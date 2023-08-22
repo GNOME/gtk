@@ -793,12 +793,12 @@ gsk_path_builder_rel_quad_to (GskPathBuilder *self,
  * from the current point to @x3, @y3 with @x1, @y1 and @x2, @y2 as the control
  * points.
  *
+ * After this, @x3, @y3 will be the new current point.
+ *
  * <picture>
  *   <source srcset="cubic-dark.png" media="(prefers-color-scheme: dark)">
  *   <img alt="Cubic To" src="cubic-light.png">
  * </picture>
- *
- * After this, @x3, @y3 will be the new current point.
  *
  * Since: 4.14
  */
@@ -869,9 +869,9 @@ gsk_path_builder_rel_cubic_to (GskPathBuilder *self,
  *
  * Note that this is different from calling [method@Gsk.PathBuilder.line_to]
  * with the start point in that the contour will be closed. A closed
- * contour behaves different from an open one when stroking its start
- * and end point are considered connected, so they will be joined
- * via the line join, and not ended with line caps.
+ * contour behaves differently from an open one. When stroking, its
+ * start and end point are considered connected, so they will be
+ * joined via the line join, and not ended with line caps.
  *
  * Since: 4.14
  */
