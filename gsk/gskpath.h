@@ -33,7 +33,6 @@ G_BEGIN_DECLS
  * @GSK_PATH_FOREACH_ALLOW_ONLY_LINES: The default behavior, only allow lines.
  * @GSK_PATH_FOREACH_ALLOW_QUAD: Allow emission of `GSK_PATH_QUAD` operations
  * @GSK_PATH_FOREACH_ALLOW_CUBIC: Allow emission of `GSK_PATH_CUBIC` operations.
- * @GSK_PATH_FOREACH_ALLOW_ANY: Allow emission of any kind of operation.
  *
  * Flags that can be passed to gsk_path_foreach() to enable additional
  * features.
