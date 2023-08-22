@@ -65,6 +65,10 @@ of the path is filled.
   The color that is used to render the background behind the path.
   If not specified, white is used.
 
+``--fill``
+
+  Fill the path (this is the default).
+
 ``--stroke``
 
   Stroke the path instead of filling it.
@@ -129,6 +133,10 @@ The interior of the path is filled.
 
   The file to save the PNG image to.
   If not specified, "path.png" is used.
+
+``--fill``
+
+  Fill the path (this is the default).
 
 ``--stroke``
 
