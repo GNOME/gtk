@@ -319,7 +319,7 @@ gsk_standard_contour_get_stroke_bounds (const GskContour *contour,
   if (self->n_points == 0)
     return FALSE;
 
-  extra = MAX (stroke->line_width / 2, gsk_stroke_get_join_width (stroke) / 2);
+  extra = MAX (stroke->line_width, gsk_stroke_get_join_width (stroke));
 
   gsk_bounding_box_init (bounds, &GRAPHENE_POINT_INIT (self->bounds.min.x - extra,
                                                        self->bounds.min.y - extra),

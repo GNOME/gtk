@@ -3,7 +3,8 @@ Slug: paths
 
 GSK provides a path object that can be used to render more complex
 shapes than lines or rounded rectangles. It is comparable to cairos
-path API, with some notable differences.
+[path API](https://www.cairographics.org/manual/cairo-Paths.html),
+with some notable differences.
 
 In general, a path consists of one or more connected **_contours_**,
 each of which may have multiple **_segments_**, and may or may not be closed.
