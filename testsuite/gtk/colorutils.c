@@ -30,6 +30,10 @@ struct {
   { 1, 0, 1, 5.0 / 6.0, 1, 1 },
 };
 
+/* Close enough for float precision to match, even with some
+ * rounding errors */
+#define EPSILON 1e-6
+
 static void
 test_roundtrips (void)
 {
@@ -40,13 +44,13 @@ test_roundtrips (void)
 
       g_print ("color %u\n", i);
       gtk_hsv_to_rgb (tests[i].h, tests[i].s, tests[i].v, &r, &g, &b);
-      g_assert_cmpfloat_with_epsilon (r, tests[i].r, FLT_EPSILON);
-      g_assert_cmpfloat_with_epsilon (g, tests[i].g, FLT_EPSILON);
-      g_assert_cmpfloat_with_epsilon (b, tests[i].b, FLT_EPSILON);
+      g_assert_cmpfloat_with_epsilon (r, tests[i].r, EPSILON);
+      g_assert_cmpfloat_with_epsilon (g, tests[i].g, EPSILON);
+      g_assert_cmpfloat_with_epsilon (b, tests[i].b, EPSILON);
       gtk_rgb_to_hsv (tests[i].r, tests[i].g, tests[i].b, &h, &s, &v);
-      g_assert_cmpfloat_with_epsilon (h, tests[i].h, FLT_EPSILON);
-      g_assert_cmpfloat_with_epsilon (s, tests[i].s, FLT_EPSILON);
-      g_assert_cmpfloat_with_epsilon (v, tests[i].v, FLT_EPSILON);
+      g_assert_cmpfloat_with_epsilon (h, tests[i].h, EPSILON);
+      g_assert_cmpfloat_with_epsilon (s, tests[i].s, EPSILON);
+      g_assert_cmpfloat_with_epsilon (v, tests[i].v, EPSILON);
     }
 }
 
