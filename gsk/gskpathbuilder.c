@@ -870,7 +870,8 @@ angle_between (const graphene_vec2_t *t1,
   return angle;
 }
 
-#define RAD_TO_DEG(r) ((r)*180.0/M_PI)
+#define RAD_TO_DEG(r) ((r)*180.f/M_PI)
+#define DEG_TO_RAD(d) ((d)*M_PI/180.f)
 
 static float
 angle_between_points (const graphene_point_t *c,
@@ -882,7 +883,7 @@ angle_between_points (const graphene_point_t *c,
   graphene_vec2_init (&t1, a->x - c->x, a->y - c->y);
   graphene_vec2_init (&t2, b->x - c->x, b->y - c->y);
 
-  return RAD_TO_DEG (angle_between (&t1, &t2));
+  return (float) RAD_TO_DEG (angle_between (&t1, &t2));
 }
 
 /**
@@ -1190,6 +1191,67 @@ gsk_path_builder_svg_arc_to (GskPathBuilder *self,
                    sin_th1, cos_th1,
                    t);
     }
+}
+
+/**
+ * gsk_path_builder_html_arc_to:
+ * @self: a `GskPathBuilder`
+ * @x1: X coordinate of first control point
+ * @y1: Y coordinate of first control point
+ * @x2: X coordinate of second control point
+ * @y2: Y coordinate of second control point
+ * @radius: Radius of the circle
+ *
+ * Implements arc-to according to the HTML Canvas spec.
+ *
+ * A convenience function that implements the
+ * [HTML arc_to](https://html.spec.whatwg.org/multipage/canvas.html#dom-context-2d-arcto-dev)
+ * functionality.
+ *
+ * Since: 4.14
+ */
+void
+gsk_path_builder_html_arc_to (GskPathBuilder *self,
+                              float           x1,
+                              float           y1,
+                              float           x2,
+                              float           y2,
+                              float           radius)
+{
+  float angle, b;
+  graphene_vec2_t t;
+  graphene_point_t p, q;
+
+  g_return_if_fail (self != NULL);
+  g_return_if_fail (radius > 0);
+
+  angle = angle_between_points (&GRAPHENE_POINT_INIT (x1, y1),
+                                &self->current_point,
+                                &GRAPHENE_POINT_INIT (x2, y2));
+
+  if (fabsf (angle) < 3)
+    {
+      gsk_path_builder_line_to (self, x2, y2);
+      return;
+    }
+
+  b = radius / tanf (fabsf ((float) DEG_TO_RAD (angle / 2)));
+
+  graphene_vec2_init (&t, self->current_point.x - x1, self->current_point.y - y1);
+  graphene_vec2_normalize (&t, &t);
+
+  p.x = x1 + b * graphene_vec2_get_x (&t);
+  p.y = y1 + b * graphene_vec2_get_y (&t);
+
+  graphene_vec2_init (&t, x2 - x1, y2 - y1);
+  graphene_vec2_normalize (&t, &t);
+
+  q.x = x1 + b * graphene_vec2_get_x (&t);
+  q.y = y1 + b * graphene_vec2_get_y (&t);
+
+  gsk_path_builder_line_to (self, p.x, p.y);
+
+  gsk_path_builder_svg_arc_to (self, radius, radius, 0, FALSE, angle < 0, q.x, q.y);
 }
 
 /**

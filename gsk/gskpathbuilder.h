@@ -144,6 +144,14 @@ void                    gsk_path_builder_svg_arc_to             (GskPathBuilder 
                                                                  float                   y);
 
 GDK_AVAILABLE_IN_4_14
+void                    gsk_path_builder_html_arc_to            (GskPathBuilder         *self,
+                                                                 float                   x1,
+                                                                 float                   y1,
+                                                                 float                   x2,
+                                                                 float                   y2,
+                                                                 float                   radius);
+
+GDK_AVAILABLE_IN_4_14
 void                    gsk_path_builder_close                  (GskPathBuilder         *self);
 
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GskPathBuilder, gsk_path_builder_unref)
