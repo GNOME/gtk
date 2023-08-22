@@ -48,21 +48,30 @@ do_render (int          *argc,
   const char *output_file = NULL;
   char **args = NULL;
   GOptionContext *context;
+  GOptionGroup *options;
   const GOptionEntry entries[] = {
-    { "fill-rule", 0, 0, G_OPTION_ARG_STRING, &fill, N_("Fill rule (winding, even-odd)"), N_("VALUE") },
+    { "fill", 0, G_OPTION_FLAG_REVERSE, G_OPTION_ARG_NONE, &do_stroke, N_("Fill the path (the default)"), NULL },
+    { "stroke", 0, 0, G_OPTION_ARG_NONE, &do_stroke, N_("Stroke the path"), NULL },
+    { "output", 0, 0, G_OPTION_ARG_FILENAME, &output_file, N_("The output file"), N_("FILE") },
     { "fg-color", 0, 0, G_OPTION_ARG_STRING, &fg_color, N_("Foreground color"), N_("COLOR") },
     { "bg-color", 0, 0, G_OPTION_ARG_STRING, &bg_color, N_("Background color"), N_("COLOR") },
-    { "stroke", 0, 0, G_OPTION_ARG_NONE, &do_stroke, N_("Stroke the path instead of filling it"), NULL },
+    { G_OPTION_REMAINING, 0, 0, G_OPTION_ARG_STRING_ARRAY, &args, NULL, N_("PATH") },
+    { NULL, }
+  };
+  const GOptionEntry fill_entries[] = {
+    { "fill-rule", 0, 0, G_OPTION_ARG_STRING, &fill, N_("Fill rule (winding, even-odd)"), N_("VALUE") },
+    { NULL, }
+  };
+  const GOptionEntry stroke_entries[] = {
     { "line-width", 0, 0, G_OPTION_ARG_DOUBLE, &line_width, N_("Line width (number)"), N_("VALUE") },
     { "line-cap", 0, 0, G_OPTION_ARG_STRING, &cap, N_("Line cap (butt, round, square)"), N_("VALUE") },
     { "line-join", 0, 0, G_OPTION_ARG_STRING, &join, N_("Line join (miter, miter-clip, round, bevel, arcs)"), N_("VALUE") },
     { "miter-limit", 0, 0, G_OPTION_ARG_DOUBLE, &miter_limit, N_("Miter limit (number)"), N_("VALUE") },
     { "dashes", 0, 0, G_OPTION_ARG_STRING, &dashes, N_("Dash pattern (comma-separated numbers)"), N_("VALUE") },
     { "dash-offset", 0, 0, G_OPTION_ARG_DOUBLE, &dash_offset, N_("Dash offset (number)"), N_("VALUE") },
-    { "output", 0, 0, G_OPTION_ARG_FILENAME, &output_file, N_("The output file"), N_("FILE") },
-    { G_OPTION_REMAINING, 0, 0, G_OPTION_ARG_STRING_ARRAY, &args, NULL, N_("PATH") },
     { NULL, }
   };
+
   GskPath *path;
   GskFillRule fill_rule;
   GdkRGBA fg, bg;
@@ -85,8 +94,25 @@ do_render (int          *argc,
   g_set_prgname ("gtk4-path-tool render");
   context = g_option_context_new (NULL);
   g_option_context_set_translation_domain (context, GETTEXT_PACKAGE);
-  g_option_context_add_main_entries (context, entries, NULL);
   g_option_context_set_summary (context, _("Render the path to a png image."));
+
+  g_option_context_add_main_entries (context, entries, NULL);
+
+  options = g_option_group_new ("fill",
+                                _("Options related to filling"),
+                                _("Show help for fill options"),
+                                NULL, NULL);
+  g_option_group_add_entries (options, fill_entries);
+  g_option_group_set_translation_domain (options, GETTEXT_PACKAGE);
+  g_option_context_add_group (context, options);
+
+  options = g_option_group_new ("stroke",
+                                _("Options related to stroking"),
+                                _("Show help for stroke options"),
+                                NULL, NULL);
+  g_option_group_add_entries (options, stroke_entries);
+  g_option_group_set_translation_domain (options, GETTEXT_PACKAGE);
+  g_option_context_add_group (context, options);
 
   if (!g_option_context_parse (context, argc, (char ***)argv, &error))
     {
