@@ -302,7 +302,7 @@ gsk_path_to_cairo (GskPath *self,
                                    cr);
 }
 
-/*< private >
+/**
  * gsk_path_get_n_contours:
  * @path: a `GskPath`
  *
@@ -311,8 +311,10 @@ gsk_path_to_cairo (GskPath *self,
  * Returns: the number of contours in @path
  */
 gsize
-gsk_path_get_n_contours (const GskPath *self)
+gsk_path_get_n_contours (GskPath *self)
 {
+  g_return_val_if_fail (self != NULL, 0);
+
   return self->n_contours;
 }
 

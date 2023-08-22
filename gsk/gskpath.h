@@ -93,6 +93,9 @@ void                    gsk_path_to_cairo                       (GskPath        
                                                                  cairo_t                *cr);
 
 GDK_AVAILABLE_IN_4_14
+gsize                   gsk_path_get_n_contours                 (GskPath                *self);
+
+GDK_AVAILABLE_IN_4_14
 gboolean                gsk_path_is_empty                       (GskPath                *self);
 
 GDK_AVAILABLE_IN_4_14

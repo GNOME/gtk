@@ -40,7 +40,6 @@ typedef struct _GskRealPathPoint GskRealPathPoint;
 
 GskPath *               gsk_path_new_from_contours              (const GSList           *contours);
 
-gsize                   gsk_path_get_n_contours                 (const GskPath          *self);
 const GskContour *      gsk_path_get_contour                    (const GskPath          *self,
                                                                  gsize                   i);
 
