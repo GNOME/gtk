@@ -22,8 +22,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2023-08-16 20:40+0000\n"
-"PO-Revision-Date: 2023-08-17 21:02+0300\n"
+"POT-Creation-Date: 2023-08-22 16:19+0000\n"
+"PO-Revision-Date: 2023-08-22 22:19+0300\n"
 "Last-Translator: Sabri Ünal <libreajans@gmail.com>\n"
 "Language-Team: Türkçe <takim@gnome.org.tr>\n"
 "Language: tr\n"
@@ -579,7 +579,7 @@ msgstr "Veri okunurken %d. satırda hata"
 #: gdk/macos/gdkmacospasteboard.c:211 gdk/wayland/gdkclipboard-wayland.c:240
 #: gdk/wayland/gdkdrop-wayland.c:207 gdk/wayland/gdkprimary-wayland.c:343
 #: gdk/win32/gdkdrop-win32.c:1018 gdk/win32/gdkdrop-win32.c:1063
-#: gdk/x11/gdkclipboard-x11.c:805 gdk/x11/gdkdrop-x11.c:235
+#: gdk/x11/gdkclipboard-x11.c:807 gdk/x11/gdkdrop-x11.c:235
 msgid "No compatible transfer format found"
 msgstr "Uyumlu aktarım biçimi bulunamadı"
 
@@ -775,11 +775,11 @@ msgid "Opening %d Item"
 msgid_plural "Opening %d Items"
 msgstr[0] "%d öge açılıyor"
 
-#: gdk/x11/gdkclipboard-x11.c:475
+#: gdk/x11/gdkclipboard-x11.c:477
 msgid "Clipboard manager could not store selection."
 msgstr "Pano yöneticisi seçimi depolayamadı."
 
-#: gdk/x11/gdkclipboard-x11.c:655
+#: gdk/x11/gdkclipboard-x11.c:657
 msgid "Cannot store clipboard. No clipboard manager is active."
 msgstr "Pano depolanamadı. Aktif pano yöneticisi yok."
 
@@ -7164,7 +7164,7 @@ msgstr ""
 #: tools/gtk-builder-tool-enumerate.c:56 tools/gtk-builder-tool-preview.c:179
 #: tools/gtk-builder-tool-preview.c:180 tools/gtk-builder-tool-screenshot.c:360
 #: tools/gtk-builder-tool-simplify.c:2529 tools/gtk-builder-tool-validate.c:261
-#: tools/gtk-path-tool-render.c:62 tools/gtk-rendernode-tool-info.c:208
+#: tools/gtk-path-tool-render.c:55 tools/gtk-rendernode-tool-info.c:208
 #: tools/gtk-rendernode-tool-show.c:102
 msgid "FILE"
 msgstr "DOSYA"
@@ -7463,7 +7463,7 @@ msgid "Allow cubic Bézier curves"
 msgstr "Kübik Bézier eğrilerine izin ver"
 
 #: tools/gtk-path-tool-decompose.c:77 tools/gtk-path-tool-info.c:88
-#: tools/gtk-path-tool-render.c:63 tools/gtk-path-tool-show.c:132
+#: tools/gtk-path-tool-render.c:58 tools/gtk-path-tool-show.c:127
 msgid "PATH"
 msgstr "YOL"
 
@@ -7516,105 +7516,125 @@ msgstr "%d karesel"
 msgid "%d cubics"
 msgstr "%d kübik"
 
-#: tools/gtk-path-tool-render.c:52 tools/gtk-path-tool-show.c:122
-msgid "Fill rule (winding, even-odd)"
-msgstr "Doldurma kuralı (sarma, çift-tek)"
-
-#: tools/gtk-path-tool-render.c:52 tools/gtk-path-tool-render.c:56
-#: tools/gtk-path-tool-render.c:57 tools/gtk-path-tool-render.c:58
-#: tools/gtk-path-tool-render.c:59 tools/gtk-path-tool-render.c:60
-#: tools/gtk-path-tool-render.c:61 tools/gtk-path-tool-show.c:122
-#: tools/gtk-path-tool-show.c:126 tools/gtk-path-tool-show.c:127
-#: tools/gtk-path-tool-show.c:128 tools/gtk-path-tool-show.c:129
-#: tools/gtk-path-tool-show.c:130 tools/gtk-path-tool-show.c:131
-msgid "VALUE"
-msgstr "DEĞER"
-
 #: tools/gtk-path-tool-render.c:53 tools/gtk-path-tool-show.c:123
-msgid "Foreground color"
-msgstr "Ön alan rengi"
-
-#: tools/gtk-path-tool-render.c:53 tools/gtk-path-tool-render.c:54
-#: tools/gtk-path-tool-show.c:123 tools/gtk-path-tool-show.c:124
-msgid "COLOR"
-msgstr "RENK"
+msgid "Fill the path (the default)"
+msgstr "Yolu doldur (öntanımlı)"
 
 #: tools/gtk-path-tool-render.c:54 tools/gtk-path-tool-show.c:124
-msgid "Background color"
-msgstr "Arka plan rengi"
+msgid "Stroke the path"
+msgstr "Yolu darbele"
 
-#: tools/gtk-path-tool-render.c:55 tools/gtk-path-tool-show.c:125
-msgid "Stroke the path instead of filling it"
-msgstr "Doldurmak yerine yolu darbele"
-
-#: tools/gtk-path-tool-render.c:56 tools/gtk-path-tool-show.c:126
-msgid "Line width (number)"
-msgstr "Çizgi genişliği (sayı)"
-
-#: tools/gtk-path-tool-render.c:57 tools/gtk-path-tool-show.c:127
-msgid "Line cap (butt, round, square)"
-msgstr "Çizgi ucu (uç, yuvarlak, kare)"
-
-#: tools/gtk-path-tool-render.c:58 tools/gtk-path-tool-show.c:128
-msgid "Line join (miter, miter-clip, round, bevel, arcs)"
-msgstr "Çizgi birleşimi (gönye, gönye yakalama, yuvarlak, eğim, yay)"
-
-#: tools/gtk-path-tool-render.c:59 tools/gtk-path-tool-show.c:129
-msgid "Miter limit (number)"
-msgstr "Gönye sınırı (sayı)"
-
-#: tools/gtk-path-tool-render.c:60 tools/gtk-path-tool-show.c:130
-msgid "Dash pattern (comma-separated numbers)"
-msgstr "Tire deseni (virgülle ayrılmış sayılar)"
-
-#: tools/gtk-path-tool-render.c:61 tools/gtk-path-tool-show.c:131
-msgid "Dash offset (number)"
-msgstr "Tire konumu (sayı)"
-
-#: tools/gtk-path-tool-render.c:62
+#: tools/gtk-path-tool-render.c:55
 msgid "The output file"
 msgstr "Çıktı dosyası"
 
-#: tools/gtk-path-tool-render.c:81 tools/gtk-path-tool-show.c:145
+#: tools/gtk-path-tool-render.c:56 tools/gtk-path-tool-show.c:125
+msgid "Foreground color"
+msgstr "Ön alan rengi"
+
+#: tools/gtk-path-tool-render.c:56 tools/gtk-path-tool-render.c:57
+#: tools/gtk-path-tool-show.c:125 tools/gtk-path-tool-show.c:126
+msgid "COLOR"
+msgstr "RENK"
+
+#: tools/gtk-path-tool-render.c:57 tools/gtk-path-tool-show.c:126
+msgid "Background color"
+msgstr "Arka plan rengi"
+
+#: tools/gtk-path-tool-render.c:62 tools/gtk-path-tool-show.c:131
+msgid "Fill rule (winding, even-odd)"
+msgstr "Doldurma kuralı (sarma, çift-tek)"
+
+#: tools/gtk-path-tool-render.c:62 tools/gtk-path-tool-render.c:66
+#: tools/gtk-path-tool-render.c:67 tools/gtk-path-tool-render.c:68
+#: tools/gtk-path-tool-render.c:69 tools/gtk-path-tool-render.c:70
+#: tools/gtk-path-tool-render.c:71 tools/gtk-path-tool-show.c:131
+#: tools/gtk-path-tool-show.c:135 tools/gtk-path-tool-show.c:136
+#: tools/gtk-path-tool-show.c:137 tools/gtk-path-tool-show.c:138
+#: tools/gtk-path-tool-show.c:139 tools/gtk-path-tool-show.c:140
+msgid "VALUE"
+msgstr "DEĞER"
+
+#: tools/gtk-path-tool-render.c:66 tools/gtk-path-tool-show.c:135
+msgid "Line width (number)"
+msgstr "Çizgi genişliği (sayı)"
+
+#: tools/gtk-path-tool-render.c:67 tools/gtk-path-tool-show.c:136
+msgid "Line cap (butt, round, square)"
+msgstr "Çizgi ucu (uç, yuvarlak, kare)"
+
+#: tools/gtk-path-tool-render.c:68 tools/gtk-path-tool-show.c:137
+msgid "Line join (miter, miter-clip, round, bevel, arcs)"
+msgstr "Çizgi birleşimi (gönye, gönye yakalama, yuvarlak, eğim, yay)"
+
+#: tools/gtk-path-tool-render.c:69 tools/gtk-path-tool-show.c:138
+msgid "Miter limit (number)"
+msgstr "Gönye sınırı (sayı)"
+
+#: tools/gtk-path-tool-render.c:70 tools/gtk-path-tool-show.c:139
+msgid "Dash pattern (comma-separated numbers)"
+msgstr "Tire deseni (virgülle ayrılmış sayılar)"
+
+#: tools/gtk-path-tool-render.c:71 tools/gtk-path-tool-show.c:140
+msgid "Dash offset (number)"
+msgstr "Tire konumu (sayı)"
+
+#: tools/gtk-path-tool-render.c:90 tools/gtk-path-tool-show.c:153
 msgid "Could not initialize windowing system"
 msgstr "Pencereleme sistemi ilklendirilemedi"
 
-#: tools/gtk-path-tool-render.c:89
+#: tools/gtk-path-tool-render.c:97
 msgid "Render the path to a png image."
 msgstr "Yolu png resmine gerçekle."
 
-#: tools/gtk-path-tool-render.c:102 tools/gtk-path-tool-show.c:166
+#: tools/gtk-path-tool-render.c:102 tools/gtk-path-tool-show.c:164
+msgid "Options related to filling"
+msgstr "Doldurmayla ilgili seçenekler"
+
+#: tools/gtk-path-tool-render.c:103 tools/gtk-path-tool-show.c:165
+msgid "Show help for fill options"
+msgstr "Doldurma seçenekleri için yardım göster"
+
+#: tools/gtk-path-tool-render.c:110 tools/gtk-path-tool-show.c:172
+msgid "Options related to stroking"
+msgstr "Darbelemeyle ilgili seçenekler"
+
+#: tools/gtk-path-tool-render.c:111 tools/gtk-path-tool-show.c:173
+msgid "Show help for stroke options"
+msgstr "Darbeleme seçenekleri için yardım göster"
+
+#: tools/gtk-path-tool-render.c:128 tools/gtk-path-tool-show.c:190
 msgid "No path specified"
 msgstr "Yol belirtilmedi"
 
 # Buradaki --replace yi çevirmedim, çevrilmesi gerekiyor mu bilemedim.
-#: tools/gtk-path-tool-render.c:108
+#: tools/gtk-path-tool-render.c:134
 msgid "Can only render a single path"
 msgstr "Yalnızca tek bir yol gerçeklenebilir"
 
-#: tools/gtk-path-tool-render.c:114 tools/gtk-path-tool-show.c:178
+#: tools/gtk-path-tool-render.c:140 tools/gtk-path-tool-show.c:202
 msgid "fill rule"
 msgstr "doldurma kuralı"
 
-#: tools/gtk-path-tool-render.c:118 tools/gtk-path-tool-show.c:182
+#: tools/gtk-path-tool-render.c:144 tools/gtk-path-tool-show.c:206
 msgid "line cap"
 msgstr "çizgi ucu"
 
-#: tools/gtk-path-tool-render.c:119 tools/gtk-path-tool-show.c:183
+#: tools/gtk-path-tool-render.c:145 tools/gtk-path-tool-show.c:207
 msgid "line join"
 msgstr "çizgi birleşimi"
 
-#: tools/gtk-path-tool-render.c:143 tools/gtk-path-tool-show.c:207
+#: tools/gtk-path-tool-render.c:169 tools/gtk-path-tool-show.c:231
 #, c-format
 msgid "Failed to parse '%s' as number"
 msgstr "'%s', sayı olarak ayrıştırılamadı"
 
-#: tools/gtk-path-tool-render.c:187
+#: tools/gtk-path-tool-render.c:213
 #, c-format
 msgid "Saving png to '%s' failed"
 msgstr "'%s' png kaydı başarısız"
 
-#: tools/gtk-path-tool-render.c:194
+#: tools/gtk-path-tool-render.c:220
 #, c-format
 msgid "Output written to '%s'."
 msgstr "Çıktı şuna yazıldı: '%s'."
@@ -7623,12 +7643,12 @@ msgstr "Çıktı şuna yazıldı: '%s'."
 msgid "Path Preview"
 msgstr "Yol Ön İzlemesi"
 
-#: tools/gtk-path-tool-show.c:153
+#: tools/gtk-path-tool-show.c:161
 msgid "Display the path."
 msgstr "Yolu görüntüle."
 
 # Buradaki --replace yi çevirmedim, çevrilmesi gerekiyor mu bilemedim.
-#: tools/gtk-path-tool-show.c:172
+#: tools/gtk-path-tool-show.c:196
 msgid "Can only show a single path"
 msgstr "Yalnızca tek bir yol gösterilebilir"
 
@@ -7874,3 +7894,6 @@ msgstr ""
 "“%s” içinde tema dizin dosyası yok.\n"
 "Eğer burada gerçekten bir simge önbelleği oluşturmak istiyorsanız, --ignore-"
 "theme-indexʼi kullanın.\n"
+
+#~ msgid "Stroke the path instead of filling it"
+#~ msgstr "Doldurmak yerine yolu darbele"
