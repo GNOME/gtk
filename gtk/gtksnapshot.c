@@ -2068,9 +2068,10 @@ gtk_snapshot_translate_3d (GtkSnapshot              *snapshot,
  * @angle: the rotation angle, in degrees (clockwise)
  *
  * Rotates @@snapshot's coordinate system by @angle degrees in 2D space -
- * or in 3D speak, rotates around the Z axis.
+ * or in 3D speak, rotates around the Z axis. The rotation happens around
+ * the origin point of (0, 0) in the @snapshot's current coordinate system.
  *
- * To rotate around other axes, use [method@Gsk.Transform.rotate_3d].
+ * To rotate around axes other than the Z axis, use [method@Gsk.Transform.rotate_3d].
  */
 void
 gtk_snapshot_rotate (GtkSnapshot *snapshot,
