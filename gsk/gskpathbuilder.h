@@ -121,6 +121,37 @@ void                    gsk_path_builder_rel_cubic_to           (GskPathBuilder 
                                                                  float                   x3,
                                                                  float                   y3);
 GDK_AVAILABLE_IN_4_14
+void                    gsk_path_builder_arc_to                 (GskPathBuilder         *self,
+                                                                 float                   x1,
+                                                                 float                   y1,
+                                                                 float                   x2,
+                                                                 float                   y2);
+GDK_AVAILABLE_IN_4_14
+void                    gsk_path_builder_rel_arc_to             (GskPathBuilder         *self,
+                                                                 float                   x1,
+                                                                 float                   y1,
+                                                                 float                   x2,
+                                                                 float                   y2);
+
+GDK_AVAILABLE_IN_4_14
+void                    gsk_path_builder_svg_arc_to             (GskPathBuilder         *self,
+                                                                 float                   rx,
+                                                                 float                   ry,
+                                                                 float                   x_axis_rotation,
+                                                                 gboolean                large_arc,
+                                                                 gboolean                positive_sweep,
+                                                                 float                   x,
+                                                                 float                   y);
+
+GDK_AVAILABLE_IN_4_14
+void                    gsk_path_builder_html_arc_to            (GskPathBuilder         *self,
+                                                                 float                   x1,
+                                                                 float                   y1,
+                                                                 float                   x2,
+                                                                 float                   y2,
+                                                                 float                   radius);
+
+GDK_AVAILABLE_IN_4_14
 void                    gsk_path_builder_close                  (GskPathBuilder         *self);
 
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GskPathBuilder, gsk_path_builder_unref)

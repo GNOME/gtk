@@ -73,6 +73,7 @@ demos = files([
   'panes.c',
   'password_entry.c',
   'path_fill.c',
+  'path_spinner.c',
   'path_walk.c',
   'peg_solitaire.c',
   'pickers.c',

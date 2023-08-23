@@ -25,7 +25,6 @@
 
 #include "gskpathprivate.h"
 #include "gskcontourprivate.h"
-#include "gsksplineprivate.h"
 
 /**
  * GskPathBuilder:
@@ -502,62 +501,44 @@ gsk_path_builder_add_rounded_rect (GskPathBuilder       *self,
                             rect->bounds.origin.x + rect->bounds.size.width - rect->corner[GSK_CORNER_TOP_RIGHT].width,
                             rect->bounds.origin.y);
   /* topright corner */
-  gsk_path_builder_svg_arc_to (self,
-                               rect->corner[GSK_CORNER_TOP_RIGHT].width,
-                               rect->corner[GSK_CORNER_TOP_RIGHT].height,
-                               0, FALSE, TRUE,
-                               rect->bounds.origin.x + rect->bounds.size.width,
-                               rect->bounds.origin.y + rect->corner[GSK_CORNER_TOP_RIGHT].height);
+  gsk_path_builder_arc_to (self,
+                           rect->bounds.origin.x + rect->bounds.size.width,
+                           rect->bounds.origin.y,
+                           rect->bounds.origin.x + rect->bounds.size.width,
+                           rect->bounds.origin.y + rect->corner[GSK_CORNER_TOP_RIGHT].height);
   /* right */
   gsk_path_builder_line_to (self,
                             rect->bounds.origin.x + rect->bounds.size.width,
                             rect->bounds.origin.y + rect->bounds.size.height - rect->corner[GSK_CORNER_BOTTOM_RIGHT].height);
   /* bottomright corner */
-  gsk_path_builder_svg_arc_to (self,
-                               rect->corner[GSK_CORNER_BOTTOM_RIGHT].width,
-                               rect->corner[GSK_CORNER_BOTTOM_RIGHT].height,
-                               0, FALSE, TRUE,
-                               rect->bounds.origin.x + rect->bounds.size.width - rect->corner[GSK_CORNER_BOTTOM_RIGHT].width,
-                               rect->bounds.origin.y + rect->bounds.size.height);
+  gsk_path_builder_arc_to (self,
+                           rect->bounds.origin.x + rect->bounds.size.width,
+                           rect->bounds.origin.y + rect->bounds.size.height,
+                           rect->bounds.origin.x + rect->bounds.size.width - rect->corner[GSK_CORNER_BOTTOM_RIGHT].width,
+                           rect->bounds.origin.y + rect->bounds.size.height);
   /* bottom */
   gsk_path_builder_line_to (self,
                             rect->bounds.origin.x + rect->corner[GSK_CORNER_BOTTOM_LEFT].width,
                             rect->bounds.origin.y + rect->bounds.size.height);
   /* bottomleft corner */
-  gsk_path_builder_svg_arc_to (self,
-                               rect->corner[GSK_CORNER_BOTTOM_LEFT].width,
-                               rect->corner[GSK_CORNER_BOTTOM_LEFT].height,
-                               0, FALSE, TRUE,
-                               rect->bounds.origin.x,
-                               rect->bounds.origin.y + rect->bounds.size.height - rect->corner[GSK_CORNER_BOTTOM_LEFT].height);
+  gsk_path_builder_arc_to (self,
+                           rect->bounds.origin.x,
+                           rect->bounds.origin.y + rect->bounds.size.height,
+                           rect->bounds.origin.x,
+                           rect->bounds.origin.y + rect->bounds.size.height - rect->corner[GSK_CORNER_BOTTOM_LEFT].height);
   /* left */
   gsk_path_builder_line_to (self,
                             rect->bounds.origin.x,
                             rect->bounds.origin.y + rect->corner[GSK_CORNER_TOP_LEFT].height);
   /* topleft corner */
-  gsk_path_builder_svg_arc_to (self,
-                               rect->corner[GSK_CORNER_TOP_LEFT].width,
-                               rect->corner[GSK_CORNER_TOP_LEFT].height,
-                               0, FALSE, TRUE,
-                               rect->bounds.origin.x + rect->corner[GSK_CORNER_TOP_LEFT].width,
-                               rect->bounds.origin.y);
+  gsk_path_builder_arc_to (self,
+                           rect->bounds.origin.x,
+                           rect->bounds.origin.y,
+                           rect->bounds.origin.x + rect->corner[GSK_CORNER_TOP_LEFT].width,
+                           rect->bounds.origin.y);
   /* done */
   gsk_path_builder_close (self);
   self->current_point = current;
-}
-
-static gboolean
-circle_contour_curve (const graphene_point_t pts[4],
-                      gpointer                data)
-{
-  GskPathBuilder *self = data;
-
-  gsk_path_builder_cubic_to (self,
-                             pts[1].x, pts[1].y,
-                             pts[2].x, pts[2].y,
-                             pts[3].x, pts[3].y);
-
-  return TRUE;
 }
 
 /**
@@ -586,11 +567,19 @@ gsk_path_builder_add_circle (GskPathBuilder         *self,
   current = self->current_point;
 
   gsk_path_builder_move_to (self, center->x + radius, center->y);
-  gsk_spline_decompose_arc (center, radius,
-                            GSK_PATH_TOLERANCE_DEFAULT,
-                            0, 2 * M_PI,
-                            circle_contour_curve, self);
-
+  // bottom right quarter
+  gsk_path_builder_arc_to (self, center->x + radius, center->y + radius,
+                                 center->x, center->y + radius);
+  // bottom left quarter
+  gsk_path_builder_arc_to (self, center->x - radius, center->y + radius,
+                                 center->x - radius, center->y);
+  // top left quarter
+  gsk_path_builder_arc_to (self, center->x - radius, center->y - radius,
+                                 center->x, center->y - radius);
+  // top right quarter
+  gsk_path_builder_arc_to (self, center->x + radius, center->y - radius,
+                                 center->x + radius, center->y);
+  // done
   gsk_path_builder_close (self);
   self->current_point = current;
 }
@@ -861,6 +850,120 @@ gsk_path_builder_rel_cubic_to (GskPathBuilder *self,
                              self->current_point.y + y3);
 }
 
+/* Return the angle between t1 and t2 in radians, such that
+ * 0 means straight continuation
+ * < 0 means right turn
+ * > 0 means left turn
+ */
+static float
+angle_between (const graphene_vec2_t *t1,
+               const graphene_vec2_t *t2)
+{
+  float angle = atan2 (graphene_vec2_get_y (t2), graphene_vec2_get_x (t2))
+                - atan2 (graphene_vec2_get_y (t1), graphene_vec2_get_x (t1));
+
+  if (angle > M_PI)
+    angle -= 2 * M_PI;
+  if (angle < - M_PI)
+    angle += 2 * M_PI;
+
+  return angle;
+}
+
+#define RAD_TO_DEG(r) ((r)*180.f/M_PI)
+#define DEG_TO_RAD(d) ((d)*M_PI/180.f)
+
+static float
+angle_between_points (const graphene_point_t *c,
+                      const graphene_point_t *a,
+                      const graphene_point_t *b)
+{
+  graphene_vec2_t t1, t2;
+
+  graphene_vec2_init (&t1, a->x - c->x, a->y - c->y);
+  graphene_vec2_init (&t2, b->x - c->x, b->y - c->y);
+
+  return (float) RAD_TO_DEG (angle_between (&t1, &t2));
+}
+
+/**
+ * gsk_path_builder_arc_to:
+ * @self: a `GskPathBuilder`
+ * @x1: x coordinate of first control point
+ * @y1: y coordinate of first control point
+ * @x2: x coordinate of second control point
+ * @y2: y coordinate of second control point
+ *
+ * Adds an elliptical arc from the current point to @x3, @y3
+ * with @x1, @y1 determining the tangent directions.
+ *
+ * After this, @x3, @y3 will be the new current point.
+ *
+ * <picture>
+ *   <source srcset="arc-dark.png" media="(prefers-color-scheme: dark)">
+ *   <img alt="Arc To" src="arc-light.png">
+ * </picture>
+ *
+ * Since: 4.14
+ */
+void
+gsk_path_builder_arc_to (GskPathBuilder *self,
+                         float           x1,
+                         float           y1,
+                         float           x2,
+                         float           y2)
+{
+  g_return_if_fail (self != NULL);
+
+  if (fabsf (angle_between_points (&GRAPHENE_POINT_INIT (x1, y1),
+                                   &self->current_point,
+                                   &GRAPHENE_POINT_INIT (x2, y2))) < 3)
+    {
+      gsk_path_builder_line_to (self, x2, y2);
+      return;
+    }
+
+  self->flags &= ~GSK_PATH_FLAT;
+  gsk_path_builder_append_current (self,
+                                   GSK_PATH_ARC,
+                                   2, (graphene_point_t[2]) {
+                                     GRAPHENE_POINT_INIT (x1, y1),
+                                     GRAPHENE_POINT_INIT (x2, y2),
+                                   });
+}
+
+/**
+ * gsk_path_builder_rel_arc_to:
+ * @self: a `GskPathBuilder`
+ * @x1: x coordinate of first control point
+ * @y1: y coordinate of first control point
+ * @x2: x coordinate of second control point
+ * @y2: y coordinate of second control point
+ *
+ * Adds an elliptical arc from the current point to @x3, @y3
+ * with @x1, @y1 determining the tangent directions. All coordinates
+ * are given relative to the current point.
+ *
+ * This is the relative version of [method@Gsk.PathBuilder.arc_to].
+ *
+ * Since: 4.14
+ */
+void
+gsk_path_builder_rel_arc_to (GskPathBuilder *self,
+                             float           x1,
+                             float           y1,
+                             float           x2,
+                             float           y2)
+{
+  g_return_if_fail (self != NULL);
+
+  gsk_path_builder_arc_to (self,
+                           self->current_point.x + x1,
+                           self->current_point.y + y1,
+                           self->current_point.x + x2,
+                           self->current_point.y + y2);
+}
+
 /**
  * gsk_path_builder_close:
  * @self: a `GskPathBuilder`
@@ -938,6 +1041,25 @@ _sincos (double angle,
 #endif
 }
 
+/**
+ * gsk_path_builder_svg_arc_to:
+ * @self: a `GskPathBuilder`
+ * @rx: X radius
+ * @ry: Y radius
+ * @x_axis_rotation: the rotation of the ellipsis
+ * @large_arc: whether to add the large arc
+ * @positive_sweep: whether to sweep in the positive direction
+ * @x: the X coordinate of the endpoint
+ * @y: the Y coordinate of the endpoint
+ *
+ * Implements arc-to according to the SVG spec.
+ *
+ * A convenience function that implements the
+ * [SVG arc_to](https://www.w3.org/TR/SVG11/paths.html#PathDataEllipticalArcCommands)
+ * functionality.
+ *
+ * Since: 4.14
+ */
 void
 gsk_path_builder_svg_arc_to (GskPathBuilder *self,
                              float           rx,
@@ -969,6 +1091,8 @@ gsk_path_builder_svg_arc_to (GskPathBuilder *self,
   double sin_th1, cos_th1;
   double th_half;
   double t;
+
+  g_return_if_fail (self != NULL);
 
   if (self->points->len > 0)
     {
@@ -1067,6 +1191,67 @@ gsk_path_builder_svg_arc_to (GskPathBuilder *self,
                    sin_th1, cos_th1,
                    t);
     }
+}
+
+/**
+ * gsk_path_builder_html_arc_to:
+ * @self: a `GskPathBuilder`
+ * @x1: X coordinate of first control point
+ * @y1: Y coordinate of first control point
+ * @x2: X coordinate of second control point
+ * @y2: Y coordinate of second control point
+ * @radius: Radius of the circle
+ *
+ * Implements arc-to according to the HTML Canvas spec.
+ *
+ * A convenience function that implements the
+ * [HTML arc_to](https://html.spec.whatwg.org/multipage/canvas.html#dom-context-2d-arcto-dev)
+ * functionality.
+ *
+ * Since: 4.14
+ */
+void
+gsk_path_builder_html_arc_to (GskPathBuilder *self,
+                              float           x1,
+                              float           y1,
+                              float           x2,
+                              float           y2,
+                              float           radius)
+{
+  float angle, b;
+  graphene_vec2_t t;
+  graphene_point_t p, q;
+
+  g_return_if_fail (self != NULL);
+  g_return_if_fail (radius > 0);
+
+  angle = angle_between_points (&GRAPHENE_POINT_INIT (x1, y1),
+                                &self->current_point,
+                                &GRAPHENE_POINT_INIT (x2, y2));
+
+  if (fabsf (angle) < 3)
+    {
+      gsk_path_builder_line_to (self, x2, y2);
+      return;
+    }
+
+  b = radius / tanf (fabsf ((float) DEG_TO_RAD (angle / 2)));
+
+  graphene_vec2_init (&t, self->current_point.x - x1, self->current_point.y - y1);
+  graphene_vec2_normalize (&t, &t);
+
+  p.x = x1 + b * graphene_vec2_get_x (&t);
+  p.y = y1 + b * graphene_vec2_get_y (&t);
+
+  graphene_vec2_init (&t, x2 - x1, y2 - y1);
+  graphene_vec2_normalize (&t, &t);
+
+  q.x = x1 + b * graphene_vec2_get_x (&t);
+  q.y = y1 + b * graphene_vec2_get_y (&t);
+
+  gsk_path_builder_line_to (self, p.x, p.y);
+
+  gsk_path_builder_svg_arc_to (self, radius, radius, 0, FALSE, angle < 0, q.x, q.y);
 }
 
 /**

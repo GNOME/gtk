@@ -373,6 +373,11 @@ collect_path (GskPathOperation        op,
                                           pts[3].x, pts[3].y);
       break;
 
+    case GSK_PATH_ARC:
+      gsk_path_builder_arc_to (builder, pts[1].x, pts[1].y,
+                                        pts[2].x, pts[2].y);
+      break;
+
     default:
       g_assert_not_reached ();
     }
@@ -689,6 +694,118 @@ test_path_builder_add (void)
   gsk_path_unref (path);
 }
 
+static gboolean
+rotate_path_cb (GskPathOperation        op,
+                const graphene_point_t *pts,
+                gsize                   n_pts,
+                gpointer                user_data)
+{
+  GskPathBuilder **builders = user_data;
+
+  switch (op)
+    {
+    case GSK_PATH_MOVE:
+      gsk_path_builder_move_to (builders[0], pts[0].x, pts[0].y);
+      gsk_path_builder_move_to (builders[1], pts[0].y, -pts[0].x);
+      break;
+
+    case GSK_PATH_CLOSE:
+      gsk_path_builder_close (builders[0]);
+      gsk_path_builder_close (builders[1]);
+      break;
+
+    case GSK_PATH_LINE:
+      gsk_path_builder_line_to (builders[0], pts[1].x, pts[1].y);
+      gsk_path_builder_line_to (builders[1], pts[1].y, -pts[1].x);
+      break;
+
+    case GSK_PATH_QUAD:
+      gsk_path_builder_quad_to (builders[0], pts[1].x, pts[1].y, pts[2].x, pts[2].y);
+      gsk_path_builder_quad_to (builders[1], pts[1].y, -pts[1].x, pts[2].y, -pts[2].x);
+      break;
+
+    case GSK_PATH_CUBIC:
+      gsk_path_builder_cubic_to (builders[0], pts[1].x, pts[1].y, pts[2].x, pts[2].y, pts[3].x, pts[3].y);
+      gsk_path_builder_cubic_to (builders[1], pts[1].y, -pts[1].x, pts[2].y, -pts[2].x, pts[3].y, -pts[3].x);
+      break;
+
+    case GSK_PATH_ARC:
+      gsk_path_builder_arc_to (builders[0], pts[1].x, pts[1].y, pts[2].x, pts[2].y);
+      gsk_path_builder_arc_to (builders[1], pts[1].y, -pts[1].x, pts[2].y, -pts[2].x);
+      break;
+
+    default:
+      g_assert_not_reached ();
+      return FALSE;
+    }
+
+  return TRUE;
+}
+
+static void
+test_rotated_arc (void)
+{
+  GskPath *path;
+  GskPathBuilder *builders[2];
+  GskPath *paths[2];
+  float x, y;
+  GskFillRule fill_rule;
+
+  path = gsk_path_parse ("M -963 186 E -375 -757, 537 -607");
+
+  x = -626;
+  y = -274;
+
+  builders[0] = gsk_path_builder_new ();
+  builders[1] = gsk_path_builder_new ();
+
+  /* Use -1 here because we want all the flags, even future additions */
+  gsk_path_foreach (path, -1, rotate_path_cb, builders);
+  gsk_path_unref (path);
+
+  paths[0] = gsk_path_builder_free_to_path (builders[0]);
+  paths[1] = gsk_path_builder_free_to_path (builders[1]);
+
+  fill_rule = GSK_FILL_RULE_EVEN_ODD;
+
+  g_assert_true (gsk_path_in_fill (paths[0], &GRAPHENE_POINT_INIT (x, y), fill_rule)
+                 ==
+                 gsk_path_in_fill (paths[1], &GRAPHENE_POINT_INIT (y, -x), fill_rule));
+
+  gsk_path_unref (paths[0]);
+  gsk_path_unref (paths[1]);
+}
+
+static void
+test_rounded_rect (void)
+{
+  GskRoundedRect rect;
+  GskPathBuilder *builder;
+  GskPath *path;
+
+  gsk_rounded_rect_init (&rect, &GRAPHENE_RECT_INIT (10, 10, 100, 50),
+                         &GRAPHENE_SIZE_INIT (0, 0),
+                         &GRAPHENE_SIZE_INIT (10, 10),
+                         &GRAPHENE_SIZE_INIT (10, 30),
+                         &GRAPHENE_SIZE_INIT (30, 0));
+
+  builder = gsk_path_builder_new ();
+
+  gsk_path_builder_add_rounded_rect (builder, &rect);
+
+  path = gsk_path_builder_free_to_path (builder);
+
+  for (int i = 0; i < 1000; i++)
+    {
+      graphene_point_t p = GRAPHENE_POINT_INIT (g_test_rand_double_range (0, 200),
+                                                g_test_rand_double_range (0, 200));
+
+      g_assert_true (gsk_rounded_rect_contains_point (&rect, &p) == gsk_path_in_fill (path, &p, GSK_FILL_RULE_WINDING));
+    }
+
+  gsk_path_unref (path);
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -703,6 +820,8 @@ main (int argc, char *argv[])
   g_test_add_func ("/path/bad-in-fill", test_bad_in_fill);
   g_test_add_func ("/path/unclosed-in-fill", test_unclosed_in_fill);
   g_test_add_func ("/path/builder/add", test_path_builder_add);
+  g_test_add_func ("/path/rotated-arc", test_rotated_arc);
+  g_test_add_func ("/path/rounded-rect", test_rounded_rect);
 
   return g_test_run ();
 }

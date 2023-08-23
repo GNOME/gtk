@@ -281,6 +281,10 @@ typedef enum {
  * @GSK_PATH_CUBIC: A curve-to operation describing a cubic Bézier curve with 4
  *   points describing the start point, the two control points and the end point
  *   of the curve.
+ * @GSK_PATH_ARC: A curve-to operation describing an elliptical arc with 3 points
+ *   (more precisely, 2 points with their tangents). Note that an ellipse is not
+ *   uniquely determined by this data; GTK picks the ellipse segment that is the
+ *   affine transform of a quarter circle.
  *
  * Path operations are used to described segments of a `GskPath`.
  *
@@ -294,6 +298,7 @@ typedef enum {
   GSK_PATH_LINE,
   GSK_PATH_QUAD,
   GSK_PATH_CUBIC,
+  GSK_PATH_ARC,
 } GskPathOperation;
 
 /**

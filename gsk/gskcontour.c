@@ -287,6 +287,13 @@ gsk_standard_contour_print (const GskContour *contour,
           _g_string_append_point (string, &pt[3]);
           break;
 
+        case GSK_PATH_ARC:
+          g_string_append (string, " E ");
+          _g_string_append_point (string, &pt[1]);
+          g_string_append (string, ", ");
+          _g_string_append_point (string, &pt[2]);
+          break;
+
         default:
           g_assert_not_reached();
           return;

@@ -33,6 +33,7 @@ G_BEGIN_DECLS
  * @GSK_PATH_FOREACH_ALLOW_ONLY_LINES: The default behavior, only allow lines.
  * @GSK_PATH_FOREACH_ALLOW_QUAD: Allow emission of `GSK_PATH_QUAD` operations
  * @GSK_PATH_FOREACH_ALLOW_CUBIC: Allow emission of `GSK_PATH_CUBIC` operations.
+ * @GSK_PATH_FOREACH_ALLOW_ARC: Allow emission of `GSK_PATH_ARC` operations.
  *
  * Flags that can be passed to gsk_path_foreach() to enable additional
  * features.
@@ -48,6 +49,7 @@ typedef enum
   GSK_PATH_FOREACH_ALLOW_ONLY_LINES = 0,
   GSK_PATH_FOREACH_ALLOW_QUAD       = (1 << 0),
   GSK_PATH_FOREACH_ALLOW_CUBIC      = (1 << 1),
+  GSK_PATH_FOREACH_ALLOW_ARC        = (1 << 2),
 } GskPathForeachFlags;
 
 /**

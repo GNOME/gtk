@@ -33,6 +33,7 @@ typedef union _GskCurve GskCurve;
 typedef struct _GskLineCurve GskLineCurve;
 typedef struct _GskQuadCurve GskQuadCurve;
 typedef struct _GskCubicCurve GskCubicCurve;
+typedef struct _GskArcCurve GskArcCurve;
 
 struct _GskLineCurve
 {
@@ -65,12 +66,24 @@ struct _GskCubicCurve
   graphene_point_t coeffs[4];
 };
 
+struct _GskArcCurve
+{
+  GskPathOperation op;
+
+  gboolean has_matrix;
+
+  graphene_point_t points[3];
+
+  graphene_matrix_t m;
+};
+
 union _GskCurve
 {
   GskPathOperation op;
   GskLineCurve line;
   GskQuadCurve quad;
   GskCubicCurve cubic;
+  GskArcCurve arc;
 };
 
 typedef enum {
