@@ -95,10 +95,11 @@ static gboolean
 gdk_gl_texture_invoke_callback (gpointer data)
 {
   InvokeData *invoke = data;
-  GdkGLContext *context;
+  GdkGLContext *context, *previous;
 
   context = gdk_display_get_gl_context (gdk_gl_context_get_display (invoke->self->context));
 
+  previous = gdk_gl_context_get_current ();
   gdk_gl_context_make_current (context);
 
   if (invoke->self->sync && context != invoke->self->context)
@@ -109,6 +110,11 @@ gdk_gl_texture_invoke_callback (gpointer data)
   invoke->func (invoke->self, context, invoke->data);
 
   g_atomic_int_set (&invoke->spinlock, 1);
+
+  if (previous)
+    gdk_gl_context_make_current (previous);
+  else
+    gdk_gl_context_clear_current ();
 
   return FALSE;
 }
