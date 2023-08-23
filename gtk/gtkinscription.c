@@ -96,7 +96,13 @@ enum
   N_PROPS
 };
 
-G_DEFINE_TYPE (GtkInscription, gtk_inscription, GTK_TYPE_WIDGET)
+static void     gtk_inscription_buildable_interface_init   (GtkBuildableIface  *iface);
+
+static GtkBuildableIface *buildable_parent_iface = NULL;
+
+G_DEFINE_TYPE_WITH_CODE (GtkInscription, gtk_inscription, GTK_TYPE_WIDGET,
+                         G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE,
+                                                gtk_inscription_buildable_interface_init))
 
 static GParamSpec *properties[N_PROPS] = { NULL, };
 
@@ -234,6 +240,72 @@ gtk_inscription_set_property (GObject      *object,
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
       break;
     }
+}
+
+static const GtkBuildableParser pango_parser =
+{
+  gtk_pango_attribute_start_element,
+};
+
+static gboolean
+gtk_inscription_buildable_custom_tag_start (GtkBuildable       *buildable,
+                                            GtkBuilder         *builder,
+                                            GObject            *child,
+                                            const char         *tagname,
+                                            GtkBuildableParser *parser,
+                                            gpointer           *data)
+{
+  if (buildable_parent_iface->custom_tag_start (buildable, builder, child,
+                                                tagname, parser, data))
+    return TRUE;
+
+  if (strcmp (tagname, "attributes") == 0)
+    {
+      GtkPangoAttributeParserData *parser_data;
+
+      parser_data = g_new0 (GtkPangoAttributeParserData, 1);
+      parser_data->builder = g_object_ref (builder);
+      parser_data->object = (GObject *) g_object_ref (buildable);
+      *parser = pango_parser;
+      *data = parser_data;
+      return TRUE;
+    }
+  return FALSE;
+}
+
+static void
+gtk_inscription_buildable_custom_finished (GtkBuildable *buildable,
+                                           GtkBuilder   *builder,
+                                           GObject      *child,
+                                           const char   *tagname,
+                                           gpointer      user_data)
+{
+  GtkPangoAttributeParserData *data = user_data;
+
+  buildable_parent_iface->custom_finished (buildable, builder, child,
+                                           tagname, user_data);
+
+  if (strcmp (tagname, "attributes") == 0)
+    {
+      if (data->attrs)
+        {
+          gtk_inscription_set_attributes (GTK_INSCRIPTION (buildable), data->attrs);
+          pango_attr_list_unref (data->attrs);
+        }
+
+      g_object_unref (data->object);
+      g_object_unref (data->builder);
+      g_free (data);
+    }
+}
+
+static void
+gtk_inscription_buildable_interface_init (GtkBuildableIface *iface)
+{
+  buildable_parent_iface = g_type_interface_peek_parent (iface);
+
+  iface->custom_tag_start = gtk_inscription_buildable_custom_tag_start;
+  iface->custom_finished = gtk_inscription_buildable_custom_finished;
 }
 
 static void
