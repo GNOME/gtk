@@ -115,6 +115,14 @@ When paths are rendered as part of an interactive interface, it is sometimes
 necessary to determine whether the mouse points is over the path. GSK provides
 [method@Gsk.Path.in_fill] for this purpose.
 
+## Path length
+
+An important property of paths is their **_length_**. Computing it efficiently
+requires caching, therefore GSK provides a separate [struct@Gsk.PathMeasure] object
+to deal with path lengths. After constructing a `GskPathMeasure` object for a path,
+it can be used to determine the length of the path with [method@Gsk.PathMeasure.get_length]
+and locate points at a given distance into the path with [method@Gsk.PathMeasure.get_point].
+
 ## Other Path APIs
 
 Paths have uses beyond rendering, for example as trajectories in animations.
@@ -127,11 +135,26 @@ You can query properties of a path at certain point once you have a
 `GskPathPoint` structs can be compared for equality with [method@Gsk.PathPoint.equal]
 and ordered wrt. to which one comes first, using [method@Gsk.PathPoint.compare].
 
-To obtain a `GskPathPoint`, use [method@Gsk.Path.get_closest_point], [method@Gsk.Path.get_start_point] or [method@Gsk.Path.get_end_point].
+To obtain a `GskPathPoint`, use [method@Gsk.Path.get_closest_point],
+[method@Gsk.Path.get_start_point], [method@Gsk.Path.get_end_point] or
+[method@Gsk.PathMeasure.get_point].
 
 To query properties of the path at a point, use [method@Gsk.PathPoint.get_position],
-[method@Gsk.PathPoint.get_tangent], [method@Gsk.PathPoint.get_rotation] and
-[method@Gsk.PathPoint.get_curvature].
+[method@Gsk.PathPoint.get_tangent], [method@Gsk.PathPoint.get_rotation],
+[method@Gsk.PathPoint.get_curvature] and [method@Gsk.PathPoint.get_distance].
+
+Some of the properties can have different values for the path going into
+the point and the path leaving the point, typically at points where the
+path takes sharp turns. Examples for this are tangents (which can have up
+to 4 different values) and curvatures (which can have two different values).
+
+<figure>
+  <picture>
+    <source srcset="directions-dark.png" media="(prefers-color-scheme: dark)">
+    <img alt="Path Tangents" src="directions-light.png">
+  </picture>
+  <figcaption>Path Tangents</figcaption>
+</figure>
 
 ## Going beyond GskPath
 
@@ -139,6 +162,7 @@ Lots of powerful functionality can be implemented for paths:
 
 - Finding intersections
 - Offsetting curves
+- Turning stroke outlines into paths
 - Molding curves (making them pass through a given point)
 
 GSK does not provide API for all of these, but it does offer a way to get at
