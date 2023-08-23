@@ -708,6 +708,16 @@ gtk_snapshot_collect_repeat (GtkSnapshot      *snapshot,
   return repeat_node;
 }
 
+static GskRenderNode *
+gtk_snapshot_collect_discard_repeat (GtkSnapshot      *snapshot,
+                                     GtkSnapshotState *state,
+                                     GskRenderNode   **nodes,
+                                     guint             n_nodes)
+{
+  /* Drop the node and return nothing.  */
+  return NULL;
+}
+
 static void
 gtk_graphene_rect_scale_affine (const graphene_rect_t *rect,
                                 float                  scale_x,
@@ -798,17 +808,24 @@ gtk_snapshot_push_repeat (GtkSnapshot           *snapshot,
                           const graphene_rect_t *child_bounds)
 {
   GtkSnapshotState *state;
+  gboolean empty_child_bounds = FALSE;
   graphene_rect_t real_child_bounds = { { 0 } };
   float scale_x, scale_y, dx, dy;
 
   gtk_snapshot_ensure_affine (snapshot, &scale_x, &scale_y, &dx, &dy);
 
   if (child_bounds)
-    gtk_graphene_rect_scale_affine (child_bounds, scale_x, scale_y, dx, dy, &real_child_bounds);
+    {
+      gtk_graphene_rect_scale_affine (child_bounds, scale_x, scale_y, dx, dy, &real_child_bounds);
+      if (real_child_bounds.size.width <= 0 || real_child_bounds.size.height <= 0)
+        empty_child_bounds = TRUE;
+    }
 
   state = gtk_snapshot_push_state (snapshot,
                                    gtk_snapshot_get_current_state (snapshot)->transform,
-                                   gtk_snapshot_collect_repeat,
+                                   empty_child_bounds
+                                   ? gtk_snapshot_collect_discard_repeat
+                                   : gtk_snapshot_collect_repeat,
                                    NULL);
 
   gtk_graphene_rect_scale_affine (bounds, scale_x, scale_y, dx, dy, &state->data.repeat.bounds);
