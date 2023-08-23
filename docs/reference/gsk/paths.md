@@ -80,8 +80,8 @@ to the path, which can be selected with a [enum@Gsk.FillRule] value.
   <figcaption>The same path, filled with GSK_FILL_RULE_EVEN_ODD</figcaption>
 </figure>
 
-To fill a path, use [method@Gtk.Snapshot.append_fill] or the more general
-[method@Gtk.Snapshot.push_fill].
+To fill a path, use [gtk_snapshot_append_fill](../gtk4/method.Snapshot.append_fill.html)
+or the more general [gtk_snapshot_push_fill](../gtk4/method.Snapshot.push_fill.html).
 
 Alternatively, a path can be **_stroked_**, which means to emulate drawing
 with an idealized pen along the path. The result of stroking a path is another
@@ -105,8 +105,9 @@ of line joins and line caps, and a dash pattern.
   <figcaption>The same path, stroked with GSK_LINE_JOIN_ROUND</figcaption>
 </figure>
 
-To stroke a path, use [method@Gtk.Snapshot.append_stroke] or
-[method@Gtk.Snapshot.push_stroke].
+To stroke a path, use
+[gtk_snapshot_append_stroke](../gtk4/method.Snapshot.append_stroke.html)
+or [gtk_snapshot_push_stroke](../gtk4/method.Snapshot.push_stroke.html).
 
 ## Hit testing
 
