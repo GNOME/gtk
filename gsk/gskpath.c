@@ -768,8 +768,9 @@ gsk_path_foreach_trampoline (GskPathOperation        op,
     }
 }
 
-#define ALLOW_ANY (GSK_PATH_FOREACH_ALLOW_QUAD| \
-                   GSK_PATH_FOREACH_ALLOW_CUBIC)
+#define ALLOW_ANY (GSK_PATH_FOREACH_ALLOW_QUAD  | \
+                   GSK_PATH_FOREACH_ALLOW_CUBIC | \
+                   GSK_PATH_FOREACH_ALLOW_ARC)
 
 gboolean
 gsk_path_foreach_with_tolerance (GskPath             *self,
