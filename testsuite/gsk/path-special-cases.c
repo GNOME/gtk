@@ -776,6 +776,36 @@ test_rotated_arc (void)
   gsk_path_unref (paths[1]);
 }
 
+static void
+test_rounded_rect (void)
+{
+  GskRoundedRect rect;
+  GskPathBuilder *builder;
+  GskPath *path;
+
+  gsk_rounded_rect_init (&rect, &GRAPHENE_RECT_INIT (10, 10, 100, 50),
+                         &GRAPHENE_SIZE_INIT (0, 0),
+                         &GRAPHENE_SIZE_INIT (10, 10),
+                         &GRAPHENE_SIZE_INIT (10, 30),
+                         &GRAPHENE_SIZE_INIT (30, 0));
+
+  builder = gsk_path_builder_new ();
+
+  gsk_path_builder_add_rounded_rect (builder, &rect);
+
+  path = gsk_path_builder_free_to_path (builder);
+
+  for (int i = 0; i < 1000; i++)
+    {
+      graphene_point_t p = GRAPHENE_POINT_INIT (g_test_rand_double_range (0, 200),
+                                                g_test_rand_double_range (0, 200));
+
+      g_assert_true (gsk_rounded_rect_contains_point (&rect, &p) == gsk_path_in_fill (path, &p, GSK_FILL_RULE_WINDING));
+    }
+
+  gsk_path_unref (path);
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -791,6 +821,7 @@ main (int argc, char *argv[])
   g_test_add_func ("/path/unclosed-in-fill", test_unclosed_in_fill);
   g_test_add_func ("/path/builder/add", test_path_builder_add);
   g_test_add_func ("/path/rotated-arc", test_rotated_arc);
+  g_test_add_func ("/path/rounded-rect", test_rounded_rect);
 
   return g_test_run ();
 }
