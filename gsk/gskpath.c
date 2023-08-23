@@ -231,20 +231,6 @@ gsk_path_to_string (GskPath *self)
 }
 
 static gboolean
-add_curve_func (GskPathOperation op,
-                const graphene_point_t *pts,
-                gsize                   n_pts,
-                gpointer                user_data)
-{
-  cairo_t *cr = user_data;
-
-  g_assert (op == GSK_PATH_CUBIC);
-  cairo_curve_to (cr, pts[1].x, pts[1].y, pts[2].x, pts[2].y, pts[3].x, pts[3].y);
-
-  return TRUE;
-}
-
-static gboolean
 gsk_path_to_cairo_add_op (GskPathOperation        op,
                           const graphene_point_t *pts,
                           gsize                   n_pts,
@@ -264,30 +250,12 @@ gsk_path_to_cairo_add_op (GskPathOperation        op,
       cairo_line_to (cr, pts[1].x, pts[1].y);
       break;
 
-    case GSK_PATH_QUAD:
-      {
-        double x, y;
-        cairo_get_current_point (cr, &x, &y);
-        cairo_curve_to (cr,
-                        1/3.f * x + 2/3.f * pts[1].x, 1/3.f * y + 2/3.f * pts[1].y,
-                        2/3.f * pts[1].x + 1/3.f * pts[2].x, 2/3.f * pts[1].y + 1/3.f * pts[2].y,
-                        pts[2].x, pts[2].y);
-      }
-      break;
-
     case GSK_PATH_CUBIC:
       cairo_curve_to (cr, pts[1].x, pts[1].y, pts[2].x, pts[2].y, pts[3].x, pts[3].y);
       break;
 
+    case GSK_PATH_QUAD:
     case GSK_PATH_ARC:
-      {
-        GskCurve curve;
-
-        gsk_curve_init_foreach (&curve, op, pts, n_pts);
-        gsk_curve_decompose_curve (&curve, GSK_PATH_FOREACH_ALLOW_CUBIC, 0.5, add_curve_func, cr);
-      }
-      break;
-
     default:
       g_assert_not_reached ();
       return FALSE;
