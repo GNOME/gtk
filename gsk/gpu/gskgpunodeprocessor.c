@@ -136,6 +136,14 @@ gsk_gpu_node_processor_add_fallback_node (GskGpuNodeProcessor *self,
                       &node->bounds);
 }
 
+static void
+gsk_gpu_node_processor_add_container_node (GskGpuNodeProcessor *self,
+                                           GskRenderNode       *node)
+{
+  for (guint i = 0; i < gsk_container_node_get_n_children (node); i++)
+    gsk_gpu_node_processor_add_node (self, gsk_container_node_get_child (node, i));
+}
+
 static const struct
 {
   GskGpuGlobals ignored_globals;
@@ -147,8 +155,8 @@ static const struct
     NULL,
   },
   [GSK_CONTAINER_NODE] = {
-    0,
-    NULL,
+    GSK_GPU_GLOBAL_MATRIX | GSK_GPU_GLOBAL_SCALE | GSK_GPU_GLOBAL_CLIP,
+    gsk_gpu_node_processor_add_container_node,
   },
   [GSK_CAIRO_NODE] = {
     0,
