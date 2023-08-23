@@ -336,6 +336,7 @@
     <file>panes.c</file>
     <file>password_entry.c</file>
     <file>path_fill.c</file>
+    <file>path_spinner.c</file>
     <file>path_walk.c</file>
     <file>peg_solitaire.c</file>
     <file>pickers.c</file>
