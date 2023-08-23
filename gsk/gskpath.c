@@ -979,7 +979,7 @@ parse_command (const char **p,
  * This is a convenience function that constructs a `GskPath`
  * from a serialized form.
  *
- * The string is expected to be in
+ * The string is expected to be in (a superset of)
  * [SVG path syntax](https://www.w3.org/TR/SVG11/paths.html#PathData),
  * as e.g. produced by [method@Gsk.Path.to_string].
  *

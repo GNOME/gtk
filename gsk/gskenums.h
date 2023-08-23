@@ -283,8 +283,8 @@ typedef enum {
  *   of the curve.
  * @GSK_PATH_ARC: A curve-to operation describing an elliptical arc with 3 points
  *   (more precisely, 2 points with their tangents). Note that an ellipse is not
- *   uniquely determined by this data; GTK picks the quarter ellipse that is the
- *   the affine transform of a quarter circle.
+ *   uniquely determined by this data; GTK picks the ellipse segment that is the
+ *   affine transform of a quarter circle.
  *
  * Path operations are used to described segments of a `GskPath`.
  *

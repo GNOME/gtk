@@ -1,7 +1,7 @@
 /* Path/Spinner
  *
- * This demo shows how to use GskPath to draw shapes that are (a bit)
- * more complex than a rounded rectangle.
+ * This demo shows how to use GskPath to draw a simple animation
+ * that could be used as a spinner.
  */
 
 #include <glib/gi18n.h>
