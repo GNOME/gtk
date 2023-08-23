@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.6\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2023-08-20 17:48+0000\n"
-"PO-Revision-Date: 2023-08-22 17:08+0330\n"
+"POT-Creation-Date: 2023-08-22 16:19+0000\n"
+"PO-Revision-Date: 2023-08-23 03:48+0330\n"
 "Last-Translator: Danial Behzadi <dani.behzi@ubuntu.com>\n"
 "Language-Team: Persian <>\n"
 "Language: fa\n"
@@ -569,7 +569,7 @@ msgstr "خواندن داده‌ها در ردیف %Id شکست خورد"
 #: gdk/macos/gdkmacospasteboard.c:211 gdk/wayland/gdkclipboard-wayland.c:240
 #: gdk/wayland/gdkdrop-wayland.c:207 gdk/wayland/gdkprimary-wayland.c:343
 #: gdk/win32/gdkdrop-win32.c:1018 gdk/win32/gdkdrop-win32.c:1063
-#: gdk/x11/gdkclipboard-x11.c:805 gdk/x11/gdkdrop-x11.c:235
+#: gdk/x11/gdkclipboard-x11.c:807 gdk/x11/gdkdrop-x11.c:235
 msgid "No compatible transfer format found"
 msgstr "هیچ قالب انتقال سازگاری پیدا نشد"
 
@@ -763,11 +763,11 @@ msgid "Opening %d Item"
 msgid_plural "Opening %d Items"
 msgstr[0] "درحال گشودن %Id مورد"
 
-#: gdk/x11/gdkclipboard-x11.c:475
+#: gdk/x11/gdkclipboard-x11.c:477
 msgid "Clipboard manager could not store selection."
 msgstr "مدیر تخته‌گیره نتوانست گزینش را ذخیره کند."
 
-#: gdk/x11/gdkclipboard-x11.c:655
+#: gdk/x11/gdkclipboard-x11.c:657
 msgid "Cannot store clipboard. No clipboard manager is active."
 msgstr "نتوانست تخته‌گیره را ذخیره کند. هیچ مدیر تخته‌گیره‌ای فعّال نیست."
 
@@ -7125,7 +7125,7 @@ msgstr ""
 #: tools/gtk-builder-tool-enumerate.c:56 tools/gtk-builder-tool-preview.c:179
 #: tools/gtk-builder-tool-preview.c:180 tools/gtk-builder-tool-screenshot.c:360
 #: tools/gtk-builder-tool-simplify.c:2529 tools/gtk-builder-tool-validate.c:261
-#: tools/gtk-path-tool-render.c:62 tools/gtk-rendernode-tool-info.c:208
+#: tools/gtk-path-tool-render.c:55 tools/gtk-rendernode-tool-info.c:208
 #: tools/gtk-rendernode-tool-show.c:102
 msgid "FILE"
 msgstr "پرونده"
@@ -7418,7 +7418,7 @@ msgid "Allow cubic Bézier curves"
 msgstr "اجازه به منحی‌های درجه سوم بزیه"
 
 #: tools/gtk-path-tool-decompose.c:77 tools/gtk-path-tool-info.c:88
-#: tools/gtk-path-tool-render.c:63 tools/gtk-path-tool-show.c:132
+#: tools/gtk-path-tool-render.c:58 tools/gtk-path-tool-show.c:127
 msgid "PATH"
 msgstr "PATH"
 
@@ -7428,7 +7428,7 @@ msgstr "باز کردن یک مسیر."
 
 #: tools/gtk-path-tool-decompose.c:102 tools/gtk-path-tool-info.c:112
 msgid "No paths given."
-msgstr "مسیری داده نشده"
+msgstr "مسیری داده نشده."
 
 #: tools/gtk-path-tool-decompose.c:128
 msgid "That didn't work out."
@@ -7471,104 +7471,124 @@ msgstr "%Id درجه دوم"
 msgid "%d cubics"
 msgstr "%Id درجه سوم"
 
-#: tools/gtk-path-tool-render.c:52 tools/gtk-path-tool-show.c:122
-msgid "Fill rule (winding, even-odd)"
-msgstr "قاعدهٔ پر کردن (winding, even-odd)"
-
-#: tools/gtk-path-tool-render.c:52 tools/gtk-path-tool-render.c:56
-#: tools/gtk-path-tool-render.c:57 tools/gtk-path-tool-render.c:58
-#: tools/gtk-path-tool-render.c:59 tools/gtk-path-tool-render.c:60
-#: tools/gtk-path-tool-render.c:61 tools/gtk-path-tool-show.c:122
-#: tools/gtk-path-tool-show.c:126 tools/gtk-path-tool-show.c:127
-#: tools/gtk-path-tool-show.c:128 tools/gtk-path-tool-show.c:129
-#: tools/gtk-path-tool-show.c:130 tools/gtk-path-tool-show.c:131
-msgid "VALUE"
-msgstr "VALUE"
-
 #: tools/gtk-path-tool-render.c:53 tools/gtk-path-tool-show.c:123
-msgid "Foreground color"
-msgstr "رنگ پیش‌زمینه"
-
-#: tools/gtk-path-tool-render.c:53 tools/gtk-path-tool-render.c:54
-#: tools/gtk-path-tool-show.c:123 tools/gtk-path-tool-show.c:124
-msgid "COLOR"
-msgstr "COLOR"
+msgid "Fill the path (the default)"
+msgstr "پر کردن مسیر (پیش‌گزیده)"
 
 #: tools/gtk-path-tool-render.c:54 tools/gtk-path-tool-show.c:124
-msgid "Background color"
-msgstr "رنگ پس‌زمینه"
+msgid "Stroke the path"
+msgstr "خط‌کشی مسیر"
 
-#: tools/gtk-path-tool-render.c:55 tools/gtk-path-tool-show.c:125
-msgid "Stroke the path instead of filling it"
-msgstr "خط‌کشی دور مسیر به جای پر کردنش"
-
-#: tools/gtk-path-tool-render.c:56 tools/gtk-path-tool-show.c:126
-msgid "Line width (number)"
-msgstr "پهنای خط (عدد)"
-
-#: tools/gtk-path-tool-render.c:57 tools/gtk-path-tool-show.c:127
-msgid "Line cap (butt, round, square)"
-msgstr "کلاهک خط (butt, round, square)"
-
-#: tools/gtk-path-tool-render.c:58 tools/gtk-path-tool-show.c:128
-msgid "Line join (miter, miter-clip, round, bevel, arcs)"
-msgstr "پیوستن خط (miter, miter-clip, round, bevel, arcs)"
-
-#: tools/gtk-path-tool-render.c:59 tools/gtk-path-tool-show.c:129
-msgid "Miter limit (number)"
-msgstr "کران تاج (عدد)"
-
-#: tools/gtk-path-tool-render.c:60 tools/gtk-path-tool-show.c:130
-msgid "Dash pattern (comma-separated numbers)"
-msgstr "الگوی نقطه‌چین (عددهای جدا شده با کاما)"
-
-#: tools/gtk-path-tool-render.c:61 tools/gtk-path-tool-show.c:131
-msgid "Dash offset (number)"
-msgstr "انحراف از مبدأ نقطه‌چین (عدد)"
-
-#: tools/gtk-path-tool-render.c:62
+#: tools/gtk-path-tool-render.c:55
 msgid "The output file"
 msgstr "پروندهٔ خروجی"
 
-#: tools/gtk-path-tool-render.c:81 tools/gtk-path-tool-show.c:145
+#: tools/gtk-path-tool-render.c:56 tools/gtk-path-tool-show.c:125
+msgid "Foreground color"
+msgstr "رنگ پیش‌زمینه"
+
+#: tools/gtk-path-tool-render.c:56 tools/gtk-path-tool-render.c:57
+#: tools/gtk-path-tool-show.c:125 tools/gtk-path-tool-show.c:126
+msgid "COLOR"
+msgstr "COLOR"
+
+#: tools/gtk-path-tool-render.c:57 tools/gtk-path-tool-show.c:126
+msgid "Background color"
+msgstr "رنگ پس‌زمینه"
+
+#: tools/gtk-path-tool-render.c:62 tools/gtk-path-tool-show.c:131
+msgid "Fill rule (winding, even-odd)"
+msgstr "قاعدهٔ پر کردن (winding, even-odd)"
+
+#: tools/gtk-path-tool-render.c:62 tools/gtk-path-tool-render.c:66
+#: tools/gtk-path-tool-render.c:67 tools/gtk-path-tool-render.c:68
+#: tools/gtk-path-tool-render.c:69 tools/gtk-path-tool-render.c:70
+#: tools/gtk-path-tool-render.c:71 tools/gtk-path-tool-show.c:131
+#: tools/gtk-path-tool-show.c:135 tools/gtk-path-tool-show.c:136
+#: tools/gtk-path-tool-show.c:137 tools/gtk-path-tool-show.c:138
+#: tools/gtk-path-tool-show.c:139 tools/gtk-path-tool-show.c:140
+msgid "VALUE"
+msgstr "VALUE"
+
+#: tools/gtk-path-tool-render.c:66 tools/gtk-path-tool-show.c:135
+msgid "Line width (number)"
+msgstr "پهنای خط (عدد)"
+
+#: tools/gtk-path-tool-render.c:67 tools/gtk-path-tool-show.c:136
+msgid "Line cap (butt, round, square)"
+msgstr "کلاهک خط (butt, round, square)"
+
+#: tools/gtk-path-tool-render.c:68 tools/gtk-path-tool-show.c:137
+msgid "Line join (miter, miter-clip, round, bevel, arcs)"
+msgstr "پیوستن خط (miter, miter-clip, round, bevel, arcs)"
+
+#: tools/gtk-path-tool-render.c:69 tools/gtk-path-tool-show.c:138
+msgid "Miter limit (number)"
+msgstr "کران تاج (عدد)"
+
+#: tools/gtk-path-tool-render.c:70 tools/gtk-path-tool-show.c:139
+msgid "Dash pattern (comma-separated numbers)"
+msgstr "الگوی نقطه‌چین (عددهای جدا شده با کاما)"
+
+#: tools/gtk-path-tool-render.c:71 tools/gtk-path-tool-show.c:140
+msgid "Dash offset (number)"
+msgstr "انحراف از مبدأ نقطه‌چین (عدد)"
+
+#: tools/gtk-path-tool-render.c:90 tools/gtk-path-tool-show.c:153
 msgid "Could not initialize windowing system"
 msgstr "نتوانست سامانهٔ پنجره را راه‌اندازی کند"
 
-#: tools/gtk-path-tool-render.c:89
+#: tools/gtk-path-tool-render.c:97
 msgid "Render the path to a png image."
 msgstr "پرداخت مسیر در یک تصویر png."
 
-#: tools/gtk-path-tool-render.c:102 tools/gtk-path-tool-show.c:166
+#: tools/gtk-path-tool-render.c:102 tools/gtk-path-tool-show.c:164
+msgid "Options related to filling"
+msgstr "گزینه‌های مربوط به پر کردن"
+
+#: tools/gtk-path-tool-render.c:103 tools/gtk-path-tool-show.c:165
+msgid "Show help for fill options"
+msgstr "نمالیش راهنما برای گزینه‌های پر کردن"
+
+#: tools/gtk-path-tool-render.c:110 tools/gtk-path-tool-show.c:172
+msgid "Options related to stroking"
+msgstr "گزینه‌های مربوط به خط‌کشی"
+
+#: tools/gtk-path-tool-render.c:111 tools/gtk-path-tool-show.c:173
+msgid "Show help for stroke options"
+msgstr "نمالیش راهنما برای گزینه‌های خط‌کشی"
+
+#: tools/gtk-path-tool-render.c:128 tools/gtk-path-tool-show.c:190
 msgid "No path specified"
 msgstr "مسیری مشخّص نشده"
 
-#: tools/gtk-path-tool-render.c:108
+#: tools/gtk-path-tool-render.c:134
 msgid "Can only render a single path"
 msgstr "تنها می‌تواند یک تک‌مسیر را پرداخت کند"
 
-#: tools/gtk-path-tool-render.c:114 tools/gtk-path-tool-show.c:178
+#: tools/gtk-path-tool-render.c:140 tools/gtk-path-tool-show.c:202
 msgid "fill rule"
 msgstr "قاعدهٔ پر کردن"
 
-#: tools/gtk-path-tool-render.c:118 tools/gtk-path-tool-show.c:182
+#: tools/gtk-path-tool-render.c:144 tools/gtk-path-tool-show.c:206
 msgid "line cap"
 msgstr "کلاهک خط"
 
-#: tools/gtk-path-tool-render.c:119 tools/gtk-path-tool-show.c:183
+#: tools/gtk-path-tool-render.c:145 tools/gtk-path-tool-show.c:207
 msgid "line join"
 msgstr "پیوستن خط"
 
-#: tools/gtk-path-tool-render.c:143 tools/gtk-path-tool-show.c:207
+#: tools/gtk-path-tool-render.c:169 tools/gtk-path-tool-show.c:231
 #, c-format
 msgid "Failed to parse '%s' as number"
 msgstr "شکست در تجزیهٔ «%s» به شکل عدد"
 
-#: tools/gtk-path-tool-render.c:187
+#: tools/gtk-path-tool-render.c:213
 #, c-format
 msgid "Saving png to '%s' failed"
 msgstr "ذخیرهٔ png در «%s» شکست خورد"
 
-#: tools/gtk-path-tool-render.c:194
+#: tools/gtk-path-tool-render.c:220
 #, c-format
 msgid "Output written to '%s'."
 msgstr "خروجی در «%s» نوشته شد."
@@ -7577,11 +7597,11 @@ msgstr "خروجی در «%s» نوشته شد."
 msgid "Path Preview"
 msgstr "پیش‌نمایش مسیر"
 
-#: tools/gtk-path-tool-show.c:153
+#: tools/gtk-path-tool-show.c:161
 msgid "Display the path."
 msgstr "نمایش مسیر."
 
-#: tools/gtk-path-tool-show.c:172
+#: tools/gtk-path-tool-show.c:196
 msgid "Can only show a single path"
 msgstr "تنها می‌تواند یک تک‌مسیر را نمایش دهد"
 
@@ -7603,7 +7623,7 @@ msgstr "شکست در تجزیهٔ «%s» به شکل مسیر.\n"
 #: tools/gtk-path-tool-utils.c:109
 #, c-format
 msgid "Failed to parse '%s' as %s."
-msgstr "شکست در تجزیهٔ «%s» به شکل %s"
+msgstr "شکست در تجزیهٔ «%s» به شکل %s."
 
 #: tools/gtk-path-tool-utils.c:111
 msgid "Possible values: "
@@ -7829,6 +7849,9 @@ msgstr ""
 "پروندهٔ نمایهٔ زمینه در «%s» نیست.\n"
 "اگر به‌راستی می‌خواهید این‌جا انبارهٔ نقشکی ایجاد کنید، از ‪--ignore-theme-index‬ "
 "استفاده کنید.\n"
+
+#~ msgid "Stroke the path instead of filling it"
+#~ msgstr "خط‌کشی دور مسیر به جای پر کردنش"
 
 #~ msgid "Tab list"
 #~ msgstr "فهرست زبانه"
