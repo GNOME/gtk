@@ -253,10 +253,16 @@ gsk_path_point_get_rotation (const GskPathPoint *point,
  * Calculates the curvature of the path at the point.
  *
  * Optionally, returns the center of the osculating circle as well.
+ * The curvature is the inverse of the radius of the osculating circle.
  *
  * If the curvature is infinite (at line segments), zero is returned,
  * and @center is not modified.
  *
+ * <picture>
+ *   <source srcset="curvature-dark.png" media="(prefers-color-scheme: dark)">
+ *   <img alt="Osculating circle" src="curvature-light.png">
+ * </picture>
+
  * Returns: The curvature of the path at the given point
  *
  * Since: 4.14
