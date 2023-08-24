@@ -30,8 +30,16 @@ variables:
 
 workflow:
   rules:
-    - if: $CI_COMMIT_TAG
+    # run merge request pipelines
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    # do not run branch pipelines if corresponding merge requests exist...
+    # (this avoids duplicate pipelines)
+    - if: $CI_COMMIT_BRANCH && $CI_OPEN_MERGE_REQUESTS
+      when: never
+    # ...but otherwise run branch pipelines
     - if: $CI_COMMIT_BRANCH
+    # run tag pipelines
+    - if: $CI_COMMIT_TAG
 
 default:
   retry:
@@ -197,21 +205,32 @@ msys2-mingw64:
     paths:
       - "${CI_PROJECT_DIR}/_build/gtkdll.tar.gz"
 
-macos:
-  # Sadly, this fails regularly, and its failure is never enlightening
-  allow_failure: true
+macos-x86_64:
   rules:
+    # run merge request pipelines
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    # do not run in forks
     - if: $CI_PROJECT_NAMESPACE == "GNOME"
   stage: build
   tags:
-    - macos
+    - macosintel
   needs: []
+  variables:
+    MESON_FORCE_BACKTRACKE: 1
+    TMPDIR: /Users/Shared/work/tmp
+    SDKROOT: /opt/sdks/MacOSX10.13.4.sdk
+    CCACHE_DIR: /Users/Shared/work/ccache
+    PIP_CACHE_DIR: /Users/Shared/build/cache
+    PIPENV_CACHE_DIR: $PIP_CACHE_DIR
+    PYTHONPYCACHEPREFIX: $PIP_CACHE_DIR
   before_script:
     - bash .gitlab-ci/show-info-osx.sh
-    - pip3 install --user meson~=1.0
-    - pip3 install --user ninja
-    - export PATH=/Users/gitlabrunner/Library/Python/3.7/bin:$PATH
-    - export MESON_FORCE_BACKTRACE=1
+    - python3 -m venv .venv
+    - ln -s /opt/cmake/CMake.app/Contents/bin/cmake .venv/bin
+    - ln -s /opt/ccache/ccache .venv/bin
+    - source .venv/bin/activate
+    - pip3 install meson==1.2.0
+    - pip3 install ninja==1.11.1
   script:
     - meson setup ${COMMON_MESON_FLAGS}
             -Dx11-backend=false
