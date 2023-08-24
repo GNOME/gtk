@@ -2,6 +2,8 @@
 
 #include "gskgputypesprivate.h"
 
+#include <graphene.h>
+
 G_BEGIN_DECLS
 
 #define GSK_TYPE_GPU_IMAGE         (gsk_gpu_image_get_type ())
@@ -21,6 +23,9 @@ struct _GskGpuImage
 struct _GskGpuImageClass
 {
   GObjectClass parent_class;
+
+  void                  (* get_projection_matrix)                       (GskGpuImage            *self,
+                                                                         graphene_matrix_t      *out_projection);
 };
 
 GType                   gsk_gpu_image_get_type                          (void) G_GNUC_CONST;
@@ -33,6 +38,9 @@ void                    gsk_gpu_image_setup                             (GskGpuI
 GdkMemoryFormat         gsk_gpu_image_get_format                        (GskGpuImage            *self);
 gsize                   gsk_gpu_image_get_width                         (GskGpuImage            *self);
 gsize                   gsk_gpu_image_get_height                        (GskGpuImage            *self);
+
+void                    gsk_gpu_image_get_projection_matrix             (GskGpuImage            *self,
+                                                                         graphene_matrix_t      *out_projection);
 
 
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GskGpuImage, g_object_unref)

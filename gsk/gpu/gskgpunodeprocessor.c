@@ -14,9 +14,6 @@
 #include "gskroundedrectprivate.h"
 #include "gsktransformprivate.h"
 
-#define ORTHO_NEAR_PLANE        -10000
-#define ORTHO_FAR_PLANE          10000
-
 typedef struct _GskGpuNodeProcessor GskGpuNodeProcessor;
 
 typedef enum {
@@ -51,8 +48,7 @@ gsk_gpu_node_processor_finish (GskGpuNodeProcessor *self)
 static void
 gsk_gpu_node_processor_init (GskGpuNodeProcessor         *self,
                              GskGpuFrame                 *frame,
-                             gsize                        width,
-                             gsize                        height,
+                             GskGpuImage                 *target,
                              const cairo_rectangle_int_t *clip,
                              const graphene_rect_t       *viewport)
 {
@@ -62,13 +58,9 @@ gsk_gpu_node_processor_init (GskGpuNodeProcessor         *self,
   gsk_gpu_clip_init_empty (&self->clip, &GRAPHENE_RECT_INIT (0, 0, viewport->size.width, viewport->size.height));
 
   self->modelview = NULL;
-  graphene_matrix_init_ortho (&self->projection,
-                              0, width,
-                              0, height,
-                              2 * ORTHO_NEAR_PLANE - ORTHO_FAR_PLANE,
-                              ORTHO_FAR_PLANE);
-  graphene_vec2_init (&self->scale, width / viewport->size.width,
-                                    height / viewport->size.height);
+  gsk_gpu_image_get_projection_matrix (target, &self->projection);
+  graphene_vec2_init (&self->scale, gsk_gpu_image_get_width (target) / viewport->size.width,
+                                    gsk_gpu_image_get_height (target) / viewport->size.height);
   self->offset = GRAPHENE_POINT_INIT (-viewport->origin.x,
                                       -viewport->origin.y);
   self->pending_globals = GSK_GPU_GLOBAL_MATRIX | GSK_GPU_GLOBAL_SCALE | GSK_GPU_GLOBAL_CLIP;
@@ -106,8 +98,7 @@ gsk_gpu_node_processor_process (GskGpuFrame                 *frame,
 
   gsk_gpu_node_processor_init (&self,
                                frame,
-                               gsk_gpu_image_get_width (target),
-                               gsk_gpu_image_get_height (target),
+                               target,
                                clip,
                                viewport);
 

@@ -786,6 +786,25 @@ gsk_vulkan_image_new_for_offscreen (GskVulkanDevice *device,
 }
 
 static void
+gsk_vulkan_image_get_projection_matrix (GskGpuImage       *image,
+                                        graphene_matrix_t *out_projection)
+{
+  graphene_matrix_t scale_z;
+
+  GSK_GPU_IMAGE_CLASS (gsk_vulkan_image_parent_class)->get_projection_matrix (image, out_projection);
+
+  graphene_matrix_init_from_float (&scale_z,
+                                   (float[16]) {
+                                       1,   0,   0,   0,
+                                       0,   1,   0,   0,
+                                       0,   0, 0.5,   0,
+                                       0,   0, 0.5,   1
+                                   });
+
+  graphene_matrix_multiply (out_projection, &scale_z, out_projection);
+}
+
+static void
 gsk_vulkan_image_finalize (GObject *object)
 {
   GskVulkanImage *self = GSK_VULKAN_IMAGE (object);
@@ -817,7 +836,12 @@ gsk_vulkan_image_finalize (GObject *object)
 static void
 gsk_vulkan_image_class_init (GskVulkanImageClass *klass)
 {
-  G_OBJECT_CLASS (klass)->finalize = gsk_vulkan_image_finalize;
+  GskGpuImageClass *image_class = GSK_GPU_IMAGE_CLASS (klass);
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
+
+  image_class->get_projection_matrix = gsk_vulkan_image_get_projection_matrix;
+
+  object_class->finalize = gsk_vulkan_image_finalize;
 }
 
 static void
