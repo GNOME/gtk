@@ -177,7 +177,7 @@ do_path_fill (GtkWidget *do_widget)
 
       window = gtk_window_new ();
       gtk_window_set_resizable (GTK_WINDOW (window), TRUE);
-      gtk_window_set_title (GTK_WINDOW (window), "Path Fill");
+      gtk_window_set_title (GTK_WINDOW (window), "Fill and Stroke");
       g_object_add_weak_pointer (G_OBJECT (window), (gpointer *)&window);
 
       paintable = gtk_logo_paintable_new ();
