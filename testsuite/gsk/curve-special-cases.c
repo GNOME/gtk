@@ -146,25 +146,51 @@ test_curve_crossing (void)
 }
 
 static void
+test_circle (void)
+{
+  GskCurve c;
+  graphene_point_t p;
+  graphene_vec2_t tangent, tangent2;
+
+  parse_curve (&c, "M 1 0 E 1 1 0 1");
+
+  g_assert_true (graphene_point_equal (gsk_curve_get_start_point (&c), &GRAPHENE_POINT_INIT (1, 0)));
+  g_assert_true (graphene_point_equal (gsk_curve_get_end_point (&c), &GRAPHENE_POINT_INIT (0, 1)));
+
+  gsk_curve_get_start_tangent (&c, &tangent);
+  g_assert_true (graphene_vec2_equal (&tangent, graphene_vec2_init (&tangent2, 0, 1)));
+
+  gsk_curve_get_end_tangent (&c, &tangent);
+  g_assert_true (graphene_vec2_equal (&tangent, graphene_vec2_init (&tangent2, -1, 0)));
+
+  for (int i = 1; i < 10; i++)
+    {
+      float t = i / 10.f;
+
+      gsk_curve_get_point (&c, t, &p);
+      g_assert_true (graphene_point_near (&p,
+                                          &GRAPHENE_POINT_INIT (cos (t * M_PI_2), sin (t * M_PI_2)), 0.001));
+    }
+}
+
+static void
 test_arc (void)
 {
   GskCurve c;
   graphene_point_t p;
 
-  parse_curve (&c, "M 1 0 E 1 1 0 1");
-  g_assert_true (graphene_point_equal (gsk_curve_get_start_point (&c), &GRAPHENE_POINT_INIT (1, 0)));
-  g_assert_true (graphene_point_equal (gsk_curve_get_end_point (&c), &GRAPHENE_POINT_INIT (0, 1)));
-  gsk_curve_get_point (&c, 0.5, &p);
-  g_assert_true (graphene_point_near (&p,
-                                      &GRAPHENE_POINT_INIT (cos (M_PI/4), sin (M_PI/4)), 0.001));
-
-
   parse_curve (&c, "M 100 100 E 200 100 200 200");
   g_assert_true (graphene_point_equal (gsk_curve_get_start_point (&c), &GRAPHENE_POINT_INIT (100, 100)));
   g_assert_true (graphene_point_equal (gsk_curve_get_end_point (&c), &GRAPHENE_POINT_INIT (200, 200)));
-  gsk_curve_get_point (&c, 0.5, &p);
-  g_assert_true (graphene_point_near (&p,
-                                      &GRAPHENE_POINT_INIT (100 + 100 * sin (M_PI/4), 100 + 100 * (1 - cos (M_PI/4))), 0.001));
+
+  for (int i = 1; i < 10; i++)
+    {
+      float t = i / 10.f;
+
+      gsk_curve_get_point (&c, t, &p);
+      g_assert_true (graphene_point_near (&p,
+                                          &GRAPHENE_POINT_INIT (100 + 100 * sin (t * M_PI_2), 100 + 100 * (1 - cos (t * M_PI_2))), 0.001));
+    }
 }
 
 int
@@ -176,6 +202,7 @@ main (int   argc,
   g_test_add_func ("/curve/special/tangents", test_curve_tangents);
   g_test_add_func ("/curve/special/degenerate-tangents", test_curve_degenerate_tangents);
   g_test_add_func ("/curve/special/crossing", test_curve_crossing);
+  g_test_add_func ("/curve/special/circle", test_circle);
   g_test_add_func ("/curve/special/arc", test_arc);
 
   return g_test_run ();
