@@ -1353,35 +1353,35 @@ gtk_menu_button_get_use_underline (GtkMenuButton *menu_button)
 }
 
 static GList *
-get_menu_bars (GtkWindow *window)
+get_menu_bars (GtkWidget *toplevel)
 {
-  return g_object_get_data (G_OBJECT (window), "gtk-menu-bar-list");
+  return g_object_get_data (G_OBJECT (toplevel), "gtk-menu-bar-list");
 }
 
 static void
-set_menu_bars (GtkWindow *window,
+set_menu_bars (GtkWidget *toplevel,
                GList     *menubars)
 {
-  g_object_set_data (G_OBJECT (window), I_("gtk-menu-bar-list"), menubars);
+  g_object_set_data (G_OBJECT (toplevel), I_("gtk-menu-bar-list"), menubars);
 }
 
 static void
-add_to_window (GtkWindow     *window,
-               GtkMenuButton *button)
+add_to_toplevel (GtkWidget     *toplevel,
+                 GtkMenuButton *button)
 {
-  GList *menubars = get_menu_bars (window);
+  GList *menubars = get_menu_bars (toplevel);
 
-  set_menu_bars (window, g_list_prepend (menubars, button));
+  set_menu_bars (toplevel, g_list_prepend (menubars, button));
 }
 
 static void
-remove_from_window (GtkWindow     *window,
-                    GtkMenuButton *button)
+remove_from_toplevel (GtkWidget     *toplevel,
+                      GtkMenuButton *button)
 {
-  GList *menubars = get_menu_bars (window);
+  GList *menubars = get_menu_bars (toplevel);
 
   menubars = g_list_remove (menubars, button);
-  set_menu_bars (window, menubars);
+  set_menu_bars (toplevel, menubars);
 }
 
 static void
@@ -1394,7 +1394,7 @@ gtk_menu_button_root (GtkWidget *widget)
   if (button->primary)
     {
       GtkWidget *toplevel = GTK_WIDGET (gtk_widget_get_root (widget));
-      add_to_window (GTK_WINDOW (toplevel), button);
+      add_to_toplevel (toplevel, button);
     }
 }
 
@@ -1404,7 +1404,7 @@ gtk_menu_button_unroot (GtkWidget *widget)
   GtkWidget *toplevel;
 
   toplevel = GTK_WIDGET (gtk_widget_get_root (widget));
-  remove_from_window (GTK_WINDOW (toplevel), GTK_MENU_BUTTON (widget));
+  remove_from_toplevel (toplevel, GTK_MENU_BUTTON (widget));
 
   GTK_WIDGET_CLASS (gtk_menu_button_parent_class)->unroot (widget);
 }
@@ -1437,9 +1437,9 @@ gtk_menu_button_set_primary (GtkMenuButton *menu_button,
   if (toplevel)
     {
       if (menu_button->primary)
-        add_to_window (GTK_WINDOW (toplevel), menu_button);
+        add_to_toplevel (GTK_WIDGET (toplevel), menu_button);
       else
-        remove_from_window (GTK_WINDOW (toplevel), menu_button);
+        remove_from_toplevel (GTK_WIDGET (toplevel), menu_button);
     }
 
   g_object_notify_by_pspec (G_OBJECT (menu_button), menu_button_props[PROP_PRIMARY]);
