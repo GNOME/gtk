@@ -1595,7 +1595,7 @@ gsk_arc_curve_decompose (const GskCurve      *curve,
                                             tolerance,
                                             &mid,
                                             0.5f,
-                                            &self->points[3],
+                                            &self->points[2],
                                             1.0f,
                                             add_line_func,
                                             user_data);
