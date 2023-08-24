@@ -11,11 +11,28 @@ struct _GskGpuImagePrivate
   gsize height;
 };
 
+#define ORTHO_NEAR_PLANE        -10000
+#define ORTHO_FAR_PLANE          10000
+
 G_DEFINE_TYPE_WITH_PRIVATE (GskGpuImage, gsk_gpu_image, G_TYPE_OBJECT)
+
+static void
+gsk_gpu_image_get_default_projection_matrix (GskGpuImage       *self,
+                                             graphene_matrix_t *out_projection)
+{
+  GskGpuImagePrivate *priv = gsk_gpu_image_get_instance_private (self);
+
+  graphene_matrix_init_ortho (out_projection,
+                              0, priv->width,
+                              0, priv->height,
+                              ORTHO_NEAR_PLANE,
+                              ORTHO_FAR_PLANE);
+}
 
 static void
 gsk_gpu_image_class_init (GskGpuImageClass *klass)
 {
+  klass->get_projection_matrix = gsk_gpu_image_get_default_projection_matrix;
 }
 
 static void
@@ -60,3 +77,9 @@ gsk_gpu_image_get_height (GskGpuImage *self)
   return priv->height;
 }
 
+void
+gsk_gpu_image_get_projection_matrix (GskGpuImage       *self,
+                                     graphene_matrix_t *out_projection)
+{
+  GSK_GPU_IMAGE_GET_CLASS (self)->get_projection_matrix (self, out_projection);
+}

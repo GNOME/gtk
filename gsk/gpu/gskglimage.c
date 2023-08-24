@@ -27,6 +27,18 @@ struct _GskGLImageClass
 G_DEFINE_TYPE (GskGLImage, gsk_gl_image, GSK_TYPE_GPU_IMAGE)
 
 static void
+gsk_gl_image_get_projection_matrix (GskGpuImage       *image,
+                                    graphene_matrix_t *out_projection)
+{
+  GskGLImage *self = GSK_GL_IMAGE (image);
+
+  GSK_GPU_IMAGE_CLASS (gsk_gl_image_parent_class)->get_projection_matrix (image, out_projection);
+
+  if (self->texture_id == 0)
+    graphene_matrix_scale (out_projection, 1.f, -1.f, 1.f);
+}
+
+static void
 gsk_gl_image_finalize (GObject *object)
 {
   GskGLImage *self = GSK_GL_IMAGE (object);
@@ -43,7 +55,10 @@ gsk_gl_image_finalize (GObject *object)
 static void
 gsk_gl_image_class_init (GskGLImageClass *klass)
 {
+  GskGpuImageClass *image_class = GSK_GPU_IMAGE_CLASS (klass);
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
+
+  image_class->get_projection_matrix = gsk_gl_image_get_projection_matrix;
 
   object_class->finalize = gsk_gl_image_finalize;
 }
