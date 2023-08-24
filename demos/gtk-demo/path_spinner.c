@@ -286,6 +286,12 @@ progress_timeout (gpointer data)
   return G_SOURCE_CONTINUE;
 }
 
+static void
+unset_timeout (gpointer data)
+{
+  g_source_remove (GPOINTER_TO_UINT (data));
+}
+
 GtkWidget *
 do_path_spinner (GtkWidget *do_widget)
 {
@@ -295,6 +301,7 @@ do_path_spinner (GtkWidget *do_widget)
     {
       GtkWidget *picture;
       GdkPaintable *paintable;
+      guint timeout_id;
 
       window = gtk_window_new ();
       gtk_window_set_resizable (GTK_WINDOW (window), TRUE);
@@ -308,7 +315,9 @@ do_path_spinner (GtkWidget *do_widget)
       g_object_unref (paintable);
 
       gtk_widget_add_tick_callback (picture, tick_cb, paintable, NULL);
-      g_timeout_add (100, progress_timeout, paintable);
+      timeout_id = g_timeout_add (100, progress_timeout, paintable);
+
+      g_object_set_data_full (G_OBJECT (picture), "timeout", GUINT_TO_POINTER (timeout_id), unset_timeout);
 
       gtk_window_set_child (GTK_WINDOW (window), picture);
     }
