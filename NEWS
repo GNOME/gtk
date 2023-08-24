@@ -1,6 +1,41 @@
 Overview of Changes in 4.12.1, xx-xx-xxxx
 =========================================
 
+* GtkGridView:
+ - Fix a crash when scrolling
+
+* GtkColumnView:
+ - Fix a refcounting issue in the new scroll_to api
+
+* GtkTreeView
+ - Fix style classes for sort arrows
+
+* GtkEntry:
+ - Improve tracking of user changes (for undo)
+
+* GtkNotebook:
+ - Fix a critical when switching pages
+
+* GtkColor/FontDialogButton:
+ - Make these widgets activatable
+
+* GtkMenuButton:
+ - Fix problems with focus handling
+ - Fix problems with DND
+
+* Printing
+ - Fix the cpdb backend build
+
+* MacOS:
+ - Make file filters work again
+
+* GSK:
+ - Fix issues with color matrix nodes
+
+* Wayland:
+ - Fix a crash with compositors other than gnome-shell
+
+
 Overview of Changes in 4.12.0, 05-08-2023
 =========================================
 
