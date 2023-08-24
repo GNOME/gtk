@@ -76,6 +76,7 @@ struct _GskContourClass
                                                  graphene_vec2_t        *tangent);
   float                 (* get_curvature)       (const GskContour       *contour,
                                                  GskRealPathPoint       *point,
+                                                 GskPathDirection        direction,
                                                  graphene_point_t       *center);
   void                  (* add_segment)         (const GskContour       *contour,
                                                  GskPathBuilder         *builder,
@@ -530,16 +531,35 @@ gsk_standard_contour_get_tangent (const GskContour *contour,
 static float
 gsk_standard_contour_get_curvature (const GskContour *contour,
                                     GskRealPathPoint *point,
+                                    GskPathDirection  direction,
                                     graphene_point_t *center)
 {
   GskStandardContour *self = (GskStandardContour *) contour;
   GskCurve curve;
+  gsize idx;
+  float t;
 
   if (G_UNLIKELY (point->idx == 0))
     return 0;
 
-  gsk_curve_init (&curve, self->ops[point->idx]);
-  return gsk_curve_get_curvature (&curve, point->t, center);
+  idx = point->idx;
+  t = point->t;
+
+  if (t == 0 && idx > 1 &&
+      (direction == GSK_PATH_FROM_START || direction == GSK_PATH_TO_START))
+    {
+      idx--;
+      t = 1;
+    }
+  else if (t == 1 && idx + 1 < self->n_ops &&
+           (direction == GSK_PATH_FROM_END || direction == GSK_PATH_TO_END))
+    {
+      idx++;
+      t = 0;
+    }
+
+  gsk_curve_init (&curve, self->ops[idx]);
+  return gsk_curve_get_curvature (&curve, t, center);
 }
 
 static void
@@ -802,9 +822,10 @@ gsk_contour_get_tangent (const GskContour *self,
 float
 gsk_contour_get_curvature (const GskContour *self,
                            GskRealPathPoint *point,
+                           GskPathDirection  direction,
                            graphene_point_t *center)
 {
-  return self->klass->get_curvature (self, point, center);
+  return self->klass->get_curvature (self, point, direction, center);
 }
 
 void

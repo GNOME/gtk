@@ -80,8 +80,8 @@ to the path, which can be selected with a [enum@Gsk.FillRule] value.
   <figcaption>The same path, filled with GSK_FILL_RULE_EVEN_ODD</figcaption>
 </figure>
 
-To fill a path, use [gtk_snapshot_append_fill](../gtk4/method.Snapshot.append_fill.html)
-or the more general [gtk_snapshot_push_fill](../gtk4/method.Snapshot.push_fill.html).
+To fill a path, use [gtk_snapshot_append_fill()](../gtk4/method.Snapshot.append_fill.html)
+or the more general [gtk_snapshot_push_fill()](../gtk4/method.Snapshot.push_fill.html).
 
 Alternatively, a path can be **_stroked_**, which means to emulate drawing
 with an idealized pen along the path. The result of stroking a path is another
@@ -106,8 +106,8 @@ of line joins and line caps, and a dash pattern.
 </figure>
 
 To stroke a path, use
-[gtk_snapshot_append_stroke](../gtk4/method.Snapshot.append_stroke.html)
-or [gtk_snapshot_push_stroke](../gtk4/method.Snapshot.push_stroke.html).
+[gtk_snapshot_append_stroke()](../gtk4/method.Snapshot.append_stroke.html)
+or [gtk_snapshot_push_stroke()](../gtk4/method.Snapshot.push_stroke.html).
 
 ## Hit testing
 
@@ -132,3 +132,19 @@ To obtain a `GskPathPoint`, use [method@Gsk.Path.get_closest_point], [method@Gsk
 To query properties of the path at a point, use [method@Gsk.PathPoint.get_position],
 [method@Gsk.PathPoint.get_tangent], [method@Gsk.PathPoint.get_rotation] and
 [method@Gsk.PathPoint.get_curvature].
+
+## Going beyond GskPath
+
+Lots of powerful functionality can be implemented for paths:
+
+- Finding intersections
+- Offsetting curves
+- Molding curves (making them pass through a given point)
+
+GSK does not provide API for all of these, but it does offer a way to get at
+the underlying Bézier curves, so you can implement such functionality yourself.
+You can use [method@Gsk.Path.foreach] to iterate over the operations of the
+path, and get the points needed to reconstruct or modify the path piece by piece.
+
+See e.g. the [Primer on Bézier curves](https://pomax.github.io/bezierinfo/)
+for inspiration of useful things to explore.

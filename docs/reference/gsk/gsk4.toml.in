@@ -43,6 +43,8 @@ content_images = [
   "images/caps-light.png",
   "images/cubic-dark.png",
   "images/cubic-light.png",
+  "images/curvature-dark.png",
+  "images/curvature-light.png",
   "images/directions-dark.png",
   "images/directions-light.png",
   "images/fill-even-odd.png",

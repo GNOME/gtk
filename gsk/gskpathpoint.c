@@ -219,7 +219,8 @@ gsk_path_point_get_tangent (const GskPathPoint *point,
  *
  * This is a convenience variant of [method@Gsk.PathPoint.get_tangent]
  * that returns the angle between the tangent and the X axis. The angle
- * can e.g. be used in [method@Gtk.Snapshot.rotate].
+ * can e.g. be used in
+ * [gtk_snapshot_rotate()](../gtk4/method.Snapshot.rotate.html).
  *
  * Returns: the angle between the tangent and the X axis, in degrees
  *
@@ -247,16 +248,29 @@ gsk_path_point_get_rotation (const GskPathPoint *point,
  * gsk_path_point_get_curvature:
  * @point: a `GskPathPoint`
  * @path: the path that @point is on
+ * @direction: the direction for which to return the curvature
  * @center: (out caller-allocates) (nullable): Return location for
  *   the center of the osculating circle
  *
  * Calculates the curvature of the path at the point.
  *
  * Optionally, returns the center of the osculating circle as well.
+ * The curvature is the inverse of the radius of the osculating circle.
  *
- * If the curvature is infinite (at line segments), zero is returned,
- * and @center is not modified.
+ * Lines have a curvature of zero (indicating an osculating circle of
+ * infinite radius. In this case, the @center is not modified.
  *
+ * Note that certain points on a path may not have a single curvature,
+ * such as sharp turns. At such points, there are two curvatures --
+ * the (limit of) the curvature of the path going into the point,
+ * and the (limit of) the curvature of the path coming out of it.
+ * The @direction argument lets you choose which one to get.
+ *
+ * <picture>
+ *   <source srcset="curvature-dark.png" media="(prefers-color-scheme: dark)">
+ *   <img alt="Osculating circle" src="curvature-light.png">
+ * </picture>
+
  * Returns: The curvature of the path at the given point
  *
  * Since: 4.14
@@ -264,6 +278,7 @@ gsk_path_point_get_rotation (const GskPathPoint *point,
 float
 gsk_path_point_get_curvature (const GskPathPoint *point,
                               GskPath            *path,
+                              GskPathDirection    direction,
                               graphene_point_t   *center)
 {
   GskRealPathPoint *self = (GskRealPathPoint *) point;
@@ -274,5 +289,5 @@ gsk_path_point_get_curvature (const GskPathPoint *point,
   g_return_val_if_fail (self->contour < gsk_path_get_n_contours (path), 0);
 
   contour = gsk_path_get_contour (path, self->contour);
-  return gsk_contour_get_curvature (contour, self, center);
+  return gsk_contour_get_curvature (contour, self, direction, center);
 }
