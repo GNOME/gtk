@@ -174,11 +174,15 @@ init_version (GtkInspectorGeneral *gen)
   surface = gdk_surface_new_toplevel (gen->display);
   gsk_renderer = gsk_renderer_new_for_surface (surface);
   if (strcmp (G_OBJECT_TYPE_NAME (gsk_renderer), "GskVulkanRenderer") == 0)
-    renderer = "Vulkan";
+    renderer = "Vulkan (new)";
   else if (strcmp (G_OBJECT_TYPE_NAME (gsk_renderer), "GskGLRenderer") == 0)
     renderer = "GL";
   else if (strcmp (G_OBJECT_TYPE_NAME (gsk_renderer), "GskCairoRenderer") == 0)
     renderer = "Cairo";
+  else if (strcmp (G_OBJECT_TYPE_NAME (gsk_renderer), "GskVkOldRenderer") == 0)
+    renderer = "Vulkan (old)";
+  else if (strcmp (G_OBJECT_TYPE_NAME (gsk_renderer), "GskNglRenderer") == 0)
+    renderer = "GL (new)";
   else
     renderer = "Unknown";
 
