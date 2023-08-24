@@ -219,7 +219,8 @@ gsk_path_point_get_tangent (const GskPathPoint *point,
  *
  * This is a convenience variant of [method@Gsk.PathPoint.get_tangent]
  * that returns the angle between the tangent and the X axis. The angle
- * can e.g. be used in [method@Gtk.Snapshot.rotate].
+ * can e.g. be used in
+ * [gtk_snapshot_rotate()](../gtk4/method.Snapshot.rotate.html).
  *
  * Returns: the angle between the tangent and the X axis, in degrees
  *
