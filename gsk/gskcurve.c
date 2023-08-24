@@ -1688,7 +1688,7 @@ gsk_arc_curve_get_derivative (const GskCurve *curve,
   gsk_arc_curve_ensure_matrix (self);
 
   graphene_matrix_to_2d (&self->m, &xx, &yx, &xy, &yy, &x0, &y0);
-  graphene_matrix_init_from_2d (&m, xy, yy, -xx, -yx, 0, 0);
+  graphene_matrix_init_from_2d (&m, M_PI_2 * xy, M_PI_2 * yy, M_PI_2 * -xx, M_PI_2 * -yx, 0, 0);
 
   graphene_matrix_transform_point (&m, &GRAPHENE_POINT_INIT (1, 0), &p[0]);
   graphene_matrix_transform_point (&m, &GRAPHENE_POINT_INIT (1, 1), &p[1]);

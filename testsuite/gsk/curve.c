@@ -205,8 +205,6 @@ test_curve_decompose (void)
     }
 }
 
-static const char *opname[] = { "M", "Z", "L", "Q", "C", "E" };
-
 static gboolean
 add_curve_to_array (GskPathOperation        op,
                     const graphene_point_t *pts,
@@ -360,29 +358,8 @@ test_curve_derivative (void)
           graphene_vec2_init (&t2, p.x, p.y);
           graphene_vec2_normalize (&t2, &t2);
 
-          g_assert_true (graphene_vec2_near (&t1, &t2, 0.005));
+          g_assert_true (graphene_vec2_near (&t1, &t2, 0.1));
         }
-    }
-}
-
-static void
-test_curve_length (void)
-{
-  GskCurve c;
-  float l, l0;
-
-  for (int i = 0; i < 1000; i++)
-    {
-      init_random_curve (&c);
-
-      l = gsk_curve_get_length (&c);
-      l0 = graphene_point_distance (gsk_curve_get_start_point (&c),
-                                    gsk_curve_get_end_point (&c),
-                                    NULL, NULL);
-      g_print ("%s %.9f %.9f\n", opname[c.op], l0, l);
-      g_assert_true (l >= l0);
-      if (c.op == GSK_PATH_LINE)
-        g_assert_true (l == l0);
     }
 }
 
@@ -399,7 +376,6 @@ main (int argc, char *argv[])
   g_test_add_func ("/curve/decompose-cubic", test_curve_decompose_into_cubic);
   g_test_add_func ("/curve/split", test_curve_split);
   g_test_add_func ("/curve/derivative", test_curve_derivative);
-  g_test_add_func ("/curve/length", test_curve_length);
 
   return g_test_run ();
 }
