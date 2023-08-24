@@ -23,6 +23,7 @@
 #endif
 
 #include <gdk/gdk.h>
+#include <gtk/gtkshortcutsshortcut.h>
 
 G_BEGIN_DECLS
 
@@ -30,12 +31,15 @@ G_BEGIN_DECLS
 #define GTK_SHORTCUTS_GROUP(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_SHORTCUTS_GROUP, GtkShortcutsGroup))
 #define GTK_IS_SHORTCUTS_GROUP(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_SHORTCUTS_GROUP))
 
-
 typedef struct _GtkShortcutsGroup         GtkShortcutsGroup;
 typedef struct _GtkShortcutsGroupClass    GtkShortcutsGroupClass;
 
 GDK_AVAILABLE_IN_ALL
 GType gtk_shortcuts_group_get_type (void) G_GNUC_CONST;
+
+GDK_AVAILABLE_IN_4_14
+void gtk_shortcuts_group_add_shortcut (GtkShortcutsGroup    *self,
+                                       GtkShortcutsShortcut *shortcut);
 
 G_END_DECLS
 

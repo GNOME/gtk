@@ -40,6 +40,14 @@
  * depending on the application context.
  *
  * This widget is only meant to be used with [class@Gtk.ShortcutsWindow].
+ *
+ * The recommended way to construct a `GtkShortcutsGroup` is with
+ * [class@Gtk.Builder], by using the `<child>` tag to populate a
+ * `GtkShortcutsGroup` with one or more [class@Gtk.ShortcutsShortcut]
+ * instances.
+ *
+ * If you need to add a shortcut programmatically, use
+ * [method@Gtk.ShortcutsGroup.add_shortcut].
  */
 
 struct _GtkShortcutsGroup
@@ -152,9 +160,8 @@ gtk_shortcuts_group_buildable_add_child (GtkBuildable *buildable,
 {
   if (GTK_IS_SHORTCUTS_SHORTCUT (child))
     {
-      gtk_box_append (GTK_BOX (buildable), GTK_WIDGET (child));
-      gtk_shortcuts_group_apply_accel_size_group (GTK_SHORTCUTS_GROUP (buildable), GTK_WIDGET (child));
-      gtk_shortcuts_group_apply_title_size_group (GTK_SHORTCUTS_GROUP (buildable), GTK_WIDGET (child));
+      gtk_shortcuts_group_add_shortcut (GTK_SHORTCUTS_GROUP (buildable),
+                                        GTK_SHORTCUTS_SHORTCUT (child));
     }
   else
     parent_buildable_iface->add_child (buildable, builder, child, type);
@@ -360,4 +367,31 @@ gtk_shortcuts_group_init (GtkShortcutsGroup *self)
   gtk_accessible_update_relation (GTK_ACCESSIBLE (self),
                                   GTK_ACCESSIBLE_RELATION_LABELLED_BY, self->title, NULL,
                                   -1);
+}
+
+/**
+ * gtk_shortcuts_group_add_shortcut:
+ * @self: a `GtkShortcutsGroup`
+ * @shortcut: the `GtkShortcutsShortcut` to add
+ *
+ * Adds a shortcut to the shortcuts group.
+ *
+ * This is the programmatic equivalent to using [class@Gtk.Builder] and a
+ * `<child>` tag to add the child. Adding children with other API is not
+ * appropriate as `GtkShortcutsGroup` manages its children internally.
+ *
+ * Since: 4.14
+ */
+void
+gtk_shortcuts_group_add_shortcut (GtkShortcutsGroup    *self,
+                                  GtkShortcutsShortcut *shortcut)
+{
+  g_return_if_fail (GTK_IS_SHORTCUTS_GROUP (self));
+  g_return_if_fail (GTK_IS_SHORTCUTS_SHORTCUT (shortcut));
+  g_return_if_fail (gtk_widget_get_parent (GTK_WIDGET (shortcut)) == NULL);
+
+  GtkWidget *widget = GTK_WIDGET (shortcut);
+  gtk_box_append (GTK_BOX (self), widget);
+  gtk_shortcuts_group_apply_accel_size_group (self, widget);
+  gtk_shortcuts_group_apply_title_size_group (self, widget);
 }
