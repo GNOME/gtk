@@ -367,7 +367,7 @@ gsk_path_is_closed (GskPath *self)
  * If the path is empty, `FALSE` is returned and @bounds are set to
  * graphene_rect_zero(). This is different from the case where the path
  * is a single point at the origin, where the @bounds will also be set to
- * the zero rectangle but 0 will be returned.
+ * the zero rectangle but `TRUE` will be returned.
  *
  * Returns: `TRUE` if the path has bounds, `FALSE` if the path is known
  *   to be empty and have no bounds.
@@ -616,10 +616,17 @@ gsk_path_get_closest_point (GskPath                *self,
  *
  * Calls @func for every operation of the path.
  *
- * Note that this only approximates @self, because paths can contain
- * optimizations for various specialized contours, and depending on
- * the @flags, the path may be decomposed into simpler curves than
- * the ones that it contained originally.
+ * Note that this may only approximate @self, because paths can contain
+ * optimizations for various specialized contours, and depending on the
+ * @flags, the path may be decomposed into simpler curves than the ones
+ * that it contained originally.
+ *
+ * This function serves two purposes:
+ *
+ * - When the @flags allow everything, it provides access to the raw,
+ *   unmodified data of the path.
+ * - When the @flags disallow certain operations, it provides
+ *   an approximation of the path using just the allowed operations.
  *
  * Returns: `FALSE` if @func returned FALSE`, `TRUE` otherwise.
  *
