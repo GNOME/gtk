@@ -48,6 +48,17 @@ init_random_curve_with_op (GskCurve         *curve,
       }
     break;
 
+    case GSK_PATH_ARC:
+      {
+        graphene_point_t p[3];
+
+        init_random_point (&p[0]);
+        init_random_point (&p[1]);
+        init_random_point (&p[2]);
+        gsk_curve_init (curve, gsk_pathop_encode (GSK_PATH_ARC, p));
+      }
+    break;
+
     default:
       g_assert_not_reached ();
     }
@@ -56,7 +67,7 @@ init_random_curve_with_op (GskCurve         *curve,
 static void
 init_random_curve (GskCurve *curve)
 {
-  init_random_curve_with_op (curve, GSK_PATH_LINE, GSK_PATH_CUBIC);
+  init_random_curve_with_op (curve, GSK_PATH_LINE, GSK_PATH_ARC);
 }
 
 static void
@@ -93,11 +104,13 @@ test_curve_points (void)
 
       init_random_curve (&c);
 
-      /* We can assert equality here because evaluating the polynomials with 0
-       * has no effect on accuracy.
+      /* We could assert equality here because evaluating the polynomials with 0
+       * has no effect on accuracy, but for arcs, we use trigonometric functions,
+       * so allow a small error.
        */
       gsk_curve_get_point (&c, 0, &p);
-      g_assert_true (graphene_point_equal (gsk_curve_get_start_point (&c), &p));
+      g_assert_true (graphene_point_near (gsk_curve_get_start_point (&c), &p, 0.001));
+
       /* But here we evaluate the polynomials with 1 which gives the highest possible
        * accuracy error. So we'll just be generous here.
        */
@@ -191,6 +204,8 @@ test_curve_decompose (void)
       g_array_unref (array);
     }
 }
+
+static const char *opname[] = { "M", "Z", "L", "Q", "C", "E" };
 
 static gboolean
 add_curve_to_array (GskPathOperation        op,
@@ -323,6 +338,54 @@ test_curve_split (void)
     }
 }
 
+static void
+test_curve_derivative (void)
+{
+  GskCurve c, d;
+  float t;
+  graphene_vec2_t t1, t2;
+  graphene_point_t p;
+
+  for (int i = 0; i < 100; i++)
+    {
+      init_random_curve (&c);
+
+      gsk_curve_get_derivative (&c, &d);
+
+      for (int j = 0; j < 100; j++)
+        {
+          t = g_test_rand_double_range (0, 1);
+          gsk_curve_get_tangent (&c, t, &t1);
+          gsk_curve_get_point (&d, t, &p);
+          graphene_vec2_init (&t2, p.x, p.y);
+          graphene_vec2_normalize (&t2, &t2);
+
+          g_assert_true (graphene_vec2_near (&t1, &t2, 0.005));
+        }
+    }
+}
+
+static void
+test_curve_length (void)
+{
+  GskCurve c;
+  float l, l0;
+
+  for (int i = 0; i < 1000; i++)
+    {
+      init_random_curve (&c);
+
+      l = gsk_curve_get_length (&c);
+      l0 = graphene_point_distance (gsk_curve_get_start_point (&c),
+                                    gsk_curve_get_end_point (&c),
+                                    NULL, NULL);
+      g_print ("%s %.9f %.9f\n", opname[c.op], l0, l);
+      g_assert_true (l >= l0);
+      if (c.op == GSK_PATH_LINE)
+        g_assert_true (l == l0);
+    }
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -331,10 +394,12 @@ main (int argc, char *argv[])
   g_test_add_func ("/curve/points", test_curve_points);
   g_test_add_func ("/curve/tangents", test_curve_tangents);
   g_test_add_func ("/curve/decompose", test_curve_decompose);
-  g_test_add_func ("/curve/decompose/into/line", test_curve_decompose_into_line);
-  g_test_add_func ("/curve/decompose/into/quad", test_curve_decompose_into_quad);
-  g_test_add_func ("/curve/decompose/into/cubic", test_curve_decompose_into_cubic);
+  g_test_add_func ("/curve/decompose-line", test_curve_decompose_into_line);
+  g_test_add_func ("/curve/decompose-quad", test_curve_decompose_into_quad);
+  g_test_add_func ("/curve/decompose-cubic", test_curve_decompose_into_cubic);
   g_test_add_func ("/curve/split", test_curve_split);
+  g_test_add_func ("/curve/derivative", test_curve_derivative);
+  g_test_add_func ("/curve/length", test_curve_length);
 
   return g_test_run ();
 }
