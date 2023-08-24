@@ -248,6 +248,7 @@ gsk_path_point_get_rotation (const GskPathPoint *point,
  * gsk_path_point_get_curvature:
  * @point: a `GskPathPoint`
  * @path: the path that @point is on
+ * @direction: the direction for which to return the curvature
  * @center: (out caller-allocates) (nullable): Return location for
  *   the center of the osculating circle
  *
@@ -259,8 +260,11 @@ gsk_path_point_get_rotation (const GskPathPoint *point,
  * Lines have a curvature of zero (indicating an osculating circle of
  * infinite radius. In this case, the @center is not modified.
  *
- * If curvature does not exist (at sharp turns), zero is returned and
- * the @center is again not modified.
+ * Note that certain points on a path may not have a single curvature,
+ * such as sharp turns. At such points, there are two curvatures --
+ * the (limit of) the curvature of the path going into the point,
+ * and the (limit of) the curvature of the path coming out of it.
+ * The @direction argument lets you choose which one to get.
  *
  * <picture>
  *   <source srcset="curvature-dark.png" media="(prefers-color-scheme: dark)">
@@ -274,6 +278,7 @@ gsk_path_point_get_rotation (const GskPathPoint *point,
 float
 gsk_path_point_get_curvature (const GskPathPoint *point,
                               GskPath            *path,
+                              GskPathDirection    direction,
                               graphene_point_t   *center)
 {
   GskRealPathPoint *self = (GskRealPathPoint *) point;
@@ -284,5 +289,5 @@ gsk_path_point_get_curvature (const GskPathPoint *point,
   g_return_val_if_fail (self->contour < gsk_path_get_n_contours (path), 0);
 
   contour = gsk_path_get_contour (path, self->contour);
-  return gsk_contour_get_curvature (contour, self, center);
+  return gsk_contour_get_curvature (contour, self, direction, center);
 }

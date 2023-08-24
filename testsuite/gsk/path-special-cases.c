@@ -473,7 +473,7 @@ test_path_point (void)
   gsk_path_point_get_position (&point, path, &pos);
   gsk_path_point_get_tangent (&point, path, GSK_PATH_FROM_START, &t1);
   gsk_path_point_get_tangent (&point, path, GSK_PATH_TO_END, &t2);
-  curvature = gsk_path_point_get_curvature (&point, path, &center);
+  curvature = gsk_path_point_get_curvature (&point, path, GSK_PATH_FROM_START, &center);
 
   g_assert_true (graphene_point_equal (&pos, &GRAPHENE_POINT_INIT (100, 100)));
   g_assert_true (graphene_vec2_equal (&t1, graphene_vec2_y_axis ()));

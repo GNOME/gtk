@@ -75,6 +75,7 @@ float                   gsk_path_point_get_rotation    (const GskPathPoint *poin
 GDK_AVAILABLE_IN_4_14
 float                   gsk_path_point_get_curvature   (const GskPathPoint *point,
                                                         GskPath            *path,
+                                                        GskPathDirection    direction,
                                                         graphene_point_t   *center);
 
 
