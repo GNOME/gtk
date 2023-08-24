@@ -1681,20 +1681,20 @@ gsk_arc_curve_get_derivative (const GskCurve *curve,
                               GskCurve       *derivative)
 {
   const GskArcCurve *self = &curve->arc;
-  graphene_vec3_t t, t1, t2, t3;
+  double xx, yx, xy, yy, x0, y0;
+  graphene_matrix_t m;
+  graphene_point_t p[3];
 
   gsk_arc_curve_ensure_matrix (self);
 
-  graphene_matrix_transform_vec3 (&self->m, graphene_vec3_init (&t, 0, 1, 0), &t1);
-  graphene_matrix_transform_vec3 (&self->m, graphene_vec3_init (&t, -1, 1, 0), &t2);
-  graphene_matrix_transform_vec3 (&self->m, graphene_vec3_init (&t, -1, 0, 0), &t3);
+  graphene_matrix_to_2d (&self->m, &xx, &yx, &xy, &yy, &x0, &y0);
+  graphene_matrix_init_from_2d (&m, xy, yy, -xx, -yx, 0, 0);
 
-  gsk_arc_curve_init_from_points ((GskArcCurve *)derivative,
-                                  (const graphene_point_t[3]) {
-                                    GRAPHENE_POINT_INIT (graphene_vec3_get_x (&t1), graphene_vec3_get_y (&t1)),
-                                    GRAPHENE_POINT_INIT (graphene_vec3_get_x (&t2), graphene_vec3_get_y (&t2)),
-                                    GRAPHENE_POINT_INIT (graphene_vec3_get_x (&t3), graphene_vec3_get_y (&t3)),
-                                  });
+  graphene_matrix_transform_point (&m, &GRAPHENE_POINT_INIT (1, 0), &p[0]);
+  graphene_matrix_transform_point (&m, &GRAPHENE_POINT_INIT (1, 1), &p[1]);
+  graphene_matrix_transform_point (&m, &GRAPHENE_POINT_INIT (0, 1), &p[2]);
+
+  gsk_arc_curve_init_from_points ((GskArcCurve *)derivative, p);
 }
 
 static int
