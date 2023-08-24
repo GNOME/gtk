@@ -305,7 +305,7 @@ do_path_spinner (GtkWidget *do_widget)
 
       window = gtk_window_new ();
       gtk_window_set_resizable (GTK_WINDOW (window), TRUE);
-      gtk_window_set_title (GTK_WINDOW (window), "Path Spinner");
+      gtk_window_set_title (GTK_WINDOW (window), "Spinner");
       g_object_add_weak_pointer (G_OBJECT (window), (gpointer *)&window);
 
       paintable = gtk_spinner_paintable_new ();
