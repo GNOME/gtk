@@ -487,7 +487,6 @@ gsk_path_builder_add_rounded_rect (GskPathBuilder       *self,
                                    const GskRoundedRect *rect)
 {
   graphene_point_t current;
-  const float weight = M_SQRT1_2;
 
   g_return_if_fail (self != NULL);
   g_return_if_fail (rect != NULL);
@@ -502,45 +501,41 @@ gsk_path_builder_add_rounded_rect (GskPathBuilder       *self,
                             rect->bounds.origin.x + rect->bounds.size.width - rect->corner[GSK_CORNER_TOP_RIGHT].width,
                             rect->bounds.origin.y);
   /* topright corner */
-  gsk_path_builder_conic_to (self,
-                             rect->bounds.origin.x + rect->bounds.size.width,
-                             rect->bounds.origin.y,
-                             rect->bounds.origin.x + rect->bounds.size.width,
-                             rect->bounds.origin.y + rect->corner[GSK_CORNER_TOP_RIGHT].height,
-                             weight);
+  gsk_path_builder_arc_to (self,
+                           rect->bounds.origin.x + rect->bounds.size.width,
+                           rect->bounds.origin.y,
+                           rect->bounds.origin.x + rect->bounds.size.width,
+                           rect->bounds.origin.y + rect->corner[GSK_CORNER_TOP_RIGHT].height);
   /* right */
   gsk_path_builder_line_to (self,
                             rect->bounds.origin.x + rect->bounds.size.width,
                             rect->bounds.origin.y + rect->bounds.size.height - rect->corner[GSK_CORNER_BOTTOM_RIGHT].height);
   /* bottomright corner */
-  gsk_path_builder_conic_to (self,
-                             rect->bounds.origin.x + rect->bounds.size.width,
-                             rect->bounds.origin.y + rect->bounds.size.height,
-                             rect->bounds.origin.x + rect->bounds.size.width - rect->corner[GSK_CORNER_BOTTOM_RIGHT].width,
-                             rect->bounds.origin.y + rect->bounds.size.height,
-                             weight);
+  gsk_path_builder_arc_to (self,
+                           rect->bounds.origin.x + rect->bounds.size.width,
+                           rect->bounds.origin.y + rect->bounds.size.height,
+                           rect->bounds.origin.x + rect->bounds.size.width - rect->corner[GSK_CORNER_BOTTOM_RIGHT].width,
+                           rect->bounds.origin.y + rect->bounds.size.height);
   /* bottom */
   gsk_path_builder_line_to (self,
                             rect->bounds.origin.x + rect->corner[GSK_CORNER_BOTTOM_LEFT].width,
                             rect->bounds.origin.y + rect->bounds.size.height);
   /* bottomleft corner */
-  gsk_path_builder_conic_to (self,
-                             rect->bounds.origin.x,
-                             rect->bounds.origin.y + rect->bounds.size.height,
-                             rect->bounds.origin.x,
-                             rect->bounds.origin.y + rect->bounds.size.height - rect->corner[GSK_CORNER_BOTTOM_LEFT].height,
-                             weight);
+  gsk_path_builder_arc_to (self,
+                           rect->bounds.origin.x,
+                           rect->bounds.origin.y + rect->bounds.size.height,
+                           rect->bounds.origin.x,
+                           rect->bounds.origin.y + rect->bounds.size.height - rect->corner[GSK_CORNER_BOTTOM_LEFT].height);
   /* left */
   gsk_path_builder_line_to (self,
                             rect->bounds.origin.x,
                             rect->bounds.origin.y + rect->corner[GSK_CORNER_TOP_LEFT].height);
   /* topleft corner */
-  gsk_path_builder_conic_to (self,
-                             rect->bounds.origin.x,
-                             rect->bounds.origin.y,
-                             rect->bounds.origin.x + rect->corner[GSK_CORNER_TOP_LEFT].width,
-                             rect->bounds.origin.y,
-                             weight);
+  gsk_path_builder_arc_to (self,
+                           rect->bounds.origin.x,
+                           rect->bounds.origin.y,
+                           rect->bounds.origin.x + rect->corner[GSK_CORNER_TOP_LEFT].width,
+                           rect->bounds.origin.y);
   /* done */
   gsk_path_builder_close (self);
   self->current_point = current;
@@ -564,7 +559,6 @@ gsk_path_builder_add_circle (GskPathBuilder         *self,
                              float                   radius)
 {
   graphene_point_t current;
-  const float weight = M_SQRT1_2;
 
   g_return_if_fail (self != NULL);
   g_return_if_fail (center != NULL);
@@ -574,25 +568,21 @@ gsk_path_builder_add_circle (GskPathBuilder         *self,
 
   gsk_path_builder_move_to (self, center->x + radius, center->y);
   // bottom right quarter
-  gsk_path_builder_conic_to (self,
-                             center->x + radius, center->y + radius,
-                             center->x, center->y + radius,
-                             weight);
+  gsk_path_builder_arc_to (self,
+                           center->x + radius, center->y + radius,
+                           center->x, center->y + radius);
   // bottom left quarter
-  gsk_path_builder_conic_to (self,
-                             center->x - radius, center->y + radius,
-                             center->x - radius, center->y,
-                             weight);
+  gsk_path_builder_arc_to (self,
+                           center->x - radius, center->y + radius,
+                           center->x - radius, center->y);
   // top left quarter
-  gsk_path_builder_conic_to (self,
-                             center->x - radius, center->y - radius,
-                             center->x, center->y - radius,
-                             weight);
+  gsk_path_builder_arc_to (self,
+                           center->x - radius, center->y - radius,
+                           center->x, center->y - radius);
   // top right quarter
-  gsk_path_builder_conic_to (self,
-                             center->x + radius, center->y - radius,
-                             center->x + radius, center->y,
-                             weight);
+  gsk_path_builder_arc_to (self,
+                           center->x + radius, center->y - radius,
+                           center->x + radius, center->y);
   // done
   gsk_path_builder_close (self);
   self->current_point = current;
@@ -947,6 +937,43 @@ gsk_path_builder_rel_conic_to (GskPathBuilder *self,
                              self->current_point.x + x2,
                              self->current_point.y + y2,
                              weight);
+}
+
+/**
+ * gsk_path_builder_arc_to:
+ * @self: a `GskPathBuilder`
+ * @x1: x coordinate of first control point
+ * @y1: y coordinate of first control point
+ * @x2: x coordinate of second control point
+ * @y2: y coordinate of second control point
+ *
+ * Adds an elliptical arc from the current point to @x3, @y3
+ * with @x1, @y1 determining the tangent directions.
+ *
+ * After this, @x3, @y3 will be the new current point.
+ *
+ * Note: Two points and their tangents do not determine
+ * a unique ellipse, so GSK just picks one. If you need more
+ * precise control, use [method@Gsk.PathBuilder.conic_to]
+ * or [method@Gsk.PathBuilder.svg_arc_to].
+ *
+ * <picture>
+ *   <source srcset="arc-dark.png" media="(prefers-color-scheme: dark)">
+ *   <img alt="Arc To" src="arc-light.png">
+ * </picture>
+ *
+ * Since: 4.14
+ */
+void
+gsk_path_builder_arc_to (GskPathBuilder *self,
+                         float           x1,
+                         float           y1,
+                         float           x2,
+                         float           y2)
+{
+  g_return_if_fail (self != NULL);
+
+  gsk_path_builder_conic_to (self, x1, y1, x2, y2, M_SQRT1_2);
 }
 
 /**

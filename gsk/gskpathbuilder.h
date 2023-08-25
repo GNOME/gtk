@@ -137,6 +137,13 @@ void                    gsk_path_builder_rel_conic_to           (GskPathBuilder 
                                                                  float                   weight);
 
 GDK_AVAILABLE_IN_4_14
+void                    gsk_path_builder_arc_to                 (GskPathBuilder         *self,
+                                                                 float                   x1,
+                                                                 float                   y1,
+                                                                 float                   x2,
+                                                                 float                   y2);
+
+GDK_AVAILABLE_IN_4_14
 void                    gsk_path_builder_svg_arc_to             (GskPathBuilder         *self,
                                                                  float                   rx,
                                                                  float                   ry,
