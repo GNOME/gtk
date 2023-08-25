@@ -840,24 +840,24 @@ gtk_gears_unrealize (GtkWidget *widget)
   GtkGearsPrivate *priv = gtk_gears_get_instance_private ((GtkGears *) widget);
 
   gtk_gl_area_make_current (glarea);
-  if (gtk_gl_area_get_error (glarea) != NULL)
-    return;
+  if (gtk_gl_area_get_error (glarea) == NULL)
+    {
+      /* Release the resources associated with OpenGL */
+      if (priv->gear_vbo[0] != 0)
+        glDeleteBuffers (1, &(priv->gear_vbo[0]));
 
-  /* Release the resources associated with OpenGL */
-  if (priv->gear_vbo[0] != 0)
-    glDeleteBuffers (1, &(priv->gear_vbo[0]));
+      if (priv->gear_vbo[1] != 0)
+        glDeleteBuffers (1, &(priv->gear_vbo[1]));
 
-  if (priv->gear_vbo[1] != 0)
-    glDeleteBuffers (1, &(priv->gear_vbo[1]));
+      if (priv->gear_vbo[2] != 0)
+        glDeleteBuffers (1, &(priv->gear_vbo[2]));
 
-  if (priv->gear_vbo[2] != 0)
-    glDeleteBuffers (1, &(priv->gear_vbo[2]));
+      if (priv->vao != 0)
+        glDeleteVertexArrays (1, &priv->vao);
 
-  if (priv->vao != 0)
-    glDeleteVertexArrays (1, &priv->vao);
-
-  if (priv->program != 0)
-    glDeleteProgram (priv->program);
+      if (priv->program != 0)
+        glDeleteProgram (priv->program);
+    }
 
   priv->ModelViewProjectionMatrix_location = 0;
   priv->NormalMatrix_location = 0;
