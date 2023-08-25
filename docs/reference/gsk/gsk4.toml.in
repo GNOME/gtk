@@ -37,10 +37,10 @@ content_files = [
 ]
 content_images = [
   "gtk-logo.svg",
-  "images/arc-dark.png",
-  "images/arc-light.png",
   "images/caps-dark.png",
   "images/caps-light.png",
+  "images/conic-light.png",
+  "images/conic-dark.png",
   "images/cubic-dark.png",
   "images/cubic-light.png",
   "images/curvature-dark.png",

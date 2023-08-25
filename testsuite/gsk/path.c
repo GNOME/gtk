@@ -276,19 +276,21 @@ add_standard_contour (GskPathBuilder *builder)
           break;
 
         case 6:
-          gsk_path_builder_arc_to (builder,
-                                   g_test_rand_double_range (-1000, 1000),
-                                   g_test_rand_double_range (-1000, 1000),
-                                   g_test_rand_double_range (-1000, 1000),
-                                   g_test_rand_double_range (-1000, 1000));
+          gsk_path_builder_conic_to (builder,
+                                     g_test_rand_double_range (-1000, 1000),
+                                     g_test_rand_double_range (-1000, 1000),
+                                     g_test_rand_double_range (-1000, 1000),
+                                     g_test_rand_double_range (-1000, 1000),
+                                     g_test_rand_double_range (0.2, 20));
           break;
 
         case 7:
-          gsk_path_builder_rel_arc_to (builder,
-                                       g_test_rand_double_range (-1000, 1000),
-                                       g_test_rand_double_range (-1000, 1000),
-                                       g_test_rand_double_range (-1000, 1000),
-                                       g_test_rand_double_range (-1000, 1000));
+          gsk_path_builder_rel_conic_to (builder,
+                                         g_test_rand_double_range (-1000, 1000),
+                                         g_test_rand_double_range (-1000, 1000),
+                                         g_test_rand_double_range (-1000, 1000),
+                                         g_test_rand_double_range (-1000, 1000),
+                                         g_test_rand_double_range (0.2, 20));
           break;
 
         default:
@@ -387,11 +389,13 @@ path_operation_print (const PathOperation *p,
       _g_string_append_point (string, &p->pts[3]);
       break;
 
-    case GSK_PATH_ARC:
-      g_string_append (string, " E ");
+    case GSK_PATH_CONIC:
+      g_string_append (string, " O ");
       _g_string_append_point (string, &p->pts[1]);
       g_string_append (string, ", ");
-      _g_string_append_point (string, &p->pts[2]);
+      _g_string_append_point (string, &p->pts[3]);
+      g_string_append (string, ", ");
+      _g_string_append_double (string, p->pts[2].x);
       break;
 
     default:
@@ -428,9 +432,9 @@ path_operation_equal (const PathOperation *p1,
             && graphene_point_near (&p1->pts[2], &p2->pts[2], epsilon)
             && graphene_point_near (&p1->pts[3], &p2->pts[3], epsilon);
 
-      case GSK_PATH_ARC:
+      case GSK_PATH_CONIC:
         return graphene_point_near (&p1->pts[1], &p2->pts[1], epsilon)
-            && graphene_point_near (&p1->pts[2], &p2->pts[2], epsilon);
+            && graphene_point_near (&p1->pts[3], &p2->pts[3], epsilon);
 
       default:
         g_return_val_if_reached (FALSE);
@@ -441,6 +445,7 @@ static gboolean
 collect_path_operation_cb (GskPathOperation        op,
                            const graphene_point_t *pts,
                            gsize                   n_pts,
+                           float                   weight,
                            gpointer                user_data)
 {
   g_array_append_vals (user_data,
@@ -685,6 +690,7 @@ static gboolean
 rotate_path_cb (GskPathOperation        op,
                 const graphene_point_t *pts,
                 gsize                   n_pts,
+                float                   weight,
                 gpointer                user_data)
 {
   GskPathBuilder **builders = user_data;
@@ -716,9 +722,9 @@ rotate_path_cb (GskPathOperation        op,
       gsk_path_builder_cubic_to (builders[1], pts[1].y, -pts[1].x, pts[2].y, -pts[2].x, pts[3].y, -pts[3].x);
       break;
 
-    case GSK_PATH_ARC:
-      gsk_path_builder_arc_to (builders[0], pts[1].x, pts[1].y, pts[2].x, pts[2].y);
-      gsk_path_builder_arc_to (builders[1], pts[1].y, -pts[1].x, pts[2].y, -pts[2].x);
+    case GSK_PATH_CONIC:
+      gsk_path_builder_conic_to (builders[0], pts[1].x, pts[1].y, pts[2].x, pts[2].y, weight);
+      gsk_path_builder_conic_to (builders[1], pts[1].y, -pts[1].x, pts[2].y, -pts[2].x, weight);
       break;
 
     default:

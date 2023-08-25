@@ -342,6 +342,7 @@ static gboolean
 collect_path (GskPathOperation        op,
               const graphene_point_t *pts,
               gsize                   n_pts,
+              float                   weight,
               gpointer                user_data)
 {
   GskPathBuilder *builder = user_data;
@@ -373,9 +374,10 @@ collect_path (GskPathOperation        op,
                                           pts[3].x, pts[3].y);
       break;
 
-    case GSK_PATH_ARC:
-      gsk_path_builder_arc_to (builder, pts[1].x, pts[1].y,
-                                        pts[2].x, pts[2].y);
+    case GSK_PATH_CONIC:
+      gsk_path_builder_conic_to (builder, pts[1].x, pts[1].y,
+                                          pts[2].x, pts[2].y,
+                                          weight);
       break;
 
     default:
@@ -698,6 +700,7 @@ static gboolean
 rotate_path_cb (GskPathOperation        op,
                 const graphene_point_t *pts,
                 gsize                   n_pts,
+                float                   weight,
                 gpointer                user_data)
 {
   GskPathBuilder **builders = user_data;
@@ -729,9 +732,9 @@ rotate_path_cb (GskPathOperation        op,
       gsk_path_builder_cubic_to (builders[1], pts[1].y, -pts[1].x, pts[2].y, -pts[2].x, pts[3].y, -pts[3].x);
       break;
 
-    case GSK_PATH_ARC:
-      gsk_path_builder_arc_to (builders[0], pts[1].x, pts[1].y, pts[2].x, pts[2].y);
-      gsk_path_builder_arc_to (builders[1], pts[1].y, -pts[1].x, pts[2].y, -pts[2].x);
+    case GSK_PATH_CONIC:
+      gsk_path_builder_conic_to (builders[0], pts[1].x, pts[1].y, pts[2].x, pts[2].y, weight);
+      gsk_path_builder_conic_to (builders[1], pts[1].y, -pts[1].x, pts[2].y, -pts[2].x, weight);
       break;
 
     default:
@@ -751,7 +754,7 @@ test_rotated_arc (void)
   float x, y;
   GskFillRule fill_rule;
 
-  path = gsk_path_parse ("M -963 186 E -375 -757, 537 -607");
+  path = gsk_path_parse ("M -963 186 O -375 -757, 537 -607 0.707");
 
   x = -626;
   y = -274;

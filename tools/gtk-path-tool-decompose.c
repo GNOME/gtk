@@ -28,6 +28,7 @@ static gboolean
 foreach_cb (GskPathOperation        op,
             const graphene_point_t *pts,
             gsize                   n_pts,
+            float                   weight,
             gpointer                user_data)
 {
   GskPathBuilder *builder = user_data;
@@ -47,7 +48,8 @@ foreach_cb (GskPathOperation        op,
       break;
 
     case GSK_PATH_QUAD:
-      gsk_path_builder_quad_to (builder, pts[1].x, pts[1].y, pts[2].x, pts[2].y);
+      gsk_path_builder_quad_to (builder, pts[1].x, pts[1].y,
+                                         pts[2].x, pts[2].y);
       break;
 
     case GSK_PATH_CUBIC:
@@ -56,8 +58,10 @@ foreach_cb (GskPathOperation        op,
                                           pts[3].x, pts[3].y);
       break;
 
-    case GSK_PATH_ARC:
-      gsk_path_builder_arc_to (builder, pts[1].x, pts[1].y, pts[2].x, pts[2].y);
+    case GSK_PATH_CONIC:
+      gsk_path_builder_conic_to (builder, pts[1].x, pts[1].y,
+                                          pts[2].x, pts[2].y,
+                                          weight);
       break;
 
     default:
@@ -73,13 +77,13 @@ do_decompose (int *argc, const char ***argv)
   GError *error = NULL;
   gboolean allow_quad = FALSE;
   gboolean allow_cubic = FALSE;
-  gboolean allow_arc = FALSE;
+  gboolean allow_conic = FALSE;
   char **args = NULL;
   GOptionContext *context;
   GOptionEntry entries[] = {
     { "allow-quad", 0, 0, G_OPTION_ARG_NONE, &allow_quad, N_("Allow quadratic Bézier curves"), NULL },
     { "allow-cubic", 0, 0, G_OPTION_ARG_NONE, &allow_cubic, N_("Allow cubic Bézier curves"), NULL },
-    { "allow-arc", 0, 0, G_OPTION_ARG_NONE, &allow_arc, N_("Allow elliptical arcs"), NULL },
+    { "allow-conic", 0, 0, G_OPTION_ARG_NONE, &allow_conic, N_("Allow conic Bézier curves"), NULL },
     { G_OPTION_REMAINING, 0, 0, G_OPTION_ARG_FILENAME_ARRAY, &args, NULL, N_("PATH") },
     { NULL, },
   };
@@ -116,8 +120,8 @@ do_decompose (int *argc, const char ***argv)
     flags |= GSK_PATH_FOREACH_ALLOW_QUAD;
   if (allow_cubic)
     flags |= GSK_PATH_FOREACH_ALLOW_CUBIC;
-  if (allow_arc)
-    flags |= GSK_PATH_FOREACH_ALLOW_ARC;
+  if (allow_conic)
+    flags |= GSK_PATH_FOREACH_ALLOW_CONIC;
 
   builder = gsk_path_builder_new ();
 

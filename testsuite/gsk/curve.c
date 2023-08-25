@@ -48,14 +48,16 @@ init_random_curve_with_op (GskCurve         *curve,
       }
     break;
 
-    case GSK_PATH_ARC:
+    case GSK_PATH_CONIC:
       {
-        graphene_point_t p[3];
+        graphene_point_t p[4];
 
         init_random_point (&p[0]);
         init_random_point (&p[1]);
-        init_random_point (&p[2]);
-        gsk_curve_init (curve, gsk_pathop_encode (GSK_PATH_ARC, p));
+        p[2].x = g_test_rand_double_range (0.2, 20);
+        p[2].y = 0.f;
+        init_random_point (&p[3]);
+        gsk_curve_init (curve, gsk_pathop_encode (GSK_PATH_CONIC, p));
       }
     break;
 
@@ -67,7 +69,7 @@ init_random_curve_with_op (GskCurve         *curve,
 static void
 init_random_curve (GskCurve *curve)
 {
-  init_random_curve_with_op (curve, GSK_PATH_LINE, GSK_PATH_ARC);
+  init_random_curve_with_op (curve, GSK_PATH_LINE, GSK_PATH_CONIC);
 }
 
 static void
@@ -209,12 +211,13 @@ static gboolean
 add_curve_to_array (GskPathOperation        op,
                     const graphene_point_t *pts,
                     gsize                   n_pts,
+                    float                   weight,
                     gpointer                user_data)
 {
   GArray *array = user_data;
   GskCurve c;
 
-  gsk_curve_init_foreach (&c, op, pts, n_pts);
+  gsk_curve_init_foreach (&c, op, pts, n_pts, weight);
   g_array_append_val (array, c);
 
   return TRUE;
@@ -262,8 +265,8 @@ test_curve_decompose_into (GskPathForeachFlags flags)
             case GSK_PATH_CUBIC:
               g_assert_true (flags & GSK_PATH_FOREACH_ALLOW_CUBIC);
               break;
-            case GSK_PATH_ARC:
-              g_assert_true (flags & GSK_PATH_FOREACH_ALLOW_ARC);
+            case GSK_PATH_CONIC:
+              g_assert_true (flags & GSK_PATH_FOREACH_ALLOW_CONIC);
               break;
             default:
               g_assert_not_reached ();
@@ -346,7 +349,8 @@ test_curve_derivative (void)
 
   for (int i = 0; i < 100; i++)
     {
-      init_random_curve (&c);
+      /* No derivatives for conics */
+      init_random_curve_with_op (&c, GSK_PATH_LINE, GSK_PATH_CUBIC);
 
       gsk_curve_get_derivative (&c, &d);
 

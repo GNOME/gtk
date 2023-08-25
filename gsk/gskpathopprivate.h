@@ -50,6 +50,13 @@ void                    gsk_path_builder_pathop_reverse_to      (GskPathBuilder 
 
 /* IMPLEMENTATION */
 
+/* Note:
+ *
+ * The weight of conics is encoded as p[2].x, and the endpoint is p[3].
+ * This is important, since contours store the points of adjacent
+ * operations overlapping, so we can't put the weight at the end.
+ */
+
 #define GSK_PATHOP_OPERATION_MASK (0x7)
 
 static inline gskpathop
@@ -82,20 +89,23 @@ gsk_pathop_foreach (gskpathop          pop,
   switch (gsk_pathop_op (pop))
   {
     case GSK_PATH_MOVE:
-      return func (gsk_pathop_op (pop), gsk_pathop_points (pop), 1, user_data);
+      return func (gsk_pathop_op (pop), gsk_pathop_points (pop), 1, 0, user_data);
 
     case GSK_PATH_CLOSE:
     case GSK_PATH_LINE:
-      return func (gsk_pathop_op (pop), gsk_pathop_points (pop), 2, user_data);
+      return func (gsk_pathop_op (pop), gsk_pathop_points (pop), 2, 0, user_data);
 
     case GSK_PATH_QUAD:
-      return func (gsk_pathop_op (pop), gsk_pathop_points (pop), 3, user_data);
+      return func (gsk_pathop_op (pop), gsk_pathop_points (pop), 3, 0, user_data);
 
     case GSK_PATH_CUBIC:
-      return func (gsk_pathop_op (pop), gsk_pathop_points (pop), 4, user_data);
+      return func (gsk_pathop_op (pop), gsk_pathop_points (pop), 4, 0, user_data);
 
-    case GSK_PATH_ARC:
-      return func (gsk_pathop_op (pop), gsk_pathop_points (pop), 3, user_data);
+    case GSK_PATH_CONIC:
+      {
+        const graphene_point_t *pts = gsk_pathop_points (pop);
+        return func (gsk_pathop_op (pop), (graphene_point_t[3]) { pts[0], pts[1], pts[3] }, 3, pts[2].x, user_data);
+      }
 
     default:
       g_assert_not_reached ();
@@ -131,8 +141,8 @@ gsk_path_builder_pathop_to (GskPathBuilder *builder,
       gsk_path_builder_cubic_to (builder, pts[1].x, pts[1].y, pts[2].x, pts[2].y, pts[3].x, pts[3].y);
       break;
 
-    case GSK_PATH_ARC:
-      gsk_path_builder_arc_to (builder, pts[1].x, pts[1].y, pts[2].x, pts[2].y);
+    case GSK_PATH_CONIC:
+      gsk_path_builder_conic_to (builder, pts[1].x, pts[1].y, pts[3].x, pts[3].y, pts[2].x);
       break;
 
     default:
@@ -169,8 +179,8 @@ gsk_path_builder_pathop_reverse_to (GskPathBuilder *builder,
       gsk_path_builder_cubic_to (builder, pts[2].x, pts[2].y, pts[1].x, pts[1].y, pts[0].x, pts[0].y);
       break;
 
-    case GSK_PATH_ARC:
-      gsk_path_builder_arc_to (builder, pts[1].x, pts[1].y, pts[0].x, pts[0].y);
+    case GSK_PATH_CONIC:
+      gsk_path_builder_conic_to (builder, pts[1].x, pts[1].y, pts[0].x, pts[0].y, pts[2].x);
       break;
 
     default:
