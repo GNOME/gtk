@@ -162,9 +162,9 @@
  * `GtkTextView` uses the [enum@Gtk.AccessibleRole.text_box] role.
  */
 
-/* How scrolling, validation, exposes, etc. work.
+/* How scrolling, validation, snapshots, etc. work.
  *
- * The expose_event handler has the invariant that the onscreen lines
+ * The snapshot handler has the invariant that the onscreen lines
  * have been validated.
  *
  * There are two ways that onscreen lines can become invalid. The first
@@ -173,7 +173,7 @@
  * gtk_text_view_value_changed() and goes like this:
  *   - gdk_surface_scroll() to reflect the new adjustment value
  *   - validate the lines that were moved onscreen
- *   - gdk_surface_process_updates() to handle the exposes immediately
+ *   - gdk_surface_process_updates() to handle the snapshots immediately
  *
  * The second way is that you get the “invalidated” signal from the layout,
  * indicating that lines have become invalid. This code path begins in
@@ -191,7 +191,7 @@
  *
  * Also, in size_allocate, if we invalidate some lines from changing
  * the layout width, we need to go ahead and run the high-priority idle,
- * because GTK sends exposes right after doing the size allocates without
+ * because GTK does snapshotting right after doing the size allocates without
  * returning to the main loop. This is also why the high-priority idle
  * is at a higher priority than resizing.
  *
@@ -4865,9 +4865,9 @@ gtk_text_view_size_allocate (GtkWidget *widget,
       gtk_text_layout_set_mru_size (priv->layout, mru_size);
     }
 
-  /* The GTK resize loop processes all the pending exposes right
-   * after doing the resize stuff, so the idle sizer won't have a
-   * chance to run. So we do the work here.
+  /* The GTK resize loop does snapshotting right after doing
+   * the resize stuff, so the idle sizer won't have a chance
+   * to run. So we do the work here.
    */
   gtk_text_view_flush_first_validate (text_view);
 
@@ -6137,7 +6137,7 @@ gtk_text_view_snapshot (GtkWidget   *widget,
   GtkTextViewPrivate *priv = text_view->priv;
   const GList *iter;
 
-  DV(g_print (">Exposed ("G_STRLOC")\n"));
+  DV(g_print (">Snapshot ("G_STRLOC")\n"));
 
   draw_text (widget, snapshot);
 
