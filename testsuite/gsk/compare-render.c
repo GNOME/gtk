@@ -9,6 +9,10 @@ static gboolean flip = FALSE;
 static gboolean rotate = FALSE;
 static gboolean repeat = FALSE;
 static gboolean mask = FALSE;
+static gboolean replay = FALSE;
+
+extern void
+replay_node (GskRenderNode *node, GtkSnapshot *snapshot);
 
 static const char *
 get_output_dir (void)
@@ -159,6 +163,7 @@ static const GOptionEntry options[] = {
   { "rotate", 0, 0, G_OPTION_ARG_NONE, &rotate, "Do rotated test", NULL },
   { "repeat", 0, 0, G_OPTION_ARG_NONE, &repeat, "Do repeated test", NULL },
   { "mask", 0, 0, G_OPTION_ARG_NONE, &mask, "Do masked test", NULL },
+  { "replay", 0, 0, G_OPTION_ARG_NONE, &replay, "Do replay test", NULL },
   { NULL }
 };
 
@@ -484,6 +489,45 @@ main (int argc, char **argv)
 
       g_clear_object (&rendered_texture);
       g_clear_object (&reference_texture);
+      gsk_render_node_unref (node2);
+    }
+
+  if (replay)
+    {
+      GskRenderNode *node2;
+      GdkTexture *rendered_texture2;
+      graphene_rect_t node_bounds, node2_bounds;
+      GtkSnapshot *snapshot = gtk_snapshot_new ();
+
+      replay_node (node, snapshot);
+      node2 = gtk_snapshot_free_to_node (snapshot);
+      /* If the whole render node tree got eliminated, make sure we have
+         something to work with nevertheless.  */
+      if (!node2)
+        node2 = gsk_container_node_new (NULL, 0);
+
+      gsk_render_node_get_bounds (node, &node_bounds);
+      gsk_render_node_get_bounds (node2, &node2_bounds);
+      /* Check that the node didn't grow.  */
+      success = success && graphene_rect_contains_rect (&node_bounds, &node2_bounds);
+
+      rendered_texture = gsk_renderer_render_texture (renderer, node, &node_bounds);
+      rendered_texture2 = gsk_renderer_render_texture (renderer, node2, &node_bounds);
+      g_assert_nonnull (rendered_texture);
+      g_assert_nonnull (rendered_texture2);
+
+      diff_texture = reftest_compare_textures (rendered_texture, rendered_texture2);
+
+      if (diff_texture)
+        {
+          save_image (diff_texture, node_file, "-replayed.diff.png");
+          save_node (node2, node_file, "-replayed.node");
+          g_object_unref (diff_texture);
+          success = FALSE;
+        }
+
+      g_clear_object (&rendered_texture);
+      g_clear_object (&rendered_texture2);
       gsk_render_node_unref (node2);
     }
 

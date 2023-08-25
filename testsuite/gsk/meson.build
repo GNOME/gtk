@@ -1,5 +1,5 @@
 compare_render = executable('compare-render',
-  ['compare-render.c', '../reftests/reftest-compare.c'],
+  ['compare-render.c', '../reftests/reftest-compare.c', 'replay-node.c'],
   dependencies: libgtk_dep,
   c_args: common_cflags,
 )
@@ -34,6 +34,7 @@ compare_render_tests = [
   'clip-translate-offscreen',
   'color-blur0',
   'color-matrix-identity',
+  'color-matrix-merge',
   'color-matrix-parsing',
   'crossfade-clip-both-children',
   'cross-fade-in-opacity',
@@ -148,6 +149,13 @@ foreach renderer : renderers
       suites += 'wayland_gles_failing'
     endif
 
+    test_env = [
+      'GSK_RENDERER=' + renderer_name,
+      'GTK_A11Y=test',
+      'G_TEST_SRCDIR=@0@'.format(meson.current_source_dir()),
+      'G_TEST_BUILDDIR=@0@'.format(meson.current_build_dir())
+    ]
+
     if ((exclude_term == '' or not testname.contains(exclude_term)) and
         (renderer_name != 'broadway' or broadway_enabled))
       test(renderer_name + ' ' + testname, compare_render,
@@ -156,12 +164,7 @@ foreach renderer : renderers
           join_paths(meson.current_source_dir(), 'compare', testname + '.node'),
           join_paths(meson.current_source_dir(), 'compare', testname + '.png'),
         ],
-        env: [
-          'GSK_RENDERER=' + renderer_name,
-          'GTK_A11Y=test',
-          'G_TEST_SRCDIR=@0@'.format(meson.current_source_dir()),
-          'G_TEST_BUILDDIR=@0@'.format(meson.current_build_dir())
-        ],
+        env: test_env,
         suite: suites,
       )
       test(renderer_name + ' ' + testname + ' flipped', compare_render,
@@ -171,12 +174,7 @@ foreach renderer : renderers
           join_paths(meson.current_source_dir(), 'compare', testname + '.node'),
           join_paths(meson.current_source_dir(), 'compare', testname + '.png'),
         ],
-        env: [
-          'GSK_RENDERER=' + renderer_name,
-          'GTK_A11Y=test',
-          'G_TEST_SRCDIR=@0@'.format(meson.current_source_dir()),
-          'G_TEST_BUILDDIR=@0@'.format(meson.current_build_dir())
-        ],
+        env: test_env,
         suite: suites + [ 'gsk-compare-flipped-' + renderer_name ],
       )
       test(renderer_name + ' ' + testname + ' repeated', compare_render,
@@ -186,12 +184,7 @@ foreach renderer : renderers
           join_paths(meson.current_source_dir(), 'compare', testname + '.node'),
           join_paths(meson.current_source_dir(), 'compare', testname + '.png'),
         ],
-        env: [
-          'GSK_RENDERER=' + renderer_name,
-          'GTK_A11Y=test',
-          'G_TEST_SRCDIR=@0@'.format(meson.current_source_dir()),
-          'G_TEST_BUILDDIR=@0@'.format(meson.current_build_dir())
-        ],
+        env: test_env,
         suite: suites + [ 'gsk-compare-repeated-' + renderer_name ],
       )
       test(renderer_name + ' ' + testname + ' rotated', compare_render,
@@ -201,12 +194,7 @@ foreach renderer : renderers
           join_paths(meson.current_source_dir(), 'compare', testname + '.node'),
           join_paths(meson.current_source_dir(), 'compare', testname + '.png'),
         ],
-        env: [
-          'GSK_RENDERER=' + renderer_name,
-          'GTK_A11Y=test',
-          'G_TEST_SRCDIR=@0@'.format(meson.current_source_dir()),
-          'G_TEST_BUILDDIR=@0@'.format(meson.current_build_dir())
-        ],
+        env: test_env,
         suite: suites + [ 'gsk-compare-rotated-' + renderer_name ],
       )
       test(renderer_name + ' ' + testname + ' masked', compare_render,
@@ -216,13 +204,18 @@ foreach renderer : renderers
           join_paths(meson.current_source_dir(), 'compare', testname + '.node'),
           join_paths(meson.current_source_dir(), 'compare', testname + '.png'),
         ],
-        env: [
-          'GSK_RENDERER=' + renderer_name,
-          'GTK_A11Y=test',
-          'G_TEST_SRCDIR=@0@'.format(meson.current_source_dir()),
-          'G_TEST_BUILDDIR=@0@'.format(meson.current_build_dir())
-        ],
+        env: test_env,
         suite: suites + [ 'gsk-compare-masked-' + renderer_name ],
+      )
+      test(renderer_name + ' ' + testname + ' replayed', compare_render,
+        args: [
+          '--replay',
+          '--output', join_paths(meson.current_build_dir(), 'compare', renderer_name),
+          join_paths(meson.current_source_dir(), 'compare', testname + '.node'),
+          join_paths(meson.current_source_dir(), 'compare', testname + '.png'),
+        ],
+        env: test_env,
+        suite: suites + [ 'gsk-compare-replayed-' + renderer_name ],
       )
     endif
   endforeach
