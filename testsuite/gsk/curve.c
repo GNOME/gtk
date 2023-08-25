@@ -342,26 +342,22 @@ test_curve_split (void)
 static void
 test_curve_derivative (void)
 {
-  GskCurve c, d;
+  GskCurve c;
   float t;
   graphene_vec2_t t1, t2;
   graphene_point_t p;
 
   for (int i = 0; i < 100; i++)
     {
-      /* No derivatives for conics */
-      init_random_curve_with_op (&c, GSK_PATH_LINE, GSK_PATH_CUBIC);
-
-      gsk_curve_get_derivative (&c, &d);
+      init_random_curve (&c);
 
       for (int j = 0; j < 100; j++)
         {
           t = g_test_rand_double_range (0, 1);
+          gsk_curve_get_derivative_at (&c, t, &p);
           gsk_curve_get_tangent (&c, t, &t1);
-          gsk_curve_get_point (&d, t, &p);
           graphene_vec2_init (&t2, p.x, p.y);
           graphene_vec2_normalize (&t2, &t2);
-
           g_assert_true (graphene_vec2_near (&t1, &t2, 0.1));
         }
     }
