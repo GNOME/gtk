@@ -1,4 +1,4 @@
-Overview of Changes in 4.12.1, xx-xx-xxxx
+Overview of Changes in 4.12.1, 25-08-2023
 =========================================
 
 * GtkGridView:
@@ -34,6 +34,10 @@ Overview of Changes in 4.12.1, xx-xx-xxxx
 
 * Wayland:
  - Fix a crash with compositors other than gnome-shell
+
+* Translation updates:
+ Polish
+ Swedish
 
 
 Overview of Changes in 4.12.0, 05-08-2023
