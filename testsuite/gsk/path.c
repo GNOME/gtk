@@ -791,12 +791,6 @@ test_split (void)
   GskPathPoint point0, point1, point2;
   float tolerance = 0.5;
 
-  if (!g_test_slow ())
-    {
-      g_test_skip ("Skipping slow test");
-      return;
-    }
-
   for (int i = 0; i < 100; i++)
     {
       if (g_test_verbose ())
@@ -866,12 +860,6 @@ test_roundtrip (void)
   float distance;
   float tolerance = 0.5;
 
-  if (!g_test_slow ())
-    {
-      g_test_skip ("Skipping slow test");
-      return;
-    }
-
   for (int i = 0; i < 100; i++)
     {
       if (g_test_verbose ())
@@ -912,12 +900,6 @@ test_segment (void)
   GskPathBuilder *builder;
   float split1, split2, epsilon;
   float tolerance = 0.5;
-
-  if (!g_test_slow ())
-    {
-      g_test_skip ("Skipping slow test");
-      return;
-    }
 
   for (int i = 0; i < 100; i++)
     {
