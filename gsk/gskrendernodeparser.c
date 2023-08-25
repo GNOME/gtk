@@ -1173,9 +1173,15 @@ create_default_texture (void)
 }
 
 static GskRenderNode *
+create_default_render_node_with_bounds (const graphene_rect_t *rect)
+{
+  return gsk_color_node_new (&GDK_RGBA("FF00CC"), rect);
+}
+
+static GskRenderNode *
 create_default_render_node (void)
 {
-  return gsk_color_node_new (&GDK_RGBA("FF00CC"), &GRAPHENE_RECT_INIT (0, 0, 50, 50));
+  return create_default_render_node_with_bounds (&GRAPHENE_RECT_INIT (0, 0, 50, 50));
 }
 
 static GskPath *
@@ -2254,10 +2260,14 @@ parse_fill_node (GtkCssParser *parser,
   GskRenderNode *result;
 
   parse_declarations (parser, context, declarations, G_N_ELEMENTS (declarations));
-  if (child == NULL)
-    child = create_default_render_node ();
   if (path == NULL)
     path = create_default_path ();
+  if (child == NULL)
+    {
+      graphene_rect_t bounds;
+      gsk_path_get_bounds (path, &bounds);
+      child = create_default_render_node_with_bounds (&bounds);
+    }
 
   result = gsk_fill_node_new (child, path, rule);
 
@@ -2311,8 +2321,6 @@ parse_stroke_node (GtkCssParser *parser,
   GskRenderNode *result;
 
   parse_declarations (parser, context, declarations, G_N_ELEMENTS (declarations));
-  if (child == NULL)
-    child = create_default_render_node ();
   if (path == NULL)
     path = create_default_path ();
 
@@ -2326,6 +2334,13 @@ parse_stroke_node (GtkCssParser *parser,
       g_array_free (dash, TRUE);
     }
   gsk_stroke_set_dash_offset (stroke, dash_offset);
+
+  if (child == NULL)
+    {
+      graphene_rect_t bounds;
+      gsk_path_get_stroke_bounds (path, stroke, &bounds);
+      child = create_default_render_node_with_bounds (&bounds);
+    }
 
   result = gsk_stroke_node_new (child, path, stroke);
 
