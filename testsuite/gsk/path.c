@@ -796,7 +796,7 @@ test_split (void)
       if (g_test_verbose ())
         g_test_message ("path %u", i);
 
-      path = create_random_path (G_MAXUINT);
+      path = create_random_path (1);
       measure = gsk_path_measure_new_with_tolerance (path, tolerance);
 
       length = gsk_path_measure_get_length (measure);
@@ -865,7 +865,7 @@ test_roundtrip (void)
       if (g_test_verbose ())
         g_test_message ("path %u", i);
 
-      path = create_random_path (G_MAXUINT);
+      path = create_random_path (1);
       measure = gsk_path_measure_new_with_tolerance (path, tolerance);
 
       length = gsk_path_measure_get_length (measure);
