@@ -809,6 +809,27 @@ test_rounded_rect (void)
   gsk_path_unref (path);
 }
 
+static void
+test_circle (void)
+{
+  GskPathBuilder *builder;
+  GskPath *path;
+  GskPathMeasure *measure;
+  float length;
+
+  builder = gsk_path_builder_new ();
+  gsk_path_builder_add_circle (builder, &GRAPHENE_POINT_INIT (0, 0), 1);
+  path = gsk_path_builder_free_to_path (builder);
+
+  measure = gsk_path_measure_new (path);
+  length = gsk_path_measure_get_length (measure);
+
+  g_assert_cmpfloat_with_epsilon (length, 2 * M_PI, 0.001);
+
+  gsk_path_measure_unref (measure);
+  gsk_path_unref (path);
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -825,6 +846,7 @@ main (int argc, char *argv[])
   g_test_add_func ("/path/builder/add", test_path_builder_add);
   g_test_add_func ("/path/rotated-arc", test_rotated_arc);
   g_test_add_func ("/path/rounded-rect", test_rounded_rect);
+  g_test_add_func ("/path/circle", test_circle);
 
   return g_test_run ();
 }
