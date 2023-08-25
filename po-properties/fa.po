@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.3.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-07-06 11:12+0000\n"
-"PO-Revision-Date: 2023-07-17 19:50+0330\n"
+"POT-Creation-Date: 2023-08-24 23:47+0000\n"
+"PO-Revision-Date: 2023-08-26 02:16+0330\n"
 "Last-Translator: Danial Behzadi <dani.behzi@ubuntu.com>\n"
 "Language-Team: Persian <translate@ifsug.org>\n"
 "Language: fa\n"
@@ -3571,9 +3571,8 @@ msgid "Whether to suggest Emoji replacements"
 msgstr "این که جایگزینی شکلک پیشنهاد شود یا نه"
 
 #: gtk/gtkentry.c:1564
-#, fuzzy
 msgid "Icon Prelight"
-msgstr "ارتفاع"
+msgstr "پیش‌نور نقشک"
 
 #: gtk/gtkentry.c:1565
 msgid "Whether activatable icons should prelight when hovered"
@@ -4278,9 +4277,8 @@ msgid "Model column used to retrieve the text from"
 msgstr ""
 
 #: gtk/gtkiconview.c:465
-#, fuzzy
 msgid "Markup column"
-msgstr "نشان‌گذاری"
+msgstr "ستون نشانه گذاری"
 
 #: gtk/gtkiconview.c:466
 msgid "Model column used to retrieve the text if using Pango markup"
@@ -4315,18 +4313,16 @@ msgid "Space which is inserted between cells of an item"
 msgstr ""
 
 #: gtk/gtkiconview.c:540
-#, fuzzy
 msgid "Row Spacing"
-msgstr "فاصله‌گذاری سطرها"
+msgstr "فاصله‌گذاری ردیف"
 
 #: gtk/gtkiconview.c:541
 msgid "Space which is inserted between grid rows"
 msgstr ""
 
 #: gtk/gtkiconview.c:556
-#, fuzzy
 msgid "Column Spacing"
-msgstr "فاصله‌گذاری ستون‌ها"
+msgstr "فاصله‌گذاری ستون"
 
 #: gtk/gtkiconview.c:557
 msgid "Space which is inserted between grid columns"
@@ -4341,9 +4337,8 @@ msgid "Space which is inserted at the edges of the icon view"
 msgstr ""
 
 #: gtk/gtkiconview.c:588
-#, fuzzy
 msgid "Item Orientation"
-msgstr "جهت"
+msgstr "جهت مورد"
 
 #: gtk/gtkiconview.c:589
 msgid ""
@@ -4369,18 +4364,16 @@ msgid "The column in the model containing the tooltip texts for the items"
 msgstr "نام ابزارک"
 
 #: gtk/gtkiconview.c:631
-#, fuzzy
 msgid "Item Padding"
-msgstr "ردیف کردن افقی"
+msgstr "فاصله‌دهی مورد"
 
 #: gtk/gtkiconview.c:632
 msgid "Padding around icon view items"
 msgstr ""
 
 #: gtk/gtkiconview.c:687
-#, fuzzy
 msgid "Selection Box Color"
-msgstr "رنگ سطرهای زوج"
+msgstr "رنگ جعبهٔ گزینش"
 
 #: gtk/gtkiconview.c:688
 msgid "Color of the selection box"
@@ -4479,19 +4472,16 @@ msgid "Controls whether the action bar shows its contents or not"
 msgstr ""
 
 #: gtk/gtkinfobar.c:531
-#, fuzzy
 msgid "Width of border around the content area"
-msgstr "تعداد سطرهای جدول"
+msgstr "پهنای مرز دور ناحیهٔ محتوا"
 
 #: gtk/gtkinfobar.c:549
-#, fuzzy
 msgid "Spacing between elements of the area"
-msgstr "فاصله‌گذاری بین دکمه‌ها و ..."
+msgstr "فاصله‌گذاری بین عناصر ناحیه"
 
 #: gtk/gtkinfobar.c:583
-#, fuzzy
 msgid "Width of border around the action area"
-msgstr "متنی که باید در نوار پیش‌رفت نمایش یابد"
+msgstr "پهنای مرز دور ناحیهٔ کنش"
 
 #: gtk/gtkinvisible.c:99 gtk/gtkwindow.c:901
 msgid "The screen where this window will be displayed"
@@ -4569,9 +4559,8 @@ msgid "Single Line Mode"
 msgstr "حالت تک‌خط"
 
 #: gtk/gtklabel.c:1004
-#, fuzzy
 msgid "Whether the label is in single line mode"
-msgstr "آیا این برچسب بر رنگ پس‌زمینهٔ خانه تأثیر می‌گذارد یا نه"
+msgstr "این که برچسب در حالت تک‌خط است یا نه"
 
 #: gtk/gtklabel.c:1020
 msgid "Angle"
@@ -4590,9 +4579,8 @@ msgid "Track visited links"
 msgstr ""
 
 #: gtk/gtklabel.c:1058
-#, fuzzy
 msgid "Whether visited links should be tracked"
-msgstr "آیا این برچسب بر رنگ پس‌زمینهٔ خانه تأثیر می‌گذارد یا نه"
+msgstr "این که پیوندهای دیده شده باید ردگیری شوند یا نه"
 
 #: gtk/gtklabel.c:1074
 msgid "Number of lines"
@@ -4619,65 +4607,48 @@ msgid "Currently filled value level of the level bar"
 msgstr ""
 
 #: gtk/gtklevelbar.c:1045
-#, fuzzy
-#| msgid "Minimum possible value for X"
 msgid "Minimum value level for the bar"
-msgstr "حداقل مقدار ممکن برای X"
+msgstr "سطح مقدار کمینه برای نوار"
 
 #: gtk/gtklevelbar.c:1046
-#, fuzzy
-#| msgid "The number of decimal places that are displayed in the value"
 msgid "Minimum value level that can be displayed by the bar"
-msgstr "تعداد ارقام اعشاری‌ای که در مقدار نمایش می‌یابند"
+msgstr "سطح مقدار کمینه‌ای که می‌تواند به دست نوار نشان داده شود"
 
 #: gtk/gtklevelbar.c:1060
-#, fuzzy
-#| msgid "Maximum possible value for Y"
 msgid "Maximum value level for the bar"
-msgstr "حداکثر مقدار ممکن برای Y"
+msgstr "سطح مقدار بیشینه برای نوار"
 
 #: gtk/gtklevelbar.c:1061
 msgid "Maximum value level that can be displayed by the bar"
 msgstr ""
 
 #: gtk/gtklevelbar.c:1081
-#, fuzzy
 msgid "The mode of the value indicator"
-msgstr "نام ابزارک"
+msgstr "حالت نشانگر مقدار"
 
 #: gtk/gtklevelbar.c:1082
-#, fuzzy
 msgid "The mode of the value indicator displayed by the bar"
-msgstr "نام قلم انتخاب‌شده"
+msgstr "حالت نشانگر مقدار نشان داده شده به دست نوار"
 
 #: gtk/gtklevelbar.c:1098
-#, fuzzy
 msgid "Invert the direction in which the level bar grows"
-msgstr "راستا و جهت رشد نوار پیش‌رفت"
+msgstr "برگرداندن جهتی که نوار سطح رشد می‌کند"
 
 #: gtk/gtklevelbar.c:1115
-#, fuzzy
-#| msgid "Minimum height of buttons inside the box"
 msgid "Minimum height for filling blocks"
-msgstr "حداقل ارتفاع دکمه‌های داخل جعبه"
+msgstr "کمینهٔ بلندای بلوک‌های پُر کُن"
 
 #: gtk/gtklevelbar.c:1116
-#, fuzzy
-#| msgid "Minimum height of buttons inside the box"
 msgid "Minimum height for blocks that fill the bar"
-msgstr "حداقل ارتفاع دکمه‌های داخل جعبه"
+msgstr "کمینهٔ بلندای بلوک‌هایی که نوار را پُر می‌کنند"
 
 #: gtk/gtklevelbar.c:1132
-#, fuzzy
-#| msgid "Minimum width of buttons inside the box"
 msgid "Minimum width for filling blocks"
-msgstr "حداقل عرض دکمه‌های داخل جعبه"
+msgstr "کمینهٔ پهنای بلوک‌های پُر کُن"
 
 #: gtk/gtklevelbar.c:1133
-#, fuzzy
-#| msgid "Minimum width of buttons inside the box"
 msgid "Minimum width for blocks that fill the bar"
-msgstr "حداقل عرض دکمه‌های داخل جعبه"
+msgstr "کمینهٔ پهنای بلوک‌هایی که نوار را پُر می‌کنند"
 
 #: gtk/gtklinkbutton.c:168
 msgid "URI"
@@ -4692,19 +4663,16 @@ msgid "Visited"
 msgstr "مشاهده شده"
 
 #: gtk/gtklinkbutton.c:185
-#, fuzzy
 msgid "Whether this link has been visited."
-msgstr "آیا این برچسب بر رنگ پس‌زمینهٔ خانه تأثیر می‌گذارد یا نه"
+msgstr "این که پیوند دیده شده یا نه."
 
 #: gtk/gtklistbox.c:3921
-#, fuzzy
 msgid "Whether this row can be activated"
-msgstr "آیا این برچسب بر رنگ پس‌زمینهٔ خانه تأثیر می‌گذارد یا نه"
+msgstr "این که ردیف می‌تواند فعّال شود یا نه"
 
 #: gtk/gtklistbox.c:3935
-#, fuzzy
 msgid "Whether this row can be selected"
-msgstr "آیا این برچسب بر رنگ پس‌زمینهٔ خانه تأثیر می‌گذارد یا نه"
+msgstr "این که ردیف می‌تواند گزیده شود یا نه"
 
 #: gtk/gtklockbutton.c:265
 msgid "Permission"
@@ -4760,39 +4728,32 @@ msgid "Inspected"
 msgstr ""
 
 #: gtk/gtkmagnifier.c:296
-#, fuzzy
-#| msgid "Image widget"
 msgid "Inspected widget"
-msgstr "ابزارک تصویر"
+msgstr "بازرسی ابزارک"
 
 #: gtk/gtkmagnifier.c:302 gtk/gtkmagnifier.c:303
-#, fuzzy
-#| msgid "Animation"
 msgid "magnification"
-msgstr "پویانمایی"
+msgstr "درشت‌نمایی"
 
 #: gtk/gtkmagnifier.c:309 gtk/gtkmagnifier.c:310
 msgid "resize"
 msgstr "تغییر اندازه"
 
 #: gtk/gtkmenubar.c:219
-#, fuzzy
 msgid "Pack direction"
-msgstr "جهت متن"
+msgstr "جهت جاسازی"
 
 #: gtk/gtkmenubar.c:220
-#, fuzzy
 msgid "The pack direction of the menubar"
-msgstr "نام ابزارک"
+msgstr "جهت جاسازی نوار فهرست"
 
 #: gtk/gtkmenubar.c:236
 msgid "Child Pack direction"
 msgstr ""
 
 #: gtk/gtkmenubar.c:237
-#, fuzzy
 msgid "The child pack direction of the menubar"
-msgstr "موقعیت اولیهٔ پنجره"
+msgstr "جهت جاسازی فرزند نوار فهرست"
 
 #: gtk/gtkmenubar.c:254
 msgid "Style of bevel around the menubar"
@@ -4819,14 +4780,12 @@ msgid "Menu model"
 msgstr "مدل فهرست"
 
 #: gtk/gtkmenubutton.c:506
-#, fuzzy
 msgid "The model from which the popup is made."
-msgstr "مدل نمایش درختی"
+msgstr "مدلی که بالاپر از آن ساخته می‌شود."
 
 #: gtk/gtkmenubutton.c:519
-#, fuzzy
 msgid "Align with"
-msgstr "ردیف کردن"
+msgstr "ردیف کردن با"
 
 #: gtk/gtkmenubutton.c:520
 msgid "The parent widget which the menu should align with."
@@ -4838,10 +4797,8 @@ msgid "Direction"
 msgstr "جهت"
 
 #: gtk/gtkmenubutton.c:535
-#, fuzzy
-#| msgid "The direction the arrow should point"
 msgid "The direction the arrow should point."
-msgstr "جهتی که پیکان باید به آن اشاره کند"
+msgstr "جهتی که پیکان باید به آن اشاره کند."
 
 #: gtk/gtkmenubutton.c:550
 msgid "Use a popover"
@@ -4992,9 +4949,8 @@ msgid "When scrolling, always show both arrows."
 msgstr ""
 
 #: gtk/gtkmenu.c:956
-#, fuzzy
 msgid "Arrow Placement"
-msgstr "فاصله‌گذاری سطرها"
+msgstr "قرارگیری پیکان"
 
 #: gtk/gtkmenu.c:957
 msgid "Indicates where scroll arrows should be placed"
@@ -5050,9 +5006,8 @@ msgid "Sets the accelerator path of the menu item"
 msgstr ""
 
 #: gtk/gtkmenuitem.c:792
-#, fuzzy
 msgid "The text for the child label"
-msgstr "متن برچسب"
+msgstr "متنی برای برچسب فرزند"
 
 #: gtk/gtkmenuitem.c:901
 msgid "Amount of space used up by arrow, relative to the menu item's font size"
@@ -5087,9 +5042,8 @@ msgid "label border"
 msgstr "حاشیهٔ برچسب"
 
 #: gtk/gtkmessagedialog.c:175
-#, fuzzy
 msgid "Width of border around the label in the message dialog"
-msgstr "متنی که باید در نوار پیش‌رفت نمایش یابد"
+msgstr "پهنای مرز دور برچسب در گفت‌وگوی پیام"
 
 #: gtk/gtkmessagedialog.c:197
 msgid "Message Buttons"
@@ -5100,27 +5054,24 @@ msgid "The buttons shown in the message dialog"
 msgstr ""
 
 #: gtk/gtkmessagedialog.c:215
-#, fuzzy
 msgid "The primary text of the message dialog"
-msgstr "عنوان پنجره"
+msgstr "متن اصلی گفت‌وگوی پیام"
 
 #: gtk/gtkmessagedialog.c:230
 msgid "Use Markup"
 msgstr "استفاده از نشانه‌گذاری"
 
 #: gtk/gtkmessagedialog.c:231
-#, fuzzy
 msgid "The primary text of the title includes Pango markup."
-msgstr "متن برچسب نشان‌گذاری XMLی دارد. به pango_parse_markup()‎ مراجعه کنید."
+msgstr "متن اصلی عنوان، نشانه گذاری پنگو دارد."
 
 #: gtk/gtkmessagedialog.c:245
 msgid "Secondary Text"
 msgstr "متن دومین"
 
 #: gtk/gtkmessagedialog.c:246
-#, fuzzy
 msgid "The secondary text of the message dialog"
-msgstr "عنوان پنجره"
+msgstr "متن ثانویهٔ گفت‌وگوی پیام"
 
 #: gtk/gtkmessagedialog.c:261
 msgid "Use Markup in secondary"
@@ -5164,10 +5115,8 @@ msgid "The text"
 msgstr "متن"
 
 #: gtk/gtkmodelbutton.c:1197
-#, fuzzy
-#| msgid "The text of the label includes XML markup. See pango_parse_markup()"
 msgid "The text of the button includes XML markup. See pango_parse_markup()"
-msgstr "متن برچسب نشان‌گذاری XMLی دارد. به pango_parse_markup()‎ مراجعه کنید."
+msgstr "متن دکمه، نشانه گذاری XML دارد. pango_parse_markup()‎ را ببینید."
 
 #: gtk/gtkmodelbutton.c:1226
 msgid "Menu name"
@@ -5178,27 +5127,24 @@ msgid "The name of the menu to open"
 msgstr "نام فهرست برای گشودن"
 
 #: gtk/gtkmodelbutton.c:1243
-#, fuzzy
 msgid "Whether the menu is a parent"
-msgstr "آیا این برچسب بر رنگ پس‌زمینهٔ خانه تأثیر می‌گذارد یا نه"
+msgstr "این که فهرست والد است یا نه"
 
 #: gtk/gtkmodelbutton.c:1257
 msgid "Centered"
 msgstr ""
 
 #: gtk/gtkmodelbutton.c:1258
-#, fuzzy
 msgid "Whether to center the contents"
-msgstr "متن برچسب"
+msgstr "این که محتوا وسط‌چین شود یا نه"
 
 #: gtk/gtkmodelbutton.c:1273
 msgid "Iconic"
 msgstr "نقشکی"
 
 #: gtk/gtkmodelbutton.c:1274
-#, fuzzy
 msgid "Whether to prefer the icon over text"
-msgstr "متن برچسب"
+msgstr "این که نقشک به متن ترجیح داشته باشد یا نه"
 
 #: gtk/gtkmountoperation.c:167 gtk/gtkstylecontext.c:259
 msgid "Parent"
@@ -5225,9 +5171,8 @@ msgid "Dialog Title"
 msgstr "عنوان گفت‌وگو"
 
 #: gtk/gtknativedialog.c:215
-#, fuzzy
 msgid "The title of the file chooser dialog"
-msgstr "عنوان پنجره"
+msgstr "عنوان گفت‌وگوی گزینش پرونده"
 
 #: gtk/gtknativedialog.c:228 gtk/gtkpopover.c:1783 gtk/gtkwindow.c:792
 msgid "Modal"
@@ -5240,18 +5185,16 @@ msgid ""
 msgstr ""
 
 #: gtk/gtknativedialog.c:243
-#, fuzzy
 msgid "Whether the dialog is currently visible"
-msgstr "آیا این برچسب بر رنگ پس‌زمینهٔ خانه تأثیر می‌گذارد یا نه"
+msgstr "این که گفت‌وگو هم‌اکنون قابل دیدن است یا نه"
 
 #: gtk/gtknativedialog.c:256 gtk/gtkwindow.c:1067
 msgid "Transient for Window"
 msgstr ""
 
 #: gtk/gtknativedialog.c:257 gtk/gtkwindow.c:1068
-#, fuzzy
 msgid "The transient parent of the dialog"
-msgstr "عنوان پنجره"
+msgstr "والد مرتبط گفت‌وگو"
 
 # paak kardan, rad kardan, tamiz kardan, door rikhtan, rowshan kardan, towzih daadan
 #: gtk/gtknotebook.c:766
@@ -5283,9 +5226,8 @@ msgid "Show Border"
 msgstr "نمایش لبه"
 
 #: gtk/gtknotebook.c:790
-#, fuzzy
 msgid "Whether the border should be shown"
-msgstr "آیا این برچسب بر رنگ پس‌زمینهٔ خانه تأثیر می‌گذارد یا نه"
+msgstr "این که مرز باید نشان داده شود یا نه"
 
 #: gtk/gtknotebook.c:796
 msgid "Scrollable"
@@ -5334,27 +5276,24 @@ msgid "Tab expand"
 msgstr ""
 
 #: gtk/gtknotebook.c:849
-#, fuzzy
 msgid "Whether to expand the child's tab"
-msgstr "متن برچسب"
+msgstr "این که جدول فرزنده گسترده شود یا نه"
 
 #: gtk/gtknotebook.c:855
 msgid "Tab fill"
 msgstr ""
 
 #: gtk/gtknotebook.c:856
-#, fuzzy
 msgid "Whether the child's tab should fill the allocated area"
-msgstr "آیا این برچسب بر رنگ پس‌زمینهٔ خانه تأثیر می‌گذارد یا نه"
+msgstr "این که جدول فرزند باید ناحیهٔ تخصیص داده را پر کند یا نه"
 
 #: gtk/gtknotebook.c:863
 msgid "Tab reorderable"
 msgstr ""
 
 #: gtk/gtknotebook.c:864
-#, fuzzy
 msgid "Whether the tab is reorderable by user action"
-msgstr "آیا این برچسب بر رنگ پس‌زمینهٔ خانه تأثیر می‌گذارد یا نه"
+msgstr "این که ترتیب جدول با کنش کابر قابل تغییر است یا نه"
 
 #: gtk/gtknotebook.c:870
 msgid "Tab detachable"
