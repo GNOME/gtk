@@ -977,6 +977,38 @@ gsk_path_builder_arc_to (GskPathBuilder *self,
 }
 
 /**
+ * gsk_path_builder_rel_arc_to:
+ * @self: a `GskPathBuilder`
+ * @x1: x coordinate of first control point
+ * @y1: y coordinate of first control point
+ * @x2: x coordinate of second control point
+ * @y2: y coordinate of second control point
+ *
+ * Adds an elliptical arc from the current point to @x3, @y3
+ * with @x1, @y1 determining the tangent directions. All coordinates
+ * are given relative to the current point.
+ *
+ * This is the relative version of [method@Gsk.PathBuilder.arc_to].
+ *
+ * Since: 4.14
+ */
+void
+gsk_path_builder_rel_arc_to (GskPathBuilder *self,
+                             float           x1,
+                             float           y1,
+                             float           x2,
+                             float           y2)
+{
+  g_return_if_fail (self != NULL);
+
+  gsk_path_builder_arc_to (self,
+                           self->current_point.x + x1,
+                           self->current_point.y + y1,
+                           self->current_point.x + x2,
+                           self->current_point.y + y2);
+}
+
+/**
  * gsk_path_builder_close:
  * @self: a `GskPathBuilder`
  *
@@ -1207,6 +1239,44 @@ gsk_path_builder_svg_arc_to (GskPathBuilder *self,
     }
 }
 
+/**
+ * gsk_path_builder_rel_svg_arc_to:
+ * @self: a `GskPathBuilder`
+ * @rx: X radius
+ * @ry: Y radius
+ * @x_axis_rotation: the rotation of the ellipsis
+ * @large_arc: whether to add the large arc
+ * @positive_sweep: whether to sweep in the positive direction
+ * @x: the X coordinate of the endpoint
+ * @y: the Y coordinate of the endpoint
+ *
+ * Implements arc-to according to the SVG spec.
+ *
+ * All coordinates are given relative to the current point.
+ *
+ * This is the relative version of [method@Gsk.PathBuilder.svg_arc_to].
+ *
+ * Since: 4.14
+ */
+void
+gsk_path_builder_rel_svg_arc_to (GskPathBuilder *self,
+                                 float           rx,
+                                 float           ry,
+                                 float           x_axis_rotation,
+                                 gboolean        large_arc,
+                                 gboolean        positive_sweep,
+                                 float           x,
+                                 float           y)
+{
+  gsk_path_builder_svg_arc_to (self,
+                               rx, ry,
+                               x_axis_rotation,
+                               large_arc,
+                               positive_sweep,
+                               self->current_point.x + x,
+                               self->current_point.y + y);
+}
+
 /* Return the angle between t1 and t2 in radians, such that
  * 0 means straight continuation
  * < 0 means right turn
@@ -1307,6 +1377,39 @@ gsk_path_builder_html_arc_to (GskPathBuilder *self,
   gsk_path_builder_line_to (self, p.x, p.y);
 
   gsk_path_builder_svg_arc_to (self, radius, radius, 0, FALSE, angle < 0, q.x, q.y);
+}
+
+/**
+ * gsk_path_builder_rel_html_arc_to:
+ * @self: a `GskPathBuilder`
+ * @x1: X coordinate of first control point
+ * @y1: Y coordinate of first control point
+ * @x2: X coordinate of second control point
+ * @y2: Y coordinate of second control point
+ * @radius: Radius of the circle
+ *
+ * Implements arc-to according to the HTML Canvas spec.
+ *
+ * All coordinates are given relative to the current point.
+ *
+ * This is the relative version of [method@Gsk.PathBuilder.html_arc_to].
+ *
+ * Since: 4.14
+ */
+void
+gsk_path_builder_rel_html_arc_to (GskPathBuilder *self,
+                                  float           x1,
+                                  float           y1,
+                                  float           x2,
+                                  float           y2,
+                                  float           radius)
+{
+  gsk_path_builder_html_arc_to (self,
+                                self->current_point.x + x1,
+                                self->current_point.y + y1,
+                                self->current_point.x + x2,
+                                self->current_point.y + y2,
+                                radius);
 }
 
 /**
