@@ -189,6 +189,7 @@ static gboolean
 add_reverse (GskPathOperation        op,
              const graphene_point_t *pts,
              gsize                   n_pts,
+             float                   weight,
              gpointer                user_data)
 {
   GskPathBuilder *builder = user_data;
@@ -200,7 +201,7 @@ add_reverse (GskPathOperation        op,
   if (op == GSK_PATH_CLOSE)
     op = GSK_PATH_LINE;
 
-  gsk_curve_init_foreach (&c, op, pts, n_pts);
+  gsk_curve_init_foreach (&c, op, pts, n_pts, weight);
   gsk_curve_reverse (&c, &r);
   gsk_curve_builder_to (&r, builder);
 
@@ -288,11 +289,13 @@ gsk_standard_contour_print (const GskContour *contour,
           _g_string_append_point (string, &pt[3]);
           break;
 
-        case GSK_PATH_ARC:
-          g_string_append (string, " E ");
+        case GSK_PATH_CONIC:
+          g_string_append (string, " O ");
           _g_string_append_point (string, &pt[1]);
           g_string_append (string, ", ");
-          _g_string_append_point (string, &pt[2]);
+          _g_string_append_point (string, &pt[3]);
+          g_string_append (string, ", ");
+          _g_string_append_double (string, pt[2].x);
           break;
 
         default:

@@ -234,6 +234,7 @@ static gboolean
 gsk_path_to_cairo_add_op (GskPathOperation        op,
                           const graphene_point_t *pts,
                           gsize                   n_pts,
+                          float                   weight,
                           gpointer                cr)
 {
   switch (op)
@@ -255,7 +256,7 @@ gsk_path_to_cairo_add_op (GskPathOperation        op,
       break;
 
     case GSK_PATH_QUAD:
-    case GSK_PATH_ARC:
+    case GSK_PATH_CONIC:
     default:
       g_assert_not_reached ();
       return FALSE;
@@ -670,6 +671,7 @@ gsk_path_foreach_trampoline_add_line (const graphene_point_t *from,
   return trampoline->func (GSK_PATH_LINE,
                            (graphene_point_t[2]) { *from, *to },
                            2,
+                           0.f,
                            trampoline->user_data);
 }
 
@@ -677,17 +679,19 @@ static gboolean
 gsk_path_foreach_trampoline_add_curve (GskPathOperation        op,
                                        const graphene_point_t *pts,
                                        gsize                   n_pts,
+                                       float                   weight,
                                        gpointer                data)
 {
   GskPathForeachTrampoline *trampoline = data;
 
-  return trampoline->func (op, pts, n_pts, trampoline->user_data);
+  return trampoline->func (op, pts, n_pts, weight, trampoline->user_data);
 }
 
 static gboolean
 gsk_path_foreach_trampoline (GskPathOperation        op,
                              const graphene_point_t *pts,
                              gsize                   n_pts,
+                             float                   weight,
                              gpointer                data)
 {
   GskPathForeachTrampoline *trampoline = data;
@@ -697,14 +701,14 @@ gsk_path_foreach_trampoline (GskPathOperation        op,
     case GSK_PATH_MOVE:
     case GSK_PATH_CLOSE:
     case GSK_PATH_LINE:
-      return trampoline->func (op, pts, n_pts, trampoline->user_data);
+      return trampoline->func (op, pts, n_pts, weight, trampoline->user_data);
 
     case GSK_PATH_QUAD:
       {
         GskCurve curve;
 
         if (trampoline->flags & GSK_PATH_FOREACH_ALLOW_QUAD)
-          return trampoline->func (op, pts, n_pts, trampoline->user_data);
+          return trampoline->func (op, pts, n_pts, weight, trampoline->user_data);
         else if (trampoline->flags & GSK_PATH_FOREACH_ALLOW_CUBIC)
           {
             return trampoline->func (GSK_PATH_CUBIC,
@@ -717,6 +721,7 @@ gsk_path_foreach_trampoline (GskPathOperation        op,
                                        pts[2],
                                      },
                                      4,
+                                     weight,
                                      trampoline->user_data);
           }
 
@@ -732,10 +737,10 @@ gsk_path_foreach_trampoline (GskPathOperation        op,
         GskCurve curve;
 
         if (trampoline->flags & GSK_PATH_FOREACH_ALLOW_CUBIC)
-          return trampoline->func (op, pts, n_pts, trampoline->user_data);
+          return trampoline->func (op, pts, n_pts, weight, trampoline->user_data);
 
         gsk_curve_init (&curve, gsk_pathop_encode (GSK_PATH_CUBIC, pts));
-        if (trampoline->flags & GSK_PATH_FOREACH_ALLOW_QUAD)
+        if (trampoline->flags & (GSK_PATH_FOREACH_ALLOW_QUAD|GSK_PATH_FOREACH_ALLOW_CONIC))
           return gsk_curve_decompose_curve (&curve,
                                             trampoline->flags,
                                             trampoline->tolerance,
@@ -748,15 +753,15 @@ gsk_path_foreach_trampoline (GskPathOperation        op,
                                     trampoline);
       }
 
-    case GSK_PATH_ARC:
+    case GSK_PATH_CONIC:
       {
         GskCurve curve;
 
-        if (trampoline->flags & GSK_PATH_FOREACH_ALLOW_ARC)
-          return trampoline->func (op, pts, n_pts, trampoline->user_data);
+        if (trampoline->flags & GSK_PATH_FOREACH_ALLOW_CONIC)
+          return trampoline->func (op, pts, n_pts, weight, trampoline->user_data);
 
-        gsk_curve_init (&curve, gsk_pathop_encode (GSK_PATH_ARC, pts));
-        if (trampoline->flags & (GSK_PATH_FOREACH_ALLOW_CUBIC|GSK_PATH_FOREACH_ALLOW_QUAD))
+        gsk_curve_init (&curve, gsk_pathop_encode (GSK_PATH_CONIC, (graphene_point_t[4]) { pts[0], pts[1], { weight, 0.f }, pts[2] } ));
+        if (trampoline->flags & (GSK_PATH_FOREACH_ALLOW_QUAD|GSK_PATH_FOREACH_ALLOW_CUBIC))
           return gsk_curve_decompose_curve (&curve,
                                             trampoline->flags,
                                             trampoline->tolerance,
@@ -777,7 +782,7 @@ gsk_path_foreach_trampoline (GskPathOperation        op,
 
 #define ALLOW_ANY (GSK_PATH_FOREACH_ALLOW_QUAD  | \
                    GSK_PATH_FOREACH_ALLOW_CUBIC | \
-                   GSK_PATH_FOREACH_ALLOW_ARC)
+                   GSK_PATH_FOREACH_ALLOW_CONIC)
 
 gboolean
 gsk_path_foreach_with_tolerance (GskPath             *self,
@@ -935,7 +940,7 @@ parse_command (const char **p,
   if (*cmd == 'X')
     allowed = "mM";
   else
-    allowed = "mMhHvVzZlLcCsStTqQaAeE";
+    allowed = "mMhHvVzZlLcCsStTqQaAoO";
 
   skip_whitespace (p);
   s = _strchr (allowed, **p);
@@ -971,15 +976,14 @@ parse_command (const char **p,
  * - `T x2 y2` Add a quadratic Bézier, using the reflection of the previous segments' control point as control point
  * - `S x2 y2 x3 y3` Add a cubic Bézier, using the reflection of the previous segments' second control point as first control point
  * - `A rx ry r l s x y` Add an elliptical arc from the current point to `(x, y)` with radii rx and ry. See the SVG documentation for how the other parameters influence the arc.
- * - `E x1 y1 x2 y2` Add an elliptical arc from the current point to `(x2, y2)` with tangents that are dermined by the point `(x1, y1)`.
+ * - `O x1 y1 x2 y2 w` Add a rational quadratic Bézier from the current point to `(x2, y2)` with control point `(x1, y1)` and weight `w`.
  *
  * All the commands have lowercase variants that interpret coordinates
  * relative to the current point.
  *
- * The `E` command is an extension that is not supported in SVG.
+ * The `O` command is an extension that is not supported in SVG.
  *
- * Returns: (nullable): a new `GskPath`, or `NULL`
- *   if @string could not be parsed
+ * Returns: (nullable): a new `GskPath`, or `NULL` if @string could not be parsed
  *
  * Since: 4.14
  */
@@ -1283,6 +1287,37 @@ gsk_path_parse (const char *string)
           }
           break;
 
+        case 'O':
+        case 'o':
+          {
+            double x1, y1, x2, y2, weight;
+
+            if (parse_coordinate_pair (&p, &x1, &y1) &&
+                parse_coordinate_pair (&p, &x2, &y2) &&
+                parse_nonnegative_number (&p, &weight))
+              {
+                if (cmd == 'c')
+                  {
+                    x1 += x;
+                    y1 += y;
+                    x2 += x;
+                    y2 += y;
+                  }
+                if (_strchr ("zZ", prev_cmd))
+                  { 
+                    gsk_path_builder_move_to (builder, x, y);
+                    path_x = x;
+                    path_y = y;
+                  }
+                gsk_path_builder_conic_to (builder, x1, y1, x2, y2, weight);
+                x = x2;
+                y = y2;
+              }
+            else
+              goto error;
+          }
+          break;
+
         case 'A':
         case 'a':
           {
@@ -1316,38 +1351,6 @@ gsk_path_parse (const char *string)
                                              x1, y1);
                 x = x1;
                 y = y1;
-              }
-            else
-              goto error;
-          }
-          break;
-
-        case 'E':
-        case 'e':
-          {
-            double x1, y1, x2, y2;
-
-            if (parse_coordinate_pair (&p, &x1, &y1) &&
-                parse_coordinate_pair (&p, &x2, &y2))
-              {
-                if (cmd == 'e')
-                  {
-                    x1 += x;
-                    y1 += y;
-                    x2 += x;
-                    y2 += y;
-                  }
-                if (_strchr ("zZ", prev_cmd))
-                  {
-                    gsk_path_builder_move_to (builder, x, y);
-                    path_x = x;
-                    path_y = y;
-                  }
-                gsk_path_builder_arc_to (builder, x1, y1, x2, y2);
-                prev_x1 = x1;
-                prev_y1 = y1;
-                x = x2;
-                y = y2;
               }
             else
               goto error;
