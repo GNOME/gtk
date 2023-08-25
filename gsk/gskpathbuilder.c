@@ -1070,6 +1070,8 @@ _sincos (double angle,
  * [SVG arc_to](https://www.w3.org/TR/SVG11/paths.html#PathDataEllipticalArcCommands)
  * functionality.
  *
+ * After this, @x, @y will be the new current point.
+ *
  * Since: 4.14
  */
 void
@@ -1255,6 +1257,11 @@ angle_between_points (const graphene_point_t *c,
  * A convenience function that implements the
  * [HTML arc_to](https://html.spec.whatwg.org/multipage/canvas.html#dom-context-2d-arcto-dev)
  * functionality.
+ *
+ * After this, the current point will be the point where
+ * the circle with the given radius touches the line from
+ * @x1, @y1 to @x2, @y2.
+ *
  *
  * Since: 4.14
  */
