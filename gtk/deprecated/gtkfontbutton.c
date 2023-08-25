@@ -594,6 +594,9 @@ gtk_font_button_init (GtkFontButton *font_button)
 
   font_button->button = gtk_button_new ();
   g_signal_connect (font_button->button, "clicked", G_CALLBACK (gtk_font_button_clicked), font_button);
+  g_object_bind_property (font_button, "focus-on-click",
+                          font_button->button, "focus-on-click",
+                          0);
   font_button->font_label = gtk_label_new (_("Font"));
   gtk_widget_set_hexpand (font_button->font_label, TRUE);
   font_button->size_label = gtk_label_new ("14");
