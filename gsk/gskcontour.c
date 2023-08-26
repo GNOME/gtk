@@ -662,7 +662,6 @@ add_measure (const GskCurve *curve,
   GskCurve c;
   float ll, l0;
   float t0;
-  float tt, ll0;
   CurvePoint *p = &g_array_index (array, CurvePoint, array->len - 1);
   gsize idx = p->idx;
 
@@ -684,12 +683,7 @@ add_measure (const GskCurve *curve,
   l0 = gsk_curve_get_length (&c);
   ll = (p->length + length + l1) / 2;
 
-  tt = gsk_curve_at_length (curve, l0, 0.001);
-  gsk_curve_split (curve, tt, &c, NULL);
-  ll0 = gsk_curve_get_length (&c);
-
-  if (fabsf (length + l0 - ll) < tolerance &&
-      fabsf (ll0 - l0) < tolerance)
+  if (fabsf (length + l0 - ll) < tolerance)
     {
 done:
       g_array_append_val (array, ((CurvePoint){ idx, t1, length + l1 }));
