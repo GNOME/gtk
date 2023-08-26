@@ -647,12 +647,28 @@ gsk_standard_contour_add_segment (const GskContour *contour,
 typedef struct
 {
   gsize idx;
+  float length0;
+  float length1;
+  gsize n_samples;
+  gsize first;
+} CurveMeasure;
+
+typedef struct
+{
   float t;
   float length;
 } CurvePoint;
 
+typedef struct
+{
+  GArray *curves;
+  GArray *points;
+  float tolerance;
+} GskStandardContourMeasure;
+
 static void
 add_measure (const GskCurve *curve,
+             gsize           idx,
              float           length,
              float           tolerance,
              float           t1,
@@ -662,8 +678,7 @@ add_measure (const GskCurve *curve,
   GskCurve c;
   float ll, l0;
   float t0;
-  CurvePoint *p = &g_array_index (array, CurvePoint, array->len - 1);
-  gsize idx = p->idx;
+  CurvePoint *p;
 
   /* Check if we can add (t1, length + l1) without further
    * splitting. We check two things:
@@ -674,6 +689,8 @@ add_measure (const GskCurve *curve,
   if (curve->op == GSK_PATH_LINE ||
       curve->op == GSK_PATH_CLOSE)
     goto done;
+
+  p = &g_array_index (array, CurvePoint, array->len - 1);
 
   t0 = (p->t + t1) / 2;
   if (t0 == p->t  || t0 == t1)
@@ -686,12 +703,12 @@ add_measure (const GskCurve *curve,
   if (fabsf (length + l0 - ll) < tolerance)
     {
 done:
-      g_array_append_val (array, ((CurvePoint){ idx, t1, length + l1 }));
+      g_array_append_val (array, ((CurvePoint) { t1, length + l1 }));
     }
   else
     {
-      add_measure (curve, length, tolerance, t0, l0, array);
-      add_measure (curve, length, tolerance, t1, l1, array);
+      add_measure (curve, idx, length, tolerance, t0, l0, array);
+      add_measure (curve, idx, length, tolerance, t1, l1, array);
     }
 }
 
@@ -703,16 +720,70 @@ cmpfloat (const void *p1, const void *p2)
   return *f1 < *f2 ? -1 : (*f1 > *f2 ? 1 : 0);
 }
 
+static void
+add_samples (const GskStandardContour  *self,
+             GskStandardContourMeasure *measure,
+             CurveMeasure              *curve_measure)
+{
+  gsize first;
+  GskCurve curve;
+  float l0, l1;
+  float t[3];
+  int n;
+
+  g_assert (curve_measure->n_samples == 0);
+  g_assert (0 < curve_measure->idx && curve_measure->idx < self->n_ops);
+
+  first = measure->points->len;
+
+  l0 = curve_measure->length0;
+  l1 = curve_measure->length1;
+
+  g_array_append_val (measure->points, ((CurvePoint) { 0, l0 } ));
+
+  gsk_curve_init (&curve, self->ops[curve_measure->idx]);
+
+  n = gsk_curve_get_curvature_points (&curve, t);
+  qsort (t, n, sizeof (float), cmpfloat);
+
+  for (int j = 0; j < n; j++)
+    {
+      float l = gsk_curve_get_length_to (&curve, t[j]);
+      add_measure (&curve, curve_measure->idx, l0, measure->tolerance, t[j], l, measure->points);
+    }
+
+  add_measure (&curve, curve_measure->idx, l0, measure->tolerance, 1, l1 - l0, measure->points);
+
+  curve_measure->first = first;
+  curve_measure->n_samples = measure->points->len - first;
+}
+
+static void
+ensure_samples (const GskStandardContour  *self,
+                GskStandardContourMeasure *measure,
+                CurveMeasure              *curve_measure)
+{
+  if (curve_measure->n_samples == 0)
+    add_samples (self, measure, curve_measure);
+}
+
 static gpointer
 gsk_standard_contour_init_measure (const GskContour *contour,
                                    float             tolerance,
                                    float            *out_length)
 {
   const GskStandardContour *self = (const GskStandardContour *) contour;
-  GArray *array;
+  GskStandardContourMeasure *measure;
   float length;
 
-  array = g_array_new (FALSE, FALSE, sizeof (CurvePoint));
+  measure = g_new (GskStandardContourMeasure, 1);
+
+  measure->curves = g_array_new (FALSE, FALSE, sizeof (CurveMeasure));
+  measure->points = g_array_new (FALSE, FALSE, sizeof (CurvePoint));
+  measure->tolerance = tolerance;
+
+  /* Add a placeholder for the move, so indexes match up */
+  g_array_append_val (measure->curves, ((CurveMeasure) { 0, -1, -1, 0, 0 } ));
 
   length = 0;
 
@@ -720,50 +791,44 @@ gsk_standard_contour_init_measure (const GskContour *contour,
     {
       GskCurve curve;
       float l;
-      float t[3];
-      int n;
 
       gsk_curve_init (&curve, self->ops[i]);
-
-      g_array_append_val (array, ((CurvePoint) { i, 0, length }));
-
-      n = gsk_curve_get_curvature_points (&curve, t);
-      qsort (t, n, sizeof (float), cmpfloat);
-
-      for (int j = 0; j < n; j++)
-        {
-          l = gsk_curve_get_length_to (&curve, t[j]);
-          add_measure (&curve, length, tolerance, t[j], l, array);
-        }
-
       l = gsk_curve_get_length (&curve);
-      add_measure (&curve, length, tolerance, 1, l, array);
+
+      g_array_append_val (measure->curves, ((CurveMeasure) { i, length, length + l, 0, 0 } ));
 
       length += l;
     }
 
   *out_length = length;
 
-#if 0
-  g_print ("%lu ops, %u measure points\n", self->n_ops, array->len);
-  for (gsize i = 0; i < array->len; i++)
-    {
-      CurvePoint *pp = &g_array_index (array, CurvePoint, i);
-      const char *opname[] = { "M", "Z", "L", "Q", "C" };
-      GskPathOperation op = gsk_pathop_op (self->ops[pp->idx]);
-
-      g_print ("%lu %s %g -> %g\n", pp->idx, opname[op], pp->t, pp->length);
-    }
-#endif
-
-  return array;
+  return measure;
 }
 
 static void
 gsk_standard_contour_free_measure (const GskContour *contour,
                                    gpointer          data)
 {
-  g_array_free (data, TRUE);
+  GskStandardContourMeasure *measure = data;
+
+  g_array_free (measure->curves, TRUE);
+  g_array_free (measure->points, TRUE);
+  g_free (measure);
+}
+
+static int
+find_curve (gconstpointer a,
+            gconstpointer b)
+{
+  const CurveMeasure *m = a;
+  const float distance = *(const float *) b;
+
+  if (distance < m->length0)
+    return 1;
+  else if (distance > m->length1)
+    return -1;
+  else
+    return 0;
 }
 
 static void
@@ -773,7 +838,10 @@ gsk_standard_contour_get_point (const GskContour *contour,
                                 GskRealPathPoint *result)
 {
   const GskStandardContour *self = (const GskStandardContour *) contour;
-  GArray *array = measure_data;
+  GskStandardContourMeasure *measure = measure_data;
+  CurveMeasure *curve_measure;
+  gboolean found G_GNUC_UNUSED;
+  guint idx;
   gsize i0, i1;
   CurvePoint *p0, *p1;
 
@@ -784,12 +852,18 @@ gsk_standard_contour_get_point (const GskContour *contour,
       return;
     }
 
-  i0 = 0;
-  i1 = array->len - 1;
+  found = g_array_binary_search (measure->curves, &distance, find_curve, &idx);
+  g_assert (found);
+
+  curve_measure = &g_array_index (measure->curves, CurveMeasure, idx);
+  ensure_samples (self, measure, curve_measure);
+
+  i0 = curve_measure->first;
+  i1 = curve_measure->first + curve_measure->n_samples - 1;
   while (i0 + 1 < i1)
     {
       gsize i = (i0 + i1) / 2;
-      CurvePoint *p = &g_array_index (array, CurvePoint, i);
+      CurvePoint *p = &g_array_index (measure->points, CurvePoint, i);
 
       if (p->length < distance)
         i0 = i;
@@ -797,41 +871,37 @@ gsk_standard_contour_get_point (const GskContour *contour,
         i1 = i;
       else
         {
-          result->idx = p->idx;
+          result->idx = curve_measure->idx;
           result->t = p->t;
           return;
         }
     }
 
-  p0 = &g_array_index (array, CurvePoint, i0);
-  p1 = &g_array_index (array, CurvePoint, i1);
+  p0 = &g_array_index (measure->points, CurvePoint, i0);
+  p1 = &g_array_index (measure->points, CurvePoint, i1);
 
   if (distance >= p1->length)
     {
-      if (p1->idx == self->n_ops - 1)
+      if (curve_measure->idx == self->n_ops - 1)
         {
-          result->idx = p1->idx;
+          result->idx = curve_measure->idx;
           result->t = 1;
         }
       else
         {
-          result->idx = p1->idx + 1;
+          result->idx = curve_measure->idx + 1;
           result->t = 0;
         }
     }
   else
     {
-      float fraction, t0;
+      float fraction;
 
-      g_assert (p0->idx == p1->idx || p0->t == 1);
-
-      t0 = p0->idx == p1->idx ? p0->t : 0;
-
-      result->idx = p1->idx;
+      result->idx = curve_measure->idx;
 
       fraction = (distance - p0->length) / (p1->length - p0->length);
       g_assert (fraction >= 0.f && fraction <= 1.f);
-      result->t = t0 * (1 - fraction) + p1->t * fraction;
+      result->t = p0->t * (1 - fraction) + p1->t * fraction;
       g_assert (result->t >= 0.f && result->t <= 1.f);
     }
 }
@@ -841,26 +911,27 @@ gsk_standard_contour_get_distance (const GskContour *contour,
                                    GskRealPathPoint *point,
                                    gpointer          measure_data)
 {
-  GArray *array = measure_data;
+  const GskStandardContour *self = (const GskStandardContour *) contour;
+  GskStandardContourMeasure *measure = measure_data;
+  CurveMeasure *curve_measure;
   gsize i0, i1;
   CurvePoint *p0, *p1;
-  float fraction, t0;
+  float fraction;
 
   if (G_UNLIKELY (point->idx == 0))
     return 0;
 
-  i0 = 0;
-  i1 = array->len - 1;
+  curve_measure = &g_array_index (measure->curves, CurveMeasure, point->idx);
+  ensure_samples (self, measure, curve_measure);
+
+  i0 = curve_measure->first;
+  i1 = curve_measure->first + curve_measure->n_samples - 1;
   while (i0 + 1 < i1)
     {
       gsize i = (i0 + i1) / 2;
-      CurvePoint *p = &g_array_index (array, CurvePoint, i);
+      CurvePoint *p = &g_array_index (measure->points, CurvePoint, i);
 
-      if (p->idx > point->idx)
-        i1 = i;
-      else if (p->idx < point->idx)
-        i0 = i;
-      else if (p->t > point->t)
+      if (p->t > point->t)
        i1 = i;
       else if (p->t < point->t)
        i0 = i;
@@ -868,17 +939,12 @@ gsk_standard_contour_get_distance (const GskContour *contour,
         return p->length;
     }
 
-  p0 = &g_array_index (array, CurvePoint, i0);
-  p1 = &g_array_index (array, CurvePoint, i1);
+  p0 = &g_array_index (measure->points, CurvePoint, i0);
+  p1 = &g_array_index (measure->points, CurvePoint, i1);
 
-  g_assert (p0->idx == p1->idx || p0->t == 1);
+  g_assert (p0->t <= point->t && point->t <= p1->t);
 
-  t0 = p0->idx == p1->idx ? p0->t : 0;
-
-  g_assert (p1->idx == point->idx);
-  g_assert (t0 <= point->t && point->t <= p1->t);
-
-  fraction = (point->t - t0) / (p1->t - t0);
+  fraction = (point->t - p0->t) / (p1->t - p0->t);
   g_assert (fraction >= 0.f && fraction <= 1.f);
 
   return p0->length * (1 - fraction) + p1->length * fraction;
