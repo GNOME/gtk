@@ -37,6 +37,8 @@ demos/gtk-demo/main.ui
 demos/gtk-demo/menus.ui
 demos/gtk-demo/offscreen_window2.c
 demos/gtk-demo/paint.c
+demos/gtk-demo/path_text.ui
+demos/gtk-demo/path_walk.ui
 demos/gtk-demo/popover.ui
 demos/gtk-demo/revealer.ui
 demos/gtk-demo/scale.ui
