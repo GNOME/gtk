@@ -25,18 +25,17 @@
 #include <glib/gi18n-lib.h>
 
 static gboolean
-foreach_cb (GskPathOperation        op,
-            const graphene_point_t *pts,
-            gsize                   n_pts,
-            float                   weight,
+foreach_cb (const graphene_point_t *start,
+            const graphene_point_t *end,
+            const GskPathControl   *control,
             gpointer                user_data)
 {
   GskPathBuilder *builder = user_data;
 
-  switch (op)
+  switch (control->op)
     {
     case GSK_PATH_MOVE:
-      gsk_path_builder_move_to (builder, pts[0].x, pts[0].y);
+      gsk_path_builder_move_to (builder, end->x, end->y);
       break;
 
     case GSK_PATH_CLOSE:
@@ -44,24 +43,24 @@ foreach_cb (GskPathOperation        op,
       break;
 
     case GSK_PATH_LINE:
-      gsk_path_builder_line_to (builder, pts[1].x, pts[1].y);
+      gsk_path_builder_line_to (builder, end->x, end->y);
       break;
 
     case GSK_PATH_QUAD:
-      gsk_path_builder_quad_to (builder, pts[1].x, pts[1].y,
-                                         pts[2].x, pts[2].y);
+      gsk_path_builder_quad_to (builder, control->quad.control.x, control->quad.control.y,
+                                         end->x, end->y);
       break;
 
     case GSK_PATH_CUBIC:
-      gsk_path_builder_cubic_to (builder, pts[1].x, pts[1].y,
-                                          pts[2].x, pts[2].y,
-                                          pts[3].x, pts[3].y);
+      gsk_path_builder_cubic_to (builder, control->cubic.control1.x, control->cubic.control1.y,
+                                          control->cubic.control2.x, control->cubic.control2.y,
+                                          end->x, end->y);
       break;
 
     case GSK_PATH_CONIC:
-      gsk_path_builder_conic_to (builder, pts[1].x, pts[1].y,
-                                          pts[2].x, pts[2].y,
-                                          weight);
+      gsk_path_builder_conic_to (builder, control->conic.control.x, control->conic.control.y,
+                                          end->x, end->y,
+                                          control->conic.weight);
       break;
 
     default:

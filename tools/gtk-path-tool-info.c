@@ -35,17 +35,16 @@ typedef struct
 } Statistics;
 
 static gboolean
-stats_cb (GskPathOperation        op,
-          const graphene_point_t *pts,
-          gsize                   n_pts,
-          float                   weight,
+stats_cb (const graphene_point_t *start,
+          const graphene_point_t *end,
+          const GskPathControl   *control,
           gpointer                user_data)
 {
   Statistics *stats = user_data;
 
   stats->ops++;
 
-  switch (op)
+  switch (control->op)
     {
     case GSK_PATH_MOVE:
       stats->contours++;

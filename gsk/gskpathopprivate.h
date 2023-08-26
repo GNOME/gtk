@@ -89,23 +89,50 @@ gsk_pathop_foreach (gskpathop          pop,
   switch (gsk_pathop_op (pop))
   {
     case GSK_PATH_MOVE:
-      return func (gsk_pathop_op (pop), gsk_pathop_points (pop), 1, 0, user_data);
+      return func (&GRAPHENE_POINT_INIT (0, 0),
+                   &gsk_pathop_points (pop)[0],
+                   &(GskPathControl) { .op = gsk_pathop_op (pop), },
+                   user_data);
 
     case GSK_PATH_CLOSE:
     case GSK_PATH_LINE:
-      return func (gsk_pathop_op (pop), gsk_pathop_points (pop), 2, 0, user_data);
+      return func (&gsk_pathop_points (pop)[0],
+                   &gsk_pathop_points (pop)[1],
+                   &(GskPathControl) { .op = gsk_pathop_op (pop), },
+                   user_data);
 
     case GSK_PATH_QUAD:
-      return func (gsk_pathop_op (pop), gsk_pathop_points (pop), 3, 0, user_data);
+      return func (&gsk_pathop_points (pop)[0],
+                   &gsk_pathop_points (pop)[2],
+                   &(GskPathControl) {
+                     .op = gsk_pathop_op (pop),
+                     .quad = (GskQuadControl) { gsk_pathop_points (pop)[1] }
+                   },
+                   user_data);
 
     case GSK_PATH_CUBIC:
-      return func (gsk_pathop_op (pop), gsk_pathop_points (pop), 4, 0, user_data);
+      return func (&gsk_pathop_points (pop)[0],
+                   &gsk_pathop_points (pop)[3],
+                   &(GskPathControl) {
+                     .op = gsk_pathop_op (pop),
+                     .cubic = (GskCubicControl) {
+                       .control1 = gsk_pathop_points (pop)[1],
+                       .control2 = gsk_pathop_points (pop)[2]
+                     },
+                   },
+                   user_data);
 
     case GSK_PATH_CONIC:
-      {
-        const graphene_point_t *pts = gsk_pathop_points (pop);
-        return func (gsk_pathop_op (pop), (graphene_point_t[3]) { pts[0], pts[1], pts[3] }, 3, pts[2].x, user_data);
-      }
+      return func (&gsk_pathop_points (pop)[0],
+                   &gsk_pathop_points (pop)[3],
+                   &(GskPathControl) {
+                     .op = gsk_pathop_op (pop),
+                     .conic = (GskConicControl) {
+                        .control = gsk_pathop_points (pop)[1],
+                        .weight = gsk_pathop_points (pop)[2].x
+                     },
+                   },
+                   user_data);
 
     default:
       g_assert_not_reached ();

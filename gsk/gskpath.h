@@ -53,21 +53,50 @@ typedef enum
   GSK_PATH_FOREACH_ALLOW_CONIC      = (1 << 2),
 } GskPathForeachFlags;
 
+typedef struct _GskQuadControl GskQuadControl;
+struct _GskQuadControl
+{
+  graphene_point_t control;
+};
+
+typedef struct _GskCubicControl GskCubicControl;
+struct _GskCubicControl
+{
+  graphene_point_t control1;
+  graphene_point_t control2;
+};
+
+typedef struct _GskConicControl GskConicControl;
+struct _GskConicControl
+{
+  graphene_point_t control;
+  float weight;
+};
+
+typedef struct _GskPathControl GskPathControl;
+struct _GskPathControl
+{
+  GskPathOperation op;
+
+  union {
+    GskQuadControl quad;
+    GskCubicControl cubic;
+    GskConicControl conic;
+  };
+};
+
 /**
  * GskPathForeachFunc:
- * @op: The operation
- * @pts: The points of the operation
- * @n_pts: The number of points
- * @weight: The weight for conic curves, or unused if not a conic curve
+ * @start: The start point of the operation
+ * @end: The end point of the operation
+ * @control: The control data for the operation
  * @user_data: The user data provided with the function
  *
  * Prototype of the callback to iterate through the operations of
  * a path.
  *
- * For each operation, the callback is given the @op itself, the points
- * that the operation is applied to in @pts, and a @weight for conic
- * curves. The @n_pts argument is somewhat redundant, since the number
- * of points can be inferred from the operation.
+ * For each operation, the callback is given the @op itself, the start-
+ * and endpoint, and the control data, depending on the kind of operation.
  *
  * Each contour of the path starts with a @GSK_PATH_MOVE operation.
  * Closed contours end with a @GSK_PATH_CLOSE operation.
@@ -75,10 +104,9 @@ typedef enum
  * Returns: %TRUE to continue iterating the path, %FALSE to
  *   immediately abort and not call the function again.
  */
-typedef gboolean (* GskPathForeachFunc) (GskPathOperation        op,
-                                         const graphene_point_t *pts,
-                                         gsize                   n_pts,
-                                         float                   weight,
+typedef gboolean (* GskPathForeachFunc) (const graphene_point_t *start,
+                                         const graphene_point_t *end,
+                                         const GskPathControl   *control,
                                          gpointer                user_data);
 
 #define GSK_TYPE_PATH (gsk_path_get_type ())

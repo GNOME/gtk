@@ -381,7 +381,10 @@ gsk_line_curve_decompose_curve (const GskCurve       *curve,
 {
   const GskLineCurve *self = &curve->line;
 
-  return add_curve_func (GSK_PATH_LINE, self->points, 2, 0.f, user_data);
+  return add_curve_func (&self->points[0],
+                         &self->points[1],
+                         &(GskPathControl) { .op = GSK_PATH_LINE },
+                         user_data);
 }
 
 static void
@@ -705,9 +708,10 @@ gsk_curve_add_line_cb (const graphene_point_t *from,
                        gpointer                user_data)
 {
   AddLineData *data = user_data;
-  graphene_point_t p[2] = { *from, *to };
 
-  return data->add_curve (GSK_PATH_LINE, p, 2, 0.f, data->user_data);
+  return data->add_curve (from, to,
+                          &(GskPathControl) { .op = GSK_PATH_LINE },
+                          data->user_data);
 }
 
 static gboolean
@@ -720,13 +724,30 @@ gsk_quad_curve_decompose_curve (const GskCurve       *curve,
   const GskQuadCurve *self = &curve->quad;
 
   if (flags & GSK_PATH_FOREACH_ALLOW_QUAD)
-    return add_curve_func (GSK_PATH_QUAD, self->points, 3, 0.f, user_data);
+    return add_curve_func (&self->points[0],
+                           &self->points[2],
+                           &(GskPathControl) {
+                             .op = GSK_PATH_QUAD,
+                             .quad = (GskQuadControl) {
+                               .control = self->points[1],
+                             },
+                           },
+                           user_data);
   else if (flags & GSK_PATH_FOREACH_ALLOW_CUBIC)
     {
       GskCurve c;
 
       gsk_curve_elevate (curve, &c);
-      return add_curve_func (GSK_PATH_CUBIC, c.cubic.points, 4, 0.f, user_data);
+      return add_curve_func (&c.cubic.points[0],
+                             &c.cubic.points[3],
+                             &(GskPathControl) {
+                               .op = GSK_PATH_CUBIC,
+                               .cubic = (GskCubicControl) {
+                                 .control1 = c.cubic.points[1],
+                                 .control2 = c.cubic.points[2],
+                               },
+                             },
+                             user_data);
     }
   else
     {
@@ -1180,7 +1201,16 @@ gsk_cubic_curve_decompose_curve (const GskCurve       *curve,
   const GskCubicCurve *self = &curve->cubic;
 
   if (flags & GSK_PATH_FOREACH_ALLOW_CUBIC)
-    return add_curve_func (GSK_PATH_CUBIC, self->points, 4, 0.f, user_data);
+    return add_curve_func (&self->points[0],
+                           &self->points[3],
+                           &(GskPathControl) {
+                             .op = GSK_PATH_CUBIC,
+                             .cubic = (GskCubicControl) {
+                               .control1 = self->points[1],
+                               .control2 = self->points[2],
+                             },
+                           },
+                           user_data);
 
   /* FIXME: Quadratic or arc approximation */
   return gsk_cubic_curve_decompose (curve,
@@ -1854,7 +1884,16 @@ gsk_conic_curve_decompose_or_add (const GskCurve       *curve,
                                   gpointer              user_data)
 {
   if (gsk_conic_is_close_to_cubic (curve, cubic, tolerance))
-    return add_curve_func (GSK_PATH_CUBIC, cubic->cubic.points, 4, 0.f, user_data);
+    return add_curve_func (&cubic->cubic.points[0],
+                           &cubic->cubic.points[3],
+                           &(GskPathControl) {
+                             .op = GSK_PATH_CUBIC,
+                             .cubic = (GskCubicControl) {
+                               .control1 = cubic->cubic.points[1],
+                               .control2 = cubic->cubic.points[2],
+                             },
+                           },
+                           user_data);
   else
     {
       GskCurve c1, c2;
@@ -1881,13 +1920,16 @@ gsk_conic_curve_decompose_curve (const GskCurve       *curve,
   GskCurve c;
 
   if (flags & GSK_PATH_FOREACH_ALLOW_CONIC)
-    return add_curve_func (GSK_PATH_CONIC,
-                           (const graphene_point_t[3]) { self->points[0],
-                                                         self->points[1],
-                                                         self->points[3] },
-                            3,
-                            self->points[2].x,
-                            user_data);
+    return add_curve_func (&self->points[0],
+                           &self->points[3],
+                           &(GskPathControl) {
+                             .op = GSK_PATH_CONIC,
+                             .conic = (GskConicControl) {
+                               .control = self->points[1],
+                               .weight = self->points[2].x
+                             },
+                           },
+                           user_data);
 
   if (flags & GSK_PATH_FOREACH_ALLOW_CUBIC)
     {

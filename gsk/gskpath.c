@@ -231,16 +231,15 @@ gsk_path_to_string (GskPath *self)
 }
 
 static gboolean
-gsk_path_to_cairo_add_op (GskPathOperation        op,
-                          const graphene_point_t *pts,
-                          gsize                   n_pts,
-                          float                   weight,
+gsk_path_to_cairo_add_op (const graphene_point_t *start,
+                          const graphene_point_t *end,
+                          const GskPathControl   *control,
                           gpointer                cr)
 {
-  switch (op)
+  switch (control->op)
   {
     case GSK_PATH_MOVE:
-      cairo_move_to (cr, pts[0].x, pts[0].y);
+      cairo_move_to (cr, end->x, end->y);
       break;
 
     case GSK_PATH_CLOSE:
@@ -248,11 +247,13 @@ gsk_path_to_cairo_add_op (GskPathOperation        op,
       break;
 
     case GSK_PATH_LINE:
-      cairo_line_to (cr, pts[1].x, pts[1].y);
+      cairo_line_to (cr, end->x, end->y);
       break;
 
     case GSK_PATH_CUBIC:
-      cairo_curve_to (cr, pts[1].x, pts[1].y, pts[2].x, pts[2].y, pts[3].x, pts[3].y);
+      cairo_curve_to (cr, control->cubic.control1.x, control->cubic.control1.y,
+                          control->cubic.control2.x, control->cubic.control2.y,
+                          end->x, end->y);
       break;
 
     case GSK_PATH_QUAD:
@@ -668,64 +669,65 @@ gsk_path_foreach_trampoline_add_line (const graphene_point_t *from,
 {
   GskPathForeachTrampoline *trampoline = data;
 
-  return trampoline->func (GSK_PATH_LINE,
-                           (graphene_point_t[2]) { *from, *to },
-                           2,
-                           0.f,
+  return trampoline->func (from, to,
+                           &(GskPathControl) { GSK_PATH_LINE, },
                            trampoline->user_data);
 }
 
 static gboolean
-gsk_path_foreach_trampoline_add_curve (GskPathOperation        op,
-                                       const graphene_point_t *pts,
-                                       gsize                   n_pts,
-                                       float                   weight,
+gsk_path_foreach_trampoline_add_curve (const graphene_point_t *start,
+                                       const graphene_point_t *end,
+                                       const GskPathControl   *control,
                                        gpointer                data)
 {
   GskPathForeachTrampoline *trampoline = data;
 
-  return trampoline->func (op, pts, n_pts, weight, trampoline->user_data);
+  return trampoline->func (start, end, control, trampoline->user_data);
 }
 
 static gboolean
-gsk_path_foreach_trampoline (GskPathOperation        op,
-                             const graphene_point_t *pts,
-                             gsize                   n_pts,
-                             float                   weight,
+gsk_path_foreach_trampoline (const graphene_point_t *start,
+                             const graphene_point_t *end,
+                             const GskPathControl   *control,
                              gpointer                data)
 {
   GskPathForeachTrampoline *trampoline = data;
 
-  switch (op)
+  switch (control->op)
     {
     case GSK_PATH_MOVE:
     case GSK_PATH_CLOSE:
     case GSK_PATH_LINE:
-      return trampoline->func (op, pts, n_pts, weight, trampoline->user_data);
+      return trampoline->func (start, end, control, trampoline->user_data);
 
     case GSK_PATH_QUAD:
       {
         GskCurve curve;
 
         if (trampoline->flags & GSK_PATH_FOREACH_ALLOW_QUAD)
-          return trampoline->func (op, pts, n_pts, weight, trampoline->user_data);
+          return trampoline->func (start, end, control, trampoline->user_data);
         else if (trampoline->flags & GSK_PATH_FOREACH_ALLOW_CUBIC)
           {
-            return trampoline->func (GSK_PATH_CUBIC,
-                                     (graphene_point_t[4]) {
-                                       pts[0],
-                                       GRAPHENE_POINT_INIT ((pts[0].x + 2 * pts[1].x) / 3,
-                                                            (pts[0].y + 2 * pts[1].y) / 3),
-                                       GRAPHENE_POINT_INIT ((pts[2].x + 2 * pts[1].x) / 3,
-                                                            (pts[2].y + 2 * pts[1].y) / 3),
-                                       pts[2],
+            return trampoline->func (start,
+                                     end,
+                                     &(GskPathControl) {
+                                       .op = GSK_PATH_CUBIC,
+                                       .cubic = (GskCubicControl) {
+                                         .control1 = GRAPHENE_POINT_INIT ((start->x + 2 * control->quad.control.x) / 3,
+                                                                          (start->y + 2 * control->quad.control.y) / 3),
+                                         .control2 = GRAPHENE_POINT_INIT ((end->x + 2 * control->quad.control.x) / 3,
+                                                                          (end->y + 2 * control->quad.control.y) / 3),
+                                       },
                                      },
-                                     4,
-                                     weight,
                                      trampoline->user_data);
           }
 
-        gsk_curve_init (&curve, gsk_pathop_encode (GSK_PATH_QUAD, pts));
+        gsk_curve_init (&curve, gsk_pathop_encode (GSK_PATH_QUAD,
+                                                   (graphene_point_t[3]) {
+                                                     *start,
+                                                     control->quad.control,
+                                                     *end,
+                                                   } ));
         return gsk_curve_decompose (&curve,
                                     trampoline->tolerance,
                                     gsk_path_foreach_trampoline_add_line,
@@ -737,9 +739,15 @@ gsk_path_foreach_trampoline (GskPathOperation        op,
         GskCurve curve;
 
         if (trampoline->flags & GSK_PATH_FOREACH_ALLOW_CUBIC)
-          return trampoline->func (op, pts, n_pts, weight, trampoline->user_data);
+          return trampoline->func (start, end, control, trampoline->user_data);
 
-        gsk_curve_init (&curve, gsk_pathop_encode (GSK_PATH_CUBIC, pts));
+        gsk_curve_init (&curve, gsk_pathop_encode (GSK_PATH_CUBIC,
+                                                   (const graphene_point_t[4]) {
+                                                     *start,
+                                                     control->cubic.control1,
+                                                     control->cubic.control2,
+                                                     *end,
+                                                   }));
         if (trampoline->flags & (GSK_PATH_FOREACH_ALLOW_QUAD|GSK_PATH_FOREACH_ALLOW_CONIC))
           return gsk_curve_decompose_curve (&curve,
                                             trampoline->flags,
@@ -758,9 +766,15 @@ gsk_path_foreach_trampoline (GskPathOperation        op,
         GskCurve curve;
 
         if (trampoline->flags & GSK_PATH_FOREACH_ALLOW_CONIC)
-          return trampoline->func (op, pts, n_pts, weight, trampoline->user_data);
+          return trampoline->func (start, end, control, trampoline->user_data);
 
-        gsk_curve_init (&curve, gsk_pathop_encode (GSK_PATH_CONIC, (graphene_point_t[4]) { pts[0], pts[1], { weight, 0.f }, pts[2] } ));
+        gsk_curve_init (&curve, gsk_pathop_encode (GSK_PATH_CONIC,
+                                                   (graphene_point_t[4]) {
+                                                     *start,
+                                                     control->conic.control,
+                                                     { control->conic.weight, 0.f },
+                                                     *end
+                                                   } ));
         if (trampoline->flags & (GSK_PATH_FOREACH_ALLOW_QUAD|GSK_PATH_FOREACH_ALLOW_CUBIC))
           return gsk_curve_decompose_curve (&curve,
                                             trampoline->flags,

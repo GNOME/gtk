@@ -104,20 +104,19 @@ gtk_path_transform_point (GskPathMeasure         *measure,
 }
 
 static gboolean
-gtk_path_transform_op (GskPathOperation        op,
-                       const graphene_point_t *pts,
-                       gsize                   n_pts,
-                       float                   weight,
+gtk_path_transform_op (const graphene_point_t *start,
+                       const graphene_point_t *end,
+                       const GskPathControl   *control,
                        gpointer                data)
 {
   GtkPathTransform *transform = data;
 
-  switch (op)
+  switch (control->op)
   {
     case GSK_PATH_MOVE:
       {
         graphene_point_t res;
-        gtk_path_transform_point (transform->measure, &pts[0], &transform->offset, transform->scale, &res);
+        gtk_path_transform_point (transform->measure, end, &transform->offset, transform->scale, &res);
         gsk_path_builder_move_to (transform->builder, res.x, res.y);
       }
       break;
@@ -125,7 +124,7 @@ gtk_path_transform_op (GskPathOperation        op,
     case GSK_PATH_LINE:
       {
         graphene_point_t res;
-        gtk_path_transform_point (transform->measure, &pts[1], &transform->offset, transform->scale, &res);
+        gtk_path_transform_point (transform->measure, end, &transform->offset, transform->scale, &res);
         gsk_path_builder_line_to (transform->builder, res.x, res.y);
       }
       break;
@@ -133,8 +132,8 @@ gtk_path_transform_op (GskPathOperation        op,
     case GSK_PATH_QUAD:
       {
         graphene_point_t res[2];
-        gtk_path_transform_point (transform->measure, &pts[1], &transform->offset, transform->scale, &res[0]);
-        gtk_path_transform_point (transform->measure, &pts[2], &transform->offset, transform->scale, &res[1]);
+        gtk_path_transform_point (transform->measure, &control->quad.control, &transform->offset, transform->scale, &res[0]);
+        gtk_path_transform_point (transform->measure, end, &transform->offset, transform->scale, &res[1]);
         gsk_path_builder_quad_to (transform->builder, res[0].x, res[0].y, res[1].x, res[1].y);
       }
       break;
@@ -142,9 +141,9 @@ gtk_path_transform_op (GskPathOperation        op,
     case GSK_PATH_CUBIC:
       {
         graphene_point_t res[3];
-        gtk_path_transform_point (transform->measure, &pts[1], &transform->offset, transform->scale, &res[0]);
-        gtk_path_transform_point (transform->measure, &pts[2], &transform->offset, transform->scale, &res[1]);
-        gtk_path_transform_point (transform->measure, &pts[3], &transform->offset, transform->scale, &res[2]);
+        gtk_path_transform_point (transform->measure, &control->cubic.control1, &transform->offset, transform->scale, &res[0]);
+        gtk_path_transform_point (transform->measure, &control->cubic.control2, &transform->offset, transform->scale, &res[1]);
+        gtk_path_transform_point (transform->measure, end, &transform->offset, transform->scale, &res[2]);
         gsk_path_builder_cubic_to (transform->builder, res[0].x, res[0].y, res[1].x, res[1].y, res[2].x, res[2].y);
       }
       break;
@@ -152,9 +151,9 @@ gtk_path_transform_op (GskPathOperation        op,
     case GSK_PATH_CONIC:
       {
         graphene_point_t res[2];
-        gtk_path_transform_point (transform->measure, &pts[1], &transform->offset, transform->scale, &res[0]);
-        gtk_path_transform_point (transform->measure, &pts[3], &transform->offset, transform->scale, &res[1]);
-        gsk_path_builder_conic_to (transform->builder, res[0].x, res[0].y, res[1].x, res[1].y, weight);
+        gtk_path_transform_point (transform->measure, &control->conic.control, &transform->offset, transform->scale, &res[0]);
+        gtk_path_transform_point (transform->measure, end, &transform->offset, transform->scale, &res[1]);
+        gsk_path_builder_conic_to (transform->builder, res[0].x, res[0].y, res[1].x, res[1].y, control->conic.weight);
       }
       break;
 
