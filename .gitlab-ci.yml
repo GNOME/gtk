@@ -207,9 +207,7 @@ msys2-mingw64:
 
 macos-x86_64:
   rules:
-    # run merge request pipelines
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
-    # do not run in forks
+    # Do not run in forks as the runner is not available there.
     - if: $CI_PROJECT_NAMESPACE == "GNOME"
   stage: build
   tags:
