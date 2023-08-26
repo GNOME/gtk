@@ -69,7 +69,8 @@ G_DEFINE_BOXED_TYPE (GskPathMeasure, gsk_path_measure,
  * gsk_path_measure_new:
  * @path: the path to measure
  *
- * Creates a measure object for the given @path.
+ * Creates a measure object for the given @path with the
+ * default tolerance.
  *
  * Returns: a new `GskPathMeasure` representing @path
  *

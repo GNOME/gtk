@@ -368,7 +368,7 @@ gsk_stroke_get_miter_limit (const GskStroke *self)
  * gsk_stroke_set_dash:
  * @self: a `GskStroke`
  * @dash: (array length=n_dash) (transfer none) (nullable):
- *     the array of dashes
+ *   the array of dashes
  * @n_dash: number of elements in @dash
  *
  * Sets the dash pattern to use by this stroke.

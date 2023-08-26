@@ -177,7 +177,7 @@ gsk_path_get_flags (const GskPath *self)
  * Converts @self into a human-readable string representation suitable
  * for printing.
  *
- * The string is compatible with
+ * The string is compatible with (a superset of)
  * [SVG path syntax](https://www.w3.org/TR/SVG11/paths.html#PathData),
  * see [func@Gsk.Path.parse] for a summary of the syntax.
  *
@@ -421,6 +421,7 @@ gsk_path_get_bounds (GskPath         *self,
  *
  * Returns: `TRUE` if the path has bounds, `FALSE` if the path is known
  *   to be empty and have no bounds.
+ *
  * Since: 4.14
  */
 gboolean

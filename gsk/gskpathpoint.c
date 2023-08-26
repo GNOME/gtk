@@ -34,8 +34,8 @@
  *
  * `GskPathPoint` is an opaque type representing a point on a path.
  *
- * It can be queried for properties of the path at that point, such as its
- * tangent or its curvature.
+ * It can be queried for properties of the path at that point, such as
+ * its tangent or its curvature.
  *
  * To obtain a `GskPathPoint`, use [method@Gsk.Path.get_closest_point],
  * [method@Gsk.Path.get_start_point], [method@Gsk.Path.get_end_point]
@@ -87,6 +87,8 @@ gsk_path_point_free (GskPathPoint *point)
  * same location.
  *
  * Return: `TRUE` if @point1 and @point2 are equal
+ *
+ * Since: 4.14
  */
 gboolean
 gsk_path_point_equal (const GskPathPoint *point1,
@@ -116,6 +118,8 @@ gsk_path_point_equal (const GskPathPoint *point1,
  * Returns: -1 if @point1 is before @point2,
  *   1 if @point1 is after @point2,
  *   0 if they are equal
+ *
+ * Since: 4.14
  */
 int
 gsk_path_point_compare (const GskPathPoint *point1,

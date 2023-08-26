@@ -64,7 +64,7 @@
  * [method@Gsk.PathBuilder.close] to close the path by connecting it
  * back with a line to the starting point.
  *
- * This is similar for how paths are drawn in Cairo.
+ * This is similar to how paths are drawn in Cairo.
  *
  * Since: 4.14
  */
@@ -240,7 +240,7 @@ gsk_path_builder_unref (GskPathBuilder *self)
  * @self: a `GskPathBuilder`
  *
  * Creates a new `GskPath` from the current state of the
- * given builder, and frees the @builder instance.
+ * given builder, and unrefs the @builder instance.
  *
  * Returns: (transfer full): the newly created `GskPath`
  *   with all the contours added to the builder
@@ -310,12 +310,14 @@ gsk_path_builder_add_contour (GskPathBuilder *self,
  * gsk_path_builder_get_current_point:
  * @self: a `GskPathBuilder`
  *
- * Gets the current point. The current point is used for relative
- * drawing commands and updated after every operation.
+ * Gets the current point.
  *
- * When the builder is created, the default current point is set to (0, 0).
- * Note that this is different from cairo, which starts out without
- * a current point.
+ * The current point is used for relative drawing commands and
+ * updated after every operation.
+ *
+ * When the builder is created, the default current point is set
+ * to `0, 0`. Note that this is different from cairo, which starts
+ * out without a current point.
  *
  * Returns: (transfer none): The current point
  *
@@ -828,7 +830,9 @@ gsk_path_builder_cubic_to (GskPathBuilder *self,
  *
  * Adds a [cubic Bézier curve](https://en.wikipedia.org/wiki/B%C3%A9zier_curve)
  * from the current point to @x3, @y3 with @x1, @y1 and @x2, @y2 as the control
- * points. All coordinates are given relative to the current point.
+ * points.
+ *
+ * All coordinates are given relative to the current point.
  *
  * This is the relative version of [method@Gsk.PathBuilder.cubic_to].
  *
@@ -865,7 +869,7 @@ gsk_path_builder_rel_cubic_to (GskPathBuilder *self,
  *
  * Adds a [conic curve](https://en.wikipedia.org/wiki/Non-uniform_rational_B-spline)
  * from the current point to @x2, @y2 with the given @weight and @x1, @y1 as the
- * single control point.
+ * control point.
  *
  * The weight determines how strongly the curve is pulled towards the control point.
  * A conic with weight 1 is identical to a quadratic Bézier curve with the same points.
@@ -914,7 +918,9 @@ gsk_path_builder_conic_to (GskPathBuilder *self,
  *
  * Adds a [conic curve](https://en.wikipedia.org/wiki/Non-uniform_rational_B-spline)
  * from the current point to @x2, @y2 with the given @weight and @x1, @y1 as the
- * single control point.
+ * control point.
+ *
+ * All coordinates are given relative to the current point.
  *
  * This is the relative version of [method@Gsk.PathBuilder.conic_to].
  *
@@ -985,8 +991,9 @@ gsk_path_builder_arc_to (GskPathBuilder *self,
  * @y2: y coordinate of second control point
  *
  * Adds an elliptical arc from the current point to @x3, @y3
- * with @x1, @y1 determining the tangent directions. All coordinates
- * are given relative to the current point.
+ * with @x1, @y1 determining the tangent directions.
+ *
+ * All coordinates are given relative to the current point.
  *
  * This is the relative version of [method@Gsk.PathBuilder.arc_to].
  *
@@ -1332,7 +1339,6 @@ angle_between_points (const graphene_point_t *c,
  * the circle with the given radius touches the line from
  * @x1, @y1 to @x2, @y2.
  *
- *
  * Since: 4.14
  */
 void
@@ -1417,8 +1423,7 @@ gsk_path_builder_rel_html_arc_to (GskPathBuilder *self,
  * @self: a #GskPathBuilder
  * @layout: the pango layout to add
  *
- * Adds the outlines for the glyphs in @layout to
- * the builder.
+ * Adds the outlines for the glyphs in @layout to the builder.
  *
  * Since: 4.14
  */
