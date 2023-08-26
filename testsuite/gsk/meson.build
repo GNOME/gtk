@@ -295,6 +295,8 @@ node_parser_tests = [
   'empty-transform.ref.node',
   'fill.node',
   'fill.ref.node',
+  'fill2.node',
+  'fill2.ref.node',
   'glshader.node',
   'glshader.ref.node',
   'glshader.errors',
