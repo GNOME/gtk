@@ -34,8 +34,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.8.2\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2023-08-05 10:34+0000\n"
-"PO-Revision-Date: 2023-08-05 11:18+0100\n"
+"POT-Creation-Date: 2023-08-26 02:30+0000\n"
+"PO-Revision-Date: 2023-08-26 11:18+0100\n"
 "Last-Translator: Jordi Mas i Hernàndez <jmas@softcatala.org>\n"
 "Language-Team: Catalan <tradgnome@softcatala.org>\n"
 "Language: ca\n"
@@ -161,7 +161,7 @@ msgstr "L'aplicació no admet API de %s"
 
 #. translators: This is about OpenGL backend names, like
 #. * "Trying to use X11 GLX, but EGL is already in use"
-#: gdk/gdkglcontext.c:1863
+#: gdk/gdkglcontext.c:1864
 #, c-format
 msgid "Trying to use %s, but %s is already in use"
 msgstr "S'està intentant utilitzar %s, però ja s'està utilitzant %s"
@@ -596,7 +596,7 @@ msgstr "No s'ha pogut llegir les dades a la fila %d"
 #: gdk/macos/gdkmacospasteboard.c:211 gdk/wayland/gdkclipboard-wayland.c:240
 #: gdk/wayland/gdkdrop-wayland.c:207 gdk/wayland/gdkprimary-wayland.c:343
 #: gdk/win32/gdkdrop-win32.c:1018 gdk/win32/gdkdrop-win32.c:1063
-#: gdk/x11/gdkclipboard-x11.c:805 gdk/x11/gdkdrop-x11.c:235
+#: gdk/x11/gdkclipboard-x11.c:807 gdk/x11/gdkdrop-x11.c:235
 msgid "No compatible transfer format found"
 msgstr "No s'ha trobat cap format de transferència compatible"
 
@@ -770,10 +770,9 @@ msgid "No GL implementation is available"
 msgstr "No hi ha cap implementació GL disponible"
 
 #: gdk/win32/gdkglcontext-win32-wgl.c:396
-#, fuzzy, c-format
-#| msgid "EGL version %d.%d is too old. GTK requires %d.%d"
+#, c-format
 msgid "WGL version %d.%d is too low, need at least %d.%d"
-msgstr "La versió de l'EGL %d.%d és massa antiga. La GTK requereix %d.%d"
+msgstr "La versió %d.%d de WGL és massa baixa, cal com a mínim %d.%d"
 
 #: gdk/win32/gdkglcontext-win32-wgl.c:414
 #, c-format
@@ -838,11 +837,11 @@ msgid_plural "Opening %d Items"
 msgstr[0] "S'està obrint %d element"
 msgstr[1] "S'estan obrint %d elements"
 
-#: gdk/x11/gdkclipboard-x11.c:475
+#: gdk/x11/gdkclipboard-x11.c:477
 msgid "Clipboard manager could not store selection."
 msgstr "El gestor de porta-retalls no ha pogut desar la selecció."
 
-#: gdk/x11/gdkclipboard-x11.c:655
+#: gdk/x11/gdkclipboard-x11.c:657
 msgid "Cannot store clipboard. No clipboard manager is active."
 msgstr ""
 "No es pot emmagatzemar el porta-retalls. No està actiu el gestor del porta-"
@@ -1111,13 +1110,13 @@ msgid "Pick a Color"
 msgstr "Trieu un color"
 
 #: gtk/deprecated/gtkcolorbutton.c:502 gtk/gtkcolorchooserwidget.c:313
-#: gtk/gtkcolordialogbutton.c:302
+#: gtk/gtkcolordialogbutton.c:335
 #, c-format
 msgid "Red %d%%, Green %d%%, Blue %d%%, Alpha %d%%"
 msgstr "Vermell %d%%, verd %d%%, blau %d%%, alfa %d%%"
 
 #: gtk/deprecated/gtkcolorbutton.c:508 gtk/gtkcolorchooserwidget.c:319
-#: gtk/gtkcolordialogbutton.c:308
+#: gtk/gtkcolordialogbutton.c:341
 #, c-format
 msgid "Red %d%%, Green %d%%, Blue %d%%"
 msgstr "Vermell %d%%, verd %d%%, blau %d%%"
@@ -1132,11 +1131,11 @@ msgid "Pick a Font"
 msgstr "Trieu un tipus de lletra"
 
 #: gtk/deprecated/gtkfontbutton.c:597 gtk/gtkfilechooserwidget.c:3871
-#: gtk/gtkfontdialogbutton.c:115 gtk/inspector/visual.ui:169
+#: gtk/gtkfontdialogbutton.c:126 gtk/inspector/visual.ui:169
 msgid "Font"
 msgstr "Tipus de lletra"
 
-#: gtk/deprecated/gtkfontbutton.c:1152 gtk/gtkfontdialogbutton.c:614
+#: gtk/deprecated/gtkfontbutton.c:1152 gtk/gtkfontdialogbutton.c:652
 msgctxt "font"
 msgid "None"
 msgstr "Cap"
@@ -2109,7 +2108,7 @@ msgstr "Personalitzat"
 
 #: gtk/gtkcolorchooserwidget.c:571
 msgid "Add Color"
-msgstr "Afegeix color"
+msgstr "Afegeix un color"
 
 #: gtk/gtkcolorchooserwidget.c:593
 #, c-format
@@ -2274,7 +2273,7 @@ msgstr "_Obre"
 msgid "_Save"
 msgstr "_Desa"
 
-#: gtk/gtkfilechoosernativequartz.c:340 gtk/ui/gtkfilechooserwidget.ui:288
+#: gtk/gtkfilechoosernativequartz.c:344 gtk/ui/gtkfilechooserwidget.ui:288
 msgid "Select which types of files are shown"
 msgstr "Seleccioneu quins tipus de fitxers es mostren"
 
@@ -2347,7 +2346,7 @@ msgid "If you delete an item, it will be permanently lost."
 msgstr "Si suprimiu un element, es perdrà definitivament."
 
 #: gtk/gtkfilechooserwidget.c:1185 gtk/gtkfilechooserwidget.c:1815
-#: gtk/gtklabel.c:5695 gtk/gtktext.c:6125 gtk/gtktextview.c:9018
+#: gtk/gtklabel.c:5695 gtk/gtktext.c:6145 gtk/gtktextview.c:9018
 msgid "_Delete"
 msgstr "_Suprimeix"
 
@@ -2488,7 +2487,7 @@ msgstr "Programa"
 msgid "Audio"
 msgstr "Àudio"
 
-#: gtk/gtkfilechooserwidget.c:3872 gtk/gtkfilefilter.c:1035
+#: gtk/gtkfilechooserwidget.c:3872 gtk/gtkfilefilter.c:1032
 msgid "Image"
 msgstr "Imatge"
 
@@ -2599,7 +2598,7 @@ msgstr "Selecciona carpetes"
 msgid "Select a Folder"
 msgstr "Selecciona una carpeta"
 
-#: gtk/gtkfilefilter.c:1048
+#: gtk/gtkfilefilter.c:1045
 msgid "Unspecified"
 msgstr "No especificat"
 
@@ -2691,19 +2690,19 @@ msgstr "Tanca"
 msgid "Close the infobar"
 msgstr "Tanca la barra d'informació"
 
-#: gtk/gtklabel.c:5692 gtk/gtktext.c:6113 gtk/gtktextview.c:9006
+#: gtk/gtklabel.c:5692 gtk/gtktext.c:6133 gtk/gtktextview.c:9006
 msgid "Cu_t"
 msgstr "Re_talla"
 
-#: gtk/gtklabel.c:5693 gtk/gtktext.c:6117 gtk/gtktextview.c:9010
+#: gtk/gtklabel.c:5693 gtk/gtktext.c:6137 gtk/gtktextview.c:9010
 msgid "_Copy"
 msgstr "_Copia"
 
-#: gtk/gtklabel.c:5694 gtk/gtktext.c:6121 gtk/gtktextview.c:9014
+#: gtk/gtklabel.c:5694 gtk/gtktext.c:6141 gtk/gtktextview.c:9014
 msgid "_Paste"
 msgstr "_Enganxa"
 
-#: gtk/gtklabel.c:5700 gtk/gtktext.c:6134 gtk/gtktextview.c:9039
+#: gtk/gtklabel.c:5700 gtk/gtktext.c:6154 gtk/gtktextview.c:9039
 msgid "Select _All"
 msgstr "Seleccion_a-ho tot"
 
@@ -2913,7 +2912,7 @@ msgstr "Pestanya anterior"
 msgid "Next tab"
 msgstr "Pestanya següent"
 
-#: gtk/gtknotebook.c:4331 gtk/gtknotebook.c:6539
+#: gtk/gtknotebook.c:4331 gtk/gtknotebook.c:6541
 #, c-format
 msgid "Page %u"
 msgstr "Pàgina %u"
@@ -3658,7 +3657,7 @@ msgctxt "accessibility"
 msgid "Sidebar"
 msgstr "Barra lateral"
 
-#: gtk/gtktext.c:6139 gtk/gtktextview.c:9044
+#: gtk/gtktext.c:6159 gtk/gtktextview.c:9044
 msgid "Insert _Emoji"
 msgstr "Insereix _emoji"
 
@@ -7204,20 +7203,7 @@ msgid "Can’t close stream"
 msgstr "No es pot tancar el flux"
 
 #: tools/gtk-builder-tool.c:36
-#, fuzzy, c-format
-#| msgid ""
-#| "Usage:\n"
-#| "  gtk-builder-tool [COMMAND] [OPTION…] FILE\n"
-#| "\n"
-#| "Perform various tasks on GtkBuilder .ui files.\n"
-#| "\n"
-#| "Commands:\n"
-#| "  validate     Validate the file\n"
-#| "  simplify     Simplify the file\n"
-#| "  enumerate    List all named objects\n"
-#| "  preview      Preview the file\n"
-#| "  screenshot   Take a screenshot of the file\n"
-#| "\n"
+#, c-format
 msgid ""
 "Usage:\n"
 "  gtk4-builder-tool [COMMAND] [OPTION…] FILE\n"
@@ -7243,7 +7229,8 @@ msgstr ""
 "  simplify           Simplifica el fitxer\n"
 "  enumerate          Llista tots els objectes anomenats\n"
 "  preview            Previsualitza el fitxer\n"
-"  screenshot         Fes una captura de pantalla\n"
+"  render             Fes una captura de pantalla del fitxer\n"
+"  screenshot         Fes una captura de pantalla del fitxer\n"
 "\n"
 
 #: tools/gtk-builder-tool-enumerate.c:56 tools/gtk-builder-tool-preview.c:179
@@ -7288,10 +7275,9 @@ msgstr "Utilitza l'estil del fitxer CSS"
 #: tools/gtk-builder-tool-screenshot.c:370
 #: tools/gtk-builder-tool-validate.c:268 tools/gtk-rendernode-tool-show.c:109
 #: tools/gtk-rendernode-tool-render.c:204
-#, fuzzy, c-format
-#| msgid "Could not initialize EGL display"
+#, c-format
 msgid "Could not initialize windowing system\n"
-msgstr "No s'ha pogut inicialitzar la pantalla EGL"
+msgstr "No s'ha pogut inicialitzar el sistema de finestres\n"
 
 #: tools/gtk-builder-tool-preview.c:195
 msgid "Preview the file."
@@ -7306,13 +7292,14 @@ msgid "No .ui file specified\n"
 msgstr "No s'ha especificat un fitxer .ui\n"
 
 #: tools/gtk-builder-tool-preview.c:214
-#, fuzzy, c-format
+#, c-format
 #| msgid "Can only simplify a single .ui file without --replace\n"
 msgid "Can only preview a single .ui file\n"
-msgstr "Només es pot simplificar un únic fitxer .ui sense --replace\n"
+msgstr "Només es pot previsualitzar un únic fitxer .ui\n"
 
 #: tools/gtk-builder-tool-screenshot.c:238
 #, c-format
+#| msgid "No results found"
 msgid "No object found\n"
 msgstr "No s'ha trobat cap objecte\n"
 
@@ -7323,10 +7310,9 @@ msgstr "Els objectes del tipus %s no poden ser captura de pantalla\n"
 
 # FIXME
 #: tools/gtk-builder-tool-screenshot.c:298
-#, fuzzy, c-format
-#| msgid "Failed to write hash table\n"
+#, c-format
 msgid "Failed to take a screenshot\n"
-msgstr "No s'ha pogut escriure la taula de resum\n"
+msgstr "No s'ha pogut fer una captura de pantalla\n"
 
 #: tools/gtk-builder-tool-screenshot.c:309
 #, c-format
@@ -7345,10 +7331,9 @@ msgstr "Sortida escrita a %s.\n"
 
 #: tools/gtk-builder-tool-screenshot.c:336
 #: tools/gtk-rendernode-tool-render.c:176
-#, fuzzy, c-format
-#| msgid "Failed to open file %s : %s\n"
+#, c-format
 msgid "Failed to save %s: %s\n"
-msgstr "No s'ha pogut obrir el fitxer %s: %s\n"
+msgstr "No s'ha pogut desar %s: %s\n"
 
 #: tools/gtk-builder-tool-screenshot.c:359
 msgid "Screenshot only the named object"
@@ -7372,10 +7357,9 @@ msgid "Render a .ui file to an image."
 msgstr "Renderitza un fitxer .ui a una imatge."
 
 #: tools/gtk-builder-tool-screenshot.c:397
-#, fuzzy, c-format
-#| msgid "Can only simplify a single .ui file without --replace\n"
 msgid "Can only render a single .ui file to a single output file\n"
-msgstr "Només es pot simplificar un únic fitxer .ui sense --replace\n"
+msgstr ""
+"Només es pot renderitzar un únic fitxer .ui a un únic fitxer de sortida\n"
 
 #: tools/gtk-builder-tool-simplify.c:444
 #, c-format
@@ -7383,28 +7367,24 @@ msgid "%s:%d: Couldn’t parse value for property '%s': %s\n"
 msgstr "%s:%d: no s'ha pogut analitzar el valor per a la propietat «%s»: %s\n"
 
 #: tools/gtk-builder-tool-simplify.c:658
-#, c-format, fuzzy
-#| msgid "%s:%d: %sproperty %s::%s not found\n"
+#, c-format
 msgid "Property %s not found"
 msgstr "No s'ha trobat la propietat %s"
 
 #: tools/gtk-builder-tool-simplify.c:661
-#, c-format, fuzzy
-#| msgid "%s:%d: %sproperty %s::%s not found\n"
+#, c-format
 msgid "Packing property %s not found"
 msgstr "No s'ha trobat la propietat d'empaquetatge %s"
 
 #: tools/gtk-builder-tool-simplify.c:664
-#, fuzzy, c-format
-#| msgid "%s:%d: %sproperty %s::%s not found\n"
+#, c-format
 msgid "Cell property %s not found"
-msgstr "%s:%d: %sproperty %s::%s no s'ha trobat\n"
+msgstr "No s'ha trobat la propietat de cel·la %s"
 
 #: tools/gtk-builder-tool-simplify.c:667
-#, fuzzy, c-format
-#| msgid "%s:%d: %sproperty %s::%s not found\n"
+#, c-format
 msgid "Layout property %s not found"
-msgstr "%s:%d: %sproperty %s::%s no s'ha trobat\n"
+msgstr "No s'ha trobat la propietat de disposició %s"
 
 #: tools/gtk-builder-tool-simplify.c:1397
 #, c-format
@@ -7430,7 +7410,6 @@ msgstr "No s'ha pogut llegir «%s»: %s\n"
 
 #: tools/gtk-builder-tool-simplify.c:2510
 #, c-format
-#| msgid "Failed to write %s: “%s”\n"
 msgid "Failed to write “%s”: “%s”\n"
 msgstr "No s'ha pogut escriure «%s»: «%s»\n"
 
@@ -7452,9 +7431,9 @@ msgid "Can only simplify a single .ui file without --replace\n"
 msgstr "Només es pot simplificar un únic fitxer .ui sense --replace\n"
 
 #: tools/gtk-builder-tool-validate.c:45
-#, c-format, fuzzy
+#, c-format
 msgid "Failed to lookup template parent type %s\n"
-msgstr "No s'ha pogut cercar el tipus pare de la plantilla %s"
+msgstr "No s'ha pogut cercar el tipus pare de la plantilla %s\n"
 
 #: tools/gtk-builder-tool-validate.c:123
 msgid "Deprecated types:\n"
@@ -7529,20 +7508,7 @@ msgid "%s: error launching application: %s\n"
 msgstr "%s: s'ha produït un error en executar l'aplicació: %s\n"
 
 #: tools/gtk-rendernode-tool.c:35
-#, fuzzy, c-format
-#| msgid ""
-#| "Usage:\n"
-#| "  gtk-builder-tool [COMMAND] [OPTION…] FILE\n"
-#| "\n"
-#| "Perform various tasks on GtkBuilder .ui files.\n"
-#| "\n"
-#| "Commands:\n"
-#| "  validate     Validate the file\n"
-#| "  simplify     Simplify the file\n"
-#| "  enumerate    List all named objects\n"
-#| "  preview      Preview the file\n"
-#| "  screenshot   Take a screenshot of the file\n"
-#| "\n"
+#, c-format
 msgid ""
 "Usage:\n"
 "  gtk4-rendernode-tool [COMMAND] [OPTION…] FILE\n"
@@ -7556,16 +7522,14 @@ msgid ""
 "\n"
 msgstr ""
 "Ús:\n"
-"  gtk-builder-tool [ORDRE] [OPCIONS…] FITXER\n"
+"  gtk4-rendernode-tool [ORDRE] [OPCIÓ...] FITXER\n"
 "\n"
-"Fes diverses tasques en fitxers GtkBuilder .ui.\n"
+"Realitza diverses tasques als nodes de renderització GTK.\n"
 "\n"
 "Ordres:\n"
-"  validate           Valida el fitxer\n"
-"  simplify           Simplifica el fitxer\n"
-"  enumerate          Llista tots els objectes anomenats\n"
-"  preview            Previsualitza el fitxer\n"
-"  screenshot         Fes una captura de pantalla\n"
+"  info         Proporciona informació sobre el node\n"
+"  show         Mostra el node\n"
+"  render       Fes una captura de pantalla del node\n"
 "\n"
 
 #: tools/gtk-rendernode-tool-info.c:177
@@ -7594,44 +7558,39 @@ msgstr "Proporciona informació sobre el node de renderització."
 
 #: tools/gtk-rendernode-tool-info.c:222 tools/gtk-rendernode-tool-show.c:130
 #: tools/gtk-rendernode-tool-render.c:225
-#, fuzzy, c-format
-#| msgid "No .ui file specified\n"
+#, c-format
 msgid "No .node file specified\n"
-msgstr "No s'ha especificat un fitxer .ui\n"
+msgstr "No s'ha especificat un fitxer .node\n"
 
 #: tools/gtk-rendernode-tool-info.c:228
-#, fuzzy, c-format
-#| msgid "Can only simplify a single .ui file without --replace\n"
+#, c-format
 msgid "Can only accept a single .node file\n"
-msgstr "Només es pot simplificar un únic fitxer .ui sense --replace\n"
+msgstr "Només es pot acceptar un únic fitxer .node\n"
 
 #: tools/gtk-rendernode-tool-show.c:117
 msgid "Show the render node."
 msgstr "Mostra el node de renderització."
 
 #: tools/gtk-rendernode-tool-show.c:136
-#, fuzzy, c-format
-#| msgid "Can only simplify a single .ui file without --replace\n"
+#, c-format
 msgid "Can only preview a single .node file\n"
-msgstr "Només es pot simplificar un únic fitxer .ui sense --replace\n"
+msgstr "Només es pot previsualitzar un únic fitxer .node\n"
 
 #: tools/gtk-rendernode-tool-render.c:123
-#, c-format, fuzzy
+#, c-format
 msgid ""
 "File %s exists.\n"
 "If you want to overwrite, specify the filename.\n"
 msgstr ""
 "El fitxer %s existeix.\n"
-"Si voleu sobreescriure, especifiqueu el nom del fitxer."
+"Si voleu sobreescriure, especifiqueu el nom del fitxer.\n"
 
 #: tools/gtk-rendernode-tool-render.c:137
-#, fuzzy, c-format
-#| msgid "Failed to open file %s : %s\n"
+#, c-format
 msgid "Failed to generate SVG: %s\n"
-msgstr "No s'ha pogut obrir el fitxer %s: %s\n"
+msgstr "No s'ha pogut generar el SVG: %s\n"
 
 #: tools/gtk-rendernode-tool-render.c:196
-#, fuzzy
 msgid "Renderer to use"
 msgstr "Renderitzador a utilitzar"
 
@@ -7640,15 +7599,14 @@ msgid "RENDERER"
 msgstr "RENDERITZADOR"
 
 #: tools/gtk-rendernode-tool-render.c:212
-#, fuzzy
 msgid "Render a .node file to an image."
 msgstr "Renderitza un fitxer .node a una imatge."
 
 #: tools/gtk-rendernode-tool-render.c:231
-#, c-format, fuzzy
+#, c-format
 msgid "Can only render a single .node file to a single output file\n"
 msgstr ""
-"Només es pot renderitzar un únic fitxer .node a un únic fitxer de sortida"
+"Només es pot renderitzar un únic fitxer .node a un únic fitxer de sortida\n"
 
 #: tools/gtk-rendernode-tool-utils.c:51
 #, c-format
@@ -7762,22 +7720,3 @@ msgid ""
 msgstr ""
 "No hi ha el fitxer índex de tema a «%s».\n"
 "Si realment voleu crear una memòria cau d'icones aquí, utilitzeu --ignore-theme-index.\n"
-
-#~ msgid "Tab list"
-#~ msgstr "Llista de pestanyes"
-
-#~ msgid "Allocation"
-#~ msgstr "Assignació"
-
-#~ msgid "Show fps overlay"
-#~ msgstr "Mostra la superposició fps"
-
-#~ msgid "Simulate Touchscreen"
-#~ msgstr "Simula una pantalla tàctil"
-
-#~ msgid "Take a screenshot of the file."
-#~ msgstr "Feu una captura de pantalla del fitxer."
-
-#, c-format
-#~ msgid "Can’t parse “%s”\n"
-#~ msgstr "No es pot analitzar «%s»\n"
