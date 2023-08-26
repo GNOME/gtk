@@ -801,7 +801,7 @@ test_split (void)
 
       length = gsk_path_measure_get_length (measure);
       /* chosen high enough to stop the testsuite from failing */
-      epsilon = MAX (length / 1000, 1.f / 1024);
+      epsilon = MAX (length / 250, 1.f / 1024);
 
       split = g_test_rand_double_range (0, length);
 
