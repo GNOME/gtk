@@ -1,5 +1,77 @@
-Overview of Changes in 4.13.0, xx-xx-xxxx
+Overview of Changes in 4.13.0, 25-08-2023
 =========================================
+
+* GskPath, GskPathBuilder, GskPathMeasure:
+  Data types and APIs for path rendering. These APIs are still
+  considered experimental, and may change until 4.14. Please try
+  them out and give us feedback. Documentation can be found
+  here: https://docs.gtk.org/gsk4/paths.html
+
+* GtkGridView:
+ - Fix a crash when scrolling
+
+* GtkColumnView:
+ - Fix a refcounting issue in the new scroll_to api
+
+* GtkTreeView
+ - Fix style classes for sort arrows
+
+* GtkEntry:
+ - Improve tracking of user changes (for undo)
+
+* GtkNotebook:
+ - Fix a critical when switching pages
+
+* GtkColor/FontDialogButton:
+ - Make these widgets activatable
+
+* GtkMenuButton:
+ - Fix problems with focus handling
+ - Fix problems with DND
+ - Make flags a settable property
+
+* GtkShortcutsWindow:
+ - Add API to build shortcuts windows programmatically
+
+* Printing
+ - Fix the cpdb backend build
+
+* MacOS:
+ - Make file filters work again
+
+* GSK:
+ - Fix issues with color matrix nodes
+
+* Wayland:
+ - Fix a crash with compositors other than gnome-shell
+
+* Deprecations:
+ - Remaining GtkTreeModel-related types
+
+* Demos:
+ - Add a few path demos to gtk4-demo
+
+* Tools:
+ - gtk4-path-tool provides a commandline interface for paths
+
+* Translation updates:
+ Basque
+ Catalan
+ Finnish
+ Galician
+ Georgian
+ German
+ Greek
+ Indonesian
+ Kazakh
+ Persian
+ Polish
+ Romanian
+ Spanish
+ Swedish
+ Turkish
+ Ukrainian
+
 
 Overview of Changes in 4.12.0, 05-08-2023
 =========================================
