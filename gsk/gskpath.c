@@ -24,7 +24,6 @@
 #include "gskcurveprivate.h"
 #include "gskpathbuilder.h"
 #include "gskpathpointprivate.h"
-#include "gsksplineprivate.h"
 
 /**
  * GskPath:

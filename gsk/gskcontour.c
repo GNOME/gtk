@@ -25,7 +25,6 @@
 #include "gskpathbuilder.h"
 #include "gskpathprivate.h"
 #include "gskpathpointprivate.h"
-#include "gsksplineprivate.h"
 #include "gskstrokeprivate.h"
 
 typedef struct _GskContourClass GskContourClass;
