@@ -147,6 +147,19 @@ Creates a node like `gsk_cross_fade_node_new()` with the given properties.
 
 Creates a node like `gsk_debug_node_new()` with the given properties.
 
+### fill
+
+| property  | syntax          | default                | printed     |
+| --------- | --------------- | ---------------------- | ----------- |
+| child     | `<node>`        | *see below*            | always      |
+| path      | `<string>`      | ""                     | always      |
+| fill-rule | `<fill-rule>`   | winding                | always      |
+
+Creates a node like `gsk_fill_node_new()` with the given properties.
+
+The default child node is the default color node, but created with the
+bounds of the path.
+
 ### glshader
 
 | property   | syntax             | default                | printed     |
@@ -288,6 +301,24 @@ Creates a node like `gsk_rounded_clip_node_new()` with the given properties.
 | shadows  | `<shadow>`       | black 1 1              | always      |
 
 Creates a node like `gsk_shadow_node_new()` with the given properties.
+
+### stroke
+
+| property    | syntax             | default           | printed     |
+| ----------- | ------------------ | ----------------- | ----------- |
+| child       | `<node>`           | *see below*       | always      |
+| path        | `<string>`         | ""                | always      |
+| line-width  | `<number>`         | 0                 | non-default |
+| line-cap    | `<line-cap>`       | butt              | always      |
+| line-join   | `<line-join>`      | miter             | always      |
+| miter-limit | `<number>`         | 4                 | non-default |
+| dash        | `<number>{+}|none` | none              | non-default |
+| dash-offset | `<number>`         | 0                 | non-default |
+
+Creates a node like `gsk_stroke_node_new()` with the given properties.
+
+The default child node is the default color node, but created with the
+stroke bounds of the path.
 
 ### text
 
