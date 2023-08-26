@@ -37,7 +37,9 @@
  * It can be queried for properties of the path at that point, such as its
  * tangent or its curvature.
  *
- * To obtain a `GskPathPoint`, use [method@Gsk.Path.get_closest_point].
+ * To obtain a `GskPathPoint`, use [method@Gsk.Path.get_closest_point],
+ * [method@Gsk.Path.get_start_point], [method@Gsk.Path.get_end_point]
+ * or [method@Gsk.PathMeasure.get_point].
  *
  * Note that `GskPathPoint` structs are meant to be stack-allocated, and
  * don't a reference to the path object they are obtained from. It is the
