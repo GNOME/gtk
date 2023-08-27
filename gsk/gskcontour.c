@@ -1221,16 +1221,6 @@ gsk_circle_contour_get_winding (const GskContour       *contour,
 static gsize
 gsk_circle_contour_get_n_ops (const GskContour *contour)
 {
-  /* Not related to how many curves foreach produces.
-   * GskPath assumes that the start- and endpoints
-   * of a contour are { x, 1, 0 } and { x, n_ops - 1, 1 }.
-   *
-   * The circle contour uses a single 'segment' in path
-   * points, with a t that ranges from 0 to 1 to cover
-   * the angles from 0 to 360 (or 360 to 0 in the ccw
-   * case).
-   */
-
   return 2;
 }
 
@@ -1916,6 +1906,17 @@ gsk_contour_get_closest_point (const GskContour       *self,
   return self->klass->get_closest_point (self, point, threshold, result, out_dist);
 }
 
+/* Not related to how many curves foreach produces.
+ *
+ * GskPath assumes that the start- and endpoints
+ * of a contour are { x, 1, 0 } and { x, n_ops - 1, 1 }.
+ *
+ * While the standard and rounded rect contours use
+ * one point per op, the circle contour uses a single
+ * 'segment' in path points, with a t that ranges
+ * from 0 to 1 to cover the angles from 0 to 360 (or
+ * 360 to 0 in the ccw case).
+ */
 gsize
 gsk_contour_get_n_ops (const GskContour *self)
 {
