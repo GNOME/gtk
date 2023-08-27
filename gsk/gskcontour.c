@@ -1503,6 +1503,12 @@ gsk_circle_contour_new (const graphene_point_t *center,
 /* }}} */
 /* {{{ API */
 
+const char *
+gsk_contour_get_type_name (const GskContour *self)
+{
+  return self->klass->type_name;
+}
+
 gsize
 gsk_contour_get_size (const GskContour *self)
 {
