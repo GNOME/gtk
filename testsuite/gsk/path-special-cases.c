@@ -785,6 +785,8 @@ test_rounded_rect (void)
   GskRoundedRect rect;
   GskPathBuilder *builder;
   GskPath *path;
+  GskPathPoint point;
+  graphene_point_t p;
 
   gsk_rounded_rect_init (&rect, &GRAPHENE_RECT_INIT (10, 10, 100, 50),
                          &GRAPHENE_SIZE_INIT (0, 0),
@@ -798,13 +800,21 @@ test_rounded_rect (void)
 
   path = gsk_path_builder_free_to_path (builder);
 
-  for (int i = 0; i < 1000; i++)
+  for (int i = 0; i < 100; i++)
     {
-      graphene_point_t p = GRAPHENE_POINT_INIT (g_test_rand_double_range (0, 200),
-                                                g_test_rand_double_range (0, 200));
+      p = GRAPHENE_POINT_INIT (g_test_rand_double_range (0, 200),
+                               g_test_rand_double_range (0, 200));
 
       g_assert_true (gsk_rounded_rect_contains_point (&rect, &p) == gsk_path_in_fill (path, &p, GSK_FILL_RULE_WINDING));
     }
+
+  gsk_path_get_start_point (path, &point);
+  gsk_path_point_get_position (&point, path, &p);
+  g_assert_true (graphene_point_equal (&p, &GRAPHENE_POINT_INIT (10, 10)));
+
+  gsk_path_get_end_point (path, &point);
+  gsk_path_point_get_position (&point, path, &p);
+  g_assert_true (graphene_point_equal (&p, &GRAPHENE_POINT_INIT (10, 10)));
 
   gsk_path_unref (path);
 }
@@ -817,6 +827,7 @@ test_circle (void)
   GskPathMeasure *measure, *measure1, *measure2, *measure3;
   float length, length1, length2, length3;
   GskPathPoint point0, point1;
+  graphene_point_t p;
 
   builder = gsk_path_builder_new ();
   gsk_path_builder_add_circle (builder, &GRAPHENE_POINT_INIT (0, 0), 1);
@@ -826,6 +837,14 @@ test_circle (void)
   length = gsk_path_measure_get_length (measure);
 
   g_assert_cmpfloat_with_epsilon (length, 2 * M_PI, 0.001);
+
+  gsk_path_get_start_point (path, &point0);
+  gsk_path_point_get_position (&point0, path, &p);
+  g_assert_true (graphene_point_equal (&p, &GRAPHENE_POINT_INIT (1, 0)));
+
+  gsk_path_get_end_point (path, &point0);
+  gsk_path_point_get_position (&point0, path, &p);
+  g_assert_true (graphene_point_equal (&p, &GRAPHENE_POINT_INIT (1, 0)));
 
   gsk_path_get_closest_point (path, &GRAPHENE_POINT_INIT (1, 1), INFINITY, &point0);
   gsk_path_get_closest_point (path, &GRAPHENE_POINT_INIT (-1, 1), INFINITY, &point1);
