@@ -1287,7 +1287,7 @@ gsk_circle_contour_get_closest_point (const GskContour       *contour,
   angle = RAD_TO_DEG (atan2f (point->y - self->center.y, point->x - self->center.x));
 
   if (angle < 0)
-    angle = 360 - angle;
+    angle = 360 + angle;
 
   t = CLAMP (angle / 360, 0, 1);
 
@@ -1390,7 +1390,7 @@ gsk_circle_contour_add_segment (const GskContour *contour,
 
   if (end->idx == 1 && end->t == 1)
     {
-      end2.idx = 4;
+      end2.idx = 5;
       end2.t = 1;
     }
   else
