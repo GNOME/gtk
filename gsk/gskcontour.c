@@ -1467,6 +1467,8 @@ gsk_circle_contour_new (const graphene_point_t *center,
 {
   GskCircleContour *self;
 
+  g_assert (radius > 0);
+
   self = g_new0 (GskCircleContour, 1);
 
   self->contour.klass = &GSK_CIRCLE_CONTOUR_CLASS;
@@ -1700,7 +1702,10 @@ gsk_rect_contour_get_closest_point (const GskContour       *contour,
   if (gsk_rect_contour_closest_point (self, point, threshold, out_dist, &distance))
     {
       result->idx = 1;
-      result->t = distance / self->length;
+      if (self->length == 0)
+        result->t = 0;
+      else
+        result->t = distance / self->length;
 
       return TRUE;
     }
@@ -1961,7 +1966,10 @@ gsk_rect_contour_get_point (const GskContour *contour,
   const GskRectContour *self = (const GskRectContour *) contour;
 
   result->idx = 1;
-  result->t = CLAMP (distance / self->length, 0, 1);
+  if (self->length == 0)
+    result->t = 0;
+  else
+    result->t = CLAMP (distance / self->length, 0, 1);
 }
 
 static float

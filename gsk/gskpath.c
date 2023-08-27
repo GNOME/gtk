@@ -603,6 +603,7 @@ gsk_path_get_closest_point (GskPath                *self,
       if (gsk_contour_get_closest_point (self->contours[i], point, threshold, res, &distance))
         {
           found = TRUE;
+          g_assert (0 <= res->t && res->t <= 1);
           res->contour = i;
           threshold = distance;
         }
