@@ -50,9 +50,6 @@ struct _GskContourClass
   gboolean              (* get_stroke_bounds)   (const GskContour       *contour,
                                                  const GskStroke        *stroke,
                                                  GskBoundingBox         *bounds);
-  void                  (* get_start_end)       (const GskContour       *self,
-                                                 graphene_point_t       *start,
-                                                 graphene_point_t       *end);
   gboolean              (* foreach)             (const GskContour       *contour,
                                                  float                   tolerance,
                                                  GskPathForeachFunc      func,
@@ -408,20 +405,6 @@ gsk_standard_contour_get_stroke_bounds (const GskContour *contour,
                                                        self->bounds.max.y + extra));
 
   return TRUE;
-}
-
-static void
-gsk_standard_contour_get_start_end (const GskContour *contour,
-                                    graphene_point_t *start,
-                                    graphene_point_t *end)
-{
-  const GskStandardContour *self = (const GskStandardContour *) contour;
-
-  if (start)
-    *start = self->points[0];
-
-  if (end)
-    *end = self->points[self->n_points - 1];
 }
 
 static int
@@ -1018,7 +1001,6 @@ static const GskContourClass GSK_STANDARD_CONTOUR_CLASS =
   gsk_contour_print_default,
   gsk_standard_contour_get_bounds,
   gsk_standard_contour_get_stroke_bounds,
-  gsk_standard_contour_get_start_end,
   gsk_standard_contour_foreach,
   gsk_standard_contour_reverse,
   gsk_standard_contour_get_winding,
@@ -1142,20 +1124,6 @@ gsk_circle_contour_get_stroke_bounds (const GskContour *contour,
                                                self->center.y + self->radius + stroke->line_width/2));
 
   return TRUE;
-}
-
-static void
-gsk_circle_contour_get_start_end (const GskContour *contour,
-                                  graphene_point_t *start,
-                                  graphene_point_t *end)
-{
-  const GskCircleContour *self = (const GskCircleContour *) contour;
-
-  if (start)
-    *start = GRAPHENE_POINT_INIT (self->center.x + self->radius, self->center.y);
-
-  if (end)
-    *end = GRAPHENE_POINT_INIT (self->center.x + self->radius, self->center.y);
 }
 
 static gboolean
@@ -1463,7 +1431,6 @@ static const GskContourClass GSK_CIRCLE_CONTOUR_CLASS =
   gsk_contour_print_default,
   gsk_circle_contour_get_bounds,
   gsk_circle_contour_get_stroke_bounds,
-  gsk_circle_contour_get_start_end,
   gsk_circle_contour_foreach,
   gsk_circle_contour_reverse,
   gsk_circle_contour_get_winding,
@@ -1552,22 +1519,6 @@ gsk_rounded_rect_contour_get_stroke_bounds (const GskContour *contour,
                                                b.max.y + stroke->line_width / 2));
 
   return TRUE;
-}
-
-static void
-gsk_rounded_rect_contour_get_start_end (const GskContour *contour,
-                                        graphene_point_t *start,
-                                        graphene_point_t *end)
-{
-  const GskRoundedRectContour *self = (const GskRoundedRectContour *) contour;
-
-  if (start)
-    *start = GRAPHENE_POINT_INIT (self->rect.bounds.origin.x + self->rect.corner[GSK_CORNER_TOP_LEFT].width,
-                                  self->rect.bounds.origin.y);
-
-  if (end)
-    *end = GRAPHENE_POINT_INIT (self->rect.bounds.origin.x + self->rect.corner[GSK_CORNER_TOP_LEFT].width,
-                                self->rect.bounds.origin.y);
 }
 
 static void
@@ -1843,7 +1794,6 @@ static const GskContourClass GSK_ROUNDED_RECT_CONTOUR_CLASS =
   gsk_contour_print_default,
   gsk_rounded_rect_contour_get_bounds,
   gsk_rounded_rect_contour_get_stroke_bounds,
-  gsk_rounded_rect_contour_get_start_end,
   gsk_rounded_rect_contour_foreach,
   gsk_rounded_rect_contour_reverse,
   gsk_rounded_rect_contour_get_winding,
@@ -1947,14 +1897,6 @@ gsk_contour_foreach (const GskContour   *self,
                      gpointer            user_data)
 {
   return self->klass->foreach (self, tolerance, func, user_data);
-}
-
-void
-gsk_contour_get_start_end (const GskContour *self,
-                           graphene_point_t *start,
-                           graphene_point_t *end)
-{
-  self->klass->get_start_end (self, start, end);
 }
 
 int
