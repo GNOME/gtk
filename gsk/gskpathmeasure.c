@@ -38,6 +38,8 @@
  *
  * A `GskPathMeasure` struct is a reference counted struct
  * and should be treated as opaque.
+ *
+ * Since: 4.14
  */
 
 typedef struct _GskContourMeasure GskContourMeasure;
