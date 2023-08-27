@@ -57,9 +57,6 @@ gboolean                gsk_contour_foreach                     (const GskContou
                                                                  float                   tolerance,
                                                                  GskPathForeachFunc      func,
                                                                  gpointer                user_data);
-void                    gsk_contour_get_start_end               (const GskContour       *self,
-                                                                 graphene_point_t       *start,
-                                                                 graphene_point_t       *end);
 int                     gsk_contour_get_winding                 (const GskContour       *self,
                                                                  const graphene_point_t *point);
 gsize                   gsk_contour_get_n_ops                   (const GskContour       *self);

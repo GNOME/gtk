@@ -50,9 +50,6 @@ struct _GskContourClass
   gboolean              (* get_stroke_bounds)   (const GskContour       *contour,
                                                  const GskStroke        *stroke,
                                                  GskBoundingBox         *bounds);
-  void                  (* get_start_end)       (const GskContour       *self,
-                                                 graphene_point_t       *start,
-                                                 graphene_point_t       *end);
   gboolean              (* foreach)             (const GskContour       *contour,
                                                  float                   tolerance,
                                                  GskPathForeachFunc      func,
@@ -408,20 +405,6 @@ gsk_standard_contour_get_stroke_bounds (const GskContour *contour,
                                                        self->bounds.max.y + extra));
 
   return TRUE;
-}
-
-static void
-gsk_standard_contour_get_start_end (const GskContour *contour,
-                                    graphene_point_t *start,
-                                    graphene_point_t *end)
-{
-  const GskStandardContour *self = (const GskStandardContour *) contour;
-
-  if (start)
-    *start = self->points[0];
-
-  if (end)
-    *end = self->points[self->n_points - 1];
 }
 
 static int
@@ -1018,7 +1001,6 @@ static const GskContourClass GSK_STANDARD_CONTOUR_CLASS =
   gsk_contour_print_default,
   gsk_standard_contour_get_bounds,
   gsk_standard_contour_get_stroke_bounds,
-  gsk_standard_contour_get_start_end,
   gsk_standard_contour_foreach,
   gsk_standard_contour_reverse,
   gsk_standard_contour_get_winding,
@@ -1144,20 +1126,6 @@ gsk_circle_contour_get_stroke_bounds (const GskContour *contour,
   return TRUE;
 }
 
-static void
-gsk_circle_contour_get_start_end (const GskContour *contour,
-                                  graphene_point_t *start,
-                                  graphene_point_t *end)
-{
-  const GskCircleContour *self = (const GskCircleContour *) contour;
-
-  if (start)
-    *start = GRAPHENE_POINT_INIT (self->center.x + self->radius, self->center.y);
-
-  if (end)
-    *end = GRAPHENE_POINT_INIT (self->center.x + self->radius, self->center.y);
-}
-
 static gboolean
 gsk_circle_contour_foreach (const GskContour   *contour,
                             float               tolerance,
@@ -1253,16 +1221,9 @@ gsk_circle_contour_get_winding (const GskContour       *contour,
 static gsize
 gsk_circle_contour_get_n_ops (const GskContour *contour)
 {
-  /* Not related to how many curves foreach produces.
-   * GskPath assumes that the start- and endpoints
-   * of a contour are { x, 1, 0 } and { x, n_ops - 1, 1 }.
-   *
-   * The circle contour uses a single 'segment' in path
-   * points, with a t that ranges from 0 to 1 to cover
-   * the angles from 0 to 360 (or 360 to 0 in the ccw
-   * case).
+  /* idx == 0 is the move (which does not really exist here,
+   * but gskpath.c assumes there is one).
    */
-
   return 2;
 }
 
@@ -1463,7 +1424,6 @@ static const GskContourClass GSK_CIRCLE_CONTOUR_CLASS =
   gsk_contour_print_default,
   gsk_circle_contour_get_bounds,
   gsk_circle_contour_get_stroke_bounds,
-  gsk_circle_contour_get_start_end,
   gsk_circle_contour_foreach,
   gsk_circle_contour_reverse,
   gsk_circle_contour_get_winding,
@@ -1555,22 +1515,6 @@ gsk_rounded_rect_contour_get_stroke_bounds (const GskContour *contour,
 }
 
 static void
-gsk_rounded_rect_contour_get_start_end (const GskContour *contour,
-                                        graphene_point_t *start,
-                                        graphene_point_t *end)
-{
-  const GskRoundedRectContour *self = (const GskRoundedRectContour *) contour;
-
-  if (start)
-    *start = GRAPHENE_POINT_INIT (self->rect.bounds.origin.x + self->rect.corner[GSK_CORNER_TOP_LEFT].width,
-                                  self->rect.bounds.origin.y);
-
-  if (end)
-    *end = GRAPHENE_POINT_INIT (self->rect.bounds.origin.x + self->rect.corner[GSK_CORNER_TOP_LEFT].width,
-                                self->rect.bounds.origin.y);
-}
-
-static void
 get_rounded_rect_points (const GskRoundedRect *rect,
                          graphene_point_t     *pts)
 {
@@ -1587,6 +1531,7 @@ get_rounded_rect_points (const GskRoundedRect *rect,
   pts[10] = GRAPHENE_POINT_INIT (rect->bounds.origin.x, rect->bounds.origin.y + rect->corner[GSK_CORNER_TOP_LEFT].height);
   pts[11] = GRAPHENE_POINT_INIT (rect->bounds.origin.x, rect->bounds.origin.y);
   pts[12] = GRAPHENE_POINT_INIT (rect->bounds.origin.x + rect->corner[GSK_CORNER_TOP_LEFT].width, rect->bounds.origin.y);
+  pts[13] = GRAPHENE_POINT_INIT (rect->bounds.origin.x + rect->corner[GSK_CORNER_TOP_LEFT].width, rect->bounds.origin.y);
 }
 
 static gboolean
@@ -1596,7 +1541,7 @@ gsk_rounded_rect_contour_foreach (const GskContour   *contour,
                                   gpointer            user_data)
 {
   const GskRoundedRectContour *self = (const GskRoundedRectContour *) contour;
-  graphene_point_t pts[13];
+  graphene_point_t pts[14];
 
   get_rounded_rect_points (&self->rect, pts);
   if (self->ccw)
@@ -1664,7 +1609,7 @@ gsk_rounded_rect_contour_get_winding (const GskContour       *contour,
 static gsize
 gsk_rounded_rect_contour_get_n_ops (const GskContour *contour)
 {
-  return 9;
+  return 10;
 }
 
 static gboolean
@@ -1843,7 +1788,6 @@ static const GskContourClass GSK_ROUNDED_RECT_CONTOUR_CLASS =
   gsk_contour_print_default,
   gsk_rounded_rect_contour_get_bounds,
   gsk_rounded_rect_contour_get_stroke_bounds,
-  gsk_rounded_rect_contour_get_start_end,
   gsk_rounded_rect_contour_foreach,
   gsk_rounded_rect_contour_reverse,
   gsk_rounded_rect_contour_get_winding,
@@ -1949,14 +1893,6 @@ gsk_contour_foreach (const GskContour   *self,
   return self->klass->foreach (self, tolerance, func, user_data);
 }
 
-void
-gsk_contour_get_start_end (const GskContour *self,
-                           graphene_point_t *start,
-                           graphene_point_t *end)
-{
-  self->klass->get_start_end (self, start, end);
-}
-
 int
 gsk_contour_get_winding (const GskContour       *self,
                          const graphene_point_t *point)
@@ -1974,6 +1910,17 @@ gsk_contour_get_closest_point (const GskContour       *self,
   return self->klass->get_closest_point (self, point, threshold, result, out_dist);
 }
 
+/* Not related to how many curves foreach produces.
+ *
+ * GskPath assumes that the start- and endpoints
+ * of a contour are { x, 1, 0 } and { x, n_ops - 1, 1 }.
+ *
+ * While the standard and rounded rect contours use
+ * one point per op, the circle contour uses a single
+ * 'segment' in path points, with a t that ranges
+ * from 0 to 1 to cover the angles from 0 to 360 (or
+ * 360 to 0 in the ccw case).
+ */
 gsize
 gsk_contour_get_n_ops (const GskContour *self)
 {

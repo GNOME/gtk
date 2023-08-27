@@ -518,6 +518,10 @@ gsk_path_get_start_point (GskPath      *self,
   if (self->n_contours == 0)
     return FALSE;
 
+  /* Conceptually, there is always a move at the
+   * beginning, which jumps from where to the start
+   * point of the contour, so we use idx == 1 here.
+   */
   res->contour = 0;
   res->idx = 1;
   res->t = 0;
