@@ -1095,6 +1095,28 @@ gsk_circle_contour_get_flags (const GskContour *contour)
   return GSK_PATH_CLOSED;
 }
 
+static void
+gsk_circle_contour_print (const GskContour *contour,
+                          GString          *string)
+{
+  const GskCircleContour *self = (const GskCircleContour *) contour;
+
+  _g_string_append_point (string, "M ", &GRAPHENE_POINT_INIT (self->center.x + self->radius, self->center.y));
+  _g_string_append_point (string, " o ", &GRAPHENE_POINT_INIT (0, self->radius));
+  _g_string_append_point (string, ", ", &GRAPHENE_POINT_INIT (- self->radius, self->radius));
+  _g_string_append_double (string, ", ", M_SQRT1_2);
+  _g_string_append_point (string, " o ", &GRAPHENE_POINT_INIT (- self->radius, 0));
+  _g_string_append_point (string, ", ", &GRAPHENE_POINT_INIT (- self->radius, - self->radius));
+  _g_string_append_double (string, ", ", M_SQRT1_2);
+  _g_string_append_point (string, " o ", &GRAPHENE_POINT_INIT (0, - self->radius));
+  _g_string_append_point (string, ", ", &GRAPHENE_POINT_INIT (self->radius, - self->radius));
+  _g_string_append_double (string, ", ", M_SQRT1_2);
+  _g_string_append_point (string, " o ", &GRAPHENE_POINT_INIT (self->radius, 0));
+  _g_string_append_point (string, ", ", &GRAPHENE_POINT_INIT (self->radius, self->radius));
+  _g_string_append_double (string, ", ", M_SQRT1_2);
+  g_string_append (string, " z");
+}
+
 static gboolean
 gsk_circle_contour_get_bounds (const GskContour *contour,
                                GskBoundingBox   *bounds)
@@ -1421,7 +1443,7 @@ static const GskContourClass GSK_CIRCLE_CONTOUR_CLASS =
   gsk_circle_contour_copy,
   gsk_contour_get_size_default,
   gsk_circle_contour_get_flags,
-  gsk_contour_print_default,
+  gsk_circle_contour_print,
   gsk_circle_contour_get_bounds,
   gsk_circle_contour_get_stroke_bounds,
   gsk_circle_contour_foreach,
