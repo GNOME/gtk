@@ -29,6 +29,7 @@
 #include <gtk/gtk.h>
 #include "gtk-rendernode-tool.h"
 
+#define N_NODE_TYPES (GSK_MASK_NODE + 1)
 static void
 count_nodes (GskRenderNode *node,
              unsigned int  *counts,
@@ -37,6 +38,7 @@ count_nodes (GskRenderNode *node,
   unsigned int d, dd;
 
   counts[gsk_render_node_get_node_type (node)] += 1;
+  g_assert (gsk_render_node_get_node_type (node) < N_NODE_TYPES);
   d = 0;
 
   switch (gsk_render_node_get_node_type (node))
@@ -157,7 +159,7 @@ static void
 file_info (const char *filename)
 {
   GskRenderNode *node;
-  unsigned int counts[GSK_MASK_NODE + 1] = { 0, };
+  unsigned int counts[N_NODE_TYPES] = { 0, };
   unsigned int total = 0;
   unsigned int namelen = 0;
   unsigned int depth = 0;
