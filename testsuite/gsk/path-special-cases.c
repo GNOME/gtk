@@ -323,7 +323,7 @@ test_rect_path (void)
   g_assert_true (gsk_path_is_closed (path));
 
   s = gsk_path_to_string (path);
-  g_assert_cmpstr (s, ==, "M 0 0 L 200 0 L 200 100 L 0 100 Z");
+  g_assert_cmpstr (s, ==, "M 0 0 h 200 v 100 h -200 z");
   g_free (s);
 
   g_assert_true (gsk_path_get_bounds (path, &bounds));
@@ -820,6 +820,42 @@ test_rounded_rect (void)
 }
 
 static void
+test_rect (void)
+{
+  graphene_rect_t rect;
+  GskPathBuilder *builder;
+  GskPath *path;
+  GskPathPoint point;
+  graphene_point_t p;
+
+  rect = GRAPHENE_RECT_INIT (10, 10, 100, 50);
+
+  builder = gsk_path_builder_new ();
+
+  gsk_path_builder_add_rect (builder, &rect);
+
+  path = gsk_path_builder_free_to_path (builder);
+
+  for (int i = 0; i < 100; i++)
+    {
+      p = GRAPHENE_POINT_INIT (g_test_rand_double_range (0, 200),
+                               g_test_rand_double_range (0, 200));
+
+      g_assert_true (graphene_rect_contains_point (&rect, &p) == gsk_path_in_fill (path, &p, GSK_FILL_RULE_WINDING));
+    }
+
+  gsk_path_get_start_point (path, &point);
+  gsk_path_point_get_position (&point, path, &p);
+  g_assert_true (graphene_point_equal (&p, &GRAPHENE_POINT_INIT (10, 10)));
+
+  gsk_path_get_end_point (path, &point);
+  gsk_path_point_get_position (&point, path, &p);
+  g_assert_true (graphene_point_equal (&p, &GRAPHENE_POINT_INIT (10, 10)));
+
+  gsk_path_unref (path);
+}
+
+static void
 test_circle (void)
 {
   GskPathBuilder *builder;
@@ -883,7 +919,11 @@ test_circle (void)
 
   builder = gsk_path_builder_new ();
   gsk_path_builder_add_path (builder, path);
-  gsk_path_builder_add_rect (builder, &GRAPHENE_RECT_INIT (-2, -2, 4, 4));
+  gsk_path_builder_move_to (builder, -2, -2);
+  gsk_path_builder_line_to (builder, 2, 0);
+  gsk_path_builder_line_to (builder, 2, 2);
+  gsk_path_builder_line_to (builder, -2, 2);
+  gsk_path_builder_close (builder);
   path4 = gsk_path_builder_free_to_path (builder);
 
   g_assert_true (gsk_path_in_fill (path4, &GRAPHENE_POINT_INIT (0, 0), GSK_FILL_RULE_WINDING));
@@ -1002,7 +1042,7 @@ main (int argc, char *argv[])
 
   g_test_add_func ("/path/rsvg-parse", test_rsvg_parse);
   g_test_add_func ("/path/empty", test_empty_path);
-  g_test_add_func ("/path/rect", test_rect_path);
+  g_test_add_func ("/path/rect-path", test_rect_path);
   g_test_add_func ("/path/foreach", test_foreach);
   g_test_add_func ("/path/point", test_path_point);
   g_test_add_func ("/path/segments", test_path_segments);
@@ -1011,6 +1051,7 @@ main (int argc, char *argv[])
   g_test_add_func ("/path/builder/add", test_path_builder_add);
   g_test_add_func ("/path/rotated-arc", test_rotated_arc);
   g_test_add_func ("/path/rounded-rect", test_rounded_rect);
+  g_test_add_func ("/path/rect", test_rect);
   g_test_add_func ("/path/circle", test_circle);
   g_test_add_func ("/path/length", test_length);
   g_test_add_func ("/path/rect/segment", test_rect_segment);

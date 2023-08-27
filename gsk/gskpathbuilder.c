@@ -460,20 +460,10 @@ void
 gsk_path_builder_add_rect (GskPathBuilder        *self,
                            const graphene_rect_t *rect)
 {
-  graphene_point_t current;
-
   g_return_if_fail (self != NULL);
+  g_return_if_fail (rect != NULL);
 
-  current = self->current_point;
-
-  gsk_path_builder_move_to (self, rect->origin.x, rect->origin.y);
-
-  gsk_path_builder_rel_line_to (self, rect->size.width, 0);
-  gsk_path_builder_rel_line_to (self, 0, rect->size.height);
-  gsk_path_builder_rel_line_to (self, - rect->size.width, 0);
-
-  gsk_path_builder_close (self);
-  self->current_point = current;
+  gsk_path_builder_add_contour (self, gsk_rect_contour_new (rect));
 }
 
 /**

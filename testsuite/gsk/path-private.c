@@ -116,18 +116,14 @@ test_circle_winding (void)
   path1 = convert_to_standard_contour (path);
   contour1 = gsk_path_get_contour (path1, 0);
 
-  g_assert_true (gsk_contour_get_winding (contour, &GRAPHENE_POINT_INIT (100, 100))
-                 ==
-                 gsk_contour_get_winding (contour1, &GRAPHENE_POINT_INIT (100, 100)));
-
   builder = gsk_path_builder_new ();
   gsk_path_builder_add_reverse_path (builder, path);
   path2 = gsk_path_builder_free_to_path (builder);
   contour2 = gsk_path_get_contour (path2, 0);
 
-  g_assert_true (gsk_contour_get_winding (contour, &GRAPHENE_POINT_INIT (100, 100))
-                 ==
-                 - gsk_contour_get_winding (contour2, &GRAPHENE_POINT_INIT (100, 100)));
+  g_assert_true (gsk_contour_get_winding (contour, &GRAPHENE_POINT_INIT (100, 100)) == 1);
+  g_assert_true (gsk_contour_get_winding (contour1, &GRAPHENE_POINT_INIT (100, 100)) == 1);
+  g_assert_true (gsk_contour_get_winding (contour2, &GRAPHENE_POINT_INIT (100, 100)) == -1);
 
   gsk_path_unref (path2);
   gsk_path_unref (path1);
@@ -189,22 +185,79 @@ test_rounded_rect_winding (void)
   path1 = convert_to_standard_contour (path);
   contour1 = gsk_path_get_contour (path1, 0);
 
-  g_assert_true (gsk_contour_get_winding (contour, &GRAPHENE_POINT_INIT (150, 150))
-                 ==
-                 gsk_contour_get_winding (contour1, &GRAPHENE_POINT_INIT (150, 150)));
+  builder = gsk_path_builder_new ();
+  gsk_path_builder_add_reverse_path (builder, path);
+  path2 = gsk_path_builder_free_to_path (builder);
+  contour2 = gsk_path_get_contour (path2, 0);
+
+  g_assert_true (gsk_contour_get_winding (contour, &GRAPHENE_POINT_INIT (150, 150)) == 1);
+  g_assert_true (gsk_contour_get_winding (contour1, &GRAPHENE_POINT_INIT (150, 150)) == 1);
+  g_assert_true (gsk_contour_get_winding (contour2, &GRAPHENE_POINT_INIT (150, 150)) == -1);
+
+  gsk_path_unref (path2);
+  gsk_path_unref (path1);
+}
+
+static void
+test_rect_roundtrip (void)
+{
+  graphene_rect_t rect;
+  GskPathBuilder *builder;
+  GskPath *path, *path2;
+  const GskContour *contour;
+  char *s;
+
+  rect = GRAPHENE_RECT_INIT (100, 100, 200, 150);
+
+  builder = gsk_path_builder_new ();
+  gsk_path_builder_add_rect (builder, &rect);
+  path = gsk_path_builder_free_to_path (builder);
+  contour = gsk_path_get_contour (path, 0);
+
+  g_assert_cmpstr (gsk_contour_get_type_name (contour), ==, "GskRectContour");
+
+  s = gsk_path_to_string (path);
+  path2 = gsk_path_parse (s);
+  contour = gsk_path_get_contour (path2, 0);
+
+  g_assert_cmpstr (gsk_contour_get_type_name (contour), ==, "GskRectContour");
+
+  g_free (s);
+  gsk_path_unref (path2);
+  gsk_path_unref (path);
+}
+
+static void
+test_rect_winding (void)
+{
+  GskPathBuilder *builder;
+  GskPath *path, *path1, *path2, *path3;
+  const GskContour *contour, *contour1, *contour2, *contour3;
+
+  builder = gsk_path_builder_new ();
+  gsk_path_builder_add_rect (builder, &GRAPHENE_RECT_INIT (100, 100, 200, 150));
+  path = gsk_path_builder_free_to_path (builder);
+  contour = gsk_path_get_contour (path, 0);
+
+  path1 = convert_to_standard_contour (path);
+  contour1 = gsk_path_get_contour (path1, 0);
 
   builder = gsk_path_builder_new ();
   gsk_path_builder_add_reverse_path (builder, path);
   path2 = gsk_path_builder_free_to_path (builder);
   contour2 = gsk_path_get_contour (path2, 0);
 
-  g_assert_true (gsk_contour_get_winding (contour, &GRAPHENE_POINT_INIT (150, 150))
-                 ==
-                 - gsk_contour_get_winding (contour2, &GRAPHENE_POINT_INIT (150, 150)));
+  path3 = convert_to_standard_contour (path2);
+  contour3 = gsk_path_get_contour (path3, 0);
 
+  g_assert_true (gsk_contour_get_winding (contour, &GRAPHENE_POINT_INIT (150, 150)) == 1);
+  g_assert_true (gsk_contour_get_winding (contour1, &GRAPHENE_POINT_INIT (150, 150)) == 1);
+  g_assert_true (gsk_contour_get_winding (contour2, &GRAPHENE_POINT_INIT (150, 150)) == -1);
+  g_assert_true (gsk_contour_get_winding (contour3, &GRAPHENE_POINT_INIT (150, 150)) == -1);
+
+  gsk_path_unref (path3);
   gsk_path_unref (path2);
   gsk_path_unref (path1);
-  gsk_path_unref (path);
 }
 
 int
@@ -216,6 +269,8 @@ main (int argc, char *argv[])
   g_test_add_func ("/path/circle/winding", test_circle_winding);
   g_test_add_func ("/path/rounded-rect/roundtrip", test_rounded_rect_roundtrip);
   g_test_add_func ("/path/rounded-rect/winding", test_rounded_rect_winding);
+  g_test_add_func ("/path/rect/roundtrip", test_rect_roundtrip);
+  g_test_add_func ("/path/rect/winding", test_rect_winding);
 
   return g_test_run ();
 }

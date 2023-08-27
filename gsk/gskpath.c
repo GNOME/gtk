@@ -996,6 +996,35 @@ is_line (double x0, double y0,
 }
 
 static gboolean
+parse_rectangle (const char **p,
+                 double      *x,
+                 double      *y,
+                 double      *w,
+                 double      *h)
+{
+  const char *o = *p;
+  double w2;
+
+  if (parse_coordinate_pair (p, x, y) &&
+      parse_string (p, "h") &&
+      parse_coordinate (p, w) &&
+      parse_string (p, "v") &&
+      parse_coordinate (p, h) &&
+      parse_string (p, "h") &&
+      parse_coordinate (p, &w2) &&
+      parse_string (p, "z") &&
+      NEAR (w2, -*w))
+    {
+      skip_whitespace (p);
+
+      return TRUE;
+    }
+
+  *p = o;
+  return FALSE;
+}
+
+static gboolean
 parse_circle (const char **p,
               double      *cx,
               double      *cy,
@@ -1101,6 +1130,9 @@ parse_rounded_rect (const char     **p,
           rr->corner[GSK_CORNER_TOP_RIGHT] = GRAPHENE_SIZE_INIT (x2 - x1, y3 - y2);
           rr->corner[GSK_CORNER_BOTTOM_RIGHT] = GRAPHENE_SIZE_INIT (x5 - x6, y5 - y4);
           rr->corner[GSK_CORNER_BOTTOM_LEFT] = GRAPHENE_SIZE_INIT (x7 - x8, y8 - y7);
+
+          skip_whitespace (p);
+
           return TRUE;
         }
     }
@@ -1195,35 +1227,47 @@ gsk_path_parse (const char *string)
         case 'M':
         case 'm':
           {
-            double x1, y1, r;
+            double x1, y1, w, h, r;
             GskRoundedRect rr;
 
             /* Look for special contours */
-            if (parse_circle (&p, &x1, &y1, &r))
+            if (parse_rectangle (&p, &x1, &y1, &w, &h))
+              {
+                gsk_path_builder_add_rect (builder, &GRAPHENE_RECT_INIT (x1, y1, w, h));
+                if (_strchr ("zZX", prev_cmd))
+                  {
+                    path_x = x1;
+                    path_y = y1;
+                  }
+
+                x = x1;
+                y = y1;
+              }
+            else if (parse_circle (&p, &x1, &y1, &r))
               {
                 gsk_path_builder_add_circle (builder, &GRAPHENE_POINT_INIT (x1, y1), r);
 
-                x = x1 + r;
-                y = y1;
-
                 if (_strchr ("zZX", prev_cmd))
                   {
-                    path_x = x;
-                    path_y = y;
+                    path_x = x1 + r;
+                    path_y = y1;
                   }
+
+                x = x1 + r;
+                y = y1;
               }
             else if (parse_rounded_rect (&p, &rr))
               {
                 gsk_path_builder_add_rounded_rect (builder, &rr);
 
-                x = rr.bounds.origin.x + rr.corner[GSK_CORNER_TOP_LEFT].width;
-                y = rr.bounds.origin.y;
-
                 if (_strchr ("zZX", prev_cmd))
                   {
-                    path_x = x;
-                    path_y = y;
+                    path_x = rr.bounds.origin.x + rr.corner[GSK_CORNER_TOP_LEFT].width;
+                    path_y = rr.bounds.origin.y;
                   }
+
+                x = rr.bounds.origin.x + rr.corner[GSK_CORNER_TOP_LEFT].width;
+                y = rr.bounds.origin.y;
               }
             else if (parse_coordinate_pair (&p, &x1, &y1))
               {
@@ -1232,6 +1276,7 @@ gsk_path_parse (const char *string)
                     x1 += x;
                     y1 += y;
                   }
+
                 if (repeat)
                   gsk_path_builder_line_to (builder, x1, y1);
                 else
@@ -1243,6 +1288,7 @@ gsk_path_parse (const char *string)
                         path_y = y1;
                       }
                   }
+
                 x = x1;
                 y = y1;
               }
