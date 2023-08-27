@@ -852,7 +852,7 @@ static const GskCurveClass GSK_QUAD_CURVE_CLASS = {
   gsk_quad_curve_get_length_to,
 };
 
-/* }}} */ 
+/* }}} */
 /* {{{ Cubic */
 
 static void
