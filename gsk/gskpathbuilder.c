@@ -443,10 +443,13 @@ gsk_path_builder_add_cairo_path (GskPathBuilder     *self,
  *
  * Adds @rect as a new contour to the path built by the builder.
  *
- * The path is going around the rectangle in clockwise direction.
+ * This does the equivalent of "M x y h width v height h -width z"
+ * where `x`, `y`, `width`, `height` are the dimensions of @rect.
  *
  * If the width or height of the rectangle is negative, the start
- * point will be on the right or bottom, respectively.
+ * point will be on the right or bottom, respectively. Note that
+ * a negative width or height will cause the path to go counterclockwise
+ * instead of clockwise.
  *
  * If the the width or height are 0, the path will be a closed
  * horizontal or vertical line. If both are 0, it'll be a closed dot.
