@@ -488,59 +488,10 @@ void
 gsk_path_builder_add_rounded_rect (GskPathBuilder       *self,
                                    const GskRoundedRect *rect)
 {
-  graphene_point_t current;
-
   g_return_if_fail (self != NULL);
   g_return_if_fail (rect != NULL);
 
-  current = self->current_point;
-
-  gsk_path_builder_move_to (self,
-                            rect->bounds.origin.x + rect->corner[GSK_CORNER_TOP_LEFT].width,
-                            rect->bounds.origin.y);
-  /* top */
-  gsk_path_builder_line_to (self,
-                            rect->bounds.origin.x + rect->bounds.size.width - rect->corner[GSK_CORNER_TOP_RIGHT].width,
-                            rect->bounds.origin.y);
-  /* topright corner */
-  gsk_path_builder_arc_to (self,
-                           rect->bounds.origin.x + rect->bounds.size.width,
-                           rect->bounds.origin.y,
-                           rect->bounds.origin.x + rect->bounds.size.width,
-                           rect->bounds.origin.y + rect->corner[GSK_CORNER_TOP_RIGHT].height);
-  /* right */
-  gsk_path_builder_line_to (self,
-                            rect->bounds.origin.x + rect->bounds.size.width,
-                            rect->bounds.origin.y + rect->bounds.size.height - rect->corner[GSK_CORNER_BOTTOM_RIGHT].height);
-  /* bottomright corner */
-  gsk_path_builder_arc_to (self,
-                           rect->bounds.origin.x + rect->bounds.size.width,
-                           rect->bounds.origin.y + rect->bounds.size.height,
-                           rect->bounds.origin.x + rect->bounds.size.width - rect->corner[GSK_CORNER_BOTTOM_RIGHT].width,
-                           rect->bounds.origin.y + rect->bounds.size.height);
-  /* bottom */
-  gsk_path_builder_line_to (self,
-                            rect->bounds.origin.x + rect->corner[GSK_CORNER_BOTTOM_LEFT].width,
-                            rect->bounds.origin.y + rect->bounds.size.height);
-  /* bottomleft corner */
-  gsk_path_builder_arc_to (self,
-                           rect->bounds.origin.x,
-                           rect->bounds.origin.y + rect->bounds.size.height,
-                           rect->bounds.origin.x,
-                           rect->bounds.origin.y + rect->bounds.size.height - rect->corner[GSK_CORNER_BOTTOM_LEFT].height);
-  /* left */
-  gsk_path_builder_line_to (self,
-                            rect->bounds.origin.x,
-                            rect->bounds.origin.y + rect->corner[GSK_CORNER_TOP_LEFT].height);
-  /* topleft corner */
-  gsk_path_builder_arc_to (self,
-                           rect->bounds.origin.x,
-                           rect->bounds.origin.y,
-                           rect->bounds.origin.x + rect->corner[GSK_CORNER_TOP_LEFT].width,
-                           rect->bounds.origin.y);
-  /* done */
-  gsk_path_builder_close (self);
-  self->current_point = current;
+  gsk_path_builder_add_contour (self, gsk_rounded_rect_contour_new (rect));
 }
 
 /**
