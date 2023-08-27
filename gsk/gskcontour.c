@@ -1221,6 +1221,9 @@ gsk_circle_contour_get_winding (const GskContour       *contour,
 static gsize
 gsk_circle_contour_get_n_ops (const GskContour *contour)
 {
+  /* idx == 0 is the move (which does not really exist here,
+   * but gskpath.c assumes there is one).
+   */
   return 2;
 }
 
@@ -1528,6 +1531,7 @@ get_rounded_rect_points (const GskRoundedRect *rect,
   pts[10] = GRAPHENE_POINT_INIT (rect->bounds.origin.x, rect->bounds.origin.y + rect->corner[GSK_CORNER_TOP_LEFT].height);
   pts[11] = GRAPHENE_POINT_INIT (rect->bounds.origin.x, rect->bounds.origin.y);
   pts[12] = GRAPHENE_POINT_INIT (rect->bounds.origin.x + rect->corner[GSK_CORNER_TOP_LEFT].width, rect->bounds.origin.y);
+  pts[13] = GRAPHENE_POINT_INIT (rect->bounds.origin.x + rect->corner[GSK_CORNER_TOP_LEFT].width, rect->bounds.origin.y);
 }
 
 static gboolean
@@ -1537,7 +1541,7 @@ gsk_rounded_rect_contour_foreach (const GskContour   *contour,
                                   gpointer            user_data)
 {
   const GskRoundedRectContour *self = (const GskRoundedRectContour *) contour;
-  graphene_point_t pts[13];
+  graphene_point_t pts[14];
 
   get_rounded_rect_points (&self->rect, pts);
   if (self->ccw)
@@ -1605,7 +1609,7 @@ gsk_rounded_rect_contour_get_winding (const GskContour       *contour,
 static gsize
 gsk_rounded_rect_contour_get_n_ops (const GskContour *contour)
 {
-  return 9;
+  return 10;
 }
 
 static gboolean
