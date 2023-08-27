@@ -964,6 +964,33 @@ parse_string (const char **p,
   return TRUE;
 }
 
+#define NEAR(x, y) (fabs ((x) - (y)) < 0.001)
+
+static gboolean
+is_rect (double x0, double y0,
+         double x1, double y1,
+         double x2, double y2,
+         double x3, double y3)
+{
+  return NEAR (x0, x3) && NEAR (x1, x2) &&
+         NEAR (y0, y1) && NEAR (y2, y3) &&
+         x0 < x1 && y1 < y2;
+}
+
+static gboolean
+is_line (double x0, double y0,
+         double x1, double y1,
+         double x2, double y2,
+         double x3, double y3)
+{
+  if (NEAR (y0, y3))
+    return x0 <= x1 && x1 <= x2 && x2 <= x3 &&
+           NEAR (y0, y1) && NEAR (y0, y2) && NEAR (y0, y3);
+  else
+    return y0 <= y1 && y1 <= y2 && y2 <= y3 &&
+           NEAR (x0, x1) && NEAR (x0, x2) && NEAR (x0, x3);
+}
+
 static gboolean
 parse_circle (const char **p,
               double      *cx,
@@ -998,16 +1025,12 @@ parse_circle (const char **p,
       xx = (x0 + x4) / 2;
       yy = (y2 + y6) / 2;
 
-#define NEAR(x, y) (fabs ((x) - (y)) < 0.001)
-
-      if (NEAR (x0, x1) && NEAR (x0, x8) && NEAR (x0, x7) &&
-          NEAR (x2, x6) && NEAR (x3, x4) && NEAR (x4, x5) &&
-          NEAR (y5, y6) && NEAR (y6, y7) && NEAR (y4, y8) &&
-          NEAR (y8, y0) && NEAR (y3, y2) && NEAR (y2, y1) &&
-          NEAR (x2, xx) && NEAR (yy, y4) &&
+      if (NEAR (x0, x8) && NEAR (y0, y8) &&
+          is_rect (x5, y5, x7, y7, x1, y1, x3, y3) &&
+          is_rect (x5, y5, x6, y6, xx, yy, x4, y4) &&
+          is_rect (xx, yy, x0, y0, x1, y1, x2, y2) &&
           NEAR (w0, M_SQRT1_2) && NEAR (w1, M_SQRT1_2) &&
-          NEAR (w2, M_SQRT1_2) && NEAR (w3, M_SQRT1_2) &&
-          x1 > x2 && x2 > x3 && y3 > y4 && y4 > y5)
+          NEAR (w2, M_SQRT1_2) && NEAR (w3, M_SQRT1_2))
         {
           *cx = xx;
           *cy = yy;
@@ -1017,13 +1040,72 @@ parse_circle (const char **p,
 
           return TRUE;
         }
-
-#undef NEAR
     }
 
   *p = o;
   return FALSE;
 }
+
+static gboolean
+parse_rounded_rect (const char     **p,
+                    GskRoundedRect  *rr)
+{
+  const char *o = *p;
+  double x0, y0, x1, y1, x2, y2, x3, y3;
+  double x4, y4, x5, y5, x6, y6, x7, y7;
+  double x8, y8, x9, y9, x10, y10, x11, y11;
+  double x12, y12, w0, w1, w2, w3;
+
+  if (parse_coordinate_pair (p, &x0, &y0) &&
+      parse_string (p, "L") &&
+      parse_coordinate_pair (p, &x1, &y1) &&
+      parse_string (p, "O") &&
+      parse_coordinate_pair (p, &x2, &y2) &&
+      parse_coordinate_pair (p, &x3, &y3) &&
+      parse_nonnegative_number (p, &w0) &&
+      parse_string (p, "L") &&
+      parse_coordinate_pair (p, &x4, &y4) &&
+      parse_string (p, "O") &&
+      parse_coordinate_pair (p, &x5, &y5) &&
+      parse_coordinate_pair (p, &x6, &y6) &&
+      parse_nonnegative_number (p, &w1) &&
+      parse_string (p, "L") &&
+      parse_coordinate_pair (p, &x7, &y7) &&
+      parse_string (p, "O") &&
+      parse_coordinate_pair (p, &x8, &y8) &&
+      parse_coordinate_pair (p, &x9, &y9) &&
+      parse_nonnegative_number (p, &w2) &&
+      parse_string (p, "L") &&
+      parse_coordinate_pair (p, &x10, &y10) &&
+      parse_string (p, "O") &&
+      parse_coordinate_pair (p, &x11, &y11) &&
+      parse_coordinate_pair (p, &x12, &y12) &&
+      parse_nonnegative_number (p, &w3) &&
+      parse_string (p, "Z"))
+    {
+      if (NEAR (x0, x12) && NEAR (y0, y12) &&
+          is_rect (x11, y11, x2, y2, x5, y5, x8, y8) &&
+          is_line (x11, y11, x0, y0, x1, y1, x2, y2) &&
+          is_line (x2, y2, x3, y3, x4, y4, x5, y5) &&
+          is_line (x8, y8, x7, y7, x6, y6, x5, y5) &&
+          is_line (x11, y11, x10, y10, x9, y9, x8, y8) &&
+          NEAR (w0, M_SQRT1_2) && NEAR (w1, M_SQRT1_2) &&
+          NEAR (w2, M_SQRT1_2) && NEAR (w3, M_SQRT1_2))
+        {
+          rr->bounds = GRAPHENE_RECT_INIT (x11, y11, x5 - x11, y5 - y11);
+          rr->corner[GSK_CORNER_TOP_LEFT] = GRAPHENE_SIZE_INIT (x12 - x11, y10 - y11);
+          rr->corner[GSK_CORNER_TOP_RIGHT] = GRAPHENE_SIZE_INIT (x2 - x1, y3 - y2);
+          rr->corner[GSK_CORNER_BOTTOM_RIGHT] = GRAPHENE_SIZE_INIT (x5 - x6, y5 - y4);
+          rr->corner[GSK_CORNER_BOTTOM_LEFT] = GRAPHENE_SIZE_INIT (x7 - x8, y8 - y7);
+          return TRUE;
+        }
+    }
+
+  *p = o;
+  return FALSE;
+}
+
+#undef NEAR
 
 /**
  * gsk_path_parse:
@@ -1110,17 +1192,34 @@ gsk_path_parse (const char *string)
         case 'm':
           {
             double x1, y1, r;
+            GskRoundedRect rr;
 
+            /* Look for special contours */
             if (parse_circle (&p, &x1, &y1, &r))
               {
                 gsk_path_builder_add_circle (builder, &GRAPHENE_POINT_INIT (x1, y1), r);
-                if (_strchr ("zZX", prev_cmd))
-                  {
-                    path_x = x1 + r;
-                    path_y = y1;
-                  }
+
                 x = x1 + r;
                 y = y1;
+
+                if (_strchr ("zZX", prev_cmd))
+                  {
+                    path_x = x;
+                    path_y = y;
+                  }
+              }
+            else if (parse_rounded_rect (&p, &rr))
+              {
+                gsk_path_builder_add_rounded_rect (builder, &rr);
+
+                x = rr.bounds.origin.x + rr.corner[GSK_CORNER_TOP_LEFT].width;
+                y = rr.bounds.origin.y;
+
+                if (_strchr ("zZX", prev_cmd))
+                  {
+                    path_x = x;
+                    path_y = y;
+                  }
               }
             else if (parse_coordinate_pair (&p, &x1, &y1))
               {
