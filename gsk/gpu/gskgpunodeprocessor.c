@@ -14,6 +14,51 @@
 #include "gskroundedrectprivate.h"
 #include "gsktransformprivate.h"
 
+/* A note about coordinate systems
+ *
+ * The rendering code keeps track of multiple coordinate systems to optimize rendering as
+ * much as possible and in the coordinate system it makes most sense in.
+ * Sometimes there are cases where GL requires a certain coordinate system, too.
+ *
+ * 1. the node coordinate system
+ * This is the coordinate system of the rendernode. It is basically not used outside of
+ * looking at the node and basically never hits the GPU (it does for paths). We immediately
+ * convert it to:
+ *
+ * 2. the basic coordinate system
+ * convert on CPU: NodeProcessor.offset
+ * convert on GPU: ---
+ * This is the coordinate system we emit vertex state in, the clip is tracked here.
+ * The main benefit is that most transform nodes only change the offset, so we can avoid
+ * updating any state in this coordinate system when that happens.
+ *
+ * 3. the scaled coordinate system
+ * converts on CPU: NodeProcessor.scale
+ * converts on GPU: push.scale
+ * This includes the current scale of the transform. It is usually equal to the scale factor
+ * of the window we are rendering to (which is bad because devs without hidpi screens can
+ * forget this and then everyone else will see bugs). We make decisions about pixel sizes in
+ * this coordinate system, like picking glyphs from the glyph cache or the sizes of offscreens
+ * for offscreen rendering.
+ *
+ * 4. the device coordinate system
+ * converts on CPU: NodeProcessor.modelview
+ * converts on GPU: ---
+ * The scissor rect is tracked in this coordinate system. It represents the actual device pixels.
+ * A bunch of optimizations (like glScissor() and glClear()) can be done here, so in the case
+ * that modelview == NULL and we end up with integer coordinates (because pixels), we try to go
+ * here.
+ * This coordinate system does not exist on shaders as they rarely reason about pixels, and if
+ * they need to, they can ask the fragment shader via gl_FragCoord.
+ *
+ * 5. the GL coordinate system
+ * converts on CPU: NodeProcessor.projection
+ * converts on GPU: push.mvp (from scaled coordinate system)
+ * This coordinate system is what GL (or Vulkan) expect coordinates to appear in, and is usually
+ * (-1, -1) => (1, 1), but may be flipped etc depending on the render target. The CPU essentially
+ * never uses it, other than to allow the vertex shaders to emit its vertices.
+ */
+
 typedef struct _GskGpuNodeProcessor GskGpuNodeProcessor;
 
 typedef enum {
