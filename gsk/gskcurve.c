@@ -721,6 +721,19 @@ gsk_quad_curve_decompose_curve (const GskCurve       *curve,
 
   if (flags & GSK_PATH_FOREACH_ALLOW_QUAD)
     return add_curve_func (GSK_PATH_QUAD, self->points, 3, 0.f, user_data);
+  else if (graphene_point_equal (&curve->conic.points[0], &curve->conic.points[1]) ||
+           graphene_point_equal (&curve->conic.points[1], &curve->conic.points[2]))
+    {
+      if (!graphene_point_equal (&curve->conic.points[0], &curve->conic.points[2]))
+        return add_curve_func (GSK_PATH_LINE,
+                               (graphene_point_t[2]) {
+                                 curve->conic.points[0],
+                                 curve->conic.points[2],
+                               },
+                               2, 0.f, user_data);
+      else
+        return TRUE;
+    }
   else if (flags & GSK_PATH_FOREACH_ALLOW_CUBIC)
     {
       GskCurve c;
@@ -1853,7 +1866,20 @@ gsk_conic_curve_decompose_or_add (const GskCurve       *curve,
                                   GskCurveAddCurveFunc  add_curve_func,
                                   gpointer              user_data)
 {
-  if (gsk_conic_is_close_to_cubic (curve, cubic, tolerance))
+  if (graphene_point_equal (&curve->conic.points[0], &curve->conic.points[1]) ||
+      graphene_point_equal (&curve->conic.points[1], &curve->conic.points[3]))
+    {
+      if (!graphene_point_equal (&curve->conic.points[0], &curve->conic.points[3]))
+        return add_curve_func (GSK_PATH_LINE,
+                               (graphene_point_t[2]) {
+                                 curve->conic.points[0],
+                                 curve->conic.points[3],
+                               },
+                               2, 0.f, user_data);
+      else
+        return TRUE;
+    }
+  else if (gsk_conic_is_close_to_cubic (curve, cubic, tolerance))
     return add_curve_func (GSK_PATH_CUBIC, cubic->cubic.points, 4, 0.f, user_data);
   else
     {
@@ -1895,7 +1921,7 @@ gsk_conic_curve_decompose_curve (const GskCurve       *curve,
       return gsk_conic_curve_decompose_or_add (curve, &c, tolerance, add_curve_func, user_data);
     }
 
-  /* FIXME: Quadratic (or conic?) approximation */
+  /* FIXME: Quadratic approximation */
   return gsk_conic_curve_decompose (curve,
                                     tolerance,
                                     gsk_curve_add_line_cb,
