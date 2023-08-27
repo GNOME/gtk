@@ -96,34 +96,30 @@ struct _GskContourClass
                                                  gpointer                measure_data);
 };
 
-static gsize
-gsk_contour_get_size_default (const GskContour *contour)
-{
-  return contour->klass->struct_size;
-}
-
 /* {{{ Utilities */
 
 #define DEG_TO_RAD(x)          ((x) * (G_PI / 180.f))
 #define RAD_TO_DEG(x)          ((x) / (G_PI / 180.f))
 
 static void
-_g_string_append_double (GString *string,
-                         double   d)
+_g_string_append_double (GString    *string,
+                         const char *prefix,
+                         double      d)
 {
   char buf[G_ASCII_DTOSTR_BUF_SIZE];
 
   g_ascii_dtostr (buf, G_ASCII_DTOSTR_BUF_SIZE, d);
+  g_string_append (string, prefix);
   g_string_append (string, buf);
 }
 
 static void
 _g_string_append_point (GString                *string,
+                        const char             *prefix,
                         const graphene_point_t *pt)
 {
-  _g_string_append_double (string, pt->x);
-  g_string_append_c (string, ' ');
-  _g_string_append_double (string, pt->y);
+  _g_string_append_double (string, prefix, pt->x);
+  _g_string_append_double (string, " ", pt->y);
 }
 
 static gboolean
@@ -178,6 +174,69 @@ convert_to_standard_contour (const GskContour *contour)
   builder = gsk_path_builder_new ();
   gsk_contour_foreach (contour, 0.5, add_segment, builder);
   return gsk_path_builder_free_to_path (builder);
+}
+
+/* }}} */
+/* {{{ Default implementations */
+
+static gsize
+gsk_contour_get_size_default (const GskContour *contour)
+{
+  return contour->klass->struct_size;
+}
+
+static gboolean
+foreach_print (GskPathOperation        op,
+               const graphene_point_t *pts,
+               gsize                   n_pts,
+               float                   weight,
+               gpointer                data)
+{
+  GString *string = data;
+
+  switch (op)
+    {
+    case GSK_PATH_MOVE:
+      _g_string_append_point (string, "M ", &pts[0]);
+      break;
+
+    case GSK_PATH_CLOSE:
+      g_string_append (string, " Z");
+      break;
+
+    case GSK_PATH_LINE:
+      _g_string_append_point (string, " L ", &pts[1]);
+      break;
+
+    case GSK_PATH_QUAD:
+      _g_string_append_point (string, " Q ", &pts[1]);
+      _g_string_append_point (string, ", ", &pts[2]);
+      break;
+
+    case GSK_PATH_CUBIC:
+      _g_string_append_point (string, " C ", &pts[1]);
+      _g_string_append_point (string, ", ", &pts[2]);
+      _g_string_append_point (string, ", ", &pts[3]);
+      break;
+
+    case GSK_PATH_CONIC:
+      _g_string_append_point (string, " O ", &pts[1]);
+      _g_string_append_point (string, ", ", &pts[2]);
+      _g_string_append_double (string, ", ", weight);
+      break;
+
+    default:
+      g_assert_not_reached ();
+    }
+
+  return TRUE;
+}
+
+static void
+gsk_contour_print_default (const GskContour *contour,
+                           GString          *string)
+{
+  gsk_contour_foreach (contour, 0.5, foreach_print, string);
 }
 
 /* }}} */
@@ -314,65 +373,6 @@ gsk_standard_contour_get_flags (const GskContour *contour)
   const GskStandardContour *self = (const GskStandardContour *) contour;
 
   return self->flags;
-}
-
-static void
-gsk_standard_contour_print (const GskContour *contour,
-                            GString          *string)
-{
-  const GskStandardContour *self = (const GskStandardContour *) contour;
-  gsize i;
-
-  for (i = 0; i < self->n_ops; i ++)
-    {
-      const graphene_point_t *pt = gsk_pathop_points (self->ops[i]);
-
-      switch (gsk_pathop_op (self->ops[i]))
-        {
-        case GSK_PATH_MOVE:
-          g_string_append (string, "M ");
-          _g_string_append_point (string, &pt[0]);
-          break;
-
-        case GSK_PATH_CLOSE:
-          g_string_append (string, " Z");
-          break;
-
-        case GSK_PATH_LINE:
-          g_string_append (string, " L ");
-          _g_string_append_point (string, &pt[1]);
-          break;
-
-        case GSK_PATH_QUAD:
-          g_string_append (string, " Q ");
-          _g_string_append_point (string, &pt[1]);
-          g_string_append (string, ", ");
-          _g_string_append_point (string, &pt[2]);
-          break;
-
-        case GSK_PATH_CUBIC:
-          g_string_append (string, " C ");
-          _g_string_append_point (string, &pt[1]);
-          g_string_append (string, ", ");
-          _g_string_append_point (string, &pt[2]);
-          g_string_append (string, ", ");
-          _g_string_append_point (string, &pt[3]);
-          break;
-
-        case GSK_PATH_CONIC:
-          g_string_append (string, " O ");
-          _g_string_append_point (string, &pt[1]);
-          g_string_append (string, ", ");
-          _g_string_append_point (string, &pt[3]);
-          g_string_append (string, ", ");
-          _g_string_append_double (string, pt[2].x);
-          break;
-
-        default:
-          g_assert_not_reached();
-          return;
-        }
-    }
 }
 
 static gboolean
@@ -1015,7 +1015,7 @@ static const GskContourClass GSK_STANDARD_CONTOUR_CLASS =
   gsk_standard_contour_copy,
   gsk_standard_contour_get_size,
   gsk_standard_contour_get_flags,
-  gsk_standard_contour_print,
+  gsk_contour_print_default,
   gsk_standard_contour_get_bounds,
   gsk_standard_contour_get_stroke_bounds,
   gsk_standard_contour_get_start_end,
@@ -1111,70 +1111,6 @@ static GskPathFlags
 gsk_circle_contour_get_flags (const GskContour *contour)
 {
   return GSK_PATH_CLOSED;
-}
-
-static gboolean
-foreach_print (GskPathOperation        op,
-               const graphene_point_t *pts,
-               gsize                   n_pts,
-               float                   weight,
-               gpointer                data)
-{
-  GString *string = data;
-
-  switch (op)
-    {
-    case GSK_PATH_MOVE:
-      g_string_append (string, "M ");
-      _g_string_append_point (string, &pts[0]);
-      break;
-
-    case GSK_PATH_CLOSE:
-      g_string_append (string, " Z");
-      break;
-
-    case GSK_PATH_LINE:
-      g_string_append (string, " L ");
-      _g_string_append_point (string, &pts[1]);
-      break;
-
-    case GSK_PATH_QUAD:
-      g_string_append (string, " Q ");
-      _g_string_append_point (string, &pts[1]);
-      g_string_append (string, ", ");
-      _g_string_append_point (string, &pts[2]);
-      break;
-
-    case GSK_PATH_CUBIC:
-      g_string_append (string, " C ");
-      _g_string_append_point (string, &pts[1]);
-      g_string_append (string, ", ");
-      _g_string_append_point (string, &pts[2]);
-      g_string_append (string, ", ");
-      _g_string_append_point (string, &pts[3]);
-      break;
-
-    case GSK_PATH_CONIC:
-      g_string_append (string, " O ");
-      _g_string_append_point (string, &pts[1]);
-      g_string_append (string, ", ");
-      _g_string_append_point (string, &pts[2]);
-      g_string_append (string, ", ");
-      _g_string_append_double (string, weight);
-      break;
-
-    default:
-      g_assert_not_reached ();
-    }
-
-  return TRUE;
-}
-
-static void
-gsk_circle_contour_print (const GskContour *contour,
-                          GString          *string)
-{
-  gsk_contour_foreach (contour, 0.5, foreach_print, string);
 }
 
 static gboolean
@@ -1527,7 +1463,7 @@ static const GskContourClass GSK_CIRCLE_CONTOUR_CLASS =
   gsk_circle_contour_copy,
   gsk_contour_get_size_default,
   gsk_circle_contour_get_flags,
-  gsk_circle_contour_print,
+  gsk_contour_print_default,
   gsk_circle_contour_get_bounds,
   gsk_circle_contour_get_stroke_bounds,
   gsk_circle_contour_get_start_end,
