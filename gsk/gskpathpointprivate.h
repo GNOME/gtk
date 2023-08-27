@@ -14,7 +14,8 @@ struct _GskRealPathPoint
 
 G_STATIC_ASSERT (sizeof (GskRealPathPoint) <= sizeof (GskPathPoint));
 
-const char * gsk_path_point_to_string (GskPathPoint *point);
+char * gsk_path_point_to_string (GskPathPoint *point);
+void   gsk_path_point_print     (GskPathPoint *point);
 
 G_END_DECLS
 
