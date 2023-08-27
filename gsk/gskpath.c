@@ -603,6 +603,7 @@ gsk_path_get_closest_point (GskPath                *self,
       if (gsk_contour_get_closest_point (self->contours[i], point, threshold, res, &distance))
         {
           found = TRUE;
+          g_assert (0 <= res->t && res->t <= 1);
           res->contour = i;
           threshold = distance;
         }
@@ -1034,40 +1035,43 @@ parse_circle (const char **p,
   double x0, y0, x1, y1, x2, y2, x3, y3;
   double x4, y4, x5, y5, x6, y6, x7, y7;
   double x8, y8, w0, w1, w2, w3;
-  double xx, yy;
+  double rr;
 
   if (parse_coordinate_pair (p, &x0, &y0) &&
-      parse_string (p, "O") &&
+      parse_string (p, "o") &&
       parse_coordinate_pair (p, &x1, &y1) &&
       parse_coordinate_pair (p, &x2, &y2) &&
       parse_nonnegative_number (p, &w0) &&
-      parse_string (p, "O") &&
+      parse_string (p, "o") &&
       parse_coordinate_pair (p, &x3, &y3) &&
       parse_coordinate_pair (p, &x4, &y4) &&
       parse_nonnegative_number (p, &w1) &&
-      parse_string (p, "O") &&
+      parse_string (p, "o") &&
       parse_coordinate_pair (p, &x5, &y5) &&
       parse_coordinate_pair (p, &x6, &y6) &&
       parse_nonnegative_number (p, &w2) &&
-      parse_string (p, "O") &&
+      parse_string (p, "o") &&
       parse_coordinate_pair (p, &x7, &y7) &&
       parse_coordinate_pair (p, &x8, &y8) &&
       parse_nonnegative_number (p, &w3) &&
-      parse_string (p, "Z"))
+      parse_string (p, "z"))
     {
-      xx = (x0 + x4) / 2;
-      yy = (y2 + y6) / 2;
+      rr = y1;
 
-      if (NEAR (x0, x8) && NEAR (y0, y8) &&
-          is_rect (x5, y5, x7, y7, x1, y1, x3, y3) &&
-          is_rect (x5, y5, x6, y6, xx, yy, x4, y4) &&
-          is_rect (xx, yy, x0, y0, x1, y1, x2, y2) &&
+      if (x1 == 0   && y1 == rr  &&
+          x2 == -rr && y2 == rr  &&
+          x3 == -rr && y3 == 0   &&
+          x4 == -rr && y4 == -rr &&
+          x5 == 0   && y5 == -rr &&
+          x6 == rr  && y6 == -rr &&
+          x7 == rr  && y7 == 0   &&
+          x8 == rr  && y8 == rr &&
           NEAR (w0, M_SQRT1_2) && NEAR (w1, M_SQRT1_2) &&
           NEAR (w2, M_SQRT1_2) && NEAR (w3, M_SQRT1_2))
         {
-          *cx = xx;
-          *cy = yy;
-          *r = x0 - xx;
+          *cx = x0 - rr;
+          *cy = y0;
+          *r = rr;
 
           skip_whitespace (p);
 
@@ -1528,7 +1532,7 @@ gsk_path_parse (const char *string)
                 parse_coordinate_pair (&p, &x2, &y2) &&
                 parse_nonnegative_number (&p, &weight))
               {
-                if (cmd == 'c')
+                if (cmd == 'o')
                   {
                     x1 += x;
                     y1 += y;

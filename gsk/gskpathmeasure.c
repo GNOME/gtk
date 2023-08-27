@@ -285,6 +285,9 @@ gsk_path_measure_get_point (GskPathMeasure *self,
   contour = gsk_path_get_contour (self->path, i);
 
   gsk_contour_get_point (contour, self->measures[i].contour_data, distance, res);
+
+  g_assert (0 <= res->t && res->t <= 1);
+
   res->contour = i;
 
   return TRUE;
