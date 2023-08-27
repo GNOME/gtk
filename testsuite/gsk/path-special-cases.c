@@ -957,6 +957,44 @@ test_length (void)
   gsk_path_measure_unref (measure2);
 }
 
+static void
+test_rect_segment (void)
+{
+  GskPathBuilder *builder;
+  GskPath *path, *path1, *path2;
+  GskPathMeasure *measure, *measure1, *measure2;
+  GskPathPoint point0, point1;
+
+  builder = gsk_path_builder_new ();
+  gsk_path_builder_add_rect (builder, &GRAPHENE_RECT_INIT (0, 0, 100, 100));
+  path = gsk_path_builder_free_to_path (builder);
+  measure = gsk_path_measure_new (path);
+
+  gsk_path_measure_get_point (measure, 20, &point0);
+  gsk_path_measure_get_point (measure, 80, &point1);
+
+  builder = gsk_path_builder_new ();
+  gsk_path_builder_add_segment (builder, path, &point0, &point1);
+  path1 = gsk_path_builder_free_to_path (builder);
+  measure1 = gsk_path_measure_new (path1);
+
+  g_assert_cmpfloat_with_epsilon (gsk_path_measure_get_length (measure1), 60, 0.001);
+
+  builder = gsk_path_builder_new ();
+  gsk_path_builder_add_segment (builder, path, &point1, &point0);
+  path2 = gsk_path_builder_free_to_path (builder);
+  measure2 = gsk_path_measure_new (path2);
+
+  g_assert_cmpfloat_with_epsilon (gsk_path_measure_get_length (measure2), 340, 0.001);
+
+  gsk_path_unref (path);
+  gsk_path_unref (path1);
+  gsk_path_unref (path2);
+  gsk_path_measure_unref (measure);
+  gsk_path_measure_unref (measure1);
+  gsk_path_measure_unref (measure2);
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -975,6 +1013,7 @@ main (int argc, char *argv[])
   g_test_add_func ("/path/rounded-rect", test_rounded_rect);
   g_test_add_func ("/path/circle", test_circle);
   g_test_add_func ("/path/length", test_length);
+  g_test_add_func ("/path/rect/segment", test_rect_segment);
 
   return g_test_run ();
 }
