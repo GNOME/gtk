@@ -560,34 +560,11 @@ gsk_path_builder_add_circle (GskPathBuilder         *self,
                              const graphene_point_t *center,
                              float                   radius)
 {
-  graphene_point_t current;
-
   g_return_if_fail (self != NULL);
   g_return_if_fail (center != NULL);
   g_return_if_fail (radius > 0);
 
-  current = self->current_point;
-
-  gsk_path_builder_move_to (self, center->x + radius, center->y);
-  // bottom right quarter
-  gsk_path_builder_arc_to (self,
-                           center->x + radius, center->y + radius,
-                           center->x, center->y + radius);
-  // bottom left quarter
-  gsk_path_builder_arc_to (self,
-                           center->x - radius, center->y + radius,
-                           center->x - radius, center->y);
-  // top left quarter
-  gsk_path_builder_arc_to (self,
-                           center->x - radius, center->y - radius,
-                           center->x, center->y - radius);
-  // top right quarter
-  gsk_path_builder_arc_to (self,
-                           center->x + radius, center->y - radius,
-                           center->x + radius, center->y);
-  // done
-  gsk_path_builder_close (self);
-  self->current_point = current;
+  gsk_path_builder_add_contour (self, gsk_circle_contour_new (center, radius));
 }
 
 /**

@@ -34,6 +34,9 @@ GskContour *            gsk_standard_contour_new                (GskPathFlags   
                                                                  gsize                   n_ops,
                                                                  gssize                  offset);
 
+GskContour *            gsk_circle_contour_new                  (const graphene_point_t *center,
+                                                                 float                   radius);
+
 void                    gsk_contour_copy                        (GskContour *            dest,
                                                                  const GskContour       *src);
 GskContour *            gsk_contour_dup                         (const GskContour       *src);

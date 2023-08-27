@@ -953,6 +953,78 @@ parse_command (const char **p,
   return FALSE;
 }
 
+static gboolean
+parse_string (const char **p,
+              const char  *s)
+{ 
+  int len = strlen (s);
+  if (strncmp (*p, s, len) != 0)
+    return FALSE;
+  (*p) += len;
+  return TRUE;
+}
+
+static gboolean
+parse_circle (const char **p,
+              double      *cx,
+              double      *cy,
+              double      *r)
+{
+  const char *o = *p;
+  double x0, y0, x1, y1, x2, y2, x3, y3;
+  double x4, y4, x5, y5, x6, y6, x7, y7;
+  double x8, y8, w0, w1, w2, w3;
+  double xx, yy;
+
+  if (parse_coordinate_pair (p, &x0, &y0) &&
+      parse_string (p, "O") &&
+      parse_coordinate_pair (p, &x1, &y1) &&
+      parse_coordinate_pair (p, &x2, &y2) &&
+      parse_nonnegative_number (p, &w0) &&
+      parse_string (p, "O") &&
+      parse_coordinate_pair (p, &x3, &y3) &&
+      parse_coordinate_pair (p, &x4, &y4) &&
+      parse_nonnegative_number (p, &w1) &&
+      parse_string (p, "O") &&
+      parse_coordinate_pair (p, &x5, &y5) &&
+      parse_coordinate_pair (p, &x6, &y6) &&
+      parse_nonnegative_number (p, &w2) &&
+      parse_string (p, "O") &&
+      parse_coordinate_pair (p, &x7, &y7) &&
+      parse_coordinate_pair (p, &x8, &y8) &&
+      parse_nonnegative_number (p, &w3) &&
+      parse_string (p, "Z"))
+    {
+      xx = (x0 + x4) / 2;
+      yy = (y2 + y6) / 2;
+
+#define NEAR(x, y) (fabs ((x) - (y)) < 0.001)
+
+      if (NEAR (x0, x1) && NEAR (x0, x8) && NEAR (x0, x7) &&
+          NEAR (x2, x6) && NEAR (x3, x4) && NEAR (x4, x5) &&
+          NEAR (y5, y6) && NEAR (y6, y7) && NEAR (y4, y8) &&
+          NEAR (y8, y0) && NEAR (y3, y2) && NEAR (y2, y1) &&
+          NEAR (x2, xx) && NEAR (yy, y4) &&
+          NEAR (w0, M_SQRT1_2) && NEAR (w1, M_SQRT1_2) &&
+          NEAR (w2, M_SQRT1_2) && NEAR (w3, M_SQRT1_2) &&
+          x1 > x2 && x2 > x3 && y3 > y4 && y4 > y5)
+        {
+          *cx = xx;
+          *cy = yy;
+          *r = x0 - xx;
+
+          skip_whitespace (p);
+
+          return TRUE;
+        }
+
+#undef NEAR
+    }
+
+  *p = o;
+  return FALSE;
+}
+
 /**
  * gsk_path_parse:
  * @string: a string
@@ -1037,9 +1109,20 @@ gsk_path_parse (const char *string)
         case 'M':
         case 'm':
           {
-            double x1, y1;
+            double x1, y1, r;
 
-            if (parse_coordinate_pair (&p, &x1, &y1))
+            if (parse_circle (&p, &x1, &y1, &r))
+              {
+                gsk_path_builder_add_circle (builder, &GRAPHENE_POINT_INIT (x1, y1), r);
+                if (_strchr ("zZX", prev_cmd))
+                  {
+                    path_x = x1 + r;
+                    path_y = y1;
+                  }
+                x = x1 + r;
+                y = y1;
+              }
+            else if (parse_coordinate_pair (&p, &x1, &y1))
               {
                 if (cmd == 'm')
                   {
