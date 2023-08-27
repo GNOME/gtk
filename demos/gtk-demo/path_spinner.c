@@ -56,9 +56,9 @@ gtk_spinner_paintable_get_intrinsic_height (GdkPaintable *paintable)
 
 static void
 gtk_spinner_paintable_snapshot (GdkPaintable *paintable,
-                             GdkSnapshot  *snapshot,
-                             double        width,
-                             double        height)
+                                GdkSnapshot  *snapshot,
+                                double        width,
+                                double        height)
 {
   GtkSpinnerPaintable *self = GTK_SPINNER_PAINTABLE (paintable);
 
@@ -190,27 +190,16 @@ update_path (GtkSpinnerPaintable *self)
 {
   GskPathBuilder *builder;
   GskPathPoint start, end;
-  GskTransform *t;
-  graphene_point_t p, p0, p1;
+  graphene_point_t p0, p1;
   float start_angle, end_angle;
 
-  p = GRAPHENE_POINT_INIT (40, 0);
   start_angle = self->angle;
   end_angle = fmod (self->angle + 360 * self->completion / 100, 360);
 
-  t = gsk_transform_translate (
-        gsk_transform_rotate (
-          gsk_transform_translate (NULL, &GRAPHENE_POINT_INIT (50, 50)),
-          start_angle),
-        &GRAPHENE_POINT_INIT (-50, -50));
-  gsk_transform_transform_point (t, &p, &p0);
-
-  t = gsk_transform_translate (
-        gsk_transform_rotate (
-          gsk_transform_translate (NULL, &GRAPHENE_POINT_INIT (50, 50)),
-          end_angle),
-        &GRAPHENE_POINT_INIT (-50, -50));
-  gsk_transform_transform_point (t, &p, &p1);
+  p0 = GRAPHENE_POINT_INIT (50 + 40 * cos (M_PI * start_angle / 180),
+                            50 + 40 * sin (M_PI * start_angle / 180));
+  p1 = GRAPHENE_POINT_INIT (50 + 40 * cos (M_PI * end_angle / 180),
+                            50 + 40 * sin (M_PI * end_angle / 180));
 
   g_clear_pointer (&self->path, gsk_path_unref);
 

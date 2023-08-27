@@ -54,6 +54,17 @@ G_DEFINE_BOXED_TYPE (GskPathPoint, gsk_path_point,
                      gsk_path_point_free)
 
 
+const char *
+gsk_path_point_to_string (GskPathPoint *point)
+{
+  GskRealPathPoint *p = (GskRealPathPoint *) point;
+  static char buf[128];
+  g_snprintf (buf, sizeof (buf),
+              "{ .contour = %lu, .idx = %lu, .t = %.9f }",
+              p->contour, p->idx, p->t);
+  return buf;
+}
+
 GskPathPoint *
 gsk_path_point_copy (GskPathPoint *point)
 {

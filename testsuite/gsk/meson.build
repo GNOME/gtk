@@ -398,6 +398,7 @@ endforeach
 internal_tests = [
   [ 'curve' ],
   [ 'curve-special-cases' ],
+  [ 'path-private' ],
   [ 'diff' ],
   [ 'half-float' ],
   ['rounded-rect'],
