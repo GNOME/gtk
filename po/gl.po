@@ -20,8 +20,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-master-po-gl-77922___.merged\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2023-08-23 19:17+0000\n"
-"PO-Revision-Date: 2023-08-24 08:19+0200\n"
+"POT-Creation-Date: 2023-08-28 15:54+0000\n"
+"PO-Revision-Date: 2023-08-29 00:36+0200\n"
 "Last-Translator: Fran Dieguez <frandieguez@gnome.org>\n"
 "Language-Team: Galician <proxecto@trasno.gal>\n"
 "Language: gl\n"
@@ -2896,7 +2896,7 @@ msgstr "Anterior lapela"
 msgid "Next tab"
 msgstr "Seguinte lapela"
 
-#: gtk/gtknotebook.c:4331 gtk/gtknotebook.c:6539
+#: gtk/gtknotebook.c:4331 gtk/gtknotebook.c:6541
 #, c-format
 msgid "Page %u"
 msgstr "Páxina %u"
@@ -3565,7 +3565,7 @@ msgctxt "keyboard side marker"
 msgid "R"
 msgstr "D"
 
-#: gtk/gtkshortcutssection.c:407
+#: gtk/gtkshortcutssection.c:414
 msgid "_Show All"
 msgstr "_Mostrar todos"
 
@@ -3602,27 +3602,27 @@ msgid "Swipe right"
 msgstr "Deslizar á dereita"
 
 #. Translators: This is placeholder text for the search entry in the shortcuts window
-#: gtk/gtkshortcutswindow.c:855 gtk/gtkshortcutswindow.c:922
-#: gtk/gtkshortcutswindow.c:927
+#: gtk/gtkshortcutswindow.c:879 gtk/gtkshortcutswindow.c:946
+#: gtk/gtkshortcutswindow.c:951
 msgid "Search Shortcuts"
 msgstr "Atallos da busca"
 
 #. Translators: This is the window title for the shortcuts window in normal mode
-#: gtk/gtkshortcutswindow.c:887 gtk/inspector/window.ui:498
+#: gtk/gtkshortcutswindow.c:911 gtk/inspector/window.ui:498
 msgid "Shortcuts"
 msgstr "Atallos"
 
 #. Translators: This is the window title for the shortcuts window in search mode
-#: gtk/gtkshortcutswindow.c:892
+#: gtk/gtkshortcutswindow.c:916
 msgid "Search Results"
 msgstr "Resultados da busca"
 
-#: gtk/gtkshortcutswindow.c:989 gtk/ui/gtkemojichooser.ui:349
+#: gtk/gtkshortcutswindow.c:1013 gtk/ui/gtkemojichooser.ui:349
 #: gtk/ui/gtkfilechooserwidget.ui:239
 msgid "No Results Found"
 msgstr "Non se atopou ningún resultado"
 
-#: gtk/gtkshortcutswindow.c:1000 gtk/ui/gtkemojichooser.ui:362
+#: gtk/gtkshortcutswindow.c:1024 gtk/ui/gtkemojichooser.ui:362
 #: gtk/ui/gtkfilechooserwidget.ui:252 gtk/ui/gtkplacesview.ui:218
 msgid "Try a different search"
 msgstr "Tente unha busca diferente"
@@ -3697,7 +3697,7 @@ msgid "Description"
 msgstr "Descrición"
 
 #: gtk/inspector/a11y.ui:99 gtk/inspector/misc-info.ui:296
-#: tools/gtk-path-tool-info.c:133
+#: tools/gtk-path-tool-info.c:132
 msgid "Bounds"
 msgstr "Limiares"
 
@@ -7482,95 +7482,105 @@ msgid ""
 "\n"
 "Commands:\n"
 "  decompose    Decompose the path\n"
+"  reverse      Reverse the path\n"
+"  restrict     Restrict the path to a segment\n"
 "  show         Display the path in a window\n"
 "  render       Render the path as an image\n"
 "  info         Print information about the path\n"
 "\n"
 msgstr ""
 "Uso:\n"
-"  gtk4-path-tool [ORDE] FICHEIRO\n"
+"  gtk4-path-tool [ORDE] [OPCIÓN…] FICHEIRO\n"
 "\n"
 "Leva a cabo varias tarefas en rutas.\n"
 "\n"
 "Ordes:\n"
 "\n"
 "  decompose         Descompoñer a ruta\n"
+"  reverse      Reverter a ruta\n"
+"\n"
+"  restrict     Restrinxir a ruta dun segmento\n"
 "  show         Mostra a ruta nunha xanela\n"
 "  render       Renderiza a ruta como unha imaxe\n"
-"\n"
 "  info         Fornece información da ruta\n"
 "\n"
 
-#: tools/gtk-path-tool-decompose.c:80
+#: tools/gtk-path-tool-decompose.c:84
 msgid "Allow quadratic Bézier curves"
 msgstr "Permitir curvas Bézier cuadráticas"
 
-#: tools/gtk-path-tool-decompose.c:81
+#: tools/gtk-path-tool-decompose.c:85
 msgid "Allow cubic Bézier curves"
 msgstr "Permitir curvas Bézier cúbicas"
 
-#: tools/gtk-path-tool-decompose.c:82
-msgid "Allow elliptical arcs"
-msgstr "Permitir arcos elípticos"
+#: tools/gtk-path-tool-decompose.c:86
+msgid "Allow conic Bézier curves"
+msgstr "Permitir curvas Bézier cónicas"
 
-#: tools/gtk-path-tool-decompose.c:83 tools/gtk-path-tool-info.c:93
-#: tools/gtk-path-tool-render.c:58 tools/gtk-path-tool-show.c:127
+#: tools/gtk-path-tool-decompose.c:87 tools/gtk-path-tool-info.c:88
+#: tools/gtk-path-tool-render.c:58 tools/gtk-path-tool-restrict.c:38
+#: tools/gtk-path-tool-show.c:127
 msgid "PATH"
 msgstr "RUTA"
 
-#: tools/gtk-path-tool-decompose.c:95
+#: tools/gtk-path-tool-decompose.c:99
 msgid "Decompose a path."
 msgstr "Descompoñer unha ruta."
 
-#: tools/gtk-path-tool-decompose.c:108 tools/gtk-path-tool-info.c:117
+#: tools/gtk-path-tool-decompose.c:112 tools/gtk-path-tool-info.c:113
+#: tools/gtk-path-tool-restrict.c:64
 msgid "No paths given."
 msgstr "Non se forneceron rutas."
 
-#: tools/gtk-path-tool-decompose.c:136
+#: tools/gtk-path-tool-decompose.c:140 tools/gtk-path-tool-restrict.c:94
 msgid "That didn't work out."
 msgstr "Iso non funcionou."
 
-#: tools/gtk-path-tool-info.c:104
+#: tools/gtk-path-tool-info.c:100
 msgid "Print information about a path."
 msgstr "Mostra a información sobre a ruta."
 
-#: tools/gtk-path-tool-info.c:124
+#: tools/gtk-path-tool-info.c:121
 msgid "Path is empty."
 msgstr "A ruta está baleira."
 
-#: tools/gtk-path-tool-info.c:130
+#: tools/gtk-path-tool-info.c:127
 msgid "Path is closed"
 msgstr "A ruta está pechada"
 
-#: tools/gtk-path-tool-info.c:139
+#: tools/gtk-path-tool-info.c:129
+msgid "Path length"
+msgstr "Lonxitude da ruta"
+
+#: tools/gtk-path-tool-info.c:138
 #, c-format
 msgid "%d contours"
 msgstr "%d contornos"
 
-#: tools/gtk-path-tool-info.c:141
+#: tools/gtk-path-tool-info.c:140
 #, c-format
 msgid "%d operations"
 msgstr "%d operacións"
 
-#: tools/gtk-path-tool-info.c:145
+#: tools/gtk-path-tool-info.c:144
 #, c-format
 msgid "%d lines"
 msgstr "%d liñas"
 
-#: tools/gtk-path-tool-info.c:150
+#: tools/gtk-path-tool-info.c:149
 #, c-format
 msgid "%d quadratics"
 msgstr "%d cuadráticas"
 
-#: tools/gtk-path-tool-info.c:155
+#: tools/gtk-path-tool-info.c:154
 #, c-format
 msgid "%d cubics"
 msgstr "%d cúbicas"
 
-#: tools/gtk-path-tool-info.c:160
+#: tools/gtk-path-tool-info.c:159
 #, c-format
-msgid "%d arcs"
-msgstr "%d arcos"
+msgid "%d conics"
+msgstr "%d cónicas"
 
 #: tools/gtk-path-tool-render.c:53 tools/gtk-path-tool-show.c:123
 msgid "Fill the path (the default)"
@@ -7693,6 +7703,22 @@ msgstr "Fallou o gardado do png en «%s»"
 #, c-format
 msgid "Output written to '%s'."
 msgstr "Saída escrita en «%s»."
+
+#: tools/gtk-path-tool-restrict.c:36
+msgid "Beginning of segment"
+msgstr "Comezo do segmento"
+
+#: tools/gtk-path-tool-restrict.c:36 tools/gtk-path-tool-restrict.c:37
+msgid "LENGTH"
+msgstr "LONXITUDE"
+
+#: tools/gtk-path-tool-restrict.c:37
+msgid "End of segment"
+msgstr "Final do segmento"
+
+#: tools/gtk-path-tool-restrict.c:51
+msgid "Restrict a path to a segment."
+msgstr "Restrinxir unha ruta a unha segmento."
 
 #: tools/gtk-path-tool-show.c:43 tools/gtk-path-tool-show.c:78
 msgid "Path Preview"
@@ -7948,6 +7974,13 @@ msgstr ""
 "Non hai ficheiro de índice de tema en «%s».\n"
 "Se está seguro de que quere crear unha caché de iconas aquí, use --ignore-"
 "theme-index.\n"
+
+#~ msgid "Allow elliptical arcs"
+#~ msgstr "Permitir arcos elípticos"
+
+#, c-format
+#~ msgid "%d arcs"
+#~ msgstr "%d arcos"
 
 #~ msgid "Stroke the path instead of filling it"
 #~ msgstr "Traza a ruta en lugar de enchela"
