@@ -173,6 +173,188 @@ gsk_gpu_node_processor_add_fallback_node (GskGpuNodeProcessor *self,
 }
 
 static void
+extract_scale_from_transform (GskTransform *transform,
+                              float        *out_scale_x,
+                              float        *out_scale_y)
+{
+  switch (gsk_transform_get_category (transform))
+    {
+    default:
+      g_assert_not_reached ();
+      G_GNUC_FALLTHROUGH;
+    case GSK_TRANSFORM_CATEGORY_IDENTITY:
+    case GSK_TRANSFORM_CATEGORY_2D_TRANSLATE:
+      *out_scale_x = 1.0f;
+      *out_scale_y = 1.0f;
+      return;
+
+    case GSK_TRANSFORM_CATEGORY_2D_AFFINE:
+      {
+        float scale_x, scale_y, dx, dy;
+        gsk_transform_to_affine (transform, &scale_x, &scale_y, &dx, &dy);
+        *out_scale_x = fabs (scale_x);
+        *out_scale_y = fabs (scale_y);
+      }
+      return;
+
+    case GSK_TRANSFORM_CATEGORY_2D:
+      {
+        float skew_x, skew_y, scale_x, scale_y, angle, dx, dy;
+        gsk_transform_to_2d_components (transform,
+                                        &skew_x, &skew_y,
+                                        &scale_x, &scale_y,
+                                        &angle,
+                                        &dx, &dy);
+        *out_scale_x = fabs (scale_x);
+        *out_scale_y = fabs (scale_y);
+      }
+      return;
+
+    case GSK_TRANSFORM_CATEGORY_UNKNOWN:
+    case GSK_TRANSFORM_CATEGORY_ANY:
+    case GSK_TRANSFORM_CATEGORY_3D:
+      {
+        graphene_quaternion_t rotation;
+        graphene_matrix_t matrix;
+        graphene_vec4_t perspective;
+        graphene_vec3_t translation;
+        graphene_vec3_t matrix_scale;
+        graphene_vec3_t shear;
+
+        gsk_transform_to_matrix (transform, &matrix);
+        graphene_matrix_decompose (&matrix,
+                                   &translation,
+                                   &matrix_scale,
+                                   &rotation,
+                                   &shear,
+                                   &perspective);
+
+        *out_scale_x = fabs (graphene_vec3_get_x (&matrix_scale));
+        *out_scale_y = fabs (graphene_vec3_get_y (&matrix_scale));
+      }
+      return;
+    }
+}
+
+static void
+gsk_gpu_node_processor_add_transform_node (GskGpuNodeProcessor *self,
+                                           GskRenderNode       *node)
+{
+  GskRenderNode *child;
+  GskTransform *transform;
+  graphene_point_t old_offset;
+  graphene_vec2_t old_scale;
+  GskTransform *old_modelview;
+  GskGpuClip old_clip;
+
+  child = gsk_transform_node_get_child (node);
+  transform = gsk_transform_node_get_transform (node);
+
+  switch (gsk_transform_get_category (transform))
+    {
+    case GSK_TRANSFORM_CATEGORY_IDENTITY:
+    case GSK_TRANSFORM_CATEGORY_2D_TRANSLATE:
+      {
+        float dx, dy;
+        gsk_transform_to_translate (transform, &dx, &dy);
+        old_offset = self->offset;
+        self->offset.x += dx;
+        self->offset.y += dy;
+        gsk_gpu_node_processor_add_node (self, child);
+        self->offset = old_offset;
+      }
+      return;
+
+    case GSK_TRANSFORM_CATEGORY_2D_AFFINE:
+      {
+        float dx, dy, scale_x, scale_y;
+
+        gsk_gpu_clip_init_copy (&old_clip, &self->clip);
+        old_offset = self->offset;
+        old_scale = self->scale;
+        old_modelview = gsk_transform_ref (self->modelview);
+
+        gsk_transform_to_affine (transform, &scale_x, &scale_y, &dx, &dy);
+        gsk_gpu_clip_scale (&self->clip, &old_clip, scale_x, scale_y);
+        self->offset.x = (self->offset.x + dx) / scale_x;
+        self->offset.y = (self->offset.y + dy) / scale_y;
+        graphene_vec2_init (&self->scale, fabs (scale_x), fabs (scale_y));
+        graphene_vec2_multiply (&self->scale, &old_scale, &self->scale);
+        self->modelview = gsk_transform_scale (self->modelview,
+                                               scale_x / fabs (scale_x),
+                                               scale_y / fabs (scale_y));
+      }
+      break;
+
+    case GSK_TRANSFORM_CATEGORY_2D:
+    case GSK_TRANSFORM_CATEGORY_UNKNOWN:
+    case GSK_TRANSFORM_CATEGORY_ANY:
+    case GSK_TRANSFORM_CATEGORY_3D:
+      {
+        GskTransform *clip_transform;
+        float scale_x, scale_y, old_pixels, new_pixels;
+
+        clip_transform = gsk_transform_transform (gsk_transform_translate (NULL, &self->offset), transform);
+        gsk_gpu_clip_init_copy (&old_clip, &self->clip);
+
+        if (gsk_gpu_clip_contains_rect (&self->clip, &self->offset, &node->bounds))
+          {
+            gsk_gpu_clip_init_empty (&self->clip, &child->bounds);
+          }
+        else if (!gsk_gpu_clip_transform (&self->clip, &old_clip, clip_transform, &child->bounds))
+          {
+            gsk_transform_unref (clip_transform);
+            GSK_DEBUG (FALLBACK, "Transform nodes can't deal with clip type %u", self->clip.type);
+            gsk_gpu_node_processor_add_fallback_node (self, node);
+            return;
+          }
+
+        old_offset = self->offset;
+        old_scale = self->scale;
+        old_modelview = gsk_transform_ref (self->modelview);
+
+        self->modelview = gsk_transform_scale (self->modelview,
+                                               graphene_vec2_get_x (&self->scale),
+                                               graphene_vec2_get_y (&self->scale));
+        self->modelview = gsk_transform_transform (self->modelview, clip_transform);
+        gsk_transform_unref (clip_transform);
+
+        extract_scale_from_transform (self->modelview, &scale_x, &scale_y);
+
+        old_pixels = graphene_vec2_get_x (&old_scale) * graphene_vec2_get_y (&old_scale) *
+                     old_clip.rect.bounds.size.width * old_clip.rect.bounds.size.height;
+        new_pixels = scale_x * scale_y * self->clip.rect.bounds.size.width * self->clip.rect.bounds.size.height;
+        if (new_pixels > 2 * old_pixels)
+          {
+            float forced_downscale = 2 * old_pixels / new_pixels;
+            scale_x *= forced_downscale;
+            scale_y *= forced_downscale;
+          }
+
+        self->modelview = gsk_transform_scale (self->modelview, 1 / scale_x, 1 / scale_y);
+        graphene_vec2_init (&self->scale, scale_x, scale_y);
+        self->offset = *graphene_point_zero ();
+      }
+      break;
+
+    default:
+      g_assert_not_reached ();
+      break;
+    }
+
+  self->pending_globals |= GSK_GPU_GLOBAL_MATRIX | GSK_GPU_GLOBAL_SCALE | GSK_GPU_GLOBAL_CLIP;
+
+  gsk_gpu_node_processor_add_node (self, child);
+
+  self->offset = old_offset;
+  self->scale = old_scale;
+  gsk_transform_unref (self->modelview);
+  self->modelview = old_modelview;
+  gsk_gpu_clip_init_copy (&self->clip, &old_clip);
+  self->pending_globals |= GSK_GPU_GLOBAL_MATRIX | GSK_GPU_GLOBAL_SCALE | GSK_GPU_GLOBAL_CLIP;
+}
+
+static void
 gsk_gpu_node_processor_add_container_node (GskGpuNodeProcessor *self,
                                            GskRenderNode       *node)
 {
@@ -239,8 +421,8 @@ static const struct
     NULL,
   },
   [GSK_TRANSFORM_NODE] = {
-    0,
-    NULL,
+    GSK_GPU_GLOBAL_MATRIX | GSK_GPU_GLOBAL_SCALE | GSK_GPU_GLOBAL_CLIP,
+    gsk_gpu_node_processor_add_transform_node,
   },
   [GSK_OPACITY_NODE] = {
     0,
