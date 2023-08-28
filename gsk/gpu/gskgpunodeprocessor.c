@@ -6,6 +6,7 @@
 #include "gskgpuframeprivate.h"
 #include "gskgpuglobalsopprivate.h"
 #include "gskgpuimageprivate.h"
+#include "gskgpuscissoropprivate.h"
 #include "gskgputextureopprivate.h"
 #include "gskgpuuploadopprivate.h"
 
@@ -62,9 +63,10 @@
 typedef struct _GskGpuNodeProcessor GskGpuNodeProcessor;
 
 typedef enum {
-  GSK_GPU_GLOBAL_MATRIX = (1 << 0),
-  GSK_GPU_GLOBAL_SCALE  = (1 << 1),
-  GSK_GPU_GLOBAL_CLIP   = (1 << 2)
+  GSK_GPU_GLOBAL_MATRIX  = (1 << 0),
+  GSK_GPU_GLOBAL_SCALE   = (1 << 1),
+  GSK_GPU_GLOBAL_CLIP    = (1 << 2),
+  GSK_GPU_GLOBAL_SCISSOR = (1 << 3),
 } GskGpuGlobals;
 
 struct _GskGpuNodeProcessor
@@ -108,7 +110,7 @@ gsk_gpu_node_processor_init (GskGpuNodeProcessor         *self,
                                     gsk_gpu_image_get_height (target) / viewport->size.height);
   self->offset = GRAPHENE_POINT_INIT (-viewport->origin.x,
                                       -viewport->origin.y);
-  self->pending_globals = GSK_GPU_GLOBAL_MATRIX | GSK_GPU_GLOBAL_SCALE | GSK_GPU_GLOBAL_CLIP;
+  self->pending_globals = GSK_GPU_GLOBAL_MATRIX | GSK_GPU_GLOBAL_SCALE | GSK_GPU_GLOBAL_CLIP | GSK_GPU_GLOBAL_SCISSOR;
 }
 
 static void
@@ -130,6 +132,14 @@ gsk_gpu_node_processor_emit_globals_op (GskGpuNodeProcessor *self)
                       &self->clip.rect);
 
   self->pending_globals &= ~(GSK_GPU_GLOBAL_MATRIX | GSK_GPU_GLOBAL_SCALE | GSK_GPU_GLOBAL_CLIP);
+}
+
+static void
+gsk_gpu_node_processor_emit_scissor_op (GskGpuNodeProcessor *self)
+{
+  gsk_gpu_scissor_op (self->frame,
+                      &self->scissor);
+  self->pending_globals &= ~GSK_GPU_GLOBAL_SCISSOR;
 }
 
 void
@@ -373,7 +383,7 @@ static const struct
     NULL,
   },
   [GSK_CONTAINER_NODE] = {
-    GSK_GPU_GLOBAL_MATRIX | GSK_GPU_GLOBAL_SCALE | GSK_GPU_GLOBAL_CLIP,
+    GSK_GPU_GLOBAL_MATRIX | GSK_GPU_GLOBAL_SCALE | GSK_GPU_GLOBAL_CLIP | GSK_GPU_GLOBAL_SCISSOR,
     gsk_gpu_node_processor_add_container_node,
   },
   [GSK_CAIRO_NODE] = {
@@ -421,7 +431,7 @@ static const struct
     NULL,
   },
   [GSK_TRANSFORM_NODE] = {
-    GSK_GPU_GLOBAL_MATRIX | GSK_GPU_GLOBAL_SCALE | GSK_GPU_GLOBAL_CLIP,
+    GSK_GPU_GLOBAL_MATRIX | GSK_GPU_GLOBAL_SCALE | GSK_GPU_GLOBAL_CLIP | GSK_GPU_GLOBAL_SCISSOR,
     gsk_gpu_node_processor_add_transform_node,
   },
   [GSK_OPACITY_NODE] = {
@@ -519,6 +529,8 @@ gsk_gpu_node_processor_add_node (GskGpuNodeProcessor *self,
   required_globals = self->pending_globals & ~nodes_vtable[node_type].ignored_globals;
   if (required_globals & (GSK_GPU_GLOBAL_MATRIX | GSK_GPU_GLOBAL_SCALE | GSK_GPU_GLOBAL_CLIP))
     gsk_gpu_node_processor_emit_globals_op (self);
+  if (required_globals & GSK_GPU_GLOBAL_SCISSOR)
+    gsk_gpu_node_processor_emit_scissor_op (self);
   g_assert ((self->pending_globals & ~nodes_vtable[node_type].ignored_globals) == 0);
 
   if (nodes_vtable[node_type].process_node)
