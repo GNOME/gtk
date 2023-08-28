@@ -497,6 +497,8 @@ gsk_path_builder_add_rounded_rect (GskPathBuilder       *self,
  *
  * The path is going around the circle in clockwise direction.
  *
+ * If @radius is zero, the contour will be a closed point.
+ *
  * Since: 4.14
  */
 void
@@ -506,7 +508,7 @@ gsk_path_builder_add_circle (GskPathBuilder         *self,
 {
   g_return_if_fail (self != NULL);
   g_return_if_fail (center != NULL);
-  g_return_if_fail (radius > 0);
+  g_return_if_fail (radius >= 0);
 
   gsk_path_builder_add_contour (self, gsk_circle_contour_new (center, radius));
 }

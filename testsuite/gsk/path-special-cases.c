@@ -938,7 +938,6 @@ test_circle (void)
   g_assert_true (gsk_path_in_fill (path6, &GRAPHENE_POINT_INIT (0, 0), GSK_FILL_RULE_WINDING));
   g_assert_false (gsk_path_in_fill (path6, &GRAPHENE_POINT_INIT (0, 0), GSK_FILL_RULE_EVEN_ODD));
 
-
   gsk_path_measure_unref (measure);
   gsk_path_measure_unref (measure1);
   gsk_path_measure_unref (measure2);
@@ -1035,6 +1034,28 @@ test_rect_segment (void)
   gsk_path_measure_unref (measure2);
 }
 
+static void
+test_circle_point (void)
+{
+  GskPathBuilder *builder;
+  GskPath *path;
+  GskPathPoint point;
+  graphene_point_t center;
+  float k;
+
+  builder = gsk_path_builder_new ();
+  gsk_path_builder_add_circle (builder, &GRAPHENE_POINT_INIT (1, 2), 0);
+  path = gsk_path_builder_free_to_path (builder);
+
+  gsk_path_get_start_point (path, &point);
+  k = gsk_path_point_get_curvature (&point, path, GSK_PATH_TO_END, &center);
+
+  g_assert_true (k == INFINITY);
+  g_assert_true (graphene_point_equal (&center, &GRAPHENE_POINT_INIT (1, 2)));
+
+  gsk_path_unref (path);
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -1055,6 +1076,7 @@ main (int argc, char *argv[])
   g_test_add_func ("/path/circle", test_circle);
   g_test_add_func ("/path/length", test_length);
   g_test_add_func ("/path/rect/segment", test_rect_segment);
+  g_test_add_func ("/path/circle-point", test_circle_point);
 
   return g_test_run ();
 }

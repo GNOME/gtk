@@ -914,6 +914,7 @@ gsk_standard_contour_get_point (const GskContour *contour,
         {
           result->idx = curve_measure->idx;
           result->t = p->t;
+          g_assert (0 <= result->t && result->t <= 1);
           return;
         }
     }
@@ -941,9 +942,9 @@ gsk_standard_contour_get_point (const GskContour *contour,
       result->idx = curve_measure->idx;
 
       fraction = (distance - p0->length) / (p1->length - p0->length);
-      g_assert (fraction >= 0.f && fraction <= 1.f);
+      g_assert (fraction >= 0 && fraction <= 1);
       result->t = p0->t * (1 - fraction) + p1->t * fraction;
-      g_assert (result->t >= 0.f && result->t <= 1.f);
+      g_assert (result->t >= 0 && result->t <= 1);
     }
 }
 
@@ -986,7 +987,7 @@ gsk_standard_contour_get_distance (const GskContour *contour,
   g_assert (p0->t <= point->t && point->t <= p1->t);
 
   fraction = (point->t - p0->t) / (p1->t - p0->t);
-  g_assert (fraction >= 0.f && fraction <= 1.f);
+  g_assert (fraction >= 0 && fraction <= 1);
 
   return p0->length * (1 - fraction) + p1->length * fraction;
 }
@@ -1295,7 +1296,10 @@ gsk_circle_contour_get_curvature (const GskContour *contour,
   if (center)
     *center = self->center;
 
-  return 1 / self->radius;
+  if (self->radius == 0)
+    return INFINITY;
+
+  return 1.f / self->radius;
 }
 
 static void
@@ -1377,13 +1381,17 @@ gsk_circle_contour_get_point (const GskContour *contour,
   const GskCircleContour *self = (const GskCircleContour *) contour;
   float t;
 
-  t = distance / (2 * M_PI * self->radius);
+  if (self->radius == 0)
+    t = 0;
+  else
+    t = distance / (2 * M_PI * self->radius);
 
   if (self->ccw)
     t = 1 - t;
 
   result->idx = 1;
   result->t = t;
+  g_assert (result->t >= 0 && result->t <= 1);
 }
 
 static float
@@ -1433,7 +1441,7 @@ gsk_circle_contour_new (const graphene_point_t *center,
 {
   GskCircleContour *self;
 
-  g_assert (radius > 0);
+  g_assert (radius >= 0);
 
   self = g_new0 (GskCircleContour, 1);
 
@@ -1936,6 +1944,7 @@ gsk_rect_contour_get_point (const GskContour *contour,
     result->t = 0;
   else
     result->t = CLAMP (distance / self->length, 0, 1);
+  g_assert (0 <= result->t && result->t <= 1);
 }
 
 static float

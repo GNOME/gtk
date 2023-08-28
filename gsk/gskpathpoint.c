@@ -285,6 +285,8 @@ gsk_path_point_get_rotation (const GskPathPoint *point,
  * Lines have a curvature of zero (indicating an osculating circle of
  * infinite radius. In this case, the @center is not modified.
  *
+ * Circles with a radius of zero have `INFINITY` as curvature
+ *
  * Note that certain points on a path may not have a single curvature,
  * such as sharp turns. At such points, there are two curvatures --
  * the (limit of) the curvature of the path going into the point,
