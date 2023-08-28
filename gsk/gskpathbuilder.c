@@ -1401,10 +1401,8 @@ gsk_path_builder_add_segment (GskPathBuilder     *self,
 
   g_return_if_fail (self != NULL);
   g_return_if_fail (path != NULL);
-  g_return_if_fail (start != NULL);
-  g_return_if_fail (end != NULL);
-  g_return_if_fail (start->contour < n_contours);
-  g_return_if_fail (end->contour < n_contours);
+  g_return_if_fail (gsk_path_point_valid (start, path));
+  g_return_if_fail (gsk_path_point_valid (end, path));
 
   current = self->current_point;
 

@@ -21,7 +21,7 @@
 
 #include <math.h>
 
-#include "gskpathpoint.h"
+#include "gskpathpointprivate.h"
 #include "gskcontourprivate.h"
 #include "gdk/gdkprivate.h"
 
@@ -156,10 +156,9 @@ gsk_path_point_get_position (const GskPathPoint *point,
 {
   const GskContour *contour;
 
-  g_return_if_fail (point != NULL);
   g_return_if_fail (path != NULL);
+  g_return_if_fail (gsk_path_point_valid (point, path));
   g_return_if_fail (position != NULL);
-  g_return_if_fail (point->contour < gsk_path_get_n_contours (path));
 
   contour = gsk_path_get_contour (path, point->contour),
   gsk_contour_get_position (contour, point, position);
@@ -195,10 +194,9 @@ gsk_path_point_get_tangent (const GskPathPoint *point,
 {
   const GskContour *contour;
 
-  g_return_if_fail (point != NULL);
   g_return_if_fail (path != NULL);
+  g_return_if_fail (gsk_path_point_valid (point, path));
   g_return_if_fail (tangent != NULL);
-  g_return_if_fail (point->contour < gsk_path_get_n_contours (path));
 
   contour = gsk_path_get_contour (path, point->contour),
   gsk_contour_get_tangent (contour, point, direction, tangent);
@@ -228,9 +226,8 @@ gsk_path_point_get_rotation (const GskPathPoint *point,
 {
   graphene_vec2_t tangent;
 
-  g_return_val_if_fail (point != NULL, 0);
   g_return_val_if_fail (path != NULL, 0);
-  g_return_val_if_fail (point->contour < gsk_path_get_n_contours (path), 0);
+  g_return_val_if_fail (gsk_path_point_valid (point, path), 0);
 
   gsk_path_point_get_tangent (point, path, direction, &tangent);
 
@@ -279,9 +276,8 @@ gsk_path_point_get_curvature (const GskPathPoint *point,
 {
   const GskContour *contour;
 
-  g_return_val_if_fail (point != NULL, 0);
   g_return_val_if_fail (path != NULL, 0);
-  g_return_val_if_fail (point->contour < gsk_path_get_n_contours (path), 0);
+  g_return_val_if_fail (gsk_path_point_valid (point, path), 0);
 
   contour = gsk_path_get_contour (path, point->contour);
   return gsk_contour_get_curvature (contour, point, direction, center);

@@ -22,7 +22,7 @@
 #include "gskpathmeasure.h"
 
 #include "gskpathbuilder.h"
-#include "gskpathpoint.h"
+#include "gskpathpointprivate.h"
 #include "gskcontourprivate.h"
 #include "gskpathprivate.h"
 
@@ -312,9 +312,8 @@ gsk_path_point_get_distance (const GskPathPoint *point,
   const GskContour *contour;
   float contour_offset = 0;
 
-  g_return_val_if_fail (point != NULL, 0);
   g_return_val_if_fail (measure != NULL, 0);
-  g_return_val_if_fail (point->contour < measure->n_contours, 0);
+  g_return_val_if_fail (gsk_path_point_valid (point, measure->path), 0);
 
   contour = gsk_path_get_contour (measure->path, point->contour);
 
