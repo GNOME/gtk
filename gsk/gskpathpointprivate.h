@@ -5,17 +5,35 @@
 
 G_BEGIN_DECLS
 
-struct _GskRealPathPoint
+#define GSK_PATH_POINT_INIT(c,i,tt) ((GskPathPoint){ .contour=(c), .idx=(i), .t=(tt) })
+
+static inline gboolean
+gsk_path_point_valid (const GskPathPoint *point,
+                      GskPath            *path)
 {
-  gsize contour;
-  gsize idx;
-  float t;
-};
+  const GskContour *contour;
+  gsize n_ops;
 
-G_STATIC_ASSERT (sizeof (GskRealPathPoint) <= sizeof (GskPathPoint));
+  if (point == NULL)
+    return FALSE;
 
-char * gsk_path_point_to_string (GskPathPoint *point);
-void   gsk_path_point_print     (GskPathPoint *point);
+  if (path == NULL)
+    return TRUE;
+
+  if (point->contour >= gsk_path_get_n_contours (path))
+    return FALSE;
+
+  contour = gsk_path_get_contour (path, point->contour);
+  n_ops = gsk_contour_get_n_ops (contour);
+  if ((n_ops > 1 && point->idx >= n_ops) ||
+      (n_ops == 1 && point->idx > n_ops))
+    return FALSE;
+
+  if (point->t < 0 || point->t > 1)
+    return FALSE;
+
+  return TRUE;
+}
 
 G_END_DECLS
 

@@ -23,7 +23,8 @@
 
 #include "gskcurveprivate.h"
 #include "gskpathbuilder.h"
-#include "gskpathpointprivate.h"
+#include "gskpathpoint.h"
+#include "gskcontourprivate.h"
 
 /**
  * GskPath:
@@ -510,8 +511,6 @@ gboolean
 gsk_path_get_start_point (GskPath      *self,
                           GskPathPoint *result)
 {
-  GskRealPathPoint *res = (GskRealPathPoint *) result;
-
   g_return_val_if_fail (self != NULL, FALSE);
   g_return_val_if_fail (result != NULL, FALSE);
 
@@ -522,9 +521,9 @@ gsk_path_get_start_point (GskPath      *self,
    * beginning, which jumps from where to the start
    * point of the contour, so we use idx == 1 here.
    */
-  res->contour = 0;
-  res->idx = 1;
-  res->t = 0;
+  result->contour = 0;
+  result->idx = 1;
+  result->t = 0;
 
   return TRUE;
 }
@@ -547,17 +546,15 @@ gboolean
 gsk_path_get_end_point (GskPath      *self,
                         GskPathPoint *result)
 {
-  GskRealPathPoint *res = (GskRealPathPoint *) result;
-
   g_return_val_if_fail (self != NULL, FALSE);
   g_return_val_if_fail (result != NULL, FALSE);
 
   if (self->n_contours == 0)
     return FALSE;
 
-  res->contour = self->n_contours - 1;
-  res->idx = gsk_contour_get_n_ops (self->contours[self->n_contours - 1]) - 1;
-  res->t = 1;
+  result->contour = self->n_contours - 1;
+  result->idx = gsk_contour_get_n_ops (self->contours[self->n_contours - 1]) - 1;
+  result->t = 1;
 
   return TRUE;
 }
@@ -586,7 +583,6 @@ gsk_path_get_closest_point (GskPath                *self,
                             float                   threshold,
                             GskPathPoint           *result)
 {
-  GskRealPathPoint *res = (GskRealPathPoint *) result;
   gboolean found;
 
   g_return_val_if_fail (self != NULL, FALSE);
@@ -600,11 +596,11 @@ gsk_path_get_closest_point (GskPath                *self,
     {
       float distance;
 
-      if (gsk_contour_get_closest_point (self->contours[i], point, threshold, res, &distance))
+      if (gsk_contour_get_closest_point (self->contours[i], point, threshold, result, &distance))
         {
           found = TRUE;
-          g_assert (0 <= res->t && res->t <= 1);
-          res->contour = i;
+          g_assert (0 <= result->t && result->t <= 1);
+          result->contour = i;
           threshold = distance;
         }
     }
@@ -1014,7 +1010,7 @@ parse_rectangle (const char **p,
       parse_string (p, "h") &&
       parse_coordinate (p, &w2) &&
       parse_string (p, "z") &&
-      NEAR (w2, -*w))
+      w2 == -*w && *w >= 0 && *h >= 0)
     {
       skip_whitespace (p);
 

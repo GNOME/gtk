@@ -22,7 +22,7 @@
 static GskPath *
 create_random_degenerate_path (guint max_contours)
 {
-#define N_DEGENERATE_PATHS 14
+#define N_DEGENERATE_PATHS 15
   GskPathBuilder *builder;
   guint i;
 
@@ -132,6 +132,14 @@ create_random_degenerate_path (guint max_contours)
       break;
 
     case 12:
+      /* circle with radius 0 */
+      gsk_path_builder_add_circle (builder,
+                                   &GRAPHENE_POINT_INIT (g_test_rand_double_range (-1000, 1000),
+                                                         g_test_rand_double_range (-1000, 1000)),
+                                   0);
+      break;
+
+    case 13:
       /* a zero-length line */
       {
         graphene_point_t point = GRAPHENE_POINT_INIT (g_test_rand_double_range (-1000, 1000),
@@ -141,7 +149,7 @@ create_random_degenerate_path (guint max_contours)
       }
       break;
 
-    case 13:
+    case 14:
       /* a cubic with start == end */
       {
         graphene_point_t point = GRAPHENE_POINT_INIT (g_test_rand_double_range (-1000, 1000),
