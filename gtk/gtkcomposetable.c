@@ -1331,10 +1331,27 @@ gtk_compose_table_check (const GtkComposeTable *table,
   if (!seq_index)
     return FALSE;
 
-  if (n_compose == 1)
-    return TRUE;
-
   match = FALSE;
+
+  if (n_compose == 1)
+    {
+      if (seq_index[2] - seq_index[1] > 0)
+        {
+          seq = table->data + seq_index[1];
+
+          value = seq[0];
+
+          if ((value & (1 << 15)) != 0)
+            g_string_append (output, &table->char_data[value & ~(1 << 15)]);
+          else
+            g_string_append_unichar (output, value);
+
+          if (compose_match)
+            *compose_match = TRUE;
+        }
+
+      return TRUE;
+    }
 
   for (i = n_compose - 1; i < table->max_seq_len; i++)
     {
