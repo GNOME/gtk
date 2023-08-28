@@ -76,6 +76,8 @@ gsk_gl_frame_submit (GskGpuFrame  *frame,
 {
   GskGLFrame *self = GSK_GL_FRAME (frame);
 
+  glEnable (GL_SCISSOR_TEST);
+
   glEnable (GL_DEPTH_TEST);
   glDepthFunc (GL_LEQUAL);
 
