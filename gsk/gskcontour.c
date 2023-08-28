@@ -1156,63 +1156,29 @@ gsk_circle_contour_foreach (const GskContour   *contour,
 {
   const GskCircleContour *self = (const GskCircleContour *) contour;
   float rx, ry;
+  graphene_point_t pts[10];
 
   rx = ry = self->radius;
   if (self->ccw)
     ry = - self->radius;
 
-  if (!func (GSK_PATH_MOVE,
-             (const graphene_point_t[1]) {
-               GRAPHENE_POINT_INIT (self->center.x + rx, self->center.y),
-             },
-             1, 0.f, user_data))
-    return FALSE;
+  pts[0] = GRAPHENE_POINT_INIT (self->center.x + rx, self->center.y);
+  pts[1] = GRAPHENE_POINT_INIT (self->center.x + rx, self->center.y + ry);
+  pts[2] = GRAPHENE_POINT_INIT (self->center.x, self->center.y + ry);
+  pts[3] = GRAPHENE_POINT_INIT (self->center.x - rx, self->center.y + ry);
+  pts[4] = GRAPHENE_POINT_INIT (self->center.x - rx, self->center.y);
+  pts[5] = GRAPHENE_POINT_INIT (self->center.x - rx, self->center.y - ry);
+  pts[6] = GRAPHENE_POINT_INIT (self->center.x, self->center.y - ry);
+  pts[7] = GRAPHENE_POINT_INIT (self->center.x + rx, self->center.y - ry);
+  pts[8] = GRAPHENE_POINT_INIT (self->center.x + rx, self->center.y);
+  pts[9] = GRAPHENE_POINT_INIT (self->center.x + rx, self->center.y);
 
-  if (!func (GSK_PATH_CONIC,
-             (const graphene_point_t[3]) {
-               GRAPHENE_POINT_INIT (self->center.x + rx, self->center.y),
-               GRAPHENE_POINT_INIT (self->center.x + rx, self->center.y + ry),
-               GRAPHENE_POINT_INIT (self->center.x, self->center.y + ry),
-             },
-             3, M_SQRT1_2, user_data))
-    return FALSE;
-
-  if (!func (GSK_PATH_CONIC,
-             (const graphene_point_t[3]) {
-               GRAPHENE_POINT_INIT (self->center.x, self->center.y + ry),
-               GRAPHENE_POINT_INIT (self->center.x - rx, self->center.y + ry),
-               GRAPHENE_POINT_INIT (self->center.x - rx, self->center.y),
-             },
-             3, M_SQRT1_2, user_data))
-    return FALSE;
-
-  if (!func (GSK_PATH_CONIC,
-             (const graphene_point_t[3]) {
-               GRAPHENE_POINT_INIT (self->center.x - rx, self->center.y),
-               GRAPHENE_POINT_INIT (self->center.x - rx, self->center.y - ry),
-               GRAPHENE_POINT_INIT (self->center.x, self->center.y - ry),
-             },
-             3, M_SQRT1_2, user_data))
-    return FALSE;
-
-  if (!func (GSK_PATH_CONIC,
-             (const graphene_point_t[3]) {
-               GRAPHENE_POINT_INIT (self->center.x, self->center.y - ry),
-               GRAPHENE_POINT_INIT (self->center.x + rx, self->center.y - ry),
-               GRAPHENE_POINT_INIT (self->center.x + rx, self->center.y),
-             },
-             3, M_SQRT1_2, user_data))
-    return FALSE;
-
-  if (!func (GSK_PATH_CLOSE,
-             (const graphene_point_t[2]) {
-               GRAPHENE_POINT_INIT (self->center.x + rx, self->center.y),
-               GRAPHENE_POINT_INIT (self->center.x + rx, self->center.y),
-             },
-             2, 0.f, user_data))
-    return FALSE;
-
-  return TRUE;
+  return func (GSK_PATH_MOVE, &pts[0], 1, 0.f, user_data) &&
+         func (GSK_PATH_CONIC, &pts[0], 3, M_SQRT1_2, user_data) &&
+         func (GSK_PATH_CONIC, &pts[2], 3, M_SQRT1_2, user_data) &&
+         func (GSK_PATH_CONIC, &pts[4], 3, M_SQRT1_2, user_data) &&
+         func (GSK_PATH_CONIC, &pts[6], 3, M_SQRT1_2, user_data) &&
+         func (GSK_PATH_CLOSE, &pts[8], 2, 0.f, user_data);
 }
 
 static GskContour *
