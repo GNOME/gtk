@@ -203,8 +203,8 @@ update_path (GtkSpinnerPaintable *self)
 
   g_clear_pointer (&self->path, gsk_path_unref);
 
-  gsk_path_get_closest_point (self->circle, &p0, INFINITY, &start);
-  gsk_path_get_closest_point (self->circle, &p1, INFINITY, &end);
+  gsk_path_get_closest_point (self->circle, &p0, INFINITY, &start, NULL);
+  gsk_path_get_closest_point (self->circle, &p1, INFINITY, &end, NULL);
 
   builder = gsk_path_builder_new ();
   gsk_path_builder_add_segment (builder, self->circle, &start, &end);

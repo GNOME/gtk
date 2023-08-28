@@ -506,10 +506,9 @@ pointer_motion (GtkEventControllerMotion *controller,
   if (gsk_path_get_closest_point (self->line_path,
                                   &GRAPHENE_POINT_INIT (x, y),
                                   INFINITY,
-                                  &point))
+                                  &point,
+                                  NULL))
     {
-      gsk_path_point_get_position (&point, self->line_path, &pos);
-
       gtk_widget_queue_draw (GTK_WIDGET (self));
     }
 }

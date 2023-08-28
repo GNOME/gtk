@@ -565,6 +565,7 @@ gsk_path_get_end_point (GskPath      *self,
  * @point: the point
  * @threshold: maximum allowed distance
  * @result: (out caller-allocates): return location for the closest point
+ * @distance: (out) (optional): return location for the distance
  *
  * Computes the closest point on the path to the given point
  * and sets the @result to it.
@@ -581,7 +582,8 @@ gboolean
 gsk_path_get_closest_point (GskPath                *self,
                             const graphene_point_t *point,
                             float                   threshold,
-                            GskPathPoint           *result)
+                            GskPathPoint           *result,
+                            float                  *distance)
 {
   gboolean found;
 
@@ -594,14 +596,17 @@ gsk_path_get_closest_point (GskPath                *self,
 
   for (int i = 0; i < self->n_contours; i++)
     {
-      float distance;
+      float dist;
 
-      if (gsk_contour_get_closest_point (self->contours[i], point, threshold, result, &distance))
+      if (gsk_contour_get_closest_point (self->contours[i], point, threshold, result, &dist))
         {
           found = TRUE;
           g_assert (0 <= result->t && result->t <= 1);
           result->contour = i;
-          threshold = distance;
+          threshold = dist;
+
+          if (distance)
+            *distance = dist;
         }
     }
 

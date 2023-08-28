@@ -135,7 +135,8 @@ GDK_AVAILABLE_IN_4_14
 gboolean                gsk_path_get_closest_point              (GskPath                *self,
                                                                  const graphene_point_t *point,
                                                                  float                   threshold,
-                                                                 GskPathPoint           *result);
+                                                                 GskPathPoint           *result,
+                                                                 float                  *distance);
 
 GDK_AVAILABLE_IN_4_14
 gboolean                gsk_path_foreach                        (GskPath                *self,

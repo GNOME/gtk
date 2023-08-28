@@ -138,16 +138,20 @@ pointer_motion (GtkEventControllerMotion *controller,
                 GtkMaze                  *self)
 {
   GskPathPoint point;
-  graphene_point_t pos;
+  float distance;
 
   if (!self->active)
     return;
 
-  gsk_path_get_closest_point (self->path, &GRAPHENE_POINT_INIT (x, y), INFINITY, &point);
-
-  gsk_path_point_get_position (&point, self->path, &pos);
-  if (graphene_point_distance (&GRAPHENE_POINT_INIT (x, y), &pos, NULL, NULL) <= MAZE_STROKE_SIZE_ACTIVE / 2.0f)
-    return;
+  if (gsk_path_get_closest_point (self->path,
+                                  &GRAPHENE_POINT_INIT (x, y),
+                                  INFINITY,
+                                  &point,
+                                  &distance))
+    {
+      if (distance < MAZE_STROKE_SIZE_ACTIVE / 2.f)
+        return;
+    }
 
   self->active = FALSE;
   gtk_widget_queue_draw (GTK_WIDGET (self));
