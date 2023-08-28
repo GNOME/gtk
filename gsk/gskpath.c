@@ -1014,7 +1014,7 @@ parse_rectangle (const char **p,
       parse_string (p, "h") &&
       parse_coordinate (p, &w2) &&
       parse_string (p, "z") &&
-      NEAR (w2, -*w))
+      w2 == -*w && *w >= 0 && *h >= 0)
     {
       skip_whitespace (p);
 

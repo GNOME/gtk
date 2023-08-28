@@ -443,13 +443,7 @@ gsk_path_builder_add_cairo_path (GskPathBuilder     *self,
  *
  * Adds @rect as a new contour to the path built by the builder.
  *
- * This does the equivalent of "M x y h width v height h -width z"
- * where `x`, `y`, `width`, `height` are the dimensions of @rect.
- *
- * If the width or height of the rectangle is negative, the start
- * point will be on the right or bottom, respectively. Note that
- * a negative width or height will cause the path to go counterclockwise
- * instead of clockwise.
+ * The path is going around the rectangle in clockwise direction.
  *
  * If the the width or height are 0, the path will be a closed
  * horizontal or vertical line. If both are 0, it'll be a closed dot.
@@ -460,10 +454,13 @@ void
 gsk_path_builder_add_rect (GskPathBuilder        *self,
                            const graphene_rect_t *rect)
 {
+  graphene_rect_t r;
+
   g_return_if_fail (self != NULL);
   g_return_if_fail (rect != NULL);
 
-  gsk_path_builder_add_contour (self, gsk_rect_contour_new (rect));
+  graphene_rect_normalize_r (rect, &r);
+  gsk_path_builder_add_contour (self, gsk_rect_contour_new (&r));
 }
 
 /**

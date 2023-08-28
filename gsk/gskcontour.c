@@ -2356,6 +2356,7 @@ gsk_rounded_rect_contour_new (const GskRoundedRect *rect)
   self->contour.klass = &GSK_ROUNDED_RECT_CONTOUR_CLASS;
 
   self->rect = *rect;
+  gsk_rounded_rect_normalize (&self->rect);
 
   return (GskContour *) self;
 }
