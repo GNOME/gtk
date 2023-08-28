@@ -34,9 +34,14 @@ typedef struct _GskPathPoint GskPathPoint;
 struct _GskPathPoint {
   /*< private >*/
   union {
-    float f[8];
-    gpointer p[8];
-  } data;
+    struct {
+      gsize contour;
+      gsize idx;
+      float t;
+    };
+    gpointer padding[8];
+    graphene_vec4_t alignment;
+  };
 };
 
 GDK_AVAILABLE_IN_4_14

@@ -429,21 +429,11 @@ test_foreach (void)
   g_free (s2);
 }
 
-/* Test the basics of the path point api */
-typedef struct _GskRealPathPoint GskRealPathPoint;
-struct _GskRealPathPoint
-{
-  gsize contour;
-  gsize idx;
-  float t;
-};
-
 static void
 test_path_point (void)
 {
   GskPath *path;
   GskPathPoint point;
-  GskRealPathPoint *rp = (GskRealPathPoint *)&point;
   gboolean ret;
   graphene_point_t pos, center;
   graphene_vec2_t t1, t2, mx;
@@ -454,23 +444,23 @@ test_path_point (void)
   ret = gsk_path_get_start_point (path, &point);
   g_assert_true (ret);
 
-  g_assert_true (rp->contour == 0);
-  g_assert_true (rp->idx == 1);
-  g_assert_true (rp->t == 0);
+  g_assert_true (point.contour == 0);
+  g_assert_true (point.idx == 1);
+  g_assert_true (point.t == 0);
 
   ret = gsk_path_get_end_point (path, &point);
   g_assert_true (ret);
 
-  g_assert_true (rp->contour == 0);
-  g_assert_true (rp->idx == 4);
-  g_assert_true (rp->t == 1);
+  g_assert_true (point.contour == 0);
+  g_assert_true (point.idx == 4);
+  g_assert_true (point.t == 1);
 
   ret = gsk_path_get_closest_point (path, &GRAPHENE_POINT_INIT (200, 200), INFINITY, &point);
   g_assert_true (ret);
 
-  g_assert_true (rp->contour == 0);
-  g_assert_true (rp->idx == 2);
-  g_assert_true (rp->t == 1);
+  g_assert_true (point.contour == 0);
+  g_assert_true (point.idx == 2);
+  g_assert_true (point.t == 1);
 
   gsk_path_point_get_position (&point, path, &pos);
   gsk_path_point_get_tangent (&point, path, GSK_PATH_FROM_START, &t1);
@@ -486,9 +476,9 @@ test_path_point (void)
   ret = gsk_path_get_closest_point (path, &GRAPHENE_POINT_INIT (100, 50), INFINITY, &point);
   g_assert_true (ret);
 
-  g_assert_true (rp->contour == 0);
-  g_assert_true (rp->idx == 2);
-  g_assert_true (rp->t == 0.5);
+  g_assert_true (point.contour == 0);
+  g_assert_true (point.idx == 2);
+  g_assert_true (point.t == 0.5);
 
   gsk_path_unref (path);
 }

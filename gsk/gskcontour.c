@@ -24,7 +24,7 @@
 #include "gskcurveprivate.h"
 #include "gskpathbuilder.h"
 #include "gskpathprivate.h"
-#include "gskpathpointprivate.h"
+#include "gskpathpoint.h"
 #include "gskstrokeprivate.h"
 
 typedef struct _GskContourClass GskContourClass;
@@ -61,24 +61,24 @@ struct _GskContourClass
   gboolean              (* get_closest_point)   (const GskContour       *contour,
                                                  const graphene_point_t *point,
                                                  float                   threshold,
-                                                 GskRealPathPoint       *result,
+                                                 GskPathPoint           *result,
                                                  float                  *out_dist);
   void                  (* get_position)        (const GskContour       *contour,
-                                                 GskRealPathPoint       *point,
+                                                 const GskPathPoint     *point,
                                                  graphene_point_t       *position);
   void                  (* get_tangent)         (const GskContour       *contour,
-                                                 GskRealPathPoint       *point,
+                                                 const GskPathPoint     *point,
                                                  GskPathDirection        direction,
                                                  graphene_vec2_t        *tangent);
   float                 (* get_curvature)       (const GskContour       *contour,
-                                                 GskRealPathPoint       *point,
+                                                 const GskPathPoint     *point,
                                                  GskPathDirection        direction,
                                                  graphene_point_t       *center);
   void                  (* add_segment)         (const GskContour       *contour,
                                                  GskPathBuilder         *builder,
                                                  gboolean                emit_move_to,
-                                                 GskRealPathPoint       *start,
-                                                 GskRealPathPoint       *end);
+                                                 const GskPathPoint     *start,
+                                                 const GskPathPoint     *end);
   gpointer              (* init_measure)        (const GskContour       *contour,
                                                  float                   tolerance,
                                                  float                  *out_length);
@@ -87,9 +87,9 @@ struct _GskContourClass
   void                  (* get_point)           (const GskContour       *contour,
                                                  gpointer                measure_data,
                                                  float                   distance,
-                                                 GskRealPathPoint       *result);
+                                                 GskPathPoint           *result);
   float                 (* get_distance)        (const GskContour       *contour,
-                                                 GskRealPathPoint       *point,
+                                                 const GskPathPoint     *point,
                                                  gpointer                measure_data);
 };
 
@@ -454,7 +454,7 @@ static gboolean
 gsk_standard_contour_get_closest_point (const GskContour       *contour,
                                         const graphene_point_t *point,
                                         float                   threshold,
-                                        GskRealPathPoint       *result,
+                                        GskPathPoint           *result,
                                         float                  *out_dist)
 {
   GskStandardContour *self = (GskStandardContour *) contour;
@@ -509,9 +509,9 @@ gsk_standard_contour_get_closest_point (const GskContour       *contour,
 }
 
 static void
-gsk_standard_contour_get_position (const GskContour *contour,
-                                   GskRealPathPoint *point,
-                                   graphene_point_t *position)
+gsk_standard_contour_get_position (const GskContour   *contour,
+                                   const GskPathPoint *point,
+                                   graphene_point_t   *position)
 {
   GskStandardContour *self = (GskStandardContour *) contour;
   GskCurve curve;
@@ -527,10 +527,10 @@ gsk_standard_contour_get_position (const GskContour *contour,
 }
 
 static void
-gsk_standard_contour_get_tangent (const GskContour *contour,
-                                  GskRealPathPoint *point,
-                                  GskPathDirection  direction,
-                                  graphene_vec2_t  *tangent)
+gsk_standard_contour_get_tangent (const GskContour   *contour,
+                                  const GskPathPoint *point,
+                                  GskPathDirection    direction,
+                                  graphene_vec2_t    *tangent)
 {
   GskStandardContour *self = (GskStandardContour *) contour;
   GskCurve curve;
@@ -585,10 +585,10 @@ gsk_standard_contour_get_tangent (const GskContour *contour,
 }
 
 static float
-gsk_standard_contour_get_curvature (const GskContour *contour,
-                                    GskRealPathPoint *point,
-                                    GskPathDirection  direction,
-                                    graphene_point_t *center)
+gsk_standard_contour_get_curvature (const GskContour   *contour,
+                                    const GskPathPoint *point,
+                                    GskPathDirection    direction,
+                                    graphene_point_t   *center)
 {
   GskStandardContour *self = (GskStandardContour *) contour;
   GskCurve curve;
@@ -635,11 +635,11 @@ add_curve (GskCurve       *curve,
 }
 
 static void
-gsk_standard_contour_add_segment (const GskContour *contour,
-                                  GskPathBuilder   *builder,
-                                  gboolean          emit_move_to,
-                                  GskRealPathPoint *start,
-                                  GskRealPathPoint *end)
+gsk_standard_contour_add_segment (const GskContour   *contour,
+                                  GskPathBuilder     *builder,
+                                  gboolean            emit_move_to,
+                                  const GskPathPoint *start,
+                                  const GskPathPoint *end)
 {
   GskStandardContour *self = (GskStandardContour *) contour;
   GskCurve c, c1, c2;
@@ -876,7 +876,7 @@ static void
 gsk_standard_contour_get_point (const GskContour *contour,
                                 gpointer          measure_data,
                                 float             distance,
-                                GskRealPathPoint *result)
+                                GskPathPoint     *result)
 {
   const GskStandardContour *self = (const GskStandardContour *) contour;
   GskStandardContourMeasure *measure = measure_data;
@@ -949,9 +949,9 @@ gsk_standard_contour_get_point (const GskContour *contour,
 }
 
 static float
-gsk_standard_contour_get_distance (const GskContour *contour,
-                                   GskRealPathPoint *point,
-                                   gpointer          measure_data)
+gsk_standard_contour_get_distance (const GskContour   *contour,
+                                   const GskPathPoint *point,
+                                   gpointer            measure_data)
 {
   const GskStandardContour *self = (const GskStandardContour *) contour;
   GskStandardContourMeasure *measure = measure_data;
@@ -1220,7 +1220,7 @@ static gboolean
 gsk_circle_contour_get_closest_point (const GskContour       *contour,
                                       const graphene_point_t *point,
                                       float                   threshold,
-                                      GskRealPathPoint       *result,
+                                      GskPathPoint           *result,
                                       float                  *out_dist)
 {
   const GskCircleContour *self = (const GskCircleContour *) contour;
@@ -1252,9 +1252,9 @@ gsk_circle_contour_get_closest_point (const GskContour       *contour,
                        (self)->center.y + sinf (DEG_TO_RAD (angle)) * self->radius)
 
 static void
-gsk_circle_contour_get_position (const GskContour *contour,
-                                 GskRealPathPoint *point,
-                                 graphene_point_t *position)
+gsk_circle_contour_get_position (const GskContour   *contour,
+                                 const GskPathPoint *point,
+                                 graphene_point_t   *position)
 {
   const GskCircleContour *self = (const GskCircleContour *) contour;
   float t;
@@ -1271,10 +1271,10 @@ gsk_circle_contour_get_position (const GskContour *contour,
 }
 
 static void
-gsk_circle_contour_get_tangent (const GskContour *contour,
-                                GskRealPathPoint *point,
-                                GskPathDirection  direction,
-                                graphene_vec2_t  *tangent)
+gsk_circle_contour_get_tangent (const GskContour   *contour,
+                                const GskPathPoint *point,
+                                GskPathDirection    direction,
+                                graphene_vec2_t    *tangent)
 {
   const GskCircleContour *self = (const GskCircleContour *) contour;
   graphene_point_t p;
@@ -1286,10 +1286,10 @@ gsk_circle_contour_get_tangent (const GskContour *contour,
 }
 
 static float
-gsk_circle_contour_get_curvature (const GskContour *contour,
-                                  GskRealPathPoint *point,
-                                  GskPathDirection  direction,
-                                  graphene_point_t *center)
+gsk_circle_contour_get_curvature (const GskContour   *contour,
+                                  const GskPathPoint *point,
+                                  GskPathDirection    direction,
+                                  graphene_point_t   *center)
 {
   const GskCircleContour *self = (const GskCircleContour *) contour;
 
@@ -1303,15 +1303,15 @@ gsk_circle_contour_get_curvature (const GskContour *contour,
 }
 
 static void
-gsk_circle_contour_add_segment (const GskContour *contour,
-                                GskPathBuilder   *builder,
-                                gboolean          emit_move_to,
-                                GskRealPathPoint *start,
-                                GskRealPathPoint *end)
+gsk_circle_contour_add_segment (const GskContour   *contour,
+                                GskPathBuilder     *builder,
+                                gboolean            emit_move_to,
+                                const GskPathPoint *start,
+                                const GskPathPoint *end)
 {
   GskPath *path;
   graphene_point_t p;
-  GskRealPathPoint start2, end2;
+  GskPathPoint start2, end2;
   const GskContour *std;
   float dist;
 
@@ -1376,7 +1376,7 @@ static void
 gsk_circle_contour_get_point (const GskContour *contour,
                               gpointer          measure_data,
                               float             distance,
-                              GskRealPathPoint *result)
+                              GskPathPoint     *result)
 {
   const GskCircleContour *self = (const GskCircleContour *) contour;
   float t;
@@ -1395,9 +1395,9 @@ gsk_circle_contour_get_point (const GskContour *contour,
 }
 
 static float
-gsk_circle_contour_get_distance (const GskContour *contour,
-                                 GskRealPathPoint *point,
-                                 gpointer          measure_data)
+gsk_circle_contour_get_distance (const GskContour   *contour,
+                                 const GskPathPoint *point,
+                                 gpointer            measure_data)
 {
   const GskCircleContour *self = (const GskCircleContour *) contour;
   float t;
@@ -1667,7 +1667,7 @@ static gboolean
 gsk_rect_contour_get_closest_point (const GskContour       *contour,
                                     const graphene_point_t *point,
                                     float                   threshold,
-                                    GskRealPathPoint       *result,
+                                    GskPathPoint           *result,
                                     float                  *out_dist)
 {
   const GskRectContour *self = (const GskRectContour *) contour;
@@ -1816,9 +1816,9 @@ gsk_rect_contour_pos_tangent (const GskRectContour *self,
 }
 
 static void
-gsk_rect_contour_get_position (const GskContour *contour,
-                               GskRealPathPoint *point,
-                               graphene_point_t *position)
+gsk_rect_contour_get_position (const GskContour   *contour,
+                               const GskPathPoint *point,
+                               graphene_point_t   *position)
 {
   const GskRectContour *self = (const GskRectContour *) contour;
 
@@ -1826,10 +1826,10 @@ gsk_rect_contour_get_position (const GskContour *contour,
 }
 
 static void
-gsk_rect_contour_get_tangent (const GskContour *contour,
-                              GskRealPathPoint *point,
-                              GskPathDirection  direction,
-                              graphene_vec2_t  *tangent)
+gsk_rect_contour_get_tangent (const GskContour   *contour,
+                              const GskPathPoint *point,
+                              GskPathDirection    direction,
+                              graphene_vec2_t    *tangent)
 {
   const GskRectContour *self = (const GskRectContour *) contour;
 
@@ -1837,20 +1837,20 @@ gsk_rect_contour_get_tangent (const GskContour *contour,
 }
 
 static float
-gsk_rect_contour_get_curvature (const GskContour *contour,
-                                GskRealPathPoint *point,
-                                GskPathDirection  direction,
-                                graphene_point_t *center)
+gsk_rect_contour_get_curvature (const GskContour   *contour,
+                                const GskPathPoint *point,
+                                GskPathDirection    direction,
+                                graphene_point_t   *center)
 {
   return 0;
 }
 
 static void
-gsk_rect_contour_add_segment (const GskContour *contour,
-                              GskPathBuilder   *builder,
-                              gboolean          emit_move_to,
-                              GskRealPathPoint *start_point,
-                              GskRealPathPoint *end_point)
+gsk_rect_contour_add_segment (const GskContour   *contour,
+                              GskPathBuilder     *builder,
+                              gboolean            emit_move_to,
+                              const GskPathPoint *start_point,
+                              const GskPathPoint *end_point)
 {
   const GskRectContour *self = (const GskRectContour *) contour;
   float w = fabsf (self->width);
@@ -1935,7 +1935,7 @@ static void
 gsk_rect_contour_get_point (const GskContour *contour,
                             gpointer          measure_data,
                             float             distance,
-                            GskRealPathPoint *result)
+                            GskPathPoint     *result)
 {
   const GskRectContour *self = (const GskRectContour *) contour;
 
@@ -1948,9 +1948,9 @@ gsk_rect_contour_get_point (const GskContour *contour,
 }
 
 static float
-gsk_rect_contour_get_distance (const GskContour *contour,
-                               GskRealPathPoint *point,
-                               gpointer          measure_data)
+gsk_rect_contour_get_distance (const GskContour   *contour,
+                               const GskPathPoint *point,
+                               gpointer            measure_data)
 {
   const GskRectContour *self = (const GskRectContour *) contour;
 
@@ -2159,7 +2159,7 @@ static gboolean
 gsk_rounded_rect_contour_get_closest_point (const GskContour       *contour,
                                             const graphene_point_t *point,
                                             float                   threshold,
-                                            GskRealPathPoint       *result,
+                                            GskPathPoint           *result,
                                             float                  *out_dist)
 {
   GskPath *path;
@@ -2215,9 +2215,9 @@ gsk_rounded_rect_contour_init_curve (const GskContour *contour,
 }
 
 static void
-gsk_rounded_rect_contour_get_position (const GskContour *contour,
-                                       GskRealPathPoint *point,
-                                       graphene_point_t *position)
+gsk_rounded_rect_contour_get_position (const GskContour   *contour,
+                                       const GskPathPoint *point,
+                                       graphene_point_t   *position)
 {
   GskCurve curve;
 
@@ -2226,10 +2226,10 @@ gsk_rounded_rect_contour_get_position (const GskContour *contour,
 }
 
 static void
-gsk_rounded_rect_contour_get_tangent (const GskContour *contour,
-                                      GskRealPathPoint *point,
-                                      GskPathDirection  direction,
-                                      graphene_vec2_t  *tangent)
+gsk_rounded_rect_contour_get_tangent (const GskContour   *contour,
+                                      const GskPathPoint *point,
+                                      GskPathDirection    direction,
+                                      graphene_vec2_t    *tangent)
 {
   GskCurve curve;
 
@@ -2238,10 +2238,10 @@ gsk_rounded_rect_contour_get_tangent (const GskContour *contour,
 }
 
 static float
-gsk_rounded_rect_contour_get_curvature (const GskContour *contour,
-                                        GskRealPathPoint *point,
-                                        GskPathDirection  direction,
-                                        graphene_point_t *center)
+gsk_rounded_rect_contour_get_curvature (const GskContour   *contour,
+                                        const GskPathPoint *point,
+                                        GskPathDirection    direction,
+                                        graphene_point_t   *center)
 {
   GskCurve curve;
 
@@ -2250,11 +2250,11 @@ gsk_rounded_rect_contour_get_curvature (const GskContour *contour,
 }
 
 static void
-gsk_rounded_rect_contour_add_segment (const GskContour *contour,
-                                      GskPathBuilder   *builder,
-                                      gboolean          emit_move_to,
-                                      GskRealPathPoint *start,
-                                      GskRealPathPoint *end)
+gsk_rounded_rect_contour_add_segment (const GskContour   *contour,
+                                      GskPathBuilder     *builder,
+                                      gboolean            emit_move_to,
+                                      const GskPathPoint *start,
+                                      const GskPathPoint *end)
 {
   GskPath *path;
   const GskContour *std;
@@ -2304,7 +2304,7 @@ static void
 gsk_rounded_rect_contour_get_point (const GskContour *contour,
                                     gpointer          measure_data,
                                     float             distance,
-                                    GskRealPathPoint *result)
+                                    GskPathPoint     *result)
 {
   RoundedRectMeasureData *data = measure_data;
 
@@ -2312,9 +2312,9 @@ gsk_rounded_rect_contour_get_point (const GskContour *contour,
 }
 
 static float
-gsk_rounded_rect_contour_get_distance (const GskContour *contour,
-                                       GskRealPathPoint *point,
-                                       gpointer          measure_data)
+gsk_rounded_rect_contour_get_distance (const GskContour   *contour,
+                                       const GskPathPoint *point,
+                                       gpointer            measure_data)
 {
   RoundedRectMeasureData *data = measure_data;
 
@@ -2448,7 +2448,7 @@ gboolean
 gsk_contour_get_closest_point (const GskContour       *self,
                                const graphene_point_t *point,
                                float                   threshold,
-                               GskRealPathPoint       *result,
+                               GskPathPoint           *result,
                                float                  *out_dist)
 {
   return self->klass->get_closest_point (self, point, threshold, result, out_dist);
@@ -2472,37 +2472,37 @@ gsk_contour_get_n_ops (const GskContour *self)
 }
 
 void
-gsk_contour_get_position (const GskContour *self,
-                          GskRealPathPoint *point,
-                          graphene_point_t *pos)
+gsk_contour_get_position (const GskContour   *self,
+                          const GskPathPoint *point,
+                          graphene_point_t   *pos)
 {
   self->klass->get_position (self, point, pos);
 }
 
 void
-gsk_contour_get_tangent (const GskContour *self,
-                         GskRealPathPoint *point,
-                         GskPathDirection  direction,
-                         graphene_vec2_t  *tangent)
+gsk_contour_get_tangent (const GskContour   *self,
+                         const GskPathPoint *point,
+                         GskPathDirection    direction,
+                         graphene_vec2_t    *tangent)
 {
   self->klass->get_tangent (self, point, direction, tangent);
 }
 
 float
-gsk_contour_get_curvature (const GskContour *self,
-                           GskRealPathPoint *point,
-                           GskPathDirection  direction,
-                           graphene_point_t *center)
+gsk_contour_get_curvature (const GskContour   *self,
+                           const GskPathPoint *point,
+                           GskPathDirection    direction,
+                           graphene_point_t   *center)
 {
   return self->klass->get_curvature (self, point, direction, center);
 }
 
 void
-gsk_contour_add_segment (const GskContour *self,
-                         GskPathBuilder   *builder,
-                         gboolean          emit_move_to,
-                         GskRealPathPoint *start,
-                         GskRealPathPoint *end)
+gsk_contour_add_segment (const GskContour   *self,
+                         GskPathBuilder     *builder,
+                         gboolean            emit_move_to,
+                         const GskPathPoint *start,
+                         const GskPathPoint *end)
 {
   self->klass->add_segment (self, builder, emit_move_to, start, end);
 }
@@ -2526,15 +2526,15 @@ void
 gsk_contour_get_point (const GskContour *self,
                        gpointer          measure_data,
                        float             distance,
-                       GskRealPathPoint *result)
+                       GskPathPoint     *result)
 {
   self->klass->get_point (self, measure_data, distance, result);
 }
 
 float
-gsk_contour_get_distance (const GskContour *self,
-                          GskRealPathPoint *point,
-                          gpointer          measure_data)
+gsk_contour_get_distance (const GskContour   *self,
+                          const GskPathPoint *point,
+                          gpointer            measure_data)
 {
   return self->klass->get_distance (self, point, measure_data);
 }

@@ -21,7 +21,7 @@
 #pragma once
 
 #include "gskpathprivate.h"
-#include "gskpathpointprivate.h"
+#include "gskpathpoint.h"
 #include "gskpathopprivate.h"
 #include "gskboundingboxprivate.h"
 
@@ -64,24 +64,24 @@ gsize                   gsk_contour_get_n_ops                   (const GskContou
 gboolean                gsk_contour_get_closest_point           (const GskContour       *self,
                                                                  const graphene_point_t *point,
                                                                  float                   threshold,
-                                                                 GskRealPathPoint       *result,
+                                                                 GskPathPoint           *result,
                                                                  float                  *out_dist);
 void                    gsk_contour_get_position                (const GskContour       *self,
-                                                                 GskRealPathPoint       *point,
+                                                                 const GskPathPoint     *point,
                                                                  graphene_point_t       *pos);
 void                    gsk_contour_get_tangent                 (const GskContour       *self,
-                                                                 GskRealPathPoint       *point,
+                                                                 const GskPathPoint     *point,
                                                                  GskPathDirection        direction,
                                                                  graphene_vec2_t        *tangent);
 float                   gsk_contour_get_curvature               (const GskContour       *self,
-                                                                 GskRealPathPoint       *point,
+                                                                 const GskPathPoint     *point,
                                                                  GskPathDirection        direction,
                                                                  graphene_point_t       *center);
 void                    gsk_contour_add_segment                 (const GskContour       *self,
                                                                  GskPathBuilder         *builder,
                                                                  gboolean                emit_move_to,
-                                                                 GskRealPathPoint       *start,
-                                                                 GskRealPathPoint       *end);
+                                                                 const GskPathPoint     *start,
+                                                                 const GskPathPoint     *end);
 
 gpointer                gsk_contour_init_measure                (const GskContour       *self,
                                                                  float                   tolerance,
@@ -91,9 +91,9 @@ void                    gsk_contour_free_measure                (const GskContou
 void                    gsk_contour_get_point                   (const GskContour       *self,
                                                                  gpointer                measure_data,
                                                                  float                   distance,
-                                                                 GskRealPathPoint       *result);
+                                                                 GskPathPoint           *result);
 float                   gsk_contour_get_distance                (const GskContour       *self,
-                                                                 GskRealPathPoint       *point,
+                                                                 const GskPathPoint     *point,
                                                                  gpointer                measure_data);
 
 G_END_DECLS

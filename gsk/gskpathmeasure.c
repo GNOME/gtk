@@ -22,7 +22,8 @@
 #include "gskpathmeasure.h"
 
 #include "gskpathbuilder.h"
-#include "gskpathpointprivate.h"
+#include "gskpathpoint.h"
+#include "gskcontourprivate.h"
 #include "gskpathprivate.h"
 
 /**
@@ -258,7 +259,6 @@ gsk_path_measure_get_point (GskPathMeasure *self,
                             float           distance,
                             GskPathPoint   *result)
 {
-  GskRealPathPoint *res = (GskRealPathPoint *) result;
   gsize i;
   const GskContour *contour;
 
@@ -284,11 +284,11 @@ gsk_path_measure_get_point (GskPathMeasure *self,
 
   contour = gsk_path_get_contour (self->path, i);
 
-  gsk_contour_get_point (contour, self->measures[i].contour_data, distance, res);
+  gsk_contour_get_point (contour, self->measures[i].contour_data, distance, result);
 
-  g_assert (0 <= res->t && res->t <= 1);
+  g_assert (0 <= result->t && result->t <= 1);
 
-  res->contour = i;
+  result->contour = i;
 
   return TRUE;
 }
@@ -309,21 +309,20 @@ float
 gsk_path_point_get_distance (const GskPathPoint *point,
                              GskPathMeasure     *measure)
 {
-  GskRealPathPoint *p = (GskRealPathPoint *)point;
   const GskContour *contour;
   float contour_offset = 0;
 
   g_return_val_if_fail (point != NULL, 0);
   g_return_val_if_fail (measure != NULL, 0);
-  g_return_val_if_fail (p->contour < measure->n_contours, 0);
+  g_return_val_if_fail (point->contour < measure->n_contours, 0);
 
-  contour = gsk_path_get_contour (measure->path, p->contour);
+  contour = gsk_path_get_contour (measure->path, point->contour);
 
   for (gsize i = 0; i < measure->n_contours; i++)
     {
       if (contour == gsk_path_get_contour (measure->path, i))
         return contour_offset + gsk_contour_get_distance (contour,
-                                                          p,
+                                                          point,
                                                           measure->measures[i].contour_data);
 
       contour_offset += measure->measures[i].length;

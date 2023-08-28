@@ -21,10 +21,8 @@
 
 #include <math.h>
 
-#include "gskpathpointprivate.h"
-
+#include "gskpathpoint.h"
 #include "gskcontourprivate.h"
-
 #include "gdk/gdkprivate.h"
 
 #define RAD_TO_DEG(x)          ((x) / (G_PI / 180.f))
@@ -41,10 +39,10 @@
  * [method@Gsk.Path.get_start_point], [method@Gsk.Path.get_end_point]
  * or [method@Gsk.PathMeasure.get_point].
  *
- * Note that `GskPathPoint` structs are meant to be stack-allocated, and
- * don't a reference to the path object they are obtained from. It is the
- * callers responsibility to keep a reference to the path as long as the
- * `GskPathPoint` is used.
+ * Note that `GskPathPoint` structs are meant to be stack-allocated,
+ * and don't hold a reference to the path object they are obtained from.
+ * It is the callers responsibility to keep a reference to the path
+ * as long as the `GskPathPoint` is used.
  *
  * Since: 4.14
  */
@@ -53,26 +51,6 @@ G_DEFINE_BOXED_TYPE (GskPathPoint, gsk_path_point,
                      gsk_path_point_copy,
                      gsk_path_point_free)
 
-
-char *
-gsk_path_point_to_string (GskPathPoint *point)
-{
-  GskRealPathPoint *p = (GskRealPathPoint *) point;
-
-  return g_strdup_printf ("{ .contour = %lu, .idx = %lu, .t = %.9f }",
-                          p->contour, p->idx, p->t);
-}
-
-void
-gsk_path_point_print (GskPathPoint *point)
-{
-  char *s;
-
-  s = gsk_path_point_to_string (point);
-  g_print ("%s\n", s);
-  g_free (s);
-}
-
 GskPathPoint *
 gsk_path_point_copy (GskPathPoint *point)
 {
@@ -80,7 +58,7 @@ gsk_path_point_copy (GskPathPoint *point)
 
   copy = g_new0 (GskPathPoint, 1);
 
-  memcpy (copy, point, sizeof (GskRealPathPoint));
+  memcpy (copy, point, sizeof (GskPathPoint));
 
   return copy;
 }
@@ -113,14 +91,11 @@ gboolean
 gsk_path_point_equal (const GskPathPoint *point1,
                       const GskPathPoint *point2)
 {
-  const GskRealPathPoint *p1 = (const GskRealPathPoint *) point1;
-  const GskRealPathPoint *p2 = (const GskRealPathPoint *) point2;
-
-  if (p1->contour == p2->contour)
+  if (point1->contour == point2->contour)
     {
-      if ((p1->idx     == p2->idx     && p1->t == p2->t) ||
-          (p1->idx + 1 == p2->idx     && p1->t == 1 && p2->t == 0) ||
-          (p1->idx     == p2->idx + 1 && p1->t == 0 && p2->t == 1))
+      if ((point1->idx     == point2->idx     && point1->t == point2->t) ||
+          (point1->idx + 1 == point2->idx     && point1->t == 1 && point2->t == 0) ||
+          (point1->idx     == point2->idx + 1 && point1->t == 0 && point2->t == 1))
         return TRUE;
     }
 
@@ -144,23 +119,20 @@ int
 gsk_path_point_compare (const GskPathPoint *point1,
                         const GskPathPoint *point2)
 {
-  const GskRealPathPoint *p1 = (const GskRealPathPoint *) point1;
-  const GskRealPathPoint *p2 = (const GskRealPathPoint *) point2;
-
   if (gsk_path_point_equal (point1, point2))
     return 0;
 
-  if (p1->contour < p2->contour)
+  if (point1->contour < point2->contour)
     return -1;
-  else if (p1->contour > p2->contour)
+  else if (point1->contour > point2->contour)
     return 1;
-  else if (p1->idx < p2->idx)
+  else if (point1->idx < point2->idx)
     return -1;
-  else if (p1->idx > p2->idx)
+  else if (point1->idx > point2->idx)
     return 1;
-  else if (p1->t < p2->t)
+  else if (point1->t < point2->t)
     return -1;
-  else if (p1->t > p2->t)
+  else if (point1->t > point2->t)
     return 1;
 
   return 0;
@@ -182,16 +154,15 @@ gsk_path_point_get_position (const GskPathPoint *point,
                              GskPath            *path,
                              graphene_point_t   *position)
 {
-  GskRealPathPoint *self = (GskRealPathPoint *) point;
   const GskContour *contour;
 
-  g_return_if_fail (self != NULL);
+  g_return_if_fail (point != NULL);
   g_return_if_fail (path != NULL);
   g_return_if_fail (position != NULL);
-  g_return_if_fail (self->contour < gsk_path_get_n_contours (path));
+  g_return_if_fail (point->contour < gsk_path_get_n_contours (path));
 
-  contour = gsk_path_get_contour (path, self->contour),
-  gsk_contour_get_position (contour, self, position);
+  contour = gsk_path_get_contour (path, point->contour),
+  gsk_contour_get_position (contour, point, position);
 }
 
 /**
@@ -222,16 +193,15 @@ gsk_path_point_get_tangent (const GskPathPoint *point,
                             GskPathDirection    direction,
                             graphene_vec2_t    *tangent)
 {
-  GskRealPathPoint *self = (GskRealPathPoint *) point;
   const GskContour *contour;
 
-  g_return_if_fail (self != NULL);
+  g_return_if_fail (point != NULL);
   g_return_if_fail (path != NULL);
   g_return_if_fail (tangent != NULL);
-  g_return_if_fail (self->contour < gsk_path_get_n_contours (path));
+  g_return_if_fail (point->contour < gsk_path_get_n_contours (path));
 
-  contour = gsk_path_get_contour (path, self->contour),
-  gsk_contour_get_tangent (contour, self, direction, tangent);
+  contour = gsk_path_get_contour (path, point->contour),
+  gsk_contour_get_tangent (contour, point, direction, tangent);
 }
 
 /**
@@ -256,12 +226,11 @@ gsk_path_point_get_rotation (const GskPathPoint *point,
                              GskPath            *path,
                              GskPathDirection    direction)
 {
-  GskRealPathPoint *self = (GskRealPathPoint *) point;
   graphene_vec2_t tangent;
 
-  g_return_val_if_fail (self != NULL, 0);
+  g_return_val_if_fail (point != NULL, 0);
   g_return_val_if_fail (path != NULL, 0);
-  g_return_val_if_fail (self->contour < gsk_path_get_n_contours (path), 0);
+  g_return_val_if_fail (point->contour < gsk_path_get_n_contours (path), 0);
 
   gsk_path_point_get_tangent (point, path, direction, &tangent);
 
@@ -308,13 +277,12 @@ gsk_path_point_get_curvature (const GskPathPoint *point,
                               GskPathDirection    direction,
                               graphene_point_t   *center)
 {
-  GskRealPathPoint *self = (GskRealPathPoint *) point;
   const GskContour *contour;
 
-  g_return_val_if_fail (self != NULL, 0);
+  g_return_val_if_fail (point != NULL, 0);
   g_return_val_if_fail (path != NULL, 0);
-  g_return_val_if_fail (self->contour < gsk_path_get_n_contours (path), 0);
+  g_return_val_if_fail (point->contour < gsk_path_get_n_contours (path), 0);
 
-  contour = gsk_path_get_contour (path, self->contour);
-  return gsk_contour_get_curvature (contour, self, direction, center);
+  contour = gsk_path_get_contour (path, point->contour);
+  return gsk_contour_get_curvature (contour, point, direction, center);
 }
