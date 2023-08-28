@@ -15,6 +15,7 @@ SYNOPSIS
 |   **gtk4-path-tool** decompose [OPTIONS...] <PATH>
 |   **gtk4-path-tool** show [OPTIONS...] <PATH>
 |   **gtk4-path-tool** render [OPTIONS...] <PATH>
+|   **gtk4-path-tool** reverse [OPTIONS...] <PATH>
 |   **gtk4-path-tool** info [OPTIONS...] <PATH>
 
 DESCRIPTION
@@ -180,6 +181,12 @@ The interior of the path is filled.
 
   The offset into the dash pattern where dashing should begin.
   The default value is 0.
+
+Reversing
+^^^^^^^^^
+
+The ``reverse`` command changes the direction of the path. The resulting
+paths starts where the original path ends.
 
 Info
 ^^^^
