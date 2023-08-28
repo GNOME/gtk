@@ -301,7 +301,7 @@ test_empty_path (void)
 
   g_assert_false (gsk_path_in_fill (path, &GRAPHENE_POINT_INIT (0, 0), GSK_FILL_RULE_WINDING));
 
-  g_assert_false (gsk_path_get_closest_point (path, &GRAPHENE_POINT_INIT (0, 0), INFINITY, &point));
+  g_assert_false (gsk_path_get_closest_point (path, &GRAPHENE_POINT_INIT (0, 0), INFINITY, &point, NULL));
 
   gsk_path_unref (path);
 }
@@ -314,6 +314,7 @@ test_rect_path (void)
   char *s;
   graphene_rect_t bounds;
   GskPathPoint point;
+  float distance;
 
   builder = gsk_path_builder_new ();
   gsk_path_builder_add_rect (builder, &GRAPHENE_RECT_INIT (0, 0, 200, 100));
@@ -332,7 +333,9 @@ test_rect_path (void)
   g_assert_true (gsk_path_in_fill (path, &GRAPHENE_POINT_INIT (50, 50), GSK_FILL_RULE_WINDING));
   g_assert_false (gsk_path_in_fill (path, &GRAPHENE_POINT_INIT (200, 200), GSK_FILL_RULE_WINDING));
 
-  g_assert_true (gsk_path_get_closest_point (path, &GRAPHENE_POINT_INIT (200, 200), INFINITY, &point));
+  g_assert_true (gsk_path_get_closest_point (path, &GRAPHENE_POINT_INIT (200, 200), INFINITY, &point, &distance));
+
+  g_assert_true (distance == 100);
 
   gsk_path_unref (path);
 }
@@ -455,7 +458,7 @@ test_path_point (void)
   g_assert_true (point.idx == 4);
   g_assert_true (point.t == 1);
 
-  ret = gsk_path_get_closest_point (path, &GRAPHENE_POINT_INIT (200, 200), INFINITY, &point);
+  ret = gsk_path_get_closest_point (path, &GRAPHENE_POINT_INIT (200, 200), INFINITY, &point, NULL);
   g_assert_true (ret);
 
   g_assert_true (point.contour == 0);
@@ -473,7 +476,7 @@ test_path_point (void)
   g_assert_true (graphene_vec2_equal (&t2, &mx));
   g_assert_true (curvature == 0);
 
-  ret = gsk_path_get_closest_point (path, &GRAPHENE_POINT_INIT (100, 50), INFINITY, &point);
+  ret = gsk_path_get_closest_point (path, &GRAPHENE_POINT_INIT (100, 50), INFINITY, &point, NULL);
   g_assert_true (ret);
 
   g_assert_true (point.contour == 0);
@@ -534,8 +537,8 @@ test_path_segments (void)
       char *str;
 
       path = gsk_path_parse (tests[i].path);
-      g_assert_true (gsk_path_get_closest_point (path, &tests[i].p1, INFINITY, &p1));
-      g_assert_true (gsk_path_get_closest_point (path, &tests[i].p2, INFINITY, &p2));
+      g_assert_true (gsk_path_get_closest_point (path, &tests[i].p1, INFINITY, &p1, NULL));
+      g_assert_true (gsk_path_get_closest_point (path, &tests[i].p2, INFINITY, &p2, NULL));
 
       builder = gsk_path_builder_new ();
       gsk_path_builder_add_segment (builder, path, &p1, &p2);
@@ -602,7 +605,7 @@ test_path_builder_add (void)
 
   path = gsk_path_parse ("M 10 10 L 100 100");
 
-  gsk_path_get_closest_point (path, &GRAPHENE_POINT_INIT (50, 50), INFINITY, &point1);
+  gsk_path_get_closest_point (path, &GRAPHENE_POINT_INIT (50, 50), INFINITY, &point1, NULL);
   gsk_path_get_end_point (path, &point2);
 
   surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, 100, 100);
@@ -872,8 +875,8 @@ test_circle (void)
   gsk_path_point_get_position (&point0, path, &p);
   g_assert_true (graphene_point_equal (&p, &GRAPHENE_POINT_INIT (1, 0)));
 
-  gsk_path_get_closest_point (path, &GRAPHENE_POINT_INIT (1, 1), INFINITY, &point0);
-  gsk_path_get_closest_point (path, &GRAPHENE_POINT_INIT (-1, 1), INFINITY, &point1);
+  gsk_path_get_closest_point (path, &GRAPHENE_POINT_INIT (1, 1), INFINITY, &point0, NULL);
+  gsk_path_get_closest_point (path, &GRAPHENE_POINT_INIT (-1, 1), INFINITY, &point1, NULL);
 
   builder = gsk_path_builder_new ();
   gsk_path_builder_add_segment (builder, path, &point0, &point1);
