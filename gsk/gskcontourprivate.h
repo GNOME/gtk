@@ -55,7 +55,6 @@ gboolean                gsk_contour_get_stroke_bounds           (const GskContou
                                                                  const GskStroke        *stroke,
                                                                  GskBoundingBox         *bounds);
 gboolean                gsk_contour_foreach                     (const GskContour       *self,
-                                                                 float                   tolerance,
                                                                  GskPathForeachFunc      func,
                                                                  gpointer                user_data);
 int                     gsk_contour_get_winding                 (const GskContour       *self,
