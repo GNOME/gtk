@@ -810,7 +810,7 @@ gsk_path_foreach_with_tolerance (GskPath             *self,
 
   for (i = 0; i < self->n_contours; i++)
     {
-      if (!gsk_contour_foreach (self->contours[i], tolerance, func, user_data))
+      if (!gsk_contour_foreach (self->contours[i], func, user_data))
         return FALSE;
     }
 
