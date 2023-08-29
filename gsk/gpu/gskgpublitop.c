@@ -147,7 +147,8 @@ gsk_gpu_blit_op_vk_command (GskGpuOp        *op,
 
 static GskGpuOp *
 gsk_gpu_blit_op_gl_command (GskGpuOp    *op,
-                            GskGpuFrame *frame)
+                            GskGpuFrame *frame,
+                            gsize        flip_y)
 {
   GskGpuBlitOp *self = (GskGpuBlitOp *) op;
   GLenum filter;
@@ -175,9 +176,11 @@ gsk_gpu_blit_op_gl_command (GskGpuOp    *op,
                      self->src_rect.x + self->src_rect.width,
                      self->src_rect.y + self->src_rect.height,
                      self->dest_rect.x,
-                     self->dest_rect.y,
+                     flip_y ? flip_y - self->dest_rect.y - self->dest_rect.height
+                            : self->dest_rect.y,
                      self->dest_rect.x + self->dest_rect.width,
-                     self->dest_rect.y + self->dest_rect.height,
+                     flip_y ? flip_y - self->dest_rect.y
+                            : self->dest_rect.y + self->dest_rect.height,
                      GL_COLOR_BUFFER_BIT,
                      filter);
   glEnable (GL_SCISSOR_TEST);

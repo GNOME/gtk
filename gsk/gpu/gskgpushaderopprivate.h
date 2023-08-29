@@ -59,9 +59,11 @@ GskGpuOp *              gsk_gpu_shader_op_vk_command                    (GskGpuO
 #endif
 GskGpuOp *              gsk_gpu_shader_op_gl_command_n                  (GskGpuOp               *op,
                                                                          GskGpuFrame            *frame,
+                                                                         gsize                   flip_y,
                                                                          gsize                   instance_scale);
 GskGpuOp *              gsk_gpu_shader_op_gl_command                    (GskGpuOp               *op,
-                                                                         GskGpuFrame            *frame);
+                                                                         GskGpuFrame            *frame,
+                                                                         gsize                   flip_y);
 
 G_END_DECLS
 

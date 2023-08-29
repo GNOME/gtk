@@ -207,6 +207,12 @@ gsk_gl_image_bind_framebuffer (GskGLImage *self)
   gsk_gl_image_bind_framebuffer_target (self, GL_FRAMEBUFFER);
 }
 
+gboolean
+gsk_gl_image_is_flipped (GskGLImage *self)
+{
+  return self->texture_id == 0;
+}
+
 GLint
 gsk_gl_image_get_gl_internal_format (GskGLImage *self)
 {

@@ -294,7 +294,8 @@ gsk_gpu_upload_cairo_op_vk_command (GskGpuOp        *op,
 
 static GskGpuOp *
 gsk_gpu_upload_cairo_op_gl_command (GskGpuOp    *op,
-                                    GskGpuFrame *frame)
+                                    GskGpuFrame *frame,
+                                    gsize        flip_y)
 {
   GskGpuUploadCairoOp *self = (GskGpuUploadCairoOp *) op;
 

@@ -75,6 +75,7 @@ gsk_gpu_shader_op_vk_command (GskGpuOp        *op,
 GskGpuOp *
 gsk_gpu_shader_op_gl_command_n (GskGpuOp    *op,
                                 GskGpuFrame *frame,
+                                gsize        flip_y,
                                 gsize        instance_scale)
 {
   GskGpuShaderOp *self = (GskGpuShaderOp *) op;
@@ -108,9 +109,10 @@ gsk_gpu_shader_op_gl_command_n (GskGpuOp    *op,
 
 GskGpuOp *
 gsk_gpu_shader_op_gl_command (GskGpuOp    *op,
-                              GskGpuFrame *frame)
+                              GskGpuFrame *frame,
+                              gsize        flip_y)
 {
-  return gsk_gpu_shader_op_gl_command_n (op, frame, 1);
+  return gsk_gpu_shader_op_gl_command_n (op, frame, flip_y, 1);
 }
 
 GskGpuShaderOp *

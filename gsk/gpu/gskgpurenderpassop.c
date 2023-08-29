@@ -155,11 +155,18 @@ gsk_gpu_render_pass_op_vk_command (GskGpuOp        *op,
 
 static GskGpuOp *
 gsk_gpu_render_pass_op_gl_command (GskGpuOp    *op,
-                                   GskGpuFrame *frame)
+                                   GskGpuFrame *frame,
+                                   gsize        flip_y)
 {
   GskGpuRenderPassOp *self = (GskGpuRenderPassOp *) op;
+  gsize target_flip_y;
 
   gsk_gl_image_bind_framebuffer (GSK_GL_IMAGE (self->target));
+
+  if (gsk_gl_image_is_flipped (GSK_GL_IMAGE (self->target)))
+    target_flip_y = gsk_gpu_image_get_height (self->target);
+  else
+    target_flip_y = 0;
 
   glViewport (0, 0,
               gsk_gpu_image_get_width (self->target),
@@ -171,10 +178,10 @@ gsk_gpu_render_pass_op_gl_command (GskGpuOp    *op,
   op = op->next;
   while (op->op_class->stage != GSK_GPU_STAGE_END_PASS)
     {
-      op = gsk_gpu_op_gl_command (op, frame);
+      op = gsk_gpu_op_gl_command (op, frame, target_flip_y);
     }
 
-  op = gsk_gpu_op_gl_command (op, frame);
+  op = gsk_gpu_op_gl_command (op, frame, target_flip_y);
 
   return op;
 }
@@ -244,7 +251,8 @@ gsk_gpu_render_pass_end_op_vk_command (GskGpuOp        *op,
 
 static GskGpuOp *
 gsk_gpu_render_pass_end_op_gl_command (GskGpuOp    *op,
-                                       GskGpuFrame *frame)
+                                       GskGpuFrame *frame,
+                                       gsize        flip_y)
 {
   /* nothing to do here */
 
