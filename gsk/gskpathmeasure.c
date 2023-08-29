@@ -309,18 +309,15 @@ float
 gsk_path_point_get_distance (const GskPathPoint *point,
                              GskPathMeasure     *measure)
 {
-  const GskContour *contour;
   float contour_offset = 0;
 
   g_return_val_if_fail (measure != NULL, 0);
   g_return_val_if_fail (gsk_path_point_valid (point, measure->path), 0);
 
-  contour = gsk_path_get_contour (measure->path, point->contour);
-
   for (gsize i = 0; i < measure->n_contours; i++)
     {
-      if (contour == gsk_path_get_contour (measure->path, i))
-        return contour_offset + gsk_contour_get_distance (contour,
+      if (i == point->contour)
+        return contour_offset + gsk_contour_get_distance (gsk_path_get_contour (measure->path, i),
                                                           point,
                                                           measure->measures[i].contour_data);
 
