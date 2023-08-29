@@ -181,7 +181,8 @@ gsk_gl_texture_data_free (gpointer user_data)
 
 static GskGpuOp *
 gsk_gpu_download_op_gl_command (GskGpuOp    *op,
-                                GskGpuFrame *frame)
+                                GskGpuFrame *frame,
+                                gsize        flip_y)
 {
   GskGpuDownloadOp *self = (GskGpuDownloadOp *) op;
   GdkGLTextureBuilder *builder;

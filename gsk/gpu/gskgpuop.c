@@ -45,8 +45,9 @@ gsk_gpu_op_vk_command (GskGpuOp        *op,
 
 GskGpuOp *
 gsk_gpu_op_gl_command (GskGpuOp    *op,
-                       GskGpuFrame *frame)
+                       GskGpuFrame *frame,
+                       gsize        flip_y)
 {
-  return op->op_class->gl_command (op, frame);
+  return op->op_class->gl_command (op, frame, flip_y);
 }
 

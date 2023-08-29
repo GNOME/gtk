@@ -44,7 +44,8 @@ struct _GskGpuOpClass
                                                                          VkCommandBuffer         command_buffer);
 #endif
   GskGpuOp *            (* gl_command)                                  (GskGpuOp               *op,
-                                                                         GskGpuFrame            *frame);
+                                                                         GskGpuFrame            *frame,
+                                                                         gsize                   flip_y);
 };
 
 /* ensures alignment of ops to multipes of 16 bytes - and that makes graphene happy */
@@ -67,7 +68,8 @@ GskGpuOp *              gsk_gpu_op_vk_command                           (GskGpuO
                                                                          VkCommandBuffer         command_buffer);
 #endif
 GskGpuOp *              gsk_gpu_op_gl_command                           (GskGpuOp               *op,
-                                                                         GskGpuFrame            *frame);
+                                                                         GskGpuFrame            *frame,
+                                                                         gsize                   flip_y);
 
 G_END_DECLS
 

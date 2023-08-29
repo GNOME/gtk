@@ -56,7 +56,8 @@ gsk_gpu_globals_op_vk_command (GskGpuOp        *op,
 
 static GskGpuOp *
 gsk_gpu_globals_op_gl_command (GskGpuOp    *op,
-                               GskGpuFrame *frame)
+                               GskGpuFrame *frame,
+                               gsize        flip_y)
 {
   GskGpuGlobalsOp *self = (GskGpuGlobalsOp *) op;
 

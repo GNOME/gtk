@@ -56,11 +56,15 @@ gsk_gpu_scissor_op_vk_command (GskGpuOp        *op,
 
 static GskGpuOp *
 gsk_gpu_scissor_op_gl_command (GskGpuOp    *op,
-                               GskGpuFrame *frame)
+                               GskGpuFrame *frame,
+                               gsize        flip_y)
 {
   GskGpuScissorOp *self = (GskGpuScissorOp *) op;
 
-  glScissor (self->rect.x, self->rect.y, self->rect.width, self->rect.height);
+  if (flip_y)
+    glScissor (self->rect.x, flip_y - self->rect.y - self->rect.height, self->rect.width, self->rect.height);
+  else
+    glScissor (self->rect.x, self->rect.y, self->rect.width, self->rect.height);
 
   return op->next;
 }
