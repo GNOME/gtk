@@ -11,6 +11,7 @@
 #include "gskgpuuploadopprivate.h"
 
 #include "gskdebugprivate.h"
+#include "gskrectprivate.h"
 #include "gskrendernodeprivate.h"
 #include "gskroundedrectprivate.h"
 #include "gsktransformprivate.h"
@@ -282,25 +283,58 @@ gsk_gpu_node_processor_rect_is_integer (GskGpuNodeProcessor   *self,
 }
 
 static void
+gsk_gpu_node_processor_get_clip_bounds (GskGpuNodeProcessor *self,
+                                        graphene_rect_t     *out_bounds)
+{
+  graphene_rect_offset_r (&self->clip.rect.bounds,
+                          - self->offset.x,
+                          - self->offset.y,
+                          out_bounds);
+ 
+  /* FIXME: We could try the scissor rect here.
+   * But how often is that smaller than the clip bounds?
+   */
+}
+ 
+static gboolean G_GNUC_WARN_UNUSED_RESULT
+gsk_gpu_node_processor_clip_node_bounds (GskGpuNodeProcessor *self,
+                                         GskRenderNode       *node,
+                                         graphene_rect_t     *out_bounds)
+{
+  graphene_rect_t tmp;
+
+  gsk_gpu_node_processor_get_clip_bounds (self, &tmp);
+  
+  if (!gsk_rect_intersection (&tmp, &node->bounds, out_bounds))
+    return FALSE;
+
+  return TRUE;
+}
+
+static void
 gsk_gpu_node_processor_add_fallback_node (GskGpuNodeProcessor *self,
                                           GskRenderNode       *node)
 {
   GskGpuImage *image;
+  graphene_rect_t clipped_bounds;
+
+  if (!gsk_gpu_node_processor_clip_node_bounds (self, node, &clipped_bounds))
+    return;
 
   gsk_gpu_node_processor_sync_globals (self, 0);
 
   image = gsk_gpu_upload_cairo_op (self->frame,
                                    node,
                                    &self->scale,
-                                   &node->bounds);
+                                   &clipped_bounds);
 
   gsk_gpu_texture_op (self->frame,
-                      gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, &node->bounds),
+                      gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, &clipped_bounds),
                       image,
                       GSK_GPU_SAMPLER_DEFAULT,
                       &node->bounds,
                       &self->offset,
-                      &node->bounds);
+                      &clipped_bounds);
 }
 
 static void
