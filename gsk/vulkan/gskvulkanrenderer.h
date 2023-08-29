@@ -18,7 +18,7 @@
 #pragma once
 
 #include <gdk/gdk.h>
-#include <gsk/gskrenderer.h>
+#include <gsk/gsk.h>
 
 #ifdef GDK_RENDERING_VULKAN
 
