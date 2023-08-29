@@ -84,6 +84,9 @@ struct _GskCurveClass
                                                          const graphene_point_t *point);
   float                         (* get_length_to)       (const GskCurve         *curve,
                                                          float                   t);
+  float                         (* get_at_length)       (const GskCurve         *curve,
+                                                         float                   distance,
+                                                         float                   epsilon);
 };
 
 /* {{{ Utilities */
@@ -208,6 +211,41 @@ get_length_by_approximation (const GskCurve *curve,
   return z * sum;
 }
 
+/* Compute the inverse of the arclength using bisection,
+ * to a given precision
+ */
+static float
+get_t_by_bisection (const GskCurve *curve,
+                    float           length,
+                    float           epsilon)
+{
+  float t1, t2, t, l;
+  GskCurve c1;
+
+  g_assert (epsilon >= FLT_EPSILON);
+
+  t1 = 0;
+  t2 = 1;
+
+  while (t1 < t2)
+    {
+      t = (t1 + t2) / 2;
+      if (t == t1 || t == t2)
+        break;
+
+      gsk_curve_split (curve, t, &c1, NULL);
+
+      l = gsk_curve_get_length (&c1);
+      if (fabsf (length - l) < epsilon)
+        break;
+      else if (l < length)
+        t1 = t;
+      else
+        t2 = t;
+    }
+
+  return t;
+}
 /* }}} */
 /* {{{ Line */
 
@@ -426,6 +464,23 @@ gsk_line_curve_get_length_to (const GskCurve *curve,
   return t * graphene_point_distance (&pts[0], &pts[1], NULL, NULL);
 }
 
+static float
+gsk_line_curve_get_at_length (const GskCurve *curve,
+                              float           distance,
+                              float           epsilon)
+{
+  const GskLineCurve *self = &curve->line;
+  const graphene_point_t *pts = self->points;
+  float length;
+
+  length = graphene_point_distance (&pts[0], &pts[1], NULL, NULL);
+
+  if (length == 0)
+    return 0;
+
+  return CLAMP (distance / length, 0, 1);
+}
+
 static const GskCurveClass GSK_LINE_CURVE_CLASS = {
   gsk_line_curve_init,
   gsk_line_curve_init_foreach,
@@ -448,6 +503,7 @@ static const GskCurveClass GSK_LINE_CURVE_CLASS = {
   gsk_line_curve_get_derivative_at,
   gsk_line_curve_get_crossing,
   gsk_line_curve_get_length_to,
+  gsk_line_curve_get_at_length,
 };
 
 /* }}} */
@@ -841,6 +897,14 @@ gsk_quad_curve_get_length_to (const GskCurve *curve,
   return get_length_by_approximation (curve, t);
 }
 
+static float
+gsk_quad_curve_get_at_length (const GskCurve *curve,
+                              float           t,
+                              float           epsilon)
+{
+  return get_t_by_bisection (curve, t, epsilon);
+}
+
 static const GskCurveClass GSK_QUAD_CURVE_CLASS = {
   gsk_quad_curve_init,
   gsk_quad_curve_init_foreach,
@@ -863,6 +927,7 @@ static const GskCurveClass GSK_QUAD_CURVE_CLASS = {
   gsk_quad_curve_get_derivative_at,
   gsk_quad_curve_get_crossing,
   gsk_quad_curve_get_length_to,
+  gsk_quad_curve_get_at_length,
 };
 
 /* }}} */
@@ -1311,6 +1376,14 @@ gsk_cubic_curve_get_length_to (const GskCurve *curve,
   return get_length_by_approximation (curve, t);
 }
 
+static float
+gsk_cubic_curve_get_at_length (const GskCurve *curve,
+                               float           t,
+                               float           epsilon)
+{
+  return get_t_by_bisection (curve, t, epsilon);
+}
+
 static const GskCurveClass GSK_CUBIC_CURVE_CLASS = {
   gsk_cubic_curve_init,
   gsk_cubic_curve_init_foreach,
@@ -1333,6 +1406,7 @@ static const GskCurveClass GSK_CUBIC_CURVE_CLASS = {
   gsk_cubic_curve_get_derivative_at,
   gsk_cubic_curve_get_crossing,
   gsk_cubic_curve_get_length_to,
+  gsk_cubic_curve_get_at_length,
 };
 
  /*  }}} */
@@ -2018,6 +2092,14 @@ gsk_conic_curve_get_length_to (const GskCurve *curve,
   return get_length_by_approximation (curve, t);
 }
 
+static float
+gsk_conic_curve_get_at_length (const GskCurve *curve,
+                               float           t,
+                               float           epsilon)
+{
+  return get_t_by_bisection (curve, t, epsilon);
+}
+
 static const GskCurveClass GSK_CONIC_CURVE_CLASS = {
   gsk_conic_curve_init,
   gsk_conic_curve_init_foreach,
@@ -2040,6 +2122,7 @@ static const GskCurveClass GSK_CONIC_CURVE_CLASS = {
   gsk_conic_curve_get_derivative_at,
   gsk_conic_curve_get_crossing,
   gsk_conic_curve_get_length_to,
+  gsk_conic_curve_get_at_length,
 };
 
 /*  }}} */
@@ -2389,32 +2472,7 @@ gsk_curve_at_length (const GskCurve *curve,
                      float           length,
                      float           epsilon)
 {
-  float t1, t2, t, l;
-  GskCurve c1;
-
-  g_assert (epsilon >= FLT_EPSILON);
-
-  t1 = 0;
-  t2 = 1;
-
-  while (t1 < t2)
-    {
-      t = (t1 + t2) / 2;
-      if (t == t1 || t == t2)
-        break;
-
-      gsk_curve_split (curve, t, &c1, NULL);
-
-      l = gsk_curve_get_length (&c1);
-      if (fabsf (length - l) < epsilon)
-        break;
-      else if (l < length)
-        t1 = t;
-      else
-        t2 = t;
-    }
-
-  return t;
+  return get_class (curve->op)->get_at_length (curve, length, epsilon);
 }
 
 static inline void
