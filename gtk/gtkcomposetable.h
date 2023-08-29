@@ -30,12 +30,13 @@ typedef struct _GtkComposeTableCompact GtkComposeTableCompact;
  * The first part of the data contains rows of length max_seq_len + 1,
  * where the first element is the item of the sequence, and the
  * following elements are offsets to the data for sequences that
- * start with the first item of length 2, ..., max_seq_len.
+ * start with the first item of length 1, ..., max_seq_len.
  *
  * The second part of the data contains the rest of the sequence
  * data. It does not have a fixed stride. For each sequence, we
  * put seq[2], ..., seq[len - 1], followed by the encoded value
- * for this sequence.
+ * for this sequence. In particular for a sequence of length 1,
+ * the offset points directly to the value.
  *
  * The values are encoded as follows:
  *
