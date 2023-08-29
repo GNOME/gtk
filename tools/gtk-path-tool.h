@@ -1,6 +1,7 @@
 #pragma once
 
 void do_info      (int *argc, const char ***argv);
+void do_dash      (int *argc, const char ***argv);
 void do_decompose (int *argc, const char ***argv);
 void do_restrict  (int *argc, const char ***argv);
 void do_reverse   (int *argc, const char ***argv);

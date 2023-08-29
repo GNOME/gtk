@@ -24,6 +24,7 @@ endif
 
 gtk_tools = [
   ['gtk4-path-tool', ['gtk-path-tool.c',
+                      'gtk-path-tool-dash.c',
                       'gtk-path-tool-decompose.c',
                       'gtk-path-tool-info.c',
                       'gtk-path-tool-render.c',

@@ -40,6 +40,7 @@ usage (void)
              "Commands:\n"
              "  decompose    Decompose the path\n"
              "  reverse      Reverse the path\n"
+             "  dash         Dash the path\n"
              "  restrict     Restrict the path to a segment\n"
              "  show         Display the path in a window\n"
              "  render       Render the path as an image\n"
@@ -126,7 +127,9 @@ main (int argc, const char *argv[])
   argv++;
   argc--;
 
-  if (strcmp (argv[0], "decompose") == 0)
+  if (strcmp (argv[0], "dash") == 0)
+    do_dash (&argc, &argv);
+  else if (strcmp (argv[0], "decompose") == 0)
     do_decompose (&argc, &argv);
   else if (strcmp (argv[0], "info") == 0)
     do_info (&argc, &argv);
