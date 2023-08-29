@@ -172,6 +172,10 @@ gsk_gpu_render_pass_op_gl_command (GskGpuOp    *op,
               gsk_gpu_image_get_width (self->target),
               gsk_gpu_image_get_height (self->target));
 
+  if (target_flip_y)
+    glScissor (self->area.x, target_flip_y - self->area.y - self->area.height, self->area.width, self->area.height);
+  else
+    glScissor (self->area.x, self->area.y, self->area.width, self->area.height);
   glClearColor (0, 0, 0, 0);
   glClear (GL_COLOR_BUFFER_BIT);
 
