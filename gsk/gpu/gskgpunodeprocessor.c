@@ -142,6 +142,20 @@ gsk_gpu_node_processor_emit_scissor_op (GskGpuNodeProcessor *self)
   self->pending_globals &= ~GSK_GPU_GLOBAL_SCISSOR;
 }
 
+static void
+gsk_gpu_node_processor_sync_globals (GskGpuNodeProcessor *self,
+                                     GskGpuGlobals        ignored)
+{
+  GskGpuGlobals required;
+
+  required = self->pending_globals & ~ignored;
+
+  if (required & (GSK_GPU_GLOBAL_MATRIX | GSK_GPU_GLOBAL_SCALE | GSK_GPU_GLOBAL_CLIP))
+    gsk_gpu_node_processor_emit_globals_op (self);
+  if (required & GSK_GPU_GLOBAL_SCISSOR)
+    gsk_gpu_node_processor_emit_scissor_op (self);
+}
+
 void
 gsk_gpu_node_processor_process (GskGpuFrame                 *frame,
                                 GskGpuImage                 *target,
@@ -272,6 +286,8 @@ gsk_gpu_node_processor_add_fallback_node (GskGpuNodeProcessor *self,
                                           GskRenderNode       *node)
 {
   GskGpuImage *image;
+
+  gsk_gpu_node_processor_sync_globals (self, 0);
 
   image = gsk_gpu_upload_cairo_op (self->frame,
                                    node,
@@ -669,7 +685,6 @@ gsk_gpu_node_processor_add_node (GskGpuNodeProcessor *self,
                                  GskRenderNode       *node)
 {
   GskRenderNodeType node_type;
-  GskGpuGlobals required_globals;
 
   /* This catches the corner cases of empty nodes, so after this check
    * there's quaranteed to be at least 1 pixel that needs to be drawn */
@@ -686,11 +701,7 @@ gsk_gpu_node_processor_add_node (GskGpuNodeProcessor *self,
       return;
     }
 
-  required_globals = self->pending_globals & ~nodes_vtable[node_type].ignored_globals;
-  if (required_globals & (GSK_GPU_GLOBAL_MATRIX | GSK_GPU_GLOBAL_SCALE | GSK_GPU_GLOBAL_CLIP))
-    gsk_gpu_node_processor_emit_globals_op (self);
-  if (required_globals & GSK_GPU_GLOBAL_SCISSOR)
-    gsk_gpu_node_processor_emit_scissor_op (self);
+  gsk_gpu_node_processor_sync_globals (self, nodes_vtable[node_type].ignored_globals);
   g_assert ((self->pending_globals & ~nodes_vtable[node_type].ignored_globals) == 0);
 
   if (nodes_vtable[node_type].process_node)
