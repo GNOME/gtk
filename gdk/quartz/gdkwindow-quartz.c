@@ -2389,6 +2389,10 @@ gdk_quartz_window_set_type_hint (GdkWindow        *window,
   if (!impl)
     return;
 
+  if (hint == GDK_WINDOW_TYPE_HINT_NORMAL &&
+      window->window_type == GDK_WINDOW_TEMP)
+    hint = GDK_WINDOW_TYPE_HINT_POPUP_MENU;
+
   impl->type_hint = hint;
 
   /* Match the documentation, only do something if we're not mapped yet. */
