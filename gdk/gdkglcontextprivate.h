@@ -147,6 +147,8 @@ void                    gdk_gl_context_label_object_printf      (GdkGLContext   
                                                                  const char      *format,
                                                                 ...)  G_GNUC_PRINTF (4, 5);
 
+const char *            gdk_gl_context_get_glsl_version_string  (GdkGLContext    *self);
+
 gboolean                gdk_gl_context_has_debug                (GdkGLContext    *self) G_GNUC_PURE;
 
 gboolean                gdk_gl_context_use_es_bgra              (GdkGLContext    *context);

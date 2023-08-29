@@ -1715,6 +1715,56 @@ gdk_gl_context_get_version (GdkGLContext *context,
     *minor = gdk_gl_version_get_minor (&priv->gl_version);
 }
 
+const char *
+gdk_gl_context_get_glsl_version_string (GdkGLContext *self)
+{
+  GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (self);
+
+  if (priv->api == GDK_GL_API_GL)
+    {
+      if (gdk_gl_version_greater_equal (&priv->gl_version, &GDK_GL_VERSION_INIT (4, 6)))
+        return "#version 460";
+      else if (gdk_gl_version_greater_equal (&priv->gl_version, &GDK_GL_VERSION_INIT (4, 5)))
+        return "#version 450";
+      else if (gdk_gl_version_greater_equal (&priv->gl_version, &GDK_GL_VERSION_INIT (4, 4)))
+        return "#version 440";
+      else if (gdk_gl_version_greater_equal (&priv->gl_version, &GDK_GL_VERSION_INIT (4, 3)))
+        return "#version 430";
+      else if (gdk_gl_version_greater_equal (&priv->gl_version, &GDK_GL_VERSION_INIT (4, 2)))
+        return "#version 420";
+      else if (gdk_gl_version_greater_equal (&priv->gl_version, &GDK_GL_VERSION_INIT (4, 1)))
+        return "#version 410";
+      else if (gdk_gl_version_greater_equal (&priv->gl_version, &GDK_GL_VERSION_INIT (4, 0)))
+        return "#version 400";
+      else if (gdk_gl_version_greater_equal (&priv->gl_version, &GDK_GL_VERSION_INIT (3, 3)))
+        return "#version 330";
+      else if (gdk_gl_version_greater_equal (&priv->gl_version, &GDK_GL_VERSION_INIT (3, 2)))
+        return "#version 150";
+      else if (gdk_gl_version_greater_equal (&priv->gl_version, &GDK_GL_VERSION_INIT (3, 1)))
+        return "#version 140";
+      else
+        return "#version 130";
+    }
+  else if (priv->api == GDK_GL_API_GLES)
+    {
+      if (gdk_gl_version_greater_equal (&priv->gl_version, &GDK_GL_VERSION_INIT (3, 2)))
+        return "#version 320 es";
+      else if (gdk_gl_version_greater_equal (&priv->gl_version, &GDK_GL_VERSION_INIT (3, 1)))
+        return "#version 310 es";
+      else if (gdk_gl_version_greater_equal (&priv->gl_version, &GDK_GL_VERSION_INIT (3, 0)))
+        return "#version 300 es";
+      else if (gdk_gl_version_greater_equal (&priv->gl_version, &GDK_GL_VERSION_INIT (3, 0)))
+        return "#version 300 es";
+      else
+        return "#version 100";
+    }
+  else
+    {
+      /* must be realized to be called */
+      g_assert_not_reached ();
+    }
+}
+
 /**
  * gdk_gl_context_clear_current:
  *
