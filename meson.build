@@ -25,6 +25,7 @@ epoxy_req          = '>= 1.4'
 cloudproviders_req = '>= 0.3.1'
 xkbcommon_req      = '>= 0.2.0'
 sysprof_req        = '>= 3.38.0'
+vulkan_req         = '>= 1.2'
 
 fs = import('fs')
 gnome = import('gnome')
@@ -605,7 +606,9 @@ endif
 # Uses meson's custom vulkan dependency searching. Set the VULKAN_SDK env var
 # to use a custom path for the Vulkan SDK. Bugs that are found with it should
 # be reported upstream and fixed.
-vulkan_dep = dependency('vulkan', required: get_option('vulkan'))
+vulkan_dep = dependency('vulkan',
+                        version: vulkan_req,
+                        required: get_option('vulkan'))
 glslc = find_program('glslc', required: get_option('vulkan'))
 if vulkan_dep.found()
   have_vulkan = true
