@@ -20,7 +20,7 @@
 
 #pragma once
 
-#include <gsk/gskrenderer.h>
+#include <gsk/gsk.h>
 
 G_BEGIN_DECLS
 
