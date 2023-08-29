@@ -163,26 +163,6 @@ gsk_gpu_node_processor_process (GskGpuFrame                 *frame,
 }
 
 static void
-gsk_gpu_node_processor_add_fallback_node (GskGpuNodeProcessor *self,
-                                          GskRenderNode       *node)
-{
-  GskGpuImage *image;
-
-  image = gsk_gpu_upload_cairo_op (self->frame,
-                                   node,
-                                   &self->scale,
-                                   &node->bounds);
-
-  gsk_gpu_texture_op (self->frame,
-                      gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, &node->bounds),
-                      image,
-                      GSK_GPU_SAMPLER_DEFAULT,
-                      &node->bounds,
-                      &self->offset,
-                      &node->bounds);
-}
-
-static void
 extract_scale_from_transform (GskTransform *transform,
                               float        *out_scale_x,
                               float        *out_scale_y)
@@ -244,6 +224,186 @@ extract_scale_from_transform (GskTransform *transform,
       }
       return;
     }
+}
+
+static gboolean
+gsk_gpu_node_processor_rect_is_integer (GskGpuNodeProcessor   *self,
+                                        const graphene_rect_t *rect,
+                                        cairo_rectangle_int_t *int_rect)
+{
+  graphene_rect_t transformed_rect;
+  float scale_x = graphene_vec2_get_x (&self->scale);
+  float scale_y = graphene_vec2_get_y (&self->scale);
+
+  switch (gsk_transform_get_category (self->modelview))
+    {
+    case GSK_TRANSFORM_CATEGORY_UNKNOWN:
+    case GSK_TRANSFORM_CATEGORY_ANY:
+    case GSK_TRANSFORM_CATEGORY_3D:
+    case GSK_TRANSFORM_CATEGORY_2D:
+      /* FIXME: We could try to handle 90° rotation here,
+       * but I don't think there's a use case */
+      return FALSE;
+
+    case GSK_TRANSFORM_CATEGORY_2D_AFFINE:
+    case GSK_TRANSFORM_CATEGORY_2D_TRANSLATE:
+      gsk_transform_transform_bounds (self->modelview, rect, &transformed_rect);
+      rect = &transformed_rect;
+      break;
+
+    case GSK_TRANSFORM_CATEGORY_IDENTITY:
+    default:
+      break;
+    }
+
+  int_rect->x = rect->origin.x * scale_x;
+  int_rect->y = rect->origin.y * scale_y;
+  int_rect->width = rect->size.width * scale_x;
+  int_rect->height = rect->size.height * scale_y;
+
+  return int_rect->x == rect->origin.x * scale_x
+      && int_rect->y == rect->origin.y * scale_y
+      && int_rect->width == rect->size.width * scale_x
+      && int_rect->height == rect->size.height * scale_y;
+}
+
+static void
+gsk_gpu_node_processor_add_fallback_node (GskGpuNodeProcessor *self,
+                                          GskRenderNode       *node)
+{
+  GskGpuImage *image;
+
+  image = gsk_gpu_upload_cairo_op (self->frame,
+                                   node,
+                                   &self->scale,
+                                   &node->bounds);
+
+  gsk_gpu_texture_op (self->frame,
+                      gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, &node->bounds),
+                      image,
+                      GSK_GPU_SAMPLER_DEFAULT,
+                      &node->bounds,
+                      &self->offset,
+                      &node->bounds);
+}
+
+static void
+gsk_gpu_node_processor_add_clip_node (GskGpuNodeProcessor *self,
+                                      GskRenderNode       *node)
+{
+  GskRenderNode *child;
+  GskGpuClip old_clip;
+  graphene_rect_t clip;
+  cairo_rectangle_int_t scissor;
+
+  child = gsk_clip_node_get_child (node);
+  graphene_rect_offset_r (gsk_clip_node_get_clip (node),
+                          self->offset.x, self->offset.y,
+                          &clip);
+
+  gsk_gpu_clip_init_copy (&old_clip, &self->clip);
+
+  /* Check if we can use scissoring for the clip */
+  if (gsk_gpu_node_processor_rect_is_integer (self, &clip, &scissor))
+    {
+      cairo_rectangle_int_t old_scissor;
+
+      if (!gdk_rectangle_intersect (&scissor, &self->scissor, &scissor))
+        return;
+
+      old_scissor = self->scissor;
+
+      if (gsk_gpu_clip_intersect_rect (&self->clip, &old_clip, &clip))
+        {
+          if (self->clip.type == GSK_GPU_CLIP_ALL_CLIPPED)
+            {
+              gsk_gpu_clip_init_copy (&self->clip, &old_clip);
+              return;
+            }
+          else if (self->clip.type == GSK_GPU_CLIP_RECT)
+            {
+              self->clip.type = GSK_GPU_CLIP_NONE;
+            }
+
+          self->scissor = scissor;
+          self->pending_globals |= GSK_GPU_GLOBAL_SCISSOR | GSK_GPU_GLOBAL_CLIP;
+
+          gsk_gpu_node_processor_add_node (self, child);
+
+          gsk_gpu_clip_init_copy (&self->clip, &old_clip);
+          self->scissor = old_scissor;
+          self->pending_globals |= GSK_GPU_GLOBAL_SCISSOR | GSK_GPU_GLOBAL_CLIP;
+        }
+      else
+        {
+          self->scissor = scissor;
+          self->pending_globals |= GSK_GPU_GLOBAL_SCISSOR;
+
+          gsk_gpu_clip_init_copy (&self->clip, &old_clip);
+
+          gsk_gpu_node_processor_add_node (self, child);
+
+          self->scissor = old_scissor;
+          self->pending_globals |= GSK_GPU_GLOBAL_SCISSOR;
+        }
+    }
+  else
+    {
+      if (!gsk_gpu_clip_intersect_rect (&self->clip, &old_clip, &clip))
+        {
+          GSK_DEBUG (FALLBACK, "Failed to find intersection between clip of type %u and rectangle", self->clip.type);
+          gsk_gpu_clip_init_copy (&self->clip, &old_clip);
+          gsk_gpu_node_processor_add_fallback_node (self, node);
+          return;
+        }
+
+      if (self->clip.type == GSK_GPU_CLIP_ALL_CLIPPED)
+        {
+          gsk_gpu_clip_init_copy (&self->clip, &old_clip);
+          return;
+        }
+
+      self->pending_globals |= GSK_GPU_GLOBAL_CLIP;
+
+      gsk_gpu_node_processor_add_node (self, child);
+
+      gsk_gpu_clip_init_copy (&self->clip, &old_clip);
+      self->pending_globals |= GSK_GPU_GLOBAL_CLIP;
+    }
+}
+
+static void
+gsk_gpu_node_processor_add_rounded_clip_node (GskGpuNodeProcessor *self,
+                                              GskRenderNode       *node)
+{
+  GskGpuClip old_clip;
+  GskRoundedRect clip;
+
+  gsk_gpu_clip_init_copy (&old_clip, &self->clip);
+
+  clip = *gsk_rounded_clip_node_get_clip (node);
+  gsk_rounded_rect_offset (&clip, self->offset.x, self->offset.y);
+
+  if (!gsk_gpu_clip_intersect_rounded_rect (&self->clip, &old_clip, &clip))
+    {
+      GSK_DEBUG (FALLBACK, "Failed to find intersection between clip of type %u and rounded rectangle", self->clip.type);
+      gsk_gpu_clip_init_copy (&self->clip, &old_clip);
+      gsk_gpu_node_processor_add_fallback_node (self, node);
+      return;
+    }
+
+  if (self->clip.type == GSK_GPU_CLIP_ALL_CLIPPED)
+    {
+      gsk_gpu_clip_init_copy (&self->clip, &old_clip);
+      return;
+    }
+
+  self->pending_globals |= GSK_GPU_GLOBAL_CLIP;
+
+  gsk_gpu_node_processor_add_node (self, gsk_rounded_clip_node_get_child (node));
+
+  gsk_gpu_clip_init_copy (&self->clip, &old_clip);
+  self->pending_globals |= GSK_GPU_GLOBAL_CLIP;
 }
 
 static void
@@ -447,12 +607,12 @@ static const struct
     NULL,
   },
   [GSK_CLIP_NODE] = {
-    0,
-    NULL,
+    GSK_GPU_GLOBAL_MATRIX | GSK_GPU_GLOBAL_SCALE | GSK_GPU_GLOBAL_CLIP | GSK_GPU_GLOBAL_SCISSOR,
+    gsk_gpu_node_processor_add_clip_node,
   },
   [GSK_ROUNDED_CLIP_NODE] = {
-    0,
-    NULL,
+    GSK_GPU_GLOBAL_MATRIX | GSK_GPU_GLOBAL_SCALE | GSK_GPU_GLOBAL_CLIP | GSK_GPU_GLOBAL_SCISSOR,
+    gsk_gpu_node_processor_add_rounded_clip_node,
   },
   [GSK_SHADOW_NODE] = {
     0,
