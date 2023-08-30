@@ -23,6 +23,7 @@ gsk_private_sources = files([
   'gskcairoblur.c',
   'gskcontour.c',
   'gskcurve.c',
+  'gskcurveintersect.c',
   'gskdebug.c',
   'gskprivate.c',
   'gl/fp16.c',

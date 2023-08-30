@@ -199,6 +199,5 @@ int                    gsk_curve_get_curvature_points           (const GskCurve 
 int                    gsk_curve_get_cusps                      (const GskCurve         *curve,
                                                                  float                   t[2]);
 
-
 G_END_DECLS
 
