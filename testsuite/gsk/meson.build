@@ -645,6 +645,7 @@ internal_tests = [
   [ 'boundingbox'],
   [ 'curve', [ ], [ 'flaky' ]],
   [ 'curve-special-cases' ],
+  [ 'curve-intersect' ],
   [ 'half-float' ],
   [ 'not-diff' ],
   [ 'misc'],
