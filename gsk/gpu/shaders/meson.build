@@ -1,14 +1,17 @@
 gsk_private_gpu_include_shaders = files([
+  'color.glsl',
   'common.glsl',
   'common-gl.glsl',
   'common-vulkan.glsl',
   'ellipse.glsl',
   'enums.glsl',
+  'pattern.glsl',
   'rect.glsl',
   'roundedrect.glsl',
 ])
 
 gsk_private_gpu_shaders = files([
+  'gskgpuuber.glsl',
   'gskgputexture.glsl',
 ])
 

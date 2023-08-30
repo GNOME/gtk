@@ -71,4 +71,3 @@ gsk_gpu_device_create_upload_image (GskGpuDevice   *self,
 {
   return GSK_GPU_DEVICE_GET_CLASS (self)->create_upload_image (self, format, width, height);
 }
-

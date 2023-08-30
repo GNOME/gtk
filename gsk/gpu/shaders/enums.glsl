@@ -5,4 +5,6 @@
 #define GSK_GPU_SHADER_CLIP_RECT 1u
 #define GSK_GPU_SHADER_CLIP_ROUNDED 2u
 
+#define GSK_GPU_PATTERN_COLOR 0
+
 #endif

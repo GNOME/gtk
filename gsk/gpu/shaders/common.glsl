@@ -13,6 +13,7 @@ void            main_clip_rounded               (void);
 #include "common-gl.glsl"
 #endif
 
+#include "color.glsl"
 #include "rect.glsl"
 #include "roundedrect.glsl"
 

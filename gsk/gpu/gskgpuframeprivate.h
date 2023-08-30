@@ -1,5 +1,6 @@
 #pragma once
 
+#include "gskgpubufferwriterprivate.h"
 #include "gskgpurenderer.h"
 #include "gskgputypesprivate.h"
 
@@ -31,8 +32,11 @@ struct _GskGpuFrameClass
                                                                          GskGpuSampler           sampler);
   GskGpuBuffer *        (* create_vertex_buffer)                        (GskGpuFrame            *self,
                                                                          gsize                   size);
+  GskGpuBuffer *        (* create_storage_buffer)                       (GskGpuFrame            *self,
+                                                                         gsize                   size);
   void                  (* submit)                                      (GskGpuFrame            *self,
                                                                          GskGpuBuffer           *vertex_buffer,
+                                                                         GskGpuBuffer           *storage_buffer,
                                                                          GskGpuOp               *op);
 };
 
@@ -55,6 +59,8 @@ guchar *                gsk_gpu_frame_get_vertex_data                   (GskGpuF
 guint32                 gsk_gpu_frame_get_image_descriptor              (GskGpuFrame            *self,
                                                                          GskGpuImage            *image,
                                                                          GskGpuSampler           sampler);
+void                    gsk_gpu_frame_write_buffer_memory               (GskGpuFrame            *self,
+                                                                         GskGpuBufferWriter     *writer);
 
 gboolean                gsk_gpu_frame_is_busy                           (GskGpuFrame            *self);
 
