@@ -173,7 +173,7 @@ _gtk_file_chooser_delegate_get_quark (void)
 
   if (G_UNLIKELY (quark == 0))
     quark = g_quark_from_static_string ("gtk-file-chooser-delegate");
-  
+
   return quark;
 }
 
@@ -357,9 +357,9 @@ _gtk_file_chooser_label_for_file (GFile *file)
         end = p;
 
       host = g_strndup (start, end - start);
-      /* Translators: the first string is a path and the second string 
-       * is a hostname. Nautilus and the panel contain the same string 
-       * to translate. 
+      /* Translators: the first string is a path and the second string
+       * is a hostname. Nautilus and the panel contain the same string
+       * to translate.
        */
       label = g_strdup_printf (_("%1$s on %2$s"), path, host);
 
@@ -474,12 +474,14 @@ _gtk_file_info_get_icon (GFileInfo    *info,
     }
 
   icon = g_file_info_get_icon (info);
-  if (icon && gtk_icon_theme_has_gicon (icon_theme, icon))
-    return g_object_ref (icon);
 
   /* Use general fallback for all files without icon */
-  icon = g_themed_icon_new ("text-x-generic");
-  return icon;
+  if (!icon)
+    return g_themed_icon_new ("text-x-generic");
+  else if (G_IS_THEMED_ICON (icon))
+    g_themed_icon_append_name (G_THEMED_ICON (icon), "text-x-generic");
+
+  return g_object_ref (icon);
 }
 
 GFile *
