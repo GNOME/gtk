@@ -6,9 +6,10 @@
 #include "gskgpuframeprivate.h"
 #include "gskgpuglobalsopprivate.h"
 #include "gskgpuimageprivate.h"
-#include "gskgpuuberopprivate.h"
+#include "gskgpupatternprivate.h"
 #include "gskgpuscissoropprivate.h"
 #include "gskgputextureopprivate.h"
+#include "gskgpuuberopprivate.h"
 #include "gskgpuuploadopprivate.h"
 
 #include "gskdebugprivate.h"
@@ -580,19 +581,16 @@ gsk_gpu_node_processor_add_color_node (GskGpuNodeProcessor *self,
                                        GskRenderNode       *node)
 {
   GskGpuBufferWriter writer;
-  const GdkRGBA *rgba;
   guint32 pattern_id;
 
   gsk_gpu_frame_write_buffer_memory (self->frame, &writer);
-  rgba = gsk_color_node_get_color (node);
 
-#define GSK_GPU_PATTERN_COLOR 0
-
-  gsk_gpu_buffer_writer_append_uint (&writer, GSK_GPU_PATTERN_COLOR);
-  gsk_gpu_buffer_writer_append_float (&writer, rgba->red);
-  gsk_gpu_buffer_writer_append_float (&writer, rgba->green);
-  gsk_gpu_buffer_writer_append_float (&writer, rgba->blue);
-  gsk_gpu_buffer_writer_append_float (&writer, rgba->alpha);
+  if (!gsk_gpu_pattern_create_for_node (&writer, node))
+    {
+      g_assert_not_reached ();
+      gsk_gpu_buffer_writer_abort (&writer);
+      return;
+    }
 
   pattern_id = gsk_gpu_buffer_writer_commit (&writer) / sizeof (float);
 
