@@ -14,6 +14,18 @@ uniform PushConstants
     vec2 scale;
 } push;
 
+#if defined(GSK_GLES) && __VERSION__ < 310
+layout(std140)
+#else
+layout(std140, binding = 1)
+#endif
+uniform Floats
+{
+  vec4 really_just_floats[1024];
+} floats;
+
+uniform sampler2D textures[16];
+
 #define GSK_VERTEX_INDEX gl_VertexID
 
 
@@ -28,8 +40,21 @@ uniform PushConstants
 #define PASS(_loc) in
 #define PASS_FLAT(_loc) flat in
 
-uniform sampler2D textures[16];
+float
+gsk_get_float (int id)
+{
+  return floats.really_just_floats[id >> 2][id & 3];
+}
+
+float
+gsk_get_float (uint id)
+{
+  return gsk_get_float (int (id));
+}
+
 #define gsk_get_texture(id) textures[id]
+#define gsk_get_int(id) (floatBitsToInt(gsk_get_float(id)))
+#define gsk_get_uint(id) (floatBitsToUint(gsk_get_float(id)))
 
 #ifdef GSK_GLES
 void

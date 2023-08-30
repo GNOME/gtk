@@ -69,9 +69,17 @@ gsk_gl_frame_create_vertex_buffer (GskGpuFrame *frame,
   return gsk_gl_buffer_new (GL_ARRAY_BUFFER, size, GL_WRITE_ONLY);
 }
 
+static GskGpuBuffer *
+gsk_gl_frame_create_storage_buffer (GskGpuFrame *frame,
+                                    gsize        size)
+{
+  return gsk_gl_buffer_new (GL_UNIFORM_BUFFER, size, GL_WRITE_ONLY);
+}
+
 static void
 gsk_gl_frame_submit (GskGpuFrame  *frame,
                      GskGpuBuffer *vertex_buffer,
+                     GskGpuBuffer *storage_buffer,
                      GskGpuOp     *op)
 {
   GskGLFrame *self = GSK_GL_FRAME (frame);
@@ -86,7 +94,12 @@ gsk_gl_frame_submit (GskGpuFrame  *frame,
   glBlendFunc (GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
   glBlendEquation (GL_FUNC_ADD);
 
-  gsk_gl_buffer_bind (GSK_GL_BUFFER (vertex_buffer));
+  if (vertex_buffer)
+    gsk_gl_buffer_bind (GSK_GL_BUFFER (vertex_buffer));
+  if (storage_buffer)
+    gsk_gl_buffer_bind_base (GSK_GL_BUFFER (storage_buffer), 1);
+  /* The globals buffer must be the last bound buffer,
+   * the globsals op relies on that. */
   glBindBufferBase (GL_UNIFORM_BUFFER, 0, self->globals_buffer_id);
   glBufferData (GL_UNIFORM_BUFFER,
                 sizeof (GskGpuGlobalsInstance),
@@ -121,6 +134,7 @@ gsk_gl_frame_class_init (GskGLFrameClass *klass)
   gpu_frame_class->cleanup = gsk_gl_frame_cleanup;
   gpu_frame_class->get_image_descriptor = gsk_gl_frame_get_image_descriptor;
   gpu_frame_class->create_vertex_buffer = gsk_gl_frame_create_vertex_buffer;
+  gpu_frame_class->create_storage_buffer = gsk_gl_frame_create_storage_buffer;
   gpu_frame_class->submit = gsk_gl_frame_submit;
 
   object_class->finalize = gsk_gl_frame_finalize;

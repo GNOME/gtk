@@ -90,3 +90,10 @@ gsk_gl_buffer_bind (GskGLBuffer *self)
   glBindBuffer (self->target, self->buffer_id);
 }
 
+void
+gsk_gl_buffer_bind_base (GskGLBuffer *self,
+                         GLuint       index)
+{
+  glBindBufferBase (self->target, index, self->buffer_id);
+}
+

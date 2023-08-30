@@ -15,6 +15,8 @@ GskGpuBuffer *          gsk_gl_buffer_new                               (GLenum 
                                                                          GLenum                  access);
 
 void                    gsk_gl_buffer_bind                              (GskGLBuffer            *self);
+void                    gsk_gl_buffer_bind_base                         (GskGLBuffer            *self,
+                                                                         GLuint                  index);
 
 G_END_DECLS
 
