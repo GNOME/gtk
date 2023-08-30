@@ -374,6 +374,7 @@ tests = [
   ['shader'],
   ['path', [ 'path-utils.c' ] ],
   ['path-special-cases'],
+  ['path-intersect'],
 ]
 
 test_cargs = []
