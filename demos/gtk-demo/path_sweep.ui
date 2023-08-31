@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <object class="GtkWindow" id="window">
+    <property name="title" translatable="yes">World Map</property>
+    <property name="default-width">1581</property>
+    <property name="default-height">726</property>
+    <property name="child">
+      <object class="GtkScrolledWindow">
+        <child>
+          <object class="GtkPathSweep" id="view">
+            <property name="hexpand">true</property>
+            <property name="vexpand">true</property>
+          </object>
+        </child>
+      </object>
+    </property>
+  </object>
+</interface>
