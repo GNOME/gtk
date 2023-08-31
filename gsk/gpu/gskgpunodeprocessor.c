@@ -602,6 +602,32 @@ gsk_gpu_node_processor_add_color_node (GskGpuNodeProcessor *self,
 }
 
 static void
+gsk_gpu_node_processor_add_opacity_node (GskGpuNodeProcessor *self,
+                                         GskRenderNode       *node)
+{
+  GskGpuBufferWriter writer;
+  guint32 pattern_id;
+
+  gsk_gpu_frame_write_buffer_memory (self->frame, &writer);
+
+  if (!gsk_gpu_pattern_create_for_node (&writer, node))
+    {
+      gsk_gpu_buffer_writer_abort (&writer);
+      GSK_DEBUG (FALLBACK, "Color node children can't be turned into pattern");
+      gsk_gpu_node_processor_add_fallback_node (self, node);
+      return;
+    }
+
+  pattern_id = gsk_gpu_buffer_writer_commit (&writer) / sizeof (float);
+
+  gsk_gpu_uber_op (self->frame,
+                   gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, &node->bounds),
+                   &node->bounds,
+                   &self->offset,
+                   pattern_id);
+}
+
+static void
 gsk_gpu_node_processor_add_container_node (GskGpuNodeProcessor *self,
                                            GskRenderNode       *node)
 {
@@ -673,7 +699,7 @@ static const struct
   },
   [GSK_OPACITY_NODE] = {
     0,
-    NULL,
+    gsk_gpu_node_processor_add_opacity_node,
   },
   [GSK_COLOR_MATRIX_NODE] = {
     0,
