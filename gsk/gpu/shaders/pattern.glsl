@@ -5,36 +5,68 @@
 
 #ifdef GSK_FRAGMENT_SHADER
 
-vec4
-gsk_get_vec4 (uint id)
+uint
+read_uint (inout uint reader)
 {
-  return vec4 (gsk_get_float (id),
-               gsk_get_float (id + 1),
-               gsk_get_float (id + 2),
-               gsk_get_float (id + 3));
+  uint result = gsk_get_uint (reader);
+  reader++;
+  return result;
+}
+
+float
+read_float (inout uint reader)
+{
+  float result = gsk_get_float (reader);
+  reader++;
+  return result;
 }
 
 vec4
-color_pattern (uint pattern)
+read_vec4 (inout uint reader)
 {
-  vec4 color = gsk_get_vec4 (pattern);
+  return vec4 (read_float (reader), read_float (reader), read_float (reader), read_float (reader));
+}
+
+void
+opacity_pattern (inout uint reader,
+                 inout vec4 color,
+                 vec2       pos)
+{
+  float opacity = read_float (reader);
+
+  color *= opacity;
+}
+
+vec4
+color_pattern (inout uint reader)
+{
+  vec4 color = read_vec4 (reader);
 
   return color_premultiply (color);
 }
 
 vec4
-pattern (uint pattern,
+pattern (uint reader,
          vec2 pos)
 {
-  uint type = gsk_get_uint (pattern);
+  vec4 color = vec4 (1.0, 0.0, 0.8, 1.0); /* pink */
 
-  switch (type)
-  {
-    case GSK_GPU_PATTERN_COLOR:
-      return color_pattern (pattern + 1);
-    default:
-      return vec4 (1.0, 0.0, 0.8, 1.0); /* pink */
-  }
+  for(;;)
+    {
+      uint type = read_uint (reader);
+      switch (type)
+      {
+        default:
+        case GSK_GPU_PATTERN_DONE:
+          return color;
+        case GSK_GPU_PATTERN_COLOR:
+          color = color_pattern (reader);
+          break;
+        case GSK_GPU_PATTERN_OPACITY:
+          opacity_pattern (reader, color, pos);
+          break;
+      }
+    }
 }
 
 #endif

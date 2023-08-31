@@ -5,6 +5,10 @@
 #include "gskrendernode.h"
 
 static gboolean
+gsk_gpu_pattern_create_internal (GskGpuBufferWriter *writer,
+                                 GskRenderNode      *node);
+
+static gboolean
 gsk_gpu_pattern_create_for_color_node (GskGpuBufferWriter *writer,
                                        GskRenderNode      *node)
 {
@@ -17,6 +21,19 @@ gsk_gpu_pattern_create_for_color_node (GskGpuBufferWriter *writer,
   gsk_gpu_buffer_writer_append_float (writer, rgba->green);
   gsk_gpu_buffer_writer_append_float (writer, rgba->blue);
   gsk_gpu_buffer_writer_append_float (writer, rgba->alpha);
+
+  return TRUE;
+}
+
+static gboolean
+gsk_gpu_pattern_create_for_opacity_node (GskGpuBufferWriter *writer,
+                                         GskRenderNode      *node)
+{
+  if (!gsk_gpu_pattern_create_internal (writer, gsk_opacity_node_get_child (node)))
+    return FALSE;
+
+  gsk_gpu_buffer_writer_append_uint (writer, GSK_GPU_PATTERN_OPACITY);
+  gsk_gpu_buffer_writer_append_float (writer, gsk_opacity_node_get_opacity (node));
 
   return TRUE;
 }
@@ -69,7 +86,7 @@ static const struct
     NULL,
   },
   [GSK_OPACITY_NODE] = {
-    NULL,
+    gsk_gpu_pattern_create_for_opacity_node,
   },
   [GSK_COLOR_MATRIX_NODE] = {
     NULL,
@@ -118,8 +135,8 @@ static const struct
   },
 };
 
-gboolean
-gsk_gpu_pattern_create_for_node (GskGpuBufferWriter *writer,
+static gboolean
+gsk_gpu_pattern_create_internal (GskGpuBufferWriter *writer,
                                  GskRenderNode      *node)
 {
   GskRenderNodeType node_type;
@@ -134,5 +151,19 @@ gsk_gpu_pattern_create_for_node (GskGpuBufferWriter *writer,
   if (nodes_vtable[node_type].create_for_node == NULL)
     return FALSE;
 
-  return nodes_vtable[node_type].create_for_node (writer, node);
+  if (!nodes_vtable[node_type].create_for_node (writer, node))
+    return FALSE;
+
+  return TRUE;
+}
+
+gboolean
+gsk_gpu_pattern_create_for_node (GskGpuBufferWriter *writer,
+                                 GskRenderNode      *node)
+{
+  if (!gsk_gpu_pattern_create_internal (writer, node))
+    return FALSE;
+
+  gsk_gpu_buffer_writer_append_uint (writer, GSK_GPU_PATTERN_DONE);
+  return TRUE;
 }

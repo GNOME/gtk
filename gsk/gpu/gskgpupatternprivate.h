@@ -7,7 +7,9 @@
 G_BEGIN_DECLS
 
 typedef enum {
+  GSK_GPU_PATTERN_DONE,
   GSK_GPU_PATTERN_COLOR,
+  GSK_GPU_PATTERN_OPACITY,
 } GskGpuPatternType;
 
 gboolean                gsk_gpu_pattern_create_for_node                 (GskGpuBufferWriter             *writer,
