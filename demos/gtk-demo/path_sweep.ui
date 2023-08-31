@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <object class="GtkWindow" id="window">
+    <property name="title" translatable="yes">World Map</property>
+    <property name="child">
+      <object class="GtkBox">
+        <property name="orientation">vertical</property>
+        <child>
+          <object class="GtkPathSweep" id="view">
+            <property name="hexpand">true</property>
+            <property name="vexpand">true</property>
+          </object>
+        </child>
+      </object>
+    </property>
+  </object>
+</interface>
