@@ -35,7 +35,9 @@ static void
 show_path_fill (GskPath       *path,
                 GskFillRule    fill_rule,
                 const GdkRGBA *fg_color,
-                const GdkRGBA *bg_color)
+                const GdkRGBA *bg_color,
+                gboolean       show_points,
+                gboolean       show_controls)
 {
   GtkWidget *window, *sw, *child;
 
@@ -55,7 +57,10 @@ show_path_fill (GskPath       *path,
                 "fill-rule", fill_rule,
                 "fg-color", fg_color,
                 "bg-color", bg_color,
+                "show-points", show_points,
+                "show-controls", show_controls,
                 NULL);
+
   gtk_widget_set_hexpand (child, TRUE);
   gtk_widget_set_vexpand (child, TRUE);
   gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (sw), child);
@@ -70,7 +75,9 @@ static void
 show_path_stroke (GskPath       *path,
                   GskStroke     *stroke,
                   const GdkRGBA *fg_color,
-                  const GdkRGBA *bg_color)
+                  const GdkRGBA *bg_color,
+                  gboolean       show_points,
+                  gboolean       show_controls)
 {
   GtkWidget *window, *sw, *child;
 
@@ -90,7 +97,10 @@ show_path_stroke (GskPath       *path,
                 "stroke", stroke,
                 "fg-color", fg_color,
                 "bg-color", bg_color,
+                "show-points", show_points,
+                "show-controls", show_controls,
                 NULL);
+
   gtk_widget_set_hexpand (child, TRUE);
   gtk_widget_set_vexpand (child, TRUE);
   gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (sw), child);
@@ -107,6 +117,8 @@ do_show (int          *argc,
 {
   GError *error = NULL;
   gboolean do_stroke = FALSE;
+  gboolean show_points = FALSE;
+  gboolean show_controls = FALSE;
   const char *fill = "winding";
   const char *fg_color = "black";
   const char *bg_color = "white";
@@ -122,6 +134,8 @@ do_show (int          *argc,
   const GOptionEntry entries[] = {
     { "fill", 0, G_OPTION_FLAG_REVERSE, G_OPTION_ARG_NONE, &do_stroke, N_("Fill the path (the default)"), NULL },
     { "stroke", 0, 0, G_OPTION_ARG_NONE, &do_stroke, N_("Stroke the path"), NULL },
+    { "points", 0, 0, G_OPTION_ARG_NONE, &show_points, N_("Show points"), NULL },
+    { "controls", 0, 0, G_OPTION_ARG_NONE, &show_controls, N_("Show controls"), NULL },
     { "fg-color", 0, 0, G_OPTION_ARG_STRING, &fg_color, N_("Foreground color"), N_("COLOR") },
     { "bg-color", 0, 0, G_OPTION_ARG_STRING, &bg_color, N_("Background color"), N_("COLOR") },
     { G_OPTION_REMAINING, 0, 0, G_OPTION_ARG_STRING_ARRAY, &args, NULL, N_("PATH") },
@@ -214,9 +228,9 @@ do_show (int          *argc,
   _gsk_stroke_set_dashes (stroke, dashes);
 
   if (do_stroke)
-    show_path_stroke (path, stroke, &fg, &bg);
+    show_path_stroke (path, stroke, &fg, &bg, show_points, show_controls);
   else
-    show_path_fill (path, fill_rule, &fg, &bg);
+    show_path_fill (path, fill_rule, &fg, &bg, show_points, show_controls);
 
   gsk_path_unref (path);
 

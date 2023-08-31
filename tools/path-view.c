@@ -33,6 +33,10 @@ struct _PathView
   GdkRGBA bg;
   int padding;
   gboolean do_fill;
+  gboolean show_points;
+  gboolean show_controls;
+  GskPath *line_path;
+  GskPath *point_path;
 };
 
 enum {
@@ -42,6 +46,8 @@ enum {
   PROP_FILL_RULE,
   PROP_FG_COLOR,
   PROP_BG_COLOR,
+  PROP_SHOW_POINTS,
+  PROP_SHOW_CONTROLS,
   N_PROPERTIES
 };
 
@@ -72,6 +78,8 @@ path_view_dispose (GObject *object)
 
   g_clear_pointer (&self->path, gsk_path_unref);
   g_clear_pointer (&self->stroke, gsk_stroke_free);
+  g_clear_pointer (&self->line_path, gsk_path_unref);
+  g_clear_pointer (&self->point_path, gsk_path_unref);
 
   G_OBJECT_CLASS (path_view_parent_class)->dispose (object);
 }
@@ -110,6 +118,14 @@ path_view_get_property (GObject    *object,
       g_value_set_boxed (value, &self->bg);
       break;
 
+    case PROP_SHOW_POINTS:
+      g_value_set_boolean (value, self->show_points);
+      break;
+
+    case PROP_SHOW_CONTROLS:
+      g_value_set_boolean (value, self->show_controls);
+      break;
+
      default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -123,6 +139,124 @@ update_bounds (PathView *self)
     gsk_path_get_bounds (self->path, &self->bounds);
   else
     gsk_path_get_stroke_bounds (self->path, self->stroke, &self->bounds);
+
+  if (self->line_path)
+    {
+      graphene_rect_t bounds;
+
+      gsk_path_get_stroke_bounds (self->line_path, self->stroke, &bounds);
+      graphene_rect_union (&bounds, &self->bounds, &self->bounds);
+    }
+
+  if (self->point_path)
+    {
+      graphene_rect_t bounds;
+
+      gsk_path_get_stroke_bounds (self->point_path, self->stroke, &bounds);
+      graphene_rect_union (&bounds, &self->bounds, &self->bounds);
+    }
+}
+
+typedef struct
+{
+  PathView *self;
+  GskPathBuilder *line_builder;
+  GskPathBuilder *point_builder;
+} ControlData;
+
+static gboolean
+collect_cb (GskPathOperation        op,
+            const graphene_point_t *pts,
+            gsize                   n_pts,
+            float                   weight,
+            gpointer                data)
+{
+  ControlData *cd = data;
+
+  switch (op)
+    {
+    case GSK_PATH_MOVE:
+      if (cd->point_builder)
+        gsk_path_builder_add_circle (cd->point_builder, &pts[0], 4);
+      if (cd->line_builder)
+        gsk_path_builder_move_to (cd->line_builder, pts[0].x, pts[0].y);
+      break;
+
+    case GSK_PATH_LINE:
+    case GSK_PATH_CLOSE:
+      if (cd->point_builder)
+        gsk_path_builder_add_circle (cd->point_builder, &pts[1], 4);
+      if (cd->line_builder)
+        gsk_path_builder_line_to (cd->line_builder, pts[1].x, pts[1].y);
+      break;
+
+    case GSK_PATH_QUAD:
+    case GSK_PATH_CONIC:
+      if (cd->point_builder)
+        {
+          if (cd->self->show_controls)
+            gsk_path_builder_add_circle (cd->point_builder, &pts[1], 3);
+          gsk_path_builder_add_circle (cd->point_builder, &pts[2], 4);
+        }
+      if (cd->line_builder)
+        {
+          gsk_path_builder_line_to (cd->line_builder, pts[1].x, pts[1].y);
+          gsk_path_builder_line_to (cd->line_builder, pts[2].x, pts[2].y);
+        }
+      break;
+
+    case GSK_PATH_CUBIC:
+      if (cd->point_builder)
+        {
+          if (cd->self->show_controls)
+            {
+              gsk_path_builder_add_circle (cd->point_builder, &pts[1], 3);
+              gsk_path_builder_add_circle (cd->point_builder, &pts[2], 3);
+            }
+          gsk_path_builder_add_circle (cd->point_builder, &pts[3], 4);
+        }
+      if (cd->line_builder)
+        {
+          gsk_path_builder_line_to (cd->line_builder, pts[1].x, pts[1].y);
+          gsk_path_builder_line_to (cd->line_builder, pts[2].x, pts[2].y);
+          gsk_path_builder_line_to (cd->line_builder, pts[3].x, pts[3].y);
+        }
+      break;
+
+    default:
+      g_assert_not_reached ();
+    }
+
+  return TRUE;
+}
+
+static void
+update_controls (PathView *self)
+{
+  ControlData data = { 0, };
+
+  data.self = self;
+
+  g_clear_pointer (&self->line_path, gsk_path_unref);
+  g_clear_pointer (&self->point_path, gsk_path_unref);
+
+  if (self->path && self->show_controls)
+    data.line_builder = gsk_path_builder_new ();
+
+  if (self->path && (self->show_points || self->show_controls))
+    data.point_builder = gsk_path_builder_new ();
+
+  if (data.line_builder || data.point_builder)
+    {
+      gsk_path_foreach (self->path, -1, collect_cb, &data);
+
+      if (data.line_builder)
+        self->line_path = gsk_path_builder_free_to_path (data.line_builder);
+      if (data.point_builder)
+        self->point_path = gsk_path_builder_free_to_path (data.point_builder);
+    }
+
+  update_bounds (self);
 }
 
 static void
@@ -139,6 +273,7 @@ path_view_set_property (GObject      *object,
     case PROP_PATH:
       g_clear_pointer (&self->path, gsk_path_unref);
       self->path = g_value_dup_boxed (value);
+      update_controls (self);
       update_bounds (self);
       gtk_widget_queue_resize (GTK_WIDGET (self));
       break;
@@ -168,6 +303,18 @@ path_view_set_property (GObject      *object,
 
     case PROP_BG_COLOR:
       self->bg = *(GdkRGBA *) g_value_get_boxed (value);
+      gtk_widget_queue_draw (GTK_WIDGET (self));
+      break;
+
+    case PROP_SHOW_POINTS:
+      self->show_points = g_value_get_boolean (value);
+      update_controls (self);
+      gtk_widget_queue_draw (GTK_WIDGET (self));
+      break;
+
+    case PROP_SHOW_CONTROLS:
+      self->show_controls = g_value_get_boolean (value);
+      update_controls (self);
       gtk_widget_queue_draw (GTK_WIDGET (self));
       break;
 
@@ -204,14 +351,33 @@ path_view_snapshot (GtkWidget   *widget,
   graphene_rect_inset (&bounds, - self->padding, - self->padding);
 
   gtk_snapshot_save (snapshot);
+
   gtk_snapshot_append_color (snapshot, &self->bg, &self->bounds);
   gtk_snapshot_translate (snapshot, &GRAPHENE_POINT_INIT (self->padding, self->padding));
+
   if (self->do_fill)
-    gtk_snapshot_push_fill (snapshot, self->path, self->fill_rule);
+    gtk_snapshot_append_fill (snapshot, self->path, self->fill_rule, &self->fg);
   else
-    gtk_snapshot_push_stroke (snapshot, self->path, self->stroke);
-  gtk_snapshot_append_color (snapshot, &self->fg, &self->bounds);
-  gtk_snapshot_pop (snapshot);
+    gtk_snapshot_append_stroke (snapshot, self->path, self->stroke, &self->fg);
+
+  if (self->line_path)
+    {
+      GskStroke *stroke = gsk_stroke_new (1);
+      GdkRGBA gray = (GdkRGBA) { 0, 0, 0, 0.5 };
+
+      gtk_snapshot_append_stroke (snapshot, self->line_path, stroke, &gray);
+    }
+
+  if (self->point_path)
+    {
+      GskStroke *stroke = gsk_stroke_new (1);
+      GdkRGBA purple = (GdkRGBA) { 1, 0, 1, 1 };
+      GdkRGBA black = (GdkRGBA) { 0, 0, 0, 1 };
+
+      gtk_snapshot_append_fill (snapshot, self->point_path, GSK_FILL_RULE_WINDING, &purple);
+      gtk_snapshot_append_stroke (snapshot, self->point_path, stroke, &black);
+    }
+
   gtk_snapshot_restore (snapshot);
 }
 
@@ -258,6 +424,16 @@ path_view_class_init (PathViewClass *class)
       = g_param_spec_boxed ("bg-color", NULL, NULL,
                             GDK_TYPE_RGBA,
                             G_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+
+  properties[PROP_SHOW_POINTS]
+      = g_param_spec_boolean ("show-points", NULL, NULL,
+                              FALSE,
+                              G_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+
+  properties[PROP_SHOW_CONTROLS]
+      = g_param_spec_boolean ("show-controls", NULL, NULL,
+                              FALSE,
+                              G_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   g_object_class_install_properties (object_class, N_PROPERTIES, properties);
 }
