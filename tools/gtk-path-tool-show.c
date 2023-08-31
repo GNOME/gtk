@@ -209,41 +209,9 @@ do_show (int          *argc,
   stroke = gsk_stroke_new (line_width);
   gsk_stroke_set_line_cap (stroke, line_cap);
   gsk_stroke_set_line_join (stroke, line_join);
-
   gsk_stroke_set_miter_limit (stroke, miter_limit);
-
-  if (dashes != NULL)
-    {
-      GArray *d = g_array_new (FALSE, FALSE, sizeof (float));
-      char **strings;
-
-      strings = g_strsplit (dashes, ",", 0);
-
-      for (unsigned int i = 0; strings[i]; i++)
-        {
-          char *end = NULL;
-          float f;
-
-          f = (float) g_ascii_strtod (strings[i], &end);
-
-          if (*end != '\0')
-            {
-              char *msg = g_strdup_printf (_("Failed to parse '%s' as number"), strings[i]);
-              g_printerr ("%s\n", msg);
-              exit (1);
-            }
-
-          g_array_append_val (d, f);
-        }
-
-      g_strfreev (strings);
-
-      gsk_stroke_set_dash (stroke, (const float *)d->data, d->len);
-
-      g_array_unref (d);
-    }
-
   gsk_stroke_set_dash_offset (stroke, dash_offset);
+  _gsk_stroke_set_dashes (stroke, dashes);
 
   if (do_stroke)
     show_path_stroke (path, stroke, &fg, &bg);

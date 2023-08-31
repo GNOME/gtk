@@ -13,3 +13,6 @@ int      get_enum_value (GType       type,
                          const char *str);
 void     get_color      (GdkRGBA    *rgba,
                          const char *str);
+
+void     _gsk_stroke_set_dashes (GskStroke  *stroke,
+                                 const char *dashes);

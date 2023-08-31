@@ -137,3 +137,40 @@ get_color (GdkRGBA    *rgba,
       exit (1);
     }
 }
+
+void
+_gsk_stroke_set_dashes (GskStroke  *stroke,
+                        const char *dashes)
+{
+  GArray *d;
+  char **strings;
+
+  if (!dashes)
+    return;
+
+  d = g_array_new (FALSE, FALSE, sizeof (float));
+  strings = g_strsplit (dashes, ",", 0);
+
+  for (unsigned int i = 0; strings[i]; i++)
+    {
+      char *end = NULL;
+      float f;
+
+      f = (float) g_ascii_strtod (strings[i], &end);
+
+      if (*end != '\0')
+        {
+          char *msg = g_strdup_printf (_("Failed to parse '%s' as number"), strings[i]);
+          g_printerr ("%s\n", msg);
+          exit (1);
+        }
+
+      g_array_append_val (d, f);
+    }
+
+  g_strfreev (strings);
+
+  gsk_stroke_set_dash (stroke, (const float *)d->data, d->len);
+
+  g_array_unref (d);
+}
