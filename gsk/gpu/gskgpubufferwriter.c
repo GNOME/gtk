@@ -18,6 +18,21 @@ gsk_gpu_buffer_writer_abort (GskGpuBufferWriter *self)
   self->finish (self, FALSE);
 }
 
+gsize
+gsk_gpu_buffer_writer_get_size (GskGpuBufferWriter *self)
+{
+  return self->size;
+}
+
+void
+gsk_gpu_buffer_writer_rewind (GskGpuBufferWriter *self,
+                              gsize               size)
+{
+  g_assert (size <= self->size);
+
+  self->size = size;
+}
+
 void
 gsk_gpu_buffer_writer_ensure_size (GskGpuBufferWriter *self,
                                    gsize               size)

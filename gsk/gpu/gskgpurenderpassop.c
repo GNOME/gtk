@@ -333,7 +333,5 @@ gsk_gpu_render_pass_op_offscreen (GskGpuFrame           *frame,
                               image,
                               GSK_RENDER_PASS_OFFSCREEN);
 
-  g_object_unref (image);
-
   return image;
 }
