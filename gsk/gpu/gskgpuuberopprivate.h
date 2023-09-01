@@ -1,6 +1,6 @@
 #pragma once
 
-#include "gskgputypesprivate.h"
+#include "gskgpushaderopprivate.h"
 
 #include <graphene.h>
 
@@ -10,6 +10,8 @@ void                    gsk_gpu_uber_op                                 (GskGpuF
                                                                          GskGpuShaderClip                clip,
                                                                          const graphene_rect_t          *rect,
                                                                          const graphene_point_t         *offset,
+                                                                         const GskGpuShaderImage        *images,
+                                                                         gsize                           n_images,
                                                                          guint32                         pattern_id);
 
 

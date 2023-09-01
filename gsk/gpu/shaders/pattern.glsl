@@ -38,6 +38,16 @@ opacity_pattern (inout uint reader,
 }
 
 vec4
+texture_pattern (inout uint reader,
+                 vec2       pos)
+{
+  uint tex_id = read_uint (reader);
+  vec4 tex_rect = read_vec4 (reader);
+
+  return texture (gsk_get_texture (tex_id), (pos - tex_rect.xy) / tex_rect.zw);
+}
+
+vec4
 color_pattern (inout uint reader)
 {
   vec4 color = read_vec4 (reader);
@@ -61,6 +71,9 @@ pattern (uint reader,
           return color;
         case GSK_GPU_PATTERN_COLOR:
           color = color_pattern (reader);
+          break;
+        case GSK_GPU_PATTERN_TEXTURE:
+          color = texture_pattern (reader, pos);
           break;
         case GSK_GPU_PATTERN_OPACITY:
           opacity_pattern (reader, color, pos);
