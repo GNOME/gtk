@@ -27,3 +27,9 @@ typedef enum {
   GSK_GPU_SHADER_CLIP_ROUNDED
 } GskGpuShaderClip;
 
+typedef enum {
+  GSK_GPU_PATTERN_DONE,
+  GSK_GPU_PATTERN_COLOR,
+  GSK_GPU_PATTERN_OPACITY,
+} GskGpuPatternType;
+
