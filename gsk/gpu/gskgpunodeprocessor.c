@@ -319,6 +319,74 @@ gsk_gpu_node_processor_clip_node_bounds (GskGpuNodeProcessor *self,
   return TRUE;
 }
 
+static GskGpuImage *
+gsk_gpu_node_procesor_get_node_as_image (GskGpuNodeProcessor *self,
+                                         GskRenderNode       *node,
+                                         graphene_rect_t     *out_bounds)
+{
+  GskGpuImage *result;
+
+  switch ((guint) gsk_render_node_get_node_type (node))
+    {
+    case GSK_TEXTURE_NODE:
+      {
+        GdkTexture *texture = gsk_texture_node_get_texture (node);
+        GskGpuDevice *device = gsk_gpu_frame_get_device (self->frame);
+        gint64 timestamp = gsk_gpu_frame_get_timestamp (self->frame);
+        result = gsk_gpu_device_lookup_texture_image (device, texture, timestamp);
+        if (result == NULL)
+          {
+            result = gsk_gpu_upload_texture_op (self->frame, texture);
+            g_object_ref (result);
+            gsk_gpu_device_cache_texture_image (device, texture, timestamp, result);
+          }
+
+        *out_bounds = node->bounds;
+        return result;
+      }
+
+    case GSK_CAIRO_NODE:
+      {
+        graphene_rect_t clipped;
+
+        graphene_rect_offset_r (&self->clip.rect.bounds, - self->offset.x, - self->offset.y, &clipped);
+        graphene_rect_intersection (&clipped, &node->bounds, &clipped);
+
+        if (clipped.size.width == 0 || clipped.size.height == 0)
+          return NULL;
+
+        result = gsk_gpu_upload_cairo_op (self->frame,
+                                          node,
+                                          &self->scale,
+                                          &clipped);
+        g_object_ref (result);
+
+        *out_bounds = clipped;
+        return result;
+      }
+
+    default:
+      {
+        graphene_rect_t clipped;
+
+        graphene_rect_offset_r (&self->clip.rect.bounds, - self->offset.x, - self->offset.y, &clipped);
+        graphene_rect_intersection (&clipped, &node->bounds, &clipped);
+
+        if (clipped.size.width == 0 || clipped.size.height == 0)
+          return NULL;
+
+        GSK_DEBUG (FALLBACK, "Offscreening node '%s'", g_type_name_from_instance ((GTypeInstance *) node));
+        result = gsk_gpu_render_pass_op_offscreen (self->frame,
+                                                   &self->scale,
+                                                   &clipped,
+                                                   node);
+
+        *out_bounds = clipped;
+        return result;
+      }
+   }
+}
+
 static void
 gsk_gpu_node_processor_add_fallback_node (GskGpuNodeProcessor *self,
                                           GskRenderNode       *node)
@@ -949,6 +1017,7 @@ gsk_gpu_node_processor_create_node_pattern (GskGpuNodeProcessor *self,
                                             gsize               *out_n_images)
 {
   GskRenderNodeType node_type;
+  graphene_rect_t bounds;
 
   node_type = gsk_render_node_get_node_type (node);
   if (node_type >= G_N_ELEMENTS (nodes_vtable))
@@ -959,11 +1028,27 @@ gsk_gpu_node_processor_create_node_pattern (GskGpuNodeProcessor *self,
 
   *out_n_images = 0;
 
-  if (nodes_vtable[node_type].create_pattern == NULL)
+  if (nodes_vtable[node_type].create_pattern != NULL)
+    {
+      gsize size_before = gsk_gpu_buffer_writer_get_size (writer);
+      if (nodes_vtable[node_type].create_pattern (self, writer, node, images, n_images, out_n_images))
+        return TRUE;
+      gsk_gpu_buffer_writer_rewind (writer, size_before);
+    }
+
+  if (n_images == 0)
     return FALSE;
 
-  if (!nodes_vtable[node_type].create_pattern (self, writer, node, images, n_images, out_n_images))
-    return FALSE;
+  images[0].image = gsk_gpu_node_procesor_get_node_as_image (self, node, &bounds);
+  images[0].sampler = GSK_GPU_SAMPLER_DEFAULT;
+  images[0].descriptor = gsk_gpu_frame_get_image_descriptor (self->frame,
+                                                             images[0].image,
+                                                             images[0].sampler);
+  *out_n_images = 1;
+
+  gsk_gpu_buffer_writer_append_uint (writer, GSK_GPU_PATTERN_TEXTURE);
+  gsk_gpu_buffer_writer_append_uint (writer, images[0].descriptor);
+  gsk_gpu_buffer_writer_append_rect (writer, &bounds, &self->offset);
 
   return TRUE;
 }

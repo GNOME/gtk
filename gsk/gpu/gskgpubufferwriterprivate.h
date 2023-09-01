@@ -24,6 +24,9 @@ struct _GskGpuBufferWriter
 gsize                   gsk_gpu_buffer_writer_commit                    (GskGpuBufferWriter             *self);
 void                    gsk_gpu_buffer_writer_abort                     (GskGpuBufferWriter             *self);
 
+gsize                   gsk_gpu_buffer_writer_get_size                  (GskGpuBufferWriter             *self);
+void                    gsk_gpu_buffer_writer_rewind                    (GskGpuBufferWriter             *self,
+                                                                         gsize                           size);
 void                    gsk_gpu_buffer_writer_ensure_size               (GskGpuBufferWriter             *self,
                                                                          gsize                           size);
 void                    gsk_gpu_buffer_writer_append                    (GskGpuBufferWriter             *self,
