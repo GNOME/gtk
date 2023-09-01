@@ -2,6 +2,8 @@
 
 #include "gskgpubufferwriterprivate.h"
 
+#include "gskrectprivate.h"
+
 #include <string.h>
 
 gsize
@@ -66,3 +68,14 @@ gsk_gpu_buffer_writer_append_uint (GskGpuBufferWriter *self,
   gsk_gpu_buffer_writer_append (self, G_ALIGNOF (guint32), (guchar *) &u, sizeof (guint32));
 }
 
+void
+gsk_gpu_buffer_writer_append_rect (GskGpuBufferWriter     *self,
+                                   const graphene_rect_t  *rect,
+                                   const graphene_point_t *offset)
+{
+  float f[4];
+
+  gsk_gpu_rect_to_float (rect, offset, f);
+
+  gsk_gpu_buffer_writer_append (self, G_ALIGNOF (float), (guchar *) f, sizeof (f));
+}

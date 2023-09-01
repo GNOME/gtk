@@ -2,6 +2,8 @@
 
 #include "gskgputypesprivate.h"
 
+#include <graphene.h>
+
 G_BEGIN_DECLS
 
 typedef struct _GskGpuBufferWriter GskGpuBufferWriter;
@@ -35,7 +37,8 @@ void                    gsk_gpu_buffer_writer_append_int                (GskGpuB
                                                                          gint32                          i);
 void                    gsk_gpu_buffer_writer_append_uint               (GskGpuBufferWriter             *self,
                                                                          guint32                         u);
-
-
+void                    gsk_gpu_buffer_writer_append_rect               (GskGpuBufferWriter             *self,
+                                                                         const graphene_rect_t          *rect,
+                                                                         const graphene_point_t         *offset);
 
 G_END_DECLS

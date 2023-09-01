@@ -6,17 +6,22 @@
 
 G_BEGIN_DECLS
 
+typedef struct _GskGpuShaderImage GskGpuShaderImage;
+
+struct _GskGpuShaderImage
+{
+  GskGpuImage *image;
+  GskGpuSampler sampler;
+  guint32 descriptor;
+};
+
 struct _GskGpuShaderOp
 {
   GskGpuOp parent_op;
 
   GskGpuShaderClip clip;
   gsize vertex_offset;
-  struct {
-    GskGpuImage *image;
-    GskGpuSampler sampler;
-    guint32 descriptor;
-  } images[2];
+  GskGpuShaderImage images[2];
   gsize n_images;
 };
 
