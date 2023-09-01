@@ -259,39 +259,39 @@ spinner {
 
 .large-title {
    font-weight: 300;
-   font-size: 24pt;
+   font-size: 240%;
 }
 .title-1 {
    font-weight: 800;
-   font-size: 20pt;
+   font-size: 200%;
 }
 .title-2 {
    font-weight: 800;
-   font-size: 15pt;
+   font-size: 150%;
 }
 .title-3 {
    font-weight: 700;
-   font-size: 15pt;
+   font-size: 150%;
 }
 .title-4 {
    font-weight: 700;
-   font-size: 13pt;
+   font-size: 130%;
 }
 .heading {
    font-weight: 700;
-   font-size: 11pt;
+   font-size: 110%;
 }
 .body {
    font-weight: 400;
-   font-size: 11pt;
+   font-size: 110%;
 }
 .caption-heading {
    font-weight: 700;
-   font-size: 9pt;
+   font-size: 90%;
 }
 .caption {
    font-weight: 400;
-   font-size: 9pt;
+   font-size: 90%;
 }
 
 /****************
@@ -3592,7 +3592,7 @@ window.dialog.message { // Message Dialog styling
 
   & label.title {
     font-weight: 800;
-    font-size: 15pt;
+    font-size: 150%;
   }
 
   &.csd { // rounded bottom border styling for csd version
