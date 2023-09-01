@@ -36,6 +36,8 @@ GType                   gsk_gpu_device_get_type                         (void) G
 
 void                    gsk_gpu_device_setup                            (GskGpuDevice           *self,
                                                                          GdkDisplay             *display);
+void                    gsk_gpu_device_gc                               (GskGpuDevice           *self,
+                                                                         gint64                  timestamp);
 
 GdkDisplay *            gsk_gpu_device_get_display                      (GskGpuDevice           *self);
 
@@ -47,6 +49,14 @@ GskGpuImage *           gsk_gpu_device_create_upload_image              (GskGpuD
                                                                          GdkMemoryFormat         format,
                                                                          gsize                   width,
                                                                          gsize                   height);
+
+GskGpuImage *           gsk_gpu_device_lookup_texture_image             (GskGpuDevice           *self,
+                                                                         GdkTexture             *texture,
+                                                                         gint64                  timestamp);
+void                    gsk_gpu_device_cache_texture_image              (GskGpuDevice           *self,
+                                                                         GdkTexture             *texture,
+                                                                         gint64                  timestamp,
+                                                                         GskGpuImage            *image);
 
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GskGpuDevice, g_object_unref)
 

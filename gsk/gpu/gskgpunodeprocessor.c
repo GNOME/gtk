@@ -3,10 +3,12 @@
 #include "gskgpunodeprocessorprivate.h"
 
 #include "gskgpuclipprivate.h"
+#include "gskgpudeviceprivate.h"
 #include "gskgpuframeprivate.h"
 #include "gskgpuglobalsopprivate.h"
 #include "gskgpuimageprivate.h"
 #include "gskgpupatternprivate.h"
+#include "gskgpurenderpassopprivate.h"
 #include "gskgpuscissoropprivate.h"
 #include "gskgputextureopprivate.h"
 #include "gskgpuuberopprivate.h"
@@ -602,6 +604,38 @@ gsk_gpu_node_processor_add_color_node (GskGpuNodeProcessor *self,
 }
 
 static void
+gsk_gpu_node_processor_add_texture_node (GskGpuNodeProcessor *self,
+                                         GskRenderNode       *node)
+{
+  GskGpuDevice *device;
+  GskGpuImage *image;
+  GdkTexture *texture;
+  gint64 timestamp;
+
+  device = gsk_gpu_frame_get_device (self->frame);
+  texture = gsk_texture_node_get_texture (node);
+  timestamp = gsk_gpu_frame_get_timestamp (self->frame);
+
+  image = gsk_gpu_device_lookup_texture_image (device, texture, timestamp);
+  if (image == NULL)
+    {
+      image = gsk_gpu_upload_texture_op (self->frame, texture);
+      gsk_gpu_device_cache_texture_image (device, texture, timestamp, image);
+      image = g_object_ref (image);
+    }
+
+  gsk_gpu_texture_op (self->frame,
+                      gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, &node->bounds),
+                      image,
+                      GSK_GPU_SAMPLER_DEFAULT,
+                      &node->bounds,
+                      &self->offset,
+                      &node->bounds);
+
+  g_object_unref (image);
+}
+
+static void
 gsk_gpu_node_processor_add_opacity_node (GskGpuNodeProcessor *self,
                                          GskRenderNode       *node)
 {
@@ -683,7 +717,7 @@ static const struct
   },
   [GSK_TEXTURE_NODE] = {
     0,
-    NULL,
+    gsk_gpu_node_processor_add_texture_node,
   },
   [GSK_INSET_SHADOW_NODE] = {
     0,
