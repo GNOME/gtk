@@ -31,6 +31,7 @@ struct _GskGpuFramePrivate
 {
   GskGpuRenderer *renderer;
   GskGpuDevice *device;
+  gint64 timestamp;
 
   GskGpuOps ops;
   GskGpuOp *first_op;
@@ -146,6 +147,14 @@ gsk_gpu_frame_get_context (GskGpuFrame *self)
   GskGpuFramePrivate *priv = gsk_gpu_frame_get_instance_private (self);
 
   return gsk_gpu_renderer_get_context (priv->renderer);
+}
+
+gint64
+gsk_gpu_frame_get_timestamp (GskGpuFrame *self)
+{
+  GskGpuFramePrivate *priv = gsk_gpu_frame_get_instance_private (self);
+
+  return priv->timestamp;
 }
 
 static void
@@ -458,13 +467,17 @@ copy_texture (gpointer    user_data,
 
 static void
 gsk_gpu_frame_record (GskGpuFrame            *self,
+                      gint64                  timestamp,
                       GskGpuImage            *target,
                       const cairo_region_t   *clip,
                       GskRenderNode          *node,
                       const graphene_rect_t  *viewport,
                       GdkTexture            **texture)
 {
+  GskGpuFramePrivate *priv = gsk_gpu_frame_get_instance_private (self);
   cairo_rectangle_int_t extents;
+
+  priv->timestamp = timestamp;
 
   if (clip)
     {
@@ -530,6 +543,7 @@ gsk_gpu_frame_submit (GskGpuFrame *self)
 
 void
 gsk_gpu_frame_render (GskGpuFrame            *self,
+                      gint64                  timestamp,
                       GskGpuImage            *target,
                       const cairo_region_t   *region,
                       GskRenderNode          *node,
@@ -538,7 +552,7 @@ gsk_gpu_frame_render (GskGpuFrame            *self,
 {
   gsk_gpu_frame_cleanup (self);
 
-  gsk_gpu_frame_record (self, target, region, node, viewport, texture);
+  gsk_gpu_frame_record (self, timestamp, target, region, node, viewport, texture);
 
   gsk_gpu_frame_submit (self);
 }

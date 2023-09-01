@@ -195,6 +195,7 @@ gsk_gpu_renderer_render_texture (GskRenderer           *renderer,
 
   texture = NULL;
   gsk_gpu_frame_render (frame,
+                        g_get_monotonic_time(),
                         image,
                         NULL,
                         root,
@@ -241,6 +242,7 @@ gsk_gpu_renderer_render (GskRenderer          *renderer,
   surface = gdk_draw_context_get_surface (priv->context);
 
   gsk_gpu_frame_render (frame,
+                        g_get_monotonic_time(),
                         backbuffer,
                         render_region,
                         root,
