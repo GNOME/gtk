@@ -203,6 +203,114 @@ gsk_gpu_upload_op_vk_command (GskGpuOp         *op,
 }
 #endif
 
+typedef struct _GskGpuUploadTextureOp GskGpuUploadTextureOp;
+
+struct _GskGpuUploadTextureOp
+{
+  GskGpuOp op;
+
+  GskGpuImage *image;
+  GskGpuBuffer *buffer;
+  GdkTexture *texture;
+};
+
+static void
+gsk_gpu_upload_texture_op_finish (GskGpuOp *op)
+{
+  GskGpuUploadTextureOp *self = (GskGpuUploadTextureOp *) op;
+
+  g_object_unref (self->image);
+  g_clear_object (&self->buffer);
+  g_object_unref (self->texture);
+}
+
+static void
+gsk_gpu_upload_texture_op_print (GskGpuOp    *op,
+                                 GskGpuFrame *frame,
+                                 GString     *string,
+                                 guint        indent)
+{
+  GskGpuUploadTextureOp *self = (GskGpuUploadTextureOp *) op;
+
+  gsk_gpu_print_op (string, indent, "upload-texture");
+  gsk_gpu_print_image (string, self->image);
+  gsk_gpu_print_newline (string);
+}
+
+static void
+gsk_gpu_upload_texture_op_draw (GskGpuOp *op,
+                                guchar   *data,
+                                gsize     stride)
+{
+  GskGpuUploadTextureOp *self = (GskGpuUploadTextureOp *) op;
+  GdkTextureDownloader *downloader;
+
+  downloader = gdk_texture_downloader_new (self->texture);
+  gdk_texture_downloader_set_format (downloader, gsk_gpu_image_get_format (self->image));
+  gdk_texture_downloader_download_into (downloader, data, stride);
+  gdk_texture_downloader_free (downloader);
+}
+
+#ifdef GDK_RENDERING_VULKAN
+static GskGpuOp *
+gsk_gpu_upload_texture_op_vk_command (GskGpuOp        *op,
+                                      GskGpuFrame     *frame,
+                                      VkRenderPass     render_pass,
+                                      VkFormat         format,
+                                      VkCommandBuffer  command_buffer)
+{
+  GskGpuUploadTextureOp *self = (GskGpuUploadTextureOp *) op;
+
+  return gsk_gpu_upload_op_vk_command (op,
+                                       frame,
+                                       command_buffer,
+                                       GSK_VULKAN_IMAGE (self->image),
+                                       gsk_gpu_upload_texture_op_draw,
+                                       &self->buffer);
+}
+#endif
+
+static GskGpuOp *
+gsk_gpu_upload_texture_op_gl_command (GskGpuOp    *op,
+                                      GskGpuFrame *frame,
+                                      gsize        flip_y)
+{
+  GskGpuUploadTextureOp *self = (GskGpuUploadTextureOp *) op;
+
+  return gsk_gpu_upload_op_gl_command (op,
+                                       frame,
+                                       self->image,
+                                       gsk_gpu_upload_texture_op_draw);
+}
+
+static const GskGpuOpClass GSK_GPU_UPLOAD_TEXTURE_OP_CLASS = {
+  GSK_GPU_OP_SIZE (GskGpuUploadTextureOp),
+  GSK_GPU_STAGE_UPLOAD,
+  gsk_gpu_upload_texture_op_finish,
+  gsk_gpu_upload_texture_op_print,
+#ifdef GDK_RENDERING_VULKAN
+  gsk_gpu_upload_texture_op_vk_command,
+#endif
+  gsk_gpu_upload_texture_op_gl_command
+};
+
+GskGpuImage *
+gsk_gpu_upload_texture_op (GskGpuFrame *frame,
+                           GdkTexture  *texture)
+{
+  GskGpuUploadTextureOp *self;
+
+  self = (GskGpuUploadTextureOp *) gsk_gpu_op_alloc (frame, &GSK_GPU_UPLOAD_TEXTURE_OP_CLASS);
+
+  self->texture = g_object_ref (texture);
+  self->image = gsk_gpu_device_create_upload_image (gsk_gpu_frame_get_device (frame),
+                                                    gdk_texture_get_format (texture),
+                                                    gdk_texture_get_width (texture),
+                                                    gdk_texture_get_height (texture));
+
+  return self->image;
+}
+
 typedef struct _GskGpuUploadCairoOp GskGpuUploadCairoOp;
 
 struct _GskGpuUploadCairoOp
