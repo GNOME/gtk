@@ -49,6 +49,7 @@ void                    gsk_gpu_frame_setup                             (GskGpuF
 
 GdkDrawContext *        gsk_gpu_frame_get_context                       (GskGpuFrame            *self) G_GNUC_PURE;
 GskGpuDevice *          gsk_gpu_frame_get_device                        (GskGpuFrame            *self) G_GNUC_PURE;
+gint64                  gsk_gpu_frame_get_timestamp                     (GskGpuFrame            *self) G_GNUC_PURE;
 
 gpointer                gsk_gpu_frame_alloc_op                          (GskGpuFrame            *self,
                                                                          gsize                   size);
@@ -65,6 +66,7 @@ void                    gsk_gpu_frame_write_buffer_memory               (GskGpuF
 gboolean                gsk_gpu_frame_is_busy                           (GskGpuFrame            *self);
 
 void                    gsk_gpu_frame_render                            (GskGpuFrame            *self,
+                                                                         gint64                  timestamp,
                                                                          GskGpuImage            *target,
                                                                          const cairo_region_t   *region,
                                                                          GskRenderNode          *node,
