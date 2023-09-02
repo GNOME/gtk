@@ -430,6 +430,7 @@ tools/gtk-path-tool-decompose.c
 tools/gtk-path-tool-info.c
 tools/gtk-path-tool-render.c
 tools/gtk-path-tool-restrict.c
+tools/gtk-path-tool-reverse.c
 tools/gtk-path-tool-show.c
 tools/gtk-path-tool-utils.c
 tools/gtk-rendernode-tool.c
