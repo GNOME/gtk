@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2023-08-22 16:19+0000\n"
-"PO-Revision-Date: 2023-08-22 23:12+0200\n"
+"POT-Creation-Date: 2023-08-31 12:06+0000\n"
+"PO-Revision-Date: 2023-09-02 05:25+0200\n"
 "Last-Translator: Ekaterine Papava <papava.e@gtu.ge>\n"
 "Language-Team: Georgian <http://mail.gnome.org/mailman/listinfo/gnome-ge-"
 "list>\n"
@@ -2879,7 +2879,7 @@ msgstr "_წინა ჩანართი"
 msgid "Next tab"
 msgstr "_შემდეგი ჩანართი"
 
-#: gtk/gtknotebook.c:4331 gtk/gtknotebook.c:6539
+#: gtk/gtknotebook.c:4331 gtk/gtknotebook.c:6541
 #, c-format
 msgid "Page %u"
 msgstr "გვერდი %u"
@@ -3546,7 +3546,7 @@ msgctxt "keyboard side marker"
 msgid "R"
 msgstr "მარჯ"
 
-#: gtk/gtkshortcutssection.c:407
+#: gtk/gtkshortcutssection.c:414
 msgid "_Show All"
 msgstr "_ყველას ჩვენება"
 
@@ -3583,27 +3583,27 @@ msgid "Swipe right"
 msgstr "გაუსვით მარჯვნივ"
 
 #. Translators: This is placeholder text for the search entry in the shortcuts window
-#: gtk/gtkshortcutswindow.c:855 gtk/gtkshortcutswindow.c:922
-#: gtk/gtkshortcutswindow.c:927
+#: gtk/gtkshortcutswindow.c:879 gtk/gtkshortcutswindow.c:946
+#: gtk/gtkshortcutswindow.c:951
 msgid "Search Shortcuts"
 msgstr "ძებნის მალსახმობები"
 
 #. Translators: This is the window title for the shortcuts window in normal mode
-#: gtk/gtkshortcutswindow.c:887 gtk/inspector/window.ui:498
+#: gtk/gtkshortcutswindow.c:911 gtk/inspector/window.ui:498
 msgid "Shortcuts"
 msgstr "მალსახმობები"
 
 #. Translators: This is the window title for the shortcuts window in search mode
-#: gtk/gtkshortcutswindow.c:892
+#: gtk/gtkshortcutswindow.c:916
 msgid "Search Results"
 msgstr "ძებნს შედეგები"
 
-#: gtk/gtkshortcutswindow.c:989 gtk/ui/gtkemojichooser.ui:349
+#: gtk/gtkshortcutswindow.c:1013 gtk/ui/gtkemojichooser.ui:349
 #: gtk/ui/gtkfilechooserwidget.ui:239
 msgid "No Results Found"
 msgstr "შედეგების გარეშე"
 
-#: gtk/gtkshortcutswindow.c:1000 gtk/ui/gtkemojichooser.ui:362
+#: gtk/gtkshortcutswindow.c:1024 gtk/ui/gtkemojichooser.ui:362
 #: gtk/ui/gtkfilechooserwidget.ui:252 gtk/ui/gtkplacesview.ui:218
 msgid "Try a different search"
 msgstr "სცადეთ სხვა ძებნა"
@@ -3678,7 +3678,7 @@ msgid "Description"
 msgstr "აღწერა"
 
 #: gtk/inspector/a11y.ui:99 gtk/inspector/misc-info.ui:296
-#: tools/gtk-path-tool-info.c:128
+#: tools/gtk-path-tool-info.c:132
 msgid "Bounds"
 msgstr "საზღვრები"
 
@@ -7453,6 +7453,8 @@ msgid ""
 "\n"
 "Commands:\n"
 "  decompose    Decompose the path\n"
+"  reverse      Reverse the path\n"
+"  restrict     Restrict the path to a segment\n"
 "  show         Display the path in a window\n"
 "  render       Render the path as an image\n"
 "  info         Print information about the path\n"
@@ -7465,78 +7467,95 @@ msgstr ""
 "\n"
 "ბრძანებები:\n"
 "  decompose     ბილიკის დაშლა\n"
+"  reverse     ბილიკის შებრუნება\n"
+"  restrict     სეგმენტამდე ბილიკის შეზღუდვა\n"
 "  show     ბილიკის ფანჯარაში ჩვენება\n"
 "  render    ბილიკის რენდერი გამოსახულების სახით\n"
 "  info         ბილიკის შესახებ ინფორმაციის გამოტანა\n"
 "\n"
 
-#: tools/gtk-path-tool-decompose.c:75
+#: tools/gtk-path-tool-decompose.c:84
 msgid "Allow quadratic Bézier curves"
 msgstr "კვადრატული ბეზიეს მრუდების დაშვება"
 
-#: tools/gtk-path-tool-decompose.c:76
+#: tools/gtk-path-tool-decompose.c:85
 msgid "Allow cubic Bézier curves"
 msgstr "კუბური ბეზიეს მრუდების დაშვება"
 
-#: tools/gtk-path-tool-decompose.c:77 tools/gtk-path-tool-info.c:88
-#: tools/gtk-path-tool-render.c:58 tools/gtk-path-tool-show.c:127
+#: tools/gtk-path-tool-decompose.c:86
+msgid "Allow conic Bézier curves"
+msgstr "კონუსური ბეზიეს მრუდების დაშვება"
+
+#: tools/gtk-path-tool-decompose.c:87 tools/gtk-path-tool-info.c:88
+#: tools/gtk-path-tool-render.c:58 tools/gtk-path-tool-restrict.c:38
+#: tools/gtk-path-tool-show.c:141
 msgid "PATH"
 msgstr "ბილიკი"
 
-#: tools/gtk-path-tool-decompose.c:89
+#: tools/gtk-path-tool-decompose.c:99
 msgid "Decompose a path."
 msgstr "ბილიკის დაშლა."
 
-#: tools/gtk-path-tool-decompose.c:102 tools/gtk-path-tool-info.c:112
+#: tools/gtk-path-tool-decompose.c:112 tools/gtk-path-tool-info.c:113
+#: tools/gtk-path-tool-restrict.c:64
 msgid "No paths given."
 msgstr "ბილიკები მითითებული არაა."
 
-#: tools/gtk-path-tool-decompose.c:128
+#: tools/gtk-path-tool-decompose.c:140 tools/gtk-path-tool-restrict.c:94
 msgid "That didn't work out."
 msgstr "ამან არ იმუშავა."
 
-#: tools/gtk-path-tool-info.c:99
+#: tools/gtk-path-tool-info.c:100
 msgid "Print information about a path."
 msgstr "ბილიკის შესახებ ინფორმაციის ჩვენება."
 
-#: tools/gtk-path-tool-info.c:119
+#: tools/gtk-path-tool-info.c:121
 msgid "Path is empty."
 msgstr "ბილიკი ცარიელია."
 
-#: tools/gtk-path-tool-info.c:125
+#: tools/gtk-path-tool-info.c:127
 msgid "Path is closed"
 msgstr "ბილიკი დახურულია"
 
-#: tools/gtk-path-tool-info.c:134
+#: tools/gtk-path-tool-info.c:129
+msgid "Path length"
+msgstr "ბილიკის სიგრძე"
+
+#: tools/gtk-path-tool-info.c:138
 #, c-format
 msgid "%d contours"
 msgstr "%d მოხაზულობა"
 
-#: tools/gtk-path-tool-info.c:136
+#: tools/gtk-path-tool-info.c:140
 #, c-format
 msgid "%d operations"
 msgstr "%d ოპერაცია"
 
-#: tools/gtk-path-tool-info.c:140
+#: tools/gtk-path-tool-info.c:144
 #, c-format
 msgid "%d lines"
 msgstr "%d ხაზი"
 
-#: tools/gtk-path-tool-info.c:145
+#: tools/gtk-path-tool-info.c:149
 #, c-format
 msgid "%d quadratics"
 msgstr "%d კვადრატი"
 
-#: tools/gtk-path-tool-info.c:150
+#: tools/gtk-path-tool-info.c:154
 #, c-format
 msgid "%d cubics"
 msgstr "%d კუბი"
 
-#: tools/gtk-path-tool-render.c:53 tools/gtk-path-tool-show.c:123
+#: tools/gtk-path-tool-info.c:159
+#, c-format
+msgid "%d conics"
+msgstr "%d კონუსი"
+
+#: tools/gtk-path-tool-render.c:53 tools/gtk-path-tool-show.c:135
 msgid "Fill the path (the default)"
 msgstr "კონტურის შევსება (ნაგულისხმევი)"
 
-#: tools/gtk-path-tool-render.c:54 tools/gtk-path-tool-show.c:124
+#: tools/gtk-path-tool-render.c:54 tools/gtk-path-tool-show.c:136
 msgid "Stroke the path"
 msgstr "კონტურის სვლა"
 
@@ -7544,58 +7563,58 @@ msgstr "კონტურის სვლა"
 msgid "The output file"
 msgstr "გამოტანის ფაილი"
 
-#: tools/gtk-path-tool-render.c:56 tools/gtk-path-tool-show.c:125
+#: tools/gtk-path-tool-render.c:56 tools/gtk-path-tool-show.c:139
 msgid "Foreground color"
 msgstr "წინა პლანის ფერი"
 
 #: tools/gtk-path-tool-render.c:56 tools/gtk-path-tool-render.c:57
-#: tools/gtk-path-tool-show.c:125 tools/gtk-path-tool-show.c:126
+#: tools/gtk-path-tool-show.c:139 tools/gtk-path-tool-show.c:140
 msgid "COLOR"
 msgstr "ფერი"
 
-#: tools/gtk-path-tool-render.c:57 tools/gtk-path-tool-show.c:126
+#: tools/gtk-path-tool-render.c:57 tools/gtk-path-tool-show.c:140
 msgid "Background color"
 msgstr "ფონის ფერი"
 
-#: tools/gtk-path-tool-render.c:62 tools/gtk-path-tool-show.c:131
+#: tools/gtk-path-tool-render.c:62 tools/gtk-path-tool-show.c:145
 msgid "Fill rule (winding, even-odd)"
 msgstr "შევსების წესი (winding, even-odd)"
 
 #: tools/gtk-path-tool-render.c:62 tools/gtk-path-tool-render.c:66
 #: tools/gtk-path-tool-render.c:67 tools/gtk-path-tool-render.c:68
 #: tools/gtk-path-tool-render.c:69 tools/gtk-path-tool-render.c:70
-#: tools/gtk-path-tool-render.c:71 tools/gtk-path-tool-show.c:131
-#: tools/gtk-path-tool-show.c:135 tools/gtk-path-tool-show.c:136
-#: tools/gtk-path-tool-show.c:137 tools/gtk-path-tool-show.c:138
-#: tools/gtk-path-tool-show.c:139 tools/gtk-path-tool-show.c:140
+#: tools/gtk-path-tool-render.c:71 tools/gtk-path-tool-show.c:145
+#: tools/gtk-path-tool-show.c:149 tools/gtk-path-tool-show.c:150
+#: tools/gtk-path-tool-show.c:151 tools/gtk-path-tool-show.c:152
+#: tools/gtk-path-tool-show.c:153 tools/gtk-path-tool-show.c:154
 msgid "VALUE"
 msgstr "მნიშვნელობა"
 
-#: tools/gtk-path-tool-render.c:66 tools/gtk-path-tool-show.c:135
+#: tools/gtk-path-tool-render.c:66 tools/gtk-path-tool-show.c:149
 msgid "Line width (number)"
 msgstr "ხაზის სიგანე (რიცხვი)"
 
-#: tools/gtk-path-tool-render.c:67 tools/gtk-path-tool-show.c:136
+#: tools/gtk-path-tool-render.c:67 tools/gtk-path-tool-show.c:150
 msgid "Line cap (butt, round, square)"
 msgstr "ხაზის თავი (ისარი, მრგვალი, კვადრატი)"
 
-#: tools/gtk-path-tool-render.c:68 tools/gtk-path-tool-show.c:137
+#: tools/gtk-path-tool-render.c:68 tools/gtk-path-tool-show.c:151
 msgid "Line join (miter, miter-clip, round, bevel, arcs)"
 msgstr "ხაზების შეერთება (miter, miter-clip, round, bevel, arcs)"
 
-#: tools/gtk-path-tool-render.c:69 tools/gtk-path-tool-show.c:138
+#: tools/gtk-path-tool-render.c:69 tools/gtk-path-tool-show.c:152
 msgid "Miter limit (number)"
 msgstr "Miter-ის ლიმიტი (რიცხვი)"
 
-#: tools/gtk-path-tool-render.c:70 tools/gtk-path-tool-show.c:139
+#: tools/gtk-path-tool-render.c:70 tools/gtk-path-tool-show.c:153
 msgid "Dash pattern (comma-separated numbers)"
 msgstr "პუნქტირის ნიმუში (მძიმით გამოყოფილი რიცხვები)"
 
-#: tools/gtk-path-tool-render.c:71 tools/gtk-path-tool-show.c:140
+#: tools/gtk-path-tool-render.c:71 tools/gtk-path-tool-show.c:154
 msgid "Dash offset (number)"
 msgstr "პუნქტირის წანაცვლება (რიცხვი)"
 
-#: tools/gtk-path-tool-render.c:90 tools/gtk-path-tool-show.c:153
+#: tools/gtk-path-tool-render.c:90 tools/gtk-path-tool-show.c:167
 msgid "Could not initialize windowing system"
 msgstr "ფანჯრული სისტემის ინიციალიზაციის შეცდომა"
 
@@ -7603,23 +7622,23 @@ msgstr "ფანჯრული სისტემის ინიციალ�
 msgid "Render the path to a png image."
 msgstr "ბილიკის რენდერი png გამოსახულებაში."
 
-#: tools/gtk-path-tool-render.c:102 tools/gtk-path-tool-show.c:164
+#: tools/gtk-path-tool-render.c:102 tools/gtk-path-tool-show.c:178
 msgid "Options related to filling"
 msgstr "შევსების პარამეტრები"
 
-#: tools/gtk-path-tool-render.c:103 tools/gtk-path-tool-show.c:165
+#: tools/gtk-path-tool-render.c:103 tools/gtk-path-tool-show.c:179
 msgid "Show help for fill options"
 msgstr "დახმარების ჩვენება შევსების პარამეტრებისთვის"
 
-#: tools/gtk-path-tool-render.c:110 tools/gtk-path-tool-show.c:172
+#: tools/gtk-path-tool-render.c:110 tools/gtk-path-tool-show.c:186
 msgid "Options related to stroking"
 msgstr "სვლის პარამეტრები"
 
-#: tools/gtk-path-tool-render.c:111 tools/gtk-path-tool-show.c:173
+#: tools/gtk-path-tool-render.c:111 tools/gtk-path-tool-show.c:187
 msgid "Show help for stroke options"
 msgstr "დახმარების ჩვენება სვლის პარამეტრებისთვის"
 
-#: tools/gtk-path-tool-render.c:128 tools/gtk-path-tool-show.c:190
+#: tools/gtk-path-tool-render.c:128 tools/gtk-path-tool-show.c:204
 msgid "No path specified"
 msgstr "ბილიკი მითითებული არაა"
 
@@ -7627,42 +7646,61 @@ msgstr "ბილიკი მითითებული არაა"
 msgid "Can only render a single path"
 msgstr "შესაძლებელია მხოლოდ ერთ ბილიკის რენდერი"
 
-#: tools/gtk-path-tool-render.c:140 tools/gtk-path-tool-show.c:202
+#: tools/gtk-path-tool-render.c:140 tools/gtk-path-tool-show.c:216
 msgid "fill rule"
 msgstr "შევსების წესი"
 
-#: tools/gtk-path-tool-render.c:144 tools/gtk-path-tool-show.c:206
+#: tools/gtk-path-tool-render.c:144 tools/gtk-path-tool-show.c:220
 msgid "line cap"
 msgstr "ხაზის თავი"
 
-#: tools/gtk-path-tool-render.c:145 tools/gtk-path-tool-show.c:207
+#: tools/gtk-path-tool-render.c:145 tools/gtk-path-tool-show.c:221
 msgid "line join"
 msgstr "ხაზების შეერთება"
 
-#: tools/gtk-path-tool-render.c:169 tools/gtk-path-tool-show.c:231
-#, c-format
-msgid "Failed to parse '%s' as number"
-msgstr "'%s'-ის რიცხვის სახით წაკითხვა შეუძლებელია"
-
-#: tools/gtk-path-tool-render.c:213
+#: tools/gtk-path-tool-render.c:181
 #, c-format
 msgid "Saving png to '%s' failed"
 msgstr "PNG-ის '%s'-ში შენახვა შეუძლებელია"
 
-#: tools/gtk-path-tool-render.c:220
+#: tools/gtk-path-tool-render.c:188
 #, c-format
 msgid "Output written to '%s'."
 msgstr "გამოტანილი ინფორმაცია ჩაწერილია %s-ში."
 
-#: tools/gtk-path-tool-show.c:43 tools/gtk-path-tool-show.c:78
+#: tools/gtk-path-tool-restrict.c:36
+msgid "Beginning of segment"
+msgstr "სეგმენტის დასაწყისი"
+
+#: tools/gtk-path-tool-restrict.c:36 tools/gtk-path-tool-restrict.c:37
+msgid "LENGTH"
+msgstr "სიგრძე"
+
+#: tools/gtk-path-tool-restrict.c:37
+msgid "End of segment"
+msgstr "სეგმენტის დასასრული"
+
+#: tools/gtk-path-tool-restrict.c:51
+msgid "Restrict a path to a segment."
+msgstr "სეგმენტამდე ბილიკის შეზღუდვა"
+
+#: tools/gtk-path-tool-show.c:45 tools/gtk-path-tool-show.c:85
 msgid "Path Preview"
 msgstr "ბილიკის მინიატურა"
 
-#: tools/gtk-path-tool-show.c:161
+#: tools/gtk-path-tool-show.c:137
+msgid "Show points"
+msgstr "წერტილების ჩვენება"
+
+#: tools/gtk-path-tool-show.c:138
+msgid "Show controls"
+msgstr "კონტროლების ჩვენება"
+
+#: tools/gtk-path-tool-show.c:175
 msgid "Display the path."
 msgstr "ბილიკის ჩვენება."
 
-#: tools/gtk-path-tool-show.c:196
+#: tools/gtk-path-tool-show.c:210
 msgid "Can only show a single path"
 msgstr "შესაძლებელია მხოლოდ ერთი ბილიკის ჩვენება"
 
@@ -7694,6 +7732,11 @@ msgstr "შესაძლო მნიშვნელობები: "
 #, c-format
 msgid "Could not parse '%s' as color"
 msgstr "'%s'-ის ფერის სახით დამუშავება შეუძლებელია"
+
+#: tools/gtk-path-tool-utils.c:163
+#, c-format
+msgid "Failed to parse '%s' as number"
+msgstr "'%s'-ის რიცხვის სახით წაკითხვა შეუძლებელია"
 
 #: tools/gtk-rendernode-tool.c:35
 #, c-format
