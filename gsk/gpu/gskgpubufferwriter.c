@@ -84,6 +84,28 @@ gsk_gpu_buffer_writer_append_uint (GskGpuBufferWriter *self,
 }
 
 void
+gsk_gpu_buffer_writer_append_matrix (GskGpuBufferWriter      *self,
+                                     const graphene_matrix_t *matrix)
+{
+  float f[16];
+
+  graphene_matrix_to_float (matrix, f);
+
+  gsk_gpu_buffer_writer_append (self, G_ALIGNOF (float), (guchar *) f, sizeof (f));
+}
+
+void
+gsk_gpu_buffer_writer_append_vec4 (GskGpuBufferWriter    *self,
+                                   const graphene_vec4_t *vec4)
+{
+  float f[4];
+
+  graphene_vec4_to_float (vec4, f);
+
+  gsk_gpu_buffer_writer_append (self, G_ALIGNOF (float), (guchar *) f, sizeof (f));
+}
+
+void
 gsk_gpu_buffer_writer_append_rect (GskGpuBufferWriter     *self,
                                    const graphene_rect_t  *rect,
                                    const graphene_point_t *offset)
