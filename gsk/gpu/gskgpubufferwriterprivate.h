@@ -40,6 +40,10 @@ void                    gsk_gpu_buffer_writer_append_int                (GskGpuB
                                                                          gint32                          i);
 void                    gsk_gpu_buffer_writer_append_uint               (GskGpuBufferWriter             *self,
                                                                          guint32                         u);
+void                    gsk_gpu_buffer_writer_append_matrix             (GskGpuBufferWriter             *self,
+                                                                         const graphene_matrix_t        *matrix);
+void                    gsk_gpu_buffer_writer_append_vec4               (GskGpuBufferWriter             *self,
+                                                                         const graphene_vec4_t          *vec4);
 void                    gsk_gpu_buffer_writer_append_rect               (GskGpuBufferWriter             *self,
                                                                          const graphene_rect_t          *rect,
                                                                          const graphene_point_t         *offset);

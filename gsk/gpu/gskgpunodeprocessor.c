@@ -795,6 +795,29 @@ gsk_gpu_node_processor_create_opacity_pattern (GskGpuNodeProcessor *self,
   return TRUE;
 }
 
+static gboolean
+gsk_gpu_node_processor_create_color_matrix_pattern (GskGpuNodeProcessor *self,
+                                                    GskGpuBufferWriter  *writer,
+                                                    GskRenderNode       *node,
+                                                    GskGpuShaderImage   *images,
+                                                    gsize                n_images,
+                                                    gsize               *out_n_images)
+{
+  if (!gsk_gpu_node_processor_create_node_pattern (self,
+                                                   writer,
+                                                   gsk_color_matrix_node_get_child (node),
+                                                   images,
+                                                   n_images,
+                                                   out_n_images))
+    return FALSE;
+
+  gsk_gpu_buffer_writer_append_uint (writer, GSK_GPU_PATTERN_COLOR_MATRIX);
+  gsk_gpu_buffer_writer_append_matrix (writer, gsk_color_matrix_node_get_color_matrix (node));
+  gsk_gpu_buffer_writer_append_vec4 (writer, gsk_color_matrix_node_get_color_offset (node));
+
+  return TRUE;
+}
+
 static void
 gsk_gpu_node_processor_add_container_node (GskGpuNodeProcessor *self,
                                            GskRenderNode       *node)
@@ -892,8 +915,8 @@ static const struct
   },
   [GSK_COLOR_MATRIX_NODE] = {
     0,
-    NULL,
-    NULL,
+    gsk_gpu_node_processor_add_node_as_pattern,
+    gsk_gpu_node_processor_create_color_matrix_pattern
   },
   [GSK_REPEAT_NODE] = {
     0,
