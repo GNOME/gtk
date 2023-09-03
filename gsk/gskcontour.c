@@ -470,7 +470,7 @@ gsk_standard_contour_get_closest_point (const GskContour       *contour,
         {
           *out_dist = dist;
           result->idx = 0;
-          result->t = 0;
+          result->t = 1;
           return TRUE;
         }
 
