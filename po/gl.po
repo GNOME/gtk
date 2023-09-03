@@ -20,8 +20,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-master-po-gl-77922___.merged\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2023-08-27 14:42+0000\n"
-"PO-Revision-Date: 2023-08-27 21:46+0200\n"
+"POT-Creation-Date: 2023-09-01 22:19+0000\n"
+"PO-Revision-Date: 2023-09-03 20:56+0200\n"
 "Last-Translator: Fran Dieguez <frandieguez@gnome.org>\n"
 "Language-Team: Galician <Proxecto Trasno <proxecto@trasno.gal>>\n"
 "Language: gl\n"
@@ -1442,12 +1442,12 @@ msgstr "xenérico"
 #: gtk/gtkaccessible.c:771
 msgctxt "accessibility"
 msgid "grid"
-msgstr "grella"
+msgstr "grade"
 
 #: gtk/gtkaccessible.c:772
 msgctxt "accessibility"
 msgid "grid cell"
-msgstr "cela da grella"
+msgstr "cela da grade"
 
 #: gtk/gtkaccessible.c:773
 msgctxt "accessibility"
@@ -1732,7 +1732,7 @@ msgstr "árbore"
 #: gtk/gtkaccessible.c:829
 msgctxt "accessibility"
 msgid "tree grid"
-msgstr "grella de árbore"
+msgstr "grade en árbore"
 
 #: gtk/gtkaccessible.c:830
 msgctxt "accessibility"
@@ -2344,7 +2344,7 @@ msgstr "Non foi posíbel seleccionar o ficheiro"
 
 #: gtk/gtkfilechooserwidget.c:1724 gtk/ui/gtkfilechooserwidget.ui:66
 msgid "Grid View"
-msgstr "Vista en grella"
+msgstr "Vista en grade"
 
 #: gtk/gtkfilechooserwidget.c:1730
 msgid "List View"
