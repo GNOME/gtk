@@ -470,7 +470,7 @@ gsk_standard_contour_get_closest_point (const GskContour       *contour,
         {
           *out_dist = dist;
           result->idx = 0;
-          result->t = 0;
+          result->t = 1;
           return TRUE;
         }
 
@@ -1139,10 +1139,10 @@ gsk_circle_contour_get_stroke_bounds (const GskContour *contour,
   const GskCircleContour *self = (const GskCircleContour *) contour;
 
   gsk_bounding_box_init (bounds,
-                         &GRAPHENE_POINT_INIT (self->center.x - self->radius - stroke->line_width/2,
-                                               self->center.y - self->radius - stroke->line_width/2),
+                         &GRAPHENE_POINT_INIT (self->center.x - self->radius - stroke->line_width,
+                                               self->center.y - self->radius - stroke->line_width),
                          &GRAPHENE_POINT_INIT (self->center.x + self->radius + stroke->line_width/2,
-                                               self->center.y + self->radius + stroke->line_width/2));
+                                               self->center.y + self->radius + stroke->line_width));
 
   return TRUE;
 }
@@ -1518,7 +1518,7 @@ gsk_rect_contour_get_stroke_bounds (const GskContour *contour,
   graphene_rect_t rect;
 
   graphene_rect_init (&rect, self->x, self->y, self->width, self->height);
-  graphene_rect_inset (&rect, - stroke->line_width / 2, - stroke->line_width / 2);
+  graphene_rect_inset (&rect, - stroke->line_width, - stroke->line_width);
   gsk_bounding_box_init_from_rect (bounds, &rect);
 
   return TRUE;
@@ -2045,10 +2045,10 @@ gsk_rounded_rect_contour_get_stroke_bounds (const GskContour *contour,
 
   gsk_bounding_box_init_from_rect (&b, &self->rect.bounds);
   gsk_bounding_box_init (bounds,
-                         &GRAPHENE_POINT_INIT (b.min.x - stroke->line_width / 2,
-                                               b.min.y - stroke->line_width / 2),
-                         &GRAPHENE_POINT_INIT (b.max.x + stroke->line_width / 2,
-                                               b.max.y + stroke->line_width / 2));
+                         &GRAPHENE_POINT_INIT (b.min.x - stroke->line_width,
+                                               b.min.y - stroke->line_width),
+                         &GRAPHENE_POINT_INIT (b.max.x + stroke->line_width,
+                                               b.max.y + stroke->line_width));
 
   return TRUE;
 }

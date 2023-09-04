@@ -37,6 +37,7 @@ struct _PathView
   gboolean show_controls;
   GskPath *line_path;
   GskPath *point_path;
+  GdkRGBA point_color;
 };
 
 enum {
@@ -46,6 +47,7 @@ enum {
   PROP_FILL_RULE,
   PROP_FG_COLOR,
   PROP_BG_COLOR,
+  PROP_POINT_COLOR,
   PROP_SHOW_POINTS,
   PROP_SHOW_CONTROLS,
   N_PROPERTIES
@@ -68,6 +70,7 @@ path_view_init (PathView *self)
   self->fill_rule = GSK_FILL_RULE_WINDING;
   self->fg = (GdkRGBA) { 0, 0, 0, 1};
   self->bg = (GdkRGBA) { 1, 1, 1, 1};
+  self->point_color = (GdkRGBA) { 1, 0, 0, 1};
   self->padding = 10;
 }
 
@@ -126,6 +129,10 @@ path_view_get_property (GObject    *object,
       g_value_set_boolean (value, self->show_controls);
       break;
 
+    case PROP_POINT_COLOR:
+      g_value_set_boxed (value, &self->point_color);
+      break;
+
      default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -155,6 +162,8 @@ update_bounds (PathView *self)
       gsk_path_get_stroke_bounds (self->point_path, self->stroke, &bounds);
       graphene_rect_union (&bounds, &self->bounds, &self->bounds);
     }
+
+  gtk_widget_queue_resize (GTK_WIDGET (self));
 }
 
 typedef struct
@@ -274,21 +283,17 @@ path_view_set_property (GObject      *object,
       g_clear_pointer (&self->path, gsk_path_unref);
       self->path = g_value_dup_boxed (value);
       update_controls (self);
-      update_bounds (self);
-      gtk_widget_queue_resize (GTK_WIDGET (self));
       break;
 
     case PROP_DO_FILL:
       self->do_fill = g_value_get_boolean (value);
       update_bounds (self);
-      gtk_widget_queue_resize (GTK_WIDGET (self));
       break;
 
     case PROP_STROKE:
       gsk_stroke_free (self->stroke);
       self->stroke = g_value_get_boxed (value);
       update_bounds (self);
-      gtk_widget_queue_resize (GTK_WIDGET (self));
       break;
 
     case PROP_FILL_RULE:
@@ -309,12 +314,15 @@ path_view_set_property (GObject      *object,
     case PROP_SHOW_POINTS:
       self->show_points = g_value_get_boolean (value);
       update_controls (self);
-      gtk_widget_queue_draw (GTK_WIDGET (self));
       break;
 
     case PROP_SHOW_CONTROLS:
       self->show_controls = g_value_get_boolean (value);
       update_controls (self);
+      break;
+
+    case PROP_POINT_COLOR:
+      self->point_color = *(GdkRGBA *) g_value_get_boxed (value);
       gtk_widget_queue_draw (GTK_WIDGET (self));
       break;
 
@@ -352,8 +360,7 @@ path_view_snapshot (GtkWidget   *widget,
 
   gtk_snapshot_save (snapshot);
 
-  gtk_snapshot_append_color (snapshot, &self->bg, &self->bounds);
-  gtk_snapshot_translate (snapshot, &GRAPHENE_POINT_INIT (self->padding, self->padding));
+  gtk_snapshot_append_color (snapshot, &self->bg, &bounds);
 
   if (self->do_fill)
     gtk_snapshot_append_fill (snapshot, self->path, self->fill_rule, &self->fg);
@@ -363,19 +370,17 @@ path_view_snapshot (GtkWidget   *widget,
   if (self->line_path)
     {
       GskStroke *stroke = gsk_stroke_new (1);
-      GdkRGBA gray = (GdkRGBA) { 0, 0, 0, 0.5 };
 
-      gtk_snapshot_append_stroke (snapshot, self->line_path, stroke, &gray);
+      gsk_stroke_set_dash (stroke, (const float[]) { 1, 1 }, 2);
+      gtk_snapshot_append_stroke (snapshot, self->line_path, stroke, &self->fg);
     }
 
   if (self->point_path)
     {
       GskStroke *stroke = gsk_stroke_new (1);
-      GdkRGBA purple = (GdkRGBA) { 1, 0, 1, 1 };
-      GdkRGBA black = (GdkRGBA) { 0, 0, 0, 1 };
 
-      gtk_snapshot_append_fill (snapshot, self->point_path, GSK_FILL_RULE_WINDING, &purple);
-      gtk_snapshot_append_stroke (snapshot, self->point_path, stroke, &black);
+      gtk_snapshot_append_fill (snapshot, self->point_path, GSK_FILL_RULE_WINDING, &self->point_color);
+      gtk_snapshot_append_stroke (snapshot, self->point_path, stroke, &self->fg);
     }
 
   gtk_snapshot_restore (snapshot);
@@ -434,6 +439,11 @@ path_view_class_init (PathViewClass *class)
       = g_param_spec_boolean ("show-controls", NULL, NULL,
                               FALSE,
                               G_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+
+  properties[PROP_POINT_COLOR]
+      = g_param_spec_boxed ("point-color", NULL, NULL,
+                            GDK_TYPE_RGBA,
+                            G_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   g_object_class_install_properties (object_class, N_PROPERTIES, properties);
 }

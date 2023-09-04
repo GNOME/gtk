@@ -37,7 +37,8 @@ show_path_fill (GskPath       *path,
                 const GdkRGBA *fg_color,
                 const GdkRGBA *bg_color,
                 gboolean       show_points,
-                gboolean       show_controls)
+                gboolean       show_controls,
+                const GdkRGBA *point_color)
 {
   GtkWidget *window, *sw, *child;
 
@@ -59,6 +60,7 @@ show_path_fill (GskPath       *path,
                 "bg-color", bg_color,
                 "show-points", show_points,
                 "show-controls", show_controls,
+                "point-color", point_color,
                 NULL);
 
   gtk_widget_set_hexpand (child, TRUE);
@@ -77,7 +79,8 @@ show_path_stroke (GskPath       *path,
                   const GdkRGBA *fg_color,
                   const GdkRGBA *bg_color,
                   gboolean       show_points,
-                  gboolean       show_controls)
+                  gboolean       show_controls,
+                  const GdkRGBA *point_color)
 {
   GtkWidget *window, *sw, *child;
 
@@ -99,6 +102,7 @@ show_path_stroke (GskPath       *path,
                 "bg-color", bg_color,
                 "show-points", show_points,
                 "show-controls", show_controls,
+                "point-color", point_color,
                 NULL);
 
   gtk_widget_set_hexpand (child, TRUE);
@@ -122,6 +126,7 @@ do_show (int          *argc,
   const char *fill = "winding";
   const char *fg_color = "black";
   const char *bg_color = "white";
+  const char *point_color = "red";
   double line_width = 1;
   const char *cap = "butt";
   const char *join = "miter";
@@ -134,10 +139,11 @@ do_show (int          *argc,
   const GOptionEntry entries[] = {
     { "fill", 0, G_OPTION_FLAG_REVERSE, G_OPTION_ARG_NONE, &do_stroke, N_("Fill the path (the default)"), NULL },
     { "stroke", 0, 0, G_OPTION_ARG_NONE, &do_stroke, N_("Stroke the path"), NULL },
-    { "points", 0, 0, G_OPTION_ARG_NONE, &show_points, N_("Show points"), NULL },
-    { "controls", 0, 0, G_OPTION_ARG_NONE, &show_controls, N_("Show controls"), NULL },
+    { "points", 0, 0, G_OPTION_ARG_NONE, &show_points, N_("Show path points"), NULL },
+    { "controls", 0, 0, G_OPTION_ARG_NONE, &show_controls, N_("Show control points"), NULL },
     { "fg-color", 0, 0, G_OPTION_ARG_STRING, &fg_color, N_("Foreground color"), N_("COLOR") },
     { "bg-color", 0, 0, G_OPTION_ARG_STRING, &bg_color, N_("Background color"), N_("COLOR") },
+    { "point-color", 0, 0, G_OPTION_ARG_STRING, &point_color, N_("Point color"), N_("COLOR") },
     { G_OPTION_REMAINING, 0, 0, G_OPTION_ARG_STRING_ARRAY, &args, NULL, N_("PATH") },
     { NULL, }
   };
@@ -156,8 +162,7 @@ do_show (int          *argc,
   };
   GskPath *path;
   GskFillRule fill_rule;
-  GdkRGBA fg;
-  GdkRGBA bg;
+  GdkRGBA fg, bg, pc;
   GskLineCap line_cap;
   GskLineJoin line_join;
   GskStroke *stroke;
@@ -216,6 +221,7 @@ do_show (int          *argc,
   fill_rule = get_enum_value (GSK_TYPE_FILL_RULE, _("fill rule"), fill);
   get_color (&fg, fg_color);
   get_color (&bg, bg_color);
+  get_color (&pc, point_color);
 
   line_cap = get_enum_value (GSK_TYPE_LINE_CAP, _("line cap"), cap);
   line_join = get_enum_value (GSK_TYPE_LINE_JOIN, _("line join"), join);
@@ -228,9 +234,9 @@ do_show (int          *argc,
   _gsk_stroke_set_dashes (stroke, dashes);
 
   if (do_stroke)
-    show_path_stroke (path, stroke, &fg, &bg, show_points, show_controls);
+    show_path_stroke (path, stroke, &fg, &bg, show_points, show_controls, &pc);
   else
-    show_path_fill (path, fill_rule, &fg, &bg, show_points, show_controls);
+    show_path_fill (path, fill_rule, &fg, &bg, show_points, show_controls, &pc);
 
   gsk_path_unref (path);
 

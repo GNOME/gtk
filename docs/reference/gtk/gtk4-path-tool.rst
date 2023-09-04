@@ -55,6 +55,22 @@ Showing
 The ``show`` command displays the given path in a window. The interior
 of the path is filled.
 
+``--fill``
+
+  Fill the path (this is the default).
+
+``--stroke``
+
+  Stroke the path instead of filling it.
+
+``--points``
+
+  Show points on the path.
+
+``--controls``
+
+  Show control points.
+
 ``--fill-rule=VALUE``
 
   The fill rule that is used to determine what areas are inside the path.
@@ -70,13 +86,10 @@ of the path is filled.
   The color that is used to render the background behind the path.
   If not specified, white is used.
 
-``--fill``
+``--point-color=COLOR``
 
-  Fill the path (this is the default).
-
-``--stroke``
-
-  Stroke the path instead of filling it.
+  The color that is used to render the points.
+  If not specified, red is used.
 
 ``--line-width=VALUE``
 
@@ -119,6 +132,22 @@ Rendering
 The ``render`` command renders the given path as a PNG image.
 The interior of the path is filled.
 
+``--fill``
+
+  Fill the path (this is the default).
+
+``--stroke``
+
+  Stroke the path instead of filling it.
+
+``--points``
+
+  Show points on the path.
+
+``--controls``
+
+  Show control points.
+
 ``--fill-rule=VALUE``
 
   The fill rule that is used to determine what areas are inside the path.
@@ -134,18 +163,15 @@ The interior of the path is filled.
   The color that is used to render the background behind the path.
   If not specified, white is used.
 
+``--point-color=COLOR``
+
+  The color that is used to render the points.
+  If not specified, red is used.
+
 ``--output-file=FILE``
 
   The file to save the PNG image to.
   If not specified, "path.png" is used.
-
-``--fill``
-
-  Fill the path (this is the default).
-
-``--stroke``
-
-  Stroke the path instead of filling it.
 
 ``--line-width=VALUE``
 
