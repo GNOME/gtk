@@ -336,7 +336,7 @@ struct _TranslationEntry {
 static TranslationEntry * find_translation_entry_by_schema (const char *schema,
                                                             const char *key);
 static void
-update_xft_settings (GdkScreen *screen)
+update_xft_settings (GdkScreen *screen, gboolean notify)
 {
   GdkWaylandScreen *screen_wayland = GDK_WAYLAND_SCREEN (screen);
   GSettings *settings;
@@ -471,25 +471,29 @@ update_xft_settings (GdkScreen *screen)
   if (screen_wayland->xft_settings.antialias != xft_settings.antialias)
     {
       screen_wayland->xft_settings.antialias = xft_settings.antialias;
-      notify_setting (screen, "gtk-xft-antialias");
+      if (notify)
+        notify_setting (screen, "gtk-xft-antialias");
     }
 
   if (screen_wayland->xft_settings.hinting != xft_settings.hinting)
     {
       screen_wayland->xft_settings.hinting = xft_settings.hinting;
-      notify_setting (screen, "gtk-xft-hinting");
+      if (notify)
+        notify_setting (screen, "gtk-xft-hinting");
     }
 
   if (screen_wayland->xft_settings.hintstyle != xft_settings.hintstyle)
     {
       screen_wayland->xft_settings.hintstyle = xft_settings.hintstyle;
-      notify_setting (screen, "gtk-xft-hintstyle");
+      if (notify)
+        notify_setting (screen, "gtk-xft-hintstyle");
     }
 
   if (screen_wayland->xft_settings.rgba != xft_settings.rgba)
     {
       screen_wayland->xft_settings.rgba = xft_settings.rgba;
-      notify_setting (screen, "gtk-xft-rgba");
+      if (notify)
+        notify_setting (screen, "gtk-xft-rgba");
     }
 
   if (screen_wayland->xft_settings.dpi != xft_settings.dpi)
@@ -510,7 +514,8 @@ update_xft_settings (GdkScreen *screen)
 
       _gdk_screen_set_resolution (screen, dpi);
 
-      notify_setting (screen, "gtk-xft-dpi");
+      if (notify)
+        notify_setting (screen, "gtk-xft-dpi");
     }
 }
 
@@ -626,7 +631,7 @@ settings_changed (GSettings   *settings,
       else if (strcmp (key, "high-contrast") == 0)
         high_contrast_changed (screen);
       else
-        update_xft_settings (screen);
+        update_xft_settings (screen, TRUE);
     }
 }
 
@@ -658,7 +663,7 @@ apply_portal_setting (TranslationEntry *entry,
         entry->fallback.i = get_order (g_variant_get_string (value, NULL));
       else if (strcmp (entry->key, "text-scaling-factor") == 0)
         entry->fallback.i = (int) (g_variant_get_double (value) * 65536.0);
-      update_xft_settings (screen);
+      update_xft_settings (screen, TRUE);
       break;
     default:
       break;
@@ -839,7 +844,7 @@ fallback:
       g_settings_schema_unref (schema);
     }
 
-  update_xft_settings (screen);
+  update_xft_settings (screen, FALSE);
 }
 
 static void
