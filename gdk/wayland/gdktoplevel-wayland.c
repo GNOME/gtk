@@ -84,11 +84,13 @@ struct _GdkWaylandToplevel
     struct gtk_surface1 *gtk_surface;
     struct xdg_toplevel *xdg_toplevel;
     struct zxdg_toplevel_v6 *zxdg_toplevel_v6;
+    struct zxdg_toplevel_decoration_v1 *xdg_toplevel_decoration;
   } display_server;
+
+  gboolean ssd;
 
   GdkWaylandToplevel *transient_for;
 
-  struct org_kde_kwin_server_decoration *server_decoration;
   GList *exported;
 
   struct {
@@ -154,6 +156,16 @@ typedef struct
   GdkWaylandSurfaceClass parent_class;
 } GdkWaylandToplevelClass;
 
+enum {
+  PROP_0,
+
+  PROP_IS_SSD,
+
+  LAST_PROP
+};
+
+static GParamSpec *properties[LAST_PROP] = { NULL, };
+
 static void gdk_wayland_toplevel_iface_init (GdkToplevelInterface *iface);
 
 G_DEFINE_TYPE_WITH_CODE (GdkWaylandToplevel, gdk_wayland_toplevel, GDK_TYPE_WAYLAND_SURFACE,
@@ -215,6 +227,7 @@ gdk_wayland_toplevel_hide_surface (GdkWaylandSurface *wayland_surface)
 
   g_clear_pointer (&toplevel->display_server.xdg_toplevel, xdg_toplevel_destroy);
   g_clear_pointer (&toplevel->display_server.zxdg_toplevel_v6, zxdg_toplevel_v6_destroy);
+  g_clear_pointer (&toplevel->display_server.xdg_toplevel_decoration, zxdg_toplevel_decoration_v1_destroy);
 
   if (toplevel->display_server.gtk_surface)
     {
@@ -736,6 +749,59 @@ static const struct xdg_toplevel_listener xdg_toplevel_listener = {
 };
 
 static void
+xdg_toplevel_decoration_configure (void                               *data,
+                                   struct zxdg_toplevel_decoration_v1 *zxdg_toplevel_decoration_v1,
+                                   uint32_t                            mode)
+{
+  GdkSurface *surface = GDK_SURFACE (data);
+  GdkWaylandToplevel *toplevel = GDK_WAYLAND_TOPLEVEL (surface);
+
+  if (mode == ZXDG_TOPLEVEL_DECORATION_V1_MODE_SERVER_SIDE)
+    {
+      if (!toplevel->ssd)
+        {
+          toplevel->ssd = TRUE;
+          g_object_notify_by_pspec (G_OBJECT (toplevel), properties[PROP_IS_SSD]);
+        }
+    }
+  else if (mode == ZXDG_TOPLEVEL_DECORATION_V1_MODE_CLIENT_SIDE)
+    {
+      if (toplevel->ssd)
+        {
+          toplevel->ssd = FALSE;
+          g_object_notify_by_pspec (G_OBJECT (toplevel), properties[PROP_IS_SSD]);
+        }
+    }
+  else
+    {
+      g_assert_not_reached ();
+    }
+}
+
+static const struct zxdg_toplevel_decoration_v1_listener xdg_toplevel_decoration_listener = {
+  xdg_toplevel_decoration_configure,
+};
+
+static void
+create_xdg_toplevel_decoration (GdkWaylandToplevel *toplevel)
+{
+  GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (gdk_surface_get_display (GDK_SURFACE (toplevel)));
+
+  if (display_wayland->server_decoration_manager)
+    {
+      toplevel->display_server.xdg_toplevel_decoration =
+        zxdg_decoration_manager_v1_get_toplevel_decoration (display_wayland->server_decoration_manager,
+                                                            toplevel->display_server.xdg_toplevel);
+
+      zxdg_toplevel_decoration_v1_add_listener (toplevel->display_server.xdg_toplevel_decoration,
+                                                &xdg_toplevel_decoration_listener,
+                                                toplevel);
+
+      zxdg_toplevel_decoration_v1_unset_mode (toplevel->display_server.xdg_toplevel_decoration);
+    }
+}
+
+static void
 create_xdg_toplevel_resources (GdkWaylandToplevel *toplevel)
 {
   GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (toplevel);
@@ -745,6 +811,8 @@ create_xdg_toplevel_resources (GdkWaylandToplevel *toplevel)
   xdg_toplevel_add_listener (toplevel->display_server.xdg_toplevel,
                              &xdg_toplevel_listener,
                              toplevel);
+
+  create_xdg_toplevel_decoration (toplevel);
 }
 
 static void
@@ -1221,8 +1289,6 @@ gdk_wayland_toplevel_set_transient_for (GdkWaylandToplevel *toplevel,
   gdk_wayland_toplevel_sync_parent (toplevel);
 }
 
-#define LAST_PROP 1
-
 static void
 gdk_wayland_toplevel_set_property (GObject      *object,
                                    guint         prop_id,
@@ -1288,6 +1354,10 @@ gdk_wayland_toplevel_get_property (GObject    *object,
 
   switch (prop_id)
     {
+    case PROP_IS_SSD:
+      g_value_set_boolean (value, toplevel->ssd);
+      break;
+
     case LAST_PROP + GDK_TOPLEVEL_PROP_STATE:
       g_value_set_flags (value, surface->state);
       break;
@@ -1386,7 +1456,21 @@ gdk_wayland_toplevel_class_init (GdkWaylandToplevelClass *class)
   wayland_surface_class->handle_configure = gdk_wayland_toplevel_handle_configure;
   wayland_surface_class->hide_surface = gdk_wayland_toplevel_hide_surface;
 
-  gdk_toplevel_install_properties (object_class, 1);
+  /**
+   * GdkWaylandToplevel:is-ssd:
+   *
+   * Whether to use Server-Side decorations or not.
+   */
+  properties[PROP_IS_SSD] =
+      g_param_spec_boolean ("is-ssd", NULL, NULL,
+                            FALSE,
+                            G_PARAM_READABLE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+
+  g_object_class_install_properties (object_class,
+                                     LAST_PROP,
+                                     properties);
+
+  gdk_toplevel_install_properties (object_class, LAST_PROP);
 }
 
 static void
@@ -2419,7 +2503,7 @@ gdk_wayland_toplevel_set_application_id (GdkToplevel *toplevel,
 }
 
 void
-gdk_wayland_toplevel_announce_csd (GdkToplevel *toplevel)
+gdk_wayland_toplevel_request_csd (GdkToplevel *toplevel)
 {
   GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (gdk_surface_get_display (GDK_SURFACE (toplevel)));
   GdkWaylandToplevel *toplevel_wayland;
@@ -2429,16 +2513,19 @@ gdk_wayland_toplevel_announce_csd (GdkToplevel *toplevel)
 
   if (!display_wayland->server_decoration_manager)
     return;
-  toplevel_wayland->server_decoration =
-      org_kde_kwin_server_decoration_manager_create (display_wayland->server_decoration_manager,
-                                                     gdk_wayland_surface_get_wl_surface (GDK_SURFACE (toplevel_wayland)));
-  if (toplevel_wayland->server_decoration)
-    org_kde_kwin_server_decoration_request_mode (toplevel_wayland->server_decoration,
-                                                 ORG_KDE_KWIN_SERVER_DECORATION_MANAGER_MODE_CLIENT);
+
+  g_clear_pointer (&toplevel_wayland->display_server.xdg_toplevel_decoration,
+                   zxdg_toplevel_decoration_v1_destroy);
+
+  if (toplevel_wayland->ssd)
+    {
+      toplevel_wayland->ssd = FALSE;
+      g_object_notify_by_pspec (G_OBJECT (toplevel), properties[PROP_IS_SSD]);
+    }
 }
 
 void
-gdk_wayland_toplevel_announce_ssd (GdkToplevel *toplevel)
+gdk_wayland_toplevel_request_ssd (GdkToplevel *toplevel)
 {
   GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (gdk_surface_get_display (GDK_SURFACE (toplevel)));
   GdkWaylandToplevel *toplevel_wayland;
@@ -2448,12 +2535,12 @@ gdk_wayland_toplevel_announce_ssd (GdkToplevel *toplevel)
 
   if (!display_wayland->server_decoration_manager)
     return;
-  toplevel_wayland->server_decoration =
-      org_kde_kwin_server_decoration_manager_create (display_wayland->server_decoration_manager,
-                                                     gdk_wayland_surface_get_wl_surface (GDK_SURFACE (toplevel_wayland)));
-  if (toplevel_wayland->server_decoration)
-    org_kde_kwin_server_decoration_request_mode (toplevel_wayland->server_decoration,
-                                                 ORG_KDE_KWIN_SERVER_DECORATION_MANAGER_MODE_SERVER);
+
+  if (!toplevel_wayland->display_server.xdg_toplevel_decoration)
+    create_xdg_toplevel_decoration (toplevel_wayland);
+
+  zxdg_toplevel_decoration_v1_set_mode (toplevel_wayland->display_server.xdg_toplevel_decoration,
+                                        ZXDG_TOPLEVEL_DECORATION_V1_MODE_SERVER_SIDE);
 }
 
 gboolean

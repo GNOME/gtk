@@ -17,7 +17,6 @@
 
 #pragma once
 
-
 void gdk_wayland_toplevel_set_geometry_hints      (GdkWaylandToplevel *toplevel,
                                                    const GdkGeometry  *geometry,
                                                    GdkSurfaceHints     geom_mask);
@@ -33,8 +32,8 @@ void gdk_wayland_toplevel_set_dbus_properties     (GdkToplevel *toplevel,
                                                    const char  *application_object_path,
                                                    const char  *unique_bus_name);
 
-void     gdk_wayland_toplevel_announce_csd        (GdkToplevel *toplevel);
-void     gdk_wayland_toplevel_announce_ssd        (GdkToplevel *toplevel);
+void     gdk_wayland_toplevel_request_csd         (GdkToplevel *toplevel);
+void     gdk_wayland_toplevel_request_ssd         (GdkToplevel *toplevel);
 
 gboolean gdk_wayland_toplevel_inhibit_idle        (GdkToplevel *toplevel);
 void     gdk_wayland_toplevel_uninhibit_idle      (GdkToplevel *toplevel);

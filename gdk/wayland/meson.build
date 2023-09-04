@@ -64,7 +64,7 @@ proto_sources = [
   ['xdg-foreign', 'unstable', 'v2', ],
   ['tablet', 'unstable', 'v2', ],
   ['keyboard-shortcuts-inhibit', 'unstable', 'v1', ],
-  ['server-decoration', 'private' ],
+  ['xdg-decoration', 'unstable', 'v1', ],
   ['xdg-output', 'unstable', 'v1', ],
   ['idle-inhibit', 'unstable', 'v1', ],
   ['xdg-activation', 'staging', 'v1', ],
