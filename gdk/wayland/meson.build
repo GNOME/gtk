@@ -103,8 +103,9 @@ proto_sources = [
     'version': 1,
   },
   {
-    'name': 'server-decoration',
-    'stability': 'private',
+    'name': 'xdg-decoration',
+    'stability': 'unstable',
+    'version': 1,
   },
   {
     'name': 'xdg-output',

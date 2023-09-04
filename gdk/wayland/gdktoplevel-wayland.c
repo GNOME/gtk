@@ -94,7 +94,7 @@ struct _GdkWaylandToplevel
 
   GdkWaylandToplevel *transient_for;
 
-  struct org_kde_kwin_server_decoration *server_decoration;
+  struct zxdg_toplevel_decoration_v1 *zxdg_toplevel_decoration_v1;
   GList *exported;
 
   struct {
@@ -254,6 +254,7 @@ gdk_wayland_toplevel_hide_surface (GdkWaylandSurface *wayland_surface)
   g_clear_pointer (&toplevel->display_server.xdg_toplevel, xdg_toplevel_destroy);
   g_clear_pointer (&toplevel->display_server.zxdg_toplevel_v6, zxdg_toplevel_v6_destroy);
   g_clear_pointer (&toplevel->display_server.xdg_dialog, xdg_dialog_v1_destroy);
+  g_clear_pointer (&toplevel->zxdg_toplevel_decoration_v1, zxdg_toplevel_decoration_v1_destroy);
 
   if (toplevel->display_server.gtk_surface)
     {
@@ -946,6 +947,28 @@ zxdg_toplevel_v6_create_resources (gpointer unused, GdkWaylandToplevel *toplevel
 }
 
 static void
+zxdg_toplevel_decoration_v1_configure (void                               *data,
+                                       struct zxdg_toplevel_decoration_v1 *zxdg_toplevel_decoration_v1,
+                                       uint32_t                            mode)
+
+{
+  GdkSurface *surface = GDK_SURFACE (data);
+  GdkWaylandToplevel *toplevel = GDK_WAYLAND_TOPLEVEL (surface);
+
+  /* Destroy the decoration object if the decoration doesn't match, this will signal to the compositor
+   * that we don't want to negotiate via the protocol and should self-decorate. */
+  if ((toplevel->decorated && mode == ZXDG_TOPLEVEL_DECORATION_V1_MODE_CLIENT_SIDE) ||
+      (!toplevel->decorated && mode == ZXDG_TOPLEVEL_DECORATION_V1_MODE_SERVER_SIDE))
+    g_clear_pointer (&toplevel->zxdg_toplevel_decoration_v1, zxdg_toplevel_decoration_v1_destroy);
+
+  g_object_notify (G_OBJECT (toplevel), "decorated");
+}
+
+static const struct zxdg_toplevel_decoration_v1_listener zxdg_toplevel_decoration_v1_listener = {
+  zxdg_toplevel_decoration_v1_configure,
+};
+
+static void
 attempt_restore_toplevel (GdkWaylandToplevel *wayland_toplevel)
 {
   GdkDisplay *display = gdk_surface_get_display (GDK_SURFACE (wayland_toplevel));
@@ -1420,19 +1443,20 @@ gdk_wayland_toplevel_set_decorated (GdkWaylandToplevel *self,
 
   self->decorated = decorated;
 
-  if (display_wayland->server_decoration_manager)
+  if (display_wayland->zxdg_decoration_manager_v1)
     {
-      if (self->server_decoration == NULL)
-        self->server_decoration =
-            org_kde_kwin_server_decoration_manager_create (display_wayland->server_decoration_manager,
-                                                           gdk_wayland_surface_get_wl_surface (GDK_SURFACE (self)));
-
-      org_kde_kwin_server_decoration_request_mode (self->server_decoration,
-                                                   decorated ? ORG_KDE_KWIN_SERVER_DECORATION_MANAGER_MODE_SERVER
-                                                             : ORG_KDE_KWIN_SERVER_DECORATION_MANAGER_MODE_CLIENT);
+      if (self->zxdg_toplevel_decoration_v1 == NULL)
+        self->zxdg_toplevel_decoration_v1 =
+          zxdg_decoration_manager_v1_get_toplevel_decoration (display_wayland->zxdg_decoration_manager_v1,
+                                                              self->display_server.xdg_toplevel);
+      
+      zxdg_toplevel_decoration_v1_add_listener (self->zxdg_toplevel_decoration_v1,
+                                                &zxdg_toplevel_decoration_v1_listener,
+                                                display_wayland);
+      
+      zxdg_toplevel_decoration_v1_set_mode (self->zxdg_toplevel_decoration_v1, decorated ? ZXDG_TOPLEVEL_DECORATION_V1_MODE_SERVER_SIDE 
+                                                                               : ZXDG_TOPLEVEL_DECORATION_V1_MODE_CLIENT_SIDE);
     }
-
-  g_object_notify (G_OBJECT (self), "decorated");
 }
 
 #define LAST_PROP 1
@@ -1868,6 +1892,8 @@ zwp_keyboard_shortcuts_inhibitor_listener = {
   inhibitor_active,
   inhibitor_inactive,
 };
+
+
 
 static struct zwp_keyboard_shortcuts_inhibitor_v1 *
 gdk_wayland_toplevel_get_inhibitor (GdkWaylandToplevel *toplevel,

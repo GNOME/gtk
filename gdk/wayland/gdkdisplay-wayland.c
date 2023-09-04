@@ -58,7 +58,7 @@
 #include <wayland/xdg-shell-unstable-v6-client-protocol.h>
 #include <wayland/xdg-foreign-unstable-v1-client-protocol.h>
 #include <wayland/xdg-foreign-unstable-v2-client-protocol.h>
-#include <wayland/server-decoration-client-protocol.h>
+#include <wayland/xdg-decoration-unstable-v1-client-protocol.h>
 #include "linux-dmabuf-unstable-v1-client-protocol.h"
 #include "presentation-time-client-protocol.h"
 #include "color-management-v1-client-protocol.h"
@@ -117,7 +117,7 @@
 #define IMPORTER_V1_VERSION             1
 #define IMPORTER_V2_VERSION             1
 #define SHORTCUTS_INHIBIT_VERSION       1
-#define SERVER_DECORATION_VERSION       1
+#define ZXDG_DECORATION_VERSION         1
 #define XDG_OUTPUT_VERSION              3
 #define IDLE_INHIBIT_VERSION            1
 #define ACTIVATION_VERSION              1
@@ -438,29 +438,6 @@ static const struct wl_shm_listener wl_shm_listener = {
   wl_shm_format
 };
 
- /* }}} */
-/* {{{ server_decoration listener */
-
-static void
-server_decoration_manager_default_mode (void                                          *data,
-                                        struct org_kde_kwin_server_decoration_manager *manager,
-                                        uint32_t                                       mode)
-{
-  g_assert (mode <= ORG_KDE_KWIN_SERVER_DECORATION_MANAGER_MODE_SERVER);
-  const char *modes[] = {
-    [ORG_KDE_KWIN_SERVER_DECORATION_MANAGER_MODE_NONE]   = "none",
-    [ORG_KDE_KWIN_SERVER_DECORATION_MANAGER_MODE_CLIENT] = "client",
-    [ORG_KDE_KWIN_SERVER_DECORATION_MANAGER_MODE_SERVER] = "server",
-  };
-  GdkWaylandDisplay *display_wayland = data;
-  GDK_DISPLAY_DEBUG (GDK_DISPLAY (data), MISC, "Compositor prefers decoration mode '%s'", modes[mode]);
-  display_wayland->server_decoration_mode = mode;
-}
-
-static const struct org_kde_kwin_server_decoration_manager_listener server_decoration_listener = {
-  .default_mode = server_decoration_manager_default_mode
-};
-
 /* }}} */
 /* {{{ session listener */
 
@@ -663,14 +640,11 @@ gdk_registry_handle_global (void               *data,
         wl_registry_bind (display_wayland->wl_registry, id,
                           &zwp_keyboard_shortcuts_inhibit_manager_v1_interface, SHORTCUTS_INHIBIT_VERSION);
     }
-  else if (match_global (display_wayland, interface, version, org_kde_kwin_server_decoration_manager_interface.name, 0))
+  else if (match_global (display_wayland, interface, version, zxdg_decoration_manager_v1_interface.name, 0))
     {
-      display_wayland->server_decoration_manager =
+      display_wayland->zxdg_decoration_manager_v1 =
         wl_registry_bind (display_wayland->wl_registry, id,
-                          &org_kde_kwin_server_decoration_manager_interface, SERVER_DECORATION_VERSION);
-      org_kde_kwin_server_decoration_manager_add_listener (display_wayland->server_decoration_manager,
-                                                           &server_decoration_listener,
-                                                           display_wayland);
+                          &zxdg_decoration_manager_v1_interface, ZXDG_DECORATION_VERSION);
     }
   else if (match_global (display_wayland, interface, version, zxdg_output_manager_v1_interface.name, XDG_OUTPUT_MIN_VERSION))
     {
@@ -917,7 +891,7 @@ gdk_wayland_display_dispose (GObject *object)
   g_clear_pointer (&display_wayland->xdg_importer, zxdg_importer_v1_destroy);
   g_clear_pointer (&display_wayland->xdg_importer_v2, zxdg_importer_v2_destroy);
   g_clear_pointer (&display_wayland->keyboard_shortcuts_inhibit, zwp_keyboard_shortcuts_inhibit_manager_v1_destroy);
-  g_clear_pointer (&display_wayland->server_decoration_manager, org_kde_kwin_server_decoration_manager_destroy);
+  g_clear_pointer (&display_wayland->zxdg_decoration_manager_v1, zxdg_decoration_manager_v1_destroy);
   g_clear_pointer (&display_wayland->xdg_output_manager, zxdg_output_manager_v1_destroy);
   g_clear_pointer (&display_wayland->idle_inhibit_manager, zwp_idle_inhibit_manager_v1_destroy);
   g_clear_pointer (&display_wayland->xdg_activation, xdg_activation_v1_destroy);
@@ -1237,14 +1211,16 @@ gdk_wayland_display_dispatch_queue (GdkDisplay            *display,
  * decorations or if it leaves decorations to the application.
  *
  * Returns: true if the compositor prefers server-side decorations
+ *
+ * Deprecated: 4.23
  */
 gboolean
 gdk_wayland_display_prefers_ssd (GdkDisplay *display)
 {
-  GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (display);
-
-  if (display_wayland->server_decoration_manager)
-    return display_wayland->server_decoration_mode == ORG_KDE_KWIN_SERVER_DECORATION_MANAGER_MODE_SERVER;
+  /* If the server doesn't implement xdg-decoration, we will just client-side
+   * decorate. If the server does implement xdg-decoration, we will initially
+   * client-side decorate and possibly negotiate a change to server-side
+   * decorations. This function is deprecated as it is no longer useful. */
 
   return FALSE;
 }

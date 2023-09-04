@@ -32,7 +32,7 @@
 #include <gdk/wayland/xdg-shell-unstable-v6-client-protocol.h>
 #include <gdk/wayland/xdg-foreign-unstable-v1-client-protocol.h>
 #include <gdk/wayland/keyboard-shortcuts-inhibit-unstable-v1-client-protocol.h>
-#include <gdk/wayland/server-decoration-client-protocol.h>
+#include <gdk/wayland/xdg-decoration-unstable-v1-client-protocol.h>
 #include <gdk/wayland/xdg-output-unstable-v1-client-protocol.h>
 #include <gdk/wayland/idle-inhibit-unstable-v1-client-protocol.h>
 #include <gdk/wayland/primary-selection-unstable-v1-client-protocol.h>
@@ -121,7 +121,7 @@ struct _GdkWaylandDisplay
   struct zxdg_importer_v1 *xdg_importer;
   struct zxdg_importer_v2 *xdg_importer_v2;
   struct zwp_keyboard_shortcuts_inhibit_manager_v1 *keyboard_shortcuts_inhibit;
-  struct org_kde_kwin_server_decoration_manager *server_decoration_manager;
+  struct zxdg_decoration_manager_v1 *zxdg_decoration_manager_v1;
   struct zxdg_output_manager_v1 *xdg_output_manager;
   struct zwp_idle_inhibit_manager_v1 *idle_inhibit_manager;
   struct xdg_activation_v1 *xdg_activation;
@@ -154,8 +154,6 @@ struct _GdkWaylandDisplay
 
   GSource *event_source;
   GSource *poll_source;
-
-  uint32_t server_decoration_mode;
 
   struct xkb_context *xkb_context;
 
