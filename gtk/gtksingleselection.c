@@ -173,12 +173,21 @@ gtk_single_selection_unselect_item (GtkSelectionModel *model,
   return TRUE;
 }
 
+static gboolean
+gtk_single_selection_unselect_all (GtkSelectionModel *model)
+{
+  GtkSingleSelection *self = GTK_SINGLE_SELECTION (model);
+
+  return gtk_single_selection_unselect_item (model, self->selected);
+}
+
 static void
 gtk_single_selection_selection_model_init (GtkSelectionModelInterface *iface)
 {
   iface->is_selected = gtk_single_selection_is_selected; 
   iface->get_selection_in_range = gtk_single_selection_get_selection_in_range; 
   iface->select_item = gtk_single_selection_select_item; 
+  iface->unselect_all = gtk_single_selection_unselect_all;
   iface->unselect_item = gtk_single_selection_unselect_item; 
 }
 
