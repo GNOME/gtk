@@ -26,6 +26,8 @@ struct _PathView
 {
   GtkWidget parent_instance;
 
+  GskPath *path1;
+  GskPath *path2;
   GskPath *path;
   GskStroke *stroke;
   graphene_rect_t bounds;
@@ -36,23 +38,30 @@ struct _PathView
   gboolean do_fill;
   gboolean show_points;
   gboolean show_controls;
+  gboolean show_intersections;
   GskPath *scaled_path;
   GskPath *line_path;
   GskPath *point_path;
   GdkRGBA point_color;
+  GdkRGBA intersection_color;
   double zoom;
+  GskPath *intersection_line_path;
+  GskPath *intersection_point_path;
 };
 
 enum {
-  PROP_PATH = 1,
+  PROP_PATH1 = 1,
+  PROP_PATH2,
   PROP_DO_FILL,
   PROP_STROKE,
   PROP_FILL_RULE,
   PROP_FG_COLOR,
   PROP_BG_COLOR,
   PROP_POINT_COLOR,
+  PROP_INTERSECTION_COLOR,
   PROP_SHOW_POINTS,
   PROP_SHOW_CONTROLS,
+  PROP_SHOW_INTERSECTIONS,
   PROP_ZOOM,
   N_PROPERTIES
 };
@@ -76,6 +85,7 @@ path_view_init (PathView *self)
   self->fg = (GdkRGBA) { 0, 0, 0, 1};
   self->bg = (GdkRGBA) { 1, 1, 1, 1};
   self->point_color = (GdkRGBA) { 1, 0, 0, 1};
+  self->intersection_color = (GdkRGBA) { 0, 1, 0, 1};
   self->padding = 10;
   self->zoom = 1;
 }
@@ -85,10 +95,14 @@ path_view_dispose (GObject *object)
 {
   PathView *self = PATH_VIEW (object);
 
+  g_clear_pointer (&self->path1, gsk_path_unref);
+  g_clear_pointer (&self->path2, gsk_path_unref);
   g_clear_pointer (&self->path, gsk_path_unref);
   g_clear_pointer (&self->stroke, gsk_stroke_free);
   g_clear_pointer (&self->line_path, gsk_path_unref);
   g_clear_pointer (&self->point_path, gsk_path_unref);
+  g_clear_pointer (&self->intersection_line_path, gsk_path_unref);
+  g_clear_pointer (&self->intersection_point_path, gsk_path_unref);
 
   G_OBJECT_CLASS (path_view_parent_class)->dispose (object);
 }
@@ -103,8 +117,12 @@ path_view_get_property (GObject    *object,
 
   switch (prop_id)
     {
-    case PROP_PATH:
-      g_value_set_boxed (value, self->path);
+    case PROP_PATH1:
+      g_value_set_boxed (value, self->path1);
+      break;
+
+    case PROP_PATH2:
+      g_value_set_boxed (value, self->path2);
       break;
 
     case PROP_DO_FILL:
@@ -135,8 +153,16 @@ path_view_get_property (GObject    *object,
       g_value_set_boolean (value, self->show_controls);
       break;
 
+    case PROP_SHOW_INTERSECTIONS:
+      g_value_set_boolean (value, self->show_intersections);
+      break;
+
     case PROP_POINT_COLOR:
       g_value_set_boxed (value, &self->point_color);
+      break;
+
+    case PROP_INTERSECTION_COLOR:
+      g_value_set_boxed (value, &self->intersection_color);
       break;
 
     case PROP_ZOOM:
@@ -199,6 +225,20 @@ update_controls (PathView *self)
 }
 
 static void
+update_intersections (PathView *self)
+{
+  g_clear_pointer (&self->intersection_line_path, gsk_path_unref);
+  g_clear_pointer (&self->intersection_point_path, gsk_path_unref);
+
+  if (self->show_intersections && self->path1)
+    collect_intersections (self->path1, self->path2, self->zoom,
+                           &self->intersection_line_path,
+                           &self->intersection_point_path);
+
+  gtk_widget_queue_draw (GTK_WIDGET (self));
+}
+
+static void
 path_view_set_fill_rule (PathView    *self,
                          GskFillRule  fill_rule)
 {
@@ -220,6 +260,27 @@ path_view_set_zoom (PathView *self,
 
   self->zoom = zoom;
   update_controls (self);
+  update_intersections (self);
+}
+
+static void
+update_path (PathView *self)
+{
+  GskPathBuilder *builder;
+
+  g_clear_pointer (&self->path, gsk_path_unref);
+
+  builder = gsk_path_builder_new ();
+  if (self->path1)
+    gsk_path_builder_add_path (builder, self->path1);
+
+  if (self->path2)
+    gsk_path_builder_add_path (builder, self->path2);
+
+  self->path = gsk_path_builder_free_to_path (builder);
+
+  update_controls (self);
+  update_intersections (self);
 }
 
 static void
@@ -232,11 +293,16 @@ path_view_set_property (GObject      *object,
 
   switch (prop_id)
     {
+    case PROP_PATH1:
+      g_clear_pointer (&self->path1, gsk_path_unref);
+      self->path1 = g_value_dup_boxed (value);
+      update_path (self);
+      break;
 
-    case PROP_PATH:
-      g_clear_pointer (&self->path, gsk_path_unref);
-      self->path = g_value_dup_boxed (value);
-      update_controls (self);
+    case PROP_PATH2:
+      g_clear_pointer (&self->path2, gsk_path_unref);
+      self->path2 = g_value_dup_boxed (value);
+      update_path (self);
       break;
 
     case PROP_DO_FILL:
@@ -274,14 +340,23 @@ path_view_set_property (GObject      *object,
       update_controls (self);
       break;
 
+    case PROP_SHOW_INTERSECTIONS:
+      self->show_intersections = g_value_get_boolean (value);
+      update_intersections (self);
+      break;
+
     case PROP_POINT_COLOR:
       self->point_color = *(GdkRGBA *) g_value_get_boxed (value);
       gtk_widget_queue_draw (GTK_WIDGET (self));
       break;
 
+    case PROP_INTERSECTION_COLOR:
+      self->intersection_color = *(GdkRGBA *) g_value_get_boxed (value);
+      gtk_widget_queue_draw (GTK_WIDGET (self));
+      break;
+
    case PROP_ZOOM:
       path_view_set_zoom (self, g_value_get_double (value));
-      update_controls (self);
      break;
 
      default:
@@ -302,9 +377,9 @@ path_view_measure (GtkWidget      *widget,
   PathView *self = PATH_VIEW (widget);
 
   if (orientation == GTK_ORIENTATION_HORIZONTAL)
-    *minimum = *natural = (int) ceilf (self->bounds.size.width) + 2 * self->padding;
+    *minimum = *natural = (int) ceilf (self->bounds.origin.x + self->bounds.size.width) + 2 * self->padding;
   else
-    *minimum = *natural = (int) ceilf (self->bounds.size.height) + 2 * self->padding;
+    *minimum = *natural = (int) ceilf (self->bounds.origin.y + self->bounds.size.height) + 2 * self->padding;
 }
 
 static void
@@ -331,6 +406,8 @@ path_view_snapshot (GtkWidget   *widget,
 
       gsk_stroke_set_dash (stroke, (const float[]) { 1, 1 }, 2);
       gtk_snapshot_append_stroke (snapshot, self->line_path, stroke, &self->fg);
+
+      gsk_stroke_free (stroke);
     }
 
   if (self->point_path)
@@ -339,6 +416,22 @@ path_view_snapshot (GtkWidget   *widget,
 
       gtk_snapshot_append_fill (snapshot, self->point_path, GSK_FILL_RULE_WINDING, &self->point_color);
       gtk_snapshot_append_stroke (snapshot, self->point_path, stroke, &self->fg);
+
+      gsk_stroke_free (stroke);
+    }
+
+  if (self->intersection_line_path)
+    {
+      GskStroke *stroke = gsk_stroke_new (gsk_stroke_get_line_width (self->stroke));
+
+      gtk_snapshot_append_stroke (snapshot, self->intersection_line_path, stroke, &self->intersection_color);
+
+      gsk_stroke_free (stroke);
+    }
+
+  if (self->intersection_point_path)
+    {
+      gtk_snapshot_append_fill (snapshot, self->intersection_point_path, GSK_FILL_RULE_WINDING, &self->intersection_color);
     }
 
   gtk_snapshot_restore (snapshot);
@@ -381,8 +474,13 @@ path_view_class_init (PathViewClass *class)
   widget_class->measure = path_view_measure;
   widget_class->snapshot = path_view_snapshot;
 
-  properties[PROP_PATH]
-      = g_param_spec_boxed ("path", NULL, NULL,
+  properties[PROP_PATH1]
+      = g_param_spec_boxed ("path1", NULL, NULL,
+                            GSK_TYPE_PATH,
+                            G_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+
+  properties[PROP_PATH2]
+      = g_param_spec_boxed ("path2", NULL, NULL,
                             GSK_TYPE_PATH,
                             G_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
@@ -422,8 +520,18 @@ path_view_class_init (PathViewClass *class)
                               FALSE,
                               G_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
+  properties[PROP_SHOW_INTERSECTIONS]
+      = g_param_spec_boolean ("show-intersections", NULL, NULL,
+                              FALSE,
+                              G_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+
   properties[PROP_POINT_COLOR]
       = g_param_spec_boxed ("point-color", NULL, NULL,
+                            GDK_TYPE_RGBA,
+                            G_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+
+  properties[PROP_INTERSECTION_COLOR]
+      = g_param_spec_boxed ("intersection-color", NULL, NULL,
                             GDK_TYPE_RGBA,
                             G_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
@@ -451,9 +559,11 @@ path_view_class_init (PathViewClass *class)
 }
 
 GtkWidget *
-path_view_new (GskPath *path)
+path_view_new (GskPath *path1,
+               GskPath *path2)
 {
   return g_object_new (PATH_TYPE_VIEW,
-                       "path", path,
+                       "path1", path1,
+                       "path1", path2,
                        NULL);
 }
