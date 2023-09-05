@@ -328,8 +328,6 @@ struct _GtkFileChooserWidget
   guint sort_directories_first : 1;
   guint show_time : 1;
   guint shortcuts_current_folder_active : 1;
-  guint show_size_column : 1;
-  guint show_type_column : 1;
   guint create_folders : 1;
   guint auto_selecting_first_row : 1;
   guint browse_files_interaction_frozen : 1;
@@ -1421,36 +1419,6 @@ change_show_hidden_state (GSimpleAction *action,
   set_show_hidden (impl, g_variant_get_boolean (state));
 }
 
-/* Callback used when the "Show Size Column" menu item is toggled */
-static void
-change_show_size_state (GSimpleAction *action,
-                        GVariant      *state,
-                        gpointer       data)
-{
-  GtkFileChooserWidget *impl = data;
-
-  g_simple_action_set_state (action, state);
-  impl->show_size_column = g_variant_get_boolean (state);
-
-  gtk_column_view_column_set_visible (impl->column_view_size_column,
-                                      impl->show_size_column);
-}
-
-/* Callback used when the "Show Type Column" menu item is toggled */
-static void
-change_show_type_state (GSimpleAction *action,
-                        GVariant      *state,
-                        gpointer       data)
-{
-  GtkFileChooserWidget *impl = data;
-
-  g_simple_action_set_state (action, state);
-  impl->show_type_column = g_variant_get_boolean (state);
-
-  gtk_column_view_column_set_visible (impl->column_view_type_column,
-                                      impl->show_type_column);
-}
-
 static void
 change_sort_directories_first_state (GSimpleAction *action,
                                      GVariant      *state,
@@ -1774,8 +1742,6 @@ static GActionEntry entries[] = {
   { "trash", trash_file_cb, NULL, NULL, NULL },
   { "popup-file-list-menu",  popup_file_list_menu, "(udd)", NULL, NULL },
   { "toggle-show-hidden", NULL, NULL, "false", change_show_hidden_state },
-  { "toggle-show-size", NULL, NULL, "false", change_show_size_state },
-  { "toggle-show-type", NULL, NULL, "false", change_show_type_state },
   { "toggle-show-time", NULL, NULL, "false", change_show_time_state },
   { "toggle-sort-dirs-first", NULL, NULL, "false", change_sort_directories_first_state },
   { "toggle-view", toggle_view_cb, NULL, NULL, NULL },
@@ -1830,12 +1796,10 @@ file_list_build_popover (GtkFileChooserWidget *impl)
   g_object_unref (item);
 
   item = g_menu_item_new (_("Show _Size Column"), "item.toggle-show-size");
-  g_menu_item_set_attribute (item, "hidden-when", "s", "action-disabled");
   g_menu_append_item (section, item);
   g_object_unref (item);
 
   item = g_menu_item_new (_("Show T_ype Column"), "item.toggle-show-type");
-  g_menu_item_set_attribute (item, "hidden-when", "s", "action-disabled");
   g_menu_append_item (section, item);
   g_object_unref (item);
 
@@ -1891,14 +1855,6 @@ file_list_update_popover (GtkFileChooserWidget *impl)
 
   action = g_action_map_lookup_action (G_ACTION_MAP (impl->item_actions), "toggle-show-hidden");
   g_simple_action_set_state (G_SIMPLE_ACTION (action), g_variant_new_boolean (impl->show_hidden));
-
-  action = g_action_map_lookup_action (G_ACTION_MAP (impl->item_actions), "toggle-show-size");
-  g_simple_action_set_enabled (G_SIMPLE_ACTION (action), (impl->view_type == VIEW_TYPE_LIST));
-  g_simple_action_set_state (G_SIMPLE_ACTION (action), g_variant_new_boolean (impl->show_size_column));
-
-  action = g_action_map_lookup_action (G_ACTION_MAP (impl->item_actions), "toggle-show-type");
-  g_simple_action_set_enabled (G_SIMPLE_ACTION (action), (impl->view_type == VIEW_TYPE_LIST));
-  g_simple_action_set_state (G_SIMPLE_ACTION (action), g_variant_new_boolean (impl->show_type_column));
 
   action = g_action_map_lookup_action (G_ACTION_MAP (impl->item_actions), "toggle-show-time");
   g_simple_action_set_enabled (G_SIMPLE_ACTION (action), (impl->view_type == VIEW_TYPE_LIST));
@@ -6859,6 +6815,7 @@ post_process_ui (GtkFileChooserWidget *impl)
   GtkShortcutTrigger *trigger;
   GtkShortcutAction *action;
   GtkShortcut *shortcut;
+  GAction *gaction;
 
   target = gtk_drop_target_new (GDK_TYPE_FILE_LIST, GDK_ACTION_COPY | GDK_ACTION_MOVE);
   g_signal_connect (target, "drop", G_CALLBACK (file_list_drag_drop_cb), impl);
@@ -6875,6 +6832,12 @@ post_process_ui (GtkFileChooserWidget *impl)
   g_action_map_add_action_entries (G_ACTION_MAP (impl->item_actions),
                                    entries, G_N_ELEMENTS (entries),
                                    impl);
+  gaction = G_ACTION (g_property_action_new ("toggle-show-size", impl->column_view_size_column, "visible"));
+  g_action_map_add_action (G_ACTION_MAP (impl->item_actions), gaction);
+  g_object_unref (gaction);
+  gaction = G_ACTION (g_property_action_new ("toggle-show-type", impl->column_view_type_column, "visible"));
+  g_action_map_add_action (G_ACTION_MAP (impl->item_actions), gaction);
+  g_object_unref (gaction);
   gtk_widget_insert_action_group (GTK_WIDGET (impl),
                                   "item",
                                   impl->item_actions);
@@ -7445,8 +7408,6 @@ gtk_file_chooser_widget_init (GtkFileChooserWidget *impl)
   impl->select_multiple = FALSE;
   impl->sort_directories_first = FALSE;
   impl->show_hidden = FALSE;
-  impl->show_size_column = TRUE;
-  impl->show_type_column = TRUE;
   impl->type_format = TYPE_FORMAT_MIME;
   impl->load_state = LOAD_EMPTY;
   impl->reload_state = RELOAD_EMPTY;
