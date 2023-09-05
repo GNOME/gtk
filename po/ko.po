@@ -2,7 +2,7 @@
 # This file is distributed under the same license as the gtk+ package.
 #
 # Sung-Hyun Nam <namsh@lgic.co.kr>, 1998
-# Changwoo Ryu <cwryu@debian.org>, 2002-2022.
+# Changwoo Ryu <cwryu@debian.org>, 2002-2023.
 #
 #
 # - font family를 나타내는 family는 "계열"이라고 번역
@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-03-14 11:38+0000\n"
-"PO-Revision-Date: 2023-03-15 02:04+0900\n"
+"POT-Creation-Date: 2023-09-02 03:09+0000\n"
+"PO-Revision-Date: 2023-09-03 10:54+0900\n"
 "Last-Translator: Changwoo Ryu <cwryu@debian.org>\n"
 "Language-Team: Gnome Korea <gnome-kr@googlegroups.com>\n"
 "Language: ko\n"
@@ -1236,7 +1236,7 @@ msgstr ""
 #: gtk/gtkfilechoosernative.c:545 gtk/gtkfilechoosernative.c:637
 #: gtk/gtkfilechooserwidget.c:1502 gtk/gtkfilechooserwidget.c:6578
 #: gtk/gtkmessagedialog.c:952 gtk/gtkmessagedialog.c:965
-#: gtk/gtkmountoperation.c:594 gtk/gtkpagesetupunixdialog.c:197
+#: gtk/gtkmountoperation.c:599 gtk/gtkpagesetupunixdialog.c:197
 #: gtk/gtkprintbackend.c:779 gtk/gtkprinteroptionwidget.c:545
 #: gtk/gtkprintunixdialog.c:674 gtk/gtkprintunixdialog.c:747
 #: gtk/gtkwindow.c:12829 gtk/inspector/css-editor.c:201
@@ -2354,7 +2354,7 @@ msgstr "열기(_O)"
 msgid "_Save"
 msgstr "저장(_S)"
 
-#: gtk/gtkfilechoosernativequartz.c:331 gtk/ui/gtkfilechooserwidget.ui:435
+#: gtk/gtkfilechoosernativequartz.c:332 gtk/ui/gtkfilechooserwidget.ui:435
 msgid "Select which types of files are shown"
 msgstr "어떤 종류의 파일을 표시할 지 선택합니다"
 
@@ -2996,75 +2996,75 @@ msgstr "아니요(_N)"
 msgid "_Yes"
 msgstr "예(_Y)"
 
-#: gtk/gtkmountoperation.c:595
+#: gtk/gtkmountoperation.c:600
 msgid "Co_nnect"
 msgstr "연결(_N)"
 
-#: gtk/gtkmountoperation.c:668
+#: gtk/gtkmountoperation.c:673
 msgid "Connect As"
 msgstr "연결 사용자"
 
-#: gtk/gtkmountoperation.c:677
+#: gtk/gtkmountoperation.c:682
 msgid "_Anonymous"
 msgstr "익명(_A)"
 
-#: gtk/gtkmountoperation.c:686
+#: gtk/gtkmountoperation.c:691
 msgid "Registered U_ser"
 msgstr "등록한 사용자(_S)"
 
-#: gtk/gtkmountoperation.c:697
+#: gtk/gtkmountoperation.c:702
 msgid "_Username"
 msgstr "사용자 이름(_U)"
 
-#: gtk/gtkmountoperation.c:702
+#: gtk/gtkmountoperation.c:707
 msgid "_Domain"
 msgstr "도메인(_D)"
 
-#: gtk/gtkmountoperation.c:711
+#: gtk/gtkmountoperation.c:716
 msgid "Volume type"
 msgstr "볼륨 종류"
 
-#: gtk/gtkmountoperation.c:721
+#: gtk/gtkmountoperation.c:726
 msgid "_Hidden"
 msgstr "감춤(_H)"
 
-#: gtk/gtkmountoperation.c:724
+#: gtk/gtkmountoperation.c:729
 msgid "_Windows system"
 msgstr "윈도우 시스템(_W)"
 
 # Personal Iteration Multiplier, 풀든 아니든 번역하든 어려우므로 그냥 PIM으로
 # 쓴다.
-#: gtk/gtkmountoperation.c:727
+#: gtk/gtkmountoperation.c:732
 msgid "_PIM"
 msgstr "_PIM"
 
-#: gtk/gtkmountoperation.c:733
+#: gtk/gtkmountoperation.c:738
 msgid "_Password"
 msgstr "암호(_P)"
 
-#: gtk/gtkmountoperation.c:755
+#: gtk/gtkmountoperation.c:760
 msgid "Forget password _immediately"
 msgstr "즉시 암호 지우기(_I)"
 
-#: gtk/gtkmountoperation.c:765
+#: gtk/gtkmountoperation.c:770
 msgid "Remember password until you _logout"
 msgstr "로그아웃할 때까지 암호 저장(_L)"
 
-#: gtk/gtkmountoperation.c:775
+#: gtk/gtkmountoperation.c:780
 msgid "Remember _forever"
 msgstr "계속 암호 저장(_F)"
 
-#: gtk/gtkmountoperation.c:1170
+#: gtk/gtkmountoperation.c:1175
 #, c-format
 msgid "Unknown Application (PID %d)"
 msgstr "알 수 없는 프로그램(PID %d)"
 
-#: gtk/gtkmountoperation.c:1355
+#: gtk/gtkmountoperation.c:1360
 #, c-format
 msgid "Unable to end process"
 msgstr "프로세스를 끝낼 수 없습니다"
 
-#: gtk/gtkmountoperation.c:1389
+#: gtk/gtkmountoperation.c:1394
 msgid "_End Process"
 msgstr "프로세스 중지(_E)"
 
@@ -4108,7 +4108,7 @@ msgstr "활성화"
 msgid "State"
 msgstr "상태"
 
-#: gtk/inspector/actions.ui:30 gtk/inspector/general.ui:196
+#: gtk/inspector/actions.ui:30 gtk/inspector/general.ui:264
 #: gtk/ui/gtkplacesview.ui:92
 msgid "Prefix"
 msgstr "접두어"
@@ -4171,15 +4171,19 @@ msgstr "값"
 msgid "Show data"
 msgstr "데이터 표시"
 
-#: gtk/inspector/general.c:330
+#: gtk/inspector/general.c:334
 msgctxt "GL version"
 msgid "None"
 msgstr "없음"
 
-#: gtk/inspector/general.c:331
+#: gtk/inspector/general.c:335
 msgctxt "GL vendor"
 msgid "None"
 msgstr "없음"
+
+#: gtk/inspector/general.c:550
+msgid "IM Context is hardcoded by GTK_IM_MODULE"
+msgstr "입력기 컨텍스트가 GTK_IM_MODULE로 하드 코딩되어 있습니다"
 
 #: gtk/inspector/general.ui:34
 msgid "GTK+ Version"
@@ -4189,31 +4193,39 @@ msgstr "GTK+ 버전"
 msgid "GDK Backend"
 msgstr "GDK 백엔드"
 
-#: gtk/inspector/general.ui:115
+#: gtk/inspector/general.ui:102
+msgid "Pango Fontmap"
+msgstr "판고 글꼴맵"
+
+#: gtk/inspector/general.ui:136
+msgid "Input Method"
+msgstr "입력기"
+
+#: gtk/inspector/general.ui:183
 msgid "Application ID"
 msgstr "프로그램 ID"
 
-#: gtk/inspector/general.ui:149
+#: gtk/inspector/general.ui:217
 msgid "Resource Path"
 msgstr "리소스 경로"
 
-#: gtk/inspector/general.ui:454
+#: gtk/inspector/general.ui:522
 msgid "Display"
 msgstr "표시"
 
-#: gtk/inspector/general.ui:489
+#: gtk/inspector/general.ui:557
 msgid "RGBA visual"
 msgstr "RGBA 비주얼"
 
-#: gtk/inspector/general.ui:523
+#: gtk/inspector/general.ui:591
 msgid "Composited"
 msgstr "컴포짓"
 
-#: gtk/inspector/general.ui:570
+#: gtk/inspector/general.ui:638
 msgid "GL Version"
 msgstr "GL 버전"
 
-#: gtk/inspector/general.ui:605
+#: gtk/inspector/general.ui:673
 msgid "GL Vendor"
 msgstr "GL 공급사"
 
@@ -7133,7 +7145,6 @@ msgstr "서비스"
 
 #. used for the application menu on MacOS.  %s is replaced with the application name.
 #: gtk/ui/gtkapplication-quartz.ui:29
-#, c-format
 msgid "Hide %s"
 msgstr "%s 숨기기"
 
@@ -7149,7 +7160,6 @@ msgstr "모두 보이기"
 
 #. used for the application menu on MacOS.  %s is replaced with the application name.
 #: gtk/ui/gtkapplication-quartz.ui:49
-#, c-format
 msgid "Quit %s"
 msgstr "%s 끝내기"
 
@@ -8416,7 +8426,3 @@ msgstr "테스트-출력.%s"
 #: modules/printbackends/test/gtkprintbackendtest.c:465
 msgid "Print to Test Printer"
 msgstr "테스트 프린터로 인쇄"
-
-#~ msgctxt "input method menu"
-#~ msgid "Waylandgtk"
-#~ msgstr "웨일랜드GTK"
