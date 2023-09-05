@@ -25,6 +25,8 @@ struct _PathView
 {
   GtkWidget parent_instance;
 
+  GskPath *path1;
+  GskPath *path2;
   GskPath *path;
   GskStroke *stroke;
   graphene_rect_t bounds;
@@ -41,7 +43,8 @@ struct _PathView
 };
 
 enum {
-  PROP_PATH = 1,
+  PROP_PATH1 = 1,
+  PROP_PATH2,
   PROP_DO_FILL,
   PROP_STROKE,
   PROP_FILL_RULE,
@@ -79,6 +82,8 @@ path_view_dispose (GObject *object)
 {
   PathView *self = PATH_VIEW (object);
 
+  g_clear_pointer (&self->path1, gsk_path_unref);
+  g_clear_pointer (&self->path2, gsk_path_unref);
   g_clear_pointer (&self->path, gsk_path_unref);
   g_clear_pointer (&self->stroke, gsk_stroke_free);
   g_clear_pointer (&self->line_path, gsk_path_unref);
@@ -97,8 +102,12 @@ path_view_get_property (GObject    *object,
 
   switch (prop_id)
     {
-    case PROP_PATH:
-      g_value_set_boxed (value, self->path);
+    case PROP_PATH1:
+      g_value_set_boxed (value, self->path1);
+      break;
+
+    case PROP_PATH2:
+      g_value_set_boxed (value, self->path2);
       break;
 
     case PROP_DO_FILL:
@@ -269,6 +278,25 @@ update_controls (PathView *self)
 }
 
 static void
+update_path (PathView *self)
+{
+  GskPathBuilder *builder;
+
+  g_clear_pointer (&self->path, gsk_path_unref);
+
+  builder = gsk_path_builder_new ();
+  if (self->path1)
+    gsk_path_builder_add_path (builder, self->path1);
+
+  if (self->path2)
+    gsk_path_builder_add_path (builder, self->path2);
+
+  self->path = gsk_path_builder_free_to_path (builder);
+
+  update_controls (self);
+}
+
+static void
 path_view_set_property (GObject      *object,
                         guint         prop_id,
                         const GValue *value,
@@ -278,11 +306,16 @@ path_view_set_property (GObject      *object,
 
   switch (prop_id)
     {
+    case PROP_PATH1:
+      g_clear_pointer (&self->path1, gsk_path_unref);
+      self->path1 = g_value_dup_boxed (value);
+      update_path (self);
+      break;
 
-    case PROP_PATH:
-      g_clear_pointer (&self->path, gsk_path_unref);
-      self->path = g_value_dup_boxed (value);
-      update_controls (self);
+    case PROP_PATH2:
+      g_clear_pointer (&self->path2, gsk_path_unref);
+      self->path2 = g_value_dup_boxed (value);
+      update_path (self);
       break;
 
     case PROP_DO_FILL:
@@ -399,8 +432,13 @@ path_view_class_init (PathViewClass *class)
   widget_class->measure = path_view_measure;
   widget_class->snapshot = path_view_snapshot;
 
-  properties[PROP_PATH]
-      = g_param_spec_boxed ("path", NULL, NULL,
+  properties[PROP_PATH1]
+      = g_param_spec_boxed ("path1", NULL, NULL,
+                            GSK_TYPE_PATH,
+                            G_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+
+  properties[PROP_PATH2]
+      = g_param_spec_boxed ("path2", NULL, NULL,
                             GSK_TYPE_PATH,
                             G_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
@@ -452,6 +490,6 @@ GtkWidget *
 path_view_new (GskPath *path)
 {
   return g_object_new (PATH_TYPE_VIEW,
-                       "path", path,
+                       "path1", path,
                        NULL);
 }
