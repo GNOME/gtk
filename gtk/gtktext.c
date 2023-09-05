@@ -2745,6 +2745,16 @@ gtk_text_click_gesture_pressed (GtkGestureClick *gesture,
   guint button;
   int tmp_pos;
 
+  if (!gtk_widget_has_focus (widget))
+    {
+      if (!gtk_widget_get_focus_on_click (widget))
+        return;
+      priv->in_click = TRUE;
+      gtk_widget_grab_focus (widget);
+      gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_CLAIMED);
+      priv->in_click = FALSE;
+    }
+
   button = gtk_gesture_single_get_current_button (GTK_GESTURE_SINGLE (gesture));
   current = gtk_gesture_single_get_current_sequence (GTK_GESTURE_SINGLE (gesture));
   event = gtk_gesture_get_last_event (GTK_GESTURE (gesture), current);
@@ -2752,14 +2762,6 @@ gtk_text_click_gesture_pressed (GtkGestureClick *gesture,
   x = gesture_get_current_point_in_layout (GTK_GESTURE_SINGLE (gesture), self);
   y = widget_y;
   gtk_text_reset_blink_time (self);
-
-  if (!gtk_widget_has_focus (widget))
-    {
-      priv->in_click = TRUE;
-      gtk_widget_grab_focus (widget);
-      gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_CLAIMED);
-      priv->in_click = FALSE;
-    }
 
   tmp_pos = gtk_text_find_position (self, x);
 
