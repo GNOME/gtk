@@ -3178,8 +3178,6 @@ static void
 settings_load (GtkFileChooserWidget *impl)
 {
   gboolean show_hidden;
-  gboolean show_size_column;
-  gboolean show_type_column;
   gboolean sort_directories_first;
   DateFormat date_format;
   TypeFormat type_format;
@@ -3193,8 +3191,6 @@ settings_load (GtkFileChooserWidget *impl)
   settings = _gtk_file_chooser_get_settings_for_widget (GTK_WIDGET (impl));
 
   show_hidden = g_settings_get_boolean (settings, SETTINGS_KEY_SHOW_HIDDEN);
-  show_size_column = g_settings_get_boolean (settings, SETTINGS_KEY_SHOW_SIZE_COLUMN);
-  show_type_column = g_settings_get_boolean (settings, SETTINGS_KEY_SHOW_TYPE_COLUMN);
   sort_column = g_settings_get_enum (settings, SETTINGS_KEY_SORT_COLUMN);
   sort_order = g_settings_get_enum (settings, SETTINGS_KEY_SORT_ORDER);
   sidebar_width = g_settings_get_int (settings, SETTINGS_KEY_SIDEBAR_WIDTH);
@@ -3206,10 +3202,8 @@ settings_load (GtkFileChooserWidget *impl)
 
   set_show_hidden (impl, show_hidden);
 
-  impl->show_size_column = show_size_column;
-  gtk_column_view_column_set_visible (impl->column_view_size_column, show_size_column);
-  impl->show_type_column = show_type_column;
-  gtk_column_view_column_set_visible (impl->column_view_type_column, show_type_column);
+  g_settings_bind (settings, SETTINGS_KEY_SHOW_SIZE_COLUMN, impl->column_view_size_column, "visible", G_SETTINGS_BIND_DEFAULT);
+  g_settings_bind (settings, SETTINGS_KEY_SHOW_TYPE_COLUMN, impl->column_view_type_column, "visible", G_SETTINGS_BIND_DEFAULT);
 
   impl->sort_column = sort_column;
   impl->sort_order = sort_order;
@@ -3248,8 +3242,6 @@ settings_save (GtkFileChooserWidget *impl)
 
   g_settings_set_enum (settings, SETTINGS_KEY_LOCATION_MODE, impl->location_mode);
   g_settings_set_boolean (settings, SETTINGS_KEY_SHOW_HIDDEN, impl->show_hidden);
-  g_settings_set_boolean (settings, SETTINGS_KEY_SHOW_SIZE_COLUMN, impl->show_size_column);
-  g_settings_set_boolean (settings, SETTINGS_KEY_SHOW_TYPE_COLUMN, impl->show_type_column);
   g_settings_set_boolean (settings, SETTINGS_KEY_SORT_DIRECTORIES_FIRST, impl->sort_directories_first);
   g_settings_set_enum (settings, SETTINGS_KEY_SORT_COLUMN, impl->sort_column);
   g_settings_set_enum (settings, SETTINGS_KEY_SORT_ORDER, impl->sort_order);
