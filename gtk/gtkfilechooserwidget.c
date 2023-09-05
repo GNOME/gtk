@@ -1795,19 +1795,6 @@ file_list_build_popover (GtkFileChooserWidget *impl)
   g_menu_append_item (section, item);
   g_object_unref (item);
 
-  item = g_menu_item_new (_("Show _Size Column"), "item.toggle-show-size");
-  g_menu_append_item (section, item);
-  g_object_unref (item);
-
-  item = g_menu_item_new (_("Show T_ype Column"), "item.toggle-show-type");
-  g_menu_append_item (section, item);
-  g_object_unref (item);
-
-  item = g_menu_item_new (_("Show _Time"), "item.toggle-show-time");
-  g_menu_item_set_attribute (item, "hidden-when", "s", "action-disabled");
-  g_menu_append_item (section, item);
-  g_object_unref (item);
-
   item = g_menu_item_new (_("Sort _Folders Before Files"), "item.toggle-sort-dirs-first");
   g_menu_append_item (section, item);
   g_object_unref (item);
@@ -1857,7 +1844,6 @@ file_list_update_popover (GtkFileChooserWidget *impl)
   g_simple_action_set_state (G_SIMPLE_ACTION (action), g_variant_new_boolean (impl->show_hidden));
 
   action = g_action_map_lookup_action (G_ACTION_MAP (impl->item_actions), "toggle-show-time");
-  g_simple_action_set_enabled (G_SIMPLE_ACTION (action), (impl->view_type == VIEW_TYPE_LIST));
   g_simple_action_set_state (G_SIMPLE_ACTION (action), g_variant_new_boolean (impl->show_time));
 
   action = g_action_map_lookup_action (G_ACTION_MAP (impl->item_actions), "toggle-sort-dirs-first");
@@ -7357,6 +7343,22 @@ setup_columns (GtkColumnView        *view,
                GtkFileChooserWidget *impl)
 {
   GtkListItemFactory *factory;
+  GMenu *menu;
+  GMenuItem *item;
+
+  menu = g_menu_new ();
+
+  item = g_menu_item_new (_("_Size"), "item.toggle-show-size");
+  g_menu_append_item (menu, item);
+  g_object_unref (item);
+
+  item = g_menu_item_new (_("T_ype"), "item.toggle-show-type");
+  g_menu_append_item (menu, item);
+  g_object_unref (item);
+
+  item = g_menu_item_new (_("_Time"), "item.toggle-show-time");
+  g_menu_append_item (menu, item);
+  g_object_unref (item);
 
   factory = gtk_signal_list_item_factory_new ();
   g_signal_connect_swapped (factory, "bind", G_CALLBACK (bind_name_cell), impl);
@@ -7364,6 +7366,7 @@ setup_columns (GtkColumnView        *view,
   gtk_column_view_column_set_expand (impl->column_view_name_column, TRUE);
   gtk_column_view_column_set_resizable (impl->column_view_name_column, TRUE);
   gtk_column_view_append_column (view, impl->column_view_name_column);
+  gtk_column_view_column_set_header_menu (impl->column_view_name_column, G_MENU_MODEL (menu));
 
   factory = gtk_signal_list_item_factory_new ();
   g_signal_connect_swapped (factory, "bind", G_CALLBACK (bind_location_cell), impl);
@@ -7372,22 +7375,28 @@ setup_columns (GtkColumnView        *view,
   gtk_column_view_column_set_resizable (impl->column_view_location_column, TRUE);
   gtk_column_view_column_set_visible (impl->column_view_location_column, FALSE);
   gtk_column_view_append_column (view, impl->column_view_location_column);
+  gtk_column_view_column_set_header_menu (impl->column_view_location_column, G_MENU_MODEL (menu));
 
   factory = gtk_signal_list_item_factory_new ();
   g_signal_connect_swapped (factory, "bind", G_CALLBACK (bind_size_cell), impl);
   impl->column_view_size_column = gtk_column_view_column_new (_("Size"), factory);
   gtk_column_view_append_column (view, impl->column_view_size_column);
+  gtk_column_view_column_set_header_menu (impl->column_view_size_column, G_MENU_MODEL (menu));
 
   factory = gtk_signal_list_item_factory_new ();
   g_signal_connect_swapped (factory, "bind", G_CALLBACK (bind_type_cell), impl);
   impl->column_view_type_column = gtk_column_view_column_new (_("Type"), factory);
   gtk_column_view_column_set_resizable (impl->column_view_type_column, TRUE);
   gtk_column_view_append_column (view, impl->column_view_type_column);
+  gtk_column_view_column_set_header_menu (impl->column_view_type_column, G_MENU_MODEL (menu));
 
   factory = gtk_signal_list_item_factory_new ();
   g_signal_connect_swapped (factory, "bind", G_CALLBACK (bind_time_cell), impl);
   impl->column_view_time_column = gtk_column_view_column_new (_("Modified"), factory);
   gtk_column_view_append_column (view, impl->column_view_time_column);
+  gtk_column_view_column_set_header_menu (impl->column_view_time_column, G_MENU_MODEL (menu));
+
+  g_object_unref (menu);
 }
 
 static void
