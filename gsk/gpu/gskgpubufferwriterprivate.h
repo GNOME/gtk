@@ -47,5 +47,7 @@ void                    gsk_gpu_buffer_writer_append_vec4               (GskGpuB
 void                    gsk_gpu_buffer_writer_append_rect               (GskGpuBufferWriter             *self,
                                                                          const graphene_rect_t          *rect,
                                                                          const graphene_point_t         *offset);
+void                    gsk_gpu_buffer_writer_append_rgba               (GskGpuBufferWriter             *self,
+                                                                         const GdkRGBA                  *rgba);
 
 G_END_DECLS

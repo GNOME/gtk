@@ -116,3 +116,12 @@ gsk_gpu_buffer_writer_append_rect (GskGpuBufferWriter     *self,
 
   gsk_gpu_buffer_writer_append (self, G_ALIGNOF (float), (guchar *) f, sizeof (f));
 }
+
+void
+gsk_gpu_buffer_writer_append_rgba (GskGpuBufferWriter *self,
+                                   const GdkRGBA      *rgba)
+{
+  float f[4] = { rgba->red, rgba->green, rgba->blue, rgba->alpha };
+
+  gsk_gpu_buffer_writer_append (self, G_ALIGNOF (float), (guchar *) f, sizeof (f));
+}
