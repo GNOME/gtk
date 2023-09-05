@@ -690,15 +690,8 @@ gsk_gpu_node_processor_create_color_pattern (GskGpuNodeProcessor *self,
                                              gsize                n_images,
                                              gsize               *out_n_images)
 {
-  const GdkRGBA *rgba;
-
-  rgba = gsk_color_node_get_color (node);
-
   gsk_gpu_buffer_writer_append_uint (writer, GSK_GPU_PATTERN_COLOR);
-  gsk_gpu_buffer_writer_append_float (writer, rgba->red);
-  gsk_gpu_buffer_writer_append_float (writer, rgba->green);
-  gsk_gpu_buffer_writer_append_float (writer, rgba->blue);
-  gsk_gpu_buffer_writer_append_float (writer, rgba->alpha);
+  gsk_gpu_buffer_writer_append_rgba (writer, gsk_color_node_get_color (node));
 
   return TRUE;
 }
