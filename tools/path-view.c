@@ -37,9 +37,12 @@ struct _PathView
   gboolean do_fill;
   gboolean show_points;
   gboolean show_controls;
+  gboolean show_intersections;
   GskPath *line_path;
   GskPath *point_path;
   GdkRGBA point_color;
+  GskPath *intersection_line_path;
+  GskPath *intersection_point_path;
 };
 
 enum {
@@ -53,6 +56,7 @@ enum {
   PROP_POINT_COLOR,
   PROP_SHOW_POINTS,
   PROP_SHOW_CONTROLS,
+  PROP_SHOW_INTERSECTIONS,
   N_PROPERTIES
 };
 
@@ -88,6 +92,8 @@ path_view_dispose (GObject *object)
   g_clear_pointer (&self->stroke, gsk_stroke_free);
   g_clear_pointer (&self->line_path, gsk_path_unref);
   g_clear_pointer (&self->point_path, gsk_path_unref);
+  g_clear_pointer (&self->intersection_line_path, gsk_path_unref);
+  g_clear_pointer (&self->intersection_point_path, gsk_path_unref);
 
   G_OBJECT_CLASS (path_view_parent_class)->dispose (object);
 }
@@ -136,6 +142,10 @@ path_view_get_property (GObject    *object,
 
     case PROP_SHOW_CONTROLS:
       g_value_set_boolean (value, self->show_controls);
+      break;
+
+    case PROP_SHOW_INTERSECTIONS:
+      g_value_set_boolean (value, self->show_intersections);
       break;
 
     case PROP_POINT_COLOR:
@@ -277,6 +287,73 @@ update_controls (PathView *self)
   update_bounds (self);
 }
 
+typedef struct {
+  GskPathBuilder *line_builder;
+  GskPathBuilder *point_builder;
+  GskPathPoint start;
+  int segment;
+} IntersectionData;
+
+static gboolean
+intersection_cb (GskPath             *path1,
+                 const GskPathPoint  *point1,
+                 GskPath             *path2,
+                 const GskPathPoint  *point2,
+                 GskPathIntersection  kind,
+                 gpointer             data)
+{
+  IntersectionData *id = data;
+  graphene_point_t pos;
+
+  switch (kind)
+    {
+    case GSK_PATH_INTERSECTION_NORMAL:
+      gsk_path_point_get_position (point1, path1, &pos);
+      gsk_path_builder_add_circle (id->point_builder, &pos, 3);
+      break;
+
+    case GSK_PATH_INTERSECTION_START:
+      if (id->segment == 0)
+        id->start = *point1;
+      id->segment++;
+      break;
+
+    case GSK_PATH_INTERSECTION_END:
+      id->segment--;
+      if (id->segment == 0)
+        gsk_path_builder_add_segment (id->line_builder, path1, &id->start, point1);
+      break;
+
+    case GSK_PATH_INTERSECTION_NONE:
+    default:
+      g_assert_not_reached ();
+    }
+
+  return TRUE;
+}
+
+static void
+update_intersections (PathView *self)
+{
+  IntersectionData id;
+
+  g_clear_pointer (&self->intersection_line_path, gsk_path_unref);
+  g_clear_pointer (&self->intersection_point_path, gsk_path_unref);
+
+  if (!self->show_intersections || !self->path1 || !self->path2)
+    return;
+
+  id.line_builder = gsk_path_builder_new ();
+  id.point_builder = gsk_path_builder_new ();
+  id.segment = 0;
+
+  gsk_path_foreach_intersection (self->path1, self->path2, intersection_cb, &id);
+
+  self->intersection_line_path = gsk_path_builder_free_to_path (id.line_builder);
+  self->intersection_point_path = gsk_path_builder_free_to_path (id.point_builder);
+  gtk_widget_queue_draw (GTK_WIDGET (self));
+}
+
 static void
 update_path (PathView *self)
 {
@@ -293,6 +370,7 @@ update_path (PathView *self)
 
   self->path = gsk_path_builder_free_to_path (builder);
 
+  update_intersections (self);
   update_controls (self);
 }
 
@@ -354,6 +432,11 @@ path_view_set_property (GObject      *object,
       update_controls (self);
       break;
 
+    case PROP_SHOW_INTERSECTIONS:
+      self->show_intersections = g_value_get_boolean (value);
+      update_intersections (self);
+      break;
+
     case PROP_POINT_COLOR:
       self->point_color = *(GdkRGBA *) g_value_get_boxed (value);
       gtk_widget_queue_draw (GTK_WIDGET (self));
@@ -377,9 +460,9 @@ path_view_measure (GtkWidget      *widget,
   PathView *self = PATH_VIEW (widget);
 
   if (orientation == GTK_ORIENTATION_HORIZONTAL)
-    *minimum = *natural = (int) ceilf (self->bounds.size.width) + 2 * self->padding;
+    *minimum = *natural = (int) ceilf (self->bounds.origin.x + self->bounds.size.width) + 2 * self->padding;
   else
-    *minimum = *natural = (int) ceilf (self->bounds.size.height) + 2 * self->padding;
+    *minimum = *natural = (int) ceilf (self->bounds.origin.y + self->bounds.size.height) + 2 * self->padding;
 }
 
 static void
@@ -414,6 +497,18 @@ path_view_snapshot (GtkWidget   *widget,
 
       gtk_snapshot_append_fill (snapshot, self->point_path, GSK_FILL_RULE_WINDING, &self->point_color);
       gtk_snapshot_append_stroke (snapshot, self->point_path, stroke, &self->fg);
+    }
+
+  if (self->intersection_line_path)
+    {
+      GskStroke *stroke = gsk_stroke_new (gsk_stroke_get_line_width (self->stroke));
+
+      gtk_snapshot_append_stroke (snapshot, self->intersection_line_path, stroke, &self->point_color);
+    }
+
+  if (self->intersection_point_path)
+    {
+      gtk_snapshot_append_fill (snapshot, self->intersection_point_path, GSK_FILL_RULE_WINDING, &self->point_color);
     }
 
   gtk_snapshot_restore (snapshot);
@@ -475,6 +570,11 @@ path_view_class_init (PathViewClass *class)
 
   properties[PROP_SHOW_CONTROLS]
       = g_param_spec_boolean ("show-controls", NULL, NULL,
+                              FALSE,
+                              G_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+
+  properties[PROP_SHOW_INTERSECTIONS]
+      = g_param_spec_boolean ("show-intersections", NULL, NULL,
                               FALSE,
                               G_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 

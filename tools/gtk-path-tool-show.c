@@ -39,6 +39,7 @@ show_path_fill (GskPath       *path1,
                 const GdkRGBA *bg_color,
                 gboolean       show_points,
                 gboolean       show_controls,
+                gboolean       show_intersections,
                 const GdkRGBA *point_color)
 {
   GtkWidget *window, *sw, *child;
@@ -63,6 +64,7 @@ show_path_fill (GskPath       *path1,
                 "bg-color", bg_color,
                 "show-points", show_points,
                 "show-controls", show_controls,
+                "show-intersections", show_intersections,
                 "point-color", point_color,
                 NULL);
 
@@ -84,6 +86,7 @@ show_path_stroke (GskPath       *path1,
                   const GdkRGBA *bg_color,
                   gboolean       show_points,
                   gboolean       show_controls,
+                  gboolean       show_intersections,
                   const GdkRGBA *point_color)
 {
   GtkWidget *window, *sw, *child;
@@ -108,6 +111,7 @@ show_path_stroke (GskPath       *path1,
                 "bg-color", bg_color,
                 "show-points", show_points,
                 "show-controls", show_controls,
+                "show-intersections", show_intersections,
                 "point-color", point_color,
                 NULL);
 
@@ -129,6 +133,7 @@ do_show (int          *argc,
   gboolean do_stroke = FALSE;
   gboolean show_points = FALSE;
   gboolean show_controls = FALSE;
+  gboolean show_intersections = FALSE;
   const char *fill = "winding";
   const char *fg_color = "black";
   const char *bg_color = "white";
@@ -147,6 +152,7 @@ do_show (int          *argc,
     { "stroke", 0, 0, G_OPTION_ARG_NONE, &do_stroke, N_("Stroke the path"), NULL },
     { "points", 0, 0, G_OPTION_ARG_NONE, &show_points, N_("Show path points"), NULL },
     { "controls", 0, 0, G_OPTION_ARG_NONE, &show_controls, N_("Show control points"), NULL },
+    { "intersections", 0, 0, G_OPTION_ARG_NONE, &show_intersections, N_("Show intersections"), NULL },
     { "fg-color", 0, 0, G_OPTION_ARG_STRING, &fg_color, N_("Foreground color"), N_("COLOR") },
     { "bg-color", 0, 0, G_OPTION_ARG_STRING, &bg_color, N_("Background color"), N_("COLOR") },
     { "point-color", 0, 0, G_OPTION_ARG_STRING, &point_color, N_("Point color"), N_("COLOR") },
@@ -245,9 +251,9 @@ do_show (int          *argc,
   _gsk_stroke_set_dashes (stroke, dashes);
 
   if (do_stroke)
-    show_path_stroke (path1, path2, stroke, &fg, &bg, show_points, show_controls, &pc);
+    show_path_stroke (path1, path2, stroke, &fg, &bg, show_points, show_controls, show_intersections, &pc);
   else
-    show_path_fill (path1, path2, fill_rule, &fg, &bg, show_points, show_controls, &pc);
+    show_path_fill (path1, path2, fill_rule, &fg, &bg, show_points, show_controls, show_intersections, &pc);
 
   g_clear_pointer (&path1, gsk_path_unref);
   g_clear_pointer (&path2, gsk_path_unref);
