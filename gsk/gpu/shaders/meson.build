@@ -5,6 +5,7 @@ gsk_private_gpu_include_shaders = files([
   'common-vulkan.glsl',
   'ellipse.glsl',
   'enums.glsl',
+  'gradient.glsl',
   'pattern.glsl',
   'rect.glsl',
   'roundedrect.glsl',

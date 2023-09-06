@@ -1,6 +1,7 @@
 #pragma once
 
 #include "gskgputypesprivate.h"
+#include "gskrendernode.h"
 
 #include <graphene.h>
 
@@ -44,10 +45,16 @@ void                    gsk_gpu_buffer_writer_append_matrix             (GskGpuB
                                                                          const graphene_matrix_t        *matrix);
 void                    gsk_gpu_buffer_writer_append_vec4               (GskGpuBufferWriter             *self,
                                                                          const graphene_vec4_t          *vec4);
+void                    gsk_gpu_buffer_writer_append_point              (GskGpuBufferWriter             *self,
+                                                                         const graphene_point_t         *point,
+                                                                         const graphene_point_t         *offset);
 void                    gsk_gpu_buffer_writer_append_rect               (GskGpuBufferWriter             *self,
                                                                          const graphene_rect_t          *rect,
                                                                          const graphene_point_t         *offset);
 void                    gsk_gpu_buffer_writer_append_rgba               (GskGpuBufferWriter             *self,
                                                                          const GdkRGBA                  *rgba);
+void                    gsk_gpu_buffer_writer_append_color_stops        (GskGpuBufferWriter             *self,
+                                                                         const GskColorStop             *stops,
+                                                                         gsize                           n_stops);
 
 G_END_DECLS
