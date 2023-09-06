@@ -445,3 +445,151 @@ gsk_gpu_upload_cairo_op (GskGpuFrame           *frame,
   return self->image;
 }
 
+typedef struct _GskGpuUploadGlyphOp GskGpuUploadGlyphOp;
+
+struct _GskGpuUploadGlyphOp
+{
+  GskGpuOp op;
+
+  GskGpuImage *image;
+  cairo_rectangle_int_t area;
+  PangoFont *font;
+  PangoGlyph glyph;
+  float scale;
+  graphene_point_t origin;
+
+  GskGpuBuffer *buffer;
+};
+
+static void
+gsk_gpu_upload_glyph_op_finish (GskGpuOp *op)
+{
+  GskGpuUploadGlyphOp *self = (GskGpuUploadGlyphOp *) op;
+
+  g_object_unref (self->image);
+  g_object_unref (self->font);
+
+  g_clear_object (&self->buffer);
+}
+
+static void
+gsk_gpu_upload_glyph_op_print (GskGpuOp    *op,
+                               GskGpuFrame *frame,
+                               GString     *string,
+                               guint        indent)
+{
+  GskGpuUploadGlyphOp *self = (GskGpuUploadGlyphOp *) op;
+
+  gsk_gpu_print_op (string, indent, "upload-glyph");
+  gsk_gpu_print_int_rect (string, &self->area);
+  g_string_append_printf (string, "glyph %u @ %g ", self->glyph, self->scale);
+  gsk_gpu_print_newline (string);
+}
+
+static void
+gsk_gpu_upload_glyph_op_draw (GskGpuOp *op,
+                              guchar   *data,
+                              gsize     stride)
+{
+  GskGpuUploadGlyphOp *self = (GskGpuUploadGlyphOp *) op;
+  cairo_surface_t *surface;
+  cairo_t *cr;
+
+  surface = cairo_image_surface_create_for_data (data,
+                                                 CAIRO_FORMAT_ARGB32,
+                                                 self->area.width,
+                                                 self->area.height,
+                                                 stride);
+  cairo_surface_set_device_offset (surface, self->origin.x, self->origin.y);
+  cairo_surface_set_device_scale (surface, self->scale, self->scale);
+
+  cr = cairo_create (surface);
+
+  /* Make sure the entire surface is initialized to black */
+  cairo_set_operator (cr, CAIRO_OPERATOR_CLEAR);
+  cairo_paint (cr);
+  cairo_set_operator (cr, CAIRO_OPERATOR_OVER);
+
+  /* Draw glyph */
+  cairo_set_source_rgba (cr, 1, 1, 1, 1);
+
+  pango_cairo_show_glyph_string (cr,
+                                 self->font,
+                                 &(PangoGlyphString) {
+                                     .num_glyphs = 1,
+                                     .glyphs = (PangoGlyphInfo[1]) { {
+                                         .glyph = self->glyph
+                                     } }
+                                 });
+
+  cairo_destroy (cr);
+
+  cairo_surface_finish (surface);
+  cairo_surface_destroy (surface);
+}
+
+#ifdef GDK_RENDERING_VULKAN
+static GskGpuOp *
+gsk_gpu_upload_glyph_op_vk_command (GskGpuOp        *op,
+                                    GskGpuFrame     *frame,
+                                    VkRenderPass     render_pass,
+                                    VkFormat         format,
+                                    VkCommandBuffer  command_buffer)
+{
+  GskGpuUploadGlyphOp *self = (GskGpuUploadGlyphOp *) op;
+
+  return gsk_gpu_upload_op_vk_command_with_area (op,
+                                                 frame,
+                                                 command_buffer,
+                                                 GSK_VULKAN_IMAGE (self->image),
+                                                 &self->area,
+                                                 gsk_gpu_upload_glyph_op_draw,
+                                                 &self->buffer);
+}
+#endif
+
+static GskGpuOp *
+gsk_gpu_upload_glyph_op_gl_command (GskGpuOp    *op,
+                                    GskGpuFrame *frame,
+                                    gsize        flip_y)
+{
+  GskGpuUploadGlyphOp *self = (GskGpuUploadGlyphOp *) op;
+
+  return gsk_gpu_upload_op_gl_command_with_area (op,
+                                                 frame,
+                                                 self->image,
+                                                 &self->area,
+                                                 gsk_gpu_upload_glyph_op_draw);
+}
+
+static const GskGpuOpClass GSK_GPU_UPLOAD_GLYPH_OP_CLASS = {
+  GSK_GPU_OP_SIZE (GskGpuUploadGlyphOp),
+  GSK_GPU_STAGE_UPLOAD,
+  gsk_gpu_upload_glyph_op_finish,
+  gsk_gpu_upload_glyph_op_print,
+#ifdef GDK_RENDERING_VULKAN
+  gsk_gpu_upload_glyph_op_vk_command,
+#endif
+  gsk_gpu_upload_glyph_op_gl_command,
+};
+
+void
+gsk_gpu_upload_glyph_op (GskGpuFrame                 *frame,
+                         GskGpuImage                 *image,
+                         PangoFont                   *font,
+                         const PangoGlyph             glyph,
+                         const cairo_rectangle_int_t *area,
+                         float                        scale,
+                         const graphene_point_t      *origin)
+{
+  GskGpuUploadGlyphOp *self;
+
+  self = (GskGpuUploadGlyphOp *) gsk_gpu_op_alloc (frame, &GSK_GPU_UPLOAD_GLYPH_OP_CLASS);
+
+  self->image = g_object_ref (image);
+  self->area = *area;
+  self->font = g_object_ref (font);
+  self->glyph = glyph;
+  self->scale = scale;
+  self->origin = *origin;
+}

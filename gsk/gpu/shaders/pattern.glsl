@@ -2,6 +2,7 @@
 #define _PATTERN_
 
 #include "common.glsl"
+#include "rect.glsl"
 
 #ifdef GSK_FRAGMENT_SHADER
 
@@ -25,6 +26,12 @@ vec4
 read_vec4 (inout uint reader)
 {
   return vec4 (read_float (reader), read_float (reader), read_float (reader), read_float (reader));
+}
+
+Rect
+read_rect (inout uint reader)
+{
+  return rect_from_gsk (read_vec4 (reader));
 }
 
 mat4
@@ -69,6 +76,29 @@ color_matrix_pattern (inout uint reader,
 }
 
 vec4
+glyphs_pattern (inout uint reader,
+                vec2       pos)
+{
+  float opacity = 0.0;
+  vec4 color = color_premultiply (read_vec4 (reader));
+  uint num_glyphs = read_uint (reader);
+  uint i;
+
+  for (i = 0u; i < num_glyphs; i++)
+    {
+      uint tex_id = read_uint (reader);
+      Rect glyph_bounds = read_rect (reader);
+      vec4 tex_rect = read_vec4 (reader);
+
+      float coverage = rect_coverage (glyph_bounds, pos);
+      if (coverage > 0.0)
+        opacity += coverage * texture (gsk_get_texture (tex_id), (pos - push.scale * tex_rect.xy) / (push.scale * tex_rect.zw)).a;
+    }
+
+  return color * opacity;
+}
+
+vec4
 texture_pattern (inout uint reader,
                  vec2       pos)
 {
@@ -105,6 +135,9 @@ pattern (uint reader,
           break;
         case GSK_GPU_PATTERN_TEXTURE:
           color = texture_pattern (reader, pos);
+          break;
+        case GSK_GPU_PATTERN_GLYPHS:
+          color = glyphs_pattern (reader, pos);
           break;
         case GSK_GPU_PATTERN_COLOR_MATRIX:
           color_matrix_pattern (reader, color, pos);

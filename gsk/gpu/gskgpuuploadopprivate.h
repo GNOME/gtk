@@ -16,10 +16,11 @@ GskGpuImage *           gsk_gpu_upload_cairo_op                         (GskGpuF
 
 void                    gsk_gpu_upload_glyph_op                         (GskGpuFrame                    *frame,
                                                                          GskGpuImage                    *image,
-                                                                         cairo_rectangle_int_t          *area,
                                                                          PangoFont                      *font,
-                                                                         PangoGlyphInfo                 *glyph_info,
-                                                                         float                           scale);
+                                                                         PangoGlyph                      glyph,
+                                                                         const cairo_rectangle_int_t    *area,
+                                                                         float                           scale,
+                                                                         const graphene_point_t         *origin);
 
 G_END_DECLS
 

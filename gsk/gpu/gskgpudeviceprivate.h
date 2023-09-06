@@ -2,6 +2,8 @@
 
 #include "gskgputypesprivate.h"
 
+#include <graphene.h>
+
 G_BEGIN_DECLS
 
 #define GSK_TYPE_GPU_DEVICE         (gsk_gpu_device_get_type ())
@@ -57,6 +59,26 @@ void                    gsk_gpu_device_cache_texture_image              (GskGpuD
                                                                          GdkTexture             *texture,
                                                                          gint64                  timestamp,
                                                                          GskGpuImage            *image);
+
+typedef enum
+{
+  GSK_GPU_GLYPH_X_OFFSET_1 = 0x1,
+  GSK_GPU_GLYPH_X_OFFSET_2 = 0x2,
+  GSK_GPU_GLYPH_X_OFFSET_3 = 0x3,
+  GSK_GPU_GLYPH_Y_OFFSET_1 = 0x4,
+  GSK_GPU_GLYPH_Y_OFFSET_2 = 0x8,
+  GSK_GPU_GLYPH_Y_OFFSET_3 = 0xC
+} GskGpuGlyphLookupFlags;
+
+GskGpuImage *           gsk_gpu_device_lookup_glyph_image               (GskGpuDevice           *self,
+                                                                         GskGpuFrame            *frame,
+                                                                         PangoFont              *font,
+                                                                         PangoGlyph              glyph,
+                                                                         GskGpuGlyphLookupFlags  flags,
+                                                                         float                   scale,
+                                                                         graphene_rect_t        *out_bounds,
+                                                                         graphene_point_t       *out_origin);
+
 
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GskGpuDevice, g_object_unref)
 
