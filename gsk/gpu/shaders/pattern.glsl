@@ -2,6 +2,7 @@
 #define _PATTERN_
 
 #include "common.glsl"
+#include "gradient.glsl"
 #include "rect.glsl"
 
 #ifdef GSK_FRAGMENT_SHADER
@@ -22,6 +23,12 @@ read_float (inout uint reader)
   return result;
 }
 
+vec2
+read_vec2 (inout uint reader)
+{
+  return vec2 (read_float (reader), read_float (reader));
+}
+
 vec4
 read_vec4 (inout uint reader)
 {
@@ -37,16 +44,25 @@ read_rect (inout uint reader)
 mat4
 read_mat4 (inout uint reader)
 {
-  mat4 result = mat4 (gsk_get_float (reader + 0), gsk_get_float (reader + 1),
-                      gsk_get_float (reader + 2), gsk_get_float (reader + 3),
-                      gsk_get_float (reader + 4), gsk_get_float (reader + 5),
-                      gsk_get_float (reader + 6), gsk_get_float (reader + 7),
-                      gsk_get_float (reader + 8), gsk_get_float (reader + 9),
-                      gsk_get_float (reader + 10), gsk_get_float (reader + 11),
-                      gsk_get_float (reader + 12), gsk_get_float (reader + 13),
-                      gsk_get_float (reader + 14), gsk_get_float (reader + 15));
-  reader += 16;
+  mat4 result = mat4 (gsk_get_float (reader + 0u), gsk_get_float (reader + 1u),
+                      gsk_get_float (reader + 2u), gsk_get_float (reader + 3u),
+                      gsk_get_float (reader + 4u), gsk_get_float (reader + 5u),
+                      gsk_get_float (reader + 6u), gsk_get_float (reader + 7u),
+                      gsk_get_float (reader + 8u), gsk_get_float (reader + 9u),
+                      gsk_get_float (reader + 10u), gsk_get_float (reader + 11u),
+                      gsk_get_float (reader + 12u), gsk_get_float (reader + 13u),
+                      gsk_get_float (reader + 14u), gsk_get_float (reader + 15u));
+  reader += 16u;
   return result;
+}
+
+Gradient
+read_gradient (inout uint reader)
+{
+  Gradient gradient = gradient_new (reader);
+  reader += gradient_get_size (gradient);
+
+  return gradient;
 }
 
 void
@@ -109,6 +125,26 @@ texture_pattern (inout uint reader,
 }
 
 vec4
+linear_gradient_pattern (inout uint reader,
+                         vec2       pos,
+                         bool       repeating)
+{
+  vec2 start = read_vec2 (reader) * push.scale;
+  vec2 end = read_vec2 (reader) * push.scale;
+  Gradient gradient = read_gradient (reader);
+
+  vec2 line = end - start;
+  float line_length = dot (line, line);
+  float offset = dot (pos - start, line) / line_length;
+  float d_offset = 0.5 * fwidth (offset);
+
+  if (repeating)
+    return gradient_get_color_repeating (gradient, offset - d_offset, offset + d_offset);
+  else
+    return gradient_get_color (gradient, offset - d_offset, offset + d_offset);
+}
+
+vec4
 color_pattern (inout uint reader)
 {
   vec4 color = read_vec4 (reader);
@@ -144,6 +180,12 @@ pattern (uint reader,
           break;
         case GSK_GPU_PATTERN_OPACITY:
           opacity_pattern (reader, color, pos);
+          break;
+        case GSK_GPU_PATTERN_LINEAR_GRADIENT:
+          color = linear_gradient_pattern (reader, pos, false);
+          break;
+        case GSK_GPU_PATTERN_REPEATING_LINEAR_GRADIENT:
+          color = linear_gradient_pattern (reader, pos, true);
           break;
       }
     }

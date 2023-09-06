@@ -767,6 +767,32 @@ gsk_gpu_node_processor_create_texture_pattern (GskGpuNodeProcessor *self,
 }
 
 static gboolean
+gsk_gpu_node_processor_create_linear_gradient_pattern (GskGpuNodeProcessor *self,
+                                                       GskGpuBufferWriter  *writer,
+                                                       GskRenderNode       *node,
+                                                       GskGpuShaderImage   *images,
+                                                       gsize                n_images,
+                                                       gsize               *out_n_images)
+{
+  if (gsk_render_node_get_node_type (node) == GSK_REPEATING_LINEAR_GRADIENT_NODE)
+    gsk_gpu_buffer_writer_append_uint (writer, GSK_GPU_PATTERN_REPEATING_LINEAR_GRADIENT);
+  else
+    gsk_gpu_buffer_writer_append_uint (writer, GSK_GPU_PATTERN_LINEAR_GRADIENT);
+
+  gsk_gpu_buffer_writer_append_point (writer,
+                                      gsk_linear_gradient_node_get_start (node),
+                                      &self->offset);
+  gsk_gpu_buffer_writer_append_point (writer,
+                                      gsk_linear_gradient_node_get_end (node),
+                                      &self->offset);
+  gsk_gpu_buffer_writer_append_color_stops (writer, 
+                                            gsk_linear_gradient_node_get_color_stops (node, NULL),
+                                            gsk_linear_gradient_node_get_n_color_stops (node));
+
+  return TRUE;
+}
+
+static gboolean
 gsk_gpu_node_processor_create_glyph_pattern (GskGpuNodeProcessor *self,
                                              GskGpuBufferWriter  *writer,
                                              GskRenderNode       *node,
@@ -944,13 +970,13 @@ static const struct
   },
   [GSK_LINEAR_GRADIENT_NODE] = {
     0,
-    NULL,
-    NULL,
+    gsk_gpu_node_processor_add_node_as_pattern,
+    gsk_gpu_node_processor_create_linear_gradient_pattern,
   },
   [GSK_REPEATING_LINEAR_GRADIENT_NODE] = {
     0,
-    NULL,
-    NULL,
+    gsk_gpu_node_processor_add_node_as_pattern,
+    gsk_gpu_node_processor_create_linear_gradient_pattern,
   },
   [GSK_RADIAL_GRADIENT_NODE] = {
     0,

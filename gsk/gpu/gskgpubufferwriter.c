@@ -106,6 +106,19 @@ gsk_gpu_buffer_writer_append_vec4 (GskGpuBufferWriter    *self,
 }
 
 void
+gsk_gpu_buffer_writer_append_point (GskGpuBufferWriter     *self,
+                                    const graphene_point_t *point,
+                                    const graphene_point_t *offset)
+{
+  float f[2];
+
+  f[0] = point->x + offset->x;
+  f[1] = point->y + offset->y;
+
+  gsk_gpu_buffer_writer_append (self, G_ALIGNOF (float), (guchar *) f, sizeof (f));
+}
+
+void
 gsk_gpu_buffer_writer_append_rect (GskGpuBufferWriter     *self,
                                    const graphene_rect_t  *rect,
                                    const graphene_point_t *offset)
@@ -125,3 +138,13 @@ gsk_gpu_buffer_writer_append_rgba (GskGpuBufferWriter *self,
 
   gsk_gpu_buffer_writer_append (self, G_ALIGNOF (float), (guchar *) f, sizeof (f));
 }
+
+void
+gsk_gpu_buffer_writer_append_color_stops (GskGpuBufferWriter *self,
+                                          const GskColorStop *stops,
+                                          gsize               n_stops)
+{
+  gsk_gpu_buffer_writer_append_uint (self, n_stops);
+  gsk_gpu_buffer_writer_append (self, G_ALIGNOF (float), (guchar *) stops, sizeof (GskColorStop) * n_stops);
+}
+
