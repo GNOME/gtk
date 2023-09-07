@@ -3153,10 +3153,6 @@ gsk_gl_render_job_visit_shadow_node (GskGLRenderJob      *job,
 
           offscreen.was_offscreen = TRUE;
         }
-      else if (dx == 0 && dy == 0)
-        {
-          continue; /* Invisible anyway */
-        }
       else
         {
           offscreen.bounds = &shadow_child->bounds;

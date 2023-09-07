@@ -89,6 +89,7 @@ compare_render_tests = [
   'scale-up-down',
   'scaled-cairo',
   'scaled-texture',
+  'shadow-behind',
   'shadow-in-opacity',
   'shadow-opacity',
   'texture-scale-magnify-10000x',
