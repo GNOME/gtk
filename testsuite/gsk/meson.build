@@ -78,6 +78,8 @@ compare_render_tests = [
   'outset_shadow_rounded_top',
   'outset_shadow_simple',
   'repeat',
+  'repeating-linear-gradient-edge-colors',
+  'repeating-radial-gradient-edge-colors',
   'repeat-no-repeat',
   'repeat-empty-child-bounds',
   'repeat-negative-coords',
