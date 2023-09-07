@@ -145,6 +145,27 @@ linear_gradient_pattern (inout uint reader,
 }
 
 vec4
+radial_gradient_pattern (inout uint reader,
+                         vec2       pos,
+                         bool       repeating)
+{
+  vec2 center = read_vec2 (reader) * push.scale;
+  vec2 radius = read_vec2 (reader) * push.scale;
+  float start = read_float (reader);
+  float end = read_float (reader);
+  Gradient gradient = read_gradient (reader);
+
+  float offset = length ((pos - center) / radius);
+  offset = (offset - start) / (end - start);
+  float d_offset = 0.5 * fwidth (offset);
+
+  if (repeating)
+    return gradient_get_color_repeating (gradient, offset - d_offset, offset + d_offset);
+  else
+    return gradient_get_color (gradient, offset - d_offset, offset + d_offset);
+}
+
+vec4
 color_pattern (inout uint reader)
 {
   vec4 color = read_vec4 (reader);
@@ -186,6 +207,12 @@ pattern (uint reader,
           break;
         case GSK_GPU_PATTERN_REPEATING_LINEAR_GRADIENT:
           color = linear_gradient_pattern (reader, pos, true);
+          break;
+        case GSK_GPU_PATTERN_RADIAL_GRADIENT:
+          color = radial_gradient_pattern (reader, pos, false);
+          break;
+        case GSK_GPU_PATTERN_REPEATING_RADIAL_GRADIENT:
+          color = radial_gradient_pattern (reader, pos, true);
           break;
       }
     }
