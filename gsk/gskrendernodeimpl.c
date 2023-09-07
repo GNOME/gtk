@@ -248,6 +248,13 @@ gsk_linear_gradient_node_draw (GskRenderNode *node,
   if (gsk_render_node_get_node_type (node) == GSK_REPEATING_LINEAR_GRADIENT_NODE)
     cairo_pattern_set_extend (pattern, CAIRO_EXTEND_REPEAT);
 
+  if (self->stops[0].offset > 0.0)
+    cairo_pattern_add_color_stop_rgba (pattern,
+                                       0.0,
+                                       self->stops[0].color.red,
+                                       self->stops[0].color.green,
+                                       self->stops[0].color.blue,
+                                       self->stops[0].color.alpha);
   for (i = 0; i < self->n_stops; i++)
     {
       cairo_pattern_add_color_stop_rgba (pattern,
@@ -257,6 +264,13 @@ gsk_linear_gradient_node_draw (GskRenderNode *node,
                                          self->stops[i].color.blue,
                                          self->stops[i].color.alpha);
     }
+  if (self->stops[self->n_stops-1].offset < 1.0)
+    cairo_pattern_add_color_stop_rgba (pattern,
+                                       1.0,
+                                       self->stops[self->n_stops-1].color.red,
+                                       self->stops[self->n_stops-1].color.green,
+                                       self->stops[self->n_stops-1].color.blue,
+                                       self->stops[self->n_stops-1].color.alpha);
 
   cairo_set_source (cr, pattern);
   cairo_pattern_destroy (pattern);
@@ -562,13 +576,29 @@ gsk_radial_gradient_node_draw (GskRenderNode *node,
   else
     cairo_pattern_set_extend (pattern, CAIRO_EXTEND_PAD);
 
-  for (i = 0; i < self->n_stops; i++)
+  if (self->stops[0].offset > 0.0)
     cairo_pattern_add_color_stop_rgba (pattern,
-                                       self->stops[i].offset,
-                                       self->stops[i].color.red,
-                                       self->stops[i].color.green,
-                                       self->stops[i].color.blue,
-                                       self->stops[i].color.alpha);
+                                       0.0,
+                                       self->stops[0].color.red,
+                                       self->stops[0].color.green,
+                                       self->stops[0].color.blue,
+                                       self->stops[0].color.alpha);
+  for (i = 0; i < self->n_stops; i++)
+    {
+      cairo_pattern_add_color_stop_rgba (pattern,
+                                         self->stops[i].offset,
+                                         self->stops[i].color.red,
+                                         self->stops[i].color.green,
+                                         self->stops[i].color.blue,
+                                         self->stops[i].color.alpha);
+    }
+  if (self->stops[self->n_stops-1].offset < 1.0)
+    cairo_pattern_add_color_stop_rgba (pattern,
+                                       1.0,
+                                       self->stops[self->n_stops-1].color.red,
+                                       self->stops[self->n_stops-1].color.green,
+                                       self->stops[self->n_stops-1].color.blue,
+                                       self->stops[self->n_stops-1].color.alpha);
 
   gsk_cairo_rectangle (cr, &node->bounds);
   cairo_translate (cr, self->center.x, self->center.y);

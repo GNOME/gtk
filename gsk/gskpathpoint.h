@@ -31,7 +31,9 @@ G_BEGIN_DECLS
 #define GSK_TYPE_PATH_POINT (gsk_path_point_get_type ())
 
 typedef struct _GskPathPoint GskPathPoint;
-struct _GskPathPoint {
+
+G_GNUC_EXTENSION struct _GskPathPoint
+{
   /*< private >*/
   union {
     struct {
