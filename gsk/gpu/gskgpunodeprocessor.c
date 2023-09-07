@@ -1198,6 +1198,8 @@ gsk_gpu_node_processor_create_node_pattern (GskGpuNodeProcessor *self,
 {
   GskRenderNodeType node_type;
   graphene_rect_t bounds;
+  guchar *tmp_data;
+  gsize tmp_size;
 
   node_type = gsk_render_node_get_node_type (node);
   if (node_type >= G_N_ELEMENTS (nodes_vtable))
@@ -1219,6 +1221,9 @@ gsk_gpu_node_processor_create_node_pattern (GskGpuNodeProcessor *self,
   if (n_images == 0)
     return FALSE;
 
+  tmp_data = gsk_gpu_buffer_writer_backup (writer, &tmp_size);
+  gsk_gpu_buffer_writer_abort (writer);
+
   images[0].image = gsk_gpu_node_procesor_get_node_as_image (self, node, &bounds);
   images[0].sampler = GSK_GPU_SAMPLER_DEFAULT;
   images[0].descriptor = gsk_gpu_frame_get_image_descriptor (self->frame,
@@ -1226,6 +1231,12 @@ gsk_gpu_node_processor_create_node_pattern (GskGpuNodeProcessor *self,
                                                              images[0].sampler);
   *out_n_images = 1;
 
+  gsk_gpu_frame_write_buffer_memory (self->frame, writer);
+  if (tmp_size)
+    {
+      gsk_gpu_buffer_writer_append (writer, sizeof (float), tmp_data, tmp_size);
+      g_free (tmp_data);
+    }
   gsk_gpu_buffer_writer_append_uint (writer, GSK_GPU_PATTERN_TEXTURE);
   gsk_gpu_buffer_writer_append_uint (writer, images[0].descriptor);
   gsk_gpu_buffer_writer_append_rect (writer, &bounds, &self->offset);
