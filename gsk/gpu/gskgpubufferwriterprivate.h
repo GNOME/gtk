@@ -18,6 +18,7 @@ struct _GskGpuBufferWriter
                                                                          gboolean                        commit);
 
   guchar *data;
+  gsize initial_size;
   gsize size;
   gsize allocated;
 };
@@ -28,6 +29,8 @@ void                    gsk_gpu_buffer_writer_abort                     (GskGpuB
 gsize                   gsk_gpu_buffer_writer_get_size                  (GskGpuBufferWriter             *self);
 void                    gsk_gpu_buffer_writer_rewind                    (GskGpuBufferWriter             *self,
                                                                          gsize                           size);
+guchar *                gsk_gpu_buffer_writer_backup                    (GskGpuBufferWriter             *self,
+                                                                         gsize                          *out_size);
 void                    gsk_gpu_buffer_writer_ensure_size               (GskGpuBufferWriter             *self,
                                                                          gsize                           size);
 void                    gsk_gpu_buffer_writer_append                    (GskGpuBufferWriter             *self,

@@ -33,6 +33,14 @@ gsk_gpu_buffer_writer_rewind (GskGpuBufferWriter *self,
   self->size = size;
 }
 
+guchar *
+gsk_gpu_buffer_writer_backup (GskGpuBufferWriter *self,
+                              gsize              *out_size)
+{
+  *out_size = self->size - self->initial_size;
+  return g_memdup (self->data + self->initial_size, *out_size);
+}
+
 void
 gsk_gpu_buffer_writer_ensure_size (GskGpuBufferWriter *self,
                                    gsize               size)

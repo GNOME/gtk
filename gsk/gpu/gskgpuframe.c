@@ -16,7 +16,7 @@
 
 #define DEFAULT_VERTEX_BUFFER_SIZE 128 * 1024
 
-/* GL_MAX_UNIFORM_BLOCK_SIZE is at least this size */
+/* GL_MAX_UNIFORM_BLOCK_SIZE is at 16384 */
 #define DEFAULT_STORAGE_BUFFER_SIZE 16 * 1024
 
 #define GDK_ARRAY_NAME gsk_gpu_ops
@@ -446,6 +446,7 @@ gsk_gpu_frame_write_buffer_memory (GskGpuFrame        *self,
   writer->finish = gsk_gpu_frame_buffer_memory_finish;
 
   writer->data = priv->storage_buffer_data;
+  writer->initial_size = priv->storage_buffer_used;
   writer->size = priv->storage_buffer_used;
   writer->allocated = gsk_gpu_buffer_get_size (priv->storage_buffer);
 }
