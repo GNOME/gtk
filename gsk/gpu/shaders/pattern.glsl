@@ -166,6 +166,23 @@ radial_gradient_pattern (inout uint reader,
 }
 
 vec4
+conic_gradient_pattern (inout uint reader,
+                        vec2       pos)
+{
+  vec2 center = read_vec2 (reader);
+  float angle = read_float (reader);
+  Gradient gradient = read_gradient (reader);
+
+  /* scaling modifies angles, so be sure to use right coordinate system */
+  pos = pos / push.scale - center;
+  float offset = atan (pos.y, pos.x);
+  offset = fract (degrees (offset + angle) / 360.0);
+  float d_offset = 0.5 * fwidth (offset);
+
+  return gradient_get_color (gradient, offset - d_offset, offset + d_offset);
+}
+
+vec4
 color_pattern (inout uint reader)
 {
   vec4 color = read_vec4 (reader);
@@ -213,6 +230,9 @@ pattern (uint reader,
           break;
         case GSK_GPU_PATTERN_REPEATING_RADIAL_GRADIENT:
           color = radial_gradient_pattern (reader, pos, true);
+          break;
+        case GSK_GPU_PATTERN_CONIC_GRADIENT:
+          color = conic_gradient_pattern (reader, pos);
           break;
       }
     }

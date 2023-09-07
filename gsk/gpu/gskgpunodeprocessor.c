@@ -820,6 +820,26 @@ gsk_gpu_node_processor_create_radial_gradient_pattern (GskGpuNodeProcessor *self
 }
 
 static gboolean
+gsk_gpu_node_processor_create_conic_gradient_pattern (GskGpuNodeProcessor *self,
+                                                      GskGpuBufferWriter  *writer,
+                                                      GskRenderNode       *node,
+                                                      GskGpuShaderImage   *images,
+                                                      gsize                n_images,
+                                                      gsize               *out_n_images)
+{
+  gsk_gpu_buffer_writer_append_uint (writer, GSK_GPU_PATTERN_CONIC_GRADIENT);
+  gsk_gpu_buffer_writer_append_point (writer,
+                                      gsk_conic_gradient_node_get_center (node),
+                                      &self->offset);
+  gsk_gpu_buffer_writer_append_float (writer, gsk_conic_gradient_node_get_angle (node));
+  gsk_gpu_buffer_writer_append_color_stops (writer, 
+                                            gsk_conic_gradient_node_get_color_stops (node, NULL),
+                                            gsk_conic_gradient_node_get_n_color_stops (node));
+
+  return TRUE;
+}
+
+static gboolean
 gsk_gpu_node_processor_create_glyph_pattern (GskGpuNodeProcessor *self,
                                              GskGpuBufferWriter  *writer,
                                              GskRenderNode       *node,
@@ -1017,8 +1037,8 @@ static const struct
   },
   [GSK_CONIC_GRADIENT_NODE] = {
     0,
-    NULL,
-    NULL,
+    gsk_gpu_node_processor_add_node_as_pattern,
+    gsk_gpu_node_processor_create_conic_gradient_pattern,
   },
   [GSK_BORDER_NODE] = {
     0,
