@@ -1749,6 +1749,19 @@ gsk_circle_contour_new (const graphene_point_t *center,
   return (GskContour *) self;
 }
 
+void
+gsk_circle_contour_get_params (const GskContour *contour,
+                               graphene_point_t *center,
+                               float            *radius,
+                               gboolean         *ccw)
+{
+  const GskCircleContour *self = (const GskCircleContour *) contour;
+
+  *center = self->center;
+  *radius = self->radius;
+  *ccw = self->ccw;
+}
+
 /* }}} */
 /* {{{ Rectangle */
 
