@@ -17,4 +17,23 @@
 #define GSK_GPU_PATTERN_REPEATING_RADIAL_GRADIENT 9u
 #define GSK_GPU_PATTERN_CONIC_GRADIENT 10u
 
+#define TOP 0u
+#define RIGHT 1u
+#define BOTTOM 2u
+#define LEFT 3u
+
+#define TOP_LEFT 0u
+#define TOP_RIGHT 1u
+#define BOTTOM_RIGHT 2u
+#define BOTTOM_LEFT 3u
+
+#define SLICE_TOP_LEFT 0u
+#define SLICE_TOP 1u
+#define SLICE_TOP_RIGHT 2u
+#define SLICE_RIGHT 3u
+#define SLICE_BOTTOM_RIGHT 4u
+#define SLICE_BOTTOM 5u
+#define SLICE_BOTTOM_LEFT 6u
+#define SLICE_LEFT 7u
+
 #endif
