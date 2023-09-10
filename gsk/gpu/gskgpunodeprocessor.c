@@ -2,6 +2,7 @@
 
 #include "gskgpunodeprocessorprivate.h"
 
+#include "gskgpuborderopprivate.h"
 #include "gskgpuclipprivate.h"
 #include "gskgpudeviceprivate.h"
 #include "gskgpuframeprivate.h"
@@ -697,6 +698,18 @@ gsk_gpu_node_processor_create_color_pattern (GskGpuNodeProcessor *self,
 }
 
 static void
+gsk_gpu_node_processor_add_border_node (GskGpuNodeProcessor *self,
+                                        GskRenderNode       *node)
+{
+  gsk_gpu_border_op (self->frame,
+                     gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, &node->bounds),
+                     gsk_border_node_get_outline (node),
+                     &self->offset,
+                     gsk_border_node_get_widths (node),
+                     gsk_border_node_get_colors (node));
+}
+
+static void
 gsk_gpu_node_processor_add_texture_node (GskGpuNodeProcessor *self,
                                          GskRenderNode       *node)
 {
@@ -1042,7 +1055,7 @@ static const struct
   },
   [GSK_BORDER_NODE] = {
     0,
-    NULL,
+    gsk_gpu_node_processor_add_border_node,
     NULL,
   },
   [GSK_TEXTURE_NODE] = {
