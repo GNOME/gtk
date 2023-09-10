@@ -87,6 +87,9 @@ struct _GtkListBasePrivate
   GtkGesture *drag_gesture;
   RubberbandData *rubberband;
 
+  /* Whether the user asked to vertically center target item for current scroll operation */
+  gboolean center_vertically;
+
   guint autoscroll_id;
   double autoscroll_delta_x;
   double autoscroll_delta_y;
@@ -825,31 +828,58 @@ gtk_list_base_compute_scroll_align (int            cell_start,
                                     int            visible_size,
                                     double         current_align,
                                     GtkPackType    current_side,
+                                    GtkScrollInfoCenter center_flags,
                                     double        *new_align,
-                                    GtkPackType   *new_side)
+                                    GtkPackType   *new_side,
+                                    gboolean      *do_center)
 {
   int cell_end, visible_end;
 
   visible_end = visible_start + visible_size;
   cell_end = cell_start + cell_size;
+  gboolean center_always = (center_flags & GTK_SCROLL_INFO_CENTER_ROW_ALWAYS);
+  gboolean center = (center_flags & GTK_SCROLL_INFO_CENTER_ROW);
+  if (do_center)
+    *do_center = FALSE;
 
   if (cell_size <= visible_size)
     {
       if (cell_start < visible_start)
         {
-          *new_align = 0.0;
           *new_side = GTK_PACK_START;
+          if (center || center_always)
+            {
+              *new_align = 0.5;
+              if (do_center)
+                *do_center = TRUE;
+            }
+          else
+            *new_align = 0.0;
         }
       else if (cell_end > visible_end)
         {
-          *new_align = 1.0;
           *new_side = GTK_PACK_END;
+          if (center || center_always)
+            {
+              *new_align = 0.5;
+              if (do_center)
+                *do_center = TRUE;
+            }
+          else
+            *new_align = 1.0;
         }
       else
         {
           /* XXX: start or end here? */
           *new_side = GTK_PACK_START;
-          *new_align = (double) (cell_start - visible_start) / visible_size;
+          if (center_always || (center && (visible_end == cell_end || visible_start == cell_start)))
+            {
+              *new_align = 0.5;
+              if (do_center)
+                *do_center = TRUE;
+            }
+          else
+            *new_align = (double) (cell_start - visible_start) / visible_size;
         }
     }
   else
@@ -903,12 +933,14 @@ gtk_list_base_scroll_to_item (GtkListBase   *self,
   gtk_list_base_compute_scroll_align (area.y, area.height,
                                       y, viewport.height,
                                       priv->anchor_align_along, priv->anchor_side_along,
-                                      &align_along, &side_along);
+                                      scroll ? gtk_scroll_info_get_center_flags (scroll) : 0,
+                                      &align_along, &side_along, &priv->center_vertically);
 
   gtk_list_base_compute_scroll_align (area.x, area.width,
                                       x, viewport.width,
                                       priv->anchor_align_across, priv->anchor_side_across,
-                                      &align_across, &side_across);
+                                      GTK_SCROLL_INFO_CENTER_NONE,
+                                      &align_across, &side_across, NULL);
 
   gtk_list_base_set_anchor (self,
                             pos,
@@ -924,14 +956,24 @@ gtk_list_base_scroll_to_item_action (GtkWidget  *widget,
                                      GVariant   *parameter)
 {
   GtkListBase *self = GTK_LIST_BASE (widget);
+  GtkScrollInfo *scroll_info = NULL;
+  GtkScrollInfoCenter center_flags = 0;
   guint pos;
 
-  if (!g_variant_check_format_string (parameter, "u", FALSE))
+  if (g_variant_check_format_string (parameter, "(uu)", FALSE))
+    g_variant_get (parameter, "(uu)", &pos, &center_flags);
+  else if (g_variant_check_format_string (parameter, "u", FALSE))
+    g_variant_get (parameter, "u", &pos);
+  else
     return;
 
-  g_variant_get (parameter, "u", &pos);
+  if (center_flags)
+    {
+      scroll_info = gtk_scroll_info_new ();
+      gtk_scroll_info_set_center_flags (scroll_info, center_flags);
+    }
 
-  gtk_list_base_scroll_to_item (self, pos, NULL);
+  gtk_list_base_scroll_to_item (self, pos, scroll_info);
 }
 
 static void
@@ -1255,13 +1297,15 @@ gtk_list_base_class_init (GtkListBaseClass *klass)
   /**
    * GtkListBase|list.scroll-to-item:
    * @position: position of item to scroll to
+   * @center_flags: a set of `GtkScrollInfoCenter` flags
+   *   Since: 4.14
    *
-   * Moves the visible area to the item given in @position with the minimum amount
-   * of scrolling required. If the item is already visible, nothing happens.
+   * Moves the visible area to the item given in @position and according
+   * to the @center_flags provided.
    */
   gtk_widget_class_install_action (widget_class,
                                    "list.scroll-to-item",
-                                   "u",
+                                   "(uu)",
                                    gtk_list_base_scroll_to_item_action);
 
   /**
@@ -2006,6 +2050,7 @@ gtk_list_base_init_real (GtkListBase      *self,
   priv->anchor_side_across = GTK_PACK_START;
   priv->selected = gtk_list_item_tracker_new (priv->item_manager);
   priv->focus = gtk_list_item_tracker_new (priv->item_manager);
+  priv->center_vertically = FALSE;
 
   priv->adjustment[GTK_ORIENTATION_HORIZONTAL] = gtk_adjustment_new (0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
   g_object_ref_sink (priv->adjustment[GTK_ORIENTATION_HORIZONTAL]);
@@ -2084,10 +2129,14 @@ gtk_list_base_update_adjustments (GtkListBase *self)
         {
           value_across = area.x;
           value_along = area.y;
+
+          if (priv->center_vertically && G_APPROX_VALUE (priv->anchor_align_along, 0.5, DBL_EPSILON))
+            value_along += area.height / 2;
+          else if (priv->anchor_side_along == GTK_PACK_END)
+            value_along += area.height;
+
           if (priv->anchor_side_across == GTK_PACK_END)
             value_across += area.width;
-          if (priv->anchor_side_along == GTK_PACK_END)
-            value_along += area.height;
           value_across -= priv->anchor_align_across * page_across;
           value_along -= priv->anchor_align_along * page_along;
         }
@@ -2097,6 +2146,10 @@ gtk_list_base_update_adjustments (GtkListBase *self)
           value_along = 0;
         }
     }
+
+  /* Can be reset now as we've already use it to calculate current scroll operation values */
+  if (priv->center_vertically)
+    priv->center_vertically = FALSE;
 
   gtk_list_base_set_adjustment_values (self,
                                        OPPOSITE_ORIENTATION (priv->orientation),

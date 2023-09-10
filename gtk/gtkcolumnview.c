@@ -1786,16 +1786,36 @@ gtk_column_view_scroll_to_column (GtkColumnView       *self,
                                   GtkColumnViewColumn *column,
                                   GtkScrollInfo       *scroll_info)
 {
-  int col_x, col_width, new_value;
+  int col_x, col_width, new_value, viewport_size;
+  gboolean center, center_always, cell_is_visible;
+  GtkScrollInfoCenter center_flags;
 
   gtk_column_view_column_get_header_allocation (column, &col_x, &col_width);
+
+  viewport_size = gtk_adjustment_get_page_size (self->hadjustment);
 
   new_value = gtk_scroll_info_compute_for_orientation (scroll_info,
                                                        GTK_ORIENTATION_HORIZONTAL,
                                                        col_x,
                                                        col_width,
                                                        gtk_adjustment_get_value (self->hadjustment),
-                                                       gtk_adjustment_get_page_size (self->hadjustment));
+                                                       viewport_size);
+
+  if (scroll_info)
+    {
+      center_flags = gtk_scroll_info_get_center_flags (scroll_info);
+      center = (center_flags & GTK_SCROLL_INFO_CENTER_COL);
+      center_always = (center_flags & GTK_SCROLL_INFO_CENTER_COL_ALWAYS);
+
+      if (new_value == col_x || /* cell aligned at start of viewport */
+          new_value + viewport_size == col_x + col_width) /* cell aligned at end of viewport */
+        cell_is_visible = FALSE;
+      else
+        cell_is_visible = TRUE;
+
+      if (center_always || (center && !cell_is_visible))
+        new_value = (int) (col_x - ((viewport_size - col_width) / 2));
+    }
 
   gtk_adjustment_set_value (self->hadjustment, new_value);
 

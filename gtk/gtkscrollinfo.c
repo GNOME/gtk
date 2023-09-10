@@ -38,6 +38,7 @@ struct _GtkScrollInfo
   guint ref_count;
 
   gboolean enabled[2]; /* directions */
+  GtkScrollInfoCenter center_flags;
 };
 
 static GtkScrollInfo default_scroll_info = {
@@ -217,6 +218,47 @@ gtk_scroll_info_compute_for_orientation (GtkScrollInfo  *self,
     delta = 0;
                                       
   return viewport_origin + delta;
+}
+
+/**
+ * gtk_scroll_info_set_center_flags:
+ * @self: a `GtkScrollInfo`
+ * @flags: a set of `GtkScrollInfoCenter` flags
+ *
+ * Sets the flags that @self will use to center a target item (row or column item)
+ * when scrolling to it.
+ *
+ * Since: 4.14
+ */
+void
+gtk_scroll_info_set_center_flags (GtkScrollInfo      *self,
+                                  GtkScrollInfoCenter flags)
+{
+  g_return_if_fail (self != NULL);
+
+  if (self->center_flags == flags)
+    return;
+
+  self->center_flags = flags;
+}
+
+/**
+ * gtk_scroll_info_get_center_flags:
+ * @self: a `GtkScrollInfo`
+ *
+ * Gets the flags that @self will use to center a target item (row or column item)
+ * when scrolling to it.
+ *
+ * Returns: a set of `GtkScrollInfoCenter` flags
+ *
+ * Since: 4.14
+ */
+GtkScrollInfoCenter
+gtk_scroll_info_get_center_flags (GtkScrollInfo *self)
+{
+  g_return_val_if_fail (self != NULL, 0);
+
+  return self->center_flags;
 }
 
 /*<private>
