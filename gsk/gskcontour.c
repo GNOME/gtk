@@ -1228,12 +1228,12 @@ gsk_circle_contour_get_closest_point (const GskContour       *contour,
   if (dist > threshold)
     return FALSE;
 
-  angle = RAD_TO_DEG (atan2f (point->y - self->center.y, point->x - self->center.x));
+  angle = atan2f (point->y - self->center.y, point->x - self->center.x);
 
   if (angle < 0)
-    angle = 360 + angle;
+    angle = M_PI - angle;
 
-  t = CLAMP (angle / 360, 0, 1);
+  t = CLAMP (angle / (2 * M_PI), 0, 1);
 
   if (self->ccw)
     t = 1 - t;
@@ -1243,10 +1243,6 @@ gsk_circle_contour_get_closest_point (const GskContour       *contour,
 
   return TRUE;
 }
-
-#define GSK_CIRCLE_POINT_INIT(self, angle) \
-  GRAPHENE_POINT_INIT ((self)->center.x + cosf (DEG_TO_RAD (angle)) * self->radius, \
-                       (self)->center.y + sinf (DEG_TO_RAD (angle)) * self->radius)
 
 static void
 gsk_circle_contour_get_position (const GskContour   *contour,
@@ -1264,7 +1260,8 @@ gsk_circle_contour_get_position (const GskContour   *contour,
   if (t == 0 || t == 1)
     *position = GRAPHENE_POINT_INIT (self->center.x + self->radius, self->center.y);
   else
-    *position = GSK_CIRCLE_POINT_INIT (self, t * 360);
+    *position = GRAPHENE_POINT_INIT (self->center.x + cosf (t * 2 * M_PI) * self->radius,
+                                     self->center.y + sinf (t * 2 * M_PI) * self->radius);
 }
 
 static void
