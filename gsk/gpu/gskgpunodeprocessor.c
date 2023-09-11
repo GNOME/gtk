@@ -996,6 +996,29 @@ gsk_gpu_node_processor_add_container_node (GskGpuNodeProcessor *self,
     gsk_gpu_node_processor_add_node (self, gsk_container_node_get_child (node, i));
 }
 
+static gboolean
+gsk_gpu_node_processor_create_debug_pattern (GskGpuNodeProcessor *self,
+                                             GskGpuBufferWriter  *writer,
+                                             GskRenderNode       *node,
+                                             GskGpuShaderImage   *images,
+                                             gsize                n_images,
+                                             gsize               *out_n_images)
+{
+  return gsk_gpu_node_processor_create_node_pattern (self,
+                                                     writer,
+                                                     gsk_debug_node_get_child (node),
+                                                     images,
+                                                     n_images,
+                                                     out_n_images);
+}
+
+static void
+gsk_gpu_node_processor_add_debug_node (GskGpuNodeProcessor *self,
+                                       GskRenderNode       *node)
+{
+  gsk_gpu_node_processor_add_node (self, gsk_debug_node_get_child (node));
+}
+
 static const struct
 {
   GskGpuGlobals ignored_globals;
@@ -1129,9 +1152,9 @@ static const struct
     NULL,
   },
   [GSK_DEBUG_NODE] = {
-    0,
-    NULL,
-    NULL,
+    GSK_GPU_GLOBAL_MATRIX | GSK_GPU_GLOBAL_SCALE | GSK_GPU_GLOBAL_CLIP | GSK_GPU_GLOBAL_SCISSOR,
+    gsk_gpu_node_processor_add_debug_node,
+    gsk_gpu_node_processor_create_debug_pattern,
   },
   [GSK_GL_SHADER_NODE] = {
     0,
