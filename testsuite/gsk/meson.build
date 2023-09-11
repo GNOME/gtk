@@ -92,6 +92,7 @@ compare_render_tests = [
   'shadow-behind',
   'shadow-in-opacity',
   'shadow-opacity',
+  'shrink-rounded-border',
   'texture-scale-magnify-10000x',
   'texture-scale-magnify-rotate',
   'texture-scale-stripes',
