@@ -28,6 +28,8 @@ gsk_rounded_rect_shrink (GskRoundedRect r, vec4 amount)
   if (r.corner_points1.zw == r.bounds.zy) new_corner_points1.zw = new_bounds.zy;
   if (r.corner_points2.xy == r.bounds.zw) new_corner_points2.xy = new_bounds.zw;
   if (r.corner_points2.zw == r.bounds.xw) new_corner_points2.zw = new_bounds.xw;
+  new_corner_points1 = clamp (new_corner_points1, new_bounds.xyxy, new_bounds.zwzw);
+  new_corner_points2 = clamp (new_corner_points2, new_bounds.xyxy, new_bounds.zwzw);
 
   return GskRoundedRect (new_bounds, new_corner_points1, new_corner_points2);
 }
