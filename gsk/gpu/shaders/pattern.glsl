@@ -66,6 +66,17 @@ read_gradient (inout uint reader)
 }
 
 void
+clip_pattern (inout uint reader,
+              inout vec4 color,
+              vec2       pos)
+{
+  Rect clip = read_rect (reader);
+  float alpha = rect_coverage (clip, pos);
+
+  color *= alpha;
+}
+
+void
 opacity_pattern (inout uint reader,
                  inout vec4 color,
                  vec2       pos)
@@ -233,6 +244,9 @@ pattern (uint reader,
           break;
         case GSK_GPU_PATTERN_CONIC_GRADIENT:
           color = conic_gradient_pattern (reader, pos);
+          break;
+        case GSK_GPU_PATTERN_CLIP:
+          clip_pattern (reader, color, pos);
           break;
       }
     }
