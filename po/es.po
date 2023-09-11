@@ -16,8 +16,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2023-08-27 19:47+0000\n"
-"PO-Revision-Date: 2023-08-28 12:23+0200\n"
+"POT-Creation-Date: 2023-09-09 15:06+0000\n"
+"PO-Revision-Date: 2023-09-11 10:49+0200\n"
 "Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
 "Language-Team: Spanish - Spain <gnome-es-list@gnome.org>\n"
 "Language: es_ES\n"
@@ -747,7 +747,7 @@ msgstr "La versión %d.%d de WGL es muy antigua, se necesita al menos la %d.%d"
 #: gdk/win32/gdkglcontext-win32-wgl.c:414
 #, c-format
 msgid "GL implementation cannot share GL contexts"
-msgstr ""
+msgstr "La implementación de GL no puede compartir contextos de GL"
 
 #: gdk/win32/gdkglcontext-win32-wgl.c:696
 msgid "No available configurations for the given pixel format"
@@ -1752,12 +1752,9 @@ msgid "window"
 msgstr "ventana"
 
 #: gtk/gtkaccessible.c:833
-#, fuzzy
-#| msgctxt "accessibility"
-#| msgid "button"
 msgctxt "accessibility"
 msgid "toggle button"
-msgstr "botón"
+msgstr "conmutar botón"
 
 #: gtk/gtkalertdialog.c:668 gtk/print/gtkcustompaperunixdialog.c:322
 #: gtk/gtkmessagedialog.c:166 gtk/ui/gtkassistant.ui:40
@@ -2096,10 +2093,8 @@ msgid "Custom"
 msgstr "Personalizada"
 
 #: gtk/gtkcolorchooserwidget.c:571
-#, fuzzy
-#| msgid "Color"
 msgid "Add Color"
-msgstr "Color"
+msgstr "Añadir color"
 
 #: gtk/gtkcolorchooserwidget.c:593
 #, c-format
@@ -2672,10 +2667,8 @@ msgid "Close"
 msgstr "Cerrar"
 
 #: gtk/deprecated/gtkinfobar.c:499
-#, fuzzy
-#| msgid "Close the window"
 msgid "Close the infobar"
-msgstr "Cerrar la ventana"
+msgstr "Cerrar la barra de información"
 
 #: gtk/gtklabel.c:5692 gtk/gtktext.c:6133 gtk/gtktextview.c:9006
 msgid "Cu_t"
@@ -2702,11 +2695,8 @@ msgid "Copy _Link Address"
 msgstr "Copiar la dirección del _enlace"
 
 #: gtk/gtklabel.c:5753 gtk/gtktext.c:2716 gtk/gtktextview.c:9088
-#, fuzzy
-#| msgctxt "OpenType layout"
-#| msgid "Contextual Alternates"
 msgid "Context menu"
-msgstr "Alternativas contextuales"
+msgstr "Menú contextual"
 
 #: gtk/gtklinkbutton.c:260
 msgid "_Copy URL"
@@ -4371,10 +4361,8 @@ msgid "Slowdown"
 msgstr "Ralentizar"
 
 #: gtk/inspector/visual.ui:385
-#, fuzzy
-#| msgid "Frame Rate"
 msgid "Show Framerate"
-msgstr "Tasa de fotogramas"
+msgstr "Mostrar tasa de fotogramas"
 
 #: gtk/inspector/visual.ui:410
 msgid "Show Graphic Updates"
@@ -4413,10 +4401,8 @@ msgid "Show Focus"
 msgstr "Mostrar foco"
 
 #: gtk/inspector/visual.ui:635
-#, fuzzy
-#| msgid "Accessibility"
 msgid "Show Accessibility warnings"
-msgstr "Accesibilidad"
+msgstr "Mostrar advertencias de accesibilidad"
 
 #: gtk/inspector/visual.ui:667
 msgid "Inspect Inspector"
@@ -7199,20 +7185,7 @@ msgid "Can’t close stream"
 msgstr "No se puede cerrar el flujo"
 
 #: tools/gtk-builder-tool.c:36
-#, fuzzy, c-format
-#| msgid ""
-#| "Usage:\n"
-#| "  gtk-builder-tool [COMMAND] [OPTION…] FILE\n"
-#| "\n"
-#| "Perform various tasks on GtkBuilder .ui files.\n"
-#| "\n"
-#| "Commands:\n"
-#| "  validate     Validate the file\n"
-#| "  simplify     Simplify the file\n"
-#| "  enumerate    List all named objects\n"
-#| "  preview      Preview the file\n"
-#| "  screenshot   Take a screenshot of the file\n"
-#| "\n"
+#, c-format
 msgid ""
 "Usage:\n"
 "  gtk4-builder-tool [COMMAND] [OPTION…] FILE\n"
@@ -7238,6 +7211,8 @@ msgstr ""
 "  simplify     Simplificar el archivo\n"
 "  enumerate    Listar todos los objetos con nombres\n"
 "  preview      Vista previa del archivo\n"
+"  render       Hacer una captura del archivo\n"
+"  screenshot   Hacer una captura del archivo\n"
 "\n"
 
 #: tools/gtk-builder-tool-enumerate.c:56 tools/gtk-builder-tool-preview.c:179
@@ -7254,17 +7229,17 @@ msgstr "Mostrar todos los objetos con nombres."
 #: tools/gtk-builder-tool-preview.c:128 tools/gtk-builder-tool-screenshot.c:236
 #, c-format
 msgid "No object with ID '%s' found\n"
-msgstr ""
+msgstr "No se ha encontrado ningún objeto con ID «%s»\n"
 
 #: tools/gtk-builder-tool-preview.c:130
 #, c-format
 msgid "No previewable object found\n"
-msgstr ""
+msgstr "No se ha encontrado ningún objeto que se pueda previsualizar\n"
 
 #: tools/gtk-builder-tool-preview.c:136
 #, c-format
 msgid "Objects of type %s can't be previewed\n"
-msgstr ""
+msgstr "Los objetos de tipo %s no se pueden previsualizar\n"
 
 #: tools/gtk-builder-tool-preview.c:178
 msgid "Preview only the named object"
@@ -7277,10 +7252,9 @@ msgstr "Usar el estilo del archivo CSS"
 #: tools/gtk-builder-tool-preview.c:187 tools/gtk-builder-tool-screenshot.c:370
 #: tools/gtk-builder-tool-validate.c:268 tools/gtk-rendernode-tool-show.c:109
 #: tools/gtk-rendernode-tool-render.c:204
-#, fuzzy, c-format
-#| msgid "Could not initialize EGL display"
+#, c-format
 msgid "Could not initialize windowing system\n"
-msgstr "No se pudo inicializar la pantalla EGL"
+msgstr "No se pudo inicializar el sistema de ventanas\n"
 
 #: tools/gtk-builder-tool-preview.c:195
 msgid "Preview the file."
@@ -7293,27 +7267,24 @@ msgid "No .ui file specified\n"
 msgstr "No se ha especificado ningún archivo .ui\n"
 
 #: tools/gtk-builder-tool-preview.c:214
-#, fuzzy, c-format
-#| msgid "Can only simplify a single .ui file without --replace\n"
+#, c-format
 msgid "Can only preview a single .ui file\n"
-msgstr "Puede simplificar un único archivo .ui sin --replace\n"
+msgstr "Sólo puede previsualizar un único archivo .ui\n"
 
 #: tools/gtk-builder-tool-screenshot.c:238
-#, fuzzy, c-format
-#| msgid "No results found"
+#, c-format
 msgid "No object found\n"
-msgstr "No se han encontrado resultados"
+msgstr "No se ha encontrado ningún objeto\n"
 
 #: tools/gtk-builder-tool-screenshot.c:244
 #, c-format
 msgid "Objects of type %s can't be screenshot\n"
-msgstr ""
+msgstr "No se puede hacer una captura de los objetos de tipo %s\n"
 
 #: tools/gtk-builder-tool-screenshot.c:298
-#, fuzzy, c-format
-#| msgid "Failed to write hash table\n"
+#, c-format
 msgid "Failed to take a screenshot\n"
-msgstr "Falló al escribir la tabla hash\n"
+msgstr "Falló al hacer la captura\n"
 
 #: tools/gtk-builder-tool-screenshot.c:309
 #, c-format
@@ -7332,10 +7303,9 @@ msgstr "Salida escrita en %s.\n"
 
 #: tools/gtk-builder-tool-screenshot.c:336
 #: tools/gtk-rendernode-tool-render.c:176
-#, fuzzy, c-format
-#| msgid "Failed to open file %s : %s\n"
+#, c-format
 msgid "Failed to save %s: %s\n"
-msgstr "Falló al abrir el archivo «%s»: %s\n"
+msgstr "Falló al guardar %s: %s\n"
 
 #: tools/gtk-builder-tool-screenshot.c:359
 msgid "Screenshot only the named object"
@@ -7356,13 +7326,13 @@ msgstr "ARCHIVO…"
 
 #: tools/gtk-builder-tool-screenshot.c:378
 msgid "Render a .ui file to an image."
-msgstr ""
+msgstr "Renderizar un archivo .ui en una imagen."
 
 #: tools/gtk-builder-tool-screenshot.c:397
-#, fuzzy, c-format
-#| msgid "Can only simplify a single .ui file without --replace\n"
+#, c-format
 msgid "Can only render a single .ui file to a single output file\n"
-msgstr "Puede simplificar un único archivo .ui sin --replace\n"
+msgstr ""
+"Sólo puede renderizar un único archivo .ui en un único archivo de salida\n"
 
 #: tools/gtk-builder-tool-simplify.c:444
 #, c-format
@@ -7375,27 +7345,24 @@ msgid "Property %s not found"
 msgstr "Propiedad %s no encontrada"
 
 #: tools/gtk-builder-tool-simplify.c:661
-#, fuzzy, c-format
-#| msgid "Packing property %s::%s not found\n"
+#, c-format
 msgid "Packing property %s not found"
-msgstr "Propiedad de empaquetado %s::%s no encontrada\n"
+msgstr "Propiedad de empaquetado %s no encontrada"
 
 #: tools/gtk-builder-tool-simplify.c:664
-#, fuzzy, c-format
-#| msgid "Cell property %s::%s not found\n"
+#, c-format
 msgid "Cell property %s not found"
-msgstr "Propiedad de celda %s:%s no encontrada\n"
+msgstr "Propiedad de celda %s no encontrada"
 
 #: tools/gtk-builder-tool-simplify.c:667
-#, fuzzy, c-format
-#| msgid "Cell property %s::%s not found\n"
+#, c-format
 msgid "Layout property %s not found"
-msgstr "Propiedad de celda %s:%s no encontrada\n"
+msgstr "Propiedad de distribución %s no encontrada"
 
 #: tools/gtk-builder-tool-simplify.c:1397
 #, c-format
 msgid "%s only accepts three children"
-msgstr ""
+msgstr "%s sólo acepta tres hijos"
 
 #: tools/gtk-builder-tool-simplify.c:2455
 #, c-format
@@ -7415,8 +7382,7 @@ msgid "Failed to read “%s”: %s\n"
 msgstr "Falló al leer «%s»: %s\n"
 
 #: tools/gtk-builder-tool-simplify.c:2510
-#, fuzzy, c-format
-#| msgid "Failed to write %s: “%s”\n"
+#, c-format
 msgid "Failed to write “%s”: “%s”\n"
 msgstr "Falló al escribir «%s»: %s\n"
 
@@ -7438,19 +7404,18 @@ msgid "Can only simplify a single .ui file without --replace\n"
 msgstr "Puede simplificar un único archivo .ui sin --replace\n"
 
 #: tools/gtk-builder-tool-validate.c:45
-#, fuzzy, c-format
-#| msgid "Failed to open file %s : %s\n"
+#, c-format
 msgid "Failed to lookup template parent type %s\n"
-msgstr "Falló al abrir el archivo «%s»: %s\n"
+msgstr "Falló al buscar el tipo de plantilla padre %s\n"
 
 #: tools/gtk-builder-tool-validate.c:123
 msgid "Deprecated types:\n"
-msgstr ""
+msgstr "Tipos obsoletos:\n"
 
 #: tools/gtk-builder-tool-validate.c:167
 #, c-format
 msgid "Failed to create an instance of the template type %s\n"
-msgstr ""
+msgstr "Falló al crear una instancia del tipo de plantilla %s\n"
 
 #: tools/gtk-builder-tool-validate.c:276
 msgid "Validate the file."
@@ -7513,20 +7478,7 @@ msgid "%s: error launching application: %s\n"
 msgstr "%s: error al lanzar la aplicación: %s\n"
 
 #: tools/gtk-rendernode-tool.c:35
-#, fuzzy, c-format
-#| msgid ""
-#| "Usage:\n"
-#| "  gtk-builder-tool [COMMAND] [OPTION…] FILE\n"
-#| "\n"
-#| "Perform various tasks on GtkBuilder .ui files.\n"
-#| "\n"
-#| "Commands:\n"
-#| "  validate     Validate the file\n"
-#| "  simplify     Simplify the file\n"
-#| "  enumerate    List all named objects\n"
-#| "  preview      Preview the file\n"
-#| "  screenshot   Take a screenshot of the file\n"
-#| "\n"
+#, c-format
 msgid ""
 "Usage:\n"
 "  gtk4-rendernode-tool [COMMAND] [OPTION…] FILE\n"
@@ -7540,15 +7492,15 @@ msgid ""
 "\n"
 msgstr ""
 "Uso:\n"
-"  gtk-builder-tool [COMANDO] [OPCIÓN…] ARCHIVO\n"
+"  gtk-rendernode-tool [COMANDO] [OPCIÓN…] ARCHIVO\n"
 "\n"
-"Realiza varias tareas en archivos .ui de GtkBuilder.\n"
+"Realiza varias tareas en nodos de renderizado GTK.\n"
 "\n"
 "Comandos:\n"
-"  validate     Validar el arcihvo\n"
-"  simplify     Simplificar el archivo\n"
-"  enumerate    Listar todos los objetos con nombres\n"
-"  preview      Vista previa del archivo\n"
+"  info         Proporcionar información sobre el nodo\n"
+"  show         Mostrar el nodo\n"
+"  render       Hacer una captura de pantalla del nodo\n"
+"\n"
 "\n"
 
 #: tools/gtk-rendernode-tool-info.c:177
@@ -7573,30 +7525,27 @@ msgstr "Origen: %g %g\n"
 
 #: tools/gtk-rendernode-tool-info.c:209
 msgid "Provide information about the render node."
-msgstr ""
+msgstr "Proporcionar información sobre el nodo renderizado."
 
 #: tools/gtk-rendernode-tool-info.c:222 tools/gtk-rendernode-tool-show.c:130
 #: tools/gtk-rendernode-tool-render.c:225
-#, fuzzy, c-format
-#| msgid "No .ui file specified\n"
+#, c-format
 msgid "No .node file specified\n"
-msgstr "No se ha especificado ningún archivo .ui\n"
+msgstr "No se ha especificado ningún archivo .node\n"
 
 #: tools/gtk-rendernode-tool-info.c:228
-#, fuzzy, c-format
-#| msgid "Can only simplify a single .ui file without --replace\n"
+#, c-format
 msgid "Can only accept a single .node file\n"
-msgstr "Puede simplificar un único archivo .ui sin --replace\n"
+msgstr "Sólo se puede aceptar un único archivo .node\n"
 
 #: tools/gtk-rendernode-tool-show.c:117
 msgid "Show the render node."
-msgstr ""
+msgstr "Mostrar el nodo renderizado."
 
 #: tools/gtk-rendernode-tool-show.c:136
-#, fuzzy, c-format
-#| msgid "Can only simplify a single .ui file without --replace\n"
+#, c-format
 msgid "Can only preview a single .node file\n"
-msgstr "Puede simplificar un único archivo .ui sin --replace\n"
+msgstr "Sólo puede previsualizar un único archivo .node\n"
 
 #: tools/gtk-rendernode-tool-render.c:123
 #, c-format
@@ -7604,31 +7553,31 @@ msgid ""
 "File %s exists.\n"
 "If you want to overwrite, specify the filename.\n"
 msgstr ""
+"El archivo %s existe.\n"
+"Si quiere sobreescribirlo, especifique el nombre del archivo.\n"
 
 #: tools/gtk-rendernode-tool-render.c:137
-#, fuzzy, c-format
-#| msgid "Failed to open file %s : %s\n"
+#, c-format
 msgid "Failed to generate SVG: %s\n"
-msgstr "Falló al abrir el archivo «%s»: %s\n"
+msgstr "Falló al generar el SVG: %s\n"
 
 #: tools/gtk-rendernode-tool-render.c:196
-#, fuzzy
-#| msgid "Renderer"
 msgid "Renderer to use"
-msgstr "Renderizador"
+msgstr "Renderizador que usar"
 
 #: tools/gtk-rendernode-tool-render.c:196
 msgid "RENDERER"
-msgstr ""
+msgstr "RENDERIZADOR"
 
 #: tools/gtk-rendernode-tool-render.c:212
 msgid "Render a .node file to an image."
-msgstr ""
+msgstr "Renderizar un archivo .node a una imagen"
 
 #: tools/gtk-rendernode-tool-render.c:231
 #, c-format
 msgid "Can only render a single .node file to a single output file\n"
 msgstr ""
+"Sólo puede renderizar un único archivo .node a un único archivo de salida\n"
 
 #: tools/gtk-rendernode-tool-utils.c:51
 #, c-format
