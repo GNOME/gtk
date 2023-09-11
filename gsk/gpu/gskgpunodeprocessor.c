@@ -531,6 +531,30 @@ gsk_gpu_node_processor_add_clip_node (GskGpuNodeProcessor *self,
     }
 }
 
+static gboolean
+gsk_gpu_node_processor_create_clip_pattern (GskGpuNodeProcessor *self,
+                                            GskGpuBufferWriter  *writer,
+                                            GskRenderNode       *node,
+                                            GskGpuShaderImage   *images,
+                                            gsize                n_images,
+                                            gsize               *out_n_images)
+{
+  if (!gsk_gpu_node_processor_create_node_pattern (self,
+                                                   writer,
+                                                   gsk_opacity_node_get_child (node),
+                                                   images,
+                                                   n_images,
+                                                   out_n_images))
+    return FALSE;
+
+  gsk_gpu_buffer_writer_append_uint (writer, GSK_GPU_PATTERN_CLIP);
+  gsk_gpu_buffer_writer_append_rect (writer,
+                                     gsk_clip_node_get_clip (node),
+                                     &self->offset);
+
+  return TRUE;
+}
+
 static void
 gsk_gpu_node_processor_add_rounded_clip_node (GskGpuNodeProcessor *self,
                                               GskRenderNode       *node)
@@ -1142,7 +1166,7 @@ static const struct
   [GSK_CLIP_NODE] = {
     GSK_GPU_GLOBAL_MATRIX | GSK_GPU_GLOBAL_SCALE | GSK_GPU_GLOBAL_CLIP | GSK_GPU_GLOBAL_SCISSOR,
     gsk_gpu_node_processor_add_clip_node,
-    NULL,
+    gsk_gpu_node_processor_create_clip_pattern,
   },
   [GSK_ROUNDED_CLIP_NODE] = {
     GSK_GPU_GLOBAL_MATRIX | GSK_GPU_GLOBAL_SCALE | GSK_GPU_GLOBAL_CLIP | GSK_GPU_GLOBAL_SCISSOR,
