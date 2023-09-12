@@ -282,6 +282,8 @@ gtk_center_layout_measure_opposite (GtkCenterLayout *self,
   int total_nat, above_nat, below_nat;
   GtkWidget *child[3];
   GtkRequestedSize sizes[3];
+  gboolean have_baseline = FALSE;
+  gboolean align_baseline = FALSE;
   int i;
 
   child[0] = self->start_widget;
@@ -305,27 +307,33 @@ gtk_center_layout_measure_opposite (GtkCenterLayout *self,
                           &child_min, &child_nat,
                           &child_min_baseline, &child_nat_baseline);
 
-      if (child_min_baseline >= 0)
+      total_min = MAX (total_min, child_min);
+      total_nat = MAX (total_nat, child_nat);
+
+      if (orientation == GTK_ORIENTATION_VERTICAL && child_min_baseline >= 0)
         {
+          have_baseline = TRUE;
+          if (gtk_widget_get_valign (child[i]) == GTK_ALIGN_BASELINE_FILL ||
+              gtk_widget_get_valign (child[i]) == GTK_ALIGN_BASELINE_CENTER)
+            align_baseline = TRUE;
+
           below_min = MAX (below_min, child_min - child_min_baseline);
           above_min = MAX (above_min, child_min_baseline);
           below_nat = MAX (below_nat, child_nat - child_nat_baseline);
           above_nat = MAX (above_nat, child_nat_baseline);
         }
-      else
-        {
-          total_min = MAX (total_min, child_min);
-          total_nat = MAX (total_nat, child_nat);
-        }
    }
 
-  if (above_min >= 0)
+  if (have_baseline)
     {
       int min_baseline = -1;
       int nat_baseline = -1;
 
-      total_min = MAX (total_min, above_min + below_min);
-      total_nat = MAX (total_nat, above_nat + below_nat);
+      if (align_baseline)
+        {
+          total_min = MAX (total_min, above_min + below_min);
+          total_nat = MAX (total_nat, above_nat + below_nat);
+        }
 
       switch (self->baseline_pos)
         {

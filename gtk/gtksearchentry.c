@@ -301,6 +301,7 @@ gtk_search_entry_measure (GtkWidget      *widget,
                           int             *natural_baseline)
 {
   GtkSearchEntry *entry = GTK_SEARCH_ENTRY (widget);
+  int text_min, text_nat;
   int icon_min, icon_nat;
   int spacing;
 
@@ -309,8 +310,11 @@ gtk_search_entry_measure (GtkWidget      *widget,
   gtk_widget_measure (entry->entry,
                       orientation,
                       for_size,
-                      minimum, natural,
+                      &text_min, &text_nat,
                       minimum_baseline, natural_baseline);
+
+  *minimum = text_min;
+  *natural = text_nat;
 
   gtk_widget_measure (entry->search_icon,
                       GTK_ORIENTATION_HORIZONTAL,
@@ -344,6 +348,11 @@ gtk_search_entry_measure (GtkWidget      *widget,
     {
       *minimum = MAX (*minimum, icon_min);
       *natural = MAX (*natural, icon_nat);
+
+      if (G_LIKELY (*minimum_baseline >= 0))
+        *minimum_baseline += (*minimum - text_min) / 2;
+      if (G_LIKELY (*natural_baseline >= 0))
+        *natural_baseline += (*natural - text_nat) / 2;
     }
 }
 

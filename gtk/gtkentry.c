@@ -1646,13 +1646,17 @@ gtk_entry_measure (GtkWidget      *widget,
 {
   GtkEntry *entry = GTK_ENTRY (widget);
   GtkEntryPrivate *priv = gtk_entry_get_instance_private (entry);
+  int text_min, text_nat;
   int i;
 
   gtk_widget_measure (priv->text,
                       orientation,
                       for_size,
-                      minimum, natural,
+                      &text_min, &text_nat,
                       minimum_baseline, natural_baseline);
+
+  *minimum = text_min;
+  *natural = text_nat;
 
   for (i = 0; i < MAX_ICONS; i++)
     {
@@ -1690,6 +1694,14 @@ gtk_entry_measure (GtkWidget      *widget,
 
       *minimum = MAX (*minimum, prog_min);
       *natural = MAX (*natural, prog_nat);
+    }
+
+  if (orientation == GTK_ORIENTATION_VERTICAL)
+    {
+      if (G_LIKELY (*minimum_baseline >= 0))
+        *minimum_baseline += (*minimum - text_min) / 2;
+      if (G_LIKELY (*natural_baseline >= 0))
+        *natural_baseline += (*natural - text_nat) / 2;
     }
 }
 
