@@ -514,10 +514,16 @@ infer_edge_constraints (GdkToplevelState state)
 static gboolean
 supports_native_edge_constraints (GdkWaylandToplevel *toplevel)
 {
-  struct gtk_surface1 *gtk_surface = toplevel->display_server.gtk_surface;
-  if (!gtk_surface)
-    return FALSE;
-  return gtk_surface1_get_version (gtk_surface) >= GTK_SURFACE1_CONFIGURE_EDGES_SINCE_VERSION;
+  if (xdg_toplevel_get_version (toplevel->display_server.xdg_toplevel) >=
+      XDG_TOPLEVEL_STATE_CONSTRAINED_LEFT_SINCE_VERSION)
+    return TRUE;
+
+  if (toplevel->display_server.gtk_surface &&
+      gtk_surface1_get_version (toplevel->display_server.gtk_surface) >=
+      GTK_SURFACE1_CONFIGURE_EDGES_SINCE_VERSION)
+    return TRUE;
+
+  return FALSE;
 }
 
 static void
@@ -634,6 +640,11 @@ xdg_toplevel_configure (void                *data,
   GdkWaylandToplevel *toplevel = GDK_WAYLAND_TOPLEVEL (surface);
   uint32_t *p;
   GdkToplevelState pending_state = 0;
+  GdkToplevelState resize_constraint_state =
+    (GDK_TOPLEVEL_STATE_TOP_RESIZABLE |
+     GDK_TOPLEVEL_STATE_RIGHT_RESIZABLE |
+     GDK_TOPLEVEL_STATE_BOTTOM_RESIZABLE |
+     GDK_TOPLEVEL_STATE_LEFT_RESIZABLE);
 
   toplevel->pending.is_resizing = FALSE;
 
@@ -691,6 +702,10 @@ xdg_toplevel_configure (void                *data,
           break;
         }
     }
+
+  if (xdg_toplevel_get_version (toplevel->display_server.xdg_toplevel) >=
+      XDG_TOPLEVEL_STATE_CONSTRAINED_LEFT_SINCE_VERSION)
+    pending_state |= resize_constraint_state;
 
   toplevel->pending.state |= pending_state;
   toplevel->pending.width = width;

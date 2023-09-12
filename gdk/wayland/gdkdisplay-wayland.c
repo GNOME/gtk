@@ -126,12 +126,7 @@
 #define GTK_SHELL1_VERSION              6
 #define XDG_WM_DIALOG_VERSION           1
 #define XDG_TOPLEVEL_ICON_VERSION       1
-
-#ifdef HAVE_TOPLEVEL_STATE_SUSPENDED
-#define XDG_WM_BASE_VERSION             6
-#else
-#define XDG_WM_BASE_VERSION             5
-#endif
+#define XDG_WM_BASE_VERSION             7
 
 G_DEFINE_TYPE (GdkWaylandDisplay, gdk_wayland_display, GDK_TYPE_DISPLAY)
 
