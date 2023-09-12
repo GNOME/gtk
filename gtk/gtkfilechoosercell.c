@@ -23,11 +23,11 @@
 
 #include "gtkprivate.h"
 #include "gtkbinlayout.h"
-#include "gtkcolumnviewcell.h"
 #include "gtkdragsource.h"
 #include "gtkgestureclick.h"
 #include "gtkgesturelongpress.h"
 #include "gtkicontheme.h"
+#include "gtklistitem.h"
 #include "gtkselectionmodel.h"
 #include "gtkfilechooserutils.h"
 #include "gtkfilechooserwidgetprivate.h"
@@ -37,7 +37,7 @@ struct _GtkFileChooserCell
   GtkWidget parent_instance;
 
   GFileInfo *item;
-  GtkColumnViewCell *list_item;
+  GtkListItem *list_item;
 };
 
 struct _GtkFileChooserCellClass
@@ -75,7 +75,7 @@ popup_menu (GtkFileChooserCell *self,
 
   if (self->list_item)
     gtk_widget_activate_action (widget, "item.popup-file-list-menu",
-                                "(udd)", gtk_column_view_cell_get_position (self->list_item), p.x, p.y);
+                                "(udd)", gtk_list_item_get_position (self->list_item), p.x, p.y);
 }
 
 static void
@@ -121,7 +121,7 @@ drag_prepare_cb (GtkDragSource *source,
   impl = GTK_FILE_CHOOSER_WIDGET (gtk_widget_get_ancestor (GTK_WIDGET (self),
                                                            GTK_TYPE_FILE_CHOOSER_WIDGET));
 
-  if (self->list_item && !gtk_column_view_cell_get_selected (self->list_item))
+  if (self->list_item && !gtk_list_item_get_selected (self->list_item))
     {
       gtk_widget_activate_action (GTK_WIDGET (self), "listitem.select", "(bb)", FALSE, FALSE);
     }
