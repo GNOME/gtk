@@ -672,10 +672,18 @@ xdg_toplevel_configure_bounds (void                *data,
   toplevel->pending.has_bounds = TRUE;
 }
 
+static void
+xdg_toplevel_wm_capabilities (void                *data,
+                              struct xdg_toplevel *xdg_toplevel,
+                              struct wl_array     *capabilities)
+{
+}
+
 static const struct xdg_toplevel_listener xdg_toplevel_listener = {
   xdg_toplevel_configure,
   xdg_toplevel_close,
   xdg_toplevel_configure_bounds,
+  xdg_toplevel_wm_capabilities,
 };
 
 static void
