@@ -27,6 +27,7 @@
 #include "gtkgestureclick.h"
 #include "gtkgesturelongpress.h"
 #include "gtkicontheme.h"
+#include "gtklistitem.h"
 #include "gtkselectionmodel.h"
 #include "gtkfilechooserutils.h"
 #include "gtkfilechooserwidgetprivate.h"
