@@ -90,7 +90,7 @@ struct _GdkMacosDisplay
   /* Note if we have a key window that is not a GdkMacosWindow
    * such as a NSPanel used for native dialogs.
    */
-  guint key_window_is_foregin : 1;
+  guint key_window_is_foreign : 1;
 };
 
 struct _GdkMacosDisplayClass
