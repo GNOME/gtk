@@ -142,6 +142,8 @@ struct _GskGLRenderJob
   const GskGLRenderModelview *current_modelview;
   GskGLProgram *current_program;
 
+  guint source_is_glyph_atlas : 1;
+
   /* If we should be rendering red zones over fallback nodes */
   guint debug_fallback : 1;
 
@@ -1256,6 +1258,7 @@ done:
                                       GL_TEXTURE_2D,
                                       GL_TEXTURE0,
                                       texture_id);
+  job->source_is_glyph_atlas = FALSE;
   gsk_gl_render_job_draw_offscreen_rect (job, &node->bounds);
   gsk_gl_render_job_end_draw (job);
 
@@ -1321,6 +1324,7 @@ blur_offscreen (GskGLRenderJob       *job,
                                           GL_TEXTURE_2D,
                                           GL_TEXTURE0,
                                           offscreen->texture_id);
+      job->source_is_glyph_atlas = FALSE;
       gsk_gl_program_set_uniform1f (job->current_program,
                                     UNIFORM_BLUR_RADIUS, 0,
                                     blur_radius_x);
@@ -1350,6 +1354,7 @@ blur_offscreen (GskGLRenderJob       *job,
                                           GL_TEXTURE_2D,
                                           GL_TEXTURE0,
                                           pass1->texture_id);
+      job->source_is_glyph_atlas = FALSE;
       gsk_gl_program_set_uniform1f (job->current_program,
                                     UNIFORM_BLUR_RADIUS, 0,
                                     blur_radius_y);
@@ -1664,6 +1669,7 @@ gsk_gl_render_job_visit_clipped_child (GskGLRenderJob        *job,
                                               GL_TEXTURE_2D,
                                               GL_TEXTURE0,
                                               offscreen.texture_id);
+          job->source_is_glyph_atlas = FALSE;
           gsk_gl_render_job_draw_offscreen_rect (job, clip);
           gsk_gl_render_job_end_draw (job);
         }
@@ -1754,6 +1760,7 @@ gsk_gl_render_job_visit_rounded_clip_node (GskGLRenderJob      *job,
                                               GL_TEXTURE_2D,
                                               GL_TEXTURE0,
                                               offscreen.texture_id);
+          job->source_is_glyph_atlas = FALSE;
           gsk_gl_render_job_draw_offscreen (job, &node->bounds, &offscreen);
           gsk_gl_render_job_end_draw (job);
         }
@@ -2119,6 +2126,7 @@ gsk_gl_render_job_visit_transform_node (GskGLRenderJob      *job,
                                                                   offscreen.texture_id,
                                                                   linear_filter ? GL_LINEAR : GL_NEAREST,
                                                                   linear_filter ? GL_LINEAR : GL_NEAREST);
+                  job->source_is_glyph_atlas = FALSE;
                   gsk_gl_render_job_draw_offscreen (job, &child->bounds, &offscreen);
                   gsk_gl_render_job_end_draw (job);
                 }
@@ -2328,6 +2336,7 @@ gsk_gl_render_job_visit_blurred_inset_shadow_node (GskGLRenderJob      *job,
                                             GL_TEXTURE_2D,
                                             GL_TEXTURE0,
                                             blurred_texture_id);
+        job->source_is_glyph_atlas = FALSE;
         gsk_gl_render_job_draw_offscreen (job, &node->bounds, &offscreen);
         gsk_gl_render_job_end_draw (job);
       }
@@ -2593,6 +2602,7 @@ gsk_gl_render_job_visit_blurred_outset_shadow_node (GskGLRenderJob      *job,
                                               GL_TEXTURE_2D,
                                               GL_TEXTURE0,
                                               blurred_texture_id);
+          job->source_is_glyph_atlas = FALSE;
           gsk_gl_program_set_uniform_rounded_rect (job->current_program,
                                                    UNIFORM_OUTSET_SHADOW_OUTLINE_RECT, 0,
                                                    &transformed_outline);
@@ -2618,6 +2628,7 @@ gsk_gl_render_job_visit_blurred_outset_shadow_node (GskGLRenderJob      *job,
                                           GL_TEXTURE_2D,
                                           GL_TEXTURE0,
                                           blurred_texture_id);
+      job->source_is_glyph_atlas = FALSE;
       gsk_gl_program_set_uniform_rounded_rect (job->current_program,
                                                UNIFORM_OUTSET_SHADOW_OUTLINE_RECT, 0,
                                                &transformed_outline);
@@ -2855,6 +2866,7 @@ gsk_gl_render_job_visit_cross_fade_node (GskGLRenderJob      *job,
                                           GL_TEXTURE_2D,
                                           GL_TEXTURE1,
                                           offscreen_end.texture_id);
+      job->source_is_glyph_atlas = FALSE;
       gsk_gl_program_set_uniform1f (job->current_program,
                                     UNIFORM_CROSS_FADE_PROGRESS, 0,
                                     progress);
@@ -2901,6 +2913,7 @@ gsk_gl_render_job_visit_opacity_node (GskGLRenderJob      *job,
                                                   GL_TEXTURE_2D,
                                                   GL_TEXTURE0,
                                                   offscreen.texture_id);
+              job->source_is_glyph_atlas = FALSE;
               gsk_gl_render_job_draw_offscreen (job, &node->bounds, &offscreen);
               gsk_gl_render_job_end_draw (job);
             }
@@ -3042,6 +3055,7 @@ gsk_gl_render_job_visit_text_node (GskGLRenderJob      *job,
                                                   GL_TEXTURE_2D,
                                                   GL_TEXTURE0,
                                                   texture_id);
+              job->source_is_glyph_atlas = TRUE;
               last_texture = texture_id;
             }
 
@@ -3162,6 +3176,7 @@ gsk_gl_render_job_visit_shadow_node (GskGLRenderJob      *job,
                                               GL_TEXTURE_2D,
                                               GL_TEXTURE0,
                                               offscreen.texture_id);
+          job->source_is_glyph_atlas = FALSE;
           rgba_to_half (&shadow->color, color);
           gsk_gl_render_job_draw_offscreen_with_color (job, &bounds, &offscreen, color);
           gsk_gl_render_job_end_draw (job);
@@ -3218,6 +3233,7 @@ gsk_gl_render_job_visit_blur_node (GskGLRenderJob      *job,
                                           GL_TEXTURE_2D,
                                           GL_TEXTURE0,
                                           offscreen.texture_id);
+      job->source_is_glyph_atlas = FALSE;
       gsk_gl_render_job_draw_coords (job,
                                      min_x, min_y, max_x, max_y,
                                      0, 1, 1, 0,
@@ -3268,6 +3284,7 @@ gsk_gl_render_job_visit_blend_node (GskGLRenderJob      *job,
                                               GL_TEXTURE_2D,
                                               GL_TEXTURE0,
                                               bottom_offscreen.texture_id);
+          job->source_is_glyph_atlas = FALSE;
           gsk_gl_render_job_draw_offscreen (job, &node->bounds, &bottom_offscreen);
           gsk_gl_render_job_end_draw (job);
         }
@@ -3290,6 +3307,7 @@ gsk_gl_render_job_visit_blend_node (GskGLRenderJob      *job,
                                           GL_TEXTURE_2D,
                                           GL_TEXTURE1,
                                           top_offscreen.texture_id);
+      job->source_is_glyph_atlas = FALSE;
       gsk_gl_program_set_uniform1i (job->current_program,
                                     UNIFORM_BLEND_MODE, 0,
                                     gsk_blend_node_get_blend_mode (node));
@@ -3352,6 +3370,7 @@ gsk_gl_render_job_visit_mask_node (GskGLRenderJob      *job,
                                           GL_TEXTURE_2D,
                                           GL_TEXTURE1,
                                           mask_offscreen.texture_id);
+      job->source_is_glyph_atlas = FALSE;
       gsk_gl_program_set_uniform1i (job->current_program,
                                     UNIFORM_MASK_MODE, 0,
                                     gsk_mask_node_get_mask_mode (node));
@@ -3388,6 +3407,7 @@ gsk_gl_render_job_visit_color_matrix_node (GskGLRenderJob      *job,
                                           GL_TEXTURE_2D,
                                           GL_TEXTURE0,
                                           offscreen.texture_id);
+      job->source_is_glyph_atlas = FALSE;
       gsk_gl_program_set_uniform_matrix (job->current_program,
                                          UNIFORM_COLOR_MATRIX_COLOR_MATRIX, 0,
                                          gsk_color_matrix_node_get_color_matrix (node));
@@ -3470,6 +3490,7 @@ gsk_gl_render_job_visit_gl_shader_node (GskGLRenderJob      *job,
                                                 GL_TEXTURE_2D,
                                                 GL_TEXTURE0 + i,
                                                 offscreens[i].texture_id);
+          job->source_is_glyph_atlas = FALSE;
           gsk_gl_program_set_uniform2f (program,
                                         UNIFORM_CUSTOM_SIZE, 0,
                                         node->bounds.size.width,
@@ -3604,6 +3625,7 @@ gsk_gl_render_job_visit_texture (GskGLRenderJob        *job,
                                                         offscreen.has_mipmap ? GL_LINEAR_MIPMAP_LINEAR : GL_LINEAR,
                                                         GL_LINEAR,
                                                         offscreen.sync);
+          job->source_is_glyph_atlas = FALSE;
           gsk_gl_render_job_draw_offscreen (job, bounds, &offscreen);
           gsk_gl_render_job_end_draw (job);
         }
@@ -3641,6 +3663,7 @@ gsk_gl_render_job_visit_texture (GskGLRenderJob        *job,
                                                               slice->texture_id,
                                                               use_mipmap ? GL_LINEAR_MIPMAP_LINEAR : GL_LINEAR,
                                                               GL_LINEAR);
+              job->source_is_glyph_atlas = FALSE;
 
               gsk_gl_render_job_draw_coords (job,
                                              x1, y1, x2, y2,
@@ -3759,6 +3782,7 @@ gsk_gl_render_job_visit_texture_scale_node (GskGLRenderJob      *job,
                                                         min_filter,
                                                         mag_filter,
                                                         sync);
+          job->source_is_glyph_atlas = FALSE;
           gsk_gl_render_job_draw_coords (job,
                                          0, 0, clip_rect.size.width, clip_rect.size.height,
                                          u0, v0, u1, v1,
@@ -3800,6 +3824,7 @@ gsk_gl_render_job_visit_texture_scale_node (GskGLRenderJob      *job,
                                                               slice->texture_id,
                                                               min_filter,
                                                               mag_filter);
+              job->source_is_glyph_atlas = FALSE;
               gsk_gl_render_job_draw_coords (job,
                                              slice_bounds.origin.x,
                                              slice_bounds.origin.y,
@@ -3832,6 +3857,7 @@ render_texture:
                                           GL_TEXTURE_2D,
                                           GL_TEXTURE0,
                                           texture_id);
+      job->source_is_glyph_atlas = FALSE;
       gsk_gl_render_job_draw_coords (job,
                                      job->offset_x + clip_rect.origin.x,
                                      job->offset_y + clip_rect.origin.y,
@@ -3884,6 +3910,7 @@ gsk_gl_render_job_visit_repeat_node (GskGLRenderJob      *job,
                                           GL_TEXTURE_2D,
                                           GL_TEXTURE0,
                                           offscreen.texture_id);
+      job->source_is_glyph_atlas = FALSE;
       gsk_gl_program_set_uniform4f (job->current_program,
                                     UNIFORM_REPEAT_CHILD_BOUNDS, 0,
                                     (node->bounds.origin.x - child_bounds->origin.x) / child_bounds->size.width,
@@ -4370,6 +4397,7 @@ gsk_gl_render_job_render_flipped (GskGLRenderJob *job,
                                           GL_TEXTURE_2D,
                                           GL_TEXTURE0,
                                           texture_id);
+      job->source_is_glyph_atlas = FALSE;
       gsk_gl_render_job_draw_rect (job, &job->viewport);
       gsk_gl_render_job_end_draw (job);
     }
