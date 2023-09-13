@@ -1466,7 +1466,8 @@ gsk_gl_render_job_visit_color_node (GskGLRenderJob      *job,
   batch = gsk_gl_command_queue_get_batch (job->command_queue);
 
   /* Limit the size, or we end up with a coordinate overflow somewhere. */
-  if (node->bounds.size.width < 300 &&
+  if (job->source_is_glyph_atlas &&
+      node->bounds.size.width < 300 &&
       node->bounds.size.height < 300 &&
       batch->any.kind == GSK_GL_COMMAND_KIND_DRAW &&
       batch->any.program == program->id)
