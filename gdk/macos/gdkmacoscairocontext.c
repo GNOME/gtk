@@ -189,6 +189,14 @@ copy_surface_data (GdkMacosBuffer       *from,
 }
 
 static void
+clamp_region_to_surface (cairo_region_t *region,
+                         GdkSurface     *surface)
+{
+  cairo_rectangle_int_t rectangle = {0, 0, surface->width, surface->height};
+  cairo_region_intersect_rectangle (region, &rectangle);
+}
+
+static void
 _gdk_macos_cairo_context_begin_frame (GdkDrawContext *draw_context,
                                       GdkMemoryDepth  depth,
                                       cairo_region_t *region)
@@ -204,6 +212,8 @@ _gdk_macos_cairo_context_begin_frame (GdkDrawContext *draw_context,
 
   surface = GDK_MACOS_SURFACE (gdk_draw_context_get_surface (draw_context));
   buffer = _gdk_macos_surface_get_buffer (surface);
+
+  clamp_region_to_surface (region, GDK_SURFACE (surface));
 
   _gdk_macos_buffer_set_damage (buffer, region);
   _gdk_macos_buffer_set_flipped (buffer, FALSE);
