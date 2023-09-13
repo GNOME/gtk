@@ -473,8 +473,7 @@ gdk_display_get_event (GdkDisplay *display)
  * @display: a `GdkDisplay`
  * @event: (transfer none): a `GdkEvent`
  *
- * Appends the given event onto the front of the event
- * queue for @display.
+ * Adds the given event to the event queue for @display.
  *
  * Deprecated: 4.10: This function is only useful in very
  * special situations and should not be used by applications.
