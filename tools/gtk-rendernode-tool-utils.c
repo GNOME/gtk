@@ -61,17 +61,15 @@ load_node_file (const char *filename)
   GError *error = NULL;
 
   file = g_file_new_for_commandline_arg (filename);
-  bytes = g_file_load_bytes (file, NULL, NULL, NULL);
+  bytes = g_file_load_bytes (file, NULL, NULL, &error);
   g_object_unref (file);
 
   if (bytes == NULL)
-    return NULL;
-
-  if (!g_utf8_validate (g_bytes_get_data (bytes, NULL), g_bytes_get_size (bytes), NULL))
     {
-      g_bytes_unref (bytes);
-      return NULL;
+      g_printerr (_("Failed to load node file: %s\n"), error->message);
+      g_clear_error (&error);
+      exit (1);
     }
 
-  return gsk_render_node_deserialize (bytes, deserialize_error_func, &error);
+  return gsk_render_node_deserialize (bytes, deserialize_error_func, NULL);
 }
