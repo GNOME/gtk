@@ -323,6 +323,8 @@ node_parser_tests = [
   'string-error.node',
   'string-error.ref.node',
   'testswitch.node',
+  'text-color.node',
+  'text-color.ref.node',
   'text-fail.node',
   'text-fail.ref.node',
   'text-fail.errors',

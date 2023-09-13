@@ -3019,7 +3019,7 @@ gsk_text_node_serialize_glyphs (GskRenderNode *node,
           string_append_double (p, (double) glyphs[i].geometry.y_offset / PANGO_SCALE);
           if (!glyphs[i].attr.is_cluster_start)
             g_string_append (p, " same-cluster");
-          if (!glyphs[i].attr.is_color)
+          if (glyphs[i].attr.is_color)
             g_string_append (p, " color");
         }
 
