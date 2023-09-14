@@ -47,13 +47,13 @@
  *
  * ```
  * switch
- * ├── label
- * ├── label
+ * ├── image
+ * ├── image
  * ╰── slider
  * ```
  *
  * `GtkSwitch` has four css nodes, the main node with the name switch and
- * subnodes for the slider and the on and off labels. Neither of them is
+ * subnodes for the slider and the on and off images. Neither of them is
  * using any style classes.
  *
  * # Accessibility
