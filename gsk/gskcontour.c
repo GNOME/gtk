@@ -172,6 +172,112 @@ convert_to_standard_contour (const GskContour *contour)
   return gsk_path_builder_free_to_path (builder);
 }
 
+typedef struct
+{
+  GskCurve *curve;
+  unsigned int idx;
+  unsigned int count;
+} InitCurveData;
+
+static gboolean
+init_curve_cb (GskPathOperation        op,
+               const graphene_point_t *pts,
+               gsize                   n_pts,
+               float                   weight,
+               gpointer                user_data)
+{
+  InitCurveData *data = user_data;
+
+  if (data->idx == data->count)
+    {
+      gsk_curve_init_foreach (data->curve, op, pts, n_pts, weight);
+      return FALSE;
+    }
+
+  data->count++;
+  return TRUE;
+}
+
+static void
+contour_init_curve (const GskContour *contour,
+                    unsigned int      idx,
+                    GskCurve         *curve)
+{
+  InitCurveData data;
+
+  data.curve = curve;
+  data.idx = idx;
+  data.count = 0;
+
+  gsk_contour_foreach (contour, init_curve_cb, &data);
+}
+
+typedef struct
+{
+  graphene_point_t point;
+  float threshold;
+  gsize idx;
+  gsize best_idx;
+  gsize best_t;
+} ClosestPointData;
+
+static gboolean
+get_closest_point_cb (GskPathOperation        op,
+                      const graphene_point_t *pts,
+                      gsize                   n_pts,
+                      float                   weight,
+                      gpointer                data)
+{
+  GskCurve curve;
+  ClosestPointData *pd = data;
+  float distance, t;
+
+  if (op == GSK_PATH_MOVE)
+    return TRUE;
+
+  pd->idx++;
+
+  gsk_curve_init_foreach (&curve, op, pts, n_pts, weight);
+
+  if (gsk_curve_get_closest_point (&curve, &pd->point, pd->threshold, &distance, &t) &&
+      distance < pd->threshold)
+    {
+      pd->best_idx = pd->idx;
+      pd->best_t = t;
+      pd->threshold = distance;
+    }
+
+  return TRUE;
+}
+
+static gboolean
+contour_get_closest_point (const GskContour       *contour,
+                           const graphene_point_t *point,
+                           float                   threshold,
+                           GskPathPoint           *result,
+                           float                  *out_dist)
+{
+  ClosestPointData pd;
+
+  pd.point = *point;
+  pd.threshold = threshold;
+  pd.idx = 0;
+  pd.best_idx = G_MAXUINT;
+
+  gsk_contour_foreach (contour, get_closest_point_cb, &pd);
+
+  if (pd.best_idx != G_MAXUINT)
+    {
+      result->idx = pd.best_idx;
+      result->t = pd.best_t;
+      *out_dist = pd.threshold;
+
+      return TRUE;
+    }
+
+  return FALSE;
+}
+
 /* }}} */
 /* {{{ Default implementations */
 
@@ -2154,56 +2260,7 @@ gsk_rounded_rect_contour_get_closest_point (const GskContour       *contour,
                                             GskPathPoint           *result,
                                             float                  *out_dist)
 {
-  GskPath *path;
-  const GskContour *std;
-  gboolean ret;
-
-  path = convert_to_standard_contour (contour);
-  std = gsk_path_get_contour (path, 0);
-  ret = gsk_standard_contour_get_closest_point (std, point, threshold, result, out_dist);
-  gsk_path_unref (path);
-
-  return ret;
-}
-
-typedef struct
-{
-  GskCurve *curve;
-  unsigned int idx;
-  unsigned int count;
-} InitCurveData;
-
-static gboolean
-init_curve_cb (GskPathOperation        op,
-               const graphene_point_t *pts,
-               gsize                   n_pts,
-               float                   weight,
-               gpointer                user_data)
-{
-  InitCurveData *data = user_data;
-
-  if (data->idx == data->count)
-    {
-      gsk_curve_init_foreach (data->curve, op, pts, n_pts, weight);
-      return FALSE;
-    }
-
-  data->count++;
-  return TRUE;
-}
-
-static void
-gsk_rounded_rect_contour_init_curve (const GskContour *contour,
-                                     unsigned int      idx,
-                                     GskCurve         *curve)
-{
-  InitCurveData data;
-
-  data.curve = curve;
-  data.idx = idx;
-  data.count = 0;
-
-  gsk_contour_foreach (contour, init_curve_cb, &data);
+  return contour_get_closest_point (contour, point, threshold, result, out_dist);
 }
 
 static void
@@ -2213,7 +2270,7 @@ gsk_rounded_rect_contour_get_position (const GskContour   *contour,
 {
   GskCurve curve;
 
-  gsk_rounded_rect_contour_init_curve (contour, point->idx, &curve);
+  contour_init_curve (contour, point->idx, &curve);
   gsk_curve_get_point (&curve, point->t, position);
 }
 
@@ -2225,7 +2282,7 @@ gsk_rounded_rect_contour_get_tangent (const GskContour   *contour,
 {
   GskCurve curve;
 
-  gsk_rounded_rect_contour_init_curve (contour, point->idx, &curve);
+  contour_init_curve (contour, point->idx, &curve);
   gsk_curve_get_tangent (&curve, point->t, tangent);
 }
 
@@ -2237,7 +2294,7 @@ gsk_rounded_rect_contour_get_curvature (const GskContour   *contour,
 {
   GskCurve curve;
 
-  gsk_rounded_rect_contour_init_curve (contour, point->idx, &curve);
+  contour_init_curve (contour, point->idx, &curve);
   return gsk_curve_get_curvature (&curve, point->t, center);
 }
 
