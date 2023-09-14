@@ -82,6 +82,18 @@ gdk_array(init) (GdkArray *self)
 #endif
 }
 
+G_GNUC_UNUSED static inline gsize
+gdk_array(get_capacity) (const GdkArray *self)
+{
+  return self->end_allocation - self->start;
+}
+
+G_GNUC_UNUSED static inline gsize
+gdk_array(get_size) (const GdkArray *self)
+{
+  return self->end - self->start;
+}
+
 static inline void
 gdk_array(free_elements) (_T_ *start,
                           _T_ *end)
@@ -110,6 +122,38 @@ gdk_array(clear) (GdkArray *self)
   gdk_array(init) (self);
 }
 
+/*
+ * gdk_array_steal:
+ * @self: the array
+ *
+ * Steals all data in the array and clears the array.
+ *
+ * If you need to know the size of the data, you should query it
+ * beforehand.
+ *
+ * Returns: The array's data
+ **/
+G_GNUC_UNUSED static inline _T_ *
+gdk_array(steal) (GdkArray *self)
+{
+  _T_ *result;
+
+#ifdef GDK_ARRAY_PREALLOC
+  if (self->start == self->preallocated)
+    {
+      gsize size = GDK_ARRAY_REAL_SIZE (gdk_array(get_size) (self));
+      result = g_new (_T_, size);
+      memcpy (result, self->preallocated, sizeof (_T_) * size);
+    }
+  else
+#endif
+    result = self->start;
+
+  gdk_array(init) (self);
+
+  return result;
+}
+
 G_GNUC_UNUSED static inline _T_ *
 gdk_array(get_data) (const GdkArray *self)
 {
@@ -121,18 +165,6 @@ gdk_array(index) (const GdkArray *self,
                   gsize           pos)
 {
   return self->start + pos;
-}
-
-G_GNUC_UNUSED static inline gsize
-gdk_array(get_capacity) (const GdkArray *self)
-{
-  return self->end_allocation - self->start;
-}
-
-G_GNUC_UNUSED static inline gsize
-gdk_array(get_size) (const GdkArray *self)
-{
-  return self->end - self->start;
 }
 
 G_GNUC_UNUSED static inline gboolean
