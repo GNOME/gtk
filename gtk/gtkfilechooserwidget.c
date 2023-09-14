@@ -3600,7 +3600,8 @@ show_and_select_files (GtkFileChooserWidget *impl,
 
           if (info2 == info)
             {
-              gtk_selection_model_select_item (impl->selection_model, i, FALSE);
+              gtk_column_view_scroll_to (GTK_COLUMN_VIEW (impl->browse_files_column_view), i, FALSE,
+                                         GTK_LIST_SCROLL_SELECT | GTK_LIST_SCROLL_FOCUS, FALSE);
               g_clear_object (&info2);
               selected_a_file = TRUE;
               break;
