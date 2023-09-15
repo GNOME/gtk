@@ -63,11 +63,12 @@ gsk_gpu_render_pass_type_to_vk_image_layout (GskRenderPassType type)
 
 static void
 gsk_gpu_render_pass_op_do_barriers (GskGpuRenderPassOp *self,
-                                       VkCommandBuffer        command_buffer)
+                                    VkCommandBuffer     command_buffer)
 {
   GskGpuShaderOp *shader;
   GskGpuOp *op;
-  gsize i;
+  const GskGpuShaderImage *images;
+  gsize i, n_images;
 
   for (op = ((GskGpuOp *) self)->next;
        op->op_class->stage != GSK_GPU_STAGE_END_PASS;
@@ -78,9 +79,10 @@ gsk_gpu_render_pass_op_do_barriers (GskGpuRenderPassOp *self,
 
       shader = (GskGpuShaderOp *) op;
 
-      for (i = 0; i < shader->n_images; i++)
+      images = gsk_gpu_shader_op_get_images (shader, &n_images);
+      for (i = 0; i < n_images; i++)
         {
-          gsk_vulkan_image_transition (GSK_VULKAN_IMAGE (shader->images[i].image),
+          gsk_vulkan_image_transition (GSK_VULKAN_IMAGE (images[i].image),
                                        command_buffer,
                                        VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT,
                                        VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
