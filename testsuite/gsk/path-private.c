@@ -139,11 +139,14 @@ test_rounded_rect_roundtrip (void)
   const GskContour *contour;
   char *s;
 
+  /* our parser only recognizes 'complete' rounded rects
+   * (i.e. no empty curves omitted).
+   */
   rr.bounds = GRAPHENE_RECT_INIT (100, 100, 200, 150);
   rr.corner[GSK_CORNER_TOP_LEFT] = GRAPHENE_SIZE_INIT (10, 10);
   rr.corner[GSK_CORNER_TOP_RIGHT] = GRAPHENE_SIZE_INIT (20, 10);
-  rr.corner[GSK_CORNER_BOTTOM_RIGHT] = GRAPHENE_SIZE_INIT (20, 0);
-  rr.corner[GSK_CORNER_BOTTOM_LEFT] = GRAPHENE_SIZE_INIT (0, 0);
+  rr.corner[GSK_CORNER_BOTTOM_RIGHT] = GRAPHENE_SIZE_INIT (20, 20);
+  rr.corner[GSK_CORNER_BOTTOM_LEFT] = GRAPHENE_SIZE_INIT (5, 10);
 
   builder = gsk_path_builder_new ();
   gsk_path_builder_add_rounded_rect (builder, &rr);
