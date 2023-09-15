@@ -187,10 +187,12 @@ conic_gradient_pattern (inout uint reader,
   /* scaling modifies angles, so be sure to use right coordinate system */
   pos = pos / push.scale - center;
   float offset = atan (pos.y, pos.x);
-  offset = fract (degrees (offset + angle) / 360.0);
-  float d_offset = 0.5 * fwidth (offset);
+  offset = degrees (offset + angle) / 360.0;
+  float overflow = fract (offset + 0.5);
+  offset = fract (offset);
+  float d_offset = max (0.00001, 0.5 * min (fwidth (offset), fwidth (overflow)));
 
-  return gradient_get_color (gradient, offset - d_offset, offset + d_offset);
+  return gradient_get_color_repeating (gradient, offset - d_offset, offset + d_offset);
 }
 
 vec4
