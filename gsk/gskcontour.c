@@ -389,6 +389,25 @@ maybe_emit_line (const graphene_point_t pts[2],
   return func (GSK_PATH_LINE, pts, 2, 0.f, user_data);
 }
 
+static inline gboolean
+maybe_emit_conic (const graphene_point_t pts[3],
+                  float                  weight,
+                  GskPathForeachFunc     func,
+                  gpointer               user_data)
+{
+  if (graphene_point_equal (&pts[0], &pts[1]))
+    {
+      if (graphene_point_equal (&pts[1], &pts[2]))
+        return TRUE;
+      else
+        return func (GSK_PATH_LINE, &pts[1], 2, 0.f, user_data);
+    }
+  else if (graphene_point_equal (&pts[1], &pts[2]))
+    return func (GSK_PATH_LINE, &pts[0], 2, 0.f, user_data);
+
+  return func (GSK_PATH_CONIC, pts, 3, weight, user_data);
+}
+
 /* Assumes a closed contour */
 static void
 apply_corner_direction (GskPathDirection  direction,
@@ -2019,6 +2038,7 @@ struct _GskRoundedRectContour
 
   GskRoundedRect rect;
   gboolean ccw;
+  gsize n_ops;
 };
 
 static void
@@ -2107,27 +2127,27 @@ gsk_rounded_rect_contour_foreach (const GskContour   *contour,
 #undef SWAP
 
       return func (GSK_PATH_MOVE, &pts[0], 1, 0.f, user_data) &&
-             func (GSK_PATH_CONIC, &pts[0], 3, M_SQRT1_2, user_data) &&
-             func (GSK_PATH_LINE, &pts[2], 2, 0.f, user_data) &&
-             func (GSK_PATH_CONIC, &pts[3], 3, M_SQRT1_2, user_data) &&
-             func (GSK_PATH_LINE, &pts[5], 2, 0.f, user_data) &&
-             func (GSK_PATH_CONIC, &pts[6], 3, M_SQRT1_2, user_data) &&
-             func (GSK_PATH_LINE, &pts[8], 2, 0.f, user_data) &&
-             func (GSK_PATH_CONIC, &pts[9], 3, M_SQRT1_2, user_data) &&
-             func (GSK_PATH_LINE, &pts[11], 2, 0.f, user_data) &&
+             maybe_emit_conic (&pts[0], M_SQRT1_2, func, user_data) &&
+             maybe_emit_line (&pts[2], func, user_data) &&
+             maybe_emit_conic (&pts[3], M_SQRT1_2, func, user_data) &&
+             maybe_emit_line (&pts[5], func, user_data) &&
+             maybe_emit_conic (&pts[6], M_SQRT1_2, func, user_data) &&
+             maybe_emit_line (&pts[8], func, user_data) &&
+             maybe_emit_conic (&pts[9], M_SQRT1_2, func, user_data) &&
+             maybe_emit_line (&pts[11], func, user_data) &&
              func (GSK_PATH_CLOSE, &pts[12], 2, 0.f, user_data);
     }
   else
     {
       return func (GSK_PATH_MOVE, &pts[0], 1, 0.f, user_data) &&
-             func (GSK_PATH_LINE, &pts[0], 2, 0.f, user_data) &&
-             func (GSK_PATH_CONIC, &pts[1], 3, M_SQRT1_2, user_data) &&
-             func (GSK_PATH_LINE, &pts[3], 2, 0.f, user_data) &&
-             func (GSK_PATH_CONIC, &pts[4], 3, M_SQRT1_2, user_data) &&
-             func (GSK_PATH_LINE, &pts[6], 2, 0.f, user_data) &&
-             func (GSK_PATH_CONIC, &pts[7], 3, M_SQRT1_2, user_data) &&
-             func (GSK_PATH_LINE, &pts[9], 2, 0.f, user_data) &&
-             func (GSK_PATH_CONIC, &pts[10], 3, M_SQRT1_2, user_data) &&
+             maybe_emit_line (&pts[0], func, user_data) &&
+             maybe_emit_conic (&pts[1], M_SQRT1_2, func, user_data) &&
+             maybe_emit_line (&pts[3], func, user_data) &&
+             maybe_emit_conic (&pts[4], M_SQRT1_2, func, user_data) &&
+             maybe_emit_line (&pts[6], func, user_data) &&
+             maybe_emit_conic (&pts[7], M_SQRT1_2, func, user_data) &&
+             maybe_emit_line (&pts[9], func, user_data) &&
+             maybe_emit_conic (&pts[10], M_SQRT1_2, func, user_data) &&
              func (GSK_PATH_CLOSE, &pts[12], 2, 0.f, user_data);
     }
 }
@@ -2160,7 +2180,9 @@ gsk_rounded_rect_contour_get_winding (const GskContour       *contour,
 static gsize
 gsk_rounded_rect_contour_get_n_ops (const GskContour *contour)
 {
-  return 10;
+  const GskRoundedRectContour *self = (const GskRoundedRectContour *) contour;
+
+  return self->n_ops;
 }
 
 static gboolean
@@ -2190,10 +2212,21 @@ gsk_rounded_rect_contour_get_tangent (const GskContour   *contour,
                                       GskPathDirection    direction,
                                       graphene_vec2_t    *tangent)
 {
+  const GskRoundedRectContour *self = (const GskRoundedRectContour *) contour;
+  gsize idx = point->idx;
+  float t = point->t;
   GskCurve curve;
 
-  contour_init_curve (contour, point->idx, &curve);
-  gsk_curve_get_tangent (&curve, point->t, tangent);
+  /* Avoid the z, since it has length 0 and won't give us a tangent */
+  if (idx == self->n_ops - 1)
+    {
+      idx = self->n_ops - 2;
+      t = 1;
+    }
+
+  apply_corner_direction (direction, &idx, &t, self->n_ops - 1);
+  contour_init_curve (contour, idx, &curve);
+  gsk_curve_get_tangent (&curve, t, tangent);
   if (direction == GSK_PATH_TO_START || direction == GSK_PATH_FROM_END)
     graphene_vec2_negate (tangent, tangent);
 }
@@ -2204,10 +2237,21 @@ gsk_rounded_rect_contour_get_curvature (const GskContour   *contour,
                                         GskPathDirection    direction,
                                         graphene_point_t   *center)
 {
+  const GskRoundedRectContour *self = (const GskRoundedRectContour *) contour;
   GskCurve curve;
+  gsize idx = point->idx;
+  float t = point->t;
 
-  contour_init_curve (contour, point->idx, &curve);
-  return gsk_curve_get_curvature (&curve, point->t, center);
+  /* Avoid the z, since it has length 0 and won't give us curvature */
+  if (idx == self->n_ops - 1)
+    {
+      idx = self->n_ops - 2;
+      t = 1;
+    }
+
+  apply_corner_direction (direction, &idx, &t, self->n_ops - 1);
+  contour_init_curve (contour, idx, &curve);
+  return gsk_curve_get_curvature (&curve, t, center);
 }
 
 static void
@@ -2299,6 +2343,47 @@ static const GskContourClass GSK_ROUNDED_RECT_CONTOUR_CLASS =
   gsk_rounded_rect_contour_get_distance,
 };
 
+static gsize
+rounded_rect_compute_n_ops (const GskRoundedRect *rect)
+{
+  graphene_point_t pts[14];
+  gsize n_ops;
+
+  get_rounded_rect_points (rect, pts);
+
+  n_ops = 2;
+
+  if (!graphene_point_equal (&pts[0], &pts[1]))
+    n_ops++;
+
+  if (!graphene_point_equal (&pts[1], &pts[2]) ||
+      !graphene_point_equal (&pts[2], &pts[3]))
+    n_ops++;
+
+  if (!graphene_point_equal (&pts[3], &pts[4]))
+    n_ops++;
+
+  if (!graphene_point_equal (&pts[4], &pts[5]) ||
+      !graphene_point_equal (&pts[5], &pts[6]))
+    n_ops++;
+
+  if (!graphene_point_equal (&pts[6], &pts[7]))
+    n_ops++;
+
+  if (!graphene_point_equal (&pts[7], &pts[8]) ||
+      !graphene_point_equal (&pts[8], &pts[9]))
+    n_ops++;
+
+  if (!graphene_point_equal (&pts[9], &pts[10]))
+    n_ops++;
+
+  if (!graphene_point_equal (&pts[10], &pts[11]) ||
+      !graphene_point_equal (&pts[11], &pts[12]))
+    n_ops++;
+
+  return n_ops;
+}
+
 GskContour *
 gsk_rounded_rect_contour_new (const GskRoundedRect *rect)
 {
@@ -2310,6 +2395,8 @@ gsk_rounded_rect_contour_new (const GskRoundedRect *rect)
 
   self->rect = *rect;
   gsk_rounded_rect_normalize (&self->rect);
+
+  self->n_ops = rounded_rect_compute_n_ops (&self->rect);
 
   return (GskContour *) self;
 }
