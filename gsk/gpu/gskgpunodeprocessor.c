@@ -441,7 +441,7 @@ gsk_gpu_node_processor_add_node_as_pattern (GskGpuNodeProcessor *self,
                    gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, &node->bounds),
                    &node->bounds,
                    &self->offset,
-                   images,
+                   g_memdup (images, sizeof (GskGpuShaderImage) * n_images),
                    n_images,
                    pattern_id);
 }

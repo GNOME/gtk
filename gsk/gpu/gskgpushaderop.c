@@ -10,14 +10,11 @@
 #include "gskvulkandeviceprivate.h"
 #endif
 
-void
-gsk_gpu_shader_op_finish (GskGpuOp *op)
+const GskGpuShaderImage *
+gsk_gpu_shader_op_get_images (GskGpuShaderOp *op,
+                              gsize          *n_images)
 {
-  GskGpuShaderOp *self = (GskGpuShaderOp *) op;
-  gsize i;
-
-  for (i = 0; i < self->n_images; i++)
-    g_object_unref (self->images[i].image);
+  return ((GskGpuShaderOpClass *) ((GskGpuOp *) op)->op_class)->get_images (op, n_images);
 }
 
 #ifdef GDK_RENDERING_VULKAN
@@ -80,8 +77,9 @@ gsk_gpu_shader_op_gl_command_n (GskGpuOp    *op,
 {
   GskGpuShaderOp *self = (GskGpuShaderOp *) op;
   GskGpuShaderOpClass *shader_op_class = (GskGpuShaderOpClass *) op->op_class;
+  const GskGpuShaderImage *images;
   GskGLDevice *device;
-  gsize i;
+  gsize i, n_images;
 
   device = GSK_GL_DEVICE (gsk_gpu_frame_get_device (frame));
 
@@ -89,12 +87,13 @@ gsk_gpu_shader_op_gl_command_n (GskGpuOp    *op,
                             shader_op_class,
                             self->clip);
 
-  for (i = 0; i < self->n_images; i++)
+  images = gsk_gpu_shader_op_get_images (self, &n_images);
+  for (i = 0; i < n_images; i++)
     {
-      glActiveTexture (GL_TEXTURE0 + self->images[i].descriptor);
-      gsk_gl_image_bind_texture (GSK_GL_IMAGE (self->images[i].image));
-      glBindSampler (self->images[i].descriptor,
-                     gsk_gl_device_get_sampler_id (device, self->images[i].sampler));
+      glActiveTexture (GL_TEXTURE0 + images[i].descriptor);
+      gsk_gl_image_bind_texture (GSK_GL_IMAGE (images[i].image));
+      glBindSampler (images[i].descriptor,
+                     gsk_gl_device_get_sampler_id (device, images[i].sampler));
     }
 
   shader_op_class->setup_vao (self->vertex_offset);
@@ -133,21 +132,12 @@ gsk_gpu_shader_op_alloc (GskGpuFrame               *frame,
   return self;
 }
 
-guint32
-gsk_gpu_shader_op_use_image (GskGpuShaderOp *self,
-                             GskGpuFrame    *frame,
-                             GskGpuImage    *image,
-                             GskGpuSampler   sampler)
+const GskGpuShaderImage *
+gsk_gpu_shader_op_no_images (GskGpuShaderOp *op,
+                             gsize          *n_images)
 {
-  gsize id;
+  *n_images = 0;
 
-  g_assert (self->n_images < G_N_ELEMENTS (self->images));
-
-  id = self->n_images;
-  self->images[id].image = g_object_ref (image);
-  self->images[id].sampler = sampler;
-  self->images[id].descriptor = gsk_gpu_frame_get_image_descriptor (frame, image, sampler);
-  self->n_images++;
-
-  return self->images[id].descriptor;
+  return NULL;
 }
+

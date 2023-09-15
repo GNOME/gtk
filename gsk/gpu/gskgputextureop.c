@@ -13,7 +13,17 @@ typedef struct _GskGpuTextureOp GskGpuTextureOp;
 struct _GskGpuTextureOp
 {
   GskGpuShaderOp op;
+
+  GskGpuShaderImage image;
 };
+
+static void
+gsk_gpu_texture_op_finish (GskGpuOp *op)
+{
+  GskGpuTextureOp *self = (GskGpuTextureOp *) op;
+
+  g_object_unref (self->image.image);
+}
 
 static void
 gsk_gpu_texture_op_print (GskGpuOp    *op,
@@ -21,6 +31,7 @@ gsk_gpu_texture_op_print (GskGpuOp    *op,
                           GString     *string,
                           guint        indent)
 {
+  GskGpuTextureOp *self = (GskGpuTextureOp *) op;
   GskGpuShaderOp *shader = (GskGpuShaderOp *) op;
   GskGpuTextureInstance *instance;
 
@@ -28,15 +39,26 @@ gsk_gpu_texture_op_print (GskGpuOp    *op,
 
   gsk_gpu_print_op (string, indent, "texture");
   gsk_gpu_print_rect (string, instance->rect);
-  gsk_gpu_print_image (string, shader->images[0].image);
+  gsk_gpu_print_image (string, self->image.image);
   gsk_gpu_print_newline (string);
+}
+
+static const GskGpuShaderImage *
+gsk_gpu_texture_op_get_images (GskGpuShaderOp *op,
+                               gsize          *n_images)
+{
+  GskGpuTextureOp *self = (GskGpuTextureOp *) op;
+
+  *n_images = 1;
+
+  return &self->image;
 }
 
 static const GskGpuShaderOpClass GSK_GPU_TEXTURE_OP_CLASS = {
   {
     GSK_GPU_OP_SIZE (GskGpuTextureOp),
     GSK_GPU_STAGE_SHADER,
-    gsk_gpu_shader_op_finish,
+    gsk_gpu_texture_op_finish,
     gsk_gpu_texture_op_print,
 #ifdef GDK_RENDERING_VULKAN
     gsk_gpu_shader_op_vk_command,
@@ -48,6 +70,7 @@ static const GskGpuShaderOpClass GSK_GPU_TEXTURE_OP_CLASS = {
 #ifdef GDK_RENDERING_VULKAN
   &gsk_gpu_texture_info,
 #endif
+  gsk_gpu_texture_op_get_images,
   gsk_gpu_texture_setup_vao
 };
 
@@ -70,5 +93,8 @@ gsk_gpu_texture_op (GskGpuFrame            *frame,
 
   gsk_gpu_rect_to_float (rect, offset, instance->rect);
   gsk_gpu_rect_to_float (tex_rect, offset, instance->tex_rect);
-  instance->tex_id = gsk_gpu_shader_op_use_image ((GskGpuShaderOp *) self, frame, image, sampler);
+  self->image.image = g_object_ref (image);
+  self->image.sampler = sampler;
+  self->image.descriptor = gsk_gpu_frame_get_image_descriptor (frame, image, sampler);
+  instance->tex_id = self->image.descriptor;
 }
