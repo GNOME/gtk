@@ -653,6 +653,13 @@ gsk_path_builder_quad_to (GskPathBuilder *self,
 {
   g_return_if_fail (self != NULL);
 
+  /* skip the quad if it collapses to a point */
+  if (graphene_point_equal (&self->current_point,
+                            &GRAPHENE_POINT_INIT (x1, y1)) &&
+      graphene_point_equal (&GRAPHENE_POINT_INIT (x1, y1),
+                            &GRAPHENE_POINT_INIT (x2, y2)))
+    return;
+
   self->flags &= ~GSK_PATH_FLAT;
   gsk_path_builder_append_current (self,
                                    GSK_PATH_QUAD,
@@ -728,6 +735,15 @@ gsk_path_builder_cubic_to (GskPathBuilder *self,
                            float           y3)
 {
   g_return_if_fail (self != NULL);
+
+  /* skip the cubic if it collapses to a point */
+  if (graphene_point_equal (&self->current_point,
+                            &GRAPHENE_POINT_INIT (x1, y1)) &&
+      graphene_point_equal (&GRAPHENE_POINT_INIT (x1, y1),
+                            &GRAPHENE_POINT_INIT (x2, y2)) &&
+      graphene_point_equal (&GRAPHENE_POINT_INIT (x2, y2),
+                            &GRAPHENE_POINT_INIT (x3, y3)))
+    return;
 
   self->flags &= ~GSK_PATH_FLAT;
   gsk_path_builder_append_current (self,
@@ -817,6 +833,13 @@ gsk_path_builder_conic_to (GskPathBuilder *self,
 {
   g_return_if_fail (self != NULL);
   g_return_if_fail (weight > 0);
+
+  /* skip the conic if it collapses to a point */
+  if (graphene_point_equal (&self->current_point,
+                            &GRAPHENE_POINT_INIT (x1, y1)) &&
+      graphene_point_equal (&GRAPHENE_POINT_INIT (x1, y1),
+                            &GRAPHENE_POINT_INIT (x2, y2)))
+    return;
 
   self->flags &= ~GSK_PATH_FLAT;
   gsk_path_builder_append_current (self,
