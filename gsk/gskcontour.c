@@ -172,6 +172,269 @@ convert_to_standard_contour (const GskContour *contour)
   return gsk_path_builder_free_to_path (builder);
 }
 
+typedef struct
+{
+  GskCurve *curve;
+  unsigned int idx;
+  unsigned int count;
+} InitCurveData;
+
+static gboolean
+init_curve_cb (GskPathOperation        op,
+               const graphene_point_t *pts,
+               gsize                   n_pts,
+               float                   weight,
+               gpointer                user_data)
+{
+  InitCurveData *data = user_data;
+
+  if (data->idx == data->count)
+    {
+      gsk_curve_init_foreach (data->curve, op, pts, n_pts, weight);
+      return FALSE;
+    }
+
+  data->count++;
+  return TRUE;
+}
+
+static void
+contour_init_curve (const GskContour *contour,
+                    unsigned int      idx,
+                    GskCurve         *curve)
+{
+  InitCurveData data;
+
+  data.curve = curve;
+  data.idx = idx;
+  data.count = 0;
+
+  gsk_contour_foreach (contour, init_curve_cb, &data);
+}
+
+typedef struct
+{
+  graphene_point_t point;
+  float threshold;
+  gsize idx;
+  gsize best_idx;
+  gsize best_t;
+} ClosestPointData;
+
+static gboolean
+get_closest_point_cb (GskPathOperation        op,
+                      const graphene_point_t *pts,
+                      gsize                   n_pts,
+                      float                   weight,
+                      gpointer                data)
+{
+  GskCurve curve;
+  ClosestPointData *pd = data;
+  float distance, t;
+
+  if (op == GSK_PATH_MOVE)
+    return TRUE;
+
+  pd->idx++;
+
+  gsk_curve_init_foreach (&curve, op, pts, n_pts, weight);
+
+  if (gsk_curve_get_closest_point (&curve, &pd->point, pd->threshold, &distance, &t) &&
+      distance < pd->threshold)
+    {
+      pd->best_idx = pd->idx;
+      pd->best_t = t;
+      pd->threshold = distance;
+    }
+
+  return TRUE;
+}
+
+static gboolean
+contour_get_closest_point (const GskContour       *contour,
+                           const graphene_point_t *point,
+                           float                   threshold,
+                           GskPathPoint           *result,
+                           float                  *out_dist)
+{
+  ClosestPointData pd;
+
+  pd.point = *point;
+  pd.threshold = threshold;
+  pd.idx = 0;
+  pd.best_idx = G_MAXUINT;
+
+  gsk_contour_foreach (contour, get_closest_point_cb, &pd);
+
+  if (pd.best_idx != G_MAXUINT)
+    {
+      result->idx = pd.best_idx;
+      result->t = pd.best_t;
+      *out_dist = pd.threshold;
+
+      return TRUE;
+    }
+
+  return FALSE;
+}
+
+static void
+add_curve (GskCurve       *curve,
+           GskPathBuilder *builder,
+           gboolean       *emit_move_to)
+{
+  if (*emit_move_to)
+    {
+      const graphene_point_t *s;
+
+      s = gsk_curve_get_start_point (curve);
+      gsk_path_builder_move_to (builder, s->x, s->y);
+      *emit_move_to = FALSE;
+    }
+  gsk_curve_builder_to (curve, builder);
+}
+
+typedef struct
+{
+  GskPathBuilder *builder;
+  gboolean emit_move_to;
+  GskPathPoint start;
+  GskPathPoint end;
+  gsize idx;
+} AddSegmentData;
+
+static gboolean
+add_segment_cb (GskPathOperation        op,
+                const graphene_point_t *pts,
+                gsize                   n_pts,
+                float                   weight,
+                gpointer                data)
+{
+  AddSegmentData *sd = data;
+  GskCurve c, c1, c2;
+
+  if (op == GSK_PATH_MOVE)
+    return TRUE;
+
+  sd->idx++;
+
+  if (sd->start.idx > sd->idx)
+    return TRUE;
+
+  if (sd->end.idx < sd->idx)
+    return FALSE;
+
+  if (op == GSK_PATH_CLOSE)
+    op = GSK_PATH_LINE;
+
+  gsk_curve_init_foreach (&c, op, pts, n_pts, weight);
+
+  if (sd->start.idx == sd->idx)
+    {
+      if (sd->end.idx == sd->idx)
+        {
+          gsk_curve_segment (&c, sd->start.t, sd->end.t, &c1);
+          add_curve (&c1, sd->builder, &sd->emit_move_to);
+          return FALSE;
+        }
+      else
+        {
+          gsk_curve_split (&c, sd->start.t, &c1, &c2);
+          add_curve (&c2, sd->builder, &sd->emit_move_to);
+          return TRUE;
+        }
+    }
+  else
+    {
+      if (sd->end.idx == sd->idx)
+        {
+          gsk_curve_split (&c, sd->end.t, &c1, &c2);
+          add_curve (&c1, sd->builder, &sd->emit_move_to);
+          return FALSE;
+        }
+      else
+        {
+          add_curve (&c, sd->builder, &sd->emit_move_to);
+          return TRUE;
+        }
+    }
+}
+
+static void
+contour_add_segment (const GskContour   *contour,
+                     GskPathBuilder     *builder,
+                     gboolean            emit_move_to,
+                     const GskPathPoint *start,
+                     const GskPathPoint *end)
+{
+  AddSegmentData sd;
+
+  sd.builder = builder;
+  sd.emit_move_to = emit_move_to;
+  sd.start = *start;
+  sd.end = *end;
+  sd.idx = 0;
+
+  gsk_contour_foreach (contour, add_segment_cb, &sd);
+}
+
+static inline gboolean
+maybe_emit_line (const graphene_point_t pts[2],
+                 GskPathForeachFunc     func,
+                 gpointer               user_data)
+{
+  if (graphene_point_equal (&pts[0], &pts[1]))
+    return TRUE;
+
+  return func (GSK_PATH_LINE, pts, 2, 0.f, user_data);
+}
+
+static inline gboolean
+maybe_emit_conic (const graphene_point_t pts[3],
+                  float                  weight,
+                  GskPathForeachFunc     func,
+                  gpointer               user_data)
+{
+  if (graphene_point_equal (&pts[0], &pts[1]))
+    {
+      if (graphene_point_equal (&pts[1], &pts[2]))
+        return TRUE;
+      else
+        return func (GSK_PATH_LINE, &pts[1], 2, 0.f, user_data);
+    }
+  else if (graphene_point_equal (&pts[1], &pts[2]))
+    return func (GSK_PATH_LINE, &pts[0], 2, 0.f, user_data);
+
+  return func (GSK_PATH_CONIC, pts, 3, weight, user_data);
+}
+
+/* Assumes a closed contour */
+static void
+apply_corner_direction (GskPathDirection  direction,
+                        gsize            *idx,
+                        float            *t,
+                        gsize             n_ops)
+{
+  if (*t == 0 &&
+      (direction == GSK_PATH_FROM_START || direction == GSK_PATH_TO_START))
+    {
+      if (*idx > 1)
+        *idx = *idx - 1;
+      else
+        *idx = n_ops - 1;
+      *t = 1;
+    }
+  else if (*t == 1 &&
+           (direction == GSK_PATH_FROM_END || direction == GSK_PATH_TO_END))
+    {
+      if (*idx < n_ops - 1)
+        *idx = *idx + 1;
+      else
+        *idx = 1;
+      *t = 0;
+    }
+}
+
 /* }}} */
 /* {{{ Default implementations */
 
@@ -537,7 +800,7 @@ gsk_standard_contour_get_tangent (const GskContour   *contour,
 
   if (G_UNLIKELY (point->idx == 0))
     {
-      graphene_vec2_init (tangent, 1, 0);
+      graphene_vec2_init (tangent, 0, 0);
       return;
     }
 
@@ -577,7 +840,6 @@ gsk_standard_contour_get_tangent (const GskContour   *contour,
 
   gsk_curve_init (&curve, self->ops[idx]);
   gsk_curve_get_tangent (&curve, t, tangent);
-
   if (direction == GSK_PATH_TO_START || direction == GSK_PATH_FROM_END)
     graphene_vec2_negate (tangent, tangent);
 }
@@ -617,22 +879,6 @@ gsk_standard_contour_get_curvature (const GskContour   *contour,
 }
 
 static void
-add_curve (GskCurve       *curve,
-           GskPathBuilder *builder,
-           gboolean       *emit_move_to)
-{
-  if (*emit_move_to)
-    {
-      const graphene_point_t *s;
-
-      s = gsk_curve_get_start_point (curve);
-      gsk_path_builder_move_to (builder, s->x, s->y);
-      *emit_move_to = FALSE;
-    }
-  gsk_curve_builder_to (curve, builder);
-}
-
-static void
 gsk_standard_contour_add_segment (const GskContour   *contour,
                                   GskPathBuilder     *builder,
                                   gboolean            emit_move_to,
@@ -643,6 +889,7 @@ gsk_standard_contour_add_segment (const GskContour   *contour,
   GskCurve c, c1, c2;
 
   g_assert (start->idx < self->n_ops);
+  g_assert (end->idx < self->n_ops);
 
   gsk_curve_init (&c, self->ops[start->idx]);
 
@@ -1228,12 +1475,12 @@ gsk_circle_contour_get_closest_point (const GskContour       *contour,
   if (dist > threshold)
     return FALSE;
 
-  angle = RAD_TO_DEG (atan2f (point->y - self->center.y, point->x - self->center.x));
+  angle = atan2f (point->y - self->center.y, point->x - self->center.x);
 
   if (angle < 0)
-    angle = 360 + angle;
+    angle = M_PI - angle;
 
-  t = CLAMP (angle / 360, 0, 1);
+  t = CLAMP (angle / (2 * M_PI), 0, 1);
 
   if (self->ccw)
     t = 1 - t;
@@ -1243,10 +1490,6 @@ gsk_circle_contour_get_closest_point (const GskContour       *contour,
 
   return TRUE;
 }
-
-#define GSK_CIRCLE_POINT_INIT(self, angle) \
-  GRAPHENE_POINT_INIT ((self)->center.x + cosf (DEG_TO_RAD (angle)) * self->radius, \
-                       (self)->center.y + sinf (DEG_TO_RAD (angle)) * self->radius)
 
 static void
 gsk_circle_contour_get_position (const GskContour   *contour,
@@ -1264,7 +1507,8 @@ gsk_circle_contour_get_position (const GskContour   *contour,
   if (t == 0 || t == 1)
     *position = GRAPHENE_POINT_INIT (self->center.x + self->radius, self->center.y);
   else
-    *position = GSK_CIRCLE_POINT_INIT (self, t * 360);
+    *position = GRAPHENE_POINT_INIT (self->center.x + cosf (t * 2 * M_PI) * self->radius,
+                                     self->center.y + sinf (t * 2 * M_PI) * self->radius);
 }
 
 static void
@@ -1464,7 +1708,8 @@ struct _GskRectContour
   float y;
   float width;
   float height;
-  float length;
+
+  gsize n_ops;
 };
 
 static void
@@ -1539,9 +1784,9 @@ gsk_rect_contour_foreach (const GskContour   *contour,
   };
 
   return func (GSK_PATH_MOVE, &pts[0], 1, 0.f, user_data) &&
-         func (GSK_PATH_LINE, &pts[0], 2, 0.f, user_data) &&
-         func (GSK_PATH_LINE, &pts[1], 2, 0.f, user_data) &&
-         func (GSK_PATH_LINE, &pts[2], 2, 0.f, user_data) &&
+         maybe_emit_line (&pts[0], func, user_data) &&
+         maybe_emit_line (&pts[1], func, user_data) &&
+         maybe_emit_line (&pts[2], func, user_data) &&
          func (GSK_PATH_CLOSE, &pts[3], 2, 0.f, user_data);
 }
 
@@ -1579,84 +1824,9 @@ gsk_rect_contour_get_winding (const GskContour       *contour,
 static gsize
 gsk_rect_contour_get_n_ops (const GskContour *contour)
 {
-  return 2;
-}
+  const GskRectContour *self = (const GskRectContour *) contour;
 
-static gboolean
-gsk_rect_contour_closest_point (const GskRectContour   *self,
-                                const graphene_point_t *point,
-                                float                   threshold,
-                                float                  *out_distance,
-                                float                  *out_offset)
-{
-  graphene_point_t t, p;
-  float distance;
-
-  /* offset coords to be relative to rectangle */
-  t.x = point->x - self->x;
-  t.y = point->y - self->y;
-
-  if (self->width)
-    {
-      /* do unit square math */
-      t.x /= self->width;
-      /* move point onto the square */
-      t.x = CLAMP (t.x, 0.f, 1.f);
-    }
-  else
-    t.x = 0.f;
-
-  if (self->height)
-    {
-      t.y /= self->height;
-      t.y = CLAMP (t.y, 0.f, 1.f);
-    }
-  else
-    t.y = 0.f;
-
-  if (t.x > 0 && t.x < 1 && t.y > 0 && t.y < 1)
-    {
-      float diff = MIN (t.x, 1.f - t.x) * fabsf (self->width) - MIN (t.y, 1.f - t.y) * fabsf (self->height);
-
-      if (diff < 0.f)
-        t.x = ceilf (t.x - 0.5f); /* round 0.5 down */
-      else if (diff > 0.f)
-        t.y = roundf (t.y); /* round 0.5 up */
-      else
-        {
-          /* at least 2 points match, return the first one in the stroke */
-          if (t.y <= 1.f - t.y)
-            t.y = 0.f;
-          else if (1.f - t.x <= t.x)
-            t.x = 1.f;
-          else
-            t.y = 1.f;
-        }
-    }
-
-  /* Don't let -0 confuse us */
-  t.x = fabsf (t.x);
-  t.y = fabsf (t.y);
-
-  p = GRAPHENE_POINT_INIT (self->x + t.x * self->width,
-                           self->y + t.y * self->height);
-
-  distance = graphene_point_distance (point, &p, NULL, NULL);
-  if (distance > threshold)
-    return FALSE;
-
-  *out_distance = distance;
-
-  if (t.y == 0)
-    *out_offset = t.x * fabsf (self->width);
-  else if (t.y == 1)
-    *out_offset = (2 - t.x) * fabsf (self->width) + fabsf (self->height);
-  else if (t.x == 1)
-    *out_offset = fabsf (self->width) + t.y * fabsf (self->height);
-  else
-    *out_offset = 2 * fabsf (self->width) + (2 - t.y) * fabsf (self->height);
-
-  return TRUE;
+  return self->n_ops;
 }
 
 static gboolean
@@ -1666,149 +1836,7 @@ gsk_rect_contour_get_closest_point (const GskContour       *contour,
                                     GskPathPoint           *result,
                                     float                  *out_dist)
 {
-  const GskRectContour *self = (const GskRectContour *) contour;
-  float distance;
-
-  if (gsk_rect_contour_closest_point (self, point, threshold, out_dist, &distance))
-    {
-      result->idx = 1;
-      if (self->length == 0)
-        result->t = 0;
-      else
-        result->t = distance / self->length;
-
-      return TRUE;
-    }
-
-  return FALSE;
-}
-
-static void
-set_tangent (float             xs,
-             float             ys,
-             float             xe,
-             float             ye,
-             GskPathDirection  direction,
-             graphene_vec2_t  *tangent)
-{
-  if (direction == GSK_PATH_TO_START || direction == GSK_PATH_FROM_START)
-    graphene_vec2_init (tangent, xs, ys);
-  else
-    graphene_vec2_init (tangent, xe, ye);
-
-  if (direction == GSK_PATH_TO_START || direction == GSK_PATH_FROM_END)
-    graphene_vec2_negate (tangent, tangent);
-}
-
-static void
-gsk_rect_contour_pos_tangent (const GskRectContour *self,
-                              float                 distance,
-                              GskPathDirection      direction,
-                              graphene_point_t     *pos,
-                              graphene_vec2_t      *tangent)
-{
-  if (distance == 0)
-    {
-      if (pos)
-        *pos = GRAPHENE_POINT_INIT (self->x, self->y);
-
-      if (tangent)
-        set_tangent (0.f, - copysignf (1.f, self->height),
-                     copysignf (1.f, self->width), 0.f,
-                     direction, tangent);
-      return;
-    }
-
-  if (distance < fabsf (self->width))
-    {
-      if (pos)
-        *pos = GRAPHENE_POINT_INIT (self->x + copysignf (distance, self->width), self->y);
-      if (tangent)
-        set_tangent (copysignf (1.f, self->width), 0.f,
-                     copysignf (1.f, self->width), 0.f,
-                     direction, tangent);
-      return;
-    }
-  distance -= fabsf (self->width);
-
-  if (distance == 0)
-    {
-      if (pos)
-        *pos = GRAPHENE_POINT_INIT (self->x + self->width, self->y);
-
-      if (tangent)
-        set_tangent (copysignf (1.f, self->width), 0.f,
-                                0.f, copysignf (1.f, self->height),
-                                direction, tangent);
-      return;
-    }
-
-  if (distance < fabsf (self->height))
-    {
-      if (pos)
-        *pos = GRAPHENE_POINT_INIT (self->x + self->width, self->y + copysignf (distance, self->height));
-      if (tangent)
-        set_tangent (0.f, copysignf (1.f, self->height),
-                     0.f, copysignf (1.f, self->height),
-                     direction, tangent);
-      return;
-    }
-  distance -= fabs (self->height);
-
-  if (distance == 0)
-    {
-      if (pos)
-        *pos = GRAPHENE_POINT_INIT (self->x + self->width, self->y + self->height);
-
-      if (tangent)
-        set_tangent (0.f, copysignf (1.f, self->height),
-                     - copysignf (1.f, self->width), 0.f,
-                     direction, tangent);
-      return;
-    }
-
-  if (distance < fabsf (self->width))
-    {
-      if (pos)
-        *pos = GRAPHENE_POINT_INIT (self->x + self->width - copysignf (distance, self->width), self->y + self->height);
-      if (tangent)
-        set_tangent (- copysignf (1.f, self->width), 0.f,
-                     - copysignf (1.f, self->width), 0.f,
-                     direction, tangent);
-      return;
-    }
-  distance -= fabsf (self->width);
-
-  if (distance == 0)
-    {
-      if (pos)
-        *pos = GRAPHENE_POINT_INIT (self->x, self->y + self->height);
-
-      if (tangent)
-        set_tangent (- copysignf (1.f, self->width), 0.f,
-                     0.f, - copysignf (1.f, self->height),
-                     direction, tangent);
-      return;
-    }
-
-  if (distance < fabsf (self->height))
-    {
-      if (pos)
-        *pos = GRAPHENE_POINT_INIT (self->x, self->y + self->height - copysignf (distance, self->height));
-      if (tangent)
-        set_tangent (0.f, - copysignf (1.f, self->height),
-                     0.f, - copysignf (1.f, self->height),
-                     direction, tangent);
-      return;
-    }
-
-  if (pos)
-    *pos = GRAPHENE_POINT_INIT (self->x, self->y);
-
-  if (tangent)
-    set_tangent (0.f, - copysignf (1.f, self->height),
-                 copysignf (1.f, self->width), 0.f,
-                 direction, tangent);
+  return contour_get_closest_point (contour, point, threshold, result, out_dist);
 }
 
 static void
@@ -1816,9 +1844,10 @@ gsk_rect_contour_get_position (const GskContour   *contour,
                                const GskPathPoint *point,
                                graphene_point_t   *position)
 {
-  const GskRectContour *self = (const GskRectContour *) contour;
+  GskCurve curve;
 
-  gsk_rect_contour_pos_tangent (self, point->t * self->length, GSK_PATH_TO_END, position, NULL);
+  contour_init_curve (contour, point->idx, &curve);
+  gsk_curve_get_point (&curve, point->t, position);
 }
 
 static void
@@ -1828,8 +1857,15 @@ gsk_rect_contour_get_tangent (const GskContour   *contour,
                               graphene_vec2_t    *tangent)
 {
   const GskRectContour *self = (const GskRectContour *) contour;
+  gsize idx = point->idx;
+  float t = point->t;
+  GskCurve curve;
 
-  gsk_rect_contour_pos_tangent (self, point->t * self->length, direction, NULL, tangent);
+  apply_corner_direction (direction, &idx, &t, self->n_ops);
+  contour_init_curve (contour, idx, &curve);
+  gsk_curve_get_tangent (&curve, t, tangent);
+  if (direction == GSK_PATH_TO_START || direction == GSK_PATH_FROM_END)
+    graphene_vec2_negate (tangent, tangent);
 }
 
 static float
@@ -1845,68 +1881,10 @@ static void
 gsk_rect_contour_add_segment (const GskContour   *contour,
                               GskPathBuilder     *builder,
                               gboolean            emit_move_to,
-                              const GskPathPoint *start_point,
-                              const GskPathPoint *end_point)
+                              const GskPathPoint *start,
+                              const GskPathPoint *end)
 {
-  const GskRectContour *self = (const GskRectContour *) contour;
-  float w = fabsf (self->width);
-  float h = fabsf (self->height);
-  float start = start_point->t * self->length;
-  float end = end_point->t * self->length;
-
-  if (start < w)
-    {
-      if (emit_move_to)
-        gsk_path_builder_move_to (builder, self->x + start * (w / self->width), self->y);
-      if (end <= w)
-        {
-          gsk_path_builder_line_to (builder, self->x + end * (w / self->width), self->y);
-          return;
-        }
-      gsk_path_builder_line_to (builder, self->x + self->width, self->y);
-    }
-  start -= w;
-  end -= w;
-
-  if (start < h)
-    {
-      if (start >= 0 && emit_move_to)
-        gsk_path_builder_move_to (builder, self->x + self->width, self->y + start * (h / self->height));
-      if (end <= h)
-        {
-          gsk_path_builder_line_to (builder, self->x + self->width, self->y + end * (h / self->height));
-          return;
-        }
-      gsk_path_builder_line_to (builder, self->x + self->width, self->y + self->height);
-    }
-  start -= h;
-  end -= h;
-
-  if (start < w)
-    {
-      if (start >= 0 && emit_move_to)
-        gsk_path_builder_move_to (builder, self->x + (w - start) * (w / self->width), self->y + self->height);
-      if (end <= w)
-        {
-          gsk_path_builder_line_to (builder, self->x + (w - end) * (w / self->width), self->y + self->height);
-          return;
-        }
-      gsk_path_builder_line_to (builder, self->x, self->y + self->height);
-    }
-  start -= w;
-  end -= w;
-
-  if (start < h)
-    {
-      if (start >= 0 && emit_move_to)
-        gsk_path_builder_move_to (builder, self->x, self->y + (h - start) * (h / self->height));
-      if (end <= h)
-        {
-          gsk_path_builder_line_to (builder, self->x, self->y + (h - end) * (h / self->height));
-          return;
-        }
-      gsk_path_builder_line_to (builder, self->x, self->y);
-    }
+  contour_add_segment (contour, builder, emit_move_to, start, end);
 }
 
 static gpointer
@@ -1916,7 +1894,7 @@ gsk_rect_contour_init_measure (const GskContour *contour,
 {
   const GskRectContour *self = (const GskRectContour *) contour;
 
-  *out_length = self->length;
+  *out_length = 2 * (fabsf (self->width) + fabsf (self->height));
 
   return NULL;
 }
@@ -1927,6 +1905,26 @@ gsk_rect_contour_free_measure (const GskContour *contour,
 {
 }
 
+static inline int
+rect_contour_get_sides (const GskRectContour *self,
+                        float                 sides[5])
+{
+  int n_sides = 0;
+
+  sides[n_sides++] = 0;
+
+  if (self->width != 0)
+    sides[n_sides++] = fabsf (self->width);
+  if (self->height != 0)
+    sides[n_sides++] = fabsf (self->height);
+  if (self->width != 0)
+    sides[n_sides++] = fabsf (self->width);
+
+  sides[n_sides++] = fabsf (self->height);
+
+  return n_sides;
+}
+
 static void
 gsk_rect_contour_get_point (const GskContour *contour,
                             gpointer          measure_data,
@@ -1934,13 +1932,32 @@ gsk_rect_contour_get_point (const GskContour *contour,
                             GskPathPoint     *result)
 {
   const GskRectContour *self = (const GskRectContour *) contour;
+  float sides[5];
+  int n_sides = 0;
 
-  result->idx = 1;
-  if (self->length == 0)
-    result->t = 0;
-  else
-    result->t = CLAMP (distance / self->length, 0, 1);
-  g_assert (0 <= result->t && result->t <= 1);
+  if (distance == 0)
+    {
+      result->idx = 1;
+      result->t  = 0;
+      return;
+    }
+
+  n_sides = rect_contour_get_sides (self, sides);
+
+  for (int i = 0; i < n_sides; i++)
+    {
+      if (distance <= sides[i])
+        {
+          result->idx = i;
+          result->t = distance / sides[i];
+          return;
+        }
+
+      distance -= sides[i];
+    }
+
+  result->idx = n_sides - 1;
+  result->t = 1;
 }
 
 static float
@@ -1949,8 +1966,22 @@ gsk_rect_contour_get_distance (const GskContour   *contour,
                                gpointer            measure_data)
 {
   const GskRectContour *self = (const GskRectContour *) contour;
+  float sides[5];
+  int n_sides G_GNUC_UNUSED;
+  float distance;
 
-  return point->t * self->length;
+  n_sides = rect_contour_get_sides (self, sides);
+
+  g_assert (point->idx < n_sides);
+
+  distance = 0;
+
+  for (int i = 0; i < point->idx; i++)
+    distance += sides[i];
+
+  distance += point->t * sides[point->idx];
+
+  return distance;
 }
 
 static const GskContourClass GSK_RECT_CONTOUR_CLASS =
@@ -1982,6 +2013,7 @@ GskContour *
 gsk_rect_contour_new (const graphene_rect_t *rect)
 {
   GskRectContour *self;
+  gsize n_ops[] = { 2, 3, 5 };
 
   self = g_new0 (GskRectContour, 1);
 
@@ -1991,7 +2023,7 @@ gsk_rect_contour_new (const graphene_rect_t *rect)
   self->y = rect->origin.y;
   self->width = rect->size.width;
   self->height = rect->size.height;
-  self->length = 2 * (fabsf (self->width) + fabsf (self->height));
+  self->n_ops = n_ops[(self->width != 0) + (self->height != 0)];
 
   return (GskContour *) self;
 }
@@ -2006,6 +2038,7 @@ struct _GskRoundedRectContour
 
   GskRoundedRect rect;
   gboolean ccw;
+  gsize n_ops;
 };
 
 static void
@@ -2094,27 +2127,27 @@ gsk_rounded_rect_contour_foreach (const GskContour   *contour,
 #undef SWAP
 
       return func (GSK_PATH_MOVE, &pts[0], 1, 0.f, user_data) &&
-             func (GSK_PATH_CONIC, &pts[0], 3, M_SQRT1_2, user_data) &&
-             func (GSK_PATH_LINE, &pts[2], 2, 0.f, user_data) &&
-             func (GSK_PATH_CONIC, &pts[3], 3, M_SQRT1_2, user_data) &&
-             func (GSK_PATH_LINE, &pts[5], 2, 0.f, user_data) &&
-             func (GSK_PATH_CONIC, &pts[6], 3, M_SQRT1_2, user_data) &&
-             func (GSK_PATH_LINE, &pts[8], 2, 0.f, user_data) &&
-             func (GSK_PATH_CONIC, &pts[9], 3, M_SQRT1_2, user_data) &&
-             func (GSK_PATH_LINE, &pts[11], 2, 0.f, user_data) &&
+             maybe_emit_conic (&pts[0], M_SQRT1_2, func, user_data) &&
+             maybe_emit_line (&pts[2], func, user_data) &&
+             maybe_emit_conic (&pts[3], M_SQRT1_2, func, user_data) &&
+             maybe_emit_line (&pts[5], func, user_data) &&
+             maybe_emit_conic (&pts[6], M_SQRT1_2, func, user_data) &&
+             maybe_emit_line (&pts[8], func, user_data) &&
+             maybe_emit_conic (&pts[9], M_SQRT1_2, func, user_data) &&
+             maybe_emit_line (&pts[11], func, user_data) &&
              func (GSK_PATH_CLOSE, &pts[12], 2, 0.f, user_data);
     }
   else
     {
       return func (GSK_PATH_MOVE, &pts[0], 1, 0.f, user_data) &&
-             func (GSK_PATH_LINE, &pts[0], 2, 0.f, user_data) &&
-             func (GSK_PATH_CONIC, &pts[1], 3, M_SQRT1_2, user_data) &&
-             func (GSK_PATH_LINE, &pts[3], 2, 0.f, user_data) &&
-             func (GSK_PATH_CONIC, &pts[4], 3, M_SQRT1_2, user_data) &&
-             func (GSK_PATH_LINE, &pts[6], 2, 0.f, user_data) &&
-             func (GSK_PATH_CONIC, &pts[7], 3, M_SQRT1_2, user_data) &&
-             func (GSK_PATH_LINE, &pts[9], 2, 0.f, user_data) &&
-             func (GSK_PATH_CONIC, &pts[10], 3, M_SQRT1_2, user_data) &&
+             maybe_emit_line (&pts[0], func, user_data) &&
+             maybe_emit_conic (&pts[1], M_SQRT1_2, func, user_data) &&
+             maybe_emit_line (&pts[3], func, user_data) &&
+             maybe_emit_conic (&pts[4], M_SQRT1_2, func, user_data) &&
+             maybe_emit_line (&pts[6], func, user_data) &&
+             maybe_emit_conic (&pts[7], M_SQRT1_2, func, user_data) &&
+             maybe_emit_line (&pts[9], func, user_data) &&
+             maybe_emit_conic (&pts[10], M_SQRT1_2, func, user_data) &&
              func (GSK_PATH_CLOSE, &pts[12], 2, 0.f, user_data);
     }
 }
@@ -2147,7 +2180,9 @@ gsk_rounded_rect_contour_get_winding (const GskContour       *contour,
 static gsize
 gsk_rounded_rect_contour_get_n_ops (const GskContour *contour)
 {
-  return 10;
+  const GskRoundedRectContour *self = (const GskRoundedRectContour *) contour;
+
+  return self->n_ops;
 }
 
 static gboolean
@@ -2157,56 +2192,7 @@ gsk_rounded_rect_contour_get_closest_point (const GskContour       *contour,
                                             GskPathPoint           *result,
                                             float                  *out_dist)
 {
-  GskPath *path;
-  const GskContour *std;
-  gboolean ret;
-
-  path = convert_to_standard_contour (contour);
-  std = gsk_path_get_contour (path, 0);
-  ret = gsk_standard_contour_get_closest_point (std, point, threshold, result, out_dist);
-  gsk_path_unref (path);
-
-  return ret;
-}
-
-typedef struct
-{
-  GskCurve *curve;
-  unsigned int idx;
-  unsigned int count;
-} InitCurveData;
-
-static gboolean
-init_curve_cb (GskPathOperation        op,
-               const graphene_point_t *pts,
-               gsize                   n_pts,
-               float                   weight,
-               gpointer                user_data)
-{
-  InitCurveData *data = user_data;
-
-  if (data->idx == data->count)
-    {
-      gsk_curve_init_foreach (data->curve, op, pts, n_pts, weight);
-      return FALSE;
-    }
-
-  data->count++;
-  return TRUE;
-}
-
-static void
-gsk_rounded_rect_contour_init_curve (const GskContour *contour,
-                                     unsigned int      idx,
-                                     GskCurve         *curve)
-{
-  InitCurveData data;
-
-  data.curve = curve;
-  data.idx = idx;
-  data.count = 0;
-
-  gsk_contour_foreach (contour, init_curve_cb, &data);
+  return contour_get_closest_point (contour, point, threshold, result, out_dist);
 }
 
 static void
@@ -2216,7 +2202,7 @@ gsk_rounded_rect_contour_get_position (const GskContour   *contour,
 {
   GskCurve curve;
 
-  gsk_rounded_rect_contour_init_curve (contour, point->idx, &curve);
+  contour_init_curve (contour, point->idx, &curve);
   gsk_curve_get_point (&curve, point->t, position);
 }
 
@@ -2226,10 +2212,23 @@ gsk_rounded_rect_contour_get_tangent (const GskContour   *contour,
                                       GskPathDirection    direction,
                                       graphene_vec2_t    *tangent)
 {
+  const GskRoundedRectContour *self = (const GskRoundedRectContour *) contour;
+  gsize idx = point->idx;
+  float t = point->t;
   GskCurve curve;
 
-  gsk_rounded_rect_contour_init_curve (contour, point->idx, &curve);
-  gsk_curve_get_tangent (&curve, point->t, tangent);
+  /* Avoid the z, since it has length 0 and won't give us a tangent */
+  if (idx == self->n_ops - 1)
+    {
+      idx = self->n_ops - 2;
+      t = 1;
+    }
+
+  apply_corner_direction (direction, &idx, &t, self->n_ops - 1);
+  contour_init_curve (contour, idx, &curve);
+  gsk_curve_get_tangent (&curve, t, tangent);
+  if (direction == GSK_PATH_TO_START || direction == GSK_PATH_FROM_END)
+    graphene_vec2_negate (tangent, tangent);
 }
 
 static float
@@ -2238,10 +2237,21 @@ gsk_rounded_rect_contour_get_curvature (const GskContour   *contour,
                                         GskPathDirection    direction,
                                         graphene_point_t   *center)
 {
+  const GskRoundedRectContour *self = (const GskRoundedRectContour *) contour;
   GskCurve curve;
+  gsize idx = point->idx;
+  float t = point->t;
 
-  gsk_rounded_rect_contour_init_curve (contour, point->idx, &curve);
-  return gsk_curve_get_curvature (&curve, point->t, center);
+  /* Avoid the z, since it has length 0 and won't give us curvature */
+  if (idx == self->n_ops - 1)
+    {
+      idx = self->n_ops - 2;
+      t = 1;
+    }
+
+  apply_corner_direction (direction, &idx, &t, self->n_ops - 1);
+  contour_init_curve (contour, idx, &curve);
+  return gsk_curve_get_curvature (&curve, t, center);
 }
 
 static void
@@ -2251,15 +2261,7 @@ gsk_rounded_rect_contour_add_segment (const GskContour   *contour,
                                       const GskPathPoint *start,
                                       const GskPathPoint *end)
 {
-  GskPath *path;
-  const GskContour *std;
-
-  path = convert_to_standard_contour (contour);
-  std = gsk_path_get_contour (path, 0);
-
-  gsk_standard_contour_add_segment (std, builder, emit_move_to, start, end);
-
-  gsk_path_unref (path);
+  contour_add_segment (contour, builder, emit_move_to, start, end);
 }
 
 typedef struct
@@ -2341,6 +2343,47 @@ static const GskContourClass GSK_ROUNDED_RECT_CONTOUR_CLASS =
   gsk_rounded_rect_contour_get_distance,
 };
 
+static gsize
+rounded_rect_compute_n_ops (const GskRoundedRect *rect)
+{
+  graphene_point_t pts[14];
+  gsize n_ops;
+
+  get_rounded_rect_points (rect, pts);
+
+  n_ops = 2;
+
+  if (!graphene_point_equal (&pts[0], &pts[1]))
+    n_ops++;
+
+  if (!graphene_point_equal (&pts[1], &pts[2]) ||
+      !graphene_point_equal (&pts[2], &pts[3]))
+    n_ops++;
+
+  if (!graphene_point_equal (&pts[3], &pts[4]))
+    n_ops++;
+
+  if (!graphene_point_equal (&pts[4], &pts[5]) ||
+      !graphene_point_equal (&pts[5], &pts[6]))
+    n_ops++;
+
+  if (!graphene_point_equal (&pts[6], &pts[7]))
+    n_ops++;
+
+  if (!graphene_point_equal (&pts[7], &pts[8]) ||
+      !graphene_point_equal (&pts[8], &pts[9]))
+    n_ops++;
+
+  if (!graphene_point_equal (&pts[9], &pts[10]))
+    n_ops++;
+
+  if (!graphene_point_equal (&pts[10], &pts[11]) ||
+      !graphene_point_equal (&pts[11], &pts[12]))
+    n_ops++;
+
+  return n_ops;
+}
+
 GskContour *
 gsk_rounded_rect_contour_new (const GskRoundedRect *rect)
 {
@@ -2352,6 +2395,8 @@ gsk_rounded_rect_contour_new (const GskRoundedRect *rect)
 
   self->rect = *rect;
   gsk_rounded_rect_normalize (&self->rect);
+
+  self->n_ops = rounded_rect_compute_n_ops (&self->rect);
 
   return (GskContour *) self;
 }
