@@ -1514,6 +1514,52 @@ test_rounded_rect_tricky (void)
   gsk_path_unref (path);
 }
 
+static void
+test_circle_plain (void)
+{
+  GskPathBuilder *builder;
+  GskPath *path;
+  GskPathMeasure *measure;
+  GskPathPoint point;
+  GskRoundedRect rect;
+  graphene_vec2_t v1, v2;
+  graphene_point_t pos, center;
+  char *s;
+  float angle, radius;
+
+  center = GRAPHENE_POINT_INIT (100, 100);
+  radius = 10;
+
+  builder = gsk_path_builder_new ();
+  gsk_path_builder_add_circle (builder, &center, radius);
+  path = gsk_path_builder_free_to_path (builder);
+
+  s = gsk_path_to_string (path);
+  g_assert_cmpstr (s, ==, "M 110 100 o 0 10, -10 10, 0.70710678118654757 o -10 0, -10 -10, 0.70710678118654757 o 0 -10, 10 -10, 0.70710678118654757 o 10 0, 10 10, 0.70710678118654757 z");
+  g_free (s);
+
+  measure = gsk_path_measure_new (path);
+
+  g_assert_cmpfloat_with_epsilon (gsk_path_measure_get_length (measure),
+                                  2 * M_PI * radius,
+                                  0.0001);
+
+  angle = 2 * M_PI / 8;
+  gsk_path_measure_get_point (measure, angle * radius, &point);
+
+  pos = GRAPHENE_POINT_INIT (100 + cosf (angle), 100 + sinf (angle);
+  graphene_vec2_init (&v1, - sinf (angle), cosf (angle));
+
+  check_path_point (&point, path,
+                    &pos,
+                    graphene_vec2_init (&v1, - sinf (angle), ),
+                    &v1, &v1,
+                    0.1, 0.1);
+
+  gsk_path_measure_unref (measure);
+  gsk_path_unref (path);
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -1541,6 +1587,7 @@ main (int argc, char *argv[])
   g_test_add_func ("/path/rect/zero", test_rect_zero);
   g_test_add_func ("/path/rounded-rect/plain", test_rounded_rect_plain);
   g_test_add_func ("/path/rounded-rect/tricky", test_rounded_rect_tricky);
+  g_test_add_func ("/path/circle/plain", test_circle_plain);
 
   return g_test_run ();
 }
