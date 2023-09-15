@@ -1408,8 +1408,11 @@ gdk_display_create_vulkan_device (GdkDisplay  *display,
                                                     },
                                                     .enabledExtensionCount = device_extensions->len,
                                                     .ppEnabledExtensionNames = (const char * const *) device_extensions->pdata,
-                                                    .pNext = &(VkPhysicalDeviceDescriptorIndexingFeatures) {
-                                                      .sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_DESCRIPTOR_INDEXING_FEATURES,
+                                                    .pNext = &(VkPhysicalDeviceVulkan12Features) {
+                                                      .sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_VULKAN_1_2_FEATURES,
+                                                      .shaderSampledImageArrayNonUniformIndexing = VK_TRUE,
+                                                      .shaderStorageBufferArrayNonUniformIndexing = VK_TRUE,
+                                                      .descriptorIndexing = VK_TRUE,
                                                       .descriptorBindingPartiallyBound = VK_TRUE,
                                                       .descriptorBindingVariableDescriptorCount = VK_TRUE,
                                                       .descriptorBindingSampledImageUpdateAfterBind = VK_TRUE,
@@ -1553,7 +1556,7 @@ gdk_display_create_vulkan_instance (GdkDisplay  *display,
                                                  .applicationVersion = 0,
                                                  .pEngineName = "GTK",
                                                  .engineVersion = VK_MAKE_VERSION (GDK_MAJOR_VERSION, GDK_MINOR_VERSION, GDK_MICRO_VERSION),
-                                                 .apiVersion = VK_API_VERSION_1_0
+                                                 .apiVersion = VK_API_VERSION_1_2
                                              },
                                              .enabledLayerCount = used_layers->len,
                                              .ppEnabledLayerNames = (const char * const *) used_layers->pdata,

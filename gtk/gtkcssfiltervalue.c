@@ -266,7 +266,8 @@ static int
 gtk_css_filter_value_compute_matrix (const GtkCssValue *value,
                                      int                first,
                                      graphene_matrix_t *matrix,
-                                     graphene_vec4_t   *offset)
+                                     graphene_vec4_t   *offset,
+                                     gboolean          *all_opacity)
 {
   graphene_matrix_t m, m2;
   graphene_vec4_t o, o2;
@@ -275,11 +276,14 @@ gtk_css_filter_value_compute_matrix (const GtkCssValue *value,
   if (!gtk_css_filter_get_matrix (&value->filters[first], matrix, offset))
     return first;
 
+  *all_opacity = value->filters[first].type == GTK_CSS_FILTER_OPACITY;
+
   for (i = first + 1; i < value->n_filters; i++)
     {
       if (!gtk_css_filter_get_matrix (&value->filters[i], &m, &o))
         return i;
 
+      *all_opacity &= value->filters[i].type == GTK_CSS_FILTER_OPACITY;
       graphene_matrix_multiply (matrix, &m, &m2);
       graphene_matrix_transform_vec4 (&m, offset, &o2);
 
@@ -936,6 +940,7 @@ gtk_css_filter_value_push_snapshot (const GtkCssValue *filter,
 {
   graphene_matrix_t matrix;
   graphene_vec4_t offset;
+  gboolean all_opacity;
   int i, j;
 
   if (gtk_css_filter_value_is_none (filter))
@@ -944,9 +949,15 @@ gtk_css_filter_value_push_snapshot (const GtkCssValue *filter,
   i = 0;
   while (i < filter->n_filters)
     {
-      j = gtk_css_filter_value_compute_matrix (filter, i, &matrix, &offset);
+      j = gtk_css_filter_value_compute_matrix (filter, i, &matrix, &offset, &all_opacity);
       if (i < j)
-        gtk_snapshot_push_color_matrix (snapshot, &matrix, &offset);
+        {
+          if (all_opacity)
+            gtk_snapshot_push_opacity (snapshot, graphene_matrix_get_value (&matrix, 3, 3));
+          else
+            gtk_snapshot_push_color_matrix (snapshot, &matrix, &offset);
+        }
+
 
       if (j < filter->n_filters)
         {

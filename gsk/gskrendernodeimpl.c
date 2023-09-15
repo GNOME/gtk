@@ -5013,7 +5013,7 @@ gsk_shadow_node_new (GskRenderNode   *child,
 
   self = gsk_render_node_alloc (GSK_SHADOW_NODE);
   node = (GskRenderNode *) self;
-  node->offscreen_for_opacity = child->offscreen_for_opacity;
+  node->offscreen_for_opacity = TRUE;
 
   self->child = gsk_render_node_ref (child);
   self->n_shadows = n_shadows;
