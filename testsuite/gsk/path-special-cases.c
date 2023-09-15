@@ -1249,6 +1249,7 @@ check_path_point (const GskPathPoint     *point,
 {
   graphene_point_t p;
   graphene_vec2_t tan;
+  float ka1, ka2;
 
   gsk_path_point_get_position (point, path, &p);
   g_assert_true (graphene_point_near (pos, &p, 0.0001));
@@ -1259,8 +1260,17 @@ check_path_point (const GskPathPoint     *point,
   gsk_path_point_get_tangent (point, path, GSK_PATH_TO_END, &tan);
   g_assert_true (graphene_vec2_near (tan2, &tan, 0.0001));
 
-  g_assert_cmpfloat_with_epsilon (k1, gsk_path_point_get_curvature (point, path, GSK_PATH_FROM_START, NULL), 0.0001);
-  g_assert_cmpfloat_with_epsilon (k2, gsk_path_point_get_curvature (point, path, GSK_PATH_TO_END, NULL), 0.0001);
+  ka1 = gsk_path_point_get_curvature (point, path, GSK_PATH_FROM_START, NULL);
+  if (isfinite (k1) && isfinite (ka1))
+    g_assert_cmpfloat_with_epsilon (k1, ka1, 0.0001);
+  else
+    g_assert_true (isinf (k1) && isinf (ka1));
+
+  ka2 = gsk_path_point_get_curvature (point, path, GSK_PATH_TO_END, NULL);
+  if (isfinite (k2) && isfinite (ka2))
+    g_assert_cmpfloat_with_epsilon (k2, ka2, 0.0001);
+  else
+    g_assert_true (isinf (k2) && isinf (ka2));
 }
 
 static void
@@ -1521,8 +1531,7 @@ test_circle_plain (void)
   GskPath *path;
   GskPathMeasure *measure;
   GskPathPoint point;
-  GskRoundedRect rect;
-  graphene_vec2_t v1, v2;
+  graphene_vec2_t v1;
   graphene_point_t pos, center;
   char *s;
   float angle, radius;
@@ -1544,17 +1553,72 @@ test_circle_plain (void)
                                   2 * M_PI * radius,
                                   0.0001);
 
-  angle = 2 * M_PI / 8;
-  gsk_path_measure_get_point (measure, angle * radius, &point);
+  gsk_path_get_start_point (path, &point);
+  g_assert_true (point.idx == 1 && point.t == 0);
 
-  pos = GRAPHENE_POINT_INIT (100 + cosf (angle), 100 + sinf (angle);
-  graphene_vec2_init (&v1, - sinf (angle), cosf (angle));
+  gsk_path_get_end_point (path, &point);
+  g_assert_true (point.idx == 5 && point.t == 1);
 
-  check_path_point (&point, path,
-                    &pos,
-                    graphene_vec2_init (&v1, - sinf (angle), ),
-                    &v1, &v1,
-                    0.1, 0.1);
+  for (int i = 0; i < 8; i++)
+    {
+      angle = 2 * M_PI * (i + 1) / 8.f;
+      gsk_path_measure_get_point (measure, angle * radius, &point);
+
+      pos = GRAPHENE_POINT_INIT (100 + cosf (angle) * radius, 100 + sinf (angle) * radius);
+      graphene_vec2_init (&v1, - sinf (angle), cosf (angle));
+
+      check_path_point (&point, path,
+                        &pos,
+                        &v1, &v1,
+                        0.1, 0.1);
+    }
+
+  gsk_path_measure_unref (measure);
+  gsk_path_unref (path);
+}
+
+static void
+test_circle_zero (void)
+{
+  GskPathBuilder *builder;
+  GskPath *path;
+  GskPathMeasure *measure;
+  GskPathPoint point;
+  graphene_vec2_t v1;
+  graphene_point_t pos, center;
+  char *s;
+  float angle, radius;
+
+  center = GRAPHENE_POINT_INIT (100, 100);
+  radius = 0;
+
+  builder = gsk_path_builder_new ();
+  gsk_path_builder_add_circle (builder, &center, radius);
+  path = gsk_path_builder_free_to_path (builder);
+
+  s = gsk_path_to_string (path);
+  g_assert_cmpstr (s, ==, "M 100 100 o 0 0, 0 0, 0.70710678118654757 o 0 0, 0 0, 0.70710678118654757 o 0 0, 0 0, 0.70710678118654757 o 0 0, 0 0, 0.70710678118654757 z");
+  g_free (s);
+
+  measure = gsk_path_measure_new (path);
+
+  g_assert_cmpfloat_with_epsilon (gsk_path_measure_get_length (measure),
+                                  2 * M_PI * radius,
+                                  0.0001);
+
+  for (int i = 0; i < 8; i++)
+    {
+      angle = 2 * M_PI * (i + 1) / 8.f;
+      gsk_path_measure_get_point (measure, angle * radius, &point);
+
+      pos = center;
+      graphene_vec2_init (&v1, 0, 0);
+
+      check_path_point (&point, path,
+                        &pos,
+                        &v1, &v1,
+                        INFINITY, INFINITY);
+    }
 
   gsk_path_measure_unref (measure);
   gsk_path_unref (path);
@@ -1588,6 +1652,7 @@ main (int argc, char *argv[])
   g_test_add_func ("/path/rounded-rect/plain", test_rounded_rect_plain);
   g_test_add_func ("/path/rounded-rect/tricky", test_rounded_rect_tricky);
   g_test_add_func ("/path/circle/plain", test_circle_plain);
+  g_test_add_func ("/path/circle/zero", test_circle_zero);
 
   return g_test_run ();
 }
