@@ -180,6 +180,9 @@ gsk_path_point_get_position (const GskPathPoint *point,
  * point, and the direction coming out of it. The @direction
  * argument lets you choose which one to get.
  *
+ * If the path is just a single point (e.g. a circle with
+ * radius zero), then @tangent is set to `0, 0`.
+ *
  * If you want to orient something in the direction of the
  * path, [method@Gsk.PathPoint.get_rotation] may be more
  * convenient to use.
