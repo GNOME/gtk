@@ -1,6 +1,64 @@
 Overview of Changes in 4.13.1, xx-xx-xxxx
 =========================================
 
+* GtkTooltip:
+ - Don't cross native boundaries when looking for tooltips
+
+* GtkCenterLayout, GtkEntry, GtkSearchEntry:
+ - Fix some issues with baseline handling
+
+* GtkFileChooser:
+ - Make "Visit file" scroll to the file
+
+* GtkSwitch:
+ - Respect text direction
+
+* Paths:
+ - GskPathMeasure performance has been improved
+ - Add custom contours for circles, rounded rectangles and rectangles
+ - Simplify GskPathPoint handling
+ - gsk_path_point_get_closest_point now returns the distance as well
+
+* Input:
+ - Handle (some) single-key compose sequences
+
+* GSK:
+ - Make the repeated gradients match between GL and cairo
+ - Make rounded rect shrinking match between Vulkan, GL and cairo
+ - Fix parsing of text nodes with color glyphs
+ - Restrict an optimization to the cases where it is crrect
+ - Fix rendering of shadows with opacity
+ - The Vulkan renderer now requires Vulkan 1.2
+
+* macOS:
+ - Clamp damage regions to the surface size
+
+* Tools:
+ - gtk4-path-tool gained restrict and reverse commands
+ - gtk4-path-tool show and render can show control points
+
+* Demos:
+ - Add a demo for hit testing with paths
+
+* Build:
+ - Fix build problems with C++ compilers
+
+* Translation updates
+ Brazilian Portuguese
+ British English
+ Catalan
+ Czech
+ Danish
+ Galician
+ Georgian
+ Italian
+ Korean
+ Lithuanian
+ Polish
+ Punjabi
+ Slovenian
+
+
 Overview of Changes in 4.13.0, 25-08-2023
 =========================================
 
