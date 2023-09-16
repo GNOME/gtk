@@ -734,10 +734,12 @@ gtk_tree_model_filter_build_level (GtkTreeModelFilter *filter,
   g_assert (filter->priv->child_model != NULL);
 
   /* Avoid building a level that already exists */
+#ifndef G_DISABLE_ASSERT
   if (parent_level)
     g_assert (parent_elt->children == NULL);
   else
     g_assert (filter->priv->root == NULL);
+#endif
 
   if (filter->priv->in_row_deleted)
     return;
