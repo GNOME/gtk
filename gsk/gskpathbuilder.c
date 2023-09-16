@@ -653,12 +653,14 @@ gsk_path_builder_quad_to (GskPathBuilder *self,
 {
   g_return_if_fail (self != NULL);
 
-  /* skip the quad if it collapses to a point */
   if (graphene_point_equal (&self->current_point,
-                            &GRAPHENE_POINT_INIT (x1, y1)) &&
+                            &GRAPHENE_POINT_INIT (x1, y1)) ||
       graphene_point_equal (&GRAPHENE_POINT_INIT (x1, y1),
                             &GRAPHENE_POINT_INIT (x2, y2)))
-    return;
+    {
+      gsk_path_builder_line_to (self, x2, y2);
+      return;
+    }
 
   self->flags &= ~GSK_PATH_FLAT;
   gsk_path_builder_append_current (self,
@@ -836,10 +838,13 @@ gsk_path_builder_conic_to (GskPathBuilder *self,
 
   /* skip the conic if it collapses to a point */
   if (graphene_point_equal (&self->current_point,
-                            &GRAPHENE_POINT_INIT (x1, y1)) &&
+                            &GRAPHENE_POINT_INIT (x1, y1)) ||
       graphene_point_equal (&GRAPHENE_POINT_INIT (x1, y1),
                             &GRAPHENE_POINT_INIT (x2, y2)))
-    return;
+    {
+      gsk_path_builder_line_to (self, x2, y2);
+      return;
+    }
 
   self->flags &= ~GSK_PATH_FLAT;
   gsk_path_builder_append_current (self,
