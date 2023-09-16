@@ -4,6 +4,7 @@
 
 #include "gskgpuborderopprivate.h"
 #include "gskgpuclipprivate.h"
+#include "gskgpucolorizeopprivate.h"
 #include "gskgpudeviceprivate.h"
 #include "gskgpuframeprivate.h"
 #include "gskgpuglobalsopprivate.h"
@@ -985,6 +986,72 @@ gsk_gpu_node_processor_create_conic_gradient_pattern (GskGpuPatternWriter *self,
   return TRUE;
 }
 
+static void
+gsk_gpu_node_processor_add_glyph_node (GskGpuNodeProcessor *self,
+                                       GskRenderNode       *node)
+{
+  GskGpuDevice *device;
+  const PangoGlyphInfo *glyphs;
+  PangoFont *font;
+  graphene_point_t offset;
+  guint i, num_glyphs;
+  float scale, inv_scale;
+
+  device = gsk_gpu_frame_get_device (self->frame);
+  num_glyphs = gsk_text_node_get_num_glyphs (node);
+  glyphs = gsk_text_node_get_glyphs (node, NULL);
+  font = gsk_text_node_get_font (node);
+  offset = *gsk_text_node_get_offset (node);
+  offset.x += self->offset.x;
+  offset.y += self->offset.y;
+
+  scale = MAX (graphene_vec2_get_x (&self->scale), graphene_vec2_get_y (&self->scale));
+  inv_scale = 1.f / scale;
+
+  for (i = 0; i < num_glyphs; i++)
+    {
+      GskGpuImage *image;
+      graphene_rect_t glyph_bounds, glyph_tex_rect;
+      graphene_point_t glyph_offset;
+
+      image = gsk_gpu_device_lookup_glyph_image (device,
+                                                 self->frame,
+                                                 font,
+                                                 glyphs[i].glyph,
+                                                 0,
+                                                 scale,
+                                                 &glyph_bounds,
+                                                 &glyph_offset);
+
+      graphene_rect_scale (&glyph_bounds, inv_scale, inv_scale, &glyph_bounds);
+      glyph_offset = GRAPHENE_POINT_INIT (offset.x - glyph_offset.x * inv_scale + (float) glyphs[i].geometry.x_offset / PANGO_SCALE,
+                                          offset.y - glyph_offset.y * inv_scale + (float) glyphs[i].geometry.y_offset / PANGO_SCALE);
+      glyph_tex_rect = GRAPHENE_RECT_INIT (
+                           0, 0,
+                           gsk_gpu_image_get_width (image) * inv_scale,
+                           gsk_gpu_image_get_height (image) * inv_scale
+                       );
+      if (gsk_text_node_has_color_glyphs (node))
+        gsk_gpu_texture_op (self->frame,
+                            gsk_gpu_clip_get_shader_clip (&self->clip, &glyph_offset, &glyph_bounds),
+                            image,
+                            GSK_GPU_SAMPLER_DEFAULT,
+                            &glyph_bounds,
+                            &glyph_offset,
+                            &glyph_tex_rect);
+      else
+        gsk_gpu_colorize_op (self->frame,
+                             gsk_gpu_clip_get_shader_clip (&self->clip, &glyph_offset, &glyph_bounds),
+                             image,
+                             &glyph_bounds,
+                             &glyph_offset,
+                             &glyph_tex_rect,
+                             gsk_text_node_get_color (node));
+
+      offset.x += (float) glyphs[i].geometry.width / PANGO_SCALE;
+    }
+}
+
 static gboolean
 gsk_gpu_node_processor_create_glyph_pattern (GskGpuPatternWriter *self,
                                              GskRenderNode       *node)
@@ -1247,7 +1314,7 @@ static const struct
   },
   [GSK_TEXT_NODE] = {
     0,
-    NULL,
+    gsk_gpu_node_processor_add_glyph_node,
     gsk_gpu_node_processor_create_glyph_pattern,
   },
   [GSK_BLUR_NODE] = {
