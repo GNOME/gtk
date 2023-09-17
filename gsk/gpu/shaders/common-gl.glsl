@@ -52,23 +52,64 @@ gsk_get_float (uint id)
   return gsk_get_float (int (id));
 }
 
-#define gsk_get_texture(id) textures[id]
 #define gsk_get_int(id) (floatBitsToInt(gsk_get_float(id)))
 #define gsk_get_uint(id) (floatBitsToUint(gsk_get_float(id)))
 
 #ifdef GSK_GLES
-void
-gsk_set_output_color (vec4 color)
+vec4
+gsk_texture (uint id,
+             vec2 pos)
 {
-  gl_FragColor = color;
+  switch(id)
+  {
+    case 0u:
+      return texture (textures[0], pos);
+    case 1u:
+      return texture (textures[1], pos);
+    case 2u:
+      return texture (textures[2], pos);
+    case 3u:
+      return texture (textures[3], pos);
+    case 4u:
+      return texture (textures[4], pos);
+    case 5u:
+      return texture (textures[5], pos);
+    case 6u:
+      return texture (textures[6], pos);
+    case 7u:
+      return texture (textures[7], pos);
+    case 8u:
+      return texture (textures[8], pos);
+    case 9u:
+      return texture (textures[9], pos);
+    case 10u:
+      return texture (textures[10], pos);
+    case 11u:
+      return texture (textures[11], pos);
+    case 12u:
+      return texture (textures[12], pos);
+    case 13u:
+      return texture (textures[13], pos);
+    case 14u:
+      return texture (textures[14], pos);
+    case 15u:
+      return texture (textures[15], pos);
+    default:
+      return vec4 (1.0, 0.0, 0.8, 1.0);
+  }
 }
-#else
+
+#else /* !GSK_GLES */
+
+#define gsk_texture(id, pos) texture (textures[id], pos)
+
+#endif
+
 layout(location = 0) out vec4 out_color;
 void
 gsk_set_output_color (vec4 color)
 {
   out_color = color;
 }
-#endif
 
 #endif

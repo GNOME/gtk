@@ -39,7 +39,7 @@ void
 run (out vec4 color,
      out vec2 position)
 {
-  float alpha = texture (gsk_get_texture (_tex_id), _tex_coord).a * rect_coverage (_rect, _pos);
+  float alpha = gsk_texture (_tex_id, _tex_coord).a * rect_coverage (_rect, _pos);
   color = _color * alpha;
   position = _pos;
 }

@@ -119,7 +119,7 @@ glyphs_pattern (inout uint reader,
 
       float coverage = rect_coverage (glyph_bounds, pos);
       if (coverage > 0.0)
-        opacity += coverage * texture (gsk_get_texture (tex_id), (pos - push.scale * tex_rect.xy) / (push.scale * tex_rect.zw)).a;
+        opacity += coverage * gsk_texture (tex_id, (pos - push.scale * tex_rect.xy) / (push.scale * tex_rect.zw)).a;
     }
 
   return color * opacity;
@@ -132,7 +132,7 @@ texture_pattern (inout uint reader,
   uint tex_id = read_uint (reader);
   vec4 tex_rect = read_vec4 (reader);
 
-  return texture (gsk_get_texture (tex_id), (pos - push.scale * tex_rect.xy) / (push.scale * tex_rect.zw));
+  return gsk_texture (tex_id, (pos - push.scale * tex_rect.xy) / (push.scale * tex_rect.zw));
 }
 
 vec4
