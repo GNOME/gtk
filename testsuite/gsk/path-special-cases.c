@@ -1538,6 +1538,38 @@ test_rounded_rect_tricky (void)
 }
 
 static void
+test_rounded_rect_parse (void)
+{
+  GskRoundedRect rr;
+  GskPathBuilder *builder;
+  GskPath *path, *path2;
+  char *s;
+
+  rr.bounds = GRAPHENE_RECT_INIT (10, 10, 100, 111);
+  rr.corner[GSK_CORNER_TOP_LEFT] = GRAPHENE_SIZE_INIT (2, 4);
+  rr.corner[GSK_CORNER_TOP_RIGHT] = GRAPHENE_SIZE_INIT (6, 8);
+  rr.corner[GSK_CORNER_BOTTOM_RIGHT] = GRAPHENE_SIZE_INIT (10, 12);
+  rr.corner[GSK_CORNER_BOTTOM_LEFT] = GRAPHENE_SIZE_INIT (14, 16);
+
+  builder = gsk_path_builder_new ();
+  gsk_path_builder_add_rounded_rect (builder, &rr);
+  path = gsk_path_builder_free_to_path (builder);
+
+  s = gsk_path_to_string (path);
+  g_assert_cmpstr (s, ==, "M 12 10 L 104 10 O 110 10, 110 18, 0.70710676908493042 L 110 109 O 110 121, 100 121, 0.70710676908493042 L 24 121 O 10 121, 10 105, 0.70710676908493042 L 10 14 O 10 10, 12 10, 0.70710676908493042 Z");
+
+  path2 = gsk_path_parse (s);
+  g_free (s);
+
+  s = gsk_path_to_string (path2);
+  g_assert_cmpstr (s, ==, "M 12 10 L 104 10 O 110 10, 110 18, 0.70710676908493042 L 110 109 O 110 121, 100 121, 0.70710676908493042 L 24 121 O 10 121, 10 105, 0.70710676908493042 L 10 14 O 10 10, 12 10, 0.70710676908493042 Z");
+  g_free (s);
+
+  gsk_path_unref (path);
+  gsk_path_unref (path2);
+}
+
+static void
 test_circle_plain (void)
 {
   GskPathBuilder *builder;
@@ -1664,6 +1696,7 @@ main (int argc, char *argv[])
   g_test_add_func ("/path/rect/zero", test_rect_zero);
   g_test_add_func ("/path/rounded-rect/plain", test_rounded_rect_plain);
   g_test_add_func ("/path/rounded-rect/tricky", test_rounded_rect_tricky);
+  g_test_add_func ("/path/rounded-rect/parse", test_rounded_rect_parse);
   g_test_add_func ("/path/circle/plain", test_circle_plain);
   g_test_add_func ("/path/circle/zero", test_circle_zero);
 

@@ -341,7 +341,7 @@ parse_rounded_rect (const char     **p,
           rr->corner[GSK_CORNER_TOP_LEFT] = GRAPHENE_SIZE_INIT (x12 - x11, y10 - y11);
           rr->corner[GSK_CORNER_TOP_RIGHT] = GRAPHENE_SIZE_INIT (x2 - x1, y3 - y2);
           rr->corner[GSK_CORNER_BOTTOM_RIGHT] = GRAPHENE_SIZE_INIT (x5 - x6, y5 - y4);
-          rr->corner[GSK_CORNER_BOTTOM_LEFT] = GRAPHENE_SIZE_INIT (x7 - x8, y8 - y7);
+          rr->corner[GSK_CORNER_BOTTOM_LEFT] = GRAPHENE_SIZE_INIT (x7 - x8, y8 - y9);
 
           skip_whitespace (p);
 
