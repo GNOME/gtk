@@ -426,10 +426,23 @@ test_foreach (void)
   path2 = gsk_path_builder_free_to_path (builder);
   s2 = gsk_path_to_string (path2);
 
-  g_assert_cmpstr (sp, ==, s2);
+  /* We still end up with quads here, since GskPathBuilder aggressively reduces
+   * curves degrees.
+   */
+  g_assert_cmpstr (s, ==, s2);
 
   gsk_path_unref (path2);
   g_free (s2);
+
+  path2 = gsk_path_parse (sp);
+  s2 = gsk_path_to_string (path2);
+
+  g_assert_cmpstr (s, ==, s2);
+
+  gsk_path_unref (path2);
+  g_free (s2);
+
+  gsk_path_unref (path);
 }
 
 static void
