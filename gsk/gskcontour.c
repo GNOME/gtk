@@ -1347,6 +1347,7 @@ gsk_circle_contour_print (const GskContour *contour,
 {
   const GskCircleContour *self = (const GskCircleContour *) contour;
   float radius, radius_neg;
+  float weight = M_SQRT1_2;
 
   if (self->radius > 0)
     {
@@ -1363,16 +1364,16 @@ gsk_circle_contour_print (const GskContour *contour,
   _g_string_append_point (string, "M ", &GRAPHENE_POINT_INIT (self->center.x + radius, self->center.y));
   _g_string_append_point (string, " o ", &GRAPHENE_POINT_INIT (0, radius));
   _g_string_append_point (string, ", ", &GRAPHENE_POINT_INIT (radius_neg, radius));
-  _g_string_append_double (string, ", ", M_SQRT1_2);
+  _g_string_append_double (string, ", ", weight);
   _g_string_append_point (string, " o ", &GRAPHENE_POINT_INIT (radius_neg, 0));
   _g_string_append_point (string, ", ", &GRAPHENE_POINT_INIT (radius_neg, radius_neg));
-  _g_string_append_double (string, ", ", M_SQRT1_2);
+  _g_string_append_double (string, ", ", weight);
   _g_string_append_point (string, " o ", &GRAPHENE_POINT_INIT (0, radius_neg));
   _g_string_append_point (string, ", ", &GRAPHENE_POINT_INIT (radius, radius_neg));
-  _g_string_append_double (string, ", ", M_SQRT1_2);
+  _g_string_append_double (string, ", ", weight);
   _g_string_append_point (string, " o ", &GRAPHENE_POINT_INIT (radius, 0));
   _g_string_append_point (string, ", ", &GRAPHENE_POINT_INIT (radius, radius));
-  _g_string_append_double (string, ", ", M_SQRT1_2);
+  _g_string_append_double (string, ", ", weight);
   g_string_append (string, " z");
 }
 

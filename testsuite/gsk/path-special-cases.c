@@ -1589,7 +1589,7 @@ test_circle_plain (void)
   path = gsk_path_builder_free_to_path (builder);
 
   s = gsk_path_to_string (path);
-  g_assert_cmpstr (s, ==, "M 110 100 o 0 10, -10 10, 0.70710678118654757 o -10 0, -10 -10, 0.70710678118654757 o 0 -10, 10 -10, 0.70710678118654757 o 10 0, 10 10, 0.70710678118654757 z");
+  g_assert_cmpstr (s, ==, "M 110 100 o 0 10, -10 10, 0.70710676908493042 o -10 0, -10 -10, 0.70710676908493042 o 0 -10, 10 -10, 0.70710676908493042 o 10 0, 10 10, 0.70710676908493042 z");
   g_free (s);
 
   measure = gsk_path_measure_new (path);
@@ -1642,7 +1642,7 @@ test_circle_zero (void)
   path = gsk_path_builder_free_to_path (builder);
 
   s = gsk_path_to_string (path);
-  g_assert_cmpstr (s, ==, "M 100 100 o 0 0, 0 0, 0.70710678118654757 o 0 0, 0 0, 0.70710678118654757 o 0 0, 0 0, 0.70710678118654757 o 0 0, 0 0, 0.70710678118654757 z");
+  g_assert_cmpstr (s, ==, "M 100 100 o 0 0, 0 0, 0.70710676908493042 o 0 0, 0 0, 0.70710676908493042 o 0 0, 0 0, 0.70710676908493042 o 0 0, 0 0, 0.70710676908493042 z");
   g_free (s);
 
   measure = gsk_path_measure_new (path);
