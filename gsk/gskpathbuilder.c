@@ -68,6 +68,9 @@
  *
  * This is similar to how paths are drawn in Cairo.
  *
+ * Note that `GskPathBuilder` will reduce the degree of added Bézier
+ * curves as much as possible, to simplify rendering.
+ *
  * Since: 4.14
  */
 
