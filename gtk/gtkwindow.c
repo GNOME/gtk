@@ -4364,16 +4364,16 @@ gtk_window_realize (GtkWidget *widget)
         {
           gtk_window_enable_csd (window);
 
-            if (priv->title_box == NULL)
-              {
-                priv->title_box = gtk_header_bar_new ();
-                gtk_widget_add_css_class (priv->title_box, "titlebar");
-                gtk_widget_add_css_class (priv->title_box, "default-decoration");
+          if (priv->title_box == NULL)
+            {
+              priv->title_box = gtk_header_bar_new ();
+              gtk_widget_add_css_class (priv->title_box, "titlebar");
+              gtk_widget_add_css_class (priv->title_box, "default-decoration");
 
-                gtk_widget_insert_before (priv->title_box, widget, NULL);
-              }
+              gtk_widget_insert_before (priv->title_box, widget, NULL);
+            }
 
-            update_window_actions (window);
+          update_window_actions (window);
         }
     }
 

@@ -24,6 +24,7 @@
 #include "gskpathbuilder.h"
 
 #include "gskpathprivate.h"
+#include "gskcurveprivate.h"
 #include "gskpathpointprivate.h"
 #include "gskcontourprivate.h"
 
@@ -66,6 +67,9 @@
  * back with a line to the starting point.
  *
  * This is similar to how paths are drawn in Cairo.
+ *
+ * Note that `GskPathBuilder` will reduce the degree of added Bézier
+ * curves as much as possible, to simplify rendering.
  *
  * Since: 4.14
  */
@@ -624,6 +628,40 @@ gsk_path_builder_rel_line_to (GskPathBuilder *self,
                             self->current_point.y + y);
 }
 
+static inline void
+closest_point (const graphene_point_t *p,
+               const graphene_point_t *a,
+               const graphene_point_t *b,
+               graphene_point_t       *q)
+{
+  graphene_vec2_t n;
+  graphene_vec2_t ap;
+  float t;
+
+  graphene_vec2_init (&n, b->x - a->x, b->y - a->y);
+  graphene_vec2_init (&ap, p->x - a->x, p->y - a->y);
+
+  t = graphene_vec2_dot (&ap, &n) / graphene_vec2_dot (&n, &n);
+
+  q->x = a->x + t * (b->x - a->x);
+  q->y = a->y + t * (b->y - a->y);
+}
+
+static inline gboolean
+collinear (const graphene_point_t *p,
+           const graphene_point_t *a,
+           const graphene_point_t *b)
+{
+  graphene_point_t q;
+
+  if (graphene_point_equal (a, b))
+    return TRUE;
+
+  closest_point (p, a, b, &q);
+
+  return graphene_point_near (p, &q, 0.001);
+}
+
 /**
  * gsk_path_builder_quad_to:
  * @self: a #GskPathBuilder
@@ -651,22 +689,49 @@ gsk_path_builder_quad_to (GskPathBuilder *self,
                           float           x2,
                           float           y2)
 {
+  graphene_point_t p0 = self->current_point;
+  graphene_point_t p1 = GRAPHENE_POINT_INIT (x1, y1);
+  graphene_point_t p2 = GRAPHENE_POINT_INIT (x2, y2);
+
   g_return_if_fail (self != NULL);
 
-  /* skip the quad if it collapses to a point */
-  if (graphene_point_equal (&self->current_point,
-                            &GRAPHENE_POINT_INIT (x1, y1)) &&
-      graphene_point_equal (&GRAPHENE_POINT_INIT (x1, y1),
-                            &GRAPHENE_POINT_INIT (x2, y2)))
-    return;
+  if (collinear (&p0, &p1, &p2))
+    {
+      GskBoundingBox bb;
+
+      /* We simplify degenerate quads to one or two lines */
+      if (!gsk_bounding_box_contains_point (gsk_bounding_box_init (&bb, &p0, &p2), &p1))
+        {
+          GskCurve c;
+
+          gsk_curve_init_foreach (&c, GSK_PATH_QUAD,
+                                  (const graphene_point_t []) { p0, p1, p2 },
+                                  3, 0.f);
+          gsk_curve_get_tight_bounds (&c, &bb);
+          for (int i = 0; i < 4; i++)
+            {
+              graphene_point_t q;
+
+              gsk_bounding_box_get_corner (&bb, i, &q);
+              if (graphene_point_equal (&p0, &q) ||
+                  graphene_point_equal (&p2, &q))
+                {
+                  gsk_bounding_box_get_corner (&bb, (i + 2) % 4, &q);
+                  gsk_path_builder_line_to (self, q.x, q.y);
+                  break;
+                }
+            }
+        }
+
+      gsk_path_builder_line_to (self, x2, y2);
+
+      return;
+    }
 
   self->flags &= ~GSK_PATH_FLAT;
   gsk_path_builder_append_current (self,
                                    GSK_PATH_QUAD,
-                                   2, (graphene_point_t[2]) {
-                                     GRAPHENE_POINT_INIT (x1, y1),
-                                     GRAPHENE_POINT_INIT (x2, y2)
-                                   });
+                                   2, (graphene_point_t[2]) { p1, p2 });
 }
 
 /**
@@ -702,6 +767,38 @@ gsk_path_builder_rel_quad_to (GskPathBuilder *self,
                             self->current_point.y + y2);
 }
 
+static gboolean
+point_is_between (const graphene_point_t *q,
+                  const graphene_point_t *p0,
+                  const graphene_point_t *p1)
+{
+  return collinear (p0, p1, q) &&
+         fabsf (graphene_point_distance (p0, q, NULL, NULL) + graphene_point_distance (p1, q, NULL, NULL) - graphene_point_distance (p0, p1, NULL, NULL)) < 0.001;
+}
+
+static gboolean
+bounding_box_corner_between (const GskBoundingBox   *bb,
+                             const graphene_point_t *p0,
+                             const graphene_point_t *p1,
+                             graphene_point_t       *p)
+{
+  for (int i = 0; i < 4; i++)
+    {
+      graphene_point_t q;
+
+      gsk_bounding_box_get_corner (bb, i, &q);
+
+      if (point_is_between (&q, p0, p1))
+        {
+          *p = q;
+          return TRUE;
+        }
+    }
+
+  return FALSE;
+}
+
+
 /**
  * gsk_path_builder_cubic_to:
  * @self: a `GskPathBuilder`
@@ -734,25 +831,136 @@ gsk_path_builder_cubic_to (GskPathBuilder *self,
                            float           x3,
                            float           y3)
 {
+  graphene_point_t p0 = self->current_point;
+  graphene_point_t p1 = GRAPHENE_POINT_INIT (x1, y1);
+  graphene_point_t p2 = GRAPHENE_POINT_INIT (x2, y2);
+  graphene_point_t p3 = GRAPHENE_POINT_INIT (x3, y3);
+  graphene_point_t p, q;
+  gboolean p01, p12, p23;
+
   g_return_if_fail (self != NULL);
 
-  /* skip the cubic if it collapses to a point */
-  if (graphene_point_equal (&self->current_point,
-                            &GRAPHENE_POINT_INIT (x1, y1)) &&
-      graphene_point_equal (&GRAPHENE_POINT_INIT (x1, y1),
-                            &GRAPHENE_POINT_INIT (x2, y2)) &&
-      graphene_point_equal (&GRAPHENE_POINT_INIT (x2, y2),
-                            &GRAPHENE_POINT_INIT (x3, y3)))
+  p01 = graphene_point_equal (&p0, &p1);
+  p12 = graphene_point_equal (&p1, &p2);
+  p23 = graphene_point_equal (&p2, &p3);
+
+  if (p01 && p12 && p23)
     return;
 
+  if ((p01 && p23) || (p12 && (p01 || p23)))
+    {
+      gsk_path_builder_line_to (self, x3, y3);
+      return;
+    }
+
+  if (collinear (&p0, &p1, &p2) &&
+      collinear (&p1, &p2, &p3) &&
+      (!p12 || collinear (&p0, &p1, &p3)))
+    {
+      GskBoundingBox bb;
+      gboolean p1in, p2in;
+
+      gsk_bounding_box_init (&bb, &p0, &p3);
+      p1in = gsk_bounding_box_contains_point (&bb, &p1);
+      p2in = gsk_bounding_box_contains_point (&bb, &p2);
+      if (p1in && p2in)
+        {
+          gsk_path_builder_line_to (self, x3, y3);
+        }
+      else
+        {
+          GskCurve c;
+
+          gsk_curve_init_foreach (&c,
+                                  GSK_PATH_CUBIC,
+                                  (const graphene_point_t[]) { p0, p1, p2, p3 },
+                                  4,
+                                  0.f);
+          gsk_curve_get_tight_bounds (&c, &bb);
+          if (!p1in)
+            {
+              /* Find the intersection of bb with p0 - p1.
+               * It must be a corner
+               */
+              bounding_box_corner_between (&bb, &p0, &p1, &p);
+              gsk_path_builder_line_to (self, p.x, p.y);
+            }
+          if (!p2in)
+            {
+              /* Find the intersection of bb with p2 - p3. */
+              bounding_box_corner_between (&bb, &p3, &p2, &p);
+              gsk_path_builder_line_to (self, p.x, p.y);
+            }
+          gsk_path_builder_line_to (self, x3, y3);
+        }
+
+      return;
+    }
+
+  /* reduce to a quadratic if possible */
+  graphene_point_interpolate (&p0, &p1, 1.5, &p);
+  graphene_point_interpolate (&p3, &p2, 1.5, &q);
+  if (graphene_point_near (&p, &q, 0.001))
+    {
+      gsk_path_builder_quad_to (self, p.x, p.y, x3, y3);
+      return;
+    }
+
   self->flags &= ~GSK_PATH_FLAT;
+
+  /* At this point, we are dealing with a cubic that can't be reduced to
+   * lines or quadratics. Check for cusps.
+   */
+    {
+      GskCurve c, c1, c2, c3, c4;
+      float t[2];
+      int n;
+
+      gsk_curve_init_foreach (&c,
+                              GSK_PATH_CUBIC,
+                              (const graphene_point_t[]) { p0, p1, p2, p3 },
+                              4,
+                              0.f);
+
+      n = gsk_curve_get_cusps (&c, t);
+      if (n == 1)
+        {
+          gsk_curve_split (&c, t[0], &c1, &c2);
+          gsk_path_builder_append_current (self,
+                                           GSK_PATH_CUBIC,
+                                           3, &c1.cubic.points[1]);
+          gsk_path_builder_append_current (self,
+                                           GSK_PATH_CUBIC,
+                                           3, &c2.cubic.points[1]);
+          return;
+        }
+      else if (n == 2)
+        {
+          if (t[1] < t[0])
+            {
+              float s = t[0];
+              t[0] = t[1];
+              t[1] = s;
+            }
+
+          gsk_curve_split (&c, t[0], &c1, &c2);
+          gsk_curve_split (&c2, (t[1] - t[0]) / (1 - t[0]), &c3, &c4);
+          gsk_path_builder_append_current (self,
+                                           GSK_PATH_CUBIC,
+                                           3, &c1.cubic.points[1]);
+          gsk_path_builder_append_current (self,
+                                           GSK_PATH_CUBIC,
+                                           3, &c3.cubic.points[1]);
+          gsk_path_builder_append_current (self,
+                                           GSK_PATH_CUBIC,
+                                           3, &c4.cubic.points[1]);
+          return;
+        }
+    }
+
   gsk_path_builder_append_current (self,
                                    GSK_PATH_CUBIC,
-                                   3, (graphene_point_t[3]) {
-                                     GRAPHENE_POINT_INIT (x1, y1),
-                                     GRAPHENE_POINT_INIT (x2, y2),
-                                     GRAPHENE_POINT_INIT (x3, y3)
-                                   });
+                                   3, (graphene_point_t[3]) { p1, p2, p3 });
 }
 
 /**
@@ -831,15 +1039,53 @@ gsk_path_builder_conic_to (GskPathBuilder *self,
                            float           y2,
                            float           weight)
 {
+  graphene_point_t p0 = self->current_point;
+  graphene_point_t p1 = GRAPHENE_POINT_INIT (x1, y1);
+  graphene_point_t p2 = GRAPHENE_POINT_INIT (x2, y2);
+
   g_return_if_fail (self != NULL);
   g_return_if_fail (weight > 0);
 
-  /* skip the conic if it collapses to a point */
-  if (graphene_point_equal (&self->current_point,
-                            &GRAPHENE_POINT_INIT (x1, y1)) &&
-      graphene_point_equal (&GRAPHENE_POINT_INIT (x1, y1),
-                            &GRAPHENE_POINT_INIT (x2, y2)))
-    return;
+  if (weight == 1)
+    {
+      gsk_path_builder_quad_to (self, x1, y1, x2, y2);
+      return;
+    }
+
+  if (collinear (&p0, &p1, &p2))
+    {
+      GskBoundingBox bb;
+
+      /* We simplify degenerate quads to one or two lines
+       * (two lines are needed if there's a cusp).
+       */
+      if (!gsk_bounding_box_contains_point (gsk_bounding_box_init (&bb, &p0, &p2), &p1))
+        {
+          GskCurve c;
+
+          gsk_curve_init_foreach (&c, GSK_PATH_CONIC,
+                                  (const graphene_point_t []) { p0, p1, p2 },
+                                  3, weight);
+          gsk_curve_get_tight_bounds (&c, &bb);
+          for (int i = 0; i < 4; i++)
+            {
+              graphene_point_t q;
+
+              gsk_bounding_box_get_corner (&bb, i, &q);
+              if (graphene_point_equal (&p0, &q) ||
+                  graphene_point_equal (&p2, &q))
+                {
+                  gsk_bounding_box_get_corner (&bb, (i + 2) % 4, &q);
+                  gsk_path_builder_line_to (self, q.x, q.y);
+                  break;
+                }
+            }
+        }
+
+      gsk_path_builder_line_to (self, x2, y2);
+
+      return;
+    }
 
   self->flags &= ~GSK_PATH_FLAT;
   gsk_path_builder_append_current (self,

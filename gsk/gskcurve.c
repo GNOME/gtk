@@ -2581,6 +2581,57 @@ gsk_curve_get_curvature_points (const GskCurve *curve,
   return filter_allowable (t, n);
 }
 
+/* Find cusps inside the open interval from 0 to 1.
+ *
+ * According to Stone & deRose, A Geometric Characterization
+ * of Parametric Cubic curves, a necessary and sufficient
+ * condition is that the first derivative vanishes.
+ */
+int
+gsk_curve_get_cusps (const GskCurve *curve,
+                     float           t[2])
+{
+  const graphene_point_t *pts = curve->cubic.points;
+  graphene_point_t p[3];
+  float ax, bx, cx;
+  float ay, by, cy;
+  float tx[3];
+  int nx;
+  int n = 0;
+
+  if (curve->op != GSK_PATH_CUBIC)
+    return 0;
+
+  p[0].x = 3 * (pts[1].x - pts[0].x);
+  p[0].y = 3 * (pts[1].y - pts[0].y);
+  p[1].x = 3 * (pts[2].x - pts[1].x);
+  p[1].y = 3 * (pts[2].y - pts[1].y);
+  p[2].x = 3 * (pts[3].x - pts[2].x);
+  p[2].y = 3 * (pts[3].y - pts[2].y);
+
+  ax = p[0].x - 2 * p[1].x + p[2].x;
+  bx = - 2 * p[0].x + 2 * p[1].x;
+  cx = p[0].x;
+
+  nx = solve_quadratic (ax, bx, cx, tx);
+  nx = filter_allowable (tx, nx);
+
+  ay = p[0].y - 2 * p[1].y + p[2].y;
+  by = - 2 * p[0].y + 2 * p[1].y;
+  cy = p[0].y;
+
+  for (int i = 0; i < nx; i++)
+    {
+      float ti = tx[i];
+
+      if (0 < ti && ti < 1 &&
+          fabsf (ay * ti * ti + by * ti + cy) < 0.001)
+        t[n++] = ti;
+    }
+
+  return n;
+}
+
 /* }}} */
 
 /* vim:set foldmethod=marker expandtab: */

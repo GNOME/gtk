@@ -112,4 +112,32 @@ gsk_bounding_box_union (const GskBoundingBox *a,
   gsk_bounding_box_init (res, &min, &max);
 }
 
-G_END_DECLS
+static inline void
+gsk_bounding_box_get_corner (const GskBoundingBox   *b,
+                             GskCorner               c,
+                             graphene_point_t       *p)
+{
+  switch (c)
+    {
+    case GSK_CORNER_TOP_LEFT:
+      *p = b->min;
+      break;
+
+    case GSK_CORNER_TOP_RIGHT:
+      p->x = b->max.x;
+      p->y = b->min.y;
+      break;
+
+    case GSK_CORNER_BOTTOM_RIGHT:
+      *p = b->max;
+      break;
+
+    case GSK_CORNER_BOTTOM_LEFT:
+      p->x = b->min.x;
+      p->y = b->max.y;
+      break;
+
+    default:
+      g_assert_not_reached ();
+    }
+}
