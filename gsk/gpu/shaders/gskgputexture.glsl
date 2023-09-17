@@ -36,7 +36,7 @@ void
 run (out vec4 color,
      out vec2 position)
 {
-  color = texture (gsk_get_texture (_tex_id), _tex_coord) *
+  color = gsk_texture (_tex_id, _tex_coord) *
           rect_coverage (_rect, _pos);
   position = _pos;
 }

@@ -32,7 +32,7 @@ layout(set = 1, binding = 0) readonly buffer FloatBuffers {
 
 layout(location = 0) out vec4 out_color;
 
-#define gsk_get_texture(id) textures[nonuniformEXT (id)]
+#define gsk_texture(id, pos) texture (textures[nonuniformEXT (id)], pos)
 #define gsk_get_buffer(id) buffers[nonuniformEXT (id)]
 #define gsk_get_float(id) gsk_get_buffer(0).floats[id]
 #define gsk_get_int(id) (floatBitsToInt(gsk_get_float(id)))
