@@ -181,8 +181,11 @@ float                  gsk_curve_at_length                      (const GskCurve 
                                                                  float                   distance,
                                                                  float                   epsilon);
 
-int                    gsk_curve_get_curvature_points           (const GskCurve *        curve,
+int                    gsk_curve_get_curvature_points           (const GskCurve         *curve,
                                                                  float                   t[3]);
+
+int                    gsk_curve_get_cusps                      (const GskCurve         *curve,
+                                                                 float                   t[2]);
 
 
 G_END_DECLS
