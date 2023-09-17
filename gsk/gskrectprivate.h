@@ -75,6 +75,12 @@ gsk_rect_intersection (const graphene_rect_t *r1,
     }
 }
 
+static inline gboolean G_GNUC_PURE
+gsk_rect_is_empty (const graphene_rect_t *rect)
+{
+  return rect->size.width == 0 || rect->size.height == 0;
+}
+
 static inline void
 gsk_rect_to_float (const graphene_rect_t *rect,
                    float                  values[4])

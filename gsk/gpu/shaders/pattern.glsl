@@ -7,6 +7,23 @@
 
 #ifdef GSK_FRAGMENT_SHADER
 
+vec4 stack[GSK_GPU_PATTERN_STACK_SIZE];
+uint stack_size = 0u;
+
+void
+stack_push (vec4 data)
+{
+  stack[stack_size] = data;
+  stack_size++;
+}
+
+vec4
+stack_pop (void)
+{
+  stack_size--;
+  return stack[stack_size];
+}
+
 uint
 read_uint (inout uint reader)
 {
@@ -100,6 +117,27 @@ color_matrix_pattern (inout uint reader,
   color = clamp(color, 0.0, 1.0);
 
   color = color_premultiply (color);
+}
+
+void
+repeat_push_pattern (inout uint reader,
+                     inout vec2 pos)
+{
+  stack_push (vec4 (pos, 0.0, 0.0));
+  Rect bounds = read_rect (reader);
+
+  vec2 size = rect_size (bounds);
+  pos = mod (pos - bounds.bounds.xy, size);
+  /* make sure we have a positive result */
+  pos = mix (pos, pos + size, lessThan (pos, vec2 (0.0)));
+  pos += bounds.bounds.xy;
+}
+
+void
+position_pop_pattern (inout uint reader,
+                      inout vec2 pos)
+{
+  pos = stack_pop ().xy;
 }
 
 vec4
@@ -249,6 +287,12 @@ pattern (uint reader,
           break;
         case GSK_GPU_PATTERN_CLIP:
           clip_pattern (reader, color, pos);
+          break;
+        case GSK_GPU_PATTERN_REPEAT_PUSH:
+          repeat_push_pattern (reader, pos);
+          break;
+        case GSK_GPU_PATTERN_POSITION_POP:
+          position_pop_pattern (reader, pos);
           break;
       }
     }

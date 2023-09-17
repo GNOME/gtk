@@ -4,6 +4,8 @@
 
 #include "gdk/gdkmemoryformatprivate.h"
 
+#define GSK_GPU_PATTERN_STACK_SIZE 16
+
 typedef struct _GskGpuBuffer            GskGpuBuffer;
 typedef struct _GskGpuDevice            GskGpuDevice;
 typedef struct _GskGpuFrame             GskGpuFrame;
@@ -41,5 +43,7 @@ typedef enum {
   GSK_GPU_PATTERN_CONIC_GRADIENT,
   GSK_GPU_PATTERN_CLIP,
   GSK_GPU_PATTERN_ROUNDED_CLIP,
+  GSK_GPU_PATTERN_REPEAT_PUSH,
+  GSK_GPU_PATTERN_POSITION_POP,
 } GskGpuPatternType;
 
