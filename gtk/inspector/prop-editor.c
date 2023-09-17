@@ -797,9 +797,12 @@ font_changed (GObject *object, GParamSpec *pspec, gpointer data)
 
   font_desc = g_value_get_boxed (&val);
 
-  block_controller (G_OBJECT (fb));
-  gtk_font_dialog_button_set_font_desc (fb, font_desc);
-  unblock_controller (G_OBJECT (fb));
+  if (font_desc != NULL)
+    {
+      block_controller (G_OBJECT (fb));
+      gtk_font_dialog_button_set_font_desc (fb, font_desc);
+      unblock_controller (G_OBJECT (fb));
+    }
 
   g_value_unset (&val);
 }
