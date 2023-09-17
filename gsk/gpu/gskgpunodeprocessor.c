@@ -1006,6 +1006,47 @@ gsk_gpu_node_processor_create_conic_gradient_pattern (GskGpuPatternWriter *self,
   return TRUE;
 }
 
+static gboolean
+gsk_gpu_node_processor_create_cross_fade_pattern (GskGpuPatternWriter *self,
+                                                  GskRenderNode       *node)
+{
+  GskRenderNode *start_child, *end_child;
+
+  start_child = gsk_cross_fade_node_get_start_child (node);
+  end_child = gsk_cross_fade_node_get_end_child (node);
+
+  if (!gsk_gpu_node_processor_create_node_pattern (self, start_child))
+    return FALSE;
+  if (!gsk_rect_contains_rect (&start_child->bounds, &node->bounds))
+    {
+      gsk_gpu_buffer_writer_append_uint (&self->writer, GSK_GPU_PATTERN_CLIP);
+      gsk_gpu_buffer_writer_append_rect (&self->writer, &start_child->bounds, &self->offset);
+    }
+
+  gsk_gpu_buffer_writer_append_uint (&self->writer, GSK_GPU_PATTERN_PUSH_COLOR);
+
+  if (!gsk_gpu_pattern_writer_push_stack (self))
+    return FALSE;
+
+  if (!gsk_gpu_node_processor_create_node_pattern (self, end_child))
+    {
+      gsk_gpu_pattern_writer_pop_stack (self);
+      return FALSE;
+    }
+  if (!gsk_rect_contains_rect (&end_child->bounds, &node->bounds))
+    {
+      gsk_gpu_buffer_writer_append_uint (&self->writer, GSK_GPU_PATTERN_CLIP);
+      gsk_gpu_buffer_writer_append_rect (&self->writer, &end_child->bounds, &self->offset);
+    }
+
+  gsk_gpu_buffer_writer_append_uint (&self->writer, GSK_GPU_PATTERN_POP_CROSS_FADE);
+  gsk_gpu_buffer_writer_append_float (&self->writer, gsk_cross_fade_node_get_progress (node));
+
+  gsk_gpu_pattern_writer_pop_stack (self);
+
+  return TRUE;
+}
+
 static void
 gsk_gpu_node_processor_add_glyph_node (GskGpuNodeProcessor *self,
                                        GskRenderNode       *node)
@@ -1377,8 +1418,8 @@ static const struct
   },
   [GSK_CROSS_FADE_NODE] = {
     0,
-    NULL,
-    NULL,
+    gsk_gpu_node_processor_add_node_as_pattern,
+    gsk_gpu_node_processor_create_cross_fade_pattern,
   },
   [GSK_TEXT_NODE] = {
     0,
