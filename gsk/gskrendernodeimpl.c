@@ -4852,17 +4852,7 @@ gsk_shadow_node_draw (GskRenderNode *node,
                       cairo_t       *cr)
 {
   GskShadowNode *self = (GskShadowNode *) node;
-  cairo_pattern_t *pattern;
   gsize i;
-
-  cairo_save (cr);
-  /* clip so the push_group() creates a small surface */
-  gsk_cairo_rectangle (cr, &self->child->bounds);
-  cairo_clip (cr);
-  cairo_push_group (cr);
-  gsk_render_node_draw (self->child, cr);
-  pattern = cairo_pop_group (cr);
-  cairo_restore (cr);
 
   cairo_save (cr);
   /* clip so the blur area stays small */
@@ -4872,27 +4862,31 @@ gsk_shadow_node_draw (GskRenderNode *node,
   for (i = 0; i < self->n_shadows; i++)
     {
       GskShadow *shadow = &self->shadows[i];
+      cairo_pattern_t *pattern;
 
       /* We don't need to draw invisible shadows */
       if (gdk_rgba_is_clear (&shadow->color))
         continue;
 
       cairo_save (cr);
-      gdk_cairo_set_source_rgba (cr, &shadow->color);
       cr = gsk_cairo_blur_start_drawing (cr, shadow->radius, GSK_BLUR_X | GSK_BLUR_Y);
 
+      cairo_save (cr);
       cairo_translate (cr, shadow->dx, shadow->dy);
+      cairo_push_group (cr);
+      gsk_render_node_draw (self->child, cr);
+      pattern = cairo_pop_group (cr);
+      gdk_cairo_set_source_rgba (cr, &shadow->color);
       cairo_mask (cr, pattern);
+      cairo_restore (cr);
 
       cr = gsk_cairo_blur_finish_drawing (cr, shadow->radius, &shadow->color, GSK_BLUR_X | GSK_BLUR_Y);
       cairo_restore (cr);
     }
 
-  cairo_set_source (cr, pattern);
-  cairo_paint (cr);
-  cairo_restore (cr);
+  gsk_render_node_draw (self->child, cr);
 
-  cairo_pattern_destroy (pattern);
+  cairo_restore (cr);
 }
 
 static void
