@@ -17,6 +17,8 @@ void            main_clip_rounded               (void);
 #include "rect.glsl"
 #include "roundedrect.glsl"
 
+#define PI 3.1415926535897932384626433832795
+
 Rect
 rect_clip (Rect r)
 {
