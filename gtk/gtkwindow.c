@@ -6554,7 +6554,8 @@ gtk_window_update_pointer_focus_on_state_change (GtkWindow *window,
            gtk_widget_is_ancestor (focus->grab_widget, widget)))
         {
           clear_widget_active_state (focus->grab_widget, widget);
-          gtk_pointer_focus_set_implicit_grab (focus, NULL);
+          gtk_pointer_focus_set_implicit_grab (focus,
+                                               gtk_widget_get_parent (widget));
         }
 
       if (GTK_WIDGET (focus->toplevel) == widget)
