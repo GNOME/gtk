@@ -27,6 +27,13 @@
 #include "gskpathpoint.h"
 #include "gskstrokeprivate.h"
 
+#include <float.h>
+
+/* This is C11 */
+#ifndef FLT_DECIMAL_DIG
+#define FLT_DECIMAL_DIG 9
+#endif
+
 typedef struct _GskContourClass GskContourClass;
 
 struct _GskContour
@@ -98,15 +105,12 @@ struct _GskContourClass
 #define RAD_TO_DEG(x)          ((x) / (G_PI / 180.f))
 
 static void
-_g_string_append_double (GString    *string,
-                         const char *prefix,
-                         double      d)
+_g_string_append_float (GString    *string,
+                        const char *prefix,
+                        float       f)
 {
-  char buf[G_ASCII_DTOSTR_BUF_SIZE];
-
-  g_ascii_dtostr (buf, G_ASCII_DTOSTR_BUF_SIZE, d);
   g_string_append (string, prefix);
-  g_string_append (string, buf);
+  g_string_append_printf (string, "%.*g", FLT_DECIMAL_DIG, f);
 }
 
 static void
@@ -114,8 +118,8 @@ _g_string_append_point (GString                *string,
                         const char             *prefix,
                         const graphene_point_t *pt)
 {
-  _g_string_append_double (string, prefix, pt->x);
-  _g_string_append_double (string, " ", pt->y);
+  _g_string_append_float (string, prefix, pt->x);
+  _g_string_append_float (string, " ", pt->y);
 }
 
 static gboolean
@@ -481,7 +485,7 @@ foreach_print (GskPathOperation        op,
     case GSK_PATH_CONIC:
       _g_string_append_point (string, " O ", &pts[1]);
       _g_string_append_point (string, ", ", &pts[2]);
-      _g_string_append_double (string, ", ", weight);
+      _g_string_append_float (string, ", ", weight);
       break;
 
     default:
@@ -1347,7 +1351,6 @@ gsk_circle_contour_print (const GskContour *contour,
 {
   const GskCircleContour *self = (const GskCircleContour *) contour;
   float radius, radius_neg;
-  float weight = M_SQRT1_2;
 
   if (self->radius > 0)
     {
@@ -1364,16 +1367,16 @@ gsk_circle_contour_print (const GskContour *contour,
   _g_string_append_point (string, "M ", &GRAPHENE_POINT_INIT (self->center.x + radius, self->center.y));
   _g_string_append_point (string, " o ", &GRAPHENE_POINT_INIT (0, radius));
   _g_string_append_point (string, ", ", &GRAPHENE_POINT_INIT (radius_neg, radius));
-  _g_string_append_double (string, ", ", weight);
+  _g_string_append_float (string, ", ", M_SQRT1_2);
   _g_string_append_point (string, " o ", &GRAPHENE_POINT_INIT (radius_neg, 0));
   _g_string_append_point (string, ", ", &GRAPHENE_POINT_INIT (radius_neg, radius_neg));
-  _g_string_append_double (string, ", ", weight);
+  _g_string_append_float (string, ", ", M_SQRT1_2);
   _g_string_append_point (string, " o ", &GRAPHENE_POINT_INIT (0, radius_neg));
   _g_string_append_point (string, ", ", &GRAPHENE_POINT_INIT (radius, radius_neg));
-  _g_string_append_double (string, ", ", weight);
+  _g_string_append_float (string, ", ", M_SQRT1_2);
   _g_string_append_point (string, " o ", &GRAPHENE_POINT_INIT (radius, 0));
   _g_string_append_point (string, ", ", &GRAPHENE_POINT_INIT (radius, radius));
-  _g_string_append_double (string, ", ", weight);
+  _g_string_append_float (string, ", ", M_SQRT1_2);
   g_string_append (string, " z");
 }
 
@@ -1804,9 +1807,9 @@ gsk_rect_contour_print (const GskContour *contour,
   const GskRectContour *self = (const GskRectContour *) contour;
 
   _g_string_append_point (string, "M ", &GRAPHENE_POINT_INIT (self->x, self->y));
-  _g_string_append_double (string, " h ", self->width);
-  _g_string_append_double (string, " v ", self->height);
-  _g_string_append_double (string, " h ", - self->width);
+  _g_string_append_float (string, " h ", self->width);
+  _g_string_append_float (string, " v ", self->height);
+  _g_string_append_float (string, " h ", - self->width);
   g_string_append (string, " z");
 }
 
