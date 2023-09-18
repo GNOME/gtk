@@ -90,6 +90,7 @@ compare_render_tests = [
   'scaled-cairo',
   'scaled-texture',
   'shadow-behind',
+  'shadow-clip-contents',
   'shadow-in-opacity',
   'shadow-opacity',
   'shrink-rounded-border',
