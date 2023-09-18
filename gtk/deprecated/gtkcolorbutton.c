@@ -290,6 +290,9 @@ gtk_color_button_init (GtkColorButton *button)
 
   button->button = gtk_button_new ();
   g_signal_connect (button->button, "clicked", G_CALLBACK (gtk_color_button_clicked), button);
+  g_object_bind_property (button, "focus-on-click",
+                          button->button, "focus-on-click",
+                          0);
   gtk_widget_set_parent (button->button, GTK_WIDGET (button));
 
   button->swatch = g_object_new (GTK_TYPE_COLOR_SWATCH,
