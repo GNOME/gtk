@@ -6517,6 +6517,21 @@ gtk_window_update_pointer_focus (GtkWindow        *window,
     }
 }
 
+static void
+clear_widget_active_state (GtkWidget *widget,
+                           GtkWidget *topmost)
+{
+  GtkWidget *w = widget;
+
+  while (w)
+    {
+      gtk_widget_set_active_state (w, FALSE);
+      if (w == topmost)
+        break;
+      w = _gtk_widget_get_parent (w);
+    }
+}
+
 void
 gtk_window_update_pointer_focus_on_state_change (GtkWindow *window,
                                                  GtkWidget *widget)
@@ -6537,7 +6552,11 @@ gtk_window_update_pointer_focus_on_state_change (GtkWindow *window,
       if (focus->grab_widget &&
           (focus->grab_widget == widget ||
            gtk_widget_is_ancestor (focus->grab_widget, widget)))
-        gtk_pointer_focus_set_implicit_grab (focus, NULL);
+        {
+          clear_widget_active_state (focus->grab_widget, widget);
+          gtk_pointer_focus_set_implicit_grab (focus,
+                                               gtk_widget_get_parent (widget));
+        }
 
       if (GTK_WIDGET (focus->toplevel) == widget)
         {
