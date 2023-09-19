@@ -30,7 +30,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2023-09-13 16:46+0000\n"
+"POT-Creation-Date: 2023-09-19 01:36+0000\n"
 "PO-Revision-Date: 2023-09-18 21:35-0400\n"
 "Last-Translator: Boyuan Yang <073plan@gmail.com>\n"
 "Language-Team: Chinese - China <i18n-zh@googlegroups.com>\n"
@@ -6216,7 +6216,7 @@ msgstr "位置"
 #: gtk/ui/gtkmediacontrols.ui:65
 msgctxt "media controls"
 msgid "Volume"
-msgstr "卷"
+msgstr "音量"
 
 #: gtk/print/ui/gtkpagesetupunixdialog.ui:30
 msgid "_Format for:"
