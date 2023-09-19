@@ -25,14 +25,8 @@ any license fees or royalties.</description>
   <homepage rdf:resource="http://www.gtk.org/" />
   <license rdf:resource="http://usefulinc.com/doap/licenses/lgpl" />
   <bug-database rdf:resource="https://gitlab.gnome.org/GNOME/gtk/issues/" />
-  <download-page rdf:resource="http://download.gnome.org/sources/gtk+/" />
-  <mailing-list rdf:resource="http://mail.gnome.org/mailman/listinfo/gtk-list" />
-  <mailing-list rdf:resource="http://mail.gnome.org/mailman/listinfo/gtk-app-devel-list" />
-  <mailing-list rdf:resource="http://mail.gnome.org/mailman/listinfo/gtk-devel-list" />
-  <mailing-list rdf:resource="http://mail.gnome.org/mailman/listinfo/gtk-doc-list" />
-  <mailing-list rdf:resource="http://mail.gnome.org/mailman/listinfo/gtk-i18n-list" />
-  <mailing-list rdf:resource="http://mail.gnome.org/mailman/listinfo/gtk-perl-list" />
-  <mailing-list rdf:resource="http://mail.gnome.org/mailman/listinfo/language-bindings" />
+  <download-page rdf:resource="https://download.gnome.org/sources/gtk/" />
+  <developer-forum rdf:resource="https://discourse.gnome.org/c/platform/5" />
   <category rdf:resource="http://api.gnome.org/doap-extensions#core" />
 
   <programming-language>C</programming-language>
