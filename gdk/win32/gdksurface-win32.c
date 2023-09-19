@@ -4442,6 +4442,10 @@ _gdk_win32_surface_request_layout (GdkSurface *surface)
     {
       _gdk_win32_get_window_rect (surface, &rect);
 
+      /* Keep current position if rect is invalid (i.e. queried in bad context) */
+      if (rect.right == rect.left || rect.bottom == rect.top)
+        return;
+
       impl->next_layout.configured_width = (rect.right - rect.left + scale - 1) / scale;
       impl->next_layout.configured_height = (rect.bottom - rect.top + scale - 1) / scale;
 
