@@ -773,8 +773,9 @@ menu_deactivate_cb (GtkMenuButton *self)
  * [ctor@Gtk.PopoverMenu.new_from_model]. Actions will be connected
  * as documented for this function.
  *
- * If [property@Gtk.MenuButton:popover] is already set, it will be
- * dissociated from the @menu_button, and the property is set to %NULL.
+ * If [property@Gtk.MenuButton:popover] was already set, that popover will be
+ * dissociated from the @menu_button, and the property is updated to refer to
+ * the newly created popover.
  */
 void
 gtk_menu_button_set_menu_model (GtkMenuButton *menu_button,
