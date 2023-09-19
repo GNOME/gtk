@@ -223,7 +223,7 @@ delete_messages (gpointer data)
 static void
 pop_message (GtkWidget *status)
 {
-  GList *messages = (GList *) g_object_get_data (G_OBJECT (status), "messages");
+  GList *messages = (GList *) g_object_steal_data (G_OBJECT (status), "messages");
 
   if (messages)
     {
@@ -241,7 +241,7 @@ static void
 push_message (GtkWidget  *status,
               const char *message)
 {
-  GList *messages = (GList *) g_object_get_data (G_OBJECT (status), "messages");
+  GList *messages = (GList *) g_object_steal_data (G_OBJECT (status), "messages");
 
   gtk_label_set_label (GTK_LABEL (status), message);
   messages = g_list_prepend (messages, g_strdup (message));
