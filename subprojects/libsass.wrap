@@ -1,5 +1,13 @@
-[wrap-git]
-directory=libsass
-url=https://github.com/lazka/libsass.git
-revision=meson
-depth=1
+[wrap-file]
+directory = libsass-3.6.4
+source_url = https://github.com/sass/libsass/archive/refs/tags/3.6.4.tar.gz
+source_filename = libsass-3.6.4.tar.gz
+source_hash = f9484d9a6df60576e791566eab2f757a97fd414fce01dd41fc0a693ea5db2889
+patch_filename = libsass_3.6.4-1_patch.zip
+patch_url = https://wrapdb.mesonbuild.com/v2/libsass_3.6.4-1/get_patch
+patch_hash = c494221e13d5d223fa93f13bded8cac149ed8e231223ea3dfdab1c1871def42f
+source_fallback_url = https://github.com/mesonbuild/wrapdb/releases/download/libsass_3.6.4-1/libsass-3.6.4.tar.gz
+wrapdb_version = 3.6.4-1
+
+[provide]
+libsass = libsass_dep
