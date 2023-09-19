@@ -804,9 +804,9 @@ gtk_menu_button_get_popup (GtkMenuButton *menu_button)
  * #GtkPopover with gtk_popover_new_from_model(). In either case,
  * actions will be connected as documented for these functions.
  *
- * If #GtkMenuButton:popup or #GtkMenuButton:popover are already set, those
- * widgets are dissociated from the @menu_button, and those properties are set
- * to %NULL.
+ * If #GtkMenuButton:popup or #GtkMenuButton:popover are already set, that
+ * widget is dissociated from the @menu_button, and the newly created menu or
+ * popover is set as the appropriate property.
  *
  * Since: 3.6
  */
