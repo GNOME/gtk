@@ -1047,6 +1047,67 @@ gsk_gpu_node_processor_create_cross_fade_pattern (GskGpuPatternWriter *self,
   return TRUE;
 }
 
+static gboolean
+gsk_gpu_node_processor_create_mask_pattern (GskGpuPatternWriter *self,
+                                            GskRenderNode       *node)
+{
+  GskRenderNode *source_child, *mask_child;
+
+  source_child = gsk_mask_node_get_source (node);
+  mask_child = gsk_mask_node_get_mask (node);
+
+  if (!gsk_gpu_node_processor_create_node_pattern (self, source_child))
+    return FALSE;
+  if (!gsk_rect_contains_rect (&source_child->bounds, &node->bounds))
+    {
+      gsk_gpu_buffer_writer_append_uint (&self->writer, GSK_GPU_PATTERN_CLIP);
+      gsk_gpu_buffer_writer_append_rect (&self->writer, &source_child->bounds, &self->offset);
+    }
+
+  gsk_gpu_buffer_writer_append_uint (&self->writer, GSK_GPU_PATTERN_PUSH_COLOR);
+
+  if (!gsk_gpu_pattern_writer_push_stack (self))
+    return FALSE;
+
+  if (!gsk_gpu_node_processor_create_node_pattern (self, mask_child))
+    {
+      gsk_gpu_pattern_writer_pop_stack (self);
+      return FALSE;
+    }
+  if (!gsk_rect_contains_rect (&mask_child->bounds, &node->bounds))
+    {
+      gsk_gpu_buffer_writer_append_uint (&self->writer, GSK_GPU_PATTERN_CLIP);
+      gsk_gpu_buffer_writer_append_rect (&self->writer, &mask_child->bounds, &self->offset);
+    }
+
+  switch (gsk_mask_node_get_mask_mode (node))
+  {
+    case GSK_MASK_MODE_ALPHA:
+      gsk_gpu_buffer_writer_append_uint (&self->writer, GSK_GPU_PATTERN_POP_MASK_ALPHA);
+      break;
+
+    case GSK_MASK_MODE_INVERTED_ALPHA:
+      gsk_gpu_buffer_writer_append_uint (&self->writer, GSK_GPU_PATTERN_POP_MASK_INVERTED_ALPHA);
+      break;
+
+    case GSK_MASK_MODE_LUMINANCE:
+      gsk_gpu_buffer_writer_append_uint (&self->writer, GSK_GPU_PATTERN_POP_MASK_LUMINANCE);
+      break;
+
+    case GSK_MASK_MODE_INVERTED_LUMINANCE:
+      gsk_gpu_buffer_writer_append_uint (&self->writer, GSK_GPU_PATTERN_POP_MASK_INVERTED_LUMINANCE);
+      break;
+
+    default:
+      g_return_val_if_reached (FALSE);
+  }
+
+
+  gsk_gpu_pattern_writer_pop_stack (self);
+
+  return TRUE;
+}
+
 static void
 gsk_gpu_node_processor_add_glyph_node (GskGpuNodeProcessor *self,
                                        GskRenderNode       *node)
@@ -1448,8 +1509,8 @@ static const struct
   },
   [GSK_MASK_NODE] = {
     0,
-    NULL,
-    NULL,
+    gsk_gpu_node_processor_add_node_as_pattern,
+    gsk_gpu_node_processor_create_mask_pattern,
   },
   [GSK_FILL_NODE] = {
     0,
