@@ -17,6 +17,7 @@ typedef struct _GskGpuShaderOpClass     GskGpuShaderOpClass;
 
 typedef enum {
   GSK_GPU_SAMPLER_DEFAULT,
+  GSK_GPU_SAMPLER_TRANSPARENT,
   GSK_GPU_SAMPLER_REPEAT,
   GSK_GPU_SAMPLER_NEAREST,
   /* add more */
