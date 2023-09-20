@@ -150,6 +150,42 @@ cross_fade_pattern (inout uint reader,
   color = mix (start, color, progress);
 }
 
+void
+mask_alpha_pattern (inout uint reader,
+                    inout vec4 color)
+{
+  vec4 source = stack_pop ();
+
+  color = source * color.a;
+}
+
+void
+mask_inverted_alpha_pattern (inout uint reader,
+                             inout vec4 color)
+{
+  vec4 source = stack_pop ();
+
+  color = source * (1.0 - color.a);
+}
+
+void
+mask_luminance_pattern (inout uint reader,
+                        inout vec4 color)
+{
+  vec4 source = stack_pop ();
+
+  color = source * luminance (color.rgb);
+}
+
+void
+mask_inverted_luminance_pattern (inout uint reader,
+                                 inout vec4 color)
+{
+  vec4 source = stack_pop ();
+
+  color = source * (color.a - luminance (color.rgb));
+}
+
 vec4
 glyphs_pattern (inout uint reader,
                 vec2       pos)
@@ -310,6 +346,18 @@ pattern (uint reader,
           break;
         case GSK_GPU_PATTERN_POP_CROSS_FADE:
           cross_fade_pattern (reader, color);
+          break;
+        case GSK_GPU_PATTERN_POP_MASK_ALPHA:
+          mask_alpha_pattern (reader, color);
+          break;
+        case GSK_GPU_PATTERN_POP_MASK_INVERTED_ALPHA:
+          mask_inverted_alpha_pattern (reader, color);
+          break;
+        case GSK_GPU_PATTERN_POP_MASK_LUMINANCE:
+          mask_luminance_pattern (reader, color);
+          break;
+        case GSK_GPU_PATTERN_POP_MASK_INVERTED_LUMINANCE:
+          mask_inverted_luminance_pattern (reader, color);
           break;
       }
     }
