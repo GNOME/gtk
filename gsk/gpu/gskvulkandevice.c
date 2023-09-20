@@ -304,6 +304,21 @@ gsk_vulkan_device_setup (GskVulkanDevice *self)
                                      .sType = VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO,
                                      .magFilter = VK_FILTER_LINEAR,
                                      .minFilter = VK_FILTER_LINEAR,
+                                     .addressModeU = VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_BORDER,
+                                     .addressModeV = VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_BORDER,
+                                     .addressModeW = VK_SAMPLER_ADDRESS_MODE_REPEAT,
+                                     .borderColor = VK_BORDER_COLOR_FLOAT_TRANSPARENT_BLACK,
+                                     .unnormalizedCoordinates = VK_FALSE,
+                                     .maxAnisotropy = 1.0,
+                                 },
+                                 NULL,
+                                 &self->vk_samplers[GSK_GPU_SAMPLER_TRANSPARENT]);
+
+  GSK_VK_CHECK (vkCreateSampler, display->vk_device,
+                                 &(VkSamplerCreateInfo) {
+                                     .sType = VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO,
+                                     .magFilter = VK_FILTER_LINEAR,
+                                     .minFilter = VK_FILTER_LINEAR,
                                      .addressModeU = VK_SAMPLER_ADDRESS_MODE_REPEAT,
                                      .addressModeV = VK_SAMPLER_ADDRESS_MODE_REPEAT,
                                      .addressModeW = VK_SAMPLER_ADDRESS_MODE_REPEAT,

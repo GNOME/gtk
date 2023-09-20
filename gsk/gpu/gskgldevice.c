@@ -137,6 +137,10 @@ gsk_gl_device_setup_samplers (GskGLDevice *self)
       GL_LINEAR,
       GL_CLAMP_TO_EDGE,
     },
+    [GSK_GPU_SAMPLER_TRANSPARENT] = {
+      GL_LINEAR,
+      GL_CLAMP_TO_BORDER,
+    },
     [GSK_GPU_SAMPLER_REPEAT] = {
       GL_LINEAR,
        GL_REPEAT,
