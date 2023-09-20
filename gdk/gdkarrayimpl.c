@@ -183,7 +183,7 @@ gdk_array(reserve) (GdkArray *self,
     return;
 
   size = gdk_array(get_size) (self);
-  new_size = 1 << g_bit_storage (MAX (GDK_ARRAY_REAL_SIZE (n), 16) - 1);
+  new_size = ((gsize) 1) << g_bit_storage (MAX (GDK_ARRAY_REAL_SIZE (n), 16) - 1);
 
 #ifdef GDK_ARRAY_PREALLOC
   if (self->start == self->preallocated)
