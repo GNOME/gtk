@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2023-08-24 10:40+0000\n"
-"PO-Revision-Date: 2023-08-23 21:57+0200\n"
+"POT-Creation-Date: 2023-09-20 20:34+0000\n"
+"PO-Revision-Date: 2023-09-20 22:57+0200\n"
 "Last-Translator: Anders Jonsson <anders.jonsson@norsjovallen.se>\n"
 "Language-Team: Swedish <tp-sv@listor.tp-sv.se>\n"
 "Language: sv\n"
@@ -54,54 +54,54 @@ msgstr "Kan inte tillhandahålla innehåll som %s"
 msgid "The current backend does not support OpenGL"
 msgstr "Den aktuella bakänden stöder inte OpenGL"
 
-#: gdk/gdkdisplay.c:1245 gdk/gdksurface.c:1252
+#: gdk/gdkdisplay.c:1244 gdk/gdksurface.c:1252
 msgid "Vulkan support disabled via GDK_DEBUG"
 msgstr "Vulkan-stöd inaktiverat via GDK_DEBUG"
 
-#: gdk/gdkdisplay.c:1277
+#: gdk/gdkdisplay.c:1276
 msgid "GL support disabled via GDK_DEBUG"
 msgstr "GL-stöd inaktiverat via GDK_DEBUG"
 
-#: gdk/gdkdisplay.c:1575
+#: gdk/gdkdisplay.c:1574
 msgid "No EGL configuration available"
 msgstr "Ingen EGL-konfiguration tillgänglig"
 
-#: gdk/gdkdisplay.c:1583
+#: gdk/gdkdisplay.c:1582
 msgid "Failed to get EGL configurations"
 msgstr "Misslyckades med att hämta EGL-konfigurationer"
 
-#: gdk/gdkdisplay.c:1613
+#: gdk/gdkdisplay.c:1612
 msgid "No EGL configuration with required features found"
 msgstr "Ingen EGL-konfiguration med funktionerna som krävdes hittades"
 
-#: gdk/gdkdisplay.c:1620
+#: gdk/gdkdisplay.c:1619
 msgid "No perfect EGL configuration found"
 msgstr "Ingen perfekt EGL-konfiguration hittades"
 
-#: gdk/gdkdisplay.c:1662
+#: gdk/gdkdisplay.c:1661
 #, c-format
 msgid "EGL implementation is missing extension %s"
 msgid_plural "EGL implementation is missing %2$d extensions: %1$s"
 msgstr[0] "EGL-implementationen saknar tillägget %s"
 msgstr[1] "EGL-implementationen saknar %2$d tillägg: %1$s"
 
-#: gdk/gdkdisplay.c:1695
+#: gdk/gdkdisplay.c:1694
 msgid "libEGL not available in this sandbox"
 msgstr "libEGL är inte tillgängligt i denna sandlåda"
 
-#: gdk/gdkdisplay.c:1696
+#: gdk/gdkdisplay.c:1695
 msgid "libEGL not available"
 msgstr "libEGL inte tillgängligt"
 
-#: gdk/gdkdisplay.c:1706
+#: gdk/gdkdisplay.c:1705
 msgid "Failed to create EGL display"
 msgstr "Misslyckades med att skapa EGL-display"
 
-#: gdk/gdkdisplay.c:1716
+#: gdk/gdkdisplay.c:1715
 msgid "Could not initialize EGL display"
 msgstr "Kunde inte initiera EGL-display"
 
-#: gdk/gdkdisplay.c:1727
+#: gdk/gdkdisplay.c:1726
 #, c-format
 msgid "EGL version %d.%d is too old. GTK requires %d.%d"
 msgstr "EGL-version %d.%d är för gammal. GTK kräver %d.%d"
@@ -1050,18 +1050,18 @@ msgctxt "progress bar label"
 msgid "%d %%"
 msgstr "%d %%"
 
-#: gtk/deprecated/gtkcolorbutton.c:183 gtk/deprecated/gtkcolorbutton.c:311
+#: gtk/deprecated/gtkcolorbutton.c:183 gtk/deprecated/gtkcolorbutton.c:314
 #: gtk/gtkcolordialog.c:411
 msgid "Pick a Color"
 msgstr "Välj en färg"
 
-#: gtk/deprecated/gtkcolorbutton.c:502 gtk/gtkcolorchooserwidget.c:313
+#: gtk/deprecated/gtkcolorbutton.c:505 gtk/gtkcolorchooserwidget.c:313
 #: gtk/gtkcolordialogbutton.c:335
 #, c-format
 msgid "Red %d%%, Green %d%%, Blue %d%%, Alpha %d%%"
 msgstr "Röd %d%%, Grön %d%%, Blå %d%%, Alfa %d%%"
 
-#: gtk/deprecated/gtkcolorbutton.c:508 gtk/gtkcolorchooserwidget.c:319
+#: gtk/deprecated/gtkcolorbutton.c:511 gtk/gtkcolorchooserwidget.c:319
 #: gtk/gtkcolordialogbutton.c:341
 #, c-format
 msgid "Red %d%%, Green %d%%, Blue %d%%"
@@ -1071,17 +1071,17 @@ msgstr "Röd %d%%, Grön %d%%, Blå %d%%"
 msgid "Sans 12"
 msgstr "Sans 12"
 
-#: gtk/deprecated/gtkfontbutton.c:507 gtk/deprecated/gtkfontbutton.c:621
+#: gtk/deprecated/gtkfontbutton.c:507 gtk/deprecated/gtkfontbutton.c:624
 #: gtk/gtkfontdialog.c:596
 msgid "Pick a Font"
 msgstr "Välj ett typsnitt"
 
-#: gtk/deprecated/gtkfontbutton.c:597 gtk/gtkfilechooserwidget.c:3871
+#: gtk/deprecated/gtkfontbutton.c:600 gtk/gtkfilechooserwidget.c:3871
 #: gtk/gtkfontdialogbutton.c:126 gtk/inspector/visual.ui:169
 msgid "Font"
 msgstr "Typsnitt"
 
-#: gtk/deprecated/gtkfontbutton.c:1152 gtk/gtkfontdialogbutton.c:652
+#: gtk/deprecated/gtkfontbutton.c:1155 gtk/gtkfontdialogbutton.c:652
 msgctxt "font"
 msgid "None"
 msgstr "Inget"
@@ -2147,7 +2147,7 @@ msgstr "_Höger:"
 msgid "Paper Margins"
 msgstr "Pappersmarginaler"
 
-#: gtk/gtkentry.c:3673
+#: gtk/gtkentry.c:3685
 msgid "Insert Emoji"
 msgstr "Infoga emoji"
 
@@ -2306,7 +2306,7 @@ msgid "If you delete an item, it will be permanently lost."
 msgstr "Om du tar bort ett objekt är det borta för alltid."
 
 #: gtk/gtkfilechooserwidget.c:1185 gtk/gtkfilechooserwidget.c:1815
-#: gtk/gtklabel.c:5695 gtk/gtktext.c:6145 gtk/gtktextview.c:9018
+#: gtk/gtklabel.c:5695 gtk/gtktext.c:6147 gtk/gtktextview.c:9018
 msgid "_Delete"
 msgstr "_Ta bort"
 
@@ -2647,19 +2647,19 @@ msgstr "Stäng"
 msgid "Close the infobar"
 msgstr "Stäng inforaden"
 
-#: gtk/gtklabel.c:5692 gtk/gtktext.c:6133 gtk/gtktextview.c:9006
+#: gtk/gtklabel.c:5692 gtk/gtktext.c:6135 gtk/gtktextview.c:9006
 msgid "Cu_t"
 msgstr "Klipp _ut"
 
-#: gtk/gtklabel.c:5693 gtk/gtktext.c:6137 gtk/gtktextview.c:9010
+#: gtk/gtklabel.c:5693 gtk/gtktext.c:6139 gtk/gtktextview.c:9010
 msgid "_Copy"
 msgstr "_Kopiera"
 
-#: gtk/gtklabel.c:5694 gtk/gtktext.c:6141 gtk/gtktextview.c:9014
+#: gtk/gtklabel.c:5694 gtk/gtktext.c:6143 gtk/gtktextview.c:9014
 msgid "_Paste"
 msgstr "Klistra _in"
 
-#: gtk/gtklabel.c:5700 gtk/gtktext.c:6154 gtk/gtktextview.c:9039
+#: gtk/gtklabel.c:5700 gtk/gtktext.c:6156 gtk/gtktextview.c:9039
 msgid "Select _All"
 msgstr "Markera _allt"
 
@@ -3515,7 +3515,7 @@ msgid "No registered application with name “%s” for item with URI “%s” f
 msgstr ""
 "Inget registrerat program med namnet ”%s” hittades för objekt med URI ”%s”"
 
-#: gtk/gtksearchentry.c:758
+#: gtk/gtksearchentry.c:767
 msgid "Clear Entry"
 msgstr "Töm sökruta"
 
@@ -3539,7 +3539,7 @@ msgctxt "keyboard side marker"
 msgid "R"
 msgstr "H"
 
-#: gtk/gtkshortcutssection.c:414
+#: gtk/gtkshortcutssection.c:407
 msgid "_Show All"
 msgstr "Vi_sa alla"
 
@@ -3576,27 +3576,27 @@ msgid "Swipe right"
 msgstr "Svep åt höger"
 
 #. Translators: This is placeholder text for the search entry in the shortcuts window
-#: gtk/gtkshortcutswindow.c:879 gtk/gtkshortcutswindow.c:946
-#: gtk/gtkshortcutswindow.c:951
+#: gtk/gtkshortcutswindow.c:855 gtk/gtkshortcutswindow.c:922
+#: gtk/gtkshortcutswindow.c:927
 msgid "Search Shortcuts"
 msgstr "Sök genvägar"
 
 #. Translators: This is the window title for the shortcuts window in normal mode
-#: gtk/gtkshortcutswindow.c:911 gtk/inspector/window.ui:498
+#: gtk/gtkshortcutswindow.c:887 gtk/inspector/window.ui:498
 msgid "Shortcuts"
 msgstr "Genvägar"
 
 #. Translators: This is the window title for the shortcuts window in search mode
-#: gtk/gtkshortcutswindow.c:916
+#: gtk/gtkshortcutswindow.c:892
 msgid "Search Results"
 msgstr "Sökresultat"
 
-#: gtk/gtkshortcutswindow.c:1013 gtk/ui/gtkemojichooser.ui:349
+#: gtk/gtkshortcutswindow.c:989 gtk/ui/gtkemojichooser.ui:349
 #: gtk/ui/gtkfilechooserwidget.ui:239
 msgid "No Results Found"
 msgstr "Inga resultat hittades"
 
-#: gtk/gtkshortcutswindow.c:1024 gtk/ui/gtkemojichooser.ui:362
+#: gtk/gtkshortcutswindow.c:1000 gtk/ui/gtkemojichooser.ui:362
 #: gtk/ui/gtkfilechooserwidget.ui:252 gtk/ui/gtkplacesview.ui:218
 msgid "Try a different search"
 msgstr "Försök med en annan sökning"
@@ -3606,7 +3606,7 @@ msgctxt "accessibility"
 msgid "Sidebar"
 msgstr "Sidopanel"
 
-#: gtk/gtktext.c:6159 gtk/gtktextview.c:9044
+#: gtk/gtktext.c:6161 gtk/gtktextview.c:9044
 msgid "Insert _Emoji"
 msgstr "Infoga _emoji"
 
@@ -3671,7 +3671,6 @@ msgid "Description"
 msgstr "Beskrivning"
 
 #: gtk/inspector/a11y.ui:99 gtk/inspector/misc-info.ui:296
-#: tools/gtk-path-tool-info.c:133
 msgid "Bounds"
 msgstr "Gränser"
 
@@ -3986,8 +3985,8 @@ msgid "Surface"
 msgstr "Yta"
 
 #: gtk/inspector/misc-info.ui:365 gtk/inspector/misc-info.ui:400
-#: gtk/inspector/misc-info.ui:435 gtk/inspector/prop-editor.c:1150
-#: gtk/inspector/prop-editor.c:1533 gtk/inspector/window.ui:396
+#: gtk/inspector/misc-info.ui:435 gtk/inspector/prop-editor.c:1153
+#: gtk/inspector/prop-editor.c:1536 gtk/inspector/window.ui:396
 msgid "Properties"
 msgstr "Egenskaper"
 
@@ -4039,7 +4038,7 @@ msgstr "Pekare: %p"
 #. Translators: %s is a type name, for example
 #. * GtkPropertyExpression with value \"2.5\"
 #.
-#: gtk/inspector/prop-editor.c:824
+#: gtk/inspector/prop-editor.c:827
 #, c-format
 msgid "%s with value \"%s\""
 msgstr "%s med värde ”%s”"
@@ -4047,7 +4046,7 @@ msgstr "%s med värde ”%s”"
 #. Translators: Both %s are type names, for example
 #. * GtkPropertyExpression with type GObject
 #.
-#: gtk/inspector/prop-editor.c:835
+#: gtk/inspector/prop-editor.c:838
 #, c-format
 msgid "%s with type %s"
 msgstr "%s med typ %s"
@@ -4055,7 +4054,7 @@ msgstr "%s med typ %s"
 #. Translators: Both %s are type names, for example
 #. * GtkObjectExpression for GtkStringObject 0x23456789
 #.
-#: gtk/inspector/prop-editor.c:848
+#: gtk/inspector/prop-editor.c:851
 #, c-format
 msgid "%s for %s %p"
 msgstr "%s för %s %p"
@@ -4063,71 +4062,71 @@ msgstr "%s för %s %p"
 #. Translators: Both %s are type names, for example
 #. * GtkPropertyExpression with value type: gchararray
 #.
-#: gtk/inspector/prop-editor.c:878
+#: gtk/inspector/prop-editor.c:881
 #, c-format
 msgid "%s with value type %s"
 msgstr "%s med värdetyp %s"
 
-#: gtk/inspector/prop-editor.c:1227
+#: gtk/inspector/prop-editor.c:1230
 #, c-format
 msgid "Uneditable property type: %s"
 msgstr "Ej redigerbar egenskapstyp: %s"
 
-#: gtk/inspector/prop-editor.c:1385
+#: gtk/inspector/prop-editor.c:1388
 msgctxt "column number"
 msgid "None"
 msgstr "Inget"
 
-#: gtk/inspector/prop-editor.c:1422
+#: gtk/inspector/prop-editor.c:1425
 msgid "Attribute:"
 msgstr "Attribut:"
 
-#: gtk/inspector/prop-editor.c:1425
+#: gtk/inspector/prop-editor.c:1428
 msgid "Model"
 msgstr "Modell"
 
-#: gtk/inspector/prop-editor.c:1430
+#: gtk/inspector/prop-editor.c:1433
 msgid "Column:"
 msgstr "Kolumn:"
 
 #. Translators: %s is a type name, for example
 #. * Action from 0x2345678 (GtkApplicationWindow)
 #.
-#: gtk/inspector/prop-editor.c:1529
+#: gtk/inspector/prop-editor.c:1532
 #, c-format
 msgid "Action from: %p (%s)"
 msgstr "Åtgärd från: %p (%s)"
 
-#: gtk/inspector/prop-editor.c:1584
+#: gtk/inspector/prop-editor.c:1587
 msgid "Reset"
 msgstr "Återställ"
 
-#: gtk/inspector/prop-editor.c:1592
+#: gtk/inspector/prop-editor.c:1595
 msgctxt "GtkSettings source"
 msgid "Default"
 msgstr "Standard"
 
-#: gtk/inspector/prop-editor.c:1595
+#: gtk/inspector/prop-editor.c:1598
 msgctxt "GtkSettings source"
 msgid "Theme"
 msgstr "Tema"
 
-#: gtk/inspector/prop-editor.c:1598
+#: gtk/inspector/prop-editor.c:1601
 msgctxt "GtkSettings source"
 msgid "XSettings"
 msgstr "XSettings"
 
-#: gtk/inspector/prop-editor.c:1602
+#: gtk/inspector/prop-editor.c:1605
 msgctxt "GtkSettings source"
 msgid "Application"
 msgstr "Program"
 
-#: gtk/inspector/prop-editor.c:1605
+#: gtk/inspector/prop-editor.c:1608
 msgctxt "GtkSettings source"
 msgid "Unknown"
 msgstr "Okänd"
 
-#: gtk/inspector/prop-editor.c:1608
+#: gtk/inspector/prop-editor.c:1611
 msgid "Source:"
 msgstr "Källa:"
 
@@ -4135,7 +4134,7 @@ msgstr "Källa:"
 msgid "Defined At"
 msgstr "Definierad vid"
 
-#: gtk/inspector/recorder.c:1922
+#: gtk/inspector/recorder.c:1865
 #, c-format
 msgid "Saving RenderNode failed"
 msgstr "Sparande av RenderNode misslyckades"
@@ -7182,8 +7181,7 @@ msgstr ""
 #: tools/gtk-builder-tool-enumerate.c:56 tools/gtk-builder-tool-preview.c:179
 #: tools/gtk-builder-tool-preview.c:180 tools/gtk-builder-tool-screenshot.c:360
 #: tools/gtk-builder-tool-simplify.c:2529 tools/gtk-builder-tool-validate.c:261
-#: tools/gtk-path-tool-render.c:55 tools/gtk-rendernode-tool-info.c:208
-#: tools/gtk-rendernode-tool-show.c:102
+#: tools/gtk-rendernode-tool-info.c:202 tools/gtk-rendernode-tool-show.c:102
 msgid "FILE"
 msgstr "FIL"
 
@@ -7215,8 +7213,8 @@ msgid "Use style from CSS file"
 msgstr "Använd stil från CSS-fil"
 
 #: tools/gtk-builder-tool-preview.c:187 tools/gtk-builder-tool-screenshot.c:370
-#: tools/gtk-builder-tool-validate.c:268 tools/gtk-rendernode-tool-render.c:204
-#: tools/gtk-rendernode-tool-show.c:109
+#: tools/gtk-builder-tool-validate.c:268 tools/gtk-rendernode-tool-show.c:109
+#: tools/gtk-rendernode-tool-render.c:204
 #, c-format
 msgid "Could not initialize windowing system\n"
 msgstr "Kunde inte initiera fönstersystem\n"
@@ -7444,267 +7442,6 @@ msgstr "%s: inget sådant program %s"
 msgid "%s: error launching application: %s\n"
 msgstr "%s: fel vid uppstart av programmet: %s\n"
 
-#: tools/gtk-path-tool.c:35
-#, c-format
-msgid ""
-"Usage:\n"
-"  gtk4-path-tool [COMMAND] [OPTION…] PATH\n"
-"\n"
-"Perform various tasks on paths.\n"
-"\n"
-"Commands:\n"
-"  decompose    Decompose the path\n"
-"  show         Display the path in a window\n"
-"  render       Render the path as an image\n"
-"  info         Print information about the path\n"
-"\n"
-msgstr ""
-"Användning:\n"
-"  gtk4-path-tool [KOMMANDO] [FLAGGA…] BANA\n"
-"\n"
-"Utför olika uppgifter på banor.\n"
-"\n"
-"Kommandon:\n"
-"  decompose    Dela upp banan\n"
-"  show         Visa banan i ett fönster\n"
-"  render       Rendera banan som en bild\n"
-"  info         Skriv ut information om banan\n"
-"\n"
-
-#: tools/gtk-path-tool-decompose.c:80
-msgid "Allow quadratic Bézier curves"
-msgstr "Tillåt kvadratiska Bézier-kurvor"
-
-#: tools/gtk-path-tool-decompose.c:81
-msgid "Allow cubic Bézier curves"
-msgstr "Tillåt kubiska Bézier-kurvor"
-
-#: tools/gtk-path-tool-decompose.c:82
-msgid "Allow elliptical arcs"
-msgstr "Tillåt elliptiska bågar"
-
-#: tools/gtk-path-tool-decompose.c:83 tools/gtk-path-tool-info.c:93
-#: tools/gtk-path-tool-render.c:58 tools/gtk-path-tool-show.c:127
-msgid "PATH"
-msgstr "BANA"
-
-#: tools/gtk-path-tool-decompose.c:95
-msgid "Decompose a path."
-msgstr "Dela upp en bana."
-
-#: tools/gtk-path-tool-decompose.c:108 tools/gtk-path-tool-info.c:117
-msgid "No paths given."
-msgstr "Inga banor angivna."
-
-#: tools/gtk-path-tool-decompose.c:136
-msgid "That didn't work out."
-msgstr "Det där fungerade inte."
-
-#: tools/gtk-path-tool-info.c:104
-msgid "Print information about a path."
-msgstr "Skriv ut information om en bana."
-
-#: tools/gtk-path-tool-info.c:124
-msgid "Path is empty."
-msgstr "Banan är tom."
-
-#: tools/gtk-path-tool-info.c:130
-msgid "Path is closed"
-msgstr "Banan är sluten"
-
-#: tools/gtk-path-tool-info.c:139
-#, c-format
-msgid "%d contours"
-msgstr "%d konturer"
-
-#: tools/gtk-path-tool-info.c:141
-#, c-format
-msgid "%d operations"
-msgstr "%d operationer"
-
-#: tools/gtk-path-tool-info.c:145
-#, c-format
-msgid "%d lines"
-msgstr "%d linjer"
-
-#: tools/gtk-path-tool-info.c:150
-#, c-format
-msgid "%d quadratics"
-msgstr "%d kvadratiska"
-
-#: tools/gtk-path-tool-info.c:155
-#, c-format
-msgid "%d cubics"
-msgstr "%d kubiska"
-
-#: tools/gtk-path-tool-info.c:160
-#, c-format
-msgid "%d arcs"
-msgstr "%d bågar"
-
-#: tools/gtk-path-tool-render.c:53 tools/gtk-path-tool-show.c:123
-msgid "Fill the path (the default)"
-msgstr "Fyll banan (standard)"
-
-#: tools/gtk-path-tool-render.c:54 tools/gtk-path-tool-show.c:124
-msgid "Stroke the path"
-msgstr "Stryk längs banan"
-
-#: tools/gtk-path-tool-render.c:55
-msgid "The output file"
-msgstr "Utdatafilen"
-
-#: tools/gtk-path-tool-render.c:56 tools/gtk-path-tool-show.c:125
-msgid "Foreground color"
-msgstr "Förgrundsfärg"
-
-#: tools/gtk-path-tool-render.c:56 tools/gtk-path-tool-render.c:57
-#: tools/gtk-path-tool-show.c:125 tools/gtk-path-tool-show.c:126
-msgid "COLOR"
-msgstr "FÄRG"
-
-#: tools/gtk-path-tool-render.c:57 tools/gtk-path-tool-show.c:126
-msgid "Background color"
-msgstr "Bakgrundsfärg"
-
-#: tools/gtk-path-tool-render.c:62 tools/gtk-path-tool-show.c:131
-msgid "Fill rule (winding, even-odd)"
-msgstr "Fyllnadsregel (vindlande, jämn-udda)"
-
-#: tools/gtk-path-tool-render.c:62 tools/gtk-path-tool-render.c:66
-#: tools/gtk-path-tool-render.c:67 tools/gtk-path-tool-render.c:68
-#: tools/gtk-path-tool-render.c:69 tools/gtk-path-tool-render.c:70
-#: tools/gtk-path-tool-render.c:71 tools/gtk-path-tool-show.c:131
-#: tools/gtk-path-tool-show.c:135 tools/gtk-path-tool-show.c:136
-#: tools/gtk-path-tool-show.c:137 tools/gtk-path-tool-show.c:138
-#: tools/gtk-path-tool-show.c:139 tools/gtk-path-tool-show.c:140
-msgid "VALUE"
-msgstr "VÄRDE"
-
-#: tools/gtk-path-tool-render.c:66 tools/gtk-path-tool-show.c:135
-msgid "Line width (number)"
-msgstr "Linjebredd (tal)"
-
-#: tools/gtk-path-tool-render.c:67 tools/gtk-path-tool-show.c:136
-msgid "Line cap (butt, round, square)"
-msgstr "Linjeavrundning (avhuggen, rund, kvadrat)"
-
-#: tools/gtk-path-tool-render.c:68 tools/gtk-path-tool-show.c:137
-msgid "Line join (miter, miter-clip, round, bevel, arcs)"
-msgstr "Linjeövergång (gering, gering-klipp, rund, fasning, bågar)"
-
-#: tools/gtk-path-tool-render.c:69 tools/gtk-path-tool-show.c:138
-msgid "Miter limit (number)"
-msgstr "Geringsgräns (tal)"
-
-#: tools/gtk-path-tool-render.c:70 tools/gtk-path-tool-show.c:139
-msgid "Dash pattern (comma-separated numbers)"
-msgstr "Streckningsmönster (kommaseparerade tal)"
-
-#: tools/gtk-path-tool-render.c:71 tools/gtk-path-tool-show.c:140
-msgid "Dash offset (number)"
-msgstr "Streckposition (tal)"
-
-#: tools/gtk-path-tool-render.c:90 tools/gtk-path-tool-show.c:153
-msgid "Could not initialize windowing system"
-msgstr "Kunde inte initiera fönstersystem"
-
-#: tools/gtk-path-tool-render.c:97
-msgid "Render the path to a png image."
-msgstr "Rendera banan till en png-bild."
-
-#: tools/gtk-path-tool-render.c:102 tools/gtk-path-tool-show.c:164
-msgid "Options related to filling"
-msgstr "Alternativ relaterade till ifyllning"
-
-#: tools/gtk-path-tool-render.c:103 tools/gtk-path-tool-show.c:165
-msgid "Show help for fill options"
-msgstr "Visa hjälp för fyllnadsalternativ"
-
-#: tools/gtk-path-tool-render.c:110 tools/gtk-path-tool-show.c:172
-msgid "Options related to stroking"
-msgstr "Alternativ relaterade till strykande"
-
-#: tools/gtk-path-tool-render.c:111 tools/gtk-path-tool-show.c:173
-msgid "Show help for stroke options"
-msgstr "Visa hjälp för strykningsalternativ"
-
-#: tools/gtk-path-tool-render.c:128 tools/gtk-path-tool-show.c:190
-msgid "No path specified"
-msgstr "Ingen bana angavs"
-
-#: tools/gtk-path-tool-render.c:134
-msgid "Can only render a single path"
-msgstr "Kan endast rendera en ensam bana"
-
-#: tools/gtk-path-tool-render.c:140 tools/gtk-path-tool-show.c:202
-msgid "fill rule"
-msgstr "fyllnadsregel"
-
-#: tools/gtk-path-tool-render.c:144 tools/gtk-path-tool-show.c:206
-msgid "line cap"
-msgstr "linjeavrundning"
-
-#: tools/gtk-path-tool-render.c:145 tools/gtk-path-tool-show.c:207
-msgid "line join"
-msgstr "linjeövergång"
-
-#: tools/gtk-path-tool-render.c:169 tools/gtk-path-tool-show.c:231
-#, c-format
-msgid "Failed to parse '%s' as number"
-msgstr "Misslyckades med att tolka ”%s” som ett tal"
-
-#: tools/gtk-path-tool-render.c:213
-#, c-format
-msgid "Saving png to '%s' failed"
-msgstr "Sparandet av png till ”%s” misslyckades"
-
-#: tools/gtk-path-tool-render.c:220
-#, c-format
-msgid "Output written to '%s'."
-msgstr "Utdata skrivet till ”%s”."
-
-#: tools/gtk-path-tool-show.c:43 tools/gtk-path-tool-show.c:78
-msgid "Path Preview"
-msgstr "Förhandsgranskning av bana"
-
-#: tools/gtk-path-tool-show.c:161
-msgid "Display the path."
-msgstr "Visa banan."
-
-#: tools/gtk-path-tool-show.c:196
-msgid "Can only show a single path"
-msgstr "Kan endast visa en ensam bana"
-
-#: tools/gtk-path-tool-utils.c:58
-#, c-format
-msgid "Failed to read from standard input: %s\n"
-msgstr "Misslyckades med att läsa från standard in: %s\n"
-
-#: tools/gtk-path-tool-utils.c:64
-#, c-format
-msgid "Error reading from standard input: %s\n"
-msgstr "Fel vid läsning från standard in: %s\n"
-
-#: tools/gtk-path-tool-utils.c:83
-#, c-format
-msgid "Failed to parse '%s' as path.\n"
-msgstr "Misslyckades med att tolka ”%s” som bana.\n"
-
-#: tools/gtk-path-tool-utils.c:109
-#, c-format
-msgid "Failed to parse '%s' as %s."
-msgstr "Misslyckades med att tolka ”%s” som %s."
-
-#: tools/gtk-path-tool-utils.c:111
-msgid "Possible values: "
-msgstr "Möjliga värden: "
-
-#: tools/gtk-path-tool-utils.c:135
-#, c-format
-msgid "Could not parse '%s' as color"
-msgstr "Kunde inte tolka ”%s” som färg"
-
 #: tools/gtk-rendernode-tool.c:35
 #, c-format
 msgid ""
@@ -7730,40 +7467,49 @@ msgstr ""
 "  render       Ta en skärmbild av noden\n"
 "\n"
 
-#: tools/gtk-rendernode-tool-info.c:185
+#: tools/gtk-rendernode-tool-info.c:179
 #, c-format
 msgid "Number of nodes: %u\n"
 msgstr "Antal noder: %u\n"
 
-#: tools/gtk-rendernode-tool-info.c:192
+#: tools/gtk-rendernode-tool-info.c:186
 #, c-format
 msgid "Depth: %u\n"
 msgstr "Djup: %u\n"
 
-#: tools/gtk-rendernode-tool-info.c:195
+#: tools/gtk-rendernode-tool-info.c:189
 #, c-format
 msgid "Bounds: %g x %g\n"
 msgstr "Gränser: %g x %g\n"
 
-#: tools/gtk-rendernode-tool-info.c:196
+#: tools/gtk-rendernode-tool-info.c:190
 #, c-format
 msgid "Origin: %g %g\n"
 msgstr "Ursprung: %g %g\n"
 
-#: tools/gtk-rendernode-tool-info.c:217
+#: tools/gtk-rendernode-tool-info.c:211
 msgid "Provide information about the render node."
 msgstr "Tillhandahåll information om renderingsnoden."
 
-#: tools/gtk-rendernode-tool-info.c:230 tools/gtk-rendernode-tool-render.c:225
-#: tools/gtk-rendernode-tool-show.c:130
+#: tools/gtk-rendernode-tool-info.c:224 tools/gtk-rendernode-tool-show.c:130
+#: tools/gtk-rendernode-tool-render.c:225
 #, c-format
 msgid "No .node file specified\n"
 msgstr "Ingen .node-fil angiven\n"
 
-#: tools/gtk-rendernode-tool-info.c:236
+#: tools/gtk-rendernode-tool-info.c:230
 #, c-format
 msgid "Can only accept a single .node file\n"
 msgstr "Kan endast acceptera en ensam .node-fil\n"
+
+#: tools/gtk-rendernode-tool-show.c:117
+msgid "Show the render node."
+msgstr "Visa renderingsnoden."
+
+#: tools/gtk-rendernode-tool-show.c:136
+#, c-format
+msgid "Can only preview a single .node file\n"
+msgstr "Kan endast förhandsgranska en ensam .node-fil\n"
 
 #: tools/gtk-rendernode-tool-render.c:123
 #, c-format
@@ -7796,19 +7542,15 @@ msgstr "Rendera en .node-fil till en bild."
 msgid "Can only render a single .node file to a single output file\n"
 msgstr "Kan endast rendera en ensam .node-fil till en ensam utdatafil\n"
 
-#: tools/gtk-rendernode-tool-show.c:117
-msgid "Show the render node."
-msgstr "Visa renderingsnoden."
-
-#: tools/gtk-rendernode-tool-show.c:136
-#, c-format
-msgid "Can only preview a single .node file\n"
-msgstr "Kan endast förhandsgranska en ensam .node-fil\n"
-
 #: tools/gtk-rendernode-tool-utils.c:51
 #, c-format
 msgid "Error at %s: %s\n"
 msgstr "Fel vid %s: %s\n"
+
+#: tools/gtk-rendernode-tool-utils.c:69
+#, c-format
+msgid "Failed to load node file: %s\n"
+msgstr "Misslyckades med att läsa in nodfil: %s\n"
 
 #: tools/updateiconcache.c:1391
 #, c-format
@@ -7916,6 +7658,205 @@ msgid ""
 msgstr ""
 "Ingen temaindexfil i ”%s”.\n"
 "Om du verkligen vill skapa en ikoncache här, använd --ignore-theme-index.\n"
+
+#, c-format
+#~ msgid ""
+#~ "Usage:\n"
+#~ "  gtk4-path-tool [COMMAND] [OPTION…] PATH\n"
+#~ "\n"
+#~ "Perform various tasks on paths.\n"
+#~ "\n"
+#~ "Commands:\n"
+#~ "  decompose    Decompose the path\n"
+#~ "  show         Display the path in a window\n"
+#~ "  render       Render the path as an image\n"
+#~ "  info         Print information about the path\n"
+#~ "\n"
+#~ msgstr ""
+#~ "Användning:\n"
+#~ "  gtk4-path-tool [KOMMANDO] [FLAGGA…] BANA\n"
+#~ "\n"
+#~ "Utför olika uppgifter på banor.\n"
+#~ "\n"
+#~ "Kommandon:\n"
+#~ "  decompose    Dela upp banan\n"
+#~ "  show         Visa banan i ett fönster\n"
+#~ "  render       Rendera banan som en bild\n"
+#~ "  info         Skriv ut information om banan\n"
+#~ "\n"
+
+#~ msgid "Allow quadratic Bézier curves"
+#~ msgstr "Tillåt kvadratiska Bézier-kurvor"
+
+#~ msgid "Allow cubic Bézier curves"
+#~ msgstr "Tillåt kubiska Bézier-kurvor"
+
+#~ msgid "Allow elliptical arcs"
+#~ msgstr "Tillåt elliptiska bågar"
+
+#~ msgid "PATH"
+#~ msgstr "BANA"
+
+#~ msgid "Decompose a path."
+#~ msgstr "Dela upp en bana."
+
+#~ msgid "No paths given."
+#~ msgstr "Inga banor angivna."
+
+#~ msgid "That didn't work out."
+#~ msgstr "Det där fungerade inte."
+
+#~ msgid "Print information about a path."
+#~ msgstr "Skriv ut information om en bana."
+
+#~ msgid "Path is empty."
+#~ msgstr "Banan är tom."
+
+#~ msgid "Path is closed"
+#~ msgstr "Banan är sluten"
+
+#, c-format
+#~ msgid "%d contours"
+#~ msgstr "%d konturer"
+
+#, c-format
+#~ msgid "%d operations"
+#~ msgstr "%d operationer"
+
+#, c-format
+#~ msgid "%d lines"
+#~ msgstr "%d linjer"
+
+#, c-format
+#~ msgid "%d quadratics"
+#~ msgstr "%d kvadratiska"
+
+#, c-format
+#~ msgid "%d cubics"
+#~ msgstr "%d kubiska"
+
+#, c-format
+#~ msgid "%d arcs"
+#~ msgstr "%d bågar"
+
+#~ msgid "Fill the path (the default)"
+#~ msgstr "Fyll banan (standard)"
+
+#~ msgid "Stroke the path"
+#~ msgstr "Stryk längs banan"
+
+#~ msgid "The output file"
+#~ msgstr "Utdatafilen"
+
+#~ msgid "Foreground color"
+#~ msgstr "Förgrundsfärg"
+
+#~ msgid "COLOR"
+#~ msgstr "FÄRG"
+
+#~ msgid "Background color"
+#~ msgstr "Bakgrundsfärg"
+
+#~ msgid "Fill rule (winding, even-odd)"
+#~ msgstr "Fyllnadsregel (vindlande, jämn-udda)"
+
+#~ msgid "VALUE"
+#~ msgstr "VÄRDE"
+
+#~ msgid "Line width (number)"
+#~ msgstr "Linjebredd (tal)"
+
+#~ msgid "Line cap (butt, round, square)"
+#~ msgstr "Linjeavrundning (avhuggen, rund, kvadrat)"
+
+#~ msgid "Line join (miter, miter-clip, round, bevel, arcs)"
+#~ msgstr "Linjeövergång (gering, gering-klipp, rund, fasning, bågar)"
+
+#~ msgid "Miter limit (number)"
+#~ msgstr "Geringsgräns (tal)"
+
+#~ msgid "Dash pattern (comma-separated numbers)"
+#~ msgstr "Streckningsmönster (kommaseparerade tal)"
+
+#~ msgid "Dash offset (number)"
+#~ msgstr "Streckposition (tal)"
+
+#~ msgid "Could not initialize windowing system"
+#~ msgstr "Kunde inte initiera fönstersystem"
+
+#~ msgid "Render the path to a png image."
+#~ msgstr "Rendera banan till en png-bild."
+
+#~ msgid "Options related to filling"
+#~ msgstr "Alternativ relaterade till ifyllning"
+
+#~ msgid "Show help for fill options"
+#~ msgstr "Visa hjälp för fyllnadsalternativ"
+
+#~ msgid "Options related to stroking"
+#~ msgstr "Alternativ relaterade till strykande"
+
+#~ msgid "Show help for stroke options"
+#~ msgstr "Visa hjälp för strykningsalternativ"
+
+#~ msgid "No path specified"
+#~ msgstr "Ingen bana angavs"
+
+#~ msgid "Can only render a single path"
+#~ msgstr "Kan endast rendera en ensam bana"
+
+#~ msgid "fill rule"
+#~ msgstr "fyllnadsregel"
+
+#~ msgid "line cap"
+#~ msgstr "linjeavrundning"
+
+#~ msgid "line join"
+#~ msgstr "linjeövergång"
+
+#, c-format
+#~ msgid "Failed to parse '%s' as number"
+#~ msgstr "Misslyckades med att tolka ”%s” som ett tal"
+
+#, c-format
+#~ msgid "Saving png to '%s' failed"
+#~ msgstr "Sparandet av png till ”%s” misslyckades"
+
+#, c-format
+#~ msgid "Output written to '%s'."
+#~ msgstr "Utdata skrivet till ”%s”."
+
+#~ msgid "Path Preview"
+#~ msgstr "Förhandsgranskning av bana"
+
+#~ msgid "Display the path."
+#~ msgstr "Visa banan."
+
+#~ msgid "Can only show a single path"
+#~ msgstr "Kan endast visa en ensam bana"
+
+#, c-format
+#~ msgid "Failed to read from standard input: %s\n"
+#~ msgstr "Misslyckades med att läsa från standard in: %s\n"
+
+#, c-format
+#~ msgid "Error reading from standard input: %s\n"
+#~ msgstr "Fel vid läsning från standard in: %s\n"
+
+#, c-format
+#~ msgid "Failed to parse '%s' as path.\n"
+#~ msgstr "Misslyckades med att tolka ”%s” som bana.\n"
+
+#, c-format
+#~ msgid "Failed to parse '%s' as %s."
+#~ msgstr "Misslyckades med att tolka ”%s” som %s."
+
+#~ msgid "Possible values: "
+#~ msgstr "Möjliga värden: "
+
+#, c-format
+#~ msgid "Could not parse '%s' as color"
+#~ msgstr "Kunde inte tolka ”%s” som färg"
 
 #~ msgid "Stroke the path instead of filling it"
 #~ msgstr "Stryk längs banan i stället för att fylla den"
