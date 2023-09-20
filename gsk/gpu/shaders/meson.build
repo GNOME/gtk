@@ -63,7 +63,6 @@ foreach shader: gsk_private_gpu_shaders
                                   '--target-env=vulkan1.2',
                                   '-fshader-stage=vertex',
                                   '-DGSK_VERTEX_SHADER=1',
-                                  '-O',
                                   '@INPUT@',
                                   '-o', '@OUTPUT@'
                                 ])
@@ -77,7 +76,6 @@ foreach shader: gsk_private_gpu_shaders
                                   '--target-env=vulkan1.2',
                                   '-fshader-stage=fragment',
                                   '-DGSK_FRAGMENT_SHADER=1',
-                                  '-O',
                                   '@INPUT@',
                                   '-o', '@OUTPUT@'
                                 ])
