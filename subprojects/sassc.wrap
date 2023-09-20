@@ -1,13 +1,8 @@
-[wrap-file]
-directory = sassc-3.6.2
-source_url = https://github.com/sass/sassc/archive/refs/tags/3.6.2.tar.gz
-source_filename = sassc-3.6.2.tar.gz
-source_hash = 608dc9002b45a91d11ed59e352469ecc05e4f58fc1259fc9a9f5b8f0f8348a03
-patch_filename = sassc_3.6.2-1_patch.zip
-patch_url = https://wrapdb.mesonbuild.com/v2/sassc_3.6.2-1/get_patch
-patch_hash = 3b0616fa7f5a007e206fa322946755b3270ba696a3cbdc65b3f0d204998c076c
-source_fallback_url = https://github.com/mesonbuild/wrapdb/releases/download/sassc_3.6.2-1/sassc-3.6.2.tar.gz
-wrapdb_version = 3.6.2-1
+[wrap-git]
+directory = sassc
+url = https://github.com/lazka/sassc.git
+revision = meson
+depth = 1
 
 [provide]
 program_names = sassc
