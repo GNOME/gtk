@@ -30,12 +30,13 @@
  *
  * `GtkStringList` is a list model that wraps an array of strings.
  *
- * The objects in the model have a "string" property.
+ * The objects in the model are of type [class@Gtk.StringObject] and have
+ * a "string" property that can be used inside expressions.
  *
  * `GtkStringList` is well-suited for any place where you would
  * typically use a `char*[]`, but need a list model.
  *
- * # GtkStringList as GtkBuildable
+ * ## GtkStringList as GtkBuildable
  *
  * The `GtkStringList` implementation of the `GtkBuildable` interface
  * supports adding items directly using the `<items>` element and
@@ -64,7 +65,8 @@
  * `GtkStringObject` is the type of items in a `GtkStringList`.
  *
  * A `GtkStringObject` is a wrapper around a `const char*`; it has
- * a [property@Gtk.StringObject:string] property.
+ * a [property@Gtk.StringObject:string] property that can be used
+ * for property bindings and expressions.
  */
 
 #define GDK_ARRAY_ELEMENT_TYPE GtkStringObject *
