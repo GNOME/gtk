@@ -6,6 +6,7 @@
 #include "gskgpubluropprivate.h"
 #include "gskgpuclipprivate.h"
 #include "gskgpucolorizeopprivate.h"
+#include "gskgpucoloropprivate.h"
 #include "gskgpudeviceprivate.h"
 #include "gskgpuframeprivate.h"
 #include "gskgpuglobalsopprivate.h"
@@ -940,6 +941,17 @@ gsk_gpu_node_processor_add_transform_node (GskGpuNodeProcessor *self,
   self->pending_globals |= GSK_GPU_GLOBAL_MATRIX | GSK_GPU_GLOBAL_SCALE | GSK_GPU_GLOBAL_CLIP;
 }
 
+static void
+gsk_gpu_node_processor_add_color_node (GskGpuNodeProcessor *self,
+                                       GskRenderNode       *node)
+{
+  gsk_gpu_color_op (self->frame,
+                    gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, &node->bounds),
+                    &node->bounds,
+                    &self->offset,
+                    gsk_color_node_get_color (node));
+}
+
 static gboolean
 gsk_gpu_node_processor_create_color_pattern (GskGpuPatternWriter *self,
                                              GskRenderNode       *node)
@@ -1571,7 +1583,7 @@ static const struct
   },
   [GSK_COLOR_NODE] = {
     0,
-    gsk_gpu_node_processor_add_node_as_pattern,
+    gsk_gpu_node_processor_add_color_node,
     gsk_gpu_node_processor_create_color_pattern,
   },
   [GSK_LINEAR_GRADIENT_NODE] = {
