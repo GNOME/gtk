@@ -753,6 +753,8 @@ gdk_win32_drag_finalize (GObject *object)
   g_set_object (&drag_win32->grab_surface, NULL);
   drag_surface = drag_win32->drag_surface;
 
+  g_clear_handle_id (&drag_win32->anim_timeout_id, g_source_remove);
+
   G_OBJECT_CLASS (gdk_win32_drag_parent_class)->finalize (object);
 
   if (drag_surface)
@@ -1867,7 +1869,6 @@ gdk_win32_drag_drop_done (GdkDrag  *drag,
   GdkDragAnim *anim;
   GdkWin32Clipdrop *clipdrop;
   gpointer ddd;
-  guint id;
 
   GDK_NOTE (DND, g_print ("gdk_win32_drag_drop_done: 0x%p %s\n",
                           drag,
@@ -1905,10 +1906,10 @@ gdk_win32_drag_drop_done (GdkDrag  *drag,
                           drag_win32->util_data.last_x, drag_win32->util_data.last_y,
                           drag_win32->start_x, drag_win32->start_y));
 
-  id = g_timeout_add_full (G_PRIORITY_DEFAULT, 17,
-                           gdk_drag_anim_timeout, anim,
-                           (GDestroyNotify) gdk_drag_anim_destroy);
-  gdk_source_set_static_name_by_id (id, "[gtk] gdk_drag_anim_timeout");
+  drag_win32->anim_timeout_id = g_timeout_add_full (G_PRIORITY_DEFAULT, 17,
+                                                    gdk_drag_anim_timeout, anim,
+                                                    (GDestroyNotify) gdk_drag_anim_destroy);
+  gdk_source_set_static_name_by_id (drag_win32->anim_timeout_id, "[gtk] gdk_drag_anim_timeout");
 }
 
 static gboolean

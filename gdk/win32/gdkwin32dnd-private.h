@@ -72,6 +72,8 @@ struct _GdkWin32Drag
    */
   GdkDragAction    current_action;
 
+  guint anim_timeout_id;
+
   GdkWin32DragUtilityData util_data;
 
   guint scale;             /* Temporarily caches the HiDPI scale */
