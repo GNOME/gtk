@@ -60,7 +60,6 @@ foreach setup : setups
   endif
 endforeach
 
-subdir('performance')
 subdir('gdk')
 subdir('gsk')
 subdir('gtk')
