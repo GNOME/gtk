@@ -104,6 +104,19 @@ struct _GskContourClass
 #define DEG_TO_RAD(x)          ((x) * (G_PI / 180.f))
 #define RAD_TO_DEG(x)          ((x) / (G_PI / 180.f))
 
+static inline void
+_sincosf (float  angle,
+          float *out_s,
+          float *out_c)
+{
+#ifdef HAVE_SINCOSF
+  sincosf (angle, out_s, out_c);
+#else
+  *out_s = sinf (angle);
+  *out_c = cosf (angle);
+#endif
+}
+
 static void
 _g_string_append_float (GString    *string,
                         const char *prefix,
@@ -1498,7 +1511,7 @@ gsk_circle_contour_get_closest_point (const GskContour       *contour,
   angle = atan2f (point->y - self->center.y, point->x - self->center.x);
 
   if (angle < 0)
-    angle = M_PI - angle;
+    angle = 2 * M_PI + angle;
 
   t = CLAMP (angle / (2 * M_PI), 0, 1);
 
@@ -1554,9 +1567,11 @@ gsk_circle_contour_get_position (const GskContour   *contour,
     }
   else
     {
-      float angle = M_PI_2 * ((idx - 1) + t);
-      *position = GRAPHENE_POINT_INIT (self->center.x + cosf (angle) * self->radius,
-                                       self->center.y + sinf (angle) * self->radius);
+      float s, c;
+
+      _sincosf (M_PI_2 * ((idx - 1) + t), &s, &c);
+      *position = GRAPHENE_POINT_INIT (self->center.x + c * self->radius,
+                                       self->center.y + s * self->radius);
     }
 }
 
