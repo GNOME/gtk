@@ -116,6 +116,7 @@ struct _GdkX11Drag
   GdkSeat *grab_seat;
   GdkDragAction actions;
   GdkDragAction current_action;
+  guint anim_timeout_id;
 
   int hot_x;
   int hot_y;
@@ -213,6 +214,8 @@ gdk_x11_drag_finalize (GObject *object)
 
   drag_surface = x11_drag->drag_surface;
   ipc_surface = x11_drag->ipc_surface;
+
+  g_clear_handle_id (&x11_drag->anim_timeout_id, g_source_remove);
 
   G_OBJECT_CLASS (gdk_x11_drag_parent_class)->finalize (object);
 
@@ -1801,7 +1804,6 @@ gdk_x11_drag_drop_done (GdkDrag  *drag,
 {
   GdkX11Drag *x11_drag = GDK_X11_DRAG (drag);
   GdkDragAnim *anim;
-  guint id;
 
   gdk_x11_drag_release_selection (drag);
 
@@ -1820,10 +1822,10 @@ gdk_x11_drag_drop_done (GdkDrag  *drag,
   anim->frame_clock = gdk_surface_get_frame_clock (x11_drag->drag_surface);
   anim->start_time = gdk_frame_clock_get_frame_time (anim->frame_clock);
 
-  id = g_timeout_add_full (G_PRIORITY_DEFAULT, 17,
-                           gdk_drag_anim_timeout, anim,
-                           (GDestroyNotify) gdk_drag_anim_destroy);
-  gdk_source_set_static_name_by_id (id, "[gtk] gdk_drag_anim_timeout");
+  x11_drag->anim_timeout_id = g_timeout_add_full (G_PRIORITY_DEFAULT, 17,
+                                                  gdk_drag_anim_timeout, anim,
+                                                  (GDestroyNotify) gdk_drag_anim_destroy);
+  gdk_source_set_static_name_by_id (x11_drag->anim_timeout_id, "[gtk] gdk_drag_anim_timeout");
   g_object_unref (drag);
 }
 
