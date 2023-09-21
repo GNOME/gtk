@@ -9,6 +9,8 @@
 
 #include "paintable.h"
 
+#undef SHOW_CONTROLS
+
 #define GTK_TYPE_SPINNER_PAINTABLE (gtk_spinner_paintable_get_type ())
 G_DECLARE_FINAL_TYPE (GtkSpinnerPaintable, gtk_spinner_paintable, GTK, SPINNER_PAINTABLE, GObject)
 
@@ -150,6 +152,7 @@ static gboolean
 add_controls (GskPathOperation        op,
               const graphene_point_t *pts,
               gsize                   n_pts,
+              float                   weight,
               gpointer                data)
 {
   GskPathBuilder *builder = data;
@@ -166,7 +169,7 @@ add_controls (GskPathOperation        op,
       break;
 
     case GSK_PATH_QUAD:
-    case GSK_PATH_ARC:
+    case GSK_PATH_CONIC:
       gsk_path_builder_line_to (builder, pts[1].x, pts[1].y);
       gsk_path_builder_line_to (builder, pts[2].x, pts[2].y);
       break;
