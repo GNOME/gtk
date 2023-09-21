@@ -1615,46 +1615,12 @@ gsk_circle_contour_add_segment (const GskContour   *contour,
                                 const GskPathPoint *end)
 {
   GskPath *path;
-  graphene_point_t p;
-  GskPathPoint start2, end2;
   const GskContour *std;
-  float dist;
-
-  /* This is a cheesy way of doing things: convert to a standard contour,
-   * and translate the path points from circle to standard. We just have
-   * to be careful to tell start- and endpoint apart.
-   */
 
   path = convert_to_standard_contour (contour);
   std = gsk_path_get_contour (path, 0);
 
-  start2.contour = 0;
-
-  if (start->idx == 1 && start->t == 0)
-    {
-      start2.idx = 1;
-      start2.t = 0;
-    }
-  else
-    {
-      gsk_circle_contour_get_position (contour, start, &p);
-      gsk_standard_contour_get_closest_point (std, &p, INFINITY, &start2, &dist);
-    }
-
-  end2.contour = 0;
-
-  if (end->idx == 1 && end->t == 1)
-    {
-      end2.idx = 5;
-      end2.t = 1;
-    }
-  else
-    {
-      gsk_circle_contour_get_position (contour, end, &p);
-      gsk_standard_contour_get_closest_point (std, &p, INFINITY, &end2, &dist);
-    }
-
-  gsk_standard_contour_add_segment (std, builder, emit_move_to, &start2, &end2);
+  gsk_standard_contour_add_segment (std, builder, emit_move_to, start, end);
 
   gsk_path_unref (path);
 }
