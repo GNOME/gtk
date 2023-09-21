@@ -143,7 +143,6 @@ gdk_macos_drag_drop_done (GdkDrag  *drag,
 {
   GdkMacosDrag *self = (GdkMacosDrag *)drag;
   GdkMacosZoomback *zb;
-  guint id;
 
   g_assert (GDK_IS_MACOS_DRAG (self));
 
@@ -162,11 +161,11 @@ gdk_macos_drag_drop_done (GdkDrag  *drag,
   zb->frame_clock = gdk_surface_get_frame_clock (GDK_SURFACE (self->drag_surface));
   zb->start_time = gdk_frame_clock_get_frame_time (zb->frame_clock);
 
-  id = g_timeout_add_full (G_PRIORITY_DEFAULT, 17,
-                           gdk_macos_zoomback_timeout,
-                           zb,
-                           (GDestroyNotify) gdk_macos_zoomback_destroy);
-  gdk_source_set_static_name_by_id (id, "[gtk] gdk_macos_zoomback_timeout");
+  self->anim_timeout_id = g_timeout_add_full (G_PRIORITY_DEFAULT, 17,
+                                              gdk_macos_zoomback_timeout,
+                                              zb,
+                                              (GDestroyNotify) gdk_macos_zoomback_destroy);
+  gdk_source_set_static_name_by_id (self->anim_timeout_id, "[gtk] gdk_macos_zoomback_timeout");
   g_object_unref (drag);
 }
 
@@ -281,6 +280,8 @@ gdk_macos_drag_finalize (GObject *object)
   GdkMacosDragSurface *drag_surface = g_steal_pointer (&self->drag_surface);
 
   g_clear_object (&self->cursor);
+
+  g_clear_handle_id(&self->anim_timeout_id, g_source_remove);
 
   G_OBJECT_CLASS (gdk_macos_drag_parent_class)->finalize (object);
 

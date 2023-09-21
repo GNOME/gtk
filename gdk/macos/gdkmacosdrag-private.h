@@ -53,6 +53,8 @@ struct _GdkMacosDrag
 
   guint did_update : 1;
   guint cancelled : 1;
+
+  guint anim_timeout_id;
 };
 
 struct _GdkMacosDragClass
