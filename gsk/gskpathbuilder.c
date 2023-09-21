@@ -718,6 +718,9 @@ gsk_path_builder_quad_to (GskPathBuilder *self,
                 {
                   gsk_bounding_box_get_corner (&bb, (i + 2) % 4, &q);
                   gsk_path_builder_line_to (self, q.x, q.y);
+                  gsk_path_builder_append_current (self,
+                                                   GSK_PATH_QUAD,
+                                                   2, (graphene_point_t[2]) { q, q });
                   break;
                 }
             }
@@ -884,12 +887,18 @@ gsk_path_builder_cubic_to (GskPathBuilder *self,
                */
               bounding_box_corner_between (&bb, &p0, &p1, &p);
               gsk_path_builder_line_to (self, p.x, p.y);
+              gsk_path_builder_append_current (self,
+                                               GSK_PATH_QUAD,
+                                               2, (graphene_point_t[2]) { p, p });
             }
           if (!p2in)
             {
               /* Find the intersection of bb with p2 - p3. */
               bounding_box_corner_between (&bb, &p3, &p2, &p);
               gsk_path_builder_line_to (self, p.x, p.y);
+              gsk_path_builder_append_current (self,
+                                               GSK_PATH_QUAD,
+                                               2, (graphene_point_t[2]) { p, p });
             }
           gsk_path_builder_line_to (self, x3, y3);
         }
@@ -930,6 +939,9 @@ gsk_path_builder_cubic_to (GskPathBuilder *self,
                                            GSK_PATH_CUBIC,
                                            3, &c1.cubic.points[1]);
           gsk_path_builder_append_current (self,
+                                           GSK_PATH_QUAD,
+                                           2, (graphene_point_t[2]) { c1.cubic.points[3], c1.cubic.points[3] });
+          gsk_path_builder_append_current (self,
                                            GSK_PATH_CUBIC,
                                            3, &c2.cubic.points[1]);
           return;
@@ -949,8 +961,14 @@ gsk_path_builder_cubic_to (GskPathBuilder *self,
                                            GSK_PATH_CUBIC,
                                            3, &c1.cubic.points[1]);
           gsk_path_builder_append_current (self,
+                                           GSK_PATH_QUAD,
+                                           2, (graphene_point_t[2]) { c1.cubic.points[3], c1.cubic.points[3] });
+          gsk_path_builder_append_current (self,
                                            GSK_PATH_CUBIC,
                                            3, &c3.cubic.points[1]);
+          gsk_path_builder_append_current (self,
+                                           GSK_PATH_QUAD,
+                                           2, (graphene_point_t[2]) { c3.cubic.points[3], c3.cubic.points[3] });
           gsk_path_builder_append_current (self,
                                            GSK_PATH_CUBIC,
                                            3, &c4.cubic.points[1]);
