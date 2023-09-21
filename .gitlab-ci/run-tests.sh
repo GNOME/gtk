@@ -23,6 +23,7 @@ case "${backend}" in
                 --suite=gtk \
                 --no-suite=failing \
                 --no-suite=flaky \
+                --no-suite=headless \
                 --no-suite=gsk-compare-broadway
 
     # Store the exit code for the CI run, but always
@@ -45,6 +46,7 @@ case "${backend}" in
                 --suite=gtk \
                 --no-suite=failing \
                 --no-suite=flaky \
+                --no-suite=headless \
                 --no-suite=${backend}_failing \
                 --no-suite=gsk-compare-broadway
     exit_code=$?
@@ -67,6 +69,7 @@ case "${backend}" in
                 --suite=gtk \
                 --no-suite=failing \
                 --no-suite=flaky \
+                --no-suite=headless \
                 --no-suite=gsk-compare-opengl
 
     kill ${server}
