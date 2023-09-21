@@ -286,15 +286,16 @@ _gdk_win32_display_init_monitors (GdkWin32Display *win32_display)
       GdkMonitor *ex_monitor;
 
       w32_ex_monitor = GDK_WIN32_MONITOR (g_list_model_get_item (win32_display->monitors, i));
-      g_object_unref (w32_ex_monitor);
       ex_monitor = GDK_MONITOR (w32_ex_monitor);
 
-      if (!w32_ex_monitor->remove)
-        continue;
+      if (w32_ex_monitor->remove)
+        {
+          w32_ex_monitor->hmonitor = NULL;
+          g_list_store_remove (G_LIST_STORE (win32_display->monitors), i);
+          gdk_monitor_invalidate (ex_monitor);
+        }
 
-      w32_ex_monitor->hmonitor = NULL;
-      g_list_store_remove (G_LIST_STORE (win32_display->monitors), i);
-      gdk_monitor_invalidate (ex_monitor);
+      g_object_unref (w32_ex_monitor);
     }
 
   for (i = 0; i < new_monitors->len; i++)
