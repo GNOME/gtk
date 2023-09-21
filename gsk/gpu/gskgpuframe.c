@@ -216,6 +216,8 @@ gsk_gpu_frame_sort_render_pass (GskGpuFrame *self,
                                 GskGpuOp    *op,
                                 SortData    *sort_data)
 {
+  SortData subpasses = { { NULL, NULL }, { NULL, NULL } };
+
   while (op)
     {
       switch (op->op_class->stage)
@@ -240,45 +242,54 @@ gsk_gpu_frame_sort_render_pass (GskGpuFrame *self,
           break;
 
         case GSK_GPU_STAGE_PASS:
-          if (sort_data->command.first == NULL)
-            sort_data->command.first = op;
+          if (subpasses.command.first == NULL)
+            subpasses.command.first = op;
           else
-            sort_data->command.last->next = op;
-          sort_data->command.last = op;
+            subpasses.command.last->next = op;
+          subpasses.command.last = op;
           op = op->next;
           break;
 
         case GSK_GPU_STAGE_BEGIN_PASS:
-          {
-            SortData pass_data = { { NULL, NULL }, { op, op } };
+          if (subpasses.command.first == NULL)
+            subpasses.command.first = op;
+          else
+            subpasses.command.last->next = op;
+          subpasses.command.last = op;
 
-            op = gsk_gpu_frame_sort_render_pass (self, op->next, &pass_data);
-
-            if (pass_data.upload.first)
-              {
-                if (sort_data->upload.last == NULL)
-                  sort_data->upload.last = pass_data.upload.last;
-                else
-                  pass_data.upload.last->next = sort_data->upload.first;
-                sort_data->upload.first = pass_data.upload.first;
-              }
-            if (sort_data->command.last == NULL)
-              sort_data->command.last = pass_data.command.last;
-            else
-              pass_data.command.last->next = sort_data->command.first;
-            sort_data->command.first = pass_data.command.first;
-          }
+          /* append subpass to existing subpasses */
+          op = gsk_gpu_frame_sort_render_pass (self, op->next, &subpasses);
           break;
 
         case GSK_GPU_STAGE_END_PASS:
           sort_data->command.last->next = op;
           sort_data->command.last = op;
-          return op->next;
+          op = op->next;
+          goto out;
 
         default:
           g_assert_not_reached ();
           break;
       }
+    }
+
+out:
+  /* prepend subpasses to the current pass */
+  if (subpasses.upload.first)
+    {
+      if (sort_data->upload.first != NULL)
+        subpasses.upload.last->next = sort_data->upload.first;
+      else
+        sort_data->upload.last = subpasses.upload.last;
+      sort_data->upload.first = subpasses.upload.first;
+    }
+  if (subpasses.command.first)
+    {
+      if (sort_data->command.first != NULL)
+        subpasses.command.last->next = sort_data->command.first;
+      else
+        sort_data->command.last = subpasses.command.last;
+      sort_data->command.first = subpasses.command.first;
     }
 
   return op;
