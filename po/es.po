@@ -16,7 +16,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-07-17 16:28+0000\n"
+"POT-Creation-Date: 2023-09-19 21:41+0000\n"
 "PO-Revision-Date: 2023-07-19 14:37+0200\n"
 "Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
 "Language-Team: Spanish - Spain <gnome-es-list@gnome.org>\n"
@@ -2284,7 +2284,7 @@ msgstr "Seleccionar _todo"
 
 #: gtk/gtkentry.c:9628 gtk/gtktextview.c:9561
 msgid "Insert _Emoji"
-msgstr "Insertar _emoticono"
+msgstr "Insertar _emoji"
 
 #: gtk/gtkentry.c:9804 gtk/gtktextview.c:9785
 msgid "Select all"
@@ -2308,7 +2308,7 @@ msgstr "Bloq Mayús está activado"
 
 #: gtk/gtkentry.c:11163
 msgid "Insert Emoji"
-msgstr "Insertar emoticono"
+msgstr "Insertar emoji"
 
 #: gtk/gtkfilechooserbutton.c:112
 msgid "Select a File"
