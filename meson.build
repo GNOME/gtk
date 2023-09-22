@@ -642,23 +642,9 @@ if not get_option('sysprof').disabled()
     ],
   )
   cdata.set('HAVE_SYSPROF', libsysprof_capture_dep.found())
-  libsysprof_dep = dependency('sysprof-4',
-    required: false,
-    default_options: [
-      'agent=false',
-      'examples=false',
-      'gtk=false',
-      'tests=false',
-      'tools=false',
-      'libsysprof=true',
-      'sysprofd=none',
-      'help=false',
-    ],
-  )
   profiler_enabled = true
 else
   libsysprof_capture_dep = disabler()
-  libsysprof_dep = disabler()
   profiler_enabled = false
 endif
 
