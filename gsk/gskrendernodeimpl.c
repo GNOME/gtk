@@ -5607,6 +5607,13 @@ gsk_text_node_new (PangoFont              *font,
       if (glyphs->glyphs[i].attr.is_color)
         self->has_color_glyphs = TRUE;
 
+      if (i == 0 &&
+          (*(guint*)(&glyphs->glyphs[i].attr)) & (1 << 3))
+        {
+          g_print ("text node in Arabic\n");
+          node->offscreen_for_opacity = TRUE;
+        }
+
       n++;
     }
 

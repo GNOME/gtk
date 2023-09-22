@@ -97,6 +97,14 @@ gsk_pango_renderer_draw_glyph_item (PangoRenderer  *renderer,
   GskPangoRenderer *crenderer = (GskPangoRenderer *) (renderer);
   GdkRGBA color;
 
+  if (glyph_item->item->analysis.script == PANGO_SCRIPT_ARABIC)
+    {
+      g_print ("glyph item in arabic!\n");
+      *(guint*)&(glyph_item->glyphs->glyphs[0].attr) |= (1 << 3);
+    }
+  else
+    *(guint*)&(glyph_item->glyphs->glyphs[0].attr) &= ~(1 << 3);
+
   get_color (crenderer, PANGO_RENDER_PART_FOREGROUND, &color);
 
   gtk_snapshot_append_text (crenderer->snapshot,
