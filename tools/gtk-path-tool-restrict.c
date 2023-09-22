@@ -34,7 +34,7 @@ do_restrict (int *argc, const char ***argv)
   GOptionContext *context;
   GOptionEntry entries[] = {
     { "start", 0, 0, G_OPTION_ARG_DOUBLE, &start, N_("Beginning of segment"), N_("LENGTH") },
-    { "end", 0, 0, G_OPTION_ARG_DOUBLE, &start, N_("End of segment"), N_("LENGTH") },
+    { "end", 0, 0, G_OPTION_ARG_DOUBLE, &end, N_("End of segment"), N_("LENGTH") },
     { G_OPTION_REMAINING, 0, 0, G_OPTION_ARG_FILENAME_ARRAY, &args, NULL, N_("PATH") },
     { NULL, },
   };
