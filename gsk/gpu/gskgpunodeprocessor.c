@@ -4,6 +4,7 @@
 
 #include "gskgpuborderopprivate.h"
 #include "gskgpubluropprivate.h"
+#include "gskgpuclearopprivate.h"
 #include "gskgpuclipprivate.h"
 #include "gskgpucolorizeopprivate.h"
 #include "gskgpucoloropprivate.h"
@@ -945,6 +946,104 @@ static void
 gsk_gpu_node_processor_add_color_node (GskGpuNodeProcessor *self,
                                        GskRenderNode       *node)
 {
+  cairo_rectangle_int_t int_clipped;
+  graphene_rect_t rect, clipped;
+  const GdkRGBA *color;
+
+  color = gsk_color_node_get_color (node);
+  graphene_rect_offset_r (&node->bounds,
+                          self->offset.x, self->offset.y,
+                          &rect);
+  gsk_rect_intersection (&self->clip.rect.bounds, &rect, &clipped);
+
+  if (gdk_rgba_is_opaque (color) &&
+      node->bounds.size.width * node->bounds.size.height > 100 * 100 && /* not worth the effort for small images */
+      gsk_gpu_node_processor_rect_is_integer (self, &clipped, &int_clipped))
+    {
+      /* now handle all the clip */
+      if (!gdk_rectangle_intersect (&int_clipped, &self->scissor, &int_clipped))
+        return;
+
+      /* we have handled the bounds, now do the corners */
+      if (self->clip.type == GSK_GPU_CLIP_ROUNDED)
+        {
+          graphene_rect_t cover;
+          GskGpuShaderClip shader_clip;
+          float scale_x, scale_y;
+
+          if (self->modelview)
+            {
+              /* Yuck, rounded clip and modelview. I give up. */
+              gsk_gpu_color_op (self->frame,
+                                gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, &node->bounds),
+                                &node->bounds,
+                                &self->offset,
+                                gsk_color_node_get_color (node));
+              return;
+            }
+
+          scale_x = graphene_vec2_get_x (&self->scale);
+          scale_y = graphene_vec2_get_y (&self->scale);
+          clipped = GRAPHENE_RECT_INIT (int_clipped.x / scale_x, int_clipped.y / scale_y,
+                                        int_clipped.width / scale_x, int_clipped.height / scale_y);
+          shader_clip = gsk_gpu_clip_get_shader_clip (&self->clip, graphene_point_zero(), &clipped);
+          if (shader_clip != GSK_GPU_SHADER_CLIP_NONE)
+            {
+              gsk_rounded_rect_get_largest_cover (&self->clip.rect, &clipped, &cover);
+              int_clipped.x = ceil (cover.origin.x * scale_x);
+              int_clipped.y = ceil (cover.origin.y * scale_y);
+              int_clipped.width = floor ((cover.origin.x + cover.size.width) * scale_x) - int_clipped.x;
+              int_clipped.height = floor ((cover.origin.y + cover.size.height) * scale_y) - int_clipped.y;
+              if (int_clipped.width == 0 || int_clipped.height == 0)
+                {
+                  gsk_gpu_color_op (self->frame,
+                                    shader_clip,
+                                    &clipped,
+                                    graphene_point_zero (),
+                                    color);
+                  return;
+                }
+              cover = GRAPHENE_RECT_INIT (int_clipped.x / scale_x, int_clipped.y / scale_y,
+                                          int_clipped.width / scale_x, int_clipped.height / scale_y);
+              if (clipped.origin.x != cover.origin.x)
+                gsk_gpu_color_op (self->frame,
+                                  shader_clip,
+                                  &GRAPHENE_RECT_INIT (clipped.origin.x, clipped.origin.y, cover.origin.x - clipped.origin.x, clipped.size.height),
+                                  graphene_point_zero (),
+                                  color);
+              if (clipped.origin.y != cover.origin.y)
+                gsk_gpu_color_op (self->frame,
+                                  shader_clip,
+                                  &GRAPHENE_RECT_INIT (clipped.origin.x, clipped.origin.y, clipped.size.width, cover.origin.y - clipped.origin.y),
+                                  graphene_point_zero (),
+                                  color);
+              if (clipped.origin.x + clipped.size.width != cover.origin.x + cover.size.width)
+                gsk_gpu_color_op (self->frame,
+                                  shader_clip,
+                                  &GRAPHENE_RECT_INIT (cover.origin.x + cover.size.width,
+                                                       clipped.origin.y,
+                                                       clipped.origin.x + clipped.size.width - cover.origin.x - cover.size.width,
+                                                       clipped.size.height),
+                                  graphene_point_zero (),
+                                  color);
+              if (clipped.origin.y + clipped.size.height != cover.origin.y + cover.size.height)
+                gsk_gpu_color_op (self->frame,
+                                  shader_clip,
+                                  &GRAPHENE_RECT_INIT (clipped.origin.x,
+                                                       cover.origin.y + cover.size.height,
+                                                       clipped.size.width,
+                                                       clipped.origin.y + clipped.size.height - cover.origin.y - cover.size.height),
+                                  graphene_point_zero (),
+                                  color);
+            }
+        }
+
+      gsk_gpu_clear_op (self->frame,
+                        &int_clipped,
+                        color);
+      return;
+    }
+
   gsk_gpu_color_op (self->frame,
                     gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, &node->bounds),
                     &node->bounds,
