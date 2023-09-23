@@ -54,56 +54,41 @@ rect_get_position (Rect rect)
 }
 
 vec2
-border_get_position (RoundedRect outline,
-                     vec4        border_widths)
+border_get_position (RoundedRect outside,
+                     RoundedRect inside)
 {
   uint slice_index = uint (GSK_VERTEX_INDEX) / 6u;
   uint vert_index = uint (GSK_VERTEX_INDEX) % 6u;
 
-  vec4 corner_widths = max (outline.corner_widths, border_widths.wyyw);
-  vec4 corner_heights = max (outline.corner_heights, border_widths.xxzz);
-
-  Rect rect;
+  Rect rect = rounded_rect_intersection_slice (outside, inside, slice_index);
 
   switch (slice_index)
     {
     case SLICE_TOP_LEFT:
-      rect = Rect (outline.bounds.xyxy + vec4 (0.0, 0.0, corner_widths[TOP_LEFT], corner_heights[TOP_LEFT]));
       rect = rect_round_larger (rect);
       rect.bounds = rect.bounds.xwzy;
       break;
     case SLICE_TOP:
-      rect = Rect (vec4 (outline.bounds.x + corner_widths[TOP_LEFT], outline.bounds.y,
-                         outline.bounds.z - corner_widths[TOP_RIGHT], outline.bounds.y + border_widths[TOP]));
       rect = rect_round_smaller_larger (rect);
       break;
     case SLICE_TOP_RIGHT:
-      rect = Rect (outline.bounds.zyzy + vec4 (- corner_widths[TOP_RIGHT], 0.0, 0.0, corner_heights[TOP_RIGHT]));
       rect = rect_round_larger (rect);
       break;
     case SLICE_RIGHT:
-      rect = Rect (vec4 (outline.bounds.z - border_widths[RIGHT], outline.bounds.y + corner_widths[TOP_RIGHT],
-                         outline.bounds.z, outline.bounds.w - corner_widths[BOTTOM_RIGHT]));
       rect = rect_round_larger_smaller (rect);
       break;
     case SLICE_BOTTOM_RIGHT:
-      rect = Rect (outline.bounds.zwzw + vec4 (- corner_widths[BOTTOM_RIGHT], - corner_heights[BOTTOM_RIGHT], 0.0, 0.0));
       rect = rect_round_larger (rect);
       rect.bounds = rect.bounds.zyxw;
       break;
     case SLICE_BOTTOM:
-      rect = Rect (vec4 (outline.bounds.x + corner_widths[BOTTOM_LEFT], outline.bounds.w - border_widths[BOTTOM],
-                         outline.bounds.z - corner_widths[BOTTOM_RIGHT], outline.bounds.w));
       rect = rect_round_smaller_larger (rect);
       break;
     case SLICE_BOTTOM_LEFT:
-      rect = Rect (outline.bounds.xwxw + vec4 (0.0, - corner_heights[BOTTOM_LEFT], corner_widths[BOTTOM_LEFT], 0.0));
       rect = rect_round_larger (rect);
       rect.bounds = rect.bounds.zwxy;
       break;
     case SLICE_LEFT:
-      rect = Rect (vec4 (outline.bounds.x + border_widths[LEFT], outline.bounds.y + corner_widths[TOP_LEFT],
-                         outline.bounds.x, outline.bounds.w - corner_widths[BOTTOM_LEFT]));
       rect = rect_round_larger_smaller (rect);
       break;
     }
@@ -177,7 +162,7 @@ main_clip_rounded (void)
   run (color, pos);
 
   RoundedRect clip = RoundedRect(vec4(push.clip_bounds.xy, push.clip_bounds.xy + push.clip_bounds.zw), push.clip_widths, push.clip_heights);
-  clip = rounded_rect_scale (clip, push.scale);
+  rounded_rect_scale (clip, push.scale);
 
   float coverage = rounded_rect_coverage (clip, pos);
   color *= coverage;
