@@ -23,6 +23,7 @@ struct _GskGpuRendererClass
   GskRendererClass parent_class;
 
   GType frame_type;
+  GskGpuOptimizations optimizations;
 
   GskGpuDevice *        (* get_device)                                  (GdkDisplay             *display,
                                                                          GError                **error);

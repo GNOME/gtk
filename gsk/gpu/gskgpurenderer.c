@@ -11,6 +11,7 @@
 #include "gskgpuimageprivate.h"
 
 #include "gdk/gdkdisplayprivate.h"
+#include "gdk/gdkdebugprivate.h"
 #include "gdk/gdkdrawcontextprivate.h"
 #include "gdk/gdkprofilerprivate.h"
 #include "gdk/gdktextureprivate.h"
@@ -19,6 +20,11 @@
 #include <graphene.h>
 
 #define GSK_GPU_MAX_FRAMES 4
+
+static const GdkDebugKey gsk_gpu_optimization_keys[] = {
+  { "uber", GSK_GPU_OPTIMIZE_UBER, "Don't use the uber shader" },
+  { "clear", GSK_GPU_OPTIMIZE_CLEAR, "Use shaders instead of vkCmdClearAttachment()/glClear()" },
+};
 
 typedef struct _GskGpuRendererPrivate GskGpuRendererPrivate;
 
@@ -71,11 +77,12 @@ static GskGpuFrame *
 gsk_gpu_renderer_create_frame (GskGpuRenderer *self)
 {
   GskGpuRendererPrivate *priv = gsk_gpu_renderer_get_instance_private (self);
+  GskGpuRendererClass *klass = GSK_GPU_RENDERER_GET_CLASS (self);
   GskGpuFrame *result;
 
-  result = g_object_new (GSK_GPU_RENDERER_GET_CLASS (self)->frame_type, NULL);
+  result = g_object_new (klass->frame_type, NULL);
 
-  gsk_gpu_frame_setup (result, self, priv->device);
+  gsk_gpu_frame_setup (result, self, priv->device, klass->optimizations);
 
   return result;
 }
@@ -269,6 +276,11 @@ gsk_gpu_renderer_class_init (GskGpuRendererClass *klass)
   renderer_class->render_texture = gsk_gpu_renderer_render_texture;
 
   gsk_ensure_resources ();
+
+  klass->optimizations = -1;
+  klass->optimizations &= ~gdk_parse_debug_var ("GSK_GPU_SKIP",
+                                                gsk_gpu_optimization_keys,
+                                                G_N_ELEMENTS (gsk_gpu_optimization_keys));
 }
 
 static void
