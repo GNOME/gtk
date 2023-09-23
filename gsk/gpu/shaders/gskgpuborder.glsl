@@ -12,6 +12,7 @@ PASS_FLAT(5) RoundedRect _inside;
 IN(0) mat4 in_border_colors;
 IN(4) mat3x4 in_outline;
 IN(7) vec4 in_border_widths;
+IN(8) vec2 in_offset;
 
 vec4
 compute_color (void)
@@ -56,8 +57,9 @@ run (out vec2 pos)
   vec4 border_widths = in_border_widths * push.scale.yxyx;
   RoundedRect outside = rounded_rect_from_gsk (in_outline);
   RoundedRect inside = rounded_rect_shrink (outside, border_widths);
+  rounded_rect_offset (inside, in_offset);
 
-  pos = border_get_position (outside, border_widths);
+  pos = border_get_position (outside, inside);
 
   _pos = pos;
   _color = compute_color ();

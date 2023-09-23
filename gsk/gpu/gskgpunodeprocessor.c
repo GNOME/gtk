@@ -1070,6 +1070,7 @@ gsk_gpu_node_processor_add_border_node (GskGpuNodeProcessor *self,
                      gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, &node->bounds),
                      gsk_border_node_get_outline (node),
                      &self->offset,
+                     graphene_point_zero (),
                      gsk_border_node_get_widths (node),
                      gsk_border_node_get_colors (node));
 }
@@ -1135,6 +1136,68 @@ gsk_gpu_node_processor_create_texture_pattern (GskGpuPatternWriter *self,
   gsk_gpu_buffer_writer_append_rect (&self->writer, &node->bounds, &self->offset);
 
   return TRUE;
+}
+
+static void
+gsk_gpu_node_processor_add_inset_shadow_node (GskGpuNodeProcessor *self,
+                                              GskRenderNode       *node)
+{
+  const GdkRGBA *color;
+  float spread, blur_radius;
+
+  spread = gsk_inset_shadow_node_get_spread (node);
+  color = gsk_inset_shadow_node_get_color (node);
+  blur_radius = gsk_inset_shadow_node_get_blur_radius (node);
+
+  if (blur_radius == 0)
+    {
+      gsk_gpu_border_op (self->frame,
+                         gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, &node->bounds),
+                         gsk_inset_shadow_node_get_outline (node),
+                         &self->offset,
+                         &GRAPHENE_POINT_INIT (gsk_inset_shadow_node_get_dx (node),
+                                               gsk_inset_shadow_node_get_dy (node)),
+                         (float[4]) { spread, spread, spread, spread },
+                         (GdkRGBA[4]) { *color, *color, *color, *color });
+      return;
+    }
+
+  GSK_DEBUG (FALLBACK, "No blurring for inset shadows");
+  gsk_gpu_node_processor_add_fallback_node (self, node);
+}
+
+static void
+gsk_gpu_node_processor_add_outset_shadow_node (GskGpuNodeProcessor *self,
+                                               GskRenderNode       *node)
+{
+  GskRoundedRect outline;
+  const GdkRGBA *color;
+  float spread, blur_radius, dx, dy;
+
+  spread = gsk_outset_shadow_node_get_spread (node);
+  color = gsk_outset_shadow_node_get_color (node);
+  blur_radius = gsk_outset_shadow_node_get_blur_radius (node);
+  dx = gsk_outset_shadow_node_get_dx (node);
+  dy = gsk_outset_shadow_node_get_dy (node);
+
+  gsk_rounded_rect_init_copy (&outline, gsk_outset_shadow_node_get_outline (node));
+  gsk_rounded_rect_shrink (&outline, -spread, -spread, -spread, -spread);
+  graphene_rect_offset (&outline.bounds, dx, dy);
+
+  if (blur_radius == 0)
+    {
+      gsk_gpu_border_op (self->frame,
+                         gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, &node->bounds),
+                         &outline,
+                         &self->offset,
+                         &GRAPHENE_POINT_INIT (-dx, -dy),
+                         (float[4]) { spread, spread, spread, spread },
+                         (GdkRGBA[4]) { *color, *color, *color, *color });
+      return;
+    }
+
+  GSK_DEBUG (FALLBACK, "No blurring for outset shadows");
+  gsk_gpu_node_processor_add_fallback_node (self, node);
 }
 
 static gboolean
@@ -1723,12 +1786,12 @@ static const struct
   },
   [GSK_INSET_SHADOW_NODE] = {
     0,
-    NULL,
+    gsk_gpu_node_processor_add_inset_shadow_node,
     NULL,
   },
   [GSK_OUTSET_SHADOW_NODE] = {
     0,
-    NULL,
+    gsk_gpu_node_processor_add_outset_shadow_node,
     NULL,
   },
   [GSK_TRANSFORM_NODE] = {

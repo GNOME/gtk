@@ -51,16 +51,6 @@ rounded_rect_distance (RoundedRect r, vec2 p)
 }
 
 RoundedRect
-rounded_rect_scale (RoundedRect r, vec2 scale)
-{
-  r.bounds *= scale.xyxy;
-  r.corner_widths *= scale.xxxx;
-  r.corner_heights *= scale.yyyy;
-
-  return r;
-}
-
-RoundedRect
 rounded_rect_shrink (RoundedRect r, vec4 amount)
 {
   vec4 new_bounds = r.bounds + vec4(1.0,1.0,-1.0,-1.0) * amount.wxyz;
@@ -70,6 +60,120 @@ rounded_rect_shrink (RoundedRect r, vec4 amount)
   new_heights = min (new_heights, new_bounds.w - new_bounds.y);
               
   return RoundedRect (new_bounds, new_widths, new_heights);
+}
+
+void
+rounded_rect_scale (inout RoundedRect r,
+                    vec2              scale)
+{
+  r.bounds *= scale.xyxy;
+  r.corner_widths *= scale.xxxx;
+  r.corner_heights *= scale.yyyy;
+}
+
+void
+rounded_rect_offset (inout RoundedRect r,
+                     vec2              offset)
+{
+  r.bounds += offset.xyxy;
+}
+
+Rect
+rounded_rect_intersection_slice (RoundedRect outside,
+                                 RoundedRect inside,
+                                 uint        slice)
+{
+  float left, right, top, bottom;
+
+  switch (slice)
+    {
+    case SLICE_TOP_LEFT:
+      return Rect (vec4 (outside.bounds.x,
+                         outside.bounds.y,
+                         max (outside.bounds.x + outside.corner_widths[TOP_LEFT],
+                              inside.bounds.x + inside.corner_widths[TOP_LEFT]),
+                         max (outside.bounds.y + outside.corner_heights[TOP_LEFT],
+                              inside.bounds.y + inside.corner_heights[TOP_LEFT])));
+
+    case SLICE_TOP:
+      left = max (outside.bounds.x + outside.corner_widths[TOP_LEFT],
+                  inside.bounds.x + inside.corner_widths[TOP_LEFT]);
+      right = min (outside.bounds.z - outside.corner_widths[TOP_RIGHT],
+                   inside.bounds.z - inside.corner_widths[TOP_RIGHT]);
+      return Rect (vec4 (left,
+                         outside.bounds.y,
+                         max (left, right),
+                         max (outside.bounds.y, inside.bounds.y)));
+
+    case SLICE_TOP_RIGHT:
+      left = max (min (outside.bounds.z - outside.corner_widths[TOP_RIGHT],
+                       inside.bounds.z - inside.corner_widths[TOP_RIGHT]),
+                  max (outside.bounds.x + outside.corner_widths[TOP_LEFT],
+                       inside.bounds.x + inside.corner_widths[TOP_LEFT]));
+      return Rect (vec4 (left,
+                         outside.bounds.y,
+                         outside.bounds.z,
+                         max (outside.bounds.y + outside.corner_heights[TOP_RIGHT],
+                              inside.bounds.y + inside.corner_heights[TOP_RIGHT])));
+
+    case SLICE_RIGHT:
+      top = max (outside.bounds.y + outside.corner_heights[TOP_RIGHT],
+                 inside.bounds.y + inside.corner_heights[TOP_RIGHT]);
+      bottom = min (outside.bounds.w - outside.corner_heights[BOTTOM_RIGHT],
+                    inside.bounds.w - inside.corner_heights[BOTTOM_RIGHT]);
+      return Rect (vec4 (min (outside.bounds.z, inside.bounds.z),
+                         top,
+                         outside.bounds.z,
+                         max (bottom, top)));
+
+    case SLICE_BOTTOM_RIGHT:
+      left = max (min (outside.bounds.z - outside.corner_widths[BOTTOM_RIGHT],
+                       inside.bounds.z - inside.corner_widths[BOTTOM_RIGHT]),
+                  max (outside.bounds.x + outside.corner_widths[BOTTOM_LEFT],
+                       inside.bounds.x + inside.corner_widths[BOTTOM_LEFT]));
+      bottom = max (min (outside.bounds.w - outside.corner_heights[BOTTOM_RIGHT],
+                         inside.bounds.w - inside.corner_heights[BOTTOM_RIGHT]),
+                    max (outside.bounds.y + outside.corner_heights[TOP_RIGHT],
+                         inside.bounds.y + inside.corner_heights[TOP_RIGHT]));
+      return Rect (vec4 (left,
+                         bottom,
+                         outside.bounds.z,
+                         outside.bounds.w));
+
+    case SLICE_BOTTOM:
+      left = max (outside.bounds.x + outside.corner_widths[BOTTOM_LEFT],
+                  inside.bounds.x + inside.corner_widths[BOTTOM_LEFT]);
+      right = min (outside.bounds.z - outside.corner_widths[BOTTOM_RIGHT],
+                   inside.bounds.z - inside.corner_widths[BOTTOM_RIGHT]);
+      return Rect (vec4 (left,
+                         min (outside.bounds.w, inside.bounds.w),
+                         max (left, right),
+                         outside.bounds.w));
+
+    case SLICE_BOTTOM_LEFT:
+      bottom = max (min (outside.bounds.w - outside.corner_heights[BOTTOM_LEFT],
+                         inside.bounds.w - inside.corner_heights[BOTTOM_LEFT]),
+                    max (outside.bounds.y + outside.corner_heights[TOP_LEFT],
+                         inside.bounds.y + inside.corner_heights[TOP_LEFT]));
+      return Rect (vec4 (outside.bounds.x,
+                         bottom,
+                         max (outside.bounds.x + outside.corner_widths[BOTTOM_LEFT],
+                              inside.bounds.x + inside.corner_widths[BOTTOM_LEFT]),
+                         outside.bounds.w));
+
+    case SLICE_LEFT:
+      top = max (outside.bounds.y + outside.corner_heights[TOP_LEFT],
+                 inside.bounds.y + inside.corner_heights[TOP_LEFT]);
+      bottom = min (outside.bounds.w - outside.corner_heights[BOTTOM_LEFT],
+                    inside.bounds.w - inside.corner_heights[BOTTOM_LEFT]);
+      return Rect (vec4 (outside.bounds.x,
+                         top,
+                         max (outside.bounds.x, inside.bounds.x),
+                         max (bottom, top)));
+
+    default:
+      return Rect (vec4 (0.0));
+    }
 }
 
 #ifdef GSK_FRAGMENT_SHADER

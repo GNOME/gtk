@@ -111,6 +111,7 @@ gsk_gpu_border_op (GskGpuFrame            *frame,
                    GskGpuShaderClip        clip,
                    const GskRoundedRect   *outline,
                    const graphene_point_t *offset,
+                   const graphene_point_t *inside_offset,
                    const float             widths[4],
                    const GdkRGBA           colors[4])
 {
@@ -129,5 +130,7 @@ gsk_gpu_border_op (GskGpuFrame            *frame,
       instance->border_widths[i] = widths[i];
       gsk_gpu_rgba_to_float (&colors[i], &instance->border_colors[4 * i]);
     }
+  instance->offset[0] = inside_offset->x;
+  instance->offset[1] = inside_offset->y;
 }
 
