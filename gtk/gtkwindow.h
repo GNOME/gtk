@@ -181,7 +181,7 @@ GList*     gtk_window_list_toplevels (void);
 
 GDK_AVAILABLE_IN_ALL
 void     gtk_window_present            (GtkWindow *window);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_14_FOR(gtk_window_present)
 void     gtk_window_present_with_time  (GtkWindow *window,
 				        guint32    timestamp);
 GDK_AVAILABLE_IN_ALL

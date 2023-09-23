@@ -2274,65 +2274,6 @@ gtk_window_get_title (GtkWindow *window)
 }
 
 /**
- * gtk_window_set_startup_id: (attributes org.gtk.Method.set_property=startup-id)
- * @window: a `GtkWindow`
- * @startup_id: a string with startup-notification identifier
- *
- * Sets the startup notification ID.
- *
- * Startup notification identifiers are used by desktop environment
- * to track application startup, to provide user feedback and other
- * features. This function changes the corresponding property on the
- * underlying `GdkSurface`.
- *
- * Normally, startup identifier is managed automatically and you should
- * only use this function in special cases like transferring focus from
- * other processes. You should use this function before calling
- * [method@Gtk.Window.present] or any equivalent function generating
- * a window map event.
- *
- * This function is only useful on X11, not with other GTK targets.
- */
-void
-gtk_window_set_startup_id (GtkWindow   *window,
-                           const char *startup_id)
-{
-  GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
-  GtkWidget *widget;
-
-  g_return_if_fail (GTK_IS_WINDOW (window));
-
-  widget = GTK_WIDGET (window);
-
-  g_free (priv->startup_id);
-  priv->startup_id = g_strdup (startup_id);
-
-  if (_gtk_widget_get_realized (widget))
-    {
-      guint32 timestamp = extract_time_from_startup_id (priv->startup_id);
-
-#ifdef GDK_WINDOWING_X11
-      if (timestamp != GDK_CURRENT_TIME && GDK_IS_X11_SURFACE (priv->surface))
-	gdk_x11_surface_set_user_time (priv->surface, timestamp);
-#endif
-
-      /* Here we differentiate real and "fake" startup notification IDs,
-       * constructed on purpose just to pass interaction timestamp
-       */
-      if (startup_id_is_fake (priv->startup_id))
-	gtk_window_present_with_time (window, timestamp);
-      else
-        {
-          /* If window is mapped, terminate the startup-notification */
-          if (_gtk_widget_get_mapped (widget) && !disable_startup_notification)
-            gdk_toplevel_set_startup_id (GDK_TOPLEVEL (priv->surface), priv->startup_id);
-        }
-    }
-
-  g_object_notify_by_pspec (G_OBJECT (window), window_props[PROP_STARTUP_ID]);
-}
-
-/**
  * gtk_window_set_default_widget: (attributes org.gtk.Property.set=default-widget)
  * @window: a `GtkWindow`
  * @default_widget: (nullable): widget to be the default
@@ -5281,6 +5222,100 @@ _gtk_window_unset_focus_and_default (GtkWindow *window,
 #undef INCLUDE_CSD_SIZE
 #undef EXCLUDE_CSD_SIZE
 
+static void
+_gtk_window_present (GtkWindow *window,
+                     guint32    timestamp)
+{
+  GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
+  GtkWidget *widget = GTK_WIDGET (window);
+
+  if (gtk_widget_get_visible (widget))
+    {
+      /* Translate a timestamp of GDK_CURRENT_TIME appropriately */
+      if (timestamp == GDK_CURRENT_TIME)
+        {
+#ifdef GDK_WINDOWING_X11
+          if (GDK_IS_X11_SURFACE (priv->surface))
+            {
+              GdkDisplay *display = gtk_widget_get_display (widget);
+              timestamp = gdk_x11_display_get_user_time (display);
+            }
+          else
+#endif
+            timestamp = gtk_get_current_event_time ();
+        }
+    }
+  else
+    {
+      priv->initial_timestamp = timestamp;
+      priv->in_present = TRUE;
+      gtk_widget_set_visible (widget, TRUE);
+      priv->in_present = FALSE;
+    }
+
+  gdk_toplevel_focus (GDK_TOPLEVEL (priv->surface), timestamp);
+  gtk_window_notify_startup (window);
+}
+
+/**
+ * gtk_window_set_startup_id: (attributes org.gtk.Method.set_property=startup-id)
+ * @window: a `GtkWindow`
+ * @startup_id: a string with startup-notification identifier
+ *
+ * Sets the startup notification ID.
+ *
+ * Startup notification identifiers are used by desktop environment
+ * to track application startup, to provide user feedback and other
+ * features. This function changes the corresponding property on the
+ * underlying `GdkSurface`.
+ *
+ * Normally, startup identifier is managed automatically and you should
+ * only use this function in special cases like transferring focus from
+ * other processes. You should use this function before calling
+ * [method@Gtk.Window.present] or any equivalent function generating
+ * a window map event.
+ *
+ * This function is only useful on X11, not with other GTK targets.
+ */
+void
+gtk_window_set_startup_id (GtkWindow   *window,
+                           const char *startup_id)
+{
+  GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
+  GtkWidget *widget;
+
+  g_return_if_fail (GTK_IS_WINDOW (window));
+
+  widget = GTK_WIDGET (window);
+
+  g_free (priv->startup_id);
+  priv->startup_id = g_strdup (startup_id);
+
+  if (_gtk_widget_get_realized (widget))
+    {
+      guint32 timestamp = extract_time_from_startup_id (priv->startup_id);
+
+#ifdef GDK_WINDOWING_X11
+      if (timestamp != GDK_CURRENT_TIME && GDK_IS_X11_SURFACE (priv->surface))
+        gdk_x11_surface_set_user_time (priv->surface, timestamp);
+#endif
+
+      /* Here we differentiate real and "fake" startup notification IDs,
+       * constructed on purpose just to pass interaction timestamp
+       */
+      if (startup_id_is_fake (priv->startup_id))
+        _gtk_window_present (window, timestamp);
+      else
+        {
+          /* If window is mapped, terminate the startup-notification */
+          if (_gtk_widget_get_mapped (widget) && !disable_startup_notification)
+            gdk_toplevel_set_startup_id (GDK_TOPLEVEL (priv->surface), priv->startup_id);
+        }
+    }
+
+  g_object_notify_by_pspec (G_OBJECT (window), window_props[PROP_STARTUP_ID]);
+}
+
 /**
  * gtk_window_present:
  * @window: a `GtkWindow`
@@ -5297,7 +5332,9 @@ _gtk_window_unset_focus_and_default (GtkWindow *window,
 void
 gtk_window_present (GtkWindow *window)
 {
-  gtk_window_present_with_time (window, GDK_CURRENT_TIME);
+  g_return_if_fail (GTK_IS_WINDOW (window));
+
+  _gtk_window_present (window, GDK_CURRENT_TIME);
 }
 
 /**
@@ -5313,52 +5350,16 @@ gtk_window_present (GtkWindow *window)
  * The timestamp should be gathered when the window was requested
  * to be shown (when clicking a link for example), rather than once
  * the window is ready to be shown.
+ *
+ * Deprecated: 4.14: Use gtk_window_present()
  */
 void
 gtk_window_present_with_time (GtkWindow *window,
-			      guint32    timestamp)
+                              guint32    timestamp)
 {
-  GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
-  GtkWidget *widget;
-  GdkSurface *surface;
-
   g_return_if_fail (GTK_IS_WINDOW (window));
 
-  widget = GTK_WIDGET (window);
-
-  if (gtk_widget_get_visible (widget))
-    {
-      surface = priv->surface;
-
-      g_assert (surface != NULL);
-
-      /* Translate a timestamp of GDK_CURRENT_TIME appropriately */
-      if (timestamp == GDK_CURRENT_TIME)
-        {
-#ifdef GDK_WINDOWING_X11
-	  if (GDK_IS_X11_SURFACE (surface))
-	    {
-	      GdkDisplay *display;
-
-	      display = gtk_widget_get_display (widget);
-	      timestamp = gdk_x11_display_get_user_time (display);
-	    }
-	  else
-#endif
-	    timestamp = gtk_get_current_event_time ();
-        }
-    }
-  else
-    {
-      priv->initial_timestamp = timestamp;
-      priv->in_present = TRUE;
-      gtk_widget_set_visible (widget, TRUE);
-      priv->in_present = FALSE;
-    }
-
-  g_assert (priv->surface != NULL);
-  gdk_toplevel_focus (GDK_TOPLEVEL (priv->surface), timestamp);
-  gtk_window_notify_startup (window);
+  _gtk_window_present (window, timestamp);
 }
 
 /**
