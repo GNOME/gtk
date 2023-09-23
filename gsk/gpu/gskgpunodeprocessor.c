@@ -956,7 +956,8 @@ gsk_gpu_node_processor_add_color_node (GskGpuNodeProcessor *self,
                           &rect);
   gsk_rect_intersection (&self->clip.rect.bounds, &rect, &clipped);
 
-  if (gdk_rgba_is_opaque (color) &&
+  if (gsk_gpu_frame_should_optimize (self->frame, GSK_GPU_OPTIMIZE_CLEAR) &&
+      gdk_rgba_is_opaque (color) &&
       node->bounds.size.width * node->bounds.size.height > 100 * 100 && /* not worth the effort for small images */
       gsk_gpu_node_processor_rect_is_integer (self, &clipped, &int_clipped))
     {
@@ -1868,6 +1869,9 @@ gsk_gpu_node_processor_create_node_pattern (GskGpuPatternWriter *self,
   GskGpuImage *image;
   gsize tmp_size;
   guint32 tex_id;
+
+  if (!gsk_gpu_frame_should_optimize (self->frame, GSK_GPU_OPTIMIZE_UBER))
+    return FALSE;
 
   node_type = gsk_render_node_get_node_type (node);
   if (node_type >= G_N_ELEMENTS (nodes_vtable))

@@ -45,11 +45,14 @@ GType                   gsk_gpu_frame_get_type                          (void) G
 
 void                    gsk_gpu_frame_setup                             (GskGpuFrame            *self,
                                                                          GskGpuRenderer         *renderer,
-                                                                         GskGpuDevice           *device);
+                                                                         GskGpuDevice           *device,
+                                                                         GskGpuOptimizations     optimizations);
 
 GdkDrawContext *        gsk_gpu_frame_get_context                       (GskGpuFrame            *self) G_GNUC_PURE;
 GskGpuDevice *          gsk_gpu_frame_get_device                        (GskGpuFrame            *self) G_GNUC_PURE;
 gint64                  gsk_gpu_frame_get_timestamp                     (GskGpuFrame            *self) G_GNUC_PURE;
+gboolean                gsk_gpu_frame_should_optimize                   (GskGpuFrame            *self,
+                                                                         GskGpuOptimizations     optimization) G_GNUC_PURE;
 
 gpointer                gsk_gpu_frame_alloc_op                          (GskGpuFrame            *self,
                                                                          gsize                   size);

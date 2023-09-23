@@ -31,6 +31,7 @@ struct _GskGpuFramePrivate
 {
   GskGpuRenderer *renderer;
   GskGpuDevice *device;
+  GskGpuOptimizations optimizations;
   gint64 timestamp;
 
   GskGpuOps ops;
@@ -120,15 +121,17 @@ gsk_gpu_frame_init (GskGpuFrame *self)
 }
 
 void
-gsk_gpu_frame_setup (GskGpuFrame    *self,
-                     GskGpuRenderer *renderer,
-                     GskGpuDevice   *device)
+gsk_gpu_frame_setup (GskGpuFrame         *self,
+                     GskGpuRenderer      *renderer,
+                     GskGpuDevice        *device,
+                     GskGpuOptimizations  optimizations)
 {
   GskGpuFramePrivate *priv = gsk_gpu_frame_get_instance_private (self);
 
   /* no reference, the renderer owns us */
   priv->renderer = renderer;
   priv->device = g_object_ref (device);
+  priv->optimizations = optimizations;
 
   GSK_GPU_FRAME_GET_CLASS (self)->setup (self);
 }
@@ -155,6 +158,15 @@ gsk_gpu_frame_get_timestamp (GskGpuFrame *self)
   GskGpuFramePrivate *priv = gsk_gpu_frame_get_instance_private (self);
 
   return priv->timestamp;
+}
+
+gboolean
+gsk_gpu_frame_should_optimize (GskGpuFrame         *self,
+                               GskGpuOptimizations  optimization)
+{
+  GskGpuFramePrivate *priv = gsk_gpu_frame_get_instance_private (self);
+
+  return (priv->optimizations & optimization) == optimization;
 }
 
 static void
