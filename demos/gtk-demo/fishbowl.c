@@ -71,14 +71,7 @@ create_blurred_button (void)
 static GtkWidget *
 create_font_button (void)
 {
-  GtkFontDialog *dialog;
-  GtkWidget *button;
-
-  dialog = gtk_font_dialog_new ();
-  button = gtk_font_dialog_button_new (dialog);
-  g_object_unref (dialog);
-
-  return button;
+  return gtk_font_dialog_button_new (gtk_font_dialog_new ());
 }
 
 static GtkWidget *
