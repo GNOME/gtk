@@ -454,7 +454,8 @@ gtk_dialog_constructed (GObject *object)
         }
       g_list_free (children);
 
-      _gtk_header_bar_track_default_decoration (GTK_HEADER_BAR (priv->headerbar));
+      if (GTK_IS_HEADER_BAR (priv->headerbar))
+        _gtk_header_bar_track_default_decoration (GTK_HEADER_BAR (priv->headerbar));
     }
   else
     {
@@ -1397,7 +1398,8 @@ gtk_dialog_buildable_add_child (GtkBuildable  *buildable,
   else if (g_str_equal (type, "titlebar"))
     {
       priv->headerbar = GTK_WIDGET (child);
-      _gtk_header_bar_track_default_decoration (GTK_HEADER_BAR (priv->headerbar));
+      if (GTK_IS_HEADER_BAR (priv->headerbar))
+        _gtk_header_bar_track_default_decoration (GTK_HEADER_BAR (priv->headerbar));
       gtk_window_set_titlebar (GTK_WINDOW (buildable), priv->headerbar);
     }
   else if (g_str_equal (type, "action"))
