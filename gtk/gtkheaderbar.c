@@ -229,6 +229,8 @@ update_default_decoration (GtkHeaderBar *bar)
 void
 _gtk_header_bar_track_default_decoration (GtkHeaderBar *bar)
 {
+  g_assert (GTK_IS_HEADER_BAR (bar));
+
   bar->track_default_decoration = TRUE;
 
   update_default_decoration (bar);
