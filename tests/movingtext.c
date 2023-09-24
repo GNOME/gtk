@@ -32,7 +32,6 @@ tick_cb (GtkWidget     *widget,
 {
   DemoWidget *self = DEMO_WIDGET (widget);
   guint64 now;
-  PangoFontDescription *desc;
 
   now = gdk_frame_clock_get_frame_time (frame_clock);
 
@@ -41,13 +40,6 @@ tick_cb (GtkWidget     *widget,
 
   self->angle = 360 * (now - self->start_time) / (double)(G_TIME_SPAN_SECOND * 10);
   self->size = 150 + 130 * sin (2 * G_PI * (now - self->start_time) / (double)(G_TIME_SPAN_SECOND * 5));
-
-  desc = pango_font_description_new ();
-  pango_font_description_set_family (desc, "Cantarell");
-  pango_font_description_set_weight (desc, 520);
-  pango_font_description_set_size (desc, self->size * PANGO_SCALE);
-  pango_layout_set_font_description (self->layout, desc);
-  pango_font_description_free (desc);
 
   gtk_widget_queue_draw (widget);
 
@@ -120,6 +112,7 @@ demo_widget_snapshot (GtkWidget   *widget,
   gtk_snapshot_save (snapshot);
 
   gtk_snapshot_translate (snapshot, &GRAPHENE_POINT_INIT (0.5 * width, 0.5 * height));
+  gtk_snapshot_scale (snapshot, self->size / 150.f, self->size / 150.f);
   gtk_snapshot_rotate (snapshot, self->angle);
   gtk_snapshot_translate (snapshot, &GRAPHENE_POINT_INIT (- 0.5 * pwidth, - 0.5 * pheight));
 
@@ -155,11 +148,19 @@ demo_widget_new (const char *text,
                  gsize       length)
 {
   DemoWidget *demo;
+  PangoFontDescription *desc;
 
   demo = g_object_new (DEMO_TYPE_WIDGET, NULL);
 
   demo->text = g_strndup (text, length);
   demo->layout = gtk_widget_create_pango_layout (GTK_WIDGET (demo), demo->text);
+
+  desc = pango_font_description_new ();
+  pango_font_description_set_family (desc, "Cantarell");
+  pango_font_description_set_weight (desc, 520);
+  pango_font_description_set_size (desc, 150 * PANGO_SCALE);
+  pango_layout_set_font_description (demo->layout, desc);
+  pango_font_description_free (desc);
 
   return GTK_WIDGET (demo);
 }
