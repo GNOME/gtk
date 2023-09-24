@@ -4,6 +4,7 @@
 
 #include "gskgpuglobalsopprivate.h"
 #include "gskgpuopprivate.h"
+#include "gskgpushaderopprivate.h"
 #include "gskglbufferprivate.h"
 #include "gskgldeviceprivate.h"
 
@@ -66,6 +67,13 @@ static GskGpuBuffer *
 gsk_gl_frame_create_vertex_buffer (GskGpuFrame *frame,
                                    gsize        size)
 {
+  GskGLFrame *self = GSK_GL_FRAME (frame);
+
+  /* We could also reassign them all to the new buffer here?
+   * Is that faster?
+   */
+  g_hash_table_remove_all (self->vaos);
+
   return gsk_gl_buffer_new (GL_ARRAY_BUFFER, size, GL_WRITE_ONLY);
 }
 
@@ -166,11 +174,12 @@ gsk_gl_frame_use_program (GskGLFrame                *self,
   vao = GPOINTER_TO_UINT (g_hash_table_lookup (self->vaos, op_class));
   if (vao)
     {
-      glBindVertexArray(vao);
+      glBindVertexArray (vao);
       return;
     }
-  glGenVertexArrays(1, &vao);
-  glBindVertexArray(vao);
+  glGenVertexArrays (1, &vao);
+  glBindVertexArray (vao);
+  op_class->setup_vao (0);
 
   g_hash_table_insert (self->vaos, (gpointer) op_class, GUINT_TO_POINTER (vao));
 }

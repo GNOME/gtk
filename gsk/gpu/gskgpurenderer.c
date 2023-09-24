@@ -25,6 +25,8 @@ static const GdkDebugKey gsk_gpu_optimization_keys[] = {
   { "uber", GSK_GPU_OPTIMIZE_UBER, "Don't use the uber shader" },
   { "clear", GSK_GPU_OPTIMIZE_CLEAR, "Use shaders instead of vkCmdClearAttachment()/glClear()" },
   { "merge", GSK_GPU_OPTIMIZE_MERGE, "Use one vkCmdDraw()/glDrawArrays() per operation" },
+
+  { "gl-baseinstance", GSK_GPU_OPTIMIZE_GL_BASE_INSTANCE, "Assume no ARB/EXT_base_instance support" },
 };
 
 typedef struct _GskGpuRendererPrivate GskGpuRendererPrivate;
@@ -33,6 +35,7 @@ struct _GskGpuRendererPrivate
 {
   GskGpuDevice *device;
   GdkDrawContext *context;
+  GskGpuOptimizations optimizations;
 
   GskGpuFrame *frames[GSK_GPU_MAX_FRAMES];
 };
@@ -83,7 +86,7 @@ gsk_gpu_renderer_create_frame (GskGpuRenderer *self)
 
   result = g_object_new (klass->frame_type, NULL);
 
-  gsk_gpu_frame_setup (result, self, priv->device, klass->optimizations);
+  gsk_gpu_frame_setup (result, self, priv->device, priv->optimizations);
 
   return result;
 }
@@ -119,6 +122,7 @@ gsk_gpu_renderer_realize (GskRenderer  *renderer,
 {
   GskGpuRenderer *self = GSK_GPU_RENDERER (renderer);
   GskGpuRendererPrivate *priv = gsk_gpu_renderer_get_instance_private (self);
+  GskGpuOptimizations context_optimizations;
   GdkDisplay *display;
 
   if (surface)
@@ -130,12 +134,14 @@ gsk_gpu_renderer_realize (GskRenderer  *renderer,
   if (priv->device == NULL)
     return FALSE;
 
-  priv->context = GSK_GPU_RENDERER_GET_CLASS (self)->create_context (self, display, surface, error);
+  priv->context = GSK_GPU_RENDERER_GET_CLASS (self)->create_context (self, display, surface, &context_optimizations, error);
   if (priv->context == NULL)
     {
       g_clear_object (&priv->device);
       return FALSE;
     }
+
+  priv->optimizations &= context_optimizations;
 
   return TRUE;
 }
@@ -287,6 +293,9 @@ gsk_gpu_renderer_class_init (GskGpuRendererClass *klass)
 static void
 gsk_gpu_renderer_init (GskGpuRenderer *self)
 {
+  GskGpuRendererPrivate *priv = gsk_gpu_renderer_get_instance_private (self);
+
+  priv->optimizations = GSK_GPU_RENDERER_GET_CLASS (self)->optimizations;
 }
 
 GdkDrawContext *

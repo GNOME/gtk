@@ -73,10 +73,11 @@ gsk_vulkan_renderer_update_images_cb (GdkVulkanContext  *context,
 }
 
 static GdkDrawContext *
-gsk_vulkan_renderer_create_context (GskGpuRenderer *renderer,
-                                    GdkDisplay     *display,
-                                    GdkSurface     *surface,
-                                    GError        **error)
+gsk_vulkan_renderer_create_context (GskGpuRenderer       *renderer,
+                                    GdkDisplay           *display,
+                                    GdkSurface           *surface,
+                                    GskGpuOptimizations  *supported,
+                                    GError              **error)
 {
   GskVulkanRenderer *self = GSK_VULKAN_RENDERER (renderer);
   GdkVulkanContext *context;
@@ -94,6 +95,8 @@ gsk_vulkan_renderer_create_context (GskGpuRenderer *renderer,
                     G_CALLBACK (gsk_vulkan_renderer_update_images_cb),
                     self);
   gsk_vulkan_renderer_update_images_cb (context, self);
+
+  *supported = -1;
 
   return GDK_DRAW_CONTEXT (context);
 }

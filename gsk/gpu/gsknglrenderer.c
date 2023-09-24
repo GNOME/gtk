@@ -8,6 +8,8 @@
 #include "gskglframeprivate.h"
 #include "gskglimageprivate.h"
 
+#include "gdk/gdkglcontextprivate.h"
+
 struct _GskNglRenderer
 {
   GskGpuRenderer parent_instance;
@@ -23,10 +25,11 @@ struct _GskNglRendererClass
 G_DEFINE_TYPE (GskNglRenderer, gsk_ngl_renderer, GSK_TYPE_GPU_RENDERER)
 
 static GdkDrawContext *
-gsk_ngl_renderer_create_context (GskGpuRenderer *renderer,
-                                 GdkDisplay     *display,
-                                 GdkSurface     *surface,
-                                 GError        **error)
+gsk_ngl_renderer_create_context (GskGpuRenderer       *renderer,
+                                 GdkDisplay           *display,
+                                 GdkSurface           *surface,
+                                 GskGpuOptimizations  *supported,
+                                 GError              **error)
 {
   GdkGLContext *context;
 
@@ -46,6 +49,14 @@ gsk_ngl_renderer_create_context (GskGpuRenderer *renderer,
       g_object_unref (context);
       return NULL;
     }
+
+  gdk_gl_context_make_current (context);
+
+  *supported = -1;
+  if (!gdk_gl_context_check_version (context, "4.2", "9.9") &&
+      !epoxy_has_gl_extension ("GL_EXT_base_instance") &&
+      !epoxy_has_gl_extension ("GL_ARB_base_instance"))
+    *supported &= ~GSK_GPU_OPTIMIZE_GL_BASE_INSTANCE;
 
   return GDK_DRAW_CONTEXT (context);
 }

@@ -23,13 +23,14 @@ struct _GskGpuRendererClass
   GskRendererClass parent_class;
 
   GType frame_type;
-  GskGpuOptimizations optimizations;
+  GskGpuOptimizations optimizations; /* subclasses cannot override this */
 
   GskGpuDevice *        (* get_device)                                  (GdkDisplay             *display,
                                                                          GError                **error);
   GdkDrawContext *      (* create_context)                              (GskGpuRenderer         *self,
                                                                          GdkDisplay             *display,
                                                                          GdkSurface             *surface,
+                                                                         GskGpuOptimizations    *supported,
                                                                          GError                **error);
 
   void                  (* make_current)                                (GskGpuRenderer         *self);

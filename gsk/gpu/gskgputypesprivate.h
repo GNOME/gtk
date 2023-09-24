@@ -58,5 +58,7 @@ typedef enum {
   GSK_GPU_OPTIMIZE_UBER                 = 1 <<  0,
   GSK_GPU_OPTIMIZE_CLEAR                = 1 <<  1,
   GSK_GPU_OPTIMIZE_MERGE                = 1 <<  2,
+  /* These require hardware support */
+  GSK_GPU_OPTIMIZE_GL_BASE_INSTANCE     = 1 <<  3,
 } GskGpuOptimizations;
 
