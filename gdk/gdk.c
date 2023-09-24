@@ -263,7 +263,7 @@ gdk_parse_debug_var (const char        *variable,
         if (debug_enabled || keys[i].always_enabled)
           fprintf (stderr, "  %s%*s%s\n", keys[i].key, (int)(max_width - strlen (keys[i].key)), " ", keys[i].help);
       }
-      fprintf (stderr, "  %s%*s%s\n", "all", max_width - 3, " ", "Enable all values");
+      fprintf (stderr, "  %s%*s%s\n", "all", max_width - 3, " ", "Enable all values. Other given values are subtracted");
       fprintf (stderr, "  %s%*s%s\n", "help", max_width - 4, " ", "Print this help");
       fprintf (stderr, "\nMultiple values can be given, separated by : or space.\n");
     }

@@ -372,7 +372,7 @@ endforeach
 tests = [
   ['transform'],
   ['shader'],
-  ['path'],
+  ['path', [ 'path-utils.c' ] ],
   ['path-special-cases'],
 ]
 
