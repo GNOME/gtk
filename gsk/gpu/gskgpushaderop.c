@@ -96,12 +96,23 @@ gsk_gpu_shader_op_gl_command_n (GskGpuOp    *op,
                      gsk_gl_device_get_sampler_id (device, images[i].sampler));
     }
 
-  shader_op_class->setup_vao (self->vertex_offset);
+  if (gsk_gpu_frame_should_optimize (frame, GSK_GPU_OPTIMIZE_GL_BASE_INSTANCE))
+    {
+      glDrawArraysInstancedBaseInstance (GL_TRIANGLES,
+                                         0,
+                                         6 * instance_scale,
+                                         1,
+                                         self->vertex_offset / shader_op_class->vertex_size);
+    }
+  else
+    {
+      shader_op_class->setup_vao (self->vertex_offset);
 
-  glDrawArraysInstanced (GL_TRIANGLES,
-                         0,
-                         6 * instance_scale,
-                         1);
+      glDrawArraysInstanced (GL_TRIANGLES,
+                             0,
+                             6 * instance_scale,
+                             1);
+    }
 
   return op->next;
 }
