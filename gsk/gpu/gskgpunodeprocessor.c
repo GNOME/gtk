@@ -1502,14 +1502,10 @@ gsk_gpu_node_processor_add_glyph_node (GskGpuNodeProcessor *self,
                                                  &glyph_bounds,
                                                  &glyph_offset);
 
-      graphene_rect_scale (&glyph_bounds, inv_scale, inv_scale, &glyph_bounds);
+      graphene_rect_scale (&GRAPHENE_RECT_INIT (-glyph_bounds.origin.x, -glyph_bounds.origin.y, gsk_gpu_image_get_width (image), gsk_gpu_image_get_height (image)), inv_scale, inv_scale, &glyph_tex_rect);
+      graphene_rect_scale (&GRAPHENE_RECT_INIT(0, 0, glyph_bounds.size.width, glyph_bounds.size.height), inv_scale, inv_scale, &glyph_bounds);
       glyph_offset = GRAPHENE_POINT_INIT (offset.x - glyph_offset.x * inv_scale + (float) glyphs[i].geometry.x_offset / PANGO_SCALE,
                                           offset.y - glyph_offset.y * inv_scale + (float) glyphs[i].geometry.y_offset / PANGO_SCALE);
-      glyph_tex_rect = GRAPHENE_RECT_INIT (
-                           0, 0,
-                           gsk_gpu_image_get_width (image) * inv_scale,
-                           gsk_gpu_image_get_height (image) * inv_scale
-                       );
       if (gsk_text_node_has_color_glyphs (node))
         gsk_gpu_texture_op (self->frame,
                             gsk_gpu_clip_get_shader_clip (&self->clip, &glyph_offset, &glyph_bounds),
