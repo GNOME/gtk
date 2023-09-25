@@ -12833,9 +12833,12 @@ gtk_tree_view_is_blank_at_pos (GtkTreeView       *tree_view,
     *column = real_column;
 
   gtk_tree_model_get_iter (priv->model, &iter, real_path);
-  if (!_gtk_tree_view_find_node (tree_view, real_path, &tree, &node))
+  _gtk_tree_view_find_node (tree_view, real_path, &tree, &node);
+  if (node == NULL)
     {
-      g_assert_not_reached ();
+      if (!path)
+        gtk_tree_path_free (real_path);
+      return TRUE;
     }
 
   /* Check if there's an expander arrow at (x, y) */
