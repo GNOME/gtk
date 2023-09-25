@@ -28,6 +28,9 @@ struct _GskGpuDeviceClass
                                                                          GdkMemoryDepth          depth,
                                                                          gsize                   width,
                                                                          gsize                   height);
+  GskGpuImage *         (* create_atlas_image)                          (GskGpuDevice           *self,
+                                                                         gsize                   width,
+                                                                         gsize                   height);
   GskGpuImage *         (* create_upload_image)                         (GskGpuDevice           *self,
                                                                          GdkMemoryFormat         format,
                                                                          gsize                   width,

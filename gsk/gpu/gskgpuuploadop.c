@@ -504,11 +504,14 @@ gsk_gpu_upload_glyph_op_draw (GskGpuOp *op,
   cairo_surface_set_device_scale (surface, self->scale, self->scale);
 
   cr = cairo_create (surface);
-
-  /* Make sure the entire surface is initialized to black */
   cairo_set_operator (cr, CAIRO_OPERATOR_CLEAR);
   cairo_paint (cr);
   cairo_set_operator (cr, CAIRO_OPERATOR_OVER);
+
+  /* Make sure the entire surface is initialized to black */
+  cairo_set_source_rgba (cr, 0, 0, 0, 0);
+  cairo_rectangle (cr, 0.0, 0.0, self->area.width, self->area.height);
+  cairo_fill (cr);
 
   /* Draw glyph */
   cairo_set_source_rgba (cr, 1, 1, 1, 1);

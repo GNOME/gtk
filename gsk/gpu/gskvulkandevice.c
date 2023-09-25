@@ -110,6 +110,18 @@ gsk_vulkan_device_create_offscreen_image (GskGpuDevice   *device,
 }
 
 static GskGpuImage *
+gsk_vulkan_device_create_atlas_image (GskGpuDevice *device,
+                                      gsize         width,
+                                      gsize         height)
+{
+  GskVulkanDevice *self = GSK_VULKAN_DEVICE (device);
+
+  return gsk_vulkan_image_new_for_atlas (self,
+                                         width,
+                                         height);
+}
+
+static GskGpuImage *
 gsk_vulkan_device_create_upload_image (GskGpuDevice    *device,
                                        GdkMemoryFormat  format,
                                        gsize            width,
@@ -187,6 +199,7 @@ gsk_vulkan_device_class_init (GskVulkanDeviceClass *klass)
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
   gpu_device_class->create_offscreen_image = gsk_vulkan_device_create_offscreen_image;
+  gpu_device_class->create_atlas_image = gsk_vulkan_device_create_atlas_image;
   gpu_device_class->create_upload_image = gsk_vulkan_device_create_upload_image;
 
   object_class->finalize = gsk_vulkan_device_finalize;

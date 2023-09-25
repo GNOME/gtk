@@ -86,6 +86,19 @@ gsk_gl_device_create_upload_image (GskGpuDevice    *device,
                            height);
 }
 
+static GskGpuImage *
+gsk_gl_device_create_atlas_image (GskGpuDevice *device,
+                                  gsize         width,
+                                  gsize         height)
+{
+  GskGLDevice *self = GSK_GL_DEVICE (device);
+
+  return gsk_gl_image_new (self,
+                           GDK_MEMORY_R8G8B8A8_PREMULTIPLIED,
+                           width,
+                           height);
+}
+
 static void
 gsk_gl_device_finalize (GObject *object)
 {
@@ -109,6 +122,7 @@ gsk_gl_device_class_init (GskGLDeviceClass *klass)
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
   gpu_device_class->create_offscreen_image = gsk_gl_device_create_offscreen_image;
+  gpu_device_class->create_atlas_image = gsk_gl_device_create_atlas_image;
   gpu_device_class->create_upload_image = gsk_gl_device_create_upload_image;
 
   object_class->finalize = gsk_gl_device_finalize;
