@@ -15,8 +15,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: lt\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2023-09-03 14:34+0000\n"
-"PO-Revision-Date: 2023-09-03 21:19+0300\n"
+"POT-Creation-Date: 2023-09-25 12:58+0000\n"
+"PO-Revision-Date: 2023-09-25 22:57+0300\n"
 "Last-Translator: Aurimas Černius <aurisc4@gmail.com>\n"
 "Language-Team: Lietuvių <gnome-lt@lists.akl.lt>\n"
 "Language: lt\n"
@@ -59,31 +59,31 @@ msgstr "Nepavyko pateikti turinio kaip %s"
 msgid "The current backend does not support OpenGL"
 msgstr "Dabartinė realizacija nepalaiko OpenGL"
 
-#: gdk/gdkdisplay.c:1245 gdk/gdksurface.c:1252
+#: gdk/gdkdisplay.c:1244 gdk/gdksurface.c:1252
 msgid "Vulkan support disabled via GDK_DEBUG"
 msgstr "Vulkan palaikymas išjungtas naudojant GDK_DEBUG"
 
-#: gdk/gdkdisplay.c:1277
+#: gdk/gdkdisplay.c:1276
 msgid "GL support disabled via GDK_DEBUG"
 msgstr "GL palaikymas išjungtas naudojant GDK_DEBUG"
 
-#: gdk/gdkdisplay.c:1575
+#: gdk/gdkdisplay.c:1574
 msgid "No EGL configuration available"
 msgstr "Nėra prieinamos EGL konfigūracijos"
 
-#: gdk/gdkdisplay.c:1583
+#: gdk/gdkdisplay.c:1582
 msgid "Failed to get EGL configurations"
 msgstr "Nepavyko gauti EGL konfigūracijų"
 
-#: gdk/gdkdisplay.c:1613
+#: gdk/gdkdisplay.c:1612
 msgid "No EGL configuration with required features found"
 msgstr "Nerasta EGL konfigūracija su reikiamomis savybėmis"
 
-#: gdk/gdkdisplay.c:1620
+#: gdk/gdkdisplay.c:1619
 msgid "No perfect EGL configuration found"
 msgstr "Nerasta puikiai tinkanti EGL konfigūracija"
 
-#: gdk/gdkdisplay.c:1662
+#: gdk/gdkdisplay.c:1661
 #, c-format
 msgid "EGL implementation is missing extension %s"
 msgid_plural "EGL implementation is missing %2$d extensions: %1$s"
@@ -91,23 +91,23 @@ msgstr[0] "EGL realizacijai trūksta %2$d plėtinio: %1$s"
 msgstr[1] "EGL realizacijai trūksta %2$d plėtinių: %1$s"
 msgstr[2] "EGL realizacijai trūksta %2$d plėtinių: %1$s"
 
-#: gdk/gdkdisplay.c:1695
+#: gdk/gdkdisplay.c:1694
 msgid "libEGL not available in this sandbox"
 msgstr "libEGL šioje apribotoje veiksenoje neprieinama"
 
-#: gdk/gdkdisplay.c:1696
+#: gdk/gdkdisplay.c:1695
 msgid "libEGL not available"
 msgstr "libEGL neprieinama"
 
-#: gdk/gdkdisplay.c:1706
+#: gdk/gdkdisplay.c:1705
 msgid "Failed to create EGL display"
 msgstr "Nepavyko sukurti EGL vaizduoklio"
 
-#: gdk/gdkdisplay.c:1716
+#: gdk/gdkdisplay.c:1715
 msgid "Could not initialize EGL display"
 msgstr "Nepavyko inicializuoti EGL vaizduoklio"
 
-#: gdk/gdkdisplay.c:1727
+#: gdk/gdkdisplay.c:1726
 #, c-format
 msgid "EGL version %d.%d is too old. GTK requires %d.%d"
 msgstr "EGL versija %d.%d yra per sena. GTK reikalauja %d.%d"
@@ -1039,18 +1039,18 @@ msgctxt "progress bar label"
 msgid "%d %%"
 msgstr "%d %%"
 
-#: gtk/deprecated/gtkcolorbutton.c:183 gtk/deprecated/gtkcolorbutton.c:311
+#: gtk/deprecated/gtkcolorbutton.c:183 gtk/deprecated/gtkcolorbutton.c:314
 #: gtk/gtkcolordialog.c:411
 msgid "Pick a Color"
 msgstr "Pasirinkite spalvą"
 
-#: gtk/deprecated/gtkcolorbutton.c:502 gtk/gtkcolorchooserwidget.c:313
+#: gtk/deprecated/gtkcolorbutton.c:505 gtk/gtkcolorchooserwidget.c:313
 #: gtk/gtkcolordialogbutton.c:335
 #, c-format
 msgid "Red %d%%, Green %d%%, Blue %d%%, Alpha %d%%"
 msgstr "Raudona %d%%, Žalia %d%%, Mėlyna %d%%, Alfa %d%%"
 
-#: gtk/deprecated/gtkcolorbutton.c:508 gtk/gtkcolorchooserwidget.c:319
+#: gtk/deprecated/gtkcolorbutton.c:511 gtk/gtkcolorchooserwidget.c:319
 #: gtk/gtkcolordialogbutton.c:341
 #, c-format
 msgid "Red %d%%, Green %d%%, Blue %d%%"
@@ -1060,17 +1060,17 @@ msgstr "Raudona %d%%, Žalia %d%%, Mėlyna %d%%"
 msgid "Sans 12"
 msgstr "Sans 12"
 
-#: gtk/deprecated/gtkfontbutton.c:507 gtk/deprecated/gtkfontbutton.c:621
+#: gtk/deprecated/gtkfontbutton.c:507 gtk/deprecated/gtkfontbutton.c:624
 #: gtk/gtkfontdialog.c:596
 msgid "Pick a Font"
 msgstr "Pasirinkite šriftą"
 
-#: gtk/deprecated/gtkfontbutton.c:597 gtk/gtkfilechooserwidget.c:3871
+#: gtk/deprecated/gtkfontbutton.c:600 gtk/gtkfilechooserwidget.c:3871
 #: gtk/gtkfontdialogbutton.c:126 gtk/inspector/visual.ui:169
 msgid "Font"
 msgstr "Šriftas"
 
-#: gtk/deprecated/gtkfontbutton.c:1152 gtk/gtkfontdialogbutton.c:652
+#: gtk/deprecated/gtkfontbutton.c:1155 gtk/gtkfontdialogbutton.c:652
 msgctxt "font"
 msgid "None"
 msgstr "Nėra"
@@ -2134,7 +2134,7 @@ msgstr "_Dešinė:"
 msgid "Paper Margins"
 msgstr "Popieriaus paraštės"
 
-#: gtk/gtkentry.c:3673
+#: gtk/gtkentry.c:3685
 msgid "Insert Emoji"
 msgstr "Įterpti emoji"
 
@@ -2292,7 +2292,7 @@ msgid "If you delete an item, it will be permanently lost."
 msgstr "Jei ištrinsite elementą, jis bus negrįžtamai prarastas."
 
 #: gtk/gtkfilechooserwidget.c:1185 gtk/gtkfilechooserwidget.c:1815
-#: gtk/gtklabel.c:5695 gtk/gtktext.c:6145 gtk/gtktextview.c:9018
+#: gtk/gtklabel.c:5695 gtk/gtktext.c:6147 gtk/gtktextview.c:9018
 msgid "_Delete"
 msgstr "Iš_trinti"
 
@@ -2630,19 +2630,19 @@ msgstr "Užverti"
 msgid "Close the infobar"
 msgstr "Užverti informacijos juostą"
 
-#: gtk/gtklabel.c:5692 gtk/gtktext.c:6133 gtk/gtktextview.c:9006
+#: gtk/gtklabel.c:5692 gtk/gtktext.c:6135 gtk/gtktextview.c:9006
 msgid "Cu_t"
 msgstr "_Iškirpti"
 
-#: gtk/gtklabel.c:5693 gtk/gtktext.c:6137 gtk/gtktextview.c:9010
+#: gtk/gtklabel.c:5693 gtk/gtktext.c:6139 gtk/gtktextview.c:9010
 msgid "_Copy"
 msgstr "_Kopijuoti"
 
-#: gtk/gtklabel.c:5694 gtk/gtktext.c:6141 gtk/gtktextview.c:9014
+#: gtk/gtklabel.c:5694 gtk/gtktext.c:6143 gtk/gtktextview.c:9014
 msgid "_Paste"
 msgstr "Į_dėti"
 
-#: gtk/gtklabel.c:5700 gtk/gtktext.c:6154 gtk/gtktextview.c:9039
+#: gtk/gtklabel.c:5700 gtk/gtktext.c:6156 gtk/gtktextview.c:9039
 msgid "Select _All"
 msgstr "P_ažymėti viską"
 
@@ -3498,7 +3498,7 @@ msgstr "Nepavyko perkelti elemento su URI „%s“ į „%s“"
 msgid "No registered application with name “%s” for item with URI “%s” found"
 msgstr "Nerasta registruota programa pavadinimu „%s“ elementui su URI „%s“"
 
-#: gtk/gtksearchentry.c:758
+#: gtk/gtksearchentry.c:767
 msgid "Clear Entry"
 msgstr "Išvalyti lauką"
 
@@ -3589,7 +3589,7 @@ msgctxt "accessibility"
 msgid "Sidebar"
 msgstr "Šoninė juosta"
 
-#: gtk/gtktext.c:6159 gtk/gtktextview.c:9044
+#: gtk/gtktext.c:6161 gtk/gtktextview.c:9044
 msgid "Insert _Emoji"
 msgstr "Įterpti _emoji"
 
@@ -3967,8 +3967,8 @@ msgid "Surface"
 msgstr "Paviršius"
 
 #: gtk/inspector/misc-info.ui:365 gtk/inspector/misc-info.ui:400
-#: gtk/inspector/misc-info.ui:435 gtk/inspector/prop-editor.c:1150
-#: gtk/inspector/prop-editor.c:1533 gtk/inspector/window.ui:396
+#: gtk/inspector/misc-info.ui:435 gtk/inspector/prop-editor.c:1153
+#: gtk/inspector/prop-editor.c:1536 gtk/inspector/window.ui:396
 msgid "Properties"
 msgstr "Savybės"
 
@@ -4020,7 +4020,7 @@ msgstr "Rodyklė: %p"
 #. Translators: %s is a type name, for example
 #. * GtkPropertyExpression with value \"2.5\"
 #.
-#: gtk/inspector/prop-editor.c:824
+#: gtk/inspector/prop-editor.c:827
 #, c-format
 msgid "%s with value \"%s\""
 msgstr "%s su verte „%s“"
@@ -4028,7 +4028,7 @@ msgstr "%s su verte „%s“"
 #. Translators: Both %s are type names, for example
 #. * GtkPropertyExpression with type GObject
 #.
-#: gtk/inspector/prop-editor.c:835
+#: gtk/inspector/prop-editor.c:838
 #, c-format
 msgid "%s with type %s"
 msgstr "%s su tipu %s"
@@ -4036,7 +4036,7 @@ msgstr "%s su tipu %s"
 #. Translators: Both %s are type names, for example
 #. * GtkObjectExpression for GtkStringObject 0x23456789
 #.
-#: gtk/inspector/prop-editor.c:848
+#: gtk/inspector/prop-editor.c:851
 #, c-format
 msgid "%s for %s %p"
 msgstr "%s %s %p"
@@ -4044,71 +4044,71 @@ msgstr "%s %s %p"
 #. Translators: Both %s are type names, for example
 #. * GtkPropertyExpression with value type: gchararray
 #.
-#: gtk/inspector/prop-editor.c:878
+#: gtk/inspector/prop-editor.c:881
 #, c-format
 msgid "%s with value type %s"
 msgstr "%s su %s tipo verte"
 
-#: gtk/inspector/prop-editor.c:1227
+#: gtk/inspector/prop-editor.c:1230
 #, c-format
 msgid "Uneditable property type: %s"
 msgstr "Neredaguojamas savybės tipas: %s"
 
-#: gtk/inspector/prop-editor.c:1385
+#: gtk/inspector/prop-editor.c:1388
 msgctxt "column number"
 msgid "None"
 msgstr "Nėra"
 
-#: gtk/inspector/prop-editor.c:1422
+#: gtk/inspector/prop-editor.c:1425
 msgid "Attribute:"
 msgstr "Atributas:"
 
-#: gtk/inspector/prop-editor.c:1425
+#: gtk/inspector/prop-editor.c:1428
 msgid "Model"
 msgstr "Modelis"
 
-#: gtk/inspector/prop-editor.c:1430
+#: gtk/inspector/prop-editor.c:1433
 msgid "Column:"
 msgstr "Stulpelis:"
 
 #. Translators: %s is a type name, for example
 #. * Action from 0x2345678 (GtkApplicationWindow)
 #.
-#: gtk/inspector/prop-editor.c:1529
+#: gtk/inspector/prop-editor.c:1532
 #, c-format
 msgid "Action from: %p (%s)"
 msgstr "Veiksmas iš: %p (%s)"
 
-#: gtk/inspector/prop-editor.c:1584
+#: gtk/inspector/prop-editor.c:1587
 msgid "Reset"
 msgstr "Atstatyti"
 
-#: gtk/inspector/prop-editor.c:1592
+#: gtk/inspector/prop-editor.c:1595
 msgctxt "GtkSettings source"
 msgid "Default"
 msgstr "Numatyta"
 
-#: gtk/inspector/prop-editor.c:1595
+#: gtk/inspector/prop-editor.c:1598
 msgctxt "GtkSettings source"
 msgid "Theme"
 msgstr "Tema"
 
-#: gtk/inspector/prop-editor.c:1598
+#: gtk/inspector/prop-editor.c:1601
 msgctxt "GtkSettings source"
 msgid "XSettings"
 msgstr "XSettings"
 
-#: gtk/inspector/prop-editor.c:1602
+#: gtk/inspector/prop-editor.c:1605
 msgctxt "GtkSettings source"
 msgid "Application"
 msgstr "Programa"
 
-#: gtk/inspector/prop-editor.c:1605
+#: gtk/inspector/prop-editor.c:1608
 msgctxt "GtkSettings source"
 msgid "Unknown"
 msgstr "Nežinoma"
 
-#: gtk/inspector/prop-editor.c:1608
+#: gtk/inspector/prop-editor.c:1611
 msgid "Source:"
 msgstr "Šaltinis:"
 
@@ -7162,7 +7162,7 @@ msgstr ""
 #: tools/gtk-builder-tool-enumerate.c:56 tools/gtk-builder-tool-preview.c:179
 #: tools/gtk-builder-tool-preview.c:180 tools/gtk-builder-tool-screenshot.c:360
 #: tools/gtk-builder-tool-simplify.c:2529 tools/gtk-builder-tool-validate.c:261
-#: tools/gtk-rendernode-tool-info.c:200 tools/gtk-rendernode-tool-show.c:102
+#: tools/gtk-rendernode-tool-info.c:202 tools/gtk-rendernode-tool-show.c:102
 msgid "FILE"
 msgstr "FAILAS"
 
@@ -7445,37 +7445,37 @@ msgstr ""
 "  render   Padaryti viršūnės atvaizdą\n"
 "\n"
 
-#: tools/gtk-rendernode-tool-info.c:177
+#: tools/gtk-rendernode-tool-info.c:179
 #, c-format
 msgid "Number of nodes: %u\n"
 msgstr "Viršūnių skaičius: %u\n"
 
-#: tools/gtk-rendernode-tool-info.c:184
+#: tools/gtk-rendernode-tool-info.c:186
 #, c-format
 msgid "Depth: %u\n"
 msgstr "Gylis: %u\n"
 
-#: tools/gtk-rendernode-tool-info.c:187
+#: tools/gtk-rendernode-tool-info.c:189
 #, c-format
 msgid "Bounds: %g x %g\n"
 msgstr "Paraštės: %g x %g\n"
 
-#: tools/gtk-rendernode-tool-info.c:188
+#: tools/gtk-rendernode-tool-info.c:190
 #, c-format
 msgid "Origin: %g %g\n"
 msgstr "Pradinė koordinatė: %g %g\n"
 
-#: tools/gtk-rendernode-tool-info.c:209
+#: tools/gtk-rendernode-tool-info.c:211
 msgid "Provide information about the render node."
 msgstr "Pateikti informaciją apie piešimo viršūnę."
 
-#: tools/gtk-rendernode-tool-info.c:222 tools/gtk-rendernode-tool-show.c:130
+#: tools/gtk-rendernode-tool-info.c:224 tools/gtk-rendernode-tool-show.c:130
 #: tools/gtk-rendernode-tool-render.c:225
 #, c-format
 msgid "No .node file specified\n"
 msgstr "Nenurodytas .node failas\n"
 
-#: tools/gtk-rendernode-tool-info.c:228
+#: tools/gtk-rendernode-tool-info.c:230
 #, c-format
 msgid "Can only accept a single .node file\n"
 msgstr "Galima pateikti tik vieną .node failą\n"
@@ -7524,6 +7524,11 @@ msgstr "Galima piešti vienintelį .node failą į vienintelį išvesties failą
 #, c-format
 msgid "Error at %s: %s\n"
 msgstr "Klaida ties %s: %s\n"
+
+#: tools/gtk-rendernode-tool-utils.c:69
+#, c-format
+msgid "Failed to load node file: %s\n"
+msgstr "Nepavyko įkelti viršūnių failo: %s\n"
 
 #: tools/updateiconcache.c:1391
 #, c-format
