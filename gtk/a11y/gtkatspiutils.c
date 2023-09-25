@@ -171,6 +171,9 @@ gtk_accessible_role_to_atspi_role (GtkAccessibleRole role)
     case GTK_ACCESSIBLE_ROLE_OPTION:
       return ATSPI_ROLE_OPTION_PANE;
 
+    case GTK_ACCESSIBLE_ROLE_PARAGRAPH:
+      return ATSPI_ROLE_PARAGRAPH;
+
     case GTK_ACCESSIBLE_ROLE_PRESENTATION:
       return ATSPI_ROLE_INVALID;
 
