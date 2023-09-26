@@ -1135,7 +1135,10 @@ printer_list_done_cb (GtkPrintBackend *backend,
   gtk_print_backend_destroy (backend);
   g_object_unref (backend);
 
-  if (finder->backends == NULL)
+  /* If there are no more backends left after removing ourselves from the list
+   * above, then we're finished.
+   */
+  if (finder->backends == NULL && !finder->found_printer)
     g_idle_add (find_printer_idle, finder);
 }
 
