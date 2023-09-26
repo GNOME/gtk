@@ -1165,9 +1165,7 @@ find_printer_init (PrinterFinder   *finder,
 
   if (gtk_print_backend_printer_list_is_done (backend))
     {
-      finder->backends = g_list_remove (finder->backends, backend);
-      gtk_print_backend_destroy (backend);
-      g_object_unref (backend);
+      printer_list_done_cb (backend, finder);
     }
   else
     {
@@ -1229,14 +1227,17 @@ find_printer (const char *printer,
   if (g_module_supported ())
     finder->backends = gtk_print_backend_load_modules ();
 
+  if (finder->backends == NULL)
+    {
+      g_idle_add (find_printer_idle, finder);
+      return;
+    }
+
   for (node = finder->backends; !finder->found_printer && node != NULL; node = next)
     {
       next = node->next;
       find_printer_init (finder, GTK_PRINT_BACKEND (node->data));
     }
-
-  if (finder->backends == NULL)
-    g_idle_add (find_printer_idle, finder);
 }
 
 
