@@ -24,13 +24,16 @@
 #include "gdksnapshotprivate.h"
 #include "gdkprivate.h"
 
+#include <graphene.h>
+
 /* HACK: So we don't need to include any (not-yet-created) GSK or GTK headers */
 GdkSnapshot *   gtk_snapshot_new                        (void);
 void            gtk_snapshot_push_debug                 (GdkSnapshot            *snapshot,
                                                          const char             *message,
                                                          ...) G_GNUC_PRINTF (2, 3);
 void            gtk_snapshot_pop                        (GdkSnapshot            *snapshot);
-GdkPaintable *  gtk_snapshot_free_to_paintable          (GdkSnapshot            *snapshot);
+GdkPaintable *  gtk_snapshot_free_to_paintable          (GdkSnapshot            *snapshot,
+                                                         const graphene_size_t  *size);
 
 /**
  * GdkPaintable:
@@ -118,7 +121,7 @@ gdk_paintable_default_get_current_image (GdkPaintable *paintable)
 
   snapshot = gtk_snapshot_new ();
   gdk_paintable_snapshot (paintable, snapshot, width, height);
-  return gtk_snapshot_free_to_paintable (snapshot);
+  return gtk_snapshot_free_to_paintable (snapshot, NULL);
 }
 
 static GdkPaintableFlags
