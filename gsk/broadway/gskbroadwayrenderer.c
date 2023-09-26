@@ -898,6 +898,8 @@ gsk_broadway_renderer_add_node (GskRenderer *renderer,
       add_float (nodes, width);
       add_float (nodes, height);
       add_uint32 (nodes, texture_id);
+
+      cairo_surface_destroy (surface);
     }
 }
 
