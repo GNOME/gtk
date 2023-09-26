@@ -345,7 +345,9 @@ gdk_texture_init (GdkTexture *self)
  *
  * Creates a new texture object representing the surface.
  *
- * @surface must be an image surface with format `CAIRO_FORMAT_ARGB32`.
+ * The @surface must be an image surface with format `CAIRO_FORMAT_ARGB32`.
+ *
+ * The newly created texture will acquire a reference on the @surface.
  *
  * Returns: a new `GdkTexture`
  */
@@ -364,7 +366,7 @@ gdk_texture_new_for_surface (cairo_surface_t *surface)
                                       * cairo_image_surface_get_stride (surface),
                                       (GDestroyNotify) cairo_surface_destroy,
                                       cairo_surface_reference (surface));
-  
+
   texture = gdk_memory_texture_new (cairo_image_surface_get_width (surface),
                                     cairo_image_surface_get_height (surface),
                                     GDK_MEMORY_DEFAULT,
@@ -819,7 +821,7 @@ gdk_texture_set_render_data (GdkTexture     *self,
                              GDestroyNotify  notify)
 {
   g_return_val_if_fail (data != NULL, FALSE);
- 
+
   if (self->render_key != NULL)
     return FALSE;
 
