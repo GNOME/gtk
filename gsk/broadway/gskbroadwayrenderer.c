@@ -612,7 +612,7 @@ gsk_broadway_renderer_add_node (GskRenderer *renderer,
             }
 
           texture = gdk_texture_new_for_surface (image_surface);
-          g_ptr_array_add (self->node_textures, g_object_ref (texture)); /* Transfers ownership to node_textures */
+          g_ptr_array_add (self->node_textures, texture); /* Transfers ownership to node_textures */
           texture_id = gdk_broadway_display_ensure_texture (display, texture);
 
           add_rect (nodes, &node->bounds, offset_x, offset_y);
