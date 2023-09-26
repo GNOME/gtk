@@ -65,6 +65,14 @@ typedef struct _GskGLRenderClip
   guint          is_fully_contained : 1;
 } GskGLRenderClip;
 
+#define GDK_ARRAY_NAME clips
+#define GDK_ARRAY_TYPE_NAME Clips
+#define GDK_ARRAY_ELEMENT_TYPE GskGLRenderClip
+#define GDK_ARRAY_BY_VALUE 1
+#define GDK_ARRAY_PREALLOC 16
+#define GDK_ARRAY_NO_MEMSET
+#include "gdk/gdkarrayimpl.c"
+
 typedef struct _GskGLRenderModelview
 {
   GskTransform *transform;
@@ -122,7 +130,7 @@ struct _GskGLRenderJob
   /* An array of GskGLRenderClip updated as nodes are processed. The
    * current clip is the last element.
    */
-  GArray *clip;
+  Clips clip;
 
   /* Our current alpha state as we process nodes */
   float alpha;
@@ -192,6 +200,14 @@ static void     gsk_gl_render_job_visit_node                (GskGLRenderJob     
 static gboolean gsk_gl_render_job_visit_node_with_offscreen (GskGLRenderJob       *job,
                                                              const GskRenderNode  *node,
                                                              GskGLRenderOffscreen *offscreen);
+
+static inline GskGLRenderClip *
+clips_grow_one (Clips *clips)
+{
+  guint len = clips_get_size (clips);
+  clips_set_size (clips, len + 1);
+  return clips_get (clips, len);
+}
 
 static inline int
 get_target_format (GskGLRenderJob      *job,
@@ -588,14 +604,12 @@ gsk_gl_render_job_push_clip (GskGLRenderJob       *job,
   GskGLRenderClip *clip;
 
   g_assert (job != NULL);
-  g_assert (job->clip != NULL);
   g_assert (rect != NULL);
 
   job->driver->stamps[UNIFORM_SHARED_CLIP_RECT]++;
 
-  g_array_set_size (job->clip, job->clip->len + 1);
+  clip = clips_grow_one (&job->clip);
 
-  clip = &g_array_index (job->clip, GskGLRenderClip, job->clip->len - 1);
   memcpy (&clip->rect, rect, sizeof *rect);
   clip->is_rectilinear = gsk_rounded_rect_is_rectilinear (rect);
   clip->is_fully_contained = FALSE;
@@ -610,16 +624,13 @@ gsk_gl_render_job_push_contained_clip (GskGLRenderJob *job)
   GskGLRenderClip *old_clip;
 
   g_assert (job != NULL);
-  g_assert (job->clip != NULL);
-  g_assert (job->clip->len > 0);
+  g_assert (clips_get_size (&job->clip) > 0);
 
   job->driver->stamps[UNIFORM_SHARED_CLIP_RECT]++;
 
-  old_clip = &g_array_index (job->clip, GskGLRenderClip, job->clip->len - 1);
+  clip = clips_grow_one (&job->clip);
+  old_clip = clips_get (&job->clip, clips_get_size (&job->clip) - 2);
 
-  g_array_set_size (job->clip, job->clip->len + 1);
-
-  clip = &g_array_index (job->clip, GskGLRenderClip, job->clip->len - 1);
   memcpy (&clip->rect.bounds, &old_clip->rect.bounds, sizeof (graphene_rect_t));
   memset (clip->rect.corner, 0, sizeof clip->rect.corner);
   clip->is_rectilinear = TRUE;
@@ -632,12 +643,11 @@ static void
 gsk_gl_render_job_pop_clip (GskGLRenderJob *job)
 {
   g_assert (job != NULL);
-  g_assert (job->clip != NULL);
-  g_assert (job->clip->len > 0);
+  g_assert (clips_get_size (&job->clip) > 0);
 
   job->driver->stamps[UNIFORM_SHARED_CLIP_RECT]++;
   job->current_clip--;
-  job->clip->len--;
+  job->clip.end--;
 }
 
 static inline void
@@ -1730,7 +1740,7 @@ gsk_gl_render_job_visit_rounded_clip_node (GskGLRenderJob      *job,
    * which both have rounded corners.
    */
 
-  if (job->clip->len <= 1)
+  if (clips_get_size (&job->clip) <= 1)
     need_offscreen = FALSE;
   else if (gsk_rounded_rect_contains_rect (&job->current_clip->rect, &transformed_clip.bounds))
     need_offscreen = FALSE;
@@ -4531,7 +4541,7 @@ gsk_gl_render_job_new (GskGLDriver           *driver,
   job = g_new0 (GskGLRenderJob, 1);
   job->driver = g_object_ref (driver);
   job->command_queue = job->driver->command_queue;
-  job->clip = g_array_sized_new (FALSE, FALSE, sizeof (GskGLRenderClip), 16);
+  clips_init (&job->clip);
   job->modelview = g_array_sized_new (FALSE, FALSE, sizeof (GskGLRenderModelview), 16);
   job->framebuffer = framebuffer;
   job->clear_framebuffer = !!clear_framebuffer;
@@ -4592,6 +4602,6 @@ gsk_gl_render_job_free (GskGLRenderJob *job)
   g_clear_object (&job->driver);
   g_clear_pointer (&job->region, cairo_region_destroy);
   g_clear_pointer (&job->modelview, g_array_unref);
-  g_clear_pointer (&job->clip, g_array_unref);
+  clips_clear (&job->clip);
   g_free (job);
 }
