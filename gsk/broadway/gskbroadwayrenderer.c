@@ -453,7 +453,7 @@ get_colorized_texture (GdkTexture *texture,
                        const graphene_matrix_t *color_matrix,
                        const graphene_vec4_t *color_offset)
 {
-  cairo_surface_t *surface = gdk_texture_download_surface (texture);
+  cairo_surface_t *surface;
   cairo_surface_t *image_surface;
   graphene_vec4_t pixel;
   guint32* pixel_data;
@@ -475,6 +475,7 @@ get_colorized_texture (GdkTexture *texture,
         return g_object_ref (colorized->texture);
     }
 
+  surface = gdk_texture_download_surface (texture);
   image_surface = cairo_surface_map_to_image (surface, NULL);
   data = cairo_image_surface_get_data (image_surface);
   width = cairo_image_surface_get_width (image_surface);
@@ -535,6 +536,8 @@ get_colorized_texture (GdkTexture *texture,
       g_object_set_data_full (G_OBJECT (texture), "broadway-colorized",
                               colorized_list, (GDestroyNotify)colorized_texture_free_list);
     }
+
+  cairo_surface_destroy (surface);
 
   return colorized_texture;
 }
@@ -611,7 +614,7 @@ gsk_broadway_renderer_add_node (GskRenderer *renderer,
             }
 
           texture = gdk_texture_new_for_surface (image_surface);
-          g_ptr_array_add (self->node_textures, g_object_ref (texture)); /* Transfers ownership to node_textures */
+          g_ptr_array_add (self->node_textures, texture); /* Transfers ownership to node_textures */
           texture_id = gdk_broadway_display_ensure_texture (display, texture);
 
           add_rect (nodes, &node->bounds, offset_x, offset_y);
@@ -902,6 +905,8 @@ gsk_broadway_renderer_add_node (GskRenderer *renderer,
       add_float (nodes, width);
       add_float (nodes, height);
       add_uint32 (nodes, texture_id);
+
+      cairo_surface_destroy (surface);
     }
 }
 
