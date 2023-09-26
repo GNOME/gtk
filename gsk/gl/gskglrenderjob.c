@@ -85,6 +85,14 @@ typedef struct _GskGLRenderModelview
   graphene_matrix_t matrix;
 } GskGLRenderModelview;
 
+#define GDK_ARRAY_NAME modelviews
+#define GDK_ARRAY_TYPE_NAME Modelviews
+#define GDK_ARRAY_ELEMENT_TYPE GskGLRenderModelview
+#define GDK_ARRAY_BY_VALUE 1
+#define GDK_ARRAY_PREALLOC 16
+#define GDK_ARRAY_NO_MEMSET
+#include "gdk/gdkarrayimpl.c"
+
 struct _GskGLRenderJob
 {
   /* The context containing the framebuffer we are drawing to. Generally this
@@ -125,7 +133,7 @@ struct _GskGLRenderJob
   /* An array of GskGLRenderModelview updated as nodes are processed. The
    * current modelview is the last element.
    */
-  GArray *modelview;
+  Modelviews modelview;
 
   /* An array of GskGLRenderClip updated as nodes are processed. The
    * current clip is the last element.
@@ -207,6 +215,14 @@ clips_grow_one (Clips *clips)
   guint len = clips_get_size (clips);
   clips_set_size (clips, len + 1);
   return clips_get (clips, len);
+}
+
+static inline GskGLRenderModelview *
+modelviews_grow_one (Modelviews *modelviews)
+{
+  guint len = modelviews_get_size (modelviews);
+  modelviews_set_size (modelviews, len + 1);
+  return modelviews_get (modelviews, len);
 }
 
 static inline int
@@ -478,15 +494,10 @@ gsk_gl_render_job_set_modelview (GskGLRenderJob *job,
   GskGLRenderModelview *modelview;
 
   g_assert (job != NULL);
-  g_assert (job->modelview != NULL);
 
   job->driver->stamps[UNIFORM_SHARED_MODELVIEW]++;
 
-  g_array_set_size (job->modelview, job->modelview->len + 1);
-
-  modelview = &g_array_index (job->modelview,
-                              GskGLRenderModelview,
-                              job->modelview->len - 1);
+  modelview = modelviews_grow_one (&job->modelview);
 
   modelview->transform = transform;
 
@@ -511,25 +522,16 @@ gsk_gl_render_job_push_modelview (GskGLRenderJob *job,
   GskGLRenderModelview *modelview;
 
   g_assert (job != NULL);
-  g_assert (job->modelview != NULL);
   g_assert (transform != NULL);
 
   job->driver->stamps[UNIFORM_SHARED_MODELVIEW]++;
 
-  g_array_set_size (job->modelview, job->modelview->len + 1);
+  modelview = modelviews_grow_one (&job->modelview);
 
-  modelview = &g_array_index (job->modelview,
-                              GskGLRenderModelview,
-                              job->modelview->len - 1);
-
-  if G_LIKELY (job->modelview->len > 1)
+  if G_LIKELY (modelviews_get_size (&job->modelview) > 1)
     {
-      GskGLRenderModelview *last;
+      GskGLRenderModelview *last = job->modelview.end - 2;
       GskTransform *t = NULL;
-
-      last = &g_array_index (job->modelview,
-                             GskGLRenderModelview,
-                             job->modelview->len - 2);
 
       /* Multiply given matrix with our previous modelview */
       t = gsk_transform_translate (gsk_transform_ref (last->transform),
@@ -564,8 +566,7 @@ gsk_gl_render_job_pop_modelview (GskGLRenderJob *job)
   const GskGLRenderModelview *head;
 
   g_assert (job != NULL);
-  g_assert (job->modelview);
-  g_assert (job->modelview->len > 0);
+  g_assert (modelviews_get_size (&job->modelview) > 0);
 
   job->driver->stamps[UNIFORM_SHARED_MODELVIEW]++;
 
@@ -576,11 +577,11 @@ gsk_gl_render_job_pop_modelview (GskGLRenderJob *job)
 
   gsk_transform_unref (head->transform);
 
-  job->modelview->len--;
+  job->modelview.end--;
 
-  if (job->modelview->len >= 1)
+  if (modelviews_get_size (&job->modelview) >= 1)
     {
-      head = &g_array_index (job->modelview, GskGLRenderModelview, job->modelview->len - 1);
+      head = job->modelview.end - 1;
 
       job->scale_x = head->scale_x;
       job->scale_y = head->scale_y;
@@ -725,7 +726,7 @@ gsk_gl_render_job_transform_bounds (GskGLRenderJob        *job,
   GskTransformCategory category;
 
   g_assert (job != NULL);
-  g_assert (job->modelview->len > 0);
+  g_assert (modelviews_get_size (&job->modelview) > 0);
   g_assert (rect != NULL);
   g_assert (out_rect != NULL);
 
@@ -4530,7 +4531,7 @@ gsk_gl_render_job_new (GskGLDriver           *driver,
   job->driver = g_object_ref (driver);
   job->command_queue = job->driver->command_queue;
   clips_init (&job->clip);
-  job->modelview = g_array_sized_new (FALSE, FALSE, sizeof (GskGLRenderModelview), 16);
+  modelviews_init (&job->modelview);
   job->framebuffer = framebuffer;
   job->clear_framebuffer = !!clear_framebuffer;
   job->default_framebuffer = default_framebuffer;
@@ -4580,16 +4581,16 @@ gsk_gl_render_job_free (GskGLRenderJob *job)
   job->current_modelview = NULL;
   job->current_clip = NULL;
 
-  while (job->modelview->len > 0)
+  while (job->modelview.end > job->modelview.start)
     {
-      GskGLRenderModelview *modelview = &g_array_index (job->modelview, GskGLRenderModelview, job->modelview->len-1);
+      GskGLRenderModelview *modelview = job->modelview.end-1;
       g_clear_pointer (&modelview->transform, gsk_transform_unref);
-      job->modelview->len--;
+      job->modelview.end--;
     }
 
   g_clear_object (&job->driver);
   g_clear_pointer (&job->region, cairo_region_destroy);
-  g_clear_pointer (&job->modelview, g_array_unref);
+  modelviews_clear (&job->modelview);
   clips_clear (&job->clip);
   g_free (job);
 }
