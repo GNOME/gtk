@@ -384,6 +384,8 @@ find_file_printer (void)
   for (l = backends; l; l = l->next)
     {
       GtkPrintBackend *backend = l->data;
+
+      /* FIXME: this needs changes for cpdb */
       if (strcmp (G_OBJECT_TYPE_NAME (backend), "GtkPrintBackendFile") == 0)
         {
           printers = gtk_print_backend_get_printer_list (backend);
@@ -427,11 +429,6 @@ prepare_print_response (GDBusConnection *connection,
       GtkPrintSettings *settings;
       GtkPageSetup *page_setup;
       GtkPrinter *printer;
-      char *filename;
-      char *uri;
-      int fd;
-
-      portal->result = GTK_PRINT_OPERATION_RESULT_APPLY;
 
       v = g_variant_lookup_value (options, "settings", G_VARIANT_TYPE_VARDICT);
       settings = gtk_print_settings_new_from_gvariant (v);
@@ -444,15 +441,28 @@ prepare_print_response (GDBusConnection *connection,
       g_variant_lookup (options, "token", "u", &portal->token);
 
       printer = find_file_printer ();
+      if (printer)
+        {
+          char *filename;
+          int fd;
+          char *uri;
 
-      fd = g_file_open_tmp ("gtkprintXXXXXX", &filename, NULL);
-      uri = g_filename_to_uri (filename, NULL, NULL);
-      gtk_print_settings_set (settings, GTK_PRINT_SETTINGS_OUTPUT_URI, uri);
-      g_free (uri);
-      close (fd);
+          fd = g_file_open_tmp ("gtkprintXXXXXX", &filename, NULL);
+          uri = g_filename_to_uri (filename, NULL, NULL);
+          gtk_print_settings_set (settings, GTK_PRINT_SETTINGS_OUTPUT_URI, uri);
+          g_free (uri);
+          close (fd);
 
-      finish_print (portal, printer, page_setup, settings);
-      g_free (filename);
+          finish_print (portal, printer, page_setup, settings);
+          g_free (filename);
+
+          portal->result = GTK_PRINT_OPERATION_RESULT_APPLY;
+        }
+      else
+        {
+          portal->do_print = FALSE;
+          portal->result = GTK_PRINT_OPERATION_RESULT_ERROR;
+        }
     }
   else
     {
