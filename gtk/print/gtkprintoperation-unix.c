@@ -1056,6 +1056,7 @@ gtk_print_run_page_setup_dialog_async (GtkWindow            *parent,
 struct _PrinterFinder
 {
   gboolean found_printer;
+  gboolean scheduled_callback;
   GFunc func;
   gpointer data;
   char *printer_name;
@@ -1086,6 +1087,14 @@ find_printer_idle (gpointer data)
   printer_finder_free (finder);
 
   return G_SOURCE_REMOVE;
+}
+
+static void
+schedule_finder_callback (PrinterFinder *finder)
+{
+  g_assert (!finder->scheduled_callback);
+  g_idle_add (find_printer_idle, finder);
+  finder->scheduled_callback = TRUE;
 }
 
 static void
@@ -1120,7 +1129,7 @@ printer_added_cb (GtkPrintBackend *backend,
     }
 
   if (finder->found_printer)
-    g_idle_add (find_printer_idle, finder);
+    schedule_finder_callback (finder);
 }
 
 static void
@@ -1135,8 +1144,11 @@ printer_list_done_cb (GtkPrintBackend *backend,
   gtk_print_backend_destroy (backend);
   g_object_unref (backend);
 
-  if (finder->backends == NULL)
-    g_idle_add (find_printer_idle, finder);
+  /* If there are no more backends left after removing ourselves from the list
+   * above, then we're finished.
+   */
+  if (finder->backends == NULL && !finder->found_printer)
+    schedule_finder_callback (finder);
 }
 
 static void
@@ -1162,9 +1174,7 @@ find_printer_init (PrinterFinder   *finder,
 
   if (gtk_print_backend_printer_list_is_done (backend))
     {
-      finder->backends = g_list_remove (finder->backends, backend);
-      gtk_print_backend_destroy (backend);
-      g_object_unref (backend);
+      printer_list_done_cb (backend, finder);
     }
   else
     {
@@ -1226,16 +1236,18 @@ find_printer (const char *printer,
   if (g_module_supported ())
     finder->backends = gtk_print_backend_load_modules ();
 
+  if (finder->backends == NULL)
+    {
+      schedule_finder_callback (finder);
+      return;
+    }
+
   for (node = finder->backends; !finder->found_printer && node != NULL; node = next)
     {
       next = node->next;
       find_printer_init (finder, GTK_PRINT_BACKEND (node->data));
     }
-
-  if (finder->backends == NULL)
-    g_idle_add (find_printer_idle, finder);
 }
-
 
 GtkPrintOperationResult
 _gtk_print_operation_platform_backend_run_dialog (GtkPrintOperation *op,
@@ -1248,6 +1260,7 @@ _gtk_print_operation_platform_backend_run_dialog (GtkPrintOperation *op,
   else
     return gtk_print_operation_unix_run_dialog (op, show_dialog, parent, do_print);
 }
+
 void
 _gtk_print_operation_platform_backend_run_dialog_async (GtkPrintOperation          *op,
 							gboolean                    show_dialog,
