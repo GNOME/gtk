@@ -22,10 +22,6 @@
 
 #include "gdkinternals.h"
 
-#ifdef GDK_WINDOWING_WIN32
-# include "win32/gdkwin32.h"
-#endif
-
 #include <epoxy/gl.h>
 #include <math.h>
 #include <string.h>
@@ -633,13 +629,6 @@ gdk_cairo_draw_from_gl (cairo_t              *cr,
     {
       /* Software fallback */
       int major, minor, version;
-      gboolean es_read_bgra = FALSE;
-
-#ifdef GDK_WINDOWING_WIN32
-      /* on ANGLE GLES, we need to set the glReadPixel() format as GL_BGRA instead */
-      if (GDK_WIN32_IS_GL_CONTEXT(paint_context))
-        es_read_bgra = TRUE;
-#endif
 
       gdk_gl_context_get_version (paint_context, &major, &minor);
       version = major * 100 + minor;
@@ -681,8 +670,11 @@ gdk_cairo_draw_from_gl (cairo_t              *cr,
       if (!gdk_gl_context_get_use_es (paint_context))
         glReadPixels (x, y, width, height, GL_BGRA, GL_UNSIGNED_INT_8_8_8_8_REV,
                       cairo_image_surface_get_data (image));
+      else if (gdk_gl_context_has_texture_format_bgra (paint_context) && G_BYTE_ORDER == G_LITTLE_ENDIAN)
+        glReadPixels (x, y, width, height, GL_BGRA, GL_UNSIGNED_BYTE,
+                      cairo_image_surface_get_data (image));
       else
-        glReadPixels (x, y, width, height, es_read_bgra ? GL_BGRA : GL_RGBA, GL_UNSIGNED_BYTE,
+        glReadPixels (x, y, width, height, GL_RGBA, GL_UNSIGNED_BYTE,
                       cairo_image_surface_get_data (image));
 
       glPixelStorei (GL_PACK_ROW_LENGTH, 0);

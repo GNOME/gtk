@@ -102,6 +102,7 @@ typedef struct {
   guint has_frame_terminator : 1;
   guint has_unpack_subimage : 1;
   guint has_sync : 1;
+  guint has_texture_format_bgra : 1;
   guint extensions_checked : 1;
   guint debug_enabled : 1;
   guint forward_compatible : 1;
@@ -448,6 +449,14 @@ gdk_gl_context_has_sync (GdkGLContext *context)
   GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (context);
 
   return priv->has_sync;
+}
+
+gboolean
+gdk_gl_context_has_texture_format_bgra (GdkGLContext *context)
+{
+  GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (context);
+
+  return priv->has_texture_format_bgra;
 }
 
 /**
@@ -819,6 +828,7 @@ gdk_gl_context_check_extensions (GdkGLContext *context)
 
       priv->has_unpack_subimage = epoxy_has_gl_extension ("GL_EXT_unpack_subimage");
       priv->has_sync = priv->gl_version >= 30;
+      priv->has_texture_format_bgra = epoxy_has_gl_extension ("GL_EXT_texture_format_BGRA8888");
     }
   else
     {
