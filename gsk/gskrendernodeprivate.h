@@ -21,6 +21,9 @@ extern GType gsk_render_node_types[];
 #define GSK_IS_RENDER_NODE_TYPE(node,type) \
   (G_TYPE_INSTANCE_GET_CLASS ((node), GSK_TYPE_RENDER_NODE, GskRenderNodeClass)->node_type == (type))
 
+#define GSK_RENDER_NODE_TYPE(node) \
+  (G_TYPE_INSTANCE_GET_CLASS ((node), GSK_TYPE_RENDER_NODE, GskRenderNodeClass)->node_type)
+
 struct _GskRenderNode
 {
   GTypeInstance parent_instance;

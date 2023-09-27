@@ -270,7 +270,7 @@ gsk_rounded_rect_shrink_to_minimum (GskRoundedRect *self)
 static inline gboolean G_GNUC_PURE
 node_supports_2d_transform (const GskRenderNode *node)
 {
-  switch (gsk_render_node_get_node_type (node))
+  switch (GSK_RENDER_NODE_TYPE (node))
     {
     case GSK_COLOR_NODE:
     case GSK_OPACITY_NODE:
@@ -332,7 +332,7 @@ node_supports_transform (const GskRenderNode *node)
    * opacity or color matrix.
    */
 
-  switch (gsk_render_node_get_node_type (node))
+  switch (GSK_RENDER_NODE_TYPE (node))
     {
     case GSK_COLOR_NODE:
     case GSK_OPACITY_NODE:
@@ -1225,12 +1225,12 @@ gsk_gl_render_job_visit_as_fallback (GskGLRenderJob      *job,
     {
       cairo_move_to (cr, 0, 0);
       cairo_rectangle (cr, 0, 0, node->bounds.size.width, node->bounds.size.height);
-      if (gsk_render_node_get_node_type (node) == GSK_CAIRO_NODE)
+      if (GSK_RENDER_NODE_TYPE (node) == GSK_CAIRO_NODE)
         cairo_set_source_rgba (cr, 0.3, 0, 1, 0.25);
       else
         cairo_set_source_rgba (cr, 1, 0, 0, 0.25);
       cairo_fill_preserve (cr);
-      if (gsk_render_node_get_node_type (node) == GSK_CAIRO_NODE)
+      if (GSK_RENDER_NODE_TYPE (node) == GSK_CAIRO_NODE)
         cairo_set_source_rgba (cr, 0.3, 0, 1, 1);
       else
         cairo_set_source_rgba (cr, 1, 0, 0, 1);
@@ -1523,7 +1523,7 @@ gsk_gl_render_job_visit_linear_gradient_node (GskGLRenderJob      *job,
   const graphene_point_t *start = gsk_linear_gradient_node_get_start (node);
   const graphene_point_t *end = gsk_linear_gradient_node_get_end (node);
   int n_color_stops = gsk_linear_gradient_node_get_n_color_stops (node);
-  gboolean repeat = gsk_render_node_get_node_type (node) == GSK_REPEATING_LINEAR_GRADIENT_NODE;
+  gboolean repeat = GSK_RENDER_NODE_TYPE (node) == GSK_REPEATING_LINEAR_GRADIENT_NODE;
   float x1 = job->offset_x + start->x;
   float x2 = job->offset_x + end->x;
   float y1 = job->offset_y + start->y;
@@ -1596,7 +1596,7 @@ gsk_gl_render_job_visit_radial_gradient_node (GskGLRenderJob      *job,
   float end = gsk_radial_gradient_node_get_end (node);
   float hradius = gsk_radial_gradient_node_get_hradius (node);
   float vradius = gsk_radial_gradient_node_get_vradius (node);
-  gboolean repeat = gsk_render_node_get_node_type (node) == GSK_REPEATING_RADIAL_GRADIENT_NODE;
+  gboolean repeat = GSK_RENDER_NODE_TYPE (node) == GSK_REPEATING_RADIAL_GRADIENT_NODE;
   float scale = 1.0f / (end - start);
   float bias = -start * scale;
 
@@ -2810,8 +2810,8 @@ static inline gboolean G_GNUC_PURE
 equal_texture_nodes (const GskRenderNode *node1,
                      const GskRenderNode *node2)
 {
-  if (gsk_render_node_get_node_type (node1) != GSK_TEXTURE_NODE ||
-      gsk_render_node_get_node_type (node2) != GSK_TEXTURE_NODE)
+  if (GSK_RENDER_NODE_TYPE (node1) != GSK_TEXTURE_NODE ||
+      GSK_RENDER_NODE_TYPE (node2) != GSK_TEXTURE_NODE)
     return FALSE;
 
   if (gsk_texture_node_get_texture (node1) !=
@@ -3114,7 +3114,7 @@ gsk_gl_render_job_visit_shadow_node (GskGLRenderJob      *job,
 
   /* Shadow nodes recolor every pixel of the source texture, but leave the alpha in tact.
    * If the child is a color matrix node that doesn't touch the alpha, we can throw that away. */
-  if (gsk_render_node_get_node_type (shadow_child) == GSK_COLOR_MATRIX_NODE &&
+  if (GSK_RENDER_NODE_TYPE (shadow_child) == GSK_COLOR_MATRIX_NODE &&
       !color_matrix_modifies_alpha (shadow_child))
     shadow_child = gsk_color_matrix_node_get_child (shadow_child);
 
@@ -3134,7 +3134,7 @@ gsk_gl_render_job_visit_shadow_node (GskGLRenderJob      *job,
         continue;
 
       if (shadow->radius == 0 &&
-          gsk_render_node_get_node_type (shadow_child) == GSK_TEXT_NODE)
+          GSK_RENDER_NODE_TYPE (shadow_child) == GSK_TEXT_NODE)
         {
           if (dx != 0 || dy != 0)
             {
@@ -3957,7 +3957,7 @@ gsk_gl_render_job_visit_node (GskGLRenderJob      *job,
   if (!gsk_gl_render_job_update_clip (job, &node->bounds, &has_clip))
     return;
 
-  switch (gsk_render_node_get_node_type (node))
+  switch (GSK_RENDER_NODE_TYPE (node))
     {
     case GSK_BLEND_NODE:
       gsk_gl_render_job_visit_blend_node (job, node);
@@ -4010,12 +4010,12 @@ gsk_gl_render_job_visit_node (GskGLRenderJob      *job,
 
             if (i + 1 < n_children &&
                 job->current_clip->is_fully_contained &&
-                gsk_render_node_get_node_type (child) == GSK_ROUNDED_CLIP_NODE)
+                GSK_RENDER_NODE_TYPE (child) == GSK_ROUNDED_CLIP_NODE)
               {
                 const GskRenderNode *grandchild = gsk_rounded_clip_node_get_child (child);
                 const GskRenderNode *child2 = children[i + 1];
-                if (gsk_render_node_get_node_type (grandchild) == GSK_COLOR_NODE &&
-                    gsk_render_node_get_node_type (child2) == GSK_BORDER_NODE &&
+                if (GSK_RENDER_NODE_TYPE (grandchild) == GSK_COLOR_NODE &&
+                    GSK_RENDER_NODE_TYPE (child2) == GSK_BORDER_NODE &&
                     gsk_border_node_get_uniform_color (child2) &&
                     rounded_rect_equal (gsk_rounded_clip_node_get_clip (child),
                                         gsk_border_node_get_outline (child2)))
@@ -4169,7 +4169,7 @@ gsk_gl_render_job_visit_node_with_offscreen (GskGLRenderJob       *job,
       return FALSE;
     }
 
-  if (gsk_render_node_get_node_type (node) == GSK_TEXTURE_NODE &&
+  if (GSK_RENDER_NODE_TYPE (node) == GSK_TEXTURE_NODE &&
       !offscreen->force_offscreen)
     {
       GdkTexture *texture = gsk_texture_node_get_texture (node);
