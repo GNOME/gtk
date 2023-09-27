@@ -87,6 +87,11 @@ gboolean        gsk_container_node_is_disjoint          (const GskRenderNode    
 
 gboolean        gsk_render_node_use_offscreen_for_opacity (const GskRenderNode       *node);
 
+gboolean        gsk_text_node_get_font_embolden         (const GskRenderNode         *node);
+
+const PangoMatrix *
+                gsk_text_node_get_font_matrix           (const GskRenderNode         *node);
+
 
 G_END_DECLS
 

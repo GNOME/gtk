@@ -35,9 +35,6 @@
 #include <gsk/gskrectprivate.h>
 #include <math.h>
 #include <string.h>
-#ifdef HAVE_PANGOFT
-#include <pango/pangofc-font.h>
-#endif
 
 #include "gskglcommandqueueprivate.h"
 #include "gskgldriverprivate.h"
@@ -3156,37 +3153,6 @@ add_encoded_glyph (GskGLDrawVertex    *vertices,
   *vertices = (GskGLDrawVertex) { .position = { eg->x, eg->y}, .uv = { eg->g16hi, eg->g16lo}, .color = { c[0], c[1], c[2], c[3] } };
 }
 
-static void
-get_synthetic_font_params (PangoFont   *font,
-                           gboolean    *embolden,
-                           PangoMatrix *matrix)
-{
-  *embolden = FALSE;
-  *matrix = (PangoMatrix) PANGO_MATRIX_INIT;
-
-#ifdef HAVE_PANGOFT
-  if (PANGO_IS_FC_FONT (font))
-    {
-      FcPattern *pattern = pango_fc_font_get_pattern (PANGO_FC_FONT (font));
-      FcBool b;
-      FcMatrix mat;
-      FcMatrix *m;
-
-      if (FcPatternGetBool (pattern, FC_EMBOLDEN, 0, &b) == FcResultMatch)
-        *embolden = b;
-
-      FcMatrixInit (&mat);
-      for (int i = 0; FcPatternGetMatrix (pattern, FC_MATRIX, i, &m) == FcResultMatch; i++)
-        FcMatrixMultiply (&mat, &mat, m);
-
-      matrix->xx = mat.xx;
-      matrix->xy = mat.xy;
-      matrix->yx = mat.yx;
-      matrix->yy = mat.yy;
-    }
-#endif
-}
-
 static inline void
 gsk_gl_render_job_visit_text_node_glyphy (GskGLRenderJob      *job,
                                           const GskRenderNode *node,
@@ -3211,7 +3177,7 @@ gsk_gl_render_job_visit_text_node_glyphy (GskGLRenderJob      *job,
   int x_position = 0;
   float font_scale;
   gboolean embolden;
-  PangoMatrix matrix = PANGO_MATRIX_INIT;
+  const PangoMatrix *matrix;
 
 #define GRID_SIZE 20
 
@@ -3224,7 +3190,9 @@ gsk_gl_render_job_visit_text_node_glyphy (GskGLRenderJob      *job,
     return;
 
   font = (PangoFont *)gsk_text_node_get_font (node);
-  get_synthetic_font_params (font, &embolden, &matrix);
+
+  embolden = gsk_text_node_get_font_embolden (node);
+  matrix = gsk_text_node_get_font_matrix (node);
 
   glyphs = gsk_text_node_get_glyphs (node, NULL);
   library = job->driver->glyphy_library;
@@ -3317,8 +3285,8 @@ gsk_gl_render_job_visit_text_node_glyphy (GskGLRenderJob      *job,
   G_STMT_START { \
     float _dx = _cx * (glyph->extents.max_x - glyph->extents.min_x); \
     float _dy = _cy * (glyph->extents.max_y - glyph->extents.min_y); \
-    float _vx = x + cx + font_scale * (glyph->extents.min_x + matrix.xx * _dx + matrix.xy * _dy); \
-    float _vy = y + cy - font_scale * (glyph->extents.min_y + matrix.yx * _dx + matrix.yy * _dy); \
+    float _vx = x + cx + font_scale * (glyph->extents.min_x + matrix->xx * _dx + matrix->xy * _dy); \
+    float _vy = y + cy - font_scale * (glyph->extents.min_y + matrix->yx * _dx + matrix->yy * _dy); \
     encoded_glyph_init (&encoded[_cx * 2 + _cy], _vx, _vy, _cx, _cy, glyph); \
   } G_STMT_END
       ENCODE_CORNER (0, 0);

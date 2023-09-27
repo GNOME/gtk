@@ -43,6 +43,10 @@
 #endif
 #include <hb-ot.h>
 
+#ifdef HAVE_PANGOFT
+#include <pango/pangofc-font.h>
+#endif
+
 /* maximal number of rectangles we keep in a diff region before we throw
  * the towel and just use the bounding box of the parent node.
  * Meant to avoid performance corner cases.
@@ -5460,6 +5464,8 @@ struct _GskTextNode
 
   PangoFont *font;
   gboolean has_color_glyphs;
+  gboolean embolden;
+  PangoMatrix matrix;
 
   GdkRGBA color;
   graphene_point_t offset;
@@ -5467,6 +5473,37 @@ struct _GskTextNode
   guint num_glyphs;
   PangoGlyphInfo *glyphs;
 };
+
+static void
+get_synthetic_font_params (PangoFont   *font,
+                           gboolean    *embolden,
+                           PangoMatrix *matrix)
+{
+  *embolden = FALSE;
+  *matrix = (PangoMatrix) PANGO_MATRIX_INIT;
+
+#ifdef HAVE_PANGOFT
+  if (PANGO_IS_FC_FONT (font))
+    {
+      FcPattern *pattern = pango_fc_font_get_pattern (PANGO_FC_FONT (font));
+      FcBool b;
+      FcMatrix mat;
+      FcMatrix *m;
+
+      if (FcPatternGetBool (pattern, FC_EMBOLDEN, 0, &b) == FcResultMatch)
+        *embolden = b;
+
+      FcMatrixInit (&mat);
+      for (int i = 0; FcPatternGetMatrix (pattern, FC_MATRIX, i, &m) == FcResultMatch; i++)
+        FcMatrixMultiply (&mat, &mat, m);
+
+      matrix->xx = mat.xx;
+      matrix->xy = mat.xy;
+      matrix->yx = mat.yx;
+      matrix->yy = mat.yy;
+    }
+#endif
+}
 
 static void
 gsk_text_node_finalize (GskRenderNode *node)
@@ -5592,6 +5629,8 @@ gsk_text_node_new (PangoFont              *font,
   self->color = *color;
   self->offset = *offset;
   self->has_color_glyphs = FALSE;
+
+  get_synthetic_font_params (self->font, &self->embolden, &self->matrix);
 
   glyph_infos = g_malloc_n (glyphs->num_glyphs, sizeof (PangoGlyphInfo));
 
@@ -5723,6 +5762,22 @@ gsk_text_node_get_offset (const GskRenderNode *node)
   const GskTextNode *self = (const GskTextNode *) node;
 
   return &self->offset;
+}
+
+gboolean
+gsk_text_node_get_font_embolden (const GskRenderNode *node)
+{
+  const GskTextNode *self = (const GskTextNode *) node;
+
+  return self->embolden;
+}
+
+const PangoMatrix *
+gsk_text_node_get_font_matrix (const GskRenderNode *node)
+{
+  const GskTextNode *self = (const GskTextNode *) node;
+
+  return &self->matrix;
 }
 
 /* }}} */
