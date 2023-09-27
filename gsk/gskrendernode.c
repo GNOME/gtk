@@ -287,14 +287,20 @@ gsk_render_node_alloc (GskRenderNodeType node_type)
  * Returns: (transfer full): the `GskRenderNode` with an additional reference
  */
 GskRenderNode *
-gsk_render_node_ref (GskRenderNode *node)
+(gsk_render_node_ref) (GskRenderNode *node)
 {
   g_return_val_if_fail (GSK_IS_RENDER_NODE (node), NULL);
 
-  g_atomic_ref_count_inc (&node->ref_count);
-
-  return node;
+  return _gsk_render_node_ref (node);
 }
+
+void
+_gsk_render_node_unref (GskRenderNode *node)
+{
+  if G_UNLIKELY (g_atomic_ref_count_dec (&node->ref_count))
+    GSK_RENDER_NODE_GET_CLASS (node)->finalize (node);
+}
+
 
 /**
  * gsk_render_node_unref:
@@ -306,12 +312,11 @@ gsk_render_node_ref (GskRenderNode *node)
  * freed.
  */
 void
-gsk_render_node_unref (GskRenderNode *node)
+(gsk_render_node_unref) (GskRenderNode *node)
 {
   g_return_if_fail (GSK_IS_RENDER_NODE (node));
 
-  if (g_atomic_ref_count_dec (&node->ref_count))
-    GSK_RENDER_NODE_GET_CLASS (node)->finalize (node);
+  _gsk_render_node_unref (node);
 }
 
 

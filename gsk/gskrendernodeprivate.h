@@ -57,6 +57,8 @@ GType           gsk_render_node_type_register_static    (const char             
 
 gpointer        gsk_render_node_alloc                   (GskRenderNodeType            node_type);
 
+void            _gsk_render_node_unref                  (GskRenderNode               *node);
+
 gboolean        gsk_render_node_can_diff                (const GskRenderNode         *node1,
                                                          const GskRenderNode         *node2) G_GNUC_PURE;
 void            gsk_render_node_diff                    (GskRenderNode               *node1,
@@ -87,6 +89,15 @@ gboolean        gsk_container_node_is_disjoint          (const GskRenderNode    
 
 gboolean        gsk_render_node_use_offscreen_for_opacity (const GskRenderNode       *node);
 
+#define gsk_render_node_ref(node)   _gsk_render_node_ref(node)
+#define gsk_render_node_unref(node) _gsk_render_node_unref(node)
+
+static inline GskRenderNode *
+_gsk_render_node_ref (GskRenderNode *node)
+{
+  g_atomic_ref_count_inc (&node->ref_count);
+  return node;
+}
 
 G_END_DECLS
 
