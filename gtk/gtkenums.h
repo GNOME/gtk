@@ -1362,6 +1362,8 @@ typedef enum {
  * @GTK_ACCESSIBLE_ROLE_APPLICATION: A toplevel element of a graphical user interface.
  *   This is the role that GTK uses by default for windows.
  *   Since: 4.12
+ * @GTK_ACCESSIBLE_ROLE_PARAGRAPH: A paragraph of content.
+ *   Since: 4.14
  *
  * The accessible role for a [iface@Accessible] implementation.
  *
@@ -1448,7 +1450,8 @@ typedef enum {
   GTK_ACCESSIBLE_ROLE_WIDGET,
   GTK_ACCESSIBLE_ROLE_WINDOW,
   GTK_ACCESSIBLE_ROLE_TOGGLE_BUTTON GDK_AVAILABLE_ENUMERATOR_IN_4_10,
-  GTK_ACCESSIBLE_ROLE_APPLICATION GDK_AVAILABLE_ENUMERATOR_IN_4_12
+  GTK_ACCESSIBLE_ROLE_APPLICATION GDK_AVAILABLE_ENUMERATOR_IN_4_12,
+  GTK_ACCESSIBLE_ROLE_PARAGRAPH GDK_AVAILABLE_ENUMERATOR_IN_4_14
 } GtkAccessibleRole;
 
 /**
