@@ -1056,6 +1056,7 @@ gtk_print_run_page_setup_dialog_async (GtkWindow            *parent,
 struct _PrinterFinder
 {
   gboolean found_printer;
+  gboolean scheduled_callback;
   GFunc func;
   gpointer data;
   char *printer_name;
@@ -1086,6 +1087,14 @@ find_printer_idle (gpointer data)
   printer_finder_free (finder);
 
   return G_SOURCE_REMOVE;
+}
+
+static void
+schedule_finder_callback (PrinterFinder *finder)
+{
+  g_assert (!finder->scheduled_callback);
+  g_idle_add (find_printer_idle, finder);
+  finder->scheduled_callback = TRUE;
 }
 
 static void
@@ -1120,7 +1129,7 @@ printer_added_cb (GtkPrintBackend *backend,
     }
 
   if (finder->found_printer)
-    g_idle_add (find_printer_idle, finder);
+    schedule_finder_callback (finder);
 }
 
 static void
@@ -1139,7 +1148,7 @@ printer_list_done_cb (GtkPrintBackend *backend,
    * above, then we're finished.
    */
   if (finder->backends == NULL && !finder->found_printer)
-    g_idle_add (find_printer_idle, finder);
+    schedule_finder_callback (finder);
 }
 
 static void
@@ -1229,7 +1238,7 @@ find_printer (const char *printer,
 
   if (finder->backends == NULL)
     {
-      g_idle_add (find_printer_idle, finder);
+      schedule_finder_callback (finder);
       return;
     }
 
