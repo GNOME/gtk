@@ -1249,7 +1249,6 @@ find_printer (const char *printer,
     }
 }
 
-
 GtkPrintOperationResult
 _gtk_print_operation_platform_backend_run_dialog (GtkPrintOperation *op,
 						  gboolean           show_dialog,
@@ -1261,6 +1260,7 @@ _gtk_print_operation_platform_backend_run_dialog (GtkPrintOperation *op,
   else
     return gtk_print_operation_unix_run_dialog (op, show_dialog, parent, do_print);
 }
+
 void
 _gtk_print_operation_platform_backend_run_dialog_async (GtkPrintOperation          *op,
 							gboolean                    show_dialog,
