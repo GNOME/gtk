@@ -1,5 +1,38 @@
-Overview of Changes in 4.12.3, xx-xx-xxxx
+Overview of Changes in 4.12.3, 28-09-2023
 =========================================
+
+* GtkWindow:
+ - Don't assume titlebars are GtkHeaderBar
+
+* GtkTreeView:
+ - Fix a crash in gtk_tree_view_is_blank_at_pos
+
+* printing:
+ - Fix some issues with the portal implementation
+
+* GSK:
+ - Some optimizations in the GL renderer
+ - Fix memory leaks in the Broadway renderer
+
+* demos:
+ - Fix a crash in gtk4-demo
+
+* Translation updates
+ Basque
+ Brazilian Portuguese
+ Czech
+ Galician
+ Georgian
+ German
+ Hungarian
+ Kazakh
+ Lithuanian
+ Persian
+ Polish
+ Spanish
+ Swedish
+ Turkish
+
 
 Overview of Changes in 4.12.2, 20-09-2023
 =========================================
