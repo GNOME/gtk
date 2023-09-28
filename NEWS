@@ -1,4 +1,4 @@
-Overview of Changes in 4.13.1, xx-xx-xxxx
+Overview of Changes in 4.13.1, 28-09-2023
 =========================================
 
 * GtkTooltip:
@@ -7,20 +7,32 @@ Overview of Changes in 4.13.1, xx-xx-xxxx
 * GtkCenterLayout, GtkEntry, GtkSearchEntry:
  - Fix some issues with baseline handling
 
+* GtkColorButton, GtkFontButton:
+ - Propagate focus-on-click
+
 * GtkFileChooser:
  - Make "Visit file" scroll to the file
 
 * GtkSwitch:
  - Respect text direction
 
+* GtkWindow:
+ - Don't assume titlebars are GtkHeaderBars
+
+* Printing:
+ - Fix some problems with the portal implementation
+ - Add a new simple print API: GtkPrintDialog
+
 * Paths:
  - GskPathMeasure performance has been improved
  - Add custom contours for circles, rounded rectangles and rectangles
  - Simplify GskPathPoint handling
  - gsk_path_point_get_closest_point now returns the distance as well
+ - Make GskPathBuilder simplify curves
 
 * Input:
  - Handle (some) single-key compose sequences
+ - Fix active state tracking with sensitivity changes and grabs
 
 * GSK:
  - Make the repeated gradients match between GL and cairo
@@ -29,6 +41,13 @@ Overview of Changes in 4.13.1, xx-xx-xxxx
  - Restrict an optimization to the cases where it is crrect
  - Fix rendering of shadows with opacity
  - The Vulkan renderer now requires Vulkan 1.2
+ - GL: Transition gradients unpremultiplied
+ - GL: Fix clipping of shadows
+ - GL: Some optimizations
+ - Broadway: Fix memory leaks in the renderer
+
+* Wayland:
+ - Make activation more reliable
 
 * macOS:
  - Clamp damage regions to the surface size
@@ -43,20 +62,29 @@ Overview of Changes in 4.13.1, xx-xx-xxxx
 * Build:
  - Fix build problems with C++ compilers
 
+* Deprecations:
+ - gtk_window_present_with_time
+
 * Translation updates
  Brazilian Portuguese
  British English
  Catalan
+ Chinese (China)
  Czech
  Danish
+ Dutch
+ Esperanto
  Galician
  Georgian
  Italian
  Korean
+ Latvian
  Lithuanian
+ Persian
  Polish
  Punjabi
  Slovenian
+ Turkish
 
 
 Overview of Changes in 4.13.0, 25-08-2023
