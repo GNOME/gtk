@@ -9,19 +9,19 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties 2.10\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-09-25 16:31+0000\n"
-"PO-Revision-Date: 2023-09-25 21:26+0200\n"
+"POT-Creation-Date: 2023-09-28 17:12+0000\n"
+"PO-Revision-Date: 2023-09-29 20:38+0200\n"
 "Last-Translator: Kristjan SCHMIDT <kristjan.schmidt@googlemail.com>\n"
 "Language-Team: Esperanto <gnome-eo-list@gnome.org>\n"
 "Language: eo\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.2.2\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+"X-Generator: Gtranslator 42.0\n"
 
 #: gdk/gdkapplaunchcontext.c:127 gdk/gdkcursor.c:139 gdk/gdkdevicemanager.c:185
-#: gdk/gdkglcontext.c:318 gdk/gdkseat.c:202 gdk/gdkseat.c:203
+#: gdk/gdkglcontext.c:319 gdk/gdkseat.c:202 gdk/gdkseat.c:203
 msgid "Display"
 msgstr "Ekrano"
 
@@ -137,23 +137,23 @@ msgstr "Implicita ekrano"
 msgid "The default display for GDK"
 msgstr "La implicita ekrano por GDK"
 
-#: gdk/gdkglcontext.c:319
+#: gdk/gdkglcontext.c:320
 msgid "The GDK display used to create the GL context"
 msgstr "La GDK-ekrano uzata por krei la GL-situacion"
 
-#: gdk/gdkglcontext.c:334 gtk/gtkwidget.c:1351
+#: gdk/gdkglcontext.c:335 gtk/gtkwidget.c:1351
 msgid "Window"
 msgstr "Fenestro"
 
-#: gdk/gdkglcontext.c:335
+#: gdk/gdkglcontext.c:336
 msgid "The GDK window bound to the GL context"
 msgstr "La GDK-fenestro ligita al la GL-situacio"
 
-#: gdk/gdkglcontext.c:350
+#: gdk/gdkglcontext.c:351
 msgid "Shared context"
 msgstr "Komuna situacio"
 
-#: gdk/gdkglcontext.c:351
+#: gdk/gdkglcontext.c:352
 msgid "The GL context this context shares data with"
 msgstr "La GL-situacio ĉi tiu situacio kunhavas datumojn kun"
 
@@ -623,7 +623,6 @@ msgid "Position of the handle relative to the child widget"
 msgstr "Loko de la tenilo rilate al la ida fenestraĵo"
 
 #: gtk/deprecated/gtkhandlebox.c:241
-#, fuzzy
 msgid "Snap edge"
 msgstr "Klakema rando"
 
@@ -636,12 +635,10 @@ msgstr ""
 "tenilon"
 
 #: gtk/deprecated/gtkhandlebox.c:250
-#, fuzzy
 msgid "Snap edge set"
-msgstr "Klakema rando agordo"
+msgstr "Klakema rando-agordo"
 
 #: gtk/deprecated/gtkhandlebox.c:251
-#, fuzzy
 msgid ""
 "Whether to use the value from the snap_edge property or a value derived from "
 "handle_position"
@@ -1022,7 +1019,7 @@ msgstr ""
 
 #: gtk/deprecated/gtktable.c:278
 msgid "Vertical padding"
-msgstr ""
+msgstr "Vertikala ŝtopado"
 
 #: gtk/deprecated/gtktable.c:279
 msgid ""
@@ -1281,10 +1278,8 @@ msgid "The name of the associated action, like 'app.quit'"
 msgstr "La nomo de la asociigita ago, kiel 'app.quit'"
 
 #: gtk/gtkactionable.c:76
-#, fuzzy
-#| msgid "Activatable"
 msgid "Action target value"
-msgstr "Aktivigeble"
+msgstr "Agocela valoro"
 
 #: gtk/gtkactionable.c:77
 msgid "The parameter for action invocations"
@@ -1535,7 +1530,6 @@ msgid "Force aspect ratio to match that of the frame's child"
 msgstr "Devigi ke la askpektrilato kongruas al la framo de la ido"
 
 #: gtk/gtkassistant.c:526 gtk/gtkdialog.c:653
-#, fuzzy
 msgid "Use Header Bar"
 msgstr "Uzi kapbreton"
 
@@ -1600,10 +1594,8 @@ msgid "Whether all required fields on the page have been filled out"
 msgstr "Ĉu ĉiuj kampoj de la paĝo estas plenigitaj"
 
 #: gtk/gtkassistant.c:647
-#, fuzzy
-#| msgid "Header Padding"
 msgid "Has padding"
-msgstr "Titola ŝtopado"
+msgstr "Havas ŝtopadon"
 
 #: gtk/gtkassistant.c:647
 msgid "Whether the assistant adds padding around the page"
@@ -1686,10 +1678,8 @@ msgid "Whether the children should all be the same size"
 msgstr "Ĉu ĉiuj idoj estu samgrande"
 
 #: gtk/gtkbox.c:292
-#, fuzzy
-#| msgid "Image position"
 msgid "Baseline position"
-msgstr "Bildpozicio"
+msgstr "Bazlinia pozicio"
 
 #: gtk/gtkbox.c:293
 msgid ""
@@ -3594,16 +3584,12 @@ msgid "Whether to show an icon for Emoji"
 msgstr "Ĉu montri piktogramon anstataŭ emoĝio"
 
 #: gtk/gtkentry.c:1544
-#, fuzzy
-#| msgid "Enable Animations"
 msgid "Enable Emoji completion"
-msgstr "Enŝalti animacioj"
+msgstr "Ebligi emoĝi-kompletigon"
 
 #: gtk/gtkentry.c:1545
-#, fuzzy
-#| msgid "Whether to use the related actions appearance properties"
 msgid "Whether to suggest Emoji replacements"
-msgstr "Ĉu uzi la rilataj agaspektoj"
+msgstr "Ĉu sugesti anstataŭaĵojn de emoĝio"
 
 #: gtk/gtkentry.c:1564
 msgid "Icon Prelight"
@@ -3959,10 +3945,8 @@ msgid "Activate row on a single click"
 msgstr ""
 
 #: gtk/gtkflowbox.c:3866
-#, fuzzy
-#| msgid "Minimum child height"
 msgid "Minimum Children Per Line"
-msgstr "Minimuma alto de la ido"
+msgstr "Minimumaj ido por linio"
 
 #: gtk/gtkflowbox.c:3867
 msgid ""
@@ -3985,20 +3969,16 @@ msgid "Vertical spacing"
 msgstr "Vertikala interspaco"
 
 #: gtk/gtkflowbox.c:3894
-#, fuzzy
-#| msgid "The amount of space between children"
 msgid "The amount of vertical space between two children"
-msgstr "La spaco inter idoj"
+msgstr "La kvanto de vertikala spaco inter du idoj"
 
 #: gtk/gtkflowbox.c:3905
 msgid "Horizontal spacing"
 msgstr "Horizontala interspaco"
 
 #: gtk/gtkflowbox.c:3906
-#, fuzzy
-#| msgid "The amount of space between children"
 msgid "The amount of horizontal space between two children"
-msgstr "La spaco inter idoj"
+msgstr "La kvanto de horizontala spaco inter du idoj"
 
 #: gtk/gtkfontbutton.c:491
 msgid "The title of the font chooser dialog"
@@ -4053,38 +4033,29 @@ msgid "Whether the preview text entry is shown or not"
 msgstr ""
 
 #: gtk/gtkfontchooser.c:118
-#, fuzzy
-#| msgid "Selection mode"
 msgid "Selection level"
-msgstr "Elektoreĝimo"
+msgstr "Elekta tavolo"
 
 #: gtk/gtkfontchooser.c:119
-#, fuzzy
-#| msgid "Whether to use the related actions appearance properties"
 msgid "Whether to select family, face or font"
-msgstr "Ĉu uzi la rilataj agaspektoj"
+msgstr "Ĉu elekti familion, vizaĝon aŭ tiparon"
 
 #: gtk/gtkfontchooser.c:137
-#, fuzzy
-#| msgid "Font stretch"
 msgid "Font features"
-msgstr "Tiparstreĉo"
+msgstr "Tiparaj trajtoj"
 
 #: gtk/gtkfontchooser.c:138
 #, fuzzy
-#| msgid "Font stretch set"
 msgid "Font features as a string"
-msgstr "Agordi tiparstreĉon"
+msgstr "Tiparaj trajtoj kiel ĉeno"
 
 #: gtk/gtkfontchooser.c:155
 msgid "Language for which features have been selected"
 msgstr ""
 
 #: gtk/gtkfontchooserwidget.c:712
-#, fuzzy
-#| msgid "The name of the selected font"
 msgid "The tweak action"
-msgstr "La nomo de la elektita tiparo"
+msgstr "La ĝustiga ago"
 
 #: gtk/gtkfontchooserwidget.c:713
 msgid "The toggle action to switch to the tweak page"
@@ -4143,10 +4114,8 @@ msgid "Factor by which to modify the default timeout"
 msgstr ""
 
 #: gtk/gtkgesturepan.c:239
-#, fuzzy
-#| msgid "Allow folder creation"
 msgid "Allowed orientations"
-msgstr "Permesi kreon de dosierujoj"
+msgstr "Permesitaj orientiĝoj"
 
 #: gtk/gtkgesturesingle.c:262
 msgid "Handle only touch events"
@@ -4177,10 +4146,8 @@ msgid "The GL context"
 msgstr ""
 
 #: gtk/gtkglarea.c:807
-#, fuzzy
-#| msgid "Text to render"
 msgid "Auto render"
-msgstr "Teksto por desegni"
+msgstr "Aŭtomata bildigo"
 
 #: gtk/gtkglarea.c:808
 msgid "Whether the GtkGLArea renders on each redraw"
@@ -4275,16 +4242,12 @@ msgid "Custom Title"
 msgstr "Propra titolo"
 
 #: gtk/gtkheaderbar.c:2042
-#, fuzzy
-#| msgid "Icon set to display"
 msgid "Custom title widget to display"
-msgstr "Agordi piktogramon por montri"
+msgstr "Propra titolo-fenestraĵo por montri"
 
 #: gtk/gtkheaderbar.c:2066
-#, fuzzy
-#| msgid "Show Icons"
 msgid "Show decorations"
-msgstr "Montri piktogramojn"
+msgstr "Montri ornamaĵojn"
 
 #: gtk/gtkheaderbar.c:2067
 msgid "Whether to show window decorations"
@@ -4440,10 +4403,8 @@ msgid "Surface"
 msgstr "Surfaco"
 
 #: gtk/gtkimage.c:264
-#, fuzzy
-#| msgid "Icon set to display"
 msgid "A cairo_surface_t to display"
-msgstr "Agordi piktogramon por montri"
+msgstr "cairo_surface_t por montri"
 
 #: gtk/gtkimage.c:295
 msgid "Icon set"
@@ -4483,14 +4444,12 @@ msgid "Resource"
 msgstr "Risurco"
 
 #: gtk/gtkimage.c:374
-#, fuzzy
-#| msgid "The GIcon being displayed"
 msgid "The resource path being displayed"
-msgstr "La risurco-pado montrata"
+msgstr "La rimeda vojo montrata"
 
 #: gtk/gtkimage.c:398
 msgid "Use Fallback"
-msgstr ""
+msgstr "Uzi retropaŝon"
 
 #: gtk/gtkimage.c:399
 msgid "Whether to use icon names fallback"
@@ -4583,7 +4542,7 @@ msgstr ""
 
 #: gtk/gtklabel.c:916
 msgid "Mnemonic key"
-msgstr ""
+msgstr "Memoriga klavo"
 
 #: gtk/gtklabel.c:917
 msgid "The mnemonic accelerator key for this label"
@@ -4591,7 +4550,7 @@ msgstr ""
 
 #: gtk/gtklabel.c:924
 msgid "Mnemonic widget"
-msgstr ""
+msgstr "Memoriga fenestraĵo"
 
 #: gtk/gtklabel.c:925
 msgid "The widget to be activated when the label's mnemonic key is pressed"
@@ -4684,28 +4643,20 @@ msgid "Invert the direction in which the level bar grows"
 msgstr ""
 
 #: gtk/gtklevelbar.c:1115
-#, fuzzy
-#| msgid "Minimum height of buttons inside the box"
 msgid "Minimum height for filling blocks"
-msgstr "Minimuma alto de butonoj ene de la kesto"
+msgstr "Minimuma alteco por plenigi blokojn"
 
 #: gtk/gtklevelbar.c:1116
-#, fuzzy
-#| msgid "Minimum height of buttons inside the box"
 msgid "Minimum height for blocks that fill the bar"
-msgstr "Minimuma alto de butonoj ene de la kesto"
+msgstr "Minimuma alteco por blokoj kiuj plenigas la breton"
 
 #: gtk/gtklevelbar.c:1132
-#, fuzzy
-#| msgid "Minimum width of buttons inside the box"
 msgid "Minimum width for filling blocks"
-msgstr "Minimuma larĝo de butonoj ene de la kesto"
+msgstr "Minimuma larĝo por plenigi blokojn"
 
 #: gtk/gtklevelbar.c:1133
-#, fuzzy
-#| msgid "Minimum width of buttons inside the box"
 msgid "Minimum width for blocks that fill the bar"
-msgstr "Minimuma larĝo de butonoj ene de la kesto"
+msgstr "Minimuma larĝo por blokoj kiuj plenigas la breton"
 
 #: gtk/gtklinkbutton.c:168
 msgid "URI"
@@ -4785,14 +4736,10 @@ msgid "Inspected"
 msgstr "Inspektita"
 
 #: gtk/gtkmagnifier.c:296
-#, fuzzy
-#| msgid "Icon widget"
 msgid "Inspected widget"
-msgstr "Piktogramfenestraĵo"
+msgstr "Inspektita fenestraĵo"
 
 #: gtk/gtkmagnifier.c:302 gtk/gtkmagnifier.c:303
-#, fuzzy
-#| msgid "Justification"
 msgid "magnification"
 msgstr "pligrandigo"
 
@@ -4845,10 +4792,8 @@ msgid "The model from which the popup is made."
 msgstr ""
 
 #: gtk/gtkmenubutton.c:519
-#, fuzzy
-#| msgid "Align set"
 msgid "Align with"
-msgstr "Agordi ĝisrandigon"
+msgstr "Akordiĝi kun"
 
 #: gtk/gtkmenubutton.c:520
 msgid "The parent widget which the menu should align with."
@@ -4876,10 +4821,8 @@ msgid "Popover"
 msgstr ""
 
 #: gtk/gtkmenubutton.c:565
-#, fuzzy
-#| msgid "The value"
 msgid "The popover"
-msgstr "La valoro"
+msgstr "La ŝprucfenestro"
 
 #: gtk/gtkmenu.c:641
 msgid "The currently selected menu item"
@@ -4950,20 +4893,16 @@ msgid "Rect anchor dx"
 msgstr ""
 
 #: gtk/gtkmenu.c:813
-#, fuzzy
-#| msgid "Horizontal Offset"
 msgid "Rect anchor horizontal offset"
-msgstr "Horizontala deŝovo"
+msgstr "Horizontala deŝovo de la rektangula ankro"
 
 #: gtk/gtkmenu.c:838
 msgid "Rect anchor dy"
 msgstr ""
 
 #: gtk/gtkmenu.c:839
-#, fuzzy
-#| msgid "Vertical Offset"
 msgid "Rect anchor vertical offset"
-msgstr "Vertikala deŝovo"
+msgstr "Vertikala deŝovo de la rektangula ankro"
 
 #: gtk/gtkmenu.c:864
 msgid "Menu type hint"
@@ -5107,8 +5046,6 @@ msgid "The dropdown menu"
 msgstr ""
 
 #: gtk/gtkmessagedialog.c:174
-#, fuzzy
-#| msgid "Image/label border"
 msgid "label border"
 msgstr "bordero de etikedo"
 
@@ -5193,10 +5130,8 @@ msgid "Menu name"
 msgstr "Menu-nomo"
 
 #: gtk/gtkmodelbutton.c:1227
-#, fuzzy
-#| msgid "The name of the selected font"
 msgid "The name of the menu to open"
-msgstr "La nomo de la elektita tiparo"
+msgstr "La nomo de la menuo por malfermi"
 
 #: gtk/gtkmodelbutton.c:1243
 msgid "Whether the menu is a parent"
@@ -5211,10 +5146,8 @@ msgid "Whether to center the contents"
 msgstr "Ĉu centri la enhavon"
 
 #: gtk/gtkmodelbutton.c:1273
-#, fuzzy
-#| msgid "Icon"
 msgid "Iconic"
-msgstr "Piktogramo"
+msgstr "Portreta"
 
 #: gtk/gtkmodelbutton.c:1274
 msgid "Whether to prefer the icon over text"
@@ -5241,16 +5174,12 @@ msgid "The screen where this window will be displayed."
 msgstr ""
 
 #: gtk/gtknativedialog.c:214
-#, fuzzy
-#| msgid "Dialog"
 msgid "Dialog Title"
-msgstr "Dialogo"
+msgstr "Dialoga titolo"
 
 #: gtk/gtknativedialog.c:215
-#, fuzzy
-#| msgid "The title of the font chooser dialog"
 msgid "The title of the file chooser dialog"
-msgstr "La titolo de la tipar-elektad-dialogo"
+msgstr "La titolo de la dosierelektila dialogo"
 
 #: gtk/gtknativedialog.c:228 gtk/gtkpopover.c:1783 gtk/gtkwindow.c:792
 msgid "Modal"
@@ -5263,10 +5192,8 @@ msgid ""
 msgstr ""
 
 #: gtk/gtknativedialog.c:243
-#, fuzzy
-#| msgid "Whether the widget is visible"
 msgid "Whether the dialog is currently visible"
-msgstr "Ĉu la fenestraĵo estu videbla"
+msgstr "Ĉu la dialogo estas nuntempe videbla"
 
 #: gtk/gtknativedialog.c:256 gtk/gtkwindow.c:1067
 msgid "Transient for Window"
@@ -5473,14 +5400,10 @@ msgid "Index"
 msgstr "Indekso"
 
 #: gtk/gtkoverlay.c:803
-#, fuzzy
-#| msgid "The index of the child in the parent"
 msgid "The index of the overlay in the parent, -1 for the main child"
-msgstr "La indekso de la ido en la gepatro, -1 por la ĉefa ido"
+msgstr "La indekso de la plustavolo en la gepatro, -1 por la ĉefa ido"
 
 #: gtk/gtkpadcontroller.c:373
-#, fuzzy
-#| msgid "Action Group"
 msgid "Action group"
 msgstr "Agogrupo"
 
@@ -5560,16 +5483,12 @@ msgid "If TRUE, the child can be made smaller than its requisition"
 msgstr ""
 
 #: gtk/gtkplacessidebar.c:4802
-#, fuzzy
-#| msgid "Location"
 msgid "Location to Select"
-msgstr "Loko"
+msgstr "Loko por elekti"
 
 #: gtk/gtkplacessidebar.c:4803
-#, fuzzy
-#| msgid "The location of the printer"
 msgid "The location to highlight in the sidebar"
-msgstr "La loko de la presilo"
+msgstr "La loko por marki en la flanka breto"
 
 #: gtk/gtkplacessidebar.c:4808 gtk/gtkplacesview.c:2366
 msgid "Open Flags"
@@ -5582,10 +5501,8 @@ msgid ""
 msgstr ""
 
 #: gtk/gtkplacessidebar.c:4815
-#, fuzzy
-#| msgid "Show Details"
 msgid "Show recent files"
-msgstr "Montri detalojn"
+msgstr "Montri lastatempajn dosierojn"
 
 #: gtk/gtkplacessidebar.c:4816
 msgid "Whether the sidebar includes a builtin shortcut for recent files"
@@ -5640,10 +5557,8 @@ msgid "Whether the sidebar includes an item to show external locations"
 msgstr "Ĉu la flanka breto inkluzivas eron por montri eksterajn lokojn"
 
 #: gtk/gtkplacessidebar.c:4857
-#, fuzzy
-#| msgid "Show 'Other locations'"
 msgid "Show “Starred Location”"
-msgstr "Montri «Aliajn lokojn»"
+msgstr "Montri \"Stelitan lokon\""
 
 #: gtk/gtkplacessidebar.c:4858
 msgid "Whether the sidebar includes an item to show starred files"
@@ -5666,10 +5581,8 @@ msgid "Fetching networks"
 msgstr ""
 
 #: gtk/gtkplacesview.c:2360
-#, fuzzy
-#| msgid "Whether the device has a cursor"
 msgid "Whether the view is fetching networks"
-msgstr "Ĉu la aparato havas kursoron"
+msgstr "Ĉu la vido alportas retojn"
 
 #: gtk/gtkplacesviewrow.c:329
 msgid "Icon of the row"
@@ -5700,22 +5613,16 @@ msgid "Volume represented by the row"
 msgstr ""
 
 #: gtk/gtkplacesviewrow.c:351
-#, fuzzy
-#| msgid "The amount of space used by the arrow"
 msgid "The volume represented by the row"
-msgstr "La spaco uzata de la sago"
+msgstr "La portilo reprezentita per la vico"
 
 #: gtk/gtkplacesviewrow.c:357
-#, fuzzy
-#| msgid "The amount of space used by the arrow"
 msgid "Mount represented by the row"
-msgstr "La spaco uzata de la sago"
+msgstr "Surmeto reprezentita per la vico"
 
 #: gtk/gtkplacesviewrow.c:358
-#, fuzzy
-#| msgid "The amount of space used by the arrow"
 msgid "The mount point represented by the row, if any"
-msgstr "La spaco uzata de la sago"
+msgstr "La surmeto reprezentita per la vico, se ekzistas"
 
 #: gtk/gtkplacesviewrow.c:364
 msgid "File represented by the row"
@@ -5782,22 +5689,16 @@ msgid "Constraint for the popover position"
 msgstr ""
 
 #: gtk/gtkpopovermenu.c:359
-#, fuzzy
-#| msgid "Visible Focus"
 msgid "Visible submenu"
-msgstr "Videbla fokuso"
+msgstr "Videbla submenuo"
 
 #: gtk/gtkpopovermenu.c:360
-#, fuzzy
-#| msgid "The name of the selected font"
 msgid "The name of the visible submenu"
-msgstr "La nomo de la elektita tiparo"
+msgstr "La nomo de la videbla submenuo"
 
 #: gtk/gtkpopovermenu.c:377
-#, fuzzy
-#| msgid "The name of the widget"
 msgid "The name of the submenu"
-msgstr "La nomo de la fenestraĵo"
+msgstr "La nomo de la submenuo"
 
 #: gtk/gtkprinter.c:122
 msgid "Name of the printer"
@@ -6400,48 +6301,36 @@ msgid "The size of the recently used resources list"
 msgstr ""
 
 #: gtk/gtkrevealer.c:241 gtk/gtkstack.c:499
-#, fuzzy
-#| msgid "Cursor type"
 msgid "Transition type"
-msgstr "Kursortipo"
+msgstr "Tipo de transiro"
 
 #: gtk/gtkrevealer.c:242 gtk/gtkstack.c:499
-#, fuzzy
-#| msgid "The type of values after parsing"
 msgid "The type of animation used to transition"
-msgstr "La tipo de valoroj post analizo"
+msgstr "La speco de animacio uzata por transiri"
 
 #: gtk/gtkrevealer.c:249 gtk/gtkstack.c:495
-#, fuzzy
-#| msgid "Translation Domain"
 msgid "Transition duration"
-msgstr "Tradukad-retregiono"
+msgstr "Daŭro de transiro"
 
 #: gtk/gtkrevealer.c:250 gtk/gtkstack.c:495
 msgid "The animation duration, in milliseconds"
 msgstr ""
 
 #: gtk/gtkrevealer.c:256
-#, fuzzy
-#| msgid "Above child"
 msgid "Reveal Child"
-msgstr "Pri la ido"
+msgstr "Malkaŝi idon"
 
 #: gtk/gtkrevealer.c:257
-#, fuzzy
-#| msgid "Whether the children should all be the same size"
 msgid "Whether the container should reveal the child"
-msgstr "Ĉu ĉiuj idoj estu samgrande"
+msgstr "Ĉu la ujo devas malkaŝi la idon"
 
 #: gtk/gtkrevealer.c:263
 msgid "Child Revealed"
 msgstr ""
 
 #: gtk/gtkrevealer.c:264
-#, fuzzy
-#| msgid "Whether the child should receive extra space when the parent grows"
 msgid "Whether the child is revealed and the animation target reached"
-msgstr "Ĉu la ido ricevu la ekstran spacon se la gepatro kreskas"
+msgstr "Ĉu la ido estas malkaŝita kaj la animacia celo atingita"
 
 #: gtk/gtkscalebutton.c:199
 msgid "The value of the scale"
@@ -6680,20 +6569,16 @@ msgid "Overlay scrolling mode"
 msgstr "Anstataŭiga reĝimo"
 
 #: gtk/gtkscrolledwindow.c:726
-#, fuzzy
-#| msgid "Maximum length"
 msgid "Maximum Content Width"
-msgstr "Maksimuma longo"
+msgstr "Maksimuma enhavo-larĝo"
 
 #: gtk/gtkscrolledwindow.c:727
 msgid "The maximum width that the scrolled window will allocate to its content"
 msgstr ""
 
 #: gtk/gtkscrolledwindow.c:740
-#, fuzzy
-#| msgid "Maximum Height"
 msgid "Maximum Content Height"
-msgstr "Maksimuma alto"
+msgstr "Maksimuma enhavo-alto"
 
 #: gtk/gtkscrolledwindow.c:741
 msgid ""
@@ -6705,10 +6590,8 @@ msgid "Propagate Natural Width"
 msgstr ""
 
 #: gtk/gtkscrolledwindow.c:776 gtk/gtkscrolledwindow.c:777
-#, fuzzy
-#| msgid "Separator Height"
 msgid "Propagate Natural Height"
-msgstr "Apartigiloalto"
+msgstr "Disvastigi naturan altecon"
 
 #: gtk/gtksearchbar.c:414
 msgid "Search Mode Enabled"
@@ -6791,10 +6674,8 @@ msgid "Cursor Aspect Ratio"
 msgstr "Kursoropozicio"
 
 #: gtk/gtksettings.c:462
-#, fuzzy
-#| msgid "The orientation of the tray"
 msgid "The aspect ratio of the text caret"
-msgstr "Orientiĝo de la taskopleto"
+msgstr "La proporcio de la tekstsigno"
 
 #: gtk/gtksettings.c:470
 msgid "Theme Name"
@@ -6849,10 +6730,8 @@ msgid "Font Name"
 msgstr "Tiparnomo"
 
 #: gtk/gtksettings.c:545
-#, fuzzy
-#| msgid "The default font options for the screen"
 msgid "The default font family and size to use"
-msgstr "La defaŭltaj tiparagordoj por la ekrano"
+msgstr "La defaŭlta tiparo-familio kaj grandeco por uzi"
 
 #: gtk/gtksettings.c:569
 msgid "Icon Sizes"
@@ -7433,10 +7312,8 @@ msgid "Whether to show cursor in text"
 msgstr "Ĉu montri kursoron en teksto"
 
 #: gtk/gtksettings.c:1793 gtk/gtksettings.c:1794
-#, fuzzy
-#| msgid "Whether to use the related actions appearance properties"
 msgid "Whether to use overlay scrollbars"
-msgstr "Ĉu uzi la rilataj agaspektoj"
+msgstr "Ĉu uzi plustavolajn rulumbretojn"
 
 #: gtk/gtkshortcutlabel.c:479 gtk/gtkshortcutsshortcut.c:537
 msgid "Accelerator"
@@ -7495,16 +7372,12 @@ msgid "Whether an icon has been set"
 msgstr "Ĉu piktogramo estis agordita"
 
 #: gtk/gtkshortcutsshortcut.c:577
-#, fuzzy
-#| msgid "Your description here"
 msgid "A short description for the shortcut"
-msgstr "Vi priskribo ĉi tie"
+msgstr "Mallonga priskribo por la ŝparvojo"
 
 #: gtk/gtkshortcutsshortcut.c:593
-#, fuzzy
-#| msgid "Your description here"
 msgid "A short description for the gesture"
-msgstr "Vi priskribo ĉi tie"
+msgstr "Mallonga priskribo por la gesto"
 
 #: gtk/gtkshortcutsshortcut.c:604
 msgid "Subtitle Set"
@@ -7527,16 +7400,12 @@ msgid "The type of shortcut that is represented"
 msgstr ""
 
 #: gtk/gtkshortcutsshortcut.c:678
-#, fuzzy
-#| msgid "Action name"
 msgid "Action Name"
 msgstr "Agonomo"
 
 #: gtk/gtkshortcutsshortcut.c:679
-#, fuzzy
-#| msgid "The name of the selected font"
 msgid "The name of the action"
-msgstr "La nomo de la elektita tiparo"
+msgstr "La nomo de la ago"
 
 #: gtk/gtksizegroup.c:229 gtk/gtktreeselection.c:130
 msgid "Mode"
@@ -7613,60 +7482,45 @@ msgid "Whether the spinner is active"
 msgstr ""
 
 #: gtk/gtkstack.c:459
-#, fuzzy
-#| msgid "Homogeneous"
 msgid "Homogeneous sizing"
-msgstr "Homogene"
+msgstr "Homogena grandeco"
 
 #: gtk/gtkstack.c:471
-#, fuzzy
-#| msgid "Horizontal alignment"
 msgid "Horizontally homogeneous"
-msgstr "Horizontala ĝisrandigo"
+msgstr "Horizontale homogena"
 
 #: gtk/gtkstack.c:471
 msgid "Horizontally homogeneous sizing"
 msgstr ""
 
 #: gtk/gtkstack.c:483
-#, fuzzy
-#| msgid "Homogeneous"
 msgid "Vertically homogeneous"
-msgstr "Homogene"
+msgstr "Vertikale homogena"
 
 #: gtk/gtkstack.c:483
 msgid "Vertically homogeneous sizing"
 msgstr ""
 
 #: gtk/gtkstack.c:487
-#, fuzzy
-#| msgid "Visible Window"
 msgid "Visible child"
-msgstr "Videbla fenestro"
+msgstr "Videbla ido"
 
 #: gtk/gtkstack.c:487
-#, fuzzy
-#| msgid "The widget currently editing the edited cell"
 msgid "The widget currently visible in the stack"
-msgstr "La fenestraĵo kiu nun redaktas la redaktata ĉelo"
+msgstr "La fenestraĵo nuntempe videbla en la stako"
 
 #: gtk/gtkstack.c:491
-#, fuzzy
-#| msgid "X alignment of the child"
 msgid "Name of visible child"
-msgstr "X-ĝisrandigo de la ido"
+msgstr "Nomo de videbla infano"
 
 #: gtk/gtkstack.c:491
-#, fuzzy
-#| msgid "The widget currently editing the edited cell"
 msgid "The name of the widget currently visible in the stack"
-msgstr "La fenestraĵo kiu nun redaktas la redaktata ĉelo"
+msgstr "La nomo de la fenestraĵo nuntempe videbla en la stako"
 
 #: gtk/gtkstack.c:503
 #, fuzzy
-#| msgid "Translation Domain"
 msgid "Transition running"
-msgstr "Tradukad-retregiono"
+msgstr "Transiro daŭranta"
 
 #: gtk/gtkstack.c:503
 msgid "Whether or not the transition is currently running"
@@ -7683,36 +7537,28 @@ msgid ""
 msgstr ""
 
 #: gtk/gtkstack.c:517
-#, fuzzy
-#| msgid "The name of the widget"
 msgid "The name of the child page"
-msgstr "La nomo de la fenestraĵo"
+msgstr "La nomo de la ida paĝo"
 
 #: gtk/gtkstack.c:524
-#, fuzzy
-#| msgid "The title of the assistant page"
 msgid "The title of the child page"
-msgstr "La titolo de la asistantopaĝo"
+msgstr "La titolo de la ida paĝo"
 
 #: gtk/gtkstack.c:530 gtk/gtktoolbutton.c:287
 msgid "Icon name"
 msgstr "Piktogramnomo"
 
 #: gtk/gtkstack.c:531
-#, fuzzy
-#| msgid "The name of the widget"
 msgid "The icon name of the child page"
-msgstr "La nomo de la fenestraĵo"
+msgstr "La piktograma nomo de la ida paĝo"
 
 #: gtk/gtkstack.c:555
 msgid "Needs Attention"
 msgstr "Bezonas atenton"
 
 #: gtk/gtkstack.c:556
-#, fuzzy
-#| msgid "Whether this tag affects the font size"
 msgid "Whether this page needs attention"
-msgstr "Ĉu tiu marko efikas al la tipargrando"
+msgstr "Ĉu ĉi tiu paĝo bezonas atenton"
 
 #: gtk/gtkstacksidebar.c:449 gtk/gtkstackswitcher.c:695
 #: gtk/gtkstackswitcher.c:696 gtk/inspector/gtkstackcombo.c:232
@@ -7781,10 +7627,8 @@ msgid "The minimum width of the handle"
 msgstr ""
 
 #: gtk/gtkswitch.c:947
-#, fuzzy
-#| msgid "Separator Height"
 msgid "Slider Height"
-msgstr "Apartigiloalto"
+msgstr "Ŝovila alto"
 
 #: gtk/gtkswitch.c:948
 #, fuzzy
@@ -8133,10 +7977,8 @@ msgid "Whether this tag affects the right margin"
 msgstr ""
 
 #: gtk/gtktexttag.c:817
-#, fuzzy
-#| msgid "Underline set"
 msgid "Underline RGBA set"
-msgstr "Agordi substrekon"
+msgstr "Agordi RGBA dum substrekado"
 
 #: gtk/gtktexttag.c:818
 #, fuzzy
@@ -8145,10 +7987,8 @@ msgid "Whether this tag affects underlining color"
 msgstr "Ĉu tiu marko efikas substrekon"
 
 #: gtk/gtktexttag.c:828
-#, fuzzy
-#| msgid "Strikethrough set"
 msgid "Strikethrough RGBA set"
-msgstr "Agordi trastrekon"
+msgstr "Agordi RGBA dum forstrekado"
 
 #: gtk/gtktexttag.c:829
 #, fuzzy
@@ -8189,36 +8029,26 @@ msgid "Whether this tag affects the paragraph background color"
 msgstr ""
 
 #: gtk/gtktexttag.c:848
-#, fuzzy
-#| msgid "Show fallback apps"
 msgid "Fallback set"
-msgstr "Montri retropaŝajn aplikaĵojn"
+msgstr "Agordi rezervan reĝimon"
 
 #: gtk/gtktexttag.c:849
-#, fuzzy
-#| msgid "Whether this tag affects the font family"
 msgid "Whether this tag affects font fallback"
-msgstr "Ĉu tiu marko efikas al la tiparfamilio"
+msgstr "Determinas ĉu ĉi tiu agordo influas tiparan rezervreĝimon"
 
 #: gtk/gtktexttag.c:852
-#, fuzzy
-#| msgid "Button spacing"
 msgid "Letter spacing set"
-msgstr "Butonspaco"
+msgstr "Agordi literinterspacon"
 
 #: gtk/gtktexttag.c:853
-#, fuzzy
-#| msgid "Whether this tag affects the rise"
 msgid "Whether this tag affects letter spacing"
-msgstr "Ĉu tiu marko efikas al la leviĝo"
+msgstr "Ĉu ĉi tiu etikedo influas interspacon de literoj"
 
 #: gtk/gtktexttag.c:856
-#, fuzzy
 msgid "Font features set"
 msgstr "Tiparaj trajtaroj"
 
 #: gtk/gtktexttag.c:857
-#, fuzzy
 msgid "Whether this tag affects font features"
 msgstr "Ĉu ĉi tiu etikedo influas tiparfunkciojn"
 
@@ -8295,7 +8125,6 @@ msgid "Monospace"
 msgstr "Egallarĝa"
 
 #: gtk/gtktextview.c:1064
-#, fuzzy
 msgid "Whether to use a monospace font"
 msgstr "Ĉu uzi egallarĝan tiparon"
 
@@ -8808,7 +8637,7 @@ msgstr ""
 
 #: gtk/gtktreeviewcolumn.c:269
 msgid "Current width of the column"
-msgstr ""
+msgstr "Nuna larĝo de la kolono"
 
 #: gtk/gtktreeviewcolumn.c:284
 msgid "Sizing"
@@ -8820,7 +8649,7 @@ msgstr ""
 
 #: gtk/gtktreeviewcolumn.c:292
 msgid "Fixed Width"
-msgstr ""
+msgstr "Fiksa larĝo"
 
 #: gtk/gtktreeviewcolumn.c:293
 msgid "Current fixed width of the column"
@@ -8828,15 +8657,15 @@ msgstr ""
 
 #: gtk/gtktreeviewcolumn.c:301
 msgid "Minimum allowed width of the column"
-msgstr ""
+msgstr "Minimuma permesita larĝo de la kolono"
 
 #: gtk/gtktreeviewcolumn.c:308
 msgid "Maximum Width"
-msgstr ""
+msgstr "Maksimuma larĝo"
 
 #: gtk/gtktreeviewcolumn.c:309
 msgid "Maximum allowed width of the column"
-msgstr ""
+msgstr "Maksimuma permesita larĝo de la kolono"
 
 #: gtk/gtktreeviewcolumn.c:317
 msgid "Title to appear in column header"
@@ -8868,7 +8697,7 @@ msgstr ""
 
 #: gtk/gtktreeviewcolumn.c:358
 msgid "Sort indicator"
-msgstr ""
+msgstr "Ordiga indikilo"
 
 #: gtk/gtktreeviewcolumn.c:359
 msgid "Whether to show a sort indicator"
@@ -8876,7 +8705,7 @@ msgstr ""
 
 #: gtk/gtktreeviewcolumn.c:365
 msgid "Sort order"
-msgstr ""
+msgstr "Ordo de ordigo"
 
 #: gtk/gtktreeviewcolumn.c:366
 msgid "Sort direction the sort indicator should indicate"
@@ -9114,7 +8943,7 @@ msgstr ""
 
 #: gtk/gtkwidget.c:1532
 msgid "All Margins"
-msgstr ""
+msgstr "Ĉiuj marĝenoj"
 
 #: gtk/gtkwidget.c:1533
 msgid "Pixels of extra space on all four sides"
