@@ -2,10 +2,13 @@
  *
  * This demo shows how to use GskPath to draw shapes that are (a bit)
  * more complex than a rounded rectangle.
+ *
+ * It also demonstrates printing to a stream with GtkPrintDialog.
  */
 
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
+#include <cairo-pdf.h>
 
 #include "paintable.h"
 
@@ -165,6 +168,89 @@ gtk_logo_paintable_new (void)
   return GDK_PAINTABLE (self);
 }
 
+static cairo_status_t
+write_cairo (void                *closure,
+             const unsigned char *data,
+             unsigned int         length)
+{
+  GOutputStream *stream = closure;
+  gsize written;
+  GError *error = NULL;
+
+  if (!g_output_stream_write_all (stream, data, length, &written, NULL, &error))
+    {
+      g_print ("Error writing pdf stream: %s\n", error->message);
+      g_error_free (error);
+      return CAIRO_STATUS_WRITE_ERROR;
+    }
+
+  return CAIRO_STATUS_SUCCESS;
+}
+
+static void
+print_ready (GObject      *source,
+             GAsyncResult *result,
+             gpointer      data)
+{
+  GtkPrintDialog *dialog = GTK_PRINT_DIALOG (source);
+  GError *error = NULL;
+  GOutputStream *stream;
+  GtkSnapshot *snapshot;
+  GdkPaintable *paintable;
+  GskRenderNode *node;
+  cairo_surface_t *surface;
+  cairo_t *cr;
+
+  stream = gtk_print_dialog_print_finish (dialog, result, &error);
+  if (stream == NULL)
+    {
+      g_print ("Failed to get output stream: %s\n", error->message);
+      g_error_free (error);
+      return;
+    }
+
+  snapshot = gtk_snapshot_new ();
+  paintable = gtk_picture_get_paintable (GTK_PICTURE (data));
+  gdk_paintable_snapshot (paintable, snapshot, 100, 100);
+  node = gtk_snapshot_free_to_node (snapshot);
+
+  surface = cairo_pdf_surface_create_for_stream (write_cairo, stream, 100, 100);
+  cr = cairo_create (surface);
+
+  gsk_render_node_draw (node, cr);
+
+  cairo_destroy (cr);
+  cairo_surface_destroy (surface);
+  gsk_render_node_unref (node);
+
+  if (!g_output_stream_close (stream, NULL, &error))
+    {
+      g_print ("Error from close: %s\n", error->message);
+      g_error_free (error);
+    }
+
+  g_object_unref (stream);
+}
+
+static void
+print (GtkButton *button,
+       gpointer   data)
+{
+  GtkWidget *picture = data;
+  GtkPrintDialog *dialog;
+
+  dialog = gtk_print_dialog_new ();
+
+  gtk_print_dialog_print (dialog,
+                          GTK_WINDOW (gtk_widget_get_root (picture)),
+                          NULL,
+                          NULL,
+                          print_ready,
+                          picture);
+
+  g_object_unref (dialog);
+}
+
 GtkWidget *
 do_path_fill (GtkWidget *do_widget)
 {
@@ -172,12 +258,21 @@ do_path_fill (GtkWidget *do_widget)
 
   if (!window)
     {
+      GtkWidget *header, *button, *label;
       GtkWidget *picture;
       GdkPaintable *paintable;
 
       window = gtk_window_new ();
-      gtk_window_set_resizable (GTK_WINDOW (window), TRUE);
+      gtk_window_set_resizable (GTK_WINDOW (window), FALSE);
+      gtk_window_set_default_size (GTK_WINDOW (window), 100, 100);
       gtk_window_set_title (GTK_WINDOW (window), "Fill and Stroke");
+      header = gtk_header_bar_new ();
+      button = gtk_button_new_from_icon_name ("printer-symbolic");
+      gtk_header_bar_pack_start (GTK_HEADER_BAR (header), button);
+      label = gtk_label_new ("Fill and Stroke");
+      gtk_widget_add_css_class (label, "title");
+      gtk_header_bar_set_title_widget (GTK_HEADER_BAR (header), label);
+      gtk_window_set_titlebar (GTK_WINDOW (window), header);
       g_object_add_weak_pointer (G_OBJECT (window), (gpointer *)&window);
 
       paintable = gtk_logo_paintable_new ();
@@ -185,6 +280,8 @@ do_path_fill (GtkWidget *do_widget)
       gtk_picture_set_content_fit (GTK_PICTURE (picture), GTK_CONTENT_FIT_CONTAIN);
       gtk_picture_set_can_shrink (GTK_PICTURE (picture), FALSE);
       g_object_unref (paintable);
+
+      g_signal_connect (button, "clicked", G_CALLBACK (print), picture);
 
       gtk_window_set_child (GTK_WINDOW (window), picture);
     }
