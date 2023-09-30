@@ -38,6 +38,8 @@
 
 #include <glib/gi18n-lib.h>
 
+/* {{{ GObject implementation */
+
 /**
  * GtkPrintDialog:
  *
@@ -52,7 +54,6 @@
  *
  * Since: 4.14
  */
-/* {{{ GObject implementation */
 
 struct _GtkPrintDialog
 {
@@ -283,6 +284,25 @@ gtk_print_dialog_new (void)
 /* {{{ API: Getters and setters */
 
 /**
+ * gtk_print_dialog_get_title:
+ * @self: a `GtkPrintDialog`
+ *
+ * Returns the title that will be shown on the
+ * print dialog.
+ *
+ * Returns: the title
+ *
+ * Since: 4.14
+ */
+const char *
+gtk_print_dialog_get_title (GtkPrintDialog *self)
+{
+  g_return_val_if_fail (GTK_IS_PRINT_DIALOG (self), NULL);
+
+  return self->title;
+}
+
+/**
  * gtk_print_dialog_set_title:
  * @self: a `GtkPrintDialog`
  * @title: the new title
@@ -480,27 +500,8 @@ gtk_print_dialog_set_print_settings (GtkPrintDialog   *self,
     g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_PRINT_SETTINGS]);
 }
 
-/**
- * gtk_print_dialog_get_title:
- * @self: a `GtkPrintDialog`
- *
- * Returns the title that will be shown on the
- * print dialog.
- *
- * Returns: the title
- *
- * Since: 4.14
- */
-const char *
-gtk_print_dialog_get_title (GtkPrintDialog *self)
-{
-  g_return_val_if_fail (GTK_IS_PRINT_DIALOG (self), NULL);
-
-  return self->title;
-}
-
 /* }}} */
- /* {{{ Async implementation */
+/* {{{ Async implementation */
 
 #ifdef HAVE_GIO_UNIX
 
