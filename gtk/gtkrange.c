@@ -1698,7 +1698,13 @@ gtk_range_render_trough (GtkGizmo    *gizmo,
     gtk_widget_snapshot_child (GTK_WIDGET (gizmo), priv->fill_widget, snapshot);
 
   if (priv->highlight_widget)
-    gtk_widget_snapshot_child (GTK_WIDGET (gizmo), priv->highlight_widget, snapshot);
+    {
+      GtkCssBoxes boxes;
+      gtk_css_boxes_init (&boxes, GTK_WIDGET (gizmo));
+      gtk_snapshot_push_rounded_clip(snapshot, gtk_css_boxes_get_padding_box (&boxes));
+      gtk_widget_snapshot_child (GTK_WIDGET (gizmo), priv->highlight_widget, snapshot);
+      gtk_snapshot_pop (snapshot);
+    }
 
   gtk_widget_snapshot_child (GTK_WIDGET (gizmo), priv->slider_widget, snapshot);
 }
