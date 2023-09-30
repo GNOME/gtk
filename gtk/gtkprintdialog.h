@@ -29,6 +29,27 @@
 
 G_BEGIN_DECLS
 
+typedef struct _GtkPrintSetup GtkPrintSetup;
+
+#define GTK_TYPE_PRINT_SETUP (gtk_print_setup_get_type ())
+
+GDK_AVAILABLE_IN_4_14
+GType           gtk_print_setup_get_type                (void) G_GNUC_CONST;
+
+GDK_AVAILABLE_IN_4_14
+GtkPrintSetup  *gtk_print_setup_ref                     (GtkPrintSetup        *setup);
+
+GDK_AVAILABLE_IN_4_14
+void            gtk_print_setup_unref                   (GtkPrintSetup        *setup);
+
+GDK_AVAILABLE_IN_4_14
+GtkPrintSettings *
+                gtk_print_setup_get_print_settings      (GtkPrintSetup        *setup);
+
+GDK_AVAILABLE_IN_4_14
+GtkPageSetup *  gtk_print_setup_get_page_setup          (GtkPrintSetup        *setup);
+
+
 #define GTK_TYPE_PRINT_DIALOG (gtk_print_dialog_get_type ())
 
 GDK_AVAILABLE_IN_4_14
@@ -59,11 +80,11 @@ void            gtk_print_dialog_set_modal              (GtkPrintDialog       *s
                                                          gboolean              modal);
 
 GDK_AVAILABLE_IN_4_14
-GtkPageSetup *  gtk_print_dialog_get_default_page_setup (GtkPrintDialog       *self);
+GtkPageSetup *  gtk_print_dialog_get_page_setup         (GtkPrintDialog       *self);
 
 GDK_AVAILABLE_IN_4_14
-void            gtk_print_dialog_set_default_page_setup (GtkPrintDialog       *self,
-                                                         GtkPageSetup         *default_page_setup);
+void            gtk_print_dialog_set_page_setup         (GtkPrintDialog       *self,
+                                                         GtkPageSetup         *page_setup);
 
 GDK_AVAILABLE_IN_4_14
 GtkPrintSettings * gtk_print_dialog_get_print_settings  (GtkPrintDialog       *self);
@@ -73,33 +94,34 @@ void               gtk_print_dialog_set_print_settings  (GtkPrintDialog       *s
                                                          GtkPrintSettings     *print_settings);
 
 GDK_AVAILABLE_IN_4_14
-void            gtk_print_dialog_prepare_print          (GtkPrintDialog       *self,
+void            gtk_print_dialog_setup                  (GtkPrintDialog       *self,
                                                          GtkWindow            *parent,
                                                          GCancellable         *cancellable,
                                                          GAsyncReadyCallback   callback,
                                                          gpointer              user_data);
 
 GDK_AVAILABLE_IN_4_14
-gboolean        gtk_print_dialog_prepare_print_finish   (GtkPrintDialog       *self,
+GtkPrintSetup  *gtk_print_dialog_setup_finish           (GtkPrintDialog       *self,
                                                          GAsyncResult         *result,
                                                          GError              **error);
 
 GDK_AVAILABLE_IN_4_14
-void            gtk_print_dialog_print_stream           (GtkPrintDialog       *self,
+void            gtk_print_dialog_print                  (GtkPrintDialog       *self,
                                                          GtkWindow            *parent,
-                                                         GInputStream         *content,
+                                                         GtkPrintSetup        *setup,
                                                          GCancellable         *cancellable,
                                                          GAsyncReadyCallback   callback,
                                                          gpointer              user_data);
 
 GDK_AVAILABLE_IN_4_14
-gboolean        gtk_print_dialog_print_stream_finish    (GtkPrintDialog       *self,
+GOutputStream * gtk_print_dialog_print_finish           (GtkPrintDialog       *self,
                                                          GAsyncResult         *result,
                                                          GError              **error);
 
 GDK_AVAILABLE_IN_4_14
 void            gtk_print_dialog_print_file             (GtkPrintDialog       *self,
                                                          GtkWindow            *parent,
+                                                         GtkPrintSetup        *setup,
                                                          GFile                *file,
                                                          GCancellable         *cancellable,
                                                          GAsyncReadyCallback   callback,
