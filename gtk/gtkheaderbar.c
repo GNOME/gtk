@@ -533,40 +533,6 @@ gtk_header_bar_remove (GtkHeaderBar *bar,
     update_default_decoration (bar);
 }
 
-static GtkSizeRequestMode
-gtk_header_bar_get_request_mode (GtkWidget *widget)
-{
-  GtkWidget *w;
-  int wfh = 0, hfw = 0;
-
-  for (w = gtk_widget_get_first_child (widget);
-       w != NULL;
-       w = gtk_widget_get_next_sibling (w))
-    {
-      GtkSizeRequestMode mode = gtk_widget_get_request_mode (w);
-
-      switch (mode)
-        {
-        case GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH:
-          hfw ++;
-          break;
-        case GTK_SIZE_REQUEST_WIDTH_FOR_HEIGHT:
-          wfh ++;
-          break;
-        case GTK_SIZE_REQUEST_CONSTANT_SIZE:
-        default:
-          break;
-        }
-    }
-
-  if (hfw == 0 && wfh == 0)
-    return GTK_SIZE_REQUEST_CONSTANT_SIZE;
-  else
-    return wfh > hfw ?
-        GTK_SIZE_REQUEST_WIDTH_FOR_HEIGHT :
-        GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH;
-}
-
 static void
 gtk_header_bar_class_init (GtkHeaderBarClass *class)
 {
@@ -580,7 +546,6 @@ gtk_header_bar_class_init (GtkHeaderBarClass *class)
 
   widget_class->root = gtk_header_bar_root;
   widget_class->unroot = gtk_header_bar_unroot;
-  widget_class->get_request_mode = gtk_header_bar_get_request_mode;
 
   /**
    * GtkHeaderBar:title-widget:

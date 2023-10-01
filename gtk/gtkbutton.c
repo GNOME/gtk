@@ -184,17 +184,6 @@ gtk_button_compute_expand (GtkWidget *widget,
     }
 }
 
-static GtkSizeRequestMode
-gtk_button_get_request_mode (GtkWidget *widget)
-{
-  GtkButtonPrivate *priv = gtk_button_get_instance_private (GTK_BUTTON (widget));
-
-  if (priv->child)
-    return gtk_widget_get_request_mode (priv->child);
-  else
-    return GTK_SIZE_REQUEST_CONSTANT_SIZE;
-}
-
 static void
 gtk_button_class_init (GtkButtonClass *klass)
 {
@@ -213,7 +202,6 @@ gtk_button_class_init (GtkButtonClass *klass)
   widget_class->unrealize = gtk_button_unrealize;
   widget_class->state_flags_changed = gtk_button_state_flags_changed;
   widget_class->compute_expand = gtk_button_compute_expand;
-  widget_class->get_request_mode = gtk_button_get_request_mode;
 
   klass->clicked = NULL;
   klass->activate = gtk_real_button_activate;

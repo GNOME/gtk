@@ -198,40 +198,6 @@ gtk_box_compute_expand (GtkWidget *widget,
   *vexpand_p = vexpand;
 }
 
-static GtkSizeRequestMode
-gtk_box_get_request_mode (GtkWidget *widget)
-{
-  GtkWidget *w;
-  int wfh = 0, hfw = 0;
-
-  for (w = gtk_widget_get_first_child (widget);
-       w != NULL;
-       w = gtk_widget_get_next_sibling (w))
-    {
-      GtkSizeRequestMode mode = gtk_widget_get_request_mode (w);
-
-      switch (mode)
-        {
-        case GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH:
-          hfw ++;
-          break;
-        case GTK_SIZE_REQUEST_WIDTH_FOR_HEIGHT:
-          wfh ++;
-          break;
-        case GTK_SIZE_REQUEST_CONSTANT_SIZE:
-        default:
-          break;
-        }
-    }
-
-  if (hfw == 0 && wfh == 0)
-    return GTK_SIZE_REQUEST_CONSTANT_SIZE;
-  else
-    return wfh > hfw ?
-        GTK_SIZE_REQUEST_WIDTH_FOR_HEIGHT :
-        GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH;
-}
-
 static void
 gtk_box_dispose (GObject *object)
 {
@@ -256,7 +222,6 @@ gtk_box_class_init (GtkBoxClass *class)
 
   widget_class->focus = gtk_widget_focus_child;
   widget_class->compute_expand = gtk_box_compute_expand;
-  widget_class->get_request_mode = gtk_box_get_request_mode;
 
   /**
    * GtkBox:spacing:
