@@ -22,6 +22,7 @@
 
 #include "gtkpopovercontentprivate.h"
 
+#include "gtkbinlayout.h"
 #include "gtkcssstylechangeprivate.h"
 #include "gtkwidgetprivate.h"
 #include "gtkprivate.h"
@@ -76,6 +77,7 @@ gtk_popover_content_class_init (GtkPopoverContentClass *klass)
   widget_class->css_changed = gtk_popover_content_css_changed;
 
   gtk_widget_class_set_css_name (widget_class, I_("contents"));
+  gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BIN_LAYOUT);
   gtk_widget_class_set_accessible_role (widget_class, GTK_ACCESSIBLE_ROLE_GENERIC);
 }
 
