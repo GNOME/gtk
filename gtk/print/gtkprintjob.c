@@ -699,8 +699,9 @@ gtk_print_job_send (GtkPrintJob             *job,
   g_return_if_fail (job->spool_io != NULL);
   
   gtk_print_job_set_status (job, GTK_PRINT_STATUS_SENDING_DATA);
-  
-  g_io_channel_seek_position (job->spool_io, 0, G_SEEK_SET, NULL);
+
+  if (g_io_channel_get_flags (job->spool_io) & G_IO_FLAG_IS_SEEKABLE)
+    g_io_channel_seek_position (job->spool_io, 0, G_SEEK_SET, NULL);
   
   gtk_print_backend_print_stream (job->backend, job,
 				  job->spool_io,

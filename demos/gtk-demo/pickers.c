@@ -1,8 +1,9 @@
 /* Pickers and Launchers
- * #Keywords: GtkColorDialog, GtkFontDialog, GtkFileDialog, GtkFileLauncher, GtkUriLauncher
+ * #Keywords: GtkColorDialog, GtkFontDialog, GtkFileDialog, GtkPrintDialog, GtkFileLauncher, GtkUriLauncher
  *
  * The dialogs are mainly intended for use in preference dialogs.
- * They allow to select colors, fonts and applications.
+ * They allow to select colors, fonts and files. There is also a
+ * print dialog.
  *
  * The launchers let you open files or URIs in applications that
  * can handle them.
@@ -168,7 +169,7 @@ print_file (GtkButton *picker)
                                    abort_mission, g_object_ref (cancellable), g_object_unref);
   g_object_set_data (G_OBJECT (cancellable), "timeout", GUINT_TO_POINTER (id));
 
-  gtk_print_dialog_print_file (dialog, parent, file, cancellable, print_file_done, NULL);
+  gtk_print_dialog_print_file (dialog, parent, NULL, file, cancellable, print_file_done, NULL);
 
   g_object_unref (cancellable);
   g_object_unref (dialog);
