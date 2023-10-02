@@ -1784,7 +1784,7 @@ buffer_changed (GtkWidget   *widget,
   if (changed->buffer)
     {
       g_object_ref (changed->buffer);
-      g_signal_connect (changed->buffer, "insert-text", G_CALLBACK (insert_range_cb), changed);
+      g_signal_connect_after (changed->buffer, "insert-text", G_CALLBACK (insert_range_cb), changed);
       g_signal_connect (changed->buffer, "delete-range", G_CALLBACK (delete_range_cb), changed);
       g_signal_connect_after (changed->buffer, "delete-range", G_CALLBACK (delete_range_after_cb), changed);
       g_signal_connect_after (changed->buffer, "mark-set", G_CALLBACK (mark_set_cb), changed);

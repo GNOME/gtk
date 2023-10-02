@@ -705,8 +705,16 @@ emit_text_changed (GtkAtSpiContext *self,
                    int              end,
                    const char      *text)
 {
+  char *copy = NULL;
+
   if (self->connection == NULL)
     return;
+
+  /* Protect against possible non-UTF8 garbage after the end
+   * that g_variant_new_string() will complain about.
+   */
+  if (text[end] != '\0')
+    text = copy = g_strndup (text, end);
 
   g_dbus_connection_emit_signal (self->connection,
                                  NULL,
@@ -716,6 +724,8 @@ emit_text_changed (GtkAtSpiContext *self,
                                  g_variant_new ("(siiva{sv})",
                                                 kind, start, end, g_variant_new_string (text), NULL),
                                  NULL);
+
+  g_free (copy);
 }
 
 static void
