@@ -725,8 +725,7 @@ emit_text_changed (GtkAtSpiContext *self,
                                                 kind, start, end, g_variant_new_string (text), NULL),
                                  NULL);
 
-  if (copy)
-    g_free (copy);
+  g_free (copy);
 }
 
 static void
