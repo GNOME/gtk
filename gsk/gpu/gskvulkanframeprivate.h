@@ -10,4 +10,8 @@ G_DECLARE_FINAL_TYPE (GskVulkanFrame, gsk_vulkan_frame, GSK, VULKAN_FRAME, GskGp
 
 VkFence                 gsk_vulkan_frame_get_vk_fence                   (GskVulkanFrame         *self) G_GNUC_PURE;
 
+guint32                 gsk_vulkan_frame_add_image                      (GskVulkanFrame         *self,
+                                                                         GskGpuImage            *image,
+                                                                         GskGpuSampler           sampler);
+
 G_END_DECLS

@@ -16,11 +16,6 @@ struct _GskGpuBorderOp
   GskGpuShaderOp op;
 };
 
-static void
-gsk_gpu_border_op_finish (GskGpuOp *op)
-{
-}
-
 static gboolean
 color_equal (const float *color1,
              const float *color2)
@@ -90,7 +85,7 @@ static const GskGpuShaderOpClass GSK_GPU_BORDER_OP_CLASS = {
   {
     GSK_GPU_OP_SIZE (GskGpuBorderOp),
     GSK_GPU_STAGE_SHADER,
-    gsk_gpu_border_op_finish,
+    gsk_gpu_shader_op_finish,
     gsk_gpu_border_op_print,
 #ifdef GDK_RENDERING_VULKAN
     gsk_gpu_border_op_vk_command,
@@ -102,7 +97,6 @@ static const GskGpuShaderOpClass GSK_GPU_BORDER_OP_CLASS = {
 #ifdef GDK_RENDERING_VULKAN
   &gsk_gpu_border_info,
 #endif
-  gsk_gpu_shader_op_no_images,
   gsk_gpu_border_setup_vao
 };
 
@@ -121,6 +115,7 @@ gsk_gpu_border_op (GskGpuFrame            *frame,
   gsk_gpu_shader_op_alloc (frame,
                            &GSK_GPU_BORDER_OP_CLASS,
                            clip,
+                           NULL,
                            &instance);
 
   gsk_rounded_rect_to_float (outline, offset, instance->outline);

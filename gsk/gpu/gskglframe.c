@@ -6,6 +6,7 @@
 #include "gskgpuopprivate.h"
 #include "gskgpushaderopprivate.h"
 #include "gskglbufferprivate.h"
+#include "gskgldescriptorsprivate.h"
 #include "gskgldeviceprivate.h"
 
 struct _GskGLFrame
@@ -49,18 +50,10 @@ gsk_gl_frame_cleanup (GskGpuFrame *frame)
   GSK_GPU_FRAME_CLASS (gsk_gl_frame_parent_class)->cleanup (frame);
 }
 
-static guint32
-gsk_gl_frame_get_image_descriptor (GskGpuFrame   *frame,
-                                   GskGpuImage   *image,
-                                   GskGpuSampler  sampler)
+static GskGpuDescriptors *
+gsk_gl_frame_create_descriptors (GskGpuFrame *frame)
 {
-  GskGLFrame *self = GSK_GL_FRAME (frame);
-  guint32 slot;
-
-  slot = self->next_texture_slot;
-  self->next_texture_slot = (self->next_texture_slot + 1) % 16;
-
-  return slot;
+  return GSK_GPU_DESCRIPTORS (gsk_gl_descriptors_new (GSK_GL_DEVICE (gsk_gpu_frame_get_device (frame))));
 }
 
 static GskGpuBuffer *
@@ -140,7 +133,7 @@ gsk_gl_frame_class_init (GskGLFrameClass *klass)
   gpu_frame_class->is_busy = gsk_gl_frame_is_busy;
   gpu_frame_class->setup = gsk_gl_frame_setup;
   gpu_frame_class->cleanup = gsk_gl_frame_cleanup;
-  gpu_frame_class->get_image_descriptor = gsk_gl_frame_get_image_descriptor;
+  gpu_frame_class->create_descriptors = gsk_gl_frame_create_descriptors;
   gpu_frame_class->create_vertex_buffer = gsk_gl_frame_create_vertex_buffer;
   gpu_frame_class->create_storage_buffer = gsk_gl_frame_create_storage_buffer;
   gpu_frame_class->submit = gsk_gl_frame_submit;

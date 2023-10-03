@@ -7,6 +7,7 @@
 #define GSK_GPU_PATTERN_STACK_SIZE 16
 
 typedef struct _GskGpuBuffer            GskGpuBuffer;
+typedef struct _GskGpuDescriptors       GskGpuDescriptors;
 typedef struct _GskGpuDevice            GskGpuDevice;
 typedef struct _GskGpuFrame             GskGpuFrame;
 typedef struct _GskGpuImage             GskGpuImage;

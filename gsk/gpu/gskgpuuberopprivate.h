@@ -10,8 +10,7 @@ void                    gsk_gpu_uber_op                                 (GskGpuF
                                                                          GskGpuShaderClip                clip,
                                                                          const graphene_rect_t          *rect,
                                                                          const graphene_point_t         *offset,
-                                                                         GskGpuShaderImage              *images,
-                                                                         gsize                           n_images,
+                                                                         GskGpuDescriptors              *desc,
                                                                          guint32                         pattern_id);
 
 

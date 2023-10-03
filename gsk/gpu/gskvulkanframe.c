@@ -4,6 +4,7 @@
 
 #include "gskgpuopprivate.h"
 #include "gskvulkanbufferprivate.h"
+#include "gskvulkandescriptorsprivate.h"
 #include "gskvulkandeviceprivate.h"
 #include "gskvulkanimageprivate.h"
 
@@ -136,16 +137,15 @@ gsk_vulkan_frame_cleanup (GskGpuFrame *frame)
   GSK_GPU_FRAME_CLASS (gsk_vulkan_frame_parent_class)->cleanup (frame);
 }
 
-static guint32
-gsk_vulkan_frame_get_image_descriptor (GskGpuFrame   *frame,
-                                       GskGpuImage   *image,
-                                       GskGpuSampler  sampler)
+guint32
+gsk_vulkan_frame_add_image (GskVulkanFrame *self,
+                            GskGpuImage    *image,
+                            GskGpuSampler   sampler)
 {
-  GskVulkanFrame *self = GSK_VULKAN_FRAME (frame);
   GskVulkanDevice *device;
   guint32 result;
 
-  device = GSK_VULKAN_DEVICE (gsk_gpu_frame_get_device (frame));
+  device = GSK_VULKAN_DEVICE (gsk_gpu_frame_get_device (GSK_GPU_FRAME (self)));
 
   result = gsk_descriptor_image_infos_get_size (&self->descriptor_images);
   g_assert (result < gsk_vulkan_device_get_max_descriptors (device));
@@ -156,7 +156,6 @@ gsk_vulkan_frame_get_image_descriptor (GskGpuFrame   *frame,
                                        .imageView = gsk_vulkan_image_get_vk_image_view (GSK_VULKAN_IMAGE (image)),
                                        .imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
                                      });
-
 
   return result;
 }
@@ -249,6 +248,12 @@ gsk_vulkan_frame_prepare_descriptor_sets (GskVulkanFrame *self)
                            descriptor_sets,
                            0,
                            NULL);
+}
+
+static GskGpuDescriptors *
+gsk_vulkan_frame_create_descriptors (GskGpuFrame *frame)
+{
+  return GSK_GPU_DESCRIPTORS (gsk_vulkan_descriptors_new (GSK_VULKAN_FRAME (frame)));
 }
 
 static GskGpuBuffer *
@@ -351,7 +356,7 @@ gsk_vulkan_frame_class_init (GskVulkanFrameClass *klass)
   gpu_frame_class->is_busy = gsk_vulkan_frame_is_busy;
   gpu_frame_class->setup = gsk_vulkan_frame_setup;
   gpu_frame_class->cleanup = gsk_vulkan_frame_cleanup;
-  gpu_frame_class->get_image_descriptor = gsk_vulkan_frame_get_image_descriptor;
+  gpu_frame_class->create_descriptors = gsk_vulkan_frame_create_descriptors;
   gpu_frame_class->create_vertex_buffer = gsk_vulkan_frame_create_vertex_buffer;
   gpu_frame_class->create_storage_buffer = gsk_vulkan_frame_create_storage_buffer;
   gpu_frame_class->submit = gsk_vulkan_frame_submit;

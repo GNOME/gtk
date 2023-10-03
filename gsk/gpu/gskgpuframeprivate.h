@@ -27,9 +27,7 @@ struct _GskGpuFrameClass
   gboolean              (* is_busy)                                     (GskGpuFrame            *self);
   void                  (* setup)                                       (GskGpuFrame            *self);
   void                  (* cleanup)                                     (GskGpuFrame            *self);
-  guint32               (* get_image_descriptor)                        (GskGpuFrame            *self,
-                                                                         GskGpuImage            *image,
-                                                                         GskGpuSampler           sampler);
+  GskGpuDescriptors *   (* create_descriptors)                          (GskGpuFrame            *self);
   GskGpuBuffer *        (* create_vertex_buffer)                        (GskGpuFrame            *self,
                                                                          gsize                   size);
   GskGpuBuffer *        (* create_storage_buffer)                       (GskGpuFrame            *self,
@@ -56,13 +54,11 @@ gboolean                gsk_gpu_frame_should_optimize                   (GskGpuF
 
 gpointer                gsk_gpu_frame_alloc_op                          (GskGpuFrame            *self,
                                                                          gsize                   size);
+GskGpuDescriptors *     gsk_gpu_frame_create_descriptors                (GskGpuFrame            *self);
 gsize                   gsk_gpu_frame_reserve_vertex_data               (GskGpuFrame            *self,
                                                                          gsize                   size);
 guchar *                gsk_gpu_frame_get_vertex_data                   (GskGpuFrame            *self,
                                                                          gsize                   offset);
-guint32                 gsk_gpu_frame_get_image_descriptor              (GskGpuFrame            *self,
-                                                                         GskGpuImage            *image,
-                                                                         GskGpuSampler           sampler);
 void                    gsk_gpu_frame_write_buffer_memory               (GskGpuFrame            *self,
                                                                          GskGpuBufferWriter     *writer);
 
