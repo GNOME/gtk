@@ -404,6 +404,8 @@ gdk_display_finalize (GObject *object)
 
   g_list_free_full (display->seats, g_object_unref);
 
+  g_free (display->egl_dmabuf_formats);
+
   G_OBJECT_CLASS (gdk_display_parent_class)->finalize (object);
 }
 
@@ -1260,6 +1262,61 @@ gdk_display_create_vulkan_context (GdkDisplay  *self,
 }
 
 static void
+init_dmabuf_formats (GdkDisplay *self)
+{
+  GdkDisplayPrivate *priv = gdk_display_get_instance_private (self);
+
+  if (priv->egl_display != EGL_NO_DISPLAY)
+    {
+      int num_formats;
+      int *formats;
+      GArray *array;
+
+      eglQueryDmaBufFormatsEXT (priv->egl_display, 0, NULL, &num_formats);
+      formats = g_new (int, num_formats);
+      eglQueryDmaBufFormatsEXT (priv->egl_display, num_formats, formats, &num_formats);
+
+      array = g_array_new (FALSE, FALSE, sizeof (GdkDmabufFormat));
+
+      for (int i = 0; i < num_formats; i++)
+        {
+          int num_modifiers;
+          uint64_t *modifiers;
+          unsigned int *external_only;
+
+          eglQueryDmaBufModifiersEXT (priv->egl_display, formats[i], 0, NULL, NULL, &num_modifiers);
+          modifiers = g_new (uint64_t, num_modifiers);
+          external_only = g_new (unsigned int, num_modifiers);
+          eglQueryDmaBufModifiersEXT (priv->egl_display, formats[i], num_modifiers, modifiers, external_only, &num_modifiers);
+
+          if (num_modifiers == 0)
+            g_array_append_val (array, ((GdkDmabufFormat){ formats[i], 0 }));
+          else
+            {
+              for (int j = 0; j < num_modifiers; j++)
+                g_array_append_val (array, ((GdkDmabufFormat){ formats[i], modifiers[j] }));
+            }
+
+          g_free (modifiers);
+        }
+
+      g_free (formats);
+
+      self->egl_dmabuf_n_formats = array->len;
+      self->egl_dmabuf_formats = (GdkDmabufFormat *) g_array_free (array, FALSE);
+    }
+
+  GDK_DEBUG (MISC, "EGL dmabuf formats: (%lu)", self->egl_dmabuf_n_formats);
+  for (gsize i = 0; i < self->egl_dmabuf_n_formats; i++)
+    {
+      uint32_t f = self->egl_dmabuf_formats[i].fourcc;
+      uint64_t m = self->egl_dmabuf_formats[i].modifier;
+
+      GDK_DEBUG (MISC, "  %c%c%c%c:%#lx", f & 0xff, (f >> 8) & 0xff, (f >> 16) & 0xff, (f >> 24) & 0xff, m);
+    }
+}
+
+static void
 gdk_display_init_gl (GdkDisplay *self)
 {
   GdkDisplayPrivate *priv = gdk_display_get_instance_private (self);
@@ -1300,6 +1357,10 @@ gdk_display_init_gl (GdkDisplay *self)
   gdk_gl_backend_use (GDK_GL_CONTEXT_GET_CLASS (context)->backend_type);
 
   gdk_profiler_end_mark (before, "initialize OpenGL", NULL);
+
+  gdk_gl_context_make_current (context);
+
+  init_dmabuf_formats (self);
 }
 
 /**
@@ -1822,6 +1883,40 @@ gdk_display_get_egl_display (GdkDisplay *self)
 #else
   return NULL;
 #endif
+}
+
+/**
+ * GdkDmabufFormat:
+ * @fourcc: the format code
+ * @modifiers: the format modifier
+ *
+ * The `GdkDmabufFormat` struct represents a dma-buf format
+ * as defined in the `drm_fourcc.h` header.
+ *
+ * Since: 4.14
+ */
+
+/**
+ * gdk_display_get_dmabuf_formats:
+ * @display: a `GdkDisplay`
+ * @n_formats: return location for the number of formats
+ *
+ * Returns the dma-buf formats that are supported for
+ * this display.
+ *
+ * Returns: (transfer none): an array of `GdkDmabufFormat` structs.
+ *   The length of the array is returned in @n_formats
+ *
+ * Since: 4.14
+ */
+const GdkDmabufFormat *
+gdk_display_get_dmabuf_formats (GdkDisplay *display,
+                                gsize      *n_formats)
+{
+  gdk_display_prepare_gl (display, NULL);
+
+  *n_formats = display->egl_dmabuf_n_formats;
+  return display->egl_dmabuf_formats;
 }
 
 GdkDebugFlags
