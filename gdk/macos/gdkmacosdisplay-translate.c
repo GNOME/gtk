@@ -1269,9 +1269,8 @@ _gdk_macos_display_translate (GdkMacosDisplay *self,
     {
       NSWindow *orig_window = [nsevent window];
 
-      if (orig_window && GDK_IS_MACOS_WINDOW (orig_window)) {
+      if (orig_window && GDK_IS_MACOS_WINDOW (orig_window))
         [NSApp sendEvent:nsevent];
-      }
     }
 
   return fill_event (self, window, nsevent, x, y);
