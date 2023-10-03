@@ -69,7 +69,9 @@ typedef struct {
 #define CONCAT_EXPANDED2(a,b) a##b
 #define GSK_GL_ADD_UNIFORM(pos, KEY, name) UNIFORM_##KEY = UNIFORM_SHARED_LAST + pos,
 #define GSK_GL_DEFINE_PROGRAM(name, resource, uniforms) enum { uniforms };
+#define GSK_GL_DEFINE_PROGRAM_NO_CLIP(name, resource, uniforms) enum { uniforms };
 # include "gskglprograms.defs"
+#undef GSK_GL_DEFINE_PROGRAM_NO_CLIP
 #undef GSK_GL_DEFINE_PROGRAM
 #undef GSK_GL_ADD_UNIFORM
 #undef GSK_GL_NO_UNIFORMS
@@ -116,10 +118,13 @@ struct _GskGLDriver
   GskGLProgram *name ## _no_clip; \
   GskGLProgram *name ## _rect_clip; \
   GskGLProgram *name;
+#define GSK_GL_DEFINE_PROGRAM_NO_CLIP(name, resource, uniforms) \
+  GskGLProgram *name;
 # include "gskglprograms.defs"
 #undef GSK_GL_NO_UNIFORMS
 #undef GSK_GL_ADD_UNIFORM
 #undef GSK_GL_DEFINE_PROGRAM
+#undef GSK_GL_DEFINE_PROGRAM_NO_CLIP
 
   gint64 current_frame_id;
 
