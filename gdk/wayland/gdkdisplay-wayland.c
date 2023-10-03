@@ -24,6 +24,7 @@
 #include <errno.h>
 #include <unistd.h>
 #include <fcntl.h>
+#include <sys/sysmacros.h>
 
 #ifdef HAVE_LINUX_MEMFD_H
 #include <linux/memfd.h>
@@ -56,6 +57,7 @@
 #include <wayland/xdg-foreign-unstable-v1-client-protocol.h>
 #include <wayland/xdg-foreign-unstable-v2-client-protocol.h>
 #include <wayland/server-decoration-client-protocol.h>
+#include "linux-dmabuf-unstable-v1-client-protocol.h"
 
 #include "wm-button-layout-translation.h"
 
@@ -298,12 +300,99 @@ wl_shm_format (void          *data,
   char buf[10];
 #endif
 
-  GDK_DEBUG (MISC, "supported pixel format %s (0x%X)",
+  GDK_DEBUG (MISC, "supported shm pixel format %s (0x%X)",
                    get_format_name (format, buf), (guint) format);
 }
 
 static const struct wl_shm_listener wl_shm_listener = {
   wl_shm_format
+};
+
+static void
+linux_dmabuf_done (void *data,
+                   struct zwp_linux_dmabuf_feedback_v1 *zwp_linux_dmabuf_feedback_v1)
+{
+  GDK_DEBUG (MISC, "dmabuf feedback done");
+}
+
+static void
+linux_dmabuf_format_table (void *data,
+                           struct zwp_linux_dmabuf_feedback_v1 *zwp_linux_dmabuf_feedback_v1,
+                           int32_t fd,
+                           uint32_t size)
+{
+  GdkWaylandDisplay *display_wayland = data;
+
+  display_wayland->linux_dmabuf_n_formats = size / 16;
+  display_wayland->linux_dmabuf_formats = mmap (NULL, size, PROT_READ, MAP_PRIVATE, fd, 0);
+
+  GDK_DEBUG (MISC, "got dmabuf format table (%lu entries)", display_wayland->linux_dmabuf_n_formats);
+}
+
+static void
+linux_dmabuf_main_device (void *data,
+                          struct zwp_linux_dmabuf_feedback_v1 *zwp_linux_dmabuf_feedback_v1,
+                          struct wl_array *device)
+{
+  dev_t dev = *(dev_t *)device->data;
+
+  GDK_DEBUG (MISC, "got dmabuf main device: %u %u", major (dev), minor (dev));
+}
+
+static void
+linux_dmabuf_tranche_done (void *data,
+                           struct zwp_linux_dmabuf_feedback_v1 *zwp_linux_dmabuf_feedback_v1)
+{
+  GDK_DEBUG (MISC, "dmabuf feedback tranche done");
+}
+
+static void
+linux_dmabuf_tranche_target_device (void *data,
+                                    struct zwp_linux_dmabuf_feedback_v1 *zwp_linux_dmabuf_feedback_v1,
+                                    struct wl_array *device)
+{
+  dev_t dev = *(dev_t *)device->data;
+
+  GDK_DEBUG (MISC, "got dmabuf tranche target device: %u %u", major (dev), minor (dev));
+}
+
+static void
+linux_dmabuf_tranche_formats (void *data,
+                              struct zwp_linux_dmabuf_feedback_v1 *zwp_linux_dmabuf_feedback_v1,
+                              struct wl_array *indices)
+{
+  GdkWaylandDisplay *display_wayland = data;
+
+  GDK_DEBUG (MISC, "got dmabuf tranche formats (%lu entries):", indices->size / sizeof (guint16));
+  guint16 *pos;
+
+  wl_array_for_each (pos, indices)
+    {
+      LinuxDmabufFormat *fmt = &display_wayland->linux_dmabuf_formats[*pos];
+      uint32_t f = fmt->fourcc;
+      uint64_t m = fmt->modifier;
+      GDK_DEBUG (MISC, "  %c%c%c%c:%#lx", f & 0xff, (f >> 8) & 0xff, (f >> 16) & 0xff, (f >> 24) & 0xff, m);
+    }
+}
+
+static void
+linux_dmabuf_tranche_flags (void *data,
+                            struct zwp_linux_dmabuf_feedback_v1 *zwp_linux_dmabuf_feedback_v1,
+                            uint32_t flags)
+{
+  GDK_DEBUG (MISC,
+             "got dmabuf tranche flags: %s",
+             flags & ZWP_LINUX_DMABUF_FEEDBACK_V1_TRANCHE_FLAGS_SCANOUT ? "scanout" : "");
+}
+
+static const struct zwp_linux_dmabuf_feedback_v1_listener linux_dmabuf_feedback_listener = {
+  linux_dmabuf_done,
+  linux_dmabuf_format_table,
+  linux_dmabuf_main_device,
+  linux_dmabuf_tranche_done,
+  linux_dmabuf_tranche_target_device,
+  linux_dmabuf_tranche_formats,
+  linux_dmabuf_tranche_flags,
 };
 
 static void
@@ -381,6 +470,18 @@ gdk_registry_handle_global (void               *data,
       display_wayland->shm =
         wl_registry_bind (display_wayland->wl_registry, id, &wl_shm_interface, 1);
       wl_shm_add_listener (display_wayland->shm, &wl_shm_listener, display_wayland);
+    }
+  else if (strcmp (interface, "zwp_linux_dmabuf_v1") == 0)
+    {
+      display_wayland->linux_dmabuf =
+        wl_registry_bind (display_wayland->wl_registry, id,
+                          &zwp_linux_dmabuf_v1_interface,
+                          MIN (version, 4));
+      display_wayland->linux_dmabuf_feedback =
+        zwp_linux_dmabuf_v1_get_default_feedback (display_wayland->linux_dmabuf);
+     zwp_linux_dmabuf_feedback_v1_add_listener (display_wayland->linux_dmabuf_feedback,
+                                                &linux_dmabuf_feedback_listener, display_wayland);
+      _gdk_wayland_display_async_roundtrip (display_wayland);
     }
   else if (strcmp (interface, "xdg_wm_base") == 0)
     {
@@ -726,6 +827,10 @@ gdk_wayland_display_dispose (GObject *object)
   g_clear_pointer (&display_wayland->xdg_activation, xdg_activation_v1_destroy);
   g_clear_pointer (&display_wayland->fractional_scale, wp_fractional_scale_manager_v1_destroy);
   g_clear_pointer (&display_wayland->viewporter, wp_viewporter_destroy);
+  g_clear_pointer (&display_wayland->linux_dmabuf, zwp_linux_dmabuf_v1_destroy);
+  g_clear_pointer (&display_wayland->linux_dmabuf_feedback, zwp_linux_dmabuf_feedback_v1_destroy);
+  if (display_wayland->linux_dmabuf_formats)
+    munmap (display_wayland->linux_dmabuf_formats, display_wayland->linux_dmabuf_n_formats * 16);
 
   g_clear_pointer (&display_wayland->shm, wl_shm_destroy);
   g_clear_pointer (&display_wayland->wl_registry, wl_registry_destroy);
