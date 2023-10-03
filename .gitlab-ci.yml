@@ -221,21 +221,28 @@ macos-x86_64:
     PIP_CACHE_DIR: /Users/Shared/build/cache
     PIPENV_CACHE_DIR: $PIP_CACHE_DIR
     PYTHONPYCACHEPREFIX: $PIP_CACHE_DIR
+    EXTRA_MESON_FLAGS: "-Dgobject-introspection:werror=false"
   before_script:
     - bash .gitlab-ci/show-info-osx.sh
-    - python3 -m venv .venv
+    - /opt/macports/bin/python3.10 -m venv .venv
     - ln -s /opt/cmake/CMake.app/Contents/bin/cmake .venv/bin
     - ln -s /opt/ccache/ccache .venv/bin
+    - ln -s /opt/pkg-config/bin/pkg-config .venv/bin
+    - ln -s /opt/bison/bin/bison .venv/bin
     - source .venv/bin/activate
     - pip3 install meson==1.2.0
     - pip3 install ninja==1.11.1
+    - pip3 install /Users/Shared/build/pkgs/PyGObject-3.44.0-cp310-cp310-macosx_10_13_x86_64.whl
+                   /Users/Shared/build/pkgs/pycairo-1.23.0-cp310-cp310-macosx_10_13_x86_64.whl
   script:
-    - meson setup ${COMMON_MESON_FLAGS}
+    - meson setup
+            ${COMMON_MESON_FLAGS}
+            ${EXTRA_MESON_FLAGS}
             -Dx11-backend=false
             -Dbroadway-backend=true
             -Dmacos-backend=true
             -Dmedia-gstreamer=disabled
-            -Dintrospection=disabled
+            -Dintrospection=enabled
             -Dcpp_std=c++11
             -Dpixman:tests=disabled
             -Dlibjpeg-turbo:simd=disabled
