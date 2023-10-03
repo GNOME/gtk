@@ -30,6 +30,8 @@
 #include <gsk/gskglshaderprivate.h>
 #include <gdk/gdktextureprivate.h>
 #include <gdk/gdkmemorytextureprivate.h>
+#include <gdk/gdkdmabuftextureprivate.h>
+#include <gdk/gdkdisplayprivate.h>
 #include <gsk/gsktransformprivate.h>
 #include <gsk/gskroundedrectprivate.h>
 #include <gsk/gskrectprivate.h>
@@ -43,9 +45,12 @@
 #include "gskglprogramprivate.h"
 #include "gskglrenderjobprivate.h"
 #include "gskglshadowlibraryprivate.h"
+#include "gskdebugprivate.h"
 
 #include "ninesliceprivate.h"
 #include "fp16private.h"
+
+#include <epoxy/egl.h>
 
 #define ORTHO_NEAR_PLANE   -10000
 #define ORTHO_FAR_PLANE     10000
@@ -3563,12 +3568,89 @@ gsk_gl_render_job_visit_gl_shader_node (GskGLRenderJob      *job,
 }
 
 static void
+import_dmabuf_texture (GskGLRenderJob       *job,
+                       GdkTexture           *texture,
+                       GskGLRenderOffscreen *offscreen)
+{
+  GdkDmabufTexture *dmabuf_texture = GDK_DMABUF_TEXTURE (texture);
+  GdkGLContext *context = job->command_queue->context;
+  GdkDisplay *display = gdk_gl_context_get_display (context);
+  EGLDisplay egl_display;
+  EGLint attribs[32];
+  EGLImage image;
+  guint texture_id;
+  int i;
+
+  GSK_DEBUG (OPENGL, "Importing dma-buf into GL via EGLImage");
+
+  egl_display = gdk_display_get_egl_display (display);
+  if (egl_display == NULL)
+    {
+      g_warning ("Can't import dmabufs when not using EGL");
+      return;
+    }
+
+  i = 0;
+  attribs[i++] = EGL_WIDTH;
+  attribs[i++] = gdk_texture_get_width (texture);
+  attribs[i++] = EGL_HEIGHT;
+  attribs[i++] = gdk_texture_get_height (texture);
+  attribs[i++] = EGL_LINUX_DRM_FOURCC_EXT;
+  attribs[i++] = gdk_dmabuf_texture_get_fourcc (dmabuf_texture);
+  attribs[i++] = EGL_LINUX_DRM_FOURCC_EXT;
+  attribs[i++] = gdk_dmabuf_texture_get_fourcc (dmabuf_texture);
+  attribs[i++] = EGL_DMA_BUF_PLANE0_FD_EXT;
+  attribs[i++] = gdk_dmabuf_texture_get_fd (dmabuf_texture);
+  attribs[i++] = EGL_DMA_BUF_PLANE0_OFFSET_EXT;
+  attribs[i++] = gdk_dmabuf_texture_get_offset (dmabuf_texture);
+  attribs[i++] = EGL_DMA_BUF_PLANE0_PITCH_EXT;
+  attribs[i++] = gdk_dmabuf_texture_get_stride (dmabuf_texture);
+  attribs[i++] = EGL_DMA_BUF_PLANE0_MODIFIER_LO_EXT;
+  attribs[i++] = gdk_dmabuf_texture_get_modifier (dmabuf_texture) & 0xFFFFFFFF;
+  attribs[i++] = EGL_DMA_BUF_PLANE0_MODIFIER_HI_EXT;
+  attribs[i++] = gdk_dmabuf_texture_get_modifier (dmabuf_texture) >> 32;
+  attribs[i++] = EGL_NONE;
+
+  image = eglCreateImageKHR (egl_display,
+                             EGL_NO_CONTEXT,
+                             EGL_LINUX_DMA_BUF_EXT,
+                             (EGLClientBuffer)NULL,
+                             attribs);
+
+  if (image == EGL_NO_IMAGE)
+    {
+      g_warning ("Failed to create EGL image: %d\n", eglGetError ());
+      return;
+    }
+
+  gdk_gl_context_make_current (context);
+
+  glGenTextures (1, &texture_id);
+  glBindTexture (GL_TEXTURE_2D, texture_id);
+  glEGLImageTargetTexture2DOES (GL_TEXTURE_2D, image);
+  glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+  glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+  eglDestroyImageKHR (egl_display, image);
+
+  offscreen->texture_id = texture_id;
+  init_full_texture_region (offscreen);
+  offscreen->has_mipmap = FALSE;
+}
+
+static void
 gsk_gl_render_job_upload_texture (GskGLRenderJob       *job,
                                   GdkTexture           *texture,
                                   gboolean              ensure_mipmap,
                                   GskGLRenderOffscreen *offscreen)
 {
   GdkGLTexture *gl_texture = NULL;
+
+  if (GDK_IS_DMABUF_TEXTURE (texture))
+    {
+      import_dmabuf_texture (job, texture, offscreen);
+      return;
+    }
 
   if (GDK_IS_GL_TEXTURE (texture))
     gl_texture = GDK_GL_TEXTURE (texture);
