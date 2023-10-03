@@ -6,19 +6,11 @@
 
 G_BEGIN_DECLS
 
-typedef struct _GskGpuShaderImage GskGpuShaderImage;
-
-struct _GskGpuShaderImage
-{
-  GskGpuImage *image;
-  GskGpuSampler sampler;
-  guint32 descriptor;
-};
-
 struct _GskGpuShaderOp
 {
   GskGpuOp parent_op;
 
+  GskGpuDescriptors *desc;
   GskGpuShaderClip clip;
   gsize vertex_offset;
 };
@@ -32,15 +24,16 @@ struct _GskGpuShaderOpClass
 #ifdef GDK_RENDERING_VULKAN
   const VkPipelineVertexInputStateCreateInfo *vertex_input_state;
 #endif
-  const GskGpuShaderImage * (* get_images)                              (GskGpuShaderOp         *op,
-                                                                         gsize                  *n_images);
   void                  (* setup_vao)                                   (gsize                   offset);
 };
 
 GskGpuShaderOp *        gsk_gpu_shader_op_alloc                         (GskGpuFrame            *frame,
                                                                          const GskGpuShaderOpClass *op_class,
                                                                          GskGpuShaderClip        clip,
+                                                                         GskGpuDescriptors      *desc,
                                                                          gpointer                out_vertex_data);
+
+void                    gsk_gpu_shader_op_finish                        (GskGpuOp               *op);
 
 #ifdef GDK_RENDERING_VULKAN
 GskGpuOp *              gsk_gpu_shader_op_vk_command_n                  (GskGpuOp               *op,
@@ -63,12 +56,6 @@ GskGpuOp *              gsk_gpu_shader_op_gl_command                    (GskGpuO
                                                                          GskGpuFrame            *frame,
                                                                          gsize                   flip_y);
 
-const GskGpuShaderImage *
-                        gsk_gpu_shader_op_get_images                    (GskGpuShaderOp         *op,
-                                                                         gsize                  *n_images);
-const GskGpuShaderImage *
-                        gsk_gpu_shader_op_no_images                     (GskGpuShaderOp         *op,
-                                                                         gsize                  *n_images);
 static inline void
 gsk_gpu_rgba_to_float (const GdkRGBA *rgba,
                        float          values[4])

@@ -344,6 +344,12 @@ gsk_gpu_frame_alloc_op (GskGpuFrame *self,
   return gsk_gpu_ops_index (&priv->ops, pos);
 }
 
+GskGpuDescriptors *
+gsk_gpu_frame_create_descriptors (GskGpuFrame *self)
+{
+  return GSK_GPU_FRAME_GET_CLASS (self)->create_descriptors (self);
+}
+
 static GskGpuBuffer *
 gsk_gpu_frame_create_vertex_buffer (GskGpuFrame *self,
                                     gsize        size)
@@ -421,14 +427,6 @@ gsk_gpu_frame_ensure_storage_buffer (GskGpuFrame *self)
     priv->storage_buffer = gsk_gpu_frame_create_storage_buffer (self, DEFAULT_STORAGE_BUFFER_SIZE);
 
   priv->storage_buffer_data = gsk_gpu_buffer_map (priv->storage_buffer);
-}
-
-guint32
-gsk_gpu_frame_get_image_descriptor (GskGpuFrame   *self,
-                                    GskGpuImage   *image,
-                                    GskGpuSampler  sampler)
-{
-  return GSK_GPU_FRAME_GET_CLASS (self)->get_image_descriptor (self, image, sampler);
 }
 
 static void

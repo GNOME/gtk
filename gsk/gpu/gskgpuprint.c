@@ -2,6 +2,7 @@
 
 #include "gskgpuprintprivate.h"
 
+#include "gskgpudescriptorsprivate.h"
 #include "gskgpuimageprivate.h"
 
 void
@@ -102,3 +103,13 @@ gsk_gpu_print_image (GString     *string,
                           gsk_gpu_image_get_width (image),
                           gsk_gpu_image_get_height (image));
 }
+
+void
+gsk_gpu_print_image_descriptor (GString           *string,
+                                GskGpuDescriptors *desc,
+                                guint32            descriptor)
+{
+  gsize id = gsk_gpu_descriptors_find_image (desc, descriptor);
+  gsk_gpu_print_image (string, gsk_gpu_descriptors_get_image (desc, id));
+}
+

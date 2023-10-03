@@ -17,11 +17,6 @@ struct _GskGpuColorOp
 };
 
 static void
-gsk_gpu_color_op_finish (GskGpuOp *op)
-{
-}
-
-static void
 gsk_gpu_color_op_print (GskGpuOp    *op,
                         GskGpuFrame *frame,
                         GString     *string,
@@ -42,7 +37,7 @@ static const GskGpuShaderOpClass GSK_GPU_COLOR_OP_CLASS = {
   {
     GSK_GPU_OP_SIZE (GskGpuColorOp),
     GSK_GPU_STAGE_SHADER,
-    gsk_gpu_color_op_finish,
+    gsk_gpu_shader_op_finish,
     gsk_gpu_color_op_print,
 #ifdef GDK_RENDERING_VULKAN
     gsk_gpu_shader_op_vk_command,
@@ -54,7 +49,6 @@ static const GskGpuShaderOpClass GSK_GPU_COLOR_OP_CLASS = {
 #ifdef GDK_RENDERING_VULKAN
   &gsk_gpu_color_info,
 #endif
-  gsk_gpu_shader_op_no_images,
   gsk_gpu_color_setup_vao
 };
 
@@ -70,6 +64,7 @@ gsk_gpu_color_op (GskGpuFrame            *frame,
   gsk_gpu_shader_op_alloc (frame,
                            &GSK_GPU_COLOR_OP_CLASS,
                            clip,
+                           NULL,
                            &instance);
 
   gsk_gpu_rect_to_float (rect, offset, instance->rect);

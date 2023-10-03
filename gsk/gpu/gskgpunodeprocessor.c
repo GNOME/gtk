@@ -8,6 +8,7 @@
 #include "gskgpuclipprivate.h"
 #include "gskgpucolorizeopprivate.h"
 #include "gskgpucoloropprivate.h"
+#include "gskgpudescriptorsprivate.h"
 #include "gskgpudeviceprivate.h"
 #include "gskgpuframeprivate.h"
 #include "gskgpuglobalsopprivate.h"
@@ -70,21 +71,6 @@
  * never uses it, other than to allow the vertex shaders to emit its vertices.
  */
 
-static void
-gsk_gpu_shader_image_clear (gpointer data)
-{
-  GskGpuShaderImage *image = data;
-  g_object_unref (image->image);
-}
-
-#define GDK_ARRAY_NAME gsk_gpu_pattern_images
-#define GDK_ARRAY_TYPE_NAME GskGpuPatternImages
-#define GDK_ARRAY_ELEMENT_TYPE GskGpuShaderImage
-#define GDK_ARRAY_FREE_FUNC gsk_gpu_shader_image_clear
-#define GDK_ARRAY_PREALLOC 8
-#define GDK_ARRAY_BY_VALUE 1
-#include "gdk/gdkarrayimpl.c"
-
 typedef struct _GskGpuNodeProcessor GskGpuNodeProcessor;
 typedef struct _GskGpuPatternWriter GskGpuPatternWriter;
 
@@ -97,28 +83,29 @@ typedef enum {
 
 struct _GskGpuNodeProcessor
 {
-  GskGpuFrame           *frame;
-  cairo_rectangle_int_t  scissor;
-  graphene_point_t       offset;
-  graphene_matrix_t      projection;
-  graphene_vec2_t        scale;
-  GskTransform          *modelview;
-  GskGpuClip             clip;
+  GskGpuFrame                   *frame;
+  GskGpuDescriptors             *desc;
+  cairo_rectangle_int_t          scissor;
+  graphene_point_t               offset;
+  graphene_matrix_t              projection;
+  graphene_vec2_t                scale;
+  GskTransform                  *modelview;
+  GskGpuClip                     clip;
 
-  GskGpuGlobals          pending_globals;
+  GskGpuGlobals                  pending_globals;
 };
 
 struct _GskGpuPatternWriter
 {
-  GskGpuFrame           *frame;
+  GskGpuFrame                   *frame;
+  GskGpuDescriptors             *desc;
 
-  graphene_rect_t        bounds;
-  graphene_point_t       offset;
-  graphene_vec2_t        scale;
-  guint                  stack;
+  graphene_rect_t                bounds;
+  graphene_point_t               offset;
+  graphene_vec2_t                scale;
+  guint                          stack;
 
-  GskGpuBufferWriter     writer;
-  GskGpuPatternImages    images;
+  GskGpuBufferWriter             writer;
 };
 
 static void             gsk_gpu_node_processor_add_node                 (GskGpuNodeProcessor            *self,
@@ -130,16 +117,22 @@ static void
 gsk_gpu_node_processor_finish (GskGpuNodeProcessor *self)
 {
   g_clear_pointer (&self->modelview, gsk_transform_unref);
+  g_clear_object (&self->desc);
 }
 
 static void
 gsk_gpu_node_processor_init (GskGpuNodeProcessor         *self,
                              GskGpuFrame                 *frame,
+                             GskGpuDescriptors           *desc,
                              GskGpuImage                 *target,
                              const cairo_rectangle_int_t *clip,
                              const graphene_rect_t       *viewport)
 {
   self->frame = frame;
+  if (desc)
+    self->desc = g_object_ref (desc);
+  else
+    self->desc = NULL;
 
   self->scissor = *clip;
   gsk_gpu_clip_init_empty (&self->clip, &GRAPHENE_RECT_INIT (0, 0, viewport->size.width, viewport->size.height));
@@ -196,6 +189,32 @@ gsk_gpu_node_processor_sync_globals (GskGpuNodeProcessor *self,
     gsk_gpu_node_processor_emit_scissor_op (self);
 }
 
+static guint32
+gsk_gpu_node_processor_add_image (GskGpuNodeProcessor *self,
+                                  GskGpuImage         *image,
+                                  GskGpuSampler        sampler)
+{
+  guint32 descriptor;
+
+  if (self->desc != NULL)
+    {
+      if (gsk_gpu_descriptors_add_image (self->desc, image, sampler, &descriptor))
+        return descriptor;
+
+      g_object_unref (self->desc);
+    }
+
+  self->desc = gsk_gpu_frame_create_descriptors (self->frame);
+
+  if (!gsk_gpu_descriptors_add_image (self->desc, image, sampler, &descriptor))
+    {
+      g_assert_not_reached ();
+      return 0;
+    }
+  
+  return descriptor;
+}
+
 static void
 rect_round_to_pixels (const graphene_rect_t *src,
                       const graphene_vec2_t *pixel_scale,
@@ -228,6 +247,7 @@ gsk_gpu_node_processor_process (GskGpuFrame                 *frame,
 
   gsk_gpu_node_processor_init (&self,
                                frame,
+                               NULL,
                                target,
                                clip,
                                viewport);
@@ -245,6 +265,7 @@ gsk_gpu_pattern_writer_init (GskGpuPatternWriter    *self,
                              const graphene_rect_t  *bounds)
 {
   self->frame = frame;
+  self->desc = NULL;
   self->bounds = GRAPHENE_RECT_INIT (bounds->origin.x + offset->x,
                                      bounds->origin.y + offset->y,
                                      bounds->size.width,
@@ -254,7 +275,6 @@ gsk_gpu_pattern_writer_init (GskGpuPatternWriter    *self,
   self->stack = 0;
 
   gsk_gpu_frame_write_buffer_memory (frame, &self->writer);
-  gsk_gpu_pattern_images_init (&self->images);
 }
 
 static gboolean
@@ -278,7 +298,7 @@ static void
 gsk_gpu_pattern_writer_finish (GskGpuPatternWriter *self)
 {
   g_assert (self->stack == 0);
-  gsk_gpu_pattern_images_clear (&self->images);
+  g_clear_object (&self->desc);
 }
 
 static void
@@ -294,24 +314,14 @@ gsk_gpu_pattern_writer_commit_op (GskGpuPatternWriter   *self,
                                   GskGpuShaderClip       clip)
 {
   guint32 pattern_id;
-  GskGpuShaderImage *images;
-  gsize n_images;
 
   pattern_id = gsk_gpu_buffer_writer_commit (&self->writer) / sizeof (float);
-  n_images = gsk_gpu_pattern_images_get_size (&self->images);
-  images = gsk_gpu_pattern_images_steal (&self->images);
-
-  {
-    for (gsize i = 0; i < n_images; i++)
-      g_assert (images[i].image);
-  }
 
   gsk_gpu_uber_op (self->frame,
                    clip,
                    &self->bounds,
                    &self->offset,
-                   images,
-                   n_images,
+                   self->desc,
                    pattern_id);
 
   gsk_gpu_pattern_writer_finish (self);
@@ -323,18 +333,10 @@ gsk_gpu_pattern_writer_add_image (GskGpuPatternWriter *self,
                                   GskGpuSampler        sampler,
                                   guint32             *out_descriptor)
 {
-  if (gsk_gpu_pattern_images_get_size (&self->images) >= 16)
-    return FALSE;
+  if (self->desc == NULL)
+    self->desc = gsk_gpu_frame_create_descriptors (self->frame);
 
-  *out_descriptor = gsk_gpu_frame_get_image_descriptor (self->frame, image, sampler);
-  gsk_gpu_pattern_images_append (&self->images,
-                                 &(GskGpuShaderImage) {
-                                     image,
-                                     sampler,
-                                     *out_descriptor
-                                 });
-
-  return TRUE;
+  return gsk_gpu_descriptors_add_image (self->desc, image, sampler, out_descriptor);
 }
 
 static void
@@ -566,11 +568,14 @@ gsk_gpu_node_processor_blur_op (GskGpuNodeProcessor       *self,
                                 const graphene_point_t    *shadow_offset,
                                 float                      blur_radius,
                                 const GdkRGBA             *blur_color_or_null,
-                                GskGpuImage               *source,
+                                GskGpuDescriptors         *source_desc,
+                                guint32                    source_descriptor,
+                                GdkMemoryDepth             source_depth,
                                 const graphene_rect_t     *source_rect)
 {
   GskGpuNodeProcessor other;
   GskGpuImage *intermediate;
+  guint32 intermediate_descriptor;
   graphene_vec2_t direction;
   graphene_rect_t clip_rect, intermediate_rect;
   graphene_point_t real_offset;
@@ -589,11 +594,12 @@ gsk_gpu_node_processor_blur_op (GskGpuNodeProcessor       *self,
   height = ceil (graphene_vec2_get_y (&self->scale) * intermediate_rect.size.height);
 
   intermediate = gsk_gpu_device_create_offscreen_image (gsk_gpu_frame_get_device (self->frame),
-                                                        gdk_memory_format_get_depth (gsk_gpu_image_get_format (source)),
+                                                        source_depth,
                                                         width, height);
 
   gsk_gpu_node_processor_init (&other,
                                self->frame,
+                               source_desc,
                                intermediate,
                                &(cairo_rectangle_int_t) { 0, 0, width, height },
                                &intermediate_rect);
@@ -608,8 +614,8 @@ gsk_gpu_node_processor_blur_op (GskGpuNodeProcessor       *self,
   graphene_vec2_init (&direction, blur_radius, 0.0f);
   gsk_gpu_blur_op (other.frame,
                    gsk_gpu_clip_get_shader_clip (&other.clip, &other.offset, &intermediate_rect),
-                   source,
-                   GSK_GPU_SAMPLER_TRANSPARENT,
+                   source_desc,
+                   source_descriptor,
                    &intermediate_rect,
                    &other.offset,
                    source_rect,
@@ -625,10 +631,11 @@ gsk_gpu_node_processor_blur_op (GskGpuNodeProcessor       *self,
   real_offset = GRAPHENE_POINT_INIT (self->offset.x + shadow_offset->x,
                                      self->offset.y + shadow_offset->y);
   graphene_vec2_init (&direction, 0.0f, blur_radius);
+  intermediate_descriptor = gsk_gpu_node_processor_add_image (self, intermediate, GSK_GPU_SAMPLER_TRANSPARENT);
   gsk_gpu_blur_op (self->frame,
                    gsk_gpu_clip_get_shader_clip (&self->clip, &real_offset, rect),
-                   intermediate,
-                   GSK_GPU_SAMPLER_TRANSPARENT,
+                   self->desc,
+                   intermediate_descriptor,
                    rect,
                    &real_offset,
                    &intermediate_rect,
@@ -644,6 +651,7 @@ gsk_gpu_node_processor_add_fallback_node (GskGpuNodeProcessor *self,
 {
   GskGpuImage *image;
   graphene_rect_t clipped_bounds;
+  guint32 descriptor;
 
   if (!gsk_gpu_node_processor_clip_node_bounds (self, node, &clipped_bounds))
     return;
@@ -654,11 +662,12 @@ gsk_gpu_node_processor_add_fallback_node (GskGpuNodeProcessor *self,
                                    node,
                                    &self->scale,
                                    &clipped_bounds);
+  descriptor = gsk_gpu_node_processor_add_image (self, image, GSK_GPU_SAMPLER_DEFAULT);
 
   gsk_gpu_texture_op (self->frame,
                       gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, &clipped_bounds),
-                      image,
-                      GSK_GPU_SAMPLER_DEFAULT,
+                      self->desc,
+                      descriptor,
                       &node->bounds,
                       &self->offset,
                       &clipped_bounds);
@@ -1083,6 +1092,7 @@ gsk_gpu_node_processor_add_texture_node (GskGpuNodeProcessor *self,
   GskGpuImage *image;
   GdkTexture *texture;
   gint64 timestamp;
+  guint32 descriptor;
 
   device = gsk_gpu_frame_get_device (self->frame);
   texture = gsk_texture_node_get_texture (node);
@@ -1095,11 +1105,12 @@ gsk_gpu_node_processor_add_texture_node (GskGpuNodeProcessor *self,
       gsk_gpu_device_cache_texture_image (device, texture, timestamp, image);
       image = g_object_ref (image);
     }
+  descriptor = gsk_gpu_node_processor_add_image (self, image, GSK_GPU_SAMPLER_DEFAULT);
 
   gsk_gpu_texture_op (self->frame,
                       gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, &node->bounds),
-                      image,
-                      GSK_GPU_SAMPLER_DEFAULT,
+                      self->desc,
+                      descriptor,
                       &node->bounds,
                       &self->offset,
                       &node->bounds);
@@ -1129,11 +1140,16 @@ gsk_gpu_node_processor_create_texture_pattern (GskGpuPatternWriter *self,
     }
 
   if (!gsk_gpu_pattern_writer_add_image (self, image, GSK_GPU_SAMPLER_DEFAULT, &descriptor))
-    return FALSE;
+    {
+      g_object_unref (image);
+      return FALSE;
+    }
 
   gsk_gpu_buffer_writer_append_uint (&self->writer, GSK_GPU_PATTERN_TEXTURE);
   gsk_gpu_buffer_writer_append_uint (&self->writer, descriptor);
   gsk_gpu_buffer_writer_append_rect (&self->writer, &node->bounds, &self->offset);
+
+  g_object_unref (image);
 
   return TRUE;
 }
@@ -1269,6 +1285,7 @@ gsk_gpu_node_processor_add_blur_node (GskGpuNodeProcessor *self,
   GskGpuImage *image;
   graphene_rect_t tex_rect, clip_rect;
   float blur_radius, clip_radius;
+  guint32 descriptor;
 
   child = gsk_blur_node_get_child (node);
   blur_radius = gsk_blur_node_get_radius (node);
@@ -1286,13 +1303,16 @@ gsk_gpu_node_processor_add_blur_node (GskGpuNodeProcessor *self,
                                      &self->scale,
                                      child,
                                      &tex_rect);
+  descriptor = gsk_gpu_node_processor_add_image (self, image, GSK_GPU_SAMPLER_TRANSPARENT);
 
   gsk_gpu_node_processor_blur_op (self,
                                   &node->bounds,
                                   graphene_point_zero (),
                                   blur_radius,
                                   NULL,
-                                  image,
+                                  self->desc,
+                                  descriptor,
+                                  gdk_memory_format_get_depth (gsk_gpu_image_get_format (image)),
                                   &tex_rect);
 
   g_object_unref (image);
@@ -1306,6 +1326,8 @@ gsk_gpu_node_processor_add_shadow_node (GskGpuNodeProcessor *self,
   graphene_rect_t clip_bounds, tex_rect;
   GskRenderNode *child;
   gsize i, n_shadows;
+  GskGpuDescriptors *desc;
+  guint32 descriptor;
 
   n_shadows = gsk_shadow_node_get_n_shadows (node);
   child = gsk_shadow_node_get_child (node);
@@ -1321,6 +1343,8 @@ gsk_gpu_node_processor_add_shadow_node (GskGpuNodeProcessor *self,
                                      &self->scale,
                                      child,
                                      &tex_rect);
+  descriptor = gsk_gpu_node_processor_add_image (self, image, GSK_GPU_SAMPLER_TRANSPARENT);
+  desc = self->desc;
 
   for (i = 0; i < n_shadows; i++)
     {
@@ -1331,7 +1355,8 @@ gsk_gpu_node_processor_add_shadow_node (GskGpuNodeProcessor *self,
                                                                 self->offset.y + shadow->dy);
           gsk_gpu_colorize_op (self->frame,
                                gsk_gpu_clip_get_shader_clip (&self->clip, &shadow_offset, &child->bounds),
-                               image,
+                               desc,
+                               descriptor,
                                &child->bounds,
                                &shadow_offset,
                                &tex_rect,
@@ -1347,15 +1372,18 @@ gsk_gpu_node_processor_add_shadow_node (GskGpuNodeProcessor *self,
                                           &GRAPHENE_POINT_INIT (shadow->dx, shadow->dy),
                                           shadow->radius,
                                           &shadow->color,
-                                          image,
+                                          desc,
+                                          descriptor,
+                                          gdk_memory_format_get_depth (gsk_gpu_image_get_format (image)),
                                           &tex_rect);
         }
     }
 
+  descriptor = gsk_gpu_node_processor_add_image (self, image, GSK_GPU_SAMPLER_DEFAULT);
   gsk_gpu_texture_op (self->frame,
                       gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, &child->bounds),
-                      image,
-                      GSK_GPU_SAMPLER_DEFAULT,
+                      self->desc,
+                      descriptor,
                       &child->bounds,
                       &self->offset,
                       &tex_rect);
@@ -1492,6 +1520,7 @@ gsk_gpu_node_processor_add_glyph_node (GskGpuNodeProcessor *self,
       GskGpuImage *image;
       graphene_rect_t glyph_bounds, glyph_tex_rect;
       graphene_point_t glyph_offset;
+      guint32 descriptor;
 
       image = gsk_gpu_device_lookup_glyph_image (device,
                                                  self->frame,
@@ -1506,18 +1535,20 @@ gsk_gpu_node_processor_add_glyph_node (GskGpuNodeProcessor *self,
       graphene_rect_scale (&GRAPHENE_RECT_INIT(0, 0, glyph_bounds.size.width, glyph_bounds.size.height), inv_scale, inv_scale, &glyph_bounds);
       glyph_offset = GRAPHENE_POINT_INIT (offset.x - glyph_offset.x * inv_scale + (float) glyphs[i].geometry.x_offset / PANGO_SCALE,
                                           offset.y - glyph_offset.y * inv_scale + (float) glyphs[i].geometry.y_offset / PANGO_SCALE);
+      descriptor = gsk_gpu_node_processor_add_image (self, image, GSK_GPU_SAMPLER_DEFAULT);
       if (gsk_text_node_has_color_glyphs (node))
         gsk_gpu_texture_op (self->frame,
                             gsk_gpu_clip_get_shader_clip (&self->clip, &glyph_offset, &glyph_bounds),
-                            image,
-                            GSK_GPU_SAMPLER_DEFAULT,
+                            self->desc,
+                            descriptor,
                             &glyph_bounds,
                             &glyph_offset,
                             &glyph_tex_rect);
       else
         gsk_gpu_colorize_op (self->frame,
                              gsk_gpu_clip_get_shader_clip (&self->clip, &glyph_offset, &glyph_bounds),
-                             image,
+                             self->desc,
+                             descriptor,
                              &glyph_bounds,
                              &glyph_offset,
                              &glyph_tex_rect,
@@ -1577,7 +1608,7 @@ gsk_gpu_node_processor_create_glyph_pattern (GskGpuPatternWriter *self,
 
       if (image != last_image)
         {
-          if (!gsk_gpu_pattern_writer_add_image (self, g_object_ref (image), GSK_GPU_SAMPLER_DEFAULT, &tex_id))
+          if (!gsk_gpu_pattern_writer_add_image (self, image, GSK_GPU_SAMPLER_DEFAULT, &tex_id))
             return FALSE;
 
           last_image = image;
@@ -1942,12 +1973,12 @@ gsk_gpu_node_processor_create_node_pattern (GskGpuPatternWriter *self,
   if (nodes_vtable[node_type].create_pattern != NULL)
     {
       gsize size_before = gsk_gpu_buffer_writer_get_size (&self->writer);
-      gsize images_before = gsk_gpu_pattern_images_get_size (&self->images);
+      gsize images_before = self->desc ? gsk_gpu_descriptors_get_size (self->desc) : 0;
       if (nodes_vtable[node_type].create_pattern (self, node))
         return TRUE;
       gsk_gpu_buffer_writer_rewind (&self->writer, size_before);
-      g_assert (gsk_gpu_pattern_images_get_size (&self->images) >= images_before);
-      gsk_gpu_pattern_images_set_size (&self->images, images_before);
+      if (self->desc)
+        gsk_gpu_descriptors_set_size (self->desc, images_before);
     }
 
   tmp_data = gsk_gpu_buffer_writer_backup (&self->writer, &tmp_size);
@@ -1977,11 +2008,16 @@ gsk_gpu_node_processor_create_node_pattern (GskGpuPatternWriter *self,
     }
 
   if (!gsk_gpu_pattern_writer_add_image (self, image, GSK_GPU_SAMPLER_DEFAULT, &tex_id))
-    return FALSE;
+    {
+      g_object_unref (image);
+      return FALSE;
+    }
 
   gsk_gpu_buffer_writer_append_uint (&self->writer, GSK_GPU_PATTERN_TEXTURE);
   gsk_gpu_buffer_writer_append_uint (&self->writer, tex_id);
   gsk_gpu_buffer_writer_append_rect (&self->writer, &bounds, &self->offset);
+
+  g_object_unref (image);
 
   return TRUE;
 }

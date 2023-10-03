@@ -3,19 +3,23 @@
 #include "gskgpushaderopprivate.h"
 
 #include "gskgpuframeprivate.h"
+#include "gskgldescriptorsprivate.h"
 #include "gskgldeviceprivate.h"
 #include "gskglframeprivate.h"
 #include "gskglimageprivate.h"
 #ifdef GDK_RENDERING_VULKAN
+#include "gskvulkandescriptorsprivate.h"
 #include "gskvulkandeviceprivate.h"
 #endif
 
-const GskGpuShaderImage *
-gsk_gpu_shader_op_get_images (GskGpuShaderOp *op,
-                              gsize          *n_images)
+void
+gsk_gpu_shader_op_finish (GskGpuOp *op)
 {
-  return ((GskGpuShaderOpClass *) ((GskGpuOp *) op)->op_class)->get_images (op, n_images);
+  GskGpuShaderOp *self = (GskGpuShaderOp *) op;
+
+  g_clear_object (&self->desc);
 }
+
 
 #ifdef GDK_RENDERING_VULKAN
 GskGpuOp *
@@ -77,24 +81,13 @@ gsk_gpu_shader_op_gl_command_n (GskGpuOp    *op,
 {
   GskGpuShaderOp *self = (GskGpuShaderOp *) op;
   GskGpuShaderOpClass *shader_op_class = (GskGpuShaderOpClass *) op->op_class;
-  const GskGpuShaderImage *images;
-  GskGLDevice *device;
-  gsize i, n_images;
-
-  device = GSK_GL_DEVICE (gsk_gpu_frame_get_device (frame));
 
   gsk_gl_frame_use_program (GSK_GL_FRAME (frame),
                             shader_op_class,
                             self->clip);
 
-  images = gsk_gpu_shader_op_get_images (self, &n_images);
-  for (i = 0; i < n_images; i++)
-    {
-      glActiveTexture (GL_TEXTURE0 + images[i].descriptor);
-      gsk_gl_image_bind_texture (GSK_GL_IMAGE (images[i].image));
-      glBindSampler (images[i].descriptor,
-                     gsk_gl_device_get_sampler_id (device, images[i].sampler));
-    }
+  if (self->desc)
+    gsk_gl_descriptors_use (GSK_GL_DESCRIPTORS (self->desc));
 
   if (gsk_gpu_frame_should_optimize (frame, GSK_GPU_OPTIMIZE_GL_BASE_INSTANCE))
     {
@@ -129,6 +122,7 @@ GskGpuShaderOp *
 gsk_gpu_shader_op_alloc (GskGpuFrame               *frame,
                          const GskGpuShaderOpClass *op_class,
                          GskGpuShaderClip           clip,
+                         GskGpuDescriptors         *desc,
                          gpointer                   out_vertex_data)
 {
   GskGpuShaderOp *self;
@@ -136,19 +130,14 @@ gsk_gpu_shader_op_alloc (GskGpuFrame               *frame,
   self = (GskGpuShaderOp *) gsk_gpu_op_alloc (frame, &op_class->parent_class);
 
   self->clip = clip;
+  if (desc)
+    self->desc = g_object_ref (desc);
+  else
+    self->desc = NULL;
   self->vertex_offset = gsk_gpu_frame_reserve_vertex_data (frame, op_class->vertex_size);
 
   *((gpointer *) out_vertex_data) = gsk_gpu_frame_get_vertex_data (frame, self->vertex_offset);
 
   return self;
-}
-
-const GskGpuShaderImage *
-gsk_gpu_shader_op_no_images (GskGpuShaderOp *op,
-                             gsize          *n_images)
-{
-  *n_images = 0;
-
-  return NULL;
 }
 

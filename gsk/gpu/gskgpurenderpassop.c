@@ -11,6 +11,7 @@
 #include "gskrendernodeprivate.h"
 #ifdef GDK_RENDERING_VULKAN
 #include "gskvulkanimageprivate.h"
+#include "gskvulkandescriptorsprivate.h"
 #endif
 
 typedef struct _GskGpuRenderPassOp GskGpuRenderPassOp;
@@ -67,8 +68,7 @@ gsk_gpu_render_pass_op_do_barriers (GskGpuRenderPassOp *self,
 {
   GskGpuShaderOp *shader;
   GskGpuOp *op;
-  const GskGpuShaderImage *images;
-  gsize i, n_images;
+  GskGpuDescriptors *desc = NULL;
 
   for (op = ((GskGpuOp *) self)->next;
        op->op_class->stage != GSK_GPU_STAGE_END_PASS;
@@ -79,15 +79,11 @@ gsk_gpu_render_pass_op_do_barriers (GskGpuRenderPassOp *self,
 
       shader = (GskGpuShaderOp *) op;
 
-      images = gsk_gpu_shader_op_get_images (shader, &n_images);
-      for (i = 0; i < n_images; i++)
-        {
-          gsk_vulkan_image_transition (GSK_VULKAN_IMAGE (images[i].image),
-                                       command_buffer,
-                                       VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT,
-                                       VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
-                                       VK_ACCESS_SHADER_READ_BIT);
-        }
+      if (shader->desc == NULL || shader->desc == desc)
+        continue;
+
+      desc = shader->desc;
+      gsk_vulkan_descriptors_transition (GSK_VULKAN_DESCRIPTORS (desc), command_buffer);
     }
 }
 
