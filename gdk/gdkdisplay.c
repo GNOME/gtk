@@ -37,6 +37,8 @@
 #include "gdkmonitorprivate.h"
 #include "gdkrectangle.h"
 #include "gdkvulkancontext.h"
+#include "gdkdmabuftextureprivate.h"
+#include "gdkdmabufformatsprivate.h"
 
 #ifdef HAVE_EGL
 #include <epoxy/egl.h>
@@ -69,6 +71,7 @@ enum
   PROP_COMPOSITED,
   PROP_RGBA,
   PROP_INPUT_SHAPES,
+  PROP_DMABUF_FORMATS,
   LAST_PROP
 };
 
@@ -136,6 +139,10 @@ gdk_display_get_property (GObject    *object,
 
     case PROP_INPUT_SHAPES:
       g_value_set_boolean (value, gdk_display_supports_input_shapes (display));
+      break;
+
+    case PROP_DMABUF_FORMATS:
+      g_value_set_boxed (value, gdk_display_get_dmabuf_formats (display));
       break;
 
     default:
@@ -238,6 +245,11 @@ gdk_display_class_init (GdkDisplayClass *class)
     g_param_spec_boolean ("input-shapes", NULL, NULL,
                           TRUE,
                           G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
+
+  props[PROP_DMABUF_FORMATS] =
+    g_param_spec_boxed ("dmabuf-formats", NULL, NULL,
+                        GDK_TYPE_DMABUF_FORMATS,
+                        G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
 
   g_object_class_install_properties (object_class, LAST_PROP, props);
 
@@ -403,6 +415,8 @@ gdk_display_finalize (GObject *object)
   g_hash_table_destroy (display->pointers_info);
 
   g_list_free_full (display->seats, g_object_unref);
+
+  g_clear_object (&display->dmabuf_formats);
 
   G_OBJECT_CLASS (gdk_display_parent_class)->finalize (object);
 }
@@ -1822,6 +1836,60 @@ gdk_display_get_egl_display (GdkDisplay *self)
 #else
   return NULL;
 #endif
+}
+
+/**
+ * GdkDmabufFormat:
+ * @fourcc: the format code
+ * @modifiers: the format modifier
+ *
+ * The `GdkDmabufFormat` struct represents a dma-buf format
+ * as defined in the `drm_fourcc.h` header.
+ *
+ * Since: 4.14
+ */
+
+/* To support a drm format, we must be able to import it into GL
+ * using the relevant EGL extensions, and download it into a memory
+ * texture, possibly doing format conversion with shaders (in GSK).
+ */
+static void
+init_dmabuf_formats (GdkDisplay *display)
+{
+  GdkDmabufFormat *formats;
+  gsize n_formats;
+
+  if (display->dmabuf_formats != NULL)
+    return;
+
+  formats = gdk_dmabuf_texture_get_supported_formats (&n_formats);
+  display->dmabuf_formats = gdk_dmabuf_formats_new (formats, n_formats);
+  g_free (formats);
+
+  g_object_notify_by_pspec (G_OBJECT (display), props[PROP_DMABUF_FORMATS]);
+}
+
+/**
+ * gdk_display_get_dmabuf_formats:
+ * @display: a `GdkDisplay`
+ *
+ * Returns the dma-buf formats that are supported on this display.
+ *
+ * GTK may use OpenGL or Vulkan to support some formats.
+ * Calling this function will then initialize them if they aren't yet.
+ *
+ * Returns: (transfer none): a `GdkDmabufFormats` object
+ *
+ * Since: 4.14
+ */
+GdkDmabufFormats *
+gdk_display_get_dmabuf_formats (GdkDisplay *display)
+{
+  gdk_display_prepare_gl (display, NULL);
+
+  init_dmabuf_formats (display);
+
+  return display->dmabuf_formats;
 }
 
 GdkDebugFlags
