@@ -1781,10 +1781,15 @@ gsk_conic_curve_segment (const GskCurve *curve,
   graphene_point_t ctrl_num, ctrl_denom;
   float mid;
 
-  if (start <= 0.0f)
-    return gsk_conic_curve_split (curve, end, segment, NULL);
-  else if (end >= 1.0f)
-    return gsk_conic_curve_split (curve, start, NULL, segment);
+  if (start <= 0.0f || end >= 1.0f)
+    {
+      if (start <= 0.0f)
+        gsk_conic_curve_split (curve, end, segment, NULL);
+      else if (end >= 1.0f)
+        gsk_conic_curve_split (curve, start, NULL, segment);
+
+      return;
+    }
 
   gsk_conic_curve_ensure_coefficents (self);
 
