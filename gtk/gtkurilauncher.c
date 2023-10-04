@@ -310,7 +310,10 @@ gtk_uri_launcher_launch (GtkUriLauncher      *self,
     }
 
 #ifndef G_OS_WIN32
-  if (gtk_openuri_portal_is_available ())
+  /* help: URIs do not use the portal because we need to open the flatpak
+   * runtime's yelp to see application documentation, not host yelp.
+   */
+  if (!g_str_has_prefix (self->uri, "help:") && gtk_openuri_portal_is_available ())
     gtk_openuri_portal_open_uri_async (self->uri, parent, cancellable, open_done, task);
   else
 #endif
