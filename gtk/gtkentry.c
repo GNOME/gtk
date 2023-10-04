@@ -171,16 +171,17 @@ typedef struct _EntryIconInfo EntryIconInfo;
 typedef struct _GtkEntryPrivate       GtkEntryPrivate;
 struct _GtkEntryPrivate
 {
-  EntryIconInfo *icons[MAX_ICONS];
+  EntryIconInfo  *icons[MAX_ICONS];
 
-  GtkWidget     *text;
-  GtkWidget     *progress_widget;
-  GMenuModel    *extra_menu;
-  gchar         *menu_entry_icon_primary_text;
-  gchar         *menu_entry_icon_secondary_text;
+  GtkWidget      *text;
+  GtkWidget      *progress_widget;
+  GMenuModel     *extra_menu;
+  gchar          *menu_entry_icon_primary_text;
+  gchar          *menu_entry_icon_secondary_text;
+  GtkEntryBuffer *buffer;
 
-  guint         show_emoji_icon         : 1;
-  guint         editing_canceled        : 1; /* Only used by GtkCellRendererText */
+  guint           show_emoji_icon         : 1;
+  guint           editing_canceled        : 1; /* Only used by GtkCellRendererText */
 };
 
 struct _EntryIconInfo
@@ -1342,13 +1343,13 @@ gtk_entry_get_property (GObject         *object,
 
     case PROP_STORAGE_TYPE_PRIMARY:
       g_value_set_enum (value,
-                        gtk_entry_get_icon_storage_type (entry, 
+                        gtk_entry_get_icon_storage_type (entry,
                                                          GTK_ENTRY_ICON_PRIMARY));
       break;
 
     case PROP_STORAGE_TYPE_SECONDARY:
       g_value_set_enum (value,
-                        gtk_entry_get_icon_storage_type (entry, 
+                        gtk_entry_get_icon_storage_type (entry,
                                                          GTK_ENTRY_ICON_SECONDARY));
       break;
 
@@ -1452,12 +1453,40 @@ notify_cb (GObject    *object,
 }
 
 static void
+length_changed_cb (GtkEntry *entry)
+{
+  g_object_notify_by_pspec (G_OBJECT (entry), entry_props[PROP_TEXT_LENGTH]);
+}
+
+static void
+buffer_changed_cb (GObject    *object,
+                   GParamSpec *pspec,
+                   gpointer    data)
+{
+  GtkText *text = GTK_TEXT (object);
+  GtkEntry *entry = GTK_ENTRY (data);
+  GtkEntryPrivate *priv = gtk_entry_get_instance_private (entry);
+
+  if (priv->buffer)
+    {
+      g_signal_handlers_disconnect_by_func (priv->buffer, length_changed_cb, entry);
+      g_clear_object (&priv->buffer);
+    }
+
+  priv->buffer = g_object_ref(gtk_text_get_buffer (text));
+  g_signal_connect_swapped (priv->buffer, "notify::length", G_CALLBACK(length_changed_cb), entry);
+}
+
+static void
 connect_text_signals (GtkEntry *entry)
 {
   GtkEntryPrivate *priv = gtk_entry_get_instance_private (entry);
 
   g_signal_connect (priv->text, "activate", G_CALLBACK (activate_cb), entry);
   g_signal_connect (priv->text, "notify", G_CALLBACK (notify_cb), entry);
+
+  g_signal_connect (priv->text, "notify::buffer", G_CALLBACK (buffer_changed_cb), entry);
+  buffer_changed_cb (G_OBJECT (priv->text), NULL, entry);
 }
 
 static void
@@ -1525,6 +1554,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
     }
   g_clear_pointer (&priv->text, gtk_widget_unparent);
   g_clear_object (&priv->extra_menu);
+  g_clear_object (&priv->buffer);
   g_clear_pointer (&priv->menu_entry_icon_primary_text, g_free);
   g_clear_pointer (&priv->menu_entry_icon_secondary_text, g_free);
 
@@ -3133,8 +3163,8 @@ gtk_entry_get_icon_tooltip_text (GtkEntry             *entry,
 
   if (!icon_info)
     return NULL;
- 
-  if (icon_info->tooltip && 
+
+  if (icon_info->tooltip &&
       !pango_parse_markup (icon_info->tooltip, -1, 0, NULL, &text, NULL, NULL))
     g_assert (NULL == text); /* text should still be NULL in case of markup errors */
 
@@ -3221,7 +3251,7 @@ gtk_entry_get_icon_tooltip_markup (GtkEntry             *entry,
 
   if (!icon_info)
     return NULL;
- 
+
   return g_strdup (icon_info->tooltip);
 }
 
@@ -3338,7 +3368,7 @@ gtk_entry_set_completion (GtkEntry           *entry,
 
   if (old == completion)
     return;
-  
+
   if (old)
     {
       _gtk_entry_completion_disconnect (old);
