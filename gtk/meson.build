@@ -1032,6 +1032,7 @@ libgtk_dep = declare_dependency(sources: gtk_dep_sources,
                                 link_args: common_ldflags)
 
 foreach lang : [
+    'bn',
     'de',
     'da',
     'fr',
