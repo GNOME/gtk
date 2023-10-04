@@ -9,6 +9,7 @@ struct _GskGLBuffer
   GLenum target;
   GLuint buffer_id;
   GLenum access;
+  guchar *data;
 };
 
 G_DEFINE_TYPE (GskGLBuffer, gsk_gl_buffer, GSK_TYPE_GPU_BUFFER)
@@ -18,6 +19,7 @@ gsk_gl_buffer_finalize (GObject *object)
 {
   GskGLBuffer *self = GSK_GL_BUFFER (object);
 
+  g_free (self->data);
   glDeleteBuffers (1, &self->buffer_id);
 
   G_OBJECT_CLASS (gsk_gl_buffer_parent_class)->finalize (object);
@@ -28,9 +30,7 @@ gsk_gl_buffer_map (GskGpuBuffer *buffer)
 {
   GskGLBuffer *self = GSK_GL_BUFFER (buffer);
 
-  gsk_gl_buffer_bind (self);
-
-  return glMapBuffer (self->target, self->access);
+  return self->data;
 }
 
 static void
@@ -40,10 +40,7 @@ gsk_gl_buffer_unmap (GskGpuBuffer *buffer)
 
   gsk_gl_buffer_bind (self);
 
-  if (!glUnmapBuffer (self->target))
-    {
-      g_warning ("glUnmapBuffer failed");
-    }
+  glBufferSubData (self->target, 0, gsk_gpu_buffer_get_size (buffer), self->data);
 }
 
 static void
@@ -80,6 +77,7 @@ gsk_gl_buffer_new (GLenum target,
   glGenBuffers (1, &self->buffer_id);
   glBindBuffer (target, self->buffer_id);
   glBufferData (target, size, NULL, GL_STATIC_DRAW);
+  self->data = malloc (size);
 
   return GSK_GPU_BUFFER (self);
 }
