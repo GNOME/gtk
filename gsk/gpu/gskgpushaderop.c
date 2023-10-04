@@ -90,6 +90,8 @@ gsk_gpu_shader_op_gl_command_n (GskGpuOp    *op,
 {
   GskGpuShaderOp *self = (GskGpuShaderOp *) op;
   GskGpuShaderOpClass *shader_op_class = (GskGpuShaderOpClass *) op->op_class;
+  GskGpuOp *next;
+  gsize i, n;
 
   gsk_gl_frame_use_program (GSK_GL_FRAME (frame),
                             shader_op_class,
@@ -98,12 +100,29 @@ gsk_gpu_shader_op_gl_command_n (GskGpuOp    *op,
   if (self->desc)
     gsk_gl_descriptors_use (GSK_GL_DESCRIPTORS (self->desc));
 
+  if (gsk_gpu_frame_should_optimize (frame, GSK_GPU_OPTIMIZE_MERGE))
+    n = MAX_MERGE_OPS;
+  else
+    n = 1;
+  i = 1;
+  for (next = op->next; next && i < n; next = next->next)
+    {
+      GskGpuShaderOp *next_shader = (GskGpuShaderOp *) next;
+
+      if (next->op_class != op->op_class ||
+          next_shader->desc != self->desc ||
+          next_shader->vertex_offset != self->vertex_offset + i * shader_op_class->vertex_size)
+        break;
+
+      i++;
+    }
+
   if (gsk_gpu_frame_should_optimize (frame, GSK_GPU_OPTIMIZE_GL_BASE_INSTANCE))
     {
       glDrawArraysInstancedBaseInstance (GL_TRIANGLES,
                                          0,
                                          6 * instance_scale,
-                                         1,
+                                         i,
                                          self->vertex_offset / shader_op_class->vertex_size);
     }
   else
@@ -113,10 +132,10 @@ gsk_gpu_shader_op_gl_command_n (GskGpuOp    *op,
       glDrawArraysInstanced (GL_TRIANGLES,
                              0,
                              6 * instance_scale,
-                             1);
+                             i);
     }
 
-  return op->next;
+  return next;
 }
 
 GskGpuOp *
