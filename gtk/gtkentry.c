@@ -178,6 +178,7 @@ struct _GtkEntryPrivate
   GMenuModel    *extra_menu;
   gchar         *menu_entry_icon_primary_text;
   gchar         *menu_entry_icon_secondary_text;
+  GSignalGroup  *buffer_signals;
 
   guint         show_emoji_icon         : 1;
   guint         editing_canceled        : 1; /* Only used by GtkCellRendererText */
@@ -1342,13 +1343,13 @@ gtk_entry_get_property (GObject         *object,
 
     case PROP_STORAGE_TYPE_PRIMARY:
       g_value_set_enum (value,
-                        gtk_entry_get_icon_storage_type (entry, 
+                        gtk_entry_get_icon_storage_type (entry,
                                                          GTK_ENTRY_ICON_PRIMARY));
       break;
 
     case PROP_STORAGE_TYPE_SECONDARY:
       g_value_set_enum (value,
-                        gtk_entry_get_icon_storage_type (entry, 
+                        gtk_entry_get_icon_storage_type (entry,
                                                          GTK_ENTRY_ICON_SECONDARY));
       break;
 
@@ -1452,12 +1453,21 @@ notify_cb (GObject    *object,
 }
 
 static void
+length_changed_cb (GtkEntry *entry)
+{
+  g_object_notify_by_pspec (G_OBJECT (entry), entry_props[PROP_TEXT_LENGTH]);
+}
+
+static void
 connect_text_signals (GtkEntry *entry)
 {
   GtkEntryPrivate *priv = gtk_entry_get_instance_private (entry);
 
   g_signal_connect (priv->text, "activate", G_CALLBACK (activate_cb), entry);
   g_signal_connect (priv->text, "notify", G_CALLBACK (notify_cb), entry);
+
+  g_signal_group_connect_swapped (priv->buffer_signals, "notify::length",
+                                  G_CALLBACK (length_changed_cb), entry);
 }
 
 static void
@@ -1486,9 +1496,14 @@ gtk_entry_init (GtkEntry *entry)
   GtkGesture *catchall;
 
   priv->text = gtk_text_new ();
+  priv->buffer_signals = g_signal_group_new (GTK_TYPE_ENTRY_BUFFER);
   gtk_widget_set_parent (priv->text, GTK_WIDGET (entry));
   gtk_editable_init_delegate (GTK_EDITABLE (entry));
   connect_text_signals (entry);
+
+  g_object_bind_property (priv->text, "buffer",
+                          priv->buffer_signals, "target",
+                          G_BINDING_SYNC_CREATE);
 
   catchall = gtk_gesture_click_new ();
   g_signal_connect (catchall, "pressed",
@@ -1523,6 +1538,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
   g_clear_object (&priv->extra_menu);
   g_clear_pointer (&priv->menu_entry_icon_primary_text, g_free);
   g_clear_pointer (&priv->menu_entry_icon_secondary_text, g_free);
+  g_clear_object (&priv->buffer_signals);
 
   G_OBJECT_CLASS (gtk_entry_parent_class)->dispose (object);
 }
@@ -3129,8 +3145,8 @@ gtk_entry_get_icon_tooltip_text (GtkEntry             *entry,
 
   if (!icon_info)
     return NULL;
- 
-  if (icon_info->tooltip && 
+
+  if (icon_info->tooltip &&
       !pango_parse_markup (icon_info->tooltip, -1, 0, NULL, &text, NULL, NULL))
     g_assert (NULL == text); /* text should still be NULL in case of markup errors */
 
@@ -3217,7 +3233,7 @@ gtk_entry_get_icon_tooltip_markup (GtkEntry             *entry,
 
   if (!icon_info)
     return NULL;
- 
+
   return g_strdup (icon_info->tooltip);
 }
 
@@ -3334,7 +3350,7 @@ gtk_entry_set_completion (GtkEntry           *entry,
 
   if (old == completion)
     return;
-  
+
   if (old)
     {
       _gtk_entry_completion_disconnect (old);
