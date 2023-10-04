@@ -105,7 +105,7 @@ gsk_gl_frame_submit (GskGpuFrame  *frame,
   glBufferData (GL_UNIFORM_BUFFER,
                 sizeof (GskGpuGlobalsInstance),
                 NULL,
-                GL_DYNAMIC_DRAW);
+                GL_STREAM_DRAW);
 
   while (op)
     {
