@@ -46,7 +46,7 @@
  *
  * 3. the scaled coordinate system
  * converts on CPU: NodeProcessor.scale
- * converts on GPU: push.scale
+ * converts on GPU: GSK_GLOBAL_SCALE
  * This includes the current scale of the transform. It is usually equal to the scale factor
  * of the window we are rendering to (which is bad because devs without hidpi screens can
  * forget this and then everyone else will see bugs). We make decisions about pixel sizes in
@@ -65,7 +65,7 @@
  *
  * 5. the GL coordinate system
  * converts on CPU: NodeProcessor.projection
- * converts on GPU: push.mvp (from scaled coordinate system)
+ * converts on GPU: GSK_GLOBAL_MVP (from scaled coordinate system)
  * This coordinate system is what GL (or Vulkan) expect coordinates to appear in, and is usually
  * (-1, -1) => (1, 1), but may be flipped etc depending on the render target. The CPU essentially
  * never uses it, other than to allow the vertex shaders to emit its vertices.

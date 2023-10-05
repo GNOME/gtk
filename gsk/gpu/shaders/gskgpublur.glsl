@@ -34,8 +34,8 @@ run (out vec2 pos)
   _tex_coord = rect_get_coord (tex_rect, pos);
   _tex_id = in_tex_id;
 
-  float blur_radius = length (push.scale * in_blur_direction);
-  _tex_blur_step = push.scale * in_blur_direction / blur_radius / rect_size (tex_rect);
+  float blur_radius = length (GSK_GLOBAL_SCALE * in_blur_direction);
+  _tex_blur_step = GSK_GLOBAL_SCALE * in_blur_direction / blur_radius / rect_size (tex_rect);
   _samples_per_side = uint (floor (blur_radius));
   float sigma = blur_radius / 2.0;
   _initial_gaussian.x = 1.0 / (sqrt (2.0 * PI) * sigma);

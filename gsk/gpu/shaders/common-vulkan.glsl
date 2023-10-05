@@ -4,13 +4,16 @@
 
 layout(push_constant) uniform PushConstants {
     mat4 mvp;
-    vec4 clip_bounds;
-    vec4 clip_widths;
-    vec4 clip_heights;
+    mat3x4 clip;
     vec2 scale;
 } push;
 
 layout(constant_id=0) const uint GSK_SHADER_CLIP = GSK_GPU_SHADER_CLIP_NONE;
+
+#define GSK_GLOBAL_MVP push.mvp
+#define GSK_GLOBAL_CLIP push.clip
+#define GSK_GLOBAL_CLIP_RECT push.clip[0]
+#define GSK_GLOBAL_SCALE push.scale
 
 #define GSK_VERTEX_INDEX gl_VertexIndex
 

@@ -14,9 +14,9 @@ struct RoundedRect
 RoundedRect
 rounded_rect_from_gsk (mat3x4 gsk_rounded_rect)
 {
-  return RoundedRect ((gsk_rounded_rect[0].xyxy + vec4 (0.0, 0.0, gsk_rounded_rect[0].zw)) * push.scale.xyxy,
-                      gsk_rounded_rect[1] * push.scale.xxxx,
-                      gsk_rounded_rect[2] * push.scale.yyyy);
+  return RoundedRect ((gsk_rounded_rect[0].xyxy + vec4 (0.0, 0.0, gsk_rounded_rect[0].zw)) * GSK_GLOBAL_SCALE.xyxy,
+                      gsk_rounded_rect[1] * GSK_GLOBAL_SCALE.xxxx,
+                      gsk_rounded_rect[2] * GSK_GLOBAL_SCALE.yyyy);
 }
 
 float

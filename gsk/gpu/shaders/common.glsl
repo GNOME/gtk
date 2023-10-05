@@ -25,7 +25,7 @@ rect_clip (Rect r)
   if (GSK_SHADER_CLIP == GSK_GPU_SHADER_CLIP_NONE)
     return r;
   else
-    return rect_intersect (r, rect_from_gsk (push.clip_bounds));
+    return rect_intersect (r, rect_from_gsk (GSK_GLOBAL_CLIP_RECT));
 }
 
 #ifdef GSK_VERTEX_SHADER
@@ -40,7 +40,7 @@ const vec2 offsets[6] = vec2[6](vec2(0.0, 0.0),
 void
 gsk_set_position (vec2 pos)
 {
-  gl_Position = push.mvp * vec4 (pos, 0.0, 1.0);
+  gl_Position = GSK_GLOBAL_MVP * vec4 (pos, 0.0, 1.0);
 }
 
 vec2
@@ -145,7 +145,7 @@ main_clip_rect (void)
 
   run (color, pos);
 
-  Rect clip = rect_from_gsk (push.clip_bounds);
+  Rect clip = rect_from_gsk (GSK_GLOBAL_CLIP_RECT);
 
   float coverage = rect_coverage (clip, pos);
   color *= coverage;
@@ -161,8 +161,7 @@ main_clip_rounded (void)
 
   run (color, pos);
 
-  RoundedRect clip = RoundedRect(vec4(push.clip_bounds.xy, push.clip_bounds.xy + push.clip_bounds.zw), push.clip_widths, push.clip_heights);
-  rounded_rect_scale (clip, push.scale);
+  RoundedRect clip = rounded_rect_from_gsk (GSK_GLOBAL_CLIP);
 
   float coverage = rounded_rect_coverage (clip, pos);
   color *= coverage;
