@@ -38,10 +38,10 @@ struct _GdkDmabufTextureBuilder
   unsigned int fourcc;
   guint64 modifier;
 
-  /* per-plane properties, only a single plane supported so far */
-  unsigned int stride;
-  unsigned int offset;
-  int fd;
+  /* per-plane properties */
+  int fd[4];
+  unsigned int stride[4];
+  unsigned int offset[4];
 
   GdkTexture *update_texture;
   cairo_region_t *update_region;
@@ -83,9 +83,18 @@ enum
   PROP_HEIGHT,
   PROP_FOURCC,
   PROP_MODIFIER,
-  PROP_STRIDE,
-  PROP_OFFSET,
-  PROP_FD,
+  PROP_FD0,
+  PROP_FD1,
+  PROP_FD2,
+  PROP_FD3,
+  PROP_STRIDE0,
+  PROP_STRIDE1,
+  PROP_STRIDE2,
+  PROP_STRIDE3,
+  PROP_OFFSET0,
+  PROP_OFFSET1,
+  PROP_OFFSET2,
+  PROP_OFFSET3,
   PROP_UPDATE_REGION,
   PROP_UPDATE_TEXTURE,
 
@@ -137,16 +146,52 @@ gdk_dmabuf_texture_builder_get_property (GObject    *object,
       g_value_set_uint64 (value, self->modifier);
       break;
 
-    case PROP_STRIDE:
-      g_value_set_uint (value, self->stride);
+    case PROP_FD0:
+      g_value_set_int (value, self->fd[0]);
       break;
 
-    case PROP_OFFSET:
-      g_value_set_uint (value, self->offset);
+    case PROP_FD1:
+      g_value_set_int (value, self->fd[1]);
       break;
 
-    case PROP_FD:
-      g_value_set_int (value, self->fd);
+    case PROP_FD2:
+      g_value_set_int (value, self->fd[2]);
+      break;
+
+    case PROP_FD3:
+      g_value_set_int (value, self->fd[3]);
+      break;
+
+    case PROP_STRIDE0:
+      g_value_set_uint (value, self->stride[0]);
+      break;
+
+    case PROP_STRIDE1:
+      g_value_set_uint (value, self->stride[1]);
+      break;
+
+    case PROP_STRIDE2:
+      g_value_set_uint (value, self->stride[2]);
+      break;
+
+    case PROP_STRIDE3:
+      g_value_set_uint (value, self->stride[3]);
+      break;
+
+    case PROP_OFFSET0:
+      g_value_set_uint (value, self->offset[0]);
+      break;
+
+    case PROP_OFFSET1:
+      g_value_set_uint (value, self->offset[1]);
+      break;
+
+    case PROP_OFFSET2:
+      g_value_set_uint (value, self->offset[2]);
+      break;
+
+    case PROP_OFFSET3:
+      g_value_set_uint (value, self->offset[3]);
       break;
 
     case PROP_UPDATE_REGION:
@@ -193,16 +238,52 @@ gdk_dmabuf_texture_builder_set_property (GObject      *object,
       gdk_dmabuf_texture_builder_set_modifier (self, g_value_get_uint64 (value));
       break;
 
-    case PROP_STRIDE:
-      gdk_dmabuf_texture_builder_set_stride (self, g_value_get_uint (value));
+    case PROP_FD0:
+      gdk_dmabuf_texture_builder_set_fd (self, 0, g_value_get_int (value));
       break;
 
-    case PROP_OFFSET:
-      gdk_dmabuf_texture_builder_set_offset (self, g_value_get_uint (value));
+    case PROP_FD1:
+      gdk_dmabuf_texture_builder_set_fd (self, 1, g_value_get_int (value));
       break;
 
-    case PROP_FD:
-      gdk_dmabuf_texture_builder_set_fd (self, g_value_get_int (value));
+    case PROP_FD2:
+      gdk_dmabuf_texture_builder_set_fd (self, 2, g_value_get_int (value));
+      break;
+
+    case PROP_FD3:
+      gdk_dmabuf_texture_builder_set_fd (self, 3, g_value_get_int (value));
+      break;
+
+    case PROP_STRIDE0:
+      gdk_dmabuf_texture_builder_set_stride (self, 0, g_value_get_uint (value));
+      break;
+
+    case PROP_STRIDE1:
+      gdk_dmabuf_texture_builder_set_stride (self, 1, g_value_get_uint (value));
+      break;
+
+    case PROP_STRIDE2:
+      gdk_dmabuf_texture_builder_set_stride (self, 2, g_value_get_uint (value));
+      break;
+
+    case PROP_STRIDE3:
+      gdk_dmabuf_texture_builder_set_stride (self, 3, g_value_get_uint (value));
+      break;
+
+    case PROP_OFFSET0:
+      gdk_dmabuf_texture_builder_set_offset (self, 0, g_value_get_uint (value));
+      break;
+
+    case PROP_OFFSET1:
+      gdk_dmabuf_texture_builder_set_offset (self, 1, g_value_get_uint (value));
+      break;
+
+    case PROP_OFFSET2:
+      gdk_dmabuf_texture_builder_set_offset (self, 2, g_value_get_uint (value));
+      break;
+
+    case PROP_OFFSET3:
+      gdk_dmabuf_texture_builder_set_offset (self, 3, g_value_get_uint (value));
       break;
 
     case PROP_UPDATE_REGION:
@@ -289,40 +370,148 @@ gdk_dmabuf_texture_builder_class_init (GdkDmabufTextureBuilderClass *klass)
                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   /**
-   * GdkDmabufTextureBuilder:stride:
+   * GdkDmabufTextureBuilder:fd0:
    *
-   * The stride.
-   *
-   * Since: 4.14
-   */
-  properties[PROP_STRIDE] =
-    g_param_spec_uint ("stride", NULL, NULL,
-                       0, G_MAXUINT, 0,
-                       G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
-
-  /**
-   * GdkDmabufTextureBuilder:offset:
-   *
-   * The offset.
+   * The file descriptor for plane 0.
    *
    * Since: 4.14
    */
-  properties[PROP_OFFSET] =
-    g_param_spec_uint ("offset", NULL, NULL,
-                       0, G_MAXUINT, 0,
-                       G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
-
-  /**
-   * GdkDmabufTextureBuilder:fd:
-   *
-   * The file descriptor.
-   *
-   * Since: 4.14
-   */
-  properties[PROP_FD] =
-    g_param_spec_int ("fd", NULL, NULL,
+  properties[PROP_FD0] =
+    g_param_spec_int ("fd0", NULL, NULL,
                       -1, G_MAXINT, -1,
                       G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+
+  /**
+   * GdkDmabufTextureBuilder:fd1:
+   *
+   * The file descriptor for plane 1.
+   *
+   * Since: 4.14
+   */
+  properties[PROP_FD1] =
+    g_param_spec_int ("fd1", NULL, NULL,
+                      -1, G_MAXINT, -1,
+                      G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+
+  /**
+   * GdkDmabufTextureBuilder:fd2:
+   *
+   * The file descriptor for plane 2.
+   *
+   * Since: 4.14
+   */
+  properties[PROP_FD2] =
+    g_param_spec_int ("fd2", NULL, NULL,
+                      -1, G_MAXINT, -1,
+                      G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+
+  /**
+   * GdkDmabufTextureBuilder:fd3:
+   *
+   * The file descriptor for plane 3.
+   *
+   * Since: 4.14
+   */
+  properties[PROP_FD3] =
+    g_param_spec_int ("fd3", NULL, NULL,
+                      -1, G_MAXINT, -1,
+                      G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+
+  /**
+   * GdkDmabufTextureBuilder:stride0:
+   *
+   * The stride for plane 0.
+   *
+   * Since: 4.14
+   */
+  properties[PROP_STRIDE0] =
+    g_param_spec_uint ("stride0", NULL, NULL,
+                       0, G_MAXUINT, 0,
+                       G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+
+  /**
+   * GdkDmabufTextureBuilder:stride1:
+   *
+   * The stride for plane 1.
+   *
+   * Since: 4.14
+   */
+  properties[PROP_STRIDE1] =
+    g_param_spec_uint ("stride1", NULL, NULL,
+                       0, G_MAXUINT, 0,
+                       G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+
+  /**
+   * GdkDmabufTextureBuilder:stride2:
+   *
+   * The stride for plane 2.
+   *
+   * Since: 4.14
+   */
+  properties[PROP_STRIDE2] =
+    g_param_spec_uint ("stride2", NULL, NULL,
+                       0, G_MAXUINT, 0,
+                       G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+
+  /**
+   * GdkDmabufTextureBuilder:stride3:
+   *
+   * The stride for plane 3.
+   *
+   * Since: 4.14
+   */
+  properties[PROP_STRIDE3] =
+    g_param_spec_uint ("stride3", NULL, NULL,
+                       0, G_MAXUINT, 0,
+                       G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+
+  /**
+   * GdkDmabufTextureBuilder:offset0:
+   *
+   * The offset for plane 0.
+   *
+   * Since: 4.14
+   */
+  properties[PROP_OFFSET0] =
+    g_param_spec_uint ("offset0", NULL, NULL,
+                       0, G_MAXUINT, 0,
+                       G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+
+  /**
+   * GdkDmabufTextureBuilder:offset1:
+   *
+   * The offset for plane 1.
+   *
+   * Since: 4.14
+   */
+  properties[PROP_OFFSET1] =
+    g_param_spec_uint ("offset1", NULL, NULL,
+                       0, G_MAXUINT, 0,
+                       G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+
+  /**
+   * GdkDmabufTextureBuilder:offset2:
+   *
+   * The offset for plane 2.
+   *
+   * Since: 4.14
+   */
+  properties[PROP_OFFSET2] =
+    g_param_spec_uint ("offset2", NULL, NULL,
+                       0, G_MAXUINT, 0,
+                       G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+
+  /**
+   * GdkDmabufTextureBuilder:offset3:
+   *
+   * The offset for plane 3.
+   *
+   * Since: 4.14
+   */
+  properties[PROP_OFFSET3] =
+    g_param_spec_uint ("offset3", NULL, NULL,
+                       0, G_MAXUINT, 0,
+                       G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   /**
    * GdkDmabufTextureBuilder:update-region: (attributes org.gdk.Property.get=gdk_dmabuf_texture_builder_get_update_region org.gdk.Property.set=gdk_dmabuf_texture_builder_set_update_region)
@@ -354,7 +543,7 @@ gdk_dmabuf_texture_builder_class_init (GdkDmabufTextureBuilderClass *klass)
 static void
 gdk_dmabuf_texture_builder_init (GdkDmabufTextureBuilder *self)
 {
-  self->fd = -1;
+  self->fd[0] = self->fd[1] = self->fd[2] = self->fd[3] = -1;
 }
 
 /**
@@ -592,29 +781,80 @@ gdk_dmabuf_texture_builder_set_modifier (GdkDmabufTextureBuilder *self,
 }
 
 /**
+ * gdk_dmabuf_texture_builder_get_fd:
+ * @self: a `GdkDmabufTextureBuilder`
+ * @plane: the plane to get the fd for
+ *
+ * Gets the file descriptor for a plane.
+ *
+ * Returns: the file descriptor
+ *
+ * Since: 4.14
+ */
+int
+gdk_dmabuf_texture_builder_get_fd (GdkDmabufTextureBuilder *self,
+                                   int                      plane)
+{
+  g_return_val_if_fail (GDK_IS_DMABUF_TEXTURE_BUILDER (self), 0);
+  g_return_val_if_fail (0 <= plane && plane < 4, 0);
+
+  return self->fd[plane];
+}
+
+/**
+ * gdk_dmabuf_texture_builder_set_fd:
+ * @self: a `GdkDmabufTextureBuilder`
+ * @plane: the plane to set the fd for
+ * @fd: the file descriptor
+ *
+ * Sets the file descriptor for a plane.
+ *
+ * Since: 4.14
+ */
+void
+gdk_dmabuf_texture_builder_set_fd (GdkDmabufTextureBuilder *self,
+                                   int                      plane,
+                                   int                      fd)
+{
+  g_return_if_fail (GDK_IS_DMABUF_TEXTURE_BUILDER (self));
+  g_return_if_fail (0 <= plane && plane < 4);
+
+  if (self->fd[plane] == fd)
+    return;
+
+  self->fd[plane] = fd;
+
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_FD0 + plane]);
+}
+
+/**
  * gdk_dmabuf_texture_builder_get_stride:
  * @self: a `GdkDmabufTextureBuilder`
+ * @plane: the plane to get the stride for
  *
- * Gets the stride value.
+ * Gets the stride value for a plane.
  *
  * Returns: the stride
  *
  * Since: 4.14
  */
 unsigned int
-gdk_dmabuf_texture_builder_get_stride (GdkDmabufTextureBuilder *self)
+gdk_dmabuf_texture_builder_get_stride (GdkDmabufTextureBuilder *self,
+                                       int                      plane)
 {
   g_return_val_if_fail (GDK_IS_DMABUF_TEXTURE_BUILDER (self), 0);
+  g_return_val_if_fail (0 <= plane && plane < 4, 0);
 
-  return self->stride;
+  return self->stride[plane];
 }
 
 /**
  * gdk_dmabuf_texture_builder_set_stride:
  * @self: a `GdkDmabufTextureBuilder`
+ * @plane: the plane to set the stride for
  * @stride: the stride value
  *
- * Sets the stride.
+ * Sets the stride for a plane.
  *
  * The stride must be set for all planes before calling [method@Gdk.GLTextureBuilder.build].
  *
@@ -622,98 +862,65 @@ gdk_dmabuf_texture_builder_get_stride (GdkDmabufTextureBuilder *self)
  */
 void
 gdk_dmabuf_texture_builder_set_stride (GdkDmabufTextureBuilder *self,
+                                       int                      plane,
                                        unsigned int             stride)
 {
   g_return_if_fail (GDK_IS_DMABUF_TEXTURE_BUILDER (self));
+  g_return_if_fail (0 <= plane && plane < 4);
 
-  if (self->stride == stride)
+  if (self->stride[plane] == stride)
     return;
 
-  self->stride = stride;
+  self->stride[plane] = stride;
 
-  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_STRIDE]);
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_STRIDE0 + plane]);
 }
 
 /**
  * gdk_dmabuf_texture_builder_get_offset:
  * @self: a `GdkDmabufTextureBuilder`
+ * @plane: the plane to get the offset for
  *
- * Gets the offset value.
+ * Gets the offset value for a plane.
  *
  * Returns: the offset
  *
  * Since: 4.14
  */
 unsigned int
-gdk_dmabuf_texture_builder_get_offset (GdkDmabufTextureBuilder *self)
+gdk_dmabuf_texture_builder_get_offset (GdkDmabufTextureBuilder *self,
+                                       int                      plane)
 {
   g_return_val_if_fail (GDK_IS_DMABUF_TEXTURE_BUILDER (self), 0);
+  g_return_val_if_fail (0 <= plane && plane < 4, 0);
 
-  return self->offset;
+  return self->offset[plane];
 }
 
 /**
  * gdk_dmabuf_texture_builder_set_offset:
  * @self: a `GdkDmabufTextureBuilder`
+ * @plane: the plane to set the offset for
  * @offset: the offset value
  *
- * Sets the offset.
+ * Sets the offset for a plane.
  *
  * Since: 4.14
  */
 void
 gdk_dmabuf_texture_builder_set_offset (GdkDmabufTextureBuilder *self,
+                                       int                      plane,
                                        unsigned int             offset)
 {
   g_return_if_fail (GDK_IS_DMABUF_TEXTURE_BUILDER (self));
+  g_return_if_fail (0 <= plane && plane < 4);
 
-  if (self->offset == offset)
+  if (self->offset[plane] == offset)
     return;
 
-  self->offset = offset;
+  self->offset[plane] = offset;
 
-  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_OFFSET]);
-}
-
-/**
- * gdk_dmabuf_texture_builder_get_fd:
- * @self: a `GdkDmabufTextureBuilder`
- *
- * Gets the file descriptor.
- *
- * Returns: the file descriptor
- *
- * Since: 4.14
- */
-int
-gdk_dmabuf_texture_builder_get_fd (GdkDmabufTextureBuilder *self)
-{
-  g_return_val_if_fail (GDK_IS_DMABUF_TEXTURE_BUILDER (self), 0);
-
-  return self->fd;
-}
-
-/**
- * gdk_dmabuf_texture_builder_set_fd:
- * @self: a `GdkDmabufTextureBuilder`
- * @fd: the file descriptor
- *
- * Sets the file descriptor.
- *
- * Since: 4.14
- */
-void
-gdk_dmabuf_texture_builder_set_fd (GdkDmabufTextureBuilder *self,
-                                   int                      fd)
-{
-  g_return_if_fail (GDK_IS_DMABUF_TEXTURE_BUILDER (self));
-
-  if (self->fd == fd)
-    return;
-
-  self->fd = fd;
-
-  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_FD]);
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_OFFSET0 + plane]);
 }
 
 /**
@@ -846,7 +1053,7 @@ gdk_dmabuf_texture_builder_build (GdkDmabufTextureBuilder *self,
   g_return_val_if_fail (self->width > 0, NULL);
   g_return_val_if_fail (self->height > 0, NULL);
   g_return_val_if_fail (self->fourcc != 0, NULL);
-  g_return_val_if_fail (self->fd != -1, NULL);
+  g_return_val_if_fail (self->fd[0] != -1, NULL);
 
 #ifdef __linux__
   return gdk_dmabuf_texture_new_from_builder (self, destroy, data);

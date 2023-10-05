@@ -63,10 +63,10 @@ struct _GdkDmabufTexture
   unsigned int fourcc;
   guint64 modifier;
 
-  /* Per-plane properties. We only support 1 plane for now */
-  unsigned int stride;
-  unsigned int offset;
-  int fd;
+  /* Per-plane properties */
+  int fd[4];
+  unsigned int stride[4];
+  unsigned int offset[4];
 
   GDestroyNotify destroy;
   gpointer data;
@@ -94,20 +94,22 @@ static struct {
   unsigned int fourcc;
   guint64 modifier;
   GdkMemoryFormat memory;
+  int planes;
 } supported_formats[] = {
-  { DRM_FORMAT_RGB888, DRM_FORMAT_MOD_LINEAR, GDK_MEMORY_R8G8B8 },
-  { DRM_FORMAT_BGR888, DRM_FORMAT_MOD_LINEAR, GDK_MEMORY_B8G8R8 },
-  { DRM_FORMAT_ARGB8888, DRM_FORMAT_MOD_LINEAR, GDK_MEMORY_A8R8G8B8 },
-  { DRM_FORMAT_ABGR8888, DRM_FORMAT_MOD_LINEAR, GDK_MEMORY_A8B8G8R8 },
-  { DRM_FORMAT_RGBA8888, DRM_FORMAT_MOD_LINEAR, GDK_MEMORY_R8G8B8A8 },
-  { DRM_FORMAT_BGRA8888, DRM_FORMAT_MOD_LINEAR, GDK_MEMORY_B8G8R8A8 },
+  { DRM_FORMAT_RGB888, DRM_FORMAT_MOD_LINEAR, GDK_MEMORY_R8G8B8, 1 },
+  { DRM_FORMAT_BGR888, DRM_FORMAT_MOD_LINEAR, GDK_MEMORY_B8G8R8, 1 },
+  { DRM_FORMAT_ARGB8888, DRM_FORMAT_MOD_LINEAR, GDK_MEMORY_A8R8G8B8, 1 },
+  { DRM_FORMAT_ABGR8888, DRM_FORMAT_MOD_LINEAR, GDK_MEMORY_A8B8G8R8, 1 },
+  { DRM_FORMAT_RGBA8888, DRM_FORMAT_MOD_LINEAR, GDK_MEMORY_R8G8B8A8, 1 },
+  { DRM_FORMAT_BGRA8888, DRM_FORMAT_MOD_LINEAR, GDK_MEMORY_B8G8R8A8, 1 },
 };
 
 static gboolean
 get_memory_format (GdkDisplay      *display,
                    unsigned int     fourcc,
                    guint64          modifier,
-                   GdkMemoryFormat *format)
+                   GdkMemoryFormat *format,
+                   int             *n_planes)
 {
   /* We can always support simple linear formats */
   for (int i = 0; i < G_N_ELEMENTS (supported_formats); i++)
@@ -116,6 +118,7 @@ get_memory_format (GdkDisplay      *display,
           supported_formats[i].modifier == modifier)
         {
           *format = supported_formats[i].memory;
+          *n_planes = supported_formats[i].planes;
           return TRUE;
         }
     }
@@ -133,6 +136,7 @@ get_memory_format (GdkDisplay      *display,
               formats[i].modifier == modifier)
             {
               *format = GDK_MEMORY_A8R8G8B8; // FIXME
+              *n_planes = 1; // FIXME
               return TRUE;
             }
         }
@@ -146,7 +150,7 @@ import_dmabuf_into_gl (GdkDmabufTexture *self)
 {
   GdkGLContext *context;
   EGLDisplay egl_display;
-  EGLint attribs[20];
+  EGLint attribs[64];
   EGLImage image;
   guint texture_id;
   int i;
@@ -167,16 +171,25 @@ import_dmabuf_into_gl (GdkDmabufTexture *self)
   attribs[i++] = EGL_LINUX_DRM_FOURCC_EXT;
   attribs[i++] = self->fourcc;
 
-  attribs[i++] = EGL_DMA_BUF_PLANE0_FD_EXT;
-  attribs[i++] = self->fd;
-  attribs[i++] = EGL_DMA_BUF_PLANE0_MODIFIER_LO_EXT;
-  attribs[i++] = self->modifier & 0xFFFFFFFF;
-  attribs[i++] = EGL_DMA_BUF_PLANE0_MODIFIER_HI_EXT;
-  attribs[i++] = self->modifier >> 32;
-  attribs[i++] = EGL_DMA_BUF_PLANE0_PITCH_EXT;
-  attribs[i++] = self->stride;
-  attribs[i++] = EGL_DMA_BUF_PLANE0_OFFSET_EXT;
-  attribs[i++] = self->offset;
+#define ADD_PLANE_ATTRIBUTES(plane) \
+  if (self->fd[plane] != -1 || self->offset[plane] != 0) \
+    { \
+      attribs[i++] = EGL_DMA_BUF_PLANE ## plane ## _FD_EXT; \
+      attribs[i++] = self->fd[plane]; \
+      attribs[i++] = EGL_DMA_BUF_PLANE ## plane ## _MODIFIER_LO_EXT; \
+      attribs[i++] = self->modifier & 0xFFFFFFFF; \
+      attribs[i++] = EGL_DMA_BUF_PLANE ## plane ## _MODIFIER_HI_EXT; \
+      attribs[i++] = self->modifier >> 32; \
+      attribs[i++] = EGL_DMA_BUF_PLANE ## plane ## _PITCH_EXT; \
+      attribs[i++] = self->stride[plane]; \
+      attribs[i++] = EGL_DMA_BUF_PLANE ## plane ## _OFFSET_EXT; \
+      attribs[i++] = self->offset[plane]; \
+    }
+
+  ADD_PLANE_ATTRIBUTES (0)
+  ADD_PLANE_ATTRIBUTES (1)
+  ADD_PLANE_ATTRIBUTES (2)
+  ADD_PLANE_ATTRIBUTES (3)
 
   attribs[i++] = EGL_NONE;
 
@@ -231,6 +244,7 @@ do_indirect_download (GdkDmabufTexture *self,
   gdk_gl_texture_builder_set_id (builder, id);
   gdk_gl_texture_builder_set_width (builder, gdk_texture_get_width (GDK_TEXTURE (self)));
   gdk_gl_texture_builder_set_height (builder, gdk_texture_get_height (GDK_TEXTURE (self)));
+  gdk_gl_texture_builder_set_format (builder, gdk_texture_get_format (GDK_TEXTURE (self)));
 
   gl_texture = gdk_gl_texture_builder_build (builder, NULL, NULL);
 
@@ -261,13 +275,13 @@ do_direct_download (GdkDmabufTexture *self,
   height = gdk_texture_get_height (GDK_TEXTURE (self));
   bpp = gdk_memory_format_bytes_per_pixel (gdk_texture_get_format (GDK_TEXTURE (self)));
 
-  src_stride = self->stride;
-  size = self->stride * height;
+  src_stride = self->stride[0];
+  size = self->stride[0] * height;
 
-  if (ioctl (self->fd, DMA_BUF_IOCTL_SYNC, &(struct dma_buf_sync) { DMA_BUF_SYNC_START|DMA_BUF_SYNC_READ }) < 0)
+  if (ioctl (self->fd[0], DMA_BUF_IOCTL_SYNC, &(struct dma_buf_sync) { DMA_BUF_SYNC_START|DMA_BUF_SYNC_READ }) < 0)
     g_warning ("Failed to sync dma-buf: %s", g_strerror (errno));
 
-  src_data = mmap (NULL, size, PROT_READ, MAP_SHARED, self->fd, self->offset);
+  src_data = mmap (NULL, size, PROT_READ, MAP_SHARED, self->fd[0], self->offset[0]);
 
   if (stride == src_stride)
     memcpy (data, src_data, size);
@@ -277,7 +291,7 @@ do_direct_download (GdkDmabufTexture *self,
         memcpy (data + i * stride, src_data + i * src_stride, height * bpp);
     }
 
-  if (ioctl (self->fd, DMA_BUF_IOCTL_SYNC, &(struct dma_buf_sync) { DMA_BUF_SYNC_END|DMA_BUF_SYNC_READ }) < 0)
+  if (ioctl (self->fd[0], DMA_BUF_IOCTL_SYNC, &(struct dma_buf_sync) { DMA_BUF_SYNC_END|DMA_BUF_SYNC_READ }) < 0)
     g_warning ("Failed to sync dma-buf: %s", g_strerror (errno));
 
   munmap (src_data, size);
@@ -291,9 +305,10 @@ gdk_dmabuf_texture_download (GdkTexture      *texture,
 {
   GdkDmabufTexture *self = GDK_DMABUF_TEXTURE (texture);
   GdkMemoryFormat fmt;
+  int planes;
   GdkMemoryFormat src_format = gdk_texture_get_format (texture);
 
-  if (!get_memory_format (NULL, self->fourcc, self->modifier, &fmt))
+  if (!get_memory_format (NULL, self->fourcc, self->modifier, &fmt, &planes))
     do_indirect_download (self, format, data, stride);
   else if (format == src_format)
     do_direct_download (self, data, stride);
@@ -306,7 +321,7 @@ gdk_dmabuf_texture_download (GdkTexture      *texture,
       width = gdk_texture_get_width (texture);
       height = gdk_texture_get_height (texture);
 
-      src_stride = self->stride;
+      src_stride = self->stride[0];
       src_data = g_new (guchar, src_stride * height);
 
       do_direct_download (self, src_data, src_stride);
@@ -333,7 +348,7 @@ gdk_dmabuf_texture_class_init (GdkDmabufTextureClass *klass)
 static void
 gdk_dmabuf_texture_init (GdkDmabufTexture *self)
 {
-  self->fd = -1;
+  self->fd[0] = self->fd[1] = self->fd[2] = self->fd[3] = -1;
 }
 
 GdkTexture *
@@ -344,17 +359,20 @@ gdk_dmabuf_texture_new_from_builder (GdkDmabufTextureBuilder *builder,
   GdkDmabufTexture *self;
   GdkTexture *update_texture;
   GdkMemoryFormat format;
+  int n_planes;
+  uint32_t f = gdk_dmabuf_texture_builder_get_fourcc (builder);
+  uint64_t m = gdk_dmabuf_texture_builder_get_modifier(builder);
 
   if (!get_memory_format (gdk_dmabuf_texture_builder_get_display (builder),
                           gdk_dmabuf_texture_builder_get_fourcc (builder),
                           gdk_dmabuf_texture_builder_get_modifier (builder),
-                          &format))
+                          &format, &n_planes))
     {
-      uint32_t f = gdk_dmabuf_texture_builder_get_fourcc (builder);
-      uint64_t m = gdk_dmabuf_texture_builder_get_modifier(builder);
       g_warning ("Unsupported dmabuf format %c%c%c%c:%#lx", f & 0xff, (f >> 8) & 0xff, (f >> 16) & 0xff, (f >> 24) & 0xff, m);
       return NULL;
     }
+
+  GDK_DEBUG (MISC, "Dmabuf texture in format %c%c%c%c:%#lx", f & 0xff, (f >> 8) & 0xff, (f >> 16) & 0xff, (f >> 24) & 0xff, m);
 
   self = g_object_new (GDK_TYPE_DMABUF_TEXTURE,
                        "width", gdk_dmabuf_texture_builder_get_width (builder),
@@ -367,13 +385,17 @@ gdk_dmabuf_texture_new_from_builder (GdkDmabufTextureBuilder *builder,
 
   self->fourcc = gdk_dmabuf_texture_builder_get_fourcc (builder);
   self->modifier = gdk_dmabuf_texture_builder_get_modifier (builder);
-  self->fd = gdk_dmabuf_texture_builder_get_fd (builder);
 
-  self->stride = gdk_dmabuf_texture_builder_get_stride (builder);
-  if (self->stride == 0)
-    self->stride = gdk_dmabuf_texture_builder_get_width (builder) *
-                   gdk_memory_format_bytes_per_pixel (format);
-  self->offset = gdk_dmabuf_texture_builder_get_offset (builder);
+  for (int i = 0; i < 4; i++)
+    {
+      self->fd[i] = gdk_dmabuf_texture_builder_get_fd (builder, i);
+      self->stride[i] = gdk_dmabuf_texture_builder_get_stride (builder, i);
+      if (self->stride[i] == 0)
+        self->stride[i] = gdk_dmabuf_texture_builder_get_width (builder) *
+                          gdk_memory_format_bytes_per_pixel (format);
+      self->offset[i] = gdk_dmabuf_texture_builder_get_offset (builder, i);
+    }
+
   update_texture = gdk_dmabuf_texture_builder_get_update_texture (builder);
   if (update_texture)
     {
@@ -406,21 +428,24 @@ gdk_dmabuf_texture_get_modifier (GdkDmabufTexture *texture)
 }
 
 unsigned int
-gdk_dmabuf_texture_get_offset (GdkDmabufTexture *texture)
+gdk_dmabuf_texture_get_offset (GdkDmabufTexture *texture,
+                               int               plane)
 {
-  return texture->offset;
+  return texture->offset[plane];
 }
 
 unsigned int
-gdk_dmabuf_texture_get_stride (GdkDmabufTexture *texture)
+gdk_dmabuf_texture_get_stride (GdkDmabufTexture *texture,
+                               int               plane)
 {
-  return texture->stride;
+  return texture->stride[plane];
 }
 
 int
-gdk_dmabuf_texture_get_fd (GdkDmabufTexture *texture)
+gdk_dmabuf_texture_get_fd (GdkDmabufTexture *texture,
+                           int               plane)
 {
-  return texture->fd;
+  return texture->fd[plane];
 }
 
 #endif /* __linux__ */

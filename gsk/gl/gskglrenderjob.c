@@ -3576,7 +3576,7 @@ import_dmabuf_texture (GskGLRenderJob       *job,
   GdkGLContext *context = job->command_queue->context;
   GdkDisplay *display = gdk_gl_context_get_display (context);
   EGLDisplay egl_display;
-  EGLint attribs[32];
+  EGLint attribs[64];
   EGLImage image;
   guint texture_id;
   int i;
@@ -3597,19 +3597,26 @@ import_dmabuf_texture (GskGLRenderJob       *job,
   attribs[i++] = gdk_texture_get_height (texture);
   attribs[i++] = EGL_LINUX_DRM_FOURCC_EXT;
   attribs[i++] = gdk_dmabuf_texture_get_fourcc (dmabuf_texture);
-  attribs[i++] = EGL_LINUX_DRM_FOURCC_EXT;
-  attribs[i++] = gdk_dmabuf_texture_get_fourcc (dmabuf_texture);
-  attribs[i++] = EGL_DMA_BUF_PLANE0_FD_EXT;
-  attribs[i++] = gdk_dmabuf_texture_get_fd (dmabuf_texture);
-  attribs[i++] = EGL_DMA_BUF_PLANE0_OFFSET_EXT;
-  attribs[i++] = gdk_dmabuf_texture_get_offset (dmabuf_texture);
-  attribs[i++] = EGL_DMA_BUF_PLANE0_PITCH_EXT;
-  attribs[i++] = gdk_dmabuf_texture_get_stride (dmabuf_texture);
-  attribs[i++] = EGL_DMA_BUF_PLANE0_MODIFIER_LO_EXT;
-  attribs[i++] = gdk_dmabuf_texture_get_modifier (dmabuf_texture) & 0xFFFFFFFF;
-  attribs[i++] = EGL_DMA_BUF_PLANE0_MODIFIER_HI_EXT;
-  attribs[i++] = gdk_dmabuf_texture_get_modifier (dmabuf_texture) >> 32;
-  attribs[i++] = EGL_NONE;
+
+#define ADD_PLANE_ATTRIBUTES(plane) \
+  if (gdk_dmabuf_texture_get_fd (dmabuf_texture, plane) != -1 || gdk_dmabuf_texture_get_offset (dmabuf_texture, plane) != 0) \
+    { \
+      attribs[i++] = EGL_DMA_BUF_PLANE ## plane ## _FD_EXT; \
+      attribs[i++] = gdk_dmabuf_texture_get_fd (dmabuf_texture, plane); \
+      attribs[i++] = EGL_DMA_BUF_PLANE ## plane ## _MODIFIER_LO_EXT; \
+      attribs[i++] = gdk_dmabuf_texture_get_modifier (dmabuf_texture) & 0xFFFFFFFF; \
+      attribs[i++] = EGL_DMA_BUF_PLANE ## plane ## _MODIFIER_HI_EXT; \
+      attribs[i++] = gdk_dmabuf_texture_get_modifier (dmabuf_texture) >> 32; \
+      attribs[i++] = EGL_DMA_BUF_PLANE ## plane ## _PITCH_EXT; \
+      attribs[i++] = gdk_dmabuf_texture_get_stride (dmabuf_texture, plane); \
+      attribs[i++] = EGL_DMA_BUF_PLANE ## plane ## _OFFSET_EXT; \
+      attribs[i++] = gdk_dmabuf_texture_get_offset (dmabuf_texture, plane); \
+    }
+
+  ADD_PLANE_ATTRIBUTES (0)
+  ADD_PLANE_ATTRIBUTES (1)
+  ADD_PLANE_ATTRIBUTES (2)
+  ADD_PLANE_ATTRIBUTES (3)
 
   image = eglCreateImageKHR (egl_display,
                              EGL_NO_CONTEXT,

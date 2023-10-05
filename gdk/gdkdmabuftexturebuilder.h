@@ -65,22 +65,28 @@ void                     gdk_dmabuf_texture_builder_set_modifier     (GdkDmabufT
                                                                       guint64                     modifier);
 
 GDK_AVAILABLE_IN_4_14
-unsigned int             gdk_dmabuf_texture_builder_get_stride       (GdkDmabufTextureBuilder    *self) G_GNUC_PURE;
+int                      gdk_dmabuf_texture_builder_get_fd           (GdkDmabufTextureBuilder    *self,
+                                                                      int                         plane) G_GNUC_PURE;
+GDK_AVAILABLE_IN_4_14
+void                     gdk_dmabuf_texture_builder_set_fd           (GdkDmabufTextureBuilder    *self,
+                                                                      int                         plane,
+                                                                      int                         fd);
+
+GDK_AVAILABLE_IN_4_14
+unsigned int             gdk_dmabuf_texture_builder_get_stride       (GdkDmabufTextureBuilder    *self,
+                                                                      int                         plane) G_GNUC_PURE;
 GDK_AVAILABLE_IN_4_14
 void                     gdk_dmabuf_texture_builder_set_stride       (GdkDmabufTextureBuilder    *self,
+                                                                      int                         plane,
                                                                       unsigned int                stride);
 
 GDK_AVAILABLE_IN_4_14
-unsigned int             gdk_dmabuf_texture_builder_get_offset       (GdkDmabufTextureBuilder    *self) G_GNUC_PURE;
+unsigned int             gdk_dmabuf_texture_builder_get_offset       (GdkDmabufTextureBuilder    *self,
+                                                                      int                         plane) G_GNUC_PURE;
 GDK_AVAILABLE_IN_4_14
 void                     gdk_dmabuf_texture_builder_set_offset       (GdkDmabufTextureBuilder    *self,
+                                                                      int                         plane,
                                                                       unsigned int                offset);
-
-GDK_AVAILABLE_IN_4_14
-int                      gdk_dmabuf_texture_builder_get_fd           (GdkDmabufTextureBuilder    *self) G_GNUC_PURE;
-GDK_AVAILABLE_IN_4_14
-void                     gdk_dmabuf_texture_builder_set_fd           (GdkDmabufTextureBuilder    *self,
-                                                                      int                         fd);
 
 GDK_AVAILABLE_IN_4_14
 GdkTexture *             gdk_dmabuf_texture_builder_get_update_texture (GdkDmabufTextureBuilder  *self) G_GNUC_PURE;
