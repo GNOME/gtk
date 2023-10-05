@@ -127,6 +127,10 @@ struct _GtkATContextClass
 
   void (* realize)       (GtkATContext *self);
   void (* unrealize)     (GtkATContext *self);
+
+  void (* announce)      (GtkATContext *self,
+                          const char   *message,
+                          GtkAccessibleAnnouncementPriority priority);
 };
 
 GtkATContext *          gtk_at_context_clone                    (GtkATContext          *self,
@@ -192,5 +196,9 @@ gtk_at_context_get_next_accessible_sibling (GtkATContext *self);
 void
 gtk_at_context_set_next_accessible_sibling (GtkATContext *self,
                                             GtkAccessible *sibling);
+
+void gtk_at_context_announce (GtkATContext                     *self,
+                              const char                       *message,
+                              GtkAccessibleAnnouncementPriority priority);
 
 G_END_DECLS

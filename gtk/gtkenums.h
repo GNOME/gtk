@@ -1802,6 +1802,20 @@ typedef enum { /*< prefix=GTK_ACCESSIBLE_SORT >*/
 } GtkAccessibleSort;
 
 /**
+ * GtkAccessibleAnnouncementPriority:
+ * @GTK_ACCESSIBLE_ANNOUNCEMENT_PRIORITY_POLITE: The announcement is not
+ *   important enough to interrupt the user.
+ * @GTK_ACCESSIBLE_ANNOUNCEMENT_PRIORITY_ASSERTIVE: The announcement is
+ *  important enough to interrupt the user.
+ *
+ * The possible values for an accessible announcement priority.
+ */
+typedef enum {
+  GTK_ACCESSIBLE_ANNOUNCEMENT_PRIORITY_POLITE,
+  GTK_ACCESSIBLE_ANNOUNCEMENT_PRIORITY_ASSERTIVE
+} GtkAccessibleAnnouncementPriority;
+ 
+/**
  * GtkPopoverMenuFlags:
  * @GTK_POPOVER_MENU_SLIDING: Submenus are presented as sliding submenus that
  *   replace the main menu.
