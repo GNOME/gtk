@@ -54,7 +54,7 @@ compute_color (void)
 void
 run (out vec2 pos)
 {
-  vec4 border_widths = in_border_widths * push.scale.yxyx;
+  vec4 border_widths = in_border_widths * GSK_GLOBAL_SCALE.yxyx;
   RoundedRect outside = rounded_rect_from_gsk (in_outline);
   RoundedRect inside = rounded_rect_shrink (outside, border_widths);
   rounded_rect_offset (inside, in_offset);

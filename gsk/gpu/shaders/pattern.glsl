@@ -203,7 +203,7 @@ glyphs_pattern (inout uint reader,
 
       float coverage = rect_coverage (glyph_bounds, pos);
       if (coverage > 0.0)
-        opacity += coverage * gsk_texture (tex_id, (pos - push.scale * tex_rect.xy) / (push.scale * tex_rect.zw)).a;
+        opacity += coverage * gsk_texture (tex_id, (pos - GSK_GLOBAL_SCALE * tex_rect.xy) / (GSK_GLOBAL_SCALE * tex_rect.zw)).a;
     }
 
   return color * opacity;
@@ -216,7 +216,7 @@ texture_pattern (inout uint reader,
   uint tex_id = read_uint (reader);
   vec4 tex_rect = read_vec4 (reader);
 
-  return gsk_texture (tex_id, (pos - push.scale * tex_rect.xy) / (push.scale * tex_rect.zw));
+  return gsk_texture (tex_id, (pos - GSK_GLOBAL_SCALE * tex_rect.xy) / (GSK_GLOBAL_SCALE * tex_rect.zw));
 }
 
 vec4
@@ -224,8 +224,8 @@ linear_gradient_pattern (inout uint reader,
                          vec2       pos,
                          bool       repeating)
 {
-  vec2 start = read_vec2 (reader) * push.scale;
-  vec2 end = read_vec2 (reader) * push.scale;
+  vec2 start = read_vec2 (reader) * GSK_GLOBAL_SCALE;
+  vec2 end = read_vec2 (reader) * GSK_GLOBAL_SCALE;
   Gradient gradient = read_gradient (reader);
 
   vec2 line = end - start;
@@ -244,8 +244,8 @@ radial_gradient_pattern (inout uint reader,
                          vec2       pos,
                          bool       repeating)
 {
-  vec2 center = read_vec2 (reader) * push.scale;
-  vec2 radius = read_vec2 (reader) * push.scale;
+  vec2 center = read_vec2 (reader) * GSK_GLOBAL_SCALE;
+  vec2 radius = read_vec2 (reader) * GSK_GLOBAL_SCALE;
   float start = read_float (reader);
   float end = read_float (reader);
   Gradient gradient = read_gradient (reader);
@@ -269,7 +269,7 @@ conic_gradient_pattern (inout uint reader,
   Gradient gradient = read_gradient (reader);
 
   /* scaling modifies angles, so be sure to use right coordinate system */
-  pos = pos / push.scale - center;
+  pos = pos / GSK_GLOBAL_SCALE - center;
   float offset = atan (pos.y, pos.x);
   offset = degrees (offset + angle) / 360.0;
   float overflow = fract (offset + 0.5);

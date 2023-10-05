@@ -18,7 +18,7 @@ Rect
 rect_from_gsk (vec4 coords)
 {
   Rect result = rect_new_size (coords);
-  result.bounds *= push.scale.xyxy;
+  result.bounds *= GSK_GLOBAL_SCALE.xyxy;
   return result;
 }
 
