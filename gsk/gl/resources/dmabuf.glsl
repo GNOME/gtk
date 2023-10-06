@@ -10,12 +10,10 @@ void main() {
 // FRAGMENT_SHADER:
 // dmabuf.glsl
 
-#extension GL_OES_EGL_image_external : require
-
 uniform samplerExternalOES u_source_dmabuf;
 
 void main() {
-  vec4 rgb = GskTexture(u_source_dmabuf, vUv);
+  vec4 rgb = texture2D(u_source_dmabuf, vUv);
 
   gskSetOutputColor(rgb);
 }

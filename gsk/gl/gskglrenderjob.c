@@ -3567,10 +3567,9 @@ gsk_gl_render_job_visit_gl_shader_node (GskGLRenderJob      *job,
     }
 }
 
-static void
+static unsigned int
 import_dmabuf_texture (GskGLRenderJob       *job,
-                       GdkTexture           *texture,
-                       GskGLRenderOffscreen *offscreen)
+                       GdkTexture           *texture)
 {
   GdkDmabufTexture *dmabuf_texture = GDK_DMABUF_TEXTURE (texture);
   GdkGLContext *context = job->command_queue->context;
@@ -3587,7 +3586,7 @@ import_dmabuf_texture (GskGLRenderJob       *job,
   if (egl_display == NULL)
     {
       g_warning ("Can't import dmabufs when not using EGL");
-      return;
+      return 0;
     }
 
   i = 0;
@@ -3618,6 +3617,8 @@ import_dmabuf_texture (GskGLRenderJob       *job,
   ADD_PLANE_ATTRIBUTES (2)
   ADD_PLANE_ATTRIBUTES (3)
 
+  attribs[i++] = EGL_NONE;
+
   image = eglCreateImageKHR (egl_display,
                              EGL_NO_CONTEXT,
                              EGL_LINUX_DMA_BUF_EXT,
@@ -3626,24 +3627,103 @@ import_dmabuf_texture (GskGLRenderJob       *job,
 
   if (image == EGL_NO_IMAGE)
     {
-      g_warning ("Failed to create EGL image: %d\n", eglGetError ());
-      return;
+      g_warning ("Failed to create EGL image: %#x\n", eglGetError ());
+      return 0;
     }
 
   gdk_gl_context_make_current (context);
 
   glGenTextures (1, &texture_id);
-  glBindTexture (GL_TEXTURE_2D, texture_id);
-  glEGLImageTargetTexture2DOES (GL_TEXTURE_2D, image);
-  glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-  glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+  glBindTexture (GL_TEXTURE_EXTERNAL_OES, texture_id);
+  glEGLImageTargetTexture2DOES (GL_TEXTURE_EXTERNAL_OES, image);
+  glTexParameteri (GL_TEXTURE_EXTERNAL_OES, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+  glTexParameteri (GL_TEXTURE_EXTERNAL_OES, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
   eglDestroyImageKHR (egl_display, image);
 
-  offscreen->texture_id = texture_id;
-  init_full_texture_region (offscreen);
-  offscreen->has_mipmap = FALSE;
+  return texture_id;
 }
+
+static void
+set_viewport_for_size (GskGLDriver  *self,
+                       GskGLProgram *program,
+                       float         width,
+                       float         height)
+{
+  float viewport[4] = { 0, 0, width, height };
+
+  gsk_gl_uniform_state_set4fv (program->uniforms,
+                               program->program_info,
+                               UNIFORM_SHARED_VIEWPORT, 0,
+                               1,
+                               (const float *)&viewport);
+  self->stamps[UNIFORM_SHARED_VIEWPORT]++;
+}
+
+#define ORTHO_NEAR_PLANE   -10000
+#define ORTHO_FAR_PLANE     10000
+
+static void
+set_projection_for_size (GskGLDriver  *self,
+                         GskGLProgram *program,
+                         float         width,
+                         float         height)
+{
+  graphene_matrix_t projection;
+
+  graphene_matrix_init_ortho (&projection, 0, width, 0, height, ORTHO_NEAR_PLANE, ORTHO_FAR_PLANE);
+  graphene_matrix_scale (&projection, 1, -1, 1);
+
+  gsk_gl_uniform_state_set_matrix (program->uniforms,
+                                   program->program_info,
+                                   UNIFORM_SHARED_PROJECTION, 0,
+                                   &projection);
+  self->stamps[UNIFORM_SHARED_PROJECTION]++;
+}
+
+static void
+reset_modelview (GskGLDriver  *self,
+                 GskGLProgram *program)
+{
+  graphene_matrix_t modelview;
+
+  graphene_matrix_init_identity (&modelview);
+
+  gsk_gl_uniform_state_set_matrix (program->uniforms,
+                                   program->program_info,
+                                   UNIFORM_SHARED_MODELVIEW, 0,
+                                   &modelview);
+  self->stamps[UNIFORM_SHARED_MODELVIEW]++;
+}
+
+static void
+draw_rect (GskGLCommandQueue *command_queue,
+           float              min_x,
+           float              min_y,
+           float              max_x,
+           float              max_y)
+{
+  GskGLDrawVertex *vertices = gsk_gl_command_queue_add_vertices (command_queue);
+  float min_u = 0;
+  float max_u = 1;
+  float min_v = 1;
+  float max_v = 0;
+  guint16 c = FP16_ZERO;
+
+  vertices[0] = (GskGLDrawVertex) { .position = { min_x, min_y }, .uv = { min_u, min_v }, .color = { c, c, c, c } };
+  vertices[1] = (GskGLDrawVertex) { .position = { min_x, max_y }, .uv = { min_u, max_v }, .color = { c, c, c, c } };
+  vertices[2] = (GskGLDrawVertex) { .position = { max_x, min_y }, .uv = { max_u, min_v }, .color = { c, c, c, c } };
+  vertices[3] = (GskGLDrawVertex) { .position = { max_x, max_y }, .uv = { max_u, max_v }, .color = { c, c, c, c } };
+  vertices[4] = (GskGLDrawVertex) { .position = { min_x, max_y }, .uv = { min_u, max_v }, .color = { c, c, c, c } };
+  vertices[5] = (GskGLDrawVertex) { .position = { max_x, min_y }, .uv = { max_u, min_v }, .color = { c, c, c, c } };
+}
+
+extern void
+gsk_gl_driver_save_texture_to_png (GskGLDriver       *driver,
+                                   int                texture_id,
+                                   int                width,
+                                   int                height,
+                                   const char        *filename);
 
 static void
 gsk_gl_render_job_upload_texture (GskGLRenderJob       *job,
@@ -3655,7 +3735,51 @@ gsk_gl_render_job_upload_texture (GskGLRenderJob       *job,
 
   if (GDK_IS_DMABUF_TEXTURE (texture))
     {
-      import_dmabuf_texture (job, texture, offscreen);
+      unsigned int texture_id;
+      GskGLRenderTarget *render_target;
+      int width, height;
+      int prev_fbo;
+      GskGLProgram *program;
+
+      g_print ("importing YUYV\n");
+      width = gdk_texture_get_width (GDK_TEXTURE (texture));
+      height = gdk_texture_get_height (GDK_TEXTURE (texture));
+
+      texture_id = import_dmabuf_texture (job, texture);
+
+      gsk_gl_driver_save_texture_to_png (job->driver, texture_id, width, height, "tex.png");
+
+      gsk_gl_driver_create_render_target (job->driver, width, height, GL_RGBA8, &render_target);
+
+      prev_fbo = gsk_gl_command_queue_bind_framebuffer (job->driver->command_queue, render_target->framebuffer_id);
+      gsk_gl_command_queue_clear (job->driver->command_queue, 0, &GRAPHENE_RECT_INIT (0, 0, width, height));
+
+      program = job->driver->dmabuf_no_clip;
+
+      gsk_gl_command_queue_begin_draw (job->driver->command_queue,
+                                       program->program_info,
+                                       width, height);
+
+      set_projection_for_size (job->driver, program, width, height);
+      set_viewport_for_size (job->driver, program, width, height);
+      reset_modelview (job->driver, program);
+
+      gsk_gl_program_set_uniform_texture (program,
+                                          UNIFORM_DMABUF_SOURCE, 0,
+                                          GL_TEXTURE_2D, GL_TEXTURE0, texture_id);
+
+      draw_rect (job->driver->command_queue, 0, 0, width, height);
+
+      gsk_gl_command_queue_end_draw (job->driver->command_queue);
+
+      gsk_gl_command_queue_bind_framebuffer (job->driver->command_queue, prev_fbo);
+
+      offscreen->texture_id = gsk_gl_driver_release_render_target (job->driver, render_target, FALSE);
+      init_full_texture_region (offscreen);
+      offscreen->has_mipmap = FALSE;
+
+      glDeleteTextures (1, &texture_id);
+
       return;
     }
 
