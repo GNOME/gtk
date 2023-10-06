@@ -208,6 +208,10 @@ static void     gsk_gl_render_job_visit_node                (GskGLRenderJob     
 static gboolean gsk_gl_render_job_visit_node_with_offscreen (GskGLRenderJob       *job,
                                                              const GskRenderNode  *node,
                                                              GskGLRenderOffscreen *offscreen);
+static void     gsk_gl_render_job_upload_texture            (GskGLRenderJob       *job,
+                                                             GdkTexture           *texture,
+                                                             gboolean              ensure_mipmap,
+                                                             GskGLRenderOffscreen *offscreen);
 
 static inline GskGLRenderClip *
 clips_grow_one (Clips *clips)
@@ -3328,6 +3332,53 @@ gsk_gl_render_job_visit_blend_node (GskGLRenderJob      *job,
     }
 }
 
+static gboolean
+gsk_gl_render_job_texture_mask_for_color (GskGLRenderJob        *job,
+                                          const GskRenderNode   *mask,
+                                          const GskRenderNode   *color,
+                                          const graphene_rect_t *bounds)
+{
+  int max_texture_size = job->command_queue->max_texture_size;
+  GdkTexture *texture = gsk_texture_node_get_texture (mask);
+  const GdkRGBA *rgba;
+
+  rgba = gsk_color_node_get_color (color);
+  if (RGBA_IS_CLEAR (rgba))
+    return TRUE;
+
+  if G_LIKELY (texture->width <= max_texture_size &&
+               texture->height <= max_texture_size &&
+               gsk_gl_render_job_begin_draw (job, CHOOSE_PROGRAM (job, coloring)))
+    {
+      GskGLRenderOffscreen offscreen = {0};
+      float scale_x = mask->bounds.size.width / texture->width;
+      float scale_y = mask->bounds.size.height / texture->height;
+      gboolean use_mipmap;
+      guint16 cc[4];
+
+      use_mipmap = (scale_x * fabs (job->scale_x)) < 0.5 ||
+                   (scale_y * fabs (job->scale_y)) < 0.5;
+
+      rgba_to_half (rgba, cc);
+      gsk_gl_render_job_upload_texture (job, texture, use_mipmap, &offscreen);
+      gsk_gl_program_set_uniform_texture_with_sync (job->current_program,
+                                                    UNIFORM_SHARED_SOURCE, 0,
+                                                    GL_TEXTURE_2D,
+                                                    GL_TEXTURE0,
+                                                    offscreen.texture_id,
+                                                    offscreen.has_mipmap ? GL_LINEAR_MIPMAP_LINEAR : GL_LINEAR,
+                                                    GL_LINEAR,
+                                                    offscreen.sync);
+      job->source_is_glyph_atlas = FALSE;
+      gsk_gl_render_job_draw_offscreen_with_color (job, bounds, &offscreen, cc);
+      gsk_gl_render_job_end_draw (job);
+
+      return TRUE;
+    }
+
+  return FALSE;
+}
+
 static inline void
 gsk_gl_render_job_visit_mask_node (GskGLRenderJob      *job,
                                    const GskRenderNode *node)
@@ -3336,6 +3387,17 @@ gsk_gl_render_job_visit_mask_node (GskGLRenderJob      *job,
   const GskRenderNode *mask = gsk_mask_node_get_mask (node);
   GskGLRenderOffscreen source_offscreen = {0};
   GskGLRenderOffscreen mask_offscreen = {0};
+
+  /* If the mask is a texture and the source is a color node
+   * then we can take a shortcut and avoid offscreens.
+   */
+  if (GSK_RENDER_NODE_TYPE (mask) == GSK_TEXTURE_NODE &&
+      GSK_RENDER_NODE_TYPE (source) == GSK_COLOR_NODE &&
+      gsk_mask_node_get_mask_mode (node) == GSK_MASK_MODE_ALPHA)
+    {
+      if (gsk_gl_render_job_texture_mask_for_color (job, mask, source, &node->bounds))
+        return;
+    }
 
   source_offscreen.bounds = &node->bounds;
   source_offscreen.force_offscreen = TRUE;
