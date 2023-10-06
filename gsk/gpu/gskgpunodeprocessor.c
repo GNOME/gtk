@@ -14,6 +14,7 @@
 #include "gskgpuglobalsopprivate.h"
 #include "gskgpuimageprivate.h"
 #include "gskgpurenderpassopprivate.h"
+#include "gskgpuroundedcoloropprivate.h"
 #include "gskgpuscissoropprivate.h"
 #include "gskgputextureopprivate.h"
 #include "gskgpuuberopprivate.h"
@@ -805,10 +806,29 @@ gsk_gpu_node_processor_add_rounded_clip_node (GskGpuNodeProcessor *self,
 {
   GskGpuClip old_clip;
   GskRoundedRect clip;
+  const GskRoundedRect *original_clip;
+  GskRenderNode *child;
+
+  child = gsk_rounded_clip_node_get_child (node);
+  original_clip = gsk_rounded_clip_node_get_clip (node);
+
+  /* Common case for entries etc: rounded solid color background.
+   * And we have a shader for that */
+  if (gsk_render_node_get_node_type (child) == GSK_COLOR_NODE &&
+      gsk_rect_contains_rect (&child->bounds, &original_clip->bounds))
+    {
+      gsk_gpu_node_processor_sync_globals (self, 0);
+      gsk_gpu_rounded_color_op (self->frame,
+                                gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, &original_clip->bounds),
+                                original_clip,
+                                &self->offset,
+                                gsk_color_node_get_color (child));
+      return;
+    }
 
   gsk_gpu_clip_init_copy (&old_clip, &self->clip);
 
-  clip = *gsk_rounded_clip_node_get_clip (node);
+  clip = *original_clip;
   gsk_rounded_rect_offset (&clip, self->offset.x, self->offset.y);
 
   if (!gsk_gpu_clip_intersect_rounded_rect (&self->clip, &old_clip, &clip))
