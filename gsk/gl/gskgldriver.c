@@ -1136,7 +1136,12 @@ gsk_gl_driver_lookup_shader (GskGLDriver  *self,
   return program;
 }
 
-#if 0
+void
+gsk_gl_driver_save_texture_to_png (GskGLDriver       *driver,
+                                   int                texture_id,
+                                   int                width,
+                                   int                height,
+                                   const char        *filename);
 void
 gsk_gl_driver_save_texture_to_png (GskGLDriver       *driver,
                                    int                texture_id,
@@ -1160,6 +1165,7 @@ gsk_gl_driver_save_texture_to_png (GskGLDriver       *driver,
   g_object_unref (builder);
 }
 
+#if 0
 void
 gsk_gl_driver_save_atlases_to_png (GskGLDriver *self,
                                    const char  *directory)
