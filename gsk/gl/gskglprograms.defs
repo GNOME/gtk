@@ -42,6 +42,10 @@ GSK_GL_DEFINE_PROGRAM (cross_fade,
                        GSK_GL_ADD_UNIFORM (1, CROSS_FADE_PROGRESS, u_progress)
                        GSK_GL_ADD_UNIFORM (2, CROSS_FADE_SOURCE2, u_source2))
 
+GSK_GL_DEFINE_PROGRAM (dmabuf,
+                       GSK_GL_SHADER_SINGLE (GSK_GL_SHADER_RESOURCE ("dmabuf.glsl")),
+                       GSK_GL_ADD_UNIFORM (1, DMABUF_SOURCE, u_source_dmabuf))
+
 GSK_GL_DEFINE_PROGRAM (filled_border,
                        GSK_GL_SHADER_SINGLE (GSK_GL_SHADER_RESOURCE ("filled_border.glsl")),
                        GSK_GL_ADD_UNIFORM (1, FILLED_BORDER_WIDTHS, u_widths)
