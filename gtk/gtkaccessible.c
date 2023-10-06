@@ -756,7 +756,15 @@ gtk_accessible_reset_relation (GtkAccessible         *self,
  * @self: a `GtkAccessible`
  * @message: the string to announce
  * @priority: the priority of the announcement
+ *
  * Requests the user's screen reader to announce the given message.
+ * This kind of notification is useful for messages that
+ * either have only a visual representation or that are not
+ * exposed visually at all, e.g. a notification about a
+ * successful operation.
+ *
+ * Also, by using this API, you can ensure that the message
+ * does not interrupts the user's current screen reader output.
  *
  * Since: 4.14
  */
