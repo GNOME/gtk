@@ -37,6 +37,7 @@
 #include "gdkmonitorprivate.h"
 #include "gdkrectangle.h"
 #include "gdkvulkancontext.h"
+#include "gdkdmabuftextureprivate.h"
 
 #ifdef HAVE_EGL
 #include <epoxy/egl.h>
@@ -1261,6 +1262,10 @@ gdk_display_create_vulkan_context (GdkDisplay  *self,
                          NULL);
 }
 
+/* To support a drm format, we must be able to import it into GL
+ * using the relevant EGL extensions, and download it into a memory
+ * texture, possibly doing format conversion with shaders (in GSK).
+ */
 static void
 init_dmabuf_formats (GdkDisplay *self)
 {
@@ -1283,6 +1288,9 @@ init_dmabuf_formats (GdkDisplay *self)
           int num_modifiers;
           uint64_t *modifiers;
           unsigned int *external_only;
+
+          if (!gdk_dmabuf_texture_may_support ((unsigned int)formats[i]))
+            continue;
 
           eglQueryDmaBufModifiersEXT (priv->egl_display, formats[i], 0, NULL, NULL, &num_modifiers);
           modifiers = g_new (uint64_t, num_modifiers);
