@@ -3,6 +3,7 @@
 #include "gskgpunodeprocessorprivate.h"
 
 #include "gskgpuborderopprivate.h"
+#include "gskgpuboxshadowopprivate.h"
 #include "gskgpubluropprivate.h"
 #include "gskgpuclearopprivate.h"
 #include "gskgpuclipprivate.h"
@@ -1195,18 +1196,27 @@ gsk_gpu_node_processor_add_inset_shadow_node (GskGpuNodeProcessor *self,
                                                gsk_inset_shadow_node_get_dy (node)),
                          (float[4]) { spread, spread, spread, spread },
                          (GdkRGBA[4]) { *color, *color, *color, *color });
-      return;
     }
-
-  GSK_DEBUG (FALLBACK, "No blurring for inset shadows");
-  gsk_gpu_node_processor_add_fallback_node (self, node);
+  else
+    {
+      gsk_gpu_box_shadow_op (self->frame,
+                             gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, &node->bounds),
+                             TRUE,
+                             &node->bounds,
+                             gsk_inset_shadow_node_get_outline (node),
+                             &GRAPHENE_POINT_INIT (gsk_inset_shadow_node_get_dx (node),
+                                                   gsk_inset_shadow_node_get_dy (node)),
+                             spread,
+                             blur_radius,
+                             &self->offset,
+                             color);
+    }
 }
 
 static void
 gsk_gpu_node_processor_add_outset_shadow_node (GskGpuNodeProcessor *self,
                                                GskRenderNode       *node)
 {
-  GskRoundedRect outline;
   const GdkRGBA *color;
   float spread, blur_radius, dx, dy;
 
@@ -1216,12 +1226,14 @@ gsk_gpu_node_processor_add_outset_shadow_node (GskGpuNodeProcessor *self,
   dx = gsk_outset_shadow_node_get_dx (node);
   dy = gsk_outset_shadow_node_get_dy (node);
 
-  gsk_rounded_rect_init_copy (&outline, gsk_outset_shadow_node_get_outline (node));
-  gsk_rounded_rect_shrink (&outline, -spread, -spread, -spread, -spread);
-  graphene_rect_offset (&outline.bounds, dx, dy);
-
   if (blur_radius == 0)
     {
+      GskRoundedRect outline;
+
+      gsk_rounded_rect_init_copy (&outline, gsk_outset_shadow_node_get_outline (node));
+      gsk_rounded_rect_shrink (&outline, -spread, -spread, -spread, -spread);
+      graphene_rect_offset (&outline.bounds, dx, dy);
+
       gsk_gpu_border_op (self->frame,
                          gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, &node->bounds),
                          &outline,
@@ -1229,11 +1241,20 @@ gsk_gpu_node_processor_add_outset_shadow_node (GskGpuNodeProcessor *self,
                          &GRAPHENE_POINT_INIT (-dx, -dy),
                          (float[4]) { spread, spread, spread, spread },
                          (GdkRGBA[4]) { *color, *color, *color, *color });
-      return;
     }
-
-  GSK_DEBUG (FALLBACK, "No blurring for outset shadows");
-  gsk_gpu_node_processor_add_fallback_node (self, node);
+  else
+    {
+      gsk_gpu_box_shadow_op (self->frame,
+                             gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, &node->bounds),
+                             FALSE,
+                             &node->bounds,
+                             gsk_outset_shadow_node_get_outline (node),
+                             &GRAPHENE_POINT_INIT (dx, dy),
+                             spread,
+                             blur_radius,
+                             &self->offset,
+                             color);
+    }
 }
 
 static gboolean
