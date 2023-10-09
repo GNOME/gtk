@@ -150,15 +150,16 @@ struct _GdkDrmFormatInfo
   guint32 fourcc;
   GdkMemoryFormat premultiplied_memory_format;
   GdkMemoryFormat unpremultiplied_memory_format;
+  gboolean requires_gl;
 };
 
 static GdkDrmFormatInfo supported_formats[] = {
-  { DRM_FORMAT_ARGB8888, GDK_MEMORY_A8R8G8B8_PREMULTIPLIED, GDK_MEMORY_A8R8G8B8 },
-  { DRM_FORMAT_RGBA8888, GDK_MEMORY_R8G8B8A8_PREMULTIPLIED, GDK_MEMORY_R8G8B8A8 },
-  { DRM_FORMAT_BGRA8888, GDK_MEMORY_B8G8R8A8_PREMULTIPLIED, GDK_MEMORY_B8G8R8A8 },
-  { DRM_FORMAT_ABGR16161616F, GDK_MEMORY_R16G16B16A16_FLOAT_PREMULTIPLIED, GDK_MEMORY_R16G16B16A16_FLOAT },
-  { DRM_FORMAT_RGB888, GDK_MEMORY_R8G8B8, GDK_MEMORY_R8G8B8 },
-  { DRM_FORMAT_BGR888, GDK_MEMORY_B8G8R8, GDK_MEMORY_B8G8R8 },
+  { DRM_FORMAT_ARGB8888, GDK_MEMORY_A8R8G8B8_PREMULTIPLIED, GDK_MEMORY_A8R8G8B8, FALSE },
+  { DRM_FORMAT_RGBA8888, GDK_MEMORY_R8G8B8A8_PREMULTIPLIED, GDK_MEMORY_R8G8B8A8, FALSE },
+  { DRM_FORMAT_BGRA8888, GDK_MEMORY_B8G8R8A8_PREMULTIPLIED, GDK_MEMORY_B8G8R8A8, FALSE },
+  { DRM_FORMAT_ABGR16161616F, GDK_MEMORY_R16G16B16A16_FLOAT_PREMULTIPLIED, GDK_MEMORY_R16G16B16A16_FLOAT, FALSE },
+  { DRM_FORMAT_RGB888, GDK_MEMORY_R8G8B8, GDK_MEMORY_R8G8B8, FALSE },
+  { DRM_FORMAT_BGR888, GDK_MEMORY_B8G8R8, GDK_MEMORY_B8G8R8, FALSE },
 };
 
 static GdkDrmFormatInfo *
@@ -171,6 +172,53 @@ get_drm_format_info (guint32 fourcc)
     }
 
   return NULL;
+}
+
+static void
+do_indirect_download (GdkDmabufTexture *self,
+                      GdkMemoryFormat  format,
+                      guchar          *data,
+                      gsize            stride)
+{
+  GskRenderer *renderer;
+  int width, height;
+  GskRenderNode *node;
+  GdkTexture *gl_texture;
+  GdkTextureDownloader *downloader;
+  GError *error = NULL;
+
+  GDK_DEBUG (MISC, "Using gsk_renderer_render_texture import for downloading a dmabuf");
+
+  g_assert (GDK_IS_DISPLAY (self->display));
+  g_assert (GDK_IS_GL_CONTEXT (gdk_display_get_gl_context (self->display)));
+
+  renderer = gsk_gl_renderer_new ();
+  if (!gsk_renderer_realize (renderer,  NULL, &error))
+    {
+      g_warning ("Failed to realize GL renderer: %s", error->message);
+      g_error_free (error);
+      g_object_unref (renderer);
+      return;
+    }
+
+  width = gdk_texture_get_width (GDK_TEXTURE (self));
+  height = gdk_texture_get_height (GDK_TEXTURE (self));
+
+  node = gsk_texture_node_new (GDK_TEXTURE (self), &GRAPHENE_RECT_INIT (0, 0, width, height));
+  gl_texture = gsk_renderer_render_texture (renderer, node, &GRAPHENE_RECT_INIT (0, 0, width, height));
+  gsk_render_node_unref (node);
+
+  gsk_renderer_unrealize (renderer);
+  g_object_unref (renderer);
+
+  downloader = gdk_texture_downloader_new (gl_texture);
+
+  gdk_texture_downloader_set_format (downloader, format);
+
+  gdk_texture_downloader_download_into (downloader, data, stride);
+
+  gdk_texture_downloader_free (downloader);
+  g_object_unref (gl_texture);
 }
 
 static void
@@ -248,8 +296,15 @@ gdk_dmabuf_texture_download (GdkTexture      *texture,
 #ifdef HAVE_LINUX_DMA_BUF_H
   GdkDmabufTexture *self = GDK_DMABUF_TEXTURE (texture);
   GdkMemoryFormat src_format = gdk_texture_get_format (texture);
+  GdkDrmFormatInfo *info;
 
-  if (format == src_format)
+  info = get_drm_format_info (self->fourcc);
+
+  g_assert (info != NULL);
+
+  if (info->requires_gl || self->n_planes > 1 || self->modifier != DRM_FORMAT_MOD_LINEAR)
+    do_indirect_download (self, format, data, stride);
+  else if (format == src_format)
     do_direct_download (self, data, stride);
   else
     {
@@ -274,6 +329,21 @@ gdk_dmabuf_texture_download (GdkTexture      *texture,
 #endif  /* HAVE_LINUX_DMA_BUF_H */
 }
 
+static gboolean
+display_supports_format (GdkDisplay *display,
+                         guint32     fourcc,
+                         guint64     modifier)
+{
+  GdkDmabufFormats *formats;
+
+  if (!display)
+    return FALSE;
+
+  formats = gdk_display_get_dmabuf_formats (display);
+
+  return gdk_dmabuf_formats_contains (formats, fourcc, modifier);
+}
+
 GdkTexture *
 gdk_dmabuf_texture_new_from_builder (GdkDmabufTextureBuilder *builder,
                                      GDestroyNotify           destroy,
@@ -291,7 +361,8 @@ gdk_dmabuf_texture_new_from_builder (GdkDmabufTextureBuilder *builder,
 
   info = get_drm_format_info (fourcc);
 
-  if (!info || modifier != DRM_FORMAT_MOD_LINEAR || n_planes > 1)
+  if (!info ||
+      ((info->requires_gl || n_planes > 1 || modifier != DRM_FORMAT_MOD_LINEAR) && !display_supports_format (display, fourcc, modifier)))
     {
       g_warning ("Unsupported dmabuf format %c%c%c%c:%#lx",
                  fourcc & 0xff, (fourcc >> 8) & 0xff, (fourcc >> 16) & 0xff, (fourcc >> 24) & 0xff, modifier);
