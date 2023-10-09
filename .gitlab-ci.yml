@@ -217,16 +217,16 @@ macos-x86_64:
     MESON_FORCE_BACKTRACKE: 1
     TMPDIR: /Users/Shared/work/tmp
     SDKROOT: /opt/sdks/MacOSX10.13.4.sdk
-    CCACHE_DIR: /Users/Shared/work/ccache
     PIP_CACHE_DIR: /Users/Shared/build/cache
     PIPENV_CACHE_DIR: $PIP_CACHE_DIR
     PYTHONPYCACHEPREFIX: $PIP_CACHE_DIR
     EXTRA_MESON_FLAGS: "-Dgobject-introspection:werror=false"
   before_script:
+    # Not using ccache on purpose as it accelerates the build so much that it
+    # can trigger race conditions in the gobject-introspection subproject.
     - bash .gitlab-ci/show-info-osx.sh
     - /opt/macports/bin/python3.10 -m venv .venv
     - ln -s /opt/cmake/CMake.app/Contents/bin/cmake .venv/bin
-    - ln -s /opt/ccache/ccache .venv/bin
     - ln -s /opt/pkg-config/bin/pkg-config .venv/bin
     - ln -s /opt/bison/bin/bison .venv/bin
     - source .venv/bin/activate
