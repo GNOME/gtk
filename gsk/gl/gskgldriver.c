@@ -756,10 +756,13 @@ import_dmabuf_planes (GskGLDriver    *self,
 
 #define ADD_PLANE(plane) \
   { \
-    attribs[i++] = EGL_DMA_BUF_PLANE## plane ##_MODIFIER_LO_EXT; \
-    attribs[i++] = modifier & 0xFFFFFFFF; \
-    attribs[i++] = EGL_DMA_BUF_PLANE## plane ## _MODIFIER_HI_EXT; \
-    attribs[i++] = modifier >> 32; \
+    if (modifier != DRM_FORMAT_MOD_INVALID) \
+      { \
+        attribs[i++] = EGL_DMA_BUF_PLANE## plane ##_MODIFIER_LO_EXT; \
+        attribs[i++] = modifier & 0xFFFFFFFF; \
+        attribs[i++] = EGL_DMA_BUF_PLANE## plane ## _MODIFIER_HI_EXT; \
+        attribs[i++] = modifier >> 32; \
+      } \
     attribs[i++] = EGL_DMA_BUF_PLANE## plane ##_FD_EXT; \
     attribs[i++] = fds[plane]; \
     attribs[i++] = EGL_DMA_BUF_PLANE## plane ##_PITCH_EXT; \
