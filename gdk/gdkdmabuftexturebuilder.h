@@ -65,6 +65,12 @@ void                     gdk_dmabuf_texture_builder_set_modifier     (GdkDmabufT
                                                                       guint64                     modifier);
 
 GDK_AVAILABLE_IN_4_14
+unsigned int             gdk_dmabuf_texture_builder_get_n_planes     (GdkDmabufTextureBuilder    *self) G_GNUC_PURE;
+GDK_AVAILABLE_IN_4_14
+void                     gdk_dmabuf_texture_builder_set_n_planes     (GdkDmabufTextureBuilder    *self,
+                                                                      unsigned int                n_planes);
+
+GDK_AVAILABLE_IN_4_14
 int                      gdk_dmabuf_texture_builder_get_fd           (GdkDmabufTextureBuilder    *self,
                                                                       int                         plane) G_GNUC_PURE;
 GDK_AVAILABLE_IN_4_14
