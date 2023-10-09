@@ -855,6 +855,7 @@ else
 endif
 
 foreach lang : [
+    'bn',
     'de',
     'da',
     'fr',
