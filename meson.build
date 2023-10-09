@@ -162,6 +162,7 @@ check_headers = [
   'inttypes.h',
   'linux/input.h',
   'linux/memfd.h',
+  'linux/dma-buf.h',
   'locale.h',
   'memory.h',
   'stdint.h',
