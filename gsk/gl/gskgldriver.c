@@ -715,14 +715,15 @@ gsk_gl_driver_cache_texture (GskGLDriver         *self,
 }
 
 static int
-import_dmabuf_plane (GskGLDriver    *self,
+import_dmabuf_planes (GskGLDriver    *self,
                      int             width,
                      int             height,
                      unsigned int    fourcc,
                      guint64         modifier,
-                     int             fd,
-                     int             stride,
-                     int             offset)
+                     unsigned int    n_planes,
+                     int            *fds,
+                     unsigned int   *strides,
+                     unsigned int   *offsets)
 {
   GdkGLContext *context = self->command_queue->context;
   GdkDisplay *display = gdk_gl_context_get_display (context);
@@ -731,6 +732,8 @@ import_dmabuf_plane (GskGLDriver    *self,
   EGLImage image;
   guint texture_id;
   int i;
+
+  g_assert (1 <= n_planes && n_planes <= 4);
 
   GSK_DEBUG (OPENGL,
              "Importing dma-buf into GL via EGLImage. Format %c%c%c%c:%#lx",
@@ -751,16 +754,25 @@ import_dmabuf_plane (GskGLDriver    *self,
   attribs[i++] = EGL_LINUX_DRM_FOURCC_EXT;
   attribs[i++] = fourcc;
 
-  attribs[i++] = EGL_DMA_BUF_PLANE0_FD_EXT;
-  attribs[i++] = fd;
-  attribs[i++] = EGL_DMA_BUF_PLANE0_MODIFIER_LO_EXT;
-  attribs[i++] = modifier & 0xFFFFFFFF;
-  attribs[i++] = EGL_DMA_BUF_PLANE0_MODIFIER_HI_EXT;
-  attribs[i++] = modifier >> 32;
-  attribs[i++] = EGL_DMA_BUF_PLANE0_PITCH_EXT;
-  attribs[i++] = stride;
-  attribs[i++] = EGL_DMA_BUF_PLANE0_OFFSET_EXT;
-  attribs[i++] = offset;
+#define ADD_PLANE(plane) \
+  { \
+    attribs[i++] = EGL_DMA_BUF_PLANE## plane ##_MODIFIER_LO_EXT; \
+    attribs[i++] = modifier & 0xFFFFFFFF; \
+    attribs[i++] = EGL_DMA_BUF_PLANE## plane ## _MODIFIER_HI_EXT; \
+    attribs[i++] = modifier >> 32; \
+    attribs[i++] = EGL_DMA_BUF_PLANE## plane ##_FD_EXT; \
+    attribs[i++] = fds[plane]; \
+    attribs[i++] = EGL_DMA_BUF_PLANE## plane ##_PITCH_EXT; \
+    attribs[i++] = strides[plane]; \
+    attribs[i++] = EGL_DMA_BUF_PLANE## plane ##_OFFSET_EXT; \
+    attribs[i++] = offsets[plane]; \
+  }
+
+  ADD_PLANE (0);
+
+  if (n_planes > 1) ADD_PLANE (1);
+  if (n_planes > 2) ADD_PLANE (2);
+  if (n_planes > 3) ADD_PLANE (3);
 
   attribs[i++] = EGL_NONE;
 
@@ -948,14 +960,15 @@ gsk_gl_driver_import_dmabuf_texture (GskGLDriver      *self,
     }
   else
     {
-      return import_dmabuf_plane (self,
-                                  gdk_texture_get_width (GDK_TEXTURE (texture)),
-                                  gdk_texture_get_height (GDK_TEXTURE (texture)),
-                                  gdk_dmabuf_texture_get_fourcc (texture),
-                                  gdk_dmabuf_texture_get_modifier (texture),
-                                  gdk_dmabuf_texture_get_fd (texture, 0),
-                                  gdk_dmabuf_texture_get_stride (texture, 0),
-                                  gdk_dmabuf_texture_get_offset (texture, 0));
+      return import_dmabuf_planes (self,
+                                   gdk_texture_get_width (GDK_TEXTURE (texture)),
+                                   gdk_texture_get_height (GDK_TEXTURE (texture)),
+                                   gdk_dmabuf_texture_get_fourcc (texture),
+                                   gdk_dmabuf_texture_get_modifier (texture),
+                                   gdk_dmabuf_texture_get_n_planes (texture),
+                                   gdk_dmabuf_texture_get_fds (texture),
+                                   gdk_dmabuf_texture_get_strides (texture),
+                                   gdk_dmabuf_texture_get_offsets (texture));
     }
 
   gsk_gl_driver_create_render_target (self, width, height, GL_RGBA8, &render_target);
@@ -972,14 +985,15 @@ gsk_gl_driver_import_dmabuf_texture (GskGLDriver      *self,
   for (int i = 0; i < info->n_planes; i++)
     {
       int plane = info->plane_indices[i];
-      int texture_id = import_dmabuf_plane (self,
-                                            width / info->hsub[i],
-                                            height / info->vsub[i],
-                                            info->subformats[i],
-                                            modifier,
-                                            gdk_dmabuf_texture_get_fd (texture, plane),
-                                            gdk_dmabuf_texture_get_stride (texture, plane),
-                                            gdk_dmabuf_texture_get_offset (texture, plane));
+      int texture_id = import_dmabuf_planes (self,
+                                             width / info->hsub[i],
+                                             height / info->vsub[i],
+                                             info->subformats[i],
+                                             modifier,
+                                             1,
+                                             gdk_dmabuf_texture_get_fds (texture) + plane,
+                                             gdk_dmabuf_texture_get_strides (texture) + plane,
+                                             gdk_dmabuf_texture_get_offsets (texture) + plane);
 
       gsk_gl_program_set_uniform_texture (program,
                                           info->uniforms[i], 0,
