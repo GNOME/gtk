@@ -1224,7 +1224,7 @@ gdk_dmabuf_texture_builder_build (GdkDmabufTextureBuilder *self,
   for (int i = 0; i < self->n_planes; i++)
     g_return_val_if_fail (self->fds[i] != -1 || self->offsets[i] != 0, NULL);
 
-  return NULL;
+  return gdk_dmabuf_texture_new_from_builder (self, destroy, data);
 }
 
 int *
