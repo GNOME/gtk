@@ -130,10 +130,10 @@ gdk_dmabuf_formats_get_n_formats (GdkDmabufFormats *formats)
  * Since: 4.14
  */
 void
-gdk_dmabuf_formats_get_format (GdkDmabufFormats     *formats,
-                               gsize                 idx,
-                               guint32              *fourcc,
-                               guint64              *modifier)
+gdk_dmabuf_formats_get_format (GdkDmabufFormats *formats,
+                               gsize             idx,
+                               guint32          *fourcc,
+                               guint64          *modifier)
 {
   GdkDmabufFormat *format;
 

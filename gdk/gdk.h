@@ -43,6 +43,7 @@
 #include <gdk/gdkdisplay.h>
 #include <gdk/gdkdisplaymanager.h>
 #include <gdk/gdkdmabufformats.h>
+#include <gdk/gdkdmabuftexturebuilder.h>
 #include <gdk/gdkdrag.h>
 #include <gdk/gdkdragsurface.h>
 #include <gdk/gdkdragsurfacesize.h>
