@@ -471,12 +471,10 @@ gdk_registry_handle_global (void               *data,
         wl_registry_bind (display_wayland->wl_registry, id, &wl_shm_interface, 1);
       wl_shm_add_listener (display_wayland->shm, &wl_shm_listener, display_wayland);
     }
-  else if (strcmp (interface, "zwp_linux_dmabuf_v1") == 0)
+  else if (strcmp (interface, "zwp_linux_dmabuf_v1") == 0 && version == 4)
     {
       display_wayland->linux_dmabuf =
-        wl_registry_bind (display_wayland->wl_registry, id,
-                          &zwp_linux_dmabuf_v1_interface,
-                          MIN (version, 4));
+        wl_registry_bind (display_wayland->wl_registry, id, &zwp_linux_dmabuf_v1_interface, version);
       display_wayland->linux_dmabuf_feedback =
         zwp_linux_dmabuf_v1_get_default_feedback (display_wayland->linux_dmabuf);
      zwp_linux_dmabuf_feedback_v1_add_listener (display_wayland->linux_dmabuf_feedback,
