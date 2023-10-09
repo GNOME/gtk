@@ -78,12 +78,56 @@ rounded_rect_offset (inout RoundedRect r,
   r.bounds += offset.xyxy;
 }
 
+bool
+rounded_rect_is_slicable (RoundedRect r)
+{
+  vec2 size = rect_size (Rect (r.bounds));
+  return (r.corner_widths[TOP_LEFT] + r.corner_widths[BOTTOM_RIGHT] <= size.x ||
+          r.corner_heights[TOP_LEFT] + r.corner_heights[BOTTOM_RIGHT] <= size.y)
+      && (r.corner_widths[BOTTOM_LEFT] + r.corner_widths[TOP_RIGHT] <= size.x ||
+          r.corner_heights[BOTTOM_LEFT] + r.corner_heights[TOP_RIGHT] <= size.y);
+}
+
+Rect
+rounded_rect_intersection_fallback_slice (RoundedRect outside,
+                                          RoundedRect inside,
+                                          uint        slice)
+{
+  switch (slice)
+    {
+    default:
+    case SLICE_TOP:
+    case SLICE_RIGHT:
+    case SLICE_BOTTOM:
+    case SLICE_LEFT:
+      return Rect (vec4 (0.0));
+
+    case SLICE_TOP_LEFT:
+      return Rect (vec4 (outside.bounds.xy, 0.5 * (outside.bounds.xy + outside.bounds.zw)));
+
+    case SLICE_TOP_RIGHT:
+      return Rect (vec4 (0.5 * (outside.bounds.x + outside.bounds.z), outside.bounds.y,
+                         outside.bounds.z, 0.5 * (outside.bounds.y + outside.bounds.w)));
+
+    case SLICE_BOTTOM_RIGHT:
+      return Rect (vec4 (0.5 * (outside.bounds.xy + outside.bounds.zw), outside.bounds.zw));
+
+    case SLICE_BOTTOM_LEFT:
+      return Rect (vec4 (outside.bounds.x, 0.5 * (outside.bounds.y + outside.bounds.w),
+                         0.5 * (outside.bounds.x + outside.bounds.z), outside.bounds.w));
+    }
+}
+
 Rect
 rounded_rect_intersection_slice (RoundedRect outside,
                                  RoundedRect inside,
                                  uint        slice)
 {
   float left, right, top, bottom;
+
+  if (!rounded_rect_is_slicable (outside) ||
+      !rounded_rect_is_slicable (inside))
+    return rounded_rect_intersection_fallback_slice (outside, inside, slice);
 
   switch (slice)
     {
