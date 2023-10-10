@@ -85,7 +85,7 @@ bbb_clicked_cb (GtkWidget *button,
 {
   GFile *file;
 
-  file = g_file_new_for_uri ("https://download.blender.org/peach/trailer/trailer_400p.ogg");
+  file = g_file_new_for_uri ("/home/mclasen/sintel_trailer_1080p.mp4");
   gtk_video_set_file (GTK_VIDEO (video), file);
   g_object_unref (file);
 }
