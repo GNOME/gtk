@@ -186,6 +186,10 @@ foreach h : check_headers
   endif
 endforeach
 
+if os_linux and not cc.has_header('linux/dma-buf.h')
+  error('OS is Linux, but linux/dma-buf.h not found.')
+endif
+
 # Maths functions might be implemented in libm
 libm = cc.find_library('m', required: false)
 
