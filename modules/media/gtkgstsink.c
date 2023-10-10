@@ -52,6 +52,9 @@
 
 #include <gst/gl/gstglfuncs.h>
 
+#include <gst/allocators/gstdmabuf.h>
+#include <libdrm/drm_fourcc.h>
+
 enum {
   PROP_0,
   PROP_PAINTABLE,
@@ -71,7 +74,17 @@ static GstStaticPadTemplate gtk_gst_sink_template =
 GST_STATIC_PAD_TEMPLATE ("sink",
     GST_PAD_SINK,
     GST_PAD_ALWAYS,
-    GST_STATIC_CAPS ("video/x-raw(" GST_CAPS_FEATURE_MEMORY_GL_MEMORY "), "
+    GST_STATIC_CAPS ("video/x-raw(" GST_CAPS_FEATURE_MEMORY_DMABUF "), "
+                     "format = (string) NV12, "
+                     "width = " GST_VIDEO_SIZE_RANGE ", "
+                     "height = " GST_VIDEO_SIZE_RANGE ", "
+                     "framerate = " GST_VIDEO_FPS_RANGE ";"
+                     "video/x-raw(" GST_CAPS_FEATURE_MEMORY_DMABUF "), "
+                     "format = (string) I420, "
+                     "width = " GST_VIDEO_SIZE_RANGE ", "
+                     "height = " GST_VIDEO_SIZE_RANGE ", "
+                     "framerate = " GST_VIDEO_FPS_RANGE ";"
+                     "video/x-raw(" GST_CAPS_FEATURE_MEMORY_GL_MEMORY "), "
                      "format = (string) RGBA, "
                      "width = " GST_VIDEO_SIZE_RANGE ", "
                      "height = " GST_VIDEO_SIZE_RANGE ", "
@@ -268,6 +281,27 @@ gtk_gst_memory_format_from_video (GstVideoFormat format)
   }
 }
 
+static uint32_t
+fourcc_from_video (GstVideoFormat format)
+{
+  switch ((guint) format)
+  {
+    case GST_VIDEO_FORMAT_RGBA:
+      return DRM_FORMAT_ABGR8888;
+    case GST_VIDEO_FORMAT_YUY2:
+      return DRM_FORMAT_YUYV;
+    case GST_VIDEO_FORMAT_NV12:
+      return DRM_FORMAT_NV12;
+    case GST_VIDEO_FORMAT_P010_10LE:
+      return DRM_FORMAT_P010;
+    case GST_VIDEO_FORMAT_I420:
+      return DRM_FORMAT_YUV420;
+    default:
+      g_assert_not_reached ();
+      return DRM_FORMAT_ABGR8888;
+  }
+}
+
 static void
 video_frame_free (GstVideoFrame *frame)
 {
@@ -283,8 +317,53 @@ gtk_gst_sink_texture_from_buffer (GtkGstSink *self,
   GstVideoFrame *frame = g_new (GstVideoFrame, 1);
   GdkTexture *texture;
 
-  if (self->gdk_context &&
-      gst_video_frame_map (frame, &self->v_info, buffer, GST_MAP_READ | GST_MAP_GL))
+  if (gst_is_dmabuf_memory (gst_buffer_peek_memory (buffer, 0)))
+    {
+      GdkDmabufTextureBuilder *builder;
+      GdkGLContext *ctx;
+      GstVideoFormat format;
+      int n_planes;
+      int n_mem;
+      int i;
+
+      g_object_get (self, "gl-context", &ctx, NULL);
+
+      builder = gdk_dmabuf_texture_builder_new ();
+      gdk_dmabuf_texture_builder_set_display (builder, gdk_gl_context_get_display (ctx));
+      g_object_unref (ctx);
+
+      gdk_dmabuf_texture_builder_set_width (builder, GST_VIDEO_INFO_WIDTH (&self->v_info));
+      gdk_dmabuf_texture_builder_set_height (builder, GST_VIDEO_INFO_HEIGHT (&self->v_info));
+
+      format = GST_VIDEO_INFO_FORMAT (&self->v_info);
+      gdk_dmabuf_texture_builder_set_fourcc (builder, fourcc_from_video (format));
+      gdk_dmabuf_texture_builder_set_modifier (builder, DRM_FORMAT_MOD_INVALID);
+
+      n_planes = GST_VIDEO_INFO_N_PLANES (&self->v_info);
+      n_mem = gst_buffer_n_memory (buffer);
+      gdk_dmabuf_texture_builder_set_n_planes (builder, n_planes);
+
+      for (i = 0; i < n_planes; i++)
+        {
+          GstMemory *mem;
+
+          if (i < n_mem)
+            mem = gst_buffer_peek_memory (buffer, i);
+          else
+            mem = gst_buffer_peek_memory (buffer, 0);
+
+          gdk_dmabuf_texture_builder_set_fd (builder, i, gst_dmabuf_memory_get_fd (mem));
+          gdk_dmabuf_texture_builder_set_stride (builder, i, GST_VIDEO_INFO_PLANE_STRIDE (&self->v_info, i));
+          gdk_dmabuf_texture_builder_set_offset (builder, i, GST_VIDEO_INFO_PLANE_OFFSET (&self->v_info, i));
+        }
+
+      texture = gdk_dmabuf_texture_builder_build (builder, NULL, NULL);
+      g_object_unref (builder);
+
+      *pixel_aspect_ratio = ((double) GST_VIDEO_INFO_PAR_N (&self->v_info) / ((double) GST_VIDEO_INFO_PAR_D (&self->v_info)));
+    }
+  else if (self->gdk_context &&
+           gst_video_frame_map (frame, &self->v_info, buffer, GST_MAP_READ | GST_MAP_GL))
     {
       GstGLSyncMeta *sync_meta;
       GdkGLTextureBuilder *builder;
