@@ -40,7 +40,7 @@ struct _GdkIOPipe
   GCond cond;
   guchar *buffer;
   gsize size;
-  GdkIOPipeState state : 2;
+  guint state : 2; /* GdkIOPipeState */
   guint input_closed : 1;
   guint output_closed : 1;
 };

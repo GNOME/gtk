@@ -70,7 +70,7 @@ typedef struct {
   CachedSizeX  cached_size_x;
   CachedSizeY  cached_size_y;
 
-  GtkSizeRequestMode request_mode   : 3;
+  guint       request_mode          : 3; /* GtkSizeRequestMode */
   guint       request_mode_valid    : 1;
   struct {
     guint       n_cached_requests   : 15;
