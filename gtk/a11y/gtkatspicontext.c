@@ -705,8 +705,15 @@ emit_text_changed (GtkAtSpiContext *self,
                    int              end,
                    const char      *text)
 {
+  char *copy;
+
   if (self->connection == NULL)
     return;
+
+  if (end < 0)
+    copy = g_strdup (text);
+  else
+    copy = g_strndup (text, end);
 
   g_dbus_connection_emit_signal (self->connection,
                                  NULL,
@@ -715,7 +722,7 @@ emit_text_changed (GtkAtSpiContext *self,
                                  "TextChanged",
                                  g_variant_new ("(siiva{sv})",
                                                 kind, start, end,
-                                                g_variant_new_take_string (g_strndup (text, end)),
+                                                g_variant_new_take_string (copy),
                                                 NULL),
                                  NULL);
 }
