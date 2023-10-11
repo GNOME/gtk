@@ -19,8 +19,10 @@
 
 #ifdef _MSC_VER
 #define STBRP__NOTUSED(v)  (void)(v)
+#define STBRP__CDECL       __cdecl
 #else
 #define STBRP__NOTUSED(v)  (void)sizeof(v)
+#define STBRP__CDECL
 #endif
 
 enum
@@ -63,9 +65,6 @@ STBRP_DEF void stbrp_setup_allow_out_of_mem(stbrp_context *context, int allow_ou
 STBRP_DEF void stbrp_init_target(stbrp_context *context, int width, int height, stbrp_node *nodes, int num_nodes)
 {
    int i;
-#ifndef STBRP_LARGE_RECTS
-   STBRP_ASSERT(width <= 0xffff && height <= 0xffff);
-#endif
 
    for (i=0; i < num_nodes-1; ++i)
       nodes[i].next = &nodes[i+1];
@@ -84,11 +83,7 @@ STBRP_DEF void stbrp_init_target(stbrp_context *context, int width, int height, 
    context->extra[0].y = 0;
    context->extra[0].next = &context->extra[1];
    context->extra[1].x = (stbrp_coord) width;
-#ifdef STBRP_LARGE_RECTS
    context->extra[1].y = (1<<30);
-#else
-   context->extra[1].y = 65535;
-#endif
    context->extra[1].next = NULL;
 }
 
@@ -160,6 +155,13 @@ static stbrp__findresult stbrp__skyline_find_best_pos(stbrp_context *c, int widt
    width -= width % c->align;
    STBRP_ASSERT(width % c->align == 0);
 
+   // if it can't possibly fit, bail immediately
+   if (width > c->width || height > c->height) {
+      fr.prev_link = NULL;
+      fr.x = fr.y = 0;
+      return fr;
+   }
+
    node = c->active_head;
    prev = &c->active_head;
    while (node->x + width <= c->width) {
@@ -223,7 +225,7 @@ static stbrp__findresult stbrp__skyline_find_best_pos(stbrp_context *c, int widt
          }
          STBRP_ASSERT(node->next->x > xpos && node->x <= xpos);
          y = stbrp__skyline_find_min_y(c, node, xpos, width, &waste);
-         if (y + height < c->height) {
+         if (y + height <= c->height) {
             if (y <= best_y) {
                if (y < best_y || waste < best_waste || (waste==best_waste && xpos < best_x)) {
                   best_x = xpos;
@@ -323,7 +325,7 @@ static stbrp__findresult stbrp__skyline_pack_rectangle(stbrp_context *context, i
    return res;
 }
 
-static int rect_height_compare(const void *a, const void *b)
+static int STBRP__CDECL rect_height_compare(const void *a, const void *b)
 {
    const stbrp_rect *p = (const stbrp_rect *) a;
    const stbrp_rect *q = (const stbrp_rect *) b;
@@ -334,18 +336,12 @@ static int rect_height_compare(const void *a, const void *b)
    return (p->w > q->w) ? -1 : (p->w < q->w);
 }
 
-static int rect_original_order(const void *a, const void *b)
+static int STBRP__CDECL rect_original_order(const void *a, const void *b)
 {
    const stbrp_rect *p = (const stbrp_rect *) a;
    const stbrp_rect *q = (const stbrp_rect *) b;
    return (p->was_packed < q->was_packed) ? -1 : (p->was_packed > q->was_packed);
 }
-
-#ifdef STBRP_LARGE_RECTS
-#define STBRP__MAXVAL  0xffffffff
-#else
-#define STBRP__MAXVAL  0xffff
-#endif
 
 STBRP_DEF int stbrp_pack_rects(stbrp_context *context, stbrp_rect *rects, int num_rects)
 {

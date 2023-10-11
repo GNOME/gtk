@@ -1,8 +1,14 @@
-// stb_rect_pack.h - v0.99 - public domain - rectangle packing
+// stb_rect_pack.h - v1.01 - public domain - rectangle packing
 // Sean Barrett 2014
 //
 // Useful for e.g. packing rectangular textures into an atlas.
 // Does not do rotation.
+//
+// Before #including,
+//
+//    #define STB_RECT_PACK_IMPLEMENTATION
+//
+// in the file that you want to have the implementation.
 //
 // Not necessarily the awesomest packing method, but better than
 // the totally naive one in stb_truetype (which is primarily what
@@ -31,9 +37,12 @@
 //
 //  Bugfixes / warning fixes
 //    Jeremy Jaussaud
+//    Fabian Giesen
 //
 // Version history:
 //
+//     1.01  (2021-07-11)  always use large rect mode, expose STBRP__MAXVAL in public section
+//     1.00  (2019-02-25)  avoid small space waste; gracefully fail too-wide rectangles
 //     0.99  (2019-02-07)  warning fixes
 //     0.11  (2017-03-03)  return packing success/fail result
 //     0.10  (2016-10-25)  remove cast-away-const to avoid warnings
@@ -72,11 +81,10 @@ typedef struct stbrp_context stbrp_context;
 typedef struct stbrp_node    stbrp_node;
 typedef struct stbrp_rect    stbrp_rect;
 
-#ifdef STBRP_LARGE_RECTS
 typedef int            stbrp_coord;
-#else
-typedef unsigned short stbrp_coord;
-#endif
+
+#define STBRP__MAXVAL  0x7fffffff
+// Mostly for internal use, but this is the maximum supported coordinate value.
 
 STBRP_DEF int stbrp_pack_rects (stbrp_context *context, stbrp_rect *rects, int num_rects);
 // Assign packed locations to rectangles. The rectangles are of type
