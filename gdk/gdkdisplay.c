@@ -43,6 +43,11 @@
 #ifdef HAVE_EGL
 #include <epoxy/egl.h>
 #endif
+
+#ifdef HAVE_LINUX_DMA_BUF_H
+#include <drm/drm_fourcc.h>
+#endif
+
 #include <math.h>
 #include <stdlib.h>
 
@@ -1858,17 +1863,77 @@ gdk_display_get_egl_display (GdkDisplay *self)
 static void
 init_dmabuf_formats (GdkDisplay *display)
 {
-  GdkDmabufFormat *formats;
-  gsize n_formats;
+  GdkDisplayPrivate *priv = gdk_display_get_instance_private (display);
 
   if (display->dmabuf_formats != NULL)
     return;
 
   gdk_display_prepare_gl (display, NULL);
 
-  formats = gdk_dmabuf_texture_get_supported_formats (&n_formats);
-  display->dmabuf_formats = gdk_dmabuf_formats_new (formats, n_formats);
-  g_free (formats);
+  gdk_gl_context_make_current (priv->gl_context);
+
+#ifdef HAVE_EGL
+  if (priv->egl_display != EGL_NO_DISPLAY &&
+      display->have_egl_dma_buf_import)
+    {
+      int num_formats;
+      int *formats;
+      GArray *array;
+
+      eglQueryDmaBufFormatsEXT (priv->egl_display, 0, NULL, &num_formats);
+      formats = g_new (int, num_formats);
+      eglQueryDmaBufFormatsEXT (priv->egl_display, num_formats, formats, &num_formats);
+
+      array = g_array_new (FALSE, FALSE, sizeof (GdkDmabufFormat));
+
+      for (int i = 0; i < num_formats; i++)
+        {
+          int num_modifiers;
+          uint64_t *modifiers;
+          unsigned int *external_only;
+
+          if (!gdk_dmabuf_texture_may_support ((unsigned int)formats[i]))
+            continue;
+
+          eglQueryDmaBufModifiersEXT (priv->egl_display, formats[i], 0, NULL, NULL, &num_modifiers);
+          modifiers = g_new (uint64_t, num_modifiers);
+          external_only = g_new (unsigned int, num_modifiers);
+          eglQueryDmaBufModifiersEXT (priv->egl_display, formats[i], num_modifiers, modifiers, external_only, &num_modifiers);
+
+          for (int j = 0; j < num_modifiers; j++)
+            {
+              if (1 || !external_only[j])
+                {
+                  GDK_DEBUG (MISC, "supported EGL dmabuf format %c%c%c%c:%#lx %s",
+                             formats[i] & 0xff,
+                             (formats[i] >> 8) & 0xff,
+                             (formats[i] >> 16) & 0xff,
+                             (formats[i] >> 24) & 0xff,
+                             modifiers[j],
+                             external_only[j] ? "EXT" : "");
+                  g_array_append_val (array, ((GdkDmabufFormat){ formats[i], modifiers[j] }));
+                }
+            }
+          g_array_append_val (array, ((GdkDmabufFormat){ formats[i], DRM_FORMAT_MOD_INVALID }));
+
+          g_free (modifiers);
+       }
+
+      g_free (formats);
+
+      display->dmabuf_formats = gdk_dmabuf_formats_new ((GdkDmabufFormat *)array->data, array->len);
+      g_array_free (array, TRUE);
+    }
+  else
+#endif
+    {
+      GdkDmabufFormat *formats;
+      gsize n_formats;
+
+      formats = gdk_dmabuf_texture_get_supported_formats (&n_formats);
+      display->dmabuf_formats = gdk_dmabuf_formats_new (formats, n_formats);
+      g_free (formats);
+    }
 }
 
 /**
