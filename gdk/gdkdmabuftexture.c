@@ -287,6 +287,22 @@ gdk_dmabuf_texture_get_supported_formats (gsize *n_formats)
 #endif
 }
 
+gboolean
+gdk_dmabuf_texture_may_support (guint32 fourcc)
+{
+#ifdef HAVE_LINUX_DMA_BUF_H
+
+  for (gsize i = 0; i < G_N_ELEMENTS (supported_formats); i++)
+    {
+      if (supported_formats[i].fourcc == fourcc)
+        return TRUE;
+    }
+
+#endif
+
+  return FALSE;
+}
+
 static void
 gdk_dmabuf_texture_download (GdkTexture      *texture,
                              GdkMemoryFormat  format,

@@ -26,7 +26,8 @@ int *                   gdk_dmabuf_texture_get_fds      (GdkDmabufTexture *textu
 unsigned int *          gdk_dmabuf_texture_get_offsets  (GdkDmabufTexture *texture);
 unsigned int *          gdk_dmabuf_texture_get_strides  (GdkDmabufTexture *texture);
 
-GdkDmabufFormat *       gdk_dmabuf_texture_get_supported_formats (gsize *n_formats);
+GdkDmabufFormat *       gdk_dmabuf_texture_get_supported_formats (gsize   *n_formats);
+gboolean                gdk_dmabuf_texture_may_support           (guint32  fourcc);
 
 
 G_END_DECLS
