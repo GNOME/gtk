@@ -1769,6 +1769,8 @@ gdk_display_init_egl (GdkDisplay  *self,
     epoxy_has_egl_extension (priv->egl_display, "EGL_KHR_no_config_context");
   self->have_egl_pixel_format_float =
     epoxy_has_egl_extension (priv->egl_display, "EGL_EXT_pixel_format_float");
+  self->have_egl_dma_buf_import =
+    epoxy_has_egl_extension (priv->egl_display, "EGL_EXT_image_dma_buf_import_modifiers");
 
   if (self->have_egl_no_config_context)
     priv->egl_config_high_depth = gdk_display_create_egl_config (self,
