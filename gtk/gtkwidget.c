@@ -6536,7 +6536,7 @@ gtk_widget_update_default_pango_context (GtkWidget *widget)
     return;
 
   if (gtk_widget_update_pango_context (widget, context, _gtk_widget_get_direction (widget)))
-    gtk_widget_queue_draw (widget);
+    gtk_widget_queue_resize (widget);
 }
 
 /**
