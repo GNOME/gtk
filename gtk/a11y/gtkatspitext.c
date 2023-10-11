@@ -1629,6 +1629,10 @@ delete_text_cb (GtkEditable *editable,
     return;
 
   text = gtk_editable_get_chars (editable, start, end);
+
+  if (end < 0)
+    end = g_utf8_strlen(text, -1);
+
   changed->text_changed (changed->data, "delete", start, end - start, text);
   g_free (text);
 }
