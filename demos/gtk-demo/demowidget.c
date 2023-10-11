@@ -34,7 +34,7 @@ transition (GtkWidget     *widget,
 {
   DemoWidget *self = DEMO_WIDGET (widget);
   DemoLayout *demo_layout = DEMO_LAYOUT (gtk_widget_get_layout_manager (widget));
-  gint64 now = g_get_monotonic_time ();
+  gint64 now = gdk_frame_clock_get_frame_time (frame_clock);
 
   gtk_widget_queue_allocate (widget);
 
@@ -66,11 +66,13 @@ clicked (GtkGestureClick *gesture,
          gpointer         data)
 {
   DemoWidget *self = data;
+  GdkFrameClock *frame_clock;
 
   if (self->tick_id != 0)
     return;
 
-  self->start_time = g_get_monotonic_time ();
+  frame_clock = gtk_widget_get_frame_clock (GTK_WIDGET (self));
+  self->start_time = gdk_frame_clock_get_frame_time (frame_clock);
   self->tick_id = gtk_widget_add_tick_callback (GTK_WIDGET (self), transition, NULL, NULL);
 }
 
