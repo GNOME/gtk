@@ -217,6 +217,10 @@ test_type (gconstpointer data)
 	  (strcmp (pspec->name, "default-display") == 0))
 	check = FALSE;
 
+      if (g_type_is_a (type, GDK_TYPE_DISPLAY) &&
+	  (strcmp (pspec->name, "dmabuf-formats") == 0))
+	check = FALSE;
+
       if (g_type_is_a (type, GDK_TYPE_MONITOR) &&
           (strcmp (pspec->name, "geometry") == 0))
         check = FALSE;
