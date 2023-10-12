@@ -43,6 +43,8 @@ void            gsk_gl_compiler_set_preamble               (GskGLCompiler      *
 void            gsk_gl_compiler_set_preamble_from_resource (GskGLCompiler      *self,
                                                             GskGLCompilerKind   kind,
                                                             const char         *resource_path);
+void            gsk_gl_compiler_set_use_preamble           (GskGLCompiler      *self,
+                                                            gboolean            use_preamble);
 void            gsk_gl_compiler_set_source                 (GskGLCompiler      *self,
                                                             GskGLCompilerKind   kind,
                                                             GBytes             *source_bytes);

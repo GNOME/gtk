@@ -20,9 +20,7 @@ gsk_private_gl_shaders = [
   'gl/resources/custom.glsl',
   'gl/resources/filled_border.glsl',
   'gl/resources/mask.glsl',
-  'gl/resources/yuyv.glsl',
-  'gl/resources/nv12.glsl',
-  'gl/resources/yuv420.glsl',
+  'gl/resources/external.glsl',
 ]
 
 gsk_public_sources = files([

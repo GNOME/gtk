@@ -94,15 +94,6 @@ GSK_GL_DEFINE_PROGRAM (unblurred_outset_shadow,
  * to the list of supported formats in gdk/gdkdmabuftexture.c.
  */
 
-GSK_GL_DEFINE_PROGRAM_NO_CLIP (yuyv,
-                               GSK_GL_SHADER_SINGLE (GSK_GL_SHADER_RESOURCE ("yuyv.glsl")),
-                               GSK_GL_ADD_UNIFORM (1, YUYV_SOURCE2, u_source2))
-
-GSK_GL_DEFINE_PROGRAM_NO_CLIP (nv12,
-                               GSK_GL_SHADER_SINGLE (GSK_GL_SHADER_RESOURCE ("nv12.glsl")),
-                               GSK_GL_ADD_UNIFORM (1, NV12_SOURCE2, u_source2))
-
-GSK_GL_DEFINE_PROGRAM_NO_CLIP (yuv420,
-                               GSK_GL_SHADER_SINGLE (GSK_GL_SHADER_RESOURCE ("yuv420.glsl")),
-                               GSK_GL_ADD_UNIFORM (1, YUV420_SOURCE2, u_source2)
-                               GSK_GL_ADD_UNIFORM (2, YUV420_SOURCE3, u_source2))
+GSK_GL_DEFINE_PROGRAM_NO_CLIP (external,
+                               GSK_GL_SHADER_SINGLE (GSK_GL_SHADER_RESOURCE ("external.glsl")),
+                               GSK_GL_ADD_UNIFORM (1, EXTERNAL_SOURCE, u_external_source))

@@ -377,6 +377,7 @@ gsk_gl_driver_load_programs (GskGLDriver  *self,
 #define GSK_GL_ADD_UNIFORM(pos, KEY, name)                                                      \
   gsk_gl_program_add_uniform (program, #name, UNIFORM_##KEY);
 #define GSK_GL_DEFINE_PROGRAM(name, sources, uniforms)                                          \
+  gsk_gl_compiler_set_use_preamble (compiler, TRUE);                                            \
   gsk_gl_compiler_set_source (compiler, GSK_GL_COMPILER_VERTEX, NULL);                          \
   gsk_gl_compiler_set_source (compiler, GSK_GL_COMPILER_FRAGMENT, NULL);                        \
   sources                                                                                       \
@@ -384,6 +385,7 @@ gsk_gl_driver_load_programs (GskGLDriver  *self,
   GSK_GL_COMPILE_PROGRAM(name ## _rect_clip, uniforms, "#define RECT_CLIP 1\n");                \
   GSK_GL_COMPILE_PROGRAM(name, uniforms, "");
 #define GSK_GL_DEFINE_PROGRAM_NO_CLIP(name, sources, uniforms)                                  \
+  gsk_gl_compiler_set_use_preamble (compiler, FALSE);                                           \
   gsk_gl_compiler_set_source (compiler, GSK_GL_COMPILER_VERTEX, NULL);                          \
   gsk_gl_compiler_set_source (compiler, GSK_GL_COMPILER_FRAGMENT, NULL);                        \
   sources                                                                                       \
@@ -719,20 +721,18 @@ gsk_gl_driver_cache_texture (GskGLDriver         *self,
 }
 
 #if defined(HAVE_EGL) && defined(HAVE_LINUX_DMA_BUF_H)
-static int
-import_dmabuf_planes (EGLDisplay    egl_display,
-                      int           width,
-                      int           height,
-                      unsigned int  fourcc,
-                      guint64       modifier,
-                      unsigned int  n_planes,
-                      int          *fds,
-                      unsigned int *strides,
-                      unsigned int *offsets)
+static EGLImage
+egl_create_dmabuf_image (EGLDisplay    display,
+                         int           width,
+                         int           height,
+                         unsigned int  fourcc,
+                         guint64       modifier,
+                         unsigned int  n_planes,
+                         int          *fds,
+                         unsigned int *strides,
+                         unsigned int *offsets)
 {
   EGLint attribs[64];
-  EGLImage image;
-  guint texture_id;
   int i;
 
   g_assert (1 <= n_planes && n_planes <= 4);
@@ -742,6 +742,8 @@ import_dmabuf_planes (EGLDisplay    egl_display,
              fourcc & 0xff, (fourcc >> 8) & 0xff, (fourcc >> 16) & 0xff, (fourcc >> 24) & 0xff, modifier);
 
   i = 0;
+  attribs[i++] = EGL_IMAGE_PRESERVED_KHR;
+  attribs[i++] = EGL_TRUE;
   attribs[i++] = EGL_WIDTH;
   attribs[i++] = width;
   attribs[i++] = EGL_HEIGHT;
@@ -774,11 +776,55 @@ import_dmabuf_planes (EGLDisplay    egl_display,
 
   attribs[i++] = EGL_NONE;
 
-  image = eglCreateImageKHR (egl_display,
-                             EGL_NO_CONTEXT,
-                             EGL_LINUX_DMA_BUF_EXT,
-                             (EGLClientBuffer)NULL,
-                             attribs);
+  return eglCreateImageKHR (display,
+                            EGL_NO_CONTEXT,
+                            EGL_LINUX_DMA_BUF_EXT,
+                            (EGLClientBuffer)NULL,
+                            attribs);
+}
+
+static guint
+egl_import_image (EGLImage image,
+                  int      target)
+{
+  guint texture_id;
+
+  glGenTextures (1, &texture_id);
+  glBindTexture (target, texture_id);
+  g_assert (glGetError() == GL_NO_ERROR);
+  glEGLImageTargetTexture2DOES (target, image);
+  g_assert (glGetError() == GL_NO_ERROR);
+  glTexParameteri (target, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+  g_assert (glGetError() == GL_NO_ERROR);
+  glTexParameteri (target, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+  g_assert (glGetError() == GL_NO_ERROR);
+
+  return texture_id;
+}
+
+static void
+egl_destroy_image (EGLDisplay display,
+                   EGLImage   image)
+{
+  eglDestroyImageKHR (display, image);
+}
+
+static int
+import_dmabuf_planes (EGLDisplay    display,
+                      int           width,
+                      int           height,
+                      unsigned int  fourcc,
+                      guint64       modifier,
+                      unsigned int  n_planes,
+                      int          *fds,
+                      unsigned int *strides,
+                      unsigned int *offsets,
+                      int           target)
+{
+  EGLImage image;
+  int texture_id;
+
+  image = egl_create_dmabuf_image (display, width, height, fourcc, modifier, n_planes,fds, strides, offsets);
 
   if (image == EGL_NO_IMAGE)
     {
@@ -786,13 +832,9 @@ import_dmabuf_planes (EGLDisplay    egl_display,
       return 0;
     }
 
-  glGenTextures (1, &texture_id);
-  glBindTexture (GL_TEXTURE_2D, texture_id);
-  glEGLImageTargetTexture2DOES (GL_TEXTURE_2D, image);
-  glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-  glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+  texture_id = egl_import_image (image, target);
 
-  eglDestroyImageKHR (egl_display, image);
+  egl_destroy_image (display, image);
 
   return texture_id;
 }
@@ -871,49 +913,6 @@ draw_rect (GskGLCommandQueue *command_queue,
   vertices[5] = (GskGLDrawVertex) { .position = { max_x, min_y }, .uv = { max_u, min_v }, .color = { c, c, c, c } };
 }
 
-typedef struct _TextureFormatInfo TextureFormatInfo;
-struct _TextureFormatInfo
-{
-  int n_planes;
-  unsigned int subformats[3];
-  int plane_indices[3];
-  int hsub[3];
-  int vsub[3];
-  int uniforms[3];
-};
-
-static TextureFormatInfo texture_format_info[] = {
-  { .n_planes = 2,
-    .subformats = { DRM_FORMAT_GR88, DRM_FORMAT_ARGB8888 },
-    .plane_indices = { 0, 0 },
-    .hsub = { 1, 2 },
-    .vsub = { 1, 1 },
-    .uniforms = { UNIFORM_SHARED_SOURCE, UNIFORM_YUYV_SOURCE2 },
-  },
-  { .n_planes = 2,
-    .subformats = { DRM_FORMAT_R8, DRM_FORMAT_GR88 },
-    .plane_indices = { 0, 1 },
-    .hsub = { 1, 2 },
-    .vsub = { 1, 2 },
-    .uniforms = { UNIFORM_SHARED_SOURCE, UNIFORM_NV12_SOURCE2 },
-  },
-  { .n_planes = 2,
-    .subformats = { DRM_FORMAT_R16, DRM_FORMAT_GR1616 },
-    .plane_indices = { 0, 1 },
-    .hsub = { 1, 2 },
-    .vsub = { 1, 2 },
-    .uniforms = { UNIFORM_SHARED_SOURCE, UNIFORM_NV12_SOURCE2 },
-  },
-  { .n_planes = 3,
-    .subformats = { DRM_FORMAT_R8, DRM_FORMAT_R8, DRM_FORMAT_R8 },
-    .plane_indices = { 0, 1, 2 },
-    .hsub = { 1, 2, 2 },
-    .vsub = { 1, 2, 2 },
-    .uniforms = { UNIFORM_SHARED_SOURCE, UNIFORM_YUV420_SOURCE2, UNIFORM_YUV420_SOURCE3  },
-  },
-
-};
-
 static unsigned int release_render_target (GskGLDriver       *self,
                                            GskGLRenderTarget *render_target,
                                            gboolean           release_texture,
@@ -927,8 +926,8 @@ gsk_gl_driver_import_dmabuf_texture (GskGLDriver      *self,
   GdkDisplay *display = gdk_gl_context_get_display (context);
   EGLDisplay egl_display;
   int width, height;
+  guint32 fourcc;
   guint64 modifier;
-  TextureFormatInfo *info;
   GskGLProgram *program;
   GskGLRenderTarget *render_target;
   guint prev_fbo;
@@ -950,27 +949,16 @@ gsk_gl_driver_import_dmabuf_texture (GskGLDriver      *self,
 
   width = gdk_texture_get_width (GDK_TEXTURE (texture));
   height = gdk_texture_get_height (GDK_TEXTURE (texture));
+  fourcc = gdk_dmabuf_texture_get_fourcc (texture);
   modifier = gdk_dmabuf_texture_get_modifier (texture);
 
-  if (gdk_dmabuf_texture_get_fourcc (texture) == DRM_FORMAT_YUYV)
+  GSK_DEBUG (OPENGL,
+             "DMA-buf Format %c%c%c%c:%#lx",
+             fourcc & 0xff, (fourcc >> 8) & 0xff, (fourcc >> 16) & 0xff, (fourcc >> 24) & 0xff, modifier);
+
+  if (gdk_gl_context_get_api (context) == GDK_GL_API_GLES)
     {
-      info = &texture_format_info[0];
-      program = self->yuyv;
-    }
-  else if (gdk_dmabuf_texture_get_fourcc (texture) == DRM_FORMAT_NV12)
-    {
-      info = &texture_format_info[1];
-      program = self->nv12;
-    }
-  else if (gdk_dmabuf_texture_get_fourcc (texture) == DRM_FORMAT_P010)
-    {
-      info = &texture_format_info[2];
-      program = self->nv12;
-    }
-  else if (gdk_dmabuf_texture_get_fourcc (texture) == DRM_FORMAT_YUV420)
-    {
-      info = &texture_format_info[3];
-      program = self->yuv420;
+      program = self->external;
     }
   else
     {
@@ -982,7 +970,8 @@ gsk_gl_driver_import_dmabuf_texture (GskGLDriver      *self,
                                    gdk_dmabuf_texture_get_n_planes (texture),
                                    gdk_dmabuf_texture_get_fds (texture),
                                    gdk_dmabuf_texture_get_strides (texture),
-                                   gdk_dmabuf_texture_get_offsets (texture));
+                                   gdk_dmabuf_texture_get_offsets (texture),
+                                   GL_TEXTURE_2D);
     }
 
   gsk_gl_driver_create_render_target (self, width, height, GL_RGBA8, &render_target);
@@ -996,22 +985,22 @@ gsk_gl_driver_import_dmabuf_texture (GskGLDriver      *self,
   set_viewport_for_size (self, program, width, height);
   reset_modelview (self, program);
 
-  for (int i = 0; i < info->n_planes; i++)
+  if (gdk_gl_context_get_api (context) == GDK_GL_API_GLES)
     {
-      int plane = info->plane_indices[i];
       int texture_id = import_dmabuf_planes (egl_display,
-                                             width / info->hsub[i],
-                                             height / info->vsub[i],
-                                             info->subformats[i],
-                                             modifier,
-                                             1,
-                                             gdk_dmabuf_texture_get_fds (texture) + plane,
-                                             gdk_dmabuf_texture_get_strides (texture) + plane,
-                                             gdk_dmabuf_texture_get_offsets (texture) + plane);
+                                             gdk_texture_get_width (GDK_TEXTURE (texture)),
+                                             gdk_texture_get_height (GDK_TEXTURE (texture)),
+                                             gdk_dmabuf_texture_get_fourcc (texture),
+                                             gdk_dmabuf_texture_get_modifier (texture),
+                                             gdk_dmabuf_texture_get_n_planes (texture),
+                                             gdk_dmabuf_texture_get_fds (texture),
+                                             gdk_dmabuf_texture_get_strides (texture),
+                                             gdk_dmabuf_texture_get_offsets (texture),
+                                             GL_TEXTURE_EXTERNAL_OES);
 
       gsk_gl_program_set_uniform_texture (program,
-                                          info->uniforms[i], 0,
-                                          GL_TEXTURE_2D, GL_TEXTURE0 + i, texture_id);
+                                          UNIFORM_EXTERNAL_SOURCE, 0,
+                                          GL_TEXTURE_EXTERNAL_OES, GL_TEXTURE0, texture_id);
 
       gsk_gl_driver_autorelease_texture (self, texture_id);
     }

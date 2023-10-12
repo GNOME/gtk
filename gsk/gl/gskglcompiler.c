@@ -56,6 +56,7 @@ struct _GskGLCompiler
   guint gles : 1;
   guint legacy : 1;
   guint debug_shaders : 1;
+  guint use_preamble : 1;
 };
 
 typedef struct _GskGLProgramAttrib
@@ -108,6 +109,7 @@ gsk_gl_compiler_init (GskGLCompiler *self)
   self->vertex_suffix = g_bytes_ref (empty_bytes);
   self->fragment_source = g_bytes_ref (empty_bytes);
   self->fragment_suffix = g_bytes_ref (empty_bytes);
+  self->use_preamble = 1;
 }
 
 GskGLCompiler *
@@ -422,6 +424,13 @@ gsk_gl_compiler_set_suffix_from_resource (GskGLCompiler     *self,
   g_clear_error (&error);
 }
 
+void
+gsk_gl_compiler_set_use_preamble (GskGLCompiler *self,
+                                  gboolean       use_preamble)
+{
+  self->use_preamble = use_preamble ? 1 : 0;
+}
+
 static void
 prepend_line_numbers (char    *code,
                       GString *s)
@@ -573,28 +582,40 @@ gsk_gl_compiler_compile (GskGLCompiler  *self,
     gl3 = "#define GSK_GL3 1\n";
 
   vertex_id = glCreateShader (GL_VERTEX_SHADER);
-  glShaderSource (vertex_id,
-                  10,
-                  (const char *[]) {
-                    version, debug, legacy, gl3, gles,
-                    clip,
-                    get_shader_string (self->all_preamble),
-                    get_shader_string (self->vertex_preamble),
-                    get_shader_string (self->vertex_source),
-                    get_shader_string (self->vertex_suffix),
-                  },
-                  (int[]) {
-                    strlen (version),
-                    strlen (debug),
-                    strlen (legacy),
-                    strlen (gl3),
-                    strlen (gles),
-                    strlen (clip),
-                    g_bytes_get_size (self->all_preamble),
-                    g_bytes_get_size (self->vertex_preamble),
-                    g_bytes_get_size (self->vertex_source),
-                    g_bytes_get_size (self->vertex_suffix),
-                  });
+  if (self->use_preamble)
+    glShaderSource (vertex_id,
+                    10,
+                    (const char *[]) {
+                      version, debug, legacy, gl3, gles,
+                      clip,
+                      get_shader_string (self->all_preamble),
+                      get_shader_string (self->vertex_preamble),
+                      get_shader_string (self->vertex_source),
+                      get_shader_string (self->vertex_suffix),
+                    },
+                    (int[]) {
+                      strlen (version),
+                      strlen (debug),
+                      strlen (legacy),
+                      strlen (gl3),
+                      strlen (gles),
+                      strlen (clip),
+                      g_bytes_get_size (self->all_preamble),
+                      g_bytes_get_size (self->vertex_preamble),
+                      g_bytes_get_size (self->vertex_source),
+                      g_bytes_get_size (self->vertex_suffix),
+                    });
+  else
+    glShaderSource (vertex_id,
+                    2,
+                    (const char *[]) {
+                      get_shader_string (self->vertex_source),
+                      get_shader_string (self->vertex_suffix),
+                    },
+                    (int[]) {
+                      g_bytes_get_size (self->vertex_source),
+                      g_bytes_get_size (self->vertex_suffix),
+                    });
   glCompileShader (vertex_id);
 
   if (!check_shader_error (vertex_id, error))
@@ -606,28 +627,40 @@ gsk_gl_compiler_compile (GskGLCompiler  *self,
   print_shader_info ("Vertex shader", vertex_id, name);
 
   fragment_id = glCreateShader (GL_FRAGMENT_SHADER);
-  glShaderSource (fragment_id,
-                  10,
-                  (const char *[]) {
-                    version, debug, legacy, gl3, gles,
-                    clip,
-                    get_shader_string (self->all_preamble),
-                    get_shader_string (self->fragment_preamble),
-                    get_shader_string (self->fragment_source),
-                    get_shader_string (self->fragment_suffix),
-                  },
-                  (int[]) {
-                    strlen (version),
-                    strlen (debug),
-                    strlen (legacy),
-                    strlen (gl3),
-                    strlen (gles),
-                    strlen (clip),
-                    g_bytes_get_size (self->all_preamble),
-                    g_bytes_get_size (self->fragment_preamble),
-                    g_bytes_get_size (self->fragment_source),
-                    g_bytes_get_size (self->fragment_suffix),
-                  });
+  if (self->use_preamble)
+    glShaderSource (fragment_id,
+                    10,
+                    (const char *[]) {
+                      version, debug, legacy, gl3, gles,
+                      clip,
+                      get_shader_string (self->all_preamble),
+                      get_shader_string (self->fragment_preamble),
+                      get_shader_string (self->fragment_source),
+                      get_shader_string (self->fragment_suffix),
+                    },
+                    (int[]) {
+                      strlen (version),
+                      strlen (debug),
+                      strlen (legacy),
+                      strlen (gl3),
+                      strlen (gles),
+                      strlen (clip),
+                      g_bytes_get_size (self->all_preamble),
+                      g_bytes_get_size (self->fragment_preamble),
+                      g_bytes_get_size (self->fragment_source),
+                      g_bytes_get_size (self->fragment_suffix),
+                    });
+  else
+    glShaderSource (fragment_id,
+                    2,
+                    (const char *[]) {
+                      get_shader_string (self->fragment_source),
+                      get_shader_string (self->fragment_suffix),
+                    },
+                    (int[]) {
+                      g_bytes_get_size (self->fragment_source),
+                      g_bytes_get_size (self->fragment_suffix),
+                    });
   glCompileShader (fragment_id);
 
   if (!check_shader_error (fragment_id, error))
