@@ -183,6 +183,7 @@ gsk_gl_device_get_for_display (GdkDisplay  *display,
 {
   GskGLDevice *self;
   GdkGLContext *context;
+  GLint max_texture_size;
 
   self = g_object_get_data (G_OBJECT (display), "-gsk-gl-device");
   if (self)
@@ -203,11 +204,10 @@ gsk_gl_device_get_for_display (GdkDisplay  *display,
 
   self = g_object_new (GSK_TYPE_GL_DEVICE, NULL);
 
-  gsk_gpu_device_setup (GSK_GPU_DEVICE (self), display);
-
-  context = gdk_display_get_gl_context (display);
-
   gdk_gl_context_make_current (context);
+
+  glGetIntegerv (GL_MAX_TEXTURE_SIZE, &max_texture_size);
+  gsk_gpu_device_setup (GSK_GPU_DEVICE (self), display, max_texture_size);
 
   self->version_string = gdk_gl_context_get_glsl_version_string (context);
   self->api = gdk_gl_context_get_api (context);

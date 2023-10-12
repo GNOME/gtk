@@ -76,6 +76,7 @@ typedef struct _GskGpuDevicePrivate GskGpuDevicePrivate;
 struct _GskGpuDevicePrivate
 {
   GdkDisplay *display;
+  gsize max_image_size;
 
   GskGpuCacheEntries cache;
   guint cache_gc_source;
@@ -248,11 +249,13 @@ gsk_gpu_device_init (GskGpuDevice *self)
 
 void
 gsk_gpu_device_setup (GskGpuDevice *self,
-                      GdkDisplay   *display)
+                      GdkDisplay   *display,
+                      gsize         max_image_size)
 {
   GskGpuDevicePrivate *priv = gsk_gpu_device_get_instance_private (self);
 
   priv->display = g_object_ref (display);
+  priv->max_image_size = max_image_size;
 }
 
 GdkDisplay *
@@ -261,6 +264,14 @@ gsk_gpu_device_get_display (GskGpuDevice *self)
   GskGpuDevicePrivate *priv = gsk_gpu_device_get_instance_private (self);
 
   return priv->display;
+}
+
+gsize
+gsk_gpu_device_get_max_image_size (GskGpuDevice *self)
+{
+  GskGpuDevicePrivate *priv = gsk_gpu_device_get_instance_private (self);
+
+  return priv->max_image_size;
 }
 
 GskGpuImage *

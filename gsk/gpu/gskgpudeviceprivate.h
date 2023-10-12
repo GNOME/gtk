@@ -40,11 +40,13 @@ struct _GskGpuDeviceClass
 GType                   gsk_gpu_device_get_type                         (void) G_GNUC_CONST;
 
 void                    gsk_gpu_device_setup                            (GskGpuDevice           *self,
-                                                                         GdkDisplay             *display);
+                                                                         GdkDisplay             *display,
+                                                                         gsize                   max_image_size);
 void                    gsk_gpu_device_gc                               (GskGpuDevice           *self,
                                                                          gint64                  timestamp);
 
 GdkDisplay *            gsk_gpu_device_get_display                      (GskGpuDevice           *self);
+gsize                   gsk_gpu_device_get_max_image_size               (GskGpuDevice           *self);
 
 GskGpuImage *           gsk_gpu_device_create_offscreen_image           (GskGpuDevice           *self,
                                                                          GdkMemoryDepth          depth,
