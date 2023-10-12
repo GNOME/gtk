@@ -362,6 +362,7 @@ GskGpuDevice *
 gsk_vulkan_device_get_for_display (GdkDisplay  *display,
                                    GError     **error)
 {
+  VkPhysicalDeviceProperties vk_props;
   GskVulkanDevice *self;
 
   self = g_object_get_data (G_OBJECT (display), "-gsk-vulkan-device");
@@ -373,7 +374,10 @@ gsk_vulkan_device_get_for_display (GdkDisplay  *display,
 
   self = g_object_new (GSK_TYPE_VULKAN_DEVICE, NULL);
 
-  gsk_gpu_device_setup (GSK_GPU_DEVICE (self), display);
+  vkGetPhysicalDeviceProperties (display->vk_physical_device, &vk_props);
+  gsk_gpu_device_setup (GSK_GPU_DEVICE (self),
+                        display,
+                        vk_props.limits.maxImageDimension2D);
   gsk_vulkan_device_setup (self);
 
   g_object_set_data (G_OBJECT (display), "-gsk-vulkan-device", self);
