@@ -715,7 +715,7 @@ emit_text_changed (GtkAtSpiContext *self,
                                  "TextChanged",
                                  g_variant_new ("(siiva{sv})",
                                                 kind, start, end,
-                                                g_variant_new_take_string (g_strndup (text, end)),
+                                                g_variant_new_string (text),
                                                 NULL),
                                  NULL);
 }

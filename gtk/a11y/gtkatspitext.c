@@ -1614,7 +1614,10 @@ insert_text_cb (GtkEditable *editable,
     return;
 
   length = g_utf8_strlen (new_text, new_text_length);
-  changed->text_changed (changed->data, "insert", *position - length, length, new_text);
+
+  char *inserted_text = g_utf8_substring (new_text, 0, length);
+  changed->text_changed (changed->data, "insert", *position - length, length, inserted_text);
+  g_free (inserted_text);
 }
 
 static void
@@ -1711,7 +1714,9 @@ insert_range_cb (GtkTextBuffer *buffer,
   position = gtk_text_iter_get_offset (iter);
   length = g_utf8_strlen (text, len);
 
-  changed->text_changed (changed->data, "insert", position - length, length, text);
+  char *inserted_text = g_utf8_substring (text, 0, length);
+  changed->text_changed (changed->data, "insert", position - length, length, inserted_text);
+  g_free (inserted_text);
 
   update_cursor (buffer, changed);
 }
