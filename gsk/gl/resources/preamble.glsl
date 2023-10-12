@@ -1,3 +1,7 @@
+#ifdef GSK_GLES
+#extension GL_OES_EGL_image_external : require
+#endif
+
 #ifndef GSK_LEGACY
 precision highp float;
 #endif

@@ -719,20 +719,18 @@ gsk_gl_driver_cache_texture (GskGLDriver         *self,
 }
 
 #if defined(HAVE_EGL) && defined(HAVE_LINUX_DMA_BUF_H)
-static int
-import_dmabuf_planes (EGLDisplay    egl_display,
-                      int           width,
-                      int           height,
-                      unsigned int  fourcc,
-                      guint64       modifier,
-                      unsigned int  n_planes,
-                      int          *fds,
-                      unsigned int *strides,
-                      unsigned int *offsets)
+static EGLImage
+egl_create_dmabuf_image (EGLDisplay    display,
+                         int           width,
+                         int           height,
+                         unsigned int  fourcc,
+                         guint64       modifier,
+                         unsigned int  n_planes,
+                         int          *fds,
+                         unsigned int *strides,
+                         unsigned int *offsets)
 {
   EGLint attribs[64];
-  EGLImage image;
-  guint texture_id;
   int i;
 
   g_assert (1 <= n_planes && n_planes <= 4);
@@ -742,6 +740,8 @@ import_dmabuf_planes (EGLDisplay    egl_display,
              fourcc & 0xff, (fourcc >> 8) & 0xff, (fourcc >> 16) & 0xff, (fourcc >> 24) & 0xff, modifier);
 
   i = 0;
+  attribs[i++] = EGL_IMAGE_PRESERVED_KHR;
+  attribs[i++] = EGL_TRUE;
   attribs[i++] = EGL_WIDTH;
   attribs[i++] = width;
   attribs[i++] = EGL_HEIGHT;
@@ -774,11 +774,51 @@ import_dmabuf_planes (EGLDisplay    egl_display,
 
   attribs[i++] = EGL_NONE;
 
-  image = eglCreateImageKHR (egl_display,
-                             EGL_NO_CONTEXT,
-                             EGL_LINUX_DMA_BUF_EXT,
-                             (EGLClientBuffer)NULL,
-                             attribs);
+  return eglCreateImageKHR (display,
+                            EGL_NO_CONTEXT,
+                            EGL_LINUX_DMA_BUF_EXT,
+                            (EGLClientBuffer)NULL,
+                            attribs);
+}
+
+static guint
+egl_import_image (EGLImage image,
+                  int      target)
+{
+  guint texture_id;
+
+  glGenTextures (1, &texture_id);
+  glBindTexture (target, texture_id);
+  glEGLImageTargetTexture2DOES (target, image);
+  glTexParameteri (target, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+  glTexParameteri (target, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+  return texture_id;
+}
+
+static void
+egl_destroy_image (EGLDisplay display,
+                   EGLImage   image)
+{
+  eglDestroyImageKHR (display, image);
+}
+
+static int
+import_dmabuf_planes (EGLDisplay    display,
+                      int           width,
+                      int           height,
+                      unsigned int  fourcc,
+                      guint64       modifier,
+                      unsigned int  n_planes,
+                      int          *fds,
+                      unsigned int *strides,
+                      unsigned int *offsets,
+                      int           target)
+{
+  EGLImage image;
+  int texture_id;
+
+  image = egl_create_dmabuf_image (display, width, height, fourcc, modifier, n_planes,fds, strides, offsets);
 
   if (image == EGL_NO_IMAGE)
     {
@@ -786,13 +826,9 @@ import_dmabuf_planes (EGLDisplay    egl_display,
       return 0;
     }
 
-  glGenTextures (1, &texture_id);
-  glBindTexture (GL_TEXTURE_2D, texture_id);
-  glEGLImageTargetTexture2DOES (GL_TEXTURE_2D, image);
-  glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-  glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+  texture_id = egl_import_image (image, target);
 
-  eglDestroyImageKHR (egl_display, image);
+  egl_destroy_image (display, image);
 
   return texture_id;
 }
@@ -927,8 +963,9 @@ gsk_gl_driver_import_dmabuf_texture (GskGLDriver      *self,
   GdkDisplay *display = gdk_gl_context_get_display (context);
   EGLDisplay egl_display;
   int width, height;
+  guint32 fourcc;
   guint64 modifier;
-  TextureFormatInfo *info;
+  TextureFormatInfo *info = NULL;
   GskGLProgram *program;
   GskGLRenderTarget *render_target;
   guint prev_fbo;
@@ -950,9 +987,18 @@ gsk_gl_driver_import_dmabuf_texture (GskGLDriver      *self,
 
   width = gdk_texture_get_width (GDK_TEXTURE (texture));
   height = gdk_texture_get_height (GDK_TEXTURE (texture));
+  fourcc = gdk_dmabuf_texture_get_fourcc (texture);
   modifier = gdk_dmabuf_texture_get_modifier (texture);
 
-  if (gdk_dmabuf_texture_get_fourcc (texture) == DRM_FORMAT_YUYV)
+  GSK_DEBUG (OPENGL,
+             "DMA-buf Format %c%c%c%c:%#lx",
+             fourcc & 0xff, (fourcc >> 8) & 0xff, (fourcc >> 16) & 0xff, (fourcc >> 24) & 0xff, modifier);
+
+  if (gdk_gl_context_get_api (context) == GDK_GL_API_GLES)
+    {
+      program = self->external;
+    }
+  else if (gdk_dmabuf_texture_get_fourcc (texture) == DRM_FORMAT_YUYV)
     {
       info = &texture_format_info[0];
       program = self->yuyv;
@@ -982,7 +1028,8 @@ gsk_gl_driver_import_dmabuf_texture (GskGLDriver      *self,
                                    gdk_dmabuf_texture_get_n_planes (texture),
                                    gdk_dmabuf_texture_get_fds (texture),
                                    gdk_dmabuf_texture_get_strides (texture),
-                                   gdk_dmabuf_texture_get_offsets (texture));
+                                   gdk_dmabuf_texture_get_offsets (texture),
+                                   GL_TEXTURE_2D);
     }
 
   gsk_gl_driver_create_render_target (self, width, height, GL_RGBA8, &render_target);
@@ -996,24 +1043,47 @@ gsk_gl_driver_import_dmabuf_texture (GskGLDriver      *self,
   set_viewport_for_size (self, program, width, height);
   reset_modelview (self, program);
 
-  for (int i = 0; i < info->n_planes; i++)
+  if (gdk_gl_context_get_api (context) == GDK_GL_API_GLES)
     {
-      int plane = info->plane_indices[i];
       int texture_id = import_dmabuf_planes (egl_display,
-                                             width / info->hsub[i],
-                                             height / info->vsub[i],
-                                             info->subformats[i],
-                                             modifier,
-                                             1,
-                                             gdk_dmabuf_texture_get_fds (texture) + plane,
-                                             gdk_dmabuf_texture_get_strides (texture) + plane,
-                                             gdk_dmabuf_texture_get_offsets (texture) + plane);
+                                             gdk_texture_get_width (GDK_TEXTURE (texture)),
+                                             gdk_texture_get_height (GDK_TEXTURE (texture)),
+                                             gdk_dmabuf_texture_get_fourcc (texture),
+                                             gdk_dmabuf_texture_get_modifier (texture),
+                                             gdk_dmabuf_texture_get_n_planes (texture),
+                                             gdk_dmabuf_texture_get_fds (texture),
+                                             gdk_dmabuf_texture_get_strides (texture),
+                                             gdk_dmabuf_texture_get_offsets (texture),
+                                             GL_TEXTURE_EXTERNAL_OES);
 
       gsk_gl_program_set_uniform_texture (program,
-                                          info->uniforms[i], 0,
-                                          GL_TEXTURE_2D, GL_TEXTURE0 + i, texture_id);
+                                          UNIFORM_EXTERNAL_SOURCE, 0,
+                                          GL_TEXTURE_EXTERNAL_OES, GL_TEXTURE0, texture_id);
 
       gsk_gl_driver_autorelease_texture (self, texture_id);
+    }
+  else
+    {
+      for (int i = 0; i < info->n_planes; i++)
+        {
+          int plane = info->plane_indices[i];
+          int texture_id = import_dmabuf_planes (egl_display,
+                                                 width / info->hsub[i],
+                                                 height / info->vsub[i],
+                                                 info->subformats[i],
+                                                 modifier,
+                                                 1,
+                                                 gdk_dmabuf_texture_get_fds (texture) + plane,
+                                                 gdk_dmabuf_texture_get_strides (texture) + plane,
+                                                 gdk_dmabuf_texture_get_offsets (texture) + plane,
+                                                 GL_TEXTURE_2D);
+
+          gsk_gl_program_set_uniform_texture (program,
+                                              info->uniforms[i], 0,
+                                              GL_TEXTURE_2D, GL_TEXTURE0 + i, texture_id);
+
+          gsk_gl_driver_autorelease_texture (self, texture_id);
+        }
     }
 
   draw_rect (self->command_queue, 0, 0, width, height);
