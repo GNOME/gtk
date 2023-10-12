@@ -579,6 +579,9 @@ gsk_vulkan_image_new (GskVulkanDevice           *device,
       if (vk_format->format != VK_FORMAT_UNDEFINED)
         break;
 
+      if (format == GDK_MEMORY_R8G8B8A8_PREMULTIPLIED)
+        return NULL;
+
       format = gsk_memory_format_get_fallback (format);
     }
 

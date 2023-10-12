@@ -103,6 +103,11 @@ gsk_gl_image_new (GskGLDevice    *device,
 {
   GskGLImage *self;
   GLint swizzle[4];
+  gsize max_size;
+
+  max_size = gsk_gpu_device_get_max_image_size (GSK_GPU_DEVICE (device));
+  if (width > max_size || height > max_size)
+    return NULL;
 
   self = g_object_new (GSK_TYPE_GL_IMAGE, NULL);
 
