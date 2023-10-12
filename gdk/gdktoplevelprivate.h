@@ -73,6 +73,11 @@ guint gdk_toplevel_install_properties (GObjectClass *object_class,
 
 void gdk_toplevel_notify_compute_size (GdkToplevel     *toplevel,
                                        GdkToplevelSize *size);
+void gdk_toplevel_notify_constrain_size (GdkToplevel *toplevel,
+                                         int          width,
+                                         int          height,
+                                         int         *new_width,
+                                         int         *new_height);
 
 void  gdk_toplevel_export_handle        (GdkToplevel          *toplevel,
                                          GCancellable         *cancellable,

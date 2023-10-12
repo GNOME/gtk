@@ -44,6 +44,7 @@ G_DEFINE_INTERFACE (GdkToplevel, gdk_toplevel, GDK_TYPE_SURFACE)
 enum
 {
   COMPUTE_SIZE,
+  CONSTRAIN_SIZE,
 
   N_SIGNALS
 };
@@ -111,6 +112,22 @@ gdk_toplevel_notify_compute_size (GdkToplevel     *toplevel,
 {
   g_signal_emit (toplevel, signals[COMPUTE_SIZE], 0, size);
   gdk_toplevel_size_validate (size);
+}
+
+void
+gdk_toplevel_notify_constrain_size (GdkToplevel *toplevel,
+                                    int          width,
+                                    int          height,
+                                    int         *out_width,
+                                    int         *out_height)
+{
+  *out_width = width;
+  *out_height = height;
+
+  g_signal_emit (toplevel, signals[CONSTRAIN_SIZE], 0, width, height, out_width, out_height);
+
+  g_warn_if_fail (*out_width <= width);
+  g_warn_if_fail (*out_height <= height);
 }
 
 static void
@@ -287,6 +304,37 @@ gdk_toplevel_default_init (GdkToplevelInterface *iface)
                   NULL,
                   G_TYPE_NONE, 1,
                   GDK_TYPE_TOPLEVEL_SIZE | G_SIGNAL_TYPE_STATIC_SCOPE);
+
+  /**
+   * GdkToplevel::constrain-size:
+   * @toplevel: a `GdkToplevel`
+   * @width: the requested width
+   * @height: the requested height
+   * @new_width: (out) (type int): the new constrained width
+   * @new_height: (out) (type int): the new constrained height
+   *
+   * Emitted when a new size has been requested for the surface giving
+   * the consumer a chance to contain the size smaller.
+   *
+   * This signal will normally be emitted when the display server has
+   * requested a new size for the window such as from a drag-resize.
+   *
+   * Both @new_width and @new_height must be less-than-or-equal to
+   * their respective @width and @height. In other words, you may
+   * only shrink the value.
+   */
+  signals[CONSTRAIN_SIZE] =
+    g_signal_new (I_("constrain-size"),
+                  GDK_TYPE_TOPLEVEL,
+                  G_SIGNAL_RUN_LAST,
+                  0,
+                  NULL, NULL,
+                  NULL,
+                  G_TYPE_NONE, 4,
+                  G_TYPE_INT,
+                  G_TYPE_INT,
+                  G_TYPE_POINTER,
+                  G_TYPE_POINTER);
 }
 
 guint

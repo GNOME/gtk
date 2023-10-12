@@ -431,6 +431,8 @@ gdk_wayland_toplevel_compute_size (GdkSurface *surface)
                                       wayland_toplevel->geometry_mask,
                                       width, height,
                                       &width, &height);
+          gdk_toplevel_notify_constrain_size (GDK_TOPLEVEL (wayland_toplevel),
+                                              width, height, &width, &height);
         }
       gdk_wayland_surface_update_size (surface, width, height, &wayland_surface->scale);
 
