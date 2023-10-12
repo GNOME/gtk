@@ -295,18 +295,23 @@ static const GskGpuOpClass GSK_GPU_UPLOAD_TEXTURE_OP_CLASS = {
 };
 
 GskGpuImage *
-gsk_gpu_upload_texture_op (GskGpuFrame *frame,
-                           GdkTexture  *texture)
+gsk_gpu_upload_texture_op_try (GskGpuFrame *frame,
+                               GdkTexture  *texture)
 {
   GskGpuUploadTextureOp *self;
+  GskGpuImage *image;
+
+  image = gsk_gpu_device_create_upload_image (gsk_gpu_frame_get_device (frame),
+                                              gdk_texture_get_format (texture),
+                                              gdk_texture_get_width (texture),
+                                              gdk_texture_get_height (texture));
+  if (image == NULL)
+    return NULL;
 
   self = (GskGpuUploadTextureOp *) gsk_gpu_op_alloc (frame, &GSK_GPU_UPLOAD_TEXTURE_OP_CLASS);
 
   self->texture = g_object_ref (texture);
-  self->image = gsk_gpu_device_create_upload_image (gsk_gpu_frame_get_device (frame),
-                                                    gdk_texture_get_format (texture),
-                                                    gdk_texture_get_width (texture),
-                                                    gdk_texture_get_height (texture));
+  self->image = image;
 
   return self->image;
 }

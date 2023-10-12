@@ -504,6 +504,7 @@ gsk_gpu_get_node_as_image (GskGpuFrame            *frame,
                            GskRenderNode          *node,
                            graphene_rect_t        *out_bounds)
 {
+  graphene_rect_t clipped;
   GskGpuImage *result;
 
   switch ((guint) gsk_render_node_get_node_type (node))
@@ -516,52 +517,52 @@ gsk_gpu_get_node_as_image (GskGpuFrame            *frame,
         result = gsk_gpu_device_lookup_texture_image (device, texture, timestamp);
         if (result == NULL)
           {
-            result = gsk_gpu_upload_texture_op (frame, texture);
-            gsk_gpu_device_cache_texture_image (device, texture, timestamp, result);
+            result = gsk_gpu_upload_texture_op_try (frame, texture);
+            if (result)
+              gsk_gpu_device_cache_texture_image (device, texture, timestamp, result);
           }
 
-        *out_bounds = node->bounds;
-        return result;
+        if (result)
+          {
+            *out_bounds = node->bounds;
+            return result;
+          }
+        break;
       }
 
     case GSK_CAIRO_NODE:
-      {
-        graphene_rect_t clipped;
+      gsk_rect_intersection (clip_bounds, &node->bounds, &clipped);
+      if (gsk_rect_is_empty (&clipped))
+        return NULL;
+      rect_round_to_pixels (&clipped, scale, &clipped);
 
-        graphene_rect_intersection (clip_bounds, &node->bounds, &clipped);
-        if (clipped.size.width == 0 || clipped.size.height == 0)
-          return NULL;
-        rect_round_to_pixels (&clipped, scale, &clipped);
+      result = gsk_gpu_upload_cairo_op (frame,
+                                        node,
+                                        scale,
+                                        &clipped);
 
-        result = gsk_gpu_upload_cairo_op (frame,
-                                          node,
-                                          scale,
-                                          &clipped);
-        g_object_ref (result);
+      g_object_ref (result);
 
-        *out_bounds = clipped;
-        return result;
-      }
+      *out_bounds = clipped;
+      return result;
 
     default:
-      {
-        graphene_rect_t clipped;
+      break;
+    }
 
-        graphene_rect_intersection (clip_bounds, &node->bounds, &clipped);
-        if (clipped.size.width == 0 || clipped.size.height == 0)
-          return NULL;
-        rect_round_to_pixels (&clipped, scale, &clipped);
+  gsk_rect_intersection (clip_bounds, &node->bounds, &clipped);
+  if (gsk_rect_is_empty (&clipped))
+    return NULL;
+  rect_round_to_pixels (&clipped, scale, &clipped);
 
-        GSK_DEBUG (FALLBACK, "Offscreening node '%s'", g_type_name_from_instance ((GTypeInstance *) node));
-        result = gsk_gpu_render_pass_op_offscreen (frame,
-                                                   scale,
-                                                   &clipped,
-                                                   node);
+  GSK_DEBUG (FALLBACK, "Offscreening node '%s'", g_type_name_from_instance ((GTypeInstance *) node));
+  result = gsk_gpu_render_pass_op_offscreen (frame,
+                                             scale,
+                                             &clipped,
+                                             node);
 
-        *out_bounds = clipped;
-        return result;
-      }
-   }
+  *out_bounds = clipped;
+  return result;
 }
 
 static void
@@ -1122,7 +1123,16 @@ gsk_gpu_node_processor_add_texture_node (GskGpuNodeProcessor *self,
   image = gsk_gpu_device_lookup_texture_image (device, texture, timestamp);
   if (image == NULL)
     {
-      image = gsk_gpu_upload_texture_op (self->frame, texture);
+      image = gsk_gpu_upload_texture_op_try (self->frame, texture);
+      if (image == NULL)
+        {
+          GSK_DEBUG (FALLBACK, "Unsupported texture format %u for size %dx%d",
+                     gdk_texture_get_format (texture),
+                     gdk_texture_get_width (texture),
+                     gdk_texture_get_height (texture));
+          gsk_gpu_node_processor_add_fallback_node (self, node);
+          return;
+        }
       gsk_gpu_device_cache_texture_image (device, texture, timestamp, image);
       image = g_object_ref (image);
     }
@@ -1156,7 +1166,9 @@ gsk_gpu_node_processor_create_texture_pattern (GskGpuPatternWriter *self,
   image = gsk_gpu_device_lookup_texture_image (device, texture, timestamp);
   if (image == NULL)
     {
-      image = gsk_gpu_upload_texture_op (self->frame, texture);
+      image = gsk_gpu_upload_texture_op_try (self->frame, texture);
+      if (image == NULL)
+        return FALSE;
       gsk_gpu_device_cache_texture_image (device, texture, timestamp, image);
     }
 

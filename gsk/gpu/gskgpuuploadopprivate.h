@@ -6,7 +6,7 @@
 
 G_BEGIN_DECLS
 
-GskGpuImage *           gsk_gpu_upload_texture_op                       (GskGpuFrame                    *frame,
+GskGpuImage *           gsk_gpu_upload_texture_op_try                   (GskGpuFrame                    *frame,
                                                                          GdkTexture                     *texture);
 
 GskGpuImage *           gsk_gpu_upload_cairo_op                         (GskGpuFrame                    *frame,
