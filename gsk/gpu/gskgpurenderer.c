@@ -15,6 +15,7 @@
 #include "gdk/gdkdrawcontextprivate.h"
 #include "gdk/gdkprofilerprivate.h"
 #include "gdk/gdktextureprivate.h"
+#include "gdk/gdktexturedownloaderprivate.h"
 #include "gdk/gdkdrawcontextprivate.h"
 
 #include <graphene.h>
@@ -183,6 +184,88 @@ gsk_gpu_renderer_unrealize (GskRenderer *renderer)
 }
 
 static GdkTexture *
+gsk_gpu_renderer_fallback_render_texture (GskGpuRenderer        *self,
+                                          GskRenderNode         *root,
+                                          const graphene_rect_t *rounded_viewport)
+{
+  GskGpuRendererPrivate *priv = gsk_gpu_renderer_get_instance_private (self);
+  GskGpuImage *image;
+  gsize width, height, max_size, image_width, image_height;
+  gsize x, y, size, bpp, stride;
+  GdkMemoryFormat format;
+  GdkMemoryDepth depth;
+  GBytes *bytes;
+  guchar *data;
+  GdkTexture *texture;
+  GdkTextureDownloader downloader;
+  GskGpuFrame *frame;
+
+  max_size = gsk_gpu_device_get_max_image_size (priv->device);
+  depth = gsk_render_node_get_preferred_depth (root);
+  do
+    {
+      image = gsk_gpu_device_create_offscreen_image (priv->device,
+                                                     gsk_render_node_get_preferred_depth (root),
+                                                     MIN (max_size, rounded_viewport->size.width),
+                                                     MIN (max_size, rounded_viewport->size.height));
+      max_size /= 2;
+    }
+  while (image == NULL);
+
+  format = gsk_gpu_image_get_format (image);
+  bpp = gdk_memory_format_bytes_per_pixel (format);
+  image_width = gsk_gpu_image_get_width (image);
+  image_height = gsk_gpu_image_get_height (image);
+  width = rounded_viewport->size.width;
+  height = rounded_viewport->size.height;
+  stride = width * bpp;
+  size = stride * height;
+  data = g_malloc_n (stride, height);
+
+  for (y = 0; y < height; y += image_height)
+    {
+      for (x = 0; x < width; x += image_width)
+        {
+          texture = NULL;
+          if (image == NULL)
+            image = gsk_gpu_device_create_offscreen_image (priv->device,
+                                                           depth,
+                                                           MIN (image_width, width - x),
+                                                           MIN (image_height, height - y));
+
+          frame = gsk_gpu_renderer_create_frame (self);
+          gsk_gpu_frame_render (frame,
+                                g_get_monotonic_time(),
+                                image,
+                                NULL,
+                                root,
+                                &GRAPHENE_RECT_INIT (rounded_viewport->origin.x + x,
+                                                     rounded_viewport->origin.y + y,
+                                                     image_width,
+                                                     image_height),
+                                &texture);
+          g_object_unref (frame);
+
+          g_assert (texture);
+          gdk_texture_downloader_init (&downloader, texture);
+          gdk_texture_downloader_set_format (&downloader, format);
+          gdk_texture_downloader_download_into (&downloader,
+                                                data + stride * y + x * bpp,
+                                                stride);
+
+          gdk_texture_downloader_finish (&downloader);
+          g_object_unref (texture);
+          g_clear_object (&image);
+        }
+    }
+
+  bytes = g_bytes_new_take (data, size);
+  texture = gdk_memory_texture_new (width, height, GDK_MEMORY_DEFAULT, bytes, stride);
+  g_bytes_unref (bytes);
+  return texture;
+}
+
+static GdkTexture *
 gsk_gpu_renderer_render_texture (GskRenderer           *renderer,
                                  GskRenderNode         *root,
                                  const graphene_rect_t *viewport)
@@ -196,8 +279,6 @@ gsk_gpu_renderer_render_texture (GskRenderer           *renderer,
 
   gsk_gpu_renderer_make_current (self);
 
-  frame = gsk_gpu_renderer_create_frame (self);
-
   rounded_viewport = GRAPHENE_RECT_INIT (viewport->origin.x,
                                          viewport->origin.y,
                                          ceil (viewport->size.width),
@@ -206,6 +287,10 @@ gsk_gpu_renderer_render_texture (GskRenderer           *renderer,
                                                  gsk_render_node_get_preferred_depth (root),
                                                  rounded_viewport.size.width,
                                                  rounded_viewport.size.height);
+  if (image == NULL)
+    return gsk_gpu_renderer_fallback_render_texture (self, root, &rounded_viewport);
+
+  frame = gsk_gpu_renderer_create_frame (self);
 
   texture = NULL;
   gsk_gpu_frame_render (frame,
