@@ -177,6 +177,7 @@ response_cb (GDBusConnection  *connection,
   self->custom_files = NULL;
   for (i = 0; uris[i]; i++)
     self->custom_files = g_slist_prepend (self->custom_files, g_file_new_for_uri (uris[i]));
+  self->custom_files = g_slist_reverse (self->custom_files);
 
   g_free (uris);
   g_variant_unref (response_data);
