@@ -30,6 +30,7 @@
 #include <gsk/gskglshaderprivate.h>
 #include <gdk/gdktextureprivate.h>
 #include <gdk/gdkmemorytextureprivate.h>
+#include <gdk/gdkdmabuftexture.h>
 #include <gsk/gsktransformprivate.h>
 #include <gsk/gskroundedrectprivate.h>
 #include <gsk/gskrectprivate.h>
@@ -46,6 +47,7 @@
 
 #include "ninesliceprivate.h"
 #include "fp16private.h"
+
 
 #define ORTHO_NEAR_PLANE   -10000
 #define ORTHO_FAR_PLANE     10000
@@ -3630,16 +3632,12 @@ gsk_gl_render_job_upload_texture (GskGLRenderJob       *job,
                                   gboolean              ensure_mipmap,
                                   GskGLRenderOffscreen *offscreen)
 {
-  GdkGLTexture *gl_texture = NULL;
-
-  if (GDK_IS_GL_TEXTURE (texture))
-    gl_texture = GDK_GL_TEXTURE (texture);
-
+  /* Don't put GL or dmabuf textures into icon caches, they are already on the GPU side */
   if (!ensure_mipmap &&
       gsk_gl_texture_library_can_cache ((GskGLTextureLibrary *)job->driver->icons_library,
                                         texture->width,
                                         texture->height) &&
-      !gl_texture)
+      !(GDK_IS_GL_TEXTURE (texture) || GDK_IS_DMABUF_TEXTURE (texture)))
     {
       const GskGLIconData *icon_data;
 
@@ -3653,16 +3651,18 @@ gsk_gl_render_job_upload_texture (GskGLRenderJob       *job,
       /* Only generate a mipmap if it does not make use reupload
        * a GL texture which we could otherwise use directly.
        */
-      if (gl_texture &&
-          gdk_gl_context_is_shared (gdk_gl_texture_get_context (gl_texture), job->command_queue->context))
-        ensure_mipmap = gdk_gl_texture_has_mipmap (gl_texture);
+      if (GDK_IS_GL_TEXTURE (texture) &&
+          gdk_gl_context_is_shared (gdk_gl_texture_get_context (GDK_GL_TEXTURE (texture)),
+                                    job->command_queue->context))
+        ensure_mipmap = gdk_gl_texture_has_mipmap (GDK_GL_TEXTURE (texture));
 
       offscreen->texture_id = gsk_gl_driver_load_texture (job->driver, texture, ensure_mipmap);
       init_full_texture_region (offscreen);
       offscreen->has_mipmap = ensure_mipmap;
 
-      if (gl_texture && offscreen->texture_id == gdk_gl_texture_get_id (gl_texture))
-        offscreen->sync = gdk_gl_texture_get_sync (gl_texture);
+      if (GDK_IS_GL_TEXTURE (texture) &&
+          offscreen->texture_id == gdk_gl_texture_get_id (GDK_GL_TEXTURE (texture)))
+        offscreen->sync = gdk_gl_texture_get_sync (GDK_GL_TEXTURE (texture));
     }
 }
 

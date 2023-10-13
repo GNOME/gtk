@@ -44,6 +44,8 @@
 #include <gdk/gdktextureprivate.h>
 
 #include <gdk/gdkmemoryformatprivate.h>
+#include <gdk/gdkdmabuftextureprivate.h>
+
 
 G_DEFINE_TYPE (GskGLDriver, gsk_gl_driver, G_TYPE_OBJECT)
 
@@ -758,7 +760,14 @@ gsk_gl_driver_load_texture (GskGLDriver *self,
       return t->texture_id;
     }
 
-  if (GDK_IS_GL_TEXTURE (texture))
+  if (GDK_IS_DMABUF_TEXTURE (texture))
+    {
+      texture_id = gdk_gl_context_import_dmabuf (context,
+                                                 gdk_texture_get_width (texture),
+                                                 gdk_texture_get_height (texture),
+                                                 gdk_dmabuf_texture_get_dmabuf (GDK_DMABUF_TEXTURE (texture)));
+    }
+  else if (GDK_IS_GL_TEXTURE (texture))
     {
       GdkGLTexture *gl_texture = (GdkGLTexture *) texture;
       GdkGLContext *texture_context = gdk_gl_texture_get_context (gl_texture);
