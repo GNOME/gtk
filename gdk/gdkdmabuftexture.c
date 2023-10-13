@@ -36,6 +36,8 @@
 #include <epoxy/egl.h>
 #endif
 
+#include <graphene.h>
+
 /**
  * GdkDmabufTexture:
  *
@@ -155,6 +157,9 @@ struct _GdkDrmFormatInfo
   GdkMemoryFormat unpremultiplied_memory_format;
 };
 
+/* These are the dma-buf formats that we can support just with memcpy,
+ * as long as they are combined with DRM_FORMAT_MOD_LINEAR
+ */
 static GdkDrmFormatInfo supported_formats[] = {
   { DRM_FORMAT_ARGB8888, GDK_MEMORY_A8R8G8B8_PREMULTIPLIED, GDK_MEMORY_A8R8G8B8 },
   { DRM_FORMAT_RGBA8888, GDK_MEMORY_R8G8B8A8_PREMULTIPLIED, GDK_MEMORY_R8G8B8A8 },
@@ -176,6 +181,73 @@ get_drm_format_info (guint32 fourcc)
   return NULL;
 }
 
+/* Hack. We don't include gsk/gsk.h here to avoid a build order problem
+ * with the generated header gskenumtypes.h, so we need to hack around
+ * a bit to access the gsk api we need.
+ */
+
+typedef gpointer GskRenderer;
+typedef gpointer GskRenderNode;
+
+extern GskRenderer *   gsk_gl_renderer_new         (void);
+extern gboolean        gsk_renderer_realize        (GskRenderer            *renderer,
+                                                    GdkSurface             *surface,
+                                                    GError                **error);
+extern void            gsk_renderer_unrealize      (GskRenderer            *renderer);
+extern GdkTexture *    gsk_renderer_render_texture (GskRenderer            *renderer,
+                                                    GskRenderNode          *node,
+                                                    const graphene_rect_t  *bounds);
+extern GskRenderNode * gsk_texture_node_new        (GdkTexture             *texture,
+                                                    const graphene_rect_t  *viewport);
+extern void            gsk_render_node_unref       (GskRenderNode          *node);
+
+static void
+do_indirect_download_gsk (GdkDmabufTexture *self,
+                          GdkMemoryFormat  format,
+                          guchar          *data,
+                          gsize            stride)
+{
+  GskRenderer *renderer;
+  int width, height;
+  GskRenderNode *node;
+  GdkTexture *gl_texture;
+  GdkTextureDownloader *downloader;
+  GError *error = NULL;
+
+  GDK_DEBUG (DMABUF, "Using gsk for downloading a dmabuf");
+
+  g_assert (GDK_IS_DISPLAY (self->display));
+  g_assert (GDK_IS_GL_CONTEXT (gdk_display_get_gl_context (self->display)));
+
+  renderer = gsk_gl_renderer_new ();
+  if (!gsk_renderer_realize (renderer, NULL, &error))
+    {
+      g_warning ("Failed to realize GL renderer: %s", error->message);
+      g_error_free (error);
+      g_object_unref (renderer);
+      return;
+    }
+
+  width = gdk_texture_get_width (GDK_TEXTURE (self));
+  height = gdk_texture_get_height (GDK_TEXTURE (self));
+
+  node = gsk_texture_node_new (GDK_TEXTURE (self), &GRAPHENE_RECT_INIT (0, 0, width, height));
+  gl_texture = gsk_renderer_render_texture (renderer, node, &GRAPHENE_RECT_INIT (0, 0, width, height));
+  gsk_render_node_unref (node);
+
+  gsk_renderer_unrealize (renderer);
+  g_object_unref (renderer);
+
+  downloader = gdk_texture_downloader_new (gl_texture);
+
+  gdk_texture_downloader_set_format (downloader, format);
+
+  gdk_texture_downloader_download_into (downloader, data, stride);
+
+  gdk_texture_downloader_free (downloader);
+  g_object_unref (gl_texture);
+}
+
 static void
 do_direct_download (GdkDmabufTexture *self,
                     guchar           *data,
@@ -187,7 +259,7 @@ do_direct_download (GdkDmabufTexture *self,
   guchar *src_data;
   int bpp;
 
-  GDK_DEBUG (DMABUF, "Using mmap() and memcpy() for downloading a dmabuf");
+  GDK_DEBUG (DMABUF, "Using mmap for downloading a dmabuf");
 
   height = gdk_texture_get_height (GDK_TEXTURE (self));
   bpp = gdk_memory_format_bytes_per_pixel (gdk_texture_get_format (GDK_TEXTURE (self)));
@@ -196,7 +268,7 @@ do_direct_download (GdkDmabufTexture *self,
   size = self->strides[0] * height;
 
   if (ioctl (self->fds[0], DMA_BUF_IOCTL_SYNC, &(struct dma_buf_sync) { DMA_BUF_SYNC_START|DMA_BUF_SYNC_READ }) < 0)
-    g_warning ("Failed to sync dma-buf: %s", g_strerror (errno));
+    g_warning ("Failed to sync dmabuf: %s", g_strerror (errno));
 
   src_data = mmap (NULL, size, PROT_READ, MAP_SHARED, self->fds[0], self->offsets[0]);
 
@@ -211,7 +283,76 @@ do_direct_download (GdkDmabufTexture *self,
   munmap (src_data, size);
 
   if (ioctl (self->fds[0], DMA_BUF_IOCTL_SYNC, &(struct dma_buf_sync) { DMA_BUF_SYNC_END|DMA_BUF_SYNC_READ }) < 0)
-    g_warning ("Failed to sync dma-buf: %s", g_strerror (errno));
+    g_warning ("Failed to sync dmabuf: %s", g_strerror (errno));
+}
+
+/* A helper to determine suitable download memory formats for drm formats */
+static GdkMemoryFormat
+compute_memory_format (guint32  fourcc,
+                       gboolean premultiplied)
+{
+  switch (fourcc)
+    {
+    case DRM_FORMAT_ARGB8888:
+    case DRM_FORMAT_ABGR8888:
+    case DRM_FORMAT_XRGB8888_A8:
+    case DRM_FORMAT_XBGR8888_A8:
+      return premultiplied ? GDK_MEMORY_A8R8G8B8_PREMULTIPLIED : GDK_MEMORY_A8R8G8B8;
+
+    case DRM_FORMAT_RGBA8888:
+    case DRM_FORMAT_RGBX8888_A8:
+      return premultiplied ? GDK_MEMORY_R8G8B8A8_PREMULTIPLIED : GDK_MEMORY_R8G8B8A8;
+
+    case DRM_FORMAT_BGRA8888:
+      return premultiplied ? GDK_MEMORY_B8G8R8A8_PREMULTIPLIED : GDK_MEMORY_B8G8R8A8;
+
+    case DRM_FORMAT_RGB888:
+    case DRM_FORMAT_XRGB8888:
+    case DRM_FORMAT_XBGR8888:
+    case DRM_FORMAT_RGBX8888:
+    case DRM_FORMAT_BGRX8888:
+      return GDK_MEMORY_R8G8B8;
+
+    case DRM_FORMAT_BGR888:
+      return GDK_MEMORY_B8G8R8;
+
+    case DRM_FORMAT_XRGB2101010:
+    case DRM_FORMAT_XBGR2101010:
+    case DRM_FORMAT_RGBX1010102:
+    case DRM_FORMAT_BGRX1010102:
+    case DRM_FORMAT_XRGB16161616:
+    case DRM_FORMAT_XBGR16161616:
+      return GDK_MEMORY_R16G16B16;
+
+    case DRM_FORMAT_ARGB2101010:
+    case DRM_FORMAT_ABGR2101010:
+    case DRM_FORMAT_RGBA1010102:
+    case DRM_FORMAT_BGRA1010102:
+    case DRM_FORMAT_ARGB16161616:
+    case DRM_FORMAT_ABGR16161616:
+      return premultiplied ? GDK_MEMORY_R16G16B16A16_PREMULTIPLIED : GDK_MEMORY_R16G16B16A16;
+
+    case DRM_FORMAT_ARGB16161616F:
+    case DRM_FORMAT_ABGR16161616F:
+      return premultiplied ? GDK_MEMORY_R16G16B16A16_FLOAT_PREMULTIPLIED : GDK_MEMORY_R16G16B16A16_FLOAT;
+
+    case DRM_FORMAT_XRGB16161616F:
+    case DRM_FORMAT_XBGR16161616F:
+      return GDK_MEMORY_R16G16B16_FLOAT;
+
+    case DRM_FORMAT_YUYV:
+    case DRM_FORMAT_YVYU:
+    case DRM_FORMAT_UYVY:
+    case DRM_FORMAT_VYUY:
+    case DRM_FORMAT_XYUV8888:
+    case DRM_FORMAT_XVUY8888:
+    case DRM_FORMAT_VUY888:
+      return GDK_MEMORY_R8G8B8;
+
+    /* Add more formats here */
+    default:
+      return premultiplied ? GDK_MEMORY_A8R8G8B8_PREMULTIPLIED : GDK_MEMORY_A8R8G8B8;
+    }
 }
 
 #endif  /* HAVE_LINUX_DMA_BUF_H */
@@ -240,8 +381,13 @@ gdk_dmabuf_texture_download (GdkTexture      *texture,
 #ifdef HAVE_LINUX_DMA_BUF_H
   GdkDmabufTexture *self = GDK_DMABUF_TEXTURE (texture);
   GdkMemoryFormat src_format = gdk_texture_get_format (texture);
+  GdkDrmFormatInfo *info;
 
-  if (format == src_format)
+  info = get_drm_format_info (self->fourcc);
+
+  if (!info || self->n_planes > 1 || self->modifier != DRM_FORMAT_MOD_LINEAR)
+    do_indirect_download_gsk (self, format, data, stride);
+  else if (format == src_format)
     do_direct_download (self, data, stride);
   else
     {
@@ -262,8 +408,23 @@ gdk_dmabuf_texture_download (GdkTexture      *texture,
                           width, height);
 
       g_free (src_data);
-    }
+     }
 #endif  /* HAVE_LINUX_DMA_BUF_H */
+}
+
+static gboolean
+display_supports_format (GdkDisplay *display,
+                         guint32     fourcc,
+                         guint64     modifier)
+{
+  GdkDmabufFormats *formats;
+
+  if (!display)
+    return FALSE;
+
+  formats = gdk_display_get_dmabuf_formats (display);
+
+  return gdk_dmabuf_formats_contains (formats, fourcc, modifier);
 }
 
 GdkTexture *
@@ -281,26 +442,25 @@ gdk_dmabuf_texture_new_from_builder (GdkDmabufTextureBuilder *builder,
   gboolean premultiplied = gdk_dmabuf_texture_builder_get_premultiplied (builder);
   unsigned int n_planes = gdk_dmabuf_texture_builder_get_n_planes (builder);
   GdkDrmFormatInfo *info;
+  gboolean can_download_directly;
+  gboolean can_download_indirectly;
 
   info = get_drm_format_info (fourcc);
 
-  if (!info || modifier != DRM_FORMAT_MOD_LINEAR)
+  can_download_directly = info != NULL && n_planes == 1 && modifier == DRM_FORMAT_MOD_LINEAR;
+  can_download_indirectly = display_supports_format (display, fourcc, modifier);
+
+  if (!can_download_directly && !can_download_indirectly)
     {
       g_set_error (error, GDK_DMABUF_ERROR, GDK_DMABUF_ERROR_UNSUPPORTED_FORMAT,
-                   "Unsupported dmabuf format: %.4s:%#lx",
-                   (char *) &fourcc, modifier);
-      return NULL;
-    }
-  if (n_planes > 1)
-    {
-      g_set_error (error, GDK_DMABUF_ERROR, GDK_DMABUF_ERROR_CREATION_FAILED,
-                   "Cannot create multiplanar textures for dmabuf format: %.4s:%#lx",
-                   (char *) &fourcc, modifier);
+                   "Unsupported dmabuf format: %.4s:%#lx, planes: %u",
+                   (char *) &fourcc, modifier, n_planes);
       return NULL;
     }
 
-  GDK_DEBUG (DMABUF, "Create dmabuf texture (format %.4s:%#lx)",
-             (char *) &fourcc, modifier);
+  GDK_DEBUG (DMABUF,
+             "Create dmabuf texture (format: %.4s:%#lx, planes: %u)",
+             (char *) &fourcc, modifier, n_planes);
 
   self = g_object_new (GDK_TYPE_DMABUF_TEXTURE,
                        "width", gdk_dmabuf_texture_builder_get_width (builder),
@@ -310,8 +470,11 @@ gdk_dmabuf_texture_new_from_builder (GdkDmabufTextureBuilder *builder,
   self->destroy = destroy;
   self->data = data;
 
-  GDK_TEXTURE (self)->format = premultiplied ? info->premultiplied_memory_format
-                                             : info->unpremultiplied_memory_format;
+  if (can_download_directly)
+    GDK_TEXTURE (self)->format = premultiplied ? info->premultiplied_memory_format
+                                               : info->unpremultiplied_memory_format;
+  else
+    GDK_TEXTURE (self)->format = compute_memory_format (fourcc, premultiplied);
 
   g_set_object (&self->display, display);
 
