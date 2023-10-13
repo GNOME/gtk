@@ -44,6 +44,8 @@
 #include <gdk/gdktextureprivate.h>
 
 #include <gdk/gdkmemoryformatprivate.h>
+#include <gdk/gdkdmabuftextureprivate.h>
+
 
 G_DEFINE_TYPE (GskGLDriver, gsk_gl_driver, G_TYPE_OBJECT)
 
@@ -399,7 +401,6 @@ gsk_gl_driver_load_programs (GskGLDriver  *self,
          g_steal_pointer (&program);                                                            \
   } G_STMT_END;
 # include "gskglprograms.defs"
-#undef GSK_GL_DEFINE_PROGRAM_CLIP
 #undef GSK_GL_DEFINE_PROGRAM
 #undef GSK_GL_ADD_UNIFORM
 #undef GSK_GL_SHADER_SINGLE
@@ -759,7 +760,19 @@ gsk_gl_driver_load_texture (GskGLDriver *self,
       return t->texture_id;
     }
 
-  if (GDK_IS_GL_TEXTURE (texture))
+  if (GDK_IS_DMABUF_TEXTURE (texture))
+    {
+      texture_id = gdk_gl_context_import_dmabuf (context,
+                                                 gdk_texture_get_width (texture),
+                                                 gdk_texture_get_height (texture),
+                                                 gdk_dmabuf_texture_get_fourcc (GDK_DMABUF_TEXTURE (texture)),
+                                                 gdk_dmabuf_texture_get_modifier (GDK_DMABUF_TEXTURE (texture)),
+                                                 gdk_dmabuf_texture_get_n_planes (GDK_DMABUF_TEXTURE (texture)),
+                                                 gdk_dmabuf_texture_get_fds (GDK_DMABUF_TEXTURE (texture)),
+                                                 gdk_dmabuf_texture_get_strides (GDK_DMABUF_TEXTURE (texture)),
+                                                 gdk_dmabuf_texture_get_offsets (GDK_DMABUF_TEXTURE (texture)));
+    }
+  else if (GDK_IS_GL_TEXTURE (texture))
     {
       GdkGLTexture *gl_texture = (GdkGLTexture *) texture;
       GdkGLContext *texture_context = gdk_gl_texture_get_context (gl_texture);
@@ -1004,9 +1017,9 @@ gsk_gl_driver_release_render_target (GskGLDriver       *self,
       texture_id = render_target->texture_id;
 
       texture = gsk_gl_texture_new (render_target->texture_id,
-                                     render_target->width,
-                                     render_target->height,
-                                     self->current_frame_id);
+                                    render_target->width,
+                                    render_target->height,
+                                    self->current_frame_id);
       g_hash_table_insert (self->textures,
                            GUINT_TO_POINTER (texture_id),
                            g_steal_pointer (&texture));
