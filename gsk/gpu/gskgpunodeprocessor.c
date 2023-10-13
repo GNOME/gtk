@@ -681,12 +681,18 @@ gsk_gpu_node_processor_add_node_as_pattern (GskGpuNodeProcessor *self,
                                             GskRenderNode       *node)
 {
   GskGpuPatternWriter writer;
+  graphene_rect_t clipped;
  
+  g_assert (self->pending_globals == 0);
+
+  if (!gsk_gpu_node_processor_clip_node_bounds (self, node, &clipped))
+    return;
+
   gsk_gpu_pattern_writer_init (&writer,
                                self->frame,
                                &self->scale,
                                &self->offset,
-                               &node->bounds);
+                               &clipped);
  
   if (!gsk_gpu_node_processor_create_node_pattern (&writer, node))
     {
