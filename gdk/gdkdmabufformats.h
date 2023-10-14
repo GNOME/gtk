@@ -38,7 +38,7 @@ GDK_AVAILABLE_IN_4_14
 void               gdk_dmabuf_formats_unref           (GdkDmabufFormats *formats);
 
 GDK_AVAILABLE_IN_4_14
-gsize              gdk_dmabuf_formats_get_n_formats   (GdkDmabufFormats *formats);
+gsize              gdk_dmabuf_formats_get_n_formats   (GdkDmabufFormats *formats) G_GNUC_PURE;
 
 GDK_AVAILABLE_IN_4_14
 void               gdk_dmabuf_formats_get_format      (GdkDmabufFormats *formats,
@@ -49,6 +49,6 @@ void               gdk_dmabuf_formats_get_format      (GdkDmabufFormats *formats
 GDK_AVAILABLE_IN_4_14
 gboolean           gdk_dmabuf_formats_contains        (GdkDmabufFormats *formats,
                                                        guint32           fourcc,
-                                                       guint64           modifier);
+                                                       guint64           modifier) G_GNUC_PURE;
 
 G_END_DECLS

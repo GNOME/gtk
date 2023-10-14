@@ -215,7 +215,11 @@ gdk_array(splice) (GdkArray *self,
                    gsize      pos,
                    gsize      removed,
                    gboolean   stolen,
+#ifdef GDK_ARRAY_BY_VALUE
+                   const _T_ *additions,
+#else
                    _T_       *additions,
+#endif
                    gsize      added)
 {
   gsize size;

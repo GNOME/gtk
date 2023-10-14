@@ -21,6 +21,7 @@
 
 #include "gdkdmabuftexturebuilder.h"
 
+#include "gdkdebugprivate.h"
 #include "gdkdisplay.h"
 #include "gdkenumtypes.h"
 #include "gdkdmabuftextureprivate.h"
@@ -932,13 +933,16 @@ gdk_dmabuf_texture_builder_set_update_region (GdkDmabufTextureBuilder *self,
  * @destroy: (nullable): destroy function to be called when the texture is
  *   released
  * @data: user data to pass to the destroy function
+ * @error: Return location for an error
  *
  * Builds a new `GdkTexture` with the values set up in the builder.
  *
- * The `destroy` function gets called when the returned texture gets released.
- *
- * Note that it is a programming error to call this function if any mandatory
+ * It is a programming error to call this function if any mandatory
  * property has not been set.
+ *
+ * If the dmabuf is not supported by GTK, %NULL will be returned and @error will be set.
+ *
+ * The `destroy` function gets called when the returned texture gets released.
  *
  * It is possible to call this function multiple times to create multiple textures,
  * possibly with changing properties in between.
@@ -957,11 +961,13 @@ gdk_dmabuf_texture_builder_set_update_region (GdkDmabufTextureBuilder *self,
  */
 GdkTexture *
 gdk_dmabuf_texture_builder_build (GdkDmabufTextureBuilder *self,
-                                  GDestroyNotify       destroy,
-                                  gpointer             data)
+                                  GDestroyNotify           destroy,
+                                  gpointer                 data,
+                                  GError                 **error)
 {
   g_return_val_if_fail (GDK_IS_DMABUF_TEXTURE_BUILDER (self), NULL);
   g_return_val_if_fail (destroy == NULL || data != NULL, NULL);
+  g_return_val_if_fail (error == NULL || *error == NULL, NULL);
   g_return_val_if_fail (self->width > 0, NULL);
   g_return_val_if_fail (self->height > 0, NULL);
   g_return_val_if_fail (self->fourcc != 0, NULL);
@@ -970,7 +976,14 @@ gdk_dmabuf_texture_builder_build (GdkDmabufTextureBuilder *self,
   for (int i = 0; i < self->n_planes; i++)
     g_return_val_if_fail (self->fds[i] != -1 || self->offsets[i] != 0, NULL);
 
-  return gdk_dmabuf_texture_new_from_builder (self, destroy, data);
+  if (GDK_DEBUG_CHECK (DMABUF_DISABLE))
+    {
+      g_set_error_literal (error, GDK_DMABUF_ERROR, GDK_DMABUF_ERROR_NOT_AVAILABLE,
+                           "dmabuf support disabled via GDK_DEBUG environment variable");
+      return NULL;
+    }
+
+  return gdk_dmabuf_texture_new_from_builder (self, destroy, data, error);
 }
 
 int *

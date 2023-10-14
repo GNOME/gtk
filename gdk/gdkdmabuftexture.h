@@ -32,11 +32,16 @@ G_BEGIN_DECLS
 #define GDK_DMABUF_TEXTURE(obj)             (G_TYPE_CHECK_INSTANCE_CAST ((obj), GDK_TYPE_DMABUF_TEXTURE, GdkDmabufTexture))
 #define GDK_IS_DMABUF_TEXTURE(obj)          (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GDK_TYPE_DMABUF_TEXTURE))
 
+#define GDK_DMABUF_ERROR       (gdk_dmabuf_error_quark ())
+
 typedef struct _GdkDmabufTexture            GdkDmabufTexture;
 typedef struct _GdkDmabufTextureClass       GdkDmabufTextureClass;
 
 GDK_AVAILABLE_IN_4_14
 GType                   gdk_dmabuf_texture_get_type                (void) G_GNUC_CONST;
+
+GDK_AVAILABLE_IN_4_14
+GQuark                  gdk_dmabuf_error_quark                     (void) G_GNUC_CONST;
 
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GdkDmabufTexture, g_object_unref)
 

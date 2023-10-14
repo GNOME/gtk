@@ -31,14 +31,15 @@
 #include "gdkclipboardprivate.h"
 #include "gdkdeviceprivate.h"
 #include "gdkdisplaymanagerprivate.h"
+#include "gdkdmabufformatsbuilderprivate.h"
+#include "gdkdmabufformatsprivate.h"
+#include "gdkdmabuftextureprivate.h"
 #include "gdkeventsprivate.h"
 #include "gdkframeclockidleprivate.h"
 #include "gdkglcontextprivate.h"
 #include "gdkmonitorprivate.h"
 #include "gdkrectangle.h"
 #include "gdkvulkancontext.h"
-#include "gdkdmabuftextureprivate.h"
-#include "gdkdmabufformatsprivate.h"
 
 #ifdef HAVE_EGL
 #include <epoxy/egl.h>
@@ -1838,17 +1839,6 @@ gdk_display_get_egl_display (GdkDisplay *self)
 #endif
 }
 
-/**
- * GdkDmabufFormat:
- * @fourcc: the format code
- * @modifiers: the format modifier
- *
- * The `GdkDmabufFormat` struct represents a dma-buf format
- * as defined in the `drm_fourcc.h` header.
- *
- * Since: 4.14
- */
-
 /* To support a drm format, we must be able to import it into GL
  * using the relevant EGL extensions, and download it into a memory
  * texture, possibly doing format conversion with shaders (in GSK).
@@ -1856,17 +1846,21 @@ gdk_display_get_egl_display (GdkDisplay *self)
 static void
 init_dmabuf_formats (GdkDisplay *display)
 {
-  GdkDmabufFormat *formats;
-  gsize n_formats;
+  GdkDmabufFormatsBuilder *builder;
 
   if (display->dmabuf_formats != NULL)
     return;
 
-  gdk_display_prepare_gl (display, NULL);
+  builder = gdk_dmabuf_formats_builder_new ();
 
-  formats = gdk_dmabuf_texture_get_supported_formats (&n_formats);
-  display->dmabuf_formats = gdk_dmabuf_formats_new (formats, n_formats);
-  g_free (formats);
+  if (!GDK_DEBUG_CHECK (DMABUF_DISABLE))
+    {
+      gdk_display_prepare_gl (display, NULL);
+
+      gdk_dmabuf_texture_add_supported_formats (builder);
+    }
+
+  display->dmabuf_formats = gdk_dmabuf_formats_builder_free_to_formats (builder);
 }
 
 /**
