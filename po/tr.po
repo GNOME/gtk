@@ -22,16 +22,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2023-09-19 12:32+0000\n"
-"PO-Revision-Date: 2023-09-19 18:25+0300\n"
-"Last-Translator: Sabri Ünal <libreajans@gmail.com>\n"
+"POT-Creation-Date: 2023-10-13 09:55+0000\n"
+"PO-Revision-Date: 2023-10-14 08:00+0300\n"
+"Last-Translator: Emin Tufan Çetin <etcetin@gmail.com>\n"
 "Language-Team: Türkçe <takim@gnome.org.tr>\n"
 "Language: tr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Poedit 3.2.2\n"
+"X-Generator: Poedit 3.4\n"
 
 #: gdk/broadway/gdkbroadway-server.c:135
 #, c-format
@@ -61,58 +61,58 @@ msgstr "İçerikler “%s” olarak sağlanamıyor"
 msgid "Cannot provide contents as %s"
 msgstr "İçerikler %s olarak sağlanamıyor"
 
-#: gdk/gdkdisplay.c:156 gdk/gdkglcontext.c:442
+#: gdk/gdkdisplay.c:163 gdk/gdkglcontext.c:442
 msgid "The current backend does not support OpenGL"
 msgstr "Şimdiki arka uç OpenGL’i desteklemiyor"
 
-#: gdk/gdkdisplay.c:1244 gdk/gdksurface.c:1252
+#: gdk/gdkdisplay.c:1258 gdk/gdksurface.c:1252
 msgid "Vulkan support disabled via GDK_DEBUG"
 msgstr "Vulkan desteği GDK_DEBUG yoluyla devre dışı bırakılmış"
 
-#: gdk/gdkdisplay.c:1276
+#: gdk/gdkdisplay.c:1290
 msgid "GL support disabled via GDK_DEBUG"
 msgstr "GL desteği, GDK_DEBUG yoluyla devre dışı bırakılmış"
 
-#: gdk/gdkdisplay.c:1574
+#: gdk/gdkdisplay.c:1588
 msgid "No EGL configuration available"
 msgstr "Kullanılabilir EGL yapılandırması yok"
 
-#: gdk/gdkdisplay.c:1582
+#: gdk/gdkdisplay.c:1596
 msgid "Failed to get EGL configurations"
 msgstr "EGL yapılandırmaları alınamadı"
 
-#: gdk/gdkdisplay.c:1612
+#: gdk/gdkdisplay.c:1626
 msgid "No EGL configuration with required features found"
 msgstr "Gerekli özellikleri olan EGL yapılandırması bulunamadı"
 
-#: gdk/gdkdisplay.c:1619
+#: gdk/gdkdisplay.c:1633
 msgid "No perfect EGL configuration found"
 msgstr "Kusursuz EGL yapılandırması bulunamadı"
 
-#: gdk/gdkdisplay.c:1661
+#: gdk/gdkdisplay.c:1675
 #, c-format
 msgid "EGL implementation is missing extension %s"
 msgid_plural "EGL implementation is missing %2$d extensions: %1$s"
 msgstr[0] "EGL uygulamasında %2$d eksik uzantı: %1$s"
 
 # https://twitter.com/mserdark/status/932936929213079559
-#: gdk/gdkdisplay.c:1694
+#: gdk/gdkdisplay.c:1708
 msgid "libEGL not available in this sandbox"
 msgstr "libEGL bu kum havuzunda kullanılamıyor"
 
-#: gdk/gdkdisplay.c:1695
+#: gdk/gdkdisplay.c:1709
 msgid "libEGL not available"
 msgstr "libEGL kullanılamıyor"
 
-#: gdk/gdkdisplay.c:1705
+#: gdk/gdkdisplay.c:1719
 msgid "Failed to create EGL display"
 msgstr "EGL ekranı oluşturulamadı"
 
-#: gdk/gdkdisplay.c:1715
+#: gdk/gdkdisplay.c:1729
 msgid "Could not initialize EGL display"
 msgstr "EGL ekranı ilklendirilemedi"
 
-#: gdk/gdkdisplay.c:1726
+#: gdk/gdkdisplay.c:1740
 #, c-format
 msgid "EGL version %d.%d is too old. GTK requires %d.%d"
 msgstr "EGL sürümü %d.%d çok eski. GTK, %d.%d gerektiriyor"
@@ -147,12 +147,12 @@ msgstr "Uygulama %s APIsini desteklemiyor"
 
 #. translators: This is about OpenGL backend names, like
 #. * "Trying to use X11 GLX, but EGL is already in use"
-#: gdk/gdkglcontext.c:1864
+#: gdk/gdkglcontext.c:1914
 #, c-format
 msgid "Trying to use %s, but %s is already in use"
 msgstr "%s kullanılmaya çalışılıyor ancak şu anda %s kullanılıyor"
 
-#: gdk/gdktexture.c:528
+#: gdk/gdktexture.c:530
 msgid "Unknown image format."
 msgstr "Bilinmeyen resim biçimi."
 
@@ -1719,6 +1719,11 @@ msgctxt "accessibility"
 msgid "toggle button"
 msgstr "aç/kapat düğmesi"
 
+#: gtk/gtkaccessible.c:835
+msgctxt "accessibility"
+msgid "paragraph"
+msgstr "paragraf"
+
 #: gtk/gtkalertdialog.c:668 gtk/print/gtkcustompaperunixdialog.c:322
 #: gtk/gtkmessagedialog.c:166 gtk/ui/gtkassistant.ui:40
 msgid "_Close"
@@ -2204,11 +2209,11 @@ msgstr "Bu adda dosya zaten var"
 #: gtk/gtkmessagedialog.c:179 gtk/gtkmountoperation.c:608
 #: gtk/print/gtkpagesetupunixdialog.c:282 gtk/print/gtkprintbackend.c:638
 #: gtk/print/gtkprintunixdialog.c:682 gtk/print/gtkprintunixdialog.c:839
-#: gtk/gtkwindow.c:6242 gtk/ui/gtkappchooserdialog.ui:48
+#: gtk/gtkwindow.c:6243 gtk/ui/gtkappchooserdialog.ui:48
 #: gtk/ui/gtkassistant.ui:52 gtk/ui/gtkcolorchooserdialog.ui:36
 #: gtk/ui/gtkfontchooserdialog.ui:27
 msgid "_Cancel"
-msgstr "_İptal Et"
+msgstr "İ_ptal"
 
 #: gtk/gtkfilechoosernative.c:521 gtk/gtkfilechoosernative.c:594
 #: gtk/gtkfiledialog.c:815 gtk/gtkplacessidebar.c:3149
@@ -2728,7 +2733,7 @@ msgid "Play"
 msgstr "Oynat"
 
 #: gtk/gtkmessagedialog.c:162 gtk/gtkmessagedialog.c:180
-#: gtk/print/gtkprintbackend.c:639 gtk/gtkwindow.c:6243
+#: gtk/print/gtkprintbackend.c:639 gtk/gtkwindow.c:6244
 msgid "_OK"
 msgstr "_Tamam"
 
@@ -3144,7 +3149,7 @@ msgstr "Ba_ğlan"
 #. if it wasn't cancelled show a dialog
 #: gtk/gtkplacesview.c:1353
 msgid "Unable to unmount volume"
-msgstr "Birim ayrılamıyor"
+msgstr "Birim ayrılamadı"
 
 #. Allow to cancel the operation
 #: gtk/gtkplacesview.c:1445
@@ -3200,7 +3205,7 @@ msgstr "_Bağlan"
 
 #: gtk/gtkplacesview.c:1894
 msgid "Unable to get remote server location"
-msgstr "Uzak sunucu konumu alınamıyor"
+msgstr "Uzak sunucu konumu alınamadı"
 
 #: gtk/gtkplacesview.c:2038 gtk/gtkplacesview.c:2047
 msgid "Networks"
@@ -3326,8 +3331,8 @@ msgstr "En olası nedeni geçici dosyanın oluşturulamamasıdır."
 
 #. window
 #: gtk/print/gtkprintoperation-portal.c:264
-#: gtk/print/gtkprintoperation-portal.c:584
-#: gtk/print/gtkprintoperation-portal.c:653 gtk/print/gtkprintunixdialog.c:3008
+#: gtk/print/gtkprintoperation-portal.c:594
+#: gtk/print/gtkprintoperation-portal.c:663 gtk/print/gtkprintunixdialog.c:3008
 msgid "Print"
 msgstr "Yazdır"
 
@@ -3602,12 +3607,12 @@ msgstr "_Geri Al"
 msgid "_Redo"
 msgstr "_Yinele"
 
-#: gtk/gtkwindow.c:6231
+#: gtk/gtkwindow.c:6232
 #, c-format
 msgid "Do you want to use GTK Inspector?"
 msgstr "GTK Denetleyicisi kullanmak istiyor musunuz?"
 
-#: gtk/gtkwindow.c:6233
+#: gtk/gtkwindow.c:6234
 #, c-format
 msgid ""
 "GTK Inspector is an interactive debugger that lets you explore and modify "
@@ -3618,7 +3623,7 @@ msgstr ""
 "izin veren etkileşimli hata ayıklayıcıdır. Bunun kullanılması uygulamanın "
 "kesilmesine ya da çökmesine neden olabilir."
 
-#: gtk/gtkwindow.c:6238
+#: gtk/gtkwindow.c:6239
 msgid "Don’t show this message again"
 msgstr "Bu iletiyi yeniden gösterme"
 
@@ -7533,7 +7538,6 @@ msgstr "%d kübik"
 
 #: tools/gtk-path-tool-info.c:159
 #, c-format
-#| msgid "%d cubics"
 msgid "%d conics"
 msgstr "%d konik"
 
@@ -7843,7 +7847,6 @@ msgstr "%s. satırda hata: %s\n"
 
 #: tools/gtk-rendernode-tool-utils.c:69
 #, c-format
-#| msgid "Failed to open file %s : %s\n"
 msgid "Failed to load node file: %s\n"
 msgstr "Düğüm dosyası yüklenemedi: %s\n"
 
