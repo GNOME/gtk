@@ -21,6 +21,7 @@
 
 #include "gdkdmabuftexturebuilder.h"
 
+#include "gdkdebugprivate.h"
 #include "gdkdisplay.h"
 #include "gdkenumtypes.h"
 #include "gdkdmabuftextureprivate.h"
@@ -974,6 +975,13 @@ gdk_dmabuf_texture_builder_build (GdkDmabufTextureBuilder *self,
 
   for (int i = 0; i < self->n_planes; i++)
     g_return_val_if_fail (self->fds[i] != -1 || self->offsets[i] != 0, NULL);
+
+  if (GDK_DEBUG_CHECK (DMABUF_DISABLE))
+    {
+      g_set_error_literal (error, GDK_DMABUF_ERROR, GDK_DMABUF_ERROR_NOT_AVAILABLE,
+                           "dmabuf support disabled via GDK_DEBUG environment variable");
+      return NULL;
+    }
 
   return gdk_dmabuf_texture_new_from_builder (self, destroy, data, error);
 }

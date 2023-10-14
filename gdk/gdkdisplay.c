@@ -1851,11 +1851,14 @@ init_dmabuf_formats (GdkDisplay *display)
   if (display->dmabuf_formats != NULL)
     return;
 
-  gdk_display_prepare_gl (display, NULL);
-
   builder = gdk_dmabuf_formats_builder_new ();
 
-  gdk_dmabuf_texture_add_supported_formats (builder);
+  if (!GDK_DEBUG_CHECK (DMABUF_DISABLE))
+    {
+      gdk_display_prepare_gl (display, NULL);
+
+      gdk_dmabuf_texture_add_supported_formats (builder);
+    }
 
   display->dmabuf_formats = gdk_dmabuf_formats_builder_free_to_formats (builder);
 }
