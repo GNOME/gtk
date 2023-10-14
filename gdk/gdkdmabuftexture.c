@@ -72,6 +72,8 @@ struct _GdkDmabufTextureClass
   GdkTextureClass parent_class;
 };
 
+G_DEFINE_QUARK (gdk-dmabuf-error-quark, gdk_dmabuf_error)
+
 G_DEFINE_TYPE (GdkDmabufTexture, gdk_dmabuf_texture, GDK_TYPE_TEXTURE)
 
 static void
@@ -267,7 +269,8 @@ gdk_dmabuf_texture_download (GdkTexture      *texture,
 GdkTexture *
 gdk_dmabuf_texture_new_from_builder (GdkDmabufTextureBuilder *builder,
                                      GDestroyNotify           destroy,
-                                     gpointer                 data)
+                                     gpointer                 data,
+                                     GError                 **error)
 {
 #ifdef HAVE_LINUX_DMA_BUF_H
   GdkDmabufTexture *self;
@@ -281,10 +284,18 @@ gdk_dmabuf_texture_new_from_builder (GdkDmabufTextureBuilder *builder,
 
   info = get_drm_format_info (fourcc);
 
-  if (!info || modifier != DRM_FORMAT_MOD_LINEAR || n_planes > 1)
+  if (!info || modifier != DRM_FORMAT_MOD_LINEAR)
     {
-      g_warning ("Unsupported dmabuf format %c%c%c%c:%#lx",
-                 fourcc & 0xff, (fourcc >> 8) & 0xff, (fourcc >> 16) & 0xff, (fourcc >> 24) & 0xff, modifier);
+      g_set_error (error, GDK_DMABUF_ERROR, GDK_DMABUF_ERROR_UNSUPPORTED_FORMAT,
+                   "Unsupported dmabuf format %c%c%c%c:%#lx",
+                   fourcc & 0xff, (fourcc >> 8) & 0xff, (fourcc >> 16) & 0xff, (fourcc >> 24) & 0xff, modifier);
+      return NULL;
+    }
+  if (n_planes > 1)
+    {
+      g_set_error (error, GDK_DMABUF_ERROR, GDK_DMABUF_ERROR_CREATION_FAILED,
+                   "Cannot create multiplanar textures for dmabuf format %c%c%c%c:%#lx",
+                   fourcc & 0xff, (fourcc >> 8) & 0xff, (fourcc >> 16) & 0xff, (fourcc >> 24) & 0xff, modifier);
       return NULL;
     }
 
@@ -331,6 +342,8 @@ gdk_dmabuf_texture_new_from_builder (GdkDmabufTextureBuilder *builder,
   return GDK_TEXTURE (self);
 
 #else /* !HAVE_LINUX_DMA_BUF_H */
+  g_set_error_literal (error, GDK_DMABUF_ERROR, GDK_DMABUF_ERROR_NOT_AVAILABLE,
+                       "dmabuf support disabled at compile-time.");
   return NULL;
 #endif
 }

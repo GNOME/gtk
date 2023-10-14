@@ -115,7 +115,8 @@ void                     gdk_dmabuf_texture_builder_set_update_region (GdkDmabuf
 GDK_AVAILABLE_IN_4_14
 GdkTexture *             gdk_dmabuf_texture_builder_build            (GdkDmabufTextureBuilder    *self,
                                                                       GDestroyNotify              destroy,
-                                                                      gpointer                    data);
+                                                                      gpointer                    data,
+                                                                      GError                    **error);
 
 G_END_DECLS
 

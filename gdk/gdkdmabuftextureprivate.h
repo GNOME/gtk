@@ -18,7 +18,8 @@ unsigned int *          gdk_dmabuf_texture_builder_get_strides  (GdkDmabufTextur
 
 GdkTexture *            gdk_dmabuf_texture_new_from_builder (GdkDmabufTextureBuilder *builder,
                                                              GDestroyNotify           destroy,
-                                                             gpointer                 data);
+                                                             gpointer                 data,
+                                                             GError                 **error);
 
 guint32                 gdk_dmabuf_texture_get_fourcc   (GdkDmabufTexture *texture);
 guint64                 gdk_dmabuf_texture_get_modifier (GdkDmabufTexture *texture);

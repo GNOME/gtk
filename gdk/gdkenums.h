@@ -143,6 +143,22 @@ typedef enum
 
 
 /**
+ * GdkDmabufError:
+ * @GDK_DMABUF_ERROR_NOT_AVAILABLE: Dmabuf support is not available, because the OS
+ *   is not Linux, or it was explicitly disabled at compile- or runtime
+ * @GDK_DMABUF_ERROR_UNSUPPORTED_FORMAT: The requested format is not supported
+ * @GDK_DMABUF_ERROR_CREATION_FAILED: GTK failed to create the resource for other
+ *   reasons
+ *
+ * Error enumeration for `GdkDmabufTexture`.
+ */
+typedef enum {
+  GDK_DMABUF_ERROR_NOT_AVAILABLE,
+  GDK_DMABUF_ERROR_UNSUPPORTED_FORMAT,
+  GDK_DMABUF_ERROR_CREATION_FAILED,
+} GdkDmabufError;
+
+/**
  * GdkGLError:
  * @GDK_GL_ERROR_NOT_AVAILABLE: OpenGL support is not available
  * @GDK_GL_ERROR_UNSUPPORTED_FORMAT: The requested visual format is not supported
