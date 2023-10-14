@@ -207,3 +207,9 @@ gdk_dmabuf_formats_new (GdkDmabufFormat *formats,
 
   return self;
 }
+
+const GdkDmabufFormat *
+gdk_dmabuf_formats_peek_formats (GdkDmabufFormats *self)
+{
+  return self->formats;
+}
