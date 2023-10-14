@@ -1839,17 +1839,6 @@ gdk_display_get_egl_display (GdkDisplay *self)
 #endif
 }
 
-/**
- * GdkDmabufFormat:
- * @fourcc: the format code
- * @modifiers: the format modifier
- *
- * The `GdkDmabufFormat` struct represents a dma-buf format
- * as defined in the `drm_fourcc.h` header.
- *
- * Since: 4.14
- */
-
 /* To support a drm format, we must be able to import it into GL
  * using the relevant EGL extensions, and download it into a memory
  * texture, possibly doing format conversion with shaders (in GSK).
