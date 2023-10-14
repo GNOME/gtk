@@ -22,8 +22,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2023-09-20 20:34+0000\n"
-"PO-Revision-Date: 2023-08-26 09:52+0300\n"
+"POT-Creation-Date: 2023-10-03 06:56+0000\n"
+"PO-Revision-Date: 2023-10-13 16:16+0300\n"
 "Last-Translator: Sabri Ünal <libreajans@gmail.com>\n"
 "Language-Team: Türkçe <gnome-turk@gnome.org>\n"
 "Language: tr\n"
@@ -31,7 +31,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Poedit 3.2.2\n"
+"X-Generator: Poedit 3.4\n"
 
 #: gdk/broadway/gdkbroadway-server.c:135
 #, c-format
@@ -152,7 +152,7 @@ msgstr "Uygulama %s APIsini desteklemiyor"
 msgid "Trying to use %s, but %s is already in use"
 msgstr "%s kullanılmaya çalışılıyor ancak şu anda %s kullanılıyor"
 
-#: gdk/gdktexture.c:528
+#: gdk/gdktexture.c:530
 msgid "Unknown image format."
 msgstr "Bilinmeyen resim biçimi."
 
@@ -2208,7 +2208,7 @@ msgstr "Bu adda dosya zaten var"
 #: gtk/ui/gtkassistant.ui:52 gtk/ui/gtkcolorchooserdialog.ui:36
 #: gtk/ui/gtkfontchooserdialog.ui:27
 msgid "_Cancel"
-msgstr "_İptal Et"
+msgstr "İ_ptal"
 
 #: gtk/gtkfilechoosernative.c:521 gtk/gtkfilechoosernative.c:594
 #: gtk/gtkfiledialog.c:815 gtk/gtkplacessidebar.c:3149
@@ -3144,7 +3144,7 @@ msgstr "Ba_ğlan"
 #. if it wasn't cancelled show a dialog
 #: gtk/gtkplacesview.c:1353
 msgid "Unable to unmount volume"
-msgstr "Birim ayrılamıyor"
+msgstr "Birim ayrılamadı"
 
 #. Allow to cancel the operation
 #: gtk/gtkplacesview.c:1445
@@ -3200,7 +3200,7 @@ msgstr "_Bağlan"
 
 #: gtk/gtkplacesview.c:1894
 msgid "Unable to get remote server location"
-msgstr "Uzak sunucu konumu alınamıyor"
+msgstr "Uzak sunucu konumu alınamadı"
 
 #: gtk/gtkplacesview.c:2038 gtk/gtkplacesview.c:2047
 msgid "Networks"
@@ -3326,8 +3326,8 @@ msgstr "En olası nedeni geçici dosyanın oluşturulamamasıdır."
 
 #. window
 #: gtk/print/gtkprintoperation-portal.c:264
-#: gtk/print/gtkprintoperation-portal.c:584
-#: gtk/print/gtkprintoperation-portal.c:653 gtk/print/gtkprintunixdialog.c:3008
+#: gtk/print/gtkprintoperation-portal.c:594
+#: gtk/print/gtkprintoperation-portal.c:663 gtk/print/gtkprintunixdialog.c:3008
 msgid "Print"
 msgstr "Yazdır"
 
