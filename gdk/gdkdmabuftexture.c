@@ -21,6 +21,7 @@
 #include "gdkdmabuftextureprivate.h"
 
 #include "gdkdisplayprivate.h"
+#include "gdkdmabufformatsbuilderprivate.h"
 #include "gdkmemoryformatprivate.h"
 #include "gdkmemorytextureprivate.h"
 #include <gdk/gdkglcontext.h>
@@ -213,29 +214,18 @@ do_direct_download (GdkDmabufTexture *self,
 
 #endif  /* HAVE_LINUX_DMA_BUF_H */
 
-GdkDmabufFormat *
-gdk_dmabuf_texture_get_supported_formats (gsize *n_formats)
+void
+gdk_dmabuf_texture_add_supported_formats (GdkDmabufFormatsBuilder *builder)
 {
 #ifdef HAVE_LINUX_DMA_BUF_H
+  gsize i;
 
-  GdkDmabufFormat *formats;
-
-  *n_formats = G_N_ELEMENTS (supported_formats);
-  formats = g_new (GdkDmabufFormat, sizeof (GdkDmabufFormat) * *n_formats);
-
-  for (gsize i = 0; i < *n_formats; i++)
+  for (i = 0; i < G_N_ELEMENTS (supported_formats); i++)
     {
-      formats[i].fourcc = supported_formats[i].fourcc;
-      formats[i].modifier = DRM_FORMAT_MOD_LINEAR;
+      gdk_dmabuf_formats_builder_add_format (builder,
+                                             supported_formats[i].fourcc,
+                                             DRM_FORMAT_MOD_LINEAR);
     }
-
-  return formats;
-
-#else
-
-  *n_formats = 0;
-  return NULL;
-
 #endif
 }
 

@@ -3,6 +3,7 @@
 #include "gdkdmabuftexture.h"
 
 #include "gdkdmabuftexturebuilder.h"
+#include "gdkdmabufformatsbuilderprivate.h"
 #include "gdkdmabufformatsprivate.h"
 #include "gdktextureprivate.h"
 #include "gdkdisplay.h"
@@ -26,7 +27,7 @@ int *                   gdk_dmabuf_texture_get_fds      (GdkDmabufTexture *textu
 unsigned int *          gdk_dmabuf_texture_get_offsets  (GdkDmabufTexture *texture);
 unsigned int *          gdk_dmabuf_texture_get_strides  (GdkDmabufTexture *texture);
 
-GdkDmabufFormat *       gdk_dmabuf_texture_get_supported_formats (gsize *n_formats);
+void                    gdk_dmabuf_texture_add_supported_formats (GdkDmabufFormatsBuilder *builder);
 
 
 G_END_DECLS

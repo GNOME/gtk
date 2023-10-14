@@ -31,14 +31,15 @@
 #include "gdkclipboardprivate.h"
 #include "gdkdeviceprivate.h"
 #include "gdkdisplaymanagerprivate.h"
+#include "gdkdmabufformatsbuilderprivate.h"
+#include "gdkdmabufformatsprivate.h"
+#include "gdkdmabuftextureprivate.h"
 #include "gdkeventsprivate.h"
 #include "gdkframeclockidleprivate.h"
 #include "gdkglcontextprivate.h"
 #include "gdkmonitorprivate.h"
 #include "gdkrectangle.h"
 #include "gdkvulkancontext.h"
-#include "gdkdmabuftextureprivate.h"
-#include "gdkdmabufformatsprivate.h"
 
 #ifdef HAVE_EGL
 #include <epoxy/egl.h>
@@ -1856,17 +1857,18 @@ gdk_display_get_egl_display (GdkDisplay *self)
 static void
 init_dmabuf_formats (GdkDisplay *display)
 {
-  GdkDmabufFormat *formats;
-  gsize n_formats;
+  GdkDmabufFormatsBuilder *builder;
 
   if (display->dmabuf_formats != NULL)
     return;
 
   gdk_display_prepare_gl (display, NULL);
 
-  formats = gdk_dmabuf_texture_get_supported_formats (&n_formats);
-  display->dmabuf_formats = gdk_dmabuf_formats_new (formats, n_formats);
-  g_free (formats);
+  builder = gdk_dmabuf_formats_builder_new ();
+
+  gdk_dmabuf_texture_add_supported_formats (builder);
+
+  display->dmabuf_formats = gdk_dmabuf_formats_builder_free_to_formats (builder);
 }
 
 /**
