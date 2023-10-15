@@ -386,8 +386,7 @@ gdk_dmabuf_texture_new_from_builder (GdkDmabufTextureBuilder *builder,
 
   info = get_drm_format_info (fourcc);
 
-  if (!info ||
-      ((info->requires_gl || n_planes > 1 || modifier != DRM_FORMAT_MOD_LINEAR) && !display_supports_format (display, fourcc, modifier)))
+  if ((!info || info->requires_gl || n_planes > 1 || modifier != DRM_FORMAT_MOD_LINEAR) && !display_supports_format (display, fourcc, modifier))
     {
       g_warning ("Unsupported dmabuf format %c%c%c%c:%#lx",
                  fourcc & 0xff, (fourcc >> 8) & 0xff, (fourcc >> 16) & 0xff, (fourcc >> 24) & 0xff, modifier);
@@ -405,8 +404,11 @@ gdk_dmabuf_texture_new_from_builder (GdkDmabufTextureBuilder *builder,
   self->destroy = destroy;
   self->data = data;
 
-  GDK_TEXTURE (self)->format = premultiplied ? info->premultiplied_memory_format
-                                             : info->unpremultiplied_memory_format;
+  if (info)
+    GDK_TEXTURE (self)->format = premultiplied ? info->premultiplied_memory_format
+                                               : info->unpremultiplied_memory_format;
+  else
+    GDK_TEXTURE (self)->format = premultiplied ? GDK_MEMORY_A8R8G8B8_PREMULTIPLIED : GDK_MEMORY_A8R8G8B8;
 
   g_set_object (&self->display, display);
 
