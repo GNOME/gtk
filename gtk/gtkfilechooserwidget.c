@@ -4772,7 +4772,7 @@ gtk_file_chooser_widget_add_filter (GtkFileChooser *chooser,
       return;
     }
 
-  g_object_ref_sink (filter);
+  g_object_ref (filter);
 
   g_list_store_append (impl->filters, filter);
   g_object_unref (filter);
@@ -6000,7 +6000,7 @@ set_current_filter (GtkFileChooserWidget *impl,
         g_object_unref (impl->current_filter);
       impl->current_filter = filter;
       if (impl->current_filter)
-        g_object_ref_sink (impl->current_filter);
+        g_object_ref (impl->current_filter);
 
       gtk_drop_down_set_selected (GTK_DROP_DOWN (impl->filter_combo), filter_index);
 
