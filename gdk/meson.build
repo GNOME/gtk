@@ -17,6 +17,7 @@ gdk_public_sources = files([
   'gdkdevicetool.c',
   'gdkdisplay.c',
   'gdkdisplaymanager.c',
+  'gdkdmabuf.c',
   'gdkdmabufformats.c',
   'gdkdmabufformatsbuilder.c',
   'gdkdmabuftexture.c',
