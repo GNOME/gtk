@@ -170,14 +170,20 @@ This variable can be set to a list of debug options, which cause GDK to
 print out different types of debugging information. Some of these options
 are only available when GTK has been configured with `-Ddebug=true`.
 
-`cursor`
-: Information about cursor objects (only win32)
+`misc`
+: Miscellaneous information
+
+`events`
+: Information about events
+
+`dnd`
+: Information about drag-and-drop
+
+`input`
+: Information about input (mostly Windows)
 
 `eventloop`
 : Information about event loop operation (mostly macOS)
-
-`misc`
-: Miscellaneous information
 
 `frames`
 : Information about the frame clock
@@ -185,20 +191,20 @@ are only available when GTK has been configured with `-Ddebug=true`.
 `settings`
 : Information about xsettings
 
+`opengl`
+: Information about OpenGL
+
+`vulkan`
+: Information about Vulkan
+
 `selection`
 : Information about selections
 
 `clipboard`
 : Information about clipboards
 
-`dnd`
-: Information about drag-and-drop
-
-`opengl`
-: Information about OpenGL
-
-`vulkan`
-: Information about Vulkan
+`dmabuf`
+: Information about dmabuf handling (Linux-only)
 
 A number of options affect behavior instead of logging:
 
@@ -216,6 +222,9 @@ A number of options affect behavior instead of logging:
 
 `gl-fractional`
 : Enable fractional scaling for OpenGL. This is experimental
+
+`gl-debug`
+: Insert debugging information in OpenGL
 
 `gl-legacy`
 : Use a legacy OpenGL context
@@ -243,6 +252,12 @@ A number of options affect behavior instead of logging:
 
 `high-depth`
 : Use high bit depth rendering if possible
+
+`no-vsync`
+: Repaint instantly (uses 100% CPU with animations)
+
+`dmabuf-disable`
+: Disable dmabuf support
 
 The special value `all` can be used to turn on all debug options. The special
 value `help` can be used to obtain a list of all supported debug options.
