@@ -35,6 +35,15 @@
 #include <epoxy/egl.h>
 #endif
 
+/* We don't include gsk/gsk.h here to avoid a build order problem
+ * with the generated header gskenumtypes.h
+ */
+#include <gsk/gskenums.h>
+#include <gsk/gsktypes.h>
+#include <gsk/gskrenderer.h>
+#include <gsk/gskrendernode.h>
+#include <gsk/gl/gskglrenderer.h>
+
 /**
  * GdkDmabufTexture:
  *
