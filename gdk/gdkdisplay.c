@@ -1892,8 +1892,8 @@ init_dmabuf_formats (GdkDisplay *display)
           uint64_t *modifiers;
           unsigned int *external_only;
 
-          if (!gdk_dmabuf_texture_may_support ((unsigned int)formats[i]))
-            continue;
+//          if (!gdk_dmabuf_texture_may_support ((unsigned int)formats[i]))
+//            continue;
 
           eglQueryDmaBufModifiersEXT (priv->egl_display, formats[i], 0, NULL, NULL, &num_modifiers);
           modifiers = g_new (uint64_t, num_modifiers);

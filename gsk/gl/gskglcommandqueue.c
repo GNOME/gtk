@@ -282,7 +282,10 @@ snapshot_attachments (const GskGLAttachmentState *state,
         {
           bind[count].id = state->textures[i].id;
           bind[count].texture = state->textures[i].texture;
-          bind[count].sampler = state->textures[i].sampler;
+          if (state->textures[i].target == GL_TEXTURE_EXTERNAL_OES)
+            bind[count].sampler = 15;
+          else
+           bind[count].sampler = state->textures[i].sampler;
           count++;
         }
     }
@@ -1190,12 +1193,23 @@ gsk_gl_command_queue_execute (GskGLCommandQueue    *self,
                           s->sync = NULL;
                         }
 
-                      glBindTexture (GL_TEXTURE_2D, bind->id);
+                      if (bind->sampler == 15)
+                        glBindTexture (GL_TEXTURE_EXTERNAL_OES, bind->id);
+                      else
+                        glBindTexture (GL_TEXTURE_2D, bind->id);
                       textures[bind->texture] = bind->id;
                       if (!self->has_samplers)
                         {
-                          glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, min_filter_from_index (bind->sampler / GSK_GL_N_FILTERS));
-                          glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, mag_filter_from_index (bind->sampler % GSK_GL_N_FILTERS));
+                          if (bind->sampler == 15)
+                            {
+                              glTexParameteri (GL_TEXTURE_EXTERNAL_OES, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+                              glTexParameteri (GL_TEXTURE_EXTERNAL_OES, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+                            }
+                          else
+                            {
+                              glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, min_filter_from_index (bind->sampler / GSK_GL_N_FILTERS));
+                              glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, mag_filter_from_index (bind->sampler % GSK_GL_N_FILTERS));
+                            }
                         }
                     }
 
@@ -1205,8 +1219,16 @@ gsk_gl_command_queue_execute (GskGLCommandQueue    *self,
                         glBindSampler (bind->texture, self->samplers[bind->sampler]);
                       else
                         {
-                          glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, min_filter_from_index (bind->sampler / GSK_GL_N_FILTERS));
-                          glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, mag_filter_from_index (bind->sampler % GSK_GL_N_FILTERS));
+                          if (bind->sampler == 15)
+                            {
+                              glTexParameteri (GL_TEXTURE_EXTERNAL_OES, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+                              glTexParameteri (GL_TEXTURE_EXTERNAL_OES, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+                            }
+                          else
+                            {
+                              glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, min_filter_from_index (bind->sampler / GSK_GL_N_FILTERS));
+                              glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, mag_filter_from_index (bind->sampler % GSK_GL_N_FILTERS));
+                            }
                         }
                       samplers[bind->texture] = bind->sampler;
                     }
@@ -1324,7 +1346,7 @@ gsk_gl_command_queue_end_frame (GskGLCommandQueue *self)
       if (self->attachments->textures[i].id != 0)
         {
           glActiveTexture (GL_TEXTURE0 + i);
-          glBindTexture (GL_TEXTURE_2D, 0);
+          glBindTexture (self->attachments->textures[i].target, 0);
 
           self->attachments->textures[i].id = 0;
           self->attachments->textures[i].changed = FALSE;
@@ -1401,7 +1423,7 @@ gsk_gl_command_queue_create_texture (GskGLCommandQueue *self,
 
   glActiveTexture (GL_TEXTURE0);
   glBindTexture (GL_TEXTURE_2D, texture_id);
- 
+
   glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
   glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
   glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
@@ -1429,8 +1451,10 @@ gsk_gl_command_queue_create_texture (GskGLCommandQueue *self,
   }
 
   /* Restore the previous texture if it was set */
-  if (self->attachments->textures[0].id != 0)
-    glBindTexture (GL_TEXTURE_2D, self->attachments->textures[0].id);
+  if (self->attachments->textures[0].id != 0 &&
+      self->attachments->textures[0].target == GL_TEXTURE_2D)
+    glBindTexture (self->attachments->textures[0].target,
+                   self->attachments->textures[0].id);
 
   return (int)texture_id;
 }

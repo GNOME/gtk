@@ -789,9 +789,13 @@ egl_import_image (EGLImage image,
 
   glGenTextures (1, &texture_id);
   glBindTexture (target, texture_id);
+  g_assert (glGetError() == GL_NO_ERROR);
   glEGLImageTargetTexture2DOES (target, image);
+  g_assert (glGetError() == GL_NO_ERROR);
   glTexParameteri (target, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+  g_assert (glGetError() == GL_NO_ERROR);
   glTexParameteri (target, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+  g_assert (glGetError() == GL_NO_ERROR);
 
   return texture_id;
 }

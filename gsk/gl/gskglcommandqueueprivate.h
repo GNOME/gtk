@@ -54,6 +54,7 @@ typedef struct _GskGLCommandBind
    */
   guint texture : 4;
 
+  /* the sampler to use. We set sampler to 15 to indicate external textures */
   guint sampler : 4;
 
   /* The identifier for the texture created with glGenTextures(). */
