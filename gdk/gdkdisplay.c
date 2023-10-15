@@ -1850,6 +1850,7 @@ gdk_display_get_egl_display (GdkDisplay *self)
 static void
 init_dmabuf_formats (GdkDisplay *display)
 {
+  GdkDisplayPrivate *priv = gdk_display_get_instance_private (display);
   GdkDmabufFormatsBuilder *builder;
 
   if (display->dmabuf_formats != NULL)
@@ -1862,6 +1863,9 @@ init_dmabuf_formats (GdkDisplay *display)
       gdk_display_prepare_gl (display, NULL);
 
       gdk_dmabuf_texture_add_supported_formats (builder);
+
+      if (priv->gl_context)
+        gdk_gl_context_add_dmabuf_formats (priv->gl_context, builder);
     }
 
   display->dmabuf_formats = gdk_dmabuf_formats_builder_free_to_formats (builder);
