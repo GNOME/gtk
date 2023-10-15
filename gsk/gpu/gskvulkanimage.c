@@ -456,24 +456,28 @@ gsk_vulkan_device_supports_format (GskVulkanDevice   *device,
                                    gsize              height)
 {
   VkPhysicalDevice vk_phys_device;
-  VkFormatProperties properties;
-  VkImageFormatProperties image_properties;
+  VkFormatProperties2 properties;
+  VkImageFormatProperties2 image_properties;
   VkFormatFeatureFlags features, required;
   VkResult res;
 
   vk_phys_device = gsk_vulkan_device_get_vk_physical_device (device);
 
-  vkGetPhysicalDeviceFormatProperties (vk_phys_device,
-                                       format,
-                                       &properties);
+  properties = (VkFormatProperties2) {
+    .sType = VK_STRUCTURE_TYPE_FORMAT_PROPERTIES_2,
+    .pNext = NULL
+  };
+  vkGetPhysicalDeviceFormatProperties2 (vk_phys_device,
+                                        format,
+                                        &properties);
 
   switch ((int) tiling)
     {
       case VK_IMAGE_TILING_OPTIMAL:
-        features = properties.optimalTilingFeatures;
+        features = properties.formatProperties.optimalTilingFeatures;
         break;
       case VK_IMAGE_TILING_LINEAR:
-        features = properties.optimalTilingFeatures;
+        features = properties.formatProperties.linearTilingFeatures;
         break;
       default:
         return FALSE;
@@ -487,18 +491,26 @@ gsk_vulkan_device_supports_format (GskVulkanDevice   *device,
   if ((features & required) != required)
     return FALSE;
 
-  res = vkGetPhysicalDeviceImageFormatProperties (vk_phys_device,
-                                                  format,
-                                                  VK_IMAGE_TYPE_2D,
-                                                  tiling,
-                                                  usage,
-                                                  0,
-                                                  &image_properties);
+  image_properties = (VkImageFormatProperties2) {
+    .sType = VK_STRUCTURE_TYPE_IMAGE_FORMAT_PROPERTIES_2,
+    .pNext = NULL,
+  };
+  res = vkGetPhysicalDeviceImageFormatProperties2 (vk_phys_device,
+                                                   &(VkPhysicalDeviceImageFormatInfo2) {
+                                                     .sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_IMAGE_FORMAT_INFO_2,
+                                                     .pNext = NULL,
+                                                     .format = format,
+                                                     .type = VK_IMAGE_TYPE_2D,
+                                                     .tiling = tiling,
+                                                     .usage = usage,
+                                                     .flags = 0,
+                                                   },
+                                                   &image_properties);
   if (res != VK_SUCCESS)
     return FALSE;
 
-  if (image_properties.maxExtent.width < width ||
-      image_properties.maxExtent.height < height)
+  if (image_properties.imageFormatProperties.maxExtent.width < width ||
+      image_properties.imageFormatProperties.maxExtent.height < height)
     return FALSE;
 
   return TRUE;
