@@ -117,6 +117,8 @@ static const GdkDebugKey gdk_debug_keys[] = {
   { "vulkan",          GDK_DEBUG_VULKAN, "Information about Vulkan" },
   { "selection",       GDK_DEBUG_SELECTION, "Information about selections" },
   { "clipboard",       GDK_DEBUG_CLIPBOARD, "Information about clipboards" },
+  { "dmabuf",          GDK_DEBUG_DMABUF, "Information about dmabuf buffers" },
+
   { "nograbs",         GDK_DEBUG_NOGRABS, "Disable pointer and keyboard grabs (X11)", TRUE },
   { "portals",         GDK_DEBUG_PORTALS, "Force use of portals", TRUE },
   { "no-portals",      GDK_DEBUG_NO_PORTALS, "Disable use of portals", TRUE },

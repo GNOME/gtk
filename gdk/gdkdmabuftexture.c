@@ -187,7 +187,7 @@ do_direct_download (GdkDmabufTexture *self,
   guchar *src_data;
   int bpp;
 
-  GDK_DEBUG (MISC, "Using mmap() and memcpy() for downloading a dmabuf");
+  GDK_DEBUG (DMABUF, "Using mmap() and memcpy() for downloading a dmabuf");
 
   height = gdk_texture_get_height (GDK_TEXTURE (self));
   bpp = gdk_memory_format_bytes_per_pixel (gdk_texture_get_format (GDK_TEXTURE (self)));
@@ -287,20 +287,20 @@ gdk_dmabuf_texture_new_from_builder (GdkDmabufTextureBuilder *builder,
   if (!info || modifier != DRM_FORMAT_MOD_LINEAR)
     {
       g_set_error (error, GDK_DMABUF_ERROR, GDK_DMABUF_ERROR_UNSUPPORTED_FORMAT,
-                   "Unsupported dmabuf format %c%c%c%c:%#lx",
-                   fourcc & 0xff, (fourcc >> 8) & 0xff, (fourcc >> 16) & 0xff, (fourcc >> 24) & 0xff, modifier);
+                   "Unsupported dmabuf format: %.4s:%#lx",
+                   (char *) &fourcc, modifier);
       return NULL;
     }
   if (n_planes > 1)
     {
       g_set_error (error, GDK_DMABUF_ERROR, GDK_DMABUF_ERROR_CREATION_FAILED,
-                   "Cannot create multiplanar textures for dmabuf format %c%c%c%c:%#lx",
-                   fourcc & 0xff, (fourcc >> 8) & 0xff, (fourcc >> 16) & 0xff, (fourcc >> 24) & 0xff, modifier);
+                   "Cannot create multiplanar textures for dmabuf format: %.4s:%#lx",
+                   (char *) &fourcc, modifier);
       return NULL;
     }
 
-  GDK_DEBUG (MISC, "Dmabuf texture in format %c%c%c%c:%#lx",
-             fourcc & 0xff, (fourcc >> 8) & 0xff, (fourcc >> 16) & 0xff, (fourcc >> 24) & 0xff, modifier);
+  GDK_DEBUG (DMABUF, "Create dmabuf texture (format %.4s:%#lx)",
+             (char *) &fourcc, modifier);
 
   self = g_object_new (GDK_TYPE_DMABUF_TEXTURE,
                        "width", gdk_dmabuf_texture_builder_get_width (builder),
