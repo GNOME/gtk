@@ -23,6 +23,7 @@
 #include "gdkglcontext.h"
 #include "gdkdrawcontextprivate.h"
 #include "gdkglversionprivate.h"
+#include "gdkdmabufformatsbuilderprivate.h"
 
 G_BEGIN_DECLS
 
@@ -159,5 +160,28 @@ gboolean                gdk_gl_context_has_sync                 (GdkGLContext   
 
 double                  gdk_gl_context_get_scale                (GdkGLContext    *self);
 
-G_END_DECLS
+void                    gdk_gl_context_add_dmabuf_formats       (GdkGLContext            *self,
+                                                                 GdkDmabufFormatsBuilder *builder);
 
+guint                   gdk_gl_context_import_dmabuf            (GdkGLContext    *self,
+                                                                 int              width,
+                                                                 int              height,
+                                                                 unsigned int     fourcc,
+                                                                 guint64          modifier,
+                                                                 unsigned int     n_planes,
+                                                                 int             *fds,
+                                                                 unsigned int    *strides,
+                                                                 unsigned int    *offsets);
+
+gboolean                gdk_gl_context_export_dmabuf            (GdkGLContext    *self,
+                                                                 unsigned int     texture_id,
+                                                                 int             *fourcc,
+                                                                 int             *n_planes,
+                                                                 guint64         *modifier,
+                                                                 int             *fds,
+                                                                 int             *strides,
+                                                                 int             *offsets);
+
+
+
+G_END_DECLS

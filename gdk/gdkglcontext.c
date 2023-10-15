@@ -83,6 +83,7 @@
 #include "gdkmemorytextureprivate.h"
 #include "gdkprofilerprivate.h"
 #include "gdkglversionprivate.h"
+#include "gdkdmabufformatsprivate.h"
 
 #include "gdkprivate.h"
 
@@ -93,6 +94,10 @@
 #include <epoxy/gl.h>
 #ifdef HAVE_EGL
 #include <epoxy/egl.h>
+#endif
+
+#ifdef HAVE_LINUX_DMA_BUF_H
+#include <drm/drm_fourcc.h>
 #endif
 
 #include <math.h>
@@ -1944,4 +1949,227 @@ gdk_gl_backend_use (GdkGLBackend backend_type)
     }
 
   g_assert (the_gl_backend_type == backend_type);
+}
+
+void
+gdk_gl_context_add_dmabuf_formats (GdkGLContext            *self,
+                                   GdkDmabufFormatsBuilder *builder)
+{
+#if defined(HAVE_EGL) && defined(HAVE_LINUX_DMA_BUF_H)
+  GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (self);
+  GdkDisplay *display = gdk_gl_context_get_display (self);
+  EGLDisplay egl_display = gdk_display_get_egl_display (display);
+
+  gdk_gl_context_make_current (self);
+
+  if (egl_display != EGL_NO_DISPLAY &&
+      display->have_egl_dma_buf_import &&
+      priv->has_image_storage)
+    {
+      int num_fourccs;
+      int *fourccs;
+
+      eglQueryDmaBufFormatsEXT (egl_display, 0, NULL, &num_fourccs);
+      fourccs = g_new (int, num_fourccs);
+      eglQueryDmaBufFormatsEXT (egl_display, num_fourccs, fourccs, &num_fourccs);
+
+      for (int i = 0; i < num_fourccs; i++)
+        {
+          int num_modifiers;
+          uint64_t *modifiers;
+          unsigned int *external_only;
+
+          eglQueryDmaBufModifiersEXT (egl_display, fourccs[i], 0, NULL, NULL, &num_modifiers);
+          modifiers = g_new (uint64_t, num_modifiers);
+          external_only = g_new (unsigned int, num_modifiers);
+          eglQueryDmaBufModifiersEXT (egl_display, fourccs[i], num_modifiers, modifiers, external_only, &num_modifiers);
+
+          for (int j = 0; j < num_modifiers; j++)
+            {
+              GDK_DEBUG (DMABUF, "%ssupported EGL dmabuf format %.4s:%#lx %s",
+                         external_only[j] ? "un" : "",
+                         (char *) &fourccs[i],
+                         modifiers[j],
+                         external_only[j] ? "EXT" : "");
+              if (!external_only[j])
+                gdk_dmabuf_formats_builder_add_format (builder, fourccs[i], modifiers[j]);
+            }
+
+          g_free (modifiers);
+       }
+
+      g_free (fourccs);
+    }
+#endif
+}
+
+guint
+gdk_gl_context_import_dmabuf (GdkGLContext *self,
+                              int           width,
+                              int           height,
+                              unsigned int  fourcc,
+                              guint64       modifier,
+                              unsigned int  n_planes,
+                              int          *fds,
+                              unsigned int *strides,
+                              unsigned int *offsets)
+{
+#if defined(HAVE_EGL) && defined(HAVE_LINUX_DMA_BUF_H)
+  GdkDisplay *display = gdk_gl_context_get_display (self);
+  EGLDisplay egl_display = gdk_display_get_egl_display (display);
+  EGLint attribs[64];
+  int i;
+  EGLImage image;
+  guint texture_id;
+
+  g_return_val_if_fail (GDK_IS_GL_CONTEXT (self), 0);
+  g_return_val_if_fail (width > 0, 0);
+  g_return_val_if_fail (height > 0, 0);
+  g_return_val_if_fail (1 <= n_planes && n_planes <= 4, 0);
+  g_return_val_if_fail (fds != NULL, 0);
+  g_return_val_if_fail (strides != NULL, 0);
+  g_return_val_if_fail (offsets != NULL, 0);
+
+  if (egl_display == EGL_NO_DISPLAY || !display->have_egl_dma_buf_import)
+    return 0;
+
+  GDK_DEBUG (DMABUF,
+             "Importing dmabuf (format: %.4s:%#lx, planes: %u) into GL",
+             (char *) &fourcc, modifier, n_planes);
+
+  i = 0;
+  attribs[i++] = EGL_WIDTH;
+  attribs[i++] = width;
+  attribs[i++] = EGL_HEIGHT;
+  attribs[i++] = height;
+  attribs[i++] = EGL_LINUX_DRM_FOURCC_EXT;
+  attribs[i++] = fourcc;
+
+#define ADD_PLANE(plane) \
+  { \
+    if (modifier != DRM_FORMAT_MOD_INVALID) \
+      { \
+        attribs[i++] = EGL_DMA_BUF_PLANE## plane ##_MODIFIER_LO_EXT; \
+        attribs[i++] = modifier & 0xFFFFFFFF; \
+        attribs[i++] = EGL_DMA_BUF_PLANE## plane ## _MODIFIER_HI_EXT; \
+        attribs[i++] = modifier >> 32; \
+      } \
+    attribs[i++] = EGL_DMA_BUF_PLANE## plane ##_FD_EXT; \
+    attribs[i++] = fds[plane]; \
+    attribs[i++] = EGL_DMA_BUF_PLANE## plane ##_PITCH_EXT; \
+    attribs[i++] = strides[plane]; \
+    attribs[i++] = EGL_DMA_BUF_PLANE## plane ##_OFFSET_EXT; \
+    attribs[i++] = offsets[plane]; \
+  }
+
+  ADD_PLANE (0);
+
+  if (n_planes > 1) ADD_PLANE (1);
+  if (n_planes > 2) ADD_PLANE (2);
+  if (n_planes > 3) ADD_PLANE (3);
+
+  attribs[i++] = EGL_NONE;
+
+  image = eglCreateImageKHR (egl_display,
+                             EGL_NO_CONTEXT,
+                             EGL_LINUX_DMA_BUF_EXT,
+                             (EGLClientBuffer)NULL,
+                             attribs);
+
+  if (image == EGL_NO_IMAGE)
+    {
+      g_warning ("Creating EGLImage for dmabuf failed: %#x", eglGetError ());
+      return 0;
+    }
+
+  glGenTextures (1, &texture_id);
+  glBindTexture (GL_TEXTURE_2D, texture_id);
+  glEGLImageTargetTexture2DOES (GL_TEXTURE_2D, image);
+  glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+  glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+  eglDestroyImageKHR (egl_display, image);
+
+  return texture_id;
+#else
+  return 0;
+#endif
+}
+
+gboolean
+gdk_gl_context_export_dmabuf (GdkGLContext *self,
+                              unsigned int  texture_id,
+                              int          *fourcc,
+                              int          *n_planes,
+                              guint64      *modifier,
+                              int          *fds,
+                              int          *strides,
+                              int          *offsets)
+{
+#if defined(HAVE_EGL) && defined(HAVE_LINUX_DMA_BUF_H)
+  GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (self);
+  GdkDisplay *display = gdk_gl_context_get_display (self);
+  EGLDisplay egl_display = gdk_display_get_egl_display (display);
+  EGLContext egl_context = priv->egl_context;
+  EGLint attribs[10];
+  int i;
+  EGLImage image;
+  gboolean result = FALSE;
+
+  g_return_val_if_fail (GDK_IS_GL_CONTEXT (self), FALSE);
+  g_return_val_if_fail (texture_id > 0, FALSE);
+  g_return_val_if_fail (fourcc != NULL, FALSE);
+  g_return_val_if_fail (n_planes != NULL, FALSE);
+  g_return_val_if_fail (modifier != NULL, FALSE);
+  g_return_val_if_fail (fds != NULL, FALSE);
+  g_return_val_if_fail (strides != NULL, FALSE);
+  g_return_val_if_fail (offsets != NULL, FALSE);
+
+  if (egl_display == EGL_NO_DISPLAY || !display->have_egl_dma_buf_export)
+    return 0;
+
+  GDK_DEBUG (DMABUF, "Exporting GL texture to dmabuf");
+
+  i = 0;
+  attribs[i++] = EGL_IMAGE_PRESERVED_KHR;
+  attribs[i++] = EGL_TRUE;
+
+  attribs[i++] = EGL_NONE;
+
+  image = eglCreateImageKHR (egl_display,
+                             egl_context,
+                             EGL_GL_TEXTURE_2D_KHR,
+                             (EGLClientBuffer)GUINT_TO_POINTER (texture_id),
+                             attribs);
+
+  if (image == EGL_NO_IMAGE)
+    return FALSE;
+
+  if (!eglExportDMABUFImageQueryMESA (egl_display,
+                                      image,
+                                      fourcc,
+                                      n_planes,
+                                      modifier))
+    goto out;
+
+  if (!eglExportDMABUFImageMESA (egl_display,
+                                 image,
+                                 fds,
+                                 strides,
+                                 offsets))
+    goto out;
+
+  GDK_DEBUG (DMABUF,
+             "Exported GL texture to dmabuf (format: %.4s:%#lx, planes: %d)",
+             (char *)fourcc, *modifier, *n_planes);
+
+  result = TRUE;
+
+out:
+  eglDestroyImageKHR (egl_display, image);
+
+  return result;
+#else
+  return FALSE:
+#endif
 }
