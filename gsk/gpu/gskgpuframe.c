@@ -10,6 +10,7 @@
 #include "gskgpuopprivate.h"
 #include "gskgpurendererprivate.h"
 #include "gskgpurenderpassopprivate.h"
+#include "gskgpuuploadopprivate.h"
 
 #include "gskdebugprivate.h"
 #include "gskrendererprivate.h"
@@ -74,6 +75,19 @@ gsk_gpu_frame_cleanup (GskGpuFrame *self)
   GSK_GPU_FRAME_GET_CLASS (self)->cleanup (self);
 }
 
+static GskGpuImage *
+gsk_gpu_frame_default_upload_texture (GskGpuFrame *frame,
+                                      GdkTexture  *texture)
+{
+  GskGpuImage *image;
+
+  image = gsk_gpu_upload_texture_op_try (frame, texture);
+  if (image)
+    g_object_ref (image);
+
+  return image;
+}
+
 static void
 gsk_gpu_frame_dispose (GObject *object)
 {
@@ -107,6 +121,7 @@ gsk_gpu_frame_class_init (GskGpuFrameClass *klass)
 
   klass->setup = gsk_gpu_frame_default_setup;
   klass->cleanup = gsk_gpu_frame_default_cleanup;
+  klass->upload_texture = gsk_gpu_frame_default_upload_texture;
 
   object_class->dispose = gsk_gpu_frame_dispose;
   object_class->finalize = gsk_gpu_frame_finalize;
@@ -342,6 +357,13 @@ gsk_gpu_frame_alloc_op (GskGpuFrame *self,
                       size);
 
   return gsk_gpu_ops_index (&priv->ops, pos);
+}
+
+GskGpuImage *
+gsk_gpu_frame_upload_texture (GskGpuFrame  *self,
+                              GdkTexture   *texture)
+{
+  return GSK_GPU_FRAME_GET_CLASS (self)->upload_texture (self, texture);
 }
 
 GskGpuDescriptors *
