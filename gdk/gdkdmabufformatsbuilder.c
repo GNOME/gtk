@@ -65,16 +65,16 @@ gdk_dmabuf_format_equal (gconstpointer data_a,
   const GdkDmabufFormat *a = data_a;
   const GdkDmabufFormat *b = data_b;
 
-  return a->fourcc == b->fourcc
-      && a->modifier == b->modifier;
+  return a->fourcc == b->fourcc &&
+         a->modifier == b->modifier;
 }
 
 static void
 gdk_dmabuf_formats_builder_sort (GdkDmabufFormatsBuilder *self)
 {
   qsort (gdk_dmabuf_formats_builder_get_data (self),
-         sizeof (GdkDmabufFormat),
          gdk_dmabuf_formats_builder_get_size (self),
+         sizeof (GdkDmabufFormat),
          gdk_dmabuf_format_compare);
 }
 
