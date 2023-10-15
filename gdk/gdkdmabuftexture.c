@@ -219,13 +219,20 @@ do_indirect_download_gsk (GdkDmabufTexture *self,
   g_assert (GDK_IS_DISPLAY (self->display));
   g_assert (GDK_IS_GL_CONTEXT (gdk_display_get_gl_context (self->display)));
 
-  renderer = gsk_gl_renderer_new ();
-  if (!gsk_renderer_realize (renderer, NULL, &error))
+  renderer = g_object_get_data (G_OBJECT (self->display), "dmabuf-gl-renderer");
+  if (!renderer)
     {
-      g_warning ("Failed to realize GL renderer: %s", error->message);
-      g_error_free (error);
-      g_object_unref (renderer);
-      return;
+      renderer = gsk_gl_renderer_new ();
+      if (!gsk_renderer_realize (renderer, NULL, &error))
+        {
+          g_warning ("Failed to realize GL renderer: %s", error->message);
+          g_error_free (error);
+          g_object_unref (renderer);
+          return;
+        }
+
+      g_object_set_data_full (G_OBJECT (self->display), "dmabuf-gl-renderer",
+                              renderer, g_object_unref);
     }
 
   width = gdk_texture_get_width (GDK_TEXTURE (self));
