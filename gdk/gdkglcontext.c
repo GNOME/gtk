@@ -109,6 +109,7 @@ typedef struct {
   guint has_sync : 1;
   guint has_unpack_subimage : 1;
   guint has_debug_output : 1;
+  guint has_image_storage : 1;
   guint extensions_checked : 1;
   guint debug_enabled : 1;
   guint forward_compatible : 1;
@@ -1554,6 +1555,8 @@ gdk_gl_context_check_extensions (GdkGLContext *context)
   priv->has_sync = gdk_gl_context_check_version (context, "3.2", "3.0") ||
                    epoxy_has_gl_extension ("GL_ARB_sync") ||
                    epoxy_has_gl_extension ("GL_APPLE_sync");
+
+  priv->has_image_storage = epoxy_has_gl_extension ("GL_EXT_EGL_image_storage");
 
 #ifdef G_ENABLE_DEBUG
   {
