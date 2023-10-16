@@ -24,7 +24,7 @@
 #include "gdkdmabufformatsbuilderprivate.h"
 #include "gdkmemoryformatprivate.h"
 #include "gdkmemorytextureprivate.h"
-#include <gdk/gdkglcontext.h>
+#include <gdk/gdkglcontextprivate.h>
 #include <gdk/gdkgltexturebuilder.h>
 #include <gdk/gdktexturedownloader.h>
 
@@ -200,6 +200,336 @@ extern GdkTexture *    gsk_renderer_render_texture (GskRenderer            *rend
 extern GskRenderNode * gsk_texture_node_new        (GdkTexture             *texture,
                                                     const graphene_rect_t  *viewport);
 extern void            gsk_render_node_unref       (GskRenderNode          *node);
+
+static int
+gl_format_for_memory_format (GdkMemoryFormat format)
+{
+  switch (gdk_memory_format_get_depth (format))
+    {
+    case GDK_MEMORY_U8:
+      return GL_RGBA8;
+    case GDK_MEMORY_U16:
+      return GL_RGBA16;
+    case GDK_MEMORY_FLOAT16:
+      return GL_RGBA16F;
+    case GDK_MEMORY_FLOAT32:
+      return GL_RGBA32F;
+    default:
+      g_assert_not_reached ();
+    }
+}
+
+static int
+gl_type_for_gl_format (int format)
+{
+  switch (format)
+    {
+    case GL_RGBA8:
+      return GL_UNSIGNED_BYTE;
+    case GL_RGBA16:
+      return GL_UNSIGNED_SHORT;
+    case GL_RGBA16F:
+      return GL_HALF_FLOAT;
+    case GL_RGBA32F:
+      return GL_FLOAT;
+    default:
+      g_assert_not_reached ();
+    }
+}
+
+static void
+create_render_target (int           width,
+                      int           height,
+                      int           format,
+                      unsigned int *fbo_id,
+                      unsigned int *texture_id)
+{
+  int type;
+  unsigned int texture, fbo;
+
+  type = gl_type_for_gl_format (format);
+
+  glGenTextures (1, &texture);
+
+  glActiveTexture (GL_TEXTURE0);
+  glBindTexture (GL_TEXTURE_2D, texture);
+
+  glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+  glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+  glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+  glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+
+  glTexImage2D (GL_TEXTURE_2D, 0, format, width, height, 0, GL_RGBA, type, NULL);
+
+  glGenFramebuffers (1, &fbo);
+  glBindFramebuffer (GL_FRAMEBUFFER, fbo);
+  glFramebufferTexture2D (GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture, 0);
+  g_assert (glCheckFramebufferStatus (GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE);
+
+  *fbo_id = fbo;
+  *texture_id = texture;
+}
+
+static const char vertex_shader_source[] = ""
+"#version 150\n"
+"in vec2 in_position;\n"
+"void main() {\n"
+"  gl_Position = vec4(in_position, 0.0, 1.0);\n"
+"}";
+
+static const char fragment_shader_source[] = ""
+"#version 150\n"
+"uniform sampler2D source;\n"
+"uniform vec2 size;\n"
+"out vec4 out_color;\n"
+"void main() {\n"
+"  vec4 in_color = texture(source, gl_FragCoord.xy / size);\n"
+"  out_color = in_color;\n"
+"}";
+
+static unsigned int
+create_shader (int         type,
+               const char *src)
+{
+  unsigned int shader;
+  int status;
+
+  shader = glCreateShader (type);
+  glShaderSource (shader, 1, &src, NULL);
+  glCompileShader (shader);
+
+  glGetShaderiv (shader, GL_COMPILE_STATUS, &status);
+  if (status == GL_FALSE)
+    {
+      int log_len;
+      char *buffer;
+
+      glGetShaderiv (shader, GL_INFO_LOG_LENGTH, &log_len);
+
+      buffer = g_malloc (log_len + 1);
+      glGetShaderInfoLog (shader, log_len, NULL, buffer);
+
+      g_warning ("Compile failure in %s shader:\n%s",
+                 type == GL_VERTEX_SHADER ? "vertex" : "fragment",
+                 buffer);
+
+      g_free (buffer);
+
+      glDeleteShader (shader);
+
+      return 0;
+    }
+
+  return shader;
+}
+
+static unsigned int
+compile_program (const char *vs,
+                 const char *fs,
+                 unsigned int *source_location,
+                 unsigned int *size_location)
+{
+  unsigned int vertex, fragment, program;
+  int status;
+
+  vertex = create_shader (GL_VERTEX_SHADER, vs);
+  if (vertex == 0)
+    return 0;
+
+  fragment = create_shader (GL_FRAGMENT_SHADER, fs);
+  if (fragment == 0)
+    {
+      glDeleteShader (vertex);
+      return 0;
+    }
+
+  program = glCreateProgram ();
+
+  glAttachShader (program, vertex);
+  glAttachShader (program, fragment);
+
+  glLinkProgram (program);
+
+  glGetProgramiv (program, GL_LINK_STATUS, &status);
+  if (status == GL_FALSE)
+    {
+      int log_len;
+      char *buffer;
+
+      glGetProgramiv (program, GL_INFO_LOG_LENGTH, &log_len);
+
+      buffer = g_malloc (log_len + 1);
+      glGetProgramInfoLog (program, log_len, NULL, buffer);
+
+      g_warning ("Linking failure:\n%s", buffer);
+
+      g_free (buffer);
+
+      glDeleteProgram (program);
+      program = 0;
+
+      goto out;
+    }
+
+  *source_location = glGetUniformLocation (program, "source");
+  *size_location = glGetUniformLocation (program, "size");
+
+  glDetachShader (program, vertex);
+  glDetachShader (program, fragment);
+
+out:
+  glDeleteShader (vertex);
+  glDeleteShader (fragment);
+
+  return program;
+}
+
+typedef struct {
+  unsigned int program;
+  unsigned int source_location;
+  unsigned int size_location;
+} ProgramData;
+
+static unsigned int
+get_blit_program (GdkGLContext *context,
+                  unsigned int *source_location,
+                  unsigned int *size_location)
+{
+  ProgramData *data;
+
+  data = g_object_get_data (G_OBJECT (context), "dmabuf-blit-program-data");
+  if (!data)
+    {
+      data = g_new0 (ProgramData, 1);
+      data->program = compile_program (vertex_shader_source,
+                                       fragment_shader_source,
+                                       &data->source_location,
+                                       &data->size_location);
+      g_object_set_data (G_OBJECT (context), "dmabuf-blit-program-data", data);
+    }
+
+  *source_location = data->source_location;
+  *size_location = data->size_location;
+
+  return data->program;
+}
+
+static void
+blit_texture (GdkGLContext *context,
+              int           width,
+              int           height,
+              unsigned int  texture,
+              unsigned int  fbo)
+{
+  unsigned int program;
+  unsigned int source_location;
+  unsigned int size_location;
+  unsigned int vao;
+  unsigned int buffer;
+  const float vertices[] = {
+    -1.0f, 1.0f,
+    -1.0f, -1.0f,
+    1.0f, 1.0f,
+    1.0f, -1.0f
+  };
+
+  program = get_blit_program (context, &source_location, &size_location);
+
+  glGenVertexArrays (1, &vao);
+  glBindVertexArray (vao);
+
+  glGenBuffers (1, &buffer);
+  glBindBuffer (GL_ARRAY_BUFFER, buffer);
+  glBufferData (GL_ARRAY_BUFFER, sizeof (vertices), vertices, GL_STATIC_DRAW);
+
+  glVertexAttribPointer (0, 2, GL_FLOAT, GL_FALSE, 0, NULL);
+  glEnableVertexAttribArray (0);
+
+  glActiveTexture (GL_TEXTURE0);
+  glBindTexture (GL_TEXTURE_2D, texture);
+  glBindFramebuffer (GL_FRAMEBUFFER, fbo);
+
+  glUseProgram (program);
+  glUniform1i (source_location, texture);
+  glUniform2f (size_location, width, height);
+
+  glDrawArrays (GL_TRIANGLE_STRIP, 0, 4);
+
+  glUseProgram (0);
+  glDisableVertexAttribArray (0);
+  glBindBuffer (GL_ARRAY_BUFFER, 0);
+
+  glDeleteBuffers (1, &buffer);
+  glDeleteVertexArrays (1, &vao);
+}
+
+static void
+do_indirect_download_gl (GdkDmabufTexture *self,
+                         GdkMemoryFormat   format,
+                         guchar           *data,
+                         gsize             stride)
+{
+  GdkGLContext *context;
+  unsigned int texture_id;
+  unsigned int texture_id2;
+  unsigned int fbo;
+  int width, height;
+  int gl_format;
+  GdkGLTextureBuilder *builder;
+  GdkTexture *gl_texture;
+  gpointer sync;
+  GdkTextureDownloader *downloader;
+
+  GDK_DEBUG (DMABUF, "Using gl for downloading a dmabuf");
+
+  context = gdk_display_get_gl_context (self->display);
+
+  gdk_gl_context_make_current (context);
+
+  gl_format = gl_format_for_memory_format (format),
+
+  width = gdk_texture_get_width (GDK_TEXTURE (self));
+  height = gdk_texture_get_height (GDK_TEXTURE (self));
+
+  /* 1. import the dmabuf as GL texture */
+  texture_id = gdk_gl_context_import_dmabuf (context, width, height,
+                                             self->fourcc,
+                                             self->modifier,
+                                             self->n_planes,
+                                             self->fds,
+                                             self->strides,
+                                             self->offsets);
+
+  /* 2. create a texture to render into */
+  create_render_target (width, height, gl_format, &fbo, &texture_id2);
+
+  /* 3. copy from texture_id1 to texture_id2, using a blit shader */
+  glClear (GL_COLOR_BUFFER_BIT);
+  blit_texture (context, width, height, texture_id, fbo);
+  sync = glFenceSync (GL_SYNC_GPU_COMMANDS_COMPLETE, 0);
+
+  /* 4. create a GdkGLTexture from the rendered texture */
+  builder = gdk_gl_texture_builder_new ();
+  gdk_gl_texture_builder_set_context (builder, context);
+  gdk_gl_texture_builder_set_id (builder, texture_id2);
+  gdk_gl_texture_builder_set_width (builder, width);
+  gdk_gl_texture_builder_set_height (builder, height);
+  gdk_gl_texture_builder_set_format (builder, format);
+  gdk_gl_texture_builder_set_sync (builder, sync);
+  gl_texture = gdk_gl_texture_builder_build (builder, NULL, NULL);
+
+  /* 5. download it */
+  downloader = gdk_texture_downloader_new (gl_texture);
+  gdk_texture_downloader_set_format (downloader, format);
+  gdk_texture_downloader_download_into (downloader, data, stride);
+  gdk_texture_downloader_free (downloader);
+  g_object_unref (gl_texture);
+
+  /* 6. cleanup */
+  glDeleteFramebuffers (1, &fbo);
+  glDeleteTextures (1, &texture_id);
+  glDeleteTextures (1, &texture_id2);
+}
 
 static void
 do_indirect_download_gsk (GdkDmabufTexture *self,
@@ -380,6 +710,20 @@ gdk_dmabuf_texture_add_supported_formats (GdkDmabufFormatsBuilder *builder)
 }
 
 static void
+do_indirect_download (GdkDmabufTexture *self,
+                      GdkMemoryFormat   format,
+                      guchar           *data,
+                      gsize             stride)
+{
+  const char *method = g_getenv ("DMABUF_DOWNLOAD_METHOD");
+
+  if (g_strcmp0 (method, "gl") == 0)
+    do_indirect_download_gl (self, format, data, stride);
+  else
+    do_indirect_download_gsk (self, format, data, stride);
+}
+
+static void
 gdk_dmabuf_texture_download (GdkTexture      *texture,
                              GdkMemoryFormat  format,
                              guchar          *data,
@@ -392,8 +736,9 @@ gdk_dmabuf_texture_download (GdkTexture      *texture,
 
   info = get_drm_format_info (self->fourcc);
 
-  if (!info || self->n_planes > 1 || self->modifier != DRM_FORMAT_MOD_LINEAR)
-    do_indirect_download_gsk (self, format, data, stride);
+  if (!info || self->n_planes > 1 || self->modifier != DRM_FORMAT_MOD_LINEAR ||
+      g_getenv ("DMABUF_DOWNLOAD_METHOD") != NULL)
+    do_indirect_download (self, format, data, stride);
   else if (format == src_format)
     do_direct_download (self, data, stride);
   else
