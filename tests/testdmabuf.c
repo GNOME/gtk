@@ -425,6 +425,8 @@ main (int argc, char *argv[])
 
   texture = make_dmabuf_texture (filename, format);
 
+  gdk_texture_save_to_png (texture, "testdmabuf.out.png");
+
   window = gtk_window_new ();
 
   picture = gtk_picture_new_for_paintable (GDK_PAINTABLE (texture));
