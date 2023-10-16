@@ -1839,6 +1839,29 @@ gdk_display_get_egl_display (GdkDisplay *self)
 #endif
 }
 
+#ifdef HAVE_LINUX_DMA_BUF_H
+static void
+gdk_display_add_dmabuf_downloader (GdkDisplay                *display,
+                                   const GdkDmabufDownloader *downloader,
+                                   GdkDmabufFormatsBuilder   *builder)
+{
+  gsize i;
+
+  downloader->add_formats (downloader, display, builder);
+
+  /* dmabuf_downloaders is NULL-terminated */
+  for (i = 0; i < G_N_ELEMENTS (display->dmabuf_downloaders) - 1; i++)
+    {
+      if (display->dmabuf_downloaders[i] == NULL)
+        break;
+    }
+
+  g_assert (i < G_N_ELEMENTS (display->dmabuf_downloaders));
+
+  display->dmabuf_downloaders[i] = downloader;
+}
+#endif
+
 /* To support a drm format, we must be able to import it into GL
  * using the relevant EGL extensions, and download it into a memory
  * texture, possibly doing format conversion with shaders (in GSK).
@@ -1853,15 +1876,17 @@ init_dmabuf_formats (GdkDisplay *display)
 
   builder = gdk_dmabuf_formats_builder_new ();
 
+#ifdef HAVE_LINUX_DMA_BUF_H
   if (!GDK_DEBUG_CHECK (DMABUF_DISABLE))
     {
       gdk_display_prepare_gl (display, NULL);
 
-      gdk_dmabuf_texture_add_supported_formats (builder);
+      gdk_display_add_dmabuf_downloader (display, gdk_dmabuf_get_direct_downloader (), builder);
     }
+#endif
 
   display->dmabuf_formats = gdk_dmabuf_formats_builder_free_to_formats (builder);
-}
+} 
 
 /**
  * gdk_display_get_dmabuf_formats:

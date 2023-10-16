@@ -25,7 +25,7 @@
 #include "gdksurfaceprivate.h"
 #include "gdkkeysprivate.h"
 #include "gdkdeviceprivate.h"
-#include "gdkdmabufformats.h"
+#include "gdkdmabufprivate.h"
 
 #ifdef GDK_RENDERING_VULKAN
 #include <vulkan/vulkan.h>
@@ -116,6 +116,7 @@ struct _GdkDisplay
   guint have_egl_pixel_format_float : 1;
 
   GdkDmabufFormats *dmabuf_formats;
+  const GdkDmabufDownloader *dmabuf_downloaders[4];
 };
 
 struct _GdkDisplayClass
