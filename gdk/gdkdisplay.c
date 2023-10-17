@@ -391,6 +391,8 @@ gdk_display_dispose (GObject *object)
 
   g_queue_clear (&display->queued_events);
 
+  gdk_display_set_egl_downloader_data (display, NULL, NULL);
+
   g_clear_object (&priv->gl_context);
 #ifdef HAVE_EGL
   g_clear_pointer (&priv->egl_display, eglTerminate);
@@ -2371,4 +2373,22 @@ gdk_display_translate_key (GdkDisplay      *display,
                                               effective_group,
                                               level,
                                               consumed);
+}
+
+gpointer
+gdk_display_get_egl_downloader_data (GdkDisplay *display)
+{
+  return display->egl_downloader_data;
+}
+
+void
+gdk_display_set_egl_downloader_data (GdkDisplay     *display,
+                                     gpointer        data,
+                                     GDestroyNotify  destroy)
+{
+  if (display->egl_downloader_data_destroy)
+    display->egl_downloader_data_destroy (display->egl_downloader_data);
+
+  display->egl_downloader_data = data;
+  display->egl_downloader_data_destroy = destroy;
 }
