@@ -87,18 +87,29 @@ gdk_dmabuf_direct_downloader_supports (const GdkDmabufDownloader  *downloader,
 
   info = get_drm_format_info (dmabuf->fourcc);
 
-  if (!info || dmabuf->modifier != DRM_FORMAT_MOD_LINEAR)
+  if (!info)
     {
-      g_set_error (error, GDK_DMABUF_ERROR, GDK_DMABUF_ERROR_UNSUPPORTED_FORMAT,
-                   "Unsupported dmabuf format %.4s:%#lx",
-                   (char *) &dmabuf->fourcc, dmabuf->modifier);
+      g_set_error (error,
+                   GDK_DMABUF_ERROR, GDK_DMABUF_ERROR_UNSUPPORTED_FORMAT,
+                   "Unsupported dmabuf format %.4s",
+                   (char *) &dmabuf->fourcc);
       return FALSE;
     }
+
+  if (dmabuf->modifier != DRM_FORMAT_MOD_LINEAR)
+    {
+      g_set_error (error,
+                   GDK_DMABUF_ERROR, GDK_DMABUF_ERROR_UNSUPPORTED_FORMAT,
+                   "Unsupported dmabuf modifier %#lx (only linear buffers are supported)",
+                   dmabuf->modifier);
+      return FALSE;
+    }
+
   if (dmabuf->n_planes > 1)
     {
-      g_set_error (error, GDK_DMABUF_ERROR, GDK_DMABUF_ERROR_CREATION_FAILED,
-                   "Cannot create multiplanar textures for dmabuf format %.4s:%#lx",
-                   (char *) &dmabuf->fourcc, dmabuf->modifier);
+      g_set_error_literal (error,
+                           GDK_DMABUF_ERROR, GDK_DMABUF_ERROR_CREATION_FAILED,
+                           "Multiplanar dmabufs are not supported");
       return FALSE;
     }
 
