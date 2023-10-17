@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: gtk-properties\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-09-30 15:05+0000\n"
-"PO-Revision-Date: 2023-10-12 16:19+0200\n"
+"PO-Revision-Date: 2023-10-18 00:30+0200\n"
 "Last-Translator: Ekaterine Papava <papava.e@gtu.ge>\n"
 "Language-Team: Georgian <(nothing)>\n"
 "Language: ka\n"
@@ -1094,7 +1094,7 @@ msgstr "შევსება"
 
 #: gtk/deprecated/gtktrayicon-x11.c:169
 msgid "Padding that should be put around icons in the tray"
-msgstr ""
+msgstr "შევსება, რომელიც სისტემურ საათთან ხატულის გარშემო უნდა დაიხატოს"
 
 #: gtk/deprecated/gtktrayicon-x11.c:178 gtk/gtkstackswitcher.c:686
 msgid "Icon Size"
@@ -1257,7 +1257,7 @@ msgstr "ამაჩქარებლის დახურვა"
 
 #: gtk/gtkaccellabel.c:210
 msgid "The closure to be monitored for accelerator changes"
-msgstr ""
+msgstr "დახურვის მონიტორინგი ამაჩქარებლის ცვლილებებზე"
 
 #: gtk/gtkaccellabel.c:216
 msgid "Accelerator Widget"
@@ -1265,7 +1265,7 @@ msgstr "ამაჩქარებელი ვიჯეტი"
 
 #: gtk/gtkaccellabel.c:217
 msgid "The widget to be monitored for accelerator changes"
-msgstr ""
+msgstr "ვიჯეტის მონიტორინგი ამაჩქარებლის ცვლილებებზე"
 
 #: gtk/gtkaccessible.c:156 gtk/gtkeventcontroller.c:168
 #: gtk/gtktreeviewcolumn.c:337
@@ -1274,7 +1274,7 @@ msgstr "ვიჯეტი"
 
 #: gtk/gtkaccessible.c:157
 msgid "The widget referenced by this accessible."
-msgstr ""
+msgstr "ამ წვდომადის მიერ მიმართული ვიჯეტი."
 
 #: gtk/gtkactionable.c:71
 msgid "Action name"
@@ -1378,7 +1378,7 @@ msgstr "ნაგულიხმევი ელემენტის ჩვე�
 
 #: gtk/gtkappchooserbutton.c:635
 msgid "Whether the combobox should show the default application on top"
-msgstr ""
+msgstr "უნდა აჩვენოს ჩამოსაშლელმა სიამ ნაგულისხმევი აპლიკაცია ზემოდან, თუ არა"
 
 #: gtk/gtkappchooserbutton.c:647 gtk/gtkappchooserdialog.c:688
 msgid "Heading"
@@ -1708,7 +1708,7 @@ msgstr ""
 
 #: gtk/gtkbox.c:351
 msgid "Extra space to put between the child and its neighbors, in pixels"
-msgstr ""
+msgstr "დამატებითი ადგილი შვილსა და მის მეზობლებს შორის, პიქსელებში"
 
 #: gtk/gtkbuilder.c:292
 msgid "Translation Domain"
@@ -1722,7 +1722,7 @@ msgstr "თარგმანის დომენი, რომელსაც
 msgid ""
 "Text of the label widget inside the button, if the button contains a label "
 "widget"
-msgstr ""
+msgstr "ვიჯეტი ჭდის ტექსტი ღილაკის შიგნით, თუ ღილაკი ჭდის ვიჯეტს შეიცავს"
 
 #: gtk/gtkbutton.c:288 gtk/gtkexpander.c:317 gtk/gtklabel.c:827
 #: gtk/gtkmenuitem.c:805 gtk/gtktoolbutton.c:250
@@ -1759,7 +1759,7 @@ msgstr "ვერტიკალური სწორება შვილი�
 
 #: gtk/gtkbutton.c:361
 msgid "Child widget to appear next to the button text"
-msgstr ""
+msgstr "შვილი ვიჯეტი მენიუს ტექსტის შემდეგ გამოჩნდება"
 
 #: gtk/gtkbutton.c:374
 msgid "Image position"
@@ -1775,7 +1775,7 @@ msgstr "ნაგულისხმევი დაშორება"
 
 #: gtk/gtkbutton.c:524
 msgid "Extra space to add for GTK_CAN_DEFAULT buttons"
-msgstr ""
+msgstr "დამატებით დასამატებელი ადგილი GTK_CAN_DEFAULT ღილაკებისთვის"
 
 #: gtk/gtkbutton.c:541
 msgid "Default Outside Spacing"
@@ -1786,6 +1786,8 @@ msgid ""
 "Extra space to add for GTK_CAN_DEFAULT buttons that is always drawn outside "
 "the border"
 msgstr ""
+"დამატებით დასამატებელი ადგილი GTK_CAN_DEFAULT ღილაკებისთვის, რომლებიც "
+"ყოველთვის საზღვრის გარეთ დაიხატება"
 
 #: gtk/gtkbutton.c:556
 msgid "Child X Displacement"
@@ -1951,7 +1953,7 @@ msgstr "სწორება"
 
 #: gtk/gtkcellareabox.c:347
 msgid "Whether cell should align with adjacent rows"
-msgstr ""
+msgstr "უნდა გასწორდეს თუ არა უჯრედი ახლომახლო მწკრივებთან"
 
 #: gtk/gtkcellareabox.c:363
 msgid "Fixed Size"
@@ -1959,7 +1961,7 @@ msgstr "ფიქსირებული ზომა"
 
 #: gtk/gtkcellareabox.c:364
 msgid "Whether cells should be the same size in all rows"
-msgstr ""
+msgstr "უნდა იყოს თუ არა უჯრედი ყველა მწკრივში ერთი ზომის"
 
 #: gtk/gtkcellareabox.c:380
 msgid "Pack Type"
@@ -2309,7 +2311,7 @@ msgstr "ტექსტის Y სწორება"
 
 #: gtk/gtkcellrendererprogress.c:215
 msgid "The vertical text alignment, from 0 (top) to 1 (bottom)."
-msgstr ""
+msgstr "ვერტიკალური ტექსტის სწორება. 0-დან (ზემოდან) 1-მდე(ქვემოდან)"
 
 #: gtk/gtkcellrendererprogress.c:226 gtk/gtklevelbar.c:1097
 #: gtk/gtkmodelbutton.c:1242 gtk/gtkprogressbar.c:264 gtk/gtkrange.c:441
@@ -2318,7 +2320,7 @@ msgstr "შებრუნებულია"
 
 #: gtk/gtkcellrendererprogress.c:227 gtk/gtkprogressbar.c:265
 msgid "Invert the direction in which the progress bar grows"
-msgstr ""
+msgstr "მიმდინარეობის ზოლის ზრდის მიმართულების ინვერსია"
 
 #: gtk/gtkcellrendererspin.c:113 gtk/gtkrange.c:434 gtk/gtkscalebutton.c:217
 #: gtk/gtkspinbutton.c:379
@@ -2343,7 +2345,7 @@ msgstr "ციფრები"
 
 #: gtk/gtkcellrendererspin.c:144 gtk/gtkspinbutton.c:396
 msgid "The number of decimal places to display"
-msgstr ""
+msgstr "წილადი ნაწილის მაჩვენებლების ფიქსირებული რაოდენობის ჩვენება"
 
 #: gtk/gtkcellrendererspinner.c:126
 msgid "Whether the spinner is active (ie. shown) in the cell"
@@ -2383,7 +2385,7 @@ msgstr "ერთი პარაგრაფის რეჟიმი"
 
 #: gtk/gtkcellrenderertext.c:277
 msgid "Whether to keep all text in a single paragraph"
-msgstr ""
+msgstr "იყოს თუ არა სრული ტექსტი ერთ პარაგრაფში"
 
 #: gtk/gtkcellrenderertext.c:283 gtk/gtkcellview.c:217 gtk/gtktexttag.c:216
 msgid "Background color name"
@@ -2436,7 +2438,7 @@ msgstr "ჩასწორებადი"
 
 #: gtk/gtkcellrenderertext.c:358 gtk/gtktexttag.c:310 gtk/gtktextview.c:827
 msgid "Whether the text can be modified by the user"
-msgstr ""
+msgstr "შეუძლია თუ არა მომხმარებელს ტექსტის შეცვლა"
 
 #: gtk/gtkcellrenderertext.c:364 gtk/gtkcellrenderertext.c:371
 #: gtk/gtkfontchooser.c:64 gtk/gtktexttag.c:325 gtk/gtktexttag.c:333
@@ -2826,7 +2828,7 @@ msgstr ""
 
 #: gtk/gtkcheckmenuitem.c:210
 msgid "Whether the menu item is checked"
-msgstr ""
+msgstr "შემოწმდება თუ არა მენიუს პუნქტი"
 
 #: gtk/gtkcheckmenuitem.c:217 gtk/gtktogglebutton.c:195
 msgid "Inconsistent"
@@ -3088,7 +3090,7 @@ msgstr "ბავშვი"
 
 #: gtk/gtkcontainer.c:550
 msgid "Can be used to add a new child to the container"
-msgstr ""
+msgstr "შეგიძლიათ, კონტეინერში ახალი შვილის ჩასამატებლად გამოიყენოთ"
 
 #: gtk/gtkcssnode.c:628
 msgid "Style Classes"
@@ -3249,7 +3251,7 @@ msgstr ""
 
 #: gtk/gtkentry.c:862
 msgid "Whether the entry contents can be edited"
-msgstr ""
+msgstr "შეიძლება თუ არა ჩანაწერის შემცველობის ჩასწორება"
 
 #: gtk/gtkentry.c:876
 msgid "Visibility"
@@ -3302,7 +3304,7 @@ msgstr "მაქსიმალური სიგანე სიმბოლ�
 
 #: gtk/gtkentry.c:938
 msgid "The desired maximum width of the entry, in characters"
-msgstr ""
+msgstr "ელემენტის სასურველი სიგანე, სიმბოლოებში"
 
 #: gtk/gtkentry.c:945
 msgid "Scroll offset"
@@ -3322,7 +3324,7 @@ msgstr "მრავალხაზიანი ტექსტის შეკ�
 
 #: gtk/gtkentry.c:984
 msgid "Whether to truncate multiline pastes to one line."
-msgstr ""
+msgstr "შევაერთო თუ არა ჩასმული ტექსტები ერთ ხაზში."
 
 #: gtk/gtkentry.c:1002
 msgid "Which kind of shadow to draw around the entry when has-frame is set"
@@ -3362,7 +3364,7 @@ msgstr "შესრულების ნაწილი"
 
 #: gtk/gtkentry.c:1078
 msgid "The current fraction of the task that's been completed"
-msgstr ""
+msgstr "ამოცანის მიმდინარე ნაწილი, რომელიც ადსრულდა"
 
 #: gtk/gtkentry.c:1093
 msgid "Progress Pulse Step"
@@ -3376,7 +3378,7 @@ msgstr ""
 
 #: gtk/gtkentry.c:1110
 msgid "Show text in the entry when it's empty and unfocused"
-msgstr ""
+msgstr "ამ ელემენტში ტექსტის ჩვენება, როცა ის ცარიელი და ფოკუსის გარეშეა"
 
 #: gtk/gtkentry.c:1123
 msgid "Primary pixbuf"
@@ -4149,7 +4151,7 @@ msgstr "გააჩნია ალფა"
 
 #: gtk/gtkglarea.c:829
 msgid "Whether the color buffer has an alpha component"
-msgstr ""
+msgstr "აქვს ფერის ბუფერს ალფა კომპონენტი, თუ არა"
 
 #: gtk/gtkglarea.c:845
 msgid "Has depth buffer"
@@ -4209,7 +4211,7 @@ msgstr "სიგანე"
 
 #: gtk/gtkgrid.c:1810
 msgid "The number of columns that a child spans"
-msgstr ""
+msgstr "სვეტების რაოდენობა, რომელსაც შვილი იკავებს"
 
 #: gtk/gtkgrid.c:1816 gtk/gtklayout.c:683 gtk/gtkshortcutsgroup.c:362
 msgid "Height"
@@ -4217,7 +4219,7 @@ msgstr "სიმაღლე"
 
 #: gtk/gtkgrid.c:1817
 msgid "The number of rows that a child spans"
-msgstr ""
+msgstr "მწკრივების რაოდენობა, რომელსაც შვილი იკავებს"
 
 #: gtk/gtkheaderbar.c:2028
 msgid "The title to display"
@@ -4570,7 +4572,7 @@ msgstr "კუთხე, რომლითაც ჭდე მობრუნ�
 
 #: gtk/gtklabel.c:1041
 msgid "The desired maximum width of the label, in characters"
-msgstr ""
+msgstr "ჭდის სასურველი სიგანე, სიმბოლოებში"
 
 #: gtk/gtklabel.c:1057
 msgid "Track visited links"
@@ -4610,7 +4612,7 @@ msgstr "მინიმალური მნიშვნელობის დ�
 
 #: gtk/gtklevelbar.c:1046
 msgid "Minimum value level that can be displayed by the bar"
-msgstr ""
+msgstr "მინიმალური მნიშვნელობის დონე პანელისთვის"
 
 #: gtk/gtklevelbar.c:1060
 msgid "Maximum value level for the bar"
@@ -4618,7 +4620,7 @@ msgstr "მაქსიმალური მნიშვნელობის �
 
 #: gtk/gtklevelbar.c:1061
 msgid "Maximum value level that can be displayed by the bar"
-msgstr ""
+msgstr "მაქსიმალური მნიშვნელობის დონე პანელისთვის"
 
 #: gtk/gtklevelbar.c:1081
 msgid "The mode of the value indicator"
@@ -4626,11 +4628,11 @@ msgstr "მნიშვნელბის მაჩვენებლის რ�
 
 #: gtk/gtklevelbar.c:1082
 msgid "The mode of the value indicator displayed by the bar"
-msgstr ""
+msgstr "მნიშვნელობის მაჩვენებლის რეჟიმი პანელისთვის"
 
 #: gtk/gtklevelbar.c:1098
 msgid "Invert the direction in which the level bar grows"
-msgstr ""
+msgstr "დონის ზოლის ზრდის მიმართულების ინვერსია"
 
 #: gtk/gtklevelbar.c:1115
 msgid "Minimum height for filling blocks"
@@ -4686,7 +4688,7 @@ msgstr "ტექსტის დაბლოკვა"
 
 #: gtk/gtklockbutton.c:274
 msgid "The text to display when prompting the user to lock"
-msgstr ""
+msgstr "დაბლოკვისას მომხმარებლისთვის ნაჩვენები ტექსტი"
 
 #: gtk/gtklockbutton.c:282
 msgid "Unlock Text"
@@ -4694,7 +4696,7 @@ msgstr "ტექსტის განბლოკვა"
 
 #: gtk/gtklockbutton.c:283
 msgid "The text to display when prompting the user to unlock"
-msgstr ""
+msgstr "განბლოკვისას მომხმარებლისთვის ნაჩვენები ტექსტი"
 
 #: gtk/gtklockbutton.c:291
 msgid "Lock Tooltip"
@@ -4702,7 +4704,7 @@ msgstr "მინიშნების დაბლოკვა"
 
 #: gtk/gtklockbutton.c:292
 msgid "The tooltip to display when prompting the user to lock"
-msgstr ""
+msgstr "დაბლოკვისას მომხმარებლისთვის ნაჩვენები მინიშნება"
 
 #: gtk/gtklockbutton.c:300
 msgid "Unlock Tooltip"
@@ -4710,16 +4712,17 @@ msgstr "მინიშნების განბლოკვა"
 
 #: gtk/gtklockbutton.c:301
 msgid "The tooltip to display when prompting the user to unlock"
-msgstr ""
+msgstr "განბლოკვისას მომხმარებლისთვის ნაჩვენები მინიშნება"
 
 #: gtk/gtklockbutton.c:309
 msgid "Not Authorized Tooltip"
-msgstr ""
+msgstr "არაავტორიზებული მინიშნება"
 
 #: gtk/gtklockbutton.c:310
 msgid ""
 "The tooltip to display when prompting the user cannot obtain authorization"
 msgstr ""
+"მინიშნება, რომელსაც ვაჩვენებთ, როცა მომხმარებელს ავტორიზაცია არ შეუძლია"
 
 #: gtk/gtkmagnifier.c:295
 msgid "Inspected"
@@ -4779,7 +4782,7 @@ msgstr "მენიუს მოდელი"
 
 #: gtk/gtkmenubutton.c:506
 msgid "The model from which the popup is made."
-msgstr ""
+msgstr "მოდელი, რომლიდანაც მხტუნარა შეიქმნა."
 
 #: gtk/gtkmenubutton.c:519
 msgid "Align with"
@@ -4787,7 +4790,7 @@ msgstr "მიერთება"
 
 #: gtk/gtkmenubutton.c:520
 msgid "The parent widget which the menu should align with."
-msgstr ""
+msgstr "მშობელი ვიჯეტი, რომელთანაც მენიუ უნდა გასწორდეს."
 
 #: gtk/gtkmenubutton.c:534 gtk/gtkshortcutsshortcut.c:646
 #: gtk/gtkstylecontext.c:243
@@ -4796,7 +4799,7 @@ msgstr "მიმართულება"
 
 #: gtk/gtkmenubutton.c:535
 msgid "The direction the arrow should point."
-msgstr ""
+msgstr "ისრის მიმართულება."
 
 #: gtk/gtkmenubutton.c:550
 msgid "Use a popover"
@@ -4836,7 +4839,7 @@ msgstr "ვიჯეტის მიმაგრება"
 
 #: gtk/gtkmenu.c:688
 msgid "The widget the menu is attached to"
-msgstr ""
+msgstr "ვიჯეტი, რომელზეც მენიუა მიმაგრებული"
 
 #: gtk/gtkmenu.c:704
 msgid ""
@@ -4908,7 +4911,7 @@ msgstr "თარაზული შევსება"
 
 #: gtk/gtkmenu.c:887
 msgid "Extra space at the left and right edges of the menu"
-msgstr ""
+msgstr "დამატებითი ადგილი მენიუს მარცხენა და მარჯვენა წიბოებთან"
 
 #: gtk/gtkmenu.c:905
 msgid "Vertical Padding"
@@ -4916,7 +4919,7 @@ msgstr "შვეული შევსება"
 
 #: gtk/gtkmenu.c:906
 msgid "Extra space at the top and bottom of the menu"
-msgstr ""
+msgstr "დამატებითი ადგილი მენიუს ზედა და ქვედა საზღვრებთან"
 
 #: gtk/gtkmenu.c:915
 msgid "Vertical Offset"
@@ -4927,6 +4930,7 @@ msgid ""
 "When the menu is a submenu, position it this number of pixels offset "
 "vertically"
 msgstr ""
+"როცა მენიუ ქვემენიუა, მისი ამ რაოდენობა პიქსელებით ვერტიკალურად წანაცვლება"
 
 #: gtk/gtkmenu.c:924
 msgid "Horizontal Offset"
@@ -4936,7 +4940,7 @@ msgstr "ჰორიზონტალური წანაცვლება"
 msgid ""
 "When the menu is a submenu, position it this number of pixels offset "
 "horizontally"
-msgstr ""
+msgstr "როცა მენიუ ქვემენიუა, მისი ამ რაოდენობა პიქსელებით შვეულად წანაცვლება"
 
 #: gtk/gtkmenu.c:940
 msgid "Double Arrows"
@@ -4944,7 +4948,7 @@ msgstr "ორმაგი ისრები"
 
 #: gtk/gtkmenu.c:941
 msgid "When scrolling, always show both arrows."
-msgstr ""
+msgstr "გადახვევისას, ორივე ისარი ყოველთვის გამოჩნდება."
 
 #: gtk/gtkmenu.c:956
 msgid "Arrow Placement"
@@ -4952,7 +4956,7 @@ msgstr "ისრების განლაგება"
 
 #: gtk/gtkmenu.c:957
 msgid "Indicates where scroll arrows should be placed"
-msgstr ""
+msgstr "მიუთითებს, სად უნდა მოთავსდეს ჩოჩიის ისრები"
 
 #: gtk/gtkmenu.c:965
 msgid "Left Attach"
@@ -4964,7 +4968,7 @@ msgstr "მარჯვენა მიმაგრება"
 
 #: gtk/gtkmenu.c:974
 msgid "The column number to attach the right side of the child to"
-msgstr ""
+msgstr "შვილის მარჯვენა მხარეს მისამაგრებელი სვეტის ნომერი"
 
 #: gtk/gtkmenu.c:981
 msgid "Top Attach"
@@ -4972,7 +4976,7 @@ msgstr "ზედა მიმაგრება"
 
 #: gtk/gtkmenu.c:982
 msgid "The row number to attach the top of the child to"
-msgstr ""
+msgstr "შვილის ზედა მხარეს მისამაგრებელი მწკრივის ნომერი"
 
 #: gtk/gtkmenu.c:989
 msgid "Bottom Attach"
@@ -5001,7 +5005,7 @@ msgstr ""
 
 #: gtk/gtkmenuitem.c:778
 msgid "Sets the accelerator path of the menu item"
-msgstr ""
+msgstr "დააყენებს მენიუს პუნქტის ამაჩქარებლის ბილიკს"
 
 #: gtk/gtkmenuitem.c:792
 msgid "The text for the child label"
@@ -5215,7 +5219,7 @@ msgstr "ჩანართების ჩვენება"
 
 #: gtk/gtknotebook.c:783
 msgid "Whether tabs should be shown"
-msgstr ""
+msgstr "უნდა იყოს თუ არა ტაბი ნაჩვენები"
 
 #: gtk/gtknotebook.c:789
 msgid "Show Border"
@@ -5223,7 +5227,7 @@ msgstr "საზღვრის ჩვენება"
 
 #: gtk/gtknotebook.c:790
 msgid "Whether the border should be shown"
-msgstr ""
+msgstr "უნდა იყოს თუ არა საზღვარი ნაჩვენები"
 
 #: gtk/gtknotebook.c:796
 msgid "Scrollable"
@@ -5979,11 +5983,11 @@ msgstr "შესაძლებლობები, რომლის დამ
 
 #: gtk/gtkprintunixdialog.c:457
 msgid "Whether the dialog supports selection"
-msgstr ""
+msgstr "აქვს თუ არა დიალოგს მონიშვნის მხარდაჭერა"
 
 #: gtk/gtkprintunixdialog.c:465
 msgid "Whether the application has a selection"
-msgstr ""
+msgstr "აქვს თუ არა აპლიკაციას მონიშნული"
 
 #: gtk/gtkprogressbar.c:271
 msgid "Fraction"
@@ -6003,7 +6007,7 @@ msgstr ""
 
 #: gtk/gtkprogressbar.c:288
 msgid "Text to be displayed in the progress bar"
-msgstr ""
+msgstr "მიმდინარეობის ზოლზე ნაჩვენები ტექსტი"
 
 #: gtk/gtkprogressbar.c:309
 msgid "Show text"
@@ -6011,7 +6015,7 @@ msgstr "ტექსტის ჩვენება"
 
 #: gtk/gtkprogressbar.c:310
 msgid "Whether the progress is shown as text."
-msgstr ""
+msgstr "არის თუ არა მიმდინარეობის ზოლი ნაჩვენები, როგორც ტექსტი."
 
 #: gtk/gtkprogressbar.c:331
 msgid ""
@@ -6037,47 +6041,47 @@ msgstr ""
 
 #: gtk/gtkprogressbar.c:380
 msgid "Minimum horizontal bar width"
-msgstr ""
+msgstr "მინიმალური ჰორიზონტალური პანელის სიგანე"
 
 #: gtk/gtkprogressbar.c:381
 msgid "The minimum horizontal width of the progress bar"
-msgstr ""
+msgstr "მიმდინარეობის ზოლის მინიმალური ჰორიზონტალური სიგანე"
 
 #: gtk/gtkprogressbar.c:395
 msgid "Minimum horizontal bar height"
-msgstr ""
+msgstr "მინიმალური ჰორიზონტალური პანელის სიმაღლე"
 
 #: gtk/gtkprogressbar.c:396
 msgid "Minimum horizontal height of the progress bar"
-msgstr ""
+msgstr "მიმდინარეობის ზოლის მინიმალური ჰორიზონტალური სიმაღლე"
 
 #: gtk/gtkprogressbar.c:410
 msgid "Minimum vertical bar width"
-msgstr ""
+msgstr "მინიმალური ვერტიკალური პანელის სიგანე"
 
 #: gtk/gtkprogressbar.c:411
 msgid "The minimum vertical width of the progress bar"
-msgstr ""
+msgstr "მიმდინარეობის ზოლის მინიმალური ვერტიკალური სიგანე"
 
 #: gtk/gtkprogressbar.c:425
 msgid "Minimum vertical bar height"
-msgstr ""
+msgstr "მინიმალური ვერტიკალური პანელის სიმაღლე"
 
 #: gtk/gtkprogressbar.c:426
 msgid "The minimum vertical height of the progress bar"
-msgstr ""
+msgstr "მიმდინარეობის ზოლის მინიმალური ვერტიკალური სიმაღლე"
 
 #: gtk/gtkradiobutton.c:185
 msgid "The radio button whose group this widget belongs to."
-msgstr ""
+msgstr "რადიოღილაკი, რომლის ჯგუფსაც ეს ვიჯეტი ეკუთვნის."
 
 #: gtk/gtkradiomenuitem.c:425
 msgid "The radio menu item whose group this widget belongs to."
-msgstr ""
+msgstr "რადიომენიუ, რომლის ჯგუფსაც ეს ვიჯეტი ეკუთვნის."
 
 #: gtk/gtkradiotoolbutton.c:84
 msgid "The radio tool button whose group this button belongs to."
-msgstr ""
+msgstr "რადიოხელსაწყოს ღილაკი, რომლის ჯგუფსაც ეს ვიჯეტი ეკუთვნის."
 
 #: gtk/gtkrange.c:435
 msgid "The GtkAdjustment that contains the current value of this range object"
@@ -6149,7 +6153,7 @@ msgstr ""
 
 #: gtk/gtkrange.c:554
 msgid "Trough Border"
-msgstr ""
+msgstr "საზღვრის გავლით"
 
 #: gtk/gtkrange.c:555
 msgid "Spacing between thumb/steppers and outer trough bevel"
@@ -6273,7 +6277,7 @@ msgstr "დალაგების ტიპი"
 
 #: gtk/gtkrecentchooser.c:251
 msgid "The sorting order of the items displayed"
-msgstr ""
+msgstr "ნაჩვენები ელემენტების დალაგების მიმდევრობა"
 
 #: gtk/gtkrecentchooser.c:267
 msgid "The current filter for selecting which resources are displayed"
@@ -6285,7 +6289,7 @@ msgstr ""
 
 #: gtk/gtkrecentmanager.c:305
 msgid "The size of the recently used resources list"
-msgstr ""
+msgstr "ახლახანს გამოყენებული რესურსების სიის ზომა"
 
 #: gtk/gtkrevealer.c:241 gtk/gtkstack.c:499
 msgid "Transition type"
@@ -6301,7 +6305,7 @@ msgstr "გადასვლის დრო"
 
 #: gtk/gtkrevealer.c:250 gtk/gtkstack.c:495
 msgid "The animation duration, in milliseconds"
-msgstr ""
+msgstr "ანიმაციის ხანგრძლივობა წამებში"
 
 #: gtk/gtkrevealer.c:256
 msgid "Reveal Child"
@@ -6406,7 +6410,7 @@ msgstr ""
 
 #: gtk/gtkscrollable.c:111
 msgid "Horizontal Scrollable Policy"
-msgstr ""
+msgstr "ჰორიზონტალურად გადახვევის პოლიტიკა"
 
 #: gtk/gtkscrollable.c:112 gtk/gtkscrollable.c:128
 msgid "How the size of the content should be determined"
@@ -6414,15 +6418,15 @@ msgstr ""
 
 #: gtk/gtkscrollable.c:127
 msgid "Vertical Scrollable Policy"
-msgstr ""
+msgstr "ვერტიკალურად გადახვევის პოლიტიკა"
 
 #: gtk/gtkscrollbar.c:106
 msgid "Minimum Slider Length"
-msgstr ""
+msgstr "მინიმალური ჩოჩიის სიგრძე"
 
 #: gtk/gtkscrollbar.c:107
 msgid "Minimum length of scrollbar slider"
-msgstr ""
+msgstr "გადასახვევი ჩოჩიის მინიმალური სიგრძე"
 
 #: gtk/gtkscrollbar.c:115
 msgid "Fixed slider size"
@@ -6476,7 +6480,7 @@ msgstr ""
 
 #: gtk/gtkscrolledwindow.c:597
 msgid "Window Placement"
-msgstr ""
+msgstr "ფანჯრის მდებარეობა"
 
 #: gtk/gtkscrolledwindow.c:598
 msgid "Where the contents are located with respect to the scrollbars."
@@ -6484,7 +6488,7 @@ msgstr ""
 
 #: gtk/gtkscrolledwindow.c:616
 msgid "Window Placement Set"
-msgstr ""
+msgstr "ფანჯრის მდებარეობის აყენება"
 
 #: gtk/gtkscrolledwindow.c:617
 msgid ""
