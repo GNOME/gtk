@@ -172,7 +172,7 @@ gdk_wayland_keymap_get_entries_for_keyval (GdkKeymap     *keymap,
   *n_keys = retval->len;
   *keys = (GdkKeymapKey*) g_array_free (retval, FALSE);
 
-  return TRUE;
+  return *n_keys > 0;
 }
 
 static gboolean
