@@ -1885,9 +1885,12 @@ init_dmabuf_formats (GdkDisplay *display)
 #ifdef HAVE_LINUX_DMA_BUF_H
   if (!GDK_DEBUG_CHECK (DMABUF_DISABLE))
     {
-      gdk_display_prepare_gl (display, NULL);
-
       gdk_display_add_dmabuf_downloader (display, gdk_dmabuf_get_direct_downloader (), builder);
+
+#ifdef HAVE_EGL
+      if (gdk_display_prepare_gl (display, NULL))
+        gdk_display_add_dmabuf_downloader (display, gdk_dmabuf_get_egl_downloader (), builder);
+#endif
     }
 #endif
 
