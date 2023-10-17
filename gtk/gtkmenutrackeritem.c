@@ -86,7 +86,7 @@ struct _GtkMenuTrackerItem
   char *action_namespace;
   char *action_and_target;
   GMenuItem *item;
-  GtkMenuTrackerItemRole role : 4;
+  guint role : 4; /* GtkMenuTrackerItemRole */
   guint is_separator : 1;
   guint can_activate : 1;
   guint sensitive : 1;
