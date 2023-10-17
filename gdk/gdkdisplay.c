@@ -1889,13 +1889,18 @@ init_dmabuf_formats (GdkDisplay *display)
 
 #ifdef HAVE_EGL
       if (gdk_display_prepare_gl (display, NULL))
-        gdk_display_add_dmabuf_downloader (display, gdk_dmabuf_get_egl_downloader (), builder);
+        {
+          if (g_strcmp0 (g_getenv ("DMABUF_DOWNLOAD_METHOD"), "gl") == 0)
+            gdk_display_add_dmabuf_downloader (display, gdk_dmabuf_get_gl_downloader (), builder);
+          else
+            gdk_display_add_dmabuf_downloader (display, gdk_dmabuf_get_egl_downloader (), builder);
+        }
 #endif
     }
 #endif
 
   display->dmabuf_formats = gdk_dmabuf_formats_builder_free_to_formats (builder);
-} 
+}
 
 /**
  * gdk_display_get_dmabuf_formats:
