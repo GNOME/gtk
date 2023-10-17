@@ -119,6 +119,9 @@ struct _GdkDisplay
 
   GdkDmabufFormats *dmabuf_formats;
   const GdkDmabufDownloader *dmabuf_downloaders[4];
+  /* Private data for the EGL dmabuf downloader */
+  gpointer egl_downloader_data;
+  GDestroyNotify egl_downloader_data_destroy;
 };
 
 struct _GdkDisplayClass
@@ -266,6 +269,12 @@ void gdk_display_set_double_click_distance (GdkDisplay   *display,
 void gdk_display_set_cursor_theme          (GdkDisplay   *display,
                                             const char   *theme,
                                             int           size);
+
+gpointer  gdk_display_get_egl_downloader_data (GdkDisplay     *display);
+void      gdk_display_set_egl_downloader_data (GdkDisplay     *display,
+                                               gpointer        data,
+                                               GDestroyNotify  destroy);
+
 
 G_END_DECLS
 
