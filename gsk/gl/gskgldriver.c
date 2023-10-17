@@ -399,7 +399,6 @@ gsk_gl_driver_load_programs (GskGLDriver  *self,
          g_steal_pointer (&program);                                                            \
   } G_STMT_END;
 # include "gskglprograms.defs"
-#undef GSK_GL_DEFINE_PROGRAM_CLIP
 #undef GSK_GL_DEFINE_PROGRAM
 #undef GSK_GL_ADD_UNIFORM
 #undef GSK_GL_SHADER_SINGLE
@@ -1004,9 +1003,9 @@ gsk_gl_driver_release_render_target (GskGLDriver       *self,
       texture_id = render_target->texture_id;
 
       texture = gsk_gl_texture_new (render_target->texture_id,
-                                     render_target->width,
-                                     render_target->height,
-                                     self->current_frame_id);
+                                    render_target->width,
+                                    render_target->height,
+                                    self->current_frame_id);
       g_hash_table_insert (self->textures,
                            GUINT_TO_POINTER (texture_id),
                            g_steal_pointer (&texture));
