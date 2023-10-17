@@ -110,6 +110,12 @@ gdk_dmabuf_texture_class_init (GdkDmabufTextureClass *klass)
   gobject_class->dispose = gdk_dmabuf_texture_dispose;
 }
 
+GdkDisplay *
+gdk_dmabuf_texture_get_display (GdkDmabufTexture *self)
+{
+  return self->display;
+}
+
 const GdkDmabuf *
 gdk_dmabuf_texture_get_dmabuf (GdkDmabufTexture *self)
 {
