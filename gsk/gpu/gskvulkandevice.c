@@ -167,9 +167,10 @@ gsk_vulkan_device_finalize (GObject *object)
 
   for (i = 0; i < G_N_ELEMENTS (self->vk_samplers); i++)
     {
-      vkDestroySampler (display->vk_device,
-                        self->vk_samplers[i],
-                        NULL);
+      if (self->vk_samplers[i] != VK_NULL_HANDLE)
+        vkDestroySampler (display->vk_device,
+                          self->vk_samplers[i],
+                          NULL);
     }
 
   vkDestroyPipelineLayout (display->vk_device,
@@ -296,66 +297,6 @@ gsk_vulkan_device_setup (GskVulkanDevice *self)
                                      },
                                      NULL,
                                      &self->vk_command_pool);
-
-  GSK_VK_CHECK (vkCreateSampler, display->vk_device,
-                                 &(VkSamplerCreateInfo) {
-                                     .sType = VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO,
-                                     .magFilter = VK_FILTER_LINEAR,
-                                     .minFilter = VK_FILTER_LINEAR,
-                                     .addressModeU = VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE,
-                                     .addressModeV = VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE,
-                                     .addressModeW = VK_SAMPLER_ADDRESS_MODE_REPEAT,
-                                     .borderColor = VK_BORDER_COLOR_FLOAT_TRANSPARENT_BLACK,
-                                     .unnormalizedCoordinates = VK_FALSE,
-                                     .maxAnisotropy = 1.0,
-                                 },
-                                 NULL,
-                                 &self->vk_samplers[GSK_GPU_SAMPLER_DEFAULT]);
-
-  GSK_VK_CHECK (vkCreateSampler, display->vk_device,
-                                 &(VkSamplerCreateInfo) {
-                                     .sType = VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO,
-                                     .magFilter = VK_FILTER_LINEAR,
-                                     .minFilter = VK_FILTER_LINEAR,
-                                     .addressModeU = VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_BORDER,
-                                     .addressModeV = VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_BORDER,
-                                     .addressModeW = VK_SAMPLER_ADDRESS_MODE_REPEAT,
-                                     .borderColor = VK_BORDER_COLOR_FLOAT_TRANSPARENT_BLACK,
-                                     .unnormalizedCoordinates = VK_FALSE,
-                                     .maxAnisotropy = 1.0,
-                                 },
-                                 NULL,
-                                 &self->vk_samplers[GSK_GPU_SAMPLER_TRANSPARENT]);
-
-  GSK_VK_CHECK (vkCreateSampler, display->vk_device,
-                                 &(VkSamplerCreateInfo) {
-                                     .sType = VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO,
-                                     .magFilter = VK_FILTER_LINEAR,
-                                     .minFilter = VK_FILTER_LINEAR,
-                                     .addressModeU = VK_SAMPLER_ADDRESS_MODE_REPEAT,
-                                     .addressModeV = VK_SAMPLER_ADDRESS_MODE_REPEAT,
-                                     .addressModeW = VK_SAMPLER_ADDRESS_MODE_REPEAT,
-                                     .borderColor = VK_BORDER_COLOR_FLOAT_TRANSPARENT_BLACK,
-                                     .unnormalizedCoordinates = VK_FALSE,
-                                     .maxAnisotropy = 1.0,
-                                 },
-                                 NULL,
-                                 &self->vk_samplers[GSK_GPU_SAMPLER_REPEAT]);
-  
-  GSK_VK_CHECK (vkCreateSampler, display->vk_device,
-                                 &(VkSamplerCreateInfo) {
-                                     .sType = VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO,
-                                     .magFilter = VK_FILTER_NEAREST,
-                                     .minFilter = VK_FILTER_NEAREST,
-                                     .addressModeU = VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE,
-                                     .addressModeV = VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE,
-                                     .addressModeW = VK_SAMPLER_ADDRESS_MODE_REPEAT,
-                                     .borderColor = VK_BORDER_COLOR_FLOAT_TRANSPARENT_BLACK,
-                                     .unnormalizedCoordinates = VK_FALSE,
-                                     .maxAnisotropy = 1.0,
-                                 },
-                                 NULL,
-                                 &self->vk_samplers[GSK_GPU_SAMPLER_NEAREST]);
 }
 
 GskGpuDevice *
@@ -433,10 +374,64 @@ gsk_vulkan_device_get_vk_command_pool (GskVulkanDevice *self)
   return self->vk_command_pool;
 }
 
-VkSampler
-gsk_vulkan_device_get_vk_sampler (GskVulkanDevice *self,
-                                  GskGpuSampler    sampler)
+static VkSampler
+gsk_vulkan_device_create_sampler (GskVulkanDevice      *self,
+                                  VkFilter              vk_filter,
+                                  VkSamplerAddressMode  vk_address_mode)                                  
 {
+  VkSampler result;
+
+  GSK_VK_CHECK (vkCreateSampler, gsk_vulkan_device_get_vk_device (self),
+                                 &(VkSamplerCreateInfo) {
+                                     .sType = VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO,
+                                     .magFilter = vk_filter,
+                                     .minFilter = vk_filter,
+                                     .addressModeU = vk_address_mode,
+                                     .addressModeV = vk_address_mode,
+                                     .addressModeW = VK_SAMPLER_ADDRESS_MODE_REPEAT,
+                                     .borderColor = VK_BORDER_COLOR_FLOAT_TRANSPARENT_BLACK,
+                                     .unnormalizedCoordinates = VK_FALSE,
+                                     .maxAnisotropy = 1.0,
+                                 },
+                                 NULL,
+                                 &result);
+
+  return result;
+}
+
+VkSampler
+gsk_vulkan_device_get_vk_sampler (GskVulkanDevice     *self,
+                                  GskGpuSampler        sampler)
+{
+  const struct {
+    VkFilter filter;
+    VkSamplerAddressMode address_mode;
+  } filter_attrs[GSK_GPU_SAMPLER_N_SAMPLERS] = {
+      [GSK_GPU_SAMPLER_DEFAULT] = {
+          .filter = VK_FILTER_LINEAR,
+          .address_mode = VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE,
+      },
+      [GSK_GPU_SAMPLER_TRANSPARENT] = {
+          .filter = VK_FILTER_LINEAR,
+          .address_mode = VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_BORDER,
+      },
+      [GSK_GPU_SAMPLER_REPEAT] = {
+          .filter = VK_FILTER_LINEAR,
+          .address_mode = VK_SAMPLER_ADDRESS_MODE_REPEAT,
+      },
+      [GSK_GPU_SAMPLER_NEAREST] = {
+          .filter = VK_FILTER_NEAREST,
+          .address_mode = VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE,
+      },
+  };
+
+  if (self->vk_samplers[sampler] == VK_NULL_HANDLE)
+    {
+      self->vk_samplers[sampler] = gsk_vulkan_device_create_sampler (self,
+                                                                     filter_attrs[sampler].filter,
+                                                                     filter_attrs[sampler].address_mode);
+    }
+
   return self->vk_samplers[sampler];
 }
 
