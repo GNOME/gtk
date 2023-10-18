@@ -40,6 +40,10 @@ VkCommandPool           gsk_vulkan_device_get_vk_command_pool           (GskVulk
 VkSampler               gsk_vulkan_device_get_vk_sampler                (GskVulkanDevice        *self,
                                                                          GskGpuSampler           sampler) G_GNUC_PURE;
 
+VkSamplerYcbcrConversion
+                        gsk_vulkan_device_get_vk_conversion             (GskVulkanDevice        *self,
+                                                                         VkFormat                vk_format,
+                                                                         VkSampler              *out_sampler);
 VkRenderPass            gsk_vulkan_device_get_vk_render_pass            (GskVulkanDevice        *self,
                                                                          VkFormat                format,
                                                                          VkImageLayout           from_layout,

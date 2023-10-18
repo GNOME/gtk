@@ -20,6 +20,7 @@ struct _GskVulkanDevice
   GskVulkanAllocator *external_allocator;
   GdkVulkanFeatures features;
 
+  GHashTable *conversion_cache;
   GHashTable *pipeline_cache;
   GHashTable *render_pass_cache;
 
@@ -36,8 +37,18 @@ struct _GskVulkanDeviceClass
 
 G_DEFINE_TYPE (GskVulkanDevice, gsk_vulkan_device, GSK_TYPE_GPU_DEVICE)
 
+typedef struct _ConversionCacheEntry ConversionCacheEntry;
 typedef struct _PipelineCacheKey PipelineCacheKey;
 typedef struct _RenderPassCacheKey RenderPassCacheKey;
+
+struct _ConversionCacheEntry
+{
+  VkFormat vk_format;
+
+  /* actual data */
+  VkSamplerYcbcrConversion vk_conversion;
+  VkSampler vk_sampler;
+};
 
 struct _PipelineCacheKey
 {
@@ -52,6 +63,24 @@ struct _RenderPassCacheKey
   VkImageLayout from_layout;
   VkImageLayout to_layout;
 };
+
+static guint
+conversion_cache_entry_hash (gconstpointer data)
+{
+  const ConversionCacheEntry *key = data;
+
+  return key->vk_format;
+}
+
+static gboolean
+conversion_cache_entry_equal (gconstpointer a,
+                              gconstpointer b)
+{
+  const ConversionCacheEntry *keya = a;
+  const ConversionCacheEntry *keyb = b;
+
+  return keya->vk_format == keyb->vk_format;
+}
 
 static guint
 pipeline_cache_key_hash (gconstpointer data)
@@ -151,6 +180,16 @@ gsk_vulkan_device_finalize (GObject *object)
 
   display = gsk_gpu_device_get_display (device);
 
+  g_hash_table_iter_init (&iter, self->conversion_cache);
+  while (g_hash_table_iter_next (&iter, &key, &value))
+    {
+      ConversionCacheEntry *entry = key;
+      vkDestroySamplerYcbcrConversion (display->vk_device, entry->vk_conversion, NULL);
+      vkDestroySampler (display->vk_device, entry->vk_sampler, NULL);
+      g_free (key);
+    }
+  g_hash_table_unref (self->conversion_cache);
+
   g_hash_table_iter_init (&iter, self->pipeline_cache);
   while (g_hash_table_iter_next (&iter, &key, &value))
     {
@@ -212,6 +251,7 @@ gsk_vulkan_device_class_init (GskVulkanDeviceClass *klass)
 static void
 gsk_vulkan_device_init (GskVulkanDevice *self)
 {
+  self->conversion_cache = g_hash_table_new (conversion_cache_entry_hash, conversion_cache_entry_equal);
   self->pipeline_cache = g_hash_table_new (pipeline_cache_key_hash, pipeline_cache_key_equal);
   self->render_pass_cache = g_hash_table_new (render_pass_cache_key_hash, render_pass_cache_key_equal);
 }
@@ -386,9 +426,10 @@ gsk_vulkan_device_get_vk_command_pool (GskVulkanDevice *self)
 }
 
 static VkSampler
-gsk_vulkan_device_create_sampler (GskVulkanDevice      *self,
-                                  VkFilter              vk_filter,
-                                  VkSamplerAddressMode  vk_address_mode)                                  
+gsk_vulkan_device_create_sampler (GskVulkanDevice          *self,
+                                  VkSamplerYcbcrConversion  vk_conversion,
+                                  VkFilter                  vk_filter,
+                                  VkSamplerAddressMode      vk_address_mode)
 {
   VkSampler result;
 
@@ -399,10 +440,14 @@ gsk_vulkan_device_create_sampler (GskVulkanDevice      *self,
                                      .minFilter = vk_filter,
                                      .addressModeU = vk_address_mode,
                                      .addressModeV = vk_address_mode,
-                                     .addressModeW = VK_SAMPLER_ADDRESS_MODE_REPEAT,
+                                     .addressModeW = VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE,
                                      .borderColor = VK_BORDER_COLOR_FLOAT_TRANSPARENT_BLACK,
                                      .unnormalizedCoordinates = VK_FALSE,
                                      .maxAnisotropy = 1.0,
+                                     .pNext = vk_conversion == VK_NULL_HANDLE ? NULL : &(VkSamplerYcbcrConversionInfo) {
+                                         .sType = VK_STRUCTURE_TYPE_SAMPLER_YCBCR_CONVERSION_INFO,
+                                         .conversion = vk_conversion
+                                     }
                                  },
                                  NULL,
                                  &result);
@@ -439,11 +484,70 @@ gsk_vulkan_device_get_vk_sampler (GskVulkanDevice     *self,
   if (self->vk_samplers[sampler] == VK_NULL_HANDLE)
     {
       self->vk_samplers[sampler] = gsk_vulkan_device_create_sampler (self,
+                                                                     VK_NULL_HANDLE,
                                                                      filter_attrs[sampler].filter,
                                                                      filter_attrs[sampler].address_mode);
     }
 
   return self->vk_samplers[sampler];
+}
+
+VkSamplerYcbcrConversion
+gsk_vulkan_device_get_vk_conversion (GskVulkanDevice *self,
+                                     VkFormat         vk_format,
+                                     VkSampler       *out_sampler)
+{
+  ConversionCacheEntry lookup;
+  ConversionCacheEntry *entry;
+  GdkDisplay *display;
+
+  lookup = (ConversionCacheEntry) {
+    .vk_format = vk_format,
+  };
+  entry = g_hash_table_lookup (self->conversion_cache, &lookup);
+  if (entry)
+    {
+      if (out_sampler)
+        *out_sampler = entry->vk_sampler;
+
+      return entry->vk_conversion;
+    }
+
+  display = gsk_gpu_device_get_display (GSK_GPU_DEVICE (self));
+
+  entry = g_memdup (&lookup, sizeof (ConversionCacheEntry));
+
+  GSK_VK_CHECK (vkCreateSamplerYcbcrConversion, display->vk_device,
+                                                &(VkSamplerYcbcrConversionCreateInfo) {
+                                                    .sType = VK_STRUCTURE_TYPE_SAMPLER_YCBCR_CONVERSION_CREATE_INFO,
+                                                    .format = vk_format,
+                                                    .ycbcrModel = VK_SAMPLER_YCBCR_MODEL_CONVERSION_YCBCR_601,
+                                                    .ycbcrRange = VK_SAMPLER_YCBCR_RANGE_ITU_FULL,
+                                                    .components = (VkComponentMapping) {
+                                                        VK_COMPONENT_SWIZZLE_IDENTITY,
+                                                        VK_COMPONENT_SWIZZLE_IDENTITY,
+                                                        VK_COMPONENT_SWIZZLE_IDENTITY,
+                                                        VK_COMPONENT_SWIZZLE_IDENTITY
+                                                    },
+                                                    .xChromaOffset = VK_CHROMA_LOCATION_COSITED_EVEN,
+                                                    .yChromaOffset = VK_CHROMA_LOCATION_COSITED_EVEN,
+                                                    .chromaFilter = VK_FILTER_LINEAR,
+                                                    .forceExplicitReconstruction = VK_FALSE
+                                                },
+                                                NULL,
+                                                &entry->vk_conversion);
+
+  entry->vk_sampler = gsk_vulkan_device_create_sampler (self,
+                                                        entry->vk_conversion,
+                                                        VK_FILTER_LINEAR,
+                                                        VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE);
+
+  g_hash_table_insert (self->conversion_cache, entry, entry);
+
+  if (out_sampler)
+    *out_sampler = entry->vk_sampler;
+
+  return entry->vk_conversion;
 }
 
 VkRenderPass
