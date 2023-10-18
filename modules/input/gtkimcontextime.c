@@ -336,8 +336,11 @@ gtk_im_context_ime_filter_keypress (GtkIMContext *context,
     return FALSE;
 
   utf8 = g_utf16_to_utf8 (event_priv->translation, event_priv->translation_len, NULL, NULL, NULL);
-  g_signal_emit_by_name (context_ime, "commit", utf8);
-  g_free (utf8);
+  if (utf8)
+    {
+      g_signal_emit_by_name (context_ime, "commit", utf8);
+      g_free (utf8);
+    }
 
   return TRUE;
 }
