@@ -55,6 +55,7 @@ internal_tests = [
   'image',
   'texture',
   'gltexture',
+  'dmabuftexture',
 ]
 
 foreach t : internal_tests
