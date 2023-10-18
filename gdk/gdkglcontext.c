@@ -2087,21 +2087,30 @@ gdk_gl_context_export_dmabuf (GdkGLContext *self,
                              attribs);
 
   if (image == EGL_NO_IMAGE)
-    return FALSE;
+    {
+      g_warning ("Failed to create EGL image");
+      return FALSE;
+    }
 
   if (!eglExportDMABUFImageQueryMESA (egl_display,
                                       image,
                                       &fourcc,
                                       &n_planes,
                                       &modifier))
-    goto out;
+    {
+      g_warning ("eglExportDMABUFImageQueryMESA failed");
+      goto out;
+    }
 
   if (!eglExportDMABUFImageMESA (egl_display,
                                  image,
                                  fds,
                                  strides,
                                  offsets))
-    goto out;
+    {
+      g_warning ("eglExportDMABUFImageMESA failed");
+      goto out;
+    }
 
   dmabuf->fourcc = (guint32)fourcc;
   dmabuf->modifier = modifier;
