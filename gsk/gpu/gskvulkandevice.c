@@ -743,6 +743,7 @@ typedef struct _GskVulkanShaderSpecialization GskVulkanShaderSpecialization;
 struct _GskVulkanShaderSpecialization
 {
   guint32 clip;
+  guint32 n_immutable_samplers;
 };
 
 VkPipeline
@@ -784,17 +785,23 @@ gsk_vulkan_device_get_vk_pipeline (GskVulkanDevice           *self,
                                                        .module = gdk_display_get_vk_shader_module (display, vertex_shader_name),
                                                        .pName = "main",
                                                        .pSpecializationInfo = &(VkSpecializationInfo) {
-                                                           .mapEntryCount = 1,
-                                                           .pMapEntries = (VkSpecializationMapEntry[1]) {
+                                                           .mapEntryCount = 2,
+                                                           .pMapEntries = (VkSpecializationMapEntry[2]) {
                                                                {
                                                                    .constantID = 0,
                                                                    .offset = G_STRUCT_OFFSET (GskVulkanShaderSpecialization, clip),
+                                                                   .size = sizeof (guint32),
+                                                               },
+                                                               {
+                                                                   .constantID = 1,
+                                                                   .offset = G_STRUCT_OFFSET (GskVulkanShaderSpecialization, n_immutable_samplers),
                                                                    .size = sizeof (guint32),
                                                                },
                                                            },
                                                            .dataSize = sizeof (GskVulkanShaderSpecialization),
                                                            .pData = &(GskVulkanShaderSpecialization) {
                                                                .clip = clip,
+                                                               .n_immutable_samplers = layout->n_samplers,
                                                            },
                                                        },
                                                    },
@@ -804,17 +811,23 @@ gsk_vulkan_device_get_vk_pipeline (GskVulkanDevice           *self,
                                                        .module = gdk_display_get_vk_shader_module (display, fragment_shader_name),
                                                        .pName = "main",
                                                        .pSpecializationInfo = &(VkSpecializationInfo) {
-                                                           .mapEntryCount = 1,
-                                                           .pMapEntries = (VkSpecializationMapEntry[1]) {
+                                                           .mapEntryCount = 2,
+                                                           .pMapEntries = (VkSpecializationMapEntry[2]) {
                                                                {
                                                                    .constantID = 0,
                                                                    .offset = G_STRUCT_OFFSET (GskVulkanShaderSpecialization, clip),
                                                                    .size = sizeof (guint32),
-                                                               }
+                                                               },
+                                                               {
+                                                                   .constantID = 1,
+                                                                   .offset = G_STRUCT_OFFSET (GskVulkanShaderSpecialization, n_immutable_samplers),
+                                                                   .size = sizeof (guint32),
+                                                               },
                                                            },
                                                            .dataSize = sizeof (GskVulkanShaderSpecialization),
                                                            .pData = &(GskVulkanShaderSpecialization) {
                                                                .clip = clip,
+                                                               .n_immutable_samplers = layout->n_samplers,
                                                            },
                                                        },
                                                    },
@@ -899,6 +912,16 @@ gsk_vulkan_device_acquire_pipeline_layout (GskVulkanDevice *self,
                                            gsize            n_immutable_samplers)
 {
   GskVulkanPipelineLayout *layout;
+  VkSampler fallback[2];
+
+  /* It's mandatory to have at least 1 sampler, because GLSL can't deal with 0-sized arrays */
+  if (n_immutable_samplers == 0)
+    {
+      fallback[0] = gsk_vulkan_device_get_vk_sampler (self, GSK_GPU_SAMPLER_DEFAULT);
+      fallback[1] = NULL;
+      immutable_samplers = fallback;
+      n_immutable_samplers = 1;
+    }
 
   /* We require null-termination for the hash table lookup */
   g_assert (immutable_samplers[n_immutable_samplers] == NULL);

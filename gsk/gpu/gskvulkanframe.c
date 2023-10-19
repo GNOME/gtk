@@ -155,6 +155,7 @@ gsk_vulkan_frame_add_image (GskVulkanFrame *self,
 
   result = gsk_descriptor_image_infos_get_size (&self->descriptor_images);
   g_assert (result < gsk_vulkan_device_get_max_descriptors (device));
+  result = result << 1;
 
   gsk_descriptor_image_infos_append (&self->descriptor_images,
                                      &(VkDescriptorImageInfo) {
@@ -292,7 +293,7 @@ gsk_vulkan_frame_submit (GskGpuFrame  *frame,
     }
 
   self->pipeline_layout = gsk_vulkan_device_acquire_pipeline_layout (GSK_VULKAN_DEVICE (gsk_gpu_frame_get_device (frame)),
-                                                                     (VkSampler[1]) { NULL },
+                                                                     NULL,
                                                                      0);
   GSK_VK_CHECK (vkBeginCommandBuffer, self->vk_command_buffer,
                                       &(VkCommandBufferBeginInfo) {

@@ -9,6 +9,7 @@ layout(push_constant) uniform PushConstants {
 } push;
 
 layout(constant_id=0) const uint GSK_SHADER_CLIP = GSK_GPU_SHADER_CLIP_NONE;
+layout(constant_id=1) const uint GSK_IMMUTABLE_SAMPLERS = 1;
 
 #define GSK_GLOBAL_MVP push.mvp
 #define GSK_GLOBAL_CLIP push.clip
@@ -28,6 +29,7 @@ layout(constant_id=0) const uint GSK_SHADER_CLIP = GSK_GPU_SHADER_CLIP_NONE;
 #define PASS(_loc) layout(location = _loc) in
 #define PASS_FLAT(_loc) layout(location = _loc) flat in
 
+layout(set = 0, binding = 0) uniform sampler2D immutable_textures[GSK_IMMUTABLE_SAMPLERS];
 layout(set = 0, binding = 1) uniform sampler2D textures[50000];
 layout(set = 1, binding = 0) readonly buffer FloatBuffers {
   float floats[];
@@ -35,7 +37,16 @@ layout(set = 1, binding = 0) readonly buffer FloatBuffers {
 
 layout(location = 0) out vec4 out_color;
 
-#define gsk_texture(id, pos) texture (textures[nonuniformEXT (id)], pos)
+vec4
+gsk_texture (uint id,
+             vec2 pos)
+{
+  if ((id & 1) != 0)
+    return texture (immutable_textures[nonuniformEXT (id >> 1)], pos);
+
+  return texture (textures[nonuniformEXT (id >> 1)], pos);
+}
+
 #define gsk_get_buffer(id) buffers[nonuniformEXT (id)]
 #define gsk_get_float(id) gsk_get_buffer(0).floats[id]
 #define gsk_get_int(id) (floatBitsToInt(gsk_get_float(id)))
