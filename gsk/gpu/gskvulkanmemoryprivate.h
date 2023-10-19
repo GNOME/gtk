@@ -51,6 +51,7 @@ GskVulkanAllocator *    gsk_vulkan_direct_allocator_new                 (VkDevic
 GskVulkanAllocator *    gsk_vulkan_buddy_allocator_new                  (GskVulkanAllocator             *allocator,
                                                                          gsize                           block_size);
 GskVulkanAllocator *    gsk_vulkan_stats_allocator_new                  (GskVulkanAllocator             *allocator);
+GskVulkanAllocator *    gsk_vulkan_external_allocator_new               (VkDevice                        device);
 
 static inline void
 gsk_vulkan_alloc (GskVulkanAllocator  *allocator,

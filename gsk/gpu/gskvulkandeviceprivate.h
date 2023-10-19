@@ -50,6 +50,7 @@ VkPipeline              gsk_vulkan_device_get_vk_pipeline               (GskVulk
                                                                          VkFormat                format,
                                                                          VkRenderPass            render_pass);
 
+GskVulkanAllocator *    gsk_vulkan_device_get_external_allocator        (GskVulkanDevice        *self);
 GskVulkanAllocator *    gsk_vulkan_device_find_allocator                (GskVulkanDevice        *self,
                                                                          uint32_t                allowed_types,
                                                                          VkMemoryPropertyFlags   required_flags,
