@@ -28,7 +28,7 @@ layout(constant_id=0) const uint GSK_SHADER_CLIP = GSK_GPU_SHADER_CLIP_NONE;
 #define PASS(_loc) layout(location = _loc) in
 #define PASS_FLAT(_loc) layout(location = _loc) flat in
 
-layout(set = 0, binding = 0) uniform sampler2D textures[50000];
+layout(set = 0, binding = 1) uniform sampler2D textures[50000];
 layout(set = 1, binding = 0) readonly buffer FloatBuffers {
   float floats[];
 } buffers[50000];

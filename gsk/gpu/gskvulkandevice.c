@@ -21,11 +21,11 @@ struct _GskVulkanDevice
   GdkVulkanFeatures features;
 
   GHashTable *conversion_cache;
-  GHashTable *pipeline_cache;
   GHashTable *render_pass_cache;
+  GHashTable *pipeline_layouts;
+  GskVulkanPipelineLayout *pipeline_layout_cache;
 
-  VkDescriptorSetLayout vk_descriptor_set_layouts[GSK_VULKAN_N_DESCRIPTOR_SETS];
-  VkPipelineLayout vk_pipeline_layout;
+  VkDescriptorSetLayout vk_buffer_set_layout;
   VkCommandPool vk_command_pool;
   VkSampler vk_samplers[GSK_GPU_SAMPLER_N_SAMPLERS];
 };
@@ -40,6 +40,18 @@ G_DEFINE_TYPE (GskVulkanDevice, gsk_vulkan_device, GSK_TYPE_GPU_DEVICE)
 typedef struct _ConversionCacheEntry ConversionCacheEntry;
 typedef struct _PipelineCacheKey PipelineCacheKey;
 typedef struct _RenderPassCacheKey RenderPassCacheKey;
+
+struct _GskVulkanPipelineLayout
+{
+  gint ref_count;
+
+  VkDescriptorSetLayout vk_image_set_layout;
+  VkPipelineLayout vk_pipeline_layout;
+  GHashTable *pipeline_cache;
+
+  gsize n_samplers;
+  VkSampler samplers[];
+};
 
 struct _ConversionCacheEntry
 {
@@ -140,6 +152,165 @@ gsk_vulkan_device_create_offscreen_image (GskGpuDevice   *device,
                                              height);
 }
 
+static GskVulkanPipelineLayout *
+gsk_vulkan_pipeline_layout_new (GskVulkanDevice *self,
+                                VkSampler       *immutable_samplers,
+                                gsize            n_immutable_samplers)
+{
+  GskVulkanPipelineLayout *layout;
+  GdkDisplay *display;
+
+  layout = g_malloc (sizeof (GskVulkanPipelineLayout) + (n_immutable_samplers + 1) * sizeof (VkSampler));
+  layout->ref_count = 1;
+
+  layout->n_samplers = n_immutable_samplers;
+  memcpy (layout->samplers, immutable_samplers, (n_immutable_samplers + 1) * sizeof (VkSampler));
+  layout->pipeline_cache = g_hash_table_new (pipeline_cache_key_hash, pipeline_cache_key_equal);
+
+  display = gsk_gpu_device_get_display (GSK_GPU_DEVICE (self));
+
+  GSK_VK_CHECK (vkCreateDescriptorSetLayout, display->vk_device,
+                                             &(VkDescriptorSetLayoutCreateInfo) {
+                                                 .sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO,
+                                                 .bindingCount = 2,
+                                                 .flags = VK_DESCRIPTOR_SET_LAYOUT_CREATE_UPDATE_AFTER_BIND_POOL_BIT,
+                                                 .pBindings = (VkDescriptorSetLayoutBinding[2]) {
+                                                     {
+                                                         .binding = 0,
+                                                         .descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,
+                                                         .descriptorCount = layout->n_samplers,
+                                                         .stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT,
+                                                         .pImmutableSamplers = layout->samplers
+                                                     },
+                                                     {
+                                                         .binding = 1,
+                                                         .descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,
+                                                         .descriptorCount = DESCRIPTOR_POOL_MAXITEMS,
+                                                         .stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT
+                                                     }
+                                                 },
+                                                 .pNext = &(VkDescriptorSetLayoutBindingFlagsCreateInfo) {
+                                                   .sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_BINDING_FLAGS_CREATE_INFO,
+                                                   .bindingCount = 2,
+                                                   .pBindingFlags = (VkDescriptorBindingFlags[2]) {
+                                                     VK_DESCRIPTOR_BINDING_PARTIALLY_BOUND_BIT
+                                                     | VK_DESCRIPTOR_BINDING_UPDATE_AFTER_BIND_BIT,
+                                                     VK_DESCRIPTOR_BINDING_PARTIALLY_BOUND_BIT
+                                                     | VK_DESCRIPTOR_BINDING_VARIABLE_DESCRIPTOR_COUNT_BIT
+                                                     | VK_DESCRIPTOR_BINDING_UPDATE_AFTER_BIND_BIT,
+                                                   },
+                                                 }
+                                             },
+                                             NULL,
+                                             &layout->vk_image_set_layout);
+
+  GSK_VK_CHECK (vkCreatePipelineLayout, display->vk_device,
+                                        &(VkPipelineLayoutCreateInfo) {
+                                            .sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO,
+                                            .setLayoutCount = 2,
+                                            .pSetLayouts = (VkDescriptorSetLayout[2]) {
+                                                layout->vk_image_set_layout,
+                                                self->vk_buffer_set_layout,
+                                            },
+                                            .pushConstantRangeCount = 1,
+                                            .pPushConstantRanges = (VkPushConstantRange[1]) {
+                                                {
+                                                    .stageFlags = VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT,
+                                                    .offset = 0,
+                                                    .size = sizeof (GskGpuGlobalsInstance)
+                                                }
+                                            }
+                                        },
+                                        NULL,
+                                        &layout->vk_pipeline_layout);
+
+  g_hash_table_insert (self->pipeline_layouts, layout->samplers, layout);
+
+  return layout;
+}
+
+static void
+gsk_vulkan_pipeline_layout_unref (GskVulkanDevice         *self,
+                                  GskVulkanPipelineLayout *layout)
+{
+  GdkDisplay *display;
+  GHashTableIter iter;
+  gpointer key, value;
+
+  layout->ref_count--;
+  if (layout->ref_count)
+    return;
+
+  if (!g_hash_table_remove (self->pipeline_layouts, layout->samplers))
+    {
+      g_assert_not_reached ();
+    }
+
+  display = gsk_gpu_device_get_display (GSK_GPU_DEVICE (self));
+
+  vkDestroyDescriptorSetLayout (display->vk_device,
+                                layout->vk_image_set_layout,
+                                NULL);
+
+  vkDestroyPipelineLayout (display->vk_device,
+                           layout->vk_pipeline_layout,
+                           NULL);
+
+  g_hash_table_iter_init (&iter, layout->pipeline_cache);
+  while (g_hash_table_iter_next (&iter, &key, &value))
+    {
+      g_free (key);
+      vkDestroyPipeline (display->vk_device, value, NULL);
+    }
+  g_hash_table_unref (layout->pipeline_cache);
+
+  g_free (layout);
+}
+
+static void
+gsk_vulkan_pipeline_layout_ref (GskVulkanDevice         *self,
+                                GskVulkanPipelineLayout *layout)
+{
+  layout->ref_count++;
+}
+
+static guint
+gsk_vulkan_pipeline_layout_hash_samplers (gconstpointer data)
+{
+  const VkSampler *samplers = data;
+  guint result = 0;
+
+  while (*samplers)
+    {
+      result = (result << 13) ^
+               GPOINTER_TO_SIZE (*samplers) ^
+               (GPOINTER_TO_SIZE (*samplers) >> 32);
+      samplers++;
+    }
+
+  return result;
+}
+
+static gboolean
+pipeline_layout_equal_samplers (gconstpointer a,
+                                gconstpointer b)
+{
+  const VkSampler *samplersa = a;
+  const VkSampler *samplersb = b;
+
+  while (TRUE)
+    {
+      if (*samplersa != *samplersb)
+        return FALSE;
+
+      if (*samplersa == NULL)
+        return TRUE;
+
+      samplersa++;
+      samplersb++;
+    }
+}
+
 static GskGpuImage *
 gsk_vulkan_device_create_atlas_image (GskGpuDevice *device,
                                       gsize         width,
@@ -180,6 +351,11 @@ gsk_vulkan_device_finalize (GObject *object)
 
   display = gsk_gpu_device_get_display (device);
 
+  if (self->pipeline_layout_cache)
+    gsk_vulkan_pipeline_layout_unref (self, self->pipeline_layout_cache);
+  g_assert (g_hash_table_size (self->pipeline_layouts) == 0);
+  g_hash_table_unref (self->pipeline_layouts);
+
   g_hash_table_iter_init (&iter, self->conversion_cache);
   while (g_hash_table_iter_next (&iter, &key, &value))
     {
@@ -189,14 +365,6 @@ gsk_vulkan_device_finalize (GObject *object)
       g_free (key);
     }
   g_hash_table_unref (self->conversion_cache);
-
-  g_hash_table_iter_init (&iter, self->pipeline_cache);
-  while (g_hash_table_iter_next (&iter, &key, &value))
-    {
-      g_free (key);
-      vkDestroyPipeline (display->vk_device, value, NULL);
-    }
-  g_hash_table_unref (self->pipeline_cache);
 
   g_hash_table_iter_init (&iter, self->render_pass_cache);
   while (g_hash_table_iter_next (&iter, &key, &value))
@@ -214,17 +382,13 @@ gsk_vulkan_device_finalize (GObject *object)
                           NULL);
     }
 
-  vkDestroyPipelineLayout (display->vk_device,
-                           self->vk_pipeline_layout,
-                           NULL);
   vkDestroyCommandPool (display->vk_device,
                         self->vk_command_pool,
                         NULL);
 
-  for (i = 0; i < GSK_VULKAN_N_DESCRIPTOR_SETS; i++)
-    vkDestroyDescriptorSetLayout (display->vk_device,
-                                  self->vk_descriptor_set_layouts[i],
-                                  NULL);
+  vkDestroyDescriptorSetLayout (display->vk_device,
+                                self->vk_buffer_set_layout,
+                                NULL);
 
   for (i = 0; i < VK_MAX_MEMORY_TYPES; i++)
     g_clear_pointer (&self->allocators[i], gsk_vulkan_allocator_unref);
@@ -252,8 +416,8 @@ static void
 gsk_vulkan_device_init (GskVulkanDevice *self)
 {
   self->conversion_cache = g_hash_table_new (conversion_cache_entry_hash, conversion_cache_entry_equal);
-  self->pipeline_cache = g_hash_table_new (pipeline_cache_key_hash, pipeline_cache_key_equal);
   self->render_pass_cache = g_hash_table_new (render_pass_cache_key_hash, render_pass_cache_key_equal);
+  self->pipeline_layouts = g_hash_table_new (gsk_vulkan_pipeline_layout_hash_samplers, pipeline_layout_equal_samplers);
 }
 
 static void
@@ -262,32 +426,6 @@ gsk_vulkan_device_setup (GskVulkanDevice *self)
   GdkDisplay *display;
 
   display = gsk_gpu_device_get_display (GSK_GPU_DEVICE (self));
-
-  GSK_VK_CHECK (vkCreateDescriptorSetLayout, display->vk_device,
-                                             &(VkDescriptorSetLayoutCreateInfo) {
-                                                 .sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO,
-                                                 .bindingCount = 1,
-                                                 .flags = VK_DESCRIPTOR_SET_LAYOUT_CREATE_UPDATE_AFTER_BIND_POOL_BIT,
-                                                 .pBindings = (VkDescriptorSetLayoutBinding[1]) {
-                                                     {
-                                                         .binding = 0,
-                                                         .descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,
-                                                         .descriptorCount = DESCRIPTOR_POOL_MAXITEMS,
-                                                         .stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT
-                                                     }
-                                                 },
-                                                 .pNext = &(VkDescriptorSetLayoutBindingFlagsCreateInfo) {
-                                                   .sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_BINDING_FLAGS_CREATE_INFO,
-                                                   .bindingCount = 1,
-                                                   .pBindingFlags = (VkDescriptorBindingFlags[1]) {
-                                                     VK_DESCRIPTOR_BINDING_PARTIALLY_BOUND_BIT
-                                                     | VK_DESCRIPTOR_BINDING_VARIABLE_DESCRIPTOR_COUNT_BIT
-                                                     | VK_DESCRIPTOR_BINDING_UPDATE_AFTER_BIND_BIT,
-                                                   },
-                                                 }
-                                             },
-                                             NULL,
-                                             &self->vk_descriptor_set_layouts[GSK_VULKAN_IMAGE_SET_LAYOUT]);
 
   GSK_VK_CHECK (vkCreateDescriptorSetLayout, display->vk_device,
                                              &(VkDescriptorSetLayoutCreateInfo) {
@@ -313,24 +451,7 @@ gsk_vulkan_device_setup (GskVulkanDevice *self)
                                                  }
                                              },
                                              NULL,
-                                             &self->vk_descriptor_set_layouts[GSK_VULKAN_BUFFER_SET_LAYOUT]);
-
-  GSK_VK_CHECK (vkCreatePipelineLayout, display->vk_device,
-                                        &(VkPipelineLayoutCreateInfo) {
-                                            .sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO,
-                                            .setLayoutCount = G_N_ELEMENTS (self->vk_descriptor_set_layouts),
-                                            .pSetLayouts = self->vk_descriptor_set_layouts,
-                                            .pushConstantRangeCount = 1,
-                                            .pPushConstantRanges = (VkPushConstantRange[1]) {
-                                                {
-                                                    .stageFlags = VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT,
-                                                    .offset = 0,
-                                                    .size = sizeof (GskGpuGlobalsInstance)
-                                                }
-                                            }
-                                        },
-                                        NULL,
-                                        &self->vk_pipeline_layout);
+                                             &self->vk_buffer_set_layout);
 
   GSK_VK_CHECK (vkCreateCommandPool, display->vk_device,
                                      &(const VkCommandPoolCreateInfo) {
@@ -402,21 +523,23 @@ gsk_vulkan_device_get_vk_queue (GskVulkanDevice *self)
 }
 
 VkDescriptorSetLayout
-gsk_vulkan_device_get_vk_image_set_layout (GskVulkanDevice *self)
+gsk_vulkan_device_get_vk_image_set_layout (GskVulkanDevice         *self,
+                                           GskVulkanPipelineLayout *layout)
 {
-  return self->vk_descriptor_set_layouts[GSK_VULKAN_IMAGE_SET_LAYOUT];
+  return layout->vk_image_set_layout;
 }
 
 VkDescriptorSetLayout
 gsk_vulkan_device_get_vk_buffer_set_layout (GskVulkanDevice *self)
 {
-  return self->vk_descriptor_set_layouts[GSK_VULKAN_BUFFER_SET_LAYOUT];
+  return self->vk_buffer_set_layout;
 }
 
 VkPipelineLayout
-gsk_vulkan_device_get_vk_pipeline_layout (GskVulkanDevice *self)
+gsk_vulkan_device_get_vk_pipeline_layout (GskVulkanDevice         *self,
+                                          GskVulkanPipelineLayout *layout)
 {
-  return self->vk_pipeline_layout;
+  return layout->vk_pipeline_layout;
 }
 
 VkCommandPool
@@ -624,6 +747,7 @@ struct _GskVulkanShaderSpecialization
 
 VkPipeline
 gsk_vulkan_device_get_vk_pipeline (GskVulkanDevice           *self,
+                                   GskVulkanPipelineLayout   *layout,
                                    const GskGpuShaderOpClass *op_class,
                                    GskGpuShaderClip           clip,
                                    VkFormat                   format,
@@ -639,7 +763,7 @@ gsk_vulkan_device_get_vk_pipeline (GskVulkanDevice           *self,
     .clip = clip,
     .format = format,
   };
-  pipeline = g_hash_table_lookup (self->pipeline_cache, &cache_key);
+  pipeline = g_hash_table_lookup (layout->pipeline_cache, &cache_key);
   if (pipeline)
     return pipeline;
 
@@ -751,7 +875,7 @@ gsk_vulkan_device_get_vk_pipeline (GskVulkanDevice           *self,
                                                        VK_DYNAMIC_STATE_SCISSOR
                                                    },
                                                },
-                                               .layout = self->vk_pipeline_layout,
+                                               .layout = layout->vk_pipeline_layout,
                                                .renderPass = render_pass,
                                                .subpass = 0,
                                                .basePipelineHandle = VK_NULL_HANDLE,
@@ -763,10 +887,40 @@ gsk_vulkan_device_get_vk_pipeline (GskVulkanDevice           *self,
   g_free (fragment_shader_name);
   g_free (vertex_shader_name);
 
-  g_hash_table_insert (self->pipeline_cache, g_memdup (&cache_key, sizeof (PipelineCacheKey)), pipeline);
+  g_hash_table_insert (layout->pipeline_cache, g_memdup (&cache_key, sizeof (PipelineCacheKey)), pipeline);
   //gdk_vulkan_context_pipeline_cache_updated (self->vulkan);
 
   return pipeline;
+}
+
+GskVulkanPipelineLayout *
+gsk_vulkan_device_acquire_pipeline_layout (GskVulkanDevice *self,
+                                           VkSampler       *immutable_samplers,
+                                           gsize            n_immutable_samplers)
+{
+  GskVulkanPipelineLayout *layout;
+
+  /* We require null-termination for the hash table lookup */
+  g_assert (immutable_samplers[n_immutable_samplers] == NULL);
+
+  layout = g_hash_table_lookup (self->pipeline_layouts, immutable_samplers);
+  if (layout)
+    {
+      gsk_vulkan_pipeline_layout_ref (self, layout);
+      return layout;
+    }
+
+  return gsk_vulkan_pipeline_layout_new (self, immutable_samplers, n_immutable_samplers);
+}
+
+void
+gsk_vulkan_device_release_pipeline_layout (GskVulkanDevice         *self,
+                                           GskVulkanPipelineLayout *layout)
+{
+  if (self->pipeline_layout_cache)
+    gsk_vulkan_pipeline_layout_unref (self, self->pipeline_layout_cache);
+
+  self->pipeline_layout_cache = layout;
 }
 
 static GskVulkanAllocator *
