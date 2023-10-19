@@ -141,9 +141,7 @@ struct _Download
 };
 
 static gboolean
-gdk_gl_texture_find_format (gboolean         use_es,
-                            guint            gl_major,
-                            guint            gl_minor,
+gdk_gl_texture_find_format (GdkGLContext    *context,
                             GdkMemoryAlpha   alpha,
                             GLint            gl_format,
                             GLint            gl_type,
@@ -159,7 +157,7 @@ gdk_gl_texture_find_format (gboolean         use_es,
       if (gdk_memory_format_alpha (format) != alpha)
         continue;
 
-      if (!gdk_memory_format_gl_format (format, use_es, gl_major, gl_minor, &q_internal_format, &q_format, &q_type, q_swizzle))
+      if (!gdk_memory_format_gl_format (format, context, &q_internal_format, &q_format, &q_type, q_swizzle))
         continue;
 
       if (q_format != gl_format || q_type != gl_type)
@@ -183,16 +181,13 @@ gdk_gl_texture_do_download (GdkGLTexture *self,
   Download *download = download_;
   GLenum gl_internal_format, gl_format, gl_type;
   GLint gl_swizzle[4];
-  int major, minor;
 
   format = gdk_texture_get_format (texture),
   expected_stride = texture->width * gdk_memory_format_bytes_per_pixel (download->format);
-  gdk_gl_context_get_version (context, &major, &minor);
 
   if (!gdk_gl_context_get_use_es (context) &&
       gdk_memory_format_gl_format (format,
-                                   FALSE,
-                                   major, minor,
+                                   context,
                                    &gl_internal_format,
                                    &gl_format, &gl_type, gl_swizzle))
     {
@@ -243,7 +238,7 @@ gdk_gl_texture_do_download (GdkGLTexture *self,
         {
           glGetFramebufferParameteriv (GL_FRAMEBUFFER, GL_IMPLEMENTATION_COLOR_READ_FORMAT, &gl_read_format);
           glGetFramebufferParameteriv (GL_FRAMEBUFFER, GL_IMPLEMENTATION_COLOR_READ_TYPE, &gl_read_type);
-          if (!gdk_gl_texture_find_format (TRUE, major, minor, gdk_memory_format_alpha (format), gl_read_format, gl_read_type, &actual_format))
+          if (!gdk_gl_texture_find_format (context, gdk_memory_format_alpha (format), gl_read_format, gl_read_type, &actual_format))
             {
               gl_read_format = GL_RGBA;
               gl_read_type = GL_UNSIGNED_BYTE;

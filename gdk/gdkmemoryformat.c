@@ -20,6 +20,7 @@
 #include "config.h"
 
 #include "gdkmemoryformatprivate.h"
+#include "gdkglcontextprivate.h"
 
 #include "gsk/gl/fp16private.h"
 
@@ -352,7 +353,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     4,
     G_ALIGNOF (guchar),
     GDK_MEMORY_U8,
-    { 0, 0, G_MAXUINT, G_MAXUINT },
+    { 0, 0, 0, 0 },
     { GL_RGBA8, GL_BGRA, GL_UNSIGNED_BYTE, { GL_RED, GL_GREEN, GL_BLUE, GL_ALPHA } },
     b8g8r8a8_premultiplied_to_float,
     b8g8r8a8_premultiplied_from_float,
@@ -382,7 +383,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     4,
     G_ALIGNOF (guchar),
     GDK_MEMORY_U8,
-    { 0, 0, G_MAXUINT, G_MAXUINT },
+    { 0, 0, 0, 0 },
     { GL_RGBA8, GL_BGRA, GL_UNSIGNED_BYTE, { GL_RED, GL_GREEN, GL_BLUE, GL_ALPHA } },
     b8g8r8a8_to_float,
     b8g8r8a8_from_float,
@@ -733,14 +734,19 @@ gdk_memory_depth_get_alpha_format (GdkMemoryDepth depth)
 
 gboolean
 gdk_memory_format_gl_format (GdkMemoryFormat  format,
-                             gboolean         gles,
-                             guint            gl_major,
-                             guint            gl_minor,
+                             GdkGLContext    *context,
                              guint           *out_internal_format,
                              guint           *out_format,
                              guint           *out_type,
                              GLint            out_swizzle[4])
 {
+  int gl_major;
+  int gl_minor;
+  gboolean gles;
+
+  gdk_gl_context_get_version (context, &gl_major, &gl_minor);
+  gles = gdk_gl_context_get_use_es (context);
+
   *out_internal_format = memory_formats[format].gl.internal_format;
   *out_format = memory_formats[format].gl.format;
   *out_type = memory_formats[format].gl.type;
@@ -751,6 +757,9 @@ gdk_memory_format_gl_format (GdkMemoryFormat  format,
       if (memory_formats[format].min_gl_version.gles_major > gl_major ||
           (memory_formats[format].min_gl_version.gles_major == gl_major &&
            memory_formats[format].min_gl_version.gles_minor > gl_minor))
+        return FALSE;
+
+      if (*out_format == GL_BGRA && !gdk_gl_context_has_bgra (context))
         return FALSE;
     }
   else
