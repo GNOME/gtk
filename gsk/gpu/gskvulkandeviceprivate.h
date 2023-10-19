@@ -7,6 +7,7 @@
 #include "gskvulkanmemoryprivate.h"
 
 #include <gdk/gdkvulkancontext.h>
+#include "gdk/gdkdisplayprivate.h"
 
 G_BEGIN_DECLS
 
@@ -26,6 +27,8 @@ GskGpuDevice *          gsk_vulkan_device_get_for_display               (GdkDisp
                                                                          GError                **error);
 
 gsize                   gsk_vulkan_device_get_max_descriptors           (GskVulkanDevice        *self) G_GNUC_PURE;
+gboolean                gsk_vulkan_device_has_feature                   (GskVulkanDevice        *self,
+                                                                         GdkVulkanFeatures       feature) G_GNUC_PURE;
 
 VkDevice                gsk_vulkan_device_get_vk_device                 (GskVulkanDevice        *self) G_GNUC_PURE;
 VkPhysicalDevice        gsk_vulkan_device_get_vk_physical_device        (GskVulkanDevice        *self) G_GNUC_PURE;
