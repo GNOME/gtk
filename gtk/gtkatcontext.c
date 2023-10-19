@@ -1290,33 +1290,36 @@ gtk_at_context_get_text_accumulate (GtkATContext          *self,
     }
 
   /* Step 2.E */
-  if (self->accessible_role == GTK_ACCESSIBLE_ROLE_TEXT_BOX)
+  if ((property == GTK_ACCESSIBLE_PROPERTY_LABEL && is_child) || (relation == GTK_ACCESSIBLE_RELATION_LABELLED_BY && is_ref))
     {
-      if (GTK_IS_EDITABLE (self->accessible))
+      if (self->accessible_role == GTK_ACCESSIBLE_ROLE_TEXT_BOX)
         {
-          const char *text = gtk_editable_get_text (GTK_EDITABLE (self->accessible));
-          if (text && not_just_space (text))
-            append_with_space (res, text);
-        }
-      return;
-    }
-  else if (gtk_accessible_role_is_range_subclass (self->accessible_role))
-    {
-      if (gtk_accessible_attribute_set_contains (self->properties, GTK_ACCESSIBLE_PROPERTY_VALUE_TEXT))
+          if (GTK_IS_EDITABLE (self->accessible))
+            {
+              const char *text = gtk_editable_get_text (GTK_EDITABLE (self->accessible));
+            if (text && not_just_space (text))
+              append_with_space (res, text);
+          }
+        return;
+      }
+      else if (gtk_accessible_role_is_range_subclass (self->accessible_role))
         {
-          value = gtk_accessible_attribute_set_get_value (self->properties, GTK_ACCESSIBLE_PROPERTY_VALUE_TEXT);
-          append_with_space (res, gtk_string_accessible_value_get (value));
-        }
-      else if (gtk_accessible_attribute_set_contains (self->properties, GTK_ACCESSIBLE_PROPERTY_VALUE_NOW))
-        {
-          value = gtk_accessible_attribute_set_get_value (self->properties, GTK_ACCESSIBLE_PROPERTY_VALUE_NOW);
-          if (res->len > 0)
-            g_string_append (res, " ");
-          g_string_append_printf (res, "%g", gtk_number_accessible_value_get (value));
-        }
+          if (gtk_accessible_attribute_set_contains (self->properties, GTK_ACCESSIBLE_PROPERTY_VALUE_TEXT))
+            {
+              value = gtk_accessible_attribute_set_get_value (self->properties, GTK_ACCESSIBLE_PROPERTY_VALUE_TEXT);
+              append_with_space (res, gtk_string_accessible_value_get (value));
+            }
+          else if (gtk_accessible_attribute_set_contains (self->properties, GTK_ACCESSIBLE_PROPERTY_VALUE_NOW))
+            {
+              value = gtk_accessible_attribute_set_get_value (self->properties, GTK_ACCESSIBLE_PROPERTY_VALUE_NOW);
+              if (res->len > 0)
+                g_string_append (res, " ");
+              g_string_append_printf (res, "%g", gtk_number_accessible_value_get (value));
+            }
 
-      return;
-    }
+          return;
+        }
+      }
 
   /* Step 2.F */
   if (gtk_accessible_role_supports_name_from_content (self->accessible_role) || is_ref || is_child)
