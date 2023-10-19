@@ -365,6 +365,8 @@ static void
 gdk_dmabuf_texture_builder_init (GdkDmabufTextureBuilder *self)
 {
   self->premultiplied = TRUE;
+  self->display = gdk_display_get_default ();
+
   for (int i = 0; i < GDK_DMABUF_MAX_PLANES; i++)
     self->dmabuf.planes[i].fd = -1;
 }
@@ -391,7 +393,7 @@ gdk_dmabuf_texture_builder_new (void)
  * Returns the display that this texture builder is
  * associated with.
  *
- * Returns: (transfer none) (nullable): the display
+ * Returns: (transfer none): the display
  *
  * Since: 4.14
  */
@@ -421,6 +423,7 @@ gdk_dmabuf_texture_builder_set_display (GdkDmabufTextureBuilder *self,
                                         GdkDisplay              *display)
 {
   g_return_if_fail (GDK_IS_DMABUF_TEXTURE_BUILDER (self));
+  g_return_if_fail (GDK_IS_DISPLAY (display));
 
   if (g_set_object (&self->display, display))
     g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_DISPLAY]);
