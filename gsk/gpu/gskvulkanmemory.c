@@ -371,4 +371,67 @@ gsk_vulkan_stats_allocator_new (GskVulkanAllocator *allocator)
 }
 
 /* }}} */
+/* {{{ external allocator ***/
+
+typedef struct _GskVulkanExteralAllocator GskVulkanExteralAllocator;
+
+struct _GskVulkanExteralAllocator
+{
+  GskVulkanAllocator allocator_class;
+
+  VkDevice device; /* no reference held */
+};
+
+static void
+gsk_vulkan_external_allocator_free_allocator (GskVulkanAllocator *allocator)
+{
+  g_free (allocator);
+}
+
+static void
+gsk_vulkan_external_allocator_alloc (GskVulkanAllocator  *allocator,
+                                     VkDeviceSize         size,
+                                     VkDeviceSize         alignment,
+                                     GskVulkanAllocation *alloc)
+{
+  alloc->vk_memory = VK_NULL_HANDLE;
+  alloc->map = NULL;
+  alloc->offset = 0;
+  alloc->size = size;
+}
+
+static void
+gsk_vulkan_external_allocator_free (GskVulkanAllocator  *allocator,
+                                    GskVulkanAllocation *alloc)
+{
+  GskVulkanExteralAllocator *self = (GskVulkanExteralAllocator *) allocator;
+
+  g_assert (alloc->map == NULL);
+
+  if (alloc->vk_memory)
+    vkFreeMemory (self->device,
+                  alloc->vk_memory,
+                  NULL);
+}
+
+/* The external allocator assumes you call alloc() and then set alloc->vk_memory
+ * manually.
+ * You can even usnet it before calling free() if you set it back to VK_NULL_HANDLE.
+ */
+GskVulkanAllocator *
+gsk_vulkan_external_allocator_new (VkDevice device)
+{
+  GskVulkanExteralAllocator *self;
+
+  self = g_new0 (GskVulkanExteralAllocator, 1);
+  self->allocator_class.ref_count = 1;
+  self->allocator_class.free_allocator = gsk_vulkan_external_allocator_free_allocator;
+  self->allocator_class.alloc = gsk_vulkan_external_allocator_alloc;
+  self->allocator_class.free = gsk_vulkan_external_allocator_free;
+  self->device = device;
+
+  return (GskVulkanAllocator *) self;
+}
+
+/* }}} */
 

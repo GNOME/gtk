@@ -17,6 +17,7 @@ struct _GskVulkanDevice
   GskGpuDevice parent_instance;
 
   GskVulkanAllocator *allocators[VK_MAX_MEMORY_TYPES];
+  GskVulkanAllocator *external_allocator;
   GdkVulkanFeatures features;
 
   GHashTable *pipeline_cache;
@@ -188,6 +189,7 @@ gsk_vulkan_device_finalize (GObject *object)
 
   for (i = 0; i < VK_MAX_MEMORY_TYPES; i++)
     g_clear_pointer (&self->allocators[i], gsk_vulkan_allocator_unref);
+  g_clear_pointer (&self->external_allocator, gsk_vulkan_allocator_unref);
 
   gdk_display_unref_vulkan (display);
 
@@ -715,3 +717,14 @@ gsk_vulkan_device_find_allocator (GskVulkanDevice       *self,
   return gsk_vulkan_allocator_ref (gsk_vulkan_device_get_allocator (self, i, &properties.memoryTypes[i]));
 }
 
+GskVulkanAllocator *
+gsk_vulkan_device_get_external_allocator (GskVulkanDevice *self)
+{
+  if (self->external_allocator == NULL)
+    {
+      self->external_allocator = gsk_vulkan_external_allocator_new (gsk_vulkan_device_get_vk_device (self));
+      //self->external_allocator = gsk_vulkan_stats_allocator_new (self->external_allocator);
+    }
+
+  return self->external_allocator;
+}
