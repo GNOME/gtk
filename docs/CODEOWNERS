@@ -2,8 +2,9 @@
 # a merge request for files listed here, please add the following people to
 # the list of reviewers
 
-# The syntax of this file is similar to the GitHub CODEOWNERS file:
-#   https://help.github.com/articles/about-codeowners/
+# The syntax of this file is defined in the GitLab documentation:
+#   https://docs.gitlab.com/ee/user/project/codeowners/reference.html
+#
 # Which, in turn, is similar to the .gitignore and .gitattributes files:
 #
 #  - comments start with `#`
@@ -14,64 +15,61 @@
 # If you want to be responsible for code reviews in specific sections of
 # the GTK code base, add yourself here.
 
-# Maintainer
-*                       @matthiasc
+[Maintainer]
+*                        @matthiasc
 
-# Build system
-meson.build             @ebassi @nirbheek
-*.py                    @ebassi
+[Build system]
+meson.build              @ebassi @nirbheek @xclaesse
+*.py                     @ebassi
 
-# CSS
-gtk/gtkcss*.[ch]        @otte @baedert
-gtk/gtkstyle*.[ch]      @otte @baedert
+[CSS]
+/gtk/gtkcss*.[ch]        @otte @matthiasc
+/gtk/gtkstyle*.[ch]      @otte @matthiasc
 
-# Gestures
-gtk/gtkeventcontroller* @carlosg
-gtk/gtkgesture*.[ch]    @carlosg
+[Gestures]
+/gtk/gtkeventcontroller* @carlosg
+/gtk/gtkgesture*.[ch]    @carlosg
 
-# GtkFileChooser
-gtk/gtkfilechooser*     @federico @ebassi
-gtk/gtkfilesystem*      @federico @ebassi
-gtk/gtkfilefilter*      @federico @ebassi
+[Input methods]
+/gtk/gtkimcontext*       @carlosg
 
-# GtkFontChooser
-gtk/gtkfontchooser*     @matthiasc
+[Media]
+/gtk/gtkmedia*           @otte
 
-# Input methods
-gtk/gtkimcontext*       @carlosg
+[GSK]
+/gsk/                    @otte @chergert @ebassi
 
-# Media
-gtk/gtkmedia*           @otte
+[GL rendering]
+/gsk/gl/                 @otte @chergert
 
-# GSK
-gsk                     @otte @baedert @ebassi
+[Vulkan rendering]
+/gsk/vulkan              @otte
 
-# GL rendering
-gsk/gl                  @baedert @ebassi
+[Documentation]
+/docs/                   @ebassi @dboles
+README.md                @ebassi
+CONTRIBUTING.md          @ebassi @matthiasc
 
-# Vulkan rendering
-gsk/vulkan
+[Wayland]
+/gdk/wayland             @jadahl
 
-# Documentation
-docs/                   @ebassi @dboles
+[X11]
+/gdk/x11                 @ofourdan @matthiasc @carlosg
 
-# Wayland
-gdk/wayland             @jadahl
+[macOS]
+/gdk/macos               @chergert
 
-# X11
-gdk/x11                 @ofourdan @matthiasc
+[Themes]
+/gtk/themes              @lapoc @jimmac
 
-# Themes
-gtk/themes              @lapoc @jimmac
+[Inspector]
+/gtk/inspector           @otte @matthiasc
 
-# Inspector
-gtk/inspector           @otte @matthiasc
+[Layout managers]
+/gtk/gtklayout*          @ebassi
+/gtk/gtkconstraint*      @ebassi
 
-# Layout managers
-gtk/gtklayout*          @ebassi
-gtk/gtkconstraint*      @ebassi
-
-# Accessibility
-gtk/gtkaccessible*.[ch] @ebassi
-gtk/gtkatcontext*.[ch]  @ebassi
-gtk/a11y                @ebassi
+[Accessibility]
+/gtk/gtkaccessible*.[ch] @ebassi @tyrylu @matthiasc
+/gtk/gtkatcontext*.[ch]  @ebassi @tyrylu @matthiasc
+/gtk/a11y                @ebassi @tyrylu
