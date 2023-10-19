@@ -38,6 +38,7 @@ guchar *                gsk_vulkan_image_get_data                       (GskVulk
 
 GskVulkanImagePostprocess
                         gsk_vulkan_image_get_postprocess                (GskVulkanImage         *self);
+VkSampler               gsk_vulkan_image_get_vk_sampler                 (GskVulkanImage         *self);
 VkPipelineStageFlags    gsk_vulkan_image_get_vk_pipeline_stage          (GskVulkanImage         *self);
 VkImageLayout           gsk_vulkan_image_get_vk_image_layout            (GskVulkanImage         *self);
 VkAccessFlags           gsk_vulkan_image_get_vk_access                  (GskVulkanImage         *self);
