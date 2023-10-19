@@ -18,6 +18,7 @@ typedef struct _GskGpuShaderOpClass     GskGpuShaderOpClass;
 
 typedef enum {
   GSK_GPU_IMAGE_EXTERNAL       = (1 << 0),
+  GSK_GPU_IMAGE_TOGGLE_REF     = (1 << 1),
 } GskGpuImageFlags;
 
 typedef enum {

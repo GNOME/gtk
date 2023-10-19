@@ -35,6 +35,7 @@ gboolean                gsk_vulkan_device_has_feature                   (GskVulk
 VkDevice                gsk_vulkan_device_get_vk_device                 (GskVulkanDevice        *self) G_GNUC_PURE;
 VkPhysicalDevice        gsk_vulkan_device_get_vk_physical_device        (GskVulkanDevice        *self) G_GNUC_PURE;
 VkQueue                 gsk_vulkan_device_get_vk_queue                  (GskVulkanDevice        *self) G_GNUC_PURE;
+uint32_t                gsk_vulkan_device_get_vk_queue_family_index     (GskVulkanDevice        *self) G_GNUC_PURE;
 VkDescriptorSetLayout   gsk_vulkan_device_get_vk_buffer_set_layout      (GskVulkanDevice        *self) G_GNUC_PURE;
 VkCommandPool           gsk_vulkan_device_get_vk_command_pool           (GskVulkanDevice        *self) G_GNUC_PURE;
 VkSampler               gsk_vulkan_device_get_vk_sampler                (GskVulkanDevice        *self,

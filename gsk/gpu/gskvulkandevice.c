@@ -522,6 +522,12 @@ gsk_vulkan_device_get_vk_queue (GskVulkanDevice *self)
   return gsk_gpu_device_get_display (GSK_GPU_DEVICE (self))->vk_queue;
 }
 
+uint32_t
+gsk_vulkan_device_get_vk_queue_family_index (GskVulkanDevice *self)
+{
+  return gsk_gpu_device_get_display (GSK_GPU_DEVICE (self))->vk_queue_family_index;
+}
+
 VkDescriptorSetLayout
 gsk_vulkan_device_get_vk_image_set_layout (GskVulkanDevice         *self,
                                            GskVulkanPipelineLayout *layout)

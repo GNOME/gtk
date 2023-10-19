@@ -35,6 +35,8 @@ void                    gsk_gpu_image_setup                             (GskGpuI
                                                                          GdkMemoryFormat         format,
                                                                          gsize                   width,
                                                                          gsize                   height);
+void                    gsk_gpu_image_toggle_ref_texture                (GskGpuImage            *self,
+                                                                         GdkTexture             *texture);
 
 GdkMemoryFormat         gsk_gpu_image_get_format                        (GskGpuImage            *self);
 gsize                   gsk_gpu_image_get_width                         (GskGpuImage            *self);

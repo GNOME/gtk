@@ -31,8 +31,39 @@ gsk_gpu_image_get_default_projection_matrix (GskGpuImage       *self,
 }
 
 static void
+gsk_gpu_image_texture_toggle_ref_cb (gpointer  texture,
+                                     GObject  *image,
+                                     gboolean  is_last_ref)
+{
+  if (is_last_ref)
+    g_object_unref (texture);
+  else
+    g_object_ref (texture);
+}
+
+static void
+gsk_gpu_image_dispose (GObject *object)
+{
+  GskGpuImage *self = GSK_GPU_IMAGE (object);
+  GskGpuImagePrivate *priv = gsk_gpu_image_get_instance_private (self);
+
+  if (priv->flags & GSK_GPU_IMAGE_TOGGLE_REF)
+    {
+      priv->flags &= ~GSK_GPU_IMAGE_TOGGLE_REF;
+      G_OBJECT (self)->ref_count++;
+      g_object_remove_toggle_ref (G_OBJECT (self), gsk_gpu_image_texture_toggle_ref_cb, NULL);
+    }
+
+  G_OBJECT_CLASS (gsk_gpu_image_parent_class)->dispose (object);
+}
+
+static void
 gsk_gpu_image_class_init (GskGpuImageClass *klass)
 {
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
+
+  object_class->dispose = gsk_gpu_image_dispose;
+
   klass->get_projection_matrix = gsk_gpu_image_get_default_projection_matrix;
 }
 
@@ -54,6 +85,34 @@ gsk_gpu_image_setup (GskGpuImage      *self,
   priv->format = format;
   priv->width = width;
   priv->height = height;
+}
+
+/*
+ * gsk_gpu_image_toggle_ref_texture:
+ * @self: a GskGpuImage
+ * @texture: the texture owning @self
+ *
+ * This function must be called whenever the texture owns the data
+ * used by the image. It will then add a toggle ref, so that ref'ing
+ * the image will ref the texture and unrefing the image will unref it
+ * again.
+ *
+ * This ensures that whenever the image is used, the texture will keep
+ * being referenced and not go away. But once all the image's references
+ * get unref'ed, the texture is free to go away.
+ **/
+void
+gsk_gpu_image_toggle_ref_texture (GskGpuImage *self,
+                                  GdkTexture  *texture)
+{
+  GskGpuImagePrivate *priv = gsk_gpu_image_get_instance_private (self);
+
+  g_assert ((priv->flags & GSK_GPU_IMAGE_TOGGLE_REF) == 0);
+
+  priv->flags |= GSK_GPU_IMAGE_TOGGLE_REF;
+  g_object_ref (texture);
+  g_object_add_toggle_ref (G_OBJECT (self), gsk_gpu_image_texture_toggle_ref_cb, texture);
+  g_object_unref (self);
 }
                      
 GdkMemoryFormat
