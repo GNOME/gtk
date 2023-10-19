@@ -3,6 +3,8 @@
 #include "gskgpuimageprivate.h"
 #include "gskvulkandeviceprivate.h"
 
+#include "gdk/gdkdmabufprivate.h"
+
 G_BEGIN_DECLS
 
 /* required postprocessing steps before the image van be used */
@@ -28,11 +30,15 @@ GskGpuImage *           gsk_vulkan_image_new_for_offscreen              (GskVulk
                                                                          GdkMemoryFormat         preferred_format,
                                                                          gsize                   width,
                                                                          gsize                   height);
-
 GskGpuImage *           gsk_vulkan_image_new_for_upload                 (GskVulkanDevice        *device,
                                                                          GdkMemoryFormat         format,
                                                                          gsize                   width,
                                                                          gsize                   height);
+#ifdef HAVE_DMABUF
+GskGpuImage *           gsk_vulkan_image_new_for_dmabuf                 (GskVulkanDevice        *device,
+                                                                         GdkTexture             *texture);
+#endif
+
 guchar *                gsk_vulkan_image_get_data                       (GskVulkanImage         *self,
                                                                          gsize                  *out_stride);
 

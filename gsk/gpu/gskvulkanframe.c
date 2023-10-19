@@ -9,6 +9,7 @@
 #include "gskvulkanimageprivate.h"
 
 #include "gdk/gdkdisplayprivate.h"
+#include "gdk/gdkdmabuftextureprivate.h"
 
 #define GDK_ARRAY_NAME gsk_descriptor_image_infos
 #define GDK_ARRAY_TYPE_NAME GskDescriptorImageInfos
@@ -153,6 +154,23 @@ gsk_vulkan_frame_cleanup (GskGpuFrame *frame)
   self->pipeline_layout = NULL;
 
   GSK_GPU_FRAME_CLASS (gsk_vulkan_frame_parent_class)->cleanup (frame);
+}
+
+static GskGpuImage *
+gsk_vulkan_frame_upload_texture (GskGpuFrame  *frame,
+                                 GdkTexture   *texture)
+{
+#ifdef HAVE_DMABUF
+  if (GDK_IS_DMABUF_TEXTURE (texture))
+    {
+      GskGpuImage *image = gsk_vulkan_image_new_for_dmabuf (GSK_VULKAN_DEVICE (gsk_gpu_frame_get_device (frame)),
+                                                            texture);
+      if (image)
+        return image;
+    }
+#endif
+
+  return GSK_GPU_FRAME_CLASS (gsk_vulkan_frame_parent_class)->upload_texture (frame, texture);
 }
 
 guint32
@@ -410,6 +428,7 @@ gsk_vulkan_frame_class_init (GskVulkanFrameClass *klass)
   gpu_frame_class->is_busy = gsk_vulkan_frame_is_busy;
   gpu_frame_class->setup = gsk_vulkan_frame_setup;
   gpu_frame_class->cleanup = gsk_vulkan_frame_cleanup;
+  gpu_frame_class->upload_texture = gsk_vulkan_frame_upload_texture;
   gpu_frame_class->create_descriptors = gsk_vulkan_frame_create_descriptors;
   gpu_frame_class->create_vertex_buffer = gsk_vulkan_frame_create_vertex_buffer;
   gpu_frame_class->create_storage_buffer = gsk_vulkan_frame_create_storage_buffer;

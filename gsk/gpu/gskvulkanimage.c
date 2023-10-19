@@ -6,9 +6,12 @@
 #include "gskvulkanmemoryprivate.h"
 
 #include "gdk/gdkdisplayprivate.h"
+#include "gdk/gdkdmabuftextureprivate.h"
 #include "gdk/gdkvulkancontextprivate.h"
 #include "gdk/gdkmemoryformatprivate.h"
+#include "gdk/gdkvulkancontextprivate.h"
 
+#include <fcntl.h>
 #include <string.h>
 
 struct _GskVulkanImage
@@ -451,22 +454,32 @@ gsk_memory_format_get_fallback (GdkMemoryFormat format)
 static gboolean
 gsk_vulkan_device_supports_format (GskVulkanDevice   *device,
                                    VkFormat           format,
+                                   uint64_t           modifier,
+                                   guint              n_planes,
                                    VkImageTiling      tiling,
                                    VkImageUsageFlags  usage,
                                    gsize              width,
                                    gsize              height)
 {
+  VkDrmFormatModifierPropertiesEXT drm_mod_properties[100];
+  VkDrmFormatModifierPropertiesListEXT drm_properties;
   VkPhysicalDevice vk_phys_device;
   VkFormatProperties2 properties;
   VkImageFormatProperties2 image_properties;
   VkFormatFeatureFlags features, required;
   VkResult res;
+  gsize i;
 
   vk_phys_device = gsk_vulkan_device_get_vk_physical_device (device);
 
+  drm_properties = (VkDrmFormatModifierPropertiesListEXT) {
+    .sType = VK_STRUCTURE_TYPE_DRM_FORMAT_MODIFIER_PROPERTIES_LIST_EXT,
+    .drmFormatModifierCount = G_N_ELEMENTS (drm_mod_properties),
+    .pDrmFormatModifierProperties = drm_mod_properties,
+  };
   properties = (VkFormatProperties2) {
     .sType = VK_STRUCTURE_TYPE_FORMAT_PROPERTIES_2,
-    .pNext = NULL
+    .pNext = (tiling != VK_IMAGE_TILING_DRM_FORMAT_MODIFIER_EXT) ? NULL : &drm_properties
   };
   vkGetPhysicalDeviceFormatProperties2 (vk_phys_device,
                                         format,
@@ -479,6 +492,20 @@ gsk_vulkan_device_supports_format (GskVulkanDevice   *device,
         break;
       case VK_IMAGE_TILING_LINEAR:
         features = properties.formatProperties.linearTilingFeatures;
+        break;
+      case VK_IMAGE_TILING_DRM_FORMAT_MODIFIER_EXT:
+        features = 0;
+        for (i = 0; i < drm_properties.drmFormatModifierCount; i++)
+          {
+            if (drm_mod_properties[i].drmFormatModifier == modifier &&
+                drm_mod_properties[i].drmFormatModifierPlaneCount == n_planes)
+              {
+                features = drm_mod_properties[i].drmFormatModifierTilingFeatures;
+                break;
+              }
+          }
+        if (features == 0)
+          return FALSE;
         break;
       default:
         return FALSE;
@@ -494,17 +521,22 @@ gsk_vulkan_device_supports_format (GskVulkanDevice   *device,
 
   image_properties = (VkImageFormatProperties2) {
     .sType = VK_STRUCTURE_TYPE_IMAGE_FORMAT_PROPERTIES_2,
-    .pNext = NULL,
   };
   res = vkGetPhysicalDeviceImageFormatProperties2 (vk_phys_device,
                                                    &(VkPhysicalDeviceImageFormatInfo2) {
                                                      .sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_IMAGE_FORMAT_INFO_2,
-                                                     .pNext = NULL,
                                                      .format = format,
                                                      .type = VK_IMAGE_TYPE_2D,
                                                      .tiling = tiling,
                                                      .usage = usage,
                                                      .flags = 0,
+                                                     .pNext = (tiling != VK_IMAGE_TILING_DRM_FORMAT_MODIFIER_EXT) ? NULL : &(VkPhysicalDeviceImageDrmFormatModifierInfoEXT) {
+                                                         .sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_IMAGE_DRM_FORMAT_MODIFIER_INFO_EXT,
+                                                         .drmFormatModifier = modifier,
+                                                         .sharingMode = VK_SHARING_MODE_EXCLUSIVE,
+                                                         .queueFamilyIndexCount = 1,
+                                                         .pQueueFamilyIndices = (uint32_t[1]) { gsk_vulkan_device_get_vk_queue_family_index (device) },
+                                                      }
                                                    },
                                                    &image_properties);
   if (res != VK_SUCCESS)
@@ -580,6 +612,7 @@ gsk_vulkan_image_new (GskVulkanDevice           *device,
 
           if (gsk_vulkan_device_supports_format (device,
                                                  vk_format->format,
+                                                 0, 1,
                                                  tiling, usage,
                                                  width, height))
             break;
@@ -587,6 +620,7 @@ gsk_vulkan_image_new (GskVulkanDevice           *device,
           if (tiling != VK_IMAGE_TILING_OPTIMAL &&
               gsk_vulkan_device_supports_format (device,
                                                  vk_format->format,
+                                                 0, 1,
                                                  VK_IMAGE_TILING_OPTIMAL, usage,
                                                  width, height))
             {
@@ -806,6 +840,271 @@ gsk_vulkan_image_new_for_offscreen (GskVulkanDevice *device,
 
   return GSK_GPU_IMAGE (self);
 }
+
+#ifdef HAVE_DMABUF
+GskGpuImage *
+gsk_vulkan_image_new_for_dmabuf (GskVulkanDevice *device,
+                                 GdkTexture      *texture)
+{
+  GskVulkanImage *self;
+  VkDevice vk_device;
+  VkFormat vk_format;
+  VkComponentMapping vk_components;
+  VkSamplerYcbcrConversion vk_conversion;
+  PFN_vkGetMemoryFdPropertiesKHR func_vkGetMemoryFdPropertiesKHR;
+  gsize i;
+  int fd;
+  gsize width, height;
+  const GdkDmabuf *dmabuf;
+  VkResult res;
+  gboolean is_yuv;
+
+  if (!gsk_vulkan_device_has_feature (device, GDK_VULKAN_FEATURE_DMABUF))
+    {
+      GDK_DEBUG (DMABUF, "Vulkan does not support dmabufs");
+      return NULL;
+    }
+
+  width = gdk_texture_get_width (texture);
+  height = gdk_texture_get_height (texture);
+  dmabuf = gdk_dmabuf_texture_get_dmabuf (GDK_DMABUF_TEXTURE (texture));
+  vk_device = gsk_vulkan_device_get_vk_device (device);
+  func_vkGetMemoryFdPropertiesKHR = (PFN_vkGetMemoryFdPropertiesKHR) vkGetDeviceProcAddr (vk_device, "vkGetMemoryFdPropertiesKHR");
+
+  vk_format = gdk_dmabuf_get_vk_format (dmabuf->fourcc, &vk_components);
+  if (vk_format == VK_FORMAT_UNDEFINED)
+    {
+      GDK_DEBUG (DMABUF, "GTK's Vulkan doesn't support fourcc %.4s", (char *) &dmabuf->fourcc);
+      return NULL;
+    }
+  if (!gdk_dmabuf_fourcc_is_yuv (dmabuf->fourcc, &is_yuv))
+    {
+      g_assert_not_reached ();
+    }
+
+  /* FIXME: Add support for disjoint images */
+  if (gdk_dmabuf_is_disjoint (dmabuf))
+    {
+      GDK_DEBUG (DMABUF, "FIXME: Add support for disjoint dmabufs to Vulkan");
+      return NULL;
+    }
+
+  if (!gsk_vulkan_device_supports_format (device,
+                                          vk_format,
+                                          dmabuf->modifier,
+                                          dmabuf->n_planes,
+                                          VK_IMAGE_TILING_DRM_FORMAT_MODIFIER_EXT,
+                                          VK_IMAGE_USAGE_SAMPLED_BIT,
+                                          width, height))
+    {
+      GDK_DEBUG (DMABUF, "Vulkan driver does not support format %.4s::%016llx with %u planes",
+                 (char *) &dmabuf->fourcc, (unsigned long long) dmabuf->modifier, dmabuf->n_planes);
+      return NULL;
+    }
+
+  self = g_object_new (GSK_TYPE_VULKAN_IMAGE, NULL);
+
+  self->display = g_object_ref (gsk_gpu_device_get_display (GSK_GPU_DEVICE (device)));
+  gdk_display_ref_vulkan (self->display);
+  self->vk_tiling = VK_IMAGE_TILING_DRM_FORMAT_MODIFIER_EXT;
+  self->vk_format = vk_format;
+  self->vk_pipeline_stage = VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT;
+  self->vk_image_layout = VK_IMAGE_LAYOUT_UNDEFINED;
+  self->vk_access = 0;
+
+  res  = vkCreateImage (vk_device,
+                        &(VkImageCreateInfo) {
+                            .sType = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO,
+                            .flags = 0, //disjoint ? VK_IMAGE_CREATE_DISJOINT_BIT : 0,
+                            .imageType = VK_IMAGE_TYPE_2D,
+                            .format = vk_format,
+                            .extent = { width, height, 1 },
+                            .mipLevels = 1,
+                            .arrayLayers = 1,
+                            .samples = VK_SAMPLE_COUNT_1_BIT,
+                            .tiling = VK_IMAGE_TILING_DRM_FORMAT_MODIFIER_EXT,
+                            .usage = VK_IMAGE_USAGE_SAMPLED_BIT,
+                            .sharingMode = VK_SHARING_MODE_EXCLUSIVE,
+                            .initialLayout = self->vk_image_layout,
+                            .pNext = &(VkExternalMemoryImageCreateInfo) {
+                                .sType = VK_STRUCTURE_TYPE_EXTERNAL_MEMORY_IMAGE_CREATE_INFO,
+                                .handleTypes = VK_EXTERNAL_MEMORY_HANDLE_TYPE_DMA_BUF_BIT_EXT,
+                                .pNext = &(VkImageDrmFormatModifierExplicitCreateInfoEXT) {
+                                    .sType = VK_STRUCTURE_TYPE_IMAGE_DRM_FORMAT_MODIFIER_EXPLICIT_CREATE_INFO_EXT,
+                                    .drmFormatModifier = dmabuf->modifier,
+                                    .drmFormatModifierPlaneCount = dmabuf->n_planes,
+                                    .pPlaneLayouts = (VkSubresourceLayout[4]) {
+                                        {
+                                            .offset = dmabuf->planes[0].offset,
+                                            .rowPitch = dmabuf->planes[0].stride,
+                                        },
+                                        {
+                                            .offset = dmabuf->planes[1].offset,
+                                            .rowPitch = dmabuf->planes[1].stride,
+                                        },
+                                        {
+                                            .offset = dmabuf->planes[2].offset,
+                                            .rowPitch = dmabuf->planes[2].stride,
+                                        },
+                                        {
+                                            .offset = dmabuf->planes[3].offset,
+                                            .rowPitch = dmabuf->planes[3].stride,
+                                        },
+                                    },
+                                }
+                            },
+                        },
+                        NULL,
+                        &self->vk_image);
+  if (res != VK_SUCCESS)
+    {
+      gsk_vulkan_handle_result (res, "vkCreateImage");
+      GDK_DEBUG (DMABUF, "vkCreateImage() failed: %s", gdk_vulkan_strerror (res));
+      return NULL;
+    }
+
+  gsk_gpu_image_setup (GSK_GPU_IMAGE (self),
+                       is_yuv ? GSK_GPU_IMAGE_EXTERNAL : 0,
+                       gdk_texture_get_format (texture),
+                       width, height);
+  gsk_gpu_image_toggle_ref_texture (GSK_GPU_IMAGE (self), texture);
+
+  self->allocator = gsk_vulkan_device_get_external_allocator (device);
+  gsk_vulkan_allocator_ref (self->allocator);
+
+  fd = fcntl (dmabuf->planes[0].fd, F_DUPFD_CLOEXEC, (int) 3);
+  if (fd < 0)
+    {
+      GDK_DEBUG (DMABUF, "Vulkan failed to dup() fd: %s", g_strerror (errno));
+      vkDestroyImage (vk_device, self->vk_image, NULL);
+      return NULL;
+    }
+
+  for (i = 0; i < 1 /* disjoint ? dmabuf->n_planes : 1 */; i++)
+    {
+      VkMemoryFdPropertiesKHR fd_props = {
+          .sType = VK_STRUCTURE_TYPE_MEMORY_FD_PROPERTIES_KHR,
+      };
+      VkMemoryRequirements2 requirements = {
+          .sType = VK_STRUCTURE_TYPE_MEMORY_REQUIREMENTS_2,
+      };
+
+      GSK_VK_CHECK (func_vkGetMemoryFdPropertiesKHR, vk_device,
+                                                     VK_EXTERNAL_MEMORY_HANDLE_TYPE_DMA_BUF_BIT_EXT,
+                                                     fd,
+                                                     &fd_props);
+
+      vkGetImageMemoryRequirements2 (vk_device,
+                                     &(VkImageMemoryRequirementsInfo2) {
+                                         .sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_REQUIREMENTS_INFO_2,
+                                         .image = self->vk_image,
+                                         //.pNext = !disjoint ? NULL : &(VkImagePlaneMemoryRequirementsInfo) {
+                                         //    .sType = VK_STRUCTURE_TYPE_IMAGE_PLANE_MEMORY_REQUIREMENTS_INFO,
+                                         //    .planeAspect = aspect_flags[i]
+                                         //},
+                                     },
+                                     &requirements);
+
+      gsk_vulkan_alloc (self->allocator,
+                        requirements.memoryRequirements.size,
+                        requirements.memoryRequirements.alignment,
+                        &self->allocation);
+      GSK_VK_CHECK (vkAllocateMemory, vk_device,
+                                      &(VkMemoryAllocateInfo) {
+                                          .sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO,
+                                          .allocationSize = requirements.memoryRequirements.size,
+                                          .memoryTypeIndex = g_bit_nth_lsf (fd_props.memoryTypeBits, -1),
+                                          .pNext = &(VkImportMemoryFdInfoKHR) {
+                                              .sType = VK_STRUCTURE_TYPE_IMPORT_MEMORY_FD_INFO_KHR,
+                                              .handleType = VK_EXTERNAL_MEMORY_HANDLE_TYPE_DMA_BUF_BIT_EXT,
+                                              .fd = fd,
+                                              .pNext = &(VkMemoryDedicatedAllocateInfo) {
+                                                  .sType = VK_STRUCTURE_TYPE_MEMORY_DEDICATED_ALLOCATE_INFO,
+                                                  .image = self->vk_image,
+                                              }
+                                          }
+                                      },
+                                      NULL,
+                                      &self->allocation.vk_memory);
+    }
+
+#if 1
+  GSK_VK_CHECK (vkBindImageMemory2, self->display->vk_device,
+                                    1,
+                                    &(VkBindImageMemoryInfo) {
+                                        .sType = VK_STRUCTURE_TYPE_BIND_IMAGE_MEMORY_INFO,
+                                        .image = self->vk_image,
+                                        .memory = self->allocation.vk_memory,
+                                        .memoryOffset = self->allocation.offset,
+                                    });
+#else
+  GSK_VK_CHECK (vkBindImageMemory2, self->display->vk_device,
+                                    dmabuf->n_planes,
+                                    (VkBindImageMemoryInfo[4]) {
+                                        {
+                                            .sType = VK_STRUCTURE_TYPE_BIND_IMAGE_MEMORY_INFO,
+                                            .image = self->vk_image,
+                                            .memory = self->allocation.vk_memory,
+                                            .memoryOffset = dmabuf->planes[0].offset,
+                                            .pNext = &(VkBindImagePlaneMemoryInfo) {
+                                                .sType = VK_STRUCTURE_TYPE_BIND_IMAGE_PLANE_MEMORY_INFO,
+                                                .planeAspect = VK_IMAGE_ASPECT_MEMORY_PLANE_0_BIT_EXT,
+                                            },
+                                        },
+                                        {
+                                            .sType = VK_STRUCTURE_TYPE_BIND_IMAGE_MEMORY_INFO,
+                                            .image = self->vk_image,
+                                            .memory = self->allocation.vk_memory,
+                                            .memoryOffset = dmabuf->planes[1].offset,
+                                            .pNext = &(VkBindImagePlaneMemoryInfo) {
+                                                .sType = VK_STRUCTURE_TYPE_BIND_IMAGE_PLANE_MEMORY_INFO,
+                                                .planeAspect = VK_IMAGE_ASPECT_MEMORY_PLANE_1_BIT_EXT,
+                                            },
+
+                                        },
+                                        {
+                                            .sType = VK_STRUCTURE_TYPE_BIND_IMAGE_MEMORY_INFO,
+                                            .image = self->vk_image,
+                                            .memory = self->allocation.vk_memory,
+                                            .memoryOffset = dmabuf->planes[2].offset,
+                                            .pNext = &(VkBindImagePlaneMemoryInfo) {
+                                                .sType = VK_STRUCTURE_TYPE_BIND_IMAGE_PLANE_MEMORY_INFO,
+                                                .planeAspect = VK_IMAGE_ASPECT_MEMORY_PLANE_2_BIT_EXT,
+                                            },
+                                        },
+                                        {
+                                            .sType = VK_STRUCTURE_TYPE_BIND_IMAGE_MEMORY_INFO,
+                                            .image = self->vk_image,
+                                            .memory = self->allocation.vk_memory,
+                                            .memoryOffset = dmabuf->planes[3].offset,
+                                            .pNext = &(VkBindImagePlaneMemoryInfo) {
+                                                .sType = VK_STRUCTURE_TYPE_BIND_IMAGE_PLANE_MEMORY_INFO,
+                                                .planeAspect = VK_IMAGE_ASPECT_MEMORY_PLANE_3_BIT_EXT,
+                                            },
+                                        }
+                                    });
+#endif
+
+  if (is_yuv)
+    vk_conversion = gsk_vulkan_device_get_vk_conversion (device, vk_format, &self->vk_sampler);
+  else
+    vk_conversion = VK_NULL_HANDLE;
+
+  gsk_vulkan_image_create_view (self,
+                                vk_conversion,
+                                &(GskMemoryFormatInfo) {
+                                  vk_format,
+                                  vk_components,
+                                });
+
+  GDK_DEBUG (DMABUF, "Vulkan uploaded %zux%zu %.4s::%016llx %sdmabuf",
+             width, height,
+             (char *) &dmabuf->fourcc, (unsigned long long) dmabuf->modifier,
+             is_yuv ? "YUV " : "");
+
+  return GSK_GPU_IMAGE (self);
+}
+#endif
 
 static void
 gsk_vulkan_image_get_projection_matrix (GskGpuImage       *image,
