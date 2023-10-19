@@ -23,6 +23,7 @@ struct _GskVulkanImage
   VkImage vk_image;
   VkImageView vk_image_view;
   VkFramebuffer vk_framebuffer;
+  VkSampler vk_sampler;
   GskVulkanImagePostprocess postprocess;
 
   VkPipelineStageFlags vk_pipeline_stage;
@@ -518,6 +519,7 @@ gsk_vulkan_device_supports_format (GskVulkanDevice   *device,
 
 static void
 gsk_vulkan_image_create_view (GskVulkanImage            *self,
+                              VkSamplerYcbcrConversion   vk_conversion,
                               const GskMemoryFormatInfo *format)
 {
   GSK_VK_CHECK (vkCreateImageView, self->display->vk_device,
@@ -534,6 +536,10 @@ gsk_vulkan_image_create_view (GskVulkanImage            *self,
                                          .baseArrayLayer = 0,
                                          .layerCount = 1,
                                      },
+                                     .pNext = vk_conversion == VK_NULL_HANDLE ? NULL : &(VkSamplerYcbcrConversionInfo) {
+                                         .sType = VK_STRUCTURE_TYPE_SAMPLER_YCBCR_CONVERSION_INFO,
+                                         .conversion = vk_conversion
+                                     }
                                  },
                                  NULL,
                                  &self->vk_image_view);
@@ -649,7 +655,7 @@ gsk_vulkan_image_new (GskVulkanDevice           *device,
                                    self->allocation.vk_memory,
                                    self->allocation.offset);
 
-  gsk_vulkan_image_create_view (self, vk_format);
+  gsk_vulkan_image_create_view (self, VK_NULL_HANDLE, vk_format);
 
   return self;
 }
@@ -740,6 +746,7 @@ gsk_vulkan_image_new_for_swapchain (GskVulkanDevice  *device,
   gsk_gpu_image_setup (GSK_GPU_IMAGE (self), GDK_MEMORY_DEFAULT, width, height);
 
   gsk_vulkan_image_create_view (self,
+                                VK_NULL_HANDLE,
                                 &(GskMemoryFormatInfo) {
                                   format,
                                   { VK_COMPONENT_SWIZZLE_R,
@@ -893,6 +900,12 @@ GskVulkanImagePostprocess
 gsk_vulkan_image_get_postprocess (GskVulkanImage *self)
 {
   return self->postprocess;
+}
+
+VkSampler
+gsk_vulkan_image_get_vk_sampler (GskVulkanImage *self)
+{
+  return self->vk_sampler;
 }
 
 VkImage
