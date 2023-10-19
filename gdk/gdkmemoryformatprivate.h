@@ -20,6 +20,7 @@
 #pragma once
 
 #include "gdkenums.h"
+#include "gdktypes.h"
 
 #include <epoxy/gl.h>
 
@@ -46,9 +47,7 @@ GdkMemoryDepth          gdk_memory_depth_merge              (GdkMemoryDepth     
                                                              GdkMemoryDepth              depth2) G_GNUC_CONST;
 GdkMemoryFormat         gdk_memory_depth_get_alpha_format   (GdkMemoryDepth              depth) G_GNUC_CONST;
 gboolean                gdk_memory_format_gl_format         (GdkMemoryFormat             format,
-                                                             gboolean                    gles,
-                                                             guint                       gl_major,
-                                                             guint                       gl_minor,
+                                                             GdkGLContext               *context,
                                                              guint                      *out_internal_format,
                                                              guint                      *out_format,
                                                              guint                      *out_type,

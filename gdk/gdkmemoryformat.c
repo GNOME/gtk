@@ -20,6 +20,7 @@
 #include "config.h"
 
 #include "gdkmemoryformatprivate.h"
+#include "gdkglcontext.h"
 
 #include "gsk/gl/fp16private.h"
 
@@ -733,14 +734,19 @@ gdk_memory_depth_get_alpha_format (GdkMemoryDepth depth)
 
 gboolean
 gdk_memory_format_gl_format (GdkMemoryFormat  format,
-                             gboolean         gles,
-                             guint            gl_major,
-                             guint            gl_minor,
+                             GdkGLContext    *context,
                              guint           *out_internal_format,
                              guint           *out_format,
                              guint           *out_type,
                              GLint            out_swizzle[4])
 {
+  int gl_major;
+  int gl_minor;
+  gboolean gles;
+
+  gdk_gl_context_get_version (context, &gl_major, &gl_minor);
+  gles = gdk_gl_context_get_use_es (context);
+
   *out_internal_format = memory_formats[format].gl.internal_format;
   *out_format = memory_formats[format].gl.format;
   *out_type = memory_formats[format].gl.type;
