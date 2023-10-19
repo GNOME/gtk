@@ -211,6 +211,8 @@ gulong              _gdk_display_get_next_serial      (GdkDisplay       *display
 void                _gdk_display_pause_events         (GdkDisplay       *display);
 void                _gdk_display_unpause_events       (GdkDisplay       *display);
 
+void                gdk_display_init_dmabuf           (GdkDisplay       *self);
+
 GdkVulkanContext *  gdk_display_create_vulkan_context (GdkDisplay       *self,
                                                        GError          **error);
 

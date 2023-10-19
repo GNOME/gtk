@@ -140,6 +140,8 @@ gdk_dmabuf_texture_new_from_builder (GdkDmabufTextureBuilder *builder,
   display = gdk_dmabuf_texture_builder_get_display (builder);
   dmabuf = gdk_dmabuf_texture_builder_get_dmabuf (builder);
 
+  gdk_display_init_dmabuf (display);
+
   for (i = 0; display->dmabuf_downloaders[i] != NULL; i++)
     {
       if (local_error && g_error_matches (local_error, GDK_DMABUF_ERROR, GDK_DMABUF_ERROR_UNSUPPORTED_FORMAT))
