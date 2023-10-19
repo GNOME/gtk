@@ -684,7 +684,7 @@ gdk_drop_read_async (GdkDrop             *self,
  * gdk_drop_read_finish:
  * @self: a `GdkDrop`
  * @result: a `GAsyncResult`
- * @out_mime_type: (out) (type utf8): return location for the used mime type
+ * @out_mime_type: (out) (type utf8) (transfer none): return location for the used mime type
  * @error: (nullable): location to store error information on failure
  *
  * Finishes an async drop read operation.
