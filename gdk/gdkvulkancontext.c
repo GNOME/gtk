@@ -24,6 +24,10 @@
 
 #include "gdkvulkancontextprivate.h"
 
+#include "gdkdebugprivate.h"
+#include "gdkdmabufformatsbuilderprivate.h"
+#include "gdkdmabuffourccprivate.h"
+#include "gdkdmabuftextureprivate.h"
 #include "gdkdisplayprivate.h"
 #include <glib/gi18n-lib.h>
 #include <math.h>
@@ -1726,6 +1730,7 @@ gdk_display_unref_vulkan (GdkDisplay *display)
 
   GDK_DEBUG (VULKAN, "Closing Vulkan instance");
   display->vulkan_features = 0;
+  g_clear_pointer (&display->vk_dmabuf_formats, gdk_dmabuf_formats_unref);
   g_hash_table_iter_init (&iter, display->vk_shader_modules);
   while (g_hash_table_iter_next (&iter, &key, &value))
     {
@@ -1761,6 +1766,70 @@ gdk_display_unref_vulkan (GdkDisplay *display)
     }
   vkDestroyInstance (display->vk_instance, NULL);
   display->vk_instance = VK_NULL_HANDLE;
+}
+
+GdkDmabufDownloader *
+gdk_vulkan_get_dmabuf_downloader (GdkDisplay              *display,
+                                  GdkDmabufFormatsBuilder *builder)
+{
+  GdkDmabufFormatsBuilder *vulkan_builder;
+  VkDrmFormatModifierPropertiesEXT modifier_list[100];
+  VkDrmFormatModifierPropertiesListEXT modifier_props = {
+    .sType = VK_STRUCTURE_TYPE_DRM_FORMAT_MODIFIER_PROPERTIES_LIST_EXT,
+    .pNext = NULL,
+    .pDrmFormatModifierProperties = modifier_list,
+  };
+  VkFormatProperties2 props = {
+    .sType = VK_STRUCTURE_TYPE_FORMAT_PROPERTIES_2,
+    .pNext = &modifier_props,
+  };
+  VkFormat vk_format;
+  guint32 fourcc;
+  gsize i, j;
+
+  g_assert (display->vk_dmabuf_formats == NULL);
+
+  if (!gdk_display_init_vulkan (display, NULL))
+    return NULL;
+
+  if ((display->vulkan_features & GDK_VULKAN_FEATURE_DMABUF) == 0)
+    return NULL;
+
+  vulkan_builder = gdk_dmabuf_formats_builder_new ();
+
+  for (i = 0; gdk_dmabuf_vk_get_nth (i, &fourcc, &vk_format); i++)
+    {
+      if (vk_format == VK_FORMAT_UNDEFINED)
+        continue;
+
+      modifier_props.drmFormatModifierCount = sizeof (modifier_list);
+      vkGetPhysicalDeviceFormatProperties2 (display->vk_physical_device,
+                                            vk_format,
+                                            &props);
+      g_warn_if_fail (modifier_props.drmFormatModifierCount < sizeof (modifier_list));
+      for (j = 0; j < modifier_props.drmFormatModifierCount; j++)
+        {
+          GDK_DISPLAY_DEBUG (display, DMABUF,
+                             "Vulkan supports dmabuf format %.4s::%016llx with %u planes and features 0x%x",
+                             (char *) &fourcc,
+                             (long long unsigned) modifier_list[j].drmFormatModifier,
+                             modifier_list[j].drmFormatModifierPlaneCount,
+                             modifier_list[j].drmFormatModifierTilingFeatures);
+
+          if (modifier_list[j].drmFormatModifier == DRM_FORMAT_MOD_LINEAR)
+            continue;
+
+          gdk_dmabuf_formats_builder_add_format (vulkan_builder,
+                                                 fourcc,
+                                                 modifier_list[j].drmFormatModifier);
+        }
+    }
+
+  display->vk_dmabuf_formats = gdk_dmabuf_formats_builder_free_to_formats (vulkan_builder);
+
+  gdk_dmabuf_formats_builder_add_formats (builder, display->vk_dmabuf_formats);
+
+  return NULL;
 }
 
 VkShaderModule
