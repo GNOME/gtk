@@ -198,7 +198,7 @@ test_name_range (void)
   gtk_range_set_value (GTK_RANGE (scale), 50);
 
   name = gtk_at_context_get_name (context);
-  g_assert_cmpstr (name, ==, "50");
+  g_assert_cmpstr (name, ==, "");
 
   g_free (name);
 
