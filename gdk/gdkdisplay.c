@@ -1866,12 +1866,12 @@ gdk_display_add_dmabuf_downloader (GdkDisplay                *display,
  * using the relevant EGL extensions, and download it into a memory
  * texture, possibly doing format conversion with shaders (in GSK).
  */
-static void
-init_dmabuf_formats (GdkDisplay *display)
+void
+gdk_display_init_dmabuf (GdkDisplay *self)
 {
   GdkDmabufFormatsBuilder *builder;
 
-  if (display->dmabuf_formats != NULL)
+  if (self->dmabuf_formats != NULL)
     return;
 
   builder = gdk_dmabuf_formats_builder_new ();
@@ -1879,13 +1879,13 @@ init_dmabuf_formats (GdkDisplay *display)
 #ifdef HAVE_LINUX_DMA_BUF_H
   if (!GDK_DEBUG_CHECK (DMABUF_DISABLE))
     {
-      gdk_display_prepare_gl (display, NULL);
+      gdk_display_prepare_gl (self, NULL);
 
-      gdk_display_add_dmabuf_downloader (display, gdk_dmabuf_get_direct_downloader (), builder);
+      gdk_display_add_dmabuf_downloader (self, gdk_dmabuf_get_direct_downloader (), builder);
     }
 #endif
 
-  display->dmabuf_formats = gdk_dmabuf_formats_builder_free_to_formats (builder);
+  self->dmabuf_formats = gdk_dmabuf_formats_builder_free_to_formats (builder);
 } 
 
 /**
@@ -1904,7 +1904,7 @@ init_dmabuf_formats (GdkDisplay *display)
 GdkDmabufFormats *
 gdk_display_get_dmabuf_formats (GdkDisplay *display)
 {
-  init_dmabuf_formats (display);
+  gdk_display_init_dmabuf (display);
 
   return display->dmabuf_formats;
 }
