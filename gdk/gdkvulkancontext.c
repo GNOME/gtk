@@ -533,6 +533,36 @@ physical_device_supports_extension (VkPhysicalDevice  device,
   return FALSE;
 }
 
+static gboolean
+physical_device_check_features (VkPhysicalDevice   device,
+                                GdkVulkanFeatures *out_features)
+{
+  VkPhysicalDeviceSamplerYcbcrConversionFeatures ycbcr_features = {
+      .sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_SAMPLER_YCBCR_CONVERSION_FEATURES
+  };
+  VkPhysicalDeviceFeatures2 features = {
+      .sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_FEATURES_2,
+      .pNext = &ycbcr_features
+  };
+
+  vkGetPhysicalDeviceFeatures2 (device, &features);
+
+  *out_features = 0;
+
+  if (!features.features.shaderUniformBufferArrayDynamicIndexing ||
+      !features.features.shaderSampledImageArrayDynamicIndexing)
+    return FALSE;
+
+  if (ycbcr_features.samplerYcbcrConversion)
+    *out_features |= GDK_VULKAN_FEATURE_YCBCR;
+
+  if (physical_device_supports_extension (device, VK_KHR_EXTERNAL_MEMORY_FD_EXTENSION_NAME) &&
+      physical_device_supports_extension (device, VK_EXT_IMAGE_DRM_FORMAT_MODIFIER_EXTENSION_NAME))
+    *out_features |= GDK_VULKAN_FEATURE_DMABUF;
+
+  return TRUE;
+}
+
 static void
 gdk_vulkan_context_begin_frame (GdkDrawContext *draw_context,
                                 GdkMemoryDepth  depth,
@@ -1368,9 +1398,13 @@ gdk_display_create_vulkan_device (GdkDisplay  *display,
 
   for (i = first; i < last; i++)
     {
+      GdkVulkanFeatures features;
       uint32_t n_queue_props;
 
       if (!physical_device_supports_extension (devices[i], VK_EXT_DESCRIPTOR_INDEXING_EXTENSION_NAME))
+        continue;
+
+      if (!physical_device_check_features (devices[i], &features))
         continue;
 
       vkGetPhysicalDeviceQueueFamilyProperties (devices[i], &n_queue_props, NULL);
@@ -1381,16 +1415,17 @@ gdk_display_create_vulkan_device (GdkDisplay  *display,
           if (queue_props[j].queueFlags & VK_QUEUE_GRAPHICS_BIT)
             {
               GPtrArray *device_extensions;
-              gboolean has_incremental_present;
-
-              has_incremental_present = physical_device_supports_extension (devices[i],
-                                                                            VK_KHR_INCREMENTAL_PRESENT_EXTENSION_NAME);
 
               device_extensions = g_ptr_array_new ();
               g_ptr_array_add (device_extensions, (gpointer) VK_KHR_SWAPCHAIN_EXTENSION_NAME);
               g_ptr_array_add (device_extensions, (gpointer) VK_KHR_MAINTENANCE_3_EXTENSION_NAME);
               g_ptr_array_add (device_extensions, (gpointer) VK_EXT_DESCRIPTOR_INDEXING_EXTENSION_NAME);
-              if (has_incremental_present)
+              if (features & GDK_VULKAN_FEATURE_DMABUF)
+                {
+                  g_ptr_array_add (device_extensions, (gpointer) VK_KHR_EXTERNAL_MEMORY_FD_EXTENSION_NAME);
+                  g_ptr_array_add (device_extensions, (gpointer) VK_EXT_IMAGE_DRM_FORMAT_MODIFIER_EXTENSION_NAME);
+                }
+              if (physical_device_supports_extension (devices[i], VK_KHR_INCREMENTAL_PRESENT_EXTENSION_NAME))
                 g_ptr_array_add (device_extensions, (gpointer) VK_KHR_INCREMENTAL_PRESENT_EXTENSION_NAME);
 
               GDK_DISPLAY_DEBUG (display, VULKAN, "Using Vulkan device %u, queue %u", i, j);
@@ -1406,15 +1441,19 @@ gdk_display_create_vulkan_device (GdkDisplay  *display,
                                                     },
                                                     .enabledExtensionCount = device_extensions->len,
                                                     .ppEnabledExtensionNames = (const char * const *) device_extensions->pdata,
-                                                    .pNext = &(VkPhysicalDeviceVulkan12Features) {
-                                                      .sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_VULKAN_1_2_FEATURES,
-                                                      .shaderSampledImageArrayNonUniformIndexing = VK_TRUE,
-                                                      .shaderStorageBufferArrayNonUniformIndexing = VK_TRUE,
-                                                      .descriptorIndexing = VK_TRUE,
-                                                      .descriptorBindingPartiallyBound = VK_TRUE,
-                                                      .descriptorBindingVariableDescriptorCount = VK_TRUE,
-                                                      .descriptorBindingSampledImageUpdateAfterBind = VK_TRUE,
-                                                      .descriptorBindingStorageBufferUpdateAfterBind = VK_TRUE,
+                                                    .pNext = &(VkPhysicalDeviceVulkan11Features) {
+                                                        .sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_VULKAN_1_1_FEATURES,
+                                                        .samplerYcbcrConversion = features & GDK_VULKAN_FEATURE_YCBCR ? VK_TRUE : VK_FALSE,
+                                                        .pNext = &(VkPhysicalDeviceVulkan12Features) {
+                                                            .sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_VULKAN_1_2_FEATURES,
+                                                            .shaderSampledImageArrayNonUniformIndexing = VK_TRUE,
+                                                            .shaderStorageBufferArrayNonUniformIndexing = VK_TRUE,
+                                                            .descriptorIndexing = VK_TRUE,
+                                                            .descriptorBindingPartiallyBound = VK_TRUE,
+                                                            .descriptorBindingVariableDescriptorCount = VK_TRUE,
+                                                            .descriptorBindingSampledImageUpdateAfterBind = VK_TRUE,
+                                                            .descriptorBindingStorageBufferUpdateAfterBind = VK_TRUE,
+                                                        }
                                                     }
                                                 },
                                                 NULL,
@@ -1429,6 +1468,7 @@ gdk_display_create_vulkan_device (GdkDisplay  *display,
               display->vk_physical_device = devices[i];
               vkGetDeviceQueue(display->vk_device, j, 0, &display->vk_queue);
               display->vk_queue_family_index = j;
+              display->vulkan_features = features;
               return TRUE;
             }
         }
@@ -1685,6 +1725,7 @@ gdk_display_unref_vulkan (GdkDisplay *display)
     return;
 
   GDK_DEBUG (VULKAN, "Closing Vulkan instance");
+  display->vulkan_features = 0;
   g_hash_table_iter_init (&iter, display->vk_shader_modules);
   while (g_hash_table_iter_next (&iter, &key, &value))
     {

@@ -41,6 +41,11 @@ G_BEGIN_DECLS
 
 typedef struct _GdkDisplayClass GdkDisplayClass;
 
+typedef enum {
+  GDK_VULKAN_FEATURE_DMABUF     = 1 << 0,
+  GDK_VULKAN_FEATURE_YCBCR      = 1 << 1
+} GdkVulkanFeatures;
+
 /* Tracks information about the device grab on this display */
 typedef struct
 {
@@ -107,6 +112,7 @@ struct _GdkDisplay
   char *vk_pipeline_cache_etag;
   guint vk_save_pipeline_cache_source;
   GHashTable *vk_shader_modules;
+  GdkVulkanFeatures vulkan_features;
 
   guint vulkan_refcount;
 #endif /* GDK_RENDERING_VULKAN */

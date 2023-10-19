@@ -17,6 +17,7 @@ struct _GskVulkanDevice
   GskGpuDevice parent_instance;
 
   GskVulkanAllocator *allocators[VK_MAX_MEMORY_TYPES];
+  GdkVulkanFeatures features;
 
   GHashTable *pipeline_cache;
   GHashTable *render_pass_cache;
@@ -314,6 +315,7 @@ gsk_vulkan_device_get_for_display (GdkDisplay  *display,
     return NULL;
 
   self = g_object_new (GSK_TYPE_VULKAN_DEVICE, NULL);
+  self->features = display->vulkan_features;
 
   vkGetPhysicalDeviceProperties (display->vk_physical_device, &vk_props);
   gsk_gpu_device_setup (GSK_GPU_DEVICE (self),
@@ -330,6 +332,13 @@ gsize
 gsk_vulkan_device_get_max_descriptors (GskVulkanDevice *self)
 {
   return DESCRIPTOR_POOL_MAXITEMS;
+}
+
+gboolean
+gsk_vulkan_device_has_feature (GskVulkanDevice   *self,
+                               GdkVulkanFeatures  feature)
+{
+  return (self->features & feature) == feature;
 }
 
 VkDevice
