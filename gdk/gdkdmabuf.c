@@ -1919,6 +1919,19 @@ gdk_dmabuf_get_memory_format (guint32          fourcc,
 }
 
 #ifdef GDK_RENDERING_VULKAN
+gboolean
+gdk_dmabuf_vk_get_nth (gsize     n,
+                       guint32  *fourcc,
+                       VkFormat *vk_format)
+{
+  if (n >= G_N_ELEMENTS (supported_formats))
+    return FALSE;
+
+  *fourcc = supported_formats[n].fourcc;
+  *vk_format = supported_formats[n].vk.format;
+  return TRUE;
+}
+
 VkFormat
 gdk_dmabuf_get_vk_format (guint32             fourcc,
                           VkComponentMapping *out_components)

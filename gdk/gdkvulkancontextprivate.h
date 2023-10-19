@@ -23,6 +23,8 @@
 #include "gdkvulkancontext.h"
 
 #include "gdkdebugprivate.h"
+#include "gdkdmabufprivate.h"
+#include "gdkdmabufdownloaderprivate.h"
 #include "gdkdrawcontextprivate.h"
 #include "gdkenums.h"
 
@@ -73,6 +75,9 @@ gboolean                gdk_display_init_vulkan                         (GdkDisp
                                                                          GError               **error);
 void                    gdk_display_ref_vulkan                          (GdkDisplay            *display);
 void                    gdk_display_unref_vulkan                        (GdkDisplay            *display);
+
+GdkDmabufDownloader *   gdk_vulkan_get_dmabuf_downloader                (GdkDisplay            *display,
+                                                                         GdkDmabufFormatsBuilder *builder);
 
 VkShaderModule          gdk_display_get_vk_shader_module                (GdkDisplay            *display,
                                                                          const char            *resource_name);

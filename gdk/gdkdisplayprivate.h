@@ -112,6 +112,7 @@ struct _GdkDisplay
   char *vk_pipeline_cache_etag;
   guint vk_save_pipeline_cache_source;
   GHashTable *vk_shader_modules;
+  GdkDmabufFormats *vk_dmabuf_formats;
   GdkVulkanFeatures vulkan_features;
 
   guint vulkan_refcount;
