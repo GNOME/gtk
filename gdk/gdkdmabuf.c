@@ -346,7 +346,7 @@ gdk_dmabuf_direct_downloader_do_download (GdkTexture *texture,
           continue;
         }
 
-      sizes[i] = lseek (dmabuf->planes[0].fd, 0, SEEK_END);
+      sizes[i] = lseek (dmabuf->planes[i].fd, 0, SEEK_END);
       if (sizes[i] == (off_t) -1)
         {
           g_warning ("Failed to seek dmabuf: %s", g_strerror (errno));
