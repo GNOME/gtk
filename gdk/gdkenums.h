@@ -304,6 +304,10 @@ typedef enum
  * @GDK_MEMORY_A8R8G8B8: 4 bytes; for alpha, red, green, blue.
  * @GDK_MEMORY_R8G8B8A8: 4 bytes; for red, green, blue, alpha.
  * @GDK_MEMORY_A8B8G8R8: 4 bytes; for alpha, blue, green, red.
+ * @GDK_MEMORY_B8G8R8X8: 4 bytes; for blue, green, red, unused. Since 4.14
+ * @GDK_MEMORY_X8R8G8B8: 4 bytes; for unused, red, green, blue. Since 4.14
+ * @GDK_MEMORY_R8G8B8X8: 4 bytes; for red, green, blue, unused. Since 4.14
+ * @GDK_MEMORY_X8B8G8R8: 4 bytes; for unused, blue, green, red. Since 4.14
  * @GDK_MEMORY_R8G8B8: 3 bytes; for red, green, blue. The data is opaque.
  * @GDK_MEMORY_B8G8R8: 3 bytes; for blue, green, red. The data is opaque.
  * @GDK_MEMORY_R16G16B16: 3 guint16 values; for red, green, blue. Since: 4.6
@@ -385,6 +389,10 @@ typedef enum {
   GDK_MEMORY_A16_FLOAT GDK_AVAILABLE_ENUMERATOR_IN_4_12,
   GDK_MEMORY_A32_FLOAT GDK_AVAILABLE_ENUMERATOR_IN_4_12,
   GDK_MEMORY_A8B8G8R8_PREMULTIPLIED GDK_AVAILABLE_ENUMERATOR_IN_4_14,
+  GDK_MEMORY_B8G8R8X8 GDK_AVAILABLE_ENUMERATOR_IN_4_14,
+  GDK_MEMORY_X8R8G8B8 GDK_AVAILABLE_ENUMERATOR_IN_4_14,
+  GDK_MEMORY_R8G8B8X8 GDK_AVAILABLE_ENUMERATOR_IN_4_14,
+  GDK_MEMORY_X8B8G8R8 GDK_AVAILABLE_ENUMERATOR_IN_4_14,
 
   GDK_MEMORY_N_FORMATS
 } GdkMemoryFormat;
