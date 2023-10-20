@@ -22,6 +22,7 @@
 
 #include "gdkdisplayprivate.h"
 #include "gdkdmabufformatsbuilderprivate.h"
+#include "gdkdmabufprivate.h"
 #include "gdktextureprivate.h"
 #include <gdk/gdkglcontext.h>
 #include <gdk/gdkgltexturebuilder.h>
@@ -132,13 +133,22 @@ gdk_dmabuf_texture_new_from_builder (GdkDmabufTextureBuilder *builder,
   GdkDmabufTexture *self;
   GdkTexture *update_texture;
   GdkDisplay *display;
-  const GdkDmabuf *dmabuf;
+  GdkDmabuf dmabuf;
   GdkMemoryFormat format;
   GError *local_error = NULL;
+  int width, height;
   gsize i;
 
   display = gdk_dmabuf_texture_builder_get_display (builder);
-  dmabuf = gdk_dmabuf_texture_builder_get_dmabuf (builder);
+  width = gdk_dmabuf_texture_builder_get_width (builder);
+  height = gdk_dmabuf_texture_builder_get_height (builder);
+  
+  if (!gdk_dmabuf_sanitize (&dmabuf,
+                            width,
+                            height,
+                            gdk_dmabuf_texture_builder_get_dmabuf (builder),
+                            error))
+    return NULL;
 
   gdk_display_init_dmabuf (display);
 
@@ -149,7 +159,7 @@ gdk_dmabuf_texture_new_from_builder (GdkDmabufTextureBuilder *builder,
 
       if (display->dmabuf_downloaders[i]->supports (display->dmabuf_downloaders[i],
                                                     display,
-                                                    dmabuf,
+                                                    &dmabuf,
                                                     gdk_dmabuf_texture_builder_get_premultiplied (builder),
                                                     &format,
                                                     local_error ? NULL : &local_error))
@@ -163,14 +173,14 @@ gdk_dmabuf_texture_new_from_builder (GdkDmabufTextureBuilder *builder,
     }
 
   self = g_object_new (GDK_TYPE_DMABUF_TEXTURE,
-                       "width", gdk_dmabuf_texture_builder_get_width (builder),
-                       "height", gdk_dmabuf_texture_builder_get_height (builder),
+                       "width", width,
+                       "height", height,
                        NULL);
 
   GDK_TEXTURE (self)->format = format;
   g_set_object (&self->display, display);
   self->downloader = display->dmabuf_downloaders[i];
-  self->dmabuf = *dmabuf;
+  self->dmabuf = dmabuf;
   self->destroy = destroy;
   self->data = data;
 
