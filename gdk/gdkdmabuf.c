@@ -172,16 +172,14 @@ gdk_dmabuf_direct_downloader_download (const GdkDmabufDownloader *downloader,
     gdk_dmabuf_direct_downloader_do_download (texture, data, stride);
   else
     {
-      const GdkDmabuf *dmabuf;
       unsigned int width, height;
       guchar *src_data;
       gsize src_stride;
 
-      dmabuf = gdk_dmabuf_texture_get_dmabuf (GDK_DMABUF_TEXTURE (texture));
       width = gdk_texture_get_width (texture);
       height = gdk_texture_get_height (texture);
 
-      src_stride = dmabuf->planes[0].stride;
+      src_stride = width * gdk_memory_format_bytes_per_pixel (src_format);
       src_data = g_new (guchar, src_stride * height);
 
       gdk_dmabuf_direct_downloader_do_download (texture, src_data, src_stride);
