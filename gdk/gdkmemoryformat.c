@@ -94,6 +94,7 @@ name ## _from_float (guchar      *dest_data, \
 TYPED_FUNCS (b8g8r8a8_premultiplied, guchar, 2, 1, 0, 3, 4, 255)
 TYPED_FUNCS (a8r8g8b8_premultiplied, guchar, 1, 2, 3, 0, 4, 255)
 TYPED_FUNCS (r8g8b8a8_premultiplied, guchar, 0, 1, 2, 3, 4, 255)
+TYPED_FUNCS (a8b8g8r8_premultiplied, guchar, 3, 2, 1, 0, 4, 255)
 TYPED_FUNCS (b8g8r8a8, guchar, 2, 1, 0, 3, 4, 255)
 TYPED_FUNCS (a8r8g8b8, guchar, 1, 2, 3, 0, 4, 255)
 TYPED_FUNCS (r8g8b8a8, guchar, 0, 1, 2, 3, 4, 255)
@@ -377,6 +378,16 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     { GL_RGBA8, GL_RGBA, GL_UNSIGNED_BYTE, { GL_RED, GL_GREEN, GL_BLUE, GL_ALPHA } },
     r8g8b8a8_premultiplied_to_float,
     r8g8b8a8_premultiplied_from_float,
+  },
+  [GDK_MEMORY_A8B8G8R8_PREMULTIPLIED] = {
+    GDK_MEMORY_ALPHA_PREMULTIPLIED,
+    4,
+    G_ALIGNOF (guchar),
+    GDK_MEMORY_U8,
+    { 0, 0, G_MAXUINT, G_MAXUINT },
+    { GL_RGBA8, GL_RGBA, GDK_GL_UNSIGNED_BYTE_FLIPPED, { GL_RED, GL_GREEN, GL_BLUE, GL_ALPHA } },
+    a8b8g8r8_premultiplied_to_float,
+    a8b8g8r8_premultiplied_from_float,
   },
   [GDK_MEMORY_B8G8R8A8] = {
     GDK_MEMORY_ALPHA_STRAIGHT,

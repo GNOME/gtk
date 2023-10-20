@@ -298,6 +298,8 @@ typedef enum
  *   The color values are premultiplied with the alpha value.
  * @GDK_MEMORY_R8G8B8A8_PREMULTIPLIED: 4 bytes; for red, green, blue, alpha
  *   The color values are premultiplied with the alpha value.
+ * @GDK_MEMORY_A8B8G8R8_PREMULTIPLIED: 4 bytes; for alpha, blue, green, red,
+ *   The color values are premultiplied with the alpha value. Since 4.14
  * @GDK_MEMORY_B8G8R8A8: 4 bytes; for blue, green, red, alpha.
  * @GDK_MEMORY_A8R8G8B8: 4 bytes; for alpha, red, green, blue.
  * @GDK_MEMORY_R8G8B8A8: 4 bytes; for red, green, blue, alpha.
@@ -382,6 +384,7 @@ typedef enum {
   GDK_MEMORY_A16 GDK_AVAILABLE_ENUMERATOR_IN_4_12,
   GDK_MEMORY_A16_FLOAT GDK_AVAILABLE_ENUMERATOR_IN_4_12,
   GDK_MEMORY_A32_FLOAT GDK_AVAILABLE_ENUMERATOR_IN_4_12,
+  GDK_MEMORY_A8B8G8R8_PREMULTIPLIED GDK_AVAILABLE_ENUMERATOR_IN_4_14,
 
   GDK_MEMORY_N_FORMATS
 } GdkMemoryFormat;
