@@ -111,7 +111,7 @@ gsk_gl_icon_library_add (GskGLIconLibrary     *self,
   gdk_gl_context_push_debug_group_printf (gdk_gl_context_get_current (),
                                           "Uploading texture");
 
-  if (gdk_gl_context_get_use_es (gdk_gl_context_get_current ()))
+  if (!gdk_gl_context_has_bgra (gdk_gl_context_get_current ()))
     {
       pixel_data = free_data = g_malloc (width * height * 4);
       gdk_memory_convert (pixel_data, width * 4,
@@ -125,7 +125,7 @@ gsk_gl_icon_library_add (GskGLIconLibrary     *self,
     {
       pixel_data = surface_data;
       gl_format = GL_BGRA;
-      gl_type = GL_UNSIGNED_INT_8_8_8_8_REV;
+      gl_type = GL_UNSIGNED_BYTE;
     }
 
   texture_id = GSK_GL_TEXTURE_ATLAS_ENTRY_TEXTURE (icon_data);
