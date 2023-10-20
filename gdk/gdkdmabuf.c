@@ -178,6 +178,59 @@ download_nv12 (guchar          *dst_data,
     }
 }
 
+static void
+download_yuyv (guchar          *dst_data,
+               gsize            dst_stride,
+               GdkMemoryFormat  dst_format,
+               gsize            width,
+               gsize            height,
+               const GdkDmabuf *dmabuf,
+               const guchar    *src_datas[GDK_DMABUF_MAX_PLANES],
+               gsize            sizes[GDK_DMABUF_MAX_PLANES])
+{
+  const guchar *src_data;
+  gsize x, y, src_stride;
+  gsize Y1, Y2, U, V;
+
+  switch (dmabuf->fourcc)
+    {
+    case DRM_FORMAT_YUYV:
+      Y1 = 0; U = 1; Y2 = 2; V = 3;
+      break;
+    case DRM_FORMAT_YVYU:
+      Y1 = 0; V = 1; Y2 = 2; U = 3;
+      break;
+    case DRM_FORMAT_UYVY:
+      U = 0; Y1 = 1; V = 2; Y2 = 3;
+      break;
+    case DRM_FORMAT_VYUY:
+      V = 0; Y1 = 1; U = 2; Y2 = 3;
+      break;
+    default:
+      g_assert_not_reached ();
+      return;
+    }
+
+  src_stride = dmabuf->planes[0].stride;
+  src_data = src_datas[0] + dmabuf->planes[0].offset;
+  g_return_if_fail (sizes[0] >= dmabuf->planes[0].offset + height * src_stride);
+
+  for (y = 0; y < height; y ++)
+    {
+      for (x = 0; x < width; x += 2)
+        {
+          int r, g, b;
+
+          get_uv_values (&itu601_wide, src_data[2 * x + U], src_data[2 * x + V], &r, &g, &b);
+          set_rgb_values (&dst_data[3 * x], src_data[2 * x + Y1], r, g, b);
+          if (x + 1 < width)
+            set_rgb_values (&dst_data[3 * (x + 1)], src_data[2 * x + Y2], r, g, b);
+        }
+      dst_data += dst_stride;
+      src_data += src_stride;
+    }
+}
+
 static const GdkDrmFormatInfo supported_formats[] = {
   { DRM_FORMAT_ARGB8888, GDK_MEMORY_A8R8G8B8_PREMULTIPLIED, GDK_MEMORY_A8R8G8B8, download_memcpy },
   { DRM_FORMAT_RGBA8888, GDK_MEMORY_R8G8B8A8_PREMULTIPLIED, GDK_MEMORY_R8G8B8A8, download_memcpy },
@@ -188,6 +241,10 @@ static const GdkDrmFormatInfo supported_formats[] = {
   /* YUV formats */
   { DRM_FORMAT_NV12, GDK_MEMORY_R8G8B8, GDK_MEMORY_R8G8B8, download_nv12 },
   { DRM_FORMAT_NV21, GDK_MEMORY_R8G8B8, GDK_MEMORY_R8G8B8, download_nv12 },
+  { DRM_FORMAT_YUYV, GDK_MEMORY_R8G8B8, GDK_MEMORY_R8G8B8, download_yuyv },
+  { DRM_FORMAT_YVYU, GDK_MEMORY_R8G8B8, GDK_MEMORY_R8G8B8, download_yuyv },
+  { DRM_FORMAT_VYUY, GDK_MEMORY_R8G8B8, GDK_MEMORY_R8G8B8, download_yuyv },
+  { DRM_FORMAT_UYVY, GDK_MEMORY_R8G8B8, GDK_MEMORY_R8G8B8, download_yuyv },
 };
 
 static const GdkDrmFormatInfo *
