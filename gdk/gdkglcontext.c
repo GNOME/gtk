@@ -1867,12 +1867,34 @@ gdk_gl_context_has_sync (GdkGLContext *self)
   return priv->has_sync;
 }
 
+/* Return if GL_BGRA works with glTexImage2D */
 gboolean
 gdk_gl_context_has_bgra (GdkGLContext *self)
 {
   GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (self);
 
   return priv->has_bgra;
+}
+
+/* Return if glGenVertexArrays, glBindVertexArray and glDeleteVertexArrays
+ * can be used
+ */
+gboolean
+gdk_gl_context_has_vertex_arrays (GdkGLContext *self)
+{
+  GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (self);
+
+  switch (priv->api)
+    {
+    case GDK_GL_API_GL:
+      return TRUE;
+
+    case GDK_GL_API_GLES:
+      return gdk_gl_version_get_major (&priv->gl_version) >= 3;
+
+    default:
+      g_return_val_if_reached (FALSE);
+    }
 }
 
 /* This is currently private! */
