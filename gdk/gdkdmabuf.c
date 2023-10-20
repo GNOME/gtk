@@ -244,6 +244,15 @@ gdk_dmabuf_sanitize (GdkDmabuf        *dest,
 {
   const GdkDrmFormatInfo *info;
 
+  if (src->n_planes > GDK_DMABUF_MAX_PLANES)
+    {
+      g_set_error (error,
+                   GDK_DMABUF_ERROR, GDK_DMABUF_ERROR_UNSUPPORTED_FORMAT,
+                   "GTK only support dmabufs with %u planes, not %u",
+                   GDK_DMABUF_MAX_PLANES, src->n_planes);
+      return FALSE;
+    }
+
   info = get_drm_format_info (src->fourcc);
 
   if (info == NULL)
