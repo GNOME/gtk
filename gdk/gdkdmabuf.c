@@ -380,7 +380,7 @@ out:
       if (!needs_unmap[i])
         continue;
 
-      munmap (src_data, sizes[i]);
+      munmap ((void *)src_data[i], sizes[i]);
 
       if (ioctl (dmabuf->planes[i].fd, DMA_BUF_IOCTL_SYNC, &(struct dma_buf_sync) { DMA_BUF_SYNC_END|DMA_BUF_SYNC_READ }) < 0)
         g_warning ("Failed to sync dmabuf: %s", g_strerror (errno));
