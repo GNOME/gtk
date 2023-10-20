@@ -32,23 +32,62 @@
 #include <epoxy/egl.h>
 
 typedef struct _GdkDrmFormatInfo GdkDrmFormatInfo;
+
 struct _GdkDrmFormatInfo
 {
   guint32 fourcc;
   GdkMemoryFormat premultiplied_memory_format;
   GdkMemoryFormat unpremultiplied_memory_format;
+  void (* download) (guchar          *dst_data,
+                     gsize            dst_stride,
+                     GdkMemoryFormat  dst_format,
+                     gsize            width,
+                     gsize            height,
+                     const GdkDmabuf *dmabuf,
+                     const guchar    *src_datas[GDK_DMABUF_MAX_PLANES],
+                     gsize            sizes[GDK_DMABUF_MAX_PLANES]);
 };
 
-static GdkDrmFormatInfo supported_formats[] = {
-  { DRM_FORMAT_ARGB8888, GDK_MEMORY_A8R8G8B8_PREMULTIPLIED, GDK_MEMORY_A8R8G8B8 },
-  { DRM_FORMAT_RGBA8888, GDK_MEMORY_R8G8B8A8_PREMULTIPLIED, GDK_MEMORY_R8G8B8A8 },
-  { DRM_FORMAT_BGRA8888, GDK_MEMORY_B8G8R8A8_PREMULTIPLIED, GDK_MEMORY_B8G8R8A8 },
-  { DRM_FORMAT_ABGR16161616F, GDK_MEMORY_R16G16B16A16_FLOAT_PREMULTIPLIED, GDK_MEMORY_R16G16B16A16_FLOAT },
-  { DRM_FORMAT_RGB888, GDK_MEMORY_R8G8B8, GDK_MEMORY_R8G8B8 },
-  { DRM_FORMAT_BGR888, GDK_MEMORY_B8G8R8, GDK_MEMORY_B8G8R8 },
+static void
+download_memcpy (guchar          *dst_data,
+                 gsize            dst_stride,
+                 GdkMemoryFormat  dst_format,
+                 gsize            width,
+                 gsize            height,
+                 const GdkDmabuf *dmabuf,
+                 const guchar    *src_datas[GDK_DMABUF_MAX_PLANES],
+                 gsize            sizes[GDK_DMABUF_MAX_PLANES])
+{
+  const guchar *src_data;
+  gsize src_stride;
+  guint bpp;
+
+  bpp = gdk_memory_format_bytes_per_pixel (dst_format);
+  src_stride = dmabuf->planes[0].stride;
+  src_data = src_datas[0] + dmabuf->planes[0].offset;
+  g_return_if_fail (sizes[0] >= dmabuf->planes[0].offset + (height - 1) * dst_stride + width * bpp);
+
+  if (dst_stride == src_stride)
+    memcpy (dst_data, src_data, (height - 1) * dst_stride + width * bpp);
+  else
+    {
+      gsize i;
+
+      for (i = 0; i < height; i++)
+        memcpy (dst_data + i * dst_stride, src_data + i * src_stride, width * bpp);
+    }
+}
+
+static const GdkDrmFormatInfo supported_formats[] = {
+  { DRM_FORMAT_ARGB8888, GDK_MEMORY_A8R8G8B8_PREMULTIPLIED, GDK_MEMORY_A8R8G8B8, download_memcpy },
+  { DRM_FORMAT_RGBA8888, GDK_MEMORY_R8G8B8A8_PREMULTIPLIED, GDK_MEMORY_R8G8B8A8, download_memcpy },
+  { DRM_FORMAT_BGRA8888, GDK_MEMORY_B8G8R8A8_PREMULTIPLIED, GDK_MEMORY_B8G8R8A8, download_memcpy },
+  { DRM_FORMAT_ABGR16161616F, GDK_MEMORY_R16G16B16A16_FLOAT_PREMULTIPLIED, GDK_MEMORY_R16G16B16A16_FLOAT, download_memcpy },
+  { DRM_FORMAT_RGB888, GDK_MEMORY_R8G8B8, GDK_MEMORY_R8G8B8, download_memcpy },
+  { DRM_FORMAT_BGR888, GDK_MEMORY_B8G8R8, GDK_MEMORY_B8G8R8, download_memcpy },
 };
 
-static GdkDrmFormatInfo *
+static const GdkDrmFormatInfo *
 get_drm_format_info (guint32 fourcc)
 {
   for (int i = 0; i < G_N_ELEMENTS (supported_formats); i++)
@@ -83,7 +122,7 @@ gdk_dmabuf_direct_downloader_supports (const GdkDmabufDownloader  *downloader,
                                        GdkMemoryFormat            *out_format,
                                        GError                    **error)
 {
-  GdkDrmFormatInfo *info;
+  const GdkDrmFormatInfo *info;
 
   info = get_drm_format_info (dmabuf->fourcc);
 
@@ -124,39 +163,71 @@ gdk_dmabuf_direct_downloader_do_download (GdkTexture *texture,
                                           guchar     *data,
                                           gsize       stride)
 {
+  const GdkDrmFormatInfo *info;
   const GdkDmabuf *dmabuf;
-  gsize size;
-  unsigned int height;
-  gsize src_stride;
-  guchar *src_data;
-  int bpp;
+  const guchar *src_data[GDK_DMABUF_MAX_PLANES];
+  gsize sizes[GDK_DMABUF_MAX_PLANES];
+  gsize needs_unmap[GDK_DMABUF_MAX_PLANES] = { FALSE, };
+  gsize i, j;
 
   GDK_DEBUG (DMABUF, "Using mmap() and memcpy() for downloading a dmabuf");
 
   dmabuf = gdk_dmabuf_texture_get_dmabuf (GDK_DMABUF_TEXTURE (texture));
-  height = gdk_texture_get_height (texture);
-  bpp = gdk_memory_format_bytes_per_pixel (gdk_texture_get_format (texture));
+  info = get_drm_format_info (dmabuf->fourcc);
 
-  src_stride = dmabuf->planes[0].stride;
-  size = dmabuf->planes[0].stride * height;
-
-  if (ioctl (dmabuf->planes[0].fd, DMA_BUF_IOCTL_SYNC, &(struct dma_buf_sync) { DMA_BUF_SYNC_START|DMA_BUF_SYNC_READ }) < 0)
-    g_warning ("Failed to sync dma-buf: %s", g_strerror (errno));
-
-  src_data = mmap (NULL, size, PROT_READ, MAP_SHARED, dmabuf->planes[0].fd, dmabuf->planes[0].offset);
-
-  if (stride == src_stride)
-    memcpy (data, src_data, size);
-  else
+  for (i = 0; i < dmabuf->n_planes; i++)
     {
-      for (unsigned int i = 0; i < height; i++)
-        memcpy (data + i * stride, src_data + i * src_stride, height * bpp);
+      for (j = 0; j < i; j++)
+        {
+          if (dmabuf->planes[i].fd == dmabuf->planes[j].fd)
+            break;
+        }
+      if (j < i)
+        {
+          src_data[i] = src_data[j];
+          sizes[i] = sizes[j];
+          continue;
+        }
+
+      sizes[i] = lseek (dmabuf->planes[0].fd, 0, SEEK_END);
+      if (sizes[i] == (off_t) -1)
+        {
+          g_warning ("Failed to seek dmabuf: %s", g_strerror (errno));
+          goto out;
+        }
+
+      if (ioctl (dmabuf->planes[i].fd, DMA_BUF_IOCTL_SYNC, &(struct dma_buf_sync) { DMA_BUF_SYNC_START|DMA_BUF_SYNC_READ }) < 0)
+        g_warning ("Failed to sync dmabuf: %s", g_strerror (errno));
+
+      src_data[i] = mmap (NULL, sizes[i], PROT_READ, MAP_SHARED, dmabuf->planes[i].fd, dmabuf->planes[i].offset);
+      if (src_data[i] == NULL)
+        {
+          g_warning ("Failed to mmap dmabuf: %s", g_strerror (errno));
+          goto out;
+        }
+      needs_unmap[i] = TRUE;
     }
 
-  munmap (src_data, size);
+    info->download (data,
+                    stride,
+                    gdk_texture_get_format (texture),
+                    gdk_texture_get_width (texture),
+                    gdk_texture_get_height (texture),
+                    dmabuf,
+                    src_data,
+                    sizes);
 
-  if (ioctl (dmabuf->planes[0].fd, DMA_BUF_IOCTL_SYNC, &(struct dma_buf_sync) { DMA_BUF_SYNC_END|DMA_BUF_SYNC_READ }) < 0)
-    g_warning ("Failed to sync dma-buf: %s", g_strerror (errno));
+out:
+  for (i = 0; i < dmabuf->n_planes; i++)
+    {
+      if (!needs_unmap[i])
+        continue;
+
+      munmap (src_data, sizes[i]);
+
+      if (ioctl (dmabuf->planes[i].fd, DMA_BUF_IOCTL_SYNC, &(struct dma_buf_sync) { DMA_BUF_SYNC_END|DMA_BUF_SYNC_READ }) < 0)
+        g_warning ("Failed to sync dmabuf: %s", g_strerror (errno));
+    }
 }
 
 static void
