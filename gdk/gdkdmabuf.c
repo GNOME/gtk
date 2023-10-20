@@ -206,4 +206,77 @@ gdk_dmabuf_get_direct_downloader (void)
   return &downloader;
 }
 
+/* 
+ * Tries to sanitize the dmabuf to conform to the values expected
+ * by Vulkan/EGL which should also be the values expected by
+ * Wayland compositors
+ *
+ * We put these sanitized values into the GdkDmabufTexture, by
+ * sanitizing the input from GdkDmabufTextureBuilder, which are
+ * controlled by the callers.
+ *
+ * Things we do here:
+ * 
+ * 1. Disallow any dmabuf format that we do not know.
+ *
+ * 1. Treat the INVALID modifier the same as LINEAR.
+ *
+ * 2. Ignore all other modifiers.
+ *
+ * 3. Try and fix various inconsistencies between V4L and Mesa,
+ *    like NV12.
+ *
+ * *** WARNING ***
+ *
+ * This function is not absolutely perfect, you do not have a
+ * perfect dmabuf afterwards.
+ *
+ * In particular, it doesn't check sizes.
+ *
+ * *** WARNING ***
+ */
+gboolean
+gdk_dmabuf_sanitize (GdkDmabuf        *dest,
+                     gsize             width,
+                     gsize             height,
+                     const GdkDmabuf  *src,
+                     GError          **error)
+{
+  const GdkDrmFormatInfo *info;
+
+  info = get_drm_format_info (src->fourcc);
+
+  if (info == NULL)
+    {
+      g_set_error (error,
+                   GDK_DMABUF_ERROR, GDK_DMABUF_ERROR_UNSUPPORTED_FORMAT,
+                   "Unsupported dmabuf format %.4s",
+                   (char *) &src->fourcc);
+      return FALSE;
+    }
+
+  *dest = *src;
+
+  if (src->modifier && src->modifier != DRM_FORMAT_MOD_INVALID)
+    return TRUE;
+
+  switch (dest->fourcc)
+    {
+      case DRM_FORMAT_NV12:
+        if (dest->n_planes == 1)
+          {
+            dest->n_planes = 2;
+            dest->planes[1].fd = dest->planes[0].fd;
+            dest->planes[1].stride = dest->planes[0].stride;
+            dest->planes[1].offset = dest->planes[0].offset + dest->planes[0].stride * height;
+          }
+        break;
+
+      default:
+        break;
+    }
+
+  return TRUE;
+}
+
 #endif  /* HAVE_LINUX_DMA_BUF_H */

@@ -41,4 +41,10 @@ struct _GdkDmabufDownloader
 #ifdef HAVE_LINUX_DMA_BUF_H
 const GdkDmabufDownloader *
                         gdk_dmabuf_get_direct_downloader        (void) G_GNUC_CONST;
+
+gboolean                gdk_dmabuf_sanitize                     (GdkDmabuf                      *dest,
+                                                                 gsize                           width,
+                                                                 gsize                           height,
+                                                                 const GdkDmabuf                *src,
+                                                                 GError                        **error);
 #endif
