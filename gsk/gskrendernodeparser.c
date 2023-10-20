@@ -33,6 +33,7 @@
 
 #include "gdk/gdkrgbaprivate.h"
 #include "gdk/gdktextureprivate.h"
+#include "gdk/gdkmemoryformatprivate.h"
 #include <gtk/css/gtkcss.h>
 #include "gtk/css/gtkcssdataurlprivate.h"
 #include "gtk/css/gtkcssparserprivate.h"
@@ -3169,45 +3170,20 @@ append_texture_param (Printer    *p,
       g_hash_table_insert (p->named_textures, texture, new_name);
     }
 
-  switch (gdk_texture_get_format (texture))
+  switch (gdk_memory_format_get_depth (gdk_texture_get_format (texture)))
     {
-    case GDK_MEMORY_B8G8R8A8_PREMULTIPLIED:
-    case GDK_MEMORY_A8R8G8B8_PREMULTIPLIED:
-    case GDK_MEMORY_R8G8B8A8_PREMULTIPLIED:
-    case GDK_MEMORY_B8G8R8A8:
-    case GDK_MEMORY_A8R8G8B8:
-    case GDK_MEMORY_R8G8B8A8:
-    case GDK_MEMORY_A8B8G8R8:
-    case GDK_MEMORY_R8G8B8:
-    case GDK_MEMORY_B8G8R8:
-    case GDK_MEMORY_R16G16B16:
-    case GDK_MEMORY_R16G16B16A16_PREMULTIPLIED:
-    case GDK_MEMORY_R16G16B16A16:
-    case GDK_MEMORY_G8A8_PREMULTIPLIED:
-    case GDK_MEMORY_G8A8:
-    case GDK_MEMORY_G8:
-    case GDK_MEMORY_G16A16_PREMULTIPLIED:
-    case GDK_MEMORY_G16A16:
-    case GDK_MEMORY_G16:
-    case GDK_MEMORY_A8:
-    case GDK_MEMORY_A16:
+    case GDK_MEMORY_U8:
+    case GDK_MEMORY_U16:
       bytes = gdk_texture_save_to_png_bytes (texture);
       g_string_append (p->str, "url(\"data:image/png;base64,");
       break;
 
-    case GDK_MEMORY_R16G16B16_FLOAT:
-    case GDK_MEMORY_R16G16B16A16_FLOAT_PREMULTIPLIED:
-    case GDK_MEMORY_R16G16B16A16_FLOAT:
-    case GDK_MEMORY_A16_FLOAT:
-    case GDK_MEMORY_R32G32B32_FLOAT:
-    case GDK_MEMORY_R32G32B32A32_FLOAT_PREMULTIPLIED:
-    case GDK_MEMORY_R32G32B32A32_FLOAT:
-    case GDK_MEMORY_A32_FLOAT:
+    case GDK_MEMORY_FLOAT16:
+    case GDK_MEMORY_FLOAT32:
       bytes = gdk_texture_save_to_tiff_bytes (texture);
       g_string_append (p->str, "url(\"data:image/tiff;base64,");
       break;
 
-    case GDK_MEMORY_N_FORMATS:
     default:
       g_assert_not_reached ();
     }
