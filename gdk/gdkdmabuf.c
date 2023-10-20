@@ -78,6 +78,106 @@ download_memcpy (guchar          *dst_data,
     }
 }
 
+typedef struct _YUVCoefficients YUVCoefficients;
+
+struct _YUVCoefficients
+{
+  int v_to_r;
+  int u_to_g;
+  int v_to_g;
+  int u_to_b;
+};
+
+/* multiplied by 65536 */
+//static const YUVCoefficients itu601_narrow = { 104597, -25675, -53279, 132201 };
+static const YUVCoefficients itu601_wide = { 74711, -25864, -38050, 133176 };
+
+static inline void
+get_uv_values (const YUVCoefficients *coeffs,
+               guint8                 u,
+               guint8                 v,
+               int                   *out_r,
+               int                   *out_g,
+               int                   *out_b)
+{
+  int u2 = (int) u - 127;
+  int v2 = (int) v - 127;
+  *out_r = coeffs->v_to_r * v2;
+  *out_g = coeffs->u_to_g * u2 + coeffs->v_to_g * v2;
+  *out_b = coeffs->u_to_b * u2;
+}
+
+static inline void
+set_rgb_values (guint8 rgb[3],
+                guint8 y,
+                int    r,
+                int    g,
+                int    b)
+{
+  int y2 = y * 65536;
+
+  rgb[0] = CLAMP ((y2 + r) >> 16, 0, 255);
+  rgb[1] = CLAMP ((y2 + g) >> 16, 0, 255);
+  rgb[2] = CLAMP ((y2 + b) >> 16, 0, 255);
+}
+
+static void
+download_nv12 (guchar          *dst_data,
+               gsize            dst_stride,
+               GdkMemoryFormat  dst_format,
+               gsize            width,
+               gsize            height,
+               const GdkDmabuf *dmabuf,
+               const guchar    *src_data[GDK_DMABUF_MAX_PLANES],
+               gsize            sizes[GDK_DMABUF_MAX_PLANES])
+{
+  const guchar *y_data, *uv_data;
+  gsize x, y, y_stride, uv_stride;
+  gsize U, V;
+
+  if (dmabuf->fourcc == DRM_FORMAT_NV21)
+    {
+      U = 1; V = 0;
+    }
+  else
+    {
+      U = 0; V = 1;
+    }
+
+  y_stride = dmabuf->planes[0].stride;
+  y_data = src_data[0] + dmabuf->planes[0].offset;
+  g_return_if_fail (sizes[0] >= dmabuf->planes[0].offset + height * y_stride);
+  uv_stride = dmabuf->planes[1].stride;
+  uv_data = src_data[1] + dmabuf->planes[1].offset;
+  g_return_if_fail (sizes[1] >= dmabuf->planes[1].offset + (height + 1) / 2 * uv_stride);
+
+  for (y = 0; y < height; y += 2)
+    {
+      guchar *dst2_data = dst_data + dst_stride;
+      const guchar *y2_data = y_data + y_stride;
+
+      for (x = 0; x < width; x += 2)
+        {
+          int r, g, b;
+
+          get_uv_values (&itu601_wide, uv_data[x + U], uv_data[x + V], &r, &g, &b);
+
+          set_rgb_values (&dst_data[3 * x], y_data[x], r, g, b);
+          if (x + 1 < width)
+            set_rgb_values (&dst_data[3 * (x + 1)], y_data[x], r, g, b);
+          if (y + 1 < height)
+            {
+              set_rgb_values (&dst2_data[3 * x], y2_data[x], r, g, b);
+              if (x + 1 < width)
+                set_rgb_values (&dst2_data[3 * (x + 1)], y2_data[x], r, g, b);
+            }
+        }
+      dst_data += 2 * dst_stride;
+      y_data += 2 * y_stride;
+      uv_data += uv_stride;
+    }
+}
+
 static const GdkDrmFormatInfo supported_formats[] = {
   { DRM_FORMAT_ARGB8888, GDK_MEMORY_A8R8G8B8_PREMULTIPLIED, GDK_MEMORY_A8R8G8B8, download_memcpy },
   { DRM_FORMAT_RGBA8888, GDK_MEMORY_R8G8B8A8_PREMULTIPLIED, GDK_MEMORY_R8G8B8A8, download_memcpy },
@@ -85,6 +185,9 @@ static const GdkDrmFormatInfo supported_formats[] = {
   { DRM_FORMAT_ABGR16161616F, GDK_MEMORY_R16G16B16A16_FLOAT_PREMULTIPLIED, GDK_MEMORY_R16G16B16A16_FLOAT, download_memcpy },
   { DRM_FORMAT_RGB888, GDK_MEMORY_R8G8B8, GDK_MEMORY_R8G8B8, download_memcpy },
   { DRM_FORMAT_BGR888, GDK_MEMORY_B8G8R8, GDK_MEMORY_B8G8R8, download_memcpy },
+  /* YUV formats */
+  { DRM_FORMAT_NV12, GDK_MEMORY_R8G8B8, GDK_MEMORY_R8G8B8, download_nv12 },
+  { DRM_FORMAT_NV21, GDK_MEMORY_R8G8B8, GDK_MEMORY_R8G8B8, download_nv12 },
 };
 
 static const GdkDrmFormatInfo *
@@ -141,14 +244,6 @@ gdk_dmabuf_direct_downloader_supports (const GdkDmabufDownloader  *downloader,
                    GDK_DMABUF_ERROR, GDK_DMABUF_ERROR_UNSUPPORTED_FORMAT,
                    "Unsupported dmabuf modifier %#lx (only linear buffers are supported)",
                    dmabuf->modifier);
-      return FALSE;
-    }
-
-  if (dmabuf->n_planes > 1)
-    {
-      g_set_error_literal (error,
-                           GDK_DMABUF_ERROR, GDK_DMABUF_ERROR_CREATION_FAILED,
-                           "Multiplanar dmabufs are not supported");
       return FALSE;
     }
 
