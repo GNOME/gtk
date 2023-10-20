@@ -99,6 +99,12 @@ TYPED_FUNCS (b8g8r8a8, guchar, 2, 1, 0, 3, 4, 255)
 TYPED_FUNCS (a8r8g8b8, guchar, 1, 2, 3, 0, 4, 255)
 TYPED_FUNCS (r8g8b8a8, guchar, 0, 1, 2, 3, 4, 255)
 TYPED_FUNCS (a8b8g8r8, guchar, 3, 2, 1, 0, 4, 255)
+
+TYPED_FUNCS (r8g8b8x8, guchar, 0, 1, 2, -1, 4, 255)
+TYPED_FUNCS (x8r8g8b8, guchar, 1, 2, 3, -1, 4, 255)
+TYPED_FUNCS (b8g8r8x8, guchar, 2, 1, 0, -1, 4, 255)
+TYPED_FUNCS (x8b8g8r8, guchar, 3, 2, 1, -1, 4, 255)
+
 TYPED_FUNCS (r8g8b8, guchar, 0, 1, 2, -1, 3, 255)
 TYPED_FUNCS (b8g8r8, guchar, 2, 1, 0, -1, 3, 255)
 TYPED_FUNCS (r16g16b16, guint16, 0, 1, 2, -1, 6, 65535)
@@ -428,6 +434,46 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     { GL_RGBA8, GL_BGRA, GDK_GL_UNSIGNED_BYTE_FLIPPED, { GL_RED, GL_GREEN, GL_BLUE, GL_ALPHA } },
     a8b8g8r8_to_float,
     a8b8g8r8_from_float,
+  },
+  [GDK_MEMORY_B8G8R8X8] = {
+    GDK_MEMORY_ALPHA_OPAQUE,
+    4,
+    G_ALIGNOF (guchar),
+    GDK_MEMORY_U8,
+    { 0, 0, G_MAXUINT, G_MAXUINT },
+    { GL_RGBA8, GL_BGRA, GL_UNSIGNED_BYTE, { GL_RED, GL_GREEN, GL_BLUE, GL_ONE } },
+    b8g8r8x8_to_float,
+    b8g8r8x8_from_float,
+  },
+  [GDK_MEMORY_X8R8G8B8] = {
+    GDK_MEMORY_ALPHA_OPAQUE,
+    4,
+    G_ALIGNOF (guchar),
+    GDK_MEMORY_U8,
+    { 0, 0, G_MAXUINT, G_MAXUINT },
+    { GL_RGBA8, GL_BGRA, GDK_GL_UNSIGNED_BYTE_FLIPPED, { GL_RED, GL_GREEN, GL_BLUE, GL_ONE } },
+    x8r8g8b8_to_float,
+    x8r8g8b8_from_float,
+  },
+  [GDK_MEMORY_R8G8B8X8] = {
+    GDK_MEMORY_ALPHA_OPAQUE,
+    4,
+    G_ALIGNOF (guchar),
+    GDK_MEMORY_U8,
+    { 0, 0, G_MAXUINT, G_MAXUINT },
+    { GL_RGBA8, GL_RGBA, GL_UNSIGNED_BYTE, { GL_RED, GL_GREEN, GL_BLUE, GL_ONE } },
+    r8g8b8x8_to_float,
+    r8g8b8x8_from_float,
+  },
+  [GDK_MEMORY_X8B8G8R8] = {
+    GDK_MEMORY_ALPHA_OPAQUE,
+    4,
+    G_ALIGNOF (guchar),
+    GDK_MEMORY_U8,
+    { G_MAXUINT, G_MAXUINT, G_MAXUINT, G_MAXUINT },
+    { GL_RGBA8, GL_RGBA, GDK_GL_UNSIGNED_BYTE_FLIPPED, { GL_RED, GL_GREEN, GL_BLUE, GL_ONE } },
+    x8b8g8r8_to_float,
+    x8b8g8r8_from_float,
   },
   [GDK_MEMORY_R8G8B8] = {
     GDK_MEMORY_ALPHA_OPAQUE,
