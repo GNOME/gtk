@@ -76,12 +76,12 @@ gsk_gpu_frame_cleanup (GskGpuFrame *self)
 }
 
 static GskGpuImage *
-gsk_gpu_frame_default_upload_texture (GskGpuFrame *frame,
+gsk_gpu_frame_default_upload_texture (GskGpuFrame *self,
                                       GdkTexture  *texture)
 {
   GskGpuImage *image;
 
-  image = gsk_gpu_upload_texture_op_try (frame, texture);
+  image = gsk_gpu_upload_texture_op_try (self, texture);
   if (image)
     g_object_ref (image);
 

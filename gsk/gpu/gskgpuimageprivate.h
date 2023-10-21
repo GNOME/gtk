@@ -31,6 +31,7 @@ struct _GskGpuImageClass
 GType                   gsk_gpu_image_get_type                          (void) G_GNUC_CONST;
 
 void                    gsk_gpu_image_setup                             (GskGpuImage            *self,
+                                                                         GskGpuImageFlags        flags,
                                                                          GdkMemoryFormat         format,
                                                                          gsize                   width,
                                                                          gsize                   height);
@@ -38,6 +39,9 @@ void                    gsk_gpu_image_setup                             (GskGpuI
 GdkMemoryFormat         gsk_gpu_image_get_format                        (GskGpuImage            *self);
 gsize                   gsk_gpu_image_get_width                         (GskGpuImage            *self);
 gsize                   gsk_gpu_image_get_height                        (GskGpuImage            *self);
+GskGpuImageFlags        gsk_gpu_image_get_flags                         (GskGpuImage            *self);
+void                    gsk_gpu_image_set_flags                         (GskGpuImage            *self,
+                                                                         GskGpuImageFlags        flags);
 
 void                    gsk_gpu_image_get_projection_matrix             (GskGpuImage            *self,
                                                                          graphene_matrix_t      *out_projection);

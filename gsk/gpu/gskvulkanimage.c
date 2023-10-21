@@ -617,7 +617,7 @@ gsk_vulkan_image_new (GskVulkanDevice           *device,
   self->vk_image_layout = layout;
   self->vk_access = access;
 
-  gsk_gpu_image_setup (GSK_GPU_IMAGE (self), format, width, height);
+  gsk_gpu_image_setup (GSK_GPU_IMAGE (self), 0, format, width, height);
 
   GSK_VK_CHECK (vkCreateImage, vk_device,
                                 &(VkImageCreateInfo) {
@@ -743,7 +743,7 @@ gsk_vulkan_image_new_for_swapchain (GskVulkanDevice  *device,
   self->vk_image_layout = VK_IMAGE_LAYOUT_UNDEFINED;
   self->vk_access = 0;
 
-  gsk_gpu_image_setup (GSK_GPU_IMAGE (self), GDK_MEMORY_DEFAULT, width, height);
+  gsk_gpu_image_setup (GSK_GPU_IMAGE (self), 0, GDK_MEMORY_DEFAULT, width, height);
 
   gsk_vulkan_image_create_view (self,
                                 VK_NULL_HANDLE,

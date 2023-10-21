@@ -17,6 +17,10 @@ typedef struct _GskGpuShaderOp          GskGpuShaderOp;
 typedef struct _GskGpuShaderOpClass     GskGpuShaderOpClass;
 
 typedef enum {
+  GSK_GPU_IMAGE_EXTERNAL       = (1 << 0),
+} GskGpuImageFlags;
+
+typedef enum {
   GSK_GPU_SAMPLER_DEFAULT,
   GSK_GPU_SAMPLER_TRANSPARENT,
   GSK_GPU_SAMPLER_REPEAT,

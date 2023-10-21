@@ -88,7 +88,7 @@ gsk_gl_image_new_backbuffer (GskGLDevice    *device,
                                 &self->gl_type,
                                 swizzle);
   
-  gsk_gpu_image_setup (GSK_GPU_IMAGE (self), format, width, height);
+  gsk_gpu_image_setup (GSK_GPU_IMAGE (self), 0, format, width, height);
 
   /* texture_id == 0 means backbuffer */
 
@@ -119,7 +119,7 @@ gsk_gl_image_new (GskGLDevice    *device,
                                 &self->gl_type,
                                 swizzle);
   
-  gsk_gpu_image_setup (GSK_GPU_IMAGE (self), format, width, height);
+  gsk_gpu_image_setup (GSK_GPU_IMAGE (self), 0, format, width, height);
 
   glGenTextures (1, &self->texture_id);
   self->owns_texture = TRUE;
