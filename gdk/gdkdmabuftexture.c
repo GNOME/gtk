@@ -142,7 +142,7 @@ gdk_dmabuf_texture_new_from_builder (GdkDmabufTextureBuilder *builder,
   display = gdk_dmabuf_texture_builder_get_display (builder);
   width = gdk_dmabuf_texture_builder_get_width (builder);
   height = gdk_dmabuf_texture_builder_get_height (builder);
-  
+
   if (!gdk_dmabuf_sanitize (&dmabuf,
                             width,
                             height,
@@ -171,6 +171,13 @@ gdk_dmabuf_texture_new_from_builder (GdkDmabufTextureBuilder *builder,
       g_propagate_error (error, local_error);
       return NULL;
     }
+
+  GDK_DEBUG (DMABUF,
+             "Dmabuf texture in format %.4s:%#lx, %s%u planes, memory format %u",
+             (char *) &dmabuf.fourcc, dmabuf.modifier,
+             gdk_dmabuf_texture_builder_get_premultiplied (builder) ? " premultiplied, " : "",
+             dmabuf.n_planes,
+             format);
 
   self = g_object_new (GDK_TYPE_DMABUF_TEXTURE,
                        "width", width,
