@@ -76,7 +76,8 @@ gsk_gl_attachment_state_bind_texture (GskGLAttachmentState *self,
   g_assert (self != NULL);
   g_assert (target == GL_TEXTURE_1D ||
             target == GL_TEXTURE_2D ||
-            target == GL_TEXTURE_3D);
+            target == GL_TEXTURE_3D ||
+            target == GL_TEXTURE_EXTERNAL_OES);
   g_assert (texture >= GL_TEXTURE0 && texture <= GL_TEXTURE16);
   g_assert (texture - GL_TEXTURE0 < G_N_ELEMENTS (self->textures));
 

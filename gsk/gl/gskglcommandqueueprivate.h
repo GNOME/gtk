@@ -54,6 +54,7 @@ typedef struct _GskGLCommandBind
    */
   guint texture : 4;
 
+  /* the sampler to use. We set sampler to 15 to indicate external textures */
   guint sampler : 4;
 
   /* The identifier for the texture created with glGenTextures(). */
@@ -234,8 +235,13 @@ struct _GskGLCommandQueue
 
   /* Array of samplers that we use for mag/min filter handling. It is indexed
    * by the sampler_index() function.
+   *
    * Note that when samplers are not supported (hello GLES), we fall back to
    * setting the texture filter, but that needs to be done for every texture.
+   *
+   * Also note that we don't use all of these samplers since some combinations
+   * are invalid. An index of SAMPLER_EXTERNAL is used to indicate an external
+   * texture, which needs special sampler treatment.
    */
   GLuint samplers[GSK_GL_N_FILTERS * GSK_GL_N_FILTERS];
 
