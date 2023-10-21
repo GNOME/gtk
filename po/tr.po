@@ -22,8 +22,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2023-10-03 06:56+0000\n"
-"PO-Revision-Date: 2023-10-13 16:16+0300\n"
+"POT-Creation-Date: 2023-10-17 15:10+0000\n"
+"PO-Revision-Date: 2023-10-17 18:19+0300\n"
 "Last-Translator: Sabri Ünal <libreajans@gmail.com>\n"
 "Language-Team: Türkçe <gnome-turk@gnome.org>\n"
 "Language: tr\n"
@@ -3149,7 +3149,7 @@ msgstr "Birim ayrılamadı"
 #. Allow to cancel the operation
 #: gtk/gtkplacesview.c:1445
 msgid "Cance_l"
-msgstr "İpta_l"
+msgstr "İ_ptal"
 
 #: gtk/gtkplacesview.c:1592
 msgid "AppleTalk"
