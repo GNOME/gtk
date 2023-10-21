@@ -6,6 +6,7 @@ typedef struct _GskGpuImagePrivate GskGpuImagePrivate;
 
 struct _GskGpuImagePrivate
 {
+  GskGpuImageFlags flags;
   GdkMemoryFormat format;
   gsize width;
   gsize height;
@@ -41,13 +42,15 @@ gsk_gpu_image_init (GskGpuImage *self)
 }
 
 void
-gsk_gpu_image_setup (GskGpuImage     *self,
-                     GdkMemoryFormat  format,
-                     gsize            width,
-                     gsize            height)
+gsk_gpu_image_setup (GskGpuImage      *self,
+                     GskGpuImageFlags  flags,
+                     GdkMemoryFormat   format,
+                     gsize             width,
+                     gsize             height)
 {
   GskGpuImagePrivate *priv = gsk_gpu_image_get_instance_private (self);
 
+  priv->flags = flags;
   priv->format = format;
   priv->width = width;
   priv->height = height;
@@ -75,6 +78,23 @@ gsk_gpu_image_get_height (GskGpuImage *self)
   GskGpuImagePrivate *priv = gsk_gpu_image_get_instance_private (self);
 
   return priv->height;
+}
+
+GskGpuImageFlags
+gsk_gpu_image_get_flags (GskGpuImage *self)
+{
+  GskGpuImagePrivate *priv = gsk_gpu_image_get_instance_private (self);
+
+  return priv->flags;
+}
+
+void
+gsk_gpu_image_set_flags (GskGpuImage      *self,
+                         GskGpuImageFlags  flags)
+{
+  GskGpuImagePrivate *priv = gsk_gpu_image_get_instance_private (self);
+
+  priv->flags |= flags;
 }
 
 void
