@@ -964,6 +964,8 @@ gdk_dmabuf_texture_builder_build (GdkDmabufTextureBuilder *self,
                                   gpointer                 data,
                                   GError                 **error)
 {
+  unsigned i;
+
   g_return_val_if_fail (GDK_IS_DMABUF_TEXTURE_BUILDER (self), NULL);
   g_return_val_if_fail (destroy == NULL || data != NULL, NULL);
   g_return_val_if_fail (error == NULL || *error == NULL, NULL);
@@ -971,8 +973,8 @@ gdk_dmabuf_texture_builder_build (GdkDmabufTextureBuilder *self,
   g_return_val_if_fail (self->height > 0, NULL);
   g_return_val_if_fail (self->dmabuf.fourcc != 0, NULL);
 
-  for (int i = 0; i < self->dmabuf.n_planes; i++)
-    g_return_val_if_fail (self->dmabuf.planes[i].fd != -1 || self->dmabuf.planes[i].offset != 0, NULL);
+  for (i = 0; i < self->dmabuf.n_planes; i++)
+    g_return_val_if_fail (self->dmabuf.planes[i].fd != -1, NULL);
 
   if (GDK_DEBUG_CHECK (DMABUF_DISABLE))
     {

@@ -36,9 +36,9 @@ allocate_dma_buf (gsize size)
 }
 
 static void
-populate_dma_buf (int     fd,
-                  guchar *data,
-                  gsize   size)
+populate_dma_buf (int           fd,
+                  const guchar *data,
+                  gsize         size)
 {
   guchar *buf;
 
@@ -145,7 +145,7 @@ y_u_v_create_buffer (uint32_t  drm_format,
            * sub-sampling does not require proper
            * filtering/averaging/siting.
            */
-          argb = *(rgb_row + x / 2 * 2);
+          argb = rgb_row[x];
 
           /*
            * A stupid way of "sub-sampling" chroma. This does not
@@ -180,7 +180,7 @@ nv12_create_buffer (uint32_t drm_format,
   int x, y;
   uint32_t *rgb_row;
   uint8_t *y_base;
-  uint16_t *uv_base;
+  uint8_t *uv_base;
   uint8_t *y_row;
   uint16_t *uv_row;
   uint32_t argb;
@@ -190,21 +190,22 @@ nv12_create_buffer (uint32_t drm_format,
 
   g_assert (drm_format == DRM_FORMAT_NV12);
 
-  /* Full size Y, quarter UV */
+  /* Full size Y plane, half size UV plane */
   bytes = rgb_width * rgb_height +
-          (rgb_width / 2) * (rgb_height / 2) * sizeof (uint16_t);
+          rgb_width * (rgb_height / 2);
+  *size = bytes;
 
   buf = g_new0 (guchar, bytes);
 
   *uv_offset = rgb_width * rgb_height;
   y_base = buf;
-  uv_base = (uint16_t *)(y_base + rgb_width * rgb_height);
+  uv_base = y_base + rgb_width * rgb_height;
 
   for (y = 0; y < rgb_height; y++)
     {
       rgb_row = (uint32_t *) (rgb_data + y * 4 * rgb_width);
       y_row = y_base + y * rgb_width;
-      uv_row = (uint16_t *) (uv_base + (y / 2) * (rgb_width / 2));
+      uv_row = (uint16_t *) (uv_base + (y / 2) * rgb_width);
 
       for (x = 0; x < rgb_width; x++)
         {
@@ -213,7 +214,7 @@ nv12_create_buffer (uint32_t drm_format,
            * sub-sampling does not require proper
            * filtering/averaging/siting.
            */
-          argb = *(rgb_row + x / 2 * 2);
+          argb = rgb_row[x];
 
           /*
            * A stupid way of "sub-sampling" chroma. This does not
@@ -234,9 +235,54 @@ nv12_create_buffer (uint32_t drm_format,
   return buf;
 }
 
+static void
+texture_builder_set_planes (GdkDmabufTextureBuilder *builder,
+                            gboolean                 disjoint,
+                            const guchar            *buf,
+                            unsigned                 size,
+                            unsigned                 n_planes,
+                            unsigned                 strides[4],
+                            unsigned                 sizes[4])
+{
+  gdk_dmabuf_texture_builder_set_n_planes (builder, n_planes);
+
+  if (disjoint)
+    {
+      unsigned offset = 0;
+      unsigned i;
+
+      for (i = 0; i < n_planes; i++)
+        {
+          int fd = allocate_dma_buf (sizes[i]);
+          populate_dma_buf (fd, buf + offset, sizes[i]);
+
+          gdk_dmabuf_texture_builder_set_fd (builder, i, fd);
+          gdk_dmabuf_texture_builder_set_stride (builder, i, strides[i]);
+          gdk_dmabuf_texture_builder_set_offset (builder, i, 0);
+          offset += sizes[i];
+        }
+    }
+  else
+    {
+      unsigned offset = 0;
+      unsigned i;
+      int fd = allocate_dma_buf (size);
+      populate_dma_buf (fd, buf, size);
+
+      for (i = 0; i < n_planes; i++)
+        {
+          gdk_dmabuf_texture_builder_set_fd (builder, i, fd);
+          gdk_dmabuf_texture_builder_set_stride (builder, i, strides[i]);
+          gdk_dmabuf_texture_builder_set_offset (builder, i, offset);
+          offset += sizes[i];
+        }
+    }
+}
+
 static GdkTexture *
 make_dmabuf_texture (const char *filename,
-                     guint32     format)
+                     guint32     format,
+                     gboolean    disjoint)
 {
   GdkTexture *texture;
   int width, height;
@@ -283,30 +329,15 @@ make_dmabuf_texture (const char *filename,
       guchar *buf;
       int size, u_offset, v_offset;
 
-      gdk_dmabuf_texture_builder_set_n_planes (builder, 3);
-
       buf = y_u_v_create_buffer (format, rgb_data, width, height, &size, &u_offset, &v_offset);
 
-      fd = allocate_dma_buf (width * height);
-      populate_dma_buf (fd, buf, width * height);
-
-      gdk_dmabuf_texture_builder_set_fd (builder, 0, fd);
-      gdk_dmabuf_texture_builder_set_stride (builder, 0, width);
-      gdk_dmabuf_texture_builder_set_offset (builder, 0, 0);
-
-      fd = allocate_dma_buf ((width / 2) * (height / 2));
-      populate_dma_buf (fd, buf + u_offset, (width / 2) * (height / 2));
-
-      gdk_dmabuf_texture_builder_set_fd (builder, 1, fd);
-      gdk_dmabuf_texture_builder_set_stride (builder, 1, width / 2);
-      gdk_dmabuf_texture_builder_set_offset (builder, 1, 0);
-
-      fd = allocate_dma_buf ((width / 2) * (height / 2));
-      populate_dma_buf (fd, buf + v_offset, (width / 2) * (height / 2));
-
-      gdk_dmabuf_texture_builder_set_fd (builder, 2, fd);
-      gdk_dmabuf_texture_builder_set_stride (builder, 2, width / 2);
-      gdk_dmabuf_texture_builder_set_offset (builder, 2, 0);
+      texture_builder_set_planes (builder,
+                                  disjoint,
+                                  buf,
+                                  size,
+                                  3,
+                                  (unsigned[4]) { width, width / 2, width / 2 }, 
+                                  (unsigned[4]) { width * height, width * height / 4, width * height / 4 });
 
       g_free (buf);
     }
@@ -315,23 +346,15 @@ make_dmabuf_texture (const char *filename,
       guchar *buf;
       int size, uv_offset;
 
-      gdk_dmabuf_texture_builder_set_n_planes (builder, 2);
-
       buf = nv12_create_buffer (format, rgb_data, width, height, &size, &uv_offset);
 
-      fd = allocate_dma_buf (width * height);
-      populate_dma_buf (fd, buf, width * height);
-
-      gdk_dmabuf_texture_builder_set_fd (builder, 0, fd);
-      gdk_dmabuf_texture_builder_set_stride (builder, 0, width);
-      gdk_dmabuf_texture_builder_set_offset (builder, 0, 0);
-
-      fd = allocate_dma_buf ((width / 2) * (height / 2) * sizeof (uint16_t));
-      populate_dma_buf (fd, buf + uv_offset, (width / 2) * (height / 2) * sizeof (uint16_t));
-
-      gdk_dmabuf_texture_builder_set_fd (builder, 1, fd);
-      gdk_dmabuf_texture_builder_set_stride (builder, 1, width);
-      gdk_dmabuf_texture_builder_set_offset (builder, 1, 0);
+      texture_builder_set_planes (builder,
+                                  disjoint,
+                                  buf,
+                                  size,
+                                  2,
+                                  (unsigned[4]) { width, width, }, 
+                                  (unsigned[4]) { width * height, width * height / 2 });
 
       g_free (buf);
     }
@@ -387,7 +410,7 @@ static void
 usage (void)
 {
   char *formats = supported_formats_to_string ();
-  g_print ("Usage: testdmabuf FORMAT FILE\n"
+  g_print ("Usage: testdmabuf [--bare] [--disjoint] FORMAT FILE\n"
            "Supported formats: %s\n", formats);
   g_free (formats);
   exit (1);
@@ -414,9 +437,25 @@ main (int argc, char *argv[])
   GtkWidget *window, *picture;
   char *filename;
   guint32 format;
+  gboolean disjoint = FALSE;
+  gboolean decorated = TRUE;
+  unsigned i;
 
-  if (argc != 3)
-    usage ();
+  for (i = 1; i < argc; i++)
+    {
+      if (g_str_equal (argv[i], "--disjoint"))
+        disjoint = TRUE;
+      if (g_str_equal (argv[i], "--undecorated"))
+        decorated = FALSE;
+      else
+        break;
+    }
+
+  if (argc - i != 2)
+    {
+      usage ();
+      return 1;
+    }
 
   format = parse_format (argv[1]);
   filename = argv[2];
@@ -426,11 +465,12 @@ main (int argc, char *argv[])
   /* Get the list of supported formats with GDK_DEBUG=opengl */
   gdk_display_get_dmabuf_formats (gdk_display_get_default ());
 
-  texture = make_dmabuf_texture (filename, format);
+  texture = make_dmabuf_texture (filename, format, disjoint);
 
   gdk_texture_save_to_png (texture, "testdmabuf.out.png");
 
   window = gtk_window_new ();
+  gtk_window_set_decorated (GTK_WINDOW (window), decorated);
 
   picture = gtk_picture_new_for_paintable (GDK_PAINTABLE (texture));
 
