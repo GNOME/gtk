@@ -410,7 +410,7 @@ static void
 usage (void)
 {
   char *formats = supported_formats_to_string ();
-  g_print ("Usage: testdmabuf [--bare] [--disjoint] FORMAT FILE\n"
+  g_print ("Usage: testdmabuf [--undecorated] [--disjoint][--download-to FILE] FORMAT FILE\n"
            "Supported formats: %s\n", formats);
   g_free (formats);
   exit (1);
@@ -439,14 +439,23 @@ main (int argc, char *argv[])
   guint32 format;
   gboolean disjoint = FALSE;
   gboolean decorated = TRUE;
-  unsigned i;
+  unsigned int i;
+  const char *save_filename = NULL;
 
   for (i = 1; i < argc; i++)
     {
       if (g_str_equal (argv[i], "--disjoint"))
         disjoint = TRUE;
-      if (g_str_equal (argv[i], "--undecorated"))
+      else if (g_str_equal (argv[i], "--undecorated"))
         decorated = FALSE;
+      else if (g_str_equal (argv[i], "--download-to"))
+        {
+          i++;
+          if (i == argc)
+            usage ();
+
+          save_filename = argv[i];
+        }
       else
         break;
     }
@@ -457,8 +466,8 @@ main (int argc, char *argv[])
       return 1;
     }
 
-  format = parse_format (argv[1]);
-  filename = argv[2];
+  format = parse_format (argv[argc - 2]);
+  filename = argv[argc - 1];
 
   gtk_init ();
 
@@ -467,7 +476,8 @@ main (int argc, char *argv[])
 
   texture = make_dmabuf_texture (filename, format, disjoint);
 
-  gdk_texture_save_to_png (texture, "testdmabuf.out.png");
+  if (save_filename)
+    gdk_texture_save_to_png (texture, save_filename);
 
   window = gtk_window_new ();
   gtk_window_set_decorated (GTK_WINDOW (window), decorated);
