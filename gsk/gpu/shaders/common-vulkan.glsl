@@ -9,7 +9,7 @@ layout(push_constant) uniform PushConstants {
 } push;
 
 layout(constant_id=0) const uint GSK_SHADER_CLIP = GSK_GPU_SHADER_CLIP_NONE;
-layout(constant_id=1) const uint GSK_IMMUTABLE_SAMPLERS = 1;
+layout(constant_id=1) const uint GSK_IMMUTABLE_SAMPLERS = 8;
 
 #define GSK_GLOBAL_MVP push.mvp
 #define GSK_GLOBAL_CLIP push.clip
@@ -42,7 +42,27 @@ gsk_texture (uint id,
              vec2 pos)
 {
   if ((id & 1) != 0)
-    return texture (immutable_textures[nonuniformEXT (id >> 1)], pos);
+    {
+      id >>= 1;
+      if (id == 0)
+        return texture (immutable_textures[0], pos);
+      else if (GSK_IMMUTABLE_SAMPLERS > 1 && id == 1)
+        return texture (immutable_textures[1], pos);
+      else if (GSK_IMMUTABLE_SAMPLERS > 2 && id == 2)
+        return texture (immutable_textures[2], pos);
+      else if (GSK_IMMUTABLE_SAMPLERS > 3 && id == 3)
+        return texture (immutable_textures[3], pos);
+      else if (GSK_IMMUTABLE_SAMPLERS > 4 && id == 4)
+        return texture (immutable_textures[4], pos);
+      else if (GSK_IMMUTABLE_SAMPLERS > 5 && id == 5)
+        return texture (immutable_textures[5], pos);
+      else if (GSK_IMMUTABLE_SAMPLERS > 6 && id == 6)
+        return texture (immutable_textures[6], pos);
+      else if (GSK_IMMUTABLE_SAMPLERS > 7 && id == 7)
+        return texture (immutable_textures[7], pos);
+      else
+        return vec4 (1.0, 0.0, 0.8, 1.0);
+    }
 
   return texture (textures[nonuniformEXT (id >> 1)], pos);
 }
