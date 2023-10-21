@@ -48,4 +48,6 @@ gboolean                gdk_dmabuf_sanitize                     (GdkDmabuf      
                                                                  gsize                           height,
                                                                  const GdkDmabuf                *src,
                                                                  GError                        **error);
+gboolean                gdk_dmabuf_is_disjoint                  (const GdkDmabuf                *dmabuf);
+
 #endif

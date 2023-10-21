@@ -527,4 +527,27 @@ gdk_dmabuf_sanitize (GdkDmabuf        *dest,
   return TRUE;
 }
 
+/*
+ * gdk_dmabuf_is_disjoint:
+ * @dmabuf: a sanitized GdkDmabuf
+ *
+ * A dmabuf is considered disjoint if it uses more than
+ * 1 file descriptor.
+ *
+ * Returns: %TRUE if the dmabuf is disjoint
+ **/
+gboolean
+gdk_dmabuf_is_disjoint (const GdkDmabuf *dmabuf)
+{
+  unsigned i;
+
+  for (i = 1; i < dmabuf->n_planes; i++)
+    {
+      if (dmabuf->planes[0].fd != dmabuf->planes[i].fd)
+        return TRUE;
+    }
+
+  return FALSE;
+}
+
 #endif  /* HAVE_LINUX_DMA_BUF_H */
