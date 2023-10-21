@@ -180,7 +180,7 @@ nv12_create_buffer (uint32_t drm_format,
   int x, y;
   uint32_t *rgb_row;
   uint8_t *y_base;
-  uint16_t *uv_base;
+  uint8_t *uv_base;
   uint8_t *y_row;
   uint16_t *uv_row;
   uint32_t argb;
@@ -190,21 +190,22 @@ nv12_create_buffer (uint32_t drm_format,
 
   g_assert (drm_format == DRM_FORMAT_NV12);
 
-  /* Full size Y, quarter UV */
+  /* Full size Y plane, half size UV plane */
   bytes = rgb_width * rgb_height +
-          (rgb_width / 2) * (rgb_height / 2) * sizeof (uint16_t);
+          rgb_width * (rgb_height / 2);
+  *size = bytes;
 
   buf = g_new0 (guchar, bytes);
 
   *uv_offset = rgb_width * rgb_height;
   y_base = buf;
-  uv_base = (uint16_t *)(y_base + rgb_width * rgb_height);
+  uv_base = y_base + rgb_width * rgb_height;
 
   for (y = 0; y < rgb_height; y++)
     {
       rgb_row = (uint32_t *) (rgb_data + y * 4 * rgb_width);
       y_row = y_base + y * rgb_width;
-      uv_row = (uint16_t *) (uv_base + (y / 2) * (rgb_width / 2));
+      uv_row = (uint16_t *) (uv_base + (y / 2) * rgb_width);
 
       for (x = 0; x < rgb_width; x++)
         {
