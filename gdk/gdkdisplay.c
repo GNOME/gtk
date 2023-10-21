@@ -391,6 +391,9 @@ gdk_display_dispose (GObject *object)
 
   g_queue_clear (&display->queued_events);
 
+  g_clear_object (&display->egl_gsk_renderer);
+  g_clear_pointer (&display->egl_external_formats, gdk_dmabuf_formats_unref);
+
   g_clear_object (&priv->gl_context);
 #ifdef HAVE_EGL
   g_clear_pointer (&priv->egl_display, eglTerminate);
@@ -1887,11 +1890,16 @@ gdk_display_init_dmabuf (GdkDisplay *self)
       gdk_display_prepare_gl (self, NULL);
 
       gdk_display_add_dmabuf_downloader (self, gdk_dmabuf_get_direct_downloader (), builder);
+
+#ifdef HAVE_EGL
+      if (gdk_display_prepare_gl (self, NULL))
+        gdk_display_add_dmabuf_downloader (self, gdk_dmabuf_get_egl_downloader (), builder);
+#endif
     }
 #endif
 
   self->dmabuf_formats = gdk_dmabuf_formats_builder_free_to_formats (builder);
-} 
+}
 
 /**
  * gdk_display_get_dmabuf_formats:
