@@ -327,10 +327,12 @@ gdk_dmabuf_direct_downloader_do_download (GdkTexture *texture,
   gsize needs_unmap[GDK_DMABUF_MAX_PLANES] = { FALSE, };
   gsize i, j;
 
-  GDK_DEBUG (DMABUF, "Using mmap() and memcpy() for downloading a dmabuf");
-
   dmabuf = gdk_dmabuf_texture_get_dmabuf (GDK_DMABUF_TEXTURE (texture));
   info = get_drm_format_info (dmabuf->fourcc);
+
+  GDK_DEBUG (DMABUF,
+             "Using mmap() and memcpy() for downloading a dmabuf (format %.4s:%#lx)",
+             (char *)&dmabuf->fourcc, dmabuf->modifier);
 
   for (i = 0; i < dmabuf->n_planes; i++)
     {
