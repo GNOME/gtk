@@ -22,9 +22,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2023-10-13 09:55+0000\n"
-"PO-Revision-Date: 2023-10-14 08:00+0300\n"
-"Last-Translator: Emin Tufan Çetin <etcetin@gmail.com>\n"
+"POT-Creation-Date: 2023-10-16 11:58+0000\n"
+"PO-Revision-Date: 2023-10-17 18:20+0300\n"
+"Last-Translator: Sabri Ünal <libreajans@gmail.com>\n"
 "Language-Team: Türkçe <takim@gnome.org.tr>\n"
 "Language: tr\n"
 "MIME-Version: 1.0\n"
@@ -61,58 +61,58 @@ msgstr "İçerikler “%s” olarak sağlanamıyor"
 msgid "Cannot provide contents as %s"
 msgstr "İçerikler %s olarak sağlanamıyor"
 
-#: gdk/gdkdisplay.c:163 gdk/gdkglcontext.c:442
+#: gdk/gdkdisplay.c:164 gdk/gdkglcontext.c:442
 msgid "The current backend does not support OpenGL"
 msgstr "Şimdiki arka uç OpenGL’i desteklemiyor"
 
-#: gdk/gdkdisplay.c:1258 gdk/gdksurface.c:1252
+#: gdk/gdkdisplay.c:1259 gdk/gdksurface.c:1252
 msgid "Vulkan support disabled via GDK_DEBUG"
 msgstr "Vulkan desteği GDK_DEBUG yoluyla devre dışı bırakılmış"
 
-#: gdk/gdkdisplay.c:1290
+#: gdk/gdkdisplay.c:1291
 msgid "GL support disabled via GDK_DEBUG"
 msgstr "GL desteği, GDK_DEBUG yoluyla devre dışı bırakılmış"
 
-#: gdk/gdkdisplay.c:1588
+#: gdk/gdkdisplay.c:1589
 msgid "No EGL configuration available"
 msgstr "Kullanılabilir EGL yapılandırması yok"
 
-#: gdk/gdkdisplay.c:1596
+#: gdk/gdkdisplay.c:1597
 msgid "Failed to get EGL configurations"
 msgstr "EGL yapılandırmaları alınamadı"
 
-#: gdk/gdkdisplay.c:1626
+#: gdk/gdkdisplay.c:1627
 msgid "No EGL configuration with required features found"
 msgstr "Gerekli özellikleri olan EGL yapılandırması bulunamadı"
 
-#: gdk/gdkdisplay.c:1633
+#: gdk/gdkdisplay.c:1634
 msgid "No perfect EGL configuration found"
 msgstr "Kusursuz EGL yapılandırması bulunamadı"
 
-#: gdk/gdkdisplay.c:1675
+#: gdk/gdkdisplay.c:1676
 #, c-format
 msgid "EGL implementation is missing extension %s"
 msgid_plural "EGL implementation is missing %2$d extensions: %1$s"
 msgstr[0] "EGL uygulamasında %2$d eksik uzantı: %1$s"
 
 # https://twitter.com/mserdark/status/932936929213079559
-#: gdk/gdkdisplay.c:1708
+#: gdk/gdkdisplay.c:1709
 msgid "libEGL not available in this sandbox"
 msgstr "libEGL bu kum havuzunda kullanılamıyor"
 
-#: gdk/gdkdisplay.c:1709
+#: gdk/gdkdisplay.c:1710
 msgid "libEGL not available"
 msgstr "libEGL kullanılamıyor"
 
-#: gdk/gdkdisplay.c:1719
+#: gdk/gdkdisplay.c:1720
 msgid "Failed to create EGL display"
 msgstr "EGL ekranı oluşturulamadı"
 
-#: gdk/gdkdisplay.c:1729
+#: gdk/gdkdisplay.c:1730
 msgid "Could not initialize EGL display"
 msgstr "EGL ekranı ilklendirilemedi"
 
-#: gdk/gdkdisplay.c:1740
+#: gdk/gdkdisplay.c:1741
 #, c-format
 msgid "EGL version %d.%d is too old. GTK requires %d.%d"
 msgstr "EGL sürümü %d.%d çok eski. GTK, %d.%d gerektiriyor"
@@ -3154,7 +3154,7 @@ msgstr "Birim ayrılamadı"
 #. Allow to cancel the operation
 #: gtk/gtkplacesview.c:1445
 msgid "Cance_l"
-msgstr "İpta_l"
+msgstr "İ_ptal"
 
 #: gtk/gtkplacesview.c:1592
 msgid "AppleTalk"
