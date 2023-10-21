@@ -226,6 +226,8 @@ gsk_gl_driver_dispose (GObject *object)
   GSK_GL_DELETE_PROGRAM(name);                          \
   GSK_GL_DELETE_PROGRAM(name ## _no_clip);              \
   GSK_GL_DELETE_PROGRAM(name ## _rect_clip);
+#define GSK_GL_DEFINE_PROGRAM_NO_CLIP(name, resource, uniforms) \
+  GSK_GL_DELETE_PROGRAM(name);
 #define GSK_GL_DELETE_PROGRAM(name)                     \
   G_STMT_START {                                        \
     if (self->name)                                     \
@@ -240,6 +242,7 @@ gsk_gl_driver_dispose (GObject *object)
 #undef GSK_GL_SHADER_JOINED
 #undef GSK_GL_ADD_UNIFORM
 #undef GSK_GL_DEFINE_PROGRAM
+#undef GSK_GL_DEFINE_PROGRAM_NO_CLIP
 
   if (self->shader_cache != NULL)
     {
@@ -375,6 +378,11 @@ gsk_gl_driver_load_programs (GskGLDriver  *self,
   GSK_GL_COMPILE_PROGRAM(name ## _no_clip, uniforms, "#define NO_CLIP 1\n");                    \
   GSK_GL_COMPILE_PROGRAM(name ## _rect_clip, uniforms, "#define RECT_CLIP 1\n");                \
   GSK_GL_COMPILE_PROGRAM(name, uniforms, "");
+#define GSK_GL_DEFINE_PROGRAM_NO_CLIP(name, sources, uniforms)                                  \
+  gsk_gl_compiler_set_source (compiler, GSK_GL_COMPILER_VERTEX, NULL);                          \
+  gsk_gl_compiler_set_source (compiler, GSK_GL_COMPILER_FRAGMENT, NULL);                        \
+  sources                                                                                       \
+  GSK_GL_COMPILE_PROGRAM(name, uniforms, "#define NO_CLIP 1\n");
 #define GSK_GL_COMPILE_PROGRAM(name, uniforms, clip)                                            \
   G_STMT_START {                                                                                \
     GskGLProgram *program;                                                                      \
@@ -402,6 +410,7 @@ gsk_gl_driver_load_programs (GskGLDriver  *self,
   } G_STMT_END;
 # include "gskglprograms.defs"
 #undef GSK_GL_DEFINE_PROGRAM
+#undef GSK_GL_DEFINE_PROGRAM_NO_CLIP
 #undef GSK_GL_ADD_UNIFORM
 #undef GSK_GL_SHADER_SINGLE
 #undef GSK_GL_SHADER_JOINED
