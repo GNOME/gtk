@@ -125,7 +125,10 @@ gtk_tests = [
 ]
 
 if os_unix
-  gtk_tests += [['testfontchooserdialog']]
+  gtk_tests += [
+    ['testfontchooserdialog'],
+    ['testdmabuf'],
+  ]
 endif
 
 if x11_enabled

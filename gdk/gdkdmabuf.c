@@ -327,10 +327,12 @@ gdk_dmabuf_direct_downloader_do_download (GdkTexture *texture,
   gsize needs_unmap[GDK_DMABUF_MAX_PLANES] = { FALSE, };
   gsize i, j;
 
-  GDK_DEBUG (DMABUF, "Using mmap() and memcpy() for downloading a dmabuf");
-
   dmabuf = gdk_dmabuf_texture_get_dmabuf (GDK_DMABUF_TEXTURE (texture));
   info = get_drm_format_info (dmabuf->fourcc);
+
+  GDK_DEBUG (DMABUF,
+             "Using mmap() and memcpy() for downloading a dmabuf (format %.4s:%#lx)",
+             (char *)&dmabuf->fourcc, dmabuf->modifier);
 
   for (i = 0; i < dmabuf->n_planes; i++)
     {
@@ -346,7 +348,7 @@ gdk_dmabuf_direct_downloader_do_download (GdkTexture *texture,
           continue;
         }
 
-      sizes[i] = lseek (dmabuf->planes[0].fd, 0, SEEK_END);
+      sizes[i] = lseek (dmabuf->planes[i].fd, 0, SEEK_END);
       if (sizes[i] == (off_t) -1)
         {
           g_warning ("Failed to seek dmabuf: %s", g_strerror (errno));
@@ -380,7 +382,7 @@ out:
       if (!needs_unmap[i])
         continue;
 
-      munmap (src_data, sizes[i]);
+      munmap ((void *)src_data[i], sizes[i]);
 
       if (ioctl (dmabuf->planes[i].fd, DMA_BUF_IOCTL_SYNC, &(struct dma_buf_sync) { DMA_BUF_SYNC_END|DMA_BUF_SYNC_READ }) < 0)
         g_warning ("Failed to sync dmabuf: %s", g_strerror (errno));
