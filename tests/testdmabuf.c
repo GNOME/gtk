@@ -145,7 +145,7 @@ y_u_v_create_buffer (uint32_t  drm_format,
            * sub-sampling does not require proper
            * filtering/averaging/siting.
            */
-          argb = *(rgb_row + x / 2 * 2);
+          argb = rgb_row[x];
 
           /*
            * A stupid way of "sub-sampling" chroma. This does not
@@ -213,7 +213,7 @@ nv12_create_buffer (uint32_t drm_format,
            * sub-sampling does not require proper
            * filtering/averaging/siting.
            */
-          argb = *(rgb_row + x / 2 * 2);
+          argb = rgb_row[x];
 
           /*
            * A stupid way of "sub-sampling" chroma. This does not
