@@ -173,11 +173,12 @@ gdk_dmabuf_texture_new_from_builder (GdkDmabufTextureBuilder *builder,
     }
 
   GDK_DEBUG (DMABUF,
-             "Dmabuf texture in format %.4s:%#lx, %s%u planes, memory format %u",
+             "Dmabuf texture, format %.4s:%#lx, %s%u planes, memory format %u, downloader %s",
              (char *) &dmabuf.fourcc, dmabuf.modifier,
              gdk_dmabuf_texture_builder_get_premultiplied (builder) ? " premultiplied, " : "",
              dmabuf.n_planes,
-             format);
+             format,
+             display->dmabuf_downloaders[i]->name);
 
   self = g_object_new (GDK_TYPE_DMABUF_TEXTURE,
                        "width", width,
