@@ -426,6 +426,7 @@ const GdkDmabufDownloader *
 gdk_dmabuf_get_direct_downloader (void)
 {
   static const GdkDmabufDownloader downloader = {
+    "mmap",
     gdk_dmabuf_direct_downloader_add_formats,
     gdk_dmabuf_direct_downloader_supports,
     gdk_dmabuf_direct_downloader_download,
