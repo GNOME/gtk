@@ -27,6 +27,11 @@
 #include "gdkdmabuftextureprivate.h"
 
 #include <cairo-gobject.h>
+#ifdef HAVE_LINUX_DMA_BUF_H
+#include <drm/drm_fourcc.h>
+#else
+#define DRM_FORMAT_MOD_INVALID ((1ULL << 56) - 1)
+#endif
 
 
 struct _GdkDmabufTextureBuilder
@@ -598,6 +603,13 @@ gdk_dmabuf_texture_builder_set_modifier (GdkDmabufTextureBuilder *self,
                                          guint64                  modifier)
 {
   g_return_if_fail (GDK_IS_DMABUF_TEXTURE_BUILDER (self));
+  if (modifier == DRM_FORMAT_MOD_INVALID)
+    {
+      g_critical ("GTK does not support the INVALID modifier. "
+                  "If you use code that produces it, it should include "
+                  "instructions how to transform it into a regular modifier.");
+      return;
+    }
 
   if (self->dmabuf.modifier == modifier)
     return;

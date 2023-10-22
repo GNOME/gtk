@@ -484,6 +484,14 @@ gdk_dmabuf_sanitize (GdkDmabuf        *dest,
       return FALSE;
     }
 
+  if (src->modifier == DRM_FORMAT_MOD_INVALID)
+    {
+      g_set_error (error,
+                   GDK_DMABUF_ERROR, GDK_DMABUF_ERROR_UNSUPPORTED_FORMAT,
+                   "GTK does not support the INVALID modifier.");
+      return FALSE;
+    }
+
   info = get_drm_format_info (src->fourcc);
 
   if (info == NULL)
@@ -497,7 +505,7 @@ gdk_dmabuf_sanitize (GdkDmabuf        *dest,
 
   *dest = *src;
 
-  if (src->modifier && src->modifier != DRM_FORMAT_MOD_INVALID)
+  if (src->modifier)
     return TRUE;
 
   switch (dest->fourcc)
