@@ -1,3 +1,9 @@
+#if defined(GSK_GLES3)
+#extension GL_OES_EGL_image_external_essl3 : require
+#elif defined (GSK_GLES)
+#extension GL_OES_EGL_image_external : require
+#endif
+
 #ifndef GSK_LEGACY
 precision highp float;
 #endif
