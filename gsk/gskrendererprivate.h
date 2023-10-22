@@ -56,5 +56,8 @@ GskDebugFlags           gsk_renderer_get_debug_flags            (GskRenderer    
 void                    gsk_renderer_set_debug_flags            (GskRenderer    *renderer,
                                                                  GskDebugFlags   flags);
 
+GdkTexture *            gsk_renderer_convert_texture            (GskRenderer    *renderer,
+                                                                 GdkTexture     *texture);
+
 G_END_DECLS
 

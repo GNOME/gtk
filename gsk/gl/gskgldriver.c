@@ -44,6 +44,8 @@
 #include <gdk/gdktextureprivate.h>
 
 #include <gdk/gdkmemoryformatprivate.h>
+#include <gdk/gdkdmabuftextureprivate.h>
+
 
 G_DEFINE_TYPE (GskGLDriver, gsk_gl_driver, G_TYPE_OBJECT)
 
@@ -224,6 +226,8 @@ gsk_gl_driver_dispose (GObject *object)
   GSK_GL_DELETE_PROGRAM(name);                          \
   GSK_GL_DELETE_PROGRAM(name ## _no_clip);              \
   GSK_GL_DELETE_PROGRAM(name ## _rect_clip);
+#define GSK_GL_DEFINE_PROGRAM_NO_CLIP(name, resource, uniforms) \
+  GSK_GL_DELETE_PROGRAM(name);
 #define GSK_GL_DELETE_PROGRAM(name)                     \
   G_STMT_START {                                        \
     if (self->name)                                     \
@@ -238,6 +242,7 @@ gsk_gl_driver_dispose (GObject *object)
 #undef GSK_GL_SHADER_JOINED
 #undef GSK_GL_ADD_UNIFORM
 #undef GSK_GL_DEFINE_PROGRAM
+#undef GSK_GL_DEFINE_PROGRAM_NO_CLIP
 
   if (self->shader_cache != NULL)
     {
@@ -373,6 +378,11 @@ gsk_gl_driver_load_programs (GskGLDriver  *self,
   GSK_GL_COMPILE_PROGRAM(name ## _no_clip, uniforms, "#define NO_CLIP 1\n");                    \
   GSK_GL_COMPILE_PROGRAM(name ## _rect_clip, uniforms, "#define RECT_CLIP 1\n");                \
   GSK_GL_COMPILE_PROGRAM(name, uniforms, "");
+#define GSK_GL_DEFINE_PROGRAM_NO_CLIP(name, sources, uniforms)                                  \
+  gsk_gl_compiler_set_source (compiler, GSK_GL_COMPILER_VERTEX, NULL);                          \
+  gsk_gl_compiler_set_source (compiler, GSK_GL_COMPILER_FRAGMENT, NULL);                        \
+  sources                                                                                       \
+  GSK_GL_COMPILE_PROGRAM(name, uniforms, "#define NO_CLIP 1\n");
 #define GSK_GL_COMPILE_PROGRAM(name, uniforms, clip)                                            \
   G_STMT_START {                                                                                \
     GskGLProgram *program;                                                                      \
@@ -400,6 +410,7 @@ gsk_gl_driver_load_programs (GskGLDriver  *self,
   } G_STMT_END;
 # include "gskglprograms.defs"
 #undef GSK_GL_DEFINE_PROGRAM
+#undef GSK_GL_DEFINE_PROGRAM_NO_CLIP
 #undef GSK_GL_ADD_UNIFORM
 #undef GSK_GL_SHADER_SINGLE
 #undef GSK_GL_SHADER_JOINED
@@ -702,6 +713,178 @@ gsk_gl_driver_cache_texture (GskGLDriver         *self,
     }
 }
 
+#if defined(HAVE_DMABUF) && defined (HAVE_EGL)
+static void
+set_viewport_for_size (GskGLDriver  *self,
+                       GskGLProgram *program,
+                       float         width,
+                       float         height)
+{
+  float viewport[4] = { 0, 0, width, height };
+
+  gsk_gl_uniform_state_set4fv (program->uniforms,
+                               program->program_info,
+                               UNIFORM_SHARED_VIEWPORT, 0,
+                               1,
+                               (const float *)&viewport);
+  self->stamps[UNIFORM_SHARED_VIEWPORT]++;
+}
+
+#define ORTHO_NEAR_PLANE   -10000
+#define ORTHO_FAR_PLANE     10000
+
+static void
+set_projection_for_size (GskGLDriver  *self,
+                         GskGLProgram *program,
+                         float         width,
+                         float         height)
+{
+  graphene_matrix_t projection;
+
+  graphene_matrix_init_ortho (&projection, 0, width, 0, height, ORTHO_NEAR_PLANE, ORTHO_FAR_PLANE);
+  graphene_matrix_scale (&projection, 1, -1, 1);
+
+  gsk_gl_uniform_state_set_matrix (program->uniforms,
+                                   program->program_info,
+                                   UNIFORM_SHARED_PROJECTION, 0,
+                                   &projection);
+  self->stamps[UNIFORM_SHARED_PROJECTION]++;
+}
+
+static void
+reset_modelview (GskGLDriver  *self,
+                 GskGLProgram *program)
+{
+  graphene_matrix_t modelview;
+
+  graphene_matrix_init_identity (&modelview);
+
+  gsk_gl_uniform_state_set_matrix (program->uniforms,
+                                   program->program_info,
+                                   UNIFORM_SHARED_MODELVIEW, 0,
+                                   &modelview);
+  self->stamps[UNIFORM_SHARED_MODELVIEW]++;
+}
+
+static void
+draw_rect (GskGLCommandQueue *command_queue,
+           float              min_x,
+           float              min_y,
+           float              max_x,
+           float              max_y)
+{
+  GskGLDrawVertex *vertices = gsk_gl_command_queue_add_vertices (command_queue);
+  float min_u = 0;
+  float max_u = 1;
+  float min_v = 1;
+  float max_v = 0;
+  guint16 c = FP16_ZERO;
+
+  vertices[0] = (GskGLDrawVertex) { .position = { min_x, min_y }, .uv = { min_u, min_v }, .color = { c, c, c, c } };
+  vertices[1] = (GskGLDrawVertex) { .position = { min_x, max_y }, .uv = { min_u, max_v }, .color = { c, c, c, c } };
+  vertices[2] = (GskGLDrawVertex) { .position = { max_x, min_y }, .uv = { max_u, min_v }, .color = { c, c, c, c } };
+  vertices[3] = (GskGLDrawVertex) { .position = { max_x, max_y }, .uv = { max_u, max_v }, .color = { c, c, c, c } };
+  vertices[4] = (GskGLDrawVertex) { .position = { min_x, max_y }, .uv = { min_u, max_v }, .color = { c, c, c, c } };
+  vertices[5] = (GskGLDrawVertex) { .position = { max_x, min_y }, .uv = { max_u, min_v }, .color = { c, c, c, c } };
+}
+
+static unsigned int release_render_target (GskGLDriver       *self,
+                                           GskGLRenderTarget *render_target,
+                                           gboolean           release_texture,
+                                           gboolean           cache_texture);
+
+static guint
+gsk_gl_driver_import_dmabuf_texture (GskGLDriver      *self,
+                                     GdkDmabufTexture *texture)
+{
+  GdkGLContext *context = self->command_queue->context;
+  GdkDisplay *display = gdk_gl_context_get_display (context);
+  int max_texture_size = self->command_queue->max_texture_size;
+  const GdkDmabuf *dmabuf;
+  guint texture_id;
+  int width, height;
+  GskGLProgram *program;
+  GskGLRenderTarget *render_target;
+  guint prev_fbo;
+
+  gdk_gl_context_make_current (context);
+
+  width = gdk_texture_get_width (GDK_TEXTURE (texture));
+  height = gdk_texture_get_height (GDK_TEXTURE (texture));
+
+  if (width > max_texture_size || height > max_texture_size)
+    {
+      GDK_DEBUG (DMABUF, "Can't import dmabuf bigger than MAX_TEXTURE_SIZE (%d)", max_texture_size);
+      return 0;
+    }
+
+  dmabuf = gdk_dmabuf_texture_get_dmabuf (texture);
+
+  GDK_DEBUG (DMABUF, "DMA-buf Format %.4s:%#lx", (char *) &dmabuf->fourcc, dmabuf->modifier);
+
+  if (!gdk_dmabuf_formats_contains (display->egl_external_formats, dmabuf->fourcc, dmabuf->modifier))
+    {
+      GDK_DEBUG (DMABUF, "Import dmabuf as GL_TEXTURE_2D texture");
+      return gdk_gl_context_import_dmabuf (context, width, height,
+                                           dmabuf,
+                                           GL_TEXTURE_2D);
+    }
+
+  if (!gdk_gl_context_get_use_es (context))
+    {
+      GDK_DEBUG (DMABUF, "Can't import external_only dmabuf outside of GLES");
+      return 0;
+    }
+
+  GDK_DEBUG (DMABUF, "Import dmabuf as GL_TEXTURE_EXTERNAL_OES texture");
+
+  texture_id = gdk_gl_context_import_dmabuf (context, width, height,
+                                             dmabuf,
+                                             GL_TEXTURE_EXTERNAL_OES);
+
+  if (texture_id == 0)
+    return 0;
+
+  gsk_gl_driver_autorelease_texture (self, texture_id);
+
+  program = self->external;
+
+  gsk_gl_driver_create_render_target (self, width, height, GL_RGBA8, &render_target);
+
+  prev_fbo = gsk_gl_command_queue_bind_framebuffer (self->command_queue, render_target->framebuffer_id);
+  gsk_gl_command_queue_clear (self->command_queue, 0, &GRAPHENE_RECT_INIT (0, 0, width, height));
+
+  if (gsk_gl_command_queue_begin_draw (self->command_queue, program->program_info, width, height))
+    {
+      set_projection_for_size (self, program, width, height);
+      set_viewport_for_size (self, program, width, height);
+      reset_modelview (self, program);
+
+      gsk_gl_program_set_uniform_texture (program,
+                                          UNIFORM_EXTERNAL_SOURCE, 0,
+                                          GL_TEXTURE_EXTERNAL_OES, GL_TEXTURE0, texture_id);
+
+      draw_rect (self->command_queue, 0, 0, width, height);
+
+      gsk_gl_command_queue_end_draw (self->command_queue);
+    }
+
+  gsk_gl_command_queue_bind_framebuffer (self->command_queue, prev_fbo);
+
+  return release_render_target (self, render_target, FALSE, FALSE);
+}
+
+#else
+
+static guint
+gsk_gl_driver_import_dmabuf_texture (GskGLDriver      *self,
+                                     GdkDmabufTexture *texture)
+{
+  return 0;
+}
+
+#endif /* HAVE_DMABUF && HAVE_EGL */
+
 /**
  * gsk_gl_driver_load_texture:
  * @self: a `GdkTexture`
@@ -758,7 +941,11 @@ gsk_gl_driver_load_texture (GskGLDriver *self,
       return t->texture_id;
     }
 
-  if (GDK_IS_GL_TEXTURE (texture))
+  if (GDK_IS_DMABUF_TEXTURE (texture))
+    {
+      texture_id = gsk_gl_driver_import_dmabuf_texture (self, GDK_DMABUF_TEXTURE (texture));
+    }
+  else if (GDK_IS_GL_TEXTURE (texture))
     {
       GdkGLTexture *gl_texture = (GdkGLTexture *) texture;
       GdkGLContext *texture_context = gdk_gl_texture_get_context (gl_texture);
@@ -961,6 +1148,47 @@ gsk_gl_driver_create_render_target (GskGLDriver        *self,
   return FALSE;
 }
 
+static unsigned int
+release_render_target (GskGLDriver       *self,
+                       GskGLRenderTarget *render_target,
+                       gboolean           release_texture,
+                       gboolean           cache_texture)
+{
+  guint texture_id;
+
+  g_return_val_if_fail (GSK_IS_GL_DRIVER (self), 0);
+  g_return_val_if_fail (render_target != NULL, 0);
+
+  if (release_texture)
+    {
+      texture_id = 0;
+      g_ptr_array_add (self->render_targets, render_target);
+    }
+  else
+    {
+      texture_id = render_target->texture_id;
+
+      if (cache_texture)
+        {
+          GskGLTexture *texture;
+
+          texture = gsk_gl_texture_new (render_target->texture_id,
+                                        render_target->width,
+                                        render_target->height,
+                                        self->current_frame_id);
+          g_hash_table_insert (self->textures,
+                               GUINT_TO_POINTER (texture_id),
+                               g_steal_pointer (&texture));
+        }
+
+      gsk_gl_driver_autorelease_framebuffer (self, render_target->framebuffer_id);
+      g_free (render_target);
+
+    }
+
+  return texture_id;
+}
+
 /**
  * gsk_gl_driver_release_render_target:
  * @self: a `GskGLDriver`
@@ -986,36 +1214,7 @@ gsk_gl_driver_release_render_target (GskGLDriver       *self,
                                      GskGLRenderTarget *render_target,
                                      gboolean           release_texture)
 {
-  guint texture_id;
-
-  g_return_val_if_fail (GSK_IS_GL_DRIVER (self), 0);
-  g_return_val_if_fail (render_target != NULL, 0);
-
-  if (release_texture)
-    {
-      texture_id = 0;
-      g_ptr_array_add (self->render_targets, render_target);
-    }
-  else
-    {
-      GskGLTexture *texture;
-
-      texture_id = render_target->texture_id;
-
-      texture = gsk_gl_texture_new (render_target->texture_id,
-                                    render_target->width,
-                                    render_target->height,
-                                    self->current_frame_id);
-      g_hash_table_insert (self->textures,
-                           GUINT_TO_POINTER (texture_id),
-                           g_steal_pointer (&texture));
-
-      gsk_gl_driver_autorelease_framebuffer (self, render_target->framebuffer_id);
-      g_free (render_target);
-
-    }
-
-  return texture_id;
+  return release_render_target (self, render_target, release_texture, TRUE);
 }
 
 /**

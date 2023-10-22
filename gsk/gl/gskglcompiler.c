@@ -54,6 +54,7 @@ struct _GskGLCompiler
 
   guint gl3 : 1;
   guint gles : 1;
+  guint gles3 : 1;
   guint legacy : 1;
   guint debug_shaders : 1;
 };
@@ -134,7 +135,10 @@ gsk_gl_compiler_new (GskGLDriver *driver,
       gdk_gl_context_get_version (context, &maj, &min);
 
       if (maj >= 3)
-        self->glsl_version = SHADER_VERSION_GLES3;
+        {
+          self->glsl_version = SHADER_VERSION_GLES3;
+          self->gles3 = TRUE;
+        }
       else
         {
           self->glsl_version = SHADER_VERSION_GLES;
@@ -543,6 +547,7 @@ gsk_gl_compiler_compile (GskGLCompiler  *self,
   const char *legacy = "";
   const char *gl3 = "";
   const char *gles = "";
+  const char *gles3 = "";
   int program_id;
   int vertex_id;
   int fragment_id;
@@ -569,15 +574,17 @@ gsk_gl_compiler_compile (GskGLCompiler  *self,
   if (self->gles)
     gles = "#define GSK_GLES 1\n";
 
+  if (self->gles3)
+    gles3 = "#define GSK_GLES3 1\n";
+
   if (self->gl3)
     gl3 = "#define GSK_GL3 1\n";
 
   vertex_id = glCreateShader (GL_VERTEX_SHADER);
   glShaderSource (vertex_id,
-                  10,
+                  11,
                   (const char *[]) {
-                    version, debug, legacy, gl3, gles,
-                    clip,
+                    version, debug, legacy, gl3, gles, gles3, clip,
                     get_shader_string (self->all_preamble),
                     get_shader_string (self->vertex_preamble),
                     get_shader_string (self->vertex_source),
@@ -589,6 +596,7 @@ gsk_gl_compiler_compile (GskGLCompiler  *self,
                     strlen (legacy),
                     strlen (gl3),
                     strlen (gles),
+                    strlen (gles3),
                     strlen (clip),
                     g_bytes_get_size (self->all_preamble),
                     g_bytes_get_size (self->vertex_preamble),
@@ -607,10 +615,9 @@ gsk_gl_compiler_compile (GskGLCompiler  *self,
 
   fragment_id = glCreateShader (GL_FRAGMENT_SHADER);
   glShaderSource (fragment_id,
-                  10,
+                  11,
                   (const char *[]) {
-                    version, debug, legacy, gl3, gles,
-                    clip,
+                    version, debug, legacy, gl3, gles, gles3, clip,
                     get_shader_string (self->all_preamble),
                     get_shader_string (self->fragment_preamble),
                     get_shader_string (self->fragment_source),
@@ -622,6 +629,7 @@ gsk_gl_compiler_compile (GskGLCompiler  *self,
                     strlen (legacy),
                     strlen (gl3),
                     strlen (gles),
+                    strlen (gles3),
                     strlen (clip),
                     g_bytes_get_size (self->all_preamble),
                     g_bytes_get_size (self->fragment_preamble),

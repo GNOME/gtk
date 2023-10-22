@@ -114,9 +114,15 @@ struct _GdkDisplay
   guint have_egl_buffer_age : 1;
   guint have_egl_no_config_context : 1;
   guint have_egl_pixel_format_float : 1;
+  guint have_egl_dma_buf_import : 1;
+  guint have_egl_dma_buf_export : 1;
 
   GdkDmabufFormats *dmabuf_formats;
   const GdkDmabufDownloader *dmabuf_downloaders[4];
+
+   /* Cached data the EGL dmabuf downloader */
+  gpointer egl_gsk_renderer;
+  GdkDmabufFormats *egl_external_formats;
 };
 
 struct _GdkDisplayClass

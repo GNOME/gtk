@@ -29,6 +29,9 @@ typedef struct _GskGLBindFramebuffer GskGLBindFramebuffer;
 typedef struct _GskGLBindTexture     GskGLBindTexture;
 
 #define GSK_GL_N_FILTERS 3
+#define SAMPLER_EXTERNAL 9
+
+G_STATIC_ASSERT (SAMPLER_EXTERNAL >= GSK_GL_N_FILTERS * GSK_GL_N_FILTERS);
 
 static inline guint
 filter_index (GLint filter)

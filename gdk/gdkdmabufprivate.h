@@ -25,7 +25,6 @@ struct _GdkDmabufDownloader
   gboolean              (* add_formats)                         (const GdkDmabufDownloader      *downloader,
                                                                  GdkDisplay                     *display,
                                                                  GdkDmabufFormatsBuilder        *builder);
-
   gboolean              (* supports)                            (const GdkDmabufDownloader      *downloader,
                                                                  GdkDisplay                     *display,
                                                                  const GdkDmabuf                *dmabuf,
@@ -40,14 +39,16 @@ struct _GdkDmabufDownloader
 };
 
 #ifdef HAVE_DMABUF
-const GdkDmabufDownloader *
-                        gdk_dmabuf_get_direct_downloader        (void) G_GNUC_CONST;
 
-gboolean                gdk_dmabuf_sanitize                     (GdkDmabuf                      *dest,
+const GdkDmabufDownloader * gdk_dmabuf_get_direct_downloader    (void) G_GNUC_CONST;
+const GdkDmabufDownloader * gdk_dmabuf_get_egl_downloader       (void) G_GNUC_CONST;
+
+gboolean                    gdk_dmabuf_sanitize                 (GdkDmabuf                      *dest,
                                                                  gsize                           width,
                                                                  gsize                           height,
                                                                  const GdkDmabuf                *src,
                                                                  GError                        **error);
-gboolean                gdk_dmabuf_is_disjoint                  (const GdkDmabuf                *dmabuf);
+
+gboolean                    gdk_dmabuf_is_disjoint              (const GdkDmabuf                *dmabuf);
 
 #endif
