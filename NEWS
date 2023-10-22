@@ -1,5 +1,30 @@
-Overview of Changes in 4.13.2, xx-xx-xxxx
+Overview of Changes in 4.13.2, 22-10-2023
 =========================================
+
+* GtkPrintdialog:
+ - New async-style api to replace GtkPrintOperation
+
+* GtkEmojiChooser:
+ - Add more languages: Bengali, Hindi, Japanese, Finnish,
+   Thai and Norwegian bokmål
+
+* Accessibility:
+ - Fix some utf8 handling issues
+
+* GDK:
+ - Add support for dmabuf textures, with GdkDmabufTextureBuilder
+ - Add a few more supported memory formats for textures
+
+* GSK:
+ - Add a fast-path for masking color
+ - Add support for importing dmabuf textures
+ - Handle GLES better by using some extensions
+
+* Translation updates:
+ Catalan
+ Russian
+ Turkish
+
 
 Overview of Changes in 4.13.1, 28-09-2023
 =========================================
