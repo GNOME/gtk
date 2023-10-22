@@ -1847,7 +1847,8 @@ gdk_display_add_dmabuf_downloader (GdkDisplay                *display,
 {
   gsize i;
 
-  downloader->add_formats (downloader, display, builder);
+  if (!downloader->add_formats (downloader, display, builder))
+    return;
 
   /* dmabuf_downloaders is NULL-terminated */
   for (i = 0; i < G_N_ELEMENTS (display->dmabuf_downloaders) - 1; i++)

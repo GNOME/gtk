@@ -22,7 +22,7 @@ struct _GdkDmabuf
 struct _GdkDmabufDownloader
 {
   const char *name;
-  void                  (* add_formats)                         (const GdkDmabufDownloader      *downloader,
+  gboolean              (* add_formats)                         (const GdkDmabufDownloader      *downloader,
                                                                  GdkDisplay                     *display,
                                                                  GdkDmabufFormatsBuilder        *builder);
 

@@ -264,7 +264,7 @@ get_drm_format_info (guint32 fourcc)
   return NULL;
 }
 
-static void
+static gboolean
 gdk_dmabuf_direct_downloader_add_formats (const GdkDmabufDownloader *downloader,
                                           GdkDisplay                *display,
                                           GdkDmabufFormatsBuilder   *builder)
@@ -277,6 +277,8 @@ gdk_dmabuf_direct_downloader_add_formats (const GdkDmabufDownloader *downloader,
                                              supported_formats[i].fourcc,
                                              DRM_FORMAT_MOD_LINEAR);
     }
+
+  return TRUE;
 }
 
 static gboolean
