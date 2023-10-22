@@ -28,7 +28,7 @@
 
 #include <cairo-gobject.h>
 #ifdef HAVE_DMABUF
-#include <drm/drm_fourcc.h>
+#include <drm_fourcc.h>
 #else
 #define DRM_FORMAT_MOD_INVALID ((1ULL << 56) - 1)
 #endif
@@ -86,7 +86,7 @@ struct _GdkDmabufTextureBuilderClass
  *
  * The format of the data (for graphics data, essentially its colorspace) is described
  * by a 32-bit integer. These format identifiers are defined in the header file
- * [drm/drm_fourcc.h](https://github.com/torvalds/linux/blob/master/include/uapi/drm/drm_fourcc.h)
+ * [drm_fourcc.h](https://github.com/torvalds/linux/blob/master/include/uapi/drm_fourcc.h)
  * and commonly referred to as **_fourcc_** values, since they are identified by 4 ASCII
  * characters. Additionally, each DMA buffer has a **_modifier_**, which is a 64-bit integer
  * that describes driver-specific details of the memory layout, such as tiling or compression.

@@ -23,7 +23,7 @@
 #include "gdkdmabufformatsprivate.h"
 
 #ifdef HAVE_DMABUF
-#include <drm/drm_fourcc.h>
+#include <drm_fourcc.h>
 #endif
 
 #define GDK_ARRAY_NAME gdk_dmabuf_formats_builder
