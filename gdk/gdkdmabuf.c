@@ -288,6 +288,7 @@ gdk_dmabuf_direct_downloader_supports (const GdkDmabufDownloader  *downloader,
                                        GError                    **error)
 {
   const GdkDrmFormatInfo *info;
+  char buf[36];
 
   info = get_drm_format_info (dmabuf->fourcc);
 
@@ -295,8 +296,8 @@ gdk_dmabuf_direct_downloader_supports (const GdkDmabufDownloader  *downloader,
     {
       g_set_error (error,
                    GDK_DMABUF_ERROR, GDK_DMABUF_ERROR_UNSUPPORTED_FORMAT,
-                   "Unsupported dmabuf format %.4s",
-                   (char *) &dmabuf->fourcc);
+                   "Unsupported dmabuf format %s",
+                   gdk_dmabuf_fourcc_print (buf, sizeof (buf), dmabuf->fourcc));
       return FALSE;
     }
 
@@ -304,8 +305,8 @@ gdk_dmabuf_direct_downloader_supports (const GdkDmabufDownloader  *downloader,
     {
       g_set_error (error,
                    GDK_DMABUF_ERROR, GDK_DMABUF_ERROR_UNSUPPORTED_FORMAT,
-                   "Unsupported dmabuf modifier %#lx (only linear buffers are supported)",
-                   dmabuf->modifier);
+                   "Unsupported dmabuf modifier %s (only linear buffers are supported)",
+                   gdk_dmabuf_modifier_print (buf, sizeof (buf), dmabuf->modifier));
       return FALSE;
     }
 
@@ -326,13 +327,14 @@ gdk_dmabuf_direct_downloader_do_download (GdkTexture *texture,
   gsize sizes[GDK_DMABUF_MAX_PLANES];
   gsize needs_unmap[GDK_DMABUF_MAX_PLANES] = { FALSE, };
   gsize i, j;
+  gchar buf[64];
 
   dmabuf = gdk_dmabuf_texture_get_dmabuf (GDK_DMABUF_TEXTURE (texture));
   info = get_drm_format_info (dmabuf->fourcc);
 
   GDK_DEBUG (DMABUF,
-             "Using mmap() and memcpy() for downloading a dmabuf (format %.4s:%#lx)",
-             (char *)&dmabuf->fourcc, dmabuf->modifier);
+             "Using mmap() and memcpy() for downloading a dmabuf (format %s)",
+             gdk_dmabuf_format_print (buf, sizeof (buf), dmabuf->fourcc, dmabuf->modifier));
 
   for (i = 0; i < dmabuf->n_planes; i++)
     {
@@ -515,6 +517,86 @@ gdk_dmabuf_sanitize (GdkDmabuf        *dest,
     }
 
   return TRUE;
+}
+
+const char *
+gdk_dmabuf_fourcc_print (char    *buf,
+                         gsize    size,
+                         guint32  fourcc)
+{
+  snprintf (buf, size, "%.4s", (char *)&fourcc);
+  return buf;
+}
+
+static const char *
+get_modifier_name (char    *buf,
+                   gsize    size,
+                   guint64  modifier)
+{
+  static struct {
+    guchar id;
+    const char *name;
+  } vendors[] = {
+    { DRM_FORMAT_MOD_VENDOR_NONE, "NONE" },
+    { DRM_FORMAT_MOD_VENDOR_INTEL, "Intel" },
+    { DRM_FORMAT_MOD_VENDOR_AMD, "AMD" },
+    { DRM_FORMAT_MOD_VENDOR_NVIDIA, "NVidia" },
+    { DRM_FORMAT_MOD_VENDOR_SAMSUNG, "Samsung" },
+    { DRM_FORMAT_MOD_VENDOR_QCOM, "Qualcomm" },
+    { DRM_FORMAT_MOD_VENDOR_VIVANTE, "Vivante" },
+    { DRM_FORMAT_MOD_VENDOR_BROADCOM, "Broadcom" },
+    { DRM_FORMAT_MOD_VENDOR_ARM, "Arm" },
+    { DRM_FORMAT_MOD_VENDOR_ALLWINNER, "Allwinner" },
+    { DRM_FORMAT_MOD_VENDOR_AMLOGIC, "Amlogic" },
+  };
+
+  if (modifier == DRM_FORMAT_MOD_INVALID)
+    return "INVALID";
+  else if (modifier == DRM_FORMAT_MOD_LINEAR)
+    return "LINEAR";
+
+  for (int i = 0; i < G_N_ELEMENTS (vendors); i++)
+    {
+      if (vendors[i].id == fourcc_mod_get_vendor (modifier))
+        {
+          snprintf (buf, size, "%s,%" G_GINT64_MODIFIER "u", vendors[i].name, modifier & 0x00ffffffffffffffUL);
+
+          return buf;
+        }
+    }
+
+  snprintf (buf, size, "%#" G_GINT64_MODIFIER "x", modifier);
+
+  return buf;
+}
+
+const char *
+gdk_dmabuf_modifier_print (char    *buf,
+                           gsize    size,
+                           guint64  modifier)
+{
+  char buf2[64];
+
+  snprintf (buf, size, "%s", get_modifier_name (buf2, sizeof (buf2), modifier));
+
+  return buf;
+}
+
+const char *
+gdk_dmabuf_format_print (char    *buf,
+                         gsize    size,
+                         guint32  fourcc,
+                         guint64  modifier)
+{
+  gsize len;
+  char buf2[64];
+
+  gdk_dmabuf_fourcc_print (buf, size, fourcc);
+  len = strlen (buf);
+
+  snprintf (buf + len, size - len, ":%s", get_modifier_name (buf2, sizeof (buf2), modifier));
+
+  return buf;
 }
 
 #endif  /* HAVE_LINUX_DMA_BUF_H */

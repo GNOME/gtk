@@ -48,4 +48,16 @@ gboolean                gdk_dmabuf_sanitize                     (GdkDmabuf      
                                                                  gsize                           height,
                                                                  const GdkDmabuf                *src,
                                                                  GError                        **error);
+
+const char *            gdk_dmabuf_fourcc_print   (char    *str,
+                                                   gsize    size,
+                                                   guint32  fourcc);
+const char *            gdk_dmabuf_modifier_print (char    *str,
+                                                   gsize    size,
+                                                   guint64  modifier);
+const char *            gdk_dmabuf_format_print   (char    *str,
+                                                   gsize    size,
+                                                   guint32  fourcc,
+                                                   guint64  modifier);
+
 #endif
