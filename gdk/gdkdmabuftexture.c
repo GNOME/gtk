@@ -32,7 +32,7 @@
 #include <sys/mman.h>
 #include <sys/ioctl.h>
 #include <linux/dma-buf.h>
-#include <drm/drm_fourcc.h>
+#include <drm_fourcc.h>
 #include <epoxy/egl.h>
 #endif
 

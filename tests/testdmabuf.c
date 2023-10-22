@@ -3,7 +3,7 @@
 #include <sys/mman.h>
 #include <sys/ioctl.h>
 #include <linux/dma-heap.h>
-#include <drm/drm_fourcc.h>
+#include <drm_fourcc.h>
 
 /* For this to work, you may need to give /dev/dma_heap/system
  * lax permissions.

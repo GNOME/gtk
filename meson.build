@@ -185,14 +185,6 @@ foreach h : check_headers
   endif
 endforeach
 
-if cc.has_header('linux/dma-buf.h') and cc.has_header('drm/drm_fourcc.h')
-  cdata.set('HAVE_DMABUF', 1)
-else
-  if os_linux
-    error('OS is Linux, but linux/dma-buf.h and drm/drm-fourcc.h not found.')
-  endif
-endif
-
 # Maths functions might be implemented in libm
 libm = cc.find_library('m', required: false)
 
@@ -625,6 +617,20 @@ else
   have_vulkan = false
   vulkan_pkg_found = false
 endif
+
+if cc.has_header('linux/dma-buf.h')
+  dmabuf_dep = dependency('libdrm',
+    required: os_linux)
+else
+  if os_linux
+    error('OS is Linux, but linux/dma-buf.h not found.')
+  endif
+  dmabuf_dep = dependency('', required: false)
+endif
+cdata.set('HAVE_DMABUF', dmabuf_dep.found())
+# We only care about drm_fourcc.h for all the fourccs,
+# but not about linking to libdrm
+dmabuf_dep = dmabuf_dep.partial_dependency(includes: true, compile_args: true)
 
 cloudproviders_dep = dependency('cloudproviders',
   required: get_option('cloudproviders'),
