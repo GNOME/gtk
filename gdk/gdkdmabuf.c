@@ -24,7 +24,7 @@
 #include "gdkdmabuftextureprivate.h"
 #include "gdkmemoryformatprivate.h"
 
-#ifdef HAVE_LINUX_DMA_BUF_H
+#ifdef HAVE_DMABUF
 #include <sys/mman.h>
 #include <sys/ioctl.h>
 #include <linux/dma-buf.h>
@@ -550,4 +550,4 @@ gdk_dmabuf_is_disjoint (const GdkDmabuf *dmabuf)
   return FALSE;
 }
 
-#endif  /* HAVE_LINUX_DMA_BUF_H */
+#endif  /* HAVE_DMABUF */

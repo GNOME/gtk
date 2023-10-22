@@ -1839,7 +1839,7 @@ gdk_display_get_egl_display (GdkDisplay *self)
 #endif
 }
 
-#ifdef HAVE_LINUX_DMA_BUF_H
+#ifdef HAVE_DMABUF
 static void
 gdk_display_add_dmabuf_downloader (GdkDisplay                *display,
                                    const GdkDmabufDownloader *downloader,
@@ -1877,7 +1877,7 @@ gdk_display_init_dmabuf (GdkDisplay *self)
 
   builder = gdk_dmabuf_formats_builder_new ();
 
-#ifdef HAVE_LINUX_DMA_BUF_H
+#ifdef HAVE_DMABUF
   if (!GDK_DEBUG_CHECK (DMABUF_DISABLE))
     {
       gdk_display_prepare_gl (self, NULL);

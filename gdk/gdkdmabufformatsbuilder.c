@@ -22,7 +22,7 @@
 
 #include "gdkdmabufformatsprivate.h"
 
-#ifdef HAVE_LINUX_DMA_BUF_H
+#ifdef HAVE_DMABUF
 #include <drm/drm_fourcc.h>
 #endif
 
@@ -121,7 +121,7 @@ gdk_dmabuf_formats_builder_add_format (GdkDmabufFormatsBuilder *self,
                                        guint32                  fourcc,
                                        guint64                  modifier)
 {
-#ifdef HAVE_LINUX_DMA_BUF_H
+#ifdef HAVE_DMABUF
   g_return_if_fail (modifier != DRM_FORMAT_MOD_INVALID);
 #else
   g_return_if_reached ();

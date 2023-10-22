@@ -27,7 +27,7 @@
 #include "gdkdmabuftextureprivate.h"
 
 #include <cairo-gobject.h>
-#ifdef HAVE_LINUX_DMA_BUF_H
+#ifdef HAVE_DMABUF
 #include <drm/drm_fourcc.h>
 #else
 #define DRM_FORMAT_MOD_INVALID ((1ULL << 56) - 1)

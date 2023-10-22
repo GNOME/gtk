@@ -162,7 +162,6 @@ check_headers = [
   'inttypes.h',
   'linux/input.h',
   'linux/memfd.h',
-  'linux/dma-buf.h',
   'locale.h',
   'memory.h',
   'stdint.h',
@@ -186,8 +185,12 @@ foreach h : check_headers
   endif
 endforeach
 
-if os_linux and not cc.has_header('linux/dma-buf.h')
-  error('OS is Linux, but linux/dma-buf.h not found.')
+if cc.has_header('linux/dma-buf.h') and cc.has_header('drm/drm_fourcc.h')
+  cdata.set('HAVE_DMABUF', 1)
+else
+  if os_linux
+    error('OS is Linux, but linux/dma-buf.h and drm/drm-fourcc.h not found.')
+  endif
 endif
 
 # Maths functions might be implemented in libm
