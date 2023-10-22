@@ -24,7 +24,7 @@
 #include "gdkdmabuftextureprivate.h"
 #include "gdkmemoryformatprivate.h"
 
-#ifdef HAVE_LINUX_DMA_BUF_H
+#ifdef HAVE_DMABUF
 #include <sys/mman.h>
 #include <sys/ioctl.h>
 #include <linux/dma-buf.h>
@@ -264,7 +264,7 @@ get_drm_format_info (guint32 fourcc)
   return NULL;
 }
 
-static void
+static gboolean
 gdk_dmabuf_direct_downloader_add_formats (const GdkDmabufDownloader *downloader,
                                           GdkDisplay                *display,
                                           GdkDmabufFormatsBuilder   *builder)
@@ -277,6 +277,8 @@ gdk_dmabuf_direct_downloader_add_formats (const GdkDmabufDownloader *downloader,
                                              supported_formats[i].fourcc,
                                              DRM_FORMAT_MOD_LINEAR);
     }
+
+  return TRUE;
 }
 
 static gboolean
@@ -482,6 +484,14 @@ gdk_dmabuf_sanitize (GdkDmabuf        *dest,
       return FALSE;
     }
 
+  if (src->modifier == DRM_FORMAT_MOD_INVALID)
+    {
+      g_set_error (error,
+                   GDK_DMABUF_ERROR, GDK_DMABUF_ERROR_UNSUPPORTED_FORMAT,
+                   "GTK does not support the INVALID modifier.");
+      return FALSE;
+    }
+
   info = get_drm_format_info (src->fourcc);
 
   if (info == NULL)
@@ -495,7 +505,7 @@ gdk_dmabuf_sanitize (GdkDmabuf        *dest,
 
   *dest = *src;
 
-  if (src->modifier && src->modifier != DRM_FORMAT_MOD_INVALID)
+  if (src->modifier)
     return TRUE;
 
   switch (dest->fourcc)
@@ -517,4 +527,27 @@ gdk_dmabuf_sanitize (GdkDmabuf        *dest,
   return TRUE;
 }
 
-#endif  /* HAVE_LINUX_DMA_BUF_H */
+/*
+ * gdk_dmabuf_is_disjoint:
+ * @dmabuf: a sanitized GdkDmabuf
+ *
+ * A dmabuf is considered disjoint if it uses more than
+ * 1 file descriptor.
+ *
+ * Returns: %TRUE if the dmabuf is disjoint
+ **/
+gboolean
+gdk_dmabuf_is_disjoint (const GdkDmabuf *dmabuf)
+{
+  unsigned i;
+
+  for (i = 1; i < dmabuf->n_planes; i++)
+    {
+      if (dmabuf->planes[0].fd != dmabuf->planes[i].fd)
+        return TRUE;
+    }
+
+  return FALSE;
+}
+
+#endif  /* HAVE_DMABUF */

@@ -28,7 +28,7 @@
 #include <gdk/gdkgltexturebuilder.h>
 #include <gdk/gdktexturedownloader.h>
 
-#ifdef HAVE_LINUX_DMA_BUF_H
+#ifdef HAVE_DMABUF
 #include <sys/mman.h>
 #include <sys/ioctl.h>
 #include <linux/dma-buf.h>
@@ -129,7 +129,7 @@ gdk_dmabuf_texture_new_from_builder (GdkDmabufTextureBuilder *builder,
                                      gpointer                 data,
                                      GError                 **error)
 {
-#ifdef HAVE_LINUX_DMA_BUF_H
+#ifdef HAVE_DMABUF
   GdkDmabufTexture *self;
   GdkTexture *update_texture;
   GdkDisplay *display;
@@ -210,7 +210,7 @@ gdk_dmabuf_texture_new_from_builder (GdkDmabufTextureBuilder *builder,
 
   return GDK_TEXTURE (self);
 
-#else /* !HAVE_LINUX_DMA_BUF_H */
+#else /* !HAVE_DMABUF */
   g_set_error_literal (error, GDK_DMABUF_ERROR, GDK_DMABUF_ERROR_NOT_AVAILABLE,
                        "dmabuf support disabled at compile-time.");
   return NULL;

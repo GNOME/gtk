@@ -22,7 +22,7 @@ struct _GdkDmabuf
 struct _GdkDmabufDownloader
 {
   const char *name;
-  void                  (* add_formats)                         (const GdkDmabufDownloader      *downloader,
+  gboolean              (* add_formats)                         (const GdkDmabufDownloader      *downloader,
                                                                  GdkDisplay                     *display,
                                                                  GdkDmabufFormatsBuilder        *builder);
 
@@ -39,7 +39,7 @@ struct _GdkDmabufDownloader
                                                                  gsize                           stride);
 };
 
-#ifdef HAVE_LINUX_DMA_BUF_H
+#ifdef HAVE_DMABUF
 const GdkDmabufDownloader *
                         gdk_dmabuf_get_direct_downloader        (void) G_GNUC_CONST;
 
@@ -48,4 +48,6 @@ gboolean                gdk_dmabuf_sanitize                     (GdkDmabuf      
                                                                  gsize                           height,
                                                                  const GdkDmabuf                *src,
                                                                  GError                        **error);
+gboolean                gdk_dmabuf_is_disjoint                  (const GdkDmabuf                *dmabuf);
+
 #endif
