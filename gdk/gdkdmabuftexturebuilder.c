@@ -85,8 +85,7 @@ struct _GdkDmabufTextureBuilderClass
  * descriptor per plane.
  *
  * The format of the data (for graphics data, essentially its colorspace) is described
- * by a 32-bit integer. These format identifiers are defined in the header file
- * [drm_fourcc.h](https://github.com/torvalds/linux/blob/master/include/uapi/drm_fourcc.h)
+ * by a 32-bit integer. These format identifiers are defined in the header file `drm_fourcc.h`
  * and commonly referred to as **_fourcc_** values, since they are identified by 4 ASCII
  * characters. Additionally, each DMA buffer has a **_modifier_**, which is a 64-bit integer
  * that describes driver-specific details of the memory layout, such as tiling or compression.
@@ -105,6 +104,12 @@ struct _GdkDmabufTextureBuilderClass
  *
  * `GdkDmabufTextureBuilder` can be used for quick one-shot construction of
  * textures as well as kept around and reused to construct multiple textures.
+ *
+ * For further information, see
+ *
+ * * The Linux kernel [documentation](https://docs.kernel.org/driver-api/dma-buf.html)
+ *
+ * * The header file [drm_fourcc.h](https://gitlab.freedesktop.org/mesa/drm/-/blob/main/include/drm/drm_fourcc.h)
  *
  * Since: 4.14
  */
