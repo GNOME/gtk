@@ -152,6 +152,35 @@ gdk_dmabuf_formats_get_format (GdkDmabufFormats *formats,
 }
 
 /**
+ * gdk_dmabuf_formats_next_priority:
+ * @formats: a `GdkDmabufFormats`
+ * @idx: the index of the format to query
+*
+ * Returns the index of the next-lower-priority format.
+ *
+ * The formats in a `GdkDmabufFormats` are sorted by decreasing
+ * priority. This function lets you identify formats with the
+ * same priority: all the formats between @idx and the return
+ * value of this function have the same priority.
+ *
+ * Returns: the index of the next lower priority format
+ *
+ * Since: 4.14
+ */
+gsize
+gdk_dmabuf_formats_next_priority (GdkDmabufFormats *formats,
+                                  gsize             idx)
+{
+  GdkDmabufFormat *format;
+
+  g_return_val_if_fail (idx < formats->n_formats, G_MAXSIZE);
+
+  format = &formats->formats[idx];
+
+  return format->next_priority;
+}
+
+/**
  * gdk_dmabuf_format_contains:
  * @formats: a `GdkDmabufFormats`
  * @fourcc: a format code

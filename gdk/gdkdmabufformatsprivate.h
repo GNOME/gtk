@@ -7,6 +7,7 @@ struct _GdkDmabufFormat
 {
   guint32 fourcc;
   guint64 modifier;
+  gsize next_priority;
 };
 
 GdkDmabufFormats *      gdk_dmabuf_formats_new                  (GdkDmabufFormat  *formats,

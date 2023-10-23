@@ -47,6 +47,10 @@ void               gdk_dmabuf_formats_get_format      (GdkDmabufFormats *formats
                                                        guint64          *modifier);
 
 GDK_AVAILABLE_IN_4_14
+gsize              gdk_dmabuf_formats_next_priority   (GdkDmabufFormats *formats,
+                                                       gsize             idx);
+
+GDK_AVAILABLE_IN_4_14
 gboolean           gdk_dmabuf_formats_contains        (GdkDmabufFormats *formats,
                                                        guint32           fourcc,
                                                        guint64           modifier) G_GNUC_PURE;
