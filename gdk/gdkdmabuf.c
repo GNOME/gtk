@@ -459,6 +459,8 @@ gdk_dmabuf_direct_downloader_do_download (GdkTexture *texture,
           g_warning ("Failed to seek dmabuf: %s", g_strerror (errno));
           goto out;
         }
+      /* be a good citizen and seek back to the start, as the dos recommend */
+      lseek (dmabuf->planes[i].fd, 0, SEEK_SET);
 
       if (ioctl (dmabuf->planes[i].fd, DMA_BUF_IOCTL_SYNC, &(struct dma_buf_sync) { DMA_BUF_SYNC_START|DMA_BUF_SYNC_READ }) < 0)
         g_warning ("Failed to sync dmabuf: %s", g_strerror (errno));
