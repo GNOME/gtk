@@ -3718,12 +3718,6 @@ gsk_gl_render_job_visit_texture_scale_node (GskGLRenderJob      *job,
   GskTextureKey key;
   guint texture_id;
 
-  if (filter == GSK_SCALING_FILTER_LINEAR)
-    {
-      gsk_gl_render_job_visit_texture (job, texture, bounds);
-      return;
-    }
-
   gsk_gl_render_job_untransform_bounds (job, &job->current_clip->rect.bounds, &clip_rect);
 
   if (!graphene_rect_intersection (bounds, &clip_rect, &clip_rect))
