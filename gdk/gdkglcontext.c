@@ -97,7 +97,7 @@
 #endif
 
 #ifdef HAVE_DMABUF
-#include <drm/drm_fourcc.h>
+#include <drm_fourcc.h>
 #endif
 
 #include <math.h>

@@ -33,7 +33,7 @@
 #include <sys/mman.h>
 #include <sys/ioctl.h>
 #include <linux/dma-buf.h>
-#include <drm/drm_fourcc.h>
+#include <drm_fourcc.h>
 #include <epoxy/egl.h>
 
 /* A dmabuf downloader implementation that downloads buffers via
@@ -187,7 +187,9 @@ get_memory_format (guint32  fourcc,
     case DRM_FORMAT_UYVY:
     case DRM_FORMAT_VYUY:
     case DRM_FORMAT_XYUV8888:
+#ifdef DRM_FORMAT_XVUY8888
     case DRM_FORMAT_XVUY8888:
+#endif
     case DRM_FORMAT_VUY888:
       return GDK_MEMORY_R8G8B8;
 
