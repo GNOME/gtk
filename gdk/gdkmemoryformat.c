@@ -511,7 +511,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     GDK_MEMORY_ALPHA_PREMULTIPLIED,
     16,
     G_ALIGNOF (float),
-    TRUE,
+    GDK_MEMORY_FLOAT32,
     { 0, 0, 3, 0 },
     { GL_RGBA32F, GL_RGBA, GL_FLOAT, { GL_RED, GL_GREEN, GL_BLUE, GL_ALPHA } },
     r32g32b32a32_float_to_float,
