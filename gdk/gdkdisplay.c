@@ -1882,6 +1882,9 @@ gdk_display_init_dmabuf (GdkDisplay *self)
   if (self->dmabuf_formats != NULL)
     return;
 
+  GDK_DISPLAY_DEBUG (self, DMABUF,
+                     "Beginning initialization of dmabuf support");
+
   builder = gdk_dmabuf_formats_builder_new ();
 
 #ifdef HAVE_DMABUF
@@ -1899,6 +1902,10 @@ gdk_display_init_dmabuf (GdkDisplay *self)
 #endif
 
   self->dmabuf_formats = gdk_dmabuf_formats_builder_free_to_formats (builder);
+
+  GDK_DISPLAY_DEBUG (self, DMABUF,
+                     "Initialized support for %zu dmabuf formats",
+                     gdk_dmabuf_formats_get_n_formats (self->dmabuf_formats));
 }
 
 /**
