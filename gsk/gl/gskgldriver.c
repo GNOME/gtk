@@ -1601,8 +1601,9 @@ create_texture_from_texture_destroy (gpointer data)
 }
 
 GdkTexture *
-gsk_gl_driver_create_gdk_texture (GskGLDriver *self,
-                                  guint        texture_id)
+gsk_gl_driver_create_gdk_texture (GskGLDriver     *self,
+                                  guint            texture_id,
+                                  GdkMemoryFormat  format)
 {
   GskGLTextureState *state;
   GdkGLTextureBuilder *builder;
@@ -1630,6 +1631,7 @@ gsk_gl_driver_create_gdk_texture (GskGLDriver *self,
   builder = gdk_gl_texture_builder_new ();
   gdk_gl_texture_builder_set_context (builder, self->command_queue->context);
   gdk_gl_texture_builder_set_id (builder, texture_id);
+  gdk_gl_texture_builder_set_format (builder, format);
   gdk_gl_texture_builder_set_width (builder, texture->width);
   gdk_gl_texture_builder_set_height (builder, texture->height);
   gdk_gl_texture_builder_set_sync (builder, state->sync);
