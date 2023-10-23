@@ -101,17 +101,20 @@ gdk_dmabuf_egl_downloader_add_formats (const GdkDmabufDownloader *downloader,
 
           for (int j = 0; j < num_modifiers; j++)
             {
-              GDK_DEBUG (DMABUF, "supported %sEGL dmabuf format %.4s:%#" G_GINT64_MODIFIER "x",
-                         external_only[j] ? "external " : "",
-                         (char *) &fourccs[i],
-                         modifiers[j]);
-
               /* All linear formats we support are already added my the mmap downloader.
                * We don't add external formats, unless we can use them (via GLES)
                */
               if (modifiers[j] != DRM_FORMAT_MOD_LINEAR &&
                   (!external_only[j] || gdk_gl_context_get_use_es (context)))
-                gdk_dmabuf_formats_builder_add_format (builder, fourccs[i], modifiers[j]);
+                {
+                  GDK_DEBUG (DMABUF, "%s%s dmabuf format %.4s:%#" G_GINT64_MODIFIER "x",
+                             external_only[j] ? "external " : "",
+                             downloader->name,
+                             (char *) &fourccs[i],
+                             modifiers[j]);
+
+                  gdk_dmabuf_formats_builder_add_format (builder, fourccs[i], modifiers[j]);
+                }
               if (external_only[j])
                 gdk_dmabuf_formats_builder_add_format (external, fourccs[i], modifiers[j]);
             }

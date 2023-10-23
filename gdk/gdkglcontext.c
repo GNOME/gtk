@@ -1577,9 +1577,10 @@ gdk_gl_context_check_extensions (GdkGLContext *context)
                        "* Extensions checked:\n"
                        " - GL_KHR_debug: %s\n"
                        " - GL_EXT_unpack_subimage: %s\n"
+                       " - GL_EXT_texture_format_BGRA8888: %s\n"
+                       " - GL_EXT_EGL_image_storage: %s\n"
                        " - half float: %s\n"
-                       " - sync: %s\n"
-                       " - bgra: %s",
+                       " - sync: %s",
                        gdk_gl_context_get_use_es (context) ? "OpenGL ES" : "OpenGL",
                        gdk_gl_version_get_major (&priv->gl_version), gdk_gl_version_get_minor (&priv->gl_version),
                        priv->is_legacy ? "legacy" : "core",
@@ -1587,9 +1588,10 @@ gdk_gl_context_check_extensions (GdkGLContext *context)
                        max_texture_size,
                        priv->has_khr_debug ? "yes" : "no",
                        priv->has_unpack_subimage ? "yes" : "no",
+                       priv->has_bgra ? "yes" : "no",
+                       priv->has_image_storage ? "yes" : "no",
                        priv->has_half_float ? "yes" : "no",
-                       priv->has_sync ? "yes" : "no",
-                       priv->has_bgra ? "yes" : "no");
+                       priv->has_sync ? "yes" : "no");
   }
 #endif
 

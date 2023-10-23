@@ -822,6 +822,8 @@ gsk_gl_driver_import_dmabuf_texture (GskGLDriver      *self,
 
   GDK_DEBUG (DMABUF, "DMA-buf Format %.4s:%#lx", (char *) &dmabuf->fourcc, dmabuf->modifier);
 
+  gdk_display_init_dmabuf (display);
+
   if (!gdk_dmabuf_formats_contains (display->egl_external_formats, dmabuf->fourcc, dmabuf->modifier))
     {
       GDK_DEBUG (DMABUF, "Import dmabuf as GL_TEXTURE_2D texture");
