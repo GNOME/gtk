@@ -213,7 +213,7 @@ gdk_gl_texture_builder_class_init (GdkGLTextureBuilderClass *klass)
   gobject_class->set_property = gdk_gl_texture_builder_set_property;
 
   /**
-   * GdkGLTextureBuilder:context: (attributes org.gdk.Property.get=gdk_gl_texture_builder_get_context org.gdk.Property.set=gdk_gl_texture_builder_set_context)
+   * GdkGLTextureBuilder:context: (attributes org.gtk.Property.get=gdk_gl_texture_builder_get_context org.gtk.Property.set=gdk_gl_texture_builder_set_context)
    *
    * The context owning the texture.
    *
@@ -225,7 +225,7 @@ gdk_gl_texture_builder_class_init (GdkGLTextureBuilderClass *klass)
                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   /**
-   * GdkGLTextureBuilder:format: (attributes org.gdk.Property.get=gdk_gl_texture_builder_get_format org.gdk.Property.set=gdk_gl_texture_builder_set_format)
+   * GdkGLTextureBuilder:format: (attributes org.gtk.Property.get=gdk_gl_texture_builder_get_format org.gtk.Property.set=gdk_gl_texture_builder_set_format)
    *
    * The format when downloading the texture.
    *
@@ -238,7 +238,7 @@ gdk_gl_texture_builder_class_init (GdkGLTextureBuilderClass *klass)
                        G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   /**
-   * GdkGLTextureBuilder:has-mipmap: (attributes org.gdk.Property.get=gdk_gl_texture_builder_get_has_mipmap org.gdk.Property.set=gdk_gl_texture_builder_set_has_mipmap)
+   * GdkGLTextureBuilder:has-mipmap: (attributes org.gtk.Property.get=gdk_gl_texture_builder_get_has_mipmap org.gtk.Property.set=gdk_gl_texture_builder_set_has_mipmap)
    *
    * If the texture has a mipmap.
    *
@@ -250,7 +250,7 @@ gdk_gl_texture_builder_class_init (GdkGLTextureBuilderClass *klass)
                           G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   /**
-   * GdkGLTextureBuilder:height: (attributes org.gdk.Property.get=gdk_gl_texture_builder_get_height org.gdk.Property.set=gdk_gl_texture_builder_set_height)
+   * GdkGLTextureBuilder:height: (attributes org.gtk.Property.get=gdk_gl_texture_builder_get_height org.gtk.Property.set=gdk_gl_texture_builder_set_height)
    *
    * The height of the texture.
    *
@@ -262,7 +262,7 @@ gdk_gl_texture_builder_class_init (GdkGLTextureBuilderClass *klass)
                       G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   /**
-   * GdkGLTextureBuilder:id: (attributes org.gdk.Property.get=gdk_gl_texture_builder_get_id org.gdk.Property.set=gdk_gl_texture_builder_set_id)
+   * GdkGLTextureBuilder:id: (attributes org.gtk.Property.get=gdk_gl_texture_builder_get_id org.gtk.Property.set=gdk_gl_texture_builder_set_id)
    *
    * The texture ID to use.
    *
@@ -274,7 +274,7 @@ gdk_gl_texture_builder_class_init (GdkGLTextureBuilderClass *klass)
                        G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   /**
-   * GdkGLTextureBuilder:sync: (attributes org.gdk.Property.get=gdk_gl_texture_builder_get_sync org.gdk.Property.set=gdk_gl_texture_builder_set_sync)
+   * GdkGLTextureBuilder:sync: (attributes org.gtk.Property.get=gdk_gl_texture_builder_get_sync org.gtk.Property.set=gdk_gl_texture_builder_set_sync)
    *
    * An optional `GLSync` object.
    *
@@ -287,7 +287,7 @@ gdk_gl_texture_builder_class_init (GdkGLTextureBuilderClass *klass)
                           G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   /**
-   * GdkGLTextureBuilder:update-region: (attributes org.gdk.Property.get=gdk_gl_texture_builder_get_update_region org.gdk.Property.set=gdk_gl_texture_builder_set_update_region)
+   * GdkGLTextureBuilder:update-region: (attributes org.gtk.Property.get=gdk_gl_texture_builder_get_update_region org.gtk.Property.set=gdk_gl_texture_builder_set_update_region)
    *
    * The update region for [property@Gdk.GLTextureBuilder:update-texture].
    *
@@ -299,7 +299,7 @@ gdk_gl_texture_builder_class_init (GdkGLTextureBuilderClass *klass)
                         G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   /**
-   * GdkGLTextureBuilder:update-texture: (attributes org.gdk.Property.get=gdk_gl_texture_builder_get_update_texture org.gdk.Property.set=gdk_gl_texture_builder_set_update_texture)
+   * GdkGLTextureBuilder:update-texture: (attributes org.gtk.Property.get=gdk_gl_texture_builder_get_update_texture org.gtk.Property.set=gdk_gl_texture_builder_set_update_texture)
    *
    * The texture [property@Gdk.GLTextureBuilder:update-region] is an update for.
    *
@@ -311,7 +311,7 @@ gdk_gl_texture_builder_class_init (GdkGLTextureBuilderClass *klass)
                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   /**
-   * GdkGLTextureBuilder:width: (attributes org.gdk.Property.get=gdk_gl_texture_builder_get_width org.gdk.Property.set=gdk_gl_texture_builder_set_width)
+   * GdkGLTextureBuilder:width: (attributes org.gtk.Property.get=gdk_gl_texture_builder_get_width org.gtk.Property.set=gdk_gl_texture_builder_set_width)
    *
    * The width of the texture.
    *
@@ -347,7 +347,7 @@ gdk_gl_texture_builder_new (void)
 }
 
 /**
- * gdk_gl_texture_builder_get_context: (attributes org.gdk.Method.get_property=context)
+ * gdk_gl_texture_builder_get_context: (attributes org.gtk.Method.get_property=context)
  * @self: a `GdkGLTextureBuilder`
  *
  * Gets the context previously set via gdk_gl_texture_builder_set_context() or
@@ -366,7 +366,7 @@ gdk_gl_texture_builder_get_context (GdkGLTextureBuilder *self)
 }
 
 /**
- * gdk_gl_texture_builder_set_context: (attributes org.gdk.Method.set_property=context)
+ * gdk_gl_texture_builder_set_context: (attributes org.gtk.Method.set_property=context)
  * @self: a `GdkGLTextureBuilder`
  * @context: (nullable): The context the texture beongs to or %NULL to unset
  *
@@ -391,7 +391,7 @@ gdk_gl_texture_builder_set_context (GdkGLTextureBuilder *self,
 }
 
 /**
- * gdk_gl_texture_builder_get_height: (attributes org.gdk.Method.get_property=height)
+ * gdk_gl_texture_builder_get_height: (attributes org.gtk.Method.get_property=height)
  * @self: a `GdkGLTextureBuilder`
  *
  * Gets the height previously set via gdk_gl_texture_builder_set_height() or
@@ -410,7 +410,7 @@ gdk_gl_texture_builder_get_height (GdkGLTextureBuilder *self)
 }
 
 /**
- * gdk_gl_texture_builder_set_height: (attributes org.gdk.Method.set_property=height)
+ * gdk_gl_texture_builder_set_height: (attributes org.gtk.Method.set_property=height)
  * @self: a `GdkGLTextureBuilder`
  * @height: The texture's height or 0 to unset
  *
@@ -435,7 +435,7 @@ gdk_gl_texture_builder_set_height (GdkGLTextureBuilder *self,
 }
 
 /**
- * gdk_gl_texture_builder_get_id: (attributes org.gdk.Method.get_property=id)
+ * gdk_gl_texture_builder_get_id: (attributes org.gtk.Method.get_property=id)
  * @self: a `GdkGLTextureBuilder`
  *
  * Gets the texture id previously set via gdk_gl_texture_builder_set_id() or
@@ -454,7 +454,7 @@ gdk_gl_texture_builder_get_id (GdkGLTextureBuilder *self)
 }
 
 /**
- * gdk_gl_texture_builder_set_id: (attributes org.gdk.Method.set_property=id)
+ * gdk_gl_texture_builder_set_id: (attributes org.gtk.Method.set_property=id)
  * @self: a `GdkGLTextureBuilder`
  * @id: The texture id to be used for creating the texture
  *
@@ -481,7 +481,7 @@ gdk_gl_texture_builder_set_id (GdkGLTextureBuilder *self,
 }
 
 /**
- * gdk_gl_texture_builder_get_width: (attributes org.gdk.Method.get_property=width)
+ * gdk_gl_texture_builder_get_width: (attributes org.gtk.Method.get_property=width)
  * @self: a `GdkGLTextureBuilder`
  *
  * Gets the width previously set via gdk_gl_texture_builder_set_width() or
@@ -500,7 +500,7 @@ gdk_gl_texture_builder_get_width (GdkGLTextureBuilder *self)
 }
 
 /**
- * gdk_gl_texture_builder_set_width: (attributes org.gdk.Method.set_property=width)
+ * gdk_gl_texture_builder_set_width: (attributes org.gtk.Method.set_property=width)
  * @self: a `GdkGLTextureBuilder`
  * @width: The texture's width or 0 to unset
  *
@@ -525,7 +525,7 @@ gdk_gl_texture_builder_set_width (GdkGLTextureBuilder *self,
 }
 
 /**
- * gdk_gl_texture_builder_get_has_mipmap: (attributes org.gdk.Method.get_property=has-mipmap)
+ * gdk_gl_texture_builder_get_has_mipmap: (attributes org.gtk.Method.get_property=has-mipmap)
  * @self: a `GdkGLTextureBuilder`
  *
  * Gets whether the texture has a mipmap.
@@ -543,7 +543,7 @@ gdk_gl_texture_builder_get_has_mipmap (GdkGLTextureBuilder *self)
 }
 
 /**
- * gdk_gl_texture_builder_set_has_mipmap: (attributes org.gdk.Method.set_property=has-mipmap)
+ * gdk_gl_texture_builder_set_has_mipmap: (attributes org.gtk.Method.set_property=has-mipmap)
  * @self: a `GdkGLTextureBuilder`
  * @has_mipmap: Whether the texture has a mipmap
  *
@@ -569,7 +569,7 @@ gdk_gl_texture_builder_set_has_mipmap (GdkGLTextureBuilder *self,
 }
 
 /**
- * gdk_gl_texture_builder_get_sync: (attributes org.gdk.Method.get_property=sync)
+ * gdk_gl_texture_builder_get_sync: (attributes org.gtk.Method.get_property=sync)
  * @self: a `GdkGLTextureBuilder`
  *
  * Gets the `GLsync` previously set via gdk_gl_texture_builder_set_sync().
@@ -587,7 +587,7 @@ gdk_gl_texture_builder_get_sync (GdkGLTextureBuilder *self)
 }
 
 /**
- * gdk_gl_texture_builder_set_sync: (attributes org.gdk.Method.set_property=sync)
+ * gdk_gl_texture_builder_set_sync: (attributes org.gtk.Method.set_property=sync)
  * @self: a `GdkGLTextureBuilder`
  * @sync: (nullable): the GLSync object
  *
@@ -617,7 +617,7 @@ gdk_gl_texture_builder_set_sync (GdkGLTextureBuilder *self,
 }
 
 /**
- * gdk_gl_texture_builder_get_format: (attributes org.gdk.Method.get_property=format)
+ * gdk_gl_texture_builder_get_format: (attributes org.gtk.Method.get_property=format)
  * @self: a `GdkGLTextureBuilder`
  *
  * Gets the format previously set via gdk_gl_texture_builder_set_format().
@@ -635,7 +635,7 @@ gdk_gl_texture_builder_get_format (GdkGLTextureBuilder *self)
 }
 
 /**
- * gdk_gl_texture_builder_set_format: (attributes org.gdk.Method.set_property=format)
+ * gdk_gl_texture_builder_set_format: (attributes org.gtk.Method.set_property=format)
  * @self: a `GdkGLTextureBuilder`
  * @format: The texture's format
  *
@@ -673,7 +673,7 @@ gdk_gl_texture_builder_set_format (GdkGLTextureBuilder *self,
 }
 
 /**
- * gdk_gl_texture_builder_get_update_texture: (attributes org.gdk.Method.get_property=update_texture)
+ * gdk_gl_texture_builder_get_update_texture: (attributes org.gtk.Method.get_property=update-texture)
  * @self: a `GdkGLTextureBuilder`
  *
  * Gets the texture previously set via gdk_gl_texture_builder_set_update_texture() or
@@ -692,7 +692,7 @@ gdk_gl_texture_builder_get_update_texture (GdkGLTextureBuilder *self)
 }
 
 /**
- * gdk_gl_texture_builder_set_update_texture: (attributes org.gdk.Method.set_property=update_texture)
+ * gdk_gl_texture_builder_set_update_texture: (attributes org.gtk.Method.set_property=update-texture)
  * @self: a `GdkGLTextureBuilder`
  * @texture: (nullable): the texture to update
  *
@@ -715,7 +715,7 @@ gdk_gl_texture_builder_set_update_texture (GdkGLTextureBuilder *self,
 }
 
 /**
- * gdk_gl_texture_builder_get_update_region: (attributes org.gdk.Method.get_property=update_region)
+ * gdk_gl_texture_builder_get_update_region: (attributes org.gtk.Method.get_property=update-region)
  * @self: a `GdkGLTextureBuilder`
  *
  * Gets the region previously set via gdk_gl_texture_builder_set_update_region() or
@@ -734,7 +734,7 @@ gdk_gl_texture_builder_get_update_region (GdkGLTextureBuilder *self)
 }
 
 /**
- * gdk_gl_texture_builder_set_update_region: (attributes org.gdk.Method.set_property=update_region)
+ * gdk_gl_texture_builder_set_update_region: (attributes org.gtk.Method.set_property=update-region)
  * @self: a `GdkGLTextureBuilder`
  * @region: (nullable): the region to update
  *
