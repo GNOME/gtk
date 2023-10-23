@@ -554,15 +554,14 @@ gdk_dmabuf_get_direct_downloader (void)
  * controlled by the callers.
  *
  * Things we do here:
- * 
+ *
  * 1. Disallow any dmabuf format that we do not know.
  *
- * 1. Treat the INVALID modifier the same as LINEAR.
+ * 1. Reject the INVALID modifier, accept the LINEAR one.
  *
  * 2. Ignore all other modifiers.
  *
- * 3. Try and fix various inconsistencies between V4L and Mesa,
- *    like NV12.
+ * 3. Try and fix various inconsistencies between V4L and Mesa, like NV12.
  *
  * *** WARNING ***
  *

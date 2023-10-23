@@ -96,9 +96,12 @@ struct _GdkDmabufTextureBuilderClass
  * to create the new texture.
  *
  * The required properties for a dma-buf texture are
- *  - The width and height in pixels
- *  - The `fourcc` code and `modifier` which identify the format and memory layout of the dma-buf
- *  - The file descriptor, offset and stride for each of the planes
+ *
+ *  * The width and height in pixels
+ *
+ *  * The `fourcc` code and `modifier` which identify the format and memory layout of the dma-buf
+ *
+ *  * The file descriptor, offset and stride for each of the planes
  *
  * `GdkDmabufTextureBuilder` can be used for quick one-shot construction of
  * textures as well as kept around and reused to construct multiple textures.

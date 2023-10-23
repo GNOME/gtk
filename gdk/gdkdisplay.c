@@ -1910,6 +1910,9 @@ gdk_display_init_dmabuf (GdkDisplay *self)
  * GTK may use OpenGL or Vulkan to support some formats.
  * Calling this function will then initialize them if they aren't yet.
  *
+ * The formats returned by this function can be used for negotiating
+ * buffer formats with producers such as v4l, pipewire or GStreamer.
+ *
  * Returns: (transfer none): a `GdkDmabufFormats` object
  *
  * Since: 4.14
