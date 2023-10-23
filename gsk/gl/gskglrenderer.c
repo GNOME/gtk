@@ -332,6 +332,7 @@ gsk_gl_renderer_render_texture (GskRenderer           *renderer,
   GskGLRenderJob *job;
   GdkTexture *texture;
   guint texture_id;
+  GdkMemoryFormat gdk_format;
   int width, height, max_size;
   int format;
 
@@ -375,9 +376,15 @@ gsk_gl_renderer_render_texture (GskRenderer           *renderer,
 
   if (gsk_render_node_get_preferred_depth (root) != GDK_MEMORY_U8 &&
       gdk_gl_context_check_version (self->context, "3.0", "3.0"))
-    format = GL_RGBA32F;
+    {
+      gdk_format = GDK_MEMORY_R32G32B32A32_FLOAT_PREMULTIPLIED;
+      format = GL_RGBA32F;
+    }
   else 
-    format = GL_RGBA8;
+    {
+      format = GL_RGBA8;
+      gdk_format = GDK_MEMORY_R8G8B8A8_PREMULTIPLIED;
+    }
 
   gdk_gl_context_make_current (self->context);
 
@@ -394,7 +401,7 @@ gsk_gl_renderer_render_texture (GskRenderer           *renderer,
 #endif
       gsk_gl_render_job_render_flipped (job, root);
       texture_id = gsk_gl_driver_release_render_target (self->driver, render_target, FALSE);
-      texture = gsk_gl_driver_create_gdk_texture (self->driver, texture_id);
+      texture = gsk_gl_driver_create_gdk_texture (self->driver, texture_id, gdk_format);
       gsk_gl_driver_end_frame (self->driver);
       gsk_gl_render_job_free (job);
 
