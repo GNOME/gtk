@@ -52,7 +52,9 @@ gdk_dmabuf_format_compare (gconstpointer data_a,
   const GdkDmabufFormat *a = data_a;
   const GdkDmabufFormat *b = data_b;
 
-  if (a->fourcc == b->fourcc)
+  if (a->next_priority != b->next_priority)
+    return (a->next_priority < b->next_priority) ? -1 : 1;
+  else if (a->fourcc == b->fourcc)
     return (a->modifier - b->modifier) >> 8 * (sizeof (gint64) - sizeof (gint));
   else
     return a->fourcc - b->fourcc;
@@ -79,31 +81,13 @@ gdk_dmabuf_formats_builder_sort (GdkDmabufFormatsBuilder *self)
          gdk_dmabuf_format_compare);
 }
 
-/* list must be sorted */
-static void
-gdk_dmabuf_formats_builder_remove_duplicates (GdkDmabufFormatsBuilder *self)
-{
-  gsize i, j;
-
-  for (i = 1, j = 0; i < gdk_dmabuf_formats_builder_get_size (self); i++)
-    {
-      if (gdk_dmabuf_format_equal (gdk_dmabuf_formats_builder_get (self, i),
-                                   gdk_dmabuf_formats_builder_get (self, j)))
-        continue;
-
-      j++;
-      if (i != j)
-        *gdk_dmabuf_formats_builder_index (self, j) = *gdk_dmabuf_formats_builder_index (self, i);
-    }
-}
-
 GdkDmabufFormats *
 gdk_dmabuf_formats_builder_free_to_formats (GdkDmabufFormatsBuilder *self)
 {
   GdkDmabufFormats *formats;
 
+  gdk_dmabuf_formats_builder_next_priority (self);
   gdk_dmabuf_formats_builder_sort (self);
-  gdk_dmabuf_formats_builder_remove_duplicates (self);
 
   formats = gdk_dmabuf_formats_new (gdk_dmabuf_formats_builder_get_data (self),
                                     gdk_dmabuf_formats_builder_get_size (self));
@@ -118,17 +102,41 @@ gdk_dmabuf_formats_builder_add_format (GdkDmabufFormatsBuilder *self,
                                        guint32                  fourcc,
                                        guint64                  modifier)
 {
-  gdk_dmabuf_formats_builder_append (self, &(GdkDmabufFormat) { fourcc, modifier });
+  GdkDmabufFormat format = { fourcc, modifier, G_MAXSIZE };
+
+  for (gsize i = 0; i < gdk_dmabuf_formats_builder_get_size (self); i++)
+    {
+      if (gdk_dmabuf_format_equal (gdk_dmabuf_formats_builder_get (self, i), &format))
+        return;
+    }
+
+  gdk_dmabuf_formats_builder_append (self, &format);
+}
+
+void
+gdk_dmabuf_formats_builder_next_priority (GdkDmabufFormatsBuilder *self)
+{
+  for (gsize i = gdk_dmabuf_formats_builder_get_size (self); i > 0; i--)
+    {
+      GdkDmabufFormat *format = gdk_dmabuf_formats_builder_get (self, i - 1);
+
+      if (format->next_priority != G_MAXSIZE)
+        break;
+
+       format->next_priority = gdk_dmabuf_formats_builder_get_size (self);
+    }
 }
 
 void
 gdk_dmabuf_formats_builder_add_formats (GdkDmabufFormatsBuilder *self,
                                         GdkDmabufFormats        *formats)
 {
-  gdk_dmabuf_formats_builder_splice (self,
-                                     gdk_dmabuf_formats_builder_get_size (self),
-                                     0,
-                                     FALSE,
-                                     gdk_dmabuf_formats_peek_formats (formats),
-                                     gdk_dmabuf_formats_get_n_formats (formats));
+  for (gsize i = 0; i < gdk_dmabuf_formats_get_n_formats (formats); i++)
+    {
+      guint32 fourcc;
+      guint64 modifier;
+
+      gdk_dmabuf_formats_get_format (formats, i, &fourcc, &modifier);
+      gdk_dmabuf_formats_builder_add_format (self, fourcc, modifier);
+    }
 }
