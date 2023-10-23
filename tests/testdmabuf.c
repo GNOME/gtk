@@ -2,6 +2,7 @@
 #include <fcntl.h>
 #include <sys/mman.h>
 #include <sys/ioctl.h>
+#include <unistd.h>
 #include <linux/dma-heap.h>
 #include <drm_fourcc.h>
 
@@ -9,36 +10,60 @@
  * lax permissions.
  */
 
+static int dma_heap_fd = -1;
+
+static gboolean
+initialize_dma_heap (void)
+{
+  dma_heap_fd = open ("/dev/dma_heap/system", O_RDONLY | O_CLOEXEC);
+  return dma_heap_fd != -1;
+}
+
 static int
 allocate_dma_buf (gsize size)
 {
-  static int fd = -1;
   struct dma_heap_allocation_data heap_data;
   int ret;
-
-  if (fd == -1)
-    {
-      fd = open ("/dev/dma_heap/system", O_RDONLY | O_CLOEXEC);
-      if (fd == -1)
-        g_error ("Failed to open /dev/dma_heap/system");
-    }
 
   heap_data.len = size;
   heap_data.fd = 0;
   heap_data.fd_flags = O_RDWR | O_CLOEXEC;
   heap_data.heap_flags = 0;
 
-  ret = ioctl (fd, DMA_HEAP_IOCTL_ALLOC, &heap_data);
+  ret = ioctl (dma_heap_fd, DMA_HEAP_IOCTL_ALLOC, &heap_data);
   if (ret)
     g_error ("dma-buf allocation failed");
 
   return heap_data.fd;
 }
 
+static int
+allocate_memfd (gsize size)
+{
+  int fd;
+
+  fd = memfd_create ("buffer", MFD_CLOEXEC);
+  if (fd == -1)
+    g_error ("memfd allocation failed");
+
+  ftruncate (fd, size);
+
+  return fd;
+}
+
+static int
+allocate_buffer (gsize size)
+{
+  if (dma_heap_fd != -1)
+    return allocate_dma_buf (size);
+  else
+    return allocate_memfd (size);
+}
+
 static void
-populate_dma_buf (int           fd,
-                  const guchar *data,
-                  gsize         size)
+populate_buffer (int           fd,
+                 const guchar *data,
+                 gsize         size)
 {
   guchar *buf;
 
@@ -253,8 +278,8 @@ texture_builder_set_planes (GdkDmabufTextureBuilder *builder,
 
       for (i = 0; i < n_planes; i++)
         {
-          int fd = allocate_dma_buf (sizes[i]);
-          populate_dma_buf (fd, buf + offset, sizes[i]);
+          int fd = allocate_buffer (sizes[i]);
+          populate_buffer (fd, buf + offset, sizes[i]);
 
           gdk_dmabuf_texture_builder_set_fd (builder, i, fd);
           gdk_dmabuf_texture_builder_set_stride (builder, i, strides[i]);
@@ -266,8 +291,8 @@ texture_builder_set_planes (GdkDmabufTextureBuilder *builder,
     {
       unsigned offset = 0;
       unsigned i;
-      int fd = allocate_dma_buf (size);
-      populate_dma_buf (fd, buf, size);
+      int fd = allocate_buffer (size);
+      populate_buffer (fd, buf, size);
 
       for (i = 0; i < n_planes; i++)
         {
@@ -291,6 +316,11 @@ make_dmabuf_texture (const char *filename,
   int fd;
   GdkDmabufTextureBuilder *builder;
   GError *error = NULL;
+
+  if (initialize_dma_heap ())
+    g_print ("Using dma_heap\n");
+  else
+    g_print ("Using memfd\n");
 
   texture = gdk_texture_new_from_filename (filename, NULL);
 
@@ -318,8 +348,8 @@ make_dmabuf_texture (const char *filename,
     {
       gdk_dmabuf_texture_builder_set_n_planes (builder, 1);
 
-      fd = allocate_dma_buf (rgb_size);
-      populate_dma_buf (fd, rgb_data, rgb_size);
+      fd = allocate_buffer (rgb_size);
+      populate_buffer (fd, rgb_data, rgb_size);
 
       gdk_dmabuf_texture_builder_set_fd (builder, 0, fd);
       gdk_dmabuf_texture_builder_set_stride (builder, 0, rgb_stride);
