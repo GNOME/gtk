@@ -6,7 +6,7 @@
 #include <gdk/gdkdmabuftextureprivate.h>
 
 #ifdef HAVE_DMABUF
-#include <drm/drm_fourcc.h>
+#include <drm_fourcc.h>
 #endif
 
 static void

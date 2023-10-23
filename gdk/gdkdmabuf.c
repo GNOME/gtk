@@ -133,15 +133,31 @@ download_nv12 (guchar          *dst_data,
 {
   const guchar *y_data, *uv_data;
   gsize x, y, y_stride, uv_stride;
-  gsize U, V;
+  gsize U, V, X_SUB, Y_SUB;
 
-  if (dmabuf->fourcc == DRM_FORMAT_NV21)
+  switch (dmabuf->fourcc)
     {
-      U = 1; V = 0;
-    }
-  else
-    {
-      U = 0; V = 1;
+    case DRM_FORMAT_NV12:
+      U = 0; V = 1; X_SUB = 2; Y_SUB = 2;
+      break;
+    case DRM_FORMAT_NV21:
+      U = 1; V = 0; X_SUB = 2; Y_SUB = 2;
+      break;
+    case DRM_FORMAT_NV16:
+      U = 0; V = 1; X_SUB = 2; Y_SUB = 1;
+      break;
+    case DRM_FORMAT_NV61:
+      U = 1; V = 0; X_SUB = 2; Y_SUB = 1;
+      break;
+    case DRM_FORMAT_NV24:
+      U = 0; V = 1; X_SUB = 1; Y_SUB = 1;
+      break;
+    case DRM_FORMAT_NV42:
+      U = 1; V = 0; X_SUB = 1; Y_SUB = 1;
+      break;
+    default:
+      g_assert_not_reached ();
+      return;
     }
 
   y_stride = dmabuf->planes[0].stride;
@@ -149,32 +165,105 @@ download_nv12 (guchar          *dst_data,
   g_return_if_fail (sizes[0] >= dmabuf->planes[0].offset + height * y_stride);
   uv_stride = dmabuf->planes[1].stride;
   uv_data = src_data[1] + dmabuf->planes[1].offset;
-  g_return_if_fail (sizes[1] >= dmabuf->planes[1].offset + (height + 1) / 2 * uv_stride);
+  g_return_if_fail (sizes[1] >= dmabuf->planes[1].offset + (height + Y_SUB - 1) / Y_SUB * uv_stride);
 
-  for (y = 0; y < height; y += 2)
+  for (y = 0; y < height; y += Y_SUB)
     {
-      guchar *dst2_data = dst_data + dst_stride;
-      const guchar *y2_data = y_data + y_stride;
-
-      for (x = 0; x < width; x += 2)
+      for (x = 0; x < width; x += X_SUB)
         {
           int r, g, b;
+          gsize xs, ys;
 
-          get_uv_values (&itu601_wide, uv_data[x + U], uv_data[x + V], &r, &g, &b);
+          get_uv_values (&itu601_wide, uv_data[x / X_SUB * 2 + U], uv_data[x / X_SUB * 2 + V], &r, &g, &b);
 
-          set_rgb_values (&dst_data[3 * x], y_data[x], r, g, b);
-          if (x + 1 < width)
-            set_rgb_values (&dst_data[3 * (x + 1)], y_data[x], r, g, b);
-          if (y + 1 < height)
-            {
-              set_rgb_values (&dst2_data[3 * x], y2_data[x], r, g, b);
-              if (x + 1 < width)
-                set_rgb_values (&dst2_data[3 * (x + 1)], y2_data[x], r, g, b);
-            }
+          for (ys = 0; ys < Y_SUB && y + ys < height; ys++)
+            for (xs = 0; xs < X_SUB && x + xs < width; xs++)
+              set_rgb_values (&dst_data[3 * (x + xs) + dst_stride * ys], y_data[x + xs + y_stride * ys], r, g, b);
         }
-      dst_data += 2 * dst_stride;
-      y_data += 2 * y_stride;
+      dst_data += Y_SUB * dst_stride;
+      y_data += Y_SUB * y_stride;
       uv_data += uv_stride;
+    }
+}
+
+static void
+download_yuv_3 (guchar          *dst_data,
+                gsize            dst_stride,
+                GdkMemoryFormat  dst_format,
+                gsize            width,
+                gsize            height,
+                const GdkDmabuf *dmabuf,
+                const guchar    *src_data[GDK_DMABUF_MAX_PLANES],
+                gsize            sizes[GDK_DMABUF_MAX_PLANES])
+{
+  const guchar *y_data, *u_data, *v_data;
+  gsize x, y, y_stride, u_stride, v_stride;
+  gsize U, V, X_SUB, Y_SUB;
+
+  switch (dmabuf->fourcc)
+    {
+    case DRM_FORMAT_YUV410:
+      U = 1; V = 2; X_SUB = 4; Y_SUB = 4;
+      break;
+    case DRM_FORMAT_YVU410:
+      U = 2; V = 1; X_SUB = 4; Y_SUB = 4;
+      break;
+    case DRM_FORMAT_YUV411:
+      U = 1; V = 2; X_SUB = 4; Y_SUB = 1;
+      break;
+    case DRM_FORMAT_YVU411:
+      U = 2; V = 1; X_SUB = 4; Y_SUB = 1;
+      break;
+    case DRM_FORMAT_YUV420:
+      U = 1; V = 2; X_SUB = 2; Y_SUB = 2;
+      break;
+    case DRM_FORMAT_YVU420:
+      U = 2; V = 1; X_SUB = 2; Y_SUB = 2;
+      break;
+    case DRM_FORMAT_YUV422:
+      U = 1; V = 2; X_SUB = 2; Y_SUB = 1;
+      break;
+    case DRM_FORMAT_YVU422:
+      U = 2; V = 1; X_SUB = 2; Y_SUB = 1;
+      break;
+    case DRM_FORMAT_YUV444:
+      U = 1; V = 2; X_SUB = 1; Y_SUB = 1;
+      break;
+    case DRM_FORMAT_YVU444:
+      U = 2; V = 1; X_SUB = 1; Y_SUB = 1;
+      break;
+    default:
+      g_assert_not_reached ();
+      return;
+    }
+
+  y_stride = dmabuf->planes[0].stride;
+  y_data = src_data[0] + dmabuf->planes[0].offset;
+  g_return_if_fail (sizes[0] >= dmabuf->planes[0].offset + height * y_stride);
+  u_stride = dmabuf->planes[U].stride;
+  u_data = src_data[U] + dmabuf->planes[U].offset;
+  g_return_if_fail (sizes[U] >= dmabuf->planes[U].offset + (height + Y_SUB - 1) / Y_SUB * u_stride);
+  v_stride = dmabuf->planes[V].stride;
+  v_data = src_data[V] + dmabuf->planes[V].offset;
+  g_return_if_fail (sizes[V] >= dmabuf->planes[V].offset + (height + Y_SUB - 1) / Y_SUB * v_stride);
+
+  for (y = 0; y < height; y += Y_SUB)
+    {
+      for (x = 0; x < width; x += X_SUB)
+        {
+          int r, g, b;
+          gsize xs, ys;
+
+          get_uv_values (&itu601_wide, u_data[x / X_SUB], v_data[x / X_SUB], &r, &g, &b);
+
+          for (ys = 0; ys < Y_SUB && y + ys < height; ys++)
+            for (xs = 0; xs < X_SUB && x + xs < width; xs++)
+              set_rgb_values (&dst_data[3 * (x + xs) + dst_stride * ys], y_data[x + xs + y_stride * ys], r, g, b);
+        }
+      dst_data += Y_SUB * dst_stride;
+      y_data += Y_SUB * y_stride;
+      u_data += u_stride;
+      v_data += v_stride;
     }
 }
 
@@ -246,10 +335,24 @@ static const GdkDrmFormatInfo supported_formats[] = {
   /* YUV formats */
   { DRM_FORMAT_NV12, GDK_MEMORY_R8G8B8, GDK_MEMORY_R8G8B8, download_nv12 },
   { DRM_FORMAT_NV21, GDK_MEMORY_R8G8B8, GDK_MEMORY_R8G8B8, download_nv12 },
+  { DRM_FORMAT_NV16, GDK_MEMORY_R8G8B8, GDK_MEMORY_R8G8B8, download_nv12 },
+  { DRM_FORMAT_NV61, GDK_MEMORY_R8G8B8, GDK_MEMORY_R8G8B8, download_nv12 },
+  { DRM_FORMAT_NV24, GDK_MEMORY_R8G8B8, GDK_MEMORY_R8G8B8, download_nv12 },
+  { DRM_FORMAT_NV42, GDK_MEMORY_R8G8B8, GDK_MEMORY_R8G8B8, download_nv12 },
   { DRM_FORMAT_YUYV, GDK_MEMORY_R8G8B8, GDK_MEMORY_R8G8B8, download_yuyv },
   { DRM_FORMAT_YVYU, GDK_MEMORY_R8G8B8, GDK_MEMORY_R8G8B8, download_yuyv },
   { DRM_FORMAT_VYUY, GDK_MEMORY_R8G8B8, GDK_MEMORY_R8G8B8, download_yuyv },
   { DRM_FORMAT_UYVY, GDK_MEMORY_R8G8B8, GDK_MEMORY_R8G8B8, download_yuyv },
+  { DRM_FORMAT_YUV410, GDK_MEMORY_R8G8B8, GDK_MEMORY_R8G8B8, download_yuv_3 },
+  { DRM_FORMAT_YVU410, GDK_MEMORY_R8G8B8, GDK_MEMORY_R8G8B8, download_yuv_3 },
+  { DRM_FORMAT_YUV411, GDK_MEMORY_R8G8B8, GDK_MEMORY_R8G8B8, download_yuv_3 },
+  { DRM_FORMAT_YVU411, GDK_MEMORY_R8G8B8, GDK_MEMORY_R8G8B8, download_yuv_3 },
+  { DRM_FORMAT_YUV420, GDK_MEMORY_R8G8B8, GDK_MEMORY_R8G8B8, download_yuv_3 },
+  { DRM_FORMAT_YVU420, GDK_MEMORY_R8G8B8, GDK_MEMORY_R8G8B8, download_yuv_3 },
+  { DRM_FORMAT_YUV422, GDK_MEMORY_R8G8B8, GDK_MEMORY_R8G8B8, download_yuv_3 },
+  { DRM_FORMAT_YVU422, GDK_MEMORY_R8G8B8, GDK_MEMORY_R8G8B8, download_yuv_3 },
+  { DRM_FORMAT_YUV444, GDK_MEMORY_R8G8B8, GDK_MEMORY_R8G8B8, download_yuv_3 },
+  { DRM_FORMAT_YVU444, GDK_MEMORY_R8G8B8, GDK_MEMORY_R8G8B8, download_yuv_3 },
 };
 
 static const GdkDrmFormatInfo *
@@ -511,12 +614,96 @@ gdk_dmabuf_sanitize (GdkDmabuf        *dest,
   switch (dest->fourcc)
     {
       case DRM_FORMAT_NV12:
+      case DRM_FORMAT_NV21:
+      case DRM_FORMAT_NV16:
+      case DRM_FORMAT_NV61:
         if (dest->n_planes == 1)
           {
             dest->n_planes = 2;
             dest->planes[1].fd = dest->planes[0].fd;
             dest->planes[1].stride = dest->planes[0].stride;
             dest->planes[1].offset = dest->planes[0].offset + dest->planes[0].stride * height;
+          }
+        break;
+
+      case DRM_FORMAT_NV24:
+      case DRM_FORMAT_NV42:
+        if (dest->n_planes == 1)
+          {
+            dest->n_planes = 2;
+            dest->planes[1].fd = dest->planes[0].fd;
+            dest->planes[1].stride = dest->planes[0].stride * 2;
+            dest->planes[1].offset = dest->planes[0].offset + dest->planes[0].stride * height;
+          }
+        break;
+
+      case DRM_FORMAT_YUV410:
+      case DRM_FORMAT_YVU410:
+        if (dest->n_planes == 1)
+          {
+            dest->n_planes = 3;
+            dest->planes[1].fd = dest->planes[0].fd;
+            dest->planes[1].stride = (dest->planes[0].stride + 3) / 4;
+            dest->planes[1].offset = dest->planes[0].offset + dest->planes[0].stride * height;
+            dest->planes[2].fd = dest->planes[1].fd;
+            dest->planes[2].stride = dest->planes[1].stride;
+            dest->planes[2].offset = dest->planes[1].offset + dest->planes[1].stride * ((height + 3) / 4);
+          }
+        break;
+
+      case DRM_FORMAT_YUV411:
+      case DRM_FORMAT_YVU411:
+        if (dest->n_planes == 1)
+          {
+            dest->n_planes = 3;
+            dest->planes[1].fd = dest->planes[0].fd;
+            dest->planes[1].stride = (dest->planes[0].stride + 3) / 4;
+            dest->planes[1].offset = dest->planes[0].offset + dest->planes[0].stride * height;
+            dest->planes[2].fd = dest->planes[1].fd;
+            dest->planes[2].stride = dest->planes[1].stride;
+            dest->planes[2].offset = dest->planes[1].offset + dest->planes[1].stride * height;
+          }
+        break;
+
+      case DRM_FORMAT_YUV420:
+      case DRM_FORMAT_YVU420:
+        if (dest->n_planes == 1)
+          {
+            dest->n_planes = 3;
+            dest->planes[1].fd = dest->planes[0].fd;
+            dest->planes[1].stride = (dest->planes[0].stride + 1) / 2;
+            dest->planes[1].offset = dest->planes[0].offset + dest->planes[0].stride * height;
+            dest->planes[2].fd = dest->planes[1].fd;
+            dest->planes[2].stride = dest->planes[1].stride;
+            dest->planes[2].offset = dest->planes[1].offset + dest->planes[1].stride * ((height + 1) / 2);
+          }
+        break;
+
+      case DRM_FORMAT_YUV422:
+      case DRM_FORMAT_YVU422:
+        if (dest->n_planes == 1)
+          {
+            dest->n_planes = 3;
+            dest->planes[1].fd = dest->planes[0].fd;
+            dest->planes[1].stride = (dest->planes[0].stride + 1) / 2;
+            dest->planes[1].offset = dest->planes[0].offset + dest->planes[0].stride * height;
+            dest->planes[2].fd = dest->planes[1].fd;
+            dest->planes[2].stride = dest->planes[1].stride;
+            dest->planes[2].offset = dest->planes[1].offset + dest->planes[1].stride * height;
+          }
+        break;
+
+      case DRM_FORMAT_YUV444:
+      case DRM_FORMAT_YVU444:
+        if (dest->n_planes == 1)
+          {
+            dest->n_planes = 3;
+            dest->planes[1].fd = dest->planes[0].fd;
+            dest->planes[1].stride = dest->planes[0].stride;
+            dest->planes[1].offset = dest->planes[0].offset + dest->planes[0].stride * height;
+            dest->planes[2].fd = dest->planes[1].fd;
+            dest->planes[2].stride = dest->planes[1].stride;
+            dest->planes[2].offset = dest->planes[1].offset + dest->planes[1].stride * height;
           }
         break;
 
