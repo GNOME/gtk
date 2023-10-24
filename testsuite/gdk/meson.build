@@ -55,8 +55,12 @@ internal_tests = [
   { 'name': 'image' },
   { 'name': 'texture' },
   { 'name': 'gltexture' },
-  { 'name': 'dmabuftexture', 'suites': 'failing' },
 ]
+
+if host_machine.system() != 'windows'
+  internal_tests += { 'name': 'dmabuftexture', 'suites': 'failing' }
+endif
+
 
 foreach t : internal_tests
   test_name = t.get('name')
