@@ -1920,6 +1920,8 @@ gdk_display_init_dmabuf (GdkDisplay *self)
  * The formats returned by this function can be used for negotiating
  * buffer formats with producers such as v4l, pipewire or GStreamer.
  *
+ * To learn more about dma-bufs, see [class@Gdk.DmabufTextureBuilder].
+ *
  * Returns: (transfer none): a `GdkDmabufFormats` object
  *
  * Since: 4.14
