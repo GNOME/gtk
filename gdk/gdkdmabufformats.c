@@ -37,6 +37,10 @@
  * The list of supported formats is sorted by preference,
  * with the best formats coming first.
  *
+ * The list may contains (format, modfier) pairs where the modifier
+ * is `DMA_FORMAT_MOD_INVALID`, indicating that **_implicit modifiers_**
+ * may be used with this format.
+ *
  * See [class@Gdk.DmabufTextureBuilder] for more information
  * about DMA buffers.
  *

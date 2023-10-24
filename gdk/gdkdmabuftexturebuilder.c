@@ -29,8 +29,6 @@
 #include <cairo-gobject.h>
 #ifdef HAVE_DMABUF
 #include <drm_fourcc.h>
-#else
-#define DRM_FORMAT_MOD_INVALID ((1ULL << 56) - 1)
 #endif
 
 
@@ -89,6 +87,10 @@ struct _GdkDmabufTextureBuilderClass
  * and commonly referred to as **_fourcc_** values, since they are identified by 4 ASCII
  * characters. Additionally, each DMA buffer has a **_modifier_**, which is a 64-bit integer
  * that describes driver-specific details of the memory layout, such as tiling or compression.
+ *
+ * For historical reasons, some producers of dma-bufs don't provide an explicit modifier, but
+ * instead return `DMA_FORMAT_MOD_INVALID` to indicate that their modifier is **_impliict_**.
+ * GTK tries to accomodate this situation by accepting `DMA_FORMAT_MOD_INVALID` as modifier.
  *
  * The operation of `GdkDmabufTextureBuilder` is quite simple: Create a texture builder,
  * set all the necessary properties, and then call [method@Gdk.DmabufTextureBuilder.build]
@@ -611,13 +613,6 @@ gdk_dmabuf_texture_builder_set_modifier (GdkDmabufTextureBuilder *self,
                                          guint64                  modifier)
 {
   g_return_if_fail (GDK_IS_DMABUF_TEXTURE_BUILDER (self));
-  if (modifier == DRM_FORMAT_MOD_INVALID)
-    {
-      g_critical ("GTK does not support the INVALID modifier. "
-                  "If you use code that produces it, it should include "
-                  "instructions how to transform it into a regular modifier.");
-      return;
-    }
 
   if (self->dmabuf.modifier == modifier)
     return;

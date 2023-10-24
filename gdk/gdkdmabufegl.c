@@ -113,6 +113,12 @@ gdk_dmabuf_egl_downloader_collect_formats (const GdkDmabufDownloader *downloader
           if (external_only[j])
             gdk_dmabuf_formats_builder_add_format (external, fourccs[i], modifiers[j]);
         }
+
+      /* Accept implicit modifiers as long as we accept the format at all.
+       * This is a bit of a crapshot, but unfortunately needed for a bunch
+       * of drivers.
+       */
+      gdk_dmabuf_formats_builder_add_format (formats, fourccs[i], DRM_FORMAT_MOD_INVALID);
     }
 
   g_free (modifiers);
