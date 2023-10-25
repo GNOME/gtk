@@ -21,8 +21,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-08 20:41+0000\n"
-"PO-Revision-Date: 2023-10-17 18:21+0300\n"
+"POT-Creation-Date: 2023-10-21 09:17+0000\n"
+"PO-Revision-Date: 2023-10-23 17:30+0300\n"
 "Last-Translator: Sabri Ünal <libreajans@gmail.com>\n"
 "Language-Team: Turkish <takim@gnome.org.tr>\n"
 "Language: tr\n"
@@ -1153,7 +1153,7 @@ msgstr "Ma_tlık:"
 
 #: gtk/deprecated/gtkcolorsel.c:484 gtk/deprecated/gtkcolorsel.c:494
 msgid "Transparency of the color."
-msgstr "Rengin şeffaflığı."
+msgstr "Rengin saydamlığı."
 
 #: gtk/deprecated/gtkcolorsel.c:501
 msgid "Color _name:"
