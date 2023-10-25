@@ -35,6 +35,11 @@ Showing
 
 The ``show`` command displays the rendernode.
 
+``--undecorated``
+
+Removes window decorations. This is meant for rendering of exactly the rendernode
+without any titlebar.
+
 Rendering
 ^^^^^^^^^
 
