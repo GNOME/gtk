@@ -99,24 +99,16 @@ gdk_dmabuf_egl_downloader_collect_formats (const GdkDmabufDownloader *downloader
 
       for (int j = 0; j < num_modifiers; j++)
         {
-          /* All linear formats we support are already added my the mmap downloader.
-           * We don't add external formats, unless we can use them (via GLES)
-           */
-          if (modifiers[j] != DRM_FORMAT_MOD_LINEAR &&
-              (!external_only[j] || gdk_gl_context_get_use_es (context)))
+          if (!external_only[j])
             {
-              GDK_DEBUG (DMABUF, "%s%s dmabuf format %.4s:%#" G_GINT64_MODIFIER "x",
-                         external_only[j] ? "external " : "",
-                         downloader->name,
-                         (char *) &fourccs[i],
-                         modifiers[j]);
-
               gdk_dmabuf_formats_builder_add_format (formats, fourccs[i], modifiers[j]);
+              all_external = FALSE;
             }
-          if (external_only[j])
-            gdk_dmabuf_formats_builder_add_format (external, fourccs[i], modifiers[j]);
           else
-            all_external = FALSE;
+            {
+              if (gdk_gl_context_get_use_es (context))
+                gdk_dmabuf_formats_builder_add_format (external, fourccs[i], modifiers[j]);
+            }
         }
 
       /* Accept implicit modifiers as long as we accept the format at all.
@@ -126,9 +118,9 @@ gdk_dmabuf_egl_downloader_collect_formats (const GdkDmabufDownloader *downloader
        * As an extra wrinkle, treat the implicit modifier as 'external only'
        * if all formats with the same fourcc are 'external only'.
        */
-      if (!all_external || gdk_gl_context_get_use_es (context))
+      if (!all_external)
         gdk_dmabuf_formats_builder_add_format (formats, fourccs[i], DRM_FORMAT_MOD_INVALID);
-      if (all_external)
+      else if (gdk_gl_context_get_use_es (context))
         gdk_dmabuf_formats_builder_add_format (external, fourccs[i], DRM_FORMAT_MOD_INVALID);
     }
 
@@ -144,6 +136,7 @@ gdk_dmabuf_egl_downloader_add_formats (const GdkDmabufDownloader *downloader,
                                        GdkDisplay                *display,
                                        GdkDmabufFormatsBuilder   *builder)
 {
+  GdkGLContext *context = gdk_display_get_gl_context (display);
   GdkDmabufFormatsBuilder *formats;
   GdkDmabufFormatsBuilder *external;
   gboolean retval = FALSE;
@@ -160,6 +153,11 @@ gdk_dmabuf_egl_downloader_add_formats (const GdkDmabufDownloader *downloader,
   display->egl_external_formats = gdk_dmabuf_formats_builder_free_to_formats (external);
 
   gdk_dmabuf_formats_builder_add_formats (builder, display->egl_dmabuf_formats);
+  if (gdk_gl_context_get_use_es (context))
+    {
+      gdk_dmabuf_formats_builder_next_priority (builder);
+      gdk_dmabuf_formats_builder_add_formats (builder, display->egl_external_formats);
+    }
 
   return retval;
 }

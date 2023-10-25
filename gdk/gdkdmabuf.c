@@ -376,10 +376,6 @@ gdk_dmabuf_direct_downloader_add_formats (const GdkDmabufDownloader *downloader,
 
   for (i = 0; i < G_N_ELEMENTS (supported_formats); i++)
     {
-      GDK_DEBUG (DMABUF, "%s dmabuf format %.4s:%#" G_GINT64_MODIFIER "x",
-                 downloader->name,
-                 (char *) &supported_formats[i].fourcc, (guint64) DRM_FORMAT_MOD_LINEAR);
-
       gdk_dmabuf_formats_builder_add_format (builder,
                                              supported_formats[i].fourcc,
                                              DRM_FORMAT_MOD_LINEAR);
