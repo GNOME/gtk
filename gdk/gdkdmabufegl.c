@@ -41,93 +41,125 @@
  */
 
 static gboolean
+gdk_dmabuf_egl_downloader_collect_formats (const GdkDmabufDownloader *downloader,
+                                           GdkDisplay                *display,
+                                           GdkDmabufFormatsBuilder   *formats,
+                                           GdkDmabufFormatsBuilder   *external)
+{
+  GdkGLContext *context = gdk_display_get_gl_context (display);
+  EGLDisplay egl_display = gdk_display_get_egl_display (display);
+  int num_fourccs;
+  int *fourccs;
+  guint64 *modifiers;
+  unsigned int *external_only;
+  int n_mods;
+
+  if (egl_display == EGL_NO_DISPLAY ||
+      !display->have_egl_dma_buf_import ||
+      !gdk_gl_context_has_image_storage (context))
+    return FALSE;
+
+  gdk_gl_context_make_current (context);
+
+  eglQueryDmaBufFormatsEXT (egl_display, 0, NULL, &num_fourccs);
+  fourccs = g_new (int, num_fourccs);
+  eglQueryDmaBufFormatsEXT (egl_display, num_fourccs, fourccs, &num_fourccs);
+
+  n_mods = 80;
+  modifiers = g_new (guint64, n_mods);
+  external_only = g_new (unsigned int, n_mods);
+
+  for (int i = 0; i < num_fourccs; i++)
+    {
+      int num_modifiers;
+      gboolean all_external;
+
+      eglQueryDmaBufModifiersEXT (egl_display,
+                                  fourccs[i],
+                                  0,
+                                  NULL,
+                                  NULL,
+                                  &num_modifiers);
+
+      if (num_modifiers > n_mods)
+        {
+          n_mods = num_modifiers;
+          modifiers = g_renew (guint64, modifiers, n_mods);
+          external_only = g_renew (unsigned int, external_only, n_mods);
+        }
+
+      eglQueryDmaBufModifiersEXT (egl_display,
+                                  fourccs[i],
+                                  num_modifiers,
+                                  modifiers,
+                                  external_only,
+                                  &num_modifiers);
+
+      all_external = TRUE;
+
+      for (int j = 0; j < num_modifiers; j++)
+        {
+          /* All linear formats we support are already added my the mmap downloader.
+           * We don't add external formats, unless we can use them (via GLES)
+           */
+          if (modifiers[j] != DRM_FORMAT_MOD_LINEAR &&
+              (!external_only[j] || gdk_gl_context_get_use_es (context)))
+            {
+              GDK_DEBUG (DMABUF, "%s%s dmabuf format %.4s:%#" G_GINT64_MODIFIER "x",
+                         external_only[j] ? "external " : "",
+                         downloader->name,
+                         (char *) &fourccs[i],
+                         modifiers[j]);
+
+              gdk_dmabuf_formats_builder_add_format (formats, fourccs[i], modifiers[j]);
+            }
+          if (external_only[j])
+            gdk_dmabuf_formats_builder_add_format (external, fourccs[i], modifiers[j]);
+          else
+            all_external = FALSE;
+        }
+
+      /* Accept implicit modifiers as long as we accept the format at all.
+       * This is a bit of a crapshot, but unfortunately needed for a bunch
+       * of drivers.
+       *
+       * As an extra wrinkle, treat the implicit modifier as 'external only'
+       * if all formats with the same fourcc are 'external only'.
+       */
+      if (!all_external || gdk_gl_context_get_use_es (context))
+        gdk_dmabuf_formats_builder_add_format (formats, fourccs[i], DRM_FORMAT_MOD_INVALID);
+      if (all_external)
+        gdk_dmabuf_formats_builder_add_format (external, fourccs[i], DRM_FORMAT_MOD_INVALID);
+    }
+
+  g_free (modifiers);
+  g_free (external_only);
+  g_free (fourccs);
+
+  return TRUE;
+}
+
+static gboolean
 gdk_dmabuf_egl_downloader_add_formats (const GdkDmabufDownloader *downloader,
                                        GdkDisplay                *display,
                                        GdkDmabufFormatsBuilder   *builder)
 {
-  GdkGLContext *context = gdk_display_get_gl_context (display);
-  EGLDisplay egl_display = gdk_display_get_egl_display (display);
+  GdkDmabufFormatsBuilder *formats;
   GdkDmabufFormatsBuilder *external;
   gboolean retval = FALSE;
 
+  g_assert (display->egl_dmabuf_formats == NULL);
   g_assert (display->egl_external_formats == NULL);
 
+  formats = gdk_dmabuf_formats_builder_new ();
   external = gdk_dmabuf_formats_builder_new ();
 
-  gdk_gl_context_make_current (context);
+  retval = gdk_dmabuf_egl_downloader_collect_formats (downloader, display, formats, external);
 
-  if (egl_display != EGL_NO_DISPLAY &&
-      display->have_egl_dma_buf_import &&
-      gdk_gl_context_has_image_storage (context))
-    {
-      int num_fourccs;
-      int *fourccs;
-      guint64 *modifiers;
-      unsigned int *external_only;
-      int n_mods;
-
-      eglQueryDmaBufFormatsEXT (egl_display, 0, NULL, &num_fourccs);
-      fourccs = g_new (int, num_fourccs);
-      eglQueryDmaBufFormatsEXT (egl_display, num_fourccs, fourccs, &num_fourccs);
-
-      n_mods = 80;
-      modifiers = g_new (guint64, n_mods);
-      external_only = g_new (unsigned int, n_mods);
-
-      for (int i = 0; i < num_fourccs; i++)
-        {
-          int num_modifiers;
-
-          eglQueryDmaBufModifiersEXT (egl_display,
-                                      fourccs[i],
-                                      0,
-                                      NULL,
-                                      NULL,
-                                      &num_modifiers);
-
-          if (num_modifiers > n_mods)
-            {
-              n_mods = num_modifiers;
-              modifiers = g_renew (guint64, modifiers, n_mods);
-              external_only = g_renew (unsigned int, external_only, n_mods);
-            }
-
-          eglQueryDmaBufModifiersEXT (egl_display,
-                                      fourccs[i],
-                                      num_modifiers,
-                                      modifiers,
-                                      external_only,
-                                      &num_modifiers);
-
-          for (int j = 0; j < num_modifiers; j++)
-            {
-              /* All linear formats we support are already added my the mmap downloader.
-               * We don't add external formats, unless we can use them (via GLES)
-               */
-              if (modifiers[j] != DRM_FORMAT_MOD_LINEAR &&
-                  (!external_only[j] || gdk_gl_context_get_use_es (context)))
-                {
-                  GDK_DEBUG (DMABUF, "%s%s dmabuf format %.4s:%#" G_GINT64_MODIFIER "x",
-                             external_only[j] ? "external " : "",
-                             downloader->name,
-                             (char *) &fourccs[i],
-                             modifiers[j]);
-
-                  gdk_dmabuf_formats_builder_add_format (builder, fourccs[i], modifiers[j]);
-                }
-              if (external_only[j])
-                gdk_dmabuf_formats_builder_add_format (external, fourccs[i], modifiers[j]);
-            }
-        }
-
-      g_free (modifiers);
-      g_free (external_only);
-      g_free (fourccs);
-
-      retval = TRUE;
-    }
-
+  display->egl_dmabuf_formats = gdk_dmabuf_formats_builder_free_to_formats (formats);
   display->egl_external_formats = gdk_dmabuf_formats_builder_free_to_formats (external);
+
+  gdk_dmabuf_formats_builder_add_formats (builder, display->egl_dmabuf_formats);
 
   return retval;
 }
@@ -210,49 +242,10 @@ gdk_dmabuf_egl_downloader_supports (const GdkDmabufDownloader  *downloader,
                                     GdkMemoryFormat            *out_format,
                                     GError                    **error)
 {
-  EGLDisplay egl_display;
-  GdkGLContext *context;
-  int num_modifiers;
-  guint64 *modifiers;
-  unsigned int *external_only;
-
-  egl_display = gdk_display_get_egl_display (display);
-  if (egl_display == EGL_NO_DISPLAY)
+  if (gdk_dmabuf_formats_contains (display->egl_dmabuf_formats, dmabuf->fourcc, dmabuf->modifier))
     {
-      g_set_error_literal (error,
-                           GDK_DMABUF_ERROR, GDK_DMABUF_ERROR_UNSUPPORTED_FORMAT,
-                           "EGL not available");
-      return FALSE;
-    }
-
-  context = gdk_display_get_gl_context (display);
-
-  gdk_gl_context_make_current (context);
-
-  eglQueryDmaBufModifiersEXT (egl_display,
-                              dmabuf->fourcc,
-                              0,
-                              NULL,
-                              NULL,
-                              &num_modifiers);
-
-  modifiers = g_newa (uint64_t, num_modifiers);
-  external_only = g_newa (unsigned int, num_modifiers);
-
-  eglQueryDmaBufModifiersEXT (egl_display,
-                              dmabuf->fourcc,
-                              num_modifiers,
-                              modifiers,
-                              external_only,
-                              &num_modifiers);
-
-  for (int i = 0; i < num_modifiers; i++)
-    {
-      if (modifiers[i] == dmabuf->modifier)
-        {
-          *out_format = get_memory_format (dmabuf->fourcc, premultiplied);
-          return TRUE;
-        }
+      *out_format = get_memory_format (dmabuf->fourcc, premultiplied);
+      return TRUE;
     }
 
   g_set_error (error,

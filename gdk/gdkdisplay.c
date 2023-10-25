@@ -392,6 +392,7 @@ gdk_display_dispose (GObject *object)
   g_queue_clear (&display->queued_events);
 
   g_clear_object (&display->egl_gsk_renderer);
+  g_clear_pointer (&display->egl_dmabuf_formats, gdk_dmabuf_formats_unref);
   g_clear_pointer (&display->egl_external_formats, gdk_dmabuf_formats_unref);
 
   g_clear_object (&priv->gl_context);

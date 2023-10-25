@@ -559,11 +559,10 @@ gdk_dmabuf_get_direct_downloader (void)
  *
  * 1. Disallow any dmabuf format that we do not know.
  *
- * 1. Reject the INVALID modifier, accept the LINEAR one.
+ * 2. Ignore non-linear modifiers.
  *
- * 2. Ignore all other modifiers.
- *
- * 3. Try and fix various inconsistencies between V4L and Mesa, like NV12.
+ * 3. Try and fix various inconsistencies between V4L and Mesa
+ *    for linear modifiers, like the e.g. single-plane NV12.
  *
  * *** WARNING ***
  *
@@ -589,14 +588,6 @@ gdk_dmabuf_sanitize (GdkDmabuf        *dest,
                    GDK_DMABUF_ERROR, GDK_DMABUF_ERROR_UNSUPPORTED_FORMAT,
                    "GTK only support dmabufs with %u planes, not %u",
                    GDK_DMABUF_MAX_PLANES, src->n_planes);
-      return FALSE;
-    }
-
-  if (src->modifier == DRM_FORMAT_MOD_INVALID)
-    {
-      g_set_error (error,
-                   GDK_DMABUF_ERROR, GDK_DMABUF_ERROR_UNSUPPORTED_FORMAT,
-                   "GTK does not support the INVALID modifier.");
       return FALSE;
     }
 
