@@ -72,6 +72,7 @@ gdk_dmabuf_egl_downloader_collect_formats (const GdkDmabufDownloader *downloader
   for (int i = 0; i < num_fourccs; i++)
     {
       int num_modifiers;
+      gboolean all_external;
 
       eglQueryDmaBufModifiersEXT (egl_display,
                                   fourccs[i],
@@ -94,6 +95,8 @@ gdk_dmabuf_egl_downloader_collect_formats (const GdkDmabufDownloader *downloader
                                   external_only,
                                   &num_modifiers);
 
+      all_external = TRUE;
+
       for (int j = 0; j < num_modifiers; j++)
         {
           /* All linear formats we support are already added my the mmap downloader.
@@ -112,13 +115,21 @@ gdk_dmabuf_egl_downloader_collect_formats (const GdkDmabufDownloader *downloader
             }
           if (external_only[j])
             gdk_dmabuf_formats_builder_add_format (external, fourccs[i], modifiers[j]);
+          else
+            all_external = FALSE;
         }
 
       /* Accept implicit modifiers as long as we accept the format at all.
        * This is a bit of a crapshot, but unfortunately needed for a bunch
        * of drivers.
+       *
+       * As an extra wrinkle, treat the implicit modifier as 'external only'
+       * if all formats with the same fourcc are 'external only'.
        */
-      gdk_dmabuf_formats_builder_add_format (formats, fourccs[i], DRM_FORMAT_MOD_INVALID);
+      if (!all_external || gdk_gl_context_get_use_es (context))
+        gdk_dmabuf_formats_builder_add_format (formats, fourccs[i], DRM_FORMAT_MOD_INVALID);
+      if (all_external)
+        gdk_dmabuf_formats_builder_add_format (external, fourccs[i], DRM_FORMAT_MOD_INVALID);
     }
 
   g_free (modifiers);
