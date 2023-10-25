@@ -3655,6 +3655,8 @@ gsk_gl_render_job_upload_texture (GskGLRenderJob       *job,
           gdk_gl_context_is_shared (gdk_gl_texture_get_context (GDK_GL_TEXTURE (texture)),
                                     job->command_queue->context))
         ensure_mipmap = gdk_gl_texture_has_mipmap (GDK_GL_TEXTURE (texture));
+      else if (GDK_IS_DMABUF_TEXTURE (texture))
+        ensure_mipmap = FALSE;
 
       offscreen->texture_id = gsk_gl_driver_load_texture (job->driver, texture, ensure_mipmap);
       init_full_texture_region (offscreen);
