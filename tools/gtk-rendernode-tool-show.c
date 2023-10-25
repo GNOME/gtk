@@ -53,7 +53,8 @@ quit_cb (GtkWidget *widget,
 }
 
 static void
-show_file (const char *filename)
+show_file (const char *filename,
+           gboolean    decorated)
 {
   GskRenderNode *node;
   GdkPaintable *paintable;
@@ -79,6 +80,7 @@ show_file (const char *filename)
   gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (sw), picture);
 
   window = gtk_window_new ();
+  gtk_window_set_decorated (GTK_WINDOW (window), decorated);
   set_window_title (GTK_WINDOW (window), filename);
   gtk_window_set_child (GTK_WINDOW (window), sw);
 
@@ -98,7 +100,9 @@ do_show (int          *argc,
 {
   GOptionContext *context;
   char **filenames = NULL;
+  gboolean decorated = TRUE;
   const GOptionEntry entries[] = {
+    { "undecorated", 0, G_OPTION_FLAG_REVERSE, G_OPTION_ARG_NONE, &decorated, N_("Don't add a titlebar"), NULL },
     { G_OPTION_REMAINING, 0, 0, G_OPTION_ARG_FILENAME_ARRAY, &filenames, NULL, N_("FILE") },
     { NULL, }
   };
@@ -137,7 +141,7 @@ do_show (int          *argc,
       exit (1);
     }
 
-  show_file (filenames[0]);
+  show_file (filenames[0], decorated);
 
   g_strfreev (filenames);
 }
