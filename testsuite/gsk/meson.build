@@ -19,6 +19,7 @@ compare_render_tests = [
   'blend-invisible-child',
   'blend-in-rotate',
   'blend-normal',
+  'blurred-lines',
   'border-bottom-right',
   'border-one-rounded',
   'borders-rotated',
