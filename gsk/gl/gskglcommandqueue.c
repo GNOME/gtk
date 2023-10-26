@@ -1619,7 +1619,7 @@ gsk_gl_command_queue_do_upload_texture_chunk (GskGLCommandQueue *self,
   /* Only apply swizzle if really needed, might not even be
    * supported if default values are set
    */
-  if (gl_swizzle[0] != GL_RED || gl_swizzle[1] != GL_GREEN || gl_swizzle[2] != GL_BLUE)
+  if (gl_swizzle[0] != GL_RED || gl_swizzle[1] != GL_GREEN || gl_swizzle[2] != GL_BLUE || gl_swizzle[3] != GL_ALPHA)
     {
       /* Set each channel independently since GLES 3.0 doesn't support the iv method */
       glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_SWIZZLE_R, gl_swizzle[0]);
