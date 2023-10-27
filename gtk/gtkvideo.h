@@ -25,6 +25,7 @@
 
 #include <gtk/gtkmediastream.h>
 #include <gtk/gtkwidget.h>
+#include <gtk/gtkgraphicsoffload.h>
 
 G_BEGIN_DECLS
 
@@ -71,6 +72,12 @@ GDK_AVAILABLE_IN_ALL
 void            gtk_video_set_loop                      (GtkVideo               *self,
                                                          gboolean                loop);
 
+GDK_AVAILABLE_IN_4_14
+GtkGraphicsOffloadEnabled
+                gtk_video_get_graphics_offload          (GtkVideo               *self);
+GDK_AVAILABLE_IN_4_14
+void            gtk_video_set_graphics_offload          (GtkVideo               *self,
+                                                         GtkGraphicsOffloadEnabled enabled);
 
 G_END_DECLS
 

@@ -22,6 +22,7 @@
 #include "gtkvideo.h"
 
 #include "gtkbinlayout.h"
+#include "gtkgraphicsoffload.h"
 #include "gtkeventcontrollermotion.h"
 #include "gtkimage.h"
 #include <glib/gi18n-lib.h>
@@ -33,6 +34,7 @@
 #include "gtkwidgetprivate.h"
 #include "gtkgestureclick.h"
 #include "gtkprivate.h"
+#include "gtktypebuiltins.h"
 
 /**
  * GtkVideo:
@@ -65,6 +67,7 @@ struct _GtkVideo
   GtkWidget *overlay_icon;
   GtkWidget *controls_revealer;
   GtkWidget *controls;
+  GtkWidget *graphics_offload;
   guint controls_hide_source;
 
   guint autoplay : 1;
@@ -79,6 +82,7 @@ enum
   PROP_FILE,
   PROP_LOOP,
   PROP_MEDIA_STREAM,
+  PROP_GRAPHICS_OFFLOAD,
 
   N_PROPS
 };
@@ -268,6 +272,10 @@ gtk_video_get_property (GObject    *object,
       g_value_set_object (value, self->media_stream);
       break;
 
+    case PROP_GRAPHICS_OFFLOAD:
+      g_value_set_enum (value, gtk_video_get_graphics_offload (self));
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
       break;
@@ -298,6 +306,10 @@ gtk_video_set_property (GObject      *object,
 
     case PROP_MEDIA_STREAM:
       gtk_video_set_media_stream (self, g_value_get_object (value));
+      break;
+
+    case PROP_GRAPHICS_OFFLOAD:
+      gtk_video_set_graphics_offload (self, g_value_get_enum (value));
       break;
 
     default:
@@ -363,6 +375,19 @@ gtk_video_class_init (GtkVideoClass *klass)
                          GTK_TYPE_MEDIA_STREAM,
                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
+  /**
+   * GtkVideo:graphics-offload: (attributes org.gtk.Property.get=gtk_video_get_graphics_offload org.gtk.Property.set=gtk_video_set_graphics_offload)
+   *
+   * Whether to enable graphics offload.
+   *
+   * Since: 4.14
+   */
+  properties[PROP_GRAPHICS_OFFLOAD] =
+    g_param_spec_enum ("graphics-offload", NULL, NULL,
+                       GTK_TYPE_GRAPHICS_OFFLOAD_ENABLED,
+                       GTK_GRAPHICS_OFFLOAD_DISABLED,
+                       G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+
   g_object_class_install_properties (gobject_class, N_PROPS, properties);
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/libgtk/ui/gtkvideo.ui");
@@ -371,6 +396,7 @@ gtk_video_class_init (GtkVideoClass *klass)
   gtk_widget_class_bind_template_child (widget_class, GtkVideo, overlay_icon);
   gtk_widget_class_bind_template_child (widget_class, GtkVideo, controls);
   gtk_widget_class_bind_template_child (widget_class, GtkVideo, controls_revealer);
+  gtk_widget_class_bind_template_child (widget_class, GtkVideo, graphics_offload);
   gtk_widget_class_bind_template_callback (widget_class, gtk_video_motion);
   gtk_widget_class_bind_template_callback (widget_class, gtk_video_pressed);
   gtk_widget_class_bind_template_callback (widget_class, overlay_clicked_cb);
@@ -873,4 +899,49 @@ gtk_video_set_loop (GtkVideo *self,
   self->loop = loop;
 
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_LOOP]);
+}
+
+/**
+ * gtk_video_get_graphics_offload: (attributes org.gtk.Method.get_property=graphics-offload)
+ * @self: a `GtkVideo`
+ *
+ * Returns whether graphics offload is enabled.
+ *
+ * See [class@Gtk.GraphicsOffload] for more information on graphics offload.
+ *
+ * Returns: the graphics offload status
+ *
+ * Since: 4.14
+ */
+GtkGraphicsOffloadEnabled
+gtk_video_get_graphics_offload (GtkVideo *self)
+{
+  g_return_val_if_fail (GTK_IS_VIDEO (self), GTK_GRAPHICS_OFFLOAD_DISABLED);
+
+  return gtk_graphics_offload_get_enabled (GTK_GRAPHICS_OFFLOAD (self->graphics_offload));;
+}
+
+/**
+ * gtk_video_set_graphics_offload: (attributes org.gtk.Method.set_property=graphics-offload)
+ * @self: a `GtkVideo`
+ * @enabled: the new graphics offload status
+ *
+ * Sets whether to enable graphics offload.
+ *
+ * See [class@Gtk.GraphicsOffload] for more information on graphics offload.
+ *
+ * Since: 4.14
+ */
+void
+gtk_video_set_graphics_offload (GtkVideo                  *self,
+                                GtkGraphicsOffloadEnabled  enabled)
+{
+  g_return_if_fail (GTK_IS_VIDEO (self));
+
+  if (gtk_graphics_offload_get_enabled (GTK_GRAPHICS_OFFLOAD (self->graphics_offload)) == enabled)
+    return;
+
+  gtk_graphics_offload_set_enabled (GTK_GRAPHICS_OFFLOAD (self->graphics_offload), enabled);
+
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_GRAPHICS_OFFLOAD]);
 }
