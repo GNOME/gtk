@@ -17,6 +17,7 @@ static const GdkDebugKey gsk_debug_keys[] = {
   { "full-redraw", GSK_DEBUG_FULL_REDRAW, "Force full redraws" },
   { "sync", GSK_DEBUG_SYNC, "Sync after each frame" },
   { "staging", GSK_DEBUG_STAGING, "Use a staging image for texture upload (Vulkan only)" },
+  { "offload-disable", GSK_DEBUG_OFFLOAD_DISABLE, "Disable graphics offload" },
 };
 
 static guint gsk_debug_flags;

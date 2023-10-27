@@ -309,6 +309,9 @@ A number of options affect behavior instead of logging:
 `sync`
 : Sync after each frame
 
+`offload-disable`
+: Disable graphics offload to subsurfaces
+
 `vulkan-staging-image`
 : Use a staging image for Vulkan texture upload
 
