@@ -249,15 +249,23 @@ endif
 
 # Compiler flags
 if cc.get_id() == 'msvc'
-  # Compiler options taken from msvc_recommended_pragmas.h
-  # in GLib, based on _Win32_Programming_ by Rector and Newcomer
+  required_cflags = []
+  required_debug_cflags = '-Zc:preprocessor'
   test_cflags = [
-    '-FImsvc_recommended_pragmas.h',
+    '-FI@0@/build-aux/msvc/msvc_recommended_pragmas.h'.format(meson.project_source_root()),
     '-D_USE_MATH_DEFINES',
-    '-utf-8',
-    '-Zc:preprocessor'
+    required_debug_cflags
   ]
-  add_project_arguments(cc.get_supported_arguments(test_cflags), language: 'c')
+  msvc_supported_cflags = cc.get_supported_arguments(test_cflags)
+  if debug
+    required_cflags += required_debug_cflags
+  endif
+  foreach f : required_cflags
+    if not msvc_supported_cflags.contains(f)
+      error('@0@ required for this build'.format(f))
+    endif
+  endforeach
+  add_project_arguments(msvc_supported_cflags, language: 'c')
 
   add_languages('cpp')
   cxx = meson.get_compiler('cpp')
