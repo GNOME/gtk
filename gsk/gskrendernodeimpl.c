@@ -1835,6 +1835,7 @@ gsk_texture_scale_node_draw (GskRenderNode *node,
   cairo_matrix_init_scale (&matrix,
                            gdk_texture_get_width (self->texture) / node->bounds.size.width,
                            gdk_texture_get_height (self->texture) / node->bounds.size.height);
+  cairo_matrix_translate (&matrix, -node->bounds.origin.x, -node->bounds.origin.y);
   cairo_pattern_set_matrix (pattern, &matrix);
   cairo_pattern_set_filter (pattern, filters[self->filter]);
 
@@ -1842,23 +1843,15 @@ gsk_texture_scale_node_draw (GskRenderNode *node,
   cairo_pattern_destroy (pattern);
   cairo_surface_destroy (surface);
 
-  cairo_rectangle (cr2, 0, 0, node->bounds.size.width, node->bounds.size.height);
+  gsk_cairo_rectangle (cr2, &node->bounds);
   cairo_fill (cr2);
 
   cairo_destroy (cr2);
 
   cairo_save (cr);
 
-  pattern = cairo_pattern_create_for_surface (surface2);
-  cairo_pattern_set_extend (pattern, CAIRO_EXTEND_PAD);
-
-  cairo_matrix_init_identity (&matrix);
-  cairo_matrix_translate (&matrix,
-                          -node->bounds.origin.x,
-                          -node->bounds.origin.y);
-  cairo_pattern_set_matrix (pattern, &matrix);
-  cairo_set_source (cr, pattern);
-  cairo_pattern_destroy (pattern);
+  cairo_set_source_surface (cr, surface2, 0, 0);
+  cairo_pattern_set_extend (cairo_get_source (cr), CAIRO_EXTEND_PAD);
   cairo_surface_destroy (surface2);
 
   gsk_cairo_rectangle (cr, &node->bounds);

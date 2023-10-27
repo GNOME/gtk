@@ -96,6 +96,7 @@ compare_render_tests = [
   'shrink-rounded-border',
   'texture-scale-magnify-10000x',
   'texture-scale-magnify-rotate',
+  'texture-scale-offset',
   'texture-scale-stripes',
   'texture-url',
   'transform-in-transform',
