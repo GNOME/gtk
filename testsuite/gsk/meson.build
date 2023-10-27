@@ -103,6 +103,7 @@ compare_render_tests = [
   'texture-scale-magnify-10000x',
   'texture-scale-magnify-rotate',
   'texture-scale-nearest-vs-linear',
+  'texture-scale-offset',
   'texture-scale-stripes',
   'texture-url',
   'transform-in-transform',
