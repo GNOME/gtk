@@ -18,6 +18,7 @@ gdk_wayland_sources = files([
   'gdkprimary-wayland.c',
   'gdkseat-wayland.c',
   'gdksurface-wayland.c',
+  'gdksubsurface-wayland.c',
   'gdktoplevel-wayland.c',
   'gdkpopup-wayland.c',
   'gdkvulkancontext-wayland.c',

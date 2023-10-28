@@ -46,6 +46,7 @@ struct _GdkWaylandSurface
 
   unsigned int initial_configure_received : 1;
   unsigned int has_uncommitted_ack_configure : 1;
+  unsigned int has_pending_subsurface_commits : 1;
   unsigned int mapped : 1;
   unsigned int awaiting_frame_frozen : 1;
 

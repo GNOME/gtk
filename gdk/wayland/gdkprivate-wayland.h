@@ -222,4 +222,3 @@ void gdk_wayland_surface_update_scale (GdkSurface *surface);
 
 GdkModifierType gdk_wayland_keymap_get_gdk_modifiers (GdkKeymap *keymap,
                                                       guint32    mods);
-
