@@ -33,6 +33,7 @@
 #include "gdksurfaceprivate.h"
 #include "gdktoplevelprivate.h"
 #include "gdkdevice-wayland-private.h"
+#include "gdkdmabuftextureprivate.h"
 
 #include <wayland/xdg-shell-unstable-v6-client-protocol.h>
 #include <wayland/xdg-foreign-unstable-v2-client-protocol.h>
@@ -47,6 +48,7 @@
 
 #include "gdksurface-wayland-private.h"
 #include "gdktoplevel-wayland-private.h"
+
 
 /**
  * GdkWaylandSurface:
@@ -152,13 +154,17 @@ wl_region_from_cairo_region (GdkWaylandDisplay *display,
 }
 
 /* }}} */
-/* {{{ Surface implementation */
+ /* {{{ Surface implementation */
+
+static void gdk_wayland_subsurface_destroy (GdkSubsurface *sub);
 
 static void
 gdk_wayland_surface_init (GdkWaylandSurface *impl)
 {
   impl->scale = GDK_FRACTIONAL_SCALE_INIT_INT (1);
   impl->viewport_dirty = TRUE;
+
+  impl->subsurfaces = g_ptr_array_new ();
 }
 
 void
@@ -552,6 +558,7 @@ gdk_wayland_surface_finalize (GObject *object)
 
   g_clear_pointer (&impl->opaque_region, cairo_region_destroy);
   g_clear_pointer (&impl->input_region, cairo_region_destroy);
+  g_clear_pointer (&impl->subsurfaces, g_ptr_array_unref);
 
   G_OBJECT_CLASS (gdk_wayland_surface_parent_class)->finalize (object);
 }
@@ -1136,6 +1143,17 @@ gdk_wayland_surface_set_input_region (GdkSurface     *surface,
 }
 
 static void
+gdk_wayland_surface_destroy_subsurfaces (GdkWaylandSurface *impl)
+{
+  for (gsize i = 0;  i < impl->subsurfaces->len; i++)
+    {
+      GdkSubsurface *sub = g_ptr_array_index (impl->subsurfaces, i);
+      gdk_subsurface_destroy (sub);
+    }
+  g_ptr_array_set_size (impl->subsurfaces, 0);
+}
+
+static void
 gdk_wayland_surface_destroy (GdkSurface *surface,
                              gboolean    foreign_destroy)
 {
@@ -1151,6 +1169,7 @@ gdk_wayland_surface_destroy (GdkSurface *surface,
   if (GDK_IS_TOPLEVEL (surface))
     gdk_wayland_toplevel_destroy (GDK_TOPLEVEL (surface));
 
+  gdk_wayland_surface_destroy_subsurfaces (GDK_WAYLAND_SURFACE (surface));
   gdk_wayland_surface_destroy_wl_surface (GDK_WAYLAND_SURFACE (surface));
 
   frame_clock = gdk_surface_get_frame_clock (surface);
@@ -1207,6 +1226,8 @@ gdk_wayland_surface_default_hide_surface (GdkWaylandSurface *surface)
 {
 }
 
+static GdkSubsurface *gdk_wayland_surface_create_subsurface  (GdkSurface          *surface);
+
 static void
 gdk_wayland_surface_class_init (GdkWaylandSurfaceClass *klass)
 {
@@ -1230,6 +1251,7 @@ gdk_wayland_surface_class_init (GdkWaylandSurfaceClass *klass)
   surface_class->get_scale = gdk_wayland_surface_get_scale;
   surface_class->set_opaque_region = gdk_wayland_surface_set_opaque_region;
   surface_class->request_layout = gdk_wayland_surface_request_layout;
+  surface_class->create_subsurface = gdk_wayland_surface_create_subsurface;
 
   klass->handle_configure = gdk_wayland_surface_default_handle_configure;
   klass->handle_frame = gdk_wayland_surface_default_handle_frame;
@@ -1305,4 +1327,187 @@ gdk_wayland_surface_get_wl_surface (GdkSurface *surface)
 }
 
 /* }}}} */
+/* {{{ Subsurface */
+
+typedef struct {
+  GdkSubsurface subsurface;
+
+  GdkWaylandSurface *parent;
+
+  struct wl_surface *wl_surface;
+  struct wl_subsurface *wl_subsurface;
+  struct wp_viewport *wp_viewport;
+} GdkWaylandSubsurface;
+
+static void
+shm_buffer_release (void             *data,
+                    struct wl_buffer *wl_buffer)
+{
+  cairo_surface_t *surface = data;
+
+  /* Note: the wl_buffer is destroyed as cairo user data */
+  cairo_surface_destroy (surface);
+}
+
+static const struct wl_buffer_listener shm_buffer_listener = {
+  shm_buffer_release,
+};
+
+static struct wl_buffer *
+get_shm_wl_buffer (GdkWaylandSubsurface *self,
+                   GdkTexture           *texture)
+{
+  GdkWaylandDisplay *display = GDK_WAYLAND_DISPLAY (gdk_surface_get_display (GDK_SURFACE (self->parent)));
+  int width, height;
+  cairo_surface_t *surface;
+  GdkTextureDownloader *downloader;
+  struct wl_buffer *wl_buffer;
+
+  width = gdk_texture_get_width (texture);
+  height = gdk_texture_get_height (texture);
+  surface = gdk_wayland_display_create_shm_surface (display, width, height, &GDK_FRACTIONAL_SCALE_INIT_INT (1));
+
+  downloader = gdk_texture_downloader_new (texture);
+
+  gdk_texture_downloader_download_into (downloader,
+                                        cairo_image_surface_get_data (surface),
+                                        cairo_image_surface_get_stride (surface));
+
+  gdk_texture_downloader_free (downloader);
+
+  wl_buffer = _gdk_wayland_shm_surface_get_wl_buffer (surface);
+  wl_buffer_add_listener (wl_buffer, &shm_buffer_listener, surface);
+
+  return wl_buffer;
+}
+
+static struct wl_buffer *
+get_wl_buffer (GdkWaylandSubsurface *self,
+               GdkTexture           *texture)
+{
+  return get_shm_wl_buffer (self, texture);
+}
+
+static void
+gdk_wayland_subsurface_attach (GdkSubsurface         *sub,
+                               GdkTexture            *texture,
+                               const graphene_rect_t *rect)
+{
+  GdkWaylandSubsurface *self = (GdkWaylandSubsurface *)sub;
+
+  GDK_DEBUG (DMABUF,
+             "Attaching texture %p at %f %f %f %f",
+             texture,
+             rect->origin.x, rect->origin.y, rect->size.width, rect->size.height);
+
+  if (rect)
+    {
+      wl_subsurface_set_position (self->wl_subsurface,
+                                 floorf (rect->origin.x),
+                                 floorf (rect->origin.y));
+      wp_viewport_set_destination (self->wp_viewport,
+                                   ceilf (rect->origin.x + rect->size.width) - floorf (rect->origin.x),
+                                   ceilf (rect->origin.y + rect->size.height) - floorf (rect->origin.y));
+    }
+
+  if (texture)
+    {
+      wl_surface_attach (self->wl_surface, get_wl_buffer (self, texture), 0, 0);
+      wl_surface_damage_buffer (self->wl_surface,
+                                0, 0,
+                                gdk_texture_get_width (texture),
+                                gdk_texture_get_height (texture));
+    }
+  else
+    {
+      wl_surface_attach (self->wl_surface, NULL, 0, 0);
+    }
+
+  wl_surface_commit (self->wl_surface);
+}
+
+static void
+gdk_wayland_subsurface_destroy (GdkSubsurface *sub)
+{
+  GdkWaylandSubsurface *self = (GdkWaylandSubsurface *)sub;
+
+  g_clear_pointer (&self->wp_viewport, wp_viewport_destroy);
+  g_clear_pointer (&self->wl_subsurface, wl_subsurface_destroy);
+  g_clear_pointer (&self->wl_surface, wl_surface_destroy);
+
+  g_ptr_array_remove (self->parent->subsurfaces, self);
+
+  g_free (self);
+}
+
+static void
+gdk_wayland_subsurface_place_above (GdkSubsurface *sub,
+                                    GdkSubsurface *sibling)
+{
+  GdkWaylandSubsurface *self = (GdkWaylandSubsurface *)sub;
+  GdkWaylandSubsurface *sib = (GdkWaylandSubsurface *)sibling;
+
+  g_return_if_fail (self->parent == sib->parent);
+
+  wl_subsurface_place_above (self->wl_subsurface,
+                             sib ? sib->wl_surface : self->parent->display_server.wl_surface);
+}
+
+static void
+gdk_wayland_subsurface_place_below (GdkSubsurface *sub,
+                                    GdkSubsurface *sibling)
+{
+  GdkWaylandSubsurface *self = (GdkWaylandSubsurface *)sub;
+  GdkWaylandSubsurface *sib = (GdkWaylandSubsurface *)sibling;
+
+  g_return_if_fail (self->parent == sib->parent);
+
+  wl_subsurface_place_below (self->wl_subsurface,
+                             sib ? sib->wl_surface : self->parent->display_server.wl_surface);
+}
+
+
+static const GdkSubsurfaceClass subsurface_class = {
+  gdk_wayland_subsurface_destroy,
+  gdk_wayland_subsurface_attach,
+  gdk_wayland_subsurface_place_above,
+  gdk_wayland_subsurface_place_below,
+};
+
+static GdkSubsurface *
+gdk_wayland_surface_create_subsurface (GdkSurface *surface)
+{
+  GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
+  GdkWaylandDisplay *display = GDK_WAYLAND_DISPLAY (gdk_surface_get_display (surface));
+  GdkWaylandSubsurface *sub;
+  struct wl_region *wl_region;
+
+  if (display->viewporter == NULL)
+    {
+      GDK_DEBUG (DMABUF, "Can't use subsurfaces without viewporter");
+      return NULL;
+    }
+
+  sub = g_new0 (GdkWaylandSubsurface, 1);
+
+  sub->subsurface.class = &subsurface_class;
+
+  sub->parent = impl;
+  g_ptr_array_add (sub->parent->subsurfaces, sub);
+
+  sub->wl_surface = wl_compositor_create_surface (display->compositor);
+  wl_region = wl_compositor_create_region (display->compositor);
+  wl_surface_set_input_region (sub->wl_surface, wl_region);
+  wl_region_destroy (wl_region);
+  sub->wl_subsurface = wl_subcompositor_get_subsurface (display->subcompositor,
+                                                        sub->wl_surface,
+                                                        impl->display_server.wl_surface);
+  sub->wp_viewport = wp_viewporter_get_viewport (display->viewporter, sub->wl_surface);
+
+  GDK_DEBUG (DMABUF, "Subsurface created");
+
+  return (GdkSubsurface *) sub;
+}
+
+/* }}} */
 /* vim:set foldmethod=marker expandtab: */

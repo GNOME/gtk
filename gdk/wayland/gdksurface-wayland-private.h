@@ -86,6 +86,8 @@ struct _GdkWaylandSurface
   uint32_t last_configure_serial;
 
   int state_freeze_count;
+
+  GPtrArray *subsurfaces;
 };
 
 typedef struct _GdkWaylandSurfaceClass GdkWaylandSurfaceClass;
