@@ -149,3 +149,11 @@ foreach t: gtk_tests
     dependencies: [libgtk_dep, libm],
   )
 endforeach
+
+executable('testsubsurface',
+  sources: '@0@.c'.format('testsubsurface'),
+  c_args: common_cflags + ['-DGTK_COMPILATION'],
+  dependencies: libgtk_static_dep,
+  install: false,
+)
+
