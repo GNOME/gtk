@@ -23,8 +23,13 @@
 #include "gdkenumtypes.h"
 #include "gdksurface.h"
 #include "gdktoplevel.h"
+#include <graphene.h>
 
 G_BEGIN_DECLS
+
+typedef struct _GdkSubsurface GdkSubsurface;
+
+typedef struct _GskRenderNode GskRenderNode;
 
 struct _GdkSurface
 {
@@ -146,6 +151,9 @@ struct _GdkSurfaceClass
                                            cairo_region_t *region);
   void         (* request_layout)         (GdkSurface     *surface);
   gboolean     (* compute_size)           (GdkSurface     *surface);
+
+  GdkSubsurface *
+               (* create_subsurface)      (GdkSurface          *surface);
 };
 
 #define GDK_SURFACE_DESTROYED(d) (((GdkSurface *)(d))->destroyed)
@@ -334,7 +342,34 @@ void           gdk_surface_request_motion (GdkSurface *surface);
 
 gboolean       gdk_surface_supports_edge_constraints    (GdkSurface *surface);
 
+GdkSubsurface * gdk_surface_create_subsurface  (GdkSurface          *surface);
 
+typedef struct _GdkSubsurfaceClass GdkSubsurfaceClass;
+struct _GdkSubsurfaceClass
+{
+  void            (* destroy)     (GdkSubsurface         *subsurface);
+  void            (* attach)      (GdkSubsurface         *subsurface,
+                                   GdkTexture            *texture,
+                                   const graphene_rect_t *bounds);
+  void            (* place_above) (GdkSubsurface         *subsurface,
+                                   GdkSubsurface         *sibling);
+  void            (* place_below) (GdkSubsurface         *subsurface,
+                                   GdkSubsurface         *sibling);
+};
+
+struct _GdkSubsurface
+{
+  const GdkSubsurfaceClass *class;
+};
+
+void            gdk_subsurface_destroy     (GdkSubsurface         *subsurface);
+void            gdk_subsurface_attach      (GdkSubsurface         *subsurface,
+                                            GdkTexture            *texture,
+                                            const graphene_rect_t *bounds);
+void            gdk_subsurface_place_above (GdkSubsurface         *subsurface,
+                                            GdkSubsurface         *sibling);
+void            gdk_subsurface_place_below (GdkSubsurface         *subsurface,
+                                            GdkSubsurface         *sibling);
 
 G_END_DECLS
 

@@ -493,6 +493,12 @@ gdk_surface_real_get_scale (GdkSurface *surface)
   return 1.0;
 }
 
+static GdkSubsurface *
+gdk_surface_real_create_subsurface (GdkSurface *surface)
+{
+  return NULL;
+}
+
 static void
 gdk_surface_constructed (GObject *object)
 {
@@ -515,6 +521,7 @@ gdk_surface_class_init (GdkSurfaceClass *klass)
 
   klass->beep = gdk_surface_real_beep;
   klass->get_scale = gdk_surface_real_get_scale;
+  klass->create_subsurface = gdk_surface_real_create_subsurface;
 
   /**
    * GdkSurface:cursor: (attributes org.gtk.Property.get=gdk_surface_get_cursor org.gtk.Property.set=gdk_surface_set_cursor)
@@ -3054,3 +3061,40 @@ gdk_surface_leave_monitor (GdkSurface *surface,
 {
   g_signal_emit (surface, signals[LEAVE_MONITOR], 0, monitor);
 }
+
+GdkSubsurface *
+gdk_surface_create_subsurface (GdkSurface *surface)
+{
+  return GDK_SURFACE_GET_CLASS (surface)->create_subsurface (surface);
+}
+
+void
+gdk_subsurface_destroy (GdkSubsurface *subsurface)
+{
+  subsurface->class->destroy (subsurface);
+}
+
+void
+gdk_subsurface_attach (GdkSubsurface         *subsurface,
+                       GdkTexture            *texture,
+                       const graphene_rect_t *bounds)
+{
+  subsurface->class->attach (subsurface, texture, bounds);
+}
+
+/* If sibling is NULL, place the subsurface above its parent */
+void
+gdk_subsurface_place_above (GdkSubsurface *subsurface,
+                            GdkSubsurface *sibling)
+{
+  subsurface->class->place_above (subsurface, sibling);
+}
+
+/* If sibling is NULL, place the subsurface below its parent */
+void
+gdk_subsurface_place_below (GdkSubsurface *subsurface,
+                            GdkSubsurface *sibling)
+{
+  subsurface->class->place_below (subsurface, sibling);
+}
+
