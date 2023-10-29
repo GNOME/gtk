@@ -20,19 +20,19 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-properties\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-08-05 15:50+0000\n"
-"PO-Revision-Date: 2021-02-21 21:04+0300\n"
-"Last-Translator: Emin Tufan Çetin <etcetin@gmail.com>\n"
+"POT-Creation-Date: 2023-10-21 09:17+0000\n"
+"PO-Revision-Date: 2023-10-25 00:33+0300\n"
+"Last-Translator: Sabri Ünal <libreajans@gmail.com>\n"
 "Language-Team: Türkçe <takim@gnome.org.tr>\n"
 "Language: tr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Poedit 2.4.2\n"
+"X-Generator: Poedit 3.4\n"
 
 #: gdk/gdkapplaunchcontext.c:127 gdk/gdkcursor.c:139 gdk/gdkdevicemanager.c:185
-#: gdk/gdkglcontext.c:318 gdk/gdkseat.c:202 gdk/gdkseat.c:203
+#: gdk/gdkglcontext.c:319 gdk/gdkseat.c:202 gdk/gdkseat.c:203
 msgid "Display"
 msgstr "Göster"
 
@@ -148,23 +148,23 @@ msgstr "Öntanımlı Görüntü"
 msgid "The default display for GDK"
 msgstr "GDK için öntanımlı görüntü"
 
-#: gdk/gdkglcontext.c:319
+#: gdk/gdkglcontext.c:320
 msgid "The GDK display used to create the GL context"
 msgstr "GL bağlamını oluşturmak için kullanılan GDK ekranı"
 
-#: gdk/gdkglcontext.c:334 gtk/gtkwidget.c:1351
+#: gdk/gdkglcontext.c:335 gtk/gtkwidget.c:1351
 msgid "Window"
 msgstr "Pencere"
 
-#: gdk/gdkglcontext.c:335
+#: gdk/gdkglcontext.c:336
 msgid "The GDK window bound to the GL context"
 msgstr "GL bağlamına bağlı GDK penceresi"
 
-#: gdk/gdkglcontext.c:350
+#: gdk/gdkglcontext.c:351
 msgid "Shared context"
 msgstr "Paylaşılan bağlam"
 
-#: gdk/gdkglcontext.c:351
+#: gdk/gdkglcontext.c:352
 msgid "The GL context this context shares data with"
 msgstr "Bu bağlamın kendisiyle veri paylaştığı GL bağlamı"
 
@@ -609,7 +609,7 @@ msgstr "Bu yazı tipini belirten dizgi"
 
 #: gtk/deprecated/gtkfontsel.c:247 gtk/gtkfontchooser.c:90
 msgid "Preview text"
-msgstr "Önizleme metni"
+msgstr "Ön izleme metni"
 
 #: gtk/deprecated/gtkfontsel.c:248 gtk/gtkfontchooser.c:91
 msgid "The text to display in order to demonstrate the selected font"
@@ -3880,29 +3880,29 @@ msgstr "Seçilen dosyaların yerel dosya olarak sınırlanması: URL'ler"
 
 #: gtk/gtkfilechooser.c:394
 msgid "Preview widget"
-msgstr "Önizleme parçası"
+msgstr "Ön izleme parçası"
 
 #: gtk/gtkfilechooser.c:395
 msgid "Application supplied widget for custom previews."
-msgstr "Özel önizlemeler için uygulama tarafından sağlanan parça."
+msgstr "Özel ön izlemeler için uygulama tarafından sağlanan parça."
 
 #: gtk/gtkfilechooser.c:400
 msgid "Preview Widget Active"
-msgstr "Önizleme Parçası Aktif"
+msgstr "Ön İzleme Parçası Aktif"
 
 #: gtk/gtkfilechooser.c:401
 msgid ""
 "Whether the application supplied widget for custom previews should be shown."
 msgstr ""
-"Özel önizlemeler için uygulama tarafından sağlanan parçanın gösterilmesi."
+"Özel ön izlemeler için uygulama tarafından sağlanan parçanın gösterilmesi."
 
 #: gtk/gtkfilechooser.c:406
 msgid "Use Preview Label"
-msgstr "Önizleme Etiketi Kullan"
+msgstr "Ön İzleme Etiketi Kullan"
 
 #: gtk/gtkfilechooser.c:407
 msgid "Whether to display a stock label with the name of the previewed file."
-msgstr "Önizlenen dosyanın adı ile depo etiketinin gösterilmesi."
+msgstr "Ön izlenen dosyanın adı ile depo etiketinin gösterilmesi."
 
 #: gtk/gtkfilechooser.c:412
 msgid "Extra widget"
@@ -4096,11 +4096,11 @@ msgstr "Yazı tipi tanımlaması"
 
 #: gtk/gtkfontchooser.c:103
 msgid "Show preview text entry"
-msgstr "Metin girdisi önizleme göster"
+msgstr "Metin girdisi ön izleme göster"
 
 #: gtk/gtkfontchooser.c:104
 msgid "Whether the preview text entry is shown or not"
-msgstr "Metin girdisi önizleme gösterilip gösterilmemesi"
+msgstr "Metin girdisi ön izleme gösterilip gösterilmemesi"
 
 #: gtk/gtkfontchooser.c:118
 msgid "Selection level"
@@ -7110,11 +7110,11 @@ msgstr "Öntanımlı olarak kullanılacak GtkPrintBackend arka uçlarının list
 
 #: gtk/gtksettings.c:1031
 msgid "Default command to run when displaying a print preview"
-msgstr "Bir yazdırma önizlemesi gösterilirken çalıştırılacak öntanımlı komut"
+msgstr "Yazdırma ön izlemesi gösterilirken çalıştırılacak öntanımlı komut"
 
 #: gtk/gtksettings.c:1032
 msgid "Command to run when displaying a print preview"
-msgstr "Bir yazdırma önizlemesi gösterilirken çalıştırılacak komut"
+msgstr "Yazdırma ön izlemesi gösterilirken çalıştırılacak komut"
 
 #: gtk/gtksettings.c:1051
 msgid "Enable Mnemonics"
