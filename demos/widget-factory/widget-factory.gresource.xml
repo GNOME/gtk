@@ -25,14 +25,12 @@
     <file>icons/16x16/actions/format-justify-fill-symbolic.symbolic.png</file>
     <file>icons/16x16/actions/format-justify-left-symbolic.symbolic.png</file>
     <file>icons/16x16/actions/format-justify-right-symbolic.symbolic.png</file>
-    <file>icons/16x16/actions/insert-image.png</file>
     <file>icons/16x16/actions/insert-link-symbolic.symbolic.png</file>
     <file>icons/16x16/actions/send-to-symbolic.symbolic.png</file>
     <file>icons/16x16/actions/star-new-symbolic.symbolic.png</file>
     <file>icons/16x16/actions/view-continuous-symbolic.symbolic.png</file>
     <file>icons/16x16/actions/view-dual-symbolic.symbolic.png</file>
     <file>icons/16x16/actions/view-fullscreen-symbolic.symbolic.png</file>
-    <file>icons/16x16/actions/view-grid-symbolic.symbolic.png</file>
     <file>icons/16x16/actions/view-paged-symbolic.symbolic.png</file>
     <file>icons/16x16/actions/zoom-in-symbolic.symbolic.png</file>
     <file>icons/16x16/actions/zoom-in.png</file>
@@ -88,7 +86,6 @@
     <file>icons/scalable/actions/view-dual-symbolic.svg</file>
     <file>icons/scalable/actions/view-paged-symbolic.svg</file>
     <file>icons/scalable/actions/view-fullscreen-symbolic.svg</file>
-    <file>icons/scalable/actions/view-grid-symbolic.svg</file>
     <file>icons/scalable/actions/zoom-in-symbolic.svg</file>
     <file>icons/scalable/actions/zoom-original-symbolic.svg</file>
     <file>icons/scalable/actions/zoom-out-symbolic.svg</file>
