@@ -2,6 +2,94 @@
 #include "gtk/gtkwidgetprivate.h"
 #include "gdk/gdksurfaceprivate.h"
 
+#include <fcntl.h>
+#include <sys/mman.h>
+#include <sys/ioctl.h>
+#include <unistd.h>
+#include <linux/dma-heap.h>
+#include <drm_fourcc.h>
+
+static int dma_heap_fd = -1;
+
+static gboolean
+initialize_dma_heap (void)
+{
+  dma_heap_fd = open ("/dev/dma_heap/system", O_RDONLY | O_CLOEXEC);
+  return dma_heap_fd != -1;
+}
+
+static int
+allocate_dma_buf (gsize size)
+{
+  struct dma_heap_allocation_data heap_data;
+  int ret;
+
+  heap_data.len = size;
+  heap_data.fd = 0;
+  heap_data.fd_flags = O_RDWR | O_CLOEXEC;
+  heap_data.heap_flags = 0;
+
+  ret = ioctl (dma_heap_fd, DMA_HEAP_IOCTL_ALLOC, &heap_data);
+  if (ret)
+    g_error ("dma-buf allocation failed");
+
+  return heap_data.fd;
+}
+
+static void
+free_dmabuf (gpointer data)
+{
+  close (GPOINTER_TO_INT (data));
+}
+
+static GdkTexture *
+make_dmabuf_color_texture (int width,
+                           int height,
+                           GdkRGBA *color)
+{
+  int fd;
+  guchar *buf;
+  GdkDmabufTextureBuilder *builder;
+  GdkTexture *texture;
+  gsize stride, size;
+  GError *error = NULL;
+
+  stride = width * 4;
+  size = height * stride;
+  fd = allocate_dma_buf (size);
+
+  buf = mmap (NULL, size, PROT_WRITE, MAP_SHARED, fd, 0);
+
+  for (gsize i = 0; i < width * height * 4; i += 4)
+    {
+      buf[i]     = 255 * color->blue;
+      buf[i + 1] = 255 * color->green;
+      buf[i + 2] = 255 * color->red;
+      buf[i + 3] = 255 * color->alpha;
+    }
+
+  munmap (buf, size);
+
+  builder = gdk_dmabuf_texture_builder_new ();
+  gdk_dmabuf_texture_builder_set_display (builder, gdk_display_get_default ());
+  gdk_dmabuf_texture_builder_set_width (builder, width);
+  gdk_dmabuf_texture_builder_set_height (builder, height);
+  gdk_dmabuf_texture_builder_set_fourcc (builder, DRM_FORMAT_ARGB8888);
+  gdk_dmabuf_texture_builder_set_modifier (builder, DRM_FORMAT_MOD_LINEAR);
+  gdk_dmabuf_texture_builder_set_n_planes (builder, 1);
+  gdk_dmabuf_texture_builder_set_fd (builder, 0, fd);
+  gdk_dmabuf_texture_builder_set_offset (builder, 0, 0);
+  gdk_dmabuf_texture_builder_set_stride (builder, 0, stride);
+
+  texture = gdk_dmabuf_texture_builder_build (builder, free_dmabuf, GINT_TO_POINTER (fd), &error);
+  if (texture == NULL)
+    g_error ("%s", error->message);
+
+  g_object_unref (builder);
+
+  return texture;
+}
+
 static GdkTexture *
 make_shm_color_texture (int width,
                         int height,
@@ -40,7 +128,10 @@ make_color_texture (int width,
                     int height,
                     GdkRGBA *color)
 {
-  return make_shm_color_texture (width, height, color);
+  if (dma_heap_fd != -1)
+    return make_dmabuf_color_texture (width, height, color);
+  else
+    return make_shm_color_texture (width, height, color);
 }
 
 static GdkSubsurface *
@@ -143,6 +234,11 @@ main (int argc, char *argv[])
   gtk_window_set_resizable (GTK_WINDOW (window), TRUE);
 
   gtk_widget_realize (window);
+
+  if (initialize_dma_heap ())
+    g_print ("Using dambufs\n");
+  else
+    g_print ("Failed to initialize dma-heap, using shm\n");
 
   red = add_subsurface (window, &(GdkRGBA) { 1, 0, 0, 1 }, &GRAPHENE_RECT_INIT (200, 100, 50, 50));
   blue = add_subsurface (window, &(GdkRGBA) { 0, 0, 1, 1 }, &GRAPHENE_RECT_INIT (180, 120, 100, 20));
