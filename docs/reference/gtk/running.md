@@ -206,6 +206,9 @@ are only available when GTK has been configured with `-Ddebug=true`.
 `dmabuf`
 : Information about dmabuf handling (Linux-only)
 
+`offload`
+: Information about subsurfaces and graphics offload (Wayland-only)
+
 A number of options affect behavior instead of logging:
 
 `nograbs`
