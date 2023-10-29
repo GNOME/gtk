@@ -115,7 +115,6 @@ typedef struct {
   guint has_unpack_subimage : 1;
   guint has_debug_output : 1;
   guint has_bgra : 1;
-  guint has_image_storage : 1;
   guint extensions_checked : 1;
   guint debug_enabled : 1;
   guint forward_compatible : 1;
@@ -1564,8 +1563,6 @@ gdk_gl_context_check_extensions (GdkGLContext *context)
                    epoxy_has_gl_extension ("GL_ARB_sync") ||
                    epoxy_has_gl_extension ("GL_APPLE_sync");
 
-  priv->has_image_storage = epoxy_has_gl_extension ("GL_EXT_EGL_image_storage");
-
 #ifdef G_ENABLE_DEBUG
   {
     int max_texture_size;
@@ -1577,10 +1574,9 @@ gdk_gl_context_check_extensions (GdkGLContext *context)
                        "* Extensions checked:\n"
                        " - GL_KHR_debug: %s\n"
                        " - GL_EXT_unpack_subimage: %s\n"
-                       " - GL_EXT_texture_format_BGRA8888: %s\n"
-                       " - GL_EXT_EGL_image_storage: %s\n"
                        " - half float: %s\n"
-                       " - sync: %s",
+                       " - sync: %s\n"
+                       " - bgra: %s",
                        gdk_gl_context_get_use_es (context) ? "OpenGL ES" : "OpenGL",
                        gdk_gl_version_get_major (&priv->gl_version), gdk_gl_version_get_minor (&priv->gl_version),
                        priv->is_legacy ? "legacy" : "core",
@@ -1588,10 +1584,9 @@ gdk_gl_context_check_extensions (GdkGLContext *context)
                        max_texture_size,
                        priv->has_khr_debug ? "yes" : "no",
                        priv->has_unpack_subimage ? "yes" : "no",
-                       priv->has_bgra ? "yes" : "no",
-                       priv->has_image_storage ? "yes" : "no",
                        priv->has_half_float ? "yes" : "no",
-                       priv->has_sync ? "yes" : "no");
+                       priv->has_sync ? "yes" : "no",
+                       priv->has_bgra ? "yes" : "no");
   }
 #endif
 
@@ -1905,14 +1900,6 @@ gdk_gl_context_has_vertex_arrays (GdkGLContext *self)
     default:
       g_return_val_if_reached (FALSE);
     }
-}
-
-gboolean
-gdk_gl_context_has_image_storage (GdkGLContext *self)
-{
-  GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (self);
-
-  return priv->has_image_storage;
 }
 
 /* This is currently private! */
