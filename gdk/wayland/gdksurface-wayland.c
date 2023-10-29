@@ -37,6 +37,7 @@
 
 #include <wayland/xdg-shell-unstable-v6-client-protocol.h>
 #include <wayland/xdg-foreign-unstable-v2-client-protocol.h>
+#include "linux-dmabuf-unstable-v1-client-protocol.h"
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -1340,6 +1341,53 @@ typedef struct {
 } GdkWaylandSubsurface;
 
 static void
+dmabuf_buffer_release (void             *data,
+                       struct wl_buffer *wl_buffer)
+{
+  GdkTexture *texture = data;
+
+  g_object_unref (texture);
+  wl_buffer_destroy (wl_buffer);
+}
+
+static const struct wl_buffer_listener dmabuf_buffer_listener = {
+  dmabuf_buffer_release,
+};
+
+static struct wl_buffer *
+get_dmabuf_wl_buffer (GdkWaylandSubsurface *self,
+                      GdkTexture           *texture)
+{
+  GdkWaylandDisplay *display = GDK_WAYLAND_DISPLAY (gdk_surface_get_display (GDK_SURFACE (self->parent)));
+  const GdkDmabuf *dmabuf;
+  struct zwp_linux_buffer_params_v1 *params;
+  struct wl_buffer *wl_buffer;
+
+  dmabuf = gdk_dmabuf_texture_get_dmabuf (GDK_DMABUF_TEXTURE (texture));
+
+  params = zwp_linux_dmabuf_v1_create_params (display->linux_dmabuf);
+
+  for (gsize i = 0; i < dmabuf->n_planes; i++)
+    zwp_linux_buffer_params_v1_add (params,
+                                    dmabuf->planes[i].fd,
+                                    i,
+                                    dmabuf->planes[i].offset,
+                                    dmabuf->planes[i].stride,
+                                    dmabuf->modifier >> 32,
+                                    dmabuf->modifier & 0xffffffff);
+
+  wl_buffer = zwp_linux_buffer_params_v1_create_immed (params,
+                                                       gdk_texture_get_width (texture),
+                                                       gdk_texture_get_height (texture),
+                                                       dmabuf->fourcc,
+                                                       0);
+
+  wl_buffer_add_listener (wl_buffer, &dmabuf_buffer_listener, g_object_ref (texture));
+
+  return wl_buffer;
+}
+
+static void
 shm_buffer_release (void             *data,
                     struct wl_buffer *wl_buffer)
 {
@@ -1385,7 +1433,10 @@ static struct wl_buffer *
 get_wl_buffer (GdkWaylandSubsurface *self,
                GdkTexture           *texture)
 {
-  return get_shm_wl_buffer (self, texture);
+  if (GDK_IS_DMABUF_TEXTURE (texture))
+    return get_dmabuf_wl_buffer (self, texture);
+  else
+    return get_shm_wl_buffer (self, texture);
 }
 
 static void
@@ -1447,7 +1498,7 @@ gdk_wayland_subsurface_place_above (GdkSubsurface *sub,
   GdkWaylandSubsurface *self = (GdkWaylandSubsurface *)sub;
   GdkWaylandSubsurface *sib = (GdkWaylandSubsurface *)sibling;
 
-  g_return_if_fail (self->parent == sib->parent);
+  g_return_if_fail (sib == NULL || self->parent == sib->parent);
 
   wl_subsurface_place_above (self->wl_subsurface,
                              sib ? sib->wl_surface : self->parent->display_server.wl_surface);
@@ -1460,12 +1511,11 @@ gdk_wayland_subsurface_place_below (GdkSubsurface *sub,
   GdkWaylandSubsurface *self = (GdkWaylandSubsurface *)sub;
   GdkWaylandSubsurface *sib = (GdkWaylandSubsurface *)sibling;
 
-  g_return_if_fail (self->parent == sib->parent);
+  g_return_if_fail (sib == NULL || self->parent == sib->parent);
 
   wl_subsurface_place_below (self->wl_subsurface,
                              sib ? sib->wl_surface : self->parent->display_server.wl_surface);
 }
-
 
 static const GdkSubsurfaceClass subsurface_class = {
   gdk_wayland_subsurface_destroy,
