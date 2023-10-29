@@ -36,6 +36,7 @@
 #include "gdk/gdkmemoryformatprivate.h"
 #include "gdk/gdkprivate.h"
 #include "gdk/gdkrectangleprivate.h"
+#include "gdk/gdksubsurfaceprivate.h"
 
 #include <cairo.h>
 #ifdef CAIRO_HAS_SVG_SURFACE
@@ -6660,6 +6661,154 @@ gsk_gl_shader_node_get_args (const GskRenderNode *node)
 }
 
 /* }}} */
+/* {{{ GSK_SUBSURFACE_NODE */
+
+/**
+ * GskSubsurfaceNode:
+ *
+ * A render node that potentially diverts a part of the scene graph to a subsurface.
+ */
+struct _GskSubsurfaceNode
+{
+  GskRenderNode render_node;
+
+  GskRenderNode *child;
+  GdkSubsurface *subsurface;
+};
+
+static void
+gsk_subsurface_node_finalize (GskRenderNode *node)
+{
+  GskSubsurfaceNode *self = (GskSubsurfaceNode *) node;
+  GskRenderNodeClass *parent_class = g_type_class_peek (g_type_parent (GSK_TYPE_SUBSURFACE_NODE));
+
+  gsk_render_node_unref (self->child);
+  g_clear_object (&self->subsurface);
+
+  parent_class->finalize (node);
+}
+
+static void
+gsk_subsurface_node_draw (GskRenderNode *node,
+                          cairo_t       *cr)
+{
+  GskSubsurfaceNode *self = (GskSubsurfaceNode *) node;
+
+  gsk_render_node_draw (self->child, cr);
+}
+
+static gboolean
+gsk_subsurface_node_can_diff (const GskRenderNode *node1,
+                              const GskRenderNode *node2)
+{
+  return TRUE;
+}
+
+static void
+gsk_subsurface_node_diff (GskRenderNode  *node1,
+                          GskRenderNode  *node2,
+                          cairo_region_t *region)
+{
+  GskSubsurfaceNode *self1 = (GskSubsurfaceNode *) node1;
+  GskSubsurfaceNode *self2 = (GskSubsurfaceNode *) node2;
+
+  if (gdk_subsurface_get_texture (self1->subsurface) != NULL &&
+      self1->subsurface == self2->subsurface &&
+      graphene_rect_equal (&node1->bounds, &node2->bounds))
+    return;
+
+  return gsk_render_node_diff (self1->child, self2->child, region);
+}
+
+static void
+gsk_subsurface_node_class_init (gpointer g_class,
+                                gpointer class_data)
+{
+  GskRenderNodeClass *node_class = g_class;
+
+  node_class->node_type = GSK_SUBSURFACE_NODE;
+
+  node_class->finalize = gsk_subsurface_node_finalize;
+  node_class->draw = gsk_subsurface_node_draw;
+  node_class->can_diff = gsk_subsurface_node_can_diff;
+  node_class->diff = gsk_subsurface_node_diff;
+}
+
+/**
+ * gsk_subsurface_node_new:
+ * @child: The child to divert to a subsurface
+ * @subsurface: (nullable): the subsurface to use
+ *
+ * Creates a `GskRenderNode` that will possibly divert the child
+ * node to a subsurface.
+ *
+ * Returns: (transfer full) (type GskSubsurfaceNode): A new `GskRenderNode`
+ *
+ * Since: 4.14
+ */
+GskRenderNode *
+gsk_subsurface_node_new (GskRenderNode *child,
+                         gpointer       subsurface)
+{
+  GskSubsurfaceNode *self;
+  GskRenderNode *node;
+
+  g_return_val_if_fail (GSK_IS_RENDER_NODE (child), NULL);
+
+  self = gsk_render_node_alloc (GSK_SUBSURFACE_NODE);
+  node = (GskRenderNode *) self;
+  node->offscreen_for_opacity = child->offscreen_for_opacity;
+
+  self->child = gsk_render_node_ref (child);
+  if (subsurface)
+    self->subsurface = g_object_ref (subsurface);
+  else
+    self->subsurface = NULL;
+
+  graphene_rect_init_from_rect (&node->bounds, &child->bounds);
+
+  node->preferred_depth = gsk_render_node_get_preferred_depth (child);
+
+  return node;
+}
+
+/**
+ * gsk_subsurface_node_get_child:
+ * @node: (type GskSubsurfaceNode): a debug `GskRenderNode`
+ *
+ * Gets the child node that is getting drawn by the given @node.
+ *
+ * Returns: (transfer none): the child `GskRenderNode`
+ *
+ * Since: 4.14
+ */
+GskRenderNode *
+gsk_subsurface_node_get_child (const GskRenderNode *node)
+{
+  const GskSubsurfaceNode *self = (const GskSubsurfaceNode *) node;
+
+  return self->child;
+}
+
+/**
+ * gsk_subsurface_node_get_subsurface:
+ * @node: (type GskDebugNode): a debug `GskRenderNode`
+ *
+ * Gets the subsurface that was set on this node
+ *
+ * Returns: (transfer none) (nullable): the subsurface
+ *
+ * Since: 4.14
+ */
+gpointer
+gsk_subsurface_node_get_subsurface (const GskRenderNode *node)
+{
+  const GskSubsurfaceNode *self = (const GskSubsurfaceNode *) node;
+
+  return self->subsurface;
+}
+
+/* }}} */
 
 GType gsk_render_node_types[GSK_RENDER_NODE_TYPE_N_TYPES];
 
@@ -6704,6 +6853,7 @@ GSK_DEFINE_RENDER_NODE_TYPE (gsk_blur_node, GSK_BLUR_NODE)
 GSK_DEFINE_RENDER_NODE_TYPE (gsk_mask_node, GSK_MASK_NODE)
 GSK_DEFINE_RENDER_NODE_TYPE (gsk_gl_shader_node, GSK_GL_SHADER_NODE)
 GSK_DEFINE_RENDER_NODE_TYPE (gsk_debug_node, GSK_DEBUG_NODE)
+GSK_DEFINE_RENDER_NODE_TYPE (gsk_subsurface_node, GSK_SUBSURFACE_NODE)
 
 static void
 gsk_render_node_init_types_once (void)
@@ -6854,6 +7004,11 @@ gsk_render_node_init_types_once (void)
                                                     sizeof (GskStrokeNode),
                                                     gsk_stroke_node_class_init);
   gsk_render_node_types[GSK_STROKE_NODE] = node_type;
+
+  node_type = gsk_render_node_type_register_static (I_("GskSubsurfaceNode"),
+                                                    sizeof (GskSubsurfaceNode),
+                                                    gsk_subsurface_node_class_init);
+  gsk_render_node_types[GSK_SUBSURFACE_NODE] = node_type;
 }
 
 static void

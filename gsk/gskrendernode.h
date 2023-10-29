@@ -166,6 +166,7 @@ GskRenderNode *         gsk_render_node_deserialize             (GBytes         
 #define GSK_TYPE_BLUR_NODE                      (gsk_blur_node_get_type())
 #define GSK_TYPE_MASK_NODE                      (gsk_mask_node_get_type())
 #define GSK_TYPE_GL_SHADER_NODE                 (gsk_gl_shader_node_get_type())
+#define GSK_TYPE_SUBSURFACE_NODE                (gsk_subsurface_node_get_type())
 
 typedef struct _GskDebugNode                    GskDebugNode;
 typedef struct _GskColorNode                    GskColorNode;
@@ -196,6 +197,7 @@ typedef struct _GskTextNode                     GskTextNode;
 typedef struct _GskBlurNode                     GskBlurNode;
 typedef struct _GskMaskNode                     GskMaskNode;
 typedef struct _GskGLShaderNode                 GskGLShaderNode;
+typedef struct _GskSubsurfaceNode               GskSubsurfaceNode;
 
 GDK_AVAILABLE_IN_ALL
 GType                   gsk_debug_node_get_type                 (void) G_GNUC_CONST;
@@ -589,6 +591,16 @@ GDK_AVAILABLE_IN_ALL
 GBytes *                gsk_gl_shader_node_get_args             (const GskRenderNode      *node) G_GNUC_PURE;
 GDK_AVAILABLE_IN_ALL
 GskGLShader *           gsk_gl_shader_node_get_shader           (const GskRenderNode      *node) G_GNUC_PURE;
+
+GDK_AVAILABLE_IN_4_14
+GType                   gsk_subsurface_node_get_type            (void) G_GNUC_CONST;
+GDK_AVAILABLE_IN_4_14
+GskRenderNode *         gsk_subsurface_node_new                 (GskRenderNode            *child,
+                                                                 gpointer                  subsurface);
+GDK_AVAILABLE_IN_4_14
+GskRenderNode *         gsk_subsurface_node_get_child           (const GskRenderNode      *node) G_GNUC_PURE;
+GDK_AVAILABLE_IN_4_14
+gpointer                gsk_subsurface_node_get_subsurface      (const GskRenderNode      *node);
 
 /**
  * GSK_VALUE_HOLDS_RENDER_NODE:

@@ -273,6 +273,7 @@ collect_reused_child_nodes (GskRenderer *renderer,
     case GSK_MASK_NODE:
     case GSK_FILL_NODE:
     case GSK_STROKE_NODE:
+    case GSK_SUBSURFACE_NODE:
 
     default:
 
@@ -802,6 +803,11 @@ gsk_broadway_renderer_add_node (GskRenderer *renderer,
                                           gsk_debug_node_get_child (node), offset_x, offset_y, clip_bounds);
         }
       return;
+
+    case GSK_SUBSURFACE_NODE:
+      gsk_broadway_renderer_add_node (renderer,
+                                      gsk_subsurface_node_get_child (node), offset_x, offset_y, clip_bounds);
+     return;
 
       /* Generic nodes */
 
