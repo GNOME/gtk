@@ -101,6 +101,7 @@ compare_render_tests = [
   'texture-scale-filters-3d',
   'texture-scale-magnify-10000x',
   'texture-scale-magnify-rotate',
+  'texture-scale-nearest-vs-linear',
   'texture-scale-stripes',
   'texture-url',
   'transform-in-transform',
