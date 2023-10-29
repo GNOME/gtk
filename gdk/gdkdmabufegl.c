@@ -55,8 +55,7 @@ gdk_dmabuf_egl_downloader_collect_formats (const GdkDmabufDownloader *downloader
   int n_mods;
 
   if (egl_display == EGL_NO_DISPLAY ||
-      !display->have_egl_dma_buf_import ||
-      !gdk_gl_context_has_image_storage (context))
+      !display->have_egl_dma_buf_import)
     return FALSE;
 
   gdk_gl_context_make_current (context);
