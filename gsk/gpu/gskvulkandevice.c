@@ -552,7 +552,9 @@ static VkSampler
 gsk_vulkan_device_create_sampler (GskVulkanDevice          *self,
                                   VkSamplerYcbcrConversion  vk_conversion,
                                   VkFilter                  vk_filter,
-                                  VkSamplerAddressMode      vk_address_mode)
+                                  VkSamplerAddressMode      vk_address_mode,
+                                  VkSamplerMipmapMode       vk_mipmap_mode,
+                                  float                     max_lod)
 {
   VkSampler result;
 
@@ -561,12 +563,15 @@ gsk_vulkan_device_create_sampler (GskVulkanDevice          *self,
                                      .sType = VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO,
                                      .magFilter = vk_filter,
                                      .minFilter = vk_filter,
+                                     .mipmapMode = vk_mipmap_mode,
                                      .addressModeU = vk_address_mode,
                                      .addressModeV = vk_address_mode,
                                      .addressModeW = VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE,
                                      .borderColor = VK_BORDER_COLOR_FLOAT_TRANSPARENT_BLACK,
                                      .unnormalizedCoordinates = VK_FALSE,
                                      .maxAnisotropy = 1.0,
+                                     .minLod = 0.0,
+                                     .maxLod = max_lod,
                                      .pNext = vk_conversion == VK_NULL_HANDLE ? NULL : &(VkSamplerYcbcrConversionInfo) {
                                          .sType = VK_STRUCTURE_TYPE_SAMPLER_YCBCR_CONVERSION_INFO,
                                          .conversion = vk_conversion
@@ -585,22 +590,38 @@ gsk_vulkan_device_get_vk_sampler (GskVulkanDevice     *self,
   const struct {
     VkFilter filter;
     VkSamplerAddressMode address_mode;
+    VkSamplerMipmapMode mipmap_mode;
+    float max_lod;
   } filter_attrs[GSK_GPU_SAMPLER_N_SAMPLERS] = {
       [GSK_GPU_SAMPLER_DEFAULT] = {
           .filter = VK_FILTER_LINEAR,
           .address_mode = VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE,
+          .mipmap_mode = VK_SAMPLER_MIPMAP_MODE_NEAREST,
+          .max_lod = 0.0f,
       },
       [GSK_GPU_SAMPLER_TRANSPARENT] = {
           .filter = VK_FILTER_LINEAR,
           .address_mode = VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_BORDER,
+          .mipmap_mode = VK_SAMPLER_MIPMAP_MODE_NEAREST,
+          .max_lod = 0.0f,
       },
       [GSK_GPU_SAMPLER_REPEAT] = {
           .filter = VK_FILTER_LINEAR,
           .address_mode = VK_SAMPLER_ADDRESS_MODE_REPEAT,
+          .mipmap_mode = VK_SAMPLER_MIPMAP_MODE_NEAREST,
+          .max_lod = 0.0f,
       },
       [GSK_GPU_SAMPLER_NEAREST] = {
           .filter = VK_FILTER_NEAREST,
           .address_mode = VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE,
+          .mipmap_mode = VK_SAMPLER_MIPMAP_MODE_NEAREST,
+          .max_lod = 0.0f,
+      },
+      [GSK_GPU_SAMPLER_MIPMAP_DEFAULT] = {
+          .filter = VK_FILTER_LINEAR,
+          .address_mode = VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE,
+          .mipmap_mode = VK_SAMPLER_MIPMAP_MODE_LINEAR,
+          .max_lod = VK_LOD_CLAMP_NONE,
       },
   };
 
@@ -609,7 +630,9 @@ gsk_vulkan_device_get_vk_sampler (GskVulkanDevice     *self,
       self->vk_samplers[sampler] = gsk_vulkan_device_create_sampler (self,
                                                                      VK_NULL_HANDLE,
                                                                      filter_attrs[sampler].filter,
-                                                                     filter_attrs[sampler].address_mode);
+                                                                     filter_attrs[sampler].address_mode,
+                                                                     filter_attrs[sampler].mipmap_mode,
+                                                                     filter_attrs[sampler].max_lod);
     }
 
   return self->vk_samplers[sampler];
@@ -663,7 +686,9 @@ gsk_vulkan_device_get_vk_conversion (GskVulkanDevice *self,
   entry->vk_sampler = gsk_vulkan_device_create_sampler (self,
                                                         entry->vk_conversion,
                                                         VK_FILTER_LINEAR,
-                                                        VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE);
+                                                        VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE,
+                                                        VK_SAMPLER_MIPMAP_MODE_NEAREST,
+                                                        0.0f);
 
   g_hash_table_insert (self->conversion_cache, entry, entry);
 
