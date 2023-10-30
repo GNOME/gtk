@@ -144,24 +144,34 @@ static void
 gsk_gl_device_setup_samplers (GskGLDevice *self)
 {
   struct {
-    GLuint filter;
+    GLuint min_filter;
+    GLuint mag_filter;
     GLuint wrap;
   } sampler_flags[GSK_GPU_SAMPLER_N_SAMPLERS] = {
     [GSK_GPU_SAMPLER_DEFAULT] = {
-      GL_LINEAR,
-      GL_CLAMP_TO_EDGE,
+      .min_filter = GL_LINEAR,
+      .mag_filter = GL_LINEAR,
+      .wrap = GL_CLAMP_TO_EDGE,
     },
     [GSK_GPU_SAMPLER_TRANSPARENT] = {
-      GL_LINEAR,
-      GL_CLAMP_TO_BORDER,
+      .min_filter = GL_LINEAR,
+      .mag_filter = GL_LINEAR,
+      .wrap = GL_CLAMP_TO_BORDER,
     },
     [GSK_GPU_SAMPLER_REPEAT] = {
-      GL_LINEAR,
-       GL_REPEAT,
+      .min_filter = GL_LINEAR,
+      .mag_filter = GL_LINEAR,
+      .wrap = GL_REPEAT,
     },
     [GSK_GPU_SAMPLER_NEAREST] = {
-      GL_NEAREST,
-      GL_CLAMP_TO_EDGE,
+      .min_filter = GL_NEAREST,
+      .mag_filter = GL_NEAREST,
+      .wrap = GL_CLAMP_TO_EDGE,
+    },
+    [GSK_GPU_SAMPLER_MIPMAP_DEFAULT] = {
+      .min_filter = GL_LINEAR_MIPMAP_LINEAR,
+      .mag_filter = GL_LINEAR,
+      .wrap = GL_CLAMP_TO_EDGE,
     }
   };
   guint i;
@@ -170,8 +180,8 @@ gsk_gl_device_setup_samplers (GskGLDevice *self)
 
   for (i = 0; i < G_N_ELEMENTS (self->sampler_ids); i++)
     {
-      glSamplerParameteri (self->sampler_ids[i], GL_TEXTURE_MIN_FILTER, sampler_flags[i].filter);
-      glSamplerParameteri (self->sampler_ids[i], GL_TEXTURE_MAG_FILTER, sampler_flags[i].filter);
+      glSamplerParameteri (self->sampler_ids[i], GL_TEXTURE_MIN_FILTER, sampler_flags[i].min_filter);
+      glSamplerParameteri (self->sampler_ids[i], GL_TEXTURE_MAG_FILTER, sampler_flags[i].mag_filter);
       glSamplerParameteri (self->sampler_ids[i], GL_TEXTURE_WRAP_S, sampler_flags[i].wrap);
       glSamplerParameteri (self->sampler_ids[i], GL_TEXTURE_WRAP_T, sampler_flags[i].wrap);
     }
