@@ -2348,10 +2348,7 @@ gsk_inset_shadow_node_draw (GskRenderNode *node,
        * We could remove the part of "box" where the blur doesn't
        * reach, but computing that is a bit tricky since the
        * rounded corners are on the "inside" of it. */
-      r.x = floor (clip_box.bounds.origin.x);
-      r.y = floor (clip_box.bounds.origin.y);
-      r.width = ceil (clip_box.bounds.origin.x + clip_box.bounds.size.width) - r.x;
-      r.height = ceil (clip_box.bounds.origin.y + clip_box.bounds.size.height) - r.y;
+      rectangle_init_from_graphene (&r, &clip_box.bounds);
       remaining = cairo_region_create_rectangle (&r);
 
       /* First do the corners of box */
