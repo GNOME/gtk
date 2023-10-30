@@ -1,10 +1,10 @@
 clip {
-  clip: 24995 24995 10 10;
+  clip: 16379 16379 10 10;
   child: transform {
-    transform: translate(25000, 25000) rotate(90) translate(-25000, -25000);
+    transform: translate(16384, 16384) rotate(90) translate(-16384, -16384);
     child: texture-scale {
       texture: url("data:;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAKElEQVQYlWNkYGD4z4AG/v/HEGJgwhDBAQZQIQs2hzMyMtLBauorBACQUgcSISWLRgAAAABJRU5ErkJggg==");
-      bounds: 0 0 50000 50000;
+      bounds: 0 0 32768 32768;
       filter: nearest;
     }
   }
