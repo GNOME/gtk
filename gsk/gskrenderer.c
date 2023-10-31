@@ -444,7 +444,7 @@ gsk_renderer_render (GskRenderer          *renderer,
   else
     {
       clip = cairo_region_copy (region);
-      gsk_render_node_diff (priv->prev_node, root, clip);
+      gsk_render_node_diff (priv->prev_node, root, clip, NULL);
 
       if (cairo_region_is_empty (clip))
         {
