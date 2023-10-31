@@ -462,6 +462,7 @@ gtk_progress_bar_init (GtkProgressBar *pbar)
                                                  NULL,
                                                  NULL,
                                                  NULL, NULL);
+  gtk_widget_set_overflow (pbar->trough_widget, GTK_OVERFLOW_HIDDEN);
   gtk_widget_set_parent (pbar->trough_widget, GTK_WIDGET (pbar));
 
   pbar->progress_widget = gtk_gizmo_new_with_role ("progress",
