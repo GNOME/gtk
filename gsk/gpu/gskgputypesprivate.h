@@ -19,6 +19,7 @@ typedef struct _GskGpuShaderOpClass     GskGpuShaderOpClass;
 typedef enum {
   GSK_GPU_IMAGE_EXTERNAL       = (1 << 0),
   GSK_GPU_IMAGE_TOGGLE_REF     = (1 << 1),
+  GSK_GPU_IMAGE_STRAIGHT_ALPHA = (1 << 2),
 } GskGpuImageFlags;
 
 typedef enum {
@@ -42,6 +43,7 @@ typedef enum {
   GSK_GPU_PATTERN_COLOR,
   GSK_GPU_PATTERN_OPACITY,
   GSK_GPU_PATTERN_TEXTURE,
+  GSK_GPU_PATTERN_STRAIGHT_ALPHA,
   GSK_GPU_PATTERN_COLOR_MATRIX,
   GSK_GPU_PATTERN_GLYPHS,
   GSK_GPU_PATTERN_LINEAR_GRADIENT,

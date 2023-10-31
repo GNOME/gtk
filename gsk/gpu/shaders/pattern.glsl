@@ -220,6 +220,16 @@ texture_pattern (inout uint reader,
 }
 
 vec4
+straight_alpha_pattern (inout uint reader,
+                        vec2       pos)
+{
+  uint tex_id = read_uint (reader);
+  vec4 tex_rect = read_vec4 (reader);
+
+  return gsk_texture_straight_alpha (tex_id, (pos - GSK_GLOBAL_SCALE * tex_rect.xy) / (GSK_GLOBAL_SCALE * tex_rect.zw));
+}
+
+vec4
 linear_gradient_pattern (inout uint reader,
                          vec2       pos,
                          bool       repeating)
@@ -306,6 +316,9 @@ pattern (uint reader,
           break;
         case GSK_GPU_PATTERN_TEXTURE:
           color = texture_pattern (reader, pos);
+          break;
+        case GSK_GPU_PATTERN_STRAIGHT_ALPHA:
+          color = straight_alpha_pattern (reader, pos);
           break;
         case GSK_GPU_PATTERN_GLYPHS:
           color = glyphs_pattern (reader, pos);
