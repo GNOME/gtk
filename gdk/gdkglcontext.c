@@ -109,6 +109,7 @@ typedef struct {
   guint has_sync : 1;
   guint has_unpack_subimage : 1;
   guint has_debug_output : 1;
+  guint has_bgra : 1;
   guint extensions_checked : 1;
   guint debug_enabled : 1;
   guint forward_compatible : 1;
@@ -1531,11 +1532,13 @@ gdk_gl_context_check_extensions (GdkGLContext *context)
       priv->has_unpack_subimage = gdk_gl_version_greater_equal (&priv->gl_version, &GDK_GL_VERSION_INIT (3, 0)) ||
                                   epoxy_has_gl_extension ("GL_EXT_unpack_subimage");
       priv->has_khr_debug = epoxy_has_gl_extension ("GL_KHR_debug");
+      priv->has_bgra = epoxy_has_gl_extension ("GL_EXT_texture_format_BGRA8888");
     }
   else
     {
       priv->has_unpack_subimage = TRUE;
       priv->has_khr_debug = epoxy_has_gl_extension ("GL_KHR_debug");
+      priv->has_bgra = TRUE;
 
       /* We asked for a core profile, but we didn't get one, so we're in legacy mode */
       if (!gdk_gl_version_greater_equal (&priv->gl_version, &GDK_GL_VERSION_INIT (3, 2)))
@@ -1567,7 +1570,8 @@ gdk_gl_context_check_extensions (GdkGLContext *context)
                        " - GL_KHR_debug: %s\n"
                        " - GL_EXT_unpack_subimage: %s\n"
                        " - half float: %s\n"
-                       " - sync: %s",
+                       " - sync: %s\n"
+                       " - bgra: %s",
                        gdk_gl_context_get_use_es (context) ? "OpenGL ES" : "OpenGL",
                        gdk_gl_version_get_major (&priv->gl_version), gdk_gl_version_get_minor (&priv->gl_version),
                        priv->is_legacy ? "legacy" : "core",
@@ -1576,7 +1580,8 @@ gdk_gl_context_check_extensions (GdkGLContext *context)
                        priv->has_khr_debug ? "yes" : "no",
                        priv->has_unpack_subimage ? "yes" : "no",
                        priv->has_half_float ? "yes" : "no",
-                       priv->has_sync ? "yes" : "no");
+                       priv->has_sync ? "yes" : "no",
+                       priv->has_bgra ? "yes" : "no");
   }
 #endif
 
@@ -1810,6 +1815,36 @@ gdk_gl_context_has_sync (GdkGLContext *self)
   GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (self);
 
   return priv->has_sync;
+}
+
+/* Return if GL_BGRA works with glTexImage2D */
+gboolean
+gdk_gl_context_has_bgra (GdkGLContext *self)
+{
+  GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (self);
+
+  return priv->has_bgra;
+}
+
+/* Return if glGenVertexArrays, glBindVertexArray and glDeleteVertexArrays
+ * can be used
+ */
+gboolean
+gdk_gl_context_has_vertex_arrays (GdkGLContext *self)
+{
+  GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (self);
+
+  switch (priv->api)
+    {
+    case GDK_GL_API_GL:
+      return TRUE;
+
+    case GDK_GL_API_GLES:
+      return gdk_gl_version_get_major (&priv->gl_version) >= 3;
+
+    default:
+      g_return_val_if_reached (FALSE);
+    }
 }
 
 /* This is currently private! */

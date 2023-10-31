@@ -155,6 +155,10 @@ gboolean                gdk_gl_context_has_vertex_half_float    (GdkGLContext   
 
 gboolean                gdk_gl_context_has_sync                 (GdkGLContext    *self) G_GNUC_PURE;
 
+gboolean                gdk_gl_context_has_bgra                 (GdkGLContext    *self) G_GNUC_PURE;
+
+gboolean                gdk_gl_context_has_vertex_arrays        (GdkGLContext    *self) G_GNUC_PURE;
+
 double                  gdk_gl_context_get_scale                (GdkGLContext    *self);
 
 G_END_DECLS

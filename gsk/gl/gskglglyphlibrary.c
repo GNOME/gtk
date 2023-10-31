@@ -119,7 +119,11 @@ gsk_gl_glyph_library_init_atlas (GskGLTextureLibrary *self,
 
   memset (pixel_data, 255, sizeof pixel_data);
 
-  if (gdk_gl_context_get_use_es (gdk_gl_context_get_current ()))
+  if (!gdk_gl_context_has_bgra (gdk_gl_context_get_current ())
+#if G_BYTE_ORDER == G_BIG_ENDIAN
+      || gdk_gl_context_get_use_es (gdk_gl_context_get_current ())
+#endif
+     )
     {
       gl_format = GL_RGBA;
       gl_type = GL_UNSIGNED_BYTE;
@@ -127,9 +131,8 @@ gsk_gl_glyph_library_init_atlas (GskGLTextureLibrary *self,
   else
     {
       gl_format = GL_BGRA;
-      gl_type = GL_UNSIGNED_INT_8_8_8_8_REV;
+      gl_type = GL_UNSIGNED_BYTE;
     }
-
   glBindTexture (GL_TEXTURE_2D, atlas->texture_id);
 
   glTexSubImage2D (GL_TEXTURE_2D, 0,
@@ -277,7 +280,7 @@ gsk_gl_glyph_library_upload_glyph (GskGLGlyphLibrary     *self,
 
   g_assert (texture_id > 0);
 
-  if G_UNLIKELY (gdk_gl_context_get_use_es (gdk_gl_context_get_current ()))
+  if (G_UNLIKELY (!gdk_gl_context_has_bgra (gdk_gl_context_get_current ())))
     {
       pixel_data = free_data = g_malloc (width * height * 4);
       gdk_memory_convert (pixel_data, width * 4,
@@ -294,7 +297,7 @@ gsk_gl_glyph_library_upload_glyph (GskGLGlyphLibrary     *self,
     {
       pixel_data = cairo_image_surface_get_data (surface);
       gl_format = GL_BGRA;
-      gl_type = GL_UNSIGNED_INT_8_8_8_8_REV;
+      gl_type = GL_UNSIGNED_BYTE;
     }
 
   glPixelStorei (GL_UNPACK_ROW_LENGTH, stride / 4);
