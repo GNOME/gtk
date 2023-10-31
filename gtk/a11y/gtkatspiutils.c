@@ -51,6 +51,9 @@ gtk_accessible_role_to_atspi_role (GtkAccessibleRole role)
     case GTK_ACCESSIBLE_ROLE_BANNER:
       break;
 
+    case GTK_ACCESSIBLE_ROLE_BLOCK_QUOTE:
+      return ATSPI_ROLE_BLOCK_QUOTE;
+
     case GTK_ACCESSIBLE_ROLE_BUTTON:
       return ATSPI_ROLE_PUSH_BUTTON;
 
