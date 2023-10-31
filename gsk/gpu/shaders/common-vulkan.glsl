@@ -67,6 +67,67 @@ gsk_texture (uint id,
   return texture (textures[nonuniformEXT (id >> 1)], pos);
 }
 
+ivec2
+gsk_texture_size (uint id,
+                  int  lod)
+{
+  if ((id & 1) != 0)
+    {
+      id >>= 1;
+      if (id == 0)
+        return textureSize (immutable_textures[0], lod);
+      else if (GSK_IMMUTABLE_SAMPLERS > 1 && id == 1)
+        return textureSize (immutable_textures[1], lod);
+      else if (GSK_IMMUTABLE_SAMPLERS > 2 && id == 2)
+        return textureSize (immutable_textures[2], lod);
+      else if (GSK_IMMUTABLE_SAMPLERS > 3 && id == 3)
+        return textureSize (immutable_textures[3], lod);
+      else if (GSK_IMMUTABLE_SAMPLERS > 4 && id == 4)
+        return textureSize (immutable_textures[4], lod);
+      else if (GSK_IMMUTABLE_SAMPLERS > 5 && id == 5)
+        return textureSize (immutable_textures[5], lod);
+      else if (GSK_IMMUTABLE_SAMPLERS > 6 && id == 6)
+        return textureSize (immutable_textures[6], lod);
+      else if (GSK_IMMUTABLE_SAMPLERS > 7 && id == 7)
+        return textureSize (immutable_textures[7], lod);
+      else
+        return ivec2 (1, 1);
+    }
+
+  return textureSize (textures[nonuniformEXT (id >> 1)], lod);
+}
+
+vec4
+gsk_texel_fetch (uint  id,
+                 ivec2 pos,
+                 int   lod)
+{
+  if ((id & 1) != 0)
+    {
+      id >>= 1;
+      if (id == 0)
+        return texelFetch (immutable_textures[0], pos, lod);
+      else if (GSK_IMMUTABLE_SAMPLERS > 1 && id == 1)
+        return texelFetch (immutable_textures[1], pos, lod);
+      else if (GSK_IMMUTABLE_SAMPLERS > 2 && id == 2)
+        return texelFetch (immutable_textures[2], pos, lod);
+      else if (GSK_IMMUTABLE_SAMPLERS > 3 && id == 3)
+        return texelFetch (immutable_textures[3], pos, lod);
+      else if (GSK_IMMUTABLE_SAMPLERS > 4 && id == 4)
+        return texelFetch (immutable_textures[4], pos, lod);
+      else if (GSK_IMMUTABLE_SAMPLERS > 5 && id == 5)
+        return texelFetch (immutable_textures[5], pos, lod);
+      else if (GSK_IMMUTABLE_SAMPLERS > 6 && id == 6)
+        return texelFetch (immutable_textures[6], pos, lod);
+      else if (GSK_IMMUTABLE_SAMPLERS > 7 && id == 7)
+        return texelFetch (immutable_textures[7], pos, lod);
+      else
+        return vec4 (1.0, 0.0, 0.8, 1.0);
+    }
+
+  return texelFetch (textures[nonuniformEXT (id >> 1)], pos, lod);
+}
+
 #define gsk_get_buffer(id) buffers[nonuniformEXT (id)]
 #define gsk_get_float(id) gsk_get_buffer(0).floats[id]
 #define gsk_get_int(id) (floatBitsToInt(gsk_get_float(id)))

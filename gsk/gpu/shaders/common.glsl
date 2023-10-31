@@ -124,6 +124,28 @@ main (void)
 
 #ifdef GSK_FRAGMENT_SHADER
 
+vec4
+gsk_texture_straight_alpha (uint tex_id,
+                            vec2 pos)
+{
+  vec2 size = vec2 (gsk_texture_size (tex_id, 0));
+  pos *= size;
+  size -= vec2 (1.0);
+  /* GL_CLAMP_TO_EDGE */
+  pos = clamp (pos - 0.5, vec2 (0.0), size);
+  ivec2 ipos = ivec2 (pos);
+  pos = fract (pos);
+  vec4 tl = gsk_texel_fetch (tex_id, ipos, 0);
+  tl.rgb *= tl.a;
+  vec4 tr = gsk_texel_fetch (tex_id, ipos + ivec2(1, 0), 0);
+  tr.rgb *= tr.a;
+  vec4 bl = gsk_texel_fetch (tex_id, ipos + ivec2(0, 1), 0);
+  bl.rgb *= bl.a;
+  vec4 br = gsk_texel_fetch (tex_id, ipos + ivec2(1, 1), 0);
+  br.rgb *= br.a;
+  return mix (mix (tl, tr, pos.x), mix (bl, br, pos.x), pos.y);
+}
+
 void            run                             (out vec4 color,
                                                  out vec2 pos);
 

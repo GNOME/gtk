@@ -17,6 +17,7 @@
 #include "gskgpurenderpassopprivate.h"
 #include "gskgpuroundedcoloropprivate.h"
 #include "gskgpuscissoropprivate.h"
+#include "gskgpustraightalphaopprivate.h"
 #include "gskgputextureopprivate.h"
 #include "gskgpuuberopprivate.h"
 #include "gskgpuuploadopprivate.h"
@@ -559,6 +560,147 @@ gsk_gpu_get_node_as_image (GskGpuFrame            *frame,
 
   *out_bounds = clipped;
   return result;
+}
+
+static GskGpuImage *
+gsk_gpu_node_processor_ensure_image (GskGpuNodeProcessor *self,
+                                     GskGpuImage         *image,
+                                     GskGpuImageFlags     required_flags,
+                                     GskGpuImageFlags     disallowed_flags)
+{
+  GskGpuImageFlags flags, missing_flags;
+  GskGpuImage *copy;
+  gsize width, height;
+  GskGpuNodeProcessor other;
+  graphene_rect_t rect;
+  guint32 descriptor;
+
+  g_assert ((required_flags & disallowed_flags) == 0);
+  g_assert ((required_flags & (GSK_GPU_IMAGE_EXTERNAL | GSK_GPU_IMAGE_STRAIGHT_ALPHA)) == 0);
+
+  flags = gsk_gpu_image_get_flags (image);
+  missing_flags = required_flags & ~flags;
+  if ((flags & disallowed_flags) == 0)
+    {
+      if (missing_flags == 0)
+        return image;
+    }
+
+  width = gsk_gpu_image_get_width (image);
+  height = gsk_gpu_image_get_height (image);
+
+  copy = gsk_gpu_device_create_offscreen_image (gsk_gpu_frame_get_device (self->frame),
+                                                gdk_memory_format_get_depth (gsk_gpu_image_get_format (image)),
+                                                width, height);
+
+  rect = GRAPHENE_RECT_INIT (0, 0, width, height);
+  descriptor = gsk_gpu_node_processor_add_image (self, image, GSK_GPU_SAMPLER_DEFAULT);
+
+  gsk_gpu_node_processor_init (&other,
+                               self->frame,
+                               self->desc,
+                               copy,
+                               &(cairo_rectangle_int_t) { 0, 0, width, height },
+                               &rect);
+
+  gsk_gpu_render_pass_begin_op (other.frame,
+                                copy,
+                                &(cairo_rectangle_int_t) { 0, 0, width, height },
+                                GSK_RENDER_PASS_OFFSCREEN);
+
+  gsk_gpu_node_processor_sync_globals (&other, 0);
+
+  if (flags & GSK_GPU_IMAGE_STRAIGHT_ALPHA)
+    {
+      gsk_gpu_straight_alpha_op (other.frame,
+                                 gsk_gpu_clip_get_shader_clip (&other.clip, &other.offset, &rect),
+                                 self->desc,
+                                 descriptor,
+                                 &rect,
+                                 &other.offset,
+                                 &rect);
+    }
+  else
+    {
+      gsk_gpu_texture_op (other.frame,
+                          gsk_gpu_clip_get_shader_clip (&other.clip, &other.offset, &rect),
+                          self->desc,
+                          descriptor,
+                          &rect,
+                          &other.offset,
+                          &rect);
+    }
+
+  gsk_gpu_render_pass_end_op (other.frame,
+                              image,
+                              GSK_RENDER_PASS_OFFSCREEN);
+
+  gsk_gpu_node_processor_finish (&other);
+
+  g_object_unref (image);
+
+  return copy;
+}
+
+/*
+ * gsk_gpu_node_processor_get_node_as_image:
+ * @self: a node processor
+ * @required_flags: flags that the resulting image must have
+ * @disallowed_flags: flags that the resulting image must NOT have
+ * @clip_bounds: (nullable): clip rectangle to use or NULL to use
+ *   the current clip
+ * @node: the node to turn into an image
+ * @out_bounds: bounds of the the image in node space
+ *
+ * Generates an image for the given node that conforms to the required flags
+ * and does not contain the disallowed flags. The image is restricted to the
+ * region in the clip bounds.
+ *
+ * Returns: (nullable): The node as an image or %NULL if the node is fully
+ *     clipped
+ **/
+static GskGpuImage *
+gsk_gpu_node_processor_get_node_as_image (GskGpuNodeProcessor   *self,
+                                          GskGpuImageFlags       required_flags,
+                                          GskGpuImageFlags       disallowed_flags,
+                                          const graphene_rect_t *clip_bounds,
+                                          GskRenderNode         *node,
+                                          graphene_rect_t       *out_bounds)
+{
+  GskGpuImage *image, *ensure;
+  graphene_rect_t default_clip;
+
+  if (clip_bounds == NULL)
+    {
+      if (!gsk_gpu_node_processor_clip_node_bounds (self, node, &default_clip))
+        return NULL;
+      clip_bounds = &default_clip;
+    }
+
+  image = gsk_gpu_get_node_as_image (self->frame,
+                                     clip_bounds,
+                                     &self->scale,
+                                     node,
+                                     out_bounds);
+  if (image == NULL)
+    return NULL;
+
+  ensure = gsk_gpu_node_processor_ensure_image (self,
+                                                image,
+                                                required_flags,
+                                                disallowed_flags);
+
+  /* if we fixed up a cached texture, cache the fixed up version instead */
+  if (ensure != image && disallowed_flags &&
+      gsk_render_node_get_node_type (node) == GSK_TEXTURE_NODE)
+    {
+      gsk_gpu_device_cache_texture_image (gsk_gpu_frame_get_device (self->frame),
+                                          gsk_texture_node_get_texture (node),
+                                          gsk_gpu_frame_get_timestamp (self->frame),
+                                          ensure);
+    }
+
+  return ensure;
 }
 
 static void
@@ -1138,13 +1280,26 @@ gsk_gpu_node_processor_add_texture_node (GskGpuNodeProcessor *self,
     }
   descriptor = gsk_gpu_node_processor_add_image (self, image, GSK_GPU_SAMPLER_DEFAULT);
 
-  gsk_gpu_texture_op (self->frame,
-                      gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, &node->bounds),
-                      self->desc,
-                      descriptor,
-                      &node->bounds,
-                      &self->offset,
-                      &node->bounds);
+  if (gsk_gpu_image_get_flags (image) & GSK_GPU_IMAGE_STRAIGHT_ALPHA)
+    {
+      gsk_gpu_straight_alpha_op (self->frame,
+                                 gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, &node->bounds),
+                                 self->desc,
+                                 descriptor,
+                                 &node->bounds,
+                                 &self->offset,
+                                 &node->bounds);
+    }
+  else
+    {
+      gsk_gpu_texture_op (self->frame,
+                          gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, &node->bounds),
+                          self->desc,
+                          descriptor,
+                          &node->bounds,
+                          &self->offset,
+                          &node->bounds);
+    }
 
   g_object_unref (image);
 }
@@ -1177,7 +1332,10 @@ gsk_gpu_node_processor_create_texture_pattern (GskGpuPatternWriter *self,
       return FALSE;
     }
 
-  gsk_gpu_buffer_writer_append_uint (&self->writer, GSK_GPU_PATTERN_TEXTURE);
+  if (gsk_gpu_image_get_flags (image) & GSK_GPU_IMAGE_STRAIGHT_ALPHA)
+    gsk_gpu_buffer_writer_append_uint (&self->writer, GSK_GPU_PATTERN_STRAIGHT_ALPHA);
+  else
+    gsk_gpu_buffer_writer_append_uint (&self->writer, GSK_GPU_PATTERN_TEXTURE);
   gsk_gpu_buffer_writer_append_uint (&self->writer, descriptor);
   gsk_gpu_buffer_writer_append_rect (&self->writer, &node->bounds, &self->offset);
 
@@ -1350,11 +1508,15 @@ gsk_gpu_node_processor_add_blur_node (GskGpuNodeProcessor *self,
   clip_radius = gsk_cairo_blur_compute_pixels (blur_radius / 2.0);
   gsk_gpu_node_processor_get_clip_bounds (self, &clip_rect);
   graphene_rect_inset (&clip_rect, -clip_radius, -clip_radius);
-  image = gsk_gpu_get_node_as_image (self->frame,
-                                     &clip_rect,
-                                     &self->scale,
-                                     child,
-                                     &tex_rect);
+  image = gsk_gpu_node_processor_get_node_as_image (self,
+                                                    0,
+                                                    GSK_GPU_IMAGE_STRAIGHT_ALPHA,
+                                                    &clip_rect,
+                                                    child,
+                                                    &tex_rect);
+  if (image == NULL)
+    return;
+
   descriptor = gsk_gpu_node_processor_add_image (self, image, GSK_GPU_SAMPLER_TRANSPARENT);
 
   gsk_gpu_node_processor_blur_op (self,
@@ -1390,11 +1552,15 @@ gsk_gpu_node_processor_add_shadow_node (GskGpuNodeProcessor *self,
                                     clip_bounds.size.width + node->bounds.size.width - child->bounds.size.width,
                                     clip_bounds.size.height + node->bounds.size.height - child->bounds.size.height);
 
-  image = gsk_gpu_get_node_as_image (self->frame,
-                                     &clip_bounds, 
-                                     &self->scale,
-                                     child,
-                                     &tex_rect);
+  image = gsk_gpu_node_processor_get_node_as_image (self,
+                                                    0,
+                                                    GSK_GPU_IMAGE_STRAIGHT_ALPHA,
+                                                    &clip_bounds, 
+                                                    child,
+                                                    &tex_rect);
+  if (image == NULL)
+    return;
+
   descriptor = gsk_gpu_node_processor_add_image (self, image, GSK_GPU_SAMPLER_TRANSPARENT);
   desc = self->desc;
 
@@ -2065,7 +2231,10 @@ gsk_gpu_node_processor_create_node_pattern (GskGpuPatternWriter *self,
       return FALSE;
     }
 
-  gsk_gpu_buffer_writer_append_uint (&self->writer, GSK_GPU_PATTERN_TEXTURE);
+  if (gsk_gpu_image_get_flags (image) & GSK_GPU_IMAGE_STRAIGHT_ALPHA)
+    gsk_gpu_buffer_writer_append_uint (&self->writer, GSK_GPU_PATTERN_STRAIGHT_ALPHA);
+  else
+    gsk_gpu_buffer_writer_append_uint (&self->writer, GSK_GPU_PATTERN_TEXTURE);
   gsk_gpu_buffer_writer_append_uint (&self->writer, tex_id);
   gsk_gpu_buffer_writer_append_rect (&self->writer, &bounds, &self->offset);
 
