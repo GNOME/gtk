@@ -272,7 +272,8 @@ update_area_requires_clear (GdkSurface           *surface,
 static void
 gsk_gl_renderer_render (GskRenderer          *renderer,
                         GskRenderNode        *root,
-                        const cairo_region_t *update_area)
+                        const cairo_region_t *update_area,
+                        GskOffload           *offload)
 {
   GskGLRenderer *self = (GskGLRenderer *)renderer;
   cairo_region_t *render_region;

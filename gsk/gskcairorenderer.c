@@ -152,7 +152,8 @@ gsk_cairo_renderer_render_texture (GskRenderer           *renderer,
 static void
 gsk_cairo_renderer_render (GskRenderer          *renderer,
                            GskRenderNode        *root,
-                           const cairo_region_t *region)
+                           const cairo_region_t *region,
+                           GskOffload           *offload)
 {
   GskCairoRenderer *self = GSK_CAIRO_RENDERER (renderer);
   cairo_t *cr;

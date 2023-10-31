@@ -21,6 +21,7 @@
 #include "gskrenderer.h"
 #include "gskprofilerprivate.h"
 #include "gskdebugprivate.h"
+#include "gskoffloadprivate.h"
 
 G_BEGIN_DECLS
 
@@ -47,7 +48,8 @@ struct _GskRendererClass
                                                                  const graphene_rect_t  *viewport);
   void                 (* render)                               (GskRenderer            *renderer,
                                                                  GskRenderNode          *root,
-                                                                 const cairo_region_t   *invalid);
+                                                                 const cairo_region_t   *invalid,
+                                                                 GskOffload             *offload);
 };
 
 GskProfiler *           gsk_renderer_get_profiler               (GskRenderer    *renderer);

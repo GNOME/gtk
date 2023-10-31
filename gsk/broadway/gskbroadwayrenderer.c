@@ -919,7 +919,8 @@ gsk_broadway_renderer_add_node (GskRenderer *renderer,
 static void
 gsk_broadway_renderer_render (GskRenderer          *renderer,
                               GskRenderNode        *root,
-                              const cairo_region_t *update_area)
+                              const cairo_region_t *update_area,
+                              GskOffload           *offload)
 {
   GskBroadwayRenderer *self = GSK_BROADWAY_RENDERER (renderer);
 
