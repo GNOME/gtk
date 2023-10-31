@@ -41,7 +41,7 @@ activate (GtkApplication* app,
   window = gtk_application_window_new (app);
   gtk_window_set_title (GTK_WINDOW (window), "Window");
   gtk_window_set_default_size (GTK_WINDOW (window), 200, 200);
-  gtk_widget_show (window);
+  gtk_widget_set_visible (window, TRUE);
 }
 
 int
@@ -183,7 +183,7 @@ activate (GtkApplication *app,
 
   gtk_box_append (GTK_BOX (box), button);
 
-  gtk_widget_show (window);
+  gtk_widget_set_visible (window, TRUE);
 }
 
 int
@@ -331,8 +331,7 @@ activate (GtkApplication *app,
    */
   gtk_grid_attach (GTK_GRID (grid), button, 0, 1, 2, 1);
 
-  gtk_widget_show (window);
-
+  gtk_widget_set_visible (window, TRUE);
 }
 
 int
@@ -554,7 +553,7 @@ activate (GtkApplication *app,
 
   g_signal_connect (press, "pressed", G_CALLBACK (pressed), drawing_area);
 
-  gtk_widget_show (window);
+  gtk_widget_set_visible (window, TRUE);
 }
 
 int
@@ -631,7 +630,7 @@ activate (GtkApplication *app,
   button = gtk_builder_get_object (builder, "quit");
   g_signal_connect_swapped (button, "clicked", G_CALLBACK (quit_cb), window);
 
-  gtk_widget_show (GTK_WIDGET (window));
+  gtk_widget_set_visible (GTK_WIDGET (window), TRUE);
 
   /* We do not need the builder any more */
   g_object_unref (builder);
