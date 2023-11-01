@@ -24,16 +24,25 @@
 #include "gtkwidget.h"
 #include "gtkwindow.h"
 #include "gtknative.h"
+#include "gtkmain.h"
 
 /* duration before we start fading in us */
 #define GDK_FPS_OVERLAY_LINGER_DURATION (1000 * 1000)
 /* duration when fade is finished in us */
 #define GDK_FPS_OVERLAY_FADE_DURATION (500 * 1000)
 
-typedef struct _GtkFpsInfo {
+typedef struct _GtkFpsInfo GtkFpsInfo;
+
+struct _GtkFpsInfo
+{
+  PangoFont *font;
+  PangoGlyphString *glyphs;
+  PangoGlyphString *digits;
+  int width, height, baseline;
+
   gint64 last_frame;
   GskRenderNode *last_node;
-} GtkFpsInfo;
+};
 
 struct _GtkFpsOverlay
 {
@@ -54,9 +63,55 @@ gtk_fps_info_free (gpointer data)
 {
   GtkFpsInfo *info = data;
 
+  g_clear_pointer (&info->glyphs, pango_glyph_string_free);
+  g_clear_pointer (&info->digits, pango_glyph_string_free);
+  g_clear_object (&info->font);
+
   gsk_render_node_unref (info->last_node);
 
   g_free (info);
+}
+
+static GtkFpsInfo *
+gtk_fps_info_new (GtkWidget *widget)
+{
+  PangoLayout *layout;
+  PangoLayoutIter *iter;
+  PangoLayoutRun *run;
+  PangoAttrList *attrs;
+  GtkFpsInfo *info;
+
+  info = g_new0 (GtkFpsInfo, 1);
+
+  layout = gtk_widget_create_pango_layout (widget, "0000.00 fps");
+  attrs = pango_attr_list_new ();
+  pango_attr_list_insert (attrs, pango_attr_font_features_new ("tnum=1"));
+  pango_layout_set_attributes (layout, attrs);
+  pango_attr_list_unref (attrs);
+  pango_layout_get_pixel_size (layout, &info->width, &info->height);
+
+  iter = pango_layout_get_iter (layout);
+  info->baseline = pango_layout_iter_get_baseline (iter) / (double) PANGO_SCALE;
+  run = pango_layout_iter_get_run_readonly (iter);
+
+  info->glyphs = pango_glyph_string_copy (run->glyphs);
+  info->font = g_object_ref (run->item->analysis.font);
+
+  pango_layout_iter_free (iter);
+
+  pango_layout_set_text (layout, "0123456789 ", -1);
+
+  iter = pango_layout_get_iter (layout);
+  run = pango_layout_iter_get_run_readonly (iter);
+
+  g_assert (run->glyphs->num_glyphs == 11);
+
+  info->digits = pango_glyph_string_copy (run->glyphs);
+
+  pango_layout_iter_free (iter);
+  g_object_unref (layout);
+
+  return info;
 }
 
 static double
@@ -89,21 +144,17 @@ gtk_fps_overlay_snapshot (GtkInspectorOverlay *overlay,
 {
   GtkFpsOverlay *self = GTK_FPS_OVERLAY (overlay);
   GtkFpsInfo *info;
-  PangoLayout *layout;
-  PangoAttrList *attrs;
   gint64 now;
   double fps;
-  char *fps_string;
   graphene_rect_t bounds;
   gboolean has_bounds;
-  int width, height;
   double overlay_opacity;
 
   now = gdk_frame_clock_get_frame_time (gtk_widget_get_frame_clock (widget));
   info = g_hash_table_lookup (self->infos, widget);
   if (info == NULL)
     {
-      info = g_new0 (GtkFpsInfo, 1);
+      info = gtk_fps_info_new (widget);
       g_hash_table_insert (self->infos, widget, info);
     }
   if (info->last_node != node)
@@ -131,12 +182,6 @@ gtk_fps_overlay_snapshot (GtkInspectorOverlay *overlay,
         }
     }
 
-  fps = gtk_fps_overlay_get_fps (widget);
-  if (fps == 0.0)
-    fps_string = g_strdup ("--- fps");
-  else
-    fps_string = g_strdup_printf ("%.2f fps", fps);
-
   if (GTK_IS_WINDOW (widget))
     {
       GtkWidget *child = gtk_window_get_child (GTK_WINDOW (widget));
@@ -146,33 +191,47 @@ gtk_fps_overlay_snapshot (GtkInspectorOverlay *overlay,
       else
         has_bounds = gtk_widget_compute_bounds (child, widget, &bounds);
     }
-  else
+   else
     {
       has_bounds = gtk_widget_compute_bounds (widget, widget, &bounds);
     }
 
-  layout = gtk_widget_create_pango_layout (widget, fps_string);
-  attrs = pango_attr_list_new ();
-  pango_attr_list_insert (attrs, pango_attr_font_features_new ("tnum=1"));
-  pango_layout_set_attributes (layout, attrs);
-  pango_attr_list_unref (attrs);
-  pango_layout_get_pixel_size (layout, &width, &height);
-
   gtk_snapshot_save (snapshot);
   if (has_bounds)
-    gtk_snapshot_translate (snapshot, &GRAPHENE_POINT_INIT (bounds.origin.x + bounds.size.width - width, bounds.origin.y));
+    gtk_snapshot_translate (snapshot, &GRAPHENE_POINT_INIT (bounds.origin.x + bounds.size.width - info->width, bounds.origin.y));
+
   if (overlay_opacity < 1.0)
     gtk_snapshot_push_opacity (snapshot, overlay_opacity);
   gtk_snapshot_append_color (snapshot,
                              &(GdkRGBA) { 0, 0, 0, 0.5 },
-                             &GRAPHENE_RECT_INIT (-1, -1, width + 2, height + 2));
-  gtk_snapshot_append_layout (snapshot,
-                              layout,
-                              &(GdkRGBA) { 1, 1, 1, 1 });
+                             &GRAPHENE_RECT_INIT (-1, -1, info->width + 2, info->height + 2));
+
+  fps = gtk_fps_overlay_get_fps (widget);
+  if (fps != 0.0)
+    {
+      GskRenderNode *fps_node;
+      char fps_string[40];
+
+      g_snprintf (fps_string, sizeof (fps_string), "%7.2f fps", fps);
+      for (int i = 0; i < 7; i++)
+        {
+          if (g_ascii_isdigit (fps_string[i]))
+            info->glyphs->glyphs[i].glyph = info->digits->glyphs[fps_string[i] - '0'].glyph;
+          else if (fps_string[i] == ' ')
+            info->glyphs->glyphs[i].glyph = info->digits->glyphs[10].glyph;
+        }
+
+      fps_node = gsk_text_node_new (info->font,
+                                    info->glyphs,
+                                    &(GdkRGBA) { 1, 1, 1, 1 },
+                                    &GRAPHENE_POINT_INIT (0, info->baseline));
+      gtk_snapshot_append_node (snapshot, fps_node);
+      gsk_render_node_unref (fps_node);
+    }
+
   if (overlay_opacity < 1.0)
     gtk_snapshot_pop (snapshot);
   gtk_snapshot_restore (snapshot);
-  g_free (fps_string);
 
   gtk_widget_add_tick_callback (widget, gtk_fps_overlay_force_redraw, NULL, NULL);
 }
