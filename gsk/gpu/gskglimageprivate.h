@@ -18,6 +18,12 @@ GskGpuImage *           gsk_gl_image_new                                (GskGLDe
                                                                          GdkMemoryFormat         format,
                                                                          gsize                   width,
                                                                          gsize                   height);
+GskGpuImage *           gsk_gl_image_new_for_texture                    (GskGLDevice            *device,
+                                                                         GdkTexture             *owner,
+                                                                         GLuint                  tex_id,
+                                                                         gboolean                take_ownership,
+                                                                         GskGpuImageFlags        extra_flags);
+                                                                         
 
 void                    gsk_gl_image_bind_texture                       (GskGLImage             *self);
 void                    gsk_gl_image_bind_framebuffer                   (GskGLImage             *self);

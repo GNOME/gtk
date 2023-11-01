@@ -8,6 +8,9 @@
 #include "gskglbufferprivate.h"
 #include "gskgldescriptorsprivate.h"
 #include "gskgldeviceprivate.h"
+#include "gskglimageprivate.h"
+
+#include "gdkgltextureprivate.h"
 
 struct _GskGLFrame
 {
@@ -48,6 +51,39 @@ gsk_gl_frame_cleanup (GskGpuFrame *frame)
   self->next_texture_slot = 0;
 
   GSK_GPU_FRAME_CLASS (gsk_gl_frame_parent_class)->cleanup (frame);
+}
+
+static GskGpuImage *
+gsk_gl_frame_upload_texture (GskGpuFrame  *frame,
+                             gboolean      with_mipmap,
+                             GdkTexture   *texture)
+{
+  if (GDK_IS_GL_TEXTURE (texture))
+    {
+      GdkGLTexture *gl_texture = GDK_GL_TEXTURE (texture);
+
+      if (gdk_gl_context_is_shared (GDK_GL_CONTEXT (gsk_gpu_frame_get_context (frame)),
+                                    gdk_gl_texture_get_context (gl_texture)))
+        {
+          GskGpuImage *image;
+          GLsync sync;
+
+          image = gsk_gl_image_new_for_texture (GSK_GL_DEVICE (gsk_gpu_frame_get_device (frame)),
+                                                texture,
+                                                gdk_gl_texture_get_id (gl_texture),
+                                                FALSE,
+                                                gdk_gl_texture_has_mipmap (gl_texture) ? (GSK_GPU_IMAGE_CAN_MIPMAP | GSK_GPU_IMAGE_MIPMAP) : 0);
+         
+          /* This is a hack, but it works */
+          sync = gdk_gl_texture_get_sync (gl_texture);
+          if (sync)
+            glWaitSync (sync, 0, GL_TIMEOUT_IGNORED);
+
+          return image;
+        }
+    }
+
+  return GSK_GPU_FRAME_CLASS (gsk_gl_frame_parent_class)->upload_texture (frame, with_mipmap, texture);
 }
 
 static GskGpuDescriptors *
@@ -133,6 +169,7 @@ gsk_gl_frame_class_init (GskGLFrameClass *klass)
   gpu_frame_class->is_busy = gsk_gl_frame_is_busy;
   gpu_frame_class->setup = gsk_gl_frame_setup;
   gpu_frame_class->cleanup = gsk_gl_frame_cleanup;
+  gpu_frame_class->upload_texture = gsk_gl_frame_upload_texture;
   gpu_frame_class->create_descriptors = gsk_gl_frame_create_descriptors;
   gpu_frame_class->create_vertex_buffer = gsk_gl_frame_create_vertex_buffer;
   gpu_frame_class->create_storage_buffer = gsk_gl_frame_create_storage_buffer;
