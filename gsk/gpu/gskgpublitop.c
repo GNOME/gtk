@@ -209,6 +209,8 @@ gsk_gpu_blit_op (GskGpuFrame                 *frame,
 {
   GskGpuBlitOp *self;
 
+  g_assert ((gsk_gpu_image_get_flags (src_image) & GSK_GPU_IMAGE_NO_BLIT) == 0);
+
   self = (GskGpuBlitOp *) gsk_gpu_op_alloc (frame, &GSK_GPU_BLIT_OP_CLASS);
 
   self->src_image = g_object_ref (src_image);

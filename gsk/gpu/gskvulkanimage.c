@@ -458,7 +458,8 @@ gsk_vulkan_device_supports_format (GskVulkanDevice   *device,
                                    VkImageTiling      tiling,
                                    VkImageUsageFlags  usage,
                                    gsize              width,
-                                   gsize              height)
+                                   gsize              height,
+                                   GskGpuImageFlags  *out_flags)
 {
   VkDrmFormatModifierPropertiesEXT drm_mod_properties[100];
   VkDrmFormatModifierPropertiesListEXT drm_properties;
@@ -545,6 +546,10 @@ gsk_vulkan_device_supports_format (GskVulkanDevice   *device,
       image_properties.imageFormatProperties.maxExtent.height < height)
     return FALSE;
 
+  *out_flags = 0;
+  if ((features & VK_FORMAT_FEATURE_BLIT_SRC_BIT) == 0)
+    *out_flags |= GSK_GPU_IMAGE_NO_BLIT;
+
   return TRUE;
 }
 
@@ -593,6 +598,7 @@ gsk_vulkan_image_new (GskVulkanDevice           *device,
   GskVulkanImage *self;
   VkDevice vk_device;
   const GskMemoryFormatInfo *vk_format;
+  GskGpuImageFlags flags;
 
   g_assert (width > 0 && height > 0);
 
@@ -613,7 +619,8 @@ gsk_vulkan_image_new (GskVulkanDevice           *device,
                                                  vk_format->format,
                                                  0, 1,
                                                  tiling, usage,
-                                                 width, height))
+                                                 width, height,
+                                                 &flags))
             break;
 
           if (tiling != VK_IMAGE_TILING_OPTIMAL &&
@@ -621,7 +628,8 @@ gsk_vulkan_image_new (GskVulkanDevice           *device,
                                                  vk_format->format,
                                                  0, 1,
                                                  VK_IMAGE_TILING_OPTIMAL, usage,
-                                                 width, height))
+                                                 width, height,
+                                                 &flags))
             {
               tiling = VK_IMAGE_TILING_OPTIMAL;
               break;
@@ -650,7 +658,7 @@ gsk_vulkan_image_new (GskVulkanDevice           *device,
   self->vk_access = access;
 
   gsk_gpu_image_setup (GSK_GPU_IMAGE (self),
-                       vk_format->flags,
+                       flags | vk_format->flags,
                        format, width, height);
 
   GSK_VK_CHECK (vkCreateImage, vk_device,
@@ -664,7 +672,8 @@ gsk_vulkan_image_new (GskVulkanDevice           *device,
                                     .arrayLayers = 1,
                                     .samples = VK_SAMPLE_COUNT_1_BIT,
                                     .tiling = tiling,
-                                    .usage = usage,
+                                    .usage = usage |
+                                             (flags & GSK_GPU_IMAGE_NO_BLIT ? 0 : VK_IMAGE_USAGE_TRANSFER_SRC_BIT),
                                     .sharingMode = VK_SHARING_MODE_EXCLUSIVE,
                                     .initialLayout = self->vk_image_layout,
                                 },
@@ -857,6 +866,7 @@ gsk_vulkan_image_new_for_dmabuf (GskVulkanDevice *device,
   gsize width, height;
   const GdkDmabuf *dmabuf;
   VkResult res;
+  GskGpuImageFlags flags;
   gboolean is_yuv;
 
   if (!gsk_vulkan_device_has_feature (device, GDK_VULKAN_FEATURE_DMABUF))
@@ -895,7 +905,8 @@ gsk_vulkan_image_new_for_dmabuf (GskVulkanDevice *device,
                                           dmabuf->n_planes,
                                           VK_IMAGE_TILING_DRM_FORMAT_MODIFIER_EXT,
                                           VK_IMAGE_USAGE_SAMPLED_BIT,
-                                          width, height))
+                                          width, height,
+                                          &flags))
     {
       GDK_DEBUG (DMABUF, "Vulkan driver does not support format %.4s::%016llx with %u planes",
                  (char *) &dmabuf->fourcc, (unsigned long long) dmabuf->modifier, dmabuf->n_planes);
@@ -923,7 +934,8 @@ gsk_vulkan_image_new_for_dmabuf (GskVulkanDevice *device,
                             .arrayLayers = 1,
                             .samples = VK_SAMPLE_COUNT_1_BIT,
                             .tiling = VK_IMAGE_TILING_DRM_FORMAT_MODIFIER_EXT,
-                            .usage = VK_IMAGE_USAGE_SAMPLED_BIT,
+                            .usage = VK_IMAGE_USAGE_SAMPLED_BIT |
+                                     (flags & GSK_GPU_IMAGE_NO_BLIT ? 0 : VK_IMAGE_USAGE_TRANSFER_SRC_BIT),
                             .sharingMode = VK_SHARING_MODE_EXCLUSIVE,
                             .initialLayout = self->vk_image_layout,
                             .pNext = &(VkExternalMemoryImageCreateInfo) {
@@ -964,8 +976,9 @@ gsk_vulkan_image_new_for_dmabuf (GskVulkanDevice *device,
     }
 
   gsk_gpu_image_setup (GSK_GPU_IMAGE (self),
+                       flags |
                        (gdk_memory_format_alpha (gdk_texture_get_format (texture)) == GDK_MEMORY_ALPHA_STRAIGHT ? GSK_GPU_IMAGE_STRAIGHT_ALPHA : 0) |
-                       (is_yuv ? GSK_GPU_IMAGE_EXTERNAL : 0),
+                       (is_yuv ? (GSK_GPU_IMAGE_EXTERNAL | GSK_GPU_IMAGE_NO_BLIT) : 0),
                        gdk_texture_get_format (texture),
                        width, height);
   gsk_gpu_image_toggle_ref_texture (GSK_GPU_IMAGE (self), texture);

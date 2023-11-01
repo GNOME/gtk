@@ -4,6 +4,7 @@
 
 #include "gskgpuborderopprivate.h"
 #include "gskgpuboxshadowopprivate.h"
+#include "gskgpublitopprivate.h"
 #include "gskgpubluropprivate.h"
 #include "gskgpuclearopprivate.h"
 #include "gskgpuclipprivate.h"
@@ -571,9 +572,6 @@ gsk_gpu_node_processor_ensure_image (GskGpuNodeProcessor *self,
   GskGpuImageFlags flags, missing_flags;
   GskGpuImage *copy;
   gsize width, height;
-  GskGpuNodeProcessor other;
-  graphene_rect_t rect;
-  guint32 descriptor;
 
   g_assert ((required_flags & disallowed_flags) == 0);
   g_assert ((required_flags & (GSK_GPU_IMAGE_EXTERNAL | GSK_GPU_IMAGE_STRAIGHT_ALPHA)) == 0);
@@ -593,49 +591,62 @@ gsk_gpu_node_processor_ensure_image (GskGpuNodeProcessor *self,
                                                 gdk_memory_format_get_depth (gsk_gpu_image_get_format (image)),
                                                 width, height);
 
-  rect = GRAPHENE_RECT_INIT (0, 0, width, height);
-  descriptor = gsk_gpu_node_processor_add_image (self, image, GSK_GPU_SAMPLER_DEFAULT);
-
-  gsk_gpu_node_processor_init (&other,
-                               self->frame,
-                               self->desc,
-                               copy,
-                               &(cairo_rectangle_int_t) { 0, 0, width, height },
-                               &rect);
-
-  gsk_gpu_render_pass_begin_op (other.frame,
-                                copy,
-                                &(cairo_rectangle_int_t) { 0, 0, width, height },
-                                GSK_RENDER_PASS_OFFSCREEN);
-
-  gsk_gpu_node_processor_sync_globals (&other, 0);
-
-  if (flags & GSK_GPU_IMAGE_STRAIGHT_ALPHA)
+  if ((flags & (GSK_GPU_IMAGE_NO_BLIT | GSK_GPU_IMAGE_STRAIGHT_ALPHA)) == 0)
     {
-      gsk_gpu_straight_alpha_op (other.frame,
-                                 gsk_gpu_clip_get_shader_clip (&other.clip, &other.offset, &rect),
-                                 self->desc,
-                                 descriptor,
-                                 &rect,
-                                 &other.offset,
-                                 &rect);
+      gsk_gpu_blit_op (self->frame,
+                       image,
+                       copy,
+                       &(cairo_rectangle_int_t) { 0, 0, width, height },
+                       &(cairo_rectangle_int_t) { 0, 0, width, height },
+                       GSK_GPU_BLIT_NEAREST);
     }
   else
     {
-      gsk_gpu_texture_op (other.frame,
-                          gsk_gpu_clip_get_shader_clip (&other.clip, &other.offset, &rect),
-                          self->desc,
-                          descriptor,
-                          &rect,
-                          &other.offset,
-                          &rect);
+      GskGpuNodeProcessor other;
+      graphene_rect_t rect = GRAPHENE_RECT_INIT (0, 0, width, height);
+      guint32 descriptor = gsk_gpu_node_processor_add_image (self, image, GSK_GPU_SAMPLER_DEFAULT);
+
+      gsk_gpu_node_processor_init (&other,
+                                   self->frame,
+                                   self->desc,
+                                   copy,
+                                   &(cairo_rectangle_int_t) { 0, 0, width, height },
+                                   &rect);
+
+      gsk_gpu_render_pass_begin_op (other.frame,
+                                    copy,
+                                    &(cairo_rectangle_int_t) { 0, 0, width, height },
+                                    GSK_RENDER_PASS_OFFSCREEN);
+
+      gsk_gpu_node_processor_sync_globals (&other, 0);
+
+      if (flags & GSK_GPU_IMAGE_STRAIGHT_ALPHA)
+        {
+          gsk_gpu_straight_alpha_op (other.frame,
+                                     gsk_gpu_clip_get_shader_clip (&other.clip, &other.offset, &rect),
+                                     self->desc,
+                                     descriptor,
+                                     &rect,
+                                     &other.offset,
+                                     &rect);
+        }
+      else
+        {
+          gsk_gpu_texture_op (other.frame,
+                              gsk_gpu_clip_get_shader_clip (&other.clip, &other.offset, &rect),
+                              self->desc,
+                              descriptor,
+                              &rect,
+                              &other.offset,
+                              &rect);
+        }
+
+      gsk_gpu_render_pass_end_op (other.frame,
+                                  copy,
+                                  GSK_RENDER_PASS_OFFSCREEN);
+
+      gsk_gpu_node_processor_finish (&other);
     }
-
-  gsk_gpu_render_pass_end_op (other.frame,
-                              image,
-                              GSK_RENDER_PASS_OFFSCREEN);
-
-  gsk_gpu_node_processor_finish (&other);
 
   g_object_unref (image);
 
