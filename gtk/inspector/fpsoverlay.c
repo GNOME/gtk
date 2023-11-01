@@ -100,8 +100,6 @@ gtk_fps_overlay_snapshot (GtkInspectorOverlay *overlay,
   graphene_rect_t bounds;
   gboolean has_bounds;
   double overlay_opacity;
-  PangoGlyphString *glyphs;
-  GskRenderNode *fps_node;
 
   now = gdk_frame_clock_get_frame_time (gtk_widget_get_frame_clock (widget));
   info = g_hash_table_lookup (self->infos, widget);
@@ -149,27 +147,6 @@ gtk_fps_overlay_snapshot (GtkInspectorOverlay *overlay,
       has_bounds = gtk_widget_compute_bounds (widget, widget, &bounds);
     }
 
-  glyphs = pango_glyph_string_copy (self->glyphs);
-
-  fps = gtk_fps_overlay_get_fps (widget);
-  if (fps == 0.0)
-    {
-      for (int i = 0; i < 7; i++)
-        glyphs->glyphs[i].glyph = PANGO_GLYPH_EMPTY;
-    }
-  else
-    {
-      char *fps_string = g_strdup_printf ("%7.2f fps", fps);
-      for (int i = 0; i < 7; i++)
-        {
-          if (g_ascii_isdigit (fps_string[i]))
-            glyphs->glyphs[i].glyph = self->digits->glyphs[fps_string[i] - '0'].glyph;
-          else if (fps_string[i] == ' ')
-            glyphs->glyphs[i].glyph = PANGO_GLYPH_EMPTY;
-        }
-      g_free (fps_string);
-    }
-
   gtk_snapshot_save (snapshot);
   if (has_bounds)
     gtk_snapshot_translate (snapshot, &GRAPHENE_POINT_INIT (bounds.origin.x + bounds.size.width - self->width, bounds.origin.y));
@@ -179,12 +156,30 @@ gtk_fps_overlay_snapshot (GtkInspectorOverlay *overlay,
   gtk_snapshot_append_color (snapshot,
                              &(GdkRGBA) { 0, 0, 0, 0.5 },
                              &GRAPHENE_RECT_INIT (-1, -1, self->width + 2, self->height + 2));
-  fps_node = gsk_text_node_new (self->font,
-                                glyphs,
-                                &(GdkRGBA) { 1, 1, 1, 1 },
-                                &GRAPHENE_POINT_INIT (0, self->baseline));
-  gtk_snapshot_append_node (snapshot, fps_node);
-  gsk_render_node_unref (fps_node);
+
+  fps = gtk_fps_overlay_get_fps (widget);
+  if (fps != 0.0)
+    {
+      GskRenderNode *fps_node;
+      char fps_string[40];
+
+      g_snprintf (fps_string, sizeof (fps_string), "%7.2f fps", fps);
+      for (int i = 0; i < 7; i++)
+        {
+          if (g_ascii_isdigit (fps_string[i]))
+            self->glyphs->glyphs[i].glyph = self->digits->glyphs[fps_string[i] - '0'].glyph;
+          else if (fps_string[i] == ' ')
+            self->glyphs->glyphs[i].glyph = PANGO_GLYPH_EMPTY;
+        }
+
+      fps_node = gsk_text_node_new (self->font,
+                                    self->glyphs,
+                                    &(GdkRGBA) { 1, 1, 1, 1 },
+                                    &GRAPHENE_POINT_INIT (0, self->baseline));
+      gtk_snapshot_append_node (snapshot, fps_node);
+      gsk_render_node_unref (fps_node);
+    }
+
   if (overlay_opacity < 1.0)
     gtk_snapshot_pop (snapshot);
   gtk_snapshot_restore (snapshot);
