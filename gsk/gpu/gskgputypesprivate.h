@@ -20,6 +20,7 @@ typedef enum {
   GSK_GPU_IMAGE_EXTERNAL       = (1 << 0),
   GSK_GPU_IMAGE_TOGGLE_REF     = (1 << 1),
   GSK_GPU_IMAGE_STRAIGHT_ALPHA = (1 << 2),
+  GSK_GPU_IMAGE_NO_BLIT        = (1 << 3),
 } GskGpuImageFlags;
 
 typedef enum {
