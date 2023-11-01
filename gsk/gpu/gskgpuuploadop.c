@@ -296,12 +296,14 @@ static const GskGpuOpClass GSK_GPU_UPLOAD_TEXTURE_OP_CLASS = {
 
 GskGpuImage *
 gsk_gpu_upload_texture_op_try (GskGpuFrame *frame,
+                               gboolean     with_mipmap,
                                GdkTexture  *texture)
 {
   GskGpuUploadTextureOp *self;
   GskGpuImage *image;
 
   image = gsk_gpu_device_create_upload_image (gsk_gpu_frame_get_device (frame),
+                                              with_mipmap,
                                               gdk_texture_get_format (texture),
                                               gdk_texture_get_width (texture),
                                               gdk_texture_get_height (texture));
@@ -441,6 +443,7 @@ gsk_gpu_upload_cairo_op (GskGpuFrame           *frame,
 
   self->node = gsk_render_node_ref (node);
   self->image = gsk_gpu_device_create_upload_image (gsk_gpu_frame_get_device (frame),
+                                                    FALSE,
                                                     GDK_MEMORY_DEFAULT,
                                                     ceil (graphene_vec2_get_x (scale) * viewport->size.width),
                                                     ceil (graphene_vec2_get_y (scale) * viewport->size.height));

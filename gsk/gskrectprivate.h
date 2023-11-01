@@ -1,6 +1,7 @@
 #pragma once
 
 #include <graphene.h>
+#include <math.h>
 
 static inline void
 gsk_rect_init (graphene_rect_t *r,
@@ -110,5 +111,15 @@ gsk_gpu_rect_to_float (const graphene_rect_t  *rect,
   values[1] = rect->origin.y + offset->y;
   values[2] = rect->size.width;
   values[3] = rect->size.height;
+}
+
+static inline void
+gsk_rect_round_larger (graphene_rect_t *rect)
+{
+  float x = floor (rect->origin.x);
+  float y = floor (rect->origin.y);
+  *rect = GRAPHENE_RECT_INIT (x, y,
+                              ceil (rect->origin.x + rect->size.width) - x,
+                              ceil (rect->origin.y + rect->size.height) - y);
 }
 

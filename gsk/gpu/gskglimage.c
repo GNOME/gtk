@@ -88,7 +88,7 @@ gsk_gl_image_new_backbuffer (GskGLDevice    *device,
                                 &self->gl_type,
                                 swizzle);
   
-  gsk_gpu_image_setup (GSK_GPU_IMAGE (self), 0, format, width, height);
+  gsk_gpu_image_setup (GSK_GPU_IMAGE (self), GSK_GPU_IMAGE_CAN_MIPMAP, format, width, height);
 
   /* texture_id == 0 means backbuffer */
 
@@ -120,6 +120,7 @@ gsk_gl_image_new (GskGLDevice    *device,
                                 swizzle);
   
   gsk_gpu_image_setup (GSK_GPU_IMAGE (self),
+                       GSK_GPU_IMAGE_CAN_MIPMAP |
                        (gdk_memory_format_alpha (format) == GDK_MEMORY_ALPHA_STRAIGHT ? GSK_GPU_IMAGE_STRAIGHT_ALPHA : 0),
                        format,
                        width, height);

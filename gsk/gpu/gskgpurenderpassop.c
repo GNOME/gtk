@@ -242,6 +242,33 @@ gsk_gpu_render_pass_end_op_vk_command (GskGpuOp        *op,
 
   vkCmdEndRenderPass (command_buffer);
 
+  if (gsk_gpu_image_get_flags (self->target) & GSK_GPU_IMAGE_CAN_MIPMAP)
+    {
+      vkCmdPipelineBarrier (command_buffer,
+                            gsk_vulkan_image_get_vk_pipeline_stage (GSK_VULKAN_IMAGE (self->target)),
+                            VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
+                            0,
+                            0, NULL,
+                            0, NULL,
+                            1, &(VkImageMemoryBarrier) {
+                                .sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_BARRIER,
+                                .srcAccessMask = gsk_vulkan_image_get_vk_access (GSK_VULKAN_IMAGE (self->target)),
+                                .dstAccessMask = VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT,
+                                .oldLayout = gsk_vulkan_image_get_vk_image_layout (GSK_VULKAN_IMAGE (self->target)),
+                                .newLayout = gsk_gpu_render_pass_type_to_vk_image_layout (self->pass_type),
+                                .srcQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED,
+                                .dstQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED,
+                                .image = gsk_vulkan_image_get_vk_image (GSK_VULKAN_IMAGE (self->target)),
+                                .subresourceRange = {
+                                  .aspectMask = VK_IMAGE_ASPECT_COLOR_BIT,
+                                  .baseMipLevel = 1,
+                                  .levelCount = VK_REMAINING_MIP_LEVELS,
+                                  .baseArrayLayer = 0,
+                                  .layerCount = 1
+                                },
+                            });
+        }
+
   gsk_vulkan_image_set_vk_image_layout (GSK_VULKAN_IMAGE (self->target),
                                         VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
                                         gsk_gpu_render_pass_type_to_vk_image_layout (self->pass_type),
@@ -313,6 +340,7 @@ gsk_gpu_render_pass_op_offscreen (GskGpuFrame           *frame,
   height = ceil (graphene_vec2_get_y (scale) * viewport->size.height);
 
   image = gsk_gpu_device_create_offscreen_image (gsk_gpu_frame_get_device (frame),
+                                                 FALSE,
                                                  gsk_render_node_get_preferred_depth (node),
                                                  width, height);
 

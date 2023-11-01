@@ -60,6 +60,7 @@ gl_program_key_equal (gconstpointer a,
 
 static GskGpuImage *
 gsk_gl_device_create_offscreen_image (GskGpuDevice   *device,
+                                      gboolean        with_mipmap,
                                       GdkMemoryDepth  depth,
                                       gsize           width,
                                       gsize           height)
@@ -74,6 +75,7 @@ gsk_gl_device_create_offscreen_image (GskGpuDevice   *device,
 
 static GskGpuImage *
 gsk_gl_device_create_upload_image (GskGpuDevice    *device,
+                                   gboolean         with_mipmap,
                                    GdkMemoryFormat  format,
                                    gsize            width,
                                    gsize            height)
