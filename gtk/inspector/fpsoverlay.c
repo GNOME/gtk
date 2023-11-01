@@ -99,10 +99,12 @@ gtk_fps_info_new (GtkWidget *widget)
 
   pango_layout_iter_free (iter);
 
-  pango_layout_set_text (layout, "0123456789", -1);
+  pango_layout_set_text (layout, "0123456789 ", -1);
 
   iter = pango_layout_get_iter (layout);
   run = pango_layout_iter_get_run_readonly (iter);
+
+  g_assert (run->glyphs->num_glyphs == 11);
 
   info->digits = pango_glyph_string_copy (run->glyphs);
 
@@ -216,7 +218,7 @@ gtk_fps_overlay_snapshot (GtkInspectorOverlay *overlay,
           if (g_ascii_isdigit (fps_string[i]))
             info->glyphs->glyphs[i].glyph = info->digits->glyphs[fps_string[i] - '0'].glyph;
           else if (fps_string[i] == ' ')
-            info->glyphs->glyphs[i].glyph = PANGO_GLYPH_EMPTY;
+            info->glyphs->glyphs[i].glyph = info->digits->glyphs[10].glyph;
         }
 
       fps_node = gsk_text_node_new (info->font,
