@@ -26,6 +26,7 @@
 #include "layoutoverlay.h"
 #include "focusoverlay.h"
 #include "baselineoverlay.h"
+#include "subsurfaceoverlay.h"
 #include "window.h"
 
 #include "gtkadjustment.h"
@@ -96,6 +97,7 @@ struct _GtkInspectorVisual
   GtkWidget *layout_switch;
   GtkWidget *focus_switch;
   GtkWidget *a11y_switch;
+  GtkWidget *subsurface_switch;
 
   GtkInspectorOverlay *fps_overlay;
   GtkInspectorOverlay *updates_overlay;
@@ -103,6 +105,7 @@ struct _GtkInspectorVisual
   GtkInspectorOverlay *focus_overlay;
   GtkInspectorOverlay *baseline_overlay;
   GtkInspectorOverlay *a11y_overlay;
+  GtkInspectorOverlay *subsurface_overlay;
 
   GdkDisplay *display;
 };
@@ -310,6 +313,40 @@ a11y_activate (GtkSwitch          *sw,
         {
           gtk_inspector_window_remove_overlay (iw, vis->a11y_overlay);
           vis->a11y_overlay = NULL;
+        }
+    }
+
+  redraw_everything ();
+}
+
+static void
+subsurface_activate (GtkSwitch          *sw,
+                     GParamSpec         *pspec,
+                     GtkInspectorVisual *vis)
+{
+  GtkInspectorWindow *iw;
+  gboolean subsurface;
+
+  subsurface = gtk_switch_get_active (sw);
+  iw = GTK_INSPECTOR_WINDOW (gtk_widget_get_root (GTK_WIDGET (vis)));
+  if (iw == NULL)
+    return;
+
+  if (subsurface)
+    {
+      if (vis->subsurface_overlay == NULL)
+        {
+          vis->subsurface_overlay = gtk_subsurface_overlay_new ();
+          gtk_inspector_window_add_overlay (iw, vis->subsurface_overlay);
+          g_object_unref (vis->subsurface_overlay);
+        }
+    }
+  else
+    {
+      if (vis->subsurface_overlay != NULL)
+        {
+          gtk_inspector_window_remove_overlay (iw, vis->subsurface_overlay);
+          vis->subsurface_overlay = NULL;
         }
     }
 
@@ -1043,6 +1080,11 @@ row_activated (GtkListBox         *box,
       GtkSwitch *sw = GTK_SWITCH (vis->a11y_switch);
       gtk_switch_set_active (sw, !gtk_switch_get_active (sw));
     }
+  else if (gtk_widget_is_ancestor (vis->subsurface_switch, GTK_WIDGET (row)))
+    {
+      GtkSwitch *sw = GTK_SWITCH (vis->subsurface_switch);
+      gtk_switch_set_active (sw, !gtk_switch_get_active (sw));
+    }
 }
 
 static void
@@ -1162,6 +1204,7 @@ gtk_inspector_visual_class_init (GtkInspectorVisualClass *klass)
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorVisual, layout_switch);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorVisual, focus_switch);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorVisual, a11y_switch);
+  gtk_widget_class_bind_template_child (widget_class, GtkInspectorVisual, subsurface_switch);
 
   gtk_widget_class_bind_template_callback (widget_class, fps_activate);
   gtk_widget_class_bind_template_callback (widget_class, updates_activate);
@@ -1171,6 +1214,7 @@ gtk_inspector_visual_class_init (GtkInspectorVisualClass *klass)
   gtk_widget_class_bind_template_callback (widget_class, layout_activate);
   gtk_widget_class_bind_template_callback (widget_class, focus_activate);
   gtk_widget_class_bind_template_callback (widget_class, a11y_activate);
+  gtk_widget_class_bind_template_callback (widget_class, subsurface_activate);
   gtk_widget_class_bind_template_callback (widget_class, inspect_inspector);
 
   gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BIN_LAYOUT);

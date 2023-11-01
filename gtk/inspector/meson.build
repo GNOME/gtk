@@ -42,6 +42,7 @@ inspector_sources = files(
   'startrecording.c',
   'statistics.c',
   'strv-editor.c',
+  'subsurfaceoverlay.c',
   'tree-data.c',
   'type-info.c',
   'updatesoverlay.c',
