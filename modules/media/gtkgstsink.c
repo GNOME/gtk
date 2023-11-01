@@ -246,26 +246,30 @@ gtk_gst_sink_propose_allocation (GstBaseSink *bsink,
 }
 
 static GdkMemoryFormat
-gtk_gst_memory_format_from_video (GstVideoFormat format)
+gtk_gst_memory_format_from_video_info (GstVideoInfo *info)
 {
-  switch ((guint) format)
+#define IS_PREMULTIPLIED(_info) (GST_VIDEO_INFO_FLAGS (_info) & GST_VIDEO_FLAG_PREMULTIPLIED_ALPHA)
+  switch ((guint) GST_VIDEO_INFO_FORMAT (info))
   {
     case GST_VIDEO_FORMAT_BGRA:
-      return GDK_MEMORY_B8G8R8A8;
+      return IS_PREMULTIPLIED (info) ? GDK_MEMORY_B8G8R8A8_PREMULTIPLIED : GDK_MEMORY_B8G8R8A8;
     case GST_VIDEO_FORMAT_ARGB:
-      return GDK_MEMORY_A8R8G8B8;
+      return IS_PREMULTIPLIED (info) ? GDK_MEMORY_A8R8G8B8_PREMULTIPLIED : GDK_MEMORY_A8R8G8B8;
     case GST_VIDEO_FORMAT_RGBA:
-      return GDK_MEMORY_R8G8B8A8;
+      return IS_PREMULTIPLIED (info) ? GDK_MEMORY_R8G8B8A8_PREMULTIPLIED : GDK_MEMORY_R8G8B8A8;
     case GST_VIDEO_FORMAT_ABGR:
-      return GDK_MEMORY_A8B8G8R8;
+      return IS_PREMULTIPLIED (info) ? GDK_MEMORY_A8B8G8R8_PREMULTIPLIED : GDK_MEMORY_A8B8G8R8;
     case GST_VIDEO_FORMAT_RGB:
       return GDK_MEMORY_R8G8B8;
     case GST_VIDEO_FORMAT_BGR:
       return GDK_MEMORY_B8G8R8;
     default:
-      g_assert_not_reached ();
-      return GDK_MEMORY_A8R8G8B8;
+      if (GST_VIDEO_INFO_HAS_ALPHA (info))
+        return IS_PREMULTIPLIED (info) ? GDK_MEMORY_R8G8B8A8_PREMULTIPLIED : GDK_MEMORY_R8G8B8A8;
+      else
+        return GDK_MEMORY_R8G8B8;
   }
+#undef IS_PREMULTIPLIED
 }
 
 static void
@@ -301,6 +305,7 @@ gtk_gst_sink_texture_from_buffer (GtkGstSink *self,
        */
       builder = gdk_gl_texture_builder_new ();
       gdk_gl_texture_builder_set_context (builder, self->gdk_context);
+      gdk_gl_texture_builder_set_format (builder, gtk_gst_memory_format_from_video_info (&frame->info));
       gdk_gl_texture_builder_set_id (builder, *(guint *) frame->data[0]);
       gdk_gl_texture_builder_set_width (builder, frame->info.width);
       gdk_gl_texture_builder_set_height (builder, frame->info.height);
@@ -324,7 +329,7 @@ gtk_gst_sink_texture_from_buffer (GtkGstSink *self,
                                           frame);
       texture = gdk_memory_texture_new (frame->info.width,
                                         frame->info.height,
-                                        gtk_gst_memory_format_from_video (GST_VIDEO_FRAME_FORMAT (frame)),
+                                        gtk_gst_memory_format_from_video_info (&frame->info),
                                         bytes,
                                         frame->info.stride[0]);
       g_bytes_unref (bytes);
