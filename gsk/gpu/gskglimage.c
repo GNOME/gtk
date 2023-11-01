@@ -153,6 +153,44 @@ gsk_gl_image_new (GskGLDevice    *device,
   return GSK_GPU_IMAGE (self);
 }
 
+GskGpuImage *
+gsk_gl_image_new_for_texture (GskGLDevice      *device,
+                              GdkTexture       *owner,
+                              GLuint            tex_id,
+                              gboolean          take_ownership,
+                              GskGpuImageFlags  extra_flags)
+{
+  GdkMemoryFormat format;
+  GskGLImage *self;
+  GLint swizzle[4];
+
+  format = gdk_texture_get_format (owner);
+
+  self = g_object_new (GSK_TYPE_GL_IMAGE, NULL);
+
+  /* We only do this so these variables get initialized */
+  gsk_gl_device_find_gl_format (device,
+                                format,
+                                &format,
+                                &self->gl_internal_format,
+                                &self->gl_format,
+                                &self->gl_type,
+                                swizzle);
+  
+  gsk_gpu_image_setup (GSK_GPU_IMAGE (self),
+                       extra_flags |
+                       (gdk_memory_format_alpha (format) == GDK_MEMORY_ALPHA_STRAIGHT ? GSK_GPU_IMAGE_STRAIGHT_ALPHA : 0),
+                       format,
+                       gdk_texture_get_width (owner),
+                       gdk_texture_get_height (owner));
+  gsk_gpu_image_toggle_ref_texture (GSK_GPU_IMAGE (self), owner);
+
+  self->texture_id = tex_id;
+  self->owns_texture = take_ownership;
+
+  return GSK_GPU_IMAGE (self);
+}
+
 void
 gsk_gl_image_bind_texture (GskGLImage *self)
 {
