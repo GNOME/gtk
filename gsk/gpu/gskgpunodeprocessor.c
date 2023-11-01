@@ -15,6 +15,7 @@
 #include "gskgpuframeprivate.h"
 #include "gskgpuglobalsopprivate.h"
 #include "gskgpuimageprivate.h"
+#include "gskgpumipmapopprivate.h"
 #include "gskgpurenderpassopprivate.h"
 #include "gskgpuroundedcoloropprivate.h"
 #include "gskgpuscissoropprivate.h"
@@ -518,7 +519,7 @@ gsk_gpu_get_node_as_image (GskGpuFrame            *frame,
         gint64 timestamp = gsk_gpu_frame_get_timestamp (frame);
         result = gsk_gpu_device_lookup_texture_image (device, texture, timestamp);
         if (result == NULL)
-          result = gsk_gpu_frame_upload_texture (frame, texture);
+          result = gsk_gpu_frame_upload_texture (frame, FALSE, texture);
 
         if (result)
           {
@@ -574,7 +575,7 @@ gsk_gpu_node_processor_ensure_image (GskGpuNodeProcessor *self,
   gsize width, height;
 
   g_assert ((required_flags & disallowed_flags) == 0);
-  g_assert ((required_flags & (GSK_GPU_IMAGE_EXTERNAL | GSK_GPU_IMAGE_STRAIGHT_ALPHA)) == 0);
+  g_assert ((required_flags & (GSK_GPU_IMAGE_EXTERNAL | GSK_GPU_IMAGE_STRAIGHT_ALPHA | GSK_GPU_IMAGE_NO_BLIT)) == 0);
 
   flags = gsk_gpu_image_get_flags (image);
   missing_flags = required_flags & ~flags;
@@ -582,12 +583,20 @@ gsk_gpu_node_processor_ensure_image (GskGpuNodeProcessor *self,
     {
       if (missing_flags == 0)
         return image;
+
+      if (missing_flags == GSK_GPU_IMAGE_MIPMAP &&
+          (flags & GSK_GPU_IMAGE_CAN_MIPMAP))
+        {
+          gsk_gpu_mipmap_op (self->frame, image);
+          return image;
+        }
     }
 
   width = gsk_gpu_image_get_width (image);
   height = gsk_gpu_image_get_height (image);
 
   copy = gsk_gpu_device_create_offscreen_image (gsk_gpu_frame_get_device (self->frame),
+                                                required_flags & (GSK_GPU_IMAGE_CAN_MIPMAP | GSK_GPU_IMAGE_MIPMAP) ? TRUE : FALSE,
                                                 gdk_memory_format_get_depth (gsk_gpu_image_get_format (image)),
                                                 width, height);
 
@@ -647,6 +656,9 @@ gsk_gpu_node_processor_ensure_image (GskGpuNodeProcessor *self,
 
       gsk_gpu_node_processor_finish (&other);
     }
+
+  if (required_flags & GSK_GPU_IMAGE_MIPMAP)
+    gsk_gpu_mipmap_op (self->frame, copy);
 
   g_object_unref (image);
 
@@ -746,6 +758,7 @@ gsk_gpu_node_processor_blur_op (GskGpuNodeProcessor       *self,
   height = ceil (graphene_vec2_get_y (&self->scale) * intermediate_rect.size.height);
 
   intermediate = gsk_gpu_device_create_offscreen_image (gsk_gpu_frame_get_device (self->frame),
+                                                        FALSE,
                                                         source_depth,
                                                         width, height);
 
@@ -1278,7 +1291,7 @@ gsk_gpu_node_processor_add_texture_node (GskGpuNodeProcessor *self,
   image = gsk_gpu_device_lookup_texture_image (device, texture, timestamp);
   if (image == NULL)
     {
-      image = gsk_gpu_frame_upload_texture (self->frame, texture);
+      image = gsk_gpu_frame_upload_texture (self->frame, FALSE, texture);
       if (image == NULL)
         {
           GSK_DEBUG (FALLBACK, "Unsupported texture format %u for size %dx%d",
@@ -1332,7 +1345,7 @@ gsk_gpu_node_processor_create_texture_pattern (GskGpuPatternWriter *self,
   image = gsk_gpu_device_lookup_texture_image (device, texture, timestamp);
   if (image == NULL)
     {
-      image = gsk_gpu_frame_upload_texture (self->frame, texture);
+      image = gsk_gpu_frame_upload_texture (self->frame, FALSE, texture);
       if (image == NULL)
         return FALSE;
     }
@@ -1353,6 +1366,100 @@ gsk_gpu_node_processor_create_texture_pattern (GskGpuPatternWriter *self,
   g_object_unref (image);
 
   return TRUE;
+}
+
+static void
+gsk_gpu_node_processor_add_texture_scale_node (GskGpuNodeProcessor *self,
+                                               GskRenderNode       *node)
+{
+  GskGpuDevice *device;
+  GskGpuImage *image;
+  GdkTexture *texture;
+  GskScalingFilter scaling_filter;
+  gint64 timestamp;
+  guint32 descriptor;
+  gboolean need_mipmap, need_offscreen;
+
+  need_offscreen = self->modelview != NULL || 
+            !graphene_vec2_equal (&self->scale, graphene_vec2_one ());
+  if (need_offscreen)
+    {
+      GskGpuImage *offscreen;
+      graphene_rect_t clip_bounds;
+
+      if (!gsk_gpu_node_processor_clip_node_bounds (self, node, &clip_bounds))
+        return;
+      gsk_rect_round_larger (&clip_bounds);
+      offscreen = gsk_gpu_render_pass_op_offscreen (self->frame,
+                                                    graphene_vec2_one (),
+                                                    &clip_bounds,
+                                                    node);
+      descriptor = gsk_gpu_node_processor_add_image (self, offscreen, GSK_GPU_SAMPLER_DEFAULT);
+      gsk_gpu_texture_op (self->frame,
+                          gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, &node->bounds),
+                          self->desc,
+                          descriptor,
+                          &node->bounds,
+                          &self->offset,
+                          &clip_bounds);
+      g_object_unref (offscreen);
+      return;
+    }
+
+  device = gsk_gpu_frame_get_device (self->frame);
+  texture = gsk_texture_scale_node_get_texture (node);
+  scaling_filter = gsk_texture_scale_node_get_filter (node);
+  timestamp = gsk_gpu_frame_get_timestamp (self->frame);
+  need_mipmap = scaling_filter == GSK_SCALING_FILTER_TRILINEAR;
+
+  image = gsk_gpu_device_lookup_texture_image (device, texture, timestamp);
+  if (image == NULL)
+    {
+      image = gsk_gpu_frame_upload_texture (self->frame, need_mipmap, texture);
+      if (image == NULL)
+        {
+          GSK_DEBUG (FALLBACK, "Unsupported texture format %u for size %dx%d",
+                     gdk_texture_get_format (texture),
+                     gdk_texture_get_width (texture),
+                     gdk_texture_get_height (texture));
+          gsk_gpu_node_processor_add_fallback_node (self, node);
+          return;
+        }
+    }
+
+  image = gsk_gpu_node_processor_ensure_image (self,
+                                               image,
+                                               need_mipmap ? (GSK_GPU_IMAGE_CAN_MIPMAP | GSK_GPU_IMAGE_MIPMAP) : 0,
+                                               GSK_GPU_IMAGE_STRAIGHT_ALPHA);
+
+  switch (scaling_filter)
+    {
+      case GSK_SCALING_FILTER_LINEAR:
+        descriptor = gsk_gpu_node_processor_add_image (self, image, GSK_GPU_SAMPLER_DEFAULT);
+        break;
+
+      case GSK_SCALING_FILTER_NEAREST:
+        descriptor = gsk_gpu_node_processor_add_image (self, image, GSK_GPU_SAMPLER_NEAREST);
+        break;
+
+      case GSK_SCALING_FILTER_TRILINEAR:
+        descriptor = gsk_gpu_node_processor_add_image (self, image, GSK_GPU_SAMPLER_MIPMAP_DEFAULT);
+        break;
+
+      default:
+        g_assert_not_reached ();
+        return;
+    }
+
+  gsk_gpu_texture_op (self->frame,
+                      gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, &node->bounds),
+                      self->desc,
+                      descriptor,
+                      &node->bounds,
+                      &self->offset,
+                      &node->bounds);
+
+  g_object_unref (image);
 }
 
 static void
@@ -2117,7 +2224,7 @@ static const struct
   },
   [GSK_TEXTURE_SCALE_NODE] = {
     0,
-    NULL,
+    gsk_gpu_node_processor_add_texture_scale_node,
     NULL,
   },
   [GSK_MASK_NODE] = {

@@ -77,11 +77,12 @@ gsk_gpu_frame_cleanup (GskGpuFrame *self)
 
 static GskGpuImage *
 gsk_gpu_frame_default_upload_texture (GskGpuFrame *self,
+                                      gboolean     with_mipmap,
                                       GdkTexture  *texture)
 {
   GskGpuImage *image;
 
-  image = gsk_gpu_upload_texture_op_try (self, texture);
+  image = gsk_gpu_upload_texture_op_try (self, with_mipmap, texture);
   if (image)
     g_object_ref (image);
 
@@ -361,12 +362,13 @@ gsk_gpu_frame_alloc_op (GskGpuFrame *self,
 
 GskGpuImage *
 gsk_gpu_frame_upload_texture (GskGpuFrame  *self,
+                              gboolean      with_mipmap,
                               GdkTexture   *texture)
 {
   GskGpuFramePrivate *priv = gsk_gpu_frame_get_instance_private (self);
   GskGpuImage *image;
 
-  image = GSK_GPU_FRAME_GET_CLASS (self)->upload_texture (self, texture);
+  image = GSK_GPU_FRAME_GET_CLASS (self)->upload_texture (self, with_mipmap, texture);
 
   if (image)
     gsk_gpu_device_cache_texture_image (priv->device, texture, priv->timestamp, image);

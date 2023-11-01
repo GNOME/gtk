@@ -25,6 +25,7 @@ struct _GskGpuDeviceClass
   GObjectClass parent_class;
 
   GskGpuImage *         (* create_offscreen_image)                      (GskGpuDevice           *self,
+                                                                         gboolean                with_mipmap,
                                                                          GdkMemoryDepth          depth,
                                                                          gsize                   width,
                                                                          gsize                   height);
@@ -32,6 +33,7 @@ struct _GskGpuDeviceClass
                                                                          gsize                   width,
                                                                          gsize                   height);
   GskGpuImage *         (* create_upload_image)                         (GskGpuDevice           *self,
+                                                                         gboolean                with_mipmap,
                                                                          GdkMemoryFormat         format,
                                                                          gsize                   width,
                                                                          gsize                   height);
@@ -49,10 +51,12 @@ GdkDisplay *            gsk_gpu_device_get_display                      (GskGpuD
 gsize                   gsk_gpu_device_get_max_image_size               (GskGpuDevice           *self);
 
 GskGpuImage *           gsk_gpu_device_create_offscreen_image           (GskGpuDevice           *self,
+                                                                         gboolean                with_mipmap,
                                                                          GdkMemoryDepth          depth,
                                                                          gsize                   width,
                                                                          gsize                   height);
 GskGpuImage *           gsk_gpu_device_create_upload_image              (GskGpuDevice           *self,
+                                                                         gboolean                with_mipmap,
                                                                          GdkMemoryFormat         format,
                                                                          gsize                   width,
                                                                          gsize                   height);

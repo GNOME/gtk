@@ -7,6 +7,7 @@
 G_BEGIN_DECLS
 
 GskGpuImage *           gsk_gpu_upload_texture_op_try                   (GskGpuFrame                    *frame,
+                                                                         gboolean                        with_mipmap,
                                                                          GdkTexture                     *texture);
 
 GskGpuImage *           gsk_gpu_upload_cairo_op                         (GskGpuFrame                    *frame,

@@ -138,20 +138,6 @@ render_pass_cache_key_equal (gconstpointer a,
          keya->format == keyb->format;
 }
 
-static GskGpuImage *
-gsk_vulkan_device_create_offscreen_image (GskGpuDevice   *device,
-                                          GdkMemoryDepth  depth,
-                                          gsize           width,
-                                          gsize           height)
-{
-  GskVulkanDevice *self = GSK_VULKAN_DEVICE (device);
-
-  return gsk_vulkan_image_new_for_offscreen (self,
-                                             GDK_MEMORY_R8G8B8A8_PREMULTIPLIED,
-                                             width,
-                                             height);
-}
-
 static GskVulkanPipelineLayout *
 gsk_vulkan_pipeline_layout_new (GskVulkanDevice *self,
                                 VkSampler       *immutable_samplers,
@@ -312,6 +298,22 @@ pipeline_layout_equal_samplers (gconstpointer a,
 }
 
 static GskGpuImage *
+gsk_vulkan_device_create_offscreen_image (GskGpuDevice   *device,
+                                          gboolean        with_mipmap,
+                                          GdkMemoryDepth  depth,
+                                          gsize           width,
+                                          gsize           height)
+{
+  GskVulkanDevice *self = GSK_VULKAN_DEVICE (device);
+
+  return gsk_vulkan_image_new_for_offscreen (self,
+                                             with_mipmap,
+                                             gdk_memory_depth_get_format (depth),
+                                             width,
+                                             height);
+}
+
+static GskGpuImage *
 gsk_vulkan_device_create_atlas_image (GskGpuDevice *device,
                                       gsize         width,
                                       gsize         height)
@@ -325,6 +327,7 @@ gsk_vulkan_device_create_atlas_image (GskGpuDevice *device,
 
 static GskGpuImage *
 gsk_vulkan_device_create_upload_image (GskGpuDevice    *device,
+                                       gboolean         with_mipmap,
                                        GdkMemoryFormat  format,
                                        gsize            width,
                                        gsize            height)
@@ -332,6 +335,7 @@ gsk_vulkan_device_create_upload_image (GskGpuDevice    *device,
   GskVulkanDevice *self = GSK_VULKAN_DEVICE (device);
 
   return gsk_vulkan_image_new_for_upload (self,
+                                          with_mipmap,
                                           format,
                                           width,
                                           height);

@@ -158,6 +158,7 @@ gsk_vulkan_frame_cleanup (GskGpuFrame *frame)
 
 static GskGpuImage *
 gsk_vulkan_frame_upload_texture (GskGpuFrame  *frame,
+                                 gboolean      with_mipmap,
                                  GdkTexture   *texture)
 {
 #ifdef HAVE_DMABUF
@@ -170,7 +171,7 @@ gsk_vulkan_frame_upload_texture (GskGpuFrame  *frame,
     }
 #endif
 
-  return GSK_GPU_FRAME_CLASS (gsk_vulkan_frame_parent_class)->upload_texture (frame, texture);
+  return GSK_GPU_FRAME_CLASS (gsk_vulkan_frame_parent_class)->upload_texture (frame, with_mipmap, texture);
 }
 
 guint32

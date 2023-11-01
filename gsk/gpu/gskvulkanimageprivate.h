@@ -21,10 +21,12 @@ GskGpuImage *           gsk_vulkan_image_new_for_atlas                  (GskVulk
                                                                          gsize                   width,
                                                                          gsize                   height);
 GskGpuImage *           gsk_vulkan_image_new_for_offscreen              (GskVulkanDevice        *device,
+                                                                         gboolean                with_mipmap,
                                                                          GdkMemoryFormat         preferred_format,
                                                                          gsize                   width,
                                                                          gsize                   height);
 GskGpuImage *           gsk_vulkan_image_new_for_upload                 (GskVulkanDevice        *device,
+                                                                         gboolean                with_mipmap,
                                                                          GdkMemoryFormat         format,
                                                                          gsize                   width,
                                                                          gsize                   height);
@@ -58,6 +60,13 @@ VkImageView             gsk_vulkan_image_get_vk_image_view              (GskVulk
 VkFormat                gsk_vulkan_image_get_vk_format                  (GskVulkanImage         *self);
 VkFramebuffer           gsk_vulkan_image_get_vk_framebuffer             (GskVulkanImage         *self,
                                                                          VkRenderPass            pass);
+
+static inline guint
+gsk_vulkan_mipmap_levels (gsize width,
+                          gsize height)
+{
+  return g_bit_nth_msf (MAX (width, height) - 1, -1) + 1;
+}
 
 G_END_DECLS
 

@@ -26,6 +26,7 @@ struct _GskVulkanImage
   VkImage vk_image;
   VkImageView vk_image_view;
   VkFramebuffer vk_framebuffer;
+  VkImageView vk_framebuffer_image_view;
   VkSampler vk_sampler;
 
   VkPipelineStageFlags vk_pipeline_stage;
@@ -583,6 +584,7 @@ gsk_vulkan_image_create_view (GskVulkanImage            *self,
 
 static GskVulkanImage *
 gsk_vulkan_image_new (GskVulkanDevice           *device,
+                      gboolean                   with_mipmap,
                       GdkMemoryFormat            format,
                       gsize                      width,
                       gsize                      height,
@@ -658,7 +660,8 @@ gsk_vulkan_image_new (GskVulkanDevice           *device,
   self->vk_access = access;
 
   gsk_gpu_image_setup (GSK_GPU_IMAGE (self),
-                       flags | vk_format->flags,
+                       flags | vk_format->flags |
+                       (with_mipmap ? GSK_GPU_IMAGE_CAN_MIPMAP : 0),
                        format, width, height);
 
   GSK_VK_CHECK (vkCreateImage, vk_device,
@@ -668,7 +671,7 @@ gsk_vulkan_image_new (GskVulkanDevice           *device,
                                     .imageType = VK_IMAGE_TYPE_2D,
                                     .format = vk_format->format,
                                     .extent = { width, height, 1 },
-                                    .mipLevels = 1,
+                                    .mipLevels = with_mipmap ? gsk_vulkan_mipmap_levels (width, height) : 1,
                                     .arrayLayers = 1,
                                     .samples = VK_SAMPLE_COUNT_1_BIT,
                                     .tiling = tiling,
@@ -704,14 +707,16 @@ gsk_vulkan_image_new (GskVulkanDevice           *device,
 }
 
 GskGpuImage *
-gsk_vulkan_image_new_for_upload (GskVulkanDevice   *device,
-                                 GdkMemoryFormat    format,
-                                 gsize              width,
-                                 gsize              height)
+gsk_vulkan_image_new_for_upload (GskVulkanDevice *device,
+                                 gboolean         with_mipmap,
+                                 GdkMemoryFormat  format,
+                                 gsize            width,
+                                 gsize            height)
 {
   GskVulkanImage *self;
 
   self = gsk_vulkan_image_new (device,
+                               with_mipmap,
                                format,
                                width,
                                height,
@@ -810,6 +815,7 @@ gsk_vulkan_image_new_for_atlas (GskVulkanDevice *device,
   GskVulkanImage *self;
 
   self = gsk_vulkan_image_new (device,
+                               FALSE,
                                GDK_MEMORY_DEFAULT,
                                width,
                                height,
@@ -826,6 +832,7 @@ gsk_vulkan_image_new_for_atlas (GskVulkanDevice *device,
 
 GskGpuImage *
 gsk_vulkan_image_new_for_offscreen (GskVulkanDevice *device,
+                                    gboolean         with_mipmap,
                                     GdkMemoryFormat  preferred_format,
                                     gsize            width,
                                     gsize            height)
@@ -833,6 +840,7 @@ gsk_vulkan_image_new_for_offscreen (GskVulkanDevice *device,
   GskVulkanImage *self;
 
   self = gsk_vulkan_image_new (device,
+                               with_mipmap,
                                preferred_format,
                                width,
                                height,
@@ -1150,6 +1158,10 @@ gsk_vulkan_image_finalize (GObject *object)
   if (self->vk_framebuffer != VK_NULL_HANDLE)
     vkDestroyFramebuffer (device, self->vk_framebuffer, NULL);
 
+  if (self->vk_framebuffer_image_view != VK_NULL_HANDLE &&
+      self->vk_framebuffer_image_view != self->vk_image_view)
+    vkDestroyImageView (device, self->vk_framebuffer_image_view, NULL);
+
   if (self->vk_image_view != VK_NULL_HANDLE)
     vkDestroyImageView (device, self->vk_image_view, NULL);
 
@@ -1191,13 +1203,37 @@ gsk_vulkan_image_get_vk_framebuffer (GskVulkanImage *self,
   if (self->vk_framebuffer)
     return self->vk_framebuffer;
 
+  if (gsk_gpu_image_get_flags (GSK_GPU_IMAGE (self)) & GSK_GPU_IMAGE_CAN_MIPMAP)
+    {
+      GSK_VK_CHECK (vkCreateImageView, self->display->vk_device,
+                                     &(VkImageViewCreateInfo) {
+                                         .sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO,
+                                         .image = self->vk_image,
+                                         .viewType = VK_IMAGE_VIEW_TYPE_2D,
+                                         .format = self->vk_format,
+                                         .subresourceRange = {
+                                             .aspectMask = VK_IMAGE_ASPECT_COLOR_BIT,
+                                             .baseMipLevel = 0,
+                                             .levelCount = 1,
+                                             .baseArrayLayer = 0,
+                                             .layerCount = 1,
+                                         }
+                                     },
+                                 NULL,
+                                 &self->vk_framebuffer_image_view);
+    }
+  else
+    {
+      self->vk_framebuffer_image_view = self->vk_image_view;
+    }
+
   GSK_VK_CHECK (vkCreateFramebuffer, self->display->vk_device,
                                      &(VkFramebufferCreateInfo) {
                                          .sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO,
                                          .renderPass = render_pass,
                                          .attachmentCount = 1,
                                          .pAttachments = (VkImageView[1]) {
-                                             self->vk_image_view,
+                                             self->vk_framebuffer_image_view,
                                          },
                                          .width = gsk_gpu_image_get_width (GSK_GPU_IMAGE (self)),
                                          .height = gsk_gpu_image_get_height (GSK_GPU_IMAGE (self)),
