@@ -1983,12 +1983,12 @@ gdk_gl_backend_use (GdkGLBackend backend_type)
   g_assert (the_gl_backend_type == backend_type);
 }
 
-guint
-gdk_gl_context_import_dmabuf (GdkGLContext    *self,
-                              int              width,
-                              int              height,
-                              const GdkDmabuf *dmabuf,
-                              int              target)
+static guint
+gdk_gl_context_import_dmabuf_for_target (GdkGLContext    *self,
+                                         int              width,
+                                         int              height,
+                                         const GdkDmabuf *dmabuf,
+                                         int              target)
 {
 #if defined(HAVE_EGL) && defined(HAVE_DMABUF)
   GdkDisplay *display = gdk_gl_context_get_display (self);
@@ -2074,6 +2074,65 @@ gdk_gl_context_import_dmabuf (GdkGLContext    *self,
 #else
   return 0;
 #endif
+}
+
+guint
+gdk_gl_context_import_dmabuf (GdkGLContext    *self,
+                              int              width,
+                              int              height,
+                              const GdkDmabuf *dmabuf,
+                              gboolean        *external)
+{
+  GdkDisplay *display = gdk_gl_context_get_display (self);
+  guint texture_id;
+
+  gdk_display_init_dmabuf (display);
+
+  if (!gdk_dmabuf_formats_contains (display->egl_external_formats, dmabuf->fourcc, dmabuf->modifier))
+    {
+      texture_id = gdk_gl_context_import_dmabuf_for_target (self,
+                                                            width, height,
+                                                            dmabuf,
+                                                            GL_TEXTURE_2D);
+      if (texture_id == 0)
+        {
+          GDK_DEBUG (DMABUF, "Failed import of %dx%d %.4s::%016llx",
+                             width, height,
+                             (char *) &dmabuf->fourcc, (long long unsigned) dmabuf->modifier);
+          return 0;
+        }
+
+      GDK_DEBUG (DMABUF, "Imported %dx%d %.4s::%016llx dmabuf as GL_TEXTURE_2D texture",
+                         width, height,
+                         (char *) &dmabuf->fourcc, (long long unsigned) dmabuf->modifier);
+      *external = FALSE;
+      return texture_id;
+    }
+
+  if (!gdk_gl_context_get_use_es (self))
+    {
+      GDK_DEBUG (DMABUF, "Can't import external_only %.4s::%016llx outside of GLES",
+                         (char *) &dmabuf->fourcc, (long long unsigned) dmabuf->modifier);
+      return 0;
+    }
+
+  texture_id = gdk_gl_context_import_dmabuf_for_target (self,
+                                                        width, height,
+                                                        dmabuf,
+                                                        GL_TEXTURE_EXTERNAL_OES);
+  if (texture_id == 0)
+    {
+      GDK_DEBUG (DMABUF, "Failed import of external_only %dx%d %.4s::%016llx dmabuf",
+                         width, height,
+                         (char *) &dmabuf->fourcc, (long long unsigned) dmabuf->modifier);
+      return 0;
+    }
+
+  GDK_DEBUG (DMABUF, "Imported %dx%d %.4s::%016llx dmabuf as GL_TEXTURE_EXTERNAL_OES texture",
+                     width, height,
+                     (char *) &dmabuf->fourcc, (long long unsigned) dmabuf->modifier);
+  *external = TRUE;
+  return texture_id;
 }
 
 gboolean

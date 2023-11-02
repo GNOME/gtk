@@ -440,8 +440,8 @@ gdk_dmabuf_direct_downloader_do_download (GdkTexture *texture,
   info = get_drm_format_info (dmabuf->fourcc);
 
   GDK_DEBUG (DMABUF,
-             "Using mmap() and memcpy() for downloading a dmabuf (format %.4s:%#lx)",
-             (char *)&dmabuf->fourcc, dmabuf->modifier);
+             "Using mmap() and memcpy() for downloading a dmabuf (format %.4s::%016llx)",
+             (char *)&dmabuf->fourcc, (long long unsigned) dmabuf->modifier);
 
   for (i = 0; i < dmabuf->n_planes; i++)
     {

@@ -218,6 +218,7 @@ test_dmabuf_import (void)
   GdkTexture *texture2;
   GdkGLTextureBuilder *builder;
   guchar *data;
+  gboolean external;
 
   display = gdk_display_get_default ();
   if (!gdk_display_prepare_gl (display, &error))
@@ -256,7 +257,9 @@ test_dmabuf_import (void)
   g_assert_no_error (error);
 
   dmabuf2 = gdk_dmabuf_texture_get_dmabuf (GDK_DMABUF_TEXTURE (texture));
-  texture_id2 = gdk_gl_context_import_dmabuf (context2, 64, 64, dmabuf2, GL_TEXTURE_2D);
+  texture_id2 = gdk_gl_context_import_dmabuf (context2, 64, 64, dmabuf2, &external);
+  g_assert_cmpint (texture_id2, !=, 0);
+  g_assert_false (external);
 
   builder = gdk_gl_texture_builder_new ();
   gdk_gl_texture_builder_set_context (builder, context2);

@@ -798,7 +798,6 @@ gsk_gl_driver_import_dmabuf_texture (GskGLDriver      *self,
                                      GdkDmabufTexture *texture)
 {
   GdkGLContext *context = self->command_queue->context;
-  GdkDisplay *display = gdk_gl_context_get_display (context);
   int max_texture_size = self->command_queue->max_texture_size;
   const GdkDmabuf *dmabuf;
   guint texture_id;
@@ -806,6 +805,7 @@ gsk_gl_driver_import_dmabuf_texture (GskGLDriver      *self,
   GskGLProgram *program;
   GskGLRenderTarget *render_target;
   guint prev_fbo;
+  gboolean external;
 
   gdk_gl_context_make_current (context);
 
@@ -820,32 +820,15 @@ gsk_gl_driver_import_dmabuf_texture (GskGLDriver      *self,
 
   dmabuf = gdk_dmabuf_texture_get_dmabuf (texture);
 
-  GDK_DEBUG (DMABUF, "DMA-buf Format %.4s:%#lx", (char *) &dmabuf->fourcc, dmabuf->modifier);
-
-  gdk_display_init_dmabuf (display);
-
-  if (!gdk_dmabuf_formats_contains (display->egl_external_formats, dmabuf->fourcc, dmabuf->modifier))
-    {
-      GDK_DEBUG (DMABUF, "Import dmabuf as GL_TEXTURE_2D texture");
-      return gdk_gl_context_import_dmabuf (context, width, height,
-                                           dmabuf,
-                                           GL_TEXTURE_2D);
-    }
-
-  if (!gdk_gl_context_get_use_es (context))
-    {
-      GDK_DEBUG (DMABUF, "Can't import external_only dmabuf outside of GLES");
-      return 0;
-    }
-
-  GDK_DEBUG (DMABUF, "Import dmabuf as GL_TEXTURE_EXTERNAL_OES texture");
-
-  texture_id = gdk_gl_context_import_dmabuf (context, width, height,
+  texture_id = gdk_gl_context_import_dmabuf (context,
+                                             width, height,
                                              dmabuf,
-                                             GL_TEXTURE_EXTERNAL_OES);
-
+                                             &external);
   if (texture_id == 0)
     return 0;
+
+  if (!external)
+    return texture_id;
 
   gsk_gl_driver_autorelease_texture (self, texture_id);
 

@@ -168,7 +168,7 @@ guint                   gdk_gl_context_import_dmabuf            (GdkGLContext   
                                                                  int              width,
                                                                  int              height,
                                                                  const GdkDmabuf *dmabuf,
-                                                                 int              target);
+                                                                 gboolean        *external);
 
 gboolean                gdk_gl_context_export_dmabuf            (GdkGLContext    *self,
                                                                  unsigned int     texture_id,
