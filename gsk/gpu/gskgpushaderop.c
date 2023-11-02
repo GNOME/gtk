@@ -82,15 +82,18 @@ gsk_gpu_shader_op_gl_command_n (GskGpuOp    *op,
 {
   GskGpuShaderOp *self = (GskGpuShaderOp *) op;
   GskGpuShaderOpClass *shader_op_class = (GskGpuShaderOpClass *) op->op_class;
+  GskGLDescriptors *desc;
   GskGpuOp *next;
   gsize i;
 
+  desc = GSK_GL_DESCRIPTORS (self->desc);
   gsk_gl_frame_use_program (GSK_GL_FRAME (frame),
                             shader_op_class,
-                            self->clip);
+                            self->clip,
+                            desc ? gsk_gl_descriptors_get_n_external (desc) : 0);
 
-  if (self->desc)
-    gsk_gl_descriptors_use (GSK_GL_DESCRIPTORS (self->desc));
+  if (desc)
+    gsk_gl_descriptors_use (GSK_GL_DESCRIPTORS (desc));
 
   i = 1;
   for (next = op->next; next && i < 10 * 1000; next = next->next)

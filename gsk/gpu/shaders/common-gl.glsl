@@ -27,7 +27,12 @@ uniform Floats
   vec4 really_just_floats[1024];
 } floats;
 
-uniform sampler2D textures[16];
+#if N_EXTERNAL_TEXTURES > 0
+uniform samplerExternalOES external_textures[N_EXTERNAL_TEXTURES];
+#endif
+#if N_TEXTURES > 0
+uniform sampler2D textures[N_TEXTURES];
+#endif
 
 #define GSK_VERTEX_INDEX gl_VertexID
 
@@ -59,90 +64,227 @@ gsk_get_float (uint id)
 #define gsk_get_uint(id) (floatBitsToUint(gsk_get_float(id)))
 
 #ifdef GSK_GLES
+
 vec4
 gsk_texture (uint id,
              vec2 pos)
 {
-  switch(id)
-  {
-    case 0u:
-      return texture (textures[0], pos);
-    case 1u:
-      return texture (textures[1], pos);
-    case 2u:
-      return texture (textures[2], pos);
-    case 3u:
-      return texture (textures[3], pos);
-    case 4u:
-      return texture (textures[4], pos);
-    case 5u:
-      return texture (textures[5], pos);
-    case 6u:
-      return texture (textures[6], pos);
-    case 7u:
-      return texture (textures[7], pos);
-    case 8u:
-      return texture (textures[8], pos);
-    case 9u:
-      return texture (textures[9], pos);
-    case 10u:
-      return texture (textures[10], pos);
-    case 11u:
-      return texture (textures[11], pos);
-    case 12u:
-      return texture (textures[12], pos);
-    case 13u:
-      return texture (textures[13], pos);
-    case 14u:
-      return texture (textures[14], pos);
-    case 15u:
-      return texture (textures[15], pos);
-    default:
-      return vec4 (1.0, 0.0, 0.8, 1.0);
-  }
+  if ((id & 1u) != 0u)
+    {
+      switch (id >> 1u)
+        {
+        case 0u:
+#if N_EXTERNAL_TEXTURES > 0
+          return texture (external_textures[0], pos);
+#endif
+#if N_EXTERNAL_TEXTURES > 1
+        case 1u:
+          return texture (external_textures[1], pos);
+#endif
+        case 2u:
+#if N_EXTERNAL_TEXTURES > 2
+          return texture (external_textures[2], pos);
+#endif
+        case 3u:
+#if N_EXTERNAL_TEXTURES > 3
+          return texture (external_textures[3], pos);
+#endif
+        case 4u:
+#if N_EXTERNAL_TEXTURES > 4
+          return texture (external_textures[4], pos);
+#endif
+        case 5u:
+#if N_EXTERNAL_TEXTURES > 5
+          return texture (external_textures[5], pos);
+#endif
+        default:
+          break;
+        }
+    }
+  else
+    {
+      switch (id >> 1u)
+        {
+        case 0u:
+#if N_TEXTURES > 0
+          return texture (textures[0], pos);
+#endif
+        case 1u:
+#if N_TEXTURES > 1
+          return texture (textures[1], pos);
+#endif
+        case 2u:
+#if N_TEXTURES > 2
+          return texture (textures[2], pos);
+#endif
+        case 3u:
+#if N_TEXTURES > 3
+          return texture (textures[3], pos);
+#endif
+        case 4u:
+#if N_TEXTURES > 4
+          return texture (textures[4], pos);
+#endif
+        case 5u:
+#if N_TEXTURES > 5
+          return texture (textures[5], pos);
+#endif
+        case 6u:
+#if N_TEXTURES > 6
+          return texture (textures[6], pos);
+#endif
+        case 7u:
+#if N_TEXTURES > 7
+          return texture (textures[7], pos);
+#endif
+        case 8u:
+#if N_TEXTURES > 8
+          return texture (textures[8], pos);
+#endif
+        case 9u:
+#if N_TEXTURES > 9
+          return texture (textures[9], pos);
+#endif
+        case 10u:
+#if N_TEXTURES > 10
+          return texture (textures[10], pos);
+#endif
+        case 11u:
+#if N_TEXTURES > 11
+          return texture (textures[11], pos);
+#endif
+        case 12u:
+#if N_TEXTURES > 12
+          return texture (textures[12], pos);
+#endif
+        case 13u:
+#if N_TEXTURES > 13
+          return texture (textures[13], pos);
+#endif
+        case 14u:
+#if N_TEXTURES > 14
+          return texture (textures[14], pos);
+#endif
+        case 15u:
+#if N_TEXTURES > 15
+          return texture (textures[15], pos);
+#endif
+        default:
+          break;
+        }
+    }
+  return vec4 (1.0, 0.0, 0.8, 1.0);
 }
 
 ivec2
 gsk_texture_size (uint id,
                   int  lod)
 {
-  switch(id)
-  {
-    case 0u:
-      return textureSize (textures[0], lod);
-    case 1u:
-      return textureSize (textures[1], lod);
-    case 2u:
-      return textureSize (textures[2], lod);
-    case 3u:
-      return textureSize (textures[3], lod);
-    case 4u:
-      return textureSize (textures[4], lod);
-    case 5u:
-      return textureSize (textures[5], lod);
-    case 6u:
-      return textureSize (textures[6], lod);
-    case 7u:
-      return textureSize (textures[7], lod);
-    case 8u:
-      return textureSize (textures[8], lod);
-    case 9u:
-      return textureSize (textures[9], lod);
-    case 10u:
-      return textureSize (textures[10], lod);
-    case 11u:
-      return textureSize (textures[11], lod);
-    case 12u:
-      return textureSize (textures[12], lod);
-    case 13u:
-      return textureSize (textures[13], lod);
-    case 14u:
-      return textureSize (textures[14], lod);
-    case 15u:
-      return textureSize (textures[15], lod);
-    default:
-      return ivec2 (1, 1);
-  }
+  if ((id & 1u) != 0u)
+    {
+      switch (id >> 1u)
+        {
+        case 0u:
+#if N_EXTERNAL_TEXTURES > 0
+          return textureSize (external_textures[0], lod);
+#endif
+#if N_EXTERNAL_TEXTURES > 1
+        case 1u:
+          return textureSize (external_textures[1], lod);
+#endif
+        case 2u:
+#if N_EXTERNAL_TEXTURES > 2
+          return textureSize (external_textures[2], lod);
+#endif
+        case 3u:
+#if N_EXTERNAL_TEXTURES > 3
+          return textureSize (external_textures[3], lod);
+#endif
+        case 4u:
+#if N_EXTERNAL_TEXTURES > 4
+          return textureSize (external_textures[4], lod);
+#endif
+        case 5u:
+#if N_EXTERNAL_TEXTURES > 5
+          return textureSize (external_textures[5], lod);
+#endif
+        default:
+          break;
+        }
+    }
+  else
+    {
+      switch (id >> 1u)
+        {
+        case 0u:
+#if N_TEXTURES > 0
+          return textureSize (textures[0], lod);
+#endif
+        case 1u:
+#if N_TEXTURES > 1
+          return textureSize (textures[1], lod);
+#endif
+        case 2u:
+#if N_TEXTURES > 2
+          return textureSize (textures[2], lod);
+#endif
+        case 3u:
+#if N_TEXTURES > 3
+          return textureSize (textures[3], lod);
+#endif
+        case 4u:
+#if N_TEXTURES > 4
+          return textureSize (textures[4], lod);
+#endif
+        case 5u:
+#if N_TEXTURES > 5
+          return textureSize (textures[5], lod);
+#endif
+        case 6u:
+#if N_TEXTURES > 6
+          return textureSize (textures[6], lod);
+#endif
+        case 7u:
+#if N_TEXTURES > 7
+          return textureSize (textures[7], lod);
+#endif
+        case 8u:
+#if N_TEXTURES > 8
+          return textureSize (textures[8], lod);
+#endif
+        case 9u:
+#if N_TEXTURES > 9
+          return textureSize (textures[9], lod);
+#endif
+        case 10u:
+#if N_TEXTURES > 10
+          return textureSize (textures[10], lod);
+#endif
+        case 11u:
+#if N_TEXTURES > 11
+          return textureSize (textures[11], lod);
+#endif
+        case 12u:
+#if N_TEXTURES > 12
+          return textureSize (textures[12], lod);
+#endif
+        case 13u:
+#if N_TEXTURES > 13
+          return textureSize (textures[13], lod);
+#endif
+        case 14u:
+#if N_TEXTURES > 14
+          return textureSize (textures[14], lod);
+#endif
+        case 15u:
+#if N_TEXTURES > 15
+          return textureSize (textures[15], lod);
+#endif
+        default:
+          break;
+        }
+    }
+  return ivec2 (1, 1);
 }
 
 vec4
@@ -150,50 +292,118 @@ gsk_texel_fetch (uint  id,
                  ivec2 pos,
                  int   lod)
 {
-  switch(id)
-  {
-    case 0u:
-      return texelFetch (textures[0], pos, lod);
-    case 1u:
-      return texelFetch (textures[1], pos, lod);
-    case 2u:
-      return texelFetch (textures[2], pos, lod);
-    case 3u:
-      return texelFetch (textures[3], pos, lod);
-    case 4u:
-      return texelFetch (textures[4], pos, lod);
-    case 5u:
-      return texelFetch (textures[5], pos, lod);
-    case 6u:
-      return texelFetch (textures[6], pos, lod);
-    case 7u:
-      return texelFetch (textures[7], pos, lod);
-    case 8u:
-      return texelFetch (textures[8], pos, lod);
-    case 9u:
-      return texelFetch (textures[9], pos, lod);
-    case 10u:
-      return texelFetch (textures[10], pos, lod);
-    case 11u:
-      return texelFetch (textures[11], pos, lod);
-    case 12u:
-      return texelFetch (textures[12], pos, lod);
-    case 13u:
-      return texelFetch (textures[13], pos, lod);
-    case 14u:
-      return texelFetch (textures[14], pos, lod);
-    case 15u:
-      return texelFetch (textures[15], pos, lod);
-    default:
-      return vec4 (1.0, 0.0, 0.8, 1.0);
-  }
+  if ((id & 1u) != 0u)
+    {
+      switch (id >> 1u)
+        {
+        case 0u:
+#if N_EXTERNAL_TEXTURES > 0
+          return texelFetch (external_textures[0], pos, lod);
+#endif
+#if N_EXTERNAL_TEXTURES > 1
+        case 1u:
+          return texelFetch (external_textures[1], pos, lod);
+#endif
+        case 2u:
+#if N_EXTERNAL_TEXTURES > 2
+          return texelFetch (external_textures[2], pos, lod);
+#endif
+        case 3u:
+#if N_EXTERNAL_TEXTURES > 3
+          return texelFetch (external_textures[3], pos, lod);
+#endif
+        case 4u:
+#if N_EXTERNAL_TEXTURES > 4
+          return texelFetch (external_textures[4], pos, lod);
+#endif
+        case 5u:
+#if N_EXTERNAL_TEXTURES > 5
+          return texelFetch (external_textures[5], pos, lod);
+#endif
+        default:
+          break;
+        }
+    }
+  else
+    {
+      switch (id >> 1u)
+        {
+        case 0u:
+#if N_TEXTURES > 0
+          return texelFetch (textures[0], pos, lod);
+#endif
+        case 1u:
+#if N_TEXTURES > 1
+          return texelFetch (textures[1], pos, lod);
+#endif
+        case 2u:
+#if N_TEXTURES > 2
+          return texelFetch (textures[2], pos, lod);
+#endif
+        case 3u:
+#if N_TEXTURES > 3
+          return texelFetch (textures[3], pos, lod);
+#endif
+        case 4u:
+#if N_TEXTURES > 4
+          return texelFetch (textures[4], pos, lod);
+#endif
+        case 5u:
+#if N_TEXTURES > 5
+          return texelFetch (textures[5], pos, lod);
+#endif
+        case 6u:
+#if N_TEXTURES > 6
+          return texelFetch (textures[6], pos, lod);
+#endif
+        case 7u:
+#if N_TEXTURES > 7
+          return texelFetch (textures[7], pos, lod);
+#endif
+        case 8u:
+#if N_TEXTURES > 8
+          return texelFetch (textures[8], pos, lod);
+#endif
+        case 9u:
+#if N_TEXTURES > 9
+          return texelFetch (textures[9], pos, lod);
+#endif
+        case 10u:
+#if N_TEXTURES > 10
+          return texelFetch (textures[10], pos, lod);
+#endif
+        case 11u:
+#if N_TEXTURES > 11
+          return texelFetch (textures[11], pos, lod);
+#endif
+        case 12u:
+#if N_TEXTURES > 12
+          return texelFetch (textures[12], pos, lod);
+#endif
+        case 13u:
+#if N_TEXTURES > 13
+          return texelFetch (textures[13], pos, lod);
+#endif
+        case 14u:
+#if N_TEXTURES > 14
+          return texelFetch (textures[14], pos, lod);
+#endif
+        case 15u:
+#if N_TEXTURES > 15
+          return texelFetch (textures[15], pos, lod);
+#endif
+        default:
+          break;
+        }
+    }
+  return vec4 (1.0, 0.0, 0.8, 1.0);
 }
 
 #else /* !GSK_GLES */
 
-#define gsk_texture(id, pos) texture (textures[id], pos)
-#define gsk_texture_size(id, lod) textureSize (textures[id], lod)
-#define gsk_texel_fetch(id, pos, lod) texelFetch (textures[id], pos, lod)
+#define gsk_texture(id, pos) texture (textures[id >> 1], pos)
+#define gsk_texture_size(id, lod) textureSize (textures[id >> 1], lod)
+#define gsk_texel_fetch(id, pos, lod) texelFetch (textures[id >> 1], pos, lod)
 
 #endif
 

@@ -194,7 +194,10 @@ gsk_gl_image_new_for_texture (GskGLDevice      *device,
 void
 gsk_gl_image_bind_texture (GskGLImage *self)
 {
-  glBindTexture (GL_TEXTURE_2D, self->texture_id);
+  if (gsk_gpu_image_get_flags (GSK_GPU_IMAGE (self)) & GSK_GPU_IMAGE_EXTERNAL)
+    glBindTexture (GL_TEXTURE_EXTERNAL_OES, self->texture_id);
+  else
+    glBindTexture (GL_TEXTURE_2D, self->texture_id);
 }
 
 void
