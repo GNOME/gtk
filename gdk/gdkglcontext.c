@@ -2020,6 +2020,10 @@ gdk_gl_context_import_dmabuf (GdkGLContext    *self,
   attribs[i++] = height;
   attribs[i++] = EGL_LINUX_DRM_FOURCC_EXT;
   attribs[i++] = dmabuf->fourcc;
+  attribs[i++] = EGL_YUV_COLOR_SPACE_HINT_EXT;
+  attribs[i++] = EGL_ITU_REC601_EXT;
+  attribs[i++] = EGL_SAMPLE_RANGE_HINT_EXT;
+  attribs[i++] = EGL_YUV_FULL_RANGE_EXT;
 
 #define ADD_PLANE(plane) \
   { \
