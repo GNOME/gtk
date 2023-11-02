@@ -78,14 +78,22 @@ rect_get_coord (Rect r, vec2 pt)
 #ifdef GSK_FRAGMENT_SHADER
 
 float
-rect_coverage (Rect r, vec2 p)
+rect_coverage (Rect r,
+               vec2 p,
+               vec2 dFdp)
 {
-  vec2 dFdp = abs(fwidth (p));
   Rect prect = Rect(vec4(p - 0.5 * dFdp, p + 0.5 * dFdp));
   Rect coverect = rect_intersect (r, prect);
   vec2 coverage = rect_size(coverect) / dFdp;
   return coverage.x * coverage.y;
 }
+
+float
+rect_coverage (Rect r, vec2 p)
+{
+  return rect_coverage (r, p, abs (fwidth (p)));
+}
+
 
 #endif
 

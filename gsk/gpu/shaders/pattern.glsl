@@ -24,6 +24,32 @@ stack_pop (void)
   return stack[stack_size];
 }
 
+struct Position
+{
+  /* pos.xy is the actual position
+     pos.zw is the fwidth() of it
+  */
+  vec4 pos;
+};
+
+vec2
+position (Position pos)
+{
+  return pos.pos.xy;
+}
+
+vec2
+position_fwidth (Position pos)
+{
+  return pos.pos.zw;
+}
+
+Position
+position_new (vec2 pos)
+{
+  return Position (vec4 (pos, fwidth (pos)));
+}
+
 uint
 read_uint (inout uint reader)
 {
@@ -85,18 +111,17 @@ read_gradient (inout uint reader)
 void
 clip_pattern (inout uint reader,
               inout vec4 color,
-              vec2       pos)
+              Position   pos)
 {
   Rect clip = read_rect (reader);
-  float alpha = rect_coverage (clip, pos);
+  float alpha = rect_coverage (clip, position (pos), abs (position_fwidth (pos)));
 
   color *= alpha;
 }
 
 void
 opacity_pattern (inout uint reader,
-                 inout vec4 color,
-                 vec2       pos)
+                 inout vec4 color)
 {
   float opacity = read_float (reader);
 
@@ -105,8 +130,7 @@ opacity_pattern (inout uint reader,
 
 void
 color_matrix_pattern (inout uint reader,
-                      inout vec4 color,
-                      vec2       pos)
+                      inout vec4 color)
 {
   mat4 matrix = read_mat4 (reader);
   vec4 offset = read_vec4 (reader);
@@ -120,24 +144,24 @@ color_matrix_pattern (inout uint reader,
 }
 
 void
-repeat_push_pattern (inout uint reader,
-                     inout vec2 pos)
+repeat_push_pattern (inout uint     reader,
+                     inout Position pos)
 {
-  stack_push (vec4 (pos, 0.0, 0.0));
+  stack_push (pos.pos);
   Rect bounds = read_rect (reader);
 
   vec2 size = rect_size (bounds);
-  pos = mod (pos - bounds.bounds.xy, size);
+  pos.pos.xy = mod (pos.pos.xy - bounds.bounds.xy, size);
   /* make sure we have a positive result */
-  pos = mix (pos, pos + size, lessThan (pos, vec2 (0.0)));
-  pos += bounds.bounds.xy;
+  pos.pos.xy = mix (pos.pos.xy, pos.pos.xy + size, lessThan (pos.pos.xy, vec2 (0.0)));
+  pos.pos.xy += bounds.bounds.xy;
 }
 
 void
-position_pop_pattern (inout uint reader,
-                      inout vec2 pos)
+position_pop_pattern (inout uint     reader,
+                      inout Position pos)
 {
-  pos = stack_pop ().xy;
+  pos = Position (stack_pop ());
 }
 
 void
@@ -188,22 +212,24 @@ mask_inverted_luminance_pattern (inout uint reader,
 
 vec4
 glyphs_pattern (inout uint reader,
-                vec2       pos)
+                Position   pos)
 {
   float opacity = 0.0;
   vec4 color = color_premultiply (read_vec4 (reader));
   uint num_glyphs = read_uint (reader);
   uint i;
 
+  vec2 p = position (pos);
+  vec2 dFdp = abs (position_fwidth (pos));
   for (i = 0u; i < num_glyphs; i++)
     {
       uint tex_id = read_uint (reader);
       Rect glyph_bounds = read_rect (reader);
       vec4 tex_rect = read_vec4 (reader);
 
-      float coverage = rect_coverage (glyph_bounds, pos);
+      float coverage = rect_coverage (glyph_bounds, p, dFdp);
       if (coverage > 0.0)
-        opacity += coverage * gsk_texture (tex_id, (pos - GSK_GLOBAL_SCALE * tex_rect.xy) / (GSK_GLOBAL_SCALE * tex_rect.zw)).a;
+        opacity += coverage * gsk_texture (tex_id, (p - GSK_GLOBAL_SCALE * tex_rect.xy) / (GSK_GLOBAL_SCALE * tex_rect.zw)).a;
     }
 
   return color * opacity;
@@ -211,27 +237,27 @@ glyphs_pattern (inout uint reader,
 
 vec4
 texture_pattern (inout uint reader,
-                 vec2       pos)
+                 Position   pos)
 {
   uint tex_id = read_uint (reader);
   vec4 tex_rect = read_vec4 (reader);
 
-  return gsk_texture (tex_id, (pos - GSK_GLOBAL_SCALE * tex_rect.xy) / (GSK_GLOBAL_SCALE * tex_rect.zw));
+  return gsk_texture (tex_id, (position (pos) - GSK_GLOBAL_SCALE * tex_rect.xy) / (GSK_GLOBAL_SCALE * tex_rect.zw));
 }
 
 vec4
 straight_alpha_pattern (inout uint reader,
-                        vec2       pos)
+                        Position   pos)
 {
   uint tex_id = read_uint (reader);
   vec4 tex_rect = read_vec4 (reader);
 
-  return gsk_texture_straight_alpha (tex_id, (pos - GSK_GLOBAL_SCALE * tex_rect.xy) / (GSK_GLOBAL_SCALE * tex_rect.zw));
+  return gsk_texture_straight_alpha (tex_id, (position (pos) - GSK_GLOBAL_SCALE * tex_rect.xy) / (GSK_GLOBAL_SCALE * tex_rect.zw));
 }
 
 vec4
 linear_gradient_pattern (inout uint reader,
-                         vec2       pos,
+                         Position   pos,
                          bool       repeating)
 {
   vec2 start = read_vec2 (reader) * GSK_GLOBAL_SCALE;
@@ -240,8 +266,9 @@ linear_gradient_pattern (inout uint reader,
 
   vec2 line = end - start;
   float line_length = dot (line, line);
-  float offset = dot (pos - start, line) / line_length;
-  float d_offset = 0.5 * fwidth (offset);
+  float offset = dot (position (pos) - start, line) / line_length;
+  float other_offset = dot (position (pos) + position_fwidth (pos) - start, line) / line_length;
+  float d_offset = 0.5 * abs (offset - other_offset);
 
   if (repeating)
     return gradient_get_color_repeating (gradient, offset - d_offset, offset + d_offset);
@@ -251,7 +278,7 @@ linear_gradient_pattern (inout uint reader,
 
 vec4
 radial_gradient_pattern (inout uint reader,
-                         vec2       pos,
+                         Position   pos,
                          bool       repeating)
 {
   vec2 center = read_vec2 (reader) * GSK_GLOBAL_SCALE;
@@ -260,9 +287,11 @@ radial_gradient_pattern (inout uint reader,
   float end = read_float (reader);
   Gradient gradient = read_gradient (reader);
 
-  float offset = length ((pos - center) / radius);
+  float offset = length ((position (pos) - center) / radius);
+  float other_offset = length ((position (pos) + position_fwidth (pos) - center) / radius);
   offset = (offset - start) / (end - start);
-  float d_offset = 0.5 * fwidth (offset);
+  other_offset = (other_offset - start) / (end - start);
+  float d_offset = abs (0.5 * (offset - other_offset));
 
   if (repeating)
     return gradient_get_color_repeating (gradient, offset - d_offset, offset + d_offset);
@@ -272,19 +301,24 @@ radial_gradient_pattern (inout uint reader,
 
 vec4
 conic_gradient_pattern (inout uint reader,
-                        vec2       pos)
+                        Position   pos)
 {
   vec2 center = read_vec2 (reader);
   float angle = read_float (reader);
   Gradient gradient = read_gradient (reader);
 
   /* scaling modifies angles, so be sure to use right coordinate system */
-  pos = pos / GSK_GLOBAL_SCALE - center;
-  float offset = atan (pos.y, pos.x);
+  vec2 dpos = position (pos) / GSK_GLOBAL_SCALE - center;
+  vec2 dpos2 = (position (pos) + position_fwidth (pos)) / GSK_GLOBAL_SCALE - center;
+  float offset = atan (dpos.y, dpos.x);
+  float offset2 = atan (dpos2.y, dpos2.x);
   offset = degrees (offset + angle) / 360.0;
+  offset2 = degrees (offset2 + angle) / 360.0;
   float overflow = fract (offset + 0.5);
+  float overflow2 = fract (offset2 + 0.5);
   offset = fract (offset);
-  float d_offset = max (0.00001, 0.5 * min (fwidth (offset), fwidth (overflow)));
+  offset2 = fract (offset2);
+  float d_offset = max (0.00001, 0.5 * min (abs (offset - offset2), abs (overflow - overflow2)));
 
   return gradient_get_color_repeating (gradient, offset - d_offset, offset + d_offset);
 }
@@ -299,9 +333,10 @@ color_pattern (inout uint reader)
 
 vec4
 pattern (uint reader,
-         vec2 pos)
+         vec2 pos_)
 {
   vec4 color = vec4 (1.0, 0.0, 0.8, 1.0); /* pink */
+  Position pos = position_new (pos_);
 
   for(;;)
     {
@@ -324,10 +359,10 @@ pattern (uint reader,
           color = glyphs_pattern (reader, pos);
           break;
         case GSK_GPU_PATTERN_COLOR_MATRIX:
-          color_matrix_pattern (reader, color, pos);
+          color_matrix_pattern (reader, color);
           break;
         case GSK_GPU_PATTERN_OPACITY:
-          opacity_pattern (reader, color, pos);
+          opacity_pattern (reader, color);
           break;
         case GSK_GPU_PATTERN_LINEAR_GRADIENT:
           color = linear_gradient_pattern (reader, pos, false);
