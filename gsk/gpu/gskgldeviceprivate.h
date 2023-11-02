@@ -13,7 +13,8 @@ GskGpuDevice *          gsk_gl_device_get_for_display                   (GdkDisp
 
 void                    gsk_gl_device_use_program                       (GskGLDevice            *self,
                                                                          const GskGpuShaderOpClass *op_class,
-                                                                         GskGpuShaderClip        clip);
+                                                                         GskGpuShaderClip        clip,
+                                                                         guint                   n_external_textures);
 
 GLuint                  gsk_gl_device_get_sampler_id                    (GskGLDevice            *self,
                                                                          GskGpuSampler           sampler);
