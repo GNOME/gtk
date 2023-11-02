@@ -10,6 +10,8 @@
 #include "gskgldeviceprivate.h"
 #include "gskglimageprivate.h"
 
+#include "gdkdmabuftextureprivate.h"
+#include "gdkglcontextprivate.h"
 #include "gdkgltextureprivate.h"
 
 struct _GskGLFrame
@@ -80,6 +82,25 @@ gsk_gl_frame_upload_texture (GskGpuFrame  *frame,
             glWaitSync (sync, 0, GL_TIMEOUT_IGNORED);
 
           return image;
+        }
+    }
+  else if (GDK_IS_DMABUF_TEXTURE (texture))
+    {
+      gboolean external;
+      GLuint tex_id;
+
+      tex_id = gdk_gl_context_import_dmabuf (GDK_GL_CONTEXT (gsk_gpu_frame_get_context (frame)),
+                                             gdk_texture_get_width (texture),
+                                             gdk_texture_get_height (texture),
+                                             gdk_dmabuf_texture_get_dmabuf (GDK_DMABUF_TEXTURE (texture)),
+                                             &external);
+      if (tex_id)
+        {
+          return gsk_gl_image_new_for_texture (GSK_GL_DEVICE (gsk_gpu_frame_get_device (frame)),
+                                               texture,
+                                               tex_id,
+                                               TRUE,
+                                               (external ? GSK_GPU_IMAGE_EXTERNAL | GSK_GPU_IMAGE_NO_BLIT : 0));
         }
     }
 
