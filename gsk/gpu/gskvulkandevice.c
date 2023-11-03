@@ -10,8 +10,6 @@
 #include "gdk/gdkdisplayprivate.h"
 #include "gdk/gdkvulkancontextprivate.h"
 
-#define DESCRIPTOR_POOL_MAXITEMS 50000
-
 struct _GskVulkanDevice
 {
   GskGpuDevice parent_instance;
@@ -20,6 +18,7 @@ struct _GskVulkanDevice
   GskVulkanAllocator *external_allocator;
   GdkVulkanFeatures features;
 
+  guint max_immutable_samplers;
   guint max_samplers;
   guint max_buffers;
 
@@ -468,7 +467,7 @@ gsk_vulkan_device_init (GskVulkanDevice *self)
 }
 
 static void
-gsk_vulkan_device_setup (GskVulkanDevice *self)
+gsk_vulkan_device_create_vk_objects (GskVulkanDevice *self)
 {
   GdkDisplay *display;
 
@@ -484,11 +483,46 @@ gsk_vulkan_device_setup (GskVulkanDevice *self)
                                      &self->vk_command_pool);
 }
 
+static void
+gsk_vulkan_device_setup (GskVulkanDevice *self,
+                         GdkDisplay      *display)
+{
+  VkPhysicalDeviceVulkan12Properties vk12_props = {
+    .sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_VULKAN_1_2_PROPERTIES,
+  };
+  VkPhysicalDeviceProperties2 vk_props = {
+    .sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_PROPERTIES_2,
+    .pNext = &vk12_props
+  };
+
+  vkGetPhysicalDeviceProperties2 (display->vk_physical_device, &vk_props);
+  /* These numbers can be improved in the shader sources by adding more
+   * entries to the big switch() statements */
+  self->max_immutable_samplers = 8;
+  if (!gsk_vulkan_device_has_feature (self, GDK_VULKAN_FEATURE_DYNAMIC_INDEXING))
+    {
+      self->max_buffers = 8;
+      self->max_samplers = 8;
+    }
+  else if (gsk_vulkan_device_has_feature (self, GDK_VULKAN_FEATURE_DESCRIPTOR_INDEXING))
+    {
+      self->max_buffers = vk12_props.maxPerStageDescriptorUpdateAfterBindUniformBuffers;
+      self->max_samplers = vk12_props.maxPerStageDescriptorUpdateAfterBindSampledImages;
+    }
+  else
+    {
+      self->max_buffers = vk_props.properties.limits.maxPerStageDescriptorUniformBuffers;
+      self->max_samplers = vk_props.properties.limits.maxPerStageDescriptorSampledImages;
+    }
+  gsk_gpu_device_setup (GSK_GPU_DEVICE (self),
+                        display,
+                        vk_props.properties.limits.maxImageDimension2D);
+}
+
 GskGpuDevice *
 gsk_vulkan_device_get_for_display (GdkDisplay  *display,
                                    GError     **error)
 {
-  VkPhysicalDeviceProperties vk_props;
   GskVulkanDevice *self;
 
   self = g_object_get_data (G_OBJECT (display), "-gsk-vulkan-device");
@@ -500,14 +534,10 @@ gsk_vulkan_device_get_for_display (GdkDisplay  *display,
 
   self = g_object_new (GSK_TYPE_VULKAN_DEVICE, NULL);
   self->features = display->vulkan_features;
-  self->max_samplers = DESCRIPTOR_POOL_MAXITEMS;
-  self->max_buffers = DESCRIPTOR_POOL_MAXITEMS;
 
-  vkGetPhysicalDeviceProperties (display->vk_physical_device, &vk_props);
-  gsk_gpu_device_setup (GSK_GPU_DEVICE (self),
-                        display,
-                        vk_props.limits.maxImageDimension2D);
-  gsk_vulkan_device_setup (self);
+  gsk_vulkan_device_setup (self, display);
+
+  gsk_vulkan_device_create_vk_objects (self);
 
   g_object_set_data (G_OBJECT (display), "-gsk-vulkan-device", self);
 
@@ -515,9 +545,21 @@ gsk_vulkan_device_get_for_display (GdkDisplay  *display,
 }
 
 gsize
-gsk_vulkan_device_get_max_descriptors (GskVulkanDevice *self)
+gsk_vulkan_device_get_max_immutable_samplers (GskVulkanDevice *self)
 {
-  return DESCRIPTOR_POOL_MAXITEMS;
+  return self->max_immutable_samplers;
+}
+
+gsize
+gsk_vulkan_device_get_max_samplers (GskVulkanDevice *self)
+{
+  return self->max_samplers;
+}
+
+gsize
+gsk_vulkan_device_get_max_buffers (GskVulkanDevice *self)
+{
+  return self->max_buffers;
 }
 
 gboolean
@@ -1006,9 +1048,9 @@ gsk_vulkan_device_acquire_pipeline_layout (GskVulkanDevice *self,
       immutable_samplers = fallback;
       n_immutable_samplers = 1;
     }
-  n_samplers = MIN (n_samplers, 8);
+  n_samplers = MAX (n_samplers, 8);
   g_assert (n_samplers <= self->max_samplers);
-  n_buffers = MIN (n_buffers, 8);
+  n_buffers = MAX (n_buffers, 8);
   g_assert (n_buffers <= self->max_buffers);
   setup.n_samplers = MIN (2 << g_bit_nth_msf (n_samplers - 1, -1), self->max_samplers);
   setup.n_buffers = MIN (2 << g_bit_nth_msf (n_buffers - 1, -1), self->max_buffers);
