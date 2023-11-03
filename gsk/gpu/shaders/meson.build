@@ -25,8 +25,7 @@ gsk_private_gpu_shaders = files([
 
 gsk_private_gpu_shader_headers = []
 gsk_private_gpu_gl_shaders = []
-gsk_private_gpu_vulkan_vertex_shaders = []
-gsk_private_gpu_vulkan_fragment_shaders = []
+gsk_private_gpu_vulkan_shaders = []
 
 generate_header = find_program('generate-header.py')
 process_includes = find_program('process-glsl-includes.py')
@@ -56,36 +55,34 @@ foreach shader: gsk_private_gpu_shaders
   gsk_private_gpu_gl_shaders += gl_shader
 
   if (have_vulkan)
-    vert_spv = fs.name (fs.replace_suffix (shader, '')) + '.vert.spv'
-    frag_spv = fs.name (fs.replace_suffix (shader, '')) + '.frag.spv'
-    vert_target = custom_target(vert_spv,
-                                input: shader,
-                                output: vert_spv,
-                                depend_files: gsk_private_gpu_include_shaders,
-                                command: [
-                                  glslc,
-                                  '-std=450',
-                                  '--target-env=vulkan1.2',
-                                  '-fshader-stage=vertex',
-                                  '-DGSK_VERTEX_SHADER=1',
-                                  '@INPUT@',
-                                  '-o', '@OUTPUT@'
-                                ])
-    frag_target = custom_target(frag_spv,
-                                input: shader,
-                                output: frag_spv,
-                                depend_files: gsk_private_gpu_include_shaders,
-                                command: [
-                                  glslc,
-                                  '-std=450',
-                                  '--target-env=vulkan1.2',
-                                  '-fshader-stage=fragment',
-                                  '-DGSK_FRAGMENT_SHADER=1',
-                                  '@INPUT@',
-                                  '-o', '@OUTPUT@'
-                                ])
-    gsk_private_gpu_vulkan_vertex_shaders += vert_target
-    gsk_private_gpu_vulkan_fragment_shaders += frag_target
+    glslc_options = [
+      [ fs.name (fs.replace_suffix (shader, '')) + '.vert.spv',
+        [ '--target-env=vulkan1.2',
+          '-fshader-stage=vertex',
+          '-DGSK_VERTEX_SHADER=1',
+        ]
+      ],
+      [ fs.name (fs.replace_suffix (shader, '')) + '.frag.spv',
+        [ '--target-env=vulkan1.2',
+          '-fshader-stage=fragment',
+          '-DGSK_FRAGMENT_SHADER=1',
+        ]
+      ]
+    ]
+    foreach option: glslc_options
+      target = custom_target(option.get(0),
+                             input: shader,
+                             output: option.get(0),
+                             depend_files: gsk_private_gpu_include_shaders,
+                             command: [
+                               glslc,
+                               '-std=450',
+                               option.get(1),
+                               '@INPUT@',
+                               '-o', '@OUTPUT@'
+                             ])
+      gsk_private_gpu_vulkan_shaders += target
+    endforeach
   endif
 endforeach
 
