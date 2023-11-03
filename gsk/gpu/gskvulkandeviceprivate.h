@@ -36,7 +36,6 @@ VkDevice                gsk_vulkan_device_get_vk_device                 (GskVulk
 VkPhysicalDevice        gsk_vulkan_device_get_vk_physical_device        (GskVulkanDevice        *self) G_GNUC_PURE;
 VkQueue                 gsk_vulkan_device_get_vk_queue                  (GskVulkanDevice        *self) G_GNUC_PURE;
 uint32_t                gsk_vulkan_device_get_vk_queue_family_index     (GskVulkanDevice        *self) G_GNUC_PURE;
-VkDescriptorSetLayout   gsk_vulkan_device_get_vk_buffer_set_layout      (GskVulkanDevice        *self) G_GNUC_PURE;
 VkCommandPool           gsk_vulkan_device_get_vk_command_pool           (GskVulkanDevice        *self) G_GNUC_PURE;
 VkSampler               gsk_vulkan_device_get_vk_sampler                (GskVulkanDevice        *self,
                                                                          GskGpuSampler           sampler) G_GNUC_PURE;
@@ -44,10 +43,14 @@ VkSampler               gsk_vulkan_device_get_vk_sampler                (GskVulk
 GskVulkanPipelineLayout *
                         gsk_vulkan_device_acquire_pipeline_layout       (GskVulkanDevice        *self,
                                                                          VkSampler              *immutable_samplers,
-                                                                         gsize                   n_immutable_samplers);
+                                                                         gsize                   n_immutable_samplers,
+                                                                         gsize                   n_samplers,
+                                                                         gsize                   n_buffers);
 void                    gsk_vulkan_device_release_pipeline_layout       (GskVulkanDevice        *self,
                                                                          GskVulkanPipelineLayout*layout);
 VkDescriptorSetLayout   gsk_vulkan_device_get_vk_image_set_layout       (GskVulkanDevice        *self,
+                                                                         GskVulkanPipelineLayout*layout) G_GNUC_PURE;
+VkDescriptorSetLayout   gsk_vulkan_device_get_vk_buffer_set_layout      (GskVulkanDevice        *self,
                                                                          GskVulkanPipelineLayout*layout) G_GNUC_PURE;
 VkPipelineLayout        gsk_vulkan_device_get_vk_pipeline_layout        (GskVulkanDevice        *self,
                                                                          GskVulkanPipelineLayout*layout) G_GNUC_PURE;
