@@ -799,6 +799,8 @@ struct _GskVulkanShaderSpecialization
 {
   guint32 clip;
   guint32 n_immutable_samplers;
+  guint32 n_samplers;
+  guint32 n_buffers;
 };
 
 VkPipeline
@@ -840,8 +842,8 @@ gsk_vulkan_device_get_vk_pipeline (GskVulkanDevice           *self,
                                                        .module = gdk_display_get_vk_shader_module (display, vertex_shader_name),
                                                        .pName = "main",
                                                        .pSpecializationInfo = &(VkSpecializationInfo) {
-                                                           .mapEntryCount = 2,
-                                                           .pMapEntries = (VkSpecializationMapEntry[2]) {
+                                                           .mapEntryCount = 4,
+                                                           .pMapEntries = (VkSpecializationMapEntry[4]) {
                                                                {
                                                                    .constantID = 0,
                                                                    .offset = G_STRUCT_OFFSET (GskVulkanShaderSpecialization, clip),
@@ -852,11 +854,23 @@ gsk_vulkan_device_get_vk_pipeline (GskVulkanDevice           *self,
                                                                    .offset = G_STRUCT_OFFSET (GskVulkanShaderSpecialization, n_immutable_samplers),
                                                                    .size = sizeof (guint32),
                                                                },
+                                                               {
+                                                                   .constantID = 2,
+                                                                   .offset = G_STRUCT_OFFSET (GskVulkanShaderSpecialization, n_samplers),
+                                                                   .size = sizeof (guint32),
+                                                               },
+                                                               {
+                                                                   .constantID = 3,
+                                                                   .offset = G_STRUCT_OFFSET (GskVulkanShaderSpecialization, n_buffers),
+                                                                   .size = sizeof (guint32),
+                                                               },
                                                            },
                                                            .dataSize = sizeof (GskVulkanShaderSpecialization),
                                                            .pData = &(GskVulkanShaderSpecialization) {
                                                                .clip = clip,
                                                                .n_immutable_samplers = layout->setup.n_immutable_samplers,
+                                                               .n_samplers = layout->setup.n_samplers,
+                                                               .n_buffers = layout->setup.n_buffers,
                                                            },
                                                        },
                                                    },
@@ -866,8 +880,8 @@ gsk_vulkan_device_get_vk_pipeline (GskVulkanDevice           *self,
                                                        .module = gdk_display_get_vk_shader_module (display, fragment_shader_name),
                                                        .pName = "main",
                                                        .pSpecializationInfo = &(VkSpecializationInfo) {
-                                                           .mapEntryCount = 2,
-                                                           .pMapEntries = (VkSpecializationMapEntry[2]) {
+                                                           .mapEntryCount = 4,
+                                                           .pMapEntries = (VkSpecializationMapEntry[4]) {
                                                                {
                                                                    .constantID = 0,
                                                                    .offset = G_STRUCT_OFFSET (GskVulkanShaderSpecialization, clip),
@@ -878,11 +892,23 @@ gsk_vulkan_device_get_vk_pipeline (GskVulkanDevice           *self,
                                                                    .offset = G_STRUCT_OFFSET (GskVulkanShaderSpecialization, n_immutable_samplers),
                                                                    .size = sizeof (guint32),
                                                                },
+                                                               {
+                                                                   .constantID = 2,
+                                                                   .offset = G_STRUCT_OFFSET (GskVulkanShaderSpecialization, n_samplers),
+                                                                   .size = sizeof (guint32),
+                                                               },
+                                                               {
+                                                                   .constantID = 3,
+                                                                   .offset = G_STRUCT_OFFSET (GskVulkanShaderSpecialization, n_buffers),
+                                                                   .size = sizeof (guint32),
+                                                               },
                                                            },
                                                            .dataSize = sizeof (GskVulkanShaderSpecialization),
                                                            .pData = &(GskVulkanShaderSpecialization) {
                                                                .clip = clip,
                                                                .n_immutable_samplers = layout->setup.n_immutable_samplers,
+                                                               .n_samplers = layout->setup.n_samplers,
+                                                               .n_buffers = layout->setup.n_buffers,
                                                            },
                                                        },
                                                    },
