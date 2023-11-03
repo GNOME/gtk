@@ -32,6 +32,16 @@
 #include <glib/gi18n-lib.h>
 #include <math.h>
 
+#ifdef GDK_RENDERING_VULKAN
+static const GdkDebugKey gsk_vulkan_feature_keys[] = {
+  { "dmabuf", GDK_VULKAN_FEATURE_DMABUF, "Never import Dmabufs" },
+  { "ycbcr", GDK_VULKAN_FEATURE_YCBCR, "Do not support Ycbcr textures" },
+  { "descriptor-indexing", GDK_VULKAN_FEATURE_DESCRIPTOR_INDEXING, "Force slow descriptor set layout codepath" },
+  { "dynamic-indexing", GDK_VULKAN_FEATURE_DYNAMIC_INDEXING, "Hardcode small number of buffer and texure arrays" },
+  { "nonuniform-indexing", GDK_VULKAN_FEATURE_NONUNIFORM_INDEXING, "Split draw calls to ensure uniform texture accesses" },
+};
+#endif
+
 /**
  * GdkVulkanContext:
  *
@@ -1319,6 +1329,7 @@ gdk_display_create_vulkan_device (GdkDisplay  *display,
   const char *override;
   gboolean list_devices;
   int first, last;
+  GdkVulkanFeatures skip_features;
 
   uint32_t n_devices = 0;
   GDK_VK_CHECK(vkEnumeratePhysicalDevices, display->vk_instance, &n_devices, NULL);
@@ -1337,6 +1348,10 @@ gdk_display_create_vulkan_device (GdkDisplay  *display,
 
   first = 0;
   last = n_devices;
+
+  skip_features = gdk_parse_debug_var ("GDK_VULKAN_SKIP",
+                                       gsk_vulkan_feature_keys,
+                                       G_N_ELEMENTS (gsk_vulkan_feature_keys));
 
   override = g_getenv ("GDK_VULKAN_DEVICE");
   list_devices = FALSE;
@@ -1419,14 +1434,13 @@ gdk_display_create_vulkan_device (GdkDisplay  *display,
 
   for (i = first; i < last; i++)
     {
-      GdkVulkanFeatures features;
+      GdkVulkanFeatures features, device_features;
       uint32_t n_queue_props;
 
-      if (!physical_device_supports_extension (devices[i], VK_EXT_DESCRIPTOR_INDEXING_EXTENSION_NAME))
+      if (!physical_device_check_features (devices[i], &device_features))
         continue;
 
-      if (!physical_device_check_features (devices[i], &features))
-        continue;
+      features = device_features & ~skip_features;
 
       vkGetPhysicalDeviceQueueFamilyProperties (devices[i], &n_queue_props, NULL);
       VkQueueFamilyProperties *queue_props = g_newa (VkQueueFamilyProperties, n_queue_props);
@@ -1492,6 +1506,18 @@ gdk_display_create_vulkan_device (GdkDisplay  *display,
               vkGetDeviceQueue(display->vk_device, j, 0, &display->vk_queue);
               display->vk_queue_family_index = j;
               display->vulkan_features = features;
+
+              GDK_DISPLAY_DEBUG (display, VULKAN, "Enabled features (use GDK_VULKAN_SKIP env var to disable):");
+              for (i = 0; i < G_N_ELEMENTS (gsk_vulkan_feature_keys); i++)
+                {
+                  GDK_DISPLAY_DEBUG (display, VULKAN, "    %s: %s",
+                                     gsk_vulkan_feature_keys[i].key,
+                                     (features & gsk_vulkan_feature_keys[i].value) ? "YES" :
+                                     ((skip_features & gsk_vulkan_feature_keys[i].value) ? "disabled via env var" :
+                                      (((device_features & gsk_vulkan_feature_keys[i].value) == 0) ? "not supported" :
+                                       "Hum, what? This should not happen.")));
+                }
+
               return TRUE;
             }
         }
