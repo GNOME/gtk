@@ -856,6 +856,7 @@ gsk_vulkan_device_get_vk_pipeline (GskVulkanDevice           *self,
   PipelineCacheKey cache_key;
   VkPipeline pipeline;
   GdkDisplay *display;
+  const char *version_string;
   char *vertex_shader_name, *fragment_shader_name;
 
   cache_key = (PipelineCacheKey) {
@@ -868,8 +869,20 @@ gsk_vulkan_device_get_vk_pipeline (GskVulkanDevice           *self,
     return pipeline;
 
   display = gsk_gpu_device_get_display (GSK_GPU_DEVICE (self));
-  vertex_shader_name = g_strconcat ("/org/gtk/libgsk/shaders/vulkan/", op_class->shader_name, ".vert.spv", NULL);
-  fragment_shader_name = g_strconcat ("/org/gtk/libgsk/shaders/vulkan/", op_class->shader_name, ".frag.spv", NULL);
+  if (gsk_vulkan_device_has_feature (self, GDK_VULKAN_FEATURE_NONUNIFORM_INDEXING))
+    version_string = ".1.2";
+  else
+    version_string = ".1.0";
+  vertex_shader_name = g_strconcat ("/org/gtk/libgsk/shaders/vulkan/",
+                                    op_class->shader_name,
+                                    version_string,
+                                    ".vert.spv",
+                                    NULL);
+  fragment_shader_name = g_strconcat ("/org/gtk/libgsk/shaders/vulkan/",
+                                      op_class->shader_name,
+                                      version_string,
+                                      ".frag.spv",
+                                      NULL);
 
   GSK_VK_CHECK (vkCreateGraphicsPipelines, display->vk_device,
                                            display->vk_pipeline_cache,

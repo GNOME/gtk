@@ -36,15 +36,19 @@ gsk_gpu_shader_op_vk_command_n (GskGpuOp        *op,
   gsize i;
 
   i = 1;
-  for (next = op->next; next && i < 10 * 1000; next = next->next)
+  if (gsk_vulkan_device_has_feature (GSK_VULKAN_DEVICE (gsk_gpu_frame_get_device (frame)),
+                                     GDK_VULKAN_FEATURE_NONUNIFORM_INDEXING))
     {
-      GskGpuShaderOp *next_shader = (GskGpuShaderOp *) next;
-  
-      if (next->op_class != op->op_class ||
-          next_shader->vertex_offset != self->vertex_offset + i * shader_op_class->vertex_size)
-        break;
+      for (next = op->next; next && i < 10 * 1000; next = next->next)
+        {
+          GskGpuShaderOp *next_shader = (GskGpuShaderOp *) next;
+      
+          if (next->op_class != op->op_class ||
+              next_shader->vertex_offset != self->vertex_offset + i * shader_op_class->vertex_size)
+            break;
 
-      i++;
+          i++;
+        }
     }
 
   vkCmdBindPipeline (command_buffer,

@@ -1,4 +1,6 @@
+#ifdef HAVE_NONUNIFORM
 #extension GL_EXT_nonuniform_qualifier : enable
+#endif
 
 #include "enums.glsl"
 
@@ -62,12 +64,13 @@ gsk_texture (uint id,
         return texture (immutable_textures[6], pos);
       else if (GSK_N_IMMUTABLE_SAMPLERS > 7 && id == 7)
         return texture (immutable_textures[7], pos);
-      else
-        return vec4 (1.0, 0.0, 0.8, 1.0);
     }
   else
     {
       id >>= 1;
+#ifdef HAVE_NONUNIFORM
+      return texture (textures[nonuniformEXT (id)], pos);
+#else
       if (id == 0)
         return texture (textures[0], pos);
       else if (GSK_N_SAMPLERS > 1 && id == 1)
@@ -84,9 +87,11 @@ gsk_texture (uint id,
         return texture (textures[6], pos);
       else if (GSK_N_SAMPLERS > 7 && id == 7)
         return texture (textures[7], pos);
-      else
-        return texture (textures[nonuniformEXT (id)], pos);
+      else if (GSK_N_SAMPLERS > 8)
+        return texture (textures[id], pos);
+#endif
     }
+  return vec4 (1.0, 0.0, 0.8, 1.0);
 }
 
 ivec2
@@ -112,12 +117,13 @@ gsk_texture_size (uint id,
         return textureSize (immutable_textures[6], lod);
       else if (GSK_N_IMMUTABLE_SAMPLERS > 7 && id == 7)
         return textureSize (immutable_textures[7], lod);
-      else
-        return ivec2 (1, 1);
     }
   else
     {
       id >>= 1;
+#ifdef HAVE_NONUNIFORM
+      return textureSize (textures[nonuniformEXT (id)], lod);
+#else
       if (id == 0)
         return textureSize (textures[0], lod);
       else if (GSK_N_SAMPLERS > 1 && id == 1)
@@ -134,9 +140,11 @@ gsk_texture_size (uint id,
         return textureSize (textures[6], lod);
       else if (GSK_N_SAMPLERS > 7 && id == 7)
         return textureSize (textures[7], lod);
-      else
-        return textureSize (textures[nonuniformEXT (id)], lod);
+      else if (GSK_N_SAMPLERS > 8)
+        return textureSize (textures[id], lod);
+#endif
     }
+  return ivec2 (1, 1);
 }
 
 vec4
@@ -163,12 +171,13 @@ gsk_texel_fetch (uint  id,
         return texelFetch (immutable_textures[6], pos, lod);
       else if (GSK_N_IMMUTABLE_SAMPLERS > 7 && id == 7)
         return texelFetch (immutable_textures[7], pos, lod);
-      else
-        return vec4 (1.0, 0.0, 0.8, 1.0);
     }
   else
     {
       id >>= 1;
+#ifdef HAVE_NONUNIFORM
+      return texelFetch (textures[nonuniformEXT (id)], pos, lod);
+#else
       if (id == 0)
         return texelFetch (textures[0], pos, lod);
       else if (GSK_N_SAMPLERS > 1 && id == 1)
@@ -185,12 +194,18 @@ gsk_texel_fetch (uint  id,
         return texelFetch (textures[6], pos, lod);
       else if (GSK_N_SAMPLERS > 7 && id == 7)
         return texelFetch (textures[7], pos, lod);
-      else
-        return texelFetch (textures[nonuniformEXT (id)], pos, lod);
+      else if (GSK_N_SAMPLERS > 8)
+        return texelFetch (textures[id], pos, lod);
+#endif
     }
+  return vec4 (1.0, 0.0, 0.8, 1.0);
 }
 
+#ifdef HAVE_NONUNIFORM
 #define gsk_get_buffer(id) buffers[nonuniformEXT (id)]
+#else
+#define gsk_get_buffer(id) buffers[id]
+#endif
 #define gsk_get_float(id) gsk_get_buffer(id >> 22).floats[id & 0x3FFFFF]
 #define gsk_get_int(id) (floatBitsToInt(gsk_get_float(id)))
 #define gsk_get_uint(id) (floatBitsToUint(gsk_get_float(id)))
