@@ -30,8 +30,7 @@
 #define GDK_ARRAY_NAME gsk_samplers
 #define GDK_ARRAY_TYPE_NAME GskSamplers
 #define GDK_ARRAY_ELEMENT_TYPE VkSampler
-#define GDK_ARRAY_NULL_TERMINATED 1
-#define GDK_ARRAY_PREALLOC 31
+#define GDK_ARRAY_PREALLOC 32
 #define GDK_ARRAY_NO_MEMSET 1
 #include "gdk/gdkarrayimpl.c"
 
@@ -251,7 +250,7 @@ gsk_vulkan_frame_prepare_descriptor_sets (GskVulkanFrame *self)
                                               .descriptorSetCount = GSK_VULKAN_N_DESCRIPTOR_SETS,
                                               .pSetLayouts = (VkDescriptorSetLayout[GSK_VULKAN_N_DESCRIPTOR_SETS]) {
                                                 gsk_vulkan_device_get_vk_image_set_layout (device, self->pipeline_layout),
-                                                gsk_vulkan_device_get_vk_buffer_set_layout (device),
+                                                gsk_vulkan_device_get_vk_buffer_set_layout (device, self->pipeline_layout),
                                               },
                                               .pNext = &(VkDescriptorSetVariableDescriptorCountAllocateInfo) {
                                                 .sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_VARIABLE_DESCRIPTOR_COUNT_ALLOCATE_INFO,
@@ -355,7 +354,10 @@ gsk_vulkan_frame_submit (GskGpuFrame  *frame,
 
   self->pipeline_layout = gsk_vulkan_device_acquire_pipeline_layout (GSK_VULKAN_DEVICE (gsk_gpu_frame_get_device (frame)),
                                                                      gsk_samplers_get_data (&self->immutable_samplers),
-                                                                     gsk_samplers_get_size (&self->immutable_samplers));
+                                                                     gsk_samplers_get_size (&self->immutable_samplers),
+                                                                     gsk_descriptor_image_infos_get_size (&self->descriptor_images),
+                                                                     gsk_descriptor_buffer_infos_get_size (&self->descriptor_buffers));
+
   GSK_VK_CHECK (vkBeginCommandBuffer, self->vk_command_buffer,
                                       &(VkCommandBufferBeginInfo) {
                                           .sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO,
