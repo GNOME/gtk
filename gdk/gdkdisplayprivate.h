@@ -42,8 +42,11 @@ G_BEGIN_DECLS
 typedef struct _GdkDisplayClass GdkDisplayClass;
 
 typedef enum {
-  GDK_VULKAN_FEATURE_DMABUF     = 1 << 0,
-  GDK_VULKAN_FEATURE_YCBCR      = 1 << 1
+  GDK_VULKAN_FEATURE_DMABUF                     = 1 << 0,
+  GDK_VULKAN_FEATURE_YCBCR                      = 1 << 1,
+  GDK_VULKAN_FEATURE_DESCRIPTOR_INDEXING        = 1 << 2,
+  GDK_VULKAN_FEATURE_DYNAMIC_INDEXING           = 1 << 3,
+  GDK_VULKAN_FEATURE_NONUNIFORM_INDEXING        = 1 << 4,
 } GdkVulkanFeatures;
 
 /* Tracks information about the device grab on this display */
