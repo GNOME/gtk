@@ -40,11 +40,14 @@ gsk_gpu_shader_op_vk_command_n (GskGpuOp        *op,
   GskGpuOp *next;
   gsize i, n;
 
-  if (gsk_gpu_frame_should_optimize (frame, GSK_GPU_OPTIMIZE_MERGE))
+  if (gsk_gpu_frame_should_optimize (frame, GSK_GPU_OPTIMIZE_MERGE) &&
+      gsk_vulkan_device_has_feature (GSK_VULKAN_DEVICE (gsk_gpu_frame_get_device (frame)),
+                                     GDK_VULKAN_FEATURE_NONUNIFORM_INDEXING))
     n = MAX_MERGE_OPS;
   else
     n = 1;
   i = 1;
+
   for (next = op->next; next && i < n; next = next->next)
     {
       GskGpuShaderOp *next_shader = (GskGpuShaderOp *) next;
