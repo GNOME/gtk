@@ -49,7 +49,7 @@ main (int argc, char **argv)
   // ...
 
   // Show the application window
-  gtk_widget_show (window);
+  gtk_window_present (GTK_WINDOW (window));
 
   // Enter the main event loop, and wait for user interaction
   while (!done)
