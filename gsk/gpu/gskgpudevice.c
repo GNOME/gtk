@@ -369,7 +369,40 @@ gsk_gpu_cached_atlas_allocate (GskGpuCachedAtlas *atlas,
 
   return TRUE;
 }
-                            
+
+static void
+gsk_gpu_device_ensure_atlas (GskGpuDevice *self,
+                             gboolean      recreate,
+                             gint64        timestamp)
+{
+  GskGpuDevicePrivate *priv = gsk_gpu_device_get_instance_private (self);
+
+  if (priv->current_atlas && !recreate)
+    return;
+
+  priv->current_atlas = g_new (GskGpuCachedAtlas, 1);
+  *priv->current_atlas = (GskGpuCachedAtlas) {
+      .entry = {
+          .type = GSK_GPU_CACHE_ATLAS,
+          .last_use_timestamp = timestamp,
+      },
+      .image = GSK_GPU_DEVICE_GET_CLASS (self)->create_atlas_image (self, ATLAS_SIZE, ATLAS_SIZE),
+      .n_slices = 0,
+  };
+
+  gsk_gpu_cache_entries_append (&priv->cache, (GskGpuCacheEntry *) priv->current_atlas);
+}
+
+GskGpuImage *
+gsk_gpu_device_get_atlas_image (GskGpuDevice *self)
+{
+  GskGpuDevicePrivate *priv = gsk_gpu_device_get_instance_private (self);
+
+  gsk_gpu_device_ensure_atlas (self, FALSE, g_get_monotonic_time ());
+
+  return priv->current_atlas->image;
+}
+
 static GskGpuImage *
 gsk_gpu_device_add_atlas_image (GskGpuDevice      *self,
                                 gint64             timestamp,
@@ -383,24 +416,15 @@ gsk_gpu_device_add_atlas_image (GskGpuDevice      *self,
   if (width > MAX_ATLAS_ITEM_SIZE || height > MAX_ATLAS_ITEM_SIZE)
     return NULL;
 
-  if (priv->current_atlas &&
-      gsk_gpu_cached_atlas_allocate (priv->current_atlas, width, height, out_x, out_y))
+  gsk_gpu_device_ensure_atlas (self, FALSE, timestamp);
+  
+  if (gsk_gpu_cached_atlas_allocate (priv->current_atlas, width, height, out_x, out_y))
     {
       priv->current_atlas->entry.last_use_timestamp = timestamp;
       return priv->current_atlas->image;
     }
 
-  priv->current_atlas = g_new (GskGpuCachedAtlas, 1);
-  *priv->current_atlas = (GskGpuCachedAtlas) {
-      .entry = {
-          .type = GSK_GPU_CACHE_ATLAS,
-          .last_use_timestamp = timestamp,
-      },
-      .image = GSK_GPU_DEVICE_GET_CLASS (self)->create_atlas_image (self, ATLAS_SIZE, ATLAS_SIZE),
-      .n_slices = 0,
-  };
-
-  gsk_gpu_cache_entries_append (&priv->cache, (GskGpuCacheEntry *) priv->current_atlas);
+  gsk_gpu_device_ensure_atlas (self, TRUE, timestamp);
 
   if (gsk_gpu_cached_atlas_allocate (priv->current_atlas, width, height, out_x, out_y))
     {

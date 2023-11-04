@@ -49,6 +49,7 @@ void                    gsk_gpu_device_gc                               (GskGpuD
 
 GdkDisplay *            gsk_gpu_device_get_display                      (GskGpuDevice           *self);
 gsize                   gsk_gpu_device_get_max_image_size               (GskGpuDevice           *self);
+GskGpuImage *           gsk_gpu_device_get_atlas_image                  (GskGpuDevice           *self);
 
 GskGpuImage *           gsk_gpu_device_create_offscreen_image           (GskGpuDevice           *self,
                                                                          gboolean                with_mipmap,

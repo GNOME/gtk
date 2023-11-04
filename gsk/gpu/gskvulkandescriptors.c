@@ -152,19 +152,6 @@ gsk_vulkan_descriptors_is_full (GskVulkanDescriptors *self)
          gsk_descriptor_buffer_infos_get_size (&self->descriptor_buffers) >= gsk_vulkan_device_get_max_buffers (self->device);
 }
 
-gsize
-gsk_vulkan_descriptors_get_n_images (GskVulkanDescriptors *self)
-{
-  return gsk_descriptor_image_infos_get_size (&self->descriptor_immutable_images) + 
-         gsk_descriptor_image_infos_get_size (&self->descriptor_images);
-}
-
-gsize
-gsk_vulkan_descriptors_get_n_buffers (GskVulkanDescriptors *self)
-{
-  return gsk_descriptor_buffer_infos_get_size (&self->descriptor_buffers);
-}
-
 GskVulkanPipelineLayout *
 gsk_vulkan_descriptors_get_pipeline_layout (GskVulkanDescriptors *self)
 {
@@ -194,21 +181,80 @@ gsk_vulkan_descriptors_transition (GskVulkanDescriptors *self,
     }
 }
 
+static void
+gsk_vulkan_descriptors_fill_sets (GskVulkanDescriptors *self)
+{
+  gsize n_immutable_samplers, n_samplers, n_buffers;
+
+  if (gsk_vulkan_device_has_feature (self->device, GDK_VULKAN_FEATURE_DESCRIPTOR_INDEXING))
+    return;
+
+  /* If descriptor indexing isn't supported, all descriptors in the shaders
+   * must be properly setup. And that means we need to have
+   * descriptors for all of them.
+   */
+  gsk_vulkan_device_get_pipeline_sizes (self->device,
+                                        self->pipeline_layout,
+                                        &n_immutable_samplers,
+                                        &n_samplers,
+                                        &n_buffers);
+
+  if (gsk_descriptor_image_infos_get_size (&self->descriptor_images) == 0)
+    {
+      guint32 ignored;
+      /* We have no image, find any random image and attach it */
+      if (!gsk_gpu_descriptors_add_image (GSK_GPU_DESCRIPTORS (self),
+                                          gsk_gpu_device_get_atlas_image (GSK_GPU_DEVICE (self->device)),
+                                          GSK_GPU_SAMPLER_DEFAULT,
+                                          &ignored))
+        {
+          g_assert_not_reached ();
+        }
+    }
+  while (n_immutable_samplers > gsk_descriptor_image_infos_get_size (&self->descriptor_immutable_images))
+    {
+      gsk_descriptor_image_infos_append (&self->descriptor_immutable_images, gsk_descriptor_image_infos_get (&self->descriptor_images, 0));
+    }
+  while (n_samplers > gsk_descriptor_image_infos_get_size (&self->descriptor_images))
+    {
+      gsk_descriptor_image_infos_append (&self->descriptor_images, gsk_descriptor_image_infos_get (&self->descriptor_images, 0));
+    }
+  /* That should be the storage buffer */
+  g_assert (gsk_descriptor_buffer_infos_get_size (&self->descriptor_buffers) > 0);
+  while (n_buffers > gsk_descriptor_buffer_infos_get_size (&self->descriptor_buffers))
+    {
+      gsk_descriptor_buffer_infos_append (&self->descriptor_buffers, gsk_descriptor_buffer_infos_get (&self->descriptor_buffers, 0));
+    }
+}
+
 void
 gsk_vulkan_descriptors_prepare (GskVulkanDescriptors *self,
-                                VkDescriptorPool      vk_descriptor_pool)
+                                gsize                *n_images,
+                                gsize                *n_buffers)
 {
-  VkWriteDescriptorSet write_descriptor_sets[GSK_VULKAN_N_DESCRIPTOR_SETS + 1];
-  gsize n_descriptor_sets;
-  VkDevice vk_device;
-
-  vk_device = gsk_vulkan_device_get_vk_device (self->device);
-
   self->pipeline_layout = gsk_vulkan_device_acquire_pipeline_layout (self->device,
                                                                      gsk_samplers_get_data (&self->immutable_samplers),
                                                                      gsk_samplers_get_size (&self->immutable_samplers),
                                                                      gsk_descriptor_image_infos_get_size (&self->descriptor_images),
                                                                      gsk_descriptor_buffer_infos_get_size (&self->descriptor_buffers));
+  gsk_vulkan_descriptors_fill_sets (self);
+
+  *n_images = gsk_descriptor_image_infos_get_size (&self->descriptor_immutable_images) + 
+              gsk_descriptor_image_infos_get_size (&self->descriptor_images);
+  *n_buffers = gsk_descriptor_buffer_infos_get_size (&self->descriptor_buffers);
+}
+
+void
+gsk_vulkan_descriptors_update_sets (GskVulkanDescriptors *self,
+                                    VkDescriptorPool      vk_descriptor_pool)
+{
+  VkWriteDescriptorSet write_descriptor_sets[GSK_VULKAN_N_DESCRIPTOR_SETS + 1];
+  gsize n_descriptor_sets;
+  VkDevice vk_device;
+  gboolean descriptor_indexing;
+
+  descriptor_indexing = gsk_vulkan_device_has_feature (self->device, GDK_VULKAN_FEATURE_DESCRIPTOR_INDEXING);
+  vk_device = gsk_vulkan_device_get_vk_device (self->device);
 
   GSK_VK_CHECK (vkAllocateDescriptorSets, vk_device,
                                           &(VkDescriptorSetAllocateInfo) {
@@ -219,7 +265,7 @@ gsk_vulkan_descriptors_prepare (GskVulkanDescriptors *self,
                                                 gsk_vulkan_device_get_vk_image_set_layout (self->device, self->pipeline_layout),
                                                 gsk_vulkan_device_get_vk_buffer_set_layout (self->device, self->pipeline_layout),
                                               },
-                                              .pNext = &(VkDescriptorSetVariableDescriptorCountAllocateInfo) {
+                                              .pNext = !descriptor_indexing ? NULL : &(VkDescriptorSetVariableDescriptorCountAllocateInfo) {
                                                 .sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_VARIABLE_DESCRIPTOR_COUNT_ALLOCATE_INFO,
                                                 .descriptorSetCount = GSK_VULKAN_N_DESCRIPTOR_SETS,
                                                 .pDescriptorCounts = (uint32_t[GSK_VULKAN_N_DESCRIPTOR_SETS]) {

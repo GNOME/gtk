@@ -155,6 +155,9 @@ gsk_vulkan_pipeline_layout_new (GskVulkanDevice                    *self,
 {
   GskVulkanPipelineLayout *layout;
   GdkDisplay *display;
+  gboolean descriptor_indexing;
+  
+  descriptor_indexing = gsk_vulkan_device_has_feature (self, GDK_VULKAN_FEATURE_DESCRIPTOR_INDEXING);
 
   layout = g_malloc (sizeof (GskVulkanPipelineLayout) + setup->n_immutable_samplers * sizeof (VkSampler));
   layout->ref_count = 1;
@@ -186,7 +189,7 @@ gsk_vulkan_pipeline_layout_new (GskVulkanDevice                    *self,
                                                          .stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT
                                                      }
                                                  },
-                                                 .pNext = &(VkDescriptorSetLayoutBindingFlagsCreateInfo) {
+                                                 .pNext = !descriptor_indexing ? NULL : &(VkDescriptorSetLayoutBindingFlagsCreateInfo) {
                                                    .sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_BINDING_FLAGS_CREATE_INFO,
                                                    .bindingCount = 2,
                                                    .pBindingFlags = (VkDescriptorBindingFlags[2]) {
@@ -212,7 +215,7 @@ gsk_vulkan_pipeline_layout_new (GskVulkanDevice                    *self,
                                                          .stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT
                                                      },
                                                  },
-                                                 .pNext = &(VkDescriptorSetLayoutBindingFlagsCreateInfo) {
+                                                 .pNext = !descriptor_indexing ? NULL : &(VkDescriptorSetLayoutBindingFlagsCreateInfo) {
                                                    .sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_BINDING_FLAGS_CREATE_INFO,
                                                    .bindingCount = 1,
                                                    .pBindingFlags = (VkDescriptorBindingFlags[1]) {
@@ -1058,6 +1061,8 @@ gsk_vulkan_device_acquire_pipeline_layout (GskVulkanDevice *self,
       immutable_samplers = fallback;
       n_immutable_samplers = 1;
     }
+  /* round the number of samplers/buffer up a bit, so we don't (re)create
+   * excessive amounts of layouts */
   n_samplers = MAX (n_samplers, 8);
   g_assert (n_samplers <= self->max_samplers);
   n_buffers = MAX (n_buffers, 8);
@@ -1085,6 +1090,18 @@ gsk_vulkan_device_release_pipeline_layout (GskVulkanDevice         *self,
     gsk_vulkan_pipeline_layout_unref (self, self->pipeline_layout_cache);
 
   self->pipeline_layout_cache = layout;
+}
+
+void
+gsk_vulkan_device_get_pipeline_sizes (GskVulkanDevice        *self,
+                                      GskVulkanPipelineLayout*layout,
+                                      gsize                  *n_immutable_samplers,
+                                      gsize                  *n_samplers,
+                                      gsize                  *n_buffers)
+{
+  *n_immutable_samplers = layout->setup.n_immutable_samplers;
+  *n_samplers = layout->setup.n_samplers;
+  *n_buffers = layout->setup.n_buffers;
 }
 
 static GskVulkanAllocator *

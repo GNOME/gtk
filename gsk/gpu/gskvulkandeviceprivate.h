@@ -50,6 +50,11 @@ GskVulkanPipelineLayout *
                                                                          gsize                   n_buffers);
 void                    gsk_vulkan_device_release_pipeline_layout       (GskVulkanDevice        *self,
                                                                          GskVulkanPipelineLayout*layout);
+void                    gsk_vulkan_device_get_pipeline_sizes            (GskVulkanDevice        *self,
+                                                                         GskVulkanPipelineLayout*layout,
+                                                                         gsize                  *n_immutable_samplers,
+                                                                         gsize                  *n_samplers,
+                                                                         gsize                  *n_buffers);
 VkDescriptorSetLayout   gsk_vulkan_device_get_vk_image_set_layout       (GskVulkanDevice        *self,
                                                                          GskVulkanPipelineLayout*layout) G_GNUC_PURE;
 VkDescriptorSetLayout   gsk_vulkan_device_get_vk_buffer_set_layout      (GskVulkanDevice        *self,
