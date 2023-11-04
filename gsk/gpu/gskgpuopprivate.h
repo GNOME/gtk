@@ -23,6 +23,12 @@ typedef struct _GskVulkanCommandState GskVulkanCommandState;
 struct _GskGLCommandState
 {
   gsize flip_y;
+  struct {
+    const GskGpuOpClass *op_class;
+    GskGpuShaderClip clip;
+    gsize n_external;
+  } current_program;
+  GskGLDescriptors *desc;
 };
 
 #ifdef GDK_RENDERING_VULKAN

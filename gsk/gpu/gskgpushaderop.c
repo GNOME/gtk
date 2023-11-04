@@ -84,16 +84,32 @@ gsk_gpu_shader_op_gl_command_n (GskGpuOp          *op,
   GskGpuShaderOpClass *shader_op_class = (GskGpuShaderOpClass *) op->op_class;
   GskGLDescriptors *desc;
   GskGpuOp *next;
-  gsize i;
+  gsize i, n_external;
 
   desc = GSK_GL_DESCRIPTORS (self->desc);
-  gsk_gl_frame_use_program (GSK_GL_FRAME (frame),
-                            shader_op_class,
-                            self->clip,
-                            desc ? gsk_gl_descriptors_get_n_external (desc) : 0);
-
   if (desc)
-    gsk_gl_descriptors_use (GSK_GL_DESCRIPTORS (desc));
+    n_external = gsk_gl_descriptors_get_n_external (desc);
+  else
+    n_external = 0;
+
+  if (state->current_program.op_class != op->op_class ||
+      state->current_program.clip != self->clip ||
+      state->current_program.n_external != n_external)
+    {
+      state->current_program.op_class = op->op_class;
+      state->current_program.clip = self->clip;
+      state->current_program.n_external = n_external;
+      gsk_gl_frame_use_program (GSK_GL_FRAME (frame),
+                                shader_op_class,
+                                self->clip,
+                                n_external);
+    }
+
+  if (desc != state->desc && desc)
+    {
+      gsk_gl_descriptors_use (desc);
+      state->desc = desc;
+    }
 
   i = 1;
   for (next = op->next; next && i < 10 * 1000; next = next->next)
