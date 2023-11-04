@@ -83,11 +83,9 @@ gsk_gpu_download_op_vk_create (GskGpuDownloadOp *self)
 }
 
 static GskGpuOp *
-gsk_gpu_download_op_vk_command (GskGpuOp         *op,
-                                GskGpuFrame      *frame,
-                                VkRenderPass      render_pass,
-                                VkFormat          format,
-                                VkCommandBuffer   command_buffer)
+gsk_gpu_download_op_vk_command (GskGpuOp              *op,
+                                GskGpuFrame           *frame,
+                                GskVulkanCommandState *state)
 {
   GskGpuDownloadOp *self = (GskGpuDownloadOp *) op;
   gsize width, height, stride;
@@ -99,12 +97,12 @@ gsk_gpu_download_op_vk_command (GskGpuOp         *op,
                                              height * stride);
 
   gsk_vulkan_image_transition (GSK_VULKAN_IMAGE (self->image),
-                               command_buffer,
+                               state->vk_command_buffer,
                                VK_PIPELINE_STAGE_TRANSFER_BIT,
                                VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
                                VK_ACCESS_TRANSFER_READ_BIT);
 
-  vkCmdCopyImageToBuffer (command_buffer,
+  vkCmdCopyImageToBuffer (state->vk_command_buffer,
                           gsk_vulkan_image_get_vk_image (GSK_VULKAN_IMAGE (self->image)),
                           VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
                           gsk_vulkan_buffer_get_vk_buffer (GSK_VULKAN_BUFFER (self->buffer)),
@@ -133,7 +131,7 @@ gsk_gpu_download_op_vk_command (GskGpuOp         *op,
                                }
                           });
 
-  vkCmdPipelineBarrier (command_buffer,
+  vkCmdPipelineBarrier (state->vk_command_buffer,
                         VK_PIPELINE_STAGE_TRANSFER_BIT,
                         VK_PIPELINE_STAGE_HOST_BIT,
                         0,
@@ -180,9 +178,9 @@ gsk_gl_texture_data_free (gpointer user_data)
 }
 
 static GskGpuOp *
-gsk_gpu_download_op_gl_command (GskGpuOp    *op,
-                                GskGpuFrame *frame,
-                                gsize        flip_y)
+gsk_gpu_download_op_gl_command (GskGpuOp          *op,
+                                GskGpuFrame       *frame,
+                                GskGLCommandState *state)
 {
   GskGpuDownloadOp *self = (GskGpuDownloadOp *) op;
   GdkGLTextureBuilder *builder;

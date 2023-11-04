@@ -88,29 +88,25 @@ gsk_gpu_render_pass_op_do_barriers (GskGpuRenderPassOp *self,
 }
 
 static GskGpuOp *
-gsk_gpu_render_pass_op_vk_command (GskGpuOp        *op,
-                                   GskGpuFrame     *frame,
-                                   VkRenderPass     render_pass,
-                                   VkFormat         format,
-                                   VkCommandBuffer  command_buffer)
+gsk_gpu_render_pass_op_vk_command (GskGpuOp              *op,
+                                   GskGpuFrame           *frame,
+                                   GskVulkanCommandState *state)
 {
   GskGpuRenderPassOp *self = (GskGpuRenderPassOp *) op;
-  VkRenderPass vk_render_pass;
-  VkFormat vk_format;
 
   /* nesting frame passes not allowed */
-  g_assert (render_pass == VK_NULL_HANDLE);
+  g_assert (state->vk_render_pass == VK_NULL_HANDLE);
 
-  gsk_gpu_render_pass_op_do_barriers (self, command_buffer);
+  gsk_gpu_render_pass_op_do_barriers (self, state->vk_command_buffer);
 
-  vk_format = gsk_vulkan_image_get_vk_format (GSK_VULKAN_IMAGE (self->target));
-  vk_render_pass = gsk_vulkan_device_get_vk_render_pass (GSK_VULKAN_DEVICE (gsk_gpu_frame_get_device (frame)),
-                                                         vk_format,
-                                                         gsk_vulkan_image_get_vk_image_layout (GSK_VULKAN_IMAGE (self->target)),
-                                                         gsk_gpu_render_pass_type_to_vk_image_layout (self->pass_type));
+  state->vk_format = gsk_vulkan_image_get_vk_format (GSK_VULKAN_IMAGE (self->target));
+  state->vk_render_pass = gsk_vulkan_device_get_vk_render_pass (GSK_VULKAN_DEVICE (gsk_gpu_frame_get_device (frame)),
+                                                                state->vk_format,
+                                                                gsk_vulkan_image_get_vk_image_layout (GSK_VULKAN_IMAGE (self->target)),
+                                                                gsk_gpu_render_pass_type_to_vk_image_layout (self->pass_type));
 
 
-  vkCmdSetViewport (command_buffer,
+  vkCmdSetViewport (state->vk_command_buffer,
                     0,
                     1,
                     &(VkViewport) {
@@ -122,12 +118,12 @@ gsk_gpu_render_pass_op_vk_command (GskGpuOp        *op,
                         .maxDepth = 1
                     });
 
-  vkCmdBeginRenderPass (command_buffer,
+  vkCmdBeginRenderPass (state->vk_command_buffer,
                         &(VkRenderPassBeginInfo) {
                             .sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO,
-                            .renderPass = vk_render_pass,
+                            .renderPass = state->vk_render_pass,
                             .framebuffer = gsk_vulkan_image_get_vk_framebuffer (GSK_VULKAN_IMAGE(self->target),
-                                                                                vk_render_pass),
+                                                                                state->vk_render_pass),
                             .renderArea = { 
                                 { self->area.x, self->area.y },
                                 { self->area.width, self->area.height }
@@ -142,36 +138,38 @@ gsk_gpu_render_pass_op_vk_command (GskGpuOp        *op,
   op = op->next;
   while (op->op_class->stage != GSK_GPU_STAGE_END_PASS)
     {
-      op = gsk_gpu_op_vk_command (op, frame, vk_render_pass, vk_format, command_buffer);
+      op = gsk_gpu_op_vk_command (op, frame, state);
     }
 
-  op = gsk_gpu_op_vk_command (op, frame, vk_render_pass, vk_format, command_buffer);
+  op = gsk_gpu_op_vk_command (op, frame, state);
 
   return op;
 }
 #endif
 
 static GskGpuOp *
-gsk_gpu_render_pass_op_gl_command (GskGpuOp    *op,
-                                   GskGpuFrame *frame,
-                                   gsize        flip_y)
+gsk_gpu_render_pass_op_gl_command (GskGpuOp          *op,
+                                   GskGpuFrame       *frame,
+                                   GskGLCommandState *state)
 {
   GskGpuRenderPassOp *self = (GskGpuRenderPassOp *) op;
-  gsize target_flip_y;
+
+  /* nesting frame passes not allowed */
+  g_assert (state->flip_y == 0);
 
   gsk_gl_image_bind_framebuffer (GSK_GL_IMAGE (self->target));
 
   if (gsk_gl_image_is_flipped (GSK_GL_IMAGE (self->target)))
-    target_flip_y = gsk_gpu_image_get_height (self->target);
+    state->flip_y = gsk_gpu_image_get_height (self->target);
   else
-    target_flip_y = 0;
+    state->flip_y = 0;
 
   glViewport (0, 0,
               gsk_gpu_image_get_width (self->target),
               gsk_gpu_image_get_height (self->target));
 
-  if (target_flip_y)
-    glScissor (self->area.x, target_flip_y - self->area.y - self->area.height, self->area.width, self->area.height);
+  if (state->flip_y)
+    glScissor (self->area.x, state->flip_y - self->area.y - self->area.height, self->area.width, self->area.height);
   else
     glScissor (self->area.x, self->area.y, self->area.width, self->area.height);
   glClearColor (0, 0, 0, 0);
@@ -180,10 +178,10 @@ gsk_gpu_render_pass_op_gl_command (GskGpuOp    *op,
   op = op->next;
   while (op->op_class->stage != GSK_GPU_STAGE_END_PASS)
     {
-      op = gsk_gpu_op_gl_command (op, frame, target_flip_y);
+      op = gsk_gpu_op_gl_command (op, frame, state);
     }
 
-  op = gsk_gpu_op_gl_command (op, frame, target_flip_y);
+  op = gsk_gpu_op_gl_command (op, frame, state);
 
   return op;
 }
@@ -232,19 +230,17 @@ gsk_gpu_render_pass_end_op_print (GskGpuOp    *op,
 
 #ifdef GDK_RENDERING_VULKAN
 static GskGpuOp *
-gsk_gpu_render_pass_end_op_vk_command (GskGpuOp        *op,
-                                       GskGpuFrame     *frame,
-                                       VkRenderPass     render_pass,
-                                       VkFormat         format,
-                                       VkCommandBuffer  command_buffer)
+gsk_gpu_render_pass_end_op_vk_command (GskGpuOp              *op,
+                                       GskGpuFrame           *frame,
+                                       GskVulkanCommandState *state)
 {
   GskGpuFramePassEndOp *self = (GskGpuFramePassEndOp *) op;
 
-  vkCmdEndRenderPass (command_buffer);
+  vkCmdEndRenderPass (state->vk_command_buffer);
 
   if (gsk_gpu_image_get_flags (self->target) & GSK_GPU_IMAGE_CAN_MIPMAP)
     {
-      vkCmdPipelineBarrier (command_buffer,
+      vkCmdPipelineBarrier (state->vk_command_buffer,
                             gsk_vulkan_image_get_vk_pipeline_stage (GSK_VULKAN_IMAGE (self->target)),
                             VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT,
                             0,
@@ -274,16 +270,19 @@ gsk_gpu_render_pass_end_op_vk_command (GskGpuOp        *op,
                                         gsk_gpu_render_pass_type_to_vk_image_layout (self->pass_type),
                                         VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT);
 
+  state->vk_render_pass = VK_NULL_HANDLE;
+  state->vk_format = VK_FORMAT_UNDEFINED;
+
   return op->next;
 }
 #endif
 
 static GskGpuOp *
-gsk_gpu_render_pass_end_op_gl_command (GskGpuOp    *op,
-                                       GskGpuFrame *frame,
-                                       gsize        flip_y)
+gsk_gpu_render_pass_end_op_gl_command (GskGpuOp          *op,
+                                       GskGpuFrame       *frame,
+                                       GskGLCommandState *state)
 {
-  /* nothing to do here */
+  state->flip_y = 0;
 
   return op->next;
 }

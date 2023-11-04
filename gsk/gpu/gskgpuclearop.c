@@ -47,18 +47,16 @@ gsk_gpu_init_clear_value (VkClearValue  *value,
 }
 
 static GskGpuOp *
-gsk_gpu_clear_op_vk_command (GskGpuOp        *op,
-                             GskGpuFrame     *frame,
-                             VkRenderPass     render_pass,
-                             VkFormat         format,
-                             VkCommandBuffer  command_buffer)
+gsk_gpu_clear_op_vk_command (GskGpuOp              *op,
+                             GskGpuFrame           *frame,
+                             GskVulkanCommandState *state)
 {
   GskGpuClearOp *self = (GskGpuClearOp *) op;
   VkClearValue clear_value;
 
   gsk_gpu_init_clear_value (&clear_value, &self->color);
 
-  vkCmdClearAttachments (command_buffer,
+  vkCmdClearAttachments (state->vk_command_buffer,
                          1,
                          &(VkClearAttachment) {
                            VK_IMAGE_ASPECT_COLOR_BIT,
@@ -80,17 +78,17 @@ gsk_gpu_clear_op_vk_command (GskGpuOp        *op,
 #endif
 
 static GskGpuOp *
-gsk_gpu_clear_op_gl_command (GskGpuOp    *op,
-                             GskGpuFrame *frame,
-                             gsize        flip_y)
+gsk_gpu_clear_op_gl_command (GskGpuOp          *op,
+                             GskGpuFrame       *frame,
+                             GskGLCommandState *state)
 {
   GskGpuClearOp *self = (GskGpuClearOp *) op;
   int scissor[4];
 
   glGetIntegerv (GL_SCISSOR_BOX, scissor);
 
-  if (flip_y)
-    glScissor (self->rect.x, flip_y - self->rect.y - self->rect.height, self->rect.width, self->rect.height);
+  if (state->flip_y)
+    glScissor (self->rect.x, state->flip_y - self->rect.y - self->rect.height, self->rect.width, self->rect.height);
   else
     glScissor (self->rect.x, self->rect.y, self->rect.width, self->rect.height);
 

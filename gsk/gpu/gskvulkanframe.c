@@ -372,6 +372,7 @@ gsk_vulkan_frame_submit (GskGpuFrame  *frame,
                          GskGpuOp     *op)
 {
   GskVulkanFrame *self = GSK_VULKAN_FRAME (frame);
+  GskVulkanCommandState state;
 
   if (storage_buffer)
     {
@@ -403,9 +404,13 @@ gsk_vulkan_frame_submit (GskGpuFrame  *frame,
                             },
                             (VkDeviceSize[1]) { 0 });
 
+  state.vk_command_buffer = self->vk_command_buffer;
+  state.vk_render_pass = VK_NULL_HANDLE;
+  state.vk_format = VK_FORMAT_UNDEFINED;
+
   while (op)
     {
-      op = gsk_gpu_op_vk_command (op, frame, VK_NULL_HANDLE, VK_FORMAT_UNDEFINED, self->vk_command_buffer);
+      op = gsk_gpu_op_vk_command (op, frame, &state);
     }
 
   GSK_VK_CHECK (vkEndCommandBuffer, self->vk_command_buffer);

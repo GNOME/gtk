@@ -141,6 +141,7 @@ gsk_gl_frame_submit (GskGpuFrame  *frame,
                      GskGpuOp     *op)
 {
   GskGLFrame *self = GSK_GL_FRAME (frame);
+  GskGLCommandState state = { 0, };
 
   glEnable (GL_SCISSOR_TEST);
 
@@ -166,7 +167,7 @@ gsk_gl_frame_submit (GskGpuFrame  *frame,
 
   while (op)
     {
-      op = gsk_gpu_op_gl_command (op, frame, 0);
+      op = gsk_gpu_op_gl_command (op, frame, &state);
     }
 }
 

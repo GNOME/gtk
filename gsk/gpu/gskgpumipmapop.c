@@ -40,11 +40,9 @@ gsk_gpu_mipmap_op_print (GskGpuOp    *op,
 
 #ifdef GDK_RENDERING_VULKAN
 static GskGpuOp *
-gsk_gpu_mipmap_op_vk_command (GskGpuOp        *op,
-                              GskGpuFrame     *frame,
-                              VkRenderPass     render_pass,
-                              VkFormat         format,
-                              VkCommandBuffer  command_buffer)
+gsk_gpu_mipmap_op_vk_command (GskGpuOp              *op,
+                              GskGpuFrame           *frame,
+                              GskVulkanCommandState *state)
 {
   GskGpuMipmapOp *self = (GskGpuMipmapOp *) op;
   GskVulkanImage *image;
@@ -60,14 +58,14 @@ gsk_gpu_mipmap_op_vk_command (GskGpuOp        *op,
 
   /* optimize me: only transition mipmap layers 1..n, but not 0 */
   gsk_vulkan_image_transition (image,
-                               command_buffer,
+                               state->vk_command_buffer,
                                VK_PIPELINE_STAGE_TRANSFER_BIT,
                                VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
                                VK_ACCESS_TRANSFER_WRITE_BIT);
 
   for (i = 0; /* we break after the barrier */ ; i++)
     {
-      vkCmdPipelineBarrier (command_buffer,
+      vkCmdPipelineBarrier (state->vk_command_buffer,
                             VK_PIPELINE_STAGE_TRANSFER_BIT,
                             VK_PIPELINE_STAGE_TRANSFER_BIT,
                             0,
@@ -92,7 +90,7 @@ gsk_gpu_mipmap_op_vk_command (GskGpuOp        *op,
                             });
       if (i + 1 == n_levels)
         break;
-      vkCmdBlitImage (command_buffer,
+      vkCmdBlitImage (state->vk_command_buffer,
                       vk_image,
                       VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
                       vk_image,
@@ -151,9 +149,9 @@ gsk_gpu_mipmap_op_vk_command (GskGpuOp        *op,
 #endif
 
 static GskGpuOp *
-gsk_gpu_mipmap_op_gl_command (GskGpuOp    *op,
-                            GskGpuFrame *frame,
-                            gsize        flip_y)
+gsk_gpu_mipmap_op_gl_command (GskGpuOp          *op,
+                              GskGpuFrame       *frame,
+                              GskGLCommandState *state)
 {
   GskGpuMipmapOp *self = (GskGpuMipmapOp *) op;
 
