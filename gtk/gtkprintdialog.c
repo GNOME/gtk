@@ -1269,6 +1269,8 @@ create_print_dialog (GtkPrintDialog   *self,
   if (page_setup)
     gtk_print_unix_dialog_set_page_setup (dialog, page_setup);
 
+  gtk_print_unix_dialog_set_embed_page_setup (dialog, TRUE);
+
   return dialog;
 }
 
