@@ -63,8 +63,8 @@ gsk_gpu_render_pass_type_to_vk_image_layout (GskRenderPassType type)
 }
 
 static void
-gsk_gpu_render_pass_op_do_barriers (GskGpuRenderPassOp *self,
-                                    VkCommandBuffer     command_buffer)
+gsk_gpu_render_pass_op_do_barriers (GskGpuRenderPassOp     *self,
+                                    GskVulkanCommandState  *state)
 {
   GskGpuShaderOp *shader;
   GskGpuOp *op;
@@ -82,9 +82,17 @@ gsk_gpu_render_pass_op_do_barriers (GskGpuRenderPassOp *self,
       if (shader->desc == NULL || shader->desc == desc)
         continue;
 
+      if (desc == NULL)
+        {
+          gsk_vulkan_descriptors_bind (GSK_VULKAN_DESCRIPTORS (shader->desc), state->vk_command_buffer);
+          state->desc = GSK_VULKAN_DESCRIPTORS (shader->desc);
+        }
       desc = shader->desc;
-      gsk_vulkan_descriptors_transition (GSK_VULKAN_DESCRIPTORS (desc), command_buffer);
+      gsk_vulkan_descriptors_transition (GSK_VULKAN_DESCRIPTORS (desc), state->vk_command_buffer);
     }
+
+  if (desc == NULL)
+    gsk_vulkan_descriptors_transition (state->desc, state->vk_command_buffer);
 }
 
 static GskGpuOp *
@@ -97,7 +105,7 @@ gsk_gpu_render_pass_op_vk_command (GskGpuOp              *op,
   /* nesting frame passes not allowed */
   g_assert (state->vk_render_pass == VK_NULL_HANDLE);
 
-  gsk_gpu_render_pass_op_do_barriers (self, state->vk_command_buffer);
+  gsk_gpu_render_pass_op_do_barriers (self, state);
 
   state->vk_format = gsk_vulkan_image_get_vk_format (GSK_VULKAN_IMAGE (self->target));
   state->vk_render_pass = gsk_vulkan_device_get_vk_render_pass (GSK_VULKAN_DEVICE (gsk_gpu_frame_get_device (frame)),
