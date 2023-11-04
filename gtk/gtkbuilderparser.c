@@ -1763,7 +1763,6 @@ start_element (GtkBuildableParseContext  *context,
 {
   ParserData *data = (ParserData*)user_data;
 
-#ifdef G_ENABLE_DEBUG
   if (GTK_DEBUG_CHECK (BUILDER))
     {
       GString *tags = g_string_new ("");
@@ -1779,7 +1778,6 @@ start_element (GtkBuildableParseContext  *context,
       g_message ("<%s%s>", element_name, tags->str);
       g_string_free (tags, TRUE);
     }
-#endif
 
   if (!data->last_element && strcmp (element_name, "interface") != 0)
     {

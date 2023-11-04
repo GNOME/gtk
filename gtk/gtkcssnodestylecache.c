@@ -86,10 +86,8 @@ may_be_stored_in_cache (GtkCssStyle *style)
    *
    * We achieve that by disallowing any inserts into caches here.
    */
-#ifdef G_ENABLE_DEBUG
   if (GTK_DEBUG_CHECK (NO_CSS_CACHE))
     return FALSE;
-#endif
 
   if (!GTK_IS_CSS_STATIC_STYLE (style))
     return FALSE;

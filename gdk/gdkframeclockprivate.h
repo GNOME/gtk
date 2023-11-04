@@ -95,11 +95,9 @@ struct _GdkFrameTimings
   gint64 refresh_interval;
   gint64 predicted_presentation_time;
 
-#ifdef G_ENABLE_DEBUG
   gint64 layout_start_time;
   gint64 paint_start_time;
   gint64 frame_end_time;
-#endif /* G_ENABLE_DEBUG */
 
   guint complete : 1;
   guint slept_before : 1;

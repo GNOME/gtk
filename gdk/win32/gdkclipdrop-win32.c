@@ -1228,8 +1228,7 @@ inner_clipboard_window_procedure (HWND   hwnd,
 
         GDK_NOTE (DND, g_print (" drawclipboard owner: %p; opener %p ", hwnd_owner, hwnd_opener));
 
-#ifdef G_ENABLE_DEBUG
-        if (_gdk_debug_flags & GDK_DEBUG_DND)
+        if (GDK_DEBUG_CHECK (DND))
           {
             /* FIXME: grab and print clipboard formats without opening the clipboard
             if (clipboard_thread_data->clipboard_opened_for != INVALID_HANDLE_VALUE ||
@@ -1249,7 +1248,6 @@ inner_clipboard_window_procedure (HWND   hwnd,
               }
              */
           }
-#endif
 
         GDK_NOTE (DND, g_print (" \n"));
 

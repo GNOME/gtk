@@ -209,13 +209,11 @@ _gdk_broadway_roundtrip_notify (GdkSurface  *surface,
       timings->complete = TRUE;
 
 
-#ifdef G_ENABLE_DEBUG
       if ((_gdk_debug_flags & GDK_DEBUG_FRAMES) != 0)
         _gdk_frame_clock_debug_print_timings (clock, timings);
 
   if (GDK_PROFILER_IS_RUNNING)
     _gdk_frame_clock_add_timings_to_profiler (clock, timings);
-#endif
     }
 }
 

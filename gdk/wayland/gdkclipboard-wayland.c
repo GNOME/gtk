@@ -225,14 +225,12 @@ gdk_wayland_clipboard_read_async (GdkClipboard        *clipboard,
   g_task_set_priority (task, io_priority);
   g_task_set_source_tag (task, gdk_wayland_clipboard_read_async);
 
-#ifdef G_ENABLE_DEBUG
   if (GDK_DISPLAY_DEBUG_CHECK (gdk_clipboard_get_display (GDK_CLIPBOARD (cb)), CLIPBOARD))
     {
       char *s = gdk_content_formats_to_string (formats);
       gdk_debug_message ("%p: read for %s", cb, s);
       g_free (s);
     }
-#endif
   mime_type = gdk_content_formats_match_mime_type (formats, cb->offer_formats);
   if (mime_type == NULL)
     {
@@ -322,14 +320,12 @@ gdk_wayland_clipboard_claim_remote (GdkWaylandClipboard  *cb,
 
   gdk_wayland_clipboard_discard_offer (cb);
 
-#ifdef G_ENABLE_DEBUG
   if (GDK_DISPLAY_DEBUG_CHECK (gdk_clipboard_get_display (GDK_CLIPBOARD (cb)), CLIPBOARD))
     {
       char *s = gdk_content_formats_to_string (formats);
       gdk_debug_message ("%p: remote clipboard claim for %s", cb, s);
       g_free (s);
     }
-#endif
   cb->offer_formats = formats;
   cb->offer = offer;
 

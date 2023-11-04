@@ -83,8 +83,6 @@ gdk_debug_message (const char *format, ...)
   g_free (s);
 }
 
-#ifdef G_ENABLE_DEBUG
-
 #define GDK_DISPLAY_DEBUG_CHECK(display,type) \
     G_UNLIKELY (gdk_display_get_debug_flags (display) & GDK_DEBUG_##type)
 
@@ -93,13 +91,6 @@ gdk_debug_message (const char *format, ...)
     if (GDK_DISPLAY_DEBUG_CHECK (display,type))                           \
       gdk_debug_message (__VA_ARGS__);                                    \
     } G_STMT_END
-
-#else /* !G_ENABLE_DEBUG */
-
-#define GDK_DISPLAY_DEBUG_CHECK(display,type) 0
-#define GDK_DISPLAY_DEBUG(display,type,...)
-
-#endif /* G_ENABLE_DEBUG */
 
 #define GDK_DEBUG_CHECK(type) GDK_DISPLAY_DEBUG_CHECK (NULL,type)
 #define GDK_DEBUG(type,...) GDK_DISPLAY_DEBUG (NULL,type,__VA_ARGS__)

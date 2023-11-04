@@ -1455,7 +1455,6 @@ gtk_at_spi_context_realize (GtkATContext *context)
   if (self->connection == NULL)
     return;
 
-#ifdef G_ENABLE_DEBUG
   if (GTK_DEBUG_CHECK (A11Y))
     {
       GtkAccessible *accessible = gtk_at_context_get_accessible (context);
@@ -1467,7 +1466,6 @@ gtk_at_spi_context_realize (GtkATContext *context)
                  role_name);
       g_free (role_name);
     }
-#endif
 
   gtk_at_spi_root_queue_register (self->root, self, register_object);
 }

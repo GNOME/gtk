@@ -728,23 +728,18 @@ gtk_constraint_solver_optimize (GtkConstraintSolver *self,
 {
   GtkConstraintVariable *entry = NULL, *exit = NULL;
   GtkConstraintExpression *z_row = g_hash_table_lookup (self->rows, z);
-
-#ifdef G_ENABLE_DEBUG
   gint64 start_time = g_get_monotonic_time ();
-#endif
 
   g_assert (z_row != NULL);
 
   self->optimize_count += 1;
 
-#ifdef G_ENABLE_DEBUG
   if (GTK_DEBUG_CHECK (CONSTRAINTS))
     {
       char *str = gtk_constraint_variable_to_string (z);
       g_message ("optimize: %s", str);
       g_free (str);
     }
-#endif
 
   while (TRUE)
     {
@@ -801,7 +796,6 @@ gtk_constraint_solver_optimize (GtkConstraintSolver *self,
           break;
         }
 
-#ifdef G_ENABLE_DEBUG
       if (GTK_DEBUG_CHECK (CONSTRAINTS))
         {
           char *entry_s = gtk_constraint_variable_to_string (entry);
@@ -810,7 +804,6 @@ gtk_constraint_solver_optimize (GtkConstraintSolver *self,
           g_free (entry_s);
           g_free (exit_s);
         }
-#endif
 
       gtk_constraint_solver_pivot (self, entry, exit);
     }
@@ -1004,9 +997,7 @@ static void
 gtk_constraint_solver_dual_optimize (GtkConstraintSolver *self)
 {
   GtkConstraintExpression *z_row = g_hash_table_lookup (self->rows, self->objective);
-#ifdef G_ENABLE_DEBUG
   gint64 start_time = g_get_monotonic_time ();
-#endif
 
   /* We iterate until we don't have any more infeasible rows; the pivot()
    * at the end of the loop iteration may add or remove infeasible rows
@@ -1262,14 +1253,12 @@ gtk_constraint_solver_add_with_artificial_variable (GtkConstraintSolver *self,
       gtk_constraint_solver_remove_column (self, av);
       gtk_constraint_solver_remove_row (self, az, TRUE);
 
-#ifdef G_ENABLE_DEBUG
       if (GTK_DEBUG_CHECK (CONSTRAINTS))
         {
           char *str = gtk_constraint_expression_to_string (expression);
           g_message ("Unable to satisfy a required constraint (add): %s", str);
           g_free (str);
         }
-#endif
 
       return;
     }
@@ -1313,7 +1302,6 @@ gtk_constraint_solver_add_constraint_internal (GtkConstraintSolver *self,
                                                &eminus,
                                                &prev_constant);
 
-#ifdef G_ENABLE_DEBUG
   if (GTK_DEBUG_CHECK (CONSTRAINTS))
     {
       char *expr_s = gtk_constraint_expression_to_string (expr);
@@ -1322,7 +1310,6 @@ gtk_constraint_solver_add_constraint_internal (GtkConstraintSolver *self,
       g_free (ref_s);
       g_free (expr_s);
     }
-#endif
 
   if (constraint->is_stay)
     {
@@ -1494,9 +1481,7 @@ gtk_constraint_solver_create_variable (GtkConstraintSolver *self,
 void
 gtk_constraint_solver_resolve (GtkConstraintSolver *solver)
 {
-#ifdef G_ENABLE_DEBUG
   gint64 start_time = g_get_monotonic_time ();
-#endif
 
   g_return_if_fail (GTK_IS_CONSTRAINT_SOLVER (solver));
 
@@ -1626,14 +1611,12 @@ gtk_constraint_solver_add_stay_variable (GtkConstraintSolver *self,
                                           NULL,
                                           self);
 
-#ifdef G_ENABLE_DEBUG
   if (GTK_DEBUG_CHECK (CONSTRAINTS))
     {
       char *str = gtk_constraint_expression_to_string (res->expression);
       g_message ("Adding stay variable: %s", str);
       g_free (str);
     }
-#endif
 
   gtk_constraint_solver_add_constraint_internal (self, res);
 

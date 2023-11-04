@@ -877,8 +877,6 @@ pointer_handle_button (void              *data,
     gdk_wayland_seat_flush_frame_event (seat);
 }
 
-#ifdef G_ENABLE_DEBUG
-
 static const char *
 get_axis_name (uint32_t axis)
 {
@@ -892,8 +890,6 @@ get_axis_name (uint32_t axis)
       return "unknown";
     }
 }
-
-#endif
 
 static void
 pointer_handle_axis (void              *data,
@@ -943,8 +939,6 @@ pointer_handle_frame (void              *data,
   gdk_wayland_seat_flush_frame_event (seat);
 }
 
-#ifdef G_ENABLE_DEBUG
-
 static const char *
 get_axis_source_name (enum wl_pointer_axis_source source)
 {
@@ -962,8 +956,6 @@ get_axis_source_name (enum wl_pointer_axis_source source)
       return "unknown";
     }
 }
-
-#endif
 
 static void
 pointer_handle_axis_source (void                        *data,
@@ -1090,7 +1082,6 @@ get_active_layout (GdkKeymap *keymap)
   return -1;
 }
 
-#ifdef G_ENABLE_DEBUG
 static const char *
 get_active_layout_name (GdkKeymap *keymap)
 {
@@ -1100,7 +1091,6 @@ get_active_layout_name (GdkKeymap *keymap)
 
   return xkb_keymap_layout_get_name (xkb_keymap, get_active_layout (keymap));
 }
-#endif
 
 static void
 keyboard_handle_keymap (void               *data,
@@ -1126,7 +1116,6 @@ keyboard_handle_keymap (void               *data,
 
   _gdk_wayland_keymap_update_from_fd (seat->keymap, format, fd, size);
 
-#ifdef G_ENABLE_DEBUG
   if (GDK_DISPLAY_DEBUG_CHECK (seat->keymap->display, INPUT))
     {
       GString *s = g_string_new ("");
@@ -1143,7 +1132,6 @@ keyboard_handle_keymap (void               *data,
       gdk_debug_message ("layouts: %s", s->str);
       g_string_free (s, TRUE);
     }
-#endif
 
   g_signal_emit_by_name (seat->keymap, "keys-changed");
   g_signal_emit_by_name (seat->keymap, "state-changed");
@@ -3435,9 +3423,7 @@ static void
 tablet_pad_group_handle_done (void                           *data,
                               struct zwp_tablet_pad_group_v2 *wp_tablet_pad_group)
 {
-#ifdef G_ENABLE_DEBUG
   GdkWaylandTabletPadGroupData *group = data;
-#endif
 
   GDK_SEAT_DEBUG (group->pad->seat, EVENTS,
                   "tablet pad group handle done, pad group = %p",

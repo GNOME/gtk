@@ -176,9 +176,7 @@ gdk_x11_selection_input_stream_read (GInputStream  *input_stream,
                                      GError       **error)
 {
   GdkX11SelectionInputStream *stream = GDK_X11_SELECTION_INPUT_STREAM (input_stream);
-#ifdef G_ENABLE_DEBUG
   GdkX11SelectionInputStreamPrivate *priv = gdk_x11_selection_input_stream_get_instance_private (stream);
-#endif
   gssize written;
 
   GDK_DISPLAY_DEBUG (priv->display, SELECTION,

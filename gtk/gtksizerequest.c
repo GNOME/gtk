@@ -426,7 +426,6 @@ gtk_widget_query_size_for_orientation (GtkWidget        *widget,
 
   g_assert (min_size <= nat_size);
 
-#ifdef G_ENABLE_DEBUG
   if (GTK_DISPLAY_DEBUG_CHECK (_gtk_widget_get_display (widget), SIZE_REQUEST))
     {
       GString *s;
@@ -448,7 +447,6 @@ gtk_widget_query_size_for_orientation (GtkWidget        *widget,
       g_printerr ("%s", s->str);
       g_string_free (s, TRUE);
     }
-#endif
 }
 
 /**

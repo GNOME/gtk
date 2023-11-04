@@ -377,7 +377,6 @@ gsk_renderer_render_texture (GskRenderer           *renderer,
 
   texture = GSK_RENDERER_GET_CLASS (renderer)->render_texture (renderer, root, viewport);
 
-#ifdef G_ENABLE_DEBUG
   if (GSK_RENDERER_DEBUG_CHECK (renderer, RENDERER))
     {
       GString *buf = g_string_new ("*** Texture stats ***\n\n");
@@ -392,7 +391,6 @@ gsk_renderer_render_texture (GskRenderer           *renderer,
 
       g_string_free (buf, TRUE);
     }
-#endif
 
   g_clear_pointer (&priv->root_node, gsk_render_node_unref);
 
@@ -459,7 +457,6 @@ gsk_renderer_render (GskRenderer          *renderer,
 
   GSK_RENDERER_GET_CLASS (renderer)->render (renderer, root, clip);
 
-#ifdef G_ENABLE_DEBUG
   if (GSK_RENDERER_DEBUG_CHECK (renderer, RENDERER))
     {
       GString *buf = g_string_new ("*** Frame stats ***\n\n");
@@ -474,7 +471,6 @@ gsk_renderer_render (GskRenderer          *renderer,
 
       g_string_free (buf, TRUE);
     }
-#endif
 
   g_clear_pointer (&priv->prev_node, gsk_render_node_unref);
   cairo_region_destroy (clip);

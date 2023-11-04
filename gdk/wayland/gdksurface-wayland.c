@@ -193,7 +193,7 @@ get_egl_window_size (GdkSurface *surface,
   GdkDisplay *display = gdk_surface_get_display (surface);
   GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
 
-  if (gdk_display_get_debug_flags (display) & GDK_DEBUG_GL_FRACTIONAL)
+  if (GDK_DISPLAY_DEBUG_CHECK (display, GL_FRACTIONAL))
     {
       GDK_DISPLAY_DEBUG (display, OPENGL, "Using fractional scale %g for EGL window", gdk_fractional_scale_to_double (&impl->scale));
 
@@ -308,10 +308,8 @@ frame_callback (void               *data,
 
   timings->complete = TRUE;
 
-#ifdef G_ENABLE_DEBUG
   if ((_gdk_debug_flags & GDK_DEBUG_FRAMES) != 0)
     _gdk_frame_clock_debug_print_timings (clock, timings);
-#endif
 
   if (GDK_PROFILER_IS_RUNNING)
     _gdk_frame_clock_add_timings_to_profiler (clock, timings);

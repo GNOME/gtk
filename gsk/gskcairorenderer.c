@@ -27,12 +27,10 @@
 #include "gskrendernodeprivate.h"
 #include "gdk/gdktextureprivate.h"
 
-#ifdef G_ENABLE_DEBUG
 typedef struct {
   GQuark cpu_time;
   GQuark gpu_time;
 } ProfileTimers;
-#endif
 
 struct _GskCairoRenderer
 {
@@ -40,9 +38,7 @@ struct _GskCairoRenderer
 
   GdkCairoContext *cairo_context;
 
-#ifdef G_ENABLE_DEBUG
   ProfileTimers profile_timers;
-#endif
 };
 
 struct _GskCairoRendererClass
@@ -78,25 +74,19 @@ gsk_cairo_renderer_do_render (GskRenderer   *renderer,
                               cairo_t       *cr,
                               GskRenderNode *root)
 {
-#ifdef G_ENABLE_DEBUG
   GskCairoRenderer *self = GSK_CAIRO_RENDERER (renderer);
   GskProfiler *profiler;
   gint64 cpu_time;
-#endif
 
-#ifdef G_ENABLE_DEBUG
   profiler = gsk_renderer_get_profiler (renderer);
   gsk_profiler_timer_begin (profiler, self->profile_timers.cpu_time);
-#endif
 
   gsk_render_node_draw (root, cr);
 
-#ifdef G_ENABLE_DEBUG
   cpu_time = gsk_profiler_timer_end (profiler, self->profile_timers.cpu_time);
   gsk_profiler_timer_set (profiler, self->profile_timers.cpu_time, cpu_time);
 
   gsk_profiler_push_samples (profiler);
-#endif
 }
 
 static GdkTexture *
@@ -173,7 +163,6 @@ gsk_cairo_renderer_render (GskRenderer          *renderer,
 
   g_return_if_fail (cr != NULL);
 
-#ifdef G_ENABLE_DEBUG
   if (GSK_RENDERER_DEBUG_CHECK (renderer, GEOMETRY))
     {
       GdkSurface *surface = gsk_renderer_get_surface (renderer);
@@ -187,7 +176,6 @@ gsk_cairo_renderer_render (GskRenderer          *renderer,
       cairo_stroke (cr);
       cairo_restore (cr);
     }
-#endif
 
   gsk_cairo_renderer_do_render (renderer, cr, root);
 
@@ -210,11 +198,9 @@ gsk_cairo_renderer_class_init (GskCairoRendererClass *klass)
 static void
 gsk_cairo_renderer_init (GskCairoRenderer *self)
 {
-#ifdef G_ENABLE_DEBUG
   GskProfiler *profiler = gsk_renderer_get_profiler (GSK_RENDERER (self));
 
   self->profile_timers.cpu_time = gsk_profiler_add_timer (profiler, "cpu-time", "CPU time", FALSE, TRUE);
-#endif
 }
 
 /**

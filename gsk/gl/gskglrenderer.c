@@ -135,10 +135,8 @@ gsk_gl_renderer_realize (GskRenderer  *renderer,
         }
     }
 
-#ifdef G_ENABLE_DEBUG
   if (GSK_RENDERER_DEBUG_CHECK (GSK_RENDERER (self), SHADERS))
     debug_shaders = TRUE;
-#endif
 
   if (!(driver = gsk_gl_driver_for_display (display, debug_shaders, error)))
     goto failure;
@@ -307,10 +305,8 @@ gsk_gl_renderer_render (GskRenderer          *renderer,
 
   gsk_gl_driver_begin_frame (self->driver, self->command_queue);
   job = gsk_gl_render_job_new (self->driver, &viewport, scale, render_region, 0, clear_framebuffer);
-#ifdef G_ENABLE_DEBUG
   if (GSK_RENDERER_DEBUG_CHECK (GSK_RENDERER (self), FALLBACK))
     gsk_gl_render_job_set_debug_fallback (job, TRUE);
-#endif
   gsk_gl_render_job_render (job, root);
   gsk_gl_driver_end_frame (self->driver);
   gsk_gl_render_job_free (job);
@@ -395,10 +391,8 @@ gsk_gl_renderer_render_texture (GskRenderer           *renderer,
     {
       gsk_gl_driver_begin_frame (self->driver, self->command_queue);
       job = gsk_gl_render_job_new (self->driver, viewport, 1, NULL, render_target->framebuffer_id, TRUE);
-#ifdef G_ENABLE_DEBUG
       if (GSK_RENDERER_DEBUG_CHECK (GSK_RENDERER (self), FALLBACK))
         gsk_gl_render_job_set_debug_fallback (job, TRUE);
-#endif
       gsk_gl_render_job_render_flipped (job, root);
       texture_id = gsk_gl_driver_release_render_target (self->driver, render_target, FALSE);
       texture = gsk_gl_driver_create_gdk_texture (self->driver, texture_id, gdk_format);

@@ -107,14 +107,12 @@ gdk_wayland_primary_claim_remote (GdkWaylandPrimary                     *cb,
 
   gdk_wayland_primary_discard_offer (cb);
 
-#ifdef G_ENABLE_DEBUG
   if (GDK_DISPLAY_DEBUG_CHECK (gdk_clipboard_get_display (GDK_CLIPBOARD (cb)), CLIPBOARD))
     {
       char *s = gdk_content_formats_to_string (formats);
       gdk_debug_message ("%p: remote primary claim for %s", cb, s);
       g_free (s);
     }
-#endif
 
   cb->offer_formats = formats;
   cb->offer = offer;
@@ -270,14 +268,12 @@ gdk_wayland_primary_claim (GdkClipboard       *clipboard,
 {
   GdkWaylandPrimary *cb = GDK_WAYLAND_PRIMARY (clipboard);
 
-#ifdef G_ENABLE_DEBUG
   if (GDK_DISPLAY_DEBUG_CHECK (gdk_clipboard_get_display (clipboard), CLIPBOARD))
     {
       char *s = gdk_content_formats_to_string (formats);
       gdk_debug_message ("%p: claim primary (%s) for %s", cb, local ? "local" : "remote", s);
       g_free (s);
     }
-#endif
   if (local)
     {
       GdkWaylandDisplay *wdisplay = GDK_WAYLAND_DISPLAY (gdk_clipboard_get_display (clipboard));
@@ -328,14 +324,12 @@ gdk_wayland_primary_read_async (GdkClipboard        *clipboard,
   g_task_set_priority (task, io_priority);
   g_task_set_source_tag (task, gdk_wayland_primary_read_async);
 
-#ifdef G_ENABLE_DEBUG
   if (GDK_DISPLAY_DEBUG_CHECK (gdk_clipboard_get_display (clipboard), CLIPBOARD))
     {
       char *s = gdk_content_formats_to_string (formats);
       gdk_debug_message ("%p: read for %s", cb, s);
       g_free (s);
     }
-#endif
   mime_type = gdk_content_formats_match_mime_type (formats, cb->offer_formats);
   if (mime_type == NULL)
     {

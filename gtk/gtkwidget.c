@@ -4101,14 +4101,12 @@ gtk_widget_allocate (GtkWidget    *widget,
         }
 
       /* Size allocation is god... after consulting god, no further requests or allocations are needed */
-#ifdef G_ENABLE_DEBUG
       if (GTK_DISPLAY_DEBUG_CHECK (_gtk_widget_get_display (widget), GEOMETRY) &&
           gtk_widget_get_resize_needed (widget))
         {
           g_warning ("%s %p or a child called gtk_widget_queue_resize() during size_allocate().",
                      gtk_widget_get_name (widget), widget);
         }
-#endif
 
       gtk_widget_ensure_resize (widget);
       priv->alloc_needed = FALSE;
@@ -4580,7 +4578,6 @@ gtk_widget_run_controllers (GtkWidget           *widget,
               is_gesture = GTK_IS_GESTURE (controller);
               this_handled = gtk_event_controller_handle_event (controller, event, target, x, y);
 
-#ifdef G_ENABLE_DEBUG
               if (GTK_DEBUG_CHECK (KEYBINDINGS))
                 {
                   GdkEventType type = gdk_event_get_event_type (event);
@@ -4594,7 +4591,6 @@ gtk_widget_run_controllers (GtkWidget           *widget,
                                  gtk_event_controller_get_name (controller));
                     }
                 }
-#endif
 
               handled |= this_handled;
 

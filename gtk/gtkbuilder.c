@@ -462,7 +462,6 @@ gtk_builder_finalize (GObject *object)
   g_free (priv->filename);
   g_free (priv->resource_prefix);
 
-#ifdef G_ENABLE_DEBUG
   if (GTK_DEBUG_CHECK (BUILDER_OBJECTS))
     {
       GHashTableIter iter;
@@ -476,7 +475,6 @@ gtk_builder_finalize (GObject *object)
                        G_OBJECT_TYPE_NAME (value), (const char *)key);
         }
     }
-#endif
 
   g_hash_table_destroy (priv->objects);
   if (priv->signals)
@@ -988,14 +986,12 @@ _gtk_builder_construct (GtkBuilder  *builder,
               const GValue *value = object_properties_get_value (&parameters, i);
 
               iface->set_buildable_property (buildable, builder, name, value);
-#ifdef G_ENABLE_DEBUG
               if (GTK_DEBUG_CHECK (BUILDER))
                 {
                   char *str = g_strdup_value_contents (value);
                   g_message ("set %s: %s = %s", info->id, name, str);
                   g_free (str);
                 }
-#endif
             }
         }
       else
@@ -1004,7 +1000,6 @@ _gtk_builder_construct (GtkBuilder  *builder,
                          parameters.names->len,
                          (const char **) parameters.names->pdata,
                          (GValue *) parameters.values->data);
-#ifdef G_ENABLE_DEBUG
           if (GTK_DEBUG_CHECK (BUILDER))
             {
               for (i = 0; i < parameters.names->len; i++)
@@ -1016,7 +1011,6 @@ _gtk_builder_construct (GtkBuilder  *builder,
                   g_free (str);
                 }
             }
-#endif
         }
     }
 
@@ -1072,14 +1066,12 @@ _gtk_builder_apply_properties (GtkBuilder  *builder,
               const char *name = object_properties_get_name (&parameters, i);
               const GValue *value = object_properties_get_value (&parameters, i);
               iface->set_buildable_property (buildable, builder, name, value);
-#ifdef G_ENABLE_DEBUG
               if (GTK_DEBUG_CHECK (BUILDER))
                 {
                   char *str = g_strdup_value_contents (value);
                   g_message ("set %s: %s = %s", info->id, name, str);
                   g_free (str);
                 }
-#endif
             }
         }
       else
@@ -1088,7 +1080,6 @@ _gtk_builder_apply_properties (GtkBuilder  *builder,
                          parameters.names->len,
                          (const char **) parameters.names->pdata,
                          (GValue *) parameters.values->data);
-#ifdef G_ENABLE_DEBUG
           if (GTK_DEBUG_CHECK (BUILDER))
             {
               for (i = 0; i < parameters.names->len; i++)
@@ -1100,7 +1091,6 @@ _gtk_builder_apply_properties (GtkBuilder  *builder,
                   g_free (str);
                 }
             }
-#endif
         }
     }
 

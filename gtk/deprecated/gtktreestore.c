@@ -195,7 +195,6 @@ static void     gtk_tree_store_move                    (GtkTreeStore           *
                                                         gboolean                before);
 
 
-#ifdef G_ENABLE_DEBUG
 static void     validate_gnode                         (GNode *node);
 
 static inline void
@@ -207,9 +206,6 @@ validate_tree (GtkTreeStore *tree_store)
       validate_gnode (G_NODE (tree_store->priv->root));
     }
 }
-#else
-#define validate_tree(store)
-#endif
 
 G_DEFINE_TYPE_WITH_CODE (GtkTreeStore, gtk_tree_store, G_TYPE_OBJECT,
                          G_ADD_PRIVATE (GtkTreeStore)
@@ -3413,7 +3409,6 @@ gtk_tree_store_has_default_sort_func (GtkTreeSortable *sortable)
   return (tree_store->priv->default_sort_func != NULL);
 }
 
-#ifdef G_ENABLE_DEBUG
 static void
 validate_gnode (GNode* node)
 {
@@ -3429,7 +3424,6 @@ validate_gnode (GNode* node)
       iter = iter->next;
     }
 }
-#endif
 
 /* GtkBuildable custom tag implementation
  *

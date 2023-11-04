@@ -267,8 +267,6 @@ postpone_on_globals_closure (GdkWaylandDisplay *display_wayland,
     g_list_append (display_wayland->on_has_globals_closures, closure);
 }
 
-#ifdef G_ENABLE_DEBUG
-
 static const char *
 get_format_name (uint32_t format,
                  char     name[10])
@@ -287,16 +285,13 @@ get_format_name (uint32_t format,
   return name;
 }
 
-#endif
 
 static void
 wl_shm_format (void          *data,
                struct wl_shm *wl_shm,
                uint32_t       format)
 {
-#ifdef G_ENABLE_DEBUG
   char buf[10];
-#endif
 
   GDK_DEBUG (MISC, "supported pixel format %s (0x%X)",
                    get_format_name (format, buf), (guint) format);
@@ -312,13 +307,11 @@ server_decoration_manager_default_mode (void                                    
                                         uint32_t                                       mode)
 {
   g_assert (mode <= ORG_KDE_KWIN_SERVER_DECORATION_MANAGER_MODE_SERVER);
-#ifdef G_ENABLE_DEBUG
   const char *modes[] = {
     [ORG_KDE_KWIN_SERVER_DECORATION_MANAGER_MODE_NONE]   = "none",
     [ORG_KDE_KWIN_SERVER_DECORATION_MANAGER_MODE_CLIENT] = "client",
     [ORG_KDE_KWIN_SERVER_DECORATION_MANAGER_MODE_SERVER] = "server",
   };
-#endif
   GdkWaylandDisplay *display_wayland = data;
   GDK_DISPLAY_DEBUG (GDK_DISPLAY (data), MISC, "Compositor prefers decoration mode '%s'", modes[mode]);
   display_wayland->server_decoration_mode = mode;
@@ -2243,8 +2236,6 @@ gdk_wayland_display_get_setting (GdkDisplay *display,
   return FALSE;
 }
 
-#ifdef G_ENABLE_DEBUG
-
 static const char *
 subpixel_to_string (int layout)
 {
@@ -2290,8 +2281,6 @@ transform_to_string (int transform)
     }
   return NULL;
 }
-
-#endif
 
 static void
 update_scale (GdkDisplay *display)
