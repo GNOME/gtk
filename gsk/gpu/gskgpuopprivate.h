@@ -17,6 +17,23 @@ typedef enum
   GSK_GPU_STAGE_END_PASS
 } GskGpuStage;
 
+typedef struct _GskGLCommandState GskGLCommandState;
+typedef struct _GskVulkanCommandState GskVulkanCommandState;
+
+struct _GskGLCommandState
+{
+  gsize flip_y;
+};
+
+#ifdef GDK_RENDERING_VULKAN
+struct _GskVulkanCommandState
+{
+  VkRenderPass vk_render_pass;
+  VkFormat vk_format;
+  VkCommandBuffer vk_command_buffer;
+};
+#endif
+
 struct _GskGpuOp
 {
   const GskGpuOpClass *op_class;
@@ -39,13 +56,11 @@ struct _GskGpuOpClass
 #ifdef GDK_RENDERING_VULKAN
   GskGpuOp *            (* vk_command)                                  (GskGpuOp               *op,
                                                                          GskGpuFrame            *frame,
-                                                                         VkRenderPass            render_pass,
-                                                                         VkFormat                format,
-                                                                         VkCommandBuffer         command_buffer);
+                                                                         GskVulkanCommandState  *state);
 #endif
   GskGpuOp *            (* gl_command)                                  (GskGpuOp               *op,
                                                                          GskGpuFrame            *frame,
-                                                                         gsize                   flip_y);
+                                                                         GskGLCommandState      *state);
 };
 
 /* ensures alignment of ops to multipes of 16 bytes - and that makes graphene happy */
@@ -63,13 +78,11 @@ void                    gsk_gpu_op_print                                (GskGpuO
 #ifdef GDK_RENDERING_VULKAN
 GskGpuOp *              gsk_gpu_op_vk_command                           (GskGpuOp               *op,
                                                                          GskGpuFrame            *frame,
-                                                                         VkRenderPass            render_pass,
-                                                                         VkFormat                format,
-                                                                         VkCommandBuffer         command_buffer);
+                                                                         GskVulkanCommandState  *state);
 #endif
 GskGpuOp *              gsk_gpu_op_gl_command                           (GskGpuOp               *op,
                                                                          GskGpuFrame            *frame,
-                                                                         gsize                   flip_y);
+                                                                         GskGLCommandState      *state);
 
 G_END_DECLS
 

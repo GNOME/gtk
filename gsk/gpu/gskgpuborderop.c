@@ -63,22 +63,20 @@ gsk_gpu_border_op_print (GskGpuOp    *op,
 
 #ifdef GDK_RENDERING_VULKAN
 static GskGpuOp *
-gsk_gpu_border_op_vk_command (GskGpuOp        *op,
-                              GskGpuFrame     *frame,
-                              VkRenderPass     render_pass,
-                              VkFormat         format,
-                              VkCommandBuffer  command_buffer)
+gsk_gpu_border_op_vk_command (GskGpuOp              *op,
+                              GskGpuFrame           *frame,
+                              GskVulkanCommandState *state)
 {
-  return gsk_gpu_shader_op_vk_command_n (op, frame, render_pass, format, command_buffer, 8);
+  return gsk_gpu_shader_op_vk_command_n (op, frame, state, 8);
 }
 #endif
 
 static GskGpuOp *
-gsk_gpu_border_op_gl_command (GskGpuOp    *op,
-                              GskGpuFrame *frame,
-                              gsize        flip_y)
+gsk_gpu_border_op_gl_command (GskGpuOp          *op,
+                              GskGpuFrame       *frame,
+                              GskGLCommandState *state)
 {
-  return gsk_gpu_shader_op_gl_command_n (op, frame, flip_y, 8);
+  return gsk_gpu_shader_op_gl_command_n (op, frame, state, 8);
 }
 
 static const GskGpuShaderOpClass GSK_GPU_BORDER_OP_CLASS = {

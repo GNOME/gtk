@@ -23,12 +23,10 @@ gsk_gpu_shader_op_finish (GskGpuOp *op)
 
 #ifdef GDK_RENDERING_VULKAN
 GskGpuOp *
-gsk_gpu_shader_op_vk_command_n (GskGpuOp        *op,
-                                GskGpuFrame     *frame,
-                                VkRenderPass     render_pass,
-                                VkFormat         format,
-                                VkCommandBuffer  command_buffer,
-                                gsize            instance_scale)
+gsk_gpu_shader_op_vk_command_n (GskGpuOp              *op,
+                                GskGpuFrame           *frame,
+                                GskVulkanCommandState *state,
+                                gsize                  instance_scale)
 {
   GskGpuShaderOp *self = (GskGpuShaderOp *) op;
   GskGpuShaderOpClass *shader_op_class = (GskGpuShaderOpClass *) op->op_class;
@@ -51,16 +49,16 @@ gsk_gpu_shader_op_vk_command_n (GskGpuOp        *op,
         }
     }
 
-  vkCmdBindPipeline (command_buffer,
+  vkCmdBindPipeline (state->vk_command_buffer,
                      VK_PIPELINE_BIND_POINT_GRAPHICS,
                      gsk_vulkan_device_get_vk_pipeline (GSK_VULKAN_DEVICE (gsk_gpu_frame_get_device (frame)),
                                                         gsk_vulkan_frame_get_pipeline_layout (GSK_VULKAN_FRAME (frame)),
                                                         shader_op_class,
                                                         self->clip,
-                                                        format,
-                                                        render_pass));
+                                                        state->vk_format,
+                                                        state->vk_render_pass));
 
-  vkCmdDraw (command_buffer,
+  vkCmdDraw (state->vk_command_buffer,
              6 * instance_scale, i,
              0, self->vertex_offset / shader_op_class->vertex_size);
 
@@ -68,21 +66,19 @@ gsk_gpu_shader_op_vk_command_n (GskGpuOp        *op,
 }
 
 GskGpuOp *
-gsk_gpu_shader_op_vk_command (GskGpuOp        *op,
-                              GskGpuFrame     *frame,
-                              VkRenderPass     render_pass,
-                              VkFormat         format,
-                              VkCommandBuffer  command_buffer)
+gsk_gpu_shader_op_vk_command (GskGpuOp              *op,
+                              GskGpuFrame           *frame,
+                              GskVulkanCommandState *state)
 {
-  return gsk_gpu_shader_op_vk_command_n (op, frame, render_pass, format, command_buffer, 1);
+  return gsk_gpu_shader_op_vk_command_n (op, frame, state, 1);
 }
 #endif
 
 GskGpuOp *
-gsk_gpu_shader_op_gl_command_n (GskGpuOp    *op,
-                                GskGpuFrame *frame,
-                                gsize        flip_y,
-                                gsize        instance_scale)
+gsk_gpu_shader_op_gl_command_n (GskGpuOp          *op,
+                                GskGpuFrame       *frame,
+                                GskGLCommandState *state,
+                                gsize              instance_scale)
 {
   GskGpuShaderOp *self = (GskGpuShaderOp *) op;
   GskGpuShaderOpClass *shader_op_class = (GskGpuShaderOpClass *) op->op_class;
@@ -134,11 +130,11 @@ gsk_gpu_shader_op_gl_command_n (GskGpuOp    *op,
 }
 
 GskGpuOp *
-gsk_gpu_shader_op_gl_command (GskGpuOp    *op,
-                              GskGpuFrame *frame,
-                              gsize        flip_y)
+gsk_gpu_shader_op_gl_command (GskGpuOp          *op,
+                              GskGpuFrame       *frame,
+                              GskGLCommandState *state)
 {
-  return gsk_gpu_shader_op_gl_command_n (op, frame, flip_y, 1);
+  return gsk_gpu_shader_op_gl_command_n (op, frame, state, 1);
 }
 
 GskGpuShaderOp *

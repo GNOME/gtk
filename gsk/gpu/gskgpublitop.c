@@ -45,11 +45,9 @@ gsk_gpu_blit_op_print (GskGpuOp    *op,
 
 #ifdef GDK_RENDERING_VULKAN
 static GskGpuOp *
-gsk_gpu_blit_op_vk_command (GskGpuOp        *op,
-                            GskGpuFrame     *frame,
-                            VkRenderPass     render_pass,
-                            VkFormat         format,
-                            VkCommandBuffer  command_buffer)
+gsk_gpu_blit_op_vk_command (GskGpuOp              *op,
+                            GskGpuFrame           *frame,
+                            GskVulkanCommandState *state)
 {
   GskGpuBlitOp *self = (GskGpuBlitOp *) op;
   VkImageLayout src_layout, dest_layout;
@@ -61,7 +59,7 @@ gsk_gpu_blit_op_vk_command (GskGpuOp        *op,
       src_layout != VK_IMAGE_LAYOUT_GENERAL)
     {
       gsk_vulkan_image_transition (GSK_VULKAN_IMAGE (self->src_image),
-                                   command_buffer,
+                                   state->vk_command_buffer,
                                    VK_PIPELINE_STAGE_TRANSFER_BIT,
                                    VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
                                    VK_ACCESS_TRANSFER_READ_BIT);
@@ -74,7 +72,7 @@ gsk_gpu_blit_op_vk_command (GskGpuOp        *op,
       dest_layout != VK_IMAGE_LAYOUT_GENERAL)
     {
       gsk_vulkan_image_transition (GSK_VULKAN_IMAGE (self->dest_image),
-                                   command_buffer,
+                                   state->vk_command_buffer,
                                    VK_PIPELINE_STAGE_TRANSFER_BIT,
                                    VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
                                    VK_ACCESS_TRANSFER_WRITE_BIT);
@@ -95,7 +93,7 @@ gsk_gpu_blit_op_vk_command (GskGpuOp        *op,
       break;
     }
 
-  vkCmdBlitImage (command_buffer,
+  vkCmdBlitImage (state->vk_command_buffer,
                   gsk_vulkan_image_get_vk_image (GSK_VULKAN_IMAGE (self->src_image)),
                   src_layout,
                   gsk_vulkan_image_get_vk_image (GSK_VULKAN_IMAGE (self->dest_image)),
@@ -146,9 +144,9 @@ gsk_gpu_blit_op_vk_command (GskGpuOp        *op,
 #endif
 
 static GskGpuOp *
-gsk_gpu_blit_op_gl_command (GskGpuOp    *op,
-                            GskGpuFrame *frame,
-                            gsize        flip_y)
+gsk_gpu_blit_op_gl_command (GskGpuOp          *op,
+                            GskGpuFrame       *frame,
+                            GskGLCommandState *state)
 {
   GskGpuBlitOp *self = (GskGpuBlitOp *) op;
   GLenum filter;
@@ -176,10 +174,10 @@ gsk_gpu_blit_op_gl_command (GskGpuOp    *op,
                      self->src_rect.x + self->src_rect.width,
                      self->src_rect.y + self->src_rect.height,
                      self->dest_rect.x,
-                     flip_y ? flip_y - self->dest_rect.y - self->dest_rect.height
+                     state->flip_y ? state->flip_y - self->dest_rect.y - self->dest_rect.height
                             : self->dest_rect.y,
                      self->dest_rect.x + self->dest_rect.width,
-                     flip_y ? flip_y - self->dest_rect.y
+                     state->flip_y ? state->flip_y - self->dest_rect.y
                             : self->dest_rect.y + self->dest_rect.height,
                      GL_COLOR_BUFFER_BIT,
                      filter);

@@ -38,23 +38,19 @@ void                    gsk_gpu_shader_op_finish                        (GskGpuO
 #ifdef GDK_RENDERING_VULKAN
 GskGpuOp *              gsk_gpu_shader_op_vk_command_n                  (GskGpuOp               *op,
                                                                          GskGpuFrame            *frame,
-                                                                         VkRenderPass            render_pass,
-                                                                         VkFormat                format,
-                                                                         VkCommandBuffer         command_buffer,
+                                                                         GskVulkanCommandState  *state,
                                                                          gsize                   instance_scale);
 GskGpuOp *              gsk_gpu_shader_op_vk_command                    (GskGpuOp               *op,
                                                                          GskGpuFrame            *frame,
-                                                                         VkRenderPass            render_pass,
-                                                                         VkFormat                format,
-                                                                         VkCommandBuffer         command_buffer);
+                                                                         GskVulkanCommandState  *state);
 #endif
 GskGpuOp *              gsk_gpu_shader_op_gl_command_n                  (GskGpuOp               *op,
                                                                          GskGpuFrame            *frame,
-                                                                         gsize                   flip_y,
+                                                                         GskGLCommandState      *state,
                                                                          gsize                   instance_scale);
 GskGpuOp *              gsk_gpu_shader_op_gl_command                    (GskGpuOp               *op,
                                                                          GskGpuFrame            *frame,
-                                                                         gsize                   flip_y);
+                                                                         GskGLCommandState      *state);
 
 static inline void
 gsk_gpu_rgba_to_float (const GdkRGBA *rgba,
