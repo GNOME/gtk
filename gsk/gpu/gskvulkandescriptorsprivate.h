@@ -10,10 +10,25 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (GskVulkanDescriptors, gsk_vulkan_descriptors, GSK, VULKAN_DESCRIPTORS, GskGpuDescriptors)
 
-GskGpuDescriptors *             gsk_vulkan_descriptors_new              (GskVulkanFrame                 *frame);
+GskVulkanDescriptors *          gsk_vulkan_descriptors_new              (GskVulkanDevice                *device);
+
+gboolean                        gsk_vulkan_descriptors_is_full          (GskVulkanDescriptors           *self);
+gsize                           gsk_vulkan_descriptors_get_n_images     (GskVulkanDescriptors           *self);
+gsize                           gsk_vulkan_descriptors_get_n_buffers    (GskVulkanDescriptors           *self);
+GskVulkanPipelineLayout *       gsk_vulkan_descriptors_get_pipeline_layout
+                                                                        (GskVulkanDescriptors           *self);
+VkPipelineLayout                gsk_vulkan_descriptors_get_vk_pipeline_layout
+                                                                        (GskVulkanDescriptors           *self);
+guint32                         gsk_vulkan_descriptors_get_buffer_descriptor
+                                                                        (GskVulkanDescriptors           *self,
+                                                                         GskGpuBuffer                   *buffer);
 
 void                            gsk_vulkan_descriptors_transition       (GskVulkanDescriptors           *self,
                                                                          VkCommandBuffer                 command_buffer);
+void                            gsk_vulkan_descriptors_prepare          (GskVulkanDescriptors           *self,
+                                                                         VkDescriptorPool                vk_descriptor_pool);
+void                            gsk_vulkan_descriptors_bind             (GskVulkanDescriptors           *self,
+                                                                         VkCommandBuffer                 vk_command_buffer);
 
 G_END_DECLS
 

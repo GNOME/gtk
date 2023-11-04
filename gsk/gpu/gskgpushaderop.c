@@ -30,8 +30,16 @@ gsk_gpu_shader_op_vk_command_n (GskGpuOp              *op,
 {
   GskGpuShaderOp *self = (GskGpuShaderOp *) op;
   GskGpuShaderOpClass *shader_op_class = (GskGpuShaderOpClass *) op->op_class;
+  GskVulkanDescriptors *desc;
   GskGpuOp *next;
   gsize i;
+
+  desc = GSK_VULKAN_DESCRIPTORS (self->desc);
+  if (desc && state->desc != desc)
+    {
+      gsk_vulkan_descriptors_bind (desc, state->vk_command_buffer);
+      state->desc = desc;
+    }
 
   i = 1;
   if (gsk_vulkan_device_has_feature (GSK_VULKAN_DEVICE (gsk_gpu_frame_get_device (frame)),
@@ -42,17 +50,20 @@ gsk_gpu_shader_op_vk_command_n (GskGpuOp              *op,
           GskGpuShaderOp *next_shader = (GskGpuShaderOp *) next;
       
           if (next->op_class != op->op_class ||
+              next_shader->desc != self->desc ||
               next_shader->vertex_offset != self->vertex_offset + i * shader_op_class->vertex_size)
             break;
 
           i++;
         }
     }
+  else
+    next = op->next;
 
   vkCmdBindPipeline (state->vk_command_buffer,
                      VK_PIPELINE_BIND_POINT_GRAPHICS,
                      gsk_vulkan_device_get_vk_pipeline (GSK_VULKAN_DEVICE (gsk_gpu_frame_get_device (frame)),
-                                                        gsk_vulkan_frame_get_pipeline_layout (GSK_VULKAN_FRAME (frame)),
+                                                        gsk_vulkan_descriptors_get_pipeline_layout (desc),
                                                         shader_op_class,
                                                         self->clip,
                                                         state->vk_format,
