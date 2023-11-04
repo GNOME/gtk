@@ -170,7 +170,7 @@ gsk_vulkan_pipeline_layout_new (GskVulkanDevice                    *self,
                                              &(VkDescriptorSetLayoutCreateInfo) {
                                                  .sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO,
                                                  .bindingCount = 2,
-                                                 .flags = VK_DESCRIPTOR_SET_LAYOUT_CREATE_UPDATE_AFTER_BIND_POOL_BIT,
+                                                 .flags = 0,
                                                  .pBindings = (VkDescriptorSetLayoutBinding[2]) {
                                                      {
                                                          .binding = 0,
@@ -190,11 +190,9 @@ gsk_vulkan_pipeline_layout_new (GskVulkanDevice                    *self,
                                                    .sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_BINDING_FLAGS_CREATE_INFO,
                                                    .bindingCount = 2,
                                                    .pBindingFlags = (VkDescriptorBindingFlags[2]) {
+                                                     VK_DESCRIPTOR_BINDING_PARTIALLY_BOUND_BIT,
                                                      VK_DESCRIPTOR_BINDING_PARTIALLY_BOUND_BIT
-                                                     | VK_DESCRIPTOR_BINDING_UPDATE_AFTER_BIND_BIT,
-                                                     VK_DESCRIPTOR_BINDING_PARTIALLY_BOUND_BIT
-                                                     | VK_DESCRIPTOR_BINDING_VARIABLE_DESCRIPTOR_COUNT_BIT
-                                                     | VK_DESCRIPTOR_BINDING_UPDATE_AFTER_BIND_BIT,
+                                                     | VK_DESCRIPTOR_BINDING_VARIABLE_DESCRIPTOR_COUNT_BIT,
                                                    },
                                                  }
                                              },
@@ -205,7 +203,7 @@ gsk_vulkan_pipeline_layout_new (GskVulkanDevice                    *self,
                                              &(VkDescriptorSetLayoutCreateInfo) {
                                                  .sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO,
                                                  .bindingCount = 1,
-                                                 .flags = VK_DESCRIPTOR_SET_LAYOUT_CREATE_UPDATE_AFTER_BIND_POOL_BIT,
+                                                 .flags = 0,
                                                  .pBindings = (VkDescriptorSetLayoutBinding[1]) {
                                                      {
                                                          .binding = 0,
@@ -219,8 +217,7 @@ gsk_vulkan_pipeline_layout_new (GskVulkanDevice                    *self,
                                                    .bindingCount = 1,
                                                    .pBindingFlags = (VkDescriptorBindingFlags[1]) {
                                                      VK_DESCRIPTOR_BINDING_PARTIALLY_BOUND_BIT
-                                                     | VK_DESCRIPTOR_BINDING_VARIABLE_DESCRIPTOR_COUNT_BIT
-                                                     | VK_DESCRIPTOR_BINDING_UPDATE_AFTER_BIND_BIT,
+                                                     | VK_DESCRIPTOR_BINDING_VARIABLE_DESCRIPTOR_COUNT_BIT,
                                                    },
                                                  }
                                              },
