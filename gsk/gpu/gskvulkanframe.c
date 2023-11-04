@@ -181,7 +181,7 @@ gsk_vulkan_frame_prepare_descriptors (GskVulkanFrame *self,
       GSK_VK_CHECK (vkCreateDescriptorPool, vk_device,
                                             &(VkDescriptorPoolCreateInfo) {
                                                 .sType = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO,
-                                                .flags = VK_DESCRIPTOR_POOL_CREATE_UPDATE_AFTER_BIND_BIT,
+                                                .flags = 0,
                                                 .maxSets = self->pool_n_sets,
                                                 .poolSizeCount = 2,
                                                 .pPoolSizes = (VkDescriptorPoolSize[2]) {
