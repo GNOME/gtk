@@ -34,8 +34,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.8.2\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2023-09-28 00:43+0000\n"
-"PO-Revision-Date: 2023-10-02 19:46+0200\n"
+"POT-Creation-Date: 2023-10-31 00:23+0000\n"
+"PO-Revision-Date: 2023-11-03 22:28+0100\n"
 "Last-Translator: Jordi Mas i Hernàndez <jmas@softcatala.org>\n"
 "Language-Team: Catalan <tradgnome@softcatala.org>\n"
 "Language: ca\n"
@@ -75,59 +75,59 @@ msgstr "No es poden proporcionar continguts com a «%s»"
 msgid "Cannot provide contents as %s"
 msgstr "No es poden proporcionar continguts com a %s"
 
-#: gdk/gdkdisplay.c:156 gdk/gdkglcontext.c:442
+#: gdk/gdkdisplay.c:164 gdk/gdkglcontext.c:448
 msgid "The current backend does not support OpenGL"
 msgstr "El rerefons no és compatible OpenGL"
 
-#: gdk/gdkdisplay.c:1244 gdk/gdksurface.c:1252
+#: gdk/gdkdisplay.c:1263 gdk/gdksurface.c:1252 gdk/gdkvulkancontext.c:1481
 msgid "Vulkan support disabled via GDK_DEBUG"
 msgstr "S'ha desactivat el suport Vulkan mitjançant GDK_DEBUG"
 
-#: gdk/gdkdisplay.c:1276
+#: gdk/gdkdisplay.c:1295
 msgid "GL support disabled via GDK_DEBUG"
 msgstr "S'ha desactivat el suport GL mitjançant GDK_DEBUG"
 
-#: gdk/gdkdisplay.c:1574
+#: gdk/gdkdisplay.c:1593
 msgid "No EGL configuration available"
 msgstr "No hi ha cap implementació EGL disponible"
 
-#: gdk/gdkdisplay.c:1582
+#: gdk/gdkdisplay.c:1601
 msgid "Failed to get EGL configurations"
 msgstr "No s'han pogut obtenir les configuracions de l'EGL"
 
-#: gdk/gdkdisplay.c:1612
+#: gdk/gdkdisplay.c:1631
 msgid "No EGL configuration with required features found"
 msgstr ""
 "No s'ha trobat cap configuració EGL amb les característiques requerides"
 
-#: gdk/gdkdisplay.c:1619
+#: gdk/gdkdisplay.c:1638
 msgid "No perfect EGL configuration found"
 msgstr "No s'ha trobat cap configuració EGL perfecta"
 
-#: gdk/gdkdisplay.c:1661
+#: gdk/gdkdisplay.c:1680
 #, c-format
 msgid "EGL implementation is missing extension %s"
 msgid_plural "EGL implementation is missing %2$d extensions: %1$s"
 msgstr[0] "Falta l'extensió %s a la implementació d'EGL"
 msgstr[1] "Falten %2$d extensions a la implementació d'EGL: %1$s"
 
-#: gdk/gdkdisplay.c:1694
+#: gdk/gdkdisplay.c:1713
 msgid "libEGL not available in this sandbox"
 msgstr "libEGL no està disponible en aquest entorn de proves"
 
-#: gdk/gdkdisplay.c:1695
+#: gdk/gdkdisplay.c:1714
 msgid "libEGL not available"
 msgstr "libEGL no està disponible"
 
-#: gdk/gdkdisplay.c:1705
+#: gdk/gdkdisplay.c:1724
 msgid "Failed to create EGL display"
 msgstr "No s'ha pogut crear una pantalla EGL"
 
-#: gdk/gdkdisplay.c:1715
+#: gdk/gdkdisplay.c:1734
 msgid "Could not initialize EGL display"
 msgstr "No s'ha pogut inicialitzar la pantalla EGL"
 
-#: gdk/gdkdisplay.c:1726
+#: gdk/gdkdisplay.c:1745
 #, c-format
 msgid "EGL version %d.%d is too old. GTK requires %d.%d"
 msgstr "La versió de l'EGL %d.%d és massa antiga. La GTK requereix %d.%d"
@@ -140,28 +140,28 @@ msgstr "Arrossega i deixa anar no és compatible des d'altres aplicacions."
 msgid "No compatible formats to transfer contents."
 msgstr "No hi ha cap format compatible per a transferir contingut."
 
-#: gdk/gdkglcontext.c:401 gdk/x11/gdkglcontext-glx.c:642
+#: gdk/gdkglcontext.c:407 gdk/x11/gdkglcontext-glx.c:642
 msgid "No GL API allowed."
 msgstr "No es permet l'API GL."
 
-#: gdk/gdkglcontext.c:425 gdk/win32/gdkglcontext-win32-wgl.c:387
+#: gdk/gdkglcontext.c:431 gdk/win32/gdkglcontext-win32-wgl.c:387
 #: gdk/win32/gdkglcontext-win32-wgl.c:530
 #: gdk/win32/gdkglcontext-win32-wgl.c:574 gdk/x11/gdkglcontext-glx.c:691
 msgid "Unable to create a GL context"
 msgstr "No s'ha pogut crear el context GL"
 
-#: gdk/gdkglcontext.c:1280
+#: gdk/gdkglcontext.c:1286
 msgid "Anything but OpenGL ES disabled via GDK_DEBUG"
 msgstr "Tot excepte OpenGL ES desactivat mitjançant GDK_DEBUG"
 
-#: gdk/gdkglcontext.c:1289
+#: gdk/gdkglcontext.c:1295
 #, c-format
 msgid "Application does not support %s API"
 msgstr "L'aplicació no admet API de %s"
 
 #. translators: This is about OpenGL backend names, like
 #. * "Trying to use X11 GLX, but EGL is already in use"
-#: gdk/gdkglcontext.c:1864
+#: gdk/gdkglcontext.c:1954
 #, c-format
 msgid "Trying to use %s, but %s is already in use"
 msgstr "S'està intentant utilitzar %s, però ja s'està utilitzant %s"
@@ -561,7 +561,7 @@ msgstr "S'ha produït un error en interpretar el fitxer gràfic JPEG (%s)"
 msgid "Unsupported JPEG colorspace (%d)"
 msgstr "Espai de color JPEG no compatible (%d)"
 
-#: gdk/loaders/gdkjpeg.c:203 gdk/loaders/gdkpng.c:280 gdk/loaders/gdktiff.c:467
+#: gdk/loaders/gdkjpeg.c:203 gdk/loaders/gdkpng.c:280 gdk/loaders/gdktiff.c:472
 #, c-format
 msgid "Not enough memory for image size %ux%u"
 msgstr "No hi ha prou memòria per a la mida de la imatge %ux%u"
@@ -581,15 +581,15 @@ msgstr "Profunditat %u no suportada en la imatge png"
 msgid "Unsupported color type %u in png image"
 msgstr "Tipus de color %u no compatible a la imatge png"
 
-#: gdk/loaders/gdktiff.c:353
+#: gdk/loaders/gdktiff.c:358
 msgid "Failed to load RGB data from TIFF file"
 msgstr "No s'han pogut carregar les dades RGB des del fitxer TIFF"
 
-#: gdk/loaders/gdktiff.c:396
+#: gdk/loaders/gdktiff.c:401
 msgid "Could not load TIFF data"
 msgstr "No s'han pogut carregar les dades TIFF"
 
-#: gdk/loaders/gdktiff.c:479
+#: gdk/loaders/gdktiff.c:484
 #, c-format
 msgid "Reading data failed at row %d"
 msgstr "No s'ha pogut llegir les dades a la fila %d"
@@ -1130,7 +1130,7 @@ msgstr "Sans 12"
 msgid "Pick a Font"
 msgstr "Trieu un tipus de lletra"
 
-#: gtk/deprecated/gtkfontbutton.c:600 gtk/gtkfilechooserwidget.c:3871
+#: gtk/deprecated/gtkfontbutton.c:600 gtk/gtkfilechooserwidget.c:3806
 #: gtk/gtkfontdialogbutton.c:126 gtk/inspector/visual.ui:169
 msgid "Font"
 msgstr "Tipus de lletra"
@@ -1784,6 +1784,11 @@ msgctxt "accessibility"
 msgid "toggle button"
 msgstr "botó de commutació"
 
+#: gtk/gtkaccessible.c:835
+msgctxt "accessibility"
+msgid "paragraph"
+msgstr "paràgraf"
+
 #: gtk/gtkalertdialog.c:668 gtk/print/gtkcustompaperunixdialog.c:322
 #: gtk/gtkmessagedialog.c:166 gtk/ui/gtkassistant.ui:40
 msgid "_Close"
@@ -2266,12 +2271,12 @@ msgid "A file with that name already exists"
 msgstr "Ja existeix un fitxer amb aquest nom"
 
 #: gtk/gtkfilechoosernative.c:520 gtk/gtkfilechoosernative.c:600
-#: gtk/gtkfilechooserwidget.c:1185 gtk/gtkfilechooserwidget.c:5029
+#: gtk/gtkfilechooserwidget.c:1183 gtk/gtkfilechooserwidget.c:4964
 #: gtk/gtkfiledialog.c:843 gtk/gtkmessagedialog.c:170
 #: gtk/gtkmessagedialog.c:179 gtk/gtkmountoperation.c:608
 #: gtk/print/gtkpagesetupunixdialog.c:282 gtk/print/gtkprintbackend.c:638
 #: gtk/print/gtkprintunixdialog.c:682 gtk/print/gtkprintunixdialog.c:839
-#: gtk/gtkwindow.c:6242 gtk/ui/gtkappchooserdialog.ui:48
+#: gtk/gtkwindow.c:6243 gtk/ui/gtkappchooserdialog.ui:48
 #: gtk/ui/gtkassistant.ui:52 gtk/ui/gtkcolorchooserdialog.ui:36
 #: gtk/ui/gtkfontchooserdialog.ui:27
 msgid "_Cancel"
@@ -2300,254 +2305,242 @@ msgstr "Seleccioneu quins tipus de fitxers es mostren"
 msgid "%1$s on %2$s"
 msgstr "%1$s a %2$s"
 
-#: gtk/gtkfilechooserwidget.c:345
+#: gtk/gtkfilechooserwidget.c:343
 msgid "Type name of new folder"
 msgstr "Escriviu el nom de la carpeta nova"
 
-#: gtk/gtkfilechooserwidget.c:727
+#: gtk/gtkfilechooserwidget.c:725
 msgid "The folder could not be created"
 msgstr "No s'ha pogut crear la carpeta"
 
-#: gtk/gtkfilechooserwidget.c:740
+#: gtk/gtkfilechooserwidget.c:738
 msgid "You need to choose a valid filename."
 msgstr "Cal que trieu un nom de fitxer vàlid."
 
-#: gtk/gtkfilechooserwidget.c:743
+#: gtk/gtkfilechooserwidget.c:741
 #, c-format
 msgid "Cannot create a file under %s as it is not a folder"
 msgstr "No es pot crear un fitxer a %s, atès que no és una carpeta"
 
-#: gtk/gtkfilechooserwidget.c:753
+#: gtk/gtkfilechooserwidget.c:751
 msgid "Cannot create file as the filename is too long"
 msgstr "No es pot crear el fitxer perquè el nom de fitxer és massa llarg"
 
-#: gtk/gtkfilechooserwidget.c:754
+#: gtk/gtkfilechooserwidget.c:752
 msgid "Try using a shorter name."
 msgstr "Escriviu un nom més curt."
 
-#: gtk/gtkfilechooserwidget.c:764
+#: gtk/gtkfilechooserwidget.c:762
 msgid "You may only select folders"
 msgstr "Només podeu seleccionar carpetes"
 
-#: gtk/gtkfilechooserwidget.c:765
+#: gtk/gtkfilechooserwidget.c:763
 msgid "The item that you selected is not a folder try using a different item."
 msgstr ""
 "L'element que heu seleccionat no és una carpeta. Utilitzeu un element "
 "diferent."
 
-#: gtk/gtkfilechooserwidget.c:773
+#: gtk/gtkfilechooserwidget.c:771
 msgid "Invalid file name"
 msgstr "El nom del fitxer no és vàlid"
 
-#: gtk/gtkfilechooserwidget.c:782
+#: gtk/gtkfilechooserwidget.c:780
 msgid "The folder contents could not be displayed"
 msgstr "No s'ha pogut mostrar el contingut de la carpeta"
 
-#: gtk/gtkfilechooserwidget.c:790
+#: gtk/gtkfilechooserwidget.c:788
 msgid "The file could not be deleted"
 msgstr "No s'ha pogut suprimir el fitxer"
 
-#: gtk/gtkfilechooserwidget.c:798
+#: gtk/gtkfilechooserwidget.c:796
 msgid "The file could not be moved to the Trash"
 msgstr "No s'ha pogut moure el fitxer a la paperera"
 
-#: gtk/gtkfilechooserwidget.c:1183
+#: gtk/gtkfilechooserwidget.c:1181
 #, c-format
 msgid "Are you sure you want to permanently delete “%s”?"
 msgstr "Esteu segur que voleu suprimir permanentment «%s»?"
 
-#: gtk/gtkfilechooserwidget.c:1184
+#: gtk/gtkfilechooserwidget.c:1182
 msgid "If you delete an item, it will be permanently lost."
 msgstr "Si suprimiu un element, es perdrà definitivament."
 
-#: gtk/gtkfilechooserwidget.c:1185 gtk/gtkfilechooserwidget.c:1815
+#: gtk/gtkfilechooserwidget.c:1183 gtk/gtkfilechooserwidget.c:1781
 #: gtk/gtklabel.c:5695 gtk/gtktext.c:6147 gtk/gtktextview.c:9018
 msgid "_Delete"
 msgstr "_Suprimeix"
 
-#: gtk/gtkfilechooserwidget.c:1298
+#: gtk/gtkfilechooserwidget.c:1296
 msgid "The file could not be renamed"
 msgstr "No s'ha pogut canviar el nom del fitxer"
 
-#: gtk/gtkfilechooserwidget.c:1504
+#: gtk/gtkfilechooserwidget.c:1472
 msgid "Could not select file"
 msgstr "No s'ha pogut seleccionar el fitxer"
 
-#: gtk/gtkfilechooserwidget.c:1724 gtk/ui/gtkfilechooserwidget.ui:66
+#: gtk/gtkfilechooserwidget.c:1692 gtk/ui/gtkfilechooserwidget.ui:66
 msgid "Grid View"
 msgstr "Vista de graella"
 
-#: gtk/gtkfilechooserwidget.c:1730
+#: gtk/gtkfilechooserwidget.c:1698
 msgid "List View"
 msgstr "Vista de llista"
 
-#: gtk/gtkfilechooserwidget.c:1795
+#: gtk/gtkfilechooserwidget.c:1761
 msgid "_Visit File"
 msgstr "_Visita aquest fitxer"
 
-#: gtk/gtkfilechooserwidget.c:1799
+#: gtk/gtkfilechooserwidget.c:1765
 msgid "_Open With File Manager"
 msgstr "_Obre amb el gestor de fitxers"
 
-#: gtk/gtkfilechooserwidget.c:1803
+#: gtk/gtkfilechooserwidget.c:1769
 msgid "_Copy Location"
 msgstr "_Copia la ubicació"
 
-#: gtk/gtkfilechooserwidget.c:1807
+#: gtk/gtkfilechooserwidget.c:1773
 msgid "_Add to Bookmarks"
 msgstr "_Afegeix a les adreces d'interès"
 
-#: gtk/gtkfilechooserwidget.c:1811 gtk/gtkplacessidebar.c:2312
+#: gtk/gtkfilechooserwidget.c:1777 gtk/gtkplacessidebar.c:2312
 #: gtk/gtkplacessidebar.c:3270 gtk/ui/gtkfilechooserwidget.ui:410
 msgid "_Rename"
 msgstr "Canvia el _nom"
 
-#: gtk/gtkfilechooserwidget.c:1819
+#: gtk/gtkfilechooserwidget.c:1785
 msgid "_Move to Trash"
 msgstr "_Mou a la paperera"
 
-#: gtk/gtkfilechooserwidget.c:1828
+#: gtk/gtkfilechooserwidget.c:1794
 msgid "Show _Hidden Files"
 msgstr "Mostra els fitxers _ocults"
 
-#: gtk/gtkfilechooserwidget.c:1832
-msgid "Show _Size Column"
-msgstr "Mostra la columna de la _mida"
-
-#: gtk/gtkfilechooserwidget.c:1837
-msgid "Show T_ype Column"
-msgstr "Mos_tra la columna tipus"
-
-#: gtk/gtkfilechooserwidget.c:1842
-msgid "Show _Time"
-msgstr "M_ostra la data"
-
-#: gtk/gtkfilechooserwidget.c:1847
+#: gtk/gtkfilechooserwidget.c:1798
 msgid "Sort _Folders Before Files"
 msgstr "Ordena _les carpetes abans que els fitxers"
 
-#: gtk/gtkfilechooserwidget.c:1979 gtk/gtkfilechooserwidget.c:2009
-#: gtk/gtkfilechooserwidget.c:3914
+#: gtk/gtkfilechooserwidget.c:1921 gtk/gtkfilechooserwidget.c:1951
+#: gtk/gtkfilechooserwidget.c:3849
 msgid "Unknown"
 msgstr "Desconegut"
 
-#: gtk/gtkfilechooserwidget.c:2064 gtk/gtkplacessidebar.c:1025
+#: gtk/gtkfilechooserwidget.c:2006 gtk/gtkplacessidebar.c:1025
 msgid "Home"
 msgstr "Carpeta de l'usuari"
 
 #. this is the header for the location column in the print dialog
-#: gtk/gtkfilechooserwidget.c:2219 gtk/gtkfilechooserwidget.c:7415
+#: gtk/gtkfilechooserwidget.c:2161 gtk/gtkfilechooserwidget.c:7374
 #: gtk/inspector/css-node-tree.ui:76 gtk/print/ui/gtkprintunixdialog.ui:111
 msgid "Location"
 msgstr "Ubicació"
 
 #. Label
-#: gtk/gtkfilechooserwidget.c:2326
+#: gtk/gtkfilechooserwidget.c:2268
 msgid "_Name:"
 msgstr "_Nom:"
 
-#: gtk/gtkfilechooserwidget.c:2881 gtk/gtkfilechooserwidget.c:2895
+#: gtk/gtkfilechooserwidget.c:2823 gtk/gtkfilechooserwidget.c:2837
 #, c-format
 msgid "Searching in %s"
 msgstr "S'està cercant a %s"
 
-#: gtk/gtkfilechooserwidget.c:2901
+#: gtk/gtkfilechooserwidget.c:2843
 msgid "Searching"
 msgstr "S'està cercant"
 
-#: gtk/gtkfilechooserwidget.c:2907
+#: gtk/gtkfilechooserwidget.c:2849
 msgid "Enter location or URL"
 msgstr "Introduïu una ubicació o URL"
 
-#: gtk/gtkfilechooserwidget.c:3474 gtk/gtkfilechooserwidget.c:5814
-#: gtk/gtkfilechooserwidget.c:7434
+#: gtk/gtkfilechooserwidget.c:3408 gtk/gtkfilechooserwidget.c:5749
+#: gtk/gtkfilechooserwidget.c:7396
 msgid "Modified"
 msgstr "Modificat"
 
-#: gtk/gtkfilechooserwidget.c:3658
+#: gtk/gtkfilechooserwidget.c:3593
 #, c-format
 msgid "Could not read the contents of %s"
 msgstr "No s'ha pogut llegir el contingut de %s"
 
-#: gtk/gtkfilechooserwidget.c:3662
+#: gtk/gtkfilechooserwidget.c:3597
 msgid "Could not read the contents of the folder"
 msgstr "No s'ha pogut llegir el contingut de la carpeta"
 
 #. Translators: see g_date_time_format() for details on the format
-#: gtk/gtkfilechooserwidget.c:3809 gtk/gtkfilechooserwidget.c:3852
+#: gtk/gtkfilechooserwidget.c:3744 gtk/gtkfilechooserwidget.c:3787
 msgid "%H:%M"
 msgstr "%-H:%M"
 
-#: gtk/gtkfilechooserwidget.c:3811 gtk/gtkfilechooserwidget.c:3854
+#: gtk/gtkfilechooserwidget.c:3746 gtk/gtkfilechooserwidget.c:3789
 msgid "%l:%M %p"
 msgstr "%l:%M %p"
 
-#: gtk/gtkfilechooserwidget.c:3815
+#: gtk/gtkfilechooserwidget.c:3750
 msgid "Yesterday"
 msgstr "Ahir"
 
-#: gtk/gtkfilechooserwidget.c:3823
+#: gtk/gtkfilechooserwidget.c:3758
 msgid "%-e %b"
 msgstr "%-e %b"
 
-#: gtk/gtkfilechooserwidget.c:3827
+#: gtk/gtkfilechooserwidget.c:3762
 msgid "%-e %b %Y"
 msgstr "%-e %b de %Y"
 
-#: gtk/gtkfilechooserwidget.c:3869 gtk/gtkfilechooserwidget.c:3877
+#: gtk/gtkfilechooserwidget.c:3804 gtk/gtkfilechooserwidget.c:3812
 msgid "Program"
 msgstr "Programa"
 
-#: gtk/gtkfilechooserwidget.c:3870
+#: gtk/gtkfilechooserwidget.c:3805
 msgid "Audio"
 msgstr "Àudio"
 
-#: gtk/gtkfilechooserwidget.c:3872 gtk/gtkfilefilter.c:1032
+#: gtk/gtkfilechooserwidget.c:3807 gtk/gtkfilefilter.c:1032
 msgid "Image"
 msgstr "Imatge"
 
-#: gtk/gtkfilechooserwidget.c:3873
+#: gtk/gtkfilechooserwidget.c:3808
 msgid "Archive"
 msgstr "Arxiva"
 
-#: gtk/gtkfilechooserwidget.c:3874
+#: gtk/gtkfilechooserwidget.c:3809
 msgid "Markup"
 msgstr "Marcatge"
 
-#: gtk/gtkfilechooserwidget.c:3875 gtk/gtkfilechooserwidget.c:3876
+#: gtk/gtkfilechooserwidget.c:3810 gtk/gtkfilechooserwidget.c:3811
 msgid "Text"
 msgstr "Text"
 
-#: gtk/gtkfilechooserwidget.c:3878
+#: gtk/gtkfilechooserwidget.c:3813
 msgid "Video"
 msgstr "Vídeo"
 
-#: gtk/gtkfilechooserwidget.c:3879
+#: gtk/gtkfilechooserwidget.c:3814
 msgid "Contacts"
 msgstr "Contactes"
 
-#: gtk/gtkfilechooserwidget.c:3880
+#: gtk/gtkfilechooserwidget.c:3815
 msgid "Calendar"
 msgstr "Calendari"
 
-#: gtk/gtkfilechooserwidget.c:3881
+#: gtk/gtkfilechooserwidget.c:3816
 msgid "Document"
 msgstr "Document"
 
-#: gtk/gtkfilechooserwidget.c:3882
+#: gtk/gtkfilechooserwidget.c:3817
 msgid "Presentation"
 msgstr "Presentació"
 
-#: gtk/gtkfilechooserwidget.c:3883
+#: gtk/gtkfilechooserwidget.c:3818
 msgid "Spreadsheet"
 msgstr "Full de càlcul"
 
-#: gtk/gtkfilechooserwidget.c:5021 gtk/print/gtkprintunixdialog.c:673
+#: gtk/gtkfilechooserwidget.c:4956 gtk/print/gtkprintunixdialog.c:673
 #, c-format
 msgid "A file named “%s” already exists.  Do you want to replace it?"
 msgstr "Ja existeix un fitxer amb el nom «%s». Voleu reemplaçar-lo?"
 
-#: gtk/gtkfilechooserwidget.c:5023 gtk/print/gtkprintunixdialog.c:677
+#: gtk/gtkfilechooserwidget.c:4958 gtk/print/gtkprintunixdialog.c:677
 #, c-format
 msgid ""
 "The file already exists in “%s”.  Replacing it will overwrite its contents."
@@ -2555,35 +2548,49 @@ msgstr ""
 "El fitxer ja existeix a «%s». Si el reemplaceu en sobreescriureu el "
 "contingut."
 
-#: gtk/gtkfilechooserwidget.c:5029 gtk/print/gtkprintunixdialog.c:685
+#: gtk/gtkfilechooserwidget.c:4964 gtk/print/gtkprintunixdialog.c:685
 msgid "_Replace"
 msgstr "_Reemplaça"
 
-#: gtk/gtkfilechooserwidget.c:5184
+#: gtk/gtkfilechooserwidget.c:5119
 msgid "You do not have access to the specified folder."
 msgstr "No teniu accés el contingut de la carpeta especificada."
 
-#: gtk/gtkfilechooserwidget.c:5761
+#: gtk/gtkfilechooserwidget.c:5696
 msgid "Could not send the search request"
 msgstr "No s'ha pogut enviar la sol·licitud de cerca"
 
-#: gtk/gtkfilechooserwidget.c:6042
+#: gtk/gtkfilechooserwidget.c:5977
 msgid "Accessed"
 msgstr "Accedit"
 
-#: gtk/gtkfilechooserwidget.c:7408 gtk/gtkplacessidebar.c:2306
+#: gtk/gtkfilechooserwidget.c:7352
+msgid "_Size"
+msgstr "_Mida"
+
+#: gtk/gtkfilechooserwidget.c:7356
+msgid "T_ype"
+msgstr "T_ipus"
+
+#: gtk/gtkfilechooserwidget.c:7360
+#, fuzzy
+#| msgid "Show _Time"
+msgid "_Time"
+msgstr "M_ostra la data"
+
+#: gtk/gtkfilechooserwidget.c:7366 gtk/gtkplacessidebar.c:2306
 #: gtk/inspector/a11y.ui:43 gtk/inspector/actions.ui:19
 #: gtk/inspector/css-node-tree.ui:22 gtk/inspector/prop-list.ui:24
 #: gtk/ui/gtkfilechooserwidget.ui:385 gtk/print/ui/gtkprintunixdialog.ui:80
 msgid "Name"
 msgstr "Nom"
 
-#: gtk/gtkfilechooserwidget.c:7423 gtk/inspector/resource-list.ui:82
+#: gtk/gtkfilechooserwidget.c:7383 gtk/inspector/resource-list.ui:82
 #: gtk/ui/gtkfontchooserwidget.ui:217 gtk/ui/gtkfontchooserwidget.ui:386
 msgid "Size"
 msgstr "Mida"
 
-#: gtk/gtkfilechooserwidget.c:7428 gtk/inspector/misc-info.ui:57
+#: gtk/gtkfilechooserwidget.c:7389 gtk/inspector/misc-info.ui:57
 #: gtk/inspector/prop-list.ui:35 gtk/inspector/statistics.ui:36
 msgid "Type"
 msgstr "Tipus"
@@ -2800,7 +2807,7 @@ msgid "Play"
 msgstr "Reprodueix"
 
 #: gtk/gtkmessagedialog.c:162 gtk/gtkmessagedialog.c:180
-#: gtk/print/gtkprintbackend.c:639 gtk/gtkwindow.c:6243
+#: gtk/print/gtkprintbackend.c:639 gtk/gtkwindow.c:6244
 msgid "_OK"
 msgstr "_D'acord"
 
@@ -3610,7 +3617,7 @@ msgctxt "keyboard side marker"
 msgid "R"
 msgstr "D"
 
-#: gtk/gtkshortcutssection.c:407
+#: gtk/gtkshortcutssection.c:414
 msgid "_Show All"
 msgstr "_Mostra-ho tot"
 
@@ -3647,27 +3654,27 @@ msgid "Swipe right"
 msgstr "Llisca a la dreta"
 
 #. Translators: This is placeholder text for the search entry in the shortcuts window
-#: gtk/gtkshortcutswindow.c:855 gtk/gtkshortcutswindow.c:922
-#: gtk/gtkshortcutswindow.c:927
+#: gtk/gtkshortcutswindow.c:879 gtk/gtkshortcutswindow.c:946
+#: gtk/gtkshortcutswindow.c:951
 msgid "Search Shortcuts"
 msgstr "Cerca les dreceres"
 
 #. Translators: This is the window title for the shortcuts window in normal mode
-#: gtk/gtkshortcutswindow.c:887 gtk/inspector/window.ui:498
+#: gtk/gtkshortcutswindow.c:911 gtk/inspector/window.ui:498
 msgid "Shortcuts"
 msgstr "Dreceres"
 
 #. Translators: This is the window title for the shortcuts window in search mode
-#: gtk/gtkshortcutswindow.c:892
+#: gtk/gtkshortcutswindow.c:916
 msgid "Search Results"
 msgstr "Resultats de cerca"
 
-#: gtk/gtkshortcutswindow.c:989 gtk/ui/gtkemojichooser.ui:349
+#: gtk/gtkshortcutswindow.c:1013 gtk/ui/gtkemojichooser.ui:349
 #: gtk/ui/gtkfilechooserwidget.ui:239
 msgid "No Results Found"
 msgstr "No s'ha trobat cap resultat"
 
-#: gtk/gtkshortcutswindow.c:1000 gtk/ui/gtkemojichooser.ui:362
+#: gtk/gtkshortcutswindow.c:1024 gtk/ui/gtkemojichooser.ui:362
 #: gtk/ui/gtkfilechooserwidget.ui:252 gtk/ui/gtkplacesview.ui:218
 msgid "Try a different search"
 msgstr "Proveu una cerca diferent"
@@ -3689,12 +3696,12 @@ msgstr "_Desfés"
 msgid "_Redo"
 msgstr "_Refés"
 
-#: gtk/gtkwindow.c:6231
+#: gtk/gtkwindow.c:6232
 #, c-format
 msgid "Do you want to use GTK Inspector?"
 msgstr "Voleu utilitzar l'inspector del GTK?"
 
-#: gtk/gtkwindow.c:6233
+#: gtk/gtkwindow.c:6234
 #, c-format
 msgid ""
 "GTK Inspector is an interactive debugger that lets you explore and modify "
@@ -3705,7 +3712,7 @@ msgstr ""
 "modificar qualsevol aplicació GTK internament. Podeu arribar a trencar o fer "
 "fallar l'aplicació si l'utilitzeu."
 
-#: gtk/gtkwindow.c:6238
+#: gtk/gtkwindow.c:6239
 msgid "Don’t show this message again"
 msgstr "No tornis a mostrar aquest missatge"
 
@@ -3742,6 +3749,7 @@ msgid "Description"
 msgstr "Descripció"
 
 #: gtk/inspector/a11y.ui:99 gtk/inspector/misc-info.ui:296
+#: tools/gtk-path-tool-info.c:132
 msgid "Bounds"
 msgstr "Límits"
 
@@ -4204,7 +4212,7 @@ msgstr "Font:"
 msgid "Defined At"
 msgstr "Definit a"
 
-#: gtk/inspector/recorder.c:1865
+#: gtk/inspector/recorder.c:1922
 #, c-format
 msgid "Saving RenderNode failed"
 msgstr "S'ha produït un error en desar el RenderNode"
@@ -7263,7 +7271,8 @@ msgstr ""
 #: tools/gtk-builder-tool-enumerate.c:56 tools/gtk-builder-tool-preview.c:179
 #: tools/gtk-builder-tool-preview.c:180 tools/gtk-builder-tool-screenshot.c:360
 #: tools/gtk-builder-tool-simplify.c:2529 tools/gtk-builder-tool-validate.c:261
-#: tools/gtk-rendernode-tool-info.c:202 tools/gtk-rendernode-tool-show.c:102
+#: tools/gtk-path-tool-render.c:121 tools/gtk-rendernode-tool-info.c:210
+#: tools/gtk-rendernode-tool-show.c:106
 msgid "FILE"
 msgstr "FITXER"
 
@@ -7295,8 +7304,8 @@ msgid "Use style from CSS file"
 msgstr "Utilitza l'estil del fitxer CSS"
 
 #: tools/gtk-builder-tool-preview.c:187 tools/gtk-builder-tool-screenshot.c:370
-#: tools/gtk-builder-tool-validate.c:268 tools/gtk-rendernode-tool-show.c:109
-#: tools/gtk-rendernode-tool-render.c:204
+#: tools/gtk-builder-tool-validate.c:268 tools/gtk-rendernode-tool-render.c:204
+#: tools/gtk-rendernode-tool-show.c:113
 #, c-format
 msgid "Could not initialize windowing system\n"
 msgstr "No s'ha pogut inicialitzar el sistema de finestres\n"
@@ -7526,6 +7535,300 @@ msgstr "%s: no existeix l'aplicació %s"
 msgid "%s: error launching application: %s\n"
 msgstr "%s: s'ha produït un error en executar l'aplicació: %s\n"
 
+#: tools/gtk-path-tool.c:35
+#, c-format
+msgid ""
+"Usage:\n"
+"  gtk4-path-tool [COMMAND] [OPTION…] PATH\n"
+"\n"
+"Perform various tasks on paths.\n"
+"\n"
+"Commands:\n"
+"  decompose    Decompose the path\n"
+"  reverse      Reverse the path\n"
+"  restrict     Restrict the path to a segment\n"
+"  show         Display the path in a window\n"
+"  render       Render the path as an image\n"
+"  info         Print information about the path\n"
+"\n"
+msgstr ""
+
+#: tools/gtk-path-tool-decompose.c:84
+msgid "Allow quadratic Bézier curves"
+msgstr "Permetre corbes quadràtiques de Bézier"
+
+#: tools/gtk-path-tool-decompose.c:85
+msgid "Allow cubic Bézier curves"
+msgstr "Permetre corbes cúbiques de Bézier"
+
+#: tools/gtk-path-tool-decompose.c:86
+msgid "Allow conic Bézier curves"
+msgstr "Permetre corbes còniques de Bézier"
+
+#: tools/gtk-path-tool-decompose.c:87 tools/gtk-path-tool-info.c:88
+#: tools/gtk-path-tool-render.c:125 tools/gtk-path-tool-restrict.c:38
+#: tools/gtk-path-tool-reverse.c:34 tools/gtk-path-tool-show.c:147
+msgid "PATH"
+msgstr "CAMÍ"
+
+#: tools/gtk-path-tool-decompose.c:99
+msgid "Decompose a path."
+msgstr "Descomposa un camí"
+
+#: tools/gtk-path-tool-decompose.c:112 tools/gtk-path-tool-info.c:113
+#: tools/gtk-path-tool-restrict.c:64 tools/gtk-path-tool-reverse.c:58
+msgid "No paths given."
+msgstr "No s'ha proporcionat cap camí"
+
+#: tools/gtk-path-tool-decompose.c:140 tools/gtk-path-tool-restrict.c:94
+#: tools/gtk-path-tool-reverse.c:78
+msgid "That didn't work out."
+msgstr ""
+
+#: tools/gtk-path-tool-info.c:100
+msgid "Print information about a path."
+msgstr "Mostra informació sobre un camí."
+
+#: tools/gtk-path-tool-info.c:121
+msgid "Path is empty."
+msgstr "El camí és buit."
+
+#: tools/gtk-path-tool-info.c:127
+msgid "Path is closed"
+msgstr "El camí està tancat"
+
+#: tools/gtk-path-tool-info.c:129
+msgid "Path length"
+msgstr "Llargada del camí"
+
+#: tools/gtk-path-tool-info.c:138
+#, c-format
+msgid "%d contours"
+msgstr "%d contorns"
+
+#: tools/gtk-path-tool-info.c:140
+#, c-format
+msgid "%d operations"
+msgstr "%d operacions"
+
+#: tools/gtk-path-tool-info.c:144
+#, c-format
+msgid "%d lines"
+msgstr "%d línies"
+
+#: tools/gtk-path-tool-info.c:149
+#, c-format
+msgid "%d quadratics"
+msgstr ""
+
+#: tools/gtk-path-tool-info.c:154
+#, c-format
+msgid "%d cubics"
+msgstr ""
+
+#: tools/gtk-path-tool-info.c:159
+#, c-format
+msgid "%d conics"
+msgstr ""
+
+#: tools/gtk-path-tool-render.c:117 tools/gtk-path-tool-show.c:140
+msgid "Fill the path (the default)"
+msgstr "Omple el camí (predeterminat)"
+
+#: tools/gtk-path-tool-render.c:118 tools/gtk-path-tool-show.c:141
+msgid "Stroke the path"
+msgstr "Traça el camí"
+
+#: tools/gtk-path-tool-render.c:119 tools/gtk-path-tool-show.c:142
+msgid "Show path points"
+msgstr "Mostra els punts del camí"
+
+#: tools/gtk-path-tool-render.c:120 tools/gtk-path-tool-show.c:143
+msgid "Show control points"
+msgstr "Mostra els punts de control"
+
+#: tools/gtk-path-tool-render.c:121
+msgid "The output file"
+msgstr "El fitxer de sortida"
+
+#: tools/gtk-path-tool-render.c:122 tools/gtk-path-tool-show.c:144
+msgid "Foreground color"
+msgstr ""
+
+#: tools/gtk-path-tool-render.c:122 tools/gtk-path-tool-render.c:123
+#: tools/gtk-path-tool-render.c:124 tools/gtk-path-tool-show.c:144
+#: tools/gtk-path-tool-show.c:145 tools/gtk-path-tool-show.c:146
+msgid "COLOR"
+msgstr "COLOR"
+
+#: tools/gtk-path-tool-render.c:123 tools/gtk-path-tool-show.c:145
+msgid "Background color"
+msgstr "Color de fons"
+
+#: tools/gtk-path-tool-render.c:124 tools/gtk-path-tool-show.c:146
+msgid "Point color"
+msgstr "Color del punt"
+
+#: tools/gtk-path-tool-render.c:129 tools/gtk-path-tool-show.c:151
+msgid "Fill rule (winding, even-odd)"
+msgstr ""
+
+#: tools/gtk-path-tool-render.c:129 tools/gtk-path-tool-render.c:133
+#: tools/gtk-path-tool-render.c:134 tools/gtk-path-tool-render.c:135
+#: tools/gtk-path-tool-render.c:136 tools/gtk-path-tool-render.c:137
+#: tools/gtk-path-tool-render.c:138 tools/gtk-path-tool-show.c:151
+#: tools/gtk-path-tool-show.c:155 tools/gtk-path-tool-show.c:156
+#: tools/gtk-path-tool-show.c:157 tools/gtk-path-tool-show.c:158
+#: tools/gtk-path-tool-show.c:159 tools/gtk-path-tool-show.c:160
+msgid "VALUE"
+msgstr "VALOR"
+
+#: tools/gtk-path-tool-render.c:133 tools/gtk-path-tool-show.c:155
+msgid "Line width (number)"
+msgstr "Amplada de la línia (nombre)"
+
+#: tools/gtk-path-tool-render.c:134 tools/gtk-path-tool-show.c:156
+msgid "Line cap (butt, round, square)"
+msgstr ""
+
+#: tools/gtk-path-tool-render.c:135 tools/gtk-path-tool-show.c:157
+msgid "Line join (miter, miter-clip, round, bevel, arcs)"
+msgstr ""
+
+#: tools/gtk-path-tool-render.c:136 tools/gtk-path-tool-show.c:158
+msgid "Miter limit (number)"
+msgstr ""
+
+#: tools/gtk-path-tool-render.c:137 tools/gtk-path-tool-show.c:159
+msgid "Dash pattern (comma-separated numbers)"
+msgstr "Patró de punts (nombres separats per comes)"
+
+#: tools/gtk-path-tool-render.c:138 tools/gtk-path-tool-show.c:160
+msgid "Dash offset (number)"
+msgstr ""
+
+#: tools/gtk-path-tool-render.c:161 tools/gtk-path-tool-show.c:172
+msgid "Could not initialize windowing system"
+msgstr "No s'ha pogut inicialitzar el sistema de finestres"
+
+#: tools/gtk-path-tool-render.c:168
+msgid "Render the path to a png image."
+msgstr "Renderitza el camí en una imatge png."
+
+#: tools/gtk-path-tool-render.c:173 tools/gtk-path-tool-show.c:183
+msgid "Options related to filling"
+msgstr ""
+
+#: tools/gtk-path-tool-render.c:174 tools/gtk-path-tool-show.c:184
+msgid "Show help for fill options"
+msgstr "Mostra l'ajuda per a les opcions d'emplenament"
+
+#: tools/gtk-path-tool-render.c:181 tools/gtk-path-tool-show.c:191
+msgid "Options related to stroking"
+msgstr "Opcions relacionades amb el traç"
+
+#: tools/gtk-path-tool-render.c:182 tools/gtk-path-tool-show.c:192
+#, fuzzy
+#| msgid "Show other locations"
+msgid "Show help for stroke options"
+msgstr "Mostra altres ubicacions"
+
+#: tools/gtk-path-tool-render.c:199 tools/gtk-path-tool-show.c:209
+msgid "No path specified"
+msgstr "No s'ha especificat cap camí"
+
+#: tools/gtk-path-tool-render.c:205
+msgid "Can only render a single path"
+msgstr "Només es pot renderitzar un sol camí"
+
+#: tools/gtk-path-tool-render.c:250 tools/gtk-path-tool-show.c:221
+msgid "fill rule"
+msgstr ""
+
+#: tools/gtk-path-tool-render.c:255 tools/gtk-path-tool-show.c:226
+msgid "line cap"
+msgstr ""
+
+#: tools/gtk-path-tool-render.c:256 tools/gtk-path-tool-show.c:227
+msgid "line join"
+msgstr ""
+
+#: tools/gtk-path-tool-render.c:310
+#, c-format
+msgid "Saving png to '%s' failed"
+msgstr "S'ha produït un error en desar el png a «%s»"
+
+#: tools/gtk-path-tool-render.c:317
+#, c-format
+msgid "Output written to '%s'."
+msgstr "S'ha escrit la sortida a «%s»."
+
+#: tools/gtk-path-tool-restrict.c:36
+msgid "Beginning of segment"
+msgstr "Inici del segment"
+
+#: tools/gtk-path-tool-restrict.c:36 tools/gtk-path-tool-restrict.c:37
+msgid "LENGTH"
+msgstr "LLARGADA"
+
+#: tools/gtk-path-tool-restrict.c:37
+msgid "End of segment"
+msgstr "Final del segment"
+
+#: tools/gtk-path-tool-restrict.c:51
+msgid "Restrict a path to a segment."
+msgstr ""
+
+#: tools/gtk-path-tool-reverse.c:45
+msgid "Reverse a path."
+msgstr "Capgira un camí."
+
+#: tools/gtk-path-tool-show.c:46 tools/gtk-path-tool-show.c:88
+msgid "Path Preview"
+msgstr "Previsualització del camí"
+
+#: tools/gtk-path-tool-show.c:180
+msgid "Display the path."
+msgstr "Visualitza el camí"
+
+#: tools/gtk-path-tool-show.c:215
+msgid "Can only show a single path"
+msgstr "Només es pot visualitzar un únic camí"
+
+#: tools/gtk-path-tool-utils.c:58
+#, c-format
+msgid "Failed to read from standard input: %s\n"
+msgstr "No s'ha pogut llegir de l'entrada estàndard: %s\n"
+
+#: tools/gtk-path-tool-utils.c:64
+#, c-format
+msgid "Error reading from standard input: %s\n"
+msgstr "S'ha produït un error en llegir de l'entrada estàndard: %s\n"
+
+#: tools/gtk-path-tool-utils.c:83
+#, c-format
+msgid "Failed to parse '%s' as path.\n"
+msgstr "No s'ha pogut interpretar «%s» com a camí.\n"
+
+#: tools/gtk-path-tool-utils.c:109
+#, c-format
+msgid "Failed to parse '%s' as %s."
+msgstr "No s'ha pogut interpretar «%s» com a %s."
+
+#: tools/gtk-path-tool-utils.c:111
+msgid "Possible values: "
+msgstr "Valors possibles:"
+
+#: tools/gtk-path-tool-utils.c:135
+#, c-format
+msgid "Could not parse '%s' as color"
+msgstr "No s'ha pogut interpretar «%s» com a color"
+
+#: tools/gtk-path-tool-utils.c:163
+#, c-format
+msgid "Failed to parse '%s' as number"
+msgstr "No s'ha pogut interpretar «%s» com a nombre"
+
 #: tools/gtk-rendernode-tool.c:35
 #, c-format
 msgid ""
@@ -7551,49 +7854,40 @@ msgstr ""
 "  render       Fes una captura de pantalla del node\n"
 "\n"
 
-#: tools/gtk-rendernode-tool-info.c:179
+#: tools/gtk-rendernode-tool-info.c:187
 #, c-format
 msgid "Number of nodes: %u\n"
 msgstr "Nombre de nodes: %u\n"
 
-#: tools/gtk-rendernode-tool-info.c:186
+#: tools/gtk-rendernode-tool-info.c:194
 #, c-format
 msgid "Depth: %u\n"
 msgstr "Profunditat: %u\n"
 
-#: tools/gtk-rendernode-tool-info.c:189
+#: tools/gtk-rendernode-tool-info.c:197
 #, c-format
 msgid "Bounds: %g x %g\n"
 msgstr "Límits: %g x %g\n"
 
-#: tools/gtk-rendernode-tool-info.c:190
+#: tools/gtk-rendernode-tool-info.c:198
 #, c-format
 msgid "Origin: %g %g\n"
 msgstr "Origen: %g %g\n"
 
-#: tools/gtk-rendernode-tool-info.c:211
+#: tools/gtk-rendernode-tool-info.c:219
 msgid "Provide information about the render node."
 msgstr "Proporciona informació sobre el node de renderització."
 
-#: tools/gtk-rendernode-tool-info.c:224 tools/gtk-rendernode-tool-show.c:130
-#: tools/gtk-rendernode-tool-render.c:225
+#: tools/gtk-rendernode-tool-info.c:232 tools/gtk-rendernode-tool-render.c:225
+#: tools/gtk-rendernode-tool-show.c:134
 #, c-format
 msgid "No .node file specified\n"
 msgstr "No s'ha especificat un fitxer .node\n"
 
-#: tools/gtk-rendernode-tool-info.c:230
+#: tools/gtk-rendernode-tool-info.c:238
 #, c-format
 msgid "Can only accept a single .node file\n"
 msgstr "Només es pot acceptar un únic fitxer .node\n"
-
-#: tools/gtk-rendernode-tool-show.c:117
-msgid "Show the render node."
-msgstr "Mostra el node de renderització."
-
-#: tools/gtk-rendernode-tool-show.c:136
-#, c-format
-msgid "Can only preview a single .node file\n"
-msgstr "Només es pot previsualitzar un únic fitxer .node\n"
 
 #: tools/gtk-rendernode-tool-render.c:123
 #, c-format
@@ -7626,6 +7920,19 @@ msgstr "Renderitza un fitxer .node a una imatge."
 msgid "Can only render a single .node file to a single output file\n"
 msgstr ""
 "Només es pot renderitzar un únic fitxer .node a un únic fitxer de sortida\n"
+
+#: tools/gtk-rendernode-tool-show.c:105
+msgid "Don't add a titlebar"
+msgstr "No afegeixis una barra de títol"
+
+#: tools/gtk-rendernode-tool-show.c:121
+msgid "Show the render node."
+msgstr "Mostra el node de renderització."
+
+#: tools/gtk-rendernode-tool-show.c:140
+#, c-format
+msgid "Can only preview a single .node file\n"
+msgstr "Només es pot previsualitzar un únic fitxer .node\n"
 
 #: tools/gtk-rendernode-tool-utils.c:51
 #, c-format
@@ -7745,3 +8052,9 @@ msgstr ""
 "No hi ha el fitxer índex de tema a «%s».\n"
 "Si realment voleu crear una memòria cau d'icones aquí, utilitzeu --ignore-"
 "theme-index.\n"
+
+#~ msgid "Show _Size Column"
+#~ msgstr "Mostra la columna de la _mida"
+
+#~ msgid "Show T_ype Column"
+#~ msgstr "Mos_tra la columna tipus"
