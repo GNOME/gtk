@@ -7,13 +7,15 @@
 #include "gskvulkandescriptorsprivate.h"
 #include "gskvulkandeviceprivate.h"
 #include "gskvulkanimageprivate.h"
+#include "gskvulkanrealdescriptorsprivate.h"
+#include "gskvulkansubdescriptorsprivate.h"
 
 #include "gdk/gdkdisplayprivate.h"
 #include "gdk/gdkdmabuftextureprivate.h"
 
 #define GDK_ARRAY_NAME gsk_descriptors
 #define GDK_ARRAY_TYPE_NAME GskDescriptors
-#define GDK_ARRAY_ELEMENT_TYPE GskVulkanDescriptors *
+#define GDK_ARRAY_ELEMENT_TYPE GskVulkanRealDescriptors *
 #define GDK_ARRAY_FREE_FUNC g_object_unref
 #define GDK_ARRAY_NO_MEMSET 1
 #include "gdk/gdkarrayimpl.c"
@@ -151,14 +153,14 @@ gsk_vulkan_frame_prepare_descriptors (GskVulkanFrame *self,
   for (i = 0; i < gsk_descriptors_get_size (&self->descriptors); i++)
     {
       gsize n_desc_images, n_desc_buffers;
-      GskVulkanDescriptors *desc = gsk_descriptors_get (&self->descriptors, i);
+      GskVulkanRealDescriptors *desc = gsk_descriptors_get (&self->descriptors, i);
       if (storage_buffer)
         {
           G_GNUC_UNUSED guint32 descriptor;
-          descriptor = gsk_vulkan_descriptors_get_buffer_descriptor (desc, storage_buffer);
+          descriptor = gsk_vulkan_real_descriptors_get_buffer_descriptor (desc, storage_buffer);
           g_assert (descriptor == 0);
         }
-      gsk_vulkan_descriptors_prepare (desc, &n_desc_images, &n_desc_buffers);
+      gsk_vulkan_real_descriptors_prepare (desc, &n_desc_images, &n_desc_buffers);
       n_images += n_desc_images;
       n_buffers += n_desc_buffers;
     }
@@ -207,9 +209,9 @@ gsk_vulkan_frame_prepare_descriptors (GskVulkanFrame *self,
 
   for (i = 0; i < gsk_descriptors_get_size (&self->descriptors); i++)
     {
-      GskVulkanDescriptors *desc = gsk_descriptors_get (&self->descriptors, i);
+      GskVulkanRealDescriptors *desc = gsk_descriptors_get (&self->descriptors, i);
 
-      gsk_vulkan_descriptors_update_sets (desc, self->vk_descriptor_pool);
+      gsk_vulkan_real_descriptors_update_sets (desc, self->vk_descriptor_pool);
     }
 }
 
@@ -217,12 +219,37 @@ static GskGpuDescriptors *
 gsk_vulkan_frame_create_descriptors (GskGpuFrame *frame)
 {
   GskVulkanFrame *self = GSK_VULKAN_FRAME (frame);
-  GskVulkanDescriptors *desc;
 
-  desc = gsk_vulkan_descriptors_new (GSK_VULKAN_DEVICE (gsk_gpu_frame_get_device (frame)));
-  gsk_descriptors_append (&self->descriptors, desc);
+  if (gsk_vulkan_device_has_feature (GSK_VULKAN_DEVICE (gsk_gpu_frame_get_device (frame)), GDK_VULKAN_FEATURE_DESCRIPTOR_INDEXING))
+    {
+      GskVulkanRealDescriptors *parent;
 
-  return GSK_GPU_DESCRIPTORS (g_object_ref (desc));
+      if (gsk_descriptors_get_size (&self->descriptors) > 0)
+        {
+          parent = gsk_descriptors_get (&self->descriptors, gsk_descriptors_get_size (&self->descriptors) - 1);
+          if (gsk_vulkan_real_descriptors_is_full (parent))
+            parent = NULL;
+        }
+      else
+        parent = NULL;
+
+      if (parent == NULL)
+        {
+          parent = gsk_vulkan_real_descriptors_new (GSK_VULKAN_DEVICE (gsk_gpu_frame_get_device (frame)));
+          gsk_descriptors_append (&self->descriptors, parent);
+        }
+
+      return GSK_GPU_DESCRIPTORS (gsk_vulkan_sub_descriptors_new (GSK_VULKAN_DESCRIPTORS (parent)));
+    }
+  else
+    {
+      GskVulkanRealDescriptors *desc;
+
+      desc = gsk_vulkan_real_descriptors_new (GSK_VULKAN_DEVICE (gsk_gpu_frame_get_device (frame)));
+      gsk_descriptors_append (&self->descriptors, desc);
+
+      return GSK_GPU_DESCRIPTORS (g_object_ref (desc));
+    }
 }
 
 static GskGpuBuffer *
@@ -248,6 +275,9 @@ gsk_vulkan_frame_submit (GskGpuFrame  *frame,
   GskVulkanFrame *self = GSK_VULKAN_FRAME (frame);
   GskVulkanCommandState state;
 
+  if (gsk_descriptors_get_size (&self->descriptors) == 0)
+    gsk_descriptors_append (&self->descriptors, gsk_vulkan_real_descriptors_new (GSK_VULKAN_DEVICE (gsk_gpu_frame_get_device (frame))));
+
   gsk_vulkan_frame_prepare_descriptors (self, storage_buffer);
 
   GSK_VK_CHECK (vkBeginCommandBuffer, self->vk_command_buffer,
@@ -268,8 +298,10 @@ gsk_vulkan_frame_submit (GskGpuFrame  *frame,
   state.vk_command_buffer = self->vk_command_buffer;
   state.vk_render_pass = VK_NULL_HANDLE;
   state.vk_format = VK_FORMAT_UNDEFINED;
-  state.desc = gsk_descriptors_get (&self->descriptors, 0);
-  gsk_vulkan_descriptors_bind (gsk_descriptors_get (&self->descriptors, 0), state.vk_command_buffer);
+  state.desc = GSK_VULKAN_DESCRIPTORS (gsk_descriptors_get (&self->descriptors, 0));
+  gsk_vulkan_descriptors_bind (GSK_VULKAN_DESCRIPTORS (gsk_descriptors_get (&self->descriptors, 0)),
+                               NULL,
+                               state.vk_command_buffer);
 
   while (op)
     {

@@ -37,7 +37,7 @@ gsk_gpu_shader_op_vk_command_n (GskGpuOp              *op,
   desc = GSK_VULKAN_DESCRIPTORS (self->desc);
   if (desc && state->desc != desc)
     {
-      gsk_vulkan_descriptors_bind (desc, state->vk_command_buffer);
+      gsk_vulkan_descriptors_bind (desc, state->desc, state->vk_command_buffer);
       state->desc = desc;
     }
 
@@ -63,7 +63,7 @@ gsk_gpu_shader_op_vk_command_n (GskGpuOp              *op,
   vkCmdBindPipeline (state->vk_command_buffer,
                      VK_PIPELINE_BIND_POINT_GRAPHICS,
                      gsk_vulkan_device_get_vk_pipeline (GSK_VULKAN_DEVICE (gsk_gpu_frame_get_device (frame)),
-                                                        gsk_vulkan_descriptors_get_pipeline_layout (desc),
+                                                        gsk_vulkan_descriptors_get_pipeline_layout (state->desc),
                                                         shader_op_class,
                                                         self->clip,
                                                         state->vk_format,
