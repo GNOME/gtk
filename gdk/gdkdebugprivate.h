@@ -64,11 +64,24 @@ GdkDebugFlags    gdk_display_get_debug_flags    (GdkDisplay       *display);
 void             gdk_display_set_debug_flags    (GdkDisplay       *display,
                                                  GdkDebugFlags     flags);
 
+static inline void
+gdk_debug_message (const char *format, ...) G_GNUC_PRINTF(1, 2);
+static inline void
+gdk_debug_message (const char *format, ...)
+{
+  va_list args;
+  char *s;
+
+  va_start (args, format);
+  s = g_strdup_vprintf (format, args);
+  va_end (args);
 #ifdef GLIB_USING_SYSTEM_PRINTF
-#define gdk_debug_message(format, ...) fprintf (stderr, format "\n", ##__VA_ARGS__)
+  fprintf (stderr, "%s\n", s);
 #else
-#define gdk_debug_message(format, ...) g_fprintf (stderr, format "\n", ##__VA_ARGS__)
+  g_fprintf (stderr, "%s\n", s);
 #endif
+  g_free (s);
+}
 
 #ifdef G_ENABLE_DEBUG
 
