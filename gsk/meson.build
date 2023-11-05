@@ -160,7 +160,9 @@ if have_vulkan
     'gpu/gskvulkanframe.c',
     'gpu/gskvulkanimage.c',
     'gpu/gskvulkanmemory.c',
+    'gpu/gskvulkanrealdescriptors.c',
     'gpu/gskvulkanrenderer.c',
+    'gpu/gskvulkansubdescriptors.c',
   ])
 endif # have_vulkan
 

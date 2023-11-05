@@ -84,7 +84,7 @@ gsk_gpu_render_pass_op_do_barriers (GskGpuRenderPassOp     *self,
 
       if (desc == NULL)
         {
-          gsk_vulkan_descriptors_bind (GSK_VULKAN_DESCRIPTORS (shader->desc), state->vk_command_buffer);
+          gsk_vulkan_descriptors_bind (GSK_VULKAN_DESCRIPTORS (shader->desc), state->desc, state->vk_command_buffer);
           state->desc = GSK_VULKAN_DESCRIPTORS (shader->desc);
         }
       desc = shader->desc;
