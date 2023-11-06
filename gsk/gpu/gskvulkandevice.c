@@ -163,7 +163,8 @@ gsk_vulkan_pipeline_layout_new (GskVulkanDevice                    *self,
   layout->ref_count = 1;
 
   layout->setup = *setup;
-  memcpy (layout->samplers, setup->immutable_samplers, setup->n_immutable_samplers * sizeof (VkSampler));
+  if (setup->n_immutable_samplers)
+    memcpy (layout->samplers, setup->immutable_samplers, setup->n_immutable_samplers * sizeof (VkSampler));
   layout->setup.immutable_samplers = layout->samplers;
   layout->pipeline_cache = g_hash_table_new (pipeline_cache_key_hash, pipeline_cache_key_equal);
 
@@ -178,9 +179,13 @@ gsk_vulkan_pipeline_layout_new (GskVulkanDevice                    *self,
                                                      {
                                                          .binding = 0,
                                                          .descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,
-                                                         .descriptorCount = layout->setup.n_immutable_samplers,
+                                                         .descriptorCount = MAX (1, layout->setup.n_immutable_samplers),
                                                          .stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT,
-                                                         .pImmutableSamplers = layout->setup.immutable_samplers
+                                                         .pImmutableSamplers = layout->setup.n_immutable_samplers
+                                                                               ? layout->setup.immutable_samplers
+                                                                               : (VkSampler[1]) {
+                                                                                   gsk_vulkan_device_get_vk_sampler (self, GSK_GPU_SAMPLER_DEFAULT)
+                                                                               },
                                                      },
                                                      {
                                                          .binding = 1,
@@ -514,7 +519,7 @@ gsk_vulkan_device_setup (GskVulkanDevice *self,
       self->max_buffers = MIN (self->max_buffers, 32);
       self->max_samplers = MIN (self->max_samplers, 32);
     }
-  self->max_immutable_samplers = MIN (self->max_samplers, 32);
+  self->max_immutable_samplers = MIN (self->max_samplers / 3, 32);
   gsk_gpu_device_setup (GSK_GPU_DEVICE (self),
                         display,
                         vk_props.properties.limits.maxImageDimension2D);
@@ -925,8 +930,8 @@ gsk_vulkan_device_get_vk_pipeline (GskVulkanDevice           *self,
                                                            .dataSize = sizeof (GskVulkanShaderSpecialization),
                                                            .pData = &(GskVulkanShaderSpecialization) {
                                                                .clip = clip,
-                                                               .n_immutable_samplers = layout->setup.n_immutable_samplers,
-                                                               .n_samplers = layout->setup.n_samplers,
+                                                               .n_immutable_samplers = MAX (1, layout->setup.n_immutable_samplers),
+                                                               .n_samplers = layout->setup.n_samplers - MAX (3 * layout->setup.n_immutable_samplers, 1),
                                                                .n_buffers = layout->setup.n_buffers,
                                                            },
                                                        },
@@ -963,8 +968,8 @@ gsk_vulkan_device_get_vk_pipeline (GskVulkanDevice           *self,
                                                            .dataSize = sizeof (GskVulkanShaderSpecialization),
                                                            .pData = &(GskVulkanShaderSpecialization) {
                                                                .clip = clip,
-                                                               .n_immutable_samplers = layout->setup.n_immutable_samplers,
-                                                               .n_samplers = layout->setup.n_samplers,
+                                                               .n_immutable_samplers = MAX (1, layout->setup.n_immutable_samplers),
+                                                               .n_samplers = layout->setup.n_samplers - MAX (3 * layout->setup.n_immutable_samplers, 1),
                                                                .n_buffers = layout->setup.n_buffers,
                                                            },
                                                        },
@@ -1053,16 +1058,7 @@ gsk_vulkan_device_acquire_pipeline_layout (GskVulkanDevice *self,
 {
   GskVulkanPipelineLayoutSetup setup;
   GskVulkanPipelineLayout *layout;
-  VkSampler fallback[2];
 
-  /* It's mandatory to have at least 1 sampler, because GLSL can't deal with 0-sized arrays */
-  if (n_immutable_samplers == 0)
-    {
-      fallback[0] = gsk_vulkan_device_get_vk_sampler (self, GSK_GPU_SAMPLER_DEFAULT);
-      fallback[1] = NULL;
-      immutable_samplers = fallback;
-      n_immutable_samplers = 1;
-    }
   /* round the number of samplers/buffer up a bit, so we don't (re)create
    * excessive amounts of layouts */
   n_samplers = MAX (n_samplers, 8);
