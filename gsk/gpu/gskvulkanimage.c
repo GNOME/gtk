@@ -746,6 +746,9 @@ gsk_vulkan_image_can_map (GskVulkanImage *self)
       self->vk_image_layout != VK_IMAGE_LAYOUT_GENERAL)
     return FALSE;
 
+  if ((self->allocation.memory_flags & VK_MEMORY_PROPERTY_HOST_CACHED_BIT) == 0)
+    return FALSE;
+
   return self->allocation.map != NULL;
 }
 
