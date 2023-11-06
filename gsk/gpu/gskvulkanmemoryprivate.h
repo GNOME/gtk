@@ -5,8 +5,7 @@
 G_BEGIN_DECLS
 
 #define GSK_VULKAN_MEMORY_MAPPABLE (VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | \
-                                    VK_MEMORY_PROPERTY_HOST_COHERENT_BIT | \
-                                    VK_MEMORY_PROPERTY_HOST_CACHED_BIT)
+                                    VK_MEMORY_PROPERTY_HOST_COHERENT_BIT)
 
 typedef struct _GskVulkanAllocator GskVulkanAllocator;
 typedef struct _GskVulkanAllocation GskVulkanAllocation;
@@ -18,6 +17,7 @@ struct _GskVulkanAllocation
   guchar *map;
   VkDeviceSize offset;
   VkDeviceSize size;
+  VkMemoryPropertyFlags memory_flags;
 };
 
 struct _GskVulkanAllocator

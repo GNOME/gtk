@@ -57,6 +57,7 @@ gsk_vulkan_direct_allocator_alloc (GskVulkanAllocator  *allocator,
 
   alloc->offset = 0;
   alloc->size = size;
+  alloc->memory_flags = self->vk_memory_type.propertyFlags;
 }
 
 static void
@@ -398,6 +399,7 @@ gsk_vulkan_external_allocator_alloc (GskVulkanAllocator  *allocator,
   alloc->map = NULL;
   alloc->offset = 0;
   alloc->size = size;
+  alloc->memory_flags = 0;
 }
 
 static void
