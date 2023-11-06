@@ -60,14 +60,14 @@ foreach shader: gsk_private_gpu_shaders
         [ '--target-env=vulkan1.2',
           '-fshader-stage=vertex',
           '-DGSK_VERTEX_SHADER=1',
-          '-DHAVE_NONUNIFORM=1'
+          '-DHAVE_VULKAN_1_2=1'
         ]
       ],
       [ fs.name (fs.replace_suffix (shader, '')) + '.1.2.frag.spv',
         [ '--target-env=vulkan1.2',
           '-fshader-stage=fragment',
           '-DGSK_FRAGMENT_SHADER=1',
-          '-DHAVE_NONUNIFORM=1'
+          '-DHAVE_VULKAN_1_2=1'
         ]
       ],
       [ fs.name (fs.replace_suffix (shader, '')) + '.1.0.vert.spv',
