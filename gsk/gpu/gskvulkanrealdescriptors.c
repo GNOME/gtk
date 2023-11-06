@@ -93,6 +93,10 @@ gsk_vulkan_real_descriptors_add_image (GskGpuDescriptors *desc,
       if (gsk_descriptor_image_infos_get_size (&self->descriptor_immutable_images) >=
           gsk_vulkan_device_get_max_immutable_samplers (self->device))
         return FALSE;
+      if ((1 + gsk_descriptor_image_infos_get_size (&self->descriptor_immutable_images)) * 3 +
+          gsk_descriptor_image_infos_get_size (&self->descriptor_images) >
+          gsk_vulkan_device_get_max_samplers (self->device))
+        return FALSE;
 
       result = gsk_descriptor_image_infos_get_size (&self->descriptor_immutable_images) << 1 | 1;
 
@@ -105,7 +109,8 @@ gsk_vulkan_real_descriptors_add_image (GskGpuDescriptors *desc,
     }
   else
     {
-      if (gsk_descriptor_image_infos_get_size (&self->descriptor_images) >=
+      if (MAX (1, gsk_descriptor_image_infos_get_size (&self->descriptor_immutable_images) * 3) +
+          gsk_descriptor_image_infos_get_size (&self->descriptor_images) >=
           gsk_vulkan_device_get_max_samplers (self->device))
         return FALSE;
 
@@ -180,7 +185,9 @@ gboolean
 gsk_vulkan_real_descriptors_is_full (GskVulkanRealDescriptors *self)
 {
   return gsk_descriptor_image_infos_get_size (&self->descriptor_immutable_images) >= gsk_vulkan_device_get_max_immutable_samplers (self->device) ||
-         gsk_descriptor_image_infos_get_size (&self->descriptor_images) >= gsk_vulkan_device_get_max_samplers (self->device) ||
+         gsk_descriptor_image_infos_get_size (&self->descriptor_images) +
+         MAX (1, gsk_descriptor_image_infos_get_size (&self->descriptor_immutable_images) * 3) >=
+         gsk_vulkan_device_get_max_samplers (self->device) ||
          gsk_descriptor_buffer_infos_get_size (&self->descriptor_buffers) >= gsk_vulkan_device_get_max_buffers (self->device);
 }
 
@@ -214,11 +221,11 @@ gsk_vulkan_real_descriptors_fill_sets (GskVulkanRealDescriptors *self)
           g_assert_not_reached ();
         }
     }
-  while (n_immutable_samplers > gsk_descriptor_image_infos_get_size (&self->descriptor_immutable_images))
+  while (MAX (1, n_immutable_samplers) > gsk_descriptor_image_infos_get_size (&self->descriptor_immutable_images))
     {
       gsk_descriptor_image_infos_append (&self->descriptor_immutable_images, gsk_descriptor_image_infos_get (&self->descriptor_images, 0));
     }
-  while (n_samplers > gsk_descriptor_image_infos_get_size (&self->descriptor_images))
+  while (n_samplers - MAX (1, 3 * n_immutable_samplers) > gsk_descriptor_image_infos_get_size (&self->descriptor_images))
     {
       gsk_descriptor_image_infos_append (&self->descriptor_images, gsk_descriptor_image_infos_get (&self->descriptor_images, 0));
     }
