@@ -496,16 +496,7 @@ gsk_vulkan_device_setup (GskVulkanDevice *self,
   };
 
   vkGetPhysicalDeviceProperties2 (display->vk_physical_device, &vk_props);
-  /* These numbers can be improved in the shader sources by adding more
-   * entries to the big switch() statements */
-  self->max_immutable_samplers = 8;
-  if (!gsk_vulkan_device_has_feature (self, GDK_VULKAN_FEATURE_DYNAMIC_INDEXING) ||
-      !gsk_vulkan_device_has_feature (self, GDK_VULKAN_FEATURE_NONUNIFORM_INDEXING))
-    {
-      self->max_buffers = 8;
-      self->max_samplers = 8;
-    }
-  else if (gsk_vulkan_device_has_feature (self, GDK_VULKAN_FEATURE_DESCRIPTOR_INDEXING))
+  if (gsk_vulkan_device_has_feature (self, GDK_VULKAN_FEATURE_DESCRIPTOR_INDEXING))
     {
       self->max_buffers = vk12_props.maxPerStageDescriptorUpdateAfterBindUniformBuffers;
       self->max_samplers = vk12_props.maxPerStageDescriptorUpdateAfterBindSampledImages;
@@ -515,6 +506,15 @@ gsk_vulkan_device_setup (GskVulkanDevice *self,
       self->max_buffers = vk_props.properties.limits.maxPerStageDescriptorUniformBuffers;
       self->max_samplers = vk_props.properties.limits.maxPerStageDescriptorSampledImages;
     }
+  if (!gsk_vulkan_device_has_feature (self, GDK_VULKAN_FEATURE_DYNAMIC_INDEXING) ||
+      !gsk_vulkan_device_has_feature (self, GDK_VULKAN_FEATURE_NONUNIFORM_INDEXING))
+    {
+      /* These numbers can be improved in the shader sources by adding more
+       * entries to the big if() ladders */
+      self->max_buffers = MIN (self->max_buffers, 32);
+      self->max_samplers = MIN (self->max_samplers, 32);
+    }
+  self->max_immutable_samplers = MIN (self->max_samplers, 32);
   gsk_gpu_device_setup (GSK_GPU_DEVICE (self),
                         display,
                         vk_props.properties.limits.maxImageDimension2D);
