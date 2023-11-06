@@ -499,7 +499,8 @@ gsk_vulkan_device_setup (GskVulkanDevice *self,
   /* These numbers can be improved in the shader sources by adding more
    * entries to the big switch() statements */
   self->max_immutable_samplers = 8;
-  if (!gsk_vulkan_device_has_feature (self, GDK_VULKAN_FEATURE_DYNAMIC_INDEXING))
+  if (!gsk_vulkan_device_has_feature (self, GDK_VULKAN_FEATURE_DYNAMIC_INDEXING) ||
+      !gsk_vulkan_device_has_feature (self, GDK_VULKAN_FEATURE_NONUNIFORM_INDEXING))
     {
       self->max_buffers = 8;
       self->max_samplers = 8;
@@ -869,7 +870,8 @@ gsk_vulkan_device_get_vk_pipeline (GskVulkanDevice           *self,
     return pipeline;
 
   display = gsk_gpu_device_get_display (GSK_GPU_DEVICE (self));
-  if (gsk_vulkan_device_has_feature (self, GDK_VULKAN_FEATURE_NONUNIFORM_INDEXING))
+  if (gsk_vulkan_device_has_feature (self, GDK_VULKAN_FEATURE_DYNAMIC_INDEXING) &&
+      gsk_vulkan_device_has_feature (self, GDK_VULKAN_FEATURE_NONUNIFORM_INDEXING))
     version_string = ".1.2";
   else
     version_string = ".1.0";

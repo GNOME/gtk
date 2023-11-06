@@ -1,4 +1,4 @@
-#ifdef HAVE_NONUNIFORM
+#ifdef HAVE_VULKAN_1_2
 #extension GL_EXT_nonuniform_qualifier : enable
 #endif
 
@@ -68,7 +68,7 @@ gsk_texture (uint id,
   else
     {
       id >>= 1;
-#ifdef HAVE_NONUNIFORM
+#ifdef HAVE_VULKAN_1_2
       return texture (textures[nonuniformEXT (id)], pos);
 #else
       if (id == 0)
@@ -87,8 +87,6 @@ gsk_texture (uint id,
         return texture (textures[6], pos);
       else if (GSK_N_SAMPLERS > 7 && id == 7)
         return texture (textures[7], pos);
-      else if (GSK_N_SAMPLERS > 8)
-        return texture (textures[id], pos);
 #endif
     }
   return vec4 (1.0, 0.0, 0.8, 1.0);
@@ -121,7 +119,7 @@ gsk_texture_size (uint id,
   else
     {
       id >>= 1;
-#ifdef HAVE_NONUNIFORM
+#ifdef HAVE_VULKAN_1_2
       return textureSize (textures[nonuniformEXT (id)], lod);
 #else
       if (id == 0)
@@ -140,8 +138,6 @@ gsk_texture_size (uint id,
         return textureSize (textures[6], lod);
       else if (GSK_N_SAMPLERS > 7 && id == 7)
         return textureSize (textures[7], lod);
-      else if (GSK_N_SAMPLERS > 8)
-        return textureSize (textures[id], lod);
 #endif
     }
   return ivec2 (1, 1);
@@ -175,7 +171,7 @@ gsk_texel_fetch (uint  id,
   else
     {
       id >>= 1;
-#ifdef HAVE_NONUNIFORM
+#ifdef HAVE_VULKAN_1_2
       return texelFetch (textures[nonuniformEXT (id)], pos, lod);
 #else
       if (id == 0)
@@ -194,19 +190,38 @@ gsk_texel_fetch (uint  id,
         return texelFetch (textures[6], pos, lod);
       else if (GSK_N_SAMPLERS > 7 && id == 7)
         return texelFetch (textures[7], pos, lod);
-      else if (GSK_N_SAMPLERS > 8)
-        return texelFetch (textures[id], pos, lod);
 #endif
     }
   return vec4 (1.0, 0.0, 0.8, 1.0);
 }
 
-#ifdef HAVE_NONUNIFORM
+#ifdef HAVE_VULKAN_1_2
 #define gsk_get_buffer(id) buffers[nonuniformEXT (id)]
-#else
-#define gsk_get_buffer(id) buffers[id]
-#endif
 #define gsk_get_float(id) gsk_get_buffer(id >> 22).floats[id & 0x3FFFFF]
+#else
+float
+gsk_get_float (uint id)
+{
+  uint buffer_id = id >> 22;
+  uint float_id = id & 0x3FFFFF;
+  if (buffer_id == 0)
+    return buffers[0].floats[float_id];
+  else if (GSK_N_BUFFERS > 1 && buffer_id == 1)
+    return buffers[1].floats[float_id];
+  else if (GSK_N_BUFFERS > 2 && buffer_id == 2)
+    return buffers[2].floats[float_id];
+  else if (GSK_N_BUFFERS > 3 && buffer_id == 3)
+    return buffers[3].floats[float_id];
+  else if (GSK_N_BUFFERS > 4 && buffer_id == 4)
+    return buffers[4].floats[float_id];
+  else if (GSK_N_BUFFERS > 5 && buffer_id == 5)
+    return buffers[5].floats[float_id];
+  else if (GSK_N_BUFFERS > 6 && buffer_id == 6)
+    return buffers[6].floats[float_id];
+  else if (GSK_N_BUFFERS > 7 && buffer_id == 7)
+    return buffers[7].floats[float_id];
+}
+#endif
 #define gsk_get_int(id) (floatBitsToInt(gsk_get_float(id)))
 #define gsk_get_uint(id) (floatBitsToUint(gsk_get_float(id)))
 
