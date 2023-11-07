@@ -361,7 +361,6 @@ init_gl (GtkInspectorGeneral *gen)
       append_egl_extension_row (gen, egl_display, "EGL_EXT_swap_buffers_with_damage");
       append_egl_extension_row (gen, egl_display, "EGL_KHR_surfaceless_context");
       append_egl_extension_row (gen, egl_display, "EGL_KHR_no_config_context");
-      append_egl_extension_row (gen, egl_display, "EGL_KHR_pixel_format_float");
       append_egl_extension_row (gen, egl_display, "EGL_EXT_image_dma_buf_import_modifiers");
       append_egl_extension_row (gen, egl_display, "EGL_MESA_image_dma_buf_export");
     }
