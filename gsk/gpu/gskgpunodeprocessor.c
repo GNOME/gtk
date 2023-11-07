@@ -1105,11 +1105,36 @@ gsk_gpu_node_processor_add_transform_node (GskGpuNodeProcessor *self,
           {
             gsk_gpu_clip_init_empty (&self->clip, &child->bounds);
           }
+        else if (old_clip.type == GSK_GPU_CLIP_NONE)
+          {
+            GskTransform *inverse;
+            graphene_rect_t new_bounds;
+            inverse = gsk_transform_invert (gsk_transform_ref (clip_transform));
+            gsk_transform_transform_bounds (inverse, &old_clip.rect.bounds, &new_bounds);
+            gsk_transform_unref (inverse);
+            gsk_gpu_clip_init_empty (&self->clip, &new_bounds);
+          }
         else if (!gsk_gpu_clip_transform (&self->clip, &old_clip, clip_transform, &child->bounds))
           {
+            GskGpuImage *image;
+            graphene_rect_t tex_rect;
             gsk_transform_unref (clip_transform);
-            GSK_DEBUG (FALLBACK, "Transform nodes can't deal with clip type %u", self->clip.type);
-            gsk_gpu_node_processor_add_fallback_node (self, node);
+            /* This cannot loop because the next time we'll hit the branch above */
+            gsk_gpu_node_processor_sync_globals (self, 0);
+            image = gsk_gpu_node_processor_get_node_as_image (self,
+                                                              0,
+                                                              0,
+                                                              NULL,
+                                                              node,
+                                                              &tex_rect);
+            if (image != NULL)
+              {
+                gsk_gpu_node_processor_image_op (self,
+                                                 image,
+                                                 &node->bounds,
+                                                 &tex_rect);
+                g_object_unref (image);
+              }
             return;
           }
 
