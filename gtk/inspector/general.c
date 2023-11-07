@@ -36,6 +36,9 @@
 #include "gtkimmoduleprivate.h"
 
 #include "gdk/gdkdebugprivate.h"
+#include "gdk/gdkdisplayprivate.h"
+
+#include <epoxy/gl.h>
 
 #ifdef GDK_WINDOWING_X11
 #include "x11/gdkx.h"
@@ -90,11 +93,21 @@ struct _GtkInspectorGeneral
   GtkWidget *pango_fontmap;
   GtkWidget *media_backend;
   GtkWidget *im_module;
-  GtkWidget *gl_version;
+  GtkWidget *gl_backend_version;
+  GtkWidget *gl_backend_version_row;
+  GtkWidget *gl_backend_vendor;
+  GtkWidget *gl_backend_vendor_row;
   GtkWidget *gl_error;
   GtkWidget *gl_error_row;
+  GtkWidget *gl_version;
   GtkWidget *gl_vendor;
   GtkWidget *gl_vendor_row;
+  GtkWidget *gl_renderer;
+  GtkWidget *gl_renderer_row;
+  GtkWidget *gl_full_version;
+  GtkWidget *gl_full_version_row;
+  GtkWidget *glsl_version;
+  GtkWidget *glsl_version_row;
   GtkWidget *vk_device;
   GtkWidget *vk_api_version;
   GtkWidget *vk_driver_version;
@@ -228,7 +241,7 @@ add_check_row (GtkInspectorGeneral *gen,
   gtk_widget_set_hexpand (box, FALSE);
   gtk_list_box_insert (list, row, -1);
 
-  gtk_size_group_add_widget (GTK_SIZE_GROUP (gen->labels), label);
+  gtk_size_group_add_widget (gen->labels, label);
 }
 
 static void
@@ -268,7 +281,7 @@ add_label_row (GtkInspectorGeneral *gen,
   gtk_widget_set_hexpand (box, FALSE);
   gtk_list_box_insert (GTK_LIST_BOX (list), row, -1);
 
-  gtk_size_group_add_widget (GTK_SIZE_GROUP (gen->labels), label);
+  gtk_size_group_add_widget (gen->labels, label);
 }
 
 #ifdef GDK_WINDOWING_X11
@@ -326,21 +339,23 @@ get_egl_display (GdkDisplay *display)
 static void
 init_gl (GtkInspectorGeneral *gen)
 {
+  GdkGLContext *context;
   GError *error = NULL;
+  int major, minor;
+  char *s;
 
   if (!gdk_display_prepare_gl (gen->display, &error))
     {
       gtk_label_set_text (GTK_LABEL (gen->gl_version), C_("GL version", "None"));
-      gtk_widget_set_visible (gen->gl_vendor_row, FALSE);
       gtk_widget_set_visible (gen->gl_error_row, TRUE);
+      gtk_widget_set_visible (gen->gl_backend_version_row, FALSE);
+      gtk_widget_set_visible (gen->gl_backend_vendor_row, FALSE);
+      gtk_widget_set_visible (gen->gl_renderer_row, FALSE);
+      gtk_widget_set_visible (gen->gl_vendor_row, FALSE);
+      gtk_widget_set_visible (gen->gl_full_version_row, FALSE);
+      gtk_widget_set_visible (gen->glsl_version_row, FALSE);
       gtk_label_set_text (GTK_LABEL (gen->gl_error), error->message);
       g_error_free (error);
-    }
-
-  if (gdk_display_get_debug_flags (gen->display) & GDK_DEBUG_GL_DISABLE)
-    {
-      gtk_label_set_text (GTK_LABEL (gen->gl_version), C_("GL version", "Disabled"));
-      gtk_label_set_text (GTK_LABEL (gen->gl_vendor), C_("GL vendor", "Disabled"));
       return;
     }
 
@@ -351,10 +366,10 @@ init_gl (GtkInspectorGeneral *gen)
       char *version;
 
       version = g_strconcat ("EGL ", eglQueryString (egl_display, EGL_VERSION), NULL);
-      gtk_label_set_text (GTK_LABEL (gen->gl_version), version);
+      gtk_label_set_text (GTK_LABEL (gen->gl_backend_version), version);
       g_free (version);
 
-      gtk_label_set_text (GTK_LABEL (gen->gl_vendor), eglQueryString (egl_display, EGL_VENDOR));
+      gtk_label_set_text (GTK_LABEL (gen->gl_backend_vendor), eglQueryString (egl_display, EGL_VENDOR));
 
       append_egl_extension_row (gen, egl_display, "EGL_KHR_create_context");
       append_egl_extension_row (gen, egl_display, "EGL_EXT_buffer_age");
@@ -377,9 +392,9 @@ init_gl (GtkInspectorGeneral *gen)
         return;
 
       version = g_strconcat ("GLX ", glXGetClientString (dpy, GLX_VERSION), NULL);
-      gtk_label_set_text (GTK_LABEL (gen->gl_version), version);
+      gtk_label_set_text (GTK_LABEL (gen->gl_backend_version), version);
       g_free (version);
-      gtk_label_set_text (GTK_LABEL (gen->gl_vendor), glXGetClientString (dpy, GLX_VENDOR));
+      gtk_label_set_text (GTK_LABEL (gen->gl_backend_vendor), glXGetClientString (dpy, GLX_VENDOR));
 
       append_glx_extension_row (gen, dpy, "GLX_ARB_create_context_profile");
       append_glx_extension_row (gen, dpy, "GLX_SGI_swap_control");
@@ -396,14 +411,8 @@ init_gl (GtkInspectorGeneral *gen)
   if (GDK_IS_WIN32_DISPLAY (gen->display) &&
       gdk_gl_backend_can_be_used (GDK_GL_WGL, NULL))
     {
-      int gl_version;
-      char *version;
-
-      gl_version = epoxy_gl_version ();
-      version = g_strdup_printf ("WGL %d.%d", gl_version / 10, gl_version % 10);
-      gtk_label_set_text (GTK_LABEL (gen->gl_version), version);
-      g_free (version);
-      gtk_label_set_text (GTK_LABEL (gen->gl_vendor), (const char *) glGetString (GL_VENDOR));
+      gtk_label_set_text (GTK_LABEL (gen->gl_backend_vendor), "Microsoft WGL");
+      gtk_widget_set_visible (gen->gl_backend_version, FALSE);
 
       append_wgl_extension_row (gen, "WGL_EXT_create_context");
       append_wgl_extension_row (gen, "WGL_EXT_swap_control");
@@ -414,9 +423,22 @@ init_gl (GtkInspectorGeneral *gen)
   else
 #endif
     {
-      gtk_label_set_text (GTK_LABEL (gen->gl_version), C_("GL version", "None"));
-      gtk_label_set_text (GTK_LABEL (gen->gl_vendor), C_("GL vendor", "None"));
+      gtk_label_set_text (GTK_LABEL (gen->gl_backend_version), C_("GL version", "Unknown"));
+      gtk_widget_set_visible (gen->gl_backend_vendor_row, FALSE);
     }
+
+  context = gdk_display_get_gl_context (gen->display);
+  gdk_gl_context_make_current (context);
+  gdk_gl_context_get_version (context, &major, &minor);
+  s = g_strdup_printf ("%s %u.%u",
+                       gdk_gl_context_get_use_es (context) ? "GLES " : "OpenGL ", 
+                       major, minor);
+  gtk_label_set_text (GTK_LABEL (gen->gl_version), s);
+  g_free (s);
+  gtk_label_set_text (GTK_LABEL (gen->gl_vendor), (const char *) glGetString (GL_VENDOR));
+  gtk_label_set_text (GTK_LABEL (gen->gl_renderer), (const char *) glGetString (GL_RENDERER));
+  gtk_label_set_text (GTK_LABEL (gen->gl_full_version), (const char *) glGetString (GL_VERSION));
+  gtk_label_set_text (GTK_LABEL (gen->glsl_version), (const char *) glGetString (GL_SHADING_LANGUAGE_VERSION));
 }
 
 #ifdef GDK_RENDERING_VULKAN
@@ -1193,11 +1215,21 @@ gtk_inspector_general_class_init (GtkInspectorGeneralClass *klass)
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorGeneral, pango_fontmap);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorGeneral, media_backend);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorGeneral, im_module);
-  gtk_widget_class_bind_template_child (widget_class, GtkInspectorGeneral, gl_version);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorGeneral, gl_error);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorGeneral, gl_error_row);
+  gtk_widget_class_bind_template_child (widget_class, GtkInspectorGeneral, gl_version);
+  gtk_widget_class_bind_template_child (widget_class, GtkInspectorGeneral, gl_backend_version);
+  gtk_widget_class_bind_template_child (widget_class, GtkInspectorGeneral, gl_backend_version_row);
+  gtk_widget_class_bind_template_child (widget_class, GtkInspectorGeneral, gl_backend_vendor);
+  gtk_widget_class_bind_template_child (widget_class, GtkInspectorGeneral, gl_backend_vendor_row);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorGeneral, gl_vendor);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorGeneral, gl_vendor_row);
+  gtk_widget_class_bind_template_child (widget_class, GtkInspectorGeneral, gl_renderer);
+  gtk_widget_class_bind_template_child (widget_class, GtkInspectorGeneral, gl_renderer_row);
+  gtk_widget_class_bind_template_child (widget_class, GtkInspectorGeneral, gl_full_version);
+  gtk_widget_class_bind_template_child (widget_class, GtkInspectorGeneral, gl_full_version_row);
+  gtk_widget_class_bind_template_child (widget_class, GtkInspectorGeneral, glsl_version);
+  gtk_widget_class_bind_template_child (widget_class, GtkInspectorGeneral, glsl_version_row);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorGeneral, vk_device);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorGeneral, vk_api_version);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorGeneral, vk_driver_version);
