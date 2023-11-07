@@ -855,8 +855,8 @@ gsk_gpu_node_processor_add_fallback_node (GskGpuNodeProcessor *self,
                       &clipped_bounds);
 }
 
-static void
-gsk_gpu_node_processor_add_node_as_pattern (GskGpuNodeProcessor *self,
+static gboolean
+gsk_gpu_node_processor_try_node_as_pattern (GskGpuNodeProcessor *self,
                                             GskRenderNode       *node)
 {
   GskGpuPatternWriter writer;
@@ -865,7 +865,7 @@ gsk_gpu_node_processor_add_node_as_pattern (GskGpuNodeProcessor *self,
   g_assert (self->pending_globals == 0);
 
   if (!gsk_gpu_node_processor_clip_node_bounds (self, node, &clipped))
-    return;
+    return TRUE;
 
   gsk_gpu_pattern_writer_init (&writer,
                                self->frame,
@@ -876,15 +876,34 @@ gsk_gpu_node_processor_add_node_as_pattern (GskGpuNodeProcessor *self,
   if (!gsk_gpu_node_processor_create_node_pattern (&writer, node))
     {
       gsk_gpu_pattern_writer_abort (&writer);
-      GSK_DEBUG (FALLBACK, "Pattern shader for node %s failed", g_type_name_from_instance ((GTypeInstance *) node));
-      gsk_gpu_node_processor_add_fallback_node (self, node);
-      return;
+      return FALSE;
     }
 
   gsk_gpu_buffer_writer_append_uint (&writer.writer, GSK_GPU_PATTERN_DONE);
 
   gsk_gpu_pattern_writer_commit_op (&writer,
                                     gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, &node->bounds));
+  return TRUE;
+}
+ 
+static void
+gsk_gpu_node_processor_add_node_as_pattern (GskGpuNodeProcessor *self,
+                                            GskRenderNode       *node)
+{
+  if (!gsk_gpu_node_processor_try_node_as_pattern (self, node))
+    {
+      if (!gsk_gpu_frame_should_optimize (self->frame, GSK_GPU_OPTIMIZE_UBER))
+        {
+          GSK_DEBUG (FALLBACK, "Using fallback for node %s because pattern shaders are disabled.",
+                               g_type_name_from_instance ((GTypeInstance *) node));
+        }
+      else
+        {
+          GSK_DEBUG (FALLBACK, "Using fallback because pattern shader for node %s failed",
+                               g_type_name_from_instance ((GTypeInstance *) node));
+        }
+      gsk_gpu_node_processor_add_fallback_node (self, node);
+    }
 }
 
 static void
