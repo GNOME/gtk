@@ -450,7 +450,7 @@ has_validation_layer (GdkVulkanContext *context)
 
   for (i = 0; i < n_layers; i++)
     {
-      if (g_str_equal (layers[i].layerName, "VK_LAYER_LUNARG_standard_validation"))
+      if (g_str_equal (layers[i].layerName, "VK_LAYER_KHRONOS_validation"))
         return TRUE;
     }
 
@@ -517,7 +517,7 @@ init_vulkan (GtkInspectorGeneral *gen)
 #endif
       add_check_row (gen, GTK_LIST_BOX (gen->vulkan_box), VK_EXT_DEBUG_REPORT_EXTENSION_NAME,
                      has_debug_extension (context), 0);
-      add_check_row (gen, GTK_LIST_BOX (gen->vulkan_box), "VK_LAYER_LUNARG_standard_validation",
+      add_check_row (gen, GTK_LIST_BOX (gen->vulkan_box), "VK_LAYER_KHRONOS_validation",
                      has_validation_layer (context), 0);
 
       g_object_unref (context);
