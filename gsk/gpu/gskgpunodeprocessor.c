@@ -970,9 +970,27 @@ gsk_gpu_node_processor_add_clip_node (GskGpuNodeProcessor *self,
     {
       if (!gsk_gpu_clip_intersect_rect (&self->clip, &old_clip, &clip))
         {
-          GSK_DEBUG (FALLBACK, "Failed to find intersection between clip of type %u and rectangle", self->clip.type);
           gsk_gpu_clip_init_copy (&self->clip, &old_clip);
-          gsk_gpu_node_processor_add_fallback_node (self, node);
+          gsk_gpu_node_processor_sync_globals (self, 0);
+          if (!gsk_gpu_node_processor_try_node_as_pattern (self, node))
+            {
+              GskGpuImage *image;
+              graphene_rect_t tex_rect;
+              image = gsk_gpu_node_processor_get_node_as_image (self,
+                                                                0,
+                                                                0,
+                                                                NULL,
+                                                                child,
+                                                                &tex_rect);
+              if (image)
+                {
+                  gsk_gpu_node_processor_image_op (self,
+                                                   image,
+                                                   &node->bounds,
+                                                   &tex_rect);
+                  g_object_unref (image);
+                }
+            }
           return;
         }
 
