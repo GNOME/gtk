@@ -478,6 +478,40 @@ gsk_gpu_node_processor_clip_node_bounds (GskGpuNodeProcessor *self,
   return TRUE;
 }
 
+static void
+gsk_gpu_node_processor_image_op (GskGpuNodeProcessor   *self,
+                                 GskGpuImage           *image,
+                                 const graphene_rect_t *rect,
+                                 const graphene_rect_t *tex_rect)
+{
+  guint32 descriptor;
+
+  g_assert (self->pending_globals == 0);
+
+  descriptor = gsk_gpu_node_processor_add_image (self, image, GSK_GPU_SAMPLER_DEFAULT);
+
+  if (gsk_gpu_image_get_flags (image) & GSK_GPU_IMAGE_STRAIGHT_ALPHA)
+    {
+      gsk_gpu_straight_alpha_op (self->frame,
+                                 gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, rect),
+                                 self->desc,
+                                 descriptor,
+                                 rect,
+                                 &self->offset,
+                                 tex_rect);
+    }
+  else
+    {
+      gsk_gpu_texture_op (self->frame,
+                          gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, rect),
+                          self->desc,
+                          descriptor,
+                          rect,
+                          &self->offset,
+                          tex_rect);
+    }
+}
+
 /*
  * gsk_gpu_get_node_as_image:
  * @frame: frame to render in
@@ -613,7 +647,6 @@ gsk_gpu_node_processor_ensure_image (GskGpuNodeProcessor *self,
     {
       GskGpuNodeProcessor other;
       graphene_rect_t rect = GRAPHENE_RECT_INIT (0, 0, width, height);
-      guint32 descriptor = gsk_gpu_node_processor_add_image (self, image, GSK_GPU_SAMPLER_DEFAULT);
 
       gsk_gpu_node_processor_init (&other,
                                    self->frame,
@@ -629,26 +662,10 @@ gsk_gpu_node_processor_ensure_image (GskGpuNodeProcessor *self,
 
       gsk_gpu_node_processor_sync_globals (&other, 0);
 
-      if (flags & GSK_GPU_IMAGE_STRAIGHT_ALPHA)
-        {
-          gsk_gpu_straight_alpha_op (other.frame,
-                                     gsk_gpu_clip_get_shader_clip (&other.clip, &other.offset, &rect),
-                                     self->desc,
-                                     descriptor,
-                                     &rect,
-                                     &other.offset,
-                                     &rect);
-        }
-      else
-        {
-          gsk_gpu_texture_op (other.frame,
-                              gsk_gpu_clip_get_shader_clip (&other.clip, &other.offset, &rect),
-                              self->desc,
-                              descriptor,
-                              &rect,
-                              &other.offset,
-                              &rect);
-        }
+      gsk_gpu_node_processor_image_op (&other,
+                                       image,
+                                       &rect,
+                                       &rect);
 
       gsk_gpu_render_pass_end_op (other.frame,
                                   copy,
@@ -1282,7 +1299,6 @@ gsk_gpu_node_processor_add_texture_node (GskGpuNodeProcessor *self,
   GskGpuImage *image;
   GdkTexture *texture;
   gint64 timestamp;
-  guint32 descriptor;
 
   device = gsk_gpu_frame_get_device (self->frame);
   texture = gsk_texture_node_get_texture (node);
@@ -1302,28 +1318,11 @@ gsk_gpu_node_processor_add_texture_node (GskGpuNodeProcessor *self,
           return;
         }
     }
-  descriptor = gsk_gpu_node_processor_add_image (self, image, GSK_GPU_SAMPLER_DEFAULT);
 
-  if (gsk_gpu_image_get_flags (image) & GSK_GPU_IMAGE_STRAIGHT_ALPHA)
-    {
-      gsk_gpu_straight_alpha_op (self->frame,
-                                 gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, &node->bounds),
-                                 self->desc,
-                                 descriptor,
-                                 &node->bounds,
-                                 &self->offset,
-                                 &node->bounds);
-    }
-  else
-    {
-      gsk_gpu_texture_op (self->frame,
-                          gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, &node->bounds),
-                          self->desc,
-                          descriptor,
-                          &node->bounds,
-                          &self->offset,
-                          &node->bounds);
-    }
+  gsk_gpu_node_processor_image_op (self,
+                                   image,
+                                   &node->bounds,
+                                   &node->bounds);
 
   g_object_unref (image);
 }
