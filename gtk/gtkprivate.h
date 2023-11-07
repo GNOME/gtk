@@ -132,8 +132,6 @@ gboolean        gtk_get_any_display_debug_flag_set (void);
 
 GBytes *get_emoji_data (void);
 
-#ifdef G_ENABLE_DEBUG
-
 #define GTK_DISPLAY_DEBUG_CHECK(display,type)                   \
   (gtk_get_any_display_debug_flag_set () &&                     \
    G_UNLIKELY (gtk_get_display_debug_flags (display) & GTK_DEBUG_##type))
@@ -149,14 +147,6 @@ GBytes *get_emoji_data (void);
     if (GTK_DISPLAY_DEBUG_CHECK (display,type))                 \
       gdk_debug_message (__VA_ARGS__);                          \
   } G_STMT_END
-
-#else
-
-#define GTK_DISPLAY_DEBUG_CHECK(display,type) 0
-#define GTK_DISPLAY_DEBUG(display,type,...)
-#define GTK_DEBUG(type,...)
-
-#endif /* G_ENABLE_DEBUG */
 
 char * _gtk_elide_underscores (const char *original);
 

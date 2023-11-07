@@ -1060,10 +1060,8 @@ gsk_gl_command_queue_execute (GskGLCommandQueue    *self,
 
   gsk_gl_command_queue_make_current (self);
 
-#ifdef G_ENABLE_DEBUG
   gsk_gl_profiler_begin_gpu_region (self->gl_profiler);
   gsk_profiler_timer_begin (self->profiler, self->metrics.cpu_time);
-#endif
 
   glEnable (GL_DEPTH_TEST);
   glDepthFunc (GL_LEQUAL);
@@ -1289,7 +1287,6 @@ gsk_gl_command_queue_execute (GskGLCommandQueue    *self,
   gdk_profiler_set_int_counter (self->metrics.n_uploads, self->n_uploads);
   gdk_profiler_set_int_counter (self->metrics.queue_depth, self->batches.len);
 
-#ifdef G_ENABLE_DEBUG
   {
     gint64 start_time G_GNUC_UNUSED = gsk_profiler_timer_get_start (self->profiler, self->metrics.cpu_time);
     gint64 cpu_time = gsk_profiler_timer_end (self->profiler, self->metrics.cpu_time);
@@ -1301,7 +1298,6 @@ gsk_gl_command_queue_execute (GskGLCommandQueue    *self,
 
     gsk_profiler_push_samples (self->profiler);
   }
-#endif
 }
 
 void
@@ -1716,7 +1712,6 @@ void
 gsk_gl_command_queue_set_profiler (GskGLCommandQueue *self,
                                    GskProfiler       *profiler)
 {
-#ifdef G_ENABLE_DEBUG
   g_assert (GSK_IS_GL_COMMAND_QUEUE (self));
   g_assert (GSK_IS_PROFILER (profiler));
 
@@ -1735,5 +1730,4 @@ gsk_gl_command_queue_set_profiler (GskGLCommandQueue *self,
       self->metrics.n_programs = gdk_profiler_define_int_counter ("programs", "Number of program changes");
       self->metrics.queue_depth = gdk_profiler_define_int_counter ("gl-queue-depth", "Depth of GL command batches");
     }
-#endif
 }

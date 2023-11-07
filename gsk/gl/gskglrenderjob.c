@@ -1226,7 +1226,6 @@ gsk_gl_render_job_visit_as_fallback (GskGLRenderJob      *job,
   cairo_fill (cr);
   cairo_restore (cr);
 
-#ifdef G_ENABLE_DEBUG
   if (job->debug_fallback)
     {
       cairo_move_to (cr, 0, 0);
@@ -1242,7 +1241,6 @@ gsk_gl_render_job_visit_as_fallback (GskGLRenderJob      *job,
         cairo_set_source_rgba (cr, 1, 0, 0, 1);
       cairo_stroke (cr);
     }
-#endif
   cairo_destroy (cr);
 
   /* Create texture to upload */

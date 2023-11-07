@@ -531,8 +531,6 @@ gdk_frame_clock_get_current_timings (GdkFrameClock *frame_clock)
   return gdk_frame_clock_get_timings (frame_clock, priv->frame_counter);
 }
 
-
-#ifdef G_ENABLE_DEBUG
 void
 _gdk_frame_clock_debug_print_timings (GdkFrameClock   *clock,
                                       GdkFrameTimings *timings)
@@ -579,7 +577,6 @@ _gdk_frame_clock_debug_print_timings (GdkFrameClock   *clock,
   g_message ("%s", str->str);
   g_string_free (str, TRUE);
 }
-#endif /* G_ENABLE_DEBUG */
 
 #define DEFAULT_REFRESH_INTERVAL 16667 /* 16.7ms (1/60th second) */
 #define MAX_HISTORY_AGE 150000         /* 150ms */

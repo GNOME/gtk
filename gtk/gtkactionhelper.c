@@ -416,7 +416,6 @@ gtk_action_helper_set_action_name (GtkActionHelper *helper,
   if (g_strcmp0 (action_name, helper->action_name) == 0)
     return;
 
-#ifdef G_ENABLE_DEBUG
   if (GTK_DEBUG_CHECK (ACTIONS))
     {
       if (action_name == NULL || !strchr (action_name, '.'))
@@ -424,7 +423,6 @@ gtk_action_helper_set_action_name (GtkActionHelper *helper,
                            "it is unlikely to work",
                            "actionhelper", action_name);
     }
-#endif
 
   /* Start by recording the current state of our properties so we know
    * what notify signals we will need to send.

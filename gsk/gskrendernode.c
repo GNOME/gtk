@@ -392,7 +392,6 @@ gsk_render_node_draw (GskRenderNode *node,
 
   GSK_RENDER_NODE_GET_CLASS (node)->draw (node, cr);
 
-#ifdef G_ENABLE_DEBUG
   if (GSK_DEBUG_CHECK (GEOMETRY))
     {
       cairo_set_operator (cr, CAIRO_OPERATOR_OVER);
@@ -402,7 +401,6 @@ gsk_render_node_draw (GskRenderNode *node,
       cairo_set_source_rgba (cr, 0, 0, 0, 0.5);
       cairo_stroke (cr);
     }
-#endif
 
   cairo_restore (cr);
 

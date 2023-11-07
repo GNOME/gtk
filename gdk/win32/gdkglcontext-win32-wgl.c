@@ -339,7 +339,6 @@ gdk_win32_display_init_wgl (GdkDisplay  *display,
       return NULL;
     }
 
-#if G_ENABLE_DEBUG
   {
     int major, minor;
     gdk_gl_context_get_version (context, &major, &minor);
@@ -357,7 +356,6 @@ gdk_win32_display_init_wgl (GdkDisplay  *display,
                          display_win32->hasWglEXTSwapControl ? "yes" : "no",
                          display_win32->hasWglOMLSyncControl ? "yes" : "no"));
   }
-#endif
 
   wglMakeCurrent (NULL, NULL);
 

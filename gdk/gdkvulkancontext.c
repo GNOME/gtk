@@ -252,7 +252,6 @@ gdk_vulkan_strerror (VkResult result)
   }
 }
 
-#ifdef G_ENABLE_DEBUG
 static const char *
 surface_present_mode_to_string (VkPresentModeKHR present_mode)
 {
@@ -275,7 +274,6 @@ surface_present_mode_to_string (VkPresentModeKHR present_mode)
 
   return "(unknown)";
 }
-#endif
 
 static const VkPresentModeKHR preferred_present_modes[] = {
   VK_PRESENT_MODE_MAILBOX_KHR,

@@ -402,7 +402,6 @@ gdk_event_alloc (GdkEventType event_type,
 
   GdkEvent *event = (GdkEvent *) g_type_create_instance (gdk_event_types[event_type]);
 
-#ifdef G_ENABLE_DEBUG
   if (GDK_DEBUG_CHECK (EVENTS))
     {
       char *str = g_enum_to_string (GDK_TYPE_EVENT_TYPE, event_type);
@@ -410,7 +409,6 @@ gdk_event_alloc (GdkEventType event_type,
                          g_type_name (gdk_event_types[event_type]), str);
       g_free (str);
     }
-#endif
 
   event->event_type = event_type;
   event->surface = surface != NULL ? g_object_ref (surface) : NULL;

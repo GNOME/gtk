@@ -195,11 +195,11 @@ static const GdkDebugKey gtk_debug_keys[] = {
   { "builder", GTK_DEBUG_BUILDER, "Trace GtkBuilder operation" },
   { "builder-objects", GTK_DEBUG_BUILDER_OBJECTS, "Log unused GtkBuilder objects" },
   { "no-css-cache", GTK_DEBUG_NO_CSS_CACHE, "Disable style property cache" },
-  { "interactive", GTK_DEBUG_INTERACTIVE, "Enable the GTK inspector", TRUE },
+  { "interactive", GTK_DEBUG_INTERACTIVE, "Enable the GTK inspector" },
   { "snapshot", GTK_DEBUG_SNAPSHOT, "Generate debug render nodes" },
   { "accessibility", GTK_DEBUG_A11Y, "Information about accessibility state changes" },
   { "iconfallback", GTK_DEBUG_ICONFALLBACK, "Information about icon fallback" },
-  { "invert-text-dir", GTK_DEBUG_INVERT_TEXT_DIR, "Invert the default text direction", TRUE },
+  { "invert-text-dir", GTK_DEBUG_INVERT_TEXT_DIR, "Invert the default text direction" },
 };
 
 /* This checks to see if the process is running suid or sgid

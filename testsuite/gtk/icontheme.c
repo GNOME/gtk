@@ -135,14 +135,6 @@ assert_icon_lookup_fails (const char         *icon_name,
   g_assert_cmpstr (gtk_icon_paintable_get_icon_name (info), ==, "image-missing");
 }
 
-#ifdef G_ENABLE_DEBUG
-#define require_debug()
-#else
-#define require_debug() \
-  g_test_skip ("requires G_ENABLE_DEBUG"); \
-  return;
-#endif
-
 static void
 do_icon_lookup (const char         *icon_name,
                 int                 size,
@@ -196,7 +188,6 @@ static void                                                                     
 func (void)                                           \
 {                                                                                 \
   char *pattern;                                                                  \
-  require_debug ();                                                               \
   if (g_test_subprocess ())                                                       \
     {                                                                             \
       guint debug_flags = gtk_get_debug_flags ();                                 \

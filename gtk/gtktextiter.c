@@ -368,16 +368,12 @@ is_segment_start (GtkTextRealIter *real)
   return real->segment_byte_offset == 0 || real->segment_char_offset == 0;
 }
 
-#ifdef G_ENABLE_DEBUG
 static void
 check_invariants (const GtkTextIter *iter)
 {
   if (GTK_DEBUG_CHECK (TEXT))
     _gtk_text_iter_check (iter);
 }
-#else
-#define check_invariants(x)
-#endif
 
 /**
  * gtk_text_iter_get_buffer:

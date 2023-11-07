@@ -119,23 +119,23 @@ static const GdkDebugKey gdk_debug_keys[] = {
   { "clipboard",       GDK_DEBUG_CLIPBOARD, "Information about clipboards" },
   { "dmabuf",          GDK_DEBUG_DMABUF, "Information about dmabuf buffers" },
 
-  { "nograbs",         GDK_DEBUG_NOGRABS, "Disable pointer and keyboard grabs (X11)", TRUE },
-  { "portals",         GDK_DEBUG_PORTALS, "Force use of portals", TRUE },
-  { "no-portals",      GDK_DEBUG_NO_PORTALS, "Disable use of portals", TRUE },
-  { "gl-disable",      GDK_DEBUG_GL_DISABLE, "Disable OpenGL support", TRUE },
-  { "gl-fractional",   GDK_DEBUG_GL_FRACTIONAL, "Enable fractional scaling for OpenGL (experimental)", TRUE },
-  { "gl-debug",        GDK_DEBUG_GL_DEBUG, "Insert debugging information in OpenGL", TRUE },
-  { "gl-legacy",       GDK_DEBUG_GL_LEGACY, "Use a legacy OpenGL context", TRUE },
-  { "gl-gles",         GDK_DEBUG_GL_GLES, "Only allow OpenGL GLES API", TRUE },
-  { "gl-egl",          GDK_DEBUG_GL_EGL, "Use EGL on X11 or Windows", TRUE },
-  { "gl-glx",          GDK_DEBUG_GL_GLX, "Use GLX on X11", TRUE },
-  { "gl-wgl",          GDK_DEBUG_GL_WGL, "Use WGL on Windows", TRUE },
-  { "vulkan-disable",  GDK_DEBUG_VULKAN_DISABLE, "Disable Vulkan support", TRUE },
-  { "vulkan-validate", GDK_DEBUG_VULKAN_VALIDATE, "Load the Vulkan validation layer", TRUE },
-  { "default-settings",GDK_DEBUG_DEFAULT_SETTINGS, "Force default values for xsettings", TRUE },
-  { "high-depth",      GDK_DEBUG_HIGH_DEPTH, "Use high bit depth rendering if possible", TRUE },
-  { "no-vsync",        GDK_DEBUG_NO_VSYNC, "Repaint instantly (uses 100% CPU with animations)", TRUE },
-  { "dmabuf-disable",  GDK_DEBUG_DMABUF_DISABLE, "Disable dmabuf support", TRUE },
+  { "nograbs",         GDK_DEBUG_NOGRABS, "Disable pointer and keyboard grabs (X11)" },
+  { "portals",         GDK_DEBUG_PORTALS, "Force use of portals" },
+  { "no-portals",      GDK_DEBUG_NO_PORTALS, "Disable use of portals" },
+  { "gl-disable",      GDK_DEBUG_GL_DISABLE, "Disable OpenGL support" },
+  { "gl-fractional",   GDK_DEBUG_GL_FRACTIONAL, "Enable fractional scaling for OpenGL (experimental)" },
+  { "gl-debug",        GDK_DEBUG_GL_DEBUG, "Insert debugging information in OpenGL" },
+  { "gl-legacy",       GDK_DEBUG_GL_LEGACY, "Use a legacy OpenGL context" },
+  { "gl-gles",         GDK_DEBUG_GL_GLES, "Only allow OpenGL GLES API" },
+  { "gl-egl",          GDK_DEBUG_GL_EGL, "Use EGL on X11 or Windows" },
+  { "gl-glx",          GDK_DEBUG_GL_GLX, "Use GLX on X11" },
+  { "gl-wgl",          GDK_DEBUG_GL_WGL, "Use WGL on Windows" },
+  { "vulkan-disable",  GDK_DEBUG_VULKAN_DISABLE, "Disable Vulkan support" },
+  { "vulkan-validate", GDK_DEBUG_VULKAN_VALIDATE, "Load the Vulkan validation layer" },
+  { "default-settings",GDK_DEBUG_DEFAULT_SETTINGS, "Force default values for xsettings" },
+  { "high-depth",      GDK_DEBUG_HIGH_DEPTH, "Use high bit depth rendering if possible" },
+  { "no-vsync",        GDK_DEBUG_NO_VSYNC, "Repaint instantly (uses 100% CPU with animations)" },
+  { "dmabuf-disable",  GDK_DEBUG_DMABUF_DISABLE, "Disable dmabuf support" },
 };
 
 
@@ -196,13 +196,6 @@ gdk_parse_debug_var (const char        *variable,
   const char *q;
   gboolean invert;
   gboolean help;
-  gboolean debug_enabled;
-
-#ifdef G_ENABLE_DEBUG
-  debug_enabled = TRUE;
-#else
-  debug_enabled = FALSE;
-#endif
 
   string = g_getenv (variable);
   if (string == NULL)
@@ -234,12 +227,6 @@ gdk_parse_debug_var (const char        *variable,
               if (strlen (keys[i].key) == q - p &&
                   g_ascii_strncasecmp (keys[i].key, p, q - p) == 0)
                 {
-                  if (!debug_enabled && !keys[i].always_enabled)
-                    {
-                      fprintf (stderr, "\"%s\" is only available when building GTK with G_ENABLE_DEBUG. See %s=help\n",
-                               val, variable);
-                      break;
-                    }
                   result |= keys[i].value;
                   break;
                 }
@@ -263,8 +250,7 @@ gdk_parse_debug_var (const char        *variable,
 
       fprintf (stderr, "Supported %s values:\n", variable);
       for (i = 0; i < nkeys; i++) {
-        if (debug_enabled || keys[i].always_enabled)
-          fprintf (stderr, "  %s%*s%s\n", keys[i].key, (int)(max_width - strlen (keys[i].key)), " ", keys[i].help);
+        fprintf (stderr, "  %s%*s%s\n", keys[i].key, (int)(max_width - strlen (keys[i].key)), " ", keys[i].help);
       }
       fprintf (stderr, "  %s%*s%s\n", "all", max_width - 3, " ", "Enable all values. Other given values are subtracted");
       fprintf (stderr, "  %s%*s%s\n", "help", max_width - 4, " ", "Print this help");
@@ -277,8 +263,7 @@ gdk_parse_debug_var (const char        *variable,
 
       for (i = 0; i < nkeys; i++)
         {
-          if (debug_enabled || keys[i].always_enabled)
-            all_flags |= keys[i].value;
+          all_flags |= keys[i].value;
         }
 
       result = all_flags & (~result);

@@ -180,7 +180,6 @@ typedef enum {
   POLLING_DESCRIPTORS,
 } SelectThreadState;
 
-#ifdef G_ENABLE_DEBUG
 static const char *const state_names[]  = {
   "BEFORE_START",
   "WAITING",
@@ -188,7 +187,6 @@ static const char *const state_names[]  = {
   "POLLING_RESTART",
   "POLLING_DESCRIPTORS"
 };
-#endif
 
 static SelectThreadState select_thread_state = BEFORE_START;
 
@@ -374,7 +372,6 @@ select_thread_start (void)
     }
 }
 
-#ifdef G_ENABLE_DEBUG
 static void
 dump_poll_result (GPollFD *ufds,
                   guint    nfds)
@@ -400,7 +397,6 @@ dump_poll_result (GPollFD *ufds,
   gdk_debug_message ("%s", s->str);
   g_string_free (s, TRUE);
 }
-#endif
 
 static gboolean
 pollfds_equal (GPollFD *old_pollfds,
@@ -468,13 +464,11 @@ select_thread_start_poll (GPollFD *ufds,
   n_ready = old_poll_func (ufds, nfds, 0);
   if (n_ready > 0 || timeout == 0)
     {
-#ifdef G_ENABLE_DEBUG
-      if ((_gdk_debug_flags & GDK_DEBUG_EVENTLOOP) && n_ready > 0)
+      if (GDK_DEBUG_CHECK (EVENTLOOP) && n_ready > 0)
         {
           gdk_debug_message ("EventLoop: Found ready file descriptors before waiting");
           dump_poll_result (ufds, nfds);
         }
-#endif
 
       return n_ready;
     }
@@ -612,13 +606,11 @@ select_thread_collect_poll (GPollFD *ufds, guint nfds)
             }
         }
 
-#ifdef G_ENABLE_DEBUG
-      if (_gdk_debug_flags & GDK_DEBUG_EVENTLOOP)
+      if (GDK_DEBUG_CHECK (EVENTLOOP))
         {
           gdk_debug_message ("EventLoop: Found ready file descriptors after waiting");
           dump_poll_result (ufds, nfds);
         }
-#endif
     }
 
   SELECT_THREAD_UNLOCK ();

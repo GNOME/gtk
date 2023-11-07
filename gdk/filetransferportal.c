@@ -369,14 +369,12 @@ portal_file_serializer (GdkContentSerializer *serializer)
           GDK_DEBUG (DND, "file transfer portal: Adding %s", g_file_peek_path (file));
           g_ptr_array_add (files, g_file_get_path (file));
         }
-#ifdef G_ENABLE_DEBUG
       else if (GDK_DEBUG_CHECK (DND))
         {
           char *uri = g_file_get_uri (file);
           gdk_debug_message ("file transfer portal: %s has no path, dropping\n", uri);
           g_free (uri);
         }
-#endif
 
       g_ptr_array_add (files, NULL);
     }
@@ -426,14 +424,12 @@ portal_finish (GObject *object,
       return;
     }
 
-#ifdef G_ENABLE_DEBUG
   if (GDK_DEBUG_CHECK (DND))
     {
       char *s = g_strjoinv (", ", files);
       gdk_debug_message ("file transfer portal: Receiving files: %s", s);
       g_free (s);
     }
-#endif
 
   value = gdk_content_deserializer_get_value (deserializer);
   if (G_VALUE_HOLDS (value, G_TYPE_FILE))

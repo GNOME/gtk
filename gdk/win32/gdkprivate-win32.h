@@ -31,19 +31,11 @@
 
 /* Old debug macros */
 
-#ifdef G_ENABLE_DEBUG
-
 #define GDK_NOTE(type,action)                             \
     G_STMT_START {                                        \
       if (GDK_DEBUG_CHECK (type))                         \
          { action; };                                     \
     } G_STMT_END
-
-#else
-
-#define GDK_NOTE(type,action)
-
-#endif
 
 /* According to
  * http://blog.airesoft.co.uk/2009/11/wm_messages/
@@ -102,7 +94,6 @@ gboolean   _gdk_modal_blocked       (GdkSurface *window);
 gboolean gdk_win32_ensure_com (void);
 gboolean gdk_win32_ensure_ole (void);
 
-#ifdef G_ENABLE_DEBUG
 void   _gdk_win32_print_dc             (HDC          hdc);
 
 char *_gdk_win32_surface_state_to_string (GdkToplevelState state);
@@ -117,7 +108,6 @@ char *_gdk_win32_cf_to_string         (UINT         format);
 char *_gdk_win32_rect_to_string       (const RECT  *rect);
 
 void   _gdk_win32_print_event            (GdkEvent     *event);
-#endif
 
 void    _gdk_win32_api_failed        (const char *where,
                                       const char *api);

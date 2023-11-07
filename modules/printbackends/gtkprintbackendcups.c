@@ -4144,13 +4144,9 @@ cups_request_ppd (GtkPrinter *printer)
                         &ppd_filename,
                         &error);
 
-#ifdef G_ENABLE_DEBUG
   /* If we are debugging printing don't delete the tmp files */
-  if (!(gtk_get_debug_flags () & GTK_DEBUG_PRINTING))
+  if (!GTK_DEBUG_CHECK (PRINTING))
     unlink (ppd_filename);
-#else
-  unlink (ppd_filename);
-#endif /* G_ENABLE_DEBUG */
 
   if (error != NULL)
     {

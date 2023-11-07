@@ -1428,7 +1428,6 @@ gdk_display_get_gl_context (GdkDisplay *self)
 }
 
 #ifdef HAVE_EGL
-#ifdef G_ENABLE_DEBUG
 static int
 strvcmp (gconstpointer p1,
          gconstpointer p2)
@@ -1485,7 +1484,6 @@ describe_egl_config (EGLDisplay egl_display,
 
   return g_strdup_printf ("R%dG%dB%dA%d%s", red, green, blue, alpha, type == EGL_COLOR_COMPONENT_TYPE_FIXED_EXT ? "" : " float");
 }
-#endif
 
 gpointer
 gdk_display_get_egl_config (GdkDisplay *self)
@@ -1786,7 +1784,6 @@ gdk_display_init_egl (GdkDisplay  *self,
   if (priv->egl_config_high_depth == NULL)
     priv->egl_config_high_depth = priv->egl_config;
 
-#ifdef G_ENABLE_DEBUG
   if (GDK_DISPLAY_DEBUG_CHECK (self, OPENGL))
     {
       char *ext = describe_extensions (priv->egl_display);
@@ -1810,7 +1807,6 @@ gdk_display_init_egl (GdkDisplay  *self,
       g_free (std_cfg);
       g_free (ext);
     }
-#endif
 
   gdk_profiler_end_mark (start_time, "init EGL", NULL);
 

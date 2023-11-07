@@ -340,14 +340,12 @@ gdk_wayland_drag_create_data_source (GdkDrag *drag)
 
   mimetypes = gdk_content_formats_get_mime_types (formats, &n_mimetypes);
 
-#ifdef G_ENABLE_DEBUG
   if (GDK_DISPLAY_DEBUG_CHECK (gdk_drag_get_display (drag), EVENTS))
     {
       char *s = g_strjoinv (" ", (char **)mimetypes);
       gdk_debug_message ("create data source, mime types=%s", s);
       g_free (s);
     }
-#endif
 
   wl_data_source_offer (drag_wayland->data_source, GDK_WAYLAND_LOCAL_DND_MIME_TYPE);
   for (i = 0; i < n_mimetypes; i++)

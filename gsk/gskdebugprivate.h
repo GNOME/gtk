@@ -29,8 +29,6 @@ void          gsk_set_debug_flags (GskDebugFlags flags);
 
 gboolean gsk_check_debug_flags (GskDebugFlags flags);
 
-#ifdef G_ENABLE_DEBUG
-
 #define GSK_DEBUG_CHECK(type)           G_UNLIKELY (gsk_check_debug_flags (GSK_DEBUG_ ## type))
 #define GSK_RENDERER_DEBUG_CHECK(renderer,type) \
   G_UNLIKELY ((gsk_renderer_get_debug_flags (renderer) & GSK_DEBUG_ ## type) != 0)
@@ -46,15 +44,6 @@ gboolean gsk_check_debug_flags (GskDebugFlags flags);
     if (GSK_DEBUG_CHECK (type))                                             \
       gdk_debug_message (__VA_ARGS__);                                      \
     } G_STMT_END
-
-#else
-
-#define GSK_DEBUG_CHECK(type)           0
-#define GSK_RENDERER_DEBUG_CHECK(renderer,type) 0
-#define GSK_RENDERER_DEBUG(display,type,...)
-#define GSK_DEBUG(type,...)
-
-#endif
 
 G_END_DECLS
 

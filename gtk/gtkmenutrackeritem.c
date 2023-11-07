@@ -562,14 +562,12 @@ _gtk_menu_tracker_item_new (GtkActionObservable *observable,
 
       action_name = strrchr (self->action_and_target, '|') + 1;
 
-#ifdef G_ENABLE_DEBUG
       if (GTK_DEBUG_CHECK (ACTIONS))
         {
           if (!strchr (action_name, '.'))
             gdk_debug_message ("menutracker: action name %s doesn't look like 'app.' or 'win.'; "
                                "it is unlikely to work", action_name);
         }
-#endif
 
       state = NULL;
 

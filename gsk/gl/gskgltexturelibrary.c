@@ -140,7 +140,6 @@ gsk_gl_texture_library_real_compact (GskGLTextureLibrary *self,
       g_clear_pointer (&removed, g_ptr_array_unref);
     }
 
-#ifdef G_ENABLE_DEBUG
   if (GSK_DEBUG_CHECK (GLYPH_CACHE))
     {
       static gint64 last_message;
@@ -153,7 +152,6 @@ gsk_gl_texture_library_real_compact (GskGLTextureLibrary *self,
                              self->atlases->len);
         }
     }
-#endif
 
   return ret;
 }

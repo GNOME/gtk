@@ -64,13 +64,24 @@ GdkDebugFlags    gdk_display_get_debug_flags    (GdkDisplay       *display);
 void             gdk_display_set_debug_flags    (GdkDisplay       *display,
                                                  GdkDebugFlags     flags);
 
-#ifdef GLIB_USING_SYSTEM_PRINTF
-#define gdk_debug_message(format, ...) fprintf (stderr, format "\n", ##__VA_ARGS__)
-#else
-#define gdk_debug_message(format, ...) g_fprintf (stderr, format "\n", ##__VA_ARGS__)
-#endif
+static inline void
+gdk_debug_message (const char *format, ...) G_GNUC_PRINTF(1, 2);
+static inline void
+gdk_debug_message (const char *format, ...)
+{
+  va_list args;
+  char *s;
 
-#ifdef G_ENABLE_DEBUG
+  va_start (args, format);
+  s = g_strdup_vprintf (format, args);
+  va_end (args);
+#ifdef GLIB_USING_SYSTEM_PRINTF
+  fprintf (stderr, "%s\n", s);
+#else
+  g_fprintf (stderr, "%s\n", s);
+#endif
+  g_free (s);
+}
 
 #define GDK_DISPLAY_DEBUG_CHECK(display,type) \
     G_UNLIKELY (gdk_display_get_debug_flags (display) & GDK_DEBUG_##type)
@@ -81,13 +92,6 @@ void             gdk_display_set_debug_flags    (GdkDisplay       *display,
       gdk_debug_message (__VA_ARGS__);                                    \
     } G_STMT_END
 
-#else /* !G_ENABLE_DEBUG */
-
-#define GDK_DISPLAY_DEBUG_CHECK(display,type) 0
-#define GDK_DISPLAY_DEBUG(display,type,...)
-
-#endif /* G_ENABLE_DEBUG */
-
 #define GDK_DEBUG_CHECK(type) GDK_DISPLAY_DEBUG_CHECK (NULL,type)
 #define GDK_DEBUG(type,...) GDK_DISPLAY_DEBUG (NULL,type,__VA_ARGS__)
 
@@ -96,7 +100,6 @@ typedef struct
   const char *key;
   guint value;
   const char *help;
-  gboolean always_enabled;
 } GdkDebugKey;
 
 guint gdk_parse_debug_var (const char        *variable,

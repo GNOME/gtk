@@ -293,7 +293,6 @@ gdk_x11_drop_finalize (GObject *object)
 
 /* Utility functions */
 
-#ifdef G_ENABLE_DEBUG
 static void
 print_target_list (GdkContentFormats *formats)
 {
@@ -301,7 +300,6 @@ print_target_list (GdkContentFormats *formats)
   g_message ("DND formats: %s", name);
   g_free (name);
 }
-#endif /* G_ENABLE_DEBUG */
 
 /*************************************************************
  ***************************** XDND **************************
@@ -411,7 +409,6 @@ gdk_x11_drop_read_actions (GdkDrop *drop)
 
           drop_x11->xdnd_have_actions = TRUE;
 
-#ifdef G_ENABLE_DEBUG
           if (GDK_DISPLAY_DEBUG_CHECK (display, DND))
             {
               GString *action_str = g_string_new (NULL);
@@ -428,7 +425,6 @@ gdk_x11_drop_read_actions (GdkDrop *drop)
               g_message("Xdnd actions = %s", action_str->str);
               g_string_free (action_str, TRUE);
             }
-#endif /* G_ENABLE_DEBUG */
         }
 
       if (data)
@@ -555,10 +551,8 @@ xdnd_enter_filter (GdkSurface   *surface,
   content_formats = gdk_content_formats_new ((const char **) formats->pdata, formats->len);
   g_ptr_array_unref (formats);
 
-#ifdef G_ENABLE_DEBUG
   if (GDK_DISPLAY_DEBUG_CHECK (display, DND))
     print_target_list (content_formats);
-#endif /* G_ENABLE_DEBUG */
 
   drag = gdk_x11_drag_find (display, source_window, GDK_SURFACE_XID (surface));
 

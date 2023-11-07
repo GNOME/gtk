@@ -82,15 +82,7 @@ typedef enum {
   GTK_DEBUG_INVERT_TEXT_DIR = 1 << 19,
 } GtkDebugFlags;
 
-#ifdef G_ENABLE_DEBUG
-
 #define GTK_DEBUG_CHECK(type) G_UNLIKELY (gtk_get_debug_flags () & GTK_DEBUG_##type)
-
-#else /* !G_ENABLE_DEBUG */
-
-#define GTK_DEBUG_CHECK(type) 0
-
-#endif /* G_ENABLE_DEBUG */
 
 GDK_AVAILABLE_IN_ALL
 GtkDebugFlags gtk_get_debug_flags (void);

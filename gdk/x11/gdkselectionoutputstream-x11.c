@@ -653,7 +653,6 @@ print_atoms (GdkDisplay *display,
              const Atom *atoms,
              gsize       n_atoms)
 {
-#ifdef G_ENABLE_DEBUG
   if (GDK_DISPLAY_DEBUG_CHECK (display, CLIPBOARD))
     {
       GString *str;
@@ -666,7 +665,6 @@ print_atoms (GdkDisplay *display,
       gdk_debug_message ("%s", str->str);
       g_string_free (str, TRUE);
     }
-#endif
 }
 
 static void

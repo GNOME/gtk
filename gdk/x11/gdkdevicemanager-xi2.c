@@ -39,7 +39,6 @@
 
 #include <string.h>
 
-#ifdef G_ENABLE_DEBUG
 static const char notify_modes[][19] = {
   "NotifyNormal",
   "NotifyGrab",
@@ -57,7 +56,6 @@ static const char notify_details[][23] = {
   "NotifyPointerRoot",
   "NotifyDetailNone"
 };
-#endif
 
 #define HAS_FOCUS(toplevel)                           \
   ((toplevel)->has_focus || (toplevel)->has_pointer_focus)
@@ -226,7 +224,6 @@ translate_valuator_class (GdkDisplay          *display,
     }
 
   _gdk_device_add_axis (device, use, min, max, resolution);
-#ifdef G_ENABLE_DEBUG
   if (GDK_DISPLAY_DEBUG_CHECK (display, INPUT))
     {
       const char *label;
@@ -238,7 +235,6 @@ translate_valuator_class (GdkDisplay          *display,
 
       gdk_debug_message ("\n\taxis: %s %s", label, use == GDK_AXIS_IGNORE ? "(ignored)" : "(used)");
     }
-#endif
 }
 
 static void
@@ -521,7 +517,6 @@ create_device (GdkX11DeviceManagerXI2 *device_manager,
       break;
     }
 
-#ifdef G_ENABLE_DEBUG
   if (GDK_DISPLAY_DEBUG_CHECK (display, INPUT))
     {
       const char *type_names[] = { "logical", "physical", "floating" };
@@ -533,7 +528,6 @@ create_device (GdkX11DeviceManagerXI2 *device_manager,
                          dev->use == XIMasterPointer,
                          num_touches);
     }
-#endif
 
   if (dev->use != XIMasterKeyboard &&
       dev->use != XIMasterPointer)
@@ -1919,7 +1913,6 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
         GdkTouchpadGesturePhase phase;
         double x, y;
 
-#ifdef G_ENABLE_DEBUG
         const char *event_name = "";
         switch (xev->evtype)
           {
@@ -1935,7 +1928,6 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
           default:
             break;
           }
-#endif
 
         GDK_DEBUG (EVENTS, "pinch gesture %s:\twindow %ld\n\tfinger_count: %u%s",
                            event_name,
@@ -1979,7 +1971,6 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
         GdkTouchpadGesturePhase phase;
         double x, y;
 
-#ifdef G_ENABLE_DEBUG
         const char *event_name = "";
         switch (xev->evtype)
           {
@@ -1995,7 +1986,6 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
           default:
             break;
           }
-#endif
 
         GDK_DEBUG (EVENTS, "swipe gesture %s:\twindow %ld\n\tfinger_count: %u%s",
                            event_name,
