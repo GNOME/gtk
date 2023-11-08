@@ -609,6 +609,7 @@ gsk_gl_command_queue_begin_draw (GskGLCommandQueue   *self,
   batch->any.next_batch_index = -1;
   batch->any.viewport.width = width;
   batch->any.viewport.height = height;
+  batch->draw.blend = 1;
   batch->draw.framebuffer = 0;
   batch->draw.uniform_count = 0;
   batch->draw.uniform_offset = self->batch_uniforms.len;
@@ -685,6 +686,7 @@ gsk_gl_command_queue_end_draw (GskGLCommandQueue *self)
       last_batch->any.program == batch->any.program &&
       last_batch->any.viewport.width == batch->any.viewport.width &&
       last_batch->any.viewport.height == batch->any.viewport.height &&
+      last_batch->draw.blend == batch->draw.blend &&
       last_batch->draw.framebuffer == batch->draw.framebuffer &&
       last_batch->draw.vbo_offset + last_batch->draw.vbo_count == batch->draw.vbo_offset &&
       last_batch->draw.vbo_count + batch->draw.vbo_count <= 0xffff &&
@@ -1247,8 +1249,13 @@ gsk_gl_command_queue_execute (GskGLCommandQueue    *self,
               n_uniforms += batch->draw.uniform_count;
             }
 
+          if (batch->draw.blend == 0)
+            glDisable (GL_BLEND);
+
           glDrawArrays (GL_TRIANGLES, batch->draw.vbo_offset, batch->draw.vbo_count);
 
+          if (batch->draw.blend == 0)
+            glEnable (GL_BLEND);
         break;
 
         default:
