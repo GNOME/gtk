@@ -69,8 +69,9 @@ gdk_vulkan_handle_result (VkResult    res,
 
 #define GDK_VK_CHECK(func, ...) gdk_vulkan_handle_result (func (__VA_ARGS__), G_STRINGIFY (func))
 
-gboolean                gdk_display_ref_vulkan                          (GdkDisplay            *display,
+gboolean                gdk_display_init_vulkan                         (GdkDisplay            *display,
                                                                          GError               **error);
+void                    gdk_display_ref_vulkan                          (GdkDisplay            *display);
 void                    gdk_display_unref_vulkan                        (GdkDisplay            *display);
 
 VkShaderModule          gdk_display_get_vk_shader_module                (GdkDisplay            *display,
