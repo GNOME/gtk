@@ -516,11 +516,7 @@ gsk_gpu_get_node_as_image (GskGpuFrame            *frame,
         gint64 timestamp = gsk_gpu_frame_get_timestamp (frame);
         result = gsk_gpu_device_lookup_texture_image (device, texture, timestamp);
         if (result == NULL)
-          {
-            result = gsk_gpu_frame_upload_texture (frame, texture);
-            if (result)
-              gsk_gpu_device_cache_texture_image (device, texture, timestamp, result);
-          }
+          result = gsk_gpu_frame_upload_texture (frame, texture);
 
         if (result)
           {
@@ -1139,7 +1135,6 @@ gsk_gpu_node_processor_add_texture_node (GskGpuNodeProcessor *self,
           gsk_gpu_node_processor_add_fallback_node (self, node);
           return;
         }
-      gsk_gpu_device_cache_texture_image (device, texture, timestamp, image);
     }
   descriptor = gsk_gpu_node_processor_add_image (self, image, GSK_GPU_SAMPLER_DEFAULT);
 
@@ -1174,7 +1169,6 @@ gsk_gpu_node_processor_create_texture_pattern (GskGpuPatternWriter *self,
       image = gsk_gpu_frame_upload_texture (self->frame, texture);
       if (image == NULL)
         return FALSE;
-      gsk_gpu_device_cache_texture_image (device, texture, timestamp, image);
     }
 
   if (!gsk_gpu_pattern_writer_add_image (self, image, GSK_GPU_SAMPLER_DEFAULT, &descriptor))

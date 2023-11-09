@@ -363,7 +363,15 @@ GskGpuImage *
 gsk_gpu_frame_upload_texture (GskGpuFrame  *self,
                               GdkTexture   *texture)
 {
-  return GSK_GPU_FRAME_GET_CLASS (self)->upload_texture (self, texture);
+  GskGpuFramePrivate *priv = gsk_gpu_frame_get_instance_private (self);
+  GskGpuImage *image;
+
+  image = GSK_GPU_FRAME_GET_CLASS (self)->upload_texture (self, texture);
+
+  if (image)
+    gsk_gpu_device_cache_texture_image (priv->device, texture, priv->timestamp, image);
+
+  return image;
 }
 
 GskGpuDescriptors *
