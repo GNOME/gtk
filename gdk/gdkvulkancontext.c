@@ -699,7 +699,7 @@ gdk_vulkan_context_real_init (GInitable     *initable,
   VkBool32 supported;
   uint32_t i;
 
-  priv->vulkan_ref = gdk_display_ref_vulkan (display, error);
+  priv->vulkan_ref = gdk_display_init_vulkan (display, error);
   if (!priv->vulkan_ref)
     return FALSE;
 
@@ -1625,9 +1625,23 @@ gdk_display_create_vulkan_instance (GdkDisplay  *display,
   return TRUE;
 }
 
+/*
+ * gdk_display_init_vulkan:
+ * @display: a display
+ * @error: A potential error message
+ *
+ * Initializes Vulkan and returns an error on failure.
+ *
+ * If Vulkan is already initialized, this function returns
+ * %TRUE and increases the refcount of the existing instance.
+ *
+ * You need to gdk_display_unref_vulkan() to close it again.
+ *
+ * Returns: %TRUE if Vulkan is initialized.
+ **/
 gboolean
-gdk_display_ref_vulkan (GdkDisplay *display,
-                        GError     **error)
+gdk_display_init_vulkan (GdkDisplay *display,
+                         GError     **error)
 {
   if (display->vulkan_refcount == 0)
     {
@@ -1638,6 +1652,23 @@ gdk_display_ref_vulkan (GdkDisplay *display,
   display->vulkan_refcount++;
 
   return TRUE;
+}
+
+/*
+ * gdk_display_ref_vulkan:
+ * @display: a GdkDisplay
+ *
+ * Increases the refcount of an existing Vulkan instance.
+ *
+ * This function must not be called if Vulkan may not be initialized
+ * yet, call gdk_display_init_vulkan() in that case.
+ **/
+void
+gdk_display_ref_vulkan (GdkDisplay *display)
+{
+  g_assert (display->vulkan_refcount > 0);
+
+  display->vulkan_refcount++;
 }
 
 void
@@ -1653,6 +1684,7 @@ gdk_display_unref_vulkan (GdkDisplay *display)
   if (display->vulkan_refcount > 0)
     return;
 
+  GDK_DEBUG (VULKAN, "Closing Vulkan instance");
   g_hash_table_iter_init (&iter, display->vk_shader_modules);
   while (g_hash_table_iter_next (&iter, &key, &value))
     {
