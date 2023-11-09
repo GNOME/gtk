@@ -69,6 +69,12 @@ gdk_draw_context_default_surface_resized (GdkDrawContext *context)
 }
 
 static void
+gdk_draw_context_default_empty_frame (GdkDrawContext *context)
+{
+  g_warning ("FIXME: Implement");
+}
+
+static void
 gdk_draw_context_dispose (GObject *gobject)
 {
   GdkDrawContext *context = GDK_DRAW_CONTEXT (gobject);
@@ -161,6 +167,7 @@ gdk_draw_context_class_init (GdkDrawContextClass *klass)
   gobject_class->dispose = gdk_draw_context_dispose;
 
   klass->surface_resized = gdk_draw_context_default_surface_resized;
+  klass->empty_frame = gdk_draw_context_default_empty_frame;
 
   /**
    * GdkDrawContext:display: (attributes org.gtk.Property.get=gdk_draw_context_get_display)
@@ -469,4 +476,18 @@ gdk_draw_context_get_frame_region (GdkDrawContext *context)
   g_return_val_if_fail (GDK_IS_DRAW_CONTEXT (context), NULL);
 
   return priv->frame_region;
+}
+
+void
+gdk_draw_context_empty_frame (GdkDrawContext *context)
+{
+  GdkDrawContextPrivate *priv = gdk_draw_context_get_instance_private (context);
+
+  g_return_if_fail (GDK_IS_DRAW_CONTEXT (context));
+  g_return_if_fail (priv->surface != NULL);
+
+  if (GDK_SURFACE_DESTROYED (priv->surface))
+    return;
+
+  GDK_DRAW_CONTEXT_GET_CLASS (context)->empty_frame (context);
 }
