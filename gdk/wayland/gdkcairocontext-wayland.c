@@ -195,6 +195,23 @@ gdk_wayland_cairo_context_end_frame (GdkDrawContext *draw_context,
 }
 
 static void
+gdk_wayland_cairo_context_empty_frame (GdkDrawContext *draw_context)
+{
+  GdkSurface *surface = gdk_draw_context_get_surface (draw_context);
+  GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
+
+  if (!impl->has_pending_subsurface_commits)
+    return;
+
+  gdk_wayland_surface_sync (surface);
+  gdk_wayland_surface_request_frame (surface);
+
+  gdk_profiler_add_mark (GDK_PROFILER_CURRENT_TIME, 0, "wayland", "surface commit");
+  gdk_wayland_surface_commit (surface);
+  gdk_wayland_surface_notify_committed (surface);
+}
+
+static void
 gdk_wayland_cairo_context_clear_all_cairo_surfaces (GdkWaylandCairoContext *self)
 {
   g_clear_pointer (&self->cached_surface, cairo_surface_destroy);
@@ -241,6 +258,7 @@ gdk_wayland_cairo_context_class_init (GdkWaylandCairoContextClass *klass)
 
   draw_context_class->begin_frame = gdk_wayland_cairo_context_begin_frame;
   draw_context_class->end_frame = gdk_wayland_cairo_context_end_frame;
+  draw_context_class->empty_frame = gdk_wayland_cairo_context_empty_frame;
   draw_context_class->surface_resized = gdk_wayland_cairo_context_surface_resized;
 
   cairo_context_class->cairo_create = gdk_wayland_cairo_context_cairo_create;

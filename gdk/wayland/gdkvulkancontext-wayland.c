@@ -28,6 +28,7 @@
 
 #include "gdkwaylanddisplay.h"
 #include "gdkwaylandsurface.h"
+#include "gdksurface-wayland-private.h"
 #include "gdkprivate-wayland.h"
 
 G_DEFINE_TYPE (GdkWaylandVulkanContext, gdk_wayland_vulkan_context, GDK_TYPE_VULKAN_CONTEXT)
@@ -73,6 +74,22 @@ gdk_vulkan_context_wayland_end_frame (GdkDrawContext *context,
 }
 
 static void
+gdk_vulkan_context_wayland_empty_frame (GdkDrawContext *context)
+{
+  GdkSurface *surface = gdk_draw_context_get_surface (GDK_DRAW_CONTEXT (context));
+  GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
+
+  if (!impl->has_pending_subsurface_commits)
+    return;
+
+  gdk_wayland_surface_sync (surface);
+  gdk_wayland_surface_request_frame (surface);
+
+  gdk_wayland_surface_commit (surface);
+  gdk_wayland_surface_notify_committed (surface);
+}
+
+static void
 gdk_wayland_vulkan_context_class_init (GdkWaylandVulkanContextClass *klass)
 {
   GdkVulkanContextClass *vulkan_context_class = GDK_VULKAN_CONTEXT_CLASS (klass);
@@ -80,6 +97,7 @@ gdk_wayland_vulkan_context_class_init (GdkWaylandVulkanContextClass *klass)
 
   vulkan_context_class->create_surface = gdk_wayland_vulkan_context_create_surface;
   draw_context_class->end_frame = gdk_vulkan_context_wayland_end_frame;
+  draw_context_class->empty_frame = gdk_vulkan_context_wayland_empty_frame;
 }
 
 static void
