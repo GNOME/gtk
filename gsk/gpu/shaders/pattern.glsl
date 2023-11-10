@@ -158,6 +158,18 @@ repeat_push_pattern (inout uint     reader,
 }
 
 void
+affine_pattern (inout uint     reader,
+                inout Position pos)
+{
+  stack_push (pos.pos);
+  vec4 transform = read_vec4 (reader);
+
+  pos.pos.zw *= transform.zw;
+  pos.pos.xy -= transform.xy;
+  pos.pos.xy *= transform.zw;
+}
+
+void
 position_pop_pattern (inout uint     reader,
                       inout Position pos)
 {
@@ -406,6 +418,9 @@ pattern (uint reader,
           break;
         case GSK_GPU_PATTERN_POP_MASK_INVERTED_LUMINANCE:
           mask_inverted_luminance_pattern (reader, color);
+          break;
+        case GSK_GPU_PATTERN_AFFINE:
+          affine_pattern (reader, pos);
           break;
       }
     }
