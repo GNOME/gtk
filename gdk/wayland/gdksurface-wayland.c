@@ -264,12 +264,10 @@ gdk_wayland_surface_update_size (GdkSurface               *surface,
   _gdk_surface_update_size (surface);
 }
 
-static void
-frame_callback (void               *data,
-                struct wl_callback *callback,
-                uint32_t            time)
+void
+gdk_wayland_surface_frame_callback (GdkSurface *surface,
+                                    uint32_t    time)
 {
-  GdkSurface *surface = data;
   GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
   GdkWaylandDisplay *display_wayland =
     GDK_WAYLAND_DISPLAY (gdk_surface_get_display (surface));
@@ -279,10 +277,13 @@ frame_callback (void               *data,
   gdk_profiler_add_mark (GDK_PROFILER_CURRENT_TIME, 0, "wayland", "frame event");
   GDK_DISPLAY_DEBUG (GDK_DISPLAY (display_wayland), EVENTS, "frame %p", surface);
 
-  g_assert (impl->frame_callback == callback);
-  g_assert (!GDK_SURFACE_DESTROYED (surface));
-
   g_clear_pointer (&impl->frame_callback, wl_callback_destroy);
+
+  for (gsize i = 0; i < gdk_surface_get_n_subsurfaces (surface); i++)
+    {
+      GdkSubsurface *subsurface = gdk_surface_get_subsurface (surface, i);
+      gdk_wayland_subsurface_clear_frame_callback (subsurface);
+    }
 
   GDK_WAYLAND_SURFACE_GET_CLASS (impl)->handle_frame (impl);
 
@@ -319,6 +320,19 @@ frame_callback (void               *data,
 
   if (GDK_PROFILER_IS_RUNNING)
     _gdk_frame_clock_add_timings_to_profiler (clock, timings);
+}
+
+static void
+frame_callback (void               *data,
+                struct wl_callback *callback,
+                uint32_t            time)
+{
+  GdkSurface *surface = data;
+
+  g_assert (GDK_WAYLAND_SURFACE (surface)->frame_callback == callback);
+  g_assert (!GDK_SURFACE_DESTROYED (surface));
+
+  gdk_wayland_surface_frame_callback (surface, time);
 }
 
 static const struct wl_callback_listener frame_listener = {
@@ -382,6 +396,13 @@ gdk_wayland_surface_request_frame (GdkSurface *surface)
   self->frame_callback = wl_surface_frame (self->display_server.wl_surface);
   wl_proxy_set_queue ((struct wl_proxy *) self->frame_callback, NULL);
   wl_callback_add_listener (self->frame_callback, &frame_listener, surface);
+
+  for (gsize i = 0; i < gdk_surface_get_n_subsurfaces (surface); i++)
+    {
+      GdkSubsurface *subsurface = gdk_surface_get_subsurface (surface, i);
+      gdk_wayland_subsurface_request_frame (subsurface);
+    }
+
   self->pending_frame_counter = gdk_frame_clock_get_frame_counter (clock);
 }
 

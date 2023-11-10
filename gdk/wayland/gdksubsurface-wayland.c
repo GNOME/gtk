@@ -41,6 +41,7 @@ gdk_wayland_subsurface_finalize (GObject *object)
   GdkWaylandSubsurface *self = GDK_WAYLAND_SUBSURFACE (object);
 
   g_clear_object (&self->texture);
+  g_clear_pointer (&self->frame_callback, wl_callback_destroy);
   g_clear_pointer (&self->opaque_region, wl_region_destroy);
   g_clear_pointer (&self->viewport, wp_viewport_destroy);
   g_clear_pointer (&self->subsurface, wl_subsurface_destroy);
@@ -337,3 +338,39 @@ gdk_wayland_subsurface_class_init (GdkWaylandSubsurfaceClass *class)
   subsurface_class->place_below = gdk_wayland_subsurface_place_below;
   subsurface_class->is_above_parent = gdk_wayland_subsurface_is_above_parent;
 };
+
+static void
+frame_callback (void               *data,
+                struct wl_callback *callback,
+                uint32_t            time)
+{
+  GdkSubsurface *sub = data;
+
+  g_assert (((GdkWaylandSubsurface *)sub)->frame_callback == callback);
+  g_assert (!GDK_SURFACE_DESTROYED (sub->parent));
+
+  gdk_wayland_surface_frame_callback (sub->parent, time);
+}
+
+static const struct wl_callback_listener frame_listener = {
+  frame_callback
+};
+
+void
+gdk_wayland_subsurface_request_frame (GdkSubsurface *sub)
+{
+  GdkWaylandSubsurface *self = (GdkWaylandSubsurface *)sub;
+
+  self->frame_callback = wl_surface_frame (self->surface);
+  wl_proxy_set_queue ((struct wl_proxy *) self->frame_callback, NULL);
+  wl_callback_add_listener (self->frame_callback, &frame_listener, self);
+  wl_surface_commit (self->surface);
+}
+
+void
+gdk_wayland_subsurface_clear_frame_callback (GdkSubsurface *sub)
+{
+  GdkWaylandSubsurface *self = (GdkWaylandSubsurface *)sub;
+
+  g_clear_pointer (&self->frame_callback, wl_callback_destroy);
+}

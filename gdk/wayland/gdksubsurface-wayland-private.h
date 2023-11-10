@@ -25,6 +25,8 @@ struct _GdkWaylandSubsurface
 
   struct wl_region *opaque_region;
 
+  struct wl_callback *frame_callback;
+
   gboolean above_parent;
 };
 
@@ -34,3 +36,6 @@ struct _GdkWaylandSubsurfaceClass
 };
 
 GType gdk_wayland_subsurface_get_type (void) G_GNUC_CONST;
+
+void gdk_wayland_subsurface_request_frame        (GdkSubsurface *subsurface);
+void gdk_wayland_subsurface_clear_frame_callback (GdkSubsurface *subsurface);

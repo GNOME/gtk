@@ -123,6 +123,9 @@ void gdk_wayland_surface_get_window_geometry (GdkSurface   *surface,
 void gdk_wayland_surface_freeze_state (GdkSurface *surface);
 void gdk_wayland_surface_thaw_state   (GdkSurface *surface);
 
+void gdk_wayland_surface_frame_callback (GdkSurface *surface,
+                                         uint32_t    time);
+
 
 #define GDK_TYPE_WAYLAND_DRAG_SURFACE (gdk_wayland_drag_surface_get_type ())
 GType gdk_wayland_drag_surface_get_type (void) G_GNUC_CONST;
