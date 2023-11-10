@@ -1220,6 +1220,86 @@ gsk_gpu_node_processor_add_transform_node (GskGpuNodeProcessor *self,
   self->pending_globals |= GSK_GPU_GLOBAL_MATRIX | GSK_GPU_GLOBAL_SCALE | GSK_GPU_GLOBAL_CLIP;
 }
 
+static gboolean
+gsk_gpu_node_processor_create_transform_pattern (GskGpuPatternWriter *self,
+                                                 GskRenderNode       *node)
+{
+  GskRenderNode *child;
+  GskTransform *transform;
+  graphene_point_t old_offset;
+  graphene_vec2_t old_scale;
+  graphene_rect_t old_bounds;
+  gboolean result;
+
+  child = gsk_transform_node_get_child (node);
+  transform = gsk_transform_node_get_transform (node);
+  old_offset = self->offset;
+  old_scale = self->scale;
+  old_bounds = self->bounds;
+
+  switch (gsk_transform_get_category (transform))
+    {
+    case GSK_TRANSFORM_CATEGORY_IDENTITY:
+      return gsk_gpu_node_processor_create_node_pattern (self, child);
+
+    case GSK_TRANSFORM_CATEGORY_2D_TRANSLATE:
+      {
+        float dx, dy;
+        gsk_transform_to_translate (transform, &dx, &dy);
+        self->offset.x += dx;
+        self->offset.y += dy;
+        result = gsk_gpu_node_processor_create_node_pattern (self, child);
+        self->offset = old_offset;
+        return result;
+      }
+
+    case GSK_TRANSFORM_CATEGORY_2D_AFFINE:
+      {
+        float sx, sy, dx, dy, inv_sx, inv_sy;
+        graphene_vec4_t vec4;
+        if (!gsk_gpu_pattern_writer_push_stack (self))
+          return FALSE;
+        gsk_transform_to_affine (transform, &sx, &sy, &dx, &dy);
+        inv_sx = 1.f / sx;
+        inv_sy = 1.f / sy;
+        gsk_gpu_buffer_writer_append_uint (&self->writer, GSK_GPU_PATTERN_AFFINE);
+        graphene_vec4_init (&vec4, self->offset.x + dx, self->offset.y + dy, inv_sx, inv_sy);
+        gsk_gpu_buffer_writer_append_vec4 (&self->writer, &vec4);
+        self->bounds.origin.x = (self->bounds.origin.x - self->offset.x - dx) * inv_sx;
+        self->bounds.origin.y = (self->bounds.origin.y - self->offset.y - dy) * inv_sy;
+        self->bounds.size.width *= inv_sx;
+        self->bounds.size.height *= inv_sy;
+        self->offset = GRAPHENE_POINT_INIT (0, 0);
+        graphene_vec2_init (&self->scale, fabs (sx), fabs (sy));
+        graphene_vec2_multiply (&self->scale, &old_scale, &self->scale);
+      }
+      break;
+
+    case GSK_TRANSFORM_CATEGORY_2D:
+    case GSK_TRANSFORM_CATEGORY_UNKNOWN:
+    case GSK_TRANSFORM_CATEGORY_ANY:
+    case GSK_TRANSFORM_CATEGORY_3D:
+      /* could add a mat4 operation here? */
+      return FALSE;
+
+    default:
+      g_assert_not_reached ();
+      return FALSE;
+    }
+
+  result = gsk_gpu_node_processor_create_node_pattern (self, child);
+
+  if (result)
+    gsk_gpu_buffer_writer_append_uint (&self->writer, GSK_GPU_PATTERN_POSITION_POP);
+
+  gsk_gpu_pattern_writer_pop_stack (self);
+  self->scale = old_scale; 
+  self->bounds = old_bounds; 
+  self->offset = old_offset; 
+
+  return result;
+}
+
 static void
 gsk_gpu_node_processor_add_color_node (GskGpuNodeProcessor *self,
                                        GskRenderNode       *node)
@@ -2221,7 +2301,7 @@ static const struct
   [GSK_TRANSFORM_NODE] = {
     GSK_GPU_GLOBAL_MATRIX | GSK_GPU_GLOBAL_SCALE | GSK_GPU_GLOBAL_CLIP | GSK_GPU_GLOBAL_SCISSOR,
     gsk_gpu_node_processor_add_transform_node,
-    NULL,
+    gsk_gpu_node_processor_create_transform_pattern,
   },
   [GSK_OPACITY_NODE] = {
     0,
