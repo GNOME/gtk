@@ -218,6 +218,7 @@ struct _GtkSpinButton
   guint          timer_calls   : 3;
   guint          wrap          : 1;
   guint          editing_canceled : 1;
+  guint          edited : 1;
   guint          activates_default : 1;
 };
 
@@ -229,6 +230,7 @@ struct _GtkSpinButtonClass
                  double        *new_value);
   int (*output) (GtkSpinButton *spin_button);
   void (*value_changed) (GtkSpinButton *spin_button);
+  void (*activate)      (GtkSpinButton *spin_button);
 
   /* Action signals for keybindings, do not connect to these */
   void (*change_value) (GtkSpinButton *spin_button,
@@ -259,6 +261,7 @@ enum
   INPUT,
   OUTPUT,
   VALUE_CHANGED,
+  ACTIVATE,
   CHANGE_VALUE,
   WRAPPED,
   LAST_SIGNAL
@@ -284,6 +287,9 @@ static gboolean gtk_spin_button_stop_spinning  (GtkSpinButton      *spin);
 static void gtk_spin_button_value_changed  (GtkAdjustment      *adjustment,
                                             GtkSpinButton      *spin_button);
 
+static void gtk_spin_button_changed (GtkEditable   *editable,
+                                     GtkSpinButton *spin_button);
+static void gtk_spin_button_real_activate (GtkSpinButton *spin_button);
 static void gtk_spin_button_activate       (GtkText            *entry,
                                             gpointer            user_data);
 static void gtk_spin_button_unset_adjustment (GtkSpinButton *spin_button);
@@ -367,6 +373,7 @@ gtk_spin_button_class_init (GtkSpinButtonClass *class)
   class->input = NULL;
   class->output = NULL;
   class->change_value = gtk_spin_button_real_change_value;
+  class->activate = gtk_spin_button_real_activate;
 
   /**
    * GtkSpinButton:activates-default: (attributes org.gtk.Property.get=gtk_spin_button_get_activates_default org.gtk.Property.set=gtk_spin_button_set_activates_default)
@@ -555,6 +562,31 @@ gtk_spin_button_class_init (GtkSpinButtonClass *class)
                   NULL, NULL,
                   NULL,
                   G_TYPE_NONE, 0);
+
+  /**
+   * GtkSpinButton::activate:
+   * @self: The widget on which the signal is emitted
+   *
+   * Emitted when the spin button is activated.
+   *
+   * The keybindings for this signal are all forms of the <kbd>Enter</kbd> key.
+   *
+   * If the <kbd>Enter</kbd> key results in the value being committed to the
+   * spin button, then activation does not occur until <kbd>Enter</kbd> is
+   * pressed again.
+   *
+   * Since: 4.14
+   */
+  spinbutton_signals[ACTIVATE] =
+    g_signal_new (I_("activate"),
+                  G_TYPE_FROM_CLASS (gobject_class),
+                  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
+                  G_STRUCT_OFFSET (GtkSpinButtonClass, activate),
+                  NULL, NULL,
+                  NULL,
+                  G_TYPE_NONE, 0);
+
+  gtk_widget_class_set_activate_signal (widget_class, spinbutton_signals[ACTIVATE]);
 
   /**
    * GtkSpinButton::wrapped:
@@ -1037,6 +1069,7 @@ gtk_spin_button_init (GtkSpinButton *spin_button)
   spin_button->digits = 0;
   spin_button->numeric = FALSE;
   spin_button->wrap = FALSE;
+  spin_button->edited = FALSE;
   spin_button->snap_to_ticks = FALSE;
   spin_button->width_chars = -1;
 
@@ -1049,6 +1082,7 @@ gtk_spin_button_init (GtkSpinButton *spin_button)
   gtk_widget_set_hexpand (spin_button->entry, TRUE);
   gtk_widget_set_vexpand (spin_button->entry, TRUE);
   g_signal_connect (spin_button->entry, "activate", G_CALLBACK (gtk_spin_button_activate), spin_button);
+  g_signal_connect (spin_button->entry, "changed", G_CALLBACK (gtk_spin_button_changed), spin_button);
   gtk_widget_set_parent (spin_button->entry, GTK_WIDGET (spin_button));
 
   spin_button->down_button = g_object_new (GTK_TYPE_BUTTON,
@@ -1384,6 +1418,8 @@ gtk_spin_button_value_changed (GtkAdjustment *adjustment,
   update_buttons_sensitivity (spin_button);
 
   g_object_notify_by_pspec (G_OBJECT (spin_button), spinbutton_props[PROP_VALUE]);
+
+  spin_button->edited = FALSE;
 }
 
 static void
@@ -1506,13 +1542,34 @@ gtk_spin_button_snap (GtkSpinButton *spin_button,
 }
 
 static void
+gtk_spin_button_changed (GtkEditable   *editable,
+                         GtkSpinButton *spin_button)
+{
+  spin_button->edited = TRUE;
+}
+
+static void
+gtk_spin_button_real_activate (GtkSpinButton *spin_button)
+{
+  if (spin_button->activates_default)
+    gtk_widget_activate_default (GTK_WIDGET (spin_button));
+}
+
+static void
 gtk_spin_button_activate (GtkText *entry,
                           gpointer  user_data)
 {
   GtkSpinButton *spin_button = user_data;
 
-  if (gtk_editable_get_editable (GTK_EDITABLE (spin_button->entry)))
-    gtk_spin_button_update (spin_button);
+  if (!gtk_editable_get_editable (GTK_EDITABLE (spin_button->entry)))
+    return;
+
+  const gboolean was_edited = spin_button->edited;
+
+  gtk_spin_button_update (spin_button); /* resets edited */
+
+  if (!was_edited)
+    g_signal_emit (spin_button, spinbutton_signals[ACTIVATE], 0);
 }
 
 static void
@@ -2168,6 +2225,8 @@ gtk_spin_button_set_value (GtkSpinButton *spin_button,
       if (!return_val)
         gtk_spin_button_default_output (spin_button);
     }
+
+  spin_button->edited = FALSE;
 }
 
 /**
