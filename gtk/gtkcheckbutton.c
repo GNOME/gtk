@@ -1055,6 +1055,8 @@ gtk_check_button_set_group (GtkCheckButton *self,
 
       update_button_role (self, GTK_BUTTON_ROLE_CHECK);
 
+      gtk_widget_set_accessible_role (GTK_WIDGET (self), GTK_ACCESSIBLE_ROLE_CHECKBOX);
+
       return;
     }
 
@@ -1077,6 +1079,9 @@ gtk_check_button_set_group (GtkCheckButton *self,
 
   update_button_role (self, GTK_BUTTON_ROLE_RADIO);
   update_button_role (group, GTK_BUTTON_ROLE_RADIO);
+
+  gtk_widget_set_accessible_role (GTK_WIDGET (self), GTK_ACCESSIBLE_ROLE_RADIO);
+  gtk_widget_set_accessible_role (GTK_WIDGET (group), GTK_ACCESSIBLE_ROLE_RADIO);
 
   g_object_notify_by_pspec (G_OBJECT (self), props[PROP_GROUP]);
 }

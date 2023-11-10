@@ -479,5 +479,8 @@ _gtk_widget_is_sensitive (GtkWidget *widget)
   return !(widget->priv->state_flags & GTK_STATE_FLAG_INSENSITIVE);
 }
 
+void gtk_widget_set_accessible_role (GtkWidget        *self,
+                                     GtkAccessibleRole role);
+
 G_END_DECLS
 
