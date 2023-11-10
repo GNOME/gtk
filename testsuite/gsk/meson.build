@@ -371,10 +371,46 @@ foreach test : node_parser_tests
         'G_TEST_SRCDIR=@0@'.format(meson.current_source_dir()),
         'G_TEST_BUILDDIR=@0@'.format(meson.current_build_dir())
       ],
+      protocol: 'exitcode',
       suite: 'gsk',
     )
   endif
 endforeach
+
+# offload does not work outside of linux
+if os_linux
+  offload = executable('offload', 'offload.c', 'gskrendernodeattach.c',
+    dependencies : libgtk_static_dep,
+    c_args: common_cflags,
+  )
+
+  offload_tests = [
+    'simple.node',
+    'transforms.node',
+    'deep.node',
+    'move.node',
+    'start_offloading.node',
+    'stop_offloading.node',
+  ]
+
+  foreach test : offload_tests
+    if test.endswith('.node') and not test.endswith('.out')
+      test('parser ' + test, offload,
+        args: [
+          join_paths(meson.current_source_dir(), 'offload', test)
+        ],
+        env: [
+          'GSK_RENDERER=opengl',
+          'GTK_A11Y=test',
+          'G_TEST_SRCDIR=@0@'.format(meson.current_source_dir()),
+          'G_TEST_BUILDDIR=@0@'.format(meson.current_build_dir())
+        ],
+        protocol: 'exitcode',
+        suite: 'gsk',
+      )
+    endif
+  endforeach
+endif
 
 tests = [
   ['transform'],
