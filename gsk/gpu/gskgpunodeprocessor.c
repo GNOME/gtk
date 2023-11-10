@@ -96,6 +96,7 @@ struct _GskGpuNodeProcessor
   graphene_vec2_t                scale;
   GskTransform                  *modelview;
   GskGpuClip                     clip;
+  float                          opacity;
 
   GskGpuGlobals                  pending_globals;
 };
@@ -148,6 +149,7 @@ gsk_gpu_node_processor_init (GskGpuNodeProcessor         *self,
                                     gsk_gpu_image_get_height (target) / viewport->size.height);
   self->offset = GRAPHENE_POINT_INIT (-viewport->origin.x,
                                       -viewport->origin.y);
+  self->opacity = 1.0;
   self->pending_globals = GSK_GPU_GLOBAL_MATRIX | GSK_GPU_GLOBAL_SCALE | GSK_GPU_GLOBAL_CLIP | GSK_GPU_GLOBAL_SCISSOR;
 }
 
@@ -879,6 +881,12 @@ gsk_gpu_node_processor_try_node_as_pattern (GskGpuNodeProcessor *self,
       return FALSE;
     }
 
+  if (self->opacity < 1.0)
+    {
+      gsk_gpu_buffer_writer_append_uint (&writer.writer, GSK_GPU_PATTERN_OPACITY);
+      gsk_gpu_buffer_writer_append_float (&writer.writer, self->opacity);
+    }
+
   gsk_gpu_buffer_writer_append_uint (&writer.writer, GSK_GPU_PATTERN_DONE);
 
   gsk_gpu_pattern_writer_commit_op (&writer,
@@ -904,6 +912,14 @@ gsk_gpu_node_processor_add_node_as_pattern (GskGpuNodeProcessor *self,
         }
       gsk_gpu_node_processor_add_fallback_node (self, node);
     }
+}
+
+static void
+gsk_gpu_node_processor_add_without_opacity (GskGpuNodeProcessor *self,
+                                            GskRenderNode       *node)
+{
+  gsk_gpu_node_processor_sync_globals (self, 0);
+  gsk_gpu_node_processor_add_node_as_pattern (self, node);
 }
 
 static void
@@ -1298,6 +1314,19 @@ gsk_gpu_node_processor_create_transform_pattern (GskGpuPatternWriter *self,
   self->offset = old_offset; 
 
   return result;
+}
+
+static void
+gsk_gpu_node_processor_add_opacity_node (GskGpuNodeProcessor *self,
+                                         GskRenderNode       *node)
+{
+  float old_opacity = self->opacity;
+
+  self->opacity *= gsk_opacity_node_get_opacity (node);
+
+  gsk_gpu_node_processor_add_node (self, gsk_opacity_node_get_child (node));
+
+  self->opacity = old_opacity;
 }
 
 static void
@@ -2225,9 +2254,14 @@ gsk_gpu_node_processor_add_debug_node (GskGpuNodeProcessor *self,
   gsk_gpu_node_processor_add_node (self, gsk_debug_node_get_child (node));
 }
 
+typedef enum {
+  GSK_GPU_HANDLE_OPACITY = (1 << 0)
+} GskGpuNodeFeatures;
+
 static const struct
 {
   GskGpuGlobals ignored_globals;
+  GskGpuNodeFeatures features;
   void                  (* process_node)                        (GskGpuNodeProcessor    *self,
                                                                  GskRenderNode          *node);
   gboolean              (* create_pattern)                      (GskGpuPatternWriter    *self,
@@ -2235,156 +2269,187 @@ static const struct
 } nodes_vtable[] = {
   [GSK_NOT_A_RENDER_NODE] = {
     0,
+    0,
     NULL,
     NULL,
   },
   [GSK_CONTAINER_NODE] = {
     GSK_GPU_GLOBAL_MATRIX | GSK_GPU_GLOBAL_SCALE | GSK_GPU_GLOBAL_CLIP | GSK_GPU_GLOBAL_SCISSOR,
+    0,
     gsk_gpu_node_processor_add_container_node,
     NULL,
   },
   [GSK_CAIRO_NODE] = {
+    0,
     0,
     NULL,
     NULL,
   },
   [GSK_COLOR_NODE] = {
     0,
+    0,
     gsk_gpu_node_processor_add_color_node,
     gsk_gpu_node_processor_create_color_pattern,
   },
   [GSK_LINEAR_GRADIENT_NODE] = {
     0,
+    GSK_GPU_HANDLE_OPACITY,
     gsk_gpu_node_processor_add_node_as_pattern,
     gsk_gpu_node_processor_create_linear_gradient_pattern,
   },
   [GSK_REPEATING_LINEAR_GRADIENT_NODE] = {
     0,
+    GSK_GPU_HANDLE_OPACITY,
     gsk_gpu_node_processor_add_node_as_pattern,
     gsk_gpu_node_processor_create_linear_gradient_pattern,
   },
   [GSK_RADIAL_GRADIENT_NODE] = {
     0,
+    GSK_GPU_HANDLE_OPACITY,
     gsk_gpu_node_processor_add_node_as_pattern,
     gsk_gpu_node_processor_create_radial_gradient_pattern,
   },
   [GSK_REPEATING_RADIAL_GRADIENT_NODE] = {
     0,
+    GSK_GPU_HANDLE_OPACITY,
     gsk_gpu_node_processor_add_node_as_pattern,
     gsk_gpu_node_processor_create_radial_gradient_pattern,
   },
   [GSK_CONIC_GRADIENT_NODE] = {
     0,
+    GSK_GPU_HANDLE_OPACITY,
     gsk_gpu_node_processor_add_node_as_pattern,
     gsk_gpu_node_processor_create_conic_gradient_pattern,
   },
   [GSK_BORDER_NODE] = {
+    0,
     0,
     gsk_gpu_node_processor_add_border_node,
     NULL,
   },
   [GSK_TEXTURE_NODE] = {
     0,
+    0,
     gsk_gpu_node_processor_add_texture_node,
     gsk_gpu_node_processor_create_texture_pattern,
   },
   [GSK_INSET_SHADOW_NODE] = {
+    0,
     0,
     gsk_gpu_node_processor_add_inset_shadow_node,
     NULL,
   },
   [GSK_OUTSET_SHADOW_NODE] = {
     0,
+    0,
     gsk_gpu_node_processor_add_outset_shadow_node,
     NULL,
   },
   [GSK_TRANSFORM_NODE] = {
     GSK_GPU_GLOBAL_MATRIX | GSK_GPU_GLOBAL_SCALE | GSK_GPU_GLOBAL_CLIP | GSK_GPU_GLOBAL_SCISSOR,
+    GSK_GPU_HANDLE_OPACITY,
     gsk_gpu_node_processor_add_transform_node,
     gsk_gpu_node_processor_create_transform_pattern,
   },
   [GSK_OPACITY_NODE] = {
-    0,
-    gsk_gpu_node_processor_add_node_as_pattern,
+    GSK_GPU_GLOBAL_MATRIX | GSK_GPU_GLOBAL_SCALE | GSK_GPU_GLOBAL_CLIP | GSK_GPU_GLOBAL_SCISSOR,
+    GSK_GPU_HANDLE_OPACITY,
+    gsk_gpu_node_processor_add_opacity_node,
     gsk_gpu_node_processor_create_opacity_pattern,
   },
   [GSK_COLOR_MATRIX_NODE] = {
     0,
+    GSK_GPU_HANDLE_OPACITY,
     gsk_gpu_node_processor_add_node_as_pattern,
     gsk_gpu_node_processor_create_color_matrix_pattern
   },
   [GSK_REPEAT_NODE] = {
     0,
+    GSK_GPU_HANDLE_OPACITY,
     gsk_gpu_node_processor_add_node_as_pattern,
     gsk_gpu_node_processor_create_repeat_pattern
   },
   [GSK_CLIP_NODE] = {
     GSK_GPU_GLOBAL_MATRIX | GSK_GPU_GLOBAL_SCALE | GSK_GPU_GLOBAL_CLIP | GSK_GPU_GLOBAL_SCISSOR,
+    GSK_GPU_HANDLE_OPACITY,
     gsk_gpu_node_processor_add_clip_node,
     gsk_gpu_node_processor_create_clip_pattern,
   },
   [GSK_ROUNDED_CLIP_NODE] = {
     GSK_GPU_GLOBAL_MATRIX | GSK_GPU_GLOBAL_SCALE | GSK_GPU_GLOBAL_CLIP | GSK_GPU_GLOBAL_SCISSOR,
+    GSK_GPU_HANDLE_OPACITY,
     gsk_gpu_node_processor_add_rounded_clip_node,
     NULL,
   },
   [GSK_SHADOW_NODE] = {
+    0,
     0,
     gsk_gpu_node_processor_add_shadow_node,
     NULL,
   },
   [GSK_BLEND_NODE] = {
     0,
+    0,
     NULL,
     NULL,
   },
   [GSK_CROSS_FADE_NODE] = {
     0,
+    GSK_GPU_HANDLE_OPACITY,
     gsk_gpu_node_processor_add_node_as_pattern,
     gsk_gpu_node_processor_create_cross_fade_pattern,
   },
   [GSK_TEXT_NODE] = {
+    0,
     0,
     gsk_gpu_node_processor_add_glyph_node,
     gsk_gpu_node_processor_create_glyph_pattern,
   },
   [GSK_BLUR_NODE] = {
     0,
+    0,
     gsk_gpu_node_processor_add_blur_node,
     NULL,
   },
   [GSK_DEBUG_NODE] = {
     GSK_GPU_GLOBAL_MATRIX | GSK_GPU_GLOBAL_SCALE | GSK_GPU_GLOBAL_CLIP | GSK_GPU_GLOBAL_SCISSOR,
+    GSK_GPU_HANDLE_OPACITY,
     gsk_gpu_node_processor_add_debug_node,
     gsk_gpu_node_processor_create_debug_pattern,
   },
   [GSK_GL_SHADER_NODE] = {
+    0,
     0,
     NULL,
     NULL,
   },
   [GSK_TEXTURE_SCALE_NODE] = {
     0,
+    0,
     gsk_gpu_node_processor_add_texture_scale_node,
     NULL,
   },
   [GSK_MASK_NODE] = {
     0,
+    GSK_GPU_HANDLE_OPACITY,
     gsk_gpu_node_processor_add_node_as_pattern,
     gsk_gpu_node_processor_create_mask_pattern,
   },
   [GSK_FILL_NODE] = {
+    0,
     0,
     NULL,
     NULL,
   },
   [GSK_STROKE_NODE] = {
     0,
+    0,
     NULL,
     NULL,
   },
   [GSK_SUBSURFACE_NODE] = {
     GSK_GPU_GLOBAL_MATRIX | GSK_GPU_GLOBAL_SCALE | GSK_GPU_GLOBAL_CLIP | GSK_GPU_GLOBAL_SCISSOR,
+    GSK_GPU_HANDLE_OPACITY,
     gsk_gpu_node_processor_add_subsurface_node,
     gsk_gpu_node_processor_create_subsurface_pattern,
   },
@@ -2408,6 +2473,12 @@ gsk_gpu_node_processor_add_node (GskGpuNodeProcessor *self,
     {
       g_critical ("unkonwn node type %u for %s", node_type, g_type_name_from_instance ((GTypeInstance *) node));
       gsk_gpu_node_processor_add_fallback_node (self, node);
+      return;
+    }
+
+  if (self->opacity < 1.0 && (nodes_vtable[node_type].features & GSK_GPU_HANDLE_OPACITY) == 0)
+    {
+      gsk_gpu_node_processor_add_without_opacity (self, node);
       return;
     }
 
