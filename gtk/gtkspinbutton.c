@@ -218,6 +218,7 @@ struct _GtkSpinButton
   guint          timer_calls   : 3;
   guint          wrap          : 1;
   guint          editing_canceled : 1;
+  guint          activates_default : 1;
 };
 
 struct _GtkSpinButtonClass
@@ -238,6 +239,7 @@ struct _GtkSpinButtonClass
 
 enum {
   PROP_0,
+  PROP_ACTIVATES_DEFAULT,
   PROP_ADJUSTMENT,
   PROP_CLIMB_RATE,
   PROP_DIGITS,
@@ -365,6 +367,20 @@ gtk_spin_button_class_init (GtkSpinButtonClass *class)
   class->input = NULL;
   class->output = NULL;
   class->change_value = gtk_spin_button_real_change_value;
+
+  /**
+   * GtkSpinButton:activates-default: (attributes org.gtk.Property.get=gtk_spin_button_get_activates_default org.gtk.Property.set=gtk_spin_button_set_activates_default)
+   *
+   * Whether to activate the default widget when the spin button is activated.
+   *
+   * See [signal@Gtk.SpinButton::activate] for what counts as activation.
+   *
+   * Since: 4.14
+   */
+  spinbutton_props[PROP_ACTIVATES_DEFAULT] =
+    g_param_spec_boolean ("activates-default", NULL, NULL,
+                          FALSE,
+                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkSpinButton:adjustment: (attributes org.gtk.Property.get=gtk_spin_button_get_adjustment org.gtk.Property.set=gtk_spin_button_set_adjustment)
@@ -729,6 +745,9 @@ gtk_spin_button_set_property (GObject      *object,
     {
       GtkAdjustment *adjustment;
 
+    case PROP_ACTIVATES_DEFAULT:
+      gtk_spin_button_set_activates_default (spin_button, g_value_get_boolean (value));
+      break;
     case PROP_ADJUSTMENT:
       adjustment = GTK_ADJUSTMENT (g_value_get_object (value));
       gtk_spin_button_set_adjustment (spin_button, adjustment);
@@ -794,6 +813,9 @@ gtk_spin_button_get_property (GObject      *object,
 
   switch (prop_id)
     {
+    case PROP_ACTIVATES_DEFAULT:
+      g_value_set_boolean (value, spin_button->activates_default);
+      break;
     case PROP_ADJUSTMENT:
       g_value_set_object (value, spin_button->adjustment);
       break;
@@ -1003,6 +1025,7 @@ gtk_spin_button_init (GtkSpinButton *spin_button)
   GtkEventController *controller;
   GtkGesture *gesture;
 
+  spin_button->activates_default = FALSE;
   spin_button->adjustment = NULL;
   spin_button->timer = 0;
   spin_button->climb_rate = 0.0;
@@ -1850,6 +1873,51 @@ gtk_spin_button_new_with_range (double min,
   gtk_spin_button_set_numeric (spin, TRUE);
 
   return GTK_WIDGET (spin);
+}
+
+/**
+ * gtk_spin_button_set_activates_default: (attributes org.gtk.Method.set_property=activates-default)
+ * @spin_button: a `GtkSpinButton`
+ * @activates_default: %TRUE to activate window’s default widget on activation
+ *
+ * Sets whether activating the spin button will activate the default
+ * widget for the window containing the spin button.
+ *
+ * See [signal@Gtk.SpinButton::activate] for what counts as activation.
+ *
+ * Since: 4.14
+ */
+void
+gtk_spin_button_set_activates_default (GtkSpinButton *spin_button,
+                                       gboolean       activates_default)
+{
+  g_return_if_fail (GTK_IS_SPIN_BUTTON (spin_button));
+
+  activates_default = !!activates_default;
+
+  if (activates_default != spin_button->activates_default)
+    {
+      spin_button->activates_default = activates_default;
+      g_object_notify_by_pspec (G_OBJECT (spin_button), spinbutton_props[PROP_ACTIVATES_DEFAULT]);
+    }
+}
+
+/**
+ * gtk_spin_button_get_activates_default: (attributes org.gtk.Method.get_property=activates-default)
+ * @spin_button: a `GtkSpinButton`
+ *
+ * Retrieves the value set by [method@Gtk.SpinButton.set_activates_default].
+ *
+ * Returns: %TRUE if the spin button will activate the default widget
+ *
+ * Since: 4.14
+ */
+gboolean
+gtk_spin_button_get_activates_default (GtkSpinButton *spin_button)
+{
+  g_return_val_if_fail (GTK_IS_SPIN_BUTTON (spin_button), FALSE);
+
+  return spin_button->activates_default;
 }
 
 /**

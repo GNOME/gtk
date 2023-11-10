@@ -116,6 +116,13 @@ GtkWidget*      gtk_spin_button_new_with_range     (double   min,
                                                     double   max,
                                                     double   step);
 
+GDK_AVAILABLE_IN_4_14
+void            gtk_spin_button_set_activates_default (GtkSpinButton *spin_button,
+                                                       gboolean       activates_default);
+
+GDK_AVAILABLE_IN_4_14
+gboolean        gtk_spin_button_get_activates_default (GtkSpinButton *spin_button);
+
 GDK_AVAILABLE_IN_ALL
 void            gtk_spin_button_set_adjustment     (GtkSpinButton  *spin_button,
                                                     GtkAdjustment  *adjustment);
