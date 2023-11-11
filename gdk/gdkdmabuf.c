@@ -377,6 +377,8 @@ gdk_dmabuf_get_memory_format (guint32  fourcc,
     return premultiplied ? info->premultiplied_memory_format
                          : info->unpremultiplied_memory_format;
 
+  GDK_DEBUG (DMABUF, "Falling back to generic ARGB for dmabuf format %.4s", (char *)&fourcc);
+
   return premultiplied ? GDK_MEMORY_A8R8G8B8_PREMULTIPLIED
                        : GDK_MEMORY_A8R8G8B8;
 }
