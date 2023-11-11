@@ -367,6 +367,20 @@ get_drm_format_info (guint32 fourcc)
   return NULL;
 }
 
+GdkMemoryFormat
+gdk_dmabuf_get_memory_format (guint32  fourcc,
+                              gboolean premultiplied)
+{
+  const GdkDrmFormatInfo *info = get_drm_format_info (fourcc);
+
+  if (info)
+    return premultiplied ? info->premultiplied_memory_format
+                         : info->unpremultiplied_memory_format;
+
+  return premultiplied ? GDK_MEMORY_A8R8G8B8_PREMULTIPLIED
+                       : GDK_MEMORY_A8R8G8B8;
+}
+
 static gboolean
 gdk_dmabuf_direct_downloader_add_formats (const GdkDmabufDownloader *downloader,
                                           GdkDisplay                *display,

@@ -163,76 +163,6 @@ gdk_dmabuf_egl_downloader_add_formats (const GdkDmabufDownloader *downloader,
   return retval;
 }
 
-static GdkMemoryFormat
-get_memory_format (guint32  fourcc,
-                   gboolean premultiplied)
-{
-  switch (fourcc)
-    {
-    case DRM_FORMAT_ARGB8888:
-    case DRM_FORMAT_ABGR8888:
-    case DRM_FORMAT_XRGB8888_A8:
-    case DRM_FORMAT_XBGR8888_A8:
-      return premultiplied ? GDK_MEMORY_A8R8G8B8_PREMULTIPLIED : GDK_MEMORY_A8R8G8B8;
-
-    case DRM_FORMAT_RGBA8888:
-    case DRM_FORMAT_RGBX8888_A8:
-      return premultiplied ? GDK_MEMORY_R8G8B8A8_PREMULTIPLIED : GDK_MEMORY_R8G8B8A8;
-
-    case DRM_FORMAT_BGRA8888:
-      return premultiplied ? GDK_MEMORY_B8G8R8A8_PREMULTIPLIED : GDK_MEMORY_B8G8R8A8;
-
-    case DRM_FORMAT_RGB888:
-    case DRM_FORMAT_XRGB8888:
-    case DRM_FORMAT_XBGR8888:
-    case DRM_FORMAT_RGBX8888:
-    case DRM_FORMAT_BGRX8888:
-      return GDK_MEMORY_R8G8B8;
-
-    case DRM_FORMAT_BGR888:
-      return GDK_MEMORY_B8G8R8;
-
-    case DRM_FORMAT_XRGB2101010:
-    case DRM_FORMAT_XBGR2101010:
-    case DRM_FORMAT_RGBX1010102:
-    case DRM_FORMAT_BGRX1010102:
-    case DRM_FORMAT_XRGB16161616:
-    case DRM_FORMAT_XBGR16161616:
-      return GDK_MEMORY_R16G16B16;
-
-    case DRM_FORMAT_ARGB2101010:
-    case DRM_FORMAT_ABGR2101010:
-    case DRM_FORMAT_RGBA1010102:
-    case DRM_FORMAT_BGRA1010102:
-    case DRM_FORMAT_ARGB16161616:
-    case DRM_FORMAT_ABGR16161616:
-      return premultiplied ? GDK_MEMORY_R16G16B16A16_PREMULTIPLIED : GDK_MEMORY_R16G16B16A16;
-
-    case DRM_FORMAT_ARGB16161616F:
-    case DRM_FORMAT_ABGR16161616F:
-      return premultiplied ? GDK_MEMORY_R16G16B16A16_FLOAT_PREMULTIPLIED : GDK_MEMORY_R16G16B16A16_FLOAT;
-
-    case DRM_FORMAT_XRGB16161616F:
-    case DRM_FORMAT_XBGR16161616F:
-      return GDK_MEMORY_R16G16B16_FLOAT;
-
-    case DRM_FORMAT_YUYV:
-    case DRM_FORMAT_YVYU:
-    case DRM_FORMAT_UYVY:
-    case DRM_FORMAT_VYUY:
-    case DRM_FORMAT_XYUV8888:
-#ifdef DRM_FORMAT_XVUY8888
-    case DRM_FORMAT_XVUY8888:
-#endif
-    case DRM_FORMAT_VUY888:
-      return GDK_MEMORY_R8G8B8;
-
-    /* Add more formats here */
-    default:
-      return premultiplied ? GDK_MEMORY_A8R8G8B8_PREMULTIPLIED : GDK_MEMORY_A8R8G8B8;
-    }
-}
-
 static gboolean
 gdk_dmabuf_egl_downloader_supports (const GdkDmabufDownloader  *downloader,
                                     GdkDisplay                 *display,
@@ -243,7 +173,7 @@ gdk_dmabuf_egl_downloader_supports (const GdkDmabufDownloader  *downloader,
 {
   if (gdk_dmabuf_formats_contains (display->egl_dmabuf_formats, dmabuf->fourcc, dmabuf->modifier))
     {
-      *out_format = get_memory_format (dmabuf->fourcc, premultiplied);
+      *out_format = gdk_dmabuf_get_memory_format (dmabuf->fourcc, premultiplied);
       return TRUE;
     }
 
