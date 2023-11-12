@@ -176,7 +176,6 @@ check_headers = [
   'sys/time.h',
   'sys/types.h',
   'unistd.h',
-  'gio/gdesktopappinfo.h'
 ]
 
 foreach h : check_headers
@@ -380,6 +379,9 @@ if os_win32
 endif
 if os_unix
   giounix_dep  = dependency('gio-unix-2.0', version: glib_req, required: false)
+  if giounix_dep.found() and cc.has_header('gio/gdesktopappinfo.h', dependencies: giounix_dep)
+    cdata.set('HAVE_DESKTOPAPPINFO', 1)
+  endif
 endif
 gmodule_dep    = dependency('gmodule-2.0', version: glib_req)
 cairo_dep      = dependency('cairo', version: cairo_req,
