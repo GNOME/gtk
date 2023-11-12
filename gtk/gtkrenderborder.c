@@ -752,10 +752,12 @@ gtk_css_style_snapshot_outline (GtkCssBoxes *boxes,
       border_width[3] = border_width[2] = border_width[1] = border_width[0];
       colors[0] = colors[1] = colors[2] = colors[3] = *color;
 
+      gtk_snapshot_push_debug (snapshot, "CSS outline");
       snapshot_border (snapshot,
                        gtk_css_boxes_get_outline_box (boxes),
                        border_width,
                        colors,
                        border_style);
+      gtk_snapshot_pop (snapshot);
     }
 }
