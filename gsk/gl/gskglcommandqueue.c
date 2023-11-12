@@ -1104,7 +1104,7 @@ gsk_gl_command_queue_execute (GskGLCommandQueue    *self,
                          (void *) G_STRUCT_OFFSET (GskGLDrawVertex, color2));
 
   /* Setup initial scissor clip */
-  if (scissor != NULL)
+  if (scissor != NULL && cairo_region_num_rectangles (scissor) > 0)
     {
       cairo_rectangle_int_t r;
 
