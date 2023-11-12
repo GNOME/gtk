@@ -368,8 +368,9 @@ get_drm_format_info (guint32 fourcc)
 }
 
 GdkMemoryFormat
-gdk_dmabuf_get_memory_format (guint32  fourcc,
-                              gboolean premultiplied)
+gdk_dmabuf_get_memory_format (GdkDisplay *display,
+                              guint32     fourcc,
+                              gboolean    premultiplied)
 {
   const GdkDrmFormatInfo *info = get_drm_format_info (fourcc);
 
@@ -377,7 +378,8 @@ gdk_dmabuf_get_memory_format (guint32  fourcc,
     return premultiplied ? info->premultiplied_memory_format
                          : info->unpremultiplied_memory_format;
 
-  GDK_DEBUG (DMABUF, "Falling back to generic ARGB for dmabuf format %.4s", (char *)&fourcc);
+  GDK_DISPLAY_DEBUG (display, DMABUF,
+                     "Falling back to generic ARGB for dmabuf format %.4s", (char *)&fourcc);
 
   return premultiplied ? GDK_MEMORY_A8R8G8B8_PREMULTIPLIED
                        : GDK_MEMORY_A8R8G8B8;
@@ -392,9 +394,10 @@ gdk_dmabuf_direct_downloader_add_formats (const GdkDmabufDownloader *downloader,
 
   for (i = 0; i < G_N_ELEMENTS (supported_formats); i++)
     {
-      GDK_DEBUG (DMABUF, "%s dmabuf format %.4s:%#" G_GINT64_MODIFIER "x",
-                 downloader->name,
-                 (char *) &supported_formats[i].fourcc, (guint64) DRM_FORMAT_MOD_LINEAR);
+      GDK_DISPLAY_DEBUG (display, DMABUF,
+                         "%s dmabuf format %.4s:%#" G_GINT64_MODIFIER "x",
+                         downloader->name,
+                         (char *) &supported_formats[i].fourcc, (guint64) DRM_FORMAT_MOD_LINEAR);
 
       gdk_dmabuf_formats_builder_add_format (builder,
                                              supported_formats[i].fourcc,
@@ -441,9 +444,10 @@ gdk_dmabuf_direct_downloader_supports (const GdkDmabufDownloader  *downloader,
 }
 
 static void
-gdk_dmabuf_direct_downloader_do_download (GdkTexture *texture,
-                                          guchar     *data,
-                                          gsize       stride)
+gdk_dmabuf_direct_downloader_do_download (const GdkDmabufDownloader *downloader,
+                                          GdkTexture                *texture,
+                                          guchar                    *data,
+                                          gsize                      stride)
 {
   const GdkDrmFormatInfo *info;
   const GdkDmabuf *dmabuf;
@@ -455,9 +459,9 @@ gdk_dmabuf_direct_downloader_do_download (GdkTexture *texture,
   dmabuf = gdk_dmabuf_texture_get_dmabuf (GDK_DMABUF_TEXTURE (texture));
   info = get_drm_format_info (dmabuf->fourcc);
 
-  GDK_DEBUG (DMABUF,
-             "Using mmap() and memcpy() for downloading a dmabuf (format %.4s::%016llx)",
-             (char *)&dmabuf->fourcc, (long long unsigned) dmabuf->modifier);
+  GDK_DISPLAY_DEBUG (gdk_dmabuf_texture_get_display (GDK_DMABUF_TEXTURE (texture)), DMABUF,
+                     "Using %s for downloading a dmabuf (format %.4s:%#" G_GINT64_MODIFIER "x)",
+                     downloader->name, (char *)&dmabuf->fourcc, dmabuf->modifier);
 
   for (i = 0; i < dmabuf->n_planes; i++)
     {
@@ -526,7 +530,7 @@ gdk_dmabuf_direct_downloader_download (const GdkDmabufDownloader *downloader,
   GdkMemoryFormat src_format = gdk_texture_get_format (texture);
 
   if (format == src_format)
-    gdk_dmabuf_direct_downloader_do_download (texture, data, stride);
+    gdk_dmabuf_direct_downloader_do_download (downloader, texture, data, stride);
   else
     {
       unsigned int width, height;
@@ -539,7 +543,7 @@ gdk_dmabuf_direct_downloader_download (const GdkDmabufDownloader *downloader,
       src_stride = width * gdk_memory_format_bytes_per_pixel (src_format);
       src_data = g_new (guchar, src_stride * height);
 
-      gdk_dmabuf_direct_downloader_do_download (texture, src_data, src_stride);
+      gdk_dmabuf_direct_downloader_do_download (downloader, texture, src_data, src_stride);
 
       gdk_memory_convert (data, stride, format,
                           src_data, src_stride, src_format,

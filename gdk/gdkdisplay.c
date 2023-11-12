@@ -1885,7 +1885,7 @@ gdk_display_init_dmabuf (GdkDisplay *self)
   builder = gdk_dmabuf_formats_builder_new ();
 
 #ifdef HAVE_DMABUF
-  if (!GDK_DEBUG_CHECK (DMABUF_DISABLE))
+  if (!GDK_DISPLAY_DEBUG_CHECK (self, DMABUF_DISABLE))
     {
       gdk_display_prepare_gl (self, NULL);
 

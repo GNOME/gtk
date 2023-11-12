@@ -104,11 +104,12 @@ gdk_dmabuf_egl_downloader_collect_formats (const GdkDmabufDownloader *downloader
           if (modifiers[j] != DRM_FORMAT_MOD_LINEAR &&
               (!external_only[j] || gdk_gl_context_get_use_es (context)))
             {
-              GDK_DEBUG (DMABUF, "%s%s dmabuf format %.4s:%#" G_GINT64_MODIFIER "x",
-                         external_only[j] ? "external " : "",
-                         downloader->name,
-                         (char *) &fourccs[i],
-                         modifiers[j]);
+              GDK_DISPLAY_DEBUG (display, DMABUF,
+                                 "%s%s dmabuf format %.4s:%#" G_GINT64_MODIFIER "x",
+                                 external_only[j] ? "external " : "",
+                                 downloader->name,
+                                 (char *) &fourccs[i],
+                                 modifiers[j]);
 
               gdk_dmabuf_formats_builder_add_format (formats, fourccs[i], modifiers[j]);
             }
@@ -173,7 +174,7 @@ gdk_dmabuf_egl_downloader_supports (const GdkDmabufDownloader  *downloader,
 {
   if (gdk_dmabuf_formats_contains (display->egl_dmabuf_formats, dmabuf->fourcc, dmabuf->modifier))
     {
-      *out_format = gdk_dmabuf_get_memory_format (dmabuf->fourcc, premultiplied);
+      *out_format = gdk_dmabuf_get_memory_format (display, dmabuf->fourcc, premultiplied);
       return TRUE;
     }
 
@@ -308,13 +309,19 @@ gdk_dmabuf_egl_downloader_download (const GdkDmabufDownloader *downloader,
                                     gsize                      stride)
 {
   Download download;
-
-  GDK_DEBUG (DMABUF, "Using %s for downloading a dmabuf", downloader->name);
+  const GdkDmabuf *dmabuf;
 
   download.texture = GDK_DMABUF_TEXTURE (texture);
   download.format = format;
   download.data = data;
   download.stride = stride;
+
+  dmabuf = gdk_dmabuf_texture_get_dmabuf (GDK_DMABUF_TEXTURE (texture));
+
+  GDK_DISPLAY_DEBUG (gdk_dmabuf_texture_get_display (download.texture), DMABUF,
+                     "Using %s for downloading a dmabuf (format %.4s:%#" G_GINT64_MODIFIER "x)",
+                     downloader->name, (char *)&dmabuf->fourcc, dmabuf->modifier);
+
 
   gdk_dmabuf_egl_downloader_run (gdk_dmabuf_egl_downloader_do_download, &download);
 }
