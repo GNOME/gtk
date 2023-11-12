@@ -991,9 +991,10 @@ gdk_dmabuf_texture_builder_build (GdkDmabufTextureBuilder *self,
   for (i = 0; i < self->dmabuf.n_planes; i++)
     g_return_val_if_fail (self->dmabuf.planes[i].fd != -1, NULL);
 
-  if (GDK_DEBUG_CHECK (DMABUF_DISABLE))
+  if (GDK_DISPLAY_DEBUG_CHECK (self->display, DMABUF_DISABLE))
     {
-      g_set_error_literal (error, GDK_DMABUF_ERROR, GDK_DMABUF_ERROR_NOT_AVAILABLE,
+      g_set_error_literal (error,
+                           GDK_DMABUF_ERROR, GDK_DMABUF_ERROR_NOT_AVAILABLE,
                            "dmabuf support disabled via GDK_DEBUG environment variable");
       return NULL;
     }

@@ -51,7 +51,8 @@ gboolean                    gdk_dmabuf_sanitize                 (GdkDmabuf      
 
 gboolean                    gdk_dmabuf_is_disjoint              (const GdkDmabuf                *dmabuf);
 
-GdkMemoryFormat             gdk_dmabuf_get_memory_format        (guint32  fourcc,
-                                                                 gboolean premultiplied);
+GdkMemoryFormat             gdk_dmabuf_get_memory_format        (GdkDisplay *display,
+                                                                 guint32     fourcc,
+                                                                 gboolean    premultiplied);
 
 #endif

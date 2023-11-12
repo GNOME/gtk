@@ -172,8 +172,8 @@ gdk_dmabuf_texture_new_from_builder (GdkDmabufTextureBuilder *builder,
       return NULL;
     }
 
-  GDK_DEBUG (DMABUF,
-             "Dmabuf texture, format %.4s:%#lx, %s%u planes, memory format %u, downloader %s",
+  GDK_DISPLAY_DEBUG (display, DMABUF,
+             "Creating dmabuf texture, format %.4s:%#" G_GINT64_MODIFIER "x, %s%u planes, memory format %u, downloader %s",
              (char *) &dmabuf.fourcc, dmabuf.modifier,
              gdk_dmabuf_texture_builder_get_premultiplied (builder) ? " premultiplied, " : "",
              dmabuf.n_planes,

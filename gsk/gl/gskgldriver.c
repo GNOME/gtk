@@ -814,7 +814,9 @@ gsk_gl_driver_import_dmabuf_texture (GskGLDriver      *self,
 
   if (width > max_texture_size || height > max_texture_size)
     {
-      GDK_DEBUG (DMABUF, "Can't import dmabuf bigger than MAX_TEXTURE_SIZE (%d)", max_texture_size);
+      GDK_DISPLAY_DEBUG (gdk_gl_context_get_display (context), DMABUF,
+                         "Can't import dmabuf bigger than MAX_TEXTURE_SIZE (%d)",
+                         max_texture_size);
       return 0;
     }
 
