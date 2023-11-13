@@ -3324,7 +3324,7 @@ strip_ulines (const char *text,
   char *q;
   gboolean after_uline = FALSE;
 
-  new_text = malloc (strlen (text) + 1);
+  new_text = g_malloc (strlen (text) + 1);
 
   q = new_text;
   for (p = text; *p; p++)

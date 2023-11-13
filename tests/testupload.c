@@ -9,7 +9,7 @@ static const char *format_name[] = {
 static const char *
 format_to_string (GdkMemoryFormat format)
 {
-  if (format < GDK_MEMORY_N_FORMATS)
+  if (format < g_strv_length ((gchar **) format_name))
     return format_name[format];
   else
     return "ERROR";

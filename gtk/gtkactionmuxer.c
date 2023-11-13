@@ -445,11 +445,14 @@ notify_observers_added (GtkActionMuxer *muxer,
       gboolean enabled;
       GVariant *state;
       GSList *node;
+      GSList *action_watchers;
 
-      if (!action->watchers)
+      action_watchers = action ? action->watchers : NULL;
+
+      if (!action_watchers)
         continue;
 
-      for (node = action ? action->watchers : NULL; node; node = node->next)
+      for (node = action_watchers; node; node = node->next)
         gtk_action_observer_primary_accel_changed (node->data, GTK_ACTION_OBSERVABLE (muxer),
                                                    action_name, NULL);
 
@@ -461,7 +464,7 @@ notify_observers_added (GtkActionMuxer *muxer,
                                       TRUE))
         continue;
 
-      for (node = action->watchers; node; node = node->next)
+      for (node = action_watchers; node; node = node->next)
         {
           gtk_action_observer_action_added (node->data,
                                             GTK_ACTION_OBSERVABLE (muxer),

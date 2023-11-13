@@ -479,11 +479,11 @@ check_hex (GtkIMContextSimple *context_simple,
 
       ch = gdk_keyval_to_unicode (priv->compose_buffer[i]);
 
-      if (ch == 0)
-        return FALSE;
-
-      if (!g_unichar_isxdigit (ch))
-        return FALSE;
+      if (ch == 0 || !g_unichar_isxdigit (ch))
+        {
+          g_string_free (str, TRUE);
+          return FALSE;
+        }
 
       buf[g_unichar_to_utf8 (ch, buf)] = '\0';
 

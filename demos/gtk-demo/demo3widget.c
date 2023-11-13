@@ -75,7 +75,9 @@ query_tooltip (GtkWidget  *widget,
   gtk_grid_attach (GTK_GRID (grid), label, 0, 2, 1, 1);
 
   precision = 1;
+  s = NULL;
   do {
+    g_free (s);
     s = g_strdup_printf ("%.*f", precision, self->scale);
     l = strlen (s) - 1;
     while (s[l] == '0')

@@ -186,7 +186,6 @@ gtk_css_parser_resolve_url (GtkCssParser *self,
       g_free (scheme);
       return file;
     }
-  g_free (scheme);
 
   if (self->directory == NULL)
     return NULL;

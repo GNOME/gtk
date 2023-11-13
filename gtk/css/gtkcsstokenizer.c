@@ -970,6 +970,7 @@ gtk_css_tokenizer_read_url (GtkCssTokenizer  *tokenizer,
             {
               gtk_css_tokenizer_read_bad_url (tokenizer, token);
               gtk_css_tokenizer_parse_error (error, "Whitespace only allowed at start and end of url");
+              g_string_free (url, TRUE);
               return FALSE;
             }
         }
