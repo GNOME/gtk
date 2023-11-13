@@ -38,6 +38,7 @@
 
 #include "gdk/gdkhslaprivate.h"
 #include "gsk/gskroundedrectprivate.h"
+#include "gsk/gskrectprivate.h"
 
 typedef struct _GtkBorderImage GtkBorderImage;
 
@@ -678,8 +679,8 @@ gtk_css_style_snapshot_border (GtkCssBoxes *boxes,
       graphene_simd4f_t alpha_test_vector;
 
       /* Optimize the most common case of "This widget has no border" */
-      if (graphene_rect_equal (gtk_css_boxes_get_border_rect (boxes),
-                               gtk_css_boxes_get_padding_rect (boxes)))
+      if (gsk_rect_equal (gtk_css_boxes_get_border_rect (boxes),
+                          gtk_css_boxes_get_padding_rect (boxes)))
         return;
 
       colors[0] = *gtk_css_color_value_get_rgba (border->border_top_color ? border->border_top_color : boxes->style->core->color);
