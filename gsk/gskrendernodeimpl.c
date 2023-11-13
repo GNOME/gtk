@@ -131,7 +131,7 @@ gsk_color_node_diff (GskRenderNode  *node1,
   GskColorNode *self1 = (GskColorNode *) node1;
   GskColorNode *self2 = (GskColorNode *) node2;
 
-  if (graphene_rect_equal (&node1->bounds, &node2->bounds) &&
+  if (gsk_rect_equal (&node1->bounds, &node2->bounds) &&
       gdk_rgba_equal (&self1->color, &self2->color))
     return;
 
@@ -1685,7 +1685,7 @@ gsk_texture_node_diff (GskRenderNode  *node1,
   GskTextureNode *self2 = (GskTextureNode *) node2;
   cairo_region_t *sub;
 
-  if (!graphene_rect_equal (&node1->bounds, &node2->bounds) ||
+  if (!gsk_rect_equal (&node1->bounds, &node2->bounds) ||
       gdk_texture_get_width (self1->texture) != gdk_texture_get_width (self2->texture) ||
       gdk_texture_get_height (self1->texture) != gdk_texture_get_height (self2->texture))
     {
@@ -1872,7 +1872,7 @@ gsk_texture_scale_node_diff (GskRenderNode  *node1,
   GskTextureScaleNode *self2 = (GskTextureScaleNode *) node2;
   cairo_region_t *sub;
 
-  if (!graphene_rect_equal (&node1->bounds, &node2->bounds) ||
+  if (!gsk_rect_equal (&node1->bounds, &node2->bounds) ||
       self1->filter != self2->filter ||
       gdk_texture_get_width (self1->texture) != gdk_texture_get_width (self2->texture) ||
       gdk_texture_get_height (self1->texture) != gdk_texture_get_height (self2->texture))
@@ -4145,7 +4145,7 @@ gsk_clip_node_diff (GskRenderNode  *node1,
   GskClipNode *self1 = (GskClipNode *) node1;
   GskClipNode *self2 = (GskClipNode *) node2;
 
-  if (graphene_rect_equal (&self1->clip, &self2->clip))
+  if (gsk_rect_equal (&self1->clip, &self2->clip))
     {
       cairo_region_t *sub;
       cairo_rectangle_int_t clip_rect;
@@ -6491,7 +6491,7 @@ gsk_gl_shader_node_diff (GskRenderNode  *node1,
   GskGLShaderNode *self1 = (GskGLShaderNode *) node1;
   GskGLShaderNode *self2 = (GskGLShaderNode *) node2;
 
-  if (graphene_rect_equal (&node1->bounds, &node2->bounds) &&
+  if (gsk_rect_equal (&node1->bounds, &node2->bounds) &&
       self1->shader == self2->shader &&
       g_bytes_compare (self1->args, self2->args) == 0 &&
       self1->n_children == self2->n_children)
