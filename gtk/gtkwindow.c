@@ -397,10 +397,6 @@ static int gtk_window_focus              (GtkWidget        *widget,
 static void gtk_window_move_focus         (GtkWidget         *widget,
                                            GtkDirectionType   dir);
 
-static void gtk_window_get_remembered_size (GtkWindow         *window,
-                                            int               *width,
-                                            int               *height);
-
 static void gtk_window_real_activate_default (GtkWindow         *window);
 static void gtk_window_real_activate_focus   (GtkWindow         *window);
 static void gtk_window_keys_changed          (GtkWindow         *window);
@@ -3718,9 +3714,15 @@ gtk_window_get_default_size (GtkWindow *window,
 			     int       *width,
 			     int       *height)
 {
+  GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
+
   g_return_if_fail (GTK_IS_WINDOW (window));
 
-  gtk_window_get_remembered_size (window, width, height);
+  if (width != NULL)
+    *width = priv->default_width;
+
+  if (height != NULL)
+    *height = priv->default_height;
 }
 
 static gboolean
@@ -4041,17 +4043,6 @@ gtk_window_unmap (GtkWidget *widget)
 
   if (child != NULL)
     gtk_widget_unmap (child);
-}
-
-static void
-gtk_window_get_remembered_size (GtkWindow *window,
-                                int       *width,
-                                int       *height)
-{
-  GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
-
-  *width = priv->default_width;
-  *height = priv->default_height;
 }
 
 static void
