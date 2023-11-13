@@ -36,3 +36,12 @@ gsk_rect_to_float (const graphene_rect_t *rect,
   values[3] = rect->size.height;
 }
 
+static inline gboolean
+gsk_rect_equal (const graphene_rect_t *r1,
+                const graphene_rect_t *r2)
+{
+  return r1->origin.x == r2->origin.x &&
+         r1->origin.y == r2->origin.y &&
+         r1->size.width == r2->size.width &&
+         r1->size.height == r2->size.height;
+}

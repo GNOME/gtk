@@ -2822,7 +2822,7 @@ equal_texture_nodes (const GskRenderNode *node1,
       gsk_texture_node_get_texture (node2))
     return FALSE;
 
-  return graphene_rect_equal (&node1->bounds, &node2->bounds);
+  return gsk_rect_equal (&node1->bounds, &node2->bounds);
 }
 
 static inline void
@@ -3949,7 +3949,7 @@ gsk_gl_render_job_visit_repeat_node (GskGLRenderJob      *job,
   if (node_is_invisible (child))
     return;
 
-  if (!graphene_rect_equal (child_bounds, &child->bounds))
+  if (!gsk_rect_equal (child_bounds, &child->bounds))
     {
       /* TODO: implement these repeat nodes. */
       gsk_gl_render_job_visit_as_fallback (job, node);
