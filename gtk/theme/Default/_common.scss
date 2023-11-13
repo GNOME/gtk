@@ -3343,6 +3343,9 @@ columnview {
 
 treeexpander {
   border-spacing: 4px;
+  indent {
+    -gtk-icon-size: 8px;
+  }
 }
 
 /********************************************************
