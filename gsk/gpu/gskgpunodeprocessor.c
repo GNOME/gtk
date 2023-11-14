@@ -989,6 +989,29 @@ gsk_gpu_node_processor_create_color_matrix_pattern (GskGpuNodeProcessor *self,
 }
 
 static void
+gsk_gpu_node_processor_add_subsurface_node (GskGpuNodeProcessor *self,
+                                            GskRenderNode       *node)
+{
+  gsk_gpu_node_processor_add_node (self, gsk_subsurface_node_get_child (node));
+}
+
+static gboolean
+gsk_gpu_node_processor_create_subsurface_pattern (GskGpuNodeProcessor *self,
+                                                  GskGpuBufferWriter  *writer,
+                                                  GskRenderNode       *node,
+                                                  GskGpuShaderImage   *images,
+                                                  gsize                n_images,
+                                                  gsize               *out_n_images)
+{
+  return gsk_gpu_node_processor_create_node_pattern (self,
+                                                     writer,
+                                                     gsk_subsurface_node_get_child (node),
+                                                     images,
+                                                     n_images,
+                                                     out_n_images);
+}
+
+static void
 gsk_gpu_node_processor_add_container_node (GskGpuNodeProcessor *self,
                                            GskRenderNode       *node)
 {
@@ -1182,9 +1205,9 @@ static const struct
     NULL,
   },
   [GSK_SUBSURFACE_NODE] = {
-    0,
-    NULL,
-    NULL,
+    GSK_GPU_GLOBAL_MATRIX | GSK_GPU_GLOBAL_SCALE | GSK_GPU_GLOBAL_CLIP | GSK_GPU_GLOBAL_SCISSOR,
+    gsk_gpu_node_processor_add_subsurface_node,
+    gsk_gpu_node_processor_create_subsurface_pattern,
   },
 };
 
