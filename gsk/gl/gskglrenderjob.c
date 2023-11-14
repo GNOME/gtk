@@ -37,7 +37,6 @@
 #include <gsk/gskroundedrectprivate.h>
 #include <gsk/gskrectprivate.h>
 #include <gsk/gskrendererprivate.h>
-#include <gsk/gskoffloadprivate.h>
 #include <math.h>
 #include <string.h>
 
@@ -180,8 +179,6 @@ struct _GskGLRenderJob
    * looking at the format of the framebuffer we are rendering on.
    */
   int target_format;
-
-  GskOffload *offload;
 };
 
 typedef struct _GskGLRenderOffscreen
@@ -4622,8 +4619,7 @@ gsk_gl_render_job_new (GskGLDriver           *driver,
                        float                  scale,
                        const cairo_region_t  *region,
                        guint                  framebuffer,
-                       gboolean               clear_framebuffer,
-                       GskOffload            *offload)
+                       gboolean               clear_framebuffer)
 {
   const graphene_rect_t *clip_rect = viewport;
   graphene_rect_t transformed_extents;
@@ -4659,7 +4655,6 @@ gsk_gl_render_job_new (GskGLDriver           *driver,
   job->scale_y = scale;
   job->viewport = *viewport;
   job->target_format = get_framebuffer_format (job->command_queue->context, framebuffer);
-  job->offload = offload;
 
   gsk_gl_render_job_set_alpha (job, 1.0f);
   gsk_gl_render_job_set_projection_from_rect (job, viewport, NULL);

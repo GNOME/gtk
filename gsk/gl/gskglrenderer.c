@@ -275,8 +275,7 @@ update_area_requires_clear (GdkSurface           *surface,
 static void
 gsk_gl_renderer_render (GskRenderer          *renderer,
                         GskRenderNode        *root,
-                        const cairo_region_t *update_area,
-                        GskOffload           *offload)
+                        const cairo_region_t *update_area)
 {
   GskGLRenderer *self = (GskGLRenderer *)renderer;
   cairo_region_t *render_region;
@@ -314,7 +313,7 @@ gsk_gl_renderer_render (GskRenderer          *renderer,
   clear_framebuffer = update_area_requires_clear (surface, render_region);
 
   gsk_gl_driver_begin_frame (self->driver, self->command_queue);
-  job = gsk_gl_render_job_new (self->driver, &viewport, scale, render_region, 0, clear_framebuffer, offload);
+  job = gsk_gl_render_job_new (self->driver, &viewport, scale, render_region, 0, clear_framebuffer);
   if (GSK_RENDERER_DEBUG_CHECK (GSK_RENDERER (self), FALLBACK))
     gsk_gl_render_job_set_debug_fallback (job, TRUE);
   gsk_gl_render_job_render (job, root);
@@ -400,7 +399,7 @@ gsk_gl_renderer_render_texture (GskRenderer           *renderer,
                                           &render_target))
     {
       gsk_gl_driver_begin_frame (self->driver, self->command_queue);
-      job = gsk_gl_render_job_new (self->driver, viewport, 1, NULL, render_target->framebuffer_id, TRUE, NULL);
+      job = gsk_gl_render_job_new (self->driver, viewport, 1, NULL, render_target->framebuffer_id, TRUE);
       if (GSK_RENDERER_DEBUG_CHECK (GSK_RENDERER (self), FALLBACK))
         gsk_gl_render_job_set_debug_fallback (job, TRUE);
       gsk_gl_render_job_render_flipped (job, root);

@@ -349,8 +349,7 @@ gsk_vulkan_renderer_render_texture (GskRenderer           *renderer,
 static void
 gsk_vulkan_renderer_render (GskRenderer          *renderer,
                             GskRenderNode        *root,
-                            const cairo_region_t *region,
-                            GskOffload           *offload)
+                            const cairo_region_t *region)
 {
   GskVulkanRenderer *self = GSK_VULKAN_RENDERER (renderer);
   GskVulkanRender *render;
