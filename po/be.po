@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk main 324beta\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-29 11:22+0000\n"
-"PO-Revision-Date: 2023-11-15 01:16+0300\n"
+"POT-Creation-Date: 2023-11-14 22:28+0000\n"
+"PO-Revision-Date: 2023-11-15 02:06+0300\n"
 "Last-Translator: Yuras Shumovich <shumovichy@gmail.com>\n"
 "Language-Team: Belarusian\n"
 "Language: be\n"
@@ -1156,7 +1156,7 @@ msgstr "П_алітра:"
 
 #: gtk/deprecated/gtkcolorsel.c:578
 msgid "Color Wheel"
-msgstr "Кола колер"
+msgstr "Кола колераў"
 
 #: gtk/deprecated/gtkcolorsel.c:1072
 msgid ""
@@ -1546,7 +1546,7 @@ msgid ""
 "See the <a href=\"%s\">%s</a> for details."
 msgstr ""
 "Праграма распаўсюджваецца без аніякіх гарантый.\n"
-"Падрабязнасці глядзіце тут: <a href=«%s»>%s</a>."
+"Падрабязнасці глядзіце тут: <a href=\"%s\">%s</a>."
 
 #. This is the text that should appear next to menu accelerators
 #. * that use the shift key. If the text on this key isn't typically
