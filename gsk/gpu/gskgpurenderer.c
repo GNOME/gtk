@@ -222,6 +222,12 @@ gsk_gpu_renderer_render (GskRenderer          *renderer,
   cairo_region_t *render_region;
   GdkSurface *surface;
 
+  if (cairo_region_is_empty (region))
+    {
+      gdk_draw_context_empty_frame (priv->context);
+      return;
+    }
+
   gdk_draw_context_begin_frame_full (priv->context,
                                      gsk_render_node_get_preferred_depth (root),
                                      region);
