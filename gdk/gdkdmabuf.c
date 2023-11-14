@@ -78,6 +78,55 @@ download_memcpy (guchar          *dst_data,
     }
 }
 
+static void
+download_memcpy_3_1 (guchar          *dst_data,
+                     gsize            dst_stride,
+                     GdkMemoryFormat  dst_format,
+                     gsize            width,
+                     gsize            height,
+                     const GdkDmabuf *dmabuf,
+                     const guchar    *src_datas[GDK_DMABUF_MAX_PLANES],
+                     gsize            sizes[GDK_DMABUF_MAX_PLANES])
+{
+  guint a;
+  guchar *dst_row;
+  const guchar *src_data, *src_row;
+  gsize src_stride;
+
+  g_assert (dmabuf->n_planes == 2);
+
+  download_memcpy (dst_data, dst_stride, dst_format, width, height, dmabuf, src_datas, sizes);
+
+  switch ((int)dst_format)
+    {
+    case GDK_MEMORY_A8R8G8B8:
+    case GDK_MEMORY_A8R8G8B8_PREMULTIPLIED:
+    case GDK_MEMORY_A8B8G8R8:
+    case GDK_MEMORY_A8B8G8R8_PREMULTIPLIED:
+      a = 0;
+      break;
+    case GDK_MEMORY_R8G8B8A8:
+    case GDK_MEMORY_R8G8B8A8_PREMULTIPLIED:
+    case GDK_MEMORY_B8G8R8A8:
+    case GDK_MEMORY_B8G8R8A8_PREMULTIPLIED:
+      a = 3;
+      break;
+    default:
+      g_assert_not_reached ();
+    }
+
+  src_stride = dmabuf->planes[1].stride;
+  src_data = src_datas[1];
+
+  for (gsize y = 0; y < height; y++)
+    {
+      dst_row = dst_data + y * dst_stride;
+      src_row = src_data + y * src_stride;
+      for (gsize x = 0; x < width; x++)
+        dst_row[4 * x + a] = src_row[x];
+    }
+}
+
 typedef struct _YUVCoefficients YUVCoefficients;
 
 struct _YUVCoefficients
@@ -332,6 +381,11 @@ static const GdkDrmFormatInfo supported_formats[] = {
   { DRM_FORMAT_ABGR16161616F, GDK_MEMORY_R16G16B16A16_FLOAT_PREMULTIPLIED, GDK_MEMORY_R16G16B16A16_FLOAT, download_memcpy },
   { DRM_FORMAT_RGB888, GDK_MEMORY_R8G8B8, GDK_MEMORY_R8G8B8, download_memcpy },
   { DRM_FORMAT_BGR888, GDK_MEMORY_B8G8R8, GDK_MEMORY_B8G8R8, download_memcpy },
+  /* 3 + 1 formats */
+  { DRM_FORMAT_BGRX8888_A8, GDK_MEMORY_A8R8G8B8_PREMULTIPLIED, GDK_MEMORY_A8R8G8B8, download_memcpy_3_1 },
+  { DRM_FORMAT_RGBX8888_A8, GDK_MEMORY_A8B8G8R8_PREMULTIPLIED, GDK_MEMORY_A8B8G8R8, download_memcpy_3_1 },
+  { DRM_FORMAT_XBGR8888_A8, GDK_MEMORY_R8G8B8A8_PREMULTIPLIED, GDK_MEMORY_R8G8B8A8, download_memcpy_3_1 },
+  { DRM_FORMAT_XRGB8888_A8, GDK_MEMORY_B8G8R8A8_PREMULTIPLIED, GDK_MEMORY_B8G8R8A8, download_memcpy_3_1 },
   /* YUV formats */
   { DRM_FORMAT_NV12, GDK_MEMORY_R8G8B8, GDK_MEMORY_R8G8B8, download_nv12 },
   { DRM_FORMAT_NV21, GDK_MEMORY_R8G8B8, GDK_MEMORY_R8G8B8, download_nv12 },
