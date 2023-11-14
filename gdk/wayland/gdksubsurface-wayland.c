@@ -87,8 +87,6 @@ params_buffer_failed (void                              *data,
 {
   CreateBufferData *cd = data;
 
-  GDK_DEBUG (OFFLOAD, "Creating wl_buffer for dmabuf failed");
-
   cd->buffer = NULL;
   cd->done = TRUE;
 }
@@ -198,12 +196,23 @@ gdk_wayland_subsurface_attach (GdkSubsurface         *sub,
                                 0, 0,
                                 gdk_texture_get_width (texture),
                                 gdk_texture_get_height (texture));
+      GDK_DISPLAY_DEBUG (gdk_surface_get_display (sub->parent), OFFLOAD,
+                         "Attached %dx%d texture to subsurface %p at %d %d %d %d",
+                         gdk_texture_get_width (texture),
+                         gdk_texture_get_height (texture),
+                         self,
+                         self->dest.x, self->dest.y,
+                         self->dest.width, self->dest.height);
+
       result = TRUE;
     }
   else
     {
       GDK_DISPLAY_DEBUG (gdk_surface_get_display (sub->parent), OFFLOAD,
-                         "Failed to get buffer for texture, hiding subsurface %p", self);
+                         "Failed to create wl_buffer for %dx%d texture, hiding subsurface %p",
+                         gdk_texture_get_width (texture),
+                         gdk_texture_get_height (texture),
+                         self);
 
       g_set_object (&self->texture, NULL);
 

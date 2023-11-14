@@ -57,34 +57,55 @@ struct _GskOffload
 };
 
 static GdkTexture *
-find_texture_to_attach (const GskRenderNode *node)
+find_texture_to_attach (GskOffload          *self,
+                        GdkSubsurface       *subsurface,
+                        const GskRenderNode *node)
 {
-  switch ((int)GSK_RENDER_NODE_TYPE (node))
+  for (;;)
     {
-    case GSK_DEBUG_NODE:
-      return find_texture_to_attach (gsk_debug_node_get_child (node));
+      switch ((int)GSK_RENDER_NODE_TYPE (node))
+        {
+        case GSK_DEBUG_NODE:
+          node = gsk_debug_node_get_child (node);
+          break;
 
-    case GSK_CONTAINER_NODE:
-      if (gsk_container_node_get_n_children (node) == 1)
-        return find_texture_to_attach (gsk_container_node_get_child (node, 0));
-      break;
+        case GSK_CONTAINER_NODE:
+          if (gsk_container_node_get_n_children (node) != 1)
+            {
+              GDK_DISPLAY_DEBUG (gdk_surface_get_display (self->surface), OFFLOAD,
+                                 "Can't offload subsurface %p: too much content, container with %d children",
+                                 subsurface, gsk_container_node_get_n_children (node));
+              return NULL;
+            }
+          node = gsk_container_node_get_child (node, 0);
+          break;
 
-    case GSK_TRANSFORM_NODE:
-      {
-        GskTransform *t = gsk_transform_node_get_transform (node);
-        if (gsk_transform_get_category (t) >= GSK_TRANSFORM_CATEGORY_2D_AFFINE)
-          return find_texture_to_attach (gsk_transform_node_get_child (node));
-      }
-      break;
+        case GSK_TRANSFORM_NODE:
+          {
+            GskTransform *t = gsk_transform_node_get_transform (node);
+            if (gsk_transform_get_category (t) < GSK_TRANSFORM_CATEGORY_2D_AFFINE)
+              {
+                char *s = gsk_transform_to_string (t);
+                GDK_DISPLAY_DEBUG (gdk_surface_get_display (self->surface), OFFLOAD,
+                                   "Can't offload subsurface %p: transform %s is not just scale/translate",
+                                   subsurface, s);
+                g_free (s);
+                return NULL;
+              }
+            node = gsk_transform_node_get_child (node);
+          }
+        break;
 
-    case GSK_TEXTURE_NODE:
-      return gsk_texture_node_get_texture (node);
+        case GSK_TEXTURE_NODE:
+          return gsk_texture_node_get_texture (node);
 
-    default:
-      break;
+        default:
+          GDK_DISPLAY_DEBUG (gdk_surface_get_display (self->surface), OFFLOAD,
+                             "Can't offload subsurface %p: Only textures supported but found %s",
+                             subsurface, g_type_name_from_instance ((GTypeInstance *) node));
+          return NULL;
+        }
     }
-
-  return NULL;
 }
 
 static void
@@ -502,25 +523,28 @@ complex_clip:
 
         GskOffloadInfo *info = find_subsurface_info (self, subsurface);
 
-        if (info)
+        if (info == NULL)
           {
-            info->texture = find_texture_to_attach (gsk_subsurface_node_get_child (node));
-            info->can_offload = self->current_clip->is_fully_contained &&
-                                info->texture != NULL;
-
-            if (info->can_offload)
+            GDK_DISPLAY_DEBUG (gdk_surface_get_display (self->surface), OFFLOAD,
+                               "Can't offload: unknown subsurface %p",
+                               subsurface);
+          }
+        else if (!self->current_clip->is_fully_contained)
+          {
+            GDK_DISPLAY_DEBUG (gdk_surface_get_display (self->surface), OFFLOAD,
+                               "Can't offload subsurface %p: clipped",
+                               subsurface);
+          }
+        else
+          {
+            info->texture = find_texture_to_attach (self, subsurface, gsk_subsurface_node_get_child (node));
+            if (info->texture)
               {
+                info->can_offload = TRUE;
                 transform_bounds (self, &node->bounds, &info->rect);
                 info->place_above = self->last_info ? self->last_info->subsurface : NULL;
                 self->last_info = info;
                 self->can_raise = TRUE;
-              }
-            else
-              {
-                GDK_DISPLAY_DEBUG (gdk_surface_get_display (self->surface), OFFLOAD,
-                                   "Can't offload subsurface %p: %s",
-                                   subsurface,
-                                   info->texture == NULL ? "no texture" : "clipped");
               }
           }
       }
@@ -580,13 +604,6 @@ gsk_offload_new (GdkSurface    *surface,
 
       if (info->can_offload)
         {
-          GDK_DISPLAY_DEBUG (display, OFFLOAD, "Attaching %dx%d texture to subsurface %p at %g %g %g %g",
-                             gdk_texture_get_width (info->texture),
-                             gdk_texture_get_height (info->texture),
-                             info->subsurface,
-                             info->rect.origin.x, info->rect.origin.y,
-                             info->rect.size.width, info->rect.size.height);
-
           info->is_offloaded = gdk_subsurface_attach (info->subsurface,
                                                       info->texture,
                                                       &info->rect);
