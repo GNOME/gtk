@@ -4017,17 +4017,20 @@ gsk_gl_render_job_visit_subsurface_node (GskGLRenderJob      *job,
   if (job->offload &&
       gsk_offload_subsurface_is_offloaded (job->offload, subsurface))
     {
-      /* Clear the area so we can see through */
-      if (gsk_gl_render_job_begin_draw (job, CHOOSE_PROGRAM (job, color)))
+      if (!gdk_subsurface_is_above_parent (subsurface))
         {
-          GskGLCommandBatch *batch;
-          guint16 color[4];
-          rgba_to_half (&(GdkRGBA){0,0,0,0}, color);
+          /* Clear the area so we can see through */
+          if (gsk_gl_render_job_begin_draw (job, CHOOSE_PROGRAM (job, color)))
+            {
+              GskGLCommandBatch *batch;
+              guint16 color[4];
+              rgba_to_half (&(GdkRGBA){0,0,0,0}, color);
 
-          batch = gsk_gl_command_queue_get_batch (job->command_queue);
-          batch->draw.blend = 0;
-          gsk_gl_render_job_draw_rect_with_color (job, &node->bounds, color);
-          gsk_gl_render_job_end_draw (job);
+              batch = gsk_gl_command_queue_get_batch (job->command_queue);
+              batch->draw.blend = 0;
+              gsk_gl_render_job_draw_rect_with_color (job, &node->bounds, color);
+              gsk_gl_render_job_end_draw (job);
+            }
         }
     }
   else
