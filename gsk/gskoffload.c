@@ -580,13 +580,6 @@ gsk_offload_new (GdkSurface    *surface,
 
       if (info->can_offload)
         {
-          GDK_DISPLAY_DEBUG (display, OFFLOAD, "Attaching %dx%d texture to subsurface %p at %g %g %g %g",
-                             gdk_texture_get_width (info->texture),
-                             gdk_texture_get_height (info->texture),
-                             info->subsurface,
-                             info->rect.origin.x, info->rect.origin.y,
-                             info->rect.size.width, info->rect.size.height);
-
           info->is_offloaded = gdk_subsurface_attach (info->subsurface,
                                                       info->texture,
                                                       &info->rect);
