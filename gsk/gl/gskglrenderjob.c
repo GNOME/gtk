@@ -4014,8 +4014,9 @@ gsk_gl_render_job_visit_subsurface_node (GskGLRenderJob      *job,
 
   subsurface = (GdkSubsurface *) gsk_subsurface_node_get_subsurface (node);
 
-  if (job->offload &&
-      gsk_offload_subsurface_is_offloaded (job->offload, subsurface))
+  if (subsurface &&
+      gdk_subsurface_get_texture (subsurface) && 
+      gdk_subsurface_get_parent (subsurface) == gdk_gl_context_get_surface (job->command_queue->context))
     {
       if (!gdk_subsurface_is_above_parent (subsurface))
         {
