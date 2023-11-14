@@ -43,6 +43,7 @@
 #include "gdkrectangle.h"
 #include "gdktoplevelprivate.h"
 #include "gdkvulkancontext.h"
+#include "gdksubsurfaceprivate.h"
 
 #include <math.h>
 
@@ -485,12 +486,22 @@ gdk_surface_init (GdkSurface *surface)
 
   surface->device_cursor = g_hash_table_new_full (NULL, NULL,
                                                  NULL, g_object_unref);
+
+  surface->subsurfaces = g_ptr_array_new ();
 }
 
 static double
 gdk_surface_real_get_scale (GdkSurface *surface)
 {
   return 1.0;
+}
+
+static GdkSubsurface *
+gdk_surface_real_create_subsurface (GdkSurface *surface)
+{
+  GDK_DISPLAY_DEBUG (gdk_surface_get_display (surface), OFFLOAD,
+                     "Subsurfaces not supported for %s", G_OBJECT_TYPE_NAME (surface));
+  return NULL;
 }
 
 static void
@@ -515,6 +526,7 @@ gdk_surface_class_init (GdkSurfaceClass *klass)
 
   klass->beep = gdk_surface_real_beep;
   klass->get_scale = gdk_surface_real_get_scale;
+  klass->create_subsurface = gdk_surface_real_create_subsurface;
 
   /**
    * GdkSurface:cursor: (attributes org.gtk.Property.get=gdk_surface_get_cursor org.gtk.Property.set=gdk_surface_set_cursor)
@@ -756,6 +768,10 @@ gdk_surface_finalize (GObject *object)
 
   if (surface->parent)
     surface->parent->children = g_list_remove (surface->parent->children, surface);
+
+  g_assert (surface->subsurfaces->len == 0);
+
+  g_ptr_array_unref (surface->subsurfaces);
 
   G_OBJECT_CLASS (gdk_surface_parent_class)->finalize (object);
 }
@@ -3053,4 +3069,33 @@ gdk_surface_leave_monitor (GdkSurface *surface,
                            GdkMonitor *monitor)
 {
   g_signal_emit (surface, signals[LEAVE_MONITOR], 0, monitor);
+}
+
+GdkSubsurface *
+gdk_surface_create_subsurface (GdkSurface *surface)
+{
+  GdkSubsurface *subsurface;
+
+  subsurface = GDK_SURFACE_GET_CLASS (surface)->create_subsurface (surface);
+
+  if (subsurface)
+    {
+      subsurface->parent = g_object_ref (surface);
+      g_ptr_array_add (surface->subsurfaces, subsurface);
+    }
+
+  return subsurface;
+}
+
+gsize
+gdk_surface_get_n_subsurfaces (GdkSurface *surface)
+{
+  return surface->subsurfaces->len;
+}
+
+GdkSubsurface *
+gdk_surface_get_subsurface (GdkSurface *surface,
+                            gsize       idx)
+{
+  return g_ptr_array_index (surface->subsurfaces, idx);
 }

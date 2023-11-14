@@ -24,10 +24,13 @@
 #include <gdk/gdkdisplayprivate.h>
 #include <gdk/gdkglcontextprivate.h>
 #include <gdk/gdksurfaceprivate.h>
+#include <gdk/gdksubsurfaceprivate.h>
 #include <glib/gi18n-lib.h>
 #include <gsk/gskdebugprivate.h>
 #include <gsk/gskrendererprivate.h>
 #include <gsk/gskrendernodeprivate.h>
+#include <gsk/gskroundedrectprivate.h>
+#include <gsk/gskrectprivate.h>
 
 #include "gskglcommandqueueprivate.h"
 #include "gskgldriverprivate.h"
@@ -272,7 +275,8 @@ update_area_requires_clear (GdkSurface           *surface,
 static void
 gsk_gl_renderer_render (GskRenderer          *renderer,
                         GskRenderNode        *root,
-                        const cairo_region_t *update_area)
+                        const cairo_region_t *update_area,
+                        GskOffload           *offload)
 {
   GskGLRenderer *self = (GskGLRenderer *)renderer;
   cairo_region_t *render_region;
@@ -287,6 +291,12 @@ gsk_gl_renderer_render (GskRenderer          *renderer,
 
   surface = gdk_draw_context_get_surface (GDK_DRAW_CONTEXT (self->context));
   scale = gdk_gl_context_get_scale (self->context);
+
+  if (cairo_region_is_empty (update_area))
+    {
+      gdk_draw_context_empty_frame (GDK_DRAW_CONTEXT (self->context));
+      return;
+    }
 
   viewport.origin.x = 0;
   viewport.origin.y = 0;
@@ -304,7 +314,7 @@ gsk_gl_renderer_render (GskRenderer          *renderer,
   clear_framebuffer = update_area_requires_clear (surface, render_region);
 
   gsk_gl_driver_begin_frame (self->driver, self->command_queue);
-  job = gsk_gl_render_job_new (self->driver, &viewport, scale, render_region, 0, clear_framebuffer);
+  job = gsk_gl_render_job_new (self->driver, &viewport, scale, render_region, 0, clear_framebuffer, offload);
   if (GSK_RENDERER_DEBUG_CHECK (GSK_RENDERER (self), FALLBACK))
     gsk_gl_render_job_set_debug_fallback (job, TRUE);
   gsk_gl_render_job_render (job, root);
@@ -376,7 +386,7 @@ gsk_gl_renderer_render_texture (GskRenderer           *renderer,
       gdk_format = GDK_MEMORY_R32G32B32A32_FLOAT_PREMULTIPLIED;
       format = GL_RGBA32F;
     }
-  else 
+  else
     {
       format = GL_RGBA8;
       gdk_format = GDK_MEMORY_R8G8B8A8_PREMULTIPLIED;
@@ -390,7 +400,7 @@ gsk_gl_renderer_render_texture (GskRenderer           *renderer,
                                           &render_target))
     {
       gsk_gl_driver_begin_frame (self->driver, self->command_queue);
-      job = gsk_gl_render_job_new (self->driver, viewport, 1, NULL, render_target->framebuffer_id, TRUE);
+      job = gsk_gl_render_job_new (self->driver, viewport, 1, NULL, render_target->framebuffer_id, TRUE, NULL);
       if (GSK_RENDERER_DEBUG_CHECK (GSK_RENDERER (self), FALLBACK))
         gsk_gl_render_job_set_debug_fallback (job, TRUE);
       gsk_gl_render_job_render_flipped (job, root);

@@ -84,6 +84,22 @@ gdk_wayland_gl_context_end_frame (GdkDrawContext *draw_context,
 }
 
 static void
+gdk_wayland_gl_context_empty_frame (GdkDrawContext *draw_context)
+{
+  GdkSurface *surface = gdk_draw_context_get_surface (draw_context);
+  GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
+
+  if (impl->has_pending_subsurface_commits)
+    {
+      gdk_wayland_surface_sync (surface);
+      gdk_wayland_surface_request_frame (surface);
+
+      gdk_wayland_surface_commit (surface);
+      gdk_wayland_surface_notify_committed (surface);
+    }
+}
+
+static void
 gdk_wayland_gl_context_class_init (GdkWaylandGLContextClass *klass)
 {
   GdkDrawContextClass *draw_context_class = GDK_DRAW_CONTEXT_CLASS (klass);
@@ -91,6 +107,7 @@ gdk_wayland_gl_context_class_init (GdkWaylandGLContextClass *klass)
 
   draw_context_class->begin_frame = gdk_wayland_gl_context_begin_frame;
   draw_context_class->end_frame = gdk_wayland_gl_context_end_frame;
+  draw_context_class->empty_frame = gdk_wayland_gl_context_empty_frame;
 
   context_class->backend_type = GDK_GL_EGL;
 }

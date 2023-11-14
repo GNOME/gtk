@@ -464,7 +464,7 @@ int
 main (int argc, char *argv[])
 {
   GdkTexture *texture;
-  GtkWidget *window, *picture;
+  GtkWidget *window, *offload, *picture;
   char *filename;
   guint32 format;
   gboolean disjoint = FALSE;
@@ -514,7 +514,9 @@ main (int argc, char *argv[])
 
   picture = gtk_picture_new_for_paintable (GDK_PAINTABLE (texture));
 
-  gtk_window_set_child (GTK_WINDOW (window), picture);
+  offload = gtk_graphics_offload_new (picture);
+
+  gtk_window_set_child (GTK_WINDOW (window), offload);
 
   gtk_window_present (GTK_WINDOW (window));
 

@@ -49,6 +49,8 @@
 
 #include <glib/gi18n-lib.h>
 #include <gdk/gdktextureprivate.h>
+#include <gdk/gdksurfaceprivate.h>
+#include <gdk/gdksubsurfaceprivate.h>
 #include "gtk/gtkdebug.h"
 #include "gtk/gtkbuiltiniconprivate.h"
 #include "gtk/gtkrendernodepaintableprivate.h"
@@ -363,6 +365,9 @@ create_list_model_for_render_node (GskRenderNode *node)
 
     case GSK_DEBUG_NODE:
       return create_render_node_list_model ((GskRenderNode *[1]) { gsk_debug_node_get_child (node) }, 1);
+
+    case GSK_SUBSURFACE_NODE:
+      return create_render_node_list_model ((GskRenderNode *[1]) { gsk_subsurface_node_get_child (node) }, 1);
     }
 }
 
@@ -449,6 +454,8 @@ node_type_name (GskRenderNodeType type)
       return "Blur";
     case GSK_GL_SHADER_NODE:
       return "GL Shader";
+    case GSK_SUBSURFACE_NODE:
+      return "Subsurface";
     }
 }
 
@@ -485,6 +492,7 @@ node_name (GskRenderNode *node)
     case GSK_TEXT_NODE:
     case GSK_BLUR_NODE:
     case GSK_GL_SHADER_NODE:
+    case GSK_SUBSURFACE_NODE:
       return g_strdup (node_type_name (gsk_render_node_get_node_type (node)));
 
     case GSK_DEBUG_NODE:
@@ -1490,6 +1498,17 @@ populate_render_node_properties (GListStore    *store,
         add_text_row (store, "Matrix", s);
         g_free (s);
         add_text_row (store, "Category", category_names[gsk_transform_get_category (transform)]);
+      }
+      break;
+
+    case GSK_SUBSURFACE_NODE:
+      {
+        GdkSubsurface *subsurface = gsk_subsurface_node_get_subsurface (node);
+        char s[40];
+
+        g_snprintf (s, sizeof (s), "%p", subsurface);
+
+        add_text_row (store, "Subsurface", s);
       }
       break;
 

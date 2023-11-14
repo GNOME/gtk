@@ -46,6 +46,7 @@ struct _GdkWaylandSurface
 
   unsigned int initial_configure_received : 1;
   unsigned int has_uncommitted_ack_configure : 1;
+  unsigned int has_pending_subsurface_commits : 1;
   unsigned int mapped : 1;
   unsigned int awaiting_frame_frozen : 1;
 
@@ -121,6 +122,9 @@ void gdk_wayland_surface_get_window_geometry (GdkSurface   *surface,
                                               GdkRectangle *geometry);
 void gdk_wayland_surface_freeze_state (GdkSurface *surface);
 void gdk_wayland_surface_thaw_state   (GdkSurface *surface);
+
+void gdk_wayland_surface_frame_callback (GdkSurface *surface,
+                                         uint32_t    time);
 
 
 #define GDK_TYPE_WAYLAND_DRAG_SURFACE (gdk_wayland_drag_surface_get_type ())

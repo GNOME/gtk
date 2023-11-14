@@ -134,6 +134,9 @@ struct _GtkSnapshotState {
       GskMaskMode mask_mode;
       GskRenderNode *mask_node;
     } mask;
+    struct {
+      GdkSubsurface *subsurface;
+    } subsurface;
   } data;
 };
 
@@ -2829,4 +2832,43 @@ gtk_snapshot_append_outset_shadow (GtkSnapshot          *snapshot,
 
 
   gtk_snapshot_append_node_internal (snapshot, node);
+}
+
+static GskRenderNode *
+gtk_snapshot_collect_subsurface (GtkSnapshot      *snapshot,
+                                 GtkSnapshotState *state,
+                                 GskRenderNode   **nodes,
+                                 guint             n_nodes)
+{
+  GskRenderNode *node, *subsurface_node;
+
+  node = gtk_snapshot_collect_default (snapshot, state, nodes, n_nodes);
+  if (node == NULL)
+    return NULL;
+
+  subsurface_node = gsk_subsurface_node_new (node, state->data.subsurface.subsurface);
+  gsk_render_node_unref (node);
+
+  return subsurface_node;
+}
+
+static void
+gtk_snapshot_clear_subsurface (GtkSnapshotState *state)
+{
+  g_object_unref (state->data.subsurface.subsurface);
+}
+
+void
+gtk_snapshot_push_subsurface (GtkSnapshot   *snapshot,
+                              GdkSubsurface *subsurface)
+{
+  const GtkSnapshotState *current_state = gtk_snapshot_get_current_state (snapshot);
+  GtkSnapshotState *state;
+
+  state = gtk_snapshot_push_state (snapshot,
+                                   current_state->transform,
+                                   gtk_snapshot_collect_subsurface,
+                                   gtk_snapshot_clear_subsurface);
+
+  state->data.subsurface.subsurface = g_object_ref (subsurface);
 }

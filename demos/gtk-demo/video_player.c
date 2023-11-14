@@ -139,6 +139,7 @@ do_video_player (GtkWidget *do_widget)
 
       video = gtk_video_new ();
       gtk_video_set_autoplay (GTK_VIDEO (video), TRUE);
+      gtk_video_set_graphics_offload (GTK_VIDEO (video), GTK_GRAPHICS_OFFLOAD_ENABLED);
       gtk_window_set_child (GTK_WINDOW (window), video);
 
       title = gtk_header_bar_new ();

@@ -45,6 +45,7 @@ void                    gdk_draw_context_begin_frame            (GdkDrawContext 
                                                                  const cairo_region_t   *region);
 GDK_AVAILABLE_IN_ALL
 void                    gdk_draw_context_end_frame              (GdkDrawContext         *context);
+
 GDK_AVAILABLE_IN_ALL
 gboolean                gdk_draw_context_is_in_frame            (GdkDrawContext         *context);
 GDK_AVAILABLE_IN_ALL

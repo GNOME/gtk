@@ -65,7 +65,7 @@ struct _Declaration
 };
 
 static void
-context_init (Context *context)
+context_init (Context    *context)
 {
   memset (context, 0, sizeof (Context));
 }
@@ -2405,6 +2405,27 @@ parse_debug_node (GtkCssParser *parser,
   return result;
 }
 
+static GskRenderNode *
+parse_subsurface_node (GtkCssParser *parser,
+                       Context      *context)
+{
+  GskRenderNode *child = NULL;
+  const Declaration declarations[] = {
+    { "child", parse_node, clear_node, &child },
+  };
+  GskRenderNode *result;
+
+  parse_declarations (parser, context, declarations, G_N_ELEMENTS (declarations));
+  if (child == NULL)
+    child = create_default_render_node ();
+
+  result = gsk_subsurface_node_new (child, NULL);
+
+  gsk_render_node_unref (child);
+
+  return result;
+}
+
 static gboolean
 parse_node (GtkCssParser *parser,
             Context      *context,
@@ -2443,6 +2464,7 @@ parse_node (GtkCssParser *parser,
     { "transform", parse_transform_node },
     { "glshader", parse_glshader_node },
     { "mask", parse_mask_node },
+    { "subsurface", parse_subsurface_node },
   };
   GskRenderNode **node_p = out_node;
   const GtkCssToken *token;
@@ -2579,6 +2601,7 @@ gsk_render_node_deserialize_from_bytes (GBytes            *bytes,
   parser = gtk_css_parser_new_for_bytes (bytes, NULL, gsk_render_node_parser_error,
                                          &error_func_pair, NULL);
   context_init (&context);
+
   root = parse_container_node (parser, &context);
 
   if (root && gsk_container_node_get_n_children (root) == 1)
@@ -2595,6 +2618,7 @@ gsk_render_node_deserialize_from_bytes (GBytes            *bytes,
 
   return root;
 }
+
 
 
 typedef struct
@@ -2733,6 +2757,10 @@ printer_init_duplicates_for_node (Printer       *printer,
             printer_init_duplicates_for_node (printer, gsk_container_node_get_child (node, i));
           }
       }
+      break;
+
+    case GSK_SUBSURFACE_NODE:
+      printer_init_duplicates_for_node (printer, gsk_subsurface_node_get_child (node));
       break;
 
     default:
@@ -4039,6 +4067,14 @@ render_node_print (Printer       *p,
           }
 
         end_node (p);
+      }
+      break;
+
+    case GSK_SUBSURFACE_NODE:
+      {
+        start_node (p, "subsurface", node_name);
+
+        append_node_param (p, "child", gsk_subsurface_node_get_child (node));
       }
       break;
 

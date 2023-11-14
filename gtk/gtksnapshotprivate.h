@@ -33,5 +33,8 @@ void                    gtk_snapshot_append_text                (GtkSnapshot    
 void                    gtk_snapshot_push_collect               (GtkSnapshot            *snapshot);
 GskRenderNode *         gtk_snapshot_pop_collect                (GtkSnapshot            *snapshot);
 
+void                    gtk_snapshot_push_subsurface            (GtkSnapshot            *snapshot,
+                                                                 GdkSubsurface          *subsurface);
+
 G_END_DECLS
 

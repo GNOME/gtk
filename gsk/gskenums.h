@@ -53,6 +53,7 @@
  * @GSK_MASK_NODE: A node that masks one child with another (Since: 4.10)
  * @GSK_FILL_NODE: A node that fills a path
  * @GSK_STROKE_NODE: A node that strokes a path
+ * @GSK_SUBSURFACE_NODE: A node possibly redirects part of the scene graph to a subsurface (Since: 4.14)
 
  * The type of a node determines what the node is rendering.
  */
@@ -86,7 +87,8 @@ typedef enum {
   GSK_TEXTURE_SCALE_NODE,
   GSK_MASK_NODE,
   GSK_FILL_NODE,
-  GSK_STROKE_NODE
+  GSK_STROKE_NODE,
+  GSK_SUBSURFACE_NODE,
 } GskRenderNodeType;
 
 /**

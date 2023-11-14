@@ -118,6 +118,7 @@ static const GdkDebugKey gdk_debug_keys[] = {
   { "selection",       GDK_DEBUG_SELECTION, "Information about selections" },
   { "clipboard",       GDK_DEBUG_CLIPBOARD, "Information about clipboards" },
   { "dmabuf",          GDK_DEBUG_DMABUF, "Information about dmabuf buffers" },
+  { "offload",         GDK_DEBUG_OFFLOAD, "Information about subsurfaces and graphics offload" },
 
   { "nograbs",         GDK_DEBUG_NOGRABS, "Disable pointer and keyboard grabs (X11)" },
   { "portals",         GDK_DEBUG_PORTALS, "Force use of portals" },

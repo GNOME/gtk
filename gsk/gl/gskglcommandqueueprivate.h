@@ -101,13 +101,15 @@ typedef struct _GskGLCommandDraw
 {
   GskGLCommandBatchAny head;
 
+  guint blend : 1;
+
   /* There doesn't seem to be a limit on the framebuffer identifier that
    * can be returned, so we have to use a whole unsigned for the framebuffer
    * we are drawing to. When processing batches, we check to see if this
    * changes and adjust the render target accordingly. Some sorting is
    * performed to reduce the amount we change framebuffers.
    */
-  guint framebuffer;
+  guint framebuffer : 31;
 
   /* The number of uniforms to change. This must be less than or equal to
    * GL_MAX_UNIFORM_LOCATIONS but only guaranteed up to 1024 by any OpenGL

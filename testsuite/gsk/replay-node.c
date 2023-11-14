@@ -481,6 +481,7 @@ replay_node (GskRenderNode *node, GtkSnapshot *snapshot)
       replay_stroke_node (node, snapshot);
       break;
 
+    case GSK_SUBSURFACE_NODE:
     case GSK_NOT_A_RENDER_NODE:
     default:
       g_assert (FALSE);
