@@ -365,6 +365,8 @@ gsk_gpu_renderer_class_init (GskGpuRendererClass *klass)
 {
   GskRendererClass *renderer_class = GSK_RENDERER_CLASS (klass);
 
+  renderer_class->supports_offload = TRUE;
+
   renderer_class->realize = gsk_gpu_renderer_realize;
   renderer_class->unrealize = gsk_gpu_renderer_unrealize;
   renderer_class->render = gsk_gpu_renderer_render;

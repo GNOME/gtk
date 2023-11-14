@@ -2190,13 +2190,6 @@ gsk_gpu_node_processor_create_color_matrix_pattern (GskGpuPatternWriter *self,
   return TRUE;
 }
 
-static void
-gsk_gpu_node_processor_add_subsurface_node (GskGpuNodeProcessor *self,
-                                            GskRenderNode       *node)
-{
-  gsk_gpu_node_processor_add_node (self, gsk_subsurface_node_get_child (node));
-}
-
 static gboolean
 gsk_gpu_node_processor_create_repeat_pattern (GskGpuPatternWriter *self,
                                               GskRenderNode       *node)
@@ -2246,10 +2239,50 @@ gsk_gpu_node_processor_create_repeat_pattern (GskGpuPatternWriter *self,
   return TRUE;
 }
 
+static void
+gsk_gpu_node_processor_add_subsurface_node (GskGpuNodeProcessor *self,
+                                            GskRenderNode       *node)
+{
+  GdkSubsurface *subsurface;
+
+  subsurface = gsk_subsurface_node_get_subsurface (node);
+  if (subsurface == NULL ||
+      gdk_subsurface_get_texture (subsurface) == NULL ||
+      gdk_subsurface_get_parent (subsurface) != gdk_draw_context_get_surface (gsk_gpu_frame_get_context (self->frame)))
+    {
+      gsk_gpu_node_processor_add_node (self, gsk_subsurface_node_get_child (node));
+      return;
+    }
+
+  if (!gdk_subsurface_is_above_parent (subsurface))
+    {
+      cairo_rectangle_int_t int_rect;
+
+      if (!gsk_gpu_node_processor_rect_is_integer (self,
+                                                   &GRAPHENE_RECT_INIT (
+                                                     node->bounds.origin.x + self->offset.x,
+                                                     node->bounds.origin.y + self->offset.y,
+                                                     node->bounds.size.width,
+                                                     node->bounds.size.height
+                                                   ),
+                                                   &int_rect))
+        {
+          g_warning ("FIXME: non-integer aligned subsurface?!");
+        }
+      gsk_gpu_clear_op (self->frame,
+                        &int_rect,
+                        &(GdkRGBA) { 0, 0, 0, 0 });
+    }
+}
+
 static gboolean
 gsk_gpu_node_processor_create_subsurface_pattern (GskGpuPatternWriter *self,
                                                   GskRenderNode       *node)
 {
+  /* This can only ever happen if no offloading is happening */
+  g_assert (gsk_subsurface_node_get_subsurface (node) == NULL ||
+            gdk_subsurface_get_texture (gsk_subsurface_node_get_subsurface (node)) == NULL);
+
   return gsk_gpu_node_processor_create_node_pattern (self, gsk_subsurface_node_get_child (node));
 }
 
