@@ -1,6 +1,39 @@
 Overview of Changes in 4.13.3, xx-xx-xxxx
 =========================================
 
+* GtkGraphicsOffload: A new widget to support passthrough
+  of dmabuf textures with subsurfaces on Wayland
+
+* GtkListView:
+ - reduce tree indentation
+
+* GtkInspector:
+ - Show more GL information
+ - Add a subsurface overlay
+ - Improve the fps overlay
+
+* GDK
+ - Allow implicit modifiers for dmabufs
+ - Support more dmabuf formats: NV16, NV61, NV24, NV42
+   and 3-plane YUV formats
+
+* GSK
+ - Fix padding of icons in the GL atlas
+ - Fix handling of texture-scale nodes in cairo
+ - Treat texture-scale nodes more faithfully in GL
+
+* Accessibility:
+ - Tweak the accessible name computation for corner cases
+
+* The GTK/GDK/GSK_DEBUG environment variables now
+  work in productions as well as in debug builds
+
+* Translation updates
+ Catalan
+ French
+ Russian
+
+
 Overview of Changes in 4.13.2, 22-10-2023
 =========================================
 
