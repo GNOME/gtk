@@ -475,7 +475,7 @@ gsk_renderer_render (GskRenderer          *renderer,
 
   g_clear_pointer (&priv->prev_node, gsk_render_node_unref);
   cairo_region_destroy (clip);
-  gsk_offload_free (offload);
+  g_clear_pointer (&offload, gsk_offload_free);
   priv->prev_node = priv->root_node;
   priv->root_node = NULL;
 }
