@@ -538,6 +538,24 @@ handle_accessible_method (GDBusConnection       *connection,
                                  "placeholder-text", gtk_string_accessible_value_get (value));
         }
 
+      if (gtk_at_context_has_accessible_relation (GTK_AT_CONTEXT (self), GTK_ACCESSIBLE_RELATION_COL_INDEX_TEXT))
+        {
+          GtkAccessibleValue *value = gtk_at_context_get_accessible_relation (GTK_AT_CONTEXT (self),
+                                                                              GTK_ACCESSIBLE_RELATION_COL_INDEX_TEXT);
+
+          g_variant_builder_add (&builder, "{ss}",
+                                 "colindextext", gtk_string_accessible_value_get (value));
+        }
+
+      if (gtk_at_context_has_accessible_relation (GTK_AT_CONTEXT (self), GTK_ACCESSIBLE_RELATION_ROW_INDEX_TEXT))
+        {
+          GtkAccessibleValue *value = gtk_at_context_get_accessible_relation (GTK_AT_CONTEXT (self),
+                                                                              GTK_ACCESSIBLE_RELATION_ROW_INDEX_TEXT);
+
+          g_variant_builder_add (&builder, "{ss}",
+                                 "rowindextext", gtk_string_accessible_value_get (value));
+        }
+
       g_variant_builder_close (&builder);
 
       g_dbus_method_invocation_return_value (invocation, g_variant_builder_end (&builder));
