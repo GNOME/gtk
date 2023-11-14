@@ -425,8 +425,9 @@ gsk_renderer_render (GskRenderer          *renderer,
                      const cairo_region_t *region)
 {
   GskRendererPrivate *priv = gsk_renderer_get_instance_private (renderer);
+  GskRendererClass *renderer_class;
   cairo_region_t *clip;
-  GskOffload *offload = NULL;
+  GskOffload *offload;
 
   g_return_if_fail (GSK_IS_RENDERER (renderer));
   g_return_if_fail (priv->is_realized);
@@ -436,10 +437,14 @@ gsk_renderer_render (GskRenderer          *renderer,
   if (priv->surface == NULL)
     return;
 
+  renderer_class = GSK_RENDERER_GET_CLASS (renderer);
   priv->root_node = gsk_render_node_ref (root);
 
-  if (!GSK_RENDERER_DEBUG_CHECK (renderer, OFFLOAD_DISABLE))
+  if (renderer_class->supports_offload &&
+      !GSK_RENDERER_DEBUG_CHECK (renderer, OFFLOAD_DISABLE))
     offload = gsk_offload_new (priv->surface, root);
+  else
+    offload = NULL;
 
   if (region == NULL || priv->prev_node == NULL || GSK_RENDERER_DEBUG_CHECK (renderer, FULL_REDRAW))
     {
@@ -456,7 +461,7 @@ gsk_renderer_render (GskRenderer          *renderer,
       gsk_render_node_diff (priv->prev_node, root, clip, offload);
     }
 
-  GSK_RENDERER_GET_CLASS (renderer)->render (renderer, root, clip, offload);
+  renderer_class->render (renderer, root, clip, offload);
 
   if (GSK_RENDERER_DEBUG_CHECK (renderer, RENDERER))
     {

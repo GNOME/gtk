@@ -38,6 +38,8 @@ struct _GskRendererClass
 {
   GObjectClass parent_class;
 
+  gboolean supports_offload;
+
   gboolean             (* realize)                              (GskRenderer            *renderer,
                                                                  GdkSurface             *surface,
                                                                  GError                **error);
