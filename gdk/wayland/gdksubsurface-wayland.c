@@ -87,7 +87,7 @@ params_buffer_failed (void                              *data,
 {
   CreateBufferData *cd = data;
 
-  g_warning ("Creating wl_buffer for dmabuf failed");
+  GDK_DEBUG (OFFLOAD, "Creating wl_buffer for dmabuf failed");
 
   cd->buffer = NULL;
   cd->done = TRUE;

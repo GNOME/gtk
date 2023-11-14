@@ -439,6 +439,8 @@ gsk_gl_renderer_class_init (GskGLRendererClass *klass)
 
   object_class->dispose = gsk_gl_renderer_dispose;
 
+  renderer_class->supports_offload = TRUE;
+
   renderer_class->realize = gsk_gl_renderer_realize;
   renderer_class->unrealize = gsk_gl_renderer_unrealize;
   renderer_class->render = gsk_gl_renderer_render;
