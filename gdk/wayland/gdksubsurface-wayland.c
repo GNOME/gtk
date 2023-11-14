@@ -164,12 +164,25 @@ gdk_wayland_subsurface_attach (GdkSubsurface         *sub,
       return FALSE;
     }
 
-  self->dest.x = floorf (rect->origin.x);
-  self->dest.y = floorf (rect->origin.y);
-  self->dest.width = ceilf (rect->origin.x + rect->size.width) - self->dest.x;
-  self->dest.height = ceilf (rect->origin.y + rect->size.height) - self->dest.y;
+  self->dest.x = rect->origin.x;
+  self->dest.y = rect->origin.y;
+  self->dest.width = rect->size.width;
+  self->dest.height = rect->size.height;
 
-  if (!GDK_IS_DMABUF_TEXTURE (texture))
+  if (self->dest.x != rect->origin.x ||
+      self->dest.y != rect->origin.y ||
+      self->dest.width != rect->size.width ||
+      self->dest.height != rect->size.height)
+    {
+      GDK_DISPLAY_DEBUG (gdk_surface_get_display (sub->parent), OFFLOAD,
+                         "Non-integer coordinates %g %g %g %g for %dx%d texture, hiding subsurface %p",
+                         rect->origin.x, rect->origin.y,
+                         rect->size.width, rect->size.height,
+                         gdk_texture_get_width (texture),
+                         gdk_texture_get_height (texture),
+                         self);
+    }
+  else if (!GDK_IS_DMABUF_TEXTURE (texture))
     {
       GDK_DISPLAY_DEBUG (gdk_surface_get_display (sub->parent), OFFLOAD,
                          "%dx%d %s is not a GdkDmabufTexture, hiding subsurface %p",
