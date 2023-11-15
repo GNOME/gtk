@@ -416,18 +416,6 @@ gtk_flow_box_child_activate (GtkFlowBoxChild *child)
 
 /* Size allocation {{{3 */
 
-static GtkSizeRequestMode
-gtk_flow_box_child_get_request_mode (GtkWidget *widget)
-{
-  GtkFlowBox *box;
-
-  box = gtk_flow_box_child_get_box (GTK_FLOW_BOX_CHILD (widget));
-  if (box)
-    return gtk_widget_get_request_mode (GTK_WIDGET (box));
-  else
-    return GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH;
-}
-
 static void
 gtk_flow_box_child_dispose (GObject *object)
 {
@@ -524,7 +512,6 @@ gtk_flow_box_child_class_init (GtkFlowBoxChildClass *class)
   object_class->set_property = gtk_flow_box_child_set_property;
 
   widget_class->root = gtk_flow_box_child_root;
-  widget_class->get_request_mode = gtk_flow_box_child_get_request_mode;
   widget_class->compute_expand = gtk_flow_box_child_compute_expand;
   widget_class->focus = gtk_flow_box_child_focus;
 
@@ -1923,9 +1910,31 @@ static GtkSizeRequestMode
 gtk_flow_box_get_request_mode (GtkWidget *widget)
 {
   GtkFlowBox *box = GTK_FLOW_BOX (widget);
+  GtkWidget *visible_child = NULL;
+  GSequenceIter *iter;
 
-  return (BOX_PRIV (box)->orientation == GTK_ORIENTATION_HORIZONTAL) ?
-    GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH : GTK_SIZE_REQUEST_WIDTH_FOR_HEIGHT;
+  for (iter = g_sequence_get_begin_iter (BOX_PRIV (box)->children);
+       !g_sequence_iter_is_end (iter);
+       iter = g_sequence_iter_next (iter))
+    {
+      GtkWidget *child;
+
+      child = g_sequence_get (iter);
+      if (!child_is_visible (child))
+        continue;
+
+      if (!visible_child)
+        visible_child = child;
+      else
+        /* Multiple visible children */
+        return (BOX_PRIV (box)->orientation == GTK_ORIENTATION_HORIZONTAL) ?
+                GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH : GTK_SIZE_REQUEST_WIDTH_FOR_HEIGHT;
+    }
+
+  if (visible_child)
+    return gtk_widget_get_request_mode (visible_child);
+
+  return GTK_SIZE_REQUEST_CONSTANT_SIZE;
 }
 
 /* Gets the largest minimum and natural length of
