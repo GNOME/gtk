@@ -30,7 +30,7 @@ G_BEGIN_DECLS
 
 #define GTK_TYPE_COLUMN_VIEW_CELL (gtk_column_view_cell_get_type ())
 GDK_AVAILABLE_IN_4_12
-GDK_DECLARE_INTERNAL_TYPE(GtkColumnViewCell, gtk_column_view_cell, GTK, COLUMN_VIEW_CELL, GtkListItem);
+GDK_DECLARE_INTERNAL_TYPE(GtkColumnViewCell, gtk_column_view_cell, GTK, COLUMN_VIEW_CELL, GtkListItem)
 
 GDK_AVAILABLE_IN_4_12
 gpointer        gtk_column_view_cell_get_item                   (GtkColumnViewCell      *self);
