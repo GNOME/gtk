@@ -2661,7 +2661,7 @@ gtk_builder_value_from_string_type (GtkBuilder   *builder,
               g_set_error (error,
                            GTK_BUILDER_ERROR,
                            GTK_BUILDER_ERROR_INVALID_VALUE,
-                           "Object named \"%s\" is of type \"%s\" which is not compatible with expected type \%s\"",
+                           "Object named \"%s\" is of type \"%s\" which is not compatible with expected type \"%s\"",
                            string, G_OBJECT_TYPE_NAME (object), g_type_name (type));
               ret = FALSE;
             }

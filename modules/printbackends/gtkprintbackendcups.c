@@ -3022,7 +3022,7 @@ create_temporary_queue (GtkPrintBackendCups *backend,
 static void
 create_cups_printer_from_avahi_data (AvahiConnectionTestData *data)
 {
-  PrinterSetupInfo *info = g_new0 (PrinterSetupInfo, 1);
+  PrinterSetupInfo *info;
   GtkPrinter       *printer;
 
   printer = gtk_print_backend_find_printer (GTK_PRINT_BACKEND (data->backend), data->printer_name);
@@ -3034,6 +3034,7 @@ create_cups_printer_from_avahi_data (AvahiConnectionTestData *data)
       return;
     }
 
+  info = g_new0 (PrinterSetupInfo, 1);
   info->avahi_printer = TRUE;
   info->printer_name = data->printer_name;
   info->printer_uri = data->printer_uri;
@@ -4156,6 +4157,7 @@ cups_request_ppd (GtkPrinter *printer)
       httpClose (http);
       g_free (ppd_filename);
       g_free (data);
+      g_free (resource);
 
       g_signal_emit_by_name (printer, "details-acquired", FALSE);
       return FALSE;

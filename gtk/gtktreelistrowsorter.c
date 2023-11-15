@@ -155,7 +155,7 @@ gtk_tree_list_row_sort_keys_compare (gconstpointer a,
   resb = unpack (keysb, &keysb, &sizeb);
   if (!resa)
     return resb ? GTK_ORDERING_LARGER : (keysa[2] < keysb[2] ? GTK_ORDERING_SMALLER : 
-                                        (keysb[2] > keysa[2] ? GTK_ORDERING_LARGER : GTK_ORDERING_EQUAL));
+                                        (keysa[2] > keysb[2] ? GTK_ORDERING_LARGER : GTK_ORDERING_EQUAL));
   else if (!resb)
     return GTK_ORDERING_SMALLER;
 

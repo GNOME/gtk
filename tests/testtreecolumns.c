@@ -430,7 +430,6 @@ update_columns (GtkTreeView *view, ViewColumnModel *view_model)
       int *new_order;
       GtkTreePath *path;
 
-      new_order = g_new (int, length);
       a = old_columns; b = view_model->columns;
 
       while (a->data == b->data)
@@ -441,6 +440,8 @@ update_columns (GtkTreeView *view, ViewColumnModel *view_model)
 	    return;
 	  m++;
 	}
+
+      new_order = g_new (int, length);
 
       if (a->next->data == b->data)
 	{

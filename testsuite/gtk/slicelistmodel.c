@@ -54,11 +54,13 @@ model_to_string (GListModel *model)
 static char *
 section_model_to_string (GListModel *model)
 {
-  GString *string = g_string_new (NULL);
+  GString *string;
   guint i, s, e;
 
   if (!GTK_IS_SECTION_MODEL (model))
     return model_to_string (model);
+
+  string = g_string_new (NULL);
 
   i = 0;
   while (i < g_list_model_get_n_items (model))
