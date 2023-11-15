@@ -89,7 +89,7 @@ struct _GdkDmabufTextureBuilderClass
  * that describes driver-specific details of the memory layout, such as tiling or compression.
  *
  * For historical reasons, some producers of dma-bufs don't provide an explicit modifier, but
- * instead return `DMA_FORMAT_MOD_INVALID` to indicate that their modifier is **_impliict_**.
+ * instead return `DMA_FORMAT_MOD_INVALID` to indicate that their modifier is **_implicit_**.
  * GTK tries to accomodate this situation by accepting `DMA_FORMAT_MOD_INVALID` as modifier.
  *
  * The operation of `GdkDmabufTextureBuilder` is quite simple: Create a texture builder,
