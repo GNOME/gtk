@@ -128,8 +128,7 @@ gsk_renderer_real_render_texture (GskRenderer           *self,
 static void
 gsk_renderer_real_render (GskRenderer          *self,
                           GskRenderNode        *root,
-                          const cairo_region_t *region,
-                          GskOffload           *offload)
+                          const cairo_region_t *region)
 {
   GSK_RENDERER_WARN_NOT_IMPLEMENTED_METHOD (self, render);
 }
@@ -453,7 +452,7 @@ gsk_renderer_render (GskRenderer          *renderer,
       gsk_render_node_diff (priv->prev_node, root, clip, offload);
     }
 
-  renderer_class->render (renderer, root, clip, offload);
+  renderer_class->render (renderer, root, clip);
 
   if (GSK_RENDERER_DEBUG_CHECK (renderer, RENDERER))
     {

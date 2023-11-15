@@ -149,18 +149,6 @@ get_wl_buffer (GdkWaylandSubsurface *self,
   return buffer;
 }
 
-static inline gboolean
-texture_is_offloadable (GdkTexture *texture)
-{
-  GdkMemoryFormat format;
-
-  if (!GDK_IS_DMABUF_TEXTURE (texture))
-    return FALSE;
-
-  format = gdk_texture_get_format (texture);
-  return gdk_memory_format_alpha (format) == GDK_MEMORY_ALPHA_OPAQUE;
-}
-
 static gboolean
 gdk_wayland_subsurface_attach (GdkSubsurface         *sub,
                                GdkTexture            *texture,
@@ -176,20 +164,60 @@ gdk_wayland_subsurface_attach (GdkSubsurface         *sub,
       return FALSE;
     }
 
-  self->dest.x = floorf (rect->origin.x);
-  self->dest.y = floorf (rect->origin.y);
-  self->dest.width = ceilf (rect->origin.x + rect->size.width) - self->dest.x;
-  self->dest.height = ceilf (rect->origin.y + rect->size.height) - self->dest.y;
+  self->dest.x = rect->origin.x;
+  self->dest.y = rect->origin.y;
+  self->dest.width = rect->size.width;
+  self->dest.height = rect->size.height;
 
-  wl_subsurface_set_position (self->subsurface, self->dest.x, self->dest.y);
-  wp_viewport_set_destination (self->viewport, self->dest.width, self->dest.height);
-
-  if (texture_is_offloadable (texture))
-    buffer = get_wl_buffer (self, texture);
+  if (self->dest.x != rect->origin.x ||
+      self->dest.y != rect->origin.y ||
+      self->dest.width != rect->size.width ||
+      self->dest.height != rect->size.height)
+    {
+      GDK_DISPLAY_DEBUG (gdk_surface_get_display (sub->parent), OFFLOAD,
+                         "Non-integer coordinates %g %g %g %g for %dx%d texture, hiding subsurface %p",
+                         rect->origin.x, rect->origin.y,
+                         rect->size.width, rect->size.height,
+                         gdk_texture_get_width (texture),
+                         gdk_texture_get_height (texture),
+                         self);
+    }
+  else if (!GDK_IS_DMABUF_TEXTURE (texture))
+    {
+      GDK_DISPLAY_DEBUG (gdk_surface_get_display (sub->parent), OFFLOAD,
+                         "%dx%d %s is not a GdkDmabufTexture, hiding subsurface %p",
+                         gdk_texture_get_width (texture),
+                         gdk_texture_get_height (texture),
+                         G_OBJECT_TYPE_NAME (texture),
+                         self);
+    }
+  else if (gdk_memory_format_alpha (gdk_texture_get_format (texture)) != GDK_MEMORY_ALPHA_OPAQUE)
+    {
+      GDK_DISPLAY_DEBUG (gdk_surface_get_display (sub->parent), OFFLOAD,
+                         "Cannot offload non-opaque %dx%d texture, hiding subsurface %p",
+                         gdk_texture_get_width (texture),
+                         gdk_texture_get_height (texture),
+                         self);
+    }
+  else
+    {
+      buffer = get_wl_buffer (self, texture);
+      if (buffer == NULL)
+        {
+          GDK_DISPLAY_DEBUG (gdk_surface_get_display (sub->parent), OFFLOAD,
+                             "Compositor failed to create wl_buffer for %dx%d texture, hiding subsurface %p",
+                             gdk_texture_get_width (texture),
+                             gdk_texture_get_height (texture),
+                             self);
+        }
+    }
 
   if (buffer)
     {
       g_set_object (&self->texture, texture);
+
+      wl_subsurface_set_position (self->subsurface, self->dest.x, self->dest.y);
+      wp_viewport_set_destination (self->viewport, self->dest.width, self->dest.height);
 
       wl_surface_attach (self->surface, buffer, 0, 0);
       wl_surface_damage_buffer (self->surface,
@@ -208,12 +236,6 @@ gdk_wayland_subsurface_attach (GdkSubsurface         *sub,
     }
   else
     {
-      GDK_DISPLAY_DEBUG (gdk_surface_get_display (sub->parent), OFFLOAD,
-                         "Failed to create wl_buffer for %dx%d texture, hiding subsurface %p",
-                         gdk_texture_get_width (texture),
-                         gdk_texture_get_height (texture),
-                         self);
-
       g_set_object (&self->texture, NULL);
 
       wl_surface_attach (self->surface, NULL, 0, 0);

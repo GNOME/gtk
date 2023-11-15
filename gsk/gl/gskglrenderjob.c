@@ -37,7 +37,6 @@
 #include <gsk/gskroundedrectprivate.h>
 #include <gsk/gskrectprivate.h>
 #include <gsk/gskrendererprivate.h>
-#include <gsk/gskoffloadprivate.h>
 #include <math.h>
 #include <string.h>
 
@@ -180,8 +179,6 @@ struct _GskGLRenderJob
    * looking at the format of the framebuffer we are rendering on.
    */
   int target_format;
-
-  GskOffload *offload;
 };
 
 typedef struct _GskGLRenderOffscreen
@@ -4014,20 +4011,24 @@ gsk_gl_render_job_visit_subsurface_node (GskGLRenderJob      *job,
 
   subsurface = (GdkSubsurface *) gsk_subsurface_node_get_subsurface (node);
 
-  if (job->offload &&
-      gsk_offload_subsurface_is_offloaded (job->offload, subsurface))
+  if (subsurface &&
+      gdk_subsurface_get_texture (subsurface) && 
+      gdk_subsurface_get_parent (subsurface) == gdk_gl_context_get_surface (job->command_queue->context))
     {
-      /* Clear the area so we can see through */
-      if (gsk_gl_render_job_begin_draw (job, CHOOSE_PROGRAM (job, color)))
+      if (!gdk_subsurface_is_above_parent (subsurface))
         {
-          GskGLCommandBatch *batch;
-          guint16 color[4];
-          rgba_to_half (&(GdkRGBA){0,0,0,0}, color);
+          /* Clear the area so we can see through */
+          if (gsk_gl_render_job_begin_draw (job, CHOOSE_PROGRAM (job, color)))
+            {
+              GskGLCommandBatch *batch;
+              guint16 color[4];
+              rgba_to_half (&(GdkRGBA){0,0,0,0}, color);
 
-          batch = gsk_gl_command_queue_get_batch (job->command_queue);
-          batch->draw.blend = 0;
-          gsk_gl_render_job_draw_rect_with_color (job, &node->bounds, color);
-          gsk_gl_render_job_end_draw (job);
+              batch = gsk_gl_command_queue_get_batch (job->command_queue);
+              batch->draw.blend = 0;
+              gsk_gl_render_job_draw_rect_with_color (job, &node->bounds, color);
+              gsk_gl_render_job_end_draw (job);
+            }
         }
     }
   else
@@ -4618,8 +4619,7 @@ gsk_gl_render_job_new (GskGLDriver           *driver,
                        float                  scale,
                        const cairo_region_t  *region,
                        guint                  framebuffer,
-                       gboolean               clear_framebuffer,
-                       GskOffload            *offload)
+                       gboolean               clear_framebuffer)
 {
   const graphene_rect_t *clip_rect = viewport;
   graphene_rect_t transformed_extents;
@@ -4655,7 +4655,6 @@ gsk_gl_render_job_new (GskGLDriver           *driver,
   job->scale_y = scale;
   job->viewport = *viewport;
   job->target_format = get_framebuffer_format (job->command_queue->context, framebuffer);
-  job->offload = offload;
 
   gsk_gl_render_job_set_alpha (job, 1.0f);
   gsk_gl_render_job_set_projection_from_rect (job, viewport, NULL);
