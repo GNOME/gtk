@@ -28,9 +28,7 @@
 #include "gdkprivate.h"
 
 #include <glib.h>
-#ifdef HAVE_DESKTOPAPPINFO
 #include <gio/gdesktopappinfo.h>
-#endif
 
 #include <string.h>
 #include <unistd.h>
@@ -355,11 +353,10 @@ gdk_x11_app_launch_context_get_startup_notify_id (GAppLaunchContext *context,
     workspace_str = g_strdup_printf ("%d", ctx->workspace);
   else
     workspace_str = NULL;
-#ifdef HAVE_DESKTOPAPPINFO
+
   if (G_IS_DESKTOP_APP_INFO (info))
     application_id = g_desktop_app_info_get_filename (G_DESKTOP_APP_INFO (info));
   else
-#endif
     application_id = NULL;
 
   startup_id = g_strdup_printf ("%s-%lu-%s-%s-%d_TIME%lu",
