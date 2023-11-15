@@ -381,7 +381,7 @@ static const GdkDrmFormatInfo supported_formats[] = {
   { DRM_FORMAT_ABGR16161616F, GDK_MEMORY_R16G16B16A16_FLOAT_PREMULTIPLIED, GDK_MEMORY_R16G16B16A16_FLOAT, download_memcpy },
   { DRM_FORMAT_RGB888, GDK_MEMORY_R8G8B8, GDK_MEMORY_R8G8B8, download_memcpy },
   { DRM_FORMAT_BGR888, GDK_MEMORY_B8G8R8, GDK_MEMORY_B8G8R8, download_memcpy },
-  /* 3 + 1 formats */
+  /* 2 plane RGB + A */
   { DRM_FORMAT_BGRX8888_A8, GDK_MEMORY_A8R8G8B8_PREMULTIPLIED, GDK_MEMORY_A8R8G8B8, download_memcpy_3_1 },
   { DRM_FORMAT_RGBX8888_A8, GDK_MEMORY_A8B8G8R8_PREMULTIPLIED, GDK_MEMORY_A8B8G8R8, download_memcpy_3_1 },
   { DRM_FORMAT_XBGR8888_A8, GDK_MEMORY_R8G8B8A8_PREMULTIPLIED, GDK_MEMORY_R8G8B8A8, download_memcpy_3_1 },
@@ -537,7 +537,7 @@ gdk_dmabuf_direct_downloader_do_download (const GdkDmabufDownloader *downloader,
           g_warning ("Failed to seek dmabuf: %s", g_strerror (errno));
           goto out;
         }
-      /* be a good citizen and seek back to the start, as the dos recommend */
+      /* be a good citizen and seek back to the start, as the docs recommend */
       lseek (dmabuf->planes[i].fd, 0, SEEK_SET);
 
       if (ioctl (dmabuf->planes[i].fd, DMA_BUF_IOCTL_SYNC, &(struct dma_buf_sync) { DMA_BUF_SYNC_START|DMA_BUF_SYNC_READ }) < 0)
