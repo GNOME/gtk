@@ -11,6 +11,10 @@
  */
 
 static int dma_heap_fd = -1;
+#ifdef GDK_RENDERING_VULKAN
+static uint32_t vk_memory_type_index = 0;
+static VkDevice vk_device = VK_NULL_HANDLE;
+#endif
 
 static gboolean
 initialize_dma_heap (void)
@@ -18,6 +22,124 @@ initialize_dma_heap (void)
   dma_heap_fd = open ("/dev/dma_heap/system", O_RDONLY | O_CLOEXEC);
   return dma_heap_fd != -1;
 }
+
+static gboolean
+initialize_vulkan (void)
+{
+#ifdef GDK_RENDERING_VULKAN
+  VkInstance vk_instance;
+  VkPhysicalDevice vk_physical_device;
+  VkResult res;
+  uint32_t i, n_devices = 1;
+  VkPhysicalDeviceMemoryProperties properties;
+
+  if (vkCreateInstance (&(VkInstanceCreateInfo) {
+                          .sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO,
+                          .pApplicationInfo = &(VkApplicationInfo) {
+                            .sType = VK_STRUCTURE_TYPE_APPLICATION_INFO,
+                            .pApplicationName = g_get_application_name (),
+                            .applicationVersion = 0,
+                            .pEngineName = "GTK testsuite",
+                            .engineVersion = VK_MAKE_VERSION (GDK_MAJOR_VERSION, GDK_MINOR_VERSION, GDK_MICRO_VERSION),
+                            .apiVersion = VK_API_VERSION_1_0
+                          },
+                        },
+                        NULL,
+                        &vk_instance) != VK_SUCCESS)
+    return FALSE;
+
+  res = vkEnumeratePhysicalDevices (vk_instance, &n_devices, &vk_physical_device);
+  if (res != VK_SUCCESS && res != VK_INCOMPLETE)
+    {
+      vkDestroyInstance (vk_instance, NULL);
+      return FALSE;
+    }
+
+  if (vkCreateDevice (vk_physical_device,
+                      &(VkDeviceCreateInfo) {
+                        .sType = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO,
+                        .queueCreateInfoCount = 1,
+                        .pQueueCreateInfos = &(VkDeviceQueueCreateInfo) {
+                          .sType = VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO,
+                          .queueFamilyIndex = 0,
+                          .queueCount = 1,
+                          .pQueuePriorities = (float []) { 1.0f },
+                        },
+                        .enabledExtensionCount = 2,
+                        .ppEnabledExtensionNames = (const char * [2]) {
+                          VK_KHR_EXTERNAL_MEMORY_FD_EXTENSION_NAME,
+                          VK_EXT_IMAGE_DRM_FORMAT_MODIFIER_EXTENSION_NAME,
+                        },
+                      },
+                      NULL,
+                      &vk_device) != VK_SUCCESS)
+    {
+      vkDestroyInstance (vk_instance, NULL);
+      return FALSE;
+    }
+
+  vkGetPhysicalDeviceMemoryProperties (vk_physical_device, &properties);
+
+#define REQUIRED_FLAGS (VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT)
+  for (i = 0; i < properties.memoryTypeCount; i++)
+    {
+      if ((properties.memoryTypes[i].propertyFlags & REQUIRED_FLAGS) == REQUIRED_FLAGS)
+        break;
+    }
+#undef REQUIRED_FLAGS
+
+  if (i >= properties.memoryTypeCount)
+    {
+      vkDestroyDevice (vk_device, NULL);
+      vkDestroyInstance (vk_instance, NULL);
+      vk_device = VK_NULL_HANDLE;
+      return FALSE;
+    }
+
+  vk_memory_type_index = i;
+
+  return TRUE;
+#else
+  return FALSE;
+#endif
+}
+
+#ifdef GDK_RENDERING_VULKAN
+static int
+allocate_vulkan (gsize size)
+{
+  VkDeviceMemory vk_memory;
+  PFN_vkGetMemoryFdKHR func_vkGetMemoryFdKHR;
+  int fd;
+
+  func_vkGetMemoryFdKHR = (PFN_vkGetMemoryFdKHR) vkGetDeviceProcAddr (vk_device, "vkGetMemoryFdKHR");
+
+  if (vkAllocateMemory (vk_device,
+                        &(VkMemoryAllocateInfo) {
+                          .sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO,
+                          .allocationSize = size,
+                          .memoryTypeIndex = vk_memory_type_index,
+                          .pNext = &(VkExportMemoryAllocateInfo) {
+                            .sType = VK_STRUCTURE_TYPE_EXPORT_MEMORY_ALLOCATE_INFO,
+                            .handleTypes = VK_EXTERNAL_MEMORY_HANDLE_TYPE_DMA_BUF_BIT_EXT
+                          },
+                        },
+                        NULL,
+                        &vk_memory) != VK_SUCCESS)
+    return -1;
+
+  if (func_vkGetMemoryFdKHR (vk_device,
+                             &(VkMemoryGetFdInfoKHR) {
+                               .sType = VK_STRUCTURE_TYPE_MEMORY_GET_FD_INFO_KHR,
+                               .memory = vk_memory,
+                               .handleType = VK_EXTERNAL_MEMORY_HANDLE_TYPE_DMA_BUF_BIT_EXT,
+                             },
+                             &fd) != VK_SUCCESS)
+    return -1;
+
+  return fd;
+}
+#endif
 
 static int
 allocate_dma_buf (gsize size)
@@ -54,6 +176,10 @@ allocate_memfd (gsize size)
 static int
 allocate_buffer (gsize size)
 {
+#ifdef GDK_RENDERING_VULKAN
+  if (vk_device)
+    return allocate_vulkan (size);
+#endif
   if (dma_heap_fd != -1)
     return allocate_dma_buf (size);
   else
@@ -317,7 +443,9 @@ make_dmabuf_texture (const char *filename,
   GdkDmabufTextureBuilder *builder;
   GError *error = NULL;
 
-  if (initialize_dma_heap ())
+  if (initialize_vulkan ())
+    g_print ("Using Vulkan\n");
+  else if (initialize_dma_heap ())
     g_print ("Using dma_heap\n");
   else
     g_print ("Using memfd\n");

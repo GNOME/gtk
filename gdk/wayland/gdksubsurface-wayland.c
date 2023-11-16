@@ -155,8 +155,8 @@ gdk_wayland_subsurface_attach (GdkSubsurface         *sub,
                                const graphene_rect_t *rect)
 {
   GdkWaylandSubsurface *self = GDK_WAYLAND_SUBSURFACE (sub);
-  gboolean result;
   struct wl_buffer *buffer = NULL;
+  gboolean result = FALSE;
 
   if (sub->parent == NULL)
     {
@@ -201,36 +201,55 @@ gdk_wayland_subsurface_attach (GdkSubsurface         *sub,
     }
   else
     {
-      buffer = get_wl_buffer (self, texture);
-      if (buffer == NULL)
+      if (g_set_object (&self->texture, texture))
         {
+          buffer = get_wl_buffer (self, texture);
+          if (buffer != NULL)
+            {
+              GDK_DISPLAY_DEBUG (gdk_surface_get_display (sub->parent), OFFLOAD,
+                                 "Attached %dx%d texture to subsurface %p at %d %d %d %d",
+                                 gdk_texture_get_width (texture),
+                                 gdk_texture_get_height (texture),
+                                 self,
+                                 self->dest.x, self->dest.y,
+                                 self->dest.width, self->dest.height);
+            }
+          else
+            {
+              GDK_DISPLAY_DEBUG (gdk_surface_get_display (sub->parent), OFFLOAD,
+                                 "Compositor failed to create wl_buffer for %dx%d texture, hiding subsurface %p",
+                                 gdk_texture_get_width (texture),
+                                 gdk_texture_get_height (texture),
+                                 self);
+            }
+        }
+      else
+        {
+          buffer = NULL;
           GDK_DISPLAY_DEBUG (gdk_surface_get_display (sub->parent), OFFLOAD,
-                             "Compositor failed to create wl_buffer for %dx%d texture, hiding subsurface %p",
+                             "Moved %dx%d texture in subsurface %p to %d %d %d %d",
                              gdk_texture_get_width (texture),
                              gdk_texture_get_height (texture),
-                             self);
+                             self,
+                             self->dest.x, self->dest.y,
+                             self->dest.width, self->dest.height);
         }
+      result = TRUE;
     }
 
-  if (buffer)
+  if (result)
     {
-      g_set_object (&self->texture, texture);
-
       wl_subsurface_set_position (self->subsurface, self->dest.x, self->dest.y);
       wp_viewport_set_destination (self->viewport, self->dest.width, self->dest.height);
 
-      wl_surface_attach (self->surface, buffer, 0, 0);
-      wl_surface_damage_buffer (self->surface,
-                                0, 0,
-                                gdk_texture_get_width (texture),
-                                gdk_texture_get_height (texture));
-      GDK_DISPLAY_DEBUG (gdk_surface_get_display (sub->parent), OFFLOAD,
-                         "Attached %dx%d texture to subsurface %p at %d %d %d %d",
-                         gdk_texture_get_width (texture),
-                         gdk_texture_get_height (texture),
-                         self,
-                         self->dest.x, self->dest.y,
-                         self->dest.width, self->dest.height);
+      if (buffer)
+        {
+          wl_surface_attach (self->surface, buffer, 0, 0);
+          wl_surface_damage_buffer (self->surface,
+                                    0, 0,
+                                    gdk_texture_get_width (texture),
+                                    gdk_texture_get_height (texture));
+        }
 
       result = TRUE;
     }
@@ -239,7 +258,6 @@ gdk_wayland_subsurface_attach (GdkSubsurface         *sub,
       g_set_object (&self->texture, NULL);
 
       wl_surface_attach (self->surface, NULL, 0, 0);
-      result = FALSE;
     }
 
   wl_surface_commit (self->surface);
