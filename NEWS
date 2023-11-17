@@ -1,5 +1,32 @@
-Overview of Changes in 4.12.4, xx-xx-xxxx
+Overview of Changes in 4.12.4, 17-11-2023
 =========================================
+
+* a11y:
+ - Tweak name computation for some corner cases
+
+* gdk:
+ - gl: Improve our use of GLES a bit (use vertex arrays and
+   GL_BGRA if available)
+ - Fix some errors in our memory format tables
+
+* gsk:
+ - gl: handle texture-scale nodes more faithfully
+ - gl: Fix icon padding in the atlas
+
+* Windows:
+ - Stop relying on glib for build configuration
+
+* Tools:
+ - Add a --undecorated option to gtk4-rendernode-tool
+
+* Translation updates
+ Catalan
+ French
+ Romanian
+ Russian
+ Spanish
+ Turkish
+
 
 Overview of Changes in 4.12.3, 28-09-2023
 =========================================
