@@ -651,27 +651,3 @@ gsk_offload_get_subsurface_info (GskOffload    *self,
 {
   return find_subsurface_info (self, subsurface);
 }
-
-gboolean
-gsk_offload_subsurface_was_offloaded (GskOffload    *self,
-                                      GdkSubsurface *subsurface)
-{
-  GskOffloadInfo *info = find_subsurface_info (self, subsurface);
-
-  if (!info)
-    return FALSE;
-
-  return info->was_offloaded;
-}
-
-gboolean
-gsk_offload_subsurface_is_offloaded (GskOffload    *self,
-                                     GdkSubsurface *subsurface)
-{
-  GskOffloadInfo *info = find_subsurface_info (self, subsurface);
-
-  if (!info)
-    return FALSE;
-
-  return info->is_offloaded;
-}

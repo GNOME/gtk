@@ -48,9 +48,3 @@ void                gsk_offload_free                     (GskOffload    *self);
 
 GskOffloadInfo    * gsk_offload_get_subsurface_info      (GskOffload    *self,
                                                           GdkSubsurface *subsurface);
-
-gboolean            gsk_offload_subsurface_was_offloaded (GskOffload    *self,
-                                                          GdkSubsurface *subsurface);
-
-gboolean            gsk_offload_subsurface_is_offloaded  (GskOffload    *self,
-                                                          GdkSubsurface *subsurface);
