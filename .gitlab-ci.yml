@@ -66,7 +66,7 @@ style-check-diff:
       junit:
         - "${CI_PROJECT_DIR}/_build/report-x11.xml"
         - "${CI_PROJECT_DIR}/_build/report-wayland.xml"
-        - "${CI_PROJECT_DIR}/_build/report-wayland_gles.xml"
+        - "${CI_PROJECT_DIR}/_build/report-wayland_gles2.xml"
         - "${CI_PROJECT_DIR}/_build/report-broadway.xml"
     name: "gtk-${CI_COMMIT_REF_NAME}"
     paths:
@@ -103,8 +103,8 @@ fedora-x86_64:
             ${FEATURE_FLAGS}
             _build
     - meson compile -C _build
-    - .gitlab-ci/run-tests.sh _build wayland
-    - .gitlab-ci/run-tests.sh _build wayland_gles
+    - .gitlab-ci/run-tests.sh _build wayland_gl
+    - .gitlab-ci/run-tests.sh _build wayland_gles2
 
 release-build:
   extends: .build-fedora-default
@@ -129,6 +129,7 @@ release-build:
     - meson install -C _build
     - PKG_CONFIG_PATH=${CI_PROJECT_DIR}/_install/lib64/pkgconfig:${CI_PROJECT_DIR}/_install/share/pkgconfig meson setup _build_hello examples/hello
     - LD_LIBRARY_PATH=${CI_PROJECT_DIR}/_install/lib64 meson compile -C _build_hello
+    - .gitlab-ci/run-tests.sh _build wayland
     - .gitlab-ci/run-tests.sh _build x11
 
 fedora-clang:
@@ -424,7 +425,7 @@ asan-build:
             _build
     - ninja -C _build
     - .gitlab-ci/run-tests.sh _build wayland
-    - .gitlab-ci/run-tests.sh _build wayland_gles
+    - .gitlab-ci/run-tests.sh _build wayland_gles2
     - .gitlab-ci/run-tests.sh _build x11
   artifacts:
     when: always

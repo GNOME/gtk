@@ -159,7 +159,7 @@ foreach renderer : renderers
     endif
 
     if compare_xfails_small_texture.contains(testname)
-      suites += 'wayland_gles_failing'
+      suites += 'wayland_gles2_failing'
     endif
 
     test_env = [
