@@ -858,6 +858,77 @@ gsk_gpu_node_processor_add_fallback_node (GskGpuNodeProcessor *self,
                       &clipped_bounds);
 }
 
+/* To be called when code wants to run a shader which
+ * would require rendering @node into an offscreen, but it
+ * could also run an ubershader.
+ */
+static gboolean
+gsk_gpu_node_processor_ubershader_instead_of_offscreen (GskGpuNodeProcessor *self,
+                                                        GskRenderNode       *node)
+{
+  if (!gsk_gpu_frame_should_optimize (self->frame, GSK_GPU_OPTIMIZE_UBER))
+    return FALSE;
+
+  for (;;)
+    {
+      switch (gsk_render_node_get_node_type (node))
+        {
+        case GSK_TRANSFORM_NODE:
+          node = gsk_transform_node_get_child (node);
+          break;
+
+        case GSK_CLIP_NODE:
+          node = gsk_clip_node_get_child (node);
+          break;
+
+        case GSK_OPACITY_NODE:
+          node = gsk_opacity_node_get_child (node);
+          break;
+
+        case GSK_DEBUG_NODE:
+          node = gsk_debug_node_get_child (node);
+          break;
+
+        case GSK_SUBSURFACE_NODE:
+          node = gsk_subsurface_node_get_child (node);
+          break;
+
+        case GSK_COLOR_NODE:
+        case GSK_LINEAR_GRADIENT_NODE:
+        case GSK_REPEATING_LINEAR_GRADIENT_NODE:
+        case GSK_RADIAL_GRADIENT_NODE:
+        case GSK_REPEATING_RADIAL_GRADIENT_NODE:
+        case GSK_CONIC_GRADIENT_NODE:
+        case GSK_ROUNDED_CLIP_NODE:
+        case GSK_REPEAT_NODE:
+        case GSK_COLOR_MATRIX_NODE:
+        case GSK_CROSS_FADE_NODE:
+        case GSK_BLEND_NODE:
+        case GSK_TEXT_NODE:
+        case GSK_MASK_NODE:
+          return TRUE;
+
+        case GSK_CONTAINER_NODE:
+        case GSK_CAIRO_NODE:
+        case GSK_BORDER_NODE:
+        case GSK_TEXTURE_NODE:
+        case GSK_INSET_SHADOW_NODE:
+        case GSK_OUTSET_SHADOW_NODE:
+        case GSK_SHADOW_NODE:
+        case GSK_BLUR_NODE:
+        case GSK_GL_SHADER_NODE:
+        case GSK_TEXTURE_SCALE_NODE:
+        case GSK_FILL_NODE:
+        case GSK_STROKE_NODE:
+          return FALSE;
+
+        case GSK_NOT_A_RENDER_NODE:
+        default:
+          g_return_val_if_reached (FALSE);
+        }
+    }
+}
+
 static gboolean
 gsk_gpu_node_processor_try_node_as_pattern (GskGpuNodeProcessor *self,
                                             GskRenderNode       *node)
@@ -925,7 +996,8 @@ gsk_gpu_node_processor_add_without_opacity (GskGpuNodeProcessor *self,
 
   gsk_gpu_node_processor_sync_globals (self, 0);
 
-  if (gsk_gpu_node_processor_try_node_as_pattern (self, node))
+  if (gsk_gpu_node_processor_ubershader_instead_of_offscreen (self, node) &&
+      gsk_gpu_node_processor_try_node_as_pattern (self, node))
     return;
 
   image = gsk_gpu_node_processor_get_node_as_image (self,
@@ -2217,6 +2289,11 @@ gsk_gpu_node_processor_add_color_matrix_node (GskGpuNodeProcessor *self,
   graphene_rect_t tex_rect;
 
   child = gsk_color_matrix_node_get_child (node);
+
+  if (gsk_gpu_node_processor_ubershader_instead_of_offscreen (self, child) &&
+      gsk_gpu_node_processor_try_node_as_pattern (self, node))
+    return;
+
   color_matrix = gsk_color_matrix_node_get_color_matrix (node);
   if (self->opacity < 1.0f)
     {
