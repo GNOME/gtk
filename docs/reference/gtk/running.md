@@ -232,8 +232,11 @@ A number of options affect behavior instead of logging:
 `gl-legacy`
 : Use a legacy OpenGL context
 
-`gl-gles`
-: Use a GLES OpenGL context
+`gl-disable-gl`
+: Don't allow the use of OpenGL GL API. This forces GLES to be used
+
+`gl-disable-gles`
+: Don't allow the use of OpenGL GLES API. This forces GL to be used
 
 `gl-egl`
 : Use an EGL context on X11 or Windows

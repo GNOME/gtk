@@ -1277,18 +1277,38 @@ gdk_gl_context_is_api_allowed (GdkGLContext  *self,
                                GError       **error)
 {
   GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (self);
+  GdkDebugFlags flags;
+  GdkGLAPI allowed_apis;
 
-  if (gdk_display_get_debug_flags (gdk_gl_context_get_display (self)) & GDK_DEBUG_GL_GLES)
+  allowed_apis = priv->allowed_apis;
+
+  flags = gdk_display_get_debug_flags (gdk_gl_context_get_display (self));
+
+  if (flags & GDK_DEBUG_GL_DISABLE_GLES)
     {
-      if (!(api & GDK_GL_API_GLES))
+      if (api == GDK_GL_API_GLES)
         {
           g_set_error_literal (error, GDK_GL_ERROR, GDK_GL_ERROR_NOT_AVAILABLE,
-                               _("Anything but OpenGL ES disabled via GDK_DEBUG"));
+                               _("OpenGL ES disabled via GDK_DEBUG"));
           return FALSE;
         }
+
+      allowed_apis &= ~GDK_GL_API_GLES;
     }
 
-  if (priv->allowed_apis & api)
+  if (flags & GDK_DEBUG_GL_DISABLE_GL)
+    {
+      if (api == GDK_GL_API_GL)
+        {
+          g_set_error_literal (error, GDK_GL_ERROR, GDK_GL_ERROR_NOT_AVAILABLE,
+                               _("OpenGL disabled via GDK_DEBUG"));
+          return FALSE;
+        }
+
+      allowed_apis &= ~GDK_GL_API_GL;
+    }
+
+  if (allowed_apis & api)
     return TRUE;
 
   g_set_error (error, GDK_GL_ERROR, GDK_GL_ERROR_NOT_AVAILABLE,
