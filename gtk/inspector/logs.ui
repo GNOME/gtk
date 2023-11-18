@@ -89,6 +89,18 @@
                 <signal name="toggled" handler="flag_toggled"/>
               </object>
             </child>
+            <child>
+              <object class="GtkCheckButton" id="dmabuf">
+                <property name="label">Dmabuf</property>
+                <signal name="toggled" handler="flag_toggled"/>
+              </object>
+            </child>
+            <child>
+              <object class="GtkCheckButton" id="offload">
+                <property name="label">Offload</property>
+                <signal name="toggled" handler="flag_toggled"/>
+              </object>
+            </child>
           </object>
         </child>
         <child>

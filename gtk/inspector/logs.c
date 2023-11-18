@@ -57,6 +57,8 @@ struct _GtkInspectorLogs
   GtkWidget *vulkan;
   GtkWidget *selection;
   GtkWidget *clipboard;
+  GtkWidget *dmabuf;
+  GtkWidget *offload;
 
   GtkWidget *renderer;
   GtkWidget *cairo;
@@ -133,6 +135,8 @@ flag_toggled (GtkWidget        *button,
   update_flag (logs->vulkan, &flags, GDK_DEBUG_VULKAN);
   update_flag (logs->selection, &flags, GDK_DEBUG_SELECTION);
   update_flag (logs->clipboard, &flags, GDK_DEBUG_CLIPBOARD);
+  update_flag (logs->dmabuf, &flags, GDK_DEBUG_DMABUF);
+  update_flag (logs->offload, &flags, GDK_DEBUG_OFFLOAD);
   gdk_display_set_debug_flags (logs->display, flags);
 
   flags = gsk_get_debug_flags ();
@@ -196,6 +200,8 @@ gtk_inspector_logs_class_init (GtkInspectorLogsClass *klass)
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorLogs, vulkan);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorLogs, selection);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorLogs, clipboard);
+  gtk_widget_class_bind_template_child (widget_class, GtkInspectorLogs, dmabuf);
+  gtk_widget_class_bind_template_child (widget_class, GtkInspectorLogs, offload);
 
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorLogs, renderer);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorLogs, cairo);
