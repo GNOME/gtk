@@ -16,8 +16,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2023-09-16 14:27+0000\n"
-"PO-Revision-Date: 2023-09-17 12:15+0200\n"
+"POT-Creation-Date: 2023-11-18 07:41+0000\n"
+"PO-Revision-Date: 2023-11-18 17:14+0100\n"
 "Last-Translator: Piotr Drąg <piotrdrag@gmail.com>\n"
 "Language-Team: Polish <community-poland@mozilla.org>\n"
 "Language: pl\n"
@@ -55,35 +55,35 @@ msgstr "Nie można dostarczyć zawartości jako „%s”"
 msgid "Cannot provide contents as %s"
 msgstr "Nie można dostarczyć zawartości jako %s"
 
-#: gdk/gdkdisplay.c:156 gdk/gdkglcontext.c:442
+#: gdk/gdkdisplay.c:164 gdk/gdkglcontext.c:448
 msgid "The current backend does not support OpenGL"
 msgstr "Bieżący mechanizm nie obsługuje OpenGL"
 
-#: gdk/gdkdisplay.c:1244 gdk/gdksurface.c:1252
+#: gdk/gdkdisplay.c:1263 gdk/gdksurface.c:1268 gdk/gdkvulkancontext.c:1479
 msgid "Vulkan support disabled via GDK_DEBUG"
 msgstr "Obsługa Vulkan została wyłączona przez zmienną GDK_DEBUG"
 
-#: gdk/gdkdisplay.c:1276
+#: gdk/gdkdisplay.c:1295
 msgid "GL support disabled via GDK_DEBUG"
 msgstr "Obsługa GL została wyłączona przez zmienną GDK_DEBUG"
 
-#: gdk/gdkdisplay.c:1574
+#: gdk/gdkdisplay.c:1591
 msgid "No EGL configuration available"
 msgstr "Brak dostępnej konfiguracji EGL"
 
-#: gdk/gdkdisplay.c:1582
+#: gdk/gdkdisplay.c:1599
 msgid "Failed to get EGL configurations"
 msgstr "Uzyskanie konfiguracji EGL się nie powiodło"
 
-#: gdk/gdkdisplay.c:1612
+#: gdk/gdkdisplay.c:1629
 msgid "No EGL configuration with required features found"
 msgstr "Nie odnaleziono konfiguracji EGL z wymaganymi funkcjami"
 
-#: gdk/gdkdisplay.c:1619
+#: gdk/gdkdisplay.c:1636
 msgid "No perfect EGL configuration found"
 msgstr "Nie odnaleziono doskonałej konfiguracji EGL"
 
-#: gdk/gdkdisplay.c:1661
+#: gdk/gdkdisplay.c:1678
 #, c-format
 msgid "EGL implementation is missing extension %s"
 msgid_plural "EGL implementation is missing %2$d extensions: %1$s"
@@ -91,23 +91,23 @@ msgstr[0] "W implementacji EGL brakuje rozszerzenia %s"
 msgstr[1] "W implementacji EGL brakuje %2$d rozszerzeń: %1$s"
 msgstr[2] "W implementacji EGL brakuje %2$d rozszerzeń: %1$s"
 
-#: gdk/gdkdisplay.c:1694
+#: gdk/gdkdisplay.c:1711
 msgid "libEGL not available in this sandbox"
 msgstr "libEGL nie jest dostępne w tej izolacji"
 
-#: gdk/gdkdisplay.c:1695
+#: gdk/gdkdisplay.c:1712
 msgid "libEGL not available"
 msgstr "libEGL jest niedostępne"
 
-#: gdk/gdkdisplay.c:1705
+#: gdk/gdkdisplay.c:1722
 msgid "Failed to create EGL display"
 msgstr "Utworzenie ekranu EGL się nie powiodło"
 
-#: gdk/gdkdisplay.c:1715
+#: gdk/gdkdisplay.c:1732
 msgid "Could not initialize EGL display"
 msgstr "Nie można zainicjować ekranu EGL"
 
-#: gdk/gdkdisplay.c:1726
+#: gdk/gdkdisplay.c:1743
 #, c-format
 msgid "EGL version %d.%d is too old. GTK requires %d.%d"
 msgstr "Wersja EGL, %d.%d, jest za stara. GTK wymaga wersji %d.%d"
@@ -120,33 +120,33 @@ msgstr "Przeciąganie z innych programów nie jest obsługiwane."
 msgid "No compatible formats to transfer contents."
 msgstr "Brak zgodnych formatów do przesłania zawartości."
 
-#: gdk/gdkglcontext.c:401 gdk/x11/gdkglcontext-glx.c:642
+#: gdk/gdkglcontext.c:407 gdk/x11/gdkglcontext-glx.c:642
 msgid "No GL API allowed."
 msgstr "Żadne API GL nie jest dozwolone."
 
-#: gdk/gdkglcontext.c:425 gdk/win32/gdkglcontext-win32-wgl.c:387
-#: gdk/win32/gdkglcontext-win32-wgl.c:530
-#: gdk/win32/gdkglcontext-win32-wgl.c:574 gdk/x11/gdkglcontext-glx.c:691
+#: gdk/gdkglcontext.c:431 gdk/win32/gdkglcontext-win32-wgl.c:385
+#: gdk/win32/gdkglcontext-win32-wgl.c:528
+#: gdk/win32/gdkglcontext-win32-wgl.c:572 gdk/x11/gdkglcontext-glx.c:691
 msgid "Unable to create a GL context"
 msgstr "Nie można utworzyć kontekstu GL"
 
-#: gdk/gdkglcontext.c:1280
+#: gdk/gdkglcontext.c:1286
 msgid "Anything but OpenGL ES disabled via GDK_DEBUG"
 msgstr "Wszystko poza OpenGL ES zostało wyłączone przez zmienną GDK_DEBUG"
 
-#: gdk/gdkglcontext.c:1289
+#: gdk/gdkglcontext.c:1295
 #, c-format
 msgid "Application does not support %s API"
 msgstr "Program nie obsługuje API %s"
 
 #. translators: This is about OpenGL backend names, like
 #. * "Trying to use X11 GLX, but EGL is already in use"
-#: gdk/gdkglcontext.c:1864
+#: gdk/gdkglcontext.c:1952
 #, c-format
 msgid "Trying to use %s, but %s is already in use"
 msgstr "Próbowanie użycia %s, ale %s jest już używane"
 
-#: gdk/gdktexture.c:528
+#: gdk/gdktexture.c:530
 msgid "Unknown image format."
 msgstr "Nieznany format obrazu."
 
@@ -537,7 +537,7 @@ msgstr "Błąd podczas interpretowania pliku obrazu JPEG (%s)"
 msgid "Unsupported JPEG colorspace (%d)"
 msgstr "Nieobsługiwana przestrzeń kolorów JPEG (%d)"
 
-#: gdk/loaders/gdkjpeg.c:203 gdk/loaders/gdkpng.c:280 gdk/loaders/gdktiff.c:467
+#: gdk/loaders/gdkjpeg.c:203 gdk/loaders/gdkpng.c:280 gdk/loaders/gdktiff.c:472
 #, c-format
 msgid "Not enough memory for image size %ux%u"
 msgstr "Za mało pamięci na obraz o rozmiarze %u×%u"
@@ -557,23 +557,23 @@ msgstr "Nieobsługiwana głębia %u w obrazie PNG"
 msgid "Unsupported color type %u in png image"
 msgstr "Nieobsługiwany typ kolorów %u w obrazie PNG"
 
-#: gdk/loaders/gdktiff.c:353
+#: gdk/loaders/gdktiff.c:358
 msgid "Failed to load RGB data from TIFF file"
 msgstr "Wczytanie danych RGB z pliku TIFF się nie powiodło"
 
-#: gdk/loaders/gdktiff.c:396
+#: gdk/loaders/gdktiff.c:401
 msgid "Could not load TIFF data"
 msgstr "Nie można wczytać danych TIFF"
 
-#: gdk/loaders/gdktiff.c:479
+#: gdk/loaders/gdktiff.c:484
 #, c-format
 msgid "Reading data failed at row %d"
 msgstr "Odczytanie danych nie powiodło się w %d. rzędzie"
 
-#: gdk/macos/gdkmacospasteboard.c:211 gdk/wayland/gdkclipboard-wayland.c:240
-#: gdk/wayland/gdkdrop-wayland.c:207 gdk/wayland/gdkprimary-wayland.c:343
+#: gdk/macos/gdkmacospasteboard.c:211 gdk/wayland/gdkclipboard-wayland.c:238
+#: gdk/wayland/gdkdrop-wayland.c:205 gdk/wayland/gdkprimary-wayland.c:337
 #: gdk/win32/gdkdrop-win32.c:1018 gdk/win32/gdkdrop-win32.c:1063
-#: gdk/x11/gdkclipboard-x11.c:807 gdk/x11/gdkdrop-x11.c:235
+#: gdk/x11/gdkclipboard-x11.c:799 gdk/x11/gdkdrop-x11.c:235
 msgid "No compatible transfer format found"
 msgstr "Nie odnaleziono zgodnego formatu przesyłania"
 
@@ -582,66 +582,66 @@ msgstr "Nie odnaleziono zgodnego formatu przesyłania"
 msgid "Failed to decode contents with mime-type of '%s'"
 msgstr "Dekodowanie treści o typie MIME „%s” się nie powiodło"
 
-#: gdk/win32/gdkclipdrop-win32.c:721
+#: gdk/win32/gdkclipdrop-win32.c:719
 #, c-format
 msgid "Cannot claim clipboard ownership. OpenClipboard() timed out."
 msgstr ""
 "Nie można zostać właścicielem schowka. OpenClipboard() przekroczyło czas "
 "oczekiwania."
 
-#: gdk/win32/gdkclipdrop-win32.c:731
+#: gdk/win32/gdkclipdrop-win32.c:729
 #, c-format
 msgid "Cannot claim clipboard ownership. Another process claimed it before us."
 msgstr ""
 "Nie można zostać właścicielem schowka. Inny proces został właścicielem przed "
 "nami."
 
-#: gdk/win32/gdkclipdrop-win32.c:745
+#: gdk/win32/gdkclipdrop-win32.c:743
 #, c-format
 msgid "Cannot claim clipboard ownership. OpenClipboard() failed: 0x%lx."
 msgstr ""
 "Nie można zostać właścicielem schowka. OpenClipboard() się nie powiodło: "
 "0x%lx."
 
-#: gdk/win32/gdkclipdrop-win32.c:757
+#: gdk/win32/gdkclipdrop-win32.c:755
 #, c-format
 msgid "Cannot claim clipboard ownership. EmptyClipboard() failed: 0x%lx."
 msgstr ""
 "Nie można zostać właścicielem schowka. EmptyClipboard() się nie powiodło: "
 "0x%lx."
 
-#: gdk/win32/gdkclipdrop-win32.c:800
+#: gdk/win32/gdkclipdrop-win32.c:798
 #, c-format
 msgid "Cannot set clipboard data. OpenClipboard() timed out."
 msgstr ""
 "Nie można ustawić danych schowka. OpenClipboard() przekroczyło czas "
 "oczekiwania."
 
-#: gdk/win32/gdkclipdrop-win32.c:810 gdk/win32/gdkclipdrop-win32.c:841
+#: gdk/win32/gdkclipdrop-win32.c:808 gdk/win32/gdkclipdrop-win32.c:839
 #, c-format
 msgid "Cannot set clipboard data. Another process claimed clipboard ownership."
 msgstr ""
 "Nie można ustawić danych schowka. Inny proces jest właścicielem schowka."
 
-#: gdk/win32/gdkclipdrop-win32.c:824
+#: gdk/win32/gdkclipdrop-win32.c:822
 #, c-format
 msgid "Cannot set clipboard data. OpenClipboard() failed: 0x%lx."
 msgstr ""
 "Nie można ustawić danych schowka. OpenClipboard() się nie powiodło: 0x%lx."
 
-#: gdk/win32/gdkclipdrop-win32.c:876
+#: gdk/win32/gdkclipdrop-win32.c:874
 #, c-format
 msgid "Cannot get clipboard data. GlobalLock(0x%p) failed: 0x%lx."
 msgstr ""
 "Nie można pobrać danych schowka. GlobalLock(0x%p) się nie powiodło: 0x%lx."
 
-#: gdk/win32/gdkclipdrop-win32.c:887
+#: gdk/win32/gdkclipdrop-win32.c:885
 #, c-format
 msgid "Cannot get clipboard data. GlobalSize(0x%p) failed: 0x%lx."
 msgstr ""
 "Nie można pobrać danych schowka. GlobalSize(0x%p) się nie powiodło: 0x%lx."
 
-#: gdk/win32/gdkclipdrop-win32.c:900
+#: gdk/win32/gdkclipdrop-win32.c:898
 #, c-format
 msgid ""
 "Cannot get clipboard data. Failed to allocate %s bytes to store the data."
@@ -649,19 +649,19 @@ msgstr ""
 "Nie można pobrać danych schowka. Przydzielenie %s B do przechowania danych "
 "się nie powiodło."
 
-#: gdk/win32/gdkclipdrop-win32.c:932
+#: gdk/win32/gdkclipdrop-win32.c:930
 #, c-format
 msgid "Cannot get clipboard data. OpenClipboard() timed out."
 msgstr ""
 "Nie można pobrać danych schowka. OpenClipboard() przekroczyło czas "
 "oczekiwania."
 
-#: gdk/win32/gdkclipdrop-win32.c:942
+#: gdk/win32/gdkclipdrop-win32.c:940
 #, c-format
 msgid "Cannot get clipboard data. Clipboard ownership changed."
 msgstr "Nie można pobrać danych schowka. Właściciel schowka się zmienił."
 
-#: gdk/win32/gdkclipdrop-win32.c:952
+#: gdk/win32/gdkclipdrop-win32.c:950
 #, c-format
 msgid ""
 "Cannot get clipboard data. Clipboard data changed before we could get it."
@@ -669,20 +669,20 @@ msgstr ""
 "Nie można pobrać danych schowka. Dane schowka zmieniły się, zanim było można "
 "je pobrać."
 
-#: gdk/win32/gdkclipdrop-win32.c:969
+#: gdk/win32/gdkclipdrop-win32.c:967
 #, c-format
 msgid "Cannot get clipboard data. OpenClipboard() failed: 0x%lx."
 msgstr ""
 "Nie można pobrać danych schowka. OpenClipboard() się nie powiodło: 0x%lx."
 
-#: gdk/win32/gdkclipdrop-win32.c:994
+#: gdk/win32/gdkclipdrop-win32.c:992
 #, c-format
 msgid "Cannot get clipboard data. No compatible transfer format found."
 msgstr ""
 "Nie można pobrać danych schowka. Nie odnaleziono zgodnego formatu "
 "przesyłania."
 
-#: gdk/win32/gdkclipdrop-win32.c:1004
+#: gdk/win32/gdkclipdrop-win32.c:1002
 #, c-format
 msgid "Cannot get clipboard data. GetClipboardData() failed: 0x%lx."
 msgstr ""
@@ -735,17 +735,17 @@ msgstr ""
 msgid "No GL implementation is available"
 msgstr "Brak dostępnej implementacji GL"
 
-#: gdk/win32/gdkglcontext-win32-wgl.c:396
+#: gdk/win32/gdkglcontext-win32-wgl.c:394
 #, c-format
 msgid "WGL version %d.%d is too low, need at least %d.%d"
 msgstr "Wersja WGL, %d.%d, jest za niska, wymagana jest co najmniej %d.%d"
 
-#: gdk/win32/gdkglcontext-win32-wgl.c:414
+#: gdk/win32/gdkglcontext-win32-wgl.c:412
 #, c-format
 msgid "GL implementation cannot share GL contexts"
 msgstr "Implementacja GL nie może dzielić się kontekstami GL"
 
-#: gdk/win32/gdkglcontext-win32-wgl.c:696
+#: gdk/win32/gdkglcontext-win32-wgl.c:694
 msgid "No available configurations for the given pixel format"
 msgstr "Brak dostępnych konfiguracji dla podanego formatu pikseli"
 
@@ -783,17 +783,17 @@ msgstr "GlobalLock() się nie powiodło: "
 msgid "GlobalAlloc() failed: "
 msgstr "GlobalAlloc() się nie powiodło: "
 
-#: gdk/x11/gdkapplaunchcontext-x11.c:299
+#: gdk/x11/gdkapplaunchcontext-x11.c:297
 #, c-format
 msgid "Starting “%s”"
 msgstr "Uruchamianie „%s”"
 
-#: gdk/x11/gdkapplaunchcontext-x11.c:312
+#: gdk/x11/gdkapplaunchcontext-x11.c:310
 #, c-format
 msgid "Opening “%s”"
 msgstr "Otwieranie „%s”"
 
-#: gdk/x11/gdkapplaunchcontext-x11.c:317
+#: gdk/x11/gdkapplaunchcontext-x11.c:315
 #, c-format
 msgid "Opening %d Item"
 msgid_plural "Opening %d Items"
@@ -801,11 +801,11 @@ msgstr[0] "Otwieranie %d elementu"
 msgstr[1] "Otwieranie %d elementów"
 msgstr[2] "Otwieranie %d elementów"
 
-#: gdk/x11/gdkclipboard-x11.c:477
+#: gdk/x11/gdkclipboard-x11.c:473
 msgid "Clipboard manager could not store selection."
 msgstr "Menedżer schowka nie może przechować zaznaczenia."
 
-#: gdk/x11/gdkclipboard-x11.c:657
+#: gdk/x11/gdkclipboard-x11.c:649
 msgid "Cannot store clipboard. No clipboard manager is active."
 msgstr "Nie można przechować schowka. Żaden menedżer schowka nie jest aktywny."
 
@@ -821,7 +821,7 @@ msgstr "Nie odnaleziono konfiguracji GLX z wymaganymi funkcjami"
 msgid "GLX is not supported"
 msgstr "GLX jest nieobsługiwane"
 
-#: gdk/x11/gdkselectioninputstream-x11.c:467
+#: gdk/x11/gdkselectioninputstream-x11.c:465
 #, c-format
 msgid "Format %s not supported"
 msgstr "Format %s jest nieobsługiwany"
@@ -848,7 +848,7 @@ msgstr "Nieprawidłowe formaty w konwersji złożonego tekstu."
 msgid "Unsupported encoding “%s”"
 msgstr "Nieobsługiwane kodowanie „%s”"
 
-#: gsk/gl/gskglrenderer.c:132
+#: gsk/gl/gskglrenderer.c:135
 #, c-format
 msgid "This GLES %d.%d implementation does not support half-float vertex data"
 msgstr ""
@@ -1067,18 +1067,18 @@ msgctxt "progress bar label"
 msgid "%d %%"
 msgstr "%d%%"
 
-#: gtk/deprecated/gtkcolorbutton.c:183 gtk/deprecated/gtkcolorbutton.c:311
+#: gtk/deprecated/gtkcolorbutton.c:183 gtk/deprecated/gtkcolorbutton.c:314
 #: gtk/gtkcolordialog.c:411
 msgid "Pick a Color"
 msgstr "Wybór koloru"
 
-#: gtk/deprecated/gtkcolorbutton.c:502 gtk/gtkcolorchooserwidget.c:313
+#: gtk/deprecated/gtkcolorbutton.c:505 gtk/gtkcolorchooserwidget.c:313
 #: gtk/gtkcolordialogbutton.c:335
 #, c-format
 msgid "Red %d%%, Green %d%%, Blue %d%%, Alpha %d%%"
 msgstr "Czerwony %d%%, zielony %d%%, niebieski %d%%, alfa %d%%"
 
-#: gtk/deprecated/gtkcolorbutton.c:508 gtk/gtkcolorchooserwidget.c:319
+#: gtk/deprecated/gtkcolorbutton.c:511 gtk/gtkcolorchooserwidget.c:319
 #: gtk/gtkcolordialogbutton.c:341
 #, c-format
 msgid "Red %d%%, Green %d%%, Blue %d%%"
@@ -1088,17 +1088,17 @@ msgstr "Czerwony %d%%, zielony %d%%, niebieski %d%%"
 msgid "Sans 12"
 msgstr "Sans 12"
 
-#: gtk/deprecated/gtkfontbutton.c:507 gtk/deprecated/gtkfontbutton.c:621
+#: gtk/deprecated/gtkfontbutton.c:507 gtk/deprecated/gtkfontbutton.c:624
 #: gtk/gtkfontdialog.c:596
 msgid "Pick a Font"
 msgstr "Wybór czcionki"
 
-#: gtk/deprecated/gtkfontbutton.c:597 gtk/gtkfilechooserwidget.c:3806
+#: gtk/deprecated/gtkfontbutton.c:600 gtk/gtkfilechooserwidget.c:3806
 #: gtk/gtkfontdialogbutton.c:126 gtk/inspector/visual.ui:169
 msgid "Font"
 msgstr "Czcionka"
 
-#: gtk/deprecated/gtkfontbutton.c:1152 gtk/gtkfontdialogbutton.c:652
+#: gtk/deprecated/gtkfontbutton.c:1155 gtk/gtkfontdialogbutton.c:652
 msgctxt "font"
 msgid "None"
 msgstr "Brak"
@@ -1748,6 +1748,16 @@ msgctxt "accessibility"
 msgid "toggle button"
 msgstr "przycisk przełączania"
 
+#: gtk/gtkaccessible.c:835
+msgctxt "accessibility"
+msgid "paragraph"
+msgstr "akapit"
+
+#: gtk/gtkaccessible.c:836
+msgctxt "accessibility"
+msgid "block quote"
+msgstr "cytat blokowy"
+
 #: gtk/gtkalertdialog.c:668 gtk/print/gtkcustompaperunixdialog.c:322
 #: gtk/gtkmessagedialog.c:166 gtk/ui/gtkassistant.ui:40
 msgid "_Close"
@@ -2233,7 +2243,7 @@ msgstr "Plik o tej nazwie już istnieje"
 #: gtk/gtkmessagedialog.c:179 gtk/gtkmountoperation.c:608
 #: gtk/print/gtkpagesetupunixdialog.c:282 gtk/print/gtkprintbackend.c:638
 #: gtk/print/gtkprintunixdialog.c:682 gtk/print/gtkprintunixdialog.c:839
-#: gtk/gtkwindow.c:6242 gtk/ui/gtkappchooserdialog.ui:48
+#: gtk/gtkwindow.c:6234 gtk/ui/gtkappchooserdialog.ui:48
 #: gtk/ui/gtkassistant.ui:52 gtk/ui/gtkcolorchooserdialog.ui:36
 #: gtk/ui/gtkfontchooserdialog.ui:27
 msgid "_Cancel"
@@ -2322,7 +2332,7 @@ msgid "If you delete an item, it will be permanently lost."
 msgstr "Jeśli element zostanie usunięty, to zostanie on bezpowrotnie utracony."
 
 #: gtk/gtkfilechooserwidget.c:1183 gtk/gtkfilechooserwidget.c:1781
-#: gtk/gtklabel.c:5695 gtk/gtktext.c:6145 gtk/gtktextview.c:9018
+#: gtk/gtklabel.c:5695 gtk/gtktext.c:6147 gtk/gtktextview.c:9018
 msgid "_Delete"
 msgstr "_Usuń"
 
@@ -2436,6 +2446,7 @@ msgid "Yesterday"
 msgstr "Wczoraj"
 
 #: gtk/gtkfilechooserwidget.c:3758
+#, c-format
 msgid "%-e %b"
 msgstr "%-d %b"
 
@@ -2662,19 +2673,19 @@ msgstr "Zamknij"
 msgid "Close the infobar"
 msgstr "Zamknij pasek informacyjny"
 
-#: gtk/gtklabel.c:5692 gtk/gtktext.c:6133 gtk/gtktextview.c:9006
+#: gtk/gtklabel.c:5692 gtk/gtktext.c:6135 gtk/gtktextview.c:9006
 msgid "Cu_t"
 msgstr "_Wytnij"
 
-#: gtk/gtklabel.c:5693 gtk/gtktext.c:6137 gtk/gtktextview.c:9010
+#: gtk/gtklabel.c:5693 gtk/gtktext.c:6139 gtk/gtktextview.c:9010
 msgid "_Copy"
 msgstr "S_kopiuj"
 
-#: gtk/gtklabel.c:5694 gtk/gtktext.c:6141 gtk/gtktextview.c:9014
+#: gtk/gtklabel.c:5694 gtk/gtktext.c:6143 gtk/gtktextview.c:9014
 msgid "_Paste"
 msgstr "Wk_lej"
 
-#: gtk/gtklabel.c:5700 gtk/gtktext.c:6154 gtk/gtktextview.c:9039
+#: gtk/gtklabel.c:5700 gtk/gtktext.c:6156 gtk/gtktextview.c:9039
 msgid "Select _All"
 msgstr "Z_aznacz wszystko"
 
@@ -2757,7 +2768,7 @@ msgid "Play"
 msgstr "Odtwarza"
 
 #: gtk/gtkmessagedialog.c:162 gtk/gtkmessagedialog.c:180
-#: gtk/print/gtkprintbackend.c:639 gtk/gtkwindow.c:6243
+#: gtk/print/gtkprintbackend.c:639 gtk/gtkwindow.c:6235
 msgid "_OK"
 msgstr "_OK"
 
@@ -3360,8 +3371,8 @@ msgstr "Najprawdopodobniej plik tymczasowy nie mógł zostać utworzony."
 
 #. window
 #: gtk/print/gtkprintoperation-portal.c:264
-#: gtk/print/gtkprintoperation-portal.c:584
-#: gtk/print/gtkprintoperation-portal.c:653 gtk/print/gtkprintunixdialog.c:3008
+#: gtk/print/gtkprintoperation-portal.c:594
+#: gtk/print/gtkprintoperation-portal.c:663 gtk/print/gtkprintunixdialog.c:3008
 msgid "Print"
 msgstr "Wydruk"
 
@@ -3451,42 +3462,42 @@ msgstr "Pobieranie informacji o drukarce…"
 #. * multiple pages on a sheet when printing
 #.
 #: gtk/print/gtkprintunixdialog.c:2753
-#: modules/printbackends/gtkprintbackendcups.c:5647
+#: modules/printbackends/gtkprintbackendcups.c:5645
 msgid "Left to right, top to bottom"
 msgstr "Od lewej do prawej, z góry do dołu"
 
 #: gtk/print/gtkprintunixdialog.c:2753
-#: modules/printbackends/gtkprintbackendcups.c:5647
+#: modules/printbackends/gtkprintbackendcups.c:5645
 msgid "Left to right, bottom to top"
 msgstr "Od lewej do prawej, z dołu na górę"
 
 #: gtk/print/gtkprintunixdialog.c:2754
-#: modules/printbackends/gtkprintbackendcups.c:5648
+#: modules/printbackends/gtkprintbackendcups.c:5646
 msgid "Right to left, top to bottom"
 msgstr "Od prawej do lewej, z góry na dół"
 
 #: gtk/print/gtkprintunixdialog.c:2754
-#: modules/printbackends/gtkprintbackendcups.c:5648
+#: modules/printbackends/gtkprintbackendcups.c:5646
 msgid "Right to left, bottom to top"
 msgstr "Od prawej do lewej, z dołu na górę"
 
 #: gtk/print/gtkprintunixdialog.c:2755
-#: modules/printbackends/gtkprintbackendcups.c:5649
+#: modules/printbackends/gtkprintbackendcups.c:5647
 msgid "Top to bottom, left to right"
 msgstr "Z góry do dołu, od lewej do prawej"
 
 #: gtk/print/gtkprintunixdialog.c:2755
-#: modules/printbackends/gtkprintbackendcups.c:5649
+#: modules/printbackends/gtkprintbackendcups.c:5647
 msgid "Top to bottom, right to left"
 msgstr "Z góry do dołu, od prawej do lewej"
 
 #: gtk/print/gtkprintunixdialog.c:2756
-#: modules/printbackends/gtkprintbackendcups.c:5650
+#: modules/printbackends/gtkprintbackendcups.c:5648
 msgid "Bottom to top, left to right"
 msgstr "Z dołu do góry, od lewej do prawej"
 
 #: gtk/print/gtkprintunixdialog.c:2756
-#: modules/printbackends/gtkprintbackendcups.c:5650
+#: modules/printbackends/gtkprintbackendcups.c:5648
 msgid "Bottom to top, right to left"
 msgstr "Z dołu do góry, od prawej do lewej"
 
@@ -3510,7 +3521,7 @@ msgstr "Z góry do dołu"
 msgid "Bottom to top"
 msgstr "Z dołu do góry"
 
-#: gtk/gtkprogressbar.c:608
+#: gtk/gtkprogressbar.c:609
 #, c-format
 msgctxt "progress bar label"
 msgid "%.0f %%"
@@ -3626,7 +3637,7 @@ msgctxt "accessibility"
 msgid "Sidebar"
 msgstr "Panel boczny"
 
-#: gtk/gtktext.c:6159 gtk/gtktextview.c:9044
+#: gtk/gtktext.c:6161 gtk/gtktextview.c:9044
 msgid "Insert _Emoji"
 msgstr "Wstaw _emoji"
 
@@ -3638,12 +3649,12 @@ msgstr "Cof_nij"
 msgid "_Redo"
 msgstr "P_onów"
 
-#: gtk/gtkwindow.c:6231
+#: gtk/gtkwindow.c:6223
 #, c-format
 msgid "Do you want to use GTK Inspector?"
 msgstr "Użyć Inspektora GTK?"
 
-#: gtk/gtkwindow.c:6233
+#: gtk/gtkwindow.c:6225
 #, c-format
 msgid ""
 "GTK Inspector is an interactive debugger that lets you explore and modify "
@@ -3654,7 +3665,7 @@ msgstr ""
 "i modyfikowanie wnętrza programu GTK. Jego użycie może spowodować awarię lub "
 "uszkodzenie programu."
 
-#: gtk/gtkwindow.c:6238
+#: gtk/gtkwindow.c:6230
 msgid "Don’t show this message again"
 msgstr "Bez wyświetlania ponownie"
 
@@ -3832,47 +3843,37 @@ msgstr "Klasy stylu"
 msgid "CSS Property"
 msgstr "Właściwość CSS"
 
-#: gtk/inspector/general.c:333 gtk/inspector/general.c:414
+#: gtk/inspector/general.c:349
 msgctxt "GL version"
 msgid "None"
 msgstr "Brak"
 
-#: gtk/inspector/general.c:342
+#: gtk/inspector/general.c:426
 msgctxt "GL version"
-msgid "Disabled"
-msgstr "Wyłączone"
+msgid "Unknown"
+msgstr "Nieznana"
 
-#: gtk/inspector/general.c:343
-msgctxt "GL vendor"
-msgid "Disabled"
-msgstr "Wyłączone"
-
-#: gtk/inspector/general.c:415
-msgctxt "GL vendor"
-msgid "None"
-msgstr "Brak"
-
-#: gtk/inspector/general.c:466
+#: gtk/inspector/general.c:491
 msgctxt "Vulkan device"
 msgid "Disabled"
 msgstr "Wyłączone"
 
-#: gtk/inspector/general.c:467 gtk/inspector/general.c:468
+#: gtk/inspector/general.c:492 gtk/inspector/general.c:493
 msgctxt "Vulkan version"
 msgid "Disabled"
 msgstr "Wyłączone"
 
-#: gtk/inspector/general.c:524
+#: gtk/inspector/general.c:549
 msgctxt "Vulkan device"
 msgid "None"
 msgstr "Brak"
 
-#: gtk/inspector/general.c:525 gtk/inspector/general.c:526
+#: gtk/inspector/general.c:550 gtk/inspector/general.c:551
 msgctxt "Vulkan version"
 msgid "None"
 msgstr "Brak"
 
-#: gtk/inspector/general.c:857
+#: gtk/inspector/general.c:882
 msgid "IM Context is hardcoded by GTK_IM_MODULE"
 msgstr ""
 "Kontekst metody wprowadzania jest zakodowany przez zmienną GTK_IM_MODULE"
@@ -3929,19 +3930,39 @@ msgstr "Składane"
 msgid "GL Version"
 msgstr "Wersja GL"
 
-#: gtk/inspector/general.ui:609
-msgid "GL Vendor"
-msgstr "Dostawca GL"
+#: gtk/inspector/general.ui:586
+msgid "GL Backend Version"
+msgstr "Wersja mechanizmu GL"
 
-#: gtk/inspector/general.ui:646
+#: gtk/inspector/general.ui:636
+msgid "GL Backend Vendor"
+msgstr "Dostawca mechanizmu GL"
+
+#: gtk/inspector/general.ui:663
+msgid "GL_VENDOR"
+msgstr "DOSTAWCA_GL"
+
+#: gtk/inspector/general.ui:692
+msgid "GL_RENDERER"
+msgstr "MECHANIZM_RYSOWANIA_GL"
+
+#: gtk/inspector/general.ui:721
+msgid "GL_VERSION"
+msgstr "WERSJA_GL"
+
+#: gtk/inspector/general.ui:750
+msgid "GL_SHADING_LANGUAGE_VERSION"
+msgstr "WERSJA_JĘZYKA_CIENIOWANIA_GL"
+
+#: gtk/inspector/general.ui:789
 msgid "Vulkan Device"
 msgstr "Urządzenie Vulkan"
 
-#: gtk/inspector/general.ui:673
+#: gtk/inspector/general.ui:816
 msgid "Vulkan API version"
 msgstr "Wersja API Vulkan"
 
-#: gtk/inspector/general.ui:700
+#: gtk/inspector/general.ui:843
 msgid "Vulkan driver version"
 msgstr "Wersja sterownika Vulkan"
 
@@ -4006,8 +4027,8 @@ msgid "Surface"
 msgstr "Powierzchnia"
 
 #: gtk/inspector/misc-info.ui:365 gtk/inspector/misc-info.ui:400
-#: gtk/inspector/misc-info.ui:435 gtk/inspector/prop-editor.c:1150
-#: gtk/inspector/prop-editor.c:1533 gtk/inspector/window.ui:396
+#: gtk/inspector/misc-info.ui:435 gtk/inspector/prop-editor.c:1153
+#: gtk/inspector/prop-editor.c:1536 gtk/inspector/window.ui:396
 msgid "Properties"
 msgstr "Właściwości"
 
@@ -4059,7 +4080,7 @@ msgstr "Wskaźnik: %p"
 #. Translators: %s is a type name, for example
 #. * GtkPropertyExpression with value \"2.5\"
 #.
-#: gtk/inspector/prop-editor.c:824
+#: gtk/inspector/prop-editor.c:827
 #, c-format
 msgid "%s with value \"%s\""
 msgstr "%s o wartości „%s”"
@@ -4067,7 +4088,7 @@ msgstr "%s o wartości „%s”"
 #. Translators: Both %s are type names, for example
 #. * GtkPropertyExpression with type GObject
 #.
-#: gtk/inspector/prop-editor.c:835
+#: gtk/inspector/prop-editor.c:838
 #, c-format
 msgid "%s with type %s"
 msgstr "%s o typie %s"
@@ -4075,7 +4096,7 @@ msgstr "%s o typie %s"
 #. Translators: Both %s are type names, for example
 #. * GtkObjectExpression for GtkStringObject 0x23456789
 #.
-#: gtk/inspector/prop-editor.c:848
+#: gtk/inspector/prop-editor.c:851
 #, c-format
 msgid "%s for %s %p"
 msgstr "%s dla %s %p"
@@ -4083,71 +4104,71 @@ msgstr "%s dla %s %p"
 #. Translators: Both %s are type names, for example
 #. * GtkPropertyExpression with value type: gchararray
 #.
-#: gtk/inspector/prop-editor.c:878
+#: gtk/inspector/prop-editor.c:881
 #, c-format
 msgid "%s with value type %s"
 msgstr "%s o typie wartości %s"
 
-#: gtk/inspector/prop-editor.c:1227
+#: gtk/inspector/prop-editor.c:1230
 #, c-format
 msgid "Uneditable property type: %s"
 msgstr "Niemodyfikowalny typ właściwości: %s"
 
-#: gtk/inspector/prop-editor.c:1385
+#: gtk/inspector/prop-editor.c:1388
 msgctxt "column number"
 msgid "None"
 msgstr "Brak"
 
-#: gtk/inspector/prop-editor.c:1422
+#: gtk/inspector/prop-editor.c:1425
 msgid "Attribute:"
 msgstr "Atrybut:"
 
-#: gtk/inspector/prop-editor.c:1425
+#: gtk/inspector/prop-editor.c:1428
 msgid "Model"
 msgstr "Model"
 
-#: gtk/inspector/prop-editor.c:1430
+#: gtk/inspector/prop-editor.c:1433
 msgid "Column:"
 msgstr "Kolumna:"
 
 #. Translators: %s is a type name, for example
 #. * Action from 0x2345678 (GtkApplicationWindow)
 #.
-#: gtk/inspector/prop-editor.c:1529
+#: gtk/inspector/prop-editor.c:1532
 #, c-format
 msgid "Action from: %p (%s)"
 msgstr "Działanie z: %p (%s)"
 
-#: gtk/inspector/prop-editor.c:1584
+#: gtk/inspector/prop-editor.c:1587
 msgid "Reset"
 msgstr "Przywróć"
 
-#: gtk/inspector/prop-editor.c:1592
+#: gtk/inspector/prop-editor.c:1595
 msgctxt "GtkSettings source"
 msgid "Default"
 msgstr "Domyślne"
 
-#: gtk/inspector/prop-editor.c:1595
+#: gtk/inspector/prop-editor.c:1598
 msgctxt "GtkSettings source"
 msgid "Theme"
 msgstr "Motyw"
 
-#: gtk/inspector/prop-editor.c:1598
+#: gtk/inspector/prop-editor.c:1601
 msgctxt "GtkSettings source"
 msgid "XSettings"
 msgstr "XSettings"
 
-#: gtk/inspector/prop-editor.c:1602
+#: gtk/inspector/prop-editor.c:1605
 msgctxt "GtkSettings source"
 msgid "Application"
 msgstr "Program"
 
-#: gtk/inspector/prop-editor.c:1605
+#: gtk/inspector/prop-editor.c:1608
 msgctxt "GtkSettings source"
 msgid "Unknown"
 msgstr "Nieznane"
 
-#: gtk/inspector/prop-editor.c:1608
+#: gtk/inspector/prop-editor.c:1611
 msgid "Source:"
 msgstr "Źródło:"
 
@@ -4155,7 +4176,7 @@ msgstr "Źródło:"
 msgid "Defined At"
 msgstr "Określone w"
 
-#: gtk/inspector/recorder.c:1922
+#: gtk/inspector/recorder.c:1941
 #, c-format
 msgid "Saving RenderNode failed"
 msgstr "Zapisanie węzła rysowania się nie powiodło"
@@ -4293,11 +4314,11 @@ msgstr "Hierarchia"
 msgid "Implements"
 msgstr "Implementuje"
 
-#: gtk/inspector/visual.c:637 gtk/inspector/visual.c:656
+#: gtk/inspector/visual.c:674 gtk/inspector/visual.c:693
 msgid "Theme is hardcoded by GTK_THEME"
 msgstr "Motyw jest zakodowany przez zmienną GTK_THEME"
 
-#: gtk/inspector/visual.c:905
+#: gtk/inspector/visual.c:942
 msgid "Backend does not support window scaling"
 msgstr "Mechanizm nie obsługuje skalowania okien"
 
@@ -4393,7 +4414,11 @@ msgstr "Wyświetlanie aktywności"
 msgid "Show Accessibility warnings"
 msgstr "Wyświetlanie ostrzeżeń ułatwień dostępu"
 
-#: gtk/inspector/visual.ui:667
+#: gtk/inspector/visual.ui:660
+msgid "Show Graphics Offload"
+msgstr "Wyświetlanie rozładowywania grafiki"
+
+#: gtk/inspector/visual.ui:692
 msgid "Inspect Inspector"
 msgstr "Zbadaj inspektora"
 
@@ -6561,22 +6586,22 @@ msgstr "Nie odnaleziono wyjścia dźwięku"
 #. * job priority option in the print dialog
 #.
 #: modules/printbackends/gtkprintbackendcpdb.c:541
-#: modules/printbackends/gtkprintbackendcups.c:5642
+#: modules/printbackends/gtkprintbackendcups.c:5640
 msgid "Urgent"
 msgstr "Ważne"
 
 #: modules/printbackends/gtkprintbackendcpdb.c:541
-#: modules/printbackends/gtkprintbackendcups.c:5642
+#: modules/printbackends/gtkprintbackendcups.c:5640
 msgid "High"
 msgstr "Wysoki"
 
 #: modules/printbackends/gtkprintbackendcpdb.c:541
-#: modules/printbackends/gtkprintbackendcups.c:5642
+#: modules/printbackends/gtkprintbackendcups.c:5640
 msgid "Medium"
 msgstr "Średni"
 
 #: modules/printbackends/gtkprintbackendcpdb.c:541
-#: modules/printbackends/gtkprintbackendcups.c:5642
+#: modules/printbackends/gtkprintbackendcups.c:5640
 msgid "Low"
 msgstr "Niski"
 
@@ -6584,7 +6609,7 @@ msgstr "Niski"
 #. * dialog that controls the front cover page.
 #.
 #: modules/printbackends/gtkprintbackendcpdb.c:562
-#: modules/printbackends/gtkprintbackendcups.c:5784
+#: modules/printbackends/gtkprintbackendcups.c:5782
 msgctxt "printer option"
 msgid "Before"
 msgstr "Przed"
@@ -6593,7 +6618,7 @@ msgstr "Przed"
 #. * dialog that controls the back cover page.
 #.
 #: modules/printbackends/gtkprintbackendcpdb.c:569
-#: modules/printbackends/gtkprintbackendcups.c:5799
+#: modules/printbackends/gtkprintbackendcups.c:5797
 msgctxt "printer option"
 msgid "After"
 msgstr "Po"
@@ -6771,266 +6796,266 @@ msgstr "Wystąpił problem z drukarką „%s”."
 msgid "; "
 msgstr ", "
 
-#: modules/printbackends/gtkprintbackendcups.c:4584
-#: modules/printbackends/gtkprintbackendcups.c:4651
+#: modules/printbackends/gtkprintbackendcups.c:4582
+#: modules/printbackends/gtkprintbackendcups.c:4649
 msgctxt "printing option"
 msgid "Two Sided"
 msgstr "Dwustronne"
 
-#: modules/printbackends/gtkprintbackendcups.c:4585
+#: modules/printbackends/gtkprintbackendcups.c:4583
 msgctxt "printing option"
 msgid "Paper Type"
 msgstr "Rodzaj papieru"
 
-#: modules/printbackends/gtkprintbackendcups.c:4586
+#: modules/printbackends/gtkprintbackendcups.c:4584
 msgctxt "printing option"
 msgid "Paper Source"
 msgstr "Źródło papieru"
 
-#: modules/printbackends/gtkprintbackendcups.c:4587
-#: modules/printbackends/gtkprintbackendcups.c:4652
+#: modules/printbackends/gtkprintbackendcups.c:4585
+#: modules/printbackends/gtkprintbackendcups.c:4650
 msgctxt "printing option"
 msgid "Output Tray"
 msgstr "Tacka wyjściowa"
 
-#: modules/printbackends/gtkprintbackendcups.c:4588
+#: modules/printbackends/gtkprintbackendcups.c:4586
 msgctxt "printing option"
 msgid "Resolution"
 msgstr "Rozdzielczość"
 
-#: modules/printbackends/gtkprintbackendcups.c:4589
+#: modules/printbackends/gtkprintbackendcups.c:4587
 msgctxt "printing option"
 msgid "GhostScript pre-filtering"
 msgstr "Wstępne filtrowanie GhostScript"
 
-#: modules/printbackends/gtkprintbackendcups.c:4598
+#: modules/printbackends/gtkprintbackendcups.c:4596
 msgctxt "printing option value"
 msgid "One Sided"
 msgstr "Jednostronne"
 
 #. Translators: this is an option of "Two Sided"
-#: modules/printbackends/gtkprintbackendcups.c:4600
+#: modules/printbackends/gtkprintbackendcups.c:4598
 msgctxt "printing option value"
 msgid "Long Edge (Standard)"
 msgstr "Grzbiet wzdłuż dłuższej krawędzi (standard)"
 
 #. Translators: this is an option of "Two Sided"
-#: modules/printbackends/gtkprintbackendcups.c:4602
+#: modules/printbackends/gtkprintbackendcups.c:4600
 msgctxt "printing option value"
 msgid "Short Edge (Flip)"
 msgstr "Grzbiet wzdłuż krótszej krawędzi (obrót)"
 
 #. Translators: this is an option of "Paper Source"
+#: modules/printbackends/gtkprintbackendcups.c:4602
 #: modules/printbackends/gtkprintbackendcups.c:4604
-#: modules/printbackends/gtkprintbackendcups.c:4606
-#: modules/printbackends/gtkprintbackendcups.c:4614
+#: modules/printbackends/gtkprintbackendcups.c:4612
 msgctxt "printing option value"
 msgid "Auto Select"
 msgstr "Wybór automatyczny"
 
 #. Translators: this is an option of "Paper Source"
 #. Translators: this is an option of "Resolution"
+#: modules/printbackends/gtkprintbackendcups.c:4606
 #: modules/printbackends/gtkprintbackendcups.c:4608
 #: modules/printbackends/gtkprintbackendcups.c:4610
-#: modules/printbackends/gtkprintbackendcups.c:4612
-#: modules/printbackends/gtkprintbackendcups.c:4616
+#: modules/printbackends/gtkprintbackendcups.c:4614
 msgctxt "printing option value"
 msgid "Printer Default"
 msgstr "Domyślne drukarki"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/gtkprintbackendcups.c:4618
+#: modules/printbackends/gtkprintbackendcups.c:4616
 msgctxt "printing option value"
 msgid "Embed GhostScript fonts only"
 msgstr "Osadzanie tylko czcionek GhostScript"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/gtkprintbackendcups.c:4620
+#: modules/printbackends/gtkprintbackendcups.c:4618
 msgctxt "printing option value"
 msgid "Convert to PS level 1"
 msgstr "Konwertowanie do „PS level 1”"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/gtkprintbackendcups.c:4622
+#: modules/printbackends/gtkprintbackendcups.c:4620
 msgctxt "printing option value"
 msgid "Convert to PS level 2"
 msgstr "Konwertowanie do „PS level 2”"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/gtkprintbackendcups.c:4624
+#: modules/printbackends/gtkprintbackendcups.c:4622
 msgctxt "printing option value"
 msgid "No pre-filtering"
 msgstr "Bez wstępnego filtrowania"
 
 #. Translators: "Miscellaneous" is the label for a button, that opens
 #. up an extra panel of settings in a print dialog.
-#: modules/printbackends/gtkprintbackendcups.c:4633
+#: modules/printbackends/gtkprintbackendcups.c:4631
 msgctxt "printing option group"
 msgid "Miscellaneous"
 msgstr "Różne"
 
-#: modules/printbackends/gtkprintbackendcups.c:4660
+#: modules/printbackends/gtkprintbackendcups.c:4658
 msgctxt "sides"
 msgid "One Sided"
 msgstr "Jednostronne"
 
 #. Translators: this is an option of "Two Sided"
-#: modules/printbackends/gtkprintbackendcups.c:4662
+#: modules/printbackends/gtkprintbackendcups.c:4660
 msgctxt "sides"
 msgid "Long Edge (Standard)"
 msgstr "Grzbiet wzdłuż dłuższej krawędzi (standard)"
 
 #. Translators: this is an option of "Two Sided"
-#: modules/printbackends/gtkprintbackendcups.c:4664
+#: modules/printbackends/gtkprintbackendcups.c:4662
 msgctxt "sides"
 msgid "Short Edge (Flip)"
 msgstr "Grzbiet wzdłuż krótszej krawędzi (obrót)"
 
 #. Translators: Top output bin
-#: modules/printbackends/gtkprintbackendcups.c:4667
+#: modules/printbackends/gtkprintbackendcups.c:4665
 msgctxt "output-bin"
 msgid "Top Bin"
 msgstr "Górny pojemnik"
 
 #. Translators: Middle output bin
-#: modules/printbackends/gtkprintbackendcups.c:4669
+#: modules/printbackends/gtkprintbackendcups.c:4667
 msgctxt "output-bin"
 msgid "Middle Bin"
 msgstr "Środkowy pojemnik"
 
 #. Translators: Bottom output bin
-#: modules/printbackends/gtkprintbackendcups.c:4671
+#: modules/printbackends/gtkprintbackendcups.c:4669
 msgctxt "output-bin"
 msgid "Bottom Bin"
 msgstr "Dolny pojemnik"
 
 #. Translators: Side output bin
-#: modules/printbackends/gtkprintbackendcups.c:4673
+#: modules/printbackends/gtkprintbackendcups.c:4671
 msgctxt "output-bin"
 msgid "Side Bin"
 msgstr "Boczny pojemnik"
 
 #. Translators: Left output bin
-#: modules/printbackends/gtkprintbackendcups.c:4675
+#: modules/printbackends/gtkprintbackendcups.c:4673
 msgctxt "output-bin"
 msgid "Left Bin"
 msgstr "Lewy pojemnik"
 
 #. Translators: Right output bin
-#: modules/printbackends/gtkprintbackendcups.c:4677
+#: modules/printbackends/gtkprintbackendcups.c:4675
 msgctxt "output-bin"
 msgid "Right Bin"
 msgstr "Prawy pojemnik"
 
 #. Translators: Center output bin
-#: modules/printbackends/gtkprintbackendcups.c:4679
+#: modules/printbackends/gtkprintbackendcups.c:4677
 msgctxt "output-bin"
 msgid "Center Bin"
 msgstr "Centralny pojemnik"
 
 #. Translators: Rear output bin
-#: modules/printbackends/gtkprintbackendcups.c:4681
+#: modules/printbackends/gtkprintbackendcups.c:4679
 msgctxt "output-bin"
 msgid "Rear Bin"
 msgstr "Tylny pojemnik"
 
 #. Translators: Output bin where one sided output is oriented in the face-up position
-#: modules/printbackends/gtkprintbackendcups.c:4683
+#: modules/printbackends/gtkprintbackendcups.c:4681
 msgctxt "output-bin"
 msgid "Face Up Bin"
 msgstr "Pojemnik wierzchem do góry"
 
 #. Translators: Output bin where one sided output is oriented in the face-down position
-#: modules/printbackends/gtkprintbackendcups.c:4685
+#: modules/printbackends/gtkprintbackendcups.c:4683
 msgctxt "output-bin"
 msgid "Face Down Bin"
 msgstr "Pojemnik wierzchem do dołu"
 
 #. Translators: Large capacity output bin
-#: modules/printbackends/gtkprintbackendcups.c:4687
+#: modules/printbackends/gtkprintbackendcups.c:4685
 msgctxt "output-bin"
 msgid "Large Capacity Bin"
 msgstr "Pojemnik o dużej pojemności"
 
 #. Translators: Output stacker number %d
-#: modules/printbackends/gtkprintbackendcups.c:4709
+#: modules/printbackends/gtkprintbackendcups.c:4707
 #, c-format
 msgctxt "output-bin"
 msgid "Stacker %d"
 msgstr "%d. stertnik"
 
 #. Translators: Output mailbox number %d
-#: modules/printbackends/gtkprintbackendcups.c:4713
+#: modules/printbackends/gtkprintbackendcups.c:4711
 #, c-format
 msgctxt "output-bin"
 msgid "Mailbox %d"
 msgstr "%d. skrzynka pocztowa"
 
 #. Translators: Private mailbox
-#: modules/printbackends/gtkprintbackendcups.c:4717
+#: modules/printbackends/gtkprintbackendcups.c:4715
 msgctxt "output-bin"
 msgid "My Mailbox"
 msgstr "Prywatna skrzynka pocztowa"
 
 #. Translators: Output tray number %d
-#: modules/printbackends/gtkprintbackendcups.c:4721
+#: modules/printbackends/gtkprintbackendcups.c:4719
 #, c-format
 msgctxt "output-bin"
 msgid "Tray %d"
 msgstr "%d. tacka"
 
-#: modules/printbackends/gtkprintbackendcups.c:5198
+#: modules/printbackends/gtkprintbackendcups.c:5196
 msgid "Printer Default"
 msgstr "Domyślne drukarki"
 
 #. Translators, this string is used to label the job priority option
 #. * in the print dialog
 #.
-#: modules/printbackends/gtkprintbackendcups.c:5672
+#: modules/printbackends/gtkprintbackendcups.c:5670
 msgid "Job Priority"
 msgstr "Priorytet"
 
 #. Translators, this string is used to label the billing info entry
 #. * in the print dialog
 #.
-#: modules/printbackends/gtkprintbackendcups.c:5683
+#: modules/printbackends/gtkprintbackendcups.c:5681
 msgid "Billing Info"
 msgstr "Informacje o opłatach"
 
 #. Translators, these strings are names for various 'standard' cover
 #. * pages that the printing system may support.
 #.
-#: modules/printbackends/gtkprintbackendcups.c:5707
+#: modules/printbackends/gtkprintbackendcups.c:5705
 msgctxt "cover page"
 msgid "None"
 msgstr "Brak"
 
-#: modules/printbackends/gtkprintbackendcups.c:5708
+#: modules/printbackends/gtkprintbackendcups.c:5706
 msgctxt "cover page"
 msgid "Classified"
 msgstr "Niejawne"
 
-#: modules/printbackends/gtkprintbackendcups.c:5709
+#: modules/printbackends/gtkprintbackendcups.c:5707
 msgctxt "cover page"
 msgid "Confidential"
 msgstr "Poufne"
 
-#: modules/printbackends/gtkprintbackendcups.c:5710
+#: modules/printbackends/gtkprintbackendcups.c:5708
 msgctxt "cover page"
 msgid "Secret"
 msgstr "Tajne"
 
-#: modules/printbackends/gtkprintbackendcups.c:5711
+#: modules/printbackends/gtkprintbackendcups.c:5709
 msgctxt "cover page"
 msgid "Standard"
 msgstr "Standardowe"
 
-#: modules/printbackends/gtkprintbackendcups.c:5712
+#: modules/printbackends/gtkprintbackendcups.c:5710
 msgctxt "cover page"
 msgid "Top Secret"
 msgstr "Ściśle tajne"
 
-#: modules/printbackends/gtkprintbackendcups.c:5713
+#: modules/printbackends/gtkprintbackendcups.c:5711
 msgctxt "cover page"
 msgid "Unclassified"
 msgstr "Jawne"
@@ -7038,7 +7063,7 @@ msgstr "Jawne"
 #. Translators, this string is used to label the pages-per-sheet option
 #. * in the print dialog
 #.
-#: modules/printbackends/gtkprintbackendcups.c:5725
+#: modules/printbackends/gtkprintbackendcups.c:5723
 msgctxt "printer option"
 msgid "Pages per Sheet"
 msgstr "Stron na kartkę"
@@ -7046,7 +7071,7 @@ msgstr "Stron na kartkę"
 #. Translators, this string is used to label the option in the print
 #. * dialog that controls in what order multiple pages are arranged
 #.
-#: modules/printbackends/gtkprintbackendcups.c:5742
+#: modules/printbackends/gtkprintbackendcups.c:5740
 msgctxt "printer option"
 msgid "Page Ordering"
 msgstr "Kolejność stron"
@@ -7055,7 +7080,7 @@ msgstr "Kolejność stron"
 #. * a print job is printed. Possible values are 'now', a specified time,
 #. * or 'on hold'
 #.
-#: modules/printbackends/gtkprintbackendcups.c:5819
+#: modules/printbackends/gtkprintbackendcups.c:5817
 msgctxt "printer option"
 msgid "Print at"
 msgstr "Wydruk o"
@@ -7063,7 +7088,7 @@ msgstr "Wydruk o"
 #. Translators: this is the name of the option that allows the user
 #. * to specify a time when a print job will be printed.
 #.
-#: modules/printbackends/gtkprintbackendcups.c:5830
+#: modules/printbackends/gtkprintbackendcups.c:5828
 msgctxt "printer option"
 msgid "Print at time"
 msgstr "Wydruk o czasie"
@@ -7073,19 +7098,19 @@ msgstr "Wydruk o czasie"
 #. * the width and height in points. E.g: "Custom
 #. * 230.4x142.9"
 #.
-#: modules/printbackends/gtkprintbackendcups.c:5877
+#: modules/printbackends/gtkprintbackendcups.c:5875
 #, c-format
 msgid "Custom %s×%s"
 msgstr "Niestandardowy %s×%s"
 
 #. TRANSLATORS: this is the ICC color profile to use for this job
-#: modules/printbackends/gtkprintbackendcups.c:5988
+#: modules/printbackends/gtkprintbackendcups.c:5986
 msgctxt "printer option"
 msgid "Printer Profile"
 msgstr "Profil drukarki"
 
 #. TRANSLATORS: this is when color profile information is unavailable
-#: modules/printbackends/gtkprintbackendcups.c:5995
+#: modules/printbackends/gtkprintbackendcups.c:5993
 msgctxt "printer option value"
 msgid "Unavailable"
 msgstr "Niedostępny"
@@ -7200,8 +7225,8 @@ msgstr ""
 #: tools/gtk-builder-tool-enumerate.c:56 tools/gtk-builder-tool-preview.c:179
 #: tools/gtk-builder-tool-preview.c:180 tools/gtk-builder-tool-screenshot.c:360
 #: tools/gtk-builder-tool-simplify.c:2529 tools/gtk-builder-tool-validate.c:261
-#: tools/gtk-path-tool-render.c:121 tools/gtk-rendernode-tool-info.c:210
-#: tools/gtk-rendernode-tool-show.c:102
+#: tools/gtk-path-tool-render.c:121 tools/gtk-rendernode-tool-info.c:214
+#: tools/gtk-rendernode-tool-show.c:106
 msgid "FILE"
 msgstr "PLIK"
 
@@ -7234,7 +7259,7 @@ msgstr "Używa stylu z pliku CSS"
 
 #: tools/gtk-builder-tool-preview.c:187 tools/gtk-builder-tool-screenshot.c:370
 #: tools/gtk-builder-tool-validate.c:268 tools/gtk-rendernode-tool-render.c:204
-#: tools/gtk-rendernode-tool-show.c:109
+#: tools/gtk-rendernode-tool-show.c:113
 #, c-format
 msgid "Could not initialize windowing system\n"
 msgstr "Nie można zainicjować systemu okien\n"
@@ -7791,37 +7816,37 @@ msgstr ""
 "  render       Wykonuje zrzut ekranu węzła\n"
 "\n"
 
-#: tools/gtk-rendernode-tool-info.c:187
+#: tools/gtk-rendernode-tool-info.c:191
 #, c-format
 msgid "Number of nodes: %u\n"
 msgstr "Liczba węzłów: %u\n"
 
-#: tools/gtk-rendernode-tool-info.c:194
+#: tools/gtk-rendernode-tool-info.c:198
 #, c-format
 msgid "Depth: %u\n"
 msgstr "Głębokość: %u\n"
 
-#: tools/gtk-rendernode-tool-info.c:197
+#: tools/gtk-rendernode-tool-info.c:201
 #, c-format
 msgid "Bounds: %g x %g\n"
 msgstr "Granice: %g×%g\n"
 
-#: tools/gtk-rendernode-tool-info.c:198
+#: tools/gtk-rendernode-tool-info.c:202
 #, c-format
 msgid "Origin: %g %g\n"
 msgstr "Punkt początkowy: %g %g\n"
 
-#: tools/gtk-rendernode-tool-info.c:219
+#: tools/gtk-rendernode-tool-info.c:223
 msgid "Provide information about the render node."
 msgstr "Podaje informacje o węźle rysowania."
 
-#: tools/gtk-rendernode-tool-info.c:232 tools/gtk-rendernode-tool-render.c:225
-#: tools/gtk-rendernode-tool-show.c:130
+#: tools/gtk-rendernode-tool-info.c:236 tools/gtk-rendernode-tool-render.c:225
+#: tools/gtk-rendernode-tool-show.c:134
 #, c-format
 msgid "No .node file specified\n"
 msgstr "Nie podano pliku .node\n"
 
-#: tools/gtk-rendernode-tool-info.c:238
+#: tools/gtk-rendernode-tool-info.c:242
 #, c-format
 msgid "Can only accept a single .node file\n"
 msgstr "Może przyjąć tylko jeden plik .node\n"
@@ -7857,11 +7882,15 @@ msgstr "Rysuje plik .node do obrazu."
 msgid "Can only render a single .node file to a single output file\n"
 msgstr "Można narysować tylko jeden plik .node do jednego pliku wyjściowego\n"
 
-#: tools/gtk-rendernode-tool-show.c:117
+#: tools/gtk-rendernode-tool-show.c:105
+msgid "Don't add a titlebar"
+msgstr "Bez dodawania paska tytułowego"
+
+#: tools/gtk-rendernode-tool-show.c:121
 msgid "Show the render node."
 msgstr "Wyświetla węzeł rysowania."
 
-#: tools/gtk-rendernode-tool-show.c:136
+#: tools/gtk-rendernode-tool-show.c:140
 #, c-format
 msgid "Can only preview a single .node file\n"
 msgstr "Można wyświetlić podgląd tylko jednego pliku .node\n"
