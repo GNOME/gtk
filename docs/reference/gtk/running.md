@@ -229,9 +229,6 @@ A number of options affect behavior instead of logging:
 `gl-debug`
 : Insert debugging information in OpenGL
 
-`gl-legacy`
-: Use a legacy OpenGL context
-
 `gl-disable-gl`
 : Don't allow the use of OpenGL GL API. This forces GLES to be used
 

@@ -126,7 +126,6 @@ static const GdkDebugKey gdk_debug_keys[] = {
   { "gl-disable",      GDK_DEBUG_GL_DISABLE, "Disable OpenGL support" },
   { "gl-fractional",   GDK_DEBUG_GL_FRACTIONAL, "Enable fractional scaling for OpenGL (experimental)" },
   { "gl-debug",        GDK_DEBUG_GL_DEBUG, "Insert debugging information in OpenGL" },
-  { "gl-legacy",       GDK_DEBUG_GL_LEGACY, "Use a legacy OpenGL context" },
   { "gl-disable-gl",   GDK_DEBUG_GL_DISABLE_GL, "Only allow OpenGL GLES API" },
   { "gl-disable-gles", GDK_DEBUG_GL_DISABLE_GLES, "Don't allow OpenGL GLES API" },
   { "gl-prefer-gl",    GDK_DEBUG_GL_PREFER_GL, "Prefer GL over GLES API" },

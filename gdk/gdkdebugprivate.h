@@ -45,7 +45,7 @@ typedef enum {
   GDK_DEBUG_NO_PORTALS      = 1 << 15,
   GDK_DEBUG_GL_DISABLE      = 1 << 16,
   GDK_DEBUG_GL_FRACTIONAL   = 1 << 17,
-  GDK_DEBUG_GL_LEGACY       = 1 << 18,
+
   GDK_DEBUG_GL_DISABLE_GL   = 1 << 19,
   GDK_DEBUG_GL_DISABLE_GLES = 1 << 20,
   GDK_DEBUG_GL_PREFER_GL    = 1 << 21,
