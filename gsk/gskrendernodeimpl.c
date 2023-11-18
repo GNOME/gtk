@@ -6717,27 +6717,37 @@ gsk_subsurface_node_diff (GskRenderNode  *node1,
 {
   GskSubsurfaceNode *self1 = (GskSubsurfaceNode *) node1;
   GskSubsurfaceNode *self2 = (GskSubsurfaceNode *) node2;
+  GskOffloadInfo *info1, *info2;
 
-  if (data->offload)
+  if (!data->offload)
     {
-      /* Include the full area if the offload status changed. */
-      if (gsk_offload_subsurface_was_offloaded (data->offload, self1->subsurface) !=
-          gsk_offload_subsurface_is_offloaded (data->offload, self1->subsurface))
-        {
-          gsk_render_node_diff_impossible (node1, node2, data);
-        }
-      else if (gsk_offload_subsurface_is_offloaded (data->offload, self1->subsurface))
-        {
-          if (!gsk_rect_equal (&node1->bounds, &node2->bounds))
-            gsk_render_node_diff_impossible (node1, node2, data);
-        }
-      else
-        {
-          gsk_render_node_data_diff (self1->child, self2->child, data);
-        }
+      gsk_render_node_data_diff (self1->child, self2->child, data);
+      return;
     }
-  else
-    gsk_render_node_data_diff (self1->child, self2->child, data);
+
+  info1 = gsk_offload_get_subsurface_info (data->offload, self1->subsurface);
+  info2 = gsk_offload_get_subsurface_info (data->offload, self2->subsurface);
+
+  if (!info1 || !info2)
+    {
+      gsk_render_node_data_diff (self1->child, self2->child, data);
+      return;
+    }
+
+  if (info1->is_offloaded != info2->is_offloaded ||
+      info1->is_above != info2->is_above)
+    {
+      gsk_render_node_diff_impossible (node1, node2, data);
+    }
+  else if (info1->is_offloaded && !info1->is_above &&
+           !gsk_rect_equal (&info1->rect, &info2->rect))
+    {
+      gsk_render_node_diff_impossible (node1, node2, data);
+    }
+  else if (!info1->is_offloaded)
+    {
+      gsk_render_node_data_diff (self1->child, self2->child, data);
+    }
 }
 
 static void
