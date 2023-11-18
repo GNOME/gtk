@@ -548,6 +548,9 @@ _gdk_win32_display_open (const char *display_name)
 
   g_signal_emit_by_name (_gdk_display, "opened");
 
+  /* Precalculate keymap, see #6203 */
+  (void) _gdk_win32_display_get_keymap (_gdk_display);
+
   GDK_NOTE (MISC, g_print ("... _gdk_display now set up\n"));
 
   return _gdk_display;
