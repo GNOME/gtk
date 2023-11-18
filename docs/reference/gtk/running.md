@@ -238,6 +238,9 @@ A number of options affect behavior instead of logging:
 `gl-disable-gles`
 : Don't allow the use of OpenGL GLES API. This forces GL to be used
 
+`gl-prefer-gl`
+: Prefer OpenGL over OpenGL ES. This was the default behavior before GTK 4.14.
+
 `gl-egl`
 : Use an EGL context on X11 or Windows
 

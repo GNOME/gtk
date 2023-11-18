@@ -129,6 +129,7 @@ static const GdkDebugKey gdk_debug_keys[] = {
   { "gl-legacy",       GDK_DEBUG_GL_LEGACY, "Use a legacy OpenGL context" },
   { "gl-disable-gl",   GDK_DEBUG_GL_DISABLE_GL, "Only allow OpenGL GLES API" },
   { "gl-disable-gles", GDK_DEBUG_GL_DISABLE_GLES, "Don't allow OpenGL GLES API" },
+  { "gl-prefer-gl",    GDK_DEBUG_GL_PREFER_GL, "Prefer GL over GLES API" },
   { "gl-egl",          GDK_DEBUG_GL_EGL, "Use EGL on X11 or Windows" },
   { "gl-glx",          GDK_DEBUG_GL_GLX, "Use GLX on X11" },
   { "gl-wgl",          GDK_DEBUG_GL_WGL, "Use WGL on Windows" },
