@@ -488,6 +488,9 @@ parse_node_file (GFile *file, const char *generate)
 static gboolean
 test_file (GFile *file)
 {
+  if (g_test_verbose ())
+    g_test_message ("%s", g_file_peek_path (file));
+
   return parse_node_file (file, FALSE);
 }
 
@@ -599,13 +602,27 @@ main (int argc, char **argv)
 
       success = TRUE;
 
-      for (i = 1; i < argc; i++)
+      if (argc > 1)
         {
-          GFile *file = g_file_new_for_commandline_arg (argv[i]);
+          for (i = 1; i < argc; i++)
+            {
+              GFile *file = g_file_new_for_commandline_arg (argv[i]);
 
-          success &= test_file (file);
+              success &= test_file (file);
 
-          g_object_unref (file);
+              g_object_unref (file);
+            }
+        }
+      else
+        {
+          const char *basedir;
+          GFile *dir;
+
+          basedir = g_test_get_dir (G_TEST_DIST);
+          dir = g_file_new_for_path (basedir);
+          success = test_files_in_directory (dir);
+
+          g_object_unref (dir);
         }
     }
 
