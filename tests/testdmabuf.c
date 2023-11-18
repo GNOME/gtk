@@ -482,6 +482,36 @@ make_dmabuf_texture (const char *filename,
       gdk_dmabuf_texture_builder_set_fd (builder, 0, fd);
       gdk_dmabuf_texture_builder_set_stride (builder, 0, rgb_stride);
     }
+  else if (format == DRM_FORMAT_XRGB8888_A8)
+    {
+      guchar *alpha_data;
+      gsize alpha_stride;
+      gsize alpha_size;
+
+      gdk_dmabuf_texture_builder_set_n_planes (builder, 2);
+
+      fd = allocate_buffer (rgb_size);
+      populate_buffer (fd, rgb_data, rgb_size);
+
+      gdk_dmabuf_texture_builder_set_fd (builder, 0, fd);
+      gdk_dmabuf_texture_builder_set_stride (builder, 0, rgb_stride);
+
+      alpha_stride = width;
+      alpha_size = alpha_stride * height;
+      alpha_data = g_new0 (guchar, alpha_size);
+
+      for (gsize i = 0; i <  height; i++)
+        for (gsize j = 0; j < width; j++)
+          alpha_data[i * alpha_stride + j] = rgb_data[i * rgb_stride + j * 4 + 3];
+
+      fd = allocate_buffer (alpha_size);
+      populate_buffer (fd, alpha_data, alpha_size);
+
+      gdk_dmabuf_texture_builder_set_fd (builder, 1, fd);
+      gdk_dmabuf_texture_builder_set_stride (builder, 1, alpha_stride);
+
+      g_free (alpha_data);
+    }
   else if (format == DRM_FORMAT_YUV420)
     {
       guchar *buf;
@@ -533,6 +563,7 @@ static guint32 supported_formats[] = {
   DRM_FORMAT_XRGB8888,
   DRM_FORMAT_YUV420,
   DRM_FORMAT_NV12,
+  DRM_FORMAT_XRGB8888_A8,
 };
 
 static gboolean
