@@ -9,6 +9,7 @@
 #include "gskgpuclearopprivate.h"
 #include "gskgpuclipprivate.h"
 #include "gskgpucolorizeopprivate.h"
+#include "gskgpucolormatrixopprivate.h"
 #include "gskgpucoloropprivate.h"
 #include "gskgpudescriptorsprivate.h"
 #include "gskgpudeviceprivate.h"
@@ -918,8 +919,36 @@ static void
 gsk_gpu_node_processor_add_without_opacity (GskGpuNodeProcessor *self,
                                             GskRenderNode       *node)
 {
+  GskGpuImage *image;
+  guint32 descriptor;
+  graphene_rect_t tex_rect;
+
   gsk_gpu_node_processor_sync_globals (self, 0);
-  gsk_gpu_node_processor_add_node_as_pattern (self, node);
+
+  if (gsk_gpu_node_processor_try_node_as_pattern (self, node))
+    return;
+
+  image = gsk_gpu_node_processor_get_node_as_image (self,
+                                                    0,
+                                                    GSK_GPU_IMAGE_STRAIGHT_ALPHA,
+                                                    NULL,
+                                                    node,
+                                                    &tex_rect);
+  if (image == NULL)
+    return;
+
+  descriptor = gsk_gpu_node_processor_add_image (self, image, GSK_GPU_SAMPLER_DEFAULT);
+  
+  gsk_gpu_color_matrix_op_opacity (self->frame,
+                                   gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, &node->bounds),
+                                   self->desc,
+                                   descriptor,
+                                   &node->bounds,
+                                   &self->offset,
+                                   &tex_rect,
+                                   self->opacity);
+
+  g_object_unref (image);
 }
 
 static void
@@ -2176,6 +2205,56 @@ gsk_gpu_node_processor_create_opacity_pattern (GskGpuPatternWriter *self,
   return TRUE;
 }
 
+static void
+gsk_gpu_node_processor_add_color_matrix_node (GskGpuNodeProcessor *self,
+                                              GskRenderNode       *node)
+{
+  GskGpuImage *image;
+  guint32 descriptor;
+  GskRenderNode *child;
+  graphene_matrix_t opacity_matrix;
+  const graphene_matrix_t *color_matrix;
+  graphene_rect_t tex_rect;
+
+  child = gsk_color_matrix_node_get_child (node);
+  color_matrix = gsk_color_matrix_node_get_color_matrix (node);
+  if (self->opacity < 1.0f)
+    {
+      graphene_matrix_init_from_float (&opacity_matrix,
+                                       (float[16]) {
+                                           1.0f, 0.0f, 0.0f, 0.0f,
+                                           0.0f, 1.0f, 0.0f, 0.0f,
+                                           0.0f, 0.0f, 1.0f, 0.0f,
+                                           0.0f, 0.0f, 0.0f, self->opacity
+                                      });
+      graphene_matrix_multiply (&opacity_matrix, color_matrix, &opacity_matrix);
+      color_matrix = &opacity_matrix;
+    }
+
+  image = gsk_gpu_node_processor_get_node_as_image (self,
+                                                    0,
+                                                    GSK_GPU_IMAGE_STRAIGHT_ALPHA,
+                                                    NULL,
+                                                    child,
+                                                    &tex_rect);
+  if (image == NULL)
+    return;
+
+  descriptor = gsk_gpu_node_processor_add_image (self, image, GSK_GPU_SAMPLER_DEFAULT);
+  
+  gsk_gpu_color_matrix_op (self->frame,
+                           gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, &node->bounds),
+                           self->desc,
+                           descriptor,
+                           &node->bounds,
+                           &self->offset,
+                           &tex_rect,
+                           color_matrix,
+                           gsk_color_matrix_node_get_color_offset (node));
+
+  g_object_unref (image);
+}
+
 static gboolean
 gsk_gpu_node_processor_create_color_matrix_pattern (GskGpuPatternWriter *self,
                                                     GskRenderNode       *node)
@@ -2414,7 +2493,7 @@ static const struct
   [GSK_COLOR_MATRIX_NODE] = {
     0,
     GSK_GPU_HANDLE_OPACITY,
-    gsk_gpu_node_processor_add_node_as_pattern,
+    gsk_gpu_node_processor_add_color_matrix_node,
     gsk_gpu_node_processor_create_color_matrix_pattern
   },
   [GSK_REPEAT_NODE] = {
