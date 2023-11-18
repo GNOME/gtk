@@ -346,26 +346,31 @@ visit_node (GskOffload    *self,
 {
   gboolean has_clip;
 
-  if (self->last_info && self->last_info->can_raise)
+  for (gsize i = 0; i < self->n_subsurfaces; i++)
     {
-      graphene_rect_t transformed_bounds;
+      GskOffloadInfo *info = &self->subsurfaces[i];
 
-      transform_bounds (self, &node->bounds, &transformed_bounds);
-      if (gsk_rect_intersects (&transformed_bounds, &self->last_info->rect))
+      if (info->can_raise)
         {
-          GskRenderNodeType type = GSK_RENDER_NODE_TYPE (node);
+          graphene_rect_t transformed_bounds;
 
-          if (type != GSK_CONTAINER_NODE &&
-              type != GSK_TRANSFORM_NODE &&
-              type != GSK_CLIP_NODE &&
-              type != GSK_ROUNDED_CLIP_NODE &&
-              type != GSK_DEBUG_NODE)
+          transform_bounds (self, &node->bounds, &transformed_bounds);
+          if (gsk_rect_intersects (&transformed_bounds, &info->rect))
             {
-              GDK_DISPLAY_DEBUG (gdk_surface_get_display (self->surface), OFFLOAD,
-                                 "Can't raise subsurface %p because a %s overlaps",
-                                 self->last_info->subsurface,
-                                 g_type_name_from_instance ((GTypeInstance *) node));
-              self->last_info->can_raise = FALSE;
+              GskRenderNodeType type = GSK_RENDER_NODE_TYPE (node);
+
+              if (type != GSK_CONTAINER_NODE &&
+                  type != GSK_TRANSFORM_NODE &&
+                  type != GSK_CLIP_NODE &&
+                  type != GSK_ROUNDED_CLIP_NODE &&
+                  type != GSK_DEBUG_NODE)
+                {
+                  GDK_DISPLAY_DEBUG (gdk_surface_get_display (self->surface), OFFLOAD,
+                                     "Can't raise subsurface %p because a %s overlaps",
+                                     info->subsurface,
+                                     g_type_name_from_instance ((GTypeInstance *) node));
+                  info->can_raise = FALSE;
+                }
             }
         }
     }
@@ -542,13 +547,7 @@ complex_clip:
                 info->can_offload = TRUE;
                 info->can_raise = TRUE;
                 transform_bounds (self, &node->bounds, &info->rect);
-                if (self->last_info)
-                  {
-                    self->last_info->can_raise = !gsk_rect_intersects (&self->last_info->rect, &info->rect);
-                    info->place_above = self->last_info->subsurface;
-                  }
-                else
-                  info->place_above = NULL;
+                info->place_above = self->last_info ? self->last_info->subsurface : NULL;
                 self->last_info = info;
               }
           }
@@ -626,13 +625,13 @@ gsk_offload_new (GdkSurface    *surface,
               gdk_subsurface_detach (info->subsurface);
             }
         }
-    }
 
-  if (self->last_info && self->last_info->can_raise)
-    {
-      GDK_DISPLAY_DEBUG (display, OFFLOAD, "Raising subsurface %p", self->last_info->subsurface);
-      gdk_subsurface_place_above (self->last_info->subsurface, NULL);
-      self->last_info->is_above = TRUE;
+      if (info->can_raise)
+        {
+          GDK_DISPLAY_DEBUG (display, OFFLOAD, "Raising subsurface %p", info->subsurface);
+          gdk_subsurface_place_above (info->subsurface, NULL);
+          info->is_above = TRUE;
+        }
     }
 
   return self;
