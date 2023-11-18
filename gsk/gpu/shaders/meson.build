@@ -17,6 +17,7 @@ gsk_private_gpu_shaders = files([
   'gskgpuboxshadow.glsl',
   'gskgpucolor.glsl',
   'gskgpucolorize.glsl',
+  'gskgpucolormatrix.glsl',
   'gskgpuroundedcolor.glsl',
   'gskgpustraightalpha.glsl',
   'gskgputexture.glsl',
