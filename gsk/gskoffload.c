@@ -53,7 +53,6 @@ struct _GskOffload
   Clip *current_clip;
 
   GskOffloadInfo *last_info;
-  gboolean can_raise;
 };
 
 static GdkTexture *
@@ -347,7 +346,7 @@ visit_node (GskOffload    *self,
 {
   gboolean has_clip;
 
-  if (self->last_info && self->can_raise)
+  if (self->last_info && self->last_info->can_raise)
     {
       graphene_rect_t transformed_bounds;
 
@@ -366,7 +365,7 @@ visit_node (GskOffload    *self,
                                  "Can't raise subsurface %p because a %s overlaps",
                                  self->last_info->subsurface,
                                  g_type_name_from_instance ((GTypeInstance *) node));
-              self->can_raise = FALSE;
+              self->last_info->can_raise = FALSE;
             }
         }
     }
@@ -541,10 +540,16 @@ complex_clip:
             if (info->texture)
               {
                 info->can_offload = TRUE;
+                info->can_raise = TRUE;
                 transform_bounds (self, &node->bounds, &info->rect);
-                info->place_above = self->last_info ? self->last_info->subsurface : NULL;
+                if (self->last_info)
+                  {
+                    self->last_info->can_raise = !gsk_rect_intersects (&self->last_info->rect, &info->rect);
+                    info->place_above = self->last_info->subsurface;
+                  }
+                else
+                  info->place_above = NULL;
                 self->last_info = info;
-                self->can_raise = TRUE;
               }
           }
       }
@@ -583,6 +588,7 @@ gsk_offload_new (GdkSurface    *surface,
       GskOffloadInfo *info = &self->subsurfaces[i];
       info->subsurface = gdk_surface_get_subsurface (self->surface, i);
       info->was_offloaded = gdk_subsurface_get_texture (info->subsurface) != NULL;
+      info->was_above = gdk_subsurface_is_above_parent (info->subsurface);
       /* Stack them all below, initially */
       gdk_subsurface_place_below (info->subsurface, NULL);
     }
@@ -622,10 +628,11 @@ gsk_offload_new (GdkSurface    *surface,
         }
     }
 
-  if (self->can_raise && self->last_info)
+  if (self->last_info && self->last_info->can_raise)
     {
       GDK_DISPLAY_DEBUG (display, OFFLOAD, "Raising subsurface %p", self->last_info->subsurface);
       gdk_subsurface_place_above (self->last_info->subsurface, NULL);
+      self->last_info->is_above = TRUE;
     }
 
   return self;
