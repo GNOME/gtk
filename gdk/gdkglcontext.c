@@ -389,17 +389,24 @@ gdk_gl_context_realize_egl (GdkGLContext  *context,
 {
   GdkDisplay *display = gdk_gl_context_get_display (context);
   GdkGLContext *share = gdk_display_get_gl_context (display);
+  GdkDebugFlags flags;
   GdkGLAPI api, preferred_api;
   gboolean prefer_legacy;
+
+  flags = gdk_display_get_debug_flags(display);
 
   if (share && gdk_gl_context_is_api_allowed (context,
                                               gdk_gl_context_get_api (share),
                                               NULL))
     preferred_api = gdk_gl_context_get_api (share);
-  else if (gdk_gl_context_is_api_allowed (context, GDK_GL_API_GL, NULL))
+  else if ((flags & GDK_DEBUG_GL_PREFER_GL) != 0 &&
+           gdk_gl_context_is_api_allowed (context, GDK_GL_API_GL, NULL))
     preferred_api = GDK_GL_API_GL;
   else if (gdk_gl_context_is_api_allowed (context, GDK_GL_API_GLES, NULL))
     preferred_api = GDK_GL_API_GLES;
+  else if ((flags & GDK_DEBUG_GL_PREFER_GL) == 0 &&
+            gdk_gl_context_is_api_allowed (context, GDK_GL_API_GL, NULL))
+    preferred_api = GDK_GL_API_GL;
   else
     {
       g_set_error_literal (error, GDK_GL_ERROR,
@@ -408,7 +415,7 @@ gdk_gl_context_realize_egl (GdkGLContext  *context,
       return 0;
     }
 
-  prefer_legacy = (gdk_display_get_debug_flags(display) & GDK_DEBUG_GL_LEGACY) ||
+  prefer_legacy = (flags & GDK_DEBUG_GL_LEGACY) ||
                    (share != NULL && gdk_gl_context_is_legacy (share));
 
   if (preferred_api == GDK_GL_API_GL)
