@@ -192,7 +192,7 @@ collect_offload_info (GdkSurface *surface,
 
       if (info->place_above)
         g_snprintf (above, sizeof (above), "%d",
-                    GPOINTER_TO_INT (g_object_get_data (G_OBJECT (subsurface), "pos")));
+                    GPOINTER_TO_INT (g_object_get_data (G_OBJECT (info->place_above), "pos")));
       else
         g_snprintf (above, sizeof (above), "-");
 
