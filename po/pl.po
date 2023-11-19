@@ -2446,7 +2446,6 @@ msgid "Yesterday"
 msgstr "Wczoraj"
 
 #: gtk/gtkfilechooserwidget.c:3758
-#, c-format
 msgid "%-e %b"
 msgstr "%-d %b"
 
