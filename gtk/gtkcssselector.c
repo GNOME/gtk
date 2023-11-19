@@ -2102,10 +2102,9 @@ subdivide_infos (GByteArray                 *array,
                  guint                       n_infos,
                  gint32                      parent_offset)
 {
-  GtkCssSelectorRuleSetInfo **matched_infos;
   guint n_matched = 0;
-  GtkCssSelectorRuleSetInfo **remaining_infos;
   guint n_remaining = 0;
+  guint n_exact = 0;
   GHashTable *ht;
   gint32 tree_offset;
   GtkCssSelectorTree *tree;
@@ -2150,37 +2149,40 @@ subdivide_infos (GByteArray                 *array,
   tree->parent_offset = parent_offset;
   tree->selector = max_selector;
 
-  /* Allocate maximum for both of them */
-  /* TODO: Potentially dangerous? */
-  matched_infos = g_alloca (sizeof (GtkCssSelectorRuleSetInfo *) * n_infos);
-  remaining_infos = g_alloca (sizeof (GtkCssSelectorRuleSetInfo *) * n_infos);
-
   gtk_css_selector_matches_init (&exact_matches);
-  for (i = 0; i < n_infos; i++)
+
+  i = 0;
+  while (i < n_infos - n_exact - n_matched)
     {
       GtkCssSelectorRuleSetInfo *info = infos[i];
 
       if (gtk_css_selectors_has_initial_selector (info->current_selector, &max_selector))
-	{
-	  info->current_selector = gtk_css_selectors_skip_initial_selector (info->current_selector, &max_selector);
-	  if (info->current_selector == NULL)
-	    {
-	      /* Matches current node */
-              gtk_css_selector_matches_append (&exact_matches, info->match);
-	      if (info->selector_match != NULL)
-		*info->selector_match = GUINT_TO_POINTER (tree_offset);
-	    }
-	  else
+        {
+          info->current_selector = gtk_css_selectors_skip_initial_selector (info->current_selector, &max_selector);
+          if (info->current_selector == NULL)
             {
-              matched_infos[n_matched] = info;
+              /* Matches current node */
+              gtk_css_selector_matches_append (&exact_matches, info->match);
+              if (info->selector_match != NULL)
+                *info->selector_match = GUINT_TO_POINTER (tree_offset);
+
+              infos[i] = infos[n_infos - n_exact - n_matched - 1];
+              infos[n_infos - n_exact - n_matched - 1] = infos[n_infos - n_exact - 1];
+              infos[n_infos - n_exact - 1] = info;
+              n_exact++;
+            }
+          else
+            {
+              infos[i] = infos[n_infos - n_exact - n_matched - 1];
+              infos[n_infos - n_exact - n_matched - 1] = info;
               n_matched++;
             }
-	}
+        }
       else
-	{
-          remaining_infos[n_remaining] = info;
+        {
+          i++;
           n_remaining++;
-	}
+        }
     }
 
   if (!gtk_css_selector_matches_is_empty (&exact_matches))
@@ -2192,13 +2194,14 @@ subdivide_infos (GByteArray                 *array,
     }
   else
     res = GTK_CSS_SELECTOR_TREE_EMPTY_OFFSET;
+
   gtk_css_selector_matches_clear (&exact_matches);
   get_tree (array, tree_offset)->matches_offset = res;
 
-  res = subdivide_infos (array, matched_infos, n_matched, tree_offset);
+  res = subdivide_infos (array, infos + n_remaining, n_matched, tree_offset);
   get_tree (array, tree_offset)->previous_offset = res;
 
-  res = subdivide_infos (array, remaining_infos, n_remaining, parent_offset);
+  res = subdivide_infos (array, infos, n_remaining, parent_offset);
   get_tree (array, tree_offset)->sibling_offset = res;
 
   g_hash_table_unref (ht);
