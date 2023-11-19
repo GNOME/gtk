@@ -26,23 +26,33 @@ struct _GskGpuDescriptorsClass
                                                                          GskGpuImage            *image,
                                                                          GskGpuSampler           sampler,
                                                                          guint32                *out_id);
+  gboolean              (* add_buffer)                                  (GskGpuDescriptors      *self,
+                                                                         GskGpuBuffer           *buffer,
+                                                                         guint32                *out_id);
 };
 
 GType                   gsk_gpu_descriptors_get_type                    (void) G_GNUC_CONST;
 
 gsize                   gsk_gpu_descriptors_get_n_images                (GskGpuDescriptors      *self);
+gsize                   gsk_gpu_descriptors_get_n_buffers               (GskGpuDescriptors      *self);
 void                    gsk_gpu_descriptors_set_size                    (GskGpuDescriptors      *self,
-                                                                         gsize                   n_images);
+                                                                         gsize                   n_images,
+                                                                         gsize                   n_buffers);
 GskGpuImage *           gsk_gpu_descriptors_get_image                   (GskGpuDescriptors      *self,
                                                                          gsize                   id);
 GskGpuSampler           gsk_gpu_descriptors_get_sampler                 (GskGpuDescriptors      *self,
                                                                          gsize                   id);
 gsize                   gsk_gpu_descriptors_find_image                  (GskGpuDescriptors      *self,
                                                                          guint32                 descriptor);
+GskGpuBuffer *          gsk_gpu_descriptors_get_buffer                  (GskGpuDescriptors      *self,
+                                                                         gsize                   id);
 
 gboolean                gsk_gpu_descriptors_add_image                   (GskGpuDescriptors      *self,
                                                                          GskGpuImage            *image,
                                                                          GskGpuSampler           sampler,
+                                                                         guint32                *out_descriptor);
+gboolean                gsk_gpu_descriptors_add_buffer                  (GskGpuDescriptors      *self,
+                                                                         GskGpuBuffer           *buffer,
                                                                          guint32                *out_descriptor);
 
 

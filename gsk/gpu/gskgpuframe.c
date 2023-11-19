@@ -461,47 +461,28 @@ gsk_gpu_frame_ensure_storage_buffer (GskGpuFrame *self)
   priv->storage_buffer_data = gsk_gpu_buffer_map (priv->storage_buffer);
 }
 
-static void
-gsk_gpu_frame_buffer_memory_ensure_size (GskGpuBufferWriter *writer,
-                                         gsize               size)
+GskGpuBuffer *
+gsk_gpu_frame_write_storage_buffer (GskGpuFrame  *self,
+                                    const guchar *data,
+                                    gsize         size,
+                                    gsize        *out_offset)
 {
-  /* FIXME: implement */
-  g_assert_not_reached ();
-}
-
-static gsize
-gsk_gpu_frame_buffer_memory_finish (GskGpuBufferWriter *writer,
-                                    gboolean            commit)
-{
-  GskGpuFrame *self = GSK_GPU_FRAME (writer->user_data);
   GskGpuFramePrivate *priv = gsk_gpu_frame_get_instance_private (self);
   gsize offset;
 
-  if (!commit)
-    return 0;
-
-  offset = priv->storage_buffer_used;
-  priv->storage_buffer_used = writer->size;
-
-  return offset;
-}
-
-void
-gsk_gpu_frame_write_buffer_memory (GskGpuFrame        *self,
-                                   GskGpuBufferWriter *writer)
-{
-  GskGpuFramePrivate *priv = gsk_gpu_frame_get_instance_private (self);
-
   gsk_gpu_frame_ensure_storage_buffer (self);
 
-  writer->user_data = self;
-  writer->ensure_size = gsk_gpu_frame_buffer_memory_ensure_size;
-  writer->finish = gsk_gpu_frame_buffer_memory_finish;
+  offset = priv->storage_buffer_used;
+  g_assert (offset + size < gsk_gpu_buffer_get_size (priv->storage_buffer));
 
-  writer->data = priv->storage_buffer_data;
-  writer->initial_size = priv->storage_buffer_used;
-  writer->size = priv->storage_buffer_used;
-  writer->allocated = gsk_gpu_buffer_get_size (priv->storage_buffer);
+  if (size)
+    {
+      memcpy (priv->storage_buffer_data + offset, data, size);
+      priv->storage_buffer_used += size;
+    }
+
+  *out_offset = offset;
+  return priv->storage_buffer;
 }
 
 gboolean
@@ -591,7 +572,6 @@ gsk_gpu_frame_submit (GskGpuFrame *self)
 
   GSK_GPU_FRAME_GET_CLASS (self)->submit (self,
                                           priv->vertex_buffer,
-                                          priv->storage_buffer,
                                           priv->first_op);
 }
 

@@ -137,8 +137,7 @@ gsk_vulkan_frame_upload_texture (GskGpuFrame  *frame,
 }
 
 static void
-gsk_vulkan_frame_prepare_descriptors (GskVulkanFrame *self,
-                                      GskGpuBuffer   *storage_buffer)
+gsk_vulkan_frame_prepare_descriptors (GskVulkanFrame *self)
 {
   GskVulkanDevice *device;
   VkDevice vk_device;
@@ -154,13 +153,7 @@ gsk_vulkan_frame_prepare_descriptors (GskVulkanFrame *self,
     {
       gsize n_desc_images, n_desc_buffers;
       GskVulkanRealDescriptors *desc = gsk_descriptors_get (&self->descriptors, i);
-      if (storage_buffer)
-        {
-          G_GNUC_UNUSED guint32 descriptor;
-          descriptor = gsk_vulkan_real_descriptors_get_buffer_descriptor (desc, storage_buffer);
-          g_assert (descriptor == 0);
-        }
-      gsk_vulkan_real_descriptors_prepare (desc, &n_desc_images, &n_desc_buffers);
+      gsk_vulkan_real_descriptors_prepare (desc, GSK_GPU_FRAME (self), &n_desc_images, &n_desc_buffers);
       n_images += n_desc_images;
       n_buffers += n_desc_buffers;
     }
@@ -269,7 +262,6 @@ gsk_vulkan_frame_create_storage_buffer (GskGpuFrame *frame,
 static void
 gsk_vulkan_frame_submit (GskGpuFrame  *frame,
                          GskGpuBuffer *vertex_buffer,
-                         GskGpuBuffer *storage_buffer,
                          GskGpuOp     *op)
 {
   GskVulkanFrame *self = GSK_VULKAN_FRAME (frame);
@@ -278,7 +270,7 @@ gsk_vulkan_frame_submit (GskGpuFrame  *frame,
   if (gsk_descriptors_get_size (&self->descriptors) == 0)
     gsk_descriptors_append (&self->descriptors, gsk_vulkan_real_descriptors_new (GSK_VULKAN_DEVICE (gsk_gpu_frame_get_device (frame))));
 
-  gsk_vulkan_frame_prepare_descriptors (self, storage_buffer);
+  gsk_vulkan_frame_prepare_descriptors (self);
 
   GSK_VK_CHECK (vkBeginCommandBuffer, self->vk_command_buffer,
                                       &(VkCommandBufferBeginInfo) {

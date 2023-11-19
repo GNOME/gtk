@@ -49,6 +49,18 @@ gsk_vulkan_sub_descriptors_add_image (GskGpuDescriptors *desc,
                                         out_descriptor);
 }
 
+static gboolean
+gsk_vulkan_sub_descriptors_add_buffer (GskGpuDescriptors *desc,
+                                       GskGpuBuffer      *buffer,
+                                       guint32           *out_descriptor)
+{
+  GskVulkanSubDescriptors *self = GSK_VULKAN_SUB_DESCRIPTORS (desc);
+
+  return gsk_gpu_descriptors_add_buffer (GSK_GPU_DESCRIPTORS (self->parent),
+                                         buffer,
+                                         out_descriptor);
+}
+
 static void
 gsk_vulkan_sub_descriptors_finalize (GObject *object)
 {
@@ -69,6 +81,7 @@ gsk_vulkan_sub_descriptors_class_init (GskVulkanSubDescriptorsClass *klass)
   object_class->finalize = gsk_vulkan_sub_descriptors_finalize;
 
   descriptors_class->add_image = gsk_vulkan_sub_descriptors_add_image;
+  descriptors_class->add_buffer = gsk_vulkan_sub_descriptors_add_buffer;
 
   vulkan_descriptors_class->get_pipeline_layout = gsk_vulkan_sub_descriptors_get_pipeline_layout;
   vulkan_descriptors_class->bind = gsk_vulkan_sub_descriptors_bind;
