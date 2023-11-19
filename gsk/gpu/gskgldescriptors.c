@@ -33,7 +33,7 @@ gsk_gl_descriptors_add_image (GskGpuDescriptors *desc,
   GskGLDescriptors *self = GSK_GL_DESCRIPTORS (desc);
   gsize used_texture_units;
 
-  used_texture_units = gsk_gpu_descriptors_get_size (desc) + 2 * self->n_external;
+  used_texture_units = gsk_gpu_descriptors_get_n_images (desc) + 2 * self->n_external;
 
   if (gsk_gpu_image_get_flags (image) & GSK_GPU_IMAGE_EXTERNAL)
     {
@@ -49,7 +49,7 @@ gsk_gl_descriptors_add_image (GskGpuDescriptors *desc,
       if (used_texture_units >= 16)
         return FALSE;
 
-      *out_descriptor = (gsk_gpu_descriptors_get_size (desc) - self->n_external) << 1;
+      *out_descriptor = (gsk_gpu_descriptors_get_n_images (desc) - self->n_external) << 1;
       return TRUE;
     }
 }
@@ -97,7 +97,7 @@ gsk_gl_descriptors_use (GskGLDescriptors *self)
   n_textures = 16 - 3 * self->n_external;
   ext = 0;
 
-  for (i = 0; i < gsk_gpu_descriptors_get_size (desc); i++)
+  for (i = 0; i < gsk_gpu_descriptors_get_n_images (desc); i++)
     {
       GskGLImage *image = GSK_GL_IMAGE (gsk_gpu_descriptors_get_image (desc, i));
 

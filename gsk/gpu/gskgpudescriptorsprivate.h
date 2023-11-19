@@ -30,9 +30,9 @@ struct _GskGpuDescriptorsClass
 
 GType                   gsk_gpu_descriptors_get_type                    (void) G_GNUC_CONST;
 
-gsize                   gsk_gpu_descriptors_get_size                    (GskGpuDescriptors      *self);
+gsize                   gsk_gpu_descriptors_get_n_images                (GskGpuDescriptors      *self);
 void                    gsk_gpu_descriptors_set_size                    (GskGpuDescriptors      *self,
-                                                                         gsize                   new_size);
+                                                                         gsize                   n_images);
 GskGpuImage *           gsk_gpu_descriptors_get_image                   (GskGpuDescriptors      *self,
                                                                          gsize                   id);
 GskGpuSampler           gsk_gpu_descriptors_get_sampler                 (GskGpuDescriptors      *self,

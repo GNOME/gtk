@@ -2731,7 +2731,7 @@ gsk_gpu_node_processor_create_node_pattern (GskGpuPatternWriter *self,
   if (nodes_vtable[node_type].create_pattern != NULL)
     {
       gsize size_before = gsk_gpu_buffer_writer_get_size (&self->writer);
-      gsize images_before = self->desc ? gsk_gpu_descriptors_get_size (self->desc) : 0;
+      gsize images_before = self->desc ? gsk_gpu_descriptors_get_n_images (self->desc) : 0;
       if (nodes_vtable[node_type].create_pattern (self, node))
         return TRUE;
       gsk_gpu_buffer_writer_rewind (&self->writer, size_before);

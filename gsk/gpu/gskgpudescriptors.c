@@ -65,7 +65,7 @@ gsk_gpu_descriptors_init (GskGpuDescriptors *self)
 }
 
 gsize
-gsk_gpu_descriptors_get_size (GskGpuDescriptors *self)
+gsk_gpu_descriptors_get_n_images (GskGpuDescriptors *self)
 {
   GskGpuDescriptorsPrivate *priv = gsk_gpu_descriptors_get_instance_private (self);
 
@@ -74,12 +74,12 @@ gsk_gpu_descriptors_get_size (GskGpuDescriptors *self)
 
 void
 gsk_gpu_descriptors_set_size (GskGpuDescriptors *self,
-                              gsize              new_size)
+                              gsize              n_images)
 {
   GskGpuDescriptorsPrivate *priv = gsk_gpu_descriptors_get_instance_private (self);
 
-  g_assert (new_size <= gsk_gpu_image_entries_get_size (&priv->images));
-  gsk_gpu_image_entries_set_size (&priv->images, new_size);
+  g_assert (n_images <= gsk_gpu_image_entries_get_size (&priv->images));
+  gsk_gpu_image_entries_set_size (&priv->images, n_images);
 }
 
 GskGpuImage *
