@@ -120,7 +120,6 @@ static const GdkDebugKey gdk_debug_keys[] = {
   { "dmabuf",          GDK_DEBUG_DMABUF, "Information about dmabuf buffers" },
   { "offload",         GDK_DEBUG_OFFLOAD, "Information about subsurfaces and graphics offload" },
 
-  { "nograbs",         GDK_DEBUG_NOGRABS, "Disable pointer and keyboard grabs (X11)" },
   { "portals",         GDK_DEBUG_PORTALS, "Force use of portals" },
   { "no-portals",      GDK_DEBUG_NO_PORTALS, "Disable use of portals" },
   { "gl-disable",      GDK_DEBUG_GL_DISABLE, "Disable OpenGL support" },

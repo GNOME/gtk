@@ -211,9 +211,6 @@ are only available when GTK has been configured with `-Ddebug=true`.
 
 A number of options affect behavior instead of logging:
 
-`nograbs`
-: Turn off all pointer and keyboard grabs
-
 `portals`
 : Force the use of [portals](https://docs.flatpak.org/en/latest/portals.html)
 
