@@ -891,6 +891,10 @@ finish_file_op (GtkFileDialog  *self,
 
       if (g_list_model_get_n_items (files) > 0)
         file = g_list_model_get_item (files, 0);
+      else
+        g_set_error_literal (error,
+                             GTK_DIALOG_ERROR, GTK_DIALOG_ERROR_FAILED,
+                             "No file selected");
 
       g_object_unref (files);
 
