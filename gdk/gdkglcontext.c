@@ -389,17 +389,24 @@ gdk_gl_context_realize_egl (GdkGLContext  *context,
 {
   GdkDisplay *display = gdk_gl_context_get_display (context);
   GdkGLContext *share = gdk_display_get_gl_context (display);
+  GdkDebugFlags flags;
   GdkGLAPI api, preferred_api;
   gboolean prefer_legacy;
+
+  flags = gdk_display_get_debug_flags(display);
 
   if (share && gdk_gl_context_is_api_allowed (context,
                                               gdk_gl_context_get_api (share),
                                               NULL))
     preferred_api = gdk_gl_context_get_api (share);
-  else if (gdk_gl_context_is_api_allowed (context, GDK_GL_API_GL, NULL))
+  else if ((flags & GDK_DEBUG_GL_PREFER_GL) != 0 &&
+           gdk_gl_context_is_api_allowed (context, GDK_GL_API_GL, NULL))
     preferred_api = GDK_GL_API_GL;
   else if (gdk_gl_context_is_api_allowed (context, GDK_GL_API_GLES, NULL))
     preferred_api = GDK_GL_API_GLES;
+  else if ((flags & GDK_DEBUG_GL_PREFER_GL) == 0 &&
+            gdk_gl_context_is_api_allowed (context, GDK_GL_API_GL, NULL))
+    preferred_api = GDK_GL_API_GL;
   else
     {
       g_set_error_literal (error, GDK_GL_ERROR,
@@ -408,7 +415,7 @@ gdk_gl_context_realize_egl (GdkGLContext  *context,
       return 0;
     }
 
-  prefer_legacy = (gdk_display_get_debug_flags(display) & GDK_DEBUG_GL_LEGACY) ||
+  prefer_legacy = (flags & GDK_DEBUG_GL_LEGACY) ||
                    (share != NULL && gdk_gl_context_is_legacy (share));
 
   if (preferred_api == GDK_GL_API_GL)
@@ -1277,18 +1284,38 @@ gdk_gl_context_is_api_allowed (GdkGLContext  *self,
                                GError       **error)
 {
   GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (self);
+  GdkDebugFlags flags;
+  GdkGLAPI allowed_apis;
 
-  if (gdk_display_get_debug_flags (gdk_gl_context_get_display (self)) & GDK_DEBUG_GL_GLES)
+  allowed_apis = priv->allowed_apis;
+
+  flags = gdk_display_get_debug_flags (gdk_gl_context_get_display (self));
+
+  if (flags & GDK_DEBUG_GL_DISABLE_GLES)
     {
-      if (!(api & GDK_GL_API_GLES))
+      if (api == GDK_GL_API_GLES)
         {
           g_set_error_literal (error, GDK_GL_ERROR, GDK_GL_ERROR_NOT_AVAILABLE,
-                               _("Anything but OpenGL ES disabled via GDK_DEBUG"));
+                               _("OpenGL ES disabled via GDK_DEBUG"));
           return FALSE;
         }
+
+      allowed_apis &= ~GDK_GL_API_GLES;
     }
 
-  if (priv->allowed_apis & api)
+  if (flags & GDK_DEBUG_GL_DISABLE_GL)
+    {
+      if (api == GDK_GL_API_GL)
+        {
+          g_set_error_literal (error, GDK_GL_ERROR, GDK_GL_ERROR_NOT_AVAILABLE,
+                               _("OpenGL disabled via GDK_DEBUG"));
+          return FALSE;
+        }
+
+      allowed_apis &= ~GDK_GL_API_GL;
+    }
+
+  if (allowed_apis & api)
     return TRUE;
 
   g_set_error (error, GDK_GL_ERROR, GDK_GL_ERROR_NOT_AVAILABLE,
