@@ -11,11 +11,9 @@ G_DECLARE_FINAL_TYPE (GskVulkanRealDescriptors, gsk_vulkan_real_descriptors, GSK
 GskVulkanRealDescriptors *      gsk_vulkan_real_descriptors_new                 (GskVulkanDevice                *device);
 
 gboolean                        gsk_vulkan_real_descriptors_is_full             (GskVulkanRealDescriptors       *self);
-guint32                         gsk_vulkan_real_descriptors_get_buffer_descriptor
-                                                                                (GskVulkanRealDescriptors       *self,
-                                                                                 GskGpuBuffer                   *buffer);
 
 void                            gsk_vulkan_real_descriptors_prepare             (GskVulkanRealDescriptors       *self,
+                                                                                 GskGpuFrame                    *frame,
                                                                                  gsize                          *n_images,
                                                                                  gsize                          *n_buffers);
 void                            gsk_vulkan_real_descriptors_update_sets         (GskVulkanRealDescriptors       *self,

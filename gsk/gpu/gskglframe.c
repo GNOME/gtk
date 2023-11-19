@@ -137,7 +137,6 @@ gsk_gl_frame_create_storage_buffer (GskGpuFrame *frame,
 static void
 gsk_gl_frame_submit (GskGpuFrame  *frame,
                      GskGpuBuffer *vertex_buffer,
-                     GskGpuBuffer *storage_buffer,
                      GskGpuOp     *op)
 {
   GskGLFrame *self = GSK_GL_FRAME (frame);
@@ -155,11 +154,8 @@ gsk_gl_frame_submit (GskGpuFrame  *frame,
 
   if (vertex_buffer)
     gsk_gl_buffer_bind (GSK_GL_BUFFER (vertex_buffer));
-  if (storage_buffer)
-    gsk_gl_buffer_bind_base (GSK_GL_BUFFER (storage_buffer), 1);
-  /* The globals buffer must be the last bound buffer,
-   * the globsals op relies on that. */
-  glBindBufferBase (GL_UNIFORM_BUFFER, 0, self->globals_buffer_id);
+
+  gsk_gl_frame_bind_globals (self);
   glBufferData (GL_UNIFORM_BUFFER,
                 sizeof (GskGpuGlobalsInstance),
                 NULL,
@@ -236,5 +232,11 @@ gsk_gl_frame_use_program (GskGLFrame                *self,
   op_class->setup_vao (0);
 
   g_hash_table_insert (self->vaos, (gpointer) op_class, GUINT_TO_POINTER (vao));
+}
+
+void
+gsk_gl_frame_bind_globals (GskGLFrame *self)
+{
+  glBindBufferBase (GL_UNIFORM_BUFFER, 0, self->globals_buffer_id);
 }
 

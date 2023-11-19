@@ -2,6 +2,7 @@
 
 #include "gskgldescriptorsprivate.h"
 
+#include "gskglbufferprivate.h"
 #include "gskglimageprivate.h"
 
 struct _GskGLDescriptors
@@ -54,6 +55,23 @@ gsk_gl_descriptors_add_image (GskGpuDescriptors *desc,
     }
 }
 
+static gboolean
+gsk_gl_descriptors_add_buffer (GskGpuDescriptors *desc,
+                               GskGpuBuffer      *buffer,
+                               guint32           *out_descriptor)
+{
+  gsize used_buffers;
+
+  used_buffers = gsk_gpu_descriptors_get_n_buffers (desc);
+
+  if (used_buffers >= 11)
+    return FALSE;
+
+  *out_descriptor = used_buffers;
+
+  return TRUE;
+}
+
 static void
 gsk_gl_descriptors_class_init (GskGLDescriptorsClass *klass)
 {
@@ -63,6 +81,7 @@ gsk_gl_descriptors_class_init (GskGLDescriptorsClass *klass)
   object_class->finalize = gsk_gl_descriptors_finalize;
 
   descriptors_class->add_image = gsk_gl_descriptors_add_image;
+  descriptors_class->add_buffer = gsk_gl_descriptors_add_buffer;
 }
 
 static void
@@ -113,5 +132,13 @@ gsk_gl_descriptors_use (GskGLDescriptors *self)
           gsk_gl_image_bind_texture (image);
           glBindSampler (i - ext, gsk_gl_device_get_sampler_id (self->device, gsk_gpu_descriptors_get_sampler (desc, i)));
         }
+    }
+
+  for (i = 0; i < gsk_gpu_descriptors_get_n_buffers (desc); i++)
+    {
+      GskGLBuffer *buffer = GSK_GL_BUFFER (gsk_gpu_descriptors_get_buffer (desc, i));
+
+      /* index 0 are the globals, we start at 1 */
+      gsk_gl_buffer_bind_base (buffer, i + 1);
     }
 }

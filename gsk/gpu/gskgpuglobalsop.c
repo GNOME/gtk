@@ -2,6 +2,7 @@
 
 #include "gskgpuglobalsopprivate.h"
 
+#include "gskglframeprivate.h"
 #include "gskgpuframeprivate.h"
 #include "gskgpuprintprivate.h"
 #include "gskroundedrectprivate.h"
@@ -62,7 +63,8 @@ gsk_gpu_globals_op_gl_command (GskGpuOp          *op,
 {
   GskGpuGlobalsOp *self = (GskGpuGlobalsOp *) op;
 
-  /* the GskGLFrame makes sure the uniform buffer points to the globals */
+  gsk_gl_frame_bind_globals (GSK_GL_FRAME (frame));
+
   /* FIXME: Does it matter if we glBufferData() or glSubBufferData() here? */
   glBufferSubData (GL_UNIFORM_BUFFER,
                    0,

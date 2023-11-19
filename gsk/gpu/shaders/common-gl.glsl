@@ -25,7 +25,7 @@ layout(std140, binding = 1)
 uniform Floats
 {
   vec4 really_just_floats[1024];
-} floats;
+} floats[11];
 
 #if N_EXTERNAL_TEXTURES > 0
 uniform samplerExternalOES external_textures[N_EXTERNAL_TEXTURES];
@@ -51,7 +51,35 @@ uniform sampler2D textures[N_TEXTURES];
 float
 gsk_get_float (int id)
 {
-  return floats.really_just_floats[id >> 2][id & 3];
+  int float_id = id & 0x3FFFFF;
+  int array_id = (id >> 22) & 0xFF;
+  switch (array_id)
+    {
+      case 0:
+        return floats[0].really_just_floats[float_id >> 2][float_id & 3];
+      case 1:
+        return floats[1].really_just_floats[float_id >> 2][float_id & 3];
+      case 2:
+        return floats[2].really_just_floats[float_id >> 2][float_id & 3];
+      case 3:
+        return floats[3].really_just_floats[float_id >> 2][float_id & 3];
+      case 4:
+        return floats[4].really_just_floats[float_id >> 2][float_id & 3];
+      case 5:
+        return floats[5].really_just_floats[float_id >> 2][float_id & 3];
+      case 6:
+        return floats[6].really_just_floats[float_id >> 2][float_id & 3];
+      case 7:
+        return floats[7].really_just_floats[float_id >> 2][float_id & 3];
+      case 8:
+        return floats[8].really_just_floats[float_id >> 2][float_id & 3];
+      case 9:
+        return floats[9].really_just_floats[float_id >> 2][float_id & 3];
+      case 10:
+        return floats[10].really_just_floats[float_id >> 2][float_id & 3];
+      default:
+        return 0.0;
+    }
 }
 
 float
