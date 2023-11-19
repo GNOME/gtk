@@ -85,6 +85,7 @@ GdkGLContextPaintData * gdk_gl_context_get_paint_data           (GdkGLContext   
 gboolean                gdk_gl_context_use_texture_rectangle    (GdkGLContext    *context);
 gboolean                gdk_gl_context_has_framebuffer_blit     (GdkGLContext    *context);
 gboolean                gdk_gl_context_has_frame_terminator     (GdkGLContext    *context);
+gboolean                gdk_gl_context_has_tex_param            (GdkGLContext    *context);
 gboolean                gdk_gl_context_has_unpack_subimage      (GdkGLContext    *context);
 gboolean                gdk_gl_context_has_sync                 (GdkGLContext    *context);
 gboolean                gdk_gl_context_has_texture_format_bgra  (GdkGLContext    *context);

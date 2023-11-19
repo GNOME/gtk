@@ -392,7 +392,17 @@ gdk_cairo_draw_from_gl (cairo_t              *cr,
   else if (source_type == GL_TEXTURE)
     {
       glBindTexture (GL_TEXTURE_2D, source);
-      glGetTexLevelParameteriv (GL_TEXTURE_2D, 0, GL_TEXTURE_ALPHA_SIZE,  &alpha_size);
+      if (gdk_gl_context_has_tex_param (paint_context))
+      {
+        glGetTexLevelParameteriv (GL_TEXTURE_2D, 0, GL_TEXTURE_ALPHA_SIZE,  &alpha_size);
+      }
+      else
+      {
+        alpha_size = 1;
+      if (gdk_gl_context_has_tex_param (paint_context))
+        glGetTexLevelParameteriv (GL_TEXTURE_2D, 0, GL_TEXTURE_ALPHA_SIZE,  &alpha_size);
+      else
+        alpha_size = 1;
     }
   else
     {
@@ -538,7 +548,8 @@ gdk_cairo_draw_from_gl (cairo_t              *cr,
 
       glBindTexture (GL_TEXTURE_2D, source);
 
-      if (gdk_gl_context_get_use_es (paint_context))
+      if (gdk_gl_context_get_use_es (paint_context) ||
+          !gdk_gl_context_has_tex_param (paint_context))
         {
           texture_width = width;
           texture_height = height;
