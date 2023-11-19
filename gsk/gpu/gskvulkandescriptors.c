@@ -31,7 +31,7 @@ gsk_vulkan_descriptors_transition (GskVulkanDescriptors *self,
   GskGpuDescriptors *desc = GSK_GPU_DESCRIPTORS (self);
   gsize i;
 
-  for (i = 0; i < gsk_gpu_descriptors_get_size (desc); i++)
+  for (i = 0; i < gsk_gpu_descriptors_get_n_images (desc); i++)
     {
       gsk_vulkan_image_transition (GSK_VULKAN_IMAGE (gsk_gpu_descriptors_get_image (desc, i)),
                                    vk_command_buffer,
