@@ -46,6 +46,9 @@ GDK_AVAILABLE_IN_ALL
 GType     gdk_rgba_get_type  (void) G_GNUC_CONST;
 
 GDK_AVAILABLE_IN_ALL
+GdkRGBA * gdk_rgba_new_from_string (const char *spec);
+
+GDK_AVAILABLE_IN_ALL
 GdkRGBA * gdk_rgba_copy      (const GdkRGBA *rgba);
 GDK_AVAILABLE_IN_ALL
 void      gdk_rgba_free      (GdkRGBA       *rgba);
