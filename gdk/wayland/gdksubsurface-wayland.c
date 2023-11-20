@@ -423,3 +423,46 @@ gdk_wayland_subsurface_clear_frame_callback (GdkSubsurface *sub)
 
   g_clear_pointer (&self->frame_callback, wl_callback_destroy);
 }
+
+GdkSubsurface *
+gdk_wayland_surface_create_subsurface (GdkSurface *surface)
+{
+  GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
+  GdkDisplay *display = gdk_surface_get_display (surface);
+  GdkWaylandDisplay *disp = GDK_WAYLAND_DISPLAY (display);
+  GdkWaylandSubsurface *sub;
+  struct wl_region *region;
+
+  if (disp->viewporter == NULL)
+    {
+      GDK_DISPLAY_DEBUG (display, OFFLOAD, "Can't use subsurfaces without viewporter");
+      return NULL;
+    }
+
+  sub = g_object_new (GDK_TYPE_WAYLAND_SUBSURFACE, NULL);
+
+  sub->surface = wl_compositor_create_surface (disp->compositor);
+  sub->subsurface = wl_subcompositor_get_subsurface (disp->subcompositor,
+                                                     sub->surface,
+                                                     impl->display_server.wl_surface);
+  sub->viewport = wp_viewporter_get_viewport (disp->viewporter, sub->surface);
+
+  /* No input, please */
+  region = wl_compositor_create_region (disp->compositor);
+  wl_surface_set_input_region (sub->surface, region);
+  wl_region_destroy (region);
+
+  /* Keep a max-sized opaque region so we don't have to update it
+   * when the size of the texture changes.
+   */
+  sub->opaque_region = wl_compositor_create_region (disp->compositor);
+  wl_region_add (sub->opaque_region, 0, 0, G_MAXINT, G_MAXINT);
+  wl_surface_set_opaque_region (sub->surface, sub->opaque_region);
+
+  sub->above_parent = TRUE;
+
+  GDK_DISPLAY_DEBUG (display, OFFLOAD, "Subsurface %p of surface %p created", sub, impl);
+
+  return GDK_SUBSURFACE (sub);
+}
+
