@@ -1183,10 +1183,8 @@ gdk_vulkan_save_pipeline_cache_cb (gpointer data)
 }
 
 void
-gdk_vulkan_context_pipeline_cache_updated (GdkVulkanContext *self)
+gdk_display_vulkan_pipeline_cache_updated (GdkDisplay *display)
 {
-  GdkDisplay *display = gdk_draw_context_get_display (GDK_DRAW_CONTEXT (self));
-
   g_clear_handle_id (&display->vk_save_pipeline_cache_source, g_source_remove);
   display->vk_save_pipeline_cache_source = g_timeout_add_seconds_full (G_PRIORITY_DEFAULT_IDLE - 10,
                                                                        10, /* random choice that is not now */
@@ -1209,14 +1207,6 @@ gdk_display_create_pipeline_cache (GdkDisplay *display)
                                            NULL,
                                            &display->vk_pipeline_cache);
     }
-}
-
-VkPipelineCache
-gdk_vulkan_context_get_pipeline_cache (GdkVulkanContext *self)
-{
-  g_return_val_if_fail (GDK_IS_VULKAN_CONTEXT (self), NULL);
-
-  return gdk_draw_context_get_display (GDK_DRAW_CONTEXT (self))->vk_pipeline_cache;
 }
 
 /**
