@@ -1044,7 +1044,7 @@ gsk_vulkan_device_get_vk_pipeline (GskVulkanDevice           *self,
   g_free (vertex_shader_name);
 
   g_hash_table_insert (layout->pipeline_cache, g_memdup (&cache_key, sizeof (PipelineCacheKey)), pipeline);
-  //gdk_vulkan_context_pipeline_cache_updated (self->vulkan);
+  gdk_display_vulkan_pipeline_cache_updated (display);
 
   return pipeline;
 }
