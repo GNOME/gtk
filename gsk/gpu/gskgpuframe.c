@@ -473,7 +473,18 @@ gsk_gpu_frame_write_storage_buffer (GskGpuFrame  *self,
   gsk_gpu_frame_ensure_storage_buffer (self);
 
   offset = priv->storage_buffer_used;
-  g_assert (offset + size < gsk_gpu_buffer_get_size (priv->storage_buffer));
+  if (offset + size > gsk_gpu_buffer_get_size (priv->storage_buffer))
+    {
+      g_assert (offset > 0);
+
+      gsk_gpu_buffer_unmap (priv->storage_buffer);
+      g_clear_object (&priv->storage_buffer);
+      priv->storage_buffer_data = 0;
+      priv->storage_buffer_used = 0;
+      gsk_gpu_frame_ensure_storage_buffer (self);
+
+      offset = priv->storage_buffer_used;
+    }
 
   if (size)
     {
