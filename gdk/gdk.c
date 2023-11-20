@@ -120,13 +120,11 @@ static const GdkDebugKey gdk_debug_keys[] = {
   { "dmabuf",          GDK_DEBUG_DMABUF, "Information about dmabuf buffers" },
   { "offload",         GDK_DEBUG_OFFLOAD, "Information about subsurfaces and graphics offload" },
 
-  { "nograbs",         GDK_DEBUG_NOGRABS, "Disable pointer and keyboard grabs (X11)" },
   { "portals",         GDK_DEBUG_PORTALS, "Force use of portals" },
   { "no-portals",      GDK_DEBUG_NO_PORTALS, "Disable use of portals" },
   { "gl-disable",      GDK_DEBUG_GL_DISABLE, "Disable OpenGL support" },
   { "gl-fractional",   GDK_DEBUG_GL_FRACTIONAL, "Enable fractional scaling for OpenGL (experimental)" },
   { "gl-debug",        GDK_DEBUG_GL_DEBUG, "Insert debugging information in OpenGL" },
-  { "gl-legacy",       GDK_DEBUG_GL_LEGACY, "Use a legacy OpenGL context" },
   { "gl-disable-gl",   GDK_DEBUG_GL_DISABLE_GL, "Only allow OpenGL GLES API" },
   { "gl-disable-gles", GDK_DEBUG_GL_DISABLE_GLES, "Don't allow OpenGL GLES API" },
   { "gl-prefer-gl",    GDK_DEBUG_GL_PREFER_GL, "Prefer GL over GLES API" },
