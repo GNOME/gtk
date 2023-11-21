@@ -38,6 +38,8 @@ struct _GtkCssAnimatedStyle
   GtkCssStyle parent;
 
   GtkCssStyle           *style;                /* the style if we weren't animating */
+  GtkCssStyle           *parent_style;
+  GtkStyleProvider      *provider;
 
   gint64                 current_time;         /* the current time in our world */
   gpointer              *animations;           /* GtkStyleAnimation**, least important one first */
@@ -57,8 +59,10 @@ GtkCssStyle *           gtk_css_animated_style_new              (GtkCssStyle    
                                                                  GtkStyleProvider       *provider,
                                                                  GtkCssStyle            *previous_style);
 GtkCssStyle *           gtk_css_animated_style_new_advance      (GtkCssAnimatedStyle    *source,
-                                                                 GtkCssStyle            *base,
-                                                                 gint64                  timestamp);
+                                                                 GtkCssStyle            *base_style,
+                                                                 GtkCssStyle            *parent_style,
+                                                                 gint64                  timestamp,
+                                                                 GtkStyleProvider       *provider);
 
 void                    gtk_css_animated_style_set_animated_value(GtkCssAnimatedStyle   *style,
                                                                  guint                   id,
@@ -66,6 +70,10 @@ void                    gtk_css_animated_style_set_animated_value(GtkCssAnimated
 
 GtkCssValue *           gtk_css_animated_style_get_intrinsic_value (GtkCssAnimatedStyle *style,
                                                                  guint                   id);
+
+GtkCssStyle *           gtk_css_animated_style_get_base_style   (GtkCssAnimatedStyle    *style);
+GtkCssStyle *           gtk_css_animated_style_get_parent_style (GtkCssAnimatedStyle    *style);
+GtkStyleProvider *      gtk_css_animated_style_get_provider     (GtkCssAnimatedStyle    *style);
 
 G_END_DECLS
 
