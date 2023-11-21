@@ -44,6 +44,11 @@
 #ifdef HAVE_EGL
 #include <epoxy/egl.h>
 #endif
+
+#ifdef HAVE_SYS_SYSMACROS_H
+#include <sys/sysmacros.h>
+#endif
+
 #include <math.h>
 #include <stdlib.h>
 
@@ -1687,6 +1692,23 @@ gdk_display_check_egl_extensions (EGLDisplay   egl_display,
   return TRUE;
 }
 
+static const char *
+find_egl_device (EGLDisplay egl_display)
+{
+  EGLAttrib value;
+  EGLDeviceEXT egl_device;
+
+  eglQueryDisplayAttribEXT (egl_display, EGL_DEVICE_EXT, &value);
+
+  egl_device = (EGLDeviceEXT)value;
+
+#ifndef EGL_DRM_RENDER_NODE_FILE_EXT
+#define EGL_DRM_RENDER_NODE_FILE_EXT 0x3377
+#endif
+
+  return eglQueryDeviceStringEXT (egl_device, EGL_DRM_RENDER_NODE_FILE_EXT);
+}
+
 gboolean
 gdk_display_init_egl (GdkDisplay  *self,
                       int          platform,
@@ -1789,9 +1811,17 @@ gdk_display_init_egl (GdkDisplay  *self,
       char *ext = describe_extensions (priv->egl_display);
       char *std_cfg = describe_egl_config (priv->egl_display, priv->egl_config);
       char *hd_cfg = describe_egl_config (priv->egl_display, priv->egl_config_high_depth);
+      const char *path;
+      struct stat buf;
+
+      path = find_egl_device (priv->egl_display);
+      if (path)
+        stat (path, &buf);
+
       gdk_debug_message ("EGL API version %d.%d found\n"
                          " - Vendor: %s\n"
                          " - Version: %s\n"
+                         " - Device: %s, %d %d\n"
                          " - Client APIs: %s\n"
                          " - Extensions:\n"
                          "\t%s\n"
@@ -1800,6 +1830,12 @@ gdk_display_init_egl (GdkDisplay  *self,
                          major, minor,
                          eglQueryString (priv->egl_display, EGL_VENDOR),
                          eglQueryString (priv->egl_display, EGL_VERSION),
+                         path ? path : "unknown",
+#ifdef HAVE_SYS_SYSMACROS_H
+                         major (buf.st_rdev), minor (buf.st_rdev),
+#else
+                         0, 0,
+#endif
                          eglQueryString (priv->egl_display, EGL_CLIENT_APIS),
                          ext, std_cfg,
                          priv->egl_config_high_depth == priv->egl_config ? "none" : hd_cfg);

@@ -175,6 +175,7 @@ check_headers = [
   'sys/systeminfo.h',
   'sys/time.h',
   'sys/types.h',
+  'sys/sysmacros.h',
   'unistd.h',
 ]
 
