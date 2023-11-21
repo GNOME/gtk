@@ -213,6 +213,7 @@ gdk_wayland_subsurface_attach (GdkSubsurface         *sub,
                                  self,
                                  self->dest.x, self->dest.y,
                                  self->dest.width, self->dest.height);
+              result = TRUE;
             }
           else
             {
@@ -233,8 +234,8 @@ gdk_wayland_subsurface_attach (GdkSubsurface         *sub,
                              self,
                              self->dest.x, self->dest.y,
                              self->dest.width, self->dest.height);
+          result = TRUE;
         }
-      result = TRUE;
     }
 
   if (result)
