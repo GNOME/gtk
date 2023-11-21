@@ -39,3 +39,6 @@ GType gdk_wayland_subsurface_get_type (void) G_GNUC_CONST;
 
 void gdk_wayland_subsurface_request_frame        (GdkSubsurface *subsurface);
 void gdk_wayland_subsurface_clear_frame_callback (GdkSubsurface *subsurface);
+
+GdkSubsurface * gdk_wayland_surface_create_subsurface (GdkSurface *surface);
+
