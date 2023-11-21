@@ -173,8 +173,11 @@ gtk_picture_snapshot (GtkWidget   *widget,
             }
         }
 
-      x = (width - ceil (w)) / 2;
-      y = floor(height - ceil (h)) / 2;
+      w = ceil (w);
+      h = ceil (h);
+
+      x = (width - w) / 2;
+      y = floor(height - h) / 2;
 
       gtk_snapshot_save (snapshot);
       gtk_snapshot_translate (snapshot, &GRAPHENE_POINT_INIT (x, y));
