@@ -159,10 +159,17 @@ gdk_wayland_subsurface_attach (GdkSubsurface         *sub,
   GdkWaylandSubsurface *self = GDK_WAYLAND_SUBSURFACE (sub);
   struct wl_buffer *buffer = NULL;
   gboolean result = FALSE;
+  GdkWaylandSubsurface *sib = sibling ? GDK_WAYLAND_SUBSURFACE (sibling) : NULL;
+  gboolean will_be_above;
+
+  if (sib)
+    will_be_above = sib->above_parent;
+  else
+    will_be_above = above;
 
   if (sub->parent == NULL)
     {
-      g_warning ("Can't draw to destroyed subsurface %p", self);
+      g_warning ("Can't attach to destroyed subsurface %p", self);
       return FALSE;
     }
 
@@ -193,10 +200,11 @@ gdk_wayland_subsurface_attach (GdkSubsurface         *sub,
                          G_OBJECT_TYPE_NAME (texture),
                          self);
     }
-  else if (gdk_memory_format_alpha (gdk_texture_get_format (texture)) != GDK_MEMORY_ALPHA_OPAQUE)
+  else if (!will_be_above &&
+           gdk_memory_format_alpha (gdk_texture_get_format (texture)) != GDK_MEMORY_ALPHA_OPAQUE)
     {
       GDK_DISPLAY_DEBUG (gdk_surface_get_display (sub->parent), OFFLOAD,
-                         "Cannot offload non-opaque %dx%d texture, hiding subsurface %p",
+                         "Cannot offload non-opaque %dx%d texture below, hiding subsurface %p",
                          gdk_texture_get_width (texture),
                          gdk_texture_get_height (texture),
                          self);
@@ -247,8 +255,6 @@ gdk_wayland_subsurface_attach (GdkSubsurface         *sub,
 
       if (buffer)
         {
-          GdkWaylandSubsurface *sib = sibling ? GDK_WAYLAND_SUBSURFACE (sibling) : NULL;
-
           wl_surface_attach (self->surface, buffer, 0, 0);
           wl_surface_damage_buffer (self->surface,
                                     0, 0,
