@@ -157,10 +157,14 @@ gdk_wayland_subsurface_attach (GdkSubsurface         *sub,
                                GdkSubsurface         *sibling)
 {
   GdkWaylandSubsurface *self = GDK_WAYLAND_SUBSURFACE (sub);
+  GdkWaylandSurface *parent = GDK_WAYLAND_SURFACE (sub->parent);
   struct wl_buffer *buffer = NULL;
   gboolean result = FALSE;
   GdkWaylandSubsurface *sib = sibling ? GDK_WAYLAND_SUBSURFACE (sibling) : NULL;
   gboolean will_be_above;
+  double scale;
+  graphene_rect_t device_rect;
+  cairo_rectangle_int_t device_dest;
 
   if (sib)
     will_be_above = sib->above_parent;
@@ -178,6 +182,16 @@ gdk_wayland_subsurface_attach (GdkSubsurface         *sub,
   self->dest.width = rect->size.width;
   self->dest.height = rect->size.height;
 
+  scale = gdk_fractional_scale_to_double (&parent->scale);
+  device_rect.origin.x = rect->origin.x * scale;
+  device_rect.origin.y = rect->origin.y * scale;
+  device_rect.size.width = rect->size.width * scale;
+  device_rect.size.height = rect->size.height * scale;
+  device_dest.x = device_rect.origin.x;
+  device_dest.y = device_rect.origin.y;
+  device_dest.width = device_rect.size.width;
+  device_dest.height = device_rect.size.height;
+
   if (self->dest.x != rect->origin.x ||
       self->dest.y != rect->origin.y ||
       self->dest.width != rect->size.width ||
@@ -189,6 +203,18 @@ gdk_wayland_subsurface_attach (GdkSubsurface         *sub,
                          rect->size.width, rect->size.height,
                          gdk_texture_get_width (texture),
                          gdk_texture_get_height (texture),
+                         self);
+    }
+  else if (device_dest.x != device_rect.origin.x ||
+           device_dest.y != device_rect.origin.y ||
+           device_dest.width != device_rect.size.width ||
+           device_dest.height != device_rect.size.height)
+    {
+      GDK_DISPLAY_DEBUG (gdk_surface_get_display (sub->parent), OFFLOAD,
+                         "Non-integral device coordinates %g %g %g %g (fractional scale %.2f), hiding subsurface %p",
+                         device_rect.origin.x, device_rect.origin.y,
+                         device_rect.size.width, device_rect.size.width,
+                         scale,
                          self);
     }
   else if (!GDK_IS_DMABUF_TEXTURE (texture))
