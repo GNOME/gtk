@@ -58,13 +58,16 @@ gdk_subsurface_get_parent (GdkSubsurface *subsurface)
 gboolean
 gdk_subsurface_attach (GdkSubsurface         *subsurface,
                        GdkTexture            *texture,
-                       const graphene_rect_t *rect)
+                       const graphene_rect_t *rect,
+                       gboolean               above,
+                       GdkSubsurface         *sibling)
 {
   g_return_val_if_fail (GDK_IS_SUBSURFACE (subsurface), FALSE);
   g_return_val_if_fail (GDK_IS_TEXTURE (texture), FALSE);
   g_return_val_if_fail (rect != NULL, FALSE);
+  g_return_val_if_fail (sibling == NULL || GDK_IS_SUBSURFACE (sibling), FALSE);
 
-  return GDK_SUBSURFACE_GET_CLASS (subsurface)->attach (subsurface, texture, rect);
+  return GDK_SUBSURFACE_GET_CLASS (subsurface)->attach (subsurface, texture, rect, above, sibling);
 }
 
 void
@@ -91,28 +94,6 @@ gdk_subsurface_get_rect (GdkSubsurface   *subsurface,
   g_return_if_fail (rect != NULL);
 
   GDK_SUBSURFACE_GET_CLASS (subsurface)->get_rect (subsurface, rect);
-}
-
-/* If sibling is NULL, place the subsurface above its parent */
-void
-gdk_subsurface_place_above (GdkSubsurface *subsurface,
-                            GdkSubsurface *sibling)
-{
-  g_return_if_fail (GDK_IS_SUBSURFACE (subsurface));
-  g_return_if_fail (sibling == NULL || GDK_IS_SUBSURFACE (sibling));
-
-  GDK_SUBSURFACE_GET_CLASS (subsurface)->place_above (subsurface, sibling);
-}
-
-/* If sibling is NULL, place the subsurface below its parent */
-void
-gdk_subsurface_place_below (GdkSubsurface *subsurface,
-                            GdkSubsurface *sibling)
-{
-  g_return_if_fail (GDK_IS_SUBSURFACE (subsurface));
-  g_return_if_fail (sibling == NULL || GDK_IS_SUBSURFACE (sibling));
-
-  GDK_SUBSURFACE_GET_CLASS (subsurface)->place_below (subsurface, sibling);
 }
 
 gboolean

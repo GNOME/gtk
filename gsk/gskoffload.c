@@ -588,8 +588,6 @@ gsk_offload_new (GdkSurface    *surface,
       info->subsurface = gdk_surface_get_subsurface (self->surface, i);
       info->was_offloaded = gdk_subsurface_get_texture (info->subsurface) != NULL;
       info->was_above = gdk_subsurface_is_above_parent (info->subsurface);
-      /* Stack them all below, initially */
-      gdk_subsurface_place_below (info->subsurface, NULL);
     }
 
   if (self->n_subsurfaces > 0)
@@ -609,12 +607,17 @@ gsk_offload_new (GdkSurface    *surface,
 
       if (info->can_offload)
         {
-          info->is_offloaded = gdk_subsurface_attach (info->subsurface,
-                                                      info->texture,
-                                                      &info->rect);
-
-          if (info->place_above)
-            gdk_subsurface_place_above (info->subsurface, info->place_above);
+          if (info->can_raise)
+            info->is_offloaded = gdk_subsurface_attach (info->subsurface,
+                                                        info->texture,
+                                                        &info->rect,
+                                                        TRUE, NULL);
+          else
+            info->is_offloaded = gdk_subsurface_attach (info->subsurface,
+                                                        info->texture,
+                                                        &info->rect,
+                                                        info->place_above != NULL,
+                                                        info->place_above);
         }
       else
         {
@@ -626,10 +629,9 @@ gsk_offload_new (GdkSurface    *surface,
             }
         }
 
-      if (info->can_raise)
+      if (info->is_offloaded && gdk_subsurface_is_above_parent (info->subsurface))
         {
           GDK_DISPLAY_DEBUG (display, OFFLOAD, "Raising subsurface %p", info->subsurface);
-          gdk_subsurface_place_above (info->subsurface, NULL);
           info->is_above = TRUE;
         }
     }

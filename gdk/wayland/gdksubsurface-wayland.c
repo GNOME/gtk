@@ -152,7 +152,9 @@ get_wl_buffer (GdkWaylandSubsurface *self,
 static gboolean
 gdk_wayland_subsurface_attach (GdkSubsurface         *sub,
                                GdkTexture            *texture,
-                               const graphene_rect_t *rect)
+                               const graphene_rect_t *rect,
+                               gboolean               above,
+                               GdkSubsurface         *sibling)
 {
   GdkWaylandSubsurface *self = GDK_WAYLAND_SUBSURFACE (sub);
   struct wl_buffer *buffer = NULL;
@@ -245,11 +247,14 @@ gdk_wayland_subsurface_attach (GdkSubsurface         *sub,
 
       if (buffer)
         {
+          GdkWaylandSubsurface *sib = sibling ? GDK_WAYLAND_SUBSURFACE (sibling) : NULL;
+
           wl_surface_attach (self->surface, buffer, 0, 0);
           wl_surface_damage_buffer (self->surface,
                                     0, 0,
                                     gdk_texture_get_width (texture),
                                     gdk_texture_get_height (texture));
+
         }
 
       result = TRUE;
@@ -259,6 +264,26 @@ gdk_wayland_subsurface_attach (GdkSubsurface         *sub,
       g_set_object (&self->texture, NULL);
 
       wl_surface_attach (self->surface, NULL, 0, 0);
+    }
+
+  if (sib)
+    {
+      if (above)
+        wl_subsurface_place_above (self->subsurface, sib->surface);
+      else
+        wl_subsurface_place_below (self->subsurface, sib->surface);
+
+      self->above_parent = sib->above_parent;
+    }
+  else
+    {
+      if (above)
+        wl_subsurface_place_above (self->subsurface,
+                                   GDK_WAYLAND_SURFACE (sub->parent)->display_server.wl_surface);
+      else
+        wl_subsurface_place_below (self->subsurface,
+                                   GDK_WAYLAND_SURFACE (sub->parent)->display_server.wl_surface);
+      self->above_parent = above;
     }
 
   wl_surface_commit (self->surface);
@@ -308,62 +333,6 @@ gdk_wayland_subsurface_get_rect (GdkSubsurface   *sub,
   rect->size.height = self->dest.height;
 }
 
-static void
-gdk_wayland_subsurface_place_above (GdkSubsurface *sub,
-                                    GdkSubsurface *sibling)
-{
-  GdkWaylandSubsurface *self = GDK_WAYLAND_SUBSURFACE (sub);
-  GdkWaylandSubsurface *sib = sibling ? GDK_WAYLAND_SUBSURFACE (sibling) : NULL;
-  gboolean above_parent;
-
-  g_return_if_fail (sibling == NULL || sub->parent == sibling->parent);
-
-  if (sib)
-    {
-      wl_subsurface_place_above (self->subsurface, sib->surface);
-      above_parent = sib->above_parent;
-    }
-  else
-    {
-      wl_subsurface_place_above (self->subsurface,
-                                 GDK_WAYLAND_SURFACE (sub->parent)->display_server.wl_surface);
-      above_parent = TRUE;
-    }
-
-  if (self->above_parent != above_parent)
-    self->above_parent = above_parent;
-
-  ((GdkWaylandSurface *)sub->parent)->has_pending_subsurface_commits = TRUE;
-}
-
-static void
-gdk_wayland_subsurface_place_below (GdkSubsurface *sub,
-                                    GdkSubsurface *sibling)
-{
-  GdkWaylandSubsurface *self = GDK_WAYLAND_SUBSURFACE (sub);
-  GdkWaylandSubsurface *sib = sibling ? GDK_WAYLAND_SUBSURFACE (sibling) : NULL;
-  gboolean above_parent;
-
-  g_return_if_fail (sibling == NULL || sub->parent == sibling->parent);
-
-  if (sib)
-    {
-      wl_subsurface_place_below (self->subsurface, sib->surface);
-      above_parent = sib->above_parent;
-    }
-  else
-    {
-      wl_subsurface_place_below (self->subsurface,
-                                 GDK_WAYLAND_SURFACE (sub->parent)->display_server.wl_surface);
-      above_parent = FALSE;
-    }
-
-  if (self->above_parent != above_parent)
-    self->above_parent = above_parent;
-
-  ((GdkWaylandSurface *)sub->parent)->has_pending_subsurface_commits = TRUE;
-}
-
 static gboolean
 gdk_wayland_subsurface_is_above_parent (GdkSubsurface *sub)
 {
@@ -384,8 +353,6 @@ gdk_wayland_subsurface_class_init (GdkWaylandSubsurfaceClass *class)
   subsurface_class->detach = gdk_wayland_subsurface_detach;
   subsurface_class->get_texture = gdk_wayland_subsurface_get_texture;
   subsurface_class->get_rect = gdk_wayland_subsurface_get_rect;
-  subsurface_class->place_above = gdk_wayland_subsurface_place_above;
-  subsurface_class->place_below = gdk_wayland_subsurface_place_below;
   subsurface_class->is_above_parent = gdk_wayland_subsurface_is_above_parent;
 };
 

@@ -50,15 +50,13 @@ struct _GdkSubsurfaceClass
 
   gboolean     (* attach)          (GdkSubsurface         *subsurface,
                                     GdkTexture            *texture,
-                                    const graphene_rect_t *rect);
+                                    const graphene_rect_t *rect,
+                                    gboolean               above,
+                                    GdkSubsurface         *sibling);
   void         (* detach)          (GdkSubsurface         *subsurface);
   GdkTexture * (* get_texture)     (GdkSubsurface         *subsurface);
   void         (* get_rect)        (GdkSubsurface         *subsurface,
                                     graphene_rect_t       *rect);
-  void         (* place_above)     (GdkSubsurface         *subsurface,
-                                    GdkSubsurface         *sibling);
-  void         (* place_below)     (GdkSubsurface         *subsurface,
-                                    GdkSubsurface         *sibling);
   gboolean     (* is_above_parent) (GdkSubsurface         *subsurface);
 };
 
@@ -67,15 +65,13 @@ GType           gdk_subsurface_get_type        (void) G_GNUC_CONST;
 GdkSurface *    gdk_subsurface_get_parent      (GdkSubsurface         *subsurface);
 gboolean        gdk_subsurface_attach          (GdkSubsurface         *subsurface,
                                                 GdkTexture            *texture,
-                                                const graphene_rect_t *rect);
+                                                const graphene_rect_t *rect,
+                                                gboolean               above,
+                                                GdkSubsurface         *sibling);
 void            gdk_subsurface_detach          (GdkSubsurface         *subsurface);
 GdkTexture *    gdk_subsurface_get_texture     (GdkSubsurface         *subsurface);
 void            gdk_subsurface_get_rect        (GdkSubsurface         *subsurface,
                                                 graphene_rect_t       *rect);
-void            gdk_subsurface_place_above     (GdkSubsurface         *subsurface,
-                                                GdkSubsurface         *sibling);
-void            gdk_subsurface_place_below     (GdkSubsurface         *subsurface,
-                                                GdkSubsurface         *sibling);
 gboolean        gdk_subsurface_is_above_parent (GdkSubsurface         *subsurface);
 
 
