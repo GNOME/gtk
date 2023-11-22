@@ -476,6 +476,7 @@ parse_node_file (GFile *file, const char *generate)
       g_clear_pointer (&region, cairo_region_destroy);
       g_clear_pointer (&reference_file, g_free);
       g_clear_pointer (&clip, cairo_region_destroy);
+      g_clear_pointer (&offload, gsk_offload_free);
       g_clear_pointer (&node2, gsk_render_node_unref);
     }
 
