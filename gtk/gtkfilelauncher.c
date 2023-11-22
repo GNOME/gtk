@@ -433,7 +433,11 @@ gtk_file_launcher_launch (GtkFileLauncher     *self,
 #ifndef G_OS_WIN32
   if (gtk_openuri_portal_is_available ())
     {
-      gtk_openuri_portal_open_async (self->file, FALSE, self->always_ask, parent, cancellable, open_done, task);
+      GtkOpenuriFlags flags = 0;
+
+      if (self->always_ask)
+        flags |= GTK_OPENURI_FLAGS_ASK;
+      gtk_openuri_portal_open_async (self->file, FALSE, flags, parent, cancellable, open_done, task);
     }
   else
 #endif
@@ -527,7 +531,9 @@ gtk_file_launcher_open_containing_folder (GtkFileLauncher     *self,
 #ifndef G_OS_WIN32
   if (gtk_openuri_portal_is_available ())
     {
-      gtk_openuri_portal_open_async (self->file, TRUE, FALSE, parent, cancellable, open_done, task);
+      GtkOpenuriFlags flags = 0;
+
+      gtk_openuri_portal_open_async (self->file, TRUE, flags, parent, cancellable, open_done, task);
     }
   else
 #endif
