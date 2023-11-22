@@ -46,6 +46,11 @@ GDK_AVAILABLE_IN_4_12
 void              gtk_file_launcher_set_always_ask               (GtkFileLauncher     *self,
                                                                   gboolean             always_ask);
 
+GDK_AVAILABLE_IN_4_14
+gboolean          gtk_file_launcher_get_writable                 (GtkFileLauncher     *self);
+GDK_AVAILABLE_IN_4_14
+void              gtk_file_launcher_set_writable                 (GtkFileLauncher     *self,
+                                                                  gboolean             writable);
 GDK_AVAILABLE_IN_4_10
 void             gtk_file_launcher_launch                        (GtkFileLauncher     *self,
                                                                   GtkWindow           *parent,
