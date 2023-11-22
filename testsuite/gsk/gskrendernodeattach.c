@@ -27,6 +27,8 @@ node_attach (const GskRenderNode *node,
              GdkSurface          *surface,
              int                 *idx)
 {
+  GskRenderNode *child, *res;
+
   switch (GSK_RENDER_NODE_TYPE (node))
     {
     case GSK_CAIRO_NODE:
@@ -45,67 +47,98 @@ node_attach (const GskRenderNode *node,
       return gsk_render_node_ref ((GskRenderNode *)node);
 
     case GSK_TRANSFORM_NODE:
-      return gsk_transform_node_new (node_attach (gsk_transform_node_get_child (node), surface, idx),
-                                     gsk_transform_node_get_transform (node));
+      child = node_attach (gsk_transform_node_get_child (node), surface, idx);
+      res = gsk_transform_node_new (child, gsk_transform_node_get_transform (node));
+      gsk_render_node_unref (child);
+      return res;
 
     case GSK_OPACITY_NODE:
-      return gsk_opacity_node_new (node_attach (gsk_opacity_node_get_child (node), surface, idx),
-                                   gsk_opacity_node_get_opacity (node));
+      child = node_attach (gsk_opacity_node_get_child (node), surface, idx);
+      res = gsk_opacity_node_new (child, gsk_opacity_node_get_opacity (node));
+      gsk_render_node_unref (child);
+      return res;
 
     case GSK_COLOR_MATRIX_NODE:
-      return gsk_color_matrix_node_new (node_attach (gsk_color_matrix_node_get_child (node), surface, idx),
+      child = node_attach (gsk_color_matrix_node_get_child (node), surface, idx);
+      res = gsk_color_matrix_node_new (child,
                                        gsk_color_matrix_node_get_color_matrix (node),
                                        gsk_color_matrix_node_get_color_offset (node));
+      gsk_render_node_unref (child);
+      return res;
 
     case GSK_REPEAT_NODE:
-      return gsk_repeat_node_new (&node->bounds,
-                                  node_attach (gsk_repeat_node_get_child (node), surface, idx),
-                                  gsk_repeat_node_get_child_bounds (node));
+      child = node_attach (gsk_repeat_node_get_child (node), surface, idx);
+      res = gsk_repeat_node_new (&node->bounds, child, gsk_repeat_node_get_child_bounds (node));
+      gsk_render_node_unref (child);
+      return res;
 
     case GSK_CONTAINER_NODE:
       {
         GskRenderNode **children = g_newa (GskRenderNode *, gsk_container_node_get_n_children (node));
         for (int i = 0; i < gsk_container_node_get_n_children (node); i++)
           children[i] = node_attach (gsk_container_node_get_child (node, i), surface, idx);
-        return gsk_container_node_new (children, gsk_container_node_get_n_children (node));
+        res = gsk_container_node_new (children, gsk_container_node_get_n_children (node));
+        for (int i = 0; i < gsk_container_node_get_n_children (node); i++)
+          gsk_render_node_unref (children[i]);
+        return res;
       }
 
     case GSK_CLIP_NODE:
-      return gsk_clip_node_new (node_attach (gsk_clip_node_get_child (node), surface, idx),
-                                gsk_clip_node_get_clip (node));
+      child = node_attach (gsk_clip_node_get_child (node), surface, idx);
+      res = gsk_clip_node_new (child, gsk_clip_node_get_clip (node));
+      gsk_render_node_unref (child);
+      return res;
 
     case GSK_ROUNDED_CLIP_NODE:
-      return gsk_rounded_clip_node_new (node_attach (gsk_rounded_clip_node_get_child (node), surface, idx),
-                                        gsk_rounded_clip_node_get_clip (node));
+      child = node_attach (gsk_rounded_clip_node_get_child (node), surface, idx);
+      res = gsk_rounded_clip_node_new (child, gsk_rounded_clip_node_get_clip (node));
+      gsk_render_node_unref (child);
+      return res;
 
     case GSK_SHADOW_NODE:
       {
         GskShadow *shadows = g_newa (GskShadow, gsk_shadow_node_get_n_shadows (node));
         for (int i = 0; i < gsk_shadow_node_get_n_shadows (node); i++)
           shadows[i] = *gsk_shadow_node_get_shadow (node, i);
-
-        return gsk_shadow_node_new (node_attach (gsk_shadow_node_get_child (node), surface, idx),
-                                    shadows,
-                                    gsk_shadow_node_get_n_shadows (node));
+        child = node_attach (gsk_shadow_node_get_child (node), surface, idx);
+        res = gsk_shadow_node_new (child, shadows, gsk_shadow_node_get_n_shadows (node));
+        gsk_render_node_unref (child);
+        return res;
       }
 
     case GSK_BLEND_NODE:
-      return gsk_blend_node_new (node_attach (gsk_blend_node_get_bottom_child (node), surface, idx),
-                                 node_attach (gsk_blend_node_get_top_child (node), surface, idx),
-                                 gsk_blend_node_get_blend_mode (node));
+      {
+        GskRenderNode *top, *bottom;
+        bottom = node_attach (gsk_blend_node_get_bottom_child (node), surface, idx);
+        top = node_attach (gsk_blend_node_get_top_child (node), surface, idx);
+        res = gsk_blend_node_new (bottom, top, gsk_blend_node_get_blend_mode (node));
+        gsk_render_node_unref (bottom);
+        gsk_render_node_unref (top);
+        return res;
+      }
 
     case GSK_CROSS_FADE_NODE:
-      return gsk_cross_fade_node_new (node_attach (gsk_cross_fade_node_get_start_child (node), surface, idx),
-                                      node_attach (gsk_cross_fade_node_get_end_child (node), surface, idx),
-                                      gsk_cross_fade_node_get_progress (node));
+      {
+        GskRenderNode *start, *end;
+        start = node_attach (gsk_cross_fade_node_get_start_child (node), surface, idx);
+        end = node_attach (gsk_cross_fade_node_get_end_child (node), surface, idx);
+        res = gsk_cross_fade_node_new (start, end, gsk_cross_fade_node_get_progress (node));
+        gsk_render_node_unref (start);
+        gsk_render_node_unref (end);
+        return res;
+      }
 
     case GSK_BLUR_NODE:
-      return gsk_blur_node_new (node_attach (gsk_blur_node_get_child (node), surface, idx),
-                                gsk_blur_node_get_radius (node));
+      child = node_attach (gsk_blur_node_get_child (node), surface, idx);
+      res = gsk_blur_node_new (child, gsk_blur_node_get_radius (node));
+      gsk_render_node_unref (child);
+      return res;
 
     case GSK_DEBUG_NODE:
-      return gsk_debug_node_new (node_attach (gsk_debug_node_get_child (node), surface, idx),
-                                 g_strdup (gsk_debug_node_get_message (node)));
+      child = node_attach (gsk_debug_node_get_child (node), surface, idx);
+      res = gsk_debug_node_new (child, g_strdup (gsk_debug_node_get_message (node)));
+      gsk_render_node_unref (child);
+      return res;
 
     case GSK_GL_SHADER_NODE:
       {
@@ -114,27 +147,42 @@ node_attach (const GskRenderNode *node,
         children = g_newa (GskRenderNode *, gsk_gl_shader_node_get_n_children (node));
         for (int i = 0; i < gsk_gl_shader_node_get_n_children (node); i++)
           children[i] = node_attach (gsk_gl_shader_node_get_child (node, i), surface, idx);
-        return gsk_gl_shader_node_new (gsk_gl_shader_node_get_shader (node),
-                                       &node->bounds,
-                                       gsk_gl_shader_node_get_args (node),
-                                       children,
-                                       gsk_gl_shader_node_get_n_children (node));
+        res = gsk_gl_shader_node_new (gsk_gl_shader_node_get_shader (node),
+                                      &node->bounds,
+                                      gsk_gl_shader_node_get_args (node),
+                                      children,
+                                      gsk_gl_shader_node_get_n_children (node));
+        for (int i = 0; i < gsk_gl_shader_node_get_n_children (node); i++)
+          gsk_render_node_unref (children[i]);
+        return res;
       }
 
     case GSK_MASK_NODE:
-      return gsk_mask_node_new (node_attach (gsk_mask_node_get_source (node), surface, idx),
-                                node_attach (gsk_mask_node_get_mask (node), surface, idx),
-                                gsk_mask_node_get_mask_mode (node));
+      {
+        GskRenderNode *source, *mask;
+        source = node_attach (gsk_mask_node_get_source (node), surface, idx);
+        mask = node_attach (gsk_mask_node_get_mask (node), surface, idx);
+        res = gsk_mask_node_new (source, mask, gsk_mask_node_get_mask_mode (node));
+        gsk_render_node_unref (source);
+        gsk_render_node_unref (mask);
+        return res;
+      }
 
     case GSK_FILL_NODE:
-      return gsk_fill_node_new (node_attach (gsk_fill_node_get_child (node), surface, idx),
-                                gsk_fill_node_get_path (node),
-                                gsk_fill_node_get_fill_rule (node));
+      child = node_attach (gsk_fill_node_get_child (node), surface, idx);
+      res = gsk_fill_node_new (child,
+                               gsk_fill_node_get_path (node),
+                               gsk_fill_node_get_fill_rule (node));
+      gsk_render_node_unref (child);
+      return res;
 
     case GSK_STROKE_NODE:
-      return gsk_stroke_node_new (node_attach (gsk_stroke_node_get_child (node), surface, idx),
-                                  gsk_stroke_node_get_path (node),
-                                  gsk_stroke_node_get_stroke (node));
+      child = node_attach (gsk_stroke_node_get_child (node), surface, idx);
+      res = gsk_stroke_node_new (child,
+                                 gsk_stroke_node_get_path (node),
+                                 gsk_stroke_node_get_stroke (node));
+      gsk_render_node_unref (child);
+      return res;
 
     case GSK_SUBSURFACE_NODE:
       {
@@ -149,8 +197,10 @@ node_attach (const GskRenderNode *node,
             subsurface = gdk_surface_get_subsurface (surface, *idx);
             (*idx)++;
           }
-        return gsk_subsurface_node_new (node_attach (gsk_subsurface_node_get_child (node), surface, idx),
-                                        subsurface);
+        child = node_attach (gsk_subsurface_node_get_child (node), surface, idx);
+        res = gsk_subsurface_node_new (child, subsurface);
+        gsk_render_node_unref (child);
+        return res;
       }
 
     case GSK_NOT_A_RENDER_NODE:
