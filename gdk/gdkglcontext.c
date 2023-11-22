@@ -351,6 +351,7 @@ gdk_gl_context_create_egl_context (GdkGLContext *context,
                      api == GDK_GL_API_GLES ? "yes" : "no");
 
   supported_versions = gdk_gl_versions_get_for_api (api);
+  ctx = EGL_NO_CONTEXT;
   for (j = 0; gdk_gl_version_greater_equal (&supported_versions[j], &version); j++)
     {
       context_attribs [major_idx] = gdk_gl_version_get_major (&supported_versions[j]);
@@ -360,11 +361,11 @@ gdk_gl_context_create_egl_context (GdkGLContext *context,
                               egl_config,
                               share ? share_priv->egl_context : EGL_NO_CONTEXT,
                               context_attribs);
-      if (ctx != NULL)
+      if (ctx != EGL_NO_CONTEXT)
         break;
     }
 
-  if (ctx == NULL)
+  if (ctx == EGL_NO_CONTEXT)
     return 0;
 
   GDK_DISPLAY_DEBUG (display, OPENGL, "Created EGL context[%p]", ctx);
