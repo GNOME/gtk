@@ -174,7 +174,7 @@ push_rect_clip (GskOffload           *self,
   Clip *clip = g_new0 (Clip, 1);
   clip->rect = *rect;
   clip->is_rectilinear = gsk_rounded_rect_is_rectilinear (rect);
-  clip->is_empty = rect->bounds.size.width == 0 && rect->bounds.size.height == 0;
+  clip->is_empty = (rect->bounds.size.width == 0 || rect->bounds.size.height == 0);
 
   self->clips = g_slist_prepend (self->clips, clip);
   self->current_clip = self->clips->data;

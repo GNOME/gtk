@@ -1812,7 +1812,7 @@ gdk_display_init_egl (GdkDisplay  *self,
       char *std_cfg = describe_egl_config (priv->egl_display, priv->egl_config);
       char *hd_cfg = describe_egl_config (priv->egl_display, priv->egl_config_high_depth);
       const char *path;
-      struct stat buf;
+      struct stat buf = { .st_rdev = 0, };
 
       path = find_egl_device (priv->egl_display);
       if (path)

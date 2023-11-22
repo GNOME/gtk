@@ -252,7 +252,7 @@ gdk_save_jpeg (GdkTexture *texture)
   gulong size = 0;
   guchar *input = NULL;
   GdkTextureDownloader downloader;
-  GBytes *texbytes;
+  GBytes *texbytes = NULL;
   const guchar *texdata;
   gsize texstride;
   guchar *row;
