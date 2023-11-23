@@ -421,22 +421,22 @@ get_drm_format_info (guint32 fourcc)
   return NULL;
 }
 
-GdkMemoryFormat
-gdk_dmabuf_get_memory_format (GdkDisplay *display,
-                              guint32     fourcc,
-                              gboolean    premultiplied)
+gboolean
+gdk_dmabuf_get_memory_format (guint32          fourcc,
+                              gboolean         premultiplied,
+                              GdkMemoryFormat *out_format)
 {
   const GdkDrmFormatInfo *info = get_drm_format_info (fourcc);
 
-  if (info)
-    return premultiplied ? info->premultiplied_memory_format
-                         : info->unpremultiplied_memory_format;
+  if (info == NULL)
+    return FALSE;
 
-  GDK_DISPLAY_DEBUG (display, DMABUF,
-                     "Falling back to generic ARGB for dmabuf format %.4s", (char *)&fourcc);
+  if (premultiplied)
+    *out_format = info->premultiplied_memory_format;
+  else
+    *out_format = info->unpremultiplied_memory_format;
 
-  return premultiplied ? GDK_MEMORY_A8R8G8B8_PREMULTIPLIED
-                       : GDK_MEMORY_A8R8G8B8;
+  return TRUE;
 }
 
 static gboolean
