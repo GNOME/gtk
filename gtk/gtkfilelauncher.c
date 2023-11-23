@@ -53,11 +53,13 @@ struct _GtkFileLauncher
 
   GFile *file;
   unsigned int always_ask : 1;
+  unsigned int writable   : 1;
 };
 
 enum {
   PROP_FILE = 1,
-  PROP_ALWAYS_ASK = 2,
+  PROP_ALWAYS_ASK,
+  PROP_WRITABLE,
 
   NUM_PROPERTIES
 };
@@ -99,6 +101,10 @@ gtk_file_launcher_get_property (GObject      *object,
       g_value_set_boolean (value, self->always_ask);
       break;
 
+    case PROP_WRITABLE:
+      g_value_set_boolean (value, self->writable);
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
       break;
@@ -121,6 +127,10 @@ gtk_file_launcher_set_property (GObject      *object,
 
     case PROP_ALWAYS_ASK:
       gtk_file_launcher_set_always_ask (self, g_value_get_boolean (value));
+      break;
+
+    case PROP_WRITABLE:
+      gtk_file_launcher_set_writable (self, g_value_get_boolean (value));
       break;
 
     default:
@@ -160,6 +170,18 @@ gtk_file_launcher_class_init (GtkFileLauncherClass *class)
    */
   properties[PROP_ALWAYS_ASK] =
       g_param_spec_boolean ("always-ask", NULL, NULL,
+                            FALSE,
+                            G_PARAM_READWRITE|G_PARAM_STATIC_STRINGS|G_PARAM_EXPLICIT_NOTIFY);
+
+  /**
+   * GtkFileLauncher:writable: (attributes org.gtk.Property.get=gtk_file_launcher_get_writable org.gtk.Property.set=gtk_file_launcher_set_writable)
+   *
+   * Whether to make the file writable for the handler.
+   *
+   * Since: 4.14
+   */
+  properties[PROP_WRITABLE] =
+      g_param_spec_boolean ("writable", NULL, NULL,
                             FALSE,
                             G_PARAM_READWRITE|G_PARAM_STATIC_STRINGS|G_PARAM_EXPLICIT_NOTIFY);
 
@@ -270,6 +292,47 @@ gtk_file_launcher_set_always_ask (GtkFileLauncher *self,
   self->always_ask = always_ask;
 
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_ALWAYS_ASK]);
+}
+
+/**
+ * gtk_file_launcher_get_writable:
+ * @self: a `GtkFileLauncher`
+ *
+ * Returns whether to make the file writable for the handler.
+ *
+ * Returns: `TRUE` if the file will be made writable
+ *
+ * Since: 4.14
+ */
+gboolean
+gtk_file_launcher_get_writable (GtkFileLauncher *self)
+{
+  g_return_val_if_fail (GTK_IS_FILE_LAUNCHER (self), FALSE);
+
+  return self->writable;
+}
+
+/**
+ * gtk_file_launcher_set_writable:
+ * @self: a `GtkFileLauncher`
+ * @writable: a `gboolean`
+ *
+ * Sets whether to make the file writable for the handler.
+ *
+ * Since: 4.14
+ */
+void
+gtk_file_launcher_set_writable (GtkFileLauncher *self,
+                                gboolean         writable)
+{
+  g_return_if_fail (GTK_IS_FILE_LAUNCHER (self));
+
+  if (self->writable == writable)
+    return;
+
+  self->writable = writable;
+
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_WRITABLE]);
 }
 
 /* }}} */
@@ -433,7 +496,15 @@ gtk_file_launcher_launch (GtkFileLauncher     *self,
 #ifndef G_OS_WIN32
   if (gtk_openuri_portal_is_available ())
     {
-      gtk_openuri_portal_open_async (self->file, FALSE, self->always_ask, parent, cancellable, open_done, task);
+      GtkOpenuriFlags flags = 0;
+
+      if (self->always_ask)
+        flags |= GTK_OPENURI_FLAGS_ASK;
+
+      if (self->writable)
+        flags |= GTK_OPENURI_FLAGS_WRITABLE;
+
+      gtk_openuri_portal_open_async (self->file, FALSE, flags, parent, cancellable, open_done, task);
     }
   else
 #endif
@@ -527,7 +598,9 @@ gtk_file_launcher_open_containing_folder (GtkFileLauncher     *self,
 #ifndef G_OS_WIN32
   if (gtk_openuri_portal_is_available ())
     {
-      gtk_openuri_portal_open_async (self->file, TRUE, FALSE, parent, cancellable, open_done, task);
+      GtkOpenuriFlags flags = 0;
+
+      gtk_openuri_portal_open_async (self->file, TRUE, flags, parent, cancellable, open_done, task);
     }
   else
 #endif
