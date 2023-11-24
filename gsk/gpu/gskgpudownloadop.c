@@ -90,6 +90,12 @@ gsk_gpu_download_op_vk_command (GskGpuOp              *op,
   GskGpuDownloadOp *self = (GskGpuDownloadOp *) op;
   gsize width, height, stride;
 
+#ifdef HAVE_DMABUF
+  self->texture = gsk_vulkan_image_to_dmabuf_texture (GSK_VULKAN_IMAGE (self->image));
+  if (self->texture)
+    return op->next;
+#endif
+
   width = gsk_gpu_image_get_width (self->image);
   height = gsk_gpu_image_get_height (self->image);
   stride = width * gdk_memory_format_bytes_per_pixel (gsk_gpu_image_get_format (self->image));

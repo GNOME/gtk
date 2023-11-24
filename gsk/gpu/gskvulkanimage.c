@@ -863,6 +863,197 @@ gsk_vulkan_image_new_for_offscreen (GskVulkanDevice *device,
 
 #ifdef HAVE_DMABUF
 GskGpuImage *
+gsk_vulkan_image_new_dmabuf (GskVulkanDevice *device,
+                             GdkMemoryFormat  format,
+                             gsize            width,
+                             gsize            height)
+{
+  VkDrmFormatModifierPropertiesEXT drm_mod_properties[100];
+  VkDrmFormatModifierPropertiesListEXT drm_properties;
+  uint64_t modifiers[100];
+  VkPhysicalDevice vk_phys_device;
+  VkDevice vk_device;
+  VkFormatProperties2 properties;
+  VkImageFormatProperties2 image_properties;
+  VkFormatFeatureFlags required;
+  const GskMemoryFormatInfo *format_info;
+  VkMemoryRequirements requirements;
+  GskVulkanImage *self;
+  VkResult res;
+  gsize i, n_modifiers;
+  gboolean can_blit;
+
+  if (!gsk_vulkan_device_has_feature (device, GDK_VULKAN_FEATURE_DMABUF))
+    return NULL;
+
+  vk_phys_device = gsk_vulkan_device_get_vk_physical_device (device);
+  vk_device = gsk_vulkan_device_get_vk_device (device);
+
+  drm_properties = (VkDrmFormatModifierPropertiesListEXT) {
+    .sType = VK_STRUCTURE_TYPE_DRM_FORMAT_MODIFIER_PROPERTIES_LIST_EXT,
+    .drmFormatModifierCount = G_N_ELEMENTS (drm_mod_properties),
+    .pDrmFormatModifierProperties = drm_mod_properties,
+  };
+  properties = (VkFormatProperties2) {
+    .sType = VK_STRUCTURE_TYPE_FORMAT_PROPERTIES_2,
+    .pNext = &drm_properties
+  };
+
+  required = VK_FORMAT_FEATURE_SAMPLED_IMAGE_BIT | VK_FORMAT_FEATURE_COLOR_ATTACHMENT_BLEND_BIT;
+
+  while (TRUE)
+    {
+      for (format_info = gsk_memory_format_get_vk_format_infos (format);
+           format_info != VK_FORMAT_UNDEFINED;
+           format_info++)
+        {
+          if (!gsk_memory_format_info_is_framebuffer_compatible (format_info))
+            continue;
+
+          vkGetPhysicalDeviceFormatProperties2 (vk_phys_device,
+                                                format_info->format,
+                                                &properties);
+
+          can_blit = TRUE;
+          n_modifiers = 0;
+          for (i = 0; i < drm_properties.drmFormatModifierCount; i++)
+            {
+              if ((drm_mod_properties[i].drmFormatModifierTilingFeatures & required) != required)
+                continue;
+
+              image_properties = (VkImageFormatProperties2) {
+                .sType = VK_STRUCTURE_TYPE_IMAGE_FORMAT_PROPERTIES_2,
+              };
+              res = vkGetPhysicalDeviceImageFormatProperties2 (vk_phys_device,
+                                                               &(VkPhysicalDeviceImageFormatInfo2) {
+                                                                 .sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_IMAGE_FORMAT_INFO_2,
+                                                                 .format = format_info->format,
+                                                                 .type = VK_IMAGE_TYPE_2D,
+                                                                 .tiling = VK_IMAGE_TILING_DRM_FORMAT_MODIFIER_EXT,
+                                                                 .usage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT,
+                                                                 .flags = 0,
+                                                                 .pNext = &(VkPhysicalDeviceImageDrmFormatModifierInfoEXT) {
+                                                                     .sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_IMAGE_DRM_FORMAT_MODIFIER_INFO_EXT,
+                                                                     .drmFormatModifier = drm_mod_properties[i].drmFormatModifier,
+                                                                     .sharingMode = VK_SHARING_MODE_EXCLUSIVE,
+                                                                     .queueFamilyIndexCount = 1,
+                                                                     .pQueueFamilyIndices = (uint32_t[1]) { gsk_vulkan_device_get_vk_queue_family_index (device) },
+                                                                  }
+                                                               },
+                                                               &image_properties);
+              if (res != VK_SUCCESS)
+                continue;
+
+              if (image_properties.imageFormatProperties.maxExtent.width < width ||
+                  image_properties.imageFormatProperties.maxExtent.height < height)
+                continue;
+
+              /* we could check the real used format after creation, but for now: */
+              if ((drm_mod_properties[i].drmFormatModifierTilingFeatures & VK_FORMAT_FEATURE_BLIT_SRC_BIT) == 0)
+                can_blit = FALSE;
+
+              modifiers[n_modifiers++] = drm_mod_properties[i].drmFormatModifier;
+            }
+
+          if (n_modifiers > 0)
+            break;
+        }
+
+      if (n_modifiers > 0)
+        break;
+
+      if (format == GDK_MEMORY_R8G8B8A8_PREMULTIPLIED)
+        return NULL;
+
+      format = gsk_memory_format_get_fallback (format);
+    }
+
+  self = g_object_new (GSK_TYPE_VULKAN_IMAGE, NULL);
+
+  self->display = g_object_ref (gsk_gpu_device_get_display (GSK_GPU_DEVICE (device)));
+  gdk_display_ref_vulkan (self->display);
+  self->vk_tiling = VK_IMAGE_TILING_DRM_FORMAT_MODIFIER_EXT;
+  self->vk_format = format_info->format;
+  self->vk_pipeline_stage = VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT;
+  self->vk_image_layout = VK_IMAGE_LAYOUT_UNDEFINED;
+  self->vk_access = 0;
+
+  gsk_gpu_image_setup (GSK_GPU_IMAGE (self),
+                       format_info->flags | GSK_GPU_IMAGE_EXTERNAL |
+                       (gdk_memory_format_alpha (format) == GDK_MEMORY_ALPHA_STRAIGHT ? GSK_GPU_IMAGE_STRAIGHT_ALPHA : 0) |
+                       (can_blit ? 0 : GSK_GPU_IMAGE_NO_BLIT),
+                       format,
+                       width, height);
+
+  res = vkCreateImage (vk_device,
+                       &(VkImageCreateInfo) {
+                           .sType = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO,
+                           .flags = 0,
+                           .imageType = VK_IMAGE_TYPE_2D,
+                           .format = format_info->format,
+                           .extent = { width, height, 1 },
+                           .mipLevels = 1,
+                           .arrayLayers = 1,
+                           .samples = VK_SAMPLE_COUNT_1_BIT,
+                           .tiling = VK_IMAGE_TILING_DRM_FORMAT_MODIFIER_EXT,
+                           .usage = VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT |
+                                    (can_blit ? 0 : VK_IMAGE_USAGE_TRANSFER_SRC_BIT),
+                           .sharingMode = VK_SHARING_MODE_EXCLUSIVE,
+                           .initialLayout = self->vk_image_layout,
+                           .pNext = &(VkExternalMemoryImageCreateInfo) {
+                               .sType = VK_STRUCTURE_TYPE_EXTERNAL_MEMORY_IMAGE_CREATE_INFO,
+                               .handleTypes = VK_EXTERNAL_MEMORY_HANDLE_TYPE_DMA_BUF_BIT_EXT,
+                               .pNext = &(VkImageDrmFormatModifierListCreateInfoEXT) {
+                                   .sType = VK_STRUCTURE_TYPE_IMAGE_DRM_FORMAT_MODIFIER_LIST_CREATE_INFO_EXT,
+                                   .drmFormatModifierCount = n_modifiers,
+                                   .pDrmFormatModifiers = modifiers
+                               }
+                           },
+                       },
+                       NULL,
+                       &self->vk_image);
+  if (res != VK_SUCCESS)
+    {
+      gsk_vulkan_handle_result (res, "vkCreateImage");
+      return NULL;
+    }
+
+  vkGetImageMemoryRequirements (vk_device,
+                                self->vk_image,
+                                &requirements);
+
+  self->allocator = gsk_vulkan_device_get_external_allocator (device);
+  gsk_vulkan_allocator_ref (self->allocator);
+
+  gsk_vulkan_alloc (self->allocator,
+                    requirements.size,
+                    requirements.alignment,
+                    &self->allocation);
+
+  GSK_VK_CHECK (vkAllocateMemory, vk_device,
+                                  &(VkMemoryAllocateInfo) {
+                                      .sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO,
+                                      .allocationSize = requirements.size,
+                                      .memoryTypeIndex = g_bit_nth_lsf (requirements.memoryTypeBits, -1),
+                                      .pNext = &(VkExportMemoryAllocateInfo) {
+                                          .sType = VK_STRUCTURE_TYPE_EXPORT_MEMORY_ALLOCATE_INFO,
+                                          .handleTypes = VK_EXTERNAL_MEMORY_HANDLE_TYPE_DMA_BUF_BIT_EXT,
+                                      }
+                                  },
+                                  NULL,
+                                  &self->allocation.vk_memory);
+
+  GSK_VK_CHECK (vkBindImageMemory, vk_device,
+                                   self->vk_image,
+                                   self->allocation.vk_memory,
+                                   self->allocation.offset);
+
+  gsk_vulkan_image_create_view (self, VK_NULL_HANDLE, format_info);
+
+  return GSK_GPU_IMAGE (self);
+}
+
+GskGpuImage *
 gsk_vulkan_image_new_for_dmabuf (GskVulkanDevice *device,
                                  GdkTexture      *texture)
 {
@@ -1128,6 +1319,128 @@ gsk_vulkan_image_new_for_dmabuf (GskVulkanDevice *device,
              is_yuv ? "YUV " : "");
 
   return GSK_GPU_IMAGE (self);
+}
+
+static void
+close_the_fd (gpointer the_fd)
+{
+  close (GPOINTER_TO_INT (the_fd));
+}
+
+static guint
+gsk_vulkan_image_get_n_planes (GskVulkanImage *self,
+                               guint64         modifier)
+{
+  VkDrmFormatModifierPropertiesEXT drm_mod_properties[100];
+  VkDrmFormatModifierPropertiesListEXT drm_properties = {
+    .sType = VK_STRUCTURE_TYPE_DRM_FORMAT_MODIFIER_PROPERTIES_LIST_EXT,
+    .drmFormatModifierCount = G_N_ELEMENTS (drm_mod_properties),
+    .pDrmFormatModifierProperties = drm_mod_properties,
+  };
+  VkFormatProperties2 properties = {
+    .sType = VK_STRUCTURE_TYPE_FORMAT_PROPERTIES_2,
+    .pNext = &drm_properties
+  };
+  gsize i;
+
+  vkGetPhysicalDeviceFormatProperties2 (self->display->vk_physical_device,
+                                        self->vk_format,
+                                        &properties);
+  
+  for (i = 0; i < drm_properties.drmFormatModifierCount; i++)
+    {
+      if (drm_mod_properties[i].drmFormatModifier == modifier)
+        return drm_mod_properties[i].drmFormatModifierPlaneCount;
+    }
+
+  g_return_val_if_reached (0);
+}
+
+GdkTexture *
+gsk_vulkan_image_to_dmabuf_texture (GskVulkanImage *self)
+{
+  GskGpuImage *image = GSK_GPU_IMAGE (self);
+  GdkDmabufTextureBuilder *builder;
+  GError *error = NULL;
+  PFN_vkGetImageDrmFormatModifierPropertiesEXT func_vkGetImageDrmFormatModifierPropertiesEXT;
+  PFN_vkGetMemoryFdKHR func_vkGetMemoryFdKHR;
+  VkImageDrmFormatModifierPropertiesEXT properties = {
+    .sType = VK_STRUCTURE_TYPE_IMAGE_DRM_FORMAT_MODIFIER_PROPERTIES_EXT,
+  };
+  VkSubresourceLayout layout;
+  GdkTexture *texture;
+  VkResult res;
+  guint32 fourcc;
+  int fd;
+  guint plane, n_planes;
+
+  if (!(gsk_gpu_image_get_flags (image) & GSK_GPU_IMAGE_EXTERNAL))
+    return FALSE;
+ 
+  fourcc = gdk_memory_format_get_dmabuf_fourcc (gsk_gpu_image_get_format (image));
+  if (fourcc == 0)
+    return FALSE;
+
+  func_vkGetImageDrmFormatModifierPropertiesEXT = (PFN_vkGetImageDrmFormatModifierPropertiesEXT)
+    vkGetDeviceProcAddr (self->display->vk_device, "vkGetImageDrmFormatModifierPropertiesEXT");
+  func_vkGetMemoryFdKHR = (PFN_vkGetMemoryFdKHR) vkGetDeviceProcAddr (self->display->vk_device, "vkGetMemoryFdKHR");
+  res = GSK_VK_CHECK (func_vkGetImageDrmFormatModifierPropertiesEXT, self->display->vk_device, self->vk_image, &properties);
+  if (res != VK_SUCCESS)
+    return FALSE;
+  n_planes = gsk_vulkan_image_get_n_planes (self, properties.drmFormatModifier);
+  if (n_planes == 0 || n_planes > GDK_DMABUF_MAX_PLANES)
+    return FALSE;
+  res = GSK_VK_CHECK (func_vkGetMemoryFdKHR, self->display->vk_device,
+                                             &(VkMemoryGetFdInfoKHR) {
+                                                 .sType = VK_STRUCTURE_TYPE_MEMORY_GET_FD_INFO_KHR,
+                                                 .memory = self->allocation.vk_memory,
+                                                 .handleType = VK_EXTERNAL_MEMORY_HANDLE_TYPE_DMA_BUF_BIT_EXT,
+                                             },
+                                             &fd);
+  if (res != VK_SUCCESS)
+    return FALSE;
+
+  builder = gdk_dmabuf_texture_builder_new ();
+  gdk_dmabuf_texture_builder_set_display (builder, self->display);
+  gdk_dmabuf_texture_builder_set_width (builder, gsk_gpu_image_get_width (image));
+  gdk_dmabuf_texture_builder_set_height (builder, gsk_gpu_image_get_height (image));
+  gdk_dmabuf_texture_builder_set_fourcc (builder, fourcc);
+  gdk_dmabuf_texture_builder_set_modifier (builder, properties.drmFormatModifier);
+  gdk_dmabuf_texture_builder_set_premultiplied (builder, !(gsk_gpu_image_get_flags (image) & GSK_GPU_IMAGE_STRAIGHT_ALPHA));
+  gdk_dmabuf_texture_builder_set_n_planes (builder, n_planes);
+  
+  for (plane = 0; plane < n_planes; plane++)
+    {
+      static const VkImageAspectFlagBits aspect[GDK_DMABUF_MAX_PLANES] = {
+        VK_IMAGE_ASPECT_MEMORY_PLANE_0_BIT_EXT,
+        VK_IMAGE_ASPECT_MEMORY_PLANE_1_BIT_EXT,
+        VK_IMAGE_ASPECT_MEMORY_PLANE_2_BIT_EXT,
+        VK_IMAGE_ASPECT_MEMORY_PLANE_3_BIT_EXT
+      };
+      vkGetImageSubresourceLayout (self->display->vk_device,
+                                   self->vk_image,
+                                   &(VkImageSubresource) {
+                                       .aspectMask = aspect[plane],
+                                       .mipLevel = 0,
+                                       .arrayLayer = 0
+                                   },
+                                   &layout);
+      gdk_dmabuf_texture_builder_set_fd (builder, plane, fd);
+      gdk_dmabuf_texture_builder_set_stride (builder, plane, layout.rowPitch);
+      gdk_dmabuf_texture_builder_set_offset (builder, plane, layout.offset);
+    }
+
+  texture = gdk_dmabuf_texture_builder_build (builder, close_the_fd, GINT_TO_POINTER (fd), &error);
+  g_object_unref (builder);
+  if (texture == NULL)
+    {
+      GDK_DEBUG (VULKAN, "Failed to create dmabuf texture: %s", error->message);
+      g_clear_error (&error);
+      close (fd);
+      return NULL;
+    }
+
+  return texture;
 }
 #endif
 
