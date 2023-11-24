@@ -31,8 +31,13 @@ GskGpuImage *           gsk_vulkan_image_new_for_upload                 (GskVulk
                                                                          gsize                   width,
                                                                          gsize                   height);
 #ifdef HAVE_DMABUF
+GskGpuImage *           gsk_vulkan_image_new_dmabuf                     (GskVulkanDevice        *device,
+                                                                         GdkMemoryFormat         format,
+                                                                         gsize                   width,
+                                                                         gsize                   height);
 GskGpuImage *           gsk_vulkan_image_new_for_dmabuf                 (GskVulkanDevice        *device,
                                                                          GdkTexture             *texture);
+GdkTexture *            gsk_vulkan_image_to_dmabuf_texture              (GskVulkanImage         *self);
 #endif
 
 guchar *                gsk_vulkan_image_get_data                       (GskVulkanImage         *self,
