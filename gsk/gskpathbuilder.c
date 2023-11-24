@@ -1414,7 +1414,6 @@ gsk_path_builder_svg_arc_to (GskPathBuilder *self,
 
   n_segs = ceil (fabs (delta_theta / (M_PI_2 + 0.001)));
   d_theta = delta_theta / n_segs;
-  theta = theta1;
   _sincos (theta1, &sin_th1, &cos_th1);
 
   th_half = d_theta / 2;

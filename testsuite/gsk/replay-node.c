@@ -38,7 +38,7 @@ replay_linear_gradient_node (GskRenderNode *node, GtkSnapshot *snapshot)
   graphene_rect_t bounds;
   const graphene_point_t *start_point, *end_point;
   const GskColorStop *stops;
-  gsize n_stops;
+  gsize n_stops = 0;
 
   gsk_render_node_get_bounds (node, &bounds);
   start_point = gsk_linear_gradient_node_get_start (node);
@@ -65,7 +65,7 @@ replay_radial_gradient_node (GskRenderNode *node, GtkSnapshot *snapshot)
   float vradius = gsk_radial_gradient_node_get_vradius (node);
   float start = gsk_radial_gradient_node_get_start (node);
   float end = gsk_radial_gradient_node_get_end (node);
-  gsize n_stops;
+  gsize n_stops = 0;
   const GskColorStop *stops = gsk_radial_gradient_node_get_color_stops (node,
                                                                         &n_stops);
 
@@ -86,7 +86,7 @@ replay_conic_gradient_node (GskRenderNode *node, GtkSnapshot *snapshot)
   gsk_render_node_get_bounds (node, &bounds);
   const graphene_point_t *center = gsk_conic_gradient_node_get_center (node);
   float rotation = gsk_conic_gradient_node_get_rotation (node);
-  gsize n_stops;
+  gsize n_stops = 0;
   const GskColorStop *stops = gsk_conic_gradient_node_get_color_stops (node,
                                                                        &n_stops);
 

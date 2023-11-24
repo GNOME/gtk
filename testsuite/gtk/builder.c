@@ -2000,7 +2000,6 @@ test_pango_attributes (void)
   /* Test errors are set */
   builder = gtk_builder_new ();
   gtk_builder_add_from_string (builder, err_buffer1, -1, &error);
-  label = gtk_builder_get_object (builder, "label1");
   g_assert_error (error, G_MARKUP_ERROR, G_MARKUP_ERROR_MISSING_ATTRIBUTE);
   g_object_unref (builder);
   g_error_free (error);
@@ -2008,8 +2007,6 @@ test_pango_attributes (void)
 
   builder = gtk_builder_new ();
   gtk_builder_add_from_string (builder, err_buffer2, -1, &error);
-  label = gtk_builder_get_object (builder, "label1");
-
   g_assert_error (error, G_MARKUP_ERROR, G_MARKUP_ERROR_UNKNOWN_ATTRIBUTE);
   g_object_unref (builder);
   g_error_free (error);
