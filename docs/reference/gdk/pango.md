@@ -1,4 +1,4 @@
- Title: Pango Interaction
+Title: Pango Interaction
 
 Pango is the text layout system used by GDK and GTK. The functions
 and types in this section are used to obtain clip regions for
