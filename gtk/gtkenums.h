@@ -41,10 +41,6 @@ G_BEGIN_DECLS
  * @GTK_ALIGN_START: snap to left or top side, leaving space on right or bottom
  * @GTK_ALIGN_END: snap to right or bottom side, leaving space on left or top
  * @GTK_ALIGN_CENTER: center natural width of widget inside the allocation
- * @GTK_ALIGN_BASELINE: align the widget according to the baseline.
- *   See [class@Gtk.Widget]. Deprecated: 4.12: Use `GTK_ALIGN_BASELINE_FILL` instead
- * @GTK_ALIGN_BASELINE_FILL: a different name for `GTK_ALIGN_BASELINE`. Since 4.12
- * @GTK_ALIGN_BASELINE_CENTER: stretch to fill all space, but align the baseline. Since 4.12
  *
  * Controls how a widget deals with extra space in a single dimension.
  *
@@ -62,6 +58,27 @@ G_BEGIN_DECLS
  * for vertical alignment. `GTK_ALIGN_BASELINE_CENTER and `GTK_ALIGN_BASELINE_FILL`
  * are treated similar to `GTK_ALIGN_CENTER` and `GTK_ALIGN_FILL`, except that it
  * positions the widget to line up the baselines, where that is supported.
+ */
+/**
+ * GTK_ALIGN_BASELINE:
+ *
+ * align the widget according to the baseline.
+ *
+ * Deprecated: 4.12: Use `GTK_ALIGN_BASELINE_FILL` instead
+ */
+/**
+ * GTK_ALIGN_BASELINE_FILL:
+ *
+ * a different name for `GTK_ALIGN_BASELINE`.
+ *
+ * Since: 4.12
+ */
+/**
+ * GTK_ALIGN_BASELINE_CENTER:
+ *
+ * stretch to fill all space, but align the baseline.
+ *
+ * Since: 4.12
  */
 typedef enum
 {
@@ -1356,29 +1373,65 @@ typedef enum {
  * @GTK_ACCESSIBLE_ROLE_WIDGET: Abstract role for interactive components of a
  *   graphical user interface
  * @GTK_ACCESSIBLE_ROLE_WINDOW: Abstract role for windows.
- * @GTK_ACCESSIBLE_ROLE_TOGGLE_BUTTON: A type of push button
- *   which stays pressed until depressed by a second activation.
- *   Since: 4.10
- * @GTK_ACCESSIBLE_ROLE_APPLICATION: A toplevel element of a graphical user interface.
- *   This is the role that GTK uses by default for windows.
- *   Since: 4.12
- * @GTK_ACCESSIBLE_ROLE_PARAGRAPH: A paragraph of content.
- *   Since: 4.14
- * @GTK_ACCESSIBLE_ROLE_BLOCK_QUOTE: A section of content that is quoted
- *   from another source.
- *   Since: 4.14
- * @GTK_ACCESSIBLE_ROLE_ARTICLE: A section of a page that consists of a
- *   composition that forms an independent part of a document, page, or site.
- *   Since: 4.14
- * @GTK_ACCESSIBLE_ROLE_COMMENT: A comment contains content expressing reaction
- *   to other content.
- *   Since: 4.14
  *
  * The accessible role for a [iface@Accessible] implementation.
  *
  * Abstract roles are only used as part of the ontology; application
  * developers must not use abstract roles in their code.
  */
+
+/**
+ * GTK_ACCESSIBLE_ROLE_TOGGLE_BUTTON:
+ *
+ * A type of push button which stays pressed until depressed by a second
+ * activation.
+ *
+ * Since: 4.10
+ */
+
+/**
+ * GTK_ACCESSIBLE_ROLE_APPLICATION:
+ *
+ * A toplevel element of a graphical user interface.
+ *
+ * This is the role that GTK uses by default for windows.
+ *
+ * Since: 4.12
+ */
+
+/**
+ * GTK_ACCESSIBLE_ROLE_PARAGRAPH:
+ *
+ * A paragraph of content.
+ *
+ * Since: 4.14
+ */
+
+/**
+ * GTK_ACCESSIBLE_ROLE_BLOCK_QUOTE:
+ *
+ * A section of content that is quoted from another source.
+ *
+ * Since: 4.14
+ */
+
+/**
+ * GTK_ACCESSIBLE_ROLE_ARTICLE:
+ *
+ * A section of a page that consists of a composition that forms an independent
+ * part of a document, page, or site.
+ *
+ * Since: 4.14
+ */
+
+/**
+ * GTK_ACCESSIBLE_ROLE_COMMENT:
+ *
+ * A comment contains content expressing reaction to other content.
+ *
+ * Since: 4.14
+ */
+
 typedef enum {
   GTK_ACCESSIBLE_ROLE_ALERT,
   GTK_ACCESSIBLE_ROLE_ALERT_DIALOG,
@@ -1489,12 +1542,17 @@ typedef enum {
  *   enumeration
  * @GTK_ACCESSIBLE_STATE_SELECTED: A “selected” state; set when a widget
  *   is selected. Value type: boolean or undefined
- * @GTK_ACCESSIBLE_STATE_VISITED: Indicates that a widget with the
- *   GTK_ACCESSIBLE_ROLE_LINK has been visited. Value type: boolean.
- *   Since: 4.12
  *
  * The possible accessible states of a [iface@Accessible].
  */
+/**
+  * GTK_ACCESSIBLE_STATE_VISITED:
+  *
+  * Indicates that a widget with the GTK_ACCESSIBLE_ROLE_LINK has been visited.
+  * Value type: boolean.
+  *
+  * Since: 4.12
+  */
 typedef enum {
   GTK_ACCESSIBLE_STATE_BUSY,
   GTK_ACCESSIBLE_STATE_CHECKED,

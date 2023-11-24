@@ -52,8 +52,6 @@ G_BEGIN_DECLS
  * @GTK_DEBUG_CONSTRAINTS: Information from the constraints solver
  * @GTK_DEBUG_BUILDER_OBJECTS: Log unused GtkBuilder objects
  * @GTK_DEBUG_A11Y: Information about accessibility state changes
- * @GTK_DEBUG_ICONFALLBACK: Information about icon fallback. Since: 4.2
- * @GTK_DEBUG_INVERT_TEXT_DIR: Inverts the default text-direction. Since: 4.8
  *
  * Flags to use with gtk_set_debug_flags().
  *
@@ -61,6 +59,23 @@ G_BEGIN_DECLS
  * types of debugging information. Some of these flags are
  * only available when GTK has been configured with `-Ddebug=true`.
  */
+
+/**
+ * GTK_DEBUG_ICONFALLBACK:
+ *
+ * Information about icon fallback.
+ *
+ * Since: 4.2
+ */
+
+/**
+ * GTK_DEBUG_INVERT_TEXT_DIR:
+ *
+ * Inverts the default text-direction.
+ *
+ * Since: 4.8
+ */
+
 typedef enum {
   GTK_DEBUG_TEXT            = 1 <<  0,
   GTK_DEBUG_TREE            = 1 <<  1,
