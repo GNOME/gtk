@@ -966,7 +966,7 @@ gsk_gl_render_job_update_clip (GskGLRenderJob        *job,
 
       /* The clip gets simpler for this node */
 
-      graphene_rect_intersection (&job->current_clip->rect.bounds, &transformed_bounds, &rect);
+      gsk_rect_intersection (&job->current_clip->rect.bounds, &transformed_bounds, &rect);
       gsk_gl_render_job_push_clip (job, &GSK_ROUNDED_RECT_INIT_FROM_RECT (rect));
 
       *pushed_clip = TRUE;
@@ -1653,9 +1653,9 @@ gsk_gl_render_job_visit_clipped_child (GskGLRenderJob        *job,
   if (job->current_clip->is_rectilinear)
     {
       memset (&intersection.corner, 0, sizeof intersection.corner);
-      graphene_rect_intersection (&transformed_clip,
-                                  &job->current_clip->rect.bounds,
-                                  &intersection.bounds);
+      gsk_rect_intersection (&transformed_clip,
+                             &job->current_clip->rect.bounds,
+                             &intersection.bounds);
 
       gsk_gl_render_job_push_clip (job, &intersection);
       gsk_gl_render_job_visit_node (job, child);
@@ -3793,7 +3793,7 @@ gsk_gl_render_job_visit_texture_scale_node (GskGLRenderJob      *job,
 
   gsk_gl_render_job_untransform_bounds (job, &job->current_clip->rect.bounds, &clip_rect);
 
-  if (!graphene_rect_intersection (bounds, &clip_rect, &clip_rect))
+  if (!gsk_rect_intersection (bounds, &clip_rect, &clip_rect))
     return;
 
   key.pointer = node;

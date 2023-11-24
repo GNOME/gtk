@@ -576,7 +576,7 @@ gsk_rounded_rect_intersect_with_rect (const GskRoundedRect  *self,
 {
   int px, py, qx, qy;
 
-  if (!graphene_rect_intersection (&self->bounds, rect, &result->bounds))
+  if (!gsk_rect_intersection (&self->bounds, rect, &result->bounds))
     return GSK_INTERSECTION_EMPTY;
 
   classify_point (&rect_point0 (rect), &rounded_rect_corner0 (self), &px, &py);
@@ -789,7 +789,7 @@ gsk_rounded_rect_intersection (const GskRoundedRect *a,
 {
   float top, left, bottom, right;
 
-  if (!graphene_rect_intersection (&a->bounds, &b->bounds, &result->bounds))
+  if (!gsk_rect_intersection (&a->bounds, &b->bounds, &result->bounds))
     return GSK_INTERSECTION_EMPTY;
 
   left = b->bounds.origin.x - a->bounds.origin.x;
@@ -913,6 +913,13 @@ gsk_rounded_rect_to_float (const GskRoundedRect   *self,
     }
 }
 
+static inline gboolean
+gsk_size_equal (const graphene_size_t *s1,
+                const graphene_size_t *s2)
+{
+  return s1->width == s2->width && s1->height == s2->height;
+}
+
 gboolean
 gsk_rounded_rect_equal (gconstpointer rect1,
                         gconstpointer rect2)
@@ -920,11 +927,11 @@ gsk_rounded_rect_equal (gconstpointer rect1,
   const GskRoundedRect *self1 = rect1;
   const GskRoundedRect *self2 = rect2;
 
-  return graphene_rect_equal (&self1->bounds, &self2->bounds)
-      && graphene_size_equal (&self1->corner[0], &self2->corner[0])
-      && graphene_size_equal (&self1->corner[1], &self2->corner[1])
-      && graphene_size_equal (&self1->corner[2], &self2->corner[2])
-      && graphene_size_equal (&self1->corner[3], &self2->corner[3]);
+  return gsk_rect_equal (&self1->bounds, &self2->bounds)
+      && gsk_size_equal (&self1->corner[0], &self2->corner[0])
+      && gsk_size_equal (&self1->corner[1], &self2->corner[1])
+      && gsk_size_equal (&self1->corner[2], &self2->corner[2])
+      && gsk_size_equal (&self1->corner[3], &self2->corner[3]);
 }
 
 char *
@@ -972,14 +979,14 @@ gsk_rounded_rect_get_largest_cover (const GskRoundedRect  *self,
   end = MAX(self->corner[GSK_CORNER_BOTTOM_LEFT].height, self->corner[GSK_CORNER_BOTTOM_RIGHT].height);
   wide.size.height -= MIN (wide.size.height, start + end);
   wide.origin.y += start;
-  graphene_rect_intersection (&wide, rect, &wide);
+  gsk_rect_intersection (&wide, rect, &wide);
 
   high = self->bounds;
   start = MAX(self->corner[GSK_CORNER_TOP_LEFT].width, self->corner[GSK_CORNER_BOTTOM_LEFT].width);
   end = MAX(self->corner[GSK_CORNER_TOP_RIGHT].width, self->corner[GSK_CORNER_BOTTOM_RIGHT].width);
   high.size.width -= MIN (high.size.width, start + end);
   high.origin.x += start;
-  graphene_rect_intersection (&high, rect, &high);
+  gsk_rect_intersection (&high, rect, &high);
 
   if (wide.size.width * wide.size.height > high.size.width * high.size.height)
     *result = wide;

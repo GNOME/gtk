@@ -77,7 +77,7 @@ _graphene_rect_init_from_clip_extents (graphene_rect_t *rect,
   double x1c, y1c, x2c, y2c;
 
   cairo_clip_extents (cr, &x1c, &y1c, &x2c, &y2c);
-  graphene_rect_init (rect, x1c, y1c, x2c - x1c, y2c - y1c);
+  gsk_rect_init (rect, x1c, y1c, x2c - x1c, y2c - y1c);
 }
 
 static void
@@ -195,7 +195,7 @@ gsk_color_node_new (const GdkRGBA         *rgba,
   node->offscreen_for_opacity = FALSE;
 
   self->color = *rgba;
-  graphene_rect_init_from_rect (&node->bounds, bounds);
+  gsk_rect_init_from_rect (&node->bounds, bounds);
 
   return node;
 }
@@ -381,7 +381,7 @@ gsk_linear_gradient_node_new (const graphene_rect_t  *bounds,
   node = (GskRenderNode *) self;
   node->offscreen_for_opacity = FALSE;
 
-  graphene_rect_init_from_rect (&node->bounds, bounds);
+  gsk_rect_init_from_rect (&node->bounds, bounds);
   graphene_point_init_from_point (&self->start, start);
   graphene_point_init_from_point (&self->end, end);
 
@@ -434,7 +434,7 @@ gsk_repeating_linear_gradient_node_new (const graphene_rect_t  *bounds,
   node = (GskRenderNode *) self;
   node->offscreen_for_opacity = FALSE;
 
-  graphene_rect_init_from_rect (&node->bounds, bounds);
+  gsk_rect_init_from_rect (&node->bounds, bounds);
   graphene_point_init_from_point (&self->start, start);
   graphene_point_init_from_point (&self->end, end);
 
@@ -726,7 +726,7 @@ gsk_radial_gradient_node_new (const graphene_rect_t  *bounds,
   node = (GskRenderNode *) self;
   node->offscreen_for_opacity = FALSE;
 
-  graphene_rect_init_from_rect (&node->bounds, bounds);
+  gsk_rect_init_from_rect (&node->bounds, bounds);
   graphene_point_init_from_point (&self->center, center);
 
   self->hradius = hradius;
@@ -795,7 +795,7 @@ gsk_repeating_radial_gradient_node_new (const graphene_rect_t  *bounds,
   node = (GskRenderNode *) self;
   node->offscreen_for_opacity = FALSE;
 
-  graphene_rect_init_from_rect (&node->bounds, bounds);
+  gsk_rect_init_from_rect (&node->bounds, bounds);
   graphene_point_init_from_point (&self->center, center);
 
   self->hradius = hradius;
@@ -1188,7 +1188,7 @@ gsk_conic_gradient_node_new (const graphene_rect_t  *bounds,
   node = (GskRenderNode *) self;
   node->offscreen_for_opacity = FALSE;
 
-  graphene_rect_init_from_rect (&node->bounds, bounds);
+  gsk_rect_init_from_rect (&node->bounds, bounds);
   graphene_point_init_from_point (&self->center, center);
 
   self->rotation = rotation;
@@ -1603,7 +1603,7 @@ gsk_border_node_new (const GskRoundedRect *outline,
   else
     self->uniform_color = FALSE;
 
-  graphene_rect_init_from_rect (&node->bounds, &self->outline.bounds);
+  gsk_rect_init_from_rect (&node->bounds, &self->outline.bounds);
 
   return node;
 }
@@ -1767,7 +1767,7 @@ gsk_texture_node_new (GdkTexture            *texture,
   node->offscreen_for_opacity = FALSE;
 
   self->texture = g_object_ref (texture);
-  graphene_rect_init_from_rect (&node->bounds, bounds);
+  gsk_rect_init_from_rect (&node->bounds, bounds);
 
   node->preferred_depth = gdk_memory_format_get_depth (gdk_texture_get_format (texture));
 
@@ -1985,7 +1985,7 @@ gsk_texture_scale_node_new (GdkTexture            *texture,
   node->offscreen_for_opacity = FALSE;
 
   self->texture = g_object_ref (texture);
-  graphene_rect_init_from_rect (&node->bounds, bounds);
+  gsk_rect_init_from_rect (&node->bounds, bounds);
   self->filter = filter;
 
   node->preferred_depth = gdk_memory_format_get_depth (gdk_texture_get_format (texture));
@@ -2459,7 +2459,7 @@ gsk_inset_shadow_node_new (const GskRoundedRect *outline,
   self->spread = spread;
   self->blur_radius = blur_radius;
 
-  graphene_rect_init_from_rect (&node->bounds, &self->outline.bounds);
+  gsk_rect_init_from_rect (&node->bounds, &self->outline.bounds);
 
   return node;
 }
@@ -2775,7 +2775,7 @@ gsk_outset_shadow_node_new (const GskRoundedRect *outline,
 
   gsk_outset_shadow_get_extents (self, &top, &right, &bottom, &left);
 
-  graphene_rect_init_from_rect (&node->bounds, &self->outline.bounds);
+  gsk_rect_init_from_rect (&node->bounds, &self->outline.bounds);
   node->bounds.origin.x -= left;
   node->bounds.origin.y -= top;
   node->bounds.size.width += left + right;
@@ -2973,7 +2973,7 @@ gsk_cairo_node_new (const graphene_rect_t *bounds)
   node = (GskRenderNode *) self;
   node->offscreen_for_opacity = FALSE;
 
-  graphene_rect_init_from_rect (&node->bounds, bounds);
+  gsk_rect_init_from_rect (&node->bounds, bounds);
 
   return node;
 }
@@ -3212,7 +3212,7 @@ gsk_container_node_new (GskRenderNode **children,
 
   if (n_children == 0)
     {
-      graphene_rect_init_from_rect (&node->bounds, graphene_rect_zero ());
+      gsk_rect_init_from_rect (&node->bounds, graphene_rect_zero ());
     }
   else
     {
@@ -3221,21 +3221,21 @@ gsk_container_node_new (GskRenderNode **children,
       self->children = g_malloc_n (n_children, sizeof (GskRenderNode *));
 
       self->children[0] = gsk_render_node_ref (children[0]);
-      graphene_rect_init_from_rect (&bounds, &(children[0]->bounds));
+      gsk_rect_init_from_rect (&bounds, &(children[0]->bounds));
       node->preferred_depth = gdk_memory_depth_merge (node->preferred_depth,
                                                       gsk_render_node_get_preferred_depth (children[0]));
 
       for (guint i = 1; i < n_children; i++)
         {
           self->children[i] = gsk_render_node_ref (children[i]);
-          self->disjoint = self->disjoint && !graphene_rect_intersection (&bounds, &(children[i]->bounds), NULL);
+          self->disjoint = self->disjoint && !gsk_rect_intersects (&bounds, &(children[i]->bounds));
           graphene_rect_union (&bounds, &(children[i]->bounds), &bounds);
           node->preferred_depth = gdk_memory_depth_merge (node->preferred_depth,
                                                           gsk_render_node_get_preferred_depth (children[i]));
           node->offscreen_for_opacity = node->offscreen_for_opacity || children[i]->offscreen_for_opacity;
         }
 
-      graphene_rect_init_from_rect (&node->bounds, &bounds);
+      gsk_rect_init_from_rect (&node->bounds, &bounds);
       node->offscreen_for_opacity = node->offscreen_for_opacity || !self->disjoint;
     }
 
@@ -3659,7 +3659,7 @@ gsk_opacity_node_new (GskRenderNode *child,
   self->child = gsk_render_node_ref (child);
   self->opacity = CLAMP (opacity, 0.0, 1.0);
 
-  graphene_rect_init_from_rect (&node->bounds, &child->bounds);
+  gsk_rect_init_from_rect (&node->bounds, &child->bounds);
 
   node->preferred_depth = gsk_render_node_get_preferred_depth (child);
 
@@ -3892,7 +3892,7 @@ gsk_color_matrix_node_new (GskRenderNode           *child,
   graphene_matrix_init_from_matrix (&self->color_matrix, color_matrix);
   graphene_vec4_init_from_vec4 (&self->color_offset, color_offset);
 
-  graphene_rect_init_from_rect (&node->bounds, &child->bounds);
+  gsk_rect_init_from_rect (&node->bounds, &child->bounds);
 
   node->preferred_depth = gsk_render_node_get_preferred_depth (child);
 
@@ -4052,14 +4052,14 @@ gsk_repeat_node_new (const graphene_rect_t *bounds,
   node = (GskRenderNode *) self;
   node->offscreen_for_opacity = TRUE;
 
-  graphene_rect_init_from_rect (&node->bounds, bounds);
+  gsk_rect_init_from_rect (&node->bounds, bounds);
 
   self->child = gsk_render_node_ref (child);
 
   if (child_bounds)
-    graphene_rect_init_from_rect (&self->child_bounds, child_bounds);
+    gsk_rect_init_from_rect (&self->child_bounds, child_bounds);
   else
-    graphene_rect_init_from_rect (&self->child_bounds, &child->bounds);
+    gsk_rect_init_from_rect (&self->child_bounds, &child->bounds);
 
   node->preferred_depth = gsk_render_node_get_preferred_depth (child);
 
@@ -4207,7 +4207,7 @@ gsk_clip_node_new (GskRenderNode         *child,
   self->child = gsk_render_node_ref (child);
   graphene_rect_normalize_r (clip, &self->clip);
 
-  graphene_rect_intersection (&self->clip, &child->bounds, &node->bounds);
+  gsk_rect_intersection (&self->clip, &child->bounds, &node->bounds);
 
   node->preferred_depth = gsk_render_node_get_preferred_depth (child);
 
@@ -4355,7 +4355,7 @@ gsk_rounded_clip_node_new (GskRenderNode         *child,
   self->child = gsk_render_node_ref (child);
   gsk_rounded_rect_init_copy (&self->clip, clip);
 
-  graphene_rect_intersection (&self->clip.bounds, &child->bounds, &node->bounds);
+  gsk_rect_intersection (&self->clip.bounds, &child->bounds, &node->bounds);
 
   node->preferred_depth = gsk_render_node_get_preferred_depth (child);
 
@@ -4535,9 +4535,9 @@ gsk_fill_node_new (GskRenderNode *child,
   self->fill_rule = fill_rule;
 
   if (gsk_path_get_bounds (path, &path_bounds))
-    graphene_rect_intersection (&path_bounds, &child->bounds, &node->bounds);
+    gsk_rect_intersection (&path_bounds, &child->bounds, &node->bounds);
   else
-    graphene_rect_init_from_rect (&node->bounds, graphene_rect_zero ());
+    gsk_rect_init (&node->bounds, 0.f, 0.f, 0.f, 0.f);
 
   return node;
 }
@@ -4743,9 +4743,9 @@ gsk_stroke_node_new (GskRenderNode   *child,
   gsk_stroke_init_copy (&self->stroke, stroke);
 
   if (gsk_path_get_stroke_bounds (self->path, &self->stroke, &stroke_bounds))
-    graphene_rect_intersection (&stroke_bounds, &child->bounds, &node->bounds);
+    gsk_rect_intersection (&stroke_bounds, &child->bounds, &node->bounds);
   else
-    graphene_rect_init_from_rect (&node->bounds, graphene_rect_zero ());
+    gsk_rect_init (&node->bounds, 0.f, 0.f, 0.f, 0.f);
 
   return node;
 }
@@ -4946,7 +4946,7 @@ gsk_shadow_node_get_bounds (GskShadowNode *self,
   float top = 0, right = 0, bottom = 0, left = 0;
   gsize i;
 
-  graphene_rect_init_from_rect (bounds, &self->child->bounds);
+  gsk_rect_init_from_rect (bounds, &self->child->bounds);
 
   for (i = 0; i < self->n_shadows; i++)
     {
@@ -5607,11 +5607,11 @@ gsk_text_node_new (PangoFont              *font,
   self->glyphs = glyph_infos;
   self->num_glyphs = n;
 
-  graphene_rect_init (&node->bounds,
-                      offset->x + ink_rect.x - 1,
-                      offset->y + ink_rect.y - 1,
-                      ink_rect.width + 2,
-                      ink_rect.height + 2);
+  gsk_rect_init (&node->bounds,
+                 offset->x + ink_rect.x - 1,
+                 offset->y + ink_rect.y - 1,
+                 ink_rect.width + 2,
+                 ink_rect.height + 2);
 
   return node;
 }
@@ -6010,10 +6010,8 @@ gsk_blur_node_new (GskRenderNode *child,
 
   clip_radius = gsk_cairo_blur_compute_pixels (radius / 2.0);
 
-  graphene_rect_init_from_rect (&node->bounds, &child->bounds);
-  graphene_rect_inset (&self->render_node.bounds,
-                       - clip_radius,
-                       - clip_radius);
+  gsk_rect_init_from_rect (&node->bounds, &child->bounds);
+  graphene_rect_inset (&self->render_node.bounds, - clip_radius, - clip_radius);
 
   node->preferred_depth = gsk_render_node_get_preferred_depth (child);
 
@@ -6404,7 +6402,7 @@ gsk_debug_node_new (GskRenderNode *child,
   self->child = gsk_render_node_ref (child);
   self->message = message;
 
-  graphene_rect_init_from_rect (&node->bounds, &child->bounds);
+  gsk_rect_init_from_rect (&node->bounds, &child->bounds);
 
   node->preferred_depth = gsk_render_node_get_preferred_depth (child);
 
@@ -6577,7 +6575,7 @@ gsk_gl_shader_node_new (GskGLShader           *shader,
   node = (GskRenderNode *) self;
   node->offscreen_for_opacity = TRUE;
 
-  graphene_rect_init_from_rect (&node->bounds, bounds);
+  gsk_rect_init_from_rect (&node->bounds, bounds);
   self->shader = g_object_ref (shader);
 
   self->args = g_bytes_ref (args);
@@ -6795,7 +6793,7 @@ gsk_subsurface_node_new (GskRenderNode *child,
   else
     self->subsurface = NULL;
 
-  graphene_rect_init_from_rect (&node->bounds, &child->bounds);
+  gsk_rect_init_from_rect (&node->bounds, &child->bounds);
 
   node->preferred_depth = gsk_render_node_get_preferred_depth (child);
 
