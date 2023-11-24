@@ -114,6 +114,15 @@ typedef enum
  */
 typedef enum
 {
+  /**
+   * GDK_NO_MODIFIER_MASK:
+   *
+   * No modifier.
+   *
+   * Since: 4.14
+   */
+  GDK_NO_MODIFIER_MASK GDK_AVAILABLE_ENUMERATOR_IN_4_14 = 0,
+
   GDK_SHIFT_MASK    = 1 << 0,
   GDK_LOCK_MASK     = 1 << 1,
   GDK_CONTROL_MASK  = 1 << 2,
