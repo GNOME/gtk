@@ -836,7 +836,8 @@ gsk_gl_driver_import_dmabuf_texture (GskGLDriver      *self,
 
   program = self->external;
 
-  gsk_gl_driver_create_render_target (self, width, height, GL_RGBA8, &render_target);
+  if (!gsk_gl_driver_create_render_target (self, width, height, GL_RGBA8, &render_target))
+    return texture_id;
 
   prev_fbo = gsk_gl_command_queue_bind_framebuffer (self->command_queue, render_target->framebuffer_id);
   gsk_gl_command_queue_clear (self->command_queue, 0, &GRAPHENE_RECT_INIT (0, 0, width, height));
