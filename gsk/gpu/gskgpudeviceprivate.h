@@ -37,6 +37,10 @@ struct _GskGpuDeviceClass
                                                                          GdkMemoryFormat         format,
                                                                          gsize                   width,
                                                                          gsize                   height);
+  GskGpuImage *         (* create_download_image)                       (GskGpuDevice           *self,
+                                                                         GdkMemoryDepth          depth,
+                                                                         gsize                   width,
+                                                                         gsize                   height);
 };
 
 GType                   gsk_gpu_device_get_type                         (void) G_GNUC_CONST;
@@ -59,6 +63,10 @@ GskGpuImage *           gsk_gpu_device_create_offscreen_image           (GskGpuD
 GskGpuImage *           gsk_gpu_device_create_upload_image              (GskGpuDevice           *self,
                                                                          gboolean                with_mipmap,
                                                                          GdkMemoryFormat         format,
+                                                                         gsize                   width,
+                                                                         gsize                   height);
+GskGpuImage *           gsk_gpu_device_create_download_image            (GskGpuDevice           *self,
+                                                                         GdkMemoryDepth          depth,
                                                                          gsize                   width,
                                                                          gsize                   height);
 

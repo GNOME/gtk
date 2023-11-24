@@ -201,11 +201,10 @@ gsk_gpu_renderer_fallback_render_texture (GskGpuRenderer        *self,
   depth = gsk_render_node_get_preferred_depth (root);
   do
     {
-      image = gsk_gpu_device_create_offscreen_image (priv->device,
-                                                     FALSE,
-                                                     gsk_render_node_get_preferred_depth (root),
-                                                     MIN (max_size, rounded_viewport->size.width),
-                                                     MIN (max_size, rounded_viewport->size.height));
+      image = gsk_gpu_device_create_download_image (priv->device,
+                                                    gsk_render_node_get_preferred_depth (root),
+                                                    MIN (max_size, rounded_viewport->size.width),
+                                                    MIN (max_size, rounded_viewport->size.height));
       max_size /= 2;
     }
   while (image == NULL);
@@ -226,11 +225,10 @@ gsk_gpu_renderer_fallback_render_texture (GskGpuRenderer        *self,
         {
           texture = NULL;
           if (image == NULL)
-            image = gsk_gpu_device_create_offscreen_image (priv->device,
-                                                           FALSE,
-                                                           depth,
-                                                           MIN (image_width, width - x),
-                                                           MIN (image_height, height - y));
+            image = gsk_gpu_device_create_download_image (priv->device,
+                                                          depth,
+                                                          MIN (image_width, width - x),
+                                                          MIN (image_height, height - y));
 
           frame = gsk_gpu_renderer_create_frame (self);
           gsk_gpu_frame_render (frame,
@@ -282,11 +280,10 @@ gsk_gpu_renderer_render_texture (GskRenderer           *renderer,
                                          viewport->origin.y,
                                          ceil (viewport->size.width),
                                          ceil (viewport->size.height));
-  image = gsk_gpu_device_create_offscreen_image (priv->device,
-                                                 FALSE,
-                                                 gsk_render_node_get_preferred_depth (root),
-                                                 rounded_viewport.size.width,
-                                                 rounded_viewport.size.height);
+  image = gsk_gpu_device_create_download_image (priv->device,
+                                                gsk_render_node_get_preferred_depth (root),
+                                                rounded_viewport.size.width,
+                                                rounded_viewport.size.height);
   if (image == NULL)
     return gsk_gpu_renderer_fallback_render_texture (self, root, &rounded_viewport);
 
