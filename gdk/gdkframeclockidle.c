@@ -589,7 +589,10 @@ gdk_frame_clock_paint_idle (void *data)
                 {
                   if (priv->phase != GDK_FRAME_CLOCK_PHASE_LAYOUT &&
                       (priv->requested & GDK_FRAME_CLOCK_PHASE_LAYOUT))
-                    timings->layout_start_time = g_get_monotonic_time ();
+                    {
+                      if (timings)
+                        timings->layout_start_time = g_get_monotonic_time ();
+                    }
                 }
 
               priv->phase = GDK_FRAME_CLOCK_PHASE_LAYOUT;
@@ -618,7 +621,10 @@ gdk_frame_clock_paint_idle (void *data)
                 {
                   if (priv->phase != GDK_FRAME_CLOCK_PHASE_PAINT &&
                       (priv->requested & GDK_FRAME_CLOCK_PHASE_PAINT))
-                    timings->paint_start_time = g_get_monotonic_time ();
+                    {
+                      if (timings)
+                        timings->paint_start_time = g_get_monotonic_time ();
+                    }
                 }
 
               priv->phase = GDK_FRAME_CLOCK_PHASE_PAINT;

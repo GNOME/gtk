@@ -553,7 +553,6 @@ update_statusbar (GtkStatusbar *statusbar)
       g_string_append_printf (string, " (%u directories remaining)", active + g_slist_length (pending));
       result = G_SOURCE_CONTINUE;
     }
-      result = G_SOURCE_CONTINUE;
 
   gtk_statusbar_push (statusbar, 0, string->str);
   g_free (string->str);
