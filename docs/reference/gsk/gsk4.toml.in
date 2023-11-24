@@ -62,4 +62,5 @@ content_images = [
   "images/stroke-miter.png",
   "images/stroke-round.png",
 ]
+content_base_url = "https://gitlab.gnome.org/GNOME/gtk/-/blob/main/docs/reference/gsk/"
 urlmap_file = "urlmap.js"
