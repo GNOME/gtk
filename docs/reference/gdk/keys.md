@@ -1,4 +1,4 @@
-Title: Key Values
+Title: Keyboard Codes, Groups, And Modifiers
 
 ## Functions for manipulating keyboard codes
 
@@ -8,19 +8,19 @@ The complete list of key values can be found in the [`gdk/gdkkeysyms.h`](https:/
 file.
 
 Key values are regularly updated from the upstream X.org X11 implementation,
-so new values are added regularly. They will be prefixed with GDK_KEY_ rather
-than XF86XK_ or XK_ (for older symbols).
+so new values are added regularly. They will be prefixed with `GDK_KEY_` rather
+than `XF86XK_` or `XK_` (for older symbols).
 
 Key values can be converted into a string representation using
-gdk_keyval_name(). The reverse function, converting a string to a key value,
-is provided by gdk_keyval_from_name().
+[`func@Gdk.keyval_name`]. The reverse function, converting a string to a key
+value, is provided by [`func@Gdk.keyval_from_name`].
 
-The case of key values can be determined using gdk_keyval_is_upper() and
-gdk_keyval_is_lower(). Key values can be converted to upper or lower case
-using gdk_keyval_to_upper() and gdk_keyval_to_lower().
+The case of key values can be determined using [`func@Gdk.keyval_is_upper`]
+and [`func@Gdk.keyval_is_lower`]. Key values can be converted to upper or lower
+case using [`func@Gdk.keyval_to_upper`] and [`func@Gdk.keyval_to_lower`].
 
-When it makes sense, key values can be converted to and from
-Unicode characters with gdk_keyval_to_unicode() and gdk_unicode_to_keyval().
+When it makes sense, key values can be converted to and from Unicode characters
+with [`func@Gdk.keyval_to_unicode`] and [`func@Gdk.unicode_to_keyval`].
 
 ## Key groups
 
@@ -36,23 +36,23 @@ You can think of a [struct@Gdk.KeymapKey] as a representation of a symbol
 printed on a physical keyboard key. That is, it contains three pieces of
 information:
 
-  1. first, it contains the hardware keycode; this is an identifying number
-    for a physical key
-  1. second, it contains the “level” of the key. The level indicates which
-    symbol on the key will be used, in a vertical direction. So on a standard
-    US keyboard, the key with the number “1“ on it also has the exclamation
-    point (”!”) character on it. The level indicates whether to use the “1”
-    or the “!” symbol. The letter keys are considered to have a lowercase
-    letter at level 0, and an uppercase letter at level 1, though normally
-    only the uppercase letter is printed on the key
-  1. third, the [struct@Gdk.KeymapKey] contains a group; groups are not used on
-     standard US keyboards, but are used in many other countries. On a
-     keyboard with groups, there can be 3 or 4 symbols printed on a single
-     key. The group indicates movement in a horizontal direction. Usually
-     groups are used for two different languages. In group 0, a key might
-     have two English characters, and in group 1 it might have two Hebrew
-     characters. The Hebrew characters will be printed on the key next to
-     the English characters.
+1. first, it contains the hardware keycode; this is an identifying number
+   for a physical key
+1. second, it contains the “level” of the key. The level indicates which
+   symbol on the key will be used, in a vertical direction. So on a standard
+   US keyboard, the key with the number “1“ on it also has the exclamation
+   point (”!”) character on it. The level indicates whether to use the “1”
+   or the “!” symbol. The letter keys are considered to have a lowercase
+   letter at level 0, and an uppercase letter at level 1, though normally
+   only the uppercase letter is printed on the key
+1. third, the [struct@Gdk.KeymapKey] contains a group; groups are not used on
+   standard US keyboards, but are used in many other countries. On a
+   keyboard with groups, there can be 3 or 4 symbols printed on a single
+   key. The group indicates movement in a horizontal direction. Usually
+   groups are used for two different languages. In group 0, a key might
+   have two English characters, and in group 1 it might have two Hebrew
+   characters. The Hebrew characters will be printed on the key next to
+   the English characters.
 
 When GDK creates a key event in order to deliver a key press or release,
 it first converts the current keyboard state into an effective group and
@@ -72,7 +72,7 @@ in the key event and can be obtained via [class@Gdk.KeyEvent] getters.
 ### Consumed modifiers
 
 The `consumed_modifiers` in a key event are modifiers that should be masked
-out from @state when comparing this key press to a hot key. For instance,
+out from `@state` when comparing this key press to a hot key. For instance,
 on a US keyboard, the `plus` symbol is shifted, so when comparing a key
 press to a `<Control>plus` accelerator `<Shift>` should be masked out.
 
@@ -91,9 +91,8 @@ if (keyval == GDK_PLUS &&
 ```
 
 An older interpretation of `consumed_modifiers` was that it contained
-all modifiers that might affect the translation of the key;
-this allowed accelerators to be stored with irrelevant consumed
-modifiers, by doing:
+all modifiers that might affect the translation of the key; this allowed
+accelerators to be stored with irrelevant consumed modifiers, by doing:
 
 ```c
 // XXX Don’t do this XXX
@@ -102,12 +101,11 @@ if (keyval == accel_keyval &&
   // Accelerator was pressed
 ```
 
-However, this did not work if multi-modifier combinations were
-used in the keymap, since, for instance, `<Control>` would be
-masked out even if only `<Control><Alt>` was used in
-the keymap. To support this usage as well as well as possible, all single
-modifier combinations that could affect the key for any combination
-of modifiers will be returned in `consumed_modifiers`; multi-modifier
-combinations are returned only when actually found in `state`. When
-you store accelerators, you should always store them with consumed
+However, this did not work if multi-modifier combinations were used in the
+keymap, since, for instance, `<Control>` would be masked out even if only
+`<Control><Alt>` was used in the keymap. To support this usage as well as
+well as possible, all single modifier combinations that could affect the key
+for any combination of modifiers will be returned in `consumed_modifiers`;
+multi-modifier combinations are returned only when actually found in `state`.
+When you store accelerators, you should always store them with consumed
 modifiers removed. Store `<Control>plus`, not `<Control><Shift>plus`.

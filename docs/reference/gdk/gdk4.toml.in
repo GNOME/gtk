@@ -107,4 +107,5 @@ content_images = [
   "images/popup-flip.png",
   "images/popup-slide.png",
 ]
+content_base_url = "https://gitlab.gnome.org/GNOME/gtk/-/blob/main/docs/reference/gdk/"
 urlmap_file = "urlmap.js"

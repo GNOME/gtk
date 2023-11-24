@@ -245,4 +245,5 @@ content_images = [
   "images/box-model-light.png",
   "images/box-model-dark.png",
 ]
+content_base_url = "https://gitlab.gnome.org/GNOME/gtk/-/blob/main/docs/reference/gtk/"
 urlmap_file = "urlmap.js"
