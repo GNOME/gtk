@@ -136,6 +136,11 @@
  *   <lookup name='search'>string_filter</lookup>
  * ```
  *
+ * Since the `<lookup>` element creates an expression and its element content can
+ * itself be an expression, this means that `<lookup>` tags can also be nested.
+ * This is a common idiom when dealing with `GtkListItem`s. See
+ * [class@Gtk.BuilderListItemFactory] for an example of this technique.
+ *
  * To create a constant expression, use the `<constant>` element. If the type attribute
  * is specified, the element content is interpreted as a value of that type. Otherwise,
  * it is assumed to be an object. For instance:
