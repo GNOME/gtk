@@ -392,6 +392,24 @@ gsk_vulkan_device_create_upload_image (GskGpuDevice    *device,
                                           height);
 }
 
+static GskGpuImage *
+gsk_vulkan_device_create_download_image (GskGpuDevice   *device,
+                                         GdkMemoryDepth  depth,
+                                         gsize           width,
+                                         gsize           height)
+{
+  GskVulkanDevice *self = GSK_VULKAN_DEVICE (device);
+  GskGpuImage *image;
+
+  image = gsk_vulkan_image_new_for_offscreen (self,
+                                              FALSE,
+                                              gdk_memory_depth_get_format (depth),
+                                              width,
+                                              height);
+
+  return image;
+}
+
 static void
 gsk_vulkan_device_finalize (GObject *object)
 {
@@ -459,6 +477,7 @@ gsk_vulkan_device_class_init (GskVulkanDeviceClass *klass)
   gpu_device_class->create_offscreen_image = gsk_vulkan_device_create_offscreen_image;
   gpu_device_class->create_atlas_image = gsk_vulkan_device_create_atlas_image;
   gpu_device_class->create_upload_image = gsk_vulkan_device_create_upload_image;
+  gpu_device_class->create_download_image = gsk_vulkan_device_create_download_image;
 
   object_class->finalize = gsk_vulkan_device_finalize;
 }

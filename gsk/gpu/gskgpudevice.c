@@ -454,6 +454,15 @@ gsk_gpu_device_create_upload_image (GskGpuDevice   *self,
   return GSK_GPU_DEVICE_GET_CLASS (self)->create_upload_image (self, with_mipmap, format, width, height);
 }
 
+GskGpuImage *
+gsk_gpu_device_create_download_image (GskGpuDevice   *self,
+                                      GdkMemoryDepth  depth,
+                                      gsize           width,
+                                      gsize           height)
+{
+  return GSK_GPU_DEVICE_GET_CLASS (self)->create_download_image (self, depth, width, height);
+}
+
 /* This rounds up to the next number that has <= 2 bits set:
  * 1, 2, 3, 4, 6, 8, 12, 16, 24, 32, 48, 64, 96, 128, ...
  * That is roughly sqrt(2), so it should limit waste
