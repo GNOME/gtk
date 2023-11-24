@@ -1265,6 +1265,14 @@ _gdk_macos_display_translate (GdkMacosDisplay *self,
           _gdk_macos_display_clear_sorting (self);
         }
     }
+  else if (is_motion_event(event_type))
+    {
+      NSWindow *orig_window = [nsevent window];
+
+      if (orig_window && GDK_IS_MACOS_WINDOW (orig_window))
+        [NSApp sendEvent:nsevent];
+    }
+
   return fill_event (self, window, nsevent, x, y);
 }
 
