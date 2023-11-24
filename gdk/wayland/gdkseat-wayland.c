@@ -4344,35 +4344,39 @@ _gdk_wayland_display_remove_seat (GdkWaylandDisplay *display_wayland,
 }
 
 uint32_t
-_gdk_wayland_seat_get_implicit_grab_serial (GdkSeat  *seat,
-                                            GdkEvent *event)
+_gdk_wayland_seat_get_implicit_grab_serial (GdkSeat          *seat,
+                                            GdkDevice        *device,
+                                            GdkEventSequence *sequence)
 {
-  GdkEventSequence *sequence = NULL;
-  GdkWaylandTouchData *touch = NULL;
-
-  if (event)
-    sequence = gdk_event_get_event_sequence (event);
+  GdkWaylandSeat *wayland_seat = GDK_WAYLAND_SEAT (seat);
+  GList *l;
 
   if (sequence)
-    touch = gdk_wayland_seat_get_touch (GDK_WAYLAND_SEAT (seat),
-                                        GDK_EVENT_SEQUENCE_TO_SLOT (sequence));
-
-  if (touch)
-    return touch->touch_down_serial;
-
-  if (event)
     {
-      GdkDevice *source = gdk_event_get_device (event);
-      GdkWaylandSeat *wayland_seat = GDK_WAYLAND_SEAT (seat);
-      GList *l;
+      GdkWaylandTouchData *touch = NULL;
 
-      for (l = wayland_seat->tablets; l; l = l->next)
-        {
-          GdkWaylandTabletData *tablet = l->data;
+      touch = gdk_wayland_seat_get_touch (GDK_WAYLAND_SEAT (seat),
+                                          GDK_EVENT_SEQUENCE_TO_SLOT (sequence));
+      if (touch)
+        return touch->touch_down_serial;
+    }
+  else if (device == wayland_seat->logical_touch)
+    {
+      GdkWaylandTouchData *touch;
+      GHashTableIter iter;
 
-          if (tablet->stylus_device == source)
-            return tablet->pointer_info.press_serial;
-        }
+      /* Pick the first sequence */
+      g_hash_table_iter_init (&iter, wayland_seat->touches);
+      g_hash_table_iter_next (&iter, NULL, (gpointer *) &touch);
+      return touch->touch_down_serial;
+    }
+
+  for (l = wayland_seat->tablets; l; l = l->next)
+    {
+      GdkWaylandTabletData *tablet = l->data;
+
+      if (tablet->logical_device == device)
+        return tablet->pointer_info.press_serial;
     }
 
   return GDK_WAYLAND_SEAT (seat)->pointer_info.press_serial;

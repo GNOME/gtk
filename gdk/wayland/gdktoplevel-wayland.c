@@ -1904,7 +1904,9 @@ gdk_wayland_toplevel_show_window_menu (GdkToplevel *toplevel,
   wl_seat = gdk_wayland_seat_get_wl_seat (seat);
   gdk_event_get_position (event, &x, &y);
 
-  serial = _gdk_wayland_seat_get_implicit_grab_serial (seat, event);
+  serial = _gdk_wayland_seat_get_implicit_grab_serial (seat,
+                                                       gdk_event_get_device (event),
+                                                       gdk_event_get_event_sequence (event));
 
   switch (display_wayland->shell_variant)
     {

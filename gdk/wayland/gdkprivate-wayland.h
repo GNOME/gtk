@@ -164,8 +164,9 @@ void        _gdk_wayland_display_remove_seat    (GdkWaylandDisplay       *displa
                                                  guint32                  id);
 
 GdkKeymap *_gdk_wayland_device_get_keymap (GdkDevice *device);
-uint32_t _gdk_wayland_seat_get_implicit_grab_serial(GdkSeat  *seat,
-                                                    GdkEvent *event);
+uint32_t _gdk_wayland_seat_get_implicit_grab_serial (GdkSeat          *seat,
+                                                     GdkDevice        *event,
+                                                     GdkEventSequence *sequence);
 uint32_t _gdk_wayland_seat_get_last_implicit_grab_serial (GdkWaylandSeat     *seat,
                                                           GdkEventSequence **sequence);
 GdkSurface * gdk_wayland_device_get_focus (GdkDevice *device);

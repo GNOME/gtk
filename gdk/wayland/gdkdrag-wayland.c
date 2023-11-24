@@ -397,7 +397,7 @@ _gdk_wayland_surface_drag_begin (GdkSurface         *surface,
                              drag_wayland->data_source,
                              gdk_wayland_surface_get_wl_surface (surface),
                              gdk_wayland_surface_get_wl_surface (drag_wayland->dnd_surface),
-                             _gdk_wayland_seat_get_implicit_grab_serial (seat, NULL));
+                             _gdk_wayland_seat_get_implicit_grab_serial (seat, device, NULL));
 
   cursor = gdk_drag_get_cursor (drag, gdk_drag_get_selected_action (drag));
   gdk_drag_set_cursor (drag, cursor);
