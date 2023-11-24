@@ -543,6 +543,100 @@ gdk_dmabuf_get_memory_format (guint32          fourcc,
   return TRUE;
 }
 
+gboolean
+gdk_dmabuf_get_fourcc (GdkMemoryFormat  format,
+                       guint32         *out_fourcc)
+{
+  /* we're not walking the list on purpose, so that we can keep track
+   * of exact matches here. Certain DRM formats map to the same memory
+   * format and we don't want the list to accidentally get mixed up.
+   */
+  switch (format)
+    {
+    case GDK_MEMORY_B8G8R8A8_PREMULTIPLIED:
+    case GDK_MEMORY_B8G8R8A8:
+      *out_fourcc = DRM_FORMAT_ARGB8888;
+      return TRUE;
+
+    case GDK_MEMORY_A8R8G8B8_PREMULTIPLIED:
+    case GDK_MEMORY_A8R8G8B8:
+      *out_fourcc = DRM_FORMAT_BGRA8888;
+      return TRUE;
+
+    case GDK_MEMORY_A8B8G8R8_PREMULTIPLIED:
+    case GDK_MEMORY_A8B8G8R8:
+      *out_fourcc = DRM_FORMAT_RGBA8888;
+      return TRUE;
+
+    case GDK_MEMORY_R8G8B8A8_PREMULTIPLIED:
+    case GDK_MEMORY_R8G8B8A8:
+      *out_fourcc = DRM_FORMAT_ABGR8888;
+      return TRUE;
+
+    case GDK_MEMORY_R8G8B8:
+      *out_fourcc = DRM_FORMAT_BGR888;
+      return TRUE;
+
+    case GDK_MEMORY_B8G8R8:
+      *out_fourcc = DRM_FORMAT_RGB888;
+      return TRUE;
+
+    case GDK_MEMORY_B8G8R8X8:
+      *out_fourcc = DRM_FORMAT_XRGB8888;
+      return TRUE;
+
+    case GDK_MEMORY_X8R8G8B8:
+      *out_fourcc = DRM_FORMAT_BGRX8888;
+      return TRUE;
+
+    case GDK_MEMORY_R8G8B8X8:
+      *out_fourcc = DRM_FORMAT_XBGR8888;
+      return TRUE;
+
+    case GDK_MEMORY_X8B8G8R8:
+      *out_fourcc = DRM_FORMAT_RGBX8888;
+      return TRUE;
+
+    case GDK_MEMORY_R16G16B16A16_FLOAT_PREMULTIPLIED:
+    case GDK_MEMORY_R16G16B16A16_FLOAT:
+      *out_fourcc = DRM_FORMAT_ABGR16161616F;
+      return TRUE;
+
+    case GDK_MEMORY_R16G16B16A16_PREMULTIPLIED:
+    case GDK_MEMORY_R16G16B16A16:
+      *out_fourcc = DRM_FORMAT_ABGR16161616;
+      return TRUE;
+
+    case GDK_MEMORY_G8:
+      *out_fourcc = DRM_FORMAT_R8;
+      return TRUE;
+
+    case GDK_MEMORY_G16:
+      *out_fourcc = DRM_FORMAT_R16;
+      return TRUE;
+
+    case GDK_MEMORY_R16G16B16:
+    case GDK_MEMORY_R16G16B16_FLOAT:
+    case GDK_MEMORY_R32G32B32_FLOAT:
+    case GDK_MEMORY_R32G32B32A32_FLOAT_PREMULTIPLIED:
+    case GDK_MEMORY_R32G32B32A32_FLOAT:
+    case GDK_MEMORY_G8A8_PREMULTIPLIED:
+    case GDK_MEMORY_G8A8:
+    case GDK_MEMORY_G16A16_PREMULTIPLIED:
+    case GDK_MEMORY_G16A16:
+    case GDK_MEMORY_A8:
+    case GDK_MEMORY_A16:
+    case GDK_MEMORY_A16_FLOAT:
+    case GDK_MEMORY_A32_FLOAT:
+      return FALSE;
+
+    case GDK_MEMORY_N_FORMATS:
+    default:
+      g_assert_not_reached ();
+      return FALSE;
+    }
+}
+
 static gboolean
 gdk_dmabuf_direct_downloader_add_formats (const GdkDmabufDownloader *downloader,
                                           GdkDisplay                *display,
