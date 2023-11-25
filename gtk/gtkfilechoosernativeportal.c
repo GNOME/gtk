@@ -23,24 +23,16 @@
 #include "gtknativedialogprivate.h"
 
 #include "gtkprivate.h"
-#include "gtkfilechooserdialog.h"
+#include "gtkdialog.h"
 #include "gtkfilechooserprivate.h"
-#include "gtkfilechooserwidget.h"
-#include "gtkfilechooserwidgetprivate.h"
-#include "gtkfilechooserutils.h"
-#include "gtkfilechooserembed.h"
-#include "gtkfilesystem.h"
+#include "gtkinvisible.h"
 #include "gtksizerequest.h"
 #include "gtktypebuiltins.h"
-#include "gtkintl.h"
 #include "gtksettings.h"
 #include "gtktogglebutton.h"
-#include "gtkstylecontext.h"
 #include "gtkheaderbar.h"
 #include "gtklabel.h"
 #include "gtkmain.h"
-#include "gtkinvisible.h"
-#include "gtkfilechooserentry.h"
 #include "gtkfilefilterprivate.h"
 #include "gtkwindowprivate.h"
 
@@ -63,36 +55,51 @@ typedef struct {
 
 
 static void
-filechooser_portal_data_free (FilechooserPortalData *data)
+filechooser_portal_data_clear (FilechooserPortalData *data)
 {
   if (data->portal_response_signal_id != 0)
-    g_dbus_connection_signal_unsubscribe (data->connection,
-                                          data->portal_response_signal_id);
+    {
+      g_dbus_connection_signal_unsubscribe (data->connection,
+                                            data->portal_response_signal_id);
+      data->portal_response_signal_id = 0;
+    }
 
-  g_object_unref (data->connection);
+  g_clear_object (&data->connection);
 
   if (data->grab_widget)
     {
       gtk_grab_remove (data->grab_widget);
       gtk_widget_destroy (data->grab_widget);
+      data->grab_widget = NULL;
     }
 
   g_clear_object (&data->self);
 
   if (data->exported_window)
-    gtk_window_unexport_handle (data->exported_window);
+    {
+      gtk_window_unexport_handle (data->exported_window);
+      data->exported_window = NULL;
+    }
 
-  g_free (data->portal_handle);
+  g_clear_pointer (&data->portal_handle, g_free);
+}
 
-  g_free (data);
+static void
+filechooser_portal_data_free (FilechooserPortalData *data)
+{
+  if (data != NULL)
+    {
+      filechooser_portal_data_clear (data);
+      g_free (data);
+    }
 }
 
 static void
 response_cb (GDBusConnection  *connection,
-             const gchar      *sender_name,
-             const gchar      *object_path,
-             const gchar      *interface_name,
-             const gchar      *signal_name,
+             const char       *sender_name,
+             const char       *object_path,
+             const char       *interface_name,
+             const char       *signal_name,
              GVariant         *parameters,
              gpointer          user_data)
 {
@@ -126,7 +133,7 @@ response_cb (GDBusConnection  *connection,
   if (current_filter)
     {
       GtkFileFilter *filter = gtk_file_filter_new_from_gvariant (current_filter);
-      const gchar *current_filter_name = gtk_file_filter_get_name (filter);
+      const char *current_filter_name = gtk_file_filter_get_name (filter);
 
       /* Try to find  the given filter in the list of filters.
        * Since filters are compared by pointer value, using the passed
@@ -157,6 +164,10 @@ response_cb (GDBusConnection  *connection,
   self->custom_files = NULL;
   for (i = 0; uris[i]; i++)
     self->custom_files = g_slist_prepend (self->custom_files, g_file_new_for_uri (uris[i]));
+  self->custom_files = g_slist_reverse (self->custom_files);
+
+  g_free (uris);
+  g_variant_unref (response_data);
 
   switch (portal_response)
     {
@@ -172,10 +183,18 @@ response_cb (GDBusConnection  *connection,
       break;
     }
 
+  /* Keep a reference on the native dialog until we can emit the response
+   * signal; filechooser_portal_data_free() will drop a reference on the
+   * dialog as well
+   */
+  g_object_ref (self);
+
   filechooser_portal_data_free (data);
   self->mode_data = NULL;
 
   _gtk_native_dialog_emit_response (GTK_NATIVE_DIALOG (self), gtk_response);
+
+  g_object_unref (self);
 }
 
 static void
@@ -220,11 +239,11 @@ open_file_msg_cb (GObject *source_object,
   if (reply == NULL)
     {
       if (!data->hidden)
-        _gtk_native_dialog_emit_response (GTK_NATIVE_DIALOG (self), GTK_RESPONSE_DELETE_EVENT);
-      g_warning ("Can't open portal file chooser: %s", error->message);
+        {
+          filechooser_portal_data_free (data);
+          self->mode_data = NULL;
+        }
       g_error_free (error);
-      filechooser_portal_data_free (data);
-      self->mode_data = NULL;
       return;
     }
 
@@ -233,7 +252,6 @@ open_file_msg_cb (GObject *source_object,
   if (data->hidden)
     {
       /* The dialog was hidden before we got the handle, close it now */
-      send_close (data);
       filechooser_portal_data_free (data);
       self->mode_data = NULL;
     }
@@ -374,7 +392,7 @@ show_portal_file_chooser (GtkFileChooserNative *self,
                            g_variant_new_string (GTK_FILE_CHOOSER_NATIVE (self)->current_name));
   if (self->current_folder)
     {
-      gchar *path;
+      char *path;
 
       path = g_file_get_path (GTK_FILE_CHOOSER_NATIVE (self)->current_folder);
       g_variant_builder_add (&opt_builder, "{sv}", "current_folder",
@@ -383,7 +401,7 @@ show_portal_file_chooser (GtkFileChooserNative *self,
     }
   if (self->current_file)
     {
-      gchar *path;
+      char *path;
 
       path = g_file_get_path (GTK_FILE_CHOOSER_NATIVE (self)->current_file);
       g_variant_builder_add (&opt_builder, "{sv}", "current_file",
@@ -516,10 +534,11 @@ gtk_file_chooser_native_portal_hide (GtkFileChooserNative *self)
   data->hidden = TRUE;
 
   if (data->portal_handle)
-    {
-      send_close (data);
-      filechooser_portal_data_free (data);
-    }
+    send_close (data);
 
+  /* We clear the data because we might have in-flight async
+   * operations that can still access it
+   */
+  filechooser_portal_data_clear (data);
   self->mode_data = NULL;
 }
