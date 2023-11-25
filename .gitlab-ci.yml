@@ -103,9 +103,8 @@ fedora-x86_64:
             ${FEATURE_FLAGS}
             _build
     - meson compile -C _build
-    # only run tests that are likely affected by test setups
-    - .gitlab-ci/run-tests.sh _build wayland_gl gtk:gdk,gtk:gsk-gl
-    - .gitlab-ci/run-tests.sh _build wayland_gles2 gtk:gdk,gtk:gsk-gl
+    - .gitlab-ci/run-tests.sh _build wayland_gl gtk:gdk,gtk:gsk
+    - .gitlab-ci/run-tests.sh _build wayland_gles2 gtk:gdk,gtk:gsk
 
 release-build:
   extends: .build-fedora-default
@@ -130,9 +129,8 @@ release-build:
     - meson install -C _build
     - PKG_CONFIG_PATH=${CI_PROJECT_DIR}/_install/lib64/pkgconfig:${CI_PROJECT_DIR}/_install/share/pkgconfig meson setup _build_hello examples/hello
     - LD_LIBRARY_PATH=${CI_PROJECT_DIR}/_install/lib64 meson compile -C _build_hello
-    #  this is our full test run with the default setup
     - .gitlab-ci/run-tests.sh _build wayland gtk:gtk
-    - .gitlab-ci/run-tests.sh _build x11 gtk:gdk,gtk:gsk-gl
+    - .gitlab-ci/run-tests.sh _build x11 gtk:gtk
 
 fedora-clang:
   extends: .build-fedora-default
