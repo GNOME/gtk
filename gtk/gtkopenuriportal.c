@@ -237,10 +237,9 @@ send_close (OpenUriData *data)
   GError *error = NULL;
 
   message = g_dbus_message_new_method_call (PORTAL_BUS_NAME,
-                                            PORTAL_OBJECT_PATH,
+                                            data->handle,
                                             PORTAL_REQUEST_INTERFACE,
                                             "Close");
-  g_dbus_message_set_body (message, g_variant_new ("(o)", data->handle));
 
   if (!g_dbus_connection_send_message (data->connection,
                                        message,
