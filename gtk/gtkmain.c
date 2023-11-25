@@ -1696,7 +1696,7 @@ gtk_main_do_event (GdkEvent *event)
       {
         GdkDrop *drop = gdk_dnd_event_get_drop (event);
         gtk_drop_begin_event (drop, gdk_event_get_event_type (event));
-        gtk_propagate_event (target_widget, event);
+        gtk_propagate_event (grab_widget, event);
         gtk_drop_end_event (drop);
       }
       break;

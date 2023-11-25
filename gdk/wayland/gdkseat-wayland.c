@@ -345,7 +345,6 @@ data_device_enter (void                  *data,
   GdkWaylandSeat *seat = data;
   GdkSurface *dest_surface;
   GdkContentFormats *formats;
-  int origin_x, origin_y;
   GdkDevice *device;
 
   dest_surface = wl_surface_get_user_data (surface);
@@ -392,12 +391,10 @@ data_device_enter (void                  *data,
 
   gdk_wayland_seat_discard_pending_offer (seat);
 
-  gdk_surface_get_origin (gdk_drop_get_surface (seat->drop), &origin_x, &origin_y);
-
   gdk_drop_emit_enter_event (seat->drop,
                              FALSE,
-                             origin_x + seat->pointer_info.surface_x,
-                             origin_y + seat->pointer_info.surface_y,
+                             seat->pointer_info.surface_x,
+                             seat->pointer_info.surface_y,
                              GDK_CURRENT_TIME);
 }
 
@@ -431,7 +428,6 @@ data_device_motion (void                  *data,
                     wl_fixed_t             y)
 {
   GdkWaylandSeat *seat = data;
-  int origin_x, origin_y;
 
   GDK_SEAT_DEBUG (seat, EVENTS,
                   "data device motion, data_device = %p, time = %d, x = %f, y = %f",
@@ -444,12 +440,10 @@ data_device_motion (void                  *data,
   seat->pointer_info.surface_x = wl_fixed_to_double (x);
   seat->pointer_info.surface_y = wl_fixed_to_double (y);
 
-  gdk_surface_get_origin (gdk_drop_get_surface (seat->drop), &origin_x, &origin_y);
-
   gdk_drop_emit_motion_event (seat->drop,
                               FALSE,
-                              origin_x + seat->pointer_info.surface_x,
-                              origin_y + seat->pointer_info.surface_y,
+                              seat->pointer_info.surface_x,
+                              seat->pointer_info.surface_y,
                               time);
 }
 
@@ -458,17 +452,14 @@ data_device_drop (void                  *data,
                   struct wl_data_device *data_device)
 {
   GdkWaylandSeat *seat = data;
-  int origin_x, origin_y;
 
   GDK_SEAT_DEBUG (seat, EVENTS,
                   "data device drop, data device %p", data_device);
 
-  gdk_surface_get_origin (gdk_drop_get_surface (seat->drop), &origin_x, &origin_y);
-
   gdk_drop_emit_drop_event (seat->drop,
                             FALSE,
-                            origin_x + seat->pointer_info.surface_x,
-                            origin_y + seat->pointer_info.surface_y,
+                            seat->pointer_info.surface_x,
+                            seat->pointer_info.surface_y,
                             GDK_CURRENT_TIME);
 }
 
@@ -4330,35 +4321,39 @@ _gdk_wayland_display_remove_seat (GdkWaylandDisplay *display_wayland,
 }
 
 uint32_t
-_gdk_wayland_seat_get_implicit_grab_serial (GdkSeat  *seat,
-                                            GdkEvent *event)
+_gdk_wayland_seat_get_implicit_grab_serial (GdkSeat          *seat,
+                                            GdkDevice        *device,
+                                            GdkEventSequence *sequence)
 {
-  GdkEventSequence *sequence = NULL;
-  GdkWaylandTouchData *touch = NULL;
-
-  if (event)
-    sequence = gdk_event_get_event_sequence (event);
+  GdkWaylandSeat *wayland_seat = GDK_WAYLAND_SEAT (seat);
+  GList *l;
 
   if (sequence)
-    touch = gdk_wayland_seat_get_touch (GDK_WAYLAND_SEAT (seat),
-                                        GDK_EVENT_SEQUENCE_TO_SLOT (sequence));
-
-  if (touch)
-    return touch->touch_down_serial;
-
-  if (event)
     {
-      GdkDevice *source = gdk_event_get_device (event);
-      GdkWaylandSeat *wayland_seat = GDK_WAYLAND_SEAT (seat);
-      GList *l;
+      GdkWaylandTouchData *touch = NULL;
 
-      for (l = wayland_seat->tablets; l; l = l->next)
-        {
-          GdkWaylandTabletData *tablet = l->data;
+      touch = gdk_wayland_seat_get_touch (GDK_WAYLAND_SEAT (seat),
+                                          GDK_EVENT_SEQUENCE_TO_SLOT (sequence));
+      if (touch)
+        return touch->touch_down_serial;
+    }
+  else if (device == wayland_seat->logical_touch)
+    {
+      GdkWaylandTouchData *touch;
+      GHashTableIter iter;
 
-          if (tablet->stylus_device == source)
-            return tablet->pointer_info.press_serial;
-        }
+      /* Pick the first sequence */
+      g_hash_table_iter_init (&iter, wayland_seat->touches);
+      g_hash_table_iter_next (&iter, NULL, (gpointer *) &touch);
+      return touch->touch_down_serial;
+    }
+
+  for (l = wayland_seat->tablets; l; l = l->next)
+    {
+      GdkWaylandTabletData *tablet = l->data;
+
+      if (tablet->logical_device == device)
+        return tablet->pointer_info.press_serial;
     }
 
   return GDK_WAYLAND_SEAT (seat)->pointer_info.press_serial;
