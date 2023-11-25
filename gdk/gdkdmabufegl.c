@@ -23,6 +23,7 @@
 
 #include "gdkdmabufformatsbuilderprivate.h"
 #include "gdkdebugprivate.h"
+#include "gdkdmabuffourccprivate.h"
 #include "gdkdmabuftextureprivate.h"
 #include "gdkmemoryformatprivate.h"
 #include "gdkdisplayprivate.h"
@@ -30,10 +31,6 @@
 #include "gdktexturedownloader.h"
 
 #include <graphene.h>
-#include <sys/mman.h>
-#include <sys/ioctl.h>
-#include <linux/dma-buf.h>
-#include <drm_fourcc.h>
 #include <epoxy/egl.h>
 
 /* A dmabuf downloader implementation that downloads buffers via
@@ -174,7 +171,14 @@ gdk_dmabuf_egl_downloader_supports (const GdkDmabufDownloader  *downloader,
 {
   if (gdk_dmabuf_formats_contains (display->egl_dmabuf_formats, dmabuf->fourcc, dmabuf->modifier))
     {
-      *out_format = gdk_dmabuf_get_memory_format (display, dmabuf->fourcc, premultiplied);
+      if (!gdk_dmabuf_get_memory_format (dmabuf->fourcc, premultiplied, out_format))
+        {
+          GDK_DISPLAY_DEBUG (display, DMABUF,
+                             "Falling back to generic ARGB for dmabuf format %.4s",
+                             (char *) &dmabuf->fourcc);
+          *out_format = premultiplied ? GDK_MEMORY_R8G8B8A8_PREMULTIPLIED
+                                      : GDK_MEMORY_R8G8B8A8;
+        }
       return TRUE;
     }
 

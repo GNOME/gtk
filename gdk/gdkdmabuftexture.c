@@ -22,19 +22,12 @@
 
 #include "gdkdisplayprivate.h"
 #include "gdkdmabufformatsbuilderprivate.h"
+#include "gdkdmabuffourccprivate.h"
 #include "gdkdmabufprivate.h"
 #include "gdktextureprivate.h"
 #include <gdk/gdkglcontext.h>
 #include <gdk/gdkgltexturebuilder.h>
 #include <gdk/gdktexturedownloader.h>
-
-#ifdef HAVE_DMABUF
-#include <sys/mman.h>
-#include <sys/ioctl.h>
-#include <linux/dma-buf.h>
-#include <drm_fourcc.h>
-#include <epoxy/egl.h>
-#endif
 
 /**
  * GdkDmabufTexture:
