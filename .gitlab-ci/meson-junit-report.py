@@ -44,7 +44,7 @@ outfile = args.output
 testsuites = ET.Element('testsuites')
 testsuites.set('id', '{}/{}'.format(args.job_id, args.branch))
 testsuites.set('package', args.project_name)
-testsuites.set('timestamp', datetime.datetime.utcnow().isoformat(timespec='minutes'))
+testsuites.set('timestamp', datetime.datetime.now(datetime.UTC).isoformat(timespec='minutes'))
 
 suites = {}
 for line in args.infile:
