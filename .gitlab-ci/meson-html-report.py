@@ -324,7 +324,7 @@ for line in args.infile:
     units.append(unit)
 
 report = {}
-report['date'] = datetime.datetime.utcnow()
+report['date'] = datetime.datetime.now(datetime.UTC)
 report['locale_date'] = report['date'].strftime("%c")
 report['project_name'] = args.project_name
 report['backend'] = args.backend
