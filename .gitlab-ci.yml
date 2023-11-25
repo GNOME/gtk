@@ -66,6 +66,7 @@ style-check-diff:
       junit:
         - "${CI_PROJECT_DIR}/_build/report-x11.xml"
         - "${CI_PROJECT_DIR}/_build/report-wayland.xml"
+        - "${CI_PROJECT_DIR}/_build/report-wayland_gl.xml"
         - "${CI_PROJECT_DIR}/_build/report-wayland_gles2.xml"
         - "${CI_PROJECT_DIR}/_build/report-broadway.xml"
     name: "gtk-${CI_COMMIT_REF_NAME}"
