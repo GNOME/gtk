@@ -54,7 +54,7 @@
  * @GSK_FILL_NODE: A node that fills a path
  * @GSK_STROKE_NODE: A node that strokes a path
  * @GSK_SUBSURFACE_NODE: A node possibly redirects part of the scene graph to a subsurface (Since: 4.14)
-
+ *
  * The type of a node determines what the node is rendering.
  */
 typedef enum {
