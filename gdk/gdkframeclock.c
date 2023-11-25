@@ -346,19 +346,15 @@ gdk_frame_clock_end_updating (GdkFrameClock *frame_clock)
   GDK_FRAME_CLOCK_GET_CLASS (frame_clock)->end_updating (frame_clock);
 }
 
-static void
+static inline void
 _gdk_frame_clock_freeze (GdkFrameClock *clock)
 {
-  g_return_if_fail (GDK_IS_FRAME_CLOCK (clock));
-
   GDK_FRAME_CLOCK_GET_CLASS (clock)->freeze (clock);
 }
 
-static void
+static inline void
 _gdk_frame_clock_thaw (GdkFrameClock *clock)
 {
-  g_return_if_fail (GDK_IS_FRAME_CLOCK (clock));
-
   GDK_FRAME_CLOCK_GET_CLASS (clock)->thaw (clock);
 }
 
@@ -390,6 +386,12 @@ _gdk_frame_clock_uninhibit_freeze (GdkFrameClock *clock)
     _gdk_frame_clock_freeze (clock);
 }
 
+static inline gint64
+_gdk_frame_clock_get_frame_counter (GdkFrameClock *frame_clock)
+{
+  return frame_clock->priv->frame_counter;
+}
+
 /**
  * gdk_frame_clock_get_frame_counter:
  * @frame_clock: a `GdkFrameClock`
@@ -404,13 +406,15 @@ _gdk_frame_clock_uninhibit_freeze (GdkFrameClock *clock)
 gint64
 gdk_frame_clock_get_frame_counter (GdkFrameClock *frame_clock)
 {
-  GdkFrameClockPrivate *priv;
-
   g_return_val_if_fail (GDK_IS_FRAME_CLOCK (frame_clock), 0);
 
-  priv = frame_clock->priv;
+  return _gdk_frame_clock_get_frame_counter (frame_clock);
+}
 
-  return priv->frame_counter;
+static inline gint64
+_gdk_frame_clock_get_history_start (GdkFrameClock *frame_clock)
+{
+  return frame_clock->priv->frame_counter + 1 - frame_clock->priv->n_timings;
 }
 
 /**
@@ -433,13 +437,9 @@ gdk_frame_clock_get_frame_counter (GdkFrameClock *frame_clock)
 gint64
 gdk_frame_clock_get_history_start (GdkFrameClock *frame_clock)
 {
-  GdkFrameClockPrivate *priv;
-
   g_return_val_if_fail (GDK_IS_FRAME_CLOCK (frame_clock), 0);
 
-  priv = frame_clock->priv;
-
-  return priv->frame_counter + 1 - priv->n_timings;
+  return _gdk_frame_clock_get_history_start (frame_clock);
 }
 
 void
@@ -470,6 +470,24 @@ _gdk_frame_clock_begin_frame (GdkFrameClock *frame_clock)
   priv->timings[priv->current] = _gdk_frame_timings_new (priv->frame_counter);
 }
 
+static inline GdkFrameTimings *
+_gdk_frame_clock_get_timings (GdkFrameClock *frame_clock,
+                              gint64         frame_counter)
+{
+  GdkFrameClockPrivate *priv = frame_clock->priv;
+  int pos;
+
+  if (frame_counter > priv->frame_counter)
+    return NULL;
+
+  if (frame_counter <= priv->frame_counter - priv->n_timings)
+    return NULL;
+
+  pos = (priv->current - (priv->frame_counter - frame_counter) + FRAME_HISTORY_MAX_LENGTH) % FRAME_HISTORY_MAX_LENGTH;
+
+  return priv->timings[pos];
+}
+
 /**
  * gdk_frame_clock_get_timings:
  * @frame_clock: a `GdkFrameClock`
@@ -490,22 +508,9 @@ GdkFrameTimings *
 gdk_frame_clock_get_timings (GdkFrameClock *frame_clock,
                              gint64         frame_counter)
 {
-  GdkFrameClockPrivate *priv;
-  int pos;
-
   g_return_val_if_fail (GDK_IS_FRAME_CLOCK (frame_clock), NULL);
 
-  priv = frame_clock->priv;
-
-  if (frame_counter > priv->frame_counter)
-    return NULL;
-
-  if (frame_counter <= priv->frame_counter - priv->n_timings)
-    return NULL;
-
-  pos = (priv->current - (priv->frame_counter - frame_counter) + FRAME_HISTORY_MAX_LENGTH) % FRAME_HISTORY_MAX_LENGTH;
-
-  return priv->timings[pos];
+  return _gdk_frame_clock_get_timings (frame_clock, frame_counter);
 }
 
 /**
@@ -528,7 +533,7 @@ gdk_frame_clock_get_current_timings (GdkFrameClock *frame_clock)
 
   priv = frame_clock->priv;
 
-  return gdk_frame_clock_get_timings (frame_clock, priv->frame_counter);
+  return _gdk_frame_clock_get_timings (frame_clock, priv->frame_counter);
 }
 
 void
@@ -539,8 +544,8 @@ _gdk_frame_clock_debug_print_timings (GdkFrameClock   *clock,
 
   gint64 previous_frame_time = 0;
   gint64 previous_smoothed_frame_time = 0;
-  GdkFrameTimings *previous_timings = gdk_frame_clock_get_timings (clock,
-                                                                   timings->frame_counter - 1);
+  GdkFrameTimings *previous_timings = _gdk_frame_clock_get_timings (clock,
+                                                                    timings->frame_counter - 1);
 
   if (previous_timings != NULL)
     {
@@ -611,11 +616,11 @@ gdk_frame_clock_get_refresh_info (GdkFrameClock *frame_clock,
 
   g_return_if_fail (GDK_IS_FRAME_CLOCK (frame_clock));
 
-  frame_counter = gdk_frame_clock_get_frame_counter (frame_clock);
+  frame_counter = _gdk_frame_clock_get_frame_counter (frame_clock);
 
   while (TRUE)
     {
-      GdkFrameTimings *timings = gdk_frame_clock_get_timings (frame_clock, frame_counter);
+      GdkFrameTimings *timings = _gdk_frame_clock_get_timings (frame_clock, frame_counter);
       gint64 presentation_time;
       gint64 refresh_interval;
 
@@ -727,15 +732,15 @@ guess_refresh_interval (GdkFrameClock *frame_clock)
 
   interval = G_MAXINT64;
 
-  for (i = gdk_frame_clock_get_history_start (frame_clock);
-       i < gdk_frame_clock_get_frame_counter (frame_clock);
+  for (i = _gdk_frame_clock_get_history_start (frame_clock);
+       i < _gdk_frame_clock_get_frame_counter (frame_clock);
        i++)
     {
       GdkFrameTimings *t, *before;
       gint64 ts, before_ts;
 
-      t = gdk_frame_clock_get_timings (frame_clock, i);
-      before = gdk_frame_clock_get_timings (frame_clock, i - 1);
+      t = _gdk_frame_clock_get_timings (frame_clock, i);
+      before = _gdk_frame_clock_get_timings (frame_clock, i - 1);
       if (t == NULL || before == NULL)
         continue;
 
@@ -770,12 +775,12 @@ gdk_frame_clock_get_fps (GdkFrameClock *frame_clock)
   gint64 start_timestamp, end_timestamp;
   gint64 interval;
 
-  start_counter = gdk_frame_clock_get_history_start (frame_clock);
-  end_counter = gdk_frame_clock_get_frame_counter (frame_clock);
-  start = gdk_frame_clock_get_timings (frame_clock, start_counter);
-  for (end = gdk_frame_clock_get_timings (frame_clock, end_counter);
+  start_counter = _gdk_frame_clock_get_history_start (frame_clock);
+  end_counter = _gdk_frame_clock_get_frame_counter (frame_clock);
+  start = _gdk_frame_clock_get_timings (frame_clock, start_counter);
+  for (end = _gdk_frame_clock_get_timings (frame_clock, end_counter);
        end_counter > start_counter && end != NULL && !gdk_frame_timings_get_complete (end);
-       end = gdk_frame_clock_get_timings (frame_clock, end_counter))
+       end = _gdk_frame_clock_get_timings (frame_clock, end_counter))
     end_counter--;
   if (end_counter - start_counter < 4)
     return 0.0;
