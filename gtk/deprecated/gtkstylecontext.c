@@ -490,7 +490,7 @@ gtk_style_context_set_scale (GtkStyleContext *context,
  *
  * Returns: the scale
  *
- * Deprecated 4.10: Use [method@Gtk.Widget.get_scale_factor] instead
+ * Deprecated: 4.10: Use [method@Gtk.Widget.get_scale_factor] instead
  **/
 int
 gtk_style_context_get_scale (GtkStyleContext *context)
