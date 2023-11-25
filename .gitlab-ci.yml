@@ -430,6 +430,9 @@ asan-build:
     - .gitlab-ci/run-tests.sh _build x11
   artifacts:
     when: always
+    reports:
+      junit:
+        - "${CI_PROJECT_DIR}/_build/report-wayland.xml"
     paths:
       - "${CI_PROJECT_DIR}/_build/meson-logs"
 
