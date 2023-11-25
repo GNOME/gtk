@@ -31,9 +31,6 @@
 #include "gdktexturedownloader.h"
 
 #include <graphene.h>
-#include <sys/mman.h>
-#include <sys/ioctl.h>
-#include <linux/dma-buf.h>
 #include <epoxy/egl.h>
 
 /* A dmabuf downloader implementation that downloads buffers via

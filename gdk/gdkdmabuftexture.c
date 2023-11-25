@@ -29,13 +29,6 @@
 #include <gdk/gdkgltexturebuilder.h>
 #include <gdk/gdktexturedownloader.h>
 
-#ifdef HAVE_DMABUF
-#include <sys/mman.h>
-#include <sys/ioctl.h>
-#include <linux/dma-buf.h>
-#include <epoxy/egl.h>
-#endif
-
 /**
  * GdkDmabufTexture:
  *
