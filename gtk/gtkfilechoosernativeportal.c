@@ -185,11 +185,9 @@ send_close (FilechooserPortalData *data)
   GError *error = NULL;
 
   message = g_dbus_message_new_method_call ("org.freedesktop.portal.Desktop",
-                                            "/org/freedesktop/portal/desktop",
-                                            "org.freedesktop.portal.FileChooser",
+                                            data->portal_handle,
+                                            "org.freedesktop.portal.Request",
                                             "Close");
-  g_dbus_message_set_body (message,
-                           g_variant_new ("(o)", data->portal_handle));
 
   if (!g_dbus_connection_send_message (data->connection,
                                        message,
