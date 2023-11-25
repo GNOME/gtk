@@ -21,7 +21,7 @@ case "${setup}" in
                 --timeout-multiplier "${multiplier}" \
                 --print-errorlogs \
                 --setup=${setup} \
-                --suite=${suite//,/'--suite='} \
+                --suite=${suite} \
                 --no-suite=failing \
                 --no-suite=${setup}_failing \
                 --no-suite=flaky \
@@ -45,7 +45,7 @@ case "${setup}" in
                 --timeout-multiplier "${multiplier}" \
                 --print-errorlogs \
                 --setup=${setup} \
-                --suite=${suite//,/'--suite='} \
+                --suite=${suite} \
                 --no-suite=failing \
                 --no-suite=${setup}_failing \
                 --no-suite=flaky \
@@ -68,7 +68,7 @@ case "${setup}" in
                 --timeout-multiplier "${multiplier}" \
                 --print-errorlogs \
                 --setup=${setup} \
-                --suite=${suite//,/'--suite='} \
+                --suite=${suite} \
                 --no-suite=failing \
                 --no-suite=${setup}_failing \
                 --no-suite=flaky \
