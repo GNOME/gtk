@@ -335,7 +335,13 @@
  * which might be referenced by other widgets declared as children of the
  * `<template>` tag.
  *
- * An example of a template definition:
+ * Since, unlike the `<object>` tag, the `<template>` tag does not contain an
+ * “id” attribute, if you need to refer to the instance of the object itself that
+ * the template will create, simply refer to the template class name in an
+ * applicable element content.
+ *
+ * Here is an example of a template definition, which includes an example of
+ * this in the `<signal>` tag:
  *
  * ```xml
  * <interface>
