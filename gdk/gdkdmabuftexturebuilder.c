@@ -27,9 +27,6 @@
 #include "gdkdmabuftextureprivate.h"
 
 #include <cairo-gobject.h>
-#ifdef HAVE_DMABUF
-#include <drm_fourcc.h>
-#endif
 
 
 struct _GdkDmabufTextureBuilder

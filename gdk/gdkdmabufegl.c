@@ -23,6 +23,7 @@
 
 #include "gdkdmabufformatsbuilderprivate.h"
 #include "gdkdebugprivate.h"
+#include "gdkdmabuffourccprivate.h"
 #include "gdkdmabuftextureprivate.h"
 #include "gdkmemoryformatprivate.h"
 #include "gdkdisplayprivate.h"
@@ -33,7 +34,6 @@
 #include <sys/mman.h>
 #include <sys/ioctl.h>
 #include <linux/dma-buf.h>
-#include <drm_fourcc.h>
 #include <epoxy/egl.h>
 
 /* A dmabuf downloader implementation that downloads buffers via
