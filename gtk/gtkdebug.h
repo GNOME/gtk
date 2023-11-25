@@ -53,6 +53,7 @@ G_BEGIN_DECLS
  * @GTK_DEBUG_BUILDER_OBJECTS: Log unused GtkBuilder objects
  * @GTK_DEBUG_A11Y: Information about accessibility state changes
  * @GTK_DEBUG_ICONFALLBACK: Information about icon fallback. Since: 4.2
+ * @GTK_DEBUG_INVERT_TEXT_DIR: Inverts the default text-direction. Since: 4.8
  *
  * Flags to use with gtk_set_debug_flags().
  *
