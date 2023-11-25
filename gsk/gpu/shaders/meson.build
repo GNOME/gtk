@@ -1,4 +1,5 @@
 gsk_private_gpu_include_shaders = files([
+  'blendmode.glsl',
   'color.glsl',
   'common.glsl',
   'common-gl.glsl',

@@ -2,6 +2,7 @@
 #define _PATTERN_
 
 #include "common.glsl"
+#include "blendmode.glsl"
 #include "gradient.glsl"
 #include "rect.glsl"
 
@@ -222,6 +223,15 @@ mask_inverted_luminance_pattern (inout uint reader,
   color = source * (color.a - luminance (color.rgb));
 }
 
+void
+blend_mode_pattern (inout vec4 color,
+                    uint       mode)
+{
+  vec4 bottom = stack_pop ();
+  
+  color = blend_mode (bottom, color, mode);
+}
+
 vec4
 glyphs_pattern (inout uint reader,
                 Position   pos)
@@ -421,6 +431,24 @@ pattern (uint reader,
           break;
         case GSK_GPU_PATTERN_AFFINE:
           affine_pattern (reader, pos);
+          break;
+        case GSK_GPU_PATTERN_BLEND_DEFAULT:
+        case GSK_GPU_PATTERN_BLEND_MULTIPLY:
+        case GSK_GPU_PATTERN_BLEND_SCREEN:
+        case GSK_GPU_PATTERN_BLEND_OVERLAY:
+        case GSK_GPU_PATTERN_BLEND_DARKEN:
+        case GSK_GPU_PATTERN_BLEND_LIGHTEN:
+        case GSK_GPU_PATTERN_BLEND_COLOR_DODGE:
+        case GSK_GPU_PATTERN_BLEND_COLOR_BURN:
+        case GSK_GPU_PATTERN_BLEND_HARD_LIGHT:
+        case GSK_GPU_PATTERN_BLEND_SOFT_LIGHT:
+        case GSK_GPU_PATTERN_BLEND_DIFFERENCE:
+        case GSK_GPU_PATTERN_BLEND_EXCLUSION:
+        case GSK_GPU_PATTERN_BLEND_COLOR:
+        case GSK_GPU_PATTERN_BLEND_HUE:
+        case GSK_GPU_PATTERN_BLEND_SATURATION:
+        case GSK_GPU_PATTERN_BLEND_LUMINOSITY:
+          blend_mode_pattern (color, type - GSK_GPU_PATTERN_BLEND_DEFAULT);
           break;
       }
     }
