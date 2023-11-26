@@ -14,16 +14,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk gtk-4-12\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2023-09-07 16:59+0000\n"
-"PO-Revision-Date: 2023-09-09 22:04+0700\n"
-"Last-Translator: Andika Triwidada <andika@gmail.com>\n"
+"POT-Creation-Date: 2023-11-23 19:35+0000\n"
+"PO-Revision-Date: 2023-11-26 23:07+0700\n"
+"Last-Translator: Kukuh Syafaat <kukuhsyafaat@gnome.org>\n"
 "Language-Team: Indonesian <gnome-l10n-id@googlegroups.com>\n"
 "Language: id\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Poedit 3.3.2\n"
+"X-Generator: Poedit 3.4.1\n"
 
 #: gdk/broadway/gdkbroadway-server.c:135
 #, c-format
@@ -53,57 +53,57 @@ msgstr "Tidak dapat memberikan konten sebagai %s"
 msgid "Cannot provide contents as %s"
 msgstr "Tidak dapat memberikan konten sebagai \"%s\""
 
-#: gdk/gdkdisplay.c:156 gdk/gdkglcontext.c:442
+#: gdk/gdkdisplay.c:156 gdk/gdkglcontext.c:443
 msgid "The current backend does not support OpenGL"
 msgstr "Backend saat ini tak mendukung OpenGL"
 
-#: gdk/gdkdisplay.c:1245 gdk/gdksurface.c:1252
+#: gdk/gdkdisplay.c:1244 gdk/gdksurface.c:1252
 msgid "Vulkan support disabled via GDK_DEBUG"
 msgstr "Dukungan Vulkan dinonaktifkan melalui GDK_DEBUG"
 
-#: gdk/gdkdisplay.c:1277
+#: gdk/gdkdisplay.c:1276
 msgid "GL support disabled via GDK_DEBUG"
 msgstr "Dukungan GL dinonaktifkan melalui GDK_DEBUG"
 
-#: gdk/gdkdisplay.c:1575
+#: gdk/gdkdisplay.c:1574
 msgid "No EGL configuration available"
 msgstr "Tak ada konfigurasi EGL yang tersedia"
 
-#: gdk/gdkdisplay.c:1583
+#: gdk/gdkdisplay.c:1582
 msgid "Failed to get EGL configurations"
 msgstr "Gagal mendapatkan konfigurasi EGL"
 
-#: gdk/gdkdisplay.c:1613
+#: gdk/gdkdisplay.c:1612
 msgid "No EGL configuration with required features found"
 msgstr "Tidak ditemukan konfigurasi EGL dengan fitur yang diperlukan"
 
-#: gdk/gdkdisplay.c:1620
+#: gdk/gdkdisplay.c:1619
 msgid "No perfect EGL configuration found"
 msgstr "Tak ditemukan konfigurasi EGL yang sempurna"
 
-#: gdk/gdkdisplay.c:1662
+#: gdk/gdkdisplay.c:1661
 #, c-format
 msgid "EGL implementation is missing extension %s"
 msgid_plural "EGL implementation is missing %2$d extensions: %1$s"
 msgstr[0] "Implementasi EGL tidak memiliki %2$d ekstensi: %1$s"
 
-#: gdk/gdkdisplay.c:1695
+#: gdk/gdkdisplay.c:1694
 msgid "libEGL not available in this sandbox"
 msgstr "libEGL tidak tersedia di sandbox ini"
 
-#: gdk/gdkdisplay.c:1696
+#: gdk/gdkdisplay.c:1695
 msgid "libEGL not available"
 msgstr "libEGL tidak tersedia"
 
-#: gdk/gdkdisplay.c:1706
+#: gdk/gdkdisplay.c:1705
 msgid "Failed to create EGL display"
 msgstr "Gagal membuat tampilan EGL"
 
-#: gdk/gdkdisplay.c:1716
+#: gdk/gdkdisplay.c:1715
 msgid "Could not initialize EGL display"
 msgstr "Tidak bisa menginisialisasi tampilan EGL"
 
-#: gdk/gdkdisplay.c:1727
+#: gdk/gdkdisplay.c:1726
 #, c-format
 msgid "EGL version %d.%d is too old. GTK requires %d.%d"
 msgstr "EGL versi %d.%d terlalu tua. GTK memerlukan %d.%d"
@@ -116,33 +116,33 @@ msgstr "Seret dan jatuhkan dari aplikasi lain tidak didukung."
 msgid "No compatible formats to transfer contents."
 msgstr "Tidak ada format yang kompatibel untuk mentransfer konten."
 
-#: gdk/gdkglcontext.c:401 gdk/x11/gdkglcontext-glx.c:642
+#: gdk/gdkglcontext.c:402 gdk/x11/gdkglcontext-glx.c:642
 msgid "No GL API allowed."
 msgstr "Tidak ada API GL yang diizinkan."
 
-#: gdk/gdkglcontext.c:425 gdk/win32/gdkglcontext-win32-wgl.c:387
+#: gdk/gdkglcontext.c:426 gdk/win32/gdkglcontext-win32-wgl.c:387
 #: gdk/win32/gdkglcontext-win32-wgl.c:530
 #: gdk/win32/gdkglcontext-win32-wgl.c:574 gdk/x11/gdkglcontext-glx.c:691
 msgid "Unable to create a GL context"
 msgstr "Tak dapat membuat sebuah konteks GL"
 
-#: gdk/gdkglcontext.c:1280
+#: gdk/gdkglcontext.c:1281
 msgid "Anything but OpenGL ES disabled via GDK_DEBUG"
 msgstr "Apa pun kecuali OpenGL ES dinonaktifkan melalui GDK_DEBUG"
 
-#: gdk/gdkglcontext.c:1289
+#: gdk/gdkglcontext.c:1290
 #, c-format
 msgid "Application does not support %s API"
 msgstr "Aplikasi tidak mendukung API %s"
 
 #. translators: This is about OpenGL backend names, like
 #. * "Trying to use X11 GLX, but EGL is already in use"
-#: gdk/gdkglcontext.c:1864
+#: gdk/gdkglcontext.c:1899
 #, c-format
 msgid "Trying to use %s, but %s is already in use"
 msgstr "Mencoba menggunakan %s, tetapi %s sudah digunakan"
 
-#: gdk/gdktexture.c:528
+#: gdk/gdktexture.c:530
 msgid "Unknown image format."
 msgstr "Format gambar tidak dikenal."
 
@@ -1050,18 +1050,18 @@ msgctxt "progress bar label"
 msgid "%d %%"
 msgstr "%d %%"
 
-#: gtk/deprecated/gtkcolorbutton.c:183 gtk/deprecated/gtkcolorbutton.c:311
+#: gtk/deprecated/gtkcolorbutton.c:183 gtk/deprecated/gtkcolorbutton.c:314
 #: gtk/gtkcolordialog.c:411
 msgid "Pick a Color"
 msgstr "Pilih Warna"
 
-#: gtk/deprecated/gtkcolorbutton.c:502 gtk/gtkcolorchooserwidget.c:313
+#: gtk/deprecated/gtkcolorbutton.c:505 gtk/gtkcolorchooserwidget.c:313
 #: gtk/gtkcolordialogbutton.c:335
 #, c-format
 msgid "Red %d%%, Green %d%%, Blue %d%%, Alpha %d%%"
 msgstr "Merah %d%%, Hijau %d%%, Biru %d%%, Alfa %d%%"
 
-#: gtk/deprecated/gtkcolorbutton.c:508 gtk/gtkcolorchooserwidget.c:319
+#: gtk/deprecated/gtkcolorbutton.c:511 gtk/gtkcolorchooserwidget.c:319
 #: gtk/gtkcolordialogbutton.c:341
 #, c-format
 msgid "Red %d%%, Green %d%%, Blue %d%%"
@@ -1071,17 +1071,17 @@ msgstr "Merah %d%%, Hijau %d%%, Biru %d%%"
 msgid "Sans 12"
 msgstr "Sans 12"
 
-#: gtk/deprecated/gtkfontbutton.c:507 gtk/deprecated/gtkfontbutton.c:621
+#: gtk/deprecated/gtkfontbutton.c:507 gtk/deprecated/gtkfontbutton.c:624
 #: gtk/gtkfontdialog.c:596
 msgid "Pick a Font"
 msgstr "Pilih Fonta"
 
-#: gtk/deprecated/gtkfontbutton.c:597 gtk/gtkfilechooserwidget.c:3871
+#: gtk/deprecated/gtkfontbutton.c:600 gtk/gtkfilechooserwidget.c:3871
 #: gtk/gtkfontdialogbutton.c:126 gtk/inspector/visual.ui:169
 msgid "Font"
 msgstr "Fonta"
 
-#: gtk/deprecated/gtkfontbutton.c:1152 gtk/gtkfontdialogbutton.c:652
+#: gtk/deprecated/gtkfontbutton.c:1155 gtk/gtkfontdialogbutton.c:652
 msgctxt "font"
 msgid "None"
 msgstr "Nihil"
@@ -2147,7 +2147,7 @@ msgstr "_Kanan:"
 msgid "Paper Margins"
 msgstr "Margin Kertas"
 
-#: gtk/gtkentry.c:3673
+#: gtk/gtkentry.c:3685
 msgid "Insert Emoji"
 msgstr "Sisipkan Emoji"
 
@@ -2217,7 +2217,7 @@ msgstr "Berkas dengan nama itu sudah ada"
 #: gtk/gtkmessagedialog.c:179 gtk/gtkmountoperation.c:608
 #: gtk/print/gtkpagesetupunixdialog.c:282 gtk/print/gtkprintbackend.c:638
 #: gtk/print/gtkprintunixdialog.c:682 gtk/print/gtkprintunixdialog.c:839
-#: gtk/gtkwindow.c:6242 gtk/ui/gtkappchooserdialog.ui:48
+#: gtk/gtkwindow.c:6233 gtk/ui/gtkappchooserdialog.ui:48
 #: gtk/ui/gtkassistant.ui:52 gtk/ui/gtkcolorchooserdialog.ui:36
 #: gtk/ui/gtkfontchooserdialog.ui:27
 msgid "_Cancel"
@@ -2305,7 +2305,7 @@ msgid "If you delete an item, it will be permanently lost."
 msgstr "Jika Anda menghapus suatu butir, itu akan hilang selamanya."
 
 #: gtk/gtkfilechooserwidget.c:1185 gtk/gtkfilechooserwidget.c:1815
-#: gtk/gtklabel.c:5695 gtk/gtktext.c:6145 gtk/gtktextview.c:9018
+#: gtk/gtklabel.c:5695 gtk/gtktext.c:6147 gtk/gtktextview.c:9018
 msgid "_Delete"
 msgstr "_Hapus"
 
@@ -2431,6 +2431,7 @@ msgid "Yesterday"
 msgstr "Kemarin"
 
 #: gtk/gtkfilechooserwidget.c:3823
+#, c-format
 msgid "%-e %b"
 msgstr "%-e %b"
 
@@ -2645,19 +2646,19 @@ msgstr "Tutup"
 msgid "Close the infobar"
 msgstr "Tutup bilah info"
 
-#: gtk/gtklabel.c:5692 gtk/gtktext.c:6133 gtk/gtktextview.c:9006
+#: gtk/gtklabel.c:5692 gtk/gtktext.c:6135 gtk/gtktextview.c:9006
 msgid "Cu_t"
 msgstr "Po_tong"
 
-#: gtk/gtklabel.c:5693 gtk/gtktext.c:6137 gtk/gtktextview.c:9010
+#: gtk/gtklabel.c:5693 gtk/gtktext.c:6139 gtk/gtktextview.c:9010
 msgid "_Copy"
 msgstr "_Salin"
 
-#: gtk/gtklabel.c:5694 gtk/gtktext.c:6141 gtk/gtktextview.c:9014
+#: gtk/gtklabel.c:5694 gtk/gtktext.c:6143 gtk/gtktextview.c:9014
 msgid "_Paste"
 msgstr "Tem_pel"
 
-#: gtk/gtklabel.c:5700 gtk/gtktext.c:6154 gtk/gtktextview.c:9039
+#: gtk/gtklabel.c:5700 gtk/gtktext.c:6156 gtk/gtktextview.c:9039
 msgid "Select _All"
 msgstr "Pilih Semu_a"
 
@@ -2740,7 +2741,7 @@ msgid "Play"
 msgstr "Putar"
 
 #: gtk/gtkmessagedialog.c:162 gtk/gtkmessagedialog.c:180
-#: gtk/print/gtkprintbackend.c:639 gtk/gtkwindow.c:6243
+#: gtk/print/gtkprintbackend.c:639 gtk/gtkwindow.c:6234
 msgid "_OK"
 msgstr "_Ok"
 
@@ -3339,8 +3340,8 @@ msgstr "Alasan paling mungkin adalah berkas temporer tidak dapat dibuat."
 
 #. window
 #: gtk/print/gtkprintoperation-portal.c:264
-#: gtk/print/gtkprintoperation-portal.c:584
-#: gtk/print/gtkprintoperation-portal.c:653 gtk/print/gtkprintunixdialog.c:3008
+#: gtk/print/gtkprintoperation-portal.c:594
+#: gtk/print/gtkprintoperation-portal.c:663 gtk/print/gtkprintunixdialog.c:3008
 msgid "Print"
 msgstr "Cetak"
 
@@ -3514,7 +3515,7 @@ msgstr ""
 "Tak ditemukan aplikasi terdaftar dengan nama \"%s\" bagi butir dengan URI "
 "\"%s\""
 
-#: gtk/gtksearchentry.c:758
+#: gtk/gtksearchentry.c:767
 msgid "Clear Entry"
 msgstr "Bersihkan Entri"
 
@@ -3605,7 +3606,7 @@ msgctxt "accessibility"
 msgid "Sidebar"
 msgstr "Bilah sisi"
 
-#: gtk/gtktext.c:6159 gtk/gtktextview.c:9044
+#: gtk/gtktext.c:6161 gtk/gtktextview.c:9044
 msgid "Insert _Emoji"
 msgstr "Sisipkan _Emoji"
 
@@ -3617,12 +3618,12 @@ msgstr "_Tidak Jadi"
 msgid "_Redo"
 msgstr "_Jadi Lagi"
 
-#: gtk/gtkwindow.c:6231
+#: gtk/gtkwindow.c:6222
 #, c-format
 msgid "Do you want to use GTK Inspector?"
 msgstr "Apakah Anda ingin memakai GTK Inspector?"
 
-#: gtk/gtkwindow.c:6233
+#: gtk/gtkwindow.c:6224
 #, c-format
 msgid ""
 "GTK Inspector is an interactive debugger that lets you explore and modify "
@@ -3633,7 +3634,7 @@ msgstr ""
 "mengeksplorasi dan mengubah internal dari sebarang aplikasi GTK. Memakainya "
 "dapat menyebabkan aplikasi rusak atau remuk."
 
-#: gtk/gtkwindow.c:6238
+#: gtk/gtkwindow.c:6229
 msgid "Don’t show this message again"
 msgstr "Jangan tampilkan pesan ini lagi"
 
@@ -3778,8 +3779,8 @@ msgid ""
 "You can temporarily disable this custom CSS by clicking on the “Pause” "
 "button above."
 msgstr ""
-"Anda dapat mematikan sementara CSS ubahan ini dengan mengklik tombol \"Jeda"
-"\" di atas."
+"Anda dapat mematikan sementara CSS ubahan ini dengan mengklik tombol "
+"\"Jeda\" di atas."
 
 #: gtk/inspector/css-editor.c:130
 msgid "Changes are applied instantly and globally, for the whole application."
@@ -3985,8 +3986,8 @@ msgid "Surface"
 msgstr "Permukaan"
 
 #: gtk/inspector/misc-info.ui:365 gtk/inspector/misc-info.ui:400
-#: gtk/inspector/misc-info.ui:435 gtk/inspector/prop-editor.c:1150
-#: gtk/inspector/prop-editor.c:1533 gtk/inspector/window.ui:396
+#: gtk/inspector/misc-info.ui:435 gtk/inspector/prop-editor.c:1153
+#: gtk/inspector/prop-editor.c:1536 gtk/inspector/window.ui:396
 msgid "Properties"
 msgstr "Properti"
 
@@ -4038,7 +4039,7 @@ msgstr "Pointer: %p"
 #. Translators: %s is a type name, for example
 #. * GtkPropertyExpression with value \"2.5\"
 #.
-#: gtk/inspector/prop-editor.c:824
+#: gtk/inspector/prop-editor.c:827
 #, c-format
 msgid "%s with value \"%s\""
 msgstr "%s dengan nilai \"%s\""
@@ -4046,7 +4047,7 @@ msgstr "%s dengan nilai \"%s\""
 #. Translators: Both %s are type names, for example
 #. * GtkPropertyExpression with type GObject
 #.
-#: gtk/inspector/prop-editor.c:835
+#: gtk/inspector/prop-editor.c:838
 #, c-format
 msgid "%s with type %s"
 msgstr "%s dengan tipe %s"
@@ -4054,7 +4055,7 @@ msgstr "%s dengan tipe %s"
 #. Translators: Both %s are type names, for example
 #. * GtkObjectExpression for GtkStringObject 0x23456789
 #.
-#: gtk/inspector/prop-editor.c:848
+#: gtk/inspector/prop-editor.c:851
 #, c-format
 msgid "%s for %s %p"
 msgstr "%s untuk %s %p"
@@ -4062,71 +4063,71 @@ msgstr "%s untuk %s %p"
 #. Translators: Both %s are type names, for example
 #. * GtkPropertyExpression with value type: gchararray
 #.
-#: gtk/inspector/prop-editor.c:878
+#: gtk/inspector/prop-editor.c:881
 #, c-format
 msgid "%s with value type %s"
 msgstr "%s dengan tipe nilai %s"
 
-#: gtk/inspector/prop-editor.c:1227
+#: gtk/inspector/prop-editor.c:1230
 #, c-format
 msgid "Uneditable property type: %s"
 msgstr "Tipe properti yang tak dapat disunting: %s"
 
-#: gtk/inspector/prop-editor.c:1385
+#: gtk/inspector/prop-editor.c:1388
 msgctxt "column number"
 msgid "None"
 msgstr "Nihil"
 
-#: gtk/inspector/prop-editor.c:1422
+#: gtk/inspector/prop-editor.c:1425
 msgid "Attribute:"
 msgstr "Atribut:"
 
-#: gtk/inspector/prop-editor.c:1425
+#: gtk/inspector/prop-editor.c:1428
 msgid "Model"
 msgstr "Model"
 
-#: gtk/inspector/prop-editor.c:1430
+#: gtk/inspector/prop-editor.c:1433
 msgid "Column:"
 msgstr "Kolom:"
 
 #. Translators: %s is a type name, for example
 #. * Action from 0x2345678 (GtkApplicationWindow)
 #.
-#: gtk/inspector/prop-editor.c:1529
+#: gtk/inspector/prop-editor.c:1532
 #, c-format
 msgid "Action from: %p (%s)"
 msgstr "Aksi dari: %p (%s)"
 
-#: gtk/inspector/prop-editor.c:1584
+#: gtk/inspector/prop-editor.c:1587
 msgid "Reset"
 msgstr "Reset"
 
-#: gtk/inspector/prop-editor.c:1592
+#: gtk/inspector/prop-editor.c:1595
 msgctxt "GtkSettings source"
 msgid "Default"
 msgstr "Baku"
 
-#: gtk/inspector/prop-editor.c:1595
+#: gtk/inspector/prop-editor.c:1598
 msgctxt "GtkSettings source"
 msgid "Theme"
 msgstr "Tema"
 
-#: gtk/inspector/prop-editor.c:1598
+#: gtk/inspector/prop-editor.c:1601
 msgctxt "GtkSettings source"
 msgid "XSettings"
 msgstr "XSettings"
 
-#: gtk/inspector/prop-editor.c:1602
+#: gtk/inspector/prop-editor.c:1605
 msgctxt "GtkSettings source"
 msgid "Application"
 msgstr "Aplikasi"
 
-#: gtk/inspector/prop-editor.c:1605
+#: gtk/inspector/prop-editor.c:1608
 msgctxt "GtkSettings source"
 msgid "Unknown"
 msgstr "Tidak Diketahui"
 
-#: gtk/inspector/prop-editor.c:1608
+#: gtk/inspector/prop-editor.c:1611
 msgid "Source:"
 msgstr "Sumber:"
 
@@ -7179,7 +7180,7 @@ msgstr ""
 #: tools/gtk-builder-tool-enumerate.c:56 tools/gtk-builder-tool-preview.c:179
 #: tools/gtk-builder-tool-preview.c:180 tools/gtk-builder-tool-screenshot.c:360
 #: tools/gtk-builder-tool-simplify.c:2529 tools/gtk-builder-tool-validate.c:261
-#: tools/gtk-rendernode-tool-info.c:200 tools/gtk-rendernode-tool-show.c:102
+#: tools/gtk-rendernode-tool-info.c:202 tools/gtk-rendernode-tool-show.c:106
 msgid "FILE"
 msgstr "BERKAS"
 
@@ -7211,7 +7212,7 @@ msgid "Use style from CSS file"
 msgstr "Gunakan gaya dari berkas CSS"
 
 #: tools/gtk-builder-tool-preview.c:187 tools/gtk-builder-tool-screenshot.c:370
-#: tools/gtk-builder-tool-validate.c:268 tools/gtk-rendernode-tool-show.c:109
+#: tools/gtk-builder-tool-validate.c:268 tools/gtk-rendernode-tool-show.c:113
 #: tools/gtk-rendernode-tool-render.c:204
 #, c-format
 msgid "Could not initialize windowing system\n"
@@ -7468,46 +7469,50 @@ msgstr ""
 "\n"
 "\n"
 
-#: tools/gtk-rendernode-tool-info.c:177
+#: tools/gtk-rendernode-tool-info.c:179
 #, c-format
 msgid "Number of nodes: %u\n"
 msgstr "Cacah simpul: %u\n"
 
-#: tools/gtk-rendernode-tool-info.c:184
+#: tools/gtk-rendernode-tool-info.c:186
 #, c-format
 msgid "Depth: %u\n"
 msgstr "Kedalaman: %u\n"
 
-#: tools/gtk-rendernode-tool-info.c:187
+#: tools/gtk-rendernode-tool-info.c:189
 #, c-format
 msgid "Bounds: %g x %g\n"
 msgstr "Batas: %g x %g\n"
 
-#: tools/gtk-rendernode-tool-info.c:188
+#: tools/gtk-rendernode-tool-info.c:190
 #, c-format
 msgid "Origin: %g %g\n"
 msgstr "Asal: %g %g\n"
 
-#: tools/gtk-rendernode-tool-info.c:209
+#: tools/gtk-rendernode-tool-info.c:211
 msgid "Provide information about the render node."
 msgstr "Menyediakan informasi tentang simpul render."
 
-#: tools/gtk-rendernode-tool-info.c:222 tools/gtk-rendernode-tool-show.c:130
+#: tools/gtk-rendernode-tool-info.c:224 tools/gtk-rendernode-tool-show.c:134
 #: tools/gtk-rendernode-tool-render.c:225
 #, c-format
 msgid "No .node file specified\n"
 msgstr "Tidak ada berkas .node yang ditentukan\n"
 
-#: tools/gtk-rendernode-tool-info.c:228
+#: tools/gtk-rendernode-tool-info.c:230
 #, c-format
 msgid "Can only accept a single .node file\n"
 msgstr "Hanya dapat menerima satu berkas .node\n"
 
-#: tools/gtk-rendernode-tool-show.c:117
+#: tools/gtk-rendernode-tool-show.c:105
+msgid "Don't add a titlebar"
+msgstr "Jangan tambahkan bilah judul"
+
+#: tools/gtk-rendernode-tool-show.c:121
 msgid "Show the render node."
 msgstr "Menampilkan simpul render."
 
-#: tools/gtk-rendernode-tool-show.c:136
+#: tools/gtk-rendernode-tool-show.c:140
 #, c-format
 msgid "Can only preview a single .node file\n"
 msgstr "Hanya dapat memratinjau satu berkas .node\n"
@@ -7548,6 +7553,11 @@ msgstr ""
 #, c-format
 msgid "Error at %s: %s\n"
 msgstr "Galat di %s: %s\n"
+
+#: tools/gtk-rendernode-tool-utils.c:69
+#, c-format
+msgid "Failed to load node file: %s\n"
+msgstr "Gagal memuat berkas simpul: %s\n"
 
 #: tools/updateiconcache.c:1391
 #, c-format
