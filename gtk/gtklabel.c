@@ -1318,20 +1318,14 @@ get_width_for_height (GtkLabel *self,
         }
 
       /* then, do minimum width */
-      if (self->ellipsize != PANGO_ELLIPSIZE_NONE)
-        {
-          g_object_unref (layout);
-          layout = gtk_label_get_measuring_layout (self, NULL, MAX (minimum_default, 0));
-          pango_layout_get_size (layout, minimum_width, NULL);
-          *minimum_width = MAX (*minimum_width, minimum_default);
-        }
-      else if (self->natural_wrap_mode == GTK_NATURAL_WRAP_INHERIT)
+      if (self->natural_wrap_mode == GTK_NATURAL_WRAP_INHERIT && self->ellipsize == PANGO_ELLIPSIZE_NONE)
         {
           *minimum_width = *natural_width;
         }
       else
         {
           pango_layout_set_wrap (layout, self->wrap_mode);
+          pango_layout_set_ellipsize (layout, self->ellipsize);
           *minimum_width = my_pango_layout_get_width_for_height (layout, height, min, *natural_width);
         }
     }
