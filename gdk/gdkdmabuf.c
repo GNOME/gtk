@@ -710,7 +710,8 @@ gdk_dmabuf_direct_downloader_do_download (const GdkDmabufDownloader *downloader,
 
   dmabuf = gdk_dmabuf_texture_get_dmabuf (GDK_DMABUF_TEXTURE (texture));
   info = get_drm_format_info (dmabuf->fourcc);
-  g_return_if_fail (info->download);
+
+  g_return_if_fail (info && info->download);
 
   GDK_DISPLAY_DEBUG (gdk_dmabuf_texture_get_display (GDK_DMABUF_TEXTURE (texture)), DMABUF,
                      "Using %s for downloading a dmabuf (format %.4s:%#" G_GINT64_MODIFIER "x)",
