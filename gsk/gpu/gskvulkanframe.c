@@ -153,7 +153,7 @@ gsk_vulkan_frame_prepare_descriptors (GskVulkanFrame *self)
     {
       gsize n_desc_images, n_desc_buffers;
       GskVulkanRealDescriptors *desc = gsk_descriptors_get (&self->descriptors, i);
-      gsk_vulkan_real_descriptors_prepare (desc, GSK_GPU_FRAME (self), &n_desc_images, &n_desc_buffers);
+      gsk_vulkan_real_descriptors_prepare (desc, &n_desc_images, &n_desc_buffers);
       n_images += n_desc_images;
       n_buffers += n_desc_buffers;
     }
@@ -228,7 +228,7 @@ gsk_vulkan_frame_create_descriptors (GskGpuFrame *frame)
 
       if (parent == NULL)
         {
-          parent = gsk_vulkan_real_descriptors_new (GSK_VULKAN_DEVICE (gsk_gpu_frame_get_device (frame)));
+          parent = gsk_vulkan_real_descriptors_new (self);
           gsk_descriptors_append (&self->descriptors, parent);
         }
 
@@ -238,7 +238,7 @@ gsk_vulkan_frame_create_descriptors (GskGpuFrame *frame)
     {
       GskVulkanRealDescriptors *desc;
 
-      desc = gsk_vulkan_real_descriptors_new (GSK_VULKAN_DEVICE (gsk_gpu_frame_get_device (frame)));
+      desc = gsk_vulkan_real_descriptors_new (self);
       gsk_descriptors_append (&self->descriptors, desc);
 
       return GSK_GPU_DESCRIPTORS (g_object_ref (desc));
@@ -268,7 +268,7 @@ gsk_vulkan_frame_submit (GskGpuFrame  *frame,
   GskVulkanCommandState state;
 
   if (gsk_descriptors_get_size (&self->descriptors) == 0)
-    gsk_descriptors_append (&self->descriptors, gsk_vulkan_real_descriptors_new (GSK_VULKAN_DEVICE (gsk_gpu_frame_get_device (frame))));
+    gsk_descriptors_append (&self->descriptors, gsk_vulkan_real_descriptors_new (self));
 
   gsk_vulkan_frame_prepare_descriptors (self);
 
