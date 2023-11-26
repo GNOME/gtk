@@ -741,7 +741,7 @@ gdk_dmabuf_direct_downloader_do_download (const GdkDmabufDownloader *downloader,
       /* be a good citizen and seek back to the start, as the docs recommend */
       lseek (dmabuf->planes[i].fd, 0, SEEK_SET);
 
-      if (ioctl (dmabuf->planes[i].fd, DMA_BUF_IOCTL_SYNC, &(struct dma_buf_sync) { DMA_BUF_SYNC_START|DMA_BUF_SYNC_READ }) < 0)
+      if (gdk_dmabuf_ioctl (dmabuf->planes[i].fd, DMA_BUF_IOCTL_SYNC, &(struct dma_buf_sync) { DMA_BUF_SYNC_START|DMA_BUF_SYNC_READ }) < 0)
         g_warning ("Failed to sync dmabuf: %s", g_strerror (errno));
 
       src_data[i] = mmap (NULL, sizes[i], PROT_READ, MAP_SHARED, dmabuf->planes[i].fd, dmabuf->planes[i].offset);
@@ -770,7 +770,7 @@ out:
 
       munmap ((void *)src_data[i], sizes[i]);
 
-      if (ioctl (dmabuf->planes[i].fd, DMA_BUF_IOCTL_SYNC, &(struct dma_buf_sync) { DMA_BUF_SYNC_END|DMA_BUF_SYNC_READ }) < 0)
+      if (gdk_dmabuf_ioctl (dmabuf->planes[i].fd, DMA_BUF_IOCTL_SYNC, &(struct dma_buf_sync) { DMA_BUF_SYNC_END|DMA_BUF_SYNC_READ }) < 0)
         g_warning ("Failed to sync dmabuf: %s", g_strerror (errno));
     }
 }
@@ -819,6 +819,20 @@ gdk_dmabuf_get_direct_downloader (void)
   };
 
   return &downloader;
+}
+
+int
+gdk_dmabuf_ioctl (int            fd,
+                  unsigned long  request,
+                  void          *arg)
+{
+  int ret;
+
+  do {
+    ret = ioctl (fd, request, arg);
+  } while (ret == -1 && (errno == EINTR || errno == EAGAIN));
+
+  return ret;
 }
 
 /* 
