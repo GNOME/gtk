@@ -33,7 +33,7 @@ struct _GskVulkanRealDescriptors
 {
   GskVulkanDescriptors parent_instance;
 
-  GskVulkanDevice *device;
+  GskVulkanFrame *frame; /* no reference, the frame owns us */
 
   GskVulkanPipelineLayout *pipeline_layout;
 
@@ -67,7 +67,8 @@ gsk_vulkan_real_descriptors_bind (GskVulkanDescriptors *desc,
 
   vkCmdBindDescriptorSets (vk_command_buffer,
                            VK_PIPELINE_BIND_POINT_GRAPHICS,
-                           gsk_vulkan_device_get_vk_pipeline_layout (self->device, self->pipeline_layout),
+                           gsk_vulkan_device_get_vk_pipeline_layout (GSK_VULKAN_DEVICE (gsk_gpu_frame_get_device (GSK_GPU_FRAME (self->frame))),
+                                                                     self->pipeline_layout),
                            0,
                            G_N_ELEMENTS (self->descriptor_sets),
                            self->descriptor_sets,
@@ -83,6 +84,7 @@ gsk_vulkan_real_descriptors_add_image (GskGpuDescriptors *desc,
 {
   GskVulkanRealDescriptors *self = GSK_VULKAN_REAL_DESCRIPTORS (desc);
   GskVulkanImage *vulkan_image = GSK_VULKAN_IMAGE (image);
+  GskVulkanDevice *device = GSK_VULKAN_DEVICE (gsk_gpu_frame_get_device (GSK_GPU_FRAME (self->frame)));
   VkSampler vk_sampler;
   guint32 result;
 
@@ -91,11 +93,11 @@ gsk_vulkan_real_descriptors_add_image (GskGpuDescriptors *desc,
   if (vk_sampler)
     {
       if (gsk_descriptor_image_infos_get_size (&self->descriptor_immutable_images) >=
-          gsk_vulkan_device_get_max_immutable_samplers (self->device))
+          gsk_vulkan_device_get_max_immutable_samplers (device))
         return FALSE;
       if ((1 + gsk_descriptor_image_infos_get_size (&self->descriptor_immutable_images)) * 3 +
           gsk_descriptor_image_infos_get_size (&self->descriptor_images) >
-          gsk_vulkan_device_get_max_samplers (self->device))
+          gsk_vulkan_device_get_max_samplers (device))
         return FALSE;
 
       result = gsk_descriptor_image_infos_get_size (&self->descriptor_immutable_images) << 1 | 1;
@@ -111,14 +113,14 @@ gsk_vulkan_real_descriptors_add_image (GskGpuDescriptors *desc,
     {
       if (MAX (1, gsk_descriptor_image_infos_get_size (&self->descriptor_immutable_images) * 3) +
           gsk_descriptor_image_infos_get_size (&self->descriptor_images) >=
-          gsk_vulkan_device_get_max_samplers (self->device))
+          gsk_vulkan_device_get_max_samplers (device))
         return FALSE;
 
       result = gsk_descriptor_image_infos_get_size (&self->descriptor_images) << 1;
 
       gsk_descriptor_image_infos_append (&self->descriptor_images,
                                          &(VkDescriptorImageInfo) {
-                                           .sampler = gsk_vulkan_device_get_vk_sampler (self->device, sampler),
+                                           .sampler = gsk_vulkan_device_get_vk_sampler (device, sampler),
                                            .imageView = gsk_vulkan_image_get_vk_image_view (vulkan_image),
                                            .imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
                                          });
@@ -134,9 +136,10 @@ gsk_vulkan_real_descriptors_add_buffer (GskGpuDescriptors *desc,
                                         guint32           *out_descriptor)
 {
   GskVulkanRealDescriptors *self = GSK_VULKAN_REAL_DESCRIPTORS (desc);
+  GskVulkanDevice *device = GSK_VULKAN_DEVICE (gsk_gpu_frame_get_device (GSK_GPU_FRAME (self->frame)));
 
   if (gsk_descriptor_buffer_infos_get_size (&self->descriptor_buffers) >=
-      gsk_vulkan_device_get_max_buffers (self->device))
+      gsk_vulkan_device_get_max_buffers (device))
     return FALSE;
 
   *out_descriptor = gsk_descriptor_buffer_infos_get_size (&self->descriptor_buffers);
@@ -160,9 +163,8 @@ gsk_vulkan_real_descriptors_finalize (GObject *object)
   gsk_descriptor_image_infos_clear (&self->descriptor_images);
   gsk_descriptor_buffer_infos_clear (&self->descriptor_buffers);
 
-  gsk_vulkan_device_release_pipeline_layout (self->device, self->pipeline_layout);
-
-  g_object_unref (self->device);
+  gsk_vulkan_device_release_pipeline_layout (GSK_VULKAN_DEVICE (gsk_gpu_frame_get_device (GSK_GPU_FRAME (self->frame))),
+                                             self->pipeline_layout);
 
   G_OBJECT_CLASS (gsk_vulkan_real_descriptors_parent_class)->finalize (object);
 }
@@ -193,13 +195,13 @@ gsk_vulkan_real_descriptors_init (GskVulkanRealDescriptors *self)
 }
 
 GskVulkanRealDescriptors *
-gsk_vulkan_real_descriptors_new (GskVulkanDevice *device)
+gsk_vulkan_real_descriptors_new (GskVulkanFrame *frame)
 {
   GskVulkanRealDescriptors *self;
 
   self = g_object_new (GSK_TYPE_VULKAN_REAL_DESCRIPTORS, NULL);
 
-  self->device = g_object_ref (device);
+  self->frame = frame;
 
   return self;
 }
@@ -207,27 +209,31 @@ gsk_vulkan_real_descriptors_new (GskVulkanDevice *device)
 gboolean
 gsk_vulkan_real_descriptors_is_full (GskVulkanRealDescriptors *self)
 {
-  return gsk_descriptor_image_infos_get_size (&self->descriptor_immutable_images) >= gsk_vulkan_device_get_max_immutable_samplers (self->device) ||
+  GskVulkanDevice *device = GSK_VULKAN_DEVICE (gsk_gpu_frame_get_device (GSK_GPU_FRAME (self->frame)));
+
+  return gsk_descriptor_image_infos_get_size (&self->descriptor_immutable_images) >= gsk_vulkan_device_get_max_immutable_samplers (device) ||
          gsk_descriptor_image_infos_get_size (&self->descriptor_images) +
          MAX (1, gsk_descriptor_image_infos_get_size (&self->descriptor_immutable_images) * 3) >=
-         gsk_vulkan_device_get_max_samplers (self->device) ||
-         gsk_descriptor_buffer_infos_get_size (&self->descriptor_buffers) >= gsk_vulkan_device_get_max_buffers (self->device);
+         gsk_vulkan_device_get_max_samplers (device) ||
+         gsk_descriptor_buffer_infos_get_size (&self->descriptor_buffers) >= gsk_vulkan_device_get_max_buffers (device);
 }
 
 static void
-gsk_vulkan_real_descriptors_fill_sets (GskVulkanRealDescriptors *self,
-                                       GskGpuFrame              *frame)
+gsk_vulkan_real_descriptors_fill_sets (GskVulkanRealDescriptors *self)
 {
   gsize n_immutable_samplers, n_samplers, n_buffers;
+  GskVulkanDevice *device;
 
-  if (gsk_vulkan_device_has_feature (self->device, GDK_VULKAN_FEATURE_DESCRIPTOR_INDEXING))
+  device = GSK_VULKAN_DEVICE (gsk_gpu_frame_get_device (GSK_GPU_FRAME (self->frame)));
+
+  if (gsk_vulkan_device_has_feature (device, GDK_VULKAN_FEATURE_DESCRIPTOR_INDEXING))
     return;
 
   /* If descriptor indexing isn't supported, all descriptors in the shaders
    * must be properly setup. And that means we need to have
    * descriptors for all of them.
    */
-  gsk_vulkan_device_get_pipeline_sizes (self->device,
+  gsk_vulkan_device_get_pipeline_sizes (device,
                                         self->pipeline_layout,
                                         &n_immutable_samplers,
                                         &n_samplers,
@@ -239,7 +245,7 @@ gsk_vulkan_real_descriptors_fill_sets (GskVulkanRealDescriptors *self,
       guint32 ignored;
 
       if (!gsk_gpu_descriptors_add_image (GSK_GPU_DESCRIPTORS (self),
-                                          gsk_gpu_device_get_atlas_image (GSK_GPU_DEVICE (self->device)),
+                                          gsk_gpu_device_get_atlas_image (GSK_GPU_DEVICE (device)),
                                           GSK_GPU_SAMPLER_DEFAULT,
                                           &ignored))
         {
@@ -261,7 +267,7 @@ gsk_vulkan_real_descriptors_fill_sets (GskVulkanRealDescriptors *self,
       gsize ignored_offset;
       guint32 ignored;
 
-      buffer = gsk_gpu_frame_write_storage_buffer (frame, NULL, 0, &ignored_offset);
+      buffer = gsk_gpu_frame_write_storage_buffer (GSK_GPU_FRAME (self->frame), NULL, 0, &ignored_offset);
       if (!gsk_gpu_descriptors_add_buffer (GSK_GPU_DESCRIPTORS (self),
                                            buffer,
                                            &ignored))
@@ -277,16 +283,15 @@ gsk_vulkan_real_descriptors_fill_sets (GskVulkanRealDescriptors *self,
 
 void
 gsk_vulkan_real_descriptors_prepare (GskVulkanRealDescriptors *self,
-                                     GskGpuFrame              *frame,
                                      gsize                    *n_images,
                                      gsize                    *n_buffers)
 {
-  self->pipeline_layout = gsk_vulkan_device_acquire_pipeline_layout (self->device,
+  self->pipeline_layout = gsk_vulkan_device_acquire_pipeline_layout (GSK_VULKAN_DEVICE (gsk_gpu_frame_get_device (GSK_GPU_FRAME (self->frame))),
                                                                      gsk_samplers_get_data (&self->immutable_samplers),
                                                                      gsk_samplers_get_size (&self->immutable_samplers),
                                                                      gsk_descriptor_image_infos_get_size (&self->descriptor_images),
                                                                      gsk_descriptor_buffer_infos_get_size (&self->descriptor_buffers));
-  gsk_vulkan_real_descriptors_fill_sets (self, frame);
+  gsk_vulkan_real_descriptors_fill_sets (self);
 
   *n_images = MAX (1, gsk_descriptor_image_infos_get_size (&self->descriptor_immutable_images)) +
               gsk_descriptor_image_infos_get_size (&self->descriptor_images);
@@ -301,9 +306,11 @@ gsk_vulkan_real_descriptors_update_sets (GskVulkanRealDescriptors *self,
   gsize n_descriptor_sets;
   VkDevice vk_device;
   gboolean descriptor_indexing;
+  GskVulkanDevice *device;
 
-  descriptor_indexing = gsk_vulkan_device_has_feature (self->device, GDK_VULKAN_FEATURE_DESCRIPTOR_INDEXING);
-  vk_device = gsk_vulkan_device_get_vk_device (self->device);
+  device = GSK_VULKAN_DEVICE (gsk_gpu_frame_get_device (GSK_GPU_FRAME (self->frame)));
+  descriptor_indexing = gsk_vulkan_device_has_feature (device, GDK_VULKAN_FEATURE_DESCRIPTOR_INDEXING);
+  vk_device = gsk_vulkan_device_get_vk_device (device);
 
   GSK_VK_CHECK (vkAllocateDescriptorSets, vk_device,
                                           &(VkDescriptorSetAllocateInfo) {
@@ -311,8 +318,8 @@ gsk_vulkan_real_descriptors_update_sets (GskVulkanRealDescriptors *self,
                                               .descriptorPool = vk_descriptor_pool,
                                               .descriptorSetCount = GSK_VULKAN_N_DESCRIPTOR_SETS,
                                               .pSetLayouts = (VkDescriptorSetLayout[GSK_VULKAN_N_DESCRIPTOR_SETS]) {
-                                                gsk_vulkan_device_get_vk_image_set_layout (self->device, self->pipeline_layout),
-                                                gsk_vulkan_device_get_vk_buffer_set_layout (self->device, self->pipeline_layout),
+                                                gsk_vulkan_device_get_vk_image_set_layout (device, self->pipeline_layout),
+                                                gsk_vulkan_device_get_vk_buffer_set_layout (device, self->pipeline_layout),
                                               },
                                               .pNext = !descriptor_indexing ? NULL : &(VkDescriptorSetVariableDescriptorCountAllocateInfo) {
                                                 .sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_VARIABLE_DESCRIPTOR_COUNT_ALLOCATE_INFO,
