@@ -68,12 +68,12 @@ G_DEFINE_BOXED_TYPE (GdkRGBA, gdk_rgba,
 GdkRGBA *
 gdk_rgba_new_from_string (const char *spec)
 {
-  GdkRGBA *out = g_slice_alloc(sizeof(GdkRGBA));
-  if(!out)
+  GdkRGBA *out = g_new (GdkRGBA, 1);
+  if (!out)
     return NULL;
-  if(gdk_rgba_parse(out, spec))
+  if (gdk_rgba_parse (out, spec))
     return out;
-  gdk_rgba_free(out);
+  gdk_rgba_free (out);
   return NULL;
 }
 
