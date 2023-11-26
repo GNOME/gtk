@@ -835,6 +835,61 @@ gdk_dmabuf_ioctl (int            fd,
   return ret;
 }
 
+#if !defined(DMA_BUF_IOCTL_IMPORT_SYNC_FILE)
+struct dma_buf_import_sync_file
+{
+  __u32 flags;
+  __s32 fd;
+};
+#define DMA_BUF_IOCTL_IMPORT_SYNC_FILE _IOW(DMA_BUF_BASE, 3, struct dma_buf_import_sync_file)
+#endif
+
+gboolean
+gdk_dmabuf_import_sync_file (int     dmabuf_fd,
+                             guint32 flags,
+                             int     sync_file_fd)
+{
+  struct dma_buf_import_sync_file data = {
+    .flags = flags,
+    .fd = sync_file_fd,
+  };
+
+  if (gdk_dmabuf_ioctl (dmabuf_fd, DMA_BUF_IOCTL_IMPORT_SYNC_FILE, &data) != 0)
+    {
+      GDK_DEBUG (DMABUF, "Importing dmabuf sync failed: %s", g_strerror (errno));
+      return FALSE;
+    }
+  
+  return TRUE;
+}
+
+#if !defined(DMA_BUF_IOCTL_EXPORT_SYNC_FILE)
+struct dma_buf_export_sync_file
+{
+  __u32 flags;
+  __s32 fd;
+};
+#define DMA_BUF_IOCTL_EXPORT_SYNC_FILE _IOWR(DMA_BUF_BASE, 2, struct dma_buf_export_sync_file)
+#endif
+
+int
+gdk_dmabuf_export_sync_file (int     dmabuf_fd,
+                             guint32 flags)
+{
+  struct dma_buf_export_sync_file data = {
+    .flags = flags,
+    .fd = -1,
+  };
+
+  if (gdk_dmabuf_ioctl (dmabuf_fd, DMA_BUF_IOCTL_EXPORT_SYNC_FILE, &data) != 0)
+    {
+      GDK_DEBUG (DMABUF, "Exporting dmabuf sync failed: %s", g_strerror (errno));
+      return -1;
+    }
+
+  return data.fd;
+}
+
 /* 
  * Tries to sanitize the dmabuf to conform to the values expected
  * by Vulkan/EGL which should also be the values expected by
