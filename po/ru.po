@@ -22,8 +22,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2023-10-31 21:36+0000\n"
-"PO-Revision-Date: 2023-11-01 23:34+0300\n"
+"POT-Creation-Date: 2023-11-18 03:13+0000\n"
+"PO-Revision-Date: 2023-11-18 17:20+0300\n"
 "Last-Translator: Artur So <arturios2005@mail.ru>\n"
 "Language-Team: Русский <gnome-cyr@gnome.org>\n"
 "Language: ru\n"
@@ -32,7 +32,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Poedit 3.3.2\n"
+"X-Generator: Poedit 3.4.1\n"
 
 #: gdk/broadway/gdkbroadway-server.c:135
 #, c-format
@@ -1748,7 +1748,7 @@ msgstr "окно"
 #: gtk/gtkaccessible.c:833
 msgctxt "accessibility"
 msgid "toggle button"
-msgstr "Кнопка-переключатель"
+msgstr "кнопка-переключатель"
 
 #: gtk/gtkalertdialog.c:668 gtk/print/gtkcustompaperunixdialog.c:322
 #: gtk/gtkmessagedialog.c:166 gtk/ui/gtkassistant.ui:40
@@ -2235,7 +2235,7 @@ msgstr "Файл с таким именем уже существует"
 #: gtk/gtkmessagedialog.c:179 gtk/gtkmountoperation.c:608
 #: gtk/print/gtkpagesetupunixdialog.c:282 gtk/print/gtkprintbackend.c:638
 #: gtk/print/gtkprintunixdialog.c:682 gtk/print/gtkprintunixdialog.c:839
-#: gtk/gtkwindow.c:6242 gtk/ui/gtkappchooserdialog.ui:48
+#: gtk/gtkwindow.c:6233 gtk/ui/gtkappchooserdialog.ui:48
 #: gtk/ui/gtkassistant.ui:52 gtk/ui/gtkcolorchooserdialog.ui:36
 #: gtk/ui/gtkfontchooserdialog.ui:27
 msgid "_Cancel"
@@ -2353,7 +2353,7 @@ msgstr "_Открыть в файловом менеджере"
 
 #: gtk/gtkfilechooserwidget.c:1803
 msgid "_Copy Location"
-msgstr "Копировать _адрес"
+msgstr "_Копировать расположение"
 
 #: gtk/gtkfilechooserwidget.c:1807
 msgid "_Add to Bookmarks"
@@ -2450,13 +2450,14 @@ msgstr "Вчера"
 
 # полное название месяца
 #: gtk/gtkfilechooserwidget.c:3823
+#, c-format
 msgid "%-e %b"
-msgstr "%-e %B"
+msgstr "%-e %b"
 
 # полное название месяца
 #: gtk/gtkfilechooserwidget.c:3827
 msgid "%-e %b %Y"
-msgstr "%-e %B %Y"
+msgstr "%-e %b %Y"
 
 #: gtk/gtkfilechooserwidget.c:3869 gtk/gtkfilechooserwidget.c:3877
 msgid "Program"
@@ -2760,7 +2761,7 @@ msgid "Play"
 msgstr "Воспроизвести"
 
 #: gtk/gtkmessagedialog.c:162 gtk/gtkmessagedialog.c:180
-#: gtk/print/gtkprintbackend.c:639 gtk/gtkwindow.c:6243
+#: gtk/print/gtkprintbackend.c:639 gtk/gtkwindow.c:6234
 msgid "_OK"
 msgstr "_OK"
 
@@ -3642,12 +3643,12 @@ msgstr "_Отменить"
 msgid "_Redo"
 msgstr "_Повторить"
 
-#: gtk/gtkwindow.c:6231
+#: gtk/gtkwindow.c:6222
 #, c-format
 msgid "Do you want to use GTK Inspector?"
 msgstr "Вы хотите использовать GTK Inspector?"
 
-#: gtk/gtkwindow.c:6233
+#: gtk/gtkwindow.c:6224
 #, c-format
 msgid ""
 "GTK Inspector is an interactive debugger that lets you explore and modify "
@@ -3658,7 +3659,7 @@ msgstr ""
 "изменять внутренние компоненты любого GTK-приложения. Его использование "
 "может привести к поломке или аварийному завершению работы приложения."
 
-#: gtk/gtkwindow.c:6238
+#: gtk/gtkwindow.c:6229
 msgid "Don’t show this message again"
 msgstr "Не показывать это сообщение снова"
 
@@ -3898,7 +3899,7 @@ msgstr "Карта шрифтов Pango"
 
 #: gtk/inspector/general.ui:135
 msgid "Media Backend"
-msgstr "Медиа бэкенд"
+msgstr "Медиа движок"
 
 #: gtk/inspector/general.ui:161
 msgid "Input Method"
@@ -6396,7 +6397,7 @@ msgstr "По_рядок страниц:"
 
 #: gtk/print/ui/gtkprintunixdialog.ui:539
 msgid "_Only print:"
-msgstr "_Только печать:"
+msgstr "Печатать _только:"
 
 #: gtk/print/ui/gtkprintunixdialog.ui:555
 msgid "All sheets"
@@ -7208,7 +7209,7 @@ msgstr ""
 #: tools/gtk-builder-tool-enumerate.c:56 tools/gtk-builder-tool-preview.c:179
 #: tools/gtk-builder-tool-preview.c:180 tools/gtk-builder-tool-screenshot.c:360
 #: tools/gtk-builder-tool-simplify.c:2529 tools/gtk-builder-tool-validate.c:261
-#: tools/gtk-rendernode-tool-info.c:202 tools/gtk-rendernode-tool-show.c:102
+#: tools/gtk-rendernode-tool-info.c:202 tools/gtk-rendernode-tool-show.c:106
 msgid "FILE"
 msgstr "ФАЙЛ"
 
@@ -7240,7 +7241,7 @@ msgid "Use style from CSS file"
 msgstr "Использовать стиль из файла CSS"
 
 #: tools/gtk-builder-tool-preview.c:187 tools/gtk-builder-tool-screenshot.c:370
-#: tools/gtk-builder-tool-validate.c:268 tools/gtk-rendernode-tool-show.c:109
+#: tools/gtk-builder-tool-validate.c:268 tools/gtk-rendernode-tool-show.c:113
 #: tools/gtk-rendernode-tool-render.c:204
 #, c-format
 msgid "Could not initialize windowing system\n"
@@ -7515,7 +7516,7 @@ msgstr "Источник: %g %g\n"
 msgid "Provide information about the render node."
 msgstr "Предоставить информацию об узле рендеринга."
 
-#: tools/gtk-rendernode-tool-info.c:224 tools/gtk-rendernode-tool-show.c:130
+#: tools/gtk-rendernode-tool-info.c:224 tools/gtk-rendernode-tool-show.c:134
 #: tools/gtk-rendernode-tool-render.c:225
 #, c-format
 msgid "No .node file specified\n"
@@ -7526,11 +7527,15 @@ msgstr "Не указан файл .node\n"
 msgid "Can only accept a single .node file\n"
 msgstr "Можно принимать только один файл .node\n"
 
-#: tools/gtk-rendernode-tool-show.c:117
+#: tools/gtk-rendernode-tool-show.c:105
+msgid "Don't add a titlebar"
+msgstr "Не добавлять панель заголовка"
+
+#: tools/gtk-rendernode-tool-show.c:121
 msgid "Show the render node."
 msgstr "Показать узел рендеринга."
 
-#: tools/gtk-rendernode-tool-show.c:136
+#: tools/gtk-rendernode-tool-show.c:140
 #, c-format
 msgid "Can only preview a single .node file\n"
 msgstr "Можно предварительно просмотреть только один .node файл\n"
