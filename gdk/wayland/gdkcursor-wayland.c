@@ -175,7 +175,7 @@ _gdk_wayland_cursor_get_buffer (GdkWaylandDisplay *display,
                                             _gdk_wayland_display_get_cursor_theme (display),
                                             desired_scale,
                                             gdk_cursor_get_name (cursor));
-      if (c)
+      if (c && c->image_count > 0)
         {
           struct wl_cursor_image *image;
           int cursor_scale;
