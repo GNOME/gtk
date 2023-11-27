@@ -685,6 +685,8 @@ stack-allocated using `g_newa()` or `g_alloca()`. But limit the amount
 of stack memory that you consume this way, in particular in recursive
 functions.
 
+On Windows, the default stack size we have to work with is 1M.
+
 ### Macros
 
 Try to avoid private macros unless strictly necessary. Remember to #undef
