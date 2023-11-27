@@ -220,7 +220,7 @@ _gdk_wayland_cursor_get_buffer (GdkCursor *cursor,
 {
   GdkWaylandCursor *wayland_cursor = GDK_WAYLAND_CURSOR (cursor);
 
-  if (wayland_cursor->wl_cursor)
+  if (wayland_cursor->wl_cursor && wayland_cursor->wl_cursor->image_count > 0)
     {
       struct wl_cursor_image *image;
       int cursor_scale;
