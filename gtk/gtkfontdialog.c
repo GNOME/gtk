@@ -926,9 +926,9 @@ gtk_font_dialog_choose_font_and_features (GtkFontDialog        *self,
  * gtk_font_dialog_choose_font_and_features_finish:
  * @self: a `GtkFontDialog`
  * @result: a `GAsyncResult`
- * @font_desc: (out caller-allocates): return location for font description
- * @font_features: (out caller-allocates): return location for font features
- * @language: (out caller-allocates): return location for the language
+ * @font_desc: (out): return location for font description
+ * @font_features: (out): return location for font features
+ * @language: (out): return location for the language
  * @error: return location for a [enum@Gtk.DialogError] error
  *
  * Finishes the [method@Gtk.FontDialog.choose_font_and_features]
