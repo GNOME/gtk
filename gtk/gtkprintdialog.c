@@ -1562,7 +1562,7 @@ gtk_print_dialog_print (GtkPrintDialog       *self,
   ptd->token = setup ? setup->token : 0;
   g_task_set_task_data (task, ptd, print_task_data_free);
 
-  if (!g_unix_open_pipe (ptd->fds, FD_CLOEXEC, &error))
+  if (!g_unix_open_pipe (ptd->fds, O_CLOEXEC, &error))
     {
       g_task_return_error (task, error);
       g_object_unref (task);

@@ -1564,6 +1564,7 @@ gsk_gl_command_queue_do_upload_texture_chunk (GskGLCommandQueue *self,
                                               int                x,
                                               int                y)
 {
+  G_GNUC_UNUSED gint64 start_time = GDK_PROFILER_CURRENT_TIME;
   const guchar *data;
   gsize stride;
   GBytes *bytes;
@@ -1593,6 +1594,15 @@ gsk_gl_command_queue_do_upload_texture_chunk (GskGLCommandQueue *self,
   gdk_texture_downloader_finish (&downloader);
   data = g_bytes_get_data (bytes, NULL);
   bpp = gdk_memory_format_bytes_per_pixel (data_format);
+
+  if (gdk_profiler_is_running ())
+    {
+      gdk_profiler_add_markf (start_time, GDK_PROFILER_CURRENT_TIME-start_time,
+                              "Download Texture chunk",
+                              "Tile %dx%d Size %dx%d", x, y, width, height);
+      start_time = GDK_PROFILER_CURRENT_TIME;
+    }
+
 
   glPixelStorei (GL_UNPACK_ALIGNMENT, gdk_memory_format_alignment (data_format));
 
@@ -1632,6 +1642,11 @@ gsk_gl_command_queue_do_upload_texture_chunk (GskGLCommandQueue *self,
     }
 
   g_bytes_unref (bytes);
+
+  if (gdk_profiler_is_running ())
+    gdk_profiler_add_markf (start_time, GDK_PROFILER_CURRENT_TIME-start_time,
+                            "Upload Texture chunk",
+                            "Tile %dx%d Size %dx%d", x, y, width, height);
 }
 
 int
