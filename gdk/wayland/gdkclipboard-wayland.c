@@ -245,7 +245,7 @@ gdk_wayland_clipboard_read_async (GdkClipboard        *clipboard,
 
   g_task_set_task_data (task, (gpointer) mime_type, NULL);
 
-  if (!g_unix_open_pipe (pipe_fd, FD_CLOEXEC, &error))
+  if (!g_unix_open_pipe (pipe_fd, O_CLOEXEC, &error))
     {
       g_task_return_error (task, error);
       return;
