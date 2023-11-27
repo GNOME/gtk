@@ -214,7 +214,7 @@ gtk_css_filter_get_matrix (const GtkCssFilter *filter,
       break;
 
     case GTK_CSS_FILTER_OPACITY:
-      value = _gtk_css_number_value_get (filter->invert.value, 1.0);
+      value = _gtk_css_number_value_get (filter->opacity.value, 1.0);
       graphene_matrix_init_from_float (matrix, (float[16]) {
                                            1.0, 0.0, 0.0, 0.0,
                                            0.0, 1.0, 0.0, 0.0,
