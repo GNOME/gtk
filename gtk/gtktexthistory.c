@@ -1083,7 +1083,6 @@ gtk_text_history_modified_changed (GtkTextHistory *self,
 
   return_if_not_enabled (self);
   return_if_applying (self);
-  return_if_irreversible (self);
 
   /* If we have a new save point, clear all previous modified states. */
   gtk_text_history_clear_modified (self);
@@ -1115,7 +1114,8 @@ gtk_text_history_modified_changed (GtkTextHistory *self,
   self->is_modified = !!modified;
   self->is_modified_set = TRUE;
 
-  gtk_text_history_update_state (self);
+  if (!self->irreversible)
+    gtk_text_history_update_state (self);
 }
 
 void
