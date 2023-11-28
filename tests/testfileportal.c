@@ -48,8 +48,6 @@ drag_data_get (GtkWidget        *widget,
   char **uris = (char **)g_object_get_data (G_OBJECT (widget), "uris");
 
   gtk_selection_data_set_uris (selection, uris);
-
-  g_object_set_data (G_OBJECT (widget), "uris", NULL);
 }
 
 static void
