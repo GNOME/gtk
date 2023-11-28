@@ -40,6 +40,7 @@
 #include <gdk/gdkglcontextprivate.h>
 #include <gdk/gdkdisplayprivate.h>
 #include <gdk/gdkmemorytextureprivate.h>
+#include <gdk/gdkmemoryformatprivate.h>
 #include <gdk/gdkprofilerprivate.h>
 #include <gdk/gdktextureprivate.h>
 
@@ -1407,6 +1408,8 @@ gsk_gl_driver_add_texture_slices (GskGLDriver        *self,
   int tex_height;
   int x = 0, y = 0;
   GdkMemoryTexture *memtex;
+  GdkMemoryFormat format;
+  gsize bpp;
   int extra_pixels;
   GdkMemoryTexture *memtex1 = NULL;
   GdkMemoryTexture *memtex2 = NULL;
@@ -1501,21 +1504,20 @@ gsk_gl_driver_add_texture_slices (GskGLDriver        *self,
       data3 = g_malloc (4 * extra_pixels * tex_height);
       data4 = g_malloc (4 * w * extra_pixels);
 
+      format = gdk_texture_get_format (GDK_TEXTURE (memtex));
+      bpp = gdk_memory_format_bytes_per_pixel (format);
+
       for (int i = 0; i < w; i++)
         {
           int ii = CLAMP (i, extra_pixels, (tex_width - 1) + extra_pixels) - extra_pixels;
 
           for (int j = 0; j < extra_pixels; j++)
             {
-              data1[(j * w + i) * 4]     = top_row[ii * 4];
-              data1[(j * w + i) * 4 + 1] = top_row[ii * 4 + 1];
-              data1[(j * w + i) * 4 + 2] = top_row[ii * 4 + 2];
-              data1[(j * w + i) * 4 + 3] = top_row[ii * 4 + 3];
-
-              data4[(j * w + i) * 4]     = bot_row[ii * 4];
-              data4[(j * w + i) * 4 + 1] = bot_row[ii * 4 + 1];
-              data4[(j * w + i) * 4 + 2] = bot_row[ii * 4 + 2];
-              data4[(j * w + i) * 4 + 3] = bot_row[ii * 4 + 3];
+              for (int k = 0; k < bpp; k++)
+                {
+                  data1[(j * w + i) * 4 + k] = top_row[ii * 4 + k];
+                  data4[(j * w + i) * 4 + k] = bot_row[ii * 4 + k];
+                }
             }
         }
 
@@ -1523,15 +1525,11 @@ gsk_gl_driver_add_texture_slices (GskGLDriver        *self,
         {
           for (int j = 0; j < tex_height; j++)
             {
-              data2[(j * extra_pixels + i) * 4]     = left_row[j * 4];
-              data2[(j * extra_pixels + i) * 4 + 1] = left_row[j * 4 + 1];
-              data2[(j * extra_pixels + i) * 4 + 2] = left_row[j * 4 + 2];
-              data2[(j * extra_pixels + i) * 4 + 3] = left_row[j * 4 + 3];
-
-              data3[(j * extra_pixels + i) * 4]     = right_row[j * 4];
-              data3[(j * extra_pixels + i) * 4 + 1] = right_row[j * 4 + 1];
-              data3[(j * extra_pixels + i) * 4 + 2] = right_row[j * 4 + 2];
-              data3[(j * extra_pixels + i) * 4 + 3] = right_row[j * 4 + 3];
+              for (int k = 0; k < bpp; k++)
+                {
+                  data2[(j * extra_pixels + i) * 4 + k] = left_row[j * 4 + k];
+                  data3[(j * extra_pixels + i) * 4 + k] = right_row[j * 4 + k];
+                }
             }
         }
 
@@ -1541,19 +1539,19 @@ gsk_gl_driver_add_texture_slices (GskGLDriver        *self,
       g_free (right_row);
 
       bytes = g_bytes_new_take (data1, 4 * w * extra_pixels);
-      memtex1 = GDK_MEMORY_TEXTURE (gdk_memory_texture_new (w, extra_pixels, GDK_MEMORY_DEFAULT, bytes, 4 * w));
+      memtex1 = GDK_MEMORY_TEXTURE (gdk_memory_texture_new (w, extra_pixels, format, bytes, 4 * w));
       g_bytes_unref (bytes);
 
       bytes = g_bytes_new_take (data2, 4 * extra_pixels * tex_height);
-      memtex2 = GDK_MEMORY_TEXTURE (gdk_memory_texture_new (extra_pixels, tex_height, GDK_MEMORY_DEFAULT, bytes, 4 * extra_pixels));
+      memtex2 = GDK_MEMORY_TEXTURE (gdk_memory_texture_new (extra_pixels, tex_height, format, bytes, 4 * extra_pixels));
       g_bytes_unref (bytes);
 
       bytes = g_bytes_new_take (data3, 4 * extra_pixels * tex_height);
-      memtex3 = GDK_MEMORY_TEXTURE (gdk_memory_texture_new (extra_pixels, tex_height, GDK_MEMORY_DEFAULT, bytes, 4 * extra_pixels));
+      memtex3 = GDK_MEMORY_TEXTURE (gdk_memory_texture_new (extra_pixels, tex_height, format, bytes, 4 * extra_pixels));
       g_bytes_unref (bytes);
 
       bytes = g_bytes_new_take (data4, 4 * w * extra_pixels);
-      memtex4 = GDK_MEMORY_TEXTURE (gdk_memory_texture_new (w, extra_pixels, GDK_MEMORY_DEFAULT, bytes, 4 * w));
+      memtex4 = GDK_MEMORY_TEXTURE (gdk_memory_texture_new (w, extra_pixels, format, bytes, 4 * w));
       g_bytes_unref (bytes);
     }
   else
