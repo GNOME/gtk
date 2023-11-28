@@ -62,7 +62,7 @@ G_DEFINE_BOXED_TYPE (GdkRGBA, gdk_rgba,
  * represented by @spec.
  *
  * If @spec does not conform to the formats specified by
- * [func@Gdk.Rgba.parse], this function will return `NULL`.
+ * [method@Gdk.RGBA.parse], this function will return `NULL`.
  *
  * Returns: (transfer full) (nullable): A newly allocated `GdkRGBA`
  *
