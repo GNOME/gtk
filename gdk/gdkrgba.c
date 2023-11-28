@@ -63,8 +63,6 @@ G_DEFINE_BOXED_TYPE (GdkRGBA, gdk_rgba,
  *
  * If @spec does not conform to the formats specified by
  * [func@Gdk.Rgba.parse], this function will return `NULL`.
- * 
- * The result must be freed through [method@Gdk.RGBA.free].
  *
  * Returns: (transfer full) (nullable): A newly allocated `GdkRGBA`
  *
@@ -74,8 +72,6 @@ GdkRGBA *
 gdk_rgba_new_from_string (const char *spec)
 {
   GdkRGBA *out = g_new (GdkRGBA, 1);
-  if (!out)
-    return NULL;
   if (gdk_rgba_parse (out, spec))
     return out;
   gdk_rgba_free (out);
