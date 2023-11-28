@@ -210,19 +210,20 @@ test_color_hash (void)
 static void
 test_alloc_from_string (void)
 {
-  GdkRGBA expected;
-  expected.red = 1.0;
-  expected.green = 0.0;
-  expected.blue = 1.0;
-  expected.alpha = 1.0;
+  GdkRGBA expected = {
+    .red = 1.0,
+    .green = 0.0,
+    .blue = 1.0,
+    .alpha = 1.0,
+  };
 
-  GdkRGBA *parsed = gdk_rgba_new_from_string("#ff00ff");
+  GdkRGBA *parsed = gdk_rgba_new_from_string ("#ff00ff");
   g_assert_true (gdk_rgba_equal (&expected, parsed));
 
-  gdk_rgba_free(parsed);
+  gdk_rgba_free (parsed);
 
-  GdkRGBA *fail = gdk_rgba_new_from_string("//xx!!");
-  g_assert_true (fail == NULL);
+  GdkRGBA *fail = gdk_rgba_new_from_string ("//xx!!");
+  g_assert_null (fail);
 }
 
 int

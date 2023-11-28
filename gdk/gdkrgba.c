@@ -61,9 +61,14 @@ G_DEFINE_BOXED_TYPE (GdkRGBA, gdk_rgba,
  * Allocates a new `GdkRGBA` and populates it with the color values
  * represented by @spec.
  *
+ * If @spec does not conform to the formats specified by
+ * [func@Gdk.Rgba.parse], this function will return `NULL`.
+ * 
  * The result must be freed through [method@Gdk.RGBA.free].
  *
- * Returns: A newly allocated `GdkRGBA`, or `NULL` if @spec cannot be parsed.
+ * Returns: (transfer full) (nullable): A newly allocated `GdkRGBA`
+ *
+ * Since: 4.14
  */
 GdkRGBA *
 gdk_rgba_new_from_string (const char *spec)
