@@ -1005,7 +1005,7 @@ _gdk_macos_display_get_nsevent (GdkEvent *event)
 }
 
 NSEvent *
-_gdk_macos_display_get_last_nsevent ()
+_gdk_macos_display_get_last_nsevent (void)
 {
   const GdkToNSEventMap *map = g_queue_peek_tail (&event_map);
   if (map)
