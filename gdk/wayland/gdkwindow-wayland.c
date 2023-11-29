@@ -1874,6 +1874,18 @@ xdg_toplevel_configure (void                *data,
           break;
         case XDG_TOPLEVEL_STATE_RESIZING:
           break;
+        case XDG_TOPLEVEL_STATE_TILED_TOP:
+          pending_state |= (GDK_WINDOW_STATE_TILED | GDK_WINDOW_STATE_TOP_TILED);
+          break;
+        case XDG_TOPLEVEL_STATE_TILED_RIGHT:
+          pending_state |= (GDK_WINDOW_STATE_TILED | GDK_WINDOW_STATE_RIGHT_TILED);
+          break;
+        case XDG_TOPLEVEL_STATE_TILED_BOTTOM:
+          pending_state |= (GDK_WINDOW_STATE_TILED | GDK_WINDOW_STATE_BOTTOM_TILED);
+          break;
+        case XDG_TOPLEVEL_STATE_TILED_LEFT:
+          pending_state |= (GDK_WINDOW_STATE_TILED | GDK_WINDOW_STATE_LEFT_TILED);
+          break;
         default:
           /* Unknown state */
           break;
@@ -1893,9 +1905,26 @@ xdg_toplevel_close (void                *data,
   gdk_wayland_window_handle_close (window);
 }
 
+static void
+xdg_toplevel_configure_bounds (void                *data,
+                               struct xdg_toplevel *xdg_toplevel,
+                               int32_t              width,
+                               int32_t              height)
+{
+}
+
+static void
+xdg_toplevel_wm_capabilities (void                *data,
+                              struct xdg_toplevel *xdg_toplevel,
+                              struct wl_array     *capabilities)
+{
+}
+
 static const struct xdg_toplevel_listener xdg_toplevel_listener = {
   xdg_toplevel_configure,
   xdg_toplevel_close,
+  xdg_toplevel_configure_bounds,
+  xdg_toplevel_wm_capabilities,
 };
 
 static void
