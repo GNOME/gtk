@@ -52,6 +52,7 @@ void                    gsk_vulkan_image_set_vk_image_layout            (GskVulk
                                                                          VkImageLayout           image_layout,
                                                                          VkAccessFlags           access);
 void                    gsk_vulkan_image_transition                     (GskVulkanImage         *self,
+                                                                         GskVulkanSemaphores    *semaphores,
                                                                          VkCommandBuffer         command_buffer,
                                                                          VkPipelineStageFlags    stage,
                                                                          VkImageLayout           image_layout,

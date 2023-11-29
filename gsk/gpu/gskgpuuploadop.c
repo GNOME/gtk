@@ -130,6 +130,7 @@ gsk_gpu_upload_op_vk_command_with_area (GskGpuOp                    *op,
                         },
                         0, NULL);
   gsk_vulkan_image_transition (image, 
+                               state->semaphores,
                                state->vk_command_buffer,
                                VK_PIPELINE_STAGE_TRANSFER_BIT,
                                VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,

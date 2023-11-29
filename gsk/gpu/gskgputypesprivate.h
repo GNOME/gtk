@@ -18,6 +18,7 @@ typedef struct _GskGpuOpClass           GskGpuOpClass;
 typedef struct _GskGpuShaderOp          GskGpuShaderOp;
 typedef struct _GskGpuShaderOpClass     GskGpuShaderOpClass;
 typedef struct _GskVulkanDescriptors    GskVulkanDescriptors;
+typedef struct _GskVulkanSemaphores     GskVulkanSemaphores;
 
 typedef enum {
   GSK_GPU_IMAGE_EXTERNAL       = (1 << 0),

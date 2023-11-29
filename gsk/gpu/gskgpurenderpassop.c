@@ -88,11 +88,11 @@ gsk_gpu_render_pass_op_do_barriers (GskGpuRenderPassOp     *self,
           state->desc = GSK_VULKAN_DESCRIPTORS (shader->desc);
         }
       desc = shader->desc;
-      gsk_vulkan_descriptors_transition (GSK_VULKAN_DESCRIPTORS (desc), state->vk_command_buffer);
+      gsk_vulkan_descriptors_transition (GSK_VULKAN_DESCRIPTORS (desc), state->semaphores, state->vk_command_buffer);
     }
 
   if (desc == NULL)
-    gsk_vulkan_descriptors_transition (state->desc, state->vk_command_buffer);
+    gsk_vulkan_descriptors_transition (state->desc, state->semaphores, state->vk_command_buffer);
 }
 
 static GskGpuOp *

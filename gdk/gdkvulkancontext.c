@@ -39,6 +39,8 @@ static const GdkDebugKey gsk_vulkan_feature_keys[] = {
   { "descriptor-indexing", GDK_VULKAN_FEATURE_DESCRIPTOR_INDEXING, "Force slow descriptor set layout codepath" },
   { "dynamic-indexing", GDK_VULKAN_FEATURE_DYNAMIC_INDEXING, "Hardcode small number of buffer and texure arrays" },
   { "nonuniform-indexing", GDK_VULKAN_FEATURE_NONUNIFORM_INDEXING, "Split draw calls to ensure uniform texture accesses" },
+  { "semaphore-export", GDK_VULKAN_FEATURE_SEMAPHORE_EXPORT, "Disable sync of exported dmabufs" },
+  { "semaphore-import", GDK_VULKAN_FEATURE_SEMAPHORE_IMPORT, "Disable sync of imported dmabufs" },
 };
 #endif
 
@@ -562,8 +564,17 @@ physical_device_check_features (VkPhysicalDevice   device,
       .sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_FEATURES_2,
       .pNext = &ycbcr_features
   };
+  VkExternalSemaphoreProperties semaphore_props = {
+      .sType = VK_STRUCTURE_TYPE_EXTERNAL_SEMAPHORE_PROPERTIES,
+  };
 
   vkGetPhysicalDeviceFeatures2 (device, &features);
+  vkGetPhysicalDeviceExternalSemaphoreProperties (device,
+                                                  &(VkPhysicalDeviceExternalSemaphoreInfo) {
+		                                      .sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_EXTERNAL_SEMAPHORE_INFO,
+		                                      .handleType = VK_EXTERNAL_SEMAPHORE_HANDLE_TYPE_SYNC_FD_BIT,
+	                                          },
+                                                  &semaphore_props);
 
   *out_features = 0;
 
@@ -590,6 +601,15 @@ physical_device_check_features (VkPhysicalDevice   device,
   if (physical_device_supports_extension (device, VK_KHR_EXTERNAL_MEMORY_FD_EXTENSION_NAME) &&
       physical_device_supports_extension (device, VK_EXT_IMAGE_DRM_FORMAT_MODIFIER_EXTENSION_NAME))
     *out_features |= GDK_VULKAN_FEATURE_DMABUF;
+
+  if (physical_device_supports_extension (device, VK_KHR_EXTERNAL_SEMAPHORE_FD_EXTENSION_NAME))
+    {
+      if (semaphore_props.externalSemaphoreFeatures & VK_EXTERNAL_SEMAPHORE_FEATURE_EXPORTABLE_BIT)
+        *out_features |= GDK_VULKAN_FEATURE_SEMAPHORE_EXPORT;
+
+      if (semaphore_props.externalSemaphoreFeatures & VK_EXTERNAL_SEMAPHORE_FEATURE_IMPORTABLE_BIT)
+        *out_features |= GDK_VULKAN_FEATURE_SEMAPHORE_IMPORT;
+    }
 
   return TRUE;
 }
@@ -1450,6 +1470,8 @@ gdk_display_create_vulkan_device (GdkDisplay  *display,
                   g_ptr_array_add (device_extensions, (gpointer) VK_KHR_EXTERNAL_MEMORY_FD_EXTENSION_NAME);
                   g_ptr_array_add (device_extensions, (gpointer) VK_EXT_IMAGE_DRM_FORMAT_MODIFIER_EXTENSION_NAME);
                 }
+              if (features & (GDK_VULKAN_FEATURE_SEMAPHORE_IMPORT | GDK_VULKAN_FEATURE_SEMAPHORE_EXPORT))
+                g_ptr_array_add (device_extensions, (gpointer) VK_KHR_EXTERNAL_SEMAPHORE_FD_EXTENSION_NAME);
               if (physical_device_supports_extension (devices[i], VK_KHR_INCREMENTAL_PRESENT_EXTENSION_NAME))
                 g_ptr_array_add (device_extensions, (gpointer) VK_KHR_INCREMENTAL_PRESENT_EXTENSION_NAME);
 

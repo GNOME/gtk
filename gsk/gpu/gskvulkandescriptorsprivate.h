@@ -35,6 +35,7 @@ GType                           gsk_vulkan_descriptors_get_type                 
 GskVulkanPipelineLayout *       gsk_vulkan_descriptors_get_pipeline_layout      (GskVulkanDescriptors   *self);
 
 void                            gsk_vulkan_descriptors_transition               (GskVulkanDescriptors   *self,
+                                                                                 GskVulkanSemaphores    *semaphores,
                                                                                  VkCommandBuffer         vk_command_buffer);
 void                            gsk_vulkan_descriptors_bind                     (GskVulkanDescriptors   *self,
                                                                                  GskVulkanDescriptors   *previous,

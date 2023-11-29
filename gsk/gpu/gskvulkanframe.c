@@ -20,6 +20,27 @@
 #define GDK_ARRAY_NO_MEMSET 1
 #include "gdk/gdkarrayimpl.c"
 
+#define GDK_ARRAY_NAME gsk_semaphores
+#define GDK_ARRAY_TYPE_NAME GskSemaphores
+#define GDK_ARRAY_ELEMENT_TYPE VkSemaphore
+#define GDK_ARRAY_PREALLOC 16
+#define GDK_ARRAY_NO_MEMSET 1
+#include "gdk/gdkarrayimpl.c"
+
+#define GDK_ARRAY_NAME gsk_pipeline_stages
+#define GDK_ARRAY_TYPE_NAME GskPipelineStages
+#define GDK_ARRAY_ELEMENT_TYPE VkPipelineStageFlags
+#define GDK_ARRAY_PREALLOC 16
+#define GDK_ARRAY_NO_MEMSET 1
+#include "gdk/gdkarrayimpl.c"
+
+struct _GskVulkanSemaphores
+{
+  GskSemaphores wait_semaphores;
+  GskPipelineStages wait_stages;
+  GskSemaphores signal_semaphores;
+};
+
 struct _GskVulkanFrame
 {
   GskGpuFrame parent_instance;
@@ -265,6 +286,7 @@ gsk_vulkan_frame_submit (GskGpuFrame  *frame,
                          GskGpuOp     *op)
 {
   GskVulkanFrame *self = GSK_VULKAN_FRAME (frame);
+  GskVulkanSemaphores semaphores;
   GskVulkanCommandState state;
 
   if (gsk_descriptors_get_size (&self->descriptors) == 0)
@@ -287,10 +309,16 @@ gsk_vulkan_frame_submit (GskGpuFrame  *frame,
                             },
                             (VkDeviceSize[1]) { 0 });
 
+  gsk_semaphores_init (&semaphores.wait_semaphores);
+  gsk_pipeline_stages_init (&semaphores.wait_stages);
+  gsk_semaphores_init (&semaphores.signal_semaphores);
+
   state.vk_command_buffer = self->vk_command_buffer;
   state.vk_render_pass = VK_NULL_HANDLE;
   state.vk_format = VK_FORMAT_UNDEFINED;
   state.desc = GSK_VULKAN_DESCRIPTORS (gsk_descriptors_get (&self->descriptors, 0));
+  state.semaphores = &semaphores;
+
   gsk_vulkan_descriptors_bind (GSK_VULKAN_DESCRIPTORS (gsk_descriptors_get (&self->descriptors, 0)),
                                NULL,
                                state.vk_command_buffer);
@@ -308,8 +336,17 @@ gsk_vulkan_frame_submit (GskGpuFrame  *frame,
                                   .sType = VK_STRUCTURE_TYPE_SUBMIT_INFO,
                                   .commandBufferCount = 1,
                                   .pCommandBuffers = &self->vk_command_buffer,
+                                  .pWaitSemaphores = gsk_semaphores_get_data (&semaphores.wait_semaphores),
+                                  .pWaitDstStageMask = gsk_pipeline_stages_get_data (&semaphores.wait_stages),
+                                  .waitSemaphoreCount = gsk_semaphores_get_size (&semaphores.wait_semaphores),
+                                  .pSignalSemaphores = gsk_semaphores_get_data (&semaphores.signal_semaphores),
+                                  .signalSemaphoreCount = gsk_semaphores_get_size (&semaphores.signal_semaphores),
                                },
                                self->vk_fence);
+
+  gsk_semaphores_clear (&semaphores.wait_semaphores);
+  gsk_pipeline_stages_clear (&semaphores.wait_stages);
+  gsk_semaphores_clear (&semaphores.signal_semaphores);
 }
 
 static void
@@ -374,5 +411,21 @@ VkFence
 gsk_vulkan_frame_get_vk_fence (GskVulkanFrame *self)
 {
   return self->vk_fence;
+}
+
+void
+gsk_vulkan_semaphores_add_wait (GskVulkanSemaphores  *self,
+                                VkSemaphore           semaphore,
+                                VkPipelineStageFlags  stage)
+{
+  gsk_semaphores_append (&self->wait_semaphores, semaphore);
+  gsk_pipeline_stages_append (&self->wait_stages, stage);
+}
+
+void
+gsk_vulkan_semaphores_add_signal (GskVulkanSemaphores  *self,
+                                  VkSemaphore           semaphore)
+{
+  gsk_semaphores_append (&self->signal_semaphores, semaphore);
 }
 

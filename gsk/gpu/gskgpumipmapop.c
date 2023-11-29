@@ -58,6 +58,7 @@ gsk_gpu_mipmap_op_vk_command (GskGpuOp              *op,
 
   /* optimize me: only transition mipmap layers 1..n, but not 0 */
   gsk_vulkan_image_transition (image,
+                               state->semaphores,
                                state->vk_command_buffer,
                                VK_PIPELINE_STAGE_TRANSFER_BIT,
                                VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,

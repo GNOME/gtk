@@ -39,6 +39,7 @@ struct _GskVulkanCommandState
   VkCommandBuffer vk_command_buffer;
 
   GskVulkanDescriptors *desc;
+  GskVulkanSemaphores *semaphores;
 };
 #endif
 

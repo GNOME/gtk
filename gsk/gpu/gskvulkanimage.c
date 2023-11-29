@@ -3,6 +3,7 @@
 #include "gskvulkanimageprivate.h"
 
 #include "gskvulkanbufferprivate.h"
+#include "gskvulkanframeprivate.h"
 #include "gskvulkanmemoryprivate.h"
 
 #include "gdk/gdkdisplayprivate.h"
@@ -13,6 +14,9 @@
 
 #include <fcntl.h>
 #include <string.h>
+#ifdef HAVE_DMABUF
+#include <linux/dma-buf.h>
+#endif
 
 struct _GskVulkanImage
 {
@@ -28,6 +32,7 @@ struct _GskVulkanImage
   VkFramebuffer vk_framebuffer;
   VkImageView vk_framebuffer_image_view;
   VkSampler vk_sampler;
+  VkSemaphore vk_semaphore;
 
   VkPipelineStageFlags vk_pipeline_stage;
   VkImageLayout vk_image_layout;
@@ -1221,6 +1226,32 @@ gsk_vulkan_image_new_for_dmabuf (GskVulkanDevice *device,
                                      },
                                      &requirements);
 
+      if (gsk_vulkan_device_has_feature (device, GDK_VULKAN_FEATURE_SEMAPHORE_IMPORT))
+        {
+          int sync_file_fd = gdk_dmabuf_export_sync_file (fd, DMA_BUF_SYNC_READ);
+          if (sync_file_fd >= 0)
+            {
+              PFN_vkImportSemaphoreFdKHR func_vkImportSemaphoreFdKHR;
+              func_vkImportSemaphoreFdKHR = (PFN_vkImportSemaphoreFdKHR) vkGetDeviceProcAddr (vk_device, "vkImportSemaphoreFdKHR");
+
+              GSK_VK_CHECK (vkCreateSemaphore, vk_device,
+                                               &(VkSemaphoreCreateInfo) {
+                                                   .sType = VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO,
+                                               },
+                                               NULL,
+                                               &self->vk_semaphore);
+
+              GSK_VK_CHECK (func_vkImportSemaphoreFdKHR, vk_device,
+                                                         &(VkImportSemaphoreFdInfoKHR) {
+                                                             .sType = VK_STRUCTURE_TYPE_IMPORT_SEMAPHORE_FD_INFO_KHR,
+                                                             .handleType = VK_EXTERNAL_SEMAPHORE_HANDLE_TYPE_SYNC_FD_BIT,
+                                                             .flags = VK_SEMAPHORE_IMPORT_TEMPORARY_BIT,
+                                                             .semaphore = self->vk_semaphore,
+                                                             .fd = sync_file_fd,
+                                                         });
+            }
+        }
+
       gsk_vulkan_alloc (self->allocator,
                         requirements.memoryRequirements.size,
                         requirements.memoryRequirements.alignment,
@@ -1440,6 +1471,8 @@ gsk_vulkan_image_to_dmabuf_texture (GskVulkanImage *self)
       return NULL;
     }
 
+  gsk_gpu_image_toggle_ref_texture (GSK_GPU_IMAGE (self), texture);
+
   return texture;
 }
 #endif
@@ -1480,6 +1513,9 @@ gsk_vulkan_image_finalize (GObject *object)
 
   if (self->vk_image_view != VK_NULL_HANDLE)
     vkDestroyImageView (device, self->vk_image_view, NULL);
+
+  if (self->vk_semaphore != VK_NULL_HANDLE)
+    vkDestroySemaphore (device, self->vk_semaphore, NULL);
 
   /* memory is NULL for for_swapchain() images, where we don't own
    * the VkImage */
@@ -1610,6 +1646,7 @@ gsk_vulkan_image_set_vk_image_layout (GskVulkanImage       *self,
 
 void
 gsk_vulkan_image_transition (GskVulkanImage       *self,
+                             GskVulkanSemaphores  *semaphores,
                              VkCommandBuffer       command_buffer,
                              VkPipelineStageFlags  stage,
                              VkImageLayout         image_layout,
@@ -1619,6 +1656,12 @@ gsk_vulkan_image_transition (GskVulkanImage       *self,
       self->vk_image_layout == image_layout &&
       self->vk_access == access)
     return;
+
+  if (self->vk_pipeline_stage == VK_IMAGE_LAYOUT_UNDEFINED &&
+      self->vk_semaphore)
+    {
+      gsk_vulkan_semaphores_add_wait (semaphores, self->vk_semaphore, stage);
+    }
 
   vkCmdPipelineBarrier (command_buffer,
                         self->vk_pipeline_stage,
