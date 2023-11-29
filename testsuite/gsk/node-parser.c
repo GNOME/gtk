@@ -246,6 +246,12 @@ test_file (GFile *file)
   return parse_node_file (file, FALSE);
 }
 
+static void
+test_one_file (gconstpointer data)
+{
+  test_file (G_FILE (data));
+}
+
 static int
 compare_files (gconstpointer a, gconstpointer b)
 {
@@ -272,7 +278,6 @@ test_files_in_directory (GFile *dir)
   GFileInfo *info;
   GList *l, *files;
   GError *error = NULL;
-  gboolean result = TRUE;
 
   enumerator = g_file_enumerate_children (dir, G_FILE_ATTRIBUTE_STANDARD_NAME, 0, NULL, &error);
   g_assert_no_error (error);
@@ -296,18 +301,28 @@ test_files_in_directory (GFile *dir)
 
       g_object_unref (info);
     }
-  
+
   g_assert_no_error (error);
   g_object_unref (enumerator);
 
   files = g_list_sort (files, compare_files);
   for (l = files; l; l = l->next)
     {
-      result &= test_file (l->data);
+      GFile *file = l->data;
+      char *name;
+      char *path;
+
+      name = g_file_get_basename (file);
+      path = g_strconcat ("/gsk/offload/", name, NULL);
+
+      g_test_add_data_func_full (path, g_object_ref (file), test_one_file, g_object_unref);
+
+      g_free (name);
+      g_free (path);
     }
   g_list_free_full (files, g_object_unref);
 
-  return result;
+  return g_test_run ();
 }
 
 int
@@ -324,7 +339,7 @@ main (int argc, char **argv)
 
       basedir = g_test_get_dir (G_TEST_DIST);
       dir = g_file_new_for_path (basedir);
-      success = test_files_in_directory (dir);
+      success = !test_files_in_directory (dir);
 
       g_object_unref (dir);
     }
