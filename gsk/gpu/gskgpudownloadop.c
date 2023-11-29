@@ -8,10 +8,16 @@
 #include "gskgpuprintprivate.h"
 #ifdef GDK_RENDERING_VULKAN
 #include "gskvulkanbufferprivate.h"
+#include "gskvulkanframeprivate.h"
 #include "gskvulkanimageprivate.h"
 #endif
 
+#include "gdk/gdkdmabuftextureprivate.h"
 #include "gdk/gdkglcontextprivate.h"
+
+#ifdef HAVE_DMABUF
+#include <linux/dma-buf.h>
+#endif
 
 typedef struct _GskGpuDownloadOp GskGpuDownloadOp;
 
@@ -28,6 +34,9 @@ struct _GskGpuDownloadOp
 
   GdkTexture *texture;
   GskGpuBuffer *buffer;
+#ifdef GDK_RENDERING_VULKAN
+  VkSemaphore vk_semaphore;
+#endif
 };
 
 static void
@@ -59,6 +68,40 @@ gsk_gpu_download_op_print (GskGpuOp    *op,
 }
 
 #ifdef GDK_RENDERING_VULKAN
+/* The code needs to run here because vkGetSemaphoreFdKHR() may
+ * only be called after the semaphore has been submitted via
+ * vkQueueSubmit().
+ */
+static void
+gsk_gpu_download_op_vk_sync_semaphore (GskGpuDownloadOp *self)
+{
+  PFN_vkGetSemaphoreFdKHR func_vkGetSemaphoreFdKHR;
+  GdkDisplay *display;
+  int fd, sync_file_fd;
+
+  /* Don't look at where I store my variables plz */
+  display = gdk_dmabuf_texture_get_display (GDK_DMABUF_TEXTURE (self->texture));
+  fd = gdk_dmabuf_texture_get_dmabuf (GDK_DMABUF_TEXTURE (self->texture))->planes[0].fd;
+  func_vkGetSemaphoreFdKHR = (PFN_vkGetSemaphoreFdKHR) vkGetDeviceProcAddr (display->vk_device, "vkGetSemaphoreFdKHR");
+
+  /* vkGetSemaphoreFdKHR implicitly resets the semaphore.
+   * But who cares, we're about to delete it. */
+  if (GSK_VK_CHECK (func_vkGetSemaphoreFdKHR, display->vk_device,
+                                              &(VkSemaphoreGetFdInfoKHR) {
+                                                  .sType = VK_STRUCTURE_TYPE_SEMAPHORE_GET_FD_INFO_KHR,
+                                                  .semaphore = self->vk_semaphore,
+                                                  .handleType = VK_EXTERNAL_SEMAPHORE_HANDLE_TYPE_SYNC_FD_BIT,
+                                             },
+                                             &sync_file_fd) == VK_SUCCESS)
+    {
+      gdk_dmabuf_import_sync_file (fd, DMA_BUF_SYNC_WRITE, sync_file_fd);
+      
+      close (sync_file_fd);
+    }
+
+  vkDestroySemaphore (display->vk_device, self->vk_semaphore, NULL);
+}
+
 static void
 gsk_gpu_download_op_vk_create (GskGpuDownloadOp *self)
 {
@@ -93,7 +136,31 @@ gsk_gpu_download_op_vk_command (GskGpuOp              *op,
 #ifdef HAVE_DMABUF
   self->texture = gsk_vulkan_image_to_dmabuf_texture (GSK_VULKAN_IMAGE (self->image));
   if (self->texture)
-    return op->next;
+    {
+      GskVulkanDevice *device = GSK_VULKAN_DEVICE (gsk_gpu_frame_get_device (frame));
+      VkDevice vk_device = gsk_vulkan_device_get_vk_device (device);
+
+      gsk_gpu_device_cache_texture_image (GSK_GPU_DEVICE (device), self->texture, gsk_gpu_frame_get_timestamp (frame), self->image);
+
+      if (gsk_vulkan_device_has_feature (device, GDK_VULKAN_FEATURE_SEMAPHORE_EXPORT))
+        {
+          GSK_VK_CHECK (vkCreateSemaphore, vk_device,
+                                           &(VkSemaphoreCreateInfo) {
+                                               .sType = VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO,
+  			                       .pNext = &(VkExportSemaphoreCreateInfo) {
+                                                   .sType = VK_STRUCTURE_TYPE_EXPORT_SEMAPHORE_CREATE_INFO,
+                                                   .handleTypes = VK_EXTERNAL_SEMAPHORE_HANDLE_TYPE_SYNC_FD_BIT,
+			                       },
+                                           },
+                                           NULL,
+                                           &self->vk_semaphore);
+          gsk_vulkan_semaphores_add_signal (state->semaphores, self->vk_semaphore);
+
+          self->create_func = gsk_gpu_download_op_vk_sync_semaphore;
+        }
+
+      return op->next;
+    }
 #endif
 
   width = gsk_gpu_image_get_width (self->image);
@@ -103,6 +170,7 @@ gsk_gpu_download_op_vk_command (GskGpuOp              *op,
                                              height * stride);
 
   gsk_vulkan_image_transition (GSK_VULKAN_IMAGE (self->image),
+                               state->semaphores,
                                state->vk_command_buffer,
                                VK_PIPELINE_STAGE_TRANSFER_BIT,
                                VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,

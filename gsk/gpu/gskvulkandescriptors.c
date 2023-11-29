@@ -26,6 +26,7 @@ gsk_vulkan_descriptors_get_pipeline_layout (GskVulkanDescriptors *self)
 
 void
 gsk_vulkan_descriptors_transition (GskVulkanDescriptors *self,
+                                   GskVulkanSemaphores  *semaphores,
                                    VkCommandBuffer       vk_command_buffer)
 {
   GskGpuDescriptors *desc = GSK_GPU_DESCRIPTORS (self);
@@ -34,6 +35,7 @@ gsk_vulkan_descriptors_transition (GskVulkanDescriptors *self,
   for (i = 0; i < gsk_gpu_descriptors_get_n_images (desc); i++)
     {
       gsk_vulkan_image_transition (GSK_VULKAN_IMAGE (gsk_gpu_descriptors_get_image (desc, i)),
+                                   semaphores,
                                    vk_command_buffer,
                                    VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT,
                                    VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,

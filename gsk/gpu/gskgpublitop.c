@@ -59,6 +59,7 @@ gsk_gpu_blit_op_vk_command (GskGpuOp              *op,
       src_layout != VK_IMAGE_LAYOUT_GENERAL)
     {
       gsk_vulkan_image_transition (GSK_VULKAN_IMAGE (self->src_image),
+                                   state->semaphores,
                                    state->vk_command_buffer,
                                    VK_PIPELINE_STAGE_TRANSFER_BIT,
                                    VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
@@ -72,6 +73,7 @@ gsk_gpu_blit_op_vk_command (GskGpuOp              *op,
       dest_layout != VK_IMAGE_LAYOUT_GENERAL)
     {
       gsk_vulkan_image_transition (GSK_VULKAN_IMAGE (self->dest_image),
+                                   state->semaphores,
                                    state->vk_command_buffer,
                                    VK_PIPELINE_STAGE_TRANSFER_BIT,
                                    VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
