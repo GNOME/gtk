@@ -236,13 +236,13 @@ _gdk_wayland_cursor_get_buffer (GdkCursor *cursor,
       image = wayland_cursor->wl_cursor->images[image_index];
 
       cursor_scale = wayland_cursor->scale;
-      if ((image->width % cursor_scale != 0) ||
-          (image->height % cursor_scale != 0))
+      while ((image->width % cursor_scale != 0) ||
+             (image->height % cursor_scale != 0))
         {
-          g_warning (G_STRLOC " cursor image size (%dx%d) not an integer"
+          g_warning_once (G_STRLOC " cursor image size (%dx%d) not an integer"
                      "multiple of scale (%d)", image->width, image->height,
                      cursor_scale);
-          cursor_scale = 1;
+          cursor_scale--;
         }
 
       *hotspot_x = image->hotspot_x / cursor_scale;
