@@ -49,6 +49,7 @@ typedef enum {
   GDK_VULKAN_FEATURE_NONUNIFORM_INDEXING        = 1 << 4,
   GDK_VULKAN_FEATURE_SEMAPHORE_EXPORT           = 1 << 5,
   GDK_VULKAN_FEATURE_SEMAPHORE_IMPORT           = 1 << 6,
+  GDK_VULKAN_FEATURE_INCREMENTAL_PRESENT        = 1 << 7,
 } GdkVulkanFeatures;
 
 /* Tracks information about the device grab on this display */

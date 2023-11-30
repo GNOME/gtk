@@ -41,6 +41,7 @@ static const GdkDebugKey gsk_vulkan_feature_keys[] = {
   { "nonuniform-indexing", GDK_VULKAN_FEATURE_NONUNIFORM_INDEXING, "Split draw calls to ensure uniform texture accesses" },
   { "semaphore-export", GDK_VULKAN_FEATURE_SEMAPHORE_EXPORT, "Disable sync of exported dmabufs" },
   { "semaphore-import", GDK_VULKAN_FEATURE_SEMAPHORE_IMPORT, "Disable sync of imported dmabufs" },
+  { "incremental-present", GDK_VULKAN_FEATURE_INCREMENTAL_PRESENT, "Do not send damage regions" },
 };
 #endif
 
@@ -76,9 +77,6 @@ struct _GdkVulkanContextPrivate {
   guint n_images;
   VkImage *images;
   cairo_region_t **regions;
-
-  gboolean has_present_region;
-
 #endif
 
   guint32 draw_index;
@@ -611,6 +609,9 @@ physical_device_check_features (VkPhysicalDevice   device,
         *out_features |= GDK_VULKAN_FEATURE_SEMAPHORE_IMPORT;
     }
 
+  if (physical_device_supports_extension (device, VK_KHR_INCREMENTAL_PRESENT_EXTENSION_NAME))
+    *out_features |= GDK_VULKAN_FEATURE_INCREMENTAL_PRESENT;
+
   return TRUE;
 }
 
@@ -659,42 +660,38 @@ gdk_vulkan_context_end_frame (GdkDrawContext *draw_context,
   GdkVulkanContext *context = GDK_VULKAN_CONTEXT (draw_context);
   GdkVulkanContextPrivate *priv = gdk_vulkan_context_get_instance_private (context);
   GdkSurface *surface = gdk_draw_context_get_surface (draw_context);
-  VkPresentRegionsKHR *regionsptr = VK_NULL_HANDLE;
-  VkPresentRegionsKHR regions;
+  GdkDisplay *display = gdk_draw_context_get_display (draw_context);
   VkRectLayerKHR *rectangles;
-  double scale;
   int n_regions;
 
-  scale = gdk_surface_get_scale (surface);
-  n_regions = cairo_region_num_rectangles (painted);
-  rectangles = g_alloca (sizeof (VkRectLayerKHR) * n_regions);
-
-  for (int i = 0; i < n_regions; i++)
+  if (display->vulkan_features & GDK_VULKAN_FEATURE_INCREMENTAL_PRESENT)
     {
-      cairo_rectangle_int_t r;
+      double scale;
 
-      cairo_region_get_rectangle (painted, i, &r);
+      scale = gdk_surface_get_scale (surface);
+      n_regions = cairo_region_num_rectangles (painted);
+      rectangles = g_alloca (sizeof (VkRectLayerKHR) * n_regions);
 
-      rectangles[i] = (VkRectLayerKHR) {
-          .layer = 0,
-          .offset.x = (int) floor (r.x * scale),
-          .offset.y = (int) floor (r.y * scale),
-          .extent.width = (int) ceil (r.width * scale),
-          .extent.height = (int) ceil (r.height * scale),
-      };
+      for (int i = 0; i < n_regions; i++)
+        {
+          cairo_rectangle_int_t r;
+
+          cairo_region_get_rectangle (painted, i, &r);
+
+          rectangles[i] = (VkRectLayerKHR) {
+              .layer = 0,
+              .offset.x = (int) floor (r.x * scale),
+              .offset.y = (int) floor (r.y * scale),
+              .extent.width = (int) ceil (r.width * scale),
+              .extent.height = (int) ceil (r.height * scale),
+          };
+        }
     }
-
-  regions = (VkPresentRegionsKHR) {
-      .sType = VK_STRUCTURE_TYPE_PRESENT_REGIONS_KHR,
-      .swapchainCount = 1,
-      .pRegions = &(VkPresentRegionKHR) {
-        .rectangleCount = n_regions,
-        .pRectangles = rectangles,
-      },
-  };
-
-  if (priv->has_present_region)
-    regionsptr = &regions;
+  else
+    {
+      rectangles = NULL;
+      n_regions = 0;
+    }
 
   GDK_VK_CHECK (vkQueuePresentKHR, gdk_vulkan_context_get_queue (context),
                                    &(VkPresentInfoKHR) {
@@ -710,7 +707,14 @@ gdk_vulkan_context_end_frame (GdkDrawContext *draw_context,
                                        .pImageIndices = (uint32_t[]) {
                                            priv->draw_index
                                        },
-                                       .pNext = regionsptr,
+                                       .pNext = rectangles == NULL ? NULL : &(VkPresentRegionsKHR) {
+                                           .sType = VK_STRUCTURE_TYPE_PRESENT_REGIONS_KHR,
+                                           .swapchainCount = 1,
+                                           .pRegions = &(VkPresentRegionKHR) {
+                                              .rectangleCount = n_regions,
+                                              .pRectangles = rectangles,
+                                           },
+                                       }
                                    });
 
   cairo_region_destroy (priv->regions[priv->draw_index]);
@@ -899,9 +903,6 @@ gdk_vulkan_context_real_init (GInitable     *initable,
         priv->formats[GDK_MEMORY_FLOAT16] = priv->formats[GDK_MEMORY_FLOAT32];
       if (priv->formats[GDK_MEMORY_U16].vk_format.format == VK_FORMAT_UNDEFINED)
         priv->formats[GDK_MEMORY_U16] = priv->formats[GDK_MEMORY_FLOAT32];
-
-      priv->has_present_region = physical_device_supports_extension (display->vk_physical_device,
-                                                                     VK_KHR_INCREMENTAL_PRESENT_EXTENSION_NAME);
 
       if (!gdk_vulkan_context_check_swapchain (context, error))
         goto out_surface;
@@ -1472,7 +1473,7 @@ gdk_display_create_vulkan_device (GdkDisplay  *display,
                 }
               if (features & (GDK_VULKAN_FEATURE_SEMAPHORE_IMPORT | GDK_VULKAN_FEATURE_SEMAPHORE_EXPORT))
                 g_ptr_array_add (device_extensions, (gpointer) VK_KHR_EXTERNAL_SEMAPHORE_FD_EXTENSION_NAME);
-              if (physical_device_supports_extension (devices[i], VK_KHR_INCREMENTAL_PRESENT_EXTENSION_NAME))
+              if (features & GDK_VULKAN_FEATURE_INCREMENTAL_PRESENT)
                 g_ptr_array_add (device_extensions, (gpointer) VK_KHR_INCREMENTAL_PRESENT_EXTENSION_NAME);
 
 #define ENABLE_IF(flag) ((features & (flag)) ? VK_TRUE : VK_FALSE)
