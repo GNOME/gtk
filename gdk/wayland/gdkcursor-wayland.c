@@ -467,15 +467,24 @@ _gdk_wayland_display_get_cursor_for_surface (GdkDisplay *display,
   cursor->surface.hotspot_x = x;
   cursor->surface.hotspot_y = y;
 
-  cursor->surface.scale = 1;
-
   if (surface)
     {
+      cursor->surface.width = cairo_image_surface_get_width (surface);
+      cursor->surface.height = cairo_image_surface_get_height (surface);
+
       double sx, sy;
       cairo_surface_get_device_scale (surface, &sx, &sy);
       cursor->surface.scale = (int)sx;
-      cursor->surface.width = cairo_image_surface_get_width (surface);
-      cursor->surface.height = cairo_image_surface_get_height (surface);
+
+      while ((cursor->surface.width % cursor->surface.scale != 0) ||
+             (cursor->surface.height % cursor->surface.scale != 0))
+        {
+          g_warning_once (G_STRLOC " cursor image size (%dx%d) not an integer"
+                     "multiple of scale (%d)", cursor->surface.width, cursor->surface.height,
+                     cursor->surface.scale);
+          cursor->surface.scale--;
+        }
+
       cursor->surface.hotspot_x *= sx;
       cursor->surface.hotspot_y *= sx;
     }
@@ -483,12 +492,13 @@ _gdk_wayland_display_get_cursor_for_surface (GdkDisplay *display,
     {
       cursor->surface.width = 1;
       cursor->surface.height = 1;
+      cursor->surface.scale = 1;
     }
 
   cursor->surface.cairo_surface =
     _gdk_wayland_display_create_shm_surface (display_wayland,
-                                             cursor->surface.width,
-                                             cursor->surface.height,
+                                             cursor->surface.width / cursor->surface.scale,
+                                             cursor->surface.height / cursor->surface.scale,
                                              cursor->surface.scale);
 
   buffer = _gdk_wayland_shm_surface_get_wl_buffer (cursor->surface.cairo_surface);
