@@ -68,6 +68,7 @@ G_DEFINE_TYPE (GtkApplicationImplQuartz, gtk_application_impl_quartz, GTK_TYPE_A
 - (id)initWithImpl:(GtkApplicationImplQuartz*)impl;
 - (NSApplicationTerminateReply) applicationShouldTerminate:(NSApplication *)sender;
 - (void)application:(NSApplication *)theApplication openFiles:(NSArray *)filenames;
+- (BOOL)applicationSupportsSecureRestorableState:(NSApplication *)app;
 @end
 
 @implementation GtkApplicationQuartzDelegate
@@ -122,6 +123,11 @@ G_DEFINE_TYPE (GtkApplicationImplQuartz, gtk_application_impl_quartz, GTK_TYPE_A
   g_free (files);
 
   [theApplication replyToOpenOrPrint:NSApplicationDelegateReplySuccess];
+}
+
+-(BOOL)applicationSupportsSecureRestorableState:(NSApplication *)app
+{
+  return YES;
 }
 @end
 
