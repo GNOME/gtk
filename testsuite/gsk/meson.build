@@ -74,6 +74,7 @@ compare_render_tests = [
   'mask-texture-color-alpha',
   'nested-rounded-clips',
   'opacity_clip',
+  'opacity-colormatrix-combinations',
   'opacity-overdraw',
   'opacity-overlapping-children',
   'outset_shadow_offset_both',
