@@ -207,25 +207,6 @@ test_color_hash (void)
   g_assert_cmpuint (hash1, !=, hash2);
 }
 
-static void
-test_alloc_from_string (void)
-{
-  GdkRGBA expected = {
-    .red = 1.0,
-    .green = 0.0,
-    .blue = 1.0,
-    .alpha = 1.0,
-  };
-
-  GdkRGBA *parsed = gdk_rgba_new_from_string ("#ff00ff");
-  g_assert_true (gdk_rgba_equal (&expected, parsed));
-
-  gdk_rgba_free (parsed);
-
-  GdkRGBA *fail = gdk_rgba_new_from_string ("//xx!!");
-  g_assert_null (fail);
-}
-
 int
 main (int argc, char *argv[])
 {
@@ -236,7 +217,6 @@ main (int argc, char *argv[])
   g_test_add_func ("/rgba/to-string", test_color_to_string);
   g_test_add_func ("/rgba/copy", test_color_copy);
   g_test_add_func ("/rgba/hash", test_color_hash);
-  g_test_add_func ("/rgba/from-string", test_alloc_from_string);
 
   return g_test_run ();
 }
