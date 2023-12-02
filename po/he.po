@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: gtk+.HEAD.he\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
 "POT-Creation-Date: 2023-11-30 18:27+0000\n"
-"PO-Revision-Date: 2023-12-01 23:01+0200\n"
+"PO-Revision-Date: 2023-12-03 00:11+0200\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: Hebrew <yoseforb@gmail.com>\n"
 "Language: he\n"
@@ -82,14 +82,13 @@ msgid "No perfect EGL configuration found"
 msgstr "לא נמצאה תצורת EGL מושלמת"
 
 #: gdk/gdkdisplay.c:1683
-#, fuzzy, c-format
-#| msgid "No GL implementation is available"
+#, c-format
 msgid "EGL implementation is missing extension %s"
 msgid_plural "EGL implementation is missing %2$d extensions: %1$s"
-msgstr[0] "No GL implementation is available"
-msgstr[1] "No GL implementation is available"
-msgstr[2] "No GL implementation is available"
-msgstr[3] "No GL implementation is available"
+msgstr[0] "למימוש ה־EGL חסרה ההרחבה %s"
+msgstr[1] "למימוש ה־EGL חסרות שתי הרחבות: %1$s"
+msgstr[2] "למימוש ה־EGL חסרות %2$d הרחבות: %1$s"
+msgstr[3] "למימוש ה־EGL חסרות %2$d הרחבות: %1$s"
 
 #: gdk/gdkdisplay.c:1733
 msgid "libEGL not available in this sandbox"
@@ -525,7 +524,7 @@ msgstr "תצוגה"
 #: gdk/keynamesprivate.h:6914
 msgctxt "keyboard label"
 msgid "TouchpadToggle"
-msgstr "הפעלה/נטרול של משטח המגע"
+msgstr "הפעלה/השבתה של משטח המגע"
 
 #: gdk/keynamesprivate.h:6915
 msgctxt "keyboard label"
@@ -540,7 +539,7 @@ msgstr "השהיה"
 #: gdk/loaders/gdkjpeg.c:63
 #, c-format
 msgid "Error interpreting JPEG image file (%s)"
-msgstr "שגיאה בפיענוח קובץ תמונת JPEG (%s)"
+msgstr "שגיאה בפענוח קובץ תמונת JPEG‏ (%s)"
 
 #: gdk/loaders/gdkjpeg.c:194
 #, c-format
@@ -550,7 +549,7 @@ msgstr "מרחב הצבעים של ה־JPEG אינו נתמך (%d)"
 #: gdk/loaders/gdkjpeg.c:203 gdk/loaders/gdkpng.c:280 gdk/loaders/gdktiff.c:472
 #, c-format
 msgid "Not enough memory for image size %ux%u"
-msgstr "אין מספיק זיכרון לתמונה בגודל ‎%ux%u‎"
+msgstr "אין מספיק זיכרון לתמונה בגודל ‎%u×%u‎"
 
 #: gdk/loaders/gdkpng.c:118
 #, c-format
@@ -569,7 +568,7 @@ msgstr "סוג הצבע %u אינו נתמך בתמונות png"
 
 #: gdk/loaders/gdktiff.c:358
 msgid "Failed to load RGB data from TIFF file"
-msgstr "ארע כשל בטעינת נתוני RGB מקובץ TIFF"
+msgstr "טעינת נתוני RGB מקובץ TIFF נכשלה"
 
 #: gdk/loaders/gdktiff.c:401
 msgid "Could not load TIFF data"
@@ -715,7 +714,7 @@ msgstr "Failed to transmute DnD data W32 format 0x%x to %p (%s)"
 
 #: gdk/win32/gdkglcontext-win32-wgl.c:319
 msgid "No GL implementation is available"
-msgstr "No GL implementation is available"
+msgstr "אין מימוש GL זמין"
 
 #: gdk/win32/gdkglcontext-win32-wgl.c:394
 #, fuzzy, c-format
@@ -734,16 +733,16 @@ msgstr "No available configurations for the given pixel format"
 
 #: gdk/win32/gdkhdataoutputstream-win32.c:63
 msgid "writing a closed stream"
-msgstr "writing a closed stream"
+msgstr "נכתב תזרים סגור"
 
 #: gdk/win32/gdkhdataoutputstream-win32.c:85
 msgid "g_try_realloc () failed"
-msgstr "g_try_realloc () failed"
+msgstr "g_try_realloc ()‎ נכשלה"
 
 #: gdk/win32/gdkhdataoutputstream-win32.c:93
 #: gdk/win32/gdkhdataoutputstream-win32.c:231
 msgid "GlobalReAlloc() failed: "
-msgstr "GlobalReAlloc() failed: "
+msgstr "GlobalReAlloc()‎ נכשלה: "
 
 #: gdk/win32/gdkhdataoutputstream-win32.c:105
 msgid "Ran out of buffer space (buffer size is fixed)"
@@ -782,8 +781,8 @@ msgid "Opening %d Item"
 msgid_plural "Opening %d Items"
 msgstr[0] "פריט אחד נפתח"
 msgstr[1] "שני פריטים נפתחים"
-msgstr[2] "‫%d פריטים נפתחים"
-msgstr[3] "‫%d פריטים נפתחים"
+msgstr[2] "%d פריטים נפתחים"
+msgstr[3] "%d פריטים נפתחים"
 
 #: gdk/x11/gdkclipboard-x11.c:473
 msgid "Clipboard manager could not store selection."
@@ -835,7 +834,7 @@ msgstr "הקידוד „%s” אינו נתמך"
 #: gsk/gl/gskglrenderer.c:135
 #, c-format
 msgid "This GLES %d.%d implementation does not support half-float vertex data"
-msgstr ""
+msgstr "מימוש זה של GLES %d.%d לא תומך בנתוני קודקודים עם נקודה חצי צפה"
 
 #: gtk/a11y/gtkatspiaction.c:239
 msgctxt "accessibility"
@@ -4447,10 +4446,8 @@ msgid "Show Accessibility warnings"
 msgstr "הצגת אזהרות נגישות"
 
 #: gtk/inspector/visual.ui:660
-#, fuzzy
-#| msgid "Show Graphic Updates"
 msgid "Show Graphics Offload"
-msgstr "הצגת עדכונים גרפיים"
+msgstr "הצגת פריקת גרפיקה"
 
 #: gtk/inspector/visual.ui:692
 msgid "Inspect Inspector"
@@ -6605,7 +6602,7 @@ msgstr "לא ניתן להוסיף תזרים חדש"
 
 #: modules/media/gtkffmediafile.c:485 modules/media/gtkffmediafile.c:942
 msgid "Failed to allocate an audio frame"
-msgstr "ארע כשל בהקצאת מסגרת שמע"
+msgstr "הקצאת מסגרת שמע נכשלה"
 
 #: modules/media/gtkffmediafile.c:650 modules/media/gtkffmediafile.c:898
 msgid "Not enough memory"
@@ -7204,7 +7201,7 @@ msgstr "פרופיל בלתי מוגדר"
 
 #: tools/encodesymbolic.c:41
 msgid "Output to this directory instead of cwd"
-msgstr "Output to this directory instead of cwd"
+msgstr "לשלוח פלט לתיקייה הזאת במקום אל cwd"
 
 #: tools/encodesymbolic.c:42
 msgid "Generate debug output"
@@ -7321,7 +7318,7 @@ msgstr "Can only preview a single .ui file\n"
 #: tools/gtk-builder-tool-screenshot.c:238
 #, c-format
 msgid "No object found\n"
-msgstr "No object found\n"
+msgstr "לא נמצא עצם\n"
 
 #: tools/gtk-builder-tool-screenshot.c:244
 #, c-format
@@ -7331,7 +7328,7 @@ msgstr "Objects of type %s can't be screenshot\n"
 #: tools/gtk-builder-tool-screenshot.c:298
 #, c-format
 msgid "Failed to take a screenshot\n"
-msgstr "Failed to take a screenshot\n"
+msgstr "צילום המסך נכשל\n"
 
 #: tools/gtk-builder-tool-screenshot.c:309
 #, c-format
@@ -7364,7 +7361,7 @@ msgstr "Save as node file instead of png"
 
 #: tools/gtk-builder-tool-screenshot.c:362
 msgid "Overwrite existing file"
-msgstr "Overwrite existing file"
+msgstr "שכתוב קובץ קיים"
 
 #: tools/gtk-builder-tool-screenshot.c:363
 #: tools/gtk-rendernode-tool-render.c:197
@@ -7388,27 +7385,27 @@ msgstr "%s:%d: Couldn’t parse value for property '%s': %s\n"
 #: tools/gtk-builder-tool-simplify.c:658
 #, c-format
 msgid "Property %s not found"
-msgstr "Property %s not found"
+msgstr "המאפיין %s לא נמצא"
 
 #: tools/gtk-builder-tool-simplify.c:661
 #, c-format
 msgid "Packing property %s not found"
-msgstr "Packing property %s not found"
+msgstr "מאפיין האריזה %s לא נמצא"
 
 #: tools/gtk-builder-tool-simplify.c:664
 #, c-format
 msgid "Cell property %s not found"
-msgstr "Cell property %s not found"
+msgstr "מאפיין התא %s לא נמצא"
 
 #: tools/gtk-builder-tool-simplify.c:667
 #, c-format
 msgid "Layout property %s not found"
-msgstr "Layout property %s not found"
+msgstr "מאפיין הפריסה %s לא נמצא"
 
 #: tools/gtk-builder-tool-simplify.c:1397
 #, c-format
 msgid "%s only accepts three children"
-msgstr "%s only accepts three children"
+msgstr "%s מקבל שלושה צאצאים בלבד"
 
 #: tools/gtk-builder-tool-simplify.c:2455
 #, c-format
@@ -7440,15 +7437,15 @@ msgstr "הכתיבה של %s נכשלה: „%s”\n"
 
 #: tools/gtk-builder-tool-simplify.c:2527
 msgid "Replace the file"
-msgstr "Replace the file"
+msgstr "החלפת הקובץ"
 
 #: tools/gtk-builder-tool-simplify.c:2528
 msgid "Convert from GTK 3 to GTK 4"
-msgstr "Convert from GTK 3 to GTK 4"
+msgstr "המרה מ־GTK 3 ל־GTK 4"
 
 #: tools/gtk-builder-tool-simplify.c:2539
 msgid "Simplify the file."
-msgstr "Simplify the file."
+msgstr "פישוט הקובץ."
 
 #: tools/gtk-builder-tool-simplify.c:2558
 #, c-format
@@ -7462,7 +7459,7 @@ msgstr "Failed to lookup template parent type %s\n"
 
 #: tools/gtk-builder-tool-validate.c:123
 msgid "Deprecated types:\n"
-msgstr "Deprecated types:\n"
+msgstr "סוגים שאינם תקפים עוד:\n"
 
 #: tools/gtk-builder-tool-validate.c:167
 #, c-format
@@ -7471,17 +7468,17 @@ msgstr "Failed to create an instance of the template type %s\n"
 
 #: tools/gtk-builder-tool-validate.c:276
 msgid "Validate the file."
-msgstr "Validate the file."
+msgstr "תיקוף הקובץ."
 
 #: tools/gtk-launch.c:40
 msgid "Show program version"
-msgstr "Show program version"
+msgstr "הצגת גרסת התוכנית"
 
 #. Translators: this message will appear immediately after the
 #. usage string - Usage: COMMAND [OPTION…] <THIS_MESSAGE>
 #: tools/gtk-launch.c:74
 msgid "APPLICATION [URI…] — launch an APPLICATION"
-msgstr "APPLICATION [URI…] — launch an APPLICATION"
+msgstr "APPLICATION [URI…] — הפעלת יישום"
 
 #. Translators: this message will appear after the usage string
 #. and before the list of options.
@@ -7496,7 +7493,7 @@ msgstr ""
 #: tools/gtk-launch.c:88
 #, c-format
 msgid "Error parsing commandline options: %s\n"
-msgstr "Error parsing commandline options: %s\n"
+msgstr "שגיאה בפענוח אפשרויות שורת פקודה: %s\n"
 
 #: tools/gtk-launch.c:90 tools/gtk-launch.c:111
 #, c-format
@@ -7508,26 +7505,26 @@ msgstr "כדאי לנסות את „‎%s --help” למידע נוסף."
 #: tools/gtk-launch.c:109
 #, c-format
 msgid "%s: missing application name"
-msgstr "%s: missing application name"
+msgstr "%s: שם היישום חסר"
 
 #: tools/gtk-launch.c:137
 #, c-format
 msgid "Creating AppInfo from id not supported on non unix operating systems"
-msgstr "Creating AppInfo from id not supported on non unix operating systems"
+msgstr "יצירת AppInfo ממזהה אינה נתמכת במערכות הפעלה שאינן יוניקס"
 
 #. Translators: the first %s is the program name, the second one
 #. is the application name.
 #: tools/gtk-launch.c:145
 #, c-format
 msgid "%s: no such application %s"
-msgstr "%s: no such application %s"
+msgstr "%s: איזה כזה יישום %s"
 
 #. Translators: the first %s is the program name, the second one
 #. is the error message.
 #: tools/gtk-launch.c:163
 #, c-format
 msgid "%s: error launching application: %s\n"
-msgstr "%s: error launching application: %s\n"
+msgstr "%s: שגיאה בטעינת יישום: %s\n"
 
 #: tools/gtk-path-tool.c:35
 #, c-format
@@ -7580,7 +7577,7 @@ msgstr "נתיב"
 
 #: tools/gtk-path-tool-decompose.c:99
 msgid "Decompose a path."
-msgstr ""
+msgstr "פירוק נתיב."
 
 #: tools/gtk-path-tool-decompose.c:112 tools/gtk-path-tool-info.c:113
 #: tools/gtk-path-tool-restrict.c:64 tools/gtk-path-tool-reverse.c:58
@@ -7643,7 +7640,7 @@ msgstr ""
 
 #: tools/gtk-path-tool-render.c:117 tools/gtk-path-tool-show.c:140
 msgid "Fill the path (the default)"
-msgstr ""
+msgstr "מילוי הנתיב (ברירת המחדל)"
 
 #: tools/gtk-path-tool-render.c:118 tools/gtk-path-tool-show.c:141
 msgid "Stroke the path"
@@ -7727,7 +7724,7 @@ msgstr "עיבוד הנתיב לתמונת png."
 
 #: tools/gtk-path-tool-render.c:173 tools/gtk-path-tool-show.c:183
 msgid "Options related to filling"
-msgstr ""
+msgstr "אפשרויות שקשורות למילוי"
 
 #: tools/gtk-path-tool-render.c:174 tools/gtk-path-tool-show.c:184
 msgid "Show help for fill options"
@@ -7735,7 +7732,7 @@ msgstr "הצגת עזרה לאפשרויות מילוי"
 
 #: tools/gtk-path-tool-render.c:181 tools/gtk-path-tool-show.c:191
 msgid "Options related to stroking"
-msgstr ""
+msgstr "אפשרויות שקשורות לקו תוואי"
 
 #: tools/gtk-path-tool-render.c:182 tools/gtk-path-tool-show.c:192
 msgid "Show help for stroke options"
@@ -7751,15 +7748,15 @@ msgstr "יכול לעבד נתיב בודד בלבד"
 
 #: tools/gtk-path-tool-render.c:250 tools/gtk-path-tool-show.c:221
 msgid "fill rule"
-msgstr ""
+msgstr "כלל מילוי"
 
 #: tools/gtk-path-tool-render.c:255 tools/gtk-path-tool-show.c:226
 msgid "line cap"
-msgstr ""
+msgstr "ראש קו"
 
 #: tools/gtk-path-tool-render.c:256 tools/gtk-path-tool-show.c:227
 msgid "line join"
-msgstr ""
+msgstr "צירוף קו"
 
 #: tools/gtk-path-tool-render.c:310
 #, c-format
@@ -7773,19 +7770,19 @@ msgstr "הפלט נכתב אל ‚%s’."
 
 #: tools/gtk-path-tool-restrict.c:36
 msgid "Beginning of segment"
-msgstr ""
+msgstr "התחלת מקטע"
 
 #: tools/gtk-path-tool-restrict.c:36 tools/gtk-path-tool-restrict.c:37
 msgid "LENGTH"
-msgstr ""
+msgstr "אורך"
 
 #: tools/gtk-path-tool-restrict.c:37
 msgid "End of segment"
-msgstr ""
+msgstr "סוף מקטע"
 
 #: tools/gtk-path-tool-restrict.c:51
 msgid "Restrict a path to a segment."
-msgstr ""
+msgstr "הגבלת נתיב למקטע."
 
 #: tools/gtk-path-tool-reverse.c:45
 msgid "Reverse a path."
@@ -7797,7 +7794,7 @@ msgstr "תצוגת נתיב מקדימה"
 
 #: tools/gtk-path-tool-show.c:180
 msgid "Display the path."
-msgstr ""
+msgstr "הצגת הנתיב."
 
 #: tools/gtk-path-tool-show.c:215
 msgid "Can only show a single path"
@@ -7829,7 +7826,7 @@ msgstr "Failed to save %s: %s\n"
 
 #: tools/gtk-path-tool-utils.c:111
 msgid "Possible values: "
-msgstr ""
+msgstr "ערכים אפשריים: "
 
 #: tools/gtk-path-tool-utils.c:135
 #, fuzzy, c-format
@@ -7881,12 +7878,12 @@ msgstr "עומק: %u\n"
 #: tools/gtk-rendernode-tool-info.c:201
 #, c-format
 msgid "Bounds: %g x %g\n"
-msgstr ""
+msgstr "גבולות: %g × %g\n"
 
 #: tools/gtk-rendernode-tool-info.c:202
 #, c-format
 msgid "Origin: %g %g\n"
-msgstr ""
+msgstr "מקור: %g %g\n"
 
 #: tools/gtk-rendernode-tool-info.c:223
 #, fuzzy
@@ -7929,7 +7926,7 @@ msgstr "עיבוד לשימוש"
 
 #: tools/gtk-rendernode-tool-render.c:196
 msgid "RENDERER"
-msgstr ""
+msgstr "מעבד תצוגה"
 
 #: tools/gtk-rendernode-tool-render.c:212
 #, fuzzy
@@ -7945,11 +7942,11 @@ msgstr "Can only render a single .ui file to a single output file\n"
 
 #: tools/gtk-rendernode-tool-show.c:105
 msgid "Don't add a titlebar"
-msgstr ""
+msgstr "לא להוסיף שורת כותרת"
 
 #: tools/gtk-rendernode-tool-show.c:121
 msgid "Show the render node."
-msgstr ""
+msgstr "הצגת צומת מעבד התצוגה."
 
 #: tools/gtk-rendernode-tool-show.c:140
 #, fuzzy, c-format
