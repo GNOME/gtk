@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: gtk+.HEAD.he\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
 "POT-Creation-Date: 2023-11-30 18:27+0000\n"
-"PO-Revision-Date: 2023-12-03 00:11+0200\n"
+"PO-Revision-Date: 2023-12-03 15:30+0200\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: Hebrew <yoseforb@gmail.com>\n"
 "Language: he\n"
@@ -55,7 +55,7 @@ msgstr "לא ניתן לספק תוכן בתור %s"
 
 #: gdk/gdkdisplay.c:169 gdk/gdkglcontext.c:455
 msgid "The current backend does not support OpenGL"
-msgstr "הממשק הנוכחי אינו תומך ב־‏OpenGL"
+msgstr "המנשק הנוכחי אינו תומך ב־‏OpenGL"
 
 #: gdk/gdkdisplay.c:1268 gdk/gdksurface.c:1268 gdk/gdkvulkancontext.c:1479
 msgid "Vulkan support disabled via GDK_DEBUG"
@@ -63,7 +63,7 @@ msgstr "התמיכה ב־Vulkan מושבתת דרך GDK_DEBUG"
 
 #: gdk/gdkdisplay.c:1300
 msgid "GL support disabled via GDK_DEBUG"
-msgstr "GL support disabled via GDK_DEBUG"
+msgstr "התמיכה ב־GL הושבתה דרך GDK_DEBUG"
 
 #: gdk/gdkdisplay.c:1596
 msgid "No EGL configuration available"
@@ -130,16 +130,12 @@ msgid "Unable to create a GL context"
 msgstr "Unable to create a GL context"
 
 #: gdk/gdkglcontext.c:1299
-#, fuzzy
-#| msgid "Anything but OpenGL ES disabled via GDK_DEBUG"
 msgid "OpenGL ES disabled via GDK_DEBUG"
-msgstr "הכל מלבד OpenGL ES מושבת על ידי GDK_DEBUG"
+msgstr "OpenGL ES מושבת על ידי GDK_DEBUG"
 
 #: gdk/gdkglcontext.c:1311
-#, fuzzy
-#| msgid "GL support disabled via GDK_DEBUG"
 msgid "OpenGL disabled via GDK_DEBUG"
-msgstr "GL support disabled via GDK_DEBUG"
+msgstr "OpenGL מושבת על ידי GDK_DEBUG"
 
 #: gdk/gdkglcontext.c:1322
 #, c-format
@@ -717,10 +713,9 @@ msgid "No GL implementation is available"
 msgstr "אין מימוש GL זמין"
 
 #: gdk/win32/gdkglcontext-win32-wgl.c:394
-#, fuzzy, c-format
-#| msgid "EGL version %d.%d is too old. GTK requires %d.%d"
+#, c-format
 msgid "WGL version %d.%d is too low, need at least %d.%d"
-msgstr "גרסת ה־EGL‏ %d.%d ישנה מדי. GTK דורש %d.%d"
+msgstr "גרסת ה־WGL‏ %d.%d ישנה מדי. צריך לפחות %d.%d"
 
 #: gdk/win32/gdkglcontext-win32-wgl.c:412
 #, c-format
@@ -759,21 +754,21 @@ msgstr "Failed to transmute %zu bytes of data from %s to %u"
 
 #: gdk/win32/gdkhdataoutputstream-win32.c:250
 msgid "GlobalLock() failed: "
-msgstr "GlobalLock() failed: "
+msgstr "GlobalLock()‎ נכשלה: "
 
 #: gdk/win32/gdkhdataoutputstream-win32.c:364
 msgid "GlobalAlloc() failed: "
-msgstr "GlobalAlloc() failed: "
+msgstr "GlobalAlloc()‎ נכשלה: "
 
 #: gdk/x11/gdkapplaunchcontext-x11.c:297
 #, c-format
 msgid "Starting “%s”"
-msgstr "Starting “%s”"
+msgstr "„%s” מופעל"
 
 #: gdk/x11/gdkapplaunchcontext-x11.c:310
 #, c-format
 msgid "Opening “%s”"
-msgstr "Opening “%s”"
+msgstr "„%s” נפתח"
 
 #: gdk/x11/gdkapplaunchcontext-x11.c:315
 #, c-format
@@ -786,7 +781,7 @@ msgstr[3] "%d פריטים נפתחים"
 
 #: gdk/x11/gdkclipboard-x11.c:473
 msgid "Clipboard manager could not store selection."
-msgstr "Clipboard manager could not store selection."
+msgstr "מנהל לוח הגזירים לא יכול לאחסן את הבחירה."
 
 #: gdk/x11/gdkclipboard-x11.c:649
 msgid "Cannot store clipboard. No clipboard manager is active."
@@ -1818,12 +1813,12 @@ msgstr "%s כבר קיים ברשימת הסימניות"
 #: gtk/gtkbuilder-menus.c:224
 #, c-format
 msgid "Element <%s> not allowed inside <%s>"
-msgstr "Element <%s> not allowed inside <%s>"
+msgstr "הרכיב <%s> לא מורשה להיות בתוך <%s>"
 
 #: gtk/gtkbuilder-menus.c:230
 #, c-format
 msgid "Element <%s> not allowed at toplevel"
-msgstr "Element <%s> not allowed at toplevel"
+msgstr "הרכיב <%s> לא יכול להיות ברמה העליונה"
 
 #: gtk/gtkbuilder-menus.c:319
 #, c-format
@@ -2308,7 +2303,7 @@ msgstr "‏%1$s ב־%2$s"
 
 #: gtk/gtkfilechooserwidget.c:343
 msgid "Type name of new folder"
-msgstr "הזנת שם לתיקייה החדשה"
+msgstr "נא למלא שם לתיקייה החדשה"
 
 #: gtk/gtkfilechooserwidget.c:725
 msgid "The folder could not be created"
@@ -2996,7 +2991,7 @@ msgstr "ה־Caps Lock פעיל"
 
 #: gtk/gtkpasswordentry.c:700
 msgid "_Show Text"
-msgstr "_הצגת טקסט"
+msgstr "ה_צגת טקסט"
 
 #. translators: %s is the name of a cloud provider for files
 #: gtk/gtkplacessidebar.c:912
@@ -3461,15 +3456,15 @@ msgstr "אין מספיק זיכרון פנוי"
 
 #: gtk/print/gtkprintoperation-win32.c:1837
 msgid "Invalid argument to PrintDlgEx"
-msgstr "Invalid argument to PrintDlgEx"
+msgstr "משתנה שגוי ל־PrintDlgEx"
 
 #: gtk/print/gtkprintoperation-win32.c:1842
 msgid "Invalid pointer to PrintDlgEx"
-msgstr "Invalid pointer to PrintDlgEx"
+msgstr "מצביע שגוי ל־PrintDlgEx"
 
 #: gtk/print/gtkprintoperation-win32.c:1847
 msgid "Invalid handle to PrintDlgEx"
-msgstr "Invalid handle to PrintDlgEx"
+msgstr "כינוי שגוי ל־PrintDlgEx"
 
 #: gtk/print/gtkprintoperation-win32.c:1852
 msgid "Unspecified error"
@@ -3606,7 +3601,7 @@ msgstr "R"
 
 #: gtk/gtkshortcutssection.c:414
 msgid "_Show All"
-msgstr "הצגת ה_כל"
+msgstr "הצגה של ה_כול"
 
 #: gtk/gtkshortcutsshortcut.c:143
 msgid "Two finger pinch"
@@ -3673,7 +3668,7 @@ msgstr "סרגל צד"
 
 #: gtk/gtktext.c:6161 gtk/gtktextview.c:9044
 msgid "Insert _Emoji"
-msgstr "הכנסת _רגשון"
+msgstr "הוספת _רגשון"
 
 #: gtk/gtktextview.c:9026
 msgid "_Undo"
@@ -4451,7 +4446,7 @@ msgstr "הצגת פריקת גרפיקה"
 
 #: gtk/inspector/visual.ui:692
 msgid "Inspect Inspector"
-msgstr ""
+msgstr "חקירת חוקר"
 
 #: gtk/inspector/window.ui:27
 msgid "Select an Object"
@@ -7151,7 +7146,7 @@ msgstr "לא זמין"
 
 #: modules/printbackends/gtkprintbackendfile.c:238
 msgid "output"
-msgstr "output"
+msgstr "פלט"
 
 #: modules/printbackends/gtkprintbackendfile.c:510
 msgid "Print to File"
@@ -7210,7 +7205,7 @@ msgstr "יצירת פלט ניפוי שגיאות"
 #: tools/encodesymbolic.c:92
 #, c-format
 msgid "Invalid size %s\n"
-msgstr "Invalid size %s\n"
+msgstr "גודל %s שגוי\n"
 
 #: tools/encodesymbolic.c:104 tools/encodesymbolic.c:113
 #, c-format
@@ -7287,22 +7282,22 @@ msgstr "Objects of type %s can't be previewed\n"
 
 #: tools/gtk-builder-tool-preview.c:178
 msgid "Preview only the named object"
-msgstr "Preview only the named object"
+msgstr "תצוגה מקדימה של העצם עם השם בלבד"
 
 #: tools/gtk-builder-tool-preview.c:179 tools/gtk-builder-tool-screenshot.c:360
 msgid "Use style from CSS file"
-msgstr "Use style from CSS file"
+msgstr "להשתמש בסגנון מקובץ CSS"
 
 #: tools/gtk-builder-tool-preview.c:187 tools/gtk-builder-tool-screenshot.c:370
 #: tools/gtk-builder-tool-validate.c:268 tools/gtk-rendernode-tool-render.c:204
 #: tools/gtk-rendernode-tool-show.c:113
 #, c-format
 msgid "Could not initialize windowing system\n"
-msgstr "Could not initialize windowing system\n"
+msgstr "לא ניתן להפעיל את מערכת החלונות\n"
 
 #: tools/gtk-builder-tool-preview.c:195
 msgid "Preview the file."
-msgstr "Preview the file."
+msgstr "הצגה מקדימה של הקובץ."
 
 #: tools/gtk-builder-tool-preview.c:208 tools/gtk-builder-tool-screenshot.c:391
 #: tools/gtk-builder-tool-simplify.c:2552 tools/gtk-builder-tool-validate.c:287
@@ -7559,15 +7554,15 @@ msgstr ""
 
 #: tools/gtk-path-tool-decompose.c:84
 msgid "Allow quadratic Bézier curves"
-msgstr ""
+msgstr "לאפשר עקומי בזיהה מרובעים"
 
 #: tools/gtk-path-tool-decompose.c:85
 msgid "Allow cubic Bézier curves"
-msgstr ""
+msgstr "לאפשר עקומי בזייה ריבועיים"
 
 #: tools/gtk-path-tool-decompose.c:86
 msgid "Allow conic Bézier curves"
-msgstr ""
+msgstr "לאפשר עקומי בזייה חרוטיות"
 
 #: tools/gtk-path-tool-decompose.c:87 tools/gtk-path-tool-info.c:88
 #: tools/gtk-path-tool-render.c:125 tools/gtk-path-tool-restrict.c:38
@@ -7608,7 +7603,7 @@ msgstr "אורך נתיב"
 #: tools/gtk-path-tool-info.c:138
 #, c-format
 msgid "%d contours"
-msgstr ""
+msgstr "%d קווי מתאר"
 
 # msgctxt "OpenType layout"
 #: tools/gtk-path-tool-info.c:140
@@ -7626,17 +7621,17 @@ msgstr "%d קווים"
 #: tools/gtk-path-tool-info.c:149
 #, c-format
 msgid "%d quadratics"
-msgstr ""
+msgstr "%d מרובעים"
 
 #: tools/gtk-path-tool-info.c:154
 #, c-format
 msgid "%d cubics"
-msgstr ""
+msgstr "%d ריבועיים"
 
 #: tools/gtk-path-tool-info.c:159
 #, c-format
 msgid "%d conics"
-msgstr ""
+msgstr "%d חרוטיים"
 
 #: tools/gtk-path-tool-render.c:117 tools/gtk-path-tool-show.c:140
 msgid "Fill the path (the default)"
@@ -7644,7 +7639,7 @@ msgstr "מילוי הנתיב (ברירת המחדל)"
 
 #: tools/gtk-path-tool-render.c:118 tools/gtk-path-tool-show.c:141
 msgid "Stroke the path"
-msgstr ""
+msgstr "יצירת מתאר לנתיב"
 
 #: tools/gtk-path-tool-render.c:119 tools/gtk-path-tool-show.c:142
 msgid "Show path points"
@@ -7656,11 +7651,11 @@ msgstr "הצגת נקודות בקרה"
 
 #: tools/gtk-path-tool-render.c:121
 msgid "The output file"
-msgstr ""
+msgstr "קובץ הפלט"
 
 #: tools/gtk-path-tool-render.c:122 tools/gtk-path-tool-show.c:144
 msgid "Foreground color"
-msgstr ""
+msgstr "צבע חזית"
 
 #: tools/gtk-path-tool-render.c:122 tools/gtk-path-tool-render.c:123
 #: tools/gtk-path-tool-render.c:124 tools/gtk-path-tool-show.c:144
@@ -7670,7 +7665,7 @@ msgstr "צבע"
 
 #: tools/gtk-path-tool-render.c:123 tools/gtk-path-tool-show.c:145
 msgid "Background color"
-msgstr ""
+msgstr "צבע רקע"
 
 #: tools/gtk-path-tool-render.c:124 tools/gtk-path-tool-show.c:146
 msgid "Point color"
@@ -7678,7 +7673,7 @@ msgstr "צבע נקודה"
 
 #: tools/gtk-path-tool-render.c:129 tools/gtk-path-tool-show.c:151
 msgid "Fill rule (winding, even-odd)"
-msgstr ""
+msgstr "כלל מילוי (מתפתל, זוגי-אי־זוגי)"
 
 #: tools/gtk-path-tool-render.c:129 tools/gtk-path-tool-render.c:133
 #: tools/gtk-path-tool-render.c:134 tools/gtk-path-tool-render.c:135
@@ -7692,27 +7687,27 @@ msgstr "ערך"
 
 #: tools/gtk-path-tool-render.c:133 tools/gtk-path-tool-show.c:155
 msgid "Line width (number)"
-msgstr ""
+msgstr "עובי קו (מספר)"
 
 #: tools/gtk-path-tool-render.c:134 tools/gtk-path-tool-show.c:156
 msgid "Line cap (butt, round, square)"
-msgstr ""
+msgstr "קצה הקו (קטום, עגול, מרובע)"
 
 #: tools/gtk-path-tool-render.c:135 tools/gtk-path-tool-show.c:157
 msgid "Line join (miter, miter-clip, round, bevel, arcs)"
-msgstr ""
+msgstr "חיבור קווים (מצנפת, מצנפת קטומה, עגול, חתוך, קשתות)"
 
 #: tools/gtk-path-tool-render.c:136 tools/gtk-path-tool-show.c:158
 msgid "Miter limit (number)"
-msgstr ""
+msgstr "גבול מצנפת (מספר)"
 
 #: tools/gtk-path-tool-render.c:137 tools/gtk-path-tool-show.c:159
 msgid "Dash pattern (comma-separated numbers)"
-msgstr ""
+msgstr "תבנית קווקוו (מספרים מופרדים בפסיקים)"
 
 #: tools/gtk-path-tool-render.c:138 tools/gtk-path-tool-show.c:160
 msgid "Dash offset (number)"
-msgstr ""
+msgstr "היסט קווקוו (מספר)"
 
 #: tools/gtk-path-tool-render.c:161 tools/gtk-path-tool-show.c:172
 msgid "Could not initialize windowing system"
@@ -7801,44 +7796,39 @@ msgid "Can only show a single path"
 msgstr "יכול להציג נתיב יחיד בלבד"
 
 #: tools/gtk-path-tool-utils.c:58
-#, fuzzy, c-format
-#| msgid "Failed to read from temporary file"
+#, c-format
 msgid "Failed to read from standard input: %s\n"
-msgstr "נכשל בקריאה מקובץ זמני"
+msgstr "הקריאה מהקלט התקני (stdin) נכשלה: %s\n"
 
 #: tools/gtk-path-tool-utils.c:64
-#, fuzzy, c-format
+#, c-format
 #| msgid "Error parsing commandline options: %s\n"
 msgid "Error reading from standard input: %s\n"
-msgstr "Error parsing commandline options: %s\n"
+msgstr "שגיאת קריאה מהקלט התקני (stdin): %s\n"
 
 #: tools/gtk-path-tool-utils.c:83
-#, fuzzy, c-format
-#| msgid "Failed to save %s: %s\n"
+#, c-format
 msgid "Failed to parse '%s' as path.\n"
-msgstr "Failed to save %s: %s\n"
+msgstr "פענוח של ‚%s’ כתיקייה נכשל.\n"
 
 #: tools/gtk-path-tool-utils.c:109
-#, fuzzy, c-format
-#| msgid "Failed to save %s: %s\n"
+#, c-format
 msgid "Failed to parse '%s' as %s."
-msgstr "Failed to save %s: %s\n"
+msgstr "פענוח של ‚%s’ בתור %s נכשל."
 
 #: tools/gtk-path-tool-utils.c:111
 msgid "Possible values: "
 msgstr "ערכים אפשריים: "
 
 #: tools/gtk-path-tool-utils.c:135
-#, fuzzy, c-format
-#| msgid "Could not add a bookmark"
+#, c-format
 msgid "Could not parse '%s' as color"
-msgstr "לא ניתן להוסיף סימנייה"
+msgstr "לא ניתן לפענח את ‚%s’ כצבע"
 
 #: tools/gtk-path-tool-utils.c:163
-#, fuzzy, c-format
-#| msgid "Failed to open file '%s': %s"
+#, c-format
 msgid "Failed to parse '%s' as number"
-msgstr "נכשל בפתיחת הקובץ '%s': %s"
+msgstr "פענוח ‚%s’ כמספר נכשל"
 
 #: tools/gtk-rendernode-tool.c:35
 #, c-format
@@ -7886,10 +7876,8 @@ msgid "Origin: %g %g\n"
 msgstr "מקור: %g %g\n"
 
 #: tools/gtk-rendernode-tool-info.c:223
-#, fuzzy
-#| msgid "Could not retrieve information about the file"
 msgid "Provide information about the render node."
-msgstr "לא ניתן לקבל מידע על הקובץ"
+msgstr "אספקת מידע על נקודת העיבוד החזותי."
 
 #: tools/gtk-rendernode-tool-info.c:236 tools/gtk-rendernode-tool-render.c:225
 #: tools/gtk-rendernode-tool-show.c:134
@@ -7898,10 +7886,9 @@ msgid "No .node file specified\n"
 msgstr "לא צוין קובץ ‎.node\n"
 
 #: tools/gtk-rendernode-tool-info.c:242
-#, fuzzy, c-format
-#| msgid "Can only preview a single .ui file\n"
+#, c-format
 msgid "Can only accept a single .node file\n"
-msgstr "Can only preview a single .ui file\n"
+msgstr "יכול לקבל רק קובץ ‎.node בודד\n"
 
 #: tools/gtk-rendernode-tool-render.c:123
 #, c-format
@@ -7929,16 +7916,13 @@ msgid "RENDERER"
 msgstr "מעבד תצוגה"
 
 #: tools/gtk-rendernode-tool-render.c:212
-#, fuzzy
-#| msgid "Render a .ui file to an image."
 msgid "Render a .node file to an image."
-msgstr "Render a .ui file to an image."
+msgstr "עיבוד קובץ ‎.node לתמונה."
 
 #: tools/gtk-rendernode-tool-render.c:231
-#, fuzzy, c-format
-#| msgid "Can only render a single .ui file to a single output file\n"
+#, c-format
 msgid "Can only render a single .node file to a single output file\n"
-msgstr "Can only render a single .ui file to a single output file\n"
+msgstr "יכול לעבד קובץ ,node יחיד בלבד לקובץ פלט יחיד\n"
 
 #: tools/gtk-rendernode-tool-show.c:105
 msgid "Don't add a titlebar"
@@ -7949,10 +7933,9 @@ msgid "Show the render node."
 msgstr "הצגת צומת מעבד התצוגה."
 
 #: tools/gtk-rendernode-tool-show.c:140
-#, fuzzy, c-format
-#| msgid "Can only preview a single .ui file\n"
+#, c-format
 msgid "Can only preview a single .node file\n"
-msgstr "Can only preview a single .ui file\n"
+msgstr "יכול להציג תצוגה מקדימה של קובץ ‎.node יחיד בלבד\n"
 
 #: tools/gtk-rendernode-tool-utils.c:51
 #, c-format
@@ -8018,7 +8001,7 @@ msgstr "Could not rename %s back to %s: %s.\n"
 #: tools/updateiconcache.c:1614
 #, c-format
 msgid "Cache file created successfully.\n"
-msgstr "Cache file created successfully.\n"
+msgstr "קובץ המטמון נוצר בהצלחה.\n"
 
 #: tools/updateiconcache.c:1653
 msgid "Overwrite an existing cache, even if up to date"
