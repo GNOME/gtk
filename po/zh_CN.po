@@ -30,8 +30,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2023-09-19 01:36+0000\n"
-"PO-Revision-Date: 2023-09-18 21:35-0400\n"
+"POT-Creation-Date: 2023-11-30 18:24+0000\n"
+"PO-Revision-Date: 2023-12-02 20:38-0500\n"
 "Last-Translator: Boyuan Yang <073plan@gmail.com>\n"
 "Language-Team: Chinese - China <i18n-zh@googlegroups.com>\n"
 "Language: zh_CN\n"
@@ -39,7 +39,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Poedit 3.3.2\n"
+"X-Generator: Poedit 2.4.3\n"
 
 #: gdk/broadway/gdkbroadway-server.c:135
 #, c-format
@@ -69,57 +69,57 @@ msgstr "无法以“%s”提供内容"
 msgid "Cannot provide contents as %s"
 msgstr "无法以 %s 提供内容"
 
-#: gdk/gdkdisplay.c:156 gdk/gdkglcontext.c:442
+#: gdk/gdkdisplay.c:156 gdk/gdkglcontext.c:443
 msgid "The current backend does not support OpenGL"
 msgstr "当前后端不支持 OpenGL"
 
-#: gdk/gdkdisplay.c:1245 gdk/gdksurface.c:1252
+#: gdk/gdkdisplay.c:1244 gdk/gdksurface.c:1252
 msgid "Vulkan support disabled via GDK_DEBUG"
 msgstr "已通过 GDK_DEBUG 停用 Vulkan 支持"
 
-#: gdk/gdkdisplay.c:1277
+#: gdk/gdkdisplay.c:1276
 msgid "GL support disabled via GDK_DEBUG"
 msgstr "已通过 GDK_DEBUG 停用 GL 支持"
 
-#: gdk/gdkdisplay.c:1575
+#: gdk/gdkdisplay.c:1574
 msgid "No EGL configuration available"
 msgstr "没有可用的 EGL 配置"
 
-#: gdk/gdkdisplay.c:1583
+#: gdk/gdkdisplay.c:1582
 msgid "Failed to get EGL configurations"
 msgstr "获取 EGL 配置失败"
 
-#: gdk/gdkdisplay.c:1613
+#: gdk/gdkdisplay.c:1612
 msgid "No EGL configuration with required features found"
 msgstr "未找到带有所需功能的 EGL 配置"
 
-#: gdk/gdkdisplay.c:1620
+#: gdk/gdkdisplay.c:1619
 msgid "No perfect EGL configuration found"
 msgstr "未找到完全符合的 EGL 配置"
 
-#: gdk/gdkdisplay.c:1662
+#: gdk/gdkdisplay.c:1661
 #, c-format
 msgid "EGL implementation is missing extension %s"
 msgid_plural "EGL implementation is missing %2$d extensions: %1$s"
 msgstr[0] "EGL 实现缺失 %2$d 项扩展：%1$s"
 
-#: gdk/gdkdisplay.c:1695
+#: gdk/gdkdisplay.c:1694
 msgid "libEGL not available in this sandbox"
 msgstr "libEGL 在此沙盒内不可用"
 
-#: gdk/gdkdisplay.c:1696
+#: gdk/gdkdisplay.c:1695
 msgid "libEGL not available"
 msgstr "libEGL 不可用"
 
-#: gdk/gdkdisplay.c:1706
+#: gdk/gdkdisplay.c:1705
 msgid "Failed to create EGL display"
 msgstr "创建 EGL 显示失败"
 
-#: gdk/gdkdisplay.c:1716
+#: gdk/gdkdisplay.c:1715
 msgid "Could not initialize EGL display"
 msgstr "无法初始化 EGL 显示"
 
-#: gdk/gdkdisplay.c:1727
+#: gdk/gdkdisplay.c:1726
 #, c-format
 msgid "EGL version %d.%d is too old. GTK requires %d.%d"
 msgstr "EGL %d.%d 版太旧。GTK 需要 %d.%d"
@@ -132,33 +132,33 @@ msgstr "不支持从其他应用拖放。"
 msgid "No compatible formats to transfer contents."
 msgstr "无兼容格式可用于传输内容。"
 
-#: gdk/gdkglcontext.c:401 gdk/x11/gdkglcontext-glx.c:642
+#: gdk/gdkglcontext.c:402 gdk/x11/gdkglcontext-glx.c:642
 msgid "No GL API allowed."
 msgstr "无允许的 GL API。"
 
-#: gdk/gdkglcontext.c:425 gdk/win32/gdkglcontext-win32-wgl.c:387
+#: gdk/gdkglcontext.c:426 gdk/win32/gdkglcontext-win32-wgl.c:387
 #: gdk/win32/gdkglcontext-win32-wgl.c:530
 #: gdk/win32/gdkglcontext-win32-wgl.c:574 gdk/x11/gdkglcontext-glx.c:691
 msgid "Unable to create a GL context"
 msgstr "无法创建 GL 上下文"
 
-#: gdk/gdkglcontext.c:1280
+#: gdk/gdkglcontext.c:1281
 msgid "Anything but OpenGL ES disabled via GDK_DEBUG"
 msgstr "已通过 GDK_DEBUG 停用 OpenGL ES 以外的所有实现"
 
-#: gdk/gdkglcontext.c:1289
+#: gdk/gdkglcontext.c:1290
 #, c-format
 msgid "Application does not support %s API"
 msgstr "应用程序不支持 %s API"
 
 #. translators: This is about OpenGL backend names, like
 #. * "Trying to use X11 GLX, but EGL is already in use"
-#: gdk/gdkglcontext.c:1864
+#: gdk/gdkglcontext.c:1899
 #, c-format
 msgid "Trying to use %s, but %s is already in use"
 msgstr "尝试使用 %s，但 %s 已在使用"
 
-#: gdk/gdktexture.c:528
+#: gdk/gdktexture.c:530
 msgid "Unknown image format."
 msgstr "未知图像格式。"
 
@@ -1043,18 +1043,18 @@ msgctxt "progress bar label"
 msgid "%d %%"
 msgstr "%d %%"
 
-#: gtk/deprecated/gtkcolorbutton.c:183 gtk/deprecated/gtkcolorbutton.c:311
+#: gtk/deprecated/gtkcolorbutton.c:183 gtk/deprecated/gtkcolorbutton.c:314
 #: gtk/gtkcolordialog.c:411
 msgid "Pick a Color"
 msgstr "拾取颜色"
 
-#: gtk/deprecated/gtkcolorbutton.c:502 gtk/gtkcolorchooserwidget.c:313
+#: gtk/deprecated/gtkcolorbutton.c:505 gtk/gtkcolorchooserwidget.c:313
 #: gtk/gtkcolordialogbutton.c:335
 #, c-format
 msgid "Red %d%%, Green %d%%, Blue %d%%, Alpha %d%%"
 msgstr "红 %d%%，绿 %d%%，蓝 %d%%，透明度 %d%%"
 
-#: gtk/deprecated/gtkcolorbutton.c:508 gtk/gtkcolorchooserwidget.c:319
+#: gtk/deprecated/gtkcolorbutton.c:511 gtk/gtkcolorchooserwidget.c:319
 #: gtk/gtkcolordialogbutton.c:341
 #, c-format
 msgid "Red %d%%, Green %d%%, Blue %d%%"
@@ -1064,17 +1064,17 @@ msgstr "红 %d%%，绿 %d%%，蓝 %d%%"
 msgid "Sans 12"
 msgstr "Sans 12"
 
-#: gtk/deprecated/gtkfontbutton.c:507 gtk/deprecated/gtkfontbutton.c:621
+#: gtk/deprecated/gtkfontbutton.c:507 gtk/deprecated/gtkfontbutton.c:624
 #: gtk/gtkfontdialog.c:596
 msgid "Pick a Font"
 msgstr "选择字体"
 
-#: gtk/deprecated/gtkfontbutton.c:597 gtk/gtkfilechooserwidget.c:3871
+#: gtk/deprecated/gtkfontbutton.c:600 gtk/gtkfilechooserwidget.c:3871
 #: gtk/gtkfontdialogbutton.c:126 gtk/inspector/visual.ui:169
 msgid "Font"
 msgstr "字体"
 
-#: gtk/deprecated/gtkfontbutton.c:1152 gtk/gtkfontdialogbutton.c:652
+#: gtk/deprecated/gtkfontbutton.c:1155 gtk/gtkfontdialogbutton.c:652
 msgctxt "font"
 msgid "None"
 msgstr "无"
@@ -2138,7 +2138,7 @@ msgstr "右(_R)："
 msgid "Paper Margins"
 msgstr "纸张边距"
 
-#: gtk/gtkentry.c:3673
+#: gtk/gtkentry.c:3685
 msgid "Insert Emoji"
 msgstr "插入表情符号"
 
@@ -2208,7 +2208,7 @@ msgstr "同名文件已存在"
 #: gtk/gtkmessagedialog.c:179 gtk/gtkmountoperation.c:608
 #: gtk/print/gtkpagesetupunixdialog.c:282 gtk/print/gtkprintbackend.c:638
 #: gtk/print/gtkprintunixdialog.c:682 gtk/print/gtkprintunixdialog.c:839
-#: gtk/gtkwindow.c:6242 gtk/ui/gtkappchooserdialog.ui:48
+#: gtk/gtkwindow.c:6233 gtk/ui/gtkappchooserdialog.ui:48
 #: gtk/ui/gtkassistant.ui:52 gtk/ui/gtkcolorchooserdialog.ui:36
 #: gtk/ui/gtkfontchooserdialog.ui:27
 msgid "_Cancel"
@@ -2296,7 +2296,7 @@ msgid "If you delete an item, it will be permanently lost."
 msgstr "如果您删除一个项目，它将永久丢失。"
 
 #: gtk/gtkfilechooserwidget.c:1185 gtk/gtkfilechooserwidget.c:1815
-#: gtk/gtklabel.c:5695 gtk/gtktext.c:6145 gtk/gtktextview.c:9018
+#: gtk/gtklabel.c:5695 gtk/gtktext.c:6147 gtk/gtktextview.c:9018
 msgid "_Delete"
 msgstr "删除(_D)"
 
@@ -2634,19 +2634,19 @@ msgstr "关闭"
 msgid "Close the infobar"
 msgstr "关闭信息栏"
 
-#: gtk/gtklabel.c:5692 gtk/gtktext.c:6133 gtk/gtktextview.c:9006
+#: gtk/gtklabel.c:5692 gtk/gtktext.c:6135 gtk/gtktextview.c:9006
 msgid "Cu_t"
 msgstr "剪切(_T)"
 
-#: gtk/gtklabel.c:5693 gtk/gtktext.c:6137 gtk/gtktextview.c:9010
+#: gtk/gtklabel.c:5693 gtk/gtktext.c:6139 gtk/gtktextview.c:9010
 msgid "_Copy"
 msgstr "复制(_C)"
 
-#: gtk/gtklabel.c:5694 gtk/gtktext.c:6141 gtk/gtktextview.c:9014
+#: gtk/gtklabel.c:5694 gtk/gtktext.c:6143 gtk/gtktextview.c:9014
 msgid "_Paste"
 msgstr "粘贴(_P)"
 
-#: gtk/gtklabel.c:5700 gtk/gtktext.c:6154 gtk/gtktextview.c:9039
+#: gtk/gtklabel.c:5700 gtk/gtktext.c:6156 gtk/gtktextview.c:9039
 msgid "Select _All"
 msgstr "全选(_A)"
 
@@ -2729,7 +2729,7 @@ msgid "Play"
 msgstr "播放"
 
 #: gtk/gtkmessagedialog.c:162 gtk/gtkmessagedialog.c:180
-#: gtk/print/gtkprintbackend.c:639 gtk/gtkwindow.c:6243
+#: gtk/print/gtkprintbackend.c:639 gtk/gtkwindow.c:6234
 msgid "_OK"
 msgstr "确定(_O)"
 
@@ -3327,8 +3327,8 @@ msgstr "最可能的原因是无法创建临时文件。"
 
 #. window
 #: gtk/print/gtkprintoperation-portal.c:264
-#: gtk/print/gtkprintoperation-portal.c:584
-#: gtk/print/gtkprintoperation-portal.c:653 gtk/print/gtkprintunixdialog.c:3008
+#: gtk/print/gtkprintoperation-portal.c:594
+#: gtk/print/gtkprintoperation-portal.c:663 gtk/print/gtkprintunixdialog.c:3008
 msgid "Print"
 msgstr "打印"
 
@@ -3500,7 +3500,7 @@ msgstr "无法将 URI 为“%s”的项目移动至“%s”"
 msgid "No registered application with name “%s” for item with URI “%s” found"
 msgstr "未找到注册名称为“%s”且 URI 为“%s”的应用程序"
 
-#: gtk/gtksearchentry.c:758
+#: gtk/gtksearchentry.c:767
 msgid "Clear Entry"
 msgstr "清除条目"
 
@@ -3591,7 +3591,7 @@ msgctxt "accessibility"
 msgid "Sidebar"
 msgstr "侧边栏"
 
-#: gtk/gtktext.c:6159 gtk/gtktextview.c:9044
+#: gtk/gtktext.c:6161 gtk/gtktextview.c:9044
 msgid "Insert _Emoji"
 msgstr "插入表情符号(_E)"
 
@@ -3604,12 +3604,12 @@ msgid "_Redo"
 msgstr "重做(_R)"
 
 # Chrome 那个叫检查元素，这个叫检查器也没什么问题吧。
-#: gtk/gtkwindow.c:6231
+#: gtk/gtkwindow.c:6222
 #, c-format
 msgid "Do you want to use GTK Inspector?"
 msgstr "您是否要使用 GTK 检查器？"
 
-#: gtk/gtkwindow.c:6233
+#: gtk/gtkwindow.c:6224
 #, c-format
 msgid ""
 "GTK Inspector is an interactive debugger that lets you explore and modify "
@@ -3619,7 +3619,7 @@ msgstr ""
 "GTK 检查器是一个交互式的调试器，让您可以探索并修改任何 GTK 应用程序的内部构"
 "造。使用它可能造成应用程序损坏或崩溃。"
 
-#: gtk/gtkwindow.c:6238
+#: gtk/gtkwindow.c:6229
 msgid "Don’t show this message again"
 msgstr "不要再显示此消息"
 
@@ -3968,8 +3968,8 @@ msgid "Surface"
 msgstr "表面"
 
 #: gtk/inspector/misc-info.ui:365 gtk/inspector/misc-info.ui:400
-#: gtk/inspector/misc-info.ui:435 gtk/inspector/prop-editor.c:1150
-#: gtk/inspector/prop-editor.c:1533 gtk/inspector/window.ui:396
+#: gtk/inspector/misc-info.ui:435 gtk/inspector/prop-editor.c:1153
+#: gtk/inspector/prop-editor.c:1536 gtk/inspector/window.ui:396
 msgid "Properties"
 msgstr "属性"
 
@@ -4021,7 +4021,7 @@ msgstr "指针：%p"
 #. Translators: %s is a type name, for example
 #. * GtkPropertyExpression with value \"2.5\"
 #.
-#: gtk/inspector/prop-editor.c:824
+#: gtk/inspector/prop-editor.c:827
 #, c-format
 msgid "%s with value \"%s\""
 msgstr "%s 具有值“%s”"
@@ -4029,7 +4029,7 @@ msgstr "%s 具有值“%s”"
 #. Translators: Both %s are type names, for example
 #. * GtkPropertyExpression with type GObject
 #.
-#: gtk/inspector/prop-editor.c:835
+#: gtk/inspector/prop-editor.c:838
 #, c-format
 msgid "%s with type %s"
 msgstr "%s 具有类型 %s"
@@ -4037,7 +4037,7 @@ msgstr "%s 具有类型 %s"
 #. Translators: Both %s are type names, for example
 #. * GtkObjectExpression for GtkStringObject 0x23456789
 #.
-#: gtk/inspector/prop-editor.c:848
+#: gtk/inspector/prop-editor.c:851
 #, c-format
 msgid "%s for %s %p"
 msgstr "%s 对于 %s %p"
@@ -4045,71 +4045,71 @@ msgstr "%s 对于 %s %p"
 #. Translators: Both %s are type names, for example
 #. * GtkPropertyExpression with value type: gchararray
 #.
-#: gtk/inspector/prop-editor.c:878
+#: gtk/inspector/prop-editor.c:881
 #, c-format
 msgid "%s with value type %s"
 msgstr "%s 具有值类型 %s"
 
-#: gtk/inspector/prop-editor.c:1227
+#: gtk/inspector/prop-editor.c:1230
 #, c-format
 msgid "Uneditable property type: %s"
 msgstr "不可编辑的属性类型：%s"
 
-#: gtk/inspector/prop-editor.c:1385
+#: gtk/inspector/prop-editor.c:1388
 msgctxt "column number"
 msgid "None"
 msgstr "无"
 
-#: gtk/inspector/prop-editor.c:1422
+#: gtk/inspector/prop-editor.c:1425
 msgid "Attribute:"
 msgstr "属性："
 
-#: gtk/inspector/prop-editor.c:1425
+#: gtk/inspector/prop-editor.c:1428
 msgid "Model"
 msgstr "型号"
 
-#: gtk/inspector/prop-editor.c:1430
+#: gtk/inspector/prop-editor.c:1433
 msgid "Column:"
 msgstr "列："
 
 #. Translators: %s is a type name, for example
 #. * Action from 0x2345678 (GtkApplicationWindow)
 #.
-#: gtk/inspector/prop-editor.c:1529
+#: gtk/inspector/prop-editor.c:1532
 #, c-format
 msgid "Action from: %p (%s)"
 msgstr "动作来源：%p (%s)"
 
-#: gtk/inspector/prop-editor.c:1584
+#: gtk/inspector/prop-editor.c:1587
 msgid "Reset"
 msgstr "重置"
 
-#: gtk/inspector/prop-editor.c:1592
+#: gtk/inspector/prop-editor.c:1595
 msgctxt "GtkSettings source"
 msgid "Default"
 msgstr "默认"
 
-#: gtk/inspector/prop-editor.c:1595
+#: gtk/inspector/prop-editor.c:1598
 msgctxt "GtkSettings source"
 msgid "Theme"
 msgstr "主题"
 
-#: gtk/inspector/prop-editor.c:1598
+#: gtk/inspector/prop-editor.c:1601
 msgctxt "GtkSettings source"
 msgid "XSettings"
 msgstr "XSettings"
 
-#: gtk/inspector/prop-editor.c:1602
+#: gtk/inspector/prop-editor.c:1605
 msgctxt "GtkSettings source"
 msgid "Application"
 msgstr "应用程序"
 
-#: gtk/inspector/prop-editor.c:1605
+#: gtk/inspector/prop-editor.c:1608
 msgctxt "GtkSettings source"
 msgid "Unknown"
 msgstr "未知"
 
-#: gtk/inspector/prop-editor.c:1608
+#: gtk/inspector/prop-editor.c:1611
 msgid "Source:"
 msgstr "来源："
 
@@ -7162,7 +7162,7 @@ msgstr ""
 #: tools/gtk-builder-tool-enumerate.c:56 tools/gtk-builder-tool-preview.c:179
 #: tools/gtk-builder-tool-preview.c:180 tools/gtk-builder-tool-screenshot.c:360
 #: tools/gtk-builder-tool-simplify.c:2529 tools/gtk-builder-tool-validate.c:261
-#: tools/gtk-rendernode-tool-info.c:200 tools/gtk-rendernode-tool-show.c:102
+#: tools/gtk-rendernode-tool-info.c:202 tools/gtk-rendernode-tool-show.c:106
 msgid "FILE"
 msgstr "文件"
 
@@ -7194,7 +7194,7 @@ msgid "Use style from CSS file"
 msgstr "使用来自 CSS 文件的样式"
 
 #: tools/gtk-builder-tool-preview.c:187 tools/gtk-builder-tool-screenshot.c:370
-#: tools/gtk-builder-tool-validate.c:268 tools/gtk-rendernode-tool-show.c:109
+#: tools/gtk-builder-tool-validate.c:268 tools/gtk-rendernode-tool-show.c:113
 #: tools/gtk-rendernode-tool-render.c:204
 #, c-format
 msgid "Could not initialize windowing system\n"
@@ -7445,46 +7445,50 @@ msgstr ""
 "  screenshot         对节点截图\n"
 "\n"
 
-#: tools/gtk-rendernode-tool-info.c:177
+#: tools/gtk-rendernode-tool-info.c:179
 #, c-format
 msgid "Number of nodes: %u\n"
 msgstr "节点的数量：%u\n"
 
-#: tools/gtk-rendernode-tool-info.c:184
+#: tools/gtk-rendernode-tool-info.c:186
 #, c-format
 msgid "Depth: %u\n"
 msgstr "深度：%u\n"
 
-#: tools/gtk-rendernode-tool-info.c:187
+#: tools/gtk-rendernode-tool-info.c:189
 #, c-format
 msgid "Bounds: %g x %g\n"
 msgstr "边界：%g x %g\n"
 
-#: tools/gtk-rendernode-tool-info.c:188
+#: tools/gtk-rendernode-tool-info.c:190
 #, c-format
 msgid "Origin: %g %g\n"
 msgstr "原点：%g %g\n"
 
-#: tools/gtk-rendernode-tool-info.c:209
+#: tools/gtk-rendernode-tool-info.c:211
 msgid "Provide information about the render node."
 msgstr "提供有关渲染节点的信息"
 
-#: tools/gtk-rendernode-tool-info.c:222 tools/gtk-rendernode-tool-show.c:130
+#: tools/gtk-rendernode-tool-info.c:224 tools/gtk-rendernode-tool-show.c:134
 #: tools/gtk-rendernode-tool-render.c:225
 #, c-format
 msgid "No .node file specified\n"
 msgstr "未指定 .node 文件\n"
 
-#: tools/gtk-rendernode-tool-info.c:228
+#: tools/gtk-rendernode-tool-info.c:230
 #, c-format
 msgid "Can only accept a single .node file\n"
 msgstr "只能接受单个 .node 文件\n"
 
-#: tools/gtk-rendernode-tool-show.c:117
+#: tools/gtk-rendernode-tool-show.c:105
+msgid "Don't add a titlebar"
+msgstr "不要添加标题栏"
+
+#: tools/gtk-rendernode-tool-show.c:121
 msgid "Show the render node."
 msgstr "显示渲染节点。"
 
-#: tools/gtk-rendernode-tool-show.c:136
+#: tools/gtk-rendernode-tool-show.c:140
 #, c-format
 msgid "Can only preview a single .node file\n"
 msgstr "只能预览单个 .node 文件\n"
@@ -7524,6 +7528,11 @@ msgstr "只能将单个 .node 文件渲染为单个输出文件\n"
 #, c-format
 msgid "Error at %s: %s\n"
 msgstr "在 %s 处有错误：%s\n"
+
+#: tools/gtk-rendernode-tool-utils.c:69
+#, c-format
+msgid "Failed to load node file: %s\n"
+msgstr "加载 node 文件失败：%s\n"
 
 #: tools/updateiconcache.c:1391
 #, c-format
@@ -9515,8 +9524,8 @@ msgstr ""
 #~ msgstr "“%s”不是合法的属性名称"
 
 #~ msgid ""
-#~ "\"%s\" could not be converted to a value of type \"%s\" for attribute "
-#~ "\"%s\""
+#~ "\"%s\" could not be converted to a value of type \"%s\" for attribute \"%s"
+#~ "\""
 #~ msgstr "“%s”不能被转换为“%s”类型的值，此值用于属性“%s”"
 
 #~ msgid "\"%s\" is not a valid value for attribute \"%s\""
