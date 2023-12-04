@@ -68,6 +68,33 @@ enum {
 
 static GParamSpec *properties[N_PROPS];
 
+static GdkTextureChain *
+gdk_texture_chain_new (void)
+{
+  GdkTextureChain *chain = g_new0 (GdkTextureChain, 1);
+
+  g_atomic_ref_count_init (&chain->ref_count);
+  g_mutex_init (&chain->lock);
+
+  return chain;
+}
+
+static void
+gdk_texture_chain_ref (GdkTextureChain *chain)
+{
+  g_atomic_ref_count_inc (&chain->ref_count);
+}
+
+static void
+gdk_texture_chain_unref (GdkTextureChain *chain)
+{
+  if (g_atomic_ref_count_dec (&chain->ref_count))
+    {
+      g_mutex_clear (&chain->lock);
+      g_free (chain);
+    }
+}
+
 static void
 gdk_texture_paintable_snapshot (GdkPaintable *paintable,
                                 GdkSnapshot  *snapshot,
@@ -283,7 +310,30 @@ gdk_texture_dispose (GObject *object)
 {
   GdkTexture *self = GDK_TEXTURE (object);
 
-  g_clear_pointer (&self->diff_to_previous, cairo_region_destroy);
+  if (self->chain)
+    {
+      g_mutex_lock (&self->chain->lock);
+
+      if (self->next_texture && self->previous_texture)
+        {
+          cairo_region_union (self->next_texture->diff_to_previous,
+                              self->diff_to_previous);
+          self->next_texture->previous_texture = self->previous_texture;
+          self->previous_texture->next_texture = self->next_texture;
+        }
+      else if (self->next_texture)
+        self->next_texture->previous_texture = NULL;
+      else if (self->previous_texture)
+        self->previous_texture->next_texture = NULL;
+
+      self->next_texture = NULL;
+      self->previous_texture = NULL;
+      g_clear_pointer (&self->diff_to_previous, cairo_region_destroy);
+
+      g_mutex_unlock (&self->chain->lock);
+
+      g_clear_pointer (&self->chain, gdk_texture_chain_unref);
+    }
 
   gdk_texture_clear_render_data (self);
 
@@ -679,34 +729,64 @@ gdk_texture_do_download (GdkTexture      *texture,
   GDK_TEXTURE_GET_CLASS (texture)->download (texture, format, data, stride);
 }
 
+static gboolean
+gdk_texture_has_ancestor (GdkTexture *self,
+                          GdkTexture *other)
+{
+  GdkTexture *texture;
+
+  for (texture = self->previous_texture;
+       texture != NULL;
+       texture = texture->previous_texture)
+    {
+      if (texture == other)
+        return TRUE;
+    }
+  return FALSE;
+}
+
+static void
+gdk_texture_diff_from_known_ancestor (GdkTexture     *self,
+                                      GdkTexture     *ancestor,
+                                      cairo_region_t *region)
+{
+  GdkTexture *texture;
+
+  for (texture = self; texture != ancestor; texture = texture->previous_texture)
+    cairo_region_union (region, texture->diff_to_previous);
+}
+
 void
 gdk_texture_diff (GdkTexture     *self,
                   GdkTexture     *other,
                   cairo_region_t *region)
 {
-  if (self == other)
+  cairo_rectangle_int_t fill = {
+    .x = 0,
+    .y = 0,
+    .width = MAX (self->width, other->width),
+    .height = MAX (self->height, other->height),
+  };
+  GdkTextureChain *chain;
+
+  if (other == self)
     return;
 
-  if (self->previous_texture == other &&
-      g_atomic_pointer_get (&other->next_texture) == self)
+  chain = g_atomic_pointer_get (&self->chain);
+  if (chain == NULL || chain != g_atomic_pointer_get (&other->chain))
     {
-      cairo_region_union (region, self->diff_to_previous);
+      cairo_region_union_rectangle (region, &fill);
+      return;
     }
-  else if (other->previous_texture == self &&
-           g_atomic_pointer_get (&self->next_texture) == other)
-    {
-      cairo_region_union (region, other->diff_to_previous);
-    }
+
+  g_mutex_lock (&chain->lock);
+  if (gdk_texture_has_ancestor (self, other))
+    gdk_texture_diff_from_known_ancestor (self, other, region);
+  else if (gdk_texture_has_ancestor (other, self))
+    gdk_texture_diff_from_known_ancestor (other, self, region);
   else
-    {
-      cairo_region_union_rectangle (region,
-                                    &(cairo_rectangle_int_t) {
-                                      0,
-                                      0,
-                                      MAX (self->width, other->width),
-                                      MAX (self->height, other->height)
-                                    });
-    }
+    cairo_region_union_rectangle (region, &fill);
+  g_mutex_unlock (&chain->lock);
 }
 
 void
@@ -715,10 +795,30 @@ gdk_texture_set_diff (GdkTexture     *self,
                       cairo_region_t *diff)
 {
   g_assert (self->diff_to_previous == NULL);
+  g_assert (self->chain == NULL);
 
+  self->chain = g_atomic_pointer_get (&previous->chain);
+  if (self->chain == NULL)
+    {
+      self->chain = gdk_texture_chain_new ();
+      if (!g_atomic_pointer_compare_and_exchange (&previous->chain,
+                                                  NULL,
+                                                  self->chain))
+        gdk_texture_chain_unref (self->chain);
+      self->chain = previous->chain;
+    }
+  gdk_texture_chain_ref (self->chain);
+
+  g_mutex_lock (&self->chain->lock);
+  if (previous->next_texture)
+    {
+      previous->next_texture->previous_texture = NULL;
+      g_clear_pointer (&previous->next_texture->diff_to_previous, cairo_region_destroy);
+    }
+  previous->next_texture = self;
   self->previous_texture = previous;
   self->diff_to_previous = diff;
-  g_atomic_pointer_set (&previous->next_texture, self);
+  g_mutex_unlock (&self->chain->lock);
 }
 
 cairo_surface_t *

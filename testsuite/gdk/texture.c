@@ -3,6 +3,21 @@
 #include "gdk/gdkmemorytextureprivate.h"
 #include "gdk/gdktextureprivate.h"
 
+
+#define assert_texture_diff_equal(a, b, expected) G_STMT_START { \
+  cairo_region_t *_r; \
+\
+  _r = cairo_region_create (); \
+  gdk_texture_diff (a, b, _r); \
+  g_assert_true (cairo_region_equal (_r, expected)); \
+  cairo_region_destroy(_r); \
+\
+  _r = cairo_region_create (); \
+  gdk_texture_diff (b, a, _r); \
+  g_assert_true (cairo_region_equal (_r, expected)); \
+  cairo_region_destroy(_r); \
+}G_STMT_END
+
 static void
 compare_pixels (int     width,
                 int     height,
@@ -312,47 +327,49 @@ test_texture_icon_serialize (void)
 static void
 test_texture_diff (void)
 {
+  GdkTexture *texture0;
   GdkTexture *texture;
   GdkTexture *texture2;
+  cairo_region_t *empty;
   cairo_region_t *full;
   cairo_region_t *center;
-  cairo_region_t *r;
+  cairo_region_t *left;
+  cairo_region_t *left_center;
 
+  texture0 = gdk_texture_new_from_resource ("/org/gtk/libgtk/icons/16x16/places/user-trash.png");
   texture = gdk_texture_new_from_resource ("/org/gtk/libgtk/icons/16x16/places/user-trash.png");
   texture2 = gdk_texture_new_from_resource ("/org/gtk/libgtk/icons/16x16/places/user-trash.png");
 
+  empty = cairo_region_create();
   full = cairo_region_create_rectangle (&(cairo_rectangle_int_t) { 0, 0, 16, 16 });
   center = cairo_region_create_rectangle (&(cairo_rectangle_int_t) { 4, 4, 8 ,8 });
+  left = cairo_region_create_rectangle (&(cairo_rectangle_int_t) { 0, 4, 4, 4 });
+  left_center = cairo_region_copy (left);
+  cairo_region_union (left_center, center);
 
-  r = cairo_region_create ();
-  gdk_texture_diff (texture, texture, r);
-
-  g_assert_true (cairo_region_is_empty (r));
-
-  gdk_texture_diff (texture, texture2, r);
+  assert_texture_diff_equal (texture, texture, empty);
 
   /* No diff set, so we get the full area */
-  g_assert_true (cairo_region_equal (r, full));
-  cairo_region_destroy (r);
+  assert_texture_diff_equal (texture, texture2, full);
 
   gdk_texture_set_diff (texture, texture2, cairo_region_copy (center));
 
-  r = cairo_region_create ();
-  gdk_texture_diff (texture, texture2, r);
+  assert_texture_diff_equal (texture, texture2, center);
 
-  g_assert_true (cairo_region_equal (r, center));
-  cairo_region_destroy (r);
+  gdk_texture_set_diff (texture0, texture, cairo_region_copy (left));
 
-  r = cairo_region_create ();
-  gdk_texture_diff (texture2, texture, r);
+  assert_texture_diff_equal (texture0, texture2, left_center);
 
-  g_assert_true (cairo_region_equal (r, center));
-  cairo_region_destroy (r);
+  g_object_unref (texture);
+
+  assert_texture_diff_equal (texture0, texture2, left_center);
 
   cairo_region_destroy (full);
   cairo_region_destroy (center);
-  g_object_unref (texture);
+  cairo_region_destroy (left);
+  cairo_region_destroy (left_center);
   g_object_unref (texture2);
+  g_object_unref (texture0);
 }
 
 static void
