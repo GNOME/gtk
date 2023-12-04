@@ -237,11 +237,29 @@ gdk_wayland_subsurface_attach (GdkSubsurface         *sub,
     }
   else
     {
+      gboolean was_transparent;
+
+      if (self->texture)
+        was_transparent = gdk_memory_format_alpha (gdk_texture_get_format (self->texture)) != GDK_MEMORY_ALPHA_OPAQUE;
+      else
+        was_transparent = FALSE;
+
       if (g_set_object (&self->texture, texture))
         {
           buffer = get_wl_buffer (self, texture);
           if (buffer != NULL)
             {
+              gboolean is_transparent;
+
+              is_transparent = gdk_memory_format_alpha (gdk_texture_get_format (texture)) != GDK_MEMORY_ALPHA_OPAQUE;
+              if (is_transparent != was_transparent)
+                {
+                  if (is_transparent)
+                    wl_surface_set_opaque_region (self->surface, NULL);
+                  else
+                    wl_surface_set_opaque_region (self->surface, self->opaque_region);
+                }
+
               GDK_DISPLAY_DEBUG (gdk_surface_get_display (sub->parent), OFFLOAD,
                                  "Attached %dx%d texture to subsurface %p at %d %d %d %d",
                                  gdk_texture_get_width (texture),
@@ -339,6 +357,7 @@ gdk_wayland_subsurface_detach (GdkSubsurface *sub)
 
   g_set_object (&self->texture, NULL);
   wl_surface_attach (self->surface, NULL, 0, 0);
+  wl_surface_set_opaque_region (self->surface, self->opaque_region);
   wl_surface_commit (self->surface);
 
   ((GdkWaylandSurface *)sub->parent)->has_pending_subsurface_commits = TRUE;
