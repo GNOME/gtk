@@ -20,6 +20,7 @@ compare_render_tests = [
   'blend-in-rotate',
   'blend-normal',
   'blurred-lines',
+  'blur-contents-outside-of-clip',
   'border-bottom-right',
   'border-one-rounded',
   'borders-rotated',
