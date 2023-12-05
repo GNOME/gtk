@@ -22,6 +22,7 @@ compare_render_tests = [
   'blurred-lines',
   'blur-child-bounds-oversize',
   'blur-contents-outside-of-clip',
+  'blur-huge-contents-outside-of-clip',
   'border-bottom-right',
   'border-one-rounded',
   'borders-rotated',
