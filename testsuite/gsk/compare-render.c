@@ -457,14 +457,21 @@ main (int argc, char **argv)
       gsk_render_node_get_bounds (node, &bounds);
       nodes[0] = gsk_color_node_new (&(GdkRGBA){ 0, 0, 0, 1},
                                      &GRAPHENE_RECT_INIT (bounds.origin.x, bounds.origin.y, 25, 25));
-      nodes[1] = gsk_color_node_new (&(GdkRGBA){ 0, 0, 0, 1},
-                                     &GRAPHENE_RECT_INIT (bounds.origin.x + 25, bounds.origin.y + 25, bounds.size.width - 25, bounds.size.height - 25));
+      if (bounds.size.width > 25 && bounds.size.height > 25)
+        {
+          nodes[1] = gsk_color_node_new (&(GdkRGBA){ 0, 0, 0, 1},
+                                         &GRAPHENE_RECT_INIT (bounds.origin.x + 25, bounds.origin.y + 25, bounds.size.width - 25, bounds.size.height - 25));
+          mask_node = gsk_container_node_new (nodes, G_N_ELEMENTS (nodes));
+          gsk_render_node_unref (nodes[0]);
+          gsk_render_node_unref (nodes[1]);
+        }
+      else
+        {
+          mask_node = nodes[0];
+        }
 
-      mask_node = gsk_container_node_new (nodes, G_N_ELEMENTS (nodes));
       node2 = gsk_mask_node_new (node, mask_node, GSK_MASK_MODE_ALPHA);
       gsk_render_node_unref (mask_node);
-      gsk_render_node_unref (nodes[0]);
-      gsk_render_node_unref (nodes[1]);
       save_node (node2, node_file, "-masked.node");
 
       rendered_texture = gsk_renderer_render_texture (renderer, node2, NULL);
