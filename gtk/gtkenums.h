@@ -1367,6 +1367,12 @@ typedef enum {
  * @GTK_ACCESSIBLE_ROLE_BLOCK_QUOTE: A section of content that is quoted
  *   from another source.
  *   Since: 4.14
+ * @GTK_ACCESSIBLE_ROLE_ARTICLE: A section of a page that consists of a
+ *   composition that forms an independent part of a document, page, or site.
+ *   Since: 4.14
+ * @GTK_ACCESSIBLE_ROLE_COMMENT: A comment contains content expressing reaction
+ *   to other content.
+ *   Since: 4.14
  *
  * The accessible role for a [iface@Accessible] implementation.
  *
@@ -1455,7 +1461,9 @@ typedef enum {
   GTK_ACCESSIBLE_ROLE_TOGGLE_BUTTON GDK_AVAILABLE_ENUMERATOR_IN_4_10,
   GTK_ACCESSIBLE_ROLE_APPLICATION GDK_AVAILABLE_ENUMERATOR_IN_4_12,
   GTK_ACCESSIBLE_ROLE_PARAGRAPH GDK_AVAILABLE_ENUMERATOR_IN_4_14,
-  GTK_ACCESSIBLE_ROLE_BLOCK_QUOTE GDK_AVAILABLE_ENUMERATOR_IN_4_14
+  GTK_ACCESSIBLE_ROLE_BLOCK_QUOTE GDK_AVAILABLE_ENUMERATOR_IN_4_14,
+  GTK_ACCESSIBLE_ROLE_ARTICLE GDK_AVAILABLE_ENUMERATOR_IN_4_14,
+  GTK_ACCESSIBLE_ROLE_COMMENT GDK_AVAILABLE_ENUMERATOR_IN_4_14
 } GtkAccessibleRole;
 
 /**
