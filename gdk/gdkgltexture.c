@@ -157,8 +157,10 @@ gdk_gl_texture_find_format (GdkGLContext    *context,
       if (gdk_memory_format_alpha (format) != alpha)
         continue;
 
-      if (!gdk_memory_format_gl_format (format, context, &q_internal_format, &q_format, &q_type, q_swizzle))
+      if (!(gdk_gl_context_get_format_flags (context, format) & GDK_GL_FORMAT_RENDERABLE))
         continue;
+
+      gdk_memory_format_gl_format (format, &q_internal_format, &q_format, &q_type, q_swizzle);
 
       if (q_format != gl_format || q_type != gl_type)
         continue;
@@ -186,11 +188,11 @@ gdk_gl_texture_do_download (GdkGLTexture *self,
   expected_stride = texture->width * gdk_memory_format_bytes_per_pixel (download->format);
 
   if (!gdk_gl_context_get_use_es (context) &&
-      gdk_memory_format_gl_format (format,
-                                   context,
-                                   &gl_internal_format,
-                                   &gl_format, &gl_type, gl_swizzle))
+      ((gdk_gl_context_get_format_flags (context, format) & GDK_GL_FORMAT_USABLE) == GDK_GL_FORMAT_USABLE))
     {
+      gdk_memory_format_gl_format (format,
+                                   &gl_internal_format,
+                                   &gl_format, &gl_type, gl_swizzle);
       if (download->stride == expected_stride &&
           download->format == format)
         {

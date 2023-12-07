@@ -1482,78 +1482,59 @@ memory_format_gl_format (GdkMemoryFormat  data_format,
                          guint           *gl_type,
                          GLint            gl_swizzle[4])
 {
+  GdkGLMemoryFlags flags;
   GdkMemoryDepth depth;
 
   /* First, try the format itself */
-  if (gdk_memory_format_gl_format (data_format,
-                                   context,
+  flags = gdk_gl_context_get_format_flags (context, data_format);
+  if (((flags & (GDK_GL_FORMAT_USABLE | GDK_GL_FORMAT_FILTERABLE)) == (GDK_GL_FORMAT_USABLE | GDK_GL_FORMAT_FILTERABLE)) &&
+      gdk_memory_format_alpha (data_format) != GDK_MEMORY_ALPHA_STRAIGHT)
+    {
+      gdk_memory_format_gl_format (data_format,
                                    gl_internalformat,
                                    gl_format,
                                    gl_type,
-                                   gl_swizzle) &&
-      gdk_memory_format_alpha (data_format) != GDK_MEMORY_ALPHA_STRAIGHT)
-    return data_format;
-
-  depth = gdk_memory_format_get_depth (data_format);
+                                   gl_swizzle);
+      return data_format;
+    }
 
   /* Next, try the generic format for the given bit depth */
-  switch (depth)
+  depth = gdk_memory_format_get_depth (data_format);
+  data_format = gdk_memory_depth_get_format (depth);
+  flags = gdk_gl_context_get_format_flags (context, data_format);
+  if (((flags & (GDK_GL_FORMAT_USABLE | GDK_GL_FORMAT_FILTERABLE)) == (GDK_GL_FORMAT_USABLE | GDK_GL_FORMAT_FILTERABLE)))
     {
-      case GDK_MEMORY_FLOAT16:
-        data_format = GDK_MEMORY_R16G16B16A16_FLOAT_PREMULTIPLIED;
-        if (gdk_memory_format_gl_format (data_format,
-                                         context,
-                                         gl_internalformat,
-                                         gl_format,
-                                         gl_type,
-                                         gl_swizzle))
-          return data_format;
-        break;
-
-      case GDK_MEMORY_U16:
-        data_format = GDK_MEMORY_R16G16B16A16_PREMULTIPLIED;
-        if (gdk_memory_format_gl_format (data_format,
-                                         context,
-                                         gl_internalformat,
-                                         gl_format,
-                                         gl_type,
-                                         gl_swizzle))
-          return data_format;
-        break;
-
-      case GDK_MEMORY_FLOAT32:
-      case GDK_MEMORY_U8:
-        break;
-
-      default:
-        g_assert_not_reached ();
-        break;
+      gdk_memory_format_gl_format (data_format,
+                                   gl_internalformat,
+                                   gl_format,
+                                   gl_type,
+                                   gl_swizzle);
+      return data_format;
     }
 
   /* If the format is high depth, also try float32 */
   if (depth != GDK_MEMORY_U8)
     {
-      data_format = GDK_MEMORY_R32G32B32A32_FLOAT_PREMULTIPLIED;
-      if (gdk_memory_format_gl_format (data_format,
-                                       context,
+      flags = gdk_gl_context_get_format_flags (context, data_format);
+      if (((flags & (GDK_GL_FORMAT_USABLE | GDK_GL_FORMAT_FILTERABLE)) == (GDK_GL_FORMAT_USABLE | GDK_GL_FORMAT_FILTERABLE)))
+        {
+          gdk_memory_format_gl_format (data_format,
                                        gl_internalformat,
                                        gl_format,
                                        gl_type,
-                                       gl_swizzle))
-        return data_format;
+                                       gl_swizzle);
+          return data_format;
+        }
     }
 
   /* If all else fails, pick the one format that's always supported */
   data_format = GDK_MEMORY_R8G8B8A8_PREMULTIPLIED;
-  if (!gdk_memory_format_gl_format (data_format,
-                                    context,
-                                    gl_internalformat,
-                                    gl_format,
-                                    gl_type,
-                                    gl_swizzle))
-    {
-      g_assert_not_reached ();
-    }
+  g_assert ((gdk_gl_context_get_format_flags (context, data_format) & (GDK_GL_FORMAT_USABLE | GDK_GL_FORMAT_FILTERABLE)) == (GDK_GL_FORMAT_USABLE | GDK_GL_FORMAT_FILTERABLE));
+  gdk_memory_format_gl_format (data_format,
+                               gl_internalformat,
+                               gl_format,
+                               gl_type,
+                               gl_swizzle);
 
   return data_format;
 }
