@@ -444,10 +444,11 @@ if os_linux
 endif
 
 tests = [
-  ['transform'],
-  ['shader'],
-  ['path', [ 'path-utils.c' ] ],
-  ['path-special-cases'],
+  [ 'transform' ],
+  [ 'shader' ],
+  [ 'path', [ 'path-utils.c' ] ],
+  [ 'path-special-cases' ],
+  [ 'scaling' ],
 ]
 
 test_cargs = []
