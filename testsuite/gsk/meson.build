@@ -449,14 +449,14 @@ foreach t : tests
 endforeach
 
 internal_tests = [
+  [ 'boundingbox'],
   [ 'curve' ],
   [ 'curve-special-cases' ],
-  [ 'path-private' ],
   [ 'diff' ],
   [ 'half-float' ],
-  ['rounded-rect'],
-  ['misc'],
-  ['boundingbox'],
+  [ 'misc'],
+  [ 'path-private' ],
+  [ 'rounded-rect'],
 ]
 
 foreach t : internal_tests
