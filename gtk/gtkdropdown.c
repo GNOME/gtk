@@ -90,6 +90,10 @@
  * </object>
  * ```
  *
+ * If a `GtkDropDown` is created in this manner, or with
+ * [ctor@Gtk.DropDown.new_from_strings], for instance, the object returned from
+ * [method@Gtk.DropDown.get_selected_item] will be a [class@Gtk.StringObject].
+ *
  * To learn more about the list widget framework, see the
  * [overview](section-list-widget.html).
  *
