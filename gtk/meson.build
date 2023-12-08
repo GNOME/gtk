@@ -853,20 +853,27 @@ else
 endif
 
 foreach lang : [
+    'bn',
     'de',
     'da',
     'fr',
     'es',
+    'et',
+    'fi',
+    'hi',
     'hu',
     'it',
+    'ja',
     'ko',
     'lt',
     'ms',
+    'nb',
     'nl',
     'pl',
     'pt',
     'ru',
     'sv',
+    'th',
     'uk',
     'zh'
   ]
