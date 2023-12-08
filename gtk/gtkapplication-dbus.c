@@ -755,6 +755,13 @@ gtk_application_impl_dbus_inhibit (GtkApplicationImpl         *impl,
     {
       GVariantBuilder options;
 
+      if (reason == NULL)
+        /* Translators: This is the 'reason' given when inhibiting
+         * suspend or screen locking, and the caller hasn't specified
+         * a reason.
+         */
+        reason = _("Reason not specified");
+
       g_variant_builder_init (&options, G_VARIANT_TYPE_VARDICT);
       g_variant_builder_add (&options, "{sv}", "reason", g_variant_new_string (reason));
       res = g_dbus_proxy_call_sync (dbus->inhibit_proxy,
