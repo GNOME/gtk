@@ -350,7 +350,7 @@ _gdk_wayland_cursor_init (GdkWaylandCursor *cursor)
 {
 }
 
-static GdkCursor *
+GdkCursor *
 _gdk_wayland_display_get_cursor_for_name_with_scale (GdkDisplay  *display,
                                                      const gchar *name,
                                                      guint        scale)
