@@ -95,6 +95,16 @@ gsk_gl_glyph_library_clear_cache (GskGLTextureLibrary *library)
   memset (self->front, 0, sizeof self->front);
 }
 
+static gboolean
+can_use_bgra (void)
+{
+#if G_BYTE_ORDER == G_BIG_ENDIAN
+  return FALSE;
+#else
+  return gdk_gl_context_has_bgra (gdk_gl_context_get_current ());
+#endif
+}
+
 static void
 gsk_gl_glyph_library_init_atlas (GskGLTextureLibrary *self,
                                  GskGLTextureAtlas   *atlas)
@@ -119,11 +129,7 @@ gsk_gl_glyph_library_init_atlas (GskGLTextureLibrary *self,
 
   memset (pixel_data, 255, sizeof pixel_data);
 
-  if (!gdk_gl_context_has_bgra (gdk_gl_context_get_current ())
-#if G_BYTE_ORDER == G_BIG_ENDIAN
-      || gdk_gl_context_get_use_es (gdk_gl_context_get_current ())
-#endif
-     )
+  if (!can_use_bgra ())
     {
       gl_format = GL_RGBA;
       gl_type = GL_UNSIGNED_BYTE;

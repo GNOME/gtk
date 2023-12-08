@@ -71,6 +71,16 @@ gsk_gl_icon_library_init (GskGLIconLibrary *self)
                                     gsk_gl_icon_data_free);
 }
 
+static gboolean
+can_use_bgra (void)
+{
+#if G_BYTE_ORDER == G_BIG_ENDIAN
+  return FALSE;
+#else
+  return gdk_gl_context_has_bgra (gdk_gl_context_get_current ());
+#endif
+}
+
 void
 gsk_gl_icon_library_add (GskGLIconLibrary     *self,
                          GdkTexture           *key,
@@ -111,11 +121,7 @@ gsk_gl_icon_library_add (GskGLIconLibrary     *self,
   gdk_gl_context_push_debug_group_printf (gdk_gl_context_get_current (),
                                           "Uploading texture");
 
-  if (!gdk_gl_context_has_bgra (gdk_gl_context_get_current ())
-#if G_BYTE_ORDER == G_BIG_ENDIAN
-      || gdk_gl_context_get_use_es (gdk_gl_context_get_current ())
-#endif
-     )
+  if (!can_use_bgra ())
     {
       pixel_data = free_data = g_malloc (width * height * 4);
       gdk_memory_convert (pixel_data, width * 4,
