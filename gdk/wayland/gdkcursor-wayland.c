@@ -161,7 +161,7 @@ _gdk_wayland_cursor_update (GdkWaylandDisplay *display_wayland,
         {
           c = wl_cursor_theme_get_cursor (theme, name_fallback (cursor->name));
           if (!c)
-            c = wl_cursor_theme_get_cursor (theme, "left_ptr");
+            c = wl_cursor_theme_get_cursor (theme, "default");
         }
     }
 
