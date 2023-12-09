@@ -37,6 +37,96 @@ recent_manager_get_default (void)
 }
 
 static void
+recent_manager_add_nomime (void)
+{
+  if (g_test_subprocess ())
+    {
+      GtkRecentManager *manager;
+      GtkRecentData *recent_data;
+      gboolean res;
+
+      manager = gtk_recent_manager_get_default ();
+
+      recent_data = g_new0 (GtkRecentData, 1);
+
+      /* mime type is mandatory */
+      recent_data->mime_type = NULL;
+      recent_data->app_name = (char *)"testrecentchooser";
+      recent_data->app_exec = (char *)"testrecentchooser %u";
+
+      res = gtk_recent_manager_add_full (manager, uri, recent_data);
+      g_assert_false (res);
+
+      g_free (recent_data);
+      return;
+    }
+
+  g_test_trap_subprocess (NULL, 0, 0);
+  g_test_trap_assert_stderr ("*no MIME type was defined*");
+  g_test_trap_assert_failed ();
+}
+
+static void
+recent_manager_add_noapp (void)
+{
+  if (g_test_subprocess ())
+    {
+      GtkRecentManager *manager;
+      GtkRecentData *recent_data;
+      gboolean res;
+
+      manager = gtk_recent_manager_get_default ();
+
+      recent_data = g_new0 (GtkRecentData, 1);
+
+      /* app name is mandatory */
+      recent_data->mime_type = (char *)"text/plain";
+      recent_data->app_name = NULL;
+      recent_data->app_exec = (char *)"testrecentchooser %u";
+
+      res = gtk_recent_manager_add_full (manager, uri, recent_data);
+      g_assert_false (res);
+
+      g_free (recent_data);
+      return;
+    }
+
+  g_test_trap_subprocess (NULL, 0, 0);
+  g_test_trap_assert_stderr ("*no name of the application*");
+  g_test_trap_assert_failed ();
+}
+
+static void
+recent_manager_add_noexe (void)
+{
+  if (g_test_subprocess ())
+    {
+      GtkRecentManager *manager;
+      GtkRecentData *recent_data;
+      gboolean res;
+
+      manager = gtk_recent_manager_get_default ();
+
+      recent_data = g_new0 (GtkRecentData, 1);
+
+      /* app exec is mandatory */
+      recent_data->mime_type = (char *)"text/plain";
+      recent_data->app_name = (char *)"testrecentchooser";
+      recent_data->app_exec = NULL;
+
+      res = gtk_recent_manager_add_full (manager, uri, recent_data);
+      g_assert_false (res);
+
+      g_free (recent_data);
+      return;
+    }
+
+  g_test_trap_subprocess (NULL, 0, 0);
+  g_test_trap_assert_stderr ("*no command line for the application*");
+  g_test_trap_assert_failed ();
+}
+
+static void
 recent_manager_add (void)
 {
   GtkRecentManager *manager;
@@ -46,43 +136,6 @@ recent_manager_add (void)
   manager = gtk_recent_manager_get_default ();
 
   recent_data = g_new0 (GtkRecentData, 1);
-
-  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-
-  /* mime type is mandatory */
-  recent_data->mime_type = NULL;
-  recent_data->app_name = (char *)"testrecentchooser";
-  recent_data->app_exec = (char *)"testrecentchooser %u";
-  if (g_test_trap_fork (0, G_TEST_TRAP_SILENCE_STDERR))
-    {
-      res = gtk_recent_manager_add_full (manager, uri, recent_data);
-      g_assert_false (res);
-    }
-  g_test_trap_assert_failed ();
-
-  /* app name is mandatory */
-  recent_data->mime_type = (char *)"text/plain";
-  recent_data->app_name = NULL;
-  recent_data->app_exec = (char *)"testrecentchooser %u";
-  if (g_test_trap_fork (0, G_TEST_TRAP_SILENCE_STDERR))
-    {
-      res = gtk_recent_manager_add_full (manager, uri, recent_data);
-      g_assert_false (res);
-    }
-  g_test_trap_assert_failed ();
-
-  /* app exec is mandatory */
-  recent_data->mime_type = (char *)"text/plain";
-  recent_data->app_name = (char *)"testrecentchooser";
-  recent_data->app_exec = NULL;
-  if (g_test_trap_fork (0, G_TEST_TRAP_SILENCE_STDERR))
-    {
-      res = gtk_recent_manager_add_full (manager, uri, recent_data);
-      g_assert_false (res);
-    }
-  g_test_trap_assert_failed ();
-
-  G_GNUC_END_IGNORE_DEPRECATIONS;
 
   recent_data->mime_type = (char *)"text/plain";
   recent_data->app_name = (char *)"testrecentchooser";
@@ -302,7 +355,14 @@ main (int    argc,
 {
   gtk_test_init (&argc, &argv, NULL);
 
+  g_object_set (gtk_settings_get_default (),
+                "gtk-recent-files-enabled", TRUE,
+                NULL);
+
   g_test_add_func ("/recent-manager/get-default", recent_manager_get_default);
+  g_test_add_func ("/recent-manager/add-nomime", recent_manager_add_nomime);
+  g_test_add_func ("/recent-manager/add-noapp", recent_manager_add_noapp);
+  g_test_add_func ("/recent-manager/add-noexe", recent_manager_add_noexe);
   g_test_add_func ("/recent-manager/add", recent_manager_add);
   g_test_add_func ("/recent-manager/add-many", recent_manager_add_many);
   g_test_add_func ("/recent-manager/has-item", recent_manager_has_item);
