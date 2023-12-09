@@ -25,6 +25,16 @@ struct {
     "cairo",
     gsk_cairo_renderer_new,
   },
+#ifdef GDK_RENDERING_VULKAN
+  {
+    "vulkan",
+    gsk_vulkan_renderer_new,
+  },
+#endif
+  {
+    "ngl",
+    gsk_ngl_renderer_new,
+  },
 };
 
 typedef struct _TextureBuilder TextureBuilder;
