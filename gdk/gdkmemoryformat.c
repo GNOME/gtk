@@ -334,6 +334,10 @@ struct _GdkMemoryFormatDescription
     guint format;
     guint type;
     GLint swizzle[4];
+    /* -1 if none exists, ie the format is already RGBA
+     * or the format doesn't have 4 channels */
+    GdkMemoryFormat rgba_format;
+    GLint rgba_swizzle[4];
   } gl;
   /* no premultiplication going on here */
   void (* to_float) (float *, const guchar*, gsize);
@@ -359,6 +363,8 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .format = GL_BGRA,
         .type = GL_UNSIGNED_BYTE,
         .swizzle = { GL_RED, GL_GREEN, GL_BLUE, GL_ALPHA },
+        .rgba_format = GDK_MEMORY_R8G8B8A8_PREMULTIPLIED,
+        .rgba_swizzle = { GL_BLUE, GL_GREEN, GL_BLUE, GL_ALPHA },
     },
     .to_float = b8g8r8a8_premultiplied_to_float,
     .from_float = b8g8r8a8_premultiplied_from_float,
@@ -373,6 +379,8 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .format = GL_BGRA,
         .type = GDK_GL_UNSIGNED_BYTE_FLIPPED,
         .swizzle = { GL_RED, GL_GREEN, GL_BLUE, GL_ALPHA },
+        .rgba_format = GDK_MEMORY_R8G8B8A8_PREMULTIPLIED,
+        .rgba_swizzle = { GL_GREEN, GL_BLUE, GL_ALPHA, GL_RED },
     },
     .to_float = a8r8g8b8_premultiplied_to_float,
     .from_float = a8r8g8b8_premultiplied_from_float,
@@ -387,6 +395,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .format = GL_RGBA,
         .type = GL_UNSIGNED_BYTE,
         .swizzle = { GL_RED, GL_GREEN, GL_BLUE, GL_ALPHA },
+        .rgba_format = -1,
     },
     .to_float = r8g8b8a8_premultiplied_to_float,
     .from_float = r8g8b8a8_premultiplied_from_float,
@@ -401,6 +410,8 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .format = GL_RGBA,
         .type = GDK_GL_UNSIGNED_BYTE_FLIPPED,
         .swizzle = { GL_RED, GL_GREEN, GL_BLUE, GL_ALPHA },
+        .rgba_format = GDK_MEMORY_R8G8B8A8_PREMULTIPLIED,
+        .rgba_swizzle = { GL_ALPHA, GL_BLUE, GL_GREEN, GL_RED },
     },
     .to_float = a8b8g8r8_premultiplied_to_float,
     .from_float = a8b8g8r8_premultiplied_from_float,
@@ -415,6 +426,8 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .format = GL_BGRA,
         .type = GL_UNSIGNED_BYTE,
         .swizzle = { GL_RED, GL_GREEN, GL_BLUE, GL_ALPHA },
+        .rgba_format = GDK_MEMORY_R8G8B8A8,
+        .rgba_swizzle = { GL_BLUE, GL_GREEN, GL_BLUE, GL_ALPHA },
     },
     .to_float = b8g8r8a8_to_float,
     .from_float = b8g8r8a8_from_float,
@@ -429,6 +442,8 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .format = GL_RGBA,
         .type = GDK_GL_UNSIGNED_BYTE_FLIPPED,
         .swizzle = { GL_RED, GL_GREEN, GL_BLUE, GL_ALPHA },
+        .rgba_format = GDK_MEMORY_R8G8B8A8,
+        .rgba_swizzle = { GL_GREEN, GL_BLUE, GL_ALPHA, GL_RED },
     },
     .to_float = a8r8g8b8_to_float,
     .from_float = a8r8g8b8_from_float,
@@ -443,6 +458,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .format = GL_RGBA,
         .type = GL_UNSIGNED_BYTE,
         .swizzle = { GL_RED, GL_GREEN, GL_BLUE, GL_ALPHA },
+        .rgba_format = -1,
     },
     .to_float = r8g8b8a8_to_float,
     .from_float = r8g8b8a8_from_float,
@@ -457,6 +473,8 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .format = GL_BGRA,
         .type = GDK_GL_UNSIGNED_BYTE_FLIPPED,
         .swizzle = { GL_RED, GL_GREEN, GL_BLUE, GL_ALPHA },
+        .rgba_format = GDK_MEMORY_R8G8B8A8,
+        .rgba_swizzle = { GL_ALPHA, GL_BLUE, GL_GREEN, GL_RED },
     },
     .to_float = a8b8g8r8_to_float,
     .from_float = a8b8g8r8_from_float,
@@ -471,6 +489,8 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .format = GL_BGRA,
         .type = GL_UNSIGNED_BYTE,
         .swizzle = { GL_RED, GL_GREEN, GL_BLUE, GL_ONE },
+        .rgba_format = GDK_MEMORY_R8G8B8X8,
+        .rgba_swizzle = { GL_BLUE, GL_GREEN, GL_BLUE, GL_ONE },
     },
     .to_float = b8g8r8x8_to_float,
     .from_float = b8g8r8x8_from_float,
@@ -485,6 +505,8 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .format = GL_BGRA,
         .type = GDK_GL_UNSIGNED_BYTE_FLIPPED,
         .swizzle = { GL_RED, GL_GREEN, GL_BLUE, GL_ONE },
+        .rgba_format = GDK_MEMORY_R8G8B8A8,
+        .rgba_swizzle = { GL_GREEN, GL_BLUE, GL_ALPHA, GL_ONE },
     },
     .to_float = x8r8g8b8_to_float,
     .from_float = x8r8g8b8_from_float,
@@ -499,6 +521,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .format = GL_RGBA,
         .type = GL_UNSIGNED_BYTE,
         .swizzle = { GL_RED, GL_GREEN, GL_BLUE, GL_ONE },
+        .rgba_format = -1,
     },
     .to_float = r8g8b8x8_to_float,
     .from_float = r8g8b8x8_from_float,
@@ -513,6 +536,8 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .format = GL_RGBA,
         .type = GDK_GL_UNSIGNED_BYTE_FLIPPED,
         .swizzle = { GL_RED, GL_GREEN, GL_BLUE, GL_ONE },
+        .rgba_format = GDK_MEMORY_R8G8B8A8,
+        .rgba_swizzle = { GL_ALPHA, GL_BLUE, GL_GREEN, GL_ONE },
     },
     .to_float = x8b8g8r8_to_float,
     .from_float = x8b8g8r8_from_float,
@@ -527,6 +552,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .format = GL_RGB,
         .type = GL_UNSIGNED_BYTE,
         .swizzle = { GL_RED, GL_GREEN, GL_BLUE, GL_ALPHA },
+        .rgba_format = -1,
     },
     .to_float = r8g8b8_to_float,
     .from_float = r8g8b8_from_float,
@@ -541,6 +567,8 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .format = GL_BGR,
         .type = GL_UNSIGNED_BYTE,
         .swizzle = { GL_RED, GL_GREEN, GL_BLUE, GL_ALPHA },
+        .rgba_format = GDK_MEMORY_R8G8B8,
+        .rgba_swizzle = { GL_BLUE, GL_GREEN, GL_RED, GL_ALPHA },
     },
     .to_float = b8g8r8_to_float,
     .from_float = b8g8r8_from_float,
@@ -555,6 +583,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .format = GL_RGB,
         .type = GL_UNSIGNED_SHORT,
         .swizzle = { GL_RED, GL_GREEN, GL_BLUE, GL_ALPHA },
+        .rgba_format = -1,
     },
     .to_float = r16g16b16_to_float,
     .from_float = r16g16b16_from_float,
@@ -569,6 +598,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .format = GL_RGBA,
         .type = GL_UNSIGNED_SHORT,
         .swizzle = { GL_RED, GL_GREEN, GL_BLUE, GL_ALPHA },
+        .rgba_format = -1,
     },
     .to_float = r16g16b16a16_to_float,
     .from_float = r16g16b16a16_from_float,
@@ -583,6 +613,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .format = GL_RGBA,
         .type = GL_UNSIGNED_SHORT,
         .swizzle = { GL_RED, GL_GREEN, GL_BLUE, GL_ALPHA },
+        .rgba_format = -1,
     },
     .to_float = r16g16b16a16_to_float,
     .from_float = r16g16b16a16_from_float,
@@ -597,6 +628,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .format = GL_RGB,
         .type = GL_HALF_FLOAT,
         .swizzle = { GL_RED, GL_GREEN, GL_BLUE, GL_ALPHA },
+        .rgba_format = -1,
     },
     .to_float = r16g16b16_float_to_float,
     .from_float = r16g16b16_float_from_float,
@@ -611,6 +643,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .format = GL_RGBA,
         .type = GL_HALF_FLOAT,
         .swizzle = { GL_RED, GL_GREEN, GL_BLUE, GL_ALPHA },
+        .rgba_format = -1,
     },
     .to_float = r16g16b16a16_float_to_float,
     .from_float = r16g16b16a16_float_from_float,
@@ -625,6 +658,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .format = GL_RGBA,
         .type = GL_HALF_FLOAT,
         .swizzle = { GL_RED, GL_GREEN, GL_BLUE, GL_ALPHA },
+        .rgba_format = -1,
     },
     .to_float = r16g16b16a16_float_to_float,
     .from_float = r16g16b16a16_float_from_float,
@@ -639,6 +673,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .format = GL_RGB,
         .type = GL_FLOAT,
         .swizzle = { GL_RED, GL_GREEN, GL_BLUE, GL_ALPHA },
+        .rgba_format = -1,
     },
     .to_float = r32g32b32_float_to_float,
     .from_float = r32g32b32_float_from_float,
@@ -653,6 +688,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .format = GL_RGBA,
         .type = GL_FLOAT,
         .swizzle = { GL_RED, GL_GREEN, GL_BLUE, GL_ALPHA },
+        .rgba_format = -1,
     },
     .to_float = r32g32b32a32_float_to_float,
     .from_float = r32g32b32a32_float_from_float,
@@ -667,6 +703,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .format = GL_RGBA,
         .type = GL_FLOAT,
         .swizzle = { GL_RED, GL_GREEN, GL_BLUE, GL_ALPHA },
+        .rgba_format = -1,
     },
     .to_float = r32g32b32a32_float_to_float,
     .from_float = r32g32b32a32_float_from_float,
@@ -681,6 +718,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .format = GL_RG,
         .type = GL_UNSIGNED_BYTE,
         .swizzle = { GL_RED, GL_RED, GL_RED, GL_GREEN },
+        .rgba_format = -1,
     },
     .to_float = g8a8_premultiplied_to_float,
     .from_float = g8a8_premultiplied_from_float,
@@ -695,6 +733,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .format = GL_RG,
         .type = GL_UNSIGNED_BYTE,
         .swizzle = { GL_RED, GL_RED, GL_RED, GL_GREEN },
+        .rgba_format = -1,
     },
     .to_float = g8a8_to_float,
     .from_float = g8a8_from_float,
@@ -709,6 +748,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .format = GL_RED,
         .type = GL_UNSIGNED_BYTE,
         .swizzle = { GL_RED, GL_RED, GL_RED, GL_ONE },
+        .rgba_format = -1,
     },
     .to_float = g8_to_float,
     .from_float = g8_from_float,
@@ -723,6 +763,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .format = GL_RG,
         .type = GL_UNSIGNED_SHORT,
         .swizzle = { GL_RED, GL_RED, GL_RED, GL_GREEN },
+        .rgba_format = -1,
     },
     .to_float = g16a16_premultiplied_to_float,
     .from_float = g16a16_premultiplied_from_float,
@@ -737,6 +778,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .format = GL_RG,
         .type = GL_UNSIGNED_SHORT,
         .swizzle = { GL_RED, GL_RED, GL_RED, GL_GREEN },
+        .rgba_format = -1,
     },
     .to_float = g16a16_to_float,
     .from_float = g16a16_from_float,
@@ -751,6 +793,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .format = GL_RED,
         .type = GL_UNSIGNED_SHORT,
         .swizzle = { GL_RED, GL_RED, GL_RED, GL_ONE },
+        .rgba_format = -1,
     },
     .to_float = g16_to_float,
     .from_float = g16_from_float,
@@ -765,6 +808,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .format = GL_RED,
         .type = GL_UNSIGNED_BYTE,
         .swizzle = { GL_RED, GL_RED, GL_RED, GL_RED },
+        .rgba_format = -1,
     },
     .to_float = a8_to_float,
     .from_float = a8_from_float,
@@ -779,6 +823,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .format = GL_RED,
         .type = GL_UNSIGNED_SHORT,
         .swizzle = { GL_RED, GL_RED, GL_RED, GL_RED },
+        .rgba_format = -1,
     },
     .to_float = a16_to_float,
     .from_float = a16_from_float,
@@ -793,6 +838,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .format = GL_RED,
         .type = GL_HALF_FLOAT,
         .swizzle = { GL_RED, GL_RED, GL_RED, GL_RED },
+        .rgba_format = -1,
     },
     .to_float = a16_float_to_float,
     .from_float = a16_float_from_float,
@@ -807,6 +853,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .format = GL_RED,
         .type = GL_FLOAT,
         .swizzle = { GL_RED, GL_RED, GL_RED, GL_RED },
+        .rgba_format = -1,
     },
     .to_float = a32_float_to_float,
     .from_float = a32_float_from_float,
@@ -953,6 +1000,46 @@ gdk_memory_format_gl_format (GdkMemoryFormat  format,
   *out_format = memory_formats[format].gl.format;
   *out_type = memory_formats[format].gl.type;
   memcpy (out_swizzle, memory_formats[format].gl.swizzle, sizeof(GLint) * 4);
+}
+
+/*
+ * gdk_memory_format_gl_rgba_format:
+ * @format: The format to query
+ * @out_actual_format: The actual RGBA format
+ * @out_internal_format: the GL internal format
+ * @out_format: the GL format
+ * @out_type: the GL type
+ * @out_swizzle: The swizzle to use 
+ *
+ * Maps the given format to a GL format that uses RGBA and uses swizzling,
+ * as opposed to trying to find a GL format that is swapped in the right
+ * direction.
+ *
+ * This format is guaranteed equivalent in memory layout to the original
+ * format, so uploading/downloading code can treat them the same.
+ *
+ * Returns: %TRUE if the format exists and is different from the given format.
+ **/
+gboolean
+gdk_memory_format_gl_rgba_format (GdkMemoryFormat  format,
+                                  GdkMemoryFormat *out_actual_format,
+                                  guint           *out_internal_format,
+                                  guint           *out_format,
+                                  guint           *out_type,
+                                  GLint            out_swizzle[4])
+{
+  GdkMemoryFormat actual = memory_formats[format].gl.rgba_format;
+
+  if (actual == -1)
+    return FALSE;
+
+  *out_actual_format = actual;
+  *out_internal_format = memory_formats[actual].gl.internal_format;
+  *out_format = memory_formats[actual].gl.format;
+  *out_type = memory_formats[actual].gl.type;
+  memcpy (out_swizzle, memory_formats[format].gl.rgba_swizzle, sizeof(GLint) * 4);
+
+  return TRUE;
 }
 
 static void

@@ -51,7 +51,13 @@ void                    gdk_memory_format_gl_format         (GdkMemoryFormat    
                                                              guint                      *out_internal_format,
                                                              guint                      *out_format,
                                                              guint                      *out_type,
-                                                             GLint                       out_gizzle[4]);
+                                                             GLint                       out_swizzle[4]);
+gboolean                gdk_memory_format_gl_rgba_format    (GdkMemoryFormat             format,
+                                                             GdkMemoryFormat            *out_actual_format,
+                                                             guint                      *out_internal_format,
+                                                             guint                      *out_format,
+                                                             guint                      *out_type,
+                                                             GLint                       out_swizzle[4]);
 
 void                    gdk_memory_convert                  (guchar                     *dest_data,
                                                              gsize                       dest_stride,

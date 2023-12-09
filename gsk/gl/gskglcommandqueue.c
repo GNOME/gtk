@@ -1484,6 +1484,7 @@ memory_format_gl_format (GdkMemoryFormat  data_format,
 {
   GdkGLMemoryFlags flags;
   GdkMemoryDepth depth;
+  GdkMemoryFormat alt_format;
 
   /* First, try the format itself */
   flags = gdk_gl_context_get_format_flags (context, data_format);
@@ -1496,6 +1497,20 @@ memory_format_gl_format (GdkMemoryFormat  data_format,
                                    gl_type,
                                    gl_swizzle);
       return data_format;
+    }
+
+  /* Second, try the potential RGBA format */
+  if (gdk_memory_format_gl_rgba_format (data_format,
+                                        &alt_format,
+                                        gl_internalformat,
+                                        gl_format,
+                                        gl_type,
+                                        gl_swizzle))
+    {
+      flags = gdk_gl_context_get_format_flags (context, alt_format);
+      if (((flags & (GDK_GL_FORMAT_USABLE | GDK_GL_FORMAT_FILTERABLE)) == (GDK_GL_FORMAT_USABLE | GDK_GL_FORMAT_FILTERABLE)) &&
+          gdk_memory_format_alpha (alt_format) != GDK_MEMORY_ALPHA_STRAIGHT)
+        return data_format;
     }
 
   /* Next, try the generic format for the given bit depth */
