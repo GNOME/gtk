@@ -37,6 +37,7 @@ struct _GdkDmabufTextureBuilder
   unsigned int width;
   unsigned int height;
   gboolean premultiplied;
+  gboolean y_invert;
 
   GdkDmabuf dmabuf;
 
@@ -123,6 +124,7 @@ enum
   PROP_MODIFIER,
   PROP_PREMULTIPLIED,
   PROP_N_PLANES,
+  PROP_Y_INVERT,
   PROP_UPDATE_REGION,
   PROP_UPDATE_TEXTURE,
 
@@ -182,6 +184,10 @@ gdk_dmabuf_texture_builder_get_property (GObject    *object,
       g_value_set_uint (value, self->dmabuf.n_planes);
       break;
 
+    case PROP_Y_INVERT:
+      g_value_set_boolean (value, self->y_invert);
+      break;
+
     case PROP_UPDATE_REGION:
       g_value_set_boxed (value, self->update_region);
       break;
@@ -232,6 +238,10 @@ gdk_dmabuf_texture_builder_set_property (GObject      *object,
 
     case PROP_N_PLANES:
       gdk_dmabuf_texture_builder_set_n_planes (self, g_value_get_uint (value));
+      break;
+
+    case PROP_Y_INVERT:
+      gdk_dmabuf_texture_builder_set_y_invert (self, g_value_get_boolean (value));
       break;
 
     case PROP_UPDATE_REGION:
@@ -345,6 +355,18 @@ gdk_dmabuf_texture_builder_class_init (GdkDmabufTextureBuilderClass *klass)
     g_param_spec_uint ("n-planes", NULL, NULL,
                        1, GDK_DMABUF_MAX_PLANES, 1,
                        G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+
+  /**
+   * GdkDmabufTextureBuilder:y-invert: (attributes org.gtk.Property.get=gdk_dmabuf_texture_builder_get_y_invert org.gtk.Property.set=gdk_dmabuf_texture_builder_set_y_invert)
+   *
+   * Whether the texture is upside-down.
+   *
+   * Since: 4.14
+   */
+  properties[PROP_Y_INVERT] =
+    g_param_spec_boolean ("y-invert", NULL, NULL,
+                          FALSE,
+                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   /**
    * GdkDmabufTextureBuilder:update-region: (attributes org.gtk.Property.get=gdk_dmabuf_texture_builder_get_update_region org.gtk.Property.set=gdk_dmabuf_texture_builder_set_update_region)
@@ -840,6 +862,47 @@ gdk_dmabuf_texture_builder_set_offset (GdkDmabufTextureBuilder *self,
     return;
 
   self->dmabuf.planes[plane].offset = offset;
+}
+
+/**
+ * gdk_dmabuf_texture_builder_get_y_invert:
+ * @self: a `GdkDmabufTextureBuilder`
+ *
+ * Gets whether the texture is upside-down.
+ *
+ * Returns: whether the texture is upside-down.
+ *
+ * Since: 4.14
+ */
+gboolean
+gdk_dmabuf_texture_builder_get_y_invert (GdkDmabufTextureBuilder *self)
+{
+  g_return_val_if_fail (GDK_IS_DMABUF_TEXTURE_BUILDER (self), FALSE);
+
+  return self->y_invert;
+}
+
+/**
+ * gdk_dmabuf_texture_builder_set_y_invert:
+ * @self: a `GdkDmabufTextureBuilder`
+ * @y_invert: whether the texture is upside-down
+ *
+ * Sets whether the texture is upside-down.
+ *
+ * Since: 4.14
+ */
+void
+gdk_dmabuf_texture_builder_set_y_invert (GdkDmabufTextureBuilder *self,
+                                         gboolean                 y_invert)
+{
+  g_return_if_fail (GDK_IS_DMABUF_TEXTURE_BUILDER (self));
+
+  if (self->y_invert == y_invert)
+    return;
+
+  self->y_invert = y_invert;
+
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_Y_INVERT]);
 }
 
 /**

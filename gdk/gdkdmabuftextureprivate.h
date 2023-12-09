@@ -16,6 +16,7 @@ GdkTexture *            gdk_dmabuf_texture_new_from_builder (GdkDmabufTextureBui
 
 GdkDisplay *            gdk_dmabuf_texture_get_display      (GdkDmabufTexture        *self);
 const GdkDmabuf *       gdk_dmabuf_texture_get_dmabuf       (GdkDmabufTexture        *self);
+gboolean                gdk_dmabuf_texture_get_y_invert     (GdkDmabufTexture        *self);
 
 G_END_DECLS
 

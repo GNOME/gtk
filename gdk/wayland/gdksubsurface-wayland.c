@@ -106,8 +106,11 @@ get_wl_buffer (GdkWaylandSubsurface *self,
   struct wl_buffer *buffer;
   CreateBufferData cd = { NULL, FALSE };
   struct wl_event_queue *event_queue;
+  uint32_t flags = 0;
 
   dmabuf = gdk_dmabuf_texture_get_dmabuf (GDK_DMABUF_TEXTURE (texture));
+  if (gdk_dmabuf_texture_get_y_invert (GDK_DMABUF_TEXTURE (texture)))
+    flags = ZWP_LINUX_BUFFER_PARAMS_V1_FLAGS_Y_INVERT;
 
   params = zwp_linux_dmabuf_v1_create_params (display->linux_dmabuf);
 
@@ -130,7 +133,7 @@ get_wl_buffer (GdkWaylandSubsurface *self,
                                      gdk_texture_get_width (texture),
                                      gdk_texture_get_height (texture),
                                      dmabuf->fourcc,
-                                     0);
+                                     flags);
 
   while (!cd.done)
     gdk_wayland_display_dispatch_queue (GDK_DISPLAY (display), event_queue);

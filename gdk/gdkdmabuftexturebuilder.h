@@ -101,6 +101,12 @@ void                     gdk_dmabuf_texture_builder_set_offset       (GdkDmabufT
                                                                       unsigned int                offset);
 
 GDK_AVAILABLE_IN_4_14
+gboolean                 gdk_dmabuf_texture_builder_get_y_invert     (GdkDmabufTextureBuilder    *self) G_GNUC_PURE;
+GDK_AVAILABLE_IN_4_14
+void                     gdk_dmabuf_texture_builder_set_y_invert     (GdkDmabufTextureBuilder    *self,
+                                                                      gboolean                    y_invert);
+
+GDK_AVAILABLE_IN_4_14
 GdkTexture *             gdk_dmabuf_texture_builder_get_update_texture (GdkDmabufTextureBuilder  *self) G_GNUC_PURE;
 GDK_AVAILABLE_IN_4_14
 void                     gdk_dmabuf_texture_builder_set_update_texture (GdkDmabufTextureBuilder  *self,

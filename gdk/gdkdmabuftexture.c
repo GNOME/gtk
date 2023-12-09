@@ -51,6 +51,8 @@ struct _GdkDmabufTexture
 
   GDestroyNotify destroy;
   gpointer data;
+
+  gboolean y_invert;
 };
 
 struct _GdkDmabufTextureClass
@@ -114,6 +116,12 @@ const GdkDmabuf *
 gdk_dmabuf_texture_get_dmabuf (GdkDmabufTexture *self)
 {
   return &self->dmabuf;
+}
+
+gboolean
+gdk_dmabuf_texture_get_y_invert (GdkDmabufTexture *self)
+{
+  return self->y_invert;
 }
 
 GdkTexture *
@@ -184,6 +192,7 @@ gdk_dmabuf_texture_new_from_builder (GdkDmabufTextureBuilder *builder,
   self->dmabuf = dmabuf;
   self->destroy = destroy;
   self->data = data;
+  self->y_invert = gdk_dmabuf_texture_builder_get_y_invert (builder);
 
   update_texture = gdk_dmabuf_texture_builder_get_update_texture (builder);
   if (update_texture)

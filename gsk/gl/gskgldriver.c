@@ -772,7 +772,8 @@ draw_rect (GskGLCommandQueue *command_queue,
            float              min_x,
            float              min_y,
            float              max_x,
-           float              max_y)
+           float              max_y,
+           gboolean           y_invert)
 {
   GskGLDrawVertex *vertices = gsk_gl_command_queue_add_vertices (command_queue);
   float min_u = 0;
@@ -780,6 +781,12 @@ draw_rect (GskGLCommandQueue *command_queue,
   float min_v = 1;
   float max_v = 0;
   guint16 c = FP16_ZERO;
+
+  if (y_invert)
+    {
+      min_v = 0;
+      max_v = 1;
+    }
 
   vertices[0] = (GskGLDrawVertex) { .position = { min_x, min_y }, .uv = { min_u, min_v }, .color = { c, c, c, c } };
   vertices[1] = (GskGLDrawVertex) { .position = { min_x, max_y }, .uv = { min_u, max_v }, .color = { c, c, c, c } };
@@ -807,6 +814,7 @@ gsk_gl_driver_import_dmabuf_texture (GskGLDriver      *self,
   GskGLRenderTarget *render_target;
   guint prev_fbo;
   gboolean external;
+  gboolean y_invert;
 
   gdk_gl_context_make_current (context);
 
@@ -822,6 +830,7 @@ gsk_gl_driver_import_dmabuf_texture (GskGLDriver      *self,
     }
 
   dmabuf = gdk_dmabuf_texture_get_dmabuf (texture);
+  y_invert = gdk_dmabuf_texture_get_y_invert (texture);
 
   texture_id = gdk_gl_context_import_dmabuf (context,
                                              width, height,
@@ -830,7 +839,7 @@ gsk_gl_driver_import_dmabuf_texture (GskGLDriver      *self,
   if (texture_id == 0)
     return 0;
 
-  if (!external)
+  if (!external && !y_invert)
     return texture_id;
 
   gsk_gl_driver_autorelease_texture (self, texture_id);
@@ -853,7 +862,7 @@ gsk_gl_driver_import_dmabuf_texture (GskGLDriver      *self,
                                           UNIFORM_EXTERNAL_SOURCE, 0,
                                           GL_TEXTURE_EXTERNAL_OES, GL_TEXTURE0, texture_id);
 
-      draw_rect (self->command_queue, 0, 0, width, height);
+      draw_rect (self->command_queue, 0, 0, width, height, y_invert);
 
       gsk_gl_command_queue_end_draw (self->command_queue);
     }

@@ -45,8 +45,39 @@ struct _GdkDrmFormatInfo
                      gsize            height,
                      const GdkDmabuf *dmabuf,
                      const guchar    *src_datas[GDK_DMABUF_MAX_PLANES],
-                     gsize            sizes[GDK_DMABUF_MAX_PLANES]);
+                     gsize            sizes[GDK_DMABUF_MAX_PLANES],
+                     gboolean         y_invert);
 };
+
+static inline void
+flip_upside_down (guchar          *dst_data,
+                  gsize            dst_stride,
+                  GdkMemoryFormat  dst_format,
+                  gsize            width,
+                  gsize            height)
+{
+  guchar *tmp;
+  guint bpp;
+
+  bpp = gdk_memory_format_bytes_per_pixel (dst_format);
+  tmp = g_malloc (dst_stride);
+
+  g_assert (dst_stride >= bpp * width);
+
+  for (gsize i = 0 ; i < height / 2; i++)
+    {
+      guchar *row1, *row2;
+
+      row1 = dst_data + i * dst_stride;
+      row2 = dst_data + (height - 1 - i) * dst_stride;
+
+      memcpy (tmp, row1, bpp * width);
+      memcpy (row1, row2, bpp * width);
+      memcpy (row2, tmp, bpp * width);
+    }
+
+  g_free (tmp);
+}
 
 static void
 download_memcpy (guchar          *dst_data,
@@ -56,7 +87,8 @@ download_memcpy (guchar          *dst_data,
                  gsize            height,
                  const GdkDmabuf *dmabuf,
                  const guchar    *src_datas[GDK_DMABUF_MAX_PLANES],
-                 gsize            sizes[GDK_DMABUF_MAX_PLANES])
+                 gsize            sizes[GDK_DMABUF_MAX_PLANES],
+                 gboolean         y_invert)
 {
   const guchar *src_data;
   gsize src_stride;
@@ -67,14 +99,15 @@ download_memcpy (guchar          *dst_data,
   src_data = src_datas[0] + dmabuf->planes[0].offset;
   g_return_if_fail (sizes[0] >= dmabuf->planes[0].offset + (height - 1) * dst_stride + width * bpp);
 
-  if (dst_stride == src_stride)
+  if (dst_stride == src_stride && !y_invert)
     memcpy (dst_data, src_data, (height - 1) * dst_stride + width * bpp);
   else
     {
-      gsize i;
-
-      for (i = 0; i < height; i++)
-        memcpy (dst_data + i * dst_stride, src_data + i * src_stride, width * bpp);
+      for (gsize i = 0; i < height; i++)
+        {
+          gsize src_row = y_invert ? height - 1 - i : i;
+          memcpy (dst_data + i * dst_stride, src_data + src_row * src_stride, width * bpp);
+        }
     }
 }
 
@@ -86,7 +119,8 @@ download_memcpy_3_1 (guchar          *dst_data,
                      gsize            height,
                      const GdkDmabuf *dmabuf,
                      const guchar    *src_datas[GDK_DMABUF_MAX_PLANES],
-                     gsize            sizes[GDK_DMABUF_MAX_PLANES])
+                     gsize            sizes[GDK_DMABUF_MAX_PLANES],
+                     gboolean         y_invert)
 {
   guint a;
   guchar *dst_row;
@@ -95,7 +129,7 @@ download_memcpy_3_1 (guchar          *dst_data,
 
   g_assert (dmabuf->n_planes == 2);
 
-  download_memcpy (dst_data, dst_stride, dst_format, width, height, dmabuf, src_datas, sizes);
+  download_memcpy (dst_data, dst_stride, dst_format, width, height, dmabuf, src_datas, sizes, y_invert);
 
   switch ((int)dst_format)
     {
@@ -178,11 +212,13 @@ download_nv12 (guchar          *dst_data,
                gsize            height,
                const GdkDmabuf *dmabuf,
                const guchar    *src_data[GDK_DMABUF_MAX_PLANES],
-               gsize            sizes[GDK_DMABUF_MAX_PLANES])
+               gsize            sizes[GDK_DMABUF_MAX_PLANES],
+               gboolean         y_invert)
 {
   const guchar *y_data, *uv_data;
   gsize x, y, y_stride, uv_stride;
   gsize U, V, X_SUB, Y_SUB;
+  guchar *orig_dst_data = dst_data;
 
   switch (dmabuf->fourcc)
     {
@@ -233,6 +269,9 @@ download_nv12 (guchar          *dst_data,
       y_data += Y_SUB * y_stride;
       uv_data += uv_stride;
     }
+
+  if (y_invert)
+    flip_upside_down (orig_dst_data, dst_stride, dst_format, width, height);
 }
 
 static void
@@ -243,11 +282,13 @@ download_yuv_3 (guchar          *dst_data,
                 gsize            height,
                 const GdkDmabuf *dmabuf,
                 const guchar    *src_data[GDK_DMABUF_MAX_PLANES],
-                gsize            sizes[GDK_DMABUF_MAX_PLANES])
+                gsize            sizes[GDK_DMABUF_MAX_PLANES],
+                gboolean         y_invert)
 {
   const guchar *y_data, *u_data, *v_data;
   gsize x, y, y_stride, u_stride, v_stride;
   gsize U, V, X_SUB, Y_SUB;
+  guchar *orig_dst_data = dst_data;
 
   switch (dmabuf->fourcc)
     {
@@ -314,6 +355,9 @@ download_yuv_3 (guchar          *dst_data,
       u_data += u_stride;
       v_data += v_stride;
     }
+
+  if (y_invert)
+    flip_upside_down (orig_dst_data, dst_stride, dst_format, width, height);
 }
 
 static void
@@ -324,11 +368,13 @@ download_yuyv (guchar          *dst_data,
                gsize            height,
                const GdkDmabuf *dmabuf,
                const guchar    *src_datas[GDK_DMABUF_MAX_PLANES],
-               gsize            sizes[GDK_DMABUF_MAX_PLANES])
+               gsize            sizes[GDK_DMABUF_MAX_PLANES],
+               gboolean         y_invert)
 {
   const guchar *src_data;
   gsize x, y, src_stride;
   gsize Y1, Y2, U, V;
+  guchar *orig_dst_data = dst_data;
 
   switch (dmabuf->fourcc)
     {
@@ -367,6 +413,9 @@ download_yuyv (guchar          *dst_data,
       dst_data += dst_stride;
       src_data += src_stride;
     }
+
+  if (y_invert)
+    flip_upside_down (orig_dst_data, dst_stride, dst_format, width, height);
 }
 
 static const GdkDrmFormatInfo supported_formats[] = {
@@ -703,12 +752,15 @@ gdk_dmabuf_direct_downloader_do_download (const GdkDmabufDownloader *downloader,
 {
   const GdkDrmFormatInfo *info;
   const GdkDmabuf *dmabuf;
+  gboolean y_invert;
   const guchar *src_data[GDK_DMABUF_MAX_PLANES];
   gsize sizes[GDK_DMABUF_MAX_PLANES];
   gsize needs_unmap[GDK_DMABUF_MAX_PLANES] = { FALSE, };
   gsize i, j;
 
   dmabuf = gdk_dmabuf_texture_get_dmabuf (GDK_DMABUF_TEXTURE (texture));
+  y_invert = gdk_dmabuf_texture_get_y_invert (GDK_DMABUF_TEXTURE (texture));
+
   info = get_drm_format_info (dmabuf->fourcc);
 
   g_return_if_fail (info && info->download);
@@ -759,7 +811,8 @@ gdk_dmabuf_direct_downloader_do_download (const GdkDmabufDownloader *downloader,
                     gdk_texture_get_height (texture),
                     dmabuf,
                     src_data,
-                    sizes);
+                    sizes,
+                    y_invert);
 
 out:
   for (i = 0; i < dmabuf->n_planes; i++)
