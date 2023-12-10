@@ -2666,6 +2666,8 @@ gtk_drag_drop (GtkDragSourceInfo *info,
     {
       if (info->icon_window)
         gtk_widget_hide (info->icon_window);
+      if (info->proxy_dest)
+        g_object_ref (info->proxy_dest->context);
 
       gdk_drag_drop (info->context, time);
       info->drop_timeout = gdk_threads_add_timeout (DROP_ABORT_TIME,
@@ -2814,7 +2816,11 @@ gtk_drag_source_info_destroy (GtkDragSourceInfo *info)
   gtk_target_list_unref (info->target_list);
 
   if (info->drop_timeout)
-    g_source_remove (info->drop_timeout);
+    {
+      g_source_remove (info->drop_timeout);
+      if (info->proxy_dest)
+        g_object_unref (info->proxy_dest->context);
+    }
 
   if (info->update_idle)
     g_source_remove (info->update_idle);
@@ -3260,14 +3266,20 @@ static gboolean
 gtk_drag_abort_timeout (gpointer data)
 {
   GtkDragSourceInfo *info = data;
+  GdkDragContext *context = NULL;
   guint32 time = GDK_CURRENT_TIME;
 
   if (info->proxy_dest)
-    time = info->proxy_dest->proxy_drop_time;
+    {
+      time = info->proxy_dest->proxy_drop_time;
+      context = info->proxy_dest->context;
+    }
 
   info->drop_timeout = 0;
   gtk_drag_drop_finished (info, GTK_DRAG_RESULT_TIMEOUT_EXPIRED, time);
-  
+
+  g_clear_object (&context);
+
   return FALSE;
 }
 
