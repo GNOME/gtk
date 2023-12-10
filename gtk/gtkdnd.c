@@ -2759,7 +2759,7 @@ static void
 gtk_drag_source_info_free (GtkDragSourceInfo *info)
 {
   gtk_drag_remove_icon (info);
-  gtk_widget_destroy (info->icon_window);
+  g_clear_pointer (&info->icon_window, gtk_widget_destroy);
   g_free (info);
 }
 
