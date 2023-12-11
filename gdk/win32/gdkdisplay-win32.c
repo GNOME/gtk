@@ -1173,6 +1173,9 @@ gdk_win32_display_get_setting (GdkDisplay  *display,
                                const char *name,
                                GValue      *value)
 {
+  if (gdk_display_get_debug_flags (display) & GDK_DEBUG_DEFAULT_SETTINGS)
+    return FALSE;
+
   return _gdk_win32_get_setting (name, value);
 }
 
