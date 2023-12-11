@@ -13,6 +13,7 @@
 #endif
 
 #include "gdk/gdkglcontextprivate.h"
+#include "gsk/gskdebugprivate.h"
 #include "gsk/gskrendernodeprivate.h"
 
 static GskGpuOp *
@@ -308,6 +309,25 @@ gsk_gpu_upload_texture_op_try (GskGpuFrame *frame,
                                               gdk_texture_get_height (texture));
   if (image == NULL)
     return NULL;
+
+  if (GSK_DEBUG_CHECK (FALLBACK))
+    {
+      GEnumClass *enum_class = g_type_class_ref (GDK_TYPE_MEMORY_FORMAT);
+
+      if (gdk_texture_get_format (texture) != gsk_gpu_image_get_format (image))
+        {
+          gdk_debug_message ("Unsupported format %s, converting on CPU to %s",
+                             g_enum_get_value (enum_class, gdk_texture_get_format (texture))->value_nick,
+                             g_enum_get_value (enum_class, gsk_gpu_image_get_format (image))->value_nick);
+        }
+      if (with_mipmap && !(gsk_gpu_image_get_flags (image) & GSK_GPU_IMAGE_CAN_MIPMAP))
+        {
+          gdk_debug_message ("Format %s does not support mipmaps",
+                             g_enum_get_value (enum_class, gsk_gpu_image_get_format (image))->value_nick);
+        }
+
+      g_type_class_unref (enum_class);
+    }
 
   self = (GskGpuUploadTextureOp *) gsk_gpu_op_alloc (frame, &GSK_GPU_UPLOAD_TEXTURE_OP_CLASS);
 
