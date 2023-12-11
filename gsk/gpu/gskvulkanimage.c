@@ -50,7 +50,6 @@ struct _GskMemoryFormatInfo
 {
   VkFormat format;
   VkComponentMapping components;
-  GskGpuImageFlags flags;
 };
 
 static const GskMemoryFormatInfo *
@@ -63,7 +62,7 @@ gsk_memory_format_get_vk_format_infos (GdkMemoryFormat format)
     case GDK_MEMORY_A8B8G8R8_PREMULTIPLIED:
       {
         static const GskMemoryFormatInfo info[] = {
-          { VK_FORMAT_R8G8B8A8_UNORM, SWIZZLE(A, B, G, R), 0 },
+          { VK_FORMAT_R8G8B8A8_UNORM, SWIZZLE(A, B, G, R) },
           { VK_FORMAT_UNDEFINED }
         };
         return info;
@@ -71,8 +70,8 @@ gsk_memory_format_get_vk_format_infos (GdkMemoryFormat format)
     case GDK_MEMORY_B8G8R8A8_PREMULTIPLIED:
       {
         static const GskMemoryFormatInfo info[] = {
-          { VK_FORMAT_B8G8R8A8_UNORM, DEFAULT_SWIZZLE,     0 },
-          { VK_FORMAT_R8G8B8A8_UNORM, SWIZZLE(B, G, R, A), 0 },
+          { VK_FORMAT_B8G8R8A8_UNORM, DEFAULT_SWIZZLE     },
+          { VK_FORMAT_R8G8B8A8_UNORM, SWIZZLE(B, G, R, A) },
           { VK_FORMAT_UNDEFINED }
         };
         return info;
@@ -81,7 +80,7 @@ gsk_memory_format_get_vk_format_infos (GdkMemoryFormat format)
     case GDK_MEMORY_A8R8G8B8_PREMULTIPLIED:
       {
         static const GskMemoryFormatInfo info[] = {
-          { VK_FORMAT_R8G8B8A8_UNORM, SWIZZLE(G, B, A, R), 0 },
+          { VK_FORMAT_R8G8B8A8_UNORM, SWIZZLE(G, B, A, R) },
           { VK_FORMAT_UNDEFINED }
         };
         return info;
@@ -90,7 +89,7 @@ gsk_memory_format_get_vk_format_infos (GdkMemoryFormat format)
     case GDK_MEMORY_R8G8B8A8_PREMULTIPLIED:
       {
         static const GskMemoryFormatInfo info[] = {
-          { VK_FORMAT_R8G8B8A8_UNORM, DEFAULT_SWIZZLE, 0 },
+          { VK_FORMAT_R8G8B8A8_UNORM, DEFAULT_SWIZZLE },
           { VK_FORMAT_UNDEFINED }
         };
         return info;
@@ -99,8 +98,8 @@ gsk_memory_format_get_vk_format_infos (GdkMemoryFormat format)
     case GDK_MEMORY_B8G8R8A8:
       {
         static const GskMemoryFormatInfo info[] = {
-          { VK_FORMAT_B8G8R8A8_UNORM, DEFAULT_SWIZZLE,     GSK_GPU_IMAGE_STRAIGHT_ALPHA },
-          { VK_FORMAT_R8G8B8A8_UNORM, SWIZZLE(B, G, R, A), GSK_GPU_IMAGE_STRAIGHT_ALPHA },
+          { VK_FORMAT_B8G8R8A8_UNORM, DEFAULT_SWIZZLE     },
+          { VK_FORMAT_R8G8B8A8_UNORM, SWIZZLE(B, G, R, A) },
           { VK_FORMAT_UNDEFINED }
         };
         return info;
@@ -109,7 +108,7 @@ gsk_memory_format_get_vk_format_infos (GdkMemoryFormat format)
     case GDK_MEMORY_A8R8G8B8:
       {
         static const GskMemoryFormatInfo info[] = {
-          { VK_FORMAT_R8G8B8A8_UNORM, SWIZZLE(G, B, A, R), GSK_GPU_IMAGE_STRAIGHT_ALPHA },
+          { VK_FORMAT_R8G8B8A8_UNORM, SWIZZLE(G, B, A, R) },
           { VK_FORMAT_UNDEFINED }
         };
         return info;
@@ -118,7 +117,7 @@ gsk_memory_format_get_vk_format_infos (GdkMemoryFormat format)
     case GDK_MEMORY_R8G8B8A8:
       {
         static const GskMemoryFormatInfo info[] = {
-          { VK_FORMAT_R8G8B8A8_UNORM, DEFAULT_SWIZZLE, GSK_GPU_IMAGE_STRAIGHT_ALPHA },
+          { VK_FORMAT_R8G8B8A8_UNORM, DEFAULT_SWIZZLE },
           { VK_FORMAT_UNDEFINED }
         };
         return info;
@@ -127,7 +126,7 @@ gsk_memory_format_get_vk_format_infos (GdkMemoryFormat format)
     case GDK_MEMORY_A8B8G8R8:
       {
         static const GskMemoryFormatInfo info[] = {
-          { VK_FORMAT_R8G8B8A8_UNORM, SWIZZLE(A, B, G, R), GSK_GPU_IMAGE_STRAIGHT_ALPHA },
+          { VK_FORMAT_R8G8B8A8_UNORM, SWIZZLE(A, B, G, R) },
           { VK_FORMAT_UNDEFINED }
         };
         return info;
@@ -136,7 +135,7 @@ gsk_memory_format_get_vk_format_infos (GdkMemoryFormat format)
     case GDK_MEMORY_X8B8G8R8:
       {
         static const GskMemoryFormatInfo info[] = {
-          { VK_FORMAT_R8G8B8A8_UNORM, SWIZZLE(A, B, G, ONE), 0 },
+          { VK_FORMAT_R8G8B8A8_UNORM, SWIZZLE(A, B, G, ONE) },
           { VK_FORMAT_UNDEFINED }
         };
         return info;
@@ -144,8 +143,8 @@ gsk_memory_format_get_vk_format_infos (GdkMemoryFormat format)
     case GDK_MEMORY_B8G8R8X8:
       {
         static const GskMemoryFormatInfo info[] = {
-          { VK_FORMAT_B8G8R8A8_UNORM, SWIZZLE(R, G, B, ONE), 0 },
-          { VK_FORMAT_R8G8B8A8_UNORM, SWIZZLE(B, G, R, ONE), 0 },
+          { VK_FORMAT_B8G8R8A8_UNORM, SWIZZLE(R, G, B, ONE) },
+          { VK_FORMAT_R8G8B8A8_UNORM, SWIZZLE(B, G, R, ONE) },
           { VK_FORMAT_UNDEFINED }
         };
         return info;
@@ -154,7 +153,7 @@ gsk_memory_format_get_vk_format_infos (GdkMemoryFormat format)
     case GDK_MEMORY_X8R8G8B8:
       {
         static const GskMemoryFormatInfo info[] = {
-          { VK_FORMAT_R8G8B8A8_UNORM, SWIZZLE(G, B, A, ONE), 0 },
+          { VK_FORMAT_R8G8B8A8_UNORM, SWIZZLE(G, B, A, ONE) },
           { VK_FORMAT_UNDEFINED }
         };
         return info;
@@ -163,7 +162,7 @@ gsk_memory_format_get_vk_format_infos (GdkMemoryFormat format)
     case GDK_MEMORY_R8G8B8X8:
       {
         static const GskMemoryFormatInfo info[] = {
-          { VK_FORMAT_R8G8B8A8_UNORM, SWIZZLE(R, G, B, ONE), 0 },
+          { VK_FORMAT_R8G8B8A8_UNORM, SWIZZLE(R, G, B, ONE) },
           { VK_FORMAT_UNDEFINED }
         };
         return info;
@@ -172,7 +171,7 @@ gsk_memory_format_get_vk_format_infos (GdkMemoryFormat format)
     case GDK_MEMORY_R8G8B8:
       {
         static const GskMemoryFormatInfo info[] = {
-          { VK_FORMAT_R8G8B8_UNORM, DEFAULT_SWIZZLE, 0 },
+          { VK_FORMAT_R8G8B8_UNORM, DEFAULT_SWIZZLE },
           { VK_FORMAT_UNDEFINED }
         };
         return info;
@@ -181,8 +180,8 @@ gsk_memory_format_get_vk_format_infos (GdkMemoryFormat format)
     case GDK_MEMORY_B8G8R8:
       {
         static const GskMemoryFormatInfo info[] = {
-          { VK_FORMAT_B8G8R8_UNORM, DEFAULT_SWIZZLE,     0 },
-          { VK_FORMAT_R8G8B8_UNORM, SWIZZLE(B, G, R, A), 0 },
+          { VK_FORMAT_B8G8R8_UNORM, DEFAULT_SWIZZLE     },
+          { VK_FORMAT_R8G8B8_UNORM, SWIZZLE(B, G, R, A) },
           { VK_FORMAT_UNDEFINED }
         };
         return info;
@@ -191,7 +190,7 @@ gsk_memory_format_get_vk_format_infos (GdkMemoryFormat format)
     case GDK_MEMORY_R16G16B16:
       {
         static const GskMemoryFormatInfo info[] = {
-          { VK_FORMAT_R16G16B16_UNORM, DEFAULT_SWIZZLE, 0 },
+          { VK_FORMAT_R16G16B16_UNORM, DEFAULT_SWIZZLE },
           { VK_FORMAT_UNDEFINED }
         };
         return info;
@@ -200,7 +199,7 @@ gsk_memory_format_get_vk_format_infos (GdkMemoryFormat format)
     case GDK_MEMORY_R16G16B16A16_PREMULTIPLIED:
       {
         static const GskMemoryFormatInfo info[] = {
-          { VK_FORMAT_R16G16B16A16_UNORM, DEFAULT_SWIZZLE, 0 },
+          { VK_FORMAT_R16G16B16A16_UNORM, DEFAULT_SWIZZLE },
           { VK_FORMAT_UNDEFINED }
         };
         return info;
@@ -209,7 +208,7 @@ gsk_memory_format_get_vk_format_infos (GdkMemoryFormat format)
     case GDK_MEMORY_R16G16B16A16:
       {
         static const GskMemoryFormatInfo info[] = {
-          { VK_FORMAT_R16G16B16A16_UNORM, DEFAULT_SWIZZLE, GSK_GPU_IMAGE_STRAIGHT_ALPHA },
+          { VK_FORMAT_R16G16B16A16_UNORM, DEFAULT_SWIZZLE },
           { VK_FORMAT_UNDEFINED }
         };
         return info;
@@ -218,7 +217,7 @@ gsk_memory_format_get_vk_format_infos (GdkMemoryFormat format)
     case GDK_MEMORY_R16G16B16_FLOAT:
       {
         static const GskMemoryFormatInfo info[] = {
-          { VK_FORMAT_R16G16B16_SFLOAT, DEFAULT_SWIZZLE, 0 },
+          { VK_FORMAT_R16G16B16_SFLOAT, DEFAULT_SWIZZLE },
           { VK_FORMAT_UNDEFINED }
         };
         return info;
@@ -227,7 +226,7 @@ gsk_memory_format_get_vk_format_infos (GdkMemoryFormat format)
     case GDK_MEMORY_R16G16B16A16_FLOAT_PREMULTIPLIED:
       {
         static const GskMemoryFormatInfo info[] = {
-          { VK_FORMAT_R16G16B16A16_SFLOAT, DEFAULT_SWIZZLE, 0 },
+          { VK_FORMAT_R16G16B16A16_SFLOAT, DEFAULT_SWIZZLE },
           { VK_FORMAT_UNDEFINED }
         };
         return info;
@@ -236,7 +235,7 @@ gsk_memory_format_get_vk_format_infos (GdkMemoryFormat format)
     case GDK_MEMORY_R16G16B16A16_FLOAT:
       {
         static const GskMemoryFormatInfo info[] = {
-          { VK_FORMAT_R16G16B16A16_SFLOAT, DEFAULT_SWIZZLE, GSK_GPU_IMAGE_STRAIGHT_ALPHA },
+          { VK_FORMAT_R16G16B16A16_SFLOAT, DEFAULT_SWIZZLE },
           { VK_FORMAT_UNDEFINED }
         };
         return info;
@@ -245,7 +244,7 @@ gsk_memory_format_get_vk_format_infos (GdkMemoryFormat format)
     case GDK_MEMORY_R32G32B32_FLOAT:
       {
         static const GskMemoryFormatInfo info[] = {
-          { VK_FORMAT_R32G32B32_SFLOAT, DEFAULT_SWIZZLE, 0 },
+          { VK_FORMAT_R32G32B32_SFLOAT, DEFAULT_SWIZZLE },
           { VK_FORMAT_UNDEFINED }
         };
         return info;
@@ -254,7 +253,7 @@ gsk_memory_format_get_vk_format_infos (GdkMemoryFormat format)
     case GDK_MEMORY_R32G32B32A32_FLOAT_PREMULTIPLIED:
       {
         static const GskMemoryFormatInfo info[] = {
-          { VK_FORMAT_R32G32B32A32_SFLOAT, DEFAULT_SWIZZLE, 0 },
+          { VK_FORMAT_R32G32B32A32_SFLOAT, DEFAULT_SWIZZLE },
           { VK_FORMAT_UNDEFINED }
         };
         return info;
@@ -263,7 +262,7 @@ gsk_memory_format_get_vk_format_infos (GdkMemoryFormat format)
     case GDK_MEMORY_R32G32B32A32_FLOAT:
       {
         static const GskMemoryFormatInfo info[] = {
-          { VK_FORMAT_R32G32B32A32_SFLOAT, DEFAULT_SWIZZLE, GSK_GPU_IMAGE_STRAIGHT_ALPHA },
+          { VK_FORMAT_R32G32B32A32_SFLOAT, DEFAULT_SWIZZLE },
           { VK_FORMAT_UNDEFINED }
         };
         return info;
@@ -272,7 +271,7 @@ gsk_memory_format_get_vk_format_infos (GdkMemoryFormat format)
     case GDK_MEMORY_G8A8_PREMULTIPLIED:
       {
         static const GskMemoryFormatInfo info[] = {
-          { VK_FORMAT_R8G8_UNORM, SWIZZLE (R, R, R, G), 0 },
+          { VK_FORMAT_R8G8_UNORM, SWIZZLE (R, R, R, G) },
           { VK_FORMAT_UNDEFINED }
         };
         return info;
@@ -281,7 +280,7 @@ gsk_memory_format_get_vk_format_infos (GdkMemoryFormat format)
     case GDK_MEMORY_G8A8:
       {
         static const GskMemoryFormatInfo info[] = {
-          { VK_FORMAT_R8G8_UNORM, SWIZZLE (R, R, R, G), GSK_GPU_IMAGE_STRAIGHT_ALPHA },
+          { VK_FORMAT_R8G8_UNORM, SWIZZLE (R, R, R, G) },
           { VK_FORMAT_UNDEFINED }
         };
         return info;
@@ -290,7 +289,7 @@ gsk_memory_format_get_vk_format_infos (GdkMemoryFormat format)
     case GDK_MEMORY_G8:
       {
         static const GskMemoryFormatInfo info[] = {
-          { VK_FORMAT_R8_UNORM, SWIZZLE (R, R, R, ONE), 0 },
+          { VK_FORMAT_R8_UNORM, SWIZZLE (R, R, R, ONE) },
           { VK_FORMAT_UNDEFINED }
         };
         return info;
@@ -299,7 +298,7 @@ gsk_memory_format_get_vk_format_infos (GdkMemoryFormat format)
     case GDK_MEMORY_G16A16_PREMULTIPLIED:
       {
         static const GskMemoryFormatInfo info[] = {
-          { VK_FORMAT_R16G16_UNORM, SWIZZLE (R, R, R, G), 0 },
+          { VK_FORMAT_R16G16_UNORM, SWIZZLE (R, R, R, G) },
           { VK_FORMAT_UNDEFINED }
         };
         return info;
@@ -308,7 +307,7 @@ gsk_memory_format_get_vk_format_infos (GdkMemoryFormat format)
     case GDK_MEMORY_G16A16:
       {
         static const GskMemoryFormatInfo info[] = {
-          { VK_FORMAT_R16G16_UNORM, SWIZZLE (R, R, R, G), GSK_GPU_IMAGE_STRAIGHT_ALPHA },
+          { VK_FORMAT_R16G16_UNORM, SWIZZLE (R, R, R, G) },
           { VK_FORMAT_UNDEFINED }
         };
         return info;
@@ -317,7 +316,7 @@ gsk_memory_format_get_vk_format_infos (GdkMemoryFormat format)
     case GDK_MEMORY_G16:
       {
         static const GskMemoryFormatInfo info[] = {
-          { VK_FORMAT_R16_UNORM, SWIZZLE (R, R, R, ONE), 0 },
+          { VK_FORMAT_R16_UNORM, SWIZZLE (R, R, R, ONE) },
           { VK_FORMAT_UNDEFINED }
         };
         return info;
@@ -326,7 +325,7 @@ gsk_memory_format_get_vk_format_infos (GdkMemoryFormat format)
     case GDK_MEMORY_A8:
       {
         static const GskMemoryFormatInfo info[] = {
-          { VK_FORMAT_R8_UNORM, SWIZZLE (R, R, R, R), 0 },
+          { VK_FORMAT_R8_UNORM, SWIZZLE (R, R, R, R) },
           { VK_FORMAT_UNDEFINED }
         };
         return info;
@@ -335,7 +334,7 @@ gsk_memory_format_get_vk_format_infos (GdkMemoryFormat format)
     case GDK_MEMORY_A16:
       {
         static const GskMemoryFormatInfo info[] = {
-          { VK_FORMAT_R16_UNORM, SWIZZLE (R, R, R, R), 0 },
+          { VK_FORMAT_R16_UNORM, SWIZZLE (R, R, R, R) },
           { VK_FORMAT_UNDEFINED }
         };
         return info;
@@ -344,7 +343,7 @@ gsk_memory_format_get_vk_format_infos (GdkMemoryFormat format)
     case GDK_MEMORY_A16_FLOAT:
       {
         static const GskMemoryFormatInfo info[] = {
-          { VK_FORMAT_R16_SFLOAT, SWIZZLE (R, R, R, R), 0 },
+          { VK_FORMAT_R16_SFLOAT, SWIZZLE (R, R, R, R) },
           { VK_FORMAT_UNDEFINED }
         };
         return info;
@@ -353,7 +352,7 @@ gsk_memory_format_get_vk_format_infos (GdkMemoryFormat format)
     case GDK_MEMORY_A32_FLOAT:
       {
         static const GskMemoryFormatInfo info[] = {
-          { VK_FORMAT_R32_SFLOAT, SWIZZLE (R, R, R, R), 0 },
+          { VK_FORMAT_R32_SFLOAT, SWIZZLE (R, R, R, R) },
           { VK_FORMAT_UNDEFINED }
         };
         return info;
@@ -371,9 +370,6 @@ gsk_memory_format_get_vk_format_infos (GdkMemoryFormat format)
 static gboolean
 gsk_memory_format_info_is_framebuffer_compatible (const GskMemoryFormatInfo *format)
 {
-  if (format->flags)
-    return FALSE;
-
   if (format->components.r != VK_COMPONENT_SWIZZLE_R ||
       format->components.g != VK_COMPONENT_SWIZZLE_G ||
       format->components.b != VK_COMPONENT_SWIZZLE_B ||
@@ -472,7 +468,7 @@ gsk_vulkan_device_supports_format (GskVulkanDevice   *device,
   VkPhysicalDevice vk_phys_device;
   VkFormatProperties2 properties;
   VkImageFormatProperties2 image_properties;
-  VkFormatFeatureFlags features, required;
+  VkFormatFeatureFlags features;
   VkResult res;
   gsize i;
 
@@ -516,13 +512,8 @@ gsk_vulkan_device_supports_format (GskVulkanDevice   *device,
       default:
         return FALSE;
     }
-  required = 0;
-  if (usage & VK_IMAGE_USAGE_SAMPLED_BIT)
-    required |= VK_FORMAT_FEATURE_SAMPLED_IMAGE_BIT;
-  if (usage & VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT)
-    required |= VK_FORMAT_FEATURE_COLOR_ATTACHMENT_BLEND_BIT;
 
-  if ((features & required) != required)
+  if (!(features & VK_FORMAT_FEATURE_SAMPLED_IMAGE_BIT))
     return FALSE;
 
   image_properties = (VkImageFormatProperties2) {
@@ -555,6 +546,10 @@ gsk_vulkan_device_supports_format (GskVulkanDevice   *device,
   *out_flags = 0;
   if ((features & VK_FORMAT_FEATURE_BLIT_SRC_BIT) == 0)
     *out_flags |= GSK_GPU_IMAGE_NO_BLIT;
+  if (features & VK_FORMAT_FEATURE_SAMPLED_IMAGE_FILTER_LINEAR_BIT)
+    *out_flags |= GSK_GPU_IMAGE_FILTERABLE;
+  if (features & VK_FORMAT_FEATURE_COLOR_ATTACHMENT_BLEND_BIT)
+    *out_flags |= GSK_GPU_IMAGE_RENDERABLE;
 
   return TRUE;
 }
@@ -589,11 +584,10 @@ gsk_vulkan_image_create_view (GskVulkanImage            *self,
 
 static GskVulkanImage *
 gsk_vulkan_image_new (GskVulkanDevice           *device,
-                      gboolean                   with_mipmap,
                       GdkMemoryFormat            format,
+                      GskGpuImageFlags           required_flags,
                       gsize                      width,
                       gsize                      height,
-                      GskGpuImageFlags           allowed_flags,
                       VkImageTiling              tiling,
                       VkImageUsageFlags          usage,
                       VkPipelineStageFlags       stage,
@@ -606,6 +600,7 @@ gsk_vulkan_image_new (GskVulkanDevice           *device,
   VkDevice vk_device;
   const GskMemoryFormatInfo *vk_format;
   GskGpuImageFlags flags;
+#define CHECK_FLAGS (GSK_GPU_IMAGE_NO_BLIT | GSK_GPU_IMAGE_FILTERABLE | GSK_GPU_IMAGE_RENDERABLE)
 
   g_assert (width > 0 && height > 0);
 
@@ -615,9 +610,6 @@ gsk_vulkan_image_new (GskVulkanDevice           *device,
            vk_format->format != VK_FORMAT_UNDEFINED;
            vk_format++)
         {
-          if (vk_format->flags & ~allowed_flags)
-            continue;
-
           if (usage & VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT &&
               !gsk_memory_format_info_is_framebuffer_compatible (vk_format))
             continue;
@@ -627,16 +619,18 @@ gsk_vulkan_image_new (GskVulkanDevice           *device,
                                                  0, 1,
                                                  tiling, usage,
                                                  width, height,
-                                                 &flags))
+                                                 &flags) &&
+              ((flags & required_flags & CHECK_FLAGS) == (required_flags & CHECK_FLAGS)))
             break;
 
-          if (tiling != VK_IMAGE_TILING_OPTIMAL &&
+          if (tiling == VK_IMAGE_TILING_LINEAR &&
               gsk_vulkan_device_supports_format (device,
                                                  vk_format->format,
                                                  0, 1,
                                                  VK_IMAGE_TILING_OPTIMAL, usage,
                                                  width, height,
-                                                 &flags))
+                                                 &flags) &&
+              ((flags & required_flags & CHECK_FLAGS) == (required_flags & CHECK_FLAGS)))
             {
               tiling = VK_IMAGE_TILING_OPTIMAL;
               break;
@@ -651,6 +645,14 @@ gsk_vulkan_image_new (GskVulkanDevice           *device,
       format = gsk_memory_format_get_fallback (format);
     }
 
+  if (gdk_memory_format_alpha (format) == GDK_MEMORY_ALPHA_STRAIGHT)
+    flags |= GSK_GPU_IMAGE_STRAIGHT_ALPHA;
+
+  if (((flags & (GSK_GPU_IMAGE_FILTERABLE | GSK_GPU_IMAGE_RENDERABLE | GSK_GPU_IMAGE_NO_BLIT | GSK_GPU_IMAGE_STRAIGHT_ALPHA)) ==
+       (GSK_GPU_IMAGE_FILTERABLE | GSK_GPU_IMAGE_RENDERABLE)) &&
+      (required_flags & GSK_GPU_IMAGE_CAN_MIPMAP))
+    flags |= GSK_GPU_IMAGE_CAN_MIPMAP;
+
   vk_device = gsk_vulkan_device_get_vk_device (device);
 
   self = g_object_new (GSK_TYPE_VULKAN_IMAGE, NULL);
@@ -664,10 +666,7 @@ gsk_vulkan_image_new (GskVulkanDevice           *device,
   self->vk_image_layout = layout;
   self->vk_access = access;
 
-  gsk_gpu_image_setup (GSK_GPU_IMAGE (self),
-                       flags | vk_format->flags |
-                       (with_mipmap ? GSK_GPU_IMAGE_CAN_MIPMAP : 0),
-                       format, width, height);
+  gsk_gpu_image_setup (GSK_GPU_IMAGE (self), flags, format, width, height);
 
   GSK_VK_CHECK (vkCreateImage, vk_device,
                                 &(VkImageCreateInfo) {
@@ -676,7 +675,7 @@ gsk_vulkan_image_new (GskVulkanDevice           *device,
                                     .imageType = VK_IMAGE_TYPE_2D,
                                     .format = vk_format->format,
                                     .extent = { width, height, 1 },
-                                    .mipLevels = with_mipmap ? gsk_vulkan_mipmap_levels (width, height) : 1,
+                                    .mipLevels = (flags & GSK_GPU_IMAGE_CAN_MIPMAP) ? gsk_vulkan_mipmap_levels (width, height) : 1,
                                     .arrayLayers = 1,
                                     .samples = VK_SAMPLE_COUNT_1_BIT,
                                     .tiling = tiling,
@@ -709,6 +708,7 @@ gsk_vulkan_image_new (GskVulkanDevice           *device,
   gsk_vulkan_image_create_view (self, VK_NULL_HANDLE, vk_format);
 
   return self;
+#undef CHECK_FLAGS
 }
 
 GskGpuImage *
@@ -721,11 +721,10 @@ gsk_vulkan_image_new_for_upload (GskVulkanDevice *device,
   GskVulkanImage *self;
 
   self = gsk_vulkan_image_new (device,
-                               with_mipmap,
                                format,
+                               with_mipmap ? (GSK_GPU_IMAGE_CAN_MIPMAP | GSK_GPU_IMAGE_RENDERABLE | GSK_GPU_IMAGE_FILTERABLE) : 0,
                                width,
                                height,
-                               -1,
                                VK_IMAGE_TILING_LINEAR,
                                VK_IMAGE_USAGE_TRANSFER_SRC_BIT |
                                VK_IMAGE_USAGE_TRANSFER_DST_BIT |
@@ -799,6 +798,7 @@ gsk_vulkan_image_new_for_swapchain (GskVulkanDevice  *device,
   self->vk_image_layout = VK_IMAGE_LAYOUT_UNDEFINED;
   self->vk_access = 0;
 
+  /* FIXME: The memory format and flags here are very suboptimal */
   gsk_gpu_image_setup (GSK_GPU_IMAGE (self), 0, GDK_MEMORY_DEFAULT, width, height);
 
   gsk_vulkan_image_create_view (self,
@@ -823,11 +823,10 @@ gsk_vulkan_image_new_for_atlas (GskVulkanDevice *device,
   GskVulkanImage *self;
 
   self = gsk_vulkan_image_new (device,
-                               FALSE,
                                GDK_MEMORY_DEFAULT,
+                               GSK_GPU_IMAGE_FILTERABLE | GSK_GPU_IMAGE_RENDERABLE,
                                width,
                                height,
-                               0,
                                VK_IMAGE_TILING_OPTIMAL,
                                VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT,
                                VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT,
@@ -848,11 +847,11 @@ gsk_vulkan_image_new_for_offscreen (GskVulkanDevice *device,
   GskVulkanImage *self;
 
   self = gsk_vulkan_image_new (device,
-                               with_mipmap,
                                preferred_format,
+                               GSK_GPU_IMAGE_RENDERABLE |
+                               (with_mipmap ? GSK_GPU_IMAGE_CAN_MIPMAP | GSK_GPU_IMAGE_FILTERABLE : 0),
                                width,
                                height,
-                               0,
                                VK_IMAGE_TILING_OPTIMAL,
                                VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT |
                                VK_IMAGE_USAGE_SAMPLED_BIT |
@@ -886,7 +885,7 @@ gsk_vulkan_image_new_dmabuf (GskVulkanDevice *device,
   GskVulkanImage *self;
   VkResult res;
   gsize i, n_modifiers;
-  gboolean can_blit;
+  GskGpuImageFlags flags;
 
   if (!gsk_vulkan_device_has_feature (device, GDK_VULKAN_FEATURE_DMABUF))
     return NULL;
@@ -919,7 +918,7 @@ gsk_vulkan_image_new_dmabuf (GskVulkanDevice *device,
                                                 format_info->format,
                                                 &properties);
 
-          can_blit = TRUE;
+          flags = GSK_GPU_IMAGE_FILTERABLE | GSK_GPU_IMAGE_RENDERABLE;
           n_modifiers = 0;
           for (i = 0; i < drm_properties.drmFormatModifierCount; i++)
             {
@@ -955,7 +954,11 @@ gsk_vulkan_image_new_dmabuf (GskVulkanDevice *device,
 
               /* we could check the real used format after creation, but for now: */
               if ((drm_mod_properties[i].drmFormatModifierTilingFeatures & VK_FORMAT_FEATURE_BLIT_SRC_BIT) == 0)
-                can_blit = FALSE;
+                flags |= GSK_GPU_IMAGE_NO_BLIT;
+              if ((drm_mod_properties[i].drmFormatModifierTilingFeatures & VK_FORMAT_FEATURE_SAMPLED_IMAGE_FILTER_LINEAR_BIT) == 0)
+                flags &= ~GSK_GPU_IMAGE_FILTERABLE;
+              if ((drm_mod_properties[i].drmFormatModifierTilingFeatures & VK_FORMAT_FEATURE_COLOR_ATTACHMENT_BLEND_BIT) == 0)
+                flags &= ~GSK_GPU_IMAGE_RENDERABLE;
 
               modifiers[n_modifiers++] = drm_mod_properties[i].drmFormatModifier;
             }
@@ -984,9 +987,8 @@ gsk_vulkan_image_new_dmabuf (GskVulkanDevice *device,
   self->vk_access = 0;
 
   gsk_gpu_image_setup (GSK_GPU_IMAGE (self),
-                       format_info->flags | GSK_GPU_IMAGE_EXTERNAL |
-                       (gdk_memory_format_alpha (format) == GDK_MEMORY_ALPHA_STRAIGHT ? GSK_GPU_IMAGE_STRAIGHT_ALPHA : 0) |
-                       (can_blit ? 0 : GSK_GPU_IMAGE_NO_BLIT),
+                       flags | GSK_GPU_IMAGE_EXTERNAL |
+                       (gdk_memory_format_alpha (format) == GDK_MEMORY_ALPHA_STRAIGHT ? GSK_GPU_IMAGE_STRAIGHT_ALPHA : 0),
                        format,
                        width, height);
 
@@ -1002,7 +1004,7 @@ gsk_vulkan_image_new_dmabuf (GskVulkanDevice *device,
                            .samples = VK_SAMPLE_COUNT_1_BIT,
                            .tiling = VK_IMAGE_TILING_DRM_FORMAT_MODIFIER_EXT,
                            .usage = VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT |
-                                    (can_blit ? 0 : VK_IMAGE_USAGE_TRANSFER_SRC_BIT),
+                                    ((flags & GSK_GPU_IMAGE_NO_BLIT) ? 0 : VK_IMAGE_USAGE_TRANSFER_SRC_BIT),
                            .sharingMode = VK_SHARING_MODE_EXCLUSIVE,
                            .initialLayout = self->vk_image_layout,
                            .pNext = &(VkExternalMemoryImageCreateInfo) {

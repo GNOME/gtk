@@ -721,7 +721,7 @@ gsk_gpu_node_processor_ensure_image (GskGpuNodeProcessor *self,
                                                 gdk_memory_format_get_depth (gsk_gpu_image_get_format (image)),
                                                 width, height);
 
-  if ((flags & (GSK_GPU_IMAGE_NO_BLIT | GSK_GPU_IMAGE_STRAIGHT_ALPHA)) == 0)
+  if ((flags & (GSK_GPU_IMAGE_NO_BLIT | GSK_GPU_IMAGE_STRAIGHT_ALPHA | GSK_GPU_IMAGE_FILTERABLE)) == GSK_GPU_IMAGE_FILTERABLE)
     {
       gsk_gpu_blit_op (self->frame,
                        image,
