@@ -35,7 +35,7 @@ show_action_dialog (GSimpleAction *action)
 {
   GtkAlertDialog *dialog;
 
-  dialog = gtk_alert_dialog_new ("You activated action: \"%s\n",
+  dialog = gtk_alert_dialog_new ("You activated action: \"%s\"",
                                  g_action_get_name (G_ACTION (action)));
   gtk_alert_dialog_show (dialog, NULL);
   g_object_unref (dialog);
