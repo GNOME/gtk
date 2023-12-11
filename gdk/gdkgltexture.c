@@ -242,22 +242,24 @@ gdk_gl_texture_do_download (GdkGLTexture *self,
           glGetFramebufferParameteriv (GL_FRAMEBUFFER, GL_IMPLEMENTATION_COLOR_READ_TYPE, &gl_read_type);
           if (!gdk_gl_texture_find_format (context, gdk_memory_format_alpha (format), gl_read_format, gl_read_type, &actual_format))
             {
-              gl_read_format = GL_RGBA;
-              gl_read_type = GL_UNSIGNED_BYTE;
-              if (gdk_memory_format_alpha (format) == GDK_MEMORY_ALPHA_PREMULTIPLIED)
-                actual_format = GDK_MEMORY_R8G8B8A8_PREMULTIPLIED; /* pray */
-              else
-                actual_format = GDK_MEMORY_R8G8B8A8;
+              actual_format = gdk_memory_depth_get_format (gdk_memory_format_get_depth (format));
+              if (gdk_memory_format_alpha (format) == GDK_MEMORY_ALPHA_STRAIGHT)
+                actual_format = gdk_memory_format_get_straight (actual_format);
+
+              gdk_memory_format_gl_format (actual_format,
+                                           &gl_internal_format,
+                                           &gl_read_format, &gl_read_type, gl_swizzle);
             }
         }
       else
         {
-          gl_read_format = GL_RGBA;
-          gl_read_type = GL_UNSIGNED_BYTE;
-          if (gdk_memory_format_alpha (format) == GDK_MEMORY_ALPHA_PREMULTIPLIED)
-            actual_format = GDK_MEMORY_R8G8B8A8_PREMULTIPLIED; /* pray */
-          else
-            actual_format = GDK_MEMORY_R8G8B8A8;
+          actual_format = gdk_memory_depth_get_format (gdk_memory_format_get_depth (format));
+          if (gdk_memory_format_alpha (format) == GDK_MEMORY_ALPHA_STRAIGHT)
+            actual_format = gdk_memory_format_get_straight (actual_format);
+
+          gdk_memory_format_gl_format (actual_format,
+                                       &gl_internal_format,
+                                       &gl_read_format, &gl_read_type, gl_swizzle);
         }
 
       if (download->format == actual_format &&
