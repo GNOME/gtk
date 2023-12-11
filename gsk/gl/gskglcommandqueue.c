@@ -1486,10 +1486,13 @@ memory_format_gl_format (GdkMemoryFormat  data_format,
   GdkMemoryDepth depth;
   GdkMemoryFormat alt_format;
 
+  /* No support for straight formats yet */
+  if (gdk_memory_format_alpha (data_format) == GDK_MEMORY_ALPHA_STRAIGHT)
+    data_format = gdk_memory_format_get_premultiplied (data_format);
+
   /* First, try the format itself */
   flags = gdk_gl_context_get_format_flags (context, data_format);
-  if (((flags & (GDK_GL_FORMAT_USABLE | GDK_GL_FORMAT_FILTERABLE)) == (GDK_GL_FORMAT_USABLE | GDK_GL_FORMAT_FILTERABLE)) &&
-      gdk_memory_format_alpha (data_format) != GDK_MEMORY_ALPHA_STRAIGHT)
+  if ((flags & (GDK_GL_FORMAT_USABLE | GDK_GL_FORMAT_FILTERABLE)) == (GDK_GL_FORMAT_USABLE | GDK_GL_FORMAT_FILTERABLE))
     {
       gdk_memory_format_gl_format (data_format,
                                    gl_internalformat,

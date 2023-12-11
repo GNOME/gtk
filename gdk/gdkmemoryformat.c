@@ -326,6 +326,8 @@ ADD_ALPHA_FUNC(r8g8b8_to_a8b8g8r8, 0, 1, 2, 3, 2, 1, 0)
 struct _GdkMemoryFormatDescription
 {
   GdkMemoryAlpha alpha;
+  GdkMemoryFormat premultiplied;
+  GdkMemoryFormat straight;
   gsize bytes_per_pixel;
   gsize alignment;
   GdkMemoryDepth depth;
@@ -355,6 +357,8 @@ struct _GdkMemoryFormatDescription
 static const GdkMemoryFormatDescription memory_formats[] = {
   [GDK_MEMORY_B8G8R8A8_PREMULTIPLIED] = {
     .alpha = GDK_MEMORY_ALPHA_PREMULTIPLIED,
+    .premultiplied = GDK_MEMORY_B8G8R8A8_PREMULTIPLIED,
+    .straight = GDK_MEMORY_B8G8R8A8,
     .bytes_per_pixel = 4,
     .alignment = G_ALIGNOF (guchar),
     .depth = GDK_MEMORY_U8,
@@ -371,6 +375,8 @@ static const GdkMemoryFormatDescription memory_formats[] = {
   },
   [GDK_MEMORY_A8R8G8B8_PREMULTIPLIED] = {
     .alpha = GDK_MEMORY_ALPHA_PREMULTIPLIED,
+    .premultiplied = GDK_MEMORY_A8R8G8B8_PREMULTIPLIED,
+    .straight = GDK_MEMORY_A8R8G8B8,
     .bytes_per_pixel = 4,
     .alignment = G_ALIGNOF (guchar),
     .depth = GDK_MEMORY_U8,
@@ -387,6 +393,8 @@ static const GdkMemoryFormatDescription memory_formats[] = {
   },
   [GDK_MEMORY_R8G8B8A8_PREMULTIPLIED] = {
     .alpha = GDK_MEMORY_ALPHA_PREMULTIPLIED,
+    .premultiplied = GDK_MEMORY_R8G8B8A8_PREMULTIPLIED,
+    .straight = GDK_MEMORY_R8G8B8A8,
     .bytes_per_pixel = 4,
     .alignment = G_ALIGNOF (guchar),
     .depth = GDK_MEMORY_U8,
@@ -402,6 +410,8 @@ static const GdkMemoryFormatDescription memory_formats[] = {
   },
   [GDK_MEMORY_A8B8G8R8_PREMULTIPLIED] = {
     .alpha = GDK_MEMORY_ALPHA_PREMULTIPLIED,
+    .premultiplied = GDK_MEMORY_A8B8G8R8_PREMULTIPLIED,
+    .straight = GDK_MEMORY_A8B8G8R8,
     .bytes_per_pixel = 4,
     .alignment = G_ALIGNOF (guchar),
     .depth = GDK_MEMORY_U8,
@@ -418,6 +428,8 @@ static const GdkMemoryFormatDescription memory_formats[] = {
   },
   [GDK_MEMORY_B8G8R8A8] = {
     .alpha = GDK_MEMORY_ALPHA_STRAIGHT,
+    .premultiplied = GDK_MEMORY_B8G8R8A8_PREMULTIPLIED,
+    .straight = GDK_MEMORY_B8G8R8A8,
     .bytes_per_pixel = 4,
     .alignment = G_ALIGNOF (guchar),
     .depth = GDK_MEMORY_U8,
@@ -434,6 +446,8 @@ static const GdkMemoryFormatDescription memory_formats[] = {
   },
   [GDK_MEMORY_A8R8G8B8] = {
     .alpha = GDK_MEMORY_ALPHA_STRAIGHT,
+    .premultiplied = GDK_MEMORY_A8R8G8B8_PREMULTIPLIED,
+    .straight = GDK_MEMORY_A8R8G8B8,
     .bytes_per_pixel = 4,
     .alignment = G_ALIGNOF (guchar),
     .depth = GDK_MEMORY_U8,
@@ -450,6 +464,8 @@ static const GdkMemoryFormatDescription memory_formats[] = {
   },
   [GDK_MEMORY_R8G8B8A8] = {
     .alpha = GDK_MEMORY_ALPHA_STRAIGHT,
+    .premultiplied = GDK_MEMORY_R8G8B8A8_PREMULTIPLIED,
+    .straight = GDK_MEMORY_R8G8B8A8,
     .bytes_per_pixel = 4,
     .alignment = G_ALIGNOF (guchar),
     .depth = GDK_MEMORY_U8,
@@ -465,6 +481,8 @@ static const GdkMemoryFormatDescription memory_formats[] = {
   },
   [GDK_MEMORY_A8B8G8R8] = {
     .alpha = GDK_MEMORY_ALPHA_STRAIGHT,
+    .premultiplied = GDK_MEMORY_A8B8G8R8_PREMULTIPLIED,
+    .straight = GDK_MEMORY_A8B8G8R8,
     .bytes_per_pixel = 4,
     .alignment = G_ALIGNOF (guchar),
     .depth = GDK_MEMORY_U8,
@@ -481,6 +499,8 @@ static const GdkMemoryFormatDescription memory_formats[] = {
   },
   [GDK_MEMORY_B8G8R8X8] = {
     .alpha = GDK_MEMORY_ALPHA_OPAQUE,
+    .premultiplied = GDK_MEMORY_B8G8R8X8,
+    .straight = GDK_MEMORY_B8G8R8X8,
     .bytes_per_pixel = 4,
     .alignment = G_ALIGNOF (guchar),
     .depth = GDK_MEMORY_U8,
@@ -497,6 +517,8 @@ static const GdkMemoryFormatDescription memory_formats[] = {
   },
   [GDK_MEMORY_X8R8G8B8] = {
     .alpha = GDK_MEMORY_ALPHA_OPAQUE,
+    .premultiplied = GDK_MEMORY_X8R8G8B8,
+    .straight = GDK_MEMORY_X8R8G8B8,
     .bytes_per_pixel = 4,
     .alignment = G_ALIGNOF (guchar),
     .depth = GDK_MEMORY_U8,
@@ -513,6 +535,8 @@ static const GdkMemoryFormatDescription memory_formats[] = {
   },
   [GDK_MEMORY_R8G8B8X8] = {
     .alpha = GDK_MEMORY_ALPHA_OPAQUE,
+    .premultiplied = GDK_MEMORY_R8G8B8X8,
+    .straight = GDK_MEMORY_R8G8B8X8,
     .bytes_per_pixel = 4,
     .alignment = G_ALIGNOF (guchar),
     .depth = GDK_MEMORY_U8,
@@ -528,6 +552,8 @@ static const GdkMemoryFormatDescription memory_formats[] = {
   },
   [GDK_MEMORY_X8B8G8R8] = {
     .alpha = GDK_MEMORY_ALPHA_OPAQUE,
+    .premultiplied = GDK_MEMORY_X8B8G8R8,
+    .straight = GDK_MEMORY_X8B8G8R8,
     .bytes_per_pixel = 4,
     .alignment = G_ALIGNOF (guchar),
     .depth = GDK_MEMORY_U8,
@@ -544,6 +570,8 @@ static const GdkMemoryFormatDescription memory_formats[] = {
   },
   [GDK_MEMORY_R8G8B8] = {
     .alpha = GDK_MEMORY_ALPHA_OPAQUE,
+    .premultiplied = GDK_MEMORY_R8G8B8,
+    .straight = GDK_MEMORY_R8G8B8,
     .bytes_per_pixel = 3,
     .alignment = G_ALIGNOF (guchar),
     .depth = GDK_MEMORY_U8,
@@ -559,6 +587,8 @@ static const GdkMemoryFormatDescription memory_formats[] = {
   },
   [GDK_MEMORY_B8G8R8] = {
     .alpha = GDK_MEMORY_ALPHA_OPAQUE,
+    .premultiplied = GDK_MEMORY_B8G8R8,
+    .straight = GDK_MEMORY_B8G8R8,
     .bytes_per_pixel = 3,
     .alignment = G_ALIGNOF (guchar),
     .depth = GDK_MEMORY_U8,
@@ -575,6 +605,8 @@ static const GdkMemoryFormatDescription memory_formats[] = {
   },
   [GDK_MEMORY_R16G16B16] = {
     .alpha = GDK_MEMORY_ALPHA_OPAQUE,
+    .premultiplied = GDK_MEMORY_R16G16B16,
+    .straight = GDK_MEMORY_R16G16B16,
     .bytes_per_pixel = 6,
     .alignment = G_ALIGNOF (guint16),
     .depth = GDK_MEMORY_U16,
@@ -590,6 +622,8 @@ static const GdkMemoryFormatDescription memory_formats[] = {
   },
   [GDK_MEMORY_R16G16B16A16_PREMULTIPLIED] = {
     .alpha = GDK_MEMORY_ALPHA_PREMULTIPLIED,
+    .premultiplied = GDK_MEMORY_R16G16B16A16_PREMULTIPLIED,
+    .straight = GDK_MEMORY_R16G16B16A16,
     .bytes_per_pixel = 8,
     .alignment = G_ALIGNOF (guint16),
     .depth = GDK_MEMORY_U16,
@@ -605,6 +639,8 @@ static const GdkMemoryFormatDescription memory_formats[] = {
   },
   [GDK_MEMORY_R16G16B16A16] = {
     .alpha = GDK_MEMORY_ALPHA_STRAIGHT,
+    .premultiplied = GDK_MEMORY_R16G16B16A16_PREMULTIPLIED,
+    .straight = GDK_MEMORY_R16G16B16A16,
     .bytes_per_pixel = 8,
     .alignment = G_ALIGNOF (guint16),
     .depth = GDK_MEMORY_U16,
@@ -620,6 +656,8 @@ static const GdkMemoryFormatDescription memory_formats[] = {
   },
   [GDK_MEMORY_R16G16B16_FLOAT] = {
     .alpha = GDK_MEMORY_ALPHA_OPAQUE,
+    .premultiplied = GDK_MEMORY_R16G16B16_FLOAT,
+    .straight = GDK_MEMORY_R16G16B16_FLOAT,
     .bytes_per_pixel = 6,
     .alignment = G_ALIGNOF (guint16),
     .depth = GDK_MEMORY_FLOAT16,
@@ -635,6 +673,8 @@ static const GdkMemoryFormatDescription memory_formats[] = {
   },
   [GDK_MEMORY_R16G16B16A16_FLOAT_PREMULTIPLIED] = {
     .alpha = GDK_MEMORY_ALPHA_PREMULTIPLIED,
+    .premultiplied = GDK_MEMORY_R16G16B16A16_FLOAT_PREMULTIPLIED,
+    .straight = GDK_MEMORY_R16G16B16A16_FLOAT,
     .bytes_per_pixel = 8,
     .alignment = G_ALIGNOF (guint16),
     .depth = GDK_MEMORY_FLOAT16,
@@ -650,6 +690,8 @@ static const GdkMemoryFormatDescription memory_formats[] = {
   },
   [GDK_MEMORY_R16G16B16A16_FLOAT] = {
     .alpha = GDK_MEMORY_ALPHA_STRAIGHT,
+    .premultiplied = GDK_MEMORY_R16G16B16A16_FLOAT_PREMULTIPLIED,
+    .straight = GDK_MEMORY_R16G16B16A16_FLOAT,
     .bytes_per_pixel = 8,
     .alignment = G_ALIGNOF (guint16),
     .depth = GDK_MEMORY_FLOAT16,
@@ -665,6 +707,8 @@ static const GdkMemoryFormatDescription memory_formats[] = {
   },
   [GDK_MEMORY_R32G32B32_FLOAT] = {
     .alpha = GDK_MEMORY_ALPHA_OPAQUE,
+    .premultiplied = GDK_MEMORY_R32G32B32_FLOAT,
+    .straight = GDK_MEMORY_R32G32B32_FLOAT,
     12,
     .alignment = G_ALIGNOF (float),
     .depth = GDK_MEMORY_FLOAT32,
@@ -680,6 +724,8 @@ static const GdkMemoryFormatDescription memory_formats[] = {
   },
   [GDK_MEMORY_R32G32B32A32_FLOAT_PREMULTIPLIED] = {
     .alpha = GDK_MEMORY_ALPHA_PREMULTIPLIED,
+    .premultiplied = GDK_MEMORY_R32G32B32A32_FLOAT_PREMULTIPLIED,
+    .straight = GDK_MEMORY_R32G32B32A32_FLOAT,
     16,
     .alignment = G_ALIGNOF (float),
     .depth = GDK_MEMORY_FLOAT32,
@@ -695,6 +741,8 @@ static const GdkMemoryFormatDescription memory_formats[] = {
   },
   [GDK_MEMORY_R32G32B32A32_FLOAT] = {
     .alpha = GDK_MEMORY_ALPHA_STRAIGHT,
+    .premultiplied = GDK_MEMORY_R32G32B32A32_FLOAT_PREMULTIPLIED,
+    .straight = GDK_MEMORY_R32G32B32A32_FLOAT,
     16,
     .alignment = G_ALIGNOF (float),
     .depth = GDK_MEMORY_FLOAT32,
@@ -710,6 +758,8 @@ static const GdkMemoryFormatDescription memory_formats[] = {
   },
   [GDK_MEMORY_G8A8_PREMULTIPLIED] = {
     .alpha = GDK_MEMORY_ALPHA_PREMULTIPLIED,
+    .premultiplied = GDK_MEMORY_G8A8_PREMULTIPLIED,
+    .straight = GDK_MEMORY_G8A8,
     .bytes_per_pixel = 2,
     .alignment = G_ALIGNOF (guchar),
     .depth = GDK_MEMORY_U8,
@@ -725,6 +775,8 @@ static const GdkMemoryFormatDescription memory_formats[] = {
   },
   [GDK_MEMORY_G8A8] = {
     .alpha = GDK_MEMORY_ALPHA_STRAIGHT,
+    .premultiplied = GDK_MEMORY_G8A8_PREMULTIPLIED,
+    .straight = GDK_MEMORY_G8A8,
     .bytes_per_pixel = 2,
     .alignment = G_ALIGNOF (guchar),
     .depth = GDK_MEMORY_U8,
@@ -740,6 +792,8 @@ static const GdkMemoryFormatDescription memory_formats[] = {
   },
   [GDK_MEMORY_G8] = {
     .alpha = GDK_MEMORY_ALPHA_OPAQUE,
+    .premultiplied = GDK_MEMORY_G8,
+    .straight = GDK_MEMORY_G8,
     .bytes_per_pixel = 1,
     .alignment = G_ALIGNOF (guchar),
     .depth = GDK_MEMORY_U8,
@@ -755,6 +809,8 @@ static const GdkMemoryFormatDescription memory_formats[] = {
   },
   [GDK_MEMORY_G16A16_PREMULTIPLIED] = {
     .alpha = GDK_MEMORY_ALPHA_PREMULTIPLIED,
+    .premultiplied = GDK_MEMORY_G16A16_PREMULTIPLIED,
+    .straight = GDK_MEMORY_G16A16,
     .bytes_per_pixel = 4,
     .alignment = G_ALIGNOF (guint16),
     .depth = GDK_MEMORY_U16,
@@ -770,6 +826,8 @@ static const GdkMemoryFormatDescription memory_formats[] = {
   },
   [GDK_MEMORY_G16A16] = {
     .alpha = GDK_MEMORY_ALPHA_STRAIGHT,
+    .premultiplied = GDK_MEMORY_G16A16_PREMULTIPLIED,
+    .straight = GDK_MEMORY_G16A16,
     .bytes_per_pixel = 4,
     .alignment = G_ALIGNOF (guint16),
     .depth = GDK_MEMORY_U16,
@@ -785,6 +843,8 @@ static const GdkMemoryFormatDescription memory_formats[] = {
   },
   [GDK_MEMORY_G16] = {
     .alpha = GDK_MEMORY_ALPHA_OPAQUE,
+    .premultiplied = GDK_MEMORY_G16,
+    .straight = GDK_MEMORY_G16,
     .bytes_per_pixel = 2,
     .alignment = G_ALIGNOF (guint16),
     .depth = GDK_MEMORY_U16,
@@ -800,6 +860,8 @@ static const GdkMemoryFormatDescription memory_formats[] = {
   },
   [GDK_MEMORY_A8] = {
     .alpha = GDK_MEMORY_ALPHA_PREMULTIPLIED,
+    .premultiplied = GDK_MEMORY_A8,
+    .straight = GDK_MEMORY_A8,
     .bytes_per_pixel = 1,
     .alignment = G_ALIGNOF (guchar),
     .depth = GDK_MEMORY_U8,
@@ -815,6 +877,8 @@ static const GdkMemoryFormatDescription memory_formats[] = {
   },
   [GDK_MEMORY_A16] = {
     .alpha = GDK_MEMORY_ALPHA_PREMULTIPLIED,
+    .premultiplied = GDK_MEMORY_A16,
+    .straight = GDK_MEMORY_A16,
     .bytes_per_pixel = 2,
     .alignment = G_ALIGNOF (guint16),
     .depth = GDK_MEMORY_U16,
@@ -830,6 +894,8 @@ static const GdkMemoryFormatDescription memory_formats[] = {
   },
   [GDK_MEMORY_A16_FLOAT] = {
     .alpha = GDK_MEMORY_ALPHA_PREMULTIPLIED,
+    .premultiplied = GDK_MEMORY_A16_FLOAT,
+    .straight = GDK_MEMORY_A16_FLOAT,
     .bytes_per_pixel = 2,
     .alignment = G_ALIGNOF (guint16),
     .depth = GDK_MEMORY_FLOAT16,
@@ -845,6 +911,8 @@ static const GdkMemoryFormatDescription memory_formats[] = {
   },
   [GDK_MEMORY_A32_FLOAT] = {
     .alpha = GDK_MEMORY_ALPHA_PREMULTIPLIED,
+    .premultiplied = GDK_MEMORY_A32_FLOAT,
+    .straight = GDK_MEMORY_A32_FLOAT,
     .bytes_per_pixel = 4,
     .alignment = G_ALIGNOF (float),
     .depth = GDK_MEMORY_FLOAT32,
@@ -873,6 +941,18 @@ GdkMemoryAlpha
 gdk_memory_format_alpha (GdkMemoryFormat format)
 {
   return memory_formats[format].alpha;
+}
+
+GdkMemoryFormat
+gdk_memory_format_get_premultiplied (GdkMemoryFormat format)
+{
+  return memory_formats[format].premultiplied;
+}
+
+GdkMemoryFormat
+gdk_memory_format_get_straight (GdkMemoryFormat format)
+{
+  return memory_formats[format].straight;
 }
 
 gsize
