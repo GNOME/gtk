@@ -333,9 +333,9 @@ struct _GdkMemoryFormatDescription
   GdkMemoryDepth depth;
   const GdkMemoryFormat *fallbacks;
   struct {
-    guint internal_format;
-    guint format;
-    guint type;
+    GLint internal_format;
+    GLenum format;
+    GLenum type;
     GLint swizzle[4];
     /* -1 if none exists, ie the format is already RGBA
      * or the format doesn't have 4 channels */
@@ -1255,9 +1255,9 @@ gdk_memory_depth_get_alpha_format (GdkMemoryDepth depth)
 
 void
 gdk_memory_format_gl_format (GdkMemoryFormat  format,
-                             guint           *out_internal_format,
-                             guint           *out_format,
-                             guint           *out_type,
+                             GLint           *out_internal_format,
+                             GLenum          *out_format,
+                             GLenum          *out_type,
                              GLint            out_swizzle[4])
 {
   *out_internal_format = memory_formats[format].gl.internal_format;
@@ -1287,9 +1287,9 @@ gdk_memory_format_gl_format (GdkMemoryFormat  format,
 gboolean
 gdk_memory_format_gl_rgba_format (GdkMemoryFormat  format,
                                   GdkMemoryFormat *out_actual_format,
-                                  guint           *out_internal_format,
-                                  guint           *out_format,
-                                  guint           *out_type,
+                                  GLint           *out_internal_format,
+                                  GLenum          *out_format,
+                                  GLenum          *out_type,
                                   GLint            out_swizzle[4])
 {
   GdkMemoryFormat actual = memory_formats[format].gl.rgba_format;

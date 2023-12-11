@@ -151,7 +151,8 @@ gdk_gl_texture_find_format (GdkGLContext    *context,
 
   for (format = 0; format < GDK_MEMORY_N_FORMATS; format++)
     {
-      GLenum q_internal_format, q_format, q_type;
+      GLint q_internal_format;
+      GLenum q_format, q_type;
       GLint q_swizzle[4];
 
       if (gdk_memory_format_alpha (format) != alpha)
@@ -181,7 +182,8 @@ gdk_gl_texture_do_download (GdkGLTexture *self,
   GdkMemoryFormat format;
   gsize expected_stride;
   Download *download = download_;
-  GLenum gl_internal_format, gl_format, gl_type;
+  GLint gl_internal_format;
+  GLenum gl_format, gl_type;
   GLint gl_swizzle[4];
 
   format = gdk_texture_get_format (texture),
@@ -230,7 +232,7 @@ gdk_gl_texture_do_download (GdkGLTexture *self,
   else
     {
       GdkMemoryFormat actual_format;
-      GLint gl_read_format, gl_read_type;
+      GLenum gl_read_format, gl_read_type;
       GLuint fbo;
 
       glGenFramebuffers (1, &fbo);
@@ -238,9 +240,15 @@ gdk_gl_texture_do_download (GdkGLTexture *self,
       glFramebufferTexture2D (GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, self->id, 0);
       if (gdk_gl_context_check_version (context, "4.3", "3.1"))
         {
-          glGetFramebufferParameteriv (GL_FRAMEBUFFER, GL_IMPLEMENTATION_COLOR_READ_FORMAT, &gl_read_format);
-          glGetFramebufferParameteriv (GL_FRAMEBUFFER, GL_IMPLEMENTATION_COLOR_READ_TYPE, &gl_read_type);
-          if (!gdk_gl_texture_find_format (context, gdk_memory_format_alpha (format), gl_read_format, gl_read_type, &actual_format))
+          GLint read_format, read_type;
+          glGetFramebufferParameteriv (GL_FRAMEBUFFER, GL_IMPLEMENTATION_COLOR_READ_FORMAT, &read_format);
+          glGetFramebufferParameteriv (GL_FRAMEBUFFER, GL_IMPLEMENTATION_COLOR_READ_TYPE, &read_type);
+          if (gdk_gl_texture_find_format (context, gdk_memory_format_alpha (format), read_format, read_type, &actual_format))
+            {
+              gl_read_format = read_format;
+              gl_read_type = read_type;
+            }
+          else
             {
               actual_format = gdk_memory_depth_get_format (gdk_memory_format_get_depth (format));
               if (gdk_memory_format_alpha (format) == GDK_MEMORY_ALPHA_STRAIGHT)

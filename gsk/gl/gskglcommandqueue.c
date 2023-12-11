@@ -1477,9 +1477,9 @@ gsk_gl_command_queue_create_framebuffer (GskGLCommandQueue *self)
 static GdkMemoryFormat
 memory_format_gl_format (GskGLCommandQueue *self,
                          GdkMemoryFormat    data_format,
-                         guint             *gl_internalformat,
-                         guint             *gl_format,
-                         guint             *gl_type,
+                         GLint             *gl_internalformat,
+                         GLenum            *gl_format,
+                         GLenum            *gl_type,
                          GLint              gl_swizzle[4])
 {
   GdkGLMemoryFlags flags;
@@ -1561,7 +1561,7 @@ gsk_gl_command_queue_do_upload_texture_chunk (GskGLCommandQueue *self,
   GdkTextureDownloader downloader;
   GdkMemoryFormat data_format;
   int width, height;
-  GLenum gl_internalformat;
+  GLint gl_internalformat;
   GLenum gl_format;
   GLenum gl_type;
   GLint gl_swizzle[4];
@@ -1659,7 +1659,7 @@ gsk_gl_command_queue_upload_texture_chunks (GskGLCommandQueue    *self,
   G_GNUC_UNUSED gint64 start_time = GDK_PROFILER_CURRENT_TIME;
   int width, height;
   GdkMemoryFormat data_format;
-  GLenum gl_internalformat;
+  GLint gl_internalformat;
   GLenum gl_format;
   GLenum gl_type;
   GLint gl_swizzle[4];
