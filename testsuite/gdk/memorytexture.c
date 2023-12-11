@@ -863,6 +863,38 @@ upload_to_renderer (GdkTexture  *texture,
   return result;
 }
 
+static gboolean
+gl_native_should_skip_format (GdkMemoryFormat format)
+{
+  int major, minor;
+
+  if (gl_context == NULL)
+    {
+      g_test_skip ("OpenGL is not supported");
+      return TRUE;
+    }
+
+  if (!gdk_gl_context_get_use_es (gl_context))
+    return FALSE;
+
+  gdk_gl_context_get_version (gl_context, &major, &minor);
+
+  if (major < 3)
+    {
+      g_test_skip ("GLES < 3.0 is not supported");
+      return TRUE;
+    }
+
+  if (gdk_memory_format_is_deep (format) &&
+      (major < 3 || (major == 3 && minor < 1)))
+    {
+      g_test_skip ("GLES < 3.1 can't handle 16bit non-RGBA formats");
+      return TRUE;
+    }
+
+  return FALSE;
+}
+
 static void
 release_texture (gpointer data)
 {
@@ -896,7 +928,7 @@ upload_to_gl_native (GdkTexture *texture)
     { GDK_MEMORY_A16, 2, GL_R16, GL_RED, GL_UNSIGNED_SHORT, { GL_ONE, GL_ONE, GL_ONE, GL_RED } },
   };
 
-  if (gl_context == NULL)
+  if (gl_native_should_skip_format (gdk_texture_get_format (texture)))
     return texture;
 
   gdk_gl_context_make_current (gl_context);
@@ -1180,33 +1212,10 @@ should_skip_download_test (GdkMemoryFormat format,
           g_test_skip ("OpenGL renderer is not supported");
           return TRUE;
         }
-      G_GNUC_FALLTHROUGH;
+      return FALSE;
 
     case TEXTURE_METHOD_GL_NATIVE:
-      {
-        int major, minor;
-
-        if (gl_context == NULL)
-          {
-            g_test_skip ("OpenGL is not supported");
-            return TRUE;
-          }
-
-        gdk_gl_context_get_version (gl_context, &major, &minor);
-
-        if ((method == TEXTURE_METHOD_GL ||
-             method == TEXTURE_METHOD_GL_RELEASED ||
-             method == TEXTURE_METHOD_GL_NATIVE) &&
-            gdk_gl_context_get_use_es (gl_context) &&
-            (major < 3 || (major == 3 && minor < 1)) &&
-            gdk_memory_format_is_deep (format))
-          {
-            g_test_skip ("GLES < 3.1 can't handle 16bit non-RGBA formats");
-            return TRUE;
-          }
-
-        return FALSE;
-      }
+      return gl_native_should_skip_format (format);
 
     case TEXTURE_METHOD_VULKAN:
       if (vulkan_renderer == NULL)
