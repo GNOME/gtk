@@ -286,6 +286,9 @@ struct _GskGLCommandQueue
   /* If the GL context is new enough for sampler support */
   guint has_samplers : 1;
 
+  /* If the GL context is new enough to support swizzling (ie is not GLES2) */
+  guint can_swizzle : 1;
+
   /* If we're inside a begin/end_frame pair */
   guint in_frame : 1;
 
