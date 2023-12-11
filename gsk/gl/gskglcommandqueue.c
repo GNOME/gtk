@@ -1568,6 +1568,18 @@ gsk_gl_command_queue_do_upload_texture_chunk (GskGLCommandQueue *self,
                                          &gl_type,
                                          gl_swizzle);
 
+  if (GSK_DEBUG_CHECK (FALLBACK) &&
+      data_format != gdk_texture_get_format (texture))
+    {
+      GEnumClass *enum_class = g_type_class_ref (GDK_TYPE_MEMORY_FORMAT);
+
+      gdk_debug_message ("Unsupported format %s, converting on CPU to %s",
+                         g_enum_get_value (enum_class, gdk_texture_get_format (texture))->value_nick,
+                         g_enum_get_value (enum_class, data_format)->value_nick);
+
+      g_type_class_unref (enum_class);
+    }
+
   gdk_texture_downloader_init (&downloader, texture);
   gdk_texture_downloader_set_format (&downloader, data_format);
   bytes = gdk_texture_downloader_download_bytes (&downloader, &stride);
