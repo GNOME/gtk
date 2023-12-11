@@ -75,6 +75,7 @@ gsk_gl_image_new_backbuffer (GskGLDevice    *device,
                              gsize           height)
 {
   GskGLImage *self;
+  GskGpuImageFlags flags;
   GLint swizzle[4];
 
   self = g_object_new (GSK_TYPE_GL_IMAGE, NULL);
@@ -82,13 +83,15 @@ gsk_gl_image_new_backbuffer (GskGLDevice    *device,
   /* We only do this so these variables get initialized */
   gsk_gl_device_find_gl_format (device,
                                 format,
+                                0,
                                 &format,
+                                &flags,
                                 &self->gl_internal_format,
                                 &self->gl_format,
                                 &self->gl_type,
                                 swizzle);
   
-  gsk_gpu_image_setup (GSK_GPU_IMAGE (self), GSK_GPU_IMAGE_CAN_MIPMAP, format, width, height);
+  gsk_gpu_image_setup (GSK_GPU_IMAGE (self), flags, format, width, height);
 
   /* texture_id == 0 means backbuffer */
 
@@ -96,13 +99,15 @@ gsk_gl_image_new_backbuffer (GskGLDevice    *device,
 }
 
 GskGpuImage *
-gsk_gl_image_new (GskGLDevice    *device,
-                  GdkMemoryFormat format,
-                  gsize           width,
-                  gsize           height)
+gsk_gl_image_new (GskGLDevice      *device,
+                  GdkMemoryFormat   format,
+                  GskGpuImageFlags  required_flags,
+                  gsize             width,
+                  gsize             height)
 {
   GskGLImage *self;
   GLint swizzle[4];
+  GskGpuImageFlags flags;
   gsize max_size;
 
   max_size = gsk_gpu_device_get_max_image_size (GSK_GPU_DEVICE (device));
@@ -113,15 +118,16 @@ gsk_gl_image_new (GskGLDevice    *device,
 
   gsk_gl_device_find_gl_format (device,
                                 format,
+                                required_flags,
                                 &format,
+                                &flags,
                                 &self->gl_internal_format,
                                 &self->gl_format,
                                 &self->gl_type,
                                 swizzle);
   
   gsk_gpu_image_setup (GSK_GPU_IMAGE (self),
-                       GSK_GPU_IMAGE_CAN_MIPMAP |
-                       (gdk_memory_format_alpha (format) == GDK_MEMORY_ALPHA_STRAIGHT ? GSK_GPU_IMAGE_STRAIGHT_ALPHA : 0),
+                       flags,
                        format,
                        width, height);
 
@@ -160,7 +166,8 @@ gsk_gl_image_new_for_texture (GskGLDevice      *device,
                               gboolean          take_ownership,
                               GskGpuImageFlags  extra_flags)
 {
-  GdkMemoryFormat format;
+  GdkMemoryFormat format, real_format;
+  GskGpuImageFlags flags;
   GskGLImage *self;
   GLint swizzle[4];
 
@@ -168,18 +175,21 @@ gsk_gl_image_new_for_texture (GskGLDevice      *device,
 
   self = g_object_new (GSK_TYPE_GL_IMAGE, NULL);
 
-  /* We only do this so these variables get initialized */
   gsk_gl_device_find_gl_format (device,
                                 format,
-                                &format,
+                                0,
+                                &real_format,
+                                &flags,
                                 &self->gl_internal_format,
                                 &self->gl_format,
                                 &self->gl_type,
                                 swizzle);
+  if (format != real_format)
+    flags = GSK_GPU_IMAGE_NO_BLIT | 
+            (gdk_memory_format_alpha (format) == GDK_MEMORY_ALPHA_STRAIGHT ? GSK_GPU_IMAGE_STRAIGHT_ALPHA : 0);
   
   gsk_gpu_image_setup (GSK_GPU_IMAGE (self),
-                       extra_flags |
-                       (gdk_memory_format_alpha (format) == GDK_MEMORY_ALPHA_STRAIGHT ? GSK_GPU_IMAGE_STRAIGHT_ALPHA : 0),
+                       flags | extra_flags,
                        format,
                        gdk_texture_get_width (owner),
                        gdk_texture_get_height (owner));

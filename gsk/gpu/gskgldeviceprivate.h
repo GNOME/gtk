@@ -21,7 +21,9 @@ GLuint                  gsk_gl_device_get_sampler_id                    (GskGLDe
 
 void                    gsk_gl_device_find_gl_format                    (GskGLDevice            *self,
                                                                          GdkMemoryFormat         format,
+                                                                         GskGpuImageFlags        required_flags,
                                                                          GdkMemoryFormat        *out_format,
+                                                                         GskGpuImageFlags       *out_flags,
                                                                          GLint                  *out_gl_internal_format,
                                                                          GLenum                 *out_gl_format,
                                                                          GLenum                 *out_gl_type,

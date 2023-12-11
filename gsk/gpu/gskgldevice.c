@@ -72,6 +72,7 @@ gsk_gl_device_create_offscreen_image (GskGpuDevice   *device,
 
   return gsk_gl_image_new (self,
                            gdk_memory_depth_get_format (depth),
+                           GSK_GPU_IMAGE_RENDERABLE | GSK_GPU_IMAGE_FILTERABLE,
                            width,
                            height);
 }
@@ -87,6 +88,7 @@ gsk_gl_device_create_upload_image (GskGpuDevice    *device,
 
   return gsk_gl_image_new (self,
                            format,
+                           0,
                            width,
                            height);
 }
@@ -101,6 +103,7 @@ gsk_gl_device_create_download_image (GskGpuDevice   *device,
 
   return gsk_gl_image_new (self,
                            gdk_memory_depth_get_format (depth),
+                           GSK_GPU_IMAGE_RENDERABLE,
                            width,
                            height);
 }
@@ -114,6 +117,7 @@ gsk_gl_device_create_atlas_image (GskGpuDevice *device,
 
   return gsk_gl_image_new (self,
                            GDK_MEMORY_R8G8B8A8_PREMULTIPLIED,
+                           GSK_GPU_IMAGE_RENDERABLE,
                            width,
                            height);
 }
@@ -570,19 +574,100 @@ gsk_gl_device_get_sampler_id (GskGLDevice   *self,
   return self->sampler_ids[sampler];
 }
 
-void
-gsk_gl_device_find_gl_format (GskGLDevice     *self,
-                              GdkMemoryFormat  format,
-                              GdkMemoryFormat *out_format,
-                              GLint           *out_gl_internal_format,
-                              GLenum          *out_gl_format,
-                              GLenum          *out_gl_type,
-                              GLint            out_swizzle[4])
+static gboolean
+gsk_gl_device_get_format_flags (GskGLDevice      *self,
+                                GdkGLContext     *context,
+                                GdkMemoryFormat   format,
+                                GskGpuImageFlags *out_flags)
 {
-  gdk_memory_format_gl_format (format,
-                               out_gl_internal_format,
-                               out_gl_format,
-                               out_gl_type,
-                               out_swizzle);
+  GdkGLMemoryFlags gl_flags;
+
+  *out_flags = 0;
+  gl_flags = gdk_gl_context_get_format_flags (context, format);
+
+  if (!(gl_flags & GDK_GL_FORMAT_USABLE))
+    return FALSE;
+
+  if (gl_flags & GDK_GL_FORMAT_RENDERABLE)
+    *out_flags |= GSK_GPU_IMAGE_RENDERABLE;
+  else if (gdk_gl_context_get_use_es (context))
+    *out_flags |= GSK_GPU_IMAGE_NO_BLIT;
+  if (gl_flags & GDK_GL_FORMAT_FILTERABLE)
+    *out_flags |= GSK_GPU_IMAGE_FILTERABLE;
+  if ((gl_flags & (GDK_GL_FORMAT_RENDERABLE | GDK_GL_FORMAT_FILTERABLE)) == (GDK_GL_FORMAT_RENDERABLE | GDK_GL_FORMAT_FILTERABLE))
+    *out_flags |= GSK_GPU_IMAGE_CAN_MIPMAP;
+
+  if (gdk_memory_format_alpha (format) == GDK_MEMORY_ALPHA_STRAIGHT)
+    *out_flags |= GSK_GPU_IMAGE_STRAIGHT_ALPHA;
+
+  return TRUE;
+}
+
+void
+gsk_gl_device_find_gl_format (GskGLDevice      *self,
+                              GdkMemoryFormat   format,
+                              GskGpuImageFlags  required_flags,
+                              GdkMemoryFormat  *out_format,
+                              GskGpuImageFlags *out_flags,
+                              GLint            *out_gl_internal_format,
+                              GLenum           *out_gl_format,
+                              GLenum           *out_gl_type,
+                              GLint             out_swizzle[4])
+{
+  GdkGLContext *context = gdk_gl_context_get_current ();
+  GskGpuImageFlags flags;
+  GdkMemoryFormat alt_format;
+  const GdkMemoryFormat *fallbacks;
+  gsize i;
+
+  /* First, try the actual format */
+  if (gsk_gl_device_get_format_flags (self, context, format, &flags) &&
+      ((flags & required_flags) == required_flags))
+    {
+      *out_format = format;
+      *out_flags = flags;
+      gdk_memory_format_gl_format (format,
+                                   out_gl_internal_format,
+                                   out_gl_format,
+                                   out_gl_type,
+                                   out_swizzle);
+      return;
+    }
+
+  /* Second, try the potential RGBA format */
+  if (gdk_memory_format_gl_rgba_format (format,
+                                        &alt_format,
+                                        out_gl_internal_format,
+                                        out_gl_format,
+                                        out_gl_type,
+                                        out_swizzle) &&
+      gsk_gl_device_get_format_flags (self, context, alt_format, &flags) &&
+      ((flags & required_flags) == required_flags))
+    {
+      *out_format = format;
+      *out_flags = flags;
+      return;
+    }
+
+  /* Next, try the fallbacks */
+  fallbacks = gdk_memory_format_get_fallbacks (format);
+  for (i = 0; fallbacks[i] != -1; i++)
+    {
+      if (gsk_gl_device_get_format_flags (self, context, fallbacks[i], &flags) &&
+          ((flags & required_flags) == required_flags))
+        {
+          *out_format = fallbacks[i];
+          *out_flags = flags;
+          gdk_memory_format_gl_format (fallbacks[i],
+                                       out_gl_internal_format,
+                                       out_gl_format,
+                                       out_gl_type,
+                                       out_swizzle);
+          return;
+        }
+    }
+
+  /* fallbacks will always fallback to a supported format */
+  g_assert_not_reached ();
 }
 
