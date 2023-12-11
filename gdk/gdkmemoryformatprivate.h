@@ -44,6 +44,7 @@ GdkMemoryAlpha          gdk_memory_format_alpha             (GdkMemoryFormat    
 gsize                   gdk_memory_format_bytes_per_pixel   (GdkMemoryFormat             format) G_GNUC_CONST;
 GdkMemoryFormat         gdk_memory_format_get_premultiplied (GdkMemoryFormat             format) G_GNUC_CONST;
 GdkMemoryFormat         gdk_memory_format_get_straight      (GdkMemoryFormat             format) G_GNUC_CONST;
+const GdkMemoryFormat * gdk_memory_format_get_fallbacks     (GdkMemoryFormat             format) G_GNUC_CONST;
 GdkMemoryDepth          gdk_memory_format_get_depth         (GdkMemoryFormat             format) G_GNUC_CONST;
 GdkMemoryDepth          gdk_memory_depth_merge              (GdkMemoryDepth              depth1,
                                                              GdkMemoryDepth              depth2) G_GNUC_CONST;

@@ -1483,8 +1483,9 @@ memory_format_gl_format (GdkMemoryFormat  data_format,
                          GLint            gl_swizzle[4])
 {
   GdkGLMemoryFlags flags;
-  GdkMemoryDepth depth;
   GdkMemoryFormat alt_format;
+  const GdkMemoryFormat *fallbacks;
+  gsize i;
 
   /* No support for straight formats yet */
   if (gdk_memory_format_alpha (data_format) == GDK_MEMORY_ALPHA_STRAIGHT)
@@ -1516,45 +1517,25 @@ memory_format_gl_format (GdkMemoryFormat  data_format,
         return data_format;
     }
 
-  /* Next, try the generic format for the given bit depth */
-  depth = gdk_memory_format_get_depth (data_format);
-  data_format = gdk_memory_depth_get_format (depth);
-  flags = gdk_gl_context_get_format_flags (context, data_format);
-  if (((flags & (GDK_GL_FORMAT_USABLE | GDK_GL_FORMAT_FILTERABLE)) == (GDK_GL_FORMAT_USABLE | GDK_GL_FORMAT_FILTERABLE)))
+  /* Next, try the fallbacks */
+  fallbacks = gdk_memory_format_get_fallbacks (data_format);
+  for (i = 0; fallbacks[i] != -1; i++)
     {
-      gdk_memory_format_gl_format (data_format,
-                                   gl_internalformat,
-                                   gl_format,
-                                   gl_type,
-                                   gl_swizzle);
-      return data_format;
-    }
-
-  /* If the format is high depth, also try float32 */
-  if (depth != GDK_MEMORY_U8)
-    {
-      flags = gdk_gl_context_get_format_flags (context, data_format);
+      flags = gdk_gl_context_get_format_flags (context, fallbacks[i]);
       if (((flags & (GDK_GL_FORMAT_USABLE | GDK_GL_FORMAT_FILTERABLE)) == (GDK_GL_FORMAT_USABLE | GDK_GL_FORMAT_FILTERABLE)))
         {
-          gdk_memory_format_gl_format (data_format,
+          gdk_memory_format_gl_format (fallbacks[i],
                                        gl_internalformat,
                                        gl_format,
                                        gl_type,
                                        gl_swizzle);
-          return data_format;
+          return fallbacks[i];
         }
     }
 
-  /* If all else fails, pick the one format that's always supported */
-  data_format = GDK_MEMORY_R8G8B8A8_PREMULTIPLIED;
-  g_assert ((gdk_gl_context_get_format_flags (context, data_format) & (GDK_GL_FORMAT_USABLE | GDK_GL_FORMAT_FILTERABLE)) == (GDK_GL_FORMAT_USABLE | GDK_GL_FORMAT_FILTERABLE));
-  gdk_memory_format_gl_format (data_format,
-                               gl_internalformat,
-                               gl_format,
-                               gl_type,
-                               gl_swizzle);
+  g_assert_not_reached ();
 
-  return data_format;
+  return GDK_MEMORY_R8G8B8A8_PREMULTIPLIED;
 }
 
 static void

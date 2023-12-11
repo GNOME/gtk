@@ -331,6 +331,7 @@ struct _GdkMemoryFormatDescription
   gsize bytes_per_pixel;
   gsize alignment;
   GdkMemoryDepth depth;
+  const GdkMemoryFormat *fallbacks;
   struct {
     guint internal_format;
     guint format;
@@ -362,6 +363,9 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .bytes_per_pixel = 4,
     .alignment = G_ALIGNOF (guchar),
     .depth = GDK_MEMORY_U8,
+    .fallbacks = (GdkMemoryFormat[]) {
+        -1,
+    },
     .gl = {
         .internal_format = GL_RGBA8,
         .format = GL_BGRA,
@@ -380,6 +384,9 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .bytes_per_pixel = 4,
     .alignment = G_ALIGNOF (guchar),
     .depth = GDK_MEMORY_U8,
+    .fallbacks = (GdkMemoryFormat[]) {
+        -1,
+    },
     .gl = {
         .internal_format = GL_RGBA8,
         .format = GL_BGRA,
@@ -398,6 +405,9 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .bytes_per_pixel = 4,
     .alignment = G_ALIGNOF (guchar),
     .depth = GDK_MEMORY_U8,
+    .fallbacks = (GdkMemoryFormat[]) {
+        -1,
+    },
     .gl = {
         .internal_format = GL_RGBA8,
         .format = GL_RGBA,
@@ -415,6 +425,9 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .bytes_per_pixel = 4,
     .alignment = G_ALIGNOF (guchar),
     .depth = GDK_MEMORY_U8,
+    .fallbacks = (GdkMemoryFormat[]) {
+        -1,
+    },
     .gl = {
         .internal_format = GL_RGBA8,
         .format = GL_RGBA,
@@ -433,6 +446,9 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .bytes_per_pixel = 4,
     .alignment = G_ALIGNOF (guchar),
     .depth = GDK_MEMORY_U8,
+    .fallbacks = (GdkMemoryFormat[]) {
+        -1,
+    },
     .gl = {
         .internal_format = GL_RGBA8,
         .format = GL_BGRA,
@@ -451,6 +467,9 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .bytes_per_pixel = 4,
     .alignment = G_ALIGNOF (guchar),
     .depth = GDK_MEMORY_U8,
+    .fallbacks = (GdkMemoryFormat[]) {
+        -1,
+    },
     .gl = {
         .internal_format = GL_RGBA8,
         .format = GL_BGRA,
@@ -469,6 +488,9 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .bytes_per_pixel = 4,
     .alignment = G_ALIGNOF (guchar),
     .depth = GDK_MEMORY_U8,
+    .fallbacks = (GdkMemoryFormat[]) {
+        -1,
+    },
     .gl = {
         .internal_format = GL_RGBA8,
         .format = GL_RGBA,
@@ -486,6 +508,9 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .bytes_per_pixel = 4,
     .alignment = G_ALIGNOF (guchar),
     .depth = GDK_MEMORY_U8,
+    .fallbacks = (GdkMemoryFormat[]) {
+        -1,
+    },
     .gl = {
         .internal_format = GL_RGBA8,
         .format = GL_RGBA,
@@ -504,6 +529,10 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .bytes_per_pixel = 4,
     .alignment = G_ALIGNOF (guchar),
     .depth = GDK_MEMORY_U8,
+    .fallbacks = (GdkMemoryFormat[]) {
+        GDK_MEMORY_R8G8B8A8_PREMULTIPLIED,
+        -1,
+    },
     .gl = {
         .internal_format = GL_RGBA8,
         .format = GL_BGRA,
@@ -522,6 +551,10 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .bytes_per_pixel = 4,
     .alignment = G_ALIGNOF (guchar),
     .depth = GDK_MEMORY_U8,
+    .fallbacks = (GdkMemoryFormat[]) {
+        GDK_MEMORY_R8G8B8A8_PREMULTIPLIED,
+        -1,
+    },
     .gl = {
         .internal_format = GL_RGBA8,
         .format = GL_BGRA,
@@ -540,6 +573,10 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .bytes_per_pixel = 4,
     .alignment = G_ALIGNOF (guchar),
     .depth = GDK_MEMORY_U8,
+    .fallbacks = (GdkMemoryFormat[]) {
+        GDK_MEMORY_R8G8B8A8_PREMULTIPLIED,
+        -1,
+    },
     .gl = {
         .internal_format = GL_RGBA8,
         .format = GL_RGBA,
@@ -557,6 +594,10 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .bytes_per_pixel = 4,
     .alignment = G_ALIGNOF (guchar),
     .depth = GDK_MEMORY_U8,
+    .fallbacks = (GdkMemoryFormat[]) {
+        GDK_MEMORY_R8G8B8A8_PREMULTIPLIED,
+        -1,
+    },
     .gl = {
         .internal_format = GL_RGBA8,
         .format = GL_RGBA,
@@ -575,6 +616,10 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .bytes_per_pixel = 3,
     .alignment = G_ALIGNOF (guchar),
     .depth = GDK_MEMORY_U8,
+    .fallbacks = (GdkMemoryFormat[]) {
+        GDK_MEMORY_R8G8B8A8_PREMULTIPLIED,
+        -1,
+    },
     .gl = {
         .internal_format = GL_RGB8,
         .format = GL_RGB,
@@ -592,6 +637,10 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .bytes_per_pixel = 3,
     .alignment = G_ALIGNOF (guchar),
     .depth = GDK_MEMORY_U8,
+    .fallbacks = (GdkMemoryFormat[]) {
+        GDK_MEMORY_R8G8B8A8_PREMULTIPLIED,
+        -1,
+    },
     .gl = {
         .internal_format = GL_RGB8,
         .format = GL_BGR,
@@ -610,6 +659,13 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .bytes_per_pixel = 6,
     .alignment = G_ALIGNOF (guint16),
     .depth = GDK_MEMORY_U16,
+    .fallbacks = (GdkMemoryFormat[]) {
+        GDK_MEMORY_R16G16B16A16_PREMULTIPLIED,
+        GDK_MEMORY_R32G32B32A32_FLOAT_PREMULTIPLIED,
+        GDK_MEMORY_R16G16B16A16_FLOAT_PREMULTIPLIED,
+        GDK_MEMORY_R8G8B8A8_PREMULTIPLIED,
+        -1,
+    },
     .gl = {
         .internal_format = GL_RGB16,
         .format = GL_RGB,
@@ -627,6 +683,12 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .bytes_per_pixel = 8,
     .alignment = G_ALIGNOF (guint16),
     .depth = GDK_MEMORY_U16,
+    .fallbacks = (GdkMemoryFormat[]) {
+        GDK_MEMORY_R32G32B32A32_FLOAT_PREMULTIPLIED,
+        GDK_MEMORY_R16G16B16A16_FLOAT_PREMULTIPLIED,
+        GDK_MEMORY_R8G8B8A8_PREMULTIPLIED,
+        -1,
+    },
     .gl = {
         .internal_format = GL_RGBA16,
         .format = GL_RGBA,
@@ -644,6 +706,12 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .bytes_per_pixel = 8,
     .alignment = G_ALIGNOF (guint16),
     .depth = GDK_MEMORY_U16,
+    .fallbacks = (GdkMemoryFormat[]) {
+        GDK_MEMORY_R32G32B32A32_FLOAT,
+        GDK_MEMORY_R16G16B16A16_FLOAT,
+        GDK_MEMORY_R8G8B8A8,
+        -1,
+    },
     .gl = {
         .internal_format = GL_RGBA16,
         .format = GL_RGBA,
@@ -661,6 +729,12 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .bytes_per_pixel = 6,
     .alignment = G_ALIGNOF (guint16),
     .depth = GDK_MEMORY_FLOAT16,
+    .fallbacks = (GdkMemoryFormat[]) {
+        GDK_MEMORY_R16G16B16A16_FLOAT_PREMULTIPLIED,
+        GDK_MEMORY_R32G32B32A32_FLOAT_PREMULTIPLIED,
+        GDK_MEMORY_R8G8B8A8_PREMULTIPLIED,
+        -1,
+    },
     .gl = {
         .internal_format = GL_RGB16F,
         .format = GL_RGB,
@@ -678,6 +752,11 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .bytes_per_pixel = 8,
     .alignment = G_ALIGNOF (guint16),
     .depth = GDK_MEMORY_FLOAT16,
+    .fallbacks = (GdkMemoryFormat[]) {
+        GDK_MEMORY_R32G32B32A32_FLOAT_PREMULTIPLIED,
+        GDK_MEMORY_R8G8B8A8_PREMULTIPLIED,
+        -1,
+    },
     .gl = {
         .internal_format = GL_RGBA16F,
         .format = GL_RGBA,
@@ -695,6 +774,11 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .bytes_per_pixel = 8,
     .alignment = G_ALIGNOF (guint16),
     .depth = GDK_MEMORY_FLOAT16,
+    .fallbacks = (GdkMemoryFormat[]) {
+        GDK_MEMORY_R32G32B32A32_FLOAT,
+        GDK_MEMORY_R8G8B8A8,
+        -1,
+    },
     .gl = {
         .internal_format = GL_RGBA16F,
         .format = GL_RGBA,
@@ -712,6 +796,12 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     12,
     .alignment = G_ALIGNOF (float),
     .depth = GDK_MEMORY_FLOAT32,
+    .fallbacks = (GdkMemoryFormat[]) {
+        GDK_MEMORY_R32G32B32A32_FLOAT_PREMULTIPLIED,
+        GDK_MEMORY_R16G16B16A16_FLOAT_PREMULTIPLIED,
+        GDK_MEMORY_R8G8B8A8_PREMULTIPLIED,
+        -1,
+    },
     .gl = {
         .internal_format = GL_RGB32F,
         .format = GL_RGB,
@@ -729,6 +819,11 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     16,
     .alignment = G_ALIGNOF (float),
     .depth = GDK_MEMORY_FLOAT32,
+    .fallbacks = (GdkMemoryFormat[]) {
+        GDK_MEMORY_R16G16B16A16_FLOAT_PREMULTIPLIED,
+        GDK_MEMORY_R8G8B8A8_PREMULTIPLIED,
+        -1,
+    },
     .gl = {
         .internal_format = GL_RGBA32F,
         .format = GL_RGBA,
@@ -746,6 +841,11 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     16,
     .alignment = G_ALIGNOF (float),
     .depth = GDK_MEMORY_FLOAT32,
+    .fallbacks = (GdkMemoryFormat[]) {
+        GDK_MEMORY_R16G16B16A16_FLOAT,
+        GDK_MEMORY_R8G8B8A8,
+        -1,
+    },
     .gl = {
         .internal_format = GL_RGBA32F,
         .format = GL_RGBA,
@@ -763,6 +863,10 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .bytes_per_pixel = 2,
     .alignment = G_ALIGNOF (guchar),
     .depth = GDK_MEMORY_U8,
+    .fallbacks = (GdkMemoryFormat[]) {
+        GDK_MEMORY_R8G8B8A8_PREMULTIPLIED,
+        -1,
+    },
     .gl = {
         .internal_format = GL_RG8,
         .format = GL_RG,
@@ -780,6 +884,10 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .bytes_per_pixel = 2,
     .alignment = G_ALIGNOF (guchar),
     .depth = GDK_MEMORY_U8,
+    .fallbacks = (GdkMemoryFormat[]) {
+        GDK_MEMORY_R8G8B8A8,
+        -1,
+    },
     .gl = {
         .internal_format = GL_RG8,
         .format = GL_RG,
@@ -797,6 +905,10 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .bytes_per_pixel = 1,
     .alignment = G_ALIGNOF (guchar),
     .depth = GDK_MEMORY_U8,
+    .fallbacks = (GdkMemoryFormat[]) {
+        GDK_MEMORY_R8G8B8A8_PREMULTIPLIED,
+        -1,
+    },
     .gl = {
         .internal_format = GL_R8,
         .format = GL_RED,
@@ -814,6 +926,13 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .bytes_per_pixel = 4,
     .alignment = G_ALIGNOF (guint16),
     .depth = GDK_MEMORY_U16,
+    .fallbacks = (GdkMemoryFormat[]) {
+        GDK_MEMORY_R16G16B16A16_PREMULTIPLIED,
+        GDK_MEMORY_R32G32B32A32_FLOAT_PREMULTIPLIED,
+        GDK_MEMORY_R16G16B16A16_FLOAT_PREMULTIPLIED,
+        GDK_MEMORY_R8G8B8A8_PREMULTIPLIED,
+        -1,
+    },
     .gl = {
         .internal_format = GL_RG16,
         .format = GL_RG,
@@ -831,6 +950,13 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .bytes_per_pixel = 4,
     .alignment = G_ALIGNOF (guint16),
     .depth = GDK_MEMORY_U16,
+    .fallbacks = (GdkMemoryFormat[]) {
+        GDK_MEMORY_R16G16B16A16,
+        GDK_MEMORY_R32G32B32A32_FLOAT,
+        GDK_MEMORY_R16G16B16A16_FLOAT,
+        GDK_MEMORY_R8G8B8A8,
+        -1,
+    },
     .gl = {
         .internal_format = GL_RG16,
         .format = GL_RG,
@@ -848,6 +974,13 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .bytes_per_pixel = 2,
     .alignment = G_ALIGNOF (guint16),
     .depth = GDK_MEMORY_U16,
+    .fallbacks = (GdkMemoryFormat[]) {
+        GDK_MEMORY_R16G16B16A16_PREMULTIPLIED,
+        GDK_MEMORY_R32G32B32A32_FLOAT_PREMULTIPLIED,
+        GDK_MEMORY_R16G16B16A16_FLOAT_PREMULTIPLIED,
+        GDK_MEMORY_R8G8B8A8_PREMULTIPLIED,
+        -1,
+    },
     .gl = {
         .internal_format = GL_R16,
         .format = GL_RED,
@@ -865,6 +998,10 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .bytes_per_pixel = 1,
     .alignment = G_ALIGNOF (guchar),
     .depth = GDK_MEMORY_U8,
+    .fallbacks = (GdkMemoryFormat[]) {
+        GDK_MEMORY_R8G8B8A8_PREMULTIPLIED,
+        -1,
+    },
     .gl = {
         .internal_format = GL_R8,
         .format = GL_RED,
@@ -882,6 +1019,13 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .bytes_per_pixel = 2,
     .alignment = G_ALIGNOF (guint16),
     .depth = GDK_MEMORY_U16,
+    .fallbacks = (GdkMemoryFormat[]) {
+        GDK_MEMORY_R16G16B16A16_PREMULTIPLIED,
+        GDK_MEMORY_R32G32B32A32_FLOAT_PREMULTIPLIED,
+        GDK_MEMORY_R16G16B16A16_FLOAT_PREMULTIPLIED,
+        GDK_MEMORY_R8G8B8A8_PREMULTIPLIED,
+        -1,
+    },
     .gl = {
         .internal_format = GL_R16,
         .format = GL_RED,
@@ -899,6 +1043,12 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .bytes_per_pixel = 2,
     .alignment = G_ALIGNOF (guint16),
     .depth = GDK_MEMORY_FLOAT16,
+    .fallbacks = (GdkMemoryFormat[]) {
+        GDK_MEMORY_R16G16B16A16_FLOAT_PREMULTIPLIED,
+        GDK_MEMORY_R32G32B32A32_FLOAT_PREMULTIPLIED,
+        GDK_MEMORY_R8G8B8A8_PREMULTIPLIED,
+        -1,
+    },
     .gl = {
         .internal_format = GL_R16F,
         .format = GL_RED,
@@ -916,6 +1066,12 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .bytes_per_pixel = 4,
     .alignment = G_ALIGNOF (float),
     .depth = GDK_MEMORY_FLOAT32,
+    .fallbacks = (GdkMemoryFormat[]) {
+        GDK_MEMORY_R32G32B32A32_FLOAT_PREMULTIPLIED,
+        GDK_MEMORY_R16G16B16A16_FLOAT_PREMULTIPLIED,
+        GDK_MEMORY_R8G8B8A8_PREMULTIPLIED,
+        -1,
+    },
     .gl = {
         .internal_format = GL_R32F,
         .format = GL_RED,
@@ -959,6 +1115,34 @@ gsize
 gdk_memory_format_alignment (GdkMemoryFormat format)
 {
   return memory_formats[format].alignment;
+}
+
+/*
+ * gdk_memory_format_get_fallbacks:
+ * @format: a format
+ *
+ * Gets a list of fallback formats to use for @format.
+ *
+ * These formats are RGBA formats that ideally have a
+ * higher depth than the given format. They will always
+ * include a guaranteed supported format though, even
+ * if it is of lower quality.
+ *
+ * Fallbacks will use the same alpha format, ie a premultiplied
+ * format will never fall back to a straight alpha format and
+ * vice versa.
+ * Either may fall back to an opaque format.
+ * Opaque formats will fall back to premultiplied formats only.
+ *
+ * Use gdk_memory_format_get_premultiplied_formats() to transition
+ * between premultiplied and straight alpha if you need to.
+ *
+ * Returns: A list of fallbacks, terminated with -1
+ **/
+const GdkMemoryFormat *
+gdk_memory_format_get_fallbacks (GdkMemoryFormat format)
+{
+  return memory_formats[format].fallbacks;
 }
 
 /*<private>
