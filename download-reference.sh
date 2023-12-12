@@ -2,10 +2,18 @@
 
 REF="main"
 
-curl -L --output "$REF-docs.zip" "https://gitlab.gnome.org/GNOME/gtk/-/jobs/artifacts/$REF/download?job=reference" || exit $?
-unzip -d "$REF-docs" "$REF-docs.zip" || exit $?
+for PROJECT in gtk glib; do
+	if [ "$PROJECT" = "glib" ]; then
+		JOB_NAME="fedora-x86_64"
+	else
+		JOB_NAME="reference"
+	fi
 
-rm -f "$REF-docs.zip"
+	curl -L --output "$REF-docs.zip" "https://gitlab.gnome.org/GNOME/$PROJECT/-/jobs/artifacts/$REF/download?job=$JOB_NAME" || exit $?
+	unzip -d "$REF-docs" "$REF-docs.zip" || exit $?
+
+	rm -f "$REF-docs.zip"
+done
 
 DOCS_DIR="docs"
 
@@ -25,6 +33,10 @@ PangoOT
 PangoXft
 gdk-pixbuf
 gdk-pixdata
+glib
+gmodule
+gobject
+gio
 "
 
 IFS='

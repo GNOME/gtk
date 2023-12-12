@@ -29,9 +29,6 @@ The landing page is store inside the [`static`](./static) directory.
 The [`atk`](./atk) directory contains the introspection data and gi-docgen
 project files for ATK and AT-SPI2.
 
-The [`glib`](./glib) directory contains the introspection data and gi-docgen
-project files for GLib, GObject, and GIO.
-
 The [`gtk3`](./gtk3) directory contains the introspection data and gi-docgen
 project files for GTK3 and GDK3.
 
@@ -48,6 +45,14 @@ references for the following projects:
  - pango
  - gdk-pixbuf
 
+Similarly, the CI pipeline for the main development branch of GLib builds
+the API references for the following projects:
+
+ - glib
+ - gmodule
+ - gobject
+ - gio
+
 The generated documentation is stored as an artifact inside GitLab.
 Additionally, the CI pipeline will use a pipeline trigger for the
 `docs-gtk-org` branch (the branch that contains the `README` file you are
@@ -58,7 +63,6 @@ The CI pipeline for the `docs-gtk-org` branch will:
  - download the build artifacts
  - extract the various API references
  - run gi-docgen on the introspection data of the following projects:
-   - glib
    - atk
    - gtk3
  - publish the static landing page

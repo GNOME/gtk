@@ -22,11 +22,6 @@ gidocgen_common_args = [
   '--fatal-warnings',
 ]
 
-subdir('glib/glib')
-subdir('glib/gmodule')
-subdir('glib/gobject')
-subdir('glib/gio')
-
 subdir('atk/atk')
 subdir('atk/atspi2')
 
