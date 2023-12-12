@@ -75,6 +75,8 @@ gdk_dmabuf_texture_dispose (GObject *object)
   if (self->destroy)
     self->destroy (self->data);
 
+  g_clear_object (&self->display);
+
   G_OBJECT_CLASS (gdk_dmabuf_texture_parent_class)->dispose (object);
 }
 

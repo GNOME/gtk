@@ -43,6 +43,15 @@ struct _GdkDmabufDownloader
 const GdkDmabufDownloader * gdk_dmabuf_get_direct_downloader    (void) G_GNUC_CONST;
 const GdkDmabufDownloader * gdk_dmabuf_get_egl_downloader       (void) G_GNUC_CONST;
 
+int                         gdk_dmabuf_ioctl                    (int                             fd,
+                                                                 unsigned long                   request,
+                                                                 void                           *arg);
+gboolean                    gdk_dmabuf_import_sync_file         (int                             dmabuf_fd,
+                                                                 guint32                         flags,
+                                                                 int                             sync_file_fd);
+int                         gdk_dmabuf_export_sync_file         (int                             dmabuf_fd,
+                                                                 guint32                         flags);
+
 gboolean                    gdk_dmabuf_sanitize                 (GdkDmabuf                      *dest,
                                                                  gsize                           width,
                                                                  gsize                           height,

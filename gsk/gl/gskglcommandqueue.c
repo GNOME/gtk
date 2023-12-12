@@ -499,6 +499,7 @@ gsk_gl_command_queue_new (GdkGLContext      *context,
     }
 
   self->has_samplers = gdk_gl_context_check_version (context, "3.3", "3.0");
+  self->can_swizzle = gdk_gl_context_check_version (context, "3.0", "3.0");
 
   /* create the samplers */
   if (self->has_samplers)
@@ -1473,89 +1474,78 @@ gsk_gl_command_queue_create_framebuffer (GskGLCommandQueue *self)
   return fbo_id;
 }
 
-
 static GdkMemoryFormat
-memory_format_gl_format (GdkMemoryFormat  data_format,
-                         GdkGLContext    *context,
-                         guint           *gl_internalformat,
-                         guint           *gl_format,
-                         guint           *gl_type,
-                         GLint            gl_swizzle[4])
+memory_format_gl_format (GskGLCommandQueue *self,
+                         GdkMemoryFormat    data_format,
+                         GLint             *gl_internalformat,
+                         GLenum            *gl_format,
+                         GLenum            *gl_type,
+                         GLint              gl_swizzle[4])
 {
-  GdkMemoryDepth depth;
+  GdkGLMemoryFlags flags;
+  GdkMemoryFormat alt_format;
+  const GdkMemoryFormat *fallbacks;
+  gsize i;
+
+  /* No support for straight formats yet */
+  if (gdk_memory_format_alpha (data_format) == GDK_MEMORY_ALPHA_STRAIGHT)
+    data_format = gdk_memory_format_get_premultiplied (data_format);
 
   /* First, try the format itself */
-  if (gdk_memory_format_gl_format (data_format,
-                                   context,
+  flags = gdk_gl_context_get_format_flags (self->context, data_format);
+  if ((flags & (GDK_GL_FORMAT_USABLE | GDK_GL_FORMAT_FILTERABLE)) == (GDK_GL_FORMAT_USABLE | GDK_GL_FORMAT_FILTERABLE))
+    {
+      gdk_memory_format_gl_format (data_format,
                                    gl_internalformat,
                                    gl_format,
                                    gl_type,
-                                   gl_swizzle) &&
-      gdk_memory_format_alpha (data_format) != GDK_MEMORY_ALPHA_STRAIGHT)
-    return data_format;
-
-  depth = gdk_memory_format_get_depth (data_format);
-
-  /* Next, try the generic format for the given bit depth */
-  switch (depth)
-    {
-      case GDK_MEMORY_FLOAT16:
-        data_format = GDK_MEMORY_R16G16B16A16_FLOAT_PREMULTIPLIED;
-        if (gdk_memory_format_gl_format (data_format,
-                                         context,
-                                         gl_internalformat,
-                                         gl_format,
-                                         gl_type,
-                                         gl_swizzle))
-          return data_format;
-        break;
-
-      case GDK_MEMORY_U16:
-        data_format = GDK_MEMORY_R16G16B16A16_PREMULTIPLIED;
-        if (gdk_memory_format_gl_format (data_format,
-                                         context,
-                                         gl_internalformat,
-                                         gl_format,
-                                         gl_type,
-                                         gl_swizzle))
-          return data_format;
-        break;
-
-      case GDK_MEMORY_FLOAT32:
-      case GDK_MEMORY_U8:
-        break;
-
-      default:
-        g_assert_not_reached ();
-        break;
+                                   gl_swizzle);
+      return data_format;
     }
 
-  /* If the format is high depth, also try float32 */
-  if (depth != GDK_MEMORY_U8)
+  /* Second, try the potential RGBA format */
+  if (gdk_memory_format_gl_rgba_format (data_format,
+                                        &alt_format,
+                                        gl_internalformat,
+                                        gl_format,
+                                        gl_type,
+                                        gl_swizzle))
     {
-      data_format = GDK_MEMORY_R32G32B32A32_FLOAT_PREMULTIPLIED;
-      if (gdk_memory_format_gl_format (data_format,
-                                       context,
+      flags = gdk_gl_context_get_format_flags (self->context, alt_format);
+      if ((flags & (GDK_GL_FORMAT_USABLE | GDK_GL_FORMAT_FILTERABLE)) == (GDK_GL_FORMAT_USABLE | GDK_GL_FORMAT_FILTERABLE))
+        {
+          if (self->can_swizzle)
+            return data_format;
+
+          gdk_memory_format_gl_format (alt_format,
                                        gl_internalformat,
                                        gl_format,
                                        gl_type,
-                                       gl_swizzle))
-        return data_format;
+                                       gl_swizzle);
+
+          return alt_format;
+        }
     }
 
-  /* If all else fails, pick the one format that's always supported */
-  data_format = GDK_MEMORY_R8G8B8A8_PREMULTIPLIED;
-  if (!gdk_memory_format_gl_format (data_format,
-                                    context,
-                                    gl_internalformat,
-                                    gl_format,
-                                    gl_type,
-                                    gl_swizzle))
+  /* Next, try the fallbacks */
+  fallbacks = gdk_memory_format_get_fallbacks (data_format);
+  for (i = 0; fallbacks[i] != -1; i++)
     {
-      g_assert_not_reached ();
+      flags = gdk_gl_context_get_format_flags (self->context, fallbacks[i]);
+      if (((flags & (GDK_GL_FORMAT_USABLE | GDK_GL_FORMAT_FILTERABLE)) == (GDK_GL_FORMAT_USABLE | GDK_GL_FORMAT_FILTERABLE)))
+        {
+          gdk_memory_format_gl_format (fallbacks[i],
+                                       gl_internalformat,
+                                       gl_format,
+                                       gl_type,
+                                       gl_swizzle);
+          return fallbacks[i];
+        }
     }
 
-  return data_format;
+  g_assert_not_reached ();
+
+  return GDK_MEMORY_R8G8B8A8_PREMULTIPLIED;
 }
 
 static void
@@ -1571,7 +1561,7 @@ gsk_gl_command_queue_do_upload_texture_chunk (GskGLCommandQueue *self,
   GdkTextureDownloader downloader;
   GdkMemoryFormat data_format;
   int width, height;
-  GLenum gl_internalformat;
+  GLint gl_internalformat;
   GLenum gl_format;
   GLenum gl_type;
   GLint gl_swizzle[4];
@@ -1581,12 +1571,24 @@ gsk_gl_command_queue_do_upload_texture_chunk (GskGLCommandQueue *self,
   width = gdk_texture_get_width (texture);
   height = gdk_texture_get_height (texture);
 
-  data_format = memory_format_gl_format (data_format,
-                                         self->context,
+  data_format = memory_format_gl_format (self,
+                                         data_format,
                                          &gl_internalformat,
                                          &gl_format,
                                          &gl_type,
                                          gl_swizzle);
+
+  if (GSK_DEBUG_CHECK (FALLBACK) &&
+      data_format != gdk_texture_get_format (texture))
+    {
+      GEnumClass *enum_class = g_type_class_ref (GDK_TYPE_MEMORY_FORMAT);
+
+      gdk_debug_message ("Unsupported format %s, converting on CPU to %s",
+                         g_enum_get_value (enum_class, gdk_texture_get_format (texture))->value_nick,
+                         g_enum_get_value (enum_class, data_format)->value_nick);
+
+      g_type_class_unref (enum_class);
+    }
 
   gdk_texture_downloader_init (&downloader, texture);
   gdk_texture_downloader_set_format (&downloader, data_format);
@@ -1657,7 +1659,7 @@ gsk_gl_command_queue_upload_texture_chunks (GskGLCommandQueue    *self,
   G_GNUC_UNUSED gint64 start_time = GDK_PROFILER_CURRENT_TIME;
   int width, height;
   GdkMemoryFormat data_format;
-  GLenum gl_internalformat;
+  GLint gl_internalformat;
   GLenum gl_format;
   GLenum gl_type;
   GLint gl_swizzle[4];
@@ -1695,8 +1697,8 @@ gsk_gl_command_queue_upload_texture_chunks (GskGLCommandQueue    *self,
 
   /* Initialize the texture */
   data_format = gdk_texture_get_format (chunks[0].texture);
-  data_format = memory_format_gl_format (data_format,
-                                         self->context,
+  data_format = memory_format_gl_format (self,
+                                         data_format,
                                          &gl_internalformat,
                                          &gl_format,
                                          &gl_type,

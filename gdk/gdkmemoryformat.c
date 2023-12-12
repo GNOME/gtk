@@ -326,20 +326,21 @@ ADD_ALPHA_FUNC(r8g8b8_to_a8b8g8r8, 0, 1, 2, 3, 2, 1, 0)
 struct _GdkMemoryFormatDescription
 {
   GdkMemoryAlpha alpha;
+  GdkMemoryFormat premultiplied;
+  GdkMemoryFormat straight;
   gsize bytes_per_pixel;
   gsize alignment;
   GdkMemoryDepth depth;
+  const GdkMemoryFormat *fallbacks;
   struct {
-    guint gl_major;
-    guint gl_minor;
-    guint gles_major;
-    guint gles_minor;
-  } min_gl_version;
-  struct {
-    guint internal_format;
-    guint format;
-    guint type;
+    GLint internal_format;
+    GLenum format;
+    GLenum type;
     GLint swizzle[4];
+    /* -1 if none exists, ie the format is already RGBA
+     * or the format doesn't have 4 channels */
+    GdkMemoryFormat rgba_format;
+    GLint rgba_swizzle[4];
   } gl;
   /* no premultiplication going on here */
   void (* to_float) (float *, const guchar*, gsize);
@@ -356,334 +357,730 @@ struct _GdkMemoryFormatDescription
 
 static const GdkMemoryFormatDescription memory_formats[] = {
   [GDK_MEMORY_B8G8R8A8_PREMULTIPLIED] = {
-    GDK_MEMORY_ALPHA_PREMULTIPLIED,
-    4,
-    G_ALIGNOF (guchar),
-    GDK_MEMORY_U8,
-    { 0, 0, 0, 0 },
-    { GL_RGBA8, GL_BGRA, GL_UNSIGNED_BYTE, { GL_RED, GL_GREEN, GL_BLUE, GL_ALPHA } },
-    b8g8r8a8_premultiplied_to_float,
-    b8g8r8a8_premultiplied_from_float,
+    .alpha = GDK_MEMORY_ALPHA_PREMULTIPLIED,
+    .premultiplied = GDK_MEMORY_B8G8R8A8_PREMULTIPLIED,
+    .straight = GDK_MEMORY_B8G8R8A8,
+    .bytes_per_pixel = 4,
+    .alignment = G_ALIGNOF (guchar),
+    .depth = GDK_MEMORY_U8,
+    .fallbacks = (GdkMemoryFormat[]) {
+        -1,
+    },
+    .gl = {
+        .internal_format = GL_RGBA8,
+        .format = GL_BGRA,
+        .type = GL_UNSIGNED_BYTE,
+        .swizzle = { GL_RED, GL_GREEN, GL_BLUE, GL_ALPHA },
+        .rgba_format = GDK_MEMORY_R8G8B8A8_PREMULTIPLIED,
+        .rgba_swizzle = { GL_BLUE, GL_GREEN, GL_BLUE, GL_ALPHA },
+    },
+    .to_float = b8g8r8a8_premultiplied_to_float,
+    .from_float = b8g8r8a8_premultiplied_from_float,
   },
   [GDK_MEMORY_A8R8G8B8_PREMULTIPLIED] = {
-    GDK_MEMORY_ALPHA_PREMULTIPLIED,
-    4,
-    G_ALIGNOF (guchar),
-    GDK_MEMORY_U8,
-    { 0, 0, G_MAXUINT, G_MAXUINT },
-    { GL_RGBA8, GL_BGRA, GDK_GL_UNSIGNED_BYTE_FLIPPED, { GL_RED, GL_GREEN, GL_BLUE, GL_ALPHA } },
-    a8r8g8b8_premultiplied_to_float,
-    a8r8g8b8_premultiplied_from_float,
+    .alpha = GDK_MEMORY_ALPHA_PREMULTIPLIED,
+    .premultiplied = GDK_MEMORY_A8R8G8B8_PREMULTIPLIED,
+    .straight = GDK_MEMORY_A8R8G8B8,
+    .bytes_per_pixel = 4,
+    .alignment = G_ALIGNOF (guchar),
+    .depth = GDK_MEMORY_U8,
+    .fallbacks = (GdkMemoryFormat[]) {
+        -1,
+    },
+    .gl = {
+        .internal_format = GL_RGBA8,
+        .format = GL_BGRA,
+        .type = GDK_GL_UNSIGNED_BYTE_FLIPPED,
+        .swizzle = { GL_RED, GL_GREEN, GL_BLUE, GL_ALPHA },
+        .rgba_format = GDK_MEMORY_R8G8B8A8_PREMULTIPLIED,
+        .rgba_swizzle = { GL_GREEN, GL_BLUE, GL_ALPHA, GL_RED },
+    },
+    .to_float = a8r8g8b8_premultiplied_to_float,
+    .from_float = a8r8g8b8_premultiplied_from_float,
   },
   [GDK_MEMORY_R8G8B8A8_PREMULTIPLIED] = {
-    GDK_MEMORY_ALPHA_PREMULTIPLIED,
-    4,
-    G_ALIGNOF (guchar),
-    GDK_MEMORY_U8,
-    { 0, 0, 0, 0 },
-    { GL_RGBA8, GL_RGBA, GL_UNSIGNED_BYTE, { GL_RED, GL_GREEN, GL_BLUE, GL_ALPHA } },
-    r8g8b8a8_premultiplied_to_float,
-    r8g8b8a8_premultiplied_from_float,
+    .alpha = GDK_MEMORY_ALPHA_PREMULTIPLIED,
+    .premultiplied = GDK_MEMORY_R8G8B8A8_PREMULTIPLIED,
+    .straight = GDK_MEMORY_R8G8B8A8,
+    .bytes_per_pixel = 4,
+    .alignment = G_ALIGNOF (guchar),
+    .depth = GDK_MEMORY_U8,
+    .fallbacks = (GdkMemoryFormat[]) {
+        -1,
+    },
+    .gl = {
+        .internal_format = GL_RGBA8,
+        .format = GL_RGBA,
+        .type = GL_UNSIGNED_BYTE,
+        .swizzle = { GL_RED, GL_GREEN, GL_BLUE, GL_ALPHA },
+        .rgba_format = -1,
+    },
+    .to_float = r8g8b8a8_premultiplied_to_float,
+    .from_float = r8g8b8a8_premultiplied_from_float,
   },
   [GDK_MEMORY_A8B8G8R8_PREMULTIPLIED] = {
-    GDK_MEMORY_ALPHA_PREMULTIPLIED,
-    4,
-    G_ALIGNOF (guchar),
-    GDK_MEMORY_U8,
-    { 0, 0, G_MAXUINT, G_MAXUINT },
-    { GL_RGBA8, GL_RGBA, GDK_GL_UNSIGNED_BYTE_FLIPPED, { GL_RED, GL_GREEN, GL_BLUE, GL_ALPHA } },
-    a8b8g8r8_premultiplied_to_float,
-    a8b8g8r8_premultiplied_from_float,
+    .alpha = GDK_MEMORY_ALPHA_PREMULTIPLIED,
+    .premultiplied = GDK_MEMORY_A8B8G8R8_PREMULTIPLIED,
+    .straight = GDK_MEMORY_A8B8G8R8,
+    .bytes_per_pixel = 4,
+    .alignment = G_ALIGNOF (guchar),
+    .depth = GDK_MEMORY_U8,
+    .fallbacks = (GdkMemoryFormat[]) {
+        -1,
+    },
+    .gl = {
+        .internal_format = GL_RGBA8,
+        .format = GL_RGBA,
+        .type = GDK_GL_UNSIGNED_BYTE_FLIPPED,
+        .swizzle = { GL_RED, GL_GREEN, GL_BLUE, GL_ALPHA },
+        .rgba_format = GDK_MEMORY_R8G8B8A8_PREMULTIPLIED,
+        .rgba_swizzle = { GL_ALPHA, GL_BLUE, GL_GREEN, GL_RED },
+    },
+    .to_float = a8b8g8r8_premultiplied_to_float,
+    .from_float = a8b8g8r8_premultiplied_from_float,
   },
   [GDK_MEMORY_B8G8R8A8] = {
-    GDK_MEMORY_ALPHA_STRAIGHT,
-    4,
-    G_ALIGNOF (guchar),
-    GDK_MEMORY_U8,
-    { 0, 0, 0, 0 },
-    { GL_RGBA8, GL_BGRA, GL_UNSIGNED_BYTE, { GL_RED, GL_GREEN, GL_BLUE, GL_ALPHA } },
-    b8g8r8a8_to_float,
-    b8g8r8a8_from_float,
+    .alpha = GDK_MEMORY_ALPHA_STRAIGHT,
+    .premultiplied = GDK_MEMORY_B8G8R8A8_PREMULTIPLIED,
+    .straight = GDK_MEMORY_B8G8R8A8,
+    .bytes_per_pixel = 4,
+    .alignment = G_ALIGNOF (guchar),
+    .depth = GDK_MEMORY_U8,
+    .fallbacks = (GdkMemoryFormat[]) {
+        -1,
+    },
+    .gl = {
+        .internal_format = GL_RGBA8,
+        .format = GL_BGRA,
+        .type = GL_UNSIGNED_BYTE,
+        .swizzle = { GL_RED, GL_GREEN, GL_BLUE, GL_ALPHA },
+        .rgba_format = GDK_MEMORY_R8G8B8A8,
+        .rgba_swizzle = { GL_BLUE, GL_GREEN, GL_BLUE, GL_ALPHA },
+    },
+    .to_float = b8g8r8a8_to_float,
+    .from_float = b8g8r8a8_from_float,
   },
   [GDK_MEMORY_A8R8G8B8] = {
-    GDK_MEMORY_ALPHA_STRAIGHT,
-    4,
-    G_ALIGNOF (guchar),
-    GDK_MEMORY_U8,
-    { 0, 0, G_MAXUINT, G_MAXUINT },
-    { GL_RGBA8, GL_RGBA, GDK_GL_UNSIGNED_BYTE_FLIPPED, { GL_RED, GL_GREEN, GL_BLUE, GL_ALPHA } },
-    a8r8g8b8_to_float,
-    a8r8g8b8_from_float,
+    .alpha = GDK_MEMORY_ALPHA_STRAIGHT,
+    .premultiplied = GDK_MEMORY_A8R8G8B8_PREMULTIPLIED,
+    .straight = GDK_MEMORY_A8R8G8B8,
+    .bytes_per_pixel = 4,
+    .alignment = G_ALIGNOF (guchar),
+    .depth = GDK_MEMORY_U8,
+    .fallbacks = (GdkMemoryFormat[]) {
+        -1,
+    },
+    .gl = {
+        .internal_format = GL_RGBA8,
+        .format = GL_BGRA,
+        .type = GDK_GL_UNSIGNED_BYTE_FLIPPED,
+        .swizzle = { GL_RED, GL_GREEN, GL_BLUE, GL_ALPHA },
+        .rgba_format = GDK_MEMORY_R8G8B8A8,
+        .rgba_swizzle = { GL_GREEN, GL_BLUE, GL_ALPHA, GL_RED },
+    },
+    .to_float = a8r8g8b8_to_float,
+    .from_float = a8r8g8b8_from_float,
   },
   [GDK_MEMORY_R8G8B8A8] = {
-    GDK_MEMORY_ALPHA_STRAIGHT,
-    4,
-    G_ALIGNOF (guchar),
-    GDK_MEMORY_U8,
-    { 0, 0, 0, 0 },
-    { GL_RGBA8, GL_RGBA, GL_UNSIGNED_BYTE, { GL_RED, GL_GREEN, GL_BLUE, GL_ALPHA } },
-    r8g8b8a8_to_float,
-    r8g8b8a8_from_float,
+    .alpha = GDK_MEMORY_ALPHA_STRAIGHT,
+    .premultiplied = GDK_MEMORY_R8G8B8A8_PREMULTIPLIED,
+    .straight = GDK_MEMORY_R8G8B8A8,
+    .bytes_per_pixel = 4,
+    .alignment = G_ALIGNOF (guchar),
+    .depth = GDK_MEMORY_U8,
+    .fallbacks = (GdkMemoryFormat[]) {
+        -1,
+    },
+    .gl = {
+        .internal_format = GL_RGBA8,
+        .format = GL_RGBA,
+        .type = GL_UNSIGNED_BYTE,
+        .swizzle = { GL_RED, GL_GREEN, GL_BLUE, GL_ALPHA },
+        .rgba_format = -1,
+    },
+    .to_float = r8g8b8a8_to_float,
+    .from_float = r8g8b8a8_from_float,
   },
   [GDK_MEMORY_A8B8G8R8] = {
-    GDK_MEMORY_ALPHA_STRAIGHT,
-    4,
-    G_ALIGNOF (guchar),
-    GDK_MEMORY_U8,
-    { 0, 0, G_MAXUINT, G_MAXUINT },
-    { GL_RGBA8, GL_BGRA, GDK_GL_UNSIGNED_BYTE_FLIPPED, { GL_RED, GL_GREEN, GL_BLUE, GL_ALPHA } },
-    a8b8g8r8_to_float,
-    a8b8g8r8_from_float,
+    .alpha = GDK_MEMORY_ALPHA_STRAIGHT,
+    .premultiplied = GDK_MEMORY_A8B8G8R8_PREMULTIPLIED,
+    .straight = GDK_MEMORY_A8B8G8R8,
+    .bytes_per_pixel = 4,
+    .alignment = G_ALIGNOF (guchar),
+    .depth = GDK_MEMORY_U8,
+    .fallbacks = (GdkMemoryFormat[]) {
+        -1,
+    },
+    .gl = {
+        .internal_format = GL_RGBA8,
+        .format = GL_RGBA,
+        .type = GDK_GL_UNSIGNED_BYTE_FLIPPED,
+        .swizzle = { GL_RED, GL_GREEN, GL_BLUE, GL_ALPHA },
+        .rgba_format = GDK_MEMORY_R8G8B8A8,
+        .rgba_swizzle = { GL_ALPHA, GL_BLUE, GL_GREEN, GL_RED },
+    },
+    .to_float = a8b8g8r8_to_float,
+    .from_float = a8b8g8r8_from_float,
   },
   [GDK_MEMORY_B8G8R8X8] = {
-    GDK_MEMORY_ALPHA_OPAQUE,
-    4,
-    G_ALIGNOF (guchar),
-    GDK_MEMORY_U8,
-    { 0, 0, G_MAXUINT, G_MAXUINT },
-    { GL_RGBA8, GL_BGRA, GL_UNSIGNED_BYTE, { GL_RED, GL_GREEN, GL_BLUE, GL_ONE } },
-    b8g8r8x8_to_float,
-    b8g8r8x8_from_float,
+    .alpha = GDK_MEMORY_ALPHA_OPAQUE,
+    .premultiplied = GDK_MEMORY_B8G8R8X8,
+    .straight = GDK_MEMORY_B8G8R8X8,
+    .bytes_per_pixel = 4,
+    .alignment = G_ALIGNOF (guchar),
+    .depth = GDK_MEMORY_U8,
+    .fallbacks = (GdkMemoryFormat[]) {
+        GDK_MEMORY_R8G8B8A8_PREMULTIPLIED,
+        -1,
+    },
+    .gl = {
+        .internal_format = GL_RGBA8,
+        .format = GL_BGRA,
+        .type = GL_UNSIGNED_BYTE,
+        .swizzle = { GL_RED, GL_GREEN, GL_BLUE, GL_ONE },
+        .rgba_format = GDK_MEMORY_R8G8B8X8,
+        .rgba_swizzle = { GL_BLUE, GL_GREEN, GL_BLUE, GL_ONE },
+    },
+    .to_float = b8g8r8x8_to_float,
+    .from_float = b8g8r8x8_from_float,
   },
   [GDK_MEMORY_X8R8G8B8] = {
-    GDK_MEMORY_ALPHA_OPAQUE,
-    4,
-    G_ALIGNOF (guchar),
-    GDK_MEMORY_U8,
-    { 0, 0, G_MAXUINT, G_MAXUINT },
-    { GL_RGBA8, GL_BGRA, GDK_GL_UNSIGNED_BYTE_FLIPPED, { GL_RED, GL_GREEN, GL_BLUE, GL_ONE } },
-    x8r8g8b8_to_float,
-    x8r8g8b8_from_float,
+    .alpha = GDK_MEMORY_ALPHA_OPAQUE,
+    .premultiplied = GDK_MEMORY_X8R8G8B8,
+    .straight = GDK_MEMORY_X8R8G8B8,
+    .bytes_per_pixel = 4,
+    .alignment = G_ALIGNOF (guchar),
+    .depth = GDK_MEMORY_U8,
+    .fallbacks = (GdkMemoryFormat[]) {
+        GDK_MEMORY_R8G8B8A8_PREMULTIPLIED,
+        -1,
+    },
+    .gl = {
+        .internal_format = GL_RGBA8,
+        .format = GL_BGRA,
+        .type = GDK_GL_UNSIGNED_BYTE_FLIPPED,
+        .swizzle = { GL_RED, GL_GREEN, GL_BLUE, GL_ONE },
+        .rgba_format = GDK_MEMORY_R8G8B8A8,
+        .rgba_swizzle = { GL_GREEN, GL_BLUE, GL_ALPHA, GL_ONE },
+    },
+    .to_float = x8r8g8b8_to_float,
+    .from_float = x8r8g8b8_from_float,
   },
   [GDK_MEMORY_R8G8B8X8] = {
-    GDK_MEMORY_ALPHA_OPAQUE,
-    4,
-    G_ALIGNOF (guchar),
-    GDK_MEMORY_U8,
-    { 0, 0, G_MAXUINT, G_MAXUINT },
-    { GL_RGBA8, GL_RGBA, GL_UNSIGNED_BYTE, { GL_RED, GL_GREEN, GL_BLUE, GL_ONE } },
-    r8g8b8x8_to_float,
-    r8g8b8x8_from_float,
+    .alpha = GDK_MEMORY_ALPHA_OPAQUE,
+    .premultiplied = GDK_MEMORY_R8G8B8X8,
+    .straight = GDK_MEMORY_R8G8B8X8,
+    .bytes_per_pixel = 4,
+    .alignment = G_ALIGNOF (guchar),
+    .depth = GDK_MEMORY_U8,
+    .fallbacks = (GdkMemoryFormat[]) {
+        GDK_MEMORY_R8G8B8A8_PREMULTIPLIED,
+        -1,
+    },
+    .gl = {
+        .internal_format = GL_RGBA8,
+        .format = GL_RGBA,
+        .type = GL_UNSIGNED_BYTE,
+        .swizzle = { GL_RED, GL_GREEN, GL_BLUE, GL_ONE },
+        .rgba_format = -1,
+    },
+    .to_float = r8g8b8x8_to_float,
+    .from_float = r8g8b8x8_from_float,
   },
   [GDK_MEMORY_X8B8G8R8] = {
-    GDK_MEMORY_ALPHA_OPAQUE,
-    4,
-    G_ALIGNOF (guchar),
-    GDK_MEMORY_U8,
-    { G_MAXUINT, G_MAXUINT, G_MAXUINT, G_MAXUINT },
-    { GL_RGBA8, GL_RGBA, GDK_GL_UNSIGNED_BYTE_FLIPPED, { GL_RED, GL_GREEN, GL_BLUE, GL_ONE } },
-    x8b8g8r8_to_float,
-    x8b8g8r8_from_float,
+    .alpha = GDK_MEMORY_ALPHA_OPAQUE,
+    .premultiplied = GDK_MEMORY_X8B8G8R8,
+    .straight = GDK_MEMORY_X8B8G8R8,
+    .bytes_per_pixel = 4,
+    .alignment = G_ALIGNOF (guchar),
+    .depth = GDK_MEMORY_U8,
+    .fallbacks = (GdkMemoryFormat[]) {
+        GDK_MEMORY_R8G8B8A8_PREMULTIPLIED,
+        -1,
+    },
+    .gl = {
+        .internal_format = GL_RGBA8,
+        .format = GL_RGBA,
+        .type = GDK_GL_UNSIGNED_BYTE_FLIPPED,
+        .swizzle = { GL_RED, GL_GREEN, GL_BLUE, GL_ONE },
+        .rgba_format = GDK_MEMORY_R8G8B8A8,
+        .rgba_swizzle = { GL_ALPHA, GL_BLUE, GL_GREEN, GL_ONE },
+    },
+    .to_float = x8b8g8r8_to_float,
+    .from_float = x8b8g8r8_from_float,
   },
   [GDK_MEMORY_R8G8B8] = {
-    GDK_MEMORY_ALPHA_OPAQUE,
-    3,
-    G_ALIGNOF (guchar),
-    GDK_MEMORY_U8,
-    { 0, 0, 0, 0 },
-    { GL_RGB8, GL_RGB, GL_UNSIGNED_BYTE, { GL_RED, GL_GREEN, GL_BLUE, GL_ALPHA } },
-    r8g8b8_to_float,
-    r8g8b8_from_float,
+    .alpha = GDK_MEMORY_ALPHA_OPAQUE,
+    .premultiplied = GDK_MEMORY_R8G8B8,
+    .straight = GDK_MEMORY_R8G8B8,
+    .bytes_per_pixel = 3,
+    .alignment = G_ALIGNOF (guchar),
+    .depth = GDK_MEMORY_U8,
+    .fallbacks = (GdkMemoryFormat[]) {
+        GDK_MEMORY_R8G8B8A8_PREMULTIPLIED,
+        -1,
+    },
+    .gl = {
+        .internal_format = GL_RGB8,
+        .format = GL_RGB,
+        .type = GL_UNSIGNED_BYTE,
+        .swizzle = { GL_RED, GL_GREEN, GL_BLUE, GL_ALPHA },
+        .rgba_format = -1,
+    },
+    .to_float = r8g8b8_to_float,
+    .from_float = r8g8b8_from_float,
   },
   [GDK_MEMORY_B8G8R8] = {
-    GDK_MEMORY_ALPHA_OPAQUE,
-    3,
-    G_ALIGNOF (guchar),
-    GDK_MEMORY_U8,
-    { 0, 0, G_MAXUINT, G_MAXUINT },
-    { GL_RGB8, GL_BGR, GL_UNSIGNED_BYTE, { GL_RED, GL_GREEN, GL_BLUE, GL_ALPHA } },
-    b8g8r8_to_float,
-    b8g8r8_from_float,
+    .alpha = GDK_MEMORY_ALPHA_OPAQUE,
+    .premultiplied = GDK_MEMORY_B8G8R8,
+    .straight = GDK_MEMORY_B8G8R8,
+    .bytes_per_pixel = 3,
+    .alignment = G_ALIGNOF (guchar),
+    .depth = GDK_MEMORY_U8,
+    .fallbacks = (GdkMemoryFormat[]) {
+        GDK_MEMORY_R8G8B8A8_PREMULTIPLIED,
+        -1,
+    },
+    .gl = {
+        .internal_format = GL_RGB8,
+        .format = GL_BGR,
+        .type = GL_UNSIGNED_BYTE,
+        .swizzle = { GL_RED, GL_GREEN, GL_BLUE, GL_ALPHA },
+        .rgba_format = GDK_MEMORY_R8G8B8,
+        .rgba_swizzle = { GL_BLUE, GL_GREEN, GL_RED, GL_ALPHA },
+    },
+    .to_float = b8g8r8_to_float,
+    .from_float = b8g8r8_from_float,
   },
   [GDK_MEMORY_R16G16B16] = {
-    GDK_MEMORY_ALPHA_OPAQUE,
-    6,
-    G_ALIGNOF (guint16),
-    GDK_MEMORY_U16,
-    { 0, 0, 3, 0 },
-    { GL_RGB16, GL_RGB, GL_UNSIGNED_SHORT, { GL_RED, GL_GREEN, GL_BLUE, GL_ALPHA } },
-    r16g16b16_to_float,
-    r16g16b16_from_float,
+    .alpha = GDK_MEMORY_ALPHA_OPAQUE,
+    .premultiplied = GDK_MEMORY_R16G16B16,
+    .straight = GDK_MEMORY_R16G16B16,
+    .bytes_per_pixel = 6,
+    .alignment = G_ALIGNOF (guint16),
+    .depth = GDK_MEMORY_U16,
+    .fallbacks = (GdkMemoryFormat[]) {
+        GDK_MEMORY_R16G16B16A16_PREMULTIPLIED,
+        GDK_MEMORY_R32G32B32A32_FLOAT_PREMULTIPLIED,
+        GDK_MEMORY_R16G16B16A16_FLOAT_PREMULTIPLIED,
+        GDK_MEMORY_R8G8B8A8_PREMULTIPLIED,
+        -1,
+    },
+    .gl = {
+        .internal_format = GL_RGB16,
+        .format = GL_RGB,
+        .type = GL_UNSIGNED_SHORT,
+        .swizzle = { GL_RED, GL_GREEN, GL_BLUE, GL_ALPHA },
+        .rgba_format = -1,
+    },
+    .to_float = r16g16b16_to_float,
+    .from_float = r16g16b16_from_float,
   },
   [GDK_MEMORY_R16G16B16A16_PREMULTIPLIED] = {
-    GDK_MEMORY_ALPHA_PREMULTIPLIED,
-    8,
-    G_ALIGNOF (guint16),
-    GDK_MEMORY_U16,
-    { 0, 0, 3, 0 },
-    { GL_RGBA16, GL_RGBA, GL_UNSIGNED_SHORT, { GL_RED, GL_GREEN, GL_BLUE, GL_ALPHA } },
-    r16g16b16a16_to_float,
-    r16g16b16a16_from_float,
+    .alpha = GDK_MEMORY_ALPHA_PREMULTIPLIED,
+    .premultiplied = GDK_MEMORY_R16G16B16A16_PREMULTIPLIED,
+    .straight = GDK_MEMORY_R16G16B16A16,
+    .bytes_per_pixel = 8,
+    .alignment = G_ALIGNOF (guint16),
+    .depth = GDK_MEMORY_U16,
+    .fallbacks = (GdkMemoryFormat[]) {
+        GDK_MEMORY_R32G32B32A32_FLOAT_PREMULTIPLIED,
+        GDK_MEMORY_R16G16B16A16_FLOAT_PREMULTIPLIED,
+        GDK_MEMORY_R8G8B8A8_PREMULTIPLIED,
+        -1,
+    },
+    .gl = {
+        .internal_format = GL_RGBA16,
+        .format = GL_RGBA,
+        .type = GL_UNSIGNED_SHORT,
+        .swizzle = { GL_RED, GL_GREEN, GL_BLUE, GL_ALPHA },
+        .rgba_format = -1,
+    },
+    .to_float = r16g16b16a16_to_float,
+    .from_float = r16g16b16a16_from_float,
   },
   [GDK_MEMORY_R16G16B16A16] = {
-    GDK_MEMORY_ALPHA_STRAIGHT,
-    8,
-    G_ALIGNOF (guint16),
-    GDK_MEMORY_U16,
-    { 0, 0, 3, 0 },
-    { GL_RGBA16, GL_RGBA, GL_UNSIGNED_SHORT, { GL_RED, GL_GREEN, GL_BLUE, GL_ALPHA } },
-    r16g16b16a16_to_float,
-    r16g16b16a16_from_float,
+    .alpha = GDK_MEMORY_ALPHA_STRAIGHT,
+    .premultiplied = GDK_MEMORY_R16G16B16A16_PREMULTIPLIED,
+    .straight = GDK_MEMORY_R16G16B16A16,
+    .bytes_per_pixel = 8,
+    .alignment = G_ALIGNOF (guint16),
+    .depth = GDK_MEMORY_U16,
+    .fallbacks = (GdkMemoryFormat[]) {
+        GDK_MEMORY_R32G32B32A32_FLOAT,
+        GDK_MEMORY_R16G16B16A16_FLOAT,
+        GDK_MEMORY_R8G8B8A8,
+        -1,
+    },
+    .gl = {
+        .internal_format = GL_RGBA16,
+        .format = GL_RGBA,
+        .type = GL_UNSIGNED_SHORT,
+        .swizzle = { GL_RED, GL_GREEN, GL_BLUE, GL_ALPHA },
+        .rgba_format = -1,
+    },
+    .to_float = r16g16b16a16_to_float,
+    .from_float = r16g16b16a16_from_float,
   },
   [GDK_MEMORY_R16G16B16_FLOAT] = {
-    GDK_MEMORY_ALPHA_OPAQUE,
-    6,
-    G_ALIGNOF (guint16),
-    GDK_MEMORY_FLOAT16,
-    { 0, 0, 3, 0 },
-    { GL_RGB16F, GL_RGB, GL_HALF_FLOAT, { GL_RED, GL_GREEN, GL_BLUE, GL_ALPHA } },
-    r16g16b16_float_to_float,
-    r16g16b16_float_from_float,
+    .alpha = GDK_MEMORY_ALPHA_OPAQUE,
+    .premultiplied = GDK_MEMORY_R16G16B16_FLOAT,
+    .straight = GDK_MEMORY_R16G16B16_FLOAT,
+    .bytes_per_pixel = 6,
+    .alignment = G_ALIGNOF (guint16),
+    .depth = GDK_MEMORY_FLOAT16,
+    .fallbacks = (GdkMemoryFormat[]) {
+        GDK_MEMORY_R16G16B16A16_FLOAT_PREMULTIPLIED,
+        GDK_MEMORY_R32G32B32A32_FLOAT_PREMULTIPLIED,
+        GDK_MEMORY_R8G8B8A8_PREMULTIPLIED,
+        -1,
+    },
+    .gl = {
+        .internal_format = GL_RGB16F,
+        .format = GL_RGB,
+        .type = GL_HALF_FLOAT,
+        .swizzle = { GL_RED, GL_GREEN, GL_BLUE, GL_ALPHA },
+        .rgba_format = -1,
+    },
+    .to_float = r16g16b16_float_to_float,
+    .from_float = r16g16b16_float_from_float,
   },
   [GDK_MEMORY_R16G16B16A16_FLOAT_PREMULTIPLIED] = {
-    GDK_MEMORY_ALPHA_PREMULTIPLIED,
-    8,
-    G_ALIGNOF (guint16),
-    GDK_MEMORY_FLOAT16,
-    { 0, 0, 3, 0 },
-    { GL_RGBA16F, GL_RGBA, GL_HALF_FLOAT, { GL_RED, GL_GREEN, GL_BLUE, GL_ALPHA } },
-    r16g16b16a16_float_to_float,
-    r16g16b16a16_float_from_float,
+    .alpha = GDK_MEMORY_ALPHA_PREMULTIPLIED,
+    .premultiplied = GDK_MEMORY_R16G16B16A16_FLOAT_PREMULTIPLIED,
+    .straight = GDK_MEMORY_R16G16B16A16_FLOAT,
+    .bytes_per_pixel = 8,
+    .alignment = G_ALIGNOF (guint16),
+    .depth = GDK_MEMORY_FLOAT16,
+    .fallbacks = (GdkMemoryFormat[]) {
+        GDK_MEMORY_R32G32B32A32_FLOAT_PREMULTIPLIED,
+        GDK_MEMORY_R8G8B8A8_PREMULTIPLIED,
+        -1,
+    },
+    .gl = {
+        .internal_format = GL_RGBA16F,
+        .format = GL_RGBA,
+        .type = GL_HALF_FLOAT,
+        .swizzle = { GL_RED, GL_GREEN, GL_BLUE, GL_ALPHA },
+        .rgba_format = -1,
+    },
+    .to_float = r16g16b16a16_float_to_float,
+    .from_float = r16g16b16a16_float_from_float,
   },
   [GDK_MEMORY_R16G16B16A16_FLOAT] = {
-    GDK_MEMORY_ALPHA_STRAIGHT,
-    8,
-    G_ALIGNOF (guint16),
-    GDK_MEMORY_FLOAT16,
-    { 0, 0, 3, 0 },
-    { GL_RGBA16F, GL_RGBA, GL_HALF_FLOAT, { GL_RED, GL_GREEN, GL_BLUE, GL_ALPHA } },
-    r16g16b16a16_float_to_float,
-    r16g16b16a16_float_from_float,
+    .alpha = GDK_MEMORY_ALPHA_STRAIGHT,
+    .premultiplied = GDK_MEMORY_R16G16B16A16_FLOAT_PREMULTIPLIED,
+    .straight = GDK_MEMORY_R16G16B16A16_FLOAT,
+    .bytes_per_pixel = 8,
+    .alignment = G_ALIGNOF (guint16),
+    .depth = GDK_MEMORY_FLOAT16,
+    .fallbacks = (GdkMemoryFormat[]) {
+        GDK_MEMORY_R32G32B32A32_FLOAT,
+        GDK_MEMORY_R8G8B8A8,
+        -1,
+    },
+    .gl = {
+        .internal_format = GL_RGBA16F,
+        .format = GL_RGBA,
+        .type = GL_HALF_FLOAT,
+        .swizzle = { GL_RED, GL_GREEN, GL_BLUE, GL_ALPHA },
+        .rgba_format = -1,
+    },
+    .to_float = r16g16b16a16_float_to_float,
+    .from_float = r16g16b16a16_float_from_float,
   },
   [GDK_MEMORY_R32G32B32_FLOAT] = {
-    GDK_MEMORY_ALPHA_OPAQUE,
+    .alpha = GDK_MEMORY_ALPHA_OPAQUE,
+    .premultiplied = GDK_MEMORY_R32G32B32_FLOAT,
+    .straight = GDK_MEMORY_R32G32B32_FLOAT,
     12,
-    G_ALIGNOF (float),
-    GDK_MEMORY_FLOAT32,
-    { 0, 0, 3, 0 },
-    { GL_RGB32F, GL_RGB, GL_FLOAT, { GL_RED, GL_GREEN, GL_BLUE, GL_ALPHA } },
-    r32g32b32_float_to_float,
-    r32g32b32_float_from_float,
+    .alignment = G_ALIGNOF (float),
+    .depth = GDK_MEMORY_FLOAT32,
+    .fallbacks = (GdkMemoryFormat[]) {
+        GDK_MEMORY_R32G32B32A32_FLOAT_PREMULTIPLIED,
+        GDK_MEMORY_R16G16B16A16_FLOAT_PREMULTIPLIED,
+        GDK_MEMORY_R8G8B8A8_PREMULTIPLIED,
+        -1,
+    },
+    .gl = {
+        .internal_format = GL_RGB32F,
+        .format = GL_RGB,
+        .type = GL_FLOAT,
+        .swizzle = { GL_RED, GL_GREEN, GL_BLUE, GL_ALPHA },
+        .rgba_format = -1,
+    },
+    .to_float = r32g32b32_float_to_float,
+    .from_float = r32g32b32_float_from_float,
   },
   [GDK_MEMORY_R32G32B32A32_FLOAT_PREMULTIPLIED] = {
-    GDK_MEMORY_ALPHA_PREMULTIPLIED,
+    .alpha = GDK_MEMORY_ALPHA_PREMULTIPLIED,
+    .premultiplied = GDK_MEMORY_R32G32B32A32_FLOAT_PREMULTIPLIED,
+    .straight = GDK_MEMORY_R32G32B32A32_FLOAT,
     16,
-    G_ALIGNOF (float),
-    GDK_MEMORY_FLOAT32,
-    { 0, 0, 3, 0 },
-    { GL_RGBA32F, GL_RGBA, GL_FLOAT, { GL_RED, GL_GREEN, GL_BLUE, GL_ALPHA } },
-    r32g32b32a32_float_to_float,
-    r32g32b32a32_float_from_float,
+    .alignment = G_ALIGNOF (float),
+    .depth = GDK_MEMORY_FLOAT32,
+    .fallbacks = (GdkMemoryFormat[]) {
+        GDK_MEMORY_R16G16B16A16_FLOAT_PREMULTIPLIED,
+        GDK_MEMORY_R8G8B8A8_PREMULTIPLIED,
+        -1,
+    },
+    .gl = {
+        .internal_format = GL_RGBA32F,
+        .format = GL_RGBA,
+        .type = GL_FLOAT,
+        .swizzle = { GL_RED, GL_GREEN, GL_BLUE, GL_ALPHA },
+        .rgba_format = -1,
+    },
+    .to_float = r32g32b32a32_float_to_float,
+    .from_float = r32g32b32a32_float_from_float,
   },
   [GDK_MEMORY_R32G32B32A32_FLOAT] = {
-    GDK_MEMORY_ALPHA_STRAIGHT,
+    .alpha = GDK_MEMORY_ALPHA_STRAIGHT,
+    .premultiplied = GDK_MEMORY_R32G32B32A32_FLOAT_PREMULTIPLIED,
+    .straight = GDK_MEMORY_R32G32B32A32_FLOAT,
     16,
-    G_ALIGNOF (float),
-    GDK_MEMORY_FLOAT32,
-    { 0, 0, 3, 0 },
-    { GL_RGBA32F, GL_RGBA, GL_FLOAT, { GL_RED, GL_GREEN, GL_BLUE, GL_ALPHA } },
-    r32g32b32a32_float_to_float,
-    r32g32b32a32_float_from_float,
+    .alignment = G_ALIGNOF (float),
+    .depth = GDK_MEMORY_FLOAT32,
+    .fallbacks = (GdkMemoryFormat[]) {
+        GDK_MEMORY_R16G16B16A16_FLOAT,
+        GDK_MEMORY_R8G8B8A8,
+        -1,
+    },
+    .gl = {
+        .internal_format = GL_RGBA32F,
+        .format = GL_RGBA,
+        .type = GL_FLOAT,
+        .swizzle = { GL_RED, GL_GREEN, GL_BLUE, GL_ALPHA },
+        .rgba_format = -1,
+    },
+    .to_float = r32g32b32a32_float_to_float,
+    .from_float = r32g32b32a32_float_from_float,
   },
   [GDK_MEMORY_G8A8_PREMULTIPLIED] = {
-    GDK_MEMORY_ALPHA_PREMULTIPLIED,
-    2,
-    G_ALIGNOF (guchar),
-    GDK_MEMORY_U8,
-    { 0, 0, 3, 0 },
-    { GL_RG8, GL_RG, GL_UNSIGNED_BYTE, { GL_RED, GL_RED, GL_RED, GL_GREEN } },
-    g8a8_premultiplied_to_float,
-    g8a8_premultiplied_from_float,
+    .alpha = GDK_MEMORY_ALPHA_PREMULTIPLIED,
+    .premultiplied = GDK_MEMORY_G8A8_PREMULTIPLIED,
+    .straight = GDK_MEMORY_G8A8,
+    .bytes_per_pixel = 2,
+    .alignment = G_ALIGNOF (guchar),
+    .depth = GDK_MEMORY_U8,
+    .fallbacks = (GdkMemoryFormat[]) {
+        GDK_MEMORY_R8G8B8A8_PREMULTIPLIED,
+        -1,
+    },
+    .gl = {
+        .internal_format = GL_RG8,
+        .format = GL_RG,
+        .type = GL_UNSIGNED_BYTE,
+        .swizzle = { GL_RED, GL_RED, GL_RED, GL_GREEN },
+        .rgba_format = -1,
+    },
+    .to_float = g8a8_premultiplied_to_float,
+    .from_float = g8a8_premultiplied_from_float,
   },
   [GDK_MEMORY_G8A8] = {
-    GDK_MEMORY_ALPHA_STRAIGHT,
-    2,
-    G_ALIGNOF (guchar),
-    GDK_MEMORY_U8,
-    { 0, 0, 3, 0 },
-    { GL_RG8, GL_RG, GL_UNSIGNED_BYTE, { GL_RED, GL_RED, GL_RED, GL_GREEN } },
-    g8a8_to_float,
-    g8a8_from_float,
+    .alpha = GDK_MEMORY_ALPHA_STRAIGHT,
+    .premultiplied = GDK_MEMORY_G8A8_PREMULTIPLIED,
+    .straight = GDK_MEMORY_G8A8,
+    .bytes_per_pixel = 2,
+    .alignment = G_ALIGNOF (guchar),
+    .depth = GDK_MEMORY_U8,
+    .fallbacks = (GdkMemoryFormat[]) {
+        GDK_MEMORY_R8G8B8A8,
+        -1,
+    },
+    .gl = {
+        .internal_format = GL_RG8,
+        .format = GL_RG,
+        .type = GL_UNSIGNED_BYTE,
+        .swizzle = { GL_RED, GL_RED, GL_RED, GL_GREEN },
+        .rgba_format = -1,
+    },
+    .to_float = g8a8_to_float,
+    .from_float = g8a8_from_float,
   },
   [GDK_MEMORY_G8] = {
-    GDK_MEMORY_ALPHA_OPAQUE,
-    1,
-    G_ALIGNOF (guchar),
-    GDK_MEMORY_U8,
-    { 0, 0, 3, 0 },
-    { GL_R8, GL_RED, GL_UNSIGNED_BYTE, { GL_RED, GL_RED, GL_RED, GL_ONE } },
-    g8_to_float,
-    g8_from_float,
+    .alpha = GDK_MEMORY_ALPHA_OPAQUE,
+    .premultiplied = GDK_MEMORY_G8,
+    .straight = GDK_MEMORY_G8,
+    .bytes_per_pixel = 1,
+    .alignment = G_ALIGNOF (guchar),
+    .depth = GDK_MEMORY_U8,
+    .fallbacks = (GdkMemoryFormat[]) {
+        GDK_MEMORY_R8G8B8A8_PREMULTIPLIED,
+        -1,
+    },
+    .gl = {
+        .internal_format = GL_R8,
+        .format = GL_RED,
+        .type = GL_UNSIGNED_BYTE,
+        .swizzle = { GL_RED, GL_RED, GL_RED, GL_ONE },
+        .rgba_format = -1,
+    },
+    .to_float = g8_to_float,
+    .from_float = g8_from_float,
   },
   [GDK_MEMORY_G16A16_PREMULTIPLIED] = {
-    GDK_MEMORY_ALPHA_PREMULTIPLIED,
-    4,
-    G_ALIGNOF (guint16),
-    GDK_MEMORY_U16,
-    { 0, 0, 3, 0 },
-    { GL_RG16, GL_RG, GL_UNSIGNED_SHORT, { GL_RED, GL_RED, GL_RED, GL_GREEN } },
-    g16a16_premultiplied_to_float,
-    g16a16_premultiplied_from_float,
+    .alpha = GDK_MEMORY_ALPHA_PREMULTIPLIED,
+    .premultiplied = GDK_MEMORY_G16A16_PREMULTIPLIED,
+    .straight = GDK_MEMORY_G16A16,
+    .bytes_per_pixel = 4,
+    .alignment = G_ALIGNOF (guint16),
+    .depth = GDK_MEMORY_U16,
+    .fallbacks = (GdkMemoryFormat[]) {
+        GDK_MEMORY_R16G16B16A16_PREMULTIPLIED,
+        GDK_MEMORY_R32G32B32A32_FLOAT_PREMULTIPLIED,
+        GDK_MEMORY_R16G16B16A16_FLOAT_PREMULTIPLIED,
+        GDK_MEMORY_R8G8B8A8_PREMULTIPLIED,
+        -1,
+    },
+    .gl = {
+        .internal_format = GL_RG16,
+        .format = GL_RG,
+        .type = GL_UNSIGNED_SHORT,
+        .swizzle = { GL_RED, GL_RED, GL_RED, GL_GREEN },
+        .rgba_format = -1,
+    },
+    .to_float = g16a16_premultiplied_to_float,
+    .from_float = g16a16_premultiplied_from_float,
   },
   [GDK_MEMORY_G16A16] = {
-    GDK_MEMORY_ALPHA_STRAIGHT,
-    4,
-    G_ALIGNOF (guint16),
-    GDK_MEMORY_U16,
-    { 0, 0, 3, 0 },
-    { GL_RG16, GL_RG, GL_UNSIGNED_SHORT, { GL_RED, GL_RED, GL_RED, GL_GREEN } },
-    g16a16_to_float,
-    g16a16_from_float,
+    .alpha = GDK_MEMORY_ALPHA_STRAIGHT,
+    .premultiplied = GDK_MEMORY_G16A16_PREMULTIPLIED,
+    .straight = GDK_MEMORY_G16A16,
+    .bytes_per_pixel = 4,
+    .alignment = G_ALIGNOF (guint16),
+    .depth = GDK_MEMORY_U16,
+    .fallbacks = (GdkMemoryFormat[]) {
+        GDK_MEMORY_R16G16B16A16,
+        GDK_MEMORY_R32G32B32A32_FLOAT,
+        GDK_MEMORY_R16G16B16A16_FLOAT,
+        GDK_MEMORY_R8G8B8A8,
+        -1,
+    },
+    .gl = {
+        .internal_format = GL_RG16,
+        .format = GL_RG,
+        .type = GL_UNSIGNED_SHORT,
+        .swizzle = { GL_RED, GL_RED, GL_RED, GL_GREEN },
+        .rgba_format = -1,
+    },
+    .to_float = g16a16_to_float,
+    .from_float = g16a16_from_float,
   },
   [GDK_MEMORY_G16] = {
-    GDK_MEMORY_ALPHA_OPAQUE,
-    2,
-    G_ALIGNOF (guint16),
-    GDK_MEMORY_U16,
-    { 0, 0, 3, 0 },
-    { GL_R16, GL_RED, GL_UNSIGNED_SHORT, { GL_RED, GL_RED, GL_RED, GL_ONE } },
-    g16_to_float,
-    g16_from_float,
+    .alpha = GDK_MEMORY_ALPHA_OPAQUE,
+    .premultiplied = GDK_MEMORY_G16,
+    .straight = GDK_MEMORY_G16,
+    .bytes_per_pixel = 2,
+    .alignment = G_ALIGNOF (guint16),
+    .depth = GDK_MEMORY_U16,
+    .fallbacks = (GdkMemoryFormat[]) {
+        GDK_MEMORY_R16G16B16A16_PREMULTIPLIED,
+        GDK_MEMORY_R32G32B32A32_FLOAT_PREMULTIPLIED,
+        GDK_MEMORY_R16G16B16A16_FLOAT_PREMULTIPLIED,
+        GDK_MEMORY_R8G8B8A8_PREMULTIPLIED,
+        -1,
+    },
+    .gl = {
+        .internal_format = GL_R16,
+        .format = GL_RED,
+        .type = GL_UNSIGNED_SHORT,
+        .swizzle = { GL_RED, GL_RED, GL_RED, GL_ONE },
+        .rgba_format = -1,
+    },
+    .to_float = g16_to_float,
+    .from_float = g16_from_float,
   },
   [GDK_MEMORY_A8] = {
-    GDK_MEMORY_ALPHA_PREMULTIPLIED,
-    1,
-    G_ALIGNOF (guchar),
-    GDK_MEMORY_U8,
-    { 0, 0, 3, 0 },
-    { GL_R8, GL_RED, GL_UNSIGNED_BYTE, { GL_RED, GL_RED, GL_RED, GL_RED } },
-    a8_to_float,
-    a8_from_float,
+    .alpha = GDK_MEMORY_ALPHA_PREMULTIPLIED,
+    .premultiplied = GDK_MEMORY_A8,
+    .straight = GDK_MEMORY_A8,
+    .bytes_per_pixel = 1,
+    .alignment = G_ALIGNOF (guchar),
+    .depth = GDK_MEMORY_U8,
+    .fallbacks = (GdkMemoryFormat[]) {
+        GDK_MEMORY_R8G8B8A8_PREMULTIPLIED,
+        -1,
+    },
+    .gl = {
+        .internal_format = GL_R8,
+        .format = GL_RED,
+        .type = GL_UNSIGNED_BYTE,
+        .swizzle = { GL_RED, GL_RED, GL_RED, GL_RED },
+        .rgba_format = -1,
+    },
+    .to_float = a8_to_float,
+    .from_float = a8_from_float,
   },
   [GDK_MEMORY_A16] = {
-    GDK_MEMORY_ALPHA_PREMULTIPLIED,
-    2,
-    G_ALIGNOF (guint16),
-    GDK_MEMORY_U16,
-    { 0, 0, 3, 0 },
-    { GL_R16, GL_RED, GL_UNSIGNED_SHORT, { GL_RED, GL_RED, GL_RED, GL_RED } },
-    a16_to_float,
-    a16_from_float,
+    .alpha = GDK_MEMORY_ALPHA_PREMULTIPLIED,
+    .premultiplied = GDK_MEMORY_A16,
+    .straight = GDK_MEMORY_A16,
+    .bytes_per_pixel = 2,
+    .alignment = G_ALIGNOF (guint16),
+    .depth = GDK_MEMORY_U16,
+    .fallbacks = (GdkMemoryFormat[]) {
+        GDK_MEMORY_R16G16B16A16_PREMULTIPLIED,
+        GDK_MEMORY_R32G32B32A32_FLOAT_PREMULTIPLIED,
+        GDK_MEMORY_R16G16B16A16_FLOAT_PREMULTIPLIED,
+        GDK_MEMORY_R8G8B8A8_PREMULTIPLIED,
+        -1,
+    },
+    .gl = {
+        .internal_format = GL_R16,
+        .format = GL_RED,
+        .type = GL_UNSIGNED_SHORT,
+        .swizzle = { GL_RED, GL_RED, GL_RED, GL_RED },
+        .rgba_format = -1,
+    },
+    .to_float = a16_to_float,
+    .from_float = a16_from_float,
   },
   [GDK_MEMORY_A16_FLOAT] = {
-    GDK_MEMORY_ALPHA_PREMULTIPLIED,
-    2,
-    G_ALIGNOF (guint16),
-    GDK_MEMORY_FLOAT16,
-    { 0, 0, 3, 0 },
-    { GL_R16F, GL_RED, GL_HALF_FLOAT, { GL_RED, GL_RED, GL_RED, GL_RED } },
-    a16_float_to_float,
-    a16_float_from_float,
+    .alpha = GDK_MEMORY_ALPHA_PREMULTIPLIED,
+    .premultiplied = GDK_MEMORY_A16_FLOAT,
+    .straight = GDK_MEMORY_A16_FLOAT,
+    .bytes_per_pixel = 2,
+    .alignment = G_ALIGNOF (guint16),
+    .depth = GDK_MEMORY_FLOAT16,
+    .fallbacks = (GdkMemoryFormat[]) {
+        GDK_MEMORY_R16G16B16A16_FLOAT_PREMULTIPLIED,
+        GDK_MEMORY_R32G32B32A32_FLOAT_PREMULTIPLIED,
+        GDK_MEMORY_R8G8B8A8_PREMULTIPLIED,
+        -1,
+    },
+    .gl = {
+        .internal_format = GL_R16F,
+        .format = GL_RED,
+        .type = GL_HALF_FLOAT,
+        .swizzle = { GL_RED, GL_RED, GL_RED, GL_RED },
+        .rgba_format = -1,
+    },
+    .to_float = a16_float_to_float,
+    .from_float = a16_float_from_float,
   },
   [GDK_MEMORY_A32_FLOAT] = {
-    GDK_MEMORY_ALPHA_PREMULTIPLIED,
-    4,
-    G_ALIGNOF (float),
-    GDK_MEMORY_FLOAT32,
-    { 0, 0, 3, 0 },
-    { GL_R32F, GL_RED, GL_FLOAT, { GL_RED, GL_RED, GL_RED, GL_RED } },
-    a32_float_to_float,
-    a32_float_from_float,
+    .alpha = GDK_MEMORY_ALPHA_PREMULTIPLIED,
+    .premultiplied = GDK_MEMORY_A32_FLOAT,
+    .straight = GDK_MEMORY_A32_FLOAT,
+    .bytes_per_pixel = 4,
+    .alignment = G_ALIGNOF (float),
+    .depth = GDK_MEMORY_FLOAT32,
+    .fallbacks = (GdkMemoryFormat[]) {
+        GDK_MEMORY_R32G32B32A32_FLOAT_PREMULTIPLIED,
+        GDK_MEMORY_R16G16B16A16_FLOAT_PREMULTIPLIED,
+        GDK_MEMORY_R8G8B8A8_PREMULTIPLIED,
+        -1,
+    },
+    .gl = {
+        .internal_format = GL_R32F,
+        .format = GL_RED,
+        .type = GL_FLOAT,
+        .swizzle = { GL_RED, GL_RED, GL_RED, GL_RED },
+        .rgba_format = -1,
+    },
+    .to_float = a32_float_to_float,
+    .from_float = a32_float_from_float,
   }
 };
 
@@ -702,10 +1099,50 @@ gdk_memory_format_alpha (GdkMemoryFormat format)
   return memory_formats[format].alpha;
 }
 
+GdkMemoryFormat
+gdk_memory_format_get_premultiplied (GdkMemoryFormat format)
+{
+  return memory_formats[format].premultiplied;
+}
+
+GdkMemoryFormat
+gdk_memory_format_get_straight (GdkMemoryFormat format)
+{
+  return memory_formats[format].straight;
+}
+
 gsize
 gdk_memory_format_alignment (GdkMemoryFormat format)
 {
   return memory_formats[format].alignment;
+}
+
+/*
+ * gdk_memory_format_get_fallbacks:
+ * @format: a format
+ *
+ * Gets a list of fallback formats to use for @format.
+ *
+ * These formats are RGBA formats that ideally have a
+ * higher depth than the given format. They will always
+ * include a guaranteed supported format though, even
+ * if it is of lower quality.
+ *
+ * Fallbacks will use the same alpha format, ie a premultiplied
+ * format will never fall back to a straight alpha format and
+ * vice versa.
+ * Either may fall back to an opaque format.
+ * Opaque formats will fall back to premultiplied formats only.
+ *
+ * Use gdk_memory_format_get_premultiplied_formats() to transition
+ * between premultiplied and straight alpha if you need to.
+ *
+ * Returns: A list of fallbacks, terminated with -1
+ **/
+const GdkMemoryFormat *
+gdk_memory_format_get_fallbacks (GdkMemoryFormat format)
+{
+  return memory_formats[format].fallbacks;
 }
 
 /*<private>
@@ -763,6 +1200,33 @@ gdk_memory_depth_merge (GdkMemoryDepth depth1,
 }
 
 /*
+ * gdk_memory_depth_get_format:
+ * @depth: the depth
+ *
+ * Gets the preferred format to use for rendering at the
+ * given depth
+ *
+ * Returns: the format
+ **/
+GdkMemoryFormat
+gdk_memory_depth_get_format (GdkMemoryDepth depth)
+{
+  switch (depth)
+    {
+      case GDK_MEMORY_U8:
+        return GDK_MEMORY_R8G8B8A8_PREMULTIPLIED;
+      case GDK_MEMORY_U16:
+        return GDK_MEMORY_R16G16B16A16_PREMULTIPLIED;
+      case GDK_MEMORY_FLOAT16:
+        return GDK_MEMORY_R16G16B16A16_FLOAT_PREMULTIPLIED;
+      case GDK_MEMORY_FLOAT32:
+        return GDK_MEMORY_R32G32B32A32_FLOAT_PREMULTIPLIED;
+      default:
+        g_return_val_if_reached (GDK_MEMORY_R8G8B8A8_PREMULTIPLIED);
+    }
+}
+
+/*
  * gdk_memory_depth_get_alpha_format:
  * @depth: the depth
  *
@@ -789,43 +1253,55 @@ gdk_memory_depth_get_alpha_format (GdkMemoryDepth depth)
     }
 }
 
-gboolean
+void
 gdk_memory_format_gl_format (GdkMemoryFormat  format,
-                             GdkGLContext    *context,
-                             guint           *out_internal_format,
-                             guint           *out_format,
-                             guint           *out_type,
+                             GLint           *out_internal_format,
+                             GLenum          *out_format,
+                             GLenum          *out_type,
                              GLint            out_swizzle[4])
 {
-  int gl_major;
-  int gl_minor;
-  gboolean gles;
-
-  gdk_gl_context_get_version (context, &gl_major, &gl_minor);
-  gles = gdk_gl_context_get_use_es (context);
-
   *out_internal_format = memory_formats[format].gl.internal_format;
   *out_format = memory_formats[format].gl.format;
   *out_type = memory_formats[format].gl.type;
   memcpy (out_swizzle, memory_formats[format].gl.swizzle, sizeof(GLint) * 4);
+}
 
-  if (gles)
-    {
-      if (memory_formats[format].min_gl_version.gles_major > gl_major ||
-          (memory_formats[format].min_gl_version.gles_major == gl_major &&
-           memory_formats[format].min_gl_version.gles_minor > gl_minor))
-        return FALSE;
+/*
+ * gdk_memory_format_gl_rgba_format:
+ * @format: The format to query
+ * @out_actual_format: The actual RGBA format
+ * @out_internal_format: the GL internal format
+ * @out_format: the GL format
+ * @out_type: the GL type
+ * @out_swizzle: The swizzle to use 
+ *
+ * Maps the given format to a GL format that uses RGBA and uses swizzling,
+ * as opposed to trying to find a GL format that is swapped in the right
+ * direction.
+ *
+ * This format is guaranteed equivalent in memory layout to the original
+ * format, so uploading/downloading code can treat them the same.
+ *
+ * Returns: %TRUE if the format exists and is different from the given format.
+ **/
+gboolean
+gdk_memory_format_gl_rgba_format (GdkMemoryFormat  format,
+                                  GdkMemoryFormat *out_actual_format,
+                                  GLint           *out_internal_format,
+                                  GLenum          *out_format,
+                                  GLenum          *out_type,
+                                  GLint            out_swizzle[4])
+{
+  GdkMemoryFormat actual = memory_formats[format].gl.rgba_format;
 
-      if (*out_format == GL_BGRA && !gdk_gl_context_has_bgra (context))
-        return FALSE;
-    }
-  else
-    {
-      if (memory_formats[format].min_gl_version.gl_major > gl_major ||
-          (memory_formats[format].min_gl_version.gl_major == gl_major &&
-           memory_formats[format].min_gl_version.gl_minor > gl_minor))
-        return FALSE;
-    }
+  if (actual == -1)
+    return FALSE;
+
+  *out_actual_format = actual;
+  *out_internal_format = memory_formats[actual].gl.internal_format;
+  *out_format = memory_formats[actual].gl.format;
+  *out_type = memory_formats[actual].gl.type;
+  memcpy (out_swizzle, memory_formats[format].gl.rgba_swizzle, sizeof(GLint) * 4);
 
   return TRUE;
 }

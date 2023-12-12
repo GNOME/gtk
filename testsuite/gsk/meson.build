@@ -20,6 +20,7 @@ compare_render_tests = [
   'blend-in-rotate',
   'blend-normal',
   'blurred-lines',
+  'blur-contents-outside-of-clip',
   'border-bottom-right',
   'border-one-rounded',
   'borders-rotated',
@@ -74,6 +75,7 @@ compare_render_tests = [
   'mask-texture-color-alpha',
   'nested-rounded-clips',
   'opacity_clip',
+  'opacity-colormatrix-combinations',
   'opacity-overdraw',
   'opacity-overlapping-children',
   'outset_shadow_offset_both',
@@ -447,14 +449,14 @@ foreach t : tests
 endforeach
 
 internal_tests = [
+  [ 'boundingbox'],
   [ 'curve' ],
   [ 'curve-special-cases' ],
-  [ 'path-private' ],
   [ 'diff' ],
   [ 'half-float' ],
-  ['rounded-rect'],
-  ['misc'],
-  ['boundingbox'],
+  [ 'misc'],
+  [ 'path-private' ],
+  [ 'rounded-rect'],
 ]
 
 foreach t : internal_tests

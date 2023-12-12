@@ -35,6 +35,17 @@ typedef enum {
   GDK_GL_CGL
 } GdkGLBackend;
 
+typedef enum {
+  /* The format is supported for glTexImage2D() */
+  GDK_GL_FORMAT_USABLE = 1 << 0,
+  /* The format can be rendered to.
+   * GL/GLES spec term: "color-renderable" */
+  GDK_GL_FORMAT_RENDERABLE = 1 << 1,
+  /* GL_LINEAR/GL_MIPMAP_LINEAR can be used for textures in this format.
+   * GLES spec term: "texture-filterable" */
+  GDK_GL_FORMAT_FILTERABLE = 1 << 2
+} GdkGLMemoryFlags;
+
 /* The maximum amount of buffers we track update regions for.
  * Note that this is equal to the max buffer age value we
  * can provide a damage region for */
@@ -150,6 +161,8 @@ void                    gdk_gl_context_label_object_printf      (GdkGLContext   
 
 const char *            gdk_gl_context_get_glsl_version_string  (GdkGLContext    *self);
 
+GdkGLMemoryFlags        gdk_gl_context_get_format_flags         (GdkGLContext    *self,
+                                                                 GdkMemoryFormat  format) G_GNUC_PURE;
 gboolean                gdk_gl_context_has_debug                (GdkGLContext    *self) G_GNUC_PURE;
 
 gboolean                gdk_gl_context_use_es_bgra              (GdkGLContext    *context);

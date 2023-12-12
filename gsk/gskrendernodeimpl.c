@@ -2019,7 +2019,7 @@ has_empty_clip (cairo_t *cr)
   double x1, y1, x2, y2;
 
   cairo_clip_extents (cr, &x1, &y1, &x2, &y2);
-  return x1 == x2 && y1 == y2;
+  return x1 >= x2 || y1 >= y2;
 }
 
 static void
@@ -3590,11 +3590,12 @@ gsk_opacity_node_draw (GskRenderNode *node,
 {
   GskOpacityNode *self = (GskOpacityNode *) node;
 
-  cairo_save (cr);
-
   /* clip so the push_group() creates a smaller surface */
   gsk_cairo_rectangle (cr, &node->bounds);
   cairo_clip (cr);
+
+  if (has_empty_clip (cr))
+    return;
 
   cairo_push_group (cr);
 
@@ -3602,8 +3603,6 @@ gsk_opacity_node_draw (GskRenderNode *node,
 
   cairo_pop_group_to_source (cr);
   cairo_paint_with_alpha (cr, self->opacity);
-
-  cairo_restore (cr);
 }
 
 static void
@@ -3800,24 +3799,23 @@ gsk_color_matrix_node_draw (GskRenderNode *node,
   GskColorMatrixNode *self = (GskColorMatrixNode *) node;
   cairo_pattern_t *pattern;
 
-  cairo_save (cr);
-
   /* clip so the push_group() creates a smaller surface */
   gsk_cairo_rectangle (cr, &node->bounds);
   cairo_clip (cr);
+
+  if (has_empty_clip (cr))
+    return;
 
   cairo_push_group (cr);
 
   gsk_render_node_draw (self->child, cr);
 
   pattern = cairo_pop_group (cr);
-
   apply_color_matrix_to_pattern (pattern, &self->color_matrix, &self->color_offset);
 
   cairo_set_source (cr, pattern);
   cairo_paint (cr);
 
-  cairo_restore (cr);
   cairo_pattern_destroy (pattern);
 }
 
@@ -4643,8 +4641,6 @@ gsk_stroke_node_draw (GskRenderNode *node,
 {
   GskStrokeNode *self = (GskStrokeNode *) node;
 
-  cairo_save (cr);
-
   if (gsk_render_node_get_node_type (self->child) == GSK_COLOR_NODE &&
       gsk_rect_contains_rect (&self->child->bounds, &node->bounds))
     {
@@ -4654,6 +4650,9 @@ gsk_stroke_node_draw (GskRenderNode *node,
     {
       gsk_cairo_rectangle (cr, &self->child->bounds);
       cairo_clip (cr);
+      if (has_empty_clip (cr))
+        return;
+
       cairo_push_group (cr);
       gsk_render_node_draw (self->child, cr);
       cairo_pop_group_to_source (cr);
@@ -4663,8 +4662,6 @@ gsk_stroke_node_draw (GskRenderNode *node,
 
   gsk_path_to_cairo (self->path, cr);
   cairo_stroke (cr);
-
-  cairo_restore (cr);
 }
 
 static void
@@ -4848,10 +4845,11 @@ gsk_shadow_node_draw (GskRenderNode *node,
   GskShadowNode *self = (GskShadowNode *) node;
   gsize i;
 
-  cairo_save (cr);
   /* clip so the blur area stays small */
   gsk_cairo_rectangle (cr, &node->bounds);
   cairo_clip (cr);
+  if (has_empty_clip (cr))
+    return;
 
   for (i = 0; i < self->n_shadows; i++)
     {
@@ -4874,13 +4872,11 @@ gsk_shadow_node_draw (GskRenderNode *node,
       cairo_mask (cr, pattern);
       cairo_restore (cr);
 
-      cr = gsk_cairo_blur_finish_drawing (cr, shadow->radius, &shadow->color, GSK_BLUR_X | GSK_BLUR_Y);
+      cr = gsk_cairo_blur_finish_drawing (cr, 0.5 * shadow->radius, &shadow->color, GSK_BLUR_X | GSK_BLUR_Y);
       cairo_restore (cr);
     }
 
   gsk_render_node_draw (self->child, cr);
-
-  cairo_restore (cr);
 }
 
 static void
@@ -5142,6 +5138,9 @@ gsk_blend_node_draw (GskRenderNode *node,
 {
   GskBlendNode *self = (GskBlendNode *) node;
 
+  if (has_empty_clip (cr))
+    return;
+
   cairo_push_group (cr);
   gsk_render_node_draw (self->bottom, cr);
 
@@ -5308,6 +5307,9 @@ gsk_cross_fade_node_draw (GskRenderNode *node,
                           cairo_t       *cr)
 {
   GskCrossFadeNode *self = (GskCrossFadeNode *) node;
+
+  if (has_empty_clip (cr))
+    return;
 
   cairo_push_group_with_content (cr, CAIRO_CONTENT_COLOR_ALPHA);
   gsk_render_node_draw (self->start, cr);
@@ -5901,35 +5903,42 @@ gsk_blur_node_draw (GskRenderNode *node,
                     cairo_t       *cr)
 {
   GskBlurNode *self = (GskBlurNode *) node;
-  cairo_pattern_t *pattern;
   cairo_surface_t *surface;
-  cairo_surface_t *image_surface;
+  cairo_t *cr2;
+  graphene_rect_t blur_bounds;
+  double clip_radius;
 
-  cairo_save (cr);
+  clip_radius = gsk_cairo_blur_compute_pixels (0.5 * self->radius);
 
-  /* clip so the push_group() creates a smaller surface */
-  gsk_cairo_rectangle (cr, &node->bounds);
-  cairo_clip (cr);
+  /* We need to extend the clip by the blur radius
+   * so we can blur pixels in that region */
+  _graphene_rect_init_from_clip_extents (&blur_bounds, cr);
+  graphene_rect_inset (&blur_bounds, - clip_radius, - clip_radius);
+  if (!gsk_rect_intersection (&blur_bounds, &node->bounds, &blur_bounds))
+    return;
 
-  cairo_push_group (cr);
+  surface = cairo_surface_create_similar_image (cairo_get_target (cr),
+                                                CAIRO_FORMAT_ARGB32,
+                                                ceil (blur_bounds.size.width),
+                                                ceil (blur_bounds.size.height));
+  cairo_surface_set_device_offset (surface,
+                                   - blur_bounds.origin.x,
+                                   - blur_bounds.origin.y);
 
-  gsk_render_node_draw (self->child, cr);
+  cr2 = cairo_create (surface);
+  gsk_render_node_draw (self->child, cr2);
+  cairo_destroy (cr2);
 
-  pattern = cairo_pop_group (cr);
-  cairo_pattern_get_surface (pattern, &surface);
-  image_surface = cairo_surface_map_to_image (surface, NULL);
-  blur_image_surface (image_surface, (int)self->radius, 3);
+  blur_image_surface (surface, (int) ceil (0.5 * self->radius), 3);
   cairo_surface_mark_dirty (surface);
-  cairo_surface_unmap_image (surface, image_surface);
 
-  cairo_set_source (cr, pattern);
+  cairo_set_source_surface (cr, surface, 0, 0);
   cairo_rectangle (cr,
                    node->bounds.origin.x, node->bounds.origin.y,
                    node->bounds.size.width, node->bounds.size.height);
   cairo_fill (cr);
 
-  cairo_restore (cr);
-  cairo_pattern_destroy (pattern);
+  cairo_surface_destroy (surface);
 }
 
 static void
@@ -6135,6 +6144,9 @@ gsk_mask_node_draw (GskRenderNode *node,
   cairo_pattern_t *mask_pattern;
   graphene_matrix_t color_matrix;
   graphene_vec4_t color_offset;
+
+  if (has_empty_clip (cr))
+    return;
 
   cairo_push_group (cr);
   gsk_render_node_draw (self->source, cr);
