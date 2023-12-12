@@ -59,7 +59,7 @@ assert_icon_lookup_size (const char         *icon_name,
 {
   GtkIconPaintable *info;
   GFile *file;
-  char *path = NULL;
+  char *uri = NULL;
 
   if (fallbacks)
     {
@@ -83,26 +83,26 @@ assert_icon_lookup_size (const char         *icon_name,
   file = gtk_icon_paintable_get_file (info);
   if (file)
     {
-      path = g_file_get_path (file);
+      uri = g_file_get_uri (file);
       g_object_unref (file);
     }
 
   if (filename)
     {
-      if (path == NULL || !g_str_has_suffix (path, filename))
+      if (uri == NULL || !g_str_has_suffix (uri, filename))
         {
           g_error ("Icon for \"%s\" with flags %s at size %d should be \"...%s\" but is \"...%s\"",
                    icon_name, lookup_flags_to_string (flags), size,
-                   filename, path);
+                   filename, uri);
           return;
         }
     }
   else
     {
-      g_assert_null (path);
+      g_assert_null (uri);
     }
 
-  g_free (path);
+  g_free (uri);
 
   g_assert_cmpint (gdk_paintable_get_intrinsic_width (GDK_PAINTABLE (info)), ==, size);
 
