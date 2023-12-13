@@ -2710,6 +2710,9 @@ gdk_display_get_monitor_at_window (GdkDisplay *display,
 
   g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
 
+  if (window && gdk_window_is_impl_offscreen (window))
+    window = gdk_offscreen_window_get_embedder (window);
+
   class = GDK_DISPLAY_GET_CLASS (display);
   if (class->get_monitor_at_window)
     {
