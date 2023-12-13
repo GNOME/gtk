@@ -10542,9 +10542,8 @@ void
 gdk_window_set_transient_for (GdkWindow *window,
 			      GdkWindow *parent)
 {
-  if (!gdk_window_is_offscreen (window) &&
-      parent != NULL &&
-      gdk_window_is_offscreen (parent))
+  if (parent != NULL &&
+      GDK_WINDOW_IMPL_GET_CLASS (window->impl) != GDK_WINDOW_IMPL_GET_CLASS (parent->impl))
     {
       return;
     }
