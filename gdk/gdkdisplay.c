@@ -1925,12 +1925,13 @@ gdk_display_init_dmabuf (GdkDisplay *self)
     {
       gdk_display_prepare_gl (self, NULL);
 
-      gdk_display_add_dmabuf_downloader (self, gdk_dmabuf_get_direct_downloader (), builder);
-
 #ifdef HAVE_EGL
       if (gdk_display_prepare_gl (self, NULL))
         gdk_display_add_dmabuf_downloader (self, gdk_dmabuf_get_egl_downloader (), builder);
 #endif
+
+      gdk_dmabuf_formats_builder_add_formats (builder,
+                                              gdk_dmabuf_get_mmap_formats ());
     }
 #endif
 

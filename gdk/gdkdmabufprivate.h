@@ -39,8 +39,14 @@ struct _GdkDmabufDownloader
 
 #ifdef HAVE_DMABUF
 
-const GdkDmabufDownloader * gdk_dmabuf_get_direct_downloader    (void) G_GNUC_CONST;
 const GdkDmabufDownloader * gdk_dmabuf_get_egl_downloader       (void) G_GNUC_CONST;
+
+GdkDmabufFormats *          gdk_dmabuf_get_mmap_formats         (void) G_GNUC_CONST;
+void                        gdk_dmabuf_download_mmap            (GdkTexture                     *texture,
+                                                                 GdkMemoryFormat                 format,
+                                                                 guchar                         *data,
+                                                                 gsize                           stride);
+
 
 int                         gdk_dmabuf_ioctl                    (int                             fd,
                                                                  unsigned long                   request,

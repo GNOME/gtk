@@ -88,11 +88,10 @@ gdk_dmabuf_texture_download (GdkTexture      *texture,
 {
   GdkDmabufTexture *self = GDK_DMABUF_TEXTURE (texture);
 
-  self->downloader->download (self->downloader,
-                              texture,
-                              format,
-                              data,
-                              stride);
+  if (self->downloader)
+    self->downloader->download (self->downloader, texture, format, data, stride);
+  else
+    gdk_dmabuf_download_mmap (texture, format, data, stride);
 }
 
 static void
@@ -126,6 +125,7 @@ gdk_dmabuf_texture_new_from_builder (GdkDmabufTextureBuilder *builder,
 {
 #ifdef HAVE_DMABUF
   GdkDmabufTexture *self;
+  const GdkDmabufDownloader *downloader;
   GdkTexture *update_texture;
   GdkDisplay *display;
   GdkDmabuf dmabuf;
@@ -149,23 +149,34 @@ gdk_dmabuf_texture_new_from_builder (GdkDmabufTextureBuilder *builder,
 
   gdk_display_init_dmabuf (display);
 
-  for (i = 0; display->dmabuf_downloaders[i] != NULL; i++)
+  if (gdk_dmabuf_formats_contains (gdk_dmabuf_get_mmap_formats (), dmabuf.fourcc, dmabuf.modifier))
     {
-      if (local_error && g_error_matches (local_error, GDK_DMABUF_ERROR, GDK_DMABUF_ERROR_UNSUPPORTED_FORMAT))
-        g_clear_error (&local_error);
-
-      if (display->dmabuf_downloaders[i]->supports (display->dmabuf_downloaders[i],
-                                                    display,
-                                                    &dmabuf,
-                                                    premultiplied,
-                                                    local_error ? NULL : &local_error))
-        break;
+      downloader = NULL;
     }
-
-  if (display->dmabuf_downloaders[i] == NULL)
+  else
     {
-      g_propagate_error (error, local_error);
-      return NULL;
+      downloader = NULL;
+      for (i = 0; display->dmabuf_downloaders[i] != NULL; i++)
+        {
+          if (local_error && g_error_matches (local_error, GDK_DMABUF_ERROR, GDK_DMABUF_ERROR_UNSUPPORTED_FORMAT))
+            g_clear_error (&local_error);
+
+          if (display->dmabuf_downloaders[i]->supports (display->dmabuf_downloaders[i],
+                                                        display,
+                                                        &dmabuf,
+                                                        premultiplied,
+                                                        local_error ? NULL : &local_error))
+            {
+              downloader = display->dmabuf_downloaders[i];
+              break;
+            }
+        }
+
+      if (downloader == NULL)
+        {
+          g_propagate_error (error, local_error);
+          return NULL;
+        }
     }
 
   if (!gdk_dmabuf_get_memory_format (dmabuf.fourcc, premultiplied, &format))
@@ -183,7 +194,7 @@ gdk_dmabuf_texture_new_from_builder (GdkDmabufTextureBuilder *builder,
              gdk_dmabuf_texture_builder_get_premultiplied (builder) ? " premultiplied, " : "",
              dmabuf.n_planes,
              format,
-             display->dmabuf_downloaders[i]->name);
+             downloader ? downloader->name : "none");
 
   self = g_object_new (GDK_TYPE_DMABUF_TEXTURE,
                        "width", width,
@@ -192,7 +203,7 @@ gdk_dmabuf_texture_new_from_builder (GdkDmabufTextureBuilder *builder,
 
   GDK_TEXTURE (self)->format = format;
   g_set_object (&self->display, display);
-  self->downloader = display->dmabuf_downloaders[i];
+  self->downloader = downloader;
   self->dmabuf = dmabuf;
   self->destroy = destroy;
   self->data = data;

@@ -649,65 +649,42 @@ gdk_dmabuf_get_fourcc (GdkMemoryFormat  format,
     }
 }
 
-static gboolean
-gdk_dmabuf_direct_downloader_add_formats (const GdkDmabufDownloader *downloader,
-                                          GdkDisplay                *display,
-                                          GdkDmabufFormatsBuilder   *builder)
+GdkDmabufFormats *
+gdk_dmabuf_get_mmap_formats (void)
 {
-  gsize i;
+  static GdkDmabufFormats *formats = NULL;
 
-  for (i = 0; i < G_N_ELEMENTS (supported_formats); i++)
+  if (formats == NULL)
     {
-      GDK_DISPLAY_DEBUG (display, DMABUF,
-                         "%s dmabuf format %.4s:%#" G_GINT64_MODIFIER "x",
-                         downloader->name,
-                         (char *) &supported_formats[i].fourcc, (guint64) DRM_FORMAT_MOD_LINEAR);
+      GdkDmabufFormatsBuilder *builder;
+      gsize i;
 
-      gdk_dmabuf_formats_builder_add_format (builder,
-                                             supported_formats[i].fourcc,
-                                             DRM_FORMAT_MOD_LINEAR);
+      builder = gdk_dmabuf_formats_builder_new ();
+
+      for (i = 0; i < G_N_ELEMENTS (supported_formats); i++)
+        {
+          if (!supported_formats[i].download)
+            continue;
+
+          GDK_DEBUG (DMABUF,
+                     "mmap dmabuf format %.4s:%#0" G_GINT64_MODIFIER "x",
+                     (char *) &supported_formats[i].fourcc, (guint64) DRM_FORMAT_MOD_LINEAR);
+
+          gdk_dmabuf_formats_builder_add_format (builder,
+                                                 supported_formats[i].fourcc,
+                                                 DRM_FORMAT_MOD_LINEAR);
+        }
+
+      formats = gdk_dmabuf_formats_builder_free_to_formats (builder);
     }
 
-  return TRUE;
-}
-
-static gboolean
-gdk_dmabuf_direct_downloader_supports (const GdkDmabufDownloader  *downloader,
-                                       GdkDisplay                 *display,
-                                       const GdkDmabuf            *dmabuf,
-                                       gboolean                    premultiplied,
-                                       GError                    **error)
-{
-  const GdkDrmFormatInfo *info;
-
-  info = get_drm_format_info (dmabuf->fourcc);
-
-  if (!info || !info->download)
-    {
-      g_set_error (error,
-                   GDK_DMABUF_ERROR, GDK_DMABUF_ERROR_UNSUPPORTED_FORMAT,
-                   "Unsupported dmabuf format %.4s",
-                   (char *) &dmabuf->fourcc);
-      return FALSE;
-    }
-
-  if (dmabuf->modifier != DRM_FORMAT_MOD_LINEAR)
-    {
-      g_set_error (error,
-                   GDK_DMABUF_ERROR, GDK_DMABUF_ERROR_UNSUPPORTED_FORMAT,
-                   "Unsupported dmabuf modifier %#lx (only linear buffers are supported)",
-                   dmabuf->modifier);
-      return FALSE;
-    }
-
-  return TRUE;
+  return formats;
 }
 
 static void
-gdk_dmabuf_direct_downloader_do_download (const GdkDmabufDownloader *downloader,
-                                          GdkTexture                *texture,
-                                          guchar                    *data,
-                                          gsize                      stride)
+gdk_dmabuf_do_download_mmap (GdkTexture *texture,
+                             guchar     *data,
+                             gsize       stride)
 {
   const GdkDrmFormatInfo *info;
   const GdkDmabuf *dmabuf;
@@ -722,8 +699,9 @@ gdk_dmabuf_direct_downloader_do_download (const GdkDmabufDownloader *downloader,
   g_return_if_fail (info && info->download);
 
   GDK_DISPLAY_DEBUG (gdk_dmabuf_texture_get_display (GDK_DMABUF_TEXTURE (texture)), DMABUF,
-                     "Using %s for downloading a dmabuf (format %.4s:%#" G_GINT64_MODIFIER "x)",
-                     downloader->name, (char *)&dmabuf->fourcc, dmabuf->modifier);
+                     "Using mmap for downloading %dx%d dmabuf (format %.4s:%#" G_GINT64_MODIFIER "x)",
+                     gdk_texture_get_width (texture), gdk_texture_get_height (texture),
+                     (char *)&dmabuf->fourcc, dmabuf->modifier);
 
   for (i = 0; i < dmabuf->n_planes; i++)
     {
@@ -782,17 +760,16 @@ out:
     }
 }
 
-static void
-gdk_dmabuf_direct_downloader_download (const GdkDmabufDownloader *downloader,
-                                       GdkTexture                *texture,
-                                       GdkMemoryFormat            format,
-                                       guchar                    *data,
-                                       gsize                      stride)
+void
+gdk_dmabuf_download_mmap (GdkTexture      *texture,
+                          GdkMemoryFormat  format,
+                          guchar          *data,
+                          gsize            stride)
 {
   GdkMemoryFormat src_format = gdk_texture_get_format (texture);
 
   if (format == src_format)
-    gdk_dmabuf_direct_downloader_do_download (downloader, texture, data, stride);
+    gdk_dmabuf_do_download_mmap (texture, data, stride);
   else
     {
       unsigned int width, height;
@@ -805,7 +782,7 @@ gdk_dmabuf_direct_downloader_download (const GdkDmabufDownloader *downloader,
       src_stride = width * gdk_memory_format_bytes_per_pixel (src_format);
       src_data = g_new (guchar, src_stride * height);
 
-      gdk_dmabuf_direct_downloader_do_download (downloader, texture, src_data, src_stride);
+      gdk_dmabuf_do_download_mmap (texture, src_data, src_stride);
 
       gdk_memory_convert (data, stride, format,
                           src_data, src_stride, src_format,
@@ -813,19 +790,6 @@ gdk_dmabuf_direct_downloader_download (const GdkDmabufDownloader *downloader,
 
       g_free (src_data);
     }
-}
-
-const GdkDmabufDownloader *
-gdk_dmabuf_get_direct_downloader (void)
-{
-  static const GdkDmabufDownloader downloader = {
-    "mmap",
-    gdk_dmabuf_direct_downloader_add_formats,
-    gdk_dmabuf_direct_downloader_supports,
-    gdk_dmabuf_direct_downloader_download,
-  };
-
-  return &downloader;
 }
 
 int
