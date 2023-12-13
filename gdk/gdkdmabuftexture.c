@@ -132,11 +132,13 @@ gdk_dmabuf_texture_new_from_builder (GdkDmabufTextureBuilder *builder,
   GdkMemoryFormat format;
   GError *local_error = NULL;
   int width, height;
+  gboolean premultiplied;
   gsize i;
 
   display = gdk_dmabuf_texture_builder_get_display (builder);
   width = gdk_dmabuf_texture_builder_get_width (builder);
   height = gdk_dmabuf_texture_builder_get_height (builder);
+  premultiplied = gdk_dmabuf_texture_builder_get_premultiplied (builder);
 
   if (!gdk_dmabuf_sanitize (&dmabuf,
                             width,
@@ -155,8 +157,7 @@ gdk_dmabuf_texture_new_from_builder (GdkDmabufTextureBuilder *builder,
       if (display->dmabuf_downloaders[i]->supports (display->dmabuf_downloaders[i],
                                                     display,
                                                     &dmabuf,
-                                                    gdk_dmabuf_texture_builder_get_premultiplied (builder),
-                                                    &format,
+                                                    premultiplied,
                                                     local_error ? NULL : &local_error))
         break;
     }
@@ -165,6 +166,15 @@ gdk_dmabuf_texture_new_from_builder (GdkDmabufTextureBuilder *builder,
     {
       g_propagate_error (error, local_error);
       return NULL;
+    }
+
+  if (!gdk_dmabuf_get_memory_format (dmabuf.fourcc, premultiplied, &format))
+    {
+      GDK_DISPLAY_DEBUG (display, DMABUF,
+                         "Falling back to generic ARGB for dmabuf format %.4s",
+                         (char *) &dmabuf.fourcc);
+      format = premultiplied ? GDK_MEMORY_R8G8B8A8_PREMULTIPLIED
+                             : GDK_MEMORY_R8G8B8A8;
     }
 
   GDK_DISPLAY_DEBUG (display, DMABUF,

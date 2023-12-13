@@ -29,7 +29,6 @@ struct _GdkDmabufDownloader
                                                                  GdkDisplay                     *display,
                                                                  const GdkDmabuf                *dmabuf,
                                                                  gboolean                        premultiplied,
-                                                                 GdkMemoryFormat                *out_format,
                                                                  GError                        **error);
   void                  (* download)                            (const GdkDmabufDownloader      *downloader,
                                                                  GdkTexture                     *texture,

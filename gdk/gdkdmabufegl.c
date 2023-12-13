@@ -166,21 +166,10 @@ gdk_dmabuf_egl_downloader_supports (const GdkDmabufDownloader  *downloader,
                                     GdkDisplay                 *display,
                                     const GdkDmabuf            *dmabuf,
                                     gboolean                    premultiplied,
-                                    GdkMemoryFormat            *out_format,
                                     GError                    **error)
 {
   if (gdk_dmabuf_formats_contains (display->egl_dmabuf_formats, dmabuf->fourcc, dmabuf->modifier))
-    {
-      if (!gdk_dmabuf_get_memory_format (dmabuf->fourcc, premultiplied, out_format))
-        {
-          GDK_DISPLAY_DEBUG (display, DMABUF,
-                             "Falling back to generic ARGB for dmabuf format %.4s",
-                             (char *) &dmabuf->fourcc);
-          *out_format = premultiplied ? GDK_MEMORY_R8G8B8A8_PREMULTIPLIED
-                                      : GDK_MEMORY_R8G8B8A8;
-        }
-      return TRUE;
-    }
+    return TRUE;
 
   g_set_error (error,
                GDK_DMABUF_ERROR, GDK_DMABUF_ERROR_UNSUPPORTED_FORMAT,

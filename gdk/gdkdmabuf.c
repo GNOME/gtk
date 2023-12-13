@@ -676,7 +676,6 @@ gdk_dmabuf_direct_downloader_supports (const GdkDmabufDownloader  *downloader,
                                        GdkDisplay                 *display,
                                        const GdkDmabuf            *dmabuf,
                                        gboolean                    premultiplied,
-                                       GdkMemoryFormat            *out_format,
                                        GError                    **error)
 {
   const GdkDrmFormatInfo *info;
@@ -700,11 +699,6 @@ gdk_dmabuf_direct_downloader_supports (const GdkDmabufDownloader  *downloader,
                    dmabuf->modifier);
       return FALSE;
     }
-
-  if (premultiplied)
-    *out_format = gdk_memory_format_get_premultiplied (info->memory_format);
-  else
-    *out_format = gdk_memory_format_get_straight (info->memory_format);
 
   return TRUE;
 }
