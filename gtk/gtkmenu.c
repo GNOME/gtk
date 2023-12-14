@@ -5218,7 +5218,8 @@ gtk_menu_position (GtkMenu  *menu,
   rect_anchor_dx = priv->rect_anchor_dx;
   rect_anchor_dy = priv->rect_anchor_dy;
 
-  if (priv->rect_window)
+  if (priv->rect_window &&
+      !GDK_PRIVATE_CALL (gdk_window_is_impl_offscreen (priv->rect_window)))
     {
       rect_window = priv->rect_window;
       rect = priv->rect;
@@ -5264,7 +5265,7 @@ gtk_menu_position (GtkMenu  *menu,
     }
 
   if (rect_window != NULL &&
-      GDK_WINDOW_TYPE (rect_window) == GDK_WINDOW_OFFSCREEN)
+      GDK_PRIVATE_CALL (gdk_window_is_impl_offscreen (rect_window)))
     {
       GdkWindow *effective = gdk_offscreen_window_get_embedder (rect_window);
 

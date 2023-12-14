@@ -780,3 +780,12 @@ gdk_offscreen_window_class_init (GdkOffscreenWindowClass *klass)
   impl_class->delete_property = NULL;
   impl_class->get_scale_factor = gdk_offscreen_window_get_scale_factor;
 }
+
+gboolean
+gdk_window_is_impl_offscreen (GdkWindow *window)
+{
+  g_return_val_if_fail (GDK_IS_WINDOW (window), FALSE);
+
+  return GDK_IS_OFFSCREEN_WINDOW (window->impl);
+}
+

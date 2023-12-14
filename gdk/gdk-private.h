@@ -31,6 +31,8 @@ gboolean         gdk_display_get_debug_updates (GdkDisplay *display);
 void             gdk_display_set_debug_updates (GdkDisplay *display,
                                                 gboolean    debug_updates);
 
+gboolean        gdk_window_is_impl_offscreen    (GdkWindow *window);
+
 const gchar *   gdk_get_desktop_startup_id   (void);
 const gchar *   gdk_get_desktop_autostart_id (void);
 
@@ -69,6 +71,8 @@ typedef struct {
 
   gboolean (* gdk_window_titlebar_gesture) (GdkWindow          *window,
                                             GdkTitlebarGesture  gesture);
+
+  gboolean (* gdk_window_is_impl_offscreen) (GdkWindow *window);
 } GdkPrivateVTable;
 
 GDK_AVAILABLE_IN_ALL
