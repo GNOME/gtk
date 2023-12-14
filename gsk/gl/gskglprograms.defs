@@ -96,4 +96,9 @@ GSK_GL_DEFINE_PROGRAM (unblurred_outset_shadow,
 
 GSK_GL_DEFINE_PROGRAM_NO_CLIP (external,
                                GSK_GL_SHADER_SINGLE (GSK_GL_SHADER_RESOURCE ("external.glsl")),
-                               GSK_GL_ADD_UNIFORM (1, EXTERNAL_SOURCE, u_external_source))
+                               GSK_GL_ADD_UNIFORM (1, EXTERNAL_SOURCE, u_external_source)
+                               GSK_GL_ADD_UNIFORM (2, PREMULTIPLY, u_premultiply))
+
+GSK_GL_DEFINE_PROGRAM_NO_CLIP (premultiply,
+                               GSK_GL_SHADER_SINGLE (GSK_GL_SHADER_RESOURCE ("premultiply.glsl")),
+                               GSK_GL_NO_UNIFORMS)

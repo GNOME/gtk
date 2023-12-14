@@ -807,6 +807,8 @@ gsk_gl_driver_import_dmabuf_texture (GskGLDriver      *self,
   GskGLRenderTarget *render_target;
   guint prev_fbo;
   gboolean external;
+  GdkMemoryFormat format;
+  gboolean premultiply;
 
   gdk_gl_context_make_current (context);
 
@@ -822,6 +824,8 @@ gsk_gl_driver_import_dmabuf_texture (GskGLDriver      *self,
     }
 
   dmabuf = gdk_dmabuf_texture_get_dmabuf (texture);
+  format = gdk_texture_get_format (GDK_TEXTURE (texture));
+  premultiply = gdk_memory_format_alpha (format) == GDK_MEMORY_ALPHA_STRAIGHT;
 
   texture_id = gdk_gl_context_import_dmabuf (context,
                                              width, height,
@@ -830,12 +834,15 @@ gsk_gl_driver_import_dmabuf_texture (GskGLDriver      *self,
   if (texture_id == 0)
     return 0;
 
-  if (!external)
+  if (!external && !premultiply)
     return texture_id;
 
   gsk_gl_driver_autorelease_texture (self, texture_id);
 
-  program = self->external;
+  if (external)
+    program = self->external;
+  else
+    program = self->premultiply;
 
   if (!gsk_gl_driver_create_render_target (self, width, height, GL_RGBA8, &render_target))
     return texture_id;
@@ -849,9 +856,20 @@ gsk_gl_driver_import_dmabuf_texture (GskGLDriver      *self,
       set_viewport_for_size (self, program, width, height);
       reset_modelview (self, program);
 
-      gsk_gl_program_set_uniform_texture (program,
-                                          UNIFORM_EXTERNAL_SOURCE, 0,
-                                          GL_TEXTURE_EXTERNAL_OES, GL_TEXTURE0, texture_id);
+      if (external)
+        {
+          gsk_gl_program_set_uniform_texture (program,
+                                              UNIFORM_EXTERNAL_SOURCE, 0,
+                                              GL_TEXTURE_EXTERNAL_OES, GL_TEXTURE0, texture_id);
+
+          gsk_gl_program_set_uniform1i (program, UNIFORM_PREMULTIPLY, 0, premultiply);
+        }
+      else
+        {
+          gsk_gl_program_set_uniform_texture (program,
+                                              UNIFORM_SHARED_SOURCE, 0,
+                                              GL_TEXTURE_2D, GL_TEXTURE0, texture_id);
+        }
 
       draw_rect (self->command_queue, 0, 0, width, height);
 
