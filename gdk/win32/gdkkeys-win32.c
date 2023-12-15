@@ -249,8 +249,8 @@ _get_keyboard_layout_file (const char *layout_name)
                           KEY_QUERY_VALUE, &hkey);
   if (status != ERROR_SUCCESS)
     {
-      g_warning("Could not open registry key '%s'. Error code: %d",
-                kbdKeyPath, (int)status);
+      g_debug("Could not open registry key '%s'. Error code: %d",
+              kbdKeyPath, (int)status);
       goto fail1;
     }
 
