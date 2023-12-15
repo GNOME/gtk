@@ -44,412 +44,16 @@ struct _GskVulkanImage
 
 G_DEFINE_TYPE (GskVulkanImage, gsk_vulkan_image, GSK_TYPE_GPU_IMAGE)
 
-typedef struct _GskMemoryFormatInfo GskMemoryFormatInfo;
-
-struct _GskMemoryFormatInfo
-{
-  VkFormat format;
-  VkComponentMapping components;
-};
-
-static const GskMemoryFormatInfo *
-gsk_memory_format_get_vk_format_infos (GdkMemoryFormat format)
-{
-#define SWIZZLE(a, b, c, d) { VK_COMPONENT_SWIZZLE_ ## a, VK_COMPONENT_SWIZZLE_ ## b, VK_COMPONENT_SWIZZLE_ ## c, VK_COMPONENT_SWIZZLE_ ## d }
-#define DEFAULT_SWIZZLE SWIZZLE (R, G, B, A)
-  switch (format)
-    {
-    case GDK_MEMORY_A8B8G8R8_PREMULTIPLIED:
-      {
-        static const GskMemoryFormatInfo info[] = {
-          { VK_FORMAT_R8G8B8A8_UNORM, SWIZZLE(A, B, G, R) },
-          { VK_FORMAT_UNDEFINED }
-        };
-        return info;
-      }
-    case GDK_MEMORY_B8G8R8A8_PREMULTIPLIED:
-      {
-        static const GskMemoryFormatInfo info[] = {
-          { VK_FORMAT_B8G8R8A8_UNORM, DEFAULT_SWIZZLE     },
-          { VK_FORMAT_R8G8B8A8_UNORM, SWIZZLE(B, G, R, A) },
-          { VK_FORMAT_UNDEFINED }
-        };
-        return info;
-      }
-
-    case GDK_MEMORY_A8R8G8B8_PREMULTIPLIED:
-      {
-        static const GskMemoryFormatInfo info[] = {
-          { VK_FORMAT_R8G8B8A8_UNORM, SWIZZLE(G, B, A, R) },
-          { VK_FORMAT_UNDEFINED }
-        };
-        return info;
-      }
-
-    case GDK_MEMORY_R8G8B8A8_PREMULTIPLIED:
-      {
-        static const GskMemoryFormatInfo info[] = {
-          { VK_FORMAT_R8G8B8A8_UNORM, DEFAULT_SWIZZLE },
-          { VK_FORMAT_UNDEFINED }
-        };
-        return info;
-      }
-
-    case GDK_MEMORY_B8G8R8A8:
-      {
-        static const GskMemoryFormatInfo info[] = {
-          { VK_FORMAT_B8G8R8A8_UNORM, DEFAULT_SWIZZLE     },
-          { VK_FORMAT_R8G8B8A8_UNORM, SWIZZLE(B, G, R, A) },
-          { VK_FORMAT_UNDEFINED }
-        };
-        return info;
-      }
-
-    case GDK_MEMORY_A8R8G8B8:
-      {
-        static const GskMemoryFormatInfo info[] = {
-          { VK_FORMAT_R8G8B8A8_UNORM, SWIZZLE(G, B, A, R) },
-          { VK_FORMAT_UNDEFINED }
-        };
-        return info;
-      }
-
-    case GDK_MEMORY_R8G8B8A8:
-      {
-        static const GskMemoryFormatInfo info[] = {
-          { VK_FORMAT_R8G8B8A8_UNORM, DEFAULT_SWIZZLE },
-          { VK_FORMAT_UNDEFINED }
-        };
-        return info;
-      }
-
-    case GDK_MEMORY_A8B8G8R8:
-      {
-        static const GskMemoryFormatInfo info[] = {
-          { VK_FORMAT_R8G8B8A8_UNORM, SWIZZLE(A, B, G, R) },
-          { VK_FORMAT_UNDEFINED }
-        };
-        return info;
-      }
-
-    case GDK_MEMORY_X8B8G8R8:
-      {
-        static const GskMemoryFormatInfo info[] = {
-          { VK_FORMAT_R8G8B8A8_UNORM, SWIZZLE(A, B, G, ONE) },
-          { VK_FORMAT_UNDEFINED }
-        };
-        return info;
-      }
-    case GDK_MEMORY_B8G8R8X8:
-      {
-        static const GskMemoryFormatInfo info[] = {
-          { VK_FORMAT_B8G8R8A8_UNORM, SWIZZLE(R, G, B, ONE) },
-          { VK_FORMAT_R8G8B8A8_UNORM, SWIZZLE(B, G, R, ONE) },
-          { VK_FORMAT_UNDEFINED }
-        };
-        return info;
-      }
-
-    case GDK_MEMORY_X8R8G8B8:
-      {
-        static const GskMemoryFormatInfo info[] = {
-          { VK_FORMAT_R8G8B8A8_UNORM, SWIZZLE(G, B, A, ONE) },
-          { VK_FORMAT_UNDEFINED }
-        };
-        return info;
-      }
-
-    case GDK_MEMORY_R8G8B8X8:
-      {
-        static const GskMemoryFormatInfo info[] = {
-          { VK_FORMAT_R8G8B8A8_UNORM, SWIZZLE(R, G, B, ONE) },
-          { VK_FORMAT_UNDEFINED }
-        };
-        return info;
-      }
-
-    case GDK_MEMORY_R8G8B8:
-      {
-        static const GskMemoryFormatInfo info[] = {
-          { VK_FORMAT_R8G8B8_UNORM, DEFAULT_SWIZZLE },
-          { VK_FORMAT_UNDEFINED }
-        };
-        return info;
-      }
-
-    case GDK_MEMORY_B8G8R8:
-      {
-        static const GskMemoryFormatInfo info[] = {
-          { VK_FORMAT_B8G8R8_UNORM, DEFAULT_SWIZZLE     },
-          { VK_FORMAT_R8G8B8_UNORM, SWIZZLE(B, G, R, A) },
-          { VK_FORMAT_UNDEFINED }
-        };
-        return info;
-      }
-
-    case GDK_MEMORY_R16G16B16:
-      {
-        static const GskMemoryFormatInfo info[] = {
-          { VK_FORMAT_R16G16B16_UNORM, DEFAULT_SWIZZLE },
-          { VK_FORMAT_UNDEFINED }
-        };
-        return info;
-      }
-
-    case GDK_MEMORY_R16G16B16A16_PREMULTIPLIED:
-      {
-        static const GskMemoryFormatInfo info[] = {
-          { VK_FORMAT_R16G16B16A16_UNORM, DEFAULT_SWIZZLE },
-          { VK_FORMAT_UNDEFINED }
-        };
-        return info;
-      }
-
-    case GDK_MEMORY_R16G16B16A16:
-      {
-        static const GskMemoryFormatInfo info[] = {
-          { VK_FORMAT_R16G16B16A16_UNORM, DEFAULT_SWIZZLE },
-          { VK_FORMAT_UNDEFINED }
-        };
-        return info;
-      }
-
-    case GDK_MEMORY_R16G16B16_FLOAT:
-      {
-        static const GskMemoryFormatInfo info[] = {
-          { VK_FORMAT_R16G16B16_SFLOAT, DEFAULT_SWIZZLE },
-          { VK_FORMAT_UNDEFINED }
-        };
-        return info;
-      }
-
-    case GDK_MEMORY_R16G16B16A16_FLOAT_PREMULTIPLIED:
-      {
-        static const GskMemoryFormatInfo info[] = {
-          { VK_FORMAT_R16G16B16A16_SFLOAT, DEFAULT_SWIZZLE },
-          { VK_FORMAT_UNDEFINED }
-        };
-        return info;
-      }
-
-    case GDK_MEMORY_R16G16B16A16_FLOAT:
-      {
-        static const GskMemoryFormatInfo info[] = {
-          { VK_FORMAT_R16G16B16A16_SFLOAT, DEFAULT_SWIZZLE },
-          { VK_FORMAT_UNDEFINED }
-        };
-        return info;
-      }
-
-    case GDK_MEMORY_R32G32B32_FLOAT:
-      {
-        static const GskMemoryFormatInfo info[] = {
-          { VK_FORMAT_R32G32B32_SFLOAT, DEFAULT_SWIZZLE },
-          { VK_FORMAT_UNDEFINED }
-        };
-        return info;
-      }
-
-    case GDK_MEMORY_R32G32B32A32_FLOAT_PREMULTIPLIED:
-      {
-        static const GskMemoryFormatInfo info[] = {
-          { VK_FORMAT_R32G32B32A32_SFLOAT, DEFAULT_SWIZZLE },
-          { VK_FORMAT_UNDEFINED }
-        };
-        return info;
-      }
-
-    case GDK_MEMORY_R32G32B32A32_FLOAT:
-      {
-        static const GskMemoryFormatInfo info[] = {
-          { VK_FORMAT_R32G32B32A32_SFLOAT, DEFAULT_SWIZZLE },
-          { VK_FORMAT_UNDEFINED }
-        };
-        return info;
-      }
-
-    case GDK_MEMORY_G8A8_PREMULTIPLIED:
-      {
-        static const GskMemoryFormatInfo info[] = {
-          { VK_FORMAT_R8G8_UNORM, SWIZZLE (R, R, R, G) },
-          { VK_FORMAT_UNDEFINED }
-        };
-        return info;
-      }
-
-    case GDK_MEMORY_G8A8:
-      {
-        static const GskMemoryFormatInfo info[] = {
-          { VK_FORMAT_R8G8_UNORM, SWIZZLE (R, R, R, G) },
-          { VK_FORMAT_UNDEFINED }
-        };
-        return info;
-      }
-
-    case GDK_MEMORY_G8:
-      {
-        static const GskMemoryFormatInfo info[] = {
-          { VK_FORMAT_R8_UNORM, SWIZZLE (R, R, R, ONE) },
-          { VK_FORMAT_UNDEFINED }
-        };
-        return info;
-      }
-
-    case GDK_MEMORY_G16A16_PREMULTIPLIED:
-      {
-        static const GskMemoryFormatInfo info[] = {
-          { VK_FORMAT_R16G16_UNORM, SWIZZLE (R, R, R, G) },
-          { VK_FORMAT_UNDEFINED }
-        };
-        return info;
-      }
-
-    case GDK_MEMORY_G16A16:
-      {
-        static const GskMemoryFormatInfo info[] = {
-          { VK_FORMAT_R16G16_UNORM, SWIZZLE (R, R, R, G) },
-          { VK_FORMAT_UNDEFINED }
-        };
-        return info;
-      }
-
-    case GDK_MEMORY_G16:
-      {
-        static const GskMemoryFormatInfo info[] = {
-          { VK_FORMAT_R16_UNORM, SWIZZLE (R, R, R, ONE) },
-          { VK_FORMAT_UNDEFINED }
-        };
-        return info;
-      }
-
-    case GDK_MEMORY_A8:
-      {
-        static const GskMemoryFormatInfo info[] = {
-          { VK_FORMAT_R8_UNORM, SWIZZLE (R, R, R, R) },
-          { VK_FORMAT_UNDEFINED }
-        };
-        return info;
-      }
-
-    case GDK_MEMORY_A16:
-      {
-        static const GskMemoryFormatInfo info[] = {
-          { VK_FORMAT_R16_UNORM, SWIZZLE (R, R, R, R) },
-          { VK_FORMAT_UNDEFINED }
-        };
-        return info;
-      }
-
-    case GDK_MEMORY_A16_FLOAT:
-      {
-        static const GskMemoryFormatInfo info[] = {
-          { VK_FORMAT_R16_SFLOAT, SWIZZLE (R, R, R, R) },
-          { VK_FORMAT_UNDEFINED }
-        };
-        return info;
-      }
-
-    case GDK_MEMORY_A32_FLOAT:
-      {
-        static const GskMemoryFormatInfo info[] = {
-          { VK_FORMAT_R32_SFLOAT, SWIZZLE (R, R, R, R) },
-          { VK_FORMAT_UNDEFINED }
-        };
-        return info;
-      }
-
-    case GDK_MEMORY_N_FORMATS:
-    default:
-      g_assert_not_reached ();
-      return NULL;
-    }
-#undef DEFAULT_SWIZZLE
-#undef SWIZZLE
-}
-
 static gboolean
-gsk_memory_format_info_is_framebuffer_compatible (const GskMemoryFormatInfo *format)
+gsk_component_mapping_is_framebuffer_compatible (const VkComponentMapping *components)
 {
-  if (format->components.r != VK_COMPONENT_SWIZZLE_R ||
-      format->components.g != VK_COMPONENT_SWIZZLE_G ||
-      format->components.b != VK_COMPONENT_SWIZZLE_B ||
-      format->components.a != VK_COMPONENT_SWIZZLE_A)
+  if (components->r != VK_COMPONENT_SWIZZLE_R ||
+      components->g != VK_COMPONENT_SWIZZLE_G ||
+      components->b != VK_COMPONENT_SWIZZLE_B ||
+      components->a != VK_COMPONENT_SWIZZLE_A)
     return FALSE;
 
   return TRUE;
-}
-
-static GdkMemoryFormat
-gsk_memory_format_get_fallback (GdkMemoryFormat format)
-{
-  switch (format)
-    {
-    case GDK_MEMORY_A8B8G8R8_PREMULTIPLIED:
-    case GDK_MEMORY_B8G8R8A8_PREMULTIPLIED:
-    case GDK_MEMORY_A8R8G8B8_PREMULTIPLIED:
-    case GDK_MEMORY_R8G8B8A8_PREMULTIPLIED:
-    case GDK_MEMORY_B8G8R8A8:
-    case GDK_MEMORY_A8R8G8B8:
-    case GDK_MEMORY_R8G8B8A8:
-    case GDK_MEMORY_A8B8G8R8:
-    case GDK_MEMORY_R8G8B8:
-      return GDK_MEMORY_R8G8B8A8_PREMULTIPLIED;
-
-    case GDK_MEMORY_B8G8R8X8:
-    case GDK_MEMORY_X8R8G8B8:
-    case GDK_MEMORY_X8B8G8R8:
-    case GDK_MEMORY_R8G8B8X8:
-    case GDK_MEMORY_B8G8R8:
-      return GDK_MEMORY_R8G8B8;
-
-    case GDK_MEMORY_R16G16B16A16_PREMULTIPLIED:
-      return GDK_MEMORY_R32G32B32A32_FLOAT_PREMULTIPLIED;
-
-    case GDK_MEMORY_R16G16B16:
-    case GDK_MEMORY_R16G16B16A16:
-      return GDK_MEMORY_R16G16B16A16_PREMULTIPLIED;
-
-    case GDK_MEMORY_R16G16B16A16_FLOAT_PREMULTIPLIED:
-      return GDK_MEMORY_R32G32B32A32_FLOAT_PREMULTIPLIED;
-
-    case GDK_MEMORY_R16G16B16_FLOAT:
-    case GDK_MEMORY_R16G16B16A16_FLOAT:
-      return GDK_MEMORY_R16G16B16A16_FLOAT_PREMULTIPLIED;
-
-    case GDK_MEMORY_R32G32B32A32_FLOAT_PREMULTIPLIED:
-      return GDK_MEMORY_R8G8B8A8_PREMULTIPLIED;
-
-    case GDK_MEMORY_R32G32B32_FLOAT:
-    case  GDK_MEMORY_R32G32B32A32_FLOAT:
-      return GDK_MEMORY_R32G32B32A32_FLOAT_PREMULTIPLIED;
-
-    case GDK_MEMORY_G8A8_PREMULTIPLIED:
-    case GDK_MEMORY_G8A8:
-      return GDK_MEMORY_R8G8B8A8_PREMULTIPLIED;
-
-    case GDK_MEMORY_G8:
-      return GDK_MEMORY_R8G8B8;
-
-    case GDK_MEMORY_G16A16_PREMULTIPLIED:
-    case GDK_MEMORY_G16A16:
-      return GDK_MEMORY_R16G16B16A16_PREMULTIPLIED;
-
-    case GDK_MEMORY_G16:
-      return GDK_MEMORY_R16G16B16;
-
-    case GDK_MEMORY_A8:
-      return GDK_MEMORY_R8G8B8A8_PREMULTIPLIED;
-    case GDK_MEMORY_A16:
-      return GDK_MEMORY_R16G16B16A16_PREMULTIPLIED;
-    case GDK_MEMORY_A16_FLOAT:
-      return GDK_MEMORY_R16G16B16A16_FLOAT_PREMULTIPLIED;
-    case GDK_MEMORY_A32_FLOAT:
-      return GDK_MEMORY_R32G32B32A32_FLOAT_PREMULTIPLIED;
-
-    case GDK_MEMORY_N_FORMATS:
-    default:
-      return GDK_MEMORY_R8G8B8A8_PREMULTIPLIED;
-    }
 }
 
 static gboolean
@@ -556,16 +160,17 @@ gsk_vulkan_device_supports_format (GskVulkanDevice   *device,
 
 static void
 gsk_vulkan_image_create_view (GskVulkanImage            *self,
-                              VkSamplerYcbcrConversion   vk_conversion,
-                              const GskMemoryFormatInfo *format)
+                              VkFormat                   vk_format,
+                              const VkComponentMapping  *vk_components,
+                              VkSamplerYcbcrConversion   vk_conversion)
 {
   GSK_VK_CHECK (vkCreateImageView, self->display->vk_device,
                                  &(VkImageViewCreateInfo) {
                                      .sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO,
                                      .image = self->vk_image,
                                      .viewType = VK_IMAGE_VIEW_TYPE_2D,
-                                     .format = format->format,
-                                     .components = format->components,
+                                     .format = vk_format,
+                                     .components = *vk_components,
                                      .subresourceRange = {
                                          .aspectMask = VK_IMAGE_ASPECT_COLOR_BIT,
                                          .baseMipLevel = 0,
@@ -580,6 +185,56 @@ gsk_vulkan_image_create_view (GskVulkanImage            *self,
                                  },
                                  NULL,
                                  &self->vk_image_view);
+}
+
+static gboolean
+gsk_vulkan_device_check_format (GskVulkanDevice          *device,
+                                VkFormat                  vk_format,
+                                const VkComponentMapping *vk_components,
+                                GskGpuImageFlags          required_flags,
+                                VkImageTiling             vk_tiling,
+                                VkImageUsageFlags         vk_usage,
+                                gsize                     width,
+                                gsize                     height,
+                                VkImageTiling            *out_tiling,
+                                GskGpuImageFlags         *out_flags)
+{
+#define CHECK_FLAGS (GSK_GPU_IMAGE_NO_BLIT | GSK_GPU_IMAGE_FILTERABLE | GSK_GPU_IMAGE_RENDERABLE)
+  GskGpuImageFlags flags;
+
+  if (vk_usage & VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT &&
+      !gsk_component_mapping_is_framebuffer_compatible (vk_components))
+    return FALSE;
+
+  if (gsk_vulkan_device_supports_format (device,
+                                         vk_format,
+                                         0, 1,
+                                         vk_tiling, vk_usage,
+                                         width, height,
+                                         &flags) &&
+      ((flags & required_flags & CHECK_FLAGS) == (required_flags & CHECK_FLAGS)))
+    {
+      *out_tiling = vk_tiling;
+      *out_flags = flags;
+      return TRUE;
+    }
+
+  if (vk_tiling == VK_IMAGE_TILING_LINEAR &&
+      gsk_vulkan_device_supports_format (device,
+                                         vk_format,
+                                         0, 1,
+                                         VK_IMAGE_TILING_OPTIMAL, vk_usage,
+                                         width, height,
+                                         &flags) &&
+      ((flags & required_flags & CHECK_FLAGS) == (required_flags & CHECK_FLAGS)))
+    {
+      *out_tiling = VK_IMAGE_TILING_OPTIMAL;
+      *out_flags = flags;
+      return TRUE;
+    }
+
+  return FALSE;
+#undef CHECK_FLAGS
 }
 
 static GskVulkanImage *
@@ -598,51 +253,48 @@ gsk_vulkan_image_new (GskVulkanDevice           *device,
   VkMemoryRequirements requirements;
   GskVulkanImage *self;
   VkDevice vk_device;
-  const GskMemoryFormatInfo *vk_format;
   GskGpuImageFlags flags;
-#define CHECK_FLAGS (GSK_GPU_IMAGE_NO_BLIT | GSK_GPU_IMAGE_FILTERABLE | GSK_GPU_IMAGE_RENDERABLE)
+  VkFormat vk_format;
+  VkComponentMapping vk_components;
 
   g_assert (width > 0 && height > 0);
 
-  while (TRUE)
+  /* First, try the actual format */
+  vk_format = gdk_memory_format_vk_format (format, &vk_components);
+  if (vk_format == VK_FORMAT_UNDEFINED ||
+      !gsk_vulkan_device_check_format (device, vk_format, &vk_components, required_flags,
+                                       tiling, usage, width, height,
+                                       &tiling, &flags))
     {
-      for (vk_format = gsk_memory_format_get_vk_format_infos (format);
-           vk_format->format != VK_FORMAT_UNDEFINED;
-           vk_format++)
+      /* Second, try the potential RGBA format */
+      vk_format = gdk_memory_format_vk_rgba_format (format, NULL, &vk_components);
+      if (vk_format == VK_FORMAT_UNDEFINED ||
+          !gsk_vulkan_device_check_format (device, vk_format, &vk_components, required_flags,
+                                           tiling, usage, width, height,
+                                           &tiling, &flags))
         {
-          if (usage & VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT &&
-              !gsk_memory_format_info_is_framebuffer_compatible (vk_format))
-            continue;
+          const GdkMemoryFormat *fallbacks;
+          gsize i;
 
-          if (gsk_vulkan_device_supports_format (device,
-                                                 vk_format->format,
-                                                 0, 1,
-                                                 tiling, usage,
-                                                 width, height,
-                                                 &flags) &&
-              ((flags & required_flags & CHECK_FLAGS) == (required_flags & CHECK_FLAGS)))
-            break;
-
-          if (tiling == VK_IMAGE_TILING_LINEAR &&
-              gsk_vulkan_device_supports_format (device,
-                                                 vk_format->format,
-                                                 0, 1,
-                                                 VK_IMAGE_TILING_OPTIMAL, usage,
-                                                 width, height,
-                                                 &flags) &&
-              ((flags & required_flags & CHECK_FLAGS) == (required_flags & CHECK_FLAGS)))
+          /* Next, try the fallbacks */
+          fallbacks = gdk_memory_format_get_fallbacks (format);
+          for (i = 0; fallbacks[i] != -1; i++)
             {
-              tiling = VK_IMAGE_TILING_OPTIMAL;
-              break;
+              vk_format = gdk_memory_format_vk_format (fallbacks[i], &vk_components);
+              if (vk_format != VK_FORMAT_UNDEFINED &&
+                  gsk_vulkan_device_check_format (device, vk_format, &vk_components, required_flags,
+                                                  tiling, usage, width, height,
+                                                  &tiling, &flags))
+                {
+                  format = fallbacks[i];
+                  break;
+                }
             }
+
+          /* No format found. Likely, the width/height are too big */
+          if (fallbacks[i] == -1)
+            return NULL;
         }
-      if (vk_format->format != VK_FORMAT_UNDEFINED)
-        break;
-
-      if (format == GDK_MEMORY_R8G8B8A8_PREMULTIPLIED)
-        return NULL;
-
-      format = gsk_memory_format_get_fallback (format);
     }
 
   if (gdk_memory_format_alpha (format) == GDK_MEMORY_ALPHA_STRAIGHT)
@@ -659,7 +311,7 @@ gsk_vulkan_image_new (GskVulkanDevice           *device,
 
   self->display = g_object_ref (gsk_gpu_device_get_display (GSK_GPU_DEVICE (device)));
   gdk_display_ref_vulkan (self->display);
-  self->vk_format = vk_format->format;
+  self->vk_format = vk_format;
   self->vk_tiling = tiling;
   self->vk_usage = usage;
   self->vk_pipeline_stage = stage;
@@ -673,7 +325,7 @@ gsk_vulkan_image_new (GskVulkanDevice           *device,
                                     .sType = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO,
                                     .flags = 0,
                                     .imageType = VK_IMAGE_TYPE_2D,
-                                    .format = vk_format->format,
+                                    .format = vk_format,
                                     .extent = { width, height, 1 },
                                     .mipLevels = (flags & GSK_GPU_IMAGE_CAN_MIPMAP) ? gsk_vulkan_mipmap_levels (width, height) : 1,
                                     .arrayLayers = 1,
@@ -705,10 +357,9 @@ gsk_vulkan_image_new (GskVulkanDevice           *device,
                                    self->allocation.vk_memory,
                                    self->allocation.offset);
 
-  gsk_vulkan_image_create_view (self, VK_NULL_HANDLE, vk_format);
+  gsk_vulkan_image_create_view (self, vk_format, &vk_components, VK_NULL_HANDLE);
 
   return self;
-#undef CHECK_FLAGS
 }
 
 GskGpuImage *
@@ -802,15 +453,14 @@ gsk_vulkan_image_new_for_swapchain (GskVulkanDevice  *device,
   gsk_gpu_image_setup (GSK_GPU_IMAGE (self), 0, GDK_MEMORY_DEFAULT, width, height);
 
   gsk_vulkan_image_create_view (self,
-                                VK_NULL_HANDLE,
-                                &(GskMemoryFormatInfo) {
-                                  format,
-                                  { VK_COMPONENT_SWIZZLE_R,
-                                    VK_COMPONENT_SWIZZLE_G,
-                                    VK_COMPONENT_SWIZZLE_B,
-                                    VK_COMPONENT_SWIZZLE_A
-                                   }
-                                });
+                                format,
+                                &(VkComponentMapping) {
+                                  VK_COMPONENT_SWIZZLE_R,
+                                  VK_COMPONENT_SWIZZLE_G,
+                                  VK_COMPONENT_SWIZZLE_B,
+                                  VK_COMPONENT_SWIZZLE_A
+                                },
+                                VK_NULL_HANDLE);
 
   return GSK_GPU_IMAGE (self);
 }
@@ -866,32 +516,26 @@ gsk_vulkan_image_new_for_offscreen (GskVulkanDevice *device,
 }
 
 #ifdef HAVE_DMABUF
-GskGpuImage *
-gsk_vulkan_image_new_dmabuf (GskVulkanDevice *device,
-                             GdkMemoryFormat  format,
-                             gsize            width,
-                             gsize            height)
+static gboolean
+gsk_vulkan_device_check_dmabuf_format (GskVulkanDevice          *device,
+                                       VkFormat                  vk_format,
+                                       const VkComponentMapping *vk_components,
+                                       gsize                     width,
+                                       gsize                     height,
+                                       uint64_t                  modifiers[100],
+                                       GskGpuImageFlags         *out_flags,
+                                       gsize                    *out_n_modifiers)
+
 {
+  const VkFormatFeatureFlags required = VK_FORMAT_FEATURE_SAMPLED_IMAGE_BIT | VK_FORMAT_FEATURE_COLOR_ATTACHMENT_BLEND_BIT;
   VkDrmFormatModifierPropertiesEXT drm_mod_properties[100];
   VkDrmFormatModifierPropertiesListEXT drm_properties;
-  uint64_t modifiers[100];
   VkPhysicalDevice vk_phys_device;
-  VkDevice vk_device;
   VkFormatProperties2 properties;
   VkImageFormatProperties2 image_properties;
-  VkFormatFeatureFlags required;
-  const GskMemoryFormatInfo *format_info;
-  VkMemoryRequirements requirements;
-  GskVulkanImage *self;
-  VkResult res;
-  gsize i, n_modifiers;
   GskGpuImageFlags flags;
-
-  if (!gsk_vulkan_device_has_feature (device, GDK_VULKAN_FEATURE_DMABUF))
-    return NULL;
-
-  vk_phys_device = gsk_vulkan_device_get_vk_physical_device (device);
-  vk_device = gsk_vulkan_device_get_vk_device (device);
+  gsize i, n_modifiers;
+  VkResult res;
 
   drm_properties = (VkDrmFormatModifierPropertiesListEXT) {
     .sType = VK_STRUCTURE_TYPE_DRM_FORMAT_MODIFIER_PROPERTIES_LIST_EXT,
@@ -903,77 +547,129 @@ gsk_vulkan_image_new_dmabuf (GskVulkanDevice *device,
     .pNext = &drm_properties
   };
 
-  required = VK_FORMAT_FEATURE_SAMPLED_IMAGE_BIT | VK_FORMAT_FEATURE_COLOR_ATTACHMENT_BLEND_BIT;
+  if (!gsk_component_mapping_is_framebuffer_compatible (vk_components))
+    return FALSE;
 
-  while (TRUE)
+  vk_phys_device = gsk_vulkan_device_get_vk_physical_device (device);
+
+  vkGetPhysicalDeviceFormatProperties2 (vk_phys_device,
+                                        vk_format,
+                                        &properties);
+
+  flags = GSK_GPU_IMAGE_FILTERABLE | GSK_GPU_IMAGE_RENDERABLE;
+  n_modifiers = 0;
+  for (i = 0; i < drm_properties.drmFormatModifierCount; i++)
     {
-      for (format_info = gsk_memory_format_get_vk_format_infos (format);
-           format_info != VK_FORMAT_UNDEFINED;
-           format_info++)
+      if ((drm_mod_properties[i].drmFormatModifierTilingFeatures & required) != required)
+        continue;
+
+      image_properties = (VkImageFormatProperties2) {
+        .sType = VK_STRUCTURE_TYPE_IMAGE_FORMAT_PROPERTIES_2,
+      };
+      res = vkGetPhysicalDeviceImageFormatProperties2 (vk_phys_device,
+                                                       &(VkPhysicalDeviceImageFormatInfo2) {
+                                                         .sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_IMAGE_FORMAT_INFO_2,
+                                                         .format = vk_format,
+                                                         .type = VK_IMAGE_TYPE_2D,
+                                                         .tiling = VK_IMAGE_TILING_DRM_FORMAT_MODIFIER_EXT,
+                                                         .usage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT,
+                                                         .flags = 0,
+                                                         .pNext = &(VkPhysicalDeviceImageDrmFormatModifierInfoEXT) {
+                                                             .sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_IMAGE_DRM_FORMAT_MODIFIER_INFO_EXT,
+                                                             .drmFormatModifier = drm_mod_properties[i].drmFormatModifier,
+                                                             .sharingMode = VK_SHARING_MODE_EXCLUSIVE,
+                                                             .queueFamilyIndexCount = 1,
+                                                             .pQueueFamilyIndices = (uint32_t[1]) { gsk_vulkan_device_get_vk_queue_family_index (device) },
+                                                          }
+                                                       },
+                                                       &image_properties);
+      if (res != VK_SUCCESS)
+        continue;
+
+      if (image_properties.imageFormatProperties.maxExtent.width < width ||
+          image_properties.imageFormatProperties.maxExtent.height < height)
+        continue;
+
+      /* we could check the real used format after creation, but for now: */
+      if ((drm_mod_properties[i].drmFormatModifierTilingFeatures & VK_FORMAT_FEATURE_BLIT_SRC_BIT) == 0)
+        flags |= GSK_GPU_IMAGE_NO_BLIT;
+      if ((drm_mod_properties[i].drmFormatModifierTilingFeatures & VK_FORMAT_FEATURE_SAMPLED_IMAGE_FILTER_LINEAR_BIT) == 0)
+        flags &= ~GSK_GPU_IMAGE_FILTERABLE;
+      if ((drm_mod_properties[i].drmFormatModifierTilingFeatures & VK_FORMAT_FEATURE_COLOR_ATTACHMENT_BLEND_BIT) == 0)
+        flags &= ~GSK_GPU_IMAGE_RENDERABLE;
+
+      modifiers[n_modifiers++] = drm_mod_properties[i].drmFormatModifier;
+    }
+
+  if (n_modifiers == 0)
+    return FALSE;
+
+  *out_flags = flags;
+  *out_n_modifiers = n_modifiers;
+  return TRUE;
+}
+
+GskGpuImage *
+gsk_vulkan_image_new_dmabuf (GskVulkanDevice *device,
+                             GdkMemoryFormat  format,
+                             gsize            width,
+                             gsize            height)
+{
+  uint64_t modifiers[100];
+  VkDevice vk_device;
+  VkFormat vk_format;
+  VkComponentMapping vk_components;
+  VkMemoryRequirements requirements;
+  GskVulkanImage *self;
+  VkResult res;
+  gsize n_modifiers;
+  GskGpuImageFlags flags;
+
+  if (!gsk_vulkan_device_has_feature (device, GDK_VULKAN_FEATURE_DMABUF))
+    return NULL;
+
+  vk_device = gsk_vulkan_device_get_vk_device (device);
+
+  /* First, try the actual format */
+  vk_format = gdk_memory_format_vk_format (format, &vk_components);
+  if (vk_format == VK_FORMAT_UNDEFINED ||
+      !gsk_vulkan_device_check_dmabuf_format (device, vk_format, &vk_components, width, height,
+                                              modifiers, &flags, &n_modifiers))
+    {
+      /* Second, try the potential RGBA format, but as a fallback */
+      GdkMemoryFormat rgba_format;
+      vk_format = gdk_memory_format_vk_rgba_format (format, &rgba_format, NULL);
+      if (vk_format != VK_FORMAT_UNDEFINED)
+        vk_format = gdk_memory_format_vk_format (rgba_format, &vk_components);
+      if (vk_format != VK_FORMAT_UNDEFINED &&
+          gsk_vulkan_device_check_dmabuf_format (device, vk_format, &vk_components, width, height,
+                                                 modifiers, &flags, &n_modifiers))
         {
-          if (!gsk_memory_format_info_is_framebuffer_compatible (format_info))
-            continue;
+          format = rgba_format;
+        }
+      else
+        {
+          const GdkMemoryFormat *fallbacks;
+          gsize i;
 
-          vkGetPhysicalDeviceFormatProperties2 (vk_phys_device,
-                                                format_info->format,
-                                                &properties);
-
-          flags = GSK_GPU_IMAGE_FILTERABLE | GSK_GPU_IMAGE_RENDERABLE;
-          n_modifiers = 0;
-          for (i = 0; i < drm_properties.drmFormatModifierCount; i++)
+          /* Next, try the fallbacks */
+          fallbacks = gdk_memory_format_get_fallbacks (format);
+          for (i = 0; fallbacks[i] != -1; i++)
             {
-              if ((drm_mod_properties[i].drmFormatModifierTilingFeatures & required) != required)
-                continue;
-
-              image_properties = (VkImageFormatProperties2) {
-                .sType = VK_STRUCTURE_TYPE_IMAGE_FORMAT_PROPERTIES_2,
-              };
-              res = vkGetPhysicalDeviceImageFormatProperties2 (vk_phys_device,
-                                                               &(VkPhysicalDeviceImageFormatInfo2) {
-                                                                 .sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_IMAGE_FORMAT_INFO_2,
-                                                                 .format = format_info->format,
-                                                                 .type = VK_IMAGE_TYPE_2D,
-                                                                 .tiling = VK_IMAGE_TILING_DRM_FORMAT_MODIFIER_EXT,
-                                                                 .usage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT,
-                                                                 .flags = 0,
-                                                                 .pNext = &(VkPhysicalDeviceImageDrmFormatModifierInfoEXT) {
-                                                                     .sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_IMAGE_DRM_FORMAT_MODIFIER_INFO_EXT,
-                                                                     .drmFormatModifier = drm_mod_properties[i].drmFormatModifier,
-                                                                     .sharingMode = VK_SHARING_MODE_EXCLUSIVE,
-                                                                     .queueFamilyIndexCount = 1,
-                                                                     .pQueueFamilyIndices = (uint32_t[1]) { gsk_vulkan_device_get_vk_queue_family_index (device) },
-                                                                  }
-                                                               },
-                                                               &image_properties);
-              if (res != VK_SUCCESS)
-                continue;
-
-              if (image_properties.imageFormatProperties.maxExtent.width < width ||
-                  image_properties.imageFormatProperties.maxExtent.height < height)
-                continue;
-
-              /* we could check the real used format after creation, but for now: */
-              if ((drm_mod_properties[i].drmFormatModifierTilingFeatures & VK_FORMAT_FEATURE_BLIT_SRC_BIT) == 0)
-                flags |= GSK_GPU_IMAGE_NO_BLIT;
-              if ((drm_mod_properties[i].drmFormatModifierTilingFeatures & VK_FORMAT_FEATURE_SAMPLED_IMAGE_FILTER_LINEAR_BIT) == 0)
-                flags &= ~GSK_GPU_IMAGE_FILTERABLE;
-              if ((drm_mod_properties[i].drmFormatModifierTilingFeatures & VK_FORMAT_FEATURE_COLOR_ATTACHMENT_BLEND_BIT) == 0)
-                flags &= ~GSK_GPU_IMAGE_RENDERABLE;
-
-              modifiers[n_modifiers++] = drm_mod_properties[i].drmFormatModifier;
+              vk_format = gdk_memory_format_vk_format (fallbacks[i], &vk_components);
+              if (vk_format != VK_FORMAT_UNDEFINED &&
+                  gsk_vulkan_device_check_dmabuf_format (device, vk_format, &vk_components, width, height,
+                                                         modifiers, &flags, &n_modifiers))
+                {
+                  format = fallbacks[i];
+                  break;
+                }
             }
 
-          if (n_modifiers > 0)
-            break;
+          /* No format found. Likely, the width/height are too big */
+          if (fallbacks[i] == -1)
+            return NULL;
         }
-
-      if (n_modifiers > 0)
-        break;
-
-      if (format == GDK_MEMORY_R8G8B8A8_PREMULTIPLIED)
-        return NULL;
-
-      format = gsk_memory_format_get_fallback (format);
     }
 
   self = g_object_new (GSK_TYPE_VULKAN_IMAGE, NULL);
@@ -981,7 +677,7 @@ gsk_vulkan_image_new_dmabuf (GskVulkanDevice *device,
   self->display = g_object_ref (gsk_gpu_device_get_display (GSK_GPU_DEVICE (device)));
   gdk_display_ref_vulkan (self->display);
   self->vk_tiling = VK_IMAGE_TILING_DRM_FORMAT_MODIFIER_EXT;
-  self->vk_format = format_info->format;
+  self->vk_format = vk_format;
   self->vk_pipeline_stage = VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT;
   self->vk_image_layout = VK_IMAGE_LAYOUT_UNDEFINED;
   self->vk_access = 0;
@@ -997,7 +693,7 @@ gsk_vulkan_image_new_dmabuf (GskVulkanDevice *device,
                            .sType = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO,
                            .flags = 0,
                            .imageType = VK_IMAGE_TYPE_2D,
-                           .format = format_info->format,
+                           .format = vk_format,
                            .extent = { width, height, 1 },
                            .mipLevels = 1,
                            .arrayLayers = 1,
@@ -1055,7 +751,7 @@ gsk_vulkan_image_new_dmabuf (GskVulkanDevice *device,
                                    self->allocation.vk_memory,
                                    self->allocation.offset);
 
-  gsk_vulkan_image_create_view (self, VK_NULL_HANDLE, format_info);
+  gsk_vulkan_image_create_view (self, vk_format, &vk_components, VK_NULL_HANDLE);
 
   return GSK_GPU_IMAGE (self);
 }
@@ -1340,11 +1036,9 @@ gsk_vulkan_image_new_for_dmabuf (GskVulkanDevice *device,
     vk_conversion = VK_NULL_HANDLE;
 
   gsk_vulkan_image_create_view (self,
-                                vk_conversion,
-                                &(GskMemoryFormatInfo) {
-                                  vk_format,
-                                  vk_components,
-                                });
+                                vk_format,
+                                &vk_components,
+                                vk_conversion);
 
   GDK_DEBUG (DMABUF, "Vulkan uploaded %zux%zu %.4s::%016llx %sdmabuf",
              width, height,
