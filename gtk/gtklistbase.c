@@ -116,6 +116,25 @@ G_GNUC_UNUSED static void gtk_list_base_init (GtkListBase *self) { }
 
 static GParamSpec *properties[N_PROPS] = { NULL, };
 
+static gboolean
+gtk_list_base_adjustment_is_focus_within (GtkListBase *self)
+{
+  GtkRoot *root;
+  GtkWidget *focus_widget;
+
+  root = _gtk_widget_get_root (GTK_WIDGET (self));
+
+  if (root == NULL)
+    return FALSE;
+
+  focus_widget = gtk_root_get_focus (root);
+  if (focus_widget == NULL)
+    return FALSE;
+
+  return (focus_widget == GTK_WIDGET (self) ||
+          gtk_widget_is_ancestor (focus_widget, GTK_WIDGET (self)));
+}
+
 /*
  * gtk_list_base_get_position_from_allocation:
  * @self: a `GtkListBase`
@@ -2353,8 +2372,7 @@ gtk_list_base_scroll_to (GtkListBase        *self,
 
       gtk_list_item_tracker_set_position (priv->item_manager, priv->focus, pos, 0, 0);
 
-      /* XXX: Is this the proper check? */
-      if (gtk_widget_get_state_flags (GTK_WIDGET (self)) & GTK_STATE_FLAG_FOCUS_WITHIN)
+      if (gtk_list_base_adjustment_is_focus_within (self))
         {
           GtkListTile *tile = gtk_list_item_manager_get_nth (priv->item_manager, pos, NULL);
 
