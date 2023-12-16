@@ -2,6 +2,10 @@
 
 #include "gdkdmabufformatsbuilderprivate.h"
 
+#ifdef GDK_RENDERING_VULKAN
+#include <vulkan/vulkan.h>
+#endif
+
 #define GDK_DMABUF_MAX_PLANES 4
 
 typedef struct _GdkDmabuf GdkDmabuf;
@@ -70,5 +74,9 @@ gboolean                    gdk_dmabuf_fourcc_is_yuv            (guint32        
 gboolean                    gdk_dmabuf_get_memory_format        (guint32                         fourcc,
                                                                  gboolean                        premultiplied,
                                                                  GdkMemoryFormat                *out_format);
+#ifdef GDK_RENDERING_VULKAN
+VkFormat                    gdk_dmabuf_get_vk_format            (guint32                         fourcc,
+                                                                 VkComponentMapping             *out_components);
+#endif
 
 #endif
