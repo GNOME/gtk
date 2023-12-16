@@ -70,7 +70,5 @@ gboolean                    gdk_dmabuf_fourcc_is_yuv            (guint32        
 gboolean                    gdk_dmabuf_get_memory_format        (guint32                         fourcc,
                                                                  gboolean                        premultiplied,
                                                                  GdkMemoryFormat                *out_format);
-gboolean                    gdk_dmabuf_get_fourcc               (GdkMemoryFormat                 format,
-                                                                 guint32                        *out_fourcc);
 
 #endif
