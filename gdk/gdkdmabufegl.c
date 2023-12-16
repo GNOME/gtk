@@ -137,31 +137,6 @@ gdk_dmabuf_egl_downloader_collect_formats (const GdkDmabufDownloader *downloader
 }
 
 static gboolean
-gdk_dmabuf_egl_downloader_add_formats (const GdkDmabufDownloader *downloader,
-                                       GdkDisplay                *display,
-                                       GdkDmabufFormatsBuilder   *builder)
-{
-  GdkDmabufFormatsBuilder *formats;
-  GdkDmabufFormatsBuilder *external;
-  gboolean retval = FALSE;
-
-  g_assert (display->egl_dmabuf_formats == NULL);
-  g_assert (display->egl_external_formats == NULL);
-
-  formats = gdk_dmabuf_formats_builder_new ();
-  external = gdk_dmabuf_formats_builder_new ();
-
-  retval = gdk_dmabuf_egl_downloader_collect_formats (downloader, display, formats, external);
-
-  display->egl_dmabuf_formats = gdk_dmabuf_formats_builder_free_to_formats (formats);
-  display->egl_external_formats = gdk_dmabuf_formats_builder_free_to_formats (external);
-
-  gdk_dmabuf_formats_builder_add_formats (builder, display->egl_dmabuf_formats);
-
-  return retval;
-}
-
-static gboolean
 gdk_dmabuf_egl_downloader_supports (const GdkDmabufDownloader  *downloader,
                                     GdkDisplay                 *display,
                                     const GdkDmabuf            *dmabuf,
@@ -320,16 +295,38 @@ gdk_dmabuf_egl_downloader_download (const GdkDmabufDownloader *downloader,
 }
 
 const GdkDmabufDownloader *
-gdk_dmabuf_get_egl_downloader (void)
+gdk_dmabuf_get_egl_downloader (GdkDisplay              *display,
+                               GdkDmabufFormatsBuilder *builder)
 {
   static const GdkDmabufDownloader downloader = {
     "egl",
-    gdk_dmabuf_egl_downloader_add_formats,
     gdk_dmabuf_egl_downloader_supports,
     gdk_dmabuf_egl_downloader_download,
   };
+  GdkDmabufFormatsBuilder *formats;
+  GdkDmabufFormatsBuilder *external;
+  gboolean retval = FALSE;
 
-  return &downloader;
+  g_assert (display->egl_dmabuf_formats == NULL);
+  g_assert (display->egl_external_formats == NULL);
+
+  if (!gdk_display_prepare_gl (display, NULL))
+    return NULL;
+
+  formats = gdk_dmabuf_formats_builder_new ();
+  external = gdk_dmabuf_formats_builder_new ();
+
+  retval = gdk_dmabuf_egl_downloader_collect_formats (&downloader, display, formats, external);
+
+  display->egl_dmabuf_formats = gdk_dmabuf_formats_builder_free_to_formats (formats);
+  display->egl_external_formats = gdk_dmabuf_formats_builder_free_to_formats (external);
+
+  gdk_dmabuf_formats_builder_add_formats (builder, display->egl_dmabuf_formats);
+
+  if (retval)
+    return &downloader;
+  else
+    return NULL;
 }
 
 #endif  /* HAVE_DMABUF && HAVE_EGL */

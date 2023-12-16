@@ -1882,12 +1882,11 @@ gdk_display_get_egl_display (GdkDisplay *self)
 #ifdef HAVE_DMABUF
 static void
 gdk_display_add_dmabuf_downloader (GdkDisplay                *display,
-                                   const GdkDmabufDownloader *downloader,
-                                   GdkDmabufFormatsBuilder   *builder)
+                                   const GdkDmabufDownloader *downloader)
 {
   gsize i;
 
-  if (!downloader->add_formats (downloader, display, builder))
+  if (downloader == NULL)
     return;
 
   /* dmabuf_downloaders is NULL-terminated */
@@ -1897,7 +1896,7 @@ gdk_display_add_dmabuf_downloader (GdkDisplay                *display,
         break;
     }
 
-  g_assert (i < G_N_ELEMENTS (display->dmabuf_downloaders));
+  g_assert (i < G_N_ELEMENTS (display->dmabuf_downloaders) - 1);
 
   display->dmabuf_downloaders[i] = downloader;
 }
@@ -1926,8 +1925,7 @@ gdk_display_init_dmabuf (GdkDisplay *self)
       gdk_display_prepare_gl (self, NULL);
 
 #ifdef HAVE_EGL
-      if (gdk_display_prepare_gl (self, NULL))
-        gdk_display_add_dmabuf_downloader (self, gdk_dmabuf_get_egl_downloader (), builder);
+      gdk_display_add_dmabuf_downloader (self, gdk_dmabuf_get_egl_downloader (self, builder));
 #endif
 
       gdk_dmabuf_formats_builder_add_formats (builder,
