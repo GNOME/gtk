@@ -38,8 +38,7 @@
  */
 
 static gboolean
-gdk_dmabuf_egl_downloader_collect_formats (const GdkDmabufDownloader *downloader,
-                                           GdkDisplay                *display,
+gdk_dmabuf_egl_downloader_collect_formats (GdkDisplay                *display,
                                            GdkDmabufFormatsBuilder   *formats,
                                            GdkDmabufFormatsBuilder   *external)
 {
@@ -102,9 +101,8 @@ gdk_dmabuf_egl_downloader_collect_formats (const GdkDmabufDownloader *downloader
               (!external_only[j] || gdk_gl_context_get_use_es (context)))
             {
               GDK_DISPLAY_DEBUG (display, DMABUF,
-                                 "%s%s dmabuf format %.4s:%#" G_GINT64_MODIFIER "x",
+                                 "%s EGL dmabuf format %.4s:%#" G_GINT64_MODIFIER "x",
                                  external_only[j] ? "external " : "",
-                                 downloader->name,
                                  (char *) &fourccs[i],
                                  modifiers[j]);
 
@@ -316,7 +314,7 @@ gdk_dmabuf_get_egl_downloader (GdkDisplay              *display,
   formats = gdk_dmabuf_formats_builder_new ();
   external = gdk_dmabuf_formats_builder_new ();
 
-  retval = gdk_dmabuf_egl_downloader_collect_formats (&downloader, display, formats, external);
+  retval = gdk_dmabuf_egl_downloader_collect_formats (display, formats, external);
 
   display->egl_dmabuf_formats = gdk_dmabuf_formats_builder_free_to_formats (formats);
   display->egl_external_formats = gdk_dmabuf_formats_builder_free_to_formats (external);
