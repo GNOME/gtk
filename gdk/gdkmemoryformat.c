@@ -1123,20 +1123,32 @@ gdk_memory_format_alignment (GdkMemoryFormat format)
  *
  * Gets a list of fallback formats to use for @format.
  *
- * These formats are RGBA formats that ideally have a
- * higher depth than the given format. They will always
- * include a guaranteed supported format though, even
- * if it is of lower quality.
+ * These formats are RGBA formats that ideally have a higher depth
+ * than the given format. They will always include a guaranteed
+ * supported format though, even if it is of lower quality (unless
+ * @format is already guaranteed supported).
  *
  * Fallbacks will use the same alpha format, ie a premultiplied
  * format will never fall back to a straight alpha format and
- * vice versa.
- * Either may fall back to an opaque format.
- * Opaque formats will fall back to premultiplied formats only.
+ * vice versa. Either may fall back to an opaque format. Opaque
+ * formats will fall back to premultiplied formats only.
  *
- * Use gdk_memory_format_get_premultiplied_formats() to transition
- * between premultiplied and straight alpha if you need to.
+ * Use gdk_memory_format_get_premultiplied() and
+ * gdk_memory_format_get_straight() to transition between
+ * premultiplied and straight alpha if you need to.
  *
+ * Use gdk_memory_format_gl_rgba_format() to get an equivalent RGBA
+ * format and swizzle.
+ *
+ * The expected order of operation when looking for supported formats
+ * is the following:
+ *
+ * 1. Try the format itself
+ * 2. If swizzling is supported, try the RGBA format with swizzling
+ * 3. If swizzling is not supported, try the RGBA without swizzling,
+ *    and with CPU conversion
+ * 4. Try fallback formats
+ * 
  * Returns: A list of fallbacks, terminated with -1
  **/
 const GdkMemoryFormat *

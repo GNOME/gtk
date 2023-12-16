@@ -433,9 +433,11 @@ texture_builder_set_planes (GdkDmabufTextureBuilder *builder,
 static GdkTexture *
 make_dmabuf_texture (const char *filename,
                      guint32     format,
-                     gboolean    disjoint)
+                     gboolean    disjoint,
+                     gboolean    premultiplied)
 {
   GdkTexture *texture;
+  GdkTextureDownloader *downloader;
   int width, height;
   gsize rgb_stride, rgb_size;
   guchar *rgb_data;
@@ -459,7 +461,15 @@ make_dmabuf_texture (const char *filename,
 
   rgb_data = g_new0 (guchar, rgb_size);
 
-  gdk_texture_download (texture, rgb_data, rgb_stride);
+  downloader = gdk_texture_downloader_new (texture);
+
+  if (premultiplied)
+    gdk_texture_downloader_set_format (downloader, GDK_MEMORY_B8G8R8A8_PREMULTIPLIED);
+  else
+    gdk_texture_downloader_set_format (downloader, GDK_MEMORY_B8G8R8A8);
+
+  gdk_texture_downloader_download_into (downloader, rgb_data, rgb_stride);
+  gdk_texture_downloader_free (downloader);
 
   g_object_unref (texture);
 
@@ -470,6 +480,7 @@ make_dmabuf_texture (const char *filename,
   gdk_dmabuf_texture_builder_set_height (builder, height);
   gdk_dmabuf_texture_builder_set_fourcc (builder, format);
   gdk_dmabuf_texture_builder_set_modifier (builder, DRM_FORMAT_MOD_LINEAR);
+  gdk_dmabuf_texture_builder_set_premultiplied (builder, premultiplied);
 
   if (format == DRM_FORMAT_XRGB8888 ||
       format == DRM_FORMAT_ARGB8888)
@@ -627,6 +638,7 @@ main (int argc, char *argv[])
   char *filename;
   guint32 format;
   gboolean disjoint = FALSE;
+  gboolean premultiplied = TRUE;
   gboolean decorated = TRUE;
   unsigned int i;
   const char *save_filename = NULL;
@@ -637,6 +649,8 @@ main (int argc, char *argv[])
         disjoint = TRUE;
       else if (g_str_equal (argv[i], "--undecorated"))
         decorated = FALSE;
+      else if (g_str_equal (argv[i], "--unpremultiplied"))
+        premultiplied = FALSE;
       else if (g_str_equal (argv[i], "--download-to"))
         {
           i++;
@@ -663,7 +677,7 @@ main (int argc, char *argv[])
   /* Get the list of supported formats with GDK_DEBUG=opengl */
   gdk_display_get_dmabuf_formats (gdk_display_get_default ());
 
-  texture = make_dmabuf_texture (filename, format, disjoint);
+  texture = make_dmabuf_texture (filename, format, disjoint, premultiplied);
 
   if (save_filename)
     gdk_texture_save_to_png (texture, save_filename);

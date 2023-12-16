@@ -17,6 +17,8 @@ uniform samplerExternalOES u_external_source;
 uniform sampler2D u_external_source;
 #endif
 
+uniform int u_premultiply;
+
 void main() {
 /* Open-code this here, since GskTexture() expects a sampler2D */
 #if defined(GSK_GLES) || defined(GSK_LEGACY)
@@ -24,5 +26,9 @@ void main() {
 #else
   vec4 color = texture(u_external_source, vUv);
 #endif
+
+  if (u_premultiply == 1)
+    color.rgb *= color.a;
+
   gskSetOutputColor(color);
 }

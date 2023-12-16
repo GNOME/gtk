@@ -1605,7 +1605,6 @@ gsk_gl_command_queue_do_upload_texture_chunk (GskGLCommandQueue *self,
       start_time = GDK_PROFILER_CURRENT_TIME;
     }
 
-
   glPixelStorei (GL_UNPACK_ALIGNMENT, gdk_memory_format_alignment (data_format));
 
   /* GL_UNPACK_ROW_LENGTH is available on desktop GL, OpenGL ES >= 3.0, or if
