@@ -166,59 +166,6 @@ extern gboolean        gsk_renderer_realize         (GskRenderer  *renderer,
 extern GdkTexture *    gsk_renderer_convert_texture (GskRenderer  *renderer,
                                                      GdkTexture   *texture);
 
-typedef void (* InvokeFunc) (gpointer data);
-
-typedef struct _InvokeData
-{
-  volatile int spinlock;
-  InvokeFunc func;
-  gpointer data;
-} InvokeData;
-
-static gboolean
-gdk_dmabuf_egl_downloader_invoke_callback (gpointer data)
-{
-  InvokeData *invoke = data;
-  GdkGLContext *previous;
-
-  previous = gdk_gl_context_get_current ();
-
-  invoke->func (invoke->data);
-
-  if (previous)
-    gdk_gl_context_make_current (previous);
-  else
-    gdk_gl_context_clear_current ();
-
-  g_atomic_int_set (&invoke->spinlock, 1);
-
-  return FALSE;
-}
-
-/* Run func in the main thread, taking care not to disturb
- * the current GL context of the caller.
- */
-static void
-gdk_dmabuf_egl_downloader_run (InvokeFunc func,
-                               gpointer   data)
-{
-  InvokeData invoke = { 0, func, data };
-
-  g_main_context_invoke (NULL, gdk_dmabuf_egl_downloader_invoke_callback, &invoke);
-
-  while (g_atomic_int_get (&invoke.spinlock) == 0) ;
-}
-
-typedef struct _Download Download;
-
-struct _Download
-{
-  GdkDmabufTexture *texture;
-  GdkMemoryFormat format;
-  guchar *data;
-  gsize stride;
-};
-
 static GskRenderer *
 get_gsk_renderer (GdkDisplay *display)
 {
@@ -245,51 +192,36 @@ get_gsk_renderer (GdkDisplay *display)
 }
 
 static void
-gdk_dmabuf_egl_downloader_do_download (gpointer data)
-{
-  Download *download = data;
-  GdkDisplay *display;
-  GskRenderer *renderer;
-  GdkTexture *native;
-  GdkTextureDownloader *downloader;
-
-  display = gdk_dmabuf_texture_get_display (download->texture);
-
-  renderer = get_gsk_renderer (display);
-
-  native = gsk_renderer_convert_texture (renderer, GDK_TEXTURE (download->texture));
-
-  downloader = gdk_texture_downloader_new (native);
-  gdk_texture_downloader_set_format (downloader, download->format);
-  gdk_texture_downloader_download_into (downloader, download->data, download->stride);
-  gdk_texture_downloader_free (downloader);
-
-  g_object_unref (native);
-}
-
-static void
-gdk_dmabuf_egl_downloader_download (const GdkDmabufDownloader *downloader,
+gdk_dmabuf_egl_downloader_download (const GdkDmabufDownloader *downloader_,
                                     GdkTexture                *texture,
                                     GdkMemoryFormat            format,
                                     guchar                    *data,
                                     gsize                      stride)
 {
-  Download download;
-  const GdkDmabuf *dmabuf;
+  GdkGLContext *previous;
+  GdkDisplay *display;
+  GskRenderer *renderer;
+  GdkTexture *native;
+  GdkTextureDownloader *downloader;
 
-  download.texture = GDK_DMABUF_TEXTURE (texture);
-  download.format = format;
-  download.data = data;
-  download.stride = stride;
+  previous = gdk_gl_context_get_current ();
 
-  dmabuf = gdk_dmabuf_texture_get_dmabuf (GDK_DMABUF_TEXTURE (texture));
+  display = gdk_dmabuf_texture_get_display (GDK_DMABUF_TEXTURE (texture));
+  renderer = get_gsk_renderer (display);
 
-  GDK_DISPLAY_DEBUG (gdk_dmabuf_texture_get_display (download.texture), DMABUF,
-                     "Using %s for downloading a dmabuf (format %.4s:%#" G_GINT64_MODIFIER "x)",
-                     downloader->name, (char *)&dmabuf->fourcc, dmabuf->modifier);
+  native = gsk_renderer_convert_texture (renderer, texture);
 
+  downloader = gdk_texture_downloader_new (native);
+  gdk_texture_downloader_set_format (downloader, format);
+  gdk_texture_downloader_download_into (downloader, data, stride);
+  gdk_texture_downloader_free (downloader);
 
-  gdk_dmabuf_egl_downloader_run (gdk_dmabuf_egl_downloader_do_download, &download);
+  g_object_unref (native);
+
+  if (previous)
+    gdk_gl_context_make_current (previous);
+  else
+    gdk_gl_context_clear_current ();
 }
 
 const GdkDmabufDownloader *

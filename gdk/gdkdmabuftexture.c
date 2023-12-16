@@ -80,6 +80,33 @@ gdk_dmabuf_texture_dispose (GObject *object)
   G_OBJECT_CLASS (gdk_dmabuf_texture_parent_class)->dispose (object);
 }
 
+typedef struct _Download Download;
+
+struct _Download
+{
+  GdkDmabufTexture *texture;
+  GdkMemoryFormat format;
+  guchar *data;
+  gsize stride;
+  volatile int spinlock;
+};
+
+static gboolean
+gdk_dmabuf_texture_invoke_callback (gpointer data)
+{
+  Download *download = data;
+
+  download->texture->downloader->download (download->texture->downloader,
+                                           GDK_TEXTURE (download->texture),
+                                           download->format,
+                                           download->data,
+                                           download->stride);
+
+  g_atomic_int_set (&download->spinlock, 1);
+
+  return FALSE;
+}
+
 static void
 gdk_dmabuf_texture_download (GdkTexture      *texture,
                              GdkMemoryFormat  format,
@@ -87,11 +114,19 @@ gdk_dmabuf_texture_download (GdkTexture      *texture,
                              gsize            stride)
 {
   GdkDmabufTexture *self = GDK_DMABUF_TEXTURE (texture);
+  Download download = { self, format, data, stride, 0 };
 
-  if (self->downloader)
-    self->downloader->download (self->downloader, texture, format, data, stride);
-  else
-    gdk_dmabuf_download_mmap (texture, format, data, stride);
+  if (self->downloader == NULL)
+    {
+#ifdef HAVE_DMABUF
+      gdk_dmabuf_download_mmap (texture, format, data, stride);
+#endif
+      return;
+    }
+
+  g_main_context_invoke (NULL, gdk_dmabuf_texture_invoke_callback, &download);
+
+  while (g_atomic_int_get (&download.spinlock) == 0);
 }
 
 static void
