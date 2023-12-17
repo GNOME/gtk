@@ -40,9 +40,6 @@ struct _GdkDmabufDownloader
 
 #ifdef HAVE_DMABUF
 
-const GdkDmabufDownloader * gdk_dmabuf_get_egl_downloader       (GdkDisplay                     *display,
-                                                                 GdkDmabufFormatsBuilder        *builder);
-
 GdkDmabufFormats *          gdk_dmabuf_get_mmap_formats         (void) G_GNUC_CONST;
 void                        gdk_dmabuf_download_mmap            (GdkTexture                     *texture,
                                                                  GdkMemoryFormat                 format,

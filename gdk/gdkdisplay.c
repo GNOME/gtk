@@ -31,6 +31,7 @@
 #include "gdkclipboardprivate.h"
 #include "gdkdeviceprivate.h"
 #include "gdkdisplaymanagerprivate.h"
+#include "gdkdmabufeglprivate.h"
 #include "gdkdmabufformatsbuilderprivate.h"
 #include "gdkdmabufformatsprivate.h"
 #include "gdkdmabuftextureprivate.h"

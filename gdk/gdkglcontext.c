@@ -78,7 +78,7 @@
 
 #include "gdkdebugprivate.h"
 #include "gdkdisplayprivate.h"
-#include <glib/gi18n-lib.h>
+#include "gdkdmabufeglprivate.h"
 #include "gdkmemoryformatprivate.h"
 #include "gdkmemorytextureprivate.h"
 #include "gdkprofilerprivate.h"
@@ -86,6 +86,8 @@
 #include "gdkdmabufformatsprivate.h"
 
 #include "gdkprivate.h"
+
+#include <glib/gi18n-lib.h>
 
 #ifdef GDK_WINDOWING_WIN32
 # include "gdk/win32/gdkwin32.h"
@@ -2159,81 +2161,16 @@ gdk_gl_context_import_dmabuf_for_target (GdkGLContext    *self,
 {
 #if defined(HAVE_EGL) && defined(HAVE_DMABUF)
   GdkDisplay *display = gdk_gl_context_get_display (self);
-  EGLDisplay egl_display = gdk_display_get_egl_display (display);
-  EGLint attribs[64];
-  int i;
   EGLImage image;
   guint texture_id;
 
-  g_return_val_if_fail (GDK_IS_GL_CONTEXT (self), 0);
-  g_return_val_if_fail (width > 0, 0);
-  g_return_val_if_fail (height > 0, 0);
-  g_return_val_if_fail (1 <= dmabuf->n_planes && dmabuf->n_planes <= 4, 0);
-  g_return_val_if_fail (target == GL_TEXTURE_2D || target == GL_TEXTURE_EXTERNAL_OES, 0);
-
-  if (egl_display == EGL_NO_DISPLAY || !display->have_egl_dma_buf_import)
-    {
-      GDK_DISPLAY_DEBUG (display, DMABUF,
-                         "Can't import dmabufs into GL, missing EGL or EGL_EXT_image_dma_buf_import_modifiers");
-      return 0;
-    }
-
-  GDK_DISPLAY_DEBUG (display, DMABUF,
-                     "Importing dmabuf (format: %.4s:%#" G_GINT64_MODIFIER "x, planes: %u) into GL",
-                     (char *) &dmabuf->fourcc, dmabuf->modifier, dmabuf->n_planes);
-
-  i = 0;
-  attribs[i++] = EGL_IMAGE_PRESERVED_KHR;
-  attribs[i++] = EGL_TRUE;
-  attribs[i++] = EGL_WIDTH;
-  attribs[i++] = width;
-  attribs[i++] = EGL_HEIGHT;
-  attribs[i++] = height;
-  attribs[i++] = EGL_LINUX_DRM_FOURCC_EXT;
-  attribs[i++] = dmabuf->fourcc;
-  attribs[i++] = EGL_YUV_COLOR_SPACE_HINT_EXT;
-  attribs[i++] = EGL_ITU_REC601_EXT;
-  attribs[i++] = EGL_SAMPLE_RANGE_HINT_EXT;
-  attribs[i++] = EGL_YUV_FULL_RANGE_EXT;
-
-#define ADD_PLANE(plane) \
-  { \
-    if (dmabuf->modifier != DRM_FORMAT_MOD_INVALID) \
-      { \
-        attribs[i++] = EGL_DMA_BUF_PLANE## plane ##_MODIFIER_LO_EXT; \
-        attribs[i++] = dmabuf->modifier & 0xFFFFFFFF; \
-        attribs[i++] = EGL_DMA_BUF_PLANE## plane ## _MODIFIER_HI_EXT; \
-        attribs[i++] = dmabuf->modifier >> 32; \
-      } \
-    attribs[i++] = EGL_DMA_BUF_PLANE## plane ##_FD_EXT; \
-    attribs[i++] = dmabuf->planes[plane].fd; \
-    attribs[i++] = EGL_DMA_BUF_PLANE## plane ##_PITCH_EXT; \
-    attribs[i++] = dmabuf->planes[plane].stride; \
-    attribs[i++] = EGL_DMA_BUF_PLANE## plane ##_OFFSET_EXT; \
-    attribs[i++] = dmabuf->planes[plane].offset; \
-  }
-
-  ADD_PLANE (0);
-
-  if (dmabuf->n_planes > 1) ADD_PLANE (1);
-  if (dmabuf->n_planes > 2) ADD_PLANE (2);
-  if (dmabuf->n_planes > 3) ADD_PLANE (3);
-
-  attribs[i++] = EGL_NONE;
-
-  image = eglCreateImageKHR (egl_display,
-                             EGL_NO_CONTEXT,
-                             EGL_LINUX_DMA_BUF_EXT,
-                             (EGLClientBuffer)NULL,
-                             attribs);
-
+  image = gdk_dmabuf_egl_create_image (display,
+                                       width,
+                                       height,
+                                       dmabuf,
+                                       target);
   if (image == EGL_NO_IMAGE)
-    {
-      GDK_DISPLAY_DEBUG (display, DMABUF,
-                         "Creating EGLImage for dmabuf failed: %#x",
-                         eglGetError ());
-      return 0;
-    }
+    return 0;
 
   glGenTextures (1, &texture_id);
   glBindTexture (target, texture_id);
@@ -2241,7 +2178,7 @@ gdk_gl_context_import_dmabuf_for_target (GdkGLContext    *self,
   glTexParameteri (target, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
   glTexParameteri (target, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
-  eglDestroyImageKHR (egl_display, image);
+  eglDestroyImageKHR (gdk_display_get_egl_display (display), image);
 
   return texture_id;
 #else
