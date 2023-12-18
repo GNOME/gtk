@@ -102,10 +102,17 @@ gsk_gl_renderer_dmabuf_downloader_download (GdkDmabufDownloader *downloader_,
   GdkGLContext *previous;
   GdkTexture *native;
   GdkTextureDownloader *downloader;
+  int width, height;
+  GskRenderNode *node;
 
   previous = gdk_gl_context_get_current ();
 
-  native = gsk_renderer_convert_texture (renderer, GDK_TEXTURE (texture));
+  width = gdk_texture_get_width (GDK_TEXTURE (texture));
+  height = gdk_texture_get_height (GDK_TEXTURE (texture));
+
+  node = gsk_texture_node_new (GDK_TEXTURE (texture), &GRAPHENE_RECT_INIT (0, 0, width, height));
+  native = gsk_renderer_render_texture (renderer, node, &GRAPHENE_RECT_INIT (0, 0, width, height));
+  gsk_render_node_unref (node);
 
   downloader = gdk_texture_downloader_new (native);
   gdk_texture_downloader_set_format (downloader, format);

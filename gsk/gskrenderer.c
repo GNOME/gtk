@@ -678,21 +678,3 @@ gsk_renderer_set_debug_flags (GskRenderer   *renderer,
   priv->debug_flags = flags;
 }
 
-/* Feed a texture through a renderer and return the resulting 'native' texture. */
-GdkTexture *
-gsk_renderer_convert_texture (GskRenderer *self,
-                              GdkTexture  *texture)
-{
-  int width, height;
-  GskRenderNode *node;
-  GdkTexture *result;
-
-  width = gdk_texture_get_width (texture);
-  height = gdk_texture_get_height (texture);
-
-  node = gsk_texture_node_new (texture, &GRAPHENE_RECT_INIT (0, 0, width, height));
-  result = gsk_renderer_render_texture (self, node, &GRAPHENE_RECT_INIT (0, 0, width, height));
-  gsk_render_node_unref (node);
-
-  return result;
-}
