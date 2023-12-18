@@ -24,7 +24,7 @@
  * Modified by the GTK+ Team and others 1997-2001.  See the AUTHORS
  * file for a list of people on the GTK+ Team.  See the ChangeLog
  * files for a list of changes.  These files are distributed with
- * GTK+ at ftp://ftp.gtk.org/pub/gtk/. 
+ * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
 /**
@@ -414,7 +414,7 @@ gtk_aspect_frame_get_yalign (GtkAspectFrame *self)
 {
   g_return_val_if_fail (GTK_IS_ASPECT_FRAME (self), 0.5);
 
-  return self->xalign;
+  return self->yalign;
 }
 
 /**
