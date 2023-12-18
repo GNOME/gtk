@@ -280,7 +280,7 @@ gsk_gl_glyph_library_upload_glyph (GskGLGlyphLibrary     *self,
 
   g_assert (texture_id > 0);
 
-  if (G_UNLIKELY (!gdk_gl_context_has_bgra (gdk_gl_context_get_current ())))
+  if (gdk_gl_context_get_use_es (gdk_gl_context_get_current ()))
     {
       pixel_data = free_data = g_malloc (width * height * 4);
       gdk_memory_convert (pixel_data, width * 4,
