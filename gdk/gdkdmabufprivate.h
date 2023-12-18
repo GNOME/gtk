@@ -27,12 +27,10 @@ struct _GdkDmabufDownloader
 {
   const char *name;
   gboolean              (* supports)                            (const GdkDmabufDownloader      *downloader,
-                                                                 GdkDisplay                     *display,
-                                                                 const GdkDmabuf                *dmabuf,
-                                                                 gboolean                        premultiplied,
+                                                                 GdkDmabufTexture               *texture,
                                                                  GError                        **error);
   void                  (* download)                            (const GdkDmabufDownloader      *downloader,
-                                                                 GdkTexture                     *texture,
+                                                                 GdkDmabufTexture               *texture,
                                                                  GdkMemoryFormat                 format,
                                                                  guchar                         *data,
                                                                  gsize                           stride);

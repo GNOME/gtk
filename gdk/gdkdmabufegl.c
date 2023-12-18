@@ -134,21 +134,23 @@ gdk_dmabuf_egl_downloader_collect_formats (GdkDisplay                *display,
 }
 
 static gboolean
-gdk_dmabuf_egl_downloader_supports (const GdkDmabufDownloader  *downloader,
-                                    GdkDisplay                 *display,
-                                    const GdkDmabuf            *dmabuf,
-                                    gboolean                    premultiplied,
-                                    GError                    **error)
+gdk_dmabuf_egl_downloader_supports (const GdkDmabufDownloader *downloader,
+                                    GdkDmabufTexture          *texture,
+                                    GError                   **error)
 {
-  if (gdk_dmabuf_formats_contains (display->egl_dmabuf_formats, dmabuf->fourcc, dmabuf->modifier))
-    return TRUE;
+  GdkDisplay *display = gdk_dmabuf_texture_get_display (texture);
+  const GdkDmabuf *dmabuf = gdk_dmabuf_texture_get_dmabuf (texture);
 
-  g_set_error (error,
-               GDK_DMABUF_ERROR, GDK_DMABUF_ERROR_UNSUPPORTED_FORMAT,
-               "Unsupported dmabuf format: %.4s:%#" G_GINT64_MODIFIER "x",
-               (char *) &dmabuf->fourcc, dmabuf->modifier);
+  if (!gdk_dmabuf_formats_contains (display->egl_dmabuf_formats, dmabuf->fourcc, dmabuf->modifier))
+    {
+      g_set_error (error,
+                   GDK_DMABUF_ERROR, GDK_DMABUF_ERROR_UNSUPPORTED_FORMAT,
+                   "Unsupported dmabuf format: %.4s:%#" G_GINT64_MODIFIER "x",
+                   (char *) &dmabuf->fourcc, dmabuf->modifier);
+      return FALSE;
+    }
 
-  return FALSE;
+  return TRUE;
 }
 
 /* Hack. We don't include gsk/gsk.h here to avoid a build order problem
@@ -192,7 +194,7 @@ get_gsk_renderer (GdkDisplay *display)
 
 static void
 gdk_dmabuf_egl_downloader_download (const GdkDmabufDownloader *downloader_,
-                                    GdkTexture                *texture,
+                                    GdkDmabufTexture          *texture,
                                     GdkMemoryFormat            format,
                                     guchar                    *data,
                                     gsize                      stride)
@@ -205,10 +207,10 @@ gdk_dmabuf_egl_downloader_download (const GdkDmabufDownloader *downloader_,
 
   previous = gdk_gl_context_get_current ();
 
-  display = gdk_dmabuf_texture_get_display (GDK_DMABUF_TEXTURE (texture));
+  display = gdk_dmabuf_texture_get_display (texture);
   renderer = get_gsk_renderer (display);
 
-  native = gsk_renderer_convert_texture (renderer, texture);
+  native = gsk_renderer_convert_texture (renderer, GDK_TEXTURE (texture));
 
   downloader = gdk_texture_downloader_new (native);
   gdk_texture_downloader_set_format (downloader, format);
