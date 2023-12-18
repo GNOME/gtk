@@ -9,7 +9,6 @@
 #define GDK_DMABUF_MAX_PLANES 4
 
 typedef struct _GdkDmabuf GdkDmabuf;
-typedef struct _GdkDmabufDownloader GdkDmabufDownloader;
 
 struct _GdkDmabuf
 {
@@ -21,19 +20,6 @@ struct _GdkDmabuf
     unsigned int stride;
     unsigned int offset;
   } planes[GDK_DMABUF_MAX_PLANES];
-};
-
-struct _GdkDmabufDownloader
-{
-  const char *name;
-  gboolean              (* supports)                            (const GdkDmabufDownloader      *downloader,
-                                                                 GdkDmabufTexture               *texture,
-                                                                 GError                        **error);
-  void                  (* download)                            (const GdkDmabufDownloader      *downloader,
-                                                                 GdkDmabufTexture               *texture,
-                                                                 GdkMemoryFormat                 format,
-                                                                 guchar                         *data,
-                                                                 gsize                           stride);
 };
 
 #ifdef HAVE_DMABUF

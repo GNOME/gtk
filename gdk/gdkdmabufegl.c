@@ -133,110 +133,27 @@ gdk_dmabuf_egl_downloader_collect_formats (GdkDisplay                *display,
   return TRUE;
 }
 
-static gboolean
-gdk_dmabuf_egl_downloader_supports (const GdkDmabufDownloader *downloader,
-                                    GdkDmabufTexture          *texture,
-                                    GError                   **error)
-{
-  GdkDisplay *display = gdk_dmabuf_texture_get_display (texture);
-  const GdkDmabuf *dmabuf = gdk_dmabuf_texture_get_dmabuf (texture);
-
-  if (!gdk_dmabuf_formats_contains (display->egl_dmabuf_formats, dmabuf->fourcc, dmabuf->modifier))
-    {
-      g_set_error (error,
-                   GDK_DMABUF_ERROR, GDK_DMABUF_ERROR_UNSUPPORTED_FORMAT,
-                   "Unsupported dmabuf format: %.4s:%#" G_GINT64_MODIFIER "x",
-                   (char *) &dmabuf->fourcc, dmabuf->modifier);
-      return FALSE;
-    }
-
-  return TRUE;
-}
-
 /* Hack. We don't include gsk/gsk.h here to avoid a build order problem
  * with the generated header gskenumtypes.h, so we need to hack around
  * a bit to access the gsk api we need.
  */
 
-typedef gpointer GskRenderer;
+typedef struct _GskRenderer GskRenderer;
 
 extern GskRenderer *   gsk_gl_renderer_new          (void);
 extern gboolean        gsk_renderer_realize         (GskRenderer  *renderer,
                                                      GdkSurface   *surface,
                                                      GError      **error);
-extern GdkTexture *    gsk_renderer_convert_texture (GskRenderer  *renderer,
-                                                     GdkTexture   *texture);
 
-static GskRenderer *
-get_gsk_renderer (GdkDisplay *display)
-{
-  if (!display->egl_gsk_renderer)
-    {
-      GskRenderer *renderer;
-      GError *error = NULL;
-
-      renderer = gsk_gl_renderer_new ();
-
-      if (!gsk_renderer_realize (renderer, NULL, &error))
-        {
-          g_warning ("Failed to realize GL renderer: %s", error->message);
-          g_error_free (error);
-          g_object_unref (renderer);
-
-          return NULL;
-        }
-
-      display->egl_gsk_renderer = renderer;
-    }
-
-  return display->egl_gsk_renderer;
-}
-
-static void
-gdk_dmabuf_egl_downloader_download (const GdkDmabufDownloader *downloader_,
-                                    GdkDmabufTexture          *texture,
-                                    GdkMemoryFormat            format,
-                                    guchar                    *data,
-                                    gsize                      stride)
-{
-  GdkGLContext *previous;
-  GdkDisplay *display;
-  GskRenderer *renderer;
-  GdkTexture *native;
-  GdkTextureDownloader *downloader;
-
-  previous = gdk_gl_context_get_current ();
-
-  display = gdk_dmabuf_texture_get_display (texture);
-  renderer = get_gsk_renderer (display);
-
-  native = gsk_renderer_convert_texture (renderer, GDK_TEXTURE (texture));
-
-  downloader = gdk_texture_downloader_new (native);
-  gdk_texture_downloader_set_format (downloader, format);
-  gdk_texture_downloader_download_into (downloader, data, stride);
-  gdk_texture_downloader_free (downloader);
-
-  g_object_unref (native);
-
-  if (previous)
-    gdk_gl_context_make_current (previous);
-  else
-    gdk_gl_context_clear_current ();
-}
-
-const GdkDmabufDownloader *
+GdkDmabufDownloader *
 gdk_dmabuf_get_egl_downloader (GdkDisplay              *display,
                                GdkDmabufFormatsBuilder *builder)
 {
-  static const GdkDmabufDownloader downloader = {
-    "egl",
-    gdk_dmabuf_egl_downloader_supports,
-    gdk_dmabuf_egl_downloader_download,
-  };
   GdkDmabufFormatsBuilder *formats;
   GdkDmabufFormatsBuilder *external;
   gboolean retval = FALSE;
+  GError *error = NULL;
+  GskRenderer *renderer;
 
   g_assert (display->egl_dmabuf_formats == NULL);
   g_assert (display->egl_external_formats == NULL);
@@ -254,10 +171,21 @@ gdk_dmabuf_get_egl_downloader (GdkDisplay              *display,
 
   gdk_dmabuf_formats_builder_add_formats (builder, display->egl_dmabuf_formats);
 
-  if (retval)
-    return &downloader;
-  else
+  if (!retval)
     return NULL;
+
+  renderer = gsk_gl_renderer_new ();
+
+  if (!gsk_renderer_realize (renderer, NULL, &error))
+    {
+      g_warning ("Failed to realize GL renderer: %s", error->message);
+      g_error_free (error);
+      g_object_unref (renderer);
+
+      return NULL;
+    }
+
+  return GDK_DMABUF_DOWNLOADER (renderer);
 }
 
 EGLImage

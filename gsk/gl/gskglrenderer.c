@@ -20,8 +20,17 @@
 
 #include "config.h"
 
+#include "gskglrendererprivate.h"
+
+#include "gskglcommandqueueprivate.h"
+#include "gskgldriverprivate.h"
+#include "gskglprogramprivate.h"
+#include "gskglrenderjobprivate.h"
+
 #include <gdk/gdkprofilerprivate.h>
 #include <gdk/gdkdisplayprivate.h>
+#include <gdk/gdkdmabufdownloaderprivate.h>
+#include <gdk/gdkdmabuftextureprivate.h>
 #include <gdk/gdkglcontextprivate.h>
 #include <gdk/gdksurfaceprivate.h>
 #include <gdk/gdksubsurfaceprivate.h>
@@ -31,12 +40,6 @@
 #include <gsk/gskrendernodeprivate.h>
 #include <gsk/gskroundedrectprivate.h>
 #include <gsk/gskrectprivate.h>
-
-#include "gskglcommandqueueprivate.h"
-#include "gskgldriverprivate.h"
-#include "gskglprogramprivate.h"
-#include "gskglrenderjobprivate.h"
-#include "gskglrendererprivate.h"
 
 struct _GskGLRendererClass
 {
@@ -68,7 +71,65 @@ struct _GskGLRenderer
   GskGLDriver *driver;
 };
 
-G_DEFINE_TYPE (GskGLRenderer, gsk_gl_renderer, GSK_TYPE_RENDERER)
+static gboolean
+gsk_gl_renderer_dmabuf_downloader_supports (GdkDmabufDownloader  *downloader,
+                                            GdkDmabufTexture     *texture,
+                                            GError              **error)
+{
+  GdkDisplay *display = gdk_dmabuf_texture_get_display (texture);
+  const GdkDmabuf *dmabuf = gdk_dmabuf_texture_get_dmabuf (texture);
+
+  if (!gdk_dmabuf_formats_contains (display->egl_dmabuf_formats, dmabuf->fourcc, dmabuf->modifier))
+    {
+      g_set_error (error,
+                   GDK_DMABUF_ERROR, GDK_DMABUF_ERROR_UNSUPPORTED_FORMAT,
+                   "Unsupported dmabuf format: %.4s:%#" G_GINT64_MODIFIER "x",
+                   (char *) &dmabuf->fourcc, dmabuf->modifier);
+      return FALSE;
+    }
+
+  return TRUE;
+}
+
+static void
+gsk_gl_renderer_dmabuf_downloader_download (GdkDmabufDownloader *downloader_,
+                                            GdkDmabufTexture    *texture,
+                                            GdkMemoryFormat      format,
+                                            guchar              *data,
+                                            gsize                stride)
+{
+  GskRenderer *renderer = GSK_RENDERER (downloader_);
+  GdkGLContext *previous;
+  GdkTexture *native;
+  GdkTextureDownloader *downloader;
+
+  previous = gdk_gl_context_get_current ();
+
+  native = gsk_renderer_convert_texture (renderer, GDK_TEXTURE (texture));
+
+  downloader = gdk_texture_downloader_new (native);
+  gdk_texture_downloader_set_format (downloader, format);
+  gdk_texture_downloader_download_into (downloader, data, stride);
+  gdk_texture_downloader_free (downloader);
+
+  g_object_unref (native);
+
+  if (previous)
+    gdk_gl_context_make_current (previous);
+  else
+    gdk_gl_context_clear_current ();
+}
+
+static void
+gsk_gl_renderer_dmabuf_downloader_init (GdkDmabufDownloaderInterface *iface)
+{
+  iface->supports = gsk_gl_renderer_dmabuf_downloader_supports;
+  iface->download = gsk_gl_renderer_dmabuf_downloader_download;
+}
+
+G_DEFINE_TYPE_EXTENDED (GskGLRenderer, gsk_gl_renderer, GSK_TYPE_RENDERER, 0,
+                        G_IMPLEMENT_INTERFACE (GDK_TYPE_DMABUF_DOWNLOADER,
+                                               gsk_gl_renderer_dmabuf_downloader_init))
 
 /**
  * gsk_gl_renderer_new:

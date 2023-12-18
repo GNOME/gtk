@@ -392,12 +392,15 @@ gdk_display_dispose (GObject *object)
 {
   GdkDisplay *display = GDK_DISPLAY (object);
   GdkDisplayPrivate *priv = gdk_display_get_instance_private (display);
+  gsize i;
+
+  for (i = 0; i < G_N_ELEMENTS (display->dmabuf_downloaders); i++)
+    g_clear_object (&display->dmabuf_downloaders[i]);
 
   _gdk_display_manager_remove_display (gdk_display_manager_get (), display);
 
   g_queue_clear (&display->queued_events);
 
-  g_clear_object (&display->egl_gsk_renderer);
   g_clear_pointer (&display->egl_dmabuf_formats, gdk_dmabuf_formats_unref);
   g_clear_pointer (&display->egl_external_formats, gdk_dmabuf_formats_unref);
 
@@ -1882,8 +1885,8 @@ gdk_display_get_egl_display (GdkDisplay *self)
 
 #ifdef HAVE_DMABUF
 static void
-gdk_display_add_dmabuf_downloader (GdkDisplay                *display,
-                                   const GdkDmabufDownloader *downloader)
+gdk_display_add_dmabuf_downloader (GdkDisplay          *display,
+                                   GdkDmabufDownloader *downloader)
 {
   gsize i;
 

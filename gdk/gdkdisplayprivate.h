@@ -26,6 +26,7 @@
 #include "gdkkeysprivate.h"
 #include "gdkdeviceprivate.h"
 #include "gdkdmabufprivate.h"
+#include "gdkdmabufdownloaderprivate.h"
 
 #ifdef GDK_RENDERING_VULKAN
 #include <vulkan/vulkan.h>
@@ -118,10 +119,9 @@ struct _GdkDisplay
   guint have_egl_dma_buf_export : 1;
 
   GdkDmabufFormats *dmabuf_formats;
-  const GdkDmabufDownloader *dmabuf_downloaders[4];
+  GdkDmabufDownloader *dmabuf_downloaders[4];
 
    /* Cached data the EGL dmabuf downloader */
-  gpointer egl_gsk_renderer;
   GdkDmabufFormats *egl_dmabuf_formats;
   GdkDmabufFormats *egl_external_formats;
 };
