@@ -34,7 +34,6 @@ G_BEGIN_DECLS
 
 #define GDK_DMABUF_ERROR       (gdk_dmabuf_error_quark ())
 
-typedef struct _GdkDmabufTexture            GdkDmabufTexture;
 typedef struct _GdkDmabufTextureClass       GdkDmabufTextureClass;
 
 GDK_AVAILABLE_IN_4_14
