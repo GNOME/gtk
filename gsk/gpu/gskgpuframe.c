@@ -625,6 +625,8 @@ do_download (gpointer    user_data,
   gdk_texture_downloader_set_format (&downloader, download->format);
   gdk_texture_downloader_download_into (&downloader, download->data, download->stride);
   gdk_texture_downloader_finish (&downloader);
+
+  g_free (download);
 }
 
 void
@@ -636,7 +638,6 @@ gsk_gpu_frame_download_texture (GskGpuFrame     *self,
                                 gsize            stride)
 {
   GskGpuFramePrivate *priv = gsk_gpu_frame_get_instance_private (self);
-  Download download = { format, data, stride };
   GskGpuImage *image;
 
   image = gsk_gpu_device_lookup_texture_image (priv->device, texture, timestamp);
@@ -652,7 +653,15 @@ gsk_gpu_frame_download_texture (GskGpuFrame     *self,
 
   priv->timestamp = timestamp;
 
-  gsk_gpu_download_op (self, image, FALSE, do_download, &download);
+  gsk_gpu_download_op (self,
+                       image,
+                       FALSE,
+                       do_download,
+                       g_memdup (&(Download) {
+                           .format = format,
+                           .data = data,
+                           .stride = stride
+                       }, sizeof (Download)));
 
   gsk_gpu_frame_submit (self);
   g_object_unref (image);

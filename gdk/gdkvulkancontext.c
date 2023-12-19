@@ -1826,11 +1826,24 @@ gdk_display_unref_vulkan (GdkDisplay *display)
   display->vk_instance = VK_NULL_HANDLE;
 }
 
+/* Hack. We don't include gsk/gsk.h here to avoid a build order problem
+ * with the generated header gskenumtypes.h, so we need to hack around
+ * a bit to access the gsk api we need.
+ */
+
+typedef struct _GskRenderer GskRenderer;
+
+extern GskRenderer *   gsk_vulkan_renderer_new      (void);
+extern gboolean        gsk_renderer_realize         (GskRenderer  *renderer,
+                                                     GdkSurface   *surface,
+                                                     GError      **error);
+
 GdkDmabufDownloader *
 gdk_vulkan_get_dmabuf_downloader (GdkDisplay              *display,
                                   GdkDmabufFormatsBuilder *builder)
 {
   GdkDmabufFormatsBuilder *vulkan_builder;
+  GskRenderer *renderer;
   VkDrmFormatModifierPropertiesEXT modifier_list[100];
   VkDrmFormatModifierPropertiesListEXT modifier_props = {
     .sType = VK_STRUCTURE_TYPE_DRM_FORMAT_MODIFIER_PROPERTIES_LIST_EXT,
@@ -1843,6 +1856,7 @@ gdk_vulkan_get_dmabuf_downloader (GdkDisplay              *display,
   };
   VkFormat vk_format;
   guint32 fourcc;
+  GError *error = NULL;
   gsize i, j;
 
   g_assert (display->vk_dmabuf_formats == NULL);
@@ -1887,7 +1901,18 @@ gdk_vulkan_get_dmabuf_downloader (GdkDisplay              *display,
 
   gdk_dmabuf_formats_builder_add_formats (builder, display->vk_dmabuf_formats);
 
-  return NULL;
+  renderer = gsk_vulkan_renderer_new ();
+
+  if (!gsk_renderer_realize (renderer, NULL, &error))
+    {
+      g_warning ("Failed to realize GL renderer: %s", error->message);
+      g_error_free (error);
+      g_object_unref (renderer);
+
+      return NULL;
+    }
+
+  return GDK_DMABUF_DOWNLOADER (renderer);
 }
 
 VkShaderModule
