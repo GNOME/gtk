@@ -26,6 +26,10 @@
 
 G_BEGIN_DECLS
 
+#ifndef AVAILABLE_MAC_OS_X_VERSION_10_13_AND_LATER
+typedef NSString *NSPasteboardType;
+#endif
+
 @interface GdkMacosPasteboardItemDataProvider : NSObject <NSPasteboardItemDataProvider>
 {
   GdkContentProvider *_contentProvider;
