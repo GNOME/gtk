@@ -48,6 +48,9 @@ gtk_accessible_role_to_atspi_role (GtkAccessibleRole role)
     case GTK_ACCESSIBLE_ROLE_APPLICATION:
       return ATSPI_ROLE_FRAME;
 
+    case GTK_ACCESSIBLE_ROLE_ARTICLE:
+      return ATSPI_ROLE_ARTICLE;
+
     case GTK_ACCESSIBLE_ROLE_BANNER:
       break;
 
@@ -74,6 +77,9 @@ gtk_accessible_role_to_atspi_role (GtkAccessibleRole role)
 
     case GTK_ACCESSIBLE_ROLE_COMMAND:
       break;
+
+    case GTK_ACCESSIBLE_ROLE_COMMENT:
+      return ATSPI_ROLE_COMMENT;
 
     case GTK_ACCESSIBLE_ROLE_COMPOSITE:
       break;
