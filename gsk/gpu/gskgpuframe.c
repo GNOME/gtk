@@ -15,6 +15,9 @@
 #include "gskdebugprivate.h"
 #include "gskrendererprivate.h"
 
+#include "gdk/gdkdmabufdownloaderprivate.h"
+#include "gdk/gdktexturedownloaderprivate.h"
+
 #define DEFAULT_VERTEX_BUFFER_SIZE 128 * 1024
 
 /* GL_MAX_UNIFORM_BLOCK_SIZE is at 16384 */
@@ -602,4 +605,55 @@ gsk_gpu_frame_render (GskGpuFrame            *self,
   gsk_gpu_frame_submit (self);
 }
 
+typedef struct _Download Download;
 
+struct _Download
+{
+  GdkMemoryFormat format;
+  guchar *data;
+  gsize stride;
+};
+
+static void
+do_download (gpointer    user_data,
+             GdkTexture *texture)
+{
+  Download *download = user_data;
+  GdkTextureDownloader downloader;
+
+  gdk_texture_downloader_init (&downloader, texture);
+  gdk_texture_downloader_set_format (&downloader, download->format);
+  gdk_texture_downloader_download_into (&downloader, download->data, download->stride);
+  gdk_texture_downloader_finish (&downloader);
+}
+
+void
+gsk_gpu_frame_download_texture (GskGpuFrame     *self,
+                                gint64           timestamp,
+                                GdkTexture      *texture,
+                                GdkMemoryFormat  format,
+                                guchar          *data,
+                                gsize            stride)
+{
+  GskGpuFramePrivate *priv = gsk_gpu_frame_get_instance_private (self);
+  Download download = { format, data, stride };
+  GskGpuImage *image;
+
+  image = gsk_gpu_device_lookup_texture_image (priv->device, texture, timestamp);
+  if (image == NULL)
+    image = gsk_gpu_frame_upload_texture (self, FALSE, texture);
+  if (image == NULL)
+    {
+      g_critical ("Could not upload texture");
+      return;
+    }
+
+  gsk_gpu_frame_cleanup (self);
+
+  priv->timestamp = timestamp;
+
+  gsk_gpu_download_op (self, image, FALSE, do_download, &download);
+
+  gsk_gpu_frame_submit (self);
+  g_object_unref (image);
+}

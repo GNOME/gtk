@@ -8,6 +8,7 @@
 #include "gskglframeprivate.h"
 #include "gskglimageprivate.h"
 
+#include "gdk/gdkdisplayprivate.h"
 #include "gdk/gdkglcontextprivate.h"
 
 struct _GskNglRenderer
@@ -108,6 +109,14 @@ gsk_ngl_renderer_get_scale (GskGpuRenderer *self)
   return gdk_gl_context_get_scale (GDK_GL_CONTEXT (context));
 }
 
+static GdkDmabufFormats *
+gsk_ngl_renderer_get_dmabuf_formats (GskGpuRenderer *renderer)
+{
+  GdkDisplay *display = GDK_DISPLAY (gdk_draw_context_get_display (gsk_gpu_renderer_get_context (renderer)));
+
+  return display->egl_dmabuf_formats;
+}
+
 static void
 gsk_ngl_renderer_class_init (GskNglRendererClass *klass)
 {
@@ -121,6 +130,7 @@ gsk_ngl_renderer_class_init (GskNglRendererClass *klass)
   gpu_renderer_class->get_backbuffer = gsk_ngl_renderer_get_backbuffer;
   gpu_renderer_class->wait = gsk_ngl_renderer_wait;
   gpu_renderer_class->get_scale = gsk_ngl_renderer_get_scale;
+  gpu_renderer_class->get_dmabuf_formats = gsk_ngl_renderer_get_dmabuf_formats;
 }
 
 static void
