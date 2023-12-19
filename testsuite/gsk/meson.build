@@ -28,7 +28,7 @@ compare_render_tests = [
   'borders-rotated',
   'borders-scaled',
   'clip-coordinates-2d',
-  'clip-coordinates-3d',
+  'clip-coordinates-nocairo',
   'clip-in-rounded-clip1',
   'clip-in-rounded-clip2',
   'clip-in-rounded-clip3',
@@ -105,7 +105,7 @@ compare_render_tests = [
   'shrink-rounded-border',
   'stroke',
   'texture-coords',
-  'texture-scale-filters-3d',
+  'texture-scale-filters-nocairo',
   'texture-scale-magnify-10000x',
   'texture-scale-magnify-rotate',
   'texture-scale-nearest-vs-linear',
@@ -114,7 +114,7 @@ compare_render_tests = [
   'texture-url',
   'transform-in-transform',
   'transform-in-transform-in-transform',
-  'z-transform-clipping-bounds-3d',
+  'z-transform-clipping-bounds-nocairo',
 ]
 
 # these are too sensitive to differences in the renderers
@@ -123,20 +123,20 @@ informative_render_tests = [
   'big-glyph',
   'empty-text',
   'huge-glyph',
-  'rounded-clip-in-clip-3d', # both cairo and gl fail this one
+  'rounded-clip-in-clip-nocairo', # both cairo and gl fail this one
 ]
 
 renderers = [
   { 'name': 'gl' },
-  { 'name': 'broadway', 'exclude_term': '-3d' },
-  { 'name': 'cairo', 'exclude_term': '-3d' },
+  { 'name': 'broadway' },
+  { 'name': 'cairo' },
 ]
 
 compare_xfails = [
   # Both tests fail because of some font rendering issue
   'empty-linear-gradient',
   'unaligned-offscreen',
-  'upside-down-label-3d', # not really 3d, but cairo fails it
+  'upside-down-label-nocairo',
 ]
 
 compare_xfails_small_texture = [
@@ -149,7 +149,7 @@ foreach renderer : renderers
   foreach testname : compare_render_tests
 
     renderer_name = renderer.get('name')
-    exclude_term = renderer.get('exclude_term', '')
+    exclude_term = '-no' + renderer_name
 
     suites = [
       'gsk',
@@ -173,7 +173,7 @@ foreach renderer : renderers
       'G_TEST_BUILDDIR=@0@'.format(meson.current_build_dir())
     ]
 
-    if ((exclude_term == '' or not testname.contains(exclude_term)) and
+    if ((not testname.contains(exclude_term)) and
         (renderer_name != 'broadway' or broadway_enabled))
       test(renderer_name + ' ' + testname, compare_render,
         args: [
