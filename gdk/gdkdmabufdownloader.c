@@ -9,6 +9,15 @@ gdk_dmabuf_downloader_default_init (GdkDmabufDownloaderInterface *iface)
 {
 }
 
+void
+gdk_dmabuf_downloader_close (GdkDmabufDownloader *self)
+{
+  GdkDmabufDownloaderInterface *iface;
+
+  iface = GDK_DMABUF_DOWNLOADER_GET_IFACE (self);
+  iface->close (self);
+}
+
 gboolean
 gdk_dmabuf_downloader_supports (GdkDmabufDownloader  *self,
                                 GdkDmabufTexture     *texture,

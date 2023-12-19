@@ -395,7 +395,13 @@ gdk_display_dispose (GObject *object)
   gsize i;
 
   for (i = 0; i < G_N_ELEMENTS (display->dmabuf_downloaders); i++)
-    g_clear_object (&display->dmabuf_downloaders[i]);
+    {
+      if (display->dmabuf_downloaders[i] == NULL)
+        continue;
+
+      gdk_dmabuf_downloader_close (display->dmabuf_downloaders[i]);
+      g_clear_object (&display->dmabuf_downloaders[i]);
+    }
 
   _gdk_display_manager_remove_display (gdk_display_manager_get (), display);
 
