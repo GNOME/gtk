@@ -1,5 +1,62 @@
-Overview of Changes in GTK+ 3.24.39, xx-xx-xxxx
+Overview of Changes in GTK+ 3.24.39, 19-12-2023
 ===============================================
+
+* GtkMountOperation:
+ - Avoid a segfault
+
+* GtkTooltip:
+ - Fix some positioning problems
+
+* GtkFileChooser:
+ - Handle webdav in the pathbar
+
+* GtkFileChooserNative:
+ - Fix closing portal file choosers
+
+* GDK:
+ - Handle offscreen windows better in some places
+
+* Wayland:
+ - Create pad devices on enter
+ - Ensure device-added/removed are emitted
+ - Make stylus button mappings compatible with X11
+ - Try harder to preserve cursor size with scaling
+ - Avoid oob access to cursor images
+ - Support tiling in xdg-shell
+ - Avoid using legacy cursor names
+ - Fix buffer size for scaled custom cursors
+
+* X11:
+ - Remove slow path in gdk_cairo_draw_from_gl
+ - Trap more XRANDR errors
+
+* MacOs:
+ - Make gdkquartz-cocoa-access.h usable again
+ - Silence secure-restore message
+
+* Translation updates
+ Belarusian
+ British English
+ Catalan
+ Chinese (China)
+ Czech
+ Danish
+ Esperanto
+ Farsi
+ Georgian
+ Greek
+ Hebrew
+ Icelandic
+ Kazakh
+ Korean
+ Polish
+ Punjabi
+ Romanian
+ Slovak
+ Slovenian
+ Spanish
+ Turkish
+
 
 Overview of Changes in GTK+ 3.24.38, 21-05-2023
 ===============================================
