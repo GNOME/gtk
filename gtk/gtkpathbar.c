@@ -1506,10 +1506,10 @@ gtk_path_bar_update_button_appearance (GtkPathBar *path_bar,
 
 static ButtonType
 find_button_type (GtkPathBar  *path_bar,
-		  GFile       *file)
+		  GFile       *file,
+		  GFile       *root_file)
 {
-  if (path_bar->priv->root_file != NULL &&
-      g_file_equal (file, path_bar->priv->root_file))
+  if (root_file != NULL && g_file_equal (file, root_file))
     return ROOT_BUTTON;
   if (path_bar->priv->home_file != NULL &&
       g_file_equal (file, path_bar->priv->home_file))
@@ -1546,6 +1546,7 @@ static ButtonData *
 make_directory_button (GtkPathBar  *path_bar,
 		       const char  *dir_name,
 		       GFile       *file,
+		       GFile       *root_file,
 		       gboolean     current_dir,
 		       gboolean     file_is_hidden)
 {
@@ -1556,7 +1557,7 @@ make_directory_button (GtkPathBar  *path_bar,
   file_is_hidden = !! file_is_hidden;
   /* Is it a special button? */
   button_data = g_new0 (ButtonData, 1);
-  button_data->type = find_button_type (path_bar, file);
+  button_data->type = find_button_type (path_bar, file, root_file);
   button_data->button = gtk_toggle_button_new ();
   atk_obj = gtk_widget_get_accessible (button_data->button);
   gtk_widget_set_focus_on_click (button_data->button, FALSE);
@@ -1678,6 +1679,9 @@ struct SetFileInfo
   GList *new_buttons;
   GList *fake_root;
   gboolean first_directory;
+  GFile *root_file;
+
+  GCancellable *cancellable;
 };
 
 static void
@@ -1725,6 +1729,8 @@ gtk_path_bar_set_file_finish (struct SetFileInfo *info,
     g_object_unref (info->file);
   if (info->parent_file)
     g_object_unref (info->parent_file);
+  if (info->root_file)
+    g_object_unref (info->root_file);
 
   g_free (info);
 }
@@ -1748,9 +1754,6 @@ gtk_path_bar_get_info_callback (GCancellable *cancellable,
       return;
     }
 
-  g_assert (GTK_IS_PATH_BAR (file_info->path_bar));
-  g_assert (G_OBJECT (file_info->path_bar)->ref_count > 0);
-
   g_assert (cancellable == file_info->path_bar->priv->get_info_cancellable);
   cancellable_async_done (file_info->path_bar, cancellable);
   file_info->path_bar->priv->get_info_cancellable = NULL;
@@ -1767,6 +1770,7 @@ gtk_path_bar_get_info_callback (GCancellable *cancellable,
 
   button_data = make_directory_button (file_info->path_bar, display_name,
                                        file_info->file,
+				       file_info->root_file,
 				       file_info->first_directory, is_hidden);
   g_clear_object (&file_info->file);
 
@@ -1789,7 +1793,10 @@ gtk_path_bar_get_info_callback (GCancellable *cancellable,
       return;
     }
 
-  file_info->parent_file = g_file_get_parent (file_info->file);
+  if (g_file_equal (file_info->file, file_info->root_file))
+    file_info->parent_file = NULL;
+  else
+    file_info->parent_file = g_file_get_parent (file_info->file);
 
   /* Recurse asynchronously */
   file_info->path_bar->priv->get_info_cancellable =
@@ -1799,6 +1806,63 @@ gtk_path_bar_get_info_callback (GCancellable *cancellable,
 			       gtk_path_bar_get_info_callback,
 			       file_info);
   add_cancellable (file_info->path_bar, file_info->path_bar->priv->get_info_cancellable);
+}
+
+static void
+gtk_path_bar_get_mount_callback (GObject      *source,
+				 GAsyncResult *result,
+				 gpointer      data)
+{
+  GFile *file = G_FILE (source);
+  struct SetFileInfo *file_info = data;
+  GMount *mount;
+  GError *error = NULL;
+
+  gdk_threads_enter ();
+
+  mount = g_file_find_enclosing_mount_finish (file, result, &error);
+
+  if (g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
+    {
+      gtk_path_bar_set_file_finish (file_info, FALSE);
+      g_clear_error (&error);
+      gdk_threads_leave ();
+      return;
+    }
+  g_clear_error (&error);
+
+
+  if (mount)
+    {
+      file_info->root_file = g_mount_get_root (mount);
+      g_object_unref (mount);
+    }
+
+  if (file_info->root_file == NULL)
+    file_info->root_file = g_object_ref (file_info->path_bar->priv->root_file);
+
+  if (g_file_equal (file_info->file, file_info->root_file))
+    file_info->parent_file = NULL;
+  else
+    file_info->parent_file = g_file_get_parent (file_info->file);
+
+  cancellable_async_done (file_info->path_bar, file_info->cancellable);
+  if (file_info->path_bar->priv->get_info_cancellable == file_info->cancellable)
+    file_info->path_bar->priv->get_info_cancellable = NULL;
+  file_info->cancellable = NULL;
+
+  /* Recurse asynchronously */
+  file_info->path_bar->priv->get_info_cancellable =
+    _gtk_file_system_get_info (file_info->path_bar->priv->file_system,
+			       file_info->file,
+			       "standard::display-name,standard::is-hidden,standard::is-backup",
+			       gtk_path_bar_get_info_callback,
+			       file_info);
+
+  add_cancellable (file_info->path_bar,
+		   file_info->path_bar->priv->get_info_cancellable);
+
+  gdk_threads_leave ();
 }
 
 void
@@ -1828,12 +1892,29 @@ _gtk_path_bar_set_file (GtkPathBar *path_bar,
       cancel_cancellable (path_bar, path_bar->priv->get_info_cancellable);
     }
 
-  path_bar->priv->get_info_cancellable =
-    _gtk_file_system_get_info (path_bar->priv->file_system,
-                               info->file,
-                               "standard::display-name,standard::is-hidden,standard::is-backup",
-                               gtk_path_bar_get_info_callback,
-                               info);
+  if (g_file_is_native (info->file))
+    {
+      info->root_file = g_object_ref (path_bar->priv->root_file);
+      info->parent_file = g_file_get_parent (info->file);
+
+      path_bar->priv->get_info_cancellable =
+	_gtk_file_system_get_info (path_bar->priv->file_system,
+				   info->file,
+				   "standard::display-name,standard::is-hidden,standard::is-backup",
+				   gtk_path_bar_get_info_callback,
+				   info);
+    }
+  else
+    {
+      info->cancellable = g_cancellable_new ();
+      path_bar->priv->get_info_cancellable = info->cancellable;
+
+      g_file_find_enclosing_mount_async (info->file,
+					 G_PRIORITY_DEFAULT,
+					 info->cancellable,
+					 gtk_path_bar_get_mount_callback,
+					 info);
+    }
   add_cancellable (path_bar, path_bar->priv->get_info_cancellable);
 }
 
