@@ -57,6 +57,7 @@ typedef struct _GtkAboutDialog        GtkAboutDialog;
  * @GTK_LICENSE_BSD_3: The 3-clause BSD licence
  * @GTK_LICENSE_APACHE_2_0: The Apache License, version 2.0
  * @GTK_LICENSE_MPL_2_0: The Mozilla Public License, version 2.0
+ * @GTK_LICENSE_0BSD: Zero-Clause BSD license
  *
  * The type of license for an application.
  *
@@ -87,7 +88,8 @@ typedef enum {
 
   GTK_LICENSE_BSD_3,
   GTK_LICENSE_APACHE_2_0,
-  GTK_LICENSE_MPL_2_0
+  GTK_LICENSE_MPL_2_0,
+  GTK_LICENSE_0BSD
 } GtkLicense;
 
 
