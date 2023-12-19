@@ -39,7 +39,8 @@ struct _GskGpuRendererClass
                                                                          GskGpuFrame           **frame,
                                                                          gsize                   n_frames);
 
-  double                (*get_scale)                                    (GskGpuRenderer         *self);
+  double                (* get_scale)                                   (GskGpuRenderer         *self);
+  GdkDmabufFormats *    (* get_dmabuf_formats)                          (GskGpuRenderer         *self);
 };
 
 GdkDrawContext *        gsk_gpu_renderer_get_context                    (GskGpuRenderer         *self);

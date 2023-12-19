@@ -10,8 +10,9 @@
 #include "gskrendernodeprivate.h"
 #include "gskgpuimageprivate.h"
 
-#include "gdk/gdkdisplayprivate.h"
 #include "gdk/gdkdebugprivate.h"
+#include "gdk/gdkdisplayprivate.h"
+#include "gdk/gdkdmabuftextureprivate.h"
 #include "gdk/gdkdrawcontextprivate.h"
 #include "gdk/gdkprofilerprivate.h"
 #include "gdk/gdktextureprivate.h"
@@ -41,12 +42,94 @@ struct _GskGpuRendererPrivate
   GskGpuFrame *frames[GSK_GPU_MAX_FRAMES];
 };
 
-G_DEFINE_TYPE_WITH_PRIVATE (GskGpuRenderer, gsk_gpu_renderer, GSK_TYPE_RENDERER)
+static void     gsk_gpu_renderer_dmabuf_downloader_init         (GdkDmabufDownloaderInterface   *iface);
+
+G_DEFINE_TYPE_EXTENDED (GskGpuRenderer, gsk_gpu_renderer, GSK_TYPE_RENDERER, 0,
+                        G_ADD_PRIVATE (GskGpuRenderer)
+                        G_IMPLEMENT_INTERFACE (GDK_TYPE_DMABUF_DOWNLOADER,
+                                               gsk_gpu_renderer_dmabuf_downloader_init))
 
 static void
 gsk_gpu_renderer_make_current (GskGpuRenderer *self)
 {
   GSK_GPU_RENDERER_GET_CLASS (self)->make_current (self);
+}
+
+static GskGpuFrame *
+gsk_gpu_renderer_create_frame (GskGpuRenderer *self)
+{
+  GskGpuRendererPrivate *priv = gsk_gpu_renderer_get_instance_private (self);
+  GskGpuRendererClass *klass = GSK_GPU_RENDERER_GET_CLASS (self);
+  GskGpuFrame *result;
+
+  result = g_object_new (klass->frame_type, NULL);
+
+  gsk_gpu_frame_setup (result, self, priv->device, priv->optimizations);
+
+  return result;
+}
+
+static void
+gsk_gpu_renderer_dmabuf_downloader_close (GdkDmabufDownloader *downloader)
+{
+  gsk_renderer_unrealize (GSK_RENDERER (downloader));
+}
+
+static gboolean
+gsk_gpu_renderer_dmabuf_downloader_supports (GdkDmabufDownloader  *downloader,
+                                             GdkDmabufTexture     *texture,
+                                             GError              **error)
+{
+  GskGpuRenderer *self = GSK_GPU_RENDERER (downloader);
+  const GdkDmabuf *dmabuf;
+  GdkDmabufFormats *formats;
+
+  dmabuf = gdk_dmabuf_texture_get_dmabuf (texture);
+
+  formats = GSK_GPU_RENDERER_GET_CLASS (self)->get_dmabuf_formats (self);
+
+  if (!gdk_dmabuf_formats_contains (formats, dmabuf->fourcc, dmabuf->modifier))
+    {
+      g_set_error (error,
+                   GDK_DMABUF_ERROR, GDK_DMABUF_ERROR_UNSUPPORTED_FORMAT,
+                   "Unsupported dmabuf format: %.4s:%#" G_GINT64_MODIFIER "x",
+                   (char *) &dmabuf->fourcc, dmabuf->modifier);
+      return FALSE;
+    }
+
+  return TRUE;
+}
+
+static void
+gsk_gpu_renderer_dmabuf_downloader_download (GdkDmabufDownloader *downloader,
+                                             GdkDmabufTexture    *texture,
+                                             GdkMemoryFormat      format,
+                                             guchar              *data,
+                                             gsize                stride)
+{
+  GskGpuRenderer *self = GSK_GPU_RENDERER (downloader);
+  GskGpuFrame *frame;
+
+  gsk_gpu_renderer_make_current (self);
+
+  frame = gsk_gpu_renderer_create_frame (self);
+
+  gsk_gpu_frame_download_texture (frame,
+                                  g_get_monotonic_time(),
+                                  GDK_TEXTURE (texture),
+                                  format,
+                                  data,
+                                  stride);
+
+  g_object_unref (frame);
+}
+
+static void
+gsk_gpu_renderer_dmabuf_downloader_init (GdkDmabufDownloaderInterface *iface)
+{
+  iface->close = gsk_gpu_renderer_dmabuf_downloader_close;
+  iface->supports = gsk_gpu_renderer_dmabuf_downloader_supports;
+  iface->download = gsk_gpu_renderer_dmabuf_downloader_download;
 }
 
 static cairo_region_t *
@@ -74,20 +157,6 @@ get_render_region (GskGpuRenderer *self)
     }
 
   return scaled_damage;
-}
-
-static GskGpuFrame *
-gsk_gpu_renderer_create_frame (GskGpuRenderer *self)
-{
-  GskGpuRendererPrivate *priv = gsk_gpu_renderer_get_instance_private (self);
-  GskGpuRendererClass *klass = GSK_GPU_RENDERER_GET_CLASS (self);
-  GskGpuFrame *result;
-
-  result = g_object_new (klass->frame_type, NULL);
-
-  gsk_gpu_frame_setup (result, self, priv->device, priv->optimizations);
-
-  return result;
 }
 
 static GskGpuFrame *

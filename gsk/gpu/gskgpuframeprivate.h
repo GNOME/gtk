@@ -77,6 +77,12 @@ void                    gsk_gpu_frame_render                            (GskGpuF
                                                                          GskRenderNode          *node,
                                                                          const graphene_rect_t  *viewport,
                                                                          GdkTexture            **texture);
+void                    gsk_gpu_frame_download_texture                  (GskGpuFrame            *self,
+                                                                         gint64                  timestamp,
+                                                                         GdkTexture             *texture,
+                                                                         GdkMemoryFormat         format,
+                                                                         guchar                 *data,
+                                                                         gsize                   stride);
 
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GskGpuFrame, g_object_unref)
 
