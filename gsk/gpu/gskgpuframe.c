@@ -554,7 +554,7 @@ gsk_gpu_frame_record (GskGpuFrame            *self,
                               GSK_RENDER_PASS_PRESENT);
 
   if (texture)
-    gsk_gpu_download_op (self, target, copy_texture, texture);
+    gsk_gpu_download_op (self, target, TRUE, copy_texture, texture);
 }
 
 static void

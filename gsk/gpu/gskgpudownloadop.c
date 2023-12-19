@@ -28,6 +28,7 @@ struct _GskGpuDownloadOp
   GskGpuOp op;
 
   GskGpuImage *image;
+  gboolean allow_dmabuf;
   GdkGpuDownloadOpCreateFunc create_func;
   GskGpuDownloadFunc func;
   gpointer user_data;
@@ -134,7 +135,8 @@ gsk_gpu_download_op_vk_command (GskGpuOp              *op,
   gsize width, height, stride;
 
 #ifdef HAVE_DMABUF
-  self->texture = gsk_vulkan_image_to_dmabuf_texture (GSK_VULKAN_IMAGE (self->image));
+  if (self->allow_dmabuf)
+    self->texture = gsk_vulkan_image_to_dmabuf_texture (GSK_VULKAN_IMAGE (self->image));
   if (self->texture)
     {
       GskVulkanDevice *device = GSK_VULKAN_DEVICE (gsk_gpu_frame_get_device (frame));
@@ -301,6 +303,7 @@ static const GskGpuOpClass GSK_GPU_DOWNLOAD_OP_CLASS = {
 void
 gsk_gpu_download_op (GskGpuFrame        *frame,
                      GskGpuImage        *image,
+                     gboolean            allow_dmabuf,
                      GskGpuDownloadFunc  func,
                      gpointer            user_data)
 {
@@ -309,6 +312,7 @@ gsk_gpu_download_op (GskGpuFrame        *frame,
   self = (GskGpuDownloadOp *) gsk_gpu_op_alloc (frame, &GSK_GPU_DOWNLOAD_OP_CLASS);
 
   self->image = g_object_ref (image);
+  self->allow_dmabuf = allow_dmabuf;
   self->func = func,
   self->user_data = user_data;
 }
@@ -337,6 +341,7 @@ gsk_gpu_download_png_op (GskGpuFrame *frame,
 
   gsk_gpu_download_op (frame,
                        image,
+                       FALSE,
                        gsk_gpu_download_save_png_cb,
                        filename);
 }
