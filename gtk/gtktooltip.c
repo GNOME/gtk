@@ -880,6 +880,7 @@ gtk_tooltip_position (GtkTooltip *tooltip,
   int anchor_rect_padding;
 
   gtk_widget_realize (GTK_WIDGET (tooltip->current_window));
+  gtk_window_move_resize (tooltip->current_window);
   window = _gtk_widget_get_window (GTK_WIDGET (tooltip->current_window));
 
   tooltip->tooltip_widget = new_tooltip_widget;
