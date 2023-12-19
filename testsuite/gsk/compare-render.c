@@ -353,6 +353,9 @@ main (int argc, char **argv)
           exit (77);
         }
 
+      node_bounds.size.width = ceil (node_bounds.size.width);
+      node_bounds.size.height = ceil (node_bounds.size.height);
+
       bounds.origin.x = 0.;
       bounds.origin.y = 0.;
       bounds.size.width = 2 * node_bounds.size.width;
