@@ -504,8 +504,11 @@ _update_widget_coordinates (GtkGesture *gesture,
 
   gtk_widget_translate_coordinates (event_widget, widget,
                                     event_x, event_y, &x, &y);
-  data->widget_x = x;
-  data->widget_y = y;
+  /* gtk_widget_translate() loses the fractional part so we need to
+   * add it back to not lose accuracy */
+  data->widget_x = x + (event_x - (int)event_x);
+  data->widget_y = y + (event_y - (int)event_y);
+
 }
 
 static GtkEventSequenceState
