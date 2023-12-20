@@ -644,21 +644,14 @@ init_randr15 (GdkScreen *screen, gboolean *changed)
         #undef EDID_LENGTH
       }
 
-      monitor = find_monitor_by_output (x11_display, output);
-      if (monitor)
-        monitor->remove = FALSE;
-      else
-        {
-          monitor = g_object_new (GDK_TYPE_X11_MONITOR,
-                                  "display", display,
-                                  NULL);
-          monitor->output = output;
-          monitor->add = TRUE;
-          g_ptr_array_add (x11_display->monitors, monitor);
-        }
+      monitor = g_object_new (GDK_TYPE_X11_MONITOR,
+                              "display", display,
+                              NULL);
+      monitor->add = TRUE;
+      g_ptr_array_add (x11_display->monitors, monitor);
 
       gdk_monitor_get_geometry (GDK_MONITOR (monitor), &geometry);
-      name = g_strndup (output_info->name, output_info->nameLen);
+      name = gdk_x11_get_xatom_name_for_display(display, rr_monitors[i].name);
 
       newgeo.x = rr_monitors[i].x / x11_screen->window_scale;
       newgeo.y = rr_monitors[i].y / x11_screen->window_scale;
@@ -687,7 +680,6 @@ init_randr15 (GdkScreen *screen, gboolean *changed)
       gdk_monitor_set_connector (GDK_MONITOR (monitor), name);
       gdk_monitor_set_manufacturer (GDK_MONITOR (monitor), manufacturer);
       g_free (manufacturer);
-      g_free (name);
 
       if (rr_monitors[i].primary)
         primary_output = monitor->output;
