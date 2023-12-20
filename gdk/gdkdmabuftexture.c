@@ -21,6 +21,7 @@
 #include "gdkdmabuftextureprivate.h"
 
 #include "gdkdisplayprivate.h"
+#include "gdkdmabufdownloaderprivate.h"
 #include "gdkdmabufformatsbuilderprivate.h"
 #include "gdkdmabuffourccprivate.h"
 #include "gdkdmabufprivate.h"
@@ -45,7 +46,7 @@ struct _GdkDmabufTexture
   GdkTexture parent_instance;
 
   GdkDisplay *display;
-  const GdkDmabufDownloader *downloader;
+  GdkDmabufDownloader *downloader;
 
   GdkDmabuf dmabuf;
 
@@ -63,11 +64,6 @@ G_DEFINE_QUARK (gdk-dmabuf-error-quark, gdk_dmabuf_error)
 G_DEFINE_TYPE (GdkDmabufTexture, gdk_dmabuf_texture, GDK_TYPE_TEXTURE)
 
 static void
-gdk_dmabuf_texture_init (GdkDmabufTexture *self)
-{
-}
-
-static void
 gdk_dmabuf_texture_dispose (GObject *object)
 {
   GdkDmabufTexture *self = GDK_DMABUF_TEXTURE (object);
@@ -75,9 +71,37 @@ gdk_dmabuf_texture_dispose (GObject *object)
   if (self->destroy)
     self->destroy (self->data);
 
+  g_clear_object (&self->downloader);
   g_clear_object (&self->display);
 
   G_OBJECT_CLASS (gdk_dmabuf_texture_parent_class)->dispose (object);
+}
+
+typedef struct _Download Download;
+
+struct _Download
+{
+  GdkDmabufTexture *texture;
+  GdkMemoryFormat format;
+  guchar *data;
+  gsize stride;
+  volatile int spinlock;
+};
+
+static gboolean
+gdk_dmabuf_texture_invoke_callback (gpointer data)
+{
+  Download *download = data;
+
+  gdk_dmabuf_downloader_download (download->texture->downloader,
+                                  download->texture,
+                                  download->format,
+                                  download->data,
+                                  download->stride);
+
+  g_atomic_int_set (&download->spinlock, 1);
+
+  return FALSE;
 }
 
 static void
@@ -87,12 +111,19 @@ gdk_dmabuf_texture_download (GdkTexture      *texture,
                              gsize            stride)
 {
   GdkDmabufTexture *self = GDK_DMABUF_TEXTURE (texture);
+  Download download = { self, format, data, stride, 0 };
 
-  self->downloader->download (self->downloader,
-                              texture,
-                              format,
-                              data,
-                              stride);
+  if (self->downloader == NULL)
+    {
+#ifdef HAVE_DMABUF
+      gdk_dmabuf_download_mmap (texture, format, data, stride);
+#endif
+      return;
+    }
+
+  g_main_context_invoke (NULL, gdk_dmabuf_texture_invoke_callback, &download);
+
+  while (g_atomic_int_get (&download.spinlock) == 0);
 }
 
 static void
@@ -104,6 +135,11 @@ gdk_dmabuf_texture_class_init (GdkDmabufTextureClass *klass)
   texture_class->download = gdk_dmabuf_texture_download;
 
   gobject_class->dispose = gdk_dmabuf_texture_dispose;
+}
+
+static void
+gdk_dmabuf_texture_init (GdkDmabufTexture *self)
+{
 }
 
 GdkDisplay *
@@ -129,14 +165,15 @@ gdk_dmabuf_texture_new_from_builder (GdkDmabufTextureBuilder *builder,
   GdkTexture *update_texture;
   GdkDisplay *display;
   GdkDmabuf dmabuf;
-  GdkMemoryFormat format;
   GError *local_error = NULL;
   int width, height;
+  gboolean premultiplied;
   gsize i;
 
   display = gdk_dmabuf_texture_builder_get_display (builder);
   width = gdk_dmabuf_texture_builder_get_width (builder);
   height = gdk_dmabuf_texture_builder_get_height (builder);
+  premultiplied = gdk_dmabuf_texture_builder_get_premultiplied (builder);
 
   if (!gdk_dmabuf_sanitize (&dmabuf,
                             width,
@@ -147,43 +184,57 @@ gdk_dmabuf_texture_new_from_builder (GdkDmabufTextureBuilder *builder,
 
   gdk_display_init_dmabuf (display);
 
-  for (i = 0; display->dmabuf_downloaders[i] != NULL; i++)
-    {
-      if (local_error && g_error_matches (local_error, GDK_DMABUF_ERROR, GDK_DMABUF_ERROR_UNSUPPORTED_FORMAT))
-        g_clear_error (&local_error);
-
-      if (display->dmabuf_downloaders[i]->supports (display->dmabuf_downloaders[i],
-                                                    display,
-                                                    &dmabuf,
-                                                    gdk_dmabuf_texture_builder_get_premultiplied (builder),
-                                                    &format,
-                                                    local_error ? NULL : &local_error))
-        break;
-    }
-
-  if (display->dmabuf_downloaders[i] == NULL)
-    {
-      g_propagate_error (error, local_error);
-      return NULL;
-    }
-
-  GDK_DISPLAY_DEBUG (display, DMABUF,
-             "Creating dmabuf texture, format %.4s:%#" G_GINT64_MODIFIER "x, %s%u planes, memory format %u, downloader %s",
-             (char *) &dmabuf.fourcc, dmabuf.modifier,
-             gdk_dmabuf_texture_builder_get_premultiplied (builder) ? " premultiplied, " : "",
-             dmabuf.n_planes,
-             format,
-             display->dmabuf_downloaders[i]->name);
-
   self = g_object_new (GDK_TYPE_DMABUF_TEXTURE,
                        "width", width,
                        "height", height,
                        NULL);
 
-  GDK_TEXTURE (self)->format = format;
   g_set_object (&self->display, display);
-  self->downloader = display->dmabuf_downloaders[i];
   self->dmabuf = dmabuf;
+
+  if (!gdk_dmabuf_get_memory_format (dmabuf.fourcc, premultiplied, &(GDK_TEXTURE (self)->format)))
+    {
+      GDK_DISPLAY_DEBUG (display, DMABUF,
+                         "Falling back to generic RGBA for dmabuf format %.4s",
+                         (char *) &dmabuf.fourcc);
+      GDK_TEXTURE (self)->format = premultiplied ? GDK_MEMORY_R8G8B8A8_PREMULTIPLIED
+                                                 : GDK_MEMORY_R8G8B8A8;
+    }
+
+  if (!gdk_dmabuf_formats_contains (gdk_dmabuf_get_mmap_formats (), dmabuf.fourcc, dmabuf.modifier))
+    {
+      for (i = 0; display->dmabuf_downloaders[i] != NULL; i++)
+        {
+          if (local_error && g_error_matches (local_error, GDK_DMABUF_ERROR, GDK_DMABUF_ERROR_UNSUPPORTED_FORMAT))
+            g_clear_error (&local_error);
+
+          if (gdk_dmabuf_downloader_supports (display->dmabuf_downloaders[i],
+                                              self,
+                                              local_error ? NULL : &local_error))
+            {
+              self->downloader = g_object_ref (display->dmabuf_downloaders[i]);
+              break;
+            }
+        }
+
+      if (self->downloader == NULL)
+        {
+          g_propagate_error (error, local_error);
+          g_object_unref (self);
+          return NULL;
+        }
+    }
+
+  GDK_DISPLAY_DEBUG (display, DMABUF,
+                     "Creating dmabuf texture, format %.4s:%#" G_GINT64_MODIFIER "x, %s%u planes, memory format %u, downloader %s",
+                     (char *) &dmabuf.fourcc, dmabuf.modifier,
+                     gdk_dmabuf_texture_builder_get_premultiplied (builder) ? " premultiplied, " : "",
+                     dmabuf.n_planes,
+                     GDK_TEXTURE (self)->format,
+                     self->downloader ? G_OBJECT_TYPE_NAME (self->downloader) : "none");
+
+  /* Set this only once we know that the texture will be created.
+   * Otherwise dispose() will run the callback */
   self->destroy = destroy;
   self->data = data;
 

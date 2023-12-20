@@ -24,6 +24,10 @@
 
 #include <epoxy/gl.h>
 
+#ifdef GDK_RENDERING_VULKAN
+#include <vulkan/vulkan.h>
+#endif
+
 G_BEGIN_DECLS
 
 typedef enum {
@@ -61,6 +65,15 @@ gboolean                gdk_memory_format_gl_rgba_format    (GdkMemoryFormat    
                                                              GLenum                     *out_format,
                                                              GLenum                     *out_type,
                                                              GLint                       out_swizzle[4]);
+#ifdef GDK_RENDERING_VULKAN
+VkFormat                gdk_memory_format_vk_format         (GdkMemoryFormat             format,
+                                                             VkComponentMapping         *out_swizzle);
+VkFormat                gdk_memory_format_vk_rgba_format    (GdkMemoryFormat             format,
+                                                             GdkMemoryFormat            *out_rgba_format,
+                                                             VkComponentMapping         *out_swizzle);
+#endif
+guint32                 gdk_memory_format_get_dmabuf_fourcc (GdkMemoryFormat             format);
+
 
 void                    gdk_memory_convert                  (guchar                     *dest_data,
                                                              gsize                       dest_stride,

@@ -2,10 +2,13 @@
 
 #include "gdkdmabufformatsbuilderprivate.h"
 
+#ifdef GDK_RENDERING_VULKAN
+#include <vulkan/vulkan.h>
+#endif
+
 #define GDK_DMABUF_MAX_PLANES 4
 
 typedef struct _GdkDmabuf GdkDmabuf;
-typedef struct _GdkDmabufDownloader GdkDmabufDownloader;
 
 struct _GdkDmabuf
 {
@@ -19,29 +22,14 @@ struct _GdkDmabuf
   } planes[GDK_DMABUF_MAX_PLANES];
 };
 
-struct _GdkDmabufDownloader
-{
-  const char *name;
-  gboolean              (* add_formats)                         (const GdkDmabufDownloader      *downloader,
-                                                                 GdkDisplay                     *display,
-                                                                 GdkDmabufFormatsBuilder        *builder);
-  gboolean              (* supports)                            (const GdkDmabufDownloader      *downloader,
-                                                                 GdkDisplay                     *display,
-                                                                 const GdkDmabuf                *dmabuf,
-                                                                 gboolean                        premultiplied,
-                                                                 GdkMemoryFormat                *out_format,
-                                                                 GError                        **error);
-  void                  (* download)                            (const GdkDmabufDownloader      *downloader,
-                                                                 GdkTexture                     *texture,
+#ifdef HAVE_DMABUF
+
+GdkDmabufFormats *          gdk_dmabuf_get_mmap_formats         (void) G_GNUC_CONST;
+void                        gdk_dmabuf_download_mmap            (GdkTexture                     *texture,
                                                                  GdkMemoryFormat                 format,
                                                                  guchar                         *data,
                                                                  gsize                           stride);
-};
 
-#ifdef HAVE_DMABUF
-
-const GdkDmabufDownloader * gdk_dmabuf_get_direct_downloader    (void) G_GNUC_CONST;
-const GdkDmabufDownloader * gdk_dmabuf_get_egl_downloader       (void) G_GNUC_CONST;
 
 int                         gdk_dmabuf_ioctl                    (int                             fd,
                                                                  unsigned long                   request,
@@ -60,10 +48,14 @@ gboolean                    gdk_dmabuf_sanitize                 (GdkDmabuf      
 
 gboolean                    gdk_dmabuf_is_disjoint              (const GdkDmabuf                *dmabuf);
 
+gboolean                    gdk_dmabuf_fourcc_is_yuv            (guint32                         fourcc,
+                                                                 gboolean                       *is_yuv);
 gboolean                    gdk_dmabuf_get_memory_format        (guint32                         fourcc,
                                                                  gboolean                        premultiplied,
                                                                  GdkMemoryFormat                *out_format);
-gboolean                    gdk_dmabuf_get_fourcc               (GdkMemoryFormat                 format,
-                                                                 guint32                        *out_fourcc);
+#ifdef GDK_RENDERING_VULKAN
+VkFormat                    gdk_dmabuf_get_vk_format            (guint32                         fourcc,
+                                                                 VkComponentMapping             *out_components);
+#endif
 
 #endif

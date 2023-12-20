@@ -37,6 +37,7 @@ struct _GdkDrmFormatInfo
 {
   guint32 fourcc;
   GdkMemoryFormat memory_format;
+  gboolean is_yuv;
   void (* download) (guchar          *dst_data,
                      gsize            dst_stride,
                      GdkMemoryFormat  dst_format,
@@ -45,6 +46,12 @@ struct _GdkDrmFormatInfo
                      const GdkDmabuf *dmabuf,
                      const guchar    *src_datas[GDK_DMABUF_MAX_PLANES],
                      gsize            sizes[GDK_DMABUF_MAX_PLANES]);
+#ifdef GDK_RENDERING_VULKAN
+  struct {
+    VkFormat format;
+    VkComponentMapping swizzle;
+  } vk;
+#endif
 };
 
 static void
@@ -368,149 +375,1505 @@ download_yuyv (guchar          *dst_data,
     }
 }
 
+#define VULKAN_SWIZZLE(_R, _G, _B, _A) { VK_COMPONENT_SWIZZLE_ ## _R, VK_COMPONENT_SWIZZLE_ ## _G, VK_COMPONENT_SWIZZLE_ ## _B, VK_COMPONENT_SWIZZLE_ ## _A }
+#define VULKAN_DEFAULT_SWIZZLE VULKAN_SWIZZLE (R, G, B, A)
 static const GdkDrmFormatInfo supported_formats[] = {
 #if 0
   /* palette formats?! */
-  { DRM_FORMAT_C1, GDK_MEMORY_, NULL },
-  { DRM_FORMAT_C2, GDK_MEMORY_, NULL },
-  { DRM_FORMAT_C4, GDK_MEMORY_, NULL },
-  { DRM_FORMAT_C8, GDK_MEMORY_, NULL },
+  {
+    .fourcc = DRM_FORMAT_C1,
+    .memory_format = GDK_MEMORY_,
+    .is_yuv = FALSE,
+    .download = NULL,
+#ifdef GDK_RENDERING_VULKAN
+    .vk = {
+        .format =
+        .swizzle = VULKAN_DEFAULT_SWIZZLE,
+    },
+#endif
+  },
+  {
+    .fourcc = DRM_FORMAT_C2,
+    .memory_format = GDK_MEMORY_,
+    .is_yuv = FALSE,
+    .download = NULL,
+#ifdef GDK_RENDERING_VULKAN
+    .vk = {
+        .format =
+        .swizzle = VULKAN_DEFAULT_SWIZZLE,
+    },
+#endif
+  },
+  {
+    .fourcc = DRM_FORMAT_C4,
+    .memory_format = GDK_MEMORY_,
+    .is_yuv = FALSE,
+    .download = NULL,
+#ifdef GDK_RENDERING_VULKAN
+    .vk = {
+        .format =
+        .swizzle = VULKAN_DEFAULT_SWIZZLE,
+    },
+#endif
+  },
+  {
+    .fourcc = DRM_FORMAT_C8,
+    .memory_format = GDK_MEMORY_,
+    .is_yuv = FALSE,
+    .download = NULL,
+#ifdef GDK_RENDERING_VULKAN
+    .vk = {
+        .format =
+        .swizzle = VULKAN_DEFAULT_SWIZZLE,
+    },
+#endif
+  },
 #endif
   /* darkness */
-  { DRM_FORMAT_D1, GDK_MEMORY_G8, NULL },
-  { DRM_FORMAT_D2, GDK_MEMORY_G8, NULL },
-  { DRM_FORMAT_D4, GDK_MEMORY_G8, NULL },
-  { DRM_FORMAT_D8, GDK_MEMORY_G8, NULL },
+  {
+    .fourcc = DRM_FORMAT_D1,
+    .memory_format = GDK_MEMORY_G8,
+    .is_yuv = FALSE,
+    .download = NULL,
+#ifdef GDK_RENDERING_VULKAN
+    .vk = {
+        .format = VK_FORMAT_UNDEFINED,
+        .swizzle = VULKAN_DEFAULT_SWIZZLE,
+    },
+#endif
+  },
+  {
+    .fourcc = DRM_FORMAT_D2,
+    .memory_format = GDK_MEMORY_G8,
+    .is_yuv = FALSE,
+    .download = NULL,
+#ifdef GDK_RENDERING_VULKAN
+    .vk = {
+        .format = VK_FORMAT_UNDEFINED,
+        .swizzle = VULKAN_DEFAULT_SWIZZLE,
+    },
+#endif
+  },
+  {
+    .fourcc = DRM_FORMAT_D4,
+    .memory_format = GDK_MEMORY_G8,
+    .is_yuv = FALSE,
+    .download = NULL,
+#ifdef GDK_RENDERING_VULKAN
+    .vk = {
+        .format = VK_FORMAT_UNDEFINED,
+        .swizzle = VULKAN_DEFAULT_SWIZZLE,
+    },
+#endif
+  },
+  {
+    .fourcc = DRM_FORMAT_D8,
+    .memory_format = GDK_MEMORY_G8,
+    .is_yuv = FALSE,
+    .download = NULL,
+#ifdef GDK_RENDERING_VULKAN
+    .vk = {
+        .format = VK_FORMAT_UNDEFINED,
+        .swizzle = VULKAN_DEFAULT_SWIZZLE,
+    },
+#endif
+  },
   /* red only - we treat this as gray */
-  { DRM_FORMAT_R1, GDK_MEMORY_G8, NULL },
-  { DRM_FORMAT_R2, GDK_MEMORY_G8, NULL },
-  { DRM_FORMAT_R4, GDK_MEMORY_G8, NULL },
-  { DRM_FORMAT_R8, GDK_MEMORY_G8, NULL },
-  { DRM_FORMAT_R10, GDK_MEMORY_G16, NULL },
-  { DRM_FORMAT_R12, GDK_MEMORY_G16, NULL },
-  { DRM_FORMAT_R16, GDK_MEMORY_G16, NULL },
+  {
+    .fourcc = DRM_FORMAT_R1,
+    .memory_format = GDK_MEMORY_G8,
+    .is_yuv = FALSE,
+    .download = NULL,
+#ifdef GDK_RENDERING_VULKAN
+    .vk = {
+        .format = VK_FORMAT_UNDEFINED,
+        .swizzle = VULKAN_DEFAULT_SWIZZLE,
+    },
+#endif
+  },
+  {
+    .fourcc = DRM_FORMAT_R2,
+    .memory_format = GDK_MEMORY_G8,
+    .is_yuv = FALSE,
+    .download = NULL,
+#ifdef GDK_RENDERING_VULKAN
+    .vk = {
+        .format = VK_FORMAT_UNDEFINED,
+        .swizzle = VULKAN_DEFAULT_SWIZZLE,
+    },
+#endif
+  },
+  {
+    .fourcc = DRM_FORMAT_R4,
+    .memory_format = GDK_MEMORY_G8,
+    .is_yuv = FALSE,
+    .download = NULL,
+#ifdef GDK_RENDERING_VULKAN
+    .vk = {
+        .format = VK_FORMAT_UNDEFINED,
+        .swizzle = VULKAN_DEFAULT_SWIZZLE,
+    },
+#endif
+  },
+  {
+    .fourcc = DRM_FORMAT_R8,
+    .memory_format = GDK_MEMORY_G8,
+    .is_yuv = FALSE,
+    .download = NULL,
+#ifdef GDK_RENDERING_VULKAN
+    .vk = {
+        .format = VK_FORMAT_R8_UNORM,
+        .swizzle = VULKAN_DEFAULT_SWIZZLE,
+    },
+#endif
+  },
+  {
+    .fourcc = DRM_FORMAT_R10,
+    .memory_format = GDK_MEMORY_G16,
+    .is_yuv = FALSE,
+    .download = NULL,
+#ifdef GDK_RENDERING_VULKAN
+    .vk = {
+        .format = VK_FORMAT_UNDEFINED, //VK_FORMAT_R16_UNORM,
+        .swizzle = VULKAN_DEFAULT_SWIZZLE,
+    },
+#endif
+  },
+  {
+    .fourcc = DRM_FORMAT_R12,
+    .memory_format = GDK_MEMORY_G16,
+    .is_yuv = FALSE,
+    .download = NULL,
+#ifdef GDK_RENDERING_VULKAN
+    .vk = {
+        .format = VK_FORMAT_UNDEFINED, //VK_FORMAT_R16_UNORM,
+        .swizzle = VULKAN_DEFAULT_SWIZZLE,
+    },
+#endif
+  },
+  {
+    .fourcc = DRM_FORMAT_R16,
+    .memory_format = GDK_MEMORY_G16,
+    .is_yuv = FALSE,
+    .download = NULL,
+#ifdef GDK_RENDERING_VULKAN
+    .vk = {
+        .format = VK_FORMAT_R16_UNORM,
+        .swizzle = VULKAN_DEFAULT_SWIZZLE,
+    },
+#endif
+  },
   /* 2 channels - FIXME: Should this be gray + alpha? */
-  { DRM_FORMAT_RG88, GDK_MEMORY_R8G8B8, NULL },
-  { DRM_FORMAT_GR88, GDK_MEMORY_R8G8B8, NULL },
-  { DRM_FORMAT_RG1616, GDK_MEMORY_R16G16B16, NULL },
-  { DRM_FORMAT_GR1616, GDK_MEMORY_R16G16B16, NULL },
+  {
+    .fourcc = DRM_FORMAT_RG88,
+    .memory_format = GDK_MEMORY_R8G8B8,
+    .is_yuv = FALSE,
+    .download = NULL,
+#ifdef GDK_RENDERING_VULKAN
+    .vk = {
+        .format = VK_FORMAT_R8G8_UNORM,
+        .swizzle = VULKAN_DEFAULT_SWIZZLE,
+    },
+#endif
+  },
+  {
+    .fourcc = DRM_FORMAT_GR88,
+    .memory_format = GDK_MEMORY_R8G8B8,
+    .is_yuv = FALSE,
+    .download = NULL,
+#ifdef GDK_RENDERING_VULKAN
+    .vk = {
+        .format = VK_FORMAT_R8G8_UNORM,
+        .swizzle = VULKAN_SWIZZLE (G, R, B, A),
+    },
+#endif
+  },
+  {
+    .fourcc = DRM_FORMAT_RG1616,
+    .memory_format = GDK_MEMORY_R16G16B16,
+    .is_yuv = FALSE,
+    .download = NULL,
+#ifdef GDK_RENDERING_VULKAN
+    .vk = {
+        .format = VK_FORMAT_R16G16_UNORM,
+        .swizzle = VULKAN_DEFAULT_SWIZZLE,
+    },
+#endif
+  },
+  {
+    .fourcc = DRM_FORMAT_GR1616,
+    .memory_format = GDK_MEMORY_R16G16B16,
+    .is_yuv = FALSE,
+    .download = NULL,
+#ifdef GDK_RENDERING_VULKAN
+    .vk = {
+        .format = VK_FORMAT_R16G16_UNORM,
+        .swizzle = VULKAN_SWIZZLE (G, R, B, A),
+    },
+#endif
+  },
   /* <8bit per channel RGB(A) */
-  { DRM_FORMAT_RGB332, GDK_MEMORY_B8G8R8, NULL },
-  { DRM_FORMAT_BGR233, GDK_MEMORY_R8G8B8, NULL },
-  { DRM_FORMAT_XRGB4444, GDK_MEMORY_B8G8R8, NULL },
-  { DRM_FORMAT_XBGR4444, GDK_MEMORY_R8G8B8, NULL },
-  { DRM_FORMAT_RGBX4444, GDK_MEMORY_B8G8R8, NULL },
-  { DRM_FORMAT_BGRX4444, GDK_MEMORY_R8G8B8, NULL },
-  { DRM_FORMAT_ARGB4444, GDK_MEMORY_B8G8R8A8_PREMULTIPLIED, NULL },
-  { DRM_FORMAT_ABGR4444, GDK_MEMORY_R8G8B8A8_PREMULTIPLIED, NULL },
-  { DRM_FORMAT_RGBA4444, GDK_MEMORY_A8B8G8R8_PREMULTIPLIED, NULL },
-  { DRM_FORMAT_BGRA4444, GDK_MEMORY_A8R8G8B8_PREMULTIPLIED, NULL },
-  { DRM_FORMAT_XRGB1555, GDK_MEMORY_B8G8R8, NULL },
-  { DRM_FORMAT_XBGR1555, GDK_MEMORY_R8G8B8, NULL },
-  { DRM_FORMAT_RGBX5551, GDK_MEMORY_B8G8R8, NULL },
-  { DRM_FORMAT_BGRX5551, GDK_MEMORY_R8G8B8, NULL },
-  { DRM_FORMAT_ARGB1555, GDK_MEMORY_B8G8R8A8_PREMULTIPLIED, NULL },
-  { DRM_FORMAT_ABGR1555, GDK_MEMORY_R8G8B8A8_PREMULTIPLIED, NULL },
-  { DRM_FORMAT_RGBA5551, GDK_MEMORY_A8B8G8R8_PREMULTIPLIED, NULL },
-  { DRM_FORMAT_BGRA5551, GDK_MEMORY_A8R8G8B8_PREMULTIPLIED, NULL },
-  { DRM_FORMAT_RGB565, GDK_MEMORY_B8G8R8, NULL },
-  { DRM_FORMAT_BGR565, GDK_MEMORY_R8G8B8, NULL },
+  {
+    .fourcc = DRM_FORMAT_RGB332,
+    .memory_format = GDK_MEMORY_B8G8R8,
+    .is_yuv = FALSE,
+    .download = NULL,
+#ifdef GDK_RENDERING_VULKAN
+    .vk = {
+        .format = VK_FORMAT_UNDEFINED,
+        .swizzle = VULKAN_DEFAULT_SWIZZLE,
+    },
+#endif
+  },
+  {
+    .fourcc = DRM_FORMAT_BGR233,
+    .memory_format = GDK_MEMORY_R8G8B8,
+    .is_yuv = FALSE,
+    .download = NULL,
+#ifdef GDK_RENDERING_VULKAN
+    .vk = {
+        .format = VK_FORMAT_UNDEFINED,
+        .swizzle = VULKAN_DEFAULT_SWIZZLE,
+    },
+#endif
+  },
+  {
+    .fourcc = DRM_FORMAT_XRGB4444,
+    .memory_format = GDK_MEMORY_B8G8R8,
+    .is_yuv = FALSE,
+    .download = NULL,
+#ifdef GDK_RENDERING_VULKAN
+    .vk = {
+        .format = VK_FORMAT_A4R4G4B4_UNORM_PACK16,
+        .swizzle = VULKAN_SWIZZLE (R, G, B, ONE),
+    },
+#endif
+  },
+  {
+    .fourcc = DRM_FORMAT_XBGR4444,
+    .memory_format = GDK_MEMORY_R8G8B8,
+    .is_yuv = FALSE,
+    .download = NULL,
+#ifdef GDK_RENDERING_VULKAN
+    .vk = {
+        .format = VK_FORMAT_A4B4G4R4_UNORM_PACK16,
+        .swizzle = VULKAN_SWIZZLE (R, G, B, ONE),
+    },
+#endif
+  },
+  {
+    .fourcc = DRM_FORMAT_RGBX4444,
+    .memory_format = GDK_MEMORY_B8G8R8,
+    .is_yuv = FALSE,
+    .download = NULL,
+#ifdef GDK_RENDERING_VULKAN
+    .vk = {
+        .format = VK_FORMAT_R4G4B4A4_UNORM_PACK16,
+        .swizzle = VULKAN_SWIZZLE (R, G, B, ONE),
+    },
+#endif
+  },
+  {
+    .fourcc = DRM_FORMAT_BGRX4444,
+    .memory_format = GDK_MEMORY_R8G8B8,
+    .is_yuv = FALSE,
+    .download = NULL,
+#ifdef GDK_RENDERING_VULKAN
+    .vk = {
+        .format = VK_FORMAT_B4G4R4A4_UNORM_PACK16,
+        .swizzle = VULKAN_SWIZZLE (R, G, B, ONE),
+    },
+#endif
+  },
+  {
+    .fourcc = DRM_FORMAT_ARGB4444,
+    .memory_format = GDK_MEMORY_B8G8R8A8_PREMULTIPLIED,
+    .is_yuv = FALSE,
+    .download = NULL,
+#ifdef GDK_RENDERING_VULKAN
+    .vk = {
+        .format = VK_FORMAT_A4R4G4B4_UNORM_PACK16,
+        .swizzle = VULKAN_DEFAULT_SWIZZLE,
+    },
+#endif
+  },
+  {
+    .fourcc = DRM_FORMAT_ABGR4444,
+    .memory_format = GDK_MEMORY_R8G8B8A8_PREMULTIPLIED,
+    .is_yuv = FALSE,
+    .download = NULL,
+#ifdef GDK_RENDERING_VULKAN
+    .vk = {
+        .format = VK_FORMAT_A4B4G4R4_UNORM_PACK16,
+        .swizzle = VULKAN_DEFAULT_SWIZZLE,
+    },
+#endif
+  },
+  {
+    .fourcc = DRM_FORMAT_RGBA4444,
+    .memory_format = GDK_MEMORY_A8B8G8R8_PREMULTIPLIED,
+    .is_yuv = FALSE,
+    .download = NULL,
+#ifdef GDK_RENDERING_VULKAN
+    .vk = {
+        .format = VK_FORMAT_R4G4B4A4_UNORM_PACK16,
+        .swizzle = VULKAN_DEFAULT_SWIZZLE,
+    },
+#endif
+  },
+  {
+    .fourcc = DRM_FORMAT_BGRA4444,
+    .memory_format = GDK_MEMORY_A8R8G8B8_PREMULTIPLIED,
+    .is_yuv = FALSE,
+    .download = NULL,
+#ifdef GDK_RENDERING_VULKAN
+    .vk = {
+        .format = VK_FORMAT_B4G4R4A4_UNORM_PACK16,
+        .swizzle = VULKAN_DEFAULT_SWIZZLE,
+    },
+#endif
+  },
+  {
+    .fourcc = DRM_FORMAT_XRGB1555,
+    .memory_format = GDK_MEMORY_B8G8R8,
+    .is_yuv = FALSE,
+    .download = NULL,
+#ifdef GDK_RENDERING_VULKAN
+    .vk = {
+        .format = VK_FORMAT_A1R5G5B5_UNORM_PACK16,
+        .swizzle = VULKAN_SWIZZLE (R, G, B, ONE),
+    },
+#endif
+  },
+  {
+    .fourcc = DRM_FORMAT_XBGR1555,
+    .memory_format = GDK_MEMORY_R8G8B8,
+    .is_yuv = FALSE,
+    .download = NULL,
+#ifdef GDK_RENDERING_VULKAN
+    .vk = {
+        .format = VK_FORMAT_A1R5G5B5_UNORM_PACK16, // requires VK_KHR_maintenance5: VK_FORMAT_A1B5G5R5_UNORM_PACK16_KHR
+        .swizzle = VULKAN_SWIZZLE (B, G, R, ONE),
+    },
+#endif
+  },
+  {
+    .fourcc = DRM_FORMAT_RGBX5551,
+    .memory_format = GDK_MEMORY_B8G8R8,
+    .is_yuv = FALSE,
+    .download = NULL,
+#ifdef GDK_RENDERING_VULKAN
+    .vk = {
+        .format = VK_FORMAT_R5G5B5A1_UNORM_PACK16,
+        .swizzle = VULKAN_SWIZZLE (R, G, B, ONE),
+    },
+#endif
+  },
+  {
+    .fourcc = DRM_FORMAT_BGRX5551,
+    .memory_format = GDK_MEMORY_R8G8B8,
+    .is_yuv = FALSE,
+    .download = NULL,
+#ifdef GDK_RENDERING_VULKAN
+    .vk = {
+        .format = VK_FORMAT_B5G5R5A1_UNORM_PACK16,
+        .swizzle = VULKAN_SWIZZLE (R, G, B, ONE),
+    },
+#endif
+  },
+  {
+    .fourcc = DRM_FORMAT_ARGB1555,
+    .memory_format = GDK_MEMORY_B8G8R8A8_PREMULTIPLIED,
+    .is_yuv = FALSE,
+    .download = NULL,
+#ifdef GDK_RENDERING_VULKAN
+    .vk = {
+        .format = VK_FORMAT_A1R5G5B5_UNORM_PACK16,
+        .swizzle = VULKAN_DEFAULT_SWIZZLE,
+    },
+#endif
+  },
+  {
+    .fourcc = DRM_FORMAT_ABGR1555,
+    .memory_format = GDK_MEMORY_R8G8B8A8_PREMULTIPLIED,
+    .is_yuv = FALSE,
+    .download = NULL,
+#ifdef GDK_RENDERING_VULKAN
+    .vk = {
+        .format = VK_FORMAT_A1R5G5B5_UNORM_PACK16, // requires VK_KHR_maintenance5: VK_FORMAT_A1B5G5R5_UNORM_PACK16_KHR
+        .swizzle = VULKAN_SWIZZLE (B, G, R, A),
+    },
+#endif
+  },
+  {
+    .fourcc = DRM_FORMAT_RGBA5551,
+    .memory_format = GDK_MEMORY_A8B8G8R8_PREMULTIPLIED,
+    .is_yuv = FALSE,
+    .download = NULL,
+#ifdef GDK_RENDERING_VULKAN
+    .vk = {
+        .format = VK_FORMAT_R5G5B5A1_UNORM_PACK16,
+        .swizzle = VULKAN_DEFAULT_SWIZZLE,
+    },
+#endif
+  },
+  {
+    .fourcc = DRM_FORMAT_BGRA5551,
+    .memory_format = GDK_MEMORY_A8R8G8B8_PREMULTIPLIED,
+    .is_yuv = FALSE,
+    .download = NULL,
+#ifdef GDK_RENDERING_VULKAN
+    .vk = {
+        .format = VK_FORMAT_B5G5R5A1_UNORM_PACK16,
+        .swizzle = VULKAN_DEFAULT_SWIZZLE,
+    },
+#endif
+  },
+  {
+    .fourcc = DRM_FORMAT_RGB565,
+    .memory_format = GDK_MEMORY_B8G8R8,
+    .is_yuv = FALSE,
+    .download = NULL,
+#ifdef GDK_RENDERING_VULKAN
+    .vk = {
+        .format = VK_FORMAT_R5G6B5_UNORM_PACK16,
+        .swizzle = VULKAN_DEFAULT_SWIZZLE,
+    },
+#endif
+  },
+  {
+    .fourcc = DRM_FORMAT_BGR565,
+    .memory_format = GDK_MEMORY_R8G8B8,
+    .is_yuv = FALSE,
+    .download = NULL,
+#ifdef GDK_RENDERING_VULKAN
+    .vk = {
+        .format = VK_FORMAT_B5G6R5_UNORM_PACK16,
+        .swizzle = VULKAN_DEFAULT_SWIZZLE,
+    },
+#endif
+  },
   /* 8bit RGB */
-  { DRM_FORMAT_RGB888, GDK_MEMORY_R8G8B8, download_memcpy },
-  { DRM_FORMAT_BGR888, GDK_MEMORY_B8G8R8, download_memcpy },
+  {
+    .fourcc = DRM_FORMAT_RGB888,
+    .memory_format = GDK_MEMORY_R8G8B8,
+    .is_yuv = FALSE,
+    .download = download_memcpy,
+#ifdef GDK_RENDERING_VULKAN
+    .vk = {
+        .format = VK_FORMAT_B8G8R8_UNORM,
+        .swizzle = VULKAN_DEFAULT_SWIZZLE,
+    },
+#endif
+  },
+  {
+    .fourcc = DRM_FORMAT_BGR888,
+    .memory_format = GDK_MEMORY_B8G8R8,
+    .is_yuv = FALSE,
+    .download = download_memcpy,
+#ifdef GDK_RENDERING_VULKAN
+    .vk = {
+        .format = VK_FORMAT_R8G8B8_UNORM,
+        .swizzle = VULKAN_DEFAULT_SWIZZLE,
+    },
+#endif
+  },
   /* 8bit RGBA */
-  { DRM_FORMAT_BGRA8888, GDK_MEMORY_A8R8G8B8_PREMULTIPLIED, download_memcpy },
-  { DRM_FORMAT_ABGR8888, GDK_MEMORY_R8G8B8A8_PREMULTIPLIED, download_memcpy },
-  { DRM_FORMAT_ARGB8888, GDK_MEMORY_B8G8R8A8_PREMULTIPLIED, download_memcpy },
-  { DRM_FORMAT_RGBA8888, GDK_MEMORY_A8B8G8R8_PREMULTIPLIED, download_memcpy },
-  { DRM_FORMAT_BGRX8888, GDK_MEMORY_X8R8G8B8, download_memcpy },
-  { DRM_FORMAT_XBGR8888, GDK_MEMORY_R8G8B8X8, download_memcpy },
-  { DRM_FORMAT_XRGB8888, GDK_MEMORY_B8G8R8X8, download_memcpy },
-  { DRM_FORMAT_RGBX8888, GDK_MEMORY_X8B8G8R8, download_memcpy },
-  { DRM_FORMAT_ABGR16161616F, GDK_MEMORY_R16G16B16A16_FLOAT_PREMULTIPLIED, download_memcpy },
+  {
+    .fourcc = DRM_FORMAT_BGRA8888,
+    .memory_format = GDK_MEMORY_A8R8G8B8_PREMULTIPLIED,
+    .is_yuv = FALSE,
+    .download = download_memcpy,
+#ifdef GDK_RENDERING_VULKAN
+    .vk = {
+        .format = VK_FORMAT_R8G8B8A8_UNORM,
+        .swizzle = VULKAN_SWIZZLE (G, B, A, R),
+    },
+#endif
+  },
+  {
+    .fourcc = DRM_FORMAT_ABGR8888,
+    .memory_format = GDK_MEMORY_R8G8B8A8_PREMULTIPLIED,
+    .is_yuv = FALSE,
+    .download = download_memcpy,
+#ifdef GDK_RENDERING_VULKAN
+    .vk = {
+        .format = VK_FORMAT_R8G8B8A8_UNORM,
+        .swizzle = VULKAN_DEFAULT_SWIZZLE,
+    },
+#endif
+  },
+  {
+    .fourcc = DRM_FORMAT_ARGB8888,
+    .memory_format = GDK_MEMORY_B8G8R8A8_PREMULTIPLIED,
+    .is_yuv = FALSE,
+    .download = download_memcpy,
+#ifdef GDK_RENDERING_VULKAN
+    .vk = {
+        .format = VK_FORMAT_B8G8R8A8_UNORM,
+        .swizzle = VULKAN_DEFAULT_SWIZZLE,
+    },
+#endif
+  },
+  {
+    .fourcc = DRM_FORMAT_RGBA8888,
+    .memory_format = GDK_MEMORY_A8B8G8R8_PREMULTIPLIED,
+    .is_yuv = FALSE,
+    .download = download_memcpy,
+#ifdef GDK_RENDERING_VULKAN
+    .vk = {
+        .format = VK_FORMAT_R8G8B8A8_UNORM,
+        .swizzle = VULKAN_SWIZZLE (A, B, G, R),
+    },
+#endif
+  },
+  {
+    .fourcc = DRM_FORMAT_BGRX8888,
+    .memory_format = GDK_MEMORY_X8R8G8B8,
+    .is_yuv = FALSE,
+    .download = download_memcpy,
+#ifdef GDK_RENDERING_VULKAN
+    .vk = {
+        .format = VK_FORMAT_R8G8B8A8_UNORM,
+        .swizzle = VULKAN_SWIZZLE (G, B, A, ONE),
+    },
+#endif
+  },
+  {
+    .fourcc = DRM_FORMAT_XBGR8888,
+    .memory_format = GDK_MEMORY_R8G8B8X8,
+    .is_yuv = FALSE,
+    .download = download_memcpy,
+#ifdef GDK_RENDERING_VULKAN
+    .vk = {
+        .format = VK_FORMAT_R8G8B8A8_UNORM,
+        .swizzle = VULKAN_SWIZZLE (R, G, B, ONE),
+    },
+#endif
+  },
+  {
+    .fourcc = DRM_FORMAT_XRGB8888,
+    .memory_format = GDK_MEMORY_B8G8R8X8,
+    .is_yuv = FALSE,
+    .download = download_memcpy,
+#ifdef GDK_RENDERING_VULKAN
+    .vk = {
+        .format = VK_FORMAT_B8G8R8A8_UNORM,
+        .swizzle = VULKAN_SWIZZLE (R, G, B, ONE),
+    },
+#endif
+  },
+  {
+    .fourcc = DRM_FORMAT_RGBX8888,
+    .memory_format = GDK_MEMORY_X8B8G8R8,
+    .is_yuv = FALSE,
+    .download = download_memcpy,
+#ifdef GDK_RENDERING_VULKAN
+    .vk = {
+        .format = VK_FORMAT_R8G8B8A8_UNORM,
+        .swizzle = VULKAN_SWIZZLE (A, B, G, ONE),
+    },
+#endif
+  },
   /* 10bit RGB(A) */
-  { DRM_FORMAT_XRGB2101010, GDK_MEMORY_R16G16B16, NULL },
-  { DRM_FORMAT_XBGR2101010, GDK_MEMORY_R16G16B16, NULL },
-  { DRM_FORMAT_RGBX1010102, GDK_MEMORY_R16G16B16, NULL },
-  { DRM_FORMAT_BGRX1010102, GDK_MEMORY_R16G16B16, NULL },
-  { DRM_FORMAT_ARGB2101010, GDK_MEMORY_R16G16B16A16_PREMULTIPLIED, NULL },
-  { DRM_FORMAT_ABGR2101010, GDK_MEMORY_R16G16B16A16_PREMULTIPLIED, NULL },
-  { DRM_FORMAT_RGBA1010102, GDK_MEMORY_R16G16B16A16_PREMULTIPLIED, NULL },
-  { DRM_FORMAT_BGRA1010102, GDK_MEMORY_R16G16B16A16_PREMULTIPLIED, NULL },
+  {
+    .fourcc = DRM_FORMAT_XRGB2101010,
+    .memory_format = GDK_MEMORY_R16G16B16,
+    .is_yuv = FALSE,
+    .download = NULL,
+#ifdef GDK_RENDERING_VULKAN
+    .vk = {
+        .format = VK_FORMAT_A2B10G10R10_UNORM_PACK32,
+        .swizzle = VULKAN_SWIZZLE (R, G, B, ONE),
+    },
+#endif
+  },
+  {
+    .fourcc = DRM_FORMAT_XBGR2101010,
+    .memory_format = GDK_MEMORY_R16G16B16,
+    .is_yuv = FALSE,
+    .download = NULL,
+#ifdef GDK_RENDERING_VULKAN
+    .vk = {
+        .format = VK_FORMAT_A2B10G10R10_UNORM_PACK32,
+        .swizzle = VULKAN_SWIZZLE (R, G, B, ONE),
+    },
+#endif
+  },
+  {
+    .fourcc = DRM_FORMAT_RGBX1010102,
+    .memory_format = GDK_MEMORY_R16G16B16,
+    .is_yuv = FALSE,
+    .download = NULL,
+#ifdef GDK_RENDERING_VULKAN
+    .vk = {
+        .format = VK_FORMAT_UNDEFINED,
+        .swizzle = VULKAN_SWIZZLE (R, G, B, ONE),
+    },
+#endif
+  },
+  {
+    .fourcc = DRM_FORMAT_BGRX1010102,
+    .memory_format = GDK_MEMORY_R16G16B16,
+    .is_yuv = FALSE,
+    .download = NULL,
+#ifdef GDK_RENDERING_VULKAN
+    .vk = {
+        .format = VK_FORMAT_UNDEFINED,
+        .swizzle = VULKAN_SWIZZLE (R, G, B, ONE),
+    },
+#endif
+  },
+  {
+    .fourcc = DRM_FORMAT_ARGB2101010,
+    .memory_format = GDK_MEMORY_R16G16B16A16_PREMULTIPLIED,
+    .is_yuv = FALSE,
+    .download = NULL,
+#ifdef GDK_RENDERING_VULKAN
+    .vk = {
+        .format = VK_FORMAT_A2B10G10R10_UNORM_PACK32,
+        .swizzle = VULKAN_DEFAULT_SWIZZLE,
+    },
+#endif
+  },
+  {
+    .fourcc = DRM_FORMAT_ABGR2101010,
+    .memory_format = GDK_MEMORY_R16G16B16A16_PREMULTIPLIED,
+    .is_yuv = FALSE,
+    .download = NULL,
+#ifdef GDK_RENDERING_VULKAN
+    .vk = {
+        .format = VK_FORMAT_A2B10G10R10_UNORM_PACK32,
+        .swizzle = VULKAN_DEFAULT_SWIZZLE,
+    },
+#endif
+  },
+  {
+    .fourcc = DRM_FORMAT_RGBA1010102,
+    .memory_format = GDK_MEMORY_R16G16B16A16_PREMULTIPLIED,
+    .is_yuv = FALSE,
+    .download = NULL,
+#ifdef GDK_RENDERING_VULKAN
+    .vk = {
+        .format = VK_FORMAT_UNDEFINED,
+        .swizzle = VULKAN_DEFAULT_SWIZZLE,
+    },
+#endif
+  },
+  {
+    .fourcc = DRM_FORMAT_BGRA1010102,
+    .memory_format = GDK_MEMORY_R16G16B16A16_PREMULTIPLIED,
+    .is_yuv = FALSE,
+    .download = NULL,
+#ifdef GDK_RENDERING_VULKAN
+    .vk = {
+        .format = VK_FORMAT_UNDEFINED,
+        .swizzle = VULKAN_DEFAULT_SWIZZLE,
+    },
+#endif
+  },
   /* 16bit RGB(A) */
-  { DRM_FORMAT_XRGB16161616, GDK_MEMORY_R16G16B16, NULL },
-  { DRM_FORMAT_XBGR16161616, GDK_MEMORY_R16G16B16, NULL },
-  { DRM_FORMAT_ARGB16161616, GDK_MEMORY_R16G16B16A16_PREMULTIPLIED, NULL },
-  { DRM_FORMAT_ABGR16161616, GDK_MEMORY_R16G16B16A16_PREMULTIPLIED, NULL },
-  { DRM_FORMAT_XRGB16161616F, GDK_MEMORY_R16G16B16_FLOAT, NULL },
-  { DRM_FORMAT_XBGR16161616F, GDK_MEMORY_R16G16B16_FLOAT, NULL },
-  { DRM_FORMAT_ARGB16161616F, GDK_MEMORY_R16G16B16A16_FLOAT_PREMULTIPLIED, NULL },
-  { DRM_FORMAT_ABGR16161616F, GDK_MEMORY_R16G16B16A16_FLOAT_PREMULTIPLIED, NULL },
-  { DRM_FORMAT_AXBXGXRX106106106106, GDK_MEMORY_R16G16B16A16_PREMULTIPLIED, NULL },
+  {
+    .fourcc = DRM_FORMAT_XRGB16161616,
+    .memory_format = GDK_MEMORY_R16G16B16,
+    .is_yuv = FALSE,
+    .download = NULL,
+#ifdef GDK_RENDERING_VULKAN
+    .vk = {
+        .format = VK_FORMAT_R16G16B16A16_UNORM,
+        .swizzle = VULKAN_SWIZZLE (B, G, R, ONE),
+    },
+#endif
+  },
+  {
+    .fourcc = DRM_FORMAT_XBGR16161616,
+    .memory_format = GDK_MEMORY_R16G16B16,
+    .is_yuv = FALSE,
+    .download = NULL,
+#ifdef GDK_RENDERING_VULKAN
+    .vk = {
+        .format = VK_FORMAT_R16G16B16A16_UNORM,
+        .swizzle = VULKAN_SWIZZLE (R, G, B, ONE),
+    },
+#endif
+  },
+  {
+    .fourcc = DRM_FORMAT_ARGB16161616,
+    .memory_format = GDK_MEMORY_R16G16B16A16_PREMULTIPLIED,
+    .is_yuv = FALSE,
+    .download = NULL,
+#ifdef GDK_RENDERING_VULKAN
+    .vk = {
+        .format = VK_FORMAT_R16G16B16A16_UNORM,
+        .swizzle = VULKAN_SWIZZLE (B, G, R, A),
+    },
+#endif
+  },
+  {
+    .fourcc = DRM_FORMAT_ABGR16161616,
+    .memory_format = GDK_MEMORY_R16G16B16A16_PREMULTIPLIED,
+    .is_yuv = FALSE,
+    .download = NULL,
+#ifdef GDK_RENDERING_VULKAN
+    .vk = {
+        .format = VK_FORMAT_R16G16B16A16_UNORM,
+        .swizzle = VULKAN_DEFAULT_SWIZZLE,
+    },
+#endif
+  },
+  {
+    .fourcc = DRM_FORMAT_XRGB16161616F,
+    .memory_format = GDK_MEMORY_R16G16B16_FLOAT,
+    .is_yuv = FALSE,
+    .download = NULL,
+#ifdef GDK_RENDERING_VULKAN
+    .vk = {
+        .format = VK_FORMAT_R16G16B16A16_SFLOAT,
+        .swizzle = VULKAN_SWIZZLE (B, G, R, ONE),
+    },
+#endif
+  },
+  {
+    .fourcc = DRM_FORMAT_XBGR16161616F,
+    .memory_format = GDK_MEMORY_R16G16B16_FLOAT,
+    .is_yuv = FALSE,
+    .download = NULL,
+#ifdef GDK_RENDERING_VULKAN
+    .vk = {
+        .format = VK_FORMAT_R16G16B16A16_SFLOAT,
+        .swizzle = VULKAN_SWIZZLE (R, G, B, ONE),
+    },
+#endif
+  },
+  {
+    .fourcc = DRM_FORMAT_ARGB16161616F,
+    .memory_format = GDK_MEMORY_R16G16B16A16_FLOAT_PREMULTIPLIED,
+    .is_yuv = FALSE,
+    .download = NULL,
+#ifdef GDK_RENDERING_VULKAN
+    .vk = {
+        .format = VK_FORMAT_R16G16B16A16_SFLOAT,
+        .swizzle = VULKAN_SWIZZLE (B, G, R, A),
+    },
+#endif
+  },
+  {
+    .fourcc = DRM_FORMAT_ABGR16161616F,
+    .memory_format = GDK_MEMORY_R16G16B16A16_FLOAT_PREMULTIPLIED,
+    .is_yuv = FALSE,
+    .download = download_memcpy,
+#ifdef GDK_RENDERING_VULKAN
+    .vk = {
+        .format = VK_FORMAT_R16G16B16A16_SFLOAT,
+        .swizzle = VULKAN_DEFAULT_SWIZZLE,
+    },
+#endif
+  },
+  {
+    .fourcc = DRM_FORMAT_AXBXGXRX106106106106,
+    .memory_format = GDK_MEMORY_R16G16B16A16_PREMULTIPLIED,
+    .is_yuv = FALSE,
+    .download = NULL,
+#ifdef GDK_RENDERING_VULKAN
+    .vk = {
+        .format = VK_FORMAT_UNDEFINED, //VK_FORMAT_R16G16B16A16_SFLOAT,
+        .swizzle = VULKAN_DEFAULT_SWIZZLE,
+    },
+#endif
+  },
   /* 1-plane YUV formats */
-  { DRM_FORMAT_YUYV, GDK_MEMORY_R8G8B8, download_yuyv },
-  { DRM_FORMAT_YVYU, GDK_MEMORY_R8G8B8, download_yuyv },
-  { DRM_FORMAT_VYUY, GDK_MEMORY_R8G8B8, download_yuyv },
-  { DRM_FORMAT_UYVY, GDK_MEMORY_R8G8B8, download_yuyv },
-  { DRM_FORMAT_AYUV, GDK_MEMORY_R8G8B8A8_PREMULTIPLIED, NULL },
-  { DRM_FORMAT_AVUY8888, GDK_MEMORY_R8G8B8A8_PREMULTIPLIED, NULL },
-  { DRM_FORMAT_XYUV8888, GDK_MEMORY_R8G8B8, NULL },
-  { DRM_FORMAT_XVUY8888, GDK_MEMORY_R8G8B8, NULL },
-  { DRM_FORMAT_VUY888, GDK_MEMORY_R8G8B8, NULL },
-  { DRM_FORMAT_VUY101010, GDK_MEMORY_R16G16B16, NULL },
-  { DRM_FORMAT_Y210, GDK_MEMORY_R16G16B16, NULL },
-  { DRM_FORMAT_Y212, GDK_MEMORY_R16G16B16, NULL },
-  { DRM_FORMAT_Y216, GDK_MEMORY_R16G16B16, NULL },
-  { DRM_FORMAT_Y410, GDK_MEMORY_R16G16B16, NULL },
-  { DRM_FORMAT_Y412, GDK_MEMORY_R16G16B16, NULL },
-  { DRM_FORMAT_Y416, GDK_MEMORY_R16G16B16, NULL },
-  { DRM_FORMAT_XVYU2101010, GDK_MEMORY_R16G16B16, NULL },
-  { DRM_FORMAT_XVYU12_16161616, GDK_MEMORY_R16G16B16, NULL },
-  { DRM_FORMAT_XVYU16161616, GDK_MEMORY_R16G16B16, NULL },
+  {
+    .fourcc = DRM_FORMAT_YUYV,
+    .memory_format = GDK_MEMORY_R8G8B8,
+    .is_yuv = TRUE,
+    .download = download_yuyv,
+#ifdef GDK_RENDERING_VULKAN
+    .vk = {
+        .format = VK_FORMAT_G8B8G8R8_422_UNORM,
+        .swizzle = VULKAN_DEFAULT_SWIZZLE,
+    },
+#endif
+  },
+  {
+    .fourcc = DRM_FORMAT_YVYU,
+    .memory_format = GDK_MEMORY_R8G8B8,
+    .is_yuv = TRUE,
+    .download = download_yuyv,
+#ifdef GDK_RENDERING_VULKAN
+    .vk = {
+        .format = VK_FORMAT_G8B8G8R8_422_UNORM,
+        .swizzle = VULKAN_SWIZZLE (B, G, R, A),
+    },
+#endif
+  },
+  {
+    .fourcc = DRM_FORMAT_VYUY,
+    .memory_format = GDK_MEMORY_R8G8B8,
+    .is_yuv = TRUE,
+    .download = download_yuyv,
+#ifdef GDK_RENDERING_VULKAN
+    .vk = {
+        .format = VK_FORMAT_B8G8R8G8_422_UNORM,
+        .swizzle = VULKAN_DEFAULT_SWIZZLE,
+    },
+#endif
+  },
+  {
+    .fourcc = DRM_FORMAT_UYVY,
+    .memory_format = GDK_MEMORY_R8G8B8,
+    .is_yuv = TRUE,
+    .download = download_yuyv,
+#ifdef GDK_RENDERING_VULKAN
+    .vk = {
+        .format = VK_FORMAT_B8G8R8G8_422_UNORM,
+        .swizzle = VULKAN_SWIZZLE (B, G, R, A),
+    },
+#endif
+  },
+  {
+    .fourcc = DRM_FORMAT_AYUV,
+    .memory_format = GDK_MEMORY_R8G8B8A8_PREMULTIPLIED,
+    .is_yuv = TRUE,
+    .download = NULL,
+#ifdef GDK_RENDERING_VULKAN
+    .vk = {
+        .format = VK_FORMAT_B8G8R8A8_UNORM,
+        .swizzle = VULKAN_DEFAULT_SWIZZLE,
+    },
+#endif
+  },
+  {
+    .fourcc = DRM_FORMAT_AVUY8888,
+    .memory_format = GDK_MEMORY_R8G8B8A8_PREMULTIPLIED,
+    .is_yuv = TRUE,
+    .download = NULL,
+#ifdef GDK_RENDERING_VULKAN
+    .vk = {
+        .format = VK_FORMAT_R8G8B8A8_UNORM,
+        .swizzle = VULKAN_DEFAULT_SWIZZLE,
+    },
+#endif
+  },
+  {
+    .fourcc = DRM_FORMAT_XYUV8888,
+    .memory_format = GDK_MEMORY_R8G8B8,
+    .is_yuv = TRUE,
+    .download = NULL,
+#ifdef GDK_RENDERING_VULKAN
+    .vk = {
+        .format = VK_FORMAT_B8G8R8A8_UNORM,
+        .swizzle = VULKAN_SWIZZLE (R, G, B, ONE),
+    },
+#endif
+  },
+  {
+    .fourcc = DRM_FORMAT_XVUY8888,
+    .memory_format = GDK_MEMORY_R8G8B8,
+    .is_yuv = TRUE,
+    .download = NULL,
+#ifdef GDK_RENDERING_VULKAN
+    .vk = {
+        .format = VK_FORMAT_R8G8B8A8_UNORM,
+        .swizzle = VULKAN_SWIZZLE (R, G, B, ONE),
+    },
+#endif
+  },
+  {
+    .fourcc = DRM_FORMAT_VUY888,
+    .memory_format = GDK_MEMORY_R8G8B8,
+    .is_yuv = TRUE,
+    .download = NULL,
+#ifdef GDK_RENDERING_VULKAN
+    .vk = {
+        .format = VK_FORMAT_R8G8B8_UNORM,
+        .swizzle = VULKAN_DEFAULT_SWIZZLE,
+    },
+#endif
+  },
+  {
+    .fourcc = DRM_FORMAT_VUY101010,
+    .memory_format = GDK_MEMORY_R16G16B16,
+    .is_yuv = TRUE,
+    .download = NULL,
+#ifdef GDK_RENDERING_VULKAN
+    .vk = {
+        .format = VK_FORMAT_UNDEFINED, /* NB: nonlinear-modifier only */
+        .swizzle = VULKAN_DEFAULT_SWIZZLE,
+    },
+#endif
+  },
+  {
+    .fourcc = DRM_FORMAT_Y210,
+    .memory_format = GDK_MEMORY_R16G16B16,
+    .is_yuv = TRUE,
+    .download = NULL,
+#ifdef GDK_RENDERING_VULKAN
+    .vk = {
+        .format = VK_FORMAT_B10X6G10X6R10X6G10X6_422_UNORM_4PACK16,
+        .swizzle = VULKAN_DEFAULT_SWIZZLE,
+    },
+#endif
+  },
+  {
+    .fourcc = DRM_FORMAT_Y212,
+    .memory_format = GDK_MEMORY_R16G16B16,
+    .is_yuv = TRUE,
+    .download = NULL,
+#ifdef GDK_RENDERING_VULKAN
+    .vk = {
+        .format = VK_FORMAT_B12X4G12X4R12X4G12X4_422_UNORM_4PACK16,
+        .swizzle = VULKAN_DEFAULT_SWIZZLE,
+    },
+#endif
+  },
+  {
+    .fourcc = DRM_FORMAT_Y216,
+    .memory_format = GDK_MEMORY_R16G16B16,
+    .is_yuv = TRUE,
+    .download = NULL,
+#ifdef GDK_RENDERING_VULKAN
+    .vk = {
+        .format = VK_FORMAT_B16G16R16G16_422_UNORM,
+        .swizzle = VULKAN_DEFAULT_SWIZZLE,
+    },
+#endif
+  },
+  {
+    .fourcc = DRM_FORMAT_Y410,
+    .memory_format = GDK_MEMORY_R16G16B16,
+    .is_yuv = TRUE,
+    .download = NULL,
+#ifdef GDK_RENDERING_VULKAN
+    .vk = {
+        .format = VK_FORMAT_UNDEFINED,
+        .swizzle = VULKAN_DEFAULT_SWIZZLE,
+    },
+#endif
+  },
+  {
+    .fourcc = DRM_FORMAT_Y412,
+    .memory_format = GDK_MEMORY_R16G16B16,
+    .is_yuv = TRUE,
+    .download = NULL,
+#ifdef GDK_RENDERING_VULKAN
+    .vk = {
+        .format = VK_FORMAT_UNDEFINED,
+        .swizzle = VULKAN_DEFAULT_SWIZZLE,
+    },
+#endif
+  },
+  {
+    .fourcc = DRM_FORMAT_Y416,
+    .memory_format = GDK_MEMORY_R16G16B16,
+    .is_yuv = TRUE,
+    .download = NULL,
+#ifdef GDK_RENDERING_VULKAN
+    .vk = {
+        .format = VK_FORMAT_UNDEFINED,
+        .swizzle = VULKAN_DEFAULT_SWIZZLE,
+    },
+#endif
+  },
+  {
+    .fourcc = DRM_FORMAT_XVYU2101010,
+    .memory_format = GDK_MEMORY_R16G16B16,
+    .is_yuv = TRUE,
+    .download = NULL,
+#ifdef GDK_RENDERING_VULKAN
+    .vk = {
+        .format = VK_FORMAT_UNDEFINED,
+        .swizzle = VULKAN_DEFAULT_SWIZZLE,
+    },
+#endif
+  },
+  {
+    .fourcc = DRM_FORMAT_XVYU12_16161616,
+    .memory_format = GDK_MEMORY_R16G16B16,
+    .is_yuv = TRUE,
+    .download = NULL,
+#ifdef GDK_RENDERING_VULKAN
+    .vk = {
+        .format = VK_FORMAT_UNDEFINED,
+        .swizzle = VULKAN_DEFAULT_SWIZZLE,
+    },
+#endif
+  },
+  {
+    .fourcc = DRM_FORMAT_XVYU16161616,
+    .memory_format = GDK_MEMORY_R16G16B16,
+    .is_yuv = TRUE,
+    .download = NULL,
+#ifdef GDK_RENDERING_VULKAN
+    .vk = {
+        .format = VK_FORMAT_UNDEFINED,
+        .swizzle = VULKAN_DEFAULT_SWIZZLE,
+    },
+#endif
+  },
   /* tiled YUV */
-  { DRM_FORMAT_Y0L0, GDK_MEMORY_R8G8B8, NULL },
-  { DRM_FORMAT_X0L0, GDK_MEMORY_R8G8B8, NULL },
-  { DRM_FORMAT_Y0L2, GDK_MEMORY_R16G16B16, NULL },
-  { DRM_FORMAT_X0L2, GDK_MEMORY_R16G16B16, NULL },
+  {
+    .fourcc = DRM_FORMAT_Y0L0,
+    .memory_format = GDK_MEMORY_R8G8B8,
+    .is_yuv = TRUE,
+    .download = NULL,
+#ifdef GDK_RENDERING_VULKAN
+    .vk = {
+        .format = VK_FORMAT_UNDEFINED,
+        .swizzle = VULKAN_DEFAULT_SWIZZLE,
+    },
+#endif
+  },
+  {
+    .fourcc = DRM_FORMAT_X0L0,
+    .memory_format = GDK_MEMORY_R8G8B8,
+    .is_yuv = TRUE,
+    .download = NULL,
+#ifdef GDK_RENDERING_VULKAN
+    .vk = {
+        .format = VK_FORMAT_UNDEFINED,
+        .swizzle = VULKAN_DEFAULT_SWIZZLE,
+    },
+#endif
+  },
+  {
+    .fourcc = DRM_FORMAT_Y0L2,
+    .memory_format = GDK_MEMORY_R16G16B16,
+    .is_yuv = TRUE,
+    .download = NULL,
+#ifdef GDK_RENDERING_VULKAN
+    .vk = {
+        .format = VK_FORMAT_UNDEFINED,
+        .swizzle = VULKAN_DEFAULT_SWIZZLE,
+    },
+#endif
+  },
+  {
+    .fourcc = DRM_FORMAT_X0L2,
+    .memory_format = GDK_MEMORY_R16G16B16,
+    .is_yuv = TRUE,
+    .download = NULL,
+#ifdef GDK_RENDERING_VULKAN
+    .vk = {
+        .format = VK_FORMAT_UNDEFINED,
+        .swizzle = VULKAN_DEFAULT_SWIZZLE,
+    },
+#endif
+  },
   /* non-linear YUV */
-  { DRM_FORMAT_YUV420_8BIT, GDK_MEMORY_R8G8B8, NULL },
-  { DRM_FORMAT_YUV420_10BIT, GDK_MEMORY_R16G16B16, NULL },
+  {
+    .fourcc = DRM_FORMAT_YUV420_8BIT,
+    .memory_format = GDK_MEMORY_R8G8B8,
+    .is_yuv = TRUE,
+    .download = NULL,
+#ifdef GDK_RENDERING_VULKAN
+    .vk = {
+        .format = VK_FORMAT_UNDEFINED,
+        .swizzle = VULKAN_DEFAULT_SWIZZLE,
+    },
+#endif
+  },
+  {
+    .fourcc = DRM_FORMAT_YUV420_10BIT,
+    .memory_format = GDK_MEMORY_R16G16B16,
+    .is_yuv = TRUE,
+    .download = NULL,
+#ifdef GDK_RENDERING_VULKAN
+    .vk = {
+        .format = VK_FORMAT_UNDEFINED,
+        .swizzle = VULKAN_DEFAULT_SWIZZLE,
+    },
+#endif
+  },
   /* 2 plane RGB + A */
-  { DRM_FORMAT_BGRX8888_A8, GDK_MEMORY_A8R8G8B8_PREMULTIPLIED, download_memcpy_3_1 },
-  { DRM_FORMAT_RGBX8888_A8, GDK_MEMORY_A8B8G8R8_PREMULTIPLIED, download_memcpy_3_1 },
-  { DRM_FORMAT_XBGR8888_A8, GDK_MEMORY_R8G8B8A8_PREMULTIPLIED, download_memcpy_3_1 },
-  { DRM_FORMAT_XRGB8888_A8, GDK_MEMORY_B8G8R8A8_PREMULTIPLIED, download_memcpy_3_1 },
-  { DRM_FORMAT_RGB888_A8, GDK_MEMORY_R8G8B8A8_PREMULTIPLIED, NULL },
-  { DRM_FORMAT_BGR888_A8, GDK_MEMORY_B8G8R8A8_PREMULTIPLIED, NULL },
-  { DRM_FORMAT_RGB565_A8, GDK_MEMORY_R8G8B8A8_PREMULTIPLIED, NULL },
-  { DRM_FORMAT_BGR565_A8, GDK_MEMORY_B8G8R8A8_PREMULTIPLIED, NULL },
+  {
+    .fourcc = DRM_FORMAT_BGRX8888_A8,
+    .memory_format = GDK_MEMORY_A8R8G8B8_PREMULTIPLIED,
+    .is_yuv = FALSE,
+    .download = download_memcpy_3_1,
+#ifdef GDK_RENDERING_VULKAN
+    .vk = {
+        .format = VK_FORMAT_UNDEFINED,
+        .swizzle = VULKAN_DEFAULT_SWIZZLE,
+    },
+#endif
+  },
+  {
+    .fourcc = DRM_FORMAT_RGBX8888_A8,
+    .memory_format = GDK_MEMORY_A8B8G8R8_PREMULTIPLIED,
+    .is_yuv = FALSE,
+    .download = download_memcpy_3_1,
+#ifdef GDK_RENDERING_VULKAN
+    .vk = {
+        .format = VK_FORMAT_UNDEFINED,
+        .swizzle = VULKAN_DEFAULT_SWIZZLE,
+    },
+#endif
+  },
+  {
+    .fourcc = DRM_FORMAT_XBGR8888_A8,
+    .memory_format = GDK_MEMORY_R8G8B8A8_PREMULTIPLIED,
+    .is_yuv = FALSE,
+    .download = download_memcpy_3_1,
+#ifdef GDK_RENDERING_VULKAN
+    .vk = {
+        .format = VK_FORMAT_UNDEFINED,
+        .swizzle = VULKAN_DEFAULT_SWIZZLE,
+    },
+#endif
+  },
+  {
+    .fourcc = DRM_FORMAT_XRGB8888_A8,
+    .memory_format = GDK_MEMORY_B8G8R8A8_PREMULTIPLIED,
+    .is_yuv = FALSE,
+    .download = download_memcpy_3_1,
+#ifdef GDK_RENDERING_VULKAN
+    .vk = {
+        .format = VK_FORMAT_UNDEFINED,
+        .swizzle = VULKAN_DEFAULT_SWIZZLE,
+    },
+#endif
+  },
+  {
+    .fourcc = DRM_FORMAT_RGB888_A8,
+    .memory_format = GDK_MEMORY_R8G8B8A8_PREMULTIPLIED,
+    .is_yuv = FALSE,
+    .download = NULL,
+#ifdef GDK_RENDERING_VULKAN
+    .vk = {
+        .format = VK_FORMAT_UNDEFINED,
+        .swizzle = VULKAN_DEFAULT_SWIZZLE,
+    },
+#endif
+  },
+  {
+    .fourcc = DRM_FORMAT_BGR888_A8,
+    .memory_format = GDK_MEMORY_B8G8R8A8_PREMULTIPLIED,
+    .is_yuv = FALSE,
+    .download = NULL,
+#ifdef GDK_RENDERING_VULKAN
+    .vk = {
+        .format = VK_FORMAT_UNDEFINED,
+        .swizzle = VULKAN_DEFAULT_SWIZZLE,
+    },
+#endif
+  },
+  {
+    .fourcc = DRM_FORMAT_RGB565_A8,
+    .memory_format = GDK_MEMORY_R8G8B8A8_PREMULTIPLIED,
+    .is_yuv = FALSE,
+    .download = NULL,
+#ifdef GDK_RENDERING_VULKAN
+    .vk = {
+        .format = VK_FORMAT_UNDEFINED,
+        .swizzle = VULKAN_DEFAULT_SWIZZLE,
+    },
+#endif
+  },
+  {
+    .fourcc = DRM_FORMAT_BGR565_A8,
+    .memory_format = GDK_MEMORY_B8G8R8A8_PREMULTIPLIED,
+    .is_yuv = FALSE,
+    .download = NULL,
+#ifdef GDK_RENDERING_VULKAN
+    .vk = {
+        .format = VK_FORMAT_UNDEFINED,
+        .swizzle = VULKAN_DEFAULT_SWIZZLE,
+    },
+#endif
+  },
   /* 2-plane YUV formats */
-  { DRM_FORMAT_NV12, GDK_MEMORY_R8G8B8, download_nv12 },
-  { DRM_FORMAT_NV21, GDK_MEMORY_R8G8B8, download_nv12 },
-  { DRM_FORMAT_NV16, GDK_MEMORY_R8G8B8, download_nv12 },
-  { DRM_FORMAT_NV61, GDK_MEMORY_R8G8B8, download_nv12 },
-  { DRM_FORMAT_NV24, GDK_MEMORY_R8G8B8, download_nv12 },
-  { DRM_FORMAT_NV42, GDK_MEMORY_R8G8B8, download_nv12 },
-  { DRM_FORMAT_NV15, GDK_MEMORY_R16G16B16, NULL },
-  { DRM_FORMAT_P210, GDK_MEMORY_R16G16B16, NULL },
-  { DRM_FORMAT_P010, GDK_MEMORY_R16G16B16, NULL },
-  { DRM_FORMAT_P012, GDK_MEMORY_R16G16B16, NULL },
-  { DRM_FORMAT_P016, GDK_MEMORY_R16G16B16, NULL },
-  { DRM_FORMAT_P030, GDK_MEMORY_R16G16B16, NULL },
+  {
+    .fourcc = DRM_FORMAT_NV12,
+    .memory_format = GDK_MEMORY_R8G8B8,
+    .is_yuv = TRUE,
+    .download = download_nv12,
+#ifdef GDK_RENDERING_VULKAN
+    .vk = {
+        .format = VK_FORMAT_G8_B8R8_2PLANE_420_UNORM,
+        .swizzle = VULKAN_DEFAULT_SWIZZLE,
+    },
+#endif
+  },
+  {
+    .fourcc = DRM_FORMAT_NV21,
+    .memory_format = GDK_MEMORY_R8G8B8,
+    .is_yuv = TRUE,
+    .download = download_nv12,
+#ifdef GDK_RENDERING_VULKAN
+    .vk = {
+        .format = VK_FORMAT_G8_B8R8_2PLANE_420_UNORM,
+        .swizzle = VULKAN_SWIZZLE (B, G, R, A),
+    },
+#endif
+  },
+  {
+    .fourcc = DRM_FORMAT_NV16,
+    .memory_format = GDK_MEMORY_R8G8B8,
+    .is_yuv = TRUE,
+    .download = download_nv12,
+#ifdef GDK_RENDERING_VULKAN
+    .vk = {
+        .format = VK_FORMAT_G8_B8R8_2PLANE_422_UNORM,
+        .swizzle = VULKAN_DEFAULT_SWIZZLE,
+    },
+#endif
+  },
+  {
+    .fourcc = DRM_FORMAT_NV61,
+    .memory_format = GDK_MEMORY_R8G8B8,
+    .is_yuv = TRUE,
+    .download = download_nv12,
+#ifdef GDK_RENDERING_VULKAN
+    .vk = {
+        .format = VK_FORMAT_G8_B8R8_2PLANE_422_UNORM,
+        .swizzle = VULKAN_SWIZZLE (B, G, R, A),
+    },
+#endif
+  },
+  {
+    .fourcc = DRM_FORMAT_NV24,
+    .memory_format = GDK_MEMORY_R8G8B8,
+    .is_yuv = TRUE,
+    .download = download_nv12,
+#ifdef GDK_RENDERING_VULKAN
+    .vk = {
+        .format = VK_FORMAT_G8_B8R8_2PLANE_444_UNORM,
+        .swizzle = VULKAN_DEFAULT_SWIZZLE,
+    },
+#endif
+  },
+  {
+    .fourcc = DRM_FORMAT_NV42,
+    .memory_format = GDK_MEMORY_R8G8B8,
+    .is_yuv = TRUE,
+    .download = download_nv12,
+#ifdef GDK_RENDERING_VULKAN
+    .vk = {
+        .format = VK_FORMAT_G8_B8R8_2PLANE_444_UNORM,
+        .swizzle = VULKAN_SWIZZLE (B, G, R, A),
+    },
+#endif
+  },
+  {
+    .fourcc = DRM_FORMAT_NV15,
+    .memory_format = GDK_MEMORY_R16G16B16,
+    .is_yuv = TRUE,
+    .download = NULL,
+#ifdef GDK_RENDERING_VULKAN
+    .vk = {
+        .format = VK_FORMAT_UNDEFINED,
+        .swizzle = VULKAN_DEFAULT_SWIZZLE,
+    },
+#endif
+  },
+  {
+    .fourcc = DRM_FORMAT_P210,
+    .memory_format = GDK_MEMORY_R16G16B16,
+    .is_yuv = TRUE,
+    .download = NULL,
+#ifdef GDK_RENDERING_VULKAN
+    .vk = {
+        .format = VK_FORMAT_G10X6_B10X6R10X6_2PLANE_420_UNORM_3PACK16,
+        .swizzle = VULKAN_DEFAULT_SWIZZLE,
+    },
+#endif
+  },
+  {
+    .fourcc = DRM_FORMAT_P010,
+    .memory_format = GDK_MEMORY_R16G16B16,
+    .is_yuv = TRUE,
+    .download = NULL,
+#ifdef GDK_RENDERING_VULKAN
+    .vk = {
+        .format = VK_FORMAT_G10X6_B10X6R10X6_2PLANE_422_UNORM_3PACK16,
+        .swizzle = VULKAN_DEFAULT_SWIZZLE,
+    },
+#endif
+  },
+  {
+    .fourcc = DRM_FORMAT_P012,
+    .memory_format = GDK_MEMORY_R16G16B16,
+    .is_yuv = TRUE,
+    .download = NULL,
+#ifdef GDK_RENDERING_VULKAN
+    .vk = {
+        .format = VK_FORMAT_G12X4_B12X4R12X4_2PLANE_422_UNORM_3PACK16,
+        .swizzle = VULKAN_DEFAULT_SWIZZLE,
+    },
+#endif
+  },
+  {
+    .fourcc = DRM_FORMAT_P016,
+    .memory_format = GDK_MEMORY_R16G16B16,
+    .is_yuv = TRUE,
+    .download = NULL,
+#ifdef GDK_RENDERING_VULKAN
+    .vk = {
+        .format = VK_FORMAT_G16_B16R16_2PLANE_422_UNORM,
+        .swizzle = VULKAN_DEFAULT_SWIZZLE,
+    },
+#endif
+  },
+  {
+    .fourcc = DRM_FORMAT_P030,
+    .memory_format = GDK_MEMORY_R16G16B16,
+    .is_yuv = TRUE,
+    .download = NULL,
+#ifdef GDK_RENDERING_VULKAN
+    .vk = {
+        .format = VK_FORMAT_UNDEFINED,
+        .swizzle = VULKAN_DEFAULT_SWIZZLE,
+    },
+#endif
+  },
   /* 3-plane YUV */
-  { DRM_FORMAT_Q410, GDK_MEMORY_R16G16B16, NULL },
-  { DRM_FORMAT_Q401, GDK_MEMORY_R16G16B16, NULL },
-  { DRM_FORMAT_YUV410, GDK_MEMORY_R8G8B8, download_yuv_3 },
-  { DRM_FORMAT_YVU410, GDK_MEMORY_R8G8B8, download_yuv_3 },
-  { DRM_FORMAT_YUV411, GDK_MEMORY_R8G8B8, download_yuv_3 },
-  { DRM_FORMAT_YVU411, GDK_MEMORY_R8G8B8, download_yuv_3 },
-  { DRM_FORMAT_YUV420, GDK_MEMORY_R8G8B8, download_yuv_3 },
-  { DRM_FORMAT_YVU420, GDK_MEMORY_R8G8B8, download_yuv_3 },
-  { DRM_FORMAT_YUV422, GDK_MEMORY_R8G8B8, download_yuv_3 },
-  { DRM_FORMAT_YVU422, GDK_MEMORY_R8G8B8, download_yuv_3 },
-  { DRM_FORMAT_YUV444, GDK_MEMORY_R8G8B8, download_yuv_3 },
-  { DRM_FORMAT_YVU444, GDK_MEMORY_R8G8B8, download_yuv_3 },
+  {
+    .fourcc = DRM_FORMAT_Q410,
+    .memory_format = GDK_MEMORY_R16G16B16,
+    .is_yuv = TRUE,
+    .download = NULL,
+#ifdef GDK_RENDERING_VULKAN
+    .vk = {
+        .format = VK_FORMAT_G8_B8_R8_3PLANE_444_UNORM,
+        .swizzle = VULKAN_DEFAULT_SWIZZLE,
+    },
+#endif
+  },
+  {
+    .fourcc = DRM_FORMAT_Q401,
+    .memory_format = GDK_MEMORY_R16G16B16,
+    .is_yuv = TRUE,
+    .download = NULL,
+#ifdef GDK_RENDERING_VULKAN
+    .vk = {
+        .format = VK_FORMAT_G8_B8_R8_3PLANE_444_UNORM,
+        .swizzle = VULKAN_SWIZZLE (B, G, R, A),
+    },
+#endif
+  },
+  {
+    .fourcc = DRM_FORMAT_YUV410,
+    .memory_format = GDK_MEMORY_R8G8B8,
+    .is_yuv = TRUE,
+    .download = download_yuv_3,
+#ifdef GDK_RENDERING_VULKAN
+    .vk = {
+        .format = VK_FORMAT_UNDEFINED,
+        .swizzle = VULKAN_DEFAULT_SWIZZLE,
+    },
+#endif
+  },
+  {
+    .fourcc = DRM_FORMAT_YVU410,
+    .memory_format = GDK_MEMORY_R8G8B8,
+    .is_yuv = TRUE,
+    .download = download_yuv_3,
+#ifdef GDK_RENDERING_VULKAN
+    .vk = {
+        .format = VK_FORMAT_UNDEFINED,
+        .swizzle = VULKAN_DEFAULT_SWIZZLE,
+    },
+#endif
+  },
+  {
+    .fourcc = DRM_FORMAT_YUV411,
+    .memory_format = GDK_MEMORY_R8G8B8,
+    .is_yuv = TRUE,
+    .download = download_yuv_3,
+#ifdef GDK_RENDERING_VULKAN
+    .vk = {
+        .format = VK_FORMAT_UNDEFINED,
+        .swizzle = VULKAN_DEFAULT_SWIZZLE,
+    },
+#endif
+  },
+  {
+    .fourcc = DRM_FORMAT_YVU411,
+    .memory_format = GDK_MEMORY_R8G8B8,
+    .is_yuv = TRUE,
+    .download = download_yuv_3,
+#ifdef GDK_RENDERING_VULKAN
+    .vk = {
+        .format = VK_FORMAT_UNDEFINED,
+        .swizzle = VULKAN_DEFAULT_SWIZZLE,
+    },
+#endif
+  },
+  {
+    .fourcc = DRM_FORMAT_YUV420,
+    .memory_format = GDK_MEMORY_R8G8B8,
+    .is_yuv = TRUE,
+    .download = download_yuv_3,
+#ifdef GDK_RENDERING_VULKAN
+    .vk = {
+        .format = VK_FORMAT_G8_B8_R8_3PLANE_420_UNORM,
+        .swizzle = VULKAN_DEFAULT_SWIZZLE,
+    },
+#endif
+  },
+  {
+    .fourcc = DRM_FORMAT_YVU420,
+    .memory_format = GDK_MEMORY_R8G8B8,
+    .is_yuv = TRUE,
+    .download = download_yuv_3,
+#ifdef GDK_RENDERING_VULKAN
+    .vk = {
+        .format = VK_FORMAT_G8_B8_R8_3PLANE_420_UNORM,
+        .swizzle = VULKAN_SWIZZLE (B, G, R, A),
+    },
+#endif
+  },
+  {
+    .fourcc = DRM_FORMAT_YUV422,
+    .memory_format = GDK_MEMORY_R8G8B8,
+    .is_yuv = TRUE,
+    .download = download_yuv_3,
+#ifdef GDK_RENDERING_VULKAN
+    .vk = {
+        .format = VK_FORMAT_G8_B8_R8_3PLANE_422_UNORM,
+        .swizzle = VULKAN_DEFAULT_SWIZZLE,
+    },
+#endif
+  },
+  {
+    .fourcc = DRM_FORMAT_YVU422,
+    .memory_format = GDK_MEMORY_R8G8B8,
+    .is_yuv = TRUE,
+    .download = download_yuv_3,
+#ifdef GDK_RENDERING_VULKAN
+    .vk = {
+        .format = VK_FORMAT_G8_B8_R8_3PLANE_422_UNORM,
+        .swizzle = VULKAN_SWIZZLE (B, G, R, A),
+    },
+#endif
+  },
+  {
+    .fourcc = DRM_FORMAT_YUV444,
+    .memory_format = GDK_MEMORY_R8G8B8,
+    .is_yuv = TRUE,
+    .download = download_yuv_3,
+#ifdef GDK_RENDERING_VULKAN
+    .vk = {
+        .format = VK_FORMAT_G8_B8_R8_3PLANE_422_UNORM,
+        .swizzle = VULKAN_DEFAULT_SWIZZLE,
+    },
+#endif
+  },
+  {
+    .fourcc = DRM_FORMAT_YVU444,
+    .memory_format = GDK_MEMORY_R8G8B8,
+    .is_yuv = TRUE,
+    .download = download_yuv_3,
+#ifdef GDK_RENDERING_VULKAN
+    .vk = {
+        .format = VK_FORMAT_G8_B8_R8_3PLANE_422_UNORM,
+        .swizzle = VULKAN_SWIZZLE (B, G, R, A),
+    },
+#endif
+  },
 };
+#undef VULKAN_DEFAULT_SWIZZLE
+#undef VULKAN_SWIZZLE
 
 static const GdkDrmFormatInfo *
 get_drm_format_info (guint32 fourcc)
@@ -522,6 +1885,19 @@ get_drm_format_info (guint32 fourcc)
     }
 
   return NULL;
+}
+
+gboolean
+gdk_dmabuf_fourcc_is_yuv (guint32   fourcc,
+                          gboolean *is_yuv)
+{
+  const GdkDrmFormatInfo *info = get_drm_format_info (fourcc);
+
+  if (info == NULL)
+    return FALSE;
+
+  *is_yuv = info->is_yuv;
+  return TRUE;
 }
 
 gboolean
@@ -542,165 +1918,59 @@ gdk_dmabuf_get_memory_format (guint32          fourcc,
   return TRUE;
 }
 
-gboolean
-gdk_dmabuf_get_fourcc (GdkMemoryFormat  format,
-                       guint32         *out_fourcc)
+#ifdef GDK_RENDERING_VULKAN
+VkFormat
+gdk_dmabuf_get_vk_format (guint32             fourcc,
+                          VkComponentMapping *out_components)
 {
-  /* we're not walking the list on purpose, so that we can keep track
-   * of exact matches here. Certain DRM formats map to the same memory
-   * format and we don't want the list to accidentally get mixed up.
-   */
-  switch (format)
-    {
-    case GDK_MEMORY_B8G8R8A8_PREMULTIPLIED:
-    case GDK_MEMORY_B8G8R8A8:
-      *out_fourcc = DRM_FORMAT_ARGB8888;
-      return TRUE;
+  const GdkDrmFormatInfo *info = get_drm_format_info (fourcc);
 
-    case GDK_MEMORY_A8R8G8B8_PREMULTIPLIED:
-    case GDK_MEMORY_A8R8G8B8:
-      *out_fourcc = DRM_FORMAT_BGRA8888;
-      return TRUE;
+  if (info == NULL)
+    return VK_FORMAT_UNDEFINED;
 
-    case GDK_MEMORY_A8B8G8R8_PREMULTIPLIED:
-    case GDK_MEMORY_A8B8G8R8:
-      *out_fourcc = DRM_FORMAT_RGBA8888;
-      return TRUE;
+  if (out_components)
+    *out_components = info->vk.swizzle;
 
-    case GDK_MEMORY_R8G8B8A8_PREMULTIPLIED:
-    case GDK_MEMORY_R8G8B8A8:
-      *out_fourcc = DRM_FORMAT_ABGR8888;
-      return TRUE;
-
-    case GDK_MEMORY_R8G8B8:
-      *out_fourcc = DRM_FORMAT_BGR888;
-      return TRUE;
-
-    case GDK_MEMORY_B8G8R8:
-      *out_fourcc = DRM_FORMAT_RGB888;
-      return TRUE;
-
-    case GDK_MEMORY_B8G8R8X8:
-      *out_fourcc = DRM_FORMAT_XRGB8888;
-      return TRUE;
-
-    case GDK_MEMORY_X8R8G8B8:
-      *out_fourcc = DRM_FORMAT_BGRX8888;
-      return TRUE;
-
-    case GDK_MEMORY_R8G8B8X8:
-      *out_fourcc = DRM_FORMAT_XBGR8888;
-      return TRUE;
-
-    case GDK_MEMORY_X8B8G8R8:
-      *out_fourcc = DRM_FORMAT_RGBX8888;
-      return TRUE;
-
-    case GDK_MEMORY_R16G16B16A16_FLOAT_PREMULTIPLIED:
-    case GDK_MEMORY_R16G16B16A16_FLOAT:
-      *out_fourcc = DRM_FORMAT_ABGR16161616F;
-      return TRUE;
-
-    case GDK_MEMORY_R16G16B16A16_PREMULTIPLIED:
-    case GDK_MEMORY_R16G16B16A16:
-      *out_fourcc = DRM_FORMAT_ABGR16161616;
-      return TRUE;
-
-    case GDK_MEMORY_G8:
-      *out_fourcc = DRM_FORMAT_R8;
-      return TRUE;
-
-    case GDK_MEMORY_G16:
-      *out_fourcc = DRM_FORMAT_R16;
-      return TRUE;
-
-    case GDK_MEMORY_R16G16B16:
-    case GDK_MEMORY_R16G16B16_FLOAT:
-    case GDK_MEMORY_R32G32B32_FLOAT:
-    case GDK_MEMORY_R32G32B32A32_FLOAT_PREMULTIPLIED:
-    case GDK_MEMORY_R32G32B32A32_FLOAT:
-    case GDK_MEMORY_G8A8_PREMULTIPLIED:
-    case GDK_MEMORY_G8A8:
-    case GDK_MEMORY_G16A16_PREMULTIPLIED:
-    case GDK_MEMORY_G16A16:
-    case GDK_MEMORY_A8:
-    case GDK_MEMORY_A16:
-    case GDK_MEMORY_A16_FLOAT:
-    case GDK_MEMORY_A32_FLOAT:
-      return FALSE;
-
-    case GDK_MEMORY_N_FORMATS:
-    default:
-      g_assert_not_reached ();
-      return FALSE;
-    }
+  return info->vk.format;
 }
+#endif
 
-static gboolean
-gdk_dmabuf_direct_downloader_add_formats (const GdkDmabufDownloader *downloader,
-                                          GdkDisplay                *display,
-                                          GdkDmabufFormatsBuilder   *builder)
+GdkDmabufFormats *
+gdk_dmabuf_get_mmap_formats (void)
 {
-  gsize i;
+  static GdkDmabufFormats *formats = NULL;
 
-  for (i = 0; i < G_N_ELEMENTS (supported_formats); i++)
+  if (formats == NULL)
     {
-      GDK_DISPLAY_DEBUG (display, DMABUF,
-                         "%s dmabuf format %.4s:%#" G_GINT64_MODIFIER "x",
-                         downloader->name,
-                         (char *) &supported_formats[i].fourcc, (guint64) DRM_FORMAT_MOD_LINEAR);
+      GdkDmabufFormatsBuilder *builder;
+      gsize i;
 
-      gdk_dmabuf_formats_builder_add_format (builder,
-                                             supported_formats[i].fourcc,
-                                             DRM_FORMAT_MOD_LINEAR);
+      builder = gdk_dmabuf_formats_builder_new ();
+
+      for (i = 0; i < G_N_ELEMENTS (supported_formats); i++)
+        {
+          if (!supported_formats[i].download)
+            continue;
+
+          GDK_DEBUG (DMABUF,
+                     "mmap dmabuf format %.4s:%#0" G_GINT64_MODIFIER "x",
+                     (char *) &supported_formats[i].fourcc, (guint64) DRM_FORMAT_MOD_LINEAR);
+
+          gdk_dmabuf_formats_builder_add_format (builder,
+                                                 supported_formats[i].fourcc,
+                                                 DRM_FORMAT_MOD_LINEAR);
+        }
+
+      formats = gdk_dmabuf_formats_builder_free_to_formats (builder);
     }
 
-  return TRUE;
-}
-
-static gboolean
-gdk_dmabuf_direct_downloader_supports (const GdkDmabufDownloader  *downloader,
-                                       GdkDisplay                 *display,
-                                       const GdkDmabuf            *dmabuf,
-                                       gboolean                    premultiplied,
-                                       GdkMemoryFormat            *out_format,
-                                       GError                    **error)
-{
-  const GdkDrmFormatInfo *info;
-
-  info = get_drm_format_info (dmabuf->fourcc);
-
-  if (!info || !info->download)
-    {
-      g_set_error (error,
-                   GDK_DMABUF_ERROR, GDK_DMABUF_ERROR_UNSUPPORTED_FORMAT,
-                   "Unsupported dmabuf format %.4s",
-                   (char *) &dmabuf->fourcc);
-      return FALSE;
-    }
-
-  if (dmabuf->modifier != DRM_FORMAT_MOD_LINEAR)
-    {
-      g_set_error (error,
-                   GDK_DMABUF_ERROR, GDK_DMABUF_ERROR_UNSUPPORTED_FORMAT,
-                   "Unsupported dmabuf modifier %#lx (only linear buffers are supported)",
-                   dmabuf->modifier);
-      return FALSE;
-    }
-
-  if (premultiplied)
-    *out_format = gdk_memory_format_get_premultiplied (info->memory_format);
-  else
-    *out_format = gdk_memory_format_get_straight (info->memory_format);
-
-  return TRUE;
+  return formats;
 }
 
 static void
-gdk_dmabuf_direct_downloader_do_download (const GdkDmabufDownloader *downloader,
-                                          GdkTexture                *texture,
-                                          guchar                    *data,
-                                          gsize                      stride)
+gdk_dmabuf_do_download_mmap (GdkTexture *texture,
+                             guchar     *data,
+                             gsize       stride)
 {
   const GdkDrmFormatInfo *info;
   const GdkDmabuf *dmabuf;
@@ -715,8 +1985,9 @@ gdk_dmabuf_direct_downloader_do_download (const GdkDmabufDownloader *downloader,
   g_return_if_fail (info && info->download);
 
   GDK_DISPLAY_DEBUG (gdk_dmabuf_texture_get_display (GDK_DMABUF_TEXTURE (texture)), DMABUF,
-                     "Using %s for downloading a dmabuf (format %.4s:%#" G_GINT64_MODIFIER "x)",
-                     downloader->name, (char *)&dmabuf->fourcc, dmabuf->modifier);
+                     "Using mmap for downloading %dx%d dmabuf (format %.4s:%#" G_GINT64_MODIFIER "x)",
+                     gdk_texture_get_width (texture), gdk_texture_get_height (texture),
+                     (char *)&dmabuf->fourcc, dmabuf->modifier);
 
   for (i = 0; i < dmabuf->n_planes; i++)
     {
@@ -775,17 +2046,16 @@ out:
     }
 }
 
-static void
-gdk_dmabuf_direct_downloader_download (const GdkDmabufDownloader *downloader,
-                                       GdkTexture                *texture,
-                                       GdkMemoryFormat            format,
-                                       guchar                    *data,
-                                       gsize                      stride)
+void
+gdk_dmabuf_download_mmap (GdkTexture      *texture,
+                          GdkMemoryFormat  format,
+                          guchar          *data,
+                          gsize            stride)
 {
   GdkMemoryFormat src_format = gdk_texture_get_format (texture);
 
   if (format == src_format)
-    gdk_dmabuf_direct_downloader_do_download (downloader, texture, data, stride);
+    gdk_dmabuf_do_download_mmap (texture, data, stride);
   else
     {
       unsigned int width, height;
@@ -798,7 +2068,7 @@ gdk_dmabuf_direct_downloader_download (const GdkDmabufDownloader *downloader,
       src_stride = width * gdk_memory_format_bytes_per_pixel (src_format);
       src_data = g_new (guchar, src_stride * height);
 
-      gdk_dmabuf_direct_downloader_do_download (downloader, texture, src_data, src_stride);
+      gdk_dmabuf_do_download_mmap (texture, src_data, src_stride);
 
       gdk_memory_convert (data, stride, format,
                           src_data, src_stride, src_format,
@@ -806,19 +2076,6 @@ gdk_dmabuf_direct_downloader_download (const GdkDmabufDownloader *downloader,
 
       g_free (src_data);
     }
-}
-
-const GdkDmabufDownloader *
-gdk_dmabuf_get_direct_downloader (void)
-{
-  static const GdkDmabufDownloader downloader = {
-    "mmap",
-    gdk_dmabuf_direct_downloader_add_formats,
-    gdk_dmabuf_direct_downloader_supports,
-    gdk_dmabuf_direct_downloader_download,
-  };
-
-  return &downloader;
 }
 
 int

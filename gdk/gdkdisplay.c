@@ -31,6 +31,7 @@
 #include "gdkclipboardprivate.h"
 #include "gdkdeviceprivate.h"
 #include "gdkdisplaymanagerprivate.h"
+#include "gdkdmabufeglprivate.h"
 #include "gdkdmabufformatsbuilderprivate.h"
 #include "gdkdmabufformatsprivate.h"
 #include "gdkdmabuftextureprivate.h"
@@ -391,12 +392,21 @@ gdk_display_dispose (GObject *object)
 {
   GdkDisplay *display = GDK_DISPLAY (object);
   GdkDisplayPrivate *priv = gdk_display_get_instance_private (display);
+  gsize i;
+
+  for (i = 0; i < G_N_ELEMENTS (display->dmabuf_downloaders); i++)
+    {
+      if (display->dmabuf_downloaders[i] == NULL)
+        continue;
+
+      gdk_dmabuf_downloader_close (display->dmabuf_downloaders[i]);
+      g_clear_object (&display->dmabuf_downloaders[i]);
+    }
 
   _gdk_display_manager_remove_display (gdk_display_manager_get (), display);
 
   g_queue_clear (&display->queued_events);
 
-  g_clear_object (&display->egl_gsk_renderer);
   g_clear_pointer (&display->egl_dmabuf_formats, gdk_dmabuf_formats_unref);
   g_clear_pointer (&display->egl_external_formats, gdk_dmabuf_formats_unref);
 
@@ -1881,13 +1891,12 @@ gdk_display_get_egl_display (GdkDisplay *self)
 
 #ifdef HAVE_DMABUF
 static void
-gdk_display_add_dmabuf_downloader (GdkDisplay                *display,
-                                   const GdkDmabufDownloader *downloader,
-                                   GdkDmabufFormatsBuilder   *builder)
+gdk_display_add_dmabuf_downloader (GdkDisplay          *display,
+                                   GdkDmabufDownloader *downloader)
 {
   gsize i;
 
-  if (!downloader->add_formats (downloader, display, builder))
+  if (downloader == NULL)
     return;
 
   /* dmabuf_downloaders is NULL-terminated */
@@ -1897,7 +1906,7 @@ gdk_display_add_dmabuf_downloader (GdkDisplay                *display,
         break;
     }
 
-  g_assert (i < G_N_ELEMENTS (display->dmabuf_downloaders));
+  g_assert (i < G_N_ELEMENTS (display->dmabuf_downloaders) - 1);
 
   display->dmabuf_downloaders[i] = downloader;
 }
@@ -1925,12 +1934,12 @@ gdk_display_init_dmabuf (GdkDisplay *self)
     {
       gdk_display_prepare_gl (self, NULL);
 
-      gdk_display_add_dmabuf_downloader (self, gdk_dmabuf_get_direct_downloader (), builder);
-
 #ifdef HAVE_EGL
-      if (gdk_display_prepare_gl (self, NULL))
-        gdk_display_add_dmabuf_downloader (self, gdk_dmabuf_get_egl_downloader (), builder);
+      gdk_display_add_dmabuf_downloader (self, gdk_dmabuf_get_egl_downloader (self, builder));
 #endif
+
+      gdk_dmabuf_formats_builder_add_formats (builder,
+                                              gdk_dmabuf_get_mmap_formats ());
     }
 #endif
 

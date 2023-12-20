@@ -19,7 +19,7 @@
 #include "config.h"
 
 #if defined(HAVE_DMABUF) && defined (HAVE_EGL)
-#include "gdkdmabufprivate.h"
+#include "gdkdmabufeglprivate.h"
 
 #include "gdkdmabufformatsbuilderprivate.h"
 #include "gdkdebugprivate.h"
@@ -31,15 +31,13 @@
 #include "gdktexturedownloader.h"
 
 #include <graphene.h>
-#include <epoxy/egl.h>
 
 /* A dmabuf downloader implementation that downloads buffers via
  * gsk_renderer_render_texture + GL texture download.
  */
 
 static gboolean
-gdk_dmabuf_egl_downloader_collect_formats (const GdkDmabufDownloader *downloader,
-                                           GdkDisplay                *display,
+gdk_dmabuf_egl_downloader_collect_formats (GdkDisplay                *display,
                                            GdkDmabufFormatsBuilder   *formats,
                                            GdkDmabufFormatsBuilder   *external)
 {
@@ -102,9 +100,8 @@ gdk_dmabuf_egl_downloader_collect_formats (const GdkDmabufDownloader *downloader
               (!external_only[j] || gdk_gl_context_get_use_es (context)))
             {
               GDK_DISPLAY_DEBUG (display, DMABUF,
-                                 "%s%s dmabuf format %.4s:%#" G_GINT64_MODIFIER "x",
+                                 "%s EGL dmabuf format %.4s:%#" G_GINT64_MODIFIER "x",
                                  external_only[j] ? "external " : "",
-                                 downloader->name,
                                  (char *) &fourccs[i],
                                  modifiers[j]);
 
@@ -136,211 +133,143 @@ gdk_dmabuf_egl_downloader_collect_formats (const GdkDmabufDownloader *downloader
   return TRUE;
 }
 
-static gboolean
-gdk_dmabuf_egl_downloader_add_formats (const GdkDmabufDownloader *downloader,
-                                       GdkDisplay                *display,
-                                       GdkDmabufFormatsBuilder   *builder)
+/* Hack. We don't include gsk/gsk.h here to avoid a build order problem
+ * with the generated header gskenumtypes.h, so we need to hack around
+ * a bit to access the gsk api we need.
+ */
+
+typedef struct _GskRenderer GskRenderer;
+
+extern GskRenderer *   gsk_gl_renderer_new          (void);
+extern gboolean        gsk_renderer_realize         (GskRenderer  *renderer,
+                                                     GdkSurface   *surface,
+                                                     GError      **error);
+
+GdkDmabufDownloader *
+gdk_dmabuf_get_egl_downloader (GdkDisplay              *display,
+                               GdkDmabufFormatsBuilder *builder)
 {
   GdkDmabufFormatsBuilder *formats;
   GdkDmabufFormatsBuilder *external;
   gboolean retval = FALSE;
+  GError *error = NULL;
+  GskRenderer *renderer;
 
   g_assert (display->egl_dmabuf_formats == NULL);
   g_assert (display->egl_external_formats == NULL);
 
+  if (!gdk_display_prepare_gl (display, NULL))
+    return NULL;
+
   formats = gdk_dmabuf_formats_builder_new ();
   external = gdk_dmabuf_formats_builder_new ();
 
-  retval = gdk_dmabuf_egl_downloader_collect_formats (downloader, display, formats, external);
+  retval = gdk_dmabuf_egl_downloader_collect_formats (display, formats, external);
 
   display->egl_dmabuf_formats = gdk_dmabuf_formats_builder_free_to_formats (formats);
   display->egl_external_formats = gdk_dmabuf_formats_builder_free_to_formats (external);
 
   gdk_dmabuf_formats_builder_add_formats (builder, display->egl_dmabuf_formats);
 
-  return retval;
-}
+  if (!retval)
+    return NULL;
 
-static gboolean
-gdk_dmabuf_egl_downloader_supports (const GdkDmabufDownloader  *downloader,
-                                    GdkDisplay                 *display,
-                                    const GdkDmabuf            *dmabuf,
-                                    gboolean                    premultiplied,
-                                    GdkMemoryFormat            *out_format,
-                                    GError                    **error)
-{
-  if (gdk_dmabuf_formats_contains (display->egl_dmabuf_formats, dmabuf->fourcc, dmabuf->modifier))
+  renderer = gsk_gl_renderer_new ();
+
+  if (!gsk_renderer_realize (renderer, NULL, &error))
     {
-      if (!gdk_dmabuf_get_memory_format (dmabuf->fourcc, premultiplied, out_format))
-        {
-          GDK_DISPLAY_DEBUG (display, DMABUF,
-                             "Falling back to generic ARGB for dmabuf format %.4s",
-                             (char *) &dmabuf->fourcc);
-          *out_format = premultiplied ? GDK_MEMORY_R8G8B8A8_PREMULTIPLIED
-                                      : GDK_MEMORY_R8G8B8A8;
-        }
-      return TRUE;
+      g_warning ("Failed to realize GL renderer: %s", error->message);
+      g_error_free (error);
+      g_object_unref (renderer);
+
+      return NULL;
     }
 
-  g_set_error (error,
-               GDK_DMABUF_ERROR, GDK_DMABUF_ERROR_UNSUPPORTED_FORMAT,
-               "Unsupported dmabuf format: %.4s:%#" G_GINT64_MODIFIER "x",
-               (char *) &dmabuf->fourcc, dmabuf->modifier);
-
-  return FALSE;
+  return GDK_DMABUF_DOWNLOADER (renderer);
 }
 
-/* Hack. We don't include gsk/gsk.h here to avoid a build order problem
- * with the generated header gskenumtypes.h, so we need to hack around
- * a bit to access the gsk api we need.
- */
-
-typedef gpointer GskRenderer;
-
-extern GskRenderer *   gsk_gl_renderer_new          (void);
-extern gboolean        gsk_renderer_realize         (GskRenderer  *renderer,
-                                                     GdkSurface   *surface,
-                                                     GError      **error);
-extern GdkTexture *    gsk_renderer_convert_texture (GskRenderer  *renderer,
-                                                     GdkTexture   *texture);
-
-typedef void (* InvokeFunc) (gpointer data);
-
-typedef struct _InvokeData
+EGLImage
+gdk_dmabuf_egl_create_image (GdkDisplay      *display,
+                             int              width,
+                             int              height,
+                             const GdkDmabuf *dmabuf,
+                             int              target)
 {
-  volatile int spinlock;
-  InvokeFunc func;
-  gpointer data;
-} InvokeData;
+  EGLDisplay egl_display = gdk_display_get_egl_display (display);
+  EGLint attribs[64];
+  int i;
+  EGLImage image;
 
-static gboolean
-gdk_dmabuf_egl_downloader_invoke_callback (gpointer data)
-{
-  InvokeData *invoke = data;
-  GdkGLContext *previous;
+  g_return_val_if_fail (width > 0, 0);
+  g_return_val_if_fail (height > 0, 0);
+  g_return_val_if_fail (1 <= dmabuf->n_planes && dmabuf->n_planes <= 4, 0);
+  g_return_val_if_fail (target == GL_TEXTURE_2D || target == GL_TEXTURE_EXTERNAL_OES, 0);
 
-  previous = gdk_gl_context_get_current ();
-
-  invoke->func (invoke->data);
-
-  if (previous)
-    gdk_gl_context_make_current (previous);
-  else
-    gdk_gl_context_clear_current ();
-
-  g_atomic_int_set (&invoke->spinlock, 1);
-
-  return FALSE;
-}
-
-/* Run func in the main thread, taking care not to disturb
- * the current GL context of the caller.
- */
-static void
-gdk_dmabuf_egl_downloader_run (InvokeFunc func,
-                               gpointer   data)
-{
-  InvokeData invoke = { 0, func, data };
-
-  g_main_context_invoke (NULL, gdk_dmabuf_egl_downloader_invoke_callback, &invoke);
-
-  while (g_atomic_int_get (&invoke.spinlock) == 0) ;
-}
-
-typedef struct _Download Download;
-
-struct _Download
-{
-  GdkDmabufTexture *texture;
-  GdkMemoryFormat format;
-  guchar *data;
-  gsize stride;
-};
-
-static GskRenderer *
-get_gsk_renderer (GdkDisplay *display)
-{
-  if (!display->egl_gsk_renderer)
+  if (egl_display == EGL_NO_DISPLAY || !display->have_egl_dma_buf_import)
     {
-      GskRenderer *renderer;
-      GError *error = NULL;
-
-      renderer = gsk_gl_renderer_new ();
-
-      if (!gsk_renderer_realize (renderer, NULL, &error))
-        {
-          g_warning ("Failed to realize GL renderer: %s", error->message);
-          g_error_free (error);
-          g_object_unref (renderer);
-
-          return NULL;
-        }
-
-      display->egl_gsk_renderer = renderer;
+      GDK_DISPLAY_DEBUG (display, DMABUF,
+                         "Can't import dmabufs into GL, missing EGL or EGL_EXT_image_dma_buf_import_modifiers");
+      return EGL_NO_IMAGE;
     }
 
-  return display->egl_gsk_renderer;
-}
+  GDK_DISPLAY_DEBUG (display, DMABUF,
+                     "Importing dmabuf (format: %.4s:%#" G_GINT64_MODIFIER "x, planes: %u) into GL",
+                     (char *) &dmabuf->fourcc, dmabuf->modifier, dmabuf->n_planes);
 
-static void
-gdk_dmabuf_egl_downloader_do_download (gpointer data)
-{
-  Download *download = data;
-  GdkDisplay *display;
-  GskRenderer *renderer;
-  GdkTexture *native;
-  GdkTextureDownloader *downloader;
+  i = 0;
+  attribs[i++] = EGL_IMAGE_PRESERVED_KHR;
+  attribs[i++] = EGL_TRUE;
+  attribs[i++] = EGL_WIDTH;
+  attribs[i++] = width;
+  attribs[i++] = EGL_HEIGHT;
+  attribs[i++] = height;
+  attribs[i++] = EGL_LINUX_DRM_FOURCC_EXT;
+  attribs[i++] = dmabuf->fourcc;
+  attribs[i++] = EGL_YUV_COLOR_SPACE_HINT_EXT;
+  attribs[i++] = EGL_ITU_REC601_EXT;
+  attribs[i++] = EGL_SAMPLE_RANGE_HINT_EXT;
+  attribs[i++] = EGL_YUV_FULL_RANGE_EXT;
 
-  display = gdk_dmabuf_texture_get_display (download->texture);
+#define ADD_PLANE(plane) \
+  { \
+    if (dmabuf->modifier != DRM_FORMAT_MOD_INVALID) \
+      { \
+        attribs[i++] = EGL_DMA_BUF_PLANE## plane ##_MODIFIER_LO_EXT; \
+        attribs[i++] = dmabuf->modifier & 0xFFFFFFFF; \
+        attribs[i++] = EGL_DMA_BUF_PLANE## plane ## _MODIFIER_HI_EXT; \
+        attribs[i++] = dmabuf->modifier >> 32; \
+      } \
+    attribs[i++] = EGL_DMA_BUF_PLANE## plane ##_FD_EXT; \
+    attribs[i++] = dmabuf->planes[plane].fd; \
+    attribs[i++] = EGL_DMA_BUF_PLANE## plane ##_PITCH_EXT; \
+    attribs[i++] = dmabuf->planes[plane].stride; \
+    attribs[i++] = EGL_DMA_BUF_PLANE## plane ##_OFFSET_EXT; \
+    attribs[i++] = dmabuf->planes[plane].offset; \
+  }
 
-  renderer = get_gsk_renderer (display);
+  ADD_PLANE (0);
 
-  native = gsk_renderer_convert_texture (renderer, GDK_TEXTURE (download->texture));
+  if (dmabuf->n_planes > 1) ADD_PLANE (1);
+  if (dmabuf->n_planes > 2) ADD_PLANE (2);
+  if (dmabuf->n_planes > 3) ADD_PLANE (3);
 
-  downloader = gdk_texture_downloader_new (native);
-  gdk_texture_downloader_set_format (downloader, download->format);
-  gdk_texture_downloader_download_into (downloader, download->data, download->stride);
-  gdk_texture_downloader_free (downloader);
+  attribs[i++] = EGL_NONE;
 
-  g_object_unref (native);
-}
+  image = eglCreateImageKHR (egl_display,
+                             EGL_NO_CONTEXT,
+                             EGL_LINUX_DMA_BUF_EXT,
+                             (EGLClientBuffer)NULL,
+                             attribs);
 
-static void
-gdk_dmabuf_egl_downloader_download (const GdkDmabufDownloader *downloader,
-                                    GdkTexture                *texture,
-                                    GdkMemoryFormat            format,
-                                    guchar                    *data,
-                                    gsize                      stride)
-{
-  Download download;
-  const GdkDmabuf *dmabuf;
+  if (image == EGL_NO_IMAGE)
+    {
+      GDK_DISPLAY_DEBUG (display, DMABUF,
+                         "Creating EGLImage for dmabuf failed: %#x",
+                         eglGetError ());
+      return 0;
+    }
 
-  download.texture = GDK_DMABUF_TEXTURE (texture);
-  download.format = format;
-  download.data = data;
-  download.stride = stride;
-
-  dmabuf = gdk_dmabuf_texture_get_dmabuf (GDK_DMABUF_TEXTURE (texture));
-
-  GDK_DISPLAY_DEBUG (gdk_dmabuf_texture_get_display (download.texture), DMABUF,
-                     "Using %s for downloading a dmabuf (format %.4s:%#" G_GINT64_MODIFIER "x)",
-                     downloader->name, (char *)&dmabuf->fourcc, dmabuf->modifier);
-
-
-  gdk_dmabuf_egl_downloader_run (gdk_dmabuf_egl_downloader_do_download, &download);
-}
-
-const GdkDmabufDownloader *
-gdk_dmabuf_get_egl_downloader (void)
-{
-  static const GdkDmabufDownloader downloader = {
-    "egl",
-    gdk_dmabuf_egl_downloader_add_formats,
-    gdk_dmabuf_egl_downloader_supports,
-    gdk_dmabuf_egl_downloader_download,
-  };
-
-  return &downloader;
+  return image;
 }
 
 #endif  /* HAVE_DMABUF && HAVE_EGL */
