@@ -15,8 +15,7 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __REFTEST_COMPARE_H__
-#define __REFTEST_COMPARE_H__
+#pragma once
 
 #include <gtk/gtk.h>
 
@@ -27,5 +26,3 @@ GdkTexture *            reftest_compare_textures        (GdkTexture             
                                                          GdkTexture             *texture2);
 
 G_END_DECLS
-
-#endif /* __REFTEST_COMPARE_H__ */
