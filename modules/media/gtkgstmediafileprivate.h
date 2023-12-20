@@ -17,8 +17,7 @@
  * Authors: Benjamin Otte <otte@gnome.org>
  */
 
-#ifndef __GTK_GST_MEDIA_FILE_H__
-#define __GTK_GST_MEDIA_FILE_H__
+#pragma once
 
 #include <gtk/gtkmediafile.h>
 
@@ -29,5 +28,3 @@ G_BEGIN_DECLS
 G_DECLARE_FINAL_TYPE (GtkGstMediaFile, gtk_gst_media_file, GTK, GST_MEDIA_FILE, GtkMediaFile)
 
 G_END_DECLS
-
-#endif /* __GTK_GST_MEDIA_FILE_H__ */

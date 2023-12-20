@@ -17,8 +17,7 @@
  * Authors: Benjamin Otte <otte@gnome.org>
  */
 
-#ifndef __GTK_GST_PAINTABLE_H__
-#define __GTK_GST_PAINTABLE_H__
+#pragma once
 
 #include <gdk/gdk.h>
 
@@ -39,5 +38,3 @@ void            gtk_gst_paintable_queue_set_texture     (GtkGstPaintable        
                                                          double                  pixel_aspect_ratio);
 
 G_END_DECLS
-
-#endif /* __GTK_GST_PAINTABLE_H__ */
