@@ -432,7 +432,7 @@ add_scroll_binding (GtkWidgetClass *widget_class,
                     gboolean        horizontal)
 {
   guint keypad_keyval = keyval - GDK_KEY_Left + GDK_KEY_KP_Left;
-  
+
   gtk_widget_class_add_binding_signal (widget_class,
                                        keyval, mask,
                                        "scroll-child",
@@ -751,6 +751,10 @@ gtk_scrolled_window_class_init (GtkScrolledWindowClass *class)
    * GtkScrolledWindow:child: (attributes org.gtk.Property.get=gtk_scrolled_window_get_child org.gtk.Property.set=gtk_scrolled_window_set_child)
    *
    * The child widget.
+   *
+   * When setting this property, if the child widget does not implement
+   * [iface@Gtk.Scrollable], the scrolled window will add the child to
+   * a [class@Gtk.Viewport] and then set the viewport as the child.
    */
   properties[PROP_CHILD] =
       g_param_spec_object ("child", NULL, NULL,
@@ -2255,7 +2259,7 @@ gtk_scrolled_window_set_vadjustment (GtkScrolledWindow *scrolled_window,
   else
     {
       GtkAdjustment *old_adjustment;
-      
+
       old_adjustment = gtk_scrollbar_get_adjustment (GTK_SCROLLBAR (priv->vscrollbar));
       if (old_adjustment == vadjustment)
         return;
@@ -2909,7 +2913,7 @@ gtk_scrolled_window_scroll_child (GtkScrolledWindow *scrolled_window,
   if (adjustment)
     {
       double value = gtk_adjustment_get_value (adjustment);
-      
+
       switch (scroll)
         {
         case GTK_SCROLL_STEP_FORWARD:
@@ -3422,7 +3426,7 @@ gtk_scrolled_window_focus (GtkWidget        *widget,
       priv->focus_out = FALSE; /* Clear this to catch the wrap-around case */
       return FALSE;
     }
-  
+
   if (gtk_widget_is_focus (widget))
     return FALSE;
 
@@ -4214,6 +4218,10 @@ gtk_scrolled_window_get_propagate_natural_height (GtkScrolledWindow *scrolled_wi
  * @child: (nullable): the child widget
  *
  * Sets the child widget of @scrolled_window.
+ *
+ * If @child does not implement the [iface@Gtk.Scrollable] interface,
+ * the scrolled window will add @child to a [class@Gtk.Viewport] instance
+ * and then add the viewport as its child widget.
  */
 void
 gtk_scrolled_window_set_child (GtkScrolledWindow *scrolled_window,
@@ -4308,6 +4316,10 @@ gtk_scrolled_window_set_child (GtkScrolledWindow *scrolled_window,
  * @scrolled_window: a `GtkScrolledWindow`
  *
  * Gets the child widget of @scrolled_window.
+ *
+ * If the scrolled window automatically added a [class@Gtk.Viewport], this
+ * function will return the viewport widget, and you can retrieve its child
+ * using [method@Gtk.Viewport.get_child].
  *
  * Returns: (nullable) (transfer none): the child widget of @scrolled_window
  */
