@@ -1,5 +1,4 @@
-#ifndef __GTK_SHADER_STACK_H__
-#define __GTK_SHADER_STACK_H__
+#pragma once
 
 #include <gtk/gtk.h>
 
@@ -19,5 +18,3 @@ void        gtk_shader_stack_set_active   (GtkShaderStack *self,
                                            int             index);
 
 G_END_DECLS
-
-#endif /* __GTK_SHADER_STACK_H__ */

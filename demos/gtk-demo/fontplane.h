@@ -15,8 +15,7 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GTK_FONT_PLANE_H__
-#define __GTK_FONT_PLANE_H__
+#pragma once
 
 #include <gtk/gtk.h>
 
@@ -60,5 +59,3 @@ GtkWidget * gtk_font_plane_new      (GtkAdjustment *width_adj,
                                      GtkAdjustment *weight_adj);
 
 G_END_DECLS
-
-#endif /* __GTK_FONT_PLANE_H__ */

@@ -1,5 +1,4 @@
-#ifndef SCRIPT_NAMES_H
-#define SCRIPT_NAMES_H
+#pragma once
 
 #include <glib.h>
 
@@ -9,5 +8,3 @@ const char * get_script_name (GUnicodeScript script);
 const char * get_script_name_for_tag (guint32 tag);
 
 G_END_DECLS
-
-#endif

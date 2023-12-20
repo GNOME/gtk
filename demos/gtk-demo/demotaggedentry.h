@@ -18,8 +18,7 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __DEMO_TAGGED_ENTRY_H__
-#define __DEMO_TAGGED_ENTRY_H__
+#pragma once
 
 #include <gtk/gtk.h>
 
@@ -57,5 +56,3 @@ void            demo_tagged_entry_tag_set_has_close_button (DemoTaggedEntryTag *
                                                             gboolean            has_close_button);
 
 G_END_DECLS
-
-#endif /* __DEMO_TAGGED_ENTRY_H__ */
