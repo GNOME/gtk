@@ -1198,8 +1198,8 @@ gtk_synthesize_crossing_events (GtkRoot         *toplevel,
     {
       widget = gtk_widget_stack_get (&target_array, i);
 
-      if (i < gtk_widget_stack_get_size (&target_array) - 1)
-        crossing.new_descendent = gtk_widget_stack_get (&target_array, i + 1);
+      if (i > 0)
+        crossing.new_descendent = gtk_widget_stack_get (&target_array, i - 1);
       else
         crossing.new_descendent = NULL;
 
