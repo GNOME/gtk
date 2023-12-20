@@ -1222,6 +1222,7 @@ gtk_synthesize_crossing_events (GtkRoot         *toplevel,
           crossing.old_descendent = old_target ? crossing.new_descendent : NULL;
         }
 
+      check_crossing_invariants (widget, &crossing);
       translate_coordinates (surface_x, surface_y, &x, &y, widget);
       gtk_widget_handle_crossing (widget, &crossing, x, y);
       if (crossing_type == GTK_CROSSING_POINTER)
