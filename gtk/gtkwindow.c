@@ -4986,7 +4986,7 @@ void
 check_crossing_invariants (GtkWidget *widget,
                            GtkCrossingData *crossing)
 {
-#ifdef G_ENBABLE_DEBUG
+#ifdef G_ENABLE_DEBUG
   if (crossing->old_target == NULL)
     g_assert (crossing->old_descendent == NULL);
   else if (crossing->old_descendent == NULL)
