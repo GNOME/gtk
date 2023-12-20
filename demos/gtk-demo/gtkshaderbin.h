@@ -1,5 +1,4 @@
-#ifndef __GTK_SHADER_BIN_H__
-#define __GTK_SHADER_BIN_H__
+#pragma once
 
 #include <gtk/gtk.h>
 
@@ -19,5 +18,3 @@ void       gtk_shader_bin_set_child   (GtkShaderBin *self,
 GtkWidget *gtk_shader_bin_get_child   (GtkShaderBin *self);
 
 G_END_DECLS
-
-#endif /* __GTK_SHADER_BIN_H__ */

@@ -16,8 +16,7 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GTK_PRINT_BACKEND_CUPS_H__
-#define __GTK_PRINT_BACKEND_CUPS_H__
+#pragma once
 
 #include <glib-object.h>
 #include "gtk/print/gtkprintbackendprivate.h"
@@ -34,7 +33,3 @@ GtkPrintBackend *gtk_print_backend_cups_new      (void);
 GType          gtk_print_backend_cups_get_type (void) G_GNUC_CONST;
 
 G_END_DECLS
-
-#endif /* __GTK_PRINT_BACKEND_CUPS_H__ */
-
-

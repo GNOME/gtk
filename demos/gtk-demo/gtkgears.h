@@ -1,5 +1,4 @@
-#ifndef __GTK_GEARS_H__
-#define __GTK_GEARS_H__
+#pragma once
 
 #include <gtk/gtk.h>
 
@@ -44,5 +43,3 @@ void       gtk_gears_set_fps_label (GtkGears *gears,
 
 
 G_END_DECLS
-
-#endif /* __GTK_GEARS_H__ */

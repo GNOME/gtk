@@ -1,5 +1,4 @@
-#ifndef __PUZZLE_PIECE_H__
-#define __PUZZLE_PIECE_H__
+#pragma once
 
 #include <gtk/gtk.h>
 
@@ -19,5 +18,3 @@ GdkPaintable *  gtk_puzzle_piece_new            (GdkPaintable           *puzzle,
 GdkPaintable *  gtk_puzzle_piece_get_puzzle     (GtkPuzzlePiece         *self);
 guint           gtk_puzzle_piece_get_x          (GtkPuzzlePiece         *self);
 guint           gtk_puzzle_piece_get_y          (GtkPuzzlePiece         *self);
-
-#endif /* __PUZZLE_PIECE_H__ */

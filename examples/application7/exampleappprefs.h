@@ -1,5 +1,4 @@
-#ifndef __EXAMPLEAPPPREFS_H
-#define __EXAMPLEAPPPREFS_H
+#pragma once
 
 #include <gtk/gtk.h>
 #include "exampleappwin.h"
@@ -10,6 +9,3 @@ G_DECLARE_FINAL_TYPE (ExampleAppPrefs, example_app_prefs, EXAMPLE, APP_PREFS, Gt
 
 
 ExampleAppPrefs        *example_app_prefs_new          (ExampleAppWindow *win);
-
-
-#endif /* __EXAMPLEAPPPREFS_H */

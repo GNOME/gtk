@@ -17,8 +17,7 @@
  * Authors: Benjamin Otte <otte@gnome.org>
  */
 
-#ifndef __NODE_EDITOR_APPLICATION_H__
-#define __NODE_EDITOR_APPLICATION_H__
+#pragma once
 
 #include <gtk/gtk.h>
 
@@ -33,6 +32,3 @@ typedef struct _NodeEditorApplicationClass  NodeEditorApplicationClass;
 
 GType           node_editor_application_get_type    (void);
 NodeEditorApplication *node_editor_application_new         (void);
-
-
-#endif /* __NODE_EDITOR_APPLICATION_H__ */

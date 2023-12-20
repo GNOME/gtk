@@ -17,8 +17,7 @@
  * Authors: Matthias Clasen <mclasen@redhat.com>
  */
 
-#ifndef __GSK_SHADER_PAINTABLE_H__
-#define __GSK_SHADER_PAINTABLE_H__
+#pragma once
 
 #include <gdk/gdk.h>
 #include <gsk/gsk.h>
@@ -42,5 +41,3 @@ void             gsk_shader_paintable_update_time      (GskShaderPaintable *self
                                                         int                 time_idx,
                                                         gint64              frame_time);
 G_END_DECLS
-
-#endif /* __GSK_SHADER_PAINTABLE_H__ */

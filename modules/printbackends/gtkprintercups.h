@@ -8,15 +8,14 @@
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	 See the GNU
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GTK_PRINTER_CUPS_H__
-#define __GTK_PRINTER_CUPS_H__
+#pragma once
 
 #include <glib-object.h>
 #include <cups/cups.h>
@@ -39,7 +38,7 @@ G_BEGIN_DECLS
 #define GTK_IS_PRINTER_CUPS_CLASS(klass)       (G_TYPE_CHECK_CLASS_TYPE ((klass), GTK_TYPE_PRINTER_CUPS))
 #define GTK_PRINTER_CUPS_GET_CLASS(obj)        (G_TYPE_INSTANCE_GET_CLASS ((obj), GTK_TYPE_PRINTER_CUPS, GtkPrinterCupsClass))
 
-typedef struct _GtkPrinterCups	        GtkPrinterCups;
+typedef struct _GtkPrinterCups          GtkPrinterCups;
 typedef struct _GtkPrinterCupsClass     GtkPrinterCupsClass;
 typedef struct _GtkPrinterCupsPrivate   GtkPrinterCupsPrivate;
 
@@ -123,8 +122,8 @@ void                     gtk_printer_cups_register_type (GTypeModule     *module
 GtkPrinterCups          *gtk_printer_cups_new           (const char      *name,
                                                          GtkPrintBackend *backend,
                                                          gpointer         colord_client);
-ppd_file_t 		*gtk_printer_cups_get_ppd       (GtkPrinterCups  *printer);
-const char		*gtk_printer_cups_get_ppd_name  (GtkPrinterCups  *printer);
+ppd_file_t              *gtk_printer_cups_get_ppd       (GtkPrinterCups  *printer);
+const char              *gtk_printer_cups_get_ppd_name  (GtkPrinterCups  *printer);
 
 #ifdef HAVE_COLORD
 void                     gtk_printer_cups_update_settings (GtkPrinterCups *printer,
@@ -133,5 +132,3 @@ void                     gtk_printer_cups_update_settings (GtkPrinterCups *print
 #endif
 
 G_END_DECLS
-
-#endif /* __GTK_PRINTER_CUPS_H__ */

@@ -1,5 +1,4 @@
-#ifndef __GTK_SHADERTOY_H__
-#define __GTK_SHADERTOY_H__
+#pragma once
 
 #include <gtk/gtk.h>
 
@@ -30,5 +29,3 @@ void        gtk_shadertoy_set_image_shader (GtkShadertoy *shadertoy,
                                             const char   *shader);
 
 G_END_DECLS
-
-#endif /* __GTK_SHADERTOY_H__ */

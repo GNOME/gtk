@@ -17,8 +17,7 @@
  * Authors: Benjamin Otte <otte@gnome.org>
  */
 
-#ifndef __NODE_EDITOR_WINDOW_H__
-#define __NODE_EDITOR_WINDOW_H__
+#pragma once
 
 #include <gtk/gtk.h>
 
@@ -38,5 +37,3 @@ NodeEditorWindow *      node_editor_window_new          (NodeEditorApplication  
 
 gboolean                node_editor_window_load         (NodeEditorWindow       *self,
                                                          GFile                  *file);
-
-#endif /* __NODE_EDITOR_WINDOW_H__ */

@@ -18,7 +18,7 @@
  * License along with this library; if not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __G_OPEN_URI_PORTAL_H__
+#pragma once
 
 #include "gtkwindow.h"
 #include <glib.h>
@@ -55,5 +55,3 @@ gboolean gtk_openuri_portal_open_uri_finish (GAsyncResult        *result,
                                              GError             **error);
 
 G_END_DECLS
-
-#endif

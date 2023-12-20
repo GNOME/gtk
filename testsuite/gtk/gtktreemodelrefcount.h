@@ -15,8 +15,7 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GTK_TREE_MODEL_REF_COUNT_H__
-#define __GTK_TREE_MODEL_REF_COUNT_H__
+#pragma once
 
 #include <gtk/gtk.h>
 
@@ -127,6 +126,3 @@ assert_node_ref_count (GtkTreeModelRefCount *ref_model,
 {
   gtk_tree_model_ref_count_check_node (ref_model, iter, ref_count, TRUE);
 }
-
-
-#endif /* __GTK_TREE_MODEL_REF_COUNT_H__ */

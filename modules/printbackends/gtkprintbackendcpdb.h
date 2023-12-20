@@ -17,9 +17,7 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-
-#ifndef __GTK_PRINT_BACKEND_CPDB_H__
-#define __GTK_PRINT_BACKEND_CPDB_H__
+#pragma once
 
 #include <glib-object.h>
 #include <gtk/gtk.h>
@@ -38,6 +36,3 @@ GtkPrintBackend  *gtk_print_backend_cpdb_new        (void);
 GType             gtk_print_backend_cpdb_get_type   (void) G_GNUC_CONST;
 
 G_END_DECLS
-
-#endif /* __GTK_PRINT_BACKEND_CPDB_H__ */
-

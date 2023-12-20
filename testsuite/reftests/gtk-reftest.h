@@ -15,8 +15,7 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef __GTK_REFTEST_H__
-#define __GTK_REFTEST_H__
+#pragma once
 
 G_BEGIN_DECLS
 
@@ -27,5 +26,3 @@ G_MODULE_EXPORT
 extern void reftest_uninhibit_snapshot (void);
 
 G_END_DECLS
-
-#endif /* __GTK_REFTEST_H__ */

@@ -1,5 +1,4 @@
-#ifndef __VARIABLE_H__
-#define __VARIABLE_H__
+#pragma once
 
 typedef struct
 {
@@ -19,6 +18,3 @@ void   variable_add                (Variable *variable,
 double variable_mean               (Variable *variable);
 double variable_standard_deviation (Variable *variable);
 void   variable_reset              (Variable *variable);
-
-#endif /* __VARIABLE_H__ */
-

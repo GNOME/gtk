@@ -1,5 +1,4 @@
-#ifndef __ICON_BROWSER_APP_H
-#define __ICON_BROWSER_APP_H
+#pragma once
 
 #include <gtk/gtk.h>
 
@@ -14,6 +13,3 @@ typedef struct _IconBrowserAppClass  IconBrowserAppClass;
 
 GType           icon_browser_app_get_type    (void);
 IconBrowserApp *icon_browser_app_new         (void);
-
-
-#endif /* __ICON_BROWSER_APP_H */

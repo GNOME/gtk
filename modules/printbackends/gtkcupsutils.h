@@ -1,4 +1,4 @@
-/* gtkcupsutils.h 
+/* gtkcupsutils.h
  * Copyright (C) 2006 John (J5) Palmieri <johnp@redhat.com>
  *
  * This library is free software; you can redistribute it and/or
@@ -8,15 +8,14 @@
  *
  * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	 See the GNU
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
  * Lesser General Public License for more details.
  *
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
- 
-#ifndef __GTK_CUPS_UTILS_H__
-#define __GTK_CUPS_UTILS_H__
+
+#pragma once
 
 #include <glib.h>
 #include <cups/cups.h>
@@ -46,7 +45,7 @@ typedef enum
 } GtkCupsRequestType;
 
 
-/** 
+/*
  * Direction we should be polling the http socket on.
  * We are either reading or writing at each state.
  * This makes it easy for mainloops to connect to poll.
@@ -141,34 +140,34 @@ enum
 };
 
 GtkCupsRequest        * gtk_cups_request_new_with_username (http_t             *connection,
-							    GtkCupsRequestType  req_type,
-							    int                 operation_id,
-							    GIOChannel         *data_io,
-							    const char         *server,
-							    const char         *resource,
-							    const char         *username);
+                                                            GtkCupsRequestType  req_type,
+                                                            int                 operation_id,
+                                                            GIOChannel         *data_io,
+                                                            const char         *server,
+                                                            const char         *resource,
+                                                            const char         *username);
 GtkCupsRequest        * gtk_cups_request_new               (http_t             *connection,
-							    GtkCupsRequestType  req_type,
-							    int                 operation_id,
-							    GIOChannel         *data_io,
-							    const char         *server,
-							    const char         *resource);
+                                                            GtkCupsRequestType  req_type,
+                                                            int                 operation_id,
+                                                            GIOChannel         *data_io,
+                                                            const char         *server,
+                                                            const char         *resource);
 void                    gtk_cups_request_ipp_add_string    (GtkCupsRequest     *request,
-							    ipp_tag_t           group,
-							    ipp_tag_t           tag,
-							    const char         *name,
-							    const char         *charset,
-							    const char         *value);
+                                                            ipp_tag_t           group,
+                                                            ipp_tag_t           tag,
+                                                            const char         *name,
+                                                            const char         *charset,
+                                                            const char         *value);
 void                    gtk_cups_request_ipp_add_strings   (GtkCupsRequest     *request,
-							    ipp_tag_t           group,
-							    ipp_tag_t           tag,
-							    const char         *name,
-							    int                 num_values,
-							    const char         *charset,
-							    const char * const *values);
+                                                            ipp_tag_t           group,
+                                                            ipp_tag_t           tag,
+                                                            const char         *name,
+                                                            int                 num_values,
+                                                            const char         *charset,
+                                                            const char * const *values);
 const char            * gtk_cups_request_ipp_get_string    (GtkCupsRequest     *request,
-							    ipp_tag_t           tag,
-							    const char         *name);
+                                                            ipp_tag_t           tag,
+                                                            const char         *name);
 gboolean                gtk_cups_request_read_write        (GtkCupsRequest     *request,
                                                             gboolean            connect_only);
 GtkCupsPollState        gtk_cups_request_get_poll_state    (GtkCupsRequest     *request);
@@ -176,11 +175,11 @@ void                    gtk_cups_request_free              (GtkCupsRequest     *
 GtkCupsResult         * gtk_cups_request_get_result        (GtkCupsRequest     *request);
 gboolean                gtk_cups_request_is_done           (GtkCupsRequest     *request);
 void                    gtk_cups_request_encode_option     (GtkCupsRequest     *request,
-						            const char         *option,
-							    const char         *value);
+                                                            const char         *option,
+                                                            const char         *value);
 void                    gtk_cups_request_set_ipp_version   (GtkCupsRequest     *request,
-							    int                 major,
-							    int                 minor);
+                                                            int                 major,
+                                                            int                 minor);
 gboolean                gtk_cups_result_is_error           (GtkCupsResult      *result);
 ipp_t                 * gtk_cups_result_get_response       (GtkCupsResult      *result);
 GtkCupsErrorType        gtk_cups_result_get_error_type     (GtkCupsResult      *result);
@@ -193,4 +192,4 @@ GtkCupsConnectionState  gtk_cups_connection_test_get_state (GtkCupsConnectionTes
 void                    gtk_cups_connection_test_free      (GtkCupsConnectionTest *test);
 
 G_END_DECLS
-#endif 
+

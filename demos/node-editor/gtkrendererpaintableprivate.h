@@ -17,8 +17,7 @@
  * Authors: Benjamin Otte <otte@gnome.org>
  */
 
-#ifndef __GTK_RENDERER_PAINTABLE_H__
-#define __GTK_RENDERER_PAINTABLE_H__
+#pragma once
 
 #include <gsk/gsk.h>
 
@@ -39,5 +38,3 @@ void            gtk_renderer_paintable_set_paintable      (GtkRendererPaintable 
 GdkPaintable *  gtk_renderer_paintable_get_paintable      (GtkRendererPaintable *self) G_GNUC_PURE;
 
 G_END_DECLS
-
-#endif /* __GTK_RENDERER_PAINTABLE_H__ */
