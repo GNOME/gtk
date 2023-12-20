@@ -1,5 +1,4 @@
-#ifndef __EXAMPLEAPP_H
-#define __EXAMPLEAPP_H
+#pragma once
 
 #include <gtk/gtk.h>
 
@@ -9,6 +8,3 @@ G_DECLARE_FINAL_TYPE (ExampleApp, example_app, EXAMPLE, APP, GtkApplication)
 
 
 ExampleApp     *example_app_new         (void);
-
-
-#endif /* __EXAMPLEAPP_H */
