@@ -1,5 +1,4 @@
-#ifndef __TEST_PRINT_FILE_OPERATION_H__
-#define __TEST_PRINT_FILE_OPERATION_H__
+#pragma once
 
 #include <gtk/gtk.h>
 
@@ -22,7 +21,6 @@ struct _TestPrintFileOperation
   double font_size;
   int lines_per_page;
 
-  
   char **lines;
   int num_lines;
   int num_pages;
@@ -36,8 +34,6 @@ struct _TestPrintFileOperationClass
 GType                   test_print_file_operation_get_type      (void);
 TestPrintFileOperation *test_print_file_operation_new           (const char             *filename);
 void                    test_print_file_operation_set_font_size (TestPrintFileOperation *op,
-								 double                  points);
+                                                                 double                  points);
 
 G_END_DECLS
-
-#endif /* __TEST_PRINT_FILE_OPERATION_H__ */
