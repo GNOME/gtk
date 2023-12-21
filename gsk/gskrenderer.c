@@ -568,28 +568,18 @@ get_renderer_for_env_var (GdkSurface *surface)
 static GType
 get_renderer_for_backend (GdkSurface *surface)
 {
-#ifdef GDK_WINDOWING_X11
-  if (GDK_IS_X11_SURFACE (surface))
-    return GSK_TYPE_GL_RENDERER;
-#endif
-#ifdef GDK_WINDOWING_WAYLAND
-  if (GDK_IS_WAYLAND_SURFACE (surface))
-    return GSK_TYPE_GL_RENDERER;
-#endif
 #ifdef GDK_WINDOWING_BROADWAY
   if (GDK_IS_BROADWAY_SURFACE (surface))
     return GSK_TYPE_BROADWAY_RENDERER;
 #endif
-#ifdef GDK_WINDOWING_MACOS
-  if (GDK_IS_MACOS_SURFACE (surface))
-    return GSK_TYPE_GL_RENDERER;
-#endif
-#ifdef GDK_WINDOWING_WIN32
-  if (GDK_IS_WIN32_SURFACE (surface))
-    return GSK_TYPE_GL_RENDERER;
-#endif
 
   return G_TYPE_INVALID;
+}
+
+static GType
+get_renderer_for_gl (GdkSurface *surface)
+{
+  return GSK_TYPE_GL_RENDERER;
 }
 
 static GType
@@ -604,6 +594,7 @@ static struct {
   { get_renderer_for_display },
   { get_renderer_for_env_var },
   { get_renderer_for_backend },
+  { get_renderer_for_gl },
   { get_renderer_fallback },
 };
 
