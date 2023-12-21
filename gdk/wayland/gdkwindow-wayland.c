@@ -148,6 +148,7 @@ struct _GdkWindowImplWayland
   unsigned int pending_commit : 1;
   unsigned int awaiting_frame : 1;
   unsigned int using_csd : 1;
+  unsigned int suspended : 1;
   GdkWindowTypeHint hint;
   GdkWindow *transient_for;
   GdkWindow *popup_parent;
@@ -225,6 +226,7 @@ struct _GdkWindowImplWayland
     int width;
     int height;
     GdkWindowState state;
+    gboolean suspended;
   } pending;
 
   struct {
@@ -290,6 +292,7 @@ _gdk_window_impl_wayland_init (GdkWindowImplWayland *impl)
   impl->initial_fullscreen_monitor = -1;
   impl->saved_width = -1;
   impl->saved_height = -1;
+  impl->suspended = FALSE;
 }
 
 static void
@@ -1669,6 +1672,7 @@ gdk_wayland_window_handle_configure (GdkWindow *window,
   GdkWaylandDisplay *display_wayland =
     GDK_WAYLAND_DISPLAY (gdk_window_get_display (window));
   GdkWindowState new_state;
+  gboolean suspended;
   int width = impl->pending.width;
   int height = impl->pending.height;
   gboolean fixed_size;
@@ -1690,6 +1694,19 @@ gdk_wayland_window_handle_configure (GdkWindow *window,
       zxdg_surface_v6_ack_configure (impl->display_server.zxdg_surface_v6,
                                      serial);
       return;
+    }
+
+  suspended = impl->pending.suspended;
+  impl->pending.suspended = FALSE;
+
+  if (impl->suspended != suspended)
+    {
+      GdkEvent* event;
+
+      impl->suspended = suspended;
+
+      event = _gdk_make_event (window, GDK_VISIBILITY_NOTIFY, NULL, FALSE);
+      event->visibility.state = suspended ? GDK_VISIBILITY_FULLY_OBSCURED : GDK_VISIBILITY_UNOBSCURED;
     }
 
   new_state = impl->pending.state;
@@ -1806,11 +1823,13 @@ static void
 gdk_wayland_window_handle_configure_toplevel (GdkWindow     *window,
                                               int32_t        width,
                                               int32_t        height,
-                                              GdkWindowState state)
+                                              GdkWindowState state,
+                                              gboolean       suspended)
 {
   GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
 
   impl->pending.state |= state;
+  impl->pending.suspended |= suspended;
   impl->pending.width = width;
   impl->pending.height = height;
 }
@@ -1856,6 +1875,7 @@ xdg_toplevel_configure (void                *data,
   GdkWindow *window = GDK_WINDOW (data);
   uint32_t *p;
   GdkWindowState pending_state = 0;
+  gboolean suspended = FALSE;
 
   wl_array_for_each (p, states)
     {
@@ -1886,6 +1906,11 @@ xdg_toplevel_configure (void                *data,
         case XDG_TOPLEVEL_STATE_TILED_LEFT:
           pending_state |= (GDK_WINDOW_STATE_TILED | GDK_WINDOW_STATE_LEFT_TILED);
           break;
+#ifdef HAVE_TOPLEVEL_STATE_SUSPENDED
+        case XDG_TOPLEVEL_STATE_SUSPENDED:
+          suspended = TRUE;
+          break;
+#endif
         default:
           /* Unknown state */
           break;
@@ -1893,7 +1918,7 @@ xdg_toplevel_configure (void                *data,
     }
 
   gdk_wayland_window_handle_configure_toplevel (window, width, height,
-                                                pending_state);
+                                                pending_state, suspended);
 }
 
 static void
@@ -1997,7 +2022,7 @@ zxdg_toplevel_v6_configure (void                    *data,
     }
 
   gdk_wayland_window_handle_configure_toplevel (window, width, height,
-                                                pending_state);
+                                                pending_state, FALSE);
 }
 
 static void
