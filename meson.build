@@ -25,7 +25,7 @@ epoxy_req          = '>= 1.4'
 cloudproviders_req = '>= 0.3.1'
 xkbcommon_req      = '>= 0.2.0'
 sysprof_req        = '>= 3.38.0'
-vulkan_req         = '>= 1.2'
+vulkan_req         = '>= 1.3'
 
 fs = import('fs')
 gnome = import('gnome')

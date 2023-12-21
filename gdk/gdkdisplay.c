@@ -1932,8 +1932,6 @@ gdk_display_init_dmabuf (GdkDisplay *self)
 #ifdef HAVE_DMABUF
   if (!GDK_DISPLAY_DEBUG_CHECK (self, DMABUF_DISABLE))
     {
-      gdk_display_prepare_gl (self, NULL);
-
 #ifdef HAVE_EGL
       gdk_display_add_dmabuf_downloader (self, gdk_dmabuf_get_egl_downloader (self, builder));
 #endif
