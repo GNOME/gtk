@@ -583,6 +583,16 @@ get_renderer_for_gl (GdkSurface *surface)
 }
 
 static GType
+get_renderer_for_vulkan (GdkSurface *surface)
+{
+#ifdef GDK_RENDERING_VULKAN
+  return GSK_TYPE_VULKAN_RENDERER;
+#else
+  return G_TYPE_INVALID;
+#endif
+}
+
+static GType
 get_renderer_fallback (GdkSurface *surface)
 {
   return GSK_TYPE_CAIRO_RENDERER;
@@ -595,6 +605,7 @@ static struct {
   { get_renderer_for_env_var },
   { get_renderer_for_backend },
   { get_renderer_for_gl },
+  { get_renderer_for_vulkan },
   { get_renderer_fallback },
 };
 
