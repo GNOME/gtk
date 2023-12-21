@@ -469,14 +469,15 @@ check_is_composited (GdkDisplay *display,
 }
 
 static GdkX11Monitor *
-find_monitor_by_name (GdkX11Display *x11_display, char *name)
+find_monitor_by_name (GdkX11Display *x11_display,
+          char *name)
 {
   int i;
 
   for (i = 0; i < x11_display->monitors->len; i++)
     {
       GdkX11Monitor *monitor = x11_display->monitors->pdata[i];
-      if (strcmp(monitor->name, name) == 0)
+      if (g_strcmp0 (monitor->name, name) == 0)
         return monitor;
     }
 
@@ -644,7 +645,7 @@ init_randr15 (GdkScreen *screen, gboolean *changed)
         #undef EDID_LENGTH
       }
 
-      name = gdk_x11_get_xatom_name_for_display(display, rr_monitors[i].name);
+      name = gdk_x11_get_xatom_name_for_display (display, rr_monitors[i].name);
       monitor = find_monitor_by_name (x11_display, name);
       if (monitor)
         monitor->remove = FALSE;
@@ -654,7 +655,7 @@ init_randr15 (GdkScreen *screen, gboolean *changed)
                                   "display", display,
                                   NULL);
           monitor->output = output;
-          monitor->name = name;
+          monitor->name = g_strdup (name);
           monitor->add = TRUE;
           g_ptr_array_add (x11_display->monitors, monitor);
         }
@@ -850,7 +851,7 @@ init_randr13 (GdkScreen *screen, gboolean *changed)
               monitor = g_object_new (gdk_x11_monitor_get_type (),
                                       "display", display,
                                       NULL);
-              monitor->name = name;
+              monitor->name = g_steal_pointer (&name);
               monitor->output = output;
               monitor->add = TRUE;
               g_ptr_array_add (x11_display->monitors, monitor);
@@ -921,6 +922,7 @@ init_randr13 (GdkScreen *screen, gboolean *changed)
           g_object_ref (monitor);
           g_ptr_array_remove (x11_display->monitors, monitor);
           gdk_display_monitor_removed (display, GDK_MONITOR (monitor));
+          free (monitor->name);
           g_object_unref (monitor);
           *changed = TRUE;
         }
@@ -994,7 +996,7 @@ init_no_multihead (GdkScreen *screen, gboolean *changed)
                               "display", display,
                               NULL);
       monitor->output = 0;
-      monitor->name = 0;
+      monitor->name = NULL;
       monitor->add = TRUE;
       g_ptr_array_add (x11_display->monitors, monitor);
     }
