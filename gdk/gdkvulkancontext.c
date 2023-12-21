@@ -1561,7 +1561,7 @@ gdk_display_create_vulkan_instance (GdkDisplay  *display,
                                                  .applicationVersion = 0,
                                                  .pEngineName = "GTK",
                                                  .engineVersion = VK_MAKE_VERSION (GDK_MAJOR_VERSION, GDK_MINOR_VERSION, GDK_MICRO_VERSION),
-                                                 .apiVersion = VK_API_VERSION_1_2
+                                                 .apiVersion = VK_API_VERSION_1_3
                                              },
                                              .enabledLayerCount = used_layers->len,
                                              .ppEnabledLayerNames = (const char * const *) used_layers->pdata,
