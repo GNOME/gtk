@@ -1,5 +1,65 @@
-Overview of Changes in 4.13.4, xx-xx-xxxx
+Overview of Changes in 4.13.4, 30-12-2023
 =========================================
+
+* GtkFileDialog:
+ - Return an error if no file is selected
+
+* GtkFileLauncher:
+ - Add a writable property
+
+* GtkFileChooserNative:
+ - Make closing portal file dialogs work
+
+* GtkEmojiChooser:
+ - Update Emoji data to CLDR v43
+
+* GtkStringList:
+ - Add item-type and n-itmes properties
+
+* Input:
+ - Respect GTK grabs on DND events
+ - Fix crossing event generation for enter/leave
+
+* Wayland:
+ - Avoid recreating wl_buffers needlessly
+ - Be more careful when loading cursors
+
+* Dmabuf:
+ - Add support for all Dmabuf formats
+ - Tweak the offload code a bit, allow offloading translucent
+   textures, as long as they are raised. Decline to offload
+   with fractional scales.
+
+* Accessibility:
+ - Add a few more accessible roles
+
+* GL:
+ - Use GLES by default
+ - Tweak GDK_DEBUG values. The new values are
+   gl-disable-gl, gl-disable-gles and gl-prefer-gl.
+   The gl-legacy and nograbs values have been dropped.
+
+* Css:
+ - Reduce memory consumption during theme loading
+ - Fix opacity handling
+
+* Theme:
+ - Refresh some of the included symbolic icons
+
+* MacOs:
+ - Silence secure-restore message
+
+* Build:
+ - Require Vulkan 1.3
+
+* Translation updates:
+ Chinese (China)
+ Czech
+ Hebrew
+ Icelandic
+ Polish
+ Russian
+
 
 Overview of Changes in 4.13.3, 15-11-2023
 =========================================
