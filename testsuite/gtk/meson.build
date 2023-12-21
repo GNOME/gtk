@@ -100,11 +100,16 @@ tests = [
   { 'name': 'treesorter' },
   { 'name': 'treeview' },
   { 'name': 'typename' },
-  { 'name': 'displayclose' },
   { 'name': 'revealer-size' },
   { 'name': 'widgetorder' },
   { 'name': 'widget-refcount' },
 ]
+
+if x11_enabled
+  tests += [
+    { 'name': 'displayclose' },
+  ]
+endif
 
 # Tests that test private apis and therefore are linked against libgtk-4.a
 internal_tests = [

@@ -13,9 +13,7 @@ tests = [
   { 'name': 'contentformats' },
   { 'name': 'contentserializer' },
   { 'name': 'cursor' },
-  { 'name': 'display' },
   { 'name': 'displaymanager' },
-  { 'name': 'encoding' },
   { 'name': 'glcontext' },
   { 'name': 'keysyms' },
   { 'name': 'memorytexture' },
@@ -26,6 +24,13 @@ tests = [
   { 'name': 'toplevellayout' },
   { 'name': 'popuplayout' },
 ]
+
+if x11_enabled
+  tests += [
+    { 'name': 'display' },
+    { 'name': 'encoding' },
+  ]
+endif
 
 foreach t : tests
   test_name = t.get('name')

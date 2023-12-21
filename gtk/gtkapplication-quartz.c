@@ -57,14 +57,12 @@ typedef struct
 
 G_DEFINE_TYPE (GtkApplicationImplQuartz, gtk_application_impl_quartz, GTK_TYPE_APPLICATION_IMPL)
 
-@interface GtkApplicationQuartzDelegate : NSObject
+@interface GtkApplicationQuartzDelegate : NSObject<NSApplicationDelegate>
 {
   GtkApplicationImplQuartz *quartz;
 }
 
 - (id)initWithImpl:(GtkApplicationImplQuartz*)impl;
-- (NSApplicationTerminateReply) applicationShouldTerminate:(NSApplication *)sender;
-- (void)application:(NSApplication *)theApplication openFiles:(NSArray *)filenames;
 @end
 
 @implementation GtkApplicationQuartzDelegate
@@ -113,6 +111,11 @@ G_DEFINE_TYPE (GtkApplicationImplQuartz, gtk_application_impl_quartz, GTK_TYPE_A
   g_free (files);
 
   [theApplication replyToOpenOrPrint:NSApplicationDelegateReplySuccess];
+}
+
+- (BOOL)applicationSupportsSecureRestorableState:(NSApplication *)app
+{
+  return YES;
 }
 @end
 
