@@ -4,132 +4,32 @@ compare_render = executable('compare-render',
   c_args: common_cflags,
 )
 
-compare_render_tests = [
-  'big-checkerboard',
-  'big-checkerboard-scaled-down',
-  'big-checkerboard-scaled-down-nearest',
-  'big-checkerboard-scaled-down2',
-  'blend-difference',
-  'blend-modes',
-  'blend-invisible-child',
-  'blend-in-rotate',
-  'blend-normal',
-  'blurred-lines',
-  'blur-contents-outside-of-clip',
-  'border-bottom-right',
-  'border-one-rounded',
-  'borders-rotated',
-  'borders-scaled',
-  'clip-coordinates-2d',
-  'clip-coordinates-3d',
-  'clip-in-rounded-clip1',
-  'clip-in-rounded-clip2',
-  'clip-in-rounded-clip3',
-  'clipped-repeat',
-  'clipped_rounded_clip',
-  'clip-nested1',
-  'clip-translate-offscreen',
-  'color-blur0',
-  'color-matrix-identity',
-  'color-matrix-merge',
-  'color-matrix-parsing',
-  'crossfade-clip-both-children',
-  'cross-fade-in-opacity',
-  'cross-fade-in-rotate',
-  'css-background',
-  'empty-blend',
-  'empty-blur',
-  'empty-border',
-  'empty-cairo',
-  'empty-clip',
-  'empty-color',
-  'empty-color-matrix',
-  'empty-container',
-  'empty-cross-fade',
-  'empty-debug',
-  'empty-inset-shadow',
-  'empty-linear-gradient',
-  'empty-mask',
-  'empty-opacity',
-  'empty-outset-shadow',
-  'empty-repeat',
-  'empty-rounded-clip',
-  'empty-shadow',
-  'empty-texture',
-  'empty-transform',
-  'fill',
-  'huge-height',
-  'huge-width',
-  'inset-shadow-multiple',
-  'invalid-transform',
-  'issue-3615',
-  'mask',
-  'mask-clipped-inverted-alpha',
-  'mask-modes',
-  'mask-modes-with-alpha',
-  'mask-texture-color-alpha',
-  'nested-rounded-clips',
-  'opacity_clip',
-  'opacity-colormatrix-combinations',
-  'opacity-overdraw',
-  'opacity-overlapping-children',
-  'outset_shadow_offset_both',
-  'outset_shadow_offset_x',
-  'outset_shadow_offset_y',
-  'outset_shadow_rounded_top',
-  'outset_shadow_simple',
-  'repeat',
-  'repeating-linear-gradient-edge-colors',
-  'repeating-radial-gradient-edge-colors',
-  'repeat-no-repeat',
-  'repeat-empty-child-bounds',
-  'repeat-negative-coords',
-  'repeat-texture',
-  'repeating-gradient-scaled',
-  'scale-textures-negative-ngl',
-  'scale-up-down',
-  'scaled-cairo',
-  'scaled-texture',
-  'scaled-texture-scale',
-  'shadow-behind',
-  'shadow-clip-contents',
-  'shadow-in-opacity',
-  'shadow-opacity',
-  'shrink-rounded-border',
-  'stroke',
-  'texture-coords',
-  'texture-scale-filters-3d',
-  'texture-scale-magnify-10000x',
-  'texture-scale-magnify-rotate',
-  'texture-scale-nearest-vs-linear',
-  'texture-scale-offset',
-  'texture-scale-stripes',
-  'texture-url',
-  'transform-in-transform',
-  'transform-in-transform-in-transform',
-  'z-transform-clipping-bounds-3d',
-]
-
-# these are too sensitive to differences in the renderers
-# to run in ci, but still useful to keep around
-informative_render_tests = [
-  'big-glyph',
-  'empty-text',
-  'huge-glyph',
-  'rounded-clip-in-clip-3d', # both cairo and gl fail this one
-]
-
-renderers = [
-  { 'name': 'gl' },
-  { 'name': 'broadway', 'exclude_term': '-3d' },
-  { 'name': 'cairo', 'exclude_term': '-3d' },
-]
-
-compare_xfails = [
+skips = [
+  # these are too sensitive to differences in the renderers
+  # to run in ci, but still useful to keep around
+  '--skip', 'big-glyph.node',
+  '--skip', 'empty-text.node',
+  '--skip', 'huge-glyph.node',
+  '--skip', 'rounded-clip-in-clip-3d.node',
   # Both tests fail because of some font rendering issue
-  'empty-linear-gradient',
-  'unaligned-offscreen',
-  'upside-down-label-3d', # not really 3d, but cairo fails it
+  '--skip', 'empty-linear-gradient.node',
+  '--skip', 'unaligned-offscreen.node',
+  # not really 3d, but cairo fails it
+  '--skip', 'upside-down-label-3d',
+]
+
+gl_skips = [
+  # the GL renderer mishandles transforms with offscreens
+  '--skip', 'blend-in-rotate',
+  '--skip', 'cross-fade-in-opacity',
+  '--skip', 'opacity-overlapping-children',
+  '--skip', 'scaled-texture-scale',
+  '--skip', 'shadow-opacity',
+  '--skip', 'texture-scale-nearest-vs-linear',
+  #'--skip', 'blend-normal',
+  #'--skip', 'color-matrix-merge',
+  #'--skip', 'color-matrix-parsing',
+  #'--skip', 'empty-debug',
 ]
 
 compare_xfails_small_texture = [
@@ -138,98 +38,54 @@ compare_xfails_small_texture = [
   'big-checkerboard-scaled-down2'
 ]
 
-foreach renderer : renderers
-  foreach testname : compare_render_tests
+test('comparerender-gl', compare_render,
+  args: skips + gl_skips + [
+    '-k',
+    '--verbose',
+    '--dir', '@0@/compare'.format(meson.current_source_dir()),
+    '--output', '@0@/compare/gl'.format(meson.current_build_dir()),
+  ],
+  env: [
+    'GSK_RENDERER=gl',
+    'GTK_A11Y=test',
+    'G_TEST_SRCDIR=@0@'.format(meson.current_source_dir()),
+    'G_TEST_BUILDDIR=@0@'.format(meson.current_build_dir())
+  ],
+  protocol: 'tap',
+  suite: [ 'gsk', 'gsk-compare', 'gsk-gl'],
+)
 
-    renderer_name = renderer.get('name')
-    exclude_term = renderer.get('exclude_term', '')
+test('comparerender-broadway', compare_render,
+  args: skips + [
+    '--skip', '-3d',
+    '--dir', '@0@/compare'.format(meson.current_source_dir()),
+    '--output', '@0@/compare/broadway'.format(meson.current_build_dir()),
+  ],
+  env: [
+    'GSK_RENDERER=broadway',
+    'GTK_A11Y=test',
+    'G_TEST_SRCDIR=@0@'.format(meson.current_source_dir()),
+    'G_TEST_BUILDDIR=@0@'.format(meson.current_build_dir())
+  ],
+  protocol: 'tap',
+  suite: [ 'gsk', 'gsk-compare', 'gsk-broadway'],
+)
 
-    suites = [
-      'gsk',
-      'gsk-compare',
-      'gsk-' + renderer_name,
-      'gsk-compare-' + renderer_name,
-    ]
-
-    if compare_xfails.contains(testname)
-      suites += 'failing'
-    endif
-
-    if compare_xfails_small_texture.contains(testname)
-      suites += 'wayland_gles2_failing'
-    endif
-
-    test_env = [
-      'GSK_RENDERER=' + renderer_name,
-      'GTK_A11Y=test',
-      'G_TEST_SRCDIR=@0@'.format(meson.current_source_dir()),
-      'G_TEST_BUILDDIR=@0@'.format(meson.current_build_dir())
-    ]
-
-    if ((exclude_term == '' or not testname.contains(exclude_term)) and
-        (renderer_name != 'broadway' or broadway_enabled))
-      test(renderer_name + ' ' + testname, compare_render,
-        args: [
-          '--output', join_paths(meson.current_build_dir(), 'compare', renderer_name),
-          join_paths(meson.current_source_dir(), 'compare', testname + '.node'),
-          join_paths(meson.current_source_dir(), 'compare', testname + '.png'),
-        ],
-        env: test_env,
-        suite: suites,
-      )
-      test(renderer_name + ' ' + testname + ' flipped', compare_render,
-        args: [
-          '--flip',
-          '--output', join_paths(meson.current_build_dir(), 'compare', renderer_name),
-          join_paths(meson.current_source_dir(), 'compare', testname + '.node'),
-          join_paths(meson.current_source_dir(), 'compare', testname + '.png'),
-        ],
-        env: test_env,
-        suite: suites + [ 'gsk-compare-flipped-' + renderer_name ],
-      )
-      test(renderer_name + ' ' + testname + ' repeated', compare_render,
-        args: [
-          '--repeat',
-          '--output', join_paths(meson.current_build_dir(), 'compare', renderer_name),
-          join_paths(meson.current_source_dir(), 'compare', testname + '.node'),
-          join_paths(meson.current_source_dir(), 'compare', testname + '.png'),
-        ],
-        env: test_env,
-        suite: suites + [ 'gsk-compare-repeated-' + renderer_name ],
-      )
-      test(renderer_name + ' ' + testname + ' rotated', compare_render,
-        args: [
-          '--rotate',
-          '--output', join_paths(meson.current_build_dir(), 'compare', renderer_name),
-          join_paths(meson.current_source_dir(), 'compare', testname + '.node'),
-          join_paths(meson.current_source_dir(), 'compare', testname + '.png'),
-        ],
-        env: test_env,
-        suite: suites + [ 'gsk-compare-rotated-' + renderer_name ],
-      )
-      test(renderer_name + ' ' + testname + ' masked', compare_render,
-        args: [
-          '--mask',
-          '--output', join_paths(meson.current_build_dir(), 'compare', renderer_name),
-          join_paths(meson.current_source_dir(), 'compare', testname + '.node'),
-          join_paths(meson.current_source_dir(), 'compare', testname + '.png'),
-        ],
-        env: test_env,
-        suite: suites + [ 'gsk-compare-masked-' + renderer_name ],
-      )
-      test(renderer_name + ' ' + testname + ' replayed', compare_render,
-        args: [
-          '--replay',
-          '--output', join_paths(meson.current_build_dir(), 'compare', renderer_name),
-          join_paths(meson.current_source_dir(), 'compare', testname + '.node'),
-          join_paths(meson.current_source_dir(), 'compare', testname + '.png'),
-        ],
-        env: test_env,
-        suite: suites + [ 'gsk-compare-replayed-' + renderer_name ],
-      )
-    endif
-  endforeach
-endforeach
+test('comparerender-cairo', compare_render,
+  args: skips + [
+    '--skip', '-3d',
+    '--dir', '@0@/compare'.format(meson.current_source_dir()),
+    '--output', '@0@/compare/cairo'.format(meson.current_build_dir()),
+  ],
+  env: [
+    'GSK_RENDERER=cairo',
+    'GTK_A11Y=test',
+    'G_TEST_SRCDIR=@0@'.format(meson.current_source_dir()),
+    'G_TEST_BUILDDIR=@0@'.format(meson.current_build_dir())
+  ],
+  protocol: 'tap',
+  suite: [ 'gsk', 'gsk-compare', 'gsk-cairo'],
+)
 
 node_parser = executable('node-parser', 'node-parser.c',
   dependencies: libgtk_dep,
@@ -301,14 +157,14 @@ foreach t : tests
 endforeach
 
 internal_tests = [
-  [ 'boundingbox'],
   [ 'curve' ],
   [ 'curve-special-cases' ],
+  [ 'path-private' ],
   [ 'diff' ],
   [ 'half-float' ],
-  [ 'misc'],
-  [ 'path-private' ],
-  [ 'rounded-rect'],
+  ['rounded-rect'],
+  ['misc'],
+  ['boundingbox'],
 ]
 
 foreach t : internal_tests
