@@ -122,7 +122,7 @@ main (int argc, char *argv[])
         continue;
 
       group = json_object_get_int_member (obj, "group");
-      name = json_object_get_string_member (obj, "annotation");
+      name = json_object_get_string_member (obj, "label");
 
       if (json_object_has_member (obj, "skins"))
         {
