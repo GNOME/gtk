@@ -165,12 +165,18 @@ typedef struct _GdkTouchpadEvent        GdkTouchpadEvent;
  * @GDK_PAD_RING: A tablet pad axis event from a "ring".
  * @GDK_PAD_STRIP: A tablet pad axis event from a "strip".
  * @GDK_PAD_GROUP_MODE: A tablet pad group mode change.
- * @GDK_TOUCHPAD_HOLD: A touchpad hold gesture event, the current state
- *   is determined by its phase field. Since: 4.6
  * @GDK_EVENT_LAST: marks the end of the GdkEventType enumeration.
  *
  * Specifies the type of the event.
  */
+/**
+  * GDK_TOUCHPAD_HOLD:
+  *
+  * A touchpad hold gesture event, the current state is determined by its phase
+  * field.
+  *
+  * Since: 4.6
+  */
 typedef enum
 {
   GDK_DELETE,

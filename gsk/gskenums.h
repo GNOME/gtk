@@ -49,14 +49,50 @@
  * @GSK_BLUR_NODE: A node that applies a blur
  * @GSK_DEBUG_NODE: Debug information that does not affect the rendering
  * @GSK_GL_SHADER_NODE: A node that uses OpenGL fragment shaders to render
- * @GSK_TEXTURE_SCALE_NODE: A node drawing a `GdkTexture` scaled and filtered. Since: 4.10
- * @GSK_MASK_NODE: A node that masks one child with another. Since: 4.10
- * @GSK_FILL_NODE: A node that fills a path. Since: 4.14
- * @GSK_STROKE_NODE: A node that strokes a path. Since: 4.14
- * @GSK_SUBSURFACE_NODE: A node possibly redirects part of the scene graph to a subsurface. Since: 4.14
  *
  * The type of a node determines what the node is rendering.
  */
+
+/**
+ * GSK_TEXTURE_SCALE_NODE:
+ *
+ * A node drawing a `GdkTexture` scaled and filtered.
+ *
+ * Since: 4.10
+ */
+
+/**
+ * GSK_MASK_NODE:
+ *
+ * A node that masks one child with another.
+ *
+ * Since: 4.10
+ */
+
+/**
+ * GSK_STROKE_NODE:
+ *
+ * A node that strokes a path.
+ *
+ * Since: 4.14
+ */
+
+/**
+ * GSK_FILL_NODE:
+ *
+ * A node that fills a path.
+ *
+ * Since: 4.14
+ */
+
+/**
+ * GSK_SUBSURFACE_NODE:
+ *
+ * A node that possibly redirects part of the scene graph to a subsurface.
+ *
+ * Since: 4.14
+ */
+
 typedef enum {
   GSK_NOT_A_RENDER_NODE = 0,
   GSK_CONTAINER_NODE,
