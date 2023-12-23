@@ -642,7 +642,7 @@ gdk_rgba_parser_parse (GtkCssParser *parser,
     {
       if (gtk_css_token_is_ident (token, "transparent"))
         {
-          *rgba = (GdkRGBA) { 0, 0, 0, 0 };
+          *rgba = GDK_RGBA_TRANSPARENT;
         }
       else if (gdk_rgba_parse (rgba, gtk_css_token_get_string (token)))
         {

@@ -34,6 +34,11 @@
     ((_GDK_RGBA_SELECT_COLOR(str, 2, 4) << 4) | _GDK_RGBA_SELECT_COLOR(str, 2, 5)) / 255., \
     ((sizeof(str) % 4 == 1) ? ((_GDK_RGBA_SELECT_COLOR(str, 3, 6) << 4) | _GDK_RGBA_SELECT_COLOR(str, 3, 7)) : 0xFF) / 255. })
 
+#define GDK_RGBA_INIT_ALPHA(rgba,opacity) ((GdkRGBA) { (rgba)->red, (rgba)->green, (rgba)->blue, (rgba)->alpha * (opacity) })
+
+#define GDK_RGBA_TRANSPARENT ((GdkRGBA) { 0, 0, 0, 0 })
+#define GDK_RGBA_BLACK ((GdkRGBA) { 0, 0, 0, 1 })
+#define GDK_RGBA_WHITE ((GdkRGBA) { 1, 1, 1, 1 })
 
 gboolean               gdk_rgba_parser_parse                    (GtkCssParser           *parser,
                                                                  GdkRGBA                *rgba);
