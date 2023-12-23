@@ -75,6 +75,7 @@ compare_render_tests = [
   'mask',
   'mask-clipped-inverted-alpha',
   'mask-modes',
+  'mask-modes-in-opacity',
   'mask-modes-with-alpha',
   'mask-texture-color-alpha',
   'nested-rounded-clips',
