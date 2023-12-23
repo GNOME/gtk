@@ -37,8 +37,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GTK+ master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2023-09-21 17:28+0000\n"
-"PO-Revision-Date: 2023-09-22 14:02+0200\n"
+"POT-Creation-Date: 2023-11-17 20:40+0000\n"
+"PO-Revision-Date: 2023-11-18 12:15+0100\n"
 "Last-Translator: Jürgen Benvenuti <gastornis@posteo.org>\n"
 "Language-Team: German <gnome-de@gnome.org>\n"
 "Language: de\n"
@@ -46,7 +46,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.3.1\n"
+"X-Generator: Poedit 3.4\n"
 
 #: gdk/broadway/gdkbroadway-server.c:135
 #, c-format
@@ -77,7 +77,7 @@ msgstr "Inhalt kann nicht als »%s« bereitgestellt werden"
 msgid "Cannot provide contents as %s"
 msgstr "Inhalt kann nicht als %s bereitgestellt werden"
 
-#: gdk/gdkdisplay.c:156 gdk/gdkglcontext.c:442
+#: gdk/gdkdisplay.c:156 gdk/gdkglcontext.c:443
 msgid "The current backend does not support OpenGL"
 msgstr "Aktuelles Backend unterstützt kein OpenGL"
 
@@ -141,33 +141,33 @@ msgstr "Ziehen-und-Ablegen aus anderen Anwendungen wird nicht unterstützt."
 msgid "No compatible formats to transfer contents."
 msgstr "Keine kompatiblen Formate zum Übertragen des Inhalts."
 
-#: gdk/gdkglcontext.c:401 gdk/x11/gdkglcontext-glx.c:642
+#: gdk/gdkglcontext.c:402 gdk/x11/gdkglcontext-glx.c:642
 msgid "No GL API allowed."
 msgstr "Keine GL-API erlaubt."
 
-#: gdk/gdkglcontext.c:425 gdk/win32/gdkglcontext-win32-wgl.c:387
+#: gdk/gdkglcontext.c:426 gdk/win32/gdkglcontext-win32-wgl.c:387
 #: gdk/win32/gdkglcontext-win32-wgl.c:530
 #: gdk/win32/gdkglcontext-win32-wgl.c:574 gdk/x11/gdkglcontext-glx.c:691
 msgid "Unable to create a GL context"
 msgstr "GL-Kontext kann nicht erstellt werden"
 
-#: gdk/gdkglcontext.c:1280
+#: gdk/gdkglcontext.c:1281
 msgid "Anything but OpenGL ES disabled via GDK_DEBUG"
 msgstr "Mit Ausnahme von OpenGL ES sind alle APIs durch GDK_DEBUG deaktiviert"
 
-#: gdk/gdkglcontext.c:1289
+#: gdk/gdkglcontext.c:1290
 #, c-format
 msgid "Application does not support %s API"
 msgstr "Anwendung unterstützt die API %s nicht"
 
 #. translators: This is about OpenGL backend names, like
 #. * "Trying to use X11 GLX, but EGL is already in use"
-#: gdk/gdkglcontext.c:1864
+#: gdk/gdkglcontext.c:1899
 #, c-format
 msgid "Trying to use %s, but %s is already in use"
 msgstr "Es wird versucht %s zu verwenden, aber %s ist bereits in Verwendung"
 
-#: gdk/gdktexture.c:528
+#: gdk/gdktexture.c:530
 msgid "Unknown image format."
 msgstr "Bildformat unbekannt."
 
@@ -2270,7 +2270,7 @@ msgstr "Eine Datei gleichen Namens ist bereits vorhanden"
 #: gtk/gtkmessagedialog.c:179 gtk/gtkmountoperation.c:608
 #: gtk/print/gtkpagesetupunixdialog.c:282 gtk/print/gtkprintbackend.c:638
 #: gtk/print/gtkprintunixdialog.c:682 gtk/print/gtkprintunixdialog.c:839
-#: gtk/gtkwindow.c:6242 gtk/ui/gtkappchooserdialog.ui:48
+#: gtk/gtkwindow.c:6233 gtk/ui/gtkappchooserdialog.ui:48
 #: gtk/ui/gtkassistant.ui:52 gtk/ui/gtkcolorchooserdialog.ui:36
 #: gtk/ui/gtkfontchooserdialog.ui:27
 msgid "_Cancel"
@@ -2488,6 +2488,7 @@ msgid "Yesterday"
 msgstr "Gestern"
 
 #: gtk/gtkfilechooserwidget.c:3823
+#, c-format
 msgid "%-e %b"
 msgstr "%-e. %b"
 
@@ -2797,7 +2798,7 @@ msgid "Play"
 msgstr "Wiedergabe"
 
 #: gtk/gtkmessagedialog.c:162 gtk/gtkmessagedialog.c:180
-#: gtk/print/gtkprintbackend.c:639 gtk/gtkwindow.c:6243
+#: gtk/print/gtkprintbackend.c:639 gtk/gtkwindow.c:6234
 msgid "_OK"
 msgstr "_OK"
 
@@ -3402,8 +3403,8 @@ msgstr ""
 
 #. window
 #: gtk/print/gtkprintoperation-portal.c:264
-#: gtk/print/gtkprintoperation-portal.c:584
-#: gtk/print/gtkprintoperation-portal.c:653 gtk/print/gtkprintunixdialog.c:3008
+#: gtk/print/gtkprintoperation-portal.c:594
+#: gtk/print/gtkprintoperation-portal.c:663 gtk/print/gtkprintunixdialog.c:3008
 msgid "Print"
 msgstr "Drucken"
 
@@ -3680,12 +3681,12 @@ msgstr "_Rückgängig"
 msgid "_Redo"
 msgstr "_Wiederholen"
 
-#: gtk/gtkwindow.c:6231
+#: gtk/gtkwindow.c:6222
 #, c-format
 msgid "Do you want to use GTK Inspector?"
 msgstr "Wollen Sie den GTK-Inspektor verwenden?"
 
-#: gtk/gtkwindow.c:6233
+#: gtk/gtkwindow.c:6224
 #, c-format
 msgid ""
 "GTK Inspector is an interactive debugger that lets you explore and modify "
@@ -3696,7 +3697,7 @@ msgstr ""
 "Interna einer beliebigen GTK-Anwendung zu untersuchen und zu verändern. "
 "Dabei kann die Anwendung unerwünscht arbeiten oder abstürzen."
 
-#: gtk/gtkwindow.c:6238
+#: gtk/gtkwindow.c:6229
 msgid "Don’t show this message again"
 msgstr "Diese Meldung nicht mehr anzeigen"
 
@@ -7267,7 +7268,7 @@ msgstr ""
 #: tools/gtk-builder-tool-enumerate.c:56 tools/gtk-builder-tool-preview.c:179
 #: tools/gtk-builder-tool-preview.c:180 tools/gtk-builder-tool-screenshot.c:360
 #: tools/gtk-builder-tool-simplify.c:2529 tools/gtk-builder-tool-validate.c:261
-#: tools/gtk-rendernode-tool-info.c:202 tools/gtk-rendernode-tool-show.c:102
+#: tools/gtk-rendernode-tool-info.c:202 tools/gtk-rendernode-tool-show.c:106
 msgid "FILE"
 msgstr "DATEI"
 
@@ -7299,7 +7300,7 @@ msgid "Use style from CSS file"
 msgstr "Stil aus CSS-Datei verwenden"
 
 #: tools/gtk-builder-tool-preview.c:187 tools/gtk-builder-tool-screenshot.c:370
-#: tools/gtk-builder-tool-validate.c:268 tools/gtk-rendernode-tool-show.c:109
+#: tools/gtk-builder-tool-validate.c:268 tools/gtk-rendernode-tool-show.c:113
 #: tools/gtk-rendernode-tool-render.c:204
 #, c-format
 msgid "Could not initialize windowing system\n"
@@ -7579,7 +7580,7 @@ msgstr "Ursprung: %g %g\n"
 msgid "Provide information about the render node."
 msgstr "Informationen zum Darstellungsknoten bereitstellen."
 
-#: tools/gtk-rendernode-tool-info.c:224 tools/gtk-rendernode-tool-show.c:130
+#: tools/gtk-rendernode-tool-info.c:224 tools/gtk-rendernode-tool-show.c:134
 #: tools/gtk-rendernode-tool-render.c:225
 #, c-format
 msgid "No .node file specified\n"
@@ -7590,11 +7591,15 @@ msgstr "Es wurde keine .node-Datei angegeben\n"
 msgid "Can only accept a single .node file\n"
 msgstr "Es wird nur eine einzelne .node-Datei akzeptiert\n"
 
-#: tools/gtk-rendernode-tool-show.c:117
+#: tools/gtk-rendernode-tool-show.c:105
+msgid "Don't add a titlebar"
+msgstr "Keine Titelleiste hinzufügen"
+
+#: tools/gtk-rendernode-tool-show.c:121
 msgid "Show the render node."
 msgstr "Darstellungsknoten anzeigen."
 
-#: tools/gtk-rendernode-tool-show.c:136
+#: tools/gtk-rendernode-tool-show.c:140
 #, c-format
 msgid "Can only preview a single .node file\n"
 msgstr "Es kann nur eine einzelne .node-Datei als Vorschau angezeigt werden\n"
