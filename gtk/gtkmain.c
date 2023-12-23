@@ -1219,7 +1219,7 @@ gtk_synthesize_crossing_events (GtkRoot         *toplevel,
         }
       else
         {
-          crossing.old_descendent = old_target ? crossing.new_descendent : NULL;
+          crossing.old_descendent = (old_target && ancestor) ? crossing.new_descendent : NULL;
         }
 
       check_crossing_invariants (widget, &crossing);

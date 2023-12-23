@@ -99,6 +99,13 @@
 #include "broadway/gdkbroadway.h"
 #endif
 
+#define GDK_ARRAY_ELEMENT_TYPE GtkWidget *
+#define GDK_ARRAY_TYPE_NAME GtkWidgetStack
+#define GDK_ARRAY_NAME gtk_widget_stack
+#define GDK_ARRAY_FREE_FUNC g_object_unref
+#define GDK_ARRAY_PREALLOC 16
+#include "gdk/gdkarrayimpl.c"
+
 /**
  * GtkWindow:
  *
@@ -4983,28 +4990,34 @@ gtk_window_move_focus (GtkWidget        *widget,
 }
 
 void
-check_crossing_invariants (GtkWidget *widget,
+check_crossing_invariants (GtkWidget       *widget,
                            GtkCrossingData *crossing)
 {
 #ifdef G_ENABLE_DEBUG
   if (crossing->old_target == NULL)
-    g_assert (crossing->old_descendent == NULL);
+    {
+      g_assert (crossing->old_descendent == NULL);
+    }
   else if (crossing->old_descendent == NULL)
-    g_assert (crossing->old_target == widget || !gtk_widget_is_ancestor (crossing->old_target, widget));
+    {
+      g_assert (crossing->old_target == widget || !gtk_widget_is_ancestor (crossing->old_target, widget));
+    }
   else
     {
       g_assert (gtk_widget_get_parent (crossing->old_descendent) == widget);
-      g_assert (gtk_widget_is_ancestor (crossing->old_descendent, widget));
       g_assert (crossing->old_target == crossing->old_descendent || gtk_widget_is_ancestor (crossing->old_target, crossing->old_descendent));
     }
   if (crossing->new_target == NULL)
-    g_assert (crossing->new_descendent == NULL);
+    {
+      g_assert (crossing->new_descendent == NULL);
+    }
   else if (crossing->new_descendent == NULL)
-    g_assert (crossing->new_target == widget || !gtk_widget_is_ancestor (crossing->new_target, widget));
+    {
+      g_assert (crossing->new_target == widget || !gtk_widget_is_ancestor (crossing->new_target, widget));
+    }
   else
     {
       g_assert (gtk_widget_get_parent (crossing->new_descendent) == widget);
-      g_assert (gtk_widget_is_ancestor (crossing->new_descendent, widget));
       g_assert (crossing->new_target == crossing->new_descendent || gtk_widget_is_ancestor (crossing->new_target, crossing->new_descendent));
     }
 #endif
@@ -5019,10 +5032,11 @@ synthesize_focus_change_events (GtkWindow       *window,
   GtkCrossingData crossing;
   GtkWidget *ancestor;
   GtkWidget *widget, *focus_child;
-  GList *list, *l;
   GtkStateFlags flags;
   GtkWidget *prev;
   gboolean seen_ancestor;
+  GtkWidgetStack focus_array;
+  int i;
 
   if (old_focus == new_focus)
     return;
@@ -5038,9 +5052,9 @@ synthesize_focus_change_events (GtkWindow       *window,
 
   crossing.type = type;
   crossing.mode = GDK_CROSSING_NORMAL;
-  crossing.old_target = old_focus;
+  crossing.old_target = old_focus ? g_object_ref (old_focus) : NULL;
   crossing.old_descendent = NULL;
-  crossing.new_target = new_focus;
+  crossing.new_target = new_focus ? g_object_ref (new_focus) : NULL;
   crossing.new_descendent = NULL;
 
   crossing.direction = GTK_CROSSING_OUT;
@@ -5084,18 +5098,19 @@ synthesize_focus_change_events (GtkWindow       *window,
   if (gtk_window_get_focus_visible (GTK_WINDOW (window)))
     flags |= GTK_STATE_FLAG_FOCUS_VISIBLE;
 
-  list = NULL;
-  for (widget = new_focus; widget; widget = gtk_widget_get_parent (widget))
-    list = g_list_prepend (list, widget);
+  gtk_widget_stack_init (&focus_array);
+  for (widget = new_focus; widget; widget = _gtk_widget_get_parent (widget))
+    gtk_widget_stack_append (&focus_array, g_object_ref (widget));
 
   crossing.direction = GTK_CROSSING_IN;
 
   seen_ancestor = FALSE;
-  for (l = list; l; l = l->next)
+  for (i = gtk_widget_stack_get_size (&focus_array) - 1; i >= 0; i--)
     {
-      widget = l->data;
-      if (l->next)
-        focus_child = l->next->data;
+      widget = gtk_widget_stack_get (&focus_array, i);
+
+      if (i > 0)
+        focus_child = gtk_widget_stack_get (&focus_array, i - 1);
       else
         focus_child = NULL;
 
@@ -5118,19 +5133,23 @@ synthesize_focus_change_events (GtkWindow       *window,
         }
       else
         {
-          crossing.old_descendent = old_focus ? focus_child : NULL;
+          crossing.old_descendent = (old_focus && ancestor) ? focus_child : NULL;
         }
+
       check_crossing_invariants (widget, &crossing);
       gtk_widget_handle_crossing (widget, &crossing, 0, 0);
 
-      if (l->next == NULL)
+      if (i == 0)
         flags = flags | GTK_STATE_FLAG_FOCUSED;
 
       gtk_widget_set_state_flags (widget, flags, FALSE);
       gtk_widget_set_focus_child (widget, focus_child);
     }
 
-  g_list_free (list);
+  g_clear_object (&crossing.old_target);
+  g_clear_object (&crossing.new_target);
+
+  gtk_widget_stack_clear (&focus_array);
 }
 
 /**
