@@ -343,30 +343,16 @@ main (int argc, char **argv)
       int width, height;
       graphene_rect_t node_bounds;
       graphene_rect_t bounds;
-      float offset_x, offset_y;
 
       gsk_render_node_get_bounds (node, &node_bounds);
-
-      if (node_bounds.size.width > 32768. || node_bounds.size.height > 32768.)
-        {
-          g_print ("Avoiding repeat test that exceeds cairo image surface dimensions");
-          exit (77);
-        }
 
       node_bounds.size.width = ceil (node_bounds.size.width);
       node_bounds.size.height = ceil (node_bounds.size.height);
 
-      bounds.origin.x = 0.;
-      bounds.origin.y = 0.;
-      bounds.size.width = 2 * node_bounds.size.width;
-      bounds.size.height = 2 * node_bounds.size.height;
-
-      offset_x = floorf (fmodf (node_bounds.origin.x, node_bounds.size.width));
-      offset_y = floorf (fmodf (node_bounds.origin.y, node_bounds.size.height));
-      if (offset_x < 0)
-        offset_x += node_bounds.size.width;
-      if (offset_y < 0)
-        offset_y += node_bounds.size.height;
+      bounds.size.width = MIN (1000, 3 * node_bounds.size.width);
+      bounds.size.height = MIN (1000, 3 * node_bounds.size.height);
+      bounds.origin.x = node_bounds.origin.x + floorf (node_bounds.size.width / 2);
+      bounds.origin.y = node_bounds.origin.y + floorf (node_bounds.size.height / 2);
 
       node2 = gsk_repeat_node_new (&bounds, node, &node_bounds);
       save_node (node2, node_file, "-repeated.node");
@@ -381,14 +367,18 @@ main (int argc, char **argv)
       pixbuf2 = gdk_pixbuf_new (gdk_pixbuf_get_colorspace (pixbuf),
                                 gdk_pixbuf_get_has_alpha (pixbuf),
                                 gdk_pixbuf_get_bits_per_sample (pixbuf),
-                                width * 3,
-                                height * 3);
+                                width * 4,
+                                height * 4);
 
-      for (int i = 0; i < 3; i++)
-        for (int j = 0; j < 3; j++)
-          gdk_pixbuf_copy_area (pixbuf, 0, 0, width, height, pixbuf2, i * width,  j * height);
+      for (int i = 0; i < 4; i++)
+        {
+          for (int j = 0; j < 4; j++)
+            {
+              gdk_pixbuf_copy_area (pixbuf, 0, 0, width, height, pixbuf2, i * width,  j * height);
+            }
+        }
 
-      pixbuf3 = gdk_pixbuf_new_subpixbuf (pixbuf2, width - (int) offset_x, height - (int) offset_y, 2 * width, 2 * height);
+      pixbuf3 = gdk_pixbuf_new_subpixbuf (pixbuf2, width / 2, height / 2, MIN (1000, 3 * width), MIN (1000, 3 * height));
 
       reference_texture = gdk_texture_new_for_pixbuf (pixbuf3);
 
