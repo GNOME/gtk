@@ -32,6 +32,8 @@
 #include "gskroundedrectprivate.h"
 #include "gsktransformprivate.h"
 
+#include "gdk/gdkrgbaprivate.h"
+
 /* A note about coordinate systems
  *
  * The rendering code keeps track of multiple coordinate systems to optimize rendering as
@@ -889,7 +891,7 @@ gsk_gpu_node_processor_blur_op (GskGpuNodeProcessor       *self,
                    &other.offset,
                    source_rect,
                    &direction,
-                   &(GdkRGBA) { 0, 0, 0, 0 });
+                   &GDK_RGBA_TRANSPARENT);
 
   gsk_gpu_render_pass_end_op (other.frame,
                               intermediate,
@@ -909,7 +911,7 @@ gsk_gpu_node_processor_blur_op (GskGpuNodeProcessor       *self,
                    &real_offset,
                    &intermediate_rect,
                    &direction,
-                   blur_color_or_null ? blur_color_or_null : &(GdkRGBA) { 0, 0, 0, 0 });
+                   blur_color_or_null ? blur_color_or_null : &GDK_RGBA_TRANSPARENT);
 
   g_object_unref (intermediate);
 }
@@ -1307,7 +1309,7 @@ gsk_gpu_node_processor_add_rounded_clip_node (GskGpuNodeProcessor *self,
                                 gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, &original_clip->bounds),
                                 original_clip,
                                 &self->offset,
-                                &(GdkRGBA) { rgba->red, rgba->green, rgba->blue, rgba->alpha * self->opacity });
+                                &GDK_RGBA_INIT_ALPHA (rgba, self->opacity));
       return;
     }
 
@@ -1682,7 +1684,7 @@ gsk_gpu_node_processor_add_color_node (GskGpuNodeProcessor *self,
                     gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, &node->bounds),
                     &node->bounds,
                     &self->offset,
-                    &(GdkRGBA) { color->red, color->green, color->blue, color->alpha * self->opacity });
+                    &GDK_RGBA_INIT_ALPHA (color, self->opacity));
 }
 
 static gboolean
@@ -2735,7 +2737,7 @@ gsk_gpu_node_processor_create_repeat_pattern (GskGpuPatternWriter *self,
   if (gsk_rect_is_empty (child_bounds))
     {
       gsk_gpu_pattern_writer_append_uint (self, GSK_GPU_PATTERN_COLOR);
-      gsk_gpu_pattern_writer_append_rgba (self, &(GdkRGBA) { 0, 0, 0, 0 });
+      gsk_gpu_pattern_writer_append_rgba (self, &GDK_RGBA_TRANSPARENT);
       return TRUE;
     }
 
@@ -2805,7 +2807,7 @@ gsk_gpu_node_processor_add_subsurface_node (GskGpuNodeProcessor *self,
         }
       gsk_gpu_clear_op (self->frame,
                         &int_rect,
-                        &(GdkRGBA) { 0, 0, 0, 0 });
+                        &GDK_RGBA_TRANSPARENT);
     }
 }
 
@@ -3129,7 +3131,7 @@ gsk_gpu_node_processor_create_node_pattern (GskGpuPatternWriter *self,
   if (image == NULL)
     {
       gsk_gpu_pattern_writer_append_uint (self, GSK_GPU_PATTERN_COLOR);
-      gsk_gpu_pattern_writer_append_rgba (self, &(GdkRGBA) { 0, 0, 0, 0 });
+      gsk_gpu_pattern_writer_append_rgba (self, &GDK_RGBA_TRANSPARENT);
       return TRUE;
     }
 
