@@ -197,8 +197,17 @@ static GdkPixbuf *
 apply_mask_to_pixbuf (GdkPixbuf *pixbuf)
 {
   GdkPixbuf *copy;
+  int width, height;
 
   copy = gdk_pixbuf_add_alpha (pixbuf, FALSE, 0, 0, 0);
+  width = gdk_pixbuf_get_width (pixbuf);
+  height = gdk_pixbuf_get_height (pixbuf);
+  if (width < 25 || height < 25)
+    {
+      GdkPixbuf *sub = gdk_pixbuf_new_subpixbuf (copy, 0, 0, MIN (width, 25), MIN (height, 25));
+      g_object_unref (copy);
+      copy = sub;
+    }
   for (unsigned int j = 0; j < gdk_pixbuf_get_height (copy); j++)
     {
       guint8 *row = gdk_pixbuf_get_pixels (copy) + j * gdk_pixbuf_get_rowstride (copy);

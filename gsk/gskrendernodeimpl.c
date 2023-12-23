@@ -6344,7 +6344,10 @@ gsk_mask_node_new (GskRenderNode *source,
   self->mask = gsk_render_node_ref (mask);
   self->mask_mode = mask_mode;
 
-  self->render_node.bounds = source->bounds;
+  if (mask_mode == GSK_MASK_MODE_INVERTED_ALPHA)
+    self->render_node.bounds = source->bounds;
+  else if (!gsk_rect_intersection (&source->bounds, &mask->bounds, &self->render_node.bounds))
+    self->render_node.bounds = *graphene_rect_zero ();
 
   self->render_node.preferred_depth = gsk_render_node_get_preferred_depth (source);
 
