@@ -1137,16 +1137,21 @@ gsk_gpu_node_processor_add_without_opacity (GskGpuNodeProcessor *self,
 }
 
 static void
-gsk_gpu_node_processor_add_clip_node (GskGpuNodeProcessor *self,
-                                      GskRenderNode       *node)
+gsk_gpu_node_processor_add_node_clipped (GskGpuNodeProcessor   *self,
+                                         GskRenderNode         *node,
+                                         const graphene_rect_t *clip_bounds)
 {
-  GskRenderNode *child;
   GskGpuClip old_clip;
   graphene_rect_t clip;
   cairo_rectangle_int_t scissor;
 
-  child = gsk_clip_node_get_child (node);
-  graphene_rect_offset_r (gsk_clip_node_get_clip (node),
+  if (gsk_rect_contains_rect (clip_bounds, &node->bounds))
+    {
+      gsk_gpu_node_processor_add_node (self, node);
+      return;
+    }
+
+  graphene_rect_offset_r (clip_bounds,
                           self->offset.x, self->offset.y,
                           &clip);
 
@@ -1177,7 +1182,7 @@ gsk_gpu_node_processor_add_clip_node (GskGpuNodeProcessor *self,
           self->scissor = scissor;
           self->pending_globals |= GSK_GPU_GLOBAL_SCISSOR | GSK_GPU_GLOBAL_CLIP;
 
-          gsk_gpu_node_processor_add_node (self, child);
+          gsk_gpu_node_processor_add_node (self, node);
 
           gsk_gpu_clip_init_copy (&self->clip, &old_clip);
           self->scissor = old_scissor;
@@ -1190,7 +1195,7 @@ gsk_gpu_node_processor_add_clip_node (GskGpuNodeProcessor *self,
 
           gsk_gpu_clip_init_copy (&self->clip, &old_clip);
 
-          gsk_gpu_node_processor_add_node (self, child);
+          gsk_gpu_node_processor_add_node (self, node);
 
           self->scissor = old_scissor;
           self->pending_globals |= GSK_GPU_GLOBAL_SCISSOR;
@@ -1210,13 +1215,13 @@ gsk_gpu_node_processor_add_clip_node (GskGpuNodeProcessor *self,
                                                                 0,
                                                                 0,
                                                                 NULL,
-                                                                child,
+                                                                node,
                                                                 &tex_rect);
               if (image)
                 {
                   gsk_gpu_node_processor_image_op (self,
                                                    image,
-                                                   &node->bounds,
+                                                   clip_bounds,
                                                    &tex_rect);
                   g_object_unref (image);
                 }
@@ -1232,11 +1237,20 @@ gsk_gpu_node_processor_add_clip_node (GskGpuNodeProcessor *self,
 
       self->pending_globals |= GSK_GPU_GLOBAL_CLIP;
 
-      gsk_gpu_node_processor_add_node (self, child);
+      gsk_gpu_node_processor_add_node (self, node);
 
       gsk_gpu_clip_init_copy (&self->clip, &old_clip);
       self->pending_globals |= GSK_GPU_GLOBAL_CLIP;
     }
+}
+
+static void
+gsk_gpu_node_processor_add_clip_node (GskGpuNodeProcessor *self,
+                                      GskRenderNode       *node)
+{
+  gsk_gpu_node_processor_add_node_clipped (self,
+                                           gsk_clip_node_get_child (node),
+                                           gsk_clip_node_get_clip (node));
 }
 
 static gboolean
@@ -2499,6 +2513,193 @@ gsk_gpu_node_processor_create_color_matrix_pattern (GskGpuPatternWriter *self,
   return TRUE;
 }
 
+static void
+gsk_gpu_node_processor_repeat_tile (GskGpuNodeProcessor    *self,
+                                    const graphene_rect_t  *rect,
+                                    float                   x,
+                                    float                   y,
+                                    GskRenderNode          *child,
+                                    const graphene_rect_t  *child_bounds)
+{
+  GskGpuImage *image;
+  graphene_rect_t clipped_child_bounds, offset_rect;
+  guint32 descriptor;
+
+  gsk_rect_init_offset (&offset_rect,
+                        rect,
+                        - x * child_bounds->size.width,
+                        - y * child_bounds->size.height);
+  if (!gsk_rect_intersection (&offset_rect, child_bounds, &clipped_child_bounds))
+    {
+      /* The math has gone wrong probably, someone should look at this. */
+      g_warn_if_reached ();
+      return;
+    }
+
+  /* Take advantage of caching machinery if we can.
+   * If the sizes don't match, we can't though, because we need to
+   * create the right sized image for tiling.
+   */
+  if (gsk_rect_equal (&child->bounds, &clipped_child_bounds))
+    {
+      graphene_rect_t tex_rect;
+      image = gsk_gpu_node_processor_get_node_as_image (self,
+                                                        0,
+                                                        GSK_GPU_IMAGE_STRAIGHT_ALPHA,
+                                                        &clipped_child_bounds,
+                                                        child,
+                                                        &tex_rect);
+      /* The math went wrong */
+      g_warn_if_fail (gsk_rect_equal (&tex_rect, &clipped_child_bounds));
+    }
+  else
+    {
+      GSK_DEBUG (FALLBACK, "Offscreening node '%s' for tiling", g_type_name_from_instance ((GTypeInstance *) child));
+      image = gsk_gpu_render_pass_op_offscreen (self->frame,
+                                                &self->scale,
+                                                &clipped_child_bounds,
+                                                child);
+    }
+
+  g_return_if_fail (image);
+
+  descriptor = gsk_gpu_node_processor_add_image (self, image, GSK_GPU_SAMPLER_REPEAT);
+
+  gsk_gpu_texture_op (self->frame,
+                      gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, rect),
+                      self->desc,
+                      descriptor,
+                      rect,
+                      &self->offset,
+                      &GRAPHENE_RECT_INIT (
+                          clipped_child_bounds.origin.x - x * child_bounds->size.width,
+                          clipped_child_bounds.origin.y - y * child_bounds->size.height,
+                          clipped_child_bounds.size.width,
+                          clipped_child_bounds.size.height
+                      ));
+
+  g_object_unref (image);
+}
+
+static void
+gsk_gpu_node_processor_add_repeat_node (GskGpuNodeProcessor *self,
+                                        GskRenderNode       *node)
+{
+  GskRenderNode *child;
+  const graphene_rect_t *child_bounds;
+  graphene_rect_t bounds;
+  float tile_left, tile_right, tile_top, tile_bottom;
+
+  child = gsk_repeat_node_get_child (node);
+  child_bounds = gsk_repeat_node_get_child_bounds (node);
+  if (gsk_rect_is_empty (child_bounds))
+    return;
+
+  gsk_gpu_node_processor_get_clip_bounds (self, &bounds);
+  if (!gsk_rect_intersection (&bounds, &node->bounds, &bounds))
+    return;
+
+  tile_left = (bounds.origin.x - child_bounds->origin.x) / child_bounds->size.width;
+  tile_right = (bounds.origin.x + bounds.size.width - child_bounds->origin.x) / child_bounds->size.width;
+  tile_top = (bounds.origin.y - child_bounds->origin.y) / child_bounds->size.height;
+  tile_bottom = (bounds.origin.y + bounds.size.height - child_bounds->origin.y) / child_bounds->size.height;
+
+  /* the 1st check tests that a tile fully fits into the bounds,
+   * the 2nd check is to catch the case where it fits exactly */
+  if (ceilf (tile_left) < floorf (tile_right) &&
+      bounds.size.width > child_bounds->size.width)
+    {
+      if (ceilf (tile_top) < floorf (tile_bottom) &&
+          bounds.size.height > child_bounds->size.height)
+        {
+          /* tile in both directions */
+          gsk_gpu_node_processor_repeat_tile (self,
+                                              &bounds,
+                                              ceilf (tile_left),
+                                              ceilf (tile_top),
+                                              child,
+                                              child_bounds);
+        }
+      else
+        {
+          /* tile horizontally, repeat vertically */
+          float y;
+          for (y = floorf (tile_top); y < ceilf (tile_bottom); y++)
+            {
+              float start_y = MAX (bounds.origin.y,
+                                   child_bounds->origin.y + y * child_bounds->size.height);
+              float end_y = MIN (bounds.origin.y + bounds.size.height,
+                                 child_bounds->origin.y + (y + 1) * child_bounds->size.height);
+              gsk_gpu_node_processor_repeat_tile (self,
+                                                  &GRAPHENE_RECT_INIT (
+                                                    bounds.origin.x,
+                                                    start_y,
+                                                    bounds.size.width,
+                                                    end_y - start_y
+                                                  ),
+                                                  ceilf (tile_left),
+                                                  y,
+                                                  child,
+                                                  child_bounds);
+            }
+        }
+    }
+  else if (ceilf (tile_top) < floorf (tile_bottom) &&
+           bounds.size.height > child_bounds->size.height)
+    {
+      /* repeat horizontally, tile vertically */
+      float x;
+      for (x = floorf (tile_left); x < ceilf (tile_right); x++)
+        {
+          float start_x = MAX (bounds.origin.x,
+                               child_bounds->origin.x + x * child_bounds->size.width);
+          float end_x = MIN (bounds.origin.x + bounds.size.width,
+                             child_bounds->origin.x + (x + 1) * child_bounds->size.width);
+          gsk_gpu_node_processor_repeat_tile (self,
+                                              &GRAPHENE_RECT_INIT (
+                                                start_x,
+                                                bounds.origin.y,
+                                                end_x - start_x,
+                                                bounds.size.height
+                                              ),
+                                              x,
+                                              ceilf (tile_top),
+                                              child,
+                                              child_bounds);
+        }
+    }
+  else
+    {
+      /* repeat in both directions */
+      graphene_point_t old_offset, offset;
+      graphene_rect_t clip_bounds;
+      float x, y;
+
+      old_offset = self->offset;
+
+      for (x = floorf (tile_left); x < ceilf (tile_right); x++)
+        {
+          offset.x = x * child_bounds->size.width;
+          for (y = floorf (tile_top); y < ceilf (tile_bottom); y++)
+            {
+              offset.y = y * child_bounds->size.height;
+              self->offset = GRAPHENE_POINT_INIT (old_offset.x + offset.x, old_offset.y + offset.y);
+              clip_bounds = GRAPHENE_RECT_INIT (bounds.origin.x - offset.x,
+                                                bounds.origin.y - offset.y,
+                                                bounds.size.width,
+                                                bounds.size.height);
+              if (!gsk_rect_intersection (&clip_bounds, child_bounds, &clip_bounds))
+                continue;
+              gsk_gpu_node_processor_add_node_clipped (self,
+                                                       child,
+                                                       &clip_bounds);
+            }
+        }
+
+      self->offset = old_offset;
+    }
+}
+
 static gboolean
 gsk_gpu_node_processor_create_repeat_pattern (GskGpuPatternWriter *self,
                                               GskRenderNode       *node)
@@ -2729,7 +2930,7 @@ static const struct
   [GSK_REPEAT_NODE] = {
     0,
     GSK_GPU_HANDLE_OPACITY,
-    gsk_gpu_node_processor_add_node_as_pattern,
+    gsk_gpu_node_processor_add_repeat_node,
     gsk_gpu_node_processor_create_repeat_pattern
   },
   [GSK_CLIP_NODE] = {
