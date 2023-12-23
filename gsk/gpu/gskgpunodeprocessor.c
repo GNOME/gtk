@@ -16,6 +16,7 @@
 #include "gskgpuframeprivate.h"
 #include "gskgpuglobalsopprivate.h"
 #include "gskgpuimageprivate.h"
+#include "gskgpumaskopprivate.h"
 #include "gskgpumipmapopprivate.h"
 #include "gskgpurenderpassopprivate.h"
 #include "gskgpuroundedcoloropprivate.h"
@@ -2235,6 +2236,100 @@ gsk_gpu_node_processor_create_cross_fade_pattern (GskGpuPatternWriter *self,
   return TRUE;
 }
 
+static void
+gsk_gpu_node_processor_add_mask_node (GskGpuNodeProcessor *self,
+                                      GskRenderNode       *node)
+{
+  GskRenderNode *source_child, *mask_child;
+  GskGpuImage *mask_image;
+  graphene_rect_t bounds, mask_rect;
+  guint32 mask_descriptor;
+  GskMaskMode mask_mode;
+
+  source_child = gsk_mask_node_get_source (node);
+  mask_child = gsk_mask_node_get_mask (node);
+  mask_mode = gsk_mask_node_get_mask_mode (node);
+
+  if ((gsk_gpu_node_processor_ubershader_instead_of_offscreen (self, mask_child) ||
+       (gsk_gpu_node_processor_ubershader_instead_of_offscreen (self, source_child) &&
+        gsk_render_node_get_node_type (source_child) != GSK_COLOR_NODE)) &&
+      gsk_gpu_node_processor_try_node_as_pattern (self, node))
+    return;
+
+  if (!gsk_gpu_node_processor_clip_node_bounds (self, node, &bounds))
+    return;
+
+  mask_image = gsk_gpu_node_processor_get_node_as_image (self,
+                                                         0,
+                                                         GSK_GPU_IMAGE_STRAIGHT_ALPHA,
+                                                         &bounds,
+                                                         mask_child,
+                                                         &mask_rect);
+  if (mask_image == NULL)
+    {
+      if (mask_mode == GSK_MASK_MODE_INVERTED_ALPHA)
+        gsk_gpu_node_processor_add_node (self, source_child);
+      return;
+    }
+  mask_descriptor = gsk_gpu_node_processor_add_image (self, mask_image, GSK_GPU_SAMPLER_DEFAULT);
+
+  if (gsk_render_node_get_node_type (source_child) == GSK_COLOR_NODE &&
+      mask_mode == GSK_MASK_MODE_ALPHA)
+    {
+      const GdkRGBA *rgba = gsk_color_node_get_color (source_child);
+      gsk_gpu_colorize_op (self->frame,
+                           gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, &node->bounds),
+                           self->desc,
+                           mask_descriptor,
+                           &node->bounds,
+                           &self->offset,
+                           &mask_rect,
+                           &GDK_RGBA_INIT_ALPHA (rgba, self->opacity));
+    }
+  else
+    {
+      GskGpuDescriptors *desc = self->desc;
+      GskGpuImage *source_image;
+      graphene_rect_t source_rect;
+      guint32 source_descriptor;
+
+      source_image = gsk_gpu_node_processor_get_node_as_image (self,
+                                                               0,
+                                                               GSK_GPU_IMAGE_STRAIGHT_ALPHA,
+                                                               &bounds,
+                                                               source_child,
+                                                               &source_rect);
+      if (source_image == NULL)
+        {
+          g_object_unref (mask_image);
+          return;
+        }
+      source_descriptor = gsk_gpu_node_processor_add_image (self, source_image, GSK_GPU_SAMPLER_DEFAULT);
+      if (desc != self->desc)
+        {
+          desc = self->desc;
+          mask_descriptor = gsk_gpu_node_processor_add_image (self, mask_image, GSK_GPU_SAMPLER_DEFAULT);
+          g_assert (desc == self->desc);
+        }
+
+      gsk_gpu_mask_op (self->frame,
+                       gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, &node->bounds),
+                       desc,
+                       &node->bounds,
+                       &self->offset,
+                       self->opacity,
+                       mask_mode,
+                       source_descriptor,
+                       &source_rect,
+                       mask_descriptor,
+                       &mask_rect);
+
+      g_object_unref (source_image);
+    }
+
+  g_object_unref (mask_image);
+}
+
 static gboolean
 gsk_gpu_node_processor_create_mask_pattern (GskGpuPatternWriter *self,
                                             GskRenderNode       *node)
@@ -3022,7 +3117,7 @@ static const struct
   [GSK_MASK_NODE] = {
     0,
     GSK_GPU_HANDLE_OPACITY,
-    gsk_gpu_node_processor_add_node_as_pattern,
+    gsk_gpu_node_processor_add_mask_node,
     gsk_gpu_node_processor_create_mask_pattern,
   },
   [GSK_FILL_NODE] = {
