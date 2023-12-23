@@ -23,6 +23,15 @@ gsk_rect_init_from_rect (graphene_rect_t       *r,
   gsk_rect_init (r, r1->origin.x, r1->origin.y, r1->size.width, r1->size.height);
 }
 
+static inline void
+gsk_rect_init_offset (graphene_rect_t       *r,
+                      const graphene_rect_t *src,
+                      float                  dx,
+                      float                  dy)
+{
+  gsk_rect_init (r, src->origin.x + dx, src->origin.y + dy, src->size.width, src->size.height);
+}
+
 static inline gboolean G_GNUC_PURE
 gsk_rect_contains_rect (const graphene_rect_t *r1,
                         const graphene_rect_t *r2)
