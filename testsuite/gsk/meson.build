@@ -94,6 +94,7 @@ compare_render_tests = [
   'repeat-empty-child-bounds',
   'repeat-negative-coords',
   'repeat-no-repeat',
+  'repeat-repeats',
   'repeat-texture',
   'repeating-gradient-scaled',
   'scale-textures-negative-ngl',
