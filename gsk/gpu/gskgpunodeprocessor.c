@@ -942,6 +942,20 @@ gsk_gpu_node_processor_add_fallback_node (GskGpuNodeProcessor *self,
                       &clipped_bounds);
 }
 
+static gboolean
+gsk_gpu_node_processor_repeat_node_can_ubershader (GskRenderNode *node)
+{
+  const graphene_rect_t *child_bounds;
+
+  child_bounds = gsk_repeat_node_get_child_bounds (node);
+
+  if (child_bounds->size.width > node->bounds.size.width ||
+      child_bounds->size.height > node->bounds.size.height)
+    return FALSE;
+
+  return TRUE;
+}
+
 /* To be called when code wants to run a shader which
  * would require rendering @node into an offscreen, but it
  * could also run an ubershader.
@@ -977,6 +991,9 @@ gsk_gpu_node_processor_ubershader_instead_of_offscreen (GskGpuNodeProcessor *sel
           node = gsk_subsurface_node_get_child (node);
           break;
 
+        case GSK_REPEAT_NODE:
+          return gsk_gpu_node_processor_repeat_node_can_ubershader (node);
+
         case GSK_COLOR_NODE:
         case GSK_LINEAR_GRADIENT_NODE:
         case GSK_REPEATING_LINEAR_GRADIENT_NODE:
@@ -984,7 +1001,6 @@ gsk_gpu_node_processor_ubershader_instead_of_offscreen (GskGpuNodeProcessor *sel
         case GSK_REPEATING_RADIAL_GRADIENT_NODE:
         case GSK_CONIC_GRADIENT_NODE:
         case GSK_ROUNDED_CLIP_NODE:
-        case GSK_REPEAT_NODE:
         case GSK_COLOR_MATRIX_NODE:
         case GSK_CROSS_FADE_NODE:
         case GSK_BLEND_NODE:
@@ -2595,6 +2611,11 @@ gsk_gpu_node_processor_add_repeat_node (GskGpuNodeProcessor *self,
   if (gsk_rect_is_empty (child_bounds))
     return;
 
+  if (gsk_gpu_node_processor_ubershader_instead_of_offscreen (self, child) &&
+      gsk_gpu_node_processor_repeat_node_can_ubershader (node) &&
+      gsk_gpu_node_processor_try_node_as_pattern (self, node))
+    return;
+
   gsk_gpu_node_processor_get_clip_bounds (self, &bounds);
   if (!gsk_rect_intersection (&bounds, &node->bounds, &bounds))
     return;
@@ -2717,6 +2738,9 @@ gsk_gpu_node_processor_create_repeat_pattern (GskGpuPatternWriter *self,
       gsk_gpu_pattern_writer_append_rgba (self, &(GdkRGBA) { 0, 0, 0, 0 });
       return TRUE;
     }
+
+  if (!gsk_gpu_node_processor_repeat_node_can_ubershader (node))
+    return FALSE;
 
   if (!gsk_gpu_pattern_writer_push_stack (self))
     return FALSE;
