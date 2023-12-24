@@ -9,8 +9,8 @@
 msgid ""
 msgstr "Project-Id-Version: gtk+ master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2023-09-21 16:21+0000\n"
-"PO-Revision-Date: 2023-09-21 10:00+0100\n"
+"POT-Creation-Date: 2023-12-23 22:01+0000\n"
+"PO-Revision-Date: 2023-12-24 10:00+0100\n"
 "Last-Translator: Asier Sarasua Garmendia <asiersarasua@ni.eus>\n"
 "Language-Team: Basque <librezale@librezale.eus>\n"
 "Language: eu\n"
@@ -47,7 +47,7 @@ msgstr "Ezin dira edukiak “%s” gisa hornitu"
 msgid "Cannot provide contents as %s"
 msgstr "Ezin dira edukiak %s gisa hornitu"
 
-#: gdk/gdkdisplay.c:156 gdk/gdkglcontext.c:442
+#: gdk/gdkdisplay.c:156 gdk/gdkglcontext.c:443
 msgid "The current backend does not support OpenGL"
 msgstr "Uneko motorrak ez du OpenGL onartzen"
 
@@ -111,33 +111,33 @@ msgstr "Ez da onartzen beste aplikazio batzuetatik arrastatu eta jaregitea."
 msgid "No compatible formats to transfer contents."
 msgstr "Ez dago formatu bateragarririk edukiak transferitzeko."
 
-#: gdk/gdkglcontext.c:401 gdk/x11/gdkglcontext-glx.c:642
+#: gdk/gdkglcontext.c:402 gdk/x11/gdkglcontext-glx.c:642
 msgid "No GL API allowed."
 msgstr "Ez da onartzen GL APIrik."
 
-#: gdk/gdkglcontext.c:425 gdk/win32/gdkglcontext-win32-wgl.c:387
+#: gdk/gdkglcontext.c:426 gdk/win32/gdkglcontext-win32-wgl.c:387
 #: gdk/win32/gdkglcontext-win32-wgl.c:530
 #: gdk/win32/gdkglcontext-win32-wgl.c:574 gdk/x11/gdkglcontext-glx.c:691
 msgid "Unable to create a GL context"
 msgstr "Ezin da GL testuingurua sortu"
 
-#: gdk/gdkglcontext.c:1280
+#: gdk/gdkglcontext.c:1281
 msgid "Anything but OpenGL ES disabled via GDK_DEBUG"
 msgstr "OpenGL ES salbu, beste guztia desgaituta GDK_DEBUG bidez"
 
-#: gdk/gdkglcontext.c:1289
+#: gdk/gdkglcontext.c:1290
 #, c-format
 msgid "Application does not support %s API"
 msgstr "Aplikazioak ez du %s APIa onartzen"
 
 #. translators: This is about OpenGL backend names, like
 #. * "Trying to use X11 GLX, but EGL is already in use"
-#: gdk/gdkglcontext.c:1864
+#: gdk/gdkglcontext.c:1899
 #, c-format
 msgid "Trying to use %s, but %s is already in use"
 msgstr "%s erabiltzen saiatzen, baina %s jadanik erabiltzen ari da"
 
-#: gdk/gdktexture.c:528
+#: gdk/gdktexture.c:530
 msgid "Unknown image format."
 msgstr "Irudi-formatu ezezaguna."
 
@@ -573,84 +573,84 @@ msgstr "Ez da transferentziarako formatu bateragarririk aurkitu"
 msgid "Failed to decode contents with mime-type of '%s'"
 msgstr "Huts egin du '%s' mime mota duten edukiak deskodetzeak"
 
-#: gdk/win32/gdkclipdrop-win32.c:721
+#: gdk/win32/gdkclipdrop-win32.c:719
 #, c-format
 msgid "Cannot claim clipboard ownership. OpenClipboard() timed out."
 msgstr "Ezin izan da arbelaren jabetza galdegin. OpenClipboard() denbora-mugara iritsi da."
 
-#: gdk/win32/gdkclipdrop-win32.c:731
+#: gdk/win32/gdkclipdrop-win32.c:729
 #, c-format
 msgid "Cannot claim clipboard ownership. Another process claimed it before us."
 msgstr "Ezin izan da arbelaren jabetza galdegin. Beste prozesu batek aldarrikatu du guk baino lehenago."
 
-#: gdk/win32/gdkclipdrop-win32.c:745
+#: gdk/win32/gdkclipdrop-win32.c:743
 #, c-format
 msgid "Cannot claim clipboard ownership. OpenClipboard() failed: 0x%lx."
 msgstr "Ezin izan da arbelaren jabetza galdegin. OpenClipboard() prozesuak huts egin du: 0x%lx."
 
-#: gdk/win32/gdkclipdrop-win32.c:757
+#: gdk/win32/gdkclipdrop-win32.c:755
 #, c-format
 msgid "Cannot claim clipboard ownership. EmptyClipboard() failed: 0x%lx."
 msgstr "Ezin izan da arbelaren jabetza galdegin. EmptyClipboard() prozesuak huts egin du: 0x%lx."
 
-#: gdk/win32/gdkclipdrop-win32.c:800
+#: gdk/win32/gdkclipdrop-win32.c:798
 #, c-format
 msgid "Cannot set clipboard data. OpenClipboard() timed out."
 msgstr "Ezin izan da arbelaren datuak ezarri. OpenClipboard() denbora-mugara iritsi da."
 
-#: gdk/win32/gdkclipdrop-win32.c:810 gdk/win32/gdkclipdrop-win32.c:841
+#: gdk/win32/gdkclipdrop-win32.c:808 gdk/win32/gdkclipdrop-win32.c:839
 #, c-format
 msgid "Cannot set clipboard data. Another process claimed clipboard ownership."
 msgstr "Ezin izan da arbelaren datuak ezarri. Beste prozesu batek galdegin du guk baino lehenago."
 
-#: gdk/win32/gdkclipdrop-win32.c:824
+#: gdk/win32/gdkclipdrop-win32.c:822
 #, c-format
 msgid "Cannot set clipboard data. OpenClipboard() failed: 0x%lx."
 msgstr "Ezin izan da arbelaren datuak ezarri. OpenClipboard() prozesuak huts egin du: 0x%lx."
 
-#: gdk/win32/gdkclipdrop-win32.c:876
+#: gdk/win32/gdkclipdrop-win32.c:874
 #, c-format
 msgid "Cannot get clipboard data. GlobalLock(0x%p) failed: 0x%lx."
 msgstr "Ezin izan da arbelaren datuak eskuratu. GlobalLock(0x%p) prozesuak huts egin du: 0x%lx."
 
-#: gdk/win32/gdkclipdrop-win32.c:887
+#: gdk/win32/gdkclipdrop-win32.c:885
 #, c-format
 msgid "Cannot get clipboard data. GlobalSize(0x%p) failed: 0x%lx."
 msgstr "Ezin izan da arbelaren datuak eskuratu. GlobalSize(0x%p) prozesuak huts egin du: 0x%lx."
 
-#: gdk/win32/gdkclipdrop-win32.c:900
+#: gdk/win32/gdkclipdrop-win32.c:898
 #, c-format
 msgid ""
 "Cannot get clipboard data. Failed to allocate %s bytes to store the data."
 msgstr "Ezin izan da arbelaren datuak eskuratu. Huts egin du %s byte esleitzeak datuak biltegiratzeko."
 
-#: gdk/win32/gdkclipdrop-win32.c:932
+#: gdk/win32/gdkclipdrop-win32.c:930
 #, c-format
 msgid "Cannot get clipboard data. OpenClipboard() timed out."
 msgstr "Ezin izan da arbelaren datuak eskuratu. OpenClipboard() denbora-mugara iritsi da."
 
-#: gdk/win32/gdkclipdrop-win32.c:942
+#: gdk/win32/gdkclipdrop-win32.c:940
 #, c-format
 msgid "Cannot get clipboard data. Clipboard ownership changed."
 msgstr "Ezin izan da arbelaren datuak eskuratu. Arbelaren jabetza aldatu da."
 
-#: gdk/win32/gdkclipdrop-win32.c:952
+#: gdk/win32/gdkclipdrop-win32.c:950
 #, c-format
 msgid ""
 "Cannot get clipboard data. Clipboard data changed before we could get it."
 msgstr "Ezin izan da arbelaren datuak eskuratu. Arbelaren jabetza aldatu da guk eskuratu baino lehen."
 
-#: gdk/win32/gdkclipdrop-win32.c:969
+#: gdk/win32/gdkclipdrop-win32.c:967
 #, c-format
 msgid "Cannot get clipboard data. OpenClipboard() failed: 0x%lx."
 msgstr "Ezin izan da arbelaren datuak eskuratu. OpenClipboard() prozesuak huts egin du: 0x%lx."
 
-#: gdk/win32/gdkclipdrop-win32.c:994
+#: gdk/win32/gdkclipdrop-win32.c:992
 #, c-format
 msgid "Cannot get clipboard data. No compatible transfer format found."
 msgstr "Ezin izan da arbelaren datuak eskuratu. Ez da transferentziarako formatu bateragarririk aurkitu."
 
-#: gdk/win32/gdkclipdrop-win32.c:1004
+#: gdk/win32/gdkclipdrop-win32.c:1002
 #, c-format
 msgid "Cannot get clipboard data. GetClipboardData() failed: 0x%lx."
 msgstr "Ezin izan da arbelaren datuak eskuratu. GetClipboardData() prozesuak huts egin du: 0x%lx."
@@ -2184,7 +2184,7 @@ msgstr "Izen hori duen fitxategia badago lehendik ere"
 #: gtk/gtkmessagedialog.c:179 gtk/gtkmountoperation.c:608
 #: gtk/print/gtkpagesetupunixdialog.c:282 gtk/print/gtkprintbackend.c:638
 #: gtk/print/gtkprintunixdialog.c:682 gtk/print/gtkprintunixdialog.c:839
-#: gtk/gtkwindow.c:6242 gtk/ui/gtkappchooserdialog.ui:48
+#: gtk/gtkwindow.c:6233 gtk/ui/gtkappchooserdialog.ui:48
 #: gtk/ui/gtkassistant.ui:52 gtk/ui/gtkcolorchooserdialog.ui:36
 #: gtk/ui/gtkfontchooserdialog.ui:27
 msgid "_Cancel"
@@ -2705,7 +2705,7 @@ msgid "Play"
 msgstr "Erreproduzitu"
 
 #: gtk/gtkmessagedialog.c:162 gtk/gtkmessagedialog.c:180
-#: gtk/print/gtkprintbackend.c:639 gtk/gtkwindow.c:6243
+#: gtk/print/gtkprintbackend.c:639 gtk/gtkwindow.c:6234
 msgid "_OK"
 msgstr "_Ados"
 
@@ -3303,8 +3303,8 @@ msgstr "Baliteke aldi baterako fitxategia ezin sortu izatea."
 
 #. window
 #: gtk/print/gtkprintoperation-portal.c:264
-#: gtk/print/gtkprintoperation-portal.c:584
-#: gtk/print/gtkprintoperation-portal.c:653 gtk/print/gtkprintunixdialog.c:3008
+#: gtk/print/gtkprintoperation-portal.c:594
+#: gtk/print/gtkprintoperation-portal.c:663 gtk/print/gtkprintunixdialog.c:3008
 msgid "Print"
 msgstr "Inprimatu"
 
@@ -3579,12 +3579,12 @@ msgstr "_Desegin"
 msgid "_Redo"
 msgstr "_Berregin"
 
-#: gtk/gtkwindow.c:6231
+#: gtk/gtkwindow.c:6222
 #, c-format
 msgid "Do you want to use GTK Inspector?"
 msgstr "Nahi duzu GTK ikuskatzailea erabili?"
 
-#: gtk/gtkwindow.c:6233
+#: gtk/gtkwindow.c:6224
 #, c-format
 msgid ""
 "GTK Inspector is an interactive debugger that lets you explore and modify "
@@ -3592,7 +3592,7 @@ msgid ""
 "break or crash."
 msgstr "GTK ikuskatzailea araztaile interaktiboa da, edozer GTk aplikazioren barnekoak arakatzea eta aldatzea baimentzen du. Hori erabiltzean aplikazioa hondatu edo kraskatu daiteke."
 
-#: gtk/gtkwindow.c:6238
+#: gtk/gtkwindow.c:6229
 msgid "Don’t show this message again"
 msgstr "Ez erakutsi mezu hau berriro"
 
@@ -7131,7 +7131,7 @@ msgstr "Erabilera:\n"
 #: tools/gtk-builder-tool-enumerate.c:56 tools/gtk-builder-tool-preview.c:179
 #: tools/gtk-builder-tool-preview.c:180 tools/gtk-builder-tool-screenshot.c:360
 #: tools/gtk-builder-tool-simplify.c:2529 tools/gtk-builder-tool-validate.c:261
-#: tools/gtk-rendernode-tool-info.c:202 tools/gtk-rendernode-tool-show.c:102
+#: tools/gtk-rendernode-tool-info.c:202 tools/gtk-rendernode-tool-show.c:106
 msgid "FILE"
 msgstr "FITXATEGIA"
 
@@ -7163,7 +7163,7 @@ msgid "Use style from CSS file"
 msgstr "Erabili CSS fitxategiko estiloa"
 
 #: tools/gtk-builder-tool-preview.c:187 tools/gtk-builder-tool-screenshot.c:370
-#: tools/gtk-builder-tool-validate.c:268 tools/gtk-rendernode-tool-show.c:109
+#: tools/gtk-builder-tool-validate.c:268 tools/gtk-rendernode-tool-show.c:113
 #: tools/gtk-rendernode-tool-render.c:204
 #, c-format
 msgid "Could not initialize windowing system\n"
@@ -7436,7 +7436,7 @@ msgstr "Jatorria: %g %g\n"
 msgid "Provide information about the render node."
 msgstr "Eman errendatze-nodoari buruzko informazioa."
 
-#: tools/gtk-rendernode-tool-info.c:224 tools/gtk-rendernode-tool-show.c:130
+#: tools/gtk-rendernode-tool-info.c:224 tools/gtk-rendernode-tool-show.c:134
 #: tools/gtk-rendernode-tool-render.c:225
 #, c-format
 msgid "No .node file specified\n"
@@ -7447,11 +7447,15 @@ msgstr "Ez da .node fitxategirik zehaztu\n"
 msgid "Can only accept a single .node file\n"
 msgstr ".node fitxategi bakarra soilik onartu daiteke\n"
 
-#: tools/gtk-rendernode-tool-show.c:117
+#: tools/gtk-rendernode-tool-show.c:105
+msgid "Don't add a titlebar"
+msgstr "Ez gehitu titulu-barra"
+
+#: tools/gtk-rendernode-tool-show.c:121
 msgid "Show the render node."
 msgstr "Erakutsi errendatze-nodoa."
 
-#: tools/gtk-rendernode-tool-show.c:136
+#: tools/gtk-rendernode-tool-show.c:140
 #, c-format
 msgid "Can only preview a single .node file\n"
 msgstr ".node fitxategi bakarra soilik aurreikusi daiteke\n"
