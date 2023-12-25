@@ -2004,6 +2004,7 @@ gdk_display_init_dmabuf (GdkDisplay *self)
 
 #ifdef HAVE_EGL
       gdk_display_add_dmabuf_downloader (self, gdk_dmabuf_get_egl_downloader (self, builder));
+      gdk_dmabuf_formats_builder_next_priority (builder);
 #endif
 
       gdk_dmabuf_formats_builder_add_formats (builder,
@@ -2016,6 +2017,29 @@ gdk_display_init_dmabuf (GdkDisplay *self)
   GDK_DISPLAY_DEBUG (self, DMABUF,
                      "Initialized support for %zu dmabuf formats",
                      gdk_dmabuf_formats_get_n_formats (self->dmabuf_formats));
+
+#ifdef G_ENABLE_DEBUG
+  if (GDK_DISPLAY_DEBUG_CHECK (self, DMABUF))
+    {
+      for (gsize i = 0; i < gdk_dmabuf_formats_get_n_formats (self->dmabuf_formats); i++)
+        {
+          guint32 fourcc;
+          guint64 modifier;
+
+          gdk_dmabuf_formats_get_format (self->dmabuf_formats, i, &fourcc, &modifier);
+
+          gdk_debug_message ("  %.4s:%#" G_GINT64_MODIFIER "x%s",
+                             (char *) &fourcc,
+                             modifier,
+                             gdk_dmabuf_formats_contains (self->egl_external_formats, fourcc, modifier) ? " (external)" : "");
+
+          if (i + 1 < gdk_dmabuf_formats_get_n_formats (self->dmabuf_formats) &&
+              gdk_dmabuf_formats_next_priority (self->dmabuf_formats, i) == i + 1)
+            gdk_debug_message ("------");
+
+        }
+    }
+#endif
 }
 
 /**
