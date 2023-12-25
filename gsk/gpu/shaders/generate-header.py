@@ -51,6 +51,9 @@ for match in matches:
     elif match['type'] == 'vec2':
         print(f"  float {match['name']}[2];")
         expected += 1
+    elif match['type'] == 'vec3':
+        print(f"  float {match['name']}[3];")
+        expected += 1
     elif match['type'] == 'vec4':
         print(f"  float {match['name']}[4];")
         expected += 1
@@ -100,6 +103,15 @@ for i, match in enumerate(matches):
   glVertexAttribDivisor ({match['location']}, 1);
   glVertexAttribPointer ({match['location']},
                          2,
+                         GL_FLOAT,
+                         GL_FALSE,
+                         sizeof ({struct_name}),
+                         GSIZE_TO_POINTER (offset + G_STRUCT_OFFSET({struct_name}, {match['name']})));''');
+    elif match['type'] == 'vec3':
+        print(f'''  glEnableVertexAttribArray ({match['location']});
+  glVertexAttribDivisor ({match['location']}, 1);
+  glVertexAttribPointer ({match['location']},
+                         3,
                          GL_FLOAT,
                          GL_FALSE,
                          sizeof ({struct_name}),
@@ -228,6 +240,13 @@ for match in matches:
         .location = {match['location']},
         .binding = 0,
         .format = VK_FORMAT_R32G32_SFLOAT,
+        .offset = G_STRUCT_OFFSET({struct_name}, {match['name']}),
+      }},''')
+    elif match['type'] == 'vec3':
+        print(f'''      {{
+        .location = {match['location']},
+        .binding = 0,
+        .format = VK_FORMAT_R32G32B32_SFLOAT,
         .offset = G_STRUCT_OFFSET({struct_name}, {match['name']}),
       }},''')
     elif match['type'] == 'vec4':
