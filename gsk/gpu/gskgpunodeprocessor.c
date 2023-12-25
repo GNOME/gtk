@@ -1992,28 +1992,35 @@ gsk_gpu_node_processor_add_linear_gradient_node (GskGpuNodeProcessor *self,
 {
   const graphene_point_t *start, *end;
   const GskColorStop *stops;
-  gsize i, n_stops;
+  GskColorStop real_stops[7];
+  GskGpuNodeProcessor other;
+  graphene_rect_t bounds;
+  gsize i, j, n_stops;
+  GskGpuImage *image;
+  int width, height;
+  guint32 descriptor;
+  gboolean repeating;
 
   start = gsk_linear_gradient_node_get_start (node);
   end = gsk_linear_gradient_node_get_end (node);
   stops = gsk_linear_gradient_node_get_color_stops (node, &n_stops);
+  repeating = gsk_render_node_get_node_type (node) == GSK_REPEATING_LINEAR_GRADIENT_NODE;
 
   if (n_stops < 8)
     {
-      GskColorStop opacity_stops[7];
-
       if (self->opacity < 1.0)
         {
           for (i = 0; i < n_stops; i++)
             {
-              opacity_stops[i].offset = stops[i].offset;
-              opacity_stops[i].color = GDK_RGBA_INIT_ALPHA (&stops[i].color, self->opacity);
+              real_stops[i].offset = stops[i].offset;
+              real_stops[i].color = GDK_RGBA_INIT_ALPHA (&stops[i].color, self->opacity);
             }
-          stops = opacity_stops;
+          stops = real_stops;
         }
 
       gsk_gpu_linear_gradient_op (self->frame,
                                   gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, &node->bounds),
+                                  repeating,
                                   &node->bounds,
                                   start,
                                   end,
@@ -2026,7 +2033,94 @@ gsk_gpu_node_processor_add_linear_gradient_node (GskGpuNodeProcessor *self,
   if (gsk_gpu_node_processor_try_node_as_pattern (self, node))
     return;
 
-  gsk_gpu_node_processor_add_fallback_node (self, node);
+  if (!gsk_gpu_node_processor_clip_node_bounds (self, node, &bounds))
+    return;
+  rect_round_to_pixels (&bounds, &self->scale, &bounds);
+
+  width = ceil (graphene_vec2_get_x (&self->scale) * bounds.size.width);
+  height = ceil (graphene_vec2_get_y (&self->scale) * bounds.size.height);
+
+  image = gsk_gpu_device_create_offscreen_image (gsk_gpu_frame_get_device (self->frame),
+                                                 FALSE,
+                                                 gsk_render_node_get_preferred_depth (node),
+                                                 width, height);
+  gsk_gpu_node_processor_init (&other,
+                               self->frame,
+                               NULL,
+                               image,
+                               &(cairo_rectangle_int_t) { 0, 0, width, height },
+                               &bounds);
+
+  gsk_gpu_render_pass_begin_op (other.frame,
+                                image,
+                                &(cairo_rectangle_int_t) { 0, 0, width, height },
+                                GSK_RENDER_PASS_OFFSCREEN);
+
+  other.blend = GSK_GPU_BLEND_ADD;
+  other.pending_globals |= GSK_GPU_GLOBAL_BLEND;
+  gsk_gpu_node_processor_sync_globals (&other, 0);
+  
+  for (i = 0; i < n_stops; /* happens inside the loop */)
+    {
+      if (i == 0)
+        {
+          real_stops[0].offset = stops[i].offset;
+          real_stops[0].color = GDK_RGBA_INIT_ALPHA (&stops[i].color, self->opacity);
+          i++;
+        }
+      else
+        {
+          real_stops[0].offset = stops[i-1].offset;
+          real_stops[0].color = GDK_RGBA_INIT_ALPHA (&stops[i-1].color, 0);
+        }
+      for (j = 1; j < 6 && i < n_stops; j++)
+        {
+          real_stops[j].offset = stops[i].offset;
+          real_stops[j].color = GDK_RGBA_INIT_ALPHA (&stops[i].color, self->opacity);
+          i++;
+        }
+      if (i == n_stops - 1)
+        {
+          g_assert (j == 6);
+          real_stops[j].offset = stops[i].offset;
+          real_stops[j].color = GDK_RGBA_INIT_ALPHA (&stops[i].color, self->opacity);
+          j++;
+          i++;
+        }
+      else if (i < n_stops)
+        {
+          real_stops[j].offset = stops[i].offset;
+          real_stops[j].color = GDK_RGBA_INIT_ALPHA (&stops[i].color, 0);
+          j++;
+        }
+      gsk_gpu_linear_gradient_op (other.frame,
+                                  gsk_gpu_clip_get_shader_clip (&self->clip, &other.offset, &node->bounds),
+                                  repeating,
+                                  &node->bounds,
+                                  start,
+                                  end,
+                                  &other.offset,
+                                  real_stops,
+                                  j);
+    }
+
+  gsk_gpu_render_pass_end_op (other.frame,
+                              image,
+                              GSK_RENDER_PASS_OFFSCREEN);
+
+  gsk_gpu_node_processor_finish (&other);
+
+  descriptor = gsk_gpu_node_processor_add_image (self, image, GSK_GPU_SAMPLER_DEFAULT);
+
+  gsk_gpu_texture_op (self->frame,
+                      gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, &bounds),
+                      self->desc,
+                      descriptor,
+                      &node->bounds,
+                      &self->offset,
+                      &bounds);
+
+  g_object_unref (image);
 }
 
 static gboolean
@@ -3042,7 +3136,7 @@ static const struct
   [GSK_REPEATING_LINEAR_GRADIENT_NODE] = {
     0,
     GSK_GPU_HANDLE_OPACITY,
-    gsk_gpu_node_processor_add_node_as_pattern,
+    gsk_gpu_node_processor_add_linear_gradient_node,
     gsk_gpu_node_processor_create_linear_gradient_pattern,
   },
   [GSK_RADIAL_GRADIENT_NODE] = {
