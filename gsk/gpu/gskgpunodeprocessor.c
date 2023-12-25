@@ -4,6 +4,7 @@
 
 #include "gskgpuborderopprivate.h"
 #include "gskgpuboxshadowopprivate.h"
+#include "gskgpublendopprivate.h"
 #include "gskgpublitopprivate.h"
 #include "gskgpubluropprivate.h"
 #include "gskgpuclearopprivate.h"
@@ -89,6 +90,7 @@ typedef enum {
   GSK_GPU_GLOBAL_SCALE   = (1 << 1),
   GSK_GPU_GLOBAL_CLIP    = (1 << 2),
   GSK_GPU_GLOBAL_SCISSOR = (1 << 3),
+  GSK_GPU_GLOBAL_BLEND   = (1 << 4),
 } GskGpuGlobals;
 
 struct _GskGpuNodeProcessor
@@ -96,6 +98,7 @@ struct _GskGpuNodeProcessor
   GskGpuFrame                   *frame;
   GskGpuDescriptors             *desc;
   cairo_rectangle_int_t          scissor;
+  GskGpuBlend                    blend;
   graphene_point_t               offset;
   graphene_matrix_t              projection;
   graphene_vec2_t                scale;
@@ -154,6 +157,7 @@ gsk_gpu_node_processor_init (GskGpuNodeProcessor         *self,
     self->desc = NULL;
 
   self->scissor = *clip;
+  self->blend = GSK_GPU_BLEND_OVER;
   gsk_gpu_clip_init_empty (&self->clip, &GRAPHENE_RECT_INIT (0, 0, viewport->size.width, viewport->size.height));
 
   self->modelview = NULL;
@@ -163,7 +167,7 @@ gsk_gpu_node_processor_init (GskGpuNodeProcessor         *self,
   self->offset = GRAPHENE_POINT_INIT (-viewport->origin.x,
                                       -viewport->origin.y);
   self->opacity = 1.0;
-  self->pending_globals = GSK_GPU_GLOBAL_MATRIX | GSK_GPU_GLOBAL_SCALE | GSK_GPU_GLOBAL_CLIP | GSK_GPU_GLOBAL_SCISSOR;
+  self->pending_globals = GSK_GPU_GLOBAL_MATRIX | GSK_GPU_GLOBAL_SCALE | GSK_GPU_GLOBAL_CLIP | GSK_GPU_GLOBAL_SCISSOR | GSK_GPU_GLOBAL_BLEND;
 }
 
 static void
@@ -196,6 +200,13 @@ gsk_gpu_node_processor_emit_scissor_op (GskGpuNodeProcessor *self)
 }
 
 static void
+gsk_gpu_node_processor_emit_blend_op (GskGpuNodeProcessor *self)
+{
+  gsk_gpu_blend_op (self->frame, self->blend);
+  self->pending_globals &= ~GSK_GPU_GLOBAL_BLEND;
+}
+
+static void
 gsk_gpu_node_processor_sync_globals (GskGpuNodeProcessor *self,
                                      GskGpuGlobals        ignored)
 {
@@ -207,6 +218,8 @@ gsk_gpu_node_processor_sync_globals (GskGpuNodeProcessor *self,
     gsk_gpu_node_processor_emit_globals_op (self);
   if (required & GSK_GPU_GLOBAL_SCISSOR)
     gsk_gpu_node_processor_emit_scissor_op (self);
+  if (required & GSK_GPU_GLOBAL_BLEND)
+    gsk_gpu_node_processor_emit_blend_op (self);
 }
 
 static guint32
@@ -3075,7 +3088,7 @@ static const struct
     NULL,
   },
   [GSK_TRANSFORM_NODE] = {
-    GSK_GPU_GLOBAL_MATRIX | GSK_GPU_GLOBAL_SCALE | GSK_GPU_GLOBAL_CLIP | GSK_GPU_GLOBAL_SCISSOR,
+    GSK_GPU_GLOBAL_MATRIX | GSK_GPU_GLOBAL_SCALE | GSK_GPU_GLOBAL_CLIP | GSK_GPU_GLOBAL_SCISSOR | GSK_GPU_GLOBAL_BLEND,
     GSK_GPU_HANDLE_OPACITY,
     gsk_gpu_node_processor_add_transform_node,
     gsk_gpu_node_processor_create_transform_pattern,
@@ -3099,13 +3112,13 @@ static const struct
     gsk_gpu_node_processor_create_repeat_pattern
   },
   [GSK_CLIP_NODE] = {
-    GSK_GPU_GLOBAL_MATRIX | GSK_GPU_GLOBAL_SCALE | GSK_GPU_GLOBAL_CLIP | GSK_GPU_GLOBAL_SCISSOR,
+    GSK_GPU_GLOBAL_MATRIX | GSK_GPU_GLOBAL_SCALE | GSK_GPU_GLOBAL_CLIP | GSK_GPU_GLOBAL_SCISSOR | GSK_GPU_GLOBAL_BLEND,
     GSK_GPU_HANDLE_OPACITY,
     gsk_gpu_node_processor_add_clip_node,
     gsk_gpu_node_processor_create_clip_pattern,
   },
   [GSK_ROUNDED_CLIP_NODE] = {
-    GSK_GPU_GLOBAL_MATRIX | GSK_GPU_GLOBAL_SCALE | GSK_GPU_GLOBAL_CLIP | GSK_GPU_GLOBAL_SCISSOR,
+    GSK_GPU_GLOBAL_MATRIX | GSK_GPU_GLOBAL_SCALE | GSK_GPU_GLOBAL_CLIP | GSK_GPU_GLOBAL_SCISSOR | GSK_GPU_GLOBAL_BLEND,
     GSK_GPU_HANDLE_OPACITY,
     gsk_gpu_node_processor_add_rounded_clip_node,
     NULL,
@@ -3141,7 +3154,7 @@ static const struct
     NULL,
   },
   [GSK_DEBUG_NODE] = {
-    GSK_GPU_GLOBAL_MATRIX | GSK_GPU_GLOBAL_SCALE | GSK_GPU_GLOBAL_CLIP | GSK_GPU_GLOBAL_SCISSOR,
+    GSK_GPU_GLOBAL_MATRIX | GSK_GPU_GLOBAL_SCALE | GSK_GPU_GLOBAL_CLIP | GSK_GPU_GLOBAL_SCISSOR | GSK_GPU_GLOBAL_BLEND,
     GSK_GPU_HANDLE_OPACITY,
     gsk_gpu_node_processor_add_debug_node,
     gsk_gpu_node_processor_create_debug_pattern,
@@ -3177,7 +3190,7 @@ static const struct
     NULL,
   },
   [GSK_SUBSURFACE_NODE] = {
-    GSK_GPU_GLOBAL_MATRIX | GSK_GPU_GLOBAL_SCALE | GSK_GPU_GLOBAL_CLIP | GSK_GPU_GLOBAL_SCISSOR,
+    GSK_GPU_GLOBAL_MATRIX | GSK_GPU_GLOBAL_SCALE | GSK_GPU_GLOBAL_CLIP | GSK_GPU_GLOBAL_SCISSOR | GSK_GPU_GLOBAL_BLEND,
     GSK_GPU_HANDLE_OPACITY,
     gsk_gpu_node_processor_add_subsurface_node,
     gsk_gpu_node_processor_create_subsurface_pattern,

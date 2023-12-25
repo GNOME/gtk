@@ -146,11 +146,7 @@ gsk_gl_frame_submit (GskGpuFrame  *frame,
 
   glEnable (GL_DEPTH_TEST);
   glDepthFunc (GL_LEQUAL);
-
-  /* Pre-multiplied alpha */
   glEnable (GL_BLEND);
-  glBlendFunc (GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
-  glBlendEquation (GL_FUNC_ADD);
 
   if (vertex_buffer)
     gsk_gl_buffer_bind (GSK_GL_BUFFER (vertex_buffer));

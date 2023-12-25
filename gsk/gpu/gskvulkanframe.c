@@ -316,6 +316,7 @@ gsk_vulkan_frame_submit (GskGpuFrame  *frame,
   state.vk_command_buffer = self->vk_command_buffer;
   state.vk_render_pass = VK_NULL_HANDLE;
   state.vk_format = VK_FORMAT_UNDEFINED;
+  state.blend = GSK_GPU_BLEND_OVER; /* should we have a BLEND_NONE? */
   state.desc = GSK_VULKAN_DESCRIPTORS (gsk_descriptors_get (&self->descriptors, 0));
   state.semaphores = &semaphores;
 

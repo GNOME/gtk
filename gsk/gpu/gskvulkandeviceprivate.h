@@ -74,6 +74,7 @@ VkPipeline              gsk_vulkan_device_get_vk_pipeline               (GskVulk
                                                                          GskVulkanPipelineLayout*layout,
                                                                          const GskGpuShaderOpClass *op_class,
                                                                          GskGpuShaderClip        clip,
+                                                                         GskGpuBlend             blend,
                                                                          VkFormat                format,
                                                                          VkRenderPass            render_pass);
 

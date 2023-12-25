@@ -66,6 +66,7 @@ gsk_gpu_shader_op_vk_command_n (GskGpuOp              *op,
                                                         gsk_vulkan_descriptors_get_pipeline_layout (state->desc),
                                                         shader_op_class,
                                                         self->clip,
+                                                        state->blend,
                                                         state->vk_format,
                                                         state->vk_render_pass));
 

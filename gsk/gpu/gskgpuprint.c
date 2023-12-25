@@ -23,6 +23,14 @@ gsk_gpu_print_op (GString    *string,
 }
 
 void
+gsk_gpu_print_string (GString    *string,
+                      const char *s)
+{
+  g_string_append (string, s);
+  g_string_append_c (string, ' ');
+}
+
+void
 gsk_gpu_print_rect (GString     *string,
                     const float  rect[4])
 {
