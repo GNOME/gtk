@@ -77,6 +77,7 @@ struct _PipelineCacheKey
 {
   const GskGpuShaderOpClass *op_class;
   GskGpuShaderClip clip;
+  GskGpuBlend blend;
   VkFormat format;
 };
 
@@ -112,7 +113,8 @@ pipeline_cache_key_hash (gconstpointer data)
 
   return GPOINTER_TO_UINT (key->op_class) ^
          key->clip ^
-         (key->format << 2);
+         (key->blend << 2) ^
+         (key->format << 4);
 }
 
 static gboolean
@@ -124,6 +126,7 @@ pipeline_cache_key_equal (gconstpointer a,
 
   return keya->op_class == keyb->op_class &&
          keya->clip == keyb->clip &&
+         keya->blend == keyb->blend &&
          keya->format == keyb->format;
 }
 
@@ -879,11 +882,41 @@ struct _GskVulkanShaderSpecialization
   guint32 n_buffers;
 };
 
+static VkPipelineColorBlendAttachmentState blend_attachment_states[2] = {
+  [GSK_GPU_BLEND_OVER] = {
+    .blendEnable = VK_TRUE,
+    .colorBlendOp = VK_BLEND_OP_ADD,
+    .srcColorBlendFactor = VK_BLEND_FACTOR_ONE,
+    .dstColorBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA,
+    .alphaBlendOp = VK_BLEND_OP_ADD,
+    .srcAlphaBlendFactor = VK_BLEND_FACTOR_ONE,
+    .dstAlphaBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA,
+    .colorWriteMask = VK_COLOR_COMPONENT_A_BIT
+                    | VK_COLOR_COMPONENT_R_BIT
+                    | VK_COLOR_COMPONENT_G_BIT
+                    | VK_COLOR_COMPONENT_B_BIT
+  },
+  [GSK_GPU_BLEND_ADD] = {
+    .blendEnable = VK_TRUE,
+    .colorBlendOp = VK_BLEND_OP_ADD,
+    .srcColorBlendFactor = VK_BLEND_FACTOR_ONE,
+    .dstColorBlendFactor = VK_BLEND_FACTOR_ONE,
+    .alphaBlendOp = VK_BLEND_OP_ADD,
+    .srcAlphaBlendFactor = VK_BLEND_FACTOR_ONE,
+    .dstAlphaBlendFactor = VK_BLEND_FACTOR_ONE,
+    .colorWriteMask = VK_COLOR_COMPONENT_A_BIT
+                    | VK_COLOR_COMPONENT_R_BIT
+                    | VK_COLOR_COMPONENT_G_BIT
+                    | VK_COLOR_COMPONENT_B_BIT
+  },
+};
+
 VkPipeline
 gsk_vulkan_device_get_vk_pipeline (GskVulkanDevice           *self,
                                    GskVulkanPipelineLayout   *layout,
                                    const GskGpuShaderOpClass *op_class,
                                    GskGpuShaderClip           clip,
+                                   GskGpuBlend                blend,
                                    VkFormat                   format,
                                    VkRenderPass               render_pass)
 {
@@ -896,6 +929,7 @@ gsk_vulkan_device_get_vk_pipeline (GskVulkanDevice           *self,
   cache_key = (PipelineCacheKey) {
     .op_class = op_class,
     .clip = clip,
+    .blend = blend,
     .format = format,
   };
   pipeline = g_hash_table_lookup (layout->pipeline_cache, &cache_key);
@@ -1035,21 +1069,7 @@ gsk_vulkan_device_get_vk_pipeline (GskVulkanDevice           *self,
                                                .pColorBlendState = &(VkPipelineColorBlendStateCreateInfo) {
                                                    .sType = VK_STRUCTURE_TYPE_PIPELINE_COLOR_BLEND_STATE_CREATE_INFO,
                                                    .attachmentCount = 1,
-                                                   .pAttachments = (VkPipelineColorBlendAttachmentState []) {
-                                                       {
-                                                           .blendEnable = VK_TRUE,
-                                                           .colorBlendOp = VK_BLEND_OP_ADD,
-                                                           .srcColorBlendFactor = VK_BLEND_FACTOR_ONE,
-                                                           .dstColorBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA,
-                                                           .alphaBlendOp = VK_BLEND_OP_ADD,
-                                                           .srcAlphaBlendFactor = VK_BLEND_FACTOR_ONE,
-                                                           .dstAlphaBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA,
-                                                           .colorWriteMask = VK_COLOR_COMPONENT_A_BIT
-                                                                           | VK_COLOR_COMPONENT_R_BIT
-                                                                           | VK_COLOR_COMPONENT_G_BIT
-                                                                           | VK_COLOR_COMPONENT_B_BIT
-                                                       },
-                                                   }
+                                                   .pAttachments = &blend_attachment_states[blend],
                                                },
                                                .pDynamicState = &(VkPipelineDynamicStateCreateInfo) {
                                                    .sType = VK_STRUCTURE_TYPE_PIPELINE_DYNAMIC_STATE_CREATE_INFO,
