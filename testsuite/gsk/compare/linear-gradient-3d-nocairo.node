@@ -1,5 +1,5 @@
 clip {
-  clip: 0 -25 50 50;
+  clip: 1 -25 50 50;
   child: transform {
     transform: perspective(100) rotateY(45);
     child: linear-gradient {
