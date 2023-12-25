@@ -111,6 +111,7 @@ compare_render_tests = [
   'shadow-behind',
   'shadow-clip-contents',
   'shadow-in-opacity',
+  'shadow-offset-to-outside-clip',
   'shadow-opacity',
   'shrink-rounded-border',
   'stroke',
