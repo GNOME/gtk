@@ -62,5 +62,16 @@ gsk_gpu_rgba_to_float (const GdkRGBA *rgba,
   values[3] = rgba->alpha;
 }
 
+#include <graphene.h>
+
+static inline void
+gsk_gpu_point_to_float (const graphene_point_t *point,
+                        const graphene_point_t *offset,
+                        float                   values[2])
+{
+  values[0] = point->x + offset->x;
+  values[1] = point->y + offset->y;
+}
+
 G_END_DECLS
 
