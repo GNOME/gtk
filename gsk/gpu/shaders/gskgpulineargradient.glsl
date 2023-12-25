@@ -12,6 +12,7 @@ PASS_FLAT(8) vec4 _color6;
 PASS_FLAT(9) vec4 _offsets0;
 PASS_FLAT(10) vec3 _offsets1;
 PASS(11) float _offset;
+PASS_FLAT(12) uint _repeating;
 
 
 #ifdef GSK_VERTEX_SHADER
@@ -27,6 +28,7 @@ IN(7) vec4 in_color5;
 IN(8) vec4 in_color6;
 IN(9) vec4 in_offsets0;
 IN(10) vec3 in_offsets1;
+IN(11) uint in_repeating;
 
 void
 run (out vec2 pos)
@@ -52,6 +54,7 @@ run (out vec2 pos)
   _color6 = in_color6;
   _offsets0 = in_offsets0;
   _offsets1 = in_offsets1;
+  _repeating = in_repeating;
 }
 
 #endif
@@ -107,7 +110,11 @@ run (out vec4 color,
      out vec2 position)
 {
   float alpha = rect_coverage (_rect, _pos);
-  float offset = clamp (_offset, 0.0, 1.0);
+  float offset;
+  if (_repeating != 0u)
+    offset = fract (_offset);
+  else
+    offset = clamp (_offset, 0.0, 1.0);
 
   color = alpha * color_premultiply (get_gradient_color (offset));
   position = _pos;

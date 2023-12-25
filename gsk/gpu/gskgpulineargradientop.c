@@ -26,7 +26,10 @@ gsk_gpu_linear_gradient_op_print (GskGpuOp    *op,
 
   instance = (GskGpuLineargradientInstance *) gsk_gpu_frame_get_vertex_data (frame, shader->vertex_offset);
 
-  gsk_gpu_print_op (string, indent, "linear-gradient");
+  if (instance->repeating)
+    gsk_gpu_print_op (string, indent, "repeating-linear-gradient");
+  else
+    gsk_gpu_print_op (string, indent, "linear-gradient");
   gsk_gpu_print_rect (string, instance->rect);
   gsk_gpu_print_newline (string);
 }
@@ -53,6 +56,7 @@ static const GskGpuShaderOpClass GSK_GPU_LINEAR_GRADIENT_OP_CLASS = {
 void
 gsk_gpu_linear_gradient_op (GskGpuFrame            *frame,
                             GskGpuShaderClip        clip,
+                            gboolean                repeating,
                             const graphene_rect_t  *rect,
                             const graphene_point_t *start,
                             const graphene_point_t *end,
@@ -88,4 +92,5 @@ gsk_gpu_linear_gradient_op (GskGpuFrame            *frame,
   instance->offsets0[1] = stops[1].offset;
   gsk_gpu_rgba_to_float (&stops[0].color, instance->color0);
   instance->offsets0[0] = stops[0].offset;
+  instance->repeating = repeating;
 }
