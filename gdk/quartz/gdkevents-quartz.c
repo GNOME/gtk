@@ -417,12 +417,13 @@ get_toplevel_from_ns_event (NSEvent *nsevent,
                             gint    *y)
 {
   GdkWindow *toplevel = NULL;
+  NSWindow* nswindow = [nsevent window];
 
-  if ([nsevent window])
+  if (nswindow)
     {
       GdkQuartzView *view;
       NSPoint point, view_point;
-      NSRect view_frame;
+      NSRect view_bounds;
 
       view = (GdkQuartzView *)[[nsevent window] contentView];
 
@@ -430,7 +431,7 @@ get_toplevel_from_ns_event (NSEvent *nsevent,
 
       point = [nsevent locationInWindow];
       view_point = [view convertPoint:point fromView:nil];
-      view_frame = [view frame];
+      view_bounds = [view bounds];
 
       /* NSEvents come in with a window set, but with window coordinates
        * out of window bounds. For e.g. moved events this is fine, we use
@@ -445,10 +446,10 @@ get_toplevel_from_ns_event (NSEvent *nsevent,
        * toplevel window below.
        */
       if (is_mouse_button_press_event ([nsevent type]) &&
-          (view_point.x < view_frame.origin.x ||
-           view_point.x >= view_frame.origin.x + view_frame.size.width ||
-           view_point.y < view_frame.origin.y ||
-           view_point.y >= view_frame.origin.y + view_frame.size.height))
+          (view_point.x < view_bounds.origin.x ||
+           view_point.x >= view_bounds.origin.x + view_bounds.size.width ||
+           view_point.y < view_bounds.origin.y ||
+           view_point.y >= view_bounds.origin.y + view_bounds.size.height))
         {
           toplevel = NULL;
 
@@ -468,27 +469,22 @@ get_toplevel_from_ns_event (NSEvent *nsevent,
            * fallback path, which could match the window that is
            * directly under the titlebar.
            */
-          if (view_point.y < 0 &&
-              view_point.x >= view_frame.origin.x &&
-              view_point.x < view_frame.origin.x + view_frame.size.width)
+          if (view_point.y > view_bounds.origin.y + view_bounds.size.height &&
+              view_point.x >= view_bounds.origin.x &&
+              view_point.x < view_bounds.origin.x + view_bounds.size.width)
             {
-              NSView *superview = [view superview];
-              if (superview)
+              NSRect window_frame = [view convertRect: [nswindow frame]
+                                     fromView: nil];
+              if (view_point.y <=
+                  view_bounds.origin.y + window_frame.size.height)
                 {
-                  NSRect superview_frame = [superview frame];
-                  int titlebar_height = superview_frame.size.height -
-                                        view_frame.size.height;
-
-                  if (titlebar_height > 0 && view_point.y >= -titlebar_height)
-                    {
-                      return NULL;
-                    }
+                  return NULL;
                 }
             }
         }
       else
         {
-	  *screen_point = [(GdkQuartzNSWindow*)[nsevent window] convertPointToScreen:point];
+	  *screen_point = [(GdkQuartzNSWindow*)nswindow convertPointToScreen:point];
           *x = point.x;
           *y = toplevel->height - point.y;
         }
