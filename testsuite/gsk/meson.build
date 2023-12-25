@@ -71,6 +71,7 @@ compare_render_tests = [
   'inset-shadow-multiple',
   'invalid-transform',
   'issue-3615',
+  'linear-gradient-nonorthogonal-scale',
   'linear-gradient-with-64-colorstops',
   'mask',
   'mask-clipped-inverted-alpha',
