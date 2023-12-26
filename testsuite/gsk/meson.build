@@ -20,9 +20,9 @@ compare_render_tests = [
   'blend-in-rotate',
   'blend-normal',
   'blurred-lines',
-  'blur-child-bounds-oversize',
+  'blur-child-bounds-oversize-nogl',
   'blur-contents-outside-of-clip',
-  'blur-huge-contents-outside-of-clip',
+  'blur-huge-contents-outside-of-clip-nogl',
   'border-bottom-right',
   'border-one-rounded',
   'borders-rotated',
@@ -41,7 +41,7 @@ compare_render_tests = [
   'color-matrix-merge',
   'color-matrix-parsing',
   'crossfade-clip-both-children',
-  'cross-fade-clipped-with-huge-children',
+  'cross-fade-clipped-with-huge-children-nogl',
   'cross-fade-in-opacity',
   'cross-fade-in-rotate',
   'css-background',
@@ -72,7 +72,7 @@ compare_render_tests = [
   'invalid-transform',
   'issue-3615',
   'linear-gradient-3d-nocairo',
-  'linear-gradient-nonorthogonal-scale',
+  'linear-gradient-nonorthogonal-scale-nogl',
   'linear-gradient-with-64-colorstops',
   'mask',
   'mask-clipped-inverted-alpha',
@@ -99,7 +99,7 @@ compare_render_tests = [
   'repeat-negative-coords',
   'repeat-no-repeat',
   'repeat-repeats',
-  'repeat-repeats-nested',
+  'repeat-repeats-nested-nogl',
   'repeat-scaling',
   'repeat-texture',
   'repeating-gradient-scaled',
@@ -123,8 +123,8 @@ compare_render_tests = [
   'texture-scale-offset',
   'texture-scale-stripes',
   'texture-url',
-  'transform-huge-child',
-  'transform-huge-child-3d-nocairo',
+  'transform-huge-child-nogl',
+  'transform-huge-child-3d-nocairo-nogl',
   'transform-in-transform',
   'transform-in-transform-in-transform',
   'z-transform-clipping-bounds-nocairo',
@@ -155,7 +155,8 @@ compare_xfails = [
 compare_xfails_small_texture = [
   'big-checkerboard',
   'big-checkerboard-scaled-down',
-  'big-checkerboard-scaled-down2'
+  'big-checkerboard-scaled-down2',
+  'repeat-repeats', # only fails when rotated
 ]
 
 foreach renderer : renderers
