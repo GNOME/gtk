@@ -200,18 +200,26 @@ apply_mask_to_pixbuf (GdkPixbuf *pixbuf)
   int width, height;
 
   copy = gdk_pixbuf_add_alpha (pixbuf, FALSE, 0, 0, 0);
-  width = gdk_pixbuf_get_width (pixbuf);
-  height = gdk_pixbuf_get_height (pixbuf);
+  width = MIN (1000, gdk_pixbuf_get_width (pixbuf));
+  height = MIN (1000, gdk_pixbuf_get_height (pixbuf));
   if (width < 25 || height < 25)
     {
-      GdkPixbuf *sub = gdk_pixbuf_new_subpixbuf (copy, 0, 0, MIN (width, 25), MIN (height, 25));
+      width = MIN (width, 25);
+      height = MIN (height, 25);
+    }
+  if (width != gdk_pixbuf_get_width (pixbuf) ||
+      height != gdk_pixbuf_get_height (pixbuf))
+    {
+      GdkPixbuf *sub;
+      sub = gdk_pixbuf_new_subpixbuf (copy, 0, 0, width, height);
       g_object_unref (copy);
       copy = sub;
     }
-  for (unsigned int j = 0; j < gdk_pixbuf_get_height (copy); j++)
+
+  for (unsigned int j = 0; j < height; j++)
     {
       guint8 *row = gdk_pixbuf_get_pixels (copy) + j * gdk_pixbuf_get_rowstride (copy);
-      for (unsigned int i = 0; i < gdk_pixbuf_get_width (copy); i++)
+      for (unsigned int i = 0; i < width; i++)
         {
           guint8 *p = row + i * 4;
           if ((i < 25 && j >= 25) || (i >= 25 && j < 25))
@@ -462,7 +470,11 @@ main (int argc, char **argv)
       if (bounds.size.width > 25 && bounds.size.height > 25)
         {
           nodes[1] = gsk_color_node_new (&(GdkRGBA){ 0, 0, 0, 1},
-                                         &GRAPHENE_RECT_INIT (bounds.origin.x + 25, bounds.origin.y + 25, bounds.size.width - 25, bounds.size.height - 25));
+                                         &GRAPHENE_RECT_INIT (
+                                             bounds.origin.x + 25,
+                                             bounds.origin.y + 25,
+                                             MIN (1000, bounds.size.width) - 25,
+                                             MIN (1000, bounds.size.height) - 25));
           mask_node = gsk_container_node_new (nodes, G_N_ELEMENTS (nodes));
           gsk_render_node_unref (nodes[0]);
           gsk_render_node_unref (nodes[1]);
