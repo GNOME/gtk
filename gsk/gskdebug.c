@@ -9,7 +9,7 @@ static const GdkDebugKey gsk_debug_keys[] = {
   { "vulkan", GSK_DEBUG_VULKAN, "Vulkan renderer information" },
   { "shaders", GSK_DEBUG_SHADERS, "Information about shaders" },
   { "surface", GSK_DEBUG_SURFACE, "Information about surfaces" },
-  { "fallback", GSK_DEBUG_FALLBACK, "Information about fallbacks" },
+  { "fallback", GSK_DEBUG_FALLBACK, "Information about fallback usage in renderers" },
   { "glyphcache", GSK_DEBUG_GLYPH_CACHE, "Information about glyph caching" },
   { "verbose", GSK_DEBUG_VERBOSE, "Print verbose output while rendering" },
   { "geometry", GSK_DEBUG_GEOMETRY, "Show borders (when using cairo)" },
