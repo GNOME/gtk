@@ -84,6 +84,8 @@ void            gsk_render_node_diff_impossible         (GskRenderNode          
 void            gsk_container_node_diff_with            (GskRenderNode               *container,
                                                          GskRenderNode               *other,
                                                          GskDiffData                 *data);
+void            gsk_render_node_draw_fallback           (GskRenderNode               *node,
+                                                         cairo_t                     *cr);
 
 bool            gsk_border_node_get_uniform             (const GskRenderNode         *self);
 bool            gsk_border_node_get_uniform_color       (const GskRenderNode         *self);
