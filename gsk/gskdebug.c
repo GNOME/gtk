@@ -5,7 +5,6 @@
 
 static const GdkDebugKey gsk_debug_keys[] = {
   { "renderer", GSK_DEBUG_RENDERER, "General renderer information" },
-  { "cairo", GSK_DEBUG_CAIRO, "Cairo renderer information" },
   { "opengl", GSK_DEBUG_OPENGL, "OpenGL renderer information" },
   { "vulkan", GSK_DEBUG_VULKAN, "Vulkan renderer information" },
   { "shaders", GSK_DEBUG_SHADERS, "Information about shaders" },
@@ -18,6 +17,7 @@ static const GdkDebugKey gsk_debug_keys[] = {
   { "sync", GSK_DEBUG_SYNC, "Sync after each frame" },
   { "staging", GSK_DEBUG_STAGING, "Use a staging image for texture upload (Vulkan only)" },
   { "offload-disable", GSK_DEBUG_OFFLOAD_DISABLE, "Disable graphics offload" },
+  { "cairo", GSK_DEBUG_CAIRO, "Overlay error pattern over Cairo drawing (finds fallbacks)" },
 };
 
 static guint gsk_debug_flags;

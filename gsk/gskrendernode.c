@@ -386,10 +386,6 @@ gsk_render_node_draw (GskRenderNode *node,
 
   cairo_save (cr);
 
-  GSK_DEBUG (CAIRO, "Rendering node %s[%p]",
-                    g_type_name_from_instance ((GTypeInstance *) node),
-                    node);
-
   GSK_RENDER_NODE_GET_CLASS (node)->draw (node, cr);
 
   if (GSK_DEBUG_CHECK (GEOMETRY))
@@ -409,6 +405,51 @@ gsk_render_node_draw (GskRenderNode *node,
       g_warning ("drawing failure for render node %s: %s",
                  g_type_name_from_instance ((GTypeInstance *) node),
                  cairo_status_to_string (cairo_status (cr)));
+    }
+}
+
+/*
+ * gsk_render_node_draw:
+ * @node: a `GskRenderNode`
+ * @cr: cairo context to draw to
+ *
+ * Like gsk_render_node_draw(), but will overlay an error pattern if
+ * GSK_DEBUG=cairo is enabled.
+ *
+ * This has 2 purposes:
+ * 1. It allows detecting fallbacks in GPU renderers.
+ * 2. Application code can use it to detect where it is using Cairo
+ *    drawing.
+ * 
+ * So use this function whenever either of those cases should be detected.
+ **/
+void
+gsk_render_node_draw_fallback (GskRenderNode *node,
+                               cairo_t       *cr)
+{
+  gsk_render_node_draw (node, cr);
+
+  if (GSK_DEBUG_CHECK (CAIRO))
+    {
+      /* pink, black
+       * black, pink
+       */
+      static const guint32 pixels[] = { 0xFFFF00CC, 0xFF000000,
+                                        0xFF000000, 0xFFFF00CC };
+      cairo_surface_t *surface;
+
+      cairo_save (cr);
+      surface = cairo_image_surface_create_for_data ((guchar *) pixels,
+                                                     CAIRO_FORMAT_ARGB32,
+                                                     2, 2,
+                                                     2 * 4);
+      cairo_scale (cr, 10, 10);
+      cairo_set_source_surface (cr, surface, 0, 0);
+      cairo_pattern_set_filter (cairo_get_source (cr), CAIRO_FILTER_NEAREST);
+      cairo_pattern_set_extend (cairo_get_source (cr), CAIRO_EXTEND_REPEAT);
+      cairo_paint_with_alpha (cr, 0.6);
+      cairo_surface_destroy (surface);
+      cairo_restore (cr);
     }
 }
 
