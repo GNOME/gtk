@@ -197,12 +197,29 @@ static GdkPixbuf *
 apply_mask_to_pixbuf (GdkPixbuf *pixbuf)
 {
   GdkPixbuf *copy;
+  int width, height;
 
   copy = gdk_pixbuf_add_alpha (pixbuf, FALSE, 0, 0, 0);
-  for (unsigned int j = 0; j < gdk_pixbuf_get_height (copy); j++)
+  width = MIN (1000, gdk_pixbuf_get_width (pixbuf));
+  height = MIN (1000, gdk_pixbuf_get_height (pixbuf));
+  if (width < 25 || height < 25)
+    {
+      width = MIN (width, 25);
+      height = MIN (height, 25);
+    }
+  if (width != gdk_pixbuf_get_width (pixbuf) ||
+      height != gdk_pixbuf_get_height (pixbuf))
+    {
+      GdkPixbuf *sub;
+      sub = gdk_pixbuf_new_subpixbuf (copy, 0, 0, width, height);
+      g_object_unref (copy);
+      copy = sub;
+    }
+
+  for (unsigned int j = 0; j < height; j++)
     {
       guint8 *row = gdk_pixbuf_get_pixels (copy) + j * gdk_pixbuf_get_rowstride (copy);
-      for (unsigned int i = 0; i < gdk_pixbuf_get_width (copy); i++)
+      for (unsigned int i = 0; i < width; i++)
         {
           guint8 *p = row + i * 4;
           if ((i < 25 && j >= 25) || (i >= 25 && j < 25))
@@ -343,27 +360,16 @@ main (int argc, char **argv)
       int width, height;
       graphene_rect_t node_bounds;
       graphene_rect_t bounds;
-      float offset_x, offset_y;
 
       gsk_render_node_get_bounds (node, &node_bounds);
 
-      if (node_bounds.size.width > 32768. || node_bounds.size.height > 32768.)
-        {
-          g_print ("Avoiding repeat test that exceeds cairo image surface dimensions");
-          exit (77);
-        }
+      node_bounds.size.width = ceil (node_bounds.size.width);
+      node_bounds.size.height = ceil (node_bounds.size.height);
 
-      bounds.origin.x = 0.;
-      bounds.origin.y = 0.;
-      bounds.size.width = 2 * node_bounds.size.width;
-      bounds.size.height = 2 * node_bounds.size.height;
-
-      offset_x = floorf (fmodf (node_bounds.origin.x, node_bounds.size.width));
-      offset_y = floorf (fmodf (node_bounds.origin.y, node_bounds.size.height));
-      if (offset_x < 0)
-        offset_x += node_bounds.size.width;
-      if (offset_y < 0)
-        offset_y += node_bounds.size.height;
+      bounds.size.width = MIN (1000, 3 * node_bounds.size.width);
+      bounds.size.height = MIN (1000, 3 * node_bounds.size.height);
+      bounds.origin.x = node_bounds.origin.x + floorf (node_bounds.size.width / 2);
+      bounds.origin.y = node_bounds.origin.y + floorf (node_bounds.size.height / 2);
 
       node2 = gsk_repeat_node_new (&bounds, node, &node_bounds);
       save_node (node2, node_file, "-repeated.node");
@@ -378,14 +384,18 @@ main (int argc, char **argv)
       pixbuf2 = gdk_pixbuf_new (gdk_pixbuf_get_colorspace (pixbuf),
                                 gdk_pixbuf_get_has_alpha (pixbuf),
                                 gdk_pixbuf_get_bits_per_sample (pixbuf),
-                                width * 3,
-                                height * 3);
+                                width * 4,
+                                height * 4);
 
-      for (int i = 0; i < 3; i++)
-        for (int j = 0; j < 3; j++)
-          gdk_pixbuf_copy_area (pixbuf, 0, 0, width, height, pixbuf2, i * width,  j * height);
+      for (int i = 0; i < 4; i++)
+        {
+          for (int j = 0; j < 4; j++)
+            {
+              gdk_pixbuf_copy_area (pixbuf, 0, 0, width, height, pixbuf2, i * width,  j * height);
+            }
+        }
 
-      pixbuf3 = gdk_pixbuf_new_subpixbuf (pixbuf2, width - (int) offset_x, height - (int) offset_y, 2 * width, 2 * height);
+      pixbuf3 = gdk_pixbuf_new_subpixbuf (pixbuf2, width / 2, height / 2, MIN (1000, 3 * width), MIN (1000, 3 * height));
 
       reference_texture = gdk_texture_new_for_pixbuf (pixbuf3);
 
@@ -460,7 +470,11 @@ main (int argc, char **argv)
       if (bounds.size.width > 25 && bounds.size.height > 25)
         {
           nodes[1] = gsk_color_node_new (&(GdkRGBA){ 0, 0, 0, 1},
-                                         &GRAPHENE_RECT_INIT (bounds.origin.x + 25, bounds.origin.y + 25, bounds.size.width - 25, bounds.size.height - 25));
+                                         &GRAPHENE_RECT_INIT (
+                                             bounds.origin.x + 25,
+                                             bounds.origin.y + 25,
+                                             MIN (1000, bounds.size.width) - 25,
+                                             MIN (1000, bounds.size.height) - 25));
           mask_node = gsk_container_node_new (nodes, G_N_ELEMENTS (nodes));
           gsk_render_node_unref (nodes[0]);
           gsk_render_node_unref (nodes[1]);

@@ -20,13 +20,15 @@ compare_render_tests = [
   'blend-in-rotate',
   'blend-normal',
   'blurred-lines',
+  'blur-child-bounds-oversize-nogl',
   'blur-contents-outside-of-clip',
+  'blur-huge-contents-outside-of-clip-nogl',
   'border-bottom-right',
   'border-one-rounded',
   'borders-rotated',
   'borders-scaled',
   'clip-coordinates-2d',
-  'clip-coordinates-3d',
+  'clip-coordinates-nocairo',
   'clip-in-rounded-clip1',
   'clip-in-rounded-clip2',
   'clip-in-rounded-clip3',
@@ -39,6 +41,7 @@ compare_render_tests = [
   'color-matrix-merge',
   'color-matrix-parsing',
   'crossfade-clip-both-children',
+  'cross-fade-clipped-with-huge-children-nogl',
   'cross-fade-in-opacity',
   'cross-fade-in-rotate',
   'css-background',
@@ -68,9 +71,13 @@ compare_render_tests = [
   'inset-shadow-multiple',
   'invalid-transform',
   'issue-3615',
+  'linear-gradient-3d-nocairo',
+  'linear-gradient-nonorthogonal-scale-nogl',
+  'linear-gradient-with-64-colorstops',
   'mask',
   'mask-clipped-inverted-alpha',
   'mask-modes',
+  'mask-modes-in-opacity',
   'mask-modes-with-alpha',
   'mask-texture-color-alpha',
   'nested-rounded-clips',
@@ -86,9 +93,14 @@ compare_render_tests = [
   'repeat',
   'repeating-linear-gradient-edge-colors',
   'repeating-radial-gradient-edge-colors',
-  'repeat-no-repeat',
+  'repeat-child-bounds',
   'repeat-empty-child-bounds',
+  'repeat-huge-overdraw',
   'repeat-negative-coords',
+  'repeat-no-repeat',
+  'repeat-repeats',
+  'repeat-repeats-nested-nogl',
+  'repeat-scaling',
   'repeat-texture',
   'repeating-gradient-scaled',
   'scale-textures-negative-ngl',
@@ -99,20 +111,23 @@ compare_render_tests = [
   'shadow-behind',
   'shadow-clip-contents',
   'shadow-in-opacity',
+  'shadow-offset-to-outside-clip',
   'shadow-opacity',
   'shrink-rounded-border',
   'stroke',
   'texture-coords',
-  'texture-scale-filters-3d',
+  'texture-scale-filters-nocairo',
   'texture-scale-magnify-10000x',
   'texture-scale-magnify-rotate',
   'texture-scale-nearest-vs-linear',
   'texture-scale-offset',
   'texture-scale-stripes',
   'texture-url',
+  'transform-huge-child-nogl',
+  'transform-huge-child-3d-nocairo-nogl',
   'transform-in-transform',
   'transform-in-transform-in-transform',
-  'z-transform-clipping-bounds-3d',
+  'z-transform-clipping-bounds-nocairo',
 ]
 
 # these are too sensitive to differences in the renderers
@@ -121,33 +136,34 @@ informative_render_tests = [
   'big-glyph',
   'empty-text',
   'huge-glyph',
-  'rounded-clip-in-clip-3d', # both cairo and gl fail this one
+  'rounded-clip-in-clip-nocairo', # both cairo and gl fail this one
 ]
 
 renderers = [
   { 'name': 'gl' },
-  { 'name': 'broadway', 'exclude_term': '-3d' },
-  { 'name': 'cairo', 'exclude_term': '-3d' },
+  { 'name': 'broadway' },
+  { 'name': 'cairo' },
 ]
 
 compare_xfails = [
   # Both tests fail because of some font rendering issue
   'empty-linear-gradient',
   'unaligned-offscreen',
-  'upside-down-label-3d', # not really 3d, but cairo fails it
+  'upside-down-label-nocairo',
 ]
 
 compare_xfails_small_texture = [
   'big-checkerboard',
   'big-checkerboard-scaled-down',
-  'big-checkerboard-scaled-down2'
+  'big-checkerboard-scaled-down2',
+  'repeat-repeats', # only fails when rotated
 ]
 
 foreach renderer : renderers
   foreach testname : compare_render_tests
 
     renderer_name = renderer.get('name')
-    exclude_term = renderer.get('exclude_term', '')
+    exclude_term = '-no' + renderer_name
 
     suites = [
       'gsk',
@@ -171,7 +187,7 @@ foreach renderer : renderers
       'G_TEST_BUILDDIR=@0@'.format(meson.current_build_dir())
     ]
 
-    if ((exclude_term == '' or not testname.contains(exclude_term)) and
+    if ((not testname.contains(exclude_term)) and
         (renderer_name != 'broadway' or broadway_enabled))
       test(renderer_name + ' ' + testname, compare_render,
         args: [

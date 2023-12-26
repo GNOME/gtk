@@ -252,7 +252,7 @@ GDK_AVAILABLE_IN_ALL
 gsize                    gsk_linear_gradient_node_get_n_color_stops (const GskRenderNode      *node) G_GNUC_PURE;
 GDK_AVAILABLE_IN_ALL
 const GskColorStop *     gsk_linear_gradient_node_get_color_stops   (const GskRenderNode      *node,
-                                                                     gsize                    *n_stops) G_GNUC_PURE;
+                                                                     gsize                    *n_stops);
 
 GDK_AVAILABLE_IN_ALL
 GType                   gsk_repeating_linear_gradient_node_get_type (void) G_GNUC_CONST;
@@ -281,7 +281,7 @@ GDK_AVAILABLE_IN_ALL
 gsize                    gsk_conic_gradient_node_get_n_color_stops  (const GskRenderNode      *node) G_GNUC_PURE;
 GDK_AVAILABLE_IN_ALL
 const GskColorStop *     gsk_conic_gradient_node_get_color_stops    (const GskRenderNode      *node,
-                                                                     gsize                    *n_stops) G_GNUC_PURE;
+                                                                     gsize                    *n_stops);
 
 GDK_AVAILABLE_IN_ALL
 GType                   gsk_radial_gradient_node_get_type (void) G_GNUC_CONST;
@@ -298,7 +298,7 @@ GDK_AVAILABLE_IN_ALL
 gsize                   gsk_radial_gradient_node_get_n_color_stops (const GskRenderNode *node) G_GNUC_PURE;
 GDK_AVAILABLE_IN_ALL
 const GskColorStop *    gsk_radial_gradient_node_get_color_stops   (const GskRenderNode *node,
-                                                                    gsize               *n_stops) G_GNUC_PURE;
+                                                                    gsize               *n_stops);
 GDK_AVAILABLE_IN_ALL
 const graphene_point_t *gsk_radial_gradient_node_get_center        (const GskRenderNode *node) G_GNUC_PURE;
 GDK_AVAILABLE_IN_ALL
@@ -545,7 +545,7 @@ GDK_AVAILABLE_IN_ALL
 guint                   gsk_text_node_get_num_glyphs            (const GskRenderNode      *node) G_GNUC_PURE;
 GDK_AVAILABLE_IN_ALL
 const PangoGlyphInfo   *gsk_text_node_get_glyphs                (const GskRenderNode      *node,
-                                                                 guint                    *n_glyphs) G_GNUC_PURE;
+                                                                 guint                    *n_glyphs);
 GDK_AVAILABLE_IN_ALL
 const GdkRGBA *         gsk_text_node_get_color                 (const GskRenderNode      *node) G_GNUC_PURE;
 GDK_AVAILABLE_IN_ALL

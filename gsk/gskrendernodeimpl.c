@@ -3969,42 +3969,138 @@ gsk_repeat_node_finalize (GskRenderNode *node)
 }
 
 static void
+gsk_repeat_node_draw_tiled (cairo_t                *cr,
+                            const graphene_rect_t  *rect,
+                            float                   x,
+                            float                   y,
+                            GskRenderNode          *child,
+                            const graphene_rect_t  *child_bounds)
+{
+  cairo_pattern_t *pattern;
+
+  cairo_save (cr);
+  /* reset the clip so we get an unclipped pattern for repeating */
+  cairo_reset_clip (cr);
+  cairo_translate (cr,
+                   x * child_bounds->size.width,
+                   y * child_bounds->size.height);
+  gsk_cairo_rectangle (cr, child_bounds);
+  cairo_clip (cr);
+
+  cairo_push_group (cr);
+  gsk_render_node_draw (child, cr);
+  pattern = cairo_pop_group (cr);
+  cairo_restore (cr);
+
+  cairo_pattern_set_extend (pattern, CAIRO_EXTEND_REPEAT);
+  cairo_set_source (cr, pattern);
+  cairo_pattern_destroy (pattern);
+
+  gsk_cairo_rectangle (cr, rect);
+  cairo_fill (cr);
+}
+
+static void
 gsk_repeat_node_draw (GskRenderNode *node,
                       cairo_t       *cr)
 {
   GskRepeatNode *self = (GskRepeatNode *) node;
-  cairo_pattern_t *pattern;
-  cairo_surface_t *surface;
-  cairo_t *surface_cr;
-  double scale_x, scale_y, width, height;
-  cairo_matrix_t matrix;
-
-  cairo_get_matrix (cr, &matrix);
-  width = ceil (self->child_bounds.size.width * (ABS (matrix.xx) + ABS (matrix.yx)));
-  height = ceil (self->child_bounds.size.height * (ABS (matrix.xy) + ABS (matrix.yy)));
-  surface = cairo_surface_create_similar (cairo_get_target (cr),
-                                          CAIRO_CONTENT_COLOR_ALPHA,
-                                          width, height);
-  cairo_surface_get_device_scale (surface, &scale_x, &scale_y);
-  scale_x *= width / self->child_bounds.size.width;
-  scale_y *= height / self->child_bounds.size.height;
-  cairo_surface_set_device_scale (surface, scale_x, scale_y);
-  cairo_surface_set_device_offset (surface,
-                                   - self->child_bounds.origin.x * scale_x,
-                                   - self->child_bounds.origin.y * scale_y);
-
-  surface_cr = cairo_create (surface);
-  gsk_render_node_draw (self->child, surface_cr);
-  cairo_destroy (surface_cr);
-
-  pattern = cairo_pattern_create_for_surface (surface);
-  cairo_pattern_set_extend (pattern, CAIRO_EXTEND_REPEAT);
-  cairo_set_source (cr, pattern);
-  cairo_pattern_destroy (pattern);
-  cairo_surface_destroy (surface);
+  graphene_rect_t clip_bounds;
+  float tile_left, tile_right, tile_top, tile_bottom;
 
   gsk_cairo_rectangle (cr, &node->bounds);
-  cairo_fill (cr);
+  cairo_clip (cr);
+  _graphene_rect_init_from_clip_extents (&clip_bounds, cr);
+
+  tile_left = (clip_bounds.origin.x - self->child_bounds.origin.x) / self->child_bounds.size.width;
+  tile_right = (clip_bounds.origin.x + clip_bounds.size.width - self->child_bounds.origin.x) / self->child_bounds.size.width;
+  tile_top = (clip_bounds.origin.y - self->child_bounds.origin.y) / self->child_bounds.size.height;
+  tile_bottom = (clip_bounds.origin.y + clip_bounds.size.height - self->child_bounds.origin.y) / self->child_bounds.size.height;
+
+  /* the 1st check tests that a tile fully fits into the bounds,
+   * the 2nd check is to catch the case where it fits exactly */
+  if (ceilf (tile_left) < floorf (tile_right) &&
+      clip_bounds.size.width > self->child_bounds.size.width)
+    {
+      if (ceilf (tile_top) < floorf (tile_bottom) &&
+          clip_bounds.size.height > self->child_bounds.size.height)
+        {
+          /* tile in both directions */
+          gsk_repeat_node_draw_tiled (cr,
+                                      &clip_bounds,
+                                      ceilf (tile_left),
+                                      ceilf (tile_top),
+                                      self->child,
+                                      &self->child_bounds);
+        }
+      else
+        {
+          /* tile horizontally, repeat vertically */
+          float y;
+          for (y = floorf (tile_top); y < ceilf (tile_bottom); y++)
+            {
+              float start_y = MAX (clip_bounds.origin.y,
+                                   self->child_bounds.origin.y + y * self->child_bounds.size.height);
+              float end_y = MAX (clip_bounds.origin.y + clip_bounds.size.height,
+                                 self->child_bounds.origin.y + (y + 1) * self->child_bounds.size.height);
+              gsk_repeat_node_draw_tiled (cr,
+                                          &GRAPHENE_RECT_INIT (
+                                              clip_bounds.origin.x,
+                                              start_y,
+                                              clip_bounds.size.width,
+                                              end_y - start_y
+                                          ),
+                                          ceilf (tile_left),
+                                          y,
+                                          self->child,
+                                          &self->child_bounds);
+            }
+        }
+    }
+  else if (ceilf (tile_top) < floorf (tile_bottom) &&
+           clip_bounds.size.height > self->child_bounds.size.height)
+    {
+      /* repeat horizontally, tile vertically */
+      float x;
+      for (x = floorf (tile_left); x < ceilf (tile_right); x++)
+        {
+          float start_x = MAX (clip_bounds.origin.x,
+                               self->child_bounds.origin.x + x * self->child_bounds.size.width);
+          float end_x = MAX (clip_bounds.origin.x + clip_bounds.size.width,
+                             self->child_bounds.origin.x + (x + 1) * self->child_bounds.size.width);
+          gsk_repeat_node_draw_tiled (cr,
+                                      &GRAPHENE_RECT_INIT (
+                                          start_x,
+                                          clip_bounds.origin.y,
+                                          end_x - start_x,
+                                          clip_bounds.size.height
+                                      ),
+                                      x,
+                                      ceilf (tile_top),
+                                      self->child,
+                                      &self->child_bounds);
+        }
+    }
+  else
+    {
+      /* repeat in both directions */
+      float x, y;
+
+      for (x = floorf (tile_left); x < ceilf (tile_right); x++)
+        {
+          for (y = floorf (tile_top); y < ceilf (tile_bottom); y++)
+            {
+              cairo_save (cr);
+              cairo_translate (cr,
+                               x * self->child_bounds.size.width,
+                               y * self->child_bounds.size.height);
+              gsk_cairo_rectangle (cr, &self->child_bounds);
+              cairo_clip (cr);
+              gsk_render_node_draw (self->child, cr);
+              cairo_restore (cr);
+            }
+        }
+    }
 }
 
 static void
@@ -6244,7 +6340,10 @@ gsk_mask_node_new (GskRenderNode *source,
   self->mask = gsk_render_node_ref (mask);
   self->mask_mode = mask_mode;
 
-  self->render_node.bounds = source->bounds;
+  if (mask_mode == GSK_MASK_MODE_INVERTED_ALPHA)
+    self->render_node.bounds = source->bounds;
+  else if (!gsk_rect_intersection (&source->bounds, &mask->bounds, &self->render_node.bounds))
+    self->render_node.bounds = *graphene_rect_zero ();
 
   self->render_node.preferred_depth = gsk_render_node_get_preferred_depth (source);
 
