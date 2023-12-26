@@ -14,7 +14,6 @@
 
 #include "gdk/gdkglcontextprivate.h"
 #include "gsk/gskdebugprivate.h"
-#include "gsk/gskrendernodeprivate.h"
 
 static GskGpuOp *
 gsk_gpu_upload_op_gl_command_with_area (GskGpuOp                    *op,
@@ -344,8 +343,10 @@ struct _GskGpuUploadCairoOp
   GskGpuOp op;
 
   GskGpuImage *image;
-  GskRenderNode *node;
   graphene_rect_t viewport;
+  GskGpuCairoFunc func;
+  gpointer user_data;
+  GDestroyNotify user_destroy;
 
   GskGpuBuffer *buffer;
 };
@@ -356,7 +357,8 @@ gsk_gpu_upload_cairo_op_finish (GskGpuOp *op)
   GskGpuUploadCairoOp *self = (GskGpuUploadCairoOp *) op;
 
   g_object_unref (self->image);
-  gsk_render_node_unref (self->node);
+  if (self->user_destroy)
+    self->user_destroy (self->user_data);
   g_clear_object (&self->buffer);
 }
 
@@ -399,7 +401,7 @@ gsk_gpu_upload_cairo_op_draw (GskGpuOp *op,
   cairo_set_operator (cr, CAIRO_OPERATOR_OVER);
   cairo_translate (cr, -self->viewport.origin.x, -self->viewport.origin.y);
 
-  gsk_render_node_draw_fallback (self->node, cr);
+  self->func (self->user_data, cr);
 
   cairo_destroy (cr);
 
@@ -450,22 +452,25 @@ static const GskGpuOpClass GSK_GPU_UPLOAD_CAIRO_OP_CLASS = {
 
 GskGpuImage *
 gsk_gpu_upload_cairo_op (GskGpuFrame           *frame,
-                         GskRenderNode         *node,
                          const graphene_vec2_t *scale,
-                         const graphene_rect_t *viewport)
+                         const graphene_rect_t *viewport,
+                         GskGpuCairoFunc        func,
+                         gpointer               user_data,
+                         GDestroyNotify         user_destroy)
 {
   GskGpuUploadCairoOp *self;
 
   self = (GskGpuUploadCairoOp *) gsk_gpu_op_alloc (frame, &GSK_GPU_UPLOAD_CAIRO_OP_CLASS);
 
-  self->node = gsk_render_node_ref (node);
   self->image = gsk_gpu_device_create_upload_image (gsk_gpu_frame_get_device (frame),
                                                     FALSE,
                                                     GDK_MEMORY_DEFAULT,
                                                     ceil (graphene_vec2_get_x (scale) * viewport->size.width),
                                                     ceil (graphene_vec2_get_y (scale) * viewport->size.height));
-  /* g_assert (gsk_gpu_image_get_postprocess (self->image) == 0); */
   self->viewport = *viewport;
+  self->func = func;
+  self->user_data = user_data;
+  self->user_destroy = user_destroy;
 
   return self->image;
 }
