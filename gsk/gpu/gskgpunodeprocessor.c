@@ -674,9 +674,11 @@ gsk_gpu_get_node_as_image (GskGpuFrame            *frame,
       rect_round_to_pixels (&clipped, scale, &clipped);
 
       result = gsk_gpu_upload_cairo_op (frame,
-                                        node,
                                         scale,
-                                        &clipped);
+                                        &clipped,
+                                        (GskGpuCairoFunc) gsk_render_node_draw_fallback,
+                                        gsk_render_node_ref (node),
+                                        (GDestroyNotify) gsk_render_node_unref);
 
       g_object_ref (result);
 
@@ -945,9 +947,11 @@ gsk_gpu_node_processor_add_fallback_node (GskGpuNodeProcessor *self,
   gsk_gpu_node_processor_sync_globals (self, 0);
 
   image = gsk_gpu_upload_cairo_op (self->frame,
-                                   node,
                                    &self->scale,
-                                   &clipped_bounds);
+                                   &clipped_bounds,
+                                   (GskGpuCairoFunc) gsk_render_node_draw_fallback,
+                                   gsk_render_node_ref (node),
+                                   (GDestroyNotify) gsk_render_node_unref);
   descriptor = gsk_gpu_node_processor_add_image (self, image, GSK_GPU_SAMPLER_DEFAULT);
 
   gsk_gpu_texture_op (self->frame,

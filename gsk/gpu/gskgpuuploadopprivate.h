@@ -6,14 +6,19 @@
 
 G_BEGIN_DECLS
 
+typedef void            (* GskGpuCairoFunc)                             (gpointer                        user_data,
+                                                                         cairo_t                        *cr);
+
 GskGpuImage *           gsk_gpu_upload_texture_op_try                   (GskGpuFrame                    *frame,
                                                                          gboolean                        with_mipmap,
                                                                          GdkTexture                     *texture);
 
 GskGpuImage *           gsk_gpu_upload_cairo_op                         (GskGpuFrame                    *frame,
-                                                                         GskRenderNode                  *node,
                                                                          const graphene_vec2_t          *scale,
-                                                                         const graphene_rect_t          *viewport);
+                                                                         const graphene_rect_t          *viewport,
+                                                                         GskGpuCairoFunc                 func,
+                                                                         gpointer                        user_data,
+                                                                         GDestroyNotify                  user_destroy);
 
 void                    gsk_gpu_upload_glyph_op                         (GskGpuFrame                    *frame,
                                                                          GskGpuImage                    *image,
