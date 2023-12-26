@@ -1032,7 +1032,6 @@ gsk_gpu_node_processor_add_fallback_node (GskGpuNodeProcessor *self,
 {
   GskGpuImage *image;
   graphene_rect_t clipped_bounds;
-  guint32 descriptor;
 
   if (!gsk_gpu_node_processor_clip_node_bounds (self, node, &clipped_bounds))
     return;
@@ -1045,15 +1044,11 @@ gsk_gpu_node_processor_add_fallback_node (GskGpuNodeProcessor *self,
                                    (GskGpuCairoFunc) gsk_render_node_draw_fallback,
                                    gsk_render_node_ref (node),
                                    (GDestroyNotify) gsk_render_node_unref);
-  descriptor = gsk_gpu_node_processor_add_image (self, image, GSK_GPU_SAMPLER_DEFAULT);
 
-  gsk_gpu_texture_op (self->frame,
-                      gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, &clipped_bounds),
-                      self->desc,
-                      descriptor,
-                      &node->bounds,
-                      &self->offset,
-                      &clipped_bounds);
+  gsk_gpu_node_processor_image_op (self,
+                                   image,
+                                   &node->bounds,
+                                   &clipped_bounds);
 }
 
 static gboolean
@@ -3525,7 +3520,7 @@ static const struct
   },
   [GSK_CAIRO_NODE] = {
     0,
-    0,
+    GSK_GPU_HANDLE_OPACITY,
     NULL,
     NULL,
   },
