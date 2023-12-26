@@ -434,11 +434,18 @@ gsk_render_node_draw_fallback (GskRenderNode *node,
       /* pink, black
        * black, pink
        */
-      static const guint32 pixels[] = { 0xFFFF00CC, 0xFF000000,
-                                        0xFF000000, 0xFFFF00CC };
+      static const guint32 fallback_pixels[] = { 0xFFFF00CC, 0xFF000000,
+                                                 0xFF000000, 0xFFFF00CC };
+      static const guint32 cairo_pixels[] = { 0xFF9900FF, 0xFF000000,
+                                              0xFF000000, 0xFF9900FF };
+      const guint32 *pixels;
       cairo_surface_t *surface;
 
       cairo_save (cr);
+      if (GSK_RENDER_NODE_TYPE (node) == GSK_CAIRO_NODE)
+        pixels = cairo_pixels;
+      else
+        pixels = fallback_pixels;
       surface = cairo_image_surface_create_for_data ((guchar *) pixels,
                                                      CAIRO_FORMAT_ARGB32,
                                                      2, 2,
