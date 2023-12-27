@@ -12,6 +12,7 @@
 #include "gskgpucolorizeopprivate.h"
 #include "gskgpucolormatrixopprivate.h"
 #include "gskgpucoloropprivate.h"
+#include "gskgpuconicgradientopprivate.h"
 #include "gskgpudescriptorsprivate.h"
 #include "gskgpudeviceprivate.h"
 #include "gskgpuframeprivate.h"
@@ -2186,6 +2187,33 @@ gsk_gpu_node_processor_create_radial_gradient_pattern (GskGpuPatternWriter *self
   return TRUE;
 }
 
+static void
+gsk_gpu_node_processor_conic_gradient_op (GskGpuNodeProcessor  *self,
+                                          GskRenderNode        *node,
+                                          const GskColorStop   *stops,
+                                          gsize                 n_stops)
+{
+  gsk_gpu_conic_gradient_op (self->frame,
+                             gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, &node->bounds),
+                             &node->bounds,
+                             gsk_conic_gradient_node_get_center (node),
+                             gsk_conic_gradient_node_get_angle (node),
+                             &self->offset,
+                             stops,
+                             n_stops);
+}
+
+static void
+gsk_gpu_node_processor_add_conic_gradient_node (GskGpuNodeProcessor *self,
+                                                GskRenderNode       *node)
+{
+  gsk_gpu_node_processor_add_gradient_node (self,
+                                            node,
+                                            gsk_conic_gradient_node_get_color_stops (node, NULL),
+                                            gsk_conic_gradient_node_get_n_color_stops (node),
+                                            gsk_gpu_node_processor_conic_gradient_op);
+}
+
 static gboolean
 gsk_gpu_node_processor_create_conic_gradient_pattern (GskGpuPatternWriter *self,
                                                       GskRenderNode       *node)
@@ -3172,7 +3200,7 @@ static const struct
   [GSK_CONIC_GRADIENT_NODE] = {
     0,
     GSK_GPU_HANDLE_OPACITY,
-    gsk_gpu_node_processor_add_node_as_pattern,
+    gsk_gpu_node_processor_add_conic_gradient_node,
     gsk_gpu_node_processor_create_conic_gradient_pattern,
   },
   [GSK_BORDER_NODE] = {
