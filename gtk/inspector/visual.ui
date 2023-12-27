@@ -427,23 +427,24 @@
                     </child>
                     <child>
                       <object class="GtkListBoxRow">
+                        <property name="tooltip-text" translatable="yes">Tints all the places where the current renderer uses Cairo instead of the GPU.</property>
                         <child>
                           <object class="GtkBox">
                             <property name="spacing">40</property>
                             <child>
-                              <object class="GtkLabel" id="fallback_label">
-                                <property name="label" translatable="yes">Show Fallback Rendering</property>
+                              <object class="GtkLabel" id="cairo_label">
+                                <property name="label" translatable="yes">Show Cairo Rendering</property>
                                 <property name="halign">start</property>
                                 <property name="valign">baseline</property>
                                 <property name="xalign">0.0</property>
                               </object>
                             </child>
                             <child>
-                              <object class="GtkSwitch" id="fallback_switch">
+                              <object class="GtkSwitch" id="cairo_switch">
                                 <property name="halign">end</property>
                                 <property name="valign">center</property>
                                 <property name="hexpand">1</property>
-                                <signal name="notify::active" handler="fallback_activate"/>
+                                <signal name="notify::active" handler="cairo_activate"/>
                               </object>
                             </child>
                           </object>
@@ -718,7 +719,7 @@
       <widget name="hidpi_label"/>
       <widget name="animation_label"/>
       <widget name="updates_label"/>
-      <widget name="fallback_label"/>
+      <widget name="cairo_label"/>
       <widget name="baselines_label"/>
       <widget name="layout_label_box"/>
       <widget name="focus_label"/>

@@ -167,9 +167,6 @@ struct _GskGLRenderJob
 
   guint source_is_glyph_atlas : 1;
 
-  /* If we should be rendering red zones over fallback nodes */
-  guint debug_fallback : 1;
-
   /* In some cases we might want to avoid clearing the framebuffer
    * because we're going to render over the existing contents.
    */
@@ -1232,22 +1229,6 @@ gsk_gl_render_job_visit_as_fallback (GskGLRenderJob      *job,
   cairo_rectangle (cr, 0, 0, surface_width / fabs (scale_x), surface_height / fabs (scale_y));
   cairo_fill (cr);
   cairo_restore (cr);
-
-  if (job->debug_fallback)
-    {
-      cairo_move_to (cr, 0, 0);
-      cairo_rectangle (cr, 0, 0, node->bounds.size.width, node->bounds.size.height);
-      if (GSK_RENDER_NODE_TYPE (node) == GSK_CAIRO_NODE)
-        cairo_set_source_rgba (cr, 0.3, 0, 1, 0.25);
-      else
-        cairo_set_source_rgba (cr, 1, 0, 0, 0.25);
-      cairo_fill_preserve (cr);
-      if (GSK_RENDER_NODE_TYPE (node) == GSK_CAIRO_NODE)
-        cairo_set_source_rgba (cr, 0.3, 0, 1, 1);
-      else
-        cairo_set_source_rgba (cr, 1, 0, 0, 1);
-      cairo_stroke (cr);
-    }
   cairo_destroy (cr);
 
   /* Create texture to upload */
@@ -4578,15 +4559,6 @@ gsk_gl_render_job_render (GskGLRenderJob *job,
   gsk_gl_command_queue_execute (job->command_queue, surface_height, scale, job->region, job->default_framebuffer);
   gdk_gl_context_pop_debug_group (job->command_queue->context);
   gdk_profiler_add_mark (start_time, GDK_PROFILER_CURRENT_TIME-start_time, "Execute GL command queue", "");
-}
-
-void
-gsk_gl_render_job_set_debug_fallback (GskGLRenderJob *job,
-                                      gboolean        debug_fallback)
-{
-  g_return_if_fail (job != NULL);
-
-  job->debug_fallback = !!debug_fallback;
 }
 
 static int

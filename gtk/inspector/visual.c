@@ -92,7 +92,7 @@ struct _GtkInspectorVisual
   GtkWidget *debug_box;
   GtkWidget *fps_switch;
   GtkWidget *updates_switch;
-  GtkWidget *fallback_switch;
+  GtkWidget *cairo_switch;
   GtkWidget *baselines_switch;
   GtkWidget *layout_switch;
   GtkWidget *focus_switch;
@@ -388,25 +388,25 @@ updates_activate (GtkSwitch          *sw,
 }
 
 static void
-fallback_activate (GtkSwitch          *sw,
-                   GParamSpec         *pspec,
-                   GtkInspectorVisual *vis)
+cairo_activate (GtkSwitch          *sw,
+                GParamSpec         *pspec,
+                GtkInspectorVisual *vis)
 {
   GtkInspectorWindow *iw;
-  gboolean fallback;
+  gboolean active;
   guint flags;
   GList *toplevels, *l;
 
-  fallback = gtk_switch_get_active (sw);
+  active = gtk_switch_get_active (sw);
   iw = GTK_INSPECTOR_WINDOW (gtk_widget_get_root (GTK_WIDGET (vis)));
   if (iw == NULL)
     return;
 
   flags = gsk_get_debug_flags ();
-  if (fallback)
-    flags = flags | GSK_DEBUG_FALLBACK;
+  if (active)
+    flags = flags | GSK_DEBUG_CAIRO;
   else
-    flags = flags & ~GSK_DEBUG_FALLBACK;
+    flags = flags & ~GSK_DEBUG_CAIRO;
   gsk_set_debug_flags (flags);
 
   toplevels = gtk_window_list_toplevels ();
@@ -1055,9 +1055,9 @@ row_activated (GtkListBox         *box,
       GtkSwitch *sw = GTK_SWITCH (vis->updates_switch);
       gtk_switch_set_active (sw, !gtk_switch_get_active (sw));
     }
-  else if (gtk_widget_is_ancestor (vis->fallback_switch, GTK_WIDGET (row)))
+  else if (gtk_widget_is_ancestor (vis->cairo_switch, GTK_WIDGET (row)))
     {
-      GtkSwitch *sw = GTK_SWITCH (vis->fallback_switch);
+      GtkSwitch *sw = GTK_SWITCH (vis->cairo_switch);
       gtk_switch_set_active (sw, !gtk_switch_get_active (sw));
     }
   else if (gtk_widget_is_ancestor (vis->baselines_switch, GTK_WIDGET (row)))
@@ -1199,7 +1199,7 @@ gtk_inspector_visual_class_init (GtkInspectorVisualClass *klass)
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorVisual, font_scale_adjustment);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorVisual, fps_switch);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorVisual, updates_switch);
-  gtk_widget_class_bind_template_child (widget_class, GtkInspectorVisual, fallback_switch);
+  gtk_widget_class_bind_template_child (widget_class, GtkInspectorVisual, cairo_switch);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorVisual, baselines_switch);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorVisual, layout_switch);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorVisual, focus_switch);
@@ -1208,7 +1208,7 @@ gtk_inspector_visual_class_init (GtkInspectorVisualClass *klass)
 
   gtk_widget_class_bind_template_callback (widget_class, fps_activate);
   gtk_widget_class_bind_template_callback (widget_class, updates_activate);
-  gtk_widget_class_bind_template_callback (widget_class, fallback_activate);
+  gtk_widget_class_bind_template_callback (widget_class, cairo_activate);
   gtk_widget_class_bind_template_callback (widget_class, direction_changed);
   gtk_widget_class_bind_template_callback (widget_class, baselines_activate);
   gtk_widget_class_bind_template_callback (widget_class, layout_activate);
