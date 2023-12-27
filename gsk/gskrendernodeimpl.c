@@ -4523,8 +4523,6 @@ gsk_fill_node_draw (GskRenderNode *node,
 {
   GskFillNode *self = (GskFillNode *) node;
 
-  cairo_save (cr);
-
   switch (self->fill_rule)
   {
     case GSK_FILL_RULE_WINDING:
@@ -4549,8 +4547,6 @@ gsk_fill_node_draw (GskRenderNode *node,
       cairo_clip (cr);
       gsk_render_node_draw (self->child, cr);
     }
-
-  cairo_restore (cr);
 }
 
 static void
