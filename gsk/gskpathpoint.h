@@ -57,11 +57,11 @@ void                    gsk_path_point_free            (GskPathPoint       *poin
 
 GDK_AVAILABLE_IN_4_14
 gboolean                gsk_path_point_equal           (const GskPathPoint *point1,
-                                                        const GskPathPoint *point2);
+                                                        const GskPathPoint *point2) G_GNUC_PURE;
 
 GDK_AVAILABLE_IN_4_14
 int                     gsk_path_point_compare         (const GskPathPoint *point1,
-                                                        const GskPathPoint *point2);
+                                                        const GskPathPoint *point2) G_GNUC_PURE;
 
 GDK_AVAILABLE_IN_4_14
 void                    gsk_path_point_get_position    (const GskPathPoint *point,

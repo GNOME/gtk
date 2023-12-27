@@ -87,9 +87,9 @@ typedef enum {
   GTK_ACCESSIBLE_NAME_NOT_RECOMMENDED,
 } GtkAccessibleNaming;
 
-gboolean gtk_accessible_role_supports_name_from_author  (GtkAccessibleRole role);
-gboolean gtk_accessible_role_supports_name_from_content (GtkAccessibleRole role);
-GtkAccessibleNaming gtk_accessible_role_get_naming      (GtkAccessibleRole role);
+gboolean gtk_accessible_role_supports_name_from_author  (GtkAccessibleRole role) G_GNUC_CONST;
+gboolean gtk_accessible_role_supports_name_from_content (GtkAccessibleRole role) G_GNUC_CONST;
+GtkAccessibleNaming gtk_accessible_role_get_naming      (GtkAccessibleRole role) G_GNUC_CONST;
 
 gboolean        gtk_accessible_should_present   (GtkAccessible     *self);
 
