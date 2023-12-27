@@ -32,6 +32,7 @@
 
 #include "gskcairoblurprivate.h"
 #include "gskdebugprivate.h"
+#include "gskpath.h"
 #include "gskrectprivate.h"
 #include "gskrendernodeprivate.h"
 #include "gskroundedrectprivate.h"
@@ -3101,6 +3102,106 @@ gsk_gpu_node_processor_create_repeat_pattern (GskGpuPatternWriter *self,
   return TRUE;
 }
 
+typedef struct _FillData FillData;
+struct _FillData
+{
+  GskPath *path;
+  GdkRGBA color;
+  GskFillRule fill_rule;
+};
+
+static void
+gsk_fill_data_free (gpointer data)
+{
+  FillData *fill = data;
+
+  gsk_path_unref (fill->path);
+  g_free (fill);
+}
+
+static void
+gsk_gpu_node_processor_fill_path (gpointer  data,
+                                  cairo_t  *cr)
+{
+  FillData *fill = data;
+
+  switch (fill->fill_rule)
+  {
+    case GSK_FILL_RULE_WINDING:
+      cairo_set_fill_rule (cr, CAIRO_FILL_RULE_WINDING);
+      break;
+    case GSK_FILL_RULE_EVEN_ODD:
+      cairo_set_fill_rule (cr, CAIRO_FILL_RULE_EVEN_ODD);
+      break;
+    default:
+      g_assert_not_reached ();
+      break;
+  }
+  gsk_path_to_cairo (fill->path, cr);
+  gdk_cairo_set_source_rgba (cr, &fill->color);
+  cairo_fill (cr);
+}
+
+static void
+gsk_gpu_node_processor_add_fill_node (GskGpuNodeProcessor *self,
+                                      GskRenderNode       *node)
+{
+  graphene_rect_t clip_bounds, source_rect;
+  GskGpuDescriptors *desc;
+  GskGpuImage *mask_image, *source_image;
+  guint32 mask_descriptor, source_descriptor;
+  GskRenderNode *child;
+
+  if (!gsk_gpu_node_processor_clip_node_bounds (self, node, &clip_bounds))
+    return;
+
+  child = gsk_fill_node_get_child (node);
+
+  mask_image = gsk_gpu_upload_cairo_op (self->frame,
+                                        &self->scale,
+                                        &clip_bounds,
+                                        gsk_gpu_node_processor_fill_path,
+                                        g_memdup (&(FillData) {
+                                            .path = gsk_path_ref (gsk_fill_node_get_path (node)),
+                                            .color = GDK_RGBA_WHITE,
+                                            .fill_rule = gsk_fill_node_get_fill_rule (node)
+                                        }, sizeof (FillData)),
+                                        (GDestroyNotify) gsk_fill_data_free);
+  g_return_if_fail (mask_image != NULL);
+  mask_descriptor = gsk_gpu_node_processor_add_image (self, mask_image, GSK_GPU_SAMPLER_DEFAULT);
+  desc = self->desc;
+
+  source_image = gsk_gpu_node_processor_get_node_as_image (self,
+                                                           0,
+                                                           GSK_GPU_IMAGE_STRAIGHT_ALPHA,
+                                                           &clip_bounds,
+                                                           child,
+                                                           &source_rect);
+  if (source_image == NULL)
+    return;
+  source_descriptor = gsk_gpu_node_processor_add_image (self, source_image, GSK_GPU_SAMPLER_DEFAULT);
+  if (desc != self->desc)
+    {
+      desc = self->desc;
+      mask_descriptor = gsk_gpu_node_processor_add_image (self, mask_image, GSK_GPU_SAMPLER_DEFAULT);
+      g_assert (desc == self->desc);
+    }
+
+  gsk_gpu_mask_op (self->frame,
+                   gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, &node->bounds),
+                   desc,
+                   &node->bounds,
+                   &self->offset,
+                   self->opacity,
+                   GSK_MASK_MODE_ALPHA,
+                   source_descriptor,
+                   &source_rect,
+                   mask_descriptor,
+                   &clip_bounds);
+
+  g_object_unref (source_image);
+}
+
 static void
 gsk_gpu_node_processor_add_subsurface_node (GskGpuNodeProcessor *self,
                                             GskRenderNode       *node)
@@ -3353,8 +3454,8 @@ static const struct
   },
   [GSK_FILL_NODE] = {
     0,
-    0,
-    NULL,
+    GSK_GPU_HANDLE_OPACITY,
+    gsk_gpu_node_processor_add_fill_node,
     NULL,
   },
   [GSK_STROKE_NODE] = {
