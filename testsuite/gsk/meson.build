@@ -40,6 +40,7 @@ compare_render_tests = [
   'color-matrix-identity',
   'color-matrix-merge',
   'color-matrix-parsing',
+  'conic-gradient-with-64-colorstops',
   'crossfade-clip-both-children',
   'cross-fade-clipped-with-huge-children-nogl',
   'cross-fade-in-opacity',
