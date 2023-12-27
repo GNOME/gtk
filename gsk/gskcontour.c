@@ -122,8 +122,11 @@ _g_string_append_float (GString    *string,
                         const char *prefix,
                         float       f)
 {
+  char buf[G_ASCII_DTOSTR_BUF_SIZE];
+
   g_string_append (string, prefix);
-  g_string_append_printf (string, "%.*g", FLT_DECIMAL_DIG, f);
+  g_ascii_formatd (buf, G_ASCII_DTOSTR_BUF_SIZE, "%.9g", f);
+  g_string_append (string, buf);
 }
 
 static void
