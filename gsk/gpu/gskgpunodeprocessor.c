@@ -3163,11 +3163,22 @@ gsk_gpu_node_processor_add_fill_node (GskGpuNodeProcessor *self,
                                         gsk_gpu_node_processor_fill_path,
                                         g_memdup (&(FillData) {
                                             .path = gsk_path_ref (gsk_fill_node_get_path (node)),
-                                            .color = GDK_RGBA_WHITE,
+                                            .color = GSK_RENDER_NODE_TYPE (child) == GSK_COLOR_NODE
+                                                   ? *gsk_color_node_get_color (child)
+                                                   : GDK_RGBA_WHITE,
                                             .fill_rule = gsk_fill_node_get_fill_rule (node)
                                         }, sizeof (FillData)),
                                         (GDestroyNotify) gsk_fill_data_free);
   g_return_if_fail (mask_image != NULL);
+  if (GSK_RENDER_NODE_TYPE (child) == GSK_COLOR_NODE)
+    {
+      gsk_gpu_node_processor_image_op (self,
+                                       mask_image,
+                                       &clip_bounds,
+                                       &clip_bounds);
+      return;
+    }
+
   mask_descriptor = gsk_gpu_node_processor_add_image (self, mask_image, GSK_GPU_SAMPLER_DEFAULT);
   desc = self->desc;
 
