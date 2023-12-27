@@ -1990,25 +1990,25 @@ gsk_gpu_node_processor_add_outset_shadow_node (GskGpuNodeProcessor *self,
     }
 }
 
+typedef void (* GradientOpFunc) (GskGpuNodeProcessor  *self,
+                                 GskRenderNode        *node,
+                                 const GskColorStop   *stops,
+                                 gsize                 n_stops);
+
 static void
-gsk_gpu_node_processor_add_linear_gradient_node (GskGpuNodeProcessor *self,
-                                                 GskRenderNode       *node)
+gsk_gpu_node_processor_add_gradient_node (GskGpuNodeProcessor *self,
+                                          GskRenderNode       *node,
+                                          const GskColorStop  *stops,
+                                          gsize                n_stops,
+                                          GradientOpFunc       func)
 {
-  const graphene_point_t *start, *end;
-  const GskColorStop *stops;
   GskColorStop real_stops[7];
   GskGpuNodeProcessor other;
   graphene_rect_t bounds;
-  gsize i, j, n_stops;
+  gsize i, j;
   GskGpuImage *image;
   int width, height;
   guint32 descriptor;
-  gboolean repeating;
-
-  start = gsk_linear_gradient_node_get_start (node);
-  end = gsk_linear_gradient_node_get_end (node);
-  stops = gsk_linear_gradient_node_get_color_stops (node, &n_stops);
-  repeating = gsk_render_node_get_node_type (node) == GSK_REPEATING_LINEAR_GRADIENT_NODE;
 
   if (n_stops < 8)
     {
@@ -2021,16 +2021,9 @@ gsk_gpu_node_processor_add_linear_gradient_node (GskGpuNodeProcessor *self,
             }
           stops = real_stops;
         }
+      
+      func (self, node, stops, n_stops);
 
-      gsk_gpu_linear_gradient_op (self->frame,
-                                  gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, &node->bounds),
-                                  repeating,
-                                  &node->bounds,
-                                  start,
-                                  end,
-                                  &self->offset,
-                                  stops,
-                                  n_stops);
       return;
     }
 
@@ -2097,15 +2090,8 @@ gsk_gpu_node_processor_add_linear_gradient_node (GskGpuNodeProcessor *self,
           real_stops[j].color = GDK_RGBA_INIT_ALPHA (&stops[i].color, 0);
           j++;
         }
-      gsk_gpu_linear_gradient_op (other.frame,
-                                  gsk_gpu_clip_get_shader_clip (&self->clip, &other.offset, &node->bounds),
-                                  repeating,
-                                  &node->bounds,
-                                  start,
-                                  end,
-                                  &other.offset,
-                                  real_stops,
-                                  j);
+
+      func (&other, node, real_stops, j);
     }
 
   gsk_gpu_render_pass_end_op (other.frame,
@@ -2125,6 +2111,34 @@ gsk_gpu_node_processor_add_linear_gradient_node (GskGpuNodeProcessor *self,
                       &bounds);
 
   g_object_unref (image);
+}
+
+static void
+gsk_gpu_node_processor_linear_gradient_op (GskGpuNodeProcessor  *self,
+                                           GskRenderNode        *node,
+                                           const GskColorStop   *stops,
+                                           gsize                 n_stops)
+{
+  gsk_gpu_linear_gradient_op (self->frame,
+                              gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, &node->bounds),
+                              GSK_RENDER_NODE_TYPE (node) == GSK_REPEATING_LINEAR_GRADIENT_NODE,
+                              &node->bounds,
+                              gsk_linear_gradient_node_get_start (node),
+                              gsk_linear_gradient_node_get_end (node),
+                              &self->offset,
+                              stops,
+                              n_stops);
+}
+
+static void
+gsk_gpu_node_processor_add_linear_gradient_node (GskGpuNodeProcessor *self,
+                                                 GskRenderNode       *node)
+{
+  gsk_gpu_node_processor_add_gradient_node (self,
+                                            node,
+                                            gsk_linear_gradient_node_get_color_stops (node, NULL),
+                                            gsk_linear_gradient_node_get_n_color_stops (node),
+                                            gsk_gpu_node_processor_linear_gradient_op);
 }
 
 static gboolean
