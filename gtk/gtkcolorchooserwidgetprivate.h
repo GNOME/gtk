@@ -21,7 +21,7 @@
 
 G_BEGIN_DECLS
 
-char *accessible_color_name (const GdkRGBA *color);
+char *accessible_color_name (const GdkRGBA *color) G_GNUC_MALLOC;
 
 G_END_DECLS
 
