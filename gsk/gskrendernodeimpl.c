@@ -4829,7 +4829,7 @@ gsk_stroke_node_new (GskRenderNode   *child,
 
   self->child = gsk_render_node_ref (child);
   self->path = gsk_path_ref (path);
-  gsk_stroke_init_copy (&self->stroke, stroke);
+  self->stroke = GSK_STROKE_INIT_COPY (stroke);
 
   if (gsk_path_get_stroke_bounds (self->path, &self->stroke, &stroke_bounds))
     gsk_rect_intersection (&stroke_bounds, &child->bounds, &node->bounds);

@@ -1301,7 +1301,7 @@ gtk_snapshot_push_stroke (GtkSnapshot     *snapshot,
                                    gtk_snapshot_clear_stroke);
 
   state->data.stroke.path = gsk_path_ref (path);
-  gsk_stroke_init_copy (&state->data.stroke.stroke, stroke);
+  state->data.stroke.stroke = GSK_STROKE_INIT_COPY (stroke);
 }
 
 static GskRenderNode *
