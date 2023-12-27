@@ -218,7 +218,7 @@ gtk_native_unrealize (GtkNative *self)
  *
  * Returns the surface of this `GtkNative`.
  *
- * Returns: (transfer none): the surface of @self
+ * Returns: (transfer none) (nullable): the surface of @self
  */
 GdkSurface *
 gtk_native_get_surface (GtkNative *self)
@@ -234,7 +234,7 @@ gtk_native_get_surface (GtkNative *self)
  *
  * Returns the renderer that is used for this `GtkNative`.
  *
- * Returns: (transfer none): the renderer for @self
+ * Returns: (transfer none) (nullable): the renderer for @self
  */
 GskRenderer *
 gtk_native_get_renderer (GtkNative *self)
