@@ -126,9 +126,6 @@ gdk_win32_gl_context_wgl_begin_frame (GdkDrawContext *draw_context,
   GDK_DRAW_CONTEXT_CLASS (gdk_win32_gl_context_wgl_parent_class)->begin_frame (draw_context, depth, update_area);
 }
 
-static int
-gdk_init_dummy_wgl_context (GdkWin32Display *display_win32);
-
 #define PIXEL_ATTRIBUTES 17
 
 static int
@@ -178,7 +175,6 @@ get_wgl_pfd (HDC                    hdc,
 
       pixelAttribs[i++] = 0; /* end of pixelAttribs */
       g_assert (i <= PIXEL_ATTRIBUTES);
-      best_pf = gdk_init_dummy_wgl_context (display_win32);
 
       if (!wglMakeCurrent (display_win32->dummy_context_wgl.hdc,
                            display_win32->dummy_context_wgl.hglrc))
