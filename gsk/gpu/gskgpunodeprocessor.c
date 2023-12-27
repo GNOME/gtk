@@ -21,6 +21,7 @@
 #include "gskgpulineargradientopprivate.h"
 #include "gskgpumaskopprivate.h"
 #include "gskgpumipmapopprivate.h"
+#include "gskgpuradialgradientopprivate.h"
 #include "gskgpurenderpassopprivate.h"
 #include "gskgpuroundedcoloropprivate.h"
 #include "gskgpuscissoropprivate.h"
@@ -2164,6 +2165,39 @@ gsk_gpu_node_processor_create_linear_gradient_pattern (GskGpuPatternWriter *self
   return TRUE;
 }
 
+static void
+gsk_gpu_node_processor_radial_gradient_op (GskGpuNodeProcessor  *self,
+                                           GskRenderNode        *node,
+                                           const GskColorStop   *stops,
+                                           gsize                 n_stops)
+{
+  gsk_gpu_radial_gradient_op (self->frame,
+                              gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, &node->bounds),
+                              GSK_RENDER_NODE_TYPE (node) == GSK_REPEATING_RADIAL_GRADIENT_NODE,
+                              &node->bounds,
+                              gsk_radial_gradient_node_get_center (node),
+                              &GRAPHENE_POINT_INIT (
+                                  gsk_radial_gradient_node_get_hradius (node),
+                                  gsk_radial_gradient_node_get_vradius (node)
+                              ),
+                              gsk_radial_gradient_node_get_start (node),
+                              gsk_radial_gradient_node_get_end (node),
+                              &self->offset,
+                              stops,
+                              n_stops);
+}
+
+static void
+gsk_gpu_node_processor_add_radial_gradient_node (GskGpuNodeProcessor *self,
+                                                 GskRenderNode       *node)
+{
+  gsk_gpu_node_processor_add_gradient_node (self,
+                                            node,
+                                            gsk_radial_gradient_node_get_color_stops (node, NULL),
+                                            gsk_radial_gradient_node_get_n_color_stops (node),
+                                            gsk_gpu_node_processor_radial_gradient_op);
+}
+
 static gboolean
 gsk_gpu_node_processor_create_radial_gradient_pattern (GskGpuPatternWriter *self,
                                                        GskRenderNode       *node)
@@ -3188,13 +3222,13 @@ static const struct
   [GSK_RADIAL_GRADIENT_NODE] = {
     0,
     GSK_GPU_HANDLE_OPACITY,
-    gsk_gpu_node_processor_add_node_as_pattern,
+    gsk_gpu_node_processor_add_radial_gradient_node,
     gsk_gpu_node_processor_create_radial_gradient_pattern,
   },
   [GSK_REPEATING_RADIAL_GRADIENT_NODE] = {
     0,
     GSK_GPU_HANDLE_OPACITY,
-    gsk_gpu_node_processor_add_node_as_pattern,
+    gsk_gpu_node_processor_add_radial_gradient_node,
     gsk_gpu_node_processor_create_radial_gradient_pattern,
   },
   [GSK_CONIC_GRADIENT_NODE] = {
