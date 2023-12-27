@@ -117,6 +117,8 @@ compare_render_tests = [
   'shadow-opacity',
   'shrink-rounded-border',
   'stroke',
+  'stroke-opacity',
+  'stroke-with-3d-contents-nogl-nocairo',
   'texture-coords',
   'texture-scale-filters-nocairo',
   'texture-scale-magnify-10000x',
