@@ -527,13 +527,16 @@ main (int argc, char **argv)
       if (!node2)
         node2 = gsk_container_node_new (NULL, 0);
 
+      save_node (node2, node_file, "-replayed.node");
       gsk_render_node_get_bounds (node, &node_bounds);
       gsk_render_node_get_bounds (node2, &node2_bounds);
       /* Check that the node didn't grow.  */
       success = success && graphene_rect_contains_rect (&node_bounds, &node2_bounds);
 
       rendered_texture = gsk_renderer_render_texture (renderer, node, &node_bounds);
+      save_image (rendered_texture, node_file, "-replayed.ref.png");
       rendered_texture2 = gsk_renderer_render_texture (renderer, node2, &node_bounds);
+      save_image (rendered_texture2, node_file, "-replayed.out.png");
       g_assert_nonnull (rendered_texture);
       g_assert_nonnull (rendered_texture2);
 
@@ -542,7 +545,6 @@ main (int argc, char **argv)
       if (diff_texture)
         {
           save_image (diff_texture, node_file, "-replayed.diff.png");
-          save_node (node2, node_file, "-replayed.node");
           g_object_unref (diff_texture);
           success = FALSE;
         }
