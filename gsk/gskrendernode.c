@@ -409,7 +409,7 @@ gsk_render_node_draw (GskRenderNode *node,
 }
 
 /*
- * gsk_render_node_draw:
+ * gsk_render_node_draw_fallback:
  * @node: a `GskRenderNode`
  * @cr: cairo context to draw to
  *
@@ -420,9 +420,9 @@ gsk_render_node_draw (GskRenderNode *node,
  * 1. It allows detecting fallbacks in GPU renderers.
  * 2. Application code can use it to detect where it is using Cairo
  *    drawing.
- * 
+ *
  * So use this function whenever either of those cases should be detected.
- **/
+ */
 void
 gsk_render_node_draw_fallback (GskRenderNode *node,
                                cairo_t       *cr)
