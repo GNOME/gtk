@@ -66,6 +66,7 @@ compare_render_tests = [
   'empty-texture',
   'empty-transform',
   'fill',
+  'fill-opacity',
   'fill-with-3d-contents-nogl-nocairo',
   'huge-height',
   'huge-width',
