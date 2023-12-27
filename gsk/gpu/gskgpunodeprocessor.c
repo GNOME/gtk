@@ -36,6 +36,7 @@
 #include "gskrectprivate.h"
 #include "gskrendernodeprivate.h"
 #include "gskroundedrectprivate.h"
+#include "gskstrokeprivate.h"
 #include "gsktransformprivate.h"
 
 #include "gdk/gdkrgbaprivate.h"
@@ -3213,6 +3214,107 @@ gsk_gpu_node_processor_add_fill_node (GskGpuNodeProcessor *self,
   g_object_unref (source_image);
 }
 
+typedef struct _StrokeData StrokeData;
+struct _StrokeData
+{
+  GskPath *path;
+  GdkRGBA color;
+  GskStroke stroke;
+};
+
+static void
+gsk_stroke_data_free (gpointer data)
+{
+  StrokeData *stroke = data;
+
+  gsk_path_unref (stroke->path);
+  gsk_stroke_clear (&stroke->stroke);
+  g_free (stroke);
+}
+
+static void
+gsk_gpu_node_processor_stroke_path (gpointer  data,
+                                    cairo_t  *cr)
+{
+  StrokeData *stroke = data;
+
+  gsk_stroke_to_cairo (&stroke->stroke, cr);
+  gsk_path_to_cairo (stroke->path, cr);
+  gdk_cairo_set_source_rgba (cr, &stroke->color);
+  cairo_stroke (cr);
+}
+
+static void
+gsk_gpu_node_processor_add_stroke_node (GskGpuNodeProcessor *self,
+                                        GskRenderNode       *node)
+{
+  graphene_rect_t clip_bounds, source_rect;
+  GskGpuDescriptors *desc;
+  GskGpuImage *mask_image, *source_image;
+  guint32 mask_descriptor, source_descriptor;
+  GskRenderNode *child;
+
+  if (!gsk_gpu_node_processor_clip_node_bounds (self, node, &clip_bounds))
+    return;
+
+  child = gsk_stroke_node_get_child (node);
+
+  mask_image = gsk_gpu_upload_cairo_op (self->frame,
+                                        &self->scale,
+                                        &clip_bounds,
+                                        gsk_gpu_node_processor_stroke_path,
+                                        g_memdup (&(StrokeData) {
+                                            .path = gsk_path_ref (gsk_stroke_node_get_path (node)),
+                                            .color = GSK_RENDER_NODE_TYPE (child) == GSK_COLOR_NODE
+                                                   ? *gsk_color_node_get_color (child)
+                                                   : GDK_RGBA_WHITE,
+                                            .stroke = GSK_STROKE_INIT_COPY (gsk_stroke_node_get_stroke (node))
+                                        }, sizeof (StrokeData)),
+                                        (GDestroyNotify) gsk_stroke_data_free);
+  g_return_if_fail (mask_image != NULL);
+  if (GSK_RENDER_NODE_TYPE (child) == GSK_COLOR_NODE)
+    {
+      gsk_gpu_node_processor_image_op (self,
+                                       mask_image,
+                                       &clip_bounds,
+                                       &clip_bounds);
+      return;
+    }
+
+  mask_descriptor = gsk_gpu_node_processor_add_image (self, mask_image, GSK_GPU_SAMPLER_DEFAULT);
+  desc = self->desc;
+
+  source_image = gsk_gpu_node_processor_get_node_as_image (self,
+                                                           0,
+                                                           GSK_GPU_IMAGE_STRAIGHT_ALPHA,
+                                                           &clip_bounds,
+                                                           child,
+                                                           &source_rect);
+  if (source_image == NULL)
+    return;
+  source_descriptor = gsk_gpu_node_processor_add_image (self, source_image, GSK_GPU_SAMPLER_DEFAULT);
+  if (desc != self->desc)
+    {
+      desc = self->desc;
+      mask_descriptor = gsk_gpu_node_processor_add_image (self, mask_image, GSK_GPU_SAMPLER_DEFAULT);
+      g_assert (desc == self->desc);
+    }
+
+  gsk_gpu_mask_op (self->frame,
+                   gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, &node->bounds),
+                   desc,
+                   &node->bounds,
+                   &self->offset,
+                   self->opacity,
+                   GSK_MASK_MODE_ALPHA,
+                   source_descriptor,
+                   &source_rect,
+                   mask_descriptor,
+                   &clip_bounds);
+
+  g_object_unref (source_image);
+}
+
 static void
 gsk_gpu_node_processor_add_subsurface_node (GskGpuNodeProcessor *self,
                                             GskRenderNode       *node)
@@ -3471,8 +3573,8 @@ static const struct
   },
   [GSK_STROKE_NODE] = {
     0,
-    0,
-    NULL,
+    GSK_GPU_HANDLE_OPACITY,
+    gsk_gpu_node_processor_add_stroke_node,
     NULL,
   },
   [GSK_SUBSURFACE_NODE] = {
