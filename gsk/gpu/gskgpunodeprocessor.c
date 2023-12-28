@@ -273,6 +273,54 @@ rect_round_to_pixels (const graphene_rect_t *src,
       (ceil ((src->origin.y + src->size.height) * yscale) - y) * inv_yscale);
 }
 
+static GskGpuImage *
+gsk_gpu_node_processor_init_draw (GskGpuNodeProcessor   *self,
+                                  GskGpuFrame           *frame,
+                                  GdkMemoryDepth         depth,
+                                  const graphene_vec2_t *scale,
+                                  const graphene_rect_t *viewport)
+{
+  GskGpuImage *image;
+  cairo_rectangle_int_t area;
+
+  area.x = 0;
+  area.y = 0;
+  area.width = ceil (graphene_vec2_get_x (scale) * viewport->size.width);
+  area.height = ceil (graphene_vec2_get_y (scale) * viewport->size.height);
+
+  image = gsk_gpu_device_create_offscreen_image (gsk_gpu_frame_get_device (frame),
+                                                 FALSE,
+                                                 depth,
+                                                 area.width, area.height);
+  if (image == NULL)
+    return NULL;
+
+  gsk_gpu_node_processor_init (self,
+                               frame,
+                               NULL,
+                               image,
+                               &area,
+                               viewport);
+
+  gsk_gpu_render_pass_begin_op (frame,
+                                image,
+                                &area,
+                                GSK_RENDER_PASS_OFFSCREEN);
+
+  return image;
+}
+
+static void
+gsk_gpu_node_processor_finish_draw (GskGpuNodeProcessor *self,
+                                    GskGpuImage         *image)
+{
+  gsk_gpu_render_pass_end_op (self->frame,
+                              image,
+                              GSK_RENDER_PASS_OFFSCREEN);
+
+  gsk_gpu_node_processor_finish (self);
+}
+
 void
 gsk_gpu_node_processor_process (GskGpuFrame                 *frame,
                                 GskGpuImage                 *target,
@@ -2011,7 +2059,6 @@ gsk_gpu_node_processor_add_gradient_node (GskGpuNodeProcessor *self,
   graphene_rect_t bounds;
   gsize i, j;
   GskGpuImage *image;
-  int width, height;
   guint32 descriptor;
 
   if (n_stops < 8)
@@ -2038,24 +2085,11 @@ gsk_gpu_node_processor_add_gradient_node (GskGpuNodeProcessor *self,
     return;
   rect_round_to_pixels (&bounds, &self->scale, &bounds);
 
-  width = ceil (graphene_vec2_get_x (&self->scale) * bounds.size.width);
-  height = ceil (graphene_vec2_get_y (&self->scale) * bounds.size.height);
-
-  image = gsk_gpu_device_create_offscreen_image (gsk_gpu_frame_get_device (self->frame),
-                                                 FALSE,
-                                                 gsk_render_node_get_preferred_depth (node),
-                                                 width, height);
-  gsk_gpu_node_processor_init (&other,
-                               self->frame,
-                               NULL,
-                               image,
-                               &(cairo_rectangle_int_t) { 0, 0, width, height },
-                               &bounds);
-
-  gsk_gpu_render_pass_begin_op (other.frame,
-                                image,
-                                &(cairo_rectangle_int_t) { 0, 0, width, height },
-                                GSK_RENDER_PASS_OFFSCREEN);
+  image = gsk_gpu_node_processor_init_draw (&other,
+                                            self->frame,
+                                            gsk_render_node_get_preferred_depth (node),
+                                            &self->scale,
+                                            &bounds);
 
   other.blend = GSK_GPU_BLEND_ADD;
   other.pending_globals |= GSK_GPU_GLOBAL_BLEND;
@@ -2098,11 +2132,7 @@ gsk_gpu_node_processor_add_gradient_node (GskGpuNodeProcessor *self,
       func (&other, node, real_stops, j);
     }
 
-  gsk_gpu_render_pass_end_op (other.frame,
-                              image,
-                              GSK_RENDER_PASS_OFFSCREEN);
-
-  gsk_gpu_node_processor_finish (&other);
+  gsk_gpu_node_processor_finish_draw (&other, image);
 
   descriptor = gsk_gpu_node_processor_add_image (self, image, GSK_GPU_SAMPLER_DEFAULT);
 
