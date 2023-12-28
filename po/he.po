@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.HEAD.he\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2023-11-30 18:27+0000\n"
-"PO-Revision-Date: 2023-12-03 15:30+0200\n"
+"POT-Creation-Date: 2023-12-27 22:15+0000\n"
+"PO-Revision-Date: 2023-12-28 13:40+0200\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: Hebrew <yoseforb@gmail.com>\n"
 "Language: he\n"
@@ -53,35 +53,35 @@ msgstr "לא ניתן לספק תוכן בתור „%s”"
 msgid "Cannot provide contents as %s"
 msgstr "לא ניתן לספק תוכן בתור %s"
 
-#: gdk/gdkdisplay.c:169 gdk/gdkglcontext.c:455
+#: gdk/gdkdisplay.c:170 gdk/gdkglcontext.c:462
 msgid "The current backend does not support OpenGL"
 msgstr "המנשק הנוכחי אינו תומך ב־‏OpenGL"
 
-#: gdk/gdkdisplay.c:1268 gdk/gdksurface.c:1268 gdk/gdkvulkancontext.c:1479
+#: gdk/gdkdisplay.c:1278 gdk/gdksurface.c:1268 gdk/gdkvulkancontext.c:1479
 msgid "Vulkan support disabled via GDK_DEBUG"
 msgstr "התמיכה ב־Vulkan מושבתת דרך GDK_DEBUG"
 
-#: gdk/gdkdisplay.c:1300
+#: gdk/gdkdisplay.c:1310
 msgid "GL support disabled via GDK_DEBUG"
 msgstr "התמיכה ב־GL הושבתה דרך GDK_DEBUG"
 
-#: gdk/gdkdisplay.c:1596
+#: gdk/gdkdisplay.c:1606
 msgid "No EGL configuration available"
 msgstr "אין תצורת EGL זמינה"
 
-#: gdk/gdkdisplay.c:1604
+#: gdk/gdkdisplay.c:1614
 msgid "Failed to get EGL configurations"
 msgstr "קבלת תצורות EGL נכשלה"
 
-#: gdk/gdkdisplay.c:1634
+#: gdk/gdkdisplay.c:1644
 msgid "No EGL configuration with required features found"
 msgstr "לא נמצאה תצורת EGL עם היכולות הנדרשות"
 
-#: gdk/gdkdisplay.c:1641
+#: gdk/gdkdisplay.c:1651
 msgid "No perfect EGL configuration found"
 msgstr "לא נמצאה תצורת EGL מושלמת"
 
-#: gdk/gdkdisplay.c:1683
+#: gdk/gdkdisplay.c:1693
 #, c-format
 msgid "EGL implementation is missing extension %s"
 msgid_plural "EGL implementation is missing %2$d extensions: %1$s"
@@ -90,23 +90,23 @@ msgstr[1] "למימוש ה־EGL חסרות שתי הרחבות: %1$s"
 msgstr[2] "למימוש ה־EGL חסרות %2$d הרחבות: %1$s"
 msgstr[3] "למימוש ה־EGL חסרות %2$d הרחבות: %1$s"
 
-#: gdk/gdkdisplay.c:1733
+#: gdk/gdkdisplay.c:1743
 msgid "libEGL not available in this sandbox"
 msgstr "libEGL אינו זמין בארגז חול זה"
 
-#: gdk/gdkdisplay.c:1734
+#: gdk/gdkdisplay.c:1744
 msgid "libEGL not available"
 msgstr "‫libEGL לא זמין"
 
-#: gdk/gdkdisplay.c:1744
+#: gdk/gdkdisplay.c:1754
 msgid "Failed to create EGL display"
 msgstr "יצירת תצוגת EGL נכשלה"
 
-#: gdk/gdkdisplay.c:1754
+#: gdk/gdkdisplay.c:1764
 msgid "Could not initialize EGL display"
 msgstr "לא ניתן להפעיל תצוגת EGL"
 
-#: gdk/gdkdisplay.c:1765
+#: gdk/gdkdisplay.c:1775
 #, c-format
 msgid "EGL version %d.%d is too old. GTK requires %d.%d"
 msgstr "גרסת ה־EGL‏ %d.%d ישנה מדי. GTK דורש %d.%d"
@@ -119,37 +119,37 @@ msgstr "אין תמיכה בגרירה והשלכה מיישומים אחרים.
 msgid "No compatible formats to transfer contents."
 msgstr "אין תצורות תואמות להעברת תכנים."
 
-#: gdk/gdkglcontext.c:415 gdk/x11/gdkglcontext-glx.c:642
+#: gdk/gdkglcontext.c:422 gdk/x11/gdkglcontext-glx.c:642
 msgid "No GL API allowed."
 msgstr "אין GL API מאופשר."
 
-#: gdk/gdkglcontext.c:438 gdk/win32/gdkglcontext-win32-wgl.c:385
-#: gdk/win32/gdkglcontext-win32-wgl.c:528
-#: gdk/win32/gdkglcontext-win32-wgl.c:572 gdk/x11/gdkglcontext-glx.c:688
+#: gdk/gdkglcontext.c:445 gdk/win32/gdkglcontext-win32-wgl.c:381
+#: gdk/win32/gdkglcontext-win32-wgl.c:524
+#: gdk/win32/gdkglcontext-win32-wgl.c:568 gdk/x11/gdkglcontext-glx.c:688
 msgid "Unable to create a GL context"
 msgstr "Unable to create a GL context"
 
-#: gdk/gdkglcontext.c:1299
+#: gdk/gdkglcontext.c:1306
 msgid "OpenGL ES disabled via GDK_DEBUG"
 msgstr "OpenGL ES מושבת על ידי GDK_DEBUG"
 
-#: gdk/gdkglcontext.c:1311
+#: gdk/gdkglcontext.c:1318
 msgid "OpenGL disabled via GDK_DEBUG"
 msgstr "OpenGL מושבת על ידי GDK_DEBUG"
 
-#: gdk/gdkglcontext.c:1322
+#: gdk/gdkglcontext.c:1329
 #, c-format
 msgid "Application does not support %s API"
 msgstr "היישום אינו תומך ב־API ‏%s"
 
 #. translators: This is about OpenGL backend names, like
 #. * "Trying to use X11 GLX, but EGL is already in use"
-#: gdk/gdkglcontext.c:1979
+#: gdk/gdkglcontext.c:2123
 #, c-format
 msgid "Trying to use %s, but %s is already in use"
 msgstr "מתבצע ניסיון להשתמש ב־%s אך %s כבר בשימוש"
 
-#: gdk/gdktexture.c:530
+#: gdk/gdktexture.c:580
 msgid "Unknown image format."
 msgstr "תצורת התמונה אינה מוכרת."
 
@@ -708,21 +708,21 @@ msgstr "IDataObject_GetData (0x%x) failed, returning 0x%lx"
 msgid "Failed to transmute DnD data W32 format 0x%x to %p (%s)"
 msgstr "Failed to transmute DnD data W32 format 0x%x to %p (%s)"
 
-#: gdk/win32/gdkglcontext-win32-wgl.c:319
+#: gdk/win32/gdkglcontext-win32-wgl.c:315
 msgid "No GL implementation is available"
 msgstr "אין מימוש GL זמין"
 
-#: gdk/win32/gdkglcontext-win32-wgl.c:394
+#: gdk/win32/gdkglcontext-win32-wgl.c:390
 #, c-format
 msgid "WGL version %d.%d is too low, need at least %d.%d"
 msgstr "גרסת ה־WGL‏ %d.%d ישנה מדי. צריך לפחות %d.%d"
 
-#: gdk/win32/gdkglcontext-win32-wgl.c:412
+#: gdk/win32/gdkglcontext-win32-wgl.c:408
 #, c-format
 msgid "GL implementation cannot share GL contexts"
 msgstr "מימוש GL לא יכול לשתף הקשרי GL"
 
-#: gdk/win32/gdkglcontext-win32-wgl.c:692
+#: gdk/win32/gdkglcontext-win32-wgl.c:688
 msgid "No available configurations for the given pixel format"
 msgstr "No available configurations for the given pixel format"
 
@@ -826,7 +826,7 @@ msgstr "תצורות שגויות בהמרת טקסט מרוכב."
 msgid "Unsupported encoding “%s”"
 msgstr "הקידוד „%s” אינו נתמך"
 
-#: gsk/gl/gskglrenderer.c:135
+#: gsk/gl/gskglrenderer.c:210
 #, c-format
 msgid "This GLES %d.%d implementation does not support half-float vertex data"
 msgstr "מימוש זה של GLES %d.%d לא תומך בנתוני קודקודים עם נקודה חצי צפה"
@@ -1207,28 +1207,32 @@ msgstr "רישיון אפאצ'י, גרסה 2.0"
 msgid "Mozilla Public License 2.0"
 msgstr "הרישיון הציבורי של מוזילה, גרסה 2.0"
 
-#: gtk/gtkaboutdialog.c:963
+#: gtk/gtkaboutdialog.c:137
+msgid "BSD Zero-Clause License"
+msgstr "רשיון BSD אפס סעיפים"
+
+#: gtk/gtkaboutdialog.c:964
 msgid "Website"
 msgstr "אתר אינטרנט"
 
-#: gtk/gtkaboutdialog.c:999 gtk/ui/gtkapplication-quartz.ui:6
+#: gtk/gtkaboutdialog.c:1000 gtk/ui/gtkapplication-quartz.ui:6
 #, c-format
 msgid "About %s"
 msgstr "על אודות %s"
 
-#: gtk/gtkaboutdialog.c:2089
+#: gtk/gtkaboutdialog.c:2090
 msgid "Created by"
 msgstr "נוצר על ידי"
 
-#: gtk/gtkaboutdialog.c:2092
+#: gtk/gtkaboutdialog.c:2093
 msgid "Documented by"
 msgstr "תועד על ידי"
 
-#: gtk/gtkaboutdialog.c:2102
+#: gtk/gtkaboutdialog.c:2103
 msgid "Translated by"
 msgstr "תורגם על ידי"
 
-#: gtk/gtkaboutdialog.c:2107
+#: gtk/gtkaboutdialog.c:2108
 msgid "Design by"
 msgstr "עוצב על ידי"
 
@@ -1287,7 +1291,7 @@ msgstr "עוצב על ידי"
 #. Translators: this is the license preamble; the string at the end
 #. * contains the name of the license as link text.
 #.
-#: gtk/gtkaboutdialog.c:2272
+#: gtk/gtkaboutdialog.c:2273
 #, c-format
 msgid ""
 "This program comes with absolutely no warranty.\n"
@@ -1787,6 +1791,16 @@ msgctxt "accessibility"
 msgid "block quote"
 msgstr "מעטפת ציטטה"
 
+#: gtk/gtkaccessible.c:837
+msgctxt "accessibility"
+msgid "article"
+msgstr "פרק"
+
+#: gtk/gtkaccessible.c:838
+msgctxt "accessibility"
+msgid "comment"
+msgstr "הערה"
+
 #: gtk/gtkalertdialog.c:668 gtk/print/gtkcustompaperunixdialog.c:322
 #: gtk/gtkmessagedialog.c:166 gtk/ui/gtkassistant.ui:40
 msgid "_Close"
@@ -1796,7 +1810,7 @@ msgstr "_סגירה"
 #. * suspend or screen locking, and the caller hasn't specified
 #. * a reason.
 #.
-#: gtk/gtkapplication-dbus.c:721
+#: gtk/gtkapplication-dbus.c:721 gtk/gtkapplication-dbus.c:763
 msgid "Reason not specified"
 msgstr "לא צוינה סיבה"
 
@@ -2272,7 +2286,7 @@ msgstr "קובץ בשם זה כבר קיים"
 #: gtk/gtkmessagedialog.c:179 gtk/gtkmountoperation.c:608
 #: gtk/print/gtkpagesetupunixdialog.c:282 gtk/print/gtkprintbackend.c:638
 #: gtk/print/gtkprintunixdialog.c:682 gtk/print/gtkprintunixdialog.c:839
-#: gtk/gtkwindow.c:6234 gtk/ui/gtkappchooserdialog.ui:48
+#: gtk/gtkwindow.c:6253 gtk/ui/gtkappchooserdialog.ui:48
 #: gtk/ui/gtkassistant.ui:52 gtk/ui/gtkcolorchooserdialog.ui:36
 #: gtk/ui/gtkfontchooserdialog.ui:27
 msgid "_Cancel"
@@ -2799,7 +2813,7 @@ msgid "Play"
 msgstr "ניגון"
 
 #: gtk/gtkmessagedialog.c:162 gtk/gtkmessagedialog.c:180
-#: gtk/print/gtkprintbackend.c:639 gtk/gtkwindow.c:6235
+#: gtk/print/gtkprintbackend.c:639 gtk/gtkwindow.c:6254
 msgid "_OK"
 msgstr "_אישור"
 
@@ -3678,12 +3692,12 @@ msgstr "_ביטול"
 msgid "_Redo"
 msgstr "ביצוע _שוב"
 
-#: gtk/gtkwindow.c:6223
+#: gtk/gtkwindow.c:6242
 #, c-format
 msgid "Do you want to use GTK Inspector?"
 msgstr "להשתמש במפקח GTK‎?"
 
-#: gtk/gtkwindow.c:6225
+#: gtk/gtkwindow.c:6244
 #, c-format
 msgid ""
 "GTK Inspector is an interactive debugger that lets you explore and modify "
@@ -3693,7 +3707,7 @@ msgstr ""
 "מפקח GTK‎ הוא מנפה שגיאות הידודי המאפשר לך לחקור ולשנות את הפנים של כל יישום "
 "GTK+‎. שימוש בו יכול לגרום ליישום להישבר או לקרוס."
 
-#: gtk/gtkwindow.c:6230
+#: gtk/gtkwindow.c:6249
 msgid "Don’t show this message again"
 msgstr "לא להציג הודעה זו שוב"
 
@@ -4404,47 +4418,54 @@ msgstr "הצגת קצב תמוניות"
 msgid "Show Graphic Updates"
 msgstr "הצגת עדכונים גרפיים"
 
-#: gtk/inspector/visual.ui:435
-msgid "Show Fallback Rendering"
-msgstr "הצגת עיבוד בסיסי"
+#: gtk/inspector/visual.ui:430
+msgid ""
+"Tints all the places where the current renderer uses Cairo instead of the "
+"GPU."
+msgstr ""
+"מכהה את כל המקומות שמעבד התצוגה הנוכחית משתמש ב־Cairo במקום במעבד הגרפי."
 
-#: gtk/inspector/visual.ui:460
+#: gtk/inspector/visual.ui:436
+msgid "Show Cairo Rendering"
+msgstr "הצגת עיבוד Cairo"
+
+#: gtk/inspector/visual.ui:461
 msgid "Show Baselines"
 msgstr "הצגת קווי בסיס (Baselines)"
 
-#: gtk/inspector/visual.ui:488
+#: gtk/inspector/visual.ui:489
 msgid "Show Layout Borders"
 msgstr "הצגת גבולות פריסה"
 
-#: gtk/inspector/visual.ui:545
+#: gtk/inspector/visual.ui:546
 msgid "CSS Padding"
 msgstr "מרווח ב־CSS"
 
-#: gtk/inspector/visual.ui:555
+#: gtk/inspector/visual.ui:556
 msgid "CSS Border"
 msgstr "מסגרת CSS"
 
-#: gtk/inspector/visual.ui:565
+#: gtk/inspector/visual.ui:566
 msgid "CSS Margin"
 msgstr "שול CSS"
 
-#: gtk/inspector/visual.ui:575
+#: gtk/inspector/visual.ui:576
 msgid "Widget Margin"
 msgstr "שול הווידג׳ט"
 
-#: gtk/inspector/visual.ui:610
+#: gtk/inspector/visual.ui:611
 msgid "Show Focus"
 msgstr "הצגת מיקוד"
 
-#: gtk/inspector/visual.ui:635
+#: gtk/inspector/visual.ui:636
 msgid "Show Accessibility warnings"
 msgstr "הצגת אזהרות נגישות"
 
-#: gtk/inspector/visual.ui:660
+#: gtk/inspector/visual.ui:661
 msgid "Show Graphics Offload"
 msgstr "הצגת פריקת גרפיקה"
 
-#: gtk/inspector/visual.ui:692
+#: gtk/inspector/visual.ui:693
 msgid "Inspect Inspector"
 msgstr "חקירת חוקר"
 
@@ -7613,8 +7634,6 @@ msgstr "%d פעולות"
 
 #: tools/gtk-path-tool-info.c:144
 #, c-format
-#| msgctxt "Script"
-#| msgid "Balinese"
 msgid "%d lines"
 msgstr "%d קווים"
 
@@ -7802,7 +7821,6 @@ msgstr "הקריאה מהקלט התקני (stdin) נכשלה: %s\n"
 
 #: tools/gtk-path-tool-utils.c:64
 #, c-format
-#| msgid "Error parsing commandline options: %s\n"
 msgid "Error reading from standard input: %s\n"
 msgstr "שגיאת קריאה מהקלט התקני (stdin): %s\n"
 
@@ -7892,9 +7910,6 @@ msgstr "יכול לקבל רק קובץ ‎.node בודד\n"
 
 #: tools/gtk-rendernode-tool-render.c:123
 #, c-format
-#| msgid ""
-#| "File %s exists.\n"
-#| "Use --force to overwrite.\n"
 msgid ""
 "File %s exists.\n"
 "If you want to overwrite, specify the filename.\n"
@@ -7939,7 +7954,6 @@ msgstr "יכול להציג תצוגה מקדימה של קובץ ‎.node יח�
 
 #: tools/gtk-rendernode-tool-utils.c:51
 #, c-format
-#| msgid "Error creating folder '%s': %s"
 msgid "Error at %s: %s\n"
 msgstr "שגיאה ב־%s‏: %s\n"
 
@@ -8114,8 +8128,8 @@ msgstr ""
 #~ msgid "Switch to list view"
 #~ msgstr "החלפה לתצוגת רשימה"
 
-#~ msgid "default:LTR"
-#~ msgstr "default:RTL"
+msgid "default:LTR"
+msgstr "default:RTL"
 
 #~ msgid "Other application…"
 #~ msgstr "יישום אחר…"
