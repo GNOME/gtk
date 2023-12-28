@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.HEAD.he\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-12-22 16:00+0000\n"
-"PO-Revision-Date: 2023-12-03 00:11+0200\n"
+"POT-Creation-Date: 2023-12-26 00:59+0000\n"
+"PO-Revision-Date: 2023-12-28 14:16+0200\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: Hebrew <yoseforb@gmail.com>\n"
 "Language: he\n"
@@ -476,10 +476,8 @@ msgid "Suspend"
 msgstr "השהיה"
 
 #: gdk/quartz/gdkglcontext-quartz.c:123
-#, fuzzy
-#| msgid "Unable to create a GL context"
 msgid "Unable to create a GL pixel format"
-msgstr "Unable to create a GL context"
+msgstr "לא ניתן ליצור תבנית פיקסלים ב־GL"
 
 #: gdk/quartz/gdkglcontext-quartz.c:133 gdk/wayland/gdkglcontext-wayland.c:208
 #: gdk/win32/gdkglcontext-win32.c:808 gdk/win32/gdkglcontext-win32.c:1264
@@ -504,10 +502,9 @@ msgid "Core GL is not available on EGL implementation"
 msgstr "Core GL is not available on EGL implementation"
 
 #: gdk/x11/gdkapplaunchcontext-x11.c:298
-#, fuzzy, c-format
-#| msgid "Starting “%s”"
+#, c-format
 msgid "Starting %s"
-msgstr "Starting “%s”"
+msgstr "„%s” מופעל"
 
 #: gdk/x11/gdkapplaunchcontext-x11.c:311
 #, c-format
@@ -534,25 +531,16 @@ msgid "Toggles the cell"
 msgstr "מחליף את התא"
 
 #: gtk/a11y/gtkbooleancellaccessible.c:63 gtk/a11y/gtkswitchaccessible.c:89
-#, fuzzy
-#| msgctxt "accessibility"
-#| msgid "Toggle"
 msgctxt "Action name"
 msgid "Toggle"
 msgstr "בורר"
 
 #: gtk/a11y/gtkbuttonaccessible.c:321 gtk/a11y/gtkmenuitemaccessible.c:436
-#, fuzzy
-#| msgctxt "accessibility"
-#| msgid "Click"
 msgctxt "Action name"
 msgid "Click"
 msgstr "לחיצה"
 
 #: gtk/a11y/gtkbuttonaccessible.c:330
-#, fuzzy
-#| msgctxt "accessibility"
-#| msgid "Clicks the button"
 msgctxt "Action description"
 msgid "Clicks the button"
 msgstr "לוחץ על הכפתור"
@@ -589,40 +577,26 @@ msgid "Activates the cell"
 msgstr "מפעיל את התא"
 
 #: gtk/a11y/gtkcolorswatchaccessible.c:148
-#, fuzzy
-#| msgctxt "accessibility"
-#| msgid "Select"
 msgctxt "Action name"
 msgid "Select"
 msgstr "בחירה"
 
 #: gtk/a11y/gtkcolorswatchaccessible.c:150
-#, fuzzy
-#| msgid "Customize"
 msgctxt "Action name"
 msgid "Customize"
 msgstr "התאמה אישית"
 
 #: gtk/a11y/gtkcolorswatchaccessible.c:161
-#, fuzzy
-#| msgctxt "accessibility"
-#| msgid "Selects the color"
 msgctxt "Action description"
 msgid "Selects the color"
 msgstr "בוחר בצבע"
 
 #: gtk/a11y/gtkcolorswatchaccessible.c:162
-#, fuzzy
-#| msgctxt "accessibility"
-#| msgid "Activates the color"
 msgctxt "Action description"
 msgid "Activates the color"
 msgstr "מפעיל את הצבע"
 
 #: gtk/a11y/gtkcolorswatchaccessible.c:163
-#, fuzzy
-#| msgctxt "accessibility"
-#| msgid "Customizes the color"
 msgctxt "Action description"
 msgid "Customizes the color"
 msgstr "מתאים את הצבע"
@@ -638,32 +612,24 @@ msgid "Presses the combobox"
 msgstr "לוחצת על תיבת הבחירה"
 
 #: gtk/a11y/gtkentryaccessible.c:1566
-#, fuzzy
-#| msgctxt "accessibility"
-#| msgid "Activates the entry"
 msgctxt "Action description"
 msgid "Activates the entry"
 msgstr "מפעיל את הרשומה"
 
 #: gtk/a11y/gtkexpanderaccessible.c:290
-#, fuzzy
-#| msgctxt "accessibility"
-#| msgid "Activates the expander"
 msgctxt "Action description"
 msgid "Activates the expander"
 msgstr "מפעיל את המרחיב"
 
 #: gtk/a11y/gtkfilechooserwidgetaccessible.c:101
-#, fuzzy
-#| msgid "Show other locations"
 msgctxt "Action name"
 msgid "Show location"
-msgstr "הצגת מיקומים אחרים"
+msgstr "הצגת מקום"
 
 #: gtk/a11y/gtkfilechooserwidgetaccessible.c:110
 msgctxt "Action description"
 msgid "Show the File Chooser's Location text field"
-msgstr ""
+msgstr "הצגת שדה טקסט מקום בורר הקבצים"
 
 #. FIXME these need accelerators when appropriate, and
 #. * need the mnemonics to be rationalized
@@ -689,12 +655,9 @@ msgid "_CD-ROM"
 msgstr "_תקליטור"
 
 #: gtk/a11y/gtkimageaccessible.c:57 gtk/deprecated/gtkstock.c:351
-#, fuzzy
-#| msgctxt "accessibility"
-#| msgid "Clear"
 msgctxt "Stock label"
 msgid "_Clear"
-msgstr "פינוי"
+msgstr "_פינוי"
 
 #: gtk/a11y/gtkimageaccessible.c:58 gtk/deprecated/gtkstock.c:352
 msgctxt "Stock label"
@@ -911,37 +874,27 @@ msgstr "ה_שהיה"
 # msgctxt "Stock label, media"
 #. Media label, as in "play music"
 #: gtk/a11y/gtkimageaccessible.c:97 gtk/deprecated/gtkstock.c:409
-#, fuzzy
-#| msgctxt "media controls tooltip"
-#| msgid "Play"
 msgctxt "Stock label, media"
 msgid "_Play"
-msgstr "ניגון"
+msgstr "_ניגון"
 
 #. Media label, as in  "previous song"
 #: gtk/a11y/gtkimageaccessible.c:98 gtk/deprecated/gtkstock.c:411
-#, fuzzy
-#| msgid "Previous tab"
 msgctxt "Stock label, media"
 msgid "Pre_vious"
-msgstr "לשונית קודמת"
+msgstr "ה_קודם"
 
 #. Media label
 #: gtk/a11y/gtkimageaccessible.c:99 gtk/deprecated/gtkstock.c:413
-#, fuzzy
-#| msgid "Recorder"
 msgctxt "Stock label, media"
 msgid "_Record"
-msgstr "מקליט"
+msgstr "הק_לטה"
 
 #. Media label
 #: gtk/a11y/gtkimageaccessible.c:100 gtk/deprecated/gtkstock.c:415
-#, fuzzy
-#| msgctxt "keyboard label"
-#| msgid "AudioRewind"
 msgctxt "Stock label, media"
 msgid "R_ewind"
-msgstr "מדיה – חזרה"
+msgstr "הרצה א_חורה"
 
 #. Media label
 #: gtk/a11y/gtkimageaccessible.c:101 gtk/deprecated/gtkstock.c:417
@@ -975,11 +928,9 @@ msgid "_Print"
 msgstr "_הדפסה"
 
 #: gtk/a11y/gtkimageaccessible.c:107 gtk/deprecated/gtkstock.c:435
-#, fuzzy
-#| msgid "Path Preview"
 msgctxt "Stock label"
 msgid "Print Pre_view"
-msgstr "תצוגת נתיב מקדימה"
+msgstr "תצוגה מ_קדימה להדפסה"
 
 #: gtk/a11y/gtkimageaccessible.c:108 gtk/deprecated/gtkstock.c:436
 msgctxt "Stock label"
@@ -992,8 +943,6 @@ msgid "_Quit"
 msgstr "י_ציאה"
 
 #: gtk/a11y/gtkimageaccessible.c:110 gtk/deprecated/gtkstock.c:438
-#, fuzzy
-#| msgid "_Redo"
 msgctxt "Stock label"
 msgid "_Redo"
 msgstr "ביצוע _שוב"
@@ -1064,11 +1013,9 @@ msgid "_Underline"
 msgstr "קו _תחתי"
 
 #: gtk/a11y/gtkimageaccessible.c:123 gtk/deprecated/gtkstock.c:458
-#, fuzzy
-#| msgid "_Undo"
 msgctxt "Stock label"
 msgid "_Undo"
-msgstr "_ביטול"
+msgstr "ה_סגה"
 
 #: gtk/a11y/gtkimageaccessible.c:124 gtk/deprecated/gtkstock.c:388
 msgctxt "Stock label"
@@ -1102,12 +1049,9 @@ msgid "Menu"
 msgstr "תפריט"
 
 #: gtk/a11y/gtkmenuitemaccessible.c:445
-#, fuzzy
-#| msgctxt "accessibility"
-#| msgid "Clicks the button"
 msgctxt "Action description"
 msgid "Clicks the menuitem"
-msgstr "לוחץ על הכפתור"
+msgstr "לוחץ על פריט התפריט"
 
 #: gtk/a11y/gtkscalebuttonaccessible.c:140
 msgctxt "Action description"
@@ -1130,24 +1074,18 @@ msgid "Dismiss"
 msgstr "התעלמות"
 
 #: gtk/a11y/gtkspinneraccessible.c:39
-#, fuzzy
-#| msgctxt "accessibility"
-#| msgid "banner"
 msgctxt "throbbing progress animation widget"
 msgid "Spinner"
-msgstr "כרזה"
+msgstr "שבשבת"
 
 #: gtk/a11y/gtkspinneraccessible.c:40
 msgid "Provides visual indication of progress"
 msgstr "אספקת חיווי חזותי של התהליך"
 
 #: gtk/a11y/gtkswitchaccessible.c:98
-#, fuzzy
-#| msgctxt "accessibility"
-#| msgid "Toggles the switch"
 msgctxt "Action description"
 msgid "Toggles the switch"
-msgstr "בורר את מצב המפסק"
+msgstr "הופך את מצב המתג"
 
 #: gtk/deprecated/gtkcolorsel.c:425
 msgid ""
@@ -1469,10 +1407,8 @@ msgid "Unexpected character data on line %d char %d"
 msgstr "מידע תו לא צפוי בשורה %d תו %d"
 
 #: gtk/deprecated/gtkuimanager.c:2709
-#, fuzzy
-#| msgid "(Empty)"
 msgid "Empty"
-msgstr "(ריק)"
+msgstr "ריק"
 
 #: gtk/encodesymbolic.c:38
 msgid "Output to this directory instead of cwd"
@@ -1484,20 +1420,17 @@ msgid "Invalid size %s\n"
 msgstr "Invalid size %s\n"
 
 #: gtk/encodesymbolic.c:279 gtk/gtk-builder-tool.c:671
-#, fuzzy, c-format
-#| msgid "Can’t load file: %s\n"
+#, c-format
 msgid "Can't load file: %s\n"
 msgstr "לא ניתן לטעון קובץ: %s\n"
 
 #: gtk/encodesymbolic.c:307 gtk/encodesymbolic.c:313
-#, fuzzy, c-format
-#| msgid "Can’t save file %s: %s\n"
+#, c-format
 msgid "Can't save file %s: %s\n"
 msgstr "אי אפשר לשמור קובץ %s‏: %s\n"
 
 #: gtk/encodesymbolic.c:319
-#, fuzzy, c-format
-#| msgid "Can’t close stream"
+#, c-format
 msgid "Can't close stream"
 msgstr "אי אפשר לסגור תזרים"
 
@@ -1810,28 +1743,21 @@ msgid "Default Application"
 msgstr "יישום בררת המחדל"
 
 #: gtk/gtkappchooserwidget.c:643
-#, fuzzy, c-format
-#| msgid "No applications found for “%s”"
+#, c-format
 msgid "No applications found for “%s”."
 msgstr "לא נמצאו יישומים עבור „%s“"
 
 #: gtk/gtkappchooserwidget.c:726
-#, fuzzy
-#| msgid "Recommended Apps"
 msgid "Recommended Applications"
 msgstr "יישומים מומלצים"
 
 #: gtk/gtkappchooserwidget.c:741
-#, fuzzy
-#| msgid "Select Application"
 msgid "Related Applications"
-msgstr "בחירת יישום"
+msgstr "יישומים קשורים"
 
 #: gtk/gtkappchooserwidget.c:755
-#, fuzzy
-#| msgid "Other application…"
 msgid "Other Applications"
-msgstr "יישום אחר…"
+msgstr "יישומים אחרים"
 
 #: gtk/gtkapplicationwindow.c:345 gtk/gtkprintoperation-unix.c:485
 #: gtk/gtkprintoperation-win32.c:1589 gtk/inspector/prop-editor.c:1686
@@ -1864,51 +1790,32 @@ msgid "Text may not appear inside <%s>"
 msgstr "ייתכן שהטקסט לא יופיע בתוך <%s>"
 
 #: gtk/gtk-builder-tool.c:124
-#, fuzzy, c-format
-#| msgid "Packing property %s not found"
+#, c-format
 msgid "Packing property %s::%s not found\n"
-msgstr "מאפיין האריזה %s לא נמצא"
+msgstr "מאפיין האריזה %s::%s לא נמצא\n"
 
 #: gtk/gtk-builder-tool.c:126
-#, fuzzy, c-format
-#| msgid "Cell property %s not found"
+#, c-format
 msgid "Cell property %s::%s not found\n"
-msgstr "מאפיין התא %s לא נמצא"
+msgstr "מאפיין התא %s::%s לא נמצא\n"
 
 #: gtk/gtk-builder-tool.c:128
-#, fuzzy, c-format
-#| msgid "Property %s not found"
+#, c-format
 msgid "Property %s::%s not found\n"
-msgstr "המאפיין %s לא נמצא"
+msgstr "המאפיין %s::%s לא נמצא\n"
 
 #: gtk/gtk-builder-tool.c:136
-#, fuzzy, c-format
-#| msgid "%s:%d: Couldn’t parse value for property '%s': %s\n"
+#, c-format
 msgid "Couldn't parse value for %s::%s: %s\n"
-msgstr "%s:%d: Couldn’t parse value for property '%s': %s\n"
+msgstr "לא ניתן לפענח את הערך עבור %s::%s‏: %s\n"
 
 #: gtk/gtk-builder-tool.c:692
-#, fuzzy, c-format
-#| msgid "Can’t load file: %s\n"
+#, c-format
 msgid "Can't parse file: %s\n"
-msgstr "לא ניתן לטעון קובץ: %s\n"
+msgstr "לא ניתן לפענח קובץ: %s\n"
 
 #: gtk/gtk-builder-tool.c:1058
-#, fuzzy, c-format
-#| msgid ""
-#| "Usage:\n"
-#| "  gtk4-builder-tool [COMMAND] [OPTION…] FILE\n"
-#| "\n"
-#| "Perform various tasks on GtkBuilder .ui files.\n"
-#| "\n"
-#| "Commands:\n"
-#| "  validate     Validate the file\n"
-#| "  simplify     Simplify the file\n"
-#| "  enumerate    List all named objects\n"
-#| "  preview      Preview the file\n"
-#| "  render       Take a screenshot of the file\n"
-#| "  screenshot   Take a screenshot of the file\n"
-#| "\n"
+#, c-format
 msgid ""
 "Usage:\n"
 "  gtk-builder-tool [COMMAND] FILE\n"
@@ -1928,19 +1835,23 @@ msgid ""
 "\n"
 "Perform various tasks on GtkBuilder .ui files.\n"
 msgstr ""
-"Usage:\n"
-"  gtk4-builder-tool [COMMAND] [OPTION…] FILE\n"
+"שימוש:\n"
+"  gtk-builder-tool [COMMAND] FILE\n"
 "\n"
-"Perform various tasks on GtkBuilder .ui files.\n"
+"פקודות:\n"
+"  validate           אימות הקובץ\n"
+"  simplify [OPTIONS] פישוט הקובץ\n"
+"  enumerate          הצגת כל העצמים עם שם\n"
+"  preview [OPTIONS]  תצוגה מקדימה של הקובץ\n"
 "\n"
-"Commands:\n"
-"  validate     Validate the file\n"
-"  simplify     Simplify the file\n"
-"  enumerate    List all named objects\n"
-"  preview      Preview the file\n"
-"  render       Take a screenshot of the file\n"
-"  screenshot   Take a screenshot of the file\n"
+"אפשרויות פישוט:\n"
+"  --replace          החלפת הקובץ\n"
 "\n"
+"אפשרויות תצוגה מקדימה:\n"
+"  --id=ID            תצוגה מקדימה של הפריטים עם שמות בלבד\n"
+"  --css=FILE         להשתמש בסגנון מקובץ CSS\n"
+"\n"
+"ביצוע מגוון משימות על קובצי ‎.ui של GtkBuilder.\n"
 
 #. Translate to calendar:YM if you want years to be displayed
 #. * before months; otherwise translate to calendar:MY.
@@ -2301,10 +2212,8 @@ msgid "Custom"
 msgstr "התאמה אישית"
 
 #: gtk/gtkcolorchooserwidget.c:541
-#, fuzzy
-#| msgid "Custom color %d: %s"
 msgid "Custom color"
-msgstr "צבע מותאם אישית %d:‏ %s"
+msgstr "צבע מותאם אישית"
 
 #: gtk/gtkcolorchooserwidget.c:542
 msgid "Create a custom color"
@@ -2447,10 +2356,8 @@ msgid "Insert Emoji"
 msgstr "הכנסת רגשון"
 
 #: gtk/gtkfilechooserbutton.c:112
-#, fuzzy
-#| msgid "Select a Folder"
 msgid "Select a File"
-msgstr "בחירת תיקייה"
+msgstr "בחירת קובץ"
 
 #: gtk/gtkfilechooserbutton.c:113 gtk/gtkplacessidebar.c:1112
 msgid "Desktop"
@@ -2461,10 +2368,8 @@ msgid "(None)"
 msgstr "(ללא)"
 
 #: gtk/gtkfilechooserbutton.c:2162
-#, fuzzy
-#| msgid "Other app…"
 msgid "Other…"
-msgstr "יישום אחר…"
+msgstr "אחר…"
 
 #: gtk/gtkfilechooserdialog.c:542
 msgid "_Name"
@@ -2664,16 +2569,12 @@ msgid "Show T_ype Column"
 msgstr "הצגת _סוג העמודה"
 
 #: gtk/gtkfilechooserwidget.c:2346
-#, fuzzy
-#| msgid "Show Text"
 msgid "Show _Time"
-msgstr "הצגת טקסט"
+msgstr "הצגת _שעה"
 
 #: gtk/gtkfilechooserwidget.c:2347
-#, fuzzy
-#| msgid "Sort _Folders Before Files"
 msgid "Sort _Folders before Files"
-msgstr "סידור _תיקיות לפני קבצים"
+msgstr "מיון תיקיות ל_פני קבצים"
 
 #. this is the header for the location column in the print dialog
 #: gtk/gtkfilechooserwidget.c:2629 gtk/inspector/css-node-tree.ui:141
@@ -2859,37 +2760,22 @@ msgid "None"
 msgstr "ללא"
 
 #: gtk/gtkfontchooserwidget.c:1604
-#, fuzzy
-#| msgctxt "Font variation axis"
-#| msgid "Width"
 msgid "Width"
 msgstr "רוחב"
 
 #: gtk/gtkfontchooserwidget.c:1605
-#, fuzzy
-#| msgctxt "Font variation axis"
-#| msgid "Weight"
 msgid "Weight"
-msgstr "משקל"
+msgstr "גובה"
 
 #: gtk/gtkfontchooserwidget.c:1606
-#, fuzzy
-#| msgctxt "Font variation axis"
-#| msgid "Italic"
 msgid "Italic"
 msgstr "נטוי"
 
 #: gtk/gtkfontchooserwidget.c:1607
-#, fuzzy
-#| msgctxt "Font variation axis"
-#| msgid "Slant"
 msgid "Slant"
 msgstr "משופע"
 
 #: gtk/gtkfontchooserwidget.c:1608
-#, fuzzy
-#| msgctxt "Font variation axis"
-#| msgid "Optical Size"
 msgid "Optical Size"
 msgstr "גודל אופטי"
 
@@ -2918,8 +2804,6 @@ msgid "Number Formatting"
 msgstr "מספר תבנית"
 
 #: gtk/gtkfontchooserwidget.c:2360
-#, fuzzy
-#| msgid "Character Variations"
 msgid "Character Variants"
 msgstr "הגווני תו"
 
@@ -2957,8 +2841,6 @@ msgstr "ללא"
 # hebrew note: "תיקייה" is "folder", but there is no better word for
 # "directory"
 #: gtk/gtkimmulticontext.c:615
-#, fuzzy
-#| msgid "System"
 msgctxt "input method menu"
 msgid "System"
 msgstr "מערכת"
@@ -3000,8 +2882,6 @@ msgid "Show program version"
 msgstr "הצגת גרסת התוכנית"
 
 #: gtk/gtk-launch.c:76
-#, fuzzy
-#| msgid "APPLICATION [URI…] — launch an APPLICATION"
 msgid "APPLICATION [URI...] — launch an APPLICATION"
 msgstr "APPLICATION [URI…] — הפעלת יישום"
 
@@ -3021,8 +2901,7 @@ msgid "Error parsing commandline options: %s\n"
 msgstr "שגיאה בפענוח אפשרויות שורת פקודה: %s\n"
 
 #: gtk/gtk-launch.c:94 gtk/gtk-launch.c:115
-#, fuzzy, c-format
-#| msgid "Try “%s --help” for more information."
+#, c-format
 msgid "Try \"%s --help\" for more information."
 msgstr "כדאי לנסות את „‎%s --help” למידע נוסף."
 
@@ -3053,10 +2932,8 @@ msgid "%s: error launching application: %s\n"
 msgstr "%s: שגיאה בטעינת יישום: %s\n"
 
 #: gtk/gtklinkbutton.c:374
-#, fuzzy
-#| msgid "_Copy URL"
 msgid "Copy URL"
-msgstr "ה_עתקת כתובת"
+msgstr "העתקת כתובת"
 
 #: gtk/gtklinkbutton.c:522
 msgid "Invalid URI"
@@ -3869,26 +3746,21 @@ msgid "%.0f %%"
 msgstr "%.0f %%"
 
 #: gtk/gtkrecentchooserdefault.c:1075 gtk/gtkrecentchooserdefault.c:1112
-#, fuzzy, c-format
-#| msgid "No object with ID '%s' found\n"
+#, c-format
 msgid "No item for URI '%s' found"
-msgstr "No object with ID '%s' found\n"
+msgstr "לא נמצא פריט לכתובת הזיהוי ‚%s’"
 
 #: gtk/gtkrecentchooserdefault.c:1239
 msgid "Untitled filter"
 msgstr "מסנן ללא שם"
 
 #: gtk/gtkrecentchooserdefault.c:1561
-#, fuzzy
-#| msgid "Could not remove bookmark"
 msgid "Could not remove item"
-msgstr "לא ניתן להסיר את הסימנייה"
+msgstr "לא ניתן להסיר את הפריט"
 
 #: gtk/gtkrecentchooserdefault.c:1605
-#, fuzzy
-#| msgid "Could not select file"
 msgid "Could not clear list"
-msgstr "לא ניתן לבחור את הקובץ"
+msgstr "לא ניתן לפנות את הרשימה"
 
 #: gtk/gtkrecentchooserdefault.c:1689
 msgid "Copy _Location"
@@ -3899,10 +3771,8 @@ msgid "_Remove From List"
 msgstr "ה_סרה מהרשימה"
 
 #: gtk/gtkrecentchooserdefault.c:1707
-#, fuzzy
-#| msgid "Clear Entry"
 msgid "_Clear List"
-msgstr "פינוי הרשומה"
+msgstr "_פינוי הרשימה"
 
 #: gtk/gtkrecentchooserdefault.c:1719
 msgid "Show _Private Resources"
@@ -3919,10 +3789,8 @@ msgstr "הצגת _משאבים פרטיים"
 #. * recent chooser menu widget.
 #.
 #: gtk/gtkrecentchoosermenu.c:343
-#, fuzzy
-#| msgid "No printer found"
 msgid "No items found"
-msgstr "לא נמצאה מדפסת"
+msgstr "לא נמצאו פריטים"
 
 #: gtk/gtkrecentchoosermenu.c:534 gtk/gtkrecentchoosermenu.c:590
 #, c-format
@@ -3961,28 +3829,21 @@ msgstr "%d. %s"
 #: gtk/gtkrecentmanager.c:1053 gtk/gtkrecentmanager.c:1066
 #: gtk/gtkrecentmanager.c:1203 gtk/gtkrecentmanager.c:1213
 #: gtk/gtkrecentmanager.c:1265 gtk/gtkrecentmanager.c:1274
-#, fuzzy, c-format
-#| msgid "Unable to find an item with URI “%s”"
+#, c-format
 msgid "Unable to find an item with URI '%s'"
-msgstr "לא ניתן למצוא פריט עם כתובת „%s”"
+msgstr "לא ניתן למצוא פריט עם כתובת הזיהוי „%s”"
 
 #: gtk/gtkrecentmanager.c:1289
-#, fuzzy, c-format
-#| msgid "Unable to move the item with URI “%s” to “%s”"
+#, c-format
 msgid "Unable to move the item with URI '%s' to '%s'"
-msgstr "לא נתן להעביר את הפריט עם הכתובת „%s” אל „%s”"
+msgstr "לא ניתן להעביר את הפריט עם כתובת הזיהוי ‚%s’ אל ‚%s’"
 
 #: gtk/gtkrecentmanager.c:2507
-#, fuzzy, c-format
-#| msgid ""
-#| "No registered application with name “%s” for item with URI “%s” found"
+#, c-format
 msgid "No registered application with name '%s' for item with URI '%s' found"
-msgstr "לא נמצא יישום הרשום בשם „%s” עבור הפריט בעל הכתובת „%s”"
+msgstr "לא נמצא יישום רשום עם השם ‚%s’ לפריט עם כתובת הזיהוי ‚%s’"
 
 #: gtk/gtksearchentry.c:371
-#, fuzzy
-#| msgctxt "keyboard label"
-#| msgid "Search"
 msgid "Search"
 msgstr "חיפוש"
 
@@ -4248,30 +4109,23 @@ msgid "Always on Top"
 msgstr "תמיד למעלה"
 
 #: gtk/gtkwindow.c:12817
-#, fuzzy, c-format
-#| msgid "Do you want to use GTK Inspector?"
+#, c-format
 msgid "Do you want to use GTK+ Inspector?"
-msgstr "להשתמש במפקח GTK‎?"
+msgstr "להשתמש במפקח GTK‎+‎?"
 
 #: gtk/gtkwindow.c:12819
-#, fuzzy, c-format
-#| msgid ""
-#| "GTK Inspector is an interactive debugger that lets you explore and modify "
-#| "the internals of any GTK application. Using it may cause the application "
-#| "to break or crash."
+#, c-format
 msgid ""
 "GTK+ Inspector is an interactive debugger that lets you explore and modify "
 "the internals of any GTK+ application. Using it may cause the application to "
 "break or crash."
 msgstr ""
-"מפקח GTK‎ הוא מנפה שגיאות הידודי המאפשר לך לחקור ולשנות את הפנים של כל יישום "
-"GTK+‎. שימוש בו יכול לגרום ליישום להישבר או לקרוס."
+"מפקח GTK‎+‎ הוא מנפה שגיאות הידודי שמאפשר לחקור ולשנות את הרכיבים הפנימיים של "
+"כל יישום GTK+‎. שימוש בו יכול לגרום לפגם או לקריסת היישום."
 
 #: gtk/gtkwindow.c:12824
-#, fuzzy
-#| msgid "Don’t show this message again"
 msgid "Don't show this message again"
-msgstr "לא להציג הודעה זו שוב"
+msgstr "לא להציג את ההודעה הזאת שוב"
 
 #: gtk/inspector/action-editor.c:281
 msgid "Activate"
@@ -4296,10 +4150,8 @@ msgid "Parameter Type"
 msgstr "סוג משתנה"
 
 #: gtk/inspector/css-editor.c:112
-#, fuzzy
-#| msgid "You can type here any CSS rule recognized by GTK."
 msgid "You can type here any CSS rule recognized by GTK+."
-msgstr "ניתן להקליד כאן כל הוראת CSS המוכרת על ידי GTK‎."
+msgstr "ניתן להקליד כאן כל הוראת CSS המוכרת על ידי GTK‎+‎."
 
 #: gtk/inspector/css-editor.c:113
 msgid ""
@@ -4360,10 +4212,8 @@ msgid "IM Context is hardcoded by GTK_IM_MODULE"
 msgstr "‏IM Context קשיחה בקוד על ידי GTK_IM_MODULE"
 
 #: gtk/inspector/general.ui:34
-#, fuzzy
-#| msgid "GTK Version"
 msgid "GTK+ Version"
-msgstr "גרסת GTK‎"
+msgstr "גרסת GTK‎+‎"
 
 #: gtk/inspector/general.ui:68
 msgid "GDK Backend"
@@ -4390,8 +4240,6 @@ msgid "Display"
 msgstr "תצוגה"
 
 #: gtk/inspector/general.ui:557
-#, fuzzy
-#| msgid "RGBA Visual"
 msgid "RGBA visual"
 msgstr "‏RGBA חזותי"
 
@@ -4404,10 +4252,8 @@ msgid "GL Version"
 msgstr "גרסת GL"
 
 #: gtk/inspector/general.ui:673
-#, fuzzy
-#| msgid "GL Backend Vendor"
 msgid "GL Vendor"
-msgstr "ספק מנגנון GL"
+msgstr "ספק GL"
 
 #: gtk/inspector/gestures.c:129
 msgctxt "event phase"
@@ -4454,8 +4300,6 @@ msgid "Address"
 msgstr "כתובת"
 
 #: gtk/inspector/misc-info.ui:68
-#, fuzzy
-#| msgid "Reference Count"
 msgid "Reference count"
 msgstr "מונה הפניות"
 
@@ -4483,8 +4327,6 @@ msgid "Mnemonic Label"
 msgstr "תווית מואצת"
 
 #: gtk/inspector/misc-info.ui:294
-#, fuzzy
-#| msgid "Request Mode"
 msgid "Request mode"
 msgstr "מצב בקשה"
 
@@ -4505,28 +4347,20 @@ msgid "Frame Clock"
 msgstr "מונה מסגרת"
 
 #: gtk/inspector/misc-info.ui:475
-#, fuzzy
-#| msgid "Tick Callback"
 msgid "Tick callback"
-msgstr "רגע התקשרות"
+msgstr "קריאת עדכון הנפשות חוזרת"
 
 #: gtk/inspector/misc-info.ui:511
-#, fuzzy
-#| msgid "Frame Count"
 msgid "Frame count"
 msgstr "מונה תמוניות"
 
 #: gtk/inspector/misc-info.ui:545
-#, fuzzy
-#| msgid "Frame Rate"
 msgid "Frame rate"
 msgstr "קצב תמוניות"
 
 #: gtk/inspector/misc-info.ui:579
-#, fuzzy
-#| msgid "Accessible name"
 msgid "Accessible role"
-msgstr "שמות נגישות"
+msgstr "תפקיד נגישות"
 
 #: gtk/inspector/misc-info.ui:613
 msgid "Accessible name"
@@ -4553,10 +4387,8 @@ msgid "Child Visible"
 msgstr "ילד נראה"
 
 #: gtk/inspector/object-tree.ui:95
-#, fuzzy
-#| msgid "Objects"
 msgid "Object"
-msgstr "עצמים"
+msgstr "עצם"
 
 #: gtk/inspector/prop-editor.c:679
 #, c-format
@@ -4569,10 +4401,10 @@ msgid "Unknown"
 msgstr "לא ידוע"
 
 #: gtk/inspector/prop-editor.c:695
-#, fuzzy, c-format
+#, c-format
 #| msgid "Defined at: %p (%s)"
 msgid "Object: %p (%s)"
-msgstr "הוגדר ב: %p ‏(%s)"
+msgstr "עצם: %p (%s)"
 
 #: gtk/inspector/prop-editor.c:1141
 #, c-format
@@ -4584,10 +4416,8 @@ msgid "Attribute mapping"
 msgstr "מיפוי תכונה"
 
 #: gtk/inspector/prop-editor.c:1264
-#, fuzzy
-#| msgid "Model"
 msgid "Model:"
-msgstr "דגם"
+msgstr "דגם:"
 
 #: gtk/inspector/prop-editor.c:1265
 #, c-format
@@ -4637,18 +4467,12 @@ msgid "Reset"
 msgstr "איפוס"
 
 #: gtk/inspector/prop-editor.c:1679
-#, fuzzy
-#| msgctxt "GtkSettings source"
-#| msgid "Theme"
 msgid "Theme"
 msgstr "ערכת עיצוב"
 
 #: gtk/inspector/prop-editor.c:1682
-#, fuzzy
-#| msgctxt "GtkSettings source"
-#| msgid "XSettings"
 msgid "XSettings"
-msgstr "‫XSettings"
+msgstr "XSettings"
 
 #: gtk/inspector/prop-list.ui:34
 msgid "Property"
@@ -4737,10 +4561,8 @@ msgid "Both"
 msgstr "שניהם"
 
 #: gtk/inspector/statistics.c:377
-#, fuzzy
-#| msgid "GLib must be configured with -Dbuildtype=debug"
 msgid "GLib must be configured with --enable-debug"
-msgstr "‏GLib חייב להיות בנוי עם תצורת ‎-Dbuildtype=debug"
+msgstr "GLib חייב להיות מוגדר עם ‎--enable-debug"
 
 #: gtk/inspector/statistics.ui:68
 msgid "Self 1"
@@ -4788,7 +4610,7 @@ msgid ""
 "Use GDK_GL=always or GDK_GL=disable instead"
 msgstr ""
 "לא ניתן לקביעה בזמן ריצה.\n"
-"יש להשתמש GDK_GL=always או GDK_GL=disable במקום."
+"יש להשתמש GDK_GL=always או ב־GDK_GL=disable במקום"
 
 #: gtk/inspector/visual.c:831 gtk/inspector/visual.c:832
 #: gtk/inspector/visual.c:833
@@ -4796,10 +4618,8 @@ msgid "GL rendering is disabled"
 msgstr "תִּצּוּג GL מושבת"
 
 #: gtk/inspector/visual.ui:61
-#, fuzzy
-#| msgid "GTK Theme"
 msgid "GTK+ Theme"
-msgstr "ערכת עיצוב של GTK"
+msgstr "ערכת עיצוב של GTK+‎"
 
 #: gtk/inspector/visual.ui:94
 msgid "Dark Variant"
@@ -4834,10 +4654,8 @@ msgid "Right-to-Left"
 msgstr "ימין לשמאל"
 
 #: gtk/inspector/visual.ui:347
-#, fuzzy
-#| msgid "Window Scaling"
 msgid "Window scaling"
-msgstr "קנה מידה של חלון"
+msgstr "התאמת קנה מידה של חלון"
 
 #: gtk/inspector/visual.ui:382
 msgid "Animations"
@@ -4848,18 +4666,14 @@ msgid "Slowdown"
 msgstr "האטה"
 
 #: gtk/inspector/visual.ui:474
-#, fuzzy
-#| msgid "Renderer"
 msgid "Rendering Mode"
-msgstr "עיבוד"
+msgstr "מצב עיבוד"
 
 #: gtk/inspector/visual.ui:487
 msgid "Similar"
 msgstr "דומה"
 
 #: gtk/inspector/visual.ui:489
-#, fuzzy
-#| msgid "Recorder"
 msgid "Recording"
 msgstr "מקליט"
 
@@ -4884,16 +4698,12 @@ msgid "Show Widget Resizes"
 msgstr "הצגת שינוי הגודל של יישומון"
 
 #: gtk/inspector/visual.ui:683
-#, fuzzy
-#| msgid "Simulate Touchscreen"
 msgid "Simulate touchscreen"
 msgstr "הדמיית מסך מגע"
 
 #: gtk/inspector/visual.ui:728
-#, fuzzy
-#| msgid "GSK Renderer"
 msgid "GL Rendering"
-msgstr "מעבד GSK"
+msgstr "עיבוד GL"
 
 #: gtk/inspector/visual.ui:740
 msgid "When needed"
@@ -4904,11 +4714,8 @@ msgid "Always"
 msgstr "תמיד"
 
 #: gtk/inspector/visual.ui:742
-#, fuzzy
-#| msgctxt "Accelerator"
-#| msgid "Disabled"
 msgid "Disabled"
-msgstr "כבוי"
+msgstr "מושבת"
 
 #: gtk/inspector/visual.ui:766
 msgid "Software GL"
@@ -4959,10 +4766,8 @@ msgid "Signals"
 msgstr "אותות"
 
 #: gtk/inspector/window.ui:404
-#, fuzzy
-#| msgid "Properties"
 msgid "Child Properties"
-msgstr "מאפיינים"
+msgstr "מאפייני צאצא"
 
 #: gtk/inspector/window.ui:413
 msgid "Class Hierarchy"
@@ -4973,8 +4778,6 @@ msgid "CSS Selector"
 msgstr "בוחר CSS"
 
 #: gtk/inspector/window.ui:431
-#, fuzzy
-#| msgid "CSS Nodes"
 msgid "CSS nodes"
 msgstr "מפרקי CSS"
 
@@ -6878,12 +6681,9 @@ msgid "Shavian"
 msgstr "שובית"
 
 #: gtk/script-names.c:67
-#, fuzzy
-#| msgctxt "output-bin"
-#| msgid "Rear Bin"
 msgctxt "Script"
 msgid "Linear B"
-msgstr "מגש אחורי"
+msgstr "קווי ב׳"
 
 #: gtk/script-names.c:68
 msgctxt "Script"
@@ -6918,7 +6718,7 @@ msgstr "טיפינר"
 #: gtk/script-names.c:74
 msgctxt "Script"
 msgid "Syloti Nagri"
-msgstr ""
+msgstr "סילוטי נאגרי"
 
 #: gtk/script-names.c:75
 msgctxt "Script"
@@ -6928,7 +6728,7 @@ msgstr "פרסית עתיקה"
 #: gtk/script-names.c:76
 msgctxt "Script"
 msgid "Kharoshthi"
-msgstr ""
+msgstr "חרושתי"
 
 #: gtk/script-names.c:77
 msgctxt "Script"
@@ -6936,12 +6736,9 @@ msgid "Unknown"
 msgstr "לא ידוע"
 
 #: gtk/script-names.c:78
-#, fuzzy
-#| msgctxt "Script"
-#| msgid "Buginese"
 msgctxt "Script"
 msgid "Balinese"
-msgstr "בוגית"
+msgstr "באלית"
 
 #: gtk/script-names.c:79
 msgctxt "Script"
@@ -6989,12 +6786,9 @@ msgid "Saurashtra"
 msgstr "‫סורשטרה‬"
 
 #: gtk/script-names.c:88
-#, fuzzy
-#| msgctxt "Color name"
-#| msgid "Chameleon"
 msgctxt "Script"
 msgid "Cham"
-msgstr "זיקית"
+msgstr "צ׳אם"
 
 #: gtk/script-names.c:89
 msgctxt "Script"
@@ -7039,17 +6833,17 @@ msgstr "כתב חרטומים"
 #: gtk/script-names.c:97
 msgctxt "Script"
 msgid "Imperial Aramaic"
-msgstr ""
+msgstr "ארמית רשמית"
 
 #: gtk/script-names.c:98
 msgctxt "Script"
 msgid "Inscriptional Pahlavi"
-msgstr ""
+msgstr "פהלווי חרוטה"
 
 #: gtk/script-names.c:99
 msgctxt "Script"
 msgid "Inscriptional Parthian"
-msgstr ""
+msgstr "פרתית חרוטה"
 
 #: gtk/script-names.c:100
 msgctxt "Script"
@@ -7064,12 +6858,12 @@ msgstr ""
 #: gtk/script-names.c:102
 msgctxt "Script"
 msgid "Lisu"
-msgstr ""
+msgstr "ליסו"
 
 #: gtk/script-names.c:103
 msgctxt "Script"
 msgid "Meetei Mayek"
-msgstr ""
+msgstr "מיטיי מאייק"
 
 #: gtk/script-names.c:104
 msgctxt "Script"
@@ -7092,30 +6886,24 @@ msgid "Tai Tham"
 msgstr "טאי תאם"
 
 #: gtk/script-names.c:108
-#, fuzzy
-#| msgctxt "Script"
-#| msgid "Tai Le"
 msgctxt "Script"
 msgid "Tai Viet"
-msgstr "תאי לה"
+msgstr "טאי וייט"
 
 #: gtk/script-names.c:109
-#, fuzzy
-#| msgctxt "Script"
-#| msgid "Katakana"
 msgctxt "Script"
 msgid "Batak"
-msgstr "קטקאנה"
+msgstr "בטאק"
 
 #: gtk/script-names.c:110
 msgctxt "Script"
 msgid "Brahmi"
-msgstr ""
+msgstr "בראהמי"
 
 #: gtk/script-names.c:111
 msgctxt "Script"
 msgid "Mandaic"
-msgstr ""
+msgstr "מנדאית"
 
 #: gtk/script-names.c:112
 msgctxt "Script"
@@ -7125,15 +6913,12 @@ msgstr ""
 #: gtk/script-names.c:113
 msgctxt "Script"
 msgid "Meroitic Cursive"
-msgstr ""
+msgstr "מרואיטית מתחברת"
 
 #: gtk/script-names.c:114
-#, fuzzy
-#| msgctxt "Script"
-#| msgid "Egyptian Hieroglyphs"
 msgctxt "Script"
 msgid "Meroitic Hieroglyphs"
-msgstr "כתב חרטומים"
+msgstr "מרואיטית בהירוגליפים"
 
 #: gtk/script-names.c:115
 msgctxt "Script"
@@ -7163,7 +6948,7 @@ msgstr ""
 #: gtk/script-names.c:120
 msgctxt "Script"
 msgid "Caucasian Albanian"
-msgstr ""
+msgstr "אלבנית קווקזית"
 
 #: gtk/script-names.c:121
 msgctxt "Script"
@@ -7173,7 +6958,7 @@ msgstr ""
 #: gtk/script-names.c:122
 msgctxt "Script"
 msgid "Elbasan"
-msgstr ""
+msgstr "אלבסן"
 
 #: gtk/script-names.c:123
 msgctxt "Script"
@@ -7191,12 +6976,9 @@ msgid "Khudawadi, Sindhi"
 msgstr ""
 
 #: gtk/script-names.c:126
-#, fuzzy
-#| msgctxt "output-bin"
-#| msgid "Rear Bin"
 msgctxt "Script"
 msgid "Linear A"
-msgstr "מגש אחורי"
+msgstr "קווי א׳"
 
 #: gtk/script-names.c:127
 msgctxt "Script"
@@ -7214,19 +6996,14 @@ msgid "Mende Kikakui"
 msgstr ""
 
 #: gtk/script-names.c:130
-#, fuzzy
-#| msgid "Modified"
 msgctxt "Script"
 msgid "Modi"
-msgstr "שונה"
+msgstr "מודי"
 
 #: gtk/script-names.c:131
-#, fuzzy
-#| msgctxt "accessibility"
-#| msgid "row"
 msgctxt "Script"
 msgid "Mro"
-msgstr "שורה"
+msgstr "מרו"
 
 #: gtk/script-names.c:132
 msgctxt "Script"
@@ -7284,12 +7061,9 @@ msgid "Ahom"
 msgstr ""
 
 #: gtk/script-names.c:143
-#, fuzzy
-#| msgctxt "Script"
-#| msgid "Egyptian Hieroglyphs"
 msgctxt "Script"
 msgid "Anatolian Hieroglyphs"
-msgstr "כתב חרטומים"
+msgstr "הירוגליפים אנטוליים"
 
 #: gtk/script-names.c:144
 msgctxt "Script"
@@ -7297,12 +7071,11 @@ msgid "Hatran"
 msgstr ""
 
 #: gtk/script-names.c:145
-#, fuzzy
 #| msgctxt "keyboard label"
 #| msgid "Multi_key"
 msgctxt "Script"
 msgid "Multani"
-msgstr "צירוף מ_קשים"
+msgstr ""
 
 #: gtk/script-names.c:146
 msgctxt "Script"
@@ -7310,12 +7083,9 @@ msgid "Old Hungarian"
 msgstr "הונגרית עתיקה"
 
 #: gtk/script-names.c:147
-#, fuzzy
-#| msgctxt "print operation status"
-#| msgid "Printing"
 msgctxt "Script"
 msgid "Signwriting"
-msgstr "בהדפסה"
+msgstr "שפת סימנים בכתב"
 
 #: gtk/script-names.c:148
 msgctxt "Script"
@@ -7328,11 +7098,10 @@ msgid "Bhaiksuki"
 msgstr ""
 
 #: gtk/script-names.c:150
-#, fuzzy
 #| msgid "Searching"
 msgctxt "Script"
 msgid "Marchen"
-msgstr "בחיפוש"
+msgstr ""
 
 #: gtk/script-names.c:151
 msgctxt "Script"
@@ -7345,12 +7114,9 @@ msgid "Osage"
 msgstr ""
 
 #: gtk/script-names.c:153
-#, fuzzy
-#| msgctxt "Script"
-#| msgid "Hangul"
 msgctxt "Script"
 msgid "Tangut"
-msgstr "האנגול"
+msgstr "טנגוט"
 
 #: gtk/script-names.c:154
 msgctxt "Script"
@@ -7370,7 +7136,7 @@ msgstr ""
 #: gtk/script-names.c:157
 msgctxt "Script"
 msgid "Zanabazar Square"
-msgstr ""
+msgstr "זנבזאר מרובע"
 
 #: gtk/ui/gtkaboutdialog.ui:137
 msgid "About"
@@ -7381,16 +7147,12 @@ msgid "Credits"
 msgstr "תודות"
 
 #: gtk/ui/gtkappchooserdialog.ui:78
-#, fuzzy
-#| msgid "_View All Apps"
 msgid "_View All Applications"
 msgstr "ה_צגת כל היישומים"
 
 #: gtk/ui/gtkappchooserdialog.ui:86
-#, fuzzy
-#| msgid "_Find New Apps"
 msgid "_Find New Applications"
-msgstr "_חיפוש יישומים חדשים"
+msgstr "_איתור יישומים חדשים"
 
 #: gtk/ui/gtkappchooserwidget.ui:119
 msgid "No applications found."
@@ -7456,9 +7218,6 @@ msgid "A"
 msgstr "A"
 
 #: gtk/ui/gtkcoloreditor.ui:196
-#, fuzzy
-#| msgctxt "Color channel"
-#| msgid "Alpha"
 msgid "Alpha"
 msgstr "שקיפות"
 
@@ -7482,50 +7241,30 @@ msgid "V"
 msgstr "V"
 
 #: gtk/ui/gtkcoloreditor.ui:301
-#, fuzzy
-#| msgid "S_aturation:"
 msgid "Saturation"
-msgstr "_רוויה:"
+msgstr "רוויה"
 
 #: gtk/ui/gtkemojichooser.ui:53 gtk/ui/gtkemojichooser.ui:212
-#, fuzzy
-#| msgctxt "emoji category"
-#| msgid "Smileys & People"
 msgid "Smileys & People"
 msgstr "חייכנים ואנשים"
 
 #: gtk/ui/gtkemojichooser.ui:68 gtk/ui/gtkemojichooser.ui:227
-#, fuzzy
-#| msgctxt "emoji category"
-#| msgid "Body & Clothing"
 msgid "Body & Clothing"
 msgstr "גוף ובגדים"
 
 #: gtk/ui/gtkemojichooser.ui:83 gtk/ui/gtkemojichooser.ui:242
-#, fuzzy
-#| msgctxt "emoji category"
-#| msgid "Animals & Nature"
 msgid "Animals & Nature"
 msgstr "בעלי חיים וטבע"
 
 #: gtk/ui/gtkemojichooser.ui:98 gtk/ui/gtkemojichooser.ui:257
-#, fuzzy
-#| msgctxt "emoji category"
-#| msgid "Food & Drink"
 msgid "Food & Drink"
 msgstr "אוכל ושתייה"
 
 #: gtk/ui/gtkemojichooser.ui:113 gtk/ui/gtkemojichooser.ui:272
-#, fuzzy
-#| msgctxt "emoji category"
-#| msgid "Travel & Places"
 msgid "Travel & Places"
 msgstr "טיולים ומקומות"
 
 #: gtk/ui/gtkemojichooser.ui:128 gtk/ui/gtkemojichooser.ui:287
-#, fuzzy
-#| msgctxt "emoji category"
-#| msgid "Activities"
 msgid "Activities"
 msgstr "פעילויות"
 
@@ -7535,24 +7274,16 @@ msgid "Objects"
 msgstr "עצמים"
 
 #: gtk/ui/gtkemojichooser.ui:158 gtk/ui/gtkemojichooser.ui:317
-#, fuzzy
-#| msgctxt "emoji category"
-#| msgid "Symbols"
 msgid "Symbols"
 msgstr "סמלים"
 
 #: gtk/ui/gtkemojichooser.ui:173 gtk/ui/gtkemojichooser.ui:332
-#, fuzzy
-#| msgctxt "emoji category"
-#| msgid "Flags"
 msgid "Flags"
 msgstr "דגלים"
 
 #: gtk/ui/gtkfilechooserdialog.ui:32
-#, fuzzy
-#| msgid "Focus Widget"
 msgid "File Chooser Widget"
-msgstr "יישומון ממוקד"
+msgstr "וידג׳ט בורר קבצים"
 
 #: gtk/ui/gtkfilechooserwidget.ui:22
 msgid "Places"
@@ -7560,39 +7291,29 @@ msgstr "מקומות"
 
 #: gtk/ui/gtkfilechooserwidget.ui:47
 msgid "Browse Header Revealer"
-msgstr ""
+msgstr "עיון בחושף הכותרות"
 
 #: gtk/ui/gtkfilechooserwidget.ui:65
-#, fuzzy
-#| msgctxt "accessibility"
-#| msgid "row header"
 msgid "Browse Header Stack"
-msgstr "כותרת שורה"
+msgstr "עיון במחסנית כותרת"
 
 #: gtk/ui/gtkfilechooserwidget.ui:75
 msgid "PathBar Layer"
-msgstr ""
+msgstr "שכבת סרגל נתיב"
 
 #: gtk/ui/gtkfilechooserwidget.ui:121
-#, fuzzy
-#| msgid "Location"
 msgid "Location Layer"
-msgstr "מיקום"
+msgstr "שכבת מקום"
 
 #: gtk/ui/gtkfilechooserwidget.ui:137
-#, fuzzy
-#| msgctxt "keyboard label"
-#| msgid "Search"
 msgid "Search Layer"
-msgstr "חיפוש"
+msgstr "שכבת חיפוש"
 
 # hebrew note: "תיקייה" is "folder", but there is no better word for
 # "directory"
 #: gtk/ui/gtkfilechooserwidget.ui:199
-#, fuzzy
-#| msgid "File"
 msgid "Files"
-msgstr "קובץ"
+msgstr "קבצים"
 
 #: gtk/ui/gtkfilechooserwidget.ui:304
 msgid "Remote location — only searching the current folder"
@@ -7619,10 +7340,8 @@ msgid "Font Family"
 msgstr "משפחת הגופנים"
 
 #: gtk/ui/gtkfontchooserwidget.ui:121 gtk/ui/gtkfontchooserwidget.ui:248
-#, fuzzy
-#| msgid "Preview Font"
 msgid "Preview text"
-msgstr "תצוגה מקדימה לגופן"
+msgstr "תצוגה מקדימה של כתב"
 
 #: gtk/ui/gtkfontchooserwidget.ui:201
 msgid "No Fonts Found"
@@ -7908,11 +7627,8 @@ msgid "Select which type of documents are shown"
 msgstr "יש לבחור אילו סוגי מסמכים יוצגו"
 
 #: gtk/ui/gtkvolumebutton.ui:24
-#, fuzzy
-#| msgctxt "media controls"
-#| msgid "Volume"
 msgid "Volume"
-msgstr "עצמה"
+msgstr "עוצמת שמע"
 
 #: gtk/ui/gtkvolumebutton.ui:25
 msgid "Turns volume up or down"
@@ -7994,14 +7710,10 @@ msgid "Overwrite an existing cache, even if up to date"
 msgstr "Overwrite an existing cache, even if up to date"
 
 #: gtk/updateiconcache.c:1663
-#, fuzzy
-#| msgid "Don’t check for the existence of index.theme"
 msgid "Don't check for the existence of index.theme"
 msgstr "לא לבדוק אם יש index.theme"
 
 #: gtk/updateiconcache.c:1664
-#, fuzzy
-#| msgid "Don’t include image data in the cache"
 msgid "Don't include image data in the cache"
 msgstr "לא לכלול את נתוני התמונה במטמון"
 
@@ -8037,17 +7749,13 @@ msgid "No theme index file.\n"
 msgstr "No theme index file.\n"
 
 #: gtk/updateiconcache.c:1758
-#, fuzzy, c-format
-#| msgid ""
-#| "No theme index file in “%s”.\n"
-#| "If you really want to create an icon cache here, use --ignore-theme-"
-#| "index.\n"
+#, c-format
 msgid ""
 "No theme index file in '%s'.\n"
 "If you really want to create an icon cache here, use --ignore-theme-index.\n"
 msgstr ""
-"No theme index file in “%s”.\n"
-"If you really want to create an icon cache here, use --ignore-theme-index.\n"
+"אין קובץ מפתח של ערכת עיצוב ב־‚%s’.\n"
+"אם באמת צריך ליצור כאן מטמון סמלים, יש להשתמש ב־‎--ignore-theme-index.\n"
 
 #. ID
 #: modules/input/imam-et.c:452
@@ -8672,8 +8380,6 @@ msgid "PDF"
 msgstr "PDF"
 
 #: modules/printbackends/file/gtkprintbackendfile.c:663
-#, fuzzy
-#| msgid "PostScript"
 msgid "Postscript"
 msgstr "PostScript"
 
