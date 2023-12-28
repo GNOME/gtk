@@ -37,14 +37,16 @@ struct _GskStroke
   float dash_offset;
 };
 
-static inline void
-gsk_stroke_init_copy (GskStroke       *stroke,
-                      const GskStroke *other)
-{
-  *stroke = *other;
-
-  stroke->dash = g_memdup (other->dash, stroke->n_dash * sizeof (float));
-}
+#define GSK_STROKE_INIT_COPY(_stroke) ((GskStroke) {\
+    .line_width = _stroke->line_width, \
+    .line_cap = _stroke->line_cap, \
+    .line_join = _stroke->line_join, \
+    .miter_limit = _stroke->miter_limit, \
+    .dash = g_memdup (_stroke->dash, _stroke->n_dash * sizeof (float)), \
+    .n_dash = _stroke->n_dash, \
+    .dash_length = _stroke->dash_length, \
+    .dash_offset = _stroke->dash_offset, \
+})
 
 static inline void
 gsk_stroke_clear (GskStroke *stroke)

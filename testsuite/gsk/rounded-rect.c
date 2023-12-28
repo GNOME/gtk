@@ -346,6 +346,11 @@ test_intersect (void)
       ROUNDED_RECT_INIT_UNIFORM(0, 0, 21, 21, 21, 0, 0, 0),
       GSK_INTERSECTION_NOT_REPRESENTABLE,
     },
+    {
+      ROUNDED_RECT_INIT_UNIFORM(0, 0, 50, 50, 50, 0, 50, 0),
+      ROUNDED_RECT_INIT_UNIFORM(0, 0, 50, 50, 0, 50, 0, 50),
+      GSK_INTERSECTION_NOT_REPRESENTABLE,
+    },
   };
   gsize i;
 

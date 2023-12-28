@@ -46,22 +46,12 @@
 
 #include <math.h>
 
-static void
-gsk_rounded_rect_normalize_in_place (GskRoundedRect *self)
+static float
+gsk_rounded_rect_get_corner_scale_factor (GskRoundedRect *self)
 {
   float factor = 1.0;
   float corners;
-  guint i;
 
-  graphene_rect_normalize (&self->bounds);
-
-  for (i = 0; i < 4; i++)
-    {
-      self->corner[i].width = MAX (self->corner[i].width, 0);
-      self->corner[i].height = MAX (self->corner[i].height, 0);
-    }
-
-  /* clamp border radius, following CSS specs */
   corners = self->corner[GSK_CORNER_TOP_LEFT].width + self->corner[GSK_CORNER_TOP_RIGHT].width;
   if (corners > self->bounds.size.width)
     factor = MIN (factor, self->bounds.size.width / corners);
@@ -77,6 +67,26 @@ gsk_rounded_rect_normalize_in_place (GskRoundedRect *self)
   corners = self->corner[GSK_CORNER_TOP_LEFT].height + self->corner[GSK_CORNER_BOTTOM_LEFT].height;
   if (corners > self->bounds.size.height)
     factor = MIN (factor, self->bounds.size.height / corners);
+
+  return factor;
+}
+
+static void
+gsk_rounded_rect_normalize_in_place (GskRoundedRect *self)
+{
+  float factor;
+  guint i;
+
+  graphene_rect_normalize (&self->bounds);
+
+  for (i = 0; i < 4; i++)
+    {
+      self->corner[i].width = MAX (self->corner[i].width, 0);
+      self->corner[i].height = MAX (self->corner[i].height, 0);
+    }
+
+  /* clamp border radius, following CSS specs */
+  factor = gsk_rounded_rect_get_corner_scale_factor (self);
 
   for (i = 0; i < 4; i++)
     graphene_size_scale (&self->corner[i], factor, &self->corner[i]);
@@ -812,7 +822,8 @@ gsk_rounded_rect_intersection (const GskRoundedRect *a,
       check_corner (a, b,
                     GSK_CORNER_BOTTOM_RIGHT,
                     right, bottom,
-                    result))
+                    result) &&
+      gsk_rounded_rect_get_corner_scale_factor (result) >= 1.0)
     return GSK_INTERSECTION_NONEMPTY;
 
   return GSK_INTERSECTION_NOT_REPRESENTABLE;

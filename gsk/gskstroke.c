@@ -79,7 +79,7 @@ gsk_stroke_copy (const GskStroke *other)
 
   self = g_new (GskStroke, 1);
 
-  gsk_stroke_init_copy (self, other);
+  *self = GSK_STROKE_INIT_COPY (other);
 
   return self;
 }

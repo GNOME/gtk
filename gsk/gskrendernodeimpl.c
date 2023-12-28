@@ -4523,8 +4523,6 @@ gsk_fill_node_draw (GskRenderNode *node,
 {
   GskFillNode *self = (GskFillNode *) node;
 
-  cairo_save (cr);
-
   switch (self->fill_rule)
   {
     case GSK_FILL_RULE_WINDING:
@@ -4549,8 +4547,6 @@ gsk_fill_node_draw (GskRenderNode *node,
       cairo_clip (cr);
       gsk_render_node_draw (self->child, cr);
     }
-
-  cairo_restore (cr);
 }
 
 static void
@@ -4829,7 +4825,7 @@ gsk_stroke_node_new (GskRenderNode   *child,
 
   self->child = gsk_render_node_ref (child);
   self->path = gsk_path_ref (path);
-  gsk_stroke_init_copy (&self->stroke, stroke);
+  self->stroke = GSK_STROKE_INIT_COPY (stroke);
 
   if (gsk_path_get_stroke_bounds (self->path, &self->stroke, &stroke_bounds))
     gsk_rect_intersection (&stroke_bounds, &child->bounds, &node->bounds);
