@@ -1387,6 +1387,64 @@ gsk_gpu_node_processor_create_clip_pattern (GskGpuPatternWriter *self,
 }
 
 static void
+gsk_gpu_node_processor_add_rounded_clip_node_with_mask (GskGpuNodeProcessor *self,
+                                                        GskRenderNode       *node)
+{
+  GskGpuNodeProcessor other;
+  graphene_rect_t clip_bounds, child_rect;
+  GskGpuImage *child_image, *mask_image;
+  guint32 descriptors[2];
+
+  if (!gsk_gpu_node_processor_clip_node_bounds (self, node, &clip_bounds))
+    return;
+  rect_round_to_pixels (&clip_bounds, &self->scale, &clip_bounds);
+
+  child_image = gsk_gpu_node_processor_get_node_as_image (self,
+                                                          0,
+                                                          GSK_GPU_IMAGE_STRAIGHT_ALPHA,
+                                                          &clip_bounds,
+                                                          gsk_rounded_clip_node_get_child (node),
+                                                          &child_rect);
+  if (child_image == NULL)
+    return;
+
+  mask_image = gsk_gpu_node_processor_init_draw (&other,
+                                                 self->frame,
+                                                 gsk_render_node_get_preferred_depth (node),
+                                                 &self->scale,
+                                                 &clip_bounds);
+  gsk_gpu_node_processor_sync_globals (&other, 0);
+  gsk_gpu_rounded_color_op (other.frame,
+                            gsk_gpu_clip_get_shader_clip (&other.clip, &other.offset, &node->bounds),
+                            gsk_rounded_clip_node_get_clip (node),
+                            &other.offset,
+                            &GDK_RGBA_WHITE);
+  gsk_gpu_node_processor_finish_draw (&other, mask_image);
+
+  gsk_gpu_node_processor_add_images (self,
+                                     2,
+                                     (GskGpuImage *[2]) { child_image, mask_image },
+                                     (GskGpuSampler[2]) { GSK_GPU_SAMPLER_DEFAULT, GSK_GPU_SAMPLER_DEFAULT },
+                                     descriptors);
+
+  gsk_gpu_node_processor_sync_globals (self, 0);
+  gsk_gpu_mask_op (self->frame,
+                   gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, &clip_bounds),
+                   self->desc,
+                   &clip_bounds,
+                   &self->offset,
+                   self->opacity,
+                   GSK_MASK_MODE_ALPHA,
+                   descriptors[0],
+                   &child_rect,
+                   descriptors[1],
+                   &clip_bounds);
+
+  g_object_unref (child_image);
+  g_object_unref (mask_image);
+}
+
+static void
 gsk_gpu_node_processor_add_rounded_clip_node (GskGpuNodeProcessor *self,
                                               GskRenderNode       *node)
 {
@@ -1420,9 +1478,8 @@ gsk_gpu_node_processor_add_rounded_clip_node (GskGpuNodeProcessor *self,
 
   if (!gsk_gpu_clip_intersect_rounded_rect (&self->clip, &old_clip, &clip))
     {
-      GSK_DEBUG (FALLBACK, "Failed to find intersection between clip of type %u and rounded rectangle", self->clip.type);
       gsk_gpu_clip_init_copy (&self->clip, &old_clip);
-      gsk_gpu_node_processor_add_fallback_node (self, node);
+      gsk_gpu_node_processor_add_rounded_clip_node_with_mask (self, node);
       return;
     }
 
