@@ -253,6 +253,35 @@ gsk_gpu_node_processor_add_image (GskGpuNodeProcessor *self,
 }
 
 static void
+gsk_gpu_node_processor_add_images (GskGpuNodeProcessor *self,
+                                   gsize                n_images,
+                                   GskGpuImage        **images,
+                                   GskGpuSampler       *samplers,
+                                   guint32             *out_descriptors)
+{
+  GskGpuDescriptors *desc;
+  gsize i;
+
+  g_assert (n_images > 0);
+
+  /* note: This will infloop if more images are requested than can fit into an empty descriptors,
+   * so don't do that. */
+  do
+    {
+      out_descriptors[0] = gsk_gpu_node_processor_add_image (self, images[0], samplers[0]);
+      desc = self->desc;
+
+      for (i = 1; i < n_images; i++)
+        {
+          out_descriptors[i] = gsk_gpu_node_processor_add_image (self, images[i], samplers[i]);
+          if (desc != self->desc)
+            break;
+        }
+    }
+  while (desc != self->desc);
+}
+
+static void
 rect_round_to_pixels (const graphene_rect_t *src,
                       const graphene_vec2_t *pixel_scale,
                       graphene_rect_t       *dest)
@@ -2506,7 +2535,6 @@ gsk_gpu_node_processor_add_mask_node (GskGpuNodeProcessor *self,
   GskRenderNode *source_child, *mask_child;
   GskGpuImage *mask_image;
   graphene_rect_t bounds, mask_rect;
-  guint32 mask_descriptor;
   GskMaskMode mask_mode;
 
   source_child = gsk_mask_node_get_source (node);
@@ -2534,16 +2562,16 @@ gsk_gpu_node_processor_add_mask_node (GskGpuNodeProcessor *self,
         gsk_gpu_node_processor_add_node (self, source_child);
       return;
     }
-  mask_descriptor = gsk_gpu_node_processor_add_image (self, mask_image, GSK_GPU_SAMPLER_DEFAULT);
 
   if (gsk_render_node_get_node_type (source_child) == GSK_COLOR_NODE &&
       mask_mode == GSK_MASK_MODE_ALPHA)
     {
       const GdkRGBA *rgba = gsk_color_node_get_color (source_child);
+      guint32 descriptor = gsk_gpu_node_processor_add_image (self, mask_image, GSK_GPU_SAMPLER_DEFAULT);
       gsk_gpu_colorize_op (self->frame,
                            gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, &node->bounds),
                            self->desc,
-                           mask_descriptor,
+                           descriptor,
                            &node->bounds,
                            &self->offset,
                            &mask_rect,
@@ -2551,10 +2579,9 @@ gsk_gpu_node_processor_add_mask_node (GskGpuNodeProcessor *self,
     }
   else
     {
-      GskGpuDescriptors *desc = self->desc;
       GskGpuImage *source_image;
       graphene_rect_t source_rect;
-      guint32 source_descriptor;
+      guint32 descriptors[2];
 
       source_image = gsk_gpu_node_processor_get_node_as_image (self,
                                                                0,
@@ -2567,24 +2594,22 @@ gsk_gpu_node_processor_add_mask_node (GskGpuNodeProcessor *self,
           g_object_unref (mask_image);
           return;
         }
-      source_descriptor = gsk_gpu_node_processor_add_image (self, source_image, GSK_GPU_SAMPLER_DEFAULT);
-      if (desc != self->desc)
-        {
-          desc = self->desc;
-          mask_descriptor = gsk_gpu_node_processor_add_image (self, mask_image, GSK_GPU_SAMPLER_DEFAULT);
-          g_assert (desc == self->desc);
-        }
+      gsk_gpu_node_processor_add_images (self,
+                                         2,
+                                         (GskGpuImage *[2]) { source_image, mask_image },
+                                         (GskGpuSampler[2]) { GSK_GPU_SAMPLER_DEFAULT, GSK_GPU_SAMPLER_DEFAULT },
+                                         descriptors);
 
       gsk_gpu_mask_op (self->frame,
                        gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, &node->bounds),
-                       desc,
+                       self->desc,
                        &node->bounds,
                        &self->offset,
                        self->opacity,
                        mask_mode,
-                       source_descriptor,
+                       descriptors[0],
                        &source_rect,
-                       mask_descriptor,
+                       descriptors[1],
                        &mask_rect);
 
       g_object_unref (source_image);
@@ -3178,9 +3203,8 @@ gsk_gpu_node_processor_add_fill_node (GskGpuNodeProcessor *self,
                                       GskRenderNode       *node)
 {
   graphene_rect_t clip_bounds, source_rect;
-  GskGpuDescriptors *desc;
   GskGpuImage *mask_image, *source_image;
-  guint32 mask_descriptor, source_descriptor;
+  guint32 descriptors[2];
   GskRenderNode *child;
 
   if (!gsk_gpu_node_processor_clip_node_bounds (self, node, &clip_bounds))
@@ -3210,9 +3234,6 @@ gsk_gpu_node_processor_add_fill_node (GskGpuNodeProcessor *self,
       return;
     }
 
-  mask_descriptor = gsk_gpu_node_processor_add_image (self, mask_image, GSK_GPU_SAMPLER_DEFAULT);
-  desc = self->desc;
-
   source_image = gsk_gpu_node_processor_get_node_as_image (self,
                                                            0,
                                                            GSK_GPU_IMAGE_STRAIGHT_ALPHA,
@@ -3221,24 +3242,23 @@ gsk_gpu_node_processor_add_fill_node (GskGpuNodeProcessor *self,
                                                            &source_rect);
   if (source_image == NULL)
     return;
-  source_descriptor = gsk_gpu_node_processor_add_image (self, source_image, GSK_GPU_SAMPLER_DEFAULT);
-  if (desc != self->desc)
-    {
-      desc = self->desc;
-      mask_descriptor = gsk_gpu_node_processor_add_image (self, mask_image, GSK_GPU_SAMPLER_DEFAULT);
-      g_assert (desc == self->desc);
-    }
+
+  gsk_gpu_node_processor_add_images (self,
+                                     2,
+                                     (GskGpuImage *[2]) { source_image, mask_image },
+                                     (GskGpuSampler[2]) { GSK_GPU_SAMPLER_DEFAULT, GSK_GPU_SAMPLER_DEFAULT },
+                                     descriptors);
 
   gsk_gpu_mask_op (self->frame,
                    gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, &node->bounds),
-                   desc,
+                   self->desc,
                    &node->bounds,
                    &self->offset,
                    self->opacity,
                    GSK_MASK_MODE_ALPHA,
-                   source_descriptor,
+                   descriptors[0],
                    &source_rect,
-                   mask_descriptor,
+                   descriptors[1],
                    &clip_bounds);
 
   g_object_unref (source_image);
@@ -3279,9 +3299,8 @@ gsk_gpu_node_processor_add_stroke_node (GskGpuNodeProcessor *self,
                                         GskRenderNode       *node)
 {
   graphene_rect_t clip_bounds, source_rect;
-  GskGpuDescriptors *desc;
   GskGpuImage *mask_image, *source_image;
-  guint32 mask_descriptor, source_descriptor;
+  guint32 descriptors[2];
   GskRenderNode *child;
 
   if (!gsk_gpu_node_processor_clip_node_bounds (self, node, &clip_bounds))
@@ -3311,9 +3330,6 @@ gsk_gpu_node_processor_add_stroke_node (GskGpuNodeProcessor *self,
       return;
     }
 
-  mask_descriptor = gsk_gpu_node_processor_add_image (self, mask_image, GSK_GPU_SAMPLER_DEFAULT);
-  desc = self->desc;
-
   source_image = gsk_gpu_node_processor_get_node_as_image (self,
                                                            0,
                                                            GSK_GPU_IMAGE_STRAIGHT_ALPHA,
@@ -3322,24 +3338,23 @@ gsk_gpu_node_processor_add_stroke_node (GskGpuNodeProcessor *self,
                                                            &source_rect);
   if (source_image == NULL)
     return;
-  source_descriptor = gsk_gpu_node_processor_add_image (self, source_image, GSK_GPU_SAMPLER_DEFAULT);
-  if (desc != self->desc)
-    {
-      desc = self->desc;
-      mask_descriptor = gsk_gpu_node_processor_add_image (self, mask_image, GSK_GPU_SAMPLER_DEFAULT);
-      g_assert (desc == self->desc);
-    }
+
+  gsk_gpu_node_processor_add_images (self,
+                                     2,
+                                     (GskGpuImage *[2]) { source_image, mask_image },
+                                     (GskGpuSampler[2]) { GSK_GPU_SAMPLER_DEFAULT, GSK_GPU_SAMPLER_DEFAULT },
+                                     descriptors);
 
   gsk_gpu_mask_op (self->frame,
                    gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, &node->bounds),
-                   desc,
+                   self->desc,
                    &node->bounds,
                    &self->offset,
                    self->opacity,
                    GSK_MASK_MODE_ALPHA,
-                   source_descriptor,
+                   descriptors[0],
                    &source_rect,
-                   mask_descriptor,
+                   descriptors[1],
                    &clip_bounds);
 
   g_object_unref (source_image);
