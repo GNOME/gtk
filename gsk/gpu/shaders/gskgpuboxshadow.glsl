@@ -19,20 +19,37 @@ IN(6) float in_shadow_spread;
 IN(7) float in_blur_radius;
 IN(8) uint in_inset;
 
+#define GAUSSIAN_SCALE_FACTOR ((3.0 * sqrt(2.0 * PI) / 4.0))
+
 void
 run (out vec2 pos)
 {
+  Rect bounds = rect_from_gsk (in_bounds);
+  RoundedRect outside = rounded_rect_from_rect (bounds);
   RoundedRect outline = rounded_rect_from_gsk (in_outline);
+  vec2 spread = GSK_GLOBAL_SCALE * in_shadow_spread;
   
-  pos = rect_get_position (rect_from_gsk (in_bounds));
+  _clip_outline = outline;
+
+  RoundedRect inside;
+  if (in_inset == 0u)
+    {
+      inside = outline;
+      spread = -spread;
+      outline = rounded_rect_shrink (outline, spread.yxyx);
+      rounded_rect_offset (outline, GSK_GLOBAL_SCALE * in_shadow_offset);
+    }
+  else
+    {
+      outline = rounded_rect_shrink (outline, spread.yxyx);
+      rounded_rect_offset (outline, GSK_GLOBAL_SCALE * in_shadow_offset);
+      inside = outline;
+      inside = rounded_rect_shrink (inside, (in_blur_radius * GAUSSIAN_SCALE_FACTOR * GSK_GLOBAL_SCALE).yxyx);
+    }
+
+  pos = border_get_position (outside, inside);
 
   _pos = pos;
-  _clip_outline = outline;
-  vec2 spread = GSK_GLOBAL_SCALE * in_shadow_spread;
-  if (in_inset == 0u)
-    spread = -spread;
-  outline = rounded_rect_shrink (outline, spread.yxyx);
-  rounded_rect_offset (outline, GSK_GLOBAL_SCALE * in_shadow_offset);
   _shadow_outline = outline;
   _color = in_color;
   _sigma = GSK_GLOBAL_SCALE * 0.5 * in_blur_radius;

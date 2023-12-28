@@ -12,6 +12,12 @@ struct RoundedRect
 };
 
 RoundedRect
+rounded_rect_from_rect (Rect r)
+{
+  return RoundedRect (r.bounds, vec4 (0.0), vec4 (0.0));
+}
+
+RoundedRect
 rounded_rect_from_gsk (mat3x4 gsk_rounded_rect)
 {
   return RoundedRect ((gsk_rounded_rect[0].xyxy + vec4 (0.0, 0.0, gsk_rounded_rect[0].zw)) * GSK_GLOBAL_SCALE.xyxy,
