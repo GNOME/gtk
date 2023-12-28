@@ -380,7 +380,8 @@ node_parser_tests = [
   'transform-fail.node',
   'transform-fail.ref.node',
   'transform-fail.errors',
-  'widgetfactory.node',
+  # this fails in f40 since libpng changes the pngs while reencoding
+  #'widgetfactory.node',
 ]
 
 foreach test : node_parser_tests
