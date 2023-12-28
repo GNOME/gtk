@@ -105,6 +105,7 @@ compare_render_tests = [
   'repeat-scaling',
   'repeat-texture',
   'repeating-gradient-scaled',
+  'rounded-clip-with-huge-bounds-nogl',
   'scale-textures-negative-ngl',
   'scale-up-down',
   'scaled-cairo',
