@@ -679,11 +679,23 @@ gsk_gpu_node_processor_image_op (GskGpuNodeProcessor   *self,
     {
       gsk_gpu_straight_alpha_op (self->frame,
                                  gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, rect),
+                                 self->opacity,
                                  self->desc,
                                  descriptor,
                                  rect,
                                  &self->offset,
                                  tex_rect);
+    }
+  else if (self->opacity < 1.0)
+    {
+      gsk_gpu_color_matrix_op_opacity (self->frame,
+                                       gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, rect),
+                                       self->desc,
+                                       descriptor,
+                                       rect,
+                                       &self->offset,
+                                       tex_rect,
+                                       self->opacity);
     }
   else
     {
@@ -3561,7 +3573,7 @@ static const struct
   },
   [GSK_TEXTURE_NODE] = {
     0,
-    0,
+    GSK_GPU_HANDLE_OPACITY,
     gsk_gpu_node_processor_add_texture_node,
     gsk_gpu_node_processor_create_texture_pattern,
   },
