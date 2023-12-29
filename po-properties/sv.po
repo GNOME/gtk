@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ properties\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-03-25 11:03+0000\n"
-"PO-Revision-Date: 2022-03-27 11:55+0200\n"
+"POT-Creation-Date: 2023-12-20 15:29+0000\n"
+"PO-Revision-Date: 2023-12-30 00:29+0100\n"
 "Last-Translator: Anders Jonsson <anders.jonsson@norsjovallen.se>\n"
 "Language-Team: Swedish <tp-sv@listor.tp-sv.se>\n"
 "Language: sv\n"
@@ -20,10 +20,10 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Launchpad-Export-Date: 2014-08-03 20:41+0000\n"
-"X-Generator: Poedit 3.0.1\n"
+"X-Generator: Poedit 3.4.1\n"
 
 #: gdk/gdkapplaunchcontext.c:127 gdk/gdkcursor.c:139 gdk/gdkdevicemanager.c:185
-#: gdk/gdkglcontext.c:317 gdk/gdkseat.c:202 gdk/gdkseat.c:203
+#: gdk/gdkglcontext.c:320 gdk/gdkseat.c:202 gdk/gdkseat.c:203
 msgid "Display"
 msgstr "Display"
 
@@ -140,23 +140,23 @@ msgstr "Standarddisplay"
 msgid "The default display for GDK"
 msgstr "Standarddisplay för GDK"
 
-#: gdk/gdkglcontext.c:318
+#: gdk/gdkglcontext.c:321
 msgid "The GDK display used to create the GL context"
 msgstr "GDK-fönstret använt för att skapa GL-kontexten"
 
-#: gdk/gdkglcontext.c:333 gtk/gtkwidget.c:1351
+#: gdk/gdkglcontext.c:336 gtk/gtkwidget.c:1351
 msgid "Window"
 msgstr "Fönster"
 
-#: gdk/gdkglcontext.c:334
+#: gdk/gdkglcontext.c:337
 msgid "The GDK window bound to the GL context"
 msgstr "GDK-fönstret bundet till GL-kontexten"
 
-#: gdk/gdkglcontext.c:349
+#: gdk/gdkglcontext.c:352
 msgid "Shared context"
 msgstr "Delad kontext"
 
-#: gdk/gdkglcontext.c:350
+#: gdk/gdkglcontext.c:353
 msgid "The GL context this context shares data with"
 msgstr "GL-kontexten denna kontext delar data med"
 
@@ -278,7 +278,7 @@ msgstr "GIcon som visas"
 
 #: gtk/deprecated/gtkaction.c:365 gtk/deprecated/gtkstatusicon.c:263
 #: gtk/gtkcellrendererpixbuf.c:245 gtk/gtkimage.c:343 gtk/gtkprinter.c:170
-#: gtk/gtkwindow.c:891
+#: gtk/gtkwindow.c:893
 msgid "Icon Name"
 msgstr "Ikonnamn"
 
@@ -868,7 +868,7 @@ msgstr "Storleken på ikonen"
 # Se http://bugzilla.gnome.org/show_bug.cgi?id=148437 -- detta ska vara
 # "skärm"
 #: gtk/deprecated/gtkstatusicon.c:306 gtk/gtkinvisible.c:98
-#: gtk/gtkmountoperation.c:183 gtk/gtkstylecontext.c:229 gtk/gtkwindow.c:898
+#: gtk/gtkmountoperation.c:183 gtk/gtkstylecontext.c:229 gtk/gtkwindow.c:900
 msgid "Screen"
 msgstr "Skärm"
 
@@ -1329,7 +1329,7 @@ msgstr ""
 "på början eller slutet på den överordnade"
 
 #: gtk/gtkactionbar.c:345 gtk/gtkbox.c:365 gtk/gtkheaderbar.c:2020
-#: gtk/gtknotebook.c:841 gtk/gtkpaned.c:368 gtk/gtkpopover.c:1767
+#: gtk/gtknotebook.c:841 gtk/gtkpaned.c:368 gtk/gtkpopover.c:1768
 #: gtk/gtkpopovermenu.c:384 gtk/gtkstack.c:537 gtk/gtktoolitemgroup.c:1716
 msgid "Position"
 msgstr "Position"
@@ -1480,43 +1480,43 @@ msgstr "Gränssnittskomponentens standardtext"
 msgid "The default text appearing when there are no applications"
 msgstr "Standardtexten som visas när det inte finns några program"
 
-#: gtk/gtkapplication.c:845
+#: gtk/gtkapplication.c:833
 msgid "Register session"
 msgstr "Registrera session"
 
-#: gtk/gtkapplication.c:846
+#: gtk/gtkapplication.c:834
 msgid "Register with the session manager"
 msgstr "Registrera med sessionshanteraren"
 
-#: gtk/gtkapplication.c:863
+#: gtk/gtkapplication.c:851
 msgid "Screensaver Active"
 msgstr "Skärmsläckare aktiv"
 
-#: gtk/gtkapplication.c:864
+#: gtk/gtkapplication.c:852
 msgid "Whether the screensaver is active"
 msgstr "Huruvida skärmsläckaren är aktiv"
 
-#: gtk/gtkapplication.c:870
+#: gtk/gtkapplication.c:858
 msgid "Application menu"
 msgstr "Programmeny"
 
-#: gtk/gtkapplication.c:871
+#: gtk/gtkapplication.c:859
 msgid "The GMenuModel for the application menu"
 msgstr "GMenuModel för programmenyn"
 
-#: gtk/gtkapplication.c:877
+#: gtk/gtkapplication.c:865
 msgid "Menubar"
 msgstr "Menyrad"
 
-#: gtk/gtkapplication.c:878
+#: gtk/gtkapplication.c:866
 msgid "The GMenuModel for the menubar"
 msgstr "GMenuModel för menyraden"
 
-#: gtk/gtkapplication.c:884
+#: gtk/gtkapplication.c:872
 msgid "Active window"
 msgstr "Aktivt fönster"
 
-#: gtk/gtkapplication.c:885
+#: gtk/gtkapplication.c:873
 msgid "The window which most recently had focus"
 msgstr "Fönstret som senast var i fokus"
 
@@ -2334,7 +2334,7 @@ msgid "Whether the rendered pixbuf should be colorized according to the state"
 msgstr "Huruvida den renderade pixbufen ska färgsättas enligt tillståndet"
 
 #: gtk/gtkcellrendererpixbuf.c:281 gtk/gtkimage.c:359 gtk/gtkmodelbutton.c:1166
-#: gtk/gtkshortcutsshortcut.c:551 gtk/gtkwindow.c:842
+#: gtk/gtkshortcutsshortcut.c:551 gtk/gtkwindow.c:844
 msgid "Icon"
 msgstr "Ikon"
 
@@ -4017,11 +4017,11 @@ msgstr "Avbryt-etikett"
 msgid "The label on the cancel button"
 msgstr "Etiketten på avbryt-knappen"
 
-#: gtk/gtkfilechooserwidget.c:8669 gtk/gtkfilechooserwidget.c:8670
+#: gtk/gtkfilechooserwidget.c:8674 gtk/gtkfilechooserwidget.c:8675
 msgid "Search mode"
 msgstr "Sökläge"
 
-#: gtk/gtkfilechooserwidget.c:8676 gtk/gtkfilechooserwidget.c:8677
+#: gtk/gtkfilechooserwidget.c:8681 gtk/gtkfilechooserwidget.c:8682
 #: gtk/gtkheaderbar.c:2034 gtk/gtkshortcutsshortcut.c:592
 msgid "Subtitle"
 msgstr "Undertext"
@@ -4211,15 +4211,15 @@ msgstr "Utseende på ramkanten"
 msgid "A widget to display in place of the usual frame label"
 msgstr "En gränssnittskomponent att visa istället för den vanliga rametiketten"
 
-#: gtk/gtkgesture.c:876
+#: gtk/gtkgesture.c:879
 msgid "Number of points"
 msgstr "Antal punkter"
 
-#: gtk/gtkgesture.c:877
+#: gtk/gtkgesture.c:880
 msgid "Number of points needed to trigger the gesture"
 msgstr "Antalet punkter som krävs för att utlösa gesten"
 
-#: gtk/gtkgesture.c:893 gtk/gtkgesture.c:894
+#: gtk/gtkgesture.c:896 gtk/gtkgesture.c:897
 msgid "GdkWindow to receive events about"
 msgstr "GdkWindow att erhålla händelser om"
 
@@ -4612,7 +4612,7 @@ msgstr "Utrymme mellan elementen i området"
 msgid "Width of border around the action area"
 msgstr "Bredd på kanten runt åtgärdsområdet"
 
-#: gtk/gtkinvisible.c:99 gtk/gtkwindow.c:899
+#: gtk/gtkinvisible.c:99 gtk/gtkwindow.c:901
 msgid "The screen where this window will be displayed"
 msgstr "Den skärm där detta fönster kommer att visas"
 
@@ -5321,7 +5321,7 @@ msgstr "Dialogtitel"
 msgid "The title of the file chooser dialog"
 msgstr "Titeln på filväljardialogen"
 
-#: gtk/gtknativedialog.c:228 gtk/gtkpopover.c:1782 gtk/gtkwindow.c:790
+#: gtk/gtknativedialog.c:228 gtk/gtkpopover.c:1783 gtk/gtkwindow.c:792
 msgid "Modal"
 msgstr "Modalt"
 
@@ -5338,12 +5338,12 @@ msgid "Whether the dialog is currently visible"
 msgstr "Huruvida dialogrutan för närvarande är synlig"
 
 # Bättre ord saknas
-#: gtk/gtknativedialog.c:256 gtk/gtkwindow.c:1065
+#: gtk/gtknativedialog.c:256 gtk/gtkwindow.c:1067
 msgid "Transient for Window"
 msgstr "Kortvarighet för fönster"
 
 # Bättre ord?
-#: gtk/gtknativedialog.c:257 gtk/gtkwindow.c:1066
+#: gtk/gtknativedialog.c:257 gtk/gtkwindow.c:1068
 msgid "The transient parent of the dialog"
 msgstr "Kortvarig överordnad för dialogrutan"
 
@@ -5561,11 +5561,11 @@ msgstr "Åtgärdsgrupp att köra åtgärder från"
 
 #: gtk/gtkpadcontroller.c:379
 msgid "Pad device"
-msgstr "Styrplatteenhet"
+msgstr "Ritplatteenhet"
 
 #: gtk/gtkpadcontroller.c:380
 msgid "Pad device to control"
-msgstr "Styrplatteenhet att styra"
+msgstr "Ritplatteenhet att styra"
 
 #: gtk/gtkpaned.c:369
 msgid ""
@@ -5809,43 +5809,43 @@ msgstr "Uttagsfönster"
 msgid "The window of the socket the plug is embedded in"
 msgstr "Fönstret för uttaget som pluggen är inbäddad i"
 
-#: gtk/gtkpopover.c:1739
+#: gtk/gtkpopover.c:1740
 msgid "Relative to"
 msgstr "Relaterat till"
 
-#: gtk/gtkpopover.c:1740
+#: gtk/gtkpopover.c:1741
 msgid "Widget the bubble window points to"
 msgstr "Gränssnittskomponent som bubbelfönstret pekar på"
 
-#: gtk/gtkpopover.c:1753
+#: gtk/gtkpopover.c:1754
 msgid "Pointing to"
 msgstr "Pekar på"
 
-#: gtk/gtkpopover.c:1754
+#: gtk/gtkpopover.c:1755
 msgid "Rectangle the bubble window points to"
 msgstr "Rektangeln bubbelfönstret pekar på"
 
-#: gtk/gtkpopover.c:1768
+#: gtk/gtkpopover.c:1769
 msgid "Position to place the bubble window"
 msgstr "Position att placera bubbelfönstret på"
 
-#: gtk/gtkpopover.c:1783
+#: gtk/gtkpopover.c:1784
 msgid "Whether the popover is modal"
 msgstr "Huruvida kontextfönstret är modalt"
 
-#: gtk/gtkpopover.c:1800
+#: gtk/gtkpopover.c:1801
 msgid "Transitions enabled"
 msgstr "Övergångar aktiverade"
 
-#: gtk/gtkpopover.c:1801
+#: gtk/gtkpopover.c:1802
 msgid "Whether show/hide transitions are enabled or not"
 msgstr "Huruvida visa/dölj övergångar är aktiverat eller inte"
 
-#: gtk/gtkpopover.c:1814
+#: gtk/gtkpopover.c:1815
 msgid "Constraint"
 msgstr "Begränsning"
 
-#: gtk/gtkpopover.c:1815
+#: gtk/gtkpopover.c:1816
 msgid "Constraint for the popover position"
 msgstr "Begränsning för kontextfönstrets position"
 
@@ -8881,7 +8881,7 @@ msgstr "Punktmönster som används för att rita trädvyns linjer"
 msgid "Whether to display the column"
 msgstr "Huruvida kolumnen ska visas"
 
-#: gtk/gtktreeviewcolumn.c:253 gtk/gtkwindow.c:783
+#: gtk/gtktreeviewcolumn.c:253 gtk/gtkwindow.c:785
 msgid "Resizable"
 msgstr "Storleksändringsbar"
 
@@ -9421,47 +9421,47 @@ msgstr "Bredd för textmarkeringshandtagen"
 msgid "Height of text selection handles"
 msgstr "Höjd för textmarkeringshandtagen"
 
-#: gtk/gtkwindow.c:745
+#: gtk/gtkwindow.c:747
 msgid "Window Type"
 msgstr "Fönstertyp"
 
-#: gtk/gtkwindow.c:746
+#: gtk/gtkwindow.c:748
 msgid "The type of the window"
 msgstr "Typen av fönster"
 
-#: gtk/gtkwindow.c:753
+#: gtk/gtkwindow.c:755
 msgid "Window Title"
 msgstr "Fönstertitel"
 
-#: gtk/gtkwindow.c:754
+#: gtk/gtkwindow.c:756
 msgid "The title of the window"
 msgstr "Titeln på fönstret"
 
-#: gtk/gtkwindow.c:760
+#: gtk/gtkwindow.c:762
 msgid "Window Role"
 msgstr "Fönsterroll"
 
-#: gtk/gtkwindow.c:761
+#: gtk/gtkwindow.c:763
 msgid "Unique identifier for the window to be used when restoring a session"
 msgstr ""
 "Unik identifierare för fönstret som ska användas vid återställning av en "
 "session"
 
-#: gtk/gtkwindow.c:776
+#: gtk/gtkwindow.c:778
 msgid "Startup ID"
 msgstr "Uppstarts-ID"
 
-#: gtk/gtkwindow.c:777
+#: gtk/gtkwindow.c:779
 msgid "Unique startup identifier for the window used by startup-notification"
 msgstr ""
 "Unik uppstartsidentifierare för fönstret som ska användas av startup-"
 "notification"
 
-#: gtk/gtkwindow.c:784
+#: gtk/gtkwindow.c:786
 msgid "If TRUE, users can resize the window"
 msgstr "Om TRUE kan användare storleksändra fönstret"
 
-#: gtk/gtkwindow.c:791
+#: gtk/gtkwindow.c:793
 msgid ""
 "If TRUE, the window is modal (other windows are not usable while this one is "
 "up)"
@@ -9469,92 +9469,92 @@ msgstr ""
 "Om TRUE är fönstret modalt (andra fönster är inte användbara så länge detta "
 "fönster visas)"
 
-#: gtk/gtkwindow.c:797
+#: gtk/gtkwindow.c:799
 msgid "Window Position"
 msgstr "Fönsterposition"
 
-#: gtk/gtkwindow.c:798
+#: gtk/gtkwindow.c:800
 msgid "The initial position of the window"
 msgstr "Den första positionen på fönstret"
 
-#: gtk/gtkwindow.c:805
+#: gtk/gtkwindow.c:807
 msgid "Default Width"
 msgstr "Standardbredd"
 
-#: gtk/gtkwindow.c:806
+#: gtk/gtkwindow.c:808
 msgid "The default width of the window, used when initially showing the window"
 msgstr "Standardbredden på fönstret, används då fönstret först visas"
 
-#: gtk/gtkwindow.c:813
+#: gtk/gtkwindow.c:815
 msgid "Default Height"
 msgstr "Standardhöjd"
 
-#: gtk/gtkwindow.c:814
+#: gtk/gtkwindow.c:816
 msgid ""
 "The default height of the window, used when initially showing the window"
 msgstr "Standardhöjden på fönstret, används då fönstret först visas"
 
-#: gtk/gtkwindow.c:821
+#: gtk/gtkwindow.c:823
 msgid "Destroy with Parent"
 msgstr "Förstör med överordnad"
 
-#: gtk/gtkwindow.c:822
+#: gtk/gtkwindow.c:824
 msgid "If this window should be destroyed when the parent is destroyed"
 msgstr "Om detta fönster ska förstöras då dess överordnade förstörs"
 
-#: gtk/gtkwindow.c:835
+#: gtk/gtkwindow.c:837
 msgid "Hide the titlebar during maximization"
 msgstr "Dölj namnlisten under maximering"
 
-#: gtk/gtkwindow.c:836
+#: gtk/gtkwindow.c:838
 msgid "If this window's titlebar should be hidden when the window is maximized"
 msgstr "Om namnlisten för detta fönster ska vara dold när fönstret maximeras"
 
-#: gtk/gtkwindow.c:843
+#: gtk/gtkwindow.c:845
 msgid "Icon for this window"
 msgstr "Ikon för detta fönster"
 
-#: gtk/gtkwindow.c:859
+#: gtk/gtkwindow.c:861
 msgid "Mnemonics Visible"
 msgstr "Snabbtangenter synliga"
 
-#: gtk/gtkwindow.c:860
+#: gtk/gtkwindow.c:862
 msgid "Whether mnemonics are currently visible in this window"
 msgstr "Huruvida snabbtangenter visas för närvarande i detta fönster"
 
-#: gtk/gtkwindow.c:876
+#: gtk/gtkwindow.c:878
 msgid "Focus Visible"
 msgstr "Fokus synlig"
 
-#: gtk/gtkwindow.c:877
+#: gtk/gtkwindow.c:879
 msgid "Whether focus rectangles are currently visible in this window"
 msgstr "Huruvida fokusrektanglar visas för närvarande i detta fönster"
 
-#: gtk/gtkwindow.c:892
+#: gtk/gtkwindow.c:894
 msgid "Name of the themed icon for this window"
 msgstr "Namnet på den tematiserade ikonen för detta fönster"
 
-#: gtk/gtkwindow.c:905
+#: gtk/gtkwindow.c:907
 msgid "Is Active"
 msgstr "Är aktiv"
 
-#: gtk/gtkwindow.c:906
+#: gtk/gtkwindow.c:908
 msgid "Whether the toplevel is the current active window"
 msgstr "Huruvida toppnivån är det för tillfället aktiva fönstret"
 
-#: gtk/gtkwindow.c:912
+#: gtk/gtkwindow.c:914
 msgid "Focus in Toplevel"
 msgstr "Fokus i toppnivå"
 
-#: gtk/gtkwindow.c:913
+#: gtk/gtkwindow.c:915
 msgid "Whether the input focus is within this GtkWindow"
 msgstr "Huruvida inmatningsfokus är inom detta GtkWindow"
 
-#: gtk/gtkwindow.c:919
+#: gtk/gtkwindow.c:921
 msgid "Type hint"
 msgstr "Typtips"
 
-#: gtk/gtkwindow.c:920
+#: gtk/gtkwindow.c:922
 msgid ""
 "Hint to help the desktop environment understand what kind of window this is "
 "and how to treat it."
@@ -9562,116 +9562,116 @@ msgstr ""
 "Tips för att hjälpa skrivbordsmiljön förstå vad för typ av fönster detta är "
 "och hur det ska behandlas."
 
-#: gtk/gtkwindow.c:927
+#: gtk/gtkwindow.c:929
 msgid "Skip taskbar"
 msgstr "Hoppa över fönsterlista"
 
-#: gtk/gtkwindow.c:928
+#: gtk/gtkwindow.c:930
 msgid "TRUE if the window should not be in the task bar."
 msgstr "TRUE om fönstret inte ska visas i fönsterlistan."
 
-#: gtk/gtkwindow.c:934
+#: gtk/gtkwindow.c:936
 msgid "Skip pager"
 msgstr "Hoppa över väljaren"
 
-#: gtk/gtkwindow.c:935
+#: gtk/gtkwindow.c:937
 msgid "TRUE if the window should not be in the pager."
 msgstr "TRUE om fönstret inte ska vara i skrivbordsväljaren."
 
-#: gtk/gtkwindow.c:941
+#: gtk/gtkwindow.c:943
 msgid "Urgent"
 msgstr "Brådskande"
 
-#: gtk/gtkwindow.c:942
+#: gtk/gtkwindow.c:944
 msgid "TRUE if the window should be brought to the user's attention."
 msgstr "TRUE om användaren ska göras uppmärksam på fönstret."
 
-#: gtk/gtkwindow.c:955
+#: gtk/gtkwindow.c:957
 msgid "Accept focus"
 msgstr "Acceptera fokus"
 
-#: gtk/gtkwindow.c:956
+#: gtk/gtkwindow.c:958
 msgid "TRUE if the window should receive the input focus."
 msgstr "TRUE om fönstret ska få inmatningsfokus."
 
-#: gtk/gtkwindow.c:969
+#: gtk/gtkwindow.c:971
 msgid "Focus on map"
 msgstr "Fokusera vid mappning"
 
-#: gtk/gtkwindow.c:970
+#: gtk/gtkwindow.c:972
 msgid "TRUE if the window should receive the input focus when mapped."
 msgstr "TRUE om fönstret ska få inmatningsfokus då det mappas."
 
-#: gtk/gtkwindow.c:983
+#: gtk/gtkwindow.c:985
 msgid "Decorated"
 msgstr "Dekorerat"
 
-#: gtk/gtkwindow.c:984
+#: gtk/gtkwindow.c:986
 msgid "Whether the window should be decorated by the window manager"
 msgstr "Huruvida fönstret ska vara dekorerat i fönsterhanteraren"
 
-#: gtk/gtkwindow.c:997
+#: gtk/gtkwindow.c:999
 msgid "Deletable"
 msgstr "Borttagbart"
 
-#: gtk/gtkwindow.c:998
+#: gtk/gtkwindow.c:1000
 msgid "Whether the window frame should have a close button"
 msgstr "Huruvida fönsterramen ska ha en stängningsknapp"
 
-#: gtk/gtkwindow.c:1018
+#: gtk/gtkwindow.c:1020
 msgid "Resize grip"
 msgstr "Handtag för storleksändring"
 
-#: gtk/gtkwindow.c:1019
+#: gtk/gtkwindow.c:1021
 msgid "Specifies whether the window should have a resize grip"
 msgstr "Anger huruvida fönstret ska ha ett handtag för storleksändring"
 
-#: gtk/gtkwindow.c:1034
+#: gtk/gtkwindow.c:1036
 msgid "Resize grip is visible"
 msgstr "Handtag för storleksändring är synligt"
 
-#: gtk/gtkwindow.c:1035
+#: gtk/gtkwindow.c:1037
 msgid "Specifies whether the window's resize grip is visible."
 msgstr "Anger huruvida fönstrets handtag för storleksändring är synlig."
 
 # http://www.pygtk.org/pygtk2reference/gdk-constants.html#gdk-gravity-constants
-#: gtk/gtkwindow.c:1049
+#: gtk/gtkwindow.c:1051
 msgid "Gravity"
 msgstr "Dragning"
 
-#: gtk/gtkwindow.c:1050
+#: gtk/gtkwindow.c:1052
 msgid "The window gravity of the window"
 msgstr "Fönstrets fönsterdragning"
 
-#: gtk/gtkwindow.c:1085
+#: gtk/gtkwindow.c:1087
 msgid "Attached to Widget"
 msgstr "Fäst till gränssnittskomponent"
 
-#: gtk/gtkwindow.c:1086
+#: gtk/gtkwindow.c:1088
 msgid "The widget where the window is attached"
 msgstr "Gränssnittskomponenten som fönstret är fäst till"
 
-#: gtk/gtkwindow.c:1092
+#: gtk/gtkwindow.c:1094
 msgid "Is maximized"
 msgstr "Är maximerat"
 
-#: gtk/gtkwindow.c:1093
+#: gtk/gtkwindow.c:1095
 msgid "Whether the window is maximized"
 msgstr "Huruvida fönstret är maximerat"
 
-#: gtk/gtkwindow.c:1114
+#: gtk/gtkwindow.c:1116
 msgid "GtkApplication"
 msgstr "GtkApplication"
 
-#: gtk/gtkwindow.c:1115
+#: gtk/gtkwindow.c:1117
 msgid "The GtkApplication for the window"
 msgstr "GtkApplication för fönstret"
 
-#: gtk/gtkwindow.c:1125 gtk/gtkwindow.c:1126
+#: gtk/gtkwindow.c:1127 gtk/gtkwindow.c:1128
 msgid "Decorated button layout"
 msgstr "Dekorerad knapplayout"
 
-#: gtk/gtkwindow.c:1132 gtk/gtkwindow.c:1133
+#: gtk/gtkwindow.c:1134 gtk/gtkwindow.c:1135
 msgid "Decoration resize handle size"
 msgstr "Dekorerad storlekshandtagstorlek"
 
