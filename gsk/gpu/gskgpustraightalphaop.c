@@ -54,6 +54,7 @@ static const GskGpuShaderOpClass GSK_GPU_STRAIGHT_ALPHA_OP_CLASS = {
 void
 gsk_gpu_straight_alpha_op (GskGpuFrame            *frame,
                            GskGpuShaderClip        clip,
+                           float                   opacity,
                            GskGpuDescriptors      *desc,
                            guint32                 descriptor,
                            const graphene_rect_t  *rect,
@@ -71,4 +72,5 @@ gsk_gpu_straight_alpha_op (GskGpuFrame            *frame,
   gsk_gpu_rect_to_float (rect, offset, instance->rect);
   gsk_gpu_rect_to_float (tex_rect, offset, instance->tex_rect);
   instance->tex_id = descriptor;
+  instance->opacity = opacity;
 }
