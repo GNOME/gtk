@@ -39,6 +39,29 @@ compare_pixels (int     width,
     }
 }
 
+static GdkTexture *
+red_texture_new (int width,
+                 int height)
+{
+  /* We use GDK_MEMORY_R8G8B8A8 here because it's the expected PNG RGBA format */
+  const GdkMemoryFormat format = GDK_MEMORY_R8G8B8A8;
+  int i;
+  guint32 *data;
+  GBytes *bytes;
+  GdkTexture *texture;
+
+  data = g_malloc (width * height * 4);
+
+  for (i = 0; i < width * height; i++)
+    data[i] = 0xFF0000FF;
+
+  bytes = g_bytes_new_take ((guint8 *) data, width * height * 4);
+  texture = gdk_memory_texture_new (width, height, format, bytes, width * 4);
+  g_bytes_unref (bytes);
+
+  return texture;
+}
+
 static void
 compare_textures (GdkTexture *texture1,
                   GdkTexture *texture2)
@@ -146,7 +169,7 @@ test_texture_save_to_png (void)
 
   texture = gdk_texture_new_from_resource ("/org/gtk/libgtk/icons/16x16/places/user-trash.png");
 
-  gdk_texture_save_to_png (texture, "test.png");
+  g_assert_true (gdk_texture_save_to_png (texture, "test.png"));
   file = g_file_new_for_path ("test.png");
   texture2 = gdk_texture_new_from_file (file, &error);
   g_object_unref (file);
@@ -156,6 +179,10 @@ test_texture_save_to_png (void)
 
   g_object_unref (texture);
   g_object_unref (texture2);
+
+  /* libpng has a builtin user limit of 1M pixels per dimension, so we make it 1px too big. */
+  texture = red_texture_new (1 * 1000 * 1000 + 1, 1);
+  g_assert_true (gdk_texture_save_to_png (texture, "test.png"));
 }
 
 static void
