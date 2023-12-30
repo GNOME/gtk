@@ -1332,21 +1332,26 @@ gsk_gpu_node_processor_add_node_clipped (GskGpuNodeProcessor   *self,
         {
           gsk_gpu_clip_init_copy (&self->clip, &old_clip);
           gsk_gpu_node_processor_sync_globals (self, 0);
-          if (!gsk_gpu_node_processor_try_node_as_pattern (self, node))
+          if (!gsk_gpu_node_processor_ubershader_instead_of_offscreen (self, node) ||
+              !gsk_gpu_node_processor_try_node_as_pattern (self, node))
             {
               GskGpuImage *image;
-              graphene_rect_t tex_rect;
-              image = gsk_gpu_node_processor_get_node_as_image (self,
-                                                                0,
-                                                                0,
-                                                                NULL,
-                                                                node,
-                                                                &tex_rect);
+              graphene_rect_t bounds, tex_rect;
+              if (gsk_gpu_node_processor_clip_node_bounds (self, node, &bounds) &&
+                  gsk_rect_intersection (&bounds, clip_bounds, &bounds))
+                image = gsk_gpu_node_processor_get_node_as_image (self,
+                                                                  0,
+                                                                  0,
+                                                                  &bounds,
+                                                                  node,
+                                                                  &tex_rect);
+              else
+                image = NULL;
               if (image)
                 {
                   gsk_gpu_node_processor_image_op (self,
                                                    image,
-                                                   clip_bounds,
+                                                   &bounds,
                                                    &tex_rect);
                   g_object_unref (image);
                 }
