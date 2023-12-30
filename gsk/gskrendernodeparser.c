@@ -711,7 +711,7 @@ parse_shadows (GtkCssParser *parser,
 static void
 clear_shadows (gpointer inout_shadows)
 {
-  g_array_set_size (*(GArray **) inout_shadows, 0);
+  g_array_set_size (inout_shadows, 0);
 }
 
 static const struct
