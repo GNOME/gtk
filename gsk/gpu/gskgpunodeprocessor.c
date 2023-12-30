@@ -190,6 +190,27 @@ gsk_gpu_node_processor_sync_globals (GskGpuNodeProcessor *self,
     gsk_gpu_node_processor_emit_scissor_op (self);
 }
 
+static void
+rect_round_to_pixels (const graphene_rect_t *src,
+                      const graphene_vec2_t *pixel_scale,
+                      graphene_rect_t       *dest)
+{
+  float x, y, xscale, yscale, inv_xscale, inv_yscale;
+
+  xscale = graphene_vec2_get_x (pixel_scale);
+  yscale = graphene_vec2_get_y (pixel_scale);
+  inv_xscale = 1.0f / xscale;
+  inv_yscale = 1.0f / yscale;
+
+  x = floorf (src->origin.x * xscale);
+  y = floorf (src->origin.y * yscale);
+  *dest = GRAPHENE_RECT_INIT (
+      x * inv_xscale,
+      y * inv_yscale,
+      (ceil ((src->origin.x + src->size.width) * xscale) - x) * inv_xscale,
+      (ceil ((src->origin.y + src->size.height) * yscale) - y) * inv_yscale);
+}
+
 void
 gsk_gpu_node_processor_process (GskGpuFrame                 *frame,
                                 GskGpuImage                 *target,
@@ -425,6 +446,28 @@ gsk_gpu_node_processor_clip_node_bounds (GskGpuNodeProcessor *self,
   return TRUE;
 }
 
+/*
+ * gsk_gpu_get_node_as_image:
+ * @frame: frame to render in
+ * @clip_bounds: region of node that must be included in image
+ * @scale: scale factor to use for the image
+ * @node: the node to render
+ * @out_bounds: the actual bounds of the result
+ *
+ * Get the part of the node indicated by the clip bounds as an image.
+ *
+ * It is perfectly valid for this function to return an image covering
+ * a larger or smaller rectangle than the given clip bounds.
+ * It can be smaller if the node is actually smaller than the clip
+ * bounds and it's not necessary to create such a large offscreen, and
+ * it can be larger if only part of a node is drawn but a cached image
+ * for the full node (usually a texture node) already exists.
+ *
+ * The rectangle that is actually covered by the image is returned in
+ * out_bounds.
+ *
+ * Returns: the image or %NULL if there was nothing to render
+ **/
 static GskGpuImage *
 gsk_gpu_get_node_as_image (GskGpuFrame            *frame,
                            const graphene_rect_t  *clip_bounds,
@@ -457,9 +500,9 @@ gsk_gpu_get_node_as_image (GskGpuFrame            *frame,
         graphene_rect_t clipped;
 
         graphene_rect_intersection (clip_bounds, &node->bounds, &clipped);
-
         if (clipped.size.width == 0 || clipped.size.height == 0)
           return NULL;
+        rect_round_to_pixels (&clipped, scale, &clipped);
 
         result = gsk_gpu_upload_cairo_op (frame,
                                           node,
@@ -476,9 +519,9 @@ gsk_gpu_get_node_as_image (GskGpuFrame            *frame,
         graphene_rect_t clipped;
 
         graphene_rect_intersection (clip_bounds, &node->bounds, &clipped);
-
         if (clipped.size.width == 0 || clipped.size.height == 0)
           return NULL;
+        rect_round_to_pixels (&clipped, scale, &clipped);
 
         GSK_DEBUG (FALLBACK, "Offscreening node '%s'", g_type_name_from_instance ((GTypeInstance *) node));
         result = gsk_gpu_render_pass_op_offscreen (frame,
