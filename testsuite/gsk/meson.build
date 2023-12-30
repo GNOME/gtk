@@ -86,6 +86,7 @@ compare_render_tests = [
   'mask-modes-with-alpha',
   'mask-texture-color-alpha',
   'nested-rounded-clips',
+  'offscreen-pixel-alignment-nogl-nocairo',
   'opacity_clip',
   'opacity-colormatrix-combinations',
   'opacity-overdraw',
