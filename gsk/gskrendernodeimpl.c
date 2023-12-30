@@ -33,17 +33,23 @@
 #include "gsktransformprivate.h"
 #include "gskoffloadprivate.h"
 
-#include "gdk/gdktextureprivate.h"
 #include "gdk/gdkmemoryformatprivate.h"
 #include "gdk/gdkprivate.h"
 #include "gdk/gdkrectangleprivate.h"
 #include "gdk/gdksubsurfaceprivate.h"
+#include "gdk/gdktextureprivate.h"
+#include "gdk/gdktexturedownloaderprivate.h"
 
 #include <cairo.h>
 #ifdef CAIRO_HAS_SVG_SURFACE
 #include <cairo-svg.h>
 #endif
 #include <hb-ot.h>
+
+/* for oversized image fallback - we use a smaller size than Cairo actually
+ * allows to avoid rounding errors in Cairo */
+#define MAX_CAIRO_IMAGE_WIDTH 16384
+#define MAX_CAIRO_IMAGE_HEIGHT 16384
 
 /* maximal number of rectangles we keep in a diff region before we throw
  * the towel and just use the bounding box of the parent node.
@@ -1693,6 +1699,63 @@ gsk_texture_node_finalize (GskRenderNode *node)
 }
 
 static void
+gsk_texture_node_draw_oversized (GskRenderNode *node,
+                                 cairo_t       *cr)
+{
+  GskTextureNode *self = (GskTextureNode *) node;
+  cairo_surface_t *surface;
+  int x, y, width, height;
+  GdkTextureDownloader downloader;
+  GBytes *bytes;
+  const guchar *data;
+  gsize stride;
+
+  width = gdk_texture_get_width (self->texture);
+  height = gdk_texture_get_height (self->texture);
+  gdk_texture_downloader_init (&downloader, self->texture);
+  gdk_texture_downloader_set_format (&downloader, GDK_MEMORY_DEFAULT);
+  bytes = gdk_texture_downloader_download_bytes (&downloader, &stride);
+  gdk_texture_downloader_finish (&downloader);
+  data = g_bytes_get_data (bytes, NULL);
+
+  gsk_cairo_rectangle_pixel_aligned (cr, &node->bounds);
+  cairo_clip (cr);
+
+  cairo_push_group (cr);
+  cairo_set_operator (cr, CAIRO_OPERATOR_ADD);
+  cairo_translate (cr,
+                   node->bounds.origin.x,
+                   node->bounds.origin.y);
+  cairo_scale (cr, 
+               node->bounds.size.width / width,
+               node->bounds.size.height / height);
+
+  for (x = 0; x < width; x += MAX_CAIRO_IMAGE_WIDTH)
+    {
+      int tile_width = MIN (MAX_CAIRO_IMAGE_WIDTH, width - x);
+      for (y = 0; y < height; y += MAX_CAIRO_IMAGE_HEIGHT)
+        {
+          int tile_height = MIN (MAX_CAIRO_IMAGE_HEIGHT, height - y);
+          surface = cairo_image_surface_create_for_data ((guchar *) data + stride * y + 4 * x,
+                                                         CAIRO_FORMAT_ARGB32,
+                                                         tile_width, tile_height,
+                                                         stride);
+
+          cairo_set_source_surface (cr, surface, x, y);
+          cairo_pattern_set_extend (cairo_get_source (cr), CAIRO_EXTEND_PAD);
+          cairo_rectangle (cr, x, y, tile_width, tile_height);
+          cairo_fill (cr);
+
+          cairo_surface_finish (surface);
+          cairo_surface_destroy (surface);
+        }
+    }
+
+  cairo_pop_group_to_source (cr);
+  cairo_paint (cr);
+}
+
+static void
 gsk_texture_node_draw (GskRenderNode *node,
                        cairo_t       *cr)
 {
@@ -1700,14 +1763,23 @@ gsk_texture_node_draw (GskRenderNode *node,
   cairo_surface_t *surface;
   cairo_pattern_t *pattern;
   cairo_matrix_t matrix;
+  int width, height;
+
+  width = gdk_texture_get_width (self->texture);
+  height = gdk_texture_get_height (self->texture);
+  if (width > MAX_CAIRO_IMAGE_WIDTH || height > MAX_CAIRO_IMAGE_HEIGHT)
+    {
+      gsk_texture_node_draw_oversized (node, cr);
+      return;
+    }
 
   surface = gdk_texture_download_surface (self->texture);
   pattern = cairo_pattern_create_for_surface (surface);
   cairo_pattern_set_extend (pattern, CAIRO_EXTEND_PAD);
 
   cairo_matrix_init_scale (&matrix,
-                           gdk_texture_get_width (self->texture) / node->bounds.size.width,
-                           gdk_texture_get_height (self->texture) / node->bounds.size.height);
+                           width / node->bounds.size.width,
+                           height / node->bounds.size.height);
   cairo_matrix_translate (&matrix,
                           -node->bounds.origin.x,
                           -node->bounds.origin.y);
