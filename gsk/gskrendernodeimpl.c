@@ -4949,7 +4949,7 @@ gsk_shadow_node_draw (GskRenderNode *node,
         continue;
 
       cairo_save (cr);
-      cr = gsk_cairo_blur_start_drawing (cr, shadow->radius, GSK_BLUR_X | GSK_BLUR_Y);
+      cr = gsk_cairo_blur_start_drawing (cr, 0.5 * shadow->radius, GSK_BLUR_X | GSK_BLUR_Y);
 
       cairo_save (cr);
       cairo_translate (cr, shadow->dx, shadow->dy);
