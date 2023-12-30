@@ -60,6 +60,49 @@ gsk_cairo_rectangle (cairo_t               *cr,
                    rect->size.width, rect->size.height);
 }
 
+/* apply a rectangle that bounds @rect in
+ * pixel-aligned device coordinates.
+ *
+ * This is useful for clipping to minimize the rectangle
+ * in push_group() or when blurring.
+ */
+static void
+gsk_cairo_rectangle_pixel_aligned (cairo_t               *cr,
+                                   const graphene_rect_t *rect)
+{
+  double x0, x1, x2, x3;
+  double y0, y1, y2, y3;
+  double xmin, xmax, ymin, ymax;
+
+  x0 = rect->origin.x;
+  y0 = rect->origin.y;
+  cairo_user_to_device (cr, &x0, &y0);
+  x1 = rect->origin.x + rect->size.width;
+  y1 = rect->origin.y;
+  cairo_user_to_device (cr, &x1, &y1);
+  x2 = rect->origin.x;
+  y2 = rect->origin.y + rect->size.height;
+  cairo_user_to_device (cr, &x2, &y2);
+  x3 = rect->origin.x + rect->size.width;
+  y3 = rect->origin.y + rect->size.height;
+  cairo_user_to_device (cr, &x3, &y3);
+
+  xmin = MIN (MIN (x0, x1), MIN (x2, x3));
+  ymin = MIN (MIN (y0, y1), MIN (y2, y3));
+  xmax = MAX (MAX (x0, x1), MAX (x2, x3));
+  ymax = MAX (MAX (y0, y1), MAX (y2, y3));
+
+  xmin = floor (xmin);
+  ymin = floor (ymin);
+  xmax = ceil (xmax);
+  ymax = ceil (ymax);
+
+  cairo_save (cr);
+  cairo_identity_matrix (cr);
+  cairo_rectangle (cr, xmin, ymin, xmax - xmin, ymax - ymin);
+  cairo_restore (cr);
+}
+
 static void
 rectangle_init_from_graphene (cairo_rectangle_int_t *cairo,
                               const graphene_rect_t *graphene)
@@ -1859,8 +1902,7 @@ gsk_texture_scale_node_draw (GskRenderNode *node,
   cairo_pattern_set_extend (cairo_get_source (cr), CAIRO_EXTEND_PAD);
   cairo_surface_destroy (surface2);
 
-  gsk_cairo_rectangle (cr, &node->bounds);
-  cairo_fill (cr);
+  cairo_paint (cr);
 
   cairo_restore (cr);
 }
@@ -3587,7 +3629,7 @@ gsk_opacity_node_draw (GskRenderNode *node,
   GskOpacityNode *self = (GskOpacityNode *) node;
 
   /* clip so the push_group() creates a smaller surface */
-  gsk_cairo_rectangle (cr, &node->bounds);
+  gsk_cairo_rectangle_pixel_aligned (cr, &node->bounds);
   cairo_clip (cr);
 
   if (has_empty_clip (cr))
@@ -4008,7 +4050,7 @@ gsk_repeat_node_draw (GskRenderNode *node,
   graphene_rect_t clip_bounds;
   float tile_left, tile_right, tile_top, tile_bottom;
 
-  gsk_cairo_rectangle (cr, &node->bounds);
+  gsk_cairo_rectangle_pixel_aligned (cr, &node->bounds);
   cairo_clip (cr);
   _graphene_rect_init_from_clip_extents (&clip_bounds, cr);
 
@@ -4736,7 +4778,7 @@ gsk_stroke_node_draw (GskRenderNode *node,
     }
   else
     {
-      gsk_cairo_rectangle (cr, &self->child->bounds);
+      gsk_cairo_rectangle_pixel_aligned (cr, &self->child->bounds);
       cairo_clip (cr);
       if (has_empty_clip (cr))
         return;
@@ -4934,7 +4976,7 @@ gsk_shadow_node_draw (GskRenderNode *node,
   gsize i;
 
   /* clip so the blur area stays small */
-  gsk_cairo_rectangle (cr, &node->bounds);
+  gsk_cairo_rectangle_pixel_aligned (cr, &node->bounds);
   cairo_clip (cr);
   if (has_empty_clip (cr))
     return;
@@ -4956,6 +4998,7 @@ gsk_shadow_node_draw (GskRenderNode *node,
       cairo_push_group (cr);
       gsk_render_node_draw (self->child, cr);
       pattern = cairo_pop_group (cr);
+      cairo_reset_clip (cr);
       gdk_cairo_set_source_rgba (cr, &shadow->color);
       cairo_mask (cr, pattern);
       cairo_restore (cr);
