@@ -13,6 +13,7 @@
 #include "gskgpucolormatrixopprivate.h"
 #include "gskgpucoloropprivate.h"
 #include "gskgpuconicgradientopprivate.h"
+#include "gskgpucrossfadeopprivate.h"
 #include "gskgpudescriptorsprivate.h"
 #include "gskgpudeviceprivate.h"
 #include "gskgpuframeprivate.h"
@@ -2556,6 +2557,88 @@ gsk_gpu_node_processor_create_blend_pattern (GskGpuPatternWriter *self,
   return TRUE;
 }
 
+static void
+gsk_gpu_node_processor_add_cross_fade_node (GskGpuNodeProcessor *self,
+                                            GskRenderNode       *node)
+{
+  GskRenderNode *start_child, *end_child;
+  graphene_rect_t start_rect, end_rect;
+  GskGpuImage *start_image, *end_image;
+  guint32 descriptors[2];
+  float progress, old_opacity;
+
+  start_child = gsk_cross_fade_node_get_start_child (node);
+  end_child = gsk_cross_fade_node_get_end_child (node);
+  progress = gsk_cross_fade_node_get_progress (node);
+
+  if ((gsk_gpu_node_processor_ubershader_instead_of_offscreen (self, start_child) ||
+       gsk_gpu_node_processor_ubershader_instead_of_offscreen (self, end_child)) &&
+      gsk_gpu_node_processor_try_node_as_pattern (self, node))
+    return;
+
+  start_image = gsk_gpu_node_processor_get_node_as_image (self,
+                                                          0,
+                                                          GSK_GPU_IMAGE_STRAIGHT_ALPHA,
+                                                          NULL,
+                                                          start_child,
+                                                          &start_rect);
+  end_image = gsk_gpu_node_processor_get_node_as_image (self,
+                                                        0,
+                                                        GSK_GPU_IMAGE_STRAIGHT_ALPHA,
+                                                        NULL,
+                                                        end_child,
+                                                        &end_rect);
+
+  if (start_image == NULL)
+    {
+      if (end_image == NULL)
+        return;
+
+      old_opacity = self->opacity;
+      self->opacity *= progress;
+      gsk_gpu_node_processor_image_op (self,
+                                       end_image,
+                                       &end_child->bounds,
+                                       &end_rect);
+      g_object_unref (end_image);
+      self->opacity = old_opacity;
+      return;
+    }
+  else if (end_image == NULL)
+    {
+      old_opacity = self->opacity;
+      self->opacity *= (1 - progress);
+      gsk_gpu_node_processor_image_op (self,
+                                       start_image,
+                                       &start_child->bounds,
+                                       &start_rect);
+      g_object_unref (start_image);
+      self->opacity = old_opacity;
+      return;
+    }
+
+  gsk_gpu_node_processor_add_images (self,
+                                     2,
+                                     (GskGpuImage *[2]) { start_image, end_image },
+                                     (GskGpuSampler[2]) { GSK_GPU_SAMPLER_DEFAULT, GSK_GPU_SAMPLER_DEFAULT },
+                                     descriptors);
+
+  gsk_gpu_cross_fade_op (self->frame,
+                         gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, &node->bounds),
+                         self->desc,
+                         &node->bounds,
+                         &self->offset,
+                         self->opacity,
+                         progress,
+                         descriptors[0],
+                         &start_rect,
+                         descriptors[1],
+                         &end_rect);
+
+  g_object_unref (end_image);
+  g_object_unref (start_image);
+}
+
 static gboolean
 gsk_gpu_node_processor_create_cross_fade_pattern (GskGpuPatternWriter *self,
                                                   GskRenderNode       *node)
@@ -3640,7 +3723,7 @@ static const struct
   [GSK_CROSS_FADE_NODE] = {
     0,
     GSK_GPU_HANDLE_OPACITY,
-    gsk_gpu_node_processor_add_node_as_pattern,
+    gsk_gpu_node_processor_add_cross_fade_node,
     gsk_gpu_node_processor_create_cross_fade_pattern,
   },
   [GSK_TEXT_NODE] = {
