@@ -1,6 +1,7 @@
 #include "common.glsl"
 
-#define VARIATION_REPEATING ((GSK_VARIATION & 1u) == 1u)
+#define VARIATION_SUPERSAMPLING ((GSK_VARIATION & (1u << 0)) == (1u << 0))
+#define VARIATION_REPEATING     ((GSK_VARIATION & (1u << 1)) == (1u << 1))
 
 PASS(0) vec2 _pos;
 PASS_FLAT(1) Rect _rect;
@@ -123,7 +124,20 @@ run (out vec4 color,
 {
   float alpha = rect_coverage (_rect, _pos);
 
-  color = alpha * get_gradient_color_at (_pos / GSK_GLOBAL_SCALE - _center_radius.xy);
+  vec2 pos = _pos / GSK_GLOBAL_SCALE - _center_radius.xy;
+  if (VARIATION_SUPERSAMPLING)
+    {
+      vec2 dpos = 0.25 * fwidth (pos);
+      color = alpha * 0.25 * (get_gradient_color_at (pos + vec2(- dpos.x, - dpos.y)) +
+                              get_gradient_color_at (pos + vec2(- dpos.x,   dpos.y)) +
+                              get_gradient_color_at (pos + vec2(  dpos.x, - dpos.y)) +
+                              get_gradient_color_at (pos + vec2(  dpos.x,   dpos.y)));
+    }
+  else
+    {
+      color = alpha * get_gradient_color_at (pos);
+    }
+
   position = _pos;
 }
 

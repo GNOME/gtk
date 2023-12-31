@@ -8,7 +8,8 @@
 
 #include "gpu/shaders/gskgpuradialgradientinstance.h"
 
-#define VARIATION_REPEATING 1
+#define VARIATION_SUPERSAMPLING (1 << 0)
+#define VARIATION_REPEATING     (1 << 1)
 
 typedef struct _GskGpuRadialGradientOp GskGpuRadialGradientOp;
 
@@ -75,7 +76,8 @@ gsk_gpu_radial_gradient_op (GskGpuFrame            *frame,
 
   gsk_gpu_shader_op_alloc (frame,
                            &GSK_GPU_RADIAL_GRADIENT_OP_CLASS,
-                           repeating ? VARIATION_REPEATING : 0,
+                           (repeating ? VARIATION_REPEATING : 0) |
+                           (gsk_gpu_frame_should_optimize (frame, GSK_GPU_OPTIMIZE_GRADIENTS) ? VARIATION_SUPERSAMPLING : 0),
                            clip,
                            NULL,
                            &instance);

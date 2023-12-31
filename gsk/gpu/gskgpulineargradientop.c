@@ -8,7 +8,8 @@
 
 #include "gpu/shaders/gskgpulineargradientinstance.h"
 
-#define VARIATION_REPEATING 1
+#define VARIATION_SUPERSAMPLING (1 << 0)
+#define VARIATION_REPEATING     (1 << 1)
 
 typedef struct _GskGpuLinearGradientOp GskGpuLinearGradientOp;
 
@@ -73,7 +74,8 @@ gsk_gpu_linear_gradient_op (GskGpuFrame            *frame,
 
   gsk_gpu_shader_op_alloc (frame,
                            &GSK_GPU_LINEAR_GRADIENT_OP_CLASS,
-                           repeating ? VARIATION_REPEATING : 0,
+                           (repeating ? VARIATION_REPEATING : 0) |
+                           (gsk_gpu_frame_should_optimize (frame, GSK_GPU_OPTIMIZE_GRADIENTS) ? VARIATION_SUPERSAMPLING : 0),
                            clip,
                            NULL,
                            &instance);
