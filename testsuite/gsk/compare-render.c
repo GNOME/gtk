@@ -558,7 +558,5 @@ main (int argc, char **argv)
   g_object_unref (renderer);
   gdk_surface_destroy (window);
 
-  gdk_display_close (gdk_display_get_default ());
-
   return success ? 0 : 1;
 }
