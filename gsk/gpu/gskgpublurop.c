@@ -6,7 +6,11 @@
 #include "gskgpuprintprivate.h"
 #include "gskrectprivate.h"
 
+#include "gdk/gdkrgbaprivate.h"
+
 #include "gpu/shaders/gskgpublurinstance.h"
+
+#define VARIATION_COLORIZE 1
 
 typedef struct _GskGpuBlurOp GskGpuBlurOp;
 
@@ -51,22 +55,23 @@ static const GskGpuShaderOpClass GSK_GPU_BLUR_OP_CLASS = {
   gsk_gpu_blur_setup_vao
 };
 
-void
-gsk_gpu_blur_op (GskGpuFrame            *frame,
-                 GskGpuShaderClip        clip,
-                 GskGpuDescriptors      *desc,
-                 guint32                 descriptor,
-                 const graphene_rect_t  *rect,
-                 const graphene_point_t *offset,
-                 const graphene_rect_t  *tex_rect,
-                 const graphene_vec2_t  *blur_direction,
-                 const GdkRGBA          *blur_color)
+static void
+gsk_gpu_blur_op_full (GskGpuFrame            *frame,
+                      guint32                 variation,
+                      GskGpuShaderClip        clip,
+                      GskGpuDescriptors      *desc,
+                      guint32                 descriptor,
+                      const graphene_rect_t  *rect,
+                      const graphene_point_t *offset,
+                      const graphene_rect_t  *tex_rect,
+                      const graphene_vec2_t  *blur_direction,
+                      const GdkRGBA          *blur_color)
 {
   GskGpuBlurInstance *instance;
 
   gsk_gpu_shader_op_alloc (frame,
                            &GSK_GPU_BLUR_OP_CLASS,
-                           0,
+                           variation,
                            clip,
                            desc,
                            &instance);
@@ -77,3 +82,49 @@ gsk_gpu_blur_op (GskGpuFrame            *frame,
   gsk_gpu_rgba_to_float (blur_color, instance->blur_color);
   instance->tex_id = descriptor;
 }
+
+void
+gsk_gpu_blur_op (GskGpuFrame            *frame,
+                 GskGpuShaderClip        clip,
+                 GskGpuDescriptors      *desc,
+                 guint32                 descriptor,
+                 const graphene_rect_t  *rect,
+                 const graphene_point_t *offset,
+                 const graphene_rect_t  *tex_rect,
+                 const graphene_vec2_t  *blur_direction)
+{
+  gsk_gpu_blur_op_full (frame,
+                        0,
+                        clip,
+                        desc,
+                        descriptor,
+                        rect,
+                        offset,
+                        tex_rect,
+                        blur_direction,
+                        &GDK_RGBA_TRANSPARENT);
+}
+
+void
+gsk_gpu_blur_shadow_op (GskGpuFrame            *frame,
+                        GskGpuShaderClip        clip,
+                        GskGpuDescriptors      *desc,
+                        guint32                 descriptor,
+                        const graphene_rect_t  *rect,
+                        const graphene_point_t *offset,
+                        const graphene_rect_t  *tex_rect,
+                        const graphene_vec2_t  *blur_direction,
+                        const GdkRGBA          *shadow_color)
+{
+  gsk_gpu_blur_op_full (frame,
+                        VARIATION_COLORIZE,
+                        clip,
+                        desc,
+                        descriptor,
+                        rect,
+                        offset,
+                        tex_rect,
+                        blur_direction,
+                        shadow_color);
+}
+

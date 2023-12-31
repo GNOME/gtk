@@ -2,6 +2,8 @@
 
 /* blur radius (aka in_blur_direction) 0 is NOT supported and MUST be caught before */
 
+#define VARIATION_COLORIZE ((GSK_VARIATION & 1u) == 1u)
+
 PASS(0) vec2 _pos;
 PASS_FLAT(1) Rect _rect;
 PASS_FLAT(2) vec4 _blur_color;
@@ -70,10 +72,10 @@ run (out vec4 color,
       p += _tex_blur_step;
     }
 
-  if (_blur_color.a <= 0.0)
-    color = sum / coefficient_sum;
-  else
+  if (VARIATION_COLORIZE)
     color = _blur_color * sum.a / coefficient_sum;
+  else
+    color = sum / coefficient_sum;
   position = _pos;
 }
 
