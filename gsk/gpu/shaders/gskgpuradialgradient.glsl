@@ -1,5 +1,7 @@
 #include "common.glsl"
 
+#define VARIATION_REPEATING ((GSK_VARIATION & 1u) == 1u)
+
 PASS(0) vec2 _pos;
 PASS_FLAT(1) Rect _rect;
 PASS_FLAT(2) vec4 _color0;
@@ -13,7 +15,6 @@ PASS_FLAT(9) vec4 _offsets0;
 PASS_FLAT(10) vec3 _offsets1;
 PASS_FLAT(11) vec4 _center_radius;
 PASS_FLAT(12) vec2 _startend;
-PASS_FLAT(13) uint _repeating;
 
 
 #ifdef GSK_VERTEX_SHADER
@@ -30,7 +31,6 @@ IN(8) vec4 in_offsets0;
 IN(9) vec3 in_offsets1;
 IN(10) vec4 in_center_radius;
 IN(11) vec2 in_startend;
-IN(12) uint in_repeating;
 
 void
 run (out vec2 pos)
@@ -44,7 +44,6 @@ run (out vec2 pos)
 
   _center_radius = in_center_radius;
   _startend = in_startend;
-  _repeating = in_repeating;
 
   _color0 = in_color0;
   _color1 = in_color1;
@@ -110,7 +109,7 @@ get_gradient_color_at (vec2 pos)
 {
   float offset = length (pos / _center_radius.zw);
   offset = (offset - _startend.x) / (_startend.y - _startend.x);
-  if (_repeating != 0u)
+  if (VARIATION_REPEATING)
     offset = fract (offset);
   else
     offset = clamp (offset, 0.0, 1.0);
