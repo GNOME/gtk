@@ -8,6 +8,8 @@
 
 #include "gpu/shaders/gskgpulineargradientinstance.h"
 
+#define VARIATION_REPEATING 1
+
 typedef struct _GskGpuLinearGradientOp GskGpuLinearGradientOp;
 
 struct _GskGpuLinearGradientOp
@@ -26,7 +28,7 @@ gsk_gpu_linear_gradient_op_print (GskGpuOp    *op,
 
   instance = (GskGpuLineargradientInstance *) gsk_gpu_frame_get_vertex_data (frame, shader->vertex_offset);
 
-  if (instance->repeating)
+  if (shader->variation & VARIATION_REPEATING)
     gsk_gpu_print_op (string, indent, "repeating-linear-gradient");
   else
     gsk_gpu_print_op (string, indent, "linear-gradient");
@@ -71,7 +73,7 @@ gsk_gpu_linear_gradient_op (GskGpuFrame            *frame,
 
   gsk_gpu_shader_op_alloc (frame,
                            &GSK_GPU_LINEAR_GRADIENT_OP_CLASS,
-                           0,
+                           repeating ? VARIATION_REPEATING : 0,
                            clip,
                            NULL,
                            &instance);
@@ -93,5 +95,4 @@ gsk_gpu_linear_gradient_op (GskGpuFrame            *frame,
   instance->offsets0[1] = stops[1].offset;
   gsk_gpu_rgba_to_float (&stops[0].color, instance->color0);
   instance->offsets0[0] = stops[0].offset;
-  instance->repeating = repeating;
 }
