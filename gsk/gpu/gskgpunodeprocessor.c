@@ -948,7 +948,7 @@ gsk_gpu_node_processor_blur_op (GskGpuNodeProcessor       *self,
                                 const graphene_rect_t     *rect,
                                 const graphene_point_t    *shadow_offset,
                                 float                      blur_radius,
-                                const GdkRGBA             *blur_color_or_null,
+                                const GdkRGBA             *shadow_color,
                                 GskGpuDescriptors         *source_desc,
                                 guint32                    source_descriptor,
                                 GdkMemoryDepth             source_depth,
@@ -1001,8 +1001,7 @@ gsk_gpu_node_processor_blur_op (GskGpuNodeProcessor       *self,
                    &intermediate_rect,
                    &other.offset,
                    source_rect,
-                   &direction,
-                   &GDK_RGBA_TRANSPARENT);
+                   &direction);
 
   gsk_gpu_render_pass_end_op (other.frame,
                               intermediate,
@@ -1014,15 +1013,29 @@ gsk_gpu_node_processor_blur_op (GskGpuNodeProcessor       *self,
                                      self->offset.y + shadow_offset->y);
   graphene_vec2_init (&direction, 0.0f, blur_radius);
   intermediate_descriptor = gsk_gpu_node_processor_add_image (self, intermediate, GSK_GPU_SAMPLER_TRANSPARENT);
-  gsk_gpu_blur_op (self->frame,
-                   gsk_gpu_clip_get_shader_clip (&self->clip, &real_offset, rect),
-                   self->desc,
-                   intermediate_descriptor,
-                   rect,
-                   &real_offset,
-                   &intermediate_rect,
-                   &direction,
-                   blur_color_or_null ? blur_color_or_null : &GDK_RGBA_TRANSPARENT);
+  if (shadow_color)
+    {
+      gsk_gpu_blur_shadow_op (self->frame,
+                              gsk_gpu_clip_get_shader_clip (&self->clip, &real_offset, rect),
+                              self->desc,
+                              intermediate_descriptor,
+                              rect,
+                              &real_offset,
+                              &intermediate_rect,
+                              &direction,
+                              shadow_color);
+    }
+  else
+    {
+      gsk_gpu_blur_op (self->frame,
+                       gsk_gpu_clip_get_shader_clip (&self->clip, &real_offset, rect),
+                       self->desc,
+                       intermediate_descriptor,
+                       rect,
+                       &real_offset,
+                       &intermediate_rect,
+                       &direction);
+    }
 
   g_object_unref (intermediate);
 }
