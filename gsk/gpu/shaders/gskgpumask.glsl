@@ -1,5 +1,7 @@
 #include "common.glsl"
 
+#define VARIATION_MASK_MODE GSK_VARIATION
+
 PASS(0) vec2 _pos;
 PASS_FLAT(1) Rect _source_rect;
 PASS_FLAT(2) Rect _mask_rect;
@@ -7,8 +9,7 @@ PASS(3) vec2 _source_coord;
 PASS(4) vec2 _mask_coord;
 PASS_FLAT(5) uint _source_id;
 PASS_FLAT(6) uint _mask_id;
-PASS_FLAT(7) uint _mask_mode;
-PASS_FLAT(8) float _opacity;
+PASS_FLAT(7) float _opacity;
 
 
 #ifdef GSK_VERTEX_SHADER
@@ -18,8 +19,7 @@ IN(1) vec4 in_source_rect;
 IN(2) uint in_source_id;
 IN(3) vec4 in_mask_rect;
 IN(4) uint in_mask_id;
-IN(5) uint in_mask_mode;
-IN(6) float in_opacity;
+IN(5) float in_opacity;
 
 void
 run (out vec2 pos)
@@ -37,7 +37,6 @@ run (out vec2 pos)
   _mask_rect = mask_rect;
   _mask_coord = rect_get_coord (mask_rect, pos);
   _mask_id = in_mask_id;
-  _mask_mode = in_mask_mode;
   _opacity = in_opacity;
 }
 
@@ -57,7 +56,7 @@ run (out vec4 color,
               rect_coverage (_mask_rect, _pos);
 
   float alpha = _opacity;
-  switch (_mask_mode)
+  switch (VARIATION_MASK_MODE)
   {
     case GSK_MASK_MODE_ALPHA:
       alpha *= mask.a;

@@ -69,7 +69,7 @@ gsk_gpu_mask_op (GskGpuFrame            *frame,
 
   gsk_gpu_shader_op_alloc (frame,
                            &GSK_GPU_MASK_OP_CLASS,
-                           0,
+                           mask_mode,
                            clip,
                            desc,
                            &instance);
@@ -79,6 +79,5 @@ gsk_gpu_mask_op (GskGpuFrame            *frame,
   instance->source_id = source_descriptor;
   gsk_gpu_rect_to_float (mask_rect, offset, instance->mask_rect);
   instance->mask_id = mask_descriptor;
-  instance->mask_mode = mask_mode;
   instance->opacity = opacity;
 }
