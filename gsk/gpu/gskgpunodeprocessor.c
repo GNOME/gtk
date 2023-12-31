@@ -3149,30 +3149,11 @@ gsk_gpu_node_processor_repeat_tile (GskGpuNodeProcessor    *self,
       return;
     }
 
-  /* Take advantage of caching machinery if we can.
-   * If the sizes don't match, we can't though, because we need to
-   * create the right sized image for tiling.
-   */
-  if (gsk_rect_equal (&child->bounds, &clipped_child_bounds))
-    {
-      graphene_rect_t tex_rect;
-      image = gsk_gpu_node_processor_get_node_as_image (self,
-                                                        0,
-                                                        GSK_GPU_IMAGE_STRAIGHT_ALPHA,
-                                                        &clipped_child_bounds,
-                                                        child,
-                                                        &tex_rect);
-      /* The math went wrong */
-      g_warn_if_fail (gsk_rect_equal (&tex_rect, &clipped_child_bounds));
-    }
-  else
-    {
-      GSK_DEBUG (FALLBACK, "Offscreening node '%s' for tiling", g_type_name_from_instance ((GTypeInstance *) child));
-      image = gsk_gpu_render_pass_op_offscreen (self->frame,
-                                                &self->scale,
-                                                &clipped_child_bounds,
-                                                child);
-    }
+  GSK_DEBUG (FALLBACK, "Offscreening node '%s' for tiling", g_type_name_from_instance ((GTypeInstance *) child));
+  image = gsk_gpu_render_pass_op_offscreen (self->frame,
+                                            &self->scale,
+                                            &clipped_child_bounds,
+                                            child);
 
   g_return_if_fail (image);
 

@@ -1,5 +1,7 @@
 #include "common.glsl"
 
+#define VARIATION_SUPERSAMPLING ((GSK_VARIATION & (1u << 0)) == (1u << 0))
+
 PASS(0) vec2 _pos;
 PASS_FLAT(1) Rect _rect;
 PASS_FLAT(2) vec4 _color0;
@@ -117,8 +119,19 @@ run (out vec4 color,
 {
   float alpha = rect_coverage (_rect, _pos);
 
-  vec2 conic_pos = _pos / GSK_GLOBAL_SCALE - _center;
-  color = alpha * get_gradient_color_at (conic_pos);
+  vec2 pos = _pos / GSK_GLOBAL_SCALE - _center;
+  if (VARIATION_SUPERSAMPLING)
+    {
+      vec2 dpos = 0.25 * fwidth (pos);
+      color = alpha * 0.25 * (get_gradient_color_at (pos + vec2(- dpos.x, - dpos.y)) +
+                              get_gradient_color_at (pos + vec2(- dpos.x,   dpos.y)) +
+                              get_gradient_color_at (pos + vec2(  dpos.x, - dpos.y)) +
+                              get_gradient_color_at (pos + vec2(  dpos.x,   dpos.y)));
+    }
+  else
+    {
+      color = alpha * get_gradient_color_at (pos);
+    }
   position = _pos;
 }
 

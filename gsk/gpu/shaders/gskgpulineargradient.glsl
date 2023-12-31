@@ -1,6 +1,7 @@
 #include "common.glsl"
 
-#define VARIATION_REPEATING ((GSK_VARIATION & 1u) == 1u)
+#define VARIATION_SUPERSAMPLING ((GSK_VARIATION & (1u << 0)) == (1u << 0))
+#define VARIATION_REPEATING     ((GSK_VARIATION & (1u << 1)) == (1u << 1))
 
 PASS(0) vec2 _pos;
 PASS_FLAT(1) Rect _rect;
@@ -104,18 +105,37 @@ get_gradient_color (float offset)
   return color;
 }
 
+vec4
+get_gradient_color_at (float offset)
+{
+  if (VARIATION_REPEATING)
+    offset = fract (offset);
+  else
+    offset = clamp (offset, 0.0, 1.0);
+
+  return color_premultiply (get_gradient_color (offset));
+}
+
 void
 run (out vec4 color,
      out vec2 position)
 {
   float alpha = rect_coverage (_rect, _pos);
-  float offset;
-  if (VARIATION_REPEATING)
-    offset = fract (_offset);
-  else
-    offset = clamp (_offset, 0.0, 1.0);
 
-  color = alpha * color_premultiply (get_gradient_color (offset));
+  if (VARIATION_SUPERSAMPLING)
+    {
+      float dx = 0.25 * dFdx (_offset);
+      float dy = 0.25 * dFdy (_offset);
+      color = alpha * 0.25 * (get_gradient_color_at (_offset - dx - dy) +
+                              get_gradient_color_at (_offset - dx + dy) +
+                              get_gradient_color_at (_offset + dx - dy) +
+                              get_gradient_color_at (_offset + dx + dy));
+    }
+  else
+    {
+      color = alpha * get_gradient_color_at (_offset);
+    }
+
   position = _pos;
 }
 
