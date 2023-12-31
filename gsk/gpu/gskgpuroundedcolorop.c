@@ -63,6 +63,7 @@ gsk_gpu_rounded_color_op (GskGpuFrame            *frame,
 
   gsk_gpu_shader_op_alloc (frame,
                            &GSK_GPU_ROUNDED_COLOR_OP_CLASS,
+                           0,
                            clip,
                            NULL,
                            &instance);

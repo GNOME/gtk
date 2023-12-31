@@ -73,6 +73,7 @@ VkRenderPass            gsk_vulkan_device_get_vk_render_pass            (GskVulk
 VkPipeline              gsk_vulkan_device_get_vk_pipeline               (GskVulkanDevice        *self,
                                                                          GskVulkanPipelineLayout*layout,
                                                                          const GskGpuShaderOpClass *op_class,
+                                                                         guint32                 variation,
                                                                          GskGpuShaderClip        clip,
                                                                          GskGpuBlend             blend,
                                                                          VkFormat                format,

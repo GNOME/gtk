@@ -63,6 +63,7 @@ gsk_gpu_uber_op (GskGpuFrame             *frame,
 
   gsk_gpu_shader_op_alloc (frame,
                            &GSK_GPU_UBER_OP_CLASS,
+                           0,
                            clip,
                            desc,
                            &instance);

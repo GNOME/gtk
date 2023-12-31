@@ -76,6 +76,7 @@ struct _ConversionCacheEntry
 struct _PipelineCacheKey
 {
   const GskGpuShaderOpClass *op_class;
+  guint32 variation;
   GskGpuShaderClip clip;
   GskGpuBlend blend;
   VkFormat format;
@@ -113,8 +114,9 @@ pipeline_cache_key_hash (gconstpointer data)
 
   return GPOINTER_TO_UINT (key->op_class) ^
          key->clip ^
-         (key->blend << 2) ^
-         (key->format << 4);
+         (key->variation << 2) ^
+         (key->blend << 6) ^
+         (key->format << 8);
 }
 
 static gboolean
@@ -125,6 +127,7 @@ pipeline_cache_key_equal (gconstpointer a,
   const PipelineCacheKey *keyb = b;
 
   return keya->op_class == keyb->op_class &&
+         keya->variation == keyb->variation &&
          keya->clip == keyb->clip &&
          keya->blend == keyb->blend &&
          keya->format == keyb->format;
@@ -880,6 +883,7 @@ struct _GskVulkanShaderSpecialization
   guint32 n_immutable_samplers;
   guint32 n_samplers;
   guint32 n_buffers;
+  guint32 variation;
 };
 
 static VkPipelineColorBlendAttachmentState blend_attachment_states[2] = {
@@ -915,6 +919,7 @@ VkPipeline
 gsk_vulkan_device_get_vk_pipeline (GskVulkanDevice           *self,
                                    GskVulkanPipelineLayout   *layout,
                                    const GskGpuShaderOpClass *op_class,
+                                   guint32                    variation,
                                    GskGpuShaderClip           clip,
                                    GskGpuBlend                blend,
                                    VkFormat                   format,
@@ -928,6 +933,7 @@ gsk_vulkan_device_get_vk_pipeline (GskVulkanDevice           *self,
 
   cache_key = (PipelineCacheKey) {
     .op_class = op_class,
+    .variation = variation,
     .clip = clip,
     .blend = blend,
     .format = format,
@@ -966,8 +972,8 @@ gsk_vulkan_device_get_vk_pipeline (GskVulkanDevice           *self,
                                                        .module = gdk_display_get_vk_shader_module (display, vertex_shader_name),
                                                        .pName = "main",
                                                        .pSpecializationInfo = &(VkSpecializationInfo) {
-                                                           .mapEntryCount = 4,
-                                                           .pMapEntries = (VkSpecializationMapEntry[4]) {
+                                                           .mapEntryCount = 5,
+                                                           .pMapEntries = (VkSpecializationMapEntry[5]) {
                                                                {
                                                                    .constantID = 0,
                                                                    .offset = G_STRUCT_OFFSET (GskVulkanShaderSpecialization, clip),
@@ -988,6 +994,11 @@ gsk_vulkan_device_get_vk_pipeline (GskVulkanDevice           *self,
                                                                    .offset = G_STRUCT_OFFSET (GskVulkanShaderSpecialization, n_buffers),
                                                                    .size = sizeof (guint32),
                                                                },
+                                                               {
+                                                                   .constantID = 4,
+                                                                   .offset = G_STRUCT_OFFSET (GskVulkanShaderSpecialization, variation),
+                                                                   .size = sizeof (guint32),
+                                                               },
                                                            },
                                                            .dataSize = sizeof (GskVulkanShaderSpecialization),
                                                            .pData = &(GskVulkanShaderSpecialization) {
@@ -995,6 +1006,7 @@ gsk_vulkan_device_get_vk_pipeline (GskVulkanDevice           *self,
                                                                .n_immutable_samplers = MAX (1, layout->setup.n_immutable_samplers),
                                                                .n_samplers = layout->setup.n_samplers - MAX (3 * layout->setup.n_immutable_samplers, 1),
                                                                .n_buffers = layout->setup.n_buffers,
+                                                               .variation = variation,
                                                            },
                                                        },
                                                    },
@@ -1004,8 +1016,8 @@ gsk_vulkan_device_get_vk_pipeline (GskVulkanDevice           *self,
                                                        .module = gdk_display_get_vk_shader_module (display, fragment_shader_name),
                                                        .pName = "main",
                                                        .pSpecializationInfo = &(VkSpecializationInfo) {
-                                                           .mapEntryCount = 4,
-                                                           .pMapEntries = (VkSpecializationMapEntry[4]) {
+                                                           .mapEntryCount = 5,
+                                                           .pMapEntries = (VkSpecializationMapEntry[5]) {
                                                                {
                                                                    .constantID = 0,
                                                                    .offset = G_STRUCT_OFFSET (GskVulkanShaderSpecialization, clip),
@@ -1026,6 +1038,11 @@ gsk_vulkan_device_get_vk_pipeline (GskVulkanDevice           *self,
                                                                    .offset = G_STRUCT_OFFSET (GskVulkanShaderSpecialization, n_buffers),
                                                                    .size = sizeof (guint32),
                                                                },
+                                                               {
+                                                                   .constantID = 4,
+                                                                   .offset = G_STRUCT_OFFSET (GskVulkanShaderSpecialization, variation),
+                                                                   .size = sizeof (guint32),
+                                                               },
                                                            },
                                                            .dataSize = sizeof (GskVulkanShaderSpecialization),
                                                            .pData = &(GskVulkanShaderSpecialization) {
@@ -1033,6 +1050,7 @@ gsk_vulkan_device_get_vk_pipeline (GskVulkanDevice           *self,
                                                                .n_immutable_samplers = MAX (1, layout->setup.n_immutable_samplers),
                                                                .n_samplers = layout->setup.n_samplers - MAX (3 * layout->setup.n_immutable_samplers, 1),
                                                                .n_buffers = layout->setup.n_buffers,
+                                                               .variation = variation,
                                                            },
                                                        },
                                                    },

@@ -93,6 +93,7 @@ gsk_gpu_box_shadow_op (GskGpuFrame            *frame,
 
   gsk_gpu_shader_op_alloc (frame,
                            &GSK_GPU_BOX_SHADOW_OP_CLASS,
+                           0,
                            clip,
                            NULL,
                            &instance);
