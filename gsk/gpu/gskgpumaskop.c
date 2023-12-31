@@ -69,6 +69,7 @@ gsk_gpu_mask_op (GskGpuFrame            *frame,
 
   gsk_gpu_shader_op_alloc (frame,
                            &GSK_GPU_MASK_OP_CLASS,
+                           0,
                            clip,
                            desc,
                            &instance);

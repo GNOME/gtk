@@ -66,6 +66,7 @@ gsk_gpu_blur_op (GskGpuFrame            *frame,
 
   gsk_gpu_shader_op_alloc (frame,
                            &GSK_GPU_BLUR_OP_CLASS,
+                           0,
                            clip,
                            desc,
                            &instance);

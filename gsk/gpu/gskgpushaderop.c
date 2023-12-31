@@ -59,6 +59,8 @@ gsk_gpu_shader_op_vk_command_n (GskGpuOp              *op,
   
       if (next->op_class != op->op_class ||
           next_shader->desc != self->desc ||
+          next_shader->variation != self->variation ||
+          next_shader->clip != self->clip ||
           next_shader->vertex_offset != self->vertex_offset + i * shader_op_class->vertex_size)
         break;
 
@@ -70,6 +72,7 @@ gsk_gpu_shader_op_vk_command_n (GskGpuOp              *op,
                      gsk_vulkan_device_get_vk_pipeline (GSK_VULKAN_DEVICE (gsk_gpu_frame_get_device (frame)),
                                                         gsk_vulkan_descriptors_get_pipeline_layout (state->desc),
                                                         shader_op_class,
+                                                        self->variation,
                                                         self->clip,
                                                         state->blend,
                                                         state->vk_format,
@@ -110,14 +113,17 @@ gsk_gpu_shader_op_gl_command_n (GskGpuOp          *op,
     n_external = 0;
 
   if (state->current_program.op_class != op->op_class ||
+      state->current_program.variation != self->variation ||
       state->current_program.clip != self->clip ||
       state->current_program.n_external != n_external)
     {
       state->current_program.op_class = op->op_class;
+      state->current_program.variation = self->variation;
       state->current_program.clip = self->clip;
       state->current_program.n_external = n_external;
       gsk_gl_frame_use_program (GSK_GL_FRAME (frame),
                                 shader_op_class,
+                                self->variation,
                                 self->clip,
                                 n_external);
     }
@@ -139,6 +145,8 @@ gsk_gpu_shader_op_gl_command_n (GskGpuOp          *op,
 
       if (next->op_class != op->op_class ||
           next_shader->desc != self->desc ||
+          next_shader->variation != self->variation ||
+          next_shader->clip != self->clip ||
           next_shader->vertex_offset != self->vertex_offset + i * shader_op_class->vertex_size)
         break;
 
@@ -177,6 +185,7 @@ gsk_gpu_shader_op_gl_command (GskGpuOp          *op,
 GskGpuShaderOp *
 gsk_gpu_shader_op_alloc (GskGpuFrame               *frame,
                          const GskGpuShaderOpClass *op_class,
+                         guint32                    variation,
                          GskGpuShaderClip           clip,
                          GskGpuDescriptors         *desc,
                          gpointer                   out_vertex_data)
@@ -185,6 +194,7 @@ gsk_gpu_shader_op_alloc (GskGpuFrame               *frame,
 
   self = (GskGpuShaderOp *) gsk_gpu_op_alloc (frame, &op_class->parent_class);
 
+  self->variation = variation;
   self->clip = clip;
   if (desc)
     self->desc = g_object_ref (desc);

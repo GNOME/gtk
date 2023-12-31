@@ -71,6 +71,7 @@ gsk_gpu_linear_gradient_op (GskGpuFrame            *frame,
 
   gsk_gpu_shader_op_alloc (frame,
                            &GSK_GPU_LINEAR_GRADIENT_OP_CLASS,
+                           0,
                            clip,
                            NULL,
                            &instance);

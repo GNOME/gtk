@@ -11,6 +11,7 @@ struct _GskGpuShaderOp
   GskGpuOp parent_op;
 
   GskGpuDescriptors *desc;
+  guint32 variation;
   GskGpuShaderClip clip;
   gsize vertex_offset;
 };
@@ -29,6 +30,7 @@ struct _GskGpuShaderOpClass
 
 GskGpuShaderOp *        gsk_gpu_shader_op_alloc                         (GskGpuFrame            *frame,
                                                                          const GskGpuShaderOpClass *op_class,
+                                                                         guint32                 variation,
                                                                          GskGpuShaderClip        clip,
                                                                          GskGpuDescriptors      *desc,
                                                                          gpointer                out_vertex_data);
