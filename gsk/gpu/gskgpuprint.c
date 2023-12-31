@@ -31,6 +31,18 @@ gsk_gpu_print_string (GString    *string,
 }
 
 void
+gsk_gpu_print_enum (GString *string,
+                    GType    type,
+                    int      value)
+{
+  GEnumClass *class;
+
+  class = g_type_class_ref (type);
+  gsk_gpu_print_string (string, g_enum_get_value (class, value)->value_nick);
+  g_type_class_unref (class);
+}
+
+void
 gsk_gpu_print_rect (GString     *string,
                     const float  rect[4])
 {

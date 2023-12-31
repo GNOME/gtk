@@ -17,6 +17,9 @@ void                    gsk_gpu_print_newline                           (GString
 
 void                    gsk_gpu_print_string                            (GString                        *string,
                                                                          const char                     *s);
+void                    gsk_gpu_print_enum                              (GString                        *string,
+                                                                         GType                           type,
+                                                                         int                             value);
 void                    gsk_gpu_print_rect                              (GString                        *string,
                                                                          const float                     rect[4]);
 void                    gsk_gpu_print_int_rect                          (GString                        *string,

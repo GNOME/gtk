@@ -4,6 +4,7 @@
 
 #include "gskgpuborderopprivate.h"
 #include "gskgpuboxshadowopprivate.h"
+#include "gskgpublendmodeopprivate.h"
 #include "gskgpublendopprivate.h"
 #include "gskgpublitopprivate.h"
 #include "gskgpubluropprivate.h"
@@ -1218,26 +1219,6 @@ gsk_gpu_node_processor_try_node_as_pattern (GskGpuNodeProcessor *self,
   return TRUE;
 }
  
-static void
-gsk_gpu_node_processor_add_node_as_pattern (GskGpuNodeProcessor *self,
-                                            GskRenderNode       *node)
-{
-  if (!gsk_gpu_node_processor_try_node_as_pattern (self, node))
-    {
-      if (!gsk_gpu_frame_should_optimize (self->frame, GSK_GPU_OPTIMIZE_UBER))
-        {
-          GSK_DEBUG (FALLBACK, "Using fallback for node %s because pattern shaders are disabled.",
-                               g_type_name_from_instance ((GTypeInstance *) node));
-        }
-      else
-        {
-          GSK_DEBUG (FALLBACK, "Using fallback because pattern shader for node %s failed",
-                               g_type_name_from_instance ((GTypeInstance *) node));
-        }
-      gsk_gpu_node_processor_add_fallback_node (self, node);
-    }
-}
-
 static void
 gsk_gpu_node_processor_add_without_opacity (GskGpuNodeProcessor *self,
                                             GskRenderNode       *node)
@@ -2530,6 +2511,72 @@ gsk_gpu_node_processor_add_shadow_node (GskGpuNodeProcessor *self,
   g_object_unref (image);
 }
 
+static void
+gsk_gpu_node_processor_add_blend_node (GskGpuNodeProcessor *self,
+                                       GskRenderNode       *node)
+{
+  GskRenderNode *bottom_child, *top_child;
+  graphene_rect_t bottom_rect, top_rect;
+  GskGpuImage *bottom_image, *top_image;
+  guint32 descriptors[2];
+
+  bottom_child = gsk_blend_node_get_bottom_child (node);
+  top_child = gsk_blend_node_get_top_child (node);
+
+  if ((gsk_gpu_node_processor_ubershader_instead_of_offscreen (self, bottom_child) ||
+       gsk_gpu_node_processor_ubershader_instead_of_offscreen (self, top_child)) &&
+      gsk_gpu_node_processor_try_node_as_pattern (self, node))
+    return;
+
+  bottom_image = gsk_gpu_node_processor_get_node_as_image (self,
+                                                           0,
+                                                           GSK_GPU_IMAGE_STRAIGHT_ALPHA,
+                                                           NULL,
+                                                           bottom_child,
+                                                           &bottom_rect);
+  top_image = gsk_gpu_node_processor_get_node_as_image (self,
+                                                        0,
+                                                        GSK_GPU_IMAGE_STRAIGHT_ALPHA,
+                                                        NULL,
+                                                        top_child,
+                                                        &top_rect);
+
+  if (bottom_image == NULL)
+    {
+      if (top_image == NULL)
+        return;
+
+      bottom_image = g_object_ref (top_image);
+      bottom_rect = *graphene_rect_zero ();
+    }
+  else if (top_image == NULL)
+    {
+      top_image = g_object_ref (bottom_image);
+      top_rect = *graphene_rect_zero ();
+    }
+
+  gsk_gpu_node_processor_add_images (self,
+                                     2,
+                                     (GskGpuImage *[2]) { bottom_image, top_image },
+                                     (GskGpuSampler[2]) { GSK_GPU_SAMPLER_DEFAULT, GSK_GPU_SAMPLER_DEFAULT },
+                                     descriptors);
+
+  gsk_gpu_blend_mode_op (self->frame,
+                         gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, &node->bounds),
+                         self->desc,
+                         &node->bounds,
+                         &self->offset,
+                         self->opacity,
+                         gsk_blend_node_get_blend_mode (node),
+                         descriptors[0],
+                         &bottom_rect,
+                         descriptors[1],
+                         &top_rect);
+
+  g_object_unref (top_image);
+  g_object_unref (bottom_image);
+}
+
 static gboolean
 gsk_gpu_node_processor_create_blend_pattern (GskGpuPatternWriter *self,
                                              GskRenderNode       *node)
@@ -3730,7 +3777,7 @@ static const struct
   [GSK_BLEND_NODE] = {
     0,
     GSK_GPU_HANDLE_OPACITY,
-    gsk_gpu_node_processor_add_node_as_pattern,
+    gsk_gpu_node_processor_add_blend_node,
     gsk_gpu_node_processor_create_blend_pattern,
   },
   [GSK_CROSS_FADE_NODE] = {
