@@ -2,12 +2,13 @@
 
 /* blur radius (aka in_blur_direction) 0 is NOT supported and MUST be caught before */
 
+#define VARIATION_INSET ((GSK_VARIATION & 1u) == 1u)
+
 PASS(0) vec2 _pos;
 PASS_FLAT(1) RoundedRect _shadow_outline;
 PASS_FLAT(4) RoundedRect _clip_outline;
 PASS_FLAT(7) vec4 _color;
 PASS_FLAT(8) vec2 _sigma;
-PASS_FLAT(9) uint _inset;
 
 #ifdef GSK_VERTEX_SHADER
 
@@ -17,7 +18,6 @@ IN(4) vec4 in_color;
 IN(5) vec2 in_shadow_offset;
 IN(6) float in_shadow_spread;
 IN(7) float in_blur_radius;
-IN(8) uint in_inset;
 
 #define GAUSSIAN_SCALE_FACTOR ((3.0 * sqrt(2.0 * PI) / 4.0))
 
@@ -32,7 +32,7 @@ run (out vec2 pos)
   _clip_outline = outline;
 
   RoundedRect inside;
-  if (in_inset == 0u)
+  if (!VARIATION_INSET)
     {
       inside = outline;
       spread = -spread;
@@ -53,7 +53,6 @@ run (out vec2 pos)
   _shadow_outline = outline;
   _color = in_color;
   _sigma = GSK_GLOBAL_SCALE * 0.5 * in_blur_radius;
-  _inset = in_inset;
 }
 
 #endif
@@ -141,7 +140,7 @@ run (out vec4 color,
 {
   float clip_alpha = rounded_rect_coverage (_clip_outline, _pos);
 
-  if (_inset == 0u)
+  if (!VARIATION_INSET)
     clip_alpha = 1.0 - clip_alpha;
 
   if (clip_alpha == 0.0)
@@ -152,7 +151,7 @@ run (out vec4 color,
     }
 
   float blur_alpha = blur_rounded_rect (_shadow_outline, _pos);
-  if (_inset == 1u)
+  if (VARIATION_INSET)
     blur_alpha = 1.0 - blur_alpha;
 
   color = clip_alpha * _color * blur_alpha;

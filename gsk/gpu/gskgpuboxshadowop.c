@@ -10,6 +10,8 @@
 
 #include "gpu/shaders/gskgpuboxshadowinstance.h"
 
+#define VARIATION_INSET 1
+
 typedef struct _GskGpuBoxShadowOp GskGpuBoxShadowOp;
 
 struct _GskGpuBoxShadowOp
@@ -28,7 +30,7 @@ gsk_gpu_box_shadow_op_print (GskGpuOp    *op,
 
   instance = (GskGpuBoxshadowInstance *) gsk_gpu_frame_get_vertex_data (frame, shader->vertex_offset);
 
-  gsk_gpu_print_op (string, indent, instance->inset ? "inset-shadow" : "outset-shadow");
+  gsk_gpu_print_op (string, indent, shader->variation & VARIATION_INSET ? "inset-shadow" : "outset-shadow");
   gsk_gpu_print_rounded_rect (string, instance->outline);
   gsk_gpu_print_rgba (string, instance->color);
   g_string_append_printf (string, "%g %g %g %g ",
@@ -93,7 +95,7 @@ gsk_gpu_box_shadow_op (GskGpuFrame            *frame,
 
   gsk_gpu_shader_op_alloc (frame,
                            &GSK_GPU_BOX_SHADOW_OP_CLASS,
-                           0,
+                           inset ? VARIATION_INSET : 0,
                            clip,
                            NULL,
                            &instance);
@@ -105,6 +107,5 @@ gsk_gpu_box_shadow_op (GskGpuFrame            *frame,
   instance->shadow_offset[1] = shadow_offset->y;
   instance->shadow_spread = spread;
   instance->blur_radius = blur_radius;
-  instance->inset = inset ? 1 : 0;
 }
 
