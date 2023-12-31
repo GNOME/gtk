@@ -28,6 +28,7 @@ static const GdkDebugKey gsk_gpu_optimization_keys[] = {
   { "clear", GSK_GPU_OPTIMIZE_CLEAR, "Use shaders instead of vkCmdClearAttachment()/glClear()" },
   { "merge", GSK_GPU_OPTIMIZE_MERGE, "Use one vkCmdDraw()/glDrawArrays() per operation" },
   { "gradients", GSK_GPU_OPTIMIZE_GRADIENTS, "Don't supersample gradients" },
+  { "mipmap", GSK_GPU_OPTIMIZE_MIPMAP, "Avoid creating mipmaps" },
 
   { "gl-baseinstance", GSK_GPU_OPTIMIZE_GL_BASE_INSTANCE, "Assume no ARB/EXT_base_instance support" },
 };
