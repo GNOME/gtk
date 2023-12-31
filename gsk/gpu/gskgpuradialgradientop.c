@@ -8,6 +8,8 @@
 
 #include "gpu/shaders/gskgpuradialgradientinstance.h"
 
+#define VARIATION_REPEATING 1
+
 typedef struct _GskGpuRadialGradientOp GskGpuRadialGradientOp;
 
 struct _GskGpuRadialGradientOp
@@ -26,7 +28,7 @@ gsk_gpu_radial_gradient_op_print (GskGpuOp    *op,
 
   instance = (GskGpuRadialgradientInstance *) gsk_gpu_frame_get_vertex_data (frame, shader->vertex_offset);
 
-  if (instance->repeating)
+  if (shader->variation & VARIATION_REPEATING)
     gsk_gpu_print_op (string, indent, "repeating-radial-gradient");
   else
     gsk_gpu_print_op (string, indent, "radial-gradient");
@@ -73,12 +75,11 @@ gsk_gpu_radial_gradient_op (GskGpuFrame            *frame,
 
   gsk_gpu_shader_op_alloc (frame,
                            &GSK_GPU_RADIAL_GRADIENT_OP_CLASS,
-                           0,
+                           repeating ? VARIATION_REPEATING : 0,
                            clip,
                            NULL,
                            &instance);
 
-  instance->repeating = repeating;
   gsk_gpu_rect_to_float (rect, offset, instance->rect);
   gsk_gpu_point_to_float (center, offset, instance->center_radius);
   gsk_gpu_point_to_float (radius, graphene_point_zero(), &instance->center_radius[2]);
