@@ -8,6 +8,9 @@
 
 #include "gpu/shaders/gskgpustraightalphainstance.h"
 
+#define VARIATION_OPACITY        (1 << 0)
+#define VARIATION_STRAIGHT_ALPHA (1 << 1)
+
 typedef struct _GskGpuStraightAlphaOp GskGpuStraightAlphaOp;
 
 struct _GskGpuStraightAlphaOp
@@ -65,7 +68,8 @@ gsk_gpu_straight_alpha_op (GskGpuFrame            *frame,
 
   gsk_gpu_shader_op_alloc (frame,
                            &GSK_GPU_STRAIGHT_ALPHA_OP_CLASS,
-                           0,
+                           (opacity < 1.0 ? VARIATION_OPACITY : 0) |
+                           VARIATION_STRAIGHT_ALPHA,
                            clip,
                            desc,
                            &instance);
