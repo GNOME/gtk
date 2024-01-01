@@ -137,8 +137,9 @@ gdk_load_png (GBytes  *bytes,
   png_struct *png = NULL;
   png_info *info;
   guint width, height;
+  gsize i, stride;
   int depth, color_type;
-  int interlace, stride;
+  int interlace;
   GdkMemoryFormat format;
   guchar *buffer = NULL;
   guchar **row_pointers = NULL;
@@ -263,9 +264,14 @@ gdk_load_png (GBytes  *bytes,
     }
 
   bpp = gdk_memory_format_bytes_per_pixel (format);
-  stride = width * bpp;
-  if (stride % 8)
-    stride += 8 - stride % 8;
+  if (!g_size_checked_mul (&stride, width, bpp) ||
+      !g_size_checked_add (&stride, stride, (8 - stride % 8) % 8))
+    {
+      g_set_error (error,
+                   GDK_TEXTURE_ERROR, GDK_TEXTURE_ERROR_TOO_LARGE,
+                   _("Image stride too large for image size %ux%u"), width, height);
+      return NULL;
+    }
 
   buffer = g_try_malloc_n (height, stride);
   row_pointers = g_try_malloc_n (height, sizeof (char *));
@@ -281,7 +287,7 @@ gdk_load_png (GBytes  *bytes,
       return NULL;
     }
 
-  for (int i = 0; i < height; i++)
+  for (i = 0; i < height; i++)
     row_pointers[i] = &buffer[i * stride];
 
   png_read_image (png, row_pointers);
