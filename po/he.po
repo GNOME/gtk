@@ -12,16 +12,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.HEAD.he\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-12-26 00:59+0000\n"
-"PO-Revision-Date: 2023-12-28 14:16+0200\n"
+"POT-Creation-Date: 2023-12-28 12:17+0000\n"
+"PO-Revision-Date: 2024-01-02 23:54+0200\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: Hebrew <yoseforb@gmail.com>\n"
 "Language: he\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=4; plural=(n==1 ? 0 : n==2 ? 1 : n>10 && n%10==0 ? "
-"2 : 3);\n"
+"Plural-Forms: nplurals=4; plural=(n==1 ? 0 : n==2 ? 1 : n>10 && n%10==0 ? 2 : "
+"3);\n"
 "X-Generator: Poedit 3.4.1\n"
 "X-Project-Style: default\n"
 
@@ -485,10 +485,9 @@ msgstr "לא ניתן ליצור תבנית פיקסלים ב־GL"
 msgid "Unable to create a GL context"
 msgstr "Unable to create a GL context"
 
-#: gdk/wayland/gdkglcontext-wayland.c:422
-#: gdk/wayland/gdkglcontext-wayland.c:432 gdk/win32/gdkglcontext-win32.c:777
-#: gdk/win32/gdkglcontext-win32.c:1142 gdk/win32/gdkglcontext-win32.c:1152
-#: gdk/x11/gdkglcontext-x11.c:975
+#: gdk/wayland/gdkglcontext-wayland.c:422 gdk/wayland/gdkglcontext-wayland.c:432
+#: gdk/win32/gdkglcontext-win32.c:777 gdk/win32/gdkglcontext-win32.c:1142
+#: gdk/win32/gdkglcontext-win32.c:1152 gdk/x11/gdkglcontext-x11.c:975
 msgid "No available configurations for the given pixel format"
 msgstr "No available configurations for the given pixel format"
 
@@ -1619,8 +1618,7 @@ msgstr ""
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccellabel.c:181 gtk/gtkshortcutlabel.c:102
-#: gtk/gtkshortcutlabel.c:138
+#: gtk/gtkaccellabel.c:181 gtk/gtkshortcutlabel.c:102 gtk/gtkshortcutlabel.c:138
 msgctxt "keyboard label"
 msgid "Shift"
 msgstr "Shift"
@@ -1630,8 +1628,7 @@ msgstr "Shift"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccellabel.c:187 gtk/gtkshortcutlabel.c:105
-#: gtk/gtkshortcutlabel.c:140
+#: gtk/gtkaccellabel.c:187 gtk/gtkshortcutlabel.c:105 gtk/gtkshortcutlabel.c:140
 msgctxt "keyboard label"
 msgid "Ctrl"
 msgstr "Ctrl"
@@ -1641,8 +1638,7 @@ msgstr "Ctrl"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccellabel.c:193 gtk/gtkshortcutlabel.c:108
-#: gtk/gtkshortcutlabel.c:142
+#: gtk/gtkaccellabel.c:193 gtk/gtkshortcutlabel.c:108 gtk/gtkshortcutlabel.c:142
 msgctxt "keyboard label"
 msgid "Alt"
 msgstr "Alt"
@@ -1652,8 +1648,7 @@ msgstr "Alt"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccellabel.c:845 gtk/gtkshortcutlabel.c:114
-#: gtk/gtkshortcutlabel.c:152
+#: gtk/gtkaccellabel.c:845 gtk/gtkshortcutlabel.c:114 gtk/gtkshortcutlabel.c:152
 msgctxt "keyboard label"
 msgid "Super"
 msgstr "Super"
@@ -1663,8 +1658,7 @@ msgstr "Super"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccellabel.c:858 gtk/gtkshortcutlabel.c:117
-#: gtk/gtkshortcutlabel.c:154
+#: gtk/gtkaccellabel.c:858 gtk/gtkshortcutlabel.c:117 gtk/gtkshortcutlabel.c:154
 msgctxt "keyboard label"
 msgid "Hyper"
 msgstr "Hyper"
@@ -1674,8 +1668,7 @@ msgstr "Hyper"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccellabel.c:872 gtk/gtkshortcutlabel.c:111
-#: gtk/gtkshortcutlabel.c:156
+#: gtk/gtkaccellabel.c:872 gtk/gtkshortcutlabel.c:111 gtk/gtkshortcutlabel.c:156
 msgctxt "keyboard label"
 msgid "Meta"
 msgstr "מטה"
@@ -4155,8 +4148,8 @@ msgstr "ניתן להקליד כאן כל הוראת CSS המוכרת על יד�
 
 #: gtk/inspector/css-editor.c:113
 msgid ""
-"You can temporarily disable this custom CSS by clicking on the “Pause” "
-"button above."
+"You can temporarily disable this custom CSS by clicking on the “Pause” button "
+"above."
 msgstr "ניתן להשבית באופן זמני CSS מותאם על ידי לחיצה על הכפתור „השהיה” מעל."
 
 #: gtk/inspector/css-editor.c:114
@@ -4402,7 +4395,6 @@ msgstr "לא ידוע"
 
 #: gtk/inspector/prop-editor.c:695
 #, c-format
-#| msgid "Defined at: %p (%s)"
 msgid "Object: %p (%s)"
 msgstr "עצם: %p (%s)"
 
@@ -6923,7 +6915,7 @@ msgstr "מרואיטית בהירוגליפים"
 #: gtk/script-names.c:115
 msgctxt "Script"
 msgid "Miao"
-msgstr ""
+msgstr "מיאו"
 
 #: gtk/script-names.c:116
 msgctxt "Script"
@@ -7071,8 +7063,6 @@ msgid "Hatran"
 msgstr ""
 
 #: gtk/script-names.c:145
-#| msgctxt "keyboard label"
-#| msgid "Multi_key"
 msgctxt "Script"
 msgid "Multani"
 msgstr ""
@@ -7098,7 +7088,6 @@ msgid "Bhaiksuki"
 msgstr ""
 
 #: gtk/script-names.c:150
-#| msgid "Searching"
 msgctxt "Script"
 msgid "Marchen"
 msgstr ""
@@ -7126,12 +7115,12 @@ msgstr ""
 #: gtk/script-names.c:155
 msgctxt "Script"
 msgid "Nushu"
-msgstr ""
+msgstr "נושו"
 
 #: gtk/script-names.c:156
 msgctxt "Script"
 msgid "Soyombo"
-msgstr ""
+msgstr "סויומבו"
 
 #: gtk/script-names.c:157
 msgctxt "Script"
@@ -10245,11 +10234,11 @@ msgstr "הדפסה למדפסת בדיקה"
 #~ msgstr "smb://foo.example.com, ssh://192.168.0.1"
 
 #~ msgid ""
-#~ "The WGL_ARB_create_context extension needed to create core profiles is "
-#~ "not available"
+#~ "The WGL_ARB_create_context extension needed to create core profiles is not "
+#~ "available"
 #~ msgstr ""
-#~ "The WGL_ARB_create_context extension needed to create core profiles is "
-#~ "not available"
+#~ "The WGL_ARB_create_context extension needed to create core profiles is not "
+#~ "available"
 
 #~ msgid "Changes are applied instantly, only for this selected widget."
 #~ msgstr "שינויים מוחלקים מיידית, רק ליישומון נבחר זה."
@@ -10757,11 +10746,11 @@ msgstr "הדפסה למדפסת בדיקה"
 #~ msgstr "Unable to load image-loading module: %s: %s"
 
 #~ msgid ""
-#~ "Image-loading module %s does not export the proper interface; perhaps "
-#~ "it's from a different GTK version?"
+#~ "Image-loading module %s does not export the proper interface; perhaps it's "
+#~ "from a different GTK version?"
 #~ msgstr ""
-#~ "Image-loading module %s does not export the proper interface; perhaps "
-#~ "it's from a different GTK version?"
+#~ "Image-loading module %s does not export the proper interface; perhaps it's "
+#~ "from a different GTK version?"
 
 #~ msgid "Couldn't recognize the image file format for file '%s'"
 #~ msgstr "לא ניתן לזהות את פורמט התמונה בקובץ '%s'"
@@ -10772,8 +10761,7 @@ msgstr "הדפסה למדפסת בדיקה"
 #~ msgid "Error writing to image file: %s"
 #~ msgstr "שגיאה בכתיבה לקובץ תמונה: %s"
 
-#~ msgid ""
-#~ "This build of gdk-pixbuf does not support saving the image format: %s"
+#~ msgid "This build of gdk-pixbuf does not support saving the image format: %s"
 #~ msgstr "בניה זו של gdk-pixbuf לא תומכת בשמירת התמונה בפורמט: %s"
 
 #~ msgid "Insufficient memory to save image to callback"
@@ -11351,8 +11339,8 @@ msgstr "הדפסה למדפסת בדיקה"
 #~ "available to this program.\n"
 #~ "Are you sure that you want to select it?"
 #~ msgstr ""
-#~ "הקובץ \"%s\" תלוי במכונה אחרת (הנקראת %s) וייתכן כי לא תיהיה זמינה "
-#~ "לתוכנית זו. האם אתה בטוח שברצונך לבחור אותו?"
+#~ "הקובץ \"%s\" תלוי במכונה אחרת (הנקראת %s) וייתכן כי לא תיהיה זמינה לתוכנית "
+#~ "זו. האם אתה בטוח שברצונך לבחור אותו?"
 
 #~ msgid "_New Folder"
 #~ msgstr "תיקייה _חדשה"
