@@ -1639,7 +1639,8 @@ gdk_gl_context_init_memory_flags (GdkGLContext *self)
             flags |= GDK_GL_FORMAT_FILTERABLE;
           priv->memory_flags[GDK_MEMORY_R16G16B16A16_FLOAT_PREMULTIPLIED] |= flags;
           priv->memory_flags[GDK_MEMORY_R16G16B16A16_FLOAT] |= flags;
-          priv->memory_flags[GDK_MEMORY_R16G16B16_FLOAT] |= flags;
+          /* disabled for now, see https://gitlab.freedesktop.org/mesa/mesa/-/issues/10378 */
+          priv->memory_flags[GDK_MEMORY_R16G16B16_FLOAT] |= flags & ~GDK_GL_FORMAT_RENDERABLE;
           priv->memory_flags[GDK_MEMORY_A16_FLOAT] |= flags;
         }
       if (epoxy_has_gl_extension ("GL_OES_texture_float"))
