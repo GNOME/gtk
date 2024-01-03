@@ -160,6 +160,8 @@ typedef enum
  *   reasons
  *
  * Error enumeration for `GdkDmabufTexture`.
+ *
+ * Since: 4.14
  */
 typedef enum {
   GDK_DMABUF_ERROR_NOT_AVAILABLE,

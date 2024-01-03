@@ -60,6 +60,8 @@
  *
  * Applications may wish to store the page_setup and print_settings from the print setup
  * and copy them to the PrintDialog if they want to keep using them.
+ *
+ * Since: 4.14
  */
 
 struct _GtkPrintSetup

@@ -6771,6 +6771,8 @@ gsk_gl_shader_node_get_args (const GskRenderNode *node)
  * GskSubsurfaceNode:
  *
  * A render node that potentially diverts a part of the scene graph to a subsurface.
+ *
+ * Since: 4.14
  */
 struct _GskSubsurfaceNode
 {

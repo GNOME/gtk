@@ -253,6 +253,13 @@ gdk_display_class_init (GdkDisplayClass *class)
                           TRUE,
                           G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
 
+  /**
+   * GdkDisplay:dmabuf-formats:
+   *
+   * The dma-buf formats that are supported on this display
+   *
+   * Since: 4.14
+   */
   props[PROP_DMABUF_FORMATS] =
     g_param_spec_boxed ("dmabuf-formats", NULL, NULL,
                         GDK_TYPE_DMABUF_FORMATS,
