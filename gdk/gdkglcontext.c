@@ -1651,7 +1651,7 @@ gdk_gl_context_init_memory_flags (GdkGLContext *self)
             flags |= GDK_GL_FORMAT_FILTERABLE;
           priv->memory_flags[GDK_MEMORY_R32G32B32A32_FLOAT_PREMULTIPLIED] |= flags;
           priv->memory_flags[GDK_MEMORY_R32G32B32A32_FLOAT] |= flags;
-          priv->memory_flags[GDK_MEMORY_R32G32B32_FLOAT] |= flags;
+          priv->memory_flags[GDK_MEMORY_R32G32B32_FLOAT] |= flags & ~GDK_GL_FORMAT_RENDERABLE;
           priv->memory_flags[GDK_MEMORY_A32_FLOAT] |= flags;
         }
     }
