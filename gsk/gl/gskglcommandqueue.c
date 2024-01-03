@@ -1477,12 +1477,14 @@ gsk_gl_command_queue_create_framebuffer (GskGLCommandQueue *self)
 static GdkMemoryFormat
 memory_format_gl_format (GskGLCommandQueue *self,
                          GdkMemoryFormat    data_format,
+                         gboolean           ensure_mipmap,
+                         gboolean          *out_can_mipmap,
                          GLint             *gl_internalformat,
                          GLenum            *gl_format,
                          GLenum            *gl_type,
                          GLint              gl_swizzle[4])
 {
-  GdkGLMemoryFlags flags;
+  GdkGLMemoryFlags flags, required_flags;
   GdkMemoryFormat alt_format;
   const GdkMemoryFormat *fallbacks;
   gsize i;
@@ -1491,15 +1493,20 @@ memory_format_gl_format (GskGLCommandQueue *self,
   if (gdk_memory_format_alpha (data_format) == GDK_MEMORY_ALPHA_STRAIGHT)
     data_format = gdk_memory_format_get_premultiplied (data_format);
 
+  required_flags = GDK_GL_FORMAT_USABLE | GDK_GL_FORMAT_FILTERABLE;
+  if (ensure_mipmap)
+    required_flags |= GDK_GL_FORMAT_RENDERABLE;
+
   /* First, try the format itself */
   flags = gdk_gl_context_get_format_flags (self->context, data_format);
-  if ((flags & (GDK_GL_FORMAT_USABLE | GDK_GL_FORMAT_FILTERABLE)) == (GDK_GL_FORMAT_USABLE | GDK_GL_FORMAT_FILTERABLE))
+  if ((flags & required_flags) == required_flags)
     {
       gdk_memory_format_gl_format (data_format,
                                    gl_internalformat,
                                    gl_format,
                                    gl_type,
                                    gl_swizzle);
+      *out_can_mipmap = (flags & GDK_GL_FORMAT_RENDERABLE) ? TRUE : FALSE;
       return data_format;
     }
 
@@ -1512,8 +1519,10 @@ memory_format_gl_format (GskGLCommandQueue *self,
                                         gl_swizzle))
     {
       flags = gdk_gl_context_get_format_flags (self->context, alt_format);
-      if ((flags & (GDK_GL_FORMAT_USABLE | GDK_GL_FORMAT_FILTERABLE)) == (GDK_GL_FORMAT_USABLE | GDK_GL_FORMAT_FILTERABLE))
+      if ((flags & required_flags) == required_flags)
         {
+          *out_can_mipmap = (flags & GDK_GL_FORMAT_RENDERABLE) ? TRUE : FALSE;
+
           if (self->can_swizzle)
             return data_format;
 
@@ -1532,13 +1541,15 @@ memory_format_gl_format (GskGLCommandQueue *self,
   for (i = 0; fallbacks[i] != -1; i++)
     {
       flags = gdk_gl_context_get_format_flags (self->context, fallbacks[i]);
-      if (((flags & (GDK_GL_FORMAT_USABLE | GDK_GL_FORMAT_FILTERABLE)) == (GDK_GL_FORMAT_USABLE | GDK_GL_FORMAT_FILTERABLE)))
+      if (((flags & required_flags) == required_flags))
         {
           gdk_memory_format_gl_format (fallbacks[i],
                                        gl_internalformat,
                                        gl_format,
                                        gl_type,
                                        gl_swizzle);
+
+          *out_can_mipmap = (flags & GDK_GL_FORMAT_RENDERABLE) ? TRUE : FALSE;
           return fallbacks[i];
         }
     }
@@ -1644,8 +1655,10 @@ gsk_gl_command_queue_do_upload_texture_chunk (GskGLCommandQueue *self,
 
 int
 gsk_gl_command_queue_upload_texture_chunks (GskGLCommandQueue    *self,
+                                            gboolean              ensure_mipmap,
                                             unsigned int          n_chunks,
-                                            GskGLTextureChunk    *chunks)
+                                            GskGLTextureChunk    *chunks,
+                                            gboolean             *out_can_mipmap)
 {
   G_GNUC_UNUSED gint64 start_time = GDK_PROFILER_CURRENT_TIME;
   int width, height;
@@ -1690,6 +1703,8 @@ gsk_gl_command_queue_upload_texture_chunks (GskGLCommandQueue    *self,
   data_format = gdk_texture_get_format (chunks[0].texture);
   data_format = memory_format_gl_format (self,
                                          data_format,
+                                         ensure_mipmap,
+                                         out_can_mipmap,
                                          &gl_internalformat,
                                          &gl_format,
                                          &gl_type,
@@ -1718,9 +1733,15 @@ gsk_gl_command_queue_upload_texture_chunks (GskGLCommandQueue    *self,
 
 int
 gsk_gl_command_queue_upload_texture (GskGLCommandQueue *self,
-                                     GdkTexture        *texture)
+                                     GdkTexture        *texture,
+                                     gboolean           ensure_mipmap,
+                                     gboolean          *out_can_mipmap)
 {
-  return gsk_gl_command_queue_upload_texture_chunks (self, 1, &(GskGLTextureChunk){ texture, 0, 0});
+  return gsk_gl_command_queue_upload_texture_chunks (self,
+                                                     ensure_mipmap,
+                                                     1,
+                                                     &(GskGLTextureChunk){ texture, 0, 0},
+                                                     out_can_mipmap);
 }
 
 void

@@ -313,7 +313,9 @@ void                gsk_gl_command_queue_execute              (GskGLCommandQueue
                                                                const cairo_region_t *scissor,
                                                                guint                 default_framebuffer);
 int                 gsk_gl_command_queue_upload_texture       (GskGLCommandQueue    *self,
-                                                               GdkTexture           *texture);
+                                                               GdkTexture           *texture,
+                                                               gboolean              ensure_mipmap,
+                                                               gboolean             *out_can_mipmap);
 int                 gsk_gl_command_queue_create_texture       (GskGLCommandQueue    *self,
                                                                int                   width,
                                                                int                   height,
@@ -327,8 +329,10 @@ typedef struct {
 } GskGLTextureChunk;
 
 int                 gsk_gl_command_queue_upload_texture_chunks(GskGLCommandQueue    *self,
+                                                               gboolean              ensure_mipmap,
                                                                unsigned int          n_chunks,
-                                                               GskGLTextureChunk    *chunks);
+                                                               GskGLTextureChunk    *chunks,
+                                                               gboolean             *out_can_mipmap);
 
 guint               gsk_gl_command_queue_create_framebuffer   (GskGLCommandQueue    *self);
 gboolean            gsk_gl_command_queue_create_render_target (GskGLCommandQueue    *self,
