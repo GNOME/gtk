@@ -518,12 +518,10 @@ gtk_spin_button_class_init (GtkSpinButtonClass *class)
    * on_output (GtkSpinButton *spin,
    *            gpointer       data)
    * {
-   *    GtkAdjustment *adjustment;
    *    char *text;
    *    int value;
    *
-   *    adjustment = gtk_spin_button_get_adjustment (spin);
-   *    value = (int)gtk_adjustment_get_value (adjustment);
+   *    value = gtk_spin_button_get_value_as_int (spin);
    *    text = g_strdup_printf ("%02d", value);
    *    gtk_editable_set_text (GTK_EDITABLE (spin), text):
    *    g_free (text);
