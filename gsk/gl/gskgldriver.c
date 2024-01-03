@@ -946,7 +946,10 @@ gsk_gl_driver_load_texture (GskGLDriver *self,
           t->has_mipmap = TRUE;
         }
 
-      return t->texture_id;
+      if (!ensure_mipmap || t->has_mipmap)
+        return t->texture_id;
+
+      gdk_texture_clear_render_data (texture);
     }
 
   if (GDK_IS_DMABUF_TEXTURE (texture) && !ensure_mipmap)

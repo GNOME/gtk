@@ -1190,7 +1190,7 @@ gsk_gl_render_job_visit_as_fallback (GskGLRenderJob      *job,
   key.scale_x = scale_x;
   key.scale_y = scale_y;
 
-  texture_id = gsk_gl_driver_lookup_texture (job->driver, &key);
+  texture_id = gsk_gl_driver_lookup_texture (job->driver, &key, NULL);
 
   if (texture_id != 0)
     goto done;
@@ -2216,7 +2216,7 @@ gsk_gl_render_job_visit_blurred_inset_shadow_node (GskGLRenderJob      *job,
   key.scale_x = scale_x;
   key.scale_y = scale_y;
 
-  blurred_texture_id = gsk_gl_driver_lookup_texture (job->driver, &key);
+  blurred_texture_id = gsk_gl_driver_lookup_texture (job->driver, &key, NULL);
 
   if (blurred_texture_id == 0)
     {
@@ -3216,7 +3216,7 @@ gsk_gl_render_job_visit_blur_node (GskGLRenderJob      *job,
   key.scale_x = job->scale_x;
   key.scale_y = job->scale_y;
 
-  offscreen.texture_id = gsk_gl_driver_lookup_texture (job->driver, &key);
+  offscreen.texture_id = gsk_gl_driver_lookup_texture (job->driver, &key, NULL);
   cache_texture = offscreen.texture_id == 0;
 
   blur_node (job,
@@ -3771,6 +3771,8 @@ gsk_gl_render_job_visit_texture_scale_node (GskGLRenderJob      *job,
   float u0, u1, v0, v1;
   GskTextureKey key;
   guint texture_id;
+  gboolean need_mipmap;
+  gboolean has_mipmap;
 
   gsk_gl_render_job_untransform_bounds (job, &job->current_clip->rect.bounds, &clip_rect);
 
@@ -3783,9 +3785,11 @@ gsk_gl_render_job_visit_texture_scale_node (GskGLRenderJob      *job,
   key.scale_x = 1.;
   key.scale_y = 1.;
 
-  texture_id = gsk_gl_driver_lookup_texture (job->driver, &key);
+  need_mipmap = (filter == GSK_SCALING_FILTER_TRILINEAR);
 
-  if (texture_id != 0)
+  texture_id = gsk_gl_driver_lookup_texture (job->driver, &key, &has_mipmap);
+
+  if (texture_id != 0 && (!need_mipmap || has_mipmap))
     goto render_texture;
 
   viewport = GRAPHENE_RECT_INIT (0, 0,
@@ -3816,7 +3820,7 @@ gsk_gl_render_job_visit_texture_scale_node (GskGLRenderJob      *job,
     {
       gpointer sync;
 
-      texture_id = gsk_gl_driver_load_texture (job->driver, texture, filter == GSK_SCALING_FILTER_TRILINEAR);
+      texture_id = gsk_gl_driver_load_texture (job->driver, texture, need_mipmap);
 
       if (GDK_IS_GL_TEXTURE (texture) && texture_id == gdk_gl_texture_get_id (GDK_GL_TEXTURE (texture)))
         sync = gdk_gl_texture_get_sync (GDK_GL_TEXTURE (texture));
@@ -3853,7 +3857,7 @@ gsk_gl_render_job_visit_texture_scale_node (GskGLRenderJob      *job,
       GskGLTextureSlice *slices = NULL;
       guint n_slices = 0;
 
-      gsk_gl_driver_slice_texture (job->driver, texture, filter == GSK_SCALING_FILTER_TRILINEAR, &slices, &n_slices);
+      gsk_gl_driver_slice_texture (job->driver, texture, need_mipmap, &slices, &n_slices);
 
       if (gsk_gl_render_job_begin_draw (job, CHOOSE_PROGRAM (job, blit)))
         {
@@ -4352,7 +4356,7 @@ gsk_gl_render_job_visit_node_with_offscreen (GskGLRenderJob       *job,
     }
 
   /* Check if we've already cached the drawn texture. */
-  cached_id = gsk_gl_driver_lookup_texture (job->driver, &key);
+  cached_id = gsk_gl_driver_lookup_texture (job->driver, &key, NULL);
 
   if (cached_id != 0)
     {
