@@ -4451,6 +4451,7 @@ gsk_shadow_node_draw (GskRenderNode *node,
       pattern = cairo_pop_group (cr);
       gdk_cairo_set_source_rgba (cr, &shadow->color);
       cairo_mask (cr, pattern);
+      cairo_pattern_destroy (pattern);
       cairo_restore (cr);
 
       cr = gsk_cairo_blur_finish_drawing (cr, shadow->radius, &shadow->color, GSK_BLUR_X | GSK_BLUR_Y);
