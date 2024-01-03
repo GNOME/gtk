@@ -6982,12 +6982,15 @@ gsk_subsurface_node_class_init (gpointer g_class,
 }
 
 /**
- * gsk_subsurface_node_new:
+ * gsk_subsurface_node_new: (skip)
  * @child: The child to divert to a subsurface
  * @subsurface: (nullable): the subsurface to use
  *
  * Creates a `GskRenderNode` that will possibly divert the child
  * node to a subsurface.
+ *
+ * Note: since subsurfaces are currently private, these nodes cannot
+ * currently be created outside of GTK. See [class@Gtk.GraphicsOffload].
  *
  * Returns: (transfer full) (type GskSubsurfaceNode): A new `GskRenderNode`
  *
@@ -7038,7 +7041,7 @@ gsk_subsurface_node_get_child (const GskRenderNode *node)
 }
 
 /**
- * gsk_subsurface_node_get_subsurface:
+ * gsk_subsurface_node_get_subsurface: (skip)
  * @node: (type GskDebugNode): a debug `GskRenderNode`
  *
  * Gets the subsurface that was set on this node
