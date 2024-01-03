@@ -47,7 +47,6 @@ main (int   argc,
 {
   /* Keep in sync with gtk_test_init() */
   (g_test_init) (&argc, &argv, NULL);
-  g_setenv ("GTK_MODULES", "", TRUE);
   setlocale (LC_ALL, "C");
 
 
