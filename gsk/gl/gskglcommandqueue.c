@@ -1552,31 +1552,23 @@ static void
 gsk_gl_command_queue_do_upload_texture_chunk (GskGLCommandQueue *self,
                                               GdkTexture        *texture,
                                               int                x,
-                                              int                y)
+                                              int                y,
+                                              GdkMemoryFormat    data_format,
+                                              GLenum             gl_format,
+                                              GLenum             gl_type,
+                                              GLint              gl_swizzle[4])
+
 {
   G_GNUC_UNUSED gint64 start_time = GDK_PROFILER_CURRENT_TIME;
   const guchar *data;
   gsize stride;
   GBytes *bytes;
   GdkTextureDownloader downloader;
-  GdkMemoryFormat data_format;
   int width, height;
-  GLint gl_internalformat;
-  GLenum gl_format;
-  GLenum gl_type;
-  GLint gl_swizzle[4];
   gsize bpp;
 
-  data_format = gdk_texture_get_format (texture);
   width = gdk_texture_get_width (texture);
   height = gdk_texture_get_height (texture);
-
-  data_format = memory_format_gl_format (self,
-                                         data_format,
-                                         &gl_internalformat,
-                                         &gl_format,
-                                         &gl_type,
-                                         gl_swizzle);
 
   if (GSK_DEBUG_CHECK (FALLBACK) &&
       data_format != gdk_texture_get_format (texture))
@@ -1708,7 +1700,7 @@ gsk_gl_command_queue_upload_texture_chunks (GskGLCommandQueue    *self,
   for (unsigned int i = 0; i < n_chunks; i++)
     {
       GskGLTextureChunk *c = &chunks[i];
-      gsk_gl_command_queue_do_upload_texture_chunk (self, c->texture, c->x, c->y);
+      gsk_gl_command_queue_do_upload_texture_chunk (self, c->texture, c->x, c->y, data_format, gl_format, gl_type, gl_swizzle);
     }
 
   /* Restore previous texture state if any */
