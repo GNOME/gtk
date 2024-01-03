@@ -59,7 +59,7 @@ test_allowed_backends (gconstpointer data)
   g_assert_cmpint (api & allowed, ==, api);
   g_assert_cmpint (api & not_allowed, ==, 0);
 
-  random_apis = g_random_int_range (0, ALL_APIS + 1);
+  random_apis = g_test_rand_int_range (0, ALL_APIS + 1);
   gdk_gl_context_set_allowed_apis (context, random_apis);
   g_assert_cmpint (gdk_gl_context_get_allowed_apis (context), ==, random_apis);
   g_assert_cmpint (gdk_gl_context_get_api (context), ==, api);

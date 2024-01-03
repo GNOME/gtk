@@ -66,11 +66,11 @@ gdk_array(test_splice) (void)
     {
       gsize old_size = gdk_array(get_size) (&v);
 
-      pos = g_random_int_range (0, old_size + 1);
+      pos = g_test_rand_int_range (0, old_size + 1);
       g_assert_true (pos <= old_size);
-      remove = g_random_int_range (0, 4);
+      remove = g_test_rand_int_range (0, 4);
       remove = MIN (remove, old_size - pos);
-      add = g_random_int_range (0, 4);
+      add = g_test_rand_int_range (0, 4);
 
       for (j = 0; j < remove; j++)
         sum -= gdk_array(get) (&v, pos + j);

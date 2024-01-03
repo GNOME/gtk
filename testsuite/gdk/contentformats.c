@@ -67,7 +67,7 @@ create_random_content_formats (void)
 
   for (i = 0; i < n; i++)
     {
-      gsize j = g_random_int_range (0, G_N_ELEMENTS (possible_types));
+      gsize j = g_test_rand_int_range (0, G_N_ELEMENTS (possible_types));
       if (possible_types[j].type_func)
         gdk_content_formats_builder_add_gtype (builder, possible_types[j].type_func ());
       else if (possible_types[j].mime_type)

@@ -62,7 +62,7 @@ test_sort (void)
 
   for (i = 0; i < 100; i++)
     {
-      r = g_random_int_range (0, 1000);
+      r = g_test_rand_int_range (0, 1000);
       s = g_strdup_printf ("%d: %d", i, r);
       label = gtk_label_new (s);
       g_object_set_data (G_OBJECT (label), "data", GINT_TO_POINTER (r));

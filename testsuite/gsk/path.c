@@ -551,7 +551,7 @@ test_in_fill_rotated (void)
 
       for (j = 0; j < 100; j++)
         {
-          GskFillRule fill_rule = g_random_int_range (0, N_FILL_RULES);
+          GskFillRule fill_rule = g_test_rand_int_range (0, N_FILL_RULES);
           float x = g_test_rand_double_range (-1000, 1000);
           float y = g_test_rand_double_range (-1000, 1000);
 

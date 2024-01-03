@@ -439,7 +439,7 @@ fisher_yates_shuffle (guint n_items)
 
   for (i = 0; i < n_items; i++)
     {
-      j = g_random_int_range (0, i + 1);
+      j = g_test_rand_int_range (0, i + 1);
       list[i] = list[j];
       list[j] = i;
     }

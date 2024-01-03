@@ -251,7 +251,7 @@ fisher_yates_shuffle (GListStore *store)
       n = g_list_model_get_n_items (G_LIST_MODEL (store));
       for (i = 0; i < n; i++)
         {
-          int pos = g_random_int_range (0, n - i);
+          int pos = g_test_rand_int_range (0, n - i);
           GObject *item;
 
           item = g_list_model_get_item (G_LIST_MODEL (store), pos);
@@ -706,7 +706,7 @@ modify_sorter (GtkSorter *multi)
   guint option;
 
   current = g_list_model_get_item (G_LIST_MODEL (multi), 0);
-  option = g_random_int_range (0, G_N_ELEMENTS (options));
+  option = g_test_rand_int_range (0, G_N_ELEMENTS (options));
 
   if (current == NULL || options[option].type != G_OBJECT_TYPE (current) || options[option].modify_func == NULL)
     {
@@ -760,7 +760,7 @@ test_stable (void)
 
   for (i = 0; i < 100; i++)
     {
-      modify_sorter (g_random_boolean () ? a : b);
+      modify_sorter (g_test_rand_bit () ? a : b);
       assert_model_equal (model1, model2);
     }
 
