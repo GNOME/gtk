@@ -113,9 +113,10 @@ G_STATIC_ASSERT (GSK_GPU_PATTERN_BLEND_LUMINOSITY == GSK_GPU_PATTERN_BLEND_DEFAU
 typedef enum {
   GSK_GPU_OPTIMIZE_UBER                 = 1 <<  0,
   GSK_GPU_OPTIMIZE_CLEAR                = 1 <<  1,
-  GSK_GPU_OPTIMIZE_GRADIENTS            = 1 <<  2,
-  GSK_GPU_OPTIMIZE_MIPMAP               = 1 <<  3,
+  GSK_GPU_OPTIMIZE_BLIT                 = 1 <<  2,
+  GSK_GPU_OPTIMIZE_GRADIENTS            = 1 <<  3,
+  GSK_GPU_OPTIMIZE_MIPMAP               = 1 <<  4,
   /* These require hardware support */
-  GSK_GPU_OPTIMIZE_GL_BASE_INSTANCE     = 1 <<  4,
+  GSK_GPU_OPTIMIZE_GL_BASE_INSTANCE     = 1 <<  5,
 } GskGpuOptimizations;
 
