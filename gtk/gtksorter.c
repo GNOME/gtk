@@ -372,7 +372,7 @@ gtk_sorter_changed_with_keys (GtkSorter       *self,
  */
 #ifdef __GI_SCANNER__
 /**
- * gtk_ordering_from_cmpfunc:
+ * gtk_ordering_from_cmpfunc: (skip)
  * @cmpfunc_result: Result of a comparison function
  *
  * Converts the result of a `GCompareFunc` like strcmp() to a
