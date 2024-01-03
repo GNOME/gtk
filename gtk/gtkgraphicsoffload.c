@@ -69,6 +69,8 @@
  *     GDK_DEBUG=dmabuf
  *
  * The GTK inspector provides a visual debugging tool for graphics offload.
+ *
+ * Since: 4.14
  */
 
 struct _GtkGraphicsOffload

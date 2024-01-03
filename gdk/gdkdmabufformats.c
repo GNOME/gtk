@@ -37,7 +37,7 @@
  * The list of supported formats is sorted by preference,
  * with the best formats coming first.
  *
- * The list may contains (format, modfier) pairs where the modifier
+ * The list may contains (format, modifier) pairs where the modifier
  * is `DMA_FORMAT_MOD_INVALID`, indicating that **_implicit modifiers_**
  * may be used with this format.
  *
@@ -152,10 +152,10 @@ gdk_dmabuf_formats_get_format (GdkDmabufFormats *formats,
 }
 
 /**
- * gdk_dmabuf_format_contains:
+ * gdk_dmabuf_formats_contains:
  * @formats: a `GdkDmabufFormats`
  * @fourcc: a format code
- * @modfier: a format modifier
+ * @modifier: a format modifier
  *
  * Returns whether a given format is contained in @formats.
  *

@@ -39,6 +39,8 @@
  * [class@Gdk.DmabufTextureBuilder] object.
  *
  * Dma-buf textures can only be created on Linux.
+ *
+ * Since: 4.14
  */
 
 struct _GdkDmabufTexture
