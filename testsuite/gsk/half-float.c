@@ -71,7 +71,7 @@ random_representable_float (void)
     {
       /* generate a random float thats representable as fp16 */
       memset (h, 0, sizeof (h));
-      h[0] = g_random_int_range (G_MININT16, G_MAXINT16);
+      h[0] = g_test_rand_int_range (G_MININT16, G_MAXINT16);
       half_to_float4 (h, f);
     }
   while (!isnormal (f[0])); /* skip nans and infs since they don't compare well */
@@ -127,8 +127,8 @@ test_many (void)
 {
   for (int i = 0; i < 100; i++)
     {
-      int size = g_random_int_range (100, 200);
-      int offset = g_random_int_range (0, 20);
+      int size = g_test_rand_int_range (100, 200);
+      int offset = g_test_rand_int_range (0, 20);
 
       guint16 *h = g_new0 (guint16, size);
       float *f = g_new0 (float, size);
@@ -150,8 +150,8 @@ test_many_c (void)
 {
   for (int i = 0; i < 100; i++)
     {
-      int size = g_random_int_range (100, 200);
-      int offset = g_random_int_range (0, 20);
+      int size = g_test_rand_int_range (100, 200);
+      int offset = g_test_rand_int_range (0, 20);
 
       guint16 *h = g_new0 (guint16, size);
       float *f = g_new0 (float, size);

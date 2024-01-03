@@ -1569,10 +1569,10 @@ gdk_gl_context_init_memory_flags (GdkGLContext *self)
       priv->memory_flags[GDK_MEMORY_R8G8B8A8_PREMULTIPLIED] |= GDK_GL_FORMAT_USABLE | GDK_GL_FORMAT_RENDERABLE | GDK_GL_FORMAT_FILTERABLE;
       priv->memory_flags[GDK_MEMORY_R8G8B8A8] |= GDK_GL_FORMAT_USABLE | GDK_GL_FORMAT_RENDERABLE | GDK_GL_FORMAT_FILTERABLE;
       priv->memory_flags[GDK_MEMORY_R8G8B8X8] |= GDK_GL_FORMAT_USABLE | GDK_GL_FORMAT_RENDERABLE | GDK_GL_FORMAT_FILTERABLE;
-      priv->memory_flags[GDK_MEMORY_R16G16B16_FLOAT] |= GDK_GL_FORMAT_USABLE | GDK_GL_FORMAT_RENDERABLE;
-      priv->memory_flags[GDK_MEMORY_R16G16B16A16_FLOAT_PREMULTIPLIED] |= GDK_GL_FORMAT_USABLE | GDK_GL_FORMAT_RENDERABLE;
-      priv->memory_flags[GDK_MEMORY_R16G16B16A16_FLOAT] |= GDK_GL_FORMAT_USABLE | GDK_GL_FORMAT_RENDERABLE;
-      priv->memory_flags[GDK_MEMORY_A16_FLOAT] |= GDK_GL_FORMAT_USABLE | GDK_GL_FORMAT_RENDERABLE;
+      priv->memory_flags[GDK_MEMORY_R16G16B16_FLOAT] |= GDK_GL_FORMAT_USABLE | GDK_GL_FORMAT_FILTERABLE;
+      priv->memory_flags[GDK_MEMORY_R16G16B16A16_FLOAT_PREMULTIPLIED] |= GDK_GL_FORMAT_USABLE | GDK_GL_FORMAT_FILTERABLE;
+      priv->memory_flags[GDK_MEMORY_R16G16B16A16_FLOAT] |= GDK_GL_FORMAT_USABLE | GDK_GL_FORMAT_FILTERABLE;
+      priv->memory_flags[GDK_MEMORY_A16_FLOAT] |= GDK_GL_FORMAT_USABLE | GDK_GL_FORMAT_FILTERABLE;
       priv->memory_flags[GDK_MEMORY_R32G32B32_FLOAT] |= GDK_GL_FORMAT_USABLE;
       priv->memory_flags[GDK_MEMORY_R32G32B32A32_FLOAT_PREMULTIPLIED] |= GDK_GL_FORMAT_USABLE;
       priv->memory_flags[GDK_MEMORY_R32G32B32A32_FLOAT] |= GDK_GL_FORMAT_USABLE;
@@ -1583,12 +1583,12 @@ gdk_gl_context_init_memory_flags (GdkGLContext *self)
       if (gdk_gl_version_greater_equal (&priv->gl_version, &GDK_GL_VERSION_INIT (3, 2)))
         {
           /* GLES 3.2 spec, table 8.10 */
-          priv->memory_flags[GDK_MEMORY_R16G16B16A16_FLOAT_PREMULTIPLIED] |= GDK_GL_FORMAT_FILTERABLE;
-          priv->memory_flags[GDK_MEMORY_R16G16B16A16_FLOAT] |= GDK_GL_FORMAT_FILTERABLE;
-          priv->memory_flags[GDK_MEMORY_A16_FLOAT] |= GDK_GL_FORMAT_FILTERABLE;
-          priv->memory_flags[GDK_MEMORY_R32G32B32A32_FLOAT_PREMULTIPLIED] |= GDK_GL_FORMAT_FILTERABLE;
-          priv->memory_flags[GDK_MEMORY_R32G32B32A32_FLOAT] |= GDK_GL_FORMAT_FILTERABLE;
-          priv->memory_flags[GDK_MEMORY_A32_FLOAT] |= GDK_GL_FORMAT_FILTERABLE;
+          priv->memory_flags[GDK_MEMORY_R16G16B16A16_FLOAT_PREMULTIPLIED] |= GDK_GL_FORMAT_RENDERABLE;
+          priv->memory_flags[GDK_MEMORY_R16G16B16A16_FLOAT] |= GDK_GL_FORMAT_RENDERABLE;
+          priv->memory_flags[GDK_MEMORY_A16_FLOAT] |= GDK_GL_FORMAT_RENDERABLE;
+          priv->memory_flags[GDK_MEMORY_R32G32B32A32_FLOAT_PREMULTIPLIED] |= GDK_GL_FORMAT_RENDERABLE;
+          priv->memory_flags[GDK_MEMORY_R32G32B32A32_FLOAT] |= GDK_GL_FORMAT_RENDERABLE;
+          priv->memory_flags[GDK_MEMORY_A32_FLOAT] |= GDK_GL_FORMAT_RENDERABLE;
         }
     }
 
@@ -1639,7 +1639,8 @@ gdk_gl_context_init_memory_flags (GdkGLContext *self)
             flags |= GDK_GL_FORMAT_FILTERABLE;
           priv->memory_flags[GDK_MEMORY_R16G16B16A16_FLOAT_PREMULTIPLIED] |= flags;
           priv->memory_flags[GDK_MEMORY_R16G16B16A16_FLOAT] |= flags;
-          priv->memory_flags[GDK_MEMORY_R16G16B16_FLOAT] |= flags;
+          /* disabled for now, see https://gitlab.freedesktop.org/mesa/mesa/-/issues/10378 */
+          priv->memory_flags[GDK_MEMORY_R16G16B16_FLOAT] |= flags & ~GDK_GL_FORMAT_RENDERABLE;
           priv->memory_flags[GDK_MEMORY_A16_FLOAT] |= flags;
         }
       if (epoxy_has_gl_extension ("GL_OES_texture_float"))
@@ -1651,7 +1652,7 @@ gdk_gl_context_init_memory_flags (GdkGLContext *self)
             flags |= GDK_GL_FORMAT_FILTERABLE;
           priv->memory_flags[GDK_MEMORY_R32G32B32A32_FLOAT_PREMULTIPLIED] |= flags;
           priv->memory_flags[GDK_MEMORY_R32G32B32A32_FLOAT] |= flags;
-          priv->memory_flags[GDK_MEMORY_R32G32B32_FLOAT] |= flags;
+          priv->memory_flags[GDK_MEMORY_R32G32B32_FLOAT] |= flags & ~GDK_GL_FORMAT_RENDERABLE;
           priv->memory_flags[GDK_MEMORY_A32_FLOAT] |= flags;
         }
     }

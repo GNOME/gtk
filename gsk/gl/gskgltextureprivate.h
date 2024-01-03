@@ -73,6 +73,8 @@ struct _GskGLTexture
 
   /* Set when used by an atlas so we don't drop the texture */
   guint              permanent : 1;
+  /* we are allowed to call glGenerateMipmap() for this texture */
+  guint              can_mipmap : 1;
   /* we called glGenerateMipmap() for this texture */
   guint              has_mipmap : 1;
 };

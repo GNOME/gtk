@@ -925,6 +925,7 @@ gsk_gl_driver_load_texture (GskGLDriver *self,
   guint texture_id;
   int height;
   int width;
+  gboolean can_mipmap = FALSE;
 
   g_return_val_if_fail (GSK_IS_GL_DRIVER (self), 0);
   g_return_val_if_fail (GDK_IS_TEXTURE (texture), 0);
@@ -938,7 +939,7 @@ gsk_gl_driver_load_texture (GskGLDriver *self,
   t = gdk_texture_get_render_data (texture, self);
   if (t && t->texture_id)
     {
-      if (ensure_mipmap && !t->has_mipmap)
+      if (ensure_mipmap && t->can_mipmap && !t->has_mipmap)
         {
           glBindTexture (GL_TEXTURE_2D, t->texture_id);
           glGenerateMipmap (GL_TEXTURE_2D);
@@ -948,7 +949,7 @@ gsk_gl_driver_load_texture (GskGLDriver *self,
       return t->texture_id;
     }
 
-  if (GDK_IS_DMABUF_TEXTURE (texture))
+  if (GDK_IS_DMABUF_TEXTURE (texture) && !ensure_mipmap)
     {
       texture_id = gsk_gl_driver_import_dmabuf_texture (self, GDK_DMABUF_TEXTURE (texture));
     }
@@ -975,7 +976,7 @@ gsk_gl_driver_load_texture (GskGLDriver *self,
        */
       gdk_gl_context_make_current (context);
 
-      texture_id = gsk_gl_command_queue_upload_texture (self->command_queue, GDK_TEXTURE (downloaded_texture));
+      texture_id = gsk_gl_command_queue_upload_texture (self->command_queue, GDK_TEXTURE (downloaded_texture), ensure_mipmap, &can_mipmap);
     }
 
   width = gdk_texture_get_width (texture);
@@ -984,8 +985,10 @@ gsk_gl_driver_load_texture (GskGLDriver *self,
   t = gsk_gl_texture_new (texture_id,
                           width, height,
                           self->current_frame_id);
+  t->can_mipmap = can_mipmap;
   if (ensure_mipmap)
     {
+      g_assert (can_mipmap);
       glBindTexture (GL_TEXTURE_2D, t->texture_id);
       glGenerateMipmap (GL_TEXTURE_2D);
       t->has_mipmap = TRUE;
@@ -1433,6 +1436,7 @@ gsk_gl_driver_add_texture_slices (GskGLDriver        *self,
   GdkMemoryTexture *memtex2 = NULL;
   GdkMemoryTexture *memtex3 = NULL;
   GdkMemoryTexture *memtex4 = NULL;
+  gboolean can_mipmap = TRUE, slice_can_mipmap;
 
   g_assert (GSK_IS_GL_DRIVER (self));
   g_assert (GDK_IS_TEXTURE (texture));
@@ -1694,7 +1698,7 @@ gsk_gl_driver_add_texture_slices (GskGLDriver        *self,
                 n_chunks++;
               }
 
-              texture_id = gsk_gl_command_queue_upload_texture_chunks (self->command_queue, n_chunks, chunks);
+              texture_id = gsk_gl_command_queue_upload_texture_chunks (self->command_queue, TRUE, n_chunks, chunks, &slice_can_mipmap);
 
               glBindTexture (GL_TEXTURE_2D, texture_id);
               glGenerateMipmap (GL_TEXTURE_2D);
@@ -1707,9 +1711,11 @@ gsk_gl_driver_add_texture_slices (GskGLDriver        *self,
               GdkTexture *subtex;
 
               subtex = gdk_memory_texture_new_subtexture (memtex, x, y, slice_width, slice_height);
-              texture_id = gsk_gl_command_queue_upload_texture (self->command_queue, subtex);
+              texture_id = gsk_gl_command_queue_upload_texture (self->command_queue, subtex, FALSE, &slice_can_mipmap);
               g_object_unref (subtex);
             }
+
+          can_mipmap &= slice_can_mipmap;
 
           slices[slice_index].rect.x = x;
           slices[slice_index].rect.y = y;
@@ -1737,6 +1743,7 @@ gsk_gl_driver_add_texture_slices (GskGLDriver        *self,
   t = gsk_gl_texture_new (0,
                           tex_width, tex_height,
                           self->current_frame_id);
+  t->can_mipmap = can_mipmap;
   t->has_mipmap = ensure_mipmap;
 
   /* Use gsk_gl_texture_free() as destroy notify here since we are
