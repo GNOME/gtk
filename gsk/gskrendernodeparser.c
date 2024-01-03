@@ -2856,8 +2856,18 @@ base64_encode_with_linebreaks (const guchar *data,
      +1 is needed for trailing \0, also check for unlikely integer overflow */
   g_return_val_if_fail (len < ((G_MAXSIZE - 1) / 4 - 1) * 3, NULL);
 
-  max = (len / 3 + 1) * 4 + 1;
-  max += 2 * (max / 76);
+  /* The glib docs say:
+   *
+   * The output buffer must be large enough to fit all the data that will
+   * be written to it. Due to the way base64 encodes you will need
+   * at least: (@len / 3 + 1) * 4 + 4 bytes (+ 4 may be needed in case of
+   * non-zero state). If you enable line-breaking you will need at least:
+   * ((@len / 3 + 1) * 4 + 4) / 76 + 1 bytes of extra space.
+   */
+  max = (len / 3 + 1) * 4;
+  max += ((len / 3 + 1) * 4 + 4) / 76 + 1;
+  /* and the null byte */
+  max += 1;
 
   out = g_malloc (max);
 
