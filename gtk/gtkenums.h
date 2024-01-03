@@ -664,7 +664,7 @@ typedef enum {
 GtkOrdering     gtk_ordering_from_cmpfunc       (int cmpfunc_result);
 #else
 /**
- * gtk_ordering_from_cmpfunc:
+ * gtk_ordering_from_cmpfunc: (skip)
  * @cmpfunc_result: Result of a comparison function
  *
  * Converts the result of a `GCompareFunc` like strcmp() to a
