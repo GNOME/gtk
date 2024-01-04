@@ -95,6 +95,7 @@ static const GskGpuShaderOpClass GSK_GPU_BORDER_OP_CLASS = {
 #ifdef GDK_RENDERING_VULKAN
   &gsk_gpu_border_info,
 #endif
+  gsk_gpu_border_setup_attrib_locations,
   gsk_gpu_border_setup_vao
 };
 

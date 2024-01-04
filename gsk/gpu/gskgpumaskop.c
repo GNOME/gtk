@@ -49,6 +49,7 @@ static const GskGpuShaderOpClass GSK_GPU_MASK_OP_CLASS = {
 #ifdef GDK_RENDERING_VULKAN
   &gsk_gpu_mask_info,
 #endif
+  gsk_gpu_mask_setup_attrib_locations,
   gsk_gpu_mask_setup_vao
 };
 

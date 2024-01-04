@@ -25,6 +25,7 @@ struct _GskGpuShaderOpClass
 #ifdef GDK_RENDERING_VULKAN
   const VkPipelineVertexInputStateCreateInfo *vertex_input_state;
 #endif
+  void                  (* setup_attrib_locations)                      (GLuint                  program);
   void                  (* setup_vao)                                   (gsize                   offset);
 };
 

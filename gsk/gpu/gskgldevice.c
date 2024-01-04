@@ -459,21 +459,21 @@ gsk_gl_device_load_shader (GskGLDevice      *self,
 }
 
 static GLuint
-gsk_gl_device_load_program (GskGLDevice      *self,
-                            const char       *program_name,
-                            guint32           variation,
-                            GskGpuShaderClip  clip,
-                            guint             n_external_textures,
-                            GError          **error)
+gsk_gl_device_load_program (GskGLDevice               *self,
+                            const GskGpuShaderOpClass *op_class,
+                            guint32                    variation,
+                            GskGpuShaderClip           clip,
+                            guint                      n_external_textures,
+                            GError                   **error)
 {
   GLuint vertex_shader_id, fragment_shader_id, program_id;
   GLint link_status;
 
-  vertex_shader_id = gsk_gl_device_load_shader (self, program_name, GL_VERTEX_SHADER, variation, clip, n_external_textures, error);
+  vertex_shader_id = gsk_gl_device_load_shader (self, op_class->shader_name, GL_VERTEX_SHADER, variation, clip, n_external_textures, error);
   if (vertex_shader_id == 0)
     return 0;
 
-  fragment_shader_id = gsk_gl_device_load_shader (self, program_name, GL_FRAGMENT_SHADER, variation, clip, n_external_textures, error);
+  fragment_shader_id = gsk_gl_device_load_shader (self, op_class->shader_name, GL_FRAGMENT_SHADER, variation, clip, n_external_textures, error);
   if (fragment_shader_id == 0)
     return 0;
 
@@ -481,6 +481,8 @@ gsk_gl_device_load_program (GskGLDevice      *self,
 
   glAttachShader (program_id, vertex_shader_id);
   glAttachShader (program_id, fragment_shader_id);
+
+  op_class->setup_attrib_locations (program_id);
 
   glLinkProgram (program_id);
 
@@ -545,7 +547,7 @@ gsk_gl_device_use_program (GskGLDevice               *self,
       return;
     }
 
-  program_id = gsk_gl_device_load_program (self, op_class->shader_name, variation, clip, n_external_textures, &error);
+  program_id = gsk_gl_device_load_program (self, op_class, variation, clip, n_external_textures, &error);
   if (program_id == 0)
     {
       g_critical ("Failed to load shader program: %s", error->message);

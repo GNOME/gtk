@@ -51,6 +51,7 @@ static const GskGpuShaderOpClass GSK_GPU_STRAIGHT_ALPHA_OP_CLASS = {
 #ifdef GDK_RENDERING_VULKAN
   &gsk_gpu_straightalpha_info,
 #endif
+  gsk_gpu_straightalpha_setup_attrib_locations,
   gsk_gpu_straightalpha_setup_vao
 };
 
