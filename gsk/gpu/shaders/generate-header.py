@@ -21,6 +21,7 @@ with open(sys.argv[1]) as f:
         if not match.group(3).startswith('in'):
             raise Exception("Variable doesn't start with 'in'")
         matches.append({'name': ''.join('_' + char.lower() if char.isupper() else char for char in match.group(3))[3:],
+                        'attrib_name': match.group(3),
                         'location': int(match.group(1)),
                         'type': match.group(2)})
 
@@ -189,6 +190,19 @@ for i, match in enumerate(matches):
 print(f'''}}
 
 ''');
+
+
+print(f'''static void
+{var_name}_setup_attrib_locations (GLuint program)
+{{''')
+
+for match in matches:
+    print(f'''  glBindAttribLocation (program, {match['location']}, "{match['attrib_name']}");''')
+
+print(f'''}}
+
+''');
+
 
 print(f'''#ifdef GDK_RENDERING_VULKAN
 

@@ -50,6 +50,7 @@ static const GskGpuShaderOpClass GSK_GPU_CROSS_FADE_OP_CLASS = {
 #ifdef GDK_RENDERING_VULKAN
   &gsk_gpu_crossfade_info,
 #endif
+  gsk_gpu_crossfade_setup_attrib_locations,
   gsk_gpu_crossfade_setup_vao
 };
 

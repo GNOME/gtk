@@ -51,6 +51,7 @@ static const GskGpuShaderOpClass GSK_GPU_BLEND_MODE_OP_CLASS = {
 #ifdef GDK_RENDERING_VULKAN
   &gsk_gpu_blendmode_info,
 #endif
+  gsk_gpu_blendmode_setup_attrib_locations,
   gsk_gpu_blendmode_setup_vao
 };
 

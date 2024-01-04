@@ -48,6 +48,7 @@ static const GskGpuShaderOpClass GSK_GPU_TEXTURE_OP_CLASS = {
 #ifdef GDK_RENDERING_VULKAN
   &gsk_gpu_texture_info,
 #endif
+  gsk_gpu_texture_setup_attrib_locations,
   gsk_gpu_texture_setup_vao
 };
 

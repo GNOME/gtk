@@ -48,6 +48,7 @@ static const GskGpuShaderOpClass GSK_GPU_UBER_OP_CLASS = {
 #ifdef GDK_RENDERING_VULKAN
   &gsk_gpu_uber_info,
 #endif
+  gsk_gpu_uber_setup_attrib_locations,
   gsk_gpu_uber_setup_vao
 };
 

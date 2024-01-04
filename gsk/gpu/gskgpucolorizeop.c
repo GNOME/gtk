@@ -49,6 +49,7 @@ static const GskGpuShaderOpClass GSK_GPU_COLORIZE_OP_CLASS = {
 #ifdef GDK_RENDERING_VULKAN
   &gsk_gpu_colorize_info,
 #endif
+  gsk_gpu_colorize_setup_attrib_locations,
   gsk_gpu_colorize_setup_vao
 };
 
