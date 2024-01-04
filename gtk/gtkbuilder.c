@@ -238,6 +238,11 @@
  * For more information, see the documentation of the
  * [method@GObject.Object.bind_property] method.
  *
+ * Please note that another way to set up bindings between objects in .ui files
+ * is to use the `GtkExpression` methodology. See the
+ * [`GtkExpression` documentation](class.Expression.html#gtkexpression-in-ui-files)
+ * for more information.
+ *
  * ### Internal children
  *
  * Sometimes it is necessary to refer to widgets which have implicitly
