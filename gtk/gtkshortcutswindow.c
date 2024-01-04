@@ -920,7 +920,8 @@ gtk_shortcuts_window_init (GtkShortcutsWindow *self)
   g_object_set (self->search_entry,
                 /* Translators: This is placeholder text for the search entry in the shortcuts window */
                 "placeholder-text", _("Search Shortcuts"),
-                "width-chars", 40,
+                "width-chars", 31,
+                "max-width-chars", 40,
                 NULL);
 
   gtk_accessible_update_property (GTK_ACCESSIBLE (self->search_entry),
