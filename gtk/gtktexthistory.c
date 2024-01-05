@@ -1103,7 +1103,8 @@ gtk_text_history_modified_changed (GtkTextHistory *self,
     {
       if (peek->kind == ACTION_KIND_BARRIER)
         {
-          if (!(peek = peek->link.next->data))
+          if (peek->link.next == NULL ||
+              !(peek = peek->link.next->data))
             return;
         }
 
