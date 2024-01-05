@@ -166,7 +166,8 @@ gdk_frame_clock_class_init (GdkFrameClockClass *klass)
    *
    * Animations should be updated using [method@Gdk.FrameClock.get_frame_time].
    * Applications can connect directly to this signal, or use
-   * [method@Gtk.Widget.add_tick_callback] as a more convenient interface.
+   * [gtk_widget_add_tick_callback()](../gtk4/method.Widget.add_tick_callback.html)
+   * as a more convenient interface.
    */
   signals[UPDATE] =
     g_signal_new (g_intern_static_string ("update"),
@@ -203,7 +204,8 @@ gdk_frame_clock_class_init (GdkFrameClockClass *klass)
    *
    * The frame is repainted. GDK normally handles this internally and
    * emits [signal@Gdk.Surface::render] signals which are turned into
-   * [signal@Gtk.Widget::snapshot] signals by GTK.
+   * [GtkWidget::snapshot](../gtk4/signal.Widget.snapshot.html) signals
+   * by GTK.
    */
   signals[PAINT] =
     g_signal_new (g_intern_static_string ("paint"),

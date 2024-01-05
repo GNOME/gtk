@@ -681,7 +681,8 @@ gdk_empty_paintable_init (GdkEmptyPaintable *self)
  * This is often useful for implementing the
  * [vfunc@Gdk.Paintable.get_current_image] virtual function
  * when the paintable is in an incomplete state (like a
- * [class@Gtk.MediaStream] before receiving the first frame).
+ * [GtkMediaStream](../gtk4/class.MediaStream.html) before receiving
+ * the first frame).
  *
  * Returns: (transfer full): a `GdkPaintable`
  */
