@@ -6991,8 +6991,9 @@ gsk_subsurface_node_class_init (gpointer g_class,
  * Creates a `GskRenderNode` that will possibly divert the child
  * node to a subsurface.
  *
- * Note: since subsurfaces are currently private, these nodes cannot
- * currently be created outside of GTK. See [class@Gtk.GraphicsOffload].
+ * Note: Since subsurfaces are currently private, these nodes cannot
+ * currently be created outside of GTK. See
+ * [GtkGraphicsOffload](../gtk4/class.GraphicsOffload.html).
  *
  * Returns: (transfer full) (type GskSubsurfaceNode): A new `GskRenderNode`
  *
