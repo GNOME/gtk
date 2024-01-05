@@ -1435,6 +1435,8 @@ gsk_gl_command_queue_create_texture (GskGLCommandQueue *self,
 
   switch (format)
   {
+    case 0:
+      break;
     case GL_RGBA8:
       glTexImage2D (GL_TEXTURE_2D, 0, format, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
       break;
@@ -1689,7 +1691,7 @@ gsk_gl_command_queue_upload_texture_chunks (GskGLCommandQueue    *self,
       height = MIN (height, self->max_texture_size);
     }
 
-  texture_id = gsk_gl_command_queue_create_texture (self, width, height, GL_RGBA8);
+  texture_id = gsk_gl_command_queue_create_texture (self, width, height, 0);
   if (texture_id == -1)
     return texture_id;
 
