@@ -298,8 +298,8 @@ gdk_draw_context_get_surface (GdkDrawContext *context)
  *
  * When using GTK, the widget system automatically places calls to
  * gdk_draw_context_begin_frame() and gdk_draw_context_end_frame() via the
- * use of [class@Gsk.Renderer]s, so application code does not need to call
- * these functions explicitly.
+ * use of [GskRenderer](../gsk4/class.Renderer.html)s, so application code
+ * does not need to call these functions explicitly.
  */
 void
 gdk_draw_context_begin_frame (GdkDrawContext       *context,
