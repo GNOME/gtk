@@ -130,7 +130,6 @@ struct _GtkInspectorGeneral
   GtkWidget *display_name;
   GtkWidget *display_rgba;
   GtkWidget *display_composited;
-  GtkSizeGroup *labels;
 
   GdkDisplay *display;
 };
@@ -246,8 +245,6 @@ add_check_row (GtkInspectorGeneral *gen,
 
   gtk_widget_set_hexpand (box, FALSE);
   gtk_list_box_insert (list, row, -1);
-
-  gtk_size_group_add_widget (gen->labels, label);
 }
 
 static void
@@ -286,8 +283,6 @@ add_label_row (GtkInspectorGeneral *gen,
 
   gtk_widget_set_hexpand (box, FALSE);
   gtk_list_box_insert (GTK_LIST_BOX (list), row, -1);
-
-  gtk_size_group_add_widget (gen->labels, label);
 }
 
 #ifdef GDK_WINDOWING_X11
@@ -1263,7 +1258,6 @@ gtk_inspector_general_class_init (GtkInspectorGeneralClass *klass)
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorGeneral, gtk_exe_prefix);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorGeneral, gtk_data_prefix);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorGeneral, gsettings_schema_dir);
-  gtk_widget_class_bind_template_child (widget_class, GtkInspectorGeneral, labels);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorGeneral, display_name);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorGeneral, display_composited);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorGeneral, display_rgba);

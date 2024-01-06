@@ -951,30 +951,6 @@
       </object>
     </child>
   </template>
-  <object class="GtkSizeGroup" id="labels">
-    <widgets>
-      <widget name="gtk_version_label"/>
-      <widget name="gdk_backend_label"/>
-      <widget name="gsk_renderer_label"/>
-      <widget name="pango_fontmap_label"/>
-      <widget name="media_backend_label"/>
-      <widget name="app_id_label"/>
-      <widget name="resource_path_label"/>
-      <widget name="display_label"/>
-      <widget name="display_rgba_label"/>
-      <widget name="display_composited_label"/>
-      <widget name="gl_backend_version_label"/>
-      <widget name="gl_backend_vendor_label"/>
-      <widget name="gl_version_label"/>
-      <widget name="gl_vendor_label"/>
-      <widget name="gl_renderer_label"/>
-      <widget name="gl_full_version_label"/>
-      <widget name="glsl_version_label"/>
-      <widget name="vk_device_label"/>
-      <widget name="vk_api_version_label"/>
-      <widget name="vk_driver_version_label"/>
-    </widgets>
-  </object>
   <object class="GtkSizeGroup">
     <widgets>
       <widget name="version_box"/>
