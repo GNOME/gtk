@@ -1134,16 +1134,16 @@ keynav_failed (GtkWidget *widget, GtkDirectionType direction, GtkInspectorGenera
   else if (direction == GTK_DIR_DOWN && widget == gen->display_box)
     next = gen->monitor_box;
   else if (direction == GTK_DIR_DOWN && widget == gen->monitor_box)
+    next = gen->device_box;
+  else if (direction == GTK_DIR_DOWN && widget == gen->device_box)
     next = gen->gl_box;
   else if (direction == GTK_DIR_DOWN && widget == gen->gl_box)
-    next = gen->vulkan_box;
-  else if (direction == GTK_DIR_DOWN && widget == gen->vulkan_box)
-    next = gen->device_box;
-  else if (direction == GTK_DIR_UP && widget == gen->device_box)
     next = gen->vulkan_box;
   else if (direction == GTK_DIR_UP && widget == gen->vulkan_box)
     next = gen->gl_box;
   else if (direction == GTK_DIR_UP && widget == gen->gl_box)
+    next = gen->device_box;
+  else if (direction == GTK_DIR_UP && widget == gen->device_box)
     next = gen->monitor_box;
   else if (direction == GTK_DIR_UP && widget == gen->monitor_box)
     next = gen->display_box;

@@ -566,6 +566,16 @@
               </object>
             </child>
             <child>
+              <object class="GtkListBox" id="device_box">
+                <property name="selection-mode">none</property>
+                <property name="halign">center</property>
+                <style>
+                  <class name="rich-list"/>
+                  <class name="boxed-list"/>
+                </style>
+              </object>
+            </child>
+            <child>
               <object class="GtkListBox" id="gl_box">
                 <property name="selection-mode">none</property>
                 <property name="halign">center</property>
@@ -934,16 +944,6 @@
                     </child>
                   </object>
                 </child>
-              </object>
-            </child>
-            <child>
-              <object class="GtkListBox" id="device_box">
-                <property name="selection-mode">none</property>
-                <property name="halign">center</property>
-                <style>
-                  <class name="rich-list"/>
-                  <class name="boxed-list"/>
-                </style>
               </object>
             </child>
           </object>
