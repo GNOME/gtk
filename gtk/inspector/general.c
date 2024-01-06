@@ -75,6 +75,10 @@
 #include "gsk/gpu/gskvulkandeviceprivate.h"
 #endif
 
+#include "gsk/gpu/gskgputypesprivate.h"
+#include "gsk/gpu/gskgpurendererprivate.h"
+
+
 struct _GtkInspectorGeneral
 {
   GtkWidget parent;
@@ -88,6 +92,7 @@ struct _GtkInspectorGeneral
   GtkWidget *gl_box;
   GtkWidget *vulkan_box;
   GtkWidget *device_box;
+  GtkWidget *renderer_box;
   GtkWidget *gtk_version;
   GtkWidget *gdk_backend;
   GtkWidget *gsk_renderer;
@@ -137,6 +142,12 @@ typedef struct _GtkInspectorGeneralClass
 
 G_DEFINE_TYPE (GtkInspectorGeneral, gtk_inspector_general, GTK_TYPE_WIDGET)
 
+static void init_renderer (GtkInspectorGeneral *gen,
+                           GskRenderer         *renderer,
+                           const char          *name);
+
+static void populate_seats (GtkInspectorGeneral *gen);
+
 static void
 init_version (GtkInspectorGeneral *gen)
 {
@@ -184,6 +195,8 @@ init_version (GtkInspectorGeneral *gen)
     renderer = "GL (new)";
   else
     renderer = "Unknown";
+
+  init_renderer (gen, gsk_renderer, renderer);
 
   gsk_renderer_unrealize (gsk_renderer);
   g_object_unref (gsk_renderer);
@@ -918,8 +931,39 @@ init_im_module (GtkInspectorGeneral *gen)
                            gen, 0);
 }
 
+static void
+init_renderer (GtkInspectorGeneral *gen,
+               GskRenderer         *renderer,
+               const char          *name)
+{
+  add_label_row (gen, GTK_LIST_BOX (gen->renderer_box), "GSK Renderer", name, 0);
 
-static void populate_seats (GtkInspectorGeneral *gen);
+  if (strcmp (G_OBJECT_TYPE_NAME (renderer), "GskGLRenderer") == 0)
+    {
+      if (g_getenv ("GSK_MAX_TEXTURE_SIZE") != NULL)
+        {
+          add_label_row (gen, GTK_LIST_BOX (gen->renderer_box), "Max texture size",
+                         g_getenv ("GSK_MAX_TEXTURE_SIZE"), 0);
+        }
+    }
+  else if (GSK_IS_GPU_RENDERER (renderer))
+    {
+      GskGpuOptimizations opt = gsk_gpu_renderer_get_optimizations (GSK_GPU_RENDERER (renderer));
+
+      add_check_row (gen, GTK_LIST_BOX (gen->renderer_box), "Use uber shader",
+                     (opt & GSK_GPU_OPTIMIZE_UBER) != 0, 0);
+      add_check_row (gen, GTK_LIST_BOX (gen->renderer_box), "Use clear commands",
+                     (opt & GSK_GPU_OPTIMIZE_CLEAR) != 0, 0);
+      add_check_row (gen, GTK_LIST_BOX (gen->renderer_box), "Use blit commands",
+                     (opt & GSK_GPU_OPTIMIZE_BLIT) != 0, 0);
+      add_check_row (gen, GTK_LIST_BOX (gen->renderer_box), "Supersample gradients",
+                     (opt & GSK_GPU_OPTIMIZE_GRADIENTS) != 0, 0);
+      add_check_row (gen, GTK_LIST_BOX (gen->renderer_box), "Generate mipmaps",
+                     (opt & GSK_GPU_OPTIMIZE_MIPMAP) != 0, 0);
+      add_check_row (gen, GTK_LIST_BOX (gen->renderer_box), "Use gl-baseinstance",
+                     (opt & GSK_GPU_OPTIMIZE_GL_BASE_INSTANCE) != 0, 0);
+    }
+}
 
 static void
 add_tool (GtkInspectorGeneral *gen,
@@ -1158,6 +1202,10 @@ keynav_failed (GtkWidget *widget, GtkDirectionType direction, GtkInspectorGenera
     next = gen->vulkan_box;
   else if (direction == GTK_DIR_DOWN && widget == gen->vulkan_box)
     next = gen->device_box;
+  else if (direction == GTK_DIR_DOWN && widget == gen->device_box)
+    next = gen->renderer_box;
+  else if (direction == GTK_DIR_UP && widget == gen->renderer_box)
+    next = gen->device_box;
   else if (direction == GTK_DIR_UP && widget == gen->device_box)
     next = gen->vulkan_box;
   else if (direction == GTK_DIR_UP && widget == gen->vulkan_box)
@@ -1196,6 +1244,7 @@ gtk_inspector_general_constructed (GObject *object)
    g_signal_connect (gen->gl_box, "keynav-failed", G_CALLBACK (keynav_failed), gen);
    g_signal_connect (gen->vulkan_box, "keynav-failed", G_CALLBACK (keynav_failed), gen);
    g_signal_connect (gen->device_box, "keynav-failed", G_CALLBACK (keynav_failed), gen);
+   g_signal_connect (gen->renderer_box, "keynav-failed", G_CALLBACK (keynav_failed), gen);
 }
 
 static void
@@ -1276,6 +1325,7 @@ gtk_inspector_general_class_init (GtkInspectorGeneralClass *klass)
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorGeneral, display_composited);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorGeneral, display_rgba);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorGeneral, device_box);
+  gtk_widget_class_bind_template_child (widget_class, GtkInspectorGeneral, renderer_box);
 
   gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BIN_LAYOUT);
 }

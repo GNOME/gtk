@@ -871,6 +871,16 @@
                 </style>
               </object>
             </child>
+            <child>
+              <object class="GtkListBox" id="renderer_box">
+                <property name="selection-mode">none</property>
+                <property name="halign">center</property>
+                <style>
+                  <class name="rich-list"/>
+                  <class name="boxed-list"/>
+                </style>
+              </object>
+            </child>
           </object>
         </child>
       </object>
@@ -910,6 +920,7 @@
       <widget name="env_box"/>
       <widget name="display_box"/>
       <widget name="device_box"/>
+      <widget name="renderer_box"/>
     </widgets>
   </object>
 </interface>
