@@ -72,6 +72,7 @@
 
 #ifdef GDK_RENDERING_VULKAN
 #include <vulkan/vulkan.h>
+#include "gsk/gpu/gskvulkandeviceprivate.h"
 #endif
 
 struct _GtkInspectorGeneral
@@ -445,7 +446,7 @@ init_gl (GtkInspectorGeneral *gen)
 
 #ifdef GDK_RENDERING_VULKAN
 static gboolean
-has_debug_extension (GdkVulkanContext *context)
+has_debug_extension (void)
 {
   uint32_t i;
   uint32_t n_extensions;
@@ -463,7 +464,7 @@ has_debug_extension (GdkVulkanContext *context)
 }
 
 static gboolean
-has_validation_layer (GdkVulkanContext *context)
+has_validation_layer (void)
 {
   uint32_t i;
   uint32_t n_layers;
@@ -485,8 +486,7 @@ static void
 init_vulkan (GtkInspectorGeneral *gen)
 {
 #ifdef GDK_RENDERING_VULKAN
-  GdkSurface *surface;
-  GdkVulkanContext *context;
+  GskVulkanDevice *device;
 
   if (gdk_display_get_debug_flags (gen->display) & GDK_DEBUG_VULKAN_DISABLE)
     {
@@ -496,11 +496,9 @@ init_vulkan (GtkInspectorGeneral *gen)
       return;
     }
 
-  surface = gdk_surface_new_toplevel (gen->display);
-  context = gdk_surface_create_vulkan_context (surface, NULL);
-  gdk_surface_destroy (surface);
+  device = (GskVulkanDevice *) gsk_vulkan_device_get_for_display (gen->display, NULL);
 
-  if (context)
+  if (device)
     {
       VkPhysicalDevice vk_device;
       VkPhysicalDeviceProperties props;
@@ -508,7 +506,7 @@ init_vulkan (GtkInspectorGeneral *gen)
       char *api_version;
       char *driver_version;
 
-      vk_device = gdk_vulkan_context_get_physical_device (context);
+      vk_device = gsk_vulkan_device_get_vk_physical_device (device);
       vkGetPhysicalDeviceProperties (vk_device, &props);
 
       device_name = g_strdup_printf ("%s (%d)", props.deviceName, props.deviceType);
@@ -539,11 +537,39 @@ init_vulkan (GtkInspectorGeneral *gen)
         add_check_row (gen, GTK_LIST_BOX (gen->vulkan_box), "VK_KHR_wayland_surface", TRUE, 0);
 #endif
       add_check_row (gen, GTK_LIST_BOX (gen->vulkan_box), VK_EXT_DEBUG_REPORT_EXTENSION_NAME,
-                     has_debug_extension (context), 0);
+                     has_debug_extension (), 0);
       add_check_row (gen, GTK_LIST_BOX (gen->vulkan_box), "VK_LAYER_KHRONOS_validation",
-                     has_validation_layer (context), 0);
+                     has_validation_layer (), 0);
 
-      g_object_unref (context);
+      char buf[48];
+
+      g_snprintf (buf, sizeof (buf), "%ld", gsk_vulkan_device_get_max_immutable_samplers (device));
+      add_label_row (gen, GTK_LIST_BOX (gen->vulkan_box), "Max immutable samplers", buf, 0);
+
+      g_snprintf (buf, sizeof (buf), "%ld", gsk_vulkan_device_get_max_samplers (device));
+      add_label_row (gen, GTK_LIST_BOX (gen->vulkan_box), "Max samplers", buf, 0);
+
+      g_snprintf (buf, sizeof (buf), "%ld", gsk_vulkan_device_get_max_buffers (device));
+      add_label_row (gen, GTK_LIST_BOX (gen->vulkan_box), "Max buffers", buf, 0);
+
+      add_check_row (gen, GTK_LIST_BOX (gen->vulkan_box), "Dmabuf",
+                     gsk_vulkan_device_has_feature (device, GDK_VULKAN_FEATURE_DMABUF), 0);
+      add_check_row (gen, GTK_LIST_BOX (gen->vulkan_box), "Ycbcr textures",
+                     gsk_vulkan_device_has_feature (device, GDK_VULKAN_FEATURE_YCBCR), 0);
+      add_check_row (gen, GTK_LIST_BOX (gen->vulkan_box), "Descriptor indexing",
+                     gsk_vulkan_device_has_feature (device, GDK_VULKAN_FEATURE_DESCRIPTOR_INDEXING), 0);
+      add_check_row (gen, GTK_LIST_BOX (gen->vulkan_box), "Dynamic indexing",
+                     gsk_vulkan_device_has_feature (device, GDK_VULKAN_FEATURE_DYNAMIC_INDEXING), 0);
+      add_check_row (gen, GTK_LIST_BOX (gen->vulkan_box), "Nonuniform indexing",
+                     gsk_vulkan_device_has_feature (device, GDK_VULKAN_FEATURE_NONUNIFORM_INDEXING), 0);
+      add_check_row (gen, GTK_LIST_BOX (gen->vulkan_box), "Semaphore export",
+                     gsk_vulkan_device_has_feature (device, GDK_VULKAN_FEATURE_SEMAPHORE_EXPORT), 0);
+      add_check_row (gen, GTK_LIST_BOX (gen->vulkan_box), "Semaphore import",
+                     gsk_vulkan_device_has_feature (device, GDK_VULKAN_FEATURE_SEMAPHORE_IMPORT), 0);
+      add_check_row (gen, GTK_LIST_BOX (gen->vulkan_box), "Incremental present",
+                     gsk_vulkan_device_has_feature (device, GDK_VULKAN_FEATURE_INCREMENTAL_PRESENT), 0);
+
+      g_object_unref (device);
     }
   else
 #endif
