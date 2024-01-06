@@ -24,14 +24,14 @@
               </object>
             </child>
             <child>
-              <object class="GtkCheckButton" id="events">
-                <property name="label">Events</property>
+              <object class="GtkCheckButton" id="misc">
+                <property name="label">Misc</property>
                 <signal name="toggled" handler="flag_toggled"/>
               </object>
             </child>
             <child>
-              <object class="GtkCheckButton" id="misc">
-                <property name="label">Misc</property>
+              <object class="GtkCheckButton" id="events">
+                <property name="label">Events</property>
                 <signal name="toggled" handler="flag_toggled"/>
               </object>
             </child>
@@ -123,20 +123,8 @@
               </object>
             </child>
             <child>
-              <object class="GtkCheckButton" id="cairo">
-                <property name="label">Cairo</property>
-                <signal name="toggled" handler="flag_toggled"/>
-              </object>
-            </child>
-            <child>
               <object class="GtkCheckButton" id="opengl_gsk">
                 <property name="label">OpenGL</property>
-                <signal name="toggled" handler="flag_toggled"/>
-              </object>
-            </child>
-            <child>
-              <object class="GtkCheckButton" id="vulkan_gsk">
-                <property name="label">Vulkan</property>
                 <signal name="toggled" handler="flag_toggled"/>
               </object>
             </child>
@@ -153,8 +141,26 @@
               </object>
             </child>
             <child>
+              <object class="GtkCheckButton" id="vulkan_gsk">
+                <property name="label">Vulkan</property>
+                <signal name="toggled" handler="flag_toggled"/>
+              </object>
+            </child>
+            <child>
+              <object class="GtkCheckButton" id="fallback">
+                <property name="label">Fallback</property>
+                <signal name="toggled" handler="flag_toggled"/>
+              </object>
+            </child>
+            <child>
               <object class="GtkCheckButton" id="glyphcache">
                 <property name="label">Glyph Cache</property>
+                <signal name="toggled" handler="flag_toggled"/>
+              </object>
+            </child>
+            <child>
+              <object class="GtkCheckButton" id="verbose">
+                <property name="label">Verbose</property>
                 <signal name="toggled" handler="flag_toggled"/>
               </object>
             </child>

@@ -46,8 +46,8 @@ struct _GtkInspectorLogs
   GtkWidget parent;
 
   GtkWidget *box;
-  GtkWidget *events;
   GtkWidget *misc;
+  GtkWidget *events;
   GtkWidget *dnd;
   GtkWidget *input;
   GtkWidget *eventloop;
@@ -61,12 +61,13 @@ struct _GtkInspectorLogs
   GtkWidget *offload;
 
   GtkWidget *renderer;
-  GtkWidget *cairo;
   GtkWidget *opengl_gsk;
-  GtkWidget *vulkan_gsk;
   GtkWidget *shaders;
   GtkWidget *surface;
+  GtkWidget *vulkan_gsk;
+  GtkWidget *fallback;
   GtkWidget *glyphcache;
+  GtkWidget *verbose;
 
   GtkWidget *actions;
   GtkWidget *builder;
@@ -124,8 +125,8 @@ flag_toggled (GtkWidget        *button,
   GList *toplevels, *l;
 
   flags = gdk_display_get_debug_flags (logs->display);
-  update_flag (logs->events, &flags, GDK_DEBUG_EVENTS);
   update_flag (logs->misc, &flags, GDK_DEBUG_MISC);
+  update_flag (logs->events, &flags, GDK_DEBUG_EVENTS);
   update_flag (logs->dnd, &flags, GDK_DEBUG_DND);
   update_flag (logs->input, &flags, GDK_DEBUG_INPUT);
   update_flag (logs->eventloop, &flags, GDK_DEBUG_EVENTLOOP);
@@ -141,12 +142,13 @@ flag_toggled (GtkWidget        *button,
 
   flags = gsk_get_debug_flags ();
   update_flag (logs->renderer, &flags, GSK_DEBUG_RENDERER);
-  update_flag (logs->cairo, &flags, GSK_DEBUG_CAIRO);
   update_flag (logs->opengl_gsk, &flags, GSK_DEBUG_OPENGL);
-  update_flag (logs->vulkan_gsk, &flags, GSK_DEBUG_VULKAN);
   update_flag (logs->shaders, &flags, GSK_DEBUG_SHADERS);
   update_flag (logs->surface, &flags, GSK_DEBUG_SURFACE);
+  update_flag (logs->vulkan_gsk, &flags, GSK_DEBUG_VULKAN);
+  update_flag (logs->fallback, &flags, GSK_DEBUG_FALLBACK);
   update_flag (logs->glyphcache, &flags, GSK_DEBUG_GLYPH_CACHE);
+  update_flag (logs->verbose, &flags, GSK_DEBUG_VERBOSE);
   gsk_set_debug_flags (flags);
 
   toplevels = gtk_window_list_toplevels ();
@@ -189,8 +191,8 @@ gtk_inspector_logs_class_init (GtkInspectorLogsClass *klass)
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/libgtk/inspector/logs.ui");
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorLogs, box);
-  gtk_widget_class_bind_template_child (widget_class, GtkInspectorLogs, events);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorLogs, misc);
+  gtk_widget_class_bind_template_child (widget_class, GtkInspectorLogs, events);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorLogs, dnd);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorLogs, input);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorLogs, eventloop);
@@ -204,12 +206,13 @@ gtk_inspector_logs_class_init (GtkInspectorLogsClass *klass)
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorLogs, offload);
 
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorLogs, renderer);
-  gtk_widget_class_bind_template_child (widget_class, GtkInspectorLogs, cairo);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorLogs, opengl_gsk);
-  gtk_widget_class_bind_template_child (widget_class, GtkInspectorLogs, vulkan_gsk);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorLogs, shaders);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorLogs, surface);
+  gtk_widget_class_bind_template_child (widget_class, GtkInspectorLogs, vulkan_gsk);
+  gtk_widget_class_bind_template_child (widget_class, GtkInspectorLogs, fallback);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorLogs, glyphcache);
+  gtk_widget_class_bind_template_child (widget_class, GtkInspectorLogs, verbose);
 
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorLogs, actions);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorLogs, builder);
