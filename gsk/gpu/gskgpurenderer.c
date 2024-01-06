@@ -25,7 +25,7 @@
 
 static const GdkDebugKey gsk_gpu_optimization_keys[] = {
   { "uber", GSK_GPU_OPTIMIZE_UBER, "Don't use the uber shader" },
-  { "clear", GSK_GPU_OPTIMIZE_CLEAR, "Don't vkCmdClearAttachment()/glClear() instead of shaders" },
+  { "clear", GSK_GPU_OPTIMIZE_CLEAR, "Use shaders instead of vkCmdClearAttachment()/glClear()" },
   { "blit", GSK_GPU_OPTIMIZE_BLIT, "Use shaders instead of vkCmdBlit()/glBlitFramebuffer()" },
   { "gradients", GSK_GPU_OPTIMIZE_GRADIENTS, "Don't supersample gradients" },
   { "mipmap", GSK_GPU_OPTIMIZE_MIPMAP, "Avoid creating mipmaps" },
