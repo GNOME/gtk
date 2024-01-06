@@ -40,8 +40,16 @@
 G_DEFINE_ABSTRACT_TYPE (GdkX11GLContext, gdk_x11_gl_context, GDK_TYPE_GL_CONTEXT)
 
 static void
+gdk_x11_gl_context_empty_frame (GdkDrawContext *draw_context)
+{
+}
+
+static void
 gdk_x11_gl_context_class_init (GdkX11GLContextClass *klass)
 {
+  GdkDrawContextClass *draw_context_class = GDK_DRAW_CONTEXT_CLASS (klass);
+
+  draw_context_class->empty_frame = gdk_x11_gl_context_empty_frame;
 }
 
 static void

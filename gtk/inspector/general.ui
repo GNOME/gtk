@@ -528,10 +528,45 @@
                     </child>
                   </object>
                 </child>
+                <child>
+                  <object class="GtkListBoxRow" id="display_extensions_row">
+                    <property name="activatable">0</property>
+                    <child>
+                      <object class="GtkExpander">
+                        <property name="label-widget">
+                          <object class="GtkLabel">
+                            <property name="label" translatable="yes">Protocols</property>
+                            <property name="margin-start">10</property>
+                          </object>
+                        </property>
+                        <child>
+                          <object class="GtkListBox" id="display_extensions_box">
+                            <property name="margin-top">20</property>
+                            <property name="selection-mode">none</property>
+                            <property name="halign">center</property>
+                            <style>
+                              <class name="rich-list"/>
+                            </style>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
+                </child>
               </object>
             </child>
             <child>
               <object class="GtkListBox" id="monitor_box">
+                <property name="selection-mode">none</property>
+                <property name="halign">center</property>
+                <style>
+                  <class name="rich-list"/>
+                  <class name="boxed-list"/>
+                </style>
+              </object>
+            </child>
+            <child>
+              <object class="GtkListBox" id="device_box">
                 <property name="selection-mode">none</property>
                 <property name="halign">center</property>
                 <style>
@@ -768,6 +803,31 @@
                     </child>
                   </object>
                 </child>
+                <child>
+                  <object class="GtkListBoxRow" id="gl_extensions_row">
+                    <property name="activatable">0</property>
+                    <child>
+                      <object class="GtkExpander">
+                        <property name="label-widget">
+                          <object class="GtkLabel">
+                            <property name="label" translatable="yes">Extensions</property>
+                            <property name="margin-start">10</property>
+                          </object>
+                        </property>
+                        <child>
+                          <object class="GtkListBox" id="gl_extensions_box">
+                            <property name="margin-top">20</property>
+                            <property name="selection-mode">none</property>
+                            <property name="halign">center</property>
+                            <style>
+                              <class name="rich-list"/>
+                            </style>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
+                </child>
               </object>
             </child>
             <child>
@@ -859,16 +919,31 @@
                     </child>
                   </object>
                 </child>
-              </object>
-            </child>
-            <child>
-              <object class="GtkListBox" id="device_box">
-                <property name="selection-mode">none</property>
-                <property name="halign">center</property>
-                <style>
-                  <class name="rich-list"/>
-                  <class name="boxed-list"/>
-                </style>
+                <child>
+                  <object class="GtkListBoxRow" id="vulkan_extensions_row">
+                    <property name="activatable">0</property>
+                    <child>
+                      <object class="GtkExpander">
+                        <property name="label-widget">
+                          <object class="GtkLabel">
+                            <property name="label" translatable="yes">Extensions</property>
+                            <property name="margin-start">10</property>
+                          </object>
+                        </property>
+                        <child>
+                          <object class="GtkListBox" id="vulkan_extensions_box">
+                            <property name="margin-top">20</property>
+                            <property name="selection-mode">none</property>
+                            <property name="halign">center</property>
+                            <style>
+                              <class name="rich-list"/>
+                            </style>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
+                </child>
               </object>
             </child>
           </object>
@@ -876,30 +951,6 @@
       </object>
     </child>
   </template>
-  <object class="GtkSizeGroup" id="labels">
-    <widgets>
-      <widget name="gtk_version_label"/>
-      <widget name="gdk_backend_label"/>
-      <widget name="gsk_renderer_label"/>
-      <widget name="pango_fontmap_label"/>
-      <widget name="media_backend_label"/>
-      <widget name="app_id_label"/>
-      <widget name="resource_path_label"/>
-      <widget name="display_label"/>
-      <widget name="display_rgba_label"/>
-      <widget name="display_composited_label"/>
-      <widget name="gl_backend_version_label"/>
-      <widget name="gl_backend_vendor_label"/>
-      <widget name="gl_version_label"/>
-      <widget name="gl_vendor_label"/>
-      <widget name="gl_renderer_label"/>
-      <widget name="gl_full_version_label"/>
-      <widget name="glsl_version_label"/>
-      <widget name="vk_device_label"/>
-      <widget name="vk_api_version_label"/>
-      <widget name="vk_driver_version_label"/>
-    </widgets>
-  </object>
   <object class="GtkSizeGroup">
     <widgets>
       <widget name="version_box"/>

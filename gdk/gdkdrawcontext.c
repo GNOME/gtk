@@ -71,7 +71,7 @@ gdk_draw_context_default_surface_resized (GdkDrawContext *context)
 static void
 gdk_draw_context_default_empty_frame (GdkDrawContext *context)
 {
-  g_warning ("FIXME: Implement");
+  g_warning ("FIXME: Implement GdkDrawContext.empty_frame in %s", G_OBJECT_TYPE_NAME (context));
 }
 
 static void
