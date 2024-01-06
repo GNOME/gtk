@@ -487,3 +487,11 @@ gsk_gpu_renderer_get_scale (GskGpuRenderer *self)
 {
   return GSK_GPU_RENDERER_GET_CLASS (self)->get_scale (self);
 }
+
+GskGpuOptimizations
+gsk_gpu_renderer_get_optimizations (GskGpuRenderer *self)
+{
+  GskGpuRendererPrivate *priv = gsk_gpu_renderer_get_instance_private (self);
+
+  return priv->optimizations;
+}
