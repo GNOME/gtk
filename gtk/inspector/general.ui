@@ -528,6 +528,31 @@
                     </child>
                   </object>
                 </child>
+                <child>
+                  <object class="GtkListBoxRow" id="display_extensions_row">
+                    <property name="activatable">0</property>
+                    <child>
+                      <object class="GtkExpander">
+                        <property name="label-widget">
+                          <object class="GtkLabel">
+                            <property name="label" translatable="yes">Protocols</property>
+                            <property name="margin-start">10</property>
+                          </object>
+                        </property>
+                        <child>
+                          <object class="GtkListBox" id="display_extensions_box">
+                            <property name="margin-top">20</property>
+                            <property name="selection-mode">none</property>
+                            <property name="halign">center</property>
+                            <style>
+                              <class name="rich-list"/>
+                            </style>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
+                </child>
               </object>
             </child>
             <child>
@@ -768,6 +793,31 @@
                     </child>
                   </object>
                 </child>
+                <child>
+                  <object class="GtkListBoxRow" id="gl_extensions_row">
+                    <property name="activatable">0</property>
+                    <child>
+                      <object class="GtkExpander">
+                        <property name="label-widget">
+                          <object class="GtkLabel">
+                            <property name="label" translatable="yes">Extensions</property>
+                            <property name="margin-start">10</property>
+                          </object>
+                        </property>
+                        <child>
+                          <object class="GtkListBox" id="gl_extensions_box">
+                            <property name="margin-top">20</property>
+                            <property name="selection-mode">none</property>
+                            <property name="halign">center</property>
+                            <style>
+                              <class name="rich-list"/>
+                            </style>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
+                </child>
               </object>
             </child>
             <child>
@@ -853,6 +903,31 @@
                             <property name="valign">baseline</property>
                             <property name="ellipsize">end</property>
                             <property name="hexpand">1</property>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkListBoxRow" id="vulkan_extensions_row">
+                    <property name="activatable">0</property>
+                    <child>
+                      <object class="GtkExpander">
+                        <property name="label-widget">
+                          <object class="GtkLabel">
+                            <property name="label" translatable="yes">Extensions</property>
+                            <property name="margin-start">10</property>
+                          </object>
+                        </property>
+                        <child>
+                          <object class="GtkListBox" id="vulkan_extensions_box">
+                            <property name="margin-top">20</property>
+                            <property name="selection-mode">none</property>
+                            <property name="halign">center</property>
+                            <style>
+                              <class name="rich-list"/>
+                            </style>
                           </object>
                         </child>
                       </object>
