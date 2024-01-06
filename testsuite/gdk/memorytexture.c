@@ -1,9 +1,6 @@
 #include <gtk/gtk.h>
 
 #include "gsk/gl/gskglrenderer.h"
-#ifdef GDK_RENDERING_VULKAN
-#include "gsk/vulkan/gskvulkanrenderer.h"
-#endif
 
 #include <epoxy/gl.h>
 
@@ -1483,13 +1480,11 @@ main (int argc, char *argv[])
       g_clear_object (&ngl_renderer);
     }
 
-#ifdef GDK_RENDERING_VULKAN
   vulkan_renderer = gsk_vulkan_renderer_new ();
   if (!gsk_renderer_realize (vulkan_renderer, NULL, NULL))
     {
       g_clear_object (&vulkan_renderer);
     }
-#endif
 
   result = g_test_run ();
 

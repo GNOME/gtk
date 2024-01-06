@@ -109,6 +109,7 @@ gsk_private_sources = files([
   'gpu/gskgpuuberop.c',
   'gpu/gskgpuuploadop.c',
   'gpu/gsknglrenderer.c',
+  'gpu/gskvulkanrenderer.c',
 ])
 
 gsk_f16c_sources = files([
@@ -138,20 +139,18 @@ gsk_public_gl_headers = files([
 install_headers(gsk_public_gl_headers, subdir: 'gtk-4.0/gsk/gl')
 gsk_public_headers += gsk_public_gl_headers
 
+gsk_public_gpu_headers = files([
+  'gpu/gskvulkanrenderer.h'
+])
+install_headers(gsk_public_gpu_headers, subdir: 'gtk-4.0/gsk/gpu')
+gsk_public_headers += gsk_public_gpu_headers
+
 if get_variable('broadway_enabled')
   gsk_public_broadway_headers = files([
     'broadway/gskbroadwayrenderer.h'
   ])
   install_headers(gsk_public_broadway_headers, subdir: 'gtk-4.0/gsk/broadway')
   gsk_public_headers += gsk_public_broadway_headers
-endif
-
-if have_vulkan
-  gsk_public_vulkan_headers = files([
-    'vulkan/gskvulkanrenderer.h'
-  ])
-  install_headers(gsk_public_vulkan_headers, subdir: 'gtk-4.0/gsk/vulkan')
-  gsk_public_headers += gsk_public_vulkan_headers
 endif
 
 gsk_private_vulkan_shaders = []
@@ -168,7 +167,6 @@ if have_vulkan
     'gpu/gskvulkanimage.c',
     'gpu/gskvulkanmemory.c',
     'gpu/gskvulkanrealdescriptors.c',
-    'gpu/gskvulkanrenderer.c',
     'gpu/gskvulkansubdescriptors.c',
   ])
 endif # have_vulkan

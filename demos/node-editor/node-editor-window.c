@@ -28,9 +28,6 @@
 #ifdef GDK_WINDOWING_BROADWAY
 #include "gsk/broadway/gskbroadwayrenderer.h"
 #endif
-#ifdef GDK_RENDERING_VULKAN
-#include "gsk/vulkan/gskvulkanrenderer.h"
-#endif
 
 #include <cairo.h>
 #ifdef CAIRO_HAS_SVG_SURFACE

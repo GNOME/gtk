@@ -20,10 +20,6 @@
 #include <gdk/gdk.h>
 #include <gsk/gsk.h>
 
-#ifdef GDK_RENDERING_VULKAN
-
-#include <vulkan/vulkan.h>
-
 G_BEGIN_DECLS
 
 #define GSK_TYPE_VULKAN_RENDERER (gsk_vulkan_renderer_get_type ())
@@ -38,6 +34,8 @@ G_BEGIN_DECLS
  * GskVulkanRenderer:
  *
  * A GSK renderer that is using Vulkan.
+ *
+ * This renderer will fail to realize if Vulkan is not supported.
  */
 typedef struct _GskVulkanRenderer                GskVulkanRenderer;
 typedef struct _GskVulkanRendererClass           GskVulkanRendererClass;
@@ -48,4 +46,6 @@ GType                   gsk_vulkan_renderer_get_type            (void) G_GNUC_CO
 GDK_AVAILABLE_IN_ALL
 GskRenderer *           gsk_vulkan_renderer_new                 (void);
 
-#endif
+G_DEFINE_AUTOPTR_CLEANUP_FUNC(GskVulkanRenderer, g_object_unref)
+
+G_END_DECLS

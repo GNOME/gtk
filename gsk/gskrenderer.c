@@ -38,20 +38,19 @@
 
 #include "gskcairorenderer.h"
 #include "gskdebugprivate.h"
-#include "gl/gskglrenderer.h"
 #include "gskprofilerprivate.h"
 #include "gskrendernodeprivate.h"
 #include "gskoffloadprivate.h"
 
 #include "gskenumtypes.h"
 
+#include "gl/gskglrenderer.h"
+#include "gpu/gskvulkanrenderer.h"
+
 #include <graphene-gobject.h>
 #include <cairo-gobject.h>
 #include <gdk/gdk.h>
 
-#ifdef GDK_RENDERING_VULKAN
-#include "vulkan/gskvulkanrenderer.h"
-#endif
 #ifdef GDK_WINDOWING_X11
 #include <gdk/x11/gdkx.h>
 #endif

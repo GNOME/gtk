@@ -1,9 +1,6 @@
 #include <gtk/gtk.h>
 
 #include "gsk/gl/gskglrenderer.h"
-#ifdef GDK_RENDERING_VULKAN
-#include "gsk/vulkan/gskvulkanrenderer.h"
-#endif
 
 #include <epoxy/gl.h>
 
@@ -25,12 +22,10 @@ struct {
     "cairo",
     gsk_cairo_renderer_new,
   },
-#ifdef GDK_RENDERING_VULKAN
   {
     "vulkan",
     gsk_vulkan_renderer_new,
   },
-#endif
   {
     "ngl",
     gsk_ngl_renderer_new,
