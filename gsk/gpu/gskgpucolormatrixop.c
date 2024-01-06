@@ -17,9 +17,9 @@ struct _GskGpuColorMatrixOp
 
 static void
 gsk_gpu_color_matrix_op_print (GskGpuOp    *op,
-                          GskGpuFrame *frame,
-                          GString     *string,
-                          guint        indent)
+                               GskGpuFrame *frame,
+                               GString     *string,
+                               guint        indent)
 {
   GskGpuShaderOp *shader = (GskGpuShaderOp *) op;
   GskGpuColormatrixInstance *instance;

@@ -17,9 +17,9 @@ struct _GskGpuMaskOp
 
 static void
 gsk_gpu_mask_op_print (GskGpuOp    *op,
-                          GskGpuFrame *frame,
-                          GString     *string,
-                          guint        indent)
+                       GskGpuFrame *frame,
+                       GString     *string,
+                       guint        indent)
 {
   GskGpuShaderOp *shader = (GskGpuShaderOp *) op;
   GskGpuMaskInstance *instance;
