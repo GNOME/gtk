@@ -45,12 +45,12 @@ void     gdk_rectangle_union     (const GdkRectangle *src1,
 
 GDK_AVAILABLE_IN_ALL
 gboolean gdk_rectangle_equal     (const GdkRectangle *rect1,
-                                  const GdkRectangle *rect2);
+                                  const GdkRectangle *rect2) G_GNUC_PURE;
 
 GDK_AVAILABLE_IN_ALL
 gboolean gdk_rectangle_contains_point (const GdkRectangle *rect,
                                        int                 x,
-                                       int                 y);
+                                       int                 y) G_GNUC_PURE;
 
 GDK_AVAILABLE_IN_ALL
 GType gdk_rectangle_get_type (void) G_GNUC_CONST;
