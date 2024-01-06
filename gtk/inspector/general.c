@@ -179,8 +179,6 @@ init_version (GtkInspectorGeneral *gen)
     renderer = "GL";
   else if (strcmp (G_OBJECT_TYPE_NAME (gsk_renderer), "GskCairoRenderer") == 0)
     renderer = "Cairo";
-  else if (strcmp (G_OBJECT_TYPE_NAME (gsk_renderer), "GskVkOldRenderer") == 0)
-    renderer = "Vulkan (old)";
   else if (strcmp (G_OBJECT_TYPE_NAME (gsk_renderer), "GskNglRenderer") == 0)
     renderer = "GL (new)";
   else
