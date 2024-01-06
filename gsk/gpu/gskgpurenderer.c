@@ -24,6 +24,7 @@
 static const GdkDebugKey gsk_gpu_optimization_keys[] = {
   { "uber", GSK_GPU_OPTIMIZE_UBER, "Don't use the uber shader" },
   { "clear", GSK_GPU_OPTIMIZE_CLEAR, "Use shaders instead of vkCmdClearAttachment()/glClear()" },
+  { "merge", GSK_GPU_OPTIMIZE_MERGE, "Use one vkCmdDraw()/glDrawArrays() per operation" },
 };
 
 typedef struct _GskGpuRendererPrivate GskGpuRendererPrivate;

@@ -10,6 +10,12 @@
 #include "gskvulkandeviceprivate.h"
 #endif
 
+/* maximum number of ops to merge into one call
+ * If this number is too high, the command may take too long
+ * causing the driver to kill us.
+ */
+#define MAX_MERGE_OPS (10 * 1000)
+
 const GskGpuShaderImage *
 gsk_gpu_shader_op_get_images (GskGpuShaderOp *op,
                               gsize          *n_images)
@@ -29,10 +35,14 @@ gsk_gpu_shader_op_vk_command_n (GskGpuOp        *op,
   GskGpuShaderOp *self = (GskGpuShaderOp *) op;
   GskGpuShaderOpClass *shader_op_class = (GskGpuShaderOpClass *) op->op_class;
   GskGpuOp *next;
-  gsize i;
+  gsize i, n;
 
+  if (gsk_gpu_frame_should_optimize (frame, GSK_GPU_OPTIMIZE_MERGE))
+    n = MAX_MERGE_OPS;
+  else
+    n = 1;
   i = 1;
-  for (next = op->next; next && i < 10 * 1000; next = next->next)
+  for (next = op->next; next && i < n; next = next->next)
     {
       GskGpuShaderOp *next_shader = (GskGpuShaderOp *) next;
   
