@@ -101,6 +101,7 @@ wayland_enabled  = get_option('wayland-backend')
 broadway_enabled = get_option('broadway-backend')
 macos_enabled    = get_option('macos-backend')
 win32_enabled    = get_option('win32-backend')
+vulkan_enabled   = get_option('vulkan')
 
 os_unix   = false
 os_linux  = false
@@ -122,6 +123,7 @@ os_unix = not os_win32
 
 if os_darwin
   wayland_enabled = false
+  vulkan_enabled = false
 else
   macos_enabled = false
 endif
@@ -616,8 +618,8 @@ endif
 # be reported upstream and fixed.
 vulkan_dep = dependency('vulkan',
                         version: vulkan_req,
-                        required: get_option('vulkan'))
-glslc = find_program('glslc', required: get_option('vulkan'))
+                        required: vulkan_enabled)
+glslc = find_program('glslc', required: vulkan_enabled)
 if vulkan_dep.found()
   have_vulkan = true
   vulkan_pkg_found = vulkan_dep.type_name() == 'pkgconfig'

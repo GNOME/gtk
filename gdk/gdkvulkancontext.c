@@ -1826,6 +1826,8 @@ gdk_display_unref_vulkan (GdkDisplay *display)
   display->vk_instance = VK_NULL_HANDLE;
 }
 
+#ifdef HAVE_DMABUF
+
 /* Hack. We don't include gsk/gsk.h here to avoid a build order problem
  * with the generated header gskenumtypes.h, so we need to hack around
  * a bit to access the gsk api we need.
@@ -1833,10 +1835,10 @@ gdk_display_unref_vulkan (GdkDisplay *display)
 
 typedef struct _GskRenderer GskRenderer;
 
-extern GskRenderer *   gsk_vulkan_renderer_new      (void);
-extern gboolean        gsk_renderer_realize         (GskRenderer  *renderer,
-                                                     GdkSurface   *surface,
-                                                     GError      **error);
+extern GskRenderer *   gsk_vulkan_renderer_new                  (void);
+extern gboolean        gsk_renderer_realize_for_display         (GskRenderer  *renderer,
+                                                                 GdkDisplay   *display,
+                                                                 GError      **error);
 
 GdkDmabufDownloader *
 gdk_vulkan_get_dmabuf_downloader (GdkDisplay              *display,
@@ -1903,7 +1905,7 @@ gdk_vulkan_get_dmabuf_downloader (GdkDisplay              *display,
 
   renderer = gsk_vulkan_renderer_new ();
 
-  if (!gsk_renderer_realize (renderer, NULL, &error))
+  if (!gsk_renderer_realize_for_display (renderer, display, &error))
     {
       g_warning ("Failed to realize GL renderer: %s", error->message);
       g_error_free (error);
@@ -1914,6 +1916,8 @@ gdk_vulkan_get_dmabuf_downloader (GdkDisplay              *display,
 
   return GDK_DMABUF_DOWNLOADER (renderer);
 }
+
+#endif
 
 VkShaderModule
 gdk_display_get_vk_shader_module (GdkDisplay *self,

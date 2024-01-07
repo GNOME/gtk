@@ -162,6 +162,7 @@ gsk_gl_renderer_new (void)
 
 static gboolean
 gsk_gl_renderer_realize (GskRenderer  *renderer,
+                         GdkDisplay   *display,
                          GdkSurface   *surface,
                          GError      **error)
 {
@@ -169,7 +170,6 @@ gsk_gl_renderer_realize (GskRenderer  *renderer,
   GskGLRenderer *self = (GskGLRenderer *)renderer;
   GdkGLContext *context = NULL;
   GskGLDriver *driver = NULL;
-  GdkDisplay *display;
   gboolean ret = FALSE;
   gboolean debug_shaders = FALSE;
   GdkGLAPI api;
@@ -182,15 +182,9 @@ gsk_gl_renderer_realize (GskRenderer  *renderer,
   g_assert (self->command_queue == NULL);
 
   if (surface == NULL)
-    {
-      display = gdk_display_get_default (); /* FIXME: allow different displays somehow ? */
-      context = gdk_display_create_gl_context (display, error);
-    }
+    context = gdk_display_create_gl_context (display, error);
   else
-    {
-      display = gdk_surface_get_display (surface);
-      context = gdk_surface_create_gl_context (surface, error);
-    }
+    context = gdk_surface_create_gl_context (surface, error);
 
   if (!context || !gdk_gl_context_realize (context, error))
     goto failure;

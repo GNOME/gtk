@@ -1,20 +1,26 @@
 #include "config.h"
 
-#include "gsk/vulkan/gskvulkanrenderer.h"
+#include "gskvulkanrenderer.h"
 
 #include "gskgpurendererprivate.h"
+
+#ifdef GDK_RENDERING_VULKAN
+
 #include "gskvulkandeviceprivate.h"
 #include "gskvulkanframeprivate.h"
 #include "gskvulkanimageprivate.h"
 
 #include "gdk/gdkdisplayprivate.h"
+#endif
 
 struct _GskVulkanRenderer
 {
   GskGpuRenderer parent_instance;
 
+#ifdef GDK_RENDERING_VULKAN
   guint n_targets;
   GskGpuImage **targets;
+#endif
 };
 
 struct _GskVulkanRendererClass
@@ -24,6 +30,7 @@ struct _GskVulkanRendererClass
 
 G_DEFINE_TYPE (GskVulkanRenderer, gsk_vulkan_renderer, GSK_TYPE_GPU_RENDERER)
 
+#ifdef GDK_RENDERING_VULKAN
 static void
 gsk_vulkan_renderer_free_targets (GskVulkanRenderer *self)
 {
@@ -82,11 +89,7 @@ gsk_vulkan_renderer_create_context (GskGpuRenderer       *renderer,
   GskVulkanRenderer *self = GSK_VULKAN_RENDERER (renderer);
   GdkVulkanContext *context;
 
-  if (surface)
-    context = gdk_surface_create_vulkan_context (surface, error);
-  else
-    context = gdk_display_create_vulkan_context (display, error);
-
+  context = gdk_display_create_vulkan_context (display, surface, error);
   if (context == NULL)
     return NULL;
 
@@ -171,10 +174,12 @@ gsk_vulkan_renderer_unrealize (GskRenderer *renderer)
 
   GSK_RENDERER_CLASS (gsk_vulkan_renderer_parent_class)->unrealize (renderer);
 }
+#endif
 
 static void
 gsk_vulkan_renderer_class_init (GskVulkanRendererClass *klass)
 {
+#ifdef GDK_RENDERING_VULKAN
   GskGpuRendererClass *gpu_renderer_class = GSK_GPU_RENDERER_CLASS (klass);
   GskRendererClass *renderer_class = GSK_RENDERER_CLASS (klass);
 
@@ -188,6 +193,7 @@ gsk_vulkan_renderer_class_init (GskVulkanRendererClass *klass)
   gpu_renderer_class->get_dmabuf_formats = gsk_vulkan_renderer_get_dmabuf_formats;
 
   renderer_class->unrealize = gsk_vulkan_renderer_unrealize;
+#endif
 }
 
 static void
@@ -203,8 +209,8 @@ gsk_vulkan_renderer_init (GskVulkanRenderer *self)
  * The Vulkan renderer is a renderer that uses the Vulkan library for
  * rendering.
  *
- * This function is only available when GTK was compiled with Vulkan
- * support.
+ * This renderer will fail to realize when GTK was not compiled with
+ * Vulkan support.
  *
  * Returns: a new Vulkan renderer
  **/

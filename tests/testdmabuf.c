@@ -6,6 +6,9 @@
 #include <linux/dma-heap.h>
 #include <drm_fourcc.h>
 
+#ifdef GDK_RENDERING_VULKAN
+#include <vulkan/vulkan.h>
+#endif
 /* For this to work, you may need to give /dev/dma_heap/system
  * lax permissions.
  */

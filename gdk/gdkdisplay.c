@@ -1267,12 +1267,14 @@ gdk_display_get_keymap (GdkDisplay *display)
 /*<private>
  * gdk_display_create_vulkan_context:
  * @self: a `GdkDisplay`
+ * @surface: (nullable): the `GdkSurface` to use or %NULL for a surfaceless
+ *   context
  * @error: return location for an error
  *
  * Creates a new `GdkVulkanContext` for use with @display.
  *
- * The context can not be used to draw to surfaces, it can only be
- * used for custom rendering or compute.
+ * If @surface is NULL, the context can not be used to draw to surfaces,
+ * it can only be used for custom rendering or compute.
  *
  * If the creation of the `GdkVulkanContext` failed, @error will be set.
  *
@@ -1281,9 +1283,11 @@ gdk_display_get_keymap (GdkDisplay *display)
  */
 GdkVulkanContext *
 gdk_display_create_vulkan_context (GdkDisplay  *self,
+                                   GdkSurface  *surface,
                                    GError     **error)
 {
   g_return_val_if_fail (GDK_IS_DISPLAY (self), NULL);
+  g_return_val_if_fail (surface == NULL || GDK_IS_SURFACE (surface), NULL);
   g_return_val_if_fail (error == NULL || *error == NULL, NULL);
 
   if (gdk_display_get_debug_flags (self) & GDK_DEBUG_VULKAN_DISABLE)
@@ -1300,11 +1304,22 @@ gdk_display_create_vulkan_context (GdkDisplay  *self,
       return FALSE;
     }
 
-  return g_initable_new (GDK_DISPLAY_GET_CLASS (self)->vk_context_type,
-                         NULL,
-                         error,
-                         "display", self,
-                         NULL);
+  if (surface)
+    {
+      return g_initable_new (GDK_DISPLAY_GET_CLASS (self)->vk_context_type,
+                             NULL,
+                             error,
+                             "surface", surface,
+                             NULL);
+    }
+  else
+    {
+      return g_initable_new (GDK_DISPLAY_GET_CLASS (self)->vk_context_type,
+                             NULL,
+                             error,
+                             "display", self,
+                             NULL);
+    }
 }
 
 gboolean

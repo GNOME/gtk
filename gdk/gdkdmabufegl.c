@@ -140,10 +140,10 @@ gdk_dmabuf_egl_downloader_collect_formats (GdkDisplay                *display,
 
 typedef struct _GskRenderer GskRenderer;
 
-extern GskRenderer *   gsk_gl_renderer_new          (void);
-extern gboolean        gsk_renderer_realize         (GskRenderer  *renderer,
-                                                     GdkSurface   *surface,
-                                                     GError      **error);
+extern GskRenderer *   gsk_gl_renderer_new                      (void);
+extern gboolean        gsk_renderer_realize_for_display         (GskRenderer  *renderer,
+                                                                 GdkDisplay   *display,
+                                                                 GError      **error);
 
 GdkDmabufDownloader *
 gdk_dmabuf_get_egl_downloader (GdkDisplay              *display,
@@ -176,7 +176,7 @@ gdk_dmabuf_get_egl_downloader (GdkDisplay              *display,
 
   renderer = gsk_gl_renderer_new ();
 
-  if (!gsk_renderer_realize (renderer, NULL, &error))
+  if (!gsk_renderer_realize_for_display (renderer, display, &error))
     {
       g_warning ("Failed to realize GL renderer: %s", error->message);
       g_error_free (error);

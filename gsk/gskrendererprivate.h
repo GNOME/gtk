@@ -41,6 +41,7 @@ struct _GskRendererClass
   gboolean supports_offload;
 
   gboolean             (* realize)                              (GskRenderer            *renderer,
+                                                                 GdkDisplay             *display,
                                                                  GdkSurface             *surface,
                                                                  GError                **error);
   void                 (* unrealize)                            (GskRenderer            *renderer);

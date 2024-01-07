@@ -1,10 +1,5 @@
 #include <gtk/gtk.h>
 
-#include "gsk/gl/gskglrenderer.h"
-#ifdef GDK_RENDERING_VULKAN
-#include "gsk/vulkan/gskvulkanrenderer.h"
-#endif
-
 #include <epoxy/gl.h>
 
 #define N 10
@@ -1456,6 +1451,7 @@ add_conversion_test (const char    *name,
 int
 main (int argc, char *argv[])
 {
+  GdkDisplay *display;
   int result;
 
   gtk_test_init (&argc, &argv, NULL);
@@ -1465,31 +1461,31 @@ main (int argc, char *argv[])
   add_conversion_test ("/memorytexture/conversion_1x1", test_conversion_1x1);
   add_conversion_test ("/memorytexture/conversion_random", test_conversion_random);
 
-  gl_context = gdk_display_create_gl_context (gdk_display_get_default (), NULL);
+  display = gdk_display_get_default ();
+
+  gl_context = gdk_display_create_gl_context (display, NULL);
   if (gl_context == NULL || !gdk_gl_context_realize (gl_context, NULL))
     {
       g_clear_object (&gl_context);
     }
 
   gl_renderer = gsk_gl_renderer_new ();
-  if (!gsk_renderer_realize (gl_renderer, NULL, NULL))
+  if (!gsk_renderer_realize_for_display (gl_renderer, display, NULL))
     {
       g_clear_object (&gl_renderer);
     }
 
   ngl_renderer = gsk_ngl_renderer_new ();
-  if (!gsk_renderer_realize (ngl_renderer, NULL, NULL))
+  if (!gsk_renderer_realize_for_display (ngl_renderer, display, NULL))
     {
       g_clear_object (&ngl_renderer);
     }
 
-#ifdef GDK_RENDERING_VULKAN
   vulkan_renderer = gsk_vulkan_renderer_new ();
-  if (!gsk_renderer_realize (vulkan_renderer, NULL, NULL))
+  if (!gsk_renderer_realize_for_display (vulkan_renderer, display, NULL))
     {
       g_clear_object (&vulkan_renderer);
     }
-#endif
 
   result = g_test_run ();
 

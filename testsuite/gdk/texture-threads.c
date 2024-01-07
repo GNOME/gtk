@@ -1,7 +1,5 @@
 #include <gtk/gtk.h>
 
-#include "gsk/gl/gskglrenderer.h"
-
 /* This function will be called from a thread and/or the main loop.
  * Textures are threadsafe after all. */
 static void
@@ -67,7 +65,7 @@ texture_threads (void)
 
   /* 1. Get a GL renderer */
   gl_renderer = gsk_gl_renderer_new ();
-  if (!gsk_renderer_realize (gl_renderer, NULL, &error))
+  if (!gsk_renderer_realize_for_display (gl_renderer, gdk_display_get_default (), &error))
     {
       g_test_skip (error->message);
 

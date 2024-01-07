@@ -1,12 +1,5 @@
 #include <gtk/gtk.h>
 
-#include "gsk/gl/gskglrenderer.h"
-#ifdef GDK_RENDERING_VULKAN
-#include "gsk/vulkan/gskvulkanrenderer.h"
-#endif
-
-#include <epoxy/gl.h>
-
 #define N 10
 
 struct {
@@ -25,12 +18,10 @@ struct {
     "cairo",
     gsk_cairo_renderer_new,
   },
-#ifdef GDK_RENDERING_VULKAN
   {
     "vulkan",
     gsk_vulkan_renderer_new,
   },
-#endif
   {
     "ngl",
     gsk_ngl_renderer_new,
@@ -1051,7 +1042,7 @@ create_renderers (void)
   for (i = 0; i < G_N_ELEMENTS (renderers); i++)
     {
       renderers[i].renderer = renderers[i].create_func ();
-      if (!gsk_renderer_realize (renderers[i].renderer, NULL, &error))
+      if (!gsk_renderer_realize_for_display (renderers[i].renderer, gdk_display_get_default (), &error))
         {
           g_test_message ("Could not realize %s renderer: %s", renderers[i].name, error->message);
           g_clear_error (&error);

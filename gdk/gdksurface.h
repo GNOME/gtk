@@ -134,7 +134,7 @@ GdkCairoContext *gdk_surface_create_cairo_context(GdkSurface    *surface);
 GDK_AVAILABLE_IN_ALL
 GdkGLContext * gdk_surface_create_gl_context    (GdkSurface     *surface,
                                                  GError        **error);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_14
 GdkVulkanContext *
                gdk_surface_create_vulkan_context(GdkSurface     *surface,
                                                  GError        **error);

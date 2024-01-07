@@ -26,10 +26,6 @@
 
 #include <gdk/gdktypes.h>
 
-#ifdef GDK_RENDERING_VULKAN
-#include <vulkan/vulkan.h>
-#endif
-
 G_BEGIN_DECLS
 
 #define GDK_TYPE_VULKAN_CONTEXT             (gdk_vulkan_context_get_type ())
@@ -43,37 +39,6 @@ GQuark gdk_vulkan_error_quark (void);
 
 GDK_AVAILABLE_IN_ALL
 GType gdk_vulkan_context_get_type (void) G_GNUC_CONST;
-
-#ifndef __GI_SCANNER__
-#ifdef GDK_RENDERING_VULKAN
-
-GDK_AVAILABLE_IN_ALL
-const char *            gdk_vulkan_strerror                         (VkResult           result);
-
-GDK_AVAILABLE_IN_ALL
-VkInstance              gdk_vulkan_context_get_instance             (GdkVulkanContext  *context);
-GDK_AVAILABLE_IN_ALL
-VkPhysicalDevice        gdk_vulkan_context_get_physical_device      (GdkVulkanContext  *context);
-GDK_AVAILABLE_IN_ALL
-VkDevice                gdk_vulkan_context_get_device               (GdkVulkanContext  *context);
-GDK_AVAILABLE_IN_ALL
-VkQueue                 gdk_vulkan_context_get_queue                (GdkVulkanContext  *context);
-GDK_AVAILABLE_IN_ALL
-uint32_t                gdk_vulkan_context_get_queue_family_index   (GdkVulkanContext  *context);
-GDK_AVAILABLE_IN_ALL
-VkFormat                gdk_vulkan_context_get_image_format         (GdkVulkanContext  *context);
-GDK_AVAILABLE_IN_ALL
-uint32_t                gdk_vulkan_context_get_n_images             (GdkVulkanContext  *context);
-GDK_AVAILABLE_IN_ALL
-VkImage                 gdk_vulkan_context_get_image                (GdkVulkanContext  *context,
-                                                                     guint              id);
-GDK_AVAILABLE_IN_ALL
-uint32_t                gdk_vulkan_context_get_draw_index           (GdkVulkanContext  *context);
-GDK_AVAILABLE_IN_ALL
-VkSemaphore             gdk_vulkan_context_get_draw_semaphore       (GdkVulkanContext  *context);
-
-#endif /* GDK_RENDERING_VULKAN */
-#endif /* __GI_SCANNER__ */
 
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GdkVulkanContext, g_object_unref)
 
