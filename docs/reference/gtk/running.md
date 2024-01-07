@@ -274,49 +274,46 @@ are only available when GTK has been configured with `-Ddebug=true`.
 `renderer`
 : General renderer information
 
-`cairo`
-: cairo renderer information
-
 `opengl`
 : OpenGL renderer information
-
-`shaders`
-: Shaders
-
-`surface`
-: Surfaces
 
 `vulkan`
 : Vulkan renderer information
 
+`shaders`
+: Information about shaders
+
+`surface`
+: Information about surfaces
+
 `fallback`
-: Information about fallbacks
+: Information about fallback usage in renderers
 
 `glyphcache`
 : Information about glyph caching
 
+`verbose`
+: Print verbose output while rendering
+
 A number of options affect behavior instead of logging:
 
-`diff`
-: Show differences
-
 `geometry`
-: Show borders
+: Show borders (when using cairo)
 
 `full-redraw`
-: Force full redraws for every frame
+: Force full redraws
 
 `sync`
 : Sync after each frame
 
+`staging`
+: Use a staging image for texture upload (Vulkan only)
+
 `offload-disable`
 : Disable graphics offload to subsurfaces
 
-`vulkan-staging-image`
-: Use a staging image for Vulkan texture upload
-
-`vulkan-staging-buffer`
-: Use a staging buffer for Vulkan texture upload
+`cairo`
+: Overlay error pattern over cairo drawing (finds fallbacks)
 
 The special value `all` can be used to turn on all debug options. The special
 value `help` can be used to obtain a list of all supported debug options.
@@ -357,6 +354,40 @@ the default selection of the device that is used for Vulkan rendering.
 The special value `list` can be used to obtain a list of all Vulkan
 devices.
 
+### `GDK_VULKAN_SKIP`
+
+This variable can be set to a list of values, which cause GDK to
+disable features of the Vulkan support.  
+Note that these features may already be disabled if the Vulkan driver
+does not support them.
+
+`dmabuf`
+: Never import Dmabufs
+
+`ycbr`
+: Do not support Ycbcr textures
+
+`descriptor-indexing`
+: Force slow descriptor set layout codepath
+
+`dynamic-indexing`
+: Hardcode small number of buffer and texure arrays
+
+`nonuniform-indexing`
+: Split draw calls to ensure uniform texture accesses
+
+`semaphore-export`
+: Disable sync of exported dmabufs
+
+`semaphore-import`
+: Disable sync of imported dmabufs
+
+`incremental-present`
+: Do not send damage regions
+
+The special value `all` can be used to turn on all values. The special
+value `help` can be used to obtain a list of all supported values.
+
 ### `GSK_RENDERER`
 
 If set, selects the GSK renderer to use. The following renderers can
@@ -378,6 +409,9 @@ using and the GDK backend supports them:
 `gl`
 : Selects the "gl" OpenGL renderer
 
+`ngl`
+: Selects the "ngl" OpenGL renderer
+
 `vulkan`
 : Selects the Vulkan renderer
 
@@ -394,6 +428,32 @@ nVidia graphics driver and/or the Nahimic 3 code, we are not able
 to rememdy this on the GTK side; the best bet before trying the above
 workarounds is to try to update your graphics drivers and Nahimic
 installation.
+
+### `GSK_GPU_SKIP`
+
+This variable can be set to a list of values, which cause GSK to
+disable certain optimizations of the "ngl" and "vulkan" renderer.
+
+`uber`
+: Don't use the uber shader
+
+`clear`
+: Use shaders instead of vkCmdClearAttachment()/glClear()
+
+`blit`
+: Use shaders instead of vkCmdBlit()/glBlitFramebuffer()
+
+`gradients`
+: Don't supersample gradients
+
+`mipmap`
+: Avoid creating mipmaps
+
+`gl-baseinstance`
+: Assume no ARB/EXT_base_instance support
+
+The special value `all` can be used to turn on all values. The special
+value `help` can be used to obtain a list of all supported values.
 
 ### `GSK_MAX_TEXTURE_SIZE`
 

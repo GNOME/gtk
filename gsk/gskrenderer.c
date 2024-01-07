@@ -49,6 +49,9 @@
 #include <cairo-gobject.h>
 #include <gdk/gdk.h>
 
+#ifdef GDK_RENDERING_VULKAN
+#include "vulkan/gskvulkanrenderer.h"
+#endif
 #ifdef GDK_WINDOWING_X11
 #include <gdk/x11/gdkx.h>
 #endif
@@ -57,9 +60,6 @@
 #endif
 #ifdef GDK_WINDOWING_BROADWAY
 #include "broadway/gskbroadwayrenderer.h"
-#endif
-#ifdef GDK_RENDERING_VULKAN
-#include "vulkan/gskvulkanrenderer.h"
 #endif
 #ifdef GDK_WINDOWING_MACOS
 #include <gdk/macos/gdkmacos.h>
@@ -507,6 +507,8 @@ get_renderer_for_name (const char *renderer_name)
   else if (g_ascii_strcasecmp (renderer_name, "opengl") == 0 ||
            g_ascii_strcasecmp (renderer_name, "gl") == 0)
     return GSK_TYPE_GL_RENDERER;
+  else if (g_ascii_strcasecmp (renderer_name, "ngl") == 0)
+    return gsk_ngl_renderer_get_type ();
 #ifdef GDK_RENDERING_VULKAN
   else if (g_ascii_strcasecmp (renderer_name, "vulkan") == 0)
     return GSK_TYPE_VULKAN_RENDERER;
@@ -515,13 +517,14 @@ get_renderer_for_name (const char *renderer_name)
     {
       g_print ("Supported arguments for GSK_RENDERER environment variable:\n");
 #ifdef GDK_WINDOWING_BROADWAY
-      g_print ("broadway - Use the Broadway specific renderer\n");
+      g_print ("  broadway - Use the Broadway specific renderer\n");
 #else
-      g_print ("broadway - Disabled during GTK build\n");
+      g_print ("  broadway - Disabled during GTK build\n");
 #endif
       g_print ("   cairo - Use the Cairo fallback renderer\n");
       g_print ("  opengl - Use the OpenGL renderer\n");
       g_print ("      gl - Use the OpenGL renderer\n");
+      g_print ("     ngl - Use the new OpenGL renderer\n");
 #ifdef GDK_RENDERING_VULKAN
       g_print ("  vulkan - Use the Vulkan renderer\n");
 #else
@@ -565,28 +568,28 @@ get_renderer_for_env_var (GdkSurface *surface)
 static GType
 get_renderer_for_backend (GdkSurface *surface)
 {
-#ifdef GDK_WINDOWING_X11
-  if (GDK_IS_X11_SURFACE (surface))
-    return GSK_TYPE_GL_RENDERER;
-#endif
-#ifdef GDK_WINDOWING_WAYLAND
-  if (GDK_IS_WAYLAND_SURFACE (surface))
-    return GSK_TYPE_GL_RENDERER;
-#endif
 #ifdef GDK_WINDOWING_BROADWAY
   if (GDK_IS_BROADWAY_SURFACE (surface))
     return GSK_TYPE_BROADWAY_RENDERER;
 #endif
-#ifdef GDK_WINDOWING_MACOS
-  if (GDK_IS_MACOS_SURFACE (surface))
-    return GSK_TYPE_GL_RENDERER;
-#endif
-#ifdef GDK_WINDOWING_WIN32
-  if (GDK_IS_WIN32_SURFACE (surface))
-    return GSK_TYPE_GL_RENDERER;
-#endif
 
   return G_TYPE_INVALID;
+}
+
+static GType
+get_renderer_for_gl (GdkSurface *surface)
+{
+  return GSK_TYPE_GL_RENDERER;
+}
+
+static GType
+get_renderer_for_vulkan (GdkSurface *surface)
+{
+#ifdef GDK_RENDERING_VULKAN
+  return GSK_TYPE_VULKAN_RENDERER;
+#else
+  return G_TYPE_INVALID;
+#endif
 }
 
 static GType
@@ -601,6 +604,8 @@ static struct {
   { get_renderer_for_display },
   { get_renderer_for_env_var },
   { get_renderer_for_backend },
+  { get_renderer_for_gl },
+  { get_renderer_for_vulkan },
   { get_renderer_fallback },
 };
 

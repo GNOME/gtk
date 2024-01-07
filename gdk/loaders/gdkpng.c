@@ -419,6 +419,9 @@ gdk_save_png (GdkTexture *texture)
   if (!png)
     return NULL;
 
+  /* 2^31-1 is the maximum size for PNG files */
+  png_set_user_limits (png, (1u << 31) - 1, (1u << 31) - 1);
+
   info = png_create_info_struct (png);
   if (!info)
     {

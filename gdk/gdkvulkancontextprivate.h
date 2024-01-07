@@ -23,6 +23,8 @@
 #include "gdkvulkancontext.h"
 
 #include "gdkdebugprivate.h"
+#include "gdkdmabufprivate.h"
+#include "gdkdmabufdownloaderprivate.h"
 #include "gdkdrawcontextprivate.h"
 #include "gdkenums.h"
 
@@ -69,15 +71,18 @@ gdk_vulkan_handle_result (VkResult    res,
 
 #define GDK_VK_CHECK(func, ...) gdk_vulkan_handle_result (func (__VA_ARGS__), G_STRINGIFY (func))
 
-gboolean                gdk_display_ref_vulkan                          (GdkDisplay            *display,
+gboolean                gdk_display_init_vulkan                         (GdkDisplay            *display,
                                                                          GError               **error);
+void                    gdk_display_ref_vulkan                          (GdkDisplay            *display);
 void                    gdk_display_unref_vulkan                        (GdkDisplay            *display);
+
+GdkDmabufDownloader *   gdk_vulkan_get_dmabuf_downloader                (GdkDisplay            *display,
+                                                                         GdkDmabufFormatsBuilder *builder);
 
 VkShaderModule          gdk_display_get_vk_shader_module                (GdkDisplay            *display,
                                                                          const char            *resource_name);
 
-VkPipelineCache         gdk_vulkan_context_get_pipeline_cache           (GdkVulkanContext      *self);
-void                    gdk_vulkan_context_pipeline_cache_updated       (GdkVulkanContext      *self);
+void                    gdk_display_vulkan_pipeline_cache_updated       (GdkDisplay            *display);
 
 GdkMemoryFormat         gdk_vulkan_context_get_offscreen_format         (GdkVulkanContext      *context,
                                                                          GdkMemoryDepth         depth);

@@ -1,6 +1,7 @@
 #pragma once
 
 #include <graphene.h>
+#include <math.h>
 
 static inline void
 gsk_rect_init (graphene_rect_t *r,
@@ -20,6 +21,15 @@ gsk_rect_init_from_rect (graphene_rect_t       *r,
                          const graphene_rect_t *r1)
 {
   gsk_rect_init (r, r1->origin.x, r1->origin.y, r1->size.width, r1->size.height);
+}
+
+static inline void
+gsk_rect_init_offset (graphene_rect_t       *r,
+                      const graphene_rect_t *src,
+                      float                  dx,
+                      float                  dy)
+{
+  gsk_rect_init (r, src->origin.x + dx, src->origin.y + dy, src->size.width, src->size.height);
 }
 
 static inline gboolean G_GNUC_PURE
@@ -75,6 +85,12 @@ gsk_rect_intersection (const graphene_rect_t *r1,
     }
 }
 
+static inline gboolean G_GNUC_PURE
+gsk_rect_is_empty (const graphene_rect_t *rect)
+{
+  return rect->size.width == 0 || rect->size.height == 0;
+}
+
 static inline void
 gsk_rect_to_float (const graphene_rect_t *rect,
                    float                  values[4])
@@ -94,3 +110,25 @@ gsk_rect_equal (const graphene_rect_t *r1,
          r1->size.width == r2->size.width &&
          r1->size.height == r2->size.height;
 }
+
+static inline void
+gsk_gpu_rect_to_float (const graphene_rect_t  *rect,
+                       const graphene_point_t *offset,
+                       float                   values[4])
+{
+  values[0] = rect->origin.x + offset->x;
+  values[1] = rect->origin.y + offset->y;
+  values[2] = rect->size.width;
+  values[3] = rect->size.height;
+}
+
+static inline void
+gsk_rect_round_larger (graphene_rect_t *rect)
+{
+  float x = floor (rect->origin.x);
+  float y = floor (rect->origin.y);
+  *rect = GRAPHENE_RECT_INIT (x, y,
+                              ceil (rect->origin.x + rect->size.width) - x,
+                              ceil (rect->origin.y + rect->size.height) - y);
+}
+

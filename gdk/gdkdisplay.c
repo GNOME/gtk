@@ -40,7 +40,7 @@
 #include "gdkglcontextprivate.h"
 #include "gdkmonitorprivate.h"
 #include "gdkrectangle.h"
-#include "gdkvulkancontext.h"
+#include "gdkvulkancontextprivate.h"
 
 #ifdef HAVE_EGL
 #include <epoxy/egl.h>
@@ -416,6 +416,13 @@ gdk_display_dispose (GObject *object)
 
   g_clear_pointer (&display->egl_dmabuf_formats, gdk_dmabuf_formats_unref);
   g_clear_pointer (&display->egl_external_formats, gdk_dmabuf_formats_unref);
+#ifdef GDK_RENDERING_VULKAN
+  if (display->vk_dmabuf_formats)
+    {
+      gdk_display_unref_vulkan (display);
+      g_assert (display->vk_dmabuf_formats == NULL);
+    }
+#endif
 
   g_clear_object (&priv->gl_context);
 #ifdef HAVE_EGL
@@ -1300,6 +1307,17 @@ gdk_display_create_vulkan_context (GdkDisplay  *self,
                          NULL);
 }
 
+gboolean
+gdk_display_has_vulkan_feature (GdkDisplay        *self,
+                                GdkVulkanFeatures  feature)
+{
+#ifdef GDK_RENDERING_VULKAN
+  return !!(self->vulkan_features & feature);
+#else
+  return FALSE;
+#endif
+}
+
 static void
 gdk_display_init_gl (GdkDisplay *self)
 {
@@ -1939,6 +1957,10 @@ gdk_display_init_dmabuf (GdkDisplay *self)
 #ifdef HAVE_DMABUF
   if (!GDK_DISPLAY_DEBUG_CHECK (self, DMABUF_DISABLE))
     {
+#ifdef GDK_RENDERING_VULKAN
+      gdk_display_add_dmabuf_downloader (self, gdk_vulkan_get_dmabuf_downloader (self, builder));
+#endif
+
 #ifdef HAVE_EGL
       gdk_display_add_dmabuf_downloader (self, gdk_dmabuf_get_egl_downloader (self, builder));
 #endif

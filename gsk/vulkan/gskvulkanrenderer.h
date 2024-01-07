@@ -48,7 +48,4 @@ GType                   gsk_vulkan_renderer_get_type            (void) G_GNUC_CO
 GDK_AVAILABLE_IN_ALL
 GskRenderer *           gsk_vulkan_renderer_new                 (void);
 
-G_END_DECLS
-
-#endif /* GDK_RENDERING_VULKAN */
-
+#endif
