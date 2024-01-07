@@ -2,6 +2,8 @@
 
 #include <gdk/gdk.h>
 
+#include <vulkan/vulkan.h>
+
 G_BEGIN_DECLS
 
 #define GSK_VULKAN_MEMORY_MAPPABLE (VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | \

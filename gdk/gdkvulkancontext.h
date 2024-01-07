@@ -26,10 +26,6 @@
 
 #include <gdk/gdktypes.h>
 
-#ifdef GDK_RENDERING_VULKAN
-#include <vulkan/vulkan.h>
-#endif
-
 G_BEGIN_DECLS
 
 #define GDK_TYPE_VULKAN_CONTEXT             (gdk_vulkan_context_get_type ())
