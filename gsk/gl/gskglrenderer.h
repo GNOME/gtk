@@ -20,7 +20,13 @@
 
 #pragma once
 
+#if !defined (__GSK_H_INSIDE__) && !defined (GTK_COMPILATION)
 #include <gsk/gsk.h>
+#define GSK_INCLUDE_WARNING(x) GDK_DEPRECATED_IN_4_14_FOR("#include <gsk/gsk.h> instead of <gsk/gl/gskglrenderer.h> to avoid this warning")
+#else
+#include <gsk/gsktypes.h>
+#define GSK_INCLUDE_WARNING(x) x
+#endif
 
 G_BEGIN_DECLS
 
@@ -35,14 +41,14 @@ G_BEGIN_DECLS
 typedef struct _GskGLRenderer      GskGLRenderer;
 typedef struct _GskGLRendererClass GskGLRendererClass;
 
-GDK_AVAILABLE_IN_4_2
+GSK_INCLUDE_WARNING(GDK_AVAILABLE_IN_4_2)
 GType        gsk_gl_renderer_get_type (void) G_GNUC_CONST;
-GDK_AVAILABLE_IN_4_2
+GSK_INCLUDE_WARNING(GDK_AVAILABLE_IN_4_2)
 GskRenderer *gsk_gl_renderer_new      (void);
 
-GDK_AVAILABLE_IN_ALL
+GSK_INCLUDE_WARNING(GDK_AVAILABLE_IN_ALL)
 GType        gsk_ngl_renderer_get_type (void) G_GNUC_CONST;
-GDK_AVAILABLE_IN_ALL
+GSK_INCLUDE_WARNING(GDK_AVAILABLE_IN_ALL)
 GskRenderer *gsk_ngl_renderer_new      (void);
 G_END_DECLS
 
