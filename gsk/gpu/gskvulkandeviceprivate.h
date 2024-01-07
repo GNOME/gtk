@@ -6,8 +6,8 @@
 #include "gskgpuclipprivate.h"
 #include "gskvulkanmemoryprivate.h"
 
-#include <gdk/gdkvulkancontext.h>
 #include "gdk/gdkdisplayprivate.h"
+#include "gdk/gdkvulkancontextprivate.h"
 
 G_BEGIN_DECLS
 

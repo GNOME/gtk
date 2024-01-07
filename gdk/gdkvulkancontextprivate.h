@@ -57,6 +57,8 @@ struct _GdkVulkanContextClass
 
 #ifdef GDK_RENDERING_VULKAN
 
+const char *            gdk_vulkan_strerror                         (VkResult           result);
+
 static inline VkResult
 gdk_vulkan_handle_result (VkResult    res,
                           const char *called_function)
@@ -83,6 +85,18 @@ VkShaderModule          gdk_display_get_vk_shader_module                (GdkDisp
                                                                          const char            *resource_name);
 
 void                    gdk_display_vulkan_pipeline_cache_updated       (GdkDisplay            *display);
+
+VkInstance              gdk_vulkan_context_get_instance                 (GdkVulkanContext      *context);
+VkPhysicalDevice        gdk_vulkan_context_get_physical_device          (GdkVulkanContext      *context);
+VkDevice                gdk_vulkan_context_get_device                   (GdkVulkanContext      *context);
+VkQueue                 gdk_vulkan_context_get_queue                    (GdkVulkanContext      *context);
+uint32_t                gdk_vulkan_context_get_queue_family_index       (GdkVulkanContext      *context);
+VkFormat                gdk_vulkan_context_get_image_format             (GdkVulkanContext      *context);
+uint32_t                gdk_vulkan_context_get_n_images                 (GdkVulkanContext      *context);
+VkImage                 gdk_vulkan_context_get_image                    (GdkVulkanContext      *context,
+                                                                         guint                  id);
+uint32_t                gdk_vulkan_context_get_draw_index               (GdkVulkanContext      *context);
+VkSemaphore             gdk_vulkan_context_get_draw_semaphore           (GdkVulkanContext      *context);
 
 GdkMemoryFormat         gdk_vulkan_context_get_offscreen_format         (GdkVulkanContext      *context,
                                                                          GdkMemoryDepth         depth);
