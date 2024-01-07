@@ -988,7 +988,7 @@ gtk_video_get_graphics_offload (GtkVideo *self)
 {
   g_return_val_if_fail (GTK_IS_VIDEO (self), GTK_GRAPHICS_OFFLOAD_DISABLED);
 
-  return gtk_graphics_offload_get_enabled (GTK_GRAPHICS_OFFLOAD (self->graphics_offload));;
+  return gtk_graphics_offload_get_enabled (GTK_GRAPHICS_OFFLOAD (self->graphics_offload));
 }
 
 /**
