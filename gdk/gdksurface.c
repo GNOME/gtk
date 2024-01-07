@@ -1246,43 +1246,20 @@ gdk_surface_create_cairo_context (GdkSurface *surface)
  * @surface: a `GdkSurface`
  * @error: return location for an error
  *
- * Creates a new `GdkVulkanContext` for rendering on @surface.
+ * Sets an error and returns %NULL.
  *
- * If the creation of the `GdkVulkanContext` failed, @error will be set.
+ * Returns: (transfer full): %NULL
  *
- * Returns: (transfer full): the newly created `GdkVulkanContext`, or
- *   %NULL on error
+ * Deprecated: 4.14: GTK does not expose any Vulkan internals. This
+ *   function is a leftover that was accidentally exposed.
  */
 GdkVulkanContext *
 gdk_surface_create_vulkan_context (GdkSurface  *surface,
                                    GError    **error)
 {
-  GdkDisplay *display;
-
-  g_return_val_if_fail (GDK_IS_SURFACE (surface), NULL);
-  g_return_val_if_fail (error == NULL || *error == NULL, NULL);
-
-  if (gdk_display_get_debug_flags (surface->display) & GDK_DEBUG_VULKAN_DISABLE)
-    {
-      g_set_error_literal (error, GDK_VULKAN_ERROR, GDK_VULKAN_ERROR_NOT_AVAILABLE,
-                           _("Vulkan support disabled via GDK_DEBUG"));
-      return NULL;
-    }
-
-  display = surface->display;
-
-  if (GDK_DISPLAY_GET_CLASS (display)->vk_extension_name == NULL)
-    {
-      g_set_error (error, GDK_VULKAN_ERROR, GDK_VULKAN_ERROR_UNSUPPORTED,
-                   "The %s backend has no Vulkan support.", G_OBJECT_TYPE_NAME (display));
-      return FALSE;
-    }
-
-  return g_initable_new (GDK_DISPLAY_GET_CLASS (display)->vk_context_type,
-                         NULL,
-                         error,
-                         "surface", surface,
-                         NULL);
+  g_set_error (error, GDK_VULKAN_ERROR, GDK_VULKAN_ERROR_UNSUPPORTED,
+               "GTK does not expose Vulkan internals.");
+  return FALSE;
 }
 
 static gboolean
