@@ -89,11 +89,7 @@ gsk_vulkan_renderer_create_context (GskGpuRenderer       *renderer,
   GskVulkanRenderer *self = GSK_VULKAN_RENDERER (renderer);
   GdkVulkanContext *context;
 
-  if (surface)
-    context = gdk_surface_create_vulkan_context (surface, error);
-  else
-    context = gdk_display_create_vulkan_context (display, error);
-
+  context = gdk_display_create_vulkan_context (display, surface, error);
   if (context == NULL)
     return NULL;
 

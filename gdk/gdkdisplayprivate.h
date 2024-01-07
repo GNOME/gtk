@@ -236,6 +236,7 @@ void                gdk_display_init_dmabuf           (GdkDisplay       *self);
 gboolean            gdk_display_has_vulkan_feature    (GdkDisplay       *self,
                                                        GdkVulkanFeatures feature);
 GdkVulkanContext *  gdk_display_create_vulkan_context (GdkDisplay       *self,
+                                                       GdkSurface       *surface,
                                                        GError          **error);
 
 GdkGLContext *      gdk_display_get_gl_context        (GdkDisplay       *display);
