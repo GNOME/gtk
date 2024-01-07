@@ -24,7 +24,6 @@
 #include "gtkrendererpaintableprivate.h"
 
 #include "gsk/gskrendernodeparserprivate.h"
-#include "gsk/gl/gskglrenderer.h"
 #ifdef GDK_WINDOWING_BROADWAY
 #include "gsk/broadway/gskbroadwayrenderer.h"
 #endif
