@@ -293,6 +293,8 @@ gsk_renderer_do_realize (GskRenderer  *renderer,
  *
  * Since GTK 4.6, the surface may be `NULL`, which allows using
  * renderers without having to create a surface.
+ * Since GTK 4.14, it is recommended to use [method@Gsk.Renderer.realize_for_display]
+ * instead.
  *
  * Note that it is mandatory to call [method@Gsk.Renderer.unrealize] before
  * destroying the renderer.
@@ -325,13 +327,33 @@ gsk_renderer_realize (GskRenderer  *renderer,
     }
 }
 
-  priv->is_realized = TRUE;
+/**
+ * gsk_renderer_realize_for_display:
+ * @renderer: a `GskRenderer`
+ * @display: the `GdkDisplay` renderer will be used on
+ * @error: return location for an error
+ *
+ * Creates the resources needed by the @renderer to render the scene
+ * graph.
+ *
+ * Note that it is mandatory to call [method@Gsk.Renderer.unrealize] before
+ * destroying the renderer.
+ *
+ * Returns: Whether the renderer was successfully realized
+ *
+ * Since: 4.14
+ */
+gboolean
+gsk_renderer_realize_for_display (GskRenderer  *renderer,
+                                  GdkDisplay   *display,
+                                  GError      **error)
+{
+  g_return_val_if_fail (GSK_IS_RENDERER (renderer), FALSE);
+  g_return_val_if_fail (!gsk_renderer_is_realized (renderer), FALSE);
+  g_return_val_if_fail (display == NULL || GDK_IS_DISPLAY (display), FALSE);
+  g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
 
-  g_object_notify (G_OBJECT (renderer), "realized");
-  if (surface)
-    g_object_notify (G_OBJECT (renderer), "surface");
-
-  return TRUE;
+  return gsk_renderer_do_realize (renderer, display, NULL, error);
 }
 
 /**

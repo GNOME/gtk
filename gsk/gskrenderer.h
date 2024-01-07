@@ -47,6 +47,10 @@ GDK_AVAILABLE_IN_ALL
 gboolean                gsk_renderer_realize                    (GskRenderer             *renderer,
                                                                  GdkSurface              *surface,
                                                                  GError                 **error);
+GDK_AVAILABLE_IN_4_14
+gboolean                gsk_renderer_realize_for_display        (GskRenderer             *renderer,
+                                                                 GdkDisplay              *display,
+                                                                 GError                 **error);
 GDK_AVAILABLE_IN_ALL
 void                    gsk_renderer_unrealize                  (GskRenderer             *renderer);
 GDK_AVAILABLE_IN_ALL
