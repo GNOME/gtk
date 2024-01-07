@@ -1046,7 +1046,7 @@ create_renderers (void)
   for (i = 0; i < G_N_ELEMENTS (renderers); i++)
     {
       renderers[i].renderer = renderers[i].create_func ();
-      if (!gsk_renderer_realize (renderers[i].renderer, NULL, &error))
+      if (!gsk_renderer_realize_for_display (renderers[i].renderer, gdk_display_get_default (), &error))
         {
           g_test_message ("Could not realize %s renderer: %s", renderers[i].name, error->message);
           g_clear_error (&error);
