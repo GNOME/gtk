@@ -1,5 +1,45 @@
-Overview of Changes in 4.13.5, xx-xx-xxxx
+Overview of Changes in 4.13.5, 07 01 2024
 =========================================
+
+This release adds two new GSK renderers called vulkan and ngl,
+that are built from the same sources. The new renderers can
+handle many corner cases correctly that the current gl renderer
+does not handle, and they offer advantages such as antialiasing
+and supersampled gradients.
+
+The new renderers are still considered experimental, and GTK
+will only use them if they are explicitly selected using the
+GSK_RENDERER environment variable.
+
+As part of this work, the GSK include files have been rearranged.
+It is no longer necessary to include renderer-specific headers for
+ngl and vulkan (and doing so will trigger deprecation warnings),
+and their constructors are always available.
+
+The previously available experimental GdkVulkanContext APIs and
+the old Vulkan renderer have been removed.
+
+Vulkan is now enabled by default, and Linux distributions should
+build GTK with Vulkan support. This requires the glslc shader
+compiler as a new dependency.
+
+Vulkan is now also used for dmabuf support.
+
+* GtkDropdown:
+ - Fix display of initial selection
+
+* GtkShortcutsWindow:
+ - Make the window adapt to smaller screen widths
+
+* GtkTextView:
+ - Fix a possible NULL dereference in history
+
+* GDK:
+ - Make the png loader safer against overflows
+
+* GL:
+ - Fix some errors in handling of texture formats and mipmaps
+
 
 Overview of Changes in 4.13.4, 30-12-2023
 =========================================

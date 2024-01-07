@@ -425,7 +425,7 @@ if os_linux
 
   foreach test : offload_tests
     if test.endswith('.node') and not test.endswith('.out')
-      test('parser ' + test, offload,
+      test('offload ' + test, offload,
         args: [
           join_paths(meson.current_source_dir(), 'offload', test)
         ],
