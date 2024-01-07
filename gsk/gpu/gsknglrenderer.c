@@ -54,6 +54,13 @@ gsk_ngl_renderer_create_context (GskGpuRenderer       *renderer,
   gdk_gl_context_make_current (context);
 
   *supported = -1;
+
+  /* Shader compilation takes too long when texture() and get_float() calls
+   * use if/else ladders to avoid non-uniform indexing.
+   * And that is always true with GL.
+   */
+  *supported &= ~GSK_GPU_OPTIMIZE_UBER;
+
   if (!gdk_gl_context_check_version (context, "4.2", "9.9") &&
       !epoxy_has_gl_extension ("GL_EXT_base_instance") &&
       !epoxy_has_gl_extension ("GL_ARB_base_instance"))

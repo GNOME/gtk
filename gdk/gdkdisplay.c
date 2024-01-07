@@ -1307,6 +1307,17 @@ gdk_display_create_vulkan_context (GdkDisplay  *self,
                          NULL);
 }
 
+gboolean
+gdk_display_has_vulkan_feature (GdkDisplay        *self,
+                                GdkVulkanFeatures  feature)
+{
+#ifdef GDK_RENDERING_VULKAN
+  return !!(self->vulkan_features & feature);
+#else
+  return FALSE;
+#endif
+}
+
 static void
 gdk_display_init_gl (GdkDisplay *self)
 {
