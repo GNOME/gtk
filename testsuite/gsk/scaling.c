@@ -1,9 +1,5 @@
 #include <gtk/gtk.h>
 
-#include "gsk/gl/gskglrenderer.h"
-
-#include <epoxy/gl.h>
-
 #define N 10
 
 struct {

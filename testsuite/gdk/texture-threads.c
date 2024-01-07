@@ -1,7 +1,5 @@
 #include <gtk/gtk.h>
 
-#include "gsk/gl/gskglrenderer.h"
-
 /* This function will be called from a thread and/or the main loop.
  * Textures are threadsafe after all. */
 static void
