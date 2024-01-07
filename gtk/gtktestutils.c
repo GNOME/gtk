@@ -27,8 +27,6 @@
 #include "gtktextview.h"
 #include "gtkrange.h"
 
-#include <gsk/gl/gskglrenderer.h>
-
 #include <locale.h>
 #include <string.h>
 #include <math.h>
