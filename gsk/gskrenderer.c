@@ -102,6 +102,7 @@ static GParamSpec *gsk_renderer_properties[N_PROPS];
 
 static gboolean
 gsk_renderer_real_realize (GskRenderer  *self,
+                           GdkDisplay   *display,
                            GdkSurface   *surface,
                            GError      **error)
 {
@@ -255,6 +256,32 @@ gsk_renderer_is_realized (GskRenderer *renderer)
   return priv->is_realized;
 }
 
+static gboolean
+gsk_renderer_do_realize (GskRenderer  *renderer,
+                         GdkDisplay   *display,
+                         GdkSurface   *surface,
+                         GError      **error)
+{
+  GskRendererPrivate *priv = gsk_renderer_get_instance_private (renderer);
+
+  if (surface)
+    priv->surface = g_object_ref (surface);
+
+  if (!GSK_RENDERER_GET_CLASS (renderer)->realize (renderer, display, surface, error))
+    {
+      g_clear_object (&priv->surface);
+      return FALSE;
+    }
+
+  priv->is_realized = TRUE;
+
+  g_object_notify (G_OBJECT (renderer), "realized");
+  if (surface)
+    g_object_notify (G_OBJECT (renderer), "surface");
+
+  return TRUE;
+}
+
 /**
  * gsk_renderer_realize:
  * @renderer: a `GskRenderer`
@@ -277,21 +304,26 @@ gsk_renderer_realize (GskRenderer  *renderer,
                       GdkSurface   *surface,
                       GError      **error)
 {
-  GskRendererPrivate *priv = gsk_renderer_get_instance_private (renderer);
-
   g_return_val_if_fail (GSK_IS_RENDERER (renderer), FALSE);
   g_return_val_if_fail (!gsk_renderer_is_realized (renderer), FALSE);
   g_return_val_if_fail (surface == NULL || GDK_IS_SURFACE (surface), FALSE);
   g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
 
-  if (surface)
-    priv->surface = g_object_ref (surface);
-
-  if (!GSK_RENDERER_GET_CLASS (renderer)->realize (renderer, surface, error))
+  if (surface == NULL)
     {
-      g_clear_object (&priv->surface);
-      return FALSE;
+      return gsk_renderer_do_realize (renderer,
+                                      gdk_display_get_default (),
+                                      NULL,
+                                      error);
     }
+  else
+    {
+      return gsk_renderer_do_realize (renderer,
+                                      gdk_surface_get_display (surface),
+                                      surface,
+                                      error);
+    }
+}
 
   priv->is_realized = TRUE;
 

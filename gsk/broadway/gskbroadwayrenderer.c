@@ -35,6 +35,7 @@ G_DEFINE_TYPE (GskBroadwayRenderer, gsk_broadway_renderer, GSK_TYPE_RENDERER)
 
 static gboolean
 gsk_broadway_renderer_realize (GskRenderer  *renderer,
+                               GdkDisplay   *display,
                                GdkSurface   *surface,
                                GError      **error)
 {

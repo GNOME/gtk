@@ -188,18 +188,13 @@ gsk_gpu_renderer_get_frame (GskGpuRenderer *self)
 
 static gboolean
 gsk_gpu_renderer_realize (GskRenderer  *renderer,
+                          GdkDisplay   *display,
                           GdkSurface   *surface,
                           GError      **error)
 {
   GskGpuRenderer *self = GSK_GPU_RENDERER (renderer);
   GskGpuRendererPrivate *priv = gsk_gpu_renderer_get_instance_private (self);
   GskGpuOptimizations context_optimizations;
-  GdkDisplay *display;
-
-  if (surface)
-    display = gdk_surface_get_display (surface);
-  else
-    display = gdk_display_get_default ();
 
   priv->device = GSK_GPU_RENDERER_GET_CLASS (self)->get_device (display, error);
   if (priv->device == NULL)
