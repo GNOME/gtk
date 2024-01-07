@@ -9,6 +9,14 @@ struct _GdkDmabufFormat
   guint64 modifier;
 };
 
+struct _GdkDmabufFormats
+{
+  int ref_count;
+
+  gsize n_formats;
+  GdkDmabufFormat *formats;
+};
+
 GdkDmabufFormats *      gdk_dmabuf_formats_new                  (GdkDmabufFormat  *formats,
                                                                  gsize             n_formats);
 
