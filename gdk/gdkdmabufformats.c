@@ -49,14 +49,6 @@
  * Since: 4.14
  */
 
-struct _GdkDmabufFormats
-{
-  int ref_count;
-
-  gsize n_formats;
-  GdkDmabufFormat *formats;
-};
-
 G_DEFINE_BOXED_TYPE (GdkDmabufFormats, gdk_dmabuf_formats, gdk_dmabuf_formats_ref, gdk_dmabuf_formats_unref)
 
 /**
