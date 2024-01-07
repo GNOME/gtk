@@ -791,7 +791,7 @@ create_cairo_texture (NodeEditorWindow *self)
     return NULL;
 
   renderer = gsk_cairo_renderer_new ();
-  gsk_renderer_realize (renderer, NULL, NULL);
+  gsk_renderer_realize_for_display (renderer, gtk_widget_get_display (GTK_WIDGET (self)), NULL);
 
   texture = gsk_renderer_render_texture (renderer, node, NULL);
   gsk_render_node_unref (node);
@@ -863,11 +863,11 @@ export_image_response_cb (GObject      *source,
       GskRenderer *renderer;
 
       renderer = gsk_gl_renderer_new ();
-      if (!gsk_renderer_realize (renderer, NULL, NULL))
+      if (!gsk_renderer_realize_for_display (renderer, gdk_display_get_default (), NULL))
         {
           g_object_unref (renderer);
           renderer = gsk_cairo_renderer_new ();
-          if (!gsk_renderer_realize (renderer, NULL, NULL))
+          if (!gsk_renderer_realize_for_display (renderer, gdk_display_get_default (), NULL))
             {
               g_assert_not_reached ();
             }
@@ -1118,8 +1118,11 @@ node_editor_window_add_renderer (NodeEditorWindow *self,
                                  const char       *description)
 {
   GdkPaintable *paintable;
+  GdkDisplay *display;
 
-  if (!gsk_renderer_realize (renderer, NULL, NULL))
+  display = gtk_widget_get_display (GTK_WIDGET (self));
+
+  if (!gsk_renderer_realize_for_display (renderer, display, NULL))
     {
       GdkSurface *surface = gtk_native_get_surface (GTK_NATIVE (self));
       g_assert (surface != NULL);
