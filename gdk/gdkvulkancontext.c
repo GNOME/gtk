@@ -1826,6 +1826,8 @@ gdk_display_unref_vulkan (GdkDisplay *display)
   display->vk_instance = VK_NULL_HANDLE;
 }
 
+#ifdef HAVE_DMABUF
+
 /* Hack. We don't include gsk/gsk.h here to avoid a build order problem
  * with the generated header gskenumtypes.h, so we need to hack around
  * a bit to access the gsk api we need.
@@ -1914,6 +1916,8 @@ gdk_vulkan_get_dmabuf_downloader (GdkDisplay              *display,
 
   return GDK_DMABUF_DOWNLOADER (renderer);
 }
+
+#endif
 
 VkShaderModule
 gdk_display_get_vk_shader_module (GdkDisplay *self,

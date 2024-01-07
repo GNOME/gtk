@@ -69,6 +69,8 @@ gsk_gpu_download_op_print (GskGpuOp    *op,
 }
 
 #ifdef GDK_RENDERING_VULKAN
+
+#ifdef HAVE_DMABUF
 /* The code needs to run here because vkGetSemaphoreFdKHR() may
  * only be called after the semaphore has been submitted via
  * vkQueueSubmit().
@@ -102,6 +104,7 @@ gsk_gpu_download_op_vk_sync_semaphore (GskGpuDownloadOp *self)
 
   vkDestroySemaphore (display->vk_device, self->vk_semaphore, NULL);
 }
+#endif
 
 static void
 gsk_gpu_download_op_vk_create (GskGpuDownloadOp *self)
