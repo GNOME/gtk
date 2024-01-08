@@ -57,7 +57,7 @@ struct _GdkDmabufTextureBuilderClass
  *
  * DMA buffers are commonly called **_dma-bufs_**.
  *
- * DMA buffers a feature of the Linux kernel to enable efficient buffer and
+ * DMA buffers are a feature of the Linux kernel to enable efficient buffer and
  * memory sharing between hardware such as codecs, GPUs, displays, cameras and the
  * kernel drivers controlling them. For example, a decoder may want its output to
  * be directly shared with the display server for rendering without a copy.
@@ -67,7 +67,7 @@ struct _GdkDmabufTextureBuilderClass
  *
  * The memory that is shared via DMA buffers is usually stored in non-system memory
  * (maybe in device's local memory or something else not directly accessible by the
- * CPU), and accessing this memory from the CPU may have higher than usual overhead.
+ * CPU), and accessing this memory from the CPU may have higher-than-usual overhead.
  *
  * In particular for graphics data, it is not uncommon that data consists of multiple
  * separate blocks of memory, for example one block for each of the red, green and
