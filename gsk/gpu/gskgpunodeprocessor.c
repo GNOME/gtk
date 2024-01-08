@@ -1900,7 +1900,7 @@ gsk_gpu_node_processor_add_border_node (GskGpuNodeProcessor *self,
                      &self->offset,
                      graphene_point_zero (),
                      gsk_border_node_get_widths (node),
-                     gsk_border_node_get_colors (node));
+                     colors);
 }
 
 static void
