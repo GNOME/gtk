@@ -25,6 +25,7 @@ compare_render_tests = [
   'blur-huge-contents-outside-of-clip-nogl',
   'border-bottom-right',
   'border-one-rounded',
+  'border-opacity',
   'borders-rotated',
   'borders-scaled',
   'clip-coordinates-2d',
