@@ -3,6 +3,8 @@
 #include <math.h>
 #include <stdlib.h>
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+
 static void
 hsv_to_rgb (GdkRGBA *rgba,
             double   h,

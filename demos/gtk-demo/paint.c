@@ -131,7 +131,9 @@ drawing_area_snapshot (GtkWidget   *widget,
   width = gtk_widget_get_width (widget);
   height = gtk_widget_get_height (widget);
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   cr = gtk_snapshot_append_cairo (snapshot, &GRAPHENE_RECT_INIT (0, 0, width, height));
+G_GNUC_END_IGNORE_DEPRECATIONS
 
   cairo_set_source_rgb (cr, 1, 1, 1);
   cairo_paint (cr);

@@ -381,11 +381,11 @@ float                   gsk_outset_shadow_node_get_blur_radius  (const GskRender
 
 GDK_AVAILABLE_IN_ALL
 GType                   gsk_cairo_node_get_type                 (void) G_GNUC_CONST;
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_14
 GskRenderNode *         gsk_cairo_node_new                      (const graphene_rect_t    *bounds);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_14
 cairo_t *               gsk_cairo_node_get_draw_context         (GskRenderNode            *node);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_14
 cairo_surface_t *       gsk_cairo_node_get_surface              (GskRenderNode            *node);
 
 GDK_AVAILABLE_IN_ALL

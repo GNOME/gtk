@@ -2524,8 +2524,10 @@ gtk_flow_box_snapshot (GtkWidget   *widget,
 
       vertical = priv->orientation == GTK_ORIENTATION_VERTICAL;
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
       cr = gtk_snapshot_append_cairo (snapshot,
                                       &GRAPHENE_RECT_INIT (x, y, width, height));
+G_GNUC_END_IGNORE_DEPRECATIONS
 
       style = gtk_css_node_get_style (priv->rubberband_node);
 

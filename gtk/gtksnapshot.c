@@ -2214,6 +2214,8 @@ gtk_snapshot_append_node (GtkSnapshot   *snapshot,
  *
  * Returns: a `cairo_t` suitable for drawing the contents of
  *   the newly created render node
+ *
+ * Deprecated: 4.14: Create a [class@Gdk.MemoryTexture] from a cairo surface instead
  */
 cairo_t *
 gtk_snapshot_append_cairo (GtkSnapshot           *snapshot,
@@ -2230,11 +2232,12 @@ gtk_snapshot_append_cairo (GtkSnapshot           *snapshot,
   gtk_snapshot_ensure_affine (snapshot, &scale_x, &scale_y, &dx, &dy);
   gtk_graphene_rect_scale_affine (bounds, scale_x, scale_y, dx, dy, &real_bounds);
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   node = gsk_cairo_node_new (&real_bounds);
+  cr = gsk_cairo_node_get_draw_context (node);
+G_GNUC_END_IGNORE_DEPRECATIONS
 
   gtk_snapshot_append_node_internal (snapshot, node);
-
-  cr = gsk_cairo_node_get_draw_context (node);
 
   cairo_scale (cr, scale_x, scale_y);
   cairo_translate (cr, dx, dy);

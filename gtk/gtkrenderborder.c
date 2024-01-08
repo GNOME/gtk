@@ -503,8 +503,10 @@ snapshot_frame_stroke (GtkSnapshot          *snapshot,
   double double_width[4] = { border_width[0], border_width[1], border_width[2], border_width[3] };
   cairo_t *cr;
 
-  cr = gtk_snapshot_append_cairo (snapshot,
-                                  &outline->bounds);
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+  cr = gtk_snapshot_append_cairo (snapshot, &outline->bounds);
+G_GNUC_END_IGNORE_DEPRECATIONS
+
   render_frame_stroke (cr, outline, double_width, colors, hidden_side, stroke_style);
   cairo_destroy (cr);
 }
@@ -667,7 +669,9 @@ gtk_css_style_snapshot_border (GtkCssBoxes *boxes,
       bounds = gtk_css_boxes_get_border_rect (boxes);
 
       gtk_snapshot_push_debug (snapshot, "CSS border image");
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
       cr = gtk_snapshot_append_cairo (snapshot, bounds);
+G_GNUC_END_IGNORE_DEPRECATIONS
       gtk_border_image_render (&border_image, border_width, cr, bounds);
       cairo_destroy (cr);
       gtk_snapshot_pop (snapshot);

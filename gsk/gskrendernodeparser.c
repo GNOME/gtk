@@ -1726,6 +1726,7 @@ parse_texture_scale_node (GtkCssParser *parser,
   return node;
 }
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 static GskRenderNode *
 parse_cairo_node (GtkCssParser *parser,
                   Context      *context)
@@ -1769,6 +1770,7 @@ parse_cairo_node (GtkCssParser *parser,
 
   return node;
 }
+G_GNUC_END_IGNORE_DEPRECATIONS
 
 static GskRenderNode *
 parse_outset_shadow_node (GtkCssParser *parser,
@@ -4023,6 +4025,7 @@ render_node_print (Printer       *p,
       g_assert_not_reached ();
       break;
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
     case GSK_CAIRO_NODE:
       {
         cairo_surface_t *surface = gsk_cairo_node_get_surface (node);
@@ -4079,6 +4082,7 @@ render_node_print (Printer       *p,
         end_node (p);
       }
       break;
+G_GNUC_END_IGNORE_DEPRECATIONS
 
     case GSK_SUBSURFACE_NODE:
       {

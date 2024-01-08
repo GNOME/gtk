@@ -10,6 +10,7 @@ replay_container_node (GskRenderNode *node, GtkSnapshot *snapshot)
     replay_node (gsk_container_node_get_child (node, i), snapshot);
 }
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 static void
 replay_cairo_node (GskRenderNode *node, GtkSnapshot *snapshot)
 {
@@ -21,6 +22,7 @@ replay_cairo_node (GskRenderNode *node, GtkSnapshot *snapshot)
   cairo_set_source_surface (cr, surface, 0, 0);
   cairo_paint (cr);
 }
+G_GNUC_END_IGNORE_DEPRECATIONS
 
 static void
 replay_color_node (GskRenderNode *node, GtkSnapshot *snapshot)

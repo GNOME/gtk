@@ -1592,12 +1592,14 @@ create_arrow_render_node (GtkPopover *popover)
 
   snapshot = gtk_snapshot_new ();
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   cr = gtk_snapshot_append_cairo (snapshot,
                                   &GRAPHENE_RECT_INIT (
                                     0, 0,
                                     gtk_widget_get_width (widget),
                                     gtk_widget_get_height (widget)
                                   ));
+G_GNUC_END_IGNORE_DEPRECATIONS
 
   /* Clip to the arrow shape */
   cairo_save (cr);

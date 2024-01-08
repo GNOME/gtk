@@ -155,12 +155,14 @@ graph_renderer_snapshot (GtkWidget   *widget,
 
   gtk_widget_get_color (widget, &color);
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   cr = gtk_snapshot_append_cairo (snapshot,
                                   &GRAPHENE_RECT_INIT (
                                       0, 0,
                                       gtk_widget_get_width (widget),
                                       gtk_widget_get_height (widget)
                                   ));
+G_GNUC_END_IGNORE_DEPRECATIONS
 
   cairo_set_line_width (cr, 1.0);
 

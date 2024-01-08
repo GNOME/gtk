@@ -61,10 +61,12 @@ gtk_nuclear_snapshot (GtkSnapshot   *snapshot,
                              &GRAPHENE_RECT_INIT (0, 0, width, height));
 
   size = MIN (width, height);
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   cr = gtk_snapshot_append_cairo (snapshot,
                                   &GRAPHENE_RECT_INIT ((width - size) / 2.0,
                                                        (height - size) / 2.0,
                                                        size, size));
+G_GNUC_END_IGNORE_DEPRECATIONS
   gdk_cairo_set_source_rgba (cr, foreground);
   cairo_translate (cr, width / 2.0, height / 2.0);
   cairo_scale (cr, size, size);

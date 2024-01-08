@@ -200,7 +200,9 @@ snapshot_insertion_cursor (GtkSnapshot     *snapshot,
       graphene_rect_t bounds;
 
       get_insertion_cursor_bounds (width, height, aspect_ratio, direction, draw_arrow, &bounds);
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
       cr = gtk_snapshot_append_cairo (snapshot, &bounds);
+G_GNUC_END_IGNORE_DEPRECATIONS
 
       draw_insertion_cursor (cr, 0, 0, width, height, aspect_ratio, &color, direction, draw_arrow);
 

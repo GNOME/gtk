@@ -156,7 +156,7 @@ void            gtk_snapshot_perspective                (GtkSnapshot            
 GDK_AVAILABLE_IN_ALL
 void            gtk_snapshot_append_node                (GtkSnapshot            *snapshot,
                                                          GskRenderNode          *node);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_14
 cairo_t *       gtk_snapshot_append_cairo               (GtkSnapshot            *snapshot,
                                                          const graphene_rect_t  *bounds);
 GDK_AVAILABLE_IN_ALL

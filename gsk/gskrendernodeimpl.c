@@ -3053,6 +3053,8 @@ gsk_cairo_node_class_init (gpointer g_class,
  * Retrieves the Cairo surface used by the render node.
  *
  * Returns: (transfer none): a Cairo surface
+ *
+ * Deprecated: 4.14: Use a [class@Gsk.TextureNode] instead
  */
 cairo_surface_t *
 gsk_cairo_node_get_surface (GskRenderNode *node)
@@ -3074,6 +3076,8 @@ gsk_cairo_node_get_surface (GskRenderNode *node)
  * You can draw to the cairo surface using [method@Gsk.CairoNode.get_draw_context].
  *
  * Returns: (transfer full) (type GskCairoNode): A new `GskRenderNode`
+ *
+ * Deprecated: 4.14: Use a [class@Gsk.TextureNode] instead
  */
 GskRenderNode *
 gsk_cairo_node_new (const graphene_rect_t *bounds)
@@ -3104,6 +3108,8 @@ gsk_cairo_node_new (const graphene_rect_t *bounds)
  *
  * Returns: (transfer full): a Cairo context used for drawing; use
  *   cairo_destroy() when done drawing
+ *
+ * Deprecated: 4.14: Use [class@Gsk.TextureNode] instead
  */
 cairo_t *
 gsk_cairo_node_get_draw_context (GskRenderNode *node)

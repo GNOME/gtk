@@ -149,9 +149,11 @@ gsk_pango_renderer_draw_trapezoid (PangoRenderer   *renderer,
     return;
 
   pango_layout_get_pixel_extents (layout, &ink_rect, NULL);
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   cr = gtk_snapshot_append_cairo (crenderer->snapshot,
                                   &GRAPHENE_RECT_INIT (ink_rect.x, ink_rect.y,
                                                        ink_rect.width, ink_rect.height));
+G_GNUC_END_IGNORE_DEPRECATIONS
   set_color (crenderer, part, cr);
 
   x = y = 0;
@@ -250,9 +252,11 @@ gsk_pango_renderer_draw_shape (PangoRenderer  *renderer,
         return;
 
       pango_layout_get_pixel_extents (layout, &ink_rect, NULL);
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
       cr = gtk_snapshot_append_cairo (crenderer->snapshot,
                                       &GRAPHENE_RECT_INIT (ink_rect.x, ink_rect.y,
                                                            ink_rect.width, ink_rect.height));
+G_GNUC_END_IGNORE_DEPRECATIONS
       shape_renderer = pango_cairo_context_get_shape_renderer (pango_layout_get_context (layout),
                                                                &shape_renderer_data);
 

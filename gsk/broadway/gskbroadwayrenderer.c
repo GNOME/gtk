@@ -590,6 +590,7 @@ gsk_broadway_renderer_add_node (GskRenderer *renderer,
         }
       return;
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
     case GSK_CAIRO_NODE:
       if (add_new_node (renderer, node, BROADWAY_NODE_TEXTURE, clip_bounds))
         {
@@ -625,6 +626,7 @@ gsk_broadway_renderer_add_node (GskRenderer *renderer,
           cairo_surface_destroy (image_surface);
         }
       return;
+G_GNUC_END_IGNORE_DEPRECATIONS
 
     case GSK_COLOR_NODE:
       if (add_new_node (renderer, node, BROADWAY_NODE_COLOR, clip_bounds))
