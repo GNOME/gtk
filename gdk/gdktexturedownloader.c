@@ -22,7 +22,7 @@
  * [class@Gdk.Texture].
  *
  * It is intended to be created as a short-term object for a single download,
- * but can be used for multipe downloads of different textures or with different
+ * but can be used for multiple downloads of different textures or with different
  * settings.
  *
  * `GdkTextureDownloader` can be used to convert data between different formats.

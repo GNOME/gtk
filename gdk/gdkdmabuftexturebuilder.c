@@ -87,7 +87,7 @@ struct _GdkDmabufTextureBuilderClass
  *
  * For historical reasons, some producers of dma-bufs don't provide an explicit modifier, but
  * instead return `DMA_FORMAT_MOD_INVALID` to indicate that their modifier is **_implicit_**.
- * GTK tries to accomodate this situation by accepting `DMA_FORMAT_MOD_INVALID` as modifier.
+ * GTK tries to accommodate this situation by accepting `DMA_FORMAT_MOD_INVALID` as modifier.
  *
  * The operation of `GdkDmabufTextureBuilder` is quite simple: Create a texture builder,
  * set all the necessary properties, and then call [method@Gdk.DmabufTextureBuilder.build]

@@ -170,7 +170,7 @@ static int getting_events = 0;
  ************************************************************/
 
 /* The states in our state machine, see comments in select_thread_func()
- * for descriptiions of each state
+ * for descriptions of each state
  */
 typedef enum {
   BEFORE_START,

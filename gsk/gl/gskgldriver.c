@@ -1236,7 +1236,7 @@ gsk_gl_driver_release_render_target (GskGLDriver       *self,
  * @shader: the shader to lookup or load
  * @error: a location for a `GError`
  *
- * Attepts to load @shader from the shader cache.
+ * Attempts to load @shader from the shader cache.
  *
  * If it has not been loaded, then it will compile the shader on demand.
  *

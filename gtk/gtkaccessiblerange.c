@@ -21,7 +21,7 @@
  *
  * If that is not the case, a warning will be issued at run time.
  *
- * In addition to this interface, its implementors are expected to provide the
+ * In addition to this interface, its implementers are expected to provide the
  * correct values for the following properties:
  *
  * - `GTK_ACCESSIBLE_PROPERTY_VALUE_MAX`

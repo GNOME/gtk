@@ -127,7 +127,7 @@
  *
  * To create a property expression, use the `<lookup>` element. It can have a `type`
  * attribute to specify the object type, and a `name` attribute to specify the property
- * to look up. The content of `<lookup>` can either be an element specfiying the expression
+ * to look up. The content of `<lookup>` can either be an element specifying the expression
  * to use the object, or a string that specifies the name of the object to use.
  *
  * Example:

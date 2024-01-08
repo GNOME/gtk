@@ -3029,7 +3029,7 @@ gdk_event_translate (MSG *msg,
 	    unset_bits |= GDK_TOPLEVEL_STATE_MAXIMIZED;
 
       /*
-       * If we are minizing, pause all surface layout computations, and re-start the
+       * If we are minimizing, pause all surface layout computations, and re-start the
        * computation once we are coming out of a minimized state
        */
       if (!(old_state & GDK_TOPLEVEL_STATE_MINIMIZED) && set_bits & GDK_TOPLEVEL_STATE_MINIMIZED)
@@ -3045,7 +3045,7 @@ gdk_event_translate (MSG *msg,
 
 	  /* Whenever one window changes iconified state we need to also
 	   * change the iconified state in all transient related windows,
-	   * as windows doesn't give icons for transient childrens.
+	   * as windows doesn't give icons for transient children.
 	   */
 	  if ((old_state & GDK_TOPLEVEL_STATE_MINIMIZED) !=
 	      (new_state & GDK_TOPLEVEL_STATE_MINIMIZED))

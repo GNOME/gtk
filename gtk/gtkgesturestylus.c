@@ -287,11 +287,11 @@ gtk_gesture_stylus_get_stylus_only (GtkGestureStylus *gesture)
 /**
  * gtk_gesture_stylus_set_stylus_only: (attributes org.gtk.Method.set_property=stylus-only)
  * @gesture: the gesture
- * @stylus_only: whether the gesture is used exclusivly for stylus events
+ * @stylus_only: whether the gesture is used exclusively for stylus events
  *
  * Sets the state of stylus-only
  *
- * If true, the gesture will exclusivly handle events from stylus input deivces,
+ * If true, the gesture will exclusively handle events from stylus input devices,
  * otherwise it'll handle events from any pointing device.
  *
  * Since: 4.10

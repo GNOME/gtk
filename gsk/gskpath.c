@@ -40,7 +40,7 @@
  * new `GskPath` objects have to be created. The [struct@Gsk.PathBuilder]
  * structure is meant to help in this endeavor.
  *
- * Conceptually, a path consists of zero or more contours (continous, connected
+ * Conceptually, a path consists of zero or more contours (continuous, connected
  * curves), each of which may or may not be closed. Contours are typically
  * constructed from Bézier segments.
  *

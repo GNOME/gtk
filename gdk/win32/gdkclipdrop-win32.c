@@ -28,7 +28,7 @@ GTK has two clipboards - normal clipboard and primary clipboard
 Primary clipboard is only handled
 internally by GTK (it's not portable to Windows).
 
-("C:" means clipboard client (requestor), "S:" means clipboard server (provider))
+("C:" means clipboard client (requester), "S:" means clipboard server (provider))
 ("transmute" here means "change the format of some data"; this term is used here
  instead of "convert" to avoid clashing with the old g(t|d)k_selection_convert() APIs,
  which are completely unrelated)
@@ -1356,7 +1356,7 @@ inner_clipboard_window_procedure (HWND   hwnd,
         else if (returned_render->main_thread_data_handle)
           {
             BOOL set_data_succeeded;
-            /* The requestor is holding the clipboard, no
+            /* The requester is holding the clipboard, no
              * OpenClipboard() is required/possible
              */
             GDK_NOTE (DND,

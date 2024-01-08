@@ -522,7 +522,7 @@ Overview of Changes in 4.11.4, 03-07-2023
  - Center newly created transient windows
 
 * Vulkan:
- - Add antialising for gradients
+ - Add antialiasing for gradients
  - Do less work on clipped away nodes
  - Redo image uploading
  - Support different image depths and formats
@@ -1506,7 +1506,7 @@ Overview of Changes in 4.7.0, 07-05-2022
  - Event handling fixes
  - Fix keyboard input on popovers
  - Support OpenGL-based video playback
- - Suport fullscreen
+ - Support fullscreen
  - Improve native filechoooser size allocation
  - Use CALayer and IOSurface for rendering
  - Use a per-monitor CVDisplayLink
@@ -1903,7 +1903,7 @@ Overview of Changes in 4.4.0
  - Activate when moving focus
 
 * GtkLabel:
- - Propertly ignore double underscores for mnemonics
+ - Properly ignore double underscores for mnemonics
 
 * GtkPopoverMenu:
  - Fix focus cycling
@@ -2450,7 +2450,7 @@ Overview of Changes in 4.1.0
  - Set sort arrows in CSS
  - Set menu button arrows in CSS
  - Make scrollbars larger
- - Supprt circular menubuttons
+ - Support circular menubuttons
 
 * CSS:
  - Implement transform-origin

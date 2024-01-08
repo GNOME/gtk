@@ -331,7 +331,7 @@ gdk_draw_context_begin_frame (GdkDrawContext       *context,
  *
  * This is only a request and if the GDK backend does not support HDR rendering
  * or does not consider it worthwhile, it may choose to not honor the request.
- * It may also choose to provide a differnet depth even if it was not requested.
+ * It may also choose to provide a different depth even if it was not requested.
  * Typically the steps undertaken by a backend are:
  * 1. Check if high depth is supported by this drawing backend.
  * 2. Check if the compositor supports high depth.

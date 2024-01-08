@@ -75,7 +75,7 @@ define colors. Color expressions resemble functions, taking 1 or more colors
 and in some cases a number as arguments.
 
 `lighter(Color)`
- : produces a brigher variant of Color
+ : produces a brighter variant of Color
 
 `darker(Color)`
  : produces a darker variant of Color

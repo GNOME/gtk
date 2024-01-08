@@ -226,10 +226,10 @@ gtk_cell_renderer_accel_class_init (GtkCellRendererAccelClass *cell_accel_class)
 
   /**
    * GtkCellRendererAccel::accel-edited:
-   * @accel: the object reveiving the signal
+   * @accel: the object receiving the signal
    * @path_string: the path identifying the row of the edited cell
    * @accel_key: the new accelerator keyval
-   * @accel_mods: the new acclerator modifier mask
+   * @accel_mods: the new accelerator modifier mask
    * @hardware_keycode: the keycode of the new accelerator
    *
    * Gets emitted when the user has selected a new accelerator.
@@ -248,7 +248,7 @@ gtk_cell_renderer_accel_class_init (GtkCellRendererAccelClass *cell_accel_class)
 
   /**
    * GtkCellRendererAccel::accel-cleared:
-   * @accel: the object reveiving the signal
+   * @accel: the object receiving the signal
    * @path_string: the path identifying the row of the edited cell
    *
    * Gets emitted when the user has removed the accelerator.
@@ -724,7 +724,7 @@ gtk_cell_editable_widget_new (GtkCellRenderer          *cell,
   gtk_widget_set_state_flags (box->label, GTK_STATE_FLAG_SELECTED, TRUE);
 
   /* This label is displayed in a treeview cell displaying an accelerator
-   * when the cell is clicked to change the acelerator.
+   * when the cell is clicked to change the accelerator.
    */
   gtk_label_set_text (GTK_LABEL (box->label), _("New accelerator…"));
 

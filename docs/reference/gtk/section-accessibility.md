@@ -207,7 +207,7 @@ you should ensure that:
 GTK will try to fill in some information by using ancillary UI control properties,
 for instance the accessible name will be taken from the label used by the UI control,
 or from its tooltip, if the `GTK_ACCESSIBLE_PROPERTY_LABEL` property or the
-`GTK_ACCESSIBLE_RELATION_LABELLED_BY` relation are unset. Similary for the accessible
+`GTK_ACCESSIBLE_RELATION_LABELLED_BY` relation are unset. Similarly for the accessible
 description. Nevertheless, it is good practice and project hygiene to explicitly specify
 the accessible properties, just like it's good practice to specify tooltips and style classes.
 
