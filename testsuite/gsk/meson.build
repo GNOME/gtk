@@ -70,6 +70,7 @@ compare_render_tests = [
   'fill',
   'fill-clipped-nogl',
   'fill-opacity',
+  'fill-scaled-up',
   'fill-with-3d-contents-nogl-nocairo',
   'huge-height',
   'huge-width',
