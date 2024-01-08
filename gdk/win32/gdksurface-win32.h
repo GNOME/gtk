@@ -211,7 +211,7 @@ struct _GdkW32DragMoveResizeContext
   gboolean           revealed;
 
   /* Arrays of GdkRectangle pairs, describing the areas of the virtual
-   * desktop that trigger various AeroSnap window transofrmations
+   * desktop that trigger various AeroSnap window transformations
    * Coordinates are GDK screen coordinates.
    */
   GArray            *halfleft_regions;

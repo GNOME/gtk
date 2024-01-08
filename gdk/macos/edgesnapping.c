@@ -188,7 +188,7 @@ _edge_snapping_motion (EdgeSnapping   *self,
         edge_snapping_constrain_horizontal (self, change.x, &self->geometry, &new_window);
     }
 
-  /* Now constrain veritcally */
+  /* Now constrain vertically */
   if (change.y)
     {
       edge_snapping_constrain_vertical (self, change.y, &self->workarea, &new_window, FALSE);

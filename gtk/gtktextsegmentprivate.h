@@ -67,7 +67,7 @@ typedef GtkTextLineSegment* (*GtkTextSegSplitFunc)      (GtkTextLineSegment *seg
 
 /* Delete seg which is contained in line; if tree_gone, the tree is being
  * freed in its entirety, which may matter for some reason (?)
- * Return TRUE if the segment is not deleteable, e.g. a mark.
+ * Return TRUE if the segment is not deletable, e.g. a mark.
  */
 typedef gboolean            (*GtkTextSegDeleteFunc)     (GtkTextLineSegment *seg,
                                                          GtkTextLine        *line,

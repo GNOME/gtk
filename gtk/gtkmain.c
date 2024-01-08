@@ -679,7 +679,7 @@ check_sizeof_GtkWindow (size_t sizeof_GtkWindow)
 
 /* In GTK 2.0 the GtkWindow struct actually is the same size in
  * gcc-compiled code on Win32 whether compiled with -fnative-struct or
- * not. Unfortunately this wan’t noticed until after GTK 2.0.1. So,
+ * not. Unfortunately this wasn’t noticed until after GTK 2.0.1. So,
  * from GTK 2.0.2 on, check some other struct, too, where the use of
  * -fnative-struct still matters. GtkBox is one such.
  */

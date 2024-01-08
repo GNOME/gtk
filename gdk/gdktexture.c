@@ -870,7 +870,7 @@ gdk_texture_download_surface (GdkTexture *texture)
  * cairo_surface_mark_dirty (surface);
  * ```
  *
- * For more flexible download capabilites, see
+ * For more flexible download capabilities, see
  * [struct@Gdk.TextureDownloader].
  */
 void

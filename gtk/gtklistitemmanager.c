@@ -999,7 +999,7 @@ gtk_list_item_manager_merge_list_items (GtkListItemManager *self,
  * gtk_list_tile_split:
  * @self: the listitemmanager
  * @tile: a tile to split into two
- * @n_items: nuber of items to keep in tile
+ * @n_items: number of items to keep in tile
  *
  * Splits the given tile into two tiles. The original
  * tile will remain with @n_items items, the remaining

@@ -37,7 +37,7 @@ static const GdkDebugKey gsk_vulkan_feature_keys[] = {
   { "dmabuf", GDK_VULKAN_FEATURE_DMABUF, "Never import Dmabufs" },
   { "ycbcr", GDK_VULKAN_FEATURE_YCBCR, "Do not support Ycbcr textures" },
   { "descriptor-indexing", GDK_VULKAN_FEATURE_DESCRIPTOR_INDEXING, "Force slow descriptor set layout codepath" },
-  { "dynamic-indexing", GDK_VULKAN_FEATURE_DYNAMIC_INDEXING, "Hardcode small number of buffer and texure arrays" },
+  { "dynamic-indexing", GDK_VULKAN_FEATURE_DYNAMIC_INDEXING, "Hardcode small number of buffer and texture arrays" },
   { "nonuniform-indexing", GDK_VULKAN_FEATURE_NONUNIFORM_INDEXING, "Split draw calls to ensure uniform texture accesses" },
   { "semaphore-export", GDK_VULKAN_FEATURE_SEMAPHORE_EXPORT, "Disable sync of exported dmabufs" },
   { "semaphore-import", GDK_VULKAN_FEATURE_SEMAPHORE_IMPORT, "Disable sync of imported dmabufs" },

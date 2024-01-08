@@ -1586,7 +1586,7 @@ update_font_variations (void)
         }
 
       gtk_grid_attach (GTK_GRID (demo->variations_grid), combo, 1, -1, 3, 1);
-      g_signal_connect (combo, "notify::selecte", G_CALLBACK (instance_changed), NULL);
+      g_signal_connect (combo, "notify::selected", G_CALLBACK (instance_changed), NULL);
       demo->instance_combo = combo;
    }
 

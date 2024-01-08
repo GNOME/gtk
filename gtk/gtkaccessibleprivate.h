@@ -67,7 +67,7 @@ gboolean        gtk_accessible_role_is_abstract       (GtkAccessibleRole role);
  * @GTK_ACCESSIBLE_NAME_ALLOWED:
  *   The role allows an accessible name and description
  * @GTK_ACCESSIBLE_NAME_PROHIBITED:
- *   The role does not allow an accessible name and descirption
+ *   The role does not allow an accessible name and description
  * @GTK_ACCESSIBLE_NAME_REQUIRED:
  *   The role requires an accessible name and description
  * @GTK_ACCESSIBLE_NAME_RECOMMENDED:

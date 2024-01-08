@@ -62,7 +62,7 @@ are only available when GTK has been configured with `-Ddebug=true`.
 `layout`
 : Layout managers
 
-`acccessibility`
+`accessibility`
 : Accessibility state changs
 
 A number of keys are influencing behavior instead of just logging:
@@ -371,7 +371,7 @@ does not support them.
 : Force slow descriptor set layout codepath
 
 `dynamic-indexing`
-: Hardcode small number of buffer and texure arrays
+: Hardcode small number of buffer and texture arrays
 
 `nonuniform-indexing`
 : Split draw calls to ensure uniform texture accesses

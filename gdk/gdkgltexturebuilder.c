@@ -51,7 +51,7 @@ struct _GdkGLTextureBuilderClass
 /**
  * GdkGLTextureBuilder:
  *
- * `GdkGLTextureBuilder` is a buider used to construct [class@Gdk.Texture] objects from
+ * `GdkGLTextureBuilder` is a builder used to construct [class@Gdk.Texture] objects from
  * GL textures.
  *
  * The operation is quite simple: Create a texture builder, set all the necessary

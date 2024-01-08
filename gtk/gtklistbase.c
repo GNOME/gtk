@@ -2259,7 +2259,7 @@ gtk_list_base_set_anchor (GtkListBase *self,
  * behind it, if it's at the end, all the widgets will be allocated
  * in front of it.
  *
- * Addditionally, there will be @above_below widgets allocated both
+ * Additionally, there will be @above_below widgets allocated both
  * before and after the center widgets, so the total number of
  * widgets kept alive is 2 * above_below + center + 1.
  **/

@@ -1387,7 +1387,7 @@ gdk_memory_format_get_depth (GdkMemoryFormat format)
  * @depth1: the first depth
  * @depth2: the second depth
  *
- * Returns a depth that can accomodate both given depths
+ * Returns a depth that can accommodate both given depths
  * without any loss of precision.
  *
  * Returns: The merged depth

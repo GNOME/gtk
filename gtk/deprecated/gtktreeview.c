@@ -2427,7 +2427,7 @@ gtk_tree_view_size_allocate_columns (GtkWidget *widget)
 	{
 	  if (number_of_expand_columns == 1)
 	    {
-	      /* We add the remander to the last column as
+	      /* We add the remainder to the last column as
 	       * */
 	      column_width += extra;
 	    }

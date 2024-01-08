@@ -237,7 +237,7 @@ gtk_graphics_offload_class_init (GtkGraphicsOffloadClass *class)
    */
   properties[PROP_CHILD] = g_param_spec_object ("child", NULL, NULL,
                                                 GTK_TYPE_WIDGET,
-                                                GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
+                                                GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   /**
    * GtkGraphicsOffload:enabled: (attributes org.gtk.Property.get=gtk_graphics_offload_get_enabled org.gtk.Property.set=gtk_graphics_offload_set_enabled)
@@ -249,7 +249,7 @@ gtk_graphics_offload_class_init (GtkGraphicsOffloadClass *class)
   properties[PROP_ENABLED] = g_param_spec_enum ("enabled", NULL, NULL,
                                                 GTK_TYPE_GRAPHICS_OFFLOAD_ENABLED,
                                                 GTK_GRAPHICS_OFFLOAD_ENABLED,
-                                                GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
+                                                GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   g_object_class_install_properties (object_class, LAST_PROP, properties);
 

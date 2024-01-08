@@ -10,8 +10,8 @@ void main() {
   vUv = vec2(aUv.x, aUv.y);
 
   // We use this shader for both plain glyphs (used as mask)
-  // and color glpyhs (used as source). The renderer sets
-  // aColor to vec4(-1) for color glyhs.
+  // and color glyphs (used as source). The renderer sets
+  // aColor to vec4(-1) for color glyphs.
   if (distance(aColor,vec4(-1)) < 0.1)
     use_color = 0.0;
   else

@@ -598,7 +598,7 @@ gdk_macos_gl_context_make_current (GdkGLContext *context,
        * are submitted.
        *
        * TODO: investigate if we need this because we may switch contexts
-       *       durring composition and only need it when returning to a
+       *       during composition and only need it when returning to a
        *       previous context that uses the other context.
        */
       if (current != NULL)
