@@ -1207,7 +1207,7 @@ gsk_gl_render_job_visit_as_fallback (GskGLRenderJob      *job,
     cr = cairo_create (rendered_surface);
 
     cairo_save (cr);
-    cairo_translate (cr, - floorf (node->bounds.origin.x), - floorf (node->bounds.origin.y));
+    cairo_translate (cr, - node->bounds.origin.x, - node->bounds.origin.y);
     /* Render nodes don't modify state, so casting away the const is fine here */
     gsk_render_node_draw_fallback ((GskRenderNode *)node, cr);
     cairo_restore (cr);
