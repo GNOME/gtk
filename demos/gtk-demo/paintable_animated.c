@@ -70,7 +70,7 @@ gtk_nuclear_animation_snapshot (GdkPaintable *paintable,
                           ? &(GdkRGBA) { 0.9, 0.75, 0.15, 1.0 } /* yellow */
                           : &(GdkRGBA) { 0, 0, 0, 0 }, /* transparent */
                         width, height,
-                        2 * G_PI * nuclear->progress / MAX_PROGRESS);
+                        360 * nuclear->progress / MAX_PROGRESS);
 }
 
 static GdkPaintable *
@@ -85,7 +85,7 @@ gtk_nuclear_animation_get_current_image (GdkPaintable *paintable)
    * Luckily we added the rotation property to the nuclear icon
    * object previously, so we can just return an instance of that one.
    */
-  return gtk_nuclear_icon_new (2 * G_PI * nuclear->progress / MAX_PROGRESS);
+  return gtk_nuclear_icon_new (360 * nuclear->progress / MAX_PROGRESS);
 }
 
 static GdkPaintableFlags

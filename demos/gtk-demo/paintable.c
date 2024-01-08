@@ -53,7 +53,9 @@ gtk_nuclear_snapshot (GtkSnapshot   *snapshot,
                       double         rotation)
 {
 #define RADIUS 0.3
-  cairo_t *cr;
+  GskPathBuilder *builder;
+  GskPath *path;
+  GskStroke *stroke;
   double size;
 
   gtk_snapshot_append_color (snapshot,
@@ -61,24 +63,29 @@ gtk_nuclear_snapshot (GtkSnapshot   *snapshot,
                              &GRAPHENE_RECT_INIT (0, 0, width, height));
 
   size = MIN (width, height);
-  cr = gtk_snapshot_append_cairo (snapshot,
-                                  &GRAPHENE_RECT_INIT ((width - size) / 2.0,
-                                                       (height - size) / 2.0,
-                                                       size, size));
-  gdk_cairo_set_source_rgba (cr, foreground);
-  cairo_translate (cr, width / 2.0, height / 2.0);
-  cairo_scale (cr, size, size);
-  cairo_rotate (cr, rotation);
 
-  cairo_arc (cr, 0, 0, 0.1, - G_PI, G_PI);
-  cairo_fill (cr);
+  gtk_snapshot_save (snapshot);
 
-  cairo_set_line_width (cr, RADIUS);
-  cairo_set_dash (cr, (double[1]) { RADIUS * G_PI / 3 }, 1, 0.0);
-  cairo_arc (cr, 0, 0, RADIUS, - G_PI, G_PI);
-  cairo_stroke (cr);
+  gtk_snapshot_translate (snapshot, &GRAPHENE_POINT_INIT (width / 2.0, height / 2.0));
+  gtk_snapshot_scale (snapshot, size, size);
+  gtk_snapshot_rotate (snapshot, rotation);
 
-  cairo_destroy (cr);
+  builder = gsk_path_builder_new ();
+  gsk_path_builder_add_circle (builder, graphene_point_zero (), 0.1);
+  path = gsk_path_builder_free_to_path (builder);
+  gtk_snapshot_append_fill (snapshot, path, GSK_FILL_RULE_WINDING, foreground);
+  gsk_path_unref (path);
+
+  stroke = gsk_stroke_new (RADIUS);
+  gsk_stroke_set_dash (stroke, (float[1]) { RADIUS * G_PI / 3 }, 1);
+  builder = gsk_path_builder_new ();
+  gsk_path_builder_add_circle (builder, graphene_point_zero(), RADIUS);
+  path = gsk_path_builder_free_to_path (builder);
+  gtk_snapshot_append_stroke (snapshot, path, stroke, foreground);
+  gsk_path_unref (path);
+  gsk_stroke_free (stroke);
+
+  gtk_snapshot_restore (snapshot);
 }
 
 /* Here, we implement the functionality required by the GdkPaintable interface */
