@@ -76,7 +76,7 @@ gtk_nuclear_media_stream_snapshot (GdkPaintable *paintable,
                         &(GdkRGBA) { 0, 0, 0, 1 }, /* black */
                         &(GdkRGBA) { 0.9, 0.75, 0.15, 1.0 }, /* yellow */
                         width, height,
-                        2 * G_PI * nuclear->progress / DURATION);
+                        360 * nuclear->progress / DURATION);
 }
 
 static GdkPaintable *
@@ -85,7 +85,7 @@ gtk_nuclear_media_stream_get_current_image (GdkPaintable *paintable)
   GtkNuclearMediaStream *nuclear = GTK_NUCLEAR_MEDIA_STREAM (paintable);
 
   /* Same thing as with the animation */
-  return gtk_nuclear_icon_new (2 * G_PI * nuclear->progress / DURATION);
+  return gtk_nuclear_icon_new (360 * nuclear->progress / DURATION);
 }
 
 static GdkPaintableFlags

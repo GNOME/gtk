@@ -515,6 +515,29 @@ copy_texture (gpointer    user_data,
 }
 
 static void
+gsk_gpu_frame_record_rect (GskGpuFrame                 *self,
+                           GskGpuImage                 *target,
+                           const cairo_rectangle_int_t *clip,
+                           GskRenderNode               *node,
+                           const graphene_rect_t       *viewport)
+{
+  gsk_gpu_render_pass_begin_op (self,
+                                target,
+                                clip,
+                                GSK_RENDER_PASS_PRESENT);
+
+  gsk_gpu_node_processor_process (self,
+                                  target,
+                                  clip,
+                                  node,
+                                  viewport);
+
+  gsk_gpu_render_pass_end_op (self,
+                              target,
+                              GSK_RENDER_PASS_PRESENT);
+}
+
+static void
 gsk_gpu_frame_record (GskGpuFrame            *self,
                       gint64                  timestamp,
                       GskGpuImage            *target,
@@ -524,37 +547,33 @@ gsk_gpu_frame_record (GskGpuFrame            *self,
                       GdkTexture            **texture)
 {
   GskGpuFramePrivate *priv = gsk_gpu_frame_get_instance_private (self);
-  cairo_rectangle_int_t extents;
 
   priv->timestamp = timestamp;
 
   if (clip)
     {
-      cairo_region_get_extents (clip, &extents);
+      int i;
+
+      for (i = 0; i < cairo_region_num_rectangles (clip); i++)
+        {
+          cairo_rectangle_int_t rect;
+
+          cairo_region_get_rectangle (clip, i, &rect);
+          gsk_gpu_frame_record_rect (self, target, &rect, node, viewport);
+        }
     }
   else
     {
-      extents = (cairo_rectangle_int_t) {
-                    0, 0,
-                    gsk_gpu_image_get_width (target),
-                    gsk_gpu_image_get_height (target)
-                };
+      gsk_gpu_frame_record_rect (self,
+                                 target,
+                                 &(cairo_rectangle_int_t) {
+                                     0, 0,
+                                     gsk_gpu_image_get_width (target),
+                                     gsk_gpu_image_get_height (target)
+                                 },
+                                 node,
+                                 viewport);
     }
-
-  gsk_gpu_render_pass_begin_op (self,
-                                target,
-                                &extents,
-                                GSK_RENDER_PASS_PRESENT);
-
-  gsk_gpu_node_processor_process (self,
-                                  target,
-                                  &extents,
-                                  node,
-                                  viewport);
-
-  gsk_gpu_render_pass_end_op (self,
-                              target,
-                              GSK_RENDER_PASS_PRESENT);
 
   if (texture)
     gsk_gpu_download_op (self, target, TRUE, copy_texture, texture);
