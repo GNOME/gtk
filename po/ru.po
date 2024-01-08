@@ -22,8 +22,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2023-11-19 16:14+0000\n"
-"PO-Revision-Date: 2023-11-19 22:56+0300\n"
+"POT-Creation-Date: 2024-01-08 02:46+0000\n"
+"PO-Revision-Date: 2024-01-08 15:00+0300\n"
 "Last-Translator: Artur So <arturios2005@mail.ru>\n"
 "Language-Team: Русский <gnome-cyr@gnome.org>\n"
 "Language: ru\n"
@@ -32,7 +32,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Poedit 3.4.1\n"
+"X-Generator: Poedit 3.4.2\n"
 
 #: gdk/broadway/gdkbroadway-server.c:135
 #, c-format
@@ -43,11 +43,11 @@ msgstr "Тип дисплея broadway не поддерживается: %s"
 msgid "This clipboard cannot store data."
 msgstr "Этот буфер обмена не может хранить данные."
 
-#: gdk/gdkclipboard.c:287 gdk/gdkclipboard.c:785 gdk/gdkclipboard.c:1085
+#: gdk/gdkclipboard.c:287 gdk/gdkclipboard.c:786 gdk/gdkclipboard.c:1086
 msgid "Cannot read from empty clipboard."
 msgstr "Невозможно прочитать из пустого буфера обмена."
 
-#: gdk/gdkclipboard.c:318 gdk/gdkclipboard.c:1135 gdk/gdkdrag.c:618
+#: gdk/gdkclipboard.c:318 gdk/gdkclipboard.c:1136 gdk/gdkdrag.c:618
 msgid "No compatible formats to transfer clipboard contents."
 msgstr ""
 "Отсутствие совместимых форматов для передачи содержимого буфера обмена."
@@ -63,35 +63,35 @@ msgstr "Не удалось предоставить содержимое как
 msgid "Cannot provide contents as %s"
 msgstr "Не удалось предоставить содержимое как \"%s\""
 
-#: gdk/gdkdisplay.c:164 gdk/gdkglcontext.c:455
+#: gdk/gdkdisplay.c:170 gdk/gdkglcontext.c:462
 msgid "The current backend does not support OpenGL"
 msgstr "Текущий движок не поддерживает OpenGL"
 
-#: gdk/gdkdisplay.c:1263 gdk/gdksurface.c:1268 gdk/gdkvulkancontext.c:1479
+#: gdk/gdkdisplay.c:1296 gdk/gdkvulkancontext.c:1581
 msgid "Vulkan support disabled via GDK_DEBUG"
 msgstr "Поддержка Vulkan отключена через GDK_DEBUG"
 
-#: gdk/gdkdisplay.c:1295
+#: gdk/gdkdisplay.c:1350
 msgid "GL support disabled via GDK_DEBUG"
 msgstr "Поддержка GL отключена через GDK_DEBUG"
 
-#: gdk/gdkdisplay.c:1591
+#: gdk/gdkdisplay.c:1646
 msgid "No EGL configuration available"
 msgstr "Конфигурация EGL недоступна"
 
-#: gdk/gdkdisplay.c:1599
+#: gdk/gdkdisplay.c:1654
 msgid "Failed to get EGL configurations"
 msgstr "Не удалось получить конфигурации EGL"
 
-#: gdk/gdkdisplay.c:1629
+#: gdk/gdkdisplay.c:1684
 msgid "No EGL configuration with required features found"
 msgstr "Конфигурация EGL с необходимыми функциями не найдена"
 
-#: gdk/gdkdisplay.c:1636
+#: gdk/gdkdisplay.c:1691
 msgid "No perfect EGL configuration found"
 msgstr "Идеальная конфигурация EGL не найдена"
 
-#: gdk/gdkdisplay.c:1678
+#: gdk/gdkdisplay.c:1733
 #, c-format
 msgid "EGL implementation is missing extension %s"
 msgid_plural "EGL implementation is missing %2$d extensions: %1$s"
@@ -99,23 +99,23 @@ msgstr[0] "В реализации EGL отсутствует %2$d расшир�
 msgstr[1] "В реализации EGL отсутствует %2$d расширения: %1$s"
 msgstr[2] "В реализации EGL отсутствует %2$d расширений: %1$s"
 
-#: gdk/gdkdisplay.c:1711
+#: gdk/gdkdisplay.c:1783
 msgid "libEGL not available in this sandbox"
 msgstr "libEGL недоступен в этой песочнице"
 
-#: gdk/gdkdisplay.c:1712
+#: gdk/gdkdisplay.c:1784
 msgid "libEGL not available"
 msgstr "libEGL недоступен"
 
-#: gdk/gdkdisplay.c:1722
+#: gdk/gdkdisplay.c:1794
 msgid "Failed to create EGL display"
 msgstr "Не удалось создать дисплей EGL"
 
-#: gdk/gdkdisplay.c:1732
+#: gdk/gdkdisplay.c:1804
 msgid "Could not initialize EGL display"
 msgstr "Не удалось инициализировать дисплей EGL"
 
-#: gdk/gdkdisplay.c:1743
+#: gdk/gdkdisplay.c:1815
 #, c-format
 msgid "EGL version %d.%d is too old. GTK requires %d.%d"
 msgstr "Версия EGL %d.%d слишком старая. GTK требует %d.%d"
@@ -128,37 +128,37 @@ msgstr "Перетаскивание из других приложений не
 msgid "No compatible formats to transfer contents."
 msgstr "Отсутствие совместимых форматов для передачи содержимого."
 
-#: gdk/gdkglcontext.c:414 gdk/x11/gdkglcontext-glx.c:642
+#: gdk/gdkglcontext.c:422 gdk/x11/gdkglcontext-glx.c:642
 msgid "No GL API allowed."
 msgstr "API GL не разрешен."
 
-#: gdk/gdkglcontext.c:438 gdk/win32/gdkglcontext-win32-wgl.c:385
-#: gdk/win32/gdkglcontext-win32-wgl.c:528
-#: gdk/win32/gdkglcontext-win32-wgl.c:572 gdk/x11/gdkglcontext-glx.c:691
+#: gdk/gdkglcontext.c:445 gdk/win32/gdkglcontext-win32-wgl.c:381
+#: gdk/win32/gdkglcontext-win32-wgl.c:524
+#: gdk/win32/gdkglcontext-win32-wgl.c:568 gdk/x11/gdkglcontext-glx.c:688
 msgid "Unable to create a GL context"
 msgstr "Невозможно создать контекст GL"
 
-#: gdk/gdkglcontext.c:1299
+#: gdk/gdkglcontext.c:1306
 msgid "OpenGL ES disabled via GDK_DEBUG"
 msgstr "OpenGL ES отключено через GDK_DEBUG"
 
-#: gdk/gdkglcontext.c:1311
+#: gdk/gdkglcontext.c:1318
 msgid "OpenGL disabled via GDK_DEBUG"
 msgstr "OpenGL отключено через GDK_DEBUG"
 
-#: gdk/gdkglcontext.c:1322
+#: gdk/gdkglcontext.c:1329
 #, c-format
 msgid "Application does not support %s API"
 msgstr "Приложение не поддерживает %s API"
 
 #. translators: This is about OpenGL backend names, like
 #. * "Trying to use X11 GLX, but EGL is already in use"
-#: gdk/gdkglcontext.c:1979
+#: gdk/gdkglcontext.c:2124
 #, c-format
 msgid "Trying to use %s, but %s is already in use"
 msgstr "Попытка использовать %s, но %s уже используется"
 
-#: gdk/gdktexture.c:530
+#: gdk/gdktexture.c:580
 msgid "Unknown image format."
 msgstr "Неизвестный формат изображения."
 
@@ -549,7 +549,7 @@ msgstr "Ошибка интерпретации файла изображени�
 msgid "Unsupported JPEG colorspace (%d)"
 msgstr "Неподдерживаемое цветовое пространство JPEG (%d)"
 
-#: gdk/loaders/gdkjpeg.c:203 gdk/loaders/gdkpng.c:280 gdk/loaders/gdktiff.c:472
+#: gdk/loaders/gdkjpeg.c:203 gdk/loaders/gdkpng.c:286 gdk/loaders/gdktiff.c:472
 #, c-format
 msgid "Not enough memory for image size %ux%u"
 msgstr "Недостаточно памяти для размера изображения %ux%u"
@@ -559,15 +559,20 @@ msgstr "Недостаточно памяти для размера изобра
 msgid "Error reading png (%s)"
 msgstr "Ошибка чтения png (%s)"
 
-#: gdk/loaders/gdkpng.c:211
+#: gdk/loaders/gdkpng.c:212
 #, c-format
 msgid "Unsupported depth %u in png image"
 msgstr "Неподдерживаемая глубина %u в изображении png"
 
-#: gdk/loaders/gdkpng.c:261
+#: gdk/loaders/gdkpng.c:262
 #, c-format
 msgid "Unsupported color type %u in png image"
 msgstr "Неподдерживаемый тип цвета %u в изображении png"
+
+#: gdk/loaders/gdkpng.c:272
+#, c-format
+msgid "Image stride too large for image size %ux%u"
+msgstr "Шаг изображения слишком велик для размера изображения %ux%u"
 
 #: gdk/loaders/gdktiff.c:358
 msgid "Failed to load RGB data from TIFF file"
@@ -739,21 +744,21 @@ msgstr "Ошибка IDataObject_GetData (0x%x), возвращаю 0x%lx"
 msgid "Failed to transmute DnD data W32 format 0x%x to %p (%s)"
 msgstr "Не удалось преобразовать данные DnD W32 формата 0x%x в %p (%s)"
 
-#: gdk/win32/gdkglcontext-win32-wgl.c:319
+#: gdk/win32/gdkglcontext-win32-wgl.c:315
 msgid "No GL implementation is available"
 msgstr "Нет доступной реализации GL"
 
-#: gdk/win32/gdkglcontext-win32-wgl.c:394
+#: gdk/win32/gdkglcontext-win32-wgl.c:390
 #, c-format
 msgid "WGL version %d.%d is too low, need at least %d.%d"
 msgstr "Версия WGL %d.%d слишком старая, требуется %d.%d"
 
-#: gdk/win32/gdkglcontext-win32-wgl.c:412
+#: gdk/win32/gdkglcontext-win32-wgl.c:408
 #, c-format
 msgid "GL implementation cannot share GL contexts"
 msgstr "Реализация GL не может совместно использовать контексты GL"
 
-#: gdk/win32/gdkglcontext-win32-wgl.c:694
+#: gdk/win32/gdkglcontext-win32-wgl.c:688
 msgid "No available configurations for the given pixel format"
 msgstr "Нет доступных конфигураций для данного формата пикселя"
 
@@ -817,15 +822,15 @@ msgstr "Менеджер буфера обмена не смог сохрани�
 msgid "Cannot store clipboard. No clipboard manager is active."
 msgstr "Этот буфер обмена не может хранить данные."
 
-#: gdk/x11/gdkglcontext-glx.c:810
+#: gdk/x11/gdkglcontext-glx.c:807
 msgid "No GLX configurations available"
 msgstr "Конфигурации GLX не предлагаются"
 
-#: gdk/x11/gdkglcontext-glx.c:883
+#: gdk/x11/gdkglcontext-glx.c:880
 msgid "No GLX configuration with required features found"
 msgstr "Конфигурация GLX с требуемыми функциями не найдена"
 
-#: gdk/x11/gdkglcontext-glx.c:957
+#: gdk/x11/gdkglcontext-glx.c:954
 msgid "GLX is not supported"
 msgstr "GLX не поддерживается"
 
@@ -856,7 +861,7 @@ msgstr "Недопустимые форматы при преобразован�
 msgid "Unsupported encoding “%s”"
 msgstr "Неподдерживаемая кодировка \"%s\""
 
-#: gsk/gl/gskglrenderer.c:135
+#: gsk/gl/gskglrenderer.c:204
 #, c-format
 msgid "This GLES %d.%d implementation does not support half-float vertex data"
 msgstr ""
@@ -1059,7 +1064,7 @@ msgid "Invalid"
 msgstr "Неверный"
 
 #. This label is displayed in a treeview cell displaying an accelerator
-#. * when the cell is clicked to change the acelerator.
+#. * when the cell is clicked to change the accelerator.
 #.
 #: gtk/deprecated/gtkcellrendereraccel.c:436
 #: gtk/deprecated/gtkcellrendereraccel.c:729
@@ -1191,11 +1196,11 @@ msgstr "GNU Lesser General Public License, версии 3 или позднее"
 
 #: gtk/gtkaboutdialog.c:125
 msgid "BSD 2-Clause License"
-msgstr "BSD 2-Clause License"
+msgstr "Лицензия BSD 2-Clause"
 
 #: gtk/gtkaboutdialog.c:126
 msgid "The MIT License (MIT)"
-msgstr "The MIT License (MIT)"
+msgstr "Лицензия MIT (MIT)"
 
 #: gtk/gtkaboutdialog.c:127
 msgid "Artistic License 2.0"
@@ -1237,35 +1242,39 @@ msgstr "Лицензия Apache, версия 2.0"
 msgid "Mozilla Public License 2.0"
 msgstr "Общественная лицензия Mozilla 2.0"
 
-#: gtk/gtkaboutdialog.c:963
+#: gtk/gtkaboutdialog.c:137
+msgid "BSD Zero-Clause License"
+msgstr "Лицензия BSD Zero-Clause"
+
+#: gtk/gtkaboutdialog.c:964
 msgid "Website"
 msgstr "Веб-страница"
 
-#: gtk/gtkaboutdialog.c:999 gtk/ui/gtkapplication-quartz.ui:6
+#: gtk/gtkaboutdialog.c:1000 gtk/ui/gtkapplication-quartz.ui:6
 #, c-format
 msgid "About %s"
 msgstr "О %s"
 
-#: gtk/gtkaboutdialog.c:2089
+#: gtk/gtkaboutdialog.c:2090
 msgid "Created by"
 msgstr "Автор"
 
-#: gtk/gtkaboutdialog.c:2092
+#: gtk/gtkaboutdialog.c:2093
 msgid "Documented by"
 msgstr "Документация"
 
-#: gtk/gtkaboutdialog.c:2102
+#: gtk/gtkaboutdialog.c:2103
 msgid "Translated by"
 msgstr "Перевод"
 
-#: gtk/gtkaboutdialog.c:2107
+#: gtk/gtkaboutdialog.c:2108
 msgid "Design by"
 msgstr "Проект"
 
 #. Translators: this is the license preamble; the string at the end
 #. * contains the name of the license as link text.
 #.
-#: gtk/gtkaboutdialog.c:2272
+#: gtk/gtkaboutdialog.c:2273
 #, c-format
 msgid ""
 "This program comes with absolutely no warranty.\n"
@@ -1764,6 +1773,16 @@ msgctxt "accessibility"
 msgid "block quote"
 msgstr "блокировать цитирование"
 
+#: gtk/gtkaccessible.c:837
+msgctxt "accessibility"
+msgid "article"
+msgstr "статья"
+
+#: gtk/gtkaccessible.c:838
+msgctxt "accessibility"
+msgid "comment"
+msgstr "комментарий"
+
 #: gtk/gtkalertdialog.c:668 gtk/print/gtkcustompaperunixdialog.c:322
 #: gtk/gtkmessagedialog.c:166 gtk/ui/gtkassistant.ui:40
 msgid "_Close"
@@ -1773,7 +1792,7 @@ msgstr "_Закрыть"
 #. * suspend or screen locking, and the caller hasn't specified
 #. * a reason.
 #.
-#: gtk/gtkapplication-dbus.c:721
+#: gtk/gtkapplication-dbus.c:721 gtk/gtkapplication-dbus.c:763
 msgid "Reason not specified"
 msgstr "Причина не указана"
 
@@ -2249,7 +2268,7 @@ msgstr "Файл с таким именем уже существует"
 #: gtk/gtkmessagedialog.c:179 gtk/gtkmountoperation.c:608
 #: gtk/print/gtkpagesetupunixdialog.c:282 gtk/print/gtkprintbackend.c:638
 #: gtk/print/gtkprintunixdialog.c:682 gtk/print/gtkprintunixdialog.c:839
-#: gtk/gtkwindow.c:6234 gtk/ui/gtkappchooserdialog.ui:48
+#: gtk/gtkwindow.c:6253 gtk/ui/gtkappchooserdialog.ui:48
 #: gtk/ui/gtkassistant.ui:52 gtk/ui/gtkcolorchooserdialog.ui:36
 #: gtk/ui/gtkfontchooserdialog.ui:27
 msgid "_Cancel"
@@ -2337,7 +2356,7 @@ msgid "If you delete an item, it will be permanently lost."
 msgstr "Если вы удалите элемент, он будет навсегда утерян."
 
 #: gtk/gtkfilechooserwidget.c:1183 gtk/gtkfilechooserwidget.c:1781
-#: gtk/gtklabel.c:5695 gtk/gtktext.c:6147 gtk/gtktextview.c:9018
+#: gtk/gtklabel.c:5697 gtk/gtktext.c:6147 gtk/gtktextview.c:9018
 msgid "_Delete"
 msgstr "_Удалить"
 
@@ -2452,7 +2471,6 @@ msgstr "Вчера"
 
 # полное название месяца
 #: gtk/gtkfilechooserwidget.c:3758
-#, c-format
 msgid "%-e %b"
 msgstr "%-e %b"
 
@@ -2680,31 +2698,31 @@ msgstr "Закрыть"
 msgid "Close the infobar"
 msgstr "Закрыть информационную панель"
 
-#: gtk/gtklabel.c:5692 gtk/gtktext.c:6135 gtk/gtktextview.c:9006
+#: gtk/gtklabel.c:5694 gtk/gtktext.c:6135 gtk/gtktextview.c:9006
 msgid "Cu_t"
 msgstr "В_ырезать"
 
-#: gtk/gtklabel.c:5693 gtk/gtktext.c:6139 gtk/gtktextview.c:9010
+#: gtk/gtklabel.c:5695 gtk/gtktext.c:6139 gtk/gtktextview.c:9010
 msgid "_Copy"
 msgstr "_Копировать"
 
-#: gtk/gtklabel.c:5694 gtk/gtktext.c:6143 gtk/gtktextview.c:9014
+#: gtk/gtklabel.c:5696 gtk/gtktext.c:6143 gtk/gtktextview.c:9014
 msgid "_Paste"
 msgstr "Вст_авить"
 
-#: gtk/gtklabel.c:5700 gtk/gtktext.c:6156 gtk/gtktextview.c:9039
+#: gtk/gtklabel.c:5702 gtk/gtktext.c:6156 gtk/gtktextview.c:9039
 msgid "Select _All"
 msgstr "Выделить вс_ё"
 
-#: gtk/gtklabel.c:5705
+#: gtk/gtklabel.c:5707
 msgid "_Open Link"
 msgstr "_Открыть ссылку"
 
-#: gtk/gtklabel.c:5709
+#: gtk/gtklabel.c:5711
 msgid "Copy _Link Address"
 msgstr "Копировать адрес _ссылки"
 
-#: gtk/gtklabel.c:5753 gtk/gtktext.c:2716 gtk/gtktextview.c:9088
+#: gtk/gtklabel.c:5755 gtk/gtktext.c:2716 gtk/gtktextview.c:9088
 msgid "Context menu"
 msgstr "Контекстное меню"
 
@@ -2775,7 +2793,7 @@ msgid "Play"
 msgstr "Воспроизвести"
 
 #: gtk/gtkmessagedialog.c:162 gtk/gtkmessagedialog.c:180
-#: gtk/print/gtkprintbackend.c:639 gtk/gtkwindow.c:6235
+#: gtk/print/gtkprintbackend.c:639 gtk/gtkwindow.c:6254
 msgid "_OK"
 msgstr "_OK"
 
@@ -3616,7 +3634,7 @@ msgstr "Смахивание вправо"
 
 #. Translators: This is placeholder text for the search entry in the shortcuts window
 #: gtk/gtkshortcutswindow.c:879 gtk/gtkshortcutswindow.c:946
-#: gtk/gtkshortcutswindow.c:951
+#: gtk/gtkshortcutswindow.c:952
 msgid "Search Shortcuts"
 msgstr "Поиск комбинаций клавиш"
 
@@ -3630,12 +3648,12 @@ msgstr "Комбинации клавиш"
 msgid "Search Results"
 msgstr "Результаты поиска"
 
-#: gtk/gtkshortcutswindow.c:1013 gtk/ui/gtkemojichooser.ui:349
+#: gtk/gtkshortcutswindow.c:1014 gtk/ui/gtkemojichooser.ui:349
 #: gtk/ui/gtkfilechooserwidget.ui:239
 msgid "No Results Found"
 msgstr "Результатов не найдено"
 
-#: gtk/gtkshortcutswindow.c:1024 gtk/ui/gtkemojichooser.ui:362
+#: gtk/gtkshortcutswindow.c:1025 gtk/ui/gtkemojichooser.ui:362
 #: gtk/ui/gtkfilechooserwidget.ui:252 gtk/ui/gtkplacesview.ui:218
 msgid "Try a different search"
 msgstr "Попробуйте другой поисковый запрос"
@@ -3657,12 +3675,12 @@ msgstr "_Отменить"
 msgid "_Redo"
 msgstr "_Повторить"
 
-#: gtk/gtkwindow.c:6223
+#: gtk/gtkwindow.c:6242
 #, c-format
 msgid "Do you want to use GTK Inspector?"
 msgstr "Вы хотите использовать GTK Inspector?"
 
-#: gtk/gtkwindow.c:6225
+#: gtk/gtkwindow.c:6244
 #, c-format
 msgid ""
 "GTK Inspector is an interactive debugger that lets you explore and modify "
@@ -3673,7 +3691,7 @@ msgstr ""
 "изменять внутренние компоненты любого GTK-приложения. Его использование "
 "может привести к поломке или аварийному завершению работы приложения."
 
-#: gtk/gtkwindow.c:6230
+#: gtk/gtkwindow.c:6249
 msgid "Don’t show this message again"
 msgstr "Не показывать это сообщение снова"
 
@@ -3852,37 +3870,37 @@ msgstr "Классы стилей"
 msgid "CSS Property"
 msgstr "Свойство CSS"
 
-#: gtk/inspector/general.c:349
+#: gtk/inspector/general.c:352
 msgctxt "GL version"
 msgid "None"
 msgstr "Нет"
 
-#: gtk/inspector/general.c:426
+#: gtk/inspector/general.c:430
 msgctxt "GL version"
 msgid "Unknown"
 msgstr "Неизвестно"
 
-#: gtk/inspector/general.c:491
+#: gtk/inspector/general.c:492
 msgctxt "Vulkan device"
 msgid "Disabled"
 msgstr "Выключено"
 
-#: gtk/inspector/general.c:492 gtk/inspector/general.c:493
+#: gtk/inspector/general.c:493 gtk/inspector/general.c:494
 msgctxt "Vulkan version"
 msgid "Disabled"
 msgstr "Выключено"
 
-#: gtk/inspector/general.c:549
+#: gtk/inspector/general.c:544
 msgctxt "Vulkan device"
 msgid "None"
 msgstr "Нет"
 
-#: gtk/inspector/general.c:550 gtk/inspector/general.c:551
+#: gtk/inspector/general.c:545 gtk/inspector/general.c:546
 msgctxt "Vulkan version"
 msgid "None"
 msgstr "Нет"
 
-#: gtk/inspector/general.c:882
+#: gtk/inspector/general.c:884
 msgid "IM Context is hardcoded by GTK_IM_MODULE"
 msgstr "Контекст IM жестко кодируется GTK_IM_MODULE"
 
@@ -3934,43 +3952,51 @@ msgstr "Визуальный RGBA"
 msgid "Composited"
 msgstr "Скомпоновано"
 
-#: gtk/inspector/general.ui:559
+#: gtk/inspector/general.ui:538
+msgid "Protocols"
+msgstr "Протоколы"
+
+#: gtk/inspector/general.ui:594
 msgid "GL Version"
 msgstr "Версия GL"
 
-#: gtk/inspector/general.ui:586
+#: gtk/inspector/general.ui:621
 msgid "GL Backend Version"
 msgstr "Версия движка GL"
 
-#: gtk/inspector/general.ui:636
+#: gtk/inspector/general.ui:671
 msgid "GL Backend Vendor"
 msgstr "Поставщик движка GL"
 
-#: gtk/inspector/general.ui:663
+#: gtk/inspector/general.ui:698
 msgid "GL_VENDOR"
 msgstr "GL_VENDOR"
 
-#: gtk/inspector/general.ui:692
+#: gtk/inspector/general.ui:727
 msgid "GL_RENDERER"
 msgstr "GL_RENDERER"
 
-#: gtk/inspector/general.ui:721
+#: gtk/inspector/general.ui:756
 msgid "GL_VERSION"
 msgstr "GL_VERSION"
 
-#: gtk/inspector/general.ui:750
+#: gtk/inspector/general.ui:785
 msgid "GL_SHADING_LANGUAGE_VERSION"
 msgstr "GL_SHADING_LANGUAGE_VERSION"
 
-#: gtk/inspector/general.ui:789
+#: gtk/inspector/general.ui:813 gtk/inspector/general.ui:929
+msgid "Extensions"
+msgstr "Расширения"
+
+#: gtk/inspector/general.ui:849
 msgid "Vulkan Device"
 msgstr "Устройство Vulkan"
 
-#: gtk/inspector/general.ui:816
+#: gtk/inspector/general.ui:876
 msgid "Vulkan API version"
 msgstr "Версия API Vulkan"
 
-#: gtk/inspector/general.ui:843
+#: gtk/inspector/general.ui:903
 msgid "Vulkan driver version"
 msgstr "Версия драйвера Vulkan"
 
@@ -4388,47 +4414,53 @@ msgstr "Показать частоту кадров"
 msgid "Show Graphic Updates"
 msgstr "Показывать графические обновления"
 
-#: gtk/inspector/visual.ui:435
-msgid "Show Fallback Rendering"
-msgstr "Показать обратный рендеринг"
+#: gtk/inspector/visual.ui:430
+msgid ""
+"Tints all the places where the current renderer uses Cairo instead of the "
+"GPU."
+msgstr "Оттеняет все места, где текущий рендер использует Cairo вместо GPU."
 
-#: gtk/inspector/visual.ui:460
+#: gtk/inspector/visual.ui:436
+msgid "Show Cairo Rendering"
+msgstr "Показать Cairo рендеринг"
+
+#: gtk/inspector/visual.ui:461
 msgid "Show Baselines"
 msgstr "Показывать базовые линии"
 
-#: gtk/inspector/visual.ui:488
+#: gtk/inspector/visual.ui:489
 msgid "Show Layout Borders"
 msgstr "Показывать границы разметки"
 
-#: gtk/inspector/visual.ui:545
+#: gtk/inspector/visual.ui:546
 msgid "CSS Padding"
 msgstr "CSS отступ"
 
-#: gtk/inspector/visual.ui:555
+#: gtk/inspector/visual.ui:556
 msgid "CSS Border"
 msgstr "CSS Граница"
 
-#: gtk/inspector/visual.ui:565
+#: gtk/inspector/visual.ui:566
 msgid "CSS Margin"
 msgstr "CSS отступ"
 
-#: gtk/inspector/visual.ui:575
+#: gtk/inspector/visual.ui:576
 msgid "Widget Margin"
 msgstr "Отступ от виджета"
 
-#: gtk/inspector/visual.ui:610
+#: gtk/inspector/visual.ui:611
 msgid "Show Focus"
 msgstr "Показать фокус"
 
-#: gtk/inspector/visual.ui:635
+#: gtk/inspector/visual.ui:636
 msgid "Show Accessibility warnings"
 msgstr "Показать предупреждения специальных возможностей"
 
-#: gtk/inspector/visual.ui:660
+#: gtk/inspector/visual.ui:661
 msgid "Show Graphics Offload"
 msgstr "Показать графическую выгрузку"
 
-#: gtk/inspector/visual.ui:692
+#: gtk/inspector/visual.ui:693
 msgid "Inspect Inspector"
 msgstr "Инспектор контроля"
 
