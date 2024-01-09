@@ -1073,6 +1073,8 @@ gsk_gpu_node_processor_add_fallback_node (GskGpuNodeProcessor *self,
   if (!gsk_gpu_node_processor_clip_node_bounds (self, node, &clipped_bounds))
     return;
 
+  rect_round_to_pixels (&clipped_bounds, &self->scale, &self->offset, &clipped_bounds);
+
   gsk_gpu_node_processor_sync_globals (self, 0);
 
   image = gsk_gpu_upload_cairo_op (self->frame,
@@ -3481,6 +3483,7 @@ gsk_gpu_node_processor_add_fill_node (GskGpuNodeProcessor *self,
 
   if (!gsk_gpu_node_processor_clip_node_bounds (self, node, &clip_bounds))
     return;
+  rect_round_to_pixels (&clip_bounds, &self->scale, &self->offset, &clip_bounds);
 
   child = gsk_fill_node_get_child (node);
 
@@ -3522,9 +3525,9 @@ gsk_gpu_node_processor_add_fill_node (GskGpuNodeProcessor *self,
                                      descriptors);
 
   gsk_gpu_mask_op (self->frame,
-                   gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, &node->bounds),
+                   gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, &clip_bounds),
                    self->desc,
-                   &node->bounds,
+                   &clip_bounds,
                    &self->offset,
                    self->opacity,
                    GSK_MASK_MODE_ALPHA,
@@ -3577,6 +3580,7 @@ gsk_gpu_node_processor_add_stroke_node (GskGpuNodeProcessor *self,
 
   if (!gsk_gpu_node_processor_clip_node_bounds (self, node, &clip_bounds))
     return;
+  rect_round_to_pixels (&clip_bounds, &self->scale, &self->offset, &clip_bounds);
 
   child = gsk_stroke_node_get_child (node);
 
@@ -3618,9 +3622,9 @@ gsk_gpu_node_processor_add_stroke_node (GskGpuNodeProcessor *self,
                                      descriptors);
 
   gsk_gpu_mask_op (self->frame,
-                   gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, &node->bounds),
+                   gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, &clip_bounds),
                    self->desc,
-                   &node->bounds,
+                   &clip_bounds,
                    &self->offset,
                    self->opacity,
                    GSK_MASK_MODE_ALPHA,
