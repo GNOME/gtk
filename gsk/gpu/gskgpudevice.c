@@ -663,10 +663,17 @@ gsk_gpu_device_lookup_glyph_image (GskGpuDevice           *self,
 
   cache = g_new (GskGpuCachedGlyph, 1);
   pango_font_get_glyph_extents (font, glyph, &ink_rect, NULL);
-  origin.x = floor (ink_rect.x * scale / PANGO_SCALE);
-  origin.y = floor (ink_rect.y * scale / PANGO_SCALE);
-  rect.size.width = ceil ((ink_rect.x + ink_rect.width) * scale / PANGO_SCALE) - origin.x;
-  rect.size.height = ceil ((ink_rect.y + ink_rect.height) * scale / PANGO_SCALE) - origin.y;
+  pango_extents_to_pixels (&ink_rect, NULL);
+
+  ink_rect.x -= 1;
+  ink_rect.width += 2;
+  ink_rect.y -= 1;
+  ink_rect.height += 2;
+
+  origin.x = floor (ink_rect.x * scale);
+  origin.y = floor (ink_rect.y * scale);
+  rect.size.width = ceil ((ink_rect.x + ink_rect.width) * scale) - origin.x;
+  rect.size.height = ceil ((ink_rect.y + ink_rect.height) * scale) - origin.y;
   padding = 1;
 
   image = gsk_gpu_device_add_atlas_image (self,
@@ -682,10 +689,9 @@ gsk_gpu_device_lookup_glyph_image (GskGpuDevice           *self,
     }
   else
     {
-      image = gsk_gpu_device_create_upload_image (self, FALSE, GDK_MEMORY_DEFAULT, rect.size.width, rect.size.height),
-      rect.origin.x = 0;
-      rect.origin.y = 0;
-      padding = 0;
+      image = gsk_gpu_device_create_upload_image (self, FALSE, GDK_MEMORY_DEFAULT, rect.size.width + 2 * padding, rect.size.height + 2 * padding),
+      rect.origin.x = padding;
+      rect.origin.y = padding;
       cache = gsk_gpu_cached_new (self, &GSK_GPU_CACHED_GLYPH_CLASS, NULL);
     }
 
