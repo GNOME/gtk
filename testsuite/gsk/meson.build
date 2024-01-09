@@ -89,6 +89,7 @@ compare_render_tests = [
   'mask-texture-color-alpha',
   'mipmap-generation-later',
   'nested-rounded-clips',
+  'offscreen-fractional-translate-nogl',
   'offscreen-pixel-alignment-nogl-nocairo',
   'opacity_clip',
   'opacity-colormatrix-combinations',
