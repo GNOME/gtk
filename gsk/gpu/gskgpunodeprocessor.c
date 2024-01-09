@@ -3096,21 +3096,26 @@ gsk_gpu_node_processor_create_glyph_pattern (GskGpuPatternWriter *self,
           last_image = image;
         }
 
-      graphene_rect_scale (&glyph_bounds, inv_scale, inv_scale, &glyph_bounds);
       glyph_offset = GRAPHENE_POINT_INIT (offset.x - glyph_offset.x * inv_scale + (float) glyphs[i].geometry.x_offset / PANGO_SCALE,
                                           offset.y - glyph_offset.y * inv_scale + (float) glyphs[i].geometry.y_offset / PANGO_SCALE);
 
       gsk_gpu_pattern_writer_append_uint (self, tex_id);
       gsk_gpu_pattern_writer_append_rect (self,
-                                         &glyph_bounds,
-                                         &glyph_offset);
+                                          &GRAPHENE_RECT_INIT (
+                                              0,
+                                              0,
+                                              glyph_bounds.size.width * inv_scale,
+                                              glyph_bounds.size.height * inv_scale
+                                          ),
+                                          &glyph_offset);
       gsk_gpu_pattern_writer_append_rect (self,
-                                         &GRAPHENE_RECT_INIT (
-                                             0, 0,
-                                             gsk_gpu_image_get_width (image) * inv_scale,
-                                             gsk_gpu_image_get_height (image) * inv_scale
-                                         ),
-                                         &glyph_offset);
+                                          &GRAPHENE_RECT_INIT (
+                                              - glyph_bounds.origin.x * inv_scale,
+                                              - glyph_bounds.origin.y * inv_scale,
+                                              gsk_gpu_image_get_width (image) * inv_scale,
+                                              gsk_gpu_image_get_height (image) * inv_scale
+                                          ),
+                                          &glyph_offset);
 
       offset.x += (float) glyphs[i].geometry.width / PANGO_SCALE;
     }
