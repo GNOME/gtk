@@ -549,6 +549,18 @@ state_set (GtkSwitch *self,
   return TRUE;
 }
 
+static gboolean
+translate_switch_shapes_to_opacity (GBinding     *binding,
+                                    const GValue *from_value,
+                                    GValue       *to_value,
+                                    gpointer      user_data)
+{
+  gboolean visible = g_value_get_boolean (from_value);
+  g_value_set_double (to_value, visible ? 1.0 : 0.0);
+
+  return TRUE;
+}
+
 static void
 gtk_switch_class_init (GtkSwitchClass *klass)
 {
@@ -658,6 +670,7 @@ gtk_switch_init (GtkSwitch *self)
 {
   GtkLayoutManager *layout;
   GtkGesture *gesture;
+  GtkSettings *gtk_settings;
 
   gtk_widget_set_focusable (GTK_WIDGET (self), TRUE);
 
@@ -690,17 +703,31 @@ gtk_switch_init (GtkSwitch *self)
                                   gtk_switch_allocate);
   gtk_widget_set_layout_manager (GTK_WIDGET (self), layout);
 
+  gtk_settings = gtk_settings_get_default ();
+
   self->on_image = g_object_new (GTK_TYPE_IMAGE,
                                  "accessible-role", GTK_ACCESSIBLE_ROLE_NONE,
                                  "icon-name", "switch-on-symbolic",
                                  NULL);
   gtk_widget_set_parent (self->on_image, GTK_WIDGET (self));
 
+  g_object_bind_property_full (gtk_settings, "gtk-show-status-shapes",
+                               self->on_image, "opacity",
+                               G_BINDING_SYNC_CREATE,
+                               translate_switch_shapes_to_opacity,
+                               NULL, NULL, NULL);
+
   self->off_image = g_object_new (GTK_TYPE_IMAGE,
                                   "accessible-role", GTK_ACCESSIBLE_ROLE_NONE,
                                   "icon-name", "switch-off-symbolic",
                                   NULL);
   gtk_widget_set_parent (self->off_image, GTK_WIDGET (self));
+
+  g_object_bind_property_full (gtk_settings, "gtk-show-status-shapes",
+                               self->off_image, "opacity",
+                               G_BINDING_SYNC_CREATE,
+                               translate_switch_shapes_to_opacity,
+                               NULL, NULL, NULL);
 
   self->slider = gtk_gizmo_new_with_role ("slider",
                                           GTK_ACCESSIBLE_ROLE_NONE,

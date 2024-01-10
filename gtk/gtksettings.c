@@ -172,6 +172,7 @@ enum {
   PROP_ALTERNATIVE_SORT_ARROWS,
   PROP_ENABLE_ANIMATIONS,
   PROP_ERROR_BELL,
+  PROP_STATUS_SHAPES,
   PROP_PRINT_BACKENDS,
   PROP_PRINT_PREVIEW_COMMAND,
   PROP_ENABLE_ACCELS,
@@ -570,6 +571,15 @@ gtk_settings_class_init (GtkSettingsClass *class)
   pspecs[PROP_ERROR_BELL] = g_param_spec_boolean ("gtk-error-bell", NULL, NULL,
                                                   TRUE,
                                                   GTK_PARAM_READWRITE);
+
+  /**
+   * GtkSettings:gtk-show-status-shapes:
+   *
+   * When %TRUE, widgets like switches include shapes to indicate their on/off state.
+   */
+  pspecs[PROP_STATUS_SHAPES] = g_param_spec_boolean ("gtk-show-status-shapes", NULL, NULL,
+                                                     FALSE,
+                                                     GTK_PARAM_READWRITE);
 
   /**
    * GtkSettings:gtk-print-backends:
