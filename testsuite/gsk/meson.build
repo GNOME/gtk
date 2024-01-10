@@ -129,6 +129,7 @@ compare_render_tests = [
   'stroke-clipped-nogl',
   'stroke-opacity',
   'stroke-with-3d-contents-nogl-nocairo',
+  'text-mixed-color-nocairo',
   'texture-coords',
   'texture-scale-filters-nocairo',
   'texture-scale-magnify-10000x',
