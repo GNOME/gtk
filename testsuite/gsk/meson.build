@@ -134,6 +134,7 @@ compare_render_tests = [
   'stroke-fractional-translate-nogl',
   'stroke-opacity',
   'stroke-with-3d-contents-nogl-nocairo',
+  'text-mixed-color-nocairo',
   'texture-coords',
   'texture-scale-filters-nocairo',
   'texture-scale-magnify-10000x',
@@ -201,7 +202,8 @@ foreach renderer : renderers
       'GSK_RENDERER=' + renderer_name,
       'GTK_A11Y=test',
       'G_TEST_SRCDIR=@0@'.format(meson.current_source_dir()),
-      'G_TEST_BUILDDIR=@0@'.format(meson.current_build_dir())
+      'G_TEST_BUILDDIR=@0@'.format(meson.current_build_dir()),
+      'FONTCONFIG_FILE=@0@/fonts/fonts.conf'.format(meson.current_source_dir())
     ]
 
     if ((not testname.contains(exclude_term)) and

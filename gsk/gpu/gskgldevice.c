@@ -119,7 +119,7 @@ gsk_gl_device_create_atlas_image (GskGpuDevice *device,
   GskGLDevice *self = GSK_GL_DEVICE (device);
 
   return gsk_gl_image_new (self,
-                           GDK_MEMORY_R8G8B8A8_PREMULTIPLIED,
+                           GDK_MEMORY_DEFAULT,
                            GSK_GPU_IMAGE_RENDERABLE,
                            width,
                            height);
