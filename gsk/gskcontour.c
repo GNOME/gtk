@@ -1819,7 +1819,7 @@ gsk_rect_contour_get_stroke_bounds (const GskContour *contour,
   graphene_rect_t rect;
 
   graphene_rect_init (&rect, self->x, self->y, self->width, self->height);
-  graphene_rect_inset (&rect, - stroke->line_width, - stroke->line_width);
+  graphene_rect_inset (&rect, - 0.5 * stroke->line_width, - 0.5 * stroke->line_width);
   gsk_bounding_box_init_from_rect (bounds, &rect);
 
   return TRUE;
