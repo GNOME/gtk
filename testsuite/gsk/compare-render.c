@@ -1,8 +1,14 @@
+#include "config.h"
 #include <string.h>
 #include <glib/gstdio.h>
 #include <gtk/gtk.h>
 #include <stdlib.h>
 #include "../reftests/reftest-compare.h"
+
+#ifdef HAVE_PANGOFT
+#include <pango/pangofc-fontmap.h>
+#endif
+
 
 static char *arg_output_dir = NULL;
 static gboolean flip = FALSE;
@@ -232,6 +238,22 @@ apply_mask_to_pixbuf (GdkPixbuf *pixbuf)
   return copy;
 }
 
+static void
+maybe_add_test_fonts (void)
+{
+#ifdef HAVE_PANGOFT
+  const char *dir;
+
+  dir = g_getenv ("TEST_FONT_DIR");
+
+  if (dir && g_file_test (dir, G_FILE_TEST_EXISTS))
+    {
+      FcConfig *config = FcConfigGetCurrent ();
+      FcConfigAppFontAddDir (config, (const FcChar8 *) dir);
+    }
+#endif
+}
+
 /*
  * Non-option arguments:
  *   1) .node file to compare
@@ -251,6 +273,8 @@ main (int argc, char **argv)
   GError *error = NULL;
   GOptionContext *context;
   GdkTexture *diff_texture;
+
+  maybe_add_test_fonts ();
 
   (g_test_init) (&argc, &argv, NULL);
 
