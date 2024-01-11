@@ -75,6 +75,12 @@ gsk_ngl_renderer_make_current (GskGpuRenderer *renderer)
   gdk_gl_context_make_current (GDK_GL_CONTEXT (gsk_gpu_renderer_get_context (renderer)));
 }
 
+static void
+gsk_ngl_renderer_free_backbuffer (GskNglRenderer *self)
+{
+  g_clear_object (&self->backbuffer);
+}
+
 static GskGpuImage *
 gsk_ngl_renderer_get_backbuffer (GskGpuRenderer *renderer)
 {
@@ -91,7 +97,7 @@ gsk_ngl_renderer_get_backbuffer (GskGpuRenderer *renderer)
       gsk_gpu_image_get_width (self->backbuffer) != ceil (gdk_surface_get_width (surface) * scale) ||
       gsk_gpu_image_get_height (self->backbuffer) != ceil (gdk_surface_get_height (surface) * scale))
     {
-      g_clear_object (&self->backbuffer);
+      gsk_ngl_renderer_free_backbuffer (self);
       self->backbuffer = gsk_gl_image_new_backbuffer (GSK_GL_DEVICE (gsk_gpu_renderer_get_device (renderer)),
                                                       GDK_MEMORY_DEFAULT /* FIXME */,
                                                       ceil (gdk_surface_get_width (surface) * scale),
@@ -125,9 +131,20 @@ gsk_ngl_renderer_get_dmabuf_formats (GskGpuRenderer *renderer)
 }
 
 static void
+gsk_ngl_renderer_unrealize (GskRenderer *renderer)
+{
+  GskNglRenderer *self = GSK_NGL_RENDERER (renderer);
+
+  gsk_ngl_renderer_free_backbuffer (self);
+
+  GSK_RENDERER_CLASS (gsk_ngl_renderer_parent_class)->unrealize (renderer);
+}
+
+static void
 gsk_ngl_renderer_class_init (GskNglRendererClass *klass)
 {
   GskGpuRendererClass *gpu_renderer_class = GSK_GPU_RENDERER_CLASS (klass);
+  GskRendererClass *renderer_class = GSK_RENDERER_CLASS (klass);
 
   gpu_renderer_class->frame_type = GSK_TYPE_GL_FRAME;
 
@@ -138,6 +155,8 @@ gsk_ngl_renderer_class_init (GskNglRendererClass *klass)
   gpu_renderer_class->wait = gsk_ngl_renderer_wait;
   gpu_renderer_class->get_scale = gsk_ngl_renderer_get_scale;
   gpu_renderer_class->get_dmabuf_formats = gsk_ngl_renderer_get_dmabuf_formats;
+
+  renderer_class->unrealize = gsk_ngl_renderer_unrealize;
 }
 
 static void
