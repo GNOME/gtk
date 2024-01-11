@@ -39,6 +39,7 @@ static const struct {
   {"Gtk/CursorThemeSize",     "gtk-cursor-theme-size"},
   {"Gtk/ColorScheme",         "gtk-color-scheme"},
   {"Gtk/EnableAnimations",    "gtk-enable-animations"},
+  {"Gtk/ShowStatusStates",    "gtk-show-status-shapes"},
   {"Xft/Antialias",           "gtk-xft-antialias"},
   {"Xft/Hinting",             "gtk-xft-hinting"},
   {"Xft/HintStyle",           "gtk-xft-hintstyle"},

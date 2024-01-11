@@ -2482,10 +2482,6 @@ switch {
     transition: $button_transition;
   }
 
-  @if $contrast != 'high' {
-    > image { color: transparent; } /* only show i / o for the accessible theme */
-  }
-
   &:hover > slider {
     @include button(hover);
   }
