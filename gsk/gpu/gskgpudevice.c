@@ -681,7 +681,10 @@ gsk_gpu_device_lookup_glyph_image (GskGpuDevice           *self,
     }
   else
     {
-      image = gsk_gpu_device_create_upload_image (self, FALSE, GDK_MEMORY_DEFAULT, rect.size.width, rect.size.height),
+      image = gsk_gpu_device_create_upload_image (self, FALSE, GDK_MEMORY_DEFAULT, rect.size.width, rect.size.height);
+      if (!image)
+        return NULL;
+
       rect.origin.x = 0;
       rect.origin.y = 0;
       padding = 0;
