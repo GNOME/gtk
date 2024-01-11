@@ -204,7 +204,7 @@ foreach renderer : renderers
       'GTK_A11Y=test',
       'G_TEST_SRCDIR=@0@'.format(meson.current_source_dir()),
       'G_TEST_BUILDDIR=@0@'.format(meson.current_build_dir()),
-      'FONTCONFIG_FILE=@0@/fonts/fonts.conf'.format(meson.current_source_dir())
+      'TEST_FONT_DIR=@0@/fonts'.format(meson.current_source_dir())
     ]
 
     if ((not testname.contains(exclude_term)) and
