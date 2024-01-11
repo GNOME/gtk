@@ -29,6 +29,9 @@
 #include <gtk/gtk.h>
 #include "gtk-rendernode-tool.h"
 
+#ifdef GDK_WINDOWING_BROADWAY
+#include <gsk/broadway/gskbroadwayrenderer.h>
+#endif
 
 static void
 deserialize_error_func (const GskParseLocation *start,
@@ -72,4 +75,63 @@ load_node_file (const char *filename)
     }
 
   return gsk_render_node_deserialize (bytes, deserialize_error_func, NULL);
+}
+
+/* keep in sync with gsk/gskrenderer.c */
+static GskRenderer *
+get_renderer_for_name (const char *renderer_name)
+{
+  if (renderer_name == NULL)
+    return NULL;
+#ifdef GDK_WINDOWING_BROADWAY
+  else if (g_ascii_strcasecmp (renderer_name, "broadway") == 0)
+    return gsk_broadway_renderer_new ();
+#endif
+  else if (g_ascii_strcasecmp (renderer_name, "cairo") == 0)
+    return gsk_cairo_renderer_new ();
+  else if (g_ascii_strcasecmp (renderer_name, "opengl") == 0 ||
+           g_ascii_strcasecmp (renderer_name, "gl") == 0)
+    return gsk_gl_renderer_new ();
+  else if (g_ascii_strcasecmp (renderer_name, "ngl") == 0)
+    return gsk_ngl_renderer_new ();
+#ifdef GDK_RENDERING_VULKAN
+  else if (g_ascii_strcasecmp (renderer_name, "vulkan") == 0)
+    return gsk_vulkan_renderer_new ();
+#endif
+  else
+    return NULL;
+}
+
+GskRenderer *
+create_renderer (const char *name, GError **error)
+{
+  GskRenderer *renderer;
+
+  if (name == NULL)
+    {
+      /* awwwwwkward - there should be code to get the
+       * default renderer without a surface */
+      static GdkSurface *window = NULL;
+
+      if (window == NULL)
+        window = gdk_surface_new_toplevel (gdk_display_get_default ());
+      return gsk_renderer_new_for_surface (window);
+    }
+
+  renderer = get_renderer_for_name (name);
+
+  if (renderer == NULL)
+    {
+      g_set_error (error, G_IO_ERROR, G_IO_ERROR_NOT_SUPPORTED,
+                   "No renderer named \"%s\"", name);
+      return NULL;
+    }
+
+  if (!gsk_renderer_realize_for_display (renderer, gdk_display_get_default (), error))
+    {
+      g_object_unref (renderer);
+      return NULL;
+    }
+
+  return renderer;
 }
