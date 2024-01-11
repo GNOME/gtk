@@ -661,7 +661,6 @@ gsk_gpu_device_lookup_glyph_image (GskGpuDevice           *self,
       return cache->image;
     }
 
-  cache = g_new (GskGpuCachedGlyph, 1);
   pango_font_get_glyph_extents (font, glyph, &ink_rect, NULL);
   origin.x = floor (ink_rect.x * scale / PANGO_SCALE);
   origin.y = floor (ink_rect.y * scale / PANGO_SCALE);
