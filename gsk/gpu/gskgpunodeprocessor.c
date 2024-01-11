@@ -3015,6 +3015,27 @@ gsk_gpu_node_processor_add_glyph_node (GskGpuNodeProcessor *self,
                                                  &glyph_bounds,
                                                  &glyph_offset);
 
+      if (!image)
+        {
+          if (GSK_DEBUG_CHECK (FALLBACK))
+            {
+              PangoFontDescription *desc;
+              char *name;
+
+              desc = pango_font_describe (font);
+              name = pango_font_description_to_string (desc);
+              gdk_debug_message ("failed to cache glyph %u for font %s at scale %g",
+                                 glyphs[i].glyph,
+                                 name,
+                                 scale);
+              g_free (name);
+              pango_font_description_free (desc);
+            }
+
+          gsk_gpu_node_processor_add_fallback_node (self, node);
+          return;
+        }
+
       graphene_rect_scale (&GRAPHENE_RECT_INIT (-glyph_bounds.origin.x, -glyph_bounds.origin.y, gsk_gpu_image_get_width (image), gsk_gpu_image_get_height (image)), inv_scale, inv_scale, &glyph_tex_rect);
       graphene_rect_scale (&GRAPHENE_RECT_INIT(0, 0, glyph_bounds.size.width, glyph_bounds.size.height), inv_scale, inv_scale, &glyph_bounds);
       glyph_offset = GRAPHENE_POINT_INIT (offset.x - glyph_offset.x * inv_scale + (float) glyphs[i].geometry.x_offset / PANGO_SCALE,
@@ -3089,6 +3110,9 @@ gsk_gpu_node_processor_create_glyph_pattern (GskGpuPatternWriter *self,
                                                  scale,
                                                  &glyph_bounds,
                                                  &glyph_offset);
+
+      if (!image)
+        return FALSE;
 
       if (image != last_image)
         {
