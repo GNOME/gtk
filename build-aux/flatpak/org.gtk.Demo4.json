@@ -64,6 +64,38 @@
             ]
         },
         {
+            "name": "shaderc",
+            "buildsystem": "cmake-ninja",
+            "builddir": true,
+            "config-opts": [
+                "-DSHADERC_SKIP_COPYRIGHT_CHECK=ON",
+                "-DSHADERC_SKIP_EXAMPLES=ON",
+                "-DSHADERC_SKIP_TESTS=ON"
+            ],
+            "cleanup": [ "/bin", "/lib/cmake", "/lib/pkgconfig", "/include" ],
+            "post-install": [
+                "install -D /lib/$(gcc --print-multiarch)/libSPIRV*.so /app/lib"
+            ],
+            "sources": [
+                {
+                    "type": "archive",
+                    "archive-type": "tar",
+                    "url": "https://api.github.com/repos/google/shaderc/tarball/refs/tags/v2021.3",
+                    "sha256": "b7e54b23a83343d5e2da836d8833ae0db11926141955edf845e35d4dc1eb88d1"
+                },
+                {
+                    "type": "shell",
+                    "commands": [
+                        "sed -i 's|SPIRV/GlslangToSpv.h|glslang/SPIRV/GlslangToSpv.h|' libshaderc_util/src/compiler.cc",
+                        "sed -i 's|add_subdirectory(third_party)||' CMakeLists.txt",
+                        "sed -i 's|add_custom_target(build-version|set(NOT_USE|' CMakeLists.txt",
+                        "LIB=/lib/$(gcc --print-multiarch)\nVER_MATCH=\"[0-9]+\\.[^\\. ]+\"\nSHADERC=$(grep -m1 -oP \"^v$VER_MATCH\" CHANGES)\nSPIRV=v$(grep -oP \"(?<=Version:.)$VER_MATCH\" $LIB/pkgconfig/SPIRV-Tools-shared.pc)\nGLSLANG=v$(realpath $LIB/libglslang.so | grep -oP \"(?<=so.)$VER_MATCH\")\ncat <<- EOF > glslc/src/build-version.inc\n  \"shaderc $SHADERC\"\n  \"spirv-tools $SPIRV\"\n  \"glslang $GLSLANG\"\nEOF",
+                        "cat glslc/src/build-version.inc"
+                    ]
+                }
+            ]
+        },
+        {
             "name" : "libsass",
             "buildsystem" : "meson",
             "builddir" : true,
