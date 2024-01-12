@@ -709,8 +709,8 @@ gsk_gpu_device_lookup_glyph_image (GskGpuDevice           *self,
                                .height = rect.size.height + 2 * padding,
                            },
                            scale,
-                           &GRAPHENE_POINT_INIT (cache->origin.x + 1,
-                                                 cache->origin.y + 1));
+                           &GRAPHENE_POINT_INIT (cache->origin.x + padding,
+                                                 cache->origin.y + padding));
 
   g_hash_table_insert (priv->glyph_cache, cache, cache);
   gsk_gpu_cached_use (self, (GskGpuCached *) cache, gsk_gpu_frame_get_timestamp (frame));
