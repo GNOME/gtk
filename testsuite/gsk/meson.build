@@ -210,7 +210,7 @@ foreach renderer : renderers
     if ((not testname.contains(exclude_term)) and
         (renderer_name != 'broadway' or broadway_enabled) and
         (renderer_name != 'vulkan' or have_vulkan))
-      test(renderer_name + ' ' + testname, compare_render,
+      test('compare ' + renderer_name + ' ' + testname, compare_render,
         args: [
           '--output', join_paths(meson.current_build_dir(), 'compare', renderer_name),
           join_paths(meson.current_source_dir(), 'compare', testname + '.node'),
@@ -219,7 +219,7 @@ foreach renderer : renderers
         env: test_env,
         suite: suites,
       )
-      test(renderer_name + ' ' + testname + ' flipped', compare_render,
+      test('compare ' + renderer_name + ' ' + testname + ' flipped', compare_render,
         args: [
           '--flip',
           '--output', join_paths(meson.current_build_dir(), 'compare', renderer_name),
@@ -229,7 +229,7 @@ foreach renderer : renderers
         env: test_env,
         suite: suites + [ 'gsk-compare-flipped-' + renderer_name ],
       )
-      test(renderer_name + ' ' + testname + ' repeated', compare_render,
+      test('compare ' + renderer_name + ' ' + testname + ' repeated', compare_render,
         args: [
           '--repeat',
           '--output', join_paths(meson.current_build_dir(), 'compare', renderer_name),
@@ -239,7 +239,7 @@ foreach renderer : renderers
         env: test_env,
         suite: suites + [ 'gsk-compare-repeated-' + renderer_name ],
       )
-      test(renderer_name + ' ' + testname + ' rotated', compare_render,
+      test('compare ' + renderer_name + ' ' + testname + ' rotated', compare_render,
         args: [
           '--rotate',
           '--output', join_paths(meson.current_build_dir(), 'compare', renderer_name),
@@ -249,7 +249,7 @@ foreach renderer : renderers
         env: test_env,
         suite: suites + [ 'gsk-compare-rotated-' + renderer_name ],
       )
-      test(renderer_name + ' ' + testname + ' masked', compare_render,
+      test('compare ' + renderer_name + ' ' + testname + ' masked', compare_render,
         args: [
           '--mask',
           '--output', join_paths(meson.current_build_dir(), 'compare', renderer_name),
@@ -259,7 +259,7 @@ foreach renderer : renderers
         env: test_env,
         suite: suites + [ 'gsk-compare-masked-' + renderer_name ],
       )
-      test(renderer_name + ' ' + testname + ' replayed', compare_render,
+      test('compare ' + renderer_name + ' ' + testname + ' replayed', compare_render,
         args: [
           '--replay',
           '--output', join_paths(meson.current_build_dir(), 'compare', renderer_name),
