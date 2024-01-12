@@ -576,6 +576,8 @@ gtk_settings_class_init (GtkSettingsClass *class)
    * GtkSettings:gtk-show-status-shapes:
    *
    * When %TRUE, widgets like switches include shapes to indicate their on/off state.
+   *
+   * Since: 4.14
    */
   pspecs[PROP_STATUS_SHAPES] = g_param_spec_boolean ("gtk-show-status-shapes", NULL, NULL,
                                                      FALSE,
