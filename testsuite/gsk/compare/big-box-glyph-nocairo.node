@@ -1,0 +1,7 @@
+transform {
+  transform: scale(30);
+  child: text {
+    font: "text-mixed-color 7.5";
+    glyphs: 7 10;
+  }
+}

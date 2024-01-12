@@ -10,6 +10,7 @@
     <GlyphID id="4" name="D"/>
     <GlyphID id="5" name="E"/>
     <GlyphID id="6" name="F"/>
+    <GlyphID id="7" name="G"/>
   </GlyphOrder>
 
   <head>
@@ -80,6 +81,7 @@
     <mtx name="D" width="1024" lsb="0"/>
     <mtx name="E" width="1024" lsb="0"/>
     <mtx name="F" width="1024" lsb="0"/>
+    <mtx name="G" width="1024" lsb="0"/>
   </hmtx>
 
   <loca>
@@ -141,6 +143,21 @@
       </contour>
       <instructions><assembly></assembly></instructions>
     </TTGlyph>
+    <TTGlyph name="G">
+      <contour>
+        <pt x="0" y="0" on="1"/>
+        <pt x="1024" y="0" on="1"/>
+        <pt x="1024" y="2048" on="1"/>
+        <pt x="0" y="2048" on="1"/>
+      </contour>
+      <contour>
+        <pt x="5" y="5" on="1"/>
+        <pt x="5" y="2043" on="1"/>
+        <pt x="1019" y="2043" on="1"/>
+        <pt x="1019" y="5" on="1"/>
+      </contour>
+      <instructions><assembly></assembly></instructions>
+    </TTGlyph>
   </glyf>
 
   <COLR>
@@ -182,6 +199,7 @@
       <map code="0x44" name="D"/>
       <map code="0x45" name="E"/>
       <map code="0x46" name="F"/>
+      <map code="0x47" name="G"/>
     </cmap_format_4>
   </cmap>
 
