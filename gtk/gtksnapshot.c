@@ -1721,9 +1721,10 @@ gtk_snapshot_gl_shader_pop_texture (GtkSnapshot *snapshot)
  * on an internal stack.
  *
  * When [method@Gtk.Snapshot.restore] is called, @snapshot will
- * be restored to the saved state. Multiple calls to
- * [method@Snapshot.save] and [class@Snapshot.restore] can be nested;
- * each call to `gtk_snapshot_restore()` restores the state from
+ * be restored to the saved state.
+ *
+ * Multiple calls to [method@Gtk.Snapshot.save] and [method@Gtk.Snapshot.restore]
+ * can be nested; each call to `gtk_snapshot_restore()` restores the state from
  * the matching paired `gtk_snapshot_save()`.
  *
  * It is necessary to clear all saved states with corresponding

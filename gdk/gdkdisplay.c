@@ -1148,9 +1148,9 @@ _gdk_display_get_next_serial (GdkDisplay *display)
  * Indicates to the GUI environment that the application has
  * finished loading, using a given identifier.
  *
- * GTK will call this function automatically for [class@Gtk.Window]
+ * GTK will call this function automatically for [GtkWindow](../gtk4/class.Window.html)
  * with custom startup-notification identifier unless
- * [method@Gtk.Window.set_auto_startup_notification]
+ * [gtk_window_set_auto_startup_notification()](../gtk4/method.Window.set_auto_startup_notification.html)
  * is called to disable that feature.
  *
  * Deprecated: 4.10: Using [method@Gdk.Toplevel.set_startup_id] is sufficient
