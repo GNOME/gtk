@@ -59,11 +59,6 @@ gsk_gpu_clip_intersect_rect (GskGpuClip            *dest,
       gsk_gpu_clip_init_copy (dest, src);
       return TRUE;
     }
-  if (!gsk_rect_intersects (rect, &src->rect.bounds))
-    {
-      dest->type = GSK_GPU_CLIP_ALL_CLIPPED;
-      return TRUE;
-    }
 
   switch (src->type)
     {
