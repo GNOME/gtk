@@ -28,6 +28,7 @@ compare_render_tests = [
   'border-opacity',
   'borders-rotated',
   'borders-scaled',
+  'clip-contained',
   'clip-coordinates-2d',
   'clip-coordinates-nocairo',
   'clip-in-rounded-clip1',
