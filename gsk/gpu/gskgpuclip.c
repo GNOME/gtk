@@ -15,6 +15,14 @@ gsk_gpu_clip_init_empty (GskGpuClip            *clip,
 }
 
 void
+gsk_gpu_clip_init_contained (GskGpuClip            *clip,
+                             const graphene_rect_t *rect)
+{
+  clip->type = GSK_GPU_CLIP_CONTAINED;
+  gsk_rounded_rect_init_from_rect (&clip->rect, rect, 0);
+}
+
+void
 gsk_gpu_clip_init_rect (GskGpuClip            *clip,
                         const graphene_rect_t *rect)
 {
@@ -54,12 +62,6 @@ gsk_gpu_clip_intersect_rect (GskGpuClip            *dest,
 {
   GskRoundedRectIntersection res;
 
-  if (gsk_rect_contains_rect (rect, &src->rect.bounds))
-    {
-      gsk_gpu_clip_init_copy (dest, src);
-      return TRUE;
-    }
-
   switch (src->type)
     {
     case GSK_GPU_CLIP_ALL_CLIPPED:
@@ -67,6 +69,14 @@ gsk_gpu_clip_intersect_rect (GskGpuClip            *dest,
       break;
 
     case GSK_GPU_CLIP_NONE:
+      if (gsk_rect_contains_rect (rect, &src->rect.bounds))
+        {
+          gsk_gpu_clip_init_copy (dest, src);
+          return TRUE;
+        }
+      G_GNUC_FALLTHROUGH;
+
+    case GSK_GPU_CLIP_CONTAINED:
       gsk_gpu_clip_init_copy (dest, src);
       if (gsk_rect_intersection (&dest->rect.bounds, rect, &dest->rect.bounds))
         dest->type = GSK_GPU_CLIP_RECT;
@@ -119,6 +129,7 @@ gsk_gpu_clip_intersect_rounded_rect (GskGpuClip           *dest,
       break;
 
     case GSK_GPU_CLIP_NONE:
+    case GSK_GPU_CLIP_CONTAINED:
     case GSK_GPU_CLIP_RECT:
       res = gsk_rounded_rect_intersect_with_rect (rounded, &src->rect.bounds, &dest->rect);
       if (!gsk_gpu_clip_init_after_intersection (dest, res))
@@ -169,6 +180,7 @@ gsk_gpu_clip_transform (GskGpuClip            *dest,
       return TRUE;
 
     case GSK_GPU_CLIP_NONE:
+    case GSK_GPU_CLIP_CONTAINED:
     case GSK_GPU_CLIP_RECT:
     case GSK_GPU_CLIP_ROUNDED:
       switch (gsk_transform_get_category (transform))
@@ -241,6 +253,7 @@ gsk_gpu_clip_may_intersect_rect (const GskGpuClip       *self,
       return FALSE;
 
     case GSK_GPU_CLIP_NONE:
+    case GSK_GPU_CLIP_CONTAINED:
     case GSK_GPU_CLIP_RECT:
     case GSK_GPU_CLIP_ROUNDED:
       return gsk_rect_intersects (&self->rect.bounds, &r);
@@ -264,6 +277,7 @@ gsk_gpu_clip_contains_rect (const GskGpuClip       *self,
       return FALSE;
 
     case GSK_GPU_CLIP_NONE:
+    case GSK_GPU_CLIP_CONTAINED:
     case GSK_GPU_CLIP_RECT:
       return gsk_rect_contains_rect (&self->rect.bounds, &r);
 
@@ -278,6 +292,7 @@ gsk_gpu_clip_get_shader_clip (const GskGpuClip       *self,
                               const graphene_rect_t  *rect)
 {
   if (self->type == GSK_GPU_CLIP_NONE ||
+      self->type == GSK_GPU_CLIP_CONTAINED ||
       gsk_gpu_clip_contains_rect (self, offset, rect))
     return GSK_GPU_SHADER_CLIP_NONE;
   else if (self->type == GSK_GPU_CLIP_RECT)

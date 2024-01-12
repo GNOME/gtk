@@ -18,6 +18,9 @@ typedef enum {
    * to the actual bounds of the underlying framebuffer
    */
   GSK_GPU_CLIP_NONE,
+  /* The clip exists outside the rect, so clipping must
+   * happen if rendering can't be proven to stay in the rect */
+  GSK_GPU_CLIP_CONTAINED,
   /* The clip is a rectangular area */
   GSK_GPU_CLIP_RECT,
   /* The clip is a rounded rectangle */
@@ -33,6 +36,8 @@ struct _GskGpuClip
 };
 
 void                    gsk_gpu_clip_init_empty                         (GskGpuClip          *clip,
+                                                                         const graphene_rect_t  *rect);
+void                    gsk_gpu_clip_init_contained                     (GskGpuClip          *clip,
                                                                          const graphene_rect_t  *rect);
 void                    gsk_gpu_clip_init_copy                          (GskGpuClip          *self,
                                                                          const GskGpuClip    *src);

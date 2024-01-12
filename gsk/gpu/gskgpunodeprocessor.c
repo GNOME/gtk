@@ -1591,7 +1591,7 @@ gsk_gpu_node_processor_add_transform_node (GskGpuNodeProcessor *self,
 
         if (gsk_gpu_clip_contains_rect (&self->clip, &self->offset, &node->bounds))
           {
-            gsk_gpu_clip_init_empty (&self->clip, &child->bounds);
+            gsk_gpu_clip_init_contained (&self->clip, &child->bounds);
           }
         else if (old_clip.type == GSK_GPU_CLIP_NONE)
           {
@@ -1600,7 +1600,7 @@ gsk_gpu_node_processor_add_transform_node (GskGpuNodeProcessor *self,
             inverse = gsk_transform_invert (gsk_transform_ref (clip_transform));
             gsk_transform_transform_bounds (inverse, &old_clip.rect.bounds, &new_bounds);
             gsk_transform_unref (inverse);
-            gsk_gpu_clip_init_empty (&self->clip, &new_bounds);
+            gsk_gpu_clip_init_contained (&self->clip, &new_bounds);
           }
         else if (!gsk_gpu_clip_transform (&self->clip, &old_clip, clip_transform, &child->bounds))
           {
