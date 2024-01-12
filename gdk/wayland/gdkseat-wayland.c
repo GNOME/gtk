@@ -2880,6 +2880,7 @@ tablet_tool_handle_proximity_out (void                      *data,
 
   gdk_device_update_tool (tablet->stylus_device, NULL);
   g_clear_object (&tablet->pointer_info.cursor);
+  tablet->pointer_info.cursor_is_default = FALSE;
 }
 
 static double *
