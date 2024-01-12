@@ -1664,6 +1664,49 @@ should_use_fixed_size (GdkWindowState state)
                   GDK_WINDOW_STATE_TILED);
 }
 
+static gboolean
+has_per_edge_tiling_info (GdkWindowState state)
+{
+  return state & (GDK_WINDOW_STATE_TOP_TILED |
+                  GDK_WINDOW_STATE_RIGHT_TILED |
+                  GDK_WINDOW_STATE_BOTTOM_TILED |
+                  GDK_WINDOW_STATE_LEFT_TILED);
+}
+
+static GdkWindowState
+infer_edge_constraints (GdkWindowState state)
+{
+  if (state & (GDK_WINDOW_STATE_MAXIMIZED | GDK_WINDOW_STATE_FULLSCREEN))
+    return state;
+
+  if (!(state & GDK_WINDOW_STATE_TILED) || !has_per_edge_tiling_info (state))
+    return state |
+           GDK_WINDOW_STATE_TOP_RESIZABLE |
+           GDK_WINDOW_STATE_RIGHT_RESIZABLE |
+           GDK_WINDOW_STATE_BOTTOM_RESIZABLE |
+           GDK_WINDOW_STATE_LEFT_RESIZABLE;
+
+  if (!(state & GDK_WINDOW_STATE_TOP_TILED))
+    state |= GDK_WINDOW_STATE_TOP_RESIZABLE;
+  if (!(state & GDK_WINDOW_STATE_RIGHT_TILED))
+    state |= GDK_WINDOW_STATE_RIGHT_RESIZABLE;
+  if (!(state & GDK_WINDOW_STATE_BOTTOM_TILED))
+    state |= GDK_WINDOW_STATE_BOTTOM_RESIZABLE;
+  if (!(state & GDK_WINDOW_STATE_LEFT_TILED))
+    state |= GDK_WINDOW_STATE_LEFT_RESIZABLE;
+
+  return state;
+}
+
+static gboolean
+supports_native_edge_constraints (GdkWindowImplWayland *impl)
+{
+  struct gtk_surface1 *gtk_surface = impl->display_server.gtk_surface;
+  if (!gtk_surface)
+    return FALSE;
+  return gtk_surface1_get_version (gtk_surface) >= GTK_SURFACE1_CONFIGURE_EDGES_SINCE_VERSION;
+}
+
 static void
 gdk_wayland_window_handle_configure (GdkWindow *window,
                                      uint32_t   serial)
@@ -1711,6 +1754,9 @@ gdk_wayland_window_handle_configure (GdkWindow *window,
 
   new_state = impl->pending.state;
   impl->pending.state = 0;
+
+  if (!supports_native_edge_constraints (impl))
+    new_state = infer_edge_constraints (new_state);
 
   fixed_size = should_use_fixed_size (new_state);
 
