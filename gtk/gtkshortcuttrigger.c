@@ -671,7 +671,7 @@ gtk_keyval_trigger_class_init (GtkKeyvalTriggerClass *klass)
   keyval_props[KEYVAL_PROP_MODIFIERS] =
     g_param_spec_flags (I_("modifiers"), NULL, NULL,
                         GDK_TYPE_MODIFIER_TYPE,
-                        0,
+                        GDK_NO_MODIFIER_MASK,
                         G_PARAM_STATIC_STRINGS |
                         G_PARAM_CONSTRUCT_ONLY |
                         G_PARAM_READWRITE);

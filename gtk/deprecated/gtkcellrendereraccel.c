@@ -191,7 +191,7 @@ gtk_cell_renderer_accel_class_init (GtkCellRendererAccelClass *cell_accel_class)
                                    PROP_ACCEL_MODS,
                                    g_param_spec_flags ("accel-mods", NULL, NULL,
                                                        GDK_TYPE_MODIFIER_TYPE,
-                                                       0,
+                                                       GDK_NO_MODIFIER_MASK,
                                                        GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   /**
