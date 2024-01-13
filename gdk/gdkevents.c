@@ -477,18 +477,18 @@ check_event_sanity (GdkEvent *event)
 }
 #endif
 
-void
+gboolean
 _gdk_event_emit (GdkEvent *event)
 {
 #ifdef G_ENABLE_DEBUG
   if (!check_event_sanity (event))
-    return;
+    return FALSE;
 #endif
 
   if (gdk_drag_handle_source_event (event))
-    return;
+    return TRUE;
 
-  gdk_surface_handle_event (event);
+  return gdk_surface_handle_event (event);
 }
 
 /*********************************************

@@ -619,16 +619,16 @@ typedef enum
 
 GdkEvent* _gdk_event_unqueue (GdkDisplay *display);
 
-void   _gdk_event_emit               (GdkEvent   *event);
-GList* _gdk_event_queue_find_first   (GdkDisplay *display);
-void   _gdk_event_queue_remove_link  (GdkDisplay *display,
-                                      GList      *node);
-GList* _gdk_event_queue_append       (GdkDisplay *display,
-                                      GdkEvent   *event);
+gboolean _gdk_event_emit              (GdkEvent   *event);
+GList*   _gdk_event_queue_find_first  (GdkDisplay *display);
+void     _gdk_event_queue_remove_link (GdkDisplay *display,
+                                       GList      *node);
+GList*   _gdk_event_queue_append      (GdkDisplay *display,
+                                       GdkEvent   *event);
 
-void    _gdk_event_queue_handle_motion_compression (GdkDisplay *display);
-void    gdk_event_queue_handle_scroll_compression  (GdkDisplay *display);
-void    _gdk_event_queue_flush                     (GdkDisplay       *display);
+void     _gdk_event_queue_handle_motion_compression (GdkDisplay *display);
+void     gdk_event_queue_handle_scroll_compression  (GdkDisplay *display);
+void     _gdk_event_queue_flush                     (GdkDisplay       *display);
 
 double * gdk_event_dup_axes (GdkEvent *event);
 

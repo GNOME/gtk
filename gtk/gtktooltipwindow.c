@@ -198,8 +198,7 @@ surface_event (GdkSurface *surface,
                GdkEvent   *event,
                GtkWidget  *widget)
 {
-  gtk_main_do_event (event);
-  return TRUE;
+  return gtk_main_do_event (event);
 }
 
 static void
