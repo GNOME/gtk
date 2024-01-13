@@ -47,6 +47,8 @@
  * `GtkGLArea` sets up its own [class@Gdk.GLContext], and creates a custom
  * GL framebuffer that the widget will do GL rendering onto. It also ensures
  * that this framebuffer is the default GL rendering target when rendering.
+ * The completed rendering is integrated into the larger GTK scene graph as
+ * a texture.
  *
  * In order to draw, you have to connect to the [signal@Gtk.GLArea::render]
  * signal, or subclass `GtkGLArea` and override the GtkGLAreaClass.render
@@ -63,6 +65,8 @@
  *
  * The `render()` function will be called when the `GtkGLArea` is ready
  * for you to draw its content:
+ *
+ * The initial contents of the framebuffer are transparent.
  *
  * ```c
  * static gboolean
