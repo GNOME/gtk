@@ -143,14 +143,13 @@ render_file (const char *filename,
     {
       GdkTexture *texture;
       GskRenderer *renderer;
-      GdkSurface *window;
 
-      if (renderer_name)
-        g_object_set_data_full (G_OBJECT (gdk_display_get_default ()), "gsk-renderer",
-                                g_strdup (renderer_name), g_free);
-
-      window = gdk_surface_new_toplevel (gdk_display_get_default ());
-      renderer = gsk_renderer_new_for_surface (window);
+      renderer = create_renderer (renderer_name, &error);
+      if (renderer == NULL)
+        {
+          g_printerr (_("Failed to create renderer: %s\n"), error->message);
+          exit (1);
+        }
 
       texture = gsk_renderer_render_texture (renderer, node, NULL);
 
