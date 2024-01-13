@@ -637,7 +637,8 @@ gtk_popover_menu_class_init (GtkPopoverMenuClass *klass)
   g_object_class_install_property (object_class,
                                    PROP_FLAGS,
                                    g_param_spec_flags ("flags", NULL, NULL,
-                                                       GTK_TYPE_POPOVER_MENU_FLAGS, 0,
+                                                       GTK_TYPE_POPOVER_MENU_FLAGS,
+                                                       GTK_POPOVER_MENU_SLIDING,
                                                        G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS
                                                          | G_PARAM_EXPLICIT_NOTIFY));
 
@@ -783,7 +784,7 @@ GtkWidget *
 gtk_popover_menu_new_from_model (GMenuModel *model)
 
 {
-  return gtk_popover_menu_new_from_model_full (model, 0);
+  return gtk_popover_menu_new_from_model_full (model, GTK_POPOVER_MENU_SLIDING);
 }
 
 /**
@@ -798,10 +799,6 @@ gtk_popover_menu_new_from_model (GMenuModel *model)
  * This includes the `GtkApplicationWindow` to which the popover
  * belongs. Actions can also be added using [method@Gtk.Widget.insert_action_group]
  * on the parent widget or on any of its parent widgets.
- *
- * The only flag that is supported currently is
- * %GTK_POPOVER_MENU_NESTED, which makes GTK create traditional,
- * nested submenus instead of the default sliding submenus.
  *
  * Returns: the new `GtkPopoverMenu`
  */
