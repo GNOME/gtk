@@ -28,6 +28,8 @@
 #include "gsk/broadway/gskbroadwayrenderer.h"
 #endif
 
+#include <glib/gstdio.h>
+
 #include <cairo.h>
 #ifdef CAIRO_HAS_SVG_SURFACE
 #include <cairo-svg.h>
@@ -64,6 +66,8 @@ struct _NodeEditorWindow
   GFileMonitor *file_monitor;
 
   GArray *errors;
+
+  guint update_timeout;
 };
 
 struct _NodeEditorWindowClass
@@ -1101,6 +1105,9 @@ node_editor_window_finalize (GObject *object)
 {
   NodeEditorWindow *self = (NodeEditorWindow *)object;
 
+  if (self->update_timeout)
+    g_source_remove (self->update_timeout);
+
   g_array_free (self->errors, TRUE);
 
   g_clear_pointer (&self->node, gsk_render_node_unref);
@@ -1541,6 +1548,72 @@ edit_action_cb (GtkWidget  *widget,
 }
 
 static void
+dialog_response (GtkWidget        *dialog,
+                 int               response_id,
+                 NodeEditorWindow *self)
+{
+  gtk_window_destroy (GTK_WINDOW (dialog));
+
+  if (response_id == GTK_RESPONSE_OK)
+    {
+      char *path = get_autosave_path ("-unsafe");
+      char *contents;
+      gsize len;
+
+      if (g_file_get_contents (path, &contents, &len, NULL))
+        {
+          gtk_text_buffer_set_text (self->text_buffer, contents, len);
+          g_free (contents);
+        }
+
+      g_remove (path);
+      g_free (path);
+    }
+}
+
+static void
+node_editor_window_map (GtkWidget *widget)
+{
+  char *path;
+
+  GTK_WIDGET_CLASS (node_editor_window_parent_class)->map (widget);
+
+  path = get_autosave_path (NULL);
+  if (g_file_test (path, G_FILE_TEST_EXISTS))
+    {
+      g_free (path);
+      return;
+    }
+
+  g_free (path);
+
+  path = get_autosave_path ("-unsafe");
+  if (g_file_test (path, G_FILE_TEST_EXISTS))
+    {
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+      GtkWidget *dialog;
+
+      dialog = gtk_message_dialog_new (GTK_WINDOW (widget),
+                                       GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
+                                       GTK_MESSAGE_QUESTION,
+                                       GTK_BUTTONS_NONE,
+                                       "The application may have crashed.\n"
+                                       "Restore auto-saved content anyway ?");
+
+      gtk_dialog_add_button (GTK_DIALOG (dialog), "Cancel", GTK_RESPONSE_CANCEL);
+      gtk_dialog_add_button (GTK_DIALOG (dialog), "Restore", GTK_RESPONSE_OK);
+
+      g_signal_connect (dialog, "response",
+                        G_CALLBACK (dialog_response), widget);
+
+      gtk_window_present (GTK_WINDOW (dialog));
+G_GNUC_END_IGNORE_DEPRECATIONS
+    }
+
+  g_free (path);
+}
+
+static void
 node_editor_window_class_init (NodeEditorWindowClass *class)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (class);
@@ -1557,6 +1630,8 @@ node_editor_window_class_init (NodeEditorWindowClass *class)
 
   widget_class->realize = node_editor_window_realize;
   widget_class->unrealize = node_editor_window_unrealize;
+
+  widget_class->map = node_editor_window_map;
 
   gtk_widget_class_bind_template_child (widget_class, NodeEditorWindow, text_view);
   gtk_widget_class_bind_template_child (widget_class, NodeEditorWindow, picture);
@@ -1630,6 +1705,114 @@ static GActionEntry win_entries[] = {
   { "open", window_open, NULL, NULL, NULL },
 };
 
+char *
+get_autosave_path (const char *suffix)
+{
+  char *path;
+  char *name;
+
+  name = g_strconcat ("autosave", suffix, NULL);
+  path = g_build_filename (g_get_user_cache_dir (), "gtk4-node-editor", name, NULL);
+  g_free (name);
+
+  return path;
+}
+
+static void
+set_initial_text (NodeEditorWindow *self)
+{
+  char *path;
+  char *initial_text;
+  gsize len;
+
+  path = get_autosave_path (NULL);
+
+  if (g_file_get_contents (path, &initial_text, &len, NULL))
+    {
+      gtk_text_buffer_set_text (self->text_buffer, initial_text, len);
+      g_free (initial_text);
+    }
+  else
+    {
+      /* Default */
+      gtk_text_buffer_set_text (self->text_buffer,
+         "shadow {\n"
+         "  child: texture {\n"
+         "    bounds: 0 0 128 128;\n"
+         "    texture: url(\"resource:///org/gtk/gtk4/node-editor/icons/apps/org.gtk.gtk4.NodeEditor.svg\");\n"
+         "  }\n"
+         "  shadows: rgba(0,0,0,0.5) 0 1 12;\n"
+         "}\n"
+         "\n"
+         "transform {\n"
+         "  child: text {\n"
+         "    color: rgb(46,52,54);\n"
+         "    font: \"Cantarell Bold 11\";\n"
+         "    glyphs: \"GTK Node Editor\";\n"
+         "    offset: 8 14.418;\n"
+         "  }\n"
+         "  transform: translate(0, 140);\n"
+         "}", -1);
+    }
+
+  g_free (path);
+}
+
+static void
+autosave_contents (NodeEditorWindow *self)
+{
+  char *path = NULL;
+  char *dir = NULL;
+  char *contents;
+  GtkTextIter start, end;
+
+  gtk_text_buffer_get_bounds (self->text_buffer, &start, &end);
+  contents = gtk_text_buffer_get_text (self->text_buffer, &start, &end, TRUE);
+  path = get_autosave_path ("-unsafe");
+  dir = g_path_get_dirname (path);
+  g_mkdir_with_parents (dir, 0755);
+  g_file_set_contents (path, contents, -1, NULL);
+
+  g_free (dir);
+  g_free (path);
+  g_free (contents);
+}
+
+static void
+mark_autosave_as_safe (void)
+{
+  char *path1 = NULL;
+  char *path2 = NULL;
+
+  path1 = get_autosave_path ("-unsafe");
+  path2 = get_autosave_path (NULL);
+
+  g_rename (path1, path2);
+}
+
+static gboolean
+update_timeout_cb (gpointer data)
+{
+  NodeEditorWindow *self = data;
+
+  self->update_timeout = 0;
+
+  mark_autosave_as_safe ();
+
+  return G_SOURCE_REMOVE;
+}
+
+static void
+initiate_autosave (NodeEditorWindow *self)
+{
+  autosave_contents (self);
+
+  if (self->update_timeout != 0)
+    g_source_remove (self->update_timeout);
+
+  self->update_timeout = g_timeout_add (100, update_timeout_cb, self);
+}
+
 static void
 node_editor_window_init (NodeEditorWindow *self)
 {
@@ -1684,25 +1867,9 @@ node_editor_window_init (NodeEditorWindow *self)
   g_signal_connect (self->scale_scale, "notify::value", G_CALLBACK (scale_changed), self);
   gtk_text_view_set_buffer (GTK_TEXT_VIEW (self->text_view), self->text_buffer);
 
-  /* Default */
-  gtk_text_buffer_set_text (self->text_buffer,
-         "shadow {\n"
-         "  child: texture {\n"
-         "    bounds: 0 0 128 128;\n"
-         "    texture: url(\"resource:///org/gtk/gtk4/node-editor/icons/apps/org.gtk.gtk4.NodeEditor.svg\");\n"
-         "  }\n"
-         "  shadows: rgba(0,0,0,0.5) 0 1 12;\n"
-         "}\n"
-         "\n"
-         "transform {\n"
-         "  child: text {\n"
-         "    color: rgb(46,52,54);\n"
-         "    font: \"Cantarell Bold 11\";\n"
-         "    glyphs: \"GTK Node Editor\";\n"
-         "    offset: 8 14.418;\n"
-         "  }\n"
-         "  transform: translate(0, 140);\n"
-         "}", -1);
+  set_initial_text (self);
+
+  g_signal_connect_swapped (self->text_buffer, "changed", G_CALLBACK (initiate_autosave), self);
 
   if (g_getenv ("GSK_RENDERER"))
     {

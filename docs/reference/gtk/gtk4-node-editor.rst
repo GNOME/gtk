@@ -30,6 +30,14 @@ OPTIONS
 
   Show the application help.
 
+``--version``
+
+  Show the program version.
+
+``--reset``
+
+  Don't restore autosaved content and remove autosave files.
+
 ENVIRONMENT
 -----------
 

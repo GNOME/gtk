@@ -37,3 +37,5 @@ NodeEditorWindow *      node_editor_window_new          (NodeEditorApplication  
 
 gboolean                node_editor_window_load         (NodeEditorWindow       *self,
                                                          GFile                  *file);
+
+char *                  get_autosave_path               (const char             *suffix);

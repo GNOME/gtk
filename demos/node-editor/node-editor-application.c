@@ -19,6 +19,8 @@
 
 #include "config.h"
 
+#include <glib/gstdio.h>
+
 #ifdef HAVE_PANGOFT
 #include <pango/pangofc-fontmap.h>
 #endif
@@ -287,11 +289,63 @@ node_editor_application_class_init (NodeEditorApplicationClass *class)
   application_class->open = node_editor_application_open;
 }
 
+static void
+print_version (void)
+{
+  g_print ("gtk4-node-editor %s%s%s\n",
+           PACKAGE_VERSION,
+           g_strcmp0 (PROFILE, "devel") == 0 ? "-" : "",
+           g_strcmp0 (PROFILE, "devel") == 0 ? VCS_TAG : "");
+}
+
+static int
+local_options (GApplication *app,
+               GVariantDict *options,
+               gpointer      data)
+{
+  gboolean version = FALSE;
+  gboolean reset = FALSE;
+
+  g_variant_dict_lookup (options, "version", "b", &version);
+
+  if (version)
+    {
+      print_version ();
+      return 0;
+    }
+
+  g_variant_dict_lookup (options, "reset", "b", &reset);
+
+  if (reset)
+    {
+      char *path;
+
+      path = get_autosave_path ("-unsafe");
+      g_remove (path);
+      g_free (path);
+      path = get_autosave_path (NULL);
+      g_remove (path);
+      g_free (path);
+    }
+
+  return -1;
+}
+
+
 NodeEditorApplication *
 node_editor_application_new (void)
 {
-  return g_object_new (NODE_EDITOR_APPLICATION_TYPE,
-                       "application-id", "org.gtk.gtk4.NodeEditor",
-                       "flags", G_APPLICATION_HANDLES_OPEN,
-                       NULL);
+  NodeEditorApplication *app;
+
+  app = g_object_new (NODE_EDITOR_APPLICATION_TYPE,
+                      "application-id", "org.gtk.gtk4.NodeEditor",
+                      "flags", G_APPLICATION_HANDLES_OPEN,
+                      NULL);
+
+  g_application_add_main_option (G_APPLICATION (app), "version", 0, 0,G_OPTION_ARG_NONE, "Show program version", NULL);
+  g_application_add_main_option (G_APPLICATION (app), "reset", 0, 0,G_OPTION_ARG_NONE, "Remove autosave content", NULL);
+
+  g_signal_connect (app, "handle-local-options", G_CALLBACK (local_options), NULL);
+
+  return app;
 }
