@@ -289,7 +289,8 @@ gdk_device_class_init (GdkDeviceClass *klass)
    */
   device_props[PROP_MODIFIER_STATE] =
       g_param_spec_flags ("modifier-state", NULL, NULL,
-                          GDK_TYPE_MODIFIER_TYPE, 0,
+                          GDK_TYPE_MODIFIER_TYPE,
+                          GDK_NO_MODIFIER_MASK,
                           G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
 
   g_object_class_install_properties (object_class, LAST_PROP, device_props);
