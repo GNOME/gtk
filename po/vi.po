@@ -5,14 +5,14 @@
 # Joern v. Kattchee <kattchee@cs.tu-berlin.de>, 2000-2002.
 # Nguyễn Thái Ngọc Duy <pclouds@gmail.com>, 2002-2004,2007-2009,2011-2013.
 # Clytie Siddall <clytie@riverland.net.au>, 2005-2010.
-# Trần Ngọc Quân <vnwildman@gmail.com>, 2013-2015, 2023
+# Trần Ngọc Quân <vnwildman@gmail.com>, 2013-2024.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: gtk main\n"
+"Project-Id-Version: gtk.po-ui main\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2023-07-22 08:17+0000\n"
-"PO-Revision-Date: 2023-07-22 15:52+0700\n"
+"POT-Creation-Date: 2024-01-12 11:17+0000\n"
+"PO-Revision-Date: 2024-01-13 14:17+0700\n"
 "Last-Translator: Trần Ngọc Quân <vnwildman@gmail.com>\n"
 "Language-Team: Vietnamese <gnome-vi-list@gnome.org>\n"
 "Language: vi\n"
@@ -20,6 +20,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Gtranslator 42.0\n"
 
 #: gdk/broadway/gdkbroadway-server.c:135
 #, c-format
@@ -49,57 +50,57 @@ msgstr "Không thể cung cấp nội dung dạng “%s”"
 msgid "Cannot provide contents as %s"
 msgstr "Không thể cung cấp nội dung dạng %s"
 
-#: gdk/gdkdisplay.c:156 gdk/gdkglcontext.c:442
+#: gdk/gdkdisplay.c:156 gdk/gdkglcontext.c:443
 msgid "The current backend does not support OpenGL"
 msgstr "Ứng dụng chạy phía sau không hỗ trợ OpenGL"
 
-#: gdk/gdkdisplay.c:1245 gdk/gdksurface.c:1252
+#: gdk/gdkdisplay.c:1244 gdk/gdksurface.c:1252
 msgid "Vulkan support disabled via GDK_DEBUG"
 msgstr "Vulkan hỗ trợ tắt thông qua GDK_DEBUG"
 
-#: gdk/gdkdisplay.c:1277
+#: gdk/gdkdisplay.c:1276
 msgid "GL support disabled via GDK_DEBUG"
 msgstr "GL hỗ trợ tắt thông qua GDK_DEBUG"
 
-#: gdk/gdkdisplay.c:1575
+#: gdk/gdkdisplay.c:1574
 msgid "No EGL configuration available"
 msgstr "Không có cấu hình EGL nào"
 
-#: gdk/gdkdisplay.c:1583
+#: gdk/gdkdisplay.c:1582
 msgid "Failed to get EGL configurations"
 msgstr "Gặp lỗi khi lấy cấu hình EGL"
 
-#: gdk/gdkdisplay.c:1613
+#: gdk/gdkdisplay.c:1612
 msgid "No EGL configuration with required features found"
 msgstr "Không tìm thấy cấu hình EGL với các tính năng cần thiết"
 
-#: gdk/gdkdisplay.c:1620
+#: gdk/gdkdisplay.c:1619
 msgid "No perfect EGL configuration found"
 msgstr "Không tìm thấy cấu hình EGL hoàn hảo"
 
-#: gdk/gdkdisplay.c:1662
+#: gdk/gdkdisplay.c:1661
 #, c-format
 msgid "EGL implementation is missing extension %s"
 msgid_plural "EGL implementation is missing %2$d extensions: %1$s"
 msgstr[0] "Phần mã thực thi EGL thiếu tiện %2$d ích mở rộng: %1$s"
 
-#: gdk/gdkdisplay.c:1695
+#: gdk/gdkdisplay.c:1694
 msgid "libEGL not available in this sandbox"
 msgstr "libEGL không khả dụng trong sandbox này"
 
-#: gdk/gdkdisplay.c:1696
+#: gdk/gdkdisplay.c:1695
 msgid "libEGL not available"
 msgstr "libEGL không sẵn có"
 
-#: gdk/gdkdisplay.c:1706
+#: gdk/gdkdisplay.c:1705
 msgid "Failed to create EGL display"
 msgstr "Gặp lỗi khi tạo bộ hiển thị EGL"
 
-#: gdk/gdkdisplay.c:1716
+#: gdk/gdkdisplay.c:1715
 msgid "Could not initialize EGL display"
 msgstr "Không thể khởi tạo bộ hiển thị EGL"
 
-#: gdk/gdkdisplay.c:1727
+#: gdk/gdkdisplay.c:1726
 #, c-format
 msgid "EGL version %d.%d is too old. GTK requires %d.%d"
 msgstr "Phiên bản EGL %d.%d quá cũ. GTK yêu cầu %d.%d"
@@ -112,33 +113,33 @@ msgstr "Kéo và thả từ các ứng dụng khác không được hỗ trợ."
 msgid "No compatible formats to transfer contents."
 msgstr "Không có định dạng tương thích để chuyển nội dung."
 
-#: gdk/gdkglcontext.c:401 gdk/x11/gdkglcontext-glx.c:642
+#: gdk/gdkglcontext.c:402 gdk/x11/gdkglcontext-glx.c:642
 msgid "No GL API allowed."
 msgstr "Không cho phép API GL."
 
-#: gdk/gdkglcontext.c:425 gdk/win32/gdkglcontext-win32-wgl.c:387
+#: gdk/gdkglcontext.c:426 gdk/win32/gdkglcontext-win32-wgl.c:387
 #: gdk/win32/gdkglcontext-win32-wgl.c:530
 #: gdk/win32/gdkglcontext-win32-wgl.c:574 gdk/x11/gdkglcontext-glx.c:691
 msgid "Unable to create a GL context"
 msgstr "Không thể tạo ngữ cảnh GL"
 
-#: gdk/gdkglcontext.c:1280
+#: gdk/gdkglcontext.c:1281
 msgid "Anything but OpenGL ES disabled via GDK_DEBUG"
 msgstr "Mọi thứ trừ OpenGL ES bị vô hiệu hóa qua GDK_DEBUG"
 
-#: gdk/gdkglcontext.c:1289
+#: gdk/gdkglcontext.c:1290
 #, c-format
 msgid "Application does not support %s API"
 msgstr "Ứng dụng không hỗ trợ %s API"
 
 #. translators: This is about OpenGL backend names, like
 #. * "Trying to use X11 GLX, but EGL is already in use"
-#: gdk/gdkglcontext.c:1863
+#: gdk/gdkglcontext.c:1899
 #, c-format
 msgid "Trying to use %s, but %s is already in use"
 msgstr "Đang cố dùng %s, nhưng %s đã được sử dụng rồi"
 
-#: gdk/gdktexture.c:528
+#: gdk/gdktexture.c:530
 msgid "Unknown image format."
 msgstr "Định dạng ảnh chưa biết."
 
@@ -565,7 +566,7 @@ msgstr "Gặp lỗi khi đang đọc dữ liệu tại dòng %d"
 #: gdk/macos/gdkmacospasteboard.c:211 gdk/wayland/gdkclipboard-wayland.c:240
 #: gdk/wayland/gdkdrop-wayland.c:207 gdk/wayland/gdkprimary-wayland.c:343
 #: gdk/win32/gdkdrop-win32.c:1018 gdk/win32/gdkdrop-win32.c:1063
-#: gdk/x11/gdkclipboard-x11.c:805 gdk/x11/gdkdrop-x11.c:235
+#: gdk/x11/gdkclipboard-x11.c:807 gdk/x11/gdkdrop-x11.c:235
 msgid "No compatible transfer format found"
 msgstr "Không tìm thấy định dạng chuyển tương thích"
 
@@ -574,60 +575,60 @@ msgstr "Không tìm thấy định dạng chuyển tương thích"
 msgid "Failed to decode contents with mime-type of '%s'"
 msgstr "Gặp lỗi khi giải mã các nội dung với kiểu mine của '%s'"
 
-#: gdk/win32/gdkclipdrop-win32.c:721
+#: gdk/win32/gdkclipdrop-win32.c:719
 #, c-format
 msgid "Cannot claim clipboard ownership. OpenClipboard() timed out."
 msgstr ""
 "Không thể yêu cầu quyền sở hữu clipboard. OpenClipboard() đã hết thời gian "
 "chờ."
 
-#: gdk/win32/gdkclipdrop-win32.c:731
+#: gdk/win32/gdkclipdrop-win32.c:729
 #, c-format
 msgid "Cannot claim clipboard ownership. Another process claimed it before us."
 msgstr ""
 "Không thể yêu cầu quyền sở hữu clipboard. Một tiến trình khác đã tuyên bố nó "
 "trước chúng ta."
 
-#: gdk/win32/gdkclipdrop-win32.c:745
+#: gdk/win32/gdkclipdrop-win32.c:743
 #, c-format
 msgid "Cannot claim clipboard ownership. OpenClipboard() failed: 0x%lx."
 msgstr ""
 "Không thể yêu cầu quyền sở hữu clipboard. OpenClipboard() gặp lỗi: 0x%lx."
 
-#: gdk/win32/gdkclipdrop-win32.c:757
+#: gdk/win32/gdkclipdrop-win32.c:755
 #, c-format
 msgid "Cannot claim clipboard ownership. EmptyClipboard() failed: 0x%lx."
 msgstr ""
 "Không thể yêu cầu quyền sở hữu clipboard. EmptyClipboard() gặp lỗi: 0x%lx."
 
-#: gdk/win32/gdkclipdrop-win32.c:800
+#: gdk/win32/gdkclipdrop-win32.c:798
 #, c-format
 msgid "Cannot set clipboard data. OpenClipboard() timed out."
 msgstr "Không thể đặt dữ liệu clipboard. OpenClipboard() chờ quá lâu."
 
-#: gdk/win32/gdkclipdrop-win32.c:810 gdk/win32/gdkclipdrop-win32.c:841
+#: gdk/win32/gdkclipdrop-win32.c:808 gdk/win32/gdkclipdrop-win32.c:839
 #, c-format
 msgid "Cannot set clipboard data. Another process claimed clipboard ownership."
 msgstr ""
 "Không thể đặt dữ liệu clipboard. Một tiến trình khác đã xác nhận quyền sở "
 "hữu clipboard."
 
-#: gdk/win32/gdkclipdrop-win32.c:824
+#: gdk/win32/gdkclipdrop-win32.c:822
 #, c-format
 msgid "Cannot set clipboard data. OpenClipboard() failed: 0x%lx."
 msgstr "Không thể đặt dữ liệu clipboard. OpenClipboard() gặp lỗi: 0x%lx."
 
-#: gdk/win32/gdkclipdrop-win32.c:876
+#: gdk/win32/gdkclipdrop-win32.c:874
 #, c-format
 msgid "Cannot get clipboard data. GlobalLock(0x%p) failed: 0x%lx."
 msgstr "Không thể lấy dữ liệu clipboard. GlobalLock(0x%p) gặp lỗi: 0x%lx."
 
-#: gdk/win32/gdkclipdrop-win32.c:887
+#: gdk/win32/gdkclipdrop-win32.c:885
 #, c-format
 msgid "Cannot get clipboard data. GlobalSize(0x%p) failed: 0x%lx."
 msgstr "Không thể lấy dữ liệu clipboard. GlobalSize(0x%p) gặp lỗi: 0x%lx."
 
-#: gdk/win32/gdkclipdrop-win32.c:900
+#: gdk/win32/gdkclipdrop-win32.c:898
 #, c-format
 msgid ""
 "Cannot get clipboard data. Failed to allocate %s bytes to store the data."
@@ -635,17 +636,17 @@ msgstr ""
 "Không thể lấy dữ liệu clipboard. Không thể phân bổ %s byte để lưu trữ dữ "
 "liệu."
 
-#: gdk/win32/gdkclipdrop-win32.c:932
+#: gdk/win32/gdkclipdrop-win32.c:930
 #, c-format
 msgid "Cannot get clipboard data. OpenClipboard() timed out."
 msgstr "Không thể lấy dữ liệu clipboard. OpenClipboard() chờ quá lâu."
 
-#: gdk/win32/gdkclipdrop-win32.c:942
+#: gdk/win32/gdkclipdrop-win32.c:940
 #, c-format
 msgid "Cannot get clipboard data. Clipboard ownership changed."
 msgstr "Không thể lấy dữ liệu clipboard. Chủ sở hữu clipboard đã thay đổi."
 
-#: gdk/win32/gdkclipdrop-win32.c:952
+#: gdk/win32/gdkclipdrop-win32.c:950
 #, c-format
 msgid ""
 "Cannot get clipboard data. Clipboard data changed before we could get it."
@@ -653,18 +654,18 @@ msgstr ""
 "Không thể lấy dữ liệu clipboard. Dữ liệu clipboard đã thay đổi trước khi "
 "chúng ta có thể lấy được."
 
-#: gdk/win32/gdkclipdrop-win32.c:969
+#: gdk/win32/gdkclipdrop-win32.c:967
 #, c-format
 msgid "Cannot get clipboard data. OpenClipboard() failed: 0x%lx."
 msgstr "Không thể lấy dữ liệu clipboard. OpenClipboard() gặp lỗi: 0x%lx."
 
-#: gdk/win32/gdkclipdrop-win32.c:994
+#: gdk/win32/gdkclipdrop-win32.c:992
 #, c-format
 msgid "Cannot get clipboard data. No compatible transfer format found."
 msgstr ""
 "Không thể lấy dữ liệu clipboard. Không tìm thấy định dạng tương thích nào."
 
-#: gdk/win32/gdkclipdrop-win32.c:1004
+#: gdk/win32/gdkclipdrop-win32.c:1002
 #, c-format
 msgid "Cannot get clipboard data. GetClipboardData() failed: 0x%lx."
 msgstr "Không thể lấy dữ liệu clipboard. GetClipboardData() gặp lỗi: 0x%lx."
@@ -773,11 +774,11 @@ msgid "Opening %d Item"
 msgid_plural "Opening %d Items"
 msgstr[0] "Đang mở %d mục"
 
-#: gdk/x11/gdkclipboard-x11.c:475
+#: gdk/x11/gdkclipboard-x11.c:477
 msgid "Clipboard manager could not store selection."
 msgstr "Trình quản lý clipboard không thể lưu trữ phần lựa chọn."
 
-#: gdk/x11/gdkclipboard-x11.c:655
+#: gdk/x11/gdkclipboard-x11.c:657
 msgid "Cannot store clipboard. No clipboard manager is active."
 msgstr ""
 "Không thể lưu trữ clipboard. Không có trình quản lý clipboard nào đang được "
@@ -1039,19 +1040,19 @@ msgctxt "progress bar label"
 msgid "%d %%"
 msgstr "%d %%"
 
-#: gtk/deprecated/gtkcolorbutton.c:183 gtk/deprecated/gtkcolorbutton.c:311
+#: gtk/deprecated/gtkcolorbutton.c:183 gtk/deprecated/gtkcolorbutton.c:314
 #: gtk/gtkcolordialog.c:411
 msgid "Pick a Color"
 msgstr "Chọn màu"
 
-#: gtk/deprecated/gtkcolorbutton.c:502 gtk/gtkcolorchooserwidget.c:313
-#: gtk/gtkcolordialogbutton.c:302
+#: gtk/deprecated/gtkcolorbutton.c:505 gtk/gtkcolorchooserwidget.c:313
+#: gtk/gtkcolordialogbutton.c:335
 #, c-format
 msgid "Red %d%%, Green %d%%, Blue %d%%, Alpha %d%%"
 msgstr "Đỏ %d%%, Xanh %d%%, Lục %d%%, Trong suốt %d%%"
 
-#: gtk/deprecated/gtkcolorbutton.c:508 gtk/gtkcolorchooserwidget.c:319
-#: gtk/gtkcolordialogbutton.c:308
+#: gtk/deprecated/gtkcolorbutton.c:511 gtk/gtkcolorchooserwidget.c:319
+#: gtk/gtkcolordialogbutton.c:341
 #, c-format
 msgid "Red %d%%, Green %d%%, Blue %d%%"
 msgstr "Đỏ %d%%, Xanh %d%%, Lục %d%%"
@@ -1060,17 +1061,17 @@ msgstr "Đỏ %d%%, Xanh %d%%, Lục %d%%"
 msgid "Sans 12"
 msgstr "Sans 12"
 
-#: gtk/deprecated/gtkfontbutton.c:507 gtk/deprecated/gtkfontbutton.c:621
+#: gtk/deprecated/gtkfontbutton.c:507 gtk/deprecated/gtkfontbutton.c:624
 #: gtk/gtkfontdialog.c:596
 msgid "Pick a Font"
 msgstr "Chọn phông chữ"
 
-#: gtk/deprecated/gtkfontbutton.c:597 gtk/gtkfilechooserwidget.c:3871
-#: gtk/gtkfontdialogbutton.c:115 gtk/inspector/visual.ui:169
+#: gtk/deprecated/gtkfontbutton.c:600 gtk/gtkfilechooserwidget.c:3871
+#: gtk/gtkfontdialogbutton.c:126 gtk/inspector/visual.ui:169
 msgid "Font"
 msgstr "Phông chữ"
 
-#: gtk/deprecated/gtkfontbutton.c:1152 gtk/gtkfontdialogbutton.c:614
+#: gtk/deprecated/gtkfontbutton.c:1155 gtk/gtkfontdialogbutton.c:652
 msgctxt "font"
 msgid "None"
 msgstr "Không"
@@ -1728,7 +1729,7 @@ msgstr "Đón_g"
 #. * suspend or screen locking, and the caller hasn't specified
 #. * a reason.
 #.
-#: gtk/gtkapplication-dbus.c:713
+#: gtk/gtkapplication-dbus.c:721
 msgid "Reason not specified"
 msgstr "Không cung cấp lý do"
 
@@ -2134,7 +2135,7 @@ msgstr "_Phải:"
 msgid "Paper Margins"
 msgstr "Lề giấy"
 
-#: gtk/gtkentry.c:3673
+#: gtk/gtkentry.c:3685
 msgid "Insert Emoji"
 msgstr "Chèn Emoji"
 
@@ -2204,7 +2205,7 @@ msgstr "Một tập tin mang tên đó đã có rồi"
 #: gtk/gtkmessagedialog.c:179 gtk/gtkmountoperation.c:608
 #: gtk/print/gtkpagesetupunixdialog.c:282 gtk/print/gtkprintbackend.c:638
 #: gtk/print/gtkprintunixdialog.c:682 gtk/print/gtkprintunixdialog.c:839
-#: gtk/gtkwindow.c:6193 gtk/ui/gtkappchooserdialog.ui:48
+#: gtk/gtkwindow.c:6233 gtk/ui/gtkappchooserdialog.ui:48
 #: gtk/ui/gtkassistant.ui:52 gtk/ui/gtkcolorchooserdialog.ui:36
 #: gtk/ui/gtkfontchooserdialog.ui:27
 msgid "_Cancel"
@@ -2220,7 +2221,7 @@ msgstr "_Mở"
 msgid "_Save"
 msgstr "_Lưu"
 
-#: gtk/gtkfilechoosernativequartz.c:340 gtk/ui/gtkfilechooserwidget.ui:288
+#: gtk/gtkfilechoosernativequartz.c:344 gtk/ui/gtkfilechooserwidget.ui:288
 msgid "Select which types of files are shown"
 msgstr "Chọn hiển thị những kiểu tập tin nào"
 
@@ -2292,7 +2293,7 @@ msgid "If you delete an item, it will be permanently lost."
 msgstr "Nếu bạn xóa bỏ một mục, nó sẽ bị mất vĩnh viễn."
 
 #: gtk/gtkfilechooserwidget.c:1185 gtk/gtkfilechooserwidget.c:1815
-#: gtk/gtklabel.c:5693 gtk/gtktext.c:6127 gtk/gtktextview.c:9024
+#: gtk/gtklabel.c:5695 gtk/gtktext.c:6147 gtk/gtktextview.c:9018
 msgid "_Delete"
 msgstr "_Xóa bỏ"
 
@@ -2433,7 +2434,7 @@ msgstr "Chương trình"
 msgid "Audio"
 msgstr "Âm thanh"
 
-#: gtk/gtkfilechooserwidget.c:3872 gtk/gtkfilefilter.c:1035
+#: gtk/gtkfilechooserwidget.c:3872 gtk/gtkfilefilter.c:1032
 msgid "Image"
 msgstr "Ảnh"
 
@@ -2543,7 +2544,7 @@ msgstr "Chọn nhiều thư mục"
 msgid "Select a Folder"
 msgstr "Chọn thư mục"
 
-#: gtk/gtkfilefilter.c:1048
+#: gtk/gtkfilefilter.c:1045
 msgid "Unspecified"
 msgstr "Chưa xác định"
 
@@ -2631,31 +2632,31 @@ msgstr "Đóng"
 msgid "Close the infobar"
 msgstr "Đóng infobar"
 
-#: gtk/gtklabel.c:5690 gtk/gtktext.c:6115 gtk/gtktextview.c:9012
+#: gtk/gtklabel.c:5692 gtk/gtktext.c:6135 gtk/gtktextview.c:9006
 msgid "Cu_t"
 msgstr "Cắ_t"
 
-#: gtk/gtklabel.c:5691 gtk/gtktext.c:6119 gtk/gtktextview.c:9016
+#: gtk/gtklabel.c:5693 gtk/gtktext.c:6139 gtk/gtktextview.c:9010
 msgid "_Copy"
 msgstr "_Chép"
 
-#: gtk/gtklabel.c:5692 gtk/gtktext.c:6123 gtk/gtktextview.c:9020
+#: gtk/gtklabel.c:5694 gtk/gtktext.c:6143 gtk/gtktextview.c:9014
 msgid "_Paste"
 msgstr "_Dán"
 
-#: gtk/gtklabel.c:5698 gtk/gtktext.c:6136 gtk/gtktextview.c:9045
+#: gtk/gtklabel.c:5700 gtk/gtktext.c:6156 gtk/gtktextview.c:9039
 msgid "Select _All"
 msgstr "Chọn tất _cả"
 
-#: gtk/gtklabel.c:5703
+#: gtk/gtklabel.c:5705
 msgid "_Open Link"
 msgstr "_Mở liên kết"
 
-#: gtk/gtklabel.c:5707
+#: gtk/gtklabel.c:5709
 msgid "Copy _Link Address"
 msgstr "Chép địa chỉ _liên kết"
 
-#: gtk/gtklabel.c:5751 gtk/gtktext.c:2716 gtk/gtktextview.c:9094
+#: gtk/gtklabel.c:5753 gtk/gtktext.c:2716 gtk/gtktextview.c:9088
 msgid "Context menu"
 msgstr "Trình đơn ngữ cảnh"
 
@@ -2726,7 +2727,7 @@ msgid "Play"
 msgstr "Phát"
 
 #: gtk/gtkmessagedialog.c:162 gtk/gtkmessagedialog.c:180
-#: gtk/print/gtkprintbackend.c:639 gtk/gtkwindow.c:6194
+#: gtk/print/gtkprintbackend.c:639 gtk/gtkwindow.c:6234
 msgid "_OK"
 msgstr "_OK"
 
@@ -2792,7 +2793,7 @@ msgstr "_Nhớ mật khẩu cho đến khi bạn đăng xuất"
 
 #: gtk/gtkmountoperation.c:781
 msgid "Remember _forever"
-msgstr "_Nhớ mãi mãi"
+msgstr "Nhớ _mãi mãi"
 
 #: gtk/gtkmountoperation.c:1251
 #, c-format
@@ -2858,7 +2859,7 @@ msgstr "Thẻ kế trước"
 msgid "Next tab"
 msgstr "Thẻ kế tiếp"
 
-#: gtk/gtknotebook.c:4331 gtk/gtknotebook.c:6539
+#: gtk/gtknotebook.c:4331 gtk/gtknotebook.c:6541
 #, c-format
 msgid "Page %u"
 msgstr "Trang %u"
@@ -3326,8 +3327,8 @@ msgstr "Lý do thường là không thể tạo tập tin tạm."
 
 #. window
 #: gtk/print/gtkprintoperation-portal.c:264
-#: gtk/print/gtkprintoperation-portal.c:584
-#: gtk/print/gtkprintoperation-portal.c:653 gtk/print/gtkprintunixdialog.c:3008
+#: gtk/print/gtkprintoperation-portal.c:594
+#: gtk/print/gtkprintoperation-portal.c:663 gtk/print/gtkprintunixdialog.c:3008
 msgid "Print"
 msgstr "In"
 
@@ -3499,7 +3500,7 @@ msgstr "Không thể di chuyển mục có URI “%s” đến “%s”"
 msgid "No registered application with name “%s” for item with URI “%s” found"
 msgstr "Không tìm thấy ứng dụng nào đăng ký tên “%s” cho mục có URI “%s”"
 
-#: gtk/gtksearchentry.c:758
+#: gtk/gtksearchentry.c:767
 msgid "Clear Entry"
 msgstr "Xóa mục tin"
 
@@ -3590,24 +3591,24 @@ msgctxt "accessibility"
 msgid "Sidebar"
 msgstr "Thanh bên"
 
-#: gtk/gtktext.c:6141 gtk/gtktextview.c:9050
+#: gtk/gtktext.c:6161 gtk/gtktextview.c:9044
 msgid "Insert _Emoji"
 msgstr "Chèn _Emoji"
 
-#: gtk/gtktextview.c:9032
+#: gtk/gtktextview.c:9026
 msgid "_Undo"
 msgstr "_Hoàn tác"
 
-#: gtk/gtktextview.c:9036
+#: gtk/gtktextview.c:9030
 msgid "_Redo"
 msgstr "Làm _lại"
 
-#: gtk/gtkwindow.c:6182
+#: gtk/gtkwindow.c:6222
 #, c-format
 msgid "Do you want to use GTK Inspector?"
 msgstr "Bạn có muốn dùng GTK Inspector?"
 
-#: gtk/gtkwindow.c:6184
+#: gtk/gtkwindow.c:6224
 #, c-format
 msgid ""
 "GTK Inspector is an interactive debugger that lets you explore and modify "
@@ -3617,7 +3618,7 @@ msgstr ""
 "Bộ điều tra GTK là một bộ gỡ lỗi tương tác, nó giúp bạn dò tìm và sửa bên "
 "trong bất kỳ ứng dụng GTK nào. Dùng nó có thể gây ra sự đổ vỡ của ứng dụng."
 
-#: gtk/gtkwindow.c:6189
+#: gtk/gtkwindow.c:6229
 msgid "Don’t show this message again"
 msgstr "Đừng hiện lời nhắc này nữa"
 
@@ -3653,7 +3654,7 @@ msgstr "Vai trò"
 msgid "Description"
 msgstr "Mô tả"
 
-#: gtk/inspector/a11y.ui:99 gtk/inspector/misc-info.ui:297
+#: gtk/inspector/a11y.ui:99 gtk/inspector/misc-info.ui:296
 msgid "Bounds"
 msgstr "Giới hạn"
 
@@ -3955,61 +3956,61 @@ msgstr "Chế độ yêu cầu"
 msgid "Measure map"
 msgstr "Bản đồ đo lường"
 
-#: gtk/inspector/misc-info.ui:254
+#: gtk/inspector/misc-info.ui:253
 msgid "Expand"
 msgstr "Mở rộng"
 
-#: gtk/inspector/misc-info.ui:322
+#: gtk/inspector/misc-info.ui:321
 msgid "Baseline"
 msgstr "Đường cơ sở"
 
-#: gtk/inspector/misc-info.ui:347
+#: gtk/inspector/misc-info.ui:346
 msgid "Surface"
 msgstr "Bề mặt"
 
-#: gtk/inspector/misc-info.ui:366 gtk/inspector/misc-info.ui:401
-#: gtk/inspector/misc-info.ui:436 gtk/inspector/prop-editor.c:1150
-#: gtk/inspector/prop-editor.c:1533 gtk/inspector/window.ui:396
+#: gtk/inspector/misc-info.ui:365 gtk/inspector/misc-info.ui:400
+#: gtk/inspector/misc-info.ui:435 gtk/inspector/prop-editor.c:1153
+#: gtk/inspector/prop-editor.c:1536 gtk/inspector/window.ui:396
 msgid "Properties"
 msgstr "Thuộc tính"
 
-#: gtk/inspector/misc-info.ui:382
+#: gtk/inspector/misc-info.ui:381
 msgid "Renderer"
 msgstr "Bộ vẽ"
 
-#: gtk/inspector/misc-info.ui:417
+#: gtk/inspector/misc-info.ui:416
 msgid "Frame Clock"
 msgstr "Đồng hồ khung"
 
-#: gtk/inspector/misc-info.ui:452
+#: gtk/inspector/misc-info.ui:451
 msgid "Tick Callback"
 msgstr "Gọi ngược tick"
 
-#: gtk/inspector/misc-info.ui:478
+#: gtk/inspector/misc-info.ui:477
 msgid "Frame Count"
 msgstr "Số lượng khung hình"
 
-#: gtk/inspector/misc-info.ui:503
+#: gtk/inspector/misc-info.ui:502
 msgid "Frame Rate"
 msgstr "Tốc độ khung hình"
 
-#: gtk/inspector/misc-info.ui:528
+#: gtk/inspector/misc-info.ui:527
 msgid "Scale"
 msgstr "Tỷ lệ"
 
-#: gtk/inspector/misc-info.ui:553
+#: gtk/inspector/misc-info.ui:552
 msgid "Mapped"
 msgstr "Đã ánh xạ"
 
-#: gtk/inspector/misc-info.ui:579
+#: gtk/inspector/misc-info.ui:578
 msgid "Realized"
 msgstr "Hiện thực hóa"
 
-#: gtk/inspector/misc-info.ui:605
+#: gtk/inspector/misc-info.ui:604
 msgid "Is Toplevel"
 msgstr "Là mức đỉnh"
 
-#: gtk/inspector/misc-info.ui:631
+#: gtk/inspector/misc-info.ui:630
 msgid "Child Visible"
 msgstr "Con khả kiến"
 
@@ -4021,7 +4022,7 @@ msgstr "Con trỏ: %p"
 #. Translators: %s is a type name, for example
 #. * GtkPropertyExpression with value \"2.5\"
 #.
-#: gtk/inspector/prop-editor.c:824
+#: gtk/inspector/prop-editor.c:827
 #, c-format
 msgid "%s with value \"%s\""
 msgstr "%s với giá trị \"%s\""
@@ -4029,7 +4030,7 @@ msgstr "%s với giá trị \"%s\""
 #. Translators: Both %s are type names, for example
 #. * GtkPropertyExpression with type GObject
 #.
-#: gtk/inspector/prop-editor.c:835
+#: gtk/inspector/prop-editor.c:838
 #, c-format
 msgid "%s with type %s"
 msgstr "%s với kiểu %s"
@@ -4037,7 +4038,7 @@ msgstr "%s với kiểu %s"
 #. Translators: Both %s are type names, for example
 #. * GtkObjectExpression for GtkStringObject 0x23456789
 #.
-#: gtk/inspector/prop-editor.c:848
+#: gtk/inspector/prop-editor.c:851
 #, c-format
 msgid "%s for %s %p"
 msgstr "%s cho %s %p"
@@ -4045,71 +4046,71 @@ msgstr "%s cho %s %p"
 #. Translators: Both %s are type names, for example
 #. * GtkPropertyExpression with value type: gchararray
 #.
-#: gtk/inspector/prop-editor.c:878
+#: gtk/inspector/prop-editor.c:881
 #, c-format
 msgid "%s with value type %s"
 msgstr "%s với kiểu giá trị %s"
 
-#: gtk/inspector/prop-editor.c:1227
+#: gtk/inspector/prop-editor.c:1230
 #, c-format
 msgid "Uneditable property type: %s"
 msgstr "Kiểu thuộc tính không thể chỉnh sửa: %s"
 
-#: gtk/inspector/prop-editor.c:1385
+#: gtk/inspector/prop-editor.c:1388
 msgctxt "column number"
 msgid "None"
 msgstr "Không"
 
-#: gtk/inspector/prop-editor.c:1422
+#: gtk/inspector/prop-editor.c:1425
 msgid "Attribute:"
 msgstr "Thuộc tính:"
 
-#: gtk/inspector/prop-editor.c:1425
+#: gtk/inspector/prop-editor.c:1428
 msgid "Model"
 msgstr "Mô hình"
 
-#: gtk/inspector/prop-editor.c:1430
+#: gtk/inspector/prop-editor.c:1433
 msgid "Column:"
 msgstr "Cột:"
 
 #. Translators: %s is a type name, for example
 #. * Action from 0x2345678 (GtkApplicationWindow)
 #.
-#: gtk/inspector/prop-editor.c:1529
+#: gtk/inspector/prop-editor.c:1532
 #, c-format
 msgid "Action from: %p (%s)"
 msgstr "Thao tác từ: %p (%s)"
 
-#: gtk/inspector/prop-editor.c:1584
+#: gtk/inspector/prop-editor.c:1587
 msgid "Reset"
 msgstr "Đặt lại"
 
-#: gtk/inspector/prop-editor.c:1592
+#: gtk/inspector/prop-editor.c:1595
 msgctxt "GtkSettings source"
 msgid "Default"
 msgstr "Mặc định"
 
-#: gtk/inspector/prop-editor.c:1595
+#: gtk/inspector/prop-editor.c:1598
 msgctxt "GtkSettings source"
 msgid "Theme"
 msgstr "Chủ đề"
 
-#: gtk/inspector/prop-editor.c:1598
+#: gtk/inspector/prop-editor.c:1601
 msgctxt "GtkSettings source"
 msgid "XSettings"
 msgstr "Cài đặt X"
 
-#: gtk/inspector/prop-editor.c:1602
+#: gtk/inspector/prop-editor.c:1605
 msgctxt "GtkSettings source"
 msgid "Application"
 msgstr "Ứng dụng"
 
-#: gtk/inspector/prop-editor.c:1605
+#: gtk/inspector/prop-editor.c:1608
 msgctxt "GtkSettings source"
 msgid "Unknown"
 msgstr "Không rõ"
 
-#: gtk/inspector/prop-editor.c:1608
+#: gtk/inspector/prop-editor.c:1611
 msgid "Source:"
 msgstr "Nguồn:"
 
@@ -4255,11 +4256,11 @@ msgstr "Thứ bậc"
 msgid "Implements"
 msgstr "Thực hiện"
 
-#: gtk/inspector/visual.c:640 gtk/inspector/visual.c:659
+#: gtk/inspector/visual.c:637 gtk/inspector/visual.c:656
 msgid "Theme is hardcoded by GTK_THEME"
 msgstr "Chủ đề bị có định do GTK_THEME"
 
-#: gtk/inspector/visual.c:908
+#: gtk/inspector/visual.c:905
 msgid "Backend does not support window scaling"
 msgstr "Phần ứng dụng chạy phía sau không hỗ trợ co dãn cửa sổ"
 
@@ -4355,11 +4356,7 @@ msgstr "Hiển thị tiêu điểm"
 msgid "Show Accessibility warnings"
 msgstr "Hiện cảnh báo hỗ trợ Truy cập"
 
-#: gtk/inspector/visual.ui:670
-msgid "Simulate Touchscreen"
-msgstr "Mô phỏng màn hình cảm ứng"
-
-#: gtk/inspector/visual.ui:701
+#: gtk/inspector/visual.ui:667
 msgid "Inspect Inspector"
 msgstr "Xem xét Inspector"
 
@@ -4970,7 +4967,7 @@ msgstr "Chữ hoa nhỏ"
 #: gtk/open-type-layout.h:110
 msgctxt "OpenType layout"
 msgid "Simplified Forms"
-msgstr "Simplified Forms"
+msgstr "Mẫu đơn giản hóa"
 
 #: gtk/open-type-layout.h:111
 msgctxt "OpenType layout"
@@ -5726,17 +5723,17 @@ msgstr "f"
 #: gtk/print/paper_names_offsets.c:131
 msgctxt "paper size"
 msgid "Fan-Fold European"
-msgstr "Gấp quạt Âu"
+msgstr "Âu Gấp-quạt"
 
 #: gtk/print/paper_names_offsets.c:132
 msgctxt "paper size"
 msgid "Fan-Fold US"
-msgstr "Gấp quạt Mỹ"
+msgstr "Mỹ Gấp-quạt"
 
 #: gtk/print/paper_names_offsets.c:133
 msgctxt "paper size"
 msgid "Fan-Fold German Legal"
-msgstr "Gấp quạt Đức hành pháp"
+msgstr "Hành pháp Đức Gấp-quạt"
 
 #: gtk/print/paper_names_offsets.c:134
 msgctxt "paper size"
@@ -6182,11 +6179,11 @@ msgstr "_Tạo"
 
 #: gtk/ui/gtkfontchooserdialog.ui:4
 msgid "Select Font"
-msgstr "Chọn phông"
+msgstr "Chọn phông chữ"
 
 #: gtk/ui/gtkfontchooserwidget.ui:64
 msgid "Search font name"
-msgstr "Tìm tên phông"
+msgstr "Tìm kiếm tên phông chữ"
 
 #: gtk/ui/gtkfontchooserwidget.ui:77
 msgid "Filters"
@@ -6489,7 +6486,7 @@ msgstr "Một số cài đặt trong trường hợp xung đột hộp thoại"
 #: modules/media/gtkffmediafile.c:253
 #, c-format
 msgid "Unspecified error decoding media"
-msgstr "ặp lỗi khi giải mã chưa biết"
+msgstr "Gặp lỗi khi giải mã chưa biết"
 
 #: modules/media/gtkffmediafile.c:286
 #, c-format
@@ -7168,7 +7165,7 @@ msgstr ""
 #: tools/gtk-builder-tool-enumerate.c:56 tools/gtk-builder-tool-preview.c:179
 #: tools/gtk-builder-tool-preview.c:180 tools/gtk-builder-tool-screenshot.c:360
 #: tools/gtk-builder-tool-simplify.c:2529 tools/gtk-builder-tool-validate.c:261
-#: tools/gtk-rendernode-tool-info.c:200 tools/gtk-rendernode-tool-show.c:102
+#: tools/gtk-rendernode-tool-info.c:202 tools/gtk-rendernode-tool-show.c:106
 msgid "FILE"
 msgstr "TẬP_TIN"
 
@@ -7200,8 +7197,8 @@ msgid "Use style from CSS file"
 msgstr "Dùng kiểu dáng từ tập tin CSS"
 
 #: tools/gtk-builder-tool-preview.c:187 tools/gtk-builder-tool-screenshot.c:370
-#: tools/gtk-builder-tool-validate.c:268 tools/gtk-rendernode-tool-show.c:109
-#: tools/gtk-rendernode-tool-render.c:131
+#: tools/gtk-builder-tool-validate.c:268 tools/gtk-rendernode-tool-show.c:113
+#: tools/gtk-rendernode-tool-render.c:204
 #, c-format
 msgid "Could not initialize windowing system\n"
 msgstr "Không thể khởi tạo hệ thống cửa sổ\n"
@@ -7237,7 +7234,6 @@ msgid "Failed to take a screenshot\n"
 msgstr "Gặp lỗi khi chụp màn hình\n"
 
 #: tools/gtk-builder-tool-screenshot.c:309
-#: tools/gtk-rendernode-tool-render.c:83
 #, c-format
 msgid ""
 "File %s exists.\n"
@@ -7247,13 +7243,13 @@ msgstr ""
 "Dùng tùy chọn --force để ghi đè.\n"
 
 #: tools/gtk-builder-tool-screenshot.c:332
-#: tools/gtk-rendernode-tool-render.c:96
+#: tools/gtk-rendernode-tool-render.c:172
 #, c-format
 msgid "Output written to %s.\n"
 msgstr "Đầu ra ghi vào %s.\n"
 
 #: tools/gtk-builder-tool-screenshot.c:336
-#: tools/gtk-rendernode-tool-render.c:100
+#: tools/gtk-rendernode-tool-render.c:176
 #, c-format
 msgid "Failed to save %s: %s\n"
 msgstr "Gặp lỗi khi lưu %s: %s\n"
@@ -7267,12 +7263,11 @@ msgid "Save as node file instead of png"
 msgstr "Lưu dạng tập tin nút thay vì png"
 
 #: tools/gtk-builder-tool-screenshot.c:362
-#: tools/gtk-rendernode-tool-render.c:123
 msgid "Overwrite existing file"
 msgstr "Ghi đè lên tập tin sẵn có"
 
 #: tools/gtk-builder-tool-screenshot.c:363
-#: tools/gtk-rendernode-tool-render.c:124
+#: tools/gtk-rendernode-tool-render.c:197
 msgid "FILE…"
 msgstr "TẬP_TIN…"
 
@@ -7472,63 +7467,81 @@ msgstr ""
 "  render       Chụp màn hình nút\n"
 "\n"
 
-#: tools/gtk-rendernode-tool-info.c:177
+#: tools/gtk-rendernode-tool-info.c:179
 #, c-format
 msgid "Number of nodes: %u\n"
 msgstr "Số lượng nút: %u\n"
 
-#: tools/gtk-rendernode-tool-info.c:184
+#: tools/gtk-rendernode-tool-info.c:186
 #, c-format
 msgid "Depth: %u\n"
 msgstr "Độ sâu: %u\n"
 
-#: tools/gtk-rendernode-tool-info.c:187
+#: tools/gtk-rendernode-tool-info.c:189
 #, c-format
 msgid "Bounds: %g x %g\n"
 msgstr "Giới hạn: %g x %g\n"
 
-#: tools/gtk-rendernode-tool-info.c:188
+#: tools/gtk-rendernode-tool-info.c:190
 #, c-format
 msgid "Origin: %g %g\n"
 msgstr "Gốc: %g %g\n"
 
-#: tools/gtk-rendernode-tool-info.c:209
+#: tools/gtk-rendernode-tool-info.c:211
 msgid "Provide information about the render node."
 msgstr "Cung cấp thông tin về nút bộ vẽ."
 
-#: tools/gtk-rendernode-tool-info.c:222 tools/gtk-rendernode-tool-show.c:130
-#: tools/gtk-rendernode-tool-render.c:152
+#: tools/gtk-rendernode-tool-info.c:224 tools/gtk-rendernode-tool-show.c:134
+#: tools/gtk-rendernode-tool-render.c:225
 #, c-format
 msgid "No .node file specified\n"
 msgstr "Chưa chỉ ra tập tin .node\n"
 
-#: tools/gtk-rendernode-tool-info.c:228
+#: tools/gtk-rendernode-tool-info.c:230
 #, c-format
 msgid "Can only accept a single .node file\n"
 msgstr "Chỉ có thể chấp nhận một tập tin nút đơn\n"
 
-#: tools/gtk-rendernode-tool-show.c:117
+#: tools/gtk-rendernode-tool-show.c:105
+msgid "Don't add a titlebar"
+msgstr "Đừng thêm thanh tựa đề"
+
+#: tools/gtk-rendernode-tool-show.c:121
 msgid "Show the render node."
 msgstr "Hiện nút bộ vẽ."
 
-#: tools/gtk-rendernode-tool-show.c:136
+#: tools/gtk-rendernode-tool-show.c:140
 #, c-format
 msgid "Can only preview a single .node file\n"
 msgstr "Chỉ có thể xem trước một tập tin nút đơn\n"
 
-#: tools/gtk-rendernode-tool-render.c:122
+#: tools/gtk-rendernode-tool-render.c:123
+#, c-format
+msgid ""
+"File %s exists.\n"
+"If you want to overwrite, specify the filename.\n"
+msgstr ""
+"Tập tin %s sẵn có.\n"
+"Nếu bạn muốn đè hãy chỉ định tên tập tin.\n"
+
+#: tools/gtk-rendernode-tool-render.c:137
+#, c-format
+msgid "Failed to generate SVG: %s\n"
+msgstr "Gặp lỗi khi tạo SVG: %s\n"
+
+#: tools/gtk-rendernode-tool-render.c:196
 msgid "Renderer to use"
 msgstr "Bộ vẽ được dùng"
 
-#: tools/gtk-rendernode-tool-render.c:122
+#: tools/gtk-rendernode-tool-render.c:196
 msgid "RENDERER"
 msgstr "BỘ_VẼ"
 
-#: tools/gtk-rendernode-tool-render.c:139
+#: tools/gtk-rendernode-tool-render.c:212
 msgid "Render a .node file to an image."
 msgstr "Vẽ một tập tin .node ra một ảnh."
 
-#: tools/gtk-rendernode-tool-render.c:158
+#: tools/gtk-rendernode-tool-render.c:231
 #, c-format
 msgid "Can only render a single .node file to a single output file\n"
 msgstr "Chỉ có thể vẽ một tập tin .node đơn ra một tập tin đầu ra đơn\n"
@@ -7537,6 +7550,11 @@ msgstr "Chỉ có thể vẽ một tập tin .node đơn ra một tập tin đ�
 #, c-format
 msgid "Error at %s: %s\n"
 msgstr "Lỗi tại %s: %s\n"
+
+#: tools/gtk-rendernode-tool-utils.c:69
+#, c-format
+msgid "Failed to load node file: %s\n"
+msgstr "Gặp lỗi khi tải tập tin nút: %s\n"
 
 #: tools/updateiconcache.c:1391
 #, c-format
@@ -7645,6 +7663,9 @@ msgstr ""
 "Không có tập tin chỉ mục chủ đề (theme) nằm trong “%s”.\n"
 "Nếu bạn thật muốn tạo một bộ nhớ biểu tượng ở đây, hãy dùng --ignore-theme-"
 "index.\n"
+
+#~ msgid "Simulate Touchscreen"
+#~ msgstr "Mô phỏng màn hình cảm ứng"
 
 #~ msgid "Tab list"
 #~ msgstr "Danh sách tab"
