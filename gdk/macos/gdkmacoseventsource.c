@@ -734,7 +734,14 @@ gdk_macos_event_source_dispatch (GSource     *source,
 
   if (event)
     {
-      _gdk_event_emit (event);
+      gboolean handled = _gdk_event_emit (event);
+
+      if (!handled)
+        {
+          NSEvent *nsevent = _gdk_macos_display_get_nsevent (event);
+          if (nsevent != NULL)
+            [NSApp sendEvent: nsevent];
+        }
 
       gdk_event_unref (event);
     }
