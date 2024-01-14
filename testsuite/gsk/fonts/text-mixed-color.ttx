@@ -11,6 +11,7 @@
     <GlyphID id="5" name="E"/>
     <GlyphID id="6" name="F"/>
     <GlyphID id="7" name="G"/>
+    <GlyphID id="8" name="H"/>
   </GlyphOrder>
 
   <head>
@@ -82,12 +83,13 @@
     <mtx name="E" width="1024" lsb="0"/>
     <mtx name="F" width="1024" lsb="0"/>
     <mtx name="G" width="1024" lsb="0"/>
+    <mtx name="H" width="1024" lsb="256" rsb="256"/>
   </hmtx>
 
   <loca>
   </loca>
 
-  <glyf> <!-- Will result in empty table -->
+  <glyf>
     <TTGlyph name=".notdef"/>
     <TTGlyph name="A">
       <contour>
@@ -158,6 +160,15 @@
       </contour>
       <instructions><assembly></assembly></instructions>
     </TTGlyph>
+    <TTGlyph name="H">
+      <contour>
+        <pt x="256" y="0" on="1"/>
+        <pt x="768" y="0" on="1"/>
+        <pt x="768" y="2048" on="1"/>
+        <pt x="256" y="2048" on="1"/>
+      </contour>
+      <instructions><assembly></assembly></instructions>
+    </TTGlyph>
   </glyf>
 
   <COLR>
@@ -200,6 +211,7 @@
       <map code="0x45" name="E"/>
       <map code="0x46" name="F"/>
       <map code="0x47" name="G"/>
+      <map code="0x48" name="H"/>
     </cmap_format_4>
   </cmap>
 

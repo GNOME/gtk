@@ -1,0 +1,4 @@
+text {
+  font: "text-mixed-color 30";
+  glyphs: 1 40, 1 40, 8 40, 1 40;
+}
