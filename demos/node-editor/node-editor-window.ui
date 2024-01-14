@@ -3,6 +3,14 @@
   <menu id="gear_menu">
     <section>
       <item>
+        <attribute name="label" translatable="yes">_Reload automatically</attribute>
+        <attribute name="action">win.auto-reload</attribute>
+      </item>
+      <item>
+        <attribute name="label" translatable="yes">_Help</attribute>
+        <attribute name="action">app.help</attribute>
+      </item>
+      <item>
         <attribute name="label" translatable="yes">_Help</attribute>
         <attribute name="action">app.help</attribute>
       </item>

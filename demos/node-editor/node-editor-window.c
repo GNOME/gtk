@@ -1892,6 +1892,8 @@ initiate_autosave (NodeEditorWindow *self)
 static void
 node_editor_window_init (NodeEditorWindow *self)
 {
+  GAction *action;
+
   gtk_widget_init_template (GTK_WIDGET (self));
 
   self->auto_reload = TRUE;
@@ -1907,6 +1909,10 @@ node_editor_window_init (NodeEditorWindow *self)
   g_array_set_clear_func (self->errors, (GDestroyNotify)text_view_error_free);
 
   g_action_map_add_action_entries (G_ACTION_MAP (self), win_entries, G_N_ELEMENTS (win_entries), self);
+
+  action = G_ACTION (g_property_action_new ("auto-reload", self, "auto-reload"));
+  g_action_map_add_action (G_ACTION_MAP (self), action);
+  g_object_unref (action);
 
   self->tag_table = gtk_text_tag_table_new ();
   gtk_text_tag_table_add (self->tag_table,
