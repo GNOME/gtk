@@ -67,6 +67,8 @@ content_files = [
   "macos.md",
 ]
 content_images = [
+  "../images/favicon.svg",
+  "../images/favicon-192x192.png",
   "images/gtk-logo.svg",
   "images/rotated-text.png",
   "images/default_cursor.png",

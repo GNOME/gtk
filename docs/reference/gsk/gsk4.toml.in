@@ -36,6 +36,8 @@ content_files = [
   "paths.md",
 ]
 content_images = [
+  "../images/favicon.svg",
+  "../images/favicon-192x192.png",
   "gtk-logo.svg",
   "images/arc-dark.png",
   "images/arc-light.png",

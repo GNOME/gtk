@@ -85,6 +85,8 @@ content_files = [
   "visual_index.md",
 ]
 content_images = [
+  "../images/favicon.svg",
+  "../images/favicon-192x192.png",
   "images/aboutdialog.png",
   "images/action-bar.png",
   "images/appchooserbutton.png",
