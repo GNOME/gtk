@@ -29,6 +29,10 @@
 #include <gtk/gtk.h>
 #include "gtk-rendernode-tool.h"
 
+#ifdef HAVE_PANGOFT
+#include <pango/pangofc-fontmap.h>
+#endif
+
 static void G_GNUC_NORETURN
 usage (void)
 {
@@ -88,6 +92,41 @@ log_writer_func (GLogLevelFlags   level,
   return G_LOG_WRITER_HANDLED;
 }
 
+static void
+maybe_add_test_fonts (void)
+{
+#ifdef HAVE_PANGOFT
+  const char *subdir = "testsuite/gsk/fonts";
+  const char *source_dir;
+  char *dir;
+
+  source_dir = g_getenv ("GTK_SOURCE_DIR");
+
+  if (source_dir)
+    {
+      char *abs_source_dir = g_canonicalize_filename (source_dir, NULL);
+      dir = g_canonicalize_filename (subdir, abs_source_dir);
+      g_free (abs_source_dir);
+    }
+  else
+    {
+      char *current_dir = g_get_current_dir ();
+      dir = g_canonicalize_filename (subdir, current_dir);
+      g_free (current_dir);
+    }
+
+  if (g_file_test (dir, G_FILE_TEST_EXISTS))
+    {
+      FcConfig *config;
+
+      config = FcConfigGetCurrent ();
+      FcConfigAppFontAddDir (config, (const FcChar8 *) dir);
+    }
+
+  g_free (dir);
+#endif
+}
+
 int
 main (int argc, const char *argv[])
 {
@@ -107,6 +146,8 @@ main (int argc, const char *argv[])
 
   argv++;
   argc--;
+
+  maybe_add_test_fonts ();
 
   if (strcmp (argv[0], "show") == 0)
     do_show (&argc, &argv);
