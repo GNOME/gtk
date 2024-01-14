@@ -77,6 +77,7 @@ compare_render_tests = [
   'fill-opacity',
   'fill-scaled-up',
   'fill-with-3d-contents-nogl-nocairo',
+  'glyph-cache-overflow',
   'huge-height',
   'huge-width',
   'inset-shadow-multiple',
