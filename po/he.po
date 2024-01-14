@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.HEAD.he\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-12-28 12:17+0000\n"
-"PO-Revision-Date: 2024-01-02 23:54+0200\n"
+"POT-Creation-Date: 2024-01-13 21:16+0000\n"
+"PO-Revision-Date: 2024-01-14 08:56+0200\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: Hebrew <yoseforb@gmail.com>\n"
 "Language: he\n"
@@ -22,7 +22,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=4; plural=(n==1 ? 0 : n==2 ? 1 : n>10 && n%10==0 ? 2 : "
 "3);\n"
-"X-Generator: Poedit 3.4.1\n"
+"X-Generator: Poedit 3.4.2\n"
 "X-Project-Style: default\n"
 
 #: gdk/broadway/gdkbroadway-server.c:144
@@ -33,17 +33,17 @@ msgstr "סוג תצוגת ה־broadway אינה נתמכת: %s"
 #: gdk/gdk.c:179
 #, c-format
 msgid "Error parsing option --gdk-debug"
-msgstr "Error parsing option --gdk-debug"
+msgstr "שגיאה בפענוח האפשרות ‎—gdk-debug"
 
 #: gdk/gdk.c:199
 #, c-format
 msgid "Error parsing option --gdk-no-debug"
-msgstr "Error parsing option --gdk-no-debug"
+msgstr "שגיאה בפענוח האפשרות ‎—gdk-no-debug"
 
 #. Description of --class=CLASS in --help output
 #: gdk/gdk.c:228
 msgid "Program class as used by the window manager"
-msgstr "Program class as used by the window manager"
+msgstr "מחלקת התוכנית כפי שמשתמש בה מנהל החלונות"
 
 #. Placeholder in --class=CLASS in --help output
 #: gdk/gdk.c:229
@@ -63,7 +63,7 @@ msgstr "NAME"
 #. Description of --display=DISPLAY in --help output
 #: gdk/gdk.c:235
 msgid "X display to use"
-msgstr "X display to use"
+msgstr "תצוגת X לשימוש"
 
 #. Placeholder in --display=DISPLAY in --help output
 #: gdk/gdk.c:236
@@ -90,7 +90,7 @@ msgstr "GDK debugging flags to unset"
 
 #: gdk/gdkwindow.c:2851
 msgid "GL support disabled via GDK_DEBUG"
-msgstr "GL support disabled via GDK_DEBUG"
+msgstr "תמיכה ב־GL מושבתת דרך GDK_DEBUG"
 
 #: gdk/gdkwindow.c:2862
 msgid "The current backend does not support OpenGL"
@@ -1738,7 +1738,7 @@ msgstr "יישום בררת המחדל"
 #: gtk/gtkappchooserwidget.c:643
 #, c-format
 msgid "No applications found for “%s”."
-msgstr "לא נמצאו יישומים עבור „%s“"
+msgstr "לא נמצאו יישומים עבור „%s“."
 
 #: gtk/gtkappchooserwidget.c:726
 msgid "Recommended Applications"
@@ -2967,7 +2967,7 @@ msgstr ""
 #. Description of --gtk-module=MODULES in --help output
 #: gtk/gtkmain.c:462
 msgid "Load additional GTK+ modules"
-msgstr "Load additional GTK+ modules"
+msgstr "לטעון מודולים נוספים של GTK+‎"
 
 #. Placeholder in --gtk-module=MODULES in --help output
 #: gtk/gtkmain.c:463
@@ -2992,15 +2992,15 @@ msgstr "GTK+ debugging flags to unset"
 #: gtk/gtkmain.c:811 gtk/gtkmain.c:1005
 #, c-format
 msgid "Cannot open display: %s"
-msgstr "Cannot open display: %s"
+msgstr "לא ניתן לפתוח את התצוכה: %s"
 
 #: gtk/gtkmain.c:923
 msgid "GTK+ Options"
-msgstr "GTK+ Options"
+msgstr "אפשרויות GTK+‎"
 
 #: gtk/gtkmain.c:923
 msgid "Show GTK+ Options"
-msgstr "Show GTK+ Options"
+msgstr "הצגת אפשרויות GTK+‎"
 
 #. Translate to default:RTL if you want your widgets
 #. * to be RTL, otherwise translate to default:LTR.
@@ -3623,11 +3623,11 @@ msgstr "לא נמצאה מדפסת"
 
 #: gtk/gtkprintoperation-win32.c:1708
 msgid "Invalid argument to CreateDC"
-msgstr "Invalid argument to CreateDC"
+msgstr "ארגומנט שגוי ל־CreateDC"
 
 #: gtk/gtkprintoperation-win32.c:1744 gtk/gtkprintoperation-win32.c:1996
 msgid "Error from StartDoc"
-msgstr "Error from StartDoc"
+msgstr "שגיאה מ־StartDoc"
 
 #: gtk/gtkprintoperation-win32.c:1851 gtk/gtkprintoperation-win32.c:1874
 #: gtk/gtkprintoperation-win32.c:1922
@@ -3636,15 +3636,15 @@ msgstr "אין מספיק זיכרון פנוי"
 
 #: gtk/gtkprintoperation-win32.c:1927
 msgid "Invalid argument to PrintDlgEx"
-msgstr "Invalid argument to PrintDlgEx"
+msgstr "ארגומנט שגוי ל־PrintDlgEx"
 
 #: gtk/gtkprintoperation-win32.c:1932
 msgid "Invalid pointer to PrintDlgEx"
-msgstr "Invalid pointer to PrintDlgEx"
+msgstr "מצביע שגוי ל־PrintDlgEx"
 
 #: gtk/gtkprintoperation-win32.c:1937
 msgid "Invalid handle to PrintDlgEx"
-msgstr "Invalid handle to PrintDlgEx"
+msgstr "ידית שגויה ל־PrintDlgEx"
 
 #: gtk/gtkprintoperation-win32.c:1942
 msgid "Unspecified error"
