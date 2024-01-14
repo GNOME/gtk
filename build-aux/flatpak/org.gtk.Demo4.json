@@ -64,6 +64,38 @@
             ]
         },
         {
+            "name": "spirv-headers",
+            "buildsystem": "cmake-ninja",
+            "builddir": true,
+            "cleanup": [ "/bin", "/lib/cmake", "/lib/pkgconfig", "/include" ],
+            "sources": [
+                {
+                    "type": "git",
+                    "url": "https://github.com/KhronosGroup/SPIRV-Headers.git",
+                    "branch": "main"
+                }
+            ]
+        },
+        {
+            "name": "spirv-tools",
+            "buildsystem": "cmake-ninja",
+            "builddir": true,
+            "config-opts": [
+                "-DCMAKE_SKIP_RPATH:BOOL=yes",
+                "-DSPIRV_WERROR=Off",
+                "-DSPIRV-Headers_SOURCE_DIR=\"/app/include\"",
+                "-DSPIRV_TOOLS_BUILD_STATIC:BOOL=ON"
+            ],
+            "cleanup": [ "/bin", "/lib/cmake", "/lib/pkgconfig", "/include" ],
+            "sources": [
+                {
+                    "type": "git",
+                    "url": "https://github.com/KhronosGroup/SPIRV-Tools.git",
+                    "branch": "main"
+                }
+            ]
+        },
+        {
             "name": "shaderc",
             "buildsystem": "cmake-ninja",
             "builddir": true,
