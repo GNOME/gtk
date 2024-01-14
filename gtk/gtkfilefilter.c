@@ -804,7 +804,6 @@ NSArray * _gtk_file_filter_get_as_pattern_nsstrings (GtkFileFilter *filter)
             char *pattern_c = g_string_free (pattern, FALSE);
             NSString *pattern_nsstring = [NSString stringWithUTF8String:pattern_c];
             g_free (pattern_c);
-            [pattern_nsstring retain];
             [array addObject:pattern_nsstring];
           }
           break;
