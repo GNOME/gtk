@@ -32,7 +32,6 @@
       </item>
     </section>
   </menu>
-
   <object class="GtkPopover" id="testcase_popover">
     <child>
       <object class="GtkGrid">
@@ -47,7 +46,7 @@
           <object class="GtkEntry" id="testcase_name_entry">
             <property name="hexpand">1</property>
             <property name="activates-default">1</property>
-            <signal name="notify::text" handler="testcase_name_entry_changed_cb" />
+            <signal name="notify::text" handler="testcase_name_entry_changed_cb"/>
           </object>
         </child>
         <child>
@@ -60,7 +59,6 @@
             </layout>
           </object>
         </child>
-
         <child>
           <object class="GtkLabel">
             <property name="wrap">1</property>
@@ -74,7 +72,6 @@
             </layout>
           </object>
         </child>
-
         <child>
           <object class="GtkLabel" id="testcase_error_label">
             <property name="wrap">1</property>
@@ -86,7 +83,6 @@
             </layout>
           </object>
         </child>
-
         <child>
           <object class="GtkButton" id="testcase_save_button">
             <property name="label">Save</property>
@@ -94,9 +90,9 @@
             <property name="halign">end</property>
             <property name="receives-default">1</property>
             <property name="sensitive">0</property>
-            <signal name="clicked" handler="testcase_save_clicked_cb" />
+            <signal name="clicked" handler="testcase_save_clicked_cb"/>
             <style>
-              <class name="suggested-action" />
+              <class name="suggested-action"/>
             </style>
             <layout>
               <property name="row">4</property>
@@ -108,7 +104,6 @@
       </object>
     </child>
   </object>
-
   <template class="NodeEditorWindow" parent="GtkApplicationWindow">
     <property name="title" translatable="yes">GTK Node Editor</property>
     <property name="default-width">1024</property>
@@ -193,83 +188,128 @@
       </object>
     </child>
     <child>
-      <object class="GtkPaned">
-        <property name="shrink-start-child">false</property>
-        <property name="shrink-end-child">false</property>
-        <property name="position">400</property>
-        <property name="start-child">
-          <object class="GtkScrolledWindow">
-            <property name="hscrollbar-policy">never</property>
-            <property name="hexpand">1</property>
-            <property name="vexpand">1</property>
-            <child>
-              <object class="GtkTextView" id="text_view">
-                <property name="wrap-mode">word</property>
-                <property name="monospace">1</property>
-                <property name="top-margin">6</property>
-                <property name="left-margin">6</property>
-                <property name="right-margin">6</property>
-                <property name="bottom-margin">6</property>
-                <property name="has-tooltip">1</property>
-                <property name="extra-menu">extra_menu</property>
-                <signal name="query-tooltip" handler="text_view_query_tooltip_cb"/>
+      <object class="GtkOverlay">
+        <child type="overlay">
+          <object class="GtkRevealer" id="crash_warning">
+            <property name="transition-type">slide-down</property>
+            <property name="halign">center</property>
+            <property name="valign">start</property>
+            <property name="child">
+              <object class="GtkFrame">
                 <style>
-                  <class name="editor" />
+                  <class name="app-notification"/>
                 </style>
+                <property name="child">
+                  <object class="GtkBox">
+                    <property name="orientation">vertical</property>
+                    <property name="spacing">20</property>
+                    <property name="margin-start">10</property>
+                    <property name="margin-end">10</property>
+                    <property name="margin-top">10</property>
+                    <property name="margin-bottom">10</property>
+                    <child>
+                      <object class="GtkLabel">
+                        <property name="hexpand">1</property>
+                        <property name="halign">1</property>
+                        <property name="label" translatable="1">The application may have crashed.
+As a precaution, auto-loading has been turned off.
+</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkButton">
+                        <property name="valign">3</property>
+                        <property name="use-underline">1</property>
+                        <property name="label" translatable="1">_Close</property>
+                        <signal name="clicked" handler="close_crash_warning"/>
+                      </object>
+                    </child>
+                  </object>
+                </property>
+              </object>
+            </property>
+          </object>
+        </child>
+        <property name="child">
+          <object class="GtkPaned">
+            <property name="shrink-start-child">false</property>
+            <property name="shrink-end-child">false</property>
+            <property name="position">400</property>
+            <property name="start-child">
+              <object class="GtkScrolledWindow">
+                <property name="hscrollbar-policy">never</property>
+                <property name="hexpand">1</property>
+                <property name="vexpand">1</property>
                 <child>
-                  <object class="GtkGestureClick">
-                    <property name="button">1</property>
-                    <signal name="pressed" handler="click_gesture_pressed"/>
+                  <object class="GtkTextView" id="text_view">
+                    <property name="wrap-mode">word</property>
+                    <property name="monospace">1</property>
+                    <property name="top-margin">6</property>
+                    <property name="left-margin">6</property>
+                    <property name="right-margin">6</property>
+                    <property name="bottom-margin">6</property>
+                    <property name="has-tooltip">1</property>
+                    <property name="extra-menu">extra_menu</property>
+                    <signal name="query-tooltip" handler="text_view_query_tooltip_cb"/>
+                    <style>
+                      <class name="editor"/>
+                    </style>
+                    <child>
+                      <object class="GtkGestureClick">
+                        <property name="button">1</property>
+                        <signal name="pressed" handler="click_gesture_pressed"/>
+                      </object>
+                    </child>
                   </object>
                 </child>
               </object>
-            </child>
-          </object>
-        </property>
-        <property name="end-child">
-          <object class="GtkBox">
-            <child>
-              <object class="GtkScrolledWindow">
-                <property name="hexpand">1</property>
-                <property name="vexpand">1</property>
-                <property name="min-content-height">100</property>
-                <property name="min-content-width">100</property>
+            </property>
+            <property name="end-child">
+              <object class="GtkBox">
                 <child>
-                  <object class="GtkViewport">
+                  <object class="GtkScrolledWindow">
+                    <property name="hexpand">1</property>
+                    <property name="vexpand">1</property>
+                    <property name="min-content-height">100</property>
+                    <property name="min-content-width">100</property>
                     <child>
-                      <object class="GtkPicture" id="picture">
-                        <property name="can-shrink">0</property>
-                        <property name="halign">center</property>
-                        <property name="valign">center</property>
+                      <object class="GtkViewport">
                         <child>
-                          <object class="GtkDragSource">
+                          <object class="GtkPicture" id="picture">
+                            <property name="can-shrink">0</property>
+                            <property name="halign">center</property>
+                            <property name="valign">center</property>
+                            <child>
+                              <object class="GtkDragSource">
+                                <property name="actions">copy</property>
+                                <signal name="prepare" handler="on_picture_drag_prepare_cb" swapped="no"/>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkDropTargetAsync">
                             <property name="actions">copy</property>
-                            <signal name="prepare" handler="on_picture_drag_prepare_cb" swapped="no"/>
+                            <property name="formats">application/x-gtk-render-node</property>
+                            <signal name="drop" handler="on_picture_drop_cb" swapped="no"/>
                           </object>
                         </child>
                       </object>
                     </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkScrolledWindow">
+                    <property name="hscrollbar-policy">never</property>
                     <child>
-                      <object class="GtkDropTargetAsync">
-                        <property name="actions">copy</property>
-                        <property name="formats">application/x-gtk-render-node</property>
-                        <signal name="drop" handler="on_picture_drop_cb" swapped="no"/>
+                      <object class="GtkListBox" id="renderer_listbox">
+                        <property name="selection-mode">none</property>
                       </object>
                     </child>
                   </object>
                 </child>
               </object>
-            </child>
-            <child>
-              <object class="GtkScrolledWindow">
-                <property name="hscrollbar-policy">never</property>
-                <child>
-                  <object class="GtkListBox" id="renderer_listbox">
-                    <property name="selection-mode">none</property>
-                  </object>
-                </child>
-              </object>
-            </child>
+            </property>
           </object>
         </property>
       </object>

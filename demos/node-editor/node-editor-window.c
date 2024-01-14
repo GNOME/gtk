@@ -57,6 +57,7 @@ struct _NodeEditorWindow
   GtkWidget *testcase_name_entry;
   GtkWidget *testcase_save_button;
   GtkWidget *scale_scale;
+  GtkWidget *crash_warning;
 
   GtkWidget *renderer_listbox;
   GListStore *renderers;
@@ -1567,30 +1568,6 @@ edit_action_cb (GtkWidget  *widget,
 }
 
 static void
-dialog_response (GtkWidget        *dialog,
-                 int               response_id,
-                 NodeEditorWindow *self)
-{
-  gtk_window_destroy (GTK_WINDOW (dialog));
-
-  if (response_id == GTK_RESPONSE_OK)
-    {
-      char *path = get_autosave_path ("-unsafe");
-      char *contents;
-      gsize len;
-
-      if (g_file_get_contents (path, &contents, &len, NULL))
-        {
-          gtk_text_buffer_set_text (self->text_buffer, contents, len);
-          g_free (contents);
-        }
-
-      g_remove (path);
-      g_free (path);
-    }
-}
-
-static void
 node_editor_window_map (GtkWidget *widget)
 {
   char *path;
@@ -1602,31 +1579,6 @@ node_editor_window_map (GtkWidget *widget)
     {
       g_free (path);
       return;
-    }
-
-  g_free (path);
-
-  path = get_autosave_path ("-unsafe");
-  if (g_file_test (path, G_FILE_TEST_EXISTS))
-    {
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-      GtkWidget *dialog;
-
-      dialog = gtk_message_dialog_new (GTK_WINDOW (widget),
-                                       GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
-                                       GTK_MESSAGE_QUESTION,
-                                       GTK_BUTTONS_NONE,
-                                       "The application may have crashed.\n"
-                                       "Restore auto-saved content anyway ?");
-
-      gtk_dialog_add_button (GTK_DIALOG (dialog), "Cancel", GTK_RESPONSE_CANCEL);
-      gtk_dialog_add_button (GTK_DIALOG (dialog), "Restore", GTK_RESPONSE_OK);
-
-      g_signal_connect (dialog, "response",
-                        G_CALLBACK (dialog_response), widget);
-
-      gtk_window_present (GTK_WINDOW (dialog));
-G_GNUC_END_IGNORE_DEPRECATIONS
     }
 
   g_free (path);
@@ -1682,6 +1634,13 @@ node_editor_window_get_property (GObject    *object,
 }
 
 static void
+close_crash_warning (GtkButton        *button,
+                     NodeEditorWindow *self)
+{
+  gtk_revealer_set_reveal_child (GTK_REVEALER (self->crash_warning), FALSE);
+}
+
+static void
 node_editor_window_class_init (NodeEditorWindowClass *class)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (class);
@@ -1718,6 +1677,7 @@ node_editor_window_class_init (NodeEditorWindowClass *class)
   gtk_widget_class_bind_template_child (widget_class, NodeEditorWindow, testcase_name_entry);
   gtk_widget_class_bind_template_child (widget_class, NodeEditorWindow, testcase_save_button);
   gtk_widget_class_bind_template_child (widget_class, NodeEditorWindow, scale_scale);
+  gtk_widget_class_bind_template_child (widget_class, NodeEditorWindow, crash_warning);
 
   gtk_widget_class_bind_template_callback (widget_class, text_view_query_tooltip_cb);
   gtk_widget_class_bind_template_callback (widget_class, open_cb);
@@ -1730,6 +1690,7 @@ node_editor_window_class_init (NodeEditorWindowClass *class)
   gtk_widget_class_bind_template_callback (widget_class, on_picture_drag_prepare_cb);
   gtk_widget_class_bind_template_callback (widget_class, on_picture_drop_cb);
   gtk_widget_class_bind_template_callback (widget_class, click_gesture_pressed);
+  gtk_widget_class_bind_template_callback (widget_class, close_crash_warning);
 
   gtk_widget_class_install_action (widget_class, "smart-edit", NULL, edit_action_cb);
 
@@ -1797,14 +1758,23 @@ get_autosave_path (const char *suffix)
 static void
 set_initial_text (NodeEditorWindow *self)
 {
-  char *path;
+  char *path, *path1;
   char *initial_text;
   gsize len;
 
   path = get_autosave_path (NULL);
+  path1 = get_autosave_path ("-unsafe");
 
   if (g_file_get_contents (path, &initial_text, &len, NULL))
     {
+      gtk_text_buffer_set_text (self->text_buffer, initial_text, len);
+      g_free (initial_text);
+    }
+  else if (g_file_get_contents (path1, &initial_text, &len, NULL))
+    {
+      self->auto_reload = FALSE;
+      gtk_revealer_set_reveal_child (GTK_REVEALER (self->crash_warning), TRUE);
+
       gtk_text_buffer_set_text (self->text_buffer, initial_text, len);
       g_free (initial_text);
     }
@@ -1832,6 +1802,7 @@ set_initial_text (NodeEditorWindow *self)
     }
 
   g_free (path);
+  g_free (path1);
 }
 
 static void
