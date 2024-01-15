@@ -19,3 +19,11 @@ AAEAAwAAAA4AAAAA//8A/wD//wAA/wAA\
     glyphs: 7 10;
   }
 }
+color {
+  bounds: 144 -305 10 10;
+  color: rgb(0,0,0);
+}
+color {
+  bounds: 144 -5 10 10;
+  color: rgb(0,0,0);
+}
