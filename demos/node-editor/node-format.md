@@ -336,12 +336,16 @@ font, an error node will be returned.
 
 ### texture
 
-| property | syntax           | default                | printed     |
-| -------- | ---------------- | ---------------------- | ----------- |
-| bounds   | `<rect>`         | 50                     | always      |
-| texture  | `<url>`          | *see below*            | always      |
+| property | syntax              | default                | printed     |
+| -------- | ------------------- | ---------------------- | ----------- |
+| bounds   | `<rect>`            | 50                     | always      |
+| texture  | `<string>`?`<url>`? | *see below*            | always      |
 
 Creates a node like `gsk_texture_node_new()` with the given properties.
+
+If a string is specified for the texture, it will be used as a name for the text.
+Textures can be reused by specifying the name of a previously used texture. In
+that case, the url can be omitted.
 
 The default texture is a 10x10 checkerboard with the top left and bottom right
 5x5 being in the color #FF00CC and the other part being transparent. A possible
