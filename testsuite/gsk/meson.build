@@ -385,6 +385,8 @@ node_parser_tests = [
   'text-fail.node',
   'text-fail.ref.node',
   'text-fail.errors',
+  'text-font-blob.node',
+  'text-font-blob.ref.node',
   'text-no-color.node',
   'texture-fail.node',
   'texture-fail.ref.node',
