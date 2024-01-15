@@ -903,7 +903,7 @@ struct _GtkObjectExpression
 {
   GtkExpression parent;
 
-  GObject *object;
+  GWeakRef object_wr;
   GSList *watches;
 };
 
@@ -920,8 +920,6 @@ gtk_object_expression_weak_ref_cb (gpointer  data,
   GtkObjectExpression *self = (GtkObjectExpression *) data;
   GSList *l;
 
-  self->object = NULL;
-
   for (l = self->watches; l; l = l->next)
     {
       GtkObjectExpressionWatch *owatch = l->data;
@@ -934,9 +932,17 @@ static void
 gtk_object_expression_finalize (GtkExpression *expr)
 {
   GtkObjectExpression *self = (GtkObjectExpression *) expr;
+  GObject *object;
 
-  if (self->object)
-    g_object_weak_unref (self->object, gtk_object_expression_weak_ref_cb, self);
+  object = g_weak_ref_get (&self->object_wr);
+
+  if (object != NULL)
+    {
+      g_object_weak_unref (object, gtk_object_expression_weak_ref_cb, self);
+      g_object_unref (object);
+    }
+
+  g_weak_ref_clear (&self->object_wr);
 
   g_assert (self->watches == NULL);
 
@@ -955,12 +961,14 @@ gtk_object_expression_evaluate (GtkExpression *expr,
                                 GValue        *value)
 {
   GtkObjectExpression *self = (GtkObjectExpression *) expr;
+  GObject *object;
 
-  if (self->object == NULL)
+  object = g_weak_ref_get (&self->object_wr);
+  if (object == NULL)
     return FALSE;
 
   g_value_init (value, gtk_expression_get_value_type (expr));
-  g_value_set_object (value, self->object);
+  g_value_take_object (value, object);
   return TRUE;
 }
 
@@ -1035,7 +1043,7 @@ gtk_object_expression_new (GObject *object)
   result = gtk_expression_alloc (GTK_TYPE_OBJECT_EXPRESSION, G_OBJECT_TYPE (object));
   self = (GtkObjectExpression *) result;
 
-  self->object = object;
+  g_weak_ref_init (&self->object_wr, object);
   g_object_weak_ref (object, gtk_object_expression_weak_ref_cb, self);
 
   return result;
@@ -1053,10 +1061,17 @@ GObject *
 gtk_object_expression_get_object (GtkExpression *expression)
 {
   GtkObjectExpression *self = (GtkObjectExpression *) expression;
+  GObject *object;
 
   g_return_val_if_fail (G_TYPE_CHECK_INSTANCE_TYPE (expression, GTK_TYPE_OBJECT_EXPRESSION), NULL);
 
-  return self->object;
+  object = g_weak_ref_get (&self->object_wr);
+
+  /* Return a borrowed instance */
+  if (object != NULL)
+    g_object_unref (object);
+
+  return object;
 }
 
 /* }}} */
