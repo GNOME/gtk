@@ -1,0 +1,20 @@
+text {
+  font: "text-mixed-color 7.5";
+  glyphs: 7 10;
+}
+text {
+  font: "Cantarell 11";
+  glyphs: 7 10;
+}
+text {
+  font: "text-mixed-color 7.5";
+  glyphs: 7 10;
+}
+text {
+  font: "Cantarell 11";
+  glyphs: "Hello";
+}
+text {
+  font: "Cantarell 11";
+  glyphs: "Hello";
+}
