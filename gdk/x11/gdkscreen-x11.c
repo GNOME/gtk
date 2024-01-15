@@ -470,7 +470,7 @@ check_is_composited (GdkDisplay *display,
 
 static GdkX11Monitor *
 find_monitor_by_name (GdkX11Display *x11_display,
-          char *name)
+                      char          *name)
 {
   int i;
 
@@ -651,7 +651,7 @@ init_randr15 (GdkScreen *screen, gboolean *changed)
         monitor->remove = FALSE;
       else
         {
-          monitor = g_object_new (gdk_x11_monitor_get_type (),
+          monitor = g_object_new (GDK_TYPE_X11_MONITOR,
                                   "display", display,
                                   NULL);
           monitor->output = output;
@@ -996,7 +996,6 @@ init_no_multihead (GdkScreen *screen, gboolean *changed)
                               "display", display,
                               NULL);
       monitor->output = 0;
-      monitor->name = NULL;
       monitor->add = TRUE;
       g_ptr_array_add (x11_display->monitors, monitor);
     }

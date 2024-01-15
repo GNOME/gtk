@@ -95,8 +95,20 @@ gdk_x11_monitor_init (GdkX11Monitor *monitor)
 }
 
 static void
+gdk_x11_monitor_finalize (GObject *gobject)
+{
+  GdkX11Monitor *self = GDK_X11_MONITOR (gobject);
+
+  g_free (self->name);
+
+  G_OBJECT_CLASS (gdk_x11_monitor_parent_class)->finalize (gobject);
+}
+
+
+static void
 gdk_x11_monitor_class_init (GdkX11MonitorClass *class)
 {
+  G_OBJECT_CLASS (class)->finalize = gdk_x11_monitor_finalize;
   GDK_MONITOR_CLASS (class)->get_workarea = gdk_x11_monitor_get_workarea;
 }
 
