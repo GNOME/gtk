@@ -46,5 +46,6 @@ void                            gtk_column_view_cell_widget_remove             (
 GtkColumnViewCellWidget *       gtk_column_view_cell_widget_get_next           (GtkColumnViewCellWidget         *self);
 GtkColumnViewCellWidget *       gtk_column_view_cell_widget_get_prev           (GtkColumnViewCellWidget         *self);
 GtkColumnViewColumn *           gtk_column_view_cell_widget_get_column         (GtkColumnViewCellWidget         *self);
+void                            gtk_column_view_cell_widget_unset_column       (GtkColumnViewCellWidget         *self);
 
 G_END_DECLS

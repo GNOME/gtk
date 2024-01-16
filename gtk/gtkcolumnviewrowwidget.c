@@ -592,6 +592,9 @@ void
 gtk_column_view_row_widget_remove_child (GtkColumnViewRowWidget *self,
                                          GtkWidget              *child)
 {
+  if (GTK_IS_COLUMN_VIEW_CELL_WIDGET (child))
+    gtk_column_view_cell_widget_unset_column (GTK_COLUMN_VIEW_CELL_WIDGET (child));
+
   gtk_widget_unparent (child);
 }
 
