@@ -43,10 +43,16 @@ foreach t : tests
 
   suites = ['gdk'] + t.get('suites', [])
 
+  test_timeout = 60
+  if 'slow' in suites
+    test_timeout = 90
+  endif
+
   test(test_name, test_exe,
     args: [ '--tap', '-k' ],
     protocol: 'tap',
     is_parallel: t.get('parallel', false),
+    timeout: test_timeout,
     env: [
       'G_TEST_SRCDIR=@0@'.format(meson.current_source_dir()),
       'G_TEST_BUILDDIR=@0@'.format(meson.current_build_dir()),
