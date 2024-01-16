@@ -1504,6 +1504,7 @@ memory_format_gl_format (GskGLCommandQueue *self,
   if ((flags & required_flags) == required_flags)
     {
       gdk_memory_format_gl_format (data_format,
+                                   gdk_gl_context_get_use_es (self->context),
                                    gl_internalformat,
                                    gl_format,
                                    gl_type,
@@ -1514,6 +1515,7 @@ memory_format_gl_format (GskGLCommandQueue *self,
 
   /* Second, try the potential RGBA format */
   if (gdk_memory_format_gl_rgba_format (data_format,
+                                        gdk_gl_context_get_use_es (self->context),
                                         &alt_format,
                                         gl_internalformat,
                                         gl_format,
@@ -1529,6 +1531,7 @@ memory_format_gl_format (GskGLCommandQueue *self,
             return data_format;
 
           gdk_memory_format_gl_format (alt_format,
+                                       gdk_gl_context_get_use_es (self->context),
                                        gl_internalformat,
                                        gl_format,
                                        gl_type,
@@ -1546,6 +1549,7 @@ memory_format_gl_format (GskGLCommandQueue *self,
       if (((flags & required_flags) == required_flags))
         {
           gdk_memory_format_gl_format (fallbacks[i],
+                                       gdk_gl_context_get_use_es (self->context),
                                        gl_internalformat,
                                        gl_format,
                                        gl_type,
