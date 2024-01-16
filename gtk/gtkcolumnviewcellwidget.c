@@ -269,11 +269,12 @@ gtk_column_view_cell_widget_size_allocate (GtkWidget *widget,
     }
 }
 
-static void
-gtk_column_view_cell_widget_dispose (GObject *object)
+/* This should be to be called when unsetting the parent, but we have no
+ * set_parent vfunc().
+ */
+void
+gtk_column_view_cell_widget_unset_column (GtkColumnViewCellWidget *self)
 {
-  GtkColumnViewCellWidget *self = GTK_COLUMN_VIEW_CELL_WIDGET (object);
-
   if (self->column)
     {
       gtk_column_view_column_remove_cell (self->column, self);
@@ -288,6 +289,15 @@ gtk_column_view_cell_widget_dispose (GObject *object)
 
       g_clear_object (&self->column);
     }
+}
+
+static void
+gtk_column_view_cell_widget_dispose (GObject *object)
+{
+  GtkColumnViewCellWidget *self = GTK_COLUMN_VIEW_CELL_WIDGET (object);
+
+  /* unset_parent() forgot to call this. Be very angry. */
+  g_warn_if_fail (self->column == NULL);
 
   G_OBJECT_CLASS (gtk_column_view_cell_widget_parent_class)->dispose (object);
 }
