@@ -28,7 +28,7 @@ flatpak build ${builddir} meson \
                 -Ddemo-profile=devel \
                 _flatpak_build
 
-flatpak build ${builddir} ninja -C _flatpak_build install
+flatpak build --env=CI_COMMIT_SHORT_SHA=$CI_COMMIT_SHORT_SHA ${builddir} ninja -C _flatpak_build install
 
 flatpak-builder \
         --user --disable-rofiles-fuse \
