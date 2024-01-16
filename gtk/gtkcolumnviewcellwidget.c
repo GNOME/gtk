@@ -270,9 +270,9 @@ gtk_column_view_cell_widget_size_allocate (GtkWidget *widget,
 }
 
 static void
-gtk_column_view_cell_widget_unroot (GtkWidget *widget)
+gtk_column_view_cell_widget_dispose (GObject *object)
 {
-  GtkColumnViewCellWidget *self = GTK_COLUMN_VIEW_CELL_WIDGET (widget);
+  GtkColumnViewCellWidget *self = GTK_COLUMN_VIEW_CELL_WIDGET (object);
 
   if (self->column)
     {
@@ -289,7 +289,7 @@ gtk_column_view_cell_widget_unroot (GtkWidget *widget)
       g_clear_object (&self->column);
     }
 
-  GTK_WIDGET_CLASS (gtk_column_view_cell_widget_parent_class)->unroot (widget);
+  G_OBJECT_CLASS (gtk_column_view_cell_widget_parent_class)->dispose (object);
 }
 
 static GtkSizeRequestMode
@@ -308,6 +308,7 @@ gtk_column_view_cell_widget_class_init (GtkColumnViewCellWidgetClass *klass)
 {
   GtkListFactoryWidgetClass *factory_class = GTK_LIST_FACTORY_WIDGET_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
+  GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
 
   factory_class->create_object = gtk_column_view_cell_widget_create_object;
   factory_class->setup_object = gtk_column_view_cell_widget_setup_object;
@@ -319,8 +320,8 @@ gtk_column_view_cell_widget_class_init (GtkColumnViewCellWidgetClass *klass)
   widget_class->measure = gtk_column_view_cell_widget_measure;
   widget_class->size_allocate = gtk_column_view_cell_widget_size_allocate;
   widget_class->get_request_mode = gtk_column_view_cell_widget_get_request_mode;
-  widget_class->unroot = gtk_column_view_cell_widget_unroot;
 
+  gobject_class->dispose = gtk_column_view_cell_widget_dispose;
 
   gtk_widget_class_set_css_name (widget_class, I_("cell"));
   gtk_widget_class_set_accessible_role (widget_class, GTK_ACCESSIBLE_ROLE_GRID_CELL);
