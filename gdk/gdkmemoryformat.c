@@ -377,7 +377,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     },
     .gl = {
         .internal_gl_format = GL_RGBA8,
-        .internal_gles_format = GL_RGBA8,
+        .internal_gles_format = GL_BGRA,
         .format = GL_BGRA,
         .type = GL_UNSIGNED_BYTE,
         .swizzle = { GL_RED, GL_GREEN, GL_BLUE, GL_ALPHA },
@@ -488,7 +488,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     },
     .gl = {
         .internal_gl_format = GL_RGBA8,
-        .internal_gles_format = GL_RGBA8,
+        .internal_gles_format = GL_BGRA,
         .format = GL_BGRA,
         .type = GL_UNSIGNED_BYTE,
         .swizzle = { GL_RED, GL_GREEN, GL_BLUE, GL_ALPHA },
@@ -600,7 +600,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     },
     .gl = {
         .internal_gl_format = GL_RGBA8,
-        .internal_gles_format = GL_RGBA8,
+        .internal_gles_format = GL_BGRA,
         .format = GL_BGRA,
         .type = GL_UNSIGNED_BYTE,
         .swizzle = { GL_RED, GL_GREEN, GL_BLUE, GL_ONE },
