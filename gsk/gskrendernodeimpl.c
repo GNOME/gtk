@@ -5658,6 +5658,7 @@ struct _GskTextNode
 {
   GskRenderNode render_node;
 
+  PangoFontMap *fontmap;
   PangoFont *font;
   gboolean has_color_glyphs;
 
@@ -5675,6 +5676,7 @@ gsk_text_node_finalize (GskRenderNode *node)
   GskRenderNodeClass *parent_class = g_type_class_peek (g_type_parent (GSK_TYPE_TEXT_NODE));
 
   g_object_unref (self->font);
+  g_object_unref (self->fontmap);
   g_free (self->glyphs);
 
   parent_class->finalize (node);
@@ -5788,6 +5790,7 @@ gsk_text_node_new (PangoFont              *font,
   node = (GskRenderNode *) self;
   node->offscreen_for_opacity = FALSE;
 
+  self->fontmap = g_object_ref (pango_font_get_font_map (font));
   self->font = g_object_ref (font);
   self->color = *color;
   self->offset = *offset;

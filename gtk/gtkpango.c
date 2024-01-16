@@ -53,7 +53,7 @@ _gtk_pango_attr_list_merge (PangoAttrList *into,
       if (into)
         pango_attr_list_filter (from, attr_list_merge_filter, into);
       else
-       return pango_attr_list_ref (from);
+        return pango_attr_list_ref (from);
     }
 
   return into;

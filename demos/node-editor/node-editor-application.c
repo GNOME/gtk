@@ -21,10 +21,6 @@
 
 #include <glib/gstdio.h>
 
-#ifdef HAVE_PANGOFT
-#include <pango/pangofc-fontmap.h>
-#endif
-
 #include "node-editor-application.h"
 
 #include "node-editor-window.h"
@@ -51,47 +47,11 @@ struct _NodeEditorApplicationClass
   GtkApplicationClass parent_class;
 };
 
-G_DEFINE_TYPE (NodeEditorApplication, node_editor_application, GTK_TYPE_APPLICATION);
-
-static void
-maybe_add_test_fonts (void)
-{
-#ifdef HAVE_PANGOFT
-  const char *subdir = "testsuite/gsk/fonts";
-  const char *source_dir;
-  char *dir;
-
-  source_dir = g_getenv ("GTK_SOURCE_DIR");
-
-  if (source_dir)
-    {
-      char *abs_source_dir = g_canonicalize_filename (source_dir, NULL);
-      dir = g_canonicalize_filename (subdir, abs_source_dir);
-      g_free (abs_source_dir);
-    }
-  else
-    {
-      char *current_dir = g_get_current_dir ();
-      dir = g_canonicalize_filename (subdir, current_dir);
-      g_free (current_dir);
-    }
-
-  if (g_file_test (dir, G_FILE_TEST_EXISTS))
-    {
-      FcConfig *config;
-
-      config = FcConfigGetCurrent ();
-      FcConfigAppFontAddDir (config, (const FcChar8 *) dir);
-    }
-
-  g_free (dir);
-#endif
-}
+G_DEFINE_TYPE(NodeEditorApplication, node_editor_application, GTK_TYPE_APPLICATION);
 
 static void
 node_editor_application_init (NodeEditorApplication *app)
 {
-  maybe_add_test_fonts ();
 }
 
 static void

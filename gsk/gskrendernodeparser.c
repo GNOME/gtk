@@ -46,12 +46,20 @@
 #include <cairo-script-interpreter.h>
 #endif
 
+#include <pango/pangocairo.h>
+#ifdef HAVE_PANGOFT
+#include <pango/pangofc-fontmap.h>
+#endif
+
+#include <glib/gstdio.h>
+
 typedef struct _Context Context;
 
 struct _Context
 {
   GHashTable *named_nodes;
   GHashTable *named_textures;
+  PangoFontMap *fontmap;
 };
 
 typedef struct _Declaration Declaration;
@@ -65,7 +73,7 @@ struct _Declaration
 };
 
 static void
-context_init (Context    *context)
+context_init (Context *context)
 {
   memset (context, 0, sizeof (Context));
 }
@@ -75,6 +83,7 @@ context_finish (Context *context)
 {
   g_clear_pointer (&context->named_nodes, g_hash_table_unref);
   g_clear_pointer (&context->named_textures, g_hash_table_unref);
+  g_clear_object (&context->fontmap);
 }
 
 static gboolean
@@ -844,20 +853,35 @@ parse_mask_mode (GtkCssParser *parser,
 }
 
 static PangoFont *
-font_from_string (const char *string)
+font_from_string (PangoFontMap *fontmap,
+                  const char   *string)
 {
   PangoFontDescription *desc;
-  PangoFontMap *font_map;
-  PangoContext *context;
+  PangoContext *ctx;
   PangoFont *font;
 
   desc = pango_font_description_from_string (string);
-  font_map = pango_cairo_font_map_get_default ();
-  context = pango_font_map_create_context (font_map);
-  font = pango_font_map_load_font (font_map, context, desc);
+  ctx = pango_font_map_create_context (fontmap);
+  font = pango_font_map_load_font (fontmap, ctx, desc);
+  g_object_unref (ctx);
+
+  if (font)
+    {
+      PangoFontDescription *desc2;
+      const char *family, *family2;
+
+      desc2 = pango_font_describe (font);
+
+      family = pango_font_description_get_family (desc);
+      family2 = pango_font_description_get_family (desc2);
+
+      if (g_strcmp0 (family, family2) != 0)
+        g_clear_object (&font);
+
+      pango_font_description_free (desc2);
+    }
 
   pango_font_description_free (desc);
-  g_object_unref (context);
 
   return font;
 }
@@ -926,22 +950,204 @@ create_ascii_glyphs (PangoFont *font)
   return result;
 }
 
+#ifdef HAVE_PANGOFT
+
+static void
+delete_file (gpointer data)
+{
+  char *path = data;
+
+  g_remove (path);
+  g_free (path);
+}
+
+static void
+ensure_fontmap (Context *context)
+{
+  FcConfig *config;
+  GPtrArray *files;
+
+  if (context->fontmap)
+    return;
+
+  context->fontmap = pango_cairo_font_map_new ();
+
+  config = FcInitLoadConfig ();
+  pango_fc_font_map_set_config (PANGO_FC_FONT_MAP (context->fontmap), config);
+  FcConfigDestroy (config);
+
+  files = g_ptr_array_new_with_free_func (delete_file);
+
+  g_object_set_data_full (G_OBJECT (context->fontmap), "font-files", files, (GDestroyNotify) g_ptr_array_unref);
+}
+
+static void
+add_font_from_file (Context     *context,
+                    const char  *path,
+                    GError     **error)
+{
+  FcConfig *config;
+  GPtrArray *files;
+
+  ensure_fontmap (context);
+
+  if (!PANGO_IS_FC_FONT_MAP (context->fontmap))
+    {
+      g_set_error (error,
+                   GTK_CSS_PARSER_ERROR,
+                   GTK_CSS_PARSER_ERROR_FAILED,
+                   "Custom fonts are not implemented for %s", G_OBJECT_TYPE_NAME (context->fontmap));
+      return;
+    }
+
+  config = pango_fc_font_map_get_config (PANGO_FC_FONT_MAP (context->fontmap));
+
+  if (!FcConfigAppFontAddFile (config, (FcChar8 *) path))
+    {
+      g_set_error (error,
+                   GTK_CSS_PARSER_ERROR,
+                   GTK_CSS_PARSER_ERROR_FAILED,
+                   "Failed to add %s to FcConfig", path);
+      return;
+    }
+
+  files = (GPtrArray *) g_object_get_data (G_OBJECT (context->fontmap), "font-files");
+  g_ptr_array_add (files, g_strdup (path));
+
+  pango_fc_font_map_config_changed (PANGO_FC_FONT_MAP (context->fontmap));
+}
+
+static void
+add_font_from_bytes (Context  *context,
+                     GBytes   *bytes,
+                     GError  **error)
+{
+  GFile *file;
+  GIOStream *iostream;
+  GOutputStream *ostream;
+
+  file = g_file_new_tmp ("gtk4-font-XXXXXX.ttf", (GFileIOStream **) &iostream, error);
+  if (!file)
+    return;
+
+  ostream = g_io_stream_get_output_stream (iostream);
+  if (g_output_stream_write_bytes (ostream, bytes, NULL, error) == -1)
+    {
+      g_object_unref (file);
+      g_object_unref (iostream);
+
+      return;
+    }
+
+  g_io_stream_close (iostream, NULL, NULL);
+  g_object_unref (iostream);
+
+  add_font_from_file (context, g_file_peek_path (file), error);
+
+  g_object_unref (file);
+}
+
+#else /* !HAVE_PANGOFT */
+
+static void
+add_font_from_bytes (Context  *context,
+                     GBytes   *bytes,
+                     GError  **error)
+{
+  g_set_error (error,
+               GTK_CSS_PARSER_ERROR,
+               GTK_CSS_PARSER_ERROR_FAILED,
+               "Not implemented");
+}
+
+#endif
+
 static gboolean
 parse_font (GtkCssParser *parser,
             Context      *context,
             gpointer      out_font)
 {
-  PangoFont *font;
+  PangoFont *font = NULL;
   char *s;
+  GtkCssLocation start_location;
+  PangoFontMap *fontmap;
+
+  fontmap = pango_cairo_font_map_get_default ();
 
   s = gtk_css_parser_consume_string (parser);
   if (s == NULL)
     return FALSE;
 
-  font = font_from_string (s);
-  if (font == NULL)
+  start_location = *gtk_css_parser_get_start_location (parser);
+
+  if (gtk_css_parser_try_token (parser, GTK_CSS_TOKEN_URL) ||
+      gtk_css_parser_has_function (parser, "url"))
     {
-      gtk_css_parser_error_syntax (parser, "This font does not exist.");
+      char *url;
+      char *scheme;
+      GBytes *bytes = NULL;
+      GError *error = NULL;
+
+      /* If we have a url, it is a bug if the font already exists in our custom fontmap */
+      if (context->fontmap)
+        {
+          font = font_from_string (context->fontmap, s);
+          if (font)
+            {
+              g_object_unref (font);
+              gtk_css_parser_error_value (parser, "This font already exists.");
+              return FALSE;
+            }
+        }
+
+      url = gtk_css_parser_consume_url (parser);
+
+      scheme = g_uri_parse_scheme (url);
+      if (scheme && g_ascii_strcasecmp (scheme, "data") == 0)
+        {
+          bytes = gtk_css_data_url_parse (url, NULL, &error);
+        }
+      else
+        {
+          GFile *file;
+
+          file = g_file_new_for_uri (url);
+          bytes = g_file_load_bytes (file, NULL, NULL, &error);
+          g_object_unref (file);
+        }
+
+      g_free (scheme);
+      g_free (url);
+
+      if (bytes)
+        {
+          add_font_from_bytes (context, bytes, &error);
+          g_bytes_unref (bytes);
+
+          fontmap = context->fontmap;
+        }
+      else
+        {
+          g_assert (error != NULL);
+
+          gtk_css_parser_emit_error (parser,
+                                     &start_location,
+                                     gtk_css_parser_get_end_location (parser),
+                                     error);
+          g_clear_error (&error);
+
+          return FALSE;
+        }
+    }
+
+  font = font_from_string (fontmap, s);
+
+  if (!font && context->fontmap && fontmap != context->fontmap)
+    font = font_from_string (context->fontmap, s);
+
+  if (!font)
+    {
+      gtk_css_parser_error_value (parser, "This font does not exist.");
       return FALSE;
     }
 
@@ -2013,7 +2219,7 @@ parse_text_node (GtkCssParser *parser,
 
   if (font == NULL)
     {
-      font = font_from_string ("Cantarell 11");
+      font = font_from_string (pango_cairo_font_map_get_default (), "Cantarell 11");
       g_assert (font);
     }
 
@@ -2629,6 +2835,7 @@ typedef struct
   gsize named_node_counter;
   GHashTable *named_textures;
   gsize named_texture_counter;
+  GHashTable *serialized_fonts;
 } Printer;
 
 static void
@@ -2781,6 +2988,7 @@ printer_init (Printer       *self,
   self->named_node_counter = 0;
   self->named_textures = g_hash_table_new_full (NULL, NULL, NULL, g_free);
   self->named_texture_counter = 0;
+  self->serialized_fonts = g_hash_table_new (g_str_hash, g_str_equal);
 
   printer_init_duplicates_for_node (self, node);
 }
@@ -2792,6 +3000,7 @@ printer_clear (Printer *self)
     g_string_free (self->str, TRUE);
   g_hash_table_unref (self->named_nodes);
   g_hash_table_unref (self->named_textures);
+  g_hash_table_unref (self->serialized_fonts);
 }
 
 #define IDENT_LEVEL 2 /* Spaces per level */
@@ -3233,6 +3442,59 @@ append_texture_param (Printer    *p,
   g_string_append (p->str, "\");\n");
 
   g_bytes_unref (bytes);
+}
+
+static void
+gsk_text_node_serialize_font (GskRenderNode *node,
+                              Printer       *p)
+{
+  PangoFont *font = gsk_text_node_get_font (node);
+  PangoFontMap *fontmap = pango_font_get_font_map (font);
+  PangoFontDescription *desc;
+  char *s;
+
+  desc = pango_font_describe (font);
+  s = pango_font_description_to_string (desc);
+  g_string_append_printf (p->str, "\"%s\"", s);
+  g_free (s);
+  pango_font_description_free (desc);
+
+  /* Check if this is  a custom font that we created from a url */
+  if (!g_object_get_data (G_OBJECT (fontmap), "font-files"))
+    return;
+
+#ifdef HAVE_PANGOFT
+  {
+    FcPattern *pat;
+    FcResult res;
+    const char *file;
+    char *data;
+    gsize len;
+    char *b64;
+
+    pat = pango_fc_font_get_pattern (PANGO_FC_FONT (font));
+    res = FcPatternGetString (pat, FC_FILE, 0, (FcChar8 **)&file);
+    if (res != FcResultMatch)
+      return;
+
+    if (g_hash_table_contains (p->serialized_fonts, file))
+      return;
+
+    if (!g_file_get_contents (file, &data, &len, NULL))
+      return;
+
+    g_hash_table_add (p->serialized_fonts, (gpointer) file);
+
+    b64 = base64_encode_with_linebreaks ((const guchar *) data, len);
+
+    g_string_append (p->str, " url(\"data:font/ttf;base64,");
+    append_escaping_newlines (p->str, b64);
+    g_string_append (p->str, "\")");
+
+    g_free (b64);
+    g_free (data);
+  }
+#endif
 }
 
 void
@@ -3788,29 +4050,21 @@ render_node_print (Printer       *p,
       {
         const graphene_point_t *offset = gsk_text_node_get_offset (node);
         const GdkRGBA *color = gsk_text_node_get_color (node);
-        PangoFont *font = gsk_text_node_get_font (node);
-        PangoFontDescription *desc;
-        char *font_name;
 
         start_node (p, "text", node_name);
 
-        if (!gdk_rgba_equal (color, &GDK_RGBA("000000")))
+        if (!gdk_rgba_equal (color, &GDK_RGBA ("000000")))
           append_rgba_param (p, "color", color);
 
         _indent (p);
-        desc = pango_font_describe (font);
-        font_name = pango_font_description_to_string (desc);
-        g_string_append_printf (p->str, "font: \"%s\";\n", font_name);
-        g_free (font_name);
-        pango_font_description_free (desc);
+        g_string_append (p->str, "font: ");
+        gsk_text_node_serialize_font (node, p);
+        g_string_append (p->str, ";\n");
 
         _indent (p);
         g_string_append (p->str, "glyphs: ");
-
         gsk_text_node_serialize_glyphs (node, p->str);
-
-        g_string_append_c (p->str, ';');
-        g_string_append_c (p->str, '\n');
+        g_string_append (p->str, ";\n");
 
         if (!graphene_point_equal (offset, graphene_point_zero ()))
           append_point_param (p, "offset", offset);

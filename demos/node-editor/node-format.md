@@ -322,14 +322,22 @@ stroke bounds of the path.
 
 ### text
 
-| property | syntax           | default                | printed     |
-| -------- | ---------------- | ---------------------- | ----------- |
-| color    | `<color>`        | black                  | non-default |
-| font     | `<string>`       | "Cantarell 11"         | always      |
-| glyphs   | `<glyphs>`       | "Hello"                | always      |
-| offset   | `<point>`        | 0 0                    | non-default |
+| property | syntax              | default             | printed     |
+| -------- | ------------------- | ------------------- | ----------- |
+| color    | `<color>`           | black               | non-default |
+| font     | `<string>` `<url>`? | "Cantarell 11"      | always      |
+| glyphs   | `<glyphs>`          | "Hello"             | always      |
+| offset   | `<point>`           | 0 0                 | non-default |
 
 Creates a node like `gsk_text_node_new()` with the given properties.
+
+If a url is specified for the font, it must point to a font file for the
+font that is specified in the string. It can be either a data url containing
+a base64-encoded font file, or a regular url that points to a font file.
+
+Glyphs can be specified as an ASCII string, or as a comma-separated list of
+their glyph ID and advance width. Optionally, x and y offsets and flags can
+be specified as well, like this: 40 10 0 0 color.
 
 If the given font does not exist or the given glyphs are invalid for the given
 font, an error node will be returned.

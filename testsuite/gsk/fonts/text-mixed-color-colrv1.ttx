@@ -204,7 +204,7 @@
   </CPAL>
 
   <name>
-    <namerecord nameID="0" platformID="1" platEncID="0" langID="0x0" unicode="True">
+    <namerecord nameID="1" platformID="1" platEncID="0" langID="0x0" unicode="True">
       text-mixed-color-colrv1
     </namerecord>
   </name>
