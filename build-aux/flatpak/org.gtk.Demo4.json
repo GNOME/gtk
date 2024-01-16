@@ -185,6 +185,7 @@
             "builddir" : true,
             "config-opts" : [
                 "--libdir=/app/lib",
+                "-Dvulkan=disabled",
                 "-Dbuildtype=debugoptimized",
                 "-Ddemo-profile=devel"
             ],
@@ -199,6 +200,7 @@
     ],
     "build-options" : {
         "env" : {
+            "GSK_RENDERER" : "opengl"
         }
     }
 }
