@@ -19,6 +19,7 @@ flatpak build ${builddir} meson \
                 --buildtype=debugoptimized \
                 -Dx11-backend=true \
                 -Dwayland-backend=true \
+                -Dvulkan=disabled \
                 -Dbuild-tests=false \
                 -Dbuild-testsuite=false \
                 -Dbuild-examples=false \
