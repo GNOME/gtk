@@ -918,12 +918,12 @@ gtk_object_expression_weak_ref_cb (gpointer  data,
                                    GObject  *object)
 {
   GtkObjectExpression *self = (GtkObjectExpression *) data;
-  GSList *l;
+  GSList *iter = self->watches;
 
-  for (l = self->watches; l; l = l->next)
+  while (iter)
     {
-      GtkObjectExpressionWatch *owatch = l->data;
-
+      GtkObjectExpressionWatch *owatch = iter->data;
+      iter = iter->next;
       owatch->notify (owatch->user_data);
     }
 }
