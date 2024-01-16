@@ -2835,6 +2835,7 @@ typedef struct
   gsize named_node_counter;
   GHashTable *named_textures;
   gsize named_texture_counter;
+  GHashTable *serialized_fonts;
 } Printer;
 
 static void
@@ -2987,6 +2988,7 @@ printer_init (Printer       *self,
   self->named_node_counter = 0;
   self->named_textures = g_hash_table_new_full (NULL, NULL, NULL, g_free);
   self->named_texture_counter = 0;
+  self->serialized_fonts = g_hash_table_new (g_str_hash, g_str_equal);
 
   printer_init_duplicates_for_node (self, node);
 }
@@ -2998,6 +3000,7 @@ printer_clear (Printer *self)
     g_string_free (self->str, TRUE);
   g_hash_table_unref (self->named_nodes);
   g_hash_table_unref (self->named_textures);
+  g_hash_table_unref (self->serialized_fonts);
 }
 
 #define IDENT_LEVEL 2 /* Spaces per level */
@@ -3439,6 +3442,59 @@ append_texture_param (Printer    *p,
   g_string_append (p->str, "\");\n");
 
   g_bytes_unref (bytes);
+}
+
+static void
+gsk_text_node_serialize_font (GskRenderNode *node,
+                              Printer       *p)
+{
+  PangoFont *font = gsk_text_node_get_font (node);
+  PangoFontMap *fontmap = pango_font_get_font_map (font);
+  PangoFontDescription *desc;
+  char *s;
+
+  desc = pango_font_describe (font);
+  s = pango_font_description_to_string (desc);
+  g_string_append_printf (p->str, "\"%s\"", s);
+  g_free (s);
+  pango_font_description_free (desc);
+
+  /* Check if this is  a custom font that we created from a url */
+  if (!g_object_get_data (G_OBJECT (fontmap), "font-files"))
+    return;
+
+#ifdef HAVE_PANGOFT
+  {
+    FcPattern *pat;
+    FcResult res;
+    const char *file;
+    char *data;
+    gsize len;
+    char *b64;
+
+    pat = pango_fc_font_get_pattern (PANGO_FC_FONT (font));
+    res = FcPatternGetString (pat, FC_FILE, 0, (FcChar8 **)&file);
+    if (res != FcResultMatch)
+      return;
+
+    if (g_hash_table_contains (p->serialized_fonts, file))
+      return;
+
+    if (!g_file_get_contents (file, &data, &len, NULL))
+      return;
+
+    g_hash_table_add (p->serialized_fonts, (gpointer) file);
+
+    b64 = base64_encode_with_linebreaks ((const guchar *) data, len);
+
+    g_string_append (p->str, " url(\"data:font/ttf;base64,");
+    append_escaping_newlines (p->str, b64);
+    g_string_append (p->str, "\")");
+
+    g_free (b64);
+    g_free (data);
+  }
+#endif
 }
 
 void
@@ -3994,29 +4050,21 @@ render_node_print (Printer       *p,
       {
         const graphene_point_t *offset = gsk_text_node_get_offset (node);
         const GdkRGBA *color = gsk_text_node_get_color (node);
-        PangoFont *font = gsk_text_node_get_font (node);
-        PangoFontDescription *desc;
-        char *font_name;
 
         start_node (p, "text", node_name);
 
-        if (!gdk_rgba_equal (color, &GDK_RGBA("000000")))
+        if (!gdk_rgba_equal (color, &GDK_RGBA ("000000")))
           append_rgba_param (p, "color", color);
 
         _indent (p);
-        desc = pango_font_describe (font);
-        font_name = pango_font_description_to_string (desc);
-        g_string_append_printf (p->str, "font: \"%s\";\n", font_name);
-        g_free (font_name);
-        pango_font_description_free (desc);
+        g_string_append (p->str, "font: ");
+        gsk_text_node_serialize_font (node, p);
+        g_string_append (p->str, ";\n");
 
         _indent (p);
         g_string_append (p->str, "glyphs: ");
-
         gsk_text_node_serialize_glyphs (node, p->str);
-
-        g_string_append_c (p->str, ';');
-        g_string_append_c (p->str, '\n');
+        g_string_append (p->str, ";\n");
 
         if (!graphene_point_equal (offset, graphene_point_zero ()))
           append_point_param (p, "offset", offset);
