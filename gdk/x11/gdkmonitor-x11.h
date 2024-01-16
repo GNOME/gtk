@@ -32,6 +32,7 @@ struct _GdkX11Monitor
   GdkMonitor parent;
 
   XID output;
+  char *name;
   guint add     : 1;
   guint remove  : 1;
 };
