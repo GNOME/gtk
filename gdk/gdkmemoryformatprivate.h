@@ -55,11 +55,13 @@ GdkMemoryDepth          gdk_memory_depth_merge              (GdkMemoryDepth     
 GdkMemoryFormat         gdk_memory_depth_get_format         (GdkMemoryDepth              depth) G_GNUC_CONST;
 GdkMemoryFormat         gdk_memory_depth_get_alpha_format   (GdkMemoryDepth              depth) G_GNUC_CONST;
 void                    gdk_memory_format_gl_format         (GdkMemoryFormat             format,
+                                                             gboolean                    gles,
                                                              GLint                      *out_internal_format,
                                                              GLenum                     *out_format,
                                                              GLenum                     *out_type,
                                                              GLint                       out_swizzle[4]);
 gboolean                gdk_memory_format_gl_rgba_format    (GdkMemoryFormat             format,
+                                                             gboolean                    gles,
                                                              GdkMemoryFormat            *out_actual_format,
                                                              GLint                      *out_internal_format,
                                                              GLenum                     *out_format,

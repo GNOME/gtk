@@ -638,6 +638,7 @@ gsk_gl_device_find_gl_format (GskGLDevice      *self,
       *out_format = format;
       *out_flags = flags;
       gdk_memory_format_gl_format (format,
+                                   gdk_gl_context_get_use_es (context),
                                    out_gl_internal_format,
                                    out_gl_format,
                                    out_gl_type,
@@ -647,6 +648,7 @@ gsk_gl_device_find_gl_format (GskGLDevice      *self,
 
   /* Second, try the potential RGBA format */
   if (gdk_memory_format_gl_rgba_format (format,
+                                        gdk_gl_context_get_use_es (context),
                                         &alt_format,
                                         out_gl_internal_format,
                                         out_gl_format,
@@ -670,6 +672,7 @@ gsk_gl_device_find_gl_format (GskGLDevice      *self,
           *out_format = fallbacks[i];
           *out_flags = flags;
           gdk_memory_format_gl_format (fallbacks[i],
+                                       gdk_gl_context_get_use_es (context),
                                        out_gl_internal_format,
                                        out_gl_format,
                                        out_gl_type,

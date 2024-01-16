@@ -1473,6 +1473,7 @@ gdk_memory_depth_get_alpha_format (GdkMemoryDepth depth)
 
 void
 gdk_memory_format_gl_format (GdkMemoryFormat  format,
+                             gboolean         gles,
                              GLint           *out_internal_format,
                              GLenum          *out_format,
                              GLenum          *out_type,
@@ -1487,6 +1488,7 @@ gdk_memory_format_gl_format (GdkMemoryFormat  format,
 /*
  * gdk_memory_format_gl_rgba_format:
  * @format: The format to query
+ * @gles: TRUE for GLES, FALSE for GL
  * @out_actual_format: The actual RGBA format
  * @out_internal_format: the GL internal format
  * @out_format: the GL format
@@ -1504,6 +1506,7 @@ gdk_memory_format_gl_format (GdkMemoryFormat  format,
  **/
 gboolean
 gdk_memory_format_gl_rgba_format (GdkMemoryFormat  format,
+                                  gboolean         gles,
                                   GdkMemoryFormat *out_actual_format,
                                   GLint           *out_internal_format,
                                   GLenum          *out_format,
