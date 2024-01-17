@@ -2124,7 +2124,10 @@ gtk_expression_bind_notify (gpointer data)
     return;
 
   if (!gtk_expression_watch_evaluate (bind->watch, &value))
-    return;
+    {
+      g_object_unref (target);
+      return;
+    }
 
   g_object_set_property (target, bind->pspec->name, &value);
   g_object_unref (target);
