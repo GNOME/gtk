@@ -56,10 +56,10 @@ static struct {
   GdkCursor    *cursor;
 } drag_cursors[] = {
   { GDK_ACTION_ASK,     "dnd-ask",  NULL },
-  { GDK_ACTION_COPY,    "dnd-copy", NULL },
-  { GDK_ACTION_MOVE,    "dnd-move", NULL },
-  { GDK_ACTION_LINK,    "dnd-link", NULL },
-  { 0,                  "dnd-none", NULL },
+  { GDK_ACTION_COPY,    "copy", NULL },
+  { GDK_ACTION_MOVE,    "move", NULL },
+  { GDK_ACTION_LINK,    "alias", NULL },
+  { 0,                  "no-drop", NULL },
 };
 
 enum {
