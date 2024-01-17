@@ -244,6 +244,7 @@ typedef struct
   guint    csd_requested             : 1;
   guint    client_decorated          : 1; /* Decorations drawn client-side */
   guint    use_client_shadow         : 1; /* Decorations use client-side shadows */
+  guint    use_transparency          : 1;
   guint    maximized                 : 1;
   guint    suspended                 : 1;
   guint    fullscreen                : 1;
@@ -2950,7 +2951,7 @@ unset_titlebar (GtkWindow *window)
 }
 
 static gboolean
-gtk_window_supports_client_shadow (GtkWindow *window)
+gtk_window_supports_transparency (GtkWindow *window)
 {
   GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
   GdkDisplay *display;
@@ -2972,11 +2973,19 @@ gtk_window_supports_client_shadow (GtkWindow *window)
     }
 #endif
 
-#ifdef GDK_WINDOWING_MACOS
-  return FALSE;
+  return TRUE;
+}
+
+static gboolean
+gtk_window_supports_client_shadow (GtkWindow *window)
+{
+#ifndef GDK_WINDOWING_MACOS
+  GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
+
+  return priv->use_transparency;
 #endif
 
-  return TRUE;
+  return FALSE;
 }
 
 static void
@@ -2985,14 +2994,14 @@ gtk_window_enable_csd (GtkWindow *window)
   GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
   GtkWidget *widget = GTK_WIDGET (window);
 
-  /* We need a visual with alpha for client shadows */
-  if (priv->use_client_shadow)
+  /* We need a visual with alpha for rounded corners */
+  if (priv->use_transparency)
     {
       gtk_widget_add_css_class (widget, "csd");
     }
   else
     {
-      /* gtk_widget_add_css_class (widget, "solid-csd"); */
+      gtk_widget_add_css_class (widget, "solid-csd");
     }
 
   priv->client_decorated = TRUE;
@@ -3051,6 +3060,7 @@ gtk_window_set_titlebar (GtkWindow *window,
     }
   else
     {
+      priv->use_transparency = gtk_window_supports_transparency (window);
       priv->use_client_shadow = gtk_window_supports_client_shadow (window);
 
       gtk_window_enable_csd (window);
@@ -4306,9 +4316,10 @@ gtk_window_realize (GtkWidget *widget)
   /* Create default title bar */
   if (!priv->client_decorated && gtk_window_should_use_csd (window))
     {
-      priv->use_client_shadow = gtk_window_supports_client_shadow (window);
-      if (priv->use_client_shadow)
+      priv->use_transparency = gtk_window_supports_transparency (window);
+      if (priv->use_transparency)
         {
+          priv->use_client_shadow = gtk_window_supports_client_shadow (window);
           gtk_window_enable_csd (window);
 
           if (priv->title_box == NULL)
