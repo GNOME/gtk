@@ -357,7 +357,7 @@ devices.
 ### `GDK_VULKAN_SKIP`
 
 This variable can be set to a list of values, which cause GDK to
-disable features of the Vulkan support.  
+disable features of the Vulkan support.
 Note that these features may already be disabled if the Vulkan driver
 does not support them.
 
@@ -415,19 +415,24 @@ using and the GDK backend supports them:
 `vulkan`
 : Selects the Vulkan renderer
 
-Note that on Windows, if one is running Nahimic 3 on a system with
-nVidia graphics, one needs to stop the "Nahimic service" or insert
-the GTK application into the Nahimic blacklist, as noted in
-https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/297952/nahimic-and-nvidia-drivers-conflict/2334568/, or use the cairo renderer (at the cost of being unable to use
-OpenGL features), or use GDK_DEBUG=gl-gles if you know that GLES
-support is enabled for the build.
 
-This is a known issue, as the above link indicates, and affects quite
-a number of applications--sadly, since this issue lies within the
-nVidia graphics driver and/or the Nahimic 3 code, we are not able
-to rememdy this on the GTK side; the best bet before trying the above
-workarounds is to try to update your graphics drivers and Nahimic
-installation.
+::: note
+    If you are running the Nahimic 3 service on a Windows system with
+    nVidia graphics, you need to perform one of the following:
+
+     - stop the "Nahimic service"
+     - insert the GTK application into the Nahimic blocklist, as noted in the
+       [nVidia forums](https://www.nvidia.com/en-us/geforce/forums/game-ready-drivers/13/297952/nahimic-and-nvidia-drivers-conflict/2334568/)
+     - use the cairo renderer (at the cost of being unable to use OpenGL features)
+     - use `GDK_DEBUG=gl-gles`, if you know that GLES support is enabled for the build.
+
+    This is a known issue, as the above link indicates, and affects quite
+    a number of applications—sadly, since this issue lies within the
+    nVidia graphics driver and/or the Nahimic 3 code, we are not able
+    to rememdy this on the GTK side; the best bet before trying the above
+    workarounds is to try to update your graphics drivers and Nahimic
+    installation.
+
 
 ### `GSK_GPU_SKIP`
 
