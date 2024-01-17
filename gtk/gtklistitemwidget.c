@@ -37,11 +37,14 @@ gtk_list_item_widget_focus (GtkWidget        *widget,
                             GtkDirectionType  direction)
 {
   GtkWidget *child = gtk_widget_get_first_child (widget);
+  GtkWidget *focus_child = gtk_widget_get_focus_child (widget);
 
-  if (gtk_widget_get_focus_child (widget))
+  if (focus_child)
     {
       /* focus is in the child */
-      if (direction == GTK_DIR_TAB_BACKWARD)
+      if (gtk_widget_child_focus (focus_child, direction))
+        return TRUE;
+      else if (direction == GTK_DIR_TAB_BACKWARD)
         return gtk_widget_grab_focus_self (widget);
       else
         return FALSE;
