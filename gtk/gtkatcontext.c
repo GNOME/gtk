@@ -1355,22 +1355,6 @@ gtk_at_context_get_text_accumulate (GtkATContext          *self,
         }
     }
 
-  /* Step 2.G */
-  if (GTK_IS_LABEL (self->accessible))
-    {
-      const char *text = gtk_label_get_text (GTK_LABEL (self->accessible));
-      if (text && not_just_space (text))
-        append_with_space (res, text);
-      return;
-    }
-  else if (GTK_IS_INSCRIPTION (self->accessible))
-    {
-      const char *text = gtk_inscription_get_text (GTK_INSCRIPTION (self->accessible));
-      if (text && not_just_space (text))
-        append_with_space (res, text);
-      return;
-    }
-
   /* Step 2.I */
   if (GTK_IS_WIDGET (self->accessible))
     {

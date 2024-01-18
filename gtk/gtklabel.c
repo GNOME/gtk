@@ -3086,6 +3086,11 @@ gtk_label_set_label_internal (GtkLabel   *self,
 
   g_object_notify_by_pspec (G_OBJECT (self), label_props[PROP_LABEL]);
 
+  gtk_accessible_update_property (GTK_ACCESSIBLE (self),
+                                  GTK_ACCESSIBLE_PROPERTY_LABEL,
+                                  self->label,
+                                  -1);
+
   return TRUE;
 }
 

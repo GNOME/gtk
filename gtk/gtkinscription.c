@@ -805,6 +805,11 @@ gtk_inscription_set_text (GtkInscription *self,
   gtk_widget_queue_draw (GTK_WIDGET (self));
 
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_TEXT]);
+
+  gtk_accessible_update_property (GTK_ACCESSIBLE (self),
+                                  GTK_ACCESSIBLE_PROPERTY_LABEL,
+                                  text,
+                                  -1);
 }
 
 /**
