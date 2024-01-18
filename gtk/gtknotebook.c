@@ -6991,9 +6991,10 @@ gtk_notebook_get_tab_detachable (GtkNotebook *notebook,
  *
  * If you want a widget to interact with a notebook through DnD
  * (i.e.: accept dragged tabs from it) it must be set as a drop
- * destination and accept the target “GTK_NOTEBOOK_TAB”. The notebook
- * will fill the selection with a GtkWidget** pointing to the child
- * widget that corresponds to the dropped tab.
+ * destination by adding to it a [class@Gtk.DropTarget] controller that accepts
+ * the GType `GTK_TYPE_NOTEBOOK_PAGE`. The `:value` of said drop target will be
+ * preloaded with a [class@Gtk.NotebookPage] object that corresponds to the
+ * dropped tab, so you can process the value via `::accept` or `::drop` signals.
  *
  * Note that you should use [method@Gtk.Notebook.detach_tab] instead
  * of [method@Gtk.Notebook.remove_page] if you want to remove the tab
