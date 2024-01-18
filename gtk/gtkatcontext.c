@@ -611,7 +611,6 @@ static const struct {
   { "AT-SPI (X11)", "atspi", gtk_at_spi_create_context },
 #endif
   { "Test", "test", gtk_test_at_context_new },
-  { NULL, NULL, NULL },
 };
 
 /**
@@ -664,8 +663,7 @@ gtk_at_context_create (GtkAccessibleRole  accessible_role,
 
   for (size_t i = 0; i < G_N_ELEMENTS (a11y_backends); i++)
     {
-      if (a11y_backends[i].name == NULL)
-        break;
+      g_assert (a11y_backends[i].name != NULL);
 
       if (a11y_backends[i].create_context != NULL &&
           (*gtk_a11y_env == '0' || g_ascii_strcasecmp (a11y_backends[i].env_name, gtk_a11y_env) == 0))
