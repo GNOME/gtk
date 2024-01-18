@@ -1,5 +1,57 @@
-Overview of Changes in 4.12.5, xx-xx-xxxx
+Overview of Changes in 4.12.5, 17-01-2024
 =========================================
+
+* GtkColumnView:
+ - Fix a crash on dispose
+
+* GtkEmojiChooser:
+ - Update to CLDR v44
+ - Add more translations
+
+* GtkFileDialog:
+ - Return an error if no file is selected
+ - Make closing the portal file chooser work
+
+* GtkDropDown:
+ - Fix display of the initial checkmark
+
+* GtkShortcutsWindow:
+ - Reduce the minimum width
+
+* GDK:
+ - Make the png loader safer against overflow
+
+* Windows:
+ - Use new clipboard api
+
+* Wayland:
+ - Fix cursor handling with graphics tablets
+
+* macOS:
+ - Silence secure-restore message
+ - Fix build on macOS < 10.13
+
+* Translation updates
+ Basque
+ British English
+ Catalan
+ Chinese (China)
+ Czech
+ Georgian
+ German
+ Hebrew
+ Indonesian
+ Lithuanian
+ Persian
+ Polish
+ Romanian
+ Russian
+ Slovenian
+ Swedish
+ Turkish
+ Ukrainian
+ Vietnamese
+
 
 Overview of Changes in 4.12.4, 17-11-2023
 =========================================
