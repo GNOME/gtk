@@ -663,7 +663,7 @@ gtk_at_context_create (GtkAccessibleRole  accessible_role,
 
   GtkATContext *res = NULL;
 
-  for (guint i = 0; i < G_N_ELEMENTS (a11y_backends); i++)
+  for (size_t i = 0; i < G_N_ELEMENTS (a11y_backends); i++)
     {
       if (a11y_backends[i].name == NULL)
         break;
