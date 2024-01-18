@@ -102,7 +102,8 @@ enum
   PROP_SIZE,
   PROP_ADJUSTMENT,
   PROP_ICONS,
-  PROP_ACTIVE
+  PROP_ACTIVE,
+  PROP_HAS_FRAME
 };
 
 typedef struct
@@ -275,6 +276,19 @@ gtk_scale_button_class_init (GtkScaleButtonClass *klass)
                                    g_param_spec_boolean ("active", NULL, NULL,
                                                          FALSE,
                                                          GTK_PARAM_READABLE));
+
+  /**
+   * GtkScaleButton:has-frame: (attributes org.gtk.Property.get=gtk_scale_button_get_has_frame org.gtk.Property.set=gtk_scale_button_set_has_frame)
+   *
+   * If the scale button has a frame.
+   *
+   * Since: 4.14
+   */
+  g_object_class_install_property (gobject_class,
+                                   PROP_HAS_FRAME,
+                                   g_param_spec_boolean ("has-frame", NULL, NULL,
+                                                         FALSE,
+                                                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   /**
    * GtkScaleButton::value-changed:
@@ -509,6 +523,9 @@ gtk_scale_button_set_property (GObject       *object,
       gtk_scale_button_set_icons (button,
                                   (const char **)g_value_get_boxed (value));
       break;
+    case PROP_HAS_FRAME:
+      gtk_scale_button_set_has_frame (button, g_value_get_boolean (value));
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -540,6 +557,9 @@ gtk_scale_button_get_property (GObject     *object,
       break;
     case PROP_ACTIVE:
       g_value_set_boolean (value, gtk_scale_button_get_active (button));
+      break;
+    case PROP_HAS_FRAME:
+      g_value_set_boolean (value, gtk_scale_button_get_has_frame (button));
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -815,6 +835,50 @@ gtk_scale_button_get_active (GtkScaleButton *button)
   g_return_val_if_fail (GTK_IS_SCALE_BUTTON (button), FALSE);
 
   return gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (priv->button));
+}
+
+/**
+ * gtk_scale_button_get_has_frame: (attributes org.gtk.Method.get_property=has-frame)
+ * @button: a `GtkScaleButton`
+ *
+ * Returns whether the button has a frame.
+ *
+ * Returns: %TRUE if the button has a frame
+ *
+ * Since: 4.14
+ */
+gboolean
+gtk_scale_button_get_has_frame (GtkScaleButton *button)
+{
+  GtkScaleButtonPrivate *priv = gtk_scale_button_get_instance_private (button);
+
+  g_return_val_if_fail (GTK_IS_SCALE_BUTTON (button), TRUE);
+
+  return gtk_button_get_has_frame (GTK_BUTTON (priv->button));
+}
+
+/**
+ * gtk_scale_button_set_has_frame: (attributes org.gtk.Method.set_property=has-frame)
+ * @button: a `GtkScaleButton`
+ * @has_frame: whether the button should have a visible frame
+ *
+ * Sets the style of the button.
+ *
+ * Since: 4.14
+ */
+void
+gtk_scale_button_set_has_frame (GtkScaleButton *button,
+                                gboolean        has_frame)
+{
+  GtkScaleButtonPrivate *priv = gtk_scale_button_get_instance_private (button);
+
+  g_return_if_fail (GTK_IS_SCALE_BUTTON (button));
+
+  if (gtk_button_get_has_frame (GTK_BUTTON (priv->button)) == has_frame)
+    return;
+
+  gtk_button_set_has_frame (GTK_BUTTON (priv->button), has_frame);
+  g_object_notify (G_OBJECT (button), "has-frame");
 }
 
 static void
