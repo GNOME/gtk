@@ -634,6 +634,7 @@ gtk_at_context_create (GtkAccessibleRole  accessible_role,
                        GdkDisplay        *display)
 {
   static const char *gtk_a11y_env;
+  GtkATContext *res = NULL;
 
   if (gtk_a11y_env == NULL)
     {
@@ -660,8 +661,6 @@ gtk_at_context_create (GtkAccessibleRole  accessible_role,
   /* Short-circuit disabling the accessibility support */
   if (g_ascii_strcasecmp (gtk_a11y_env, "none") == 0)
     return NULL;
-
-  GtkATContext *res = NULL;
 
   for (size_t i = 0; i < G_N_ELEMENTS (a11y_backends); i++)
     {
