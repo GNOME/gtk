@@ -66,7 +66,7 @@ endif
 executable('gtk4-widget-factory',
   sources: ['widget-factory.c', widgetfactory_resources],
   c_args: common_cflags,
-  dependencies: [ libgtk_dep, demo_conf_h ],
+  dependencies: [ libgtk_dep, profile_conf_h ],
   include_directories: confinc,
   win_subsystem: 'windows',
   link_args: extra_demo_ldflags,

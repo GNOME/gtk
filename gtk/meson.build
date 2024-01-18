@@ -1028,6 +1028,7 @@ gtk_deps = [
   epoxy_dep,
   libm,
   graphene_dep,
+  profile_conf_h,
 ]
 
 if x11_enabled

@@ -4,7 +4,7 @@
 #include "iconbrowserapp.h"
 #include "iconbrowserwin.h"
 
-#include "demo_conf.h"
+#include "profile_conf.h"
 
 struct _IconBrowserApp
 {

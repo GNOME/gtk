@@ -1,7 +1,7 @@
 executable('gtk4-print-editor',
   sources: ['print-editor.c'],
   c_args: common_cflags,
-  dependencies: [ libgtk_dep, demo_conf_h ],
+  dependencies: [ libgtk_dep, profile_conf_h ],
   include_directories: confinc,
   win_subsystem: 'windows',
   link_args: extra_demo_ldflags,

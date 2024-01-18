@@ -25,7 +25,7 @@
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
 
-#include "demo_conf.h"
+#include "profile_conf.h"
 
 static void
 change_dark_state (GSimpleAction *action,
