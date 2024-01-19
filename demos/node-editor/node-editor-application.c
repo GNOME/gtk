@@ -25,7 +25,7 @@
 
 #include "node-editor-window.h"
 
-#include "demo_conf.h"
+#include "profile_conf.h"
 
 static const char *css =
 "textview.editor {"

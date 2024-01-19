@@ -24,7 +24,7 @@
 #include "demos.h"
 #include "fontify.h"
 
-#include "demo_conf.h"
+#include "profile_conf.h"
 
 static GtkWidget *info_view;
 static GtkWidget *source_view;

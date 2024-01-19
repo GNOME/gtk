@@ -38,6 +38,8 @@
 #include "gdk/gdkdebugprivate.h"
 #include "gdk/gdkdisplayprivate.h"
 
+#include "profile_conf.h"
+
 #include <epoxy/gl.h>
 
 #ifdef GDK_WINDOWING_X11
@@ -193,7 +195,16 @@ init_version (GtkInspectorGeneral *gen)
   g_object_unref (gsk_renderer);
   gdk_surface_destroy (surface);
 
-  gtk_label_set_text (GTK_LABEL (gen->gtk_version), GTK_VERSION);
+  if (g_strcmp0 (PROFILE, "devel") == 0)
+    {
+      char *version = g_strdup_printf ("%s-%s", GTK_VERSION, VCS_TAG);
+      gtk_label_set_text (GTK_LABEL (gen->gtk_version), version);
+      g_free (version);
+    }
+  else
+    {
+      gtk_label_set_text (GTK_LABEL (gen->gtk_version), GTK_VERSION);
+    }
   gtk_label_set_text (GTK_LABEL (gen->gdk_backend), backend);
   gtk_label_set_text (GTK_LABEL (gen->gsk_renderer), renderer);
 }

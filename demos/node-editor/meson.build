@@ -12,7 +12,7 @@ node_editor_resources = gnome.compile_resources('node_editor_resources',
 
 executable('gtk4-node-editor',
   sources: [node_editor_sources, node_editor_resources],
-  dependencies: [ libgtk_dep, demo_conf_h ],
+  dependencies: [ libgtk_dep, profile_conf_h ],
   include_directories: confinc,
   c_args: common_cflags,
   win_subsystem: 'windows',

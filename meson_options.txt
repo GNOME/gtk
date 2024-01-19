@@ -126,13 +126,13 @@ option('demo-profile',
        type: 'combo',
        choices: [ 'default', 'devel' ],
        value: 'default',
-       description : 'Profile to use for demos')
+       deprecated: 'profile')
 
 option('profile',
        type: 'combo',
        choices: [ 'default', 'devel' ],
        value: 'default',
-       deprecated: 'demo-profile')
+       description : 'Profile to use for demos')
 
 option('build-demos',
        type: 'boolean',

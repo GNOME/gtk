@@ -4,7 +4,7 @@
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
 
-#include "demo_conf.h"
+#include "profile_conf.h"
 
 static GtkWidget *main_window;
 static GFile *filename = NULL;
