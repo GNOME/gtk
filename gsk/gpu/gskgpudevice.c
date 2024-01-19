@@ -8,6 +8,8 @@
 #include "gdk/gdkdisplayprivate.h"
 #include "gdk/gdktextureprivate.h"
 
+#include "gsk/gskdebugprivate.h"
+
 #define MAX_SLICES_PER_ATLAS 64
 
 #define ATLAS_SIZE 1024
@@ -325,6 +327,32 @@ static const GskGpuCachedClass GSK_GPU_CACHED_GLYPH_CLASS =
 /* }}} */
 /* {{{ GskGpuDevice */
 
+static void
+print_cache_stats (GskGpuDevice *self)
+{
+  GskGpuDevicePrivate *priv = gsk_gpu_device_get_instance_private (self);
+  GskGpuCached *cached;
+  guint glyphs = 0;
+  guint textures = 0;
+  guint atlases = 0;
+
+  for (cached = priv->first_cached; cached != NULL; cached = cached->next)
+    {
+      if (cached->class == &GSK_GPU_CACHED_GLYPH_CLASS)
+        glyphs++;
+      else if (cached->class == &GSK_GPU_CACHED_TEXTURE_CLASS)
+        textures++;
+      else if (cached->class == &GSK_GPU_CACHED_ATLAS_CLASS)
+        atlases++;
+    }
+
+  gdk_debug_message ("cached items\n"
+                     "  glyphs:   %5u\n"
+                     "  textures: %5u\n"
+                     "  atlases:  %5u",
+                     glyphs, textures, atlases);
+}
+
 void
 gsk_gpu_device_gc (GskGpuDevice *self,
                    gint64        timestamp)
@@ -338,6 +366,9 @@ gsk_gpu_device_gc (GskGpuDevice *self,
       if (gsk_gpu_cached_should_collect (self, cached, timestamp))
         gsk_gpu_cached_free (self, cached);
     }
+
+  if (GSK_DEBUG_CHECK (GLYPH_CACHE))
+    print_cache_stats (self);
 }
 
 static void
