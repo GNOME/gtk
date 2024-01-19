@@ -134,6 +134,8 @@ struct _GskGpuCachedAtlas
 
   GskGpuImage *image;
 
+  gsize n_items;
+
   gsize n_slices;
   struct {
     gsize width;
@@ -281,7 +283,16 @@ static void
 gsk_gpu_cached_glyph_free (GskGpuDevice *device,
                            GskGpuCached *cached)
 {
+  GskGpuDevicePrivate *priv = gsk_gpu_device_get_instance_private (device);
   GskGpuCachedGlyph *self = (GskGpuCachedGlyph *) cached;
+
+  g_hash_table_remove (priv->glyph_cache, self);
+
+  if (cached->atlas)
+    {
+      g_assert (cached->atlas->n_items > 0);
+      cached->atlas->n_items--;
+    }
 
   g_object_unref (self->font);
   g_object_unref (self->image);
@@ -584,6 +595,8 @@ gsk_gpu_cached_atlas_allocate (GskGpuCachedAtlas *atlas,
   atlas->slices[best_slice].width += width;
   g_assert (atlas->slices[best_slice].width <= ATLAS_SIZE);
 
+  atlas->n_items++;
+
   return TRUE;
 }
 
@@ -624,20 +637,14 @@ gsk_gpu_device_add_atlas_image (GskGpuDevice      *self,
     return NULL;
 
   gsk_gpu_device_ensure_atlas (self, FALSE, timestamp);
-  
+
   if (gsk_gpu_cached_atlas_allocate (priv->current_atlas, width, height, out_x, out_y))
-    {
-      gsk_gpu_cached_use (self, (GskGpuCached *) priv->current_atlas, timestamp);
-      return priv->current_atlas->image;
-    }
+    return priv->current_atlas->image;
 
   gsk_gpu_device_ensure_atlas (self, TRUE, timestamp);
 
   if (gsk_gpu_cached_atlas_allocate (priv->current_atlas, width, height, out_x, out_y))
-    {
-      gsk_gpu_cached_use (self, (GskGpuCached *) priv->current_atlas, timestamp);
-      return priv->current_atlas->image;
-    }
+    return priv->current_atlas->image;
 
   return NULL;
 }
