@@ -423,6 +423,7 @@ gsk_gpu_renderer_render (GskRenderer          *renderer,
   gsk_gpu_device_queue_gc (priv->device);
 
   gdk_draw_context_end_frame (priv->context);
+  gsk_gpu_device_end_frame (priv->device);
 
   g_clear_pointer (&render_region, cairo_region_destroy);
 }

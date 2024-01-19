@@ -133,6 +133,47 @@ gsk_gl_device_make_current (GskGpuDevice *device)
 }
 
 static void
+save_texture_to_png (GdkDisplay *display,
+                     int         texture_id,
+                     int         width,
+                     int         height,
+                     const char *filename)
+{
+  GdkGLTextureBuilder *builder;
+  GdkTexture *texture;
+
+  builder = gdk_gl_texture_builder_new ();
+  gdk_gl_texture_builder_set_context (builder, gdk_display_get_gl_context (display));
+  gdk_gl_texture_builder_set_id (builder, texture_id);
+  gdk_gl_texture_builder_set_width (builder, width);
+  gdk_gl_texture_builder_set_height (builder, height);
+
+  texture = gdk_gl_texture_builder_build (builder, NULL, NULL);
+  gdk_texture_save_to_png (texture, filename);
+
+  g_object_unref (texture);
+  g_object_unref (builder);
+}
+
+static void
+gsk_gl_device_end_frame (GskGpuDevice *device)
+{
+  GskGpuImage *image;
+  static int count = 0;
+  char *filename;
+
+  image = gsk_gpu_device_get_atlas_image (device);
+
+  filename = g_strdup_printf ("atlas%d.png", count++);
+  save_texture_to_png (gsk_gpu_device_get_display (device),
+                       gsk_gl_image_peek_texture (GSK_GL_IMAGE (image)),
+                       gsk_gpu_image_get_width (image),
+                       gsk_gpu_image_get_height (image),
+                       filename);
+  g_free (filename);
+}
+
+static void
 gsk_gl_device_finalize (GObject *object)
 {
   GskGLDevice *self = GSK_GL_DEVICE (object);
@@ -159,6 +200,7 @@ gsk_gl_device_class_init (GskGLDeviceClass *klass)
   gpu_device_class->create_upload_image = gsk_gl_device_create_upload_image;
   gpu_device_class->create_download_image = gsk_gl_device_create_download_image;
   gpu_device_class->make_current = gsk_gl_device_make_current;
+  gpu_device_class->end_frame = gsk_gl_device_end_frame;
 
   object_class->finalize = gsk_gl_device_finalize;
 }
@@ -698,4 +740,3 @@ gsk_gl_device_find_gl_format (GskGLDevice      *self,
   /* fallbacks will always fallback to a supported format */
   g_assert_not_reached ();
 }
-
