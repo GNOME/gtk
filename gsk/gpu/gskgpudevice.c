@@ -159,8 +159,9 @@ gsk_gpu_cached_atlas_should_collect (GskGpuDevice *device,
                                      GskGpuCached *cached,
                                      gint64        timestamp)
 {
-  /* FIXME */
-  return FALSE;
+  GskGpuCachedAtlas *self = (GskGpuCachedAtlas *) cached;
+
+  return self->n_items == 0;
 }
 
 static const GskGpuCachedClass GSK_GPU_CACHED_ATLAS_CLASS =
