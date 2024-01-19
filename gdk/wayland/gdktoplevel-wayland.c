@@ -1973,8 +1973,10 @@ gdk_wayland_toplevel_titlebar_gesture (GdkToplevel        *toplevel,
     return FALSE;
 
   seat = gdk_display_get_default_seat (surface->display);
-  wl_seat = gdk_wayland_seat_get_wl_seat (seat);
+  if (!seat)
+    return FALSE;
 
+  wl_seat = gdk_wayland_seat_get_wl_seat (seat);
   serial = _gdk_wayland_seat_get_last_implicit_grab_serial (GDK_WAYLAND_SEAT (seat), NULL);
 
   gtk_surface1_titlebar_gesture (wayland_toplevel->display_server.gtk_surface,
