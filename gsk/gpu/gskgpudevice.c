@@ -198,8 +198,8 @@ gsk_gpu_cached_texture_free (GskGpuDevice *device,
   gboolean texture_still_alive;
 
   texture_still_alive = g_atomic_pointer_exchange (&self->texture, NULL) != NULL;
-  g_object_unref (self->image);
-  
+  g_clear_object (&self->image);
+
   if (!texture_still_alive)
     g_free (self);
 }
@@ -655,10 +655,8 @@ gsk_gpu_device_lookup_texture_image (GskGpuDevice *self,
   if (cache == NULL)
     cache = g_hash_table_lookup (priv->texture_cache, texture);
 
-  if (cache)
-    {
-      return g_object_ref (cache->image);
-    }
+  if (cache && cache->image)
+    return g_object_ref (cache->image);
 
   return NULL;
 }
