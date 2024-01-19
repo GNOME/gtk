@@ -408,8 +408,9 @@ gsk_gpu_device_clear_cache (GskGpuDevice *self)
         g_assert (cached->next->prev == cached);
     }
 
-  while (priv->first_cached)
-    gsk_gpu_cached_free (self, priv->first_cached);
+  /* We clear the cache from the end so glyphs get freed before their atlas */
+  while (priv->last_cached)
+    gsk_gpu_cached_free (self, priv->last_cached);
 
   g_assert (priv->last_cached == NULL);
 }
