@@ -67,6 +67,7 @@ struct _GtkInspectorLogs
   GtkWidget *shaders;
   GtkWidget *surface;
   GtkWidget *glyphcache;
+  GtkWidget *verbose;
 
   GtkWidget *actions;
   GtkWidget *builder;
@@ -147,6 +148,7 @@ flag_toggled (GtkWidget        *button,
   update_flag (logs->shaders, &flags, GSK_DEBUG_SHADERS);
   update_flag (logs->surface, &flags, GSK_DEBUG_SURFACE);
   update_flag (logs->glyphcache, &flags, GSK_DEBUG_GLYPH_CACHE);
+  update_flag (logs->verbose, &flags, GSK_DEBUG_VERBOSE);
   gsk_set_debug_flags (flags);
 
   toplevels = gtk_window_list_toplevels ();
@@ -210,6 +212,7 @@ gtk_inspector_logs_class_init (GtkInspectorLogsClass *klass)
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorLogs, shaders);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorLogs, surface);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorLogs, glyphcache);
+  gtk_widget_class_bind_template_child (widget_class, GtkInspectorLogs, verbose);
 
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorLogs, actions);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorLogs, builder);
