@@ -3,6 +3,7 @@
 #include "gskgpudeviceprivate.h"
 
 #include "gskgpuframeprivate.h"
+#include "gskgpuimageprivate.h"
 #include "gskgpuuploadopprivate.h"
 
 #include "gdk/gdkdisplayprivate.h"
@@ -17,6 +18,8 @@
 #define MAX_ATLAS_ITEM_SIZE 256
 
 G_STATIC_ASSERT (MAX_ATLAS_ITEM_SIZE < ATLAS_SIZE);
+
+#define MAX_DEAD_PIXELS (ATLAS_SIZE * ATLAS_SIZE / 2)
 
 #define CACHE_GC_TIMEOUT 15  /* seconds */
 
@@ -68,7 +71,27 @@ struct _GskGpuCached
   GskGpuCached *prev;
 
   gint64 timestamp;
+  gboolean stale;
+  guint pixels;   /* For glyphs, pixels. For atlases, dead pixels */
 };
+
+static inline void
+mark_as_stale (GskGpuCached *cached,
+               gboolean      stale)
+{
+  if (cached->stale != stale)
+    {
+      cached->stale = stale;
+
+      if (cached->atlas)
+        {
+          if (stale)
+            ((GskGpuCached *) cached->atlas)->pixels += cached->pixels;
+          else
+            ((GskGpuCached *) cached->atlas)->pixels -= cached->pixels;
+        }
+    }
+}
 
 static void
 gsk_gpu_cached_free (GskGpuDevice *device,
@@ -84,6 +107,8 @@ gsk_gpu_cached_free (GskGpuDevice *device,
     cached->prev->next = cached->next;
   else
     priv->first_cached = cached->next;
+
+  mark_as_stale (cached, TRUE);
 
   cached->class->free (device, cached);
 }
@@ -125,6 +150,7 @@ gsk_gpu_cached_use (GskGpuDevice *device,
                     gint64        timestamp)
 {
   cached->timestamp = timestamp;
+  mark_as_stale (cached, FALSE);
 }
 
 /* }}} */
@@ -168,8 +194,7 @@ gsk_gpu_cached_atlas_should_collect (GskGpuDevice *device,
                                      GskGpuCached *cached,
                                      gint64        timestamp)
 {
-  /* FIXME */
-  return FALSE;
+  return cached->pixels > MAX_DEAD_PIXELS;
 }
 
 static const GskGpuCachedClass GSK_GPU_CACHED_ATLAS_CLASS =
@@ -292,7 +317,10 @@ static void
 gsk_gpu_cached_glyph_free (GskGpuDevice *device,
                            GskGpuCached *cached)
 {
+  GskGpuDevicePrivate *priv = gsk_gpu_device_get_instance_private (device);
   GskGpuCachedGlyph *self = (GskGpuCachedGlyph *) cached;
+
+  g_hash_table_remove (priv->glyph_cache, self);
 
   g_object_unref (self->font);
   g_object_unref (self->image);
@@ -305,7 +333,11 @@ gsk_gpu_cached_glyph_should_collect (GskGpuDevice *device,
                                      GskGpuCached *cached,
                                      gint64        timestamp)
 {
-  return timestamp - cached->timestamp > CACHE_MAX_AGE;
+  if (timestamp - cached->timestamp > CACHE_MAX_AGE)
+    mark_as_stale (cached, TRUE);
+
+  /* Glyphs are only collected when their atlas is freed */
+  return FALSE;
 }
 
 static guint
@@ -373,11 +405,14 @@ gsk_gpu_device_gc (GskGpuDevice *self,
                    gint64        timestamp)
 {
   GskGpuDevicePrivate *priv = gsk_gpu_device_get_instance_private (self);
-  GskGpuCached *cached, *next;
+  GskGpuCached *cached, *prev;
 
-  for (cached = priv->first_cached; cached != NULL; cached = next)
+  /* We walk the cache from the end so we don't end up with prev
+   * being a leftover glyph on the atlas we are freeing
+   */
+  for (cached = priv->last_cached; cached != NULL; cached = prev)
     {
-      next = cached->next;
+      prev = cached->prev;
       if (gsk_gpu_cached_should_collect (self, cached, timestamp))
         gsk_gpu_cached_free (self, cached);
     }
@@ -641,20 +676,14 @@ gsk_gpu_device_add_atlas_image (GskGpuDevice      *self,
     return NULL;
 
   gsk_gpu_device_ensure_atlas (self, FALSE, timestamp);
-  
+
   if (gsk_gpu_cached_atlas_allocate (priv->current_atlas, width, height, out_x, out_y))
-    {
-      gsk_gpu_cached_use (self, (GskGpuCached *) priv->current_atlas, timestamp);
-      return priv->current_atlas->image;
-    }
+    return priv->current_atlas->image;
 
   gsk_gpu_device_ensure_atlas (self, TRUE, timestamp);
 
   if (gsk_gpu_cached_atlas_allocate (priv->current_atlas, width, height, out_x, out_y))
-    {
-      gsk_gpu_cached_use (self, (GskGpuCached *) priv->current_atlas, timestamp);
-      return priv->current_atlas->image;
-    }
+    return priv->current_atlas->image;
 
   return NULL;
 }
@@ -762,6 +791,7 @@ gsk_gpu_device_lookup_glyph_image (GskGpuDevice           *self,
   cache->image = image,
   cache->origin = GRAPHENE_POINT_INIT (- origin.x + subpixel_x,
                                        - origin.y + subpixel_y);
+  ((GskGpuCached *) cache)->pixels = (rect.size.width + 2 * padding) * (rect.size.height + 2 * padding);
 
   gsk_gpu_upload_glyph_op (frame,
                            cache->image,
