@@ -922,7 +922,6 @@ init_randr13 (GdkScreen *screen, gboolean *changed)
           g_object_ref (monitor);
           g_ptr_array_remove (x11_display->monitors, monitor);
           gdk_display_monitor_removed (display, GDK_MONITOR (monitor));
-          free (monitor->name);
           g_object_unref (monitor);
           *changed = TRUE;
         }
