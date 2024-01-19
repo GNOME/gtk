@@ -173,6 +173,7 @@ static void
 gsk_gpu_cached_atlas_free (GskGpuDevice *device,
                            GskGpuCached *cached)
 {
+  GskGpuDevicePrivate *priv = gsk_gpu_device_get_instance_private (device);
   GskGpuCachedAtlas *self = (GskGpuCachedAtlas *) cached;
   GskGpuCached *c, *next;
 
@@ -184,8 +185,11 @@ gsk_gpu_cached_atlas_free (GskGpuDevice *device,
         gsk_gpu_cached_free (device, c);
     }
 
+  if (priv->current_atlas == self)
+    priv->current_atlas = NULL;
+
   g_object_unref (self->image);
-  
+
   g_free (self);
 }
 
