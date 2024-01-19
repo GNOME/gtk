@@ -336,7 +336,7 @@ gsk_gpu_device_gc (GskGpuDevice *self,
     {
       next = cached->next;
       if (gsk_gpu_cached_should_collect (self, cached, timestamp))
-        gsk_gpu_cached_free (self, priv->first_cached);
+        gsk_gpu_cached_free (self, cached);
     }
 }
 
