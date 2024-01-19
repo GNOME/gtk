@@ -2155,15 +2155,14 @@ gdk_wayland_toplevel_focus (GdkToplevel *toplevel,
   GdkWaylandSurface *wayland_surface = GDK_WAYLAND_SURFACE (toplevel);
   GdkDisplay *display = gdk_surface_get_display (surface);
   GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (display);
+  GdkWaylandSeat *seat =
+    GDK_WAYLAND_SEAT (gdk_display_get_default_seat (display));
   gchar *startup_id = NULL;
 
   startup_id = g_steal_pointer (&display_wayland->startup_notification_id);
 
-  if (display_wayland->xdg_activation)
+  if (seat && display_wayland->xdg_activation)
     {
-      GdkWaylandSeat *seat =
-        GDK_WAYLAND_SEAT (gdk_display_get_default_seat (display));
-
       /* If the focus request does not have a startup ID associated, get a
        * new token to activate the window.
        */
