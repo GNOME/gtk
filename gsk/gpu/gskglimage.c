@@ -316,3 +316,9 @@ gsk_gl_image_steal_texture (GskGLImage *self)
 
   return self->texture_id;
 }
+
+GLuint
+gsk_gl_image_peek_texture (GskGLImage *self)
+{
+  return self->texture_id;
+}

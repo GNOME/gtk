@@ -976,5 +976,12 @@ gsk_gpu_device_lookup_glyph_image (GskGpuDevice           *self,
   return cache->image;
 }
 
+void
+gsk_gpu_device_end_frame (GskGpuDevice *self)
+{
+  if (GSK_GPU_DEVICE_GET_CLASS (self))
+    GSK_GPU_DEVICE_GET_CLASS (self)->end_frame (self);
+}
+
 /* }}} */
 /* vim:set foldmethod=marker expandtab: */

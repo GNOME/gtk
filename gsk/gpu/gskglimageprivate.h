@@ -39,4 +39,7 @@ GLenum                  gsk_gl_image_get_gl_type                        (GskGLIm
 
 GLuint                  gsk_gl_image_steal_texture                      (GskGLImage             *self);
 
+GLuint                  gsk_gl_image_peek_texture                       (GskGLImage             *self);
+
+
 G_END_DECLS

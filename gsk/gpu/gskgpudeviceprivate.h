@@ -42,7 +42,7 @@ struct _GskGpuDeviceClass
                                                                          gsize                   width,
                                                                          gsize                   height);
   void                  (* make_current)                                (GskGpuDevice           *self);
-
+  void                  (* end_frame)                                   (GskGpuDevice           *self);
 };
 
 GType                   gsk_gpu_device_get_type                         (void) G_GNUC_CONST;
@@ -98,6 +98,8 @@ GskGpuImage *           gsk_gpu_device_lookup_glyph_image               (GskGpuD
                                                                          graphene_rect_t        *out_bounds,
                                                                          graphene_point_t       *out_origin);
 
+
+void                    gsk_gpu_device_end_frame                        (GskGpuDevice           *self);
 
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GskGpuDevice, g_object_unref)
 
