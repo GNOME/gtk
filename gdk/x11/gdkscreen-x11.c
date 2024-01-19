@@ -851,7 +851,7 @@ init_randr13 (GdkScreen *screen, gboolean *changed)
               monitor = g_object_new (gdk_x11_monitor_get_type (),
                                       "display", display,
                                       NULL);
-              monitor->name = g_steal_pointer (&name);
+              monitor->name = g_strdup (name);
               monitor->output = output;
               monitor->add = TRUE;
               g_ptr_array_add (x11_display->monitors, monitor);
