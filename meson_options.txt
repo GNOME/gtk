@@ -124,14 +124,14 @@ option('man-pages',
 
 option('demo-profile',
        type: 'combo',
-       choices: [ 'default', 'devel' ],
-       value: 'default',
+       choices: [ 'auto', 'default', 'devel' ],
+       value: 'auto',
        deprecated: 'profile')
 
 option('profile',
        type: 'combo',
-       choices: [ 'default', 'devel' ],
-       value: 'default',
+       choices: [ 'auto', 'default', 'devel' ],
+       value: 'auto',
        description : 'Profile to use for demos')
 
 option('build-demos',
