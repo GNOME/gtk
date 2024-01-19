@@ -16,6 +16,8 @@
 
 #define MAX_ATLAS_ITEM_SIZE 256
 
+#define CACHE_GC_TIMEOUT 15  /* seconds */
+
 typedef struct _GskGpuCached GskGpuCached;
 typedef struct _GskGpuCachedClass GskGpuCachedClass;
 typedef struct _GskGpuCachedAtlas GskGpuCachedAtlas;
@@ -56,7 +58,7 @@ struct _GskGpuCachedClass
 struct _GskGpuCached
 {
   const GskGpuCachedClass *class;
-  
+
   GskGpuCachedAtlas *atlas;
   GskGpuCached *next;
   GskGpuCached *prev;
@@ -403,6 +405,7 @@ gsk_gpu_device_dispose (GObject *object)
   gsk_gpu_device_clear_cache (self);
   g_hash_table_unref (priv->glyph_cache);
   g_hash_table_unref (priv->texture_cache);
+  g_clear_handle_id (&priv->cache_gc_source, g_source_remove);
 
   G_OBJECT_CLASS (gsk_gpu_device_parent_class)->dispose (object);
 }
@@ -438,6 +441,16 @@ gsk_gpu_device_init (GskGpuDevice *self)
                                           g_direct_equal);
 }
 
+static gboolean
+cache_gc_source_callback (gpointer data)
+{
+  GskGpuDevice *self = data;
+
+  gsk_gpu_device_gc (self, g_get_monotonic_time ());
+
+  return G_SOURCE_CONTINUE;
+}
+
 void
 gsk_gpu_device_setup (GskGpuDevice *self,
                       GdkDisplay   *display,
@@ -447,6 +460,8 @@ gsk_gpu_device_setup (GskGpuDevice *self,
 
   priv->display = g_object_ref (display);
   priv->max_image_size = max_image_size;
+
+  priv->cache_gc_source = g_timeout_add_seconds (CACHE_GC_TIMEOUT, cache_gc_source_callback, self);
 }
 
 GdkDisplay *
