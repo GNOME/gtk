@@ -721,3 +721,4 @@ gsk_gpu_device_lookup_glyph_image (GskGpuDevice           *self,
 }
 
 /* }}} */
+/* vim:set foldmethod=marker expandtab: */
