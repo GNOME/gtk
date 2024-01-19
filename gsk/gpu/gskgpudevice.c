@@ -18,6 +18,8 @@
 
 #define CACHE_GC_TIMEOUT 15  /* seconds */
 
+#define CACHE_MAX_AGE (G_TIME_SPAN_SECOND * 4)  /* 4 seconds, in µs */
+
 typedef struct _GskGpuCached GskGpuCached;
 typedef struct _GskGpuCachedClass GskGpuCachedClass;
 typedef struct _GskGpuCachedAtlas GskGpuCachedAtlas;
@@ -62,6 +64,8 @@ struct _GskGpuCached
   GskGpuCachedAtlas *atlas;
   GskGpuCached *next;
   GskGpuCached *prev;
+
+  gint64 timestamp;
 };
 
 static void
@@ -118,7 +122,7 @@ gsk_gpu_cached_use (GskGpuDevice *device,
                     GskGpuCached *cached,
                     gint64        timestamp)
 {
-  /* FIXME */
+  cached->timestamp = timestamp;
 }
 
 /* }}} */
@@ -205,8 +209,7 @@ gsk_gpu_cached_texture_should_collect (GskGpuDevice *device,
                                        GskGpuCached *cached,
                                        gint64        timestamp)
 {
-  /* FIXME */
-  return FALSE;
+  return timestamp - cached->timestamp > CACHE_MAX_AGE;
 }
 
 static const GskGpuCachedClass GSK_GPU_CACHED_TEXTURE_CLASS =
