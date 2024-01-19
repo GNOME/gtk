@@ -158,6 +158,12 @@
                 <signal name="toggled" handler="flag_toggled"/>
               </object>
             </child>
+            <child>
+              <object class="GtkCheckButton" id="verboe">
+                <property name="label">Verbose</property>
+                <signal name="toggled" handler="flag_toggled"/>
+              </object>
+            </child>
           </object>
         </child>
         <child>
