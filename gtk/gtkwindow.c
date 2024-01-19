@@ -2602,6 +2602,9 @@ gtk_window_transient_parent_unrealized (GtkWidget *parent,
   GtkWindowPrivate *priv = gtk_window_get_instance_private (GTK_WINDOW (window));
   if (_gtk_widget_get_realized (window))
     gdk_toplevel_set_transient_for (GDK_TOPLEVEL (priv->surface), NULL);
+
+  priv->use_transparency = FALSE;
+  priv->use_client_shadow = FALSE;
 }
 
 static void
