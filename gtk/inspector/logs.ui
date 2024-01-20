@@ -159,7 +159,7 @@
               </object>
             </child>
             <child>
-              <object class="GtkCheckButton" id="verboe">
+              <object class="GtkCheckButton" id="verbose">
                 <property name="label">Verbose</property>
                 <signal name="toggled" handler="flag_toggled"/>
               </object>

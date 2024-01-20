@@ -132,3 +132,20 @@ gsk_rect_round_larger (graphene_rect_t *rect)
                               ceil (rect->origin.y + rect->size.height) - y);
 }
 
+static inline void
+gsk_rect_scale (const graphene_rect_t *r,
+                float                  sx,
+                float                  sy,
+                graphene_rect_t       *res)
+{
+  if (G_UNLIKELY (sx < 0 || sy < 0))
+    {
+      graphene_rect_scale (r, sx, sy, res);
+      return;
+    }
+
+  res->origin.x = r->origin.x * sx;
+  res->origin.y = r->origin.y * sy;
+  res->size.width = r->size.width * sx;
+  res->size.height = r->size.height * sy;
+}
