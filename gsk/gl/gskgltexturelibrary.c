@@ -117,9 +117,8 @@ gsk_gl_texture_library_real_compact (GskGLTextureLibrary *self,
                   g_hash_table_iter_remove (&iter);
                   dropped++;
                 }
-
-              if (periodic_scan)
-                  entry->accessed = FALSE;
+              else if (periodic_scan)
+                entry->accessed = FALSE;
             }
         }
 
@@ -440,7 +439,6 @@ gsk_gl_texture_library_pack (GskGLTextureLibrary *self,
 
       entry->texture = texture;
       entry->is_atlased = FALSE;
-      entry->accessed = TRUE;
       entry->area.x = padding / (float) (padding + width + padding);
       entry->area.y = padding / (float) (padding + height + padding);
       entry->area.x2 = (padding + width) / (float) (padding + width + padding);
