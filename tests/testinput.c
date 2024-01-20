@@ -194,7 +194,7 @@ button_press_event (GtkWidget *widget, GdkEventButton *event)
 
       print_axes (event->device, event->axes);
       gdk_event_get_axis ((GdkEvent *)event, GDK_AXIS_PRESSURE, &pressure);
-      draw_brush (widget, gdk_device_get_source (gdk_event_get_source_device (event)),
+      draw_brush (widget, gdk_device_get_source (gdk_event_get_source_device ((GdkEvent *)event)),
                   event->x, event->y, pressure);
 
       motion_time = event->time;
@@ -239,10 +239,10 @@ motion_notify_event (GtkWidget *widget, GdkEventMotion *event)
 	      gdk_device_get_axis (event->device, events[i]->axes, GDK_AXIS_X, &x);
 	      gdk_device_get_axis (event->device, events[i]->axes, GDK_AXIS_Y, &y);
 	      gdk_device_get_axis (event->device, events[i]->axes, GDK_AXIS_PRESSURE, &pressure);
-	      draw_brush (widget, gdk_device_get_source (gdk_event_get_source_device (event)),
+	      draw_brush (widget, gdk_device_get_source (gdk_event_get_source_device ((GdkEvent *)event)),
                           x, y, pressure);
 
-	      print_axes (gdk_event_get_source_device (event), events[i]->axes);
+	      print_axes (gdk_event_get_source_device ((GdkEvent *)event), events[i]->axes);
 	    }
 	  gdk_device_free_history (events, n_events);
 	}
@@ -252,7 +252,7 @@ motion_notify_event (GtkWidget *widget, GdkEventMotion *event)
 
 	  gdk_event_get_axis ((GdkEvent *)event, GDK_AXIS_PRESSURE, &pressure);
 
-	  draw_brush (widget, gdk_device_get_source (gdk_event_get_source_device (event)),
+	  draw_brush (widget, gdk_device_get_source (gdk_event_get_source_device ((GdkEvent *)event)),
                       event->x, event->y, pressure);
 	}
       motion_time = event->time;

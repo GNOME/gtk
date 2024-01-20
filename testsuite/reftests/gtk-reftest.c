@@ -381,7 +381,7 @@ enforce_default_settings (void)
 
   klass = g_type_class_ref (G_OBJECT_TYPE (settings));
 
-  pspecs = g_object_class_list_properties (klass, &n_pspecs);
+  pspecs = g_object_class_list_properties (G_OBJECT_CLASS (klass), &n_pspecs);
   for (i = 0; i < n_pspecs; i++)
     {
       GParamSpec *pspec = pspecs[i];
@@ -394,7 +394,7 @@ enforce_default_settings (void)
         continue;
 
       value = g_param_spec_get_default_value (pspec);
-      g_object_set_property (settings, pspec->name, value);
+      g_object_set_property (G_OBJECT (settings), pspec->name, value);
     }
 
   g_free (pspecs);
