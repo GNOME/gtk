@@ -604,11 +604,8 @@ static const struct {
                                      GtkAccessible    *accessible,
                                      GdkDisplay       *display);
 } a11y_backends[] = {
-#if defined(GDK_WINDOWING_WAYLAND)
-  { "AT-SPI (Wayland)", "atspi", gtk_at_spi_create_context },
-#endif
-#if defined(GDK_WINDOWING_X11)
-  { "AT-SPI (X11)", "atspi", gtk_at_spi_create_context },
+#if defined(GDK_WINDOWING_WAYLAND) || defined(GDK_WINDOWING_X11)
+  { "AT-SPI", "atspi", gtk_at_spi_create_context },
 #endif
   { "Test", "test", gtk_test_at_context_new },
 };
