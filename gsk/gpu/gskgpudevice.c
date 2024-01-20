@@ -384,24 +384,47 @@ print_cache_stats (GskGpuDevice *self)
   GskGpuDevicePrivate *priv = gsk_gpu_device_get_instance_private (self);
   GskGpuCached *cached;
   guint glyphs = 0;
+  guint stale_glyphs = 0;
   guint textures = 0;
   guint atlases = 0;
+  GString *ratios = g_string_new ("");
 
   for (cached = priv->first_cached; cached != NULL; cached = cached->next)
     {
       if (cached->class == &GSK_GPU_CACHED_GLYPH_CLASS)
-        glyphs++;
+        {
+          glyphs++;
+          if (cached->stale)
+            stale_glyphs++;
+        }
       else if (cached->class == &GSK_GPU_CACHED_TEXTURE_CLASS)
         textures++;
       else if (cached->class == &GSK_GPU_CACHED_ATLAS_CLASS)
-        atlases++;
+        {
+          double ratio;
+
+          atlases++;
+
+          ratio = (double) cached->pixels / (double) (ATLAS_SIZE * ATLAS_SIZE);
+
+          if (ratios->len == 0)
+            g_string_append (ratios, " (ratios ");
+          else
+            g_string_append (ratios, ", ");
+          g_string_append_printf (ratios, "%.2f", ratio);
+        }
     }
 
+  if (ratios->len > 0)
+    g_string_append (ratios, ")");
+
   gdk_debug_message ("cached items\n"
-                     "  glyphs:   %5u\n"
+                     "  glyphs:   %5u (%u stale)\n"
                      "  textures: %5u\n"
-                     "  atlases:  %5u",
-                     glyphs, textures, atlases);
+                     "  atlases:  %5u%s",
+                     glyphs, stale_glyphs, textures, atlases, ratios->str);
+
+  g_string_free (ratios, TRUE);
 }
 
 void
