@@ -48,7 +48,7 @@ struct _GskGpuCachedClass
                                                          GskGpuCached           *cached);
   gboolean              (* should_collect)              (GskGpuDevice           *device,
                                                          GskGpuCached           *cached,
-                                                         gint64                  timestsamp);
+                                                         gint64                  timestamp);
 };
 
 struct _GskGpuCached
@@ -285,7 +285,7 @@ gsk_gpu_cached_glyph_free (GskGpuDevice *device,
 static gboolean
 gsk_gpu_cached_glyph_should_collect (GskGpuDevice *device,
                                      GskGpuCached *cached,
-                                     gint64        timestsamp)
+                                     gint64        timestamp)
 {
   /* FIXME */
   return FALSE;
