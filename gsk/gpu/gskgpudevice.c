@@ -48,7 +48,7 @@ struct _GskGpuCachedClass
                                                          GskGpuCached           *cached);
   gboolean              (* should_collect)              (GskGpuDevice           *device,
                                                          GskGpuCached           *cached,
-                                                         gint64                  timestsamp);
+                                                         gint64                  timestamp);
 };
 
 struct _GskGpuCached
@@ -285,7 +285,7 @@ gsk_gpu_cached_glyph_free (GskGpuDevice *device,
 static gboolean
 gsk_gpu_cached_glyph_should_collect (GskGpuDevice *device,
                                      GskGpuCached *cached,
-                                     gint64        timestsamp)
+                                     gint64        timestamp)
 {
   /* FIXME */
   return FALSE;
@@ -336,7 +336,7 @@ gsk_gpu_device_gc (GskGpuDevice *self,
     {
       next = cached->next;
       if (gsk_gpu_cached_should_collect (self, cached, timestamp))
-        gsk_gpu_cached_free (self, priv->first_cached);
+        gsk_gpu_cached_free (self, cached);
     }
 }
 
@@ -661,7 +661,6 @@ gsk_gpu_device_lookup_glyph_image (GskGpuDevice           *self,
       return cache->image;
     }
 
-  cache = g_new (GskGpuCachedGlyph, 1);
   pango_font_get_glyph_extents (font, glyph, &ink_rect, NULL);
   origin.x = floor (ink_rect.x * scale / PANGO_SCALE);
   origin.y = floor (ink_rect.y * scale / PANGO_SCALE);
