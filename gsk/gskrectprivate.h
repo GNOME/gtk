@@ -123,6 +123,14 @@ gsk_gpu_rect_to_float (const graphene_rect_t  *rect,
 }
 
 static inline void
+gsk_point_to_float (const graphene_point_t *point,
+                    float                   values[2])
+{
+  values[0] = point->x;
+  values[1] = point->y;
+}
+
+static inline void
 gsk_rect_round_larger (graphene_rect_t *rect)
 {
   float x = floor (rect->origin.x);
@@ -149,3 +157,4 @@ gsk_rect_scale (const graphene_rect_t *r,
   res->size.width = r->size.width * sx;
   res->size.height = r->size.height * sy;
 }
+

@@ -451,12 +451,12 @@ static const GskGpuOpClass GSK_GPU_UPLOAD_CAIRO_OP_CLASS = {
 };
 
 GskGpuImage *
-gsk_gpu_upload_cairo_op (GskGpuFrame           *frame,
-                         const graphene_vec2_t *scale,
-                         const graphene_rect_t *viewport,
-                         GskGpuCairoFunc        func,
-                         gpointer               user_data,
-                         GDestroyNotify         user_destroy)
+gsk_gpu_upload_cairo_op (GskGpuFrame            *frame,
+                         const graphene_point_t *scale,
+                         const graphene_rect_t  *viewport,
+                         GskGpuCairoFunc         func,
+                         gpointer                user_data,
+                         GDestroyNotify          user_destroy)
 {
   GskGpuUploadCairoOp *self;
 
@@ -465,8 +465,8 @@ gsk_gpu_upload_cairo_op (GskGpuFrame           *frame,
   self->image = gsk_gpu_device_create_upload_image (gsk_gpu_frame_get_device (frame),
                                                     FALSE,
                                                     GDK_MEMORY_DEFAULT,
-                                                    ceil (graphene_vec2_get_x (scale) * viewport->size.width),
-                                                    ceil (graphene_vec2_get_y (scale) * viewport->size.height));
+                                                    ceil (scale->x * viewport->size.width),
+                                                    ceil (scale->y * viewport->size.height));
   self->viewport = *viewport;
   self->func = func;
   self->user_data = user_data;

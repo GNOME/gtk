@@ -17,7 +17,7 @@ struct _GskGpuGlobalsInstance
 };
 
 void                    gsk_gpu_globals_op                              (GskGpuFrame                    *frame,
-                                                                         const graphene_vec2_t          *scale,
+                                                                         const graphene_point_t         *scale,
                                                                          const graphene_matrix_t        *mvp,
                                                                          const GskRoundedRect           *clip);
 

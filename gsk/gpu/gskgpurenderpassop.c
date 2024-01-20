@@ -335,16 +335,16 @@ gsk_gpu_render_pass_end_op (GskGpuFrame       *frame,
 }
 
 GskGpuImage *
-gsk_gpu_render_pass_op_offscreen (GskGpuFrame           *frame,
-                                  const graphene_vec2_t *scale,
-                                  const graphene_rect_t *viewport,
-                                  GskRenderNode         *node)
+gsk_gpu_render_pass_op_offscreen (GskGpuFrame            *frame,
+                                  const graphene_point_t *scale,
+                                  const graphene_rect_t  *viewport,
+                                  GskRenderNode          *node)
 {
   GskGpuImage *image;
   int width, height;
 
-  width = ceil (graphene_vec2_get_x (scale) * viewport->size.width);
-  height = ceil (graphene_vec2_get_y (scale) * viewport->size.height);
+  width = ceil (scale->x * viewport->size.width);
+  height = ceil (scale->y * viewport->size.height);
 
   image = gsk_gpu_device_create_offscreen_image (gsk_gpu_frame_get_device (frame),
                                                  FALSE,

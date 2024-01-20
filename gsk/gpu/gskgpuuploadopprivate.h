@@ -14,7 +14,7 @@ GskGpuImage *           gsk_gpu_upload_texture_op_try                   (GskGpuF
                                                                          GdkTexture                     *texture);
 
 GskGpuImage *           gsk_gpu_upload_cairo_op                         (GskGpuFrame                    *frame,
-                                                                         const graphene_vec2_t          *scale,
+                                                                         const graphene_point_t         *scale,
                                                                          const graphene_rect_t          *viewport,
                                                                          GskGpuCairoFunc                 func,
                                                                          gpointer                        user_data,
