@@ -3,6 +3,7 @@
 #include "gskgpudeviceprivate.h"
 
 #include "gskgpuframeprivate.h"
+#include "gskgpuimageprivate.h"
 #include "gskgpuuploadopprivate.h"
 
 #include "gdk/gdkdisplayprivate.h"
@@ -18,7 +19,9 @@
 
 G_STATIC_ASSERT (MAX_ATLAS_ITEM_SIZE < ATLAS_SIZE);
 
-#define CACHE_GC_TIMEOUT 15  /* seconds */
+#define MAX_DEAD_PIXELS (ATLAS_SIZE * ATLAS_SIZE / 2)
+
+#define CACHE_GC_TIMEOUT 1  /* seconds */
 
 #define CACHE_MAX_AGE (G_TIME_SPAN_SECOND * 4)  /* 4 seconds, in µs */
 
@@ -68,7 +71,27 @@ struct _GskGpuCached
   GskGpuCached *prev;
 
   gint64 timestamp;
+  gboolean stale;
+  guint pixels;   /* For glyphs, pixels. For atlases, dead pixels */
 };
+
+static inline void
+mark_as_stale (GskGpuCached *cached,
+               gboolean      stale)
+{
+  if (cached->stale != stale)
+    {
+      cached->stale = stale;
+
+      if (cached->atlas)
+        {
+          if (stale)
+            ((GskGpuCached *) cached->atlas)->pixels += cached->pixels;
+          else
+            ((GskGpuCached *) cached->atlas)->pixels -= cached->pixels;
+        }
+    }
+}
 
 static void
 gsk_gpu_cached_free (GskGpuDevice *device,
@@ -84,6 +107,8 @@ gsk_gpu_cached_free (GskGpuDevice *device,
     cached->prev->next = cached->next;
   else
     priv->first_cached = cached->next;
+
+  mark_as_stale (cached, TRUE);
 
   cached->class->free (device, cached);
 }
@@ -125,6 +150,7 @@ gsk_gpu_cached_use (GskGpuDevice *device,
                     gint64        timestamp)
 {
   cached->timestamp = timestamp;
+  mark_as_stale (cached, FALSE);
 }
 
 /* }}} */
@@ -135,8 +161,6 @@ struct _GskGpuCachedAtlas
   GskGpuCached parent;
 
   GskGpuImage *image;
-
-  gsize n_items;
 
   gsize n_slices;
   struct {
@@ -174,9 +198,7 @@ gsk_gpu_cached_atlas_should_collect (GskGpuDevice *device,
                                      GskGpuCached *cached,
                                      gint64        timestamp)
 {
-  GskGpuCachedAtlas *self = (GskGpuCachedAtlas *) cached;
-
-  return self->n_items == 0;
+  return cached->pixels > MAX_DEAD_PIXELS;
 }
 
 static const GskGpuCachedClass GSK_GPU_CACHED_ATLAS_CLASS =
@@ -278,8 +300,6 @@ gsk_gpu_cached_atlas_allocate (GskGpuCachedAtlas *atlas,
   g_assert (atlas->slices[best_slice].height >= height);
   g_assert (atlas->slices[best_slice].width <= ATLAS_SIZE);
   g_assert (best_y + atlas->slices[best_slice].height <= ATLAS_SIZE);
-
-  atlas->n_items++;
 
   return TRUE;
 }
@@ -391,12 +411,6 @@ gsk_gpu_cached_glyph_free (GskGpuDevice *device,
 
   g_hash_table_remove (priv->glyph_cache, self);
 
-  if (cached->atlas)
-    {
-      g_assert (cached->atlas->n_items > 0);
-      cached->atlas->n_items--;
-    }
-
   g_object_unref (self->font);
   g_object_unref (self->image);
 
@@ -408,7 +422,11 @@ gsk_gpu_cached_glyph_should_collect (GskGpuDevice *device,
                                      GskGpuCached *cached,
                                      gint64        timestamp)
 {
-  return timestamp - cached->timestamp > CACHE_MAX_AGE;
+  if (timestamp - cached->timestamp > CACHE_MAX_AGE)
+    mark_as_stale (cached, TRUE);
+
+  /* Glyphs are only collected when their atlas is freed */
+  return FALSE;
 }
 
 static guint
@@ -476,11 +494,14 @@ gsk_gpu_device_gc (GskGpuDevice *self,
                    gint64        timestamp)
 {
   GskGpuDevicePrivate *priv = gsk_gpu_device_get_instance_private (self);
-  GskGpuCached *cached, *next;
+  GskGpuCached *cached, *prev;
 
-  for (cached = priv->first_cached; cached != NULL; cached = next)
+  /* We walk the cache from the end so we don't end up with prev
+   * begin a leftover glyph on the atlas we are freeing
+   */
+  for (cached = priv->last_cached; cached != NULL; cached = prev)
     {
-      next = cached->next;
+      prev = cached->prev;
       if (gsk_gpu_cached_should_collect (self, cached, timestamp))
         gsk_gpu_cached_free (self, cached);
     }
@@ -773,6 +794,7 @@ gsk_gpu_device_lookup_glyph_image (GskGpuDevice           *self,
   cache->scale = scale,
   cache->bounds = rect,
   cache->image = image,
+  ((GskGpuCached *) cache)->pixels = (rect.size.width + 2 * padding) * (rect.size.height + 2 * padding);
   cache->origin = GRAPHENE_POINT_INIT (- origin.x + (flags & 3) / 4.f,
                                        - origin.y + ((flags >> 2) & 3) / 4.f);
 
