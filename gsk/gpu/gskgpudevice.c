@@ -186,6 +186,85 @@ gsk_gpu_cached_atlas_new (GskGpuDevice *device)
   return self;
 }
 
+/* This rounds up to the next number that has <= 2 bits set:
+ * 1, 2, 3, 4, 6, 8, 12, 16, 24, 32, 48, 64, 96, 128, ...
+ * That is roughly sqrt(2), so it should limit waste
+ */
+static gsize
+round_up_atlas_size (gsize num)
+{
+  gsize storage = g_bit_storage (num);
+
+  num = num + (((1 << storage) - 1) >> 2);
+  num &= (((gsize) 7) << storage) >> 2;
+
+  return num;
+}
+
+static gboolean
+gsk_gpu_cached_atlas_allocate (GskGpuCachedAtlas *atlas,
+                               gsize              width,
+                               gsize              height,
+                               gsize             *out_x,
+                               gsize             *out_y)
+{
+  gsize i;
+  gsize waste, slice_waste;
+  gsize best_slice;
+  gsize y, best_y;
+  gboolean can_add_slice;
+
+  best_y = 0;
+  best_slice = G_MAXSIZE;
+  can_add_slice = atlas->n_slices < MAX_SLICES_PER_ATLAS;
+  if (can_add_slice)
+    waste = height; /* Require less than 100% waste */
+  else
+    waste = G_MAXSIZE; /* Accept any slice, we can't make better ones */
+
+  for (i = 0, y = 0; i < atlas->n_slices; y += atlas->slices[i].height, i++)
+    {
+      if (atlas->slices[i].height < height || ATLAS_SIZE - atlas->slices[i].width < width)
+        continue;
+
+      slice_waste = atlas->slices[i].height - height;
+      if (slice_waste < waste)
+        {
+          waste = slice_waste;
+          best_slice = i;
+          best_y = y;
+          if (waste == 0)
+            break;
+        }
+    }
+
+  if (best_slice >= i && i == atlas->n_slices)
+    {
+      if (!can_add_slice)
+        return FALSE;
+
+      atlas->n_slices++;
+      if (atlas->n_slices == MAX_SLICES_PER_ATLAS)
+        atlas->slices[i].height = ATLAS_SIZE - y;
+      else
+        atlas->slices[i].height = round_up_atlas_size (MAX (height, 4));
+      atlas->slices[i].width = 0;
+      best_y = y;
+      best_slice = i;
+    }
+
+  g_assert (best_slice < MAX_SLICES_PER_ATLAS);
+
+  *out_x = atlas->slices[best_slice].width;
+  *out_y = best_y;
+
+  atlas->slices[best_slice].width += width;
+
+  atlas->n_items++;
+
+  return TRUE;
+}
+
 /* }}} */
 /* {{{ CachedTexture */
 
@@ -526,84 +605,6 @@ gsk_gpu_device_create_download_image (GskGpuDevice   *self,
                                       gsize           height)
 {
   return GSK_GPU_DEVICE_GET_CLASS (self)->create_download_image (self, depth, width, height);
-}
-
-/* This rounds up to the next number that has <= 2 bits set:
- * 1, 2, 3, 4, 6, 8, 12, 16, 24, 32, 48, 64, 96, 128, ...
- * That is roughly sqrt(2), so it should limit waste
- */
-static gsize
-round_up_atlas_size (gsize num)
-{
-  gsize storage = g_bit_storage (num);
-
-  num = num + (((1 << storage) - 1) >> 2);
-  num &= (((gsize) 7) << storage) >> 2;
-
-  return num;
-}
-
-static gboolean
-gsk_gpu_cached_atlas_allocate (GskGpuCachedAtlas *atlas,
-                               gsize              width,
-                               gsize              height,
-                               gsize             *out_x,
-                               gsize             *out_y)
-{
-  gsize i;
-  gsize waste, slice_waste;
-  gsize best_slice;
-  gsize y, best_y;
-  gboolean can_add_slice;
-
-  best_y = 0;
-  best_slice = G_MAXSIZE;
-  can_add_slice = atlas->n_slices < MAX_SLICES_PER_ATLAS;
-  if (can_add_slice)
-    waste = height; /* Require less than 100% waste */
-  else
-    waste = G_MAXSIZE; /* Accept any slice, we can't make better ones */
-
-  for (i = 0, y = 0; i < atlas->n_slices; y += atlas->slices[i].height, i++)
-    {
-      if (atlas->slices[i].height < height || ATLAS_SIZE - atlas->slices[i].width < width)
-        continue;
-
-      slice_waste = atlas->slices[i].height - height;
-      if (slice_waste < waste)
-        {
-          waste = slice_waste;
-          best_slice = i;
-          best_y = y;
-          if (waste == 0)
-            break;
-        }
-    }
-
-  if (best_slice >= i && i == atlas->n_slices)
-    {
-      if (!can_add_slice)
-        return FALSE;
-
-      atlas->n_slices++;
-      if (atlas->n_slices == MAX_SLICES_PER_ATLAS)
-        atlas->slices[i].height = ATLAS_SIZE - y;
-      else
-        atlas->slices[i].height = round_up_atlas_size (MAX (height, 4));
-      atlas->slices[i].width = 0;
-      best_y = y;
-      best_slice = i;
-    }
-
-  *out_x = atlas->slices[best_slice].width;
-  *out_y = best_y;
-
-  atlas->slices[best_slice].width += width;
-  g_assert (atlas->slices[best_slice].width <= ATLAS_SIZE);
-
-  atlas->n_items++;
-
-  return TRUE;
 }
 
 static void
