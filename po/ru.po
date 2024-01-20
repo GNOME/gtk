@@ -22,8 +22,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2024-01-08 02:46+0000\n"
-"PO-Revision-Date: 2024-01-08 15:00+0300\n"
+"POT-Creation-Date: 2024-01-16 17:25+0000\n"
+"PO-Revision-Date: 2024-01-16 22:49+0300\n"
 "Last-Translator: Artur So <arturios2005@mail.ru>\n"
 "Language-Team: Русский <gnome-cyr@gnome.org>\n"
 "Language: ru\n"
@@ -866,6 +866,11 @@ msgstr "Неподдерживаемая кодировка \"%s\""
 msgid "This GLES %d.%d implementation does not support half-float vertex data"
 msgstr ""
 "Данная реализация GLES %d.%d не поддерживает полуплавающие вершинные данные"
+
+#: gsk/gpu/gskgldevice.c:238
+#, c-format
+msgid "OpenGL ES 2.0 is not supported by this renderer."
+msgstr "OpenGL ES 2.0 не поддерживается этим рендерером."
 
 #: gtk/a11y/gtkatspiaction.c:239
 msgctxt "accessibility"
@@ -2685,7 +2690,7 @@ msgstr "Вариации стилей"
 msgid "Character Variations"
 msgstr "Вариации символов"
 
-#: gtk/gtkglarea.c:305
+#: gtk/gtkglarea.c:309
 msgid "OpenGL context creation failed"
 msgstr "Не удалось создать контекст OpenGL"
 
@@ -7303,7 +7308,7 @@ msgid "Use style from CSS file"
 msgstr "Использовать стиль из файла CSS"
 
 #: tools/gtk-builder-tool-preview.c:187 tools/gtk-builder-tool-screenshot.c:370
-#: tools/gtk-builder-tool-validate.c:268 tools/gtk-rendernode-tool-render.c:204
+#: tools/gtk-builder-tool-validate.c:268 tools/gtk-rendernode-tool-render.c:203
 #: tools/gtk-rendernode-tool-show.c:113
 #, c-format
 msgid "Could not initialize windowing system\n"
@@ -7349,13 +7354,13 @@ msgstr ""
 "Используйте --force для перезаписи.\n"
 
 #: tools/gtk-builder-tool-screenshot.c:332
-#: tools/gtk-rendernode-tool-render.c:172
+#: tools/gtk-rendernode-tool-render.c:171
 #, c-format
 msgid "Output written to %s.\n"
 msgstr "Выход записывается в %s.\n"
 
 #: tools/gtk-builder-tool-screenshot.c:336
-#: tools/gtk-rendernode-tool-render.c:176
+#: tools/gtk-rendernode-tool-render.c:175
 #, c-format
 msgid "Failed to save %s: %s\n"
 msgstr "Не удалось сохранить %s: %s\n"
@@ -7373,7 +7378,7 @@ msgid "Overwrite existing file"
 msgstr "Перезаписать существующий файл"
 
 #: tools/gtk-builder-tool-screenshot.c:363
-#: tools/gtk-rendernode-tool-render.c:197
+#: tools/gtk-rendernode-tool-render.c:196
 msgid "FILE…"
 msgstr "ФАЙЛ…"
 
@@ -7844,6 +7849,7 @@ msgid ""
 "Perform various tasks on GTK render nodes.\n"
 "\n"
 "Commands:\n"
+"  benchmark    Benchmark rendering of a node\n"
 "  info         Provide information about the node\n"
 "  show         Show the node\n"
 "  render       Take a screenshot of the node\n"
@@ -7855,6 +7861,7 @@ msgstr ""
 "Выполнение различных задач на узлах рендеринга GTK.\n"
 "\n"
 "Команды:\n"
+"  benchmark    Тест рендеринга узла\n"
 "  info        Предоставить информацию об узле\n"
 "  show         Показать узел\n"
 "  render       Сделать снимок узла\n"
@@ -7884,7 +7891,7 @@ msgstr "Источник: %g %g\n"
 msgid "Provide information about the render node."
 msgstr "Предоставить информацию об узле рендеринга."
 
-#: tools/gtk-rendernode-tool-info.c:236 tools/gtk-rendernode-tool-render.c:225
+#: tools/gtk-rendernode-tool-info.c:236 tools/gtk-rendernode-tool-render.c:224
 #: tools/gtk-rendernode-tool-show.c:134
 #, c-format
 msgid "No .node file specified\n"
@@ -7909,19 +7916,24 @@ msgstr ""
 msgid "Failed to generate SVG: %s\n"
 msgstr "Не удалось сгенерировать SVG: %s\n"
 
-#: tools/gtk-rendernode-tool-render.c:196
+#: tools/gtk-rendernode-tool-render.c:150
+#, c-format
+msgid "Failed to create renderer: %s\n"
+msgstr "Не удалось создать рендерер: %s\n"
+
+#: tools/gtk-rendernode-tool-render.c:195
 msgid "Renderer to use"
 msgstr "Используемый рендерер"
 
-#: tools/gtk-rendernode-tool-render.c:196
+#: tools/gtk-rendernode-tool-render.c:195
 msgid "RENDERER"
 msgstr "РЕНДЕРЕР"
 
-#: tools/gtk-rendernode-tool-render.c:212
+#: tools/gtk-rendernode-tool-render.c:211
 msgid "Render a .node file to an image."
 msgstr "Преобразование .node файла в изображение."
 
-#: tools/gtk-rendernode-tool-render.c:231
+#: tools/gtk-rendernode-tool-render.c:230
 #, c-format
 msgid "Can only render a single .node file to a single output file\n"
 msgstr "Можно вывести только один файл .node в один выходной файл\n"
@@ -7939,12 +7951,12 @@ msgstr "Показать узел рендеринга."
 msgid "Can only preview a single .node file\n"
 msgstr "Можно предварительно просмотреть только один .node файл\n"
 
-#: tools/gtk-rendernode-tool-utils.c:51
+#: tools/gtk-rendernode-tool-utils.c:54
 #, c-format
 msgid "Error at %s: %s\n"
 msgstr "Ошибка в %s: %s\n"
 
-#: tools/gtk-rendernode-tool-utils.c:69
+#: tools/gtk-rendernode-tool-utils.c:72
 #, c-format
 msgid "Failed to load node file: %s\n"
 msgstr "Не удалось загрузить node файл: %s\n"
