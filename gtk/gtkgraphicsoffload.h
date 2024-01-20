@@ -44,6 +44,15 @@ void              gtk_graphics_offload_set_child    (GtkGraphicsOffload        *
 GDK_AVAILABLE_IN_4_14
 GtkWidget *       gtk_graphics_offload_get_child    (GtkGraphicsOffload        *self);
 
+/**
+ * GtkGraphicsOffloadEnabled:
+ * @GTK_GRAPHICS_OFFLOAD_ENABLED: Graphics offloading is enabled.
+ * @GTK_GRAPHICS_OFFLOAD_DISABLED: Graphics offloading is disabled.
+ *
+ * Represents the state of graphics offlodading.
+ *
+ * Since: 4.14
+ */
 typedef enum
 {
   GTK_GRAPHICS_OFFLOAD_ENABLED,
