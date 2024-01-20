@@ -1973,8 +1973,10 @@ gdk_wayland_toplevel_titlebar_gesture (GdkToplevel        *toplevel,
     return FALSE;
 
   seat = gdk_display_get_default_seat (surface->display);
-  wl_seat = gdk_wayland_seat_get_wl_seat (seat);
+  if (!seat)
+    return FALSE;
 
+  wl_seat = gdk_wayland_seat_get_wl_seat (seat);
   serial = _gdk_wayland_seat_get_last_implicit_grab_serial (GDK_WAYLAND_SEAT (seat), NULL);
 
   gtk_surface1_titlebar_gesture (wayland_toplevel->display_server.gtk_surface,
@@ -2155,15 +2157,14 @@ gdk_wayland_toplevel_focus (GdkToplevel *toplevel,
   GdkWaylandSurface *wayland_surface = GDK_WAYLAND_SURFACE (toplevel);
   GdkDisplay *display = gdk_surface_get_display (surface);
   GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (display);
+  GdkWaylandSeat *seat =
+    GDK_WAYLAND_SEAT (gdk_display_get_default_seat (display));
   gchar *startup_id = NULL;
 
   startup_id = g_steal_pointer (&display_wayland->startup_notification_id);
 
-  if (display_wayland->xdg_activation)
+  if (seat && display_wayland->xdg_activation)
     {
-      GdkWaylandSeat *seat =
-        GDK_WAYLAND_SEAT (gdk_display_get_default_seat (display));
-
       /* If the focus request does not have a startup ID associated, get a
        * new token to activate the window.
        */
