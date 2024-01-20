@@ -6,7 +6,7 @@
 # Mahyar Moghimi <mahyar.moqimi@gmail.com>, 2010.
 # Ali Yousefi Sabzevar <aysabzevar@gmail.com>, 2010.
 # Arash Mousavi <mousavi.arash@gmail.com>, 2011-2017.
-# Danial Behzadi <dani.behzi@ubuntu.com>, 2018-2023.
+# Danial Behzadi <dani.behzi@ubuntu.com>, 2018-2024.
 #
 msgid ""
 msgstr ""
