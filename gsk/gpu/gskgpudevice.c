@@ -296,8 +296,7 @@ gsk_gpu_cached_glyph_should_collect (GskGpuDevice *device,
                                      GskGpuCached *cached,
                                      gint64        timestamp)
 {
-  /* FIXME */
-  return FALSE;
+  return timestamp - cached->timestamp > CACHE_MAX_AGE;
 }
 
 static guint
