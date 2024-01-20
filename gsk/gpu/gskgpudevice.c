@@ -151,6 +151,15 @@ gsk_gpu_cached_atlas_free (GskGpuDevice *device,
 {
   GskGpuDevicePrivate *priv = gsk_gpu_device_get_instance_private (device);
   GskGpuCachedAtlas *self = (GskGpuCachedAtlas *) cached;
+  GskGpuCached *c, *next;
+
+  /* Free all remaining glyphs on this atlas */
+  for (c = priv->first_cached; c != NULL; c = next)
+    {
+      next = c->next;
+      if (c->atlas == self)
+        gsk_gpu_cached_free (device, c);
+    }
 
   if (priv->current_atlas == self)
     priv->current_atlas = NULL;
