@@ -96,7 +96,7 @@ gtk_at_spi_root_finalize (GObject *gobject)
   g_free (self->desktop_name);
   g_free (self->desktop_path);
 
-  G_OBJECT_CLASS (gtk_at_spi_root_parent_class)->dispose (gobject);
+  G_OBJECT_CLASS (gtk_at_spi_root_parent_class)->finalize (gobject);
 }
 
 static void
