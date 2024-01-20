@@ -148,6 +148,15 @@ gsk_gpu_cached_atlas_free (GskGpuDevice *device,
                            GskGpuCached *cached)
 {
   GskGpuCachedAtlas *self = (GskGpuCachedAtlas *) cached;
+  GskGpuCached *c, *next;
+
+  /* Free all remaining glyphs on this atlas */
+  for (c = priv->first_cached; c != NULL; c = next)
+    {
+      next = c->next;
+      if (c->atlas == self)
+        gsk_gpu_cached_free (device, c);
+    }
 
   g_object_unref (self->image);
   
