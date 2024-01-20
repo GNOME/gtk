@@ -979,7 +979,6 @@ gsk_gpu_node_processor_blur_op (GskGpuNodeProcessor       *self,
   GskGpuNodeProcessor other;
   GskGpuImage *intermediate;
   guint32 intermediate_descriptor;
-  graphene_vec2_t direction;
   graphene_rect_t clip_rect, intermediate_rect;
   graphene_point_t real_offset;
   int width, height;
@@ -1015,7 +1014,6 @@ gsk_gpu_node_processor_blur_op (GskGpuNodeProcessor       *self,
 
   gsk_gpu_node_processor_sync_globals (&other, 0);
 
-  graphene_vec2_init (&direction, blur_radius, 0.0f);
   gsk_gpu_blur_op (other.frame,
                    gsk_gpu_clip_get_shader_clip (&other.clip, &other.offset, &intermediate_rect),
                    source_desc,
@@ -1023,7 +1021,7 @@ gsk_gpu_node_processor_blur_op (GskGpuNodeProcessor       *self,
                    &intermediate_rect,
                    &other.offset,
                    source_rect,
-                   &direction);
+                   &GRAPHENE_POINT_INIT (blur_radius, 0));
 
   gsk_gpu_render_pass_end_op (other.frame,
                               intermediate,
@@ -1033,7 +1031,6 @@ gsk_gpu_node_processor_blur_op (GskGpuNodeProcessor       *self,
 
   real_offset = GRAPHENE_POINT_INIT (self->offset.x + shadow_offset->x,
                                      self->offset.y + shadow_offset->y);
-  graphene_vec2_init (&direction, 0.0f, blur_radius);
   intermediate_descriptor = gsk_gpu_node_processor_add_image (self, intermediate, GSK_GPU_SAMPLER_TRANSPARENT);
   if (shadow_color)
     {
@@ -1044,7 +1041,7 @@ gsk_gpu_node_processor_blur_op (GskGpuNodeProcessor       *self,
                               rect,
                               &real_offset,
                               &intermediate_rect,
-                              &direction,
+                              &GRAPHENE_POINT_INIT (0, blur_radius),
                               shadow_color);
     }
   else
@@ -1056,7 +1053,7 @@ gsk_gpu_node_processor_blur_op (GskGpuNodeProcessor       *self,
                        rect,
                        &real_offset,
                        &intermediate_rect,
-                       &direction);
+                       &GRAPHENE_POINT_INIT (0, blur_radius));
     }
 
   g_object_unref (intermediate);
