@@ -16,6 +16,8 @@
 
 #define MAX_ATLAS_ITEM_SIZE 256
 
+G_STATIC_ASSERT (MAX_ATLAS_ITEM_SIZE < ATLAS_SIZE);
+
 #define CACHE_GC_TIMEOUT 15  /* seconds */
 
 #define CACHE_MAX_AGE (G_TIME_SPAN_SECOND * 4)  /* 4 seconds, in µs */
@@ -243,11 +245,15 @@ gsk_gpu_cached_atlas_allocate (GskGpuCachedAtlas *atlas,
       if (!can_add_slice)
         return FALSE;
 
+      if (y + height > ATLAS_SIZE)
+        return FALSE;
+
       atlas->n_slices++;
       if (atlas->n_slices == MAX_SLICES_PER_ATLAS)
         atlas->slices[i].height = ATLAS_SIZE - y;
       else
-        atlas->slices[i].height = round_up_atlas_size (MAX (height, 4));
+        atlas->slices[i].height = MIN (round_up_atlas_size (MAX (height, 4)), ATLAS_SIZE - y);
+
       atlas->slices[i].width = 0;
       best_y = y;
       best_slice = i;
@@ -259,6 +265,10 @@ gsk_gpu_cached_atlas_allocate (GskGpuCachedAtlas *atlas,
   *out_y = best_y;
 
   atlas->slices[best_slice].width += width;
+
+  g_assert (atlas->slices[best_slice].height >= height);
+  g_assert (atlas->slices[best_slice].width <= ATLAS_SIZE);
+  g_assert (best_y + atlas->slices[best_slice].height <= ATLAS_SIZE);
 
   atlas->n_items++;
 
