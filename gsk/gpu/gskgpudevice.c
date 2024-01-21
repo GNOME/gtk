@@ -8,6 +8,7 @@
 
 #include "gdk/gdkdisplayprivate.h"
 #include "gdk/gdktextureprivate.h"
+#include "gdk/gdkprofilerprivate.h"
 
 #include "gsk/gskdebugprivate.h"
 
@@ -433,6 +434,7 @@ gsk_gpu_device_gc (GskGpuDevice *self,
 {
   GskGpuDevicePrivate *priv = gsk_gpu_device_get_instance_private (self);
   GskGpuCached *cached, *prev;
+  gint64 before G_GNUC_UNUSED = GDK_PROFILER_CURRENT_TIME;
 
   /* We walk the cache from the end so we don't end up with prev
    * being a leftover glyph on the atlas we are freeing
@@ -446,6 +448,8 @@ gsk_gpu_device_gc (GskGpuDevice *self,
 
   if (GSK_DEBUG_CHECK (GLYPH_CACHE))
     print_cache_stats (self);
+
+  gdk_profiler_end_mark (before, "Glyph cache GC", NULL);
 }
 
 static void
