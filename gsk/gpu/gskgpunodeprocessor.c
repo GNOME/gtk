@@ -145,7 +145,7 @@ static void
 gsk_gpu_node_processor_finish (GskGpuNodeProcessor *self)
 {
   g_clear_pointer (&self->modelview, gsk_transform_unref);
-  g_clear_object (&self->desc);
+  g_clear_pointer (&self->desc, gsk_gpu_descriptors_unref);
 }
 
 static void
@@ -163,7 +163,7 @@ gsk_gpu_node_processor_init (GskGpuNodeProcessor         *self,
 
   self->frame = frame;
   if (desc)
-    self->desc = g_object_ref (desc);
+    self->desc = gsk_gpu_descriptors_ref (desc);
   else
     self->desc = NULL;
 
@@ -261,7 +261,7 @@ gsk_gpu_node_processor_add_image (GskGpuNodeProcessor *self,
       if (gsk_gpu_descriptors_add_image (self->desc, image, sampler, &descriptor))
         return descriptor;
 
-      g_object_unref (self->desc);
+      gsk_gpu_descriptors_unref (self->desc);
     }
 
   self->desc = gsk_gpu_frame_create_descriptors (self->frame);
@@ -538,7 +538,7 @@ gsk_gpu_pattern_writer_finish (GskGpuPatternWriter *self)
 {
   pattern_buffer_clear (&self->buffer);
   g_assert (self->stack == 0);
-  g_clear_object (&self->desc);
+  g_clear_pointer (&self->desc, gsk_gpu_descriptors_unref);
 }
 
 static gboolean
