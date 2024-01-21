@@ -336,7 +336,7 @@ gsk_gpu_render_pass_end_op (GskGpuFrame       *frame,
 
 GskGpuImage *
 gsk_gpu_render_pass_op_offscreen (GskGpuFrame            *frame,
-                                  const graphene_point_t *scale,
+                                  const GskScale         *scale,
                                   const graphene_rect_t  *viewport,
                                   GskRenderNode          *node)
 {

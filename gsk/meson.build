@@ -51,6 +51,7 @@ gsk_private_sources = files([
   'gskdebug.c',
   'gskprivate.c',
   'gskprofiler.c',
+  'gskscale.c',
   'gl/gskglattachmentstate.c',
   'gl/gskglbuffer.c',
   'gl/gskglcommandqueue.c',

@@ -452,7 +452,7 @@ static const GskGpuOpClass GSK_GPU_UPLOAD_CAIRO_OP_CLASS = {
 
 GskGpuImage *
 gsk_gpu_upload_cairo_op (GskGpuFrame            *frame,
-                         const graphene_point_t *scale,
+                         const GskScale         *scale,
                          const graphene_rect_t  *viewport,
                          GskGpuCairoFunc         func,
                          gpointer                user_data,

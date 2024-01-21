@@ -2,6 +2,7 @@
 
 #include <graphene.h>
 #include <math.h>
+#include "gskscaleprivate.h"
 
 static inline void
 gsk_rect_init (graphene_rect_t *r,
@@ -24,12 +25,11 @@ gsk_rect_init_from_rect (graphene_rect_t       *r,
 }
 
 static inline void
-gsk_rect_init_offset (graphene_rect_t       *r,
-                      const graphene_rect_t *src,
-                      float                  dx,
-                      float                  dy)
+gsk_rect_init_offset (graphene_rect_t        *r,
+                      const graphene_rect_t  *src,
+                      const graphene_point_t *offset)
 {
-  gsk_rect_init (r, src->origin.x + dx, src->origin.y + dy, src->size.width, src->size.height);
+  gsk_rect_init (r, src->origin.x + offset->x, src->origin.y + offset->y, src->size.width, src->size.height);
 }
 
 static inline gboolean G_GNUC_PURE
@@ -130,31 +130,71 @@ gsk_point_to_float (const graphene_point_t *point,
   values[1] = point->y;
 }
 
-static inline void
-gsk_rect_round_larger (graphene_rect_t *rect)
+static inline graphene_rect_t
+gsk_rect_round_larger (const graphene_rect_t rect)
 {
-  float x = floor (rect->origin.x);
-  float y = floor (rect->origin.y);
-  *rect = GRAPHENE_RECT_INIT (x, y,
-                              ceil (rect->origin.x + rect->size.width) - x,
-                              ceil (rect->origin.y + rect->size.height) - y);
+  float x = floorf (rect.origin.x);
+  float y = floorf (rect.origin.y);
+
+  return GRAPHENE_RECT_INIT (x, y,
+                             ceilf (rect.origin.x + rect.size.width) - x,
+                             ceilf (rect.origin.y + rect.size.height) - y);
 }
 
-static inline void
-gsk_rect_scale (const graphene_rect_t *r,
-                float                  sx,
-                float                  sy,
-                graphene_rect_t       *res)
+static inline graphene_rect_t
+gsk_rect_scale (const graphene_rect_t r,
+                const GskScale        scale)
 {
-  if (G_UNLIKELY (sx < 0 || sy < 0))
+  if (G_UNLIKELY (scale.x < 0 || scale.y < 0))
     {
-      graphene_rect_scale (r, sx, sy, res);
-      return;
+      graphene_rect_t res;
+      graphene_rect_scale (&r, scale.x, scale.y, &res);
+      return res;
     }
 
-  res->origin.x = r->origin.x * sx;
-  res->origin.y = r->origin.y * sy;
-  res->size.width = r->size.width * sx;
-  res->size.height = r->size.height * sy;
+  return GRAPHENE_RECT_INIT (r.origin.x * scale.x,
+                             r.origin.y * scale.y,
+                             r.size.width * scale.x,
+                             r.size.height * scale.y);
 }
 
+static inline graphene_rect_t
+gsk_rect_add_offset (const graphene_rect_t  r,
+                     const graphene_point_t offset)
+{
+  return GRAPHENE_RECT_INIT (r.origin.x + offset.x,
+                             r.origin.y + offset.y,
+                             r.size.width,
+                             r.size.height);
+}
+
+static inline graphene_rect_t
+gsk_rect_subtract_offset (const graphene_rect_t  r,
+                          const graphene_point_t offset)
+{
+  return GRAPHENE_RECT_INIT (r.origin.x - offset.x,
+                             r.origin.y - offset.y,
+                             r.size.width,
+                             r.size.height);
+}
+
+static inline graphene_rect_t
+gsk_rect_from_points (const graphene_point_t p0,
+                      const graphene_point_t p1)
+{
+  return GRAPHENE_RECT_INIT (p0.x, p0.y, p1.x - p0.x, p1.y - p0.y);
+}
+
+static inline graphene_rect_t
+gsk_rect_round_to_pixels (const graphene_rect_t  src,
+                          const GskScale         scale,
+                          const graphene_point_t offset)
+{
+  graphene_point_t p0, p1;
+
+  p0 = gsk_point_subtract (gsk_point_divide (gsk_point_floor (gsk_point_multiply (gsk_point_add (src.origin, offset), scale)), scale), offset);
+
+  p1 = gsk_point_divide (gsk_point_subtract (gsk_point_ceil (gsk_point_multiply (gsk_point_add (gsk_point_add (src.origin, offset), gsk_point_init (src.size.width, src.size.height)), scale)), p0), scale);
+
+  return gsk_rect_from_points (p0, p1);
+}

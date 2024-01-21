@@ -40,6 +40,7 @@
 #include "gskroundedrectprivate.h"
 #include "gskstrokeprivate.h"
 #include "gsktransformprivate.h"
+#include "gskscaleprivate.h"
 
 #include "gdk/gdkrgbaprivate.h"
 
@@ -107,7 +108,7 @@ struct _GskGpuNodeProcessor
   GskGpuClip                     clip;
   GskGpuBlend                    blend;
   graphene_point_t               offset;
-  graphene_point_t               scale;
+  GskScale                       scale;
   GskTransform                  *modelview;
   graphene_matrix_t              projection;
   float                          opacity;
@@ -130,7 +131,7 @@ struct _GskGpuPatternWriter
 
   graphene_rect_t                bounds;
   graphene_point_t               offset;
-  graphene_point_t               scale;
+  GskScale                       scale;
   guint                          stack;
 
   PatternBuffer                  buffer;
@@ -175,23 +176,20 @@ gsk_gpu_node_processor_init (GskGpuNodeProcessor         *self,
     }
   else
     {
-      float scale_x = viewport->size.width / width;
-      float scale_y = viewport->size.height / height;
-      gsk_gpu_clip_init_rect (&self->clip,
-                              &GRAPHENE_RECT_INIT (
-                                  scale_x * clip->x,
-                                  scale_y * clip->y,
-                                  scale_x * clip->width,
-                                  scale_y * clip->height
-                              ));
+      graphene_rect_t rect;
+
+      rect = gsk_rect_scale (GRAPHENE_RECT_INIT (clip->x, clip->y, clip->width, clip->height),
+                             gsk_scale_init (viewport->size.width / width,
+                                             viewport->size.height / height));
+      gsk_gpu_clip_init_rect (&self->clip, &rect);
     }
 
   self->modelview = NULL;
   gsk_gpu_image_get_projection_matrix (target, &self->projection);
-  self->scale = GRAPHENE_POINT_INIT (width / viewport->size.width,
-                                     height / viewport->size.height);
-  self->offset = GRAPHENE_POINT_INIT (-viewport->origin.x,
-                                      -viewport->origin.y);
+  self->scale = gsk_scale_init (width / viewport->size.width,
+                                height / viewport->size.height);
+  self->offset = gsk_point_init (-viewport->origin.x,
+                                 -viewport->origin.y);
   self->opacity = 1.0;
   self->pending_globals = GSK_GPU_GLOBAL_MATRIX | GSK_GPU_GLOBAL_SCALE | GSK_GPU_GLOBAL_CLIP | GSK_GPU_GLOBAL_SCISSOR | GSK_GPU_GLOBAL_BLEND;
 }
@@ -303,33 +301,11 @@ gsk_gpu_node_processor_add_images (GskGpuNodeProcessor *self,
   while (desc != self->desc);
 }
 
-static void
-rect_round_to_pixels (const graphene_rect_t  *src,
-                      const graphene_point_t *pixel_scale,
-                      const graphene_point_t *pixel_offset,
-                      graphene_rect_t        *dest)
-{
-  float x, y, xscale, yscale, inv_xscale, inv_yscale;
-
-  xscale = pixel_scale->x;
-  yscale = pixel_scale->y;
-  inv_xscale = 1.0f / xscale;
-  inv_yscale = 1.0f / yscale;
-
-  x = floorf ((src->origin.x + pixel_offset->x) * xscale);
-  y = floorf ((src->origin.y + pixel_offset->y) * yscale);
-  *dest = GRAPHENE_RECT_INIT (
-      x * inv_xscale - pixel_offset->x,
-      y * inv_yscale - pixel_offset->y,
-      (ceilf ((src->origin.x + pixel_offset->x + src->size.width) * xscale) - x) * inv_xscale,
-      (ceilf ((src->origin.y + pixel_offset->y + src->size.height) * yscale) - y) * inv_yscale);
-}
-
 static GskGpuImage *
 gsk_gpu_node_processor_init_draw (GskGpuNodeProcessor    *self,
                                   GskGpuFrame            *frame,
                                   GdkMemoryDepth          depth,
-                                  const graphene_point_t *scale,
+                                  const GskScale         *scale,
                                   const graphene_rect_t  *viewport)
 {
   GskGpuImage *image;
@@ -397,7 +373,7 @@ gsk_gpu_node_processor_process (GskGpuFrame                 *frame,
 static void
 gsk_gpu_pattern_writer_init (GskGpuPatternWriter    *self,
                              GskGpuFrame            *frame,
-                             const graphene_point_t *scale,
+                             const GskScale         *scale,
                              const graphene_point_t *offset,
                              const graphene_rect_t  *bounds)
 {
@@ -552,70 +528,6 @@ gsk_gpu_pattern_writer_add_image (GskGpuPatternWriter *self,
   return gsk_gpu_descriptors_add_image (self->desc, image, sampler, out_descriptor);
 }
 
-static void
-extract_scale_from_transform (GskTransform *transform,
-                              float        *out_scale_x,
-                              float        *out_scale_y)
-{
-  switch (gsk_transform_get_category (transform))
-    {
-    default:
-      g_assert_not_reached ();
-      G_GNUC_FALLTHROUGH;
-    case GSK_TRANSFORM_CATEGORY_IDENTITY:
-    case GSK_TRANSFORM_CATEGORY_2D_TRANSLATE:
-      *out_scale_x = 1.0f;
-      *out_scale_y = 1.0f;
-      return;
-
-    case GSK_TRANSFORM_CATEGORY_2D_AFFINE:
-      {
-        float scale_x, scale_y, dx, dy;
-        gsk_transform_to_affine (transform, &scale_x, &scale_y, &dx, &dy);
-        *out_scale_x = fabs (scale_x);
-        *out_scale_y = fabs (scale_y);
-      }
-      return;
-
-    case GSK_TRANSFORM_CATEGORY_2D:
-      {
-        float skew_x, skew_y, scale_x, scale_y, angle, dx, dy;
-        gsk_transform_to_2d_components (transform,
-                                        &skew_x, &skew_y,
-                                        &scale_x, &scale_y,
-                                        &angle,
-                                        &dx, &dy);
-        *out_scale_x = fabs (scale_x);
-        *out_scale_y = fabs (scale_y);
-      }
-      return;
-
-    case GSK_TRANSFORM_CATEGORY_UNKNOWN:
-    case GSK_TRANSFORM_CATEGORY_ANY:
-    case GSK_TRANSFORM_CATEGORY_3D:
-      {
-        graphene_quaternion_t rotation;
-        graphene_matrix_t matrix;
-        graphene_vec4_t perspective;
-        graphene_vec3_t translation;
-        graphene_vec3_t matrix_scale;
-        graphene_vec3_t shear;
-
-        gsk_transform_to_matrix (transform, &matrix);
-        graphene_matrix_decompose (&matrix,
-                                   &translation,
-                                   &matrix_scale,
-                                   &rotation,
-                                   &shear,
-                                   &perspective);
-
-        *out_scale_x = fabs (graphene_vec3_get_x (&matrix_scale));
-        *out_scale_y = fabs (graphene_vec3_get_y (&matrix_scale));
-      }
-      return;
-    }
-}
-
 static gboolean
 gsk_gpu_node_processor_rect_is_integer (GskGpuNodeProcessor   *self,
                                         const graphene_rect_t *rect,
@@ -661,10 +573,10 @@ static void
 gsk_gpu_node_processor_get_clip_bounds (GskGpuNodeProcessor *self,
                                         graphene_rect_t     *out_bounds)
 {
-  graphene_rect_offset_r (&self->clip.rect.bounds,
-                          - self->offset.x,
-                          - self->offset.y,
-                          out_bounds);
+  gsk_rect_init_offset (out_bounds,
+                        &self->clip.rect.bounds,
+                        &GRAPHENE_POINT_INIT (- self->offset.x,
+                                              - self->offset.y));
  
   /* FIXME: We could try the scissor rect here.
    * But how often is that smaller than the clip bounds?
@@ -757,7 +669,7 @@ gsk_gpu_node_processor_image_op (GskGpuNodeProcessor   *self,
 static GskGpuImage *
 gsk_gpu_get_node_as_image (GskGpuFrame            *frame,
                            const graphene_rect_t  *clip_bounds,
-                           const graphene_point_t *scale,
+                           const GskScale         *scale,
                            GskRenderNode          *node,
                            graphene_rect_t        *out_bounds)
 {
@@ -937,7 +849,7 @@ gsk_gpu_node_processor_get_node_as_image (GskGpuNodeProcessor   *self,
         return NULL;
       clip_bounds = &clip;
     }
-  rect_round_to_pixels (clip_bounds, &self->scale, &self->offset, &clip);
+  clip = gsk_rect_round_to_pixels (*clip_bounds, self->scale, self->offset);
 
   image = gsk_gpu_get_node_as_image (self->frame,
                                      &clip,
@@ -1069,7 +981,7 @@ gsk_gpu_node_processor_add_fallback_node (GskGpuNodeProcessor *self,
   if (!gsk_gpu_node_processor_clip_node_bounds (self, node, &clipped_bounds))
     return;
 
-  rect_round_to_pixels (&clipped_bounds, &self->scale, &self->offset, &clipped_bounds);
+  clipped_bounds = gsk_rect_round_to_pixels (clipped_bounds, self->scale, self->offset);
 
   gsk_gpu_node_processor_sync_globals (self, 0);
 
@@ -1424,7 +1336,8 @@ gsk_gpu_node_processor_add_rounded_clip_node_with_mask (GskGpuNodeProcessor *sel
 
   if (!gsk_gpu_node_processor_clip_node_bounds (self, node, &clip_bounds))
     return;
-  rect_round_to_pixels (&clip_bounds, &self->scale, &self->offset, &clip_bounds);
+
+  clip_bounds = gsk_rect_round_to_pixels (clip_bounds, self->scale, self->offset);
 
   child_image = gsk_gpu_node_processor_get_node_as_image (self,
                                                           0,
@@ -1531,7 +1444,7 @@ gsk_gpu_node_processor_add_transform_node (GskGpuNodeProcessor *self,
   GskRenderNode *child;
   GskTransform *transform;
   graphene_point_t old_offset;
-  graphene_point_t old_scale;
+  GskScale old_scale;
   GskTransform *old_modelview;
   GskGpuClip old_clip;
 
@@ -1566,8 +1479,8 @@ gsk_gpu_node_processor_add_transform_node (GskGpuNodeProcessor *self,
         gsk_gpu_clip_scale (&self->clip, &old_clip, scale_x, scale_y);
         self->offset = GRAPHENE_POINT_INIT ((self->offset.x + dx) / scale_x,
                                             (self->offset.y + dy) / scale_y);
-        self->scale = GRAPHENE_POINT_INIT (fabsf (scale_x) * old_scale.x,
-                                           fabsf (scale_y) * old_scale.y);
+        self->scale = GSK_SCALE_INIT (fabsf (scale_x) * old_scale.x,
+                                      fabsf (scale_y) * old_scale.y);
         self->modelview = gsk_transform_scale (self->modelview,
                                                scale_x / fabsf (scale_x),
                                                scale_y / fabsf (scale_y));
@@ -1580,7 +1493,8 @@ gsk_gpu_node_processor_add_transform_node (GskGpuNodeProcessor *self,
     case GSK_TRANSFORM_CATEGORY_3D:
       {
         GskTransform *clip_transform;
-        float scale_x, scale_y, old_pixels, new_pixels;
+        float old_pixels, new_pixels;
+        GskScale scale;
 
         clip_transform = gsk_transform_transform (gsk_transform_translate (NULL, &self->offset), transform);
         gsk_gpu_clip_init_copy (&old_clip, &self->clip);
@@ -1631,20 +1545,20 @@ gsk_gpu_node_processor_add_transform_node (GskGpuNodeProcessor *self,
         self->modelview = gsk_transform_transform (self->modelview, clip_transform);
         gsk_transform_unref (clip_transform);
 
-        extract_scale_from_transform (self->modelview, &scale_x, &scale_y);
+        gsk_scale_extract_from_transform (self->modelview, &scale);
 
         old_pixels = old_scale.x * old_scale.y *
                      old_clip.rect.bounds.size.width * old_clip.rect.bounds.size.height;
-        new_pixels = scale_x * scale_y * self->clip.rect.bounds.size.width * self->clip.rect.bounds.size.height;
+        new_pixels = scale.x * scale.y * self->clip.rect.bounds.size.width * self->clip.rect.bounds.size.height;
         if (new_pixels > 2 * old_pixels)
           {
             float forced_downscale = 2 * old_pixels / new_pixels;
-            scale_x *= forced_downscale;
-            scale_y *= forced_downscale;
+            scale.x *= forced_downscale;
+            scale.y *= forced_downscale;
           }
 
-        self->modelview = gsk_transform_scale (self->modelview, 1 / scale_x, 1 / scale_y);
-        self->scale = GRAPHENE_POINT_INIT (scale_x, scale_y);
+        self->modelview = gsk_transform_scale (self->modelview, 1 / scale.x, 1 / scale.y);
+        self->scale = scale;
         self->offset = *graphene_point_zero ();
       }
       break;
@@ -1673,7 +1587,7 @@ gsk_gpu_node_processor_create_transform_pattern (GskGpuPatternWriter *self,
   GskRenderNode *child;
   GskTransform *transform;
   graphene_point_t old_offset;
-  graphene_point_t old_scale;
+  GskScale old_scale;
   graphene_rect_t old_bounds;
   gboolean result;
 
@@ -1716,7 +1630,7 @@ gsk_gpu_node_processor_create_transform_pattern (GskGpuPatternWriter *self,
         self->bounds.size.width *= inv_sx;
         self->bounds.size.height *= inv_sy;
         self->offset = GRAPHENE_POINT_INIT (0, 0);
-        self->scale = GRAPHENE_POINT_INIT (fabsf (sx) * old_scale.x, fabsf (sy) * old_scale.y);
+        self->scale = GSK_SCALE_INIT(fabsf (sx) * old_scale.x, fabsf (sy) * old_scale.y);
       }
       break;
 
@@ -2039,8 +1953,7 @@ gsk_gpu_node_processor_add_texture_scale_node (GskGpuNodeProcessor *self,
   guint32 descriptor;
   gboolean need_mipmap, need_offscreen;
 
-  need_offscreen = self->modelview != NULL ||
-                   (self->scale.x != 1 || self->scale.y != 1);
+  need_offscreen = self->modelview != NULL || !gsk_scale_is_one (self->scale);
   if (need_offscreen)
     {
       GskGpuImage *offscreen;
@@ -2048,9 +1961,9 @@ gsk_gpu_node_processor_add_texture_scale_node (GskGpuNodeProcessor *self,
 
       if (!gsk_gpu_node_processor_clip_node_bounds (self, node, &clip_bounds))
         return;
-      gsk_rect_round_larger (&clip_bounds);
+      clip_bounds = gsk_rect_round_larger (clip_bounds);
       offscreen = gsk_gpu_render_pass_op_offscreen (self->frame,
-                                                    &GRAPHENE_POINT_INIT (1, 1),
+                                                    &GSK_SCALE_INIT (1, 1),
                                                     &clip_bounds,
                                                     node);
       descriptor = gsk_gpu_node_processor_add_image (self, offscreen, GSK_GPU_SAMPLER_DEFAULT);
@@ -2246,7 +2159,8 @@ gsk_gpu_node_processor_add_gradient_node (GskGpuNodeProcessor *self,
 
   if (!gsk_gpu_node_processor_clip_node_bounds (self, node, &bounds))
     return;
-  rect_round_to_pixels (&bounds, &self->scale, &self->offset, &bounds);
+
+  bounds = gsk_rect_round_to_pixels (bounds, self->scale, self->offset);
 
   image = gsk_gpu_node_processor_init_draw (&other,
                                             self->frame,
@@ -2970,7 +2884,7 @@ gsk_gpu_node_processor_add_glyph_node (GskGpuNodeProcessor *self,
   PangoFont *font;
   graphene_point_t offset;
   guint i, num_glyphs;
-  float scale, inv_scale;
+  GskScale scale, inv;
   GdkRGBA color;
 
   if (self->opacity < 1.0 &&
@@ -2986,12 +2900,10 @@ gsk_gpu_node_processor_add_glyph_node (GskGpuNodeProcessor *self,
   num_glyphs = gsk_text_node_get_num_glyphs (node);
   glyphs = gsk_text_node_get_glyphs (node, NULL);
   font = gsk_text_node_get_font (node);
-  offset = *gsk_text_node_get_offset (node);
-  offset.x += self->offset.x;
-  offset.y += self->offset.y;
+  offset = gsk_point_add (*gsk_text_node_get_offset (node), self->offset);
 
-  scale = MAX (self->scale.x, self->scale.y);
-  inv_scale = 1.f / scale;
+  scale = gsk_scale_max (self->scale);
+  inv = gsk_scale_invert (scale);
 
   for (i = 0; i < num_glyphs; i++)
     {
@@ -3005,14 +2917,16 @@ gsk_gpu_node_processor_add_glyph_node (GskGpuNodeProcessor *self,
                                                  font,
                                                  glyphs[i].glyph,
                                                  0,
-                                                 scale,
+                                                 scale.x,
                                                  &glyph_bounds,
                                                  &glyph_offset);
 
-      gsk_rect_scale (&GRAPHENE_RECT_INIT (-glyph_bounds.origin.x, -glyph_bounds.origin.y, gsk_gpu_image_get_width (image), gsk_gpu_image_get_height (image)), inv_scale, inv_scale, &glyph_tex_rect);
-      gsk_rect_scale (&GRAPHENE_RECT_INIT(0, 0, glyph_bounds.size.width, glyph_bounds.size.height), inv_scale, inv_scale, &glyph_bounds);
-      glyph_offset = GRAPHENE_POINT_INIT (offset.x - glyph_offset.x * inv_scale + (float) glyphs[i].geometry.x_offset / PANGO_SCALE,
-                                          offset.y - glyph_offset.y * inv_scale + (float) glyphs[i].geometry.y_offset / PANGO_SCALE);
+      glyph_tex_rect = gsk_rect_scale (GRAPHENE_RECT_INIT (-glyph_bounds.origin.x, -glyph_bounds.origin.y, gsk_gpu_image_get_width (image), gsk_gpu_image_get_height (image)), inv);
+      glyph_bounds = gsk_rect_scale (GRAPHENE_RECT_INIT (0, 0, glyph_bounds.size.width, glyph_bounds.size.height), inv);
+      glyph_offset = gsk_point_add (gsk_point_add (offset, gsk_point_divide (glyph_offset, scale)),
+                                    gsk_point_init (glyphs[i].geometry.x_offset/(float)PANGO_SCALE,
+                                                    glyphs[i].geometry.y_offset/(float)PANGO_SCALE));
+
       descriptor = gsk_gpu_node_processor_add_image (self, image, GSK_GPU_SAMPLER_DEFAULT);
       if (glyphs[i].attr.is_color)
         gsk_gpu_texture_op (self->frame,
@@ -3045,7 +2959,7 @@ gsk_gpu_node_processor_create_glyph_pattern (GskGpuPatternWriter *self,
   PangoFont *font;
   guint num_glyphs;
   gsize i;
-  float scale, inv_scale;
+  GskScale scale, inv;
   guint32 tex_id;
   GskGpuImage *last_image;
   graphene_point_t offset;
@@ -3057,12 +2971,10 @@ gsk_gpu_node_processor_create_glyph_pattern (GskGpuPatternWriter *self,
   num_glyphs = gsk_text_node_get_num_glyphs (node);
   glyphs = gsk_text_node_get_glyphs (node, NULL);
   font = gsk_text_node_get_font (node);
-  offset = *gsk_text_node_get_offset (node);
-  offset.x += self->offset.x;
-  offset.y += self->offset.y;
+  offset = gsk_point_add (*gsk_text_node_get_offset (node), self->offset);
 
-  scale = MAX (self->scale.x, self->scale.y);
-  inv_scale = 1.f / scale;
+  scale = gsk_scale_max (self->scale);
+  inv = gsk_scale_invert (scale);
 
   gsk_gpu_pattern_writer_append_uint (self, GSK_GPU_PATTERN_GLYPHS);
   gsk_gpu_pattern_writer_append_rgba (self, gsk_text_node_get_color (node));
@@ -3080,7 +2992,7 @@ gsk_gpu_node_processor_create_glyph_pattern (GskGpuPatternWriter *self,
                                                  font,
                                                  glyphs[i].glyph,
                                                  0,
-                                                 scale,
+                                                 scale.x,
                                                  &glyph_bounds,
                                                  &glyph_offset);
 
@@ -3092,24 +3004,25 @@ gsk_gpu_node_processor_create_glyph_pattern (GskGpuPatternWriter *self,
           last_image = image;
         }
 
-      glyph_offset = GRAPHENE_POINT_INIT (offset.x - glyph_offset.x * inv_scale + (float) glyphs[i].geometry.x_offset / PANGO_SCALE,
-                                          offset.y - glyph_offset.y * inv_scale + (float) glyphs[i].geometry.y_offset / PANGO_SCALE);
+      glyph_offset = gsk_point_add (gsk_point_add (offset, gsk_point_divide (glyph_offset, scale)),
+                                    gsk_point_init (glyphs[i].geometry.x_offset / (float)PANGO_SCALE,
+                                                    glyphs[i].geometry.y_offset / (float)PANGO_SCALE));
 
       gsk_gpu_pattern_writer_append_uint (self, tex_id);
       gsk_gpu_pattern_writer_append_rect (self,
                                           &GRAPHENE_RECT_INIT (
                                               0,
                                               0,
-                                              glyph_bounds.size.width * inv_scale,
-                                              glyph_bounds.size.height * inv_scale
+                                              glyph_bounds.size.width * inv.x,
+                                              glyph_bounds.size.height * inv.y
                                           ),
                                           &glyph_offset);
       gsk_gpu_pattern_writer_append_rect (self,
                                           &GRAPHENE_RECT_INIT (
-                                              - glyph_bounds.origin.x * inv_scale,
-                                              - glyph_bounds.origin.y * inv_scale,
-                                              gsk_gpu_image_get_width (image) * inv_scale,
-                                              gsk_gpu_image_get_height (image) * inv_scale
+                                              - glyph_bounds.origin.x * inv.x,
+                                              - glyph_bounds.origin.y * inv.y,
+                                              gsk_gpu_image_get_width (image) * inv.x,
+                                              gsk_gpu_image_get_height (image) * inv.y
                                           ),
                                           &glyph_offset);
 
@@ -3215,8 +3128,8 @@ gsk_gpu_node_processor_repeat_tile (GskGpuNodeProcessor    *self,
 
   gsk_rect_init_offset (&offset_rect,
                         rect,
-                        - x * child_bounds->size.width,
-                        - y * child_bounds->size.height);
+                        &GRAPHENE_POINT_INIT (- x * child_bounds->size.width,
+                                              - y * child_bounds->size.height));
   if (!gsk_rect_intersection (&offset_rect, child_bounds, &clipped_child_bounds))
     {
       /* The math has gone wrong probably, someone should look at this. */
@@ -3357,11 +3270,8 @@ gsk_gpu_node_processor_add_repeat_node (GskGpuNodeProcessor *self,
           for (y = floorf (tile_top); y < ceilf (tile_bottom); y++)
             {
               offset.y = y * child_bounds->size.height;
-              self->offset = GRAPHENE_POINT_INIT (old_offset.x + offset.x, old_offset.y + offset.y);
-              clip_bounds = GRAPHENE_RECT_INIT (bounds.origin.x - offset.x,
-                                                bounds.origin.y - offset.y,
-                                                bounds.size.width,
-                                                bounds.size.height);
+              self->offset = gsk_point_add (old_offset, offset);
+              clip_bounds = gsk_rect_subtract_offset (bounds, offset);
               if (!gsk_rect_intersection (&clip_bounds, child_bounds, &clip_bounds))
                 continue;
               gsk_gpu_node_processor_add_node_clipped (self,
@@ -3402,10 +3312,7 @@ gsk_gpu_node_processor_create_repeat_pattern (GskGpuPatternWriter *self,
   gsk_gpu_pattern_writer_append_rect (self, child_bounds, &self->offset);
 
   old_bounds = self->bounds;
-  self->bounds = GRAPHENE_RECT_INIT (child_bounds->origin.x + self->offset.x,
-                                     child_bounds->origin.y + self->offset.y,
-                                     child_bounds->size.width,
-                                     child_bounds->size.height);
+  self->bounds = gsk_rect_add_offset (*child_bounds, self->offset);
 
   if (!gsk_gpu_node_processor_create_node_pattern (self, child))
     {
@@ -3477,7 +3384,8 @@ gsk_gpu_node_processor_add_fill_node (GskGpuNodeProcessor *self,
 
   if (!gsk_gpu_node_processor_clip_node_bounds (self, node, &clip_bounds))
     return;
-  rect_round_to_pixels (&clip_bounds, &self->scale, &self->offset, &clip_bounds);
+
+  clip_bounds = gsk_rect_round_to_pixels (clip_bounds, self->scale, self->offset);
 
   child = gsk_fill_node_get_child (node);
 
@@ -3574,7 +3482,8 @@ gsk_gpu_node_processor_add_stroke_node (GskGpuNodeProcessor *self,
 
   if (!gsk_gpu_node_processor_clip_node_bounds (self, node, &clip_bounds))
     return;
-  rect_round_to_pixels (&clip_bounds, &self->scale, &self->offset, &clip_bounds);
+
+  clip_bounds = gsk_rect_round_to_pixels (clip_bounds, self->scale, self->offset);
 
   child = gsk_stroke_node_get_child (node);
 
@@ -3973,15 +3882,9 @@ gsk_gpu_node_processor_create_node_pattern (GskGpuPatternWriter *self,
         gsk_gpu_descriptors_set_size (self->desc, images_before, buffers_before);
     }
 
-  rect_round_to_pixels (&GRAPHENE_RECT_INIT (
-                            self->bounds.origin.x - self->offset.x,
-                            self->bounds.origin.y - self->offset.y,
-                            self->bounds.size.width,
-                            self->bounds.size.height
-                        ),
-                        &self->scale,
-                        &self->offset,
-                        &bounds);
+  bounds = gsk_rect_round_to_pixels (gsk_rect_subtract_offset (self->bounds, self->offset),
+                                     self->scale,
+                                     self->offset);
   image = gsk_gpu_get_node_as_image (self->frame,
                                      &bounds,
                                      &self->scale,

@@ -6,6 +6,8 @@
 
 #include <graphene.h>
 
+#include "gsk/gskscaleprivate.h"
+
 G_BEGIN_DECLS
 
 /* We only need this for the final VkImageLayout, but don't tell anyone */
@@ -24,7 +26,7 @@ void                    gsk_gpu_render_pass_end_op                      (GskGpuF
                                                                          GskRenderPassType               pass_type);
 
 GskGpuImage *           gsk_gpu_render_pass_op_offscreen                (GskGpuFrame                    *frame,
-                                                                         const graphene_point_t         *scale,
+                                                                         const GskScale                 *scale,
                                                                          const graphene_rect_t          *viewport,
                                                                          GskRenderNode                  *node);
 

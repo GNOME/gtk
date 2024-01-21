@@ -3,6 +3,7 @@
 #include "gskgpuopprivate.h"
 
 #include <gsk/gskroundedrect.h>
+#include "gsk/gskscaleprivate.h"
 #include <graphene.h>
 
 G_BEGIN_DECLS
@@ -17,7 +18,7 @@ struct _GskGpuGlobalsInstance
 };
 
 void                    gsk_gpu_globals_op                              (GskGpuFrame                    *frame,
-                                                                         const graphene_point_t         *scale,
+                                                                         const GskScale                 *scale,
                                                                          const graphene_matrix_t        *mvp,
                                                                          const GskRoundedRect           *clip);
 
