@@ -52,6 +52,13 @@ G_BEGIN_DECLS
 #define gdk_array_paste(GDK_ARRAY_NAME, func_name) gdk_array_paste_more (GDK_ARRAY_NAME, func_name)
 #define gdk_array(func_name) gdk_array_paste (GDK_ARRAY_NAME, func_name)
 
+#if !defined(INCLUDE_DECL) && !defined(INCLUDE_IMPL)
+#define INCLUDE_DECL 1
+#define INCLUDE_IMPL 1
+#endif
+
+#ifdef INCLUDE_DECL
+
 typedef struct GdkArray GdkArray;
 
 struct GdkArray
@@ -81,6 +88,9 @@ gdk_array(init) (GdkArray *self)
   self->end_allocation = NULL;
 #endif
 }
+
+#endif /* INCLUDE_DECL */
+#ifdef INCLUDE_IMPL
 
 G_GNUC_UNUSED static inline gsize
 gdk_array(get_capacity) (const GdkArray *self)
@@ -304,6 +314,8 @@ gdk_array(get) (const GdkArray *self,
  }
 #endif
 
+#endif  /* INCLUDE_IMPL */
+
 #ifndef GDK_ARRAY_NO_UNDEF
 
 #undef _T_
@@ -321,6 +333,9 @@ gdk_array(get) (const GdkArray *self,
 #undef GDK_ARRAY_PREALLOC
 #undef GDK_ARRAY_TYPE_NAME
 #undef GDK_ARRAY_NO_MEMSET
+
+#undef INCLUDE_DECL
+#undef INCLUDE_IMPL
 #endif
 
 G_END_DECLS
