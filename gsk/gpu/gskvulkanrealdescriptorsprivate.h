@@ -3,11 +3,17 @@
 #include "gskvulkandescriptorsprivate.h"
 #include "gskvulkanframeprivate.h"
 
+#include "gskvulkanbufferprivate.h"
+#include "gskvulkanframeprivate.h"
+#include "gskvulkanimageprivate.h"
+
+
 G_BEGIN_DECLS
 
-#define GSK_TYPE_VULKAN_REAL_DESCRIPTORS (gsk_vulkan_real_descriptors_get_type ())
+typedef struct _GskVulkanRealDescriptors GskVulkanRealDescriptors;
 
-G_DECLARE_FINAL_TYPE (GskVulkanRealDescriptors, gsk_vulkan_real_descriptors, GSK, VULKAN_REAL_DESCRIPTORS, GskVulkanDescriptors)
+#define GSK_VULKAN_REAL_DESCRIPTORS(d) ((GskVulkanRealDescriptors *) (d))
+
 
 GskVulkanRealDescriptors *      gsk_vulkan_real_descriptors_new                 (GskVulkanFrame                 *frame);
 

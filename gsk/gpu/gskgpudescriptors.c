@@ -52,43 +52,39 @@ gsk_gpu_buffer_entry_clear (gpointer data)
 #define GDK_ARRAY_NO_MEMSET 1
 #include "gdk/gdkarrayimpl.c"
 
-typedef struct _GskGpuDescriptorsPrivate GskGpuDescriptorsPrivate;
-
 struct _GskGpuDescriptorsPrivate
 {
   GskGpuImageEntries images;
   GskGpuBufferEntries buffers;
 };
 
-G_DEFINE_TYPE_WITH_PRIVATE (GskGpuDescriptors, gsk_gpu_descriptors, G_TYPE_OBJECT)
-
-static void
-gsk_gpu_descriptors_finalize (GObject *object)
+static inline GskGpuDescriptorsPrivate *
+gsk_gpu_descriptors_get_instance_private (GskGpuDescriptors *self)
 {
-  GskGpuDescriptors *self = GSK_GPU_DESCRIPTORS (object);
-  GskGpuDescriptorsPrivate *priv = gsk_gpu_descriptors_get_instance_private (self);
-
-  gsk_gpu_image_entries_clear (&priv->images);
-  gsk_gpu_buffer_entries_clear (&priv->buffers);
-
-  G_OBJECT_CLASS (gsk_gpu_descriptors_parent_class)->finalize (object);
+  return (GskGpuDescriptorsPrivate *) (((guchar *)self) - sizeof (GskGpuDescriptorsPrivate));
 }
 
-static void
-gsk_gpu_descriptors_class_init (GskGpuDescriptorsClass *klass)
+/* Just for subclasses */
+GskGpuDescriptors *
+gsk_gpu_descriptors_new (GskGpuDescriptorsClass *desc_class,
+                         gsize                   child_size)
 {
-  GObjectClass *object_class = G_OBJECT_CLASS (klass);
+  GskGpuDescriptors *self;
+  GskGpuDescriptorsPrivate *priv;
+  guchar *data;
 
-  object_class->finalize = gsk_gpu_descriptors_finalize;
-}
+  data = g_new0 (guchar, child_size + sizeof (GskGpuDescriptorsPrivate));
 
-static void
-gsk_gpu_descriptors_init (GskGpuDescriptors *self)
-{
-  GskGpuDescriptorsPrivate *priv = gsk_gpu_descriptors_get_instance_private (self);
+  priv = (GskGpuDescriptorsPrivate *) data;
+  self = (GskGpuDescriptors *) (data + sizeof (GskGpuDescriptorsPrivate));
+
+  self->ref_count = 1;
+  self->desc_class = desc_class;
 
   gsk_gpu_image_entries_init (&priv->images);
   gsk_gpu_buffer_entries_init (&priv->buffers);
+
+  return self;
 }
 
 gsize
@@ -189,7 +185,7 @@ gsk_gpu_descriptors_add_image (GskGpuDescriptors *self,
         }
     }
 
-  if (!GSK_GPU_DESCRIPTORS_GET_CLASS (self)->add_image (self, image, sampler, &descriptor))
+  if (!self->desc_class->add_image (self, image, sampler, &descriptor))
     return FALSE;
 
   gsk_gpu_image_entries_append (&priv->images,
@@ -224,7 +220,7 @@ gsk_gpu_descriptors_add_buffer (GskGpuDescriptors *self,
         }
     }
 
-  if (!GSK_GPU_DESCRIPTORS_GET_CLASS (self)->add_buffer (self, buffer, &descriptor))
+  if (!self->desc_class->add_buffer (self, buffer, &descriptor))
     return FALSE;
 
   gsk_gpu_buffer_entries_append (&priv->buffers,
@@ -238,3 +234,28 @@ gsk_gpu_descriptors_add_buffer (GskGpuDescriptors *self,
   return TRUE;
 }
 
+GskGpuDescriptors *
+gsk_gpu_descriptors_ref (GskGpuDescriptors *self)
+{
+  self->ref_count++;
+
+  return self;
+}
+
+void
+gsk_gpu_descriptors_unref (GskGpuDescriptors *self)
+{
+  self->ref_count--;
+
+  if (self->ref_count == 0)
+    {
+      GskGpuDescriptorsPrivate *priv = gsk_gpu_descriptors_get_instance_private (self);
+
+      self->desc_class->finalize (self);
+
+      gsk_gpu_image_entries_clear (&priv->images);
+      gsk_gpu_buffer_entries_clear (&priv->buffers);
+
+      g_free (priv);
+    }
+}

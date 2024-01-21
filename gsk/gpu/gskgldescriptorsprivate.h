@@ -6,9 +6,10 @@
 
 G_BEGIN_DECLS
 
-#define GSK_TYPE_GL_DESCRIPTORS (gsk_gl_descriptors_get_type ())
+typedef struct _GskGLDescriptors GskGLDescriptors;
 
-G_DECLARE_FINAL_TYPE (GskGLDescriptors, gsk_gl_descriptors, GSK, GL_DESCRIPTORS, GskGpuDescriptors)
+#define GSK_GL_DESCRIPTORS(d) ((GskGLDescriptors *) (d))
+
 
 GskGpuDescriptors *               gsk_gl_descriptors_new                (GskGLDevice            *device);
 

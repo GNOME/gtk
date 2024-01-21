@@ -5,6 +5,7 @@
 #include "gskglbufferprivate.h"
 #include "gskglimageprivate.h"
 
+
 struct _GskGLDescriptors
 {
   GskGpuDescriptors parent_instance;
@@ -13,16 +14,12 @@ struct _GskGLDescriptors
   guint n_external;
 };
 
-G_DEFINE_TYPE (GskGLDescriptors, gsk_gl_descriptors, GSK_TYPE_GPU_DESCRIPTORS)
-
 static void
-gsk_gl_descriptors_finalize (GObject *object)
+gsk_gl_descriptors_finalize (GskGpuDescriptors *desc)
 {
-  GskGLDescriptors *self = GSK_GL_DESCRIPTORS (object);
+  GskGLDescriptors *self = GSK_GL_DESCRIPTORS (desc);
 
   g_object_unref (self->device);
-
-  G_OBJECT_CLASS (gsk_gl_descriptors_parent_class)->finalize (object);
 }
 
 static gboolean
@@ -72,33 +69,24 @@ gsk_gl_descriptors_add_buffer (GskGpuDescriptors *desc,
   return TRUE;
 }
 
-static void
-gsk_gl_descriptors_class_init (GskGLDescriptorsClass *klass)
+static GskGpuDescriptorsClass GSK_GL_DESCRIPTORS_CLASS =
 {
-  GskGpuDescriptorsClass *descriptors_class = GSK_GPU_DESCRIPTORS_CLASS (klass);
-  GObjectClass *object_class = G_OBJECT_CLASS (klass);
-
-  object_class->finalize = gsk_gl_descriptors_finalize;
-
-  descriptors_class->add_image = gsk_gl_descriptors_add_image;
-  descriptors_class->add_buffer = gsk_gl_descriptors_add_buffer;
-}
-
-static void
-gsk_gl_descriptors_init (GskGLDescriptors *self)
-{
-}
+  .finalize = gsk_gl_descriptors_finalize,
+  .add_image = gsk_gl_descriptors_add_image,
+  .add_buffer = gsk_gl_descriptors_add_buffer,
+};
 
 GskGpuDescriptors *
 gsk_gl_descriptors_new (GskGLDevice *device)
 {
-  GskGLDescriptors *self;
+  GskGpuDescriptors *desc;
 
-  self = g_object_new (GSK_TYPE_GL_DESCRIPTORS, NULL);
+  desc = gsk_gpu_descriptors_new ((GskGpuDescriptorsClass *) &GSK_GL_DESCRIPTORS_CLASS,
+                                  sizeof (GskGLDescriptors));
 
-  self->device = g_object_ref (device);
+  GSK_GL_DESCRIPTORS (desc)->device = g_object_ref (device);
 
-  return GSK_GPU_DESCRIPTORS (self);
+  return desc;
 }
 
 guint
@@ -110,7 +98,7 @@ gsk_gl_descriptors_get_n_external (GskGLDescriptors *self)
 void
 gsk_gl_descriptors_use (GskGLDescriptors *self)
 {
-  GskGpuDescriptors *desc = GSK_GPU_DESCRIPTORS (self);
+  GskGpuDescriptors *desc = &self->parent_instance;
   gsize i, ext, n_textures;
 
   n_textures = 16 - 3 * self->n_external;
