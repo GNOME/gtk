@@ -136,6 +136,7 @@ compare_render_tests = [
   'stroke-fractional-translate-nogl',
   'stroke-opacity',
   'stroke-with-3d-contents-nogl-nocairo',
+  'text-color-mix',
   'text-glyph-lsb',
   'text-mixed-color-nocairo',
   'text-mixed-color-colrv1',
