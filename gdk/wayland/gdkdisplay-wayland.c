@@ -97,6 +97,7 @@
 #define OUTPUT_VERSION_WITH_DONE 2
 #define NO_XDG_OUTPUT_DONE_SINCE_VERSION 3
 #define OUTPUT_VERSION           3
+#define XDG_WM_DIALOG_VERSION    1
 
 #ifdef HAVE_TOPLEVEL_STATE_SUSPENDED
 #define XDG_WM_BASE_VERSION      6
@@ -381,6 +382,13 @@ gdk_registry_handle_global (void               *data,
   else if (strcmp (interface, "zxdg_shell_v6") == 0)
     {
       display_wayland->zxdg_shell_v6_id = id;
+    }
+  else if (strcmp (interface, "xdg_wm_dialog_v1") == 0)
+    {
+      display_wayland->xdg_wm_dialog =
+        wl_registry_bind (display_wayland->wl_registry, id,
+                          &xdg_wm_dialog_v1_interface,
+                          MIN (version, XDG_WM_DIALOG_VERSION));
     }
   else if (strcmp (interface, "gtk_shell1") == 0)
     {
