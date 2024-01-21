@@ -211,6 +211,6 @@ gsk_gl_icon_library_add (GskGLIconLibrary     *self,
     {
       char message[64];
       g_snprintf (message, sizeof message, "Size %dx%d", width, height);
-      gdk_profiler_add_mark (start_time, GDK_PROFILER_CURRENT_TIME-start_time, "Upload Icon", message);
+      gdk_profiler_add_mark (start_time, GDK_PROFILER_CURRENT_TIME-start_time, "Upload icon", message);
     }
 }

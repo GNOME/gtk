@@ -11956,7 +11956,7 @@ gtk_widget_render (GtkWidget            *widget,
   if (GDK_PROFILER_IS_RUNNING)
     {
       before_render = GDK_PROFILER_CURRENT_TIME;
-      gdk_profiler_add_mark (before_snapshot, (before_render - before_snapshot), "widget snapshot", "");
+      gdk_profiler_add_mark (before_snapshot, (before_render - before_snapshot), "Widget snapshot", "");
     }
 
   if (root != NULL)
@@ -11972,7 +11972,7 @@ gtk_widget_render (GtkWidget            *widget,
 
       gsk_render_node_unref (root);
 
-      gdk_profiler_end_mark (before_render, "widget render", "");
+      gdk_profiler_end_mark (before_render, "Widget render", "");
     }
 }
 

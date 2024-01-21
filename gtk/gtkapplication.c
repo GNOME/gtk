@@ -257,14 +257,14 @@ gtk_application_startup (GApplication *g_application)
 
   before2 = GDK_PROFILER_CURRENT_TIME;
   gtk_init ();
-  gdk_profiler_end_mark (before2, "gtk init", NULL);
+  gdk_profiler_end_mark (before2, "gtk_init", NULL);
 
   priv->impl = gtk_application_impl_new (application, gdk_display_get_default ());
   gtk_application_impl_startup (priv->impl, priv->register_session);
 
   gtk_application_load_resources (application);
 
-  gdk_profiler_end_mark (before, "gtk application startup", NULL);
+  gdk_profiler_end_mark (before, "Application startup", NULL);
 }
 
 static void

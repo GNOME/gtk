@@ -304,7 +304,7 @@ gdk_load_png (GBytes  *bytes,
     {
       gint64 end = GDK_PROFILER_CURRENT_TIME;
       if (end - before > 500000)
-        gdk_profiler_add_mark (before, end - before, "png load", NULL);
+        gdk_profiler_add_mark (before, end - before, "Load png", NULL);
     }
 
   return texture;

@@ -274,7 +274,7 @@ gdk_wayland_surface_frame_callback (GdkSurface *surface,
   GdkFrameClock *clock = gdk_surface_get_frame_clock (surface);
   GdkFrameTimings *timings;
 
-  gdk_profiler_add_mark (GDK_PROFILER_CURRENT_TIME, 0, "wayland", "frame event");
+  gdk_profiler_add_mark (GDK_PROFILER_CURRENT_TIME, 0, "Wayland frame event", NULL);
   GDK_DISPLAY_DEBUG (GDK_DISPLAY (display_wayland), EVENTS, "frame %p", surface);
 
   g_clear_pointer (&impl->frame_callback, wl_callback_destroy);

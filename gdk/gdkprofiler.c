@@ -32,6 +32,7 @@
 #include "version/gdkversionmacros.h"
 #include "gdkframeclockprivate.h"
 
+#define CATEGORY "GTK"
 
 gboolean
 gdk_profiler_is_running (void)
@@ -50,7 +51,7 @@ void
                          const char *message)
 {
 #ifdef HAVE_SYSPROF
-  sysprof_collector_mark (begin_time, duration, "gtk", name, message);
+  sysprof_collector_mark (begin_time, duration, CATEGORY, name, message);
 #endif
 }
 
@@ -60,7 +61,7 @@ void
                          const char *message)
 {
 #ifdef HAVE_SYSPROF
-  sysprof_collector_mark (begin_time, GDK_PROFILER_CURRENT_TIME - begin_time, "gtk", name, message);
+  sysprof_collector_mark (begin_time, GDK_PROFILER_CURRENT_TIME - begin_time, CATEGORY, name, message);
 #endif
 }
 
@@ -74,7 +75,7 @@ void
 #ifdef HAVE_SYSPROF
   va_list args;
   va_start (args, message_format);
-  sysprof_collector_mark_vprintf (begin_time, duration, "gtk", name, message_format, args);
+  sysprof_collector_mark_vprintf (begin_time, duration, CATEGORY, name, message_format, args);
   va_end (args);
 #endif  /* HAVE_SYSPROF */
 }
@@ -88,7 +89,7 @@ void
 #ifdef HAVE_SYSPROF
   va_list args;
   va_start (args, message_format);
-  sysprof_collector_mark_vprintf (begin_time, GDK_PROFILER_CURRENT_TIME - begin_time, "gtk", name, message_format, args);
+  sysprof_collector_mark_vprintf (begin_time, GDK_PROFILER_CURRENT_TIME - begin_time, CATEGORY, name, message_format, args);
   va_end (args);
 #endif  /* HAVE_SYSPROF */
 }
@@ -103,7 +104,7 @@ guint
   counter.id = sysprof_collector_request_counters (1);
   counter.type = SYSPROF_CAPTURE_COUNTER_DOUBLE;
   counter.value.vdbl = 0.0;
-  g_strlcpy (counter.category, "gtk", sizeof counter.category);
+  g_strlcpy (counter.category, CATEGORY, sizeof counter.category);
   g_strlcpy (counter.name, name, sizeof counter.name);
   g_strlcpy (counter.description, description, sizeof counter.name);
 
@@ -125,7 +126,7 @@ guint
   counter.id = sysprof_collector_request_counters (1);
   counter.type = SYSPROF_CAPTURE_COUNTER_INT64;
   counter.value.v64 = 0;
-  g_strlcpy (counter.category, "gtk", sizeof counter.category);
+  g_strlcpy (counter.category, CATEGORY, sizeof counter.category);
   g_strlcpy (counter.name, name, sizeof counter.name);
   g_strlcpy (counter.description, description, sizeof counter.name);
 

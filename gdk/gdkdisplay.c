@@ -1363,7 +1363,7 @@ gdk_display_init_gl (GdkDisplay *self)
       return;
     }
 
-  gdk_profiler_end_mark (before2, "realize OpenGL context", NULL);
+  gdk_profiler_end_mark (before2, "Realize OpenGL context", NULL);
 
   /* Only assign after realize, so GdkGLContext::realize() can use
    * gdk_display_get_gl_context() == NULL to differentiate between
@@ -1373,7 +1373,7 @@ gdk_display_init_gl (GdkDisplay *self)
 
   gdk_gl_backend_use (GDK_GL_CONTEXT_GET_CLASS (context)->backend_type);
 
-  gdk_profiler_end_mark (before, "initialize OpenGL", NULL);
+  gdk_profiler_end_mark (before, "Init OpenGL", NULL);
 }
 
 /**
@@ -1768,7 +1768,6 @@ gdk_display_init_egl (GdkDisplay  *self,
 {
   GdkDisplayPrivate *priv = gdk_display_get_instance_private (self);
   G_GNUC_UNUSED gint64 start_time = GDK_PROFILER_CURRENT_TIME;
-  G_GNUC_UNUSED gint64 start_time2;
   int major, minor;
 
   if (!gdk_gl_backend_can_be_used (GDK_GL_EGL, error))
@@ -1795,7 +1794,6 @@ gdk_display_init_egl (GdkDisplay  *self,
       return FALSE;
     }
 
-  start_time2 = GDK_PROFILER_CURRENT_TIME;
   if (!eglInitialize (priv->egl_display, &major, &minor))
     {
       priv->egl_display = NULL;
@@ -1804,7 +1802,6 @@ gdk_display_init_egl (GdkDisplay  *self,
                            _("Could not initialize EGL display"));
       return FALSE;
     }
-  gdk_profiler_end_mark (start_time2, "eglInitialize", NULL);
 
   if (major < GDK_EGL_MIN_VERSION_MAJOR ||
       (major == GDK_EGL_MIN_VERSION_MAJOR && minor < GDK_EGL_MIN_VERSION_MINOR))
@@ -1894,7 +1891,7 @@ gdk_display_init_egl (GdkDisplay  *self,
       g_free (ext);
     }
 
-  gdk_profiler_end_mark (start_time, "init EGL", NULL);
+  gdk_profiler_end_mark (start_time, "Init EGL", NULL);
 
   return TRUE;
 }

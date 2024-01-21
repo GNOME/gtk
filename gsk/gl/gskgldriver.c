@@ -424,7 +424,7 @@ gsk_gl_driver_load_programs (GskGLDriver  *self,
 failure:
   g_clear_object (&compiler);
 
-  gdk_profiler_end_mark (start_time, "load programs", NULL);
+  gdk_profiler_end_mark (start_time, "Load GL programs", NULL);
 
   return ret;
 }
@@ -477,7 +477,7 @@ gsk_gl_driver_new (GskGLCommandQueue  *command_queue,
   self->icons_library = gsk_gl_icon_library_new (self);
   self->shadows_library = gsk_gl_shadow_library_new (self);
 
-  gdk_profiler_end_mark (before, "create GskGLDriver", NULL);
+  gdk_profiler_end_mark (before, "Create GL driver", NULL);
 
   return g_steal_pointer (&self);
 }

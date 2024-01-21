@@ -830,7 +830,7 @@ gdk_wayland_surface_create_xdg_toplevel (GdkWaylandToplevel *wayland_toplevel)
   maybe_set_gtk_surface_dbus_properties (wayland_toplevel);
   maybe_set_gtk_surface_modal (wayland_toplevel);
 
-  gdk_profiler_add_mark (GDK_PROFILER_CURRENT_TIME, 0, "wayland", "surface commit");
+  gdk_profiler_add_mark (GDK_PROFILER_CURRENT_TIME, 0, "Wayland surface commit", NULL);
   wl_surface_commit (wayland_surface->display_server.wl_surface);
 }
 

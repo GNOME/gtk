@@ -79,7 +79,7 @@ static guint signals[LAST_SIGNAL];
 
 static guint fps_counter;
 
-#define FRAME_HISTORY_MAX_LENGTH 128
+#define FRAME_HISTORY_MAX_LENGTH 1000
 
 struct _GdkFrameClockPrivate
 {
@@ -687,7 +687,7 @@ _gdk_frame_clock_emit_update (GdkFrameClock *frame_clock)
 
   g_signal_emit (frame_clock, signals[UPDATE], 0);
 
-  gdk_profiler_end_mark (before, "frameclock update", NULL);
+  gdk_profiler_end_mark (before, "Frameclock update", NULL);
 }
 
 void
@@ -699,7 +699,7 @@ _gdk_frame_clock_emit_layout (GdkFrameClock *frame_clock)
 
   g_signal_emit (frame_clock, signals[LAYOUT], 0);
 
-  gdk_profiler_end_mark (before, "frameclock layout", NULL);
+  gdk_profiler_end_mark (before, "Frameclock layout", NULL);
 }
 
 void
@@ -711,7 +711,7 @@ _gdk_frame_clock_emit_paint (GdkFrameClock *frame_clock)
 
   g_signal_emit (frame_clock, signals[PAINT], 0);
 
-  gdk_profiler_end_mark (before, "frameclock paint", NULL);
+  gdk_profiler_end_mark (before, "Frameclock paint", NULL);
 }
 
 void
@@ -811,12 +811,12 @@ _gdk_frame_clock_add_timings_to_profiler (GdkFrameClock   *clock,
 {
   if (timings->drawn_time != 0)
     {
-      gdk_profiler_add_mark (1000 * timings->drawn_time, 0, "drawn window", NULL);
+      gdk_profiler_add_mark (1000 * timings->drawn_time, 0, "Drawn window", NULL);
     }
 
   if (timings->presentation_time != 0)
     {
-      gdk_profiler_add_mark (1000 * timings->presentation_time, 0, "presented window", NULL);
+      gdk_profiler_add_mark (1000 * timings->presentation_time, 0, "Presented window", NULL);
     }
 
   gdk_profiler_set_counter (fps_counter, gdk_frame_clock_get_fps (clock));

@@ -2839,7 +2839,7 @@ add_event_mark (GdkEvent *event,
   class = g_type_class_ref (GDK_TYPE_EVENT_TYPE);
   value = g_enum_get_value (class, event_type);
   g_type_class_unref (class);
-  kind = value ? value->value_nick : "event";
+  kind = value ? value->value_nick : "Event";
 
   switch ((int) event_type)
     {
@@ -2909,7 +2909,7 @@ add_event_mark (GdkEvent *event,
       break;
     }
 
-  gdk_profiler_add_mark (time, end_time - time, "event", message ? message : kind);
+  gdk_profiler_add_mark (time, end_time - time, "Event", message ? message : kind);
 
   g_free (message);
 #endif

@@ -1253,7 +1253,7 @@ _gdk_wayland_display_load_cursor_theme (GdkWaylandDisplay *display_wayland)
   gdk_wayland_display_set_cursor_theme (GDK_DISPLAY (display_wayland), name, size);
   g_value_unset (&v);
 
-  gdk_profiler_end_mark (before, "wayland", "load cursor theme");
+  gdk_profiler_end_mark (before, "Wayland cursor theme load", NULL);
 
 }
 

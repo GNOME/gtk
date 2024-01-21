@@ -504,7 +504,7 @@ gdk_load_tiff (GBytes  *input_bytes,
     {
       gint64 end = GDK_PROFILER_CURRENT_TIME;
       if (end - before > 500000)
-        gdk_profiler_add_mark (before, end - before, "tiff load", NULL);
+        gdk_profiler_add_mark (before, end - before, "Load tiff", NULL);
     }
 
   return texture;
