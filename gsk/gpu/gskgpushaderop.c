@@ -23,7 +23,7 @@ gsk_gpu_shader_op_finish (GskGpuOp *op)
 {
   GskGpuShaderOp *self = (GskGpuShaderOp *) op;
 
-  g_clear_object (&self->desc);
+  g_clear_pointer (&self->desc, gsk_gpu_descriptors_unref);
 }
 
 #ifdef GDK_RENDERING_VULKAN
@@ -197,7 +197,7 @@ gsk_gpu_shader_op_alloc (GskGpuFrame               *frame,
   self->variation = variation;
   self->clip = clip;
   if (desc)
-    self->desc = g_object_ref (desc);
+    self->desc = gsk_gpu_descriptors_ref (desc);
   else
     self->desc = NULL;
   self->vertex_offset = gsk_gpu_frame_reserve_vertex_data (frame, op_class->vertex_size);
