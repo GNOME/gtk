@@ -6,17 +6,30 @@
 
 struct _GskScale
 {
-  float x;
-  float y;
+  GRAPHENE_ALIGNED_DECL (graphene_simd4f_t v, 16);
 };
 
-#define GSK_SCALE_INIT(x,y) (GskScale) { (x), (y) }
+static inline float
+gsk_scale_get_x (const GskScale scale)
+{
+  return graphene_simd4f_get_x (scale.v);
+}
+
+static inline float
+gsk_scale_get_y (const GskScale scale)
+{
+  return graphene_simd4f_get_y (scale.v);
+}
 
 static inline GskScale
-gsk_scale_init (float    x,
-                float    y)
+gsk_scale_init (float x,
+                float y)
 {
-  return (GskScale) { x, y };
+  GskScale scale;
+
+  scale.v = graphene_simd4f_init (x, y, 0.f, 0.f);
+
+  return scale;
 }
 
 static inline GskScale
@@ -29,48 +42,69 @@ static inline void
 gsk_scale_to_float (const GskScale *scale,
                     float           values[2])
 {
-  values[0] = scale->x;
-  values[1] = scale->y;
+  graphene_simd4f_dup_2f (scale->v, values);
 }
 
 static inline gboolean
 gsk_scale_is_one (const GskScale scale)
 {
-  return scale.x == 1 && scale.y == 1;
+  const graphene_vec2_t *one = graphene_vec2_one ();
+
+  return (gboolean) graphene_simd4f_cmp_eq (scale.v, one->__graphene_private_value);
 }
 
 static inline gboolean
 gsk_scale_is_uniform (const GskScale scale)
 {
-  return scale.x == scale.y;
+  return gsk_scale_get_x (scale) == gsk_scale_get_y (scale);
 }
 
 static inline GskScale
 gsk_scale_invert (const GskScale scale)
 {
-  return (GskScale) { 1 / scale.x, 1 / scale.y };
+  GskScale inv;
+
+  inv.v = graphene_simd4f_reciprocal (scale.v);
+
+  return inv;
 }
 
 static inline GskScale
 gsk_scale_multiply (const GskScale scale1,
                     const GskScale scale2)
 {
-  return (GskScale) { scale1.x * scale2.x, scale1.y * scale2.y };
+  GskScale scale;
+
+  scale.v = graphene_simd4f_mul (scale1.v, scale2.v);
+
+  return scale;
 }
 
 static inline GskScale
 gsk_scale_divide (const GskScale scale1,
                   const GskScale scale2)
 {
-  return (GskScale) { scale1.x / scale2.x, scale1.y / scale2.y };
+  GskScale scale;
+
+  scale.v = graphene_simd4f_div (scale1.v, scale2.v);
+
+  return scale;
 }
+
+#  define graphene_simd4f_shuffle_yxzw(v) \
+  (__extension__ ({ \
+    (graphene_simd4f_t) _mm_shuffle_ps ((v), (v), _MM_SHUFFLE (1, 0, 2, 3)); \
+  }))
+
 
 static inline GskScale
 gsk_scale_max (const GskScale scale)
 {
-  float s = MAX (scale.x, scale.y);
+  GskScale m;
 
-  return (GskScale) { s, s };
+  m.v = graphene_simd4f_max (graphene_simd4f_shuffle_yxzw (scale.v), scale.v);
+
+  return m;
 }
 
 static inline graphene_point_t
@@ -96,14 +130,14 @@ static inline graphene_point_t
 gsk_point_multiply (const graphene_point_t point,
                     const GskScale         scale)
 {
-  return (graphene_point_t) { point.x * scale.x, point.y * scale.y };
+  return (graphene_point_t) { point.x * gsk_scale_get_x (scale), point.y * gsk_scale_get_y (scale) };
 }
 
 static inline graphene_point_t
 gsk_point_divide (const graphene_point_t point,
                   const GskScale         scale)
 {
-  return (graphene_point_t) { point.x / scale.x, point.y / scale.y };
+  return (graphene_point_t) { point.x / gsk_scale_get_x (scale), point.y / gsk_scale_get_y (scale) };
 }
 
 static inline graphene_point_t
@@ -131,6 +165,5 @@ gsk_point_ceil (const graphene_point_t point)
 {
   return (graphene_point_t) { ceilf (point.x), ceilf (point.y) };
 }
-void
-gsk_scale_extract_from_transform (GskTransform *transform,
-                                  GskScale     *scale);
+
+GskScale gsk_scale_extract_from_transform (GskTransform *transform);

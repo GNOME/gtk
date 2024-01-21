@@ -343,8 +343,8 @@ gsk_gpu_render_pass_op_offscreen (GskGpuFrame            *frame,
   GskGpuImage *image;
   int width, height;
 
-  width = ceil (scale->x * viewport->size.width);
-  height = ceil (scale->y * viewport->size.height);
+  width = ceil (gsk_scale_get_x (*scale) * viewport->size.width);
+  height = ceil (gsk_scale_get_y (*scale) * viewport->size.height);
 
   image = gsk_gpu_device_create_offscreen_image (gsk_gpu_frame_get_device (frame),
                                                  FALSE,

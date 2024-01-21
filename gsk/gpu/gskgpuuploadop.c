@@ -465,8 +465,8 @@ gsk_gpu_upload_cairo_op (GskGpuFrame            *frame,
   self->image = gsk_gpu_device_create_upload_image (gsk_gpu_frame_get_device (frame),
                                                     FALSE,
                                                     GDK_MEMORY_DEFAULT,
-                                                    ceil (scale->x * viewport->size.width),
-                                                    ceil (scale->y * viewport->size.height));
+                                                    ceil (gsk_scale_get_x (*scale) * viewport->size.width),
+                                                    ceil (gsk_scale_get_y (*scale) * viewport->size.height));
   self->viewport = *viewport;
   self->func = func;
   self->user_data = user_data;

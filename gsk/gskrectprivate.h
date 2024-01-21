@@ -145,17 +145,20 @@ static inline graphene_rect_t
 gsk_rect_scale (const graphene_rect_t r,
                 const GskScale        scale)
 {
-  if (G_UNLIKELY (scale.x < 0 || scale.y < 0))
+  float sx = gsk_scale_get_x (scale);
+  float sy = gsk_scale_get_y (scale);
+
+  if (G_UNLIKELY (sx < 0 || sy < 0))
     {
       graphene_rect_t res;
-      graphene_rect_scale (&r, scale.x, scale.y, &res);
+      graphene_rect_scale (&r, sx, sy, &res);
       return res;
     }
 
-  return GRAPHENE_RECT_INIT (r.origin.x * scale.x,
-                             r.origin.y * scale.y,
-                             r.size.width * scale.x,
-                             r.size.height * scale.y);
+  return GRAPHENE_RECT_INIT (r.origin.x * sx,
+                             r.origin.y * sy,
+                             r.size.width * sx,
+                             r.size.height * sy);
 }
 
 static inline graphene_rect_t

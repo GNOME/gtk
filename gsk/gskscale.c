@@ -2,9 +2,8 @@
 #include "gskscaleprivate.h"
 #include "gsktransform.h"
 
-void
-gsk_scale_extract_from_transform (GskTransform *transform,
-                                  GskScale     *scale)
+GskScale
+gsk_scale_extract_from_transform (GskTransform *transform)
 {
   switch (gsk_transform_get_category (transform))
     {
@@ -14,16 +13,14 @@ gsk_scale_extract_from_transform (GskTransform *transform,
 
     case GSK_TRANSFORM_CATEGORY_IDENTITY:
     case GSK_TRANSFORM_CATEGORY_2D_TRANSLATE:
-      *scale = gsk_scale_init (1, 1);
-      return;
+      return gsk_scale_init (1, 1);
 
     case GSK_TRANSFORM_CATEGORY_2D_AFFINE:
       {
         float scale_x, scale_y, dx, dy;
         gsk_transform_to_affine (transform, &scale_x, &scale_y, &dx, &dy);
-        *scale = gsk_scale_init (fabsf (scale_x), fabsf (scale_y));
+        return gsk_scale_init (fabsf (scale_x), fabsf (scale_y));
       }
-      return;
 
     case GSK_TRANSFORM_CATEGORY_2D:
       {
@@ -33,9 +30,8 @@ gsk_scale_extract_from_transform (GskTransform *transform,
                                         &scale_x, &scale_y,
                                         &angle,
                                         &dx, &dy);
-        *scale = gsk_scale_init (fabsf (scale_x), fabsf (scale_y));
+        return gsk_scale_init (fabsf (scale_x), fabsf (scale_y));
       }
-      return;
 
     case GSK_TRANSFORM_CATEGORY_UNKNOWN:
     case GSK_TRANSFORM_CATEGORY_ANY:
@@ -56,10 +52,9 @@ gsk_scale_extract_from_transform (GskTransform *transform,
                                    &shear,
                                    &perspective);
 
-        *scale = gsk_scale_init (fabsf (graphene_vec3_get_x (&matrix_scale)),
-                                 fabsf (graphene_vec3_get_y (&matrix_scale)));
+        return gsk_scale_init (fabsf (graphene_vec3_get_x (&matrix_scale)),
+                               fabsf (graphene_vec3_get_y (&matrix_scale)));
       }
-      return;
     }
 }
 
