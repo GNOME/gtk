@@ -136,6 +136,18 @@ proto_sources = [
     'stability': 'stable',
     'version': 1,
   },
+  {
+    'name': 'xdg-dialog',
+    'stability': 'staging',
+    'version': 1,
+    'required': '>=1.36',
+  },
+  {
+    'name': 'xdg-dialog',
+    'stability': 'private',
+    'version': 1,
+    'required': '<1.36',
+  },
 ]
 
 gdk_wayland_gen_headers = []

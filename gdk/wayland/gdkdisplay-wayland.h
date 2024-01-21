@@ -40,6 +40,7 @@
 #include <gdk/wayland/fractional-scale-v1-client-protocol.h>
 #include <gdk/wayland/viewporter-client-protocol.h>
 #include <gdk/wayland/presentation-time-client-protocol.h>
+#include <gdk/wayland/xdg-dialog-v1-client-protocol.h>
 
 #include <glib.h>
 #include <gdk/gdkkeys.h>
@@ -109,6 +110,7 @@ struct _GdkWaylandDisplay
   LinuxDmabufFormat *linux_dmabuf_formats;
   struct xdg_wm_base *xdg_wm_base;
   struct zxdg_shell_v6 *zxdg_shell_v6;
+  struct xdg_wm_dialog_v1 *xdg_wm_dialog;
   struct gtk_shell1 *gtk_shell;
   struct wl_data_device_manager *data_device_manager;
   struct wl_subcompositor *subcompositor;
