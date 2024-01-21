@@ -403,7 +403,7 @@ gtk_file_chooser_set_current_folder (GtkFileChooser  *chooser,
                                      GError         **error)
 {
   g_return_val_if_fail (GTK_IS_FILE_CHOOSER (chooser), FALSE);
-  g_return_val_if_fail (G_IS_FILE (file), FALSE);
+  g_return_val_if_fail (file == NULL || G_IS_FILE (file), FALSE);
   g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
 
   return GTK_FILE_CHOOSER_GET_IFACE (chooser)->set_current_folder (chooser, file, error);
