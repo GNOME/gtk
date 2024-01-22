@@ -78,6 +78,7 @@ compare_render_tests = [
   'fill-scaled-up',
   'fill-with-3d-contents-nogl-nocairo',
   'glyph-cache-overflow',
+  'glyph-cache-overflow-slices',
   'huge-height',
   'huge-width',
   'inset-shadow-multiple',
