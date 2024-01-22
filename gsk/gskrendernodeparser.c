@@ -981,7 +981,7 @@ ensure_fontmap (Context *context)
   g_object_set_data_full (G_OBJECT (context->fontmap), "font-files", files, (GDestroyNotify) g_ptr_array_unref);
 }
 
-static void
+static gboolean
 add_font_from_file (Context     *context,
                     const char  *path,
                     GError     **error)
@@ -997,7 +997,7 @@ add_font_from_file (Context     *context,
                    GTK_CSS_PARSER_ERROR,
                    GTK_CSS_PARSER_ERROR_FAILED,
                    "Custom fonts are not implemented for %s", G_OBJECT_TYPE_NAME (context->fontmap));
-      return;
+      return FALSE;
     }
 
   config = pango_fc_font_map_get_config (PANGO_FC_FONT_MAP (context->fontmap));
@@ -1006,18 +1006,20 @@ add_font_from_file (Context     *context,
     {
       g_set_error (error,
                    GTK_CSS_PARSER_ERROR,
-                   GTK_CSS_PARSER_ERROR_FAILED,
-                   "Failed to add %s to FcConfig", path);
-      return;
+                   GTK_CSS_PARSER_ERROR_UNKNOWN_VALUE,
+                   "Failed to load font");
+      return FALSE;
     }
 
   files = (GPtrArray *) g_object_get_data (G_OBJECT (context->fontmap), "font-files");
   g_ptr_array_add (files, g_strdup (path));
 
   pango_fc_font_map_config_changed (PANGO_FC_FONT_MAP (context->fontmap));
+
+  return TRUE;
 }
 
-static void
+static gboolean
 add_font_from_bytes (Context  *context,
                      GBytes   *bytes,
                      GError  **error)
@@ -1025,10 +1027,11 @@ add_font_from_bytes (Context  *context,
   GFile *file;
   GIOStream *iostream;
   GOutputStream *ostream;
+  gboolean result;
 
   file = g_file_new_tmp ("gtk4-font-XXXXXX.ttf", (GFileIOStream **) &iostream, error);
   if (!file)
-    return;
+    return FALSE;
 
   ostream = g_io_stream_get_output_stream (iostream);
   if (g_output_stream_write_bytes (ostream, bytes, NULL, error) == -1)
@@ -1036,20 +1039,22 @@ add_font_from_bytes (Context  *context,
       g_object_unref (file);
       g_object_unref (iostream);
 
-      return;
+      return FALSE;
     }
 
   g_io_stream_close (iostream, NULL, NULL);
   g_object_unref (iostream);
 
-  add_font_from_file (context, g_file_peek_path (file), error);
+  result = add_font_from_file (context, g_file_peek_path (file), error);
 
   g_object_unref (file);
+
+  return result;
 }
 
 #else /* !HAVE_PANGOFT */
 
-static void
+static gboolean
 add_font_from_bytes (Context  *context,
                      GBytes   *bytes,
                      GError  **error)
@@ -1058,6 +1063,7 @@ add_font_from_bytes (Context  *context,
                GTK_CSS_PARSER_ERROR,
                GTK_CSS_PARSER_ERROR_FAILED,
                "Not implemented");
+  return FALSE;
 }
 
 #endif
@@ -1068,94 +1074,105 @@ parse_font (GtkCssParser *parser,
             gpointer      out_font)
 {
   PangoFont *font = NULL;
-  char *s;
-  GtkCssLocation start_location;
-  PangoFontMap *fontmap;
+  char *font_name;
 
-  fontmap = pango_cairo_font_map_get_default ();
-
-  s = gtk_css_parser_consume_string (parser);
-  if (s == NULL)
+  font_name = gtk_css_parser_consume_string (parser);
+  if (font_name == NULL)
     return FALSE;
 
-  start_location = *gtk_css_parser_get_start_location (parser);
+  if (context->fontmap)
+    font = font_from_string (context->fontmap, font_name);
 
-  if (gtk_css_parser_try_token (parser, GTK_CSS_TOKEN_URL) ||
-      gtk_css_parser_has_function (parser, "url"))
+  if (gtk_css_parser_has_url (parser))
     {
       char *url;
-      char *scheme;
-      GBytes *bytes = NULL;
-      GError *error = NULL;
 
-      /* If we have a url, it is a bug if the font already exists in our custom fontmap */
-      if (context->fontmap)
+      if (font != NULL)
         {
-          font = font_from_string (context->fontmap, s);
-          if (font)
+          gtk_css_parser_error_value (parser, "A font with this name already exists.");
+          /* consume the url to avoid more errors */
+          url = gtk_css_parser_consume_url (parser);
+          g_free (url);
+        }
+      else
+        {
+          char *scheme;
+          GBytes *bytes;
+          GError *error = NULL;
+          GtkCssLocation start_location;
+          gboolean success = FALSE;
+
+          start_location = *gtk_css_parser_get_start_location (parser);
+          url = gtk_css_parser_consume_url (parser);
+
+          if (url != NULL)
             {
-              g_object_unref (font);
-              gtk_css_parser_error_value (parser, "This font already exists.");
-              return FALSE;
+              scheme = g_uri_parse_scheme (url);
+              if (scheme && g_ascii_strcasecmp (scheme, "data") == 0)
+                {
+                  bytes = gtk_css_data_url_parse (url, NULL, &error);
+                }
+              else
+                {
+                  GFile *file;
+
+                  file = g_file_new_for_uri (url);
+                  bytes = g_file_load_bytes (file, NULL, NULL, &error);
+                  g_object_unref (file);
+                }
+
+              g_free (scheme);
+              g_free (url);
+              if (bytes != NULL)
+                {
+                  success = add_font_from_bytes (context, bytes, &error);
+                  g_bytes_unref (bytes);
+                }
+
+              if (!success)
+                {
+                  gtk_css_parser_emit_error (parser,
+                                             &start_location,
+                                             gtk_css_parser_get_end_location (parser),
+                                             error);
+                }
+            }
+
+          if (success)
+            {
+              font = font_from_string (context->fontmap, font_name);
+              if (!font)
+                {
+                  gtk_css_parser_error (parser,
+                                        GTK_CSS_PARSER_ERROR_UNKNOWN_VALUE,
+                                        &start_location,
+                                        gtk_css_parser_get_end_location (parser),
+                                        "The given url does not define a font named \"%s\"",
+                                        font_name);
+                }
             }
         }
+    }
+  else
+    {
+      if (!font)
+        font = font_from_string (pango_cairo_font_map_get_default (), font_name);
 
-      url = gtk_css_parser_consume_url (parser);
-
-      scheme = g_uri_parse_scheme (url);
-      if (scheme && g_ascii_strcasecmp (scheme, "data") == 0)
-        {
-          bytes = gtk_css_data_url_parse (url, NULL, &error);
-        }
-      else
-        {
-          GFile *file;
-
-          file = g_file_new_for_uri (url);
-          bytes = g_file_load_bytes (file, NULL, NULL, &error);
-          g_object_unref (file);
-        }
-
-      g_free (scheme);
-      g_free (url);
-
-      if (bytes)
-        {
-          add_font_from_bytes (context, bytes, &error);
-          g_bytes_unref (bytes);
-
-          fontmap = context->fontmap;
-        }
-      else
-        {
-          g_assert (error != NULL);
-
-          gtk_css_parser_emit_error (parser,
-                                     &start_location,
-                                     gtk_css_parser_get_end_location (parser),
-                                     error);
-          g_clear_error (&error);
-
-          return FALSE;
-        }
+      if (!font)
+        gtk_css_parser_error_value (parser, "The font \"%s\" does not exist", font_name);
     }
 
-  font = font_from_string (fontmap, s);
+  g_free (font_name);
 
-  if (!font && context->fontmap && fontmap != context->fontmap)
-    font = font_from_string (context->fontmap, s);
-
-  if (!font)
+  if (font)
     {
-      gtk_css_parser_error_value (parser, "This font does not exist.");
+      *((PangoFont**)out_font) = font;
+      return TRUE;
+    }
+  else
+    {
       return FALSE;
     }
-
-  *((PangoFont**)out_font) = font;
-
-  g_free (s);
-
-  return TRUE;
 }
 
 static void

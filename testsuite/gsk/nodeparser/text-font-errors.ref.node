@@ -16,7 +16,7 @@ AAEAAwAAAA4AAAAA//8A/wD//wAA/wAA\
   glyphs: 7 10;
 }
 text {
-  font: "Cantarell 11";
+  font: "text-mixed-color 7.5";
   glyphs: 7 10;
 }
 text {
@@ -30,4 +30,24 @@ text {
 text {
   font: "Cantarell 11";
   glyphs: "Hello";
+}
+text {
+  font: "Cantarell 11";
+  glyphs: 7 10;
+}
+text {
+  font: "Cantarell 11";
+  glyphs: 7 10;
+}
+text {
+  font: "Cantarell 11";
+  glyphs: 7 10;
+}
+text {
+  font: "Cantarell 11";
+  glyphs: 7 10;
+}
+text {
+  font: "Cantarell 11";
+  glyphs: 7 10;
 }
