@@ -3008,20 +3008,29 @@ gsk_gpu_node_processor_add_glyph_node (GskGpuNodeProcessor *self,
       graphene_rect_t glyph_bounds, glyph_tex_rect;
       graphene_point_t glyph_offset, glyph_origin;
       guint32 descriptor;
+      GskGpuGlyphLookupFlags flags;
 
       glyph_origin = GRAPHENE_POINT_INIT (offset.x + (float) glyphs[i].geometry.x_offset / PANGO_SCALE,
                                           offset.y + (float) glyphs[i].geometry.y_offset / PANGO_SCALE);
       if (glyph_align)
         {
-          glyph_origin.x = inv_scale * round (glyph_origin.x * scale);
-          glyph_origin.y = inv_scale * round (glyph_origin.y * scale);
+          glyph_origin.x = roundf (glyph_origin.x * scale * 4);
+          glyph_origin.y = roundf (glyph_origin.y * scale * 4);
+          flags = ((int) glyph_origin.x & 3) |
+                  (((int) glyph_origin.y & 3) << 2);
+          glyph_origin.x = 0.25 * inv_scale * glyph_origin.x;
+          glyph_origin.y = 0.25 * inv_scale * glyph_origin.y;
+        }
+      else
+        {
+          flags = 0;
         }
 
       image = gsk_gpu_device_lookup_glyph_image (device,
                                                  self->frame,
                                                  font,
                                                  glyphs[i].glyph,
-                                                 0,
+                                                 flags,
                                                  scale,
                                                  &glyph_bounds,
                                                  &glyph_offset);
