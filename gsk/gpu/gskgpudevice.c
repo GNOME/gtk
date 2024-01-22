@@ -517,15 +517,21 @@ gsk_gpu_cached_atlas_allocate (GskGpuCachedAtlas *atlas,
 
   if (best_slice >= i && i == atlas->n_slices)
     {
+      gsize slice_height;
+
       if (!can_add_slice)
+        return FALSE;
+
+      slice_height = round_up_atlas_size (MAX (height, 4));
+      if (slice_height > ATLAS_SIZE - y)
         return FALSE;
 
       atlas->n_slices++;
       if (atlas->n_slices == MAX_SLICES_PER_ATLAS)
-        atlas->slices[i].height = ATLAS_SIZE - y;
-      else
-        atlas->slices[i].height = round_up_atlas_size (MAX (height, 4));
+        slice_height = ATLAS_SIZE - y;
+
       atlas->slices[i].width = 0;
+      atlas->slices[i].height = slice_height;
       best_y = y;
       best_slice = i;
     }
