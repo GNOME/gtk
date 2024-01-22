@@ -2,6 +2,7 @@
 
 #include <gdk/gdk.h>
 #include "gsk/gskenums.h"
+#include "gsk/gsktypes.h"
 
 #include "gdk/gdkmemoryformatprivate.h"
 

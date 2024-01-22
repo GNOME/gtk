@@ -58,7 +58,7 @@ gsk_gpu_texture_op (GskGpuFrame            *frame,
                     GskGpuDescriptors      *desc,
                     guint32                 descriptor,
                     const graphene_rect_t  *rect,
-                    const graphene_point_t *offset,
+                    const GskPoint         *offset,
                     const graphene_rect_t  *tex_rect)
 {
   GskGpuTextureInstance *instance;

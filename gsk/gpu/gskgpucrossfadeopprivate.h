@@ -10,7 +10,7 @@ void                    gsk_gpu_cross_fade_op                           (GskGpuF
                                                                          GskGpuShaderClip                clip,
                                                                          GskGpuDescriptors              *desc,
                                                                          const graphene_rect_t          *rect,
-                                                                         const graphene_point_t         *offset,
+                                                                         const GskPoint                 *offset,
                                                                          float                           opacity,
                                                                          float                           progress,
                                                                          guint32                         start_descriptor,

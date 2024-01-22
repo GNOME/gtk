@@ -3,6 +3,7 @@
 #include "gskgpuopprivate.h"
 
 #include "gskgputypesprivate.h"
+#include "gskpointprivate.h"
 
 G_BEGIN_DECLS
 
@@ -69,11 +70,11 @@ gsk_gpu_rgba_to_float (const GdkRGBA *rgba,
 
 static inline void
 gsk_gpu_point_to_float (const graphene_point_t *point,
-                        const graphene_point_t *offset,
+                        const GskPoint         *offset,
                         float                   values[2])
 {
-  values[0] = point->x + offset->x;
-  values[1] = point->y + offset->y;
+  values[0] = point->x + gsk_point_get_x (*offset);
+  values[1] = point->y + gsk_point_get_y (*offset);
 }
 
 G_END_DECLS

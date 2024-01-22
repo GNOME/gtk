@@ -59,15 +59,15 @@ gboolean                gsk_gpu_clip_transform                          (GskGpuC
                                                                          GskTransform           *transform,
                                                                          const graphene_rect_t  *viewport) G_GNUC_WARN_UNUSED_RESULT;
 
-gboolean                gsk_gpu_clip_contains_rect                      (const GskGpuClip    *self,
-                                                                         const graphene_point_t *offset,
+gboolean                gsk_gpu_clip_contains_rect                      (const GskGpuClip       *self,
+                                                                         const GskPoint         *offset,
                                                                          const graphene_rect_t  *rect) G_GNUC_WARN_UNUSED_RESULT;
-gboolean                gsk_gpu_clip_may_intersect_rect                 (const GskGpuClip    *self,
-                                                                         const graphene_point_t *offset,
-                                                                         const graphene_rect_t  *rect) G_GNUC_WARN_UNUSED_RESULT;
-GskGpuShaderClip        gsk_gpu_clip_get_shader_clip                    (const GskGpuClip    *self,
-                                                                         const graphene_point_t *offset,
-                                                                         const graphene_rect_t  *rect);
+gboolean                gsk_gpu_clip_may_intersect_rect                 (const GskGpuClip      *self,
+                                                                         const GskPoint        *offset,
+                                                                         const graphene_rect_t *rect) G_GNUC_WARN_UNUSED_RESULT;
+GskGpuShaderClip        gsk_gpu_clip_get_shader_clip                    (const GskGpuClip      *self,
+                                                                         const GskPoint        *offset,
+                                                                         const graphene_rect_t *rect);
 
 G_END_DECLS
 

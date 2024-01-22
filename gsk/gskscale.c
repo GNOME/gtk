@@ -57,4 +57,3 @@ gsk_scale_extract_from_transform (GskTransform *transform)
       }
     }
 }
-

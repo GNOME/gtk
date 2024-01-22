@@ -10,7 +10,7 @@ void                    gsk_gpu_blend_mode_op                           (GskGpuF
                                                                          GskGpuShaderClip                clip,
                                                                          GskGpuDescriptors              *desc,
                                                                          const graphene_rect_t          *rect,
-                                                                         const graphene_point_t         *offset,
+                                                                         const GskPoint                 *offset,
                                                                          float                           opacity,
                                                                          GskBlendMode                    blend_mode,
                                                                          guint32                         start_descriptor,

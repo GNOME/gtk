@@ -11,7 +11,7 @@ void                    gsk_gpu_blur_op                                 (GskGpuF
                                                                          GskGpuDescriptors              *desc,
                                                                          guint32                         descriptor,
                                                                          const graphene_rect_t          *rect,
-                                                                         const graphene_point_t         *offset,
+                                                                         const GskPoint                 *offset,
                                                                          const graphene_rect_t          *tex_rect,
                                                                          const graphene_point_t         *blur_direction);
 
@@ -20,7 +20,7 @@ void                    gsk_gpu_blur_shadow_op                          (GskGpuF
                                                                          GskGpuDescriptors              *desc,
                                                                          guint32                         descriptor,
                                                                          const graphene_rect_t          *rect,
-                                                                         const graphene_point_t         *offset,
+                                                                         const GskPoint                 *offset,
                                                                          const graphene_rect_t          *tex_rect,
                                                                          const graphene_point_t         *blur_direction,
                                                                          const GdkRGBA                  *shadow_color);

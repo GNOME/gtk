@@ -66,11 +66,12 @@ gsk_gpu_radial_gradient_op (GskGpuFrame            *frame,
                             const graphene_point_t *radius,
                             float                   start,
                             float                   end,
-                            const graphene_point_t *offset,
+                            const GskPoint         *offset,
                             const GskColorStop     *stops,
                             gsize                   n_stops)
 {
   GskGpuRadialgradientInstance *instance;
+  GskPoint zero = gsk_point_init (0, 0);
 
   g_assert (n_stops > 1);
   g_assert (n_stops <= 7);
@@ -85,7 +86,7 @@ gsk_gpu_radial_gradient_op (GskGpuFrame            *frame,
 
   gsk_gpu_rect_to_float (rect, offset, instance->rect);
   gsk_gpu_point_to_float (center, offset, instance->center_radius);
-  gsk_gpu_point_to_float (radius, graphene_point_zero(), &instance->center_radius[2]);
+  gsk_gpu_point_to_float (radius, &zero, &instance->center_radius[2]);
   instance->startend[0] = start;
   instance->startend[1] = end;
   gsk_gpu_rgba_to_float (&stops[MIN (n_stops - 1, 6)].color, instance->color6);

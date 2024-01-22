@@ -1,6 +1,7 @@
 #pragma once
 
 #include "gskroundedrect.h"
+#include "gskrectprivate.h"
 
 #include <cairo.h>
 
@@ -48,6 +49,21 @@ void                     gsk_rounded_rect_path                  (const GskRounde
 void                     gsk_rounded_rect_to_float              (const GskRoundedRect     *self,
                                                                  const graphene_point_t   *offset,
                                                                  float                     rect[12]);
+static inline void
+gsk_gpu_rounded_rect_to_float (const GskRoundedRect *self,
+                               const GskPoint       *offset,
+                               float                 rect[12])
+{
+  guint i;
+
+  gsk_gpu_rect_to_float (&self->bounds, offset, rect);
+
+  for (i = 0; i < 4; i++)
+    {
+      rect[4 + i] = self->corner[i].width;
+      rect[8 + i] = self->corner[i].height;
+    }
+}
 
 gboolean                 gsk_rounded_rect_equal                 (gconstpointer             rect1,
                                                                  gconstpointer             rect2) G_GNUC_PURE;

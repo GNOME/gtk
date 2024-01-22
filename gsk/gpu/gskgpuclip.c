@@ -238,12 +238,10 @@ gsk_gpu_clip_transform (GskGpuClip            *dest,
 
 gboolean
 gsk_gpu_clip_may_intersect_rect (const GskGpuClip       *self,
-                                 const graphene_point_t *offset,
+                                 const GskPoint         *offset,
                                  const graphene_rect_t  *rect)
 {
-  graphene_rect_t r = *rect;
-  r.origin.x += offset->x;
-  r.origin.y += offset->y;
+  graphene_rect_t r = gsk_rect_add_offset (*rect, *offset);
 
   switch (self->type)
     {
@@ -262,12 +260,10 @@ gsk_gpu_clip_may_intersect_rect (const GskGpuClip       *self,
 
 gboolean
 gsk_gpu_clip_contains_rect (const GskGpuClip       *self,
-                            const graphene_point_t *offset,
+                            const GskPoint         *offset,
                             const graphene_rect_t  *rect)
 {
-  graphene_rect_t r = *rect;
-  r.origin.x += offset->x;
-  r.origin.y += offset->y;
+  graphene_rect_t r = gsk_rect_add_offset (*rect, *offset);
 
   switch (self->type)
     {
@@ -288,7 +284,7 @@ gsk_gpu_clip_contains_rect (const GskGpuClip       *self,
 
 GskGpuShaderClip
 gsk_gpu_clip_get_shader_clip (const GskGpuClip       *self,
-                              const graphene_point_t *offset,
+                              const GskPoint         *offset,
                               const graphene_rect_t  *rect)
 {
   if (self->type == GSK_GPU_CLIP_NONE ||

@@ -59,7 +59,7 @@ gsk_gpu_colorize_op (GskGpuFrame            *frame,
                      GskGpuDescriptors      *descriptors,
                      guint32                 descriptor,
                      const graphene_rect_t  *rect,
-                     const graphene_point_t *offset,
+                     const GskPoint         *offset,
                      const graphene_rect_t  *tex_rect,
                      const GdkRGBA          *color)
 {

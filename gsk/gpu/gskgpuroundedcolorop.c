@@ -57,7 +57,7 @@ void
 gsk_gpu_rounded_color_op (GskGpuFrame            *frame,
                           GskGpuShaderClip        clip,
                           const GskRoundedRect   *outline,
-                          const graphene_point_t *offset,
+                          const GskPoint         *offset,
                           const GdkRGBA          *color)
 {
   GskGpuRoundedcolorInstance *instance;
@@ -69,7 +69,7 @@ gsk_gpu_rounded_color_op (GskGpuFrame            *frame,
                            NULL,
                            &instance);
 
-  gsk_rounded_rect_to_float (outline, offset, instance->outline);
+  gsk_gpu_rounded_rect_to_float (outline, offset, instance->outline);
   gsk_gpu_rgba_to_float (color, instance->color);
 }
 
