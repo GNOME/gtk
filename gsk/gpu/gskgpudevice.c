@@ -14,6 +14,8 @@
 
 #define MAX_ATLAS_ITEM_SIZE 256
 
+G_STATIC_ASSERT (MAX_ATLAS_ITEM_SIZE < ATLAS_SIZE);
+
 typedef struct _GskGpuCached GskGpuCached;
 typedef struct _GskGpuCachedClass GskGpuCachedClass;
 typedef struct _GskGpuCachedAtlas GskGpuCachedAtlas;
