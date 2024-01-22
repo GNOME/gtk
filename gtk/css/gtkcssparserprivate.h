@@ -116,6 +116,7 @@ gboolean                gtk_css_parser_has_token                (GtkCssParser   
                                                                  GtkCssTokenType                 token_type);
 gboolean                gtk_css_parser_has_ident                (GtkCssParser                   *self,
                                                                  const char                     *ident);
+gboolean                gtk_css_parser_has_url                  (GtkCssParser                   *self);
 gboolean                gtk_css_parser_has_number               (GtkCssParser                   *self);
 gboolean                gtk_css_parser_has_integer              (GtkCssParser                   *self);
 gboolean                gtk_css_parser_has_function             (GtkCssParser                   *self,

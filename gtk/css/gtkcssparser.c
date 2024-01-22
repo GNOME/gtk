@@ -957,6 +957,14 @@ gtk_css_parser_parse_url_arg (GtkCssParser *parser,
   return 1;
 }
 
+gboolean
+gtk_css_parser_has_url (GtkCssParser *self)
+{
+  return gtk_css_parser_has_token (self, GTK_CSS_TOKEN_URL)
+      || gtk_css_parser_has_token (self, GTK_CSS_TOKEN_BAD_URL)
+      || gtk_css_parser_has_function (self, "url");
+}
+
 /**
  * gtk_css_parser_consume_url:
  * @self: a `GtkCssParser`
