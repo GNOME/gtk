@@ -3335,6 +3335,7 @@ gsk_container_node_new (GskRenderNode **children,
       self->children = g_malloc_n (n_children, sizeof (GskRenderNode *));
 
       self->children[0] = gsk_render_node_ref (children[0]);
+      node->offscreen_for_opacity = children[0]->offscreen_for_opacity;
       gsk_rect_init_from_rect (&bounds, &(children[0]->bounds));
       node->preferred_depth = gdk_memory_depth_merge (node->preferred_depth,
                                                       gsk_render_node_get_preferred_depth (children[0]));
