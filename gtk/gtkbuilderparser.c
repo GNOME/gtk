@@ -2251,7 +2251,7 @@ _gtk_builder_parser_parse_buffer (GtkBuilder   *builder,
       guint64 after = GDK_PROFILER_CURRENT_TIME;
       if (after - before > 500000) /* half a millisecond */
         {
-          gdk_profiler_add_mark (before, after - before, "builder load", filename);
+          gdk_profiler_add_mark (before, after - before, "Builder load", filename);
         }
     }
 }

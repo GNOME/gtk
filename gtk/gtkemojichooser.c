@@ -761,7 +761,7 @@ populate_emoji_chooser (gpointer data)
       now = g_get_monotonic_time ();
       if (now > start + 200) /* 2 ms */
         {
-          gdk_profiler_add_mark (start * 1000, (now - start) * 1000, "emojichooser", "populate");
+          gdk_profiler_add_mark (start * 1000, (now - start) * 1000, "Emojichooser populate", NULL);
           return G_SOURCE_CONTINUE;
         }
     }
@@ -771,7 +771,7 @@ populate_emoji_chooser (gpointer data)
   chooser->box = NULL;
   chooser->populate_idle = 0;
 
-  gdk_profiler_end_mark (start, "emojichooser", "populate (finish)");
+  gdk_profiler_end_mark (start, "Emojichooser populate (finish)", NULL);
 
   return G_SOURCE_REMOVE;
 }

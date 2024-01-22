@@ -4544,7 +4544,7 @@ gsk_gl_render_job_render (GskGLRenderJob *job,
   gsk_gl_render_job_visit_node (job, root);
   gdk_gl_context_pop_debug_group (job->command_queue->context);
 
-  gdk_profiler_add_mark (start_time, GDK_PROFILER_CURRENT_TIME-start_time, "Build GL command queue", "");
+  gdk_profiler_end_mark (start_time, "Build GL command queue", "");
 
 #if 0
   /* At this point the atlases have uploaded content while we processed
@@ -4562,7 +4562,7 @@ gsk_gl_render_job_render (GskGLRenderJob *job,
   gdk_gl_context_push_debug_group (job->command_queue->context, "Executing command queue");
   gsk_gl_command_queue_execute (job->command_queue, surface_height, scale, job->region, job->default_framebuffer);
   gdk_gl_context_pop_debug_group (job->command_queue->context);
-  gdk_profiler_add_mark (start_time, GDK_PROFILER_CURRENT_TIME-start_time, "Execute GL command queue", "");
+  gdk_profiler_end_mark (start_time, "Execute GL command queue", "");
 }
 
 static int

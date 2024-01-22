@@ -237,7 +237,7 @@ gdk_load_jpeg (GBytes  *input_bytes,
 
   g_bytes_unref (bytes);
 
-  gdk_profiler_end_mark (before, "jpeg load", NULL);
+  gdk_profiler_end_mark (before, "Load jpeg", NULL);
  
   return texture;
 }

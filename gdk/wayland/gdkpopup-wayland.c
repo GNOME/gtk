@@ -1012,7 +1012,7 @@ gdk_wayland_surface_create_xdg_popup (GdkWaylandPopup *wayland_popup,
         }
     }
 
-  gdk_profiler_add_mark (GDK_PROFILER_CURRENT_TIME, 0, "wayland", "surface commit");
+  gdk_profiler_add_mark (GDK_PROFILER_CURRENT_TIME, 0, "Wayland surface commit", NULL);
   wl_surface_commit (impl->display_server.wl_surface);
 
   if (GDK_IS_POPUP (surface))

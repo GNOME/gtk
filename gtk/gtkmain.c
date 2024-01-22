@@ -549,7 +549,7 @@ do_post_parse_initialization (void)
   gsk_render_node_init_types ();
   _gtk_ensure_resources ();
 
-  gdk_profiler_end_mark (before, "basic initialization", NULL);
+  gdk_profiler_end_mark (before, "Basic initialization", NULL);
 
   gtk_initialized = TRUE;
 
@@ -559,13 +559,13 @@ do_post_parse_initialization (void)
 #endif
   gtk_im_modules_init ();
   gtk_media_file_extension_init ();
-  gdk_profiler_end_mark (before, "init modules", NULL);
+  gdk_profiler_end_mark (before, "Init modules", NULL);
 
   before = GDK_PROFILER_CURRENT_TIME;
   display_manager = gdk_display_manager_get ();
   if (gdk_display_manager_get_default_display (display_manager) != NULL)
     default_display_notify_cb (display_manager);
-  gdk_profiler_end_mark (before, "create display", NULL);
+  gdk_profiler_end_mark (before, "Create display", NULL);
 
   g_signal_connect (display_manager, "notify::default-display",
                     G_CALLBACK (default_display_notify_cb),

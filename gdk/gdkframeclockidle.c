@@ -694,7 +694,7 @@ gdk_frame_clock_paint_idle (void *data)
   if (!gdk_frame_clock_idle_is_frozen (clock_idle))
     priv->sleep_serial = get_sleep_serial ();
 
-  gdk_profiler_end_mark (before, "frameclock cycle", NULL);
+  gdk_profiler_end_mark (before, "Frameclock cycle", NULL);
 
   return FALSE;
 }

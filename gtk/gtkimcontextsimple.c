@@ -353,7 +353,7 @@ init_compose_table_thread_cb (GTask            *task,
 
   g_task_return_boolean (task, TRUE);
 
-  gdk_profiler_end_mark (before, "im compose table load (thread)", NULL);
+  gdk_profiler_end_mark (before, "Compose table load (thread)", NULL);
 }
 
 static void

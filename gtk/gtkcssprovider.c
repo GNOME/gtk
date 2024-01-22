@@ -1016,7 +1016,7 @@ gtk_css_provider_postprocess (GtkCssProvider *css_provider)
     }
 #endif
 
-  gdk_profiler_end_mark (before, "create selector tree", NULL);
+  gdk_profiler_end_mark (before, "Create CSS selector tree", NULL);
 }
 
 static void
@@ -1081,7 +1081,7 @@ gtk_css_provider_load_internal (GtkCssProvider *self,
   if (GDK_PROFILER_IS_RUNNING)
     {
       char *uri = g_file_get_uri (file);
-      gdk_profiler_end_mark (before, "theme load", uri);
+      gdk_profiler_end_mark (before, "CSS theme load", uri);
       g_free (uri);
     }
 }

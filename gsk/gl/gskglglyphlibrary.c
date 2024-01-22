@@ -376,7 +376,7 @@ gsk_gl_glyph_library_upload_glyph (GskGLGlyphLibrary     *self,
     {
       char message[64];
       g_snprintf (message, sizeof message, "Size %dx%d", width, height);
-      gdk_profiler_add_mark (start_time, GDK_PROFILER_CURRENT_TIME-start_time, "Upload Glyph", message);
+      gdk_profiler_add_mark (start_time, GDK_PROFILER_CURRENT_TIME-start_time, "Upload glyph", message);
     }
 }
 
