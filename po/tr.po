@@ -22,16 +22,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2023-11-28 08:43+0000\n"
-"PO-Revision-Date: 2023-11-30 18:19+0300\n"
-"Last-Translator: Emin Tufan Çetin <etcetin@gmail.com>\n"
+"POT-Creation-Date: 2024-01-20 19:01+0000\n"
+"PO-Revision-Date: 2024-01-22 03:26+0300\n"
+"Last-Translator: Sabri Ünal <libreajans@gmail.com>\n"
 "Language-Team: Türkçe <gnome-turk@gnome.org>\n"
 "Language: tr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Poedit 3.4\n"
+"X-Generator: Poedit 3.4.2\n"
 
 #: gdk/broadway/gdkbroadway-server.c:135
 #, c-format
@@ -42,11 +42,11 @@ msgstr "Broadway ekran türü desteklenmiyor: %s"
 msgid "This clipboard cannot store data."
 msgstr "Bu pano veri depolayamaz."
 
-#: gdk/gdkclipboard.c:287 gdk/gdkclipboard.c:785 gdk/gdkclipboard.c:1085
+#: gdk/gdkclipboard.c:287 gdk/gdkclipboard.c:786 gdk/gdkclipboard.c:1086
 msgid "Cannot read from empty clipboard."
 msgstr "Boş panodan okunamaz."
 
-#: gdk/gdkclipboard.c:318 gdk/gdkclipboard.c:1135 gdk/gdkdrag.c:618
+#: gdk/gdkclipboard.c:318 gdk/gdkclipboard.c:1136 gdk/gdkdrag.c:618
 msgid "No compatible formats to transfer clipboard contents."
 msgstr "Pano içeriklerini aktarmak için uyumlu biçim yok."
 
@@ -129,9 +129,9 @@ msgstr "İçerikleri aktarmak için uyumlu biçim yok."
 msgid "No GL API allowed."
 msgstr "İzin verilen GP API yok."
 
-#: gdk/gdkglcontext.c:426 gdk/win32/gdkglcontext-win32-wgl.c:387
-#: gdk/win32/gdkglcontext-win32-wgl.c:530
-#: gdk/win32/gdkglcontext-win32-wgl.c:574 gdk/x11/gdkglcontext-glx.c:691
+#: gdk/gdkglcontext.c:426 gdk/win32/gdkglcontext-win32-wgl.c:383
+#: gdk/win32/gdkglcontext-win32-wgl.c:526
+#: gdk/win32/gdkglcontext-win32-wgl.c:570 gdk/x11/gdkglcontext-glx.c:691
 msgid "Unable to create a GL context"
 msgstr "GL bağlamı oluşturulamadı"
 
@@ -154,7 +154,7 @@ msgstr "%s kullanılmaya çalışılıyor ancak şu anda %s kullanılıyor"
 
 #: gdk/gdktexture.c:530
 msgid "Unknown image format."
-msgstr "Bilinmeyen resim biçimi."
+msgstr "Bilinmeyen görüntü biçimi."
 
 #.
 #. * Translators, the strings in the “keyboard label” context are
@@ -536,32 +536,37 @@ msgstr "Askıya Al"
 #: gdk/loaders/gdkjpeg.c:63
 #, c-format
 msgid "Error interpreting JPEG image file (%s)"
-msgstr "JPEG resim dosyası yorumlanırken hata (%s)"
+msgstr "JPEG görüntü dosyası yorumlanırken hata (%s)"
 
 #: gdk/loaders/gdkjpeg.c:194
 #, c-format
 msgid "Unsupported JPEG colorspace (%d)"
 msgstr "Desteklenmeyen JPEG renk uzayı (%d)"
 
-#: gdk/loaders/gdkjpeg.c:203 gdk/loaders/gdkpng.c:280 gdk/loaders/gdktiff.c:467
+#: gdk/loaders/gdkjpeg.c:203 gdk/loaders/gdkpng.c:286 gdk/loaders/gdktiff.c:467
 #, c-format
 msgid "Not enough memory for image size %ux%u"
-msgstr "%ux%u resim boyutu için yeterli bellek yok"
+msgstr "%ux%u görüntü boyutu için yeterli bellek yok"
 
 #: gdk/loaders/gdkpng.c:118
 #, c-format
 msgid "Error reading png (%s)"
 msgstr "PNG okunurken hata (%s)"
 
-#: gdk/loaders/gdkpng.c:211
+#: gdk/loaders/gdkpng.c:212
 #, c-format
 msgid "Unsupported depth %u in png image"
-msgstr "Png resminde desteklenmeyen %u derinlik"
+msgstr "Png görüntüsünde desteklenmeyen %u derinlik"
 
-#: gdk/loaders/gdkpng.c:261
+#: gdk/loaders/gdkpng.c:262
 #, c-format
 msgid "Unsupported color type %u in png image"
-msgstr "Png resminde desteklenmeyen %u renk türü"
+msgstr "Png görüntüsünde desteklenmeyen %u renk türü"
+
+#: gdk/loaders/gdkpng.c:272
+#, c-format
+msgid "Image stride too large for image size %ux%u"
+msgstr "%ux%u görüntü boyutu için görüntü adımı çok büyük"
 
 #: gdk/loaders/gdktiff.c:353
 msgid "Failed to load RGB data from TIFF file"
@@ -588,86 +593,86 @@ msgstr "Uyumlu aktarım biçimi bulunamadı"
 msgid "Failed to decode contents with mime-type of '%s'"
 msgstr "'%s' mime türü içeriklerinin kodu çözülemedi"
 
-#: gdk/win32/gdkclipdrop-win32.c:721
+#: gdk/win32/gdkclipdrop-win32.c:719
 #, c-format
 msgid "Cannot claim clipboard ownership. OpenClipboard() timed out."
 msgstr ""
 "Pano sahipliği istemi yapılamıyor. OpenClipboard() zaman aşımına uğradı."
 
-#: gdk/win32/gdkclipdrop-win32.c:731
+#: gdk/win32/gdkclipdrop-win32.c:729
 #, c-format
 msgid "Cannot claim clipboard ownership. Another process claimed it before us."
 msgstr "Pano sahipliği istemi yapılamıyor. Başka süreç bizden önce istedi."
 
-#: gdk/win32/gdkclipdrop-win32.c:745
+#: gdk/win32/gdkclipdrop-win32.c:743
 #, c-format
 msgid "Cannot claim clipboard ownership. OpenClipboard() failed: 0x%lx."
 msgstr "Pano sahipliği istemi yapılamıyor. OpenClipboard() başarısız: 0x%lx."
 
-#: gdk/win32/gdkclipdrop-win32.c:757
+#: gdk/win32/gdkclipdrop-win32.c:755
 #, c-format
 msgid "Cannot claim clipboard ownership. EmptyClipboard() failed: 0x%lx."
 msgstr "Pano sahipliği istemi yapılamıyor. EmptyClipboard() başarısız: 0x%lx."
 
-#: gdk/win32/gdkclipdrop-win32.c:800
+#: gdk/win32/gdkclipdrop-win32.c:798
 #, c-format
 msgid "Cannot set clipboard data. OpenClipboard() timed out."
 msgstr "Pano verisi belirlenemiyor. OpenClipboard() zaman aşımına uğradı."
 
-#: gdk/win32/gdkclipdrop-win32.c:810 gdk/win32/gdkclipdrop-win32.c:841
+#: gdk/win32/gdkclipdrop-win32.c:808 gdk/win32/gdkclipdrop-win32.c:839
 #, c-format
 msgid "Cannot set clipboard data. Another process claimed clipboard ownership."
 msgstr ""
 "Pano verisi belirlenemiyor. Başka süreç pano sahipliği isteminde bulundu."
 
-#: gdk/win32/gdkclipdrop-win32.c:824
+#: gdk/win32/gdkclipdrop-win32.c:822
 #, c-format
 msgid "Cannot set clipboard data. OpenClipboard() failed: 0x%lx."
 msgstr "Pano verisi belirlenemiyor. OpenClipboard() başarısız: 0x%lx."
 
-#: gdk/win32/gdkclipdrop-win32.c:876
+#: gdk/win32/gdkclipdrop-win32.c:874
 #, c-format
 msgid "Cannot get clipboard data. GlobalLock(0x%p) failed: 0x%lx."
 msgstr "Pano verisi alınamıyor. GlobalLock(0x%p) başarısız: 0x%lx."
 
-#: gdk/win32/gdkclipdrop-win32.c:887
+#: gdk/win32/gdkclipdrop-win32.c:885
 #, c-format
 msgid "Cannot get clipboard data. GlobalSize(0x%p) failed: 0x%lx."
 msgstr "Pano verisi alınamıyor. GlobalSize(0x%p) başarısız: 0x%lx."
 
-#: gdk/win32/gdkclipdrop-win32.c:900
+#: gdk/win32/gdkclipdrop-win32.c:898
 #, c-format
 msgid ""
 "Cannot get clipboard data. Failed to allocate %s bytes to store the data."
 msgstr "Pano verisi alınamıyor. %s bayt, veriyi depolamak için ayrılamadı."
 
-#: gdk/win32/gdkclipdrop-win32.c:932
+#: gdk/win32/gdkclipdrop-win32.c:930
 #, c-format
 msgid "Cannot get clipboard data. OpenClipboard() timed out."
 msgstr "Pano verisi alınamıyor. OpenClipboard() zaman aşımına uğradı."
 
-#: gdk/win32/gdkclipdrop-win32.c:942
+#: gdk/win32/gdkclipdrop-win32.c:940
 #, c-format
 msgid "Cannot get clipboard data. Clipboard ownership changed."
 msgstr "Pano verisi alınamıyor. Pano sahipliği değişti."
 
-#: gdk/win32/gdkclipdrop-win32.c:952
+#: gdk/win32/gdkclipdrop-win32.c:950
 #, c-format
 msgid ""
 "Cannot get clipboard data. Clipboard data changed before we could get it."
 msgstr "Pano verisi alınamıyor. Pano verisi biz almadan önce değişti."
 
-#: gdk/win32/gdkclipdrop-win32.c:969
+#: gdk/win32/gdkclipdrop-win32.c:967
 #, c-format
 msgid "Cannot get clipboard data. OpenClipboard() failed: 0x%lx."
 msgstr "Pano verisi alınamıyor. OpenClipboard() başarısız: 0x%lx."
 
-#: gdk/win32/gdkclipdrop-win32.c:994
+#: gdk/win32/gdkclipdrop-win32.c:992
 #, c-format
 msgid "Cannot get clipboard data. No compatible transfer format found."
 msgstr "Pano verisi alınamıyor. Uyumlu aktarım biçimi bulunamadı."
 
-#: gdk/win32/gdkclipdrop-win32.c:1004
+#: gdk/win32/gdkclipdrop-win32.c:1002
 #, c-format
 msgid "Cannot get clipboard data. GetClipboardData() failed: 0x%lx."
 msgstr "Pano verisi alınamıyor. GetClipboardData() başarısız: 0x%lx."
@@ -707,21 +712,21 @@ msgstr "IDataObject_GetData (0x%x) başarısız, 0x%lx döndürüyor"
 msgid "Failed to transmute DnD data W32 format 0x%x to %p (%s)"
 msgstr "W32 biçimli 0x%x DnD verisi, %p hedefine dönüştürülemedi (%s)"
 
-#: gdk/win32/gdkglcontext-win32-wgl.c:319
+#: gdk/win32/gdkglcontext-win32-wgl.c:315
 msgid "No GL implementation is available"
 msgstr "Kullanılabilir GL uygulaması yok"
 
-#: gdk/win32/gdkglcontext-win32-wgl.c:396
+#: gdk/win32/gdkglcontext-win32-wgl.c:392
 #, c-format
 msgid "WGL version %d.%d is too low, need at least %d.%d"
 msgstr "WGL sürümü %d.%d çok düşük, en az %d.%d gerekiyor"
 
-#: gdk/win32/gdkglcontext-win32-wgl.c:414
+#: gdk/win32/gdkglcontext-win32-wgl.c:410
 #, c-format
 msgid "GL implementation cannot share GL contexts"
 msgstr "GL uygulaması GL bağlamlarını paylaşamaz"
 
-#: gdk/win32/gdkglcontext-win32-wgl.c:696
+#: gdk/win32/gdkglcontext-win32-wgl.c:692
 msgid "No available configurations for the given pixel format"
 msgstr "Verilen piksel biçimi için kullanılabilir yapılandırma yok"
 
@@ -1427,7 +1432,7 @@ msgstr "başlık"
 #: gtk/gtkaccessible.c:775
 msgctxt "accessibility"
 msgid "image"
-msgstr "resim"
+msgstr "görüntü"
 
 #: gtk/gtkaccessible.c:776
 msgctxt "accessibility"
@@ -1728,7 +1733,7 @@ msgstr "_Kapat"
 #. * suspend or screen locking, and the caller hasn't specified
 #. * a reason.
 #.
-#: gtk/gtkapplication-dbus.c:721
+#: gtk/gtkapplication-dbus.c:721 gtk/gtkapplication-dbus.c:763
 msgid "Reason not specified"
 msgstr "Neden belirtilmedi"
 
@@ -2292,7 +2297,7 @@ msgid "If you delete an item, it will be permanently lost."
 msgstr "Eğer bir öge silerseniz kalıcı olarak kaybolur."
 
 #: gtk/gtkfilechooserwidget.c:1185 gtk/gtkfilechooserwidget.c:1815
-#: gtk/gtklabel.c:5695 gtk/gtktext.c:6147 gtk/gtktextview.c:9018
+#: gtk/gtklabel.c:5696 gtk/gtktext.c:6147 gtk/gtktextview.c:9018
 msgid "_Delete"
 msgstr "_Sil"
 
@@ -2620,7 +2625,7 @@ msgstr "Biçem Değişkeleri"
 msgid "Character Variations"
 msgstr "Karakter Değişkeleri"
 
-#: gtk/gtkglarea.c:305
+#: gtk/gtkglarea.c:309
 msgid "OpenGL context creation failed"
 msgstr "OpenGL içerik oluşturulması başarısız oldu"
 
@@ -2633,31 +2638,31 @@ msgstr "Kapat"
 msgid "Close the infobar"
 msgstr "Bilgi çubuğunu kapat"
 
-#: gtk/gtklabel.c:5692 gtk/gtktext.c:6135 gtk/gtktextview.c:9006
+#: gtk/gtklabel.c:5693 gtk/gtktext.c:6135 gtk/gtktextview.c:9006
 msgid "Cu_t"
 msgstr "Ke_s"
 
-#: gtk/gtklabel.c:5693 gtk/gtktext.c:6139 gtk/gtktextview.c:9010
+#: gtk/gtklabel.c:5694 gtk/gtktext.c:6139 gtk/gtktextview.c:9010
 msgid "_Copy"
 msgstr "_Kopyala"
 
-#: gtk/gtklabel.c:5694 gtk/gtktext.c:6143 gtk/gtktextview.c:9014
+#: gtk/gtklabel.c:5695 gtk/gtktext.c:6143 gtk/gtktextview.c:9014
 msgid "_Paste"
 msgstr "_Yapıştır"
 
-#: gtk/gtklabel.c:5700 gtk/gtktext.c:6156 gtk/gtktextview.c:9039
+#: gtk/gtklabel.c:5701 gtk/gtktext.c:6156 gtk/gtktextview.c:9039
 msgid "Select _All"
 msgstr "_Tümünü Seç"
 
-#: gtk/gtklabel.c:5705
+#: gtk/gtklabel.c:5706
 msgid "_Open Link"
 msgstr "Bağlantı _Aç"
 
-#: gtk/gtklabel.c:5709
+#: gtk/gtklabel.c:5710
 msgid "Copy _Link Address"
 msgstr "_Bağlantı Adresini Kopyala"
 
-#: gtk/gtklabel.c:5753 gtk/gtktext.c:2716 gtk/gtktextview.c:9088
+#: gtk/gtklabel.c:5754 gtk/gtktext.c:2716 gtk/gtktextview.c:9088
 msgid "Context menu"
 msgstr "Bağlam menüsü"
 
@@ -3561,7 +3566,7 @@ msgstr "Sağa kaydır"
 
 #. Translators: This is placeholder text for the search entry in the shortcuts window
 #: gtk/gtkshortcutswindow.c:855 gtk/gtkshortcutswindow.c:922
-#: gtk/gtkshortcutswindow.c:927
+#: gtk/gtkshortcutswindow.c:928
 msgid "Search Shortcuts"
 msgstr "Kısayolları Ara"
 
@@ -3575,12 +3580,12 @@ msgstr "Kısayollar"
 msgid "Search Results"
 msgstr "Arama Sonuçları"
 
-#: gtk/gtkshortcutswindow.c:989 gtk/ui/gtkemojichooser.ui:349
+#: gtk/gtkshortcutswindow.c:990 gtk/ui/gtkemojichooser.ui:349
 #: gtk/ui/gtkfilechooserwidget.ui:239
 msgid "No Results Found"
 msgstr "Hiçbir Sonuç Bulunamadı"
 
-#: gtk/gtkshortcutswindow.c:1000 gtk/ui/gtkemojichooser.ui:362
+#: gtk/gtkshortcutswindow.c:1001 gtk/ui/gtkemojichooser.ui:362
 #: gtk/ui/gtkfilechooserwidget.ui:252 gtk/ui/gtkplacesview.ui:218
 msgid "Try a different search"
 msgstr "Başka arama deneyin"
@@ -7272,7 +7277,7 @@ msgstr "DOSYA…"
 
 #: tools/gtk-builder-tool-screenshot.c:378
 msgid "Render a .ui file to an image."
-msgstr "Bir .ui dosyasını resme gerçekle."
+msgstr "Bir .ui dosyasını görüntüye işle."
 
 #: tools/gtk-builder-tool-screenshot.c:397
 #, c-format
@@ -7522,7 +7527,7 @@ msgstr "GERÇEKLEYİCİ"
 
 #: tools/gtk-rendernode-tool-render.c:212
 msgid "Render a .node file to an image."
-msgstr "Bir .node dosyasını resme gerçekle."
+msgstr "Bir .node dosyasını görüntüye işle."
 
 #: tools/gtk-rendernode-tool-render.c:231
 #, c-format
