@@ -149,7 +149,7 @@ deserialize_error_func (const GskParseLocation *start,
     append_error_value (errors, GTK_TYPE_CSS_PARSER_WARNING, error->code);
   else
     g_string_append_printf (errors, 
-                            "%s %u\n",
+                            "%s %u",
                             g_quark_to_string (error->domain),
                             error->code);
 
