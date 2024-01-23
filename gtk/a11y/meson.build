@@ -22,4 +22,9 @@ if gtk_a11y_backends.contains('atspi')
     'gtkatspiutils.c',
     'gtkatspivalue.c',
   ])
+
+  gtk_atspi_public_headers = files([
+  ])
+
+  install_headers(gtk_atspi_public_headers, 'gtkatspi.h', subdir: 'gtk-4.0/gtk/a11y/')
 endif
