@@ -116,6 +116,8 @@ compare_render_tests = [
   'repeat-huge-overdraw',
   'repeat-negative-coords',
   'repeat-no-repeat',
+  'repeat-node-tiling-horizontal',
+  'repeat-node-tiling-vertical',
   'repeat-repeats',
   'repeat-repeats-nested-nogl',
   'repeat-scaling',
