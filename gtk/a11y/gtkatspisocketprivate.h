@@ -1,4 +1,4 @@
-/* gtkatspi.h: AT-SPI
+/* gtkatspisocketprivate.h: AT-SPI socket object
  *
  * Copyright 2024  Igalia S.L.
  *
@@ -20,10 +20,14 @@
 
 #pragma once
 
-#include <gtk/gtk.h>
+#include <gio/gio.h>
+#include "gtkaccessible.h"
+#include "gtkatspisocket.h"
 
-#define __GTKATSPI_H_INSIDE__
+G_BEGIN_DECLS
 
-#include <gtk/a11y/gtkatspisocket.h>
+GVariant * gtk_at_spi_socket_to_ref (GtkAtSpiSocket *self);
+void gtk_at_spi_socket_embed (GtkAtSpiSocket  *self,
+                              GDBusConnection *connection);
 
-#undef __GTKATSPI_H_INSIDE__
+G_END_DECLS
