@@ -1,5 +1,80 @@
-Overview of Changes in 4.13.6, xx-xx-xxxx
+Overview of Changes in 4.13.6, 25-01-2024
 =========================================
+
+This release changes the ngl renderer to be the default renderer.
+
+The intent of this change is to get wider testing and verify that
+the new renderers are production-ready. If significant problems
+show up, we will revert this change for 4.14.
+
+You can still override the renderer choice using the GSK_RENDERER
+environment variable.
+
+Since ngl can handle fractional scaling much better than the old gl
+renderer, we allow fractional scaling by default with gl now. If you
+are using the old gl renderer (e.g. because your system is limited to
+GLES2), you can disable fractional scaling by setting the GDK_DEBUG
+environment variable to include the gl-no-fractional key.
+
+* GtkColumnView:
+ - Fix infinite loops in dispose
+ - Fix problems with weak ref cycles in GtkExpression
+
+* GtkListView:
+ - Fix some corner cases with sections during insertions and deletions
+ - Don't double-recycle widgets
+
+* GtkStack:
+ - Add automatic cleanup for GtkStackPage
+
+* GDK:
+ - Use standard cursor names for drag cursors
+ - Enable fractional scaling with gl by default
+
+* GSK:
+ - Many fixes and improvements to the unified renderers:
+   - Fix text rendering with the uber shader
+   - Fix rounding issues with fractional scales
+   - Fix some memory leaks
+   - Many text rendering fixes
+   - Implement subpixel positioning for glyphs
+   - Support custom fonts in node files
+   - Add tests for font rendering
+   - Fix drawing of repeat nodes
+   - Implement subpixels positioning
+   - Evict stale textures, glyphs and atlases from the cache
+ - Some fixes and improvements to the GL renderer:
+   - Fix problems with GLES on Nvidia
+   - Avoid a crash in the mask demo
+   - Respect opacity of the first child node in containers
+ - Some fixes and improvements to the fallback renderer:
+   - Fix drawing of repeat nodes
+ - Make ngl the default renderer
+
+* Wayland:
+ - Fix problems with tablet cursors
+ - Fix problems without seats
+
+* Accessibility:
+ - Respect a separate "show-status-shapes setting
+ - Fix change notification for accessible names on some widgets
+
+* Inspector:
+ - Show the git commit in devel builds
+
+* Tools:
+ - Make gtk4-node-editor autosave its contents
+ - Add a benchmark command to gtk4-rendernode-tool
+
+* Translation updates:
+ French
+ Galician
+ Georgian
+ Occitan
+ Persian
+ Russian
+ Vietnamese
+
 
 Overview of Changes in 4.13.5, 07-01-2024
 =========================================
