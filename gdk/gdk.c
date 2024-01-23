@@ -222,7 +222,6 @@ gdk_parse_debug_var (const char        *variable,
         }
       else
         {
-          char *val = g_strndup (p, q - p);
           for (i = 0; i < nkeys; i++)
             {
               if (strlen (keys[i].key) == q - p &&
@@ -233,8 +232,7 @@ gdk_parse_debug_var (const char        *variable,
                 }
             }
           if (i == nkeys)
-            fprintf (stderr, "Unrecognized value \"%s\". Try %s=help\n", val, variable);
-          g_free (val);
+            fprintf (stderr, "Unrecognized value \"%.*s\". Try %s=help\n", (int) (q - p), p, variable);
          }
 
       p = q;
