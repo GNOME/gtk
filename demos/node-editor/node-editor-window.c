@@ -1568,23 +1568,6 @@ edit_action_cb (GtkWidget  *widget,
 }
 
 static void
-node_editor_window_map (GtkWidget *widget)
-{
-  char *path;
-
-  GTK_WIDGET_CLASS (node_editor_window_parent_class)->map (widget);
-
-  path = get_autosave_path (NULL);
-  if (g_file_test (path, G_FILE_TEST_EXISTS))
-    {
-      g_free (path);
-      return;
-    }
-
-  g_free (path);
-}
-
-static void
 node_editor_window_set_property (GObject      *object,
                                  guint         prop_id,
                                  const GValue *value,
@@ -1659,8 +1642,6 @@ node_editor_window_class_init (NodeEditorWindowClass *class)
 
   widget_class->realize = node_editor_window_realize;
   widget_class->unrealize = node_editor_window_unrealize;
-
-  widget_class->map = node_editor_window_map;
 
   properties[PROP_AUTO_RELOAD] = g_param_spec_boolean ("auto-reload", NULL, NULL,
                                                        TRUE,
