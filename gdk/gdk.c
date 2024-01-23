@@ -193,8 +193,7 @@ gdk_parse_debug_var (const char        *variable,
   guint i;
   guint result = 0;
   const char *string;
-  const char *p;
-  const char *q;
+  const char *p, *q, *s;
   gboolean invert;
   gboolean help;
 
@@ -222,19 +221,42 @@ gdk_parse_debug_var (const char        *variable,
         }
       else
         {
-          char *val = g_strndup (p, q - p);
+          s = strchr (p, '=');
+          if (!s || s > q)
+            s = q;
+
           for (i = 0; i < nkeys; i++)
             {
-              if (strlen (keys[i].key) == q - p &&
-                  g_ascii_strncasecmp (keys[i].key, p, q - p) == 0)
+              if (strlen (keys[i].key) == s - p &&
+                  g_ascii_strncasecmp (keys[i].key, p, s - p) == 0)
                 {
-                  result |= keys[i].value;
-                  break;
+                  if (s == q)
+                    {
+                      if (keys[i].callback)
+                        {
+                          if (!keys[i].callback (&keys[i], NULL))
+                            fprintf (stderr, "Setting value \"%.*s\" failed.", (int)(q - p), p);
+                        }
+                      else
+                        result |= keys[i].value;
+
+                      break;
+                    }
+                  else if (keys[i].callback)
+                    {
+                      char *val;
+
+                      val = g_strndup (s + 1, q - (s + 1));
+                      if (!keys[i].callback (&keys[i], val))
+                        fprintf (stderr, "Setting value \"%.*s\" failed.", (int)(q - p), p);
+                      g_free (val);
+
+                      break;
+                    }
                 }
             }
           if (i == nkeys)
-            fprintf (stderr, "Unrecognized value \"%s\". Try %s=help\n", val, variable);
-          g_free (val);
+            fprintf (stderr, "Unrecognized value \"%.*s\". Try %s=help\n", (int)(q - p), p, variable);
          }
 
       p = q;
@@ -246,13 +268,26 @@ gdk_parse_debug_var (const char        *variable,
     {
       int max_width = 4;
       for (i = 0; i < nkeys; i++)
-        max_width = MAX (max_width, strlen (keys[i].key));
+        {
+          int width = strlen (keys[i].key);
+          if (keys[i].callback)
+            width += strlen ("=VALUE");
+          max_width = MAX (max_width, width);
+        }
       max_width += 4;
 
       fprintf (stderr, "Supported %s values:\n", variable);
-      for (i = 0; i < nkeys; i++) {
-        fprintf (stderr, "  %s%*s%s\n", keys[i].key, (int)(max_width - strlen (keys[i].key)), " ", keys[i].help);
-      }
+      for (i = 0; i < nkeys; i++)
+        {
+          int width = strlen (keys[i].key);
+          if (keys[i].callback)
+            width += strlen ("=VALUE");
+          fprintf (stderr, "  %s%s%*s%s\n",
+                   keys[i].key,
+                   keys[i].callback ? "=VALUE" : "",
+                   (int)(max_width - width), " ",
+                   keys[i].help);
+        }
       fprintf (stderr, "  %s%*s%s\n", "all", max_width - 3, " ", "Enable all values. Other given values are subtracted");
       fprintf (stderr, "  %s%*s%s\n", "help", max_width - 4, " ", "Print this help");
       fprintf (stderr, "\nMultiple values can be given, separated by : or space.\n");

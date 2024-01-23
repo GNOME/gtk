@@ -97,14 +97,17 @@ gdk_debug_message (const char *format, ...)
 #define GDK_DEBUG_CHECK(type) GDK_DISPLAY_DEBUG_CHECK (NULL,type)
 #define GDK_DEBUG(type,...) GDK_DISPLAY_DEBUG (NULL,type,__VA_ARGS__)
 
-typedef struct
+typedef struct _GdkDebugKey GdkDebugKey;
+
+struct _GdkDebugKey
 {
   const char *key;
   guint value;
   const char *help;
-} GdkDebugKey;
+  gboolean (* callback) (const GdkDebugKey *key,
+                         const char        *value);
+};
 
 guint gdk_parse_debug_var (const char        *variable,
                            const GdkDebugKey *keys,
                            guint              nkeys);
-
