@@ -92,6 +92,7 @@
 #include <gtk/gtkcolumnviewsorter.h>
 #include <gtk/deprecated/gtkcombobox.h>
 #include <gtk/deprecated/gtkcomboboxtext.h>
+#include <gtk/gtkconfig.h>
 #include <gtk/gtkconstraintlayout.h>
 #include <gtk/gtkconstraint.h>
 #include <gtk/gtkcssprovider.h>

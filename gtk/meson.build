@@ -970,6 +970,16 @@ else
   )
 endif
 
+gtkconfig_cdata = configuration_data()
+gtkconfig_cdata.set('GTK_ACCESSIBILITY_ATSPI', gtk_a11y_backends.contains('atspi'))
+
+gtkconfig = configure_file(
+  input: 'gtkconfig.h.meson',
+  output: 'gtkconfig.h',
+  configuration: gtkconfig_cdata,
+  install_dir: gtk_includedir / 'gtk-4.0/gtk',
+)
+
 gtkversion_cdata = configuration_data()
 gtkversion_cdata.set('GTK_MAJOR_VERSION', gtk_major_version)
 gtkversion_cdata.set('GTK_MINOR_VERSION', gtk_minor_version)
@@ -996,6 +1006,7 @@ gtk_gen_headers = [
   gtkmarshal_h,
   gtktypebuiltins_h,
   gtkprivatetypebuiltins_h,
+  gtkconfig,
   gtkversion,
 ]
 
@@ -1151,7 +1162,7 @@ libgtk = shared_library('gtk-4',
   install: true,
 )
 
-gtk_dep_sources = [gtkversion, gtktypebuiltins_h]
+gtk_dep_sources = [gtkconfig, gtkversion, gtktypebuiltins_h]
 
 # Introspection
 if build_gir
@@ -1260,6 +1271,7 @@ if build_gir
     gtk_deprecated_sources,
     gtktypebuiltins_h,
     gtkversion,
+    gtkconfig,
   ]
 
   if os_unix
