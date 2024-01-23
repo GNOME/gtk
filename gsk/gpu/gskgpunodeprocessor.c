@@ -3247,8 +3247,8 @@ gsk_gpu_node_processor_repeat_tile (GskGpuNodeProcessor    *self,
                       rect,
                       &self->offset,
                       &GRAPHENE_RECT_INIT (
-                          clipped_child_bounds.origin.x - x * child_bounds->size.width,
-                          clipped_child_bounds.origin.y - y * child_bounds->size.height,
+                          clipped_child_bounds.origin.x + x * child_bounds->size.width,
+                          clipped_child_bounds.origin.y + y * child_bounds->size.height,
                           clipped_child_bounds.size.width,
                           clipped_child_bounds.size.height
                       ));
