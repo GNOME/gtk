@@ -2965,28 +2965,12 @@ gtk_window_is_composited (GtkWindow *window)
 static gboolean
 gtk_window_supports_client_shadow (GtkWindow *window)
 {
-#ifdef GDK_WINDOWING_X11
   GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
   GdkDisplay *display;
 
   display = priv->display;
-  if (GDK_IS_X11_DISPLAY (display))
-    {
-      if (!gdk_x11_screen_supports_net_wm_hint (gdk_x11_display_get_screen (display),
-                                                g_intern_static_string ("_GTK_FRAME_EXTENTS")))
-        return FALSE;
-    }
-#endif
 
-#ifndef GDK_WINDOWING_MACOS
-
-  /* We should probably be more specific to check if frame extents are
-   * supported. For now this mimics the 4.12 behavior: if we are on a
-   * compositing WM, we assume we can use frame extents. */
-  return gtk_window_is_composited (window);
-#endif
-
-  return FALSE;
+  return gdk_display_supports_shadow_width (display);
 }
 
 static void

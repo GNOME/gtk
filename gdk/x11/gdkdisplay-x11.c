@@ -1429,6 +1429,7 @@ gdk_x11_display_open (const char *display_name)
   int ignore;
   int maj, min;
   char *cm_name;
+  gboolean frame_extents;
 
   XInitThreads ();
 
@@ -1642,6 +1643,10 @@ gdk_x11_display_open (const char *display_name)
                               XGetSelectionOwner (GDK_DISPLAY_XDISPLAY (display),
                                                   gdk_x11_get_xatom_by_name_for_display (display, cm_name)) != None);
   g_free (cm_name);
+
+  frame_extents = gdk_x11_screen_supports_net_wm_hint (gdk_x11_display_get_screen (display),
+                                                       g_intern_static_string ("_GTK_FRAME_EXTENTS"));
+  gdk_display_set_shadow_width (display, frame_extents);
 
   gdk_display_emit_opened (display);
 

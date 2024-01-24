@@ -1064,6 +1064,7 @@ gdk_win32_display_check_composited (GdkWin32Display *display)
     }
 
   gdk_display_set_composited (GDK_DISPLAY (display), composited);
+  gdk_display_set_shadow_width (GDK_DISPLAY (display), composited);
 }
 
 static void
