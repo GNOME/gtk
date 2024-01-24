@@ -301,3 +301,42 @@ gsk_gpu_clip_get_shader_clip (const GskGpuClip       *self,
     return GSK_GPU_SHADER_CLIP_ROUNDED;
 }
 
+gboolean
+gsk_gpu_clip_contains_box (const GskGpuClip *self,
+                           const Point      *offset,
+                           const Box        *box)
+{
+  Box b = box_add (*box, *offset);
+
+  switch (self->type)
+    {
+    default:
+      g_assert_not_reached();
+    case GSK_GPU_CLIP_ALL_CLIPPED:
+      return FALSE;
+
+    case GSK_GPU_CLIP_NONE:
+    case GSK_GPU_CLIP_CONTAINED:
+    case GSK_GPU_CLIP_RECT:
+      return box_contains (box_from_graphene (&self->rect.bounds), b);
+
+    case GSK_GPU_CLIP_ROUNDED:
+      return gsk_rounded_rect_contains_rect (&self->rect, &GRAPHENE_RECT_INIT (box_x0 (b), box_y0 (b), box_width (b), box_height (b)));
+    }
+}
+
+GskGpuShaderClip
+gsk_gpu_clip_get_shader_clip2 (const GskGpuClip *self,
+                               const Point      *offset,
+                               const Box        *box)
+{
+  if (self->type == GSK_GPU_CLIP_NONE ||
+      self->type == GSK_GPU_CLIP_CONTAINED ||
+      gsk_gpu_clip_contains_box (self, offset, box))
+    return GSK_GPU_SHADER_CLIP_NONE;
+  else if (self->type == GSK_GPU_CLIP_RECT)
+    return GSK_GPU_SHADER_CLIP_RECT;
+  else
+    return GSK_GPU_SHADER_CLIP_ROUNDED;
+}
+

@@ -5,6 +5,7 @@
 #include <gdk/gdk.h>
 #include <graphene.h>
 #include <gsk/gskroundedrect.h>
+#include "boxprivate.h"
 
 G_BEGIN_DECLS
 
@@ -65,9 +66,16 @@ gboolean                gsk_gpu_clip_contains_rect                      (const G
 gboolean                gsk_gpu_clip_may_intersect_rect                 (const GskGpuClip    *self,
                                                                          const graphene_point_t *offset,
                                                                          const graphene_rect_t  *rect) G_GNUC_WARN_UNUSED_RESULT;
-GskGpuShaderClip        gsk_gpu_clip_get_shader_clip                    (const GskGpuClip    *self,
+GskGpuShaderClip        gsk_gpu_clip_get_shader_clip                    (const GskGpuClip       *self,
                                                                          const graphene_point_t *offset,
                                                                          const graphene_rect_t  *rect);
+
+gboolean                gsk_gpu_clip_contains_box                       (const GskGpuClip       *self,
+                                                                         const Point            *offset,
+                                                                         const Box              *box) G_GNUC_WARN_UNUSED_RESULT;
+GskGpuShaderClip        gsk_gpu_clip_get_shader_clip2                   (const GskGpuClip       *self,
+                                                                         const Point            *offset,
+                                                                         const Box              *box);
 
 G_END_DECLS
 
