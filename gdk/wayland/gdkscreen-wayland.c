@@ -1048,8 +1048,9 @@ set_capability_setting (GdkScreen                 *screen,
                         enum gtk_shell1_capability test)
 {
   GdkWaylandScreen *wayland_screen = GDK_WAYLAND_SCREEN (screen);
+  int testbit = 1 << (test - 1);
 
-  g_value_set_boolean (value, (wayland_screen->shell_capabilities & test) == test);
+  g_value_set_boolean (value, (wayland_screen->shell_capabilities & testbit) == testbit);
 
   return TRUE;
 }
