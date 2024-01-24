@@ -117,7 +117,6 @@ gtk_list_item_change_release (GtkListItemChange *change,
   if (!g_hash_table_replace (change->deleted_items, gtk_list_item_base_get_item (GTK_LIST_ITEM_BASE (widget)), widget))
     {
       g_warning ("Duplicate item detected in list. Picking one randomly.");
-      gtk_list_item_change_recycle (change, widget);
     }
 }
 
