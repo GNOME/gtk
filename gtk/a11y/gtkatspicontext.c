@@ -1541,7 +1541,7 @@ gtk_at_spi_context_announce (GtkATContext *context,
   if (self->connection == NULL)
     return;
 
-  guint atk_live = priority == GTK_ACCESSIBLE_ANNOUNCEMENT_PRIORITY_ASSERTIVE ? 2 : 1;
+  guint atk_live = priority == GTK_ACCESSIBLE_ANNOUNCEMENT_PRIORITY_HIGH ? 2 : 1;
 
   g_dbus_connection_emit_signal (self->connection,
                                  NULL,
