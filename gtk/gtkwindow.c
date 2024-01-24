@@ -244,7 +244,6 @@ typedef struct
   guint    csd_requested             : 1;
   guint    client_decorated          : 1; /* Decorations drawn client-side */
   guint    use_client_shadow         : 1; /* Decorations use client-side shadows */
-  guint    use_transparency          : 1;
   guint    maximized                 : 1;
   guint    suspended                 : 1;
   guint    fullscreen                : 1;
@@ -2603,7 +2602,6 @@ gtk_window_transient_parent_unrealized (GtkWidget *parent,
   if (_gtk_widget_get_realized (window))
     gdk_toplevel_set_transient_for (GDK_TOPLEVEL (priv->surface), NULL);
 
-  priv->use_transparency = FALSE;
   priv->use_client_shadow = FALSE;
 }
 
@@ -2954,20 +2952,24 @@ unset_titlebar (GtkWindow *window)
 }
 
 static gboolean
-gtk_window_supports_transparency (GtkWindow *window)
+gtk_window_is_composited (GtkWindow *window)
 {
   GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
   GdkDisplay *display;
 
   display = priv->display;
 
-  if (!gdk_display_is_rgba (display))
-    return FALSE;
+  return gdk_display_is_rgba (display) && gdk_display_is_composited (display);
+}
 
-  if (!gdk_display_is_composited (display))
-    return FALSE;
-
+static gboolean
+gtk_window_supports_client_shadow (GtkWindow *window)
+{
 #ifdef GDK_WINDOWING_X11
+  GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
+  GdkDisplay *display;
+
+  display = priv->display;
   if (GDK_IS_X11_DISPLAY (display))
     {
       if (!gdk_x11_screen_supports_net_wm_hint (gdk_x11_display_get_screen (display),
@@ -2976,16 +2978,12 @@ gtk_window_supports_transparency (GtkWindow *window)
     }
 #endif
 
-  return TRUE;
-}
-
-static gboolean
-gtk_window_supports_client_shadow (GtkWindow *window)
-{
 #ifndef GDK_WINDOWING_MACOS
-  GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
 
-  return priv->use_transparency;
+  /* We should probably be more specific to check if frame extents are
+   * supported. For now this mimics the 4.12 behavior: if we are on a
+   * compositing WM, we assume we can use frame extents. */
+  return gtk_window_is_composited (window);
 #endif
 
   return FALSE;
@@ -2998,7 +2996,7 @@ gtk_window_enable_csd (GtkWindow *window)
   GtkWidget *widget = GTK_WIDGET (window);
 
   /* We need a visual with alpha for rounded corners */
-  if (priv->use_transparency)
+  if (gtk_window_is_composited (window))
     {
       gtk_widget_add_css_class (widget, "csd");
     }
@@ -3063,10 +3061,9 @@ gtk_window_set_titlebar (GtkWindow *window,
     }
   else
     {
-      priv->use_transparency = gtk_window_supports_transparency (window);
       priv->use_client_shadow = gtk_window_supports_client_shadow (window);
-
       gtk_window_enable_csd (window);
+
       priv->titlebar = titlebar;
       priv->title_box = titlebar;
       gtk_widget_insert_before (priv->title_box, widget, NULL);
@@ -4319,8 +4316,7 @@ gtk_window_realize (GtkWidget *widget)
   /* Create default title bar */
   if (!priv->client_decorated && gtk_window_should_use_csd (window))
     {
-      priv->use_transparency = gtk_window_supports_transparency (window);
-      if (priv->use_transparency)
+      if (gtk_window_is_composited (window))
         {
           priv->use_client_shadow = gtk_window_supports_client_shadow (window);
           gtk_window_enable_csd (window);
