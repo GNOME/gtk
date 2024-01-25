@@ -3751,11 +3751,20 @@ gtk_text_buffer_paste_clipboard_finish (GObject      *source,
   ClipboardRequest *request_data = data;
   GtkTextBuffer *src_buffer;
   GtkTextIter start, end;
+  GtkTextMark *paste_point_override;
   const GValue *value;
 
   value = gdk_clipboard_read_value_finish (clipboard, result, NULL);
   if (value == NULL)
-    return;
+    {
+      /* Clear paste point override from empty middle-click paste */
+      paste_point_override = gtk_text_buffer_get_mark (request_data->buffer,
+                                                       "gtk_paste_point_override");
+      if (paste_point_override != NULL)
+        gtk_text_buffer_delete_mark (request_data->buffer, paste_point_override);
+
+      return;
+    }
 
   src_buffer = g_value_get_object (value);
 
