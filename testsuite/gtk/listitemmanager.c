@@ -501,7 +501,10 @@ test_exhaustive (void)
                 g_strv_builder_unref (builder);
 
                 j = g_test_rand_int_range (0, source_size + 1);
-                gtk_string_list_splice (GTK_STRING_LIST (source), j, 0, (const char * const *) inclusion);
+                gtk_string_list_splice (GTK_STRING_LIST (source),
+                                        j,
+                                        g_test_rand_bit () ? 0 : g_test_rand_int_range (0, source_size - j + 1),
+                                        (const char * const *) inclusion);
                 g_strfreev (inclusion);
 
                 if (g_test_verbose ())
