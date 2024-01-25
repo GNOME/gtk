@@ -1625,7 +1625,7 @@ gtk_list_item_manager_model_sections_changed_cb (GListModel         *model,
   gtk_list_item_change_clear_header (&change, &header->widget);
   gtk_list_tile_set_type (header, GTK_LIST_TILE_UNMATCHED_HEADER);
 
-  n_items -= MIN (n_items, position - offset);
+  n_items += offset;
   while (n_items > 0)
     {
       switch (tile->type)
