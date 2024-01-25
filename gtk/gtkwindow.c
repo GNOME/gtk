@@ -2601,8 +2601,6 @@ gtk_window_transient_parent_unrealized (GtkWidget *parent,
   GtkWindowPrivate *priv = gtk_window_get_instance_private (GTK_WINDOW (window));
   if (_gtk_widget_get_realized (window))
     gdk_toplevel_set_transient_for (GDK_TOPLEVEL (priv->surface), NULL);
-
-  priv->use_client_shadow = FALSE;
 }
 
 static void
@@ -4316,6 +4314,8 @@ gtk_window_realize (GtkWidget *widget)
 
           update_window_actions (window);
         }
+      else
+        priv->use_client_shadow = FALSE;
     }
 
   surface = gdk_surface_new_toplevel (gtk_widget_get_display (widget));
@@ -4455,6 +4455,8 @@ gtk_window_unrealize (GtkWidget *widget)
 
   gdk_surface_set_widget (surface, NULL);
   g_clear_pointer (&priv->surface, gdk_surface_destroy);
+
+  priv->use_client_shadow = FALSE;
 }
 
 static void
