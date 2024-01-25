@@ -1332,7 +1332,18 @@ gtk_accessible_value_collect_value (const GtkAccessibleCollect  *cstate,
         GtkAccessibleValueRefListCtor ctor =
           (GtkAccessibleValueRefListCtor) cstate->ctor;
 
-        GList *value = g_value_get_pointer (value_);
+        GList *value;
+
+        if (g_type_is_a (G_VALUE_TYPE(value_), GTK_ACCESSIBLE_LIST))
+          {
+            GtkAccessibleList *boxed = g_value_get_boxed (value_);
+
+            value = gtk_accessible_list_get_objects (boxed);
+          }
+        else 
+          {
+            value = g_value_get_pointer (value_);
+          }
 
         if (ctor == NULL)
           {
