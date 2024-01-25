@@ -117,7 +117,6 @@ gtk_list_item_change_release (GtkListItemChange *change,
   if (!g_hash_table_replace (change->deleted_items, gtk_list_item_base_get_item (GTK_LIST_ITEM_BASE (widget)), widget))
     {
       g_warning ("Duplicate item detected in list. Picking one randomly.");
-      gtk_list_item_change_recycle (change, widget);
     }
 }
 
@@ -968,10 +967,26 @@ gtk_list_item_manager_add_items (GtkListItemManager *self,
 
       if (section != NULL && section->type == GTK_LIST_TILE_HEADER)
         {
+          guint start, end;
+          GtkListTile *footer = gtk_list_tile_get_footer (self, section);
+          GtkListTile *previous_footer = gtk_list_tile_get_previous_skip (section);
+
+          gtk_section_model_get_section (GTK_SECTION_MODEL (self->model), position, &start, &end);
+
+          if (previous_footer != NULL && previous_footer->type == GTK_LIST_TILE_FOOTER &&
+              position > start && position < end)
+          {
+            gtk_list_item_change_clear_header (change, &section->widget);
+            gtk_list_tile_set_type (section, GTK_LIST_TILE_REMOVED);
+            gtk_list_tile_set_type (previous_footer, GTK_LIST_TILE_REMOVED);
+
+            section = gtk_list_tile_get_header (self, previous_footer);
+          }
+
           gtk_list_item_change_clear_header (change, &section->widget);
           gtk_list_tile_set_type (section,
                                   GTK_LIST_TILE_UNMATCHED_HEADER);
-          gtk_list_tile_set_type (gtk_list_tile_get_footer (self, section),
+          gtk_list_tile_set_type (footer,
                                   GTK_LIST_TILE_UNMATCHED_FOOTER);
         }
     }
@@ -1610,7 +1625,7 @@ gtk_list_item_manager_model_sections_changed_cb (GListModel         *model,
   gtk_list_item_change_clear_header (&change, &header->widget);
   gtk_list_tile_set_type (header, GTK_LIST_TILE_UNMATCHED_HEADER);
 
-  n_items -= MIN (n_items, position - offset);
+  n_items += offset;
   while (n_items > 0)
     {
       switch (tile->type)

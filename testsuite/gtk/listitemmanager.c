@@ -433,7 +433,7 @@ test_exhaustive (void)
       gboolean add = FALSE, remove = FALSE;
       guint position, n_items;
 
-      switch (g_test_rand_int_range (0, 6))
+      switch (g_test_rand_int_range (0, 7))
       {
         case 0:
           if (g_test_verbose ())
@@ -480,6 +480,34 @@ test_exhaustive (void)
             if (g_test_verbose ())
               g_test_message ("Setting has_sections to %s", has_sections ? "true" : "false");
             gtk_list_item_manager_set_has_sections (items, has_sections);
+          }
+          break;
+
+        case 6:
+          {
+            n_items = g_list_model_get_n_items (G_LIST_MODEL (store));
+            if (n_items > 0)
+              {
+                guint j = g_test_rand_int_range (0, n_items);
+                GListModel *source = g_list_model_get_item (G_LIST_MODEL (store), j);
+                guint source_size = g_list_model_get_n_items (G_LIST_MODEL (source));
+                GStrvBuilder *builder = g_strv_builder_new ();
+                guint inclusion_size = g_test_rand_int_range (1, 11);
+                char **inclusion;
+
+                for (j = 0; j < inclusion_size; j++)
+                  g_strv_builder_add (builder, g_test_rand_bit () ? "A" : "B");
+                inclusion = g_strv_builder_end (builder);
+                g_strv_builder_unref (builder);
+
+                j = g_test_rand_int_range (0, source_size + 1);
+                gtk_string_list_splice (GTK_STRING_LIST (source), j, 0, (const char * const *) inclusion);
+                g_strfreev (inclusion);
+
+                if (g_test_verbose ())
+                  g_test_message ("Adding %u items at position %u of a section which had %u items",
+                                  inclusion_size, j, source_size);
+              }
           }
           break;
 
