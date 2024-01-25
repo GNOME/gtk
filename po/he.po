@@ -6,23 +6,23 @@
 # Gil Osher <dolfin@rpg.org.il>, 2004.
 # Yair Hershkovitz <yairhr@gmail.com>, 2006.
 # Yaron Shahrabani <sh.yaron@gmail.com>, 2011, 2012.
-# Yosef Or Boczko <yoseforb@gmail.com>, 2013-2023.
+# Yosef Or Boczko <yoseforb@gmail.com>, 2013-2024.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.HEAD.he\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2023-12-27 22:15+0000\n"
-"PO-Revision-Date: 2023-12-28 13:40+0200\n"
-"Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
-"Language-Team: Hebrew <yoseforb@gmail.com>\n"
+"POT-Creation-Date: 2024-01-22 13:47+0000\n"
+"PO-Revision-Date: 2024-01-25 13:34+0200\n"
+"Last-Translator: Yosef Or Boczko <yoseforb@gmail.com>\n"
+"Language-Team: Hebrew\n"
 "Language: he\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=4; plural=(n==1 ? 0 : n==2 ? 1 : n>10 && n%10==0 ? "
-"2 : 3);\n"
-"X-Generator: Poedit 3.4.1\n"
+"2 : 3)\n"
+"X-Generator: Gtranslator 45.3\n"
 "X-Project-Style: default\n"
 
 #: gdk/broadway/gdkbroadway-server.c:135
@@ -34,11 +34,11 @@ msgstr "סוג תצוגת ה־broadway אינה נתמכת: %s"
 msgid "This clipboard cannot store data."
 msgstr "לוח גזירים זה לא יכול לאחסן נתונים."
 
-#: gdk/gdkclipboard.c:287 gdk/gdkclipboard.c:785 gdk/gdkclipboard.c:1085
+#: gdk/gdkclipboard.c:287 gdk/gdkclipboard.c:786 gdk/gdkclipboard.c:1086
 msgid "Cannot read from empty clipboard."
 msgstr "אי אפשר לקרוא מלוח גזירים ריק."
 
-#: gdk/gdkclipboard.c:318 gdk/gdkclipboard.c:1135 gdk/gdkdrag.c:618
+#: gdk/gdkclipboard.c:318 gdk/gdkclipboard.c:1136 gdk/gdkdrag.c:618
 msgid "No compatible formats to transfer clipboard contents."
 msgstr "אין תצורות תואמות להעברת תכני לוח גזירים."
 
@@ -57,31 +57,31 @@ msgstr "לא ניתן לספק תוכן בתור %s"
 msgid "The current backend does not support OpenGL"
 msgstr "המנשק הנוכחי אינו תומך ב־‏OpenGL"
 
-#: gdk/gdkdisplay.c:1278 gdk/gdksurface.c:1268 gdk/gdkvulkancontext.c:1479
+#: gdk/gdkdisplay.c:1296 gdk/gdkvulkancontext.c:1581
 msgid "Vulkan support disabled via GDK_DEBUG"
 msgstr "התמיכה ב־Vulkan מושבתת דרך GDK_DEBUG"
 
-#: gdk/gdkdisplay.c:1310
+#: gdk/gdkdisplay.c:1350
 msgid "GL support disabled via GDK_DEBUG"
 msgstr "התמיכה ב־GL הושבתה דרך GDK_DEBUG"
 
-#: gdk/gdkdisplay.c:1606
+#: gdk/gdkdisplay.c:1646
 msgid "No EGL configuration available"
 msgstr "אין תצורת EGL זמינה"
 
-#: gdk/gdkdisplay.c:1614
+#: gdk/gdkdisplay.c:1654
 msgid "Failed to get EGL configurations"
 msgstr "קבלת תצורות EGL נכשלה"
 
-#: gdk/gdkdisplay.c:1644
+#: gdk/gdkdisplay.c:1684
 msgid "No EGL configuration with required features found"
 msgstr "לא נמצאה תצורת EGL עם היכולות הנדרשות"
 
-#: gdk/gdkdisplay.c:1651
+#: gdk/gdkdisplay.c:1691
 msgid "No perfect EGL configuration found"
 msgstr "לא נמצאה תצורת EGL מושלמת"
 
-#: gdk/gdkdisplay.c:1693
+#: gdk/gdkdisplay.c:1733
 #, c-format
 msgid "EGL implementation is missing extension %s"
 msgid_plural "EGL implementation is missing %2$d extensions: %1$s"
@@ -90,23 +90,23 @@ msgstr[1] "למימוש ה־EGL חסרות שתי הרחבות: %1$s"
 msgstr[2] "למימוש ה־EGL חסרות %2$d הרחבות: %1$s"
 msgstr[3] "למימוש ה־EGL חסרות %2$d הרחבות: %1$s"
 
-#: gdk/gdkdisplay.c:1743
+#: gdk/gdkdisplay.c:1782
 msgid "libEGL not available in this sandbox"
 msgstr "libEGL אינו זמין בארגז חול זה"
 
-#: gdk/gdkdisplay.c:1744
+#: gdk/gdkdisplay.c:1783
 msgid "libEGL not available"
 msgstr "‫libEGL לא זמין"
 
-#: gdk/gdkdisplay.c:1754
+#: gdk/gdkdisplay.c:1793
 msgid "Failed to create EGL display"
 msgstr "יצירת תצוגת EGL נכשלה"
 
-#: gdk/gdkdisplay.c:1764
+#: gdk/gdkdisplay.c:1802
 msgid "Could not initialize EGL display"
 msgstr "לא ניתן להפעיל תצוגת EGL"
 
-#: gdk/gdkdisplay.c:1775
+#: gdk/gdkdisplay.c:1812
 #, c-format
 msgid "EGL version %d.%d is too old. GTK requires %d.%d"
 msgstr "גרסת ה־EGL‏ %d.%d ישנה מדי. GTK דורש %d.%d"
@@ -144,7 +144,7 @@ msgstr "היישום אינו תומך ב־API ‏%s"
 
 #. translators: This is about OpenGL backend names, like
 #. * "Trying to use X11 GLX, but EGL is already in use"
-#: gdk/gdkglcontext.c:2123
+#: gdk/gdkglcontext.c:2115
 #, c-format
 msgid "Trying to use %s, but %s is already in use"
 msgstr "מתבצע ניסיון להשתמש ב־%s אך %s כבר בשימוש"
@@ -542,7 +542,7 @@ msgstr "שגיאה בפענוח קובץ תמונת JPEG‏ (%s)"
 msgid "Unsupported JPEG colorspace (%d)"
 msgstr "מרחב הצבעים של ה־JPEG אינו נתמך (%d)"
 
-#: gdk/loaders/gdkjpeg.c:203 gdk/loaders/gdkpng.c:280 gdk/loaders/gdktiff.c:472
+#: gdk/loaders/gdkjpeg.c:203 gdk/loaders/gdkpng.c:286 gdk/loaders/gdktiff.c:472
 #, c-format
 msgid "Not enough memory for image size %ux%u"
 msgstr "אין מספיק זיכרון לתמונה בגודל ‎%u×%u‎"
@@ -552,15 +552,21 @@ msgstr "אין מספיק זיכרון לתמונה בגודל ‎%u×%u‎"
 msgid "Error reading png (%s)"
 msgstr "שגיאה בקריאת png ‏(%s)"
 
-#: gdk/loaders/gdkpng.c:211
+#: gdk/loaders/gdkpng.c:212
 #, c-format
 msgid "Unsupported depth %u in png image"
 msgstr "העומק %u אינו נתמך בתמונות png"
 
-#: gdk/loaders/gdkpng.c:261
+#: gdk/loaders/gdkpng.c:262
 #, c-format
 msgid "Unsupported color type %u in png image"
 msgstr "סוג הצבע %u אינו נתמך בתמונות png"
+
+#: gdk/loaders/gdkpng.c:272
+#, fuzzy, c-format
+#| msgid "Not enough memory for image size %ux%u"
+msgid "Image stride too large for image size %ux%u"
+msgstr "אין מספיק זיכרון לתמונה בגודל ‎%u×%u‎"
 
 #: gdk/loaders/gdktiff.c:358
 msgid "Failed to load RGB data from TIFF file"
@@ -826,10 +832,15 @@ msgstr "תצורות שגויות בהמרת טקסט מרוכב."
 msgid "Unsupported encoding “%s”"
 msgstr "הקידוד „%s” אינו נתמך"
 
-#: gsk/gl/gskglrenderer.c:210
+#: gsk/gl/gskglrenderer.c:204
 #, c-format
 msgid "This GLES %d.%d implementation does not support half-float vertex data"
 msgstr "מימוש זה של GLES %d.%d לא תומך בנתוני קודקודים עם נקודה חצי צפה"
+
+#: gsk/gpu/gskgldevice.c:238
+#, c-format
+msgid "OpenGL ES 2.0 is not supported by this renderer."
+msgstr ""
 
 #: gtk/a11y/gtkatspiaction.c:239
 msgctxt "accessibility"
@@ -1028,7 +1039,7 @@ msgid "Invalid"
 msgstr "בלתי תקני"
 
 #. This label is displayed in a treeview cell displaying an accelerator
-#. * when the cell is clicked to change the acelerator.
+#. * when the cell is clicked to change the accelerator.
 #.
 #: gtk/deprecated/gtkcellrendereraccel.c:436
 #: gtk/deprecated/gtkcellrendereraccel.c:729
@@ -2374,7 +2385,7 @@ msgid "If you delete an item, it will be permanently lost."
 msgstr "אם פריט ימחק, הוא יאבד לצמיתות."
 
 #: gtk/gtkfilechooserwidget.c:1183 gtk/gtkfilechooserwidget.c:1781
-#: gtk/gtklabel.c:5695 gtk/gtktext.c:6147 gtk/gtktextview.c:9018
+#: gtk/gtklabel.c:5702 gtk/gtktext.c:6147 gtk/gtktextview.c:9018
 msgid "_Delete"
 msgstr "מ_חיקה"
 
@@ -2703,7 +2714,7 @@ msgstr "מאפייני סגנון"
 msgid "Character Variations"
 msgstr "הגווני תו"
 
-#: gtk/gtkglarea.c:305
+#: gtk/gtkglarea.c:309
 msgid "OpenGL context creation failed"
 msgstr "יצירת הקשר OpenGL נכשלה"
 
@@ -2716,32 +2727,32 @@ msgstr "סגירה"
 msgid "Close the infobar"
 msgstr "סגירת פס המידע"
 
-#: gtk/gtklabel.c:5692 gtk/gtktext.c:6135 gtk/gtktextview.c:9006
+#: gtk/gtklabel.c:5699 gtk/gtktext.c:6135 gtk/gtktextview.c:9006
 msgid "Cu_t"
 msgstr "_גזירה"
 
-#: gtk/gtklabel.c:5693 gtk/gtktext.c:6139 gtk/gtktextview.c:9010
+#: gtk/gtklabel.c:5700 gtk/gtktext.c:6139 gtk/gtktextview.c:9010
 msgid "_Copy"
 msgstr "ה_עתקה"
 
-#: gtk/gtklabel.c:5694 gtk/gtktext.c:6143 gtk/gtktextview.c:9014
+#: gtk/gtklabel.c:5701 gtk/gtktext.c:6143 gtk/gtktextview.c:9014
 msgid "_Paste"
 msgstr "ה_דבקה"
 
-#: gtk/gtklabel.c:5700 gtk/gtktext.c:6156 gtk/gtktextview.c:9039
+#: gtk/gtklabel.c:5707 gtk/gtktext.c:6156 gtk/gtktextview.c:9039
 msgid "Select _All"
 msgstr "בחירה בה_כול"
 
-#: gtk/gtklabel.c:5705
+#: gtk/gtklabel.c:5712
 msgid "_Open Link"
 msgstr "_פתיחת קישור"
 
-#: gtk/gtklabel.c:5709
+#: gtk/gtklabel.c:5716
 msgid "Copy _Link Address"
 msgstr "העתקת כתובת ה_קישור"
 
 # msgctxt "OpenType layout"
-#: gtk/gtklabel.c:5753 gtk/gtktext.c:2716 gtk/gtktextview.c:9088
+#: gtk/gtklabel.c:5760 gtk/gtktext.c:2716 gtk/gtktextview.c:9088
 msgid "Context menu"
 msgstr "תפריט הקשר"
 
@@ -3651,7 +3662,7 @@ msgstr "החלקה ימינה"
 
 #. Translators: This is placeholder text for the search entry in the shortcuts window
 #: gtk/gtkshortcutswindow.c:879 gtk/gtkshortcutswindow.c:946
-#: gtk/gtkshortcutswindow.c:951
+#: gtk/gtkshortcutswindow.c:952
 msgid "Search Shortcuts"
 msgstr "חיפוש קיצורי מקשים"
 
@@ -3665,12 +3676,12 @@ msgstr "צירופי מקשים"
 msgid "Search Results"
 msgstr "תוצאות חיפוש"
 
-#: gtk/gtkshortcutswindow.c:1013 gtk/ui/gtkemojichooser.ui:349
+#: gtk/gtkshortcutswindow.c:1014 gtk/ui/gtkemojichooser.ui:349
 #: gtk/ui/gtkfilechooserwidget.ui:239
 msgid "No Results Found"
 msgstr "לא נמצאו תוצאות"
 
-#: gtk/gtkshortcutswindow.c:1024 gtk/ui/gtkemojichooser.ui:362
+#: gtk/gtkshortcutswindow.c:1025 gtk/ui/gtkemojichooser.ui:362
 #: gtk/ui/gtkfilechooserwidget.ui:252 gtk/ui/gtkplacesview.ui:218
 msgid "Try a different search"
 msgstr "יש לנסות חיפוש שונה"
@@ -3884,37 +3895,37 @@ msgstr "מחלקות סגנון"
 msgid "CSS Property"
 msgstr "מאפיין CSS"
 
-#: gtk/inspector/general.c:349
+#: gtk/inspector/general.c:363
 msgctxt "GL version"
 msgid "None"
 msgstr "ללא"
 
-#: gtk/inspector/general.c:426
+#: gtk/inspector/general.c:441
 msgctxt "GL version"
 msgid "Unknown"
 msgstr "לא ידוע"
 
-#: gtk/inspector/general.c:491
+#: gtk/inspector/general.c:503
 msgctxt "Vulkan device"
 msgid "Disabled"
 msgstr "מושבת"
 
-#: gtk/inspector/general.c:492 gtk/inspector/general.c:493
+#: gtk/inspector/general.c:504 gtk/inspector/general.c:505
 msgctxt "Vulkan version"
 msgid "Disabled"
 msgstr "מושבת"
 
-#: gtk/inspector/general.c:549
+#: gtk/inspector/general.c:555
 msgctxt "Vulkan device"
 msgid "None"
 msgstr "ללא"
 
-#: gtk/inspector/general.c:550 gtk/inspector/general.c:551
+#: gtk/inspector/general.c:556 gtk/inspector/general.c:557
 msgctxt "Vulkan version"
 msgid "None"
 msgstr "ללא"
 
-#: gtk/inspector/general.c:882
+#: gtk/inspector/general.c:895
 msgid "IM Context is hardcoded by GTK_IM_MODULE"
 msgstr "‏IM Context קשיחה בקוד על ידי GTK_IM_MODULE"
 
@@ -3966,43 +3977,51 @@ msgstr "‏RGBA חזותי"
 msgid "Composited"
 msgstr "מורכב"
 
-#: gtk/inspector/general.ui:559
+#: gtk/inspector/general.ui:538
+msgid "Protocols"
+msgstr "פרוטוקולים"
+
+#: gtk/inspector/general.ui:594
 msgid "GL Version"
 msgstr "גרסת GL"
 
-#: gtk/inspector/general.ui:586
+#: gtk/inspector/general.ui:621
 msgid "GL Backend Version"
 msgstr "גרסת מנגנון GL"
 
-#: gtk/inspector/general.ui:636
+#: gtk/inspector/general.ui:671
 msgid "GL Backend Vendor"
 msgstr "ספק מנגנון GL"
 
-#: gtk/inspector/general.ui:663
+#: gtk/inspector/general.ui:698
 msgid "GL_VENDOR"
 msgstr "GL_VENDOR"
 
-#: gtk/inspector/general.ui:692
+#: gtk/inspector/general.ui:727
 msgid "GL_RENDERER"
 msgstr "GL_RENDERER"
 
-#: gtk/inspector/general.ui:721
+#: gtk/inspector/general.ui:756
 msgid "GL_VERSION"
 msgstr "GL_VERSION"
 
-#: gtk/inspector/general.ui:750
+#: gtk/inspector/general.ui:785
 msgid "GL_SHADING_LANGUAGE_VERSION"
 msgstr "GL_SHADING_LANGUAGE_VERSION"
 
-#: gtk/inspector/general.ui:789
+#: gtk/inspector/general.ui:813 gtk/inspector/general.ui:929
+msgid "Extensions"
+msgstr "הרחבות"
+
+#: gtk/inspector/general.ui:849
 msgid "Vulkan Device"
 msgstr "התקן Vulkan"
 
-#: gtk/inspector/general.ui:816
+#: gtk/inspector/general.ui:876
 msgid "Vulkan API version"
 msgstr "גרסת API של Vulkan"
 
-#: gtk/inspector/general.ui:843
+#: gtk/inspector/general.ui:903
 msgid "Vulkan driver version"
 msgstr "גרסת מנהל התקן של Vulkan"
 
@@ -7310,7 +7329,7 @@ msgid "Use style from CSS file"
 msgstr "להשתמש בסגנון מקובץ CSS"
 
 #: tools/gtk-builder-tool-preview.c:187 tools/gtk-builder-tool-screenshot.c:370
-#: tools/gtk-builder-tool-validate.c:268 tools/gtk-rendernode-tool-render.c:204
+#: tools/gtk-builder-tool-validate.c:268 tools/gtk-rendernode-tool-render.c:203
 #: tools/gtk-rendernode-tool-show.c:113
 #, c-format
 msgid "Could not initialize windowing system\n"
@@ -7356,13 +7375,13 @@ msgstr ""
 "Use --force to overwrite.\n"
 
 #: tools/gtk-builder-tool-screenshot.c:332
-#: tools/gtk-rendernode-tool-render.c:172
+#: tools/gtk-rendernode-tool-render.c:171
 #, c-format
 msgid "Output written to %s.\n"
 msgstr "Output written to %s.\n"
 
 #: tools/gtk-builder-tool-screenshot.c:336
-#: tools/gtk-rendernode-tool-render.c:176
+#: tools/gtk-rendernode-tool-render.c:175
 #, c-format
 msgid "Failed to save %s: %s\n"
 msgstr "Failed to save %s: %s\n"
@@ -7380,7 +7399,7 @@ msgid "Overwrite existing file"
 msgstr "שכתוב קובץ קיים"
 
 #: tools/gtk-builder-tool-screenshot.c:363
-#: tools/gtk-rendernode-tool-render.c:197
+#: tools/gtk-rendernode-tool-render.c:196
 msgid "FILE…"
 msgstr "FILE…"
 
@@ -7857,6 +7876,7 @@ msgid ""
 "Perform various tasks on GTK render nodes.\n"
 "\n"
 "Commands:\n"
+"  benchmark    Benchmark rendering of a node\n"
 "  info         Provide information about the node\n"
 "  show         Show the node\n"
 "  render       Take a screenshot of the node\n"
@@ -7868,6 +7888,7 @@ msgstr ""
 "Perform various tasks on GTK render nodes.\n"
 "\n"
 "Commands:\n"
+"  benchmark    Benchmark rendering of a node\n"
 "  info         Provide information about the node\n"
 "  show         Show the node\n"
 "  render       Take a screenshot of the node\n"
@@ -7897,7 +7918,7 @@ msgstr "מקור: %g %g\n"
 msgid "Provide information about the render node."
 msgstr "אספקת מידע על נקודת העיבוד החזותי."
 
-#: tools/gtk-rendernode-tool-info.c:236 tools/gtk-rendernode-tool-render.c:225
+#: tools/gtk-rendernode-tool-info.c:236 tools/gtk-rendernode-tool-render.c:224
 #: tools/gtk-rendernode-tool-show.c:134
 #, c-format
 msgid "No .node file specified\n"
@@ -7922,19 +7943,25 @@ msgstr ""
 msgid "Failed to generate SVG: %s\n"
 msgstr "יצירת SVG נכשלה: %s\n"
 
-#: tools/gtk-rendernode-tool-render.c:196
+#: tools/gtk-rendernode-tool-render.c:150
+#, fuzzy, c-format
+#| msgid "Failed to rewrite header\n"
+msgid "Failed to create renderer: %s\n"
+msgstr "Failed to rewrite header\n"
+
+#: tools/gtk-rendernode-tool-render.c:195
 msgid "Renderer to use"
 msgstr "עיבוד לשימוש"
 
-#: tools/gtk-rendernode-tool-render.c:196
+#: tools/gtk-rendernode-tool-render.c:195
 msgid "RENDERER"
 msgstr "מעבד תצוגה"
 
-#: tools/gtk-rendernode-tool-render.c:212
+#: tools/gtk-rendernode-tool-render.c:211
 msgid "Render a .node file to an image."
 msgstr "עיבוד קובץ ‎.node לתמונה."
 
-#: tools/gtk-rendernode-tool-render.c:231
+#: tools/gtk-rendernode-tool-render.c:230
 #, c-format
 msgid "Can only render a single .node file to a single output file\n"
 msgstr "יכול לעבד קובץ ,node יחיד בלבד לקובץ פלט יחיד\n"
@@ -7952,12 +7979,12 @@ msgstr "הצגת צומת מעבד התצוגה."
 msgid "Can only preview a single .node file\n"
 msgstr "יכול להציג תצוגה מקדימה של קובץ ‎.node יחיד בלבד\n"
 
-#: tools/gtk-rendernode-tool-utils.c:51
+#: tools/gtk-rendernode-tool-utils.c:54
 #, c-format
 msgid "Error at %s: %s\n"
 msgstr "שגיאה ב־%s‏: %s\n"
 
-#: tools/gtk-rendernode-tool-utils.c:69
+#: tools/gtk-rendernode-tool-utils.c:72
 #, c-format
 msgid "Failed to load node file: %s\n"
 msgstr "טעינת קובץ המצב נכשלה: %s\n"
@@ -8128,8 +8155,8 @@ msgstr ""
 #~ msgid "Switch to list view"
 #~ msgstr "החלפה לתצוגת רשימה"
 
-msgid "default:LTR"
-msgstr "default:RTL"
+#~ msgid "default:LTR"
+#~ msgstr "default:RTL"
 
 #~ msgid "Other application…"
 #~ msgstr "יישום אחר…"
