@@ -18,37 +18,68 @@ vec4
 compute_color (void)
 {
   uint triangle_index = uint (GSK_VERTEX_INDEX) / 3u;
-  uint index;
+  uint index, fallback;
 
   switch (triangle_index)
   {
     case 2u * SLICE_TOP_LEFT + 1u:
+      index = TOP;
+      fallback = LEFT;
+      break;
     case 2u * SLICE_TOP:
     case 2u * SLICE_TOP + 1u:
+      index = TOP;
+      fallback = TOP;
+      break;
     case 2u * SLICE_TOP_RIGHT:
       index = TOP;
+      fallback = RIGHT;
       break;
     case 2u * SLICE_TOP_RIGHT + 1u:
+      index = RIGHT;
+      fallback = TOP;
+      break;
     case 2u * SLICE_RIGHT:
     case 2u * SLICE_RIGHT + 1u:
+      index = RIGHT;
+      fallback = RIGHT;
+      break;
     case 2u * SLICE_BOTTOM_RIGHT:
       index = RIGHT;
+      fallback = BOTTOM;
       break;
     case 2u * SLICE_BOTTOM_RIGHT + 1u:
+      index = BOTTOM;
+      fallback = RIGHT;
+      break;
     case 2u * SLICE_BOTTOM:
     case 2u * SLICE_BOTTOM + 1u:
+      index = BOTTOM;
+      fallback = BOTTOM;
+      break;
     case 2u * SLICE_BOTTOM_LEFT:
       index = BOTTOM;
+      fallback = LEFT;
       break;
     case 2u * SLICE_BOTTOM_LEFT + 1u:
+      index = LEFT;
+      fallback = BOTTOM;
+      break;
     case 2u * SLICE_LEFT:
     case 2u * SLICE_LEFT + 1u:
+      index = LEFT;
+      fallback = LEFT;
+      break;
     case 2u * SLICE_TOP_LEFT:
       index = LEFT;
+      fallback = TOP;
       break;
   }
   
-  return color_premultiply (in_border_colors[index]);
+  if (in_border_widths[index] > 0.0)
+    return color_premultiply (in_border_colors[index]);
+  else
+    return color_premultiply (in_border_colors[fallback]);
 }
 
 void

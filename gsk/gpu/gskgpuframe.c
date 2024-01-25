@@ -220,7 +220,7 @@ gsk_gpu_frame_seal_ops (GskGpuFrame *self)
 {
   GskGpuFramePrivate *priv = gsk_gpu_frame_get_instance_private (self);
   GskGpuOp *last, *op;
-  guint i;
+  gsize i;
 
   priv->first_op = (GskGpuOp *) gsk_gpu_ops_index (&priv->ops, 0);
 

@@ -27,6 +27,7 @@ compare_render_tests = [
   'border-bottom-right',
   'border-one-rounded',
   'border-opacity',
+  'border-zero-width-color',
   'borders-rotated',
   'borders-scaled',
   'clip-contained',
