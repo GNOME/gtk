@@ -3,16 +3,28 @@
 #include "gskgpudeviceprivate.h"
 
 #include "gskgpuframeprivate.h"
+#include "gskgpuimageprivate.h"
 #include "gskgpuuploadopprivate.h"
 
 #include "gdk/gdkdisplayprivate.h"
 #include "gdk/gdktextureprivate.h"
+#include "gdk/gdkprofilerprivate.h"
+
+#include "gsk/gskdebugprivate.h"
 
 #define MAX_SLICES_PER_ATLAS 64
 
 #define ATLAS_SIZE 1024
 
 #define MAX_ATLAS_ITEM_SIZE 256
+
+G_STATIC_ASSERT (MAX_ATLAS_ITEM_SIZE < ATLAS_SIZE);
+
+#define MAX_DEAD_PIXELS (ATLAS_SIZE * ATLAS_SIZE / 2)
+
+#define CACHE_GC_TIMEOUT 15  /* seconds */
+
+#define CACHE_MAX_AGE (G_TIME_SPAN_SECOND * 4)  /* 4 seconds, in µs */
 
 typedef struct _GskGpuCached GskGpuCached;
 typedef struct _GskGpuCachedClass GskGpuCachedClass;
@@ -54,11 +66,33 @@ struct _GskGpuCachedClass
 struct _GskGpuCached
 {
   const GskGpuCachedClass *class;
-  
+
   GskGpuCachedAtlas *atlas;
   GskGpuCached *next;
   GskGpuCached *prev;
+
+  gint64 timestamp;
+  gboolean stale;
+  guint pixels;   /* For glyphs, pixels. For atlases, dead pixels */
 };
+
+static inline void
+mark_as_stale (GskGpuCached *cached,
+               gboolean      stale)
+{
+  if (cached->stale != stale)
+    {
+      cached->stale = stale;
+
+      if (cached->atlas)
+        {
+          if (stale)
+            ((GskGpuCached *) cached->atlas)->pixels += cached->pixels;
+          else
+            ((GskGpuCached *) cached->atlas)->pixels -= cached->pixels;
+        }
+    }
+}
 
 static void
 gsk_gpu_cached_free (GskGpuDevice *device,
@@ -74,6 +108,8 @@ gsk_gpu_cached_free (GskGpuDevice *device,
     cached->prev->next = cached->next;
   else
     priv->first_cached = cached->next;
+
+  mark_as_stale (cached, TRUE);
 
   cached->class->free (device, cached);
 }
@@ -114,7 +150,8 @@ gsk_gpu_cached_use (GskGpuDevice *device,
                     GskGpuCached *cached,
                     gint64        timestamp)
 {
-  /* FIXME */
+  cached->timestamp = timestamp;
+  mark_as_stale (cached, FALSE);
 }
 
 /* }}} */
@@ -137,10 +174,23 @@ static void
 gsk_gpu_cached_atlas_free (GskGpuDevice *device,
                            GskGpuCached *cached)
 {
+  GskGpuDevicePrivate *priv = gsk_gpu_device_get_instance_private (device);
   GskGpuCachedAtlas *self = (GskGpuCachedAtlas *) cached;
+  GskGpuCached *c, *next;
+
+  /* Free all remaining glyphs on this atlas */
+  for (c = priv->first_cached; c != NULL; c = next)
+    {
+      next = c->next;
+      if (c->atlas == self)
+        gsk_gpu_cached_free (device, c);
+    }
+
+  if (priv->current_atlas == self)
+    priv->current_atlas = NULL;
 
   g_object_unref (self->image);
-  
+
   g_free (self);
 }
 
@@ -149,8 +199,7 @@ gsk_gpu_cached_atlas_should_collect (GskGpuDevice *device,
                                      GskGpuCached *cached,
                                      gint64        timestamp)
 {
-  /* FIXME */
-  return FALSE;
+  return cached->pixels > MAX_DEAD_PIXELS;
 }
 
 static const GskGpuCachedClass GSK_GPU_CACHED_ATLAS_CLASS =
@@ -190,8 +239,8 @@ gsk_gpu_cached_texture_free (GskGpuDevice *device,
   gboolean texture_still_alive;
 
   texture_still_alive = g_atomic_pointer_exchange (&self->texture, NULL) != NULL;
-  g_object_unref (self->image);
-  
+  g_clear_object (&self->image);
+
   if (!texture_still_alive)
     g_free (self);
 }
@@ -201,8 +250,7 @@ gsk_gpu_cached_texture_should_collect (GskGpuDevice *device,
                                        GskGpuCached *cached,
                                        gint64        timestamp)
 {
-  /* FIXME */
-  return FALSE;
+  return timestamp - cached->timestamp > CACHE_MAX_AGE;
 }
 
 static const GskGpuCachedClass GSK_GPU_CACHED_TEXTURE_CLASS =
@@ -274,7 +322,10 @@ static void
 gsk_gpu_cached_glyph_free (GskGpuDevice *device,
                            GskGpuCached *cached)
 {
+  GskGpuDevicePrivate *priv = gsk_gpu_device_get_instance_private (device);
   GskGpuCachedGlyph *self = (GskGpuCachedGlyph *) cached;
+
+  g_hash_table_remove (priv->glyph_cache, self);
 
   g_object_unref (self->font);
   g_object_unref (self->image);
@@ -287,7 +338,10 @@ gsk_gpu_cached_glyph_should_collect (GskGpuDevice *device,
                                      GskGpuCached *cached,
                                      gint64        timestamp)
 {
-  /* FIXME */
+  if (timestamp - cached->timestamp > CACHE_MAX_AGE)
+    mark_as_stale (cached, TRUE);
+
+  /* Glyphs are only collected when their atlas is freed */
   return FALSE;
 }
 
@@ -325,19 +379,77 @@ static const GskGpuCachedClass GSK_GPU_CACHED_GLYPH_CLASS =
 /* }}} */
 /* {{{ GskGpuDevice */
 
+static void
+print_cache_stats (GskGpuDevice *self)
+{
+  GskGpuDevicePrivate *priv = gsk_gpu_device_get_instance_private (self);
+  GskGpuCached *cached;
+  guint glyphs = 0;
+  guint stale_glyphs = 0;
+  guint textures = 0;
+  guint atlases = 0;
+  GString *ratios = g_string_new ("");
+
+  for (cached = priv->first_cached; cached != NULL; cached = cached->next)
+    {
+      if (cached->class == &GSK_GPU_CACHED_GLYPH_CLASS)
+        {
+          glyphs++;
+          if (cached->stale)
+            stale_glyphs++;
+        }
+      else if (cached->class == &GSK_GPU_CACHED_TEXTURE_CLASS)
+        textures++;
+      else if (cached->class == &GSK_GPU_CACHED_ATLAS_CLASS)
+        {
+          double ratio;
+
+          atlases++;
+
+          ratio = (double) cached->pixels / (double) (ATLAS_SIZE * ATLAS_SIZE);
+
+          if (ratios->len == 0)
+            g_string_append (ratios, " (ratios ");
+          else
+            g_string_append (ratios, ", ");
+          g_string_append_printf (ratios, "%.2f", ratio);
+        }
+    }
+
+  if (ratios->len > 0)
+    g_string_append (ratios, ")");
+
+  gdk_debug_message ("cached items\n"
+                     "  glyphs:   %5u (%u stale)\n"
+                     "  textures: %5u\n"
+                     "  atlases:  %5u%s",
+                     glyphs, stale_glyphs, textures, atlases, ratios->str);
+
+  g_string_free (ratios, TRUE);
+}
+
 void
 gsk_gpu_device_gc (GskGpuDevice *self,
                    gint64        timestamp)
 {
   GskGpuDevicePrivate *priv = gsk_gpu_device_get_instance_private (self);
-  GskGpuCached *cached, *next;
+  GskGpuCached *cached, *prev;
+  gint64 before G_GNUC_UNUSED = GDK_PROFILER_CURRENT_TIME;
 
-  for (cached = priv->first_cached; cached != NULL; cached = next)
+  /* We walk the cache from the end so we don't end up with prev
+   * being a leftover glyph on the atlas we are freeing
+   */
+  for (cached = priv->last_cached; cached != NULL; cached = prev)
     {
-      next = cached->next;
+      prev = cached->prev;
       if (gsk_gpu_cached_should_collect (self, cached, timestamp))
         gsk_gpu_cached_free (self, cached);
     }
+
+  if (GSK_DEBUG_CHECK (GLYPH_CACHE))
+    print_cache_stats (self);
+
+  gdk_profiler_end_mark (before, "Glyph cache GC", NULL);
 }
 
 static void
@@ -357,8 +469,9 @@ gsk_gpu_device_clear_cache (GskGpuDevice *self)
         g_assert (cached->next->prev == cached);
     }
 
-  while (priv->first_cached)
-    gsk_gpu_cached_free (self, priv->first_cached);
+  /* We clear the cache from the end so glyphs get freed before their atlas */
+  while (priv->last_cached)
+    gsk_gpu_cached_free (self, priv->last_cached);
 
   g_assert (priv->last_cached == NULL);
 }
@@ -372,6 +485,7 @@ gsk_gpu_device_dispose (GObject *object)
   gsk_gpu_device_clear_cache (self);
   g_hash_table_unref (priv->glyph_cache);
   g_hash_table_unref (priv->texture_cache);
+  g_clear_handle_id (&priv->cache_gc_source, g_source_remove);
 
   G_OBJECT_CLASS (gsk_gpu_device_parent_class)->dispose (object);
 }
@@ -407,6 +521,16 @@ gsk_gpu_device_init (GskGpuDevice *self)
                                           g_direct_equal);
 }
 
+static gboolean
+cache_gc_source_callback (gpointer data)
+{
+  GskGpuDevice *self = data;
+
+  gsk_gpu_device_gc (self, g_get_monotonic_time ());
+
+  return G_SOURCE_CONTINUE;
+}
+
 void
 gsk_gpu_device_setup (GskGpuDevice *self,
                       GdkDisplay   *display,
@@ -416,6 +540,8 @@ gsk_gpu_device_setup (GskGpuDevice *self,
 
   priv->display = g_object_ref (display);
   priv->max_image_size = max_image_size;
+
+  priv->cache_gc_source = g_timeout_add_seconds (CACHE_GC_TIMEOUT, cache_gc_source_callback, self);
 }
 
 GdkDisplay *
@@ -582,20 +708,14 @@ gsk_gpu_device_add_atlas_image (GskGpuDevice      *self,
     return NULL;
 
   gsk_gpu_device_ensure_atlas (self, FALSE, timestamp);
-  
+
   if (gsk_gpu_cached_atlas_allocate (priv->current_atlas, width, height, out_x, out_y))
-    {
-      gsk_gpu_cached_use (self, (GskGpuCached *) priv->current_atlas, timestamp);
-      return priv->current_atlas->image;
-    }
+    return priv->current_atlas->image;
 
   gsk_gpu_device_ensure_atlas (self, TRUE, timestamp);
 
   if (gsk_gpu_cached_atlas_allocate (priv->current_atlas, width, height, out_x, out_y))
-    {
-      gsk_gpu_cached_use (self, (GskGpuCached *) priv->current_atlas, timestamp);
-      return priv->current_atlas->image;
-    }
+    return priv->current_atlas->image;
 
   return NULL;
 }
@@ -612,10 +732,8 @@ gsk_gpu_device_lookup_texture_image (GskGpuDevice *self,
   if (cache == NULL)
     cache = g_hash_table_lookup (priv->texture_cache, texture);
 
-  if (cache)
-    {
-      return g_object_ref (cache->image);
-    }
+  if (cache && cache->image)
+    return g_object_ref (cache->image);
 
   return NULL;
 }
@@ -705,6 +823,7 @@ gsk_gpu_device_lookup_glyph_image (GskGpuDevice           *self,
   cache->image = image,
   cache->origin = GRAPHENE_POINT_INIT (- origin.x + subpixel_x,
                                        - origin.y + subpixel_y);
+  ((GskGpuCached *) cache)->pixels = (rect.size.width + 2 * padding) * (rect.size.height + 2 * padding);
 
   gsk_gpu_upload_glyph_op (frame,
                            cache->image,
