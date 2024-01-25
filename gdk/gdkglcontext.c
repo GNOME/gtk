@@ -593,7 +593,7 @@ gdk_gl_context_get_scale (GdkGLContext *self)
   scale = gdk_surface_get_scale (surface);
 
   display = gdk_gl_context_get_display (self);
-  if (!(gdk_display_get_debug_flags (display) & GDK_DEBUG_GL_FRACTIONAL))
+  if (gdk_display_get_debug_flags (display) & GDK_DEBUG_GL_NO_FRACTIONAL)
     scale = ceil (scale);
 
   return scale;

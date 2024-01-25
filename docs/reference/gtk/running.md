@@ -220,8 +220,8 @@ A number of options affect behavior instead of logging:
 `gl-disable`
 : Disable OpenGL support
 
-`gl-fractional`
-: Enable fractional scaling for OpenGL. This is experimental
+`gl-no-fractional`
+: Disable fractional scaling for OpenGL.
 
 `gl-debug`
 : Insert debugging information in OpenGL
