@@ -1,5 +1,8 @@
 #! /bin/sh
 
+export LIBGL_ALWAYS_SOFTWARE=1
+export GDK_VULKAN_DEVICE=1
+
 version=$(head -5 meson.build | grep version | sed -e "s/[^']*'//" -e "s/'.*$//")
 release_build_dir="release_build"
 branch=$(git branch --show-current)
