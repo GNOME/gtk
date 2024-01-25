@@ -604,14 +604,10 @@ static const struct {
                                      GtkAccessible    *accessible,
                                      GdkDisplay       *display);
 } a11y_backends[] = {
-#if defined(GDK_WINDOWING_WAYLAND)
-  { "AT-SPI (Wayland)", "atspi", gtk_at_spi_create_context },
-#endif
-#if defined(GDK_WINDOWING_X11)
-  { "AT-SPI (X11)", "atspi", gtk_at_spi_create_context },
+#if defined(GDK_WINDOWING_WAYLAND) || defined(GDK_WINDOWING_X11)
+  { "AT-SPI", "atspi", gtk_at_spi_create_context },
 #endif
   { "Test", "test", gtk_test_at_context_new },
-  { NULL, NULL, NULL },
 };
 
 /**
@@ -634,6 +630,7 @@ gtk_at_context_create (GtkAccessibleRole  accessible_role,
                        GdkDisplay        *display)
 {
   static const char *gtk_a11y_env;
+  GtkATContext *res = NULL;
 
   if (gtk_a11y_env == NULL)
     {
@@ -661,12 +658,9 @@ gtk_at_context_create (GtkAccessibleRole  accessible_role,
   if (g_ascii_strcasecmp (gtk_a11y_env, "none") == 0)
     return NULL;
 
-  GtkATContext *res = NULL;
-
-  for (guint i = 0; i < G_N_ELEMENTS (a11y_backends); i++)
+  for (size_t i = 0; i < G_N_ELEMENTS (a11y_backends); i++)
     {
-      if (a11y_backends[i].name == NULL)
-        break;
+      g_assert (a11y_backends[i].name != NULL);
 
       if (a11y_backends[i].create_context != NULL &&
           (*gtk_a11y_env == '0' || g_ascii_strcasecmp (a11y_backends[i].env_name, gtk_a11y_env) == 0))

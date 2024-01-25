@@ -1401,14 +1401,6 @@ gtk_at_spi_context_finalize (GObject *gobject)
   G_OBJECT_CLASS (gtk_at_spi_context_parent_class)->finalize (gobject);
 }
 
-static void
-gtk_at_spi_context_constructed (GObject *gobject)
-{
-  GtkAtSpiContext *self G_GNUC_UNUSED = GTK_AT_SPI_CONTEXT (gobject);
-
-  G_OBJECT_CLASS (gtk_at_spi_context_parent_class)->constructed (gobject);
-}
-
 static const char *get_bus_address (GdkDisplay *display);
 
 static void
@@ -1516,7 +1508,6 @@ gtk_at_spi_context_class_init (GtkAtSpiContextClass *klass)
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
   GtkATContextClass *context_class = GTK_AT_CONTEXT_CLASS (klass);
 
-  gobject_class->constructed = gtk_at_spi_context_constructed;
   gobject_class->finalize = gtk_at_spi_context_finalize;
 
   context_class->realize = gtk_at_spi_context_realize;
