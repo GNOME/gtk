@@ -154,6 +154,15 @@ struct _GtkAccessibleInterface
                            int           *height);
 };
 
+/**
+ * GtkAccessibleList:
+ *
+ * A boxed type which wraps a list of references to GtkAccessible objects.
+ *
+ * Since: 4.14
+ */
+typedef struct _GtkAccessibleList GtkAccessibleList;
+
 GDK_AVAILABLE_IN_ALL
 GtkATContext *  gtk_accessible_get_at_context   (GtkAccessible *self);
 
@@ -235,5 +244,20 @@ void gtk_accessible_property_init_value (GtkAccessibleProperty  property,
 GDK_AVAILABLE_IN_ALL
 void gtk_accessible_relation_init_value (GtkAccessibleRelation  relation,
                                          GValue                *value);
+
+#define GTK_ACCESSIBLE_LIST (gtk_accessible_list_get_type())
+
+GDK_AVAILABLE_IN_4_14
+GType gtk_accessible_list_get_type (void);
+
+GDK_AVAILABLE_IN_4_14
+GList * gtk_accessible_list_get_objects (GtkAccessibleList *accessible_list);
+
+GDK_AVAILABLE_IN_4_14
+GtkAccessibleList * gtk_accessible_list_new_from_list (GList *list);
+
+GDK_AVAILABLE_IN_4_14
+GtkAccessibleList * gtk_accessible_list_new_from_array (GtkAccessible **accessibles,
+                                                        gsize           n_accessibles);
 
 G_END_DECLS

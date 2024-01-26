@@ -1149,6 +1149,96 @@ gtk_accessible_get_bounds (GtkAccessible *self,
   return GTK_ACCESSIBLE_GET_IFACE (self)->get_bounds (self, x, y, width, height);
 }
 
+struct _GtkAccessibleList
+{
+  GList *objects;
+};
+
+/**
+ * gtk_accessible_list_new_from_list:
+ * @list: (element-type GtkAccessible): a reference to a `GList` containing a list of accessible values
+ *
+ * Allocates a new `GtkAccessibleList`, doing a shallow copy of the
+ * passed list of `GtkAccessible` instances.
+ *
+ * Returns: (transfer full): the list of accessible instances
+ *
+ * Since: 4.14
+ */
+GtkAccessibleList *
+gtk_accessible_list_new_from_list (GList *list)
+{
+  GtkAccessibleList *accessible_list = g_new (GtkAccessibleList, 1);
+
+  accessible_list->objects = g_list_copy (list);
+
+  return accessible_list;
+}
+
+/**
+ * gtk_accessible_list_new_from_array:
+ * @accessibles: (array length=n_accessibles): array of GtkAccessible
+ * @n_accessibles: length of @accessibles array
+ *
+ * Allocates a new list of accessible instances.
+ *
+ * Returns: (transfer full): the newly created list of accessible instances
+ *
+ * Since: 4.14
+ */
+GtkAccessibleList *
+gtk_accessible_list_new_from_array (GtkAccessible **accessibles,
+                                    gsize           n_accessibles)
+{
+  GtkAccessibleList *accessible_list;
+  GList *list = NULL;
+
+  g_return_val_if_fail (accessibles == NULL || n_accessibles == 0, NULL);
+
+  accessible_list = g_new (GtkAccessibleList, 1);
+
+  for (gsize i = 0; i < n_accessibles; i++)
+    {
+      list = g_list_prepend (list, accessibles[i]);
+    }
+
+  accessible_list->objects = g_list_reverse (list);
+
+  return accessible_list;
+}
+
+static void
+gtk_accessible_list_free (GtkAccessibleList *accessible_list)
+{
+  g_free (accessible_list->objects);
+  g_free (accessible_list);
+}
+
+static GtkAccessibleList *
+gtk_accessible_list_copy (GtkAccessibleList *accessible_list)
+{
+  return gtk_accessible_list_new_from_list (accessible_list->objects);
+}
+
+/**
+ * gtk_accessible_list_get_objects:
+ *
+ * Gets the list of objects this boxed type holds
+ *
+ * Returns: (transfer container) (element-type GtkAccessible): a shallow copy of the objects
+ *
+ * Since: 4.14
+ */
+GList *
+gtk_accessible_list_get_objects (GtkAccessibleList *accessible_list)
+{
+  return g_list_copy (accessible_list->objects);
+}
+
+G_DEFINE_BOXED_TYPE (GtkAccessibleList, gtk_accessible_list,
+                     gtk_accessible_list_copy,
+                     gtk_accessible_list_free)
+
 /*< private >
  * gtk_accessible_should_present:
  * @self: a `GtkAccessible`
