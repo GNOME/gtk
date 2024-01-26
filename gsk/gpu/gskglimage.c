@@ -43,7 +43,7 @@ gsk_gl_image_finalize (GObject *object)
 {
   GskGLImage *self = GSK_GL_IMAGE (object);
 
-  if (self->framebuffer_id)
+  if (self->texture_id && self->framebuffer_id)
     glDeleteFramebuffers (1, &self->framebuffer_id);
 
   if (self->owns_texture)
@@ -70,6 +70,7 @@ gsk_gl_image_init (GskGLImage *self)
 
 GskGpuImage *
 gsk_gl_image_new_backbuffer (GskGLDevice    *device,
+                             GdkGLContext   *context,
                              GdkMemoryFormat format,
                              gsize           width,
                              gsize           height)
@@ -94,6 +95,13 @@ gsk_gl_image_new_backbuffer (GskGLDevice    *device,
   gsk_gpu_image_setup (GSK_GPU_IMAGE (self), flags, format, width, height);
 
   /* texture_id == 0 means backbuffer */
+
+  /* Check for non-standard framebuffer binding as we might not be using
+   * the default framebuffer on systems like macOS where we've bound an
+   * IOSurface to a GL_TEXTURE_RECTANGLE. Otherwise, no scissor clip will
+   * be applied in the command queue causing overdrawing.
+   */
+  self->framebuffer_id = GDK_GL_CONTEXT_GET_CLASS (context)->get_default_framebuffer (context);
 
   return GSK_GPU_IMAGE (self);
 }

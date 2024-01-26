@@ -11,6 +11,7 @@ G_BEGIN_DECLS
 G_DECLARE_FINAL_TYPE (GskGLImage, gsk_gl_image, GSK, GL_IMAGE, GskGpuImage)
 
 GskGpuImage *           gsk_gl_image_new_backbuffer                     (GskGLDevice            *device,
+                                                                         GdkGLContext           *context,
                                                                          GdkMemoryFormat         format,
                                                                          gsize                   width,
                                                                          gsize                   height);
