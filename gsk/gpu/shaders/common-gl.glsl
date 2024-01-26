@@ -1,6 +1,6 @@
 precision highp float;
 
-#if defined(GSK_GLES) && __VERSION__ < 310
+#if __VERSION__ < 420 || (defined(GSK_GLES) && __VERSION__ < 310)
 layout(std140)
 #else
 layout(std140, binding = 0)
@@ -17,7 +17,7 @@ uniform PushConstants
 #define GSK_GLOBAL_CLIP_RECT push.clip[0]
 #define GSK_GLOBAL_SCALE push.scale
 
-#if defined(GSK_GLES) && __VERSION__ < 310
+#if __VERSION__ < 420 || (defined(GSK_GLES) && __VERSION__ < 310)
 layout(std140)
 #else
 layout(std140, binding = 1)
