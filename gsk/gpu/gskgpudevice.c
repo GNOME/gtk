@@ -735,7 +735,10 @@ gsk_gpu_device_lookup_texture_image (GskGpuDevice *self,
     cache = g_hash_table_lookup (priv->texture_cache, texture);
 
   if (cache && cache->image)
-    return g_object_ref (cache->image);
+    {
+      gsk_gpu_cached_use (self, (GskGpuCached *) cache, timestamp);
+      return g_object_ref (cache->image);
+    }
 
   return NULL;
 }
