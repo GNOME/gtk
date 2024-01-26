@@ -963,31 +963,58 @@ gtk_list_item_manager_add_items (GtkListItemManager *self,
 
   if (has_sections)
     {
-      GtkListTile *section = gtk_list_tile_get_previous_skip (tile);
+      GtkListTile *header = gtk_list_tile_get_previous_skip (tile);
 
-      if (section != NULL && section->type == GTK_LIST_TILE_HEADER)
+      if (header != NULL && gtk_list_tile_is_header (header))
         {
-          guint start, end;
-          GtkListTile *footer = gtk_list_tile_get_footer (self, section);
-          GtkListTile *previous_footer = gtk_list_tile_get_previous_skip (section);
+          GtkListTile *previous_footer = gtk_list_tile_get_previous_skip (header);
 
-          gtk_section_model_get_section (GTK_SECTION_MODEL (self->model), position, &start, &end);
-
-          if (previous_footer != NULL && previous_footer->type == GTK_LIST_TILE_FOOTER &&
-              position > start && position < end)
+          /* We've inserted right after a header. The new items either don't
+           * belong in this section or change its length. In either case, we
+           * need to flag the section header and footer for rematching.
+           */
+          if (header->type == GTK_LIST_TILE_HEADER)
           {
-            gtk_list_item_change_clear_header (change, &section->widget);
-            gtk_list_tile_set_type (section, GTK_LIST_TILE_REMOVED);
-            gtk_list_tile_set_type (previous_footer, GTK_LIST_TILE_REMOVED);
-
-            section = gtk_list_tile_get_header (self, previous_footer);
+            gtk_list_item_change_clear_header (change, &header->widget);
+            gtk_list_tile_set_type (header,
+                                    GTK_LIST_TILE_UNMATCHED_HEADER);
+            gtk_list_tile_set_type (gtk_list_tile_get_footer (self, header),
+                                    GTK_LIST_TILE_UNMATCHED_FOOTER);
           }
 
-          gtk_list_item_change_clear_header (change, &section->widget);
-          gtk_list_tile_set_type (section,
-                                  GTK_LIST_TILE_UNMATCHED_HEADER);
-          gtk_list_tile_set_type (footer,
-                                  GTK_LIST_TILE_UNMATCHED_FOOTER);
+          if (previous_footer != NULL && gtk_list_tile_is_footer (previous_footer))
+            {
+              guint start, end;
+
+              gtk_section_model_get_section (GTK_SECTION_MODEL (self->model),
+                                             position, &start, &end);
+              if (position != start)
+                {
+                  /* At least one item belongs to the previous section, but the
+                   * tile has been inserted after the section boundary. So, this
+                   * boundary must be removed. But first, ensure the previous
+                   * section is flagged for remathing.
+                   */
+                  if (previous_footer->type == GTK_LIST_TILE_FOOTER)
+                    {
+                      GtkListTile *previous_header = gtk_list_tile_get_header (self, previous_footer);
+
+                      gtk_list_item_change_clear_header (change, &previous_header->widget);
+                      gtk_list_tile_set_type (previous_header,
+                                              GTK_LIST_TILE_UNMATCHED_HEADER);
+                    }
+
+                  /* Now actually remove the boundary before the inserted tile.
+                   */
+                  gtk_list_tile_set_type (header, GTK_LIST_TILE_REMOVED);
+                  gtk_list_tile_set_type (previous_footer, GTK_LIST_TILE_REMOVED);
+
+                  /* We've already ensured the next footer is unmatched, so we
+                   * are done here. gtk_list_item_manager_ensure_items() will
+                   * reintroduce section boundaries where necessary.
+                   */
+                }
+            }
         }
     }
 
