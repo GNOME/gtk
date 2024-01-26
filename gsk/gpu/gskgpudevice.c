@@ -421,11 +421,13 @@ print_cache_stats (GskGpuDevice *self)
   if (ratios->len > 0)
     g_string_append (ratios, ")");
 
-  gdk_debug_message ("cached items\n"
+  gdk_debug_message ("Cached items\n"
                      "  glyphs:   %5u (%u stale)\n"
-                     "  textures: %5u\n"
+                     "  textures: %5u (%u in hash)\n"
                      "  atlases:  %5u%s",
-                     glyphs, stale_glyphs, textures, atlases, ratios->str);
+                     glyphs, stale_glyphs,
+                     textures, g_hash_table_size (priv->texture_cache),
+                     atlases, ratios->str);
 
   g_string_free (ratios, TRUE);
 }
