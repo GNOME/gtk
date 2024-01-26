@@ -20,8 +20,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-master-po-gl-77922___.merged\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2024-01-22 13:47+0000\n"
-"PO-Revision-Date: 2024-01-24 01:33+0100\n"
+"POT-Creation-Date: 2024-01-25 11:35+0000\n"
+"PO-Revision-Date: 2024-01-26 10:56+0100\n"
 "Last-Translator: Fran Dieguez <fran.dieguez@gnome.org>\n"
 "Language-Team: Galician <proxecto@trasno.gal>\n"
 "Language: gl\n"
@@ -4424,6 +4424,7 @@ msgid ""
 "Tints all the places where the current renderer uses Cairo instead of the "
 "GPU."
 msgstr ""
+"Tinta todos os lugares onde o renderizador actual usa Cairo en lugar da GPU."
 
 #: gtk/inspector/visual.ui:436
 msgid "Show Cairo Rendering"
@@ -4463,7 +4464,7 @@ msgstr "Mostrar avisos de accesibilidade"
 
 #: gtk/inspector/visual.ui:661
 msgid "Show Graphics Offload"
-msgstr ""
+msgstr "Mostrar a descarga de gráficos"
 
 #: gtk/inspector/visual.ui:693
 msgid "Inspect Inspector"
