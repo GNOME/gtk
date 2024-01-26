@@ -18,13 +18,12 @@
 
 #define MAX_ATLAS_ITEM_SIZE 256
 
-G_STATIC_ASSERT (MAX_ATLAS_ITEM_SIZE < ATLAS_SIZE);
-
 #define MAX_DEAD_PIXELS (ATLAS_SIZE * ATLAS_SIZE / 2)
 
-#define CACHE_GC_TIMEOUT 15  /* seconds */
+#define CACHE_TIMEOUT 15  /* seconds */
 
-#define CACHE_MAX_AGE (G_TIME_SPAN_SECOND * 4)  /* 4 seconds, in µs */
+G_STATIC_ASSERT (MAX_ATLAS_ITEM_SIZE < ATLAS_SIZE);
+G_STATIC_ASSERT (MAX_DEAD_PIXELS < ATLAS_SIZE * ATLAS_SIZE);
 
 typedef struct _GskGpuCached GskGpuCached;
 typedef struct _GskGpuCachedClass GskGpuCachedClass;
@@ -41,6 +40,7 @@ struct _GskGpuDevicePrivate
   GskGpuCached *first_cached;
   GskGpuCached *last_cached;
   guint cache_gc_source;
+  int cache_timeout;  /* in seconds, or -1 to disable gc */
 
   GHashTable *texture_cache;
   GHashTable *glyph_cache;
@@ -154,6 +154,19 @@ gsk_gpu_cached_use (GskGpuDevice *device,
   mark_as_stale (cached, FALSE);
 }
 
+static inline gboolean
+gsk_gpu_cached_is_old (GskGpuDevice *device,
+                       GskGpuCached *cached,
+                       gint64        timestamp)
+{
+  GskGpuDevicePrivate *priv = gsk_gpu_device_get_instance_private (device);
+
+  if (priv->cache_timeout < 0)
+    return FALSE;
+  else
+    return timestamp - cached->timestamp > priv->cache_timeout * G_TIME_SPAN_SECOND;
+}
+
 /* }}} */
 /* {{{ CachedAtlas */
 
@@ -250,7 +263,7 @@ gsk_gpu_cached_texture_should_collect (GskGpuDevice *device,
                                        GskGpuCached *cached,
                                        gint64        timestamp)
 {
-  return timestamp - cached->timestamp > CACHE_MAX_AGE;
+  return gsk_gpu_cached_is_old (device, cached, timestamp);
 }
 
 static const GskGpuCachedClass GSK_GPU_CACHED_TEXTURE_CLASS =
@@ -338,7 +351,7 @@ gsk_gpu_cached_glyph_should_collect (GskGpuDevice *device,
                                      GskGpuCached *cached,
                                      gint64        timestamp)
 {
-  if (timestamp - cached->timestamp > CACHE_MAX_AGE)
+  if (gsk_gpu_cached_is_old (device, cached, timestamp))
     mark_as_stale (cached, TRUE);
 
   /* Glyphs are only collected when their atlas is freed */
@@ -541,11 +554,41 @@ gsk_gpu_device_setup (GskGpuDevice *self,
                       gsize         max_image_size)
 {
   GskGpuDevicePrivate *priv = gsk_gpu_device_get_instance_private (self);
+  const char *str;
 
   priv->display = g_object_ref (display);
   priv->max_image_size = max_image_size;
+  priv->cache_timeout = CACHE_TIMEOUT;
 
-  priv->cache_gc_source = g_timeout_add_seconds (CACHE_GC_TIMEOUT, cache_gc_source_callback, self);
+  str = g_getenv ("GSK_CACHE_TIMEOUT");
+  if (str != NULL)
+    {
+      gint64 value;
+      GError *error = NULL;
+
+      if (!g_ascii_string_to_signed (str, 10, -1, G_MAXINT, &value, &error))
+        {
+          g_warning ("Failed to parse GSK_CACHE_TIMEOUT: %s", error->message);
+          g_error_free (error);
+        }
+      else
+        {
+          priv->cache_timeout = (int) value;
+        }
+    }
+
+  if (GSK_DEBUG_CHECK (GLYPH_CACHE))
+    {
+      if (priv->cache_timeout < 0)
+        gdk_debug_message ("Cache GC disabled");
+      else if (priv->cache_timeout == 0)
+        gdk_debug_message ("Cache GC before every frame");
+      else
+        gdk_debug_message ("Cache GC timeout: %d seconds", priv->cache_timeout);
+    }
+
+  if (priv->cache_timeout > 0)
+    priv->cache_gc_source = g_timeout_add_seconds (priv->cache_timeout, cache_gc_source_callback, self);
 }
 
 GdkDisplay *
