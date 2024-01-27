@@ -399,7 +399,9 @@ print_cache_stats (GskGpuDevice *self)
             stale_glyphs++;
         }
       else if (cached->class == &GSK_GPU_CACHED_TEXTURE_CLASS)
-        textures++;
+        {
+          textures++;
+        }
       else if (cached->class == &GSK_GPU_CACHED_ATLAS_CLASS)
         {
           double ratio;
