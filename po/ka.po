@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2024-01-07 07:44+0000\n"
-"PO-Revision-Date: 2024-01-08 05:11+0100\n"
+"POT-Creation-Date: 2024-01-25 11:35+0000\n"
+"PO-Revision-Date: 2024-01-27 18:13+0100\n"
 "Last-Translator: Ekaterine Papava <papava.e@gtu.ge>\n"
 "Language-Team: Georgian <http://mail.gnome.org/mailman/listinfo/gnome-ge-"
 "list>\n"
@@ -55,53 +55,53 @@ msgstr "შემცველობის %s-ად გამოტანა შ
 msgid "The current backend does not support OpenGL"
 msgstr "მიმდინარე უკანაბოლოს OpenGL-ის მხარდაჭერა არ გააჩნია"
 
-#: gdk/gdkdisplay.c:1292 gdk/gdksurface.c:1268 gdk/gdkvulkancontext.c:1581
+#: gdk/gdkdisplay.c:1296 gdk/gdkvulkancontext.c:1581
 msgid "Vulkan support disabled via GDK_DEBUG"
 msgstr "Vulkan-ის მხარდაჭერა გამორთულია GDK_DEBUG-ით"
 
-#: gdk/gdkdisplay.c:1335
+#: gdk/gdkdisplay.c:1350
 msgid "GL support disabled via GDK_DEBUG"
 msgstr "GL-ის მხარდაჭერა გათიშულია GDK_DEBUG-ის მიერ"
 
-#: gdk/gdkdisplay.c:1631
+#: gdk/gdkdisplay.c:1646
 msgid "No EGL configuration available"
 msgstr "EGL-ის კონფიგურაცია მიუწვდომელია"
 
-#: gdk/gdkdisplay.c:1639
+#: gdk/gdkdisplay.c:1654
 msgid "Failed to get EGL configurations"
 msgstr "EGL-ის კონფიგურაციის მიღების შეცდოა"
 
-#: gdk/gdkdisplay.c:1669
+#: gdk/gdkdisplay.c:1684
 msgid "No EGL configuration with required features found"
 msgstr "მოთხოვნილი ფუნქციების მქონე EGL-ის კონფიგურაცია ნაპოვნი არაა"
 
-#: gdk/gdkdisplay.c:1676
+#: gdk/gdkdisplay.c:1691
 msgid "No perfect EGL configuration found"
 msgstr "EGL-ის მისაღები კონფიგურაცია ნაპოვნი არაა"
 
-#: gdk/gdkdisplay.c:1718
+#: gdk/gdkdisplay.c:1733
 #, c-format
 msgid "EGL implementation is missing extension %s"
 msgid_plural "EGL implementation is missing %2$d extensions: %1$s"
 msgstr[0] "EGL-ის განხორციელებას %2$d გაფართოება აკლია: %1$s"
 
-#: gdk/gdkdisplay.c:1768
+#: gdk/gdkdisplay.c:1782
 msgid "libEGL not available in this sandbox"
 msgstr "ამ იზოლირებულ გარემოში libEGL მიუწვდომელია"
 
-#: gdk/gdkdisplay.c:1769
+#: gdk/gdkdisplay.c:1783
 msgid "libEGL not available"
 msgstr "libEGL მიუწვდომელია"
 
-#: gdk/gdkdisplay.c:1779
+#: gdk/gdkdisplay.c:1793
 msgid "Failed to create EGL display"
 msgstr "EGL ეკრანის შექმნის შეცდომა"
 
-#: gdk/gdkdisplay.c:1789
+#: gdk/gdkdisplay.c:1802
 msgid "Could not initialize EGL display"
 msgstr "EGL ეკრანის ინიციალიზაციის შეცდომა"
 
-#: gdk/gdkdisplay.c:1800
+#: gdk/gdkdisplay.c:1812
 #, c-format
 msgid "EGL version %d.%d is too old. GTK requires %d.%d"
 msgstr "EGL-ის ვერსია %d.%d ძალიან ძველია. GTK-ს ესაჭიროება %d.%d"
@@ -139,7 +139,7 @@ msgstr "აპლიკაციას %s-ის API-ის მხარდა�
 
 #. translators: This is about OpenGL backend names, like
 #. * "Trying to use X11 GLX, but EGL is already in use"
-#: gdk/gdkglcontext.c:2124
+#: gdk/gdkglcontext.c:2115
 #, c-format
 msgid "Trying to use %s, but %s is already in use"
 msgstr "%s გამოყენების მცდელობა, მაგრამ %s უკვე გამოიყენება"
@@ -852,12 +852,17 @@ msgstr "არასწორი ფორმატები შედგენ�
 msgid "Unsupported encoding “%s”"
 msgstr "კოდირება \"%s\" მხარდაუჭერელია"
 
-#: gsk/gl/gskglrenderer.c:210
+#: gsk/gl/gskglrenderer.c:204
 #, c-format
 msgid "This GLES %d.%d implementation does not support half-float vertex data"
 msgstr ""
 "GLES %d.%d-ის ამ განხორციელებას ნახევრად-მცურავმძიმიანი წვეროების "
 "მონაცემების მხარდაჭერა არ გააჩნია"
+
+#: gsk/gpu/gskgldevice.c:238
+#, c-format
+msgid "OpenGL ES 2.0 is not supported by this renderer."
+msgstr "OpenGL ES 2.0 ამ რენდერერის მიერ მხარდაჭერილი არაა."
 
 #: gtk/a11y/gtkatspiaction.c:239
 msgctxt "accessibility"
@@ -1056,7 +1061,7 @@ msgid "Invalid"
 msgstr "არასწორი"
 
 #. This label is displayed in a treeview cell displaying an accelerator
-#. * when the cell is clicked to change the acelerator.
+#. * when the cell is clicked to change the accelerator.
 #.
 #: gtk/deprecated/gtkcellrendereraccel.c:436
 #: gtk/deprecated/gtkcellrendereraccel.c:729
@@ -1235,7 +1240,6 @@ msgid "Mozilla Public License 2.0"
 msgstr "Mozilla Public License 2.0"
 
 #: gtk/gtkaboutdialog.c:137
-#| msgid "BSD 2-Clause License"
 msgid "BSD Zero-Clause License"
 msgstr "BSD Zero-Clause License"
 
@@ -2349,7 +2353,7 @@ msgid "If you delete an item, it will be permanently lost."
 msgstr "თუ წაშლით ელემენტს, ის სამუდამოდ დაიკარგება."
 
 #: gtk/gtkfilechooserwidget.c:1183 gtk/gtkfilechooserwidget.c:1781
-#: gtk/gtklabel.c:5697 gtk/gtktext.c:6147 gtk/gtktextview.c:9018
+#: gtk/gtklabel.c:5702 gtk/gtktext.c:6147 gtk/gtktextview.c:9018
 msgid "_Delete"
 msgstr "წაშლა"
 
@@ -2675,7 +2679,7 @@ msgstr "სტილის ვარიაციები"
 msgid "Character Variations"
 msgstr "სიმბოლოების ვარიანტები"
 
-#: gtk/gtkglarea.c:305
+#: gtk/gtkglarea.c:309
 msgid "OpenGL context creation failed"
 msgstr "OpenGL-ის კონტექსტის შექმნის შეცდომა"
 
@@ -2688,31 +2692,31 @@ msgstr "დახურვა"
 msgid "Close the infobar"
 msgstr "საინფორმაციო ზოლის დახურვა"
 
-#: gtk/gtklabel.c:5694 gtk/gtktext.c:6135 gtk/gtktextview.c:9006
+#: gtk/gtklabel.c:5699 gtk/gtktext.c:6135 gtk/gtktextview.c:9006
 msgid "Cu_t"
 msgstr "ამოჭრა"
 
-#: gtk/gtklabel.c:5695 gtk/gtktext.c:6139 gtk/gtktextview.c:9010
+#: gtk/gtklabel.c:5700 gtk/gtktext.c:6139 gtk/gtktextview.c:9010
 msgid "_Copy"
 msgstr "ასლი"
 
-#: gtk/gtklabel.c:5696 gtk/gtktext.c:6143 gtk/gtktextview.c:9014
+#: gtk/gtklabel.c:5701 gtk/gtktext.c:6143 gtk/gtktextview.c:9014
 msgid "_Paste"
 msgstr "ჩასმა"
 
-#: gtk/gtklabel.c:5702 gtk/gtktext.c:6156 gtk/gtktextview.c:9039
+#: gtk/gtklabel.c:5707 gtk/gtktext.c:6156 gtk/gtktextview.c:9039
 msgid "Select _All"
 msgstr "ყველაფრის _მონიშვნა"
 
-#: gtk/gtklabel.c:5707
+#: gtk/gtklabel.c:5712
 msgid "_Open Link"
 msgstr "_ბმულის გახსნა"
 
-#: gtk/gtklabel.c:5711
+#: gtk/gtklabel.c:5716
 msgid "Copy _Link Address"
 msgstr "დაა_კოპირე ბმულის მისამართი"
 
-#: gtk/gtklabel.c:5755 gtk/gtktext.c:2716 gtk/gtktextview.c:9088
+#: gtk/gtklabel.c:5760 gtk/gtktext.c:2716 gtk/gtktextview.c:9088
 msgid "Context menu"
 msgstr "კონტექსტური მენიუ"
 
@@ -3853,37 +3857,37 @@ msgstr "სტილის კლასები"
 msgid "CSS Property"
 msgstr "CSS-ის თვისება"
 
-#: gtk/inspector/general.c:352
+#: gtk/inspector/general.c:363
 msgctxt "GL version"
 msgid "None"
 msgstr "არცერთი"
 
-#: gtk/inspector/general.c:430
+#: gtk/inspector/general.c:441
 msgctxt "GL version"
 msgid "Unknown"
 msgstr "უცნობი"
 
-#: gtk/inspector/general.c:495
+#: gtk/inspector/general.c:503
 msgctxt "Vulkan device"
 msgid "Disabled"
 msgstr "გამორთულია"
 
-#: gtk/inspector/general.c:496 gtk/inspector/general.c:497
+#: gtk/inspector/general.c:504 gtk/inspector/general.c:505
 msgctxt "Vulkan version"
 msgid "Disabled"
 msgstr "გამორთულია"
 
-#: gtk/inspector/general.c:553
+#: gtk/inspector/general.c:555
 msgctxt "Vulkan device"
 msgid "None"
 msgstr "არცერთი"
 
-#: gtk/inspector/general.c:554 gtk/inspector/general.c:555
+#: gtk/inspector/general.c:556 gtk/inspector/general.c:557
 msgctxt "Vulkan version"
 msgid "None"
 msgstr "არცერთი"
 
-#: gtk/inspector/general.c:893
+#: gtk/inspector/general.c:895
 msgid "IM Context is hardcoded by GTK_IM_MODULE"
 msgstr "IM-ის კონტექსტი GTK_IM_MODULE-ში ხელითაა ჩაწერილი"
 
@@ -7281,7 +7285,7 @@ msgid "Use style from CSS file"
 msgstr "სტილის CSS ფაილიდან გამოყენება"
 
 #: tools/gtk-builder-tool-preview.c:187 tools/gtk-builder-tool-screenshot.c:370
-#: tools/gtk-builder-tool-validate.c:268 tools/gtk-rendernode-tool-render.c:204
+#: tools/gtk-builder-tool-validate.c:268 tools/gtk-rendernode-tool-render.c:203
 #: tools/gtk-rendernode-tool-show.c:113
 #, c-format
 msgid "Could not initialize windowing system\n"
@@ -7327,13 +7331,13 @@ msgstr ""
 "თავზე გადასაწერად გამოიყენეთ --force.\n"
 
 #: tools/gtk-builder-tool-screenshot.c:332
-#: tools/gtk-rendernode-tool-render.c:172
+#: tools/gtk-rendernode-tool-render.c:171
 #, c-format
 msgid "Output written to %s.\n"
 msgstr "გამოტანილი ინფორმაცია ჩაწერილია %s-ში.\n"
 
 #: tools/gtk-builder-tool-screenshot.c:336
-#: tools/gtk-rendernode-tool-render.c:176
+#: tools/gtk-rendernode-tool-render.c:175
 #, c-format
 msgid "Failed to save %s: %s\n"
 msgstr "\"%s'-ის შენახვის შეცდომა: %s\n"
@@ -7351,7 +7355,7 @@ msgid "Overwrite existing file"
 msgstr "არსებულ ფაილზე გადაწერა"
 
 #: tools/gtk-builder-tool-screenshot.c:363
-#: tools/gtk-rendernode-tool-render.c:197
+#: tools/gtk-rendernode-tool-render.c:196
 msgid "FILE…"
 msgstr "FILE…"
 
@@ -7821,6 +7825,7 @@ msgid ""
 "Perform various tasks on GTK render nodes.\n"
 "\n"
 "Commands:\n"
+"  benchmark    Benchmark rendering of a node\n"
 "  info         Provide information about the node\n"
 "  show         Show the node\n"
 "  render       Take a screenshot of the node\n"
@@ -7832,6 +7837,7 @@ msgstr ""
 "სხვადასხვა დავალებების შესრულება Gtk-ის რენდერის კვანძებზე.\n"
 "\n"
 "ბრძანებები:\n"
+"  benchmark   კვანძის რენდერის წარმადობის გაზომვა\n"
 "  info     ამ კვანძის შესახებ ინფორმაციის გამოტანა\n"
 "  show     ამ კვანძის ჩვენება\n"
 "  render    კვანძის ეკრანის ანაბეჭდის აღება\n"
@@ -7861,7 +7867,7 @@ msgstr "საწყისი: %g %g\n"
 msgid "Provide information about the render node."
 msgstr "შეიყვანეთ ინფორმაცია რენდერის კვანძის შესახებ."
 
-#: tools/gtk-rendernode-tool-info.c:236 tools/gtk-rendernode-tool-render.c:225
+#: tools/gtk-rendernode-tool-info.c:236 tools/gtk-rendernode-tool-render.c:224
 #: tools/gtk-rendernode-tool-show.c:134
 #, c-format
 msgid "No .node file specified\n"
@@ -7887,19 +7893,24 @@ msgstr ""
 msgid "Failed to generate SVG: %s\n"
 msgstr "შეცდომა SVG-ის გენერაციისას: %s\n"
 
-#: tools/gtk-rendernode-tool-render.c:196
+#: tools/gtk-rendernode-tool-render.c:150
+#, c-format
+msgid "Failed to create renderer: %s\n"
+msgstr "რენდერერის შექმნა ჩავარდა: %s\n"
+
+#: tools/gtk-rendernode-tool-render.c:195
 msgid "Renderer to use"
 msgstr "გამოყენებული რენდერერი"
 
-#: tools/gtk-rendernode-tool-render.c:196
+#: tools/gtk-rendernode-tool-render.c:195
 msgid "RENDERER"
 msgstr "რენდერერი"
 
-#: tools/gtk-rendernode-tool-render.c:212
+#: tools/gtk-rendernode-tool-render.c:211
 msgid "Render a .node file to an image."
 msgstr ".ui ფაილის რენდერი გამოსახულებაში."
 
-#: tools/gtk-rendernode-tool-render.c:231
+#: tools/gtk-rendernode-tool-render.c:230
 #, c-format
 msgid "Can only render a single .node file to a single output file\n"
 msgstr "ერთი .node ფაილის მხოლოდ ერთ გამოტანის ფაილში რენდერი შეგიძლიათ\n"
@@ -7917,12 +7928,12 @@ msgstr "რენდერის კვანძის ჩვენება."
 msgid "Can only preview a single .node file\n"
 msgstr "შეგიძლიათ მხოლოდ ერთი .node ფაილის გადახედვა\n"
 
-#: tools/gtk-rendernode-tool-utils.c:51
+#: tools/gtk-rendernode-tool-utils.c:54
 #, c-format
 msgid "Error at %s: %s\n"
 msgstr "შეცდომა მისამართზე %s: %s\n"
 
-#: tools/gtk-rendernode-tool-utils.c:69
+#: tools/gtk-rendernode-tool-utils.c:72
 #, c-format
 msgid "Failed to load node file: %s\n"
 msgstr "შეცდომა კვანძის ფაილის ჩატვირთვისას: %s\n"
