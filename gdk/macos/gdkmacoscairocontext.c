@@ -272,6 +272,11 @@ _gdk_macos_cairo_context_end_frame (GdkDrawContext *draw_context,
 }
 
 static void
+_gdk_macos_cairo_context_empty_frame (GdkDrawContext *draw_context)
+{
+}
+
+static void
 _gdk_macos_cairo_context_surface_resized (GdkDrawContext *draw_context)
 {
   g_assert (GDK_IS_MACOS_CAIRO_CONTEXT (draw_context));
@@ -287,6 +292,7 @@ _gdk_macos_cairo_context_class_init (GdkMacosCairoContextClass *klass)
 
   draw_context_class->begin_frame = _gdk_macos_cairo_context_begin_frame;
   draw_context_class->end_frame = _gdk_macos_cairo_context_end_frame;
+  draw_context_class->empty_frame = _gdk_macos_cairo_context_empty_frame;
   draw_context_class->surface_resized = _gdk_macos_cairo_context_surface_resized;
 
   cairo_context_class->cairo_create = _gdk_macos_cairo_context_cairo_create;
