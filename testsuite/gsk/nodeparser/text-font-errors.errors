@@ -1,5 +1,4 @@
 <data>:21:32-36: error: GTK_CSS_PARSER_ERROR_UNKNOWN_VALUE
-<data>:50:23-24: error: GTK_CSS_PARSER_ERROR_UNKNOWN_VALUE
 <data>:55:24-69:3: error: GTK_CSS_PARSER_ERROR_UNKNOWN_VALUE
 <data>:74:24-33: error: GTK_CSS_PARSER_ERROR_SYNTAX
 <data>:79:24-38: error: g-io-error-quark 15

@@ -28,7 +28,7 @@ text {
   glyphs: "Hello";
 }
 text {
-  font: "Cantarell 11";
+  font: "Noto Sans 11";
   glyphs: "Hello";
 }
 text {

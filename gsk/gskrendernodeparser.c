@@ -854,7 +854,8 @@ parse_mask_mode (GtkCssParser *parser,
 
 static PangoFont *
 font_from_string (PangoFontMap *fontmap,
-                  const char   *string)
+                  const char   *string,
+                  gboolean      allow_fallback)
 {
   PangoFontDescription *desc;
   PangoContext *ctx;
@@ -865,7 +866,7 @@ font_from_string (PangoFontMap *fontmap,
   font = pango_font_map_load_font (fontmap, ctx, desc);
   g_object_unref (ctx);
 
-  if (font)
+  if (font && !allow_fallback)
     {
       PangoFontDescription *desc2;
       const char *family, *family2;
@@ -1081,7 +1082,7 @@ parse_font (GtkCssParser *parser,
     return FALSE;
 
   if (context->fontmap)
-    font = font_from_string (context->fontmap, font_name);
+    font = font_from_string (context->fontmap, font_name, FALSE);
 
   if (gtk_css_parser_has_url (parser))
     {
@@ -1140,7 +1141,7 @@ parse_font (GtkCssParser *parser,
 
           if (success)
             {
-              font = font_from_string (context->fontmap, font_name);
+              font = font_from_string (context->fontmap, font_name, FALSE);
               if (!font)
                 {
                   gtk_css_parser_error (parser,
@@ -1156,7 +1157,7 @@ parse_font (GtkCssParser *parser,
   else
     {
       if (!font)
-        font = font_from_string (pango_cairo_font_map_get_default (), font_name);
+        font = font_from_string (pango_cairo_font_map_get_default (), font_name, TRUE);
 
       if (!font)
         gtk_css_parser_error_value (parser, "The font \"%s\" does not exist", font_name);
@@ -2236,7 +2237,7 @@ parse_text_node (GtkCssParser *parser,
 
   if (font == NULL)
     {
-      font = font_from_string (pango_cairo_font_map_get_default (), "Cantarell 11");
+      font = font_from_string (pango_cairo_font_map_get_default (), "Cantarell 11", TRUE);
       g_assert (font);
     }
 
