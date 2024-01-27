@@ -130,6 +130,7 @@ compare_render_tests = [
   'scaled-cairo',
   'scaled-texture',
   'scaled-texture-scale',
+  'scale0-crash',
   'shadow-behind',
   'shadow-clip-contents',
   'shadow-in-opacity',

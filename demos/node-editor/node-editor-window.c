@@ -1746,16 +1746,16 @@ set_initial_text (NodeEditorWindow *self)
   path = get_autosave_path (NULL);
   path1 = get_autosave_path ("-unsafe");
 
-  if (g_file_get_contents (path, &initial_text, &len, NULL))
-    {
-      gtk_text_buffer_set_text (self->text_buffer, initial_text, len);
-      g_free (initial_text);
-    }
-  else if (g_file_get_contents (path1, &initial_text, &len, NULL))
+  if (g_file_get_contents (path1, &initial_text, &len, NULL))
     {
       self->auto_reload = FALSE;
       gtk_revealer_set_reveal_child (GTK_REVEALER (self->crash_warning), TRUE);
 
+      gtk_text_buffer_set_text (self->text_buffer, initial_text, len);
+      g_free (initial_text);
+    }
+  else if (g_file_get_contents (path, &initial_text, &len, NULL))
+    {
       gtk_text_buffer_set_text (self->text_buffer, initial_text, len);
       g_free (initial_text);
     }
