@@ -1,6 +1,4 @@
-text {
-  color: rgb(50,50,50);
-  font: "Cantarell 11";
-  glyphs: "N";
-  offset: 0 32.0186;
+color {
+  bounds: 0 0 50 50;
+  color: rgb(255,0,204);
 }
