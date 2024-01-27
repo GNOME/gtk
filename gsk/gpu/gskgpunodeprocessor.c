@@ -3933,9 +3933,11 @@ gsk_gpu_node_processor_add_node (GskGpuNodeProcessor *self,
   GskRenderNodeType node_type;
 
   /* This catches the corner cases of empty nodes, so after this check
-   * there's quaranteed to be at least 1 pixel that needs to be drawn */
+   * there's quaranteed to be at least 1 pixel that needs to be drawn
+   */
   if (node->bounds.size.width == 0 || node->bounds.size.height == 0)
     return;
+
   if (!gsk_gpu_clip_may_intersect_rect (&self->clip, &self->offset, &node->bounds))
     return;
 
@@ -3979,6 +3981,12 @@ gsk_gpu_node_processor_create_node_pattern (GskGpuPatternWriter *self,
 
   if (!gsk_gpu_frame_should_optimize (self->frame, GSK_GPU_OPTIMIZE_UBER))
     return FALSE;
+
+  /* This catches the corner cases of empty nodes, so after this check
+   * there's quaranteed to be at least 1 pixel that needs to be drawn
+   */
+  if (node->bounds.size.width == 0 || node->bounds.size.height == 0)
+    return TRUE;
 
   node_type = gsk_render_node_get_node_type (node);
   if (node_type >= G_N_ELEMENTS (nodes_vtable))
