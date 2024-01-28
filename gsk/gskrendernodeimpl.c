@@ -4225,6 +4225,32 @@ gsk_repeat_node_draw (GskRenderNode *node,
 }
 
 static void
+gsk_repeat_node_diff (GskRenderNode  *node1,
+                      GskRenderNode  *node2,
+                      GskDiffData    *data)
+{
+  GskRepeatNode *self1 = (GskRepeatNode *) node1;
+  GskRepeatNode *self2 = (GskRepeatNode *) node2;
+
+  if (gsk_rect_equal (&node1->bounds, &node2->bounds) &&
+      gsk_rect_equal (&self1->child_bounds, &self2->child_bounds))
+    {
+      cairo_region_t *sub;
+
+      sub = cairo_region_create();
+      gsk_render_node_data_diff (self1->child, self2->child, &(GskDiffData) {sub, data->offload });
+      if (cairo_region_is_empty (sub))
+        {
+          cairo_region_destroy (sub);
+          return;
+        }
+      cairo_region_destroy (sub);
+    }
+
+  gsk_render_node_diff_impossible (node1, node2, data);
+}
+
+static void
 gsk_repeat_node_class_init (gpointer g_class,
                             gpointer class_data)
 {
@@ -4234,6 +4260,7 @@ gsk_repeat_node_class_init (gpointer g_class,
 
   node_class->finalize = gsk_repeat_node_finalize;
   node_class->draw = gsk_repeat_node_draw;
+  node_class->diff = gsk_repeat_node_diff;
 }
 
 /**
