@@ -240,7 +240,12 @@ struct _GskGpuCachedTexture
 {
   GskGpuCached parent;
 
-  /* atomic */ GdkTexture *texture;
+  /* atomic */ int use_count; /* We count the use by the device (via the linked
+                               * list) and by the texture (via render data or
+                               * weak ref.
+                               */
+
+  GdkTexture *texture;
   GskGpuImage *image;
 };
 
@@ -248,14 +253,37 @@ static void
 gsk_gpu_cached_texture_free (GskGpuDevice *device,
                              GskGpuCached *cached)
 {
+  GskGpuDevicePrivate *priv = gsk_gpu_device_get_instance_private (device);
   GskGpuCachedTexture *self = (GskGpuCachedTexture *) cached;
-  gboolean texture_still_alive;
+  gpointer key, value;
 
-  texture_still_alive = g_atomic_pointer_exchange (&self->texture, NULL) != NULL;
   g_clear_object (&self->image);
 
-  if (!texture_still_alive)
-    g_free (self);
+  if (g_hash_table_steal_extended (priv->texture_cache, self->texture, &key, &value))
+    {
+      /* If the texture has been reused already, we put the entry back */
+      if ((GskGpuCached *) value != cached)
+        g_hash_table_insert (priv->texture_cache, key, value);
+    }
+
+  /* If the cached item itself is still in use by the texture, we leave
+   * it to the weak ref or render data to free it.
+   */
+  if (g_atomic_int_dec_and_test (&self->use_count))
+    {
+      g_free (self);
+      return;
+    }
+}
+
+static inline gboolean
+gsk_gpu_cached_texture_is_invalid (GskGpuCachedTexture *self)
+{
+  /* If the use count is less than 2, the orignal texture has died,
+   * and the memory may have been reused for a new texture, so we
+   * can't hand out the image that is for the original texture.
+   */
+  return g_atomic_int_get (&self->use_count) < 2;
 }
 
 static gboolean
@@ -263,7 +291,10 @@ gsk_gpu_cached_texture_should_collect (GskGpuDevice *device,
                                        GskGpuCached *cached,
                                        gint64        timestamp)
 {
-  return gsk_gpu_cached_is_old (device, cached, timestamp);
+  GskGpuCachedTexture *self = (GskGpuCachedTexture *) cached;
+
+  return gsk_gpu_cached_is_old (device, cached, timestamp) ||
+         gsk_gpu_cached_texture_is_invalid (self);
 }
 
 static const GskGpuCachedClass GSK_GPU_CACHED_TEXTURE_CLASS =
@@ -276,13 +307,13 @@ static const GskGpuCachedClass GSK_GPU_CACHED_TEXTURE_CLASS =
 static void
 gsk_gpu_cached_texture_destroy_cb (gpointer data)
 {
-  GskGpuCachedTexture *cache = data;
-  gboolean cache_still_alive;
+  GskGpuCachedTexture *self = data;
 
-  cache_still_alive = g_atomic_pointer_exchange (&cache->texture, NULL) != NULL;
-
-  if (!cache_still_alive)
-    g_free (cache);
+  if (g_atomic_int_dec_and_test (&self->use_count))
+    {
+      g_free (self);
+      return;
+    }
 }
 
 static GskGpuCachedTexture *
@@ -301,13 +332,16 @@ gsk_gpu_cached_texture_new (GskGpuDevice *device,
       g_object_weak_unref (G_OBJECT (texture), (GWeakNotify) gsk_gpu_cached_texture_destroy_cb, self);
     }
 
+
   self = gsk_gpu_cached_new (device, &GSK_GPU_CACHED_TEXTURE_CLASS, NULL);
   self->texture = texture;
   self->image = g_object_ref (image);
+  self->use_count = 2;
 
   if (!gdk_texture_set_render_data (texture, device, self, gsk_gpu_cached_texture_destroy_cb))
     {
       g_object_weak_ref (G_OBJECT (texture), (GWeakNotify) gsk_gpu_cached_texture_destroy_cb, self);
+
       g_hash_table_insert (priv->texture_cache, texture, self);
     }
 
@@ -805,13 +839,12 @@ gsk_gpu_device_lookup_texture_image (GskGpuDevice *self,
   if (cache == NULL)
     cache = g_hash_table_lookup (priv->texture_cache, texture);
 
-  if (cache && cache->image)
-    {
-      gsk_gpu_cached_use (self, (GskGpuCached *) cache, timestamp);
-      return g_object_ref (cache->image);
-    }
+  if (!cache || !cache->image || gsk_gpu_cached_texture_is_invalid (cache))
+    return NULL;
 
-  return NULL;
+  gsk_gpu_cached_use (self, (GskGpuCached *) cache, timestamp);
+
+  return g_object_ref (cache->image);
 }
 
 void
