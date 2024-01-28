@@ -46,6 +46,8 @@ struct _GskGpuDevicePrivate
   GHashTable *glyph_cache;
 
   GskGpuCachedAtlas *current_atlas;
+
+  /* atomic */ gsize dead_texture_pixels;
 };
 
 G_DEFINE_TYPE_WITH_PRIVATE (GskGpuDevice, gsk_gpu_device, G_TYPE_OBJECT)
@@ -73,7 +75,7 @@ struct _GskGpuCached
 
   gint64 timestamp;
   gboolean stale;
-  guint pixels;   /* For glyphs, pixels. For atlases, dead pixels */
+  guint pixels;   /* For glyphs and textures, pixels. For atlases, dead pixels */
 };
 
 static inline void
@@ -245,6 +247,8 @@ struct _GskGpuCachedTexture
                                * weak ref.
                                */
 
+  gsize *dead_pixels_counter;
+
   GdkTexture *texture;
   GskGpuImage *image;
 };
@@ -304,16 +308,19 @@ static const GskGpuCachedClass GSK_GPU_CACHED_TEXTURE_CLASS =
   gsk_gpu_cached_texture_should_collect
 };
 
+/* Note: this function can run in an arbitrary thread, so it can
+ * only access things atomically
+ */
 static void
 gsk_gpu_cached_texture_destroy_cb (gpointer data)
 {
   GskGpuCachedTexture *self = data;
 
+  if (!gsk_gpu_cached_texture_is_invalid (self))
+    g_atomic_pointer_add (self->dead_pixels_counter, ((GskGpuCached *) self)->pixels);
+
   if (g_atomic_int_dec_and_test (&self->use_count))
-    {
-      g_free (self);
-      return;
-    }
+    g_free (self);
 }
 
 static GskGpuCachedTexture *
@@ -336,6 +343,8 @@ gsk_gpu_cached_texture_new (GskGpuDevice *device,
   self = gsk_gpu_cached_new (device, &GSK_GPU_CACHED_TEXTURE_CLASS, NULL);
   self->texture = texture;
   self->image = g_object_ref (image);
+  ((GskGpuCached *)self)->pixels = gsk_gpu_image_get_width (image) * gsk_gpu_image_get_height (image);
+  self->dead_pixels_counter = &priv->dead_texture_pixels;
   self->use_count = 2;
 
   if (!gdk_texture_set_render_data (texture, device, self, gsk_gpu_cached_texture_destroy_cb))
@@ -497,6 +506,8 @@ gsk_gpu_device_gc (GskGpuDevice *self,
         gsk_gpu_cached_free (self, cached);
     }
 
+  g_atomic_pointer_set (&priv->dead_texture_pixels, 0);
+
   if (GSK_DEBUG_CHECK (GLYPH_CACHE))
     print_cache_stats (self);
 
@@ -522,14 +533,21 @@ void
 gsk_gpu_device_maybe_gc (GskGpuDevice *self)
 {
   GskGpuDevicePrivate *priv = gsk_gpu_device_get_instance_private (self);
+  gsize dead_texture_pixels;
 
   if (priv->cache_timeout < 0)
     return;
 
-  if (priv->cache_timeout == 0)
+  dead_texture_pixels = GPOINTER_TO_SIZE (g_atomic_pointer_get (&priv->dead_texture_pixels));
+
+  if (priv->cache_timeout == 0 || dead_texture_pixels > 1000000)
     {
-      GSK_DEBUG (GLYPH_CACHE, "Pre-frame GC");
+      GSK_DEBUG (GLYPH_CACHE, "Pre-frame GC (%lu dead pixels)", dead_texture_pixels);
       gsk_gpu_device_gc (self, g_get_monotonic_time ());
+    }
+  else
+    {
+      GSK_DEBUG (GLYPH_CACHE, "No pre-frame GC (%lu dead pixels)", dead_texture_pixels);
     }
 }
 
