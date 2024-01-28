@@ -129,6 +129,7 @@ guint      _gdk_wayland_cursor_get_next_image_index (GdkWaylandDisplay *display,
                                                      guint             *next_image_delay);
 
 void            gdk_wayland_surface_sync                   (GdkSurface           *surface);
+gboolean        gdk_wayland_surface_needs_commit           (GdkSurface           *surface);
 void            gdk_wayland_surface_commit                 (GdkSurface           *surface);
 void            gdk_wayland_surface_notify_committed       (GdkSurface           *surface);
 void            gdk_wayland_surface_request_frame          (GdkSurface           *surface);

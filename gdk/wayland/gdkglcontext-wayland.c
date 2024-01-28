@@ -87,9 +87,8 @@ static void
 gdk_wayland_gl_context_empty_frame (GdkDrawContext *draw_context)
 {
   GdkSurface *surface = gdk_draw_context_get_surface (draw_context);
-  GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
 
-  if (impl->has_pending_subsurface_commits)
+  if (gdk_wayland_surface_needs_commit (surface))
     {
       gdk_wayland_surface_sync (surface);
       gdk_wayland_surface_request_frame (surface);
