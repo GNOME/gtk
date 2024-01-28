@@ -48,9 +48,8 @@ GType                   gsk_gpu_device_get_type                         (void) G
 void                    gsk_gpu_device_setup                            (GskGpuDevice           *self,
                                                                          GdkDisplay             *display,
                                                                          gsize                   max_image_size);
-void                    gsk_gpu_device_gc                               (GskGpuDevice           *self,
-                                                                         gint64                  timestamp);
-
+void                    gsk_gpu_device_maybe_gc                         (GskGpuDevice           *self);
+void                    gsk_gpu_device_queue_gc                         (GskGpuDevice           *self);
 GdkDisplay *            gsk_gpu_device_get_display                      (GskGpuDevice           *self);
 gsize                   gsk_gpu_device_get_max_image_size               (GskGpuDevice           *self);
 GskGpuImage *           gsk_gpu_device_get_atlas_image                  (GskGpuDevice           *self);

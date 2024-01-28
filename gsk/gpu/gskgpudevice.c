@@ -445,7 +445,7 @@ print_cache_stats (GskGpuDevice *self)
   g_string_free (ratios, TRUE);
 }
 
-void
+static void
 gsk_gpu_device_gc (GskGpuDevice *self,
                    gint64        timestamp)
 {
@@ -467,6 +467,45 @@ gsk_gpu_device_gc (GskGpuDevice *self,
     print_cache_stats (self);
 
   gdk_profiler_end_mark (before, "Glyph cache GC", NULL);
+}
+
+static gboolean
+cache_gc_cb (gpointer data)
+{
+  GskGpuDevice *self = data;
+  GskGpuDevicePrivate *priv = gsk_gpu_device_get_instance_private (self);
+
+  GSK_DEBUG (GLYPH_CACHE, "Periodic GC");
+
+  gsk_gpu_device_gc (self, g_get_monotonic_time ());
+
+  priv->cache_gc_source = 0;
+
+  return G_SOURCE_REMOVE;
+}
+
+void
+gsk_gpu_device_maybe_gc (GskGpuDevice *self)
+{
+  GskGpuDevicePrivate *priv = gsk_gpu_device_get_instance_private (self);
+
+  if (priv->cache_timeout < 0)
+    return;
+
+  if (priv->cache_timeout == 0)
+    {
+      GSK_DEBUG (GLYPH_CACHE, "Pre-frame GC");
+      gsk_gpu_device_gc (self, g_get_monotonic_time ());
+    }
+}
+
+void
+gsk_gpu_device_queue_gc (GskGpuDevice *self)
+{
+  GskGpuDevicePrivate *priv = gsk_gpu_device_get_instance_private (self);
+
+  if (priv->cache_timeout > 0 && !priv->cache_gc_source)
+    priv->cache_gc_source = g_timeout_add_seconds (priv->cache_timeout, cache_gc_cb, self);
 }
 
 static void
@@ -538,16 +577,6 @@ gsk_gpu_device_init (GskGpuDevice *self)
                                           g_direct_equal);
 }
 
-static gboolean
-cache_gc_source_callback (gpointer data)
-{
-  GskGpuDevice *self = data;
-
-  gsk_gpu_device_gc (self, g_get_monotonic_time ());
-
-  return G_SOURCE_CONTINUE;
-}
-
 void
 gsk_gpu_device_setup (GskGpuDevice *self,
                       GdkDisplay   *display,
@@ -586,9 +615,6 @@ gsk_gpu_device_setup (GskGpuDevice *self,
       else
         gdk_debug_message ("Cache GC timeout: %d seconds", priv->cache_timeout);
     }
-
-  if (priv->cache_timeout > 0)
-    priv->cache_gc_source = g_timeout_add_seconds (priv->cache_timeout, cache_gc_source_callback, self);
 }
 
 GdkDisplay *
