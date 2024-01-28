@@ -18,13 +18,12 @@
 
 #define MAX_ATLAS_ITEM_SIZE 256
 
-G_STATIC_ASSERT (MAX_ATLAS_ITEM_SIZE < ATLAS_SIZE);
-
 #define MAX_DEAD_PIXELS (ATLAS_SIZE * ATLAS_SIZE / 2)
 
-#define CACHE_GC_TIMEOUT 15  /* seconds */
+#define CACHE_TIMEOUT 15  /* seconds */
 
-#define CACHE_MAX_AGE (G_TIME_SPAN_SECOND * 4)  /* 4 seconds, in µs */
+G_STATIC_ASSERT (MAX_ATLAS_ITEM_SIZE < ATLAS_SIZE);
+G_STATIC_ASSERT (MAX_DEAD_PIXELS < ATLAS_SIZE * ATLAS_SIZE);
 
 typedef struct _GskGpuCached GskGpuCached;
 typedef struct _GskGpuCachedClass GskGpuCachedClass;
@@ -41,11 +40,14 @@ struct _GskGpuDevicePrivate
   GskGpuCached *first_cached;
   GskGpuCached *last_cached;
   guint cache_gc_source;
+  int cache_timeout;  /* in seconds, or -1 to disable gc */
 
   GHashTable *texture_cache;
   GHashTable *glyph_cache;
 
   GskGpuCachedAtlas *current_atlas;
+
+  /* atomic */ gsize dead_texture_pixels;
 };
 
 G_DEFINE_TYPE_WITH_PRIVATE (GskGpuDevice, gsk_gpu_device, G_TYPE_OBJECT)
@@ -73,7 +75,7 @@ struct _GskGpuCached
 
   gint64 timestamp;
   gboolean stale;
-  guint pixels;   /* For glyphs, pixels. For atlases, dead pixels */
+  guint pixels;   /* For glyphs and textures, pixels. For atlases, dead pixels */
 };
 
 static inline void
@@ -154,6 +156,19 @@ gsk_gpu_cached_use (GskGpuDevice *device,
   mark_as_stale (cached, FALSE);
 }
 
+static inline gboolean
+gsk_gpu_cached_is_old (GskGpuDevice *device,
+                       GskGpuCached *cached,
+                       gint64        timestamp)
+{
+  GskGpuDevicePrivate *priv = gsk_gpu_device_get_instance_private (device);
+
+  if (priv->cache_timeout < 0)
+    return FALSE;
+  else
+    return timestamp - cached->timestamp > priv->cache_timeout * G_TIME_SPAN_SECOND;
+}
+
 /* }}} */
 /* {{{ CachedAtlas */
 
@@ -227,7 +242,14 @@ struct _GskGpuCachedTexture
 {
   GskGpuCached parent;
 
-  /* atomic */ GdkTexture *texture;
+  /* atomic */ int use_count; /* We count the use by the device (via the linked
+                               * list) and by the texture (via render data or
+                               * weak ref.
+                               */
+
+  gsize *dead_pixels_counter;
+
+  GdkTexture *texture;
   GskGpuImage *image;
 };
 
@@ -235,14 +257,37 @@ static void
 gsk_gpu_cached_texture_free (GskGpuDevice *device,
                              GskGpuCached *cached)
 {
+  GskGpuDevicePrivate *priv = gsk_gpu_device_get_instance_private (device);
   GskGpuCachedTexture *self = (GskGpuCachedTexture *) cached;
-  gboolean texture_still_alive;
+  gpointer key, value;
 
-  texture_still_alive = g_atomic_pointer_exchange (&self->texture, NULL) != NULL;
   g_clear_object (&self->image);
 
-  if (!texture_still_alive)
-    g_free (self);
+  if (g_hash_table_steal_extended (priv->texture_cache, self->texture, &key, &value))
+    {
+      /* If the texture has been reused already, we put the entry back */
+      if ((GskGpuCached *) value != cached)
+        g_hash_table_insert (priv->texture_cache, key, value);
+    }
+
+  /* If the cached item itself is still in use by the texture, we leave
+   * it to the weak ref or render data to free it.
+   */
+  if (g_atomic_int_dec_and_test (&self->use_count))
+    {
+      g_free (self);
+      return;
+    }
+}
+
+static inline gboolean
+gsk_gpu_cached_texture_is_invalid (GskGpuCachedTexture *self)
+{
+  /* If the use count is less than 2, the orignal texture has died,
+   * and the memory may have been reused for a new texture, so we
+   * can't hand out the image that is for the original texture.
+   */
+  return g_atomic_int_get (&self->use_count) < 2;
 }
 
 static gboolean
@@ -250,7 +295,10 @@ gsk_gpu_cached_texture_should_collect (GskGpuDevice *device,
                                        GskGpuCached *cached,
                                        gint64        timestamp)
 {
-  return timestamp - cached->timestamp > CACHE_MAX_AGE;
+  GskGpuCachedTexture *self = (GskGpuCachedTexture *) cached;
+
+  return gsk_gpu_cached_is_old (device, cached, timestamp) ||
+         gsk_gpu_cached_texture_is_invalid (self);
 }
 
 static const GskGpuCachedClass GSK_GPU_CACHED_TEXTURE_CLASS =
@@ -260,16 +308,19 @@ static const GskGpuCachedClass GSK_GPU_CACHED_TEXTURE_CLASS =
   gsk_gpu_cached_texture_should_collect
 };
 
+/* Note: this function can run in an arbitrary thread, so it can
+ * only access things atomically
+ */
 static void
 gsk_gpu_cached_texture_destroy_cb (gpointer data)
 {
-  GskGpuCachedTexture *cache = data;
-  gboolean cache_still_alive;
+  GskGpuCachedTexture *self = data;
 
-  cache_still_alive = g_atomic_pointer_exchange (&cache->texture, NULL) != NULL;
+  if (!gsk_gpu_cached_texture_is_invalid (self))
+    g_atomic_pointer_add (self->dead_pixels_counter, ((GskGpuCached *) self)->pixels);
 
-  if (!cache_still_alive)
-    g_free (cache);
+  if (g_atomic_int_dec_and_test (&self->use_count))
+    g_free (self);
 }
 
 static GskGpuCachedTexture *
@@ -288,13 +339,18 @@ gsk_gpu_cached_texture_new (GskGpuDevice *device,
       g_object_weak_unref (G_OBJECT (texture), (GWeakNotify) gsk_gpu_cached_texture_destroy_cb, self);
     }
 
+
   self = gsk_gpu_cached_new (device, &GSK_GPU_CACHED_TEXTURE_CLASS, NULL);
   self->texture = texture;
   self->image = g_object_ref (image);
+  ((GskGpuCached *)self)->pixels = gsk_gpu_image_get_width (image) * gsk_gpu_image_get_height (image);
+  self->dead_pixels_counter = &priv->dead_texture_pixels;
+  self->use_count = 2;
 
   if (!gdk_texture_set_render_data (texture, device, self, gsk_gpu_cached_texture_destroy_cb))
     {
       g_object_weak_ref (G_OBJECT (texture), (GWeakNotify) gsk_gpu_cached_texture_destroy_cb, self);
+
       g_hash_table_insert (priv->texture_cache, texture, self);
     }
 
@@ -338,7 +394,7 @@ gsk_gpu_cached_glyph_should_collect (GskGpuDevice *device,
                                      GskGpuCached *cached,
                                      gint64        timestamp)
 {
-  if (timestamp - cached->timestamp > CACHE_MAX_AGE)
+  if (gsk_gpu_cached_is_old (device, cached, timestamp))
     mark_as_stale (cached, TRUE);
 
   /* Glyphs are only collected when their atlas is freed */
@@ -399,7 +455,9 @@ print_cache_stats (GskGpuDevice *self)
             stale_glyphs++;
         }
       else if (cached->class == &GSK_GPU_CACHED_TEXTURE_CLASS)
-        textures++;
+        {
+          textures++;
+        }
       else if (cached->class == &GSK_GPU_CACHED_ATLAS_CLASS)
         {
           double ratio;
@@ -419,16 +477,18 @@ print_cache_stats (GskGpuDevice *self)
   if (ratios->len > 0)
     g_string_append (ratios, ")");
 
-  gdk_debug_message ("cached items\n"
+  gdk_debug_message ("Cached items\n"
                      "  glyphs:   %5u (%u stale)\n"
-                     "  textures: %5u\n"
+                     "  textures: %5u (%u in hash)\n"
                      "  atlases:  %5u%s",
-                     glyphs, stale_glyphs, textures, atlases, ratios->str);
+                     glyphs, stale_glyphs,
+                     textures, g_hash_table_size (priv->texture_cache),
+                     atlases, ratios->str);
 
   g_string_free (ratios, TRUE);
 }
 
-void
+static void
 gsk_gpu_device_gc (GskGpuDevice *self,
                    gint64        timestamp)
 {
@@ -446,10 +506,58 @@ gsk_gpu_device_gc (GskGpuDevice *self,
         gsk_gpu_cached_free (self, cached);
     }
 
+  g_atomic_pointer_set (&priv->dead_texture_pixels, 0);
+
   if (GSK_DEBUG_CHECK (GLYPH_CACHE))
     print_cache_stats (self);
 
   gdk_profiler_end_mark (before, "Glyph cache GC", NULL);
+}
+
+static gboolean
+cache_gc_cb (gpointer data)
+{
+  GskGpuDevice *self = data;
+  GskGpuDevicePrivate *priv = gsk_gpu_device_get_instance_private (self);
+
+  GSK_DEBUG (GLYPH_CACHE, "Periodic GC");
+
+  gsk_gpu_device_gc (self, g_get_monotonic_time ());
+
+  priv->cache_gc_source = 0;
+
+  return G_SOURCE_REMOVE;
+}
+
+void
+gsk_gpu_device_maybe_gc (GskGpuDevice *self)
+{
+  GskGpuDevicePrivate *priv = gsk_gpu_device_get_instance_private (self);
+  gsize dead_texture_pixels;
+
+  if (priv->cache_timeout < 0)
+    return;
+
+  dead_texture_pixels = GPOINTER_TO_SIZE (g_atomic_pointer_get (&priv->dead_texture_pixels));
+
+  if (priv->cache_timeout == 0 || dead_texture_pixels > 1000000)
+    {
+      GSK_DEBUG (GLYPH_CACHE, "Pre-frame GC (%lu dead pixels)", dead_texture_pixels);
+      gsk_gpu_device_gc (self, g_get_monotonic_time ());
+    }
+  else
+    {
+      GSK_DEBUG (GLYPH_CACHE, "No pre-frame GC (%lu dead pixels)", dead_texture_pixels);
+    }
+}
+
+void
+gsk_gpu_device_queue_gc (GskGpuDevice *self)
+{
+  GskGpuDevicePrivate *priv = gsk_gpu_device_get_instance_private (self);
+
+  if (priv->cache_timeout > 0 && !priv->cache_gc_source)
+    priv->cache_gc_source = g_timeout_add_seconds (priv->cache_timeout, cache_gc_cb, self);
 }
 
 static void
@@ -521,27 +629,44 @@ gsk_gpu_device_init (GskGpuDevice *self)
                                           g_direct_equal);
 }
 
-static gboolean
-cache_gc_source_callback (gpointer data)
-{
-  GskGpuDevice *self = data;
-
-  gsk_gpu_device_gc (self, g_get_monotonic_time ());
-
-  return G_SOURCE_CONTINUE;
-}
-
 void
 gsk_gpu_device_setup (GskGpuDevice *self,
                       GdkDisplay   *display,
                       gsize         max_image_size)
 {
   GskGpuDevicePrivate *priv = gsk_gpu_device_get_instance_private (self);
+  const char *str;
 
   priv->display = g_object_ref (display);
   priv->max_image_size = max_image_size;
+  priv->cache_timeout = CACHE_TIMEOUT;
 
-  priv->cache_gc_source = g_timeout_add_seconds (CACHE_GC_TIMEOUT, cache_gc_source_callback, self);
+  str = g_getenv ("GSK_CACHE_TIMEOUT");
+  if (str != NULL)
+    {
+      gint64 value;
+      GError *error = NULL;
+
+      if (!g_ascii_string_to_signed (str, 10, -1, G_MAXINT, &value, &error))
+        {
+          g_warning ("Failed to parse GSK_CACHE_TIMEOUT: %s", error->message);
+          g_error_free (error);
+        }
+      else
+        {
+          priv->cache_timeout = (int) value;
+        }
+    }
+
+  if (GSK_DEBUG_CHECK (GLYPH_CACHE))
+    {
+      if (priv->cache_timeout < 0)
+        gdk_debug_message ("Cache GC disabled");
+      else if (priv->cache_timeout == 0)
+        gdk_debug_message ("Cache GC before every frame");
+      else
+        gdk_debug_message ("Cache GC timeout: %d seconds", priv->cache_timeout);
+    }
 }
 
 GdkDisplay *
@@ -732,10 +857,12 @@ gsk_gpu_device_lookup_texture_image (GskGpuDevice *self,
   if (cache == NULL)
     cache = g_hash_table_lookup (priv->texture_cache, texture);
 
-  if (cache && cache->image)
-    return g_object_ref (cache->image);
+  if (!cache || !cache->image || gsk_gpu_cached_texture_is_invalid (cache))
+    return NULL;
 
-  return NULL;
+  gsk_gpu_cached_use (self, (GskGpuCached *) cache, timestamp);
+
+  return g_object_ref (cache->image);
 }
 
 void
