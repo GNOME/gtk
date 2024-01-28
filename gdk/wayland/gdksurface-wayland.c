@@ -746,6 +746,18 @@ gdk_wayland_surface_sync (GdkSurface *surface)
   gdk_wayland_surface_sync_viewport (surface);
 }
 
+gboolean
+gdk_wayland_surface_needs_commit (GdkSurface *surface)
+{
+  GdkWaylandSurface *self = GDK_WAYLAND_SURFACE (surface);
+
+  return self->has_pending_subsurface_commits ||
+         self->opaque_region_dirty ||
+         self->input_region_dirty ||
+         self->buffer_scale_dirty ||
+         self->viewport_dirty;
+}
+
 static void
 gdk_wayland_surface_fractional_scale_preferred_scale_cb (void *data,
                                                          struct wp_fractional_scale_v1 *fractional_scale,
