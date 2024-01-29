@@ -43,6 +43,8 @@ gstplayer_dep = dependency('gstreamer-player-1.0', version: '>= 1.12.3',
                            required: get_option('media-gstreamer'))
 gstgl_dep = dependency('gstreamer-gl-1.0', version: '>= 1.12.3',
                        required: get_option('media-gstreamer'))
+gstdrm_dep = dependency('gstreamer-allocators-1.0', version: '>= 1.23',
+                        required: false)
 
 if gstplayer_dep.found() and gstgl_dep.found()
   extra_win_cflags = []
@@ -54,6 +56,13 @@ if gstplayer_dep.found() and gstgl_dep.found()
 
   media_backends += 'gstreamer'
   cdata.set('HAVE_GSTREAMER', 1)
+  media_gst_deps = [ libm, libgtk_dep, gstplayer_dep, gstgl_dep ]
+
+  if dmabuf_dep.found() and gstdrm_dep.found()
+    cdata.set('HAVE_GSTREAMER_DRM', 1)
+    media_gst_deps += [ gstdrm_dep ]
+  endif
+
   shared_module('media-gstreamer',
     sources: [
       'gtkgstmediafile.c',
@@ -61,7 +70,7 @@ if gstplayer_dep.found() and gstgl_dep.found()
       'gtkgstsink.c',
     ],
     c_args: extra_c_args + extra_win_cflags,
-    dependencies: [ libm, libgtk_dep, gstplayer_dep, gstgl_dep ],
+    dependencies: media_gst_deps,
     name_suffix: module_suffix,
     install_dir: media_install_dir,
     install: true,
