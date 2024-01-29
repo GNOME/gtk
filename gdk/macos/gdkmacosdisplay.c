@@ -625,6 +625,7 @@ gdk_macos_display_init (GdkMacosDisplay *self)
   gdk_display_set_composited (GDK_DISPLAY (self), TRUE);
   gdk_display_set_input_shapes (GDK_DISPLAY (self), FALSE);
   gdk_display_set_rgba (GDK_DISPLAY (self), TRUE);
+  gdk_display_set_shadow_width (GDK_DISPLAY (self), FALSE);
 }
 
 GdkDisplay *

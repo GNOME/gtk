@@ -63,6 +63,8 @@ GDK_AVAILABLE_IN_ALL
 gboolean    gdk_display_is_composited      (GdkDisplay  *display);
 GDK_AVAILABLE_IN_ALL
 gboolean    gdk_display_is_rgba            (GdkDisplay  *display);
+GDK_AVAILABLE_IN_4_14
+gboolean    gdk_display_supports_shadow_width (GdkDisplay *display);
 GDK_AVAILABLE_IN_ALL
 gboolean    gdk_display_supports_input_shapes (GdkDisplay    *display);
 

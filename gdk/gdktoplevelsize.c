@@ -142,6 +142,9 @@ gdk_toplevel_size_set_min_size (GdkToplevelSize *size,
  * The shadow width corresponds to the part of the computed surface size
  * that would consist of the shadow margin surrounding the window, would
  * there be any.
+ * 
+ * Shadow width should only be set if
+ * [method@Gtk.Display.supports_shadow_width] is %TRUE.
  */
 void
 gdk_toplevel_size_set_shadow_width (GdkToplevelSize *size,

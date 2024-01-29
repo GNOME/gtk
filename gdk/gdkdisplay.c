@@ -77,6 +77,7 @@ enum
   PROP_0,
   PROP_COMPOSITED,
   PROP_RGBA,
+  PROP_SHADOW_WIDTH,
   PROP_INPUT_SHAPES,
   PROP_DMABUF_FORMATS,
   LAST_PROP
@@ -111,6 +112,7 @@ struct _GdkDisplayPrivate {
 
   guint rgba : 1;
   guint composited : 1;
+  guint shadow_width: 1;
   guint input_shapes : 1;
 
   GdkDebugFlags debug_flags;
@@ -142,6 +144,10 @@ gdk_display_get_property (GObject    *object,
 
     case PROP_RGBA:
       g_value_set_boolean (value, gdk_display_is_rgba (display));
+      break;
+
+    case PROP_SHADOW_WIDTH:
+      g_value_set_boolean (value, gdk_display_supports_shadow_width (display));
       break;
 
     case PROP_INPUT_SHAPES:
@@ -240,6 +246,18 @@ gdk_display_class_init (GdkDisplayClass *class)
    */
   props[PROP_RGBA] =
     g_param_spec_boolean ("rgba", NULL, NULL,
+                          TRUE,
+                          G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
+
+  /**
+   * GdkDisplay:shadow-width: (attributes org.gtk.Property.get=gdk_display_supports_shadow_width)
+   *
+   * %TRUE if the display supports extensible frames.
+   *
+   * Since: 4.14
+   */
+  props[PROP_SHADOW_WIDTH] =
+    g_param_spec_boolean ("shadow-width", NULL, NULL,
                           TRUE,
                           G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
 
@@ -391,6 +409,7 @@ gdk_display_init (GdkDisplay *display)
 
   priv->composited = TRUE;
   priv->rgba = TRUE;
+  priv->shadow_width = TRUE;
   priv->input_shapes = TRUE;
 }
 
@@ -2120,6 +2139,46 @@ gdk_display_set_rgba (GdkDisplay *display,
   priv->rgba = rgba;
 
   g_object_notify_by_pspec (G_OBJECT (display), props[PROP_RGBA]);
+}
+
+/**
+ * gdk_display_supports_shadow_width: (attributes org.gtk.Method.get_property=shadow-width)
+ * @display: a `GdkDisplay`
+ *
+ * Returns whether it's possible for a surface to draw outside of the window area.
+ *
+ * If %TRUE is returned the application decides if it wants to draw shadows.
+ * If %FALSE is returned, the compositor decides if it wants to draw shadows.
+ *
+ * Returns: %TRUE if surfaces can draw shadows or
+ *   %FALSE if the display does not support this functionality.
+ *
+ * Since: 4.14
+ */
+gboolean
+gdk_display_supports_shadow_width (GdkDisplay *display)
+{
+  GdkDisplayPrivate *priv = gdk_display_get_instance_private (display);
+
+  g_return_val_if_fail (GDK_IS_DISPLAY (display), FALSE);
+
+  return priv->shadow_width;
+}
+
+void
+gdk_display_set_shadow_width (GdkDisplay *display,
+                              gboolean    shadow_width)
+{
+  GdkDisplayPrivate *priv = gdk_display_get_instance_private (display);
+
+  g_return_if_fail (GDK_IS_DISPLAY (display));
+
+  if (priv->shadow_width == shadow_width)
+    return;
+
+  priv->shadow_width = shadow_width;
+
+  g_object_notify_by_pspec (G_OBJECT (display), props[PROP_SHADOW_WIDTH]);
 }
 
 static void

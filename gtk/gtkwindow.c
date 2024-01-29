@@ -2950,6 +2950,17 @@ unset_titlebar (GtkWindow *window)
 }
 
 static gboolean
+gtk_window_is_composited (GtkWindow *window)
+{
+  GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
+  GdkDisplay *display;
+
+  display = priv->display;
+
+  return gdk_display_is_rgba (display) && gdk_display_is_composited (display);
+}
+
+static gboolean
 gtk_window_supports_client_shadow (GtkWindow *window)
 {
   GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
@@ -2957,22 +2968,7 @@ gtk_window_supports_client_shadow (GtkWindow *window)
 
   display = priv->display;
 
-  if (!gdk_display_is_rgba (display))
-    return FALSE;
-
-  if (!gdk_display_is_composited (display))
-    return FALSE;
-
-#ifdef GDK_WINDOWING_X11
-  if (GDK_IS_X11_DISPLAY (display))
-    {
-      if (!gdk_x11_screen_supports_net_wm_hint (gdk_x11_display_get_screen (display),
-                                                g_intern_static_string ("_GTK_FRAME_EXTENTS")))
-        return FALSE;
-    }
-#endif
-
-  return TRUE;
+  return gdk_display_supports_shadow_width (display);
 }
 
 static void
@@ -2981,11 +2977,15 @@ gtk_window_enable_csd (GtkWindow *window)
   GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
   GtkWidget *widget = GTK_WIDGET (window);
 
-  /* We need a visual with alpha for client shadows */
-  if (priv->use_client_shadow)
-    gtk_widget_add_css_class (widget, "csd");
+  /* We need a visual with alpha for rounded corners */
+  if (gtk_window_is_composited (window))
+    {
+      gtk_widget_add_css_class (widget, "csd");
+    }
   else
-    gtk_widget_add_css_class (widget, "solid-csd");
+    {
+      gtk_widget_add_css_class (widget, "solid-csd");
+    }
 
   priv->client_decorated = TRUE;
 }
@@ -3044,8 +3044,8 @@ gtk_window_set_titlebar (GtkWindow *window,
   else
     {
       priv->use_client_shadow = gtk_window_supports_client_shadow (window);
-
       gtk_window_enable_csd (window);
+
       priv->titlebar = titlebar;
       priv->title_box = titlebar;
       gtk_widget_insert_before (priv->title_box, widget, NULL);
@@ -4298,9 +4298,9 @@ gtk_window_realize (GtkWidget *widget)
   /* Create default title bar */
   if (!priv->client_decorated && gtk_window_should_use_csd (window))
     {
-      priv->use_client_shadow = gtk_window_supports_client_shadow (window);
-      if (priv->use_client_shadow)
+      if (gtk_window_is_composited (window))
         {
+          priv->use_client_shadow = gtk_window_supports_client_shadow (window);
           gtk_window_enable_csd (window);
 
           if (priv->title_box == NULL)
@@ -4314,6 +4314,8 @@ gtk_window_realize (GtkWidget *widget)
 
           update_window_actions (window);
         }
+      else
+        priv->use_client_shadow = FALSE;
     }
 
   surface = gdk_surface_new_toplevel (gtk_widget_get_display (widget));
@@ -4453,6 +4455,8 @@ gtk_window_unrealize (GtkWidget *widget)
 
   gdk_surface_set_widget (surface, NULL);
   g_clear_pointer (&priv->surface, gdk_surface_destroy);
+
+  priv->use_client_shadow = FALSE;
 }
 
 static void

@@ -257,6 +257,8 @@ void                gdk_display_set_composited        (GdkDisplay       *display
                                                        gboolean          composited);
 void                gdk_display_set_input_shapes      (GdkDisplay       *display,
                                                        gboolean          input_shapes);
+void                gdk_display_set_shadow_width      (GdkDisplay       *display,
+                                                       gboolean          shadow_width);
 
 void                gdk_display_add_seat              (GdkDisplay       *display,
                                                        GdkSeat          *seat);
