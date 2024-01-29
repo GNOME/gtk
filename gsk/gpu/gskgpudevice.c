@@ -334,11 +334,7 @@ gsk_gpu_cached_texture_new (GskGpuDevice *device,
   if (gdk_texture_get_render_data (texture, device))
     gdk_texture_clear_render_data (texture);
   else if ((self = g_hash_table_lookup (priv->texture_cache, texture)))
-    {
-      g_hash_table_remove (priv->texture_cache, texture);
-      g_object_weak_unref (G_OBJECT (texture), (GWeakNotify) gsk_gpu_cached_texture_destroy_cb, self);
-    }
-
+    g_hash_table_remove (priv->texture_cache, texture);
 
   self = gsk_gpu_cached_new (device, &GSK_GPU_CACHED_TEXTURE_CLASS, NULL);
   self->texture = texture;
