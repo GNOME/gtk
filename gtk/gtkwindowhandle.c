@@ -447,6 +447,9 @@ drag_gesture_update_cb (GtkGestureDrag  *gesture,
       p.x += native_x;
       p.y += native_y;
 
+      if (GTK_IS_WINDOW (native))
+        gtk_window_unfullscreen (GTK_WINDOW (native));
+
       surface = gtk_native_get_surface (native);
       if (GDK_IS_TOPLEVEL (surface))
         gdk_toplevel_begin_move (GDK_TOPLEVEL (surface),
