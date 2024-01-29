@@ -391,7 +391,12 @@ gsk_gpu_cached_glyph_should_collect (GskGpuDevice *device,
                                      gint64        timestamp)
 {
   if (gsk_gpu_cached_is_old (device, cached, timestamp))
-    mark_as_stale (cached, TRUE);
+    {
+      if (cached->atlas)
+        mark_as_stale (cached, TRUE);
+      else
+        return TRUE;
+    }
 
   /* Glyphs are only collected when their atlas is freed */
   return FALSE;
