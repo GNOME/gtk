@@ -334,11 +334,7 @@ gsk_gpu_cached_texture_new (GskGpuDevice *device,
   if (gdk_texture_get_render_data (texture, device))
     gdk_texture_clear_render_data (texture);
   else if ((self = g_hash_table_lookup (priv->texture_cache, texture)))
-    {
-      g_hash_table_remove (priv->texture_cache, texture);
-      g_object_weak_unref (G_OBJECT (texture), (GWeakNotify) gsk_gpu_cached_texture_destroy_cb, self);
-    }
-
+    g_hash_table_remove (priv->texture_cache, texture);
 
   self = gsk_gpu_cached_new (device, &GSK_GPU_CACHED_TEXTURE_CLASS, NULL);
   self->texture = texture;
@@ -395,7 +391,12 @@ gsk_gpu_cached_glyph_should_collect (GskGpuDevice *device,
                                      gint64        timestamp)
 {
   if (gsk_gpu_cached_is_old (device, cached, timestamp))
-    mark_as_stale (cached, TRUE);
+    {
+      if (cached->atlas)
+        mark_as_stale (cached, TRUE);
+      else
+        return TRUE;
+    }
 
   /* Glyphs are only collected when their atlas is freed */
   return FALSE;
@@ -546,10 +547,6 @@ gsk_gpu_device_maybe_gc (GskGpuDevice *self)
     {
       GSK_DEBUG (GLYPH_CACHE, "Pre-frame GC (%lu dead pixels)", dead_texture_pixels);
       gsk_gpu_device_gc (self, g_get_monotonic_time ());
-    }
-  else
-    {
-      GSK_DEBUG (GLYPH_CACHE, "No pre-frame GC (%lu dead pixels)", dead_texture_pixels);
     }
 }
 
@@ -806,8 +803,7 @@ gsk_gpu_cached_atlas_allocate (GskGpuCachedAtlas *atlas,
 
 static void
 gsk_gpu_device_ensure_atlas (GskGpuDevice *self,
-                             gboolean      recreate,
-                             gint64        timestamp)
+                             gboolean      recreate)
 {
   GskGpuDevicePrivate *priv = gsk_gpu_device_get_instance_private (self);
 
@@ -822,14 +818,13 @@ gsk_gpu_device_get_atlas_image (GskGpuDevice *self)
 {
   GskGpuDevicePrivate *priv = gsk_gpu_device_get_instance_private (self);
 
-  gsk_gpu_device_ensure_atlas (self, FALSE, g_get_monotonic_time ());
+  gsk_gpu_device_ensure_atlas (self, FALSE);
 
   return priv->current_atlas->image;
 }
 
 static GskGpuImage *
 gsk_gpu_device_add_atlas_image (GskGpuDevice      *self,
-                                gint64             timestamp,
                                 gsize              width,
                                 gsize              height,
                                 gsize             *out_x,
@@ -840,12 +835,12 @@ gsk_gpu_device_add_atlas_image (GskGpuDevice      *self,
   if (width > MAX_ATLAS_ITEM_SIZE || height > MAX_ATLAS_ITEM_SIZE)
     return NULL;
 
-  gsk_gpu_device_ensure_atlas (self, FALSE, timestamp);
+  gsk_gpu_device_ensure_atlas (self, FALSE);
 
   if (gsk_gpu_cached_atlas_allocate (priv->current_atlas, width, height, out_x, out_y))
     return priv->current_atlas->image;
 
-  gsk_gpu_device_ensure_atlas (self, TRUE, timestamp);
+  gsk_gpu_device_ensure_atlas (self, TRUE);
 
   if (gsk_gpu_cached_atlas_allocate (priv->current_atlas, width, height, out_x, out_y))
     return priv->current_atlas->image;
@@ -931,7 +926,6 @@ gsk_gpu_device_lookup_glyph_image (GskGpuDevice           *self,
   padding = 1;
 
   image = gsk_gpu_device_add_atlas_image (self,
-                                          gsk_gpu_frame_get_timestamp (frame),
                                           rect.size.width + 2 * padding, rect.size.height + 2 * padding,
                                           &atlas_x, &atlas_y);
   if (image)
@@ -950,12 +944,12 @@ gsk_gpu_device_lookup_glyph_image (GskGpuDevice           *self,
       cache = gsk_gpu_cached_new (self, &GSK_GPU_CACHED_GLYPH_CLASS, NULL);
     }
 
-  cache->font = g_object_ref (font),
-  cache->glyph = glyph,
-  cache->flags = flags,
-  cache->scale = scale,
-  cache->bounds = rect,
-  cache->image = image,
+  cache->font = g_object_ref (font);
+  cache->glyph = glyph;
+  cache->flags = flags;
+  cache->scale = scale;
+  cache->bounds = rect;
+  cache->image = image;
   cache->origin = GRAPHENE_POINT_INIT (- origin.x + subpixel_x,
                                        - origin.y + subpixel_y);
   ((GskGpuCached *) cache)->pixels = (rect.size.width + 2 * padding) * (rect.size.height + 2 * padding);
