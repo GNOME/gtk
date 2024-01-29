@@ -1,0 +1,7 @@
+text {
+  font: "Cantarell 12.9990234375";
+  glyphs: 1 0;
+  hint-metrics: on;
+  hint-style: full;
+  antialias: none;
+}

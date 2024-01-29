@@ -145,6 +145,8 @@ compare_render_tests = [
   'stroke-with-3d-contents-nogl-nocairo',
   'subpixel-positioning',
   'subpixel-positioning-hidpi-nogl-nocairo',
+  'text-A-no-aa',
+  'text-B-aa-nogl',
   'text-color-mix',
   'text-glyph-lsb',
   'text-mixed-color-nocairo',
