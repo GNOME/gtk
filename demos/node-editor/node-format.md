@@ -322,12 +322,14 @@ stroke bounds of the path.
 
 ### text
 
-| property | syntax              | default             | printed     |
-| -------- | ------------------- | ------------------- | ----------- |
-| color    | `<color>`           | black               | non-default |
-| font     | `<string>` `<url>`? | "Cantarell 15px"    | always      |
-| glyphs   | `<glyphs>`          | "Hello"             | always      |
-| offset   | `<point>`           | 0 0                 | non-default |
+| property     | syntax              | default             | printed     |
+| ------------ | ------------------- | ------------------- | ----------- |
+| color        | `<color>`           | black               | non-default |
+| font         | `<string>` `<url>`? | "Cantarell 15px"    | always      |
+| glyphs       | `<glyphs>`          | "Hello"             | always      |
+| offset       | `<point>`           | 0 0                 | non-default |
+| hint-style   | `<hint style>`      | slight              | non-default |
+| antialias    | `<antialias>`       | gray                | non-default |
 
 Creates a node like `gsk_text_node_new()` with the given properties.
 
@@ -341,6 +343,9 @@ be specified as well, like this: 40 10 0 0 color.
 
 If the given font does not exist or the given glyphs are invalid for the given
 font, an error node will be returned.
+
+Possible values for hint-style are none, slight or full.
+Possible value for antialias are none or gray.
 
 ### texture
 

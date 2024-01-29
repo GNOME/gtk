@@ -30,6 +30,7 @@
 #include "gskstroke.h"
 #include "gsktransformprivate.h"
 #include "gskenumtypes.h"
+#include "gskprivate.h"
 
 #include "gdk/gdkrgbaprivate.h"
 #include "gdk/gdktextureprivate.h"
@@ -46,7 +47,9 @@
 #include <cairo-script-interpreter.h>
 #endif
 
+#include <cairo-gobject.h>
 #include <pango/pangocairo.h>
+
 #ifdef HAVE_PANGOFT
 #include <pango/pangofc-fontmap.h>
 #endif
@@ -84,6 +87,39 @@ context_finish (Context *context)
   g_clear_pointer (&context->named_nodes, g_hash_table_unref);
   g_clear_pointer (&context->named_textures, g_hash_table_unref);
   g_clear_object (&context->fontmap);
+}
+
+static gboolean
+parse_enum (GtkCssParser *parser,
+            GType         type,
+            gpointer      out_value)
+{
+  GEnumClass *class;
+  GEnumValue *v;
+  char *enum_name;
+
+  enum_name = gtk_css_parser_consume_ident (parser);
+  if (enum_name == NULL)
+    return FALSE;
+
+  class = g_type_class_ref (type);
+
+  v = g_enum_get_value_by_nick (class, enum_name);
+  if (v == NULL)
+    {
+      gtk_css_parser_error_value (parser, "Unknown value \"%s\" for enum \"%s\"",
+                                  enum_name, g_type_name (type));
+      g_free (enum_name);
+      g_type_class_unref (class);
+      return FALSE;
+    }
+
+  *(int*)out_value = v->value;
+
+  g_free (enum_name);
+  g_type_class_unref (class);
+
+  return TRUE;
 }
 
 static gboolean
@@ -2241,6 +2277,45 @@ unpack_glyphs (PangoFont        *font,
   return TRUE;
 }
 
+static gboolean
+parse_hint_style (GtkCssParser *parser,
+                  Context      *context,
+                  gpointer      out)
+{
+  if (!parse_enum (parser, CAIRO_GOBJECT_TYPE_HINT_STYLE, out))
+    return FALSE;
+
+  if (*(cairo_hint_style_t *) out != CAIRO_HINT_STYLE_NONE &&
+      *(cairo_hint_style_t *) out != CAIRO_HINT_STYLE_SLIGHT &&
+      *(cairo_hint_style_t *) out != CAIRO_HINT_STYLE_FULL)
+    {
+      gtk_css_parser_error_value (parser, "Unsupported value for enum \"%s\"",
+                                  g_type_name (CAIRO_GOBJECT_TYPE_HINT_STYLE));
+      return FALSE;
+    }
+
+  return TRUE;
+}
+
+static gboolean
+parse_antialias (GtkCssParser *parser,
+                 Context      *context,
+                 gpointer      out)
+{
+  if (!parse_enum (parser, CAIRO_GOBJECT_TYPE_ANTIALIAS, out))
+    return FALSE;
+
+  if (*(cairo_antialias_t *) out != CAIRO_ANTIALIAS_NONE &&
+      *(cairo_antialias_t *) out != CAIRO_ANTIALIAS_GRAY)
+    {
+      gtk_css_parser_error_value (parser, "Unsupported value for enum \"%s\"",
+                                  g_type_name (CAIRO_GOBJECT_TYPE_ANTIALIAS));
+      return FALSE;
+    }
+
+  return TRUE;
+}
+
 static GskRenderNode *
 parse_text_node (GtkCssParser *parser,
                  Context      *context)
@@ -2249,11 +2324,16 @@ parse_text_node (GtkCssParser *parser,
   graphene_point_t offset = GRAPHENE_POINT_INIT (0, 0);
   GdkRGBA color = GDK_RGBA("000000");
   PangoGlyphString *glyphs = NULL;
+  cairo_hint_style_t hint_style = CAIRO_HINT_STYLE_SLIGHT;
+  cairo_antialias_t antialias = CAIRO_ANTIALIAS_GRAY;
+  PangoFont *hinted;
   const Declaration declarations[] = {
     { "font", parse_font, clear_font, &font },
     { "offset", parse_point, NULL, &offset },
     { "color", parse_color, NULL, &color },
-    { "glyphs", parse_glyphs, clear_glyphs, &glyphs }
+    { "glyphs", parse_glyphs, clear_glyphs, &glyphs },
+    { "hint-style", parse_hint_style, NULL, &hint_style },
+    { "antialias", parse_antialias, NULL, &antialias },
   };
   GskRenderNode *result;
 
@@ -2264,6 +2344,10 @@ parse_text_node (GtkCssParser *parser,
       font = font_from_string (pango_cairo_font_map_get_default (), "Cantarell 15px", TRUE);
       g_assert (font);
     }
+
+  hinted = gsk_get_hinted_font (font, hint_style, antialias);
+  g_object_unref (font);
+  font = hinted;
 
   if (!glyphs)
     {
@@ -2452,39 +2536,6 @@ static void
 clear_dash (gpointer inout_array)
 {
   g_clear_pointer ((GArray **) inout_array, g_array_unref);
-}
-
-static gboolean
-parse_enum (GtkCssParser *parser,
-            GType         type,
-            gpointer      out_value)
-{
-  GEnumClass *class;
-  GEnumValue *v;
-  char *enum_name;
-
-  enum_name = gtk_css_parser_consume_ident (parser);
-  if (enum_name == NULL)
-    return FALSE;
-
-  class = g_type_class_ref (type);
-
-  v = g_enum_get_value_by_nick (class, enum_name);
-  if (v == NULL)
-    {
-      gtk_css_parser_error_value (parser, "Unknown value \"%s\" for enum \"%s\"",
-                                  enum_name, g_type_name (type));
-      g_free (enum_name);
-      g_type_class_unref (class);
-      return FALSE;
-    }
-
-  *(int*)out_value = v->value;
-
-  g_free (enum_name);
-  g_type_class_unref (class);
-
-  return TRUE;
 }
 
 static gboolean
@@ -3273,6 +3324,33 @@ append_string_param (Printer    *p,
   g_string_append_c (p->str, '\n');
 }
 
+static const char *
+enum_to_nick (GType type,
+              int   value)
+{
+  GEnumClass *class;
+  GEnumValue *v;
+
+  class = g_type_class_ref (type);
+  v = g_enum_get_value (class, value);
+  g_type_class_unref (class);
+
+  return v->value_nick;
+}
+
+static void
+append_enum_param (Printer    *p,
+                   const char *param_name,
+                   GType       type,
+                   int         value)
+{
+  _indent (p);
+  g_string_append_printf (p->str, "%s: ", param_name);
+  g_string_append (p->str, enum_to_nick (type, value));
+  g_string_append_c (p->str, ';');
+  g_string_append_c (p->str, '\n');
+}
+
 static void
 append_vec4_param (Printer               *p,
                    const char            *param_name,
@@ -3540,6 +3618,37 @@ gsk_text_node_serialize_font (GskRenderNode *node,
 #endif
 }
 
+static void
+gsk_text_node_serialize_font_options (GskRenderNode *node,
+                                      Printer       *p)
+{
+  PangoFont *font = gsk_text_node_get_font (node);
+  cairo_scaled_font_t *sf = pango_cairo_font_get_scaled_font (PANGO_CAIRO_FONT (font));
+  cairo_font_options_t *options;
+  cairo_hint_style_t hint_style;
+  cairo_antialias_t antialias;
+
+  options = cairo_font_options_create ();
+  cairo_scaled_font_get_font_options (sf, options);
+  hint_style = cairo_font_options_get_hint_style (options);
+  antialias = cairo_font_options_get_antialias (options);
+  cairo_font_options_destroy (options);
+
+  /* medium and full are identical in the absence of subpixel modes */
+  if (hint_style == CAIRO_HINT_STYLE_MEDIUM)
+    hint_style = CAIRO_HINT_STYLE_FULL;
+
+  if (hint_style == CAIRO_HINT_STYLE_NONE ||
+      hint_style == CAIRO_HINT_STYLE_FULL)
+    append_enum_param (p, "hint-style", CAIRO_GOBJECT_TYPE_HINT_STYLE, hint_style);
+
+  /* CAIRO_ANTIALIAS_NONE is the only value we ever emit here, since gray is the default,
+   * and we don't accept any other values.
+   */
+  if (antialias == CAIRO_ANTIALIAS_NONE)
+    append_enum_param (p, "antialias", CAIRO_GOBJECT_TYPE_ANTIALIAS, antialias);
+}
+
 void
 gsk_text_node_serialize_glyphs (GskRenderNode *node,
                                 GString       *p)
@@ -3619,33 +3728,6 @@ gsk_text_node_serialize_glyphs (GskRenderNode *node,
   g_string_free (str, TRUE);
   if (ascii)
     pango_glyph_string_free (ascii);
-}
-
-static const char *
-enum_to_nick (GType type,
-              int   value)
-{
-  GEnumClass *class;
-  GEnumValue *v;
-
-  class = g_type_class_ref (type);
-  v = g_enum_get_value (class, value);
-  g_type_class_unref (class);
-
-  return v->value_nick;
-}
-
-static void
-append_enum_param (Printer    *p,
-                   const char *param_name,
-                   GType       type,
-                   int         value)
-{
-  _indent (p);
-  g_string_append_printf (p->str, "%s: ", param_name);
-  g_string_append (p->str, enum_to_nick (type, value));
-  g_string_append_c (p->str, ';');
-  g_string_append_c (p->str, '\n');
 }
 
 static void
@@ -4111,6 +4193,8 @@ render_node_print (Printer       *p,
 
         if (!graphene_point_equal (offset, graphene_point_zero ()))
           append_point_param (p, "offset", offset);
+
+        gsk_text_node_serialize_font_options (node, p);
 
         end_node (p);
       }
