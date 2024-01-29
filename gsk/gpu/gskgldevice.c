@@ -126,6 +126,12 @@ gsk_gl_device_create_atlas_image (GskGpuDevice *device,
 }
 
 static void
+gsk_gl_device_make_current (GskGpuDevice *device)
+{
+  gdk_gl_context_make_current (gdk_display_get_gl_context (gsk_gpu_device_get_display (device)));
+}
+
+static void
 gsk_gl_device_finalize (GObject *object)
 {
   GskGLDevice *self = GSK_GL_DEVICE (object);
@@ -151,6 +157,7 @@ gsk_gl_device_class_init (GskGLDeviceClass *klass)
   gpu_device_class->create_atlas_image = gsk_gl_device_create_atlas_image;
   gpu_device_class->create_upload_image = gsk_gl_device_create_upload_image;
   gpu_device_class->create_download_image = gsk_gl_device_create_download_image;
+  gpu_device_class->make_current = gsk_gl_device_make_current;
 
   object_class->finalize = gsk_gl_device_finalize;
 }

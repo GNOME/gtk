@@ -496,6 +496,8 @@ gsk_gpu_device_gc (GskGpuDevice *self,
   GskGpuCached *cached, *prev;
   gint64 before G_GNUC_UNUSED = GDK_PROFILER_CURRENT_TIME;
 
+  gsk_gpu_device_make_current (self);
+
   /* We walk the cache from the end so we don't end up with prev
    * being a leftover glyph on the atlas we are freeing
    */
@@ -703,6 +705,12 @@ gsk_gpu_device_create_upload_image (GskGpuDevice   *self,
                                     gsize           height)
 {
   return GSK_GPU_DEVICE_GET_CLASS (self)->create_upload_image (self, with_mipmap, format, width, height);
+}
+
+void
+gsk_gpu_device_make_current (GskGpuDevice *self)
+{
+  GSK_GPU_DEVICE_GET_CLASS (self)->make_current (self);
 }
 
 GskGpuImage *
