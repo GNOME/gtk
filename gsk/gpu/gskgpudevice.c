@@ -936,12 +936,12 @@ gsk_gpu_device_lookup_glyph_image (GskGpuDevice           *self,
       cache = gsk_gpu_cached_new (self, &GSK_GPU_CACHED_GLYPH_CLASS, NULL);
     }
 
-  cache->font = g_object_ref (font),
-  cache->glyph = glyph,
-  cache->flags = flags,
-  cache->scale = scale,
-  cache->bounds = rect,
-  cache->image = image,
+  cache->font = g_object_ref (font);
+  cache->glyph = glyph;
+  cache->flags = flags;
+  cache->scale = scale;
+  cache->bounds = rect;
+  cache->image = image;
   cache->origin = GRAPHENE_POINT_INIT (- origin.x + subpixel_x,
                                        - origin.y + subpixel_y);
   ((GskGpuCached *) cache)->pixels = (rect.size.width + 2 * padding) * (rect.size.height + 2 * padding);
