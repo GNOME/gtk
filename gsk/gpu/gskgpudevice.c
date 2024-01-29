@@ -546,10 +546,6 @@ gsk_gpu_device_maybe_gc (GskGpuDevice *self)
       GSK_DEBUG (GLYPH_CACHE, "Pre-frame GC (%lu dead pixels)", dead_texture_pixels);
       gsk_gpu_device_gc (self, g_get_monotonic_time ());
     }
-  else
-    {
-      GSK_DEBUG (GLYPH_CACHE, "No pre-frame GC (%lu dead pixels)", dead_texture_pixels);
-    }
 }
 
 void
