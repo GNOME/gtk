@@ -400,6 +400,8 @@ node_parser_tests = [
   'text-font-errors.node',
   'text-font-errors.ref.node',
   'text-font-errors.errors',
+  'text-font-options.node',
+  'text-font-options.ref.node',
   'text-no-color.node',
   'texture-fail.node',
   'texture-fail.ref.node',

@@ -322,12 +322,16 @@ stroke bounds of the path.
 
 ### text
 
-| property | syntax              | default             | printed     |
-| -------- | ------------------- | ------------------- | ----------- |
-| color    | `<color>`           | black               | non-default |
-| font     | `<string>` `<url>`? | "Cantarell 11"      | always      |
-| glyphs   | `<glyphs>`          | "Hello"             | always      |
-| offset   | `<point>`           | 0 0                 | non-default |
+| property     | syntax              | default             | printed     |
+| ------------ | ------------------- | ------------------- | ----------- |
+| color        | `<color>`           | black               | non-default |
+| font         | `<string>` `<url>`? | "Cantarell 11"      | always      |
+| glyphs       | `<glyphs>`          | "Hello"             | always      |
+| offset       | `<point>`           | 0 0                 | non-default |
+| hint-metrics | `<hint metrics>`    | off                 | non-default |
+| hint-style   | `<hint style>`      | slight              | non-default |
+| antialias    | `<antialias>`       | on                  | non-default |
+| dpi          | `<number>`          | 96                  | non-default |
 
 Creates a node like `gsk_text_node_new()` with the given properties.
 
