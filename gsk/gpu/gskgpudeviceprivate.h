@@ -41,6 +41,8 @@ struct _GskGpuDeviceClass
                                                                          GdkMemoryDepth          depth,
                                                                          gsize                   width,
                                                                          gsize                   height);
+  void                  (* make_current)                                (GskGpuDevice           *self);
+
 };
 
 GType                   gsk_gpu_device_get_type                         (void) G_GNUC_CONST;
@@ -68,7 +70,7 @@ GskGpuImage *           gsk_gpu_device_create_download_image            (GskGpuD
                                                                          GdkMemoryDepth          depth,
                                                                          gsize                   width,
                                                                          gsize                   height);
-
+void                    gsk_gpu_device_make_current                     (GskGpuDevice           *self);
 GskGpuImage *           gsk_gpu_device_lookup_texture_image             (GskGpuDevice           *self,
                                                                          GdkTexture             *texture,
                                                                          gint64                  timestamp);

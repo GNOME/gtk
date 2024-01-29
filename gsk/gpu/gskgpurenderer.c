@@ -299,8 +299,6 @@ gsk_gpu_renderer_fallback_render_texture (GskGpuRenderer        *self,
                                                           MIN (image_width, width - x),
                                                           MIN (image_height, height - y));
 
-          gsk_gpu_device_maybe_gc (priv->device);
-
           frame = gsk_gpu_renderer_create_frame (self);
           gsk_gpu_frame_render (frame,
                                 g_get_monotonic_time (),
@@ -313,8 +311,6 @@ gsk_gpu_renderer_fallback_render_texture (GskGpuRenderer        *self,
                                                      image_height),
                                 &texture);
           g_object_unref (frame);
-
-          gsk_gpu_device_queue_gc (priv->device);
 
           g_assert (texture);
           gdk_texture_downloader_init (&downloader, texture);
@@ -347,6 +343,8 @@ gsk_gpu_renderer_render_texture (GskRenderer           *renderer,
   GdkTexture *texture;
   graphene_rect_t rounded_viewport;
 
+  gsk_gpu_device_maybe_gc (priv->device);
+
   gsk_gpu_renderer_make_current (self);
 
   rounded_viewport = GRAPHENE_RECT_INIT (viewport->origin.x,
@@ -362,8 +360,6 @@ gsk_gpu_renderer_render_texture (GskRenderer           *renderer,
     return gsk_gpu_renderer_fallback_render_texture (self, root, &rounded_viewport);
 
   frame = gsk_gpu_renderer_create_frame (self);
-
-  gsk_gpu_device_maybe_gc (priv->device);
 
   texture = NULL;
   gsk_gpu_frame_render (frame,
@@ -407,6 +403,8 @@ gsk_gpu_renderer_render (GskRenderer          *renderer,
                                      gsk_render_node_get_preferred_depth (root),
                                      region);
 
+  gsk_gpu_device_maybe_gc (priv->device);
+
   gsk_gpu_renderer_make_current (self);
 
   backbuffer = GSK_GPU_RENDERER_GET_CLASS (self)->get_backbuffer (self);
@@ -414,8 +412,6 @@ gsk_gpu_renderer_render (GskRenderer          *renderer,
   frame = gsk_gpu_renderer_get_frame (self);
   render_region = get_render_region (self);
   surface = gdk_draw_context_get_surface (priv->context);
-
-  gsk_gpu_device_maybe_gc (priv->device);
 
   gsk_gpu_frame_render (frame,
                         g_get_monotonic_time (),

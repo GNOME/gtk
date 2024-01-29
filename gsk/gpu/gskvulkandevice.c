@@ -426,6 +426,11 @@ gsk_vulkan_device_create_download_image (GskGpuDevice   *device,
 }
 
 static void
+gsk_vulkan_device_make_current (GskGpuDevice *device)
+{
+}
+
+static void
 gsk_vulkan_device_finalize (GObject *object)
 {
   GskVulkanDevice *self = GSK_VULKAN_DEVICE (object);
@@ -493,6 +498,7 @@ gsk_vulkan_device_class_init (GskVulkanDeviceClass *klass)
   gpu_device_class->create_atlas_image = gsk_vulkan_device_create_atlas_image;
   gpu_device_class->create_upload_image = gsk_vulkan_device_create_upload_image;
   gpu_device_class->create_download_image = gsk_vulkan_device_create_download_image;
+  gpu_device_class->make_current = gsk_vulkan_device_make_current;
 
   object_class->finalize = gsk_vulkan_device_finalize;
 }
