@@ -546,6 +546,11 @@ gdk_macos_gl_context_end_frame (GdkDrawContext *context,
 }
 
 static void
+gdk_macos_gl_context_empty_frame (GdkDrawContext *draw_context)
+{
+}
+
+static void
 gdk_macos_gl_context_surface_resized (GdkDrawContext *draw_context)
 {
   GdkMacosGLContext *self = (GdkMacosGLContext *)draw_context;
@@ -667,6 +672,7 @@ gdk_macos_gl_context_class_init (GdkMacosGLContextClass *klass)
 
   draw_context_class->begin_frame = gdk_macos_gl_context_begin_frame;
   draw_context_class->end_frame = gdk_macos_gl_context_end_frame;
+  draw_context_class->empty_frame = gdk_macos_gl_context_empty_frame;
   draw_context_class->surface_resized = gdk_macos_gl_context_surface_resized;
 
   gl_class->get_damage = gdk_macos_gl_context_get_damage;
