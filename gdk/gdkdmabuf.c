@@ -2329,18 +2329,42 @@ gdk_dmabuf_sanitize (GdkDmabuf        *dest,
  * @dmabuf: a sanitized GdkDmabuf
  *
  * A dmabuf is considered disjoint if it uses more than
- * 1 file descriptor.
+ * 1 inode.
+ * Multiple file descriptors may exist when the creator
+ * of the dmabuf just dup()ed once for every plane...
  *
  * Returns: %TRUE if the dmabuf is disjoint
  **/
 gboolean
 gdk_dmabuf_is_disjoint (const GdkDmabuf *dmabuf)
 {
+  struct stat first_stat;
   unsigned i;
+
+  /* First, do a fast check */
 
   for (i = 1; i < dmabuf->n_planes; i++)
     {
       if (dmabuf->planes[0].fd != dmabuf->planes[i].fd)
+        break;
+    }
+
+  if (i == dmabuf->n_planes)
+    return FALSE;
+
+  /* We have different fds, do the fancy check instead */
+
+  if (fstat (dmabuf->planes[0].fd, &first_stat) != 0)
+    return TRUE;
+
+  for (i = 1; i < dmabuf->n_planes; i++)
+    {
+      struct stat plane_stat;
+
+      if (fstat (dmabuf->planes[0].fd, &plane_stat) != 0)
+        return TRUE;
+
+      if (first_stat.st_ino != plane_stat.st_ino)
         return TRUE;
     }
 
