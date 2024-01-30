@@ -146,6 +146,7 @@ compare_render_tests = [
   'subpixel-positioning',
   'subpixel-positioning-hidpi-nogl-nocairo',
   'text-color-mix',
+  'text-dpi-changes',
   'text-glyph-lsb',
   'text-mixed-color-nocairo',
   'text-mixed-color-colrv1',
