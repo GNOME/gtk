@@ -6454,6 +6454,30 @@ gtk_widget_get_effective_font_map (GtkWidget *widget)
     return pango_cairo_font_map_get_default ();
 }
 
+static void
+sanitize_font_options (cairo_font_options_t *options,
+                       gboolean              hint_font_metrics)
+{
+  cairo_hint_metrics_t hint_metrics;
+  cairo_hint_style_t hint_style;
+  cairo_antialias_t antialias;
+
+  hint_metrics = hint_font_metrics ? CAIRO_HINT_METRICS_ON : CAIRO_HINT_METRICS_OFF;
+
+  hint_style = cairo_font_options_get_hint_style (options);
+  antialias = cairo_font_options_get_antialias (options);
+
+  if (hint_metrics == CAIRO_HINT_METRICS_ON)
+    hint_style = CAIRO_HINT_STYLE_NONE;
+
+  if (antialias != CAIRO_ANTIALIAS_NONE)
+    antialias = CAIRO_ANTIALIAS_GRAY;
+
+  cairo_font_options_set_hint_metrics (options, hint_metrics);
+  cairo_font_options_set_hint_style (options, hint_style);
+  cairo_font_options_set_antialias (options, antialias);
+}
+
 gboolean
 gtk_widget_update_pango_context (GtkWidget        *widget,
                                  PangoContext     *context,
@@ -6463,10 +6487,12 @@ gtk_widget_update_pango_context (GtkWidget        *widget,
   GtkCssStyle *style = gtk_css_node_get_style (priv->cssnode);
   PangoFontDescription *font_desc;
   GtkSettings *settings;
-  cairo_font_options_t *font_options;
+  const cairo_font_options_t *font_options;
   guint old_serial;
   gboolean hint_font_metrics = FALSE;
   int scale;
+  cairo_font_options_t *options;
+  gboolean got_font_options;
 
   old_serial = pango_context_get_serial (context);
 
@@ -6485,9 +6511,9 @@ gtk_widget_update_pango_context (GtkWidget        *widget,
       /* Override the user setting on non-HiDPI */
       if (scale == 1)
         hint_font_metrics = TRUE;
-
-      pango_context_set_round_glyph_positions (context, hint_font_metrics);
     }
+
+  pango_context_set_round_glyph_positions (context, hint_font_metrics);
 
   if (direction != GTK_TEXT_DIR_NONE)
     pango_context_set_base_dir (context, direction == GTK_TEXT_DIR_LTR
@@ -6496,33 +6522,33 @@ gtk_widget_update_pango_context (GtkWidget        *widget,
 
   pango_cairo_context_set_resolution (context, _gtk_css_number_value_get (style->core->dpi, 100));
 
-  font_options = (cairo_font_options_t*)g_object_get_qdata (G_OBJECT (widget), quark_font_options);
-  if (settings && font_options)
-    {
-      cairo_font_options_t *options;
+  options = cairo_font_options_create ();
+  got_font_options = FALSE;
 
-      options = cairo_font_options_copy (gtk_settings_get_font_options (settings));
+  if (settings)
+    {
+      font_options = gtk_settings_get_font_options (settings);
+      if (font_options)
+        {
+          cairo_font_options_merge (options, font_options);
+          got_font_options = TRUE;
+        }
+    }
+
+  font_options = (cairo_font_options_t *) g_object_get_qdata (G_OBJECT (widget), quark_font_options);
+  if (font_options)
+    {
       cairo_font_options_merge (options, font_options);
-
-      cairo_font_options_set_hint_metrics (options,
-                                           hint_font_metrics == 1 ? CAIRO_HINT_METRICS_ON
-                                                                  : CAIRO_HINT_METRICS_OFF);
-
-      pango_cairo_context_set_font_options (context, options);
-      cairo_font_options_destroy (options);
+      got_font_options = TRUE;
     }
-  else if (settings)
+
+  if (got_font_options)
     {
-      cairo_font_options_t *options;
-
-      options = cairo_font_options_copy (gtk_settings_get_font_options (settings));
-      cairo_font_options_set_hint_metrics (options,
-                                           hint_font_metrics == 1 ? CAIRO_HINT_METRICS_ON
-                                                                  : CAIRO_HINT_METRICS_OFF);
-
+      sanitize_font_options (options, hint_font_metrics != 0);
       pango_cairo_context_set_font_options (context, options);
-      cairo_font_options_destroy (options);
     }
+
+  cairo_font_options_destroy (options);
 
   pango_context_set_font_map (context, gtk_widget_get_effective_font_map (widget));
 
