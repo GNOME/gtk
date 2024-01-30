@@ -31,6 +31,7 @@ gsk_gpu_blur_op_print (GskGpuOp    *op,
   instance = (GskGpuBlurInstance *) gsk_gpu_frame_get_vertex_data (frame, shader->vertex_offset);
 
   gsk_gpu_print_op (string, indent, "blur");
+  g_string_append_printf (string, "%g,%g ", instance->blur_direction[0], instance->blur_direction[1]);
   gsk_gpu_print_rect (string, instance->rect);
   gsk_gpu_print_image_descriptor (string, shader->desc, instance->tex_id);
   gsk_gpu_print_newline (string);
