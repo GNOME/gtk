@@ -118,6 +118,11 @@ gdk_win32_gl_context_egl_begin_frame (GdkDrawContext *draw_context,
 }
 
 static void
+gdk_win32_gl_context_egl_empty_frame (GdkDrawContext *draw_context)
+{
+}
+
+static void
 gdk_win32_gl_context_egl_class_init (GdkWin32GLContextClass *klass)
 {
   GdkGLContextClass *context_class = GDK_GL_CONTEXT_CLASS(klass);
@@ -127,6 +132,7 @@ gdk_win32_gl_context_egl_class_init (GdkWin32GLContextClass *klass)
 
   draw_context_class->begin_frame = gdk_win32_gl_context_egl_begin_frame;
   draw_context_class->end_frame = gdk_win32_gl_context_egl_end_frame;
+  draw_context_class->empty_frame = gdk_win32_gl_context_egl_empty_frame;
 }
 
 static void
