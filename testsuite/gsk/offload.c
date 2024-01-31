@@ -209,6 +209,9 @@ collect_offload_info (GdkSurface *surface,
           g_string_append_printf (s, "texture: %dx%d, ",
                                   gdk_texture_get_width (info->texture),
                                   gdk_texture_get_height (info->texture));
+          g_string_append_printf (s, "source: %g %g %g %g, ",
+                                  info->source.origin.x, info->source.origin.y,
+                                  info->source.size.width, info->source.size.height);
           g_string_append_printf (s, "dest: %g %g %g %g\n",
                                   info->dest.origin.x, info->dest.origin.y,
                                   info->dest.size.width, info->dest.size.height);

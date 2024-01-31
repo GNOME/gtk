@@ -428,6 +428,8 @@ if os_linux
     'move.node',
     'start_offloading.node',
     'stop_offloading.node',
+    'source.node',
+    'nested.node',
   ]
 
   foreach test : offload_tests
