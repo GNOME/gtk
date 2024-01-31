@@ -5455,8 +5455,8 @@ gtk_label_create_window (GtkLabel *label)
   attributes_mask = GDK_WA_X | GDK_WA_Y | GDK_WA_NOREDIR;
   if (gtk_widget_is_sensitive (widget) && priv->select_info->selectable)
     {
-      attributes.cursor = gdk_cursor_new_for_display (gtk_widget_get_display (widget),
-						      GDK_XTERM);
+      attributes.cursor = gdk_cursor_new_from_name (gtk_widget_get_display (widget),
+						    "text");
       attributes_mask |= GDK_WA_CURSOR;
     }
 
