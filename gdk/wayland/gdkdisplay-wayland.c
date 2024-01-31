@@ -2435,6 +2435,7 @@ apply_monitor_change (GdkWaylandMonitor *monitor)
 
   GdkRectangle logical_geometry;
   gboolean needs_scaling = FALSE;
+  double scale;
 
   if (monitor->xdg_output_done)
     {
@@ -2451,16 +2452,25 @@ apply_monitor_change (GdkWaylandMonitor *monitor)
 
   if (needs_scaling)
     {
-      int scale = gdk_monitor_get_scale_factor (GDK_MONITOR (monitor));
-      logical_geometry.y /= scale;
-      logical_geometry.x /= scale;
-      logical_geometry.width /= scale;
-      logical_geometry.height /= scale;
+      int scale_factor = gdk_monitor_get_scale_factor (GDK_MONITOR (monitor));
+      logical_geometry.y /= scale_factor;
+      logical_geometry.x /= scale_factor;
+      logical_geometry.width /= scale_factor;
+      logical_geometry.height /= scale_factor;
+
+      scale = scale_factor;
+    }
+  else
+    {
+      scale = MAX (monitor->output_geometry.width / (double) logical_geometry.width,
+                   monitor->output_geometry.height / (double) logical_geometry.height);
     }
 
   gdk_monitor_set_geometry (GDK_MONITOR (monitor), &logical_geometry);
   gdk_monitor_set_connector (GDK_MONITOR (monitor), monitor->name);
   gdk_monitor_set_description (GDK_MONITOR (monitor), monitor->description);
+  gdk_monitor_set_scale (GDK_MONITOR (monitor), scale);
+
   monitor->wl_output_done = FALSE;
   monitor->xdg_output_done = FALSE;
 

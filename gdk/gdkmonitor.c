@@ -26,6 +26,8 @@
 #include "gdkenumtypes.h"
 #include "gdkrectangle.h"
 
+#include <math.h>
+
 /**
  * GdkMonitor:
  *
@@ -46,6 +48,7 @@ enum {
   PROP_MODEL,
   PROP_CONNECTOR,
   PROP_SCALE_FACTOR,
+  PROP_SCALE,
   PROP_GEOMETRY,
   PROP_WIDTH_MM,
   PROP_HEIGHT_MM,
@@ -70,6 +73,8 @@ static void
 gdk_monitor_init (GdkMonitor *monitor)
 {
   monitor->scale_factor = 1;
+  monitor->scale = 1.0;
+  monitor->scale_set = FALSE;
   monitor->valid = TRUE;
 }
 
@@ -105,6 +110,10 @@ gdk_monitor_get_property (GObject    *object,
 
     case PROP_SCALE_FACTOR:
       g_value_set_int (value, monitor->scale_factor);
+      break;
+
+    case PROP_SCALE:
+      g_value_set_double (value, monitor->scale);
       break;
 
     case PROP_GEOMETRY:
@@ -233,12 +242,27 @@ gdk_monitor_class_init (GdkMonitorClass *class)
    * GdkMonitor:scale-factor: (attributes org.gtk.Property.get=gdk_monitor_get_scale_factor)
    *
    * The scale factor.
+   *
+   * The scale factor is the next larger integer,
+   * compared to [property@Gdk.Surface:scale].
    */
   props[PROP_SCALE_FACTOR] =
     g_param_spec_int ("scale-factor", NULL, NULL,
-                      0, G_MAXINT,
+                      1, G_MAXINT,
                       1,
                       G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
+
+  /**
+   * GdkMonitor:scale: (attributes org.gtk.Property.get=gdk_monitor_get_scale)
+   *
+   * The scale of the monitor.
+   *
+   * Since: 4.14
+   */
+  props[PROP_SCALE] =
+      g_param_spec_double ("scale", NULL, NULL,
+                        1., G_MAXDOUBLE, 1.,
+                        G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
 
   /**
    * GdkMonitor:geometry: (attributes org.gtk.Property.get=gdk_monitor_get_geometry)
@@ -346,7 +370,7 @@ gdk_monitor_get_display (GdkMonitor *monitor)
  * display coordinate space.
  *
  * The returned geometry is in  ”application pixels”, not in
- * ”device pixels” (see [method@Gdk.Monitor.get_scale_factor]).
+ * ”device pixels” (see [method@Gdk.Monitor.get_scale]).
  */
 void
 gdk_monitor_get_geometry (GdkMonitor   *monitor,
@@ -473,6 +497,29 @@ gdk_monitor_get_scale_factor (GdkMonitor *monitor)
 }
 
 /**
+ * gdk_monitor_get_scale: (attributes org.gtk.Method.get_property=scale)
+ * @monitor: a `GdkMonitor`
+ *
+ * Gets the internal scale factor that maps from monitor coordinates
+ * to device pixels.
+ *
+ * This can be used if you want to create pixel based data for a
+ * particular monitor, but most of the time you’re drawing to a surface
+ * where it is better to use [method@Gdk.Surface.get_scale] instead.
+ *
+ * Returns: the scale
+ *
+ * Since: 4.14
+ */
+double
+gdk_monitor_get_scale (GdkMonitor *monitor)
+{
+  g_return_val_if_fail (GDK_IS_MONITOR (monitor), 1.);
+
+  return monitor->scale;
+}
+
+/**
  * gdk_monitor_get_refresh_rate: (attributes org.gtk.Method.get_property=refresh-rate)
  * @monitor: a `GdkMonitor`
  *
@@ -583,11 +630,36 @@ void
 gdk_monitor_set_scale_factor (GdkMonitor *monitor,
                               int         scale_factor)
 {
+  g_return_if_fail (scale_factor >= 1);
+
+  if (monitor->scale_set)
+    return;
+
   if (monitor->scale_factor == scale_factor)
     return;
 
   monitor->scale_factor = scale_factor;
+  monitor->scale = scale_factor;
 
+  g_object_notify (G_OBJECT (monitor), "scale-factor");
+  g_object_notify (G_OBJECT (monitor), "scale");
+}
+
+void
+gdk_monitor_set_scale (GdkMonitor *monitor,
+                       double      scale)
+{
+  g_return_if_fail (scale >= 1.);
+
+  monitor->scale_set = TRUE;
+
+  if (monitor->scale == scale)
+    return;
+
+  monitor->scale = scale;
+  monitor->scale_factor = (int) ceil (scale);
+
+  g_object_notify (G_OBJECT (monitor), "scale");
   g_object_notify (G_OBJECT (monitor), "scale-factor");
 }
 
