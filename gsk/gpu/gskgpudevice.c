@@ -881,6 +881,50 @@ gsk_gpu_device_cache_texture_image (GskGpuDevice *self,
   gsk_gpu_cached_use (self, (GskGpuCached *) cache, timestamp);
 }
 
+static void
+render_glyph_simply (PangoFont  *font,
+                     PangoGlyph  glyph,
+                     float       scale)
+{
+  PangoRectangle ink_rect;
+  cairo_t *cr;
+  cairo_surface_t *surface;
+  PangoGlyphInfo glyph_info;
+  PangoGlyphString glyph_string;
+
+  pango_font_get_glyph_extents (font, glyph, &ink_rect, NULL);
+  pango_extents_to_pixels (&ink_rect, NULL);
+
+  surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32,
+                                        (int) ceil (ink_rect.width * scale),
+                                        (int) ceil (ink_rect.height * scale));
+  cairo_surface_set_device_scale (surface, scale, scale);
+
+  cr = cairo_create (surface);
+
+  cairo_set_source_rgba (cr, 0, 0, 0, 0);
+  cairo_rectangle (cr, 0, 0, ink_rect.width, ink_rect.height);
+  cairo_fill (cr);
+
+  cairo_set_source_rgba (cr, 1, 1, 1, 1);
+
+  glyph_info.glyph = glyph;
+  glyph_info.geometry.x_offset = - ink_rect.x * PANGO_SCALE;
+  glyph_info.geometry.y_offset = - ink_rect.y * PANGO_SCALE;
+
+  glyph_string.num_glyphs = 1;
+  glyph_string.glyphs = &glyph_info;
+
+  pango_cairo_show_glyph_string (cr, font, &glyph_string);
+  cairo_destroy (cr);
+
+  cairo_surface_flush (surface);
+
+  cairo_surface_write_to_png (surface, "cairo-glyph.png");
+
+  cairo_surface_destroy (surface);
+}
+
 GskGpuImage *
 gsk_gpu_device_lookup_glyph_image (GskGpuDevice           *self,
                                    GskGpuFrame            *frame,
@@ -915,6 +959,8 @@ gsk_gpu_device_lookup_glyph_image (GskGpuDevice           *self,
       *out_origin = cache->origin;
       return cache->image;
     }
+
+  render_glyph_simply (font, glyph, scale);
 
   subpixel_x = (flags & 3) / 4.f;
   subpixel_y = ((flags >> 2) & 3) / 4.f;
