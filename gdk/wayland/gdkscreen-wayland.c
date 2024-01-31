@@ -1565,7 +1565,7 @@ apply_monitor_change (GdkWaylandMonitor *monitor)
   GdkRectangle logical_geometry;
   gboolean needs_scaling = FALSE;
 
-  if (monitor_has_xdg_output(monitor))
+  if (monitor->xdg_output_done)
     {
       logical_geometry = monitor->xdg_output_geometry;
       needs_scaling =
