@@ -2430,15 +2430,47 @@ apply_monitor_change (GdkWaylandMonitor *monitor)
 {
   GDK_DEBUG (MISC, "monitor %d changed position %d %d, size %d %d",
                    monitor->id,
-                   monitor->x, monitor->y,
-                   monitor->width, monitor->height);
+                   monitor->output_geometry.x, monitor->output_geometry.y,
+                   monitor->output_geometry.width, monitor->output_geometry.height);
 
-  gdk_monitor_set_geometry (GDK_MONITOR (monitor),
-                            &(GdkRectangle) {
-                              monitor->x, monitor->y,
-                              monitor->width, monitor->height });
+  GdkRectangle logical_geometry;
+  gboolean needs_scaling = FALSE;
+  double scale;
+
+  if (monitor->xdg_output_done)
+    {
+      logical_geometry = monitor->xdg_output_geometry;
+      needs_scaling =
+        logical_geometry.width == monitor->output_geometry.width ||
+        logical_geometry.height == monitor->output_geometry.height;
+    }
+  else
+    {
+      logical_geometry = monitor->output_geometry;
+      needs_scaling = TRUE;
+    }
+
+  if (needs_scaling)
+    {
+      int scale_factor = gdk_monitor_get_scale_factor (GDK_MONITOR (monitor));
+      logical_geometry.y /= scale_factor;
+      logical_geometry.x /= scale_factor;
+      logical_geometry.width /= scale_factor;
+      logical_geometry.height /= scale_factor;
+
+      scale = scale_factor;
+    }
+  else
+    {
+      scale = MAX (monitor->output_geometry.width / (double) logical_geometry.width,
+                   monitor->output_geometry.height / (double) logical_geometry.height);
+    }
+
+  gdk_monitor_set_geometry (GDK_MONITOR (monitor), &logical_geometry);
   gdk_monitor_set_connector (GDK_MONITOR (monitor), monitor->name);
   gdk_monitor_set_description (GDK_MONITOR (monitor), monitor->description);
+  gdk_monitor_set_scale (GDK_MONITOR (monitor), scale);
+
   monitor->wl_output_done = FALSE;
   monitor->xdg_output_done = FALSE;
 
@@ -2456,8 +2488,8 @@ xdg_output_handle_logical_position (void                  *data,
   GDK_DEBUG (MISC, "handle logical position xdg-output %d, position %d %d",
                    monitor->id, x, y);
 
-  monitor->x = x;
-  monitor->y = y;
+  monitor->xdg_output_geometry.x = x;
+  monitor->xdg_output_geometry.y = y;
 }
 
 static void
@@ -2471,8 +2503,8 @@ xdg_output_handle_logical_size (void                  *data,
   GDK_DEBUG (MISC, "handle logical size xdg-output %d, size %d %d",
                    monitor->id, width, height);
 
-  monitor->width = width;
-  monitor->height = height;
+  monitor->xdg_output_geometry.width = width;
+  monitor->xdg_output_geometry.height = height;
 }
 
 static void
@@ -2558,8 +2590,8 @@ output_handle_geometry (void             *data,
                    make, model,
                    transform_to_string (transform));
 
-  monitor->x = x;
-  monitor->y = y;
+  monitor->output_geometry.x = x;
+  monitor->output_geometry.y = y;
 
   switch (transform)
     {
@@ -2603,27 +2635,11 @@ output_handle_scale (void             *data,
                      int32_t           scale)
 {
   GdkWaylandMonitor *monitor = (GdkWaylandMonitor *)data;
-  GdkRectangle previous_geometry;
-  int previous_scale;
-  int width;
-  int height;
 
   GDK_DEBUG (MISC, "handle scale output %d, scale %d", monitor->id, scale);
 
-  gdk_monitor_get_geometry (GDK_MONITOR (monitor), &previous_geometry);
-  previous_scale = gdk_monitor_get_scale_factor (GDK_MONITOR (monitor));
-
   /* Set the scale from wl_output protocol, regardless of xdg-output support */
   gdk_monitor_set_scale_factor (GDK_MONITOR (monitor), scale);
-
-  if (monitor_has_xdg_output (monitor))
-    return;
-
-  width = previous_geometry.width * previous_scale;
-  height = previous_geometry.height * previous_scale;
-
-  monitor->width = width / scale;
-  monitor->height = height / scale;
 
   if (should_update_monitor (monitor))
     apply_monitor_change (monitor);
@@ -2638,7 +2654,6 @@ output_handle_mode (void             *data,
                     int               refresh)
 {
   GdkWaylandMonitor *monitor = (GdkWaylandMonitor *)data;
-  int scale;
 
   GDK_DEBUG (MISC, "handle mode output %d, size %d %d, rate %d",
                    monitor->id, width, height, refresh);
@@ -2646,9 +2661,8 @@ output_handle_mode (void             *data,
   if ((flags & WL_OUTPUT_MODE_CURRENT) == 0)
     return;
 
-  scale = gdk_monitor_get_scale_factor (GDK_MONITOR (monitor));
-  monitor->width = width / scale;
-  monitor->height = height / scale;
+  monitor->output_geometry.width = width;
+  monitor->output_geometry.height = height;
   gdk_monitor_set_refresh_rate (GDK_MONITOR (monitor), refresh);
 
   if (should_update_monitor (monitor) || !monitor_has_xdg_output (monitor))
