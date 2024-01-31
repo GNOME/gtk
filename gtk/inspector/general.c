@@ -730,7 +730,7 @@ add_monitor (GtkInspectorGeneral *gen,
   GtkListBox *list;
   char *value;
   GdkRectangle rect;
-  int scale;
+  double scale;
   char *name;
   char *scale_str = NULL;
   const char *manufacturer;
@@ -753,9 +753,9 @@ add_monitor (GtkInspectorGeneral *gen,
   add_label_row (gen, list, "Connector", gdk_monitor_get_connector (monitor), 10);
 
   gdk_monitor_get_geometry (monitor, &rect);
-  scale = gdk_monitor_get_scale_factor (monitor);
-  if (scale != 1)
-    scale_str = g_strdup_printf (" @ %d", scale);
+  scale = gdk_monitor_get_scale (monitor);
+  if (scale != 1.0)
+    scale_str = g_strdup_printf (" @ %.2f", scale);
 
   value = g_strdup_printf ("%d × %d%s at %d, %d",
                            rect.width, rect.height,
@@ -764,6 +764,12 @@ add_monitor (GtkInspectorGeneral *gen,
   add_label_row (gen, list, "Geometry", value, 10);
   g_free (value);
   g_free (scale_str);
+
+  value = g_strdup_printf ("%d × %d",
+                           (int) (rect.width * scale),
+                           (int) (rect.height * scale));
+  add_label_row (gen, list, "Pixels", value, 10);
+  g_free (value);
 
   value = g_strdup_printf ("%d × %d mm²",
                            gdk_monitor_get_width_mm (monitor),
