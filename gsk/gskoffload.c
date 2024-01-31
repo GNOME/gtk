@@ -518,6 +518,10 @@ complex_clip:
               {
                 info->can_offload = TRUE;
                 info->can_raise = TRUE;
+                graphene_rect_init (&info->source,
+                                    0, 0,
+                                    gdk_texture_get_width (info->texture),
+                                    gdk_texture_get_height (info->texture));
                 transform_bounds (self, &node->bounds, &info->dest);
                 info->place_above = self->last_info ? self->last_info->subsurface : NULL;
                 self->last_info = info;
@@ -586,11 +590,13 @@ gsk_offload_new (GdkSurface     *surface,
           if (info->can_raise)
             info->is_offloaded = gdk_subsurface_attach (info->subsurface,
                                                         info->texture,
+                                                        &info->source,
                                                         &info->dest,
                                                         TRUE, NULL);
           else
             info->is_offloaded = gdk_subsurface_attach (info->subsurface,
                                                         info->texture,
+                                                        &info->source,
                                                         &info->dest,
                                                         info->place_above != NULL,
                                                         info->place_above);

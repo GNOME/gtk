@@ -152,6 +152,7 @@ get_wl_buffer (GdkWaylandSubsurface *self,
 static gboolean
 gdk_wayland_subsurface_attach (GdkSubsurface         *sub,
                                GdkTexture            *texture,
+                               const graphene_rect_t *source,
                                const graphene_rect_t *dest,
                                gboolean               above,
                                GdkSubsurface         *sibling)
@@ -182,11 +183,18 @@ gdk_wayland_subsurface_attach (GdkSubsurface         *sub,
   self->dest.width = dest->size.width;
   self->dest.height = dest->size.height;
 
+  self->source.origin.x = source->origin.x;
+  self->source.origin.y = source->origin.y;
+  self->source.size.width = source->size.width;
+  self->source.size.height = source->size.height;
+
   scale = gdk_fractional_scale_to_double (&parent->scale);
+
   device_rect.origin.x = dest->origin.x * scale;
   device_rect.origin.y = dest->origin.y * scale;
   device_rect.size.width = dest->size.width * scale;
   device_rect.size.height = dest->size.height * scale;
+
   device_dest.x = device_rect.origin.x;
   device_dest.y = device_rect.origin.y;
   device_dest.width = device_rect.size.width;
@@ -296,6 +304,11 @@ gdk_wayland_subsurface_attach (GdkSubsurface         *sub,
     {
       wl_subsurface_set_position (self->subsurface, self->dest.x, self->dest.y);
       wp_viewport_set_destination (self->viewport, self->dest.width, self->dest.height);
+      wp_viewport_set_source (self->viewport,
+                              wl_fixed_from_double (self->source.origin.x),
+                              wl_fixed_from_double (self->source.origin.y),
+                              wl_fixed_from_double (self->source.size.width),
+                              wl_fixed_from_double (self->source.size.height));
 
       if (buffer)
         {
@@ -382,6 +395,18 @@ gdk_wayland_subsurface_get_dest (GdkSubsurface   *sub,
 }
 
 static void
+gdk_wayland_subsurface_get_source (GdkSubsurface   *sub,
+                                   graphene_rect_t *source)
+{
+  GdkWaylandSubsurface *self = GDK_WAYLAND_SUBSURFACE (sub);
+
+  source->origin.x = self->source.origin.x;
+  source->origin.y = self->source.origin.y;
+  source->size.width = self->source.size.width;
+  source->size.height = self->source.size.height;
+}
+
+static void
 gdk_wayland_subsurface_class_init (GdkWaylandSubsurfaceClass *class)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (class);
@@ -392,6 +417,7 @@ gdk_wayland_subsurface_class_init (GdkWaylandSubsurfaceClass *class)
   subsurface_class->attach = gdk_wayland_subsurface_attach;
   subsurface_class->detach = gdk_wayland_subsurface_detach;
   subsurface_class->get_texture = gdk_wayland_subsurface_get_texture;
+  subsurface_class->get_source = gdk_wayland_subsurface_get_source;
   subsurface_class->get_dest = gdk_wayland_subsurface_get_dest;
 };
 

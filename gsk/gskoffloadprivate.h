@@ -32,6 +32,7 @@ typedef struct
   GdkTexture *texture;
   GdkSubsurface *place_above;
   graphene_rect_t dest;
+  graphene_rect_t source;
 
   guint was_offloaded : 1;
   guint can_offload   : 1;
