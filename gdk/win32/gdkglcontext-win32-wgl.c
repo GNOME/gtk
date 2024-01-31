@@ -117,6 +117,11 @@ gdk_win32_gl_context_wgl_end_frame (GdkDrawContext *draw_context,
 }
 
 static void
+gdk_win32_gl_context_wgl_empty_frame (GdkDrawContext *draw_context)
+{
+}
+
+static void
 gdk_win32_gl_context_wgl_begin_frame (GdkDrawContext *draw_context,
                                       GdkMemoryDepth  depth,
                                       cairo_region_t *update_area)
@@ -809,6 +814,8 @@ gdk_win32_gl_context_wgl_class_init (GdkWin32GLContextWGLClass *klass)
 
   draw_context_class->begin_frame = gdk_win32_gl_context_wgl_begin_frame;
   draw_context_class->end_frame = gdk_win32_gl_context_wgl_end_frame;
+  draw_context_class->empty_frame = gdk_win32_gl_context_wgl_empty_frame;
+
   gobject_class->dispose = gdk_win32_gl_context_wgl_dispose;
 }
 

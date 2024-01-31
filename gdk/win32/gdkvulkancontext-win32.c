@@ -75,6 +75,11 @@ gdk_win32_vulkan_context_begin_frame (GdkDrawContext *draw_context,
 }
 
 static void
+gdk_win32_vulkan_context_empty_frame (GdkDrawContext *draw_context)
+{
+}
+
+static void
 gdk_win32_vulkan_context_class_init (GdkWin32VulkanContextClass *klass)
 {
   GdkVulkanContextClass *context_class = GDK_VULKAN_CONTEXT_CLASS (klass);
@@ -82,6 +87,7 @@ gdk_win32_vulkan_context_class_init (GdkWin32VulkanContextClass *klass)
 
   context_class->create_surface = gdk_win32_vulkan_context_create_surface;
   draw_context_class->begin_frame = gdk_win32_vulkan_context_begin_frame;
+  draw_context_class->empty_frame = gdk_win32_vulkan_context_empty_frame;
 }
 
 static void
