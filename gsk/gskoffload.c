@@ -344,7 +344,7 @@ visit_node (GskOffload    *self,
 
       if (info->can_raise)
         {
-          if (gsk_rect_intersects (&transformed_bounds, &info->rect))
+          if (gsk_rect_intersects (&transformed_bounds, &info->dest))
             {
               GskRenderNodeType type = GSK_RENDER_NODE_TYPE (node);
 
@@ -518,7 +518,7 @@ complex_clip:
               {
                 info->can_offload = TRUE;
                 info->can_raise = TRUE;
-                transform_bounds (self, &node->bounds, &info->rect);
+                transform_bounds (self, &node->bounds, &info->dest);
                 info->place_above = self->last_info ? self->last_info->subsurface : NULL;
                 self->last_info = info;
               }
@@ -577,21 +577,21 @@ gsk_offload_new (GdkSurface     *surface,
   for (gsize i = 0; i < self->n_subsurfaces; i++)
     {
       GskOffloadInfo *info = &self->subsurfaces[i];
-      graphene_rect_t old_rect;
+      graphene_rect_t old_dest;
 
-      gdk_subsurface_get_rect (info->subsurface, &old_rect);
+      gdk_subsurface_get_dest (info->subsurface, &old_dest);
 
       if (info->can_offload)
         {
           if (info->can_raise)
             info->is_offloaded = gdk_subsurface_attach (info->subsurface,
                                                         info->texture,
-                                                        &info->rect,
+                                                        &info->dest,
                                                         TRUE, NULL);
           else
             info->is_offloaded = gdk_subsurface_attach (info->subsurface,
                                                         info->texture,
-                                                        &info->rect,
+                                                        &info->dest,
                                                         info->place_above != NULL,
                                                         info->place_above);
         }
@@ -613,20 +613,20 @@ gsk_offload_new (GdkSurface     *surface,
 
       if (info->is_offloaded != info->was_offloaded ||
           info->is_above != info->was_above ||
-          (info->is_offloaded && !gsk_rect_equal (&info->rect, &old_rect)))
+          (info->is_offloaded && !gsk_rect_equal (&info->dest, &old_dest)))
         {
           /* We changed things, need to invalidate everything */
-          cairo_rectangle_int_t int_rect;
+          cairo_rectangle_int_t int_dest;
 
           if (info->is_offloaded)
             {
-              gsk_rect_to_cairo_grow (&info->rect, &int_rect);
-              cairo_region_union_rectangle (diff, &int_rect);
+              gsk_rect_to_cairo_grow (&info->dest, &int_dest);
+              cairo_region_union_rectangle (diff, &int_dest);
             }
           if (info->was_offloaded)
             {
-              gsk_rect_to_cairo_grow (&old_rect, &int_rect);
-              cairo_region_union_rectangle (diff, &int_rect);
+              gsk_rect_to_cairo_grow (&old_dest, &int_dest);
+              cairo_region_union_rectangle (diff, &int_dest);
             }
         }
 

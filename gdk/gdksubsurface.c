@@ -110,7 +110,7 @@ insert_subsurface (GdkSubsurface *subsurface,
 gboolean
 gdk_subsurface_attach (GdkSubsurface         *subsurface,
                        GdkTexture            *texture,
-                       const graphene_rect_t *rect,
+                       const graphene_rect_t *dest,
                        gboolean               above,
                        GdkSubsurface         *sibling)
 {
@@ -118,7 +118,7 @@ gdk_subsurface_attach (GdkSubsurface         *subsurface,
 
   g_return_val_if_fail (GDK_IS_SUBSURFACE (subsurface), FALSE);
   g_return_val_if_fail (GDK_IS_TEXTURE (texture), FALSE);
-  g_return_val_if_fail (rect != NULL, FALSE);
+  g_return_val_if_fail (dest != NULL, FALSE);
   g_return_val_if_fail (sibling != subsurface, FALSE);
   g_return_val_if_fail (sibling == NULL || GDK_IS_SUBSURFACE (sibling), FALSE);
   g_return_val_if_fail (sibling == NULL || sibling->parent == subsurface->parent, FALSE);
@@ -148,7 +148,7 @@ gdk_subsurface_attach (GdkSubsurface         *subsurface,
         }
     }
 
-  return GDK_SUBSURFACE_GET_CLASS (subsurface)->attach (subsurface, texture, rect, above, sibling);
+  return GDK_SUBSURFACE_GET_CLASS (subsurface)->attach (subsurface, texture, dest, above, sibling);
 }
 
 void
@@ -170,13 +170,13 @@ gdk_subsurface_get_texture (GdkSubsurface *subsurface)
 }
 
 void
-gdk_subsurface_get_rect (GdkSubsurface   *subsurface,
-                         graphene_rect_t *rect)
+gdk_subsurface_get_dest (GdkSubsurface   *subsurface,
+                         graphene_rect_t *dest)
 {
   g_return_if_fail (GDK_IS_SUBSURFACE (subsurface));
-  g_return_if_fail (rect != NULL);
+  g_return_if_fail (dest != NULL);
 
-  GDK_SUBSURFACE_GET_CLASS (subsurface)->get_rect (subsurface, rect);
+  GDK_SUBSURFACE_GET_CLASS (subsurface)->get_dest (subsurface, dest);
 }
 
 gboolean
