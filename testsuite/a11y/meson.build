@@ -36,6 +36,7 @@ tests = [
 ]
 
 internal_tests = [
+  { 'name': 'inscription' },
   { 'name': 'label' },
   { 'name': 'text' },
   { 'name': 'names' },
