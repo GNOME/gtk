@@ -1809,6 +1809,8 @@ typedef enum { /*< prefix=GTK_ACCESSIBLE_SORT >*/
  * @GTK_ANNOUNCEMENT_PRIORITY_HIGH: The announcement is of high priority, and is usually spoken immediately.
  * 
  * The priority of an accessibility announcement.
+ *
+ * Since: 4.14
  */
 typedef enum {
   GTK_ACCESSIBLE_ANNOUNCEMENT_PRIORITY_LOW,
