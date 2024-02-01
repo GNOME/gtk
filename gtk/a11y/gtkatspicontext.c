@@ -1541,7 +1541,20 @@ gtk_at_spi_context_announce (GtkATContext *context,
   if (self->connection == NULL)
     return;
 
-  guint atk_live = priority == GTK_ACCESSIBLE_ANNOUNCEMENT_PRIORITY_HIGH ? 2 : 1;
+  AtspiLive live;
+
+  switch (priority)
+    {
+    case GTK_ACCESSIBLE_ANNOUNCEMENT_PRIORITY_LOW:
+    case GTK_ACCESSIBLE_ANNOUNCEMENT_PRIORITY_MEDIUM:
+      live = ATSPI_LIVE_POLITE;
+      break;
+    case GTK_ACCESSIBLE_ANNOUNCEMENT_PRIORITY_HIGH:
+      live = ATSPI_LIVE_ASSERTIVE;
+      break;
+    default:
+      g_assert_not_reached ();
+    }
 
   g_dbus_connection_emit_signal (self->connection,
                                  NULL,
@@ -1549,7 +1562,7 @@ gtk_at_spi_context_announce (GtkATContext *context,
                                  "org.a11y.atspi.Event.Object",
                                  "Announcement",
                                  g_variant_new ("(siiva{sv})",
-                                                "", atk_live, 0,
+                                                "", live, 0,
                                                 g_variant_new_string (message),
                                                 NULL),
                                  NULL);
