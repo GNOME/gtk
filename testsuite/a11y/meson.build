@@ -37,6 +37,7 @@ tests = [
 
 internal_tests = [
   { 'name': 'label' },
+  { 'name': 'text' },
   { 'name': 'names' },
 ]
 
