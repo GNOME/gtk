@@ -127,6 +127,11 @@ gtk_tests = [
 if os_unix
   gtk_tests += [
     ['testfontchooserdialog'],
+  ]
+endif
+
+if os_linux
+  gtk_tests += [
     ['testdmabuf'],
   ]
 endif
