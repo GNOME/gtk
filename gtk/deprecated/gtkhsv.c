@@ -616,8 +616,8 @@ set_cross_grab (GtkHSV    *hsv,
   GtkHSVPrivate *priv = hsv->priv;
   GdkCursor *cursor;
 
-  cursor = gdk_cursor_new_for_display (gtk_widget_get_display (GTK_WIDGET (hsv)),
-                                       GDK_CROSSHAIR);
+  cursor = gdk_cursor_new_from_name (gtk_widget_get_display (GTK_WIDGET (hsv)),
+                                     "crosshair");
   gdk_device_grab (device,
                    priv->window,
                    GDK_OWNERSHIP_NONE,

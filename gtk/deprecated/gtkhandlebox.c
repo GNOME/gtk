@@ -1297,8 +1297,8 @@ gtk_handle_box_button_press (GtkWidget      *widget,
 		}
 	      priv->in_drag = TRUE;
               priv->grab_device = event->device;
-	      fleur = gdk_cursor_new_for_display (gtk_widget_get_display (widget),
-						  GDK_FLEUR);
+	      fleur = gdk_cursor_new_from_name (gtk_widget_get_display (widget),
+					        "move");
 	      if (gdk_device_grab (event->device,
                                    gtk_widget_get_window (invisible),
                                    GDK_OWNERSHIP_WINDOW,

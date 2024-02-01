@@ -4928,7 +4928,7 @@ set_cursor_from_name (GtkWidget *entry,
   if (cursor == NULL)
     {
       name = NULL;
-      cursor = gdk_cursor_new_for_display (gtk_widget_get_display (widget), GDK_BLANK_CURSOR);
+      cursor = gdk_cursor_new_from_name (gtk_widget_get_display (widget), "none");
     }
 
   gdk_window_set_cursor (gtk_widget_get_window (widget), cursor);
@@ -8635,8 +8635,8 @@ snapshot_widget (GtkButton *button,
   data->is_toplevel = widget == data->toplevel_button;
 
   if (!data->cursor)
-    data->cursor = gdk_cursor_new_for_display (gtk_widget_get_display (widget),
-					       GDK_TARGET);
+    data->cursor = gdk_cursor_new_from_name (gtk_widget_get_display (widget),
+					     "crosshair");
 
   gdk_seat_grab (gdk_device_get_seat (device),
                  gtk_widget_get_window (widget),
