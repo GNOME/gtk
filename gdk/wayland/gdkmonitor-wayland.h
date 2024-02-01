@@ -31,11 +31,10 @@ struct _GdkWaylandMonitor {
   struct wl_output *output;
 
   struct zxdg_output_v1 *xdg_output;
-  /* Size and position, can be either from wl_output or xdg_output */
-  int32_t x;
-  int32_t y;
-  int32_t width;
-  int32_t height;
+  /* Raw wl_output data */
+  GdkRectangle output_geometry;
+  /* Raw xdg_output data */
+  GdkRectangle xdg_output_geometry;
   char *name;
   gboolean wl_output_done;
   gboolean xdg_output_done;
