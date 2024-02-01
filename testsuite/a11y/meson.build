@@ -19,7 +19,6 @@ tests = [
   { 'name': 'flowbox' },
   { 'name': 'general' },
   { 'name': 'image' },
-  { 'name': 'label' },
   { 'name': 'listbox' },
   { 'name': 'levelbar' },
   { 'name': 'passwordentry' },
@@ -37,6 +36,7 @@ tests = [
 ]
 
 internal_tests = [
+  { 'name': 'label' },
   { 'name': 'names' },
 ]
 
