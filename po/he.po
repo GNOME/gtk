@@ -12,16 +12,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.HEAD.he\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2023-12-08 07:03+0000\n"
-"PO-Revision-Date: 2023-12-09 23:59+0200\n"
+"POT-Creation-Date: 2024-01-30 20:51+0000\n"
+"PO-Revision-Date: 2024-02-02 10:52+0200\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: Hebrew <yoseforb@gmail.com>\n"
 "Language: he\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=4; plural=(n==1 ? 0 : n==2 ? 1 : n>10 && n%10==0 ? "
-"2 : 3);\n"
+"Plural-Forms: nplurals=4; plural=(n==1 ? 0 : n==2 ? 1 : n>10 && n%10==0 ? 2 : "
+"3);\n"
 "X-Generator: Poedit 3.4.1\n"
 "X-Project-Style: default\n"
 
@@ -34,11 +34,11 @@ msgstr "סוג תצוגת ה־broadway אינו נתמך: %s"
 msgid "This clipboard cannot store data."
 msgstr "לוח גזירים זה לא יכול לאחסן נתונים."
 
-#: gdk/gdkclipboard.c:287 gdk/gdkclipboard.c:785 gdk/gdkclipboard.c:1085
+#: gdk/gdkclipboard.c:287 gdk/gdkclipboard.c:786 gdk/gdkclipboard.c:1086
 msgid "Cannot read from empty clipboard."
 msgstr "אי אפשר לקרוא מלוח גזירים ריק."
 
-#: gdk/gdkclipboard.c:318 gdk/gdkclipboard.c:1135 gdk/gdkdrag.c:618
+#: gdk/gdkclipboard.c:318 gdk/gdkclipboard.c:1136 gdk/gdkdrag.c:618
 msgid "No compatible formats to transfer clipboard contents."
 msgstr "אין תצורות תואמות להעברת תכני לוח גזירים."
 
@@ -123,9 +123,9 @@ msgstr "אין תצורות תואמות להעברת תכנים."
 msgid "No GL API allowed."
 msgstr "אין GL API מאופשר."
 
-#: gdk/gdkglcontext.c:426 gdk/win32/gdkglcontext-win32-wgl.c:387
-#: gdk/win32/gdkglcontext-win32-wgl.c:530
-#: gdk/win32/gdkglcontext-win32-wgl.c:574 gdk/x11/gdkglcontext-glx.c:691
+#: gdk/gdkglcontext.c:426 gdk/win32/gdkglcontext-win32-wgl.c:383
+#: gdk/win32/gdkglcontext-win32-wgl.c:526 gdk/win32/gdkglcontext-win32-wgl.c:570
+#: gdk/x11/gdkglcontext-glx.c:691
 msgid "Unable to create a GL context"
 msgstr "לא ניתן ליצור הקשר GL"
 
@@ -538,7 +538,7 @@ msgstr "שגיאה בפיענוח קובץ תמונת JPEG (%s)"
 msgid "Unsupported JPEG colorspace (%d)"
 msgstr "מרחב הצבעים של ה־JPEG אינו נתמך (%d)"
 
-#: gdk/loaders/gdkjpeg.c:203 gdk/loaders/gdkpng.c:280 gdk/loaders/gdktiff.c:467
+#: gdk/loaders/gdkjpeg.c:203 gdk/loaders/gdkpng.c:286 gdk/loaders/gdktiff.c:467
 #, c-format
 msgid "Not enough memory for image size %ux%u"
 msgstr "אין מספיק זיכרון לתמונה בגודל ‎%ux%u‎"
@@ -548,15 +548,20 @@ msgstr "אין מספיק זיכרון לתמונה בגודל ‎%ux%u‎"
 msgid "Error reading png (%s)"
 msgstr "שגיאה בקריאת png ‏(%s)"
 
-#: gdk/loaders/gdkpng.c:211
+#: gdk/loaders/gdkpng.c:212
 #, c-format
 msgid "Unsupported depth %u in png image"
 msgstr "העומק %u אינו נתמך בתמונות png"
 
-#: gdk/loaders/gdkpng.c:261
+#: gdk/loaders/gdkpng.c:262
 #, c-format
 msgid "Unsupported color type %u in png image"
 msgstr "סוג הצבע %u אינו נתמך בתמונות png"
+
+#: gdk/loaders/gdkpng.c:272
+#, c-format
+msgid "Image stride too large for image size %ux%u"
+msgstr "פסיעת התמונה גדולה מדי לתמונה בגודל ‎%ux%u‎"
 
 #: gdk/loaders/gdktiff.c:353
 msgid "Failed to load RGB data from TIFF file"
@@ -583,87 +588,86 @@ msgstr "לא נמצאה תצורת העברה תואמת"
 msgid "Failed to decode contents with mime-type of '%s'"
 msgstr "פענוח התוכן מסוג MIME‏ ‚%s’ נכשל"
 
-#: gdk/win32/gdkclipdrop-win32.c:721
+#: gdk/win32/gdkclipdrop-win32.c:719
 #, c-format
 msgid "Cannot claim clipboard ownership. OpenClipboard() timed out."
 msgstr ""
 "לא ניתן לטעון לבעלות על לוח הגזירים. הזמן שהוקצב ל־OpenClipboard()‎ הסתיים."
 
-#: gdk/win32/gdkclipdrop-win32.c:731
+#: gdk/win32/gdkclipdrop-win32.c:729
 #, c-format
 msgid "Cannot claim clipboard ownership. Another process claimed it before us."
 msgstr "לא ניתן לטעון לבעלות על לוח הגזירים. תהליך אחר טען אותה לפנינו."
 
-#: gdk/win32/gdkclipdrop-win32.c:745
+#: gdk/win32/gdkclipdrop-win32.c:743
 #, c-format
 msgid "Cannot claim clipboard ownership. OpenClipboard() failed: 0x%lx."
 msgstr "לא ניתן לטעון לבעלות על לוח הגזירים. OpenClipboard()‎ נכשלה: 0x%lx."
 
-#: gdk/win32/gdkclipdrop-win32.c:757
+#: gdk/win32/gdkclipdrop-win32.c:755
 #, c-format
 msgid "Cannot claim clipboard ownership. EmptyClipboard() failed: 0x%lx."
 msgstr "לא ניתן לטעון לבעלות על לוח הגזירים. EmptyClipboard()‎ נכשלה: 0x%lx."
 
-#: gdk/win32/gdkclipdrop-win32.c:800
+#: gdk/win32/gdkclipdrop-win32.c:798
 #, c-format
 msgid "Cannot set clipboard data. OpenClipboard() timed out."
 msgstr "לא ניתן להגדיר נתוני לוח גזירים. הזמן שהוקצב ל־OpenClipboard()‎ הסתיים."
 
-#: gdk/win32/gdkclipdrop-win32.c:810 gdk/win32/gdkclipdrop-win32.c:841
+#: gdk/win32/gdkclipdrop-win32.c:808 gdk/win32/gdkclipdrop-win32.c:839
 #, c-format
 msgid "Cannot set clipboard data. Another process claimed clipboard ownership."
 msgstr "לא ניתן להגדיר נתוני לוח גזירים. תהליך אחר טען בעלות על לוח הגזירים."
 
-#: gdk/win32/gdkclipdrop-win32.c:824
+#: gdk/win32/gdkclipdrop-win32.c:822
 #, c-format
 msgid "Cannot set clipboard data. OpenClipboard() failed: 0x%lx."
 msgstr "לא ניתן להגדיר נתוני לוח גזירים. OpenClipboard()‎ נכשלה: 0x%lx."
 
-#: gdk/win32/gdkclipdrop-win32.c:876
+#: gdk/win32/gdkclipdrop-win32.c:874
 #, c-format
 msgid "Cannot get clipboard data. GlobalLock(0x%p) failed: 0x%lx."
 msgstr "לא ניתן לקבל נתונים מלוח הגזירים. GlobalLock(0x%p) נכשלה: 0x%lx."
 
-#: gdk/win32/gdkclipdrop-win32.c:887
+#: gdk/win32/gdkclipdrop-win32.c:885
 #, c-format
 msgid "Cannot get clipboard data. GlobalSize(0x%p) failed: 0x%lx."
 msgstr "לא ניתן לקבל נתונים מלוח הגזירים. GlobalSize(0x%p) נכשלה: 0x%lx."
 
-#: gdk/win32/gdkclipdrop-win32.c:900
+#: gdk/win32/gdkclipdrop-win32.c:898
 #, c-format
 msgid ""
 "Cannot get clipboard data. Failed to allocate %s bytes to store the data."
 msgstr "לא ניתן לקבל נתונים מלוח הגזירים. הקצאת %s בתים לאחסון הנתונים נכשלה."
 
-#: gdk/win32/gdkclipdrop-win32.c:932
+#: gdk/win32/gdkclipdrop-win32.c:930
 #, c-format
 msgid "Cannot get clipboard data. OpenClipboard() timed out."
-msgstr ""
-"לא ניתן לקבל נתונים מלוח הגזירים. הזמן שהוקצב ל־OpenClipboard()‎ הסתיים."
+msgstr "לא ניתן לקבל נתונים מלוח הגזירים. הזמן שהוקצב ל־OpenClipboard()‎ הסתיים."
 
-#: gdk/win32/gdkclipdrop-win32.c:942
+#: gdk/win32/gdkclipdrop-win32.c:940
 #, c-format
 msgid "Cannot get clipboard data. Clipboard ownership changed."
 msgstr "לא ניתן לקבל נתונים מלוח הגזירים. הבעלות על לוח הגזירים הועברה."
 
-#: gdk/win32/gdkclipdrop-win32.c:952
+#: gdk/win32/gdkclipdrop-win32.c:950
 #, c-format
 msgid ""
 "Cannot get clipboard data. Clipboard data changed before we could get it."
 msgstr ""
 "לא ניתן לקבל נתונים מלוח הגזירים. לוח הגזירים השתנה לפני שהצלחנו לקבל אותם."
 
-#: gdk/win32/gdkclipdrop-win32.c:969
+#: gdk/win32/gdkclipdrop-win32.c:967
 #, c-format
 msgid "Cannot get clipboard data. OpenClipboard() failed: 0x%lx."
 msgstr "לא ניתן לקבל נתונים מלוח הגזירים. OpenClipboard()‎ נכשלה: 0x%lx."
 
-#: gdk/win32/gdkclipdrop-win32.c:994
+#: gdk/win32/gdkclipdrop-win32.c:992
 #, c-format
 msgid "Cannot get clipboard data. No compatible transfer format found."
 msgstr "לא ניתן לקבל נתונים מלוח הגזירים. לא נמצאה תבנית העברה תואמת."
 
-#: gdk/win32/gdkclipdrop-win32.c:1004
+#: gdk/win32/gdkclipdrop-win32.c:1002
 #, c-format
 msgid "Cannot get clipboard data. GetClipboardData() failed: 0x%lx."
 msgstr "לא ניתן לקבל נתונים מלוח הגזירים. GetClipboardData()‎ נכשלה: 0x%lx."
@@ -703,21 +707,21 @@ msgstr "IDataObject_GetData (0x%x) נכשלה, הוחזר 0x%lx"
 msgid "Failed to transmute DnD data W32 format 0x%x to %p (%s)"
 msgstr "Failed to transmute DnD data W32 format 0x%x to %p (%s)"
 
-#: gdk/win32/gdkglcontext-win32-wgl.c:319
+#: gdk/win32/gdkglcontext-win32-wgl.c:315
 msgid "No GL implementation is available"
 msgstr "אין מימוש GL זמין"
 
-#: gdk/win32/gdkglcontext-win32-wgl.c:396
+#: gdk/win32/gdkglcontext-win32-wgl.c:392
 #, c-format
 msgid "WGL version %d.%d is too low, need at least %d.%d"
 msgstr "גרסת ה־WGL‏ %d.%d ישנה מדי. צריך לפחות %d.%d"
 
-#: gdk/win32/gdkglcontext-win32-wgl.c:414
+#: gdk/win32/gdkglcontext-win32-wgl.c:410
 #, c-format
 msgid "GL implementation cannot share GL contexts"
 msgstr "מימוש GL לא יכול לשתף הקשרי GL"
 
-#: gdk/win32/gdkglcontext-win32-wgl.c:696
+#: gdk/win32/gdkglcontext-win32-wgl.c:692
 msgid "No available configurations for the given pixel format"
 msgstr "אין הגדרות זמינים לתצורת הפיקסלים שצוינה"
 
@@ -807,8 +811,7 @@ msgstr "אין מספיק זיכרון ביעד"
 msgid "Need complete input to do conversion"
 msgstr "נדרש קלט מלא כדי לבצע המרה"
 
-#: gdk/x11/gdktextlistconverter-x11.c:216
-#: gdk/x11/gdktextlistconverter-x11.c:250
+#: gdk/x11/gdktextlistconverter-x11.c:216 gdk/x11/gdktextlistconverter-x11.c:250
 msgid "Invalid byte sequence in conversion input"
 msgstr "רצף בתים שגוי בקלט ההמרה"
 
@@ -1296,8 +1299,7 @@ msgstr ""
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccelgroup.c:837 gtk/gtkshortcutlabel.c:101
-#: gtk/gtkshortcutlabel.c:137
+#: gtk/gtkaccelgroup.c:837 gtk/gtkshortcutlabel.c:101 gtk/gtkshortcutlabel.c:137
 msgctxt "keyboard label"
 msgid "Shift"
 msgstr "Shift"
@@ -1307,8 +1309,7 @@ msgstr "Shift"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccelgroup.c:856 gtk/gtkshortcutlabel.c:104
-#: gtk/gtkshortcutlabel.c:139
+#: gtk/gtkaccelgroup.c:856 gtk/gtkshortcutlabel.c:104 gtk/gtkshortcutlabel.c:139
 msgctxt "keyboard label"
 msgid "Ctrl"
 msgstr "Ctrl"
@@ -1318,8 +1319,7 @@ msgstr "Ctrl"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccelgroup.c:875 gtk/gtkshortcutlabel.c:107
-#: gtk/gtkshortcutlabel.c:141
+#: gtk/gtkaccelgroup.c:875 gtk/gtkshortcutlabel.c:107 gtk/gtkshortcutlabel.c:141
 msgctxt "keyboard label"
 msgid "Alt"
 msgstr "Alt"
@@ -1329,8 +1329,7 @@ msgstr "Alt"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccelgroup.c:893 gtk/gtkshortcutlabel.c:113
-#: gtk/gtkshortcutlabel.c:143
+#: gtk/gtkaccelgroup.c:893 gtk/gtkshortcutlabel.c:113 gtk/gtkshortcutlabel.c:143
 msgctxt "keyboard label"
 msgid "Super"
 msgstr "Super"
@@ -1340,8 +1339,7 @@ msgstr "Super"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccelgroup.c:907 gtk/gtkshortcutlabel.c:116
-#: gtk/gtkshortcutlabel.c:145
+#: gtk/gtkaccelgroup.c:907 gtk/gtkshortcutlabel.c:116 gtk/gtkshortcutlabel.c:145
 msgctxt "keyboard label"
 msgid "Hyper"
 msgstr "Hyper"
@@ -1351,8 +1349,7 @@ msgstr "Hyper"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccelgroup.c:922 gtk/gtkshortcutlabel.c:110
-#: gtk/gtkshortcutlabel.c:148
+#: gtk/gtkaccelgroup.c:922 gtk/gtkshortcutlabel.c:110 gtk/gtkshortcutlabel.c:148
 msgctxt "keyboard label"
 msgid "Meta"
 msgstr "מטה"
@@ -1781,7 +1778,7 @@ msgstr "_סגירה"
 #. * suspend or screen locking, and the caller hasn't specified
 #. * a reason.
 #.
-#: gtk/gtkapplication-dbus.c:721
+#: gtk/gtkapplication-dbus.c:721 gtk/gtkapplication-dbus.c:763
 msgid "Reason not specified"
 msgstr "לא צוינה סיבה"
 
@@ -2253,13 +2250,12 @@ msgstr "קובץ בשם זה כבר קיים"
 
 #: gtk/gtkfilechoosernative.c:520 gtk/gtkfilechoosernative.c:600
 #: gtk/gtkfilechooserwidget.c:1185 gtk/gtkfilechooserwidget.c:5029
-#: gtk/gtkfiledialog.c:843 gtk/gtkmessagedialog.c:170
-#: gtk/gtkmessagedialog.c:179 gtk/gtkmountoperation.c:608
-#: gtk/print/gtkpagesetupunixdialog.c:282 gtk/print/gtkprintbackend.c:638
-#: gtk/print/gtkprintunixdialog.c:682 gtk/print/gtkprintunixdialog.c:839
-#: gtk/gtkwindow.c:6233 gtk/ui/gtkappchooserdialog.ui:48
-#: gtk/ui/gtkassistant.ui:52 gtk/ui/gtkcolorchooserdialog.ui:36
-#: gtk/ui/gtkfontchooserdialog.ui:27
+#: gtk/gtkfiledialog.c:843 gtk/gtkmessagedialog.c:170 gtk/gtkmessagedialog.c:179
+#: gtk/gtkmountoperation.c:608 gtk/print/gtkpagesetupunixdialog.c:282
+#: gtk/print/gtkprintbackend.c:638 gtk/print/gtkprintunixdialog.c:682
+#: gtk/print/gtkprintunixdialog.c:839 gtk/gtkwindow.c:6233
+#: gtk/ui/gtkappchooserdialog.ui:48 gtk/ui/gtkassistant.ui:52
+#: gtk/ui/gtkcolorchooserdialog.ui:36 gtk/ui/gtkfontchooserdialog.ui:27
 msgid "_Cancel"
 msgstr "_ביטול"
 
@@ -2345,7 +2341,7 @@ msgid "If you delete an item, it will be permanently lost."
 msgstr "אם פריט ימחק, הוא יאבד לצמיתות."
 
 #: gtk/gtkfilechooserwidget.c:1185 gtk/gtkfilechooserwidget.c:1815
-#: gtk/gtklabel.c:5695 gtk/gtktext.c:6147 gtk/gtktextview.c:9018
+#: gtk/gtklabel.c:5696 gtk/gtktext.c:6147 gtk/gtktextview.c:9018
 msgid "_Delete"
 msgstr "מ_חיקה"
 
@@ -2674,7 +2670,7 @@ msgstr "מאפייני סגנון"
 msgid "Character Variations"
 msgstr "הגווני תו"
 
-#: gtk/gtkglarea.c:305
+#: gtk/gtkglarea.c:309
 msgid "OpenGL context creation failed"
 msgstr "יצירת הקשר OpenGL נכשלה"
 
@@ -2687,32 +2683,32 @@ msgstr "סגירה"
 msgid "Close the infobar"
 msgstr "סגירת פס המידע"
 
-#: gtk/gtklabel.c:5692 gtk/gtktext.c:6135 gtk/gtktextview.c:9006
+#: gtk/gtklabel.c:5693 gtk/gtktext.c:6135 gtk/gtktextview.c:9006
 msgid "Cu_t"
 msgstr "_גזירה"
 
-#: gtk/gtklabel.c:5693 gtk/gtktext.c:6139 gtk/gtktextview.c:9010
+#: gtk/gtklabel.c:5694 gtk/gtktext.c:6139 gtk/gtktextview.c:9010
 msgid "_Copy"
 msgstr "ה_עתקה"
 
-#: gtk/gtklabel.c:5694 gtk/gtktext.c:6143 gtk/gtktextview.c:9014
+#: gtk/gtklabel.c:5695 gtk/gtktext.c:6143 gtk/gtktextview.c:9014
 msgid "_Paste"
 msgstr "ה_דבקה"
 
-#: gtk/gtklabel.c:5700 gtk/gtktext.c:6156 gtk/gtktextview.c:9039
+#: gtk/gtklabel.c:5701 gtk/gtktext.c:6156 gtk/gtktextview.c:9039
 msgid "Select _All"
 msgstr "בחירה בה_כול"
 
-#: gtk/gtklabel.c:5705
+#: gtk/gtklabel.c:5706
 msgid "_Open Link"
 msgstr "_פתיחת קישור"
 
-#: gtk/gtklabel.c:5709
+#: gtk/gtklabel.c:5710
 msgid "Copy _Link Address"
 msgstr "העתקת כתובת ה_קישור"
 
 # msgctxt "OpenType layout"
-#: gtk/gtklabel.c:5753 gtk/gtktext.c:2716 gtk/gtktextview.c:9088
+#: gtk/gtklabel.c:5754 gtk/gtktext.c:2716 gtk/gtktextview.c:9088
 msgid "Context menu"
 msgstr "תפריט הקשר"
 
@@ -2932,8 +2928,7 @@ msgstr "ניהול גדלים מותאמים…"
 msgid "_Apply"
 msgstr "ה_חלה"
 
-#: gtk/print/gtkpagesetupunixdialog.c:318
-#: gtk/print/gtkpagesetupunixdialog.c:570
+#: gtk/print/gtkpagesetupunixdialog.c:318 gtk/print/gtkpagesetupunixdialog.c:570
 msgid "Any Printer"
 msgstr "מדפסת כלשהי"
 
@@ -3622,7 +3617,7 @@ msgstr "החלקה ימינה"
 
 #. Translators: This is placeholder text for the search entry in the shortcuts window
 #: gtk/gtkshortcutswindow.c:855 gtk/gtkshortcutswindow.c:922
-#: gtk/gtkshortcutswindow.c:927
+#: gtk/gtkshortcutswindow.c:928
 msgid "Search Shortcuts"
 msgstr "חיפוש קיצורי מקשים"
 
@@ -3636,12 +3631,12 @@ msgstr "צירופי מקשים"
 msgid "Search Results"
 msgstr "תוצאות חיפוש"
 
-#: gtk/gtkshortcutswindow.c:989 gtk/ui/gtkemojichooser.ui:349
+#: gtk/gtkshortcutswindow.c:990 gtk/ui/gtkemojichooser.ui:349
 #: gtk/ui/gtkfilechooserwidget.ui:239
 msgid "No Results Found"
 msgstr "לא נמצאו תוצאות"
 
-#: gtk/gtkshortcutswindow.c:1000 gtk/ui/gtkemojichooser.ui:362
+#: gtk/gtkshortcutswindow.c:1001 gtk/ui/gtkemojichooser.ui:362
 #: gtk/ui/gtkfilechooserwidget.ui:252 gtk/ui/gtkplacesview.ui:218
 msgid "Try a different search"
 msgstr "יש לנסות חיפוש שונה"
@@ -3671,9 +3666,9 @@ msgstr "להשתמש במפקח GTK‎?"
 #: gtk/gtkwindow.c:6224
 #, c-format
 msgid ""
-"GTK Inspector is an interactive debugger that lets you explore and modify "
-"the internals of any GTK application. Using it may cause the application to "
-"break or crash."
+"GTK Inspector is an interactive debugger that lets you explore and modify the "
+"internals of any GTK application. Using it may cause the application to break "
+"or crash."
 msgstr ""
 "מפקח GTK‎ הוא מנפה שגיאות הידודי המאפשר לך לחקור ולשנות את הפנים של כל יישום "
 "GTK+‎. שימוש בו יכול לגרום ליישום להישבר או לקרוס."
@@ -3820,8 +3815,8 @@ msgstr "ניתן להקליד כאן כל הוראת CSS המוכרת על יד�
 
 #: gtk/inspector/css-editor.c:129
 msgid ""
-"You can temporarily disable this custom CSS by clicking on the “Pause” "
-"button above."
+"You can temporarily disable this custom CSS by clicking on the “Pause” button "
+"above."
 msgstr "ניתן להשבית באופן זמני CSS מותאם על ידי לחיצה על הכפתור „השהיה” מעל."
 
 #: gtk/inspector/css-editor.c:130
@@ -6372,8 +6367,7 @@ msgstr "_בחירה"
 msgid "Pag_es:"
 msgstr "_דפים:"
 
-#: gtk/print/ui/gtkprintunixdialog.ui:260
-#: gtk/print/ui/gtkprintunixdialog.ui:273
+#: gtk/print/ui/gtkprintunixdialog.ui:260 gtk/print/ui/gtkprintunixdialog.ui:273
 msgid ""
 "Specify one or more page ranges,\n"
 " e.g. 1–3, 7, 11"
@@ -6480,10 +6474,8 @@ msgid "A_t:"
 msgstr "_ב:"
 
 #. Ability to parse the am/pm format depends on actual locale. You can remove the am/pm values below for your locale if they are not supported.
-#: gtk/print/ui/gtkprintunixdialog.ui:903
-#: gtk/print/ui/gtkprintunixdialog.ui:905
-#: gtk/print/ui/gtkprintunixdialog.ui:921
-#: gtk/print/ui/gtkprintunixdialog.ui:923
+#: gtk/print/ui/gtkprintunixdialog.ui:903 gtk/print/ui/gtkprintunixdialog.ui:905
+#: gtk/print/ui/gtkprintunixdialog.ui:921 gtk/print/ui/gtkprintunixdialog.ui:923
 msgid ""
 "Specify the time of print,\n"
 " e.g. 15∶30, 2∶35 pm, 14∶15∶20, 11∶46∶30 am, 4 pm"
@@ -6496,8 +6488,7 @@ msgstr ""
 msgid "On _hold"
 msgstr "בהמ_תנה"
 
-#: gtk/print/ui/gtkprintunixdialog.ui:937
-#: gtk/print/ui/gtkprintunixdialog.ui:938
+#: gtk/print/ui/gtkprintunixdialog.ui:937 gtk/print/ui/gtkprintunixdialog.ui:938
 msgid "Hold the job until it is explicitly released"
 msgstr "החזקת המשימה עד שתשוחרר מפורשות"
 
@@ -7378,8 +7369,7 @@ msgstr ""
 "לא ניתן לטעון את „%s”: %s\n"
 "‬\n"
 
-#: tools/gtk-builder-tool-simplify.c:2466
-#: tools/gtk-builder-tool-simplify.c:2472
+#: tools/gtk-builder-tool-simplify.c:2466 tools/gtk-builder-tool-simplify.c:2472
 #: tools/gtk-builder-tool-simplify.c:2478
 #, c-format
 msgid "Can’t parse “%s”: %s\n"
@@ -8679,8 +8669,8 @@ msgstr ""
 #~ "צבע זה בעזרת המשולש הפנימי."
 
 #~ msgid ""
-#~ "Click the eyedropper, then click a color anywhere on your screen to "
-#~ "select that color."
+#~ "Click the eyedropper, then click a color anywhere on your screen to select "
+#~ "that color."
 #~ msgstr "יש ללחוץ על הטפטפת ואז ללחוץ על צבע כלשהו במסך לבחירת אותו הצבע."
 
 #~ msgid "_Hue:"
@@ -8732,8 +8722,8 @@ msgstr ""
 #~ "You can enter an HTML-style hexadecimal color value, or simply a color "
 #~ "name such as “orange” in this entry."
 #~ msgstr ""
-#~ "ניתן להזין ערך צבע הקסדצימלי בסגנון HTML, או פשוט לכתוב שם צבע באנגלית "
-#~ "כמו „orange” ברשומה זו."
+#~ "ניתן להזין ערך צבע הקסדצימלי בסגנון HTML, או פשוט לכתוב שם צבע באנגלית כמו "
+#~ "„orange” ברשומה זו."
 
 #~ msgid "_Palette:"
 #~ msgstr "_פלטה:"
@@ -9543,11 +9533,11 @@ msgstr ""
 #~ msgstr "smb://foo.example.com, ssh://192.168.0.1"
 
 #~ msgid ""
-#~ "The WGL_ARB_create_context extension needed to create core profiles is "
-#~ "not available"
+#~ "The WGL_ARB_create_context extension needed to create core profiles is not "
+#~ "available"
 #~ msgstr ""
-#~ "The WGL_ARB_create_context extension needed to create core profiles is "
-#~ "not available"
+#~ "The WGL_ARB_create_context extension needed to create core profiles is not "
+#~ "available"
 
 #~ msgid "Changes are applied instantly, only for this selected widget."
 #~ msgstr "שינויים מוחלקים מיידית, רק ליישומון נבחר זה."
@@ -10070,11 +10060,11 @@ msgstr ""
 #~ msgstr "Unable to load image-loading module: %s: %s"
 
 #~ msgid ""
-#~ "Image-loading module %s does not export the proper interface; perhaps "
-#~ "it's from a different GTK version?"
+#~ "Image-loading module %s does not export the proper interface; perhaps it's "
+#~ "from a different GTK version?"
 #~ msgstr ""
-#~ "Image-loading module %s does not export the proper interface; perhaps "
-#~ "it's from a different GTK version?"
+#~ "Image-loading module %s does not export the proper interface; perhaps it's "
+#~ "from a different GTK version?"
 
 #~ msgid "Couldn't recognize the image file format for file '%s'"
 #~ msgstr "לא ניתן לזהות את פורמט התמונה בקובץ '%s'"
@@ -10085,8 +10075,7 @@ msgstr ""
 #~ msgid "Error writing to image file: %s"
 #~ msgstr "שגיאה בכתיבה לקובץ תמונה: %s"
 
-#~ msgid ""
-#~ "This build of gdk-pixbuf does not support saving the image format: %s"
+#~ msgid "This build of gdk-pixbuf does not support saving the image format: %s"
 #~ msgstr "בניה זו של gdk-pixbuf לא תומכת בשמירת התמונה בפורמט: %s"
 
 #~ msgid "Insufficient memory to save image to callback"
@@ -10667,8 +10656,8 @@ msgstr ""
 #~ "available to this program.\n"
 #~ "Are you sure that you want to select it?"
 #~ msgstr ""
-#~ "הקובץ \"%s\" תלוי במכונה אחרת (הנקראת %s) וייתכן כי לא תיהיה זמינה "
-#~ "לתוכנית זו. האם אתה בטוח שברצונך לבחור אותו?"
+#~ "הקובץ \"%s\" תלוי במכונה אחרת (הנקראת %s) וייתכן כי לא תיהיה זמינה לתוכנית "
+#~ "זו. האם אתה בטוח שברצונך לבחור אותו?"
 
 #~ msgid "_New Folder"
 #~ msgstr "תיקייה _חדשה"
