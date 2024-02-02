@@ -532,7 +532,7 @@ gdk_wayland_toplevel_handle_configure (GdkWaylandSurface *wayland_surface)
           wayland_toplevel->next_layout.should_constrain = FALSE;
         }
 
-      wayland_toplevel->next_layout.size_is_fixed = fixed_size;
+      wayland_toplevel->next_layout.size_is_fixed = fixed_size && !is_resizing;
       wayland_surface->next_layout.configured_width = width;
       wayland_surface->next_layout.configured_height = height;
     }
