@@ -473,6 +473,20 @@ pango_underline_to_string (PangoUnderline value)
 }
 
 const char *
+pango_overline_to_string (PangoOverline value)
+{
+  switch (value)
+    {
+    case PANGO_OVERLINE_NONE:
+      return "none";
+    case PANGO_OVERLINE_SINGLE:
+      return "single";
+    default:
+      g_assert_not_reached ();
+    }
+}
+
+const char *
 pango_wrap_mode_to_string (PangoWrapMode mode)
 {
   /* Keep these in sync with gtk_wrap_mode_to_string() */
@@ -783,6 +797,13 @@ gtk_pango_get_run_attributes (PangoLayout     *layout,
     {
       g_ptr_array_add (names, g_strdup ("underline"));
       g_ptr_array_add (values, g_strdup (pango_underline_to_string (pango_int->value)));
+    }
+
+  pango_int = (PangoAttrInt *) pango_attr_iterator_get (iter, PANGO_ATTR_OVERLINE);
+  if (pango_int != NULL)
+    {
+      g_ptr_array_add (names, g_strdup ("overline"));
+      g_ptr_array_add (values, g_strdup (pango_overline_to_string (pango_int->value)));
     }
 
   pango_int = (PangoAttrInt *) pango_attr_iterator_get (iter, PANGO_ATTR_STRIKETHROUGH);
