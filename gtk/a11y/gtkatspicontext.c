@@ -23,6 +23,7 @@
 #include "gtkatspicontextprivate.h"
 
 #include "gtkaccessibleprivate.h"
+#include "gtkaccessibletext-private.h"
 
 #include "gtkatspiactionprivate.h"
 #include "gtkatspieditabletextprivate.h"
@@ -1154,8 +1155,8 @@ gtk_at_spi_context_state_change (GtkATContext                *ctx,
 
   if (changed_properties & GTK_ACCESSIBLE_PROPERTY_CHANGE_DESCRIPTION)
   {
-      char *label = gtk_at_context_get_description (GTK_AT_CONTEXT (self));                                            
-      GVariant *v = g_variant_new_take_string (label);                                                                 
+      char *label = gtk_at_context_get_description (GTK_AT_CONTEXT (self));
+      GVariant *v = g_variant_new_take_string (label);
       emit_property_changed (self, "accessible-description", v);
     }
 
@@ -1568,6 +1569,55 @@ gtk_at_spi_context_announce (GtkATContext                      *context,
 }
 
 static void
+gtk_at_spi_context_update_caret_position (GtkATContext *context)
+{
+  GtkAtSpiContext *self = GTK_AT_SPI_CONTEXT (context);
+  GtkAccessible *accessible = gtk_at_context_get_accessible (context);
+  GtkAccessibleText *accessible_text = GTK_ACCESSIBLE_TEXT (accessible);
+  guint offset;
+
+  if (self->connection == NULL)
+    return;
+
+  offset = gtk_accessible_text_get_caret_position (accessible_text);
+
+  g_dbus_connection_emit_signal (self->connection,
+                                 NULL,
+                                 self->context_path,
+                                 "org.a11y.atspi.Event.Object",
+                                 "TextCaretMoved",
+                                 g_variant_new ("(siiva{sv})",
+                                                "",
+                                                (int) offset,
+                                                0,
+                                                g_variant_new_string (""),
+                                                NULL),
+                                 NULL);
+}
+
+static void
+gtk_at_spi_context_update_selection_bound (GtkATContext *context)
+{
+  GtkAtSpiContext *self = GTK_AT_SPI_CONTEXT (context);
+
+  if (self->connection == NULL)
+    return;
+
+  g_dbus_connection_emit_signal (self->connection,
+                                 NULL,
+                                 self->context_path,
+                                 "org.a11y.atspi.Event.Object",
+                                 "TextSelectionChanged",
+                                 g_variant_new ("(siiva{sv})",
+                                                "",
+                                                0,
+                                                0,
+                                                g_variant_new_string (""),
+                                                NULL),
+                                 NULL);
+}
+
+static void
 gtk_at_spi_context_class_init (GtkAtSpiContextClass *klass)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
@@ -1582,6 +1632,8 @@ gtk_at_spi_context_class_init (GtkAtSpiContextClass *klass)
   context_class->bounds_change = gtk_at_spi_context_bounds_change;
   context_class->child_change = gtk_at_spi_context_child_change;
   context_class->announce = gtk_at_spi_context_announce;
+  context_class->update_caret_position = gtk_at_spi_context_update_caret_position;
+  context_class->update_selection_bound = gtk_at_spi_context_update_selection_bound;
 }
 
 static void
