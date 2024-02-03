@@ -1,6 +1,35 @@
 Overview of Changes in 4.13.7, xx-xx-xxxx
 =========================================
 
+* Accessibility:
+ - Add socket support for webkit accessibility
+
+* GSK:
+ - Make the ngl renderer work on macOS
+ - Fix a crash in the vulkan renderer
+ - Make nodeparser allow aliases for fonts again
+ - Implement cache eviction for the glyph and
+   texture caches
+
+* media:
+ - Support dmabufs in the gstreamer backend. This allows
+   zero-copy video playback on Wayland when paired with
+   hardware video decoding
+
+* Wayland:
+ - Commit empty frames if and double-buffered state
+   is pending
+ - Fix monitor size information when using mutter without
+   the scale-monitor-framebuffer setting
+
+* Tools:
+ - Make the crash handling in gtk4-node-editor more robust
+
+* Translation updates
+ Galician
+ Georgian
+
+
 Overview of Changes in 4.13.6, 25-01-2024
 =========================================
 
