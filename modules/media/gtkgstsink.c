@@ -358,12 +358,18 @@ video_frame_free (GstVideoFrame *frame)
 }
 
 static GdkTexture *
-gtk_gst_sink_texture_from_buffer (GtkGstSink *self,
-                                  GstBuffer  *buffer,
-                                  double     *pixel_aspect_ratio)
+gtk_gst_sink_texture_from_buffer (GtkGstSink      *self,
+                                  GstBuffer       *buffer,
+                                  double          *pixel_aspect_ratio,
+                                  graphene_rect_t *viewport)
 {
   GstVideoFrame *frame = g_new (GstVideoFrame, 1);
   GdkTexture *texture;
+
+  viewport->origin.x = 0;
+  viewport->origin.y = 0;
+  viewport->size.width = GST_VIDEO_INFO_WIDTH (&self->v_info);
+  viewport->size.height = GST_VIDEO_INFO_HEIGHT (&self->v_info);
 
 #ifdef HAVE_GSTREAMER_DRM
   if (gst_is_dmabuf_memory (gst_buffer_peek_memory (buffer, 0)))
@@ -384,9 +390,8 @@ gtk_gst_sink_texture_from_buffer (GtkGstSink *self,
       gdk_dmabuf_texture_builder_set_display (builder, gdk_gl_context_get_display (self->gdk_context));
       gdk_dmabuf_texture_builder_set_fourcc (builder, self->drm_info.drm_fourcc);
       gdk_dmabuf_texture_builder_set_modifier (builder, self->drm_info.drm_modifier);
-      // Padded width/height is set into the vmeta, perhaps we should import using these ?
-      gdk_dmabuf_texture_builder_set_width (builder, GST_VIDEO_INFO_WIDTH (&self->v_info));
-      gdk_dmabuf_texture_builder_set_height (builder, GST_VIDEO_INFO_HEIGHT (&self->v_info));
+      gdk_dmabuf_texture_builder_set_width (builder, vmeta->width);
+      gdk_dmabuf_texture_builder_set_height (builder, vmeta->height);
       gdk_dmabuf_texture_builder_set_n_planes (builder, vmeta->n_planes);
 
       for (i = 0; i < vmeta->n_planes; i++)
@@ -491,6 +496,7 @@ gtk_gst_sink_show_frame (GstVideoSink *vsink,
   GtkGstSink *self;
   GdkTexture *texture;
   double pixel_aspect_ratio;
+  graphene_rect_t viewport;
 
   GST_TRACE ("rendering buffer:%p", buf);
 
@@ -498,10 +504,10 @@ gtk_gst_sink_show_frame (GstVideoSink *vsink,
 
   GST_OBJECT_LOCK (self);
 
-  texture = gtk_gst_sink_texture_from_buffer (self, buf, &pixel_aspect_ratio);
+  texture = gtk_gst_sink_texture_from_buffer (self, buf, &pixel_aspect_ratio, &viewport);
   if (texture)
     {
-      gtk_gst_paintable_queue_set_texture (self->paintable, texture, pixel_aspect_ratio);
+      gtk_gst_paintable_queue_set_texture (self->paintable, texture, pixel_aspect_ratio, &viewport);
       g_object_unref (texture);
     }
 

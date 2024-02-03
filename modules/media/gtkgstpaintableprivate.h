@@ -20,6 +20,7 @@
 #pragma once
 
 #include <gdk/gdk.h>
+#include <graphene.h>
 
 G_BEGIN_DECLS
 
@@ -35,6 +36,7 @@ void            gtk_gst_paintable_unrealize             (GtkGstPaintable        
                                                          GdkSurface             *surface);
 void            gtk_gst_paintable_queue_set_texture     (GtkGstPaintable        *self,
                                                          GdkTexture             *texture,
-                                                         double                  pixel_aspect_ratio);
+                                                         double                  pixel_aspect_ratio,
+                                                         const graphene_rect_t  *viewport);
 
 G_END_DECLS
