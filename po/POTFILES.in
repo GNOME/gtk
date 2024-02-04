@@ -436,6 +436,7 @@ tools/gtk-path-tool-reverse.c
 tools/gtk-path-tool-show.c
 tools/gtk-path-tool-utils.c
 tools/gtk-rendernode-tool.c
+tools/gtk-rendernode-tool-benchmark.c
 tools/gtk-rendernode-tool-info.c
 tools/gtk-rendernode-tool-render.c
 tools/gtk-rendernode-tool-show.c
