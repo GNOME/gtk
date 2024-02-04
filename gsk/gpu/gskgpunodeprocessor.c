@@ -1318,7 +1318,8 @@ gsk_gpu_node_processor_add_node_clipped (GskGpuNodeProcessor   *self,
               gsk_gpu_clip_init_copy (&self->clip, &old_clip);
               return;
             }
-          else if (self->clip.type == GSK_GPU_CLIP_RECT)
+          else if (self->clip.type == GSK_GPU_CLIP_RECT &&
+                   gsk_rect_contains_rect (&self->clip.rect.bounds, &clip))
             {
               self->clip.type = GSK_GPU_CLIP_NONE;
             }
