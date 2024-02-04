@@ -93,7 +93,7 @@ do_benchmark (int          *argc,
   const GOptionEntry entries[] = {
     { "renderer", 0, 0, G_OPTION_ARG_STRING_ARRAY, &renderers, N_("Add renderer to benchmark"), N_("RENDERER") },
     { "runs", 0, 0, G_OPTION_ARG_INT, &runs, N_("Number of runs with each renderer"), N_("RUNS") },
-    { "no-download", 0, 0, G_OPTION_ARG_NONE, &nodownload, N_("Dont download result/wait for GPU to finish"), NULL },
+    { "no-download", 0, 0, G_OPTION_ARG_NONE, &nodownload, N_("Don’t download result/wait for GPU to finish"), NULL },
     { G_OPTION_REMAINING, 0, 0, G_OPTION_ARG_FILENAME_ARRAY, &filenames, NULL, N_("FILE…") },
     { NULL, }
   };
