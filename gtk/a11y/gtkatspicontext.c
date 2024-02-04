@@ -1618,6 +1618,68 @@ gtk_at_spi_context_update_selection_bound (GtkATContext *context)
 }
 
 static void
+gtk_at_spi_context_update_text_contents (GtkATContext *context,
+                                         GtkAccessibleTextContentChange change,
+                                         unsigned int start,
+                                         unsigned int end)
+{
+  GtkAtSpiContext *self = GTK_AT_SPI_CONTEXT (context);
+
+  if (self->connection == NULL)
+    return;
+
+  GtkAccessible *accessible = gtk_at_context_get_accessible (context);
+  if (!GTK_IS_ACCESSIBLE_TEXT (accessible))
+    return;
+
+  const char *kind = "";
+
+  switch (change)
+    {
+    case GTK_ACCESSIBLE_TEXT_CONTENT_CHANGE_INSERT:
+      kind = "insert";
+      break;
+
+    case GTK_ACCESSIBLE_TEXT_CONTENT_CHANGE_REMOVE:
+      kind = "delete";
+      break;
+
+    default:
+      g_assert_not_reached ();
+    }
+
+  /* Retrieve the text using the given range */
+  GBytes *contents = gtk_accessible_text_get_contents (GTK_ACCESSIBLE_TEXT (accessible),
+                                                       start, end);
+  if (contents == NULL)
+    goto out;
+
+  const char *text = g_bytes_get_data (contents, NULL);
+  if (text == NULL)
+    goto out;
+
+  /* Using G_MAXUINT in GTK maps to the text length */
+  if (end == G_MAXUINT)
+    end = g_utf8_strlen (text, -1);
+
+  g_dbus_connection_emit_signal (self->connection,
+                                 NULL,
+                                 self->context_path,
+                                 "org.a11y.atspi.Event.Object",
+                                 "TextChanged",
+                                 g_variant_new ("(siiva{sv})",
+                                                kind,
+                                                start,
+                                                end - start,
+                                                g_variant_new_string (text),
+                                                NULL),
+                                 NULL);
+
+out:
+  g_clear_pointer (&contents, g_bytes_unref);
+}
+
+static void
 gtk_at_spi_context_class_init (GtkAtSpiContextClass *klass)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
@@ -1634,6 +1696,7 @@ gtk_at_spi_context_class_init (GtkAtSpiContextClass *klass)
   context_class->announce = gtk_at_spi_context_announce;
   context_class->update_caret_position = gtk_at_spi_context_update_caret_position;
   context_class->update_selection_bound = gtk_at_spi_context_update_selection_bound;
+  context_class->update_text_contents = gtk_at_spi_context_update_text_contents;
 }
 
 static void
