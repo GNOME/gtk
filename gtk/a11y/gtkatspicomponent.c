@@ -24,6 +24,7 @@
 
 #include "gtkatspicontextprivate.h"
 #include "gtkatspiprivate.h"
+#include "gtkatspisocket.h"
 #include "gtkatspiutilsprivate.h"
 #include "gtkaccessibleprivate.h"
 #include "gtkpopover.h"
@@ -35,6 +36,24 @@
 #include "gtkdebug.h"
 
 #include <gio/gio.h>
+
+static GtkWidget *
+find_first_accessible_widget (GtkAccessible *accessible)
+{
+  GtkAccessible *parent = gtk_accessible_get_accessible_parent (accessible);
+
+  while (parent != NULL)
+    {
+      g_object_unref (parent);
+
+      if (GTK_IS_WIDGET (parent))
+        return GTK_WIDGET (parent);
+
+      parent = gtk_accessible_get_accessible_parent (parent);
+    }
+
+  return NULL;
+}
 
 static void
 translate_coordinates_to_widget (GtkWidget      *widget,
@@ -122,7 +141,16 @@ component_handle_method (GDBusConnection       *connection,
 {
   GtkATContext *self = user_data;
   GtkAccessible *accessible = gtk_at_context_get_accessible (self);
-  GtkWidget *widget = GTK_WIDGET (accessible);
+  GtkWidget *widget;
+
+  if (GTK_IS_WIDGET (accessible))
+    widget = GTK_WIDGET (accessible);
+  else if (GTK_IS_AT_SPI_SOCKET (accessible))
+    widget = find_first_accessible_widget (accessible);
+  else
+    g_assert_not_reached ();
+
+  g_assert (widget != NULL);
 
   if (g_strcmp0 (method_name, "Contains") == 0)
     {
@@ -249,7 +277,7 @@ static const GDBusInterfaceVTable component_vtable = {
 const GDBusInterfaceVTable *
 gtk_atspi_get_component_vtable (GtkAccessible *accessible)
 {
-  if (GTK_IS_WIDGET (accessible))
+  if (GTK_IS_WIDGET (accessible) || GTK_IS_AT_SPI_SOCKET (accessible))
     return &component_vtable;
 
   return NULL;
