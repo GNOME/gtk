@@ -1795,7 +1795,7 @@ static TranslationEntry translations[] = {
   { FALSE, "org.gnome.desktop.wm.preferences", "action-middle-click-titlebar", "gtk-titlebar-middle-click", G_TYPE_STRING, { .s = "none" } },
   { FALSE, "org.gnome.desktop.wm.preferences", "action-right-click-titlebar", "gtk-titlebar-right-click", G_TYPE_STRING, { .s = "menu" } },
   { FALSE, "org.gnome.desktop.a11y", "always-show-text-caret", "gtk-keynav-use-caret", G_TYPE_BOOLEAN, { .b = FALSE } },
-  { FALSE, "org.gnome.desktop.a11y.interface", "high-contrast", "high-contast", G_TYPE_NONE, { .b = FALSE } },
+  { FALSE, "org.gnome.desktop.a11y.interface", "high-contrast", "high-contrast", G_TYPE_NONE, { .b = FALSE } },
   { FALSE, "org.gnome.desktop.a11y.interface", "show-status-shapes", "gtk-show-status-shapes", G_TYPE_BOOLEAN, { .b = FALSE } },
   /* Note, this setting doesn't exist, the portal and gsd fake it */
   { FALSE, "org.gnome.fontconfig", "serial", "gtk-fontconfig-timestamp", G_TYPE_NONE, { .i = 0 } },
