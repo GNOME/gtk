@@ -893,7 +893,7 @@ foreach a11y_backend: gtk_a11y_backends
     filebase: pkg,
     unescaped_variables: common_pc_variables,
     name: 'GTK',
-    description: 'GTK Accessibility support',
+    description: gtk_a11y_backend_info[a11y_backend]['description'],
     requires: ['gtk4', get_variable('@0@_public_deps'.format(a11y_backend), [])],
   )
   meson.override_dependency(pkg, libgtk_dep)
