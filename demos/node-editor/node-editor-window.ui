@@ -213,6 +213,7 @@
                         <property name="halign">1</property>
                         <property name="label" translatable="1">The application may have crashed.
 As a precaution, auto-loading has been turned off.
+You can turn it back on in the menu.
 </property>
                       </object>
                     </child>
