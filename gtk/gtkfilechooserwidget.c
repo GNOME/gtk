@@ -3723,21 +3723,25 @@ my_g_format_date_for_display (GtkFileChooserWidget *impl,
 {
   GDateTime *now, *time;
   GDateTime *now_date, *date;
+  GTimeZone *tz;
   const char *format;
   char *date_str;
   int days_ago;
 
+  tz = g_time_zone_new_local ();
   time = g_date_time_new_from_unix_local (secs);
-  date = g_date_time_new_local (g_date_time_get_year (time),
-                                g_date_time_get_month (time),
-                                g_date_time_get_day_of_month (time),
-                                0, 0, 0);
+  date = g_date_time_new (tz,
+                          g_date_time_get_year (time),
+                          g_date_time_get_month (time),
+                          g_date_time_get_day_of_month (time),
+                          0, 0, 0);
 
-  now = g_date_time_new_now_local ();
-  now_date = g_date_time_new_local (g_date_time_get_year (now),
-                                    g_date_time_get_month (now),
-                                    g_date_time_get_day_of_month (now),
-                                    0, 0, 0);
+  now = g_date_time_new_now (tz);
+  now_date = g_date_time_new (tz,
+                              g_date_time_get_year (now),
+                              g_date_time_get_month (now),
+                              g_date_time_get_day_of_month (now),
+                              0, 0, 0);
   days_ago = g_date_time_difference (now_date, date) / G_TIME_SPAN_DAY;
 
   if (days_ago < 1)
