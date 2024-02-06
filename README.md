@@ -12,10 +12,6 @@ Contents
 ├── atk
 │   ├── atk
 │   └── atspi2
-├── glib
-│   ├── gio
-│   ├── glib
-│   └── gobject
 ├── gtk3
 │   ├── gdk
 │   └── gtk
