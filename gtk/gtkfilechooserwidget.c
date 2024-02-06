@@ -639,6 +639,7 @@ _gtk_file_chooser_extract_recent_folders (GList *infos)
   GList *l;
   GList *result;
   GHashTable *folders;
+  guint counter = 0;
 
   result = NULL;
 
@@ -650,6 +651,9 @@ _gtk_file_chooser_extract_recent_folders (GList *infos)
       const char *uri, *mime_type;
       GFile *dir;
       GFile *file;
+
+      if (counter >= DEFAULT_RECENT_FILES_LIMIT)
+        break;
 
       if (!gtk_recent_info_is_local (info))
         continue;
@@ -674,6 +678,7 @@ _gtk_file_chooser_extract_recent_folders (GList *infos)
             {
               g_hash_table_insert (folders, dir, (gpointer) 1);
               result = g_list_prepend (result, g_object_ref (dir));
+              counter++;
             }
 
           g_object_unref (dir);
