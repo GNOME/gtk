@@ -217,3 +217,41 @@ gdk_dmabuf_formats_peek_formats (GdkDmabufFormats *self)
 {
   return self->formats;
 }
+
+/**
+ * gdk_dmabuf_formats_equal:
+ * @formats1: (nullable): a `GdkDmabufFormats`
+ * @formats2: (nullable): another `GdkDmabufFormats`
+ *
+ * Returns whether @formats1 and @formats2 contain the
+ * same dmabuf formats, in the same order.
+ *
+ * Returns: `TRUE` if @formats1 and @formats2 are equal
+ *
+ * Since: 4.14
+ */
+gboolean
+gdk_dmabuf_formats_equal (const GdkDmabufFormats *formats1,
+                          const GdkDmabufFormats *formats2)
+{
+  if (formats1 == formats2)
+    return TRUE;
+
+  if (formats1 == NULL || formats2 == NULL)
+    return FALSE;
+
+  if (formats1->n_formats != formats2->n_formats)
+    return FALSE;
+
+  for (gsize i = 0; i < formats1->n_formats; i++)
+    {
+      GdkDmabufFormat *f1 = &formats1->formats[i];
+      GdkDmabufFormat *f2 = &formats2->formats[i];
+
+      if (f1->fourcc != f2->fourcc ||
+          f1->modifier != f2->modifier)
+        return FALSE;
+    }
+
+  return TRUE;
+}
