@@ -887,6 +887,18 @@ foreach backend: enabled_backends
   meson.override_dependency(pkg, libgtk_dep)
 endforeach
 
+foreach a11y_backend: gtk_a11y_backends
+  pkg = 'gtk4-@0@'.format(a11y_backend)
+  pkg_config.generate(
+    filebase: pkg,
+    unescaped_variables: common_pc_variables,
+    name: 'GTK',
+    description: gtk_a11y_backend_info[a11y_backend]['description'],
+    requires: ['gtk4', get_variable('@0@_public_deps'.format(a11y_backend), [])],
+  )
+  meson.override_dependency(pkg, libgtk_dep)
+endforeach
+
 if os_unix
   pkg_config.generate(
     filebase: 'gtk4-unix-print',

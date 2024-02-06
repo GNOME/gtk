@@ -29,6 +29,7 @@
 #include "gtkatspiprivate.h"
 #include "gtkatspirootprivate.h"
 #include "gtkatspiselectionprivate.h"
+#include "gtkatspisocketprivate.h"
 #include "gtkatspitextprivate.h"
 #include "gtkatspiutilsprivate.h"
 #include "gtkatspivalueprivate.h"
@@ -576,6 +577,15 @@ handle_accessible_method (GDBusConnection       *connection,
 
       accessible = gtk_at_context_get_accessible (GTK_AT_CONTEXT (self));
 
+      if (GTK_IS_AT_SPI_SOCKET (accessible))
+        {
+          GtkAtSpiSocket *socket = GTK_AT_SPI_SOCKET (accessible);
+          GVariant *ref = gtk_at_spi_socket_to_ref (socket);
+
+          g_dbus_method_invocation_return_value (invocation, g_variant_new ("(@(so))", ref));
+          return;
+        }
+
       presentable_idx = 0;
 
       for (child = gtk_accessible_get_first_accessible_child (accessible);
@@ -619,6 +629,13 @@ handle_accessible_method (GDBusConnection       *connection,
 
       GtkAccessible *accessible = gtk_at_context_get_accessible (GTK_AT_CONTEXT (self));
       GtkAccessible *child = NULL;
+
+      if (GTK_IS_AT_SPI_SOCKET (accessible))
+        {
+          GtkAtSpiSocket *socket = GTK_AT_SPI_SOCKET (accessible);
+          GVariant *ref = gtk_at_spi_socket_to_ref (socket);
+          g_variant_builder_add (&builder, "@(so)", ref);
+        }
 
       for (child = gtk_accessible_get_first_accessible_child (accessible);
            child != NULL;
@@ -1370,6 +1387,18 @@ gtk_at_spi_context_register_object (GtkAtSpiContext *self)
   GTK_DEBUG (A11Y, "Registered %d interfaces on object path '%s'",
                    self->n_registered_objects,
                    self->context_path);
+
+  if (GTK_IS_AT_SPI_SOCKET (accessible))
+    {
+      GtkAtSpiSocket *socket = GTK_AT_SPI_SOCKET (accessible);
+
+      gtk_at_spi_socket_embed (socket, self->connection);
+
+      GTK_DEBUG (A11Y, "Embedded plug %s:%s in socket %s",
+                 gtk_at_spi_socket_get_bus_name (socket),
+                 gtk_at_spi_socket_get_object_path (socket),
+                 self->context_path);
+    }
 }
 
 static void
@@ -1806,6 +1835,10 @@ gtk_at_spi_context_get_child_count (GtkAtSpiContext *self)
 
   GtkAccessible *accessible = gtk_at_context_get_accessible (GTK_AT_CONTEXT (self));
   int n_children = 0;
+
+  /* A socket always has exactly one child: the remote plug */
+  if (GTK_IS_AT_SPI_SOCKET (accessible))
+    return 1;
 
   GtkAccessible *child = NULL;
   for (child = gtk_accessible_get_first_accessible_child (accessible);
