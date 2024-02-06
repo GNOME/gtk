@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ HEAD\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2024-01-13 17:20+0000\n"
-"PO-Revision-Date: 2024-01-13 19:42+0100\n"
+"POT-Creation-Date: 2024-02-06 16:52+0000\n"
+"PO-Revision-Date: 2024-02-06 21:10+0100\n"
 "Last-Translator: Quentin PAGÈS\n"
 "Language-Team: Tot En Òc\n"
 "Language: oc\n"
@@ -49,41 +49,41 @@ msgstr "Impossible de legir lo contengut de %s"
 msgid "Cannot provide contents as %s"
 msgstr "Impossible de legir lo contengut de %s"
 
-#: gdk/gdkdisplay.c:170 gdk/gdkglcontext.c:462
+#: gdk/gdkdisplay.c:176 gdk/gdkglcontext.c:462
 msgid "The current backend does not support OpenGL"
 msgstr "Lo motor actual gerís pas OpenGL"
 
-#: gdk/gdkdisplay.c:1296 gdk/gdkvulkancontext.c:1581
+#: gdk/gdkdisplay.c:1315 gdk/gdkvulkancontext.c:1581
 #, fuzzy
 #| msgid "GL support disabled via GDK_DEBUG"
 msgid "Vulkan support disabled via GDK_DEBUG"
 msgstr "Presa en carga de GL desactivada via GDK_DEBUG"
 
-#: gdk/gdkdisplay.c:1350
+#: gdk/gdkdisplay.c:1369
 msgid "GL support disabled via GDK_DEBUG"
 msgstr "Presa en carga de GL desactivada via GDK_DEBUG"
 
-#: gdk/gdkdisplay.c:1646
+#: gdk/gdkdisplay.c:1665
 #, fuzzy
 #| msgid "No GL implementation is available"
 msgid "No EGL configuration available"
 msgstr "Pas cap d'implementacion GL disponibla"
 
-#: gdk/gdkdisplay.c:1654
+#: gdk/gdkdisplay.c:1673
 msgid "Failed to get EGL configurations"
 msgstr ""
 
-#: gdk/gdkdisplay.c:1684
+#: gdk/gdkdisplay.c:1703
 msgid "No EGL configuration with required features found"
 msgstr ""
 
-#: gdk/gdkdisplay.c:1691
+#: gdk/gdkdisplay.c:1710
 #, fuzzy
 #| msgid "No network locations found"
 msgid "No perfect EGL configuration found"
 msgstr "Cap d'emplaçament de ret pas trobat"
 
-#: gdk/gdkdisplay.c:1733
+#: gdk/gdkdisplay.c:1752
 #, fuzzy, c-format
 #| msgid "No GL implementation is available"
 msgid "EGL implementation is missing extension %s"
@@ -91,27 +91,27 @@ msgid_plural "EGL implementation is missing %2$d extensions: %1$s"
 msgstr[0] "Pas cap d'implementacion GL disponibla"
 msgstr[1] "Pas cap d'implementacion GL disponibla"
 
-#: gdk/gdkdisplay.c:1783
+#: gdk/gdkdisplay.c:1801
 msgid "libEGL not available in this sandbox"
 msgstr ""
 
-#: gdk/gdkdisplay.c:1784
+#: gdk/gdkdisplay.c:1802
 #, fuzzy
 #| msgid "Not available"
 msgid "libEGL not available"
 msgstr "Pas disponible"
 
-#: gdk/gdkdisplay.c:1794
+#: gdk/gdkdisplay.c:1812
 #, fuzzy
 #| msgid "Failed to rewrite header\n"
 msgid "Failed to create EGL display"
 msgstr "Impossible de reescriure l'entèsta\n"
 
-#: gdk/gdkdisplay.c:1804
+#: gdk/gdkdisplay.c:1821
 msgid "Could not initialize EGL display"
 msgstr ""
 
-#: gdk/gdkdisplay.c:1815
+#: gdk/gdkdisplay.c:1831
 #, c-format
 msgid "EGL version %d.%d is too old. GTK requires %d.%d"
 msgstr ""
@@ -128,9 +128,9 @@ msgstr ""
 msgid "No GL API allowed."
 msgstr ""
 
-#: gdk/gdkglcontext.c:445 gdk/win32/gdkglcontext-win32-wgl.c:381
-#: gdk/win32/gdkglcontext-win32-wgl.c:524
-#: gdk/win32/gdkglcontext-win32-wgl.c:568 gdk/x11/gdkglcontext-glx.c:688
+#: gdk/gdkglcontext.c:445 gdk/win32/gdkglcontext-win32-wgl.c:386
+#: gdk/win32/gdkglcontext-win32-wgl.c:529
+#: gdk/win32/gdkglcontext-win32-wgl.c:573 gdk/x11/gdkglcontext-glx.c:688
 msgid "Unable to create a GL context"
 msgstr "Impossible de crear un contèxte GL"
 
@@ -153,16 +153,14 @@ msgstr ""
 
 #. translators: This is about OpenGL backend names, like
 #. * "Trying to use X11 GLX, but EGL is already in use"
-#: gdk/gdkglcontext.c:2124
+#: gdk/gdkglcontext.c:2115
 #, c-format
 msgid "Trying to use %s, but %s is already in use"
 msgstr ""
 
 #: gdk/gdktexture.c:580
-#, fuzzy
-#| msgid "Unknown item"
 msgid "Unknown image format."
-msgstr "Element desconegut"
+msgstr "Element desconegut."
 
 #.
 #. * Translators, the strings in the “keyboard label” context are
@@ -721,21 +719,21 @@ msgstr ""
 msgid "Failed to transmute DnD data W32 format 0x%x to %p (%s)"
 msgstr ""
 
-#: gdk/win32/gdkglcontext-win32-wgl.c:315
+#: gdk/win32/gdkglcontext-win32-wgl.c:320
 msgid "No GL implementation is available"
 msgstr "Pas cap d'implementacion GL disponibla"
 
-#: gdk/win32/gdkglcontext-win32-wgl.c:390
+#: gdk/win32/gdkglcontext-win32-wgl.c:395
 #, c-format
 msgid "WGL version %d.%d is too low, need at least %d.%d"
 msgstr ""
 
-#: gdk/win32/gdkglcontext-win32-wgl.c:408
+#: gdk/win32/gdkglcontext-win32-wgl.c:413
 #, c-format
 msgid "GL implementation cannot share GL contexts"
 msgstr ""
 
-#: gdk/win32/gdkglcontext-win32-wgl.c:688
+#: gdk/win32/gdkglcontext-win32-wgl.c:693
 msgid "No available configurations for the given pixel format"
 msgstr "Pas de configuracion disponibla pel format de pixèl donat"
 
@@ -847,7 +845,7 @@ msgstr "Dobertura de « %s »."
 msgid "This GLES %d.%d implementation does not support half-float vertex data"
 msgstr ""
 
-#: gsk/gpu/gskgldevice.c:238
+#: gsk/gpu/gskgldevice.c:245
 #, c-format
 msgid "OpenGL ES 2.0 is not supported by this renderer."
 msgstr ""
@@ -858,25 +856,16 @@ msgid "Click"
 msgstr "Clicar"
 
 #: gtk/a11y/gtkatspiaction.c:240
-#, fuzzy
-#| msgctxt "Action description"
-#| msgid "Clicks the button"
 msgctxt "accessibility"
 msgid "Clicks the button"
 msgstr "Clica sul boton"
 
 #: gtk/a11y/gtkatspiaction.c:290
-#, fuzzy
-#| msgctxt "Action name"
-#| msgid "Toggle"
 msgctxt "accessibility"
 msgid "Toggle"
-msgstr "Inversar"
+msgstr "Bascular"
 
 #: gtk/a11y/gtkatspiaction.c:291
-#, fuzzy
-#| msgctxt "Action description"
-#| msgid "Toggles the switch"
 msgctxt "accessibility"
 msgid "Toggles the switch"
 msgstr "Invèrsa la comanda"
@@ -887,9 +876,6 @@ msgid "Select"
 msgstr "Seleccionar"
 
 #: gtk/a11y/gtkatspiaction.c:372
-#, fuzzy
-#| msgctxt "Action description"
-#| msgid "Selects the color"
 msgctxt "accessibility"
 msgid "Selects the color"
 msgstr "Selecciona la color"
@@ -910,17 +896,11 @@ msgid "Activates the color"
 msgstr "Activa la color"
 
 #: gtk/a11y/gtkatspiaction.c:387
-#, fuzzy
-#| msgctxt "Action name"
-#| msgid "Customize"
 msgctxt "accessibility"
 msgid "Customize"
 msgstr "Personalizar"
 
 #: gtk/a11y/gtkatspiaction.c:388
-#, fuzzy
-#| msgctxt "Action description"
-#| msgid "Customizes the color"
 msgctxt "accessibility"
 msgid "Customizes the color"
 msgstr "Personaliza la color"
@@ -935,9 +915,6 @@ msgstr "Activa l'icòna d'extension"
 
 #: gtk/a11y/gtkatspiaction.c:496 gtk/a11y/gtkatspiaction.c:604
 #: gtk/a11y/gtkatspiaction.c:691
-#, fuzzy
-#| msgctxt "Action description"
-#| msgid "Activates the entry"
 msgctxt "accessibility"
 msgid "Activates the entry"
 msgstr "Activa l'entrada"
@@ -977,11 +954,9 @@ msgid "Peek"
 msgstr ""
 
 #: gtk/a11y/gtkatspiaction.c:612
-#, fuzzy
-#| msgid "Browse the contents of the network"
 msgctxt "accessibility"
 msgid "Shows the contents of the password entry"
-msgstr "Percor lo contengut de la ret"
+msgstr "Aficha lo contengut de l’entrada del senhal"
 
 #: gtk/a11y/gtkatspiaction.c:698
 msgctxt "accessibility"
@@ -989,11 +964,9 @@ msgid "Clear"
 msgstr "Escafar"
 
 #: gtk/a11y/gtkatspiaction.c:699
-#, fuzzy
-#| msgid "Browse the contents of the network"
 msgctxt "accessibility"
 msgid "Clears the contents of the entry"
-msgstr "Percor lo contengut de la ret"
+msgstr "Escafa lo contengut de l’entrada"
 
 #: gtk/a11y/gtkatspiroot.c:256 gtk/gtkaccessible.c:834
 msgctxt "accessibility"
@@ -1064,14 +1037,10 @@ msgid "No apps found for “%s”."
 msgstr "Cap d'aplicacion pas trobada per « %s »."
 
 #: gtk/deprecated/gtkappchooserwidget.c:658
-#, fuzzy
-#| msgid "Recommended Applications"
 msgid "Recommended Apps"
 msgstr "Aplicacions recomandadas"
 
 #: gtk/deprecated/gtkappchooserwidget.c:673
-#, fuzzy
-#| msgid "Related Applications"
 msgid "Related Apps"
 msgstr "Aplicacions aparentadas"
 
@@ -1414,12 +1383,9 @@ msgid "alert dialog"
 msgstr ""
 
 #: gtk/gtkaccessible.c:757
-#, fuzzy
-#| msgctxt "throbbing progress animation widget"
-#| msgid "Spinner"
 msgctxt "accessibility"
 msgid "banner"
-msgstr "Indicador d'activitat"
+msgstr "bandièra"
 
 #: gtk/gtkaccessible.c:758
 msgctxt "accessibility"
@@ -1427,11 +1393,9 @@ msgid "button"
 msgstr "boton"
 
 #: gtk/gtkaccessible.c:759
-#, fuzzy
-#| msgid "Location"
 msgctxt "accessibility"
 msgid "caption"
-msgstr "Emplaçament"
+msgstr "legenda"
 
 #: gtk/gtkaccessible.c:760
 msgctxt "accessibility"
@@ -1454,11 +1418,9 @@ msgid "combo box"
 msgstr "bóstia combinada"
 
 #: gtk/gtkaccessible.c:764
-#, fuzzy
-#| msgid "Top Command"
 msgctxt "accessibility"
 msgid "command"
-msgstr "Comanda top"
+msgstr "comanda"
 
 #: gtk/gtkaccessible.c:765
 #, fuzzy
@@ -1473,11 +1435,9 @@ msgid "dialog"
 msgstr "bóstia de dialòg"
 
 #: gtk/gtkaccessible.c:767
-#, fuzzy
-#| msgid "Documented by"
 msgctxt "accessibility"
 msgid "document"
-msgstr "Documentat per"
+msgstr "document"
 
 #: gtk/gtkaccessible.c:768
 msgctxt "accessibility"
@@ -1510,11 +1470,9 @@ msgid "group"
 msgstr "grop"
 
 #: gtk/gtkaccessible.c:774
-#, fuzzy
-#| msgid "Recording"
 msgctxt "accessibility"
 msgid "heading"
-msgstr "Enregistrament"
+msgstr "títol"
 
 #: gtk/gtkaccessible.c:775
 msgctxt "accessibility"
@@ -1652,12 +1610,9 @@ msgid "radio group"
 msgstr "grop de botons ràdio"
 
 #: gtk/gtkaccessible.c:802
-#, fuzzy
-#| msgctxt "Color name"
-#| msgid "Orange"
 msgctxt "accessibility"
 msgid "range"
-msgstr "Irange"
+msgstr "plaja"
 
 #: gtk/gtkaccessible.c:803
 msgctxt "accessibility"
@@ -1690,11 +1645,9 @@ msgid "search"
 msgstr "recercar"
 
 #: gtk/gtkaccessible.c:809
-#, fuzzy
-#| msgid "Search"
 msgctxt "accessibility"
 msgid "search box"
-msgstr "Recercar"
+msgstr "fenèstra de recèrca"
 
 #: gtk/gtkaccessible.c:810
 msgctxt "accessibility"
@@ -1742,12 +1695,9 @@ msgid "switch"
 msgstr ""
 
 #: gtk/gtkaccessible.c:819
-#, fuzzy
-#| msgctxt "keyboard label"
-#| msgid "Tab"
 msgctxt "accessibility"
 msgid "tab"
-msgstr "Tabulacion"
+msgstr "tabulacion"
 
 #: gtk/gtkaccessible.c:820
 msgctxt "accessibility"
@@ -1800,11 +1750,9 @@ msgid "tree grid"
 msgstr ""
 
 #: gtk/gtkaccessible.c:830
-#, fuzzy
-#| msgid "Could not remove item"
 msgctxt "accessibility"
 msgid "tree item"
-msgstr "Impossible de suprimir l'element"
+msgstr "element arborescent"
 
 #: gtk/gtkaccessible.c:831
 msgctxt "accessibility"
@@ -2178,10 +2126,8 @@ msgid "Custom"
 msgstr "Personalizada"
 
 #: gtk/gtkcolorchooserwidget.c:571
-#, fuzzy
-#| msgid "Color"
 msgid "Add Color"
-msgstr "Color"
+msgstr "Apondre la color"
 
 #: gtk/gtkcolorchooserwidget.c:593
 #, c-format
@@ -2189,9 +2135,6 @@ msgid "Custom color %d: %s"
 msgstr "Color personalizada %d : %s"
 
 #: gtk/gtkcolorswatch.c:230
-#, fuzzy
-#| msgctxt "Action name"
-#| msgid "Customize"
 msgid "Customize"
 msgstr "Personalizar"
 
@@ -2331,7 +2274,7 @@ msgstr "Un fichièr amb aqueste nom existís ja"
 #: gtk/gtkmessagedialog.c:179 gtk/gtkmountoperation.c:608
 #: gtk/print/gtkpagesetupunixdialog.c:282 gtk/print/gtkprintbackend.c:638
 #: gtk/print/gtkprintunixdialog.c:682 gtk/print/gtkprintunixdialog.c:839
-#: gtk/gtkwindow.c:6253 gtk/ui/gtkappchooserdialog.ui:48
+#: gtk/gtkwindow.c:6257 gtk/ui/gtkappchooserdialog.ui:48
 #: gtk/ui/gtkassistant.ui:52 gtk/ui/gtkcolorchooserdialog.ui:36
 #: gtk/ui/gtkfontchooserdialog.ui:27
 msgid "_Cancel"
@@ -2421,7 +2364,7 @@ msgid "If you delete an item, it will be permanently lost."
 msgstr "Se suprimissètz un element, serà perdut per totjorn."
 
 #: gtk/gtkfilechooserwidget.c:1183 gtk/gtkfilechooserwidget.c:1781
-#: gtk/gtklabel.c:5697 gtk/gtktext.c:6147 gtk/gtktextview.c:9018
+#: gtk/gtklabel.c:5702 gtk/gtktext.c:6147 gtk/gtktextview.c:9018
 msgid "_Delete"
 msgstr "_Suprimir"
 
@@ -2552,7 +2495,7 @@ msgstr "Programa"
 msgid "Audio"
 msgstr "Àudio"
 
-#: gtk/gtkfilechooserwidget.c:3807 gtk/gtkfilefilter.c:1032
+#: gtk/gtkfilechooserwidget.c:3807 gtk/gtkfilefilter.c:1013
 msgid "Image"
 msgstr "Imatge"
 
@@ -2590,7 +2533,7 @@ msgstr "Presentacion"
 
 #: gtk/gtkfilechooserwidget.c:3818
 msgid "Spreadsheet"
-msgstr ""
+msgstr "Fuèlh de calcul"
 
 #: gtk/gtkfilechooserwidget.c:4956 gtk/print/gtkprintunixdialog.c:673
 #, c-format
@@ -2620,20 +2563,16 @@ msgid "Accessed"
 msgstr "Accessible"
 
 #: gtk/gtkfilechooserwidget.c:7352
-#, fuzzy
-#| msgid "Size"
 msgid "_Size"
-msgstr "Talha"
+msgstr "_Talha"
 
 #: gtk/gtkfilechooserwidget.c:7356
 msgid "T_ype"
-msgstr ""
+msgstr "T_ipe"
 
 #: gtk/gtkfilechooserwidget.c:7360
-#, fuzzy
-#| msgid "Show _Time"
 msgid "_Time"
-msgstr "Afichar l'_ora"
+msgstr "_Ora"
 
 #: gtk/gtkfilechooserwidget.c:7366 gtk/gtkplacessidebar.c:2306
 #: gtk/inspector/a11y.ui:43 gtk/inspector/actions.ui:19
@@ -2659,16 +2598,12 @@ msgid "Pick Files"
 msgstr "Fichièrs"
 
 #: gtk/gtkfiledialog.c:816
-#, fuzzy
-#| msgid "Pick a Font"
 msgid "Pick a File"
-msgstr "Causissètz una poliça"
+msgstr "Causir un fichièr"
 
 #: gtk/gtkfiledialog.c:821
-#, fuzzy
-#| msgid "Select a File"
 msgid "Save a File"
-msgstr "Seleccionar un fichièr"
+msgstr "Enregistrar un fichièr"
 
 #: gtk/gtkfiledialog.c:825 gtk/ui/gtkappchooserdialog.ui:53
 #: gtk/ui/gtkcolorchooserdialog.ui:41 gtk/ui/gtkfontchooserdialog.ui:32
@@ -2676,22 +2611,16 @@ msgid "_Select"
 msgstr "_Seleccionar"
 
 #: gtk/gtkfiledialog.c:826
-#, fuzzy
-#| msgid "Select a File"
 msgid "Select Folders"
-msgstr "Seleccionar un fichièr"
+msgstr "Seleccionar los dossièrs"
 
 #: gtk/gtkfiledialog.c:826
-#, fuzzy
-#| msgid "Select a File"
 msgid "Select a Folder"
-msgstr "Seleccionar un fichièr"
+msgstr "Seleccionar un dossièr"
 
-#: gtk/gtkfilefilter.c:1045
-#, fuzzy
-#| msgid "Unspecified error"
+#: gtk/gtkfilefilter.c:1026
 msgid "Unspecified"
-msgstr "Error pas precisada"
+msgstr "Non especificat"
 
 #: gtk/gtkfontchooserdialog.c:192 gtk/gtkfontchooserdialog.c:195
 #, fuzzy
@@ -2739,11 +2668,8 @@ msgid "Default"
 msgstr "Per defaut"
 
 #: gtk/gtkfontchooserwidget.c:2519
-#, fuzzy
-#| msgctxt "event phase"
-#| msgid "Capture"
 msgid "Ligatures"
-msgstr "Captura"
+msgstr "Ligaduras"
 
 #: gtk/gtkfontchooserwidget.c:2520
 #, fuzzy
@@ -2761,10 +2687,8 @@ msgid "Number Spacing"
 msgstr ""
 
 #: gtk/gtkfontchooserwidget.c:2523
-#, fuzzy
-#| msgid "Actions"
 msgid "Fractions"
-msgstr "Accions"
+msgstr "Fraccions"
 
 #: gtk/gtkfontchooserwidget.c:2524
 #, fuzzy
@@ -2789,31 +2713,31 @@ msgstr "Tampar"
 msgid "Close the infobar"
 msgstr ""
 
-#: gtk/gtklabel.c:5694 gtk/gtktext.c:6135 gtk/gtktextview.c:9006
+#: gtk/gtklabel.c:5699 gtk/gtktext.c:6135 gtk/gtktextview.c:9006
 msgid "Cu_t"
 msgstr "_Talhar"
 
-#: gtk/gtklabel.c:5695 gtk/gtktext.c:6139 gtk/gtktextview.c:9010
+#: gtk/gtklabel.c:5700 gtk/gtktext.c:6139 gtk/gtktextview.c:9010
 msgid "_Copy"
 msgstr "_Copiar"
 
-#: gtk/gtklabel.c:5696 gtk/gtktext.c:6143 gtk/gtktextview.c:9014
+#: gtk/gtklabel.c:5701 gtk/gtktext.c:6143 gtk/gtktextview.c:9014
 msgid "_Paste"
 msgstr "_Pegar"
 
-#: gtk/gtklabel.c:5702 gtk/gtktext.c:6156 gtk/gtktextview.c:9039
+#: gtk/gtklabel.c:5707 gtk/gtktext.c:6156 gtk/gtktextview.c:9039
 msgid "Select _All"
 msgstr "Seleccionar _tot"
 
-#: gtk/gtklabel.c:5707
+#: gtk/gtklabel.c:5712
 msgid "_Open Link"
 msgstr "_Dobrir lo ligam"
 
-#: gtk/gtklabel.c:5711
+#: gtk/gtklabel.c:5716
 msgid "Copy _Link Address"
 msgstr "Copiar l'_adreça del ligam"
 
-#: gtk/gtklabel.c:5755 gtk/gtktext.c:2716 gtk/gtktextview.c:9088
+#: gtk/gtklabel.c:5760 gtk/gtktext.c:2716 gtk/gtktextview.c:9088
 msgid "Context menu"
 msgstr "Menú contextual"
 
@@ -2884,7 +2808,7 @@ msgid "Play"
 msgstr "Lectura"
 
 #: gtk/gtkmessagedialog.c:162 gtk/gtkmessagedialog.c:180
-#: gtk/print/gtkprintbackend.c:639 gtk/gtkwindow.c:6254
+#: gtk/print/gtkprintbackend.c:639 gtk/gtkwindow.c:6258
 msgid "_OK"
 msgstr "_D'acòrdi"
 
@@ -3009,17 +2933,12 @@ msgid "GTK could not find a media module. Check your installation."
 msgstr ""
 
 #: gtk/gtknotebook.c:3211
-#, fuzzy
-#| msgctxt "Stock label, media"
-#| msgid "Pre_vious"
 msgid "Previous tab"
-msgstr "Pre_cedent"
+msgstr "Onglet precedent"
 
 #: gtk/gtknotebook.c:3215
-#, fuzzy
-#| msgid "_Next"
 msgid "Next tab"
-msgstr "_Seguent"
+msgstr "Onglet seguent"
 
 #: gtk/gtknotebook.c:4331 gtk/gtknotebook.c:6541
 #, c-format
@@ -3070,26 +2989,20 @@ msgid "Page Setup"
 msgstr "Parametratge de la pagina"
 
 #: gtk/gtkpasswordentry.c:168
-#, fuzzy
-#| msgid "Hide %s"
 msgid "Hide Text"
-msgstr "Amagar %s"
+msgstr "Amagar lo tèxte"
 
 #: gtk/gtkpasswordentry.c:173 gtk/gtkpasswordentry.c:624
-#, fuzzy
-#| msgid "Show _Time"
 msgid "Show Text"
-msgstr "Afichar l'_ora"
+msgstr "Afichar lo tèxte"
 
 #: gtk/gtkpasswordentry.c:215
 msgid "Caps Lock is on"
 msgstr "Verr. maj. es activat"
 
 #: gtk/gtkpasswordentry.c:700
-#, fuzzy
-#| msgid "Show _Time"
 msgid "_Show Text"
-msgstr "Afichar l'_ora"
+msgstr "_Afichar lo tèxte"
 
 #. translators: %s is the name of a cloud provider for files
 #: gtk/gtkplacessidebar.c:912
@@ -3110,10 +3023,8 @@ msgid "Starred"
 msgstr "Favorit"
 
 #: gtk/gtkplacessidebar.c:1016
-#, fuzzy
-#| msgid "Starred"
 msgid "Starred files"
-msgstr "Favorit"
+msgstr "Fichièrs en favorit"
 
 #: gtk/gtkplacessidebar.c:1027
 msgid "Open your personal folder"
@@ -3781,26 +3692,19 @@ msgid "Insert _Emoji"
 msgstr "Inserir un emoji"
 
 #: gtk/gtktextview.c:9026
-#, fuzzy
-#| msgctxt "Stock label"
-#| msgid "_Undo"
 msgid "_Undo"
-msgstr "A_nullar"
+msgstr "_Anullar"
 
 #: gtk/gtktextview.c:9030
-#, fuzzy
-#| msgctxt "Stock label"
-#| msgid "_Redo"
 msgid "_Redo"
 msgstr "_Restablir"
 
-#: gtk/gtkwindow.c:6242
-#, fuzzy, c-format
-#| msgid "Do you want to use GTK+ Inspector?"
+#: gtk/gtkwindow.c:6246
+#, c-format
 msgid "Do you want to use GTK Inspector?"
-msgstr "Volètz utilizar l'Inspector GTK+ ?"
+msgstr "Volètz utilizar l'Inspector GTK ?"
 
-#: gtk/gtkwindow.c:6244
+#: gtk/gtkwindow.c:6248
 #, fuzzy, c-format
 #| msgid ""
 #| "GTK+ Inspector is an interactive debugger that lets you explore and "
@@ -3815,11 +3719,9 @@ msgstr ""
 "modificar las entralhas de quina aplicacion GTK+ que siá. En l'utilizant, "
 "pòt arribar que l'aplicacion foncione mal o plante."
 
-#: gtk/gtkwindow.c:6249
-#, fuzzy
-#| msgid "Don't show this message again"
+#: gtk/gtkwindow.c:6253
 msgid "Don’t show this message again"
-msgstr "Afichar pas mai aqueste messatge"
+msgstr "Mostrar pas mai aqueste messatge"
 
 #: gtk/gtkwindowcontrols.c:309 gtk/gtkwindowhandle.c:234
 msgid "Minimize"
@@ -3859,10 +3761,8 @@ msgid "Bounds"
 msgstr ""
 
 #: gtk/inspector/a11y.ui:125
-#, fuzzy
-#| msgid "Object"
 msgid "Object Path"
-msgstr "Objècte"
+msgstr "Camin de l'objècte"
 
 #: gtk/inspector/a11y.ui:164
 msgid "Attribute"
@@ -3906,11 +3806,9 @@ msgid "Hover to load"
 msgstr ""
 
 #: gtk/inspector/clipboard.c:278
-#, fuzzy
-#| msgid "Empty"
 msgctxt "clipboard"
 msgid "empty"
-msgstr "Void"
+msgstr "void"
 
 #: gtk/inspector/clipboard.c:283 gtk/inspector/clipboard.c:325
 msgctxt "clipboard"
@@ -4007,47 +3905,37 @@ msgstr "Classas d'estil"
 msgid "CSS Property"
 msgstr "Proprietat CSS"
 
-#: gtk/inspector/general.c:352
+#: gtk/inspector/general.c:363
 msgctxt "GL version"
 msgid "None"
 msgstr "Pas cap"
 
-#: gtk/inspector/general.c:430
+#: gtk/inspector/general.c:441
 msgctxt "GL version"
 msgid "Unknown"
 msgstr "Desconegut"
 
-#: gtk/inspector/general.c:492
-#, fuzzy
-#| msgid "Disabled"
+#: gtk/inspector/general.c:503
 msgctxt "Vulkan device"
 msgid "Disabled"
 msgstr "Desactivat"
 
-#: gtk/inspector/general.c:493 gtk/inspector/general.c:494
-#, fuzzy
-#| msgid "Disabled"
+#: gtk/inspector/general.c:504 gtk/inspector/general.c:505
 msgctxt "Vulkan version"
 msgid "Disabled"
-msgstr "Desactivat"
+msgstr "Desactivada"
 
-#: gtk/inspector/general.c:544
-#, fuzzy
-#| msgctxt "font"
-#| msgid "None"
+#: gtk/inspector/general.c:555
 msgctxt "Vulkan device"
 msgid "None"
 msgstr "Pas cap"
 
-#: gtk/inspector/general.c:545 gtk/inspector/general.c:546
-#, fuzzy
-#| msgctxt "font"
-#| msgid "None"
+#: gtk/inspector/general.c:556 gtk/inspector/general.c:557
 msgctxt "Vulkan version"
 msgid "None"
 msgstr "Pas cap"
 
-#: gtk/inspector/general.c:884
+#: gtk/inspector/general.c:901
 #, fuzzy
 #| msgid "Theme is hardcoded by GTK_THEME"
 msgid "IM Context is hardcoded by GTK_IM_MODULE"
@@ -4078,17 +3966,12 @@ msgid "Media Backend"
 msgstr "Motor GDK"
 
 #: gtk/inspector/general.ui:161
-#, fuzzy
-#| msgctxt "input method menu"
-#| msgid "X Input Method"
 msgid "Input Method"
-msgstr "Metòde de picada X"
+msgstr "Metòde d’entrada"
 
 #: gtk/inspector/general.ui:198
-#, fuzzy
-#| msgid "Application"
 msgid "Application ID"
-msgstr "Aplicacion"
+msgstr "ID de l'aplicacion"
 
 #: gtk/inspector/general.ui:224
 #, fuzzy
@@ -4113,10 +3996,8 @@ msgid "Composited"
 msgstr "Compausat"
 
 #: gtk/inspector/general.ui:538
-#, fuzzy
-#| msgid "Available Protocols"
 msgid "Protocols"
-msgstr "Protocòls disponibles"
+msgstr "Protocòls"
 
 #: gtk/inspector/general.ui:594
 msgid "GL Version"
@@ -4152,13 +4033,11 @@ msgstr ""
 
 #: gtk/inspector/general.ui:813 gtk/inspector/general.ui:929
 msgid "Extensions"
-msgstr ""
+msgstr "Extensions"
 
 #: gtk/inspector/general.ui:849
-#, fuzzy
-#| msgid "_Unlock Device"
 msgid "Vulkan Device"
-msgstr "_Desverrolhar lo volum"
+msgstr "Periferic Vulkan"
 
 #: gtk/inspector/general.ui:876
 msgid "Vulkan API version"
@@ -4222,7 +4101,7 @@ msgstr ""
 
 #: gtk/inspector/misc-info.ui:253
 msgid "Expand"
-msgstr ""
+msgstr "Espandir"
 
 #: gtk/inspector/misc-info.ui:321
 msgid "Baseline"
@@ -4245,10 +4124,8 @@ msgid "Renderer"
 msgstr "Mòde de rendut"
 
 #: gtk/inspector/misc-info.ui:416
-#, fuzzy
-#| msgid "Frame count"
 msgid "Frame Clock"
-msgstr "Nombre d'imatges"
+msgstr "Relòtge de trama"
 
 #: gtk/inspector/misc-info.ui:451
 #, fuzzy
@@ -4257,8 +4134,6 @@ msgid "Tick Callback"
 msgstr "Foncion de rapèl de tic"
 
 #: gtk/inspector/misc-info.ui:477
-#, fuzzy
-#| msgid "Frame count"
 msgid "Frame Count"
 msgstr "Nombre d'imatges"
 
@@ -4371,8 +4246,6 @@ msgid "Theme"
 msgstr "Tèma"
 
 #: gtk/inspector/prop-editor.c:1601
-#, fuzzy
-#| msgid "XSettings"
 msgctxt "GtkSettings source"
 msgid "XSettings"
 msgstr "Paramètres X"
@@ -4427,7 +4300,7 @@ msgstr ""
 
 #: gtk/inspector/recorder.ui:67
 msgid "Copy to clipboard"
-msgstr ""
+msgstr "Copiar al quichapapièrs"
 
 #: gtk/inspector/recorder.ui:144 gtk/inspector/recorder.ui:187
 msgid "Property"
@@ -4516,10 +4389,9 @@ msgid "Enable statistics with GOBJECT_DEBUG=instance-count"
 msgstr "Activar las estatisticas amb GOBJECT_DEBUG=instance-count"
 
 #: gtk/inspector/strv-editor.c:83
-#, fuzzy, c-format
-#| msgid "Remove"
+#, c-format
 msgid "Remove %s"
-msgstr "Levar"
+msgstr "Suprimir %s"
 
 #: gtk/inspector/strv-editor.c:115
 msgid "Add"
@@ -4546,10 +4418,8 @@ msgid "Backend does not support window scaling"
 msgstr "Lo motor gerís pas la mesa a l'escala de las fenèstras"
 
 #: gtk/inspector/visual.ui:34
-#, fuzzy
-#| msgid "GTK+ Theme"
 msgid "GTK Theme"
-msgstr "Tèma GTK+"
+msgstr "Tèma GTK"
 
 #: gtk/inspector/visual.ui:58
 msgid "Dark Variant"
@@ -4629,19 +4499,15 @@ msgstr "Afichar los limits de bordaduras"
 
 #: gtk/inspector/visual.ui:546
 msgid "CSS Padding"
-msgstr ""
+msgstr "Espaçament CSS"
 
 #: gtk/inspector/visual.ui:556
-#, fuzzy
-#| msgid "CSS nodes"
 msgid "CSS Border"
-msgstr "Nosèls CSS"
+msgstr "Bordadura CSS"
 
 #: gtk/inspector/visual.ui:566
-#, fuzzy
-#| msgid "Paper Margins"
 msgid "CSS Margin"
-msgstr "Marges del papièr"
+msgstr "Marges CSS"
 
 #: gtk/inspector/visual.ui:576
 #, fuzzy
@@ -4703,11 +4569,8 @@ msgid "Refresh action state"
 msgstr ""
 
 #: gtk/inspector/window.ui:327
-#, fuzzy
-#| msgctxt "Stock label, media"
-#| msgid "Pre_vious"
 msgid "Previous object"
-msgstr "Pre_cedent"
+msgstr "Objècte precedent"
 
 #: gtk/inspector/window.ui:334
 #, fuzzy
@@ -4739,8 +4602,6 @@ msgid "Layout"
 msgstr "Agençament"
 
 #: gtk/inspector/window.ui:418
-#, fuzzy
-#| msgid "CSS nodes"
 msgid "CSS Nodes"
 msgstr "Nosèls CSS"
 
@@ -4830,11 +4691,9 @@ msgid "Above-base Substitutions"
 msgstr ""
 
 #: gtk/open-type-layout.h:18
-#, fuzzy
-#| msgid "Authentication"
 msgctxt "OpenType layout"
 msgid "Alternative Fractions"
-msgstr "Autentificacion"
+msgstr "Fraccions alternativas"
 
 #: gtk/open-type-layout.h:19
 msgctxt "OpenType layout"
@@ -4978,11 +4837,9 @@ msgid "Fractions"
 msgstr "Fraccions"
 
 #: gtk/open-type-layout.h:46
-#, fuzzy
-#| msgid "Focus Widget"
 msgctxt "OpenType layout"
 msgid "Full Widths"
-msgstr "Component amb lo focus"
+msgstr "Plenas largors"
 
 #: gtk/open-type-layout.h:47
 msgctxt "OpenType layout"
@@ -5030,12 +4887,9 @@ msgid "Half Widths"
 msgstr ""
 
 #: gtk/open-type-layout.h:56
-#, fuzzy
-#| msgctxt "print operation status"
-#| msgid "Initial state"
 msgctxt "OpenType layout"
 msgid "Initial Forms"
-msgstr "Estat inicial"
+msgstr "Fòrmas inicialas"
 
 #: gtk/open-type-layout.h:57
 msgctxt "OpenType layout"
@@ -5043,12 +4897,9 @@ msgid "Isolated Forms"
 msgstr ""
 
 #: gtk/open-type-layout.h:58
-#, fuzzy
-#| msgctxt "Stock label"
-#| msgid "_Italic"
 msgctxt "OpenType layout"
 msgid "Italics"
-msgstr "_Italica"
+msgstr "Italica"
 
 #: gtk/open-type-layout.h:59
 msgctxt "OpenType layout"
@@ -5076,11 +4927,9 @@ msgid "JIS2004 Forms"
 msgstr ""
 
 #: gtk/open-type-layout.h:64
-#, fuzzy
-#| msgid "Warning"
 msgctxt "OpenType layout"
 msgid "Kerning"
-msgstr "Avertiment"
+msgstr "Interletratge"
 
 #: gtk/open-type-layout.h:65
 #, fuzzy
@@ -5091,12 +4940,9 @@ msgid "Left Bounds"
 msgstr "Nauc d'esquèrra"
 
 #: gtk/open-type-layout.h:66
-#, fuzzy
-#| msgctxt "cover page"
-#| msgid "Standard"
 msgctxt "OpenType layout"
 msgid "Standard Ligatures"
-msgstr "Estandard"
+msgstr "Ligaturas estandardas"
 
 #: gtk/open-type-layout.h:67
 msgctxt "OpenType layout"
@@ -5188,11 +5034,9 @@ msgid "Optical Bounds"
 msgstr ""
 
 #: gtk/open-type-layout.h:84
-#, fuzzy
-#| msgid "Signals"
 msgctxt "OpenType layout"
 msgid "Ordinals"
-msgstr "Senhals"
+msgstr "Ordinals"
 
 #: gtk/open-type-layout.h:85
 msgctxt "OpenType layout"
@@ -6385,14 +6229,10 @@ msgid "System"
 msgstr "Sistèma"
 
 #: gtk/ui/gtkappchooserdialog.ui:4
-#, fuzzy
-#| msgid "Select _All"
 msgid "Select App"
-msgstr "Seleccionar _tot"
+msgstr "Seleccionar aplicacion"
 
 #: gtk/ui/gtkappchooserdialog.ui:63
-#, fuzzy
-#| msgid "_View All Applications"
 msgid "_View All Apps"
 msgstr "_Afichar totas las aplicacions"
 
@@ -6459,10 +6299,8 @@ msgid "Hue"
 msgstr "Tinta"
 
 #: gtk/ui/gtkcoloreditor.ui:115
-#, fuzzy
-#| msgid "Alpha"
 msgid "Alpha value"
-msgstr "Alfa"
+msgstr "Valor alfa"
 
 #: gtk/ui/gtkcoloreditor.ui:133
 #, fuzzy
@@ -6495,10 +6333,8 @@ msgid "(None)"
 msgstr "(Pas cap)"
 
 #: gtk/ui/gtkdropdown.ui:78
-#, fuzzy
-#| msgid "Search"
 msgid "Search…"
-msgstr "Recercar"
+msgstr "Recercar…"
 
 #: gtk/ui/gtkemojichooser.ui:69 gtk/ui/gtkemojichooser.ui:239
 msgctxt "emoji category"
@@ -6969,16 +6805,10 @@ msgid "After"
 msgstr "Aprèp"
 
 #: modules/printbackends/gtkprintbackendcpdb.c:592
-#, fuzzy
-#| msgctxt "printer option"
-#| msgid "Print at"
 msgid "Print at"
 msgstr "Imprimir a"
 
 #: modules/printbackends/gtkprintbackendcpdb.c:602
-#, fuzzy
-#| msgctxt "printer option"
-#| msgid "Print at time"
 msgid "Print at time"
 msgstr "Imprimir a l'ora"
 
@@ -7643,8 +7473,9 @@ msgid "Use style from CSS file"
 msgstr ""
 
 #: tools/gtk-builder-tool-preview.c:187 tools/gtk-builder-tool-screenshot.c:370
-#: tools/gtk-builder-tool-validate.c:268 tools/gtk-rendernode-tool-render.c:203
-#: tools/gtk-rendernode-tool-show.c:113
+#: tools/gtk-builder-tool-validate.c:268
+#: tools/gtk-rendernode-tool-benchmark.c:106
+#: tools/gtk-rendernode-tool-render.c:203 tools/gtk-rendernode-tool-show.c:113
 #, c-format
 msgid "Could not initialize windowing system\n"
 msgstr ""
@@ -7665,10 +7496,9 @@ msgid "Can only preview a single .ui file\n"
 msgstr ""
 
 #: tools/gtk-builder-tool-screenshot.c:238
-#, fuzzy, c-format
-#| msgid "No results found"
+#, c-format
 msgid "No object found\n"
-msgstr "Cap de resultat pas trobat"
+msgstr "Cap d'objècte pas trobat\n"
 
 #: tools/gtk-builder-tool-screenshot.c:244
 #, c-format
@@ -7716,6 +7546,7 @@ msgid "Overwrite existing file"
 msgstr "Espotir un cache existent quitament se es a jorn"
 
 #: tools/gtk-builder-tool-screenshot.c:363
+#: tools/gtk-rendernode-tool-benchmark.c:97
 #: tools/gtk-rendernode-tool-render.c:196
 msgid "FILE…"
 msgstr "FICHIÈR…"
@@ -7791,10 +7622,8 @@ msgid "Failed to write “%s”: “%s”\n"
 msgstr "Impossible d'escriure dins lo fichièr de cache : %s\n"
 
 #: tools/gtk-builder-tool-simplify.c:2527
-#, fuzzy
-#| msgid "Recent files"
 msgid "Replace the file"
-msgstr "Fichièrs recents"
+msgstr "Remplaçar lo fichièr"
 
 #: tools/gtk-builder-tool-simplify.c:2528
 msgid "Convert from GTK 3 to GTK 4"
@@ -8222,6 +8051,45 @@ msgid ""
 "\n"
 msgstr ""
 
+#: tools/gtk-rendernode-tool-benchmark.c:94
+#, fuzzy
+#| msgid "Rendering Mode"
+msgid "Add renderer to benchmark"
+msgstr "Mòde de rendut"
+
+#: tools/gtk-rendernode-tool-benchmark.c:94
+#: tools/gtk-rendernode-tool-render.c:195
+msgid "RENDERER"
+msgstr ""
+
+#: tools/gtk-rendernode-tool-benchmark.c:95
+msgid "Number of runs with each renderer"
+msgstr ""
+
+#: tools/gtk-rendernode-tool-benchmark.c:95
+msgid "RUNS"
+msgstr ""
+
+#: tools/gtk-rendernode-tool-benchmark.c:96
+msgid "Don’t download result/wait for GPU to finish"
+msgstr ""
+
+#: tools/gtk-rendernode-tool-benchmark.c:114
+msgid "Benchmark rendering of a .node file."
+msgstr ""
+
+#: tools/gtk-rendernode-tool-benchmark.c:127
+#: tools/gtk-rendernode-tool-info.c:236 tools/gtk-rendernode-tool-render.c:224
+#: tools/gtk-rendernode-tool-show.c:134
+#, c-format
+msgid "No .node file specified\n"
+msgstr ""
+
+#: tools/gtk-rendernode-tool-benchmark.c:133
+#, c-format
+msgid "Can only benchmark a single .node file\n"
+msgstr ""
+
 #: tools/gtk-rendernode-tool-info.c:191
 #, c-format
 msgid "Number of nodes: %u\n"
@@ -8244,12 +8112,6 @@ msgstr ""
 
 #: tools/gtk-rendernode-tool-info.c:223
 msgid "Provide information about the render node."
-msgstr ""
-
-#: tools/gtk-rendernode-tool-info.c:236 tools/gtk-rendernode-tool-render.c:224
-#: tools/gtk-rendernode-tool-show.c:134
-#, c-format
-msgid "No .node file specified\n"
 msgstr ""
 
 #: tools/gtk-rendernode-tool-info.c:242
@@ -8281,10 +8143,6 @@ msgstr "Impossible de reescriure l'entèsta\n"
 #| msgid "Rendering Mode"
 msgid "Renderer to use"
 msgstr "Mòde de rendut"
-
-#: tools/gtk-rendernode-tool-render.c:195
-msgid "RENDERER"
-msgstr ""
 
 #: tools/gtk-rendernode-tool-render.c:211
 msgid "Render a .node file to an image."
