@@ -316,7 +316,10 @@ gdk_x11_gl_context_glx_get_damage (GdkGLContext *context)
           for (i = 0; i < buffer_age - 1; i++)
             {
               if (context->old_updated_area[i] == NULL)
-                return GDK_GL_CONTEXT_CLASS (gdk_x11_gl_context_glx_parent_class)->get_damage (context);
+                {
+                  cairo_region_destroy (damage);
+                  return GDK_GL_CONTEXT_CLASS (gdk_x11_gl_context_glx_parent_class)->get_damage (context);
+                }
 
               cairo_region_union (damage, context->old_updated_area[i]);
             }
