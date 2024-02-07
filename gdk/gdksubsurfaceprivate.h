@@ -61,7 +61,6 @@ struct _GdkSubsurfaceClass
   GdkTexture * (* get_texture)     (GdkSubsurface         *subsurface);
   void         (* get_rect)        (GdkSubsurface         *subsurface,
                                     graphene_rect_t       *rect);
-  gboolean     (* is_above_parent) (GdkSubsurface         *subsurface);
 };
 
 GType           gdk_subsurface_get_type        (void) G_GNUC_CONST;

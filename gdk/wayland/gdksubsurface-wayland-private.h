@@ -26,8 +26,6 @@ struct _GdkWaylandSubsurface
   struct wl_region *opaque_region;
 
   struct wl_callback *frame_callback;
-
-  gboolean above_parent;
 };
 
 struct _GdkWaylandSubsurfaceClass

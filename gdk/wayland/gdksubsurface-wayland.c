@@ -166,8 +166,8 @@ gdk_wayland_subsurface_attach (GdkSubsurface         *sub,
   graphene_rect_t device_rect;
   cairo_rectangle_int_t device_dest;
 
-  if (sib)
-    will_be_above = sib->above_parent;
+  if (sibling)
+    will_be_above = sibling->above_parent;
   else
     will_be_above = above;
 
@@ -322,8 +322,6 @@ gdk_wayland_subsurface_attach (GdkSubsurface         *sub,
         wl_subsurface_place_above (self->subsurface, sib->surface);
       else
         wl_subsurface_place_below (self->subsurface, sib->surface);
-
-      self->above_parent = sib->above_parent;
     }
   else
     {
@@ -333,7 +331,6 @@ gdk_wayland_subsurface_attach (GdkSubsurface         *sub,
       else
         wl_subsurface_place_below (self->subsurface,
                                    GDK_WAYLAND_SURFACE (sub->parent)->display_server.wl_surface);
-      self->above_parent = above;
     }
 
   wl_surface_commit (self->surface);
@@ -384,14 +381,6 @@ gdk_wayland_subsurface_get_rect (GdkSubsurface   *sub,
   rect->size.height = self->dest.height;
 }
 
-static gboolean
-gdk_wayland_subsurface_is_above_parent (GdkSubsurface *sub)
-{
-  GdkWaylandSubsurface *self = (GdkWaylandSubsurface *)sub;
-
-  return self->above_parent;
-}
-
 static void
 gdk_wayland_subsurface_class_init (GdkWaylandSubsurfaceClass *class)
 {
@@ -404,7 +393,6 @@ gdk_wayland_subsurface_class_init (GdkWaylandSubsurfaceClass *class)
   subsurface_class->detach = gdk_wayland_subsurface_detach;
   subsurface_class->get_texture = gdk_wayland_subsurface_get_texture;
   subsurface_class->get_rect = gdk_wayland_subsurface_get_rect;
-  subsurface_class->is_above_parent = gdk_wayland_subsurface_is_above_parent;
 };
 
 static void
@@ -477,8 +465,6 @@ gdk_wayland_surface_create_subsurface (GdkSurface *surface)
   sub->opaque_region = wl_compositor_create_region (disp->compositor);
   wl_region_add (sub->opaque_region, 0, 0, G_MAXINT, G_MAXINT);
   wl_surface_set_opaque_region (sub->surface, sub->opaque_region);
-
-  sub->above_parent = TRUE;
 
   GDK_DISPLAY_DEBUG (display, OFFLOAD, "Subsurface %p of surface %p created", sub, impl);
 
