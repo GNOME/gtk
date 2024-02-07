@@ -1,6 +1,8 @@
 #pragma once
 
+#include "gdk/gdkdmabufformats.h"
 #include "gdksubsurfaceprivate.h"
+#include "gdkdmabuf-wayland-private.h"
 
 
 typedef struct _GdkWaylandSubsurface GdkWaylandSubsurface;
@@ -26,6 +28,8 @@ struct _GdkWaylandSubsurface
   struct wl_region *opaque_region;
 
   struct wl_callback *frame_callback;
+
+  DmabufFormatsInfo *formats;
 };
 
 struct _GdkWaylandSubsurfaceClass
@@ -39,4 +43,3 @@ void gdk_wayland_subsurface_request_frame        (GdkSubsurface *subsurface);
 void gdk_wayland_subsurface_clear_frame_callback (GdkSubsurface *subsurface);
 
 GdkSubsurface * gdk_wayland_surface_create_subsurface (GdkSurface *surface);
-
