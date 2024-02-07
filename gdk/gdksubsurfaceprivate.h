@@ -41,6 +41,10 @@ struct _GdkSubsurface
   GdkSurface *parent;
 
   int ref_count;
+
+  gboolean above_parent;
+  gpointer sibling_above;
+  gpointer sibling_below;
 };
 
 
