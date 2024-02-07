@@ -1,6 +1,9 @@
 Overview of Changes in 4.13.7, xx-xx-xxxx
 =========================================
 
+* GtkFileChooser:
+ - Speed up opening
+
 * Accessibility:
  - Add socket support for webkit accessibility
 
@@ -28,6 +31,7 @@ Overview of Changes in 4.13.7, xx-xx-xxxx
 * Translation updates
  Galician
  Georgian
+ Occitan
 
 
 Overview of Changes in 4.13.6, 25-01-2024
