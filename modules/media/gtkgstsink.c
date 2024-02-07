@@ -61,7 +61,6 @@ enum {
   PROP_0,
   PROP_PAINTABLE,
   PROP_GL_CONTEXT,
-  PROP_DMABUF_FORMATS,
 
   N_PROPS,
 };
@@ -174,11 +173,13 @@ gtk_gst_sink_get_caps (GstBaseSink *bsink,
     {
       tmp = gst_pad_get_pad_template_caps (GST_BASE_SINK_PAD (bsink));
 #ifdef HAVE_GSTREAMER_DRM
-      if (self->dmabuf_formats)
-        {
-          tmp = gst_caps_make_writable (tmp);
-          add_drm_formats_and_modifiers (tmp, self->dmabuf_formats);
-        }
+      {
+        GdkDisplay *display = gdk_gl_context_get_display (self->gdk_context);
+        GdkDmabufFormats *formats = gdk_display_get_dmabuf_formats (display);
+
+        tmp = gst_caps_make_writable (tmp);
+        add_drm_formats_and_modifiers (tmp, formats);
+      }
 #endif
     }
   else
@@ -730,10 +731,6 @@ gtk_gst_sink_set_property (GObject      *object,
         g_clear_object (&self->gdk_context);
       break;
 
-    case PROP_DMABUF_FORMATS:
-      self->dmabuf_formats = g_value_get_boxed (value);
-      break;
-
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -755,9 +752,6 @@ gtk_gst_sink_get_property (GObject    *object,
       break;
     case PROP_GL_CONTEXT:
       g_value_set_object (value, self->gdk_context);
-      break;
-    case PROP_DMABUF_FORMATS:
-      g_value_set_boxed (value, self->dmabuf_formats);
       break;
 
     default:
@@ -818,19 +812,6 @@ gtk_gst_sink_class_init (GtkGstSinkClass * klass)
     g_param_spec_object ("gl-context", NULL, NULL,
                          GDK_TYPE_GL_CONTEXT,
                          G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
-
-  /**
-   * GtkGstSink:dmabuf-formats:
-   *
-   * The #GdkDmabufFormats that are supported by the #GdkDisplay and can be used
-   * with #GdkDmabufTextureBuilder.
-   *
-   * Since: 4.14
-   */
-  properties[PROP_DMABUF_FORMATS] =
-    g_param_spec_boxed ("dmabuf-formats", NULL, NULL,
-                        GDK_TYPE_DMABUF_FORMATS,
-                        G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
 
   g_object_class_install_properties (gobject_class, N_PROPS, properties);
 

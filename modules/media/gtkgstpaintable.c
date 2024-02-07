@@ -115,15 +115,12 @@ gtk_gst_paintable_video_renderer_create_video_sink (GstPlayerVideoRenderer *rend
                                                     GstPlayer              *player)
 {
   GtkGstPaintable *self = GTK_GST_PAINTABLE (renderer);
-  GdkDmabufFormats *dmabuf_formats;
   GstElement *sink;
   GdkGLContext *ctx;
 
-  dmabuf_formats = gdk_display_get_dmabuf_formats (gdk_display_get_default ());
   sink = g_object_new (GTK_TYPE_GST_SINK,
                        "paintable", self,
                        "gl-context", self->context,
-                       "dmabuf-formats", dmabuf_formats,
                        NULL);
 
   if (self->context != NULL)
