@@ -190,7 +190,8 @@ overlay_clicked_cb (GtkGestureClick *gesture,
 {
   GtkVideo *self = data;
 
-  gtk_media_stream_set_playing (self->media_stream, !gtk_media_stream_get_playing (self->media_stream));
+  if (self->media_stream)
+    gtk_media_stream_set_playing (self->media_stream, !gtk_media_stream_get_playing (self->media_stream));
 }
 
 static void
