@@ -646,9 +646,12 @@ gdk_wayland_surface_sync_opaque_region (GdkSurface *surface)
           cairo_region_t *region = cairo_region_copy (impl->opaque_region);
           for (gsize i = 0; i < gdk_surface_get_n_subsurfaces (surface); i++)
             {
-              GdkWaylandSubsurface *sub = (GdkWaylandSubsurface *)gdk_surface_get_subsurface (surface, i);
-              if (sub->above_parent)
+              GdkSubsurface *subsurface = gdk_surface_get_subsurface (surface, i);
+              GdkWaylandSubsurface *sub = (GdkWaylandSubsurface *) subsurface;
+
+              if (subsurface->above_parent)
                 continue;
+
               if (sub->texture != NULL)
                 cairo_region_subtract_rectangle (region, &sub->dest);
             }

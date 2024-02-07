@@ -63,6 +63,7 @@ internal_tests = [
 ]
 
 if host_machine.system() != 'windows'
+  internal_tests += { 'name': 'dmabufformats' }
   internal_tests += { 'name': 'dmabuftexture', 'suites': 'failing' }
 endif
 

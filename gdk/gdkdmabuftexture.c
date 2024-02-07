@@ -33,7 +33,7 @@
 /**
  * GdkDmabufTexture:
  *
- * A `GdkTexture` representing a dma-buf object.
+ * A `GdkTexture` representing a DMA buffer.
  *
  * To create a `GdkDmabufTexture`, use the auxiliary
  * [class@Gdk.DmabufTextureBuilder] object.

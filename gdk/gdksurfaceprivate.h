@@ -99,6 +99,12 @@ struct _GdkSurface
   GdkSeat *current_shortcuts_inhibited_seat;
 
   GPtrArray *subsurfaces;
+
+  /* We keep the subsurfaces above and below the surface in two linked
+   * lists, which start here.
+   */
+  GdkSubsurface *subsurfaces_above;
+  GdkSubsurface *subsurfaces_below;
 };
 
 struct _GdkSurfaceClass

@@ -643,6 +643,7 @@ main (int argc, char *argv[])
   gboolean disjoint = FALSE;
   gboolean premultiplied = TRUE;
   gboolean decorated = TRUE;
+  gboolean fullscreen = FALSE;
   unsigned int i;
   const char *save_filename = NULL;
 
@@ -652,6 +653,8 @@ main (int argc, char *argv[])
         disjoint = TRUE;
       else if (g_str_equal (argv[i], "--undecorated"))
         decorated = FALSE;
+      else if (g_str_equal (argv[i], "--fullscreen"))
+        fullscreen = TRUE;
       else if (g_str_equal (argv[i], "--unpremultiplied"))
         premultiplied = FALSE;
       else if (g_str_equal (argv[i], "--download-to"))
@@ -687,6 +690,8 @@ main (int argc, char *argv[])
 
   window = gtk_window_new ();
   gtk_window_set_decorated (GTK_WINDOW (window), decorated);
+  if (fullscreen)
+    gtk_window_fullscreen (GTK_WINDOW (window));
 
   picture = gtk_picture_new_for_paintable (GDK_PAINTABLE (texture));
 

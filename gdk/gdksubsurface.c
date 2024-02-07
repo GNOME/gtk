@@ -62,10 +62,51 @@ gdk_subsurface_attach (GdkSubsurface         *subsurface,
                        gboolean               above,
                        GdkSubsurface         *sibling)
 {
+  GdkSurface *parent = subsurface->parent;
+
   g_return_val_if_fail (GDK_IS_SUBSURFACE (subsurface), FALSE);
   g_return_val_if_fail (GDK_IS_TEXTURE (texture), FALSE);
   g_return_val_if_fail (rect != NULL, FALSE);
   g_return_val_if_fail (sibling == NULL || GDK_IS_SUBSURFACE (sibling), FALSE);
+
+  if (sibling)
+    {
+      subsurface->above_parent = sibling->above_parent;
+
+      if (above)
+        {
+          subsurface->sibling_above = sibling->sibling_above;
+          sibling->sibling_above = subsurface;
+          subsurface->sibling_below = sibling;
+        }
+      else
+        {
+          subsurface->sibling_below = sibling->sibling_below;
+          sibling->sibling_below = subsurface;
+          subsurface->sibling_above = sibling;
+        }
+    }
+  else
+    {
+      subsurface->above_parent = above;
+
+      if (above)
+        {
+          subsurface->sibling_above = parent->subsurfaces_above;
+          subsurface->sibling_below = NULL;
+          if (parent->subsurfaces_above)
+            parent->subsurfaces_above->sibling_below = subsurface;
+          parent->subsurfaces_above = subsurface;
+        }
+      else
+        {
+          subsurface->sibling_below = parent->subsurfaces_below;
+          subsurface->sibling_above = NULL;
+          if (parent->subsurfaces_below)
+            parent->subsurfaces_below->sibling_above = subsurface;
+          parent->subsurfaces_below = subsurface;
+        }
+    }
 
   return GDK_SUBSURFACE_GET_CLASS (subsurface)->attach (subsurface, texture, rect, above, sibling);
 }
@@ -73,7 +114,17 @@ gdk_subsurface_attach (GdkSubsurface         *subsurface,
 void
 gdk_subsurface_detach (GdkSubsurface *subsurface)
 {
+  GdkSurface *parent = subsurface->parent;
+
   g_return_if_fail (GDK_IS_SUBSURFACE (subsurface));
+
+  if (parent->subsurfaces_above == subsurface)
+    parent->subsurfaces_above = subsurface->sibling_above;
+  if (parent->subsurfaces_below == subsurface)
+    parent->subsurfaces_below = subsurface->sibling_below;
+
+  subsurface->sibling_above = NULL;
+  subsurface->sibling_below = NULL;
 
   GDK_SUBSURFACE_GET_CLASS (subsurface)->detach (subsurface);
 }
@@ -101,5 +152,5 @@ gdk_subsurface_is_above_parent (GdkSubsurface *subsurface)
 {
   g_return_val_if_fail (GDK_IS_SUBSURFACE (subsurface), TRUE);
 
-  return GDK_SUBSURFACE_GET_CLASS (subsurface)->is_above_parent (subsurface);
+  return subsurface->above_parent;
 }

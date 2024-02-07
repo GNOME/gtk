@@ -51,4 +51,8 @@ gboolean           gdk_dmabuf_formats_contains        (GdkDmabufFormats *formats
                                                        guint32           fourcc,
                                                        guint64           modifier) G_GNUC_PURE;
 
+GDK_AVAILABLE_IN_4_14
+gboolean           gdk_dmabuf_formats_equal           (const GdkDmabufFormats *formats1,
+                                                       const GdkDmabufFormats *formats2);
+
 G_END_DECLS
