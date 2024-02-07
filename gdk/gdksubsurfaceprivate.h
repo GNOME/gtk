@@ -43,8 +43,8 @@ struct _GdkSubsurface
   int ref_count;
 
   gboolean above_parent;
-  gpointer sibling_above;
-  gpointer sibling_below;
+  GdkSubsurface *sibling_above;
+  GdkSubsurface *sibling_below;
 };
 
 
