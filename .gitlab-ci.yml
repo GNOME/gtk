@@ -212,7 +212,9 @@ msys2-mingw64:
 macos-x86_64:
   rules:
     # Do not run in forks as the runner is not available there.
+    # (except for dehesselle who maintains the runner)
     - if: $CI_PROJECT_NAMESPACE == "GNOME"
+    - if: $CI_PROJECT_NAMESPACE == "dehesselle"
   stage: build
   tags:
     - macosintel
@@ -251,7 +253,6 @@ macos-x86_64:
             -Dpixman:tests=disabled
             -Dlibjpeg-turbo:simd=disabled
             -Dbuild-demos=false
-            -Dbuild-tests=false
             -Dbuild-examples=false
             -Dbuild-testsuite=false
             _build
