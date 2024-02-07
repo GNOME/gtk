@@ -21,6 +21,7 @@
 
 #include "gdkenumtypes.h"
 #include "gdksurface.h"
+#include "gdkdmabufformats.h"
 #include <graphene.h>
 
 G_BEGIN_DECLS
@@ -45,6 +46,8 @@ struct _GdkSubsurface
   gboolean above_parent;
   GdkSubsurface *sibling_above;
   GdkSubsurface *sibling_below;
+
+  GdkDmabufFormats *dmabuf_formats;
 };
 
 typedef enum {
@@ -109,6 +112,8 @@ gboolean        gdk_subsurface_get_background_rect (GdkSubsurface         *subsu
                                                     graphene_rect_t       *rect);
 void            gdk_subsurface_get_bounds          (GdkSubsurface         *subsurface,
                                                     graphene_rect_t       *bounds);
+void            gdk_subsurface_set_dmabuf_formats  (GdkSubsurface         *subsurface,
+                                                    GdkDmabufFormats      *formats);
 
 G_END_DECLS
 

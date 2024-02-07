@@ -91,6 +91,7 @@ enum {
   PROP_0,
   PROP_CURSOR,
   PROP_DISPLAY,
+  PROP_DMABUF_FORMATS,
   PROP_FRAME_CLOCK,
   PROP_MAPPED,
   PROP_WIDTH,
@@ -549,6 +550,18 @@ gdk_surface_class_init (GdkSurfaceClass *klass)
                            G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
 
   /**
+   * GdkSurface:dmabuf-formats: (attributes org.gtk.Property.get=gdk_surface_get_dmabuf_formats)
+   *
+   * The dmabuf formats that can be used with this surface.
+   *
+   * Since: 4.14
+   */
+  properties[PROP_DMABUF_FORMATS] =
+      g_param_spec_boxed ("dmabuf-formats", NULL, NULL,
+                          GDK_TYPE_DMABUF_FORMATS,
+                          G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
+
+  /**
    * GdkSurface:frame-clock: (attributes org.gtk.Property.get=gdk_surface_get_frame_clock)
    *
    * The `GdkFrameClock` of the surface.
@@ -773,6 +786,9 @@ gdk_surface_finalize (GObject *object)
 
   g_ptr_array_unref (surface->subsurfaces);
 
+  g_clear_pointer (&surface->dmabuf_formats, gdk_dmabuf_formats_unref);
+  g_clear_pointer (&surface->effective_dmabuf_formats, gdk_dmabuf_formats_unref);
+
   G_OBJECT_CLASS (gdk_surface_parent_class)->finalize (object);
 }
 
@@ -825,6 +841,10 @@ gdk_surface_get_property (GObject    *object,
 
     case PROP_DISPLAY:
       g_value_set_object (value, surface->display);
+      break;
+
+    case PROP_DMABUF_FORMATS:
+      g_value_set_boxed (value, surface->effective_dmabuf_formats);
       break;
 
     case PROP_FRAME_CLOCK:
@@ -3075,4 +3095,71 @@ gdk_surface_get_subsurface (GdkSurface *surface,
                             gsize       idx)
 {
   return g_ptr_array_index (surface->subsurfaces, idx);
+}
+
+void
+gdk_surface_set_dmabuf_formats (GdkSurface       *surface,
+                                GdkDmabufFormats *formats)
+{
+  g_return_if_fail (GDK_IS_SURFACE (surface));
+  g_return_if_fail (formats != NULL);
+
+  g_clear_pointer (&surface->dmabuf_formats, gdk_dmabuf_formats_unref);
+  surface->dmabuf_formats = gdk_dmabuf_formats_ref (formats);
+
+  if (surface->subsurfaces_above == NULL)
+    {
+      GDK_DISPLAY_DEBUG (surface->display, DMABUF, "Using main surface formats");
+      gdk_surface_set_effective_dmabuf_formats (surface, formats);
+    }
+}
+
+void
+gdk_surface_set_effective_dmabuf_formats (GdkSurface       *surface,
+                                          GdkDmabufFormats *formats)
+{
+  g_return_if_fail (GDK_IS_SURFACE (surface));
+
+  if (!formats)
+    return;
+
+  if (gdk_dmabuf_formats_equal (surface->effective_dmabuf_formats, formats))
+    {
+      GDK_DISPLAY_DEBUG (surface->display, DMABUF, "Formats unchanged");
+      return;
+    }
+
+  g_clear_pointer (&surface->effective_dmabuf_formats, gdk_dmabuf_formats_unref);
+  surface->effective_dmabuf_formats = gdk_dmabuf_formats_ref (formats);
+
+  g_object_notify_by_pspec (G_OBJECT (surface), properties[PROP_DMABUF_FORMATS]);
+}
+
+/**
+ * gdk_surface_get_dmabuf_formats:
+ * @surface: a `GdkSurface`
+ *
+ * Returns the dma-buf formats that are supported on this surface.
+ *
+ * What formats can be used may depend on the geometry and stacking
+ * order of the surface and its subsurfaces, and can change over time.
+ *
+ * The formats returned by this function can be used for negotiating
+ * buffer formats with producers such as v4l, pipewire or GStreamer.
+ *
+ * To learn more about dma-bufs, see [class@Gdk.DmabufTextureBuilder].
+ *
+ * Returns: (transfer none): a `GdkDmabufFormats` object
+ *
+ * Since: 4.16
+ */
+GdkDmabufFormats *
+gdk_surface_get_dmabuf_formats (GdkSurface *surface)
+{
+  g_return_val_if_fail (GDK_IS_SURFACE (surface), NULL);
+
+  if (surface->effective_dmabuf_formats)
+    return surface->effective_dmabuf_formats;
+  else
+    return gdk_display_get_dmabuf_formats (surface->display);
 }

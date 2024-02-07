@@ -105,6 +105,9 @@ struct _GdkSurface
    */
   GdkSubsurface *subsurfaces_above;
   GdkSubsurface *subsurfaces_below;
+
+  GdkDmabufFormats *dmabuf_formats;
+  GdkDmabufFormats *effective_dmabuf_formats;
 };
 
 struct _GdkSurfaceClass
@@ -354,5 +357,11 @@ GdkSubsurface * gdk_surface_create_subsurface  (GdkSurface          *surface);
 gsize           gdk_surface_get_n_subsurfaces  (GdkSurface          *surface);
 GdkSubsurface * gdk_surface_get_subsurface     (GdkSurface          *surface,
                                                 gsize                idx);
+
+void            gdk_surface_set_dmabuf_formats (GdkSurface          *surface,
+                                                GdkDmabufFormats    *formats);
+
+void            gdk_surface_set_effective_dmabuf_formats (GdkSurface          *surface,
+                                                          GdkDmabufFormats    *formats);
 
 G_END_DECLS

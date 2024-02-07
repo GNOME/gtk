@@ -21,6 +21,7 @@
 #include "gdksurfaceprivate.h"
 #include "gdktexture.h"
 #include "gsk/gskrectprivate.h"
+#include "gdkdebugprivate.h"
 
 G_DEFINE_TYPE (GdkSubsurface, gdk_subsurface, G_TYPE_OBJECT)
 
@@ -36,6 +37,7 @@ gdk_subsurface_finalize (GObject *object)
 
   g_ptr_array_remove (subsurface->parent->subsurfaces, subsurface);
   g_clear_object (&subsurface->parent);
+  g_clear_pointer (&subsurface->dmabuf_formats, gdk_dmabuf_formats_unref);
 
   G_OBJECT_CLASS (gdk_subsurface_parent_class)->finalize (object);
 }
@@ -116,6 +118,28 @@ insert_subsurface (GdkSubsurface *subsurface,
     }
 }
 
+static inline gboolean
+is_topmost_subsurface (GdkSubsurface *subsurface)
+{
+  GdkSurface *parent = subsurface->parent;
+
+  return !subsurface->sibling_above && parent->subsurfaces_below != subsurface;
+}
+
+static inline GdkSubsurface *
+find_topmost_subsurface (GdkSurface *surface)
+{
+  GdkSubsurface *top = surface->subsurfaces_above;
+
+  if (top)
+    {
+      while (top->sibling_above)
+        top = top->sibling_above;
+    }
+
+  return top;
+}
+
 /*< private >
  * gdk_subsurface_attach:
  * @subsurface: the `GdkSubsurface`
@@ -150,7 +174,7 @@ gdk_subsurface_attach (GdkSubsurface         *subsurface,
                        GdkSubsurface         *sibling)
 {
   GdkSurface *parent = subsurface->parent;
-  gboolean result;
+  gboolean was_topmost, is_topmost, result;
 
   g_return_val_if_fail (GDK_IS_SUBSURFACE (subsurface), FALSE);
   g_return_val_if_fail (GDK_IS_TEXTURE (texture), FALSE);
@@ -163,6 +187,8 @@ gdk_subsurface_attach (GdkSubsurface         *subsurface,
   g_return_val_if_fail (sibling != subsurface, FALSE);
   g_return_val_if_fail (sibling == NULL || GDK_IS_SUBSURFACE (sibling), FALSE);
   g_return_val_if_fail (sibling == NULL || sibling->parent == subsurface->parent, FALSE);
+
+  was_topmost = is_topmost_subsurface (subsurface);
 
   result = GDK_SUBSURFACE_GET_CLASS (subsurface)->attach (subsurface,
                                                           texture,
@@ -198,6 +224,29 @@ gdk_subsurface_attach (GdkSubsurface         *subsurface,
         }
     }
 
+  is_topmost = is_topmost_subsurface (subsurface);
+
+  if (!was_topmost && is_topmost)
+    {
+      GDK_DISPLAY_DEBUG (parent->display, DMABUF, "Using formats of topmost subsurface %p", subsurface);
+      gdk_surface_set_effective_dmabuf_formats (parent, subsurface->dmabuf_formats);
+    }
+  else if (was_topmost && !is_topmost)
+    {
+      GdkSubsurface *top = find_topmost_subsurface (parent);
+
+      if (top)
+        {
+          GDK_DISPLAY_DEBUG (parent->display, DMABUF, "Using formats of topmost subsurface %p", top);
+          gdk_surface_set_effective_dmabuf_formats (parent, top->dmabuf_formats);
+        }
+      else
+        {
+          GDK_DISPLAY_DEBUG (parent->display, DMABUF, "Using formats of main surface");
+          gdk_surface_set_effective_dmabuf_formats (parent, parent->dmabuf_formats);
+        }
+    }
+
   return result;
 }
 
@@ -212,9 +261,24 @@ gdk_subsurface_attach (GdkSubsurface         *subsurface,
 void
 gdk_subsurface_detach (GdkSubsurface *subsurface)
 {
+  gboolean was_topmost;
+
   g_return_if_fail (GDK_IS_SUBSURFACE (subsurface));
 
+  was_topmost = is_topmost_subsurface (subsurface);
+
   remove_subsurface (subsurface);
+
+  if (was_topmost)
+    {
+      GdkSurface *parent = subsurface->parent;
+      GdkSubsurface *top = find_topmost_subsurface (parent);
+
+      if (top)
+        gdk_surface_set_effective_dmabuf_formats (parent, top->dmabuf_formats);
+      else
+        gdk_surface_set_effective_dmabuf_formats (parent, parent->dmabuf_formats);
+    }
 
   GDK_SUBSURFACE_GET_CLASS (subsurface)->detach (subsurface);
 }
@@ -369,4 +433,18 @@ gdk_subsurface_get_bounds (GdkSubsurface   *subsurface,
   gdk_subsurface_get_texture_rect (subsurface, bounds);
   if (gdk_subsurface_get_background_rect (subsurface, &background))
     graphene_rect_union (bounds, &background, bounds);
+}
+
+void
+gdk_subsurface_set_dmabuf_formats (GdkSubsurface    *subsurface,
+                                   GdkDmabufFormats *formats)
+{
+  g_return_if_fail (GDK_IS_SUBSURFACE (subsurface));
+  g_return_if_fail (formats != NULL);
+
+  g_clear_pointer (&subsurface->dmabuf_formats, gdk_dmabuf_formats_unref);
+  subsurface->dmabuf_formats = gdk_dmabuf_formats_ref (formats);
+
+  if (is_topmost_subsurface (subsurface))
+    gdk_surface_set_effective_dmabuf_formats (subsurface->parent, formats);
 }
