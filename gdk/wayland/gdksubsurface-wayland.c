@@ -27,6 +27,7 @@
 #include "gdksubsurfaceprivate.h"
 #include "gdkdebugprivate.h"
 #include "gsk/gskrectprivate.h"
+#include "gdkprivate.h"
 
 #include "linux-dmabuf-unstable-v1-client-protocol.h"
 
@@ -51,6 +52,7 @@ gdk_wayland_subsurface_finalize (GObject *object)
   g_clear_pointer (&self->bg_viewport, wp_viewport_destroy);
   g_clear_pointer (&self->bg_subsurface, wl_subsurface_destroy);
   g_clear_pointer (&self->bg_surface, wl_surface_destroy);
+  g_clear_pointer (&self->formats, dmabuf_formats_info_free);
 
   G_OBJECT_CLASS (gdk_wayland_subsurface_parent_class)->finalize (object);
 }
@@ -790,6 +792,15 @@ gdk_wayland_subsurface_clear_frame_callback (GdkSubsurface *sub)
   g_clear_pointer (&self->frame_callback, wl_callback_destroy);
 }
 
+static void
+dmabuf_formats_callback (gpointer           data,
+                         DmabufFormatsInfo *info)
+{
+  GdkSubsurface *sub = data;
+
+  gdk_subsurface_set_dmabuf_formats (sub, info->formats);
+}
+
 GdkSubsurface *
 gdk_wayland_surface_create_subsurface (GdkSurface *surface)
 {
@@ -798,6 +809,8 @@ gdk_wayland_surface_create_subsurface (GdkSurface *surface)
   GdkWaylandDisplay *disp = GDK_WAYLAND_DISPLAY (display);
   GdkWaylandSubsurface *sub;
   struct wl_region *region;
+  struct zwp_linux_dmabuf_feedback_v1 *feedback;
+  char *name;
 
   if (disp->subcompositor == NULL || disp->viewporter == NULL)
     {
@@ -825,8 +838,28 @@ gdk_wayland_surface_create_subsurface (GdkSurface *surface)
   wl_region_add (sub->opaque_region, 0, 0, G_MAXINT, G_MAXINT);
   wl_surface_set_opaque_region (sub->surface, sub->opaque_region);
 
+  gdk_display_init_dmabuf (display);
+
+  if (disp->linux_dmabuf)
+    {
+      dmabuf_formats_info_set_egl_formats (disp->dmabuf_formats_info, display->dmabuf_formats);
+      feedback = zwp_linux_dmabuf_v1_get_surface_feedback (disp->linux_dmabuf, sub->surface);
+    }
+  else
+    {
+      feedback = NULL;
+    }
+
+  name = g_strdup_printf ("subsurface %p", sub);
+  sub->formats = dmabuf_formats_info_new (display,
+                                          name,
+                                          display->dmabuf_formats,
+                                          feedback,
+                                          dmabuf_formats_callback,
+                                          sub);
+  g_free (name);
+
   GDK_DISPLAY_DEBUG (display, OFFLOAD, "Subsurface %p of surface %p created", sub, impl);
 
   return GDK_SUBSURFACE (sub);
 }
-

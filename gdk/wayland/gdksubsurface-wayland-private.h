@@ -1,6 +1,8 @@
 #pragma once
 
+#include "gdk/gdkdmabufformats.h"
 #include "gdksubsurfaceprivate.h"
+#include "gdkdmabuf-wayland-private.h"
 
 #include "wayland-client-protocol.h"
 
@@ -35,6 +37,8 @@ struct _GdkWaylandSubsurface
   struct wp_viewport *bg_viewport;
   cairo_rectangle_int_t bg_rect;
   gboolean bg_attached;
+
+  DmabufFormatsInfo *formats;
 };
 
 struct _GdkWaylandSubsurfaceClass
@@ -48,4 +52,3 @@ void gdk_wayland_subsurface_request_frame        (GdkSubsurface *subsurface);
 void gdk_wayland_subsurface_clear_frame_callback (GdkSubsurface *subsurface);
 
 GdkSubsurface * gdk_wayland_surface_create_subsurface (GdkSurface *surface);
-

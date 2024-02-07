@@ -445,6 +445,6 @@ gdk_subsurface_set_dmabuf_formats (GdkSubsurface    *subsurface,
   g_clear_pointer (&subsurface->dmabuf_formats, gdk_dmabuf_formats_unref);
   subsurface->dmabuf_formats = gdk_dmabuf_formats_ref (formats);
 
-  if (is_topmost_subsurface (subsurface))
+  if (subsurface->parent && is_topmost_subsurface (subsurface))
     gdk_surface_set_effective_dmabuf_formats (subsurface->parent, formats);
 }

@@ -89,6 +89,8 @@ struct _GdkWaylandSurface
   uint32_t last_configure_serial;
 
   int state_freeze_count;
+
+  DmabufFormatsInfo *formats;
 };
 
 typedef struct _GdkWaylandSurfaceClass GdkWaylandSurfaceClass;

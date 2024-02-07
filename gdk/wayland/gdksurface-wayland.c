@@ -937,6 +937,15 @@ gdk_wayland_surface_create_wl_surface (GdkSurface *surface)
 }
 
 static void
+dmabuf_formats_callback (gpointer           data,
+                         DmabufFormatsInfo *info)
+{
+  GdkSurface *surface = data;
+
+  gdk_surface_set_dmabuf_formats (surface, info->formats);
+}
+
+static void
 gdk_wayland_surface_constructed (GObject *object)
 {
   GdkSurface *surface = GDK_SURFACE (object);
@@ -944,6 +953,8 @@ gdk_wayland_surface_constructed (GObject *object)
   GdkDisplay *display = gdk_surface_get_display (surface);
   GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (display);
   GdkFrameClock *frame_clock = gdk_surface_get_frame_clock (surface);
+  struct zwp_linux_dmabuf_feedback_v1 *feedback;
+  char *name;
 
   self->event_queue = wl_display_create_queue (display_wayland->wl_display);
   display_wayland->event_queues = g_list_prepend (display_wayland->event_queues,
@@ -968,6 +979,29 @@ gdk_wayland_surface_constructed (GObject *object)
     }
 
   gdk_wayland_surface_create_wl_surface (surface);
+
+  gdk_display_init_dmabuf (display);
+
+  if (display_wayland->linux_dmabuf)
+    {
+      dmabuf_formats_info_set_egl_formats (display_wayland->dmabuf_formats_info,
+                                           display->dmabuf_formats);
+      feedback = zwp_linux_dmabuf_v1_get_surface_feedback (display_wayland->linux_dmabuf,
+                                                           self->display_server.wl_surface);
+    }
+  else
+    {
+      feedback = NULL;
+    }
+
+  name = g_strdup_printf ("surface %p", surface);
+  self->formats = dmabuf_formats_info_new (display,
+                                           name,
+                                           display->dmabuf_formats,
+                                           feedback,
+                                           dmabuf_formats_callback,
+                                           surface);
+  g_free (name);
 
   g_signal_connect (frame_clock, "before-paint", G_CALLBACK (on_frame_clock_before_paint), surface);
   g_signal_connect (frame_clock, "after-paint", G_CALLBACK (on_frame_clock_after_paint), surface);
