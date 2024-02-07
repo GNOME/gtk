@@ -178,13 +178,12 @@ gtk_gst_sink_get_caps (GstBaseSink *bsink,
     {
       tmp = gst_pad_get_pad_template_caps (GST_BASE_SINK_PAD (bsink));
 #ifdef HAVE_GSTREAMER_DRM
-      {
-        GdkDisplay *display = gdk_gl_context_get_display (self->gdk_context);
-        GdkDmabufFormats *formats = gdk_display_get_dmabuf_formats (display);
+      GdkSurface *surface;
 
-        tmp = gst_caps_make_writable (tmp);
-        add_drm_formats_and_modifiers (tmp, formats);
-      }
+      tmp = gst_caps_make_writable (tmp);
+
+      surface = gdk_gl_context_get_surface (self->gdk_context);
+      add_drm_formats_and_modifiers (tmp, gdk_surface_get_dmabuf_formats (surface));
 #endif
     }
   else
