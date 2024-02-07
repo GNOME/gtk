@@ -11,6 +11,10 @@
 #include <drm_fourcc.h>
 #endif
 
+#ifdef GDK_WINDOWING_WAYLAND
+#include <gdk/wayland/gdkwayland.h>
+#endif
+
 static void
 test_dmabuf_formats_basic (void)
 {
@@ -137,6 +141,52 @@ test_priorities (void)
   gdk_dmabuf_formats_unref (formats);
 }
 
+static void
+test_wayland (void)
+{
+  GdkDmabufFormatsBuilder *builder;
+  GdkDmabufFormats *formats1, *formats2;
+
+  builder = gdk_dmabuf_formats_builder_new ();
+  gdk_dmabuf_formats_builder_add_format_for_device (builder,
+                                                    DRM_FORMAT_RGBA8888,
+                                                    0,
+                                                    DRM_FORMAT_MOD_LINEAR,
+                                                    0);
+  gdk_dmabuf_formats_builder_add_format_for_device (builder,
+                                                    DRM_FORMAT_ARGB8888,
+                                                    0,
+                                                    DRM_FORMAT_MOD_LINEAR,
+                                                    1);
+  formats1 = gdk_dmabuf_formats_builder_free_to_formats_for_device (builder, 2);
+
+#ifdef GDK_WINDOWING_WAYLAND
+  g_assert_true (gdk_wayland_dmabuf_formats_get_main_device (formats1) == 2);
+  g_assert_true (gdk_wayland_dmabuf_formats_get_target_device (formats1, 0) == 0);
+  g_assert_true (gdk_wayland_dmabuf_formats_get_target_device (formats1, 1) == 1);
+  g_assert_false (gdk_wayland_dmabuf_formats_is_scanout (formats1, 0));
+  g_assert_false (gdk_wayland_dmabuf_formats_is_scanout (formats1, 1));
+#endif
+
+  builder = gdk_dmabuf_formats_builder_new ();
+  gdk_dmabuf_formats_builder_add_format (builder, DRM_FORMAT_ARGB8888, DRM_FORMAT_MOD_LINEAR);
+  gdk_dmabuf_formats_builder_add_format (builder, DRM_FORMAT_RGBA8888, DRM_FORMAT_MOD_LINEAR);
+  formats2 = gdk_dmabuf_formats_builder_free_to_formats (builder);
+
+#ifdef GDK_WINDOWING_WAYLAND
+  g_assert_true (gdk_wayland_dmabuf_formats_get_main_device (formats2) == 0);
+  g_assert_true (gdk_wayland_dmabuf_formats_get_target_device (formats2, 0) == 0);
+  g_assert_true (gdk_wayland_dmabuf_formats_get_target_device (formats2, 1) == 0);
+  g_assert_false (gdk_wayland_dmabuf_formats_is_scanout (formats2, 0));
+  g_assert_false (gdk_wayland_dmabuf_formats_is_scanout (formats2, 1));
+#endif
+
+  g_assert_false (gdk_dmabuf_formats_equal (formats1, formats2));
+
+  gdk_dmabuf_formats_unref (formats1);
+  gdk_dmabuf_formats_unref (formats2);
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -145,6 +195,7 @@ main (int argc, char *argv[])
   g_test_add_func ("/dmabuf/formats/basic", test_dmabuf_formats_basic);
   g_test_add_func ("/dmabuf/formats/builder", test_dmabuf_formats_builder);
   g_test_add_func ("/dmabuf/formats/priorities", test_priorities);
+  g_test_add_func ("/dmabuf/formats/wayland", test_wayland);
 
   return g_test_run ();
 }

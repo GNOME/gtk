@@ -69,7 +69,9 @@ gdk_dmabuf_format_equal (gconstpointer data_a,
   const GdkDmabufFormat *b = data_b;
 
   return a->fourcc == b->fourcc &&
-         a->modifier == b->modifier;
+         a->flags == b->flags &&
+         a->modifier == b->modifier &&
+         a->device == b->device;
 }
 
 static void
@@ -82,7 +84,8 @@ gdk_dmabuf_formats_builder_sort (GdkDmabufFormatsBuilder *self)
 }
 
 GdkDmabufFormats *
-gdk_dmabuf_formats_builder_free_to_formats (GdkDmabufFormatsBuilder *self)
+gdk_dmabuf_formats_builder_free_to_formats_for_device (GdkDmabufFormatsBuilder *self,
+                                                       guint64                  device)
 {
   GdkDmabufFormats *formats;
 
@@ -90,19 +93,28 @@ gdk_dmabuf_formats_builder_free_to_formats (GdkDmabufFormatsBuilder *self)
   gdk_dmabuf_formats_builder_sort (self);
 
   formats = gdk_dmabuf_formats_new (gdk_dmabuf_formats_builder_get_data (self),
-                                    gdk_dmabuf_formats_builder_get_size (self));
+                                    gdk_dmabuf_formats_builder_get_size (self),
+                                    device);
   gdk_dmabuf_formats_builder_clear (self);
   g_free (self);
 
   return formats;
 }
 
-void
-gdk_dmabuf_formats_builder_add_format (GdkDmabufFormatsBuilder *self,
-                                       guint32                  fourcc,
-                                       guint64                  modifier)
+GdkDmabufFormats *
+gdk_dmabuf_formats_builder_free_to_formats (GdkDmabufFormatsBuilder *self)
 {
-  GdkDmabufFormat format = { fourcc, modifier, G_MAXSIZE };
+  return gdk_dmabuf_formats_builder_free_to_formats_for_device (self, 0);
+}
+
+void
+gdk_dmabuf_formats_builder_add_format_for_device (GdkDmabufFormatsBuilder *self,
+                                                  guint32                  fourcc,
+                                                  guint32                  flags,
+                                                  guint64                  modifier,
+                                                  guint64                  device)
+{
+  GdkDmabufFormat format = { fourcc, flags, modifier, device, G_MAXSIZE };
 
   for (gsize i = 0; i < gdk_dmabuf_formats_builder_get_size (self); i++)
     {
@@ -111,6 +123,14 @@ gdk_dmabuf_formats_builder_add_format (GdkDmabufFormatsBuilder *self,
     }
 
   gdk_dmabuf_formats_builder_append (self, &format);
+}
+
+void
+gdk_dmabuf_formats_builder_add_format (GdkDmabufFormatsBuilder *self,
+                                       guint32                  fourcc,
+                                       guint64                  modifier)
+{
+  gdk_dmabuf_formats_builder_add_format_for_device (self, fourcc, 0, modifier, 0);
 }
 
 void

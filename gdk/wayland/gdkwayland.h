@@ -30,6 +30,7 @@
 
 #include <gdk/wayland/gdkwaylanddevice.h>
 #include <gdk/wayland/gdkwaylanddisplay.h>
+#include <gdk/wayland/gdkwaylanddmabufformats.h>
 #include <gdk/wayland/gdkwaylandglcontext.h>
 #include <gdk/wayland/gdkwaylandmonitor.h>
 #include <gdk/wayland/gdkwaylandpopup.h>
