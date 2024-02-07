@@ -30,6 +30,7 @@ gdk_wayland_sources = files([
 gdk_wayland_public_headers = files([
   'gdkwaylanddevice.h',
   'gdkwaylanddisplay.h',
+  'gdkwaylanddmabufformats.h',
   'gdkwaylandglcontext.h',
   'gdkwaylandmonitor.h',
   'gdkwaylandpopup.h',
