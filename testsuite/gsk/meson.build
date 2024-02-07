@@ -465,7 +465,7 @@ if os_linux
           'G_TEST_BUILDDIR=@0@'.format(meson.current_build_dir())
         ],
         protocol: 'exitcode',
-        suite: 'gsk',
+        suite: ['gsk', 'offload'],
       )
     endif
   endforeach
