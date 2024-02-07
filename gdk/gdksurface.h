@@ -139,6 +139,9 @@ GdkVulkanContext *
                gdk_surface_create_vulkan_context(GdkSurface     *surface,
                                                  GError        **error);
 
+GdkDmabufFormats *
+               gdk_surface_get_dmabuf_formats   (GdkSurface     *surface);
+
 G_DEFINE_AUTOPTR_CLEANUP_FUNC (GdkSurface, g_object_unref)
 
 G_END_DECLS
