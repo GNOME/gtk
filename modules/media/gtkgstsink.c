@@ -156,8 +156,7 @@ add_drm_formats_and_modifiers (GstCaps          *caps,
       gst_value_list_append_and_take_value (&dmabuf_list, &value);
     }
 
-    gst_structure_take_value (gst_caps_get_structure (caps, 0), "drm-format",
-        &dmabuf_list);
+    gst_structure_take_value (gst_caps_get_structure (caps, 0), "drm-format", &dmabuf_list);
 }
 #endif
 
@@ -371,6 +370,7 @@ gtk_gst_sink_texture_from_buffer (GtkGstSink *self,
       g_autoptr (GdkDmabufTextureBuilder) builder = NULL;
       const GstVideoMeta *vmeta = gst_buffer_get_video_meta (buffer);
       GError *error = NULL;
+      GdkDisplay *display;
       int i;
 
       /* We don't map dmabufs */
@@ -380,8 +380,17 @@ gtk_gst_sink_texture_from_buffer (GtkGstSink *self,
       g_return_val_if_fail (self->gdk_context, NULL);
       g_return_val_if_fail (self->drm_info.drm_fourcc != DRM_FORMAT_INVALID, NULL);
 
+      display = gdk_gl_context_get_display (self->gdk_context);
+
+      GDK_DISPLAY_DEBUG (display, DMABUF,
+                         "Got %dx%d dmabuf from gstreamer, format %.4s:%#" G_GINT64_MODIFIER "x, %d planes",
+                         GSK_VIDEO_INFO_WIDTH (&self->v_info),
+                         GSK_VIDEO_INFO_HEIGHT (&self->v_info),
+                         (char *) self->drm_info.drm_fourcc, self->drm_info.drm_modifier,
+                         vmeta->n_planes);
+
       builder = gdk_dmabuf_texture_builder_new ();
-      gdk_dmabuf_texture_builder_set_display (builder, gdk_gl_context_get_display (self->gdk_context));
+      gdk_dmabuf_texture_builder_set_display (builder, display);
       gdk_dmabuf_texture_builder_set_fourcc (builder, self->drm_info.drm_fourcc);
       gdk_dmabuf_texture_builder_set_modifier (builder, self->drm_info.drm_modifier);
       // Padded width/height is set into the vmeta, perhaps we should import using these ?
