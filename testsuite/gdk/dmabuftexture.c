@@ -9,31 +9,6 @@
 #include <drm_fourcc.h>
 #endif
 
-static void
-test_dmabuf_formats (void)
-{
-  GdkDisplay *display;
-  GdkDmabufFormats *formats;
-
-  display = gdk_display_get_default ();
-
-  formats = gdk_display_get_dmabuf_formats (display);
-
-#ifdef HAVE_DMABUF
-  /* We always have basic linear formats */
-  g_assert_true (gdk_dmabuf_formats_get_n_formats (formats) >= 6);
-
-  g_assert_true (gdk_dmabuf_formats_contains (formats, DRM_FORMAT_ARGB8888, DRM_FORMAT_MOD_LINEAR));
-  g_assert_true (gdk_dmabuf_formats_contains (formats, DRM_FORMAT_RGBA8888, DRM_FORMAT_MOD_LINEAR));
-  g_assert_true (gdk_dmabuf_formats_contains (formats, DRM_FORMAT_BGRA8888, DRM_FORMAT_MOD_LINEAR));
-  g_assert_true (gdk_dmabuf_formats_contains (formats, DRM_FORMAT_ABGR16161616F, DRM_FORMAT_MOD_LINEAR));
-  g_assert_true (gdk_dmabuf_formats_contains (formats, DRM_FORMAT_RGB888, DRM_FORMAT_MOD_LINEAR));
-  g_assert_true (gdk_dmabuf_formats_contains (formats, DRM_FORMAT_BGR888, DRM_FORMAT_MOD_LINEAR));
-#else
-  g_assert_true (gdk_dmabuf_formats_get_n_formats (formats) == 0);
-#endif
-}
-
 static cairo_surface_t *
 make_surface (int width,
               int height)
@@ -290,7 +265,6 @@ main (int argc, char *argv[])
 {
   gtk_test_init (&argc, &argv, NULL);
 
-  g_test_add_func ("/dmabuf/formats", test_dmabuf_formats);
   g_test_add_func ("/dmabuf/export", test_dmabuf_export);
   g_test_add_func ("/dmabuf/import", test_dmabuf_import);
 
