@@ -1446,7 +1446,10 @@ gtk_calendar_key_controller_key_pressed (GtkEventControllerKey *controller,
     case GDK_KEY_Left:
       return_val = TRUE;
       if (state & modifier)
-        calendar_set_month_prev (calendar);
+        if (!gtk_widget_is_sensitive (calendar->arrow_widgets[0]))
+          break; /* Not allowed with the mouse, not allowed with the keyboard. */
+        else
+          calendar_set_month_prev (calendar);
       else
         {
           move_focus (calendar, -1, 0);
@@ -1458,7 +1461,10 @@ gtk_calendar_key_controller_key_pressed (GtkEventControllerKey *controller,
     case GDK_KEY_Right:
       return_val = TRUE;
       if (state & modifier)
-        calendar_set_month_next (calendar);
+        if (!gtk_widget_is_sensitive (calendar->arrow_widgets[1]))
+          break; /* Not allowed with the mouse, not allowed with the keyboard. */
+        else
+          calendar_set_month_next (calendar);
       else
         {
           move_focus (calendar, 1, 0);
@@ -1470,7 +1476,10 @@ gtk_calendar_key_controller_key_pressed (GtkEventControllerKey *controller,
     case GDK_KEY_Up:
       return_val = TRUE;
       if (state & modifier)
-        calendar_set_year_prev (calendar);
+        if (!gtk_widget_is_sensitive (calendar->arrow_widgets[2]))
+          break; /* Not allowed with the mouse, not allowed with the keyboard. */
+        else
+          calendar_set_year_prev (calendar);
       else
         {
           move_focus (calendar, 0, 1);
@@ -1482,7 +1491,10 @@ gtk_calendar_key_controller_key_pressed (GtkEventControllerKey *controller,
     case GDK_KEY_Down:
       return_val = TRUE;
       if (state & modifier)
-        calendar_set_year_next (calendar);
+        if (!gtk_widget_is_sensitive (calendar->arrow_widgets[3]))
+          break; /* Not allowed with the mouse, not allowed with the keyboard. */
+        else
+          calendar_set_year_next (calendar);
       else
         {
           move_focus (calendar, 0, -1);
