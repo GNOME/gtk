@@ -483,6 +483,12 @@ gsk_renderer_render (GskRenderer          *renderer,
   if (priv->surface == NULL)
     return;
 
+  /* Offloading can change subsurface stacking, which may trigger
+   * surface property changes. We don't want them to take effect
+   * during frame processing.
+   */
+  g_object_freeze_notify (G_OBJECT (priv->surface));
+
   renderer_class = GSK_RENDERER_GET_CLASS (renderer);
 
   clip = cairo_region_copy (region);
@@ -528,6 +534,8 @@ gsk_renderer_render (GskRenderer          *renderer,
   cairo_region_destroy (clip);
   g_clear_pointer (&offload, gsk_offload_free);
   priv->prev_node = gsk_render_node_ref (root);
+
+  g_object_thaw_notify (G_OBJECT (priv->surface));
 }
 
 /*< private >
