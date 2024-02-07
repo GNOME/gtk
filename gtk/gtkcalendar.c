@@ -130,6 +130,10 @@
 #include "gtkstack.h"
 #include "gtkgrid.h"
 
+/* GDateTime is used, from 0001-01-01 to 9999-12-31 */
+static const int YEAR_MIN = 1;
+static const int YEAR_MAX = 9999;
+
 static const guint month_length[2][13] =
 {
   { 0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 },
@@ -964,28 +968,27 @@ calendar_update_day_labels (GtkCalendar *calendar)
 {
   char buffer[255];
   GDateTime *today;
-  int new_day;
-  int x, y;
   int today_day;
+  int selected_year, selected_month, selected_day;
+  gboolean lower_limit_reached, upper_limit_reached;
 
-  new_day = g_date_time_get_day_of_month (calendar->date);
-
+  today_day = -1;
   today = g_date_time_new_now_local ();
-
-  if (g_date_time_get_year (calendar->date) == g_date_time_get_year (today) &&
-      g_date_time_get_month (calendar->date) == g_date_time_get_month (today))
-    today_day = g_date_time_get_day_of_month (today);
-  else
-    today_day = -1;
-
+  if (g_date_time_get_year (calendar->date) == g_date_time_get_year (today))
+    if (g_date_time_get_month (calendar->date) == g_date_time_get_month (today))
+      today_day = g_date_time_get_day_of_month (today);
   g_date_time_unref (today);
 
-  /* Update day labels */
-  for (y = 0; y < 6; y++)
-    for (x = 0; x < 7; x++)
+  g_date_time_get_ymd (calendar->date, &selected_year, &selected_month, &selected_day);
+
+  lower_limit_reached = selected_year == YEAR_MIN && selected_month == G_DATE_JANUARY;
+  upper_limit_reached = selected_year == YEAR_MAX && selected_month == G_DATE_DECEMBER;
+
+  for (int row = 0; row < 6; row++)
+    for (int col = 0; col < 7; col++)
       {
-        const int day = calendar->day[y][x];
-        GtkWidget *label = calendar->day_number_labels[y][x];
+        const int day = calendar->day[row][col];
+        GtkWidget *label = calendar->day_number_labels[row][col];
         /* Translators: this defines whether the day numbers should use
          * localized digits or the ones used in English (0123...).
          *
@@ -997,37 +1000,47 @@ calendar_update_day_labels (GtkCalendar *calendar)
          * too.
          */
         g_snprintf (buffer, sizeof (buffer), C_ ("calendar:day:digits", "%d"), day);
-
         gtk_label_set_label (GTK_LABEL (label), buffer);
+        gtk_widget_remove_css_class (label, "other-month");
+        gtk_widget_remove_css_class (label, "today");
+        gtk_widget_unset_state_flags (label, GTK_STATE_FLAG_CHECKED);
+        gtk_widget_unset_state_flags (label, GTK_STATE_FLAG_FOCUSED);
+        gtk_widget_unset_state_flags (label, GTK_STATE_FLAG_SELECTED);
+        gtk_widget_set_sensitive (label, TRUE);
 
-        if (calendar->day_month[y][x] == MONTH_PREV ||
-            calendar->day_month[y][x] == MONTH_NEXT)
-          gtk_widget_add_css_class (label, "other-month");
-        else
-          gtk_widget_remove_css_class (label, "other-month");
-
-        if (calendar->marked_date[day - 1] &&
-            calendar->day_month[y][x] == MONTH_CURRENT)
-          gtk_widget_set_state_flags (label, GTK_STATE_FLAG_CHECKED, FALSE);
-        else
-          gtk_widget_unset_state_flags (label, GTK_STATE_FLAG_CHECKED);
-
-        if (new_day == day &&
-            calendar->day_month[y][x] == MONTH_CURRENT)
-          gtk_widget_set_state_flags (label, GTK_STATE_FLAG_SELECTED, FALSE);
-        else
-          gtk_widget_unset_state_flags (label, GTK_STATE_FLAG_SELECTED);
-
-        if (calendar->focus_row == y && calendar->focus_col == x)
+        if (calendar->focus_row == row && calendar->focus_col == col)
           gtk_widget_set_state_flags (label, GTK_STATE_FLAG_FOCUSED, FALSE);
-        else
-          gtk_widget_unset_state_flags (label, GTK_STATE_FLAG_FOCUSED);
 
-        if (day == today_day &&
-            calendar->day_month[y][x] == MONTH_CURRENT)
-          gtk_widget_add_css_class (label, "today");
-        else
-          gtk_widget_remove_css_class (label, "today");
+        switch (calendar->day_month[row][col])
+          {
+          case MONTH_PREV:
+            gtk_widget_add_css_class (label, "other-month");
+            if (lower_limit_reached)
+              {
+                gtk_label_set_label (GTK_LABEL (label), NULL);
+                gtk_widget_set_sensitive (label, FALSE);
+              }
+            break;
+          case MONTH_CURRENT:
+            if (day == selected_day)
+              gtk_widget_set_state_flags (label, GTK_STATE_FLAG_SELECTED, FALSE);
+            if (day == today_day)
+              gtk_widget_add_css_class (label, "today");
+            if (calendar->marked_date[day - 1])
+              gtk_widget_set_state_flags (label, GTK_STATE_FLAG_CHECKED, FALSE);
+            break;
+          case MONTH_NEXT:
+            gtk_widget_add_css_class (label, "other-month");
+            if (upper_limit_reached)
+              {
+                gtk_label_set_label (GTK_LABEL (label), NULL);
+                gtk_widget_set_sensitive (label, FALSE);
+              }
+            break;
+          default:
+            g_assert_not_reached ();
+            break;
+          }
       }
 }
 
