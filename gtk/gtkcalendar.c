@@ -1045,6 +1045,29 @@ calendar_update_day_labels (GtkCalendar *calendar)
 }
 
 static void
+calendar_update_navigation_buttons (GtkCalendar *calendar)
+{
+  int year, month;
+  g_date_time_get_ymd (calendar->date, &year, &month, NULL);
+  for (int i = 0; i < 4; i++)
+    gtk_widget_set_sensitive (calendar->arrow_widgets[i], TRUE);
+  if (year == YEAR_MIN)
+    {
+      /* Cannot go back */
+      gtk_widget_set_sensitive (calendar->arrow_widgets[2], FALSE);
+      if (month == G_DATE_JANUARY)
+        gtk_widget_set_sensitive (calendar->arrow_widgets[0], FALSE);
+    }
+  else if (year == YEAR_MAX)
+    {
+      /* Cannot move forward */
+      gtk_widget_set_sensitive (calendar->arrow_widgets[3], FALSE);
+      if (month == G_DATE_DECEMBER)
+        gtk_widget_set_sensitive (calendar->arrow_widgets[1], FALSE);
+    }
+}
+
+static void
 calendar_select_day_internal (GtkCalendar *calendar,
                               GDateTime   *date,
                               gboolean     emit_day_signal)
@@ -1090,6 +1113,8 @@ calendar_select_day_internal (GtkCalendar *calendar,
   calendar_compute_days (calendar);
   gtk_stack_set_visible_child_name (GTK_STACK (calendar->month_name_stack),
                                     default_monthname[new_month - 1]);
+
+  calendar_update_navigation_buttons (calendar);
 
   calendar_update_day_labels (calendar);
 
