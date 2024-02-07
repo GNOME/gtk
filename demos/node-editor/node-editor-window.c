@@ -68,8 +68,9 @@ struct _NodeEditorWindow
 
   GArray *errors;
 
-  guint update_timeout;
   gboolean auto_reload;
+  gboolean mark_as_safe_pending;
+  gulong after_paint_handler;
 };
 
 struct _NodeEditorWindowClass
@@ -246,12 +247,49 @@ highlight_text (NodeEditorWindow *self)
 }
 
 static void
+mark_autosave_as_unsafe (void)
+{
+  char *path1 = NULL;
+  char *path2 = NULL;
+
+  path1 = get_autosave_path ("-unsafe");
+  path2 = get_autosave_path (NULL);
+
+  g_rename (path2, path1);
+}
+
+static void
+mark_autosave_as_safe (void)
+{
+  char *path1 = NULL;
+  char *path2 = NULL;
+
+  path1 = get_autosave_path ("-unsafe");
+  path2 = get_autosave_path (NULL);
+
+  g_rename (path1, path2);
+}
+
+static void
+after_paint (GdkFrameClock    *clock,
+             NodeEditorWindow *self)
+{
+  if (self->mark_as_safe_pending)
+    {
+      self->mark_as_safe_pending = FALSE;
+      mark_autosave_as_safe ();
+    }
+}
+
+static void
 reload (NodeEditorWindow *self)
 {
   char *text;
   GBytes *bytes;
   float scale;
   GskRenderNode *big_node;
+
+  mark_autosave_as_unsafe ();
 
   text = get_current_text (self->text_buffer);
   bytes = g_bytes_new_take (text, strlen (text));
@@ -314,6 +352,8 @@ reload (NodeEditorWindow *self)
     }
 
   g_clear_pointer (&big_node, gsk_render_node_unref);
+
+  self->mark_as_safe_pending = TRUE;
 }
 
 static void
@@ -1125,9 +1165,6 @@ node_editor_window_finalize (GObject *object)
 {
   NodeEditorWindow *self = (NodeEditorWindow *)object;
 
-  if (self->update_timeout)
-    g_source_remove (self->update_timeout);
-
   g_array_free (self->errors, TRUE);
 
   g_clear_pointer (&self->node, gsk_render_node_unref);
@@ -1172,6 +1209,7 @@ static void
 node_editor_window_realize (GtkWidget *widget)
 {
   NodeEditorWindow *self = NODE_EDITOR_WINDOW (widget);
+  GdkFrameClock *frameclock;
 
   GTK_WIDGET_CLASS (node_editor_window_parent_class)->realize (widget);
 
@@ -1199,13 +1237,23 @@ node_editor_window_realize (GtkWidget *widget)
   node_editor_window_add_renderer (self,
                                    gsk_cairo_renderer_new (),
                                    "Cairo");
+
+  frameclock = gtk_widget_get_frame_clock (widget);
+  self->after_paint_handler = g_signal_connect (frameclock, "after-paint",
+                                                G_CALLBACK (after_paint), self);
+
 }
 
 static void
 node_editor_window_unrealize (GtkWidget *widget)
 {
   NodeEditorWindow *self = NODE_EDITOR_WINDOW (widget);
+  GdkFrameClock *frameclock;
   guint i;
+
+  frameclock = gtk_widget_get_frame_clock (widget);
+  g_signal_handler_disconnect (frameclock, self->after_paint_handler);
+  self->after_paint_handler = 0;
 
   for (i = 0; i < g_list_model_get_n_items (G_LIST_MODEL (self->renderers)); i ++)
     {
@@ -1807,41 +1855,6 @@ autosave_contents (NodeEditorWindow *self)
 }
 
 static void
-mark_autosave_as_safe (void)
-{
-  char *path1 = NULL;
-  char *path2 = NULL;
-
-  path1 = get_autosave_path ("-unsafe");
-  path2 = get_autosave_path (NULL);
-
-  g_rename (path1, path2);
-}
-
-static gboolean
-update_timeout_cb (gpointer data)
-{
-  NodeEditorWindow *self = data;
-
-  self->update_timeout = 0;
-
-  mark_autosave_as_safe ();
-
-  return G_SOURCE_REMOVE;
-}
-
-static void
-initiate_autosave (NodeEditorWindow *self)
-{
-  autosave_contents (self);
-
-  if (self->update_timeout != 0)
-    g_source_remove (self->update_timeout);
-
-  self->update_timeout = g_timeout_add (100, update_timeout_cb, self);
-}
-
-static void
 node_editor_window_init (NodeEditorWindow *self)
 {
   GAction *action;
@@ -1905,7 +1918,7 @@ node_editor_window_init (NodeEditorWindow *self)
 
   set_initial_text (self);
 
-  g_signal_connect_swapped (self->text_buffer, "changed", G_CALLBACK (initiate_autosave), self);
+  g_signal_connect_swapped (self->text_buffer, "changed", G_CALLBACK (autosave_contents), self);
 
   if (g_getenv ("GSK_RENDERER"))
     {
