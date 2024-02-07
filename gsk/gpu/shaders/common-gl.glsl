@@ -91,7 +91,7 @@ gsk_get_float (uint id)
 #define gsk_get_int(id) (floatBitsToInt(gsk_get_float(id)))
 #define gsk_get_uint(id) (floatBitsToUint(gsk_get_float(id)))
 
-#ifdef GSK_GLES
+#if __VERSION__ < 400 || defined(GSK_GLES)
 
 vec4
 gsk_texture (uint id,
