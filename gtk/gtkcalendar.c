@@ -1356,6 +1356,10 @@ move_focus (GtkCalendar *calendar,
 {
   GtkTextDirection text_dir = gtk_widget_get_direction (GTK_WIDGET (calendar));
   int x, y;
+  int old_focus_row, old_focus_col;
+
+  old_focus_row = calendar->focus_row;
+  old_focus_col = calendar->focus_col;
 
   if (updown == 1)
     {
@@ -1415,6 +1419,9 @@ move_focus (GtkCalendar *calendar,
         else
           gtk_widget_unset_state_flags (label, GTK_STATE_FLAG_FOCUSED);
       }
+
+  calendar_invalidate_day (calendar, old_focus_row, old_focus_col);
+  calendar_invalidate_day (calendar, calendar->focus_row, calendar->focus_col);
 }
 
 static gboolean
@@ -1426,8 +1433,6 @@ gtk_calendar_key_controller_key_pressed (GtkEventControllerKey *controller,
 {
   GtkCalendar *calendar = GTK_CALENDAR (widget);
   int return_val;
-  int old_focus_row;
-  int old_focus_col;
   int row, col, day;
 #ifdef __APPLE__
   GdkModifierType modifier = GDK_META_MASK;
@@ -1436,9 +1441,6 @@ gtk_calendar_key_controller_key_pressed (GtkEventControllerKey *controller,
 #endif
 
   return_val = FALSE;
-
-  old_focus_row = calendar->focus_row;
-  old_focus_col = calendar->focus_col;
 
   switch (keyval)
     {
@@ -1451,11 +1453,7 @@ gtk_calendar_key_controller_key_pressed (GtkEventControllerKey *controller,
         else
           calendar_set_month_prev (calendar);
       else
-        {
-          move_focus (calendar, -1, 0);
-          calendar_invalidate_day (calendar, old_focus_row, old_focus_col);
-          calendar_invalidate_day (calendar, calendar->focus_row, calendar->focus_col);
-        }
+        move_focus (calendar, -1, 0);
       break;
     case GDK_KEY_KP_Right:
     case GDK_KEY_Right:
@@ -1466,11 +1464,7 @@ gtk_calendar_key_controller_key_pressed (GtkEventControllerKey *controller,
         else
           calendar_set_month_next (calendar);
       else
-        {
-          move_focus (calendar, 1, 0);
-          calendar_invalidate_day (calendar, old_focus_row, old_focus_col);
-          calendar_invalidate_day (calendar, calendar->focus_row, calendar->focus_col);
-        }
+        move_focus (calendar, 1, 0);
       break;
     case GDK_KEY_KP_Up:
     case GDK_KEY_Up:
@@ -1481,11 +1475,7 @@ gtk_calendar_key_controller_key_pressed (GtkEventControllerKey *controller,
         else
           calendar_set_year_prev (calendar);
       else
-        {
-          move_focus (calendar, 0, 1);
-          calendar_invalidate_day (calendar, old_focus_row, old_focus_col);
-          calendar_invalidate_day (calendar, calendar->focus_row, calendar->focus_col);
-        }
+        move_focus (calendar, 0, 1);
       break;
     case GDK_KEY_KP_Down:
     case GDK_KEY_Down:
@@ -1496,11 +1486,7 @@ gtk_calendar_key_controller_key_pressed (GtkEventControllerKey *controller,
         else
           calendar_set_year_next (calendar);
       else
-        {
-          move_focus (calendar, 0, -1);
-          calendar_invalidate_day (calendar, old_focus_row, old_focus_col);
-          calendar_invalidate_day (calendar, calendar->focus_row, calendar->focus_col);
-        }
+        move_focus (calendar, 0, -1);
       break;
     case GDK_KEY_KP_Space:
     case GDK_KEY_space:
