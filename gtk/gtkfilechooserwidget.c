@@ -639,6 +639,7 @@ _gtk_file_chooser_extract_recent_folders (GList *infos)
   GList *l;
   GList *result;
   GHashTable *folders;
+  guint counter = 0;
 
   result = NULL;
 
@@ -650,6 +651,9 @@ _gtk_file_chooser_extract_recent_folders (GList *infos)
       const char *uri, *mime_type;
       GFile *dir;
       GFile *file;
+
+      if (counter >= DEFAULT_RECENT_FILES_LIMIT)
+        break;
 
       if (!gtk_recent_info_is_local (info))
         continue;
@@ -674,6 +678,7 @@ _gtk_file_chooser_extract_recent_folders (GList *infos)
             {
               g_hash_table_insert (folders, dir, (gpointer) 1);
               result = g_list_prepend (result, g_object_ref (dir));
+              counter++;
             }
 
           g_object_unref (dir);
@@ -3718,21 +3723,25 @@ my_g_format_date_for_display (GtkFileChooserWidget *impl,
 {
   GDateTime *now, *time;
   GDateTime *now_date, *date;
+  GTimeZone *tz;
   const char *format;
   char *date_str;
   int days_ago;
 
+  tz = g_time_zone_new_local ();
   time = g_date_time_new_from_unix_local (secs);
-  date = g_date_time_new_local (g_date_time_get_year (time),
-                                g_date_time_get_month (time),
-                                g_date_time_get_day_of_month (time),
-                                0, 0, 0);
+  date = g_date_time_new (tz,
+                          g_date_time_get_year (time),
+                          g_date_time_get_month (time),
+                          g_date_time_get_day_of_month (time),
+                          0, 0, 0);
 
-  now = g_date_time_new_now_local ();
-  now_date = g_date_time_new_local (g_date_time_get_year (now),
-                                    g_date_time_get_month (now),
-                                    g_date_time_get_day_of_month (now),
-                                    0, 0, 0);
+  now = g_date_time_new_now (tz);
+  now_date = g_date_time_new (tz,
+                              g_date_time_get_year (now),
+                              g_date_time_get_month (now),
+                              g_date_time_get_day_of_month (now),
+                              0, 0, 0);
   days_ago = g_date_time_difference (now_date, date) / G_TIME_SPAN_DAY;
 
   if (days_ago < 1)
@@ -5924,6 +5933,7 @@ recent_start_loading (GtkFileChooserWidget *impl)
     {
       const int limit = DEFAULT_RECENT_FILES_LIMIT;
       const char *app_name = g_get_application_name ();
+      GList *files = NULL;
       GList *l;
       int n;
 
@@ -5941,31 +5951,30 @@ recent_start_loading (GtkFileChooserWidget *impl)
               !gtk_recent_info_has_application (info, app_name))
             continue;
 
-
           file = g_file_new_for_uri (gtk_recent_info_get_uri (info));
-          _gtk_file_system_model_add_and_query_file (impl->recent_model,
-                                                     file,
-                                                     MODEL_ATTRIBUTES);
-          g_object_unref (file);
+          files = g_list_prepend (files, file);
 
           n++;
           if (limit != -1 && n >= limit)
             break;
         }
 
+      files = g_list_reverse (files);
+      _gtk_file_system_model_add_and_query_files (impl->recent_model,
+                                                  files,
+                                                  MODEL_ATTRIBUTES);
+      g_list_free_full (files, g_object_unref);
+
       g_set_object (&impl->model_for_search, impl->recent_model);
     }
   else
     {
       GList *folders;
-      GList *l;
 
       folders = _gtk_file_chooser_extract_recent_folders (items);
-
-      for (l = folders; l; l = l->next)
-        _gtk_file_system_model_add_and_query_file (impl->recent_model,
-                                                   G_FILE (l->data),
-                                                   MODEL_ATTRIBUTES);
+      _gtk_file_system_model_add_and_query_files (impl->recent_model,
+                                                  folders,
+                                                  MODEL_ATTRIBUTES);
 
       g_list_free_full (folders, g_object_unref);
     }
