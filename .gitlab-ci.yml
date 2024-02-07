@@ -253,7 +253,6 @@ macos-x86_64:
             -Dcpp_std=c++11
             -Dpixman:tests=disabled
             -Dlibjpeg-turbo:simd=disabled
-            -Dbuild-testsuite=false
             _build
     - meson compile -C _build
   artifacts:
