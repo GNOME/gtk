@@ -1355,73 +1355,73 @@ move_focus (GtkCalendar *calendar,
             int          updown)
 {
   GtkTextDirection text_dir = gtk_widget_get_direction (GTK_WIDGET (calendar));
-  int x, y;
-  int old_focus_row, old_focus_col;
+  int focus_row, focus_col;
+  GtkWidget *label;
 
-  old_focus_row = calendar->focus_row;
-  old_focus_col = calendar->focus_col;
+  focus_row = calendar->focus_row;
+  focus_col = calendar->focus_col;
 
   if (updown == 1)
     {
-      if (calendar->focus_row > 0)
-        calendar->focus_row--;
-      if (calendar->focus_row < 0)
-        calendar->focus_row = 5;
-      if (calendar->focus_col < 0)
-        calendar->focus_col = 6;
+      if (focus_row > 0)
+        focus_row--;
+      if (focus_row < 0)
+        focus_row = 5;
+      if (focus_col < 0)
+        focus_col = 6;
     }
   else if (updown == -1)
     {
-      if (calendar->focus_row < 5)
-        calendar->focus_row++;
-      if (calendar->focus_col < 0)
-        calendar->focus_col = 0;
+      if (focus_row < 5)
+        focus_row++;
+      if (focus_col < 0)
+        focus_col = 0;
     }
   else if ((text_dir == GTK_TEXT_DIR_LTR && direction == -1) ||
            (text_dir == GTK_TEXT_DIR_RTL && direction == 1))
     {
-      if (calendar->focus_col > 0)
-          calendar->focus_col--;
-      else if (calendar->focus_row > 0)
+      if (focus_col > 0)
+        focus_col--;
+      else if (focus_row > 0)
         {
-          calendar->focus_col = 6;
-          calendar->focus_row--;
+          focus_col = 6;
+          focus_row--;
         }
 
-      if (calendar->focus_col < 0)
-        calendar->focus_col = 6;
-      if (calendar->focus_row < 0)
-        calendar->focus_row = 5;
+      if (focus_col < 0)
+        focus_col = 6;
+      if (focus_row < 0)
+        focus_row = 5;
     }
   else
     {
-      if (calendar->focus_col < 6)
-        calendar->focus_col++;
-      else if (calendar->focus_row < 5)
+      if (focus_col < 6)
+        focus_col++;
+      else if (focus_row < 5)
         {
-          calendar->focus_col = 0;
-          calendar->focus_row++;
+          focus_col = 0;
+          focus_row++;
         }
 
-      if (calendar->focus_col < 0)
-        calendar->focus_col = 0;
-      if (calendar->focus_row < 0)
-        calendar->focus_row = 0;
+      if (focus_col < 0)
+        focus_col = 0;
+      if (focus_row < 0)
+        focus_row = 0;
     }
 
-  for (y = 0; y < 6; y ++)
-    for (x = 0; x < 7; x ++)
-      {
-        GtkWidget *label = calendar->day_number_labels[y][x];
+  if (!gtk_widget_is_sensitive (calendar->day_number_labels[focus_row][focus_col]))
+    return; /* Not sensitive, not reachable. */
 
-        if (calendar->focus_row == y && calendar->focus_col == x)
-          gtk_widget_set_state_flags (label, GTK_STATE_FLAG_FOCUSED, FALSE);
-        else
-          gtk_widget_unset_state_flags (label, GTK_STATE_FLAG_FOCUSED);
-      }
-
-  calendar_invalidate_day (calendar, old_focus_row, old_focus_col);
+  label = calendar->day_number_labels[calendar->focus_row][calendar->focus_col];
+  gtk_widget_unset_state_flags (label, GTK_STATE_FLAG_FOCUSED);
   calendar_invalidate_day (calendar, calendar->focus_row, calendar->focus_col);
+
+  calendar->focus_row = focus_row;
+  calendar->focus_col = focus_col;
+
+  label = calendar->day_number_labels[focus_row][focus_col];
+  gtk_widget_set_state_flags (label, GTK_STATE_FLAG_FOCUSED, FALSE);
+  calendar_invalidate_day (calendar, focus_row, focus_col);
 }
 
 static gboolean
