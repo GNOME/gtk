@@ -60,6 +60,7 @@ internal_tests = [
   { 'name': 'image' },
   { 'name': 'texture' },
   { 'name': 'gltexture' },
+  { 'name': 'subsurface' },
 ]
 
 if host_machine.system() != 'windows'

@@ -119,6 +119,7 @@ gdk_subsurface_attach (GdkSubsurface         *subsurface,
   g_return_val_if_fail (GDK_IS_SUBSURFACE (subsurface), FALSE);
   g_return_val_if_fail (GDK_IS_TEXTURE (texture), FALSE);
   g_return_val_if_fail (rect != NULL, FALSE);
+  g_return_val_if_fail (sibling != subsurface, FALSE);
   g_return_val_if_fail (sibling == NULL || GDK_IS_SUBSURFACE (sibling), FALSE);
   g_return_val_if_fail (sibling == NULL || sibling->parent == subsurface->parent, FALSE);
 
