@@ -1,6 +1,7 @@
-/* gtkatspisocketaccessible.h: AT-SPI socket accessible object
+/* gtkatspisocket.h: AT-SPI socket accessible object
  *
- * Copyright 2024  Igalia S.L.
+ * Copyright 2024 GNOME Foundation Inc.
+ *           2024 Igalia S.L.
  *
  * SPDX-License-Identifier: LGPL-2.1-or-later
  *
