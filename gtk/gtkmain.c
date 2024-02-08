@@ -1553,7 +1553,7 @@ is_transient_for (GtkWindow *child,
   return FALSE;
 }
 
-void
+gboolean
 gtk_main_do_event (GdkEvent *event)
 {
   GtkWidget *event_widget;
@@ -1562,9 +1562,10 @@ gtk_main_do_event (GdkEvent *event)
   GtkWindowGroup *window_group;
   GdkEvent *rewritten_event = NULL;
   GList *tmp_list;
+  gboolean handled_event = FALSE;
 
   if (gtk_inspector_handle_event (event))
-    return;
+    return FALSE;
 
   /* Find the widget which got the event. We store the widget
    * in the user_data field of GdkSurface's. Ignore the event
@@ -1572,7 +1573,7 @@ gtk_main_do_event (GdkEvent *event)
    */
   event_widget = gtk_get_event_widget (event);
   if (!event_widget)
-    return;
+    return FALSE;
 
   target_widget = event_widget;
 
@@ -1650,6 +1651,7 @@ gtk_main_do_event (GdkEvent *event)
           if (GTK_IS_WINDOW (target_widget) &&
               !gtk_window_emit_close_request (GTK_WINDOW (target_widget)))
             gtk_window_destroy (GTK_WINDOW (target_widget));
+          handled_event = TRUE;
         }
       break;
 
@@ -1657,7 +1659,7 @@ gtk_main_do_event (GdkEvent *event)
       {
         GtkWidget *root = GTK_WIDGET (gtk_widget_get_root (target_widget));
         if (!_gtk_widget_captured_event (root, event, root))
-          gtk_widget_event (root, event, root);
+          handled_event = gtk_widget_event (root, event, root);
       }
       break;
 
@@ -1682,7 +1684,7 @@ gtk_main_do_event (GdkEvent *event)
     case GDK_PAD_STRIP:
     case GDK_PAD_GROUP_MODE:
     case GDK_GRAB_BROKEN:
-      gtk_propagate_event (grab_widget, event);
+      handled_event = gtk_propagate_event (grab_widget, event);
       break;
 
     case GDK_ENTER_NOTIFY:
@@ -1690,6 +1692,7 @@ gtk_main_do_event (GdkEvent *event)
     case GDK_DRAG_ENTER:
     case GDK_DRAG_LEAVE:
       /* Crossing event propagation happens during picking */
+      handled_event = TRUE;
       break;
 
     case GDK_DRAG_MOTION:
@@ -1697,7 +1700,7 @@ gtk_main_do_event (GdkEvent *event)
       {
         GdkDrop *drop = gdk_dnd_event_get_drop (event);
         gtk_drop_begin_event (drop, gdk_event_get_event_type (event));
-        gtk_propagate_event (grab_widget, event);
+        handled_event = gtk_propagate_event (grab_widget, event);
         gtk_drop_end_event (drop);
       }
       break;
@@ -1719,6 +1722,7 @@ gtk_main_do_event (GdkEvent *event)
 
   if (rewritten_event)
     gdk_event_unref (rewritten_event);
+  return handled_event;
 }
 
 static GtkWindowGroup *

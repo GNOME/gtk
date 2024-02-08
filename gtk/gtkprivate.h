@@ -93,7 +93,7 @@ gboolean         gtk_propagate_event_internal  (GtkWidget       *widget,
                                                 GtkWidget       *topmost);
 gboolean   gtk_propagate_event          (GtkWidget       *widget,
                                          GdkEvent        *event);
-void       gtk_main_do_event       (GdkEvent           *event);
+gboolean   gtk_main_do_event            (GdkEvent        *event);
 
 GtkWidget *gtk_get_event_widget         (GdkEvent  *event);
 
