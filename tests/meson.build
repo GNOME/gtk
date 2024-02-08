@@ -1,5 +1,6 @@
 gtk_tests = [
   # testname, optional extra sources
+  ['devicepixels'],
   ['testsections'],
   ['testfilelauncher'],
   ['input'],
