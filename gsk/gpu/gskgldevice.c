@@ -242,7 +242,7 @@ gsk_gl_device_get_for_display (GdkDisplay  *display,
   if (!gdk_gl_context_check_version (context, "3.0", "3.0"))
     {
       g_set_error (error, GDK_GL_ERROR, GDK_GL_ERROR_NOT_AVAILABLE,
-                   _("OpenGL ES 2.0 is not supported by this renderer."));
+                   _("OpenGL ES 3.0 is not supported by this renderer."));
       return NULL;
     }
 
