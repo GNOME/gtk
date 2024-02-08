@@ -66,31 +66,41 @@ demo_image_snapshot (GtkWidget   *widget,
   double x, y, width, height;
 
   g_print ("snapshot\n");
+
   scale = gdk_surface_get_scale (gtk_native_get_surface (native));
 
   g_print ("scale %f\n", scale);
+
+  /* width and height that give us 1-1 mapping to device pixels */
+  width = gdk_texture_get_width (demo->texture) / scale;
+  height = gdk_texture_get_height (demo->texture) / scale;
 
   gtk_native_get_surface_transform (native, &ox, &oy);
 
   g_print ("surface transform %f %f\n", ox, oy);
 
-  if (!gtk_widget_compute_point (widget, GTK_WIDGET (native), &GRAPHENE_POINT_INIT (0, 0), &point))
+  x = (gtk_widget_get_width (widget) - width) / 2;
+  y = (gtk_widget_get_height (widget) - height) / 2;
+
+  g_print ("texture origin in widget coordinates: %f %f\n", x, y);
+
+  if (!gtk_widget_compute_point (widget, GTK_WIDGET (native), &GRAPHENE_POINT_INIT (x, y), &point))
     return;
 
   x = point.x;
   y = point.y;
 
-  g_print ("window (app) coordinates: %f %f\n", x, y);
+  g_print ("in window (app) coordinates: %f %f\n", x, y);
 
   x += ox;
   y += oy;
 
-  g_print ("surface (app) coordinates: %f %f\n", x, y);
+  g_print ("in surface (app) coordinates: %f %f\n", x, y);
 
   x *= scale;
   y *= scale;
 
-  g_print ("surface (device) coordinates: %f %f\n", x, y);
+  g_print ("in surface (device) coordinates: %f %f\n", x, y);
 
   /* Now x, y are the surface (device) coordinates of the widget's origin */
 
@@ -109,13 +119,11 @@ demo_image_snapshot (GtkWidget   *widget,
   x -= ox;
   y -= oy;
 
+  if (!gtk_widget_compute_point (widget, GTK_WIDGET (native), &GRAPHENE_POINT_INIT (0, 0), &point))
+    return;
+
   x -= point.x;
   y -= point.y;
-
-  /* width and height that give us 1-1 mapping to device pixels */
-
-  width = gdk_texture_get_width (demo->texture) / scale;
-  height = gdk_texture_get_height (demo->texture) / scale;
 
   g_print ("bounds: %f %f %f %f\n", x, y, width, height);
 
@@ -225,12 +233,31 @@ make_checkerboard_texture (int width, int height)
   return texture;
 }
 
+static gboolean
+toggle_fullscreen (GtkWidget *widget,
+                   GVariant  *args,
+                   gpointer   data)
+{
+  GtkWindow *window = GTK_WINDOW (widget);
+
+  if (gtk_window_is_fullscreen (window))
+    gtk_window_unfullscreen (window);
+  else
+    gtk_window_fullscreen (window);
+
+  return TRUE;
+}
+
 int
 main (int argc, char *argv[])
 {
   GtkWidget *window;
   GdkTexture *texture;
   GError *error = NULL;
+  GtkEventController *controller;
+  GtkShortcutTrigger *trigger;
+  GtkShortcutAction *action;
+  GtkShortcut *shortcut;
 
   gtk_init ();
 
@@ -246,7 +273,13 @@ main (int argc, char *argv[])
     }
 
   window = gtk_window_new ();
-  gtk_window_set_default_size (GTK_WINDOW (window), 797, 601);
+
+  controller = gtk_shortcut_controller_new ();
+  trigger = gtk_keyval_trigger_new (GDK_KEY_F11, GDK_NO_MODIFIER_MASK);
+  action = gtk_callback_action_new (toggle_fullscreen, NULL, NULL);
+  shortcut = gtk_shortcut_new (trigger, action);
+  gtk_shortcut_controller_add_shortcut (GTK_SHORTCUT_CONTROLLER (controller), shortcut);
+  gtk_widget_add_controller (window, controller);
 
   gtk_window_set_child (GTK_WINDOW (window), demo_image_new (texture));
 
