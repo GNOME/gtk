@@ -260,9 +260,8 @@ interval_contains (float p1, float w1,
 
 static gboolean
 update_clip (GskOffload            *self,
-             const graphene_rect_t *bounds)
+             const graphene_rect_t *transformed_bounds)
 {
-  graphene_rect_t transformed_bounds;
   gboolean no_clip = FALSE;
   gboolean rect_clip = FALSE;
 
@@ -271,9 +270,7 @@ update_clip (GskOffload            *self,
       self->current_clip->is_complex)
     return FALSE;
 
-  transform_bounds (self, bounds, &transformed_bounds);
-
-  if (!gsk_rect_intersects (&self->current_clip->rect.bounds, &transformed_bounds))
+  if (!gsk_rect_intersects (&self->current_clip->rect.bounds, transformed_bounds))
     {
       push_empty_clip (self);
       return TRUE;
@@ -281,12 +278,12 @@ update_clip (GskOffload            *self,
 
   if (self->current_clip->is_rectilinear)
     {
-      if (gsk_rect_contains_rect (&self->current_clip->rect.bounds, &transformed_bounds))
+      if (gsk_rect_contains_rect (&self->current_clip->rect.bounds, transformed_bounds))
         no_clip = TRUE;
       else
         rect_clip = TRUE;
     }
-  else if (gsk_rounded_rect_contains_rect (&self->current_clip->rect, &transformed_bounds))
+  else if (gsk_rounded_rect_contains_rect (&self->current_clip->rect, transformed_bounds))
     {
       no_clip = TRUE;
     }
@@ -297,9 +294,9 @@ update_clip (GskOffload            *self,
       rounded_rect_get_inner (&self->current_clip->rect, &inner);
 
       if (interval_contains (inner.origin.x, inner.size.width,
-                             transformed_bounds.origin.x, transformed_bounds.size.width) ||
+                             transformed_bounds->origin.x, transformed_bounds->size.width) ||
           interval_contains (inner.origin.y, inner.size.height,
-                             transformed_bounds.origin.y, transformed_bounds.size.height))
+                             transformed_bounds->origin.y, transformed_bounds->size.height))
         rect_clip = TRUE;
     }
 
@@ -318,7 +315,7 @@ update_clip (GskOffload            *self,
 
       /* The clip gets simpler for this node */
 
-      gsk_rect_intersection (&self->current_clip->rect.bounds, &transformed_bounds, &rect);
+      gsk_rect_intersection (&self->current_clip->rect.bounds, transformed_bounds, &rect);
       push_rect_clip (self, &GSK_ROUNDED_RECT_INIT_FROM_RECT (rect));
       return TRUE;
     }
@@ -345,6 +342,9 @@ visit_node (GskOffload    *self,
             GskRenderNode *node)
 {
   gboolean has_clip;
+  graphene_rect_t transformed_bounds;
+
+  transform_bounds (self, &node->bounds, &transformed_bounds);
 
   for (gsize i = 0; i < self->n_subsurfaces; i++)
     {
@@ -352,9 +352,6 @@ visit_node (GskOffload    *self,
 
       if (info->can_raise)
         {
-          graphene_rect_t transformed_bounds;
-
-          transform_bounds (self, &node->bounds, &transformed_bounds);
           if (gsk_rect_intersects (&transformed_bounds, &info->rect))
             {
               GskRenderNodeType type = GSK_RENDER_NODE_TYPE (node);
@@ -375,7 +372,7 @@ visit_node (GskOffload    *self,
         }
     }
 
-  has_clip = update_clip (self, &node->bounds);
+  has_clip = update_clip (self, &transformed_bounds);
 
   switch (GSK_RENDER_NODE_TYPE (node))
     {
