@@ -481,12 +481,15 @@ gdk_wayland_surface_create_subsurface (GdkSurface *surface)
 
   gdk_display_init_dmabuf (display);
 
-  dmabuf_formats_info_set_egl_formats (disp->dmabuf_formats_info, display->dmabuf_formats);
-
   if (disp->linux_dmabuf)
-    feedback = zwp_linux_dmabuf_v1_get_surface_feedback (disp->linux_dmabuf, sub->surface);
+    {
+      dmabuf_formats_info_set_egl_formats (disp->dmabuf_formats_info, display->dmabuf_formats);
+      feedback = zwp_linux_dmabuf_v1_get_surface_feedback (disp->linux_dmabuf, sub->surface);
+    }
   else
-    feedback = NULL;
+    {
+      feedback = NULL;
+    }
 
   name = g_strdup_printf ("subsurface %p", sub);
   sub->formats = dmabuf_formats_info_new (name,
