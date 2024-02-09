@@ -437,7 +437,8 @@ static GdkTexture *
 make_dmabuf_texture (const char *filename,
                      guint32     format,
                      gboolean    disjoint,
-                     gboolean    premultiplied)
+                     gboolean    premultiplied,
+                     gboolean    flip)
 {
   GdkTexture *texture;
   GdkTextureDownloader *downloader;
@@ -475,6 +476,20 @@ make_dmabuf_texture (const char *filename,
   gdk_texture_downloader_free (downloader);
 
   g_object_unref (texture);
+
+  if (flip)
+    {
+      for (int y = 0; y < height; y++)
+        {
+          guint32 *row = (guint32 *) (rgb_data + y * rgb_stride);
+          for (int x = 0; x < width / 2; x++)
+            {
+              guint32 p = row[x];
+              row[x] = row[width - 1 - x];
+              row[width - 1 - x] = p;
+            }
+        }
+    }
 
   builder = gdk_dmabuf_texture_builder_new ();
 
@@ -613,7 +628,7 @@ static void
 usage (void)
 {
   char *formats = supported_formats_to_string ();
-  g_print ("Usage: testdmabuf [--undecorated] [--disjoint][--download-to FILE] FORMAT FILE\n"
+  g_print ("Usage: testdmabuf [--undecorated][--disjoint][--download-to FILE] FORMAT FILE\n"
            "Supported formats: %s\n", formats);
   g_free (formats);
   exit (1);
@@ -633,11 +648,66 @@ parse_format (const char *a)
   return 0;
 }
 
+static gboolean
+toggle_fullscreen (GtkWidget *widget,
+                   GVariant  *args,
+                   gpointer   data)
+{
+  GtkWindow *window = GTK_WINDOW (widget);
+
+  if (gtk_window_is_fullscreen (window))
+    gtk_window_unfullscreen (window);
+  else
+    gtk_window_fullscreen (window);
+
+  return TRUE;
+}
+
+static gboolean
+toggle_overlay (GtkWidget *widget,
+                GVariant  *args,
+                gpointer   data)
+{
+  static GtkWidget *child = NULL;
+  GtkOverlay *overlay = data;
+
+  if (child)
+    {
+      gtk_overlay_remove_overlay (overlay, child);
+      child = NULL;
+    }
+  else
+    {
+      child = gtk_image_new_from_icon_name ("media-playback-start-symbolic");
+      gtk_image_set_icon_size (GTK_IMAGE (child), GTK_ICON_SIZE_LARGE);
+      gtk_overlay_add_overlay (overlay, child);
+    }
+
+  return TRUE;
+}
+
+static GdkTexture *texture;
+static GdkTexture *texture_flipped;
+
+static gboolean
+toggle_flip (GtkWidget *widget,
+             GVariant  *args,
+             gpointer   data)
+{
+  GtkPicture *picture = data;
+
+  if (gtk_picture_get_paintable (picture) == GDK_PAINTABLE (texture))
+    gtk_picture_set_paintable (picture, GDK_PAINTABLE (texture_flipped));
+  else
+    gtk_picture_set_paintable (picture, GDK_PAINTABLE (texture));
+
+  return TRUE;
+}
+
 int
 main (int argc, char *argv[])
 {
-  GdkTexture *texture;
-  GtkWidget *window, *offload, *picture;
+  GtkWidget *window, *offload, *picture, *overlay;
   char *filename;
   guint32 format;
   gboolean disjoint = FALSE;
@@ -646,6 +716,10 @@ main (int argc, char *argv[])
   gboolean fullscreen = FALSE;
   unsigned int i;
   const char *save_filename = NULL;
+  GtkEventController *controller;
+  GtkShortcutTrigger *trigger;
+  GtkShortcutAction *action;
+  GtkShortcut *shortcut;
 
   for (i = 1; i < argc; i++)
     {
@@ -683,7 +757,8 @@ main (int argc, char *argv[])
   /* Get the list of supported formats with GDK_DEBUG=opengl */
   gdk_display_get_dmabuf_formats (gdk_display_get_default ());
 
-  texture = make_dmabuf_texture (filename, format, disjoint, premultiplied);
+  texture = make_dmabuf_texture (filename, format, disjoint, premultiplied, FALSE);
+  texture_flipped = make_dmabuf_texture (filename, format, disjoint, premultiplied, TRUE);
 
   if (save_filename)
     gdk_texture_save_to_png (texture, save_filename);
@@ -694,10 +769,30 @@ main (int argc, char *argv[])
     gtk_window_fullscreen (GTK_WINDOW (window));
 
   picture = gtk_picture_new_for_paintable (GDK_PAINTABLE (texture));
-
   offload = gtk_graphics_offload_new (picture);
+  overlay = gtk_overlay_new ();
 
-  gtk_window_set_child (GTK_WINDOW (window), offload);
+  gtk_overlay_set_child (GTK_OVERLAY (overlay), offload);
+  gtk_window_set_child (GTK_WINDOW (window), overlay);
+
+  controller = gtk_shortcut_controller_new ();
+
+  trigger = gtk_keyval_trigger_new (GDK_KEY_F11, GDK_NO_MODIFIER_MASK);
+  action = gtk_callback_action_new (toggle_fullscreen, NULL, NULL);
+  shortcut = gtk_shortcut_new (trigger, action);
+  gtk_shortcut_controller_add_shortcut (GTK_SHORTCUT_CONTROLLER (controller), shortcut);
+
+  trigger = gtk_keyval_trigger_new (GDK_KEY_O, GDK_CONTROL_MASK);
+  action = gtk_callback_action_new (toggle_overlay, overlay, NULL);
+  shortcut = gtk_shortcut_new (trigger, action);
+  gtk_shortcut_controller_add_shortcut (GTK_SHORTCUT_CONTROLLER (controller), shortcut);
+
+  trigger = gtk_keyval_trigger_new (GDK_KEY_F, GDK_CONTROL_MASK);
+  action = gtk_callback_action_new (toggle_flip, picture, NULL);
+  shortcut = gtk_shortcut_new (trigger, action);
+  gtk_shortcut_controller_add_shortcut (GTK_SHORTCUT_CONTROLLER (controller), shortcut);
+
+  gtk_widget_add_controller (window, controller);
 
   gtk_window_present (GTK_WINDOW (window));
 
