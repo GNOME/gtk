@@ -6973,41 +6973,46 @@ gsk_subsurface_node_diff (GskRenderNode  *node1,
 {
   GskSubsurfaceNode *self1 = (GskSubsurfaceNode *) node1;
   GskSubsurfaceNode *self2 = (GskSubsurfaceNode *) node2;
-  GskOffloadInfo *info1, *info2;
+  GskOffloadInfo *info;
 
   if (!data->offload)
     {
+      /* offloading not supported, so we know the children will be drawn */
       gsk_render_node_data_diff (self1->child, self2->child, data);
       return;
     }
 
-  info1 = gsk_offload_get_subsurface_info (data->offload, self1->subsurface);
-  info2 = gsk_offload_get_subsurface_info (data->offload, self2->subsurface);
-
-  if (!info1 && !info2)
+  if (self1->subsurface != self2->subsurface)
     {
+      /* different subsurfaces, can't compare */
+      gsk_render_node_diff_impossible (node1, node2, data);
+      return;
+    }
+
+  info = gsk_offload_get_subsurface_info (data->offload, self1->subsurface);
+
+  if (!info)
+    {
+      /* No info, so offloading not supported */
       gsk_render_node_data_diff (self1->child, self2->child, data);
       return;
     }
-  else if (!info1 || !info2)
-    {
-      gsk_render_node_diff_impossible (node1, node2, data);
-      return;
-    }
 
-
-  if (info1->is_offloaded != info2->is_offloaded ||
-      info1->is_above != info2->is_above)
+  if (info->is_offloaded != info->was_offloaded ||
+      info->is_above != info->was_above)
     {
+      /* state changed between punching hole, drawing, and doing nothing. */
       gsk_render_node_diff_impossible (node1, node2, data);
     }
-  else if (info1->is_offloaded && !info1->is_above &&
-           !gsk_rect_equal (&info1->rect, &info2->rect))
+  else if (info->is_offloaded && !info->is_above &&
+           !gsk_rect_equal (&node1->bounds, &node2->bounds))
     {
+      /* We're punching a hole and it moved */
       gsk_render_node_diff_impossible (node1, node2, data);
     }
-  else if (!info1->is_offloaded)
+  else if (!info->is_offloaded)
     {
+      /* We aren't offloading and we weren't offloading (see above) */
       gsk_render_node_data_diff (self1->child, self2->child, data);
     }
 }
