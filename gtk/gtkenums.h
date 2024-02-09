@@ -1802,6 +1802,29 @@ typedef enum { /*< prefix=GTK_ACCESSIBLE_SORT >*/
 } GtkAccessibleSort;
 
 /**
+ * GTK_ANNOUNCEMENT_PRIORITY:
+ * @GTK_ANNOUNCEMENT_PRIORITY_LOW: The announcement is low priority, and might be read only
+ *     on the user's request.
+ * @GTK_ANNOUNCEMENT_PRIORITY_MEDIUM: The announcement is of medium priority, and is usually
+ *     spoken at the next opportunity, such as at the end of speaking the current sentence
+ *     or when the user pauses typing.
+ * @GTK_ANNOUNCEMENT_PRIORITY_HIGH: The announcement is of high priority, and is usually
+ *     spoken immediately. Because an interruption might disorient users or cause them to
+ *     not complete their current task, authors SHOULD NOT use high priority announcements
+ *     unless the interruption is imperative. An example would be a notification about a
+ *     critical battery power level.
+ *
+ * The priority of an accessibility announcement.
+ *
+ * Since: 4.14
+ */
+typedef enum {
+  GTK_ACCESSIBLE_ANNOUNCEMENT_PRIORITY_LOW,
+  GTK_ACCESSIBLE_ANNOUNCEMENT_PRIORITY_MEDIUM,
+  GTK_ACCESSIBLE_ANNOUNCEMENT_PRIORITY_HIGH
+} GtkAccessibleAnnouncementPriority;
+
+/**
  * GtkPopoverMenuFlags:
  * @GTK_POPOVER_MENU_SLIDING: Submenus are presented as sliding submenus that
  *   replace the main menu.

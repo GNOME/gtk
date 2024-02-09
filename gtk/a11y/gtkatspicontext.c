@@ -1532,6 +1532,42 @@ gtk_at_spi_context_unrealize (GtkATContext *context)
 }
 
 static void
+gtk_at_spi_context_announce (GtkATContext                      *context,
+                             const char                        *message,
+                             GtkAccessibleAnnouncementPriority  priority)
+{
+  GtkAtSpiContext *self = GTK_AT_SPI_CONTEXT (context);
+  AtspiLive live;
+
+  if (self->connection == NULL)
+    return;
+
+  switch (priority)
+    {
+    case GTK_ACCESSIBLE_ANNOUNCEMENT_PRIORITY_LOW:
+    case GTK_ACCESSIBLE_ANNOUNCEMENT_PRIORITY_MEDIUM:
+      live = ATSPI_LIVE_POLITE;
+      break;
+    case GTK_ACCESSIBLE_ANNOUNCEMENT_PRIORITY_HIGH:
+      live = ATSPI_LIVE_ASSERTIVE;
+      break;
+    default:
+      g_assert_not_reached ();
+    }
+
+  g_dbus_connection_emit_signal (self->connection,
+                                 NULL,
+                                 self->context_path,
+                                 "org.a11y.atspi.Event.Object",
+                                 "Announcement",
+                                 g_variant_new ("(siiva{sv})",
+                                                "", live, 0,
+                                                g_variant_new_string (message),
+                                                NULL),
+                                 NULL);
+}
+
+static void
 gtk_at_spi_context_class_init (GtkAtSpiContextClass *klass)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
@@ -1545,6 +1581,7 @@ gtk_at_spi_context_class_init (GtkAtSpiContextClass *klass)
   context_class->platform_change = gtk_at_spi_context_platform_change;
   context_class->bounds_change = gtk_at_spi_context_bounds_change;
   context_class->child_change = gtk_at_spi_context_child_change;
+  context_class->announce = gtk_at_spi_context_announce;
 }
 
 static void

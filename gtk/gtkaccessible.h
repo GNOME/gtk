@@ -260,4 +260,9 @@ GDK_AVAILABLE_IN_4_14
 GtkAccessibleList * gtk_accessible_list_new_from_array (GtkAccessible **accessibles,
                                                         gsize           n_accessibles);
 
+GDK_AVAILABLE_IN_4_14
+void gtk_accessible_announce (GtkAccessible                     *self,
+                              const char                        *message,
+                              GtkAccessibleAnnouncementPriority  priority);
+
 G_END_DECLS

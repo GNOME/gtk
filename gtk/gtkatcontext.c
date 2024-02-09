@@ -1473,3 +1473,14 @@ gtk_at_context_child_changed (GtkATContext             *self,
 
   GTK_AT_CONTEXT_GET_CLASS (self)->child_change (self, change, child);
 }
+
+void
+gtk_at_context_announce (GtkATContext                      *self,
+                         const char                        *message,
+                         GtkAccessibleAnnouncementPriority  priority)
+{
+  if (!self->realized)
+    return;
+
+  GTK_AT_CONTEXT_GET_CLASS (self)->announce (self, message, priority);
+}

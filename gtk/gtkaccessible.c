@@ -751,6 +751,41 @@ gtk_accessible_reset_relation (GtkAccessible         *self,
   g_object_unref (context);
 }
 
+/**
+ * gtk_accessible_announce:
+ * @self: a `GtkAccessible`
+ * @message: the string to announce
+ * @priority: the priority of the announcement
+ *
+ * Requests the user's screen reader to announce the given message.
+ *
+ * This kind of notification is useful for messages that
+ * either have only a visual representation or that are not
+ * exposed visually at all, e.g. a notification about a
+ * successful operation.
+ *
+ * Also, by using this API, you can ensure that the message
+ * does not interrupts the user's current screen reader output.
+ *
+ * Since: 4.14
+ */
+void
+gtk_accessible_announce (GtkAccessible                     *self,
+                         const char                        *message,
+                         GtkAccessibleAnnouncementPriority  priority)
+{
+  GtkATContext *context;
+
+  g_return_if_fail (GTK_IS_ACCESSIBLE (self));
+
+  context = gtk_accessible_get_at_context (self);
+  if (context == NULL)
+    return;
+
+  gtk_at_context_announce (context, message, priority);
+  g_object_unref (context);
+}
+
 static const char *role_names[] = {
   [GTK_ACCESSIBLE_ROLE_ALERT] = NC_("accessibility", "alert"),
   [GTK_ACCESSIBLE_ROLE_ALERT_DIALOG] = NC_("accessibility", "alert dialog"),
