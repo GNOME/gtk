@@ -3674,22 +3674,18 @@ gsk_gpu_node_processor_add_subsurface_node (GskGpuNodeProcessor *self,
 
   if (!gdk_subsurface_is_above_parent (subsurface))
     {
-      cairo_rectangle_int_t int_rect;
+      self->blend = GSK_GPU_BLEND_CLEAR;
+      self->pending_globals |= GSK_GPU_GLOBAL_BLEND;
+      gsk_gpu_node_processor_sync_globals (self, 0);
 
-      if (!gsk_gpu_node_processor_rect_is_integer (self,
-                                                   &GRAPHENE_RECT_INIT (
-                                                     node->bounds.origin.x + self->offset.x,
-                                                     node->bounds.origin.y + self->offset.y,
-                                                     node->bounds.size.width,
-                                                     node->bounds.size.height
-                                                   ),
-                                                   &int_rect))
-        {
-          g_warning ("FIXME: non-integer aligned subsurface?!");
-        }
-      gsk_gpu_clear_op (self->frame,
-                        &int_rect,
-                        &GDK_RGBA_TRANSPARENT);
+      gsk_gpu_color_op (self->frame,
+                        gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, &node->bounds),
+                        &node->bounds,
+                        &self->offset,
+                        &GDK_RGBA_WHITE);
+
+      self->blend = GSK_GPU_BLEND_OVER;
+      self->pending_globals |= GSK_GPU_GLOBAL_BLEND;
     }
 }
 

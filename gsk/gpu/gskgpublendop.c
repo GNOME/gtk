@@ -36,6 +36,9 @@ gsk_gpu_blend_op_print (GskGpuOp    *op,
       case GSK_GPU_BLEND_ADD:
         gsk_gpu_print_string (string, "add");
         break;
+      case GSK_GPU_BLEND_CLEAR:
+        gsk_gpu_print_string (string, "clear");
+        break;
       default:
         g_assert_not_reached ();
         break;
@@ -71,6 +74,9 @@ gsk_gpu_blend_op_gl_command (GskGpuOp          *op,
         break;
       case GSK_GPU_BLEND_ADD:
         glBlendFunc (GL_ONE, GL_ONE);
+        break;
+      case GSK_GPU_BLEND_CLEAR:
+        glBlendFunc (GL_ZERO, GL_ONE_MINUS_SRC_ALPHA);
         break;
       default:
         g_assert_not_reached ();
