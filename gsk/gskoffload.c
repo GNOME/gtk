@@ -141,16 +141,8 @@ transform_bounds (GskOffload            *self,
                   graphene_rect_t       *rect)
 {
   GskTransform *t = self->transforms ? self->transforms->data : NULL;
-  float sx, sy, dx, dy;
 
-  g_assert (gsk_transform_get_category (t) >= GSK_TRANSFORM_CATEGORY_2D_AFFINE);
-
-  gsk_transform_to_affine (t, &sx, &sy, &dx, &dy);
-
-  rect->origin.x = bounds->origin.x * sx + dx;
-  rect->origin.y = bounds->origin.y * sy + dy;
-  rect->size.width = bounds->size.width * sx;
-  rect->size.height = bounds->size.height * sy;
+  gsk_transform_transform_bounds (t, bounds, rect);
 }
 
 static inline void
@@ -260,9 +252,8 @@ interval_contains (float p1, float w1,
 
 static gboolean
 update_clip (GskOffload            *self,
-             const graphene_rect_t *bounds)
+             const graphene_rect_t *transformed_bounds)
 {
-  graphene_rect_t transformed_bounds;
   gboolean no_clip = FALSE;
   gboolean rect_clip = FALSE;
 
@@ -271,9 +262,7 @@ update_clip (GskOffload            *self,
       self->current_clip->is_complex)
     return FALSE;
 
-  transform_bounds (self, bounds, &transformed_bounds);
-
-  if (!gsk_rect_intersects (&self->current_clip->rect.bounds, &transformed_bounds))
+  if (!gsk_rect_intersects (&self->current_clip->rect.bounds, transformed_bounds))
     {
       push_empty_clip (self);
       return TRUE;
@@ -281,12 +270,12 @@ update_clip (GskOffload            *self,
 
   if (self->current_clip->is_rectilinear)
     {
-      if (gsk_rect_contains_rect (&self->current_clip->rect.bounds, &transformed_bounds))
+      if (gsk_rect_contains_rect (&self->current_clip->rect.bounds, transformed_bounds))
         no_clip = TRUE;
       else
         rect_clip = TRUE;
     }
-  else if (gsk_rounded_rect_contains_rect (&self->current_clip->rect, &transformed_bounds))
+  else if (gsk_rounded_rect_contains_rect (&self->current_clip->rect, transformed_bounds))
     {
       no_clip = TRUE;
     }
@@ -297,9 +286,9 @@ update_clip (GskOffload            *self,
       rounded_rect_get_inner (&self->current_clip->rect, &inner);
 
       if (interval_contains (inner.origin.x, inner.size.width,
-                             transformed_bounds.origin.x, transformed_bounds.size.width) ||
+                             transformed_bounds->origin.x, transformed_bounds->size.width) ||
           interval_contains (inner.origin.y, inner.size.height,
-                             transformed_bounds.origin.y, transformed_bounds.size.height))
+                             transformed_bounds->origin.y, transformed_bounds->size.height))
         rect_clip = TRUE;
     }
 
@@ -318,7 +307,7 @@ update_clip (GskOffload            *self,
 
       /* The clip gets simpler for this node */
 
-      gsk_rect_intersection (&self->current_clip->rect.bounds, &transformed_bounds, &rect);
+      gsk_rect_intersection (&self->current_clip->rect.bounds, transformed_bounds, &rect);
       push_rect_clip (self, &GSK_ROUNDED_RECT_INIT_FROM_RECT (rect));
       return TRUE;
     }
@@ -345,6 +334,9 @@ visit_node (GskOffload    *self,
             GskRenderNode *node)
 {
   gboolean has_clip;
+  graphene_rect_t transformed_bounds;
+
+  transform_bounds (self, &node->bounds, &transformed_bounds);
 
   for (gsize i = 0; i < self->n_subsurfaces; i++)
     {
@@ -352,9 +344,6 @@ visit_node (GskOffload    *self,
 
       if (info->can_raise)
         {
-          graphene_rect_t transformed_bounds;
-
-          transform_bounds (self, &node->bounds, &transformed_bounds);
           if (gsk_rect_intersects (&transformed_bounds, &info->rect))
             {
               GskRenderNodeType type = GSK_RENDER_NODE_TYPE (node);
@@ -375,7 +364,7 @@ visit_node (GskOffload    *self,
         }
     }
 
-  has_clip = update_clip (self, &node->bounds);
+  has_clip = update_clip (self, &transformed_bounds);
 
   switch (GSK_RENDER_NODE_TYPE (node))
     {
@@ -483,33 +472,9 @@ complex_clip:
       break;
 
     case GSK_TRANSFORM_NODE:
-      {
-        GskTransform *transform = gsk_transform_node_get_transform (node);
-        const GskTransformCategory category = gsk_transform_get_category (transform);
-
-        switch (category)
-          {
-          case GSK_TRANSFORM_CATEGORY_IDENTITY:
-            visit_node (self, gsk_transform_node_get_child (node));
-            break;
-
-          case GSK_TRANSFORM_CATEGORY_2D_TRANSLATE:
-          case GSK_TRANSFORM_CATEGORY_2D_AFFINE:
-            push_transform (self, transform);
-            visit_node (self, gsk_transform_node_get_child (node));
-            pop_transform (self);
-            break;
-
-          case GSK_TRANSFORM_CATEGORY_2D:
-          case GSK_TRANSFORM_CATEGORY_3D:
-          case GSK_TRANSFORM_CATEGORY_ANY:
-          case GSK_TRANSFORM_CATEGORY_UNKNOWN:
-            break;
-
-          default:
-            g_assert_not_reached ();
-          }
-      }
+      push_transform (self, gsk_transform_node_get_transform (node));
+      visit_node (self, gsk_transform_node_get_child (node));
+      pop_transform (self);
       break;
 
     case GSK_CONTAINER_NODE:
@@ -537,6 +502,13 @@ complex_clip:
           {
             GDK_DISPLAY_DEBUG (gdk_surface_get_display (self->surface), OFFLOAD,
                                "Can't offload subsurface %p: clipped",
+                               subsurface);
+          }
+        else if (self->transforms &&
+                 gsk_transform_get_category ((GskTransform *)self->transforms->data) < GSK_TRANSFORM_CATEGORY_2D_AFFINE)
+          {
+            GDK_DISPLAY_DEBUG (gdk_surface_get_display (self->surface), OFFLOAD,
+                               "Can't offload subsurface %p: non-affine transform",
                                subsurface);
           }
         else
