@@ -6984,11 +6984,17 @@ gsk_subsurface_node_diff (GskRenderNode  *node1,
   info1 = gsk_offload_get_subsurface_info (data->offload, self1->subsurface);
   info2 = gsk_offload_get_subsurface_info (data->offload, self2->subsurface);
 
-  if (!info1 || !info2)
+  if (!info1 && !info2)
     {
       gsk_render_node_data_diff (self1->child, self2->child, data);
       return;
     }
+  else if (!info1 || !info2)
+    {
+      gsk_render_node_diff_impossible (node1, node2, data);
+      return;
+    }
+
 
   if (info1->is_offloaded != info2->is_offloaded ||
       info1->is_above != info2->is_above)
