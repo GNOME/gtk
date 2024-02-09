@@ -6,6 +6,9 @@ Overview of Changes in 4.13.7, xx-xx-xxxx
 
 * Accessibility:
  - Add socket support for webkit accessibility
+ - Implement AT-SPI text for GtkText
+ - Implement AT-SPI component generically
+ - Add an announce API
 
 * GSK:
  - Make the ngl renderer work on macOS
@@ -13,6 +16,9 @@ Overview of Changes in 4.13.7, xx-xx-xxxx
  - Make nodeparser allow aliases for fonts again
  - Implement cache eviction for the glyph and
    texture caches
+ - Fix shaders to work on GL < 4.0
+ - Fix problems with scaled shadows
+ - Fix problems with holes for underlaid subsurfaces
 
 * media:
  - Support dmabufs in the gstreamer backend. This allows
@@ -24,6 +30,9 @@ Overview of Changes in 4.13.7, xx-xx-xxxx
    is pending
  - Fix monitor size information when using mutter without
    the scale-monitor-framebuffer setting
+
+* macOS:
+ - Propagate unhandled input events back to the OS
 
 * Tools:
  - Make the crash handling in gtk4-node-editor more robust

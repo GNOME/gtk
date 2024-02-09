@@ -480,6 +480,8 @@ parse_node_file (GFile *file, const char *generate)
       g_clear_pointer (&node2, gsk_render_node_unref);
     }
 
+  g_clear_pointer (&path, g_free);
+
   g_clear_pointer (&node, gsk_render_node_unref);
   gdk_surface_destroy (surface);
 
