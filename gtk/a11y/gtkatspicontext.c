@@ -1532,16 +1532,15 @@ gtk_at_spi_context_unrealize (GtkATContext *context)
 }
 
 static void
-gtk_at_spi_context_announce (GtkATContext *context,
-                            const char  *message,
-                            GtkAccessibleAnnouncementPriority priority)
+gtk_at_spi_context_announce (GtkATContext                      *context,
+                             const char                        *message,
+                             GtkAccessibleAnnouncementPriority  priority)
 {
   GtkAtSpiContext *self = GTK_AT_SPI_CONTEXT (context);
+  AtspiLive live;
 
   if (self->connection == NULL)
     return;
-
-  AtspiLive live;
 
   switch (priority)
     {

@@ -758,6 +758,7 @@ gtk_accessible_reset_relation (GtkAccessible         *self,
  * @priority: the priority of the announcement
  *
  * Requests the user's screen reader to announce the given message.
+ *
  * This kind of notification is useful for messages that
  * either have only a visual representation or that are not
  * exposed visually at all, e.g. a notification about a
@@ -769,9 +770,9 @@ gtk_accessible_reset_relation (GtkAccessible         *self,
  * Since: 4.14
  */
 void
-gtk_accessible_announce (GtkAccessible        *self,
-                         const char           *message,
-                         GtkAccessibleAnnouncementPriority priority)
+gtk_accessible_announce (GtkAccessible                     *self,
+                         const char                        *message,
+                         GtkAccessibleAnnouncementPriority  priority)
 {
   GtkATContext *context;
 
@@ -784,7 +785,7 @@ gtk_accessible_announce (GtkAccessible        *self,
   gtk_at_context_announce (context, message, priority);
   g_object_unref (context);
 }
- 
+
 static const char *role_names[] = {
   [GTK_ACCESSIBLE_ROLE_ALERT] = NC_("accessibility", "alert"),
   [GTK_ACCESSIBLE_ROLE_ALERT_DIALOG] = NC_("accessibility", "alert dialog"),
