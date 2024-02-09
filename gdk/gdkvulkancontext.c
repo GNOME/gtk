@@ -593,7 +593,8 @@ physical_device_check_features (VkPhysicalDevice   device,
       v12_features.shaderStorageBufferArrayNonUniformIndexing)
     *out_features |= GDK_VULKAN_FEATURE_NONUNIFORM_INDEXING;
 
-  if (ycbcr_features.samplerYcbcrConversion)
+  if (ycbcr_features.samplerYcbcrConversion ||
+      physical_device_supports_extension (device, VK_KHR_SAMPLER_YCBCR_CONVERSION_EXTENSION_NAME))
     *out_features |= GDK_VULKAN_FEATURE_YCBCR;
 
   if (physical_device_supports_extension (device, VK_KHR_EXTERNAL_MEMORY_FD_EXTENSION_NAME) &&
@@ -1466,13 +1467,27 @@ gdk_display_create_vulkan_device (GdkDisplay  *display,
               g_ptr_array_add (device_extensions, (gpointer) VK_KHR_SWAPCHAIN_EXTENSION_NAME);
               if (features & GDK_VULKAN_FEATURE_DESCRIPTOR_INDEXING)
                 g_ptr_array_add (device_extensions, (gpointer) VK_EXT_DESCRIPTOR_INDEXING_EXTENSION_NAME);
+              if (features & GDK_VULKAN_FEATURE_YCBCR)
+                {
+                  g_ptr_array_add (device_extensions, (gpointer) VK_KHR_SAMPLER_YCBCR_CONVERSION_EXTENSION_NAME);
+                  g_ptr_array_add (device_extensions, (gpointer) VK_KHR_MAINTENANCE_1_EXTENSION_NAME);
+                  g_ptr_array_add (device_extensions, (gpointer) VK_KHR_BIND_MEMORY_2_EXTENSION_NAME);
+                  g_ptr_array_add (device_extensions, (gpointer) VK_KHR_GET_MEMORY_REQUIREMENTS_2_EXTENSION_NAME);
+                }
               if (features & GDK_VULKAN_FEATURE_DMABUF)
                 {
+                  g_assert (features & GDK_VULKAN_FEATURE_YCBCR);
+
                   g_ptr_array_add (device_extensions, (gpointer) VK_KHR_EXTERNAL_MEMORY_FD_EXTENSION_NAME);
+                  g_ptr_array_add (device_extensions, (gpointer) VK_KHR_EXTERNAL_MEMORY_EXTENSION_NAME);
+
                   g_ptr_array_add (device_extensions, (gpointer) VK_EXT_IMAGE_DRM_FORMAT_MODIFIER_EXTENSION_NAME);
+                  g_ptr_array_add (device_extensions, (gpointer) VK_KHR_IMAGE_FORMAT_LIST_EXTENSION_NAME);
                 }
               if (features & (GDK_VULKAN_FEATURE_SEMAPHORE_IMPORT | GDK_VULKAN_FEATURE_SEMAPHORE_EXPORT))
-                g_ptr_array_add (device_extensions, (gpointer) VK_KHR_EXTERNAL_SEMAPHORE_FD_EXTENSION_NAME);
+                {
+                  g_ptr_array_add (device_extensions, (gpointer) VK_KHR_EXTERNAL_SEMAPHORE_FD_EXTENSION_NAME);
+                }
               if (features & GDK_VULKAN_FEATURE_INCREMENTAL_PRESENT)
                 g_ptr_array_add (device_extensions, (gpointer) VK_KHR_INCREMENTAL_PRESENT_EXTENSION_NAME);
 
@@ -1613,6 +1628,12 @@ gdk_display_create_vulkan_instance (GdkDisplay  *display,
           g_ptr_array_add (used_extensions, (gpointer) VK_EXT_DEBUG_REPORT_EXTENSION_NAME);
           have_debug_report = TRUE;
         }
+      if (g_str_equal (extensions[i].extensionName, VK_KHR_GET_PHYSICAL_DEVICE_PROPERTIES_2_EXTENSION_NAME))
+        g_ptr_array_add (used_extensions, (gpointer) VK_KHR_GET_PHYSICAL_DEVICE_PROPERTIES_2_EXTENSION_NAME);
+      if (g_str_equal (extensions[i].extensionName, VK_KHR_EXTERNAL_MEMORY_CAPABILITIES_EXTENSION_NAME))
+        g_ptr_array_add (used_extensions, (gpointer) VK_KHR_EXTERNAL_MEMORY_CAPABILITIES_EXTENSION_NAME);
+      if (g_str_equal (extensions[i].extensionName, VK_KHR_EXTERNAL_SEMAPHORE_CAPABILITIES_EXTENSION_NAME))
+        g_ptr_array_add (used_extensions, (gpointer) VK_KHR_EXTERNAL_SEMAPHORE_CAPABILITIES_EXTENSION_NAME);
     }
 
   uint32_t n_layers;
