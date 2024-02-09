@@ -691,6 +691,9 @@ gtk_editable_get_text_widget (GtkWidget *widget)
 
       if (GTK_IS_TEXT (delegate))
         return GTK_TEXT (delegate);
+
+      if (GTK_IS_TEXT (widget))
+        return GTK_TEXT (widget);
     }
 
   return NULL;
@@ -1574,8 +1577,7 @@ gtk_atspi_get_text_vtable (GtkAccessible *accessible)
     return &label_vtable;
   else if (GTK_IS_INSCRIPTION (accessible))
     return &inscription_vtable;
-  else if (GTK_IS_EDITABLE (accessible) &&
-           GTK_IS_TEXT (gtk_editable_get_delegate (GTK_EDITABLE (accessible))))
+  else if (GTK_IS_EDITABLE (accessible))
     return &editable_vtable;
   else if (GTK_IS_TEXT_VIEW (accessible))
     return &text_view_vtable;
