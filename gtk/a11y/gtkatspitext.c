@@ -692,7 +692,7 @@ gtk_editable_get_text_widget (GtkWidget *widget)
       if (GTK_IS_TEXT (delegate))
         return GTK_TEXT (delegate);
 
-      if (GTK_IS_TEXT( widget))
+      if (GTK_IS_TEXT (widget))
         return GTK_TEXT (widget);
     }
 
