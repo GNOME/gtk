@@ -3674,22 +3674,42 @@ gsk_gpu_node_processor_add_subsurface_node (GskGpuNodeProcessor *self,
 
   if (!gdk_subsurface_is_above_parent (subsurface))
     {
-      cairo_rectangle_int_t int_rect;
+      cairo_rectangle_int_t int_clipped;
+      graphene_rect_t rect, clipped;
 
-      if (!gsk_gpu_node_processor_rect_is_integer (self,
-                                                   &GRAPHENE_RECT_INIT (
-                                                     node->bounds.origin.x + self->offset.x,
-                                                     node->bounds.origin.y + self->offset.y,
-                                                     node->bounds.size.width,
-                                                     node->bounds.size.height
-                                                   ),
-                                                   &int_rect))
+      graphene_rect_offset_r (&node->bounds,
+                              self->offset.x, self->offset.y,
+                              &rect);
+      gsk_rect_intersection (&self->clip.rect.bounds, &rect, &clipped);
+
+      if (gsk_gpu_frame_should_optimize (self->frame, GSK_GPU_OPTIMIZE_CLEAR) &&
+          node->bounds.size.width * node->bounds.size.height > 100 * 100 && /* not worth the effort for small images */
+          (self->clip.type != GSK_GPU_CLIP_ROUNDED ||
+           gsk_gpu_clip_contains_rect (&self->clip, &GRAPHENE_POINT_INIT(0,0), &clipped)) &&
+          gsk_gpu_node_processor_rect_is_integer (self, &clipped, &int_clipped))
         {
-          g_warning ("FIXME: non-integer aligned subsurface?!");
+          if (gdk_rectangle_intersect (&int_clipped, &self->scissor, &int_clipped))
+            {
+              gsk_gpu_clear_op (self->frame,
+                                &int_clipped,
+                                &GDK_RGBA_TRANSPARENT);
+            }
         }
-      gsk_gpu_clear_op (self->frame,
-                        &int_rect,
-                        &GDK_RGBA_TRANSPARENT);
+      else
+        {
+          self->blend = GSK_GPU_BLEND_CLEAR;
+          self->pending_globals |= GSK_GPU_GLOBAL_BLEND;
+          gsk_gpu_node_processor_sync_globals (self, 0);
+
+          gsk_gpu_color_op (self->frame,
+                            gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, &node->bounds),
+                            &node->bounds,
+                            &self->offset,
+                            &GDK_RGBA_WHITE);
+
+          self->blend = GSK_GPU_BLEND_OVER;
+          self->pending_globals |= GSK_GPU_GLOBAL_BLEND;
+        }
     }
 }
 

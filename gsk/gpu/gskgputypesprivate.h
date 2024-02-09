@@ -49,7 +49,8 @@ typedef enum {
 
 typedef enum {
   GSK_GPU_BLEND_OVER,
-  GSK_GPU_BLEND_ADD
+  GSK_GPU_BLEND_ADD,
+  GSK_GPU_BLEND_CLEAR
 } GskGpuBlend;
 
 typedef enum {

@@ -892,7 +892,7 @@ struct _GskVulkanShaderSpecialization
   guint32 variation;
 };
 
-static VkPipelineColorBlendAttachmentState blend_attachment_states[2] = {
+static VkPipelineColorBlendAttachmentState blend_attachment_states[3] = {
   [GSK_GPU_BLEND_OVER] = {
     .blendEnable = VK_TRUE,
     .colorBlendOp = VK_BLEND_OP_ADD,
@@ -914,6 +914,19 @@ static VkPipelineColorBlendAttachmentState blend_attachment_states[2] = {
     .alphaBlendOp = VK_BLEND_OP_ADD,
     .srcAlphaBlendFactor = VK_BLEND_FACTOR_ONE,
     .dstAlphaBlendFactor = VK_BLEND_FACTOR_ONE,
+    .colorWriteMask = VK_COLOR_COMPONENT_A_BIT
+                    | VK_COLOR_COMPONENT_R_BIT
+                    | VK_COLOR_COMPONENT_G_BIT
+                    | VK_COLOR_COMPONENT_B_BIT
+  },
+  [GSK_GPU_BLEND_CLEAR] = {
+    .blendEnable = VK_TRUE,
+    .colorBlendOp = VK_BLEND_OP_ADD,
+    .srcColorBlendFactor = VK_BLEND_FACTOR_ZERO,
+    .dstColorBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA,
+    .alphaBlendOp = VK_BLEND_OP_ADD,
+    .srcAlphaBlendFactor = VK_BLEND_FACTOR_ZERO,
+    .dstAlphaBlendFactor = VK_BLEND_FACTOR_ONE_MINUS_SRC_ALPHA,
     .colorWriteMask = VK_COLOR_COMPONENT_A_BIT
                     | VK_COLOR_COMPONENT_R_BIT
                     | VK_COLOR_COMPONENT_G_BIT

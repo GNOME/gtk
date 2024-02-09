@@ -44,8 +44,14 @@ initialize_vulkan (void)
                             .applicationVersion = 0,
                             .pEngineName = "GTK testsuite",
                             .engineVersion = VK_MAKE_VERSION (GDK_MAJOR_VERSION, GDK_MINOR_VERSION, GDK_MICRO_VERSION),
-                            .apiVersion = VK_API_VERSION_1_0
+                            .apiVersion = VK_API_VERSION_1_0,
                           },
+                          .enabledExtensionCount = 3,
+                          .ppEnabledExtensionNames = (const char * [3]) {
+                            VK_KHR_GET_PHYSICAL_DEVICE_PROPERTIES_2_EXTENSION_NAME,
+                            VK_KHR_EXTERNAL_MEMORY_CAPABILITIES_EXTENSION_NAME,
+                            VK_KHR_EXTERNAL_SEMAPHORE_CAPABILITIES_EXTENSION_NAME,
+                          }
                         },
                         NULL,
                         &vk_instance) != VK_SUCCESS)
@@ -68,10 +74,19 @@ initialize_vulkan (void)
                           .queueCount = 1,
                           .pQueuePriorities = (float []) { 1.0f },
                         },
-                        .enabledExtensionCount = 2,
-                        .ppEnabledExtensionNames = (const char * [2]) {
+                        .enabledExtensionCount = 11,
+                        .ppEnabledExtensionNames = (const char * [11]) {
                           VK_KHR_EXTERNAL_MEMORY_FD_EXTENSION_NAME,
+                          VK_KHR_EXTERNAL_MEMORY_EXTENSION_NAME,
                           VK_EXT_IMAGE_DRM_FORMAT_MODIFIER_EXTENSION_NAME,
+                          VK_KHR_SAMPLER_YCBCR_CONVERSION_EXTENSION_NAME,
+                          VK_KHR_MAINTENANCE_1_EXTENSION_NAME,
+                          VK_KHR_BIND_MEMORY_2_EXTENSION_NAME,
+                          VK_KHR_GET_MEMORY_REQUIREMENTS_2_EXTENSION_NAME,
+                          VK_KHR_EXTERNAL_MEMORY_FD_EXTENSION_NAME,
+                          VK_KHR_EXTERNAL_MEMORY_EXTENSION_NAME,
+                          VK_EXT_IMAGE_DRM_FORMAT_MODIFIER_EXTENSION_NAME,
+                          VK_KHR_IMAGE_FORMAT_LIST_EXTENSION_NAME,
                         },
                       },
                       NULL,
