@@ -24,21 +24,14 @@
 
 #include "gtkatspicontextprivate.h"
 #include "gtkatspiprivate.h"
-#include "gtkatspisocket.h"
 #include "gtkatspiutilsprivate.h"
-#include "gtkaccessibleprivate.h"
+#include "gtkatspisocket.h"
 #include "gtkpopover.h"
-#include "gtkwidget.h"
-#include "gtkwindow.h"
 
 #include "a11y/atspi/atspi-component.h"
 
-#include "gtkdebug.h"
-
-#include <gio/gio.h>
-
-static GtkWidget *
-find_first_accessible_widget (GtkAccessible *accessible)
+static GtkAccessible *
+find_first_accessible_non_socket (GtkAccessible *accessible)
 {
   GtkAccessible *parent = gtk_accessible_get_accessible_parent (accessible);
 
@@ -46,8 +39,8 @@ find_first_accessible_widget (GtkAccessible *accessible)
     {
       g_object_unref (parent);
 
-      if (GTK_IS_WIDGET (parent))
-        return GTK_WIDGET (parent);
+      if (!GTK_IS_AT_SPI_SOCKET (parent))
+        return parent;
 
       parent = gtk_accessible_get_accessible_parent (parent);
     }
@@ -56,77 +49,134 @@ find_first_accessible_widget (GtkAccessible *accessible)
 }
 
 static void
-translate_coordinates_to_widget (GtkWidget      *widget,
-                                 AtspiCoordType  coordtype,
-                                 int             xi,
-                                 int             yi,
-                                 int            *xo,
-                                 int            *yo)
+translate_coordinates_to_accessible (GtkAccessible  *accessible,
+                                     AtspiCoordType  coordtype,
+                                     int             xi,
+                                     int             yi,
+                                     int            *xo,
+                                     int            *yo)
 {
-  graphene_point_t p;
-  GtkWidget *source;
+  GtkAccessible *parent;
+  int x, y, width, height;
 
-  switch (coordtype)
+  if (coordtype == ATSPI_COORD_TYPE_SCREEN)
     {
-    case ATSPI_COORD_TYPE_SCREEN:
       *xo = 0;
       *yo = 0;
       return;
-
-    case ATSPI_COORD_TYPE_WINDOW:
-      source = GTK_WIDGET (gtk_widget_get_root (widget));
-      break;
-
-    case ATSPI_COORD_TYPE_PARENT:
-      source = gtk_widget_get_parent (widget);
-      break;
-
-    default:
-      g_assert_not_reached ();
     }
 
-  if (!gtk_widget_compute_point (source, widget, &GRAPHENE_POINT_INIT (xi, yi), &p))
-    graphene_point_init (&p, xi, yi);
+  if (!gtk_accessible_get_bounds (accessible, &x, &y, &width, &height))
+    {
+      *xo = xi;
+      *yo = yi;
+      return;
+    }
 
-  *xo = (int)p.x;
-  *yo = (int)p.y;
+  // Transform coords to our parent, we will need that in any case
+  *xo = xi - x;
+  *yo = yi - y;
+
+  // If that's what the caller requested, we're done
+  if (coordtype == ATSPI_COORD_TYPE_PARENT)
+    return;
+
+  if (coordtype == ATSPI_COORD_TYPE_WINDOW)
+    {
+      parent = gtk_accessible_get_accessible_parent (accessible);
+      while (parent != NULL)
+        {
+          if (gtk_accessible_get_bounds (parent, &x, &y, &width, &height))
+            {
+              *xo = *xo - x;
+              *yo = *yo - y;
+              parent = gtk_accessible_get_accessible_parent (parent);
+            }
+          else
+            break;
+        }
+    }
+  else
+    g_assert_not_reached ();
 }
 
 static void
-translate_coordinates_from_widget (GtkWidget      *widget,
-                                   AtspiCoordType  coordtype,
-                                   int             xi,
-                                   int             yi,
-                                   int            *xo,
-                                   int            *yo)
+translate_coordinates_from_accessible (GtkAccessible *accessible,
+                                 AtspiCoordType     coordtype,
+                                 int                xi,
+                                 int                yi,
+                                 int               *xo,
+                                 int               *yo)
 {
-  graphene_point_t p;
-  GtkWidget *target;
+  GtkAccessible *parent;
+  int x, y, width, height;
 
-  switch (coordtype)
+  if (coordtype == ATSPI_COORD_TYPE_SCREEN)
     {
-    case ATSPI_COORD_TYPE_SCREEN:
       *xo = 0;
       *yo = 0;
       return;
-
-    case ATSPI_COORD_TYPE_WINDOW:
-      target = GTK_WIDGET (gtk_widget_get_root (widget));
-      break;
-
-    case ATSPI_COORD_TYPE_PARENT:
-      target = gtk_widget_get_parent (widget);
-      break;
-
-    default:
-      g_assert_not_reached ();
     }
 
-  if (!gtk_widget_compute_point (widget, target, &GRAPHENE_POINT_INIT (xi, yi), &p))
-    graphene_point_init (&p, xi, yi);
+  if (!gtk_accessible_get_bounds (accessible, &x, &y, &width, &height))
+    {
+      *xo = xi;
+      *yo = yi;
+      return;
+    }
 
-  *xo = (int)p.x;
-  *yo = (int)p.y;
+  // Transform coords to our parent, we will need that in any case
+  *xo = xi + x;
+  *yo = yi + y;
+
+  // If that's what the caller requested, we're done
+  if (coordtype == ATSPI_COORD_TYPE_PARENT)
+    return;
+
+  if (coordtype == ATSPI_COORD_TYPE_WINDOW)
+    {
+      parent = gtk_accessible_get_accessible_parent (accessible);
+      while (parent != NULL)
+        {
+          if (gtk_accessible_get_bounds (parent, &x, &y, &width, &height))
+            {
+              *xo = *xo + x;
+              *yo = *yo + y;
+              parent = gtk_accessible_get_accessible_parent (parent);
+            }
+          else
+            break;
+        }
+    }
+  else
+    g_assert_not_reached ();
+}
+
+static GtkAccessible *
+accessible_at_point (GtkAccessible *parent,
+                     int            x,
+                     int            y,
+                     bool           children_only)
+{
+  GtkAccessible *result = NULL;
+  int px, py, width, height;
+
+  if (!gtk_accessible_get_bounds (parent, &px, &py, &width, &height))
+    return NULL;
+
+  if (!children_only && x >= 0 && x <= width && y >= 0 && y <= height)
+    result = parent;
+
+  for (GtkAccessible *child = gtk_accessible_get_first_accessible_child (parent);
+       child != NULL;
+       child = gtk_accessible_get_next_accessible_sibling (child))
+    {
+      GtkAccessible *found = accessible_at_point (child, x - px, y - py, FALSE);
+      if (found)
+        result = found;
+    }
+
+  return result;
 }
 
 static void
@@ -141,48 +191,46 @@ component_handle_method (GDBusConnection       *connection,
 {
   GtkATContext *self = user_data;
   GtkAccessible *accessible = gtk_at_context_get_accessible (self);
-  GtkWidget *widget;
 
-  if (GTK_IS_WIDGET (accessible))
-    widget = GTK_WIDGET (accessible);
-  else if (GTK_IS_AT_SPI_SOCKET (accessible))
-    widget = find_first_accessible_widget (accessible);
-  else
-    g_assert_not_reached ();
-
-  g_assert (widget != NULL);
+  if (GTK_IS_AT_SPI_SOCKET (accessible))
+     accessible = find_first_accessible_non_socket (accessible);
 
   if (g_strcmp0 (method_name, "Contains") == 0)
     {
       int x, y;
+      int bounds_x, bounds_y, width, height;
       AtspiCoordType coordtype;
       gboolean ret;
 
       g_variant_get (parameters, "(iiu)", &x, &y, &coordtype);
 
-      translate_coordinates_to_widget (widget, coordtype, x, y, &x, &y);
+      translate_coordinates_to_accessible (accessible, coordtype, x, y, &x, &y);
 
-      ret = gtk_widget_contains (widget, x, y);
+      if (gtk_accessible_get_bounds (accessible, &bounds_x, &bounds_y, &width, &height))
+        ret = x >= 0 && x <= bounds_x && y >= 0 && y <= bounds_y;
+      else
+        ret = FALSE;
+
       g_dbus_method_invocation_return_value (invocation, g_variant_new ("(b)", ret));
     }
   else if (g_strcmp0 (method_name, "GetAccessibleAtPoint") == 0)
     {
       int x, y;
       AtspiCoordType coordtype;
-      GtkWidget *child;
+      GtkAccessible *child;
 
       g_variant_get (parameters, "(iiu)", &x, &y, &coordtype);
 
-      translate_coordinates_to_widget (widget, coordtype, x, y, &x, &y);
+      translate_coordinates_to_accessible (accessible, coordtype, x, y, &x, &y);
 
-      child = gtk_widget_pick (widget, x, y, GTK_PICK_DEFAULT);
+      child = accessible_at_point (accessible, x, y, TRUE);
       if (!child)
         {
           g_dbus_method_invocation_return_value (invocation, g_variant_new ("(@(so))", gtk_at_spi_null_ref ()));
         }
       else
         {
-          GtkATContext *context = gtk_accessible_get_at_context (GTK_ACCESSIBLE (child));
+          GtkATContext *context = gtk_accessible_get_at_context (child);
           GtkAtSpiContext *ctx = GTK_AT_SPI_CONTEXT (context);
 
           g_dbus_method_invocation_return_value (invocation, g_variant_new ("(@(so))", gtk_at_spi_context_to_ref (ctx)));
@@ -193,13 +241,13 @@ component_handle_method (GDBusConnection       *connection,
   else if (g_strcmp0 (method_name, "GetExtents") == 0)
     {
       AtspiCoordType coordtype;
-      int x, y;
-      int width = gtk_widget_get_width (widget);
-      int height = gtk_widget_get_height (widget);
+      int x, y, width, height;
+
+      gtk_accessible_get_bounds (accessible, &x, &y, &width, &height);
 
       g_variant_get (parameters, "(u)", &coordtype);
 
-      translate_coordinates_from_widget (widget, coordtype, 0, 0, &x, &y);
+      translate_coordinates_from_accessible (accessible, coordtype, 0, 0, &x, &y);
 
       g_dbus_method_invocation_return_value (invocation, g_variant_new ("((iiii))", x, y, width, height));
     }
@@ -210,14 +258,15 @@ component_handle_method (GDBusConnection       *connection,
 
       g_variant_get (parameters, "(u)", &coordtype);
 
-      translate_coordinates_from_widget (widget, coordtype, 0, 0, &x, &y);
+      translate_coordinates_from_accessible (accessible, coordtype, 0, 0, &x, &y);
 
       g_dbus_method_invocation_return_value (invocation, g_variant_new ("(ii)", x, y));
     }
   else if (g_strcmp0 (method_name, "GetSize") == 0)
     {
-      int width = gtk_widget_get_width (widget);
-      int height = gtk_widget_get_height (widget);
+      int x, y, width, height;
+
+      gtk_accessible_get_bounds (accessible, &x, &y, &width, &height);
 
       g_dbus_method_invocation_return_value (invocation, g_variant_new ("(ii)", width, height));
     }
@@ -225,9 +274,9 @@ component_handle_method (GDBusConnection       *connection,
     {
       AtspiComponentLayer layer;
 
-      if (GTK_IS_WINDOW (widget))
+      if (self->accessible_role == GTK_ACCESSIBLE_ROLE_WINDOW)
         layer = ATSPI_COMPONENT_LAYER_WINDOW;
-      else if (GTK_IS_POPOVER (widget))
+      else if (GTK_IS_POPOVER (accessible))
         layer = ATSPI_COMPONENT_LAYER_POPUP;
       else
         layer = ATSPI_COMPONENT_LAYER_WIDGET;
@@ -244,7 +293,10 @@ component_handle_method (GDBusConnection       *connection,
     }
   else if (g_strcmp0 (method_name, "GetAlpha") == 0)
     {
-      double opacity = gtk_widget_get_opacity (widget);
+      double opacity = 1.0;
+
+      if (GTK_IS_WIDGET (accessible))
+        opacity = gtk_widget_get_opacity (GTK_WIDGET (accessible));
 
       g_dbus_method_invocation_return_value (invocation, g_variant_new ("(d)", opacity));
     }
@@ -277,8 +329,5 @@ static const GDBusInterfaceVTable component_vtable = {
 const GDBusInterfaceVTable *
 gtk_atspi_get_component_vtable (GtkAccessible *accessible)
 {
-  if (GTK_IS_WIDGET (accessible) || GTK_IS_AT_SPI_SOCKET (accessible))
-    return &component_vtable;
-
-  return NULL;
+  return &component_vtable;
 }
