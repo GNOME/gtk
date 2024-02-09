@@ -693,8 +693,10 @@ toggle_overlay (GtkWidget *widget,
     }
   else
     {
-      child = gtk_image_new_from_icon_name ("media-playback-start-symbolic");
-      gtk_image_set_icon_size (GTK_IMAGE (child), GTK_ICON_SIZE_LARGE);
+      child = gtk_spinner_new ();
+      gtk_spinner_start (GTK_SPINNER (child));
+      gtk_widget_set_halign (child, GTK_ALIGN_CENTER);
+      gtk_widget_set_valign (child, GTK_ALIGN_CENTER);
       gtk_overlay_add_overlay (overlay, child);
     }
 
