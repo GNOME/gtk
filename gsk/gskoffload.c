@@ -141,16 +141,8 @@ transform_bounds (GskOffload            *self,
                   graphene_rect_t       *rect)
 {
   GskTransform *t = self->transforms ? self->transforms->data : NULL;
-  float sx, sy, dx, dy;
 
-  g_assert (gsk_transform_get_category (t) >= GSK_TRANSFORM_CATEGORY_2D_AFFINE);
-
-  gsk_transform_to_affine (t, &sx, &sy, &dx, &dy);
-
-  rect->origin.x = bounds->origin.x * sx + dx;
-  rect->origin.y = bounds->origin.y * sy + dy;
-  rect->size.width = bounds->size.width * sx;
-  rect->size.height = bounds->size.height * sy;
+  gsk_transform_transform_bounds (t, bounds, rect);
 }
 
 static inline void
@@ -480,33 +472,9 @@ complex_clip:
       break;
 
     case GSK_TRANSFORM_NODE:
-      {
-        GskTransform *transform = gsk_transform_node_get_transform (node);
-        const GskTransformCategory category = gsk_transform_get_category (transform);
-
-        switch (category)
-          {
-          case GSK_TRANSFORM_CATEGORY_IDENTITY:
-            visit_node (self, gsk_transform_node_get_child (node));
-            break;
-
-          case GSK_TRANSFORM_CATEGORY_2D_TRANSLATE:
-          case GSK_TRANSFORM_CATEGORY_2D_AFFINE:
-            push_transform (self, transform);
-            visit_node (self, gsk_transform_node_get_child (node));
-            pop_transform (self);
-            break;
-
-          case GSK_TRANSFORM_CATEGORY_2D:
-          case GSK_TRANSFORM_CATEGORY_3D:
-          case GSK_TRANSFORM_CATEGORY_ANY:
-          case GSK_TRANSFORM_CATEGORY_UNKNOWN:
-            break;
-
-          default:
-            g_assert_not_reached ();
-          }
-      }
+      push_transform (self, gsk_transform_node_get_transform (node));
+      visit_node (self, gsk_transform_node_get_child (node));
+      pop_transform (self);
       break;
 
     case GSK_CONTAINER_NODE:
@@ -534,6 +502,13 @@ complex_clip:
           {
             GDK_DISPLAY_DEBUG (gdk_surface_get_display (self->surface), OFFLOAD,
                                "Can't offload subsurface %p: clipped",
+                               subsurface);
+          }
+        else if (self->transforms &&
+                 gsk_transform_get_category ((GskTransform *)self->transforms->data) < GSK_TRANSFORM_CATEGORY_2D_AFFINE)
+          {
+            GDK_DISPLAY_DEBUG (gdk_surface_get_display (self->surface), OFFLOAD,
+                               "Can't offload subsurface %p: non-affine transform",
                                subsurface);
           }
         else
