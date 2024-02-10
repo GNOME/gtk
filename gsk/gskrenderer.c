@@ -632,7 +632,7 @@ get_renderer_for_backend (GdkSurface *surface)
 static GType
 get_renderer_for_gl (GdkSurface *surface)
 {
-  return gsk_ngl_renderer_get_type ();
+  return GSK_TYPE_GL_RENDERER;
 }
 
 static GType
@@ -643,12 +643,6 @@ get_renderer_for_vulkan (GdkSurface *surface)
 #else
   return G_TYPE_INVALID;
 #endif
-}
-
-static GType
-get_renderer_for_gles2 (GdkSurface *surface)
-{
-  return GSK_TYPE_GL_RENDERER;
 }
 
 static GType
@@ -664,7 +658,6 @@ static struct {
   { get_renderer_for_env_var },
   { get_renderer_for_backend },
   { get_renderer_for_gl },
-  { get_renderer_for_gles2 },
   { get_renderer_for_vulkan },
   { get_renderer_fallback },
 };
