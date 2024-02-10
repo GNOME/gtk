@@ -129,8 +129,8 @@ gsk_gpu_mipmap_op_vk_command (GskGpuOp              *op,
                                   .z = 0,
                               },
                               {
-                                  .x = width / 2,
-                                  .y = height / 2,
+                                  .x = MAX (1, width / 2),
+                                  .y = MAX (1, height / 2),
                                   .z = 1,
                               }
                           },
