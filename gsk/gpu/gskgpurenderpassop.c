@@ -333,38 +333,3 @@ gsk_gpu_render_pass_end_op (GskGpuFrame       *frame,
   self->target = g_object_ref (image);
   self->pass_type = pass_type;
 }
-
-GskGpuImage *
-gsk_gpu_render_pass_op_offscreen (GskGpuFrame           *frame,
-                                  const graphene_vec2_t *scale,
-                                  const graphene_rect_t *viewport,
-                                  GskRenderNode         *node)
-{
-  GskGpuImage *image;
-  int width, height;
-
-  width = ceil (graphene_vec2_get_x (scale) * viewport->size.width);
-  height = ceil (graphene_vec2_get_y (scale) * viewport->size.height);
-
-  image = gsk_gpu_device_create_offscreen_image (gsk_gpu_frame_get_device (frame),
-                                                 FALSE,
-                                                 gsk_render_node_get_preferred_depth (node),
-                                                 width, height);
-
-  gsk_gpu_render_pass_begin_op (frame,
-                                image,
-                                &(cairo_rectangle_int_t) { 0, 0, width, height },
-                                GSK_RENDER_PASS_OFFSCREEN);
-
-  gsk_gpu_node_processor_process (frame,
-                                  image,
-                                  &(cairo_rectangle_int_t) { 0, 0, width, height },
-                                  node,
-                                  viewport);
-
-  gsk_gpu_render_pass_end_op (frame,
-                              image,
-                              GSK_RENDER_PASS_OFFSCREEN);
-
-  return image;
-}

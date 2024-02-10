@@ -733,6 +733,41 @@ gsk_gpu_node_processor_image_op (GskGpuNodeProcessor   *self,
     }
 }
 
+static GskGpuImage *
+gsk_gpu_node_processor_create_offscreen (GskGpuFrame           *frame,
+                                         const graphene_vec2_t *scale,
+                                         const graphene_rect_t *viewport,
+                                         GskRenderNode         *node)
+{
+  GskGpuImage *image;
+  int width, height;
+
+  width = ceil (graphene_vec2_get_x (scale) * viewport->size.width);
+  height = ceil (graphene_vec2_get_y (scale) * viewport->size.height);
+
+  image = gsk_gpu_device_create_offscreen_image (gsk_gpu_frame_get_device (frame),
+                                                 FALSE,
+                                                 gsk_render_node_get_preferred_depth (node),
+                                                 width, height);
+
+  gsk_gpu_render_pass_begin_op (frame,
+                                image,
+                                &(cairo_rectangle_int_t) { 0, 0, width, height },
+                                GSK_RENDER_PASS_OFFSCREEN);
+
+  gsk_gpu_node_processor_process (frame,
+                                  image,
+                                  &(cairo_rectangle_int_t) { 0, 0, width, height },
+                                  node,
+                                  viewport);
+
+  gsk_gpu_render_pass_end_op (frame,
+                              image,
+                              GSK_RENDER_PASS_OFFSCREEN);
+
+  return image;
+}
+
 /*
  * gsk_gpu_get_node_as_image:
  * @frame: frame to render in
@@ -810,10 +845,10 @@ gsk_gpu_get_node_as_image (GskGpuFrame            *frame,
     return NULL;
 
   GSK_DEBUG (FALLBACK, "Offscreening node '%s'", g_type_name_from_instance ((GTypeInstance *) node));
-  result = gsk_gpu_render_pass_op_offscreen (frame,
-                                             scale,
-                                             &clipped,
-                                             node);
+  result = gsk_gpu_node_processor_create_offscreen (frame,
+                                                    scale,
+                                                    &clipped,
+                                                    node);
 
   *out_bounds = clipped;
   return result;
@@ -2056,10 +2091,10 @@ gsk_gpu_node_processor_add_texture_scale_node (GskGpuNodeProcessor *self,
       if (!gsk_gpu_node_processor_clip_node_bounds (self, node, &clip_bounds))
         return;
       gsk_rect_round_larger (&clip_bounds);
-      offscreen = gsk_gpu_render_pass_op_offscreen (self->frame,
-                                                    graphene_vec2_one (),
-                                                    &clip_bounds,
-                                                    node);
+      offscreen = gsk_gpu_node_processor_create_offscreen (self->frame,
+                                                           graphene_vec2_one (),
+                                                           &clip_bounds,
+                                                           node);
       descriptor = gsk_gpu_node_processor_add_image (self, offscreen, GSK_GPU_SAMPLER_DEFAULT);
       gsk_gpu_texture_op (self->frame,
                           gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, &node->bounds),
@@ -3252,10 +3287,10 @@ gsk_gpu_node_processor_repeat_tile (GskGpuNodeProcessor    *self,
     }
 
   GSK_DEBUG (FALLBACK, "Offscreening node '%s' for tiling", g_type_name_from_instance ((GTypeInstance *) child));
-  image = gsk_gpu_render_pass_op_offscreen (self->frame,
-                                            &self->scale,
-                                            &clipped_child_bounds,
-                                            child);
+  image = gsk_gpu_node_processor_create_offscreen (self->frame,
+                                                   &self->scale,
+                                                   &clipped_child_bounds,
+                                                   child);
 
   g_return_if_fail (image);
 
