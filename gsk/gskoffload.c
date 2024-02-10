@@ -537,8 +537,9 @@ complex_clip:
 }
 
 GskOffload *
-gsk_offload_new (GdkSurface    *surface,
-                 GskRenderNode *root)
+gsk_offload_new (GdkSurface     *surface,
+                 GskRenderNode  *root,
+                 cairo_region_t *diff)
 {
   GdkDisplay *display = gdk_surface_get_display (surface);
   GskOffload *self;
@@ -576,6 +577,28 @@ gsk_offload_new (GdkSurface    *surface,
   for (gsize i = 0; i < self->n_subsurfaces; i++)
     {
       GskOffloadInfo *info = &self->subsurfaces[i];
+      graphene_rect_t old_rect;
+
+      gdk_subsurface_get_rect (info->subsurface, &old_rect);
+
+      if (info->can_offload != (gdk_subsurface_get_texture (info->subsurface) != NULL) ||
+          info->can_raise != gdk_subsurface_is_above_parent (info->subsurface) ||
+          (info->can_offload && !gsk_rect_equal (&info->rect, &old_rect)))
+        {
+          /* We changed things, need to invalidate everything */
+          cairo_rectangle_int_t int_rect;
+
+          if (info->can_offload)
+            {
+              gsk_rect_to_cairo_grow (&info->rect, &int_rect);
+              cairo_region_union_rectangle (diff, &int_rect);
+            }
+          if (gdk_subsurface_get_texture (info->subsurface) != NULL)
+            {
+              gsk_rect_to_cairo_grow (&old_rect, &int_rect);
+              cairo_region_union_rectangle (diff, &int_rect);
+            }
+        }
 
       if (info->can_offload)
         {

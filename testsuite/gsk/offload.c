@@ -389,9 +389,11 @@ parse_node_file (GFile *file, const char *generate)
   gsk_render_node_unref (node);
   node = tmp;
 
-  offload = gsk_offload_new (surface, node);
+  region = cairo_region_create ();
+  offload = gsk_offload_new (surface, node, region);
   offload_state = collect_offload_info (surface, offload);
   gsk_offload_free (offload);
+  cairo_region_destroy (region);
 
   if (g_strcmp0 (generate, "offload") == 0)
     {
@@ -425,7 +427,8 @@ parse_node_file (GFile *file, const char *generate)
       gsk_render_node_unref (node2);
       node2 = tmp;
 
-      offload = gsk_offload_new (surface, node2);
+      clip = cairo_region_create ();
+      offload = gsk_offload_new (surface, node2, clip);
       offload_state = collect_offload_info (surface, offload);
 
       if (g_strcmp0 (generate, "offload2") == 0)
@@ -452,7 +455,6 @@ parse_node_file (GFile *file, const char *generate)
       g_clear_pointer (&diff, g_bytes_unref);
       g_clear_pointer (&reference_file, g_free);
 
-      clip = cairo_region_create ();
       gsk_render_node_diff (node, node2, clip, offload);
 
       if (g_strcmp0 (generate, "diff") == 0)

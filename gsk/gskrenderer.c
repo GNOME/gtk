@@ -484,24 +484,25 @@ gsk_renderer_render (GskRenderer          *renderer,
 
   renderer_class = GSK_RENDERER_GET_CLASS (renderer);
 
+  clip = cairo_region_copy (region);
+
   if (renderer_class->supports_offload &&
       !GSK_RENDERER_DEBUG_CHECK (renderer, OFFLOAD_DISABLE))
-    offload = gsk_offload_new (priv->surface, root);
+    offload = gsk_offload_new (priv->surface, root, clip);
   else
     offload = NULL;
 
   if (region == NULL || priv->prev_node == NULL || GSK_RENDERER_DEBUG_CHECK (renderer, FULL_REDRAW))
     {
-      clip = cairo_region_create_rectangle (&(GdkRectangle) {
-                                                0, 0,
-                                                gdk_surface_get_width (priv->surface),
-                                                gdk_surface_get_height (priv->surface)
-                                            });
+      cairo_region_union_rectangle (clip,
+                                    &(GdkRectangle) {
+                                        0, 0,
+                                        gdk_surface_get_width (priv->surface),
+                                        gdk_surface_get_height (priv->surface)
+                                    });
     }
   else
     {
-      clip = cairo_region_copy (region);
-
       gsk_render_node_diff (priv->prev_node, root, clip, offload);
     }
 

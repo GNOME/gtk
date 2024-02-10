@@ -6963,7 +6963,7 @@ gsk_subsurface_node_diff (GskRenderNode  *node1,
 {
   GskSubsurfaceNode *self1 = (GskSubsurfaceNode *) node1;
   GskSubsurfaceNode *self2 = (GskSubsurfaceNode *) node2;
-  GskOffloadInfo *info;
+  gboolean is_offloaded1, is_offloaded2;
 
   if (!data->offload)
     {
@@ -6972,38 +6972,31 @@ gsk_subsurface_node_diff (GskRenderNode  *node1,
       return;
     }
 
-  if (self1->subsurface != self2->subsurface)
+  is_offloaded1 = self1->subsurface && gdk_subsurface_get_texture (self1->subsurface) != NULL;
+  is_offloaded2 = self2->subsurface && gdk_subsurface_get_texture (self2->subsurface) != NULL;
+
+  if (is_offloaded1 && is_offloaded2)
     {
-      /* different subsurfaces, can't compare */
-      gsk_render_node_diff_impossible (node1, node2, data);
-      return;
+      /* both are offloaded, no contents to compare */
     }
-
-  info = gsk_offload_get_subsurface_info (data->offload, self1->subsurface);
-
-  if (!info)
+  else if (!is_offloaded1 && !is_offloaded2)
     {
-      /* No info, so offloading not supported */
+      /* neither is offloaded, diff the children */
       gsk_render_node_data_diff (self1->child, self2->child, data);
-      return;
     }
-
-  if (info->is_offloaded != info->was_offloaded ||
-      info->is_above != info->was_above)
+  else if (!is_offloaded1)
     {
-      /* state changed between punching hole, drawing, and doing nothing. */
-      gsk_render_node_diff_impossible (node1, node2, data);
+      /* The first one isn't offloaded, take its contents */
+      cairo_rectangle_int_t rect;
+      gsk_rect_to_cairo_grow (&node1->bounds, &rect);
+      cairo_region_union_rectangle (data->region, &rect);
     }
-  else if (info->is_offloaded && !info->is_above &&
-           !gsk_rect_equal (&node1->bounds, &node2->bounds))
+  else if (!is_offloaded2)
     {
-      /* We're punching a hole and it moved */
-      gsk_render_node_diff_impossible (node1, node2, data);
-    }
-  else if (!info->is_offloaded)
-    {
-      /* We aren't offloading and we weren't offloading (see above) */
-      gsk_render_node_data_diff (self1->child, self2->child, data);
+      /* The second one isn't offloaded, take its contents */
+      cairo_rectangle_int_t rect;
+      gsk_rect_to_cairo_grow (&node2->bounds, &rect);
+      cairo_region_union_rectangle (data->region, &rect);
     }
 }
 
