@@ -126,8 +126,8 @@ available on the system.
 ### `GTK_MEDIA`
 
 Specifies what backend to load for [class@Gtk.MediaFile]. The possible values
-depend on what options GTK was built with, and can include 'gstreamer',
-'ffmpeg' and 'none'. If set to 'none', media playback will be unavailable.
+depend on what options GTK was built with, and can include 'gstreamer'
+and 'none'. If set to 'none', media playback will be unavailable.
 The special value 'help' can be used to obtain a list of all supported
 media backends.
 

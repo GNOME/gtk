@@ -234,7 +234,7 @@ By default, GTK will try to build with support for the Vulkan graphics
 API in addition to cairo and OpenGL. This option can be used to explicitly
 control whether Vulkan should be used.
 
-### `media-gstreamer` and `media-ffmpeg`
+### `media-gstreamer`
 
 By default, GTK will try to build the gstreamer backend for
 media playback support. These options can be used to explicitly
