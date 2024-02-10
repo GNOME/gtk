@@ -19,6 +19,7 @@
 
 #include "gtksnapshot.h"
 
+#include "gdk/gdksubsurfaceprivate.h"
 #include "gsk/gskrendernodeprivate.h"
 
 G_BEGIN_DECLS

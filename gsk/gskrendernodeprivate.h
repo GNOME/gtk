@@ -1,7 +1,6 @@
 #pragma once
 
 #include "gskrendernode.h"
-#include "gskoffloadprivate.h"
 #include <cairo.h>
 
 #include "gdk/gdkmemoryformatprivate.h"
@@ -37,12 +36,6 @@ struct _GskRenderNode
   guint offscreen_for_opacity : 1;
 };
 
-typedef struct
-{
-  cairo_region_t *region;
-  GskOffload *offload;
-} GskDiffData;
-
 struct _GskRenderNodeClass
 {
   GTypeClass parent_class;
@@ -56,7 +49,7 @@ struct _GskRenderNodeClass
                                    const GskRenderNode  *node2);
   void            (* diff)        (GskRenderNode  *node1,
                                    GskRenderNode  *node2,
-                                   GskDiffData    *data);
+                                   cairo_region_t *region);
 };
 
 void            gsk_render_node_init_types              (void);
@@ -73,17 +66,16 @@ gboolean        gsk_render_node_can_diff                (const GskRenderNode    
                                                          const GskRenderNode         *node2) G_GNUC_PURE;
 void            gsk_render_node_diff                    (GskRenderNode               *node1,
                                                          GskRenderNode               *node2,
-                                                         cairo_region_t              *region,
-                                                         GskOffload                  *offload);
+                                                         cairo_region_t              *region);
 void            gsk_render_node_data_diff               (GskRenderNode               *node1,
                                                          GskRenderNode               *node2,
-                                                         GskDiffData                 *data);
+                                                         cairo_region_t              *region);
 void            gsk_render_node_diff_impossible         (GskRenderNode               *node1,
                                                          GskRenderNode               *node2,
-                                                         GskDiffData                 *data);
+                                                         cairo_region_t              *region);
 void            gsk_container_node_diff_with            (GskRenderNode               *container,
                                                          GskRenderNode               *other,
-                                                         GskDiffData                 *data);
+                                                         cairo_region_t              *region);
 void            gsk_render_node_draw_fallback           (GskRenderNode               *node,
                                                          cairo_t                     *cr);
 

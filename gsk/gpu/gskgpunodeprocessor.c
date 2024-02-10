@@ -42,6 +42,7 @@
 #include "gsktransformprivate.h"
 
 #include "gdk/gdkrgbaprivate.h"
+#include "gdk/gdksubsurfaceprivate.h"
 
 /* A note about coordinate systems
  *

@@ -503,7 +503,7 @@ gsk_renderer_render (GskRenderer          *renderer,
     }
   else
     {
-      gsk_render_node_diff (priv->prev_node, root, clip, offload);
+      gsk_render_node_diff (priv->prev_node, root, clip);
     }
 
   renderer_class->render (renderer, root, clip);

@@ -154,9 +154,9 @@ gsk_render_node_real_can_diff (const GskRenderNode *node1,
 static void
 gsk_render_node_real_diff (GskRenderNode  *node1,
                            GskRenderNode  *node2,
-                           GskDiffData    *data)
+                           cairo_region_t *region)
 {
-  gsk_render_node_diff_impossible (node1, node2, data);
+  gsk_render_node_diff_impossible (node1, node2, region);
 }
 
 static void
@@ -505,14 +505,14 @@ rectangle_init_from_graphene (cairo_rectangle_int_t *cairo,
 void
 gsk_render_node_diff_impossible (GskRenderNode  *node1,
                                  GskRenderNode  *node2,
-                                 GskDiffData    *data)
+                                 cairo_region_t *region)
 {
   cairo_rectangle_int_t rect;
 
   rectangle_init_from_graphene (&rect, &node1->bounds);
-  cairo_region_union_rectangle (data->region, &rect);
+  cairo_region_union_rectangle (region, &rect);
   rectangle_init_from_graphene (&rect, &node2->bounds);
-  cairo_region_union_rectangle (data->region, &rect);
+  cairo_region_union_rectangle (region, &rect);
 }
 
 /**
@@ -520,7 +520,6 @@ gsk_render_node_diff_impossible (GskRenderNode  *node1,
  * @node1: a `GskRenderNode`
  * @node2: the `GskRenderNode` to compare with
  * @region: a `cairo_region_t` to add the differences to
- * @subsurfaces: (nullable): array to add offload info to
  *
  * Compares @node1 and @node2 trying to compute the minimal region of changes.
  *
@@ -533,47 +532,30 @@ gsk_render_node_diff_impossible (GskRenderNode  *node1,
  *
  * Note that the passed in @region may already contain previous results from
  * previous node comparisons, so this function call will only add to it.
- *
- * If @subsurface_nodes is not `NULL`, then we treat subsurface nodes as
- * identical if they refer to the same subsurface and have the same bounds.
- * In this case, we collect subsurface nodes we see in @subsurface_nodes,
- * for later updating of the attached textures.
- *
- * If @subsurface_area is not `NULL`, it will collect the full area of all
- * subsurface nodes we meet.
  */
 void
 gsk_render_node_diff (GskRenderNode  *node1,
                       GskRenderNode  *node2,
-                      cairo_region_t *region,
-                      GskOffload     *offload)
-{
-  gsk_render_node_data_diff (node1, node2, &(GskDiffData) { region, offload });
-}
-
-void
-gsk_render_node_data_diff (GskRenderNode  *node1,
-                           GskRenderNode  *node2,
-                           GskDiffData    *data)
+                      cairo_region_t *region)
 {
   if (node1 == node2)
     return;
 
   if (_gsk_render_node_get_node_type (node1) == _gsk_render_node_get_node_type (node2))
     {
-      GSK_RENDER_NODE_GET_CLASS (node1)->diff (node1, node2, data);
+      GSK_RENDER_NODE_GET_CLASS (node1)->diff (node1, node2, region);
     }
   else if (_gsk_render_node_get_node_type (node1) == GSK_CONTAINER_NODE)
     {
-      gsk_container_node_diff_with (node1, node2, data);
+      gsk_container_node_diff_with (node1, node2, region);
     }
   else if (_gsk_render_node_get_node_type (node2) == GSK_CONTAINER_NODE)
     {
-      gsk_container_node_diff_with (node2, node1, data);
+      gsk_container_node_diff_with (node2, node1, region);
     }
   else
     {
-      gsk_render_node_diff_impossible (node1, node2, data);
+      gsk_render_node_diff_impossible (node1, node2, region);
     }
 }
 
