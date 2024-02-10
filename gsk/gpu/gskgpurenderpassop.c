@@ -360,7 +360,10 @@ gsk_gpu_render_pass_op_offscreen (GskGpuFrame           *frame,
                                   image,
                                   &(cairo_rectangle_int_t) { 0, 0, width, height },
                                   node,
-                                  viewport);
+                                  &GRAPHENE_RECT_INIT (viewport->origin.x,
+                                                       viewport->origin.y,
+                                                       width / graphene_vec2_get_x (scale),
+                                                       height / graphene_vec2_get_y (scale)));
 
   gsk_gpu_render_pass_end_op (frame,
                               image,
