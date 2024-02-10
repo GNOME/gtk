@@ -29,11 +29,6 @@ option('macos-backend',
 # For distros: GTK guarantees support for WebM video (VP8 and VP9), so a supported build
 # should provide that.
 
-option('media-ffmpeg',
-       type: 'feature',
-       value: 'disabled',
-       description : 'Build the experimental ffmpeg media backend')
-
 option('media-gstreamer',
        type: 'feature',
        value: 'enabled',

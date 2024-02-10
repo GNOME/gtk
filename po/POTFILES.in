@@ -413,7 +413,6 @@ gtk/ui/gtkscalebutton.ui
 gtk/ui/gtksidebarrow.ui
 gtk/ui/gtkstatusbar.ui
 gtk/ui/gtkvolumebutton.ui
-modules/media/gtkffmediafile.c
 modules/media/gtkgstsink.c
 modules/printbackends/gtkprintbackendcpdb.c
 modules/printbackends/gtkprintbackendcups.c

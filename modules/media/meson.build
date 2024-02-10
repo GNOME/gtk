@@ -5,40 +5,6 @@ media_backends = []
 extra_c_args = ['-DGTK_COMPILATION']
 extra_c_args += common_cflags
 
-ffmpeg_opt = get_option('media-ffmpeg')
-ffmpeg_versions = {
-  'libavfilter': '>= 6.47.100',
-  'libavformat': '>= 57.41.100',
-  'libavcodec': '>= 57.48.101',
-  'libavdevice': '>= 57.48.101',
-  'libavutil': '>= 55.28.100',
-  'libswresample': '>= 3.9.100',
-  'libswscale': '>= 4.6.100',
-}
-ffmpeg_deps = []
-ffmpeg_found = true
-foreach name, version : ffmpeg_versions
-  dep = dependency(name, version: version, required: ffmpeg_opt)
-  ffmpeg_deps += dep
-  if not dep.found()
-    ffmpeg_found = false
-    break
-  endif
-endforeach
-
-if ffmpeg_found
-  media_backends += 'ffmpeg'
-  cdata.set('HAVE_FFMPEG', 1)
-  shared_module('media-ffmpeg',
-    sources: 'gtkffmediafile.c',
-    c_args: extra_c_args,
-    dependencies: [ libgtk_dep, ffmpeg_deps ],
-    name_suffix: module_suffix,
-    install_dir: media_install_dir,
-    install: true,
-  )
-endif
-
 gstplayer_dep = dependency('gstreamer-player-1.0', version: '>= 1.12.3',
                            required: get_option('media-gstreamer'))
 gstgl_dep = dependency('gstreamer-gl-1.0', version: '>= 1.12.3',
