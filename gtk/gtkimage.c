@@ -181,7 +181,7 @@ gtk_image_class_init (GtkImageClass *class)
   /**
    * GtkImage:file: (attributes org.gtk.Property.set=gtk_image_set_from_file)
    *
-   * The `GFile` to display.
+   * A path to the file to display.
    */
   image_props[PROP_FILE] =
       g_param_spec_string ("file", NULL, NULL,
