@@ -9,6 +9,9 @@
 #ifdef GDK_RENDERING_VULKAN
 #include <vulkan/vulkan.h>
 #endif
+
+#include "gtkclipperprivate.h"
+
 /* For this to work, you may need to give /dev/dma_heap/system
  * lax permissions.
  */
@@ -449,13 +452,12 @@ texture_builder_set_planes (GdkDmabufTextureBuilder *builder,
 }
 
 static GdkTexture *
-make_dmabuf_texture (const char *filename,
+make_dmabuf_texture (GdkTexture *texture,
                      guint32     format,
                      gboolean    disjoint,
                      gboolean    premultiplied,
                      gboolean    flip)
 {
-  GdkTexture *texture;
   GdkTextureDownloader *downloader;
   int width, height;
   gsize rgb_stride, rgb_size;
@@ -470,8 +472,6 @@ make_dmabuf_texture (const char *filename,
     g_print ("Using dma_heap\n");
   else
     g_print ("Using memfd\n");
-
-  texture = gdk_texture_new_from_filename (filename, NULL);
 
   width = gdk_texture_get_width (texture);
   height = gdk_texture_get_height (texture);
@@ -489,8 +489,6 @@ make_dmabuf_texture (const char *filename,
 
   gdk_texture_downloader_download_into (downloader, rgb_data, rgb_stride);
   gdk_texture_downloader_free (downloader);
-
-  g_object_unref (texture);
 
   if (flip)
     {
@@ -643,7 +641,7 @@ static void
 usage (void)
 {
   char *formats = supported_formats_to_string ();
-  g_print ("Usage: testdmabuf [--undecorated][--disjoint][--download-to FILE] FORMAT FILE\n"
+  g_print ("Usage: testdmabuf [--undecorated][--disjoint][--download-to FILE][--padding PADDING] FORMAT FILE\n"
            "Supported formats: %s\n", formats);
   g_free (formats);
   exit (1);
@@ -717,6 +715,9 @@ toggle_flip (GtkWidget *widget,
 {
   GtkPicture *picture = data;
 
+  if (!texture_flipped)
+    return FALSE;
+
   if (gtk_picture_get_paintable (picture) == GDK_PAINTABLE (texture))
     gtk_picture_set_paintable (picture, GDK_PAINTABLE (texture_flipped));
   else
@@ -756,6 +757,10 @@ main (int argc, char *argv[])
   GtkShortcutTrigger *trigger;
   GtkShortcutAction *action;
   GtkShortcut *shortcut;
+  GdkPaintable *paintable;
+  GdkTexture *orig;
+  int padding[4] = { 0, }; /* left, right, top, bottom */
+  int padding_set = 0;
 
   for (i = 1; i < argc; i++)
     {
@@ -775,6 +780,37 @@ main (int argc, char *argv[])
 
           save_filename = argv[i];
         }
+      else if (g_str_equal (argv[i], "--padding"))
+        {
+          if (padding_set < 4)
+            {
+              char **strv;
+
+              i++;
+              if (i == argc)
+                usage ();
+
+              strv = g_strsplit (argv[i], ",", 0);
+              if (g_strv_length (strv) > 4)
+                g_error ("Too much padding");
+
+              for (padding_set = 0; padding_set < 4; padding_set++)
+                {
+                  guint64 num;
+                  GError *error = NULL;
+
+                  if (!strv[padding_set])
+                    break;
+
+                  if (!g_ascii_string_to_unsigned (strv[padding_set], 10, 0, 100, &num, &error))
+                    g_error ("%s", error->message);
+
+                  padding[padding_set] = (int) num;
+               }
+            }
+          else
+            g_error ("Too much padding");
+        }
       else
         break;
     }
@@ -793,8 +829,21 @@ main (int argc, char *argv[])
   /* Get the list of supported formats with GDK_DEBUG=opengl */
   gdk_display_get_dmabuf_formats (gdk_display_get_default ());
 
-  texture = make_dmabuf_texture (filename, format, disjoint, premultiplied, FALSE);
-  texture_flipped = make_dmabuf_texture (filename, format, disjoint, premultiplied, TRUE);
+  orig = gdk_texture_new_from_filename (filename, NULL);
+  texture = make_dmabuf_texture (orig, format, disjoint, premultiplied, FALSE);
+  texture_flipped = make_dmabuf_texture (orig, format, disjoint, premultiplied, TRUE);
+  g_object_unref (orig);
+
+  if (padding_set > 0)
+    {
+      paintable = gtk_clipper_new (GDK_PAINTABLE (texture),
+                                   &GRAPHENE_RECT_INIT (padding[0],
+                                                        padding[2],
+                                                        gdk_texture_get_width (texture) - padding[0] - padding[1],
+                                                        gdk_texture_get_height (texture) - padding[2] - padding[3]));
+    }
+  else
+    paintable = GDK_PAINTABLE (texture);
 
   if (save_filename)
     gdk_texture_save_to_png (texture, save_filename);
@@ -804,7 +853,7 @@ main (int argc, char *argv[])
   if (fullscreen)
     gtk_window_fullscreen (GTK_WINDOW (window));
 
-  picture = gtk_picture_new_for_paintable (GDK_PAINTABLE (texture));
+  picture = gtk_picture_new_for_paintable (paintable);
   offload = gtk_graphics_offload_new (picture);
   gtk_widget_set_halign (offload, GTK_ALIGN_CENTER);
   gtk_widget_set_valign (offload, GTK_ALIGN_CENTER);
