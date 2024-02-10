@@ -110,16 +110,6 @@ gsk_cairo_rectangle_pixel_aligned (cairo_t               *cr,
 }
 
 static void
-rectangle_init_from_graphene (cairo_rectangle_int_t *cairo,
-                              const graphene_rect_t *graphene)
-{
-  cairo->x = floorf (graphene->origin.x);
-  cairo->y = floorf (graphene->origin.y);
-  cairo->width = ceilf (graphene->origin.x + graphene->size.width) - cairo->x;
-  cairo->height = ceilf (graphene->origin.y + graphene->size.height) - cairo->y;
-}
-
-static void
 _graphene_rect_init_from_clip_extents (graphene_rect_t *rect,
                                        cairo_t         *cr)
 {
@@ -2457,7 +2447,7 @@ gsk_inset_shadow_node_draw (GskRenderNode *node,
        * We could remove the part of "box" where the blur doesn't
        * reach, but computing that is a bit tricky since the
        * rounded corners are on the "inside" of it. */
-      rectangle_init_from_graphene (&r, &clip_box.bounds);
+      gsk_rect_to_cairo_grow (&clip_box.bounds, &r);
       remaining = cairo_region_create_rectangle (&r);
 
       /* First do the corners of box */
@@ -3214,7 +3204,7 @@ gsk_container_node_change_func (gconstpointer elem, gsize idx, gpointer data)
   GskDiffData *gd = data;
   cairo_rectangle_int_t rect;
 
-  rectangle_init_from_graphene (&rect, &node->bounds);
+  gsk_rect_to_cairo_grow (&node->bounds, &rect);
   cairo_region_union_rectangle (gd->region, &rect);
   if (cairo_region_num_rectangles (gd->region) > MAX_RECTS_IN_DIFF)
     return GSK_DIFF_ABORTED;
@@ -4394,7 +4384,7 @@ gsk_clip_node_diff (GskRenderNode  *node1,
 
       sub = cairo_region_create();
       gsk_render_node_data_diff (self1->child, self2->child, &(GskDiffData) {sub, data->offload });
-      rectangle_init_from_graphene (&clip_rect, &self1->clip);
+      gsk_rect_to_cairo_grow (&self1->clip, &clip_rect);
       cairo_region_intersect_rectangle (sub, &clip_rect);
       cairo_region_union (data->region, sub);
       cairo_region_destroy (sub);
@@ -4542,7 +4532,7 @@ gsk_rounded_clip_node_diff (GskRenderNode  *node1,
 
       sub = cairo_region_create();
       gsk_render_node_data_diff (self1->child, self2->child, &(GskDiffData) { sub, data->offload });
-      rectangle_init_from_graphene (&clip_rect, &self1->clip.bounds);
+      gsk_rect_to_cairo_grow (&self1->clip.bounds, &clip_rect);
       cairo_region_intersect_rectangle (sub, &clip_rect);
       cairo_region_union (data->region, sub);
       cairo_region_destroy (sub);
@@ -4712,7 +4702,7 @@ gsk_fill_node_diff (GskRenderNode  *node1,
 
       sub = cairo_region_create();
       gsk_render_node_data_diff (self1->child, self2->child, &(GskDiffData) { sub, data->offload });
-      rectangle_init_from_graphene (&clip_rect, &node1->bounds);
+      gsk_rect_to_cairo_grow (&node1->bounds, &clip_rect);
       cairo_region_intersect_rectangle (sub, &clip_rect);
       cairo_region_union (data->region, sub);
       cairo_region_destroy (sub);
@@ -4916,7 +4906,7 @@ gsk_stroke_node_diff (GskRenderNode  *node1,
 
       sub = cairo_region_create();
       gsk_render_node_data_diff (self1->child, self2->child, &(GskDiffData) { sub, data->offload });
-      rectangle_init_from_graphene (&clip_rect, &node1->bounds);
+      gsk_rect_to_cairo_grow (&node1->bounds, &clip_rect);
       cairo_region_intersect_rectangle (sub, &clip_rect);
       cairo_region_union (data->region, sub);
       cairo_region_destroy (sub);
