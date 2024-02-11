@@ -73,10 +73,6 @@ gboolean        gsk_render_node_can_diff                (const GskRenderNode    
                                                          const GskRenderNode         *node2) G_GNUC_PURE;
 void            gsk_render_node_diff                    (GskRenderNode               *node1,
                                                          GskRenderNode               *node2,
-                                                         cairo_region_t              *region,
-                                                         GskOffload                  *offload);
-void            gsk_render_node_data_diff               (GskRenderNode               *node1,
-                                                         GskRenderNode               *node2,
                                                          GskDiffData                 *data);
 void            gsk_render_node_diff_impossible         (GskRenderNode               *node1,
                                                          GskRenderNode               *node2,

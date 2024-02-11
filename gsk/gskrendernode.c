@@ -154,9 +154,9 @@ gsk_render_node_real_can_diff (const GskRenderNode *node1,
 static void
 gsk_render_node_real_diff (GskRenderNode  *node1,
                            GskRenderNode  *node2,
-                           cairo_region_t *region)
+                           GskDiffData    *data)
 {
-  gsk_render_node_diff_impossible (node1, node2, region);
+  gsk_render_node_diff_impossible (node1, node2, data);
 }
 
 static void
@@ -505,21 +505,21 @@ rectangle_init_from_graphene (cairo_rectangle_int_t *cairo,
 void
 gsk_render_node_diff_impossible (GskRenderNode  *node1,
                                  GskRenderNode  *node2,
-                                 cairo_region_t *region)
+                                 GskDiffData    *data)
 {
   cairo_rectangle_int_t rect;
 
   rectangle_init_from_graphene (&rect, &node1->bounds);
-  cairo_region_union_rectangle (region, &rect);
+  cairo_region_union_rectangle (data->region, &rect);
   rectangle_init_from_graphene (&rect, &node2->bounds);
-  cairo_region_union_rectangle (region, &rect);
+  cairo_region_union_rectangle (data->region, &rect);
 }
 
 /**
  * gsk_render_node_diff:
  * @node1: a `GskRenderNode`
  * @node2: the `GskRenderNode` to compare with
- * @region: a `cairo_region_t` to add the differences to
+ * @data: the diff data to use
  *
  * Compares @node1 and @node2 trying to compute the minimal region of changes.
  *
@@ -536,26 +536,26 @@ gsk_render_node_diff_impossible (GskRenderNode  *node1,
 void
 gsk_render_node_diff (GskRenderNode  *node1,
                       GskRenderNode  *node2,
-                      cairo_region_t *region)
+                      GskDiffData    *data)
 {
   if (node1 == node2)
     return;
 
   if (_gsk_render_node_get_node_type (node1) == _gsk_render_node_get_node_type (node2))
     {
-      GSK_RENDER_NODE_GET_CLASS (node1)->diff (node1, node2, region);
+      GSK_RENDER_NODE_GET_CLASS (node1)->diff (node1, node2, data);
     }
   else if (_gsk_render_node_get_node_type (node1) == GSK_CONTAINER_NODE)
     {
-      gsk_container_node_diff_with (node1, node2, region);
+      gsk_container_node_diff_with (node1, node2, data);
     }
   else if (_gsk_render_node_get_node_type (node2) == GSK_CONTAINER_NODE)
     {
-      gsk_container_node_diff_with (node2, node1, region);
+      gsk_container_node_diff_with (node2, node1, data);
     }
   else
     {
-      gsk_render_node_diff_impossible (node1, node2, region);
+      gsk_render_node_diff_impossible (node1, node2, data);
     }
 }
 
