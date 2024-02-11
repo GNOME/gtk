@@ -100,6 +100,7 @@ compare_render_tests = [
   'nested-rounded-clips',
   'offscreen-fractional-translate-nogl',
   'offscreen-pixel-alignment-nogl-nocairo',
+  'offscreen-pixel-alignment2',
   'opacity_clip',
   'opacity-colormatrix-combinations',
   'opacity-overdraw',
