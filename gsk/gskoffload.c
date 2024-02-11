@@ -581,25 +581,6 @@ gsk_offload_new (GdkSurface     *surface,
 
       gdk_subsurface_get_rect (info->subsurface, &old_rect);
 
-      if (info->can_offload != (gdk_subsurface_get_texture (info->subsurface) != NULL) ||
-          info->can_raise != gdk_subsurface_is_above_parent (info->subsurface) ||
-          (info->can_offload && !gsk_rect_equal (&info->rect, &old_rect)))
-        {
-          /* We changed things, need to invalidate everything */
-          cairo_rectangle_int_t int_rect;
-
-          if (info->can_offload)
-            {
-              gsk_rect_to_cairo_grow (&info->rect, &int_rect);
-              cairo_region_union_rectangle (diff, &int_rect);
-            }
-          if (gdk_subsurface_get_texture (info->subsurface) != NULL)
-            {
-              gsk_rect_to_cairo_grow (&old_rect, &int_rect);
-              cairo_region_union_rectangle (diff, &int_rect);
-            }
-        }
-
       if (info->can_offload)
         {
           if (info->can_raise)
@@ -629,6 +610,26 @@ gsk_offload_new (GdkSurface     *surface,
           GDK_DISPLAY_DEBUG (display, OFFLOAD, "Raising subsurface %p", info->subsurface);
           info->is_above = TRUE;
         }
+
+      if (info->is_offloaded != info->was_offloaded ||
+          info->is_above != info->was_above ||
+          (info->is_offloaded && !gsk_rect_equal (&info->rect, &old_rect)))
+        {
+          /* We changed things, need to invalidate everything */
+          cairo_rectangle_int_t int_rect;
+
+          if (info->is_offloaded)
+            {
+              gsk_rect_to_cairo_grow (&info->rect, &int_rect);
+              cairo_region_union_rectangle (diff, &int_rect);
+            }
+          if (info->was_offloaded)
+            {
+              gsk_rect_to_cairo_grow (&old_rect, &int_rect);
+              cairo_region_union_rectangle (diff, &int_rect);
+            }
+        }
+
     }
 
   return self;
