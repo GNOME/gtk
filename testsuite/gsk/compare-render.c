@@ -7,6 +7,7 @@
 
 
 static char *arg_output_dir = NULL;
+static gboolean plain = FALSE;
 static gboolean flip = FALSE;
 static gboolean rotate = FALSE;
 static gboolean repeat = FALSE;
@@ -162,6 +163,7 @@ deserialize_error_func (const GskParseLocation *start,
 
 static const GOptionEntry options[] = {
   { "output", 0, 0, G_OPTION_ARG_FILENAME, &arg_output_dir, "Directory to save image files to", "DIR" },
+  { "plain", 0, 0, G_OPTION_ARG_NONE, &plain, "Run test as-is", NULL },
   { "flip", 0, 0, G_OPTION_ARG_NONE, &flip, "Do flipped test", NULL },
   { "rotate", 0, 0, G_OPTION_ARG_NONE, &rotate, "Do rotated test", NULL },
   { "repeat", 0, 0, G_OPTION_ARG_NONE, &repeat, "Do repeated test", NULL },
