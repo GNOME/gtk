@@ -185,13 +185,6 @@ renderers = [
   { 'name': 'vulkan' },
 ]
 
-compare_xfails = [
-  # Both tests fail because of some font rendering issue
-  'empty-linear-gradient',
-  'unaligned-offscreen',
-  'upside-down-label-nocairo',
-]
-
 compare_xfails_small_texture = [
   'big-checkerboard',
   'big-checkerboard-scaled-down',
