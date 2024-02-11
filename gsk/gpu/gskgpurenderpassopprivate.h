@@ -23,10 +23,5 @@ void                    gsk_gpu_render_pass_end_op                      (GskGpuF
                                                                          GskGpuImage                    *image,
                                                                          GskRenderPassType               pass_type);
 
-GskGpuImage *           gsk_gpu_render_pass_op_offscreen                (GskGpuFrame                    *frame,
-                                                                         const graphene_vec2_t          *scale,
-                                                                         const graphene_rect_t          *viewport,
-                                                                         GskRenderNode                  *node);
-
 G_END_DECLS
 

@@ -28,6 +28,7 @@ gsk_gpu_uber_op_print (GskGpuOp    *op,
   instance = (GskGpuUberInstance *) gsk_gpu_frame_get_vertex_data (frame, shader->vertex_offset);
 
   gsk_gpu_print_op (string, indent, "uber");
+  gsk_gpu_print_shader_info (string, shader->clip);
   gsk_gpu_print_rect (string, instance->rect);
   gsk_gpu_print_newline (string);
 }

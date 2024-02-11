@@ -31,6 +31,7 @@ gsk_gpu_box_shadow_op_print (GskGpuOp    *op,
   instance = (GskGpuBoxshadowInstance *) gsk_gpu_frame_get_vertex_data (frame, shader->vertex_offset);
 
   gsk_gpu_print_op (string, indent, shader->variation & VARIATION_INSET ? "inset-shadow" : "outset-shadow");
+  gsk_gpu_print_shader_info (string, shader->clip);
   gsk_gpu_print_rounded_rect (string, instance->outline);
   gsk_gpu_print_rgba (string, instance->color);
   g_string_append_printf (string, "%g %g %g %g ",
