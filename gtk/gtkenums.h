@@ -1802,7 +1802,7 @@ typedef enum { /*< prefix=GTK_ACCESSIBLE_SORT >*/
 } GtkAccessibleSort;
 
 /**
- * GTK_ANNOUNCEMENT_PRIORITY:
+ * GtkAccessibleAnnouncementPriority:
  * @GTK_ANNOUNCEMENT_PRIORITY_LOW: The announcement is low priority, and might be read only
  *     on the user's request.
  * @GTK_ANNOUNCEMENT_PRIORITY_MEDIUM: The announcement is of medium priority, and is usually
