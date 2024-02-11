@@ -122,6 +122,7 @@ compare_render_tests = [
   'repeat-no-repeat',
   'repeat-node-tiling-horizontal',
   'repeat-node-tiling-vertical',
+  'repeat-noninteger-nogl-nocairo',
   'repeat-repeats',
   'repeat-repeats-nested-nogl',
   'repeat-scaling',
