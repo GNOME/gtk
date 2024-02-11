@@ -3629,7 +3629,10 @@ tablet_pad_handle_leave (void                     *data,
                   wp_tablet_pad, surface);
 
   if (pad->current_tablet)
-    pad->current_tablet->pads = g_list_remove (pad->current_tablet->pads, pad);
+    {
+      pad->current_tablet->pads = g_list_remove (pad->current_tablet->pads, pad);
+      pad->current_tablet = NULL;
+    }
 }
 
 static void
