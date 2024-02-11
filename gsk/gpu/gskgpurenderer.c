@@ -391,7 +391,7 @@ gsk_gpu_renderer_render (GskRenderer          *renderer,
   GskGpuFrame *frame;
   GskGpuImage *backbuffer;
   cairo_region_t *render_region;
-  double scale;
+  GdkSurface *surface;
 
   if (cairo_region_is_empty (region))
     {
@@ -411,7 +411,7 @@ gsk_gpu_renderer_render (GskRenderer          *renderer,
 
   frame = gsk_gpu_renderer_get_frame (self);
   render_region = get_render_region (self);
-  scale = gsk_gpu_renderer_get_scale (self);
+  surface = gdk_draw_context_get_surface (priv->context);
 
   gsk_gpu_frame_render (frame,
                         g_get_monotonic_time (),
@@ -420,8 +420,8 @@ gsk_gpu_renderer_render (GskRenderer          *renderer,
                         root,
                         &GRAPHENE_RECT_INIT (
                           0, 0,
-                          gsk_gpu_image_get_width (backbuffer) / scale,
-                          gsk_gpu_image_get_height (backbuffer) / scale
+                          gdk_surface_get_width (surface),
+                          gdk_surface_get_height (surface)
                         ),
                         NULL);
 

@@ -353,10 +353,7 @@ gsk_gpu_node_processor_init_draw (GskGpuNodeProcessor   *self,
                                NULL,
                                image,
                                &area,
-                               &GRAPHENE_RECT_INIT (viewport->origin.x,
-                                                    viewport->origin.y,
-                                                    area.width / graphene_vec2_get_x (scale),
-                                                    area.height / graphene_vec2_get_y (scale)));
+                               viewport);
 
   gsk_gpu_render_pass_begin_op (frame,
                                 image,
@@ -1010,10 +1007,7 @@ gsk_gpu_node_processor_blur_op (GskGpuNodeProcessor       *self,
                                source_desc,
                                intermediate,
                                &(cairo_rectangle_int_t) { 0, 0, width, height },
-                               &GRAPHENE_RECT_INIT (intermediate_rect.origin.x,
-                                                    intermediate_rect.origin.y,
-                                                    width / graphene_vec2_get_x (&self->scale),
-                                                    height / graphene_vec2_get_y (&self->scale)));
+                               &intermediate_rect);
 
   gsk_gpu_render_pass_begin_op (other.frame,
                                 intermediate,
