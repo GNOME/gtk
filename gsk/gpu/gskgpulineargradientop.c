@@ -33,6 +33,7 @@ gsk_gpu_linear_gradient_op_print (GskGpuOp    *op,
     gsk_gpu_print_op (string, indent, "repeating-linear-gradient");
   else
     gsk_gpu_print_op (string, indent, "linear-gradient");
+  gsk_gpu_print_shader_info (string, shader->clip);
   gsk_gpu_print_rect (string, instance->rect);
   gsk_gpu_print_newline (string);
 }

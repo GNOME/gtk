@@ -13,6 +13,27 @@ gsk_gpu_print_indent (GString *string,
 }
 
 void
+gsk_gpu_print_shader_info (GString          *string,
+                           GskGpuShaderClip  clip)
+{
+  switch (clip)
+    {
+      case GSK_GPU_SHADER_CLIP_NONE:
+        g_string_append (string, "🞨 ");
+        break;
+      case GSK_GPU_SHADER_CLIP_RECT:
+        g_string_append (string, "□ ");
+        break;
+      case GSK_GPU_SHADER_CLIP_ROUNDED:
+        g_string_append (string, "▢ ");
+        break;
+      default:
+        g_assert_not_reached ();
+        break;
+    }
+}
+
+void
 gsk_gpu_print_op (GString    *string,
                   guint       indent,
                   const char *op_name)

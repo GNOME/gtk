@@ -30,6 +30,7 @@ gsk_gpu_straight_alpha_op_print (GskGpuOp    *op,
   instance = (GskGpuStraightalphaInstance *) gsk_gpu_frame_get_vertex_data (frame, shader->vertex_offset);
 
   gsk_gpu_print_op (string, indent, "straight-alpha");
+  gsk_gpu_print_shader_info (string, shader->clip);
   gsk_gpu_print_rect (string, instance->rect);
   gsk_gpu_print_image_descriptor (string, shader->desc, instance->tex_id);
   gsk_gpu_print_newline (string);

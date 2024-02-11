@@ -33,6 +33,7 @@ gsk_gpu_radial_gradient_op_print (GskGpuOp    *op,
     gsk_gpu_print_op (string, indent, "repeating-radial-gradient");
   else
     gsk_gpu_print_op (string, indent, "radial-gradient");
+  gsk_gpu_print_shader_info (string, shader->clip);
   gsk_gpu_print_rect (string, instance->rect);
   gsk_gpu_print_newline (string);
 }

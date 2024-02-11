@@ -27,6 +27,7 @@ gsk_gpu_cross_fade_op_print (GskGpuOp    *op,
   instance = (GskGpuCrossfadeInstance *) gsk_gpu_frame_get_vertex_data (frame, shader->vertex_offset);
 
   gsk_gpu_print_op (string, indent, "cross-fade");
+  gsk_gpu_print_shader_info (string, shader->clip);
   gsk_gpu_print_rect (string, instance->rect);
   gsk_gpu_print_image_descriptor (string, shader->desc, instance->start_id);
   gsk_gpu_print_image_descriptor (string, shader->desc, instance->end_id);

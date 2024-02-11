@@ -28,6 +28,7 @@ gsk_gpu_blend_mode_op_print (GskGpuOp    *op,
   instance = (GskGpuBlendmodeInstance *) gsk_gpu_frame_get_vertex_data (frame, shader->vertex_offset);
 
   gsk_gpu_print_op (string, indent, "blend-mode");
+  gsk_gpu_print_shader_info (string, shader->clip);
   gsk_gpu_print_rect (string, instance->rect);
   gsk_gpu_print_image_descriptor (string, shader->desc, instance->bottom_id);
   gsk_gpu_print_enum (string, GSK_TYPE_BLEND_MODE, shader->variation);

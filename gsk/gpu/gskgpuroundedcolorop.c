@@ -28,6 +28,7 @@ gsk_gpu_rounded_color_op_print (GskGpuOp    *op,
   instance = (GskGpuRoundedcolorInstance *) gsk_gpu_frame_get_vertex_data (frame, shader->vertex_offset);
 
   gsk_gpu_print_op (string, indent, "rounded-color");
+  gsk_gpu_print_shader_info (string, shader->clip);
   gsk_gpu_print_rounded_rect (string, instance->outline);
   gsk_gpu_print_rgba (string, instance->color);
   gsk_gpu_print_newline (string);
