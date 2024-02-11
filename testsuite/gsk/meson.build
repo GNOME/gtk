@@ -202,10 +202,28 @@ variants = {
   'clipped': '--clip',
 }
 
+compare_xfails = {
+  'cairo': { 'subpixel-positioning': ['clipped'], # https://gitlab.freedesktop.org/cairo/cairo/-/issues/821
+             'outset-shadow-scale-offset': ['clipped'], # #6426
+             'glyph-cache-overflow-slices': ['clipped'], # 6427
+             'scaled-texture-scale': ['clipped'], # 6428
+           },
+  'ngl': { 'shadow-offset-to-outside-clip': ['clipped'], # 6425
+           'clip-intersection-fail-opacity-nogl': ['clipped'], # 6425
+           'scaled-texture-scale': ['clipped'], # 6428
+         },
+  'vulkan': { 'shadow-offset-to-outside-clip': ['clipped'], # 6425
+              'clip-intersection-fail-opacity-nogl': ['clipped'], # 6425
+              'scaled-texture-scale': ['clipped'], # 6428
+            },
+}
+
 foreach renderer : renderers
   renderer_name = renderer.get('name')
+  renderer_xfails = compare_xfails.get(renderer_name, { })
 
   foreach testname : compare_render_tests
+    test_xfails = renderer_xfails.get(testname, [])
     exclude_term = '-no' + renderer_name
 
     suites = [
@@ -232,6 +250,10 @@ foreach renderer : renderers
         (renderer_name != 'vulkan' or have_vulkan))
 
       foreach variant : variants.keys()
+        extra_suites = [ 'gsk-compare-' + variant + '-' + renderer_name ]
+        if test_xfails.contains(variant)
+          extra_suites += ['failing']
+        endif
         test('compare ' + renderer_name + ' ' + testname + ' ' + variant, compare_render,
           args: [
             variants.get(variant),
@@ -240,7 +262,7 @@ foreach renderer : renderers
             join_paths(meson.current_source_dir(), 'compare', testname + '.png'),
           ],
           env: test_env,
-          suite: suites + [ 'gsk-compare-' + variant + '-' + renderer_name ],
+          suite: suites + extra_suites
         )
       endforeach
     endif
