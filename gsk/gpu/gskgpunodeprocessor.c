@@ -797,7 +797,6 @@ gsk_gpu_get_node_as_image (GskGpuFrame            *frame,
                            GskRenderNode          *node,
                            graphene_rect_t        *out_bounds)
 {
-  graphene_rect_t clipped;
   GskGpuImage *result;
 
   switch ((guint) gsk_render_node_get_node_type (node))
@@ -820,37 +819,29 @@ gsk_gpu_get_node_as_image (GskGpuFrame            *frame,
       }
 
     case GSK_CAIRO_NODE:
-      gsk_rect_intersection (clip_bounds, &node->bounds, &clipped);
-      if (gsk_rect_is_empty (&clipped))
-        return NULL;
-
       result = gsk_gpu_upload_cairo_op (frame,
                                         scale,
-                                        &clipped,
+                                        clip_bounds,
                                         (GskGpuCairoFunc) gsk_render_node_draw_fallback,
                                         gsk_render_node_ref (node),
                                         (GDestroyNotify) gsk_render_node_unref);
 
       g_object_ref (result);
 
-      *out_bounds = clipped;
+      *out_bounds = *clip_bounds;
       return result;
 
     default:
       break;
     }
 
-  gsk_rect_intersection (clip_bounds, &node->bounds, &clipped);
-  if (gsk_rect_is_empty (&clipped))
-    return NULL;
-
   GSK_DEBUG (FALLBACK, "Offscreening node '%s'", g_type_name_from_instance ((GTypeInstance *) node));
   result = gsk_gpu_node_processor_create_offscreen (frame,
                                                     scale,
-                                                    &clipped,
+                                                    clip_bounds,
                                                     node);
 
-  *out_bounds = clipped;
+  *out_bounds = *clip_bounds;
   return result;
 }
 
