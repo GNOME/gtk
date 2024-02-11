@@ -63,7 +63,7 @@ internal_tests = [
   { 'name': 'subsurface' },
 ]
 
-if host_machine.system() not in ['darwin', 'windows']
+if os_linux
   internal_tests += { 'name': 'dmabufformats' }
   internal_tests += { 'name': 'dmabuftexture', 'suites': 'failing' }
 endif
