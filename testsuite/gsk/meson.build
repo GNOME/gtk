@@ -203,11 +203,6 @@ variants = {
 }
 
 compare_xfails = {
-  'cairo': { 'subpixel-positioning': ['clipped'], # https://gitlab.freedesktop.org/cairo/cairo/-/issues/821
-             'outset-shadow-scale-offset': ['clipped'], # #6426
-             'glyph-cache-overflow-slices': ['clipped'], # 6427
-             'scaled-texture-scale': ['clipped'], # 6428
-           },
   'ngl': { 'shadow-offset-to-outside-clip': ['clipped'], # 6425
            'clip-intersection-fail-opacity-nogl': ['clipped'], # 6425
            'scaled-texture-scale': ['clipped'], # 6428
@@ -251,7 +246,7 @@ foreach renderer : renderers
 
       foreach variant : variants.keys()
         extra_suites = [ 'gsk-compare-' + variant + '-' + renderer_name ]
-        if test_xfails.contains(variant)
+        if test_xfails.contains(variant) or (renderer_name == 'cairo' and variant == 'clipped')
           extra_suites += ['failing']
         endif
         test('compare ' + renderer_name + ' ' + testname + ' ' + variant, compare_render,
