@@ -286,6 +286,16 @@ foreach renderer : renderers
         env: test_env,
         suite: suites + [ 'gsk-compare-replayed-' + renderer_name ],
       )
+      test('compare ' + renderer_name + ' ' + testname + ' clipped', compare_render,
+        args: [
+          '--clip',
+          '--output', join_paths(meson.current_build_dir(), 'compare', renderer_name),
+          join_paths(meson.current_source_dir(), 'compare', testname + '.node'),
+          join_paths(meson.current_source_dir(), 'compare', testname + '.png'),
+        ],
+        env: test_env,
+        suite: suites + [ 'gsk-compare-clipped-' + renderer_name ],
+      )
     endif
   endforeach
 endforeach
