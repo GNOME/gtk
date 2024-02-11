@@ -6960,33 +6960,20 @@ gsk_subsurface_node_diff (GskRenderNode  *node1,
 {
   GskSubsurfaceNode *self1 = (GskSubsurfaceNode *) node1;
   GskSubsurfaceNode *self2 = (GskSubsurfaceNode *) node2;
-  gboolean is_offloaded1, is_offloaded2;
 
-  is_offloaded1 = self1->subsurface && gdk_subsurface_get_texture (self1->subsurface) != NULL;
-  is_offloaded2 = self2->subsurface && gdk_subsurface_get_texture (self2->subsurface) != NULL;
-
-  if (is_offloaded1 && is_offloaded2)
+  if (self1->subsurface != self2->subsurface)
     {
-      /* both are offloaded, no contents to compare */
+      /* Shouldn't happen, can_diff() avoids this, but to be sure */
+      gsk_render_node_diff_impossible (node1, node2, region);
     }
-  else if (!is_offloaded1 && !is_offloaded2)
+  else if (self1->subsurface && gdk_subsurface_get_texture (self1->subsurface) != NULL)
     {
-      /* neither is offloaded, diff the children */
+      /* offloaded, no contents to compare */
+    }
+  else
+    {
+      /* not offloaded, diff the children */
       gsk_render_node_diff (self1->child, self2->child, region);
-    }
-  else if (!is_offloaded1)
-    {
-      /* The first one isn't offloaded, take its contents */
-      cairo_rectangle_int_t rect;
-      gsk_rect_to_cairo_grow (&node1->bounds, &rect);
-      cairo_region_union_rectangle (region, &rect);
-    }
-  else if (!is_offloaded2)
-    {
-      /* The second one isn't offloaded, take its contents */
-      cairo_rectangle_int_t rect;
-      gsk_rect_to_cairo_grow (&node2->bounds, &rect);
-      cairo_region_union_rectangle (region, &rect);
     }
 }
 
