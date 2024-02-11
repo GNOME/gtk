@@ -1150,42 +1150,17 @@ gtk_calendar_set_property (GObject      *object,
                            GParamSpec   *pspec)
 {
   GtkCalendar *calendar = GTK_CALENDAR (object);
-  GDateTime *date;
 
   switch (prop_id)
     {
     case PROP_YEAR:
-      date = g_date_time_new_local (g_value_get_int (value),
-                                    g_date_time_get_month (calendar->date),
-                                    g_date_time_get_day_of_month (calendar->date),
-                                    0, 0, 0);
-      if (date)
-        {
-          calendar_select_day_internal (calendar, date, TRUE);
-          g_date_time_unref (date);
-        }
+      gtk_calendar_set_year (calendar, g_value_get_int (value));
       break;
     case PROP_MONTH:
-      date = g_date_time_new_local (g_date_time_get_year (calendar->date),
-                                    g_value_get_int (value) + 1,
-                                    g_date_time_get_day_of_month (calendar->date),
-                                    0, 0, 0);
-      if (date)
-        {
-          calendar_select_day_internal (calendar, date, TRUE);
-          g_date_time_unref (date);
-        }
+      gtk_calendar_set_month (calendar, g_value_get_int (value));
       break;
     case PROP_DAY:
-      date = g_date_time_new_local (g_date_time_get_year (calendar->date),
-                                    g_date_time_get_month (calendar->date),
-                                    g_value_get_int (value),
-                                    0, 0, 0);
-      if (date)
-        {
-          calendar_select_day_internal (calendar, date, TRUE);
-          g_date_time_unref (date);
-        }
+      gtk_calendar_set_day (calendar, g_value_get_int (value));
       break;
     case PROP_SHOW_HEADING:
       gtk_calendar_set_show_heading (calendar, g_value_get_boolean (value));
@@ -1213,13 +1188,13 @@ gtk_calendar_get_property (GObject      *object,
   switch (prop_id)
     {
     case PROP_YEAR:
-      g_value_set_int (value, g_date_time_get_year (calendar->date));
+      g_value_set_int (value, gtk_calendar_get_year (calendar));
       break;
     case PROP_MONTH:
-      g_value_set_int (value, g_date_time_get_month (calendar->date) - 1);
+      g_value_set_int (value, gtk_calendar_get_month (calendar));
       break;
     case PROP_DAY:
-      g_value_set_int (value, g_date_time_get_day_of_month (calendar->date));
+      g_value_set_int (value, gtk_calendar_get_day (calendar));
       break;
     case PROP_SHOW_HEADING:
       g_value_set_boolean (value, gtk_calendar_get_show_heading (calendar));
@@ -1794,4 +1769,167 @@ gtk_calendar_get_show_day_names (GtkCalendar *self)
   g_return_val_if_fail (GTK_IS_CALENDAR (self), FALSE);
 
   return self->show_day_names;
+}
+
+/**
+ * gtk_calendar_set_day:
+ * @self: a `GtkCalendar`
+ * @day: The desired day for the selected date (as a number between 1 and 31).
+ *
+ * Sets the day for the selected date.
+ *
+ * The new date must be valid. For example, setting 31 for the day when the
+ * month is February, fails.
+ *
+ * Since: 4.14
+ */
+void
+gtk_calendar_set_day (GtkCalendar *self,
+                      int          day)
+{
+  GDateTime *date;
+
+  g_return_if_fail (GTK_IS_CALENDAR (self));
+  g_return_if_fail (day >= 1 && day <= 31);
+
+  if (day == g_date_time_get_day_of_month (self->date))
+    return;
+
+  date = g_date_time_new_local (g_date_time_get_year (self->date),
+                                g_date_time_get_month (self->date),
+                                day,
+                                0, 0, 0.0);
+  g_return_if_fail (date != NULL);
+
+  calendar_select_day_internal (self, date, TRUE);
+  g_date_time_unref (date);
+
+  g_object_notify (G_OBJECT (self), "day");
+}
+
+/**
+ * gtk_calendar_get_day:
+ * @self: a `GtkCalendar`
+ *
+ * Gets the day of the selected date.
+ *
+ * Returns: the day of the selected date.
+ *
+ * Since: 4.14
+ */
+int
+gtk_calendar_get_day (GtkCalendar *self)
+{
+  g_return_val_if_fail (GTK_IS_CALENDAR (self), -1);
+
+  return g_date_time_get_day_of_month (self->date);
+}
+
+/**
+ * gtk_calendar_set_month:
+ * @self: a `GtkCalendar`
+ * @month: The desired month for the selected date (as a number between 0 and 11).
+ *
+ * Sets the month for the selected date.
+ *
+ * The new date must be valid. For example, setting 1 (February) for the month
+ * when the day is 31, fails.
+ *
+ * Since: 4.14
+ */
+void
+gtk_calendar_set_month (GtkCalendar *self,
+                        int          month)
+{
+  GDateTime *date;
+
+  g_return_if_fail (GTK_IS_CALENDAR (self));
+  g_return_if_fail (month >= 0 && month <= 11);
+
+  if (month == g_date_time_get_month (self->date) - 1)
+    return;
+
+  date = g_date_time_new_local (g_date_time_get_year (self->date),
+                                month + 1,
+                                g_date_time_get_day_of_month (self->date),
+                                0, 0, 0.0);
+  g_return_if_fail (date != NULL);
+
+  calendar_select_day_internal (self, date, TRUE);
+  g_date_time_unref (date);
+
+  g_object_notify (G_OBJECT (self), "month");
+}
+
+/**
+ * gtk_calendar_get_month:
+ * @self: a `GtkCalendar`
+ *
+ * Gets the month of the selected date.
+ *
+ * Returns: The month of the selected date (as a number between 0 and 11).
+ *
+ * Since: 4.14
+ */
+int
+gtk_calendar_get_month (GtkCalendar *self)
+{
+  g_return_val_if_fail (GTK_IS_CALENDAR (self), -1);
+
+  return g_date_time_get_month (self->date) - 1;
+}
+
+/**
+ * gtk_calendar_set_year:
+ * @self: a `GtkCalendar`
+ * @year: The desired year for the selected date (within [struct@GLib.DateTime]
+ *   limits, i.e. from 0001 to 9999).
+ *
+ * Sets the year for the selected date.
+ *
+ * The new date must be valid. For example, setting 2023 for the year when then
+ * the date is 2024-02-29, fails.
+ *
+ * Since: 4.14
+ */
+void
+gtk_calendar_set_year (GtkCalendar *self,
+                       int          year)
+{
+  GDateTime *date;
+
+  g_return_if_fail (GTK_IS_CALENDAR (self));
+  g_return_if_fail (year >= 1 && year <= 9999);
+
+  if (year == g_date_time_get_year (self->date))
+    return;
+
+  date = g_date_time_new_local (year,
+                                g_date_time_get_month (self->date),
+                                g_date_time_get_day_of_month (self->date),
+                                0, 0, 0.0);
+  g_return_if_fail (date != NULL);
+
+  calendar_select_day_internal (self, date, TRUE);
+  g_date_time_unref (date);
+
+  g_object_notify (G_OBJECT (self), "year");
+}
+
+/**
+ * gtk_calendar_get_year:
+ * @self: a `GtkCalendar`
+ *
+ * Gets the year of the selected date.
+ *
+ * Returns: the year of the selected date.
+ *
+ * Since: 4.14
+ */
+int
+gtk_calendar_get_year (GtkCalendar *self)
+{
+  g_return_val_if_fail (GTK_IS_CALENDAR (self), -1);
+
+  return g_date_time_get_year (self->date);
 }
