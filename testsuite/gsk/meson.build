@@ -192,10 +192,20 @@ compare_xfails_small_texture = [
   'repeat-repeats', # only fails when rotated
 ]
 
-foreach renderer : renderers
-  foreach testname : compare_render_tests
+variants = {
+  'plain': '--plain',
+  'flipped': '--flip',
+  'rotated': '--rotate',
+  'repeated': '--repeat',
+  'masked': '--mask',
+  'replayed': '--replay',
+  'clipped': '--clip',
+}
 
-    renderer_name = renderer.get('name')
+foreach renderer : renderers
+  renderer_name = renderer.get('name')
+
+  foreach testname : compare_render_tests
     exclude_term = '-no' + renderer_name
 
     suites = [
@@ -220,75 +230,19 @@ foreach renderer : renderers
     if ((not testname.contains(exclude_term)) and
         (renderer_name != 'broadway' or broadway_enabled) and
         (renderer_name != 'vulkan' or have_vulkan))
-      test('compare ' + renderer_name + ' ' + testname, compare_render,
-        args: [
-          '--output', join_paths(meson.current_build_dir(), 'compare', renderer_name),
-          join_paths(meson.current_source_dir(), 'compare', testname + '.node'),
-          join_paths(meson.current_source_dir(), 'compare', testname + '.png'),
-        ],
-        env: test_env,
-        suite: suites,
-      )
-      test('compare ' + renderer_name + ' ' + testname + ' flipped', compare_render,
-        args: [
-          '--flip',
-          '--output', join_paths(meson.current_build_dir(), 'compare', renderer_name),
-          join_paths(meson.current_source_dir(), 'compare', testname + '.node'),
-          join_paths(meson.current_source_dir(), 'compare', testname + '.png'),
-        ],
-        env: test_env,
-        suite: suites + [ 'gsk-compare-flipped-' + renderer_name ],
-      )
-      test('compare ' + renderer_name + ' ' + testname + ' repeated', compare_render,
-        args: [
-          '--repeat',
-          '--output', join_paths(meson.current_build_dir(), 'compare', renderer_name),
-          join_paths(meson.current_source_dir(), 'compare', testname + '.node'),
-          join_paths(meson.current_source_dir(), 'compare', testname + '.png'),
-        ],
-        env: test_env,
-        suite: suites + [ 'gsk-compare-repeated-' + renderer_name ],
-      )
-      test('compare ' + renderer_name + ' ' + testname + ' rotated', compare_render,
-        args: [
-          '--rotate',
-          '--output', join_paths(meson.current_build_dir(), 'compare', renderer_name),
-          join_paths(meson.current_source_dir(), 'compare', testname + '.node'),
-          join_paths(meson.current_source_dir(), 'compare', testname + '.png'),
-        ],
-        env: test_env,
-        suite: suites + [ 'gsk-compare-rotated-' + renderer_name ],
-      )
-      test('compare ' + renderer_name + ' ' + testname + ' masked', compare_render,
-        args: [
-          '--mask',
-          '--output', join_paths(meson.current_build_dir(), 'compare', renderer_name),
-          join_paths(meson.current_source_dir(), 'compare', testname + '.node'),
-          join_paths(meson.current_source_dir(), 'compare', testname + '.png'),
-        ],
-        env: test_env,
-        suite: suites + [ 'gsk-compare-masked-' + renderer_name ],
-      )
-      test('compare ' + renderer_name + ' ' + testname + ' replayed', compare_render,
-        args: [
-          '--replay',
-          '--output', join_paths(meson.current_build_dir(), 'compare', renderer_name),
-          join_paths(meson.current_source_dir(), 'compare', testname + '.node'),
-          join_paths(meson.current_source_dir(), 'compare', testname + '.png'),
-        ],
-        env: test_env,
-        suite: suites + [ 'gsk-compare-replayed-' + renderer_name ],
-      )
-      test('compare ' + renderer_name + ' ' + testname + ' clipped', compare_render,
-        args: [
-          '--clip',
-          '--output', join_paths(meson.current_build_dir(), 'compare', renderer_name),
-          join_paths(meson.current_source_dir(), 'compare', testname + '.node'),
-          join_paths(meson.current_source_dir(), 'compare', testname + '.png'),
-        ],
-        env: test_env,
-        suite: suites + [ 'gsk-compare-clipped-' + renderer_name ],
-      )
+
+      foreach variant : variants.keys()
+        test('compare ' + renderer_name + ' ' + testname + ' ' + variant, compare_render,
+          args: [
+            variants.get(variant),
+            '--output', join_paths(meson.current_build_dir(), 'compare', renderer_name),
+            join_paths(meson.current_source_dir(), 'compare', testname + '.node'),
+            join_paths(meson.current_source_dir(), 'compare', testname + '.png'),
+          ],
+          env: test_env,
+          suite: suites + [ 'gsk-compare-' + variant + '-' + renderer_name ],
+        )
+      endforeach
     endif
   endforeach
 endforeach
