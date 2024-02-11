@@ -11,6 +11,8 @@
 #include "gdk/gdkdisplayprivate.h"
 #include "gdk/gdkglcontextprivate.h"
 
+#include <glib/gi18n-lib.h>
+
 struct _GskNglRenderer
 {
   GskGpuRenderer parent_instance;
@@ -52,6 +54,15 @@ gsk_ngl_renderer_create_context (GskGpuRenderer       *renderer,
     }
 
   gdk_gl_context_make_current (context);
+
+  if (!gdk_gl_context_check_version (context, "3.3", "0.0"))
+    {
+      g_set_error_literal (error, GDK_GL_ERROR,
+                           GDK_GL_ERROR_NOT_AVAILABLE,
+                           _("OpenGL 3.3 required"));
+      g_object_unref (context);
+      return NULL;
+    }
 
   *supported = -1;
 
