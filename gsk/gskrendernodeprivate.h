@@ -1,7 +1,6 @@
 #pragma once
 
 #include "gskrendernode.h"
-#include "gskoffloadprivate.h"
 #include <cairo.h>
 
 #include "gdk/gdkmemoryformatprivate.h"
@@ -40,7 +39,7 @@ struct _GskRenderNode
 typedef struct
 {
   cairo_region_t *region;
-  GskOffload *offload;
+  GdkSurface *surface;
 } GskDiffData;
 
 struct _GskRenderNodeClass
@@ -72,10 +71,6 @@ void            _gsk_render_node_unref                  (GskRenderNode          
 gboolean        gsk_render_node_can_diff                (const GskRenderNode         *node1,
                                                          const GskRenderNode         *node2) G_GNUC_PURE;
 void            gsk_render_node_diff                    (GskRenderNode               *node1,
-                                                         GskRenderNode               *node2,
-                                                         cairo_region_t              *region,
-                                                         GskOffload                  *offload);
-void            gsk_render_node_data_diff               (GskRenderNode               *node1,
                                                          GskRenderNode               *node2,
                                                          GskDiffData                 *data);
 void            gsk_render_node_diff_impossible         (GskRenderNode               *node1,

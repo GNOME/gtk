@@ -183,7 +183,7 @@ gtk_updates_overlay_snapshot (GtkInspectorOverlay *overlay,
       cairo_region_t *diff;
 
       diff = cairo_region_create ();
-      gsk_render_node_diff (updates->last, node, diff, NULL);
+      gsk_render_node_diff (updates->last, node, &(GskDiffData) { diff, NULL });
       if (cairo_region_is_empty (diff))
         cairo_region_destroy (diff);
       else

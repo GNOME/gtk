@@ -519,8 +519,7 @@ gsk_render_node_diff_impossible (GskRenderNode  *node1,
  * gsk_render_node_diff:
  * @node1: a `GskRenderNode`
  * @node2: the `GskRenderNode` to compare with
- * @region: a `cairo_region_t` to add the differences to
- * @subsurfaces: (nullable): array to add offload info to
+ * @data: the diff data to use
  *
  * Compares @node1 and @node2 trying to compute the minimal region of changes.
  *
@@ -533,28 +532,11 @@ gsk_render_node_diff_impossible (GskRenderNode  *node1,
  *
  * Note that the passed in @region may already contain previous results from
  * previous node comparisons, so this function call will only add to it.
- *
- * If @subsurface_nodes is not `NULL`, then we treat subsurface nodes as
- * identical if they refer to the same subsurface and have the same bounds.
- * In this case, we collect subsurface nodes we see in @subsurface_nodes,
- * for later updating of the attached textures.
- *
- * If @subsurface_area is not `NULL`, it will collect the full area of all
- * subsurface nodes we meet.
  */
 void
 gsk_render_node_diff (GskRenderNode  *node1,
                       GskRenderNode  *node2,
-                      cairo_region_t *region,
-                      GskOffload     *offload)
-{
-  gsk_render_node_data_diff (node1, node2, &(GskDiffData) { region, offload });
-}
-
-void
-gsk_render_node_data_diff (GskRenderNode  *node1,
-                           GskRenderNode  *node2,
-                           GskDiffData    *data)
+                      GskDiffData    *data)
 {
   if (node1 == node2)
     return;
