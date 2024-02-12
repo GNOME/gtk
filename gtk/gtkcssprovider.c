@@ -1568,7 +1568,7 @@ gtk_css_provider_print_keyframes (GHashTable *keyframes,
  * Converts the @provider into a string representation in CSS
  * format.
  *
- * Using [method@Gtk.CssProvider.load_from_data] with the return
+ * Using [method@Gtk.CssProvider.load_from_string] with the return
  * value from this function on a new provider created with
  * [ctor@Gtk.CssProvider.new] will basically create a duplicate
  * of this @provider.
