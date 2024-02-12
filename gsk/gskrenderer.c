@@ -661,15 +661,12 @@ static gboolean
 vulkan_software_rendering (GdkSurface *surface)
 {
   GdkDisplay *display = gdk_surface_get_display (surface);
-  GdkVulkanContext *context = gdk_display_create_vulkan_context (display, surface, NULL);
-  VkPhysicalDevice device;
   VkPhysicalDeviceProperties props;
 
-  if (!context)
+  if (!gdk_display_init_vulkan (display, NULL))
     return G_TYPE_INVALID;
 
-  device = gdk_vulkan_context_get_physical_device (context);
-  vkGetPhysicalDeviceProperties (device, &props);
+  vkGetPhysicalDeviceProperties (display->vk_physical_device, &props);
 
   return props.deviceType == VK_PHYSICAL_DEVICE_TYPE_CPU;
 }
