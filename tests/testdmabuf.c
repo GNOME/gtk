@@ -725,6 +725,21 @@ toggle_flip (GtkWidget *widget,
   return TRUE;
 }
 
+static gboolean
+toggle_start (GtkWidget *widget,
+              GVariant  *args,
+              gpointer   data)
+{
+  GtkWidget *offload = data;
+
+  if (gtk_widget_get_halign (offload) == GTK_ALIGN_CENTER)
+    gtk_widget_set_halign (offload, GTK_ALIGN_START);
+  else
+    gtk_widget_set_halign (offload, GTK_ALIGN_CENTER);
+
+  return TRUE;
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -791,6 +806,8 @@ main (int argc, char *argv[])
 
   picture = gtk_picture_new_for_paintable (GDK_PAINTABLE (texture));
   offload = gtk_graphics_offload_new (picture);
+  gtk_widget_set_halign (offload, GTK_ALIGN_CENTER);
+  gtk_widget_set_valign (offload, GTK_ALIGN_CENTER);
   overlay = gtk_overlay_new ();
 
   gtk_overlay_set_child (GTK_OVERLAY (overlay), offload);
@@ -810,6 +827,11 @@ main (int argc, char *argv[])
 
   trigger = gtk_keyval_trigger_new (GDK_KEY_F, GDK_CONTROL_MASK);
   action = gtk_callback_action_new (toggle_flip, picture, NULL);
+  shortcut = gtk_shortcut_new (trigger, action);
+  gtk_shortcut_controller_add_shortcut (GTK_SHORTCUT_CONTROLLER (controller), shortcut);
+
+  trigger = gtk_keyval_trigger_new (GDK_KEY_S, GDK_CONTROL_MASK);
+  action = gtk_callback_action_new (toggle_start, offload, NULL);
   shortcut = gtk_shortcut_new (trigger, action);
   gtk_shortcut_controller_add_shortcut (GTK_SHORTCUT_CONTROLLER (controller), shortcut);
 
