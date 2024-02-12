@@ -154,6 +154,7 @@ gdk_dmabuf_get_egl_downloader (GdkDisplay              *display,
   gboolean retval = FALSE;
   GError *error = NULL;
   GskRenderer *renderer;
+  GdkGLContext *previous;
 
   g_assert (display->egl_dmabuf_formats == NULL);
   g_assert (display->egl_external_formats == NULL);
@@ -161,6 +162,7 @@ gdk_dmabuf_get_egl_downloader (GdkDisplay              *display,
   if (!gdk_display_prepare_gl (display, NULL))
     return NULL;
 
+  previous = gdk_gl_context_get_current ();
   formats = gdk_dmabuf_formats_builder_new ();
   external = gdk_dmabuf_formats_builder_new ();
 
@@ -172,7 +174,11 @@ gdk_dmabuf_get_egl_downloader (GdkDisplay              *display,
   gdk_dmabuf_formats_builder_add_formats (builder, display->egl_dmabuf_formats);
 
   if (!retval)
-    return NULL;
+    {
+      if (previous)
+        gdk_gl_context_make_current (previous);
+      return NULL;
+    }
 
   renderer = gsk_gl_renderer_new ();
 
@@ -181,9 +187,14 @@ gdk_dmabuf_get_egl_downloader (GdkDisplay              *display,
       g_warning ("Failed to realize GL renderer: %s", error->message);
       g_error_free (error);
       g_object_unref (renderer);
+      if (previous)
+        gdk_gl_context_make_current (previous);
 
       return NULL;
     }
+
+  if (previous)
+    gdk_gl_context_make_current (previous);
 
   return GDK_DMABUF_DOWNLOADER (renderer);
 }
