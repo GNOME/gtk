@@ -7,11 +7,13 @@
 
 
 static char *arg_output_dir = NULL;
+static gboolean plain = FALSE;
 static gboolean flip = FALSE;
 static gboolean rotate = FALSE;
 static gboolean repeat = FALSE;
 static gboolean mask = FALSE;
 static gboolean replay = FALSE;
+static gboolean clip = FALSE;
 
 extern void
 replay_node (GskRenderNode *node, GtkSnapshot *snapshot);
@@ -161,11 +163,13 @@ deserialize_error_func (const GskParseLocation *start,
 
 static const GOptionEntry options[] = {
   { "output", 0, 0, G_OPTION_ARG_FILENAME, &arg_output_dir, "Directory to save image files to", "DIR" },
+  { "plain", 0, 0, G_OPTION_ARG_NONE, &plain, "Run test as-is", NULL },
   { "flip", 0, 0, G_OPTION_ARG_NONE, &flip, "Do flipped test", NULL },
   { "rotate", 0, 0, G_OPTION_ARG_NONE, &rotate, "Do rotated test", NULL },
   { "repeat", 0, 0, G_OPTION_ARG_NONE, &repeat, "Do repeated test", NULL },
   { "mask", 0, 0, G_OPTION_ARG_NONE, &mask, "Do masked test", NULL },
   { "replay", 0, 0, G_OPTION_ARG_NONE, &replay, "Do replay test", NULL },
+  { "clip", 0, 0, G_OPTION_ARG_NONE, &clip, "Do clip test", NULL },
   { NULL }
 };
 
@@ -232,6 +236,38 @@ apply_mask_to_pixbuf (GdkPixbuf *pixbuf)
     }
 
   return copy;
+}
+
+static void
+make_random_clip (const graphene_rect_t *bounds,
+                  cairo_rectangle_int_t *int_clip)
+{
+  int_clip->width = g_test_rand_int_range (1, (int) floor (bounds->size.width));
+  int_clip->height = g_test_rand_int_range (1, (int) floor (bounds->size.height));
+
+  int_clip->x = g_test_rand_int_range ((int) ceil (bounds->origin.x), (int) floor (bounds->origin.x + bounds->size.width - int_clip->width));
+  int_clip->y = g_test_rand_int_range ((int) ceil (bounds->origin.y), (int) floor (bounds->origin.y + bounds->size.height - int_clip->height));
+}
+
+static void
+gsk_rect_from_cairo (graphene_rect_t              *rect,
+                      const cairo_rectangle_int_t *int_rect)
+{
+  rect->origin.x = int_rect->x;
+  rect->origin.y = int_rect->y;
+  rect->size.width = int_rect->width;
+  rect->size.height = int_rect->height;
+}
+
+static GdkPixbuf *
+apply_clip_to_pixbuf (GdkPixbuf                   *pixbuf,
+                      const cairo_rectangle_int_t *int_clip)
+{
+  return gdk_pixbuf_new_subpixbuf (pixbuf,
+                                   int_clip->x,
+                                   int_clip->y,
+                                   int_clip->width,
+                                   int_clip->height);
 }
 
 /*
@@ -556,6 +592,60 @@ main (int argc, char **argv)
       gsk_render_node_unref (node2);
     }
 
+  if (clip)
+    {
+      GskRenderNode *node2;
+      GdkPixbuf *pixbuf, *pixbuf2;
+      graphene_rect_t bounds;
+      cairo_rectangle_int_t int_clip;
+      graphene_rect_t clip_rect;
+
+      gsk_render_node_get_bounds (node, &bounds);
+
+      if (bounds.size.width <= 1 || bounds.size.height <= 1)
+        {
+          g_test_skip ("Can't make a random clip");
+          goto skip_clip;
+        }
+
+      make_random_clip (&bounds, &int_clip);
+      gsk_rect_from_cairo (&clip_rect, &int_clip);
+      g_assert_true (graphene_rect_contains_rect (&bounds, &clip_rect));
+      g_assert_true (graphene_rect_get_area (&clip_rect) != 0);
+
+      node2 = gsk_clip_node_new (node, &clip_rect);
+      save_node (node2, node_file, "-clipped.node");
+
+      rendered_texture = gsk_renderer_render_texture (renderer, node2, NULL);
+      save_image (rendered_texture, node_file, "-clipped.out.png");
+
+      pixbuf = gdk_pixbuf_new_from_file (png_file, &error);
+
+      int_clip.x -= (int) bounds.origin.x;
+      int_clip.y -= (int) bounds.origin.y;
+
+      pixbuf2 = apply_clip_to_pixbuf (pixbuf, &int_clip);
+      reference_texture = gdk_texture_new_for_pixbuf (pixbuf2);
+      g_object_unref (pixbuf2);
+      g_object_unref (pixbuf);
+
+      save_image (reference_texture, node_file, "-clipped.ref.png");
+
+      diff_texture = reftest_compare_textures (rendered_texture, reference_texture);
+
+      if (diff_texture)
+        {
+          save_image (diff_texture, node_file, "-clipped.diff.png");
+          g_object_unref (diff_texture);
+          success = FALSE;
+        }
+
+      g_clear_object (&rendered_texture);
+      g_clear_object (&reference_texture);
+      gsk_render_node_unref (node2);
+    }
+
+skip_clip:
   gsk_render_node_unref (node);
 
   gsk_renderer_unrealize (renderer);
