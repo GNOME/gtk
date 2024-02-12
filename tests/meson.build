@@ -133,7 +133,7 @@ endif
 
 if os_linux
   gtk_tests += [
-    ['testdmabuf'],
+    ['testdmabuf', ['testdmabuf.c', 'gtkclipper.c']],
   ]
 endif
 

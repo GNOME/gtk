@@ -20,6 +20,7 @@
 #include "gdksubsurfaceprivate.h"
 #include "gdksurfaceprivate.h"
 #include "gdktexture.h"
+#include "gsk/gskrectprivate.h"
 
 G_DEFINE_TYPE (GdkSubsurface, gdk_subsurface, G_TYPE_OBJECT)
 
@@ -110,7 +111,8 @@ insert_subsurface (GdkSubsurface *subsurface,
 gboolean
 gdk_subsurface_attach (GdkSubsurface         *subsurface,
                        GdkTexture            *texture,
-                       const graphene_rect_t *rect,
+                       const graphene_rect_t *source,
+                       const graphene_rect_t *dest,
                        gboolean               above,
                        GdkSubsurface         *sibling)
 {
@@ -118,7 +120,12 @@ gdk_subsurface_attach (GdkSubsurface         *subsurface,
 
   g_return_val_if_fail (GDK_IS_SUBSURFACE (subsurface), FALSE);
   g_return_val_if_fail (GDK_IS_TEXTURE (texture), FALSE);
-  g_return_val_if_fail (rect != NULL, FALSE);
+  g_return_val_if_fail (source != NULL &&
+                        gsk_rect_contains_rect (&GRAPHENE_RECT_INIT (0, 0,
+                                                                     gdk_texture_get_width (texture),
+                                                                     gdk_texture_get_height (texture)),
+                                                source), FALSE);
+  g_return_val_if_fail (dest != NULL, FALSE);
   g_return_val_if_fail (sibling != subsurface, FALSE);
   g_return_val_if_fail (sibling == NULL || GDK_IS_SUBSURFACE (sibling), FALSE);
   g_return_val_if_fail (sibling == NULL || sibling->parent == subsurface->parent, FALSE);
@@ -148,7 +155,7 @@ gdk_subsurface_attach (GdkSubsurface         *subsurface,
         }
     }
 
-  return GDK_SUBSURFACE_GET_CLASS (subsurface)->attach (subsurface, texture, rect, above, sibling);
+  return GDK_SUBSURFACE_GET_CLASS (subsurface)->attach (subsurface, texture, source, dest, above, sibling);
 }
 
 void
@@ -170,13 +177,23 @@ gdk_subsurface_get_texture (GdkSubsurface *subsurface)
 }
 
 void
-gdk_subsurface_get_rect (GdkSubsurface   *subsurface,
-                         graphene_rect_t *rect)
+gdk_subsurface_get_source (GdkSubsurface   *subsurface,
+                           graphene_rect_t *source)
 {
   g_return_if_fail (GDK_IS_SUBSURFACE (subsurface));
-  g_return_if_fail (rect != NULL);
+  g_return_if_fail (source != NULL);
 
-  GDK_SUBSURFACE_GET_CLASS (subsurface)->get_rect (subsurface, rect);
+  GDK_SUBSURFACE_GET_CLASS (subsurface)->get_source (subsurface, source);
+}
+
+void
+gdk_subsurface_get_dest (GdkSubsurface   *subsurface,
+                         graphene_rect_t *dest)
+{
+  g_return_if_fail (GDK_IS_SUBSURFACE (subsurface));
+  g_return_if_fail (dest != NULL);
+
+  GDK_SUBSURFACE_GET_CLASS (subsurface)->get_dest (subsurface, dest);
 }
 
 gboolean

@@ -152,7 +152,8 @@ get_wl_buffer (GdkWaylandSubsurface *self,
 static gboolean
 gdk_wayland_subsurface_attach (GdkSubsurface         *sub,
                                GdkTexture            *texture,
-                               const graphene_rect_t *rect,
+                               const graphene_rect_t *source,
+                               const graphene_rect_t *dest,
                                gboolean               above,
                                GdkSubsurface         *sibling)
 {
@@ -177,30 +178,37 @@ gdk_wayland_subsurface_attach (GdkSubsurface         *sub,
       return FALSE;
     }
 
-  self->dest.x = rect->origin.x;
-  self->dest.y = rect->origin.y;
-  self->dest.width = rect->size.width;
-  self->dest.height = rect->size.height;
+  self->dest.x = dest->origin.x;
+  self->dest.y = dest->origin.y;
+  self->dest.width = dest->size.width;
+  self->dest.height = dest->size.height;
+
+  self->source.origin.x = source->origin.x;
+  self->source.origin.y = source->origin.y;
+  self->source.size.width = source->size.width;
+  self->source.size.height = source->size.height;
 
   scale = gdk_fractional_scale_to_double (&parent->scale);
-  device_rect.origin.x = rect->origin.x * scale;
-  device_rect.origin.y = rect->origin.y * scale;
-  device_rect.size.width = rect->size.width * scale;
-  device_rect.size.height = rect->size.height * scale;
+
+  device_rect.origin.x = dest->origin.x * scale;
+  device_rect.origin.y = dest->origin.y * scale;
+  device_rect.size.width = dest->size.width * scale;
+  device_rect.size.height = dest->size.height * scale;
+
   device_dest.x = device_rect.origin.x;
   device_dest.y = device_rect.origin.y;
   device_dest.width = device_rect.size.width;
   device_dest.height = device_rect.size.height;
 
-  if (self->dest.x != rect->origin.x ||
-      self->dest.y != rect->origin.y ||
-      self->dest.width != rect->size.width ||
-      self->dest.height != rect->size.height)
+  if (self->dest.x != dest->origin.x ||
+      self->dest.y != dest->origin.y ||
+      self->dest.width != dest->size.width ||
+      self->dest.height != dest->size.height)
     {
       GDK_DISPLAY_DEBUG (gdk_surface_get_display (sub->parent), OFFLOAD,
                          "Non-integer coordinates %g %g %g %g for %dx%d texture, hiding subsurface %p",
-                         rect->origin.x, rect->origin.y,
-                         rect->size.width, rect->size.height,
+                         dest->origin.x, dest->origin.y,
+                         dest->size.width, dest->size.height,
                          gdk_texture_get_width (texture),
                          gdk_texture_get_height (texture),
                          self);
@@ -296,6 +304,11 @@ gdk_wayland_subsurface_attach (GdkSubsurface         *sub,
     {
       wl_subsurface_set_position (self->subsurface, self->dest.x, self->dest.y);
       wp_viewport_set_destination (self->viewport, self->dest.width, self->dest.height);
+      wp_viewport_set_source (self->viewport,
+                              wl_fixed_from_double (self->source.origin.x),
+                              wl_fixed_from_double (self->source.origin.y),
+                              wl_fixed_from_double (self->source.size.width),
+                              wl_fixed_from_double (self->source.size.height));
 
       if (buffer)
         {
@@ -370,15 +383,27 @@ gdk_wayland_subsurface_get_texture (GdkSubsurface *sub)
 }
 
 static void
-gdk_wayland_subsurface_get_rect (GdkSubsurface   *sub,
-                                 graphene_rect_t *rect)
+gdk_wayland_subsurface_get_dest (GdkSubsurface   *sub,
+                                 graphene_rect_t *dest)
 {
   GdkWaylandSubsurface *self = GDK_WAYLAND_SUBSURFACE (sub);
 
-  rect->origin.x = self->dest.x;
-  rect->origin.y = self->dest.y;
-  rect->size.width = self->dest.width;
-  rect->size.height = self->dest.height;
+  dest->origin.x = self->dest.x;
+  dest->origin.y = self->dest.y;
+  dest->size.width = self->dest.width;
+  dest->size.height = self->dest.height;
+}
+
+static void
+gdk_wayland_subsurface_get_source (GdkSubsurface   *sub,
+                                   graphene_rect_t *source)
+{
+  GdkWaylandSubsurface *self = GDK_WAYLAND_SUBSURFACE (sub);
+
+  source->origin.x = self->source.origin.x;
+  source->origin.y = self->source.origin.y;
+  source->size.width = self->source.size.width;
+  source->size.height = self->source.size.height;
 }
 
 static void
@@ -392,7 +417,8 @@ gdk_wayland_subsurface_class_init (GdkWaylandSubsurfaceClass *class)
   subsurface_class->attach = gdk_wayland_subsurface_attach;
   subsurface_class->detach = gdk_wayland_subsurface_detach;
   subsurface_class->get_texture = gdk_wayland_subsurface_get_texture;
-  subsurface_class->get_rect = gdk_wayland_subsurface_get_rect;
+  subsurface_class->get_source = gdk_wayland_subsurface_get_source;
+  subsurface_class->get_dest = gdk_wayland_subsurface_get_dest;
 };
 
 static void

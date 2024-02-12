@@ -9,7 +9,7 @@ gstplayer_dep = dependency('gstreamer-player-1.0', version: '>= 1.12.3',
                            required: get_option('media-gstreamer'))
 gstgl_dep = dependency('gstreamer-gl-1.0', version: '>= 1.12.3',
                        required: get_option('media-gstreamer'))
-gstdrm_dep = dependency('gstreamer-allocators-1.0', version: '>= 1.23',
+gstdrm_dep = dependency('gstreamer-allocators-1.0', version: '>= 1.23.1',
                         required: false)
 
 if gstplayer_dep.found() and gstgl_dep.found()

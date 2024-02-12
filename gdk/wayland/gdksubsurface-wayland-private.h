@@ -22,6 +22,7 @@ struct _GdkWaylandSubsurface
 
   GdkTexture *texture;
   cairo_rectangle_int_t dest;
+  graphene_rect_t source;
 
   struct wl_region *opaque_region;
 
