@@ -298,6 +298,13 @@ add_label_row (GtkInspectorGeneral *gen,
   gtk_list_box_insert (GTK_LIST_BOX (list), row, -1);
 }
 
+static void
+append_gl_extension_row (GtkInspectorGeneral *gen,
+                         const char          *ext)
+{
+  add_check_row (gen, GTK_LIST_BOX (gen->gl_extensions_box), ext, epoxy_has_gl_extension (ext), 0);
+}
+
 #ifdef GDK_WINDOWING_X11
 static void
 append_glx_extension_row (GtkInspectorGeneral *gen,
@@ -373,6 +380,19 @@ init_gl (GtkInspectorGeneral *gen)
       g_error_free (error);
       return;
     }
+
+ gdk_gl_context_make_current (gdk_display_get_gl_context (gen->display));
+ append_gl_extension_row (gen, "GL_OES_rgb8_rgba8");
+ append_gl_extension_row (gen, "GL_EXT_abgr");
+ append_gl_extension_row (gen, "GL_EXT_texture_format_BGRA8888");
+ append_gl_extension_row (gen, "GL_EXT_texture_norm16");
+ append_gl_extension_row (gen, "GL_OES_texture_half_float");
+ append_gl_extension_row (gen, "GL_EXT_color_buffer_half_float");
+ append_gl_extension_row (gen, "GL_OES_texture_half_float_linear");
+ append_gl_extension_row (gen, "GL_OES_vertex_half_float");
+ append_gl_extension_row (gen, "GL_OES_texture_float");
+ append_gl_extension_row (gen, "GL_EXT_color_buffer_float");
+ append_gl_extension_row (gen, "GL_OES_texture_float_linear");
 
 #if defined(GDK_WINDOWING_X11) || defined(GDK_WINDOWING_WAYLAND) || (defined(GDK_WINDOWING_WIN32) && defined(GDK_WIN32_ENABLE_EGL))
   EGLDisplay egl_display = get_egl_display (gen->display);
