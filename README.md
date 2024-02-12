@@ -52,6 +52,7 @@ the API references for the following projects:
  - gmodule
  - gobject
  - gio
+ - girepository
 
 The generated documentation is stored as an artifact inside GitLab.
 Additionally, the CI pipeline will use a pipeline trigger for the
