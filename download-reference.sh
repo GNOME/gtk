@@ -37,6 +37,7 @@ glib
 gmodule
 gobject
 gio
+girepository
 "
 
 IFS='
