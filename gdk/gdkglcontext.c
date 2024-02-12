@@ -1718,7 +1718,7 @@ gdk_gl_context_check_extensions (GdkGLContext *context)
     }
 
   priv->has_half_float = gdk_gl_context_check_version (context, "3.0", "3.0") ||
-                         epoxy_has_gl_extension ("OES_vertex_half_float");
+                         epoxy_has_gl_extension ("GL_OES_vertex_half_float");
 
   priv->has_sync = gdk_gl_context_check_version (context, "3.2", "3.0") ||
                    epoxy_has_gl_extension ("GL_ARB_sync") ||
