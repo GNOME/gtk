@@ -513,11 +513,12 @@ init_vulkan (GtkInspectorGeneral *gen)
       char *device_name;
       char *api_version;
       char *driver_version;
+      const char *types[] = { "other", "integrated GPU", "discrete GPU", "virtual GPU", "CPU" };
 
       vk_device = gen->display->vk_physical_device;
       vkGetPhysicalDeviceProperties (vk_device, &props);
 
-      device_name = g_strdup_printf ("%s (%d)", props.deviceName, props.deviceType);
+      device_name = g_strdup_printf ("%s (%s)", props.deviceName, types[props.deviceType]);
       api_version = g_strdup_printf ("%d.%d.%d",
                                      VK_VERSION_MAJOR (props.apiVersion),
                                      VK_VERSION_MINOR (props.apiVersion),
