@@ -11,10 +11,6 @@
         <attribute name="action">app.help</attribute>
       </item>
       <item>
-        <attribute name="label" translatable="yes">_Help</attribute>
-        <attribute name="action">app.help</attribute>
-      </item>
-      <item>
         <attribute name="label" translatable="yes">_Inspector</attribute>
         <attribute name="action">app.inspector</attribute>
       </item>
