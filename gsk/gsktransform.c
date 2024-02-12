@@ -382,15 +382,35 @@ gsk_matrix_transform_print (GskTransform *transform,
   guint i;
   float f[16];
 
-  g_string_append (string, "matrix3d(");
-  graphene_matrix_to_float (&self->matrix, f);
-  for (i = 0; i < 16; i++)
+  if (transform->category >= GSK_TRANSFORM_CATEGORY_2D)
     {
-      if (i > 0)
-        g_string_append (string, ", ");
-      string_append_double (string, f[i]);
+      g_string_append (string, "matrix(");
+      graphene_matrix_to_float (&self->matrix, f);
+      string_append_double (string, f[0]);
+      g_string_append (string, ", ");
+      string_append_double (string, f[1]);
+      g_string_append (string, ", ");
+      string_append_double (string, f[4]);
+      g_string_append (string, ", ");
+      string_append_double (string, f[5]);
+      g_string_append (string, ", ");
+      string_append_double (string, f[12]);
+      g_string_append (string, ", ");
+      string_append_double (string, f[13]);
+      g_string_append (string, ")");
     }
-  g_string_append (string, ")");
+  else
+    {
+      g_string_append (string, "matrix3d(");
+      graphene_matrix_to_float (&self->matrix, f);
+      for (i = 0; i < 16; i++)
+        {
+          if (i > 0)
+            g_string_append (string, ", ");
+          string_append_double (string, f[i]);
+        }
+      g_string_append (string, ")");
+    }
 }
 
 static GskTransform *
