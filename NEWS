@@ -1,8 +1,11 @@
-Overview of Changes in 4.13.7, xx-xx-xxxx
+Overview of Changes in 4.13.7, 11-02-2024
 =========================================
 
 * GtkFileChooser:
  - Speed up opening
+
+* GtkCalendar:
+ - Add some missing setters and getters
 
 * Accessibility:
  - Add socket support for webkit accessibility
@@ -14,22 +17,25 @@ Overview of Changes in 4.13.7, xx-xx-xxxx
  - Make the ngl renderer work on macOS
  - Fix a crash in the vulkan renderer
  - Make nodeparser allow aliases for fonts again
- - Implement cache eviction for the glyph and
-   texture caches
- - Fix shaders to work on GL < 4.0
+ - Implement cache eviction for glyph and texture caches
+ - Fix ngl shaders to work on GL < 4.0
+ - Require GL 3.3 for the ngl renderer
  - Fix problems with scaled shadows
  - Fix problems with holes for underlaid subsurfaces
+ - Improve handling of scales and glyph cache efficiency
 
-* media:
+* Media:
  - Support dmabufs in the gstreamer backend. This allows
    zero-copy video playback on Wayland when paired with
    hardware video decoding
+ - Drop the experimental ffmpeg backend. It hasn't been
+   building for a year
 
 * Wayland:
- - Commit empty frames if and double-buffered state
-   is pending
+ - Commit empty frames if and double-buffered state is pending
  - Fix monitor size information when using mutter without
    the scale-monitor-framebuffer setting
+ - Clear the current tablet on tab leave, fixing a crash
 
 * macOS:
  - Propagate unhandled input events back to the OS
@@ -41,6 +47,7 @@ Overview of Changes in 4.13.7, xx-xx-xxxx
  Galician
  Georgian
  Occitan
+ Turkish
 
 
 Overview of Changes in 4.13.6, 25-01-2024
