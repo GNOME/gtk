@@ -75,6 +75,9 @@ static GParamSpec *obj_props[N_PROPS];
 
 static guint obj_signals[LAST_SIGNAL];
 
+static char *gtk_at_context_get_description_internal (GtkATContext*self, gboolean check_duplicates);
+static char *gtk_at_context_get_name_internal (GtkATContext*self, gboolean check_duplicates);
+
 static void
 gtk_at_context_finalize (GObject *gobject)
 {
@@ -1242,7 +1245,8 @@ gtk_at_context_get_text_accumulate (GtkATContext          *self,
                                     GtkAccessibleProperty  property,
                                     GtkAccessibleRelation  relation,
                                     gboolean               is_ref,
-                                    gboolean               is_child)
+                                    gboolean               is_child,
+                                    gboolean               check_duplicates)
 {
   GtkAccessibleValue *value = NULL;
 
@@ -1275,7 +1279,7 @@ gtk_at_context_get_text_accumulate (GtkATContext          *self,
                   GtkATContext *rel_context = gtk_accessible_get_at_context (rel);
 
                   g_ptr_array_add (nodes, rel);
-                  gtk_at_context_get_text_accumulate (rel_context, nodes, res, property, relation, TRUE, FALSE);
+                  gtk_at_context_get_text_accumulate (rel_context, nodes, res, property, relation, TRUE, FALSE, check_duplicates);
 
                   g_object_unref (rel_context);
                 }
@@ -1344,7 +1348,7 @@ gtk_at_context_get_text_accumulate (GtkATContext          *self,
               GtkAccessible *rel = GTK_ACCESSIBLE (child);
               GtkATContext *rel_context = gtk_accessible_get_at_context (rel);
 
-              gtk_at_context_get_text_accumulate (rel_context, nodes, s, property, relation, FALSE, TRUE);
+              gtk_at_context_get_text_accumulate (rel_context, nodes, s, property, relation, FALSE, TRUE, check_duplicates);
 
               g_object_unref (rel_context);
             }
@@ -1365,6 +1369,8 @@ gtk_at_context_get_text_accumulate (GtkATContext          *self,
     {
       const char *text = gtk_widget_get_tooltip_text (GTK_WIDGET (self->accessible));
       if (text && not_just_space (text))
+        if (!check_duplicates || ((property == GTK_ACCESSIBLE_PROPERTY_LABEL && strcmp(text, gtk_at_context_get_description_internal (self, FALSE)) != 0)
+          || (property == GTK_ACCESSIBLE_PROPERTY_DESCRIPTION && strcmp(text, gtk_at_context_get_name_internal (self, FALSE)) != 0)))
         append_with_space (res, text);
     }
 }
@@ -1372,7 +1378,8 @@ gtk_at_context_get_text_accumulate (GtkATContext          *self,
 static char *
 gtk_at_context_get_text (GtkATContext          *self,
                          GtkAccessibleProperty  property,
-                         GtkAccessibleRelation  relation)
+                         GtkAccessibleRelation  relation,
+gboolean              check_duplicates)
 {
   GtkATContext *parent = NULL;
 
@@ -1404,13 +1411,19 @@ gtk_at_context_get_text (GtkATContext          *self,
   GString *res = g_string_new ("");
 
   /* Step 2 */
-  gtk_at_context_get_text_accumulate (self, nodes, res, property, relation, FALSE, FALSE);
+  gtk_at_context_get_text_accumulate (self, nodes, res, property, relation, FALSE, FALSE, check_duplicates);
 
   g_ptr_array_unref (nodes);
 
   g_clear_object (&parent);
 
   return g_string_free (res, FALSE);
+}
+
+static char *
+gtk_at_context_get_name_internal (GtkATContext *self, gboolean check_duplicates)
+{
+  return gtk_at_context_get_text (self, GTK_ACCESSIBLE_PROPERTY_LABEL, GTK_ACCESSIBLE_RELATION_LABELLED_BY, check_duplicates);
 }
 
 /*< private >
@@ -1426,7 +1439,18 @@ gtk_at_context_get_text (GtkATContext          *self,
 char *
 gtk_at_context_get_name (GtkATContext *self)
 {
-  return gtk_at_context_get_text (self, GTK_ACCESSIBLE_PROPERTY_LABEL, GTK_ACCESSIBLE_RELATION_LABELLED_BY);
+  /*
+  * We intentionally don't check for duplicates here, as the name
+  * is more important, and we want the tooltip as the name
+  * if everything else fails.
+  */
+  return gtk_at_context_get_name_internal (self, FALSE);
+}
+
+static char *
+gtk_at_context_get_description_internal (GtkATContext *self, gboolean check_duplicates)
+{
+  return gtk_at_context_get_text (self, GTK_ACCESSIBLE_PROPERTY_DESCRIPTION, GTK_ACCESSIBLE_RELATION_DESCRIBED_BY, check_duplicates);
 }
 
 /*< private >
@@ -1442,7 +1466,7 @@ gtk_at_context_get_name (GtkATContext *self)
 char *
 gtk_at_context_get_description (GtkATContext *self)
 {
-  return gtk_at_context_get_text (self, GTK_ACCESSIBLE_PROPERTY_DESCRIPTION, GTK_ACCESSIBLE_RELATION_DESCRIBED_BY);
+  return gtk_at_context_get_description_internal (self, TRUE);
 }
 
 void
