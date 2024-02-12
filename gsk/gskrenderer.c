@@ -46,6 +46,8 @@
 
 #include "gl/gskglrenderer.h"
 #include "gpu/gskvulkanrenderer.h"
+#include "gdk/gdkvulkancontextprivate.h"
+#include "gdk/gdkdisplayprivate.h"
 
 #include <graphene-gobject.h>
 #include <cairo-gobject.h>
@@ -630,16 +632,56 @@ get_renderer_for_backend (GdkSurface *surface)
   return G_TYPE_INVALID;
 }
 
+static gboolean
+gl_software_rendering (GdkSurface *surface)
+{
+  GdkDisplay *display = gdk_surface_get_display (surface);
+  GdkGLContext *context;
+
+  if (!gdk_display_prepare_gl (display, NULL))
+    return G_TYPE_INVALID;
+
+  context = gdk_display_get_gl_context (display);
+  gdk_gl_context_make_current (context);
+
+  return strstr ((const char *) glGetString (GL_RENDERER), "llvmpipe") != NULL;
+}
+
 static GType
 get_renderer_for_gl (GdkSurface *surface)
 {
+  if (gl_software_rendering (surface))
+    return G_TYPE_INVALID;
+
   return gsk_ngl_renderer_get_type ();
 }
+
+#ifdef GDK_RENDERING_VULKAN
+static gboolean
+vulkan_software_rendering (GdkSurface *surface)
+{
+  GdkDisplay *display = gdk_surface_get_display (surface);
+  GdkVulkanContext *context = gdk_display_create_vulkan_context (display, surface, NULL);
+  VkPhysicalDevice device;
+  VkPhysicalDeviceProperties props;
+
+  if (!context)
+    return G_TYPE_INVALID;
+
+  device = gdk_vulkan_context_get_physical_device (context);
+  vkGetPhysicalDeviceProperties (device, &props);
+
+  return props.deviceType == VK_PHYSICAL_DEVICE_TYPE_CPU;
+}
+#endif
 
 static GType
 get_renderer_for_vulkan (GdkSurface *surface)
 {
 #ifdef GDK_RENDERING_VULKAN
+  if (vulkan_software_rendering (surface))
+    return G_TYPE_INVALID;
+
   return GSK_TYPE_VULKAN_RENDERER;
 #else
   return G_TYPE_INVALID;
@@ -649,6 +691,9 @@ get_renderer_for_vulkan (GdkSurface *surface)
 static GType
 get_renderer_for_gles2 (GdkSurface *surface)
 {
+  if (gl_software_rendering (surface))
+    return G_TYPE_INVALID;
+
   return GSK_TYPE_GL_RENDERER;
 }
 
