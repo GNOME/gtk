@@ -967,6 +967,33 @@ test_matrix_transform (void)
   gsk_transform_unref (t2);
 }
 
+static void
+test_matrix_roundtrip (void)
+{
+  GskTransform *transform;
+  gboolean res;
+  const char *input;
+  char *str;
+
+  input = "matrix(2, 3, 4, 5, 6, 7)";
+  res = gsk_transform_parse (input, &transform);
+  g_assert_true (res);
+  g_assert_true (gsk_transform_get_category (transform) >= GSK_TRANSFORM_CATEGORY_2D);
+
+  str = gsk_transform_to_string (transform);
+  g_assert_cmpstr (str, ==, input);
+  g_free (str);
+
+  input = "matrix3d(2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17)";
+  res = gsk_transform_parse (input, &transform);
+  g_assert_true (res);
+  g_assert_true (gsk_transform_get_category (transform) < GSK_TRANSFORM_CATEGORY_2D);
+
+  str = gsk_transform_to_string (transform);
+  g_assert_cmpstr (str, ==, input);
+  g_free (str);
+}
+
 int
 main (int   argc,
       char *argv[])
@@ -991,6 +1018,7 @@ main (int   argc,
   g_test_add_func ("/transform/rotate", test_rotate_transform);
   g_test_add_func ("/transform/rotate3d", test_rotate3d_transform);
   g_test_add_func ("/transform/matrix", test_matrix_transform);
+  g_test_add_func ("/transform/matrix/roundtrip", test_matrix_roundtrip);
 
   return g_test_run ();
 }
