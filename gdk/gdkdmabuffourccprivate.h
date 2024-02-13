@@ -1,5 +1,6 @@
 #pragma once
 
+#include "config.h"
 #ifdef HAVE_DMABUF
 #include <drm_fourcc.h>
 #endif
