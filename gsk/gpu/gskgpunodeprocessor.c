@@ -1010,6 +1010,8 @@ gsk_gpu_node_processor_blur_op (GskGpuNodeProcessor       *self,
 
   /* FIXME: Handle clip radius growing the clip too much */
   gsk_gpu_node_processor_get_clip_bounds (self, &clip_rect);
+  clip_rect.origin.x -= shadow_offset->x;
+  clip_rect.origin.y -= shadow_offset->y;
   graphene_rect_inset (&clip_rect, 0.f, -clip_radius);
   if (!gsk_rect_intersection (rect, &clip_rect, &intermediate_rect))
     return;
