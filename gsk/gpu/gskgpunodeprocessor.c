@@ -1003,7 +1003,6 @@ gsk_gpu_node_processor_blur_op (GskGpuNodeProcessor       *self,
   graphene_vec2_t direction;
   graphene_rect_t clip_rect, intermediate_rect;
   graphene_point_t real_offset;
-  int width, height;
   float clip_radius;
 
   clip_radius = gsk_cairo_blur_compute_pixels (blur_radius / 2.0);
@@ -1016,25 +1015,11 @@ gsk_gpu_node_processor_blur_op (GskGpuNodeProcessor       *self,
   if (!gsk_rect_intersection (rect, &clip_rect, &intermediate_rect))
     return;
 
-  width = ceilf (graphene_vec2_get_x (&self->scale) * intermediate_rect.size.width);
-  height = ceilf (graphene_vec2_get_y (&self->scale) * intermediate_rect.size.height);
-
-  intermediate = gsk_gpu_device_create_offscreen_image (gsk_gpu_frame_get_device (self->frame),
-                                                        FALSE,
-                                                        source_depth,
-                                                        width, height);
-
-  gsk_gpu_node_processor_init (&other,
-                               self->frame,
-                               source_desc,
-                               intermediate,
-                               &(cairo_rectangle_int_t) { 0, 0, width, height },
-                               &intermediate_rect);
-
-  gsk_gpu_render_pass_begin_op (other.frame,
-                                intermediate,
-                                &(cairo_rectangle_int_t) { 0, 0, width, height },
-                                GSK_RENDER_PASS_OFFSCREEN);
+  intermediate = gsk_gpu_node_processor_init_draw (&other,
+                                                   self->frame,
+                                                   source_depth,
+                                                   &self->scale,
+                                                   &intermediate_rect);
 
   gsk_gpu_node_processor_sync_globals (&other, 0);
 
@@ -1048,11 +1033,7 @@ gsk_gpu_node_processor_blur_op (GskGpuNodeProcessor       *self,
                    source_rect,
                    &direction);
 
-  gsk_gpu_render_pass_end_op (other.frame,
-                              intermediate,
-                              GSK_RENDER_PASS_OFFSCREEN);
-
-  gsk_gpu_node_processor_finish (&other);
+  gsk_gpu_node_processor_finish_draw (&other, intermediate);
 
   real_offset = GRAPHENE_POINT_INIT (self->offset.x + shadow_offset->x,
                                      self->offset.y + shadow_offset->y);
