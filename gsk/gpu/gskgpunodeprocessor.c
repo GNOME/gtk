@@ -748,6 +748,8 @@ gsk_gpu_node_processor_create_offscreen (GskGpuFrame           *frame,
                                             gsk_render_node_get_preferred_depth (node),
                                             scale,
                                             viewport);
+  if (image == NULL)
+    return NULL;
 
   gsk_gpu_node_processor_add_node (&self, node);
 
@@ -950,9 +952,13 @@ gsk_gpu_node_processor_get_node_as_image (GskGpuNodeProcessor   *self,
     {
       if (!gsk_gpu_node_processor_clip_node_bounds (self, node, &clip))
         return NULL;
-      clip_bounds = &clip;
     }
-  rect_round_to_pixels (clip_bounds, &self->scale, &self->offset, &clip);
+  else
+    {
+      if (!gsk_rect_intersection (clip_bounds, &node->bounds, &clip))
+        return NULL;
+    }
+  rect_round_to_pixels (&clip, &self->scale, &self->offset, &clip);
 
   image = gsk_gpu_get_node_as_image (self->frame,
                                      &clip,
@@ -997,36 +1003,25 @@ gsk_gpu_node_processor_blur_op (GskGpuNodeProcessor       *self,
   graphene_vec2_t direction;
   graphene_rect_t clip_rect, intermediate_rect;
   graphene_point_t real_offset;
-  int width, height;
   float clip_radius;
 
   clip_radius = gsk_cairo_blur_compute_pixels (blur_radius / 2.0);
 
   /* FIXME: Handle clip radius growing the clip too much */
   gsk_gpu_node_processor_get_clip_bounds (self, &clip_rect);
+  clip_rect.origin.x -= shadow_offset->x;
+  clip_rect.origin.y -= shadow_offset->y;
   graphene_rect_inset (&clip_rect, 0.f, -clip_radius);
   if (!gsk_rect_intersection (rect, &clip_rect, &intermediate_rect))
     return;
 
-  width = ceilf (graphene_vec2_get_x (&self->scale) * intermediate_rect.size.width);
-  height = ceilf (graphene_vec2_get_y (&self->scale) * intermediate_rect.size.height);
+  rect_round_to_pixels (&intermediate_rect, &self->scale, &self->offset, &intermediate_rect);
 
-  intermediate = gsk_gpu_device_create_offscreen_image (gsk_gpu_frame_get_device (self->frame),
-                                                        FALSE,
-                                                        source_depth,
-                                                        width, height);
-
-  gsk_gpu_node_processor_init (&other,
-                               self->frame,
-                               source_desc,
-                               intermediate,
-                               &(cairo_rectangle_int_t) { 0, 0, width, height },
-                               &intermediate_rect);
-
-  gsk_gpu_render_pass_begin_op (other.frame,
-                                intermediate,
-                                &(cairo_rectangle_int_t) { 0, 0, width, height },
-                                GSK_RENDER_PASS_OFFSCREEN);
+  intermediate = gsk_gpu_node_processor_init_draw (&other,
+                                                   self->frame,
+                                                   source_depth,
+                                                   &self->scale,
+                                                   &intermediate_rect);
 
   gsk_gpu_node_processor_sync_globals (&other, 0);
 
@@ -1040,11 +1035,7 @@ gsk_gpu_node_processor_blur_op (GskGpuNodeProcessor       *self,
                    source_rect,
                    &direction);
 
-  gsk_gpu_render_pass_end_op (other.frame,
-                              intermediate,
-                              GSK_RENDER_PASS_OFFSCREEN);
-
-  gsk_gpu_node_processor_finish (&other);
+  gsk_gpu_node_processor_finish_draw (&other, intermediate);
 
   real_offset = GRAPHENE_POINT_INIT (self->offset.x + shadow_offset->x,
                                      self->offset.y + shadow_offset->y);
