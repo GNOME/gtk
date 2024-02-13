@@ -79,6 +79,7 @@
 #include "gdkdebugprivate.h"
 #include "gdkdisplayprivate.h"
 #include "gdkdmabufeglprivate.h"
+#include "gdkdmabuffourccprivate.h"
 #include "gdkmemoryformatprivate.h"
 #include "gdkmemorytextureprivate.h"
 #include "gdkprofilerprivate.h"
@@ -96,10 +97,6 @@
 #include <epoxy/gl.h>
 #ifdef HAVE_EGL
 #include <epoxy/egl.h>
-#endif
-
-#ifdef HAVE_DMABUF
-#include <drm_fourcc.h>
 #endif
 
 #include <math.h>
