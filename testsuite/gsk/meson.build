@@ -205,15 +205,11 @@ variants = {
 }
 
 compare_xfails = {
-  'ngl': { 'shadow-offset-to-outside-clip': ['clipped'], # 6425
-           'clip-intersection-fail-opacity-nogl': ['clipped'], # 6425
-           'scaled-texture-scale': ['clipped'], # 6428
+  'ngl': { 'scaled-texture-scale': ['clipped'], # 6428
            'repeat-scaling': ['clipped'], # 6429
            'radial-gradient-with-64-colorstops': ['clipped'],
          },
-  'vulkan': { 'shadow-offset-to-outside-clip': ['clipped'], # 6425
-              'clip-intersection-fail-opacity-nogl': ['clipped'], # 6425
-              'scaled-texture-scale': ['clipped'], # 6428
+  'vulkan': { 'scaled-texture-scale': ['clipped'], # 6428
             },
 }
 
