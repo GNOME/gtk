@@ -1015,6 +1015,8 @@ gsk_gpu_node_processor_blur_op (GskGpuNodeProcessor       *self,
   if (!gsk_rect_intersection (rect, &clip_rect, &intermediate_rect))
     return;
 
+  rect_round_to_pixels (&intermediate_rect, &self->scale, &self->offset, &intermediate_rect);
+
   intermediate = gsk_gpu_node_processor_init_draw (&other,
                                                    self->frame,
                                                    source_depth,
