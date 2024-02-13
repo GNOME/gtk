@@ -53,7 +53,7 @@
 #include <gst/gl/gstglfuncs.h>
 
 #ifdef HAVE_GSTREAMER_DRM
-#include <drm_fourcc.h>
+#include <gdk/gdkdmabuffourccprivate.h>
 #include <gst/allocators/gstdmabuf.h>
 #endif
 

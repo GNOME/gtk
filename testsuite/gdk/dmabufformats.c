@@ -3,11 +3,8 @@
 #include <gtk/gtk.h>
 #include <gdk/gdkdisplayprivate.h>
 #include <gdk/gdkglcontextprivate.h>
+#include <gdk/gdkdmabuffourccprivate.h>
 #include <gdk/gdkdmabuftextureprivate.h>
-
-#ifdef HAVE_DMABUF
-#include <drm_fourcc.h>
-#endif
 
 static void
 test_dmabuf_formats_basic (void)
