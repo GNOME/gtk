@@ -748,6 +748,8 @@ gsk_gpu_node_processor_create_offscreen (GskGpuFrame           *frame,
                                             gsk_render_node_get_preferred_depth (node),
                                             scale,
                                             viewport);
+  if (image == NULL)
+    return NULL;
 
   gsk_gpu_node_processor_add_node (&self, node);
 
