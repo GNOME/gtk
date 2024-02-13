@@ -4,7 +4,7 @@
 #include <sys/ioctl.h>
 #include <unistd.h>
 #include <linux/dma-heap.h>
-#include <drm_fourcc.h>
+#include <gdk/gdkdmabuffourccprivate.h>
 
 #ifdef GDK_RENDERING_VULKAN
 #include <vulkan/vulkan.h>
