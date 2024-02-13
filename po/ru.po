@@ -22,8 +22,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2024-01-16 17:25+0000\n"
-"PO-Revision-Date: 2024-01-16 22:49+0300\n"
+"POT-Creation-Date: 2024-02-10 11:53+0000\n"
+"PO-Revision-Date: 2024-02-11 13:52+0300\n"
 "Last-Translator: Artur So <arturios2005@mail.ru>\n"
 "Language-Team: Русский <gnome-cyr@gnome.org>\n"
 "Language: ru\n"
@@ -63,35 +63,35 @@ msgstr "Не удалось предоставить содержимое как
 msgid "Cannot provide contents as %s"
 msgstr "Не удалось предоставить содержимое как \"%s\""
 
-#: gdk/gdkdisplay.c:170 gdk/gdkglcontext.c:462
+#: gdk/gdkdisplay.c:176 gdk/gdkglcontext.c:462
 msgid "The current backend does not support OpenGL"
 msgstr "Текущий движок не поддерживает OpenGL"
 
-#: gdk/gdkdisplay.c:1296 gdk/gdkvulkancontext.c:1581
+#: gdk/gdkdisplay.c:1315 gdk/gdkvulkancontext.c:1596
 msgid "Vulkan support disabled via GDK_DEBUG"
 msgstr "Поддержка Vulkan отключена через GDK_DEBUG"
 
-#: gdk/gdkdisplay.c:1350
+#: gdk/gdkdisplay.c:1369
 msgid "GL support disabled via GDK_DEBUG"
 msgstr "Поддержка GL отключена через GDK_DEBUG"
 
-#: gdk/gdkdisplay.c:1646
+#: gdk/gdkdisplay.c:1665
 msgid "No EGL configuration available"
 msgstr "Конфигурация EGL недоступна"
 
-#: gdk/gdkdisplay.c:1654
+#: gdk/gdkdisplay.c:1673
 msgid "Failed to get EGL configurations"
 msgstr "Не удалось получить конфигурации EGL"
 
-#: gdk/gdkdisplay.c:1684
+#: gdk/gdkdisplay.c:1703
 msgid "No EGL configuration with required features found"
 msgstr "Конфигурация EGL с необходимыми функциями не найдена"
 
-#: gdk/gdkdisplay.c:1691
+#: gdk/gdkdisplay.c:1710
 msgid "No perfect EGL configuration found"
 msgstr "Идеальная конфигурация EGL не найдена"
 
-#: gdk/gdkdisplay.c:1733
+#: gdk/gdkdisplay.c:1752
 #, c-format
 msgid "EGL implementation is missing extension %s"
 msgid_plural "EGL implementation is missing %2$d extensions: %1$s"
@@ -99,23 +99,23 @@ msgstr[0] "В реализации EGL отсутствует %2$d расшир�
 msgstr[1] "В реализации EGL отсутствует %2$d расширения: %1$s"
 msgstr[2] "В реализации EGL отсутствует %2$d расширений: %1$s"
 
-#: gdk/gdkdisplay.c:1783
+#: gdk/gdkdisplay.c:1801
 msgid "libEGL not available in this sandbox"
 msgstr "libEGL недоступен в этой песочнице"
 
-#: gdk/gdkdisplay.c:1784
+#: gdk/gdkdisplay.c:1802
 msgid "libEGL not available"
 msgstr "libEGL недоступен"
 
-#: gdk/gdkdisplay.c:1794
+#: gdk/gdkdisplay.c:1812
 msgid "Failed to create EGL display"
 msgstr "Не удалось создать дисплей EGL"
 
-#: gdk/gdkdisplay.c:1804
+#: gdk/gdkdisplay.c:1821
 msgid "Could not initialize EGL display"
 msgstr "Не удалось инициализировать дисплей EGL"
 
-#: gdk/gdkdisplay.c:1815
+#: gdk/gdkdisplay.c:1831
 #, c-format
 msgid "EGL version %d.%d is too old. GTK requires %d.%d"
 msgstr "Версия EGL %d.%d слишком старая. GTK требует %d.%d"
@@ -128,13 +128,13 @@ msgstr "Перетаскивание из других приложений не
 msgid "No compatible formats to transfer contents."
 msgstr "Отсутствие совместимых форматов для передачи содержимого."
 
-#: gdk/gdkglcontext.c:422 gdk/x11/gdkglcontext-glx.c:642
+#: gdk/gdkglcontext.c:422 gdk/x11/gdkglcontext-glx.c:645
 msgid "No GL API allowed."
 msgstr "API GL не разрешен."
 
-#: gdk/gdkglcontext.c:445 gdk/win32/gdkglcontext-win32-wgl.c:381
-#: gdk/win32/gdkglcontext-win32-wgl.c:524
-#: gdk/win32/gdkglcontext-win32-wgl.c:568 gdk/x11/gdkglcontext-glx.c:688
+#: gdk/gdkglcontext.c:445 gdk/win32/gdkglcontext-win32-wgl.c:386
+#: gdk/win32/gdkglcontext-win32-wgl.c:529
+#: gdk/win32/gdkglcontext-win32-wgl.c:573 gdk/x11/gdkglcontext-glx.c:691
 msgid "Unable to create a GL context"
 msgstr "Невозможно создать контекст GL"
 
@@ -153,7 +153,7 @@ msgstr "Приложение не поддерживает %s API"
 
 #. translators: This is about OpenGL backend names, like
 #. * "Trying to use X11 GLX, but EGL is already in use"
-#: gdk/gdkglcontext.c:2124
+#: gdk/gdkglcontext.c:2115
 #, c-format
 msgid "Trying to use %s, but %s is already in use"
 msgstr "Попытка использовать %s, но %s уже используется"
@@ -744,21 +744,21 @@ msgstr "Ошибка IDataObject_GetData (0x%x), возвращаю 0x%lx"
 msgid "Failed to transmute DnD data W32 format 0x%x to %p (%s)"
 msgstr "Не удалось преобразовать данные DnD W32 формата 0x%x в %p (%s)"
 
-#: gdk/win32/gdkglcontext-win32-wgl.c:315
+#: gdk/win32/gdkglcontext-win32-wgl.c:320
 msgid "No GL implementation is available"
 msgstr "Нет доступной реализации GL"
 
-#: gdk/win32/gdkglcontext-win32-wgl.c:390
+#: gdk/win32/gdkglcontext-win32-wgl.c:395
 #, c-format
 msgid "WGL version %d.%d is too low, need at least %d.%d"
 msgstr "Версия WGL %d.%d слишком старая, требуется %d.%d"
 
-#: gdk/win32/gdkglcontext-win32-wgl.c:408
+#: gdk/win32/gdkglcontext-win32-wgl.c:413
 #, c-format
 msgid "GL implementation cannot share GL contexts"
 msgstr "Реализация GL не может совместно использовать контексты GL"
 
-#: gdk/win32/gdkglcontext-win32-wgl.c:688
+#: gdk/win32/gdkglcontext-win32-wgl.c:693
 msgid "No available configurations for the given pixel format"
 msgstr "Нет доступных конфигураций для данного формата пикселя"
 
@@ -822,15 +822,15 @@ msgstr "Менеджер буфера обмена не смог сохрани�
 msgid "Cannot store clipboard. No clipboard manager is active."
 msgstr "Этот буфер обмена не может хранить данные."
 
-#: gdk/x11/gdkglcontext-glx.c:807
+#: gdk/x11/gdkglcontext-glx.c:810
 msgid "No GLX configurations available"
 msgstr "Конфигурации GLX не предлагаются"
 
-#: gdk/x11/gdkglcontext-glx.c:880
+#: gdk/x11/gdkglcontext-glx.c:883
 msgid "No GLX configuration with required features found"
 msgstr "Конфигурация GLX с требуемыми функциями не найдена"
 
-#: gdk/x11/gdkglcontext-glx.c:954
+#: gdk/x11/gdkglcontext-glx.c:957
 msgid "GLX is not supported"
 msgstr "GLX не поддерживается"
 
@@ -867,10 +867,10 @@ msgid "This GLES %d.%d implementation does not support half-float vertex data"
 msgstr ""
 "Данная реализация GLES %d.%d не поддерживает полуплавающие вершинные данные"
 
-#: gsk/gpu/gskgldevice.c:238
+#: gsk/gpu/gskgldevice.c:245
 #, c-format
-msgid "OpenGL ES 2.0 is not supported by this renderer."
-msgstr "OpenGL ES 2.0 не поддерживается этим рендерером."
+msgid "OpenGL ES 3.0 is not supported by this renderer."
+msgstr "OpenGL ES 3.0 не поддерживается этим рендерером."
 
 #: gtk/a11y/gtkatspiaction.c:239
 msgctxt "accessibility"
@@ -975,7 +975,7 @@ msgctxt "accessibility"
 msgid "Clears the contents of the entry"
 msgstr "Очищает содержимое записи"
 
-#: gtk/a11y/gtkatspiroot.c:256 gtk/gtkaccessible.c:834
+#: gtk/a11y/gtkatspiroot.c:256 gtk/gtkaccessible.c:869
 msgctxt "accessibility"
 msgid "application"
 msgstr "приложение"
@@ -1110,7 +1110,7 @@ msgstr "Sans 12"
 msgid "Pick a Font"
 msgstr "Выбрать шрифт"
 
-#: gtk/deprecated/gtkfontbutton.c:600 gtk/gtkfilechooserwidget.c:3806
+#: gtk/deprecated/gtkfontbutton.c:600 gtk/gtkfilechooserwidget.c:3815
 #: gtk/gtkfontdialogbutton.c:126 gtk/inspector/visual.ui:169
 msgid "Font"
 msgstr "Шрифт"
@@ -1373,417 +1373,417 @@ msgctxt "keyboard label"
 msgid "Backslash"
 msgstr "Backslash"
 
-#: gtk/gtkaccessible.c:755
+#: gtk/gtkaccessible.c:790
 msgctxt "accessibility"
 msgid "alert"
 msgstr "сигнал"
 
-#: gtk/gtkaccessible.c:756
+#: gtk/gtkaccessible.c:791
 msgctxt "accessibility"
 msgid "alert dialog"
 msgstr "диалог оповещения"
 
-#: gtk/gtkaccessible.c:757
+#: gtk/gtkaccessible.c:792
 msgctxt "accessibility"
 msgid "banner"
 msgstr "баннер"
 
-#: gtk/gtkaccessible.c:758
+#: gtk/gtkaccessible.c:793
 msgctxt "accessibility"
 msgid "button"
 msgstr "кнопка"
 
-#: gtk/gtkaccessible.c:759
+#: gtk/gtkaccessible.c:794
 msgctxt "accessibility"
 msgid "caption"
 msgstr "заголовок"
 
-#: gtk/gtkaccessible.c:760
+#: gtk/gtkaccessible.c:795
 msgctxt "accessibility"
 msgid "cell"
 msgstr "ячейка"
 
-#: gtk/gtkaccessible.c:761
+#: gtk/gtkaccessible.c:796
 msgctxt "accessibility"
 msgid "checkbox"
 msgstr "чекбокс"
 
-#: gtk/gtkaccessible.c:762
+#: gtk/gtkaccessible.c:797
 msgctxt "accessibility"
 msgid "column header"
 msgstr "заголовок столбца"
 
-#: gtk/gtkaccessible.c:763
+#: gtk/gtkaccessible.c:798
 msgctxt "accessibility"
 msgid "combo box"
 msgstr "выпадающий список"
 
-#: gtk/gtkaccessible.c:764
+#: gtk/gtkaccessible.c:799
 msgctxt "accessibility"
 msgid "command"
 msgstr "команда"
 
-#: gtk/gtkaccessible.c:765
+#: gtk/gtkaccessible.c:800
 msgctxt "accessibility"
 msgid "composite"
 msgstr "составной"
 
-#: gtk/gtkaccessible.c:766
+#: gtk/gtkaccessible.c:801
 msgctxt "accessibility"
 msgid "dialog"
 msgstr "диалоговое окно"
 
-#: gtk/gtkaccessible.c:767
+#: gtk/gtkaccessible.c:802
 msgctxt "accessibility"
 msgid "document"
 msgstr "документ"
 
-#: gtk/gtkaccessible.c:768
+#: gtk/gtkaccessible.c:803
 msgctxt "accessibility"
 msgid "feed"
 msgstr "лента"
 
-#: gtk/gtkaccessible.c:769
+#: gtk/gtkaccessible.c:804
 msgctxt "accessibility"
 msgid "form"
 msgstr "форм"
 
-#: gtk/gtkaccessible.c:770
+#: gtk/gtkaccessible.c:805
 msgctxt "accessibility"
 msgid "generic"
 msgstr "типовой"
 
-#: gtk/gtkaccessible.c:771
+#: gtk/gtkaccessible.c:806
 msgctxt "accessibility"
 msgid "grid"
 msgstr "сетка"
 
-#: gtk/gtkaccessible.c:772
+#: gtk/gtkaccessible.c:807
 msgctxt "accessibility"
 msgid "grid cell"
 msgstr "ячейка сетки"
 
-#: gtk/gtkaccessible.c:773
+#: gtk/gtkaccessible.c:808
 msgctxt "accessibility"
 msgid "group"
 msgstr "группа"
 
-#: gtk/gtkaccessible.c:774
+#: gtk/gtkaccessible.c:809
 msgctxt "accessibility"
 msgid "heading"
 msgstr "заголовок"
 
-#: gtk/gtkaccessible.c:775
+#: gtk/gtkaccessible.c:810
 msgctxt "accessibility"
 msgid "image"
 msgstr "изображение"
 
-#: gtk/gtkaccessible.c:776
+#: gtk/gtkaccessible.c:811
 msgctxt "accessibility"
 msgid "input"
 msgstr "вход"
 
-#: gtk/gtkaccessible.c:777
+#: gtk/gtkaccessible.c:812
 msgctxt "accessibility"
 msgid "label"
 msgstr "метка"
 
-#: gtk/gtkaccessible.c:778
+#: gtk/gtkaccessible.c:813
 msgctxt "accessibility"
 msgid "landmark"
 msgstr "отметка"
 
-#: gtk/gtkaccessible.c:779
+#: gtk/gtkaccessible.c:814
 msgctxt "accessibility"
 msgid "legend"
 msgstr "легенда"
 
-#: gtk/gtkaccessible.c:780
+#: gtk/gtkaccessible.c:815
 msgctxt "accessibility"
 msgid "link"
 msgstr "ссылка"
 
-#: gtk/gtkaccessible.c:781
+#: gtk/gtkaccessible.c:816
 msgctxt "accessibility"
 msgid "list"
 msgstr "список"
 
-#: gtk/gtkaccessible.c:782
+#: gtk/gtkaccessible.c:817
 msgctxt "accessibility"
 msgid "list box"
 msgstr "панель списка"
 
-#: gtk/gtkaccessible.c:783
+#: gtk/gtkaccessible.c:818
 msgctxt "accessibility"
 msgid "list item"
 msgstr "элемент списка"
 
-#: gtk/gtkaccessible.c:784
+#: gtk/gtkaccessible.c:819
 msgctxt "accessibility"
 msgid "log"
 msgstr "журнал"
 
-#: gtk/gtkaccessible.c:785
+#: gtk/gtkaccessible.c:820
 msgctxt "accessibility"
 msgid "main"
 msgstr "главная"
 
-#: gtk/gtkaccessible.c:786
+#: gtk/gtkaccessible.c:821
 msgctxt "accessibility"
 msgid "marquee"
 msgstr "бегущая строка"
 
-#: gtk/gtkaccessible.c:787
+#: gtk/gtkaccessible.c:822
 msgctxt "accessibility"
 msgid "math"
 msgstr "математика"
 
-#: gtk/gtkaccessible.c:788
+#: gtk/gtkaccessible.c:823
 msgctxt "accessibility"
 msgid "meter"
 msgstr "измеритель"
 
-#: gtk/gtkaccessible.c:789
+#: gtk/gtkaccessible.c:824
 msgctxt "accessibility"
 msgid "menu"
 msgstr "меню"
 
-#: gtk/gtkaccessible.c:790
+#: gtk/gtkaccessible.c:825
 msgctxt "accessibility"
 msgid "menu bar"
 msgstr "строка меню"
 
-#: gtk/gtkaccessible.c:791
+#: gtk/gtkaccessible.c:826
 msgctxt "accessibility"
 msgid "menu item"
 msgstr "пункт меню"
 
-#: gtk/gtkaccessible.c:792
+#: gtk/gtkaccessible.c:827
 msgctxt "accessibility"
 msgid "menu item checkbox"
 msgstr "флажок пункта меню"
 
-#: gtk/gtkaccessible.c:793
+#: gtk/gtkaccessible.c:828
 msgctxt "accessibility"
 msgid "menu item radio"
 msgstr "радио-кнопка меню"
 
-#: gtk/gtkaccessible.c:794
+#: gtk/gtkaccessible.c:829
 msgctxt "accessibility"
 msgid "navigation"
 msgstr "навигация"
 
-#: gtk/gtkaccessible.c:795
+#: gtk/gtkaccessible.c:830
 msgctxt "accessibility"
 msgid "none"
 msgstr "нет"
 
-#: gtk/gtkaccessible.c:796
+#: gtk/gtkaccessible.c:831
 msgctxt "accessibility"
 msgid "note"
 msgstr "примечание"
 
-#: gtk/gtkaccessible.c:797
+#: gtk/gtkaccessible.c:832
 msgctxt "accessibility"
 msgid "option"
 msgstr "параметр"
 
-#: gtk/gtkaccessible.c:798
+#: gtk/gtkaccessible.c:833
 msgctxt "accessibility"
 msgid "presentation"
 msgstr "презентация"
 
-#: gtk/gtkaccessible.c:799
+#: gtk/gtkaccessible.c:834
 msgctxt "accessibility"
 msgid "progress bar"
 msgstr "индикатор выполнения"
 
-#: gtk/gtkaccessible.c:800
+#: gtk/gtkaccessible.c:835
 msgctxt "accessibility"
 msgid "radio"
 msgstr "радио"
 
-#: gtk/gtkaccessible.c:801
+#: gtk/gtkaccessible.c:836
 msgctxt "accessibility"
 msgid "radio group"
 msgstr "группа радио-кнопок"
 
-#: gtk/gtkaccessible.c:802
+#: gtk/gtkaccessible.c:837
 msgctxt "accessibility"
 msgid "range"
 msgstr "диапазон"
 
-#: gtk/gtkaccessible.c:803
+#: gtk/gtkaccessible.c:838
 msgctxt "accessibility"
 msgid "region"
 msgstr "область"
 
-#: gtk/gtkaccessible.c:804
+#: gtk/gtkaccessible.c:839
 msgctxt "accessibility"
 msgid "row"
 msgstr "ряд"
 
-#: gtk/gtkaccessible.c:805
+#: gtk/gtkaccessible.c:840
 msgctxt "accessibility"
 msgid "row group"
 msgstr "группа рядов"
 
-#: gtk/gtkaccessible.c:806
+#: gtk/gtkaccessible.c:841
 msgctxt "accessibility"
 msgid "row header"
 msgstr "заголовок ряда"
 
-#: gtk/gtkaccessible.c:807
+#: gtk/gtkaccessible.c:842
 msgctxt "accessibility"
 msgid "scroll bar"
 msgstr "полоса прокрутки"
 
-#: gtk/gtkaccessible.c:808
+#: gtk/gtkaccessible.c:843
 msgctxt "accessibility"
 msgid "search"
 msgstr "поиск"
 
-#: gtk/gtkaccessible.c:809
+#: gtk/gtkaccessible.c:844
 msgctxt "accessibility"
 msgid "search box"
 msgstr "поле поиска"
 
-#: gtk/gtkaccessible.c:810
+#: gtk/gtkaccessible.c:845
 msgctxt "accessibility"
 msgid "section"
 msgstr "глава"
 
-#: gtk/gtkaccessible.c:811
+#: gtk/gtkaccessible.c:846
 msgctxt "accessibility"
 msgid "section head"
 msgstr "заголовок раздела"
 
-#: gtk/gtkaccessible.c:812
+#: gtk/gtkaccessible.c:847
 msgctxt "accessibility"
 msgid "select"
 msgstr "выбрать"
 
-#: gtk/gtkaccessible.c:813
+#: gtk/gtkaccessible.c:848
 msgctxt "accessibility"
 msgid "separator"
 msgstr "разделитель"
 
-#: gtk/gtkaccessible.c:814
+#: gtk/gtkaccessible.c:849
 msgctxt "accessibility"
 msgid "slider"
 msgstr "слайдер"
 
-#: gtk/gtkaccessible.c:815
+#: gtk/gtkaccessible.c:850
 msgctxt "accessibility"
 msgid "spin button"
 msgstr "крутящаяся кнопка"
 
-#: gtk/gtkaccessible.c:816
+#: gtk/gtkaccessible.c:851
 msgctxt "accessibility"
 msgid "status"
 msgstr "статус"
 
-#: gtk/gtkaccessible.c:817
+#: gtk/gtkaccessible.c:852
 msgctxt "accessibility"
 msgid "structure"
 msgstr "структура"
 
-#: gtk/gtkaccessible.c:818
+#: gtk/gtkaccessible.c:853
 msgctxt "accessibility"
 msgid "switch"
 msgstr "переключатель"
 
-#: gtk/gtkaccessible.c:819
+#: gtk/gtkaccessible.c:854
 msgctxt "accessibility"
 msgid "tab"
 msgstr "табуляция"
 
-#: gtk/gtkaccessible.c:820
+#: gtk/gtkaccessible.c:855
 msgctxt "accessibility"
 msgid "table"
 msgstr "таблица"
 
-#: gtk/gtkaccessible.c:821
+#: gtk/gtkaccessible.c:856
 msgctxt "accessibility"
 msgid "tab list"
 msgstr "список вкладок"
 
-#: gtk/gtkaccessible.c:822
+#: gtk/gtkaccessible.c:857
 msgctxt "accessibility"
 msgid "tab panel"
 msgstr "панель вкладок"
 
-#: gtk/gtkaccessible.c:823
+#: gtk/gtkaccessible.c:858
 msgctxt "accessibility"
 msgid "text box"
 msgstr "текстовое поле"
 
-#: gtk/gtkaccessible.c:824
+#: gtk/gtkaccessible.c:859
 msgctxt "accessibility"
 msgid "time"
 msgstr "время"
 
-#: gtk/gtkaccessible.c:825
+#: gtk/gtkaccessible.c:860
 msgctxt "accessibility"
 msgid "timer"
 msgstr "таймер"
 
-#: gtk/gtkaccessible.c:826
+#: gtk/gtkaccessible.c:861
 msgctxt "accessibility"
 msgid "tool bar"
 msgstr "панель инструментов"
 
-#: gtk/gtkaccessible.c:827
+#: gtk/gtkaccessible.c:862
 msgctxt "accessibility"
 msgid "tool tip"
 msgstr "подсказка"
 
-#: gtk/gtkaccessible.c:828
+#: gtk/gtkaccessible.c:863
 msgctxt "accessibility"
 msgid "tree"
 msgstr "дерево"
 
-#: gtk/gtkaccessible.c:829
+#: gtk/gtkaccessible.c:864
 msgctxt "accessibility"
 msgid "tree grid"
 msgstr "древовидная сетка"
 
-#: gtk/gtkaccessible.c:830
+#: gtk/gtkaccessible.c:865
 msgctxt "accessibility"
 msgid "tree item"
 msgstr "узел дерева"
 
-#: gtk/gtkaccessible.c:831
+#: gtk/gtkaccessible.c:866
 msgctxt "accessibility"
 msgid "widget"
 msgstr "виджет"
 
-#: gtk/gtkaccessible.c:832
+#: gtk/gtkaccessible.c:867
 msgctxt "accessibility"
 msgid "window"
 msgstr "окно"
 
-#: gtk/gtkaccessible.c:833
+#: gtk/gtkaccessible.c:868
 msgctxt "accessibility"
 msgid "toggle button"
 msgstr "кнопка-переключатель"
 
-#: gtk/gtkaccessible.c:835
+#: gtk/gtkaccessible.c:870
 msgctxt "accessibility"
 msgid "paragraph"
 msgstr "параграф"
 
-#: gtk/gtkaccessible.c:836
+#: gtk/gtkaccessible.c:871
 msgctxt "accessibility"
 msgid "block quote"
 msgstr "блокировать цитирование"
 
-#: gtk/gtkaccessible.c:837
+#: gtk/gtkaccessible.c:872
 msgctxt "accessibility"
 msgid "article"
 msgstr "статья"
 
-#: gtk/gtkaccessible.c:838
+#: gtk/gtkaccessible.c:873
 msgctxt "accessibility"
 msgid "comment"
 msgstr "комментарий"
@@ -2268,12 +2268,12 @@ msgid "A file with that name already exists"
 msgstr "Файл с таким именем уже существует"
 
 #: gtk/gtkfilechoosernative.c:520 gtk/gtkfilechoosernative.c:600
-#: gtk/gtkfilechooserwidget.c:1183 gtk/gtkfilechooserwidget.c:4964
+#: gtk/gtkfilechooserwidget.c:1188 gtk/gtkfilechooserwidget.c:4973
 #: gtk/gtkfiledialog.c:843 gtk/gtkmessagedialog.c:170
 #: gtk/gtkmessagedialog.c:179 gtk/gtkmountoperation.c:608
 #: gtk/print/gtkpagesetupunixdialog.c:282 gtk/print/gtkprintbackend.c:638
 #: gtk/print/gtkprintunixdialog.c:682 gtk/print/gtkprintunixdialog.c:839
-#: gtk/gtkwindow.c:6253 gtk/ui/gtkappchooserdialog.ui:48
+#: gtk/gtkwindow.c:6256 gtk/ui/gtkappchooserdialog.ui:48
 #: gtk/ui/gtkassistant.ui:52 gtk/ui/gtkcolorchooserdialog.ui:36
 #: gtk/ui/gtkfontchooserdialog.ui:27
 msgid "_Cancel"
@@ -2306,285 +2306,285 @@ msgstr "%1$s на %2$s"
 msgid "Type name of new folder"
 msgstr "Введите имя новой папки"
 
-#: gtk/gtkfilechooserwidget.c:725
+#: gtk/gtkfilechooserwidget.c:730
 msgid "The folder could not be created"
 msgstr "Не удалось создать папку"
 
-#: gtk/gtkfilechooserwidget.c:738
+#: gtk/gtkfilechooserwidget.c:743
 msgid "You need to choose a valid filename."
 msgstr "Необходимо выбрать корректное имя файла."
 
-#: gtk/gtkfilechooserwidget.c:741
+#: gtk/gtkfilechooserwidget.c:746
 #, c-format
 msgid "Cannot create a file under %s as it is not a folder"
 msgstr "Невозможно создать файл в %s, так как это не папка"
 
-#: gtk/gtkfilechooserwidget.c:751
+#: gtk/gtkfilechooserwidget.c:756
 msgid "Cannot create file as the filename is too long"
 msgstr "Невозможно создать файл: имя файла слишком длинное"
 
-#: gtk/gtkfilechooserwidget.c:752
+#: gtk/gtkfilechooserwidget.c:757
 msgid "Try using a shorter name."
 msgstr "Используйте более короткое имя."
 
-#: gtk/gtkfilechooserwidget.c:762
+#: gtk/gtkfilechooserwidget.c:767
 msgid "You may only select folders"
 msgstr "Можно выбирать только папки"
 
-#: gtk/gtkfilechooserwidget.c:763
+#: gtk/gtkfilechooserwidget.c:768
 msgid "The item that you selected is not a folder try using a different item."
 msgstr "Выбранный элемент не является папкой. Выберите другой элемент."
 
-#: gtk/gtkfilechooserwidget.c:771
+#: gtk/gtkfilechooserwidget.c:776
 msgid "Invalid file name"
 msgstr "Недопустимое имя файла"
 
-#: gtk/gtkfilechooserwidget.c:780
+#: gtk/gtkfilechooserwidget.c:785
 msgid "The folder contents could not be displayed"
 msgstr "Не удалось отобразить содержимое папки"
 
-#: gtk/gtkfilechooserwidget.c:788
+#: gtk/gtkfilechooserwidget.c:793
 msgid "The file could not be deleted"
 msgstr "Файл не может быть удалён"
 
-#: gtk/gtkfilechooserwidget.c:796
+#: gtk/gtkfilechooserwidget.c:801
 msgid "The file could not be moved to the Trash"
 msgstr "Файл не может быть перемещён в корзину"
 
-#: gtk/gtkfilechooserwidget.c:1181
+#: gtk/gtkfilechooserwidget.c:1186
 #, c-format
 msgid "Are you sure you want to permanently delete “%s”?"
 msgstr "Уверены что хотите безвозвратно удалить \"%s\"?"
 
-#: gtk/gtkfilechooserwidget.c:1182
+#: gtk/gtkfilechooserwidget.c:1187
 msgid "If you delete an item, it will be permanently lost."
 msgstr "Если вы удалите элемент, он будет навсегда утерян."
 
-#: gtk/gtkfilechooserwidget.c:1183 gtk/gtkfilechooserwidget.c:1781
-#: gtk/gtklabel.c:5697 gtk/gtktext.c:6147 gtk/gtktextview.c:9018
+#: gtk/gtkfilechooserwidget.c:1188 gtk/gtkfilechooserwidget.c:1786
+#: gtk/gtklabel.c:5702 gtk/gtktext.c:6147 gtk/gtktextview.c:9018
 msgid "_Delete"
 msgstr "_Удалить"
 
-#: gtk/gtkfilechooserwidget.c:1296
+#: gtk/gtkfilechooserwidget.c:1301
 msgid "The file could not be renamed"
 msgstr "Файл не может быть переименован"
 
-#: gtk/gtkfilechooserwidget.c:1472
+#: gtk/gtkfilechooserwidget.c:1477
 msgid "Could not select file"
 msgstr "Не удалось выделить файл"
 
-#: gtk/gtkfilechooserwidget.c:1692 gtk/ui/gtkfilechooserwidget.ui:66
+#: gtk/gtkfilechooserwidget.c:1697 gtk/ui/gtkfilechooserwidget.ui:66
 msgid "Grid View"
 msgstr "Вид сеткой"
 
-#: gtk/gtkfilechooserwidget.c:1698
+#: gtk/gtkfilechooserwidget.c:1703
 msgid "List View"
 msgstr "Вид списком"
 
-#: gtk/gtkfilechooserwidget.c:1761
+#: gtk/gtkfilechooserwidget.c:1766
 msgid "_Visit File"
 msgstr "_Перейти к файлу"
 
-#: gtk/gtkfilechooserwidget.c:1765
+#: gtk/gtkfilechooserwidget.c:1770
 msgid "_Open With File Manager"
 msgstr "_Открыть в файловом менеджере"
 
-#: gtk/gtkfilechooserwidget.c:1769
+#: gtk/gtkfilechooserwidget.c:1774
 msgid "_Copy Location"
 msgstr "_Копировать расположение"
 
-#: gtk/gtkfilechooserwidget.c:1773
+#: gtk/gtkfilechooserwidget.c:1778
 msgid "_Add to Bookmarks"
 msgstr "_Добавить в закладки"
 
-#: gtk/gtkfilechooserwidget.c:1777 gtk/gtkplacessidebar.c:2312
+#: gtk/gtkfilechooserwidget.c:1782 gtk/gtkplacessidebar.c:2312
 #: gtk/gtkplacessidebar.c:3270 gtk/ui/gtkfilechooserwidget.ui:410
 msgid "_Rename"
 msgstr "_Переименовать"
 
-#: gtk/gtkfilechooserwidget.c:1785
+#: gtk/gtkfilechooserwidget.c:1790
 msgid "_Move to Trash"
 msgstr "П_ереместить в корзину"
 
-#: gtk/gtkfilechooserwidget.c:1794
+#: gtk/gtkfilechooserwidget.c:1799
 msgid "Show _Hidden Files"
 msgstr "Показывать _скрытые файлы"
 
-#: gtk/gtkfilechooserwidget.c:1798
+#: gtk/gtkfilechooserwidget.c:1803
 msgid "Sort _Folders Before Files"
 msgstr "Сортировать _папки перед файлами"
 
-#: gtk/gtkfilechooserwidget.c:1921 gtk/gtkfilechooserwidget.c:1951
-#: gtk/gtkfilechooserwidget.c:3849
+#: gtk/gtkfilechooserwidget.c:1926 gtk/gtkfilechooserwidget.c:1956
+#: gtk/gtkfilechooserwidget.c:3858
 msgid "Unknown"
 msgstr "Неизвестен"
 
-#: gtk/gtkfilechooserwidget.c:2006 gtk/gtkplacessidebar.c:1025
+#: gtk/gtkfilechooserwidget.c:2011 gtk/gtkplacessidebar.c:1025
 msgid "Home"
 msgstr "Домашняя папка"
 
 #. this is the header for the location column in the print dialog
-#: gtk/gtkfilechooserwidget.c:2161 gtk/gtkfilechooserwidget.c:7374
+#: gtk/gtkfilechooserwidget.c:2166 gtk/gtkfilechooserwidget.c:7383
 #: gtk/inspector/css-node-tree.ui:76 gtk/print/ui/gtkprintunixdialog.ui:111
 msgid "Location"
 msgstr "Расположение"
 
 #. Label
-#: gtk/gtkfilechooserwidget.c:2268
+#: gtk/gtkfilechooserwidget.c:2273
 msgid "_Name:"
 msgstr "_Имя:"
 
-#: gtk/gtkfilechooserwidget.c:2823 gtk/gtkfilechooserwidget.c:2837
+#: gtk/gtkfilechooserwidget.c:2828 gtk/gtkfilechooserwidget.c:2842
 #, c-format
 msgid "Searching in %s"
 msgstr "Поиск в %s"
 
-#: gtk/gtkfilechooserwidget.c:2843
+#: gtk/gtkfilechooserwidget.c:2848
 msgid "Searching"
 msgstr "Поиск"
 
-#: gtk/gtkfilechooserwidget.c:2849
+#: gtk/gtkfilechooserwidget.c:2854
 msgid "Enter location or URL"
 msgstr "Введите расположение или URL"
 
-#: gtk/gtkfilechooserwidget.c:3408 gtk/gtkfilechooserwidget.c:5749
-#: gtk/gtkfilechooserwidget.c:7396
+#: gtk/gtkfilechooserwidget.c:3413 gtk/gtkfilechooserwidget.c:5758
+#: gtk/gtkfilechooserwidget.c:7405
 msgid "Modified"
 msgstr "Изменён"
 
-#: gtk/gtkfilechooserwidget.c:3593
+#: gtk/gtkfilechooserwidget.c:3598
 #, c-format
 msgid "Could not read the contents of %s"
 msgstr "Не удалось прочитать содержимое %s"
 
-#: gtk/gtkfilechooserwidget.c:3597
+#: gtk/gtkfilechooserwidget.c:3602
 msgid "Could not read the contents of the folder"
 msgstr "Не удалось прочитать содержимое папки"
 
 #. Translators: see g_date_time_format() for details on the format
-#: gtk/gtkfilechooserwidget.c:3744 gtk/gtkfilechooserwidget.c:3787
+#: gtk/gtkfilechooserwidget.c:3753 gtk/gtkfilechooserwidget.c:3796
 msgid "%H:%M"
 msgstr "%H:%M"
 
-#: gtk/gtkfilechooserwidget.c:3746 gtk/gtkfilechooserwidget.c:3789
+#: gtk/gtkfilechooserwidget.c:3755 gtk/gtkfilechooserwidget.c:3798
 msgid "%l:%M %p"
 msgstr "%l:%M %p"
 
-#: gtk/gtkfilechooserwidget.c:3750
+#: gtk/gtkfilechooserwidget.c:3759
 msgid "Yesterday"
 msgstr "Вчера"
 
 # полное название месяца
-#: gtk/gtkfilechooserwidget.c:3758
+#: gtk/gtkfilechooserwidget.c:3767
 msgid "%-e %b"
 msgstr "%-e %b"
 
 # полное название месяца
-#: gtk/gtkfilechooserwidget.c:3762
+#: gtk/gtkfilechooserwidget.c:3771
 msgid "%-e %b %Y"
 msgstr "%-e %b %Y"
 
-#: gtk/gtkfilechooserwidget.c:3804 gtk/gtkfilechooserwidget.c:3812
+#: gtk/gtkfilechooserwidget.c:3813 gtk/gtkfilechooserwidget.c:3821
 msgid "Program"
 msgstr "Программа"
 
-#: gtk/gtkfilechooserwidget.c:3805
+#: gtk/gtkfilechooserwidget.c:3814
 msgid "Audio"
 msgstr "Аудио"
 
-#: gtk/gtkfilechooserwidget.c:3807 gtk/gtkfilefilter.c:1032
+#: gtk/gtkfilechooserwidget.c:3816 gtk/gtkfilefilter.c:1013
 msgid "Image"
 msgstr "Изображение"
 
-#: gtk/gtkfilechooserwidget.c:3808
+#: gtk/gtkfilechooserwidget.c:3817
 msgid "Archive"
 msgstr "Архив"
 
-#: gtk/gtkfilechooserwidget.c:3809
+#: gtk/gtkfilechooserwidget.c:3818
 msgid "Markup"
 msgstr "Разметка"
 
-#: gtk/gtkfilechooserwidget.c:3810 gtk/gtkfilechooserwidget.c:3811
+#: gtk/gtkfilechooserwidget.c:3819 gtk/gtkfilechooserwidget.c:3820
 msgid "Text"
 msgstr "Текст"
 
-#: gtk/gtkfilechooserwidget.c:3813
+#: gtk/gtkfilechooserwidget.c:3822
 msgid "Video"
 msgstr "Видео"
 
-#: gtk/gtkfilechooserwidget.c:3814
+#: gtk/gtkfilechooserwidget.c:3823
 msgid "Contacts"
 msgstr "Контакты"
 
-#: gtk/gtkfilechooserwidget.c:3815
+#: gtk/gtkfilechooserwidget.c:3824
 msgid "Calendar"
 msgstr "Календарь"
 
-#: gtk/gtkfilechooserwidget.c:3816
+#: gtk/gtkfilechooserwidget.c:3825
 msgid "Document"
 msgstr "Документ"
 
-#: gtk/gtkfilechooserwidget.c:3817
+#: gtk/gtkfilechooserwidget.c:3826
 msgid "Presentation"
 msgstr "Презентация"
 
-#: gtk/gtkfilechooserwidget.c:3818
+#: gtk/gtkfilechooserwidget.c:3827
 msgid "Spreadsheet"
 msgstr "Таблица"
 
-#: gtk/gtkfilechooserwidget.c:4956 gtk/print/gtkprintunixdialog.c:673
+#: gtk/gtkfilechooserwidget.c:4965 gtk/print/gtkprintunixdialog.c:673
 #, c-format
 msgid "A file named “%s” already exists.  Do you want to replace it?"
 msgstr "Файл с именем \"%s\" уже существует. Заменить его?"
 
-#: gtk/gtkfilechooserwidget.c:4958 gtk/print/gtkprintunixdialog.c:677
+#: gtk/gtkfilechooserwidget.c:4967 gtk/print/gtkprintunixdialog.c:677
 #, c-format
 msgid ""
 "The file already exists in “%s”.  Replacing it will overwrite its contents."
 msgstr ""
 "Файл уже существует в «%s». Его замена приведёт к перезаписи содержимого."
 
-#: gtk/gtkfilechooserwidget.c:4964 gtk/print/gtkprintunixdialog.c:685
+#: gtk/gtkfilechooserwidget.c:4973 gtk/print/gtkprintunixdialog.c:685
 msgid "_Replace"
 msgstr "_Заменить"
 
-#: gtk/gtkfilechooserwidget.c:5119
+#: gtk/gtkfilechooserwidget.c:5128
 msgid "You do not have access to the specified folder."
 msgstr "У вас нет доступа к указанной папке."
 
-#: gtk/gtkfilechooserwidget.c:5696
+#: gtk/gtkfilechooserwidget.c:5705
 msgid "Could not send the search request"
 msgstr "Не удалось послать запрос на поиск"
 
-#: gtk/gtkfilechooserwidget.c:5977
+#: gtk/gtkfilechooserwidget.c:5986
 msgid "Accessed"
 msgstr "Доступ"
 
-#: gtk/gtkfilechooserwidget.c:7352
+#: gtk/gtkfilechooserwidget.c:7361
 msgid "_Size"
 msgstr "_Размер"
 
-#: gtk/gtkfilechooserwidget.c:7356
+#: gtk/gtkfilechooserwidget.c:7365
 msgid "T_ype"
 msgstr "Т_ип"
 
-#: gtk/gtkfilechooserwidget.c:7360
+#: gtk/gtkfilechooserwidget.c:7369
 msgid "_Time"
 msgstr "_Время"
 
-#: gtk/gtkfilechooserwidget.c:7366 gtk/gtkplacessidebar.c:2306
+#: gtk/gtkfilechooserwidget.c:7375 gtk/gtkplacessidebar.c:2306
 #: gtk/inspector/a11y.ui:43 gtk/inspector/actions.ui:19
 #: gtk/inspector/css-node-tree.ui:22 gtk/inspector/prop-list.ui:24
 #: gtk/ui/gtkfilechooserwidget.ui:385 gtk/print/ui/gtkprintunixdialog.ui:80
 msgid "Name"
 msgstr "Имя"
 
-#: gtk/gtkfilechooserwidget.c:7383 gtk/inspector/resource-list.ui:82
+#: gtk/gtkfilechooserwidget.c:7392 gtk/inspector/resource-list.ui:82
 #: gtk/ui/gtkfontchooserwidget.ui:217 gtk/ui/gtkfontchooserwidget.ui:386
 msgid "Size"
 msgstr "Размер"
 
-#: gtk/gtkfilechooserwidget.c:7389 gtk/inspector/misc-info.ui:57
+#: gtk/gtkfilechooserwidget.c:7398 gtk/inspector/misc-info.ui:57
 #: gtk/inspector/prop-list.ui:35 gtk/inspector/statistics.ui:36
 msgid "Type"
 msgstr "Тип"
@@ -2614,7 +2614,7 @@ msgstr "Выбрать папки"
 msgid "Select a Folder"
 msgstr "Выбрать папку"
 
-#: gtk/gtkfilefilter.c:1045
+#: gtk/gtkfilefilter.c:1026
 msgid "Unspecified"
 msgstr "Не указано"
 
@@ -2703,31 +2703,31 @@ msgstr "Закрыть"
 msgid "Close the infobar"
 msgstr "Закрыть информационную панель"
 
-#: gtk/gtklabel.c:5694 gtk/gtktext.c:6135 gtk/gtktextview.c:9006
+#: gtk/gtklabel.c:5699 gtk/gtktext.c:6135 gtk/gtktextview.c:9006
 msgid "Cu_t"
 msgstr "В_ырезать"
 
-#: gtk/gtklabel.c:5695 gtk/gtktext.c:6139 gtk/gtktextview.c:9010
+#: gtk/gtklabel.c:5700 gtk/gtktext.c:6139 gtk/gtktextview.c:9010
 msgid "_Copy"
 msgstr "_Копировать"
 
-#: gtk/gtklabel.c:5696 gtk/gtktext.c:6143 gtk/gtktextview.c:9014
+#: gtk/gtklabel.c:5701 gtk/gtktext.c:6143 gtk/gtktextview.c:9014
 msgid "_Paste"
 msgstr "Вст_авить"
 
-#: gtk/gtklabel.c:5702 gtk/gtktext.c:6156 gtk/gtktextview.c:9039
+#: gtk/gtklabel.c:5707 gtk/gtktext.c:6156 gtk/gtktextview.c:9039
 msgid "Select _All"
 msgstr "Выделить вс_ё"
 
-#: gtk/gtklabel.c:5707
+#: gtk/gtklabel.c:5712
 msgid "_Open Link"
 msgstr "_Открыть ссылку"
 
-#: gtk/gtklabel.c:5711
+#: gtk/gtklabel.c:5716
 msgid "Copy _Link Address"
 msgstr "Копировать адрес _ссылки"
 
-#: gtk/gtklabel.c:5755 gtk/gtktext.c:2716 gtk/gtktextview.c:9088
+#: gtk/gtklabel.c:5760 gtk/gtktext.c:2716 gtk/gtktextview.c:9088
 msgid "Context menu"
 msgstr "Контекстное меню"
 
@@ -2798,7 +2798,7 @@ msgid "Play"
 msgstr "Воспроизвести"
 
 #: gtk/gtkmessagedialog.c:162 gtk/gtkmessagedialog.c:180
-#: gtk/print/gtkprintbackend.c:639 gtk/gtkwindow.c:6254
+#: gtk/print/gtkprintbackend.c:639 gtk/gtkwindow.c:6257
 msgid "_OK"
 msgstr "_OK"
 
@@ -3680,12 +3680,12 @@ msgstr "_Отменить"
 msgid "_Redo"
 msgstr "_Повторить"
 
-#: gtk/gtkwindow.c:6242
+#: gtk/gtkwindow.c:6245
 #, c-format
 msgid "Do you want to use GTK Inspector?"
 msgstr "Вы хотите использовать GTK Inspector?"
 
-#: gtk/gtkwindow.c:6244
+#: gtk/gtkwindow.c:6247
 #, c-format
 msgid ""
 "GTK Inspector is an interactive debugger that lets you explore and modify "
@@ -3696,7 +3696,7 @@ msgstr ""
 "изменять внутренние компоненты любого GTK-приложения. Его использование "
 "может привести к поломке или аварийному завершению работы приложения."
 
-#: gtk/gtkwindow.c:6249
+#: gtk/gtkwindow.c:6252
 msgid "Don’t show this message again"
 msgstr "Не показывать это сообщение снова"
 
@@ -3875,37 +3875,37 @@ msgstr "Классы стилей"
 msgid "CSS Property"
 msgstr "Свойство CSS"
 
-#: gtk/inspector/general.c:352
+#: gtk/inspector/general.c:363
 msgctxt "GL version"
 msgid "None"
 msgstr "Нет"
 
-#: gtk/inspector/general.c:430
+#: gtk/inspector/general.c:441
 msgctxt "GL version"
 msgid "Unknown"
 msgstr "Неизвестно"
 
-#: gtk/inspector/general.c:492
+#: gtk/inspector/general.c:503
 msgctxt "Vulkan device"
 msgid "Disabled"
 msgstr "Выключено"
 
-#: gtk/inspector/general.c:493 gtk/inspector/general.c:494
+#: gtk/inspector/general.c:504 gtk/inspector/general.c:505
 msgctxt "Vulkan version"
 msgid "Disabled"
 msgstr "Выключено"
 
-#: gtk/inspector/general.c:544
+#: gtk/inspector/general.c:555
 msgctxt "Vulkan device"
 msgid "None"
 msgstr "Нет"
 
-#: gtk/inspector/general.c:545 gtk/inspector/general.c:546
+#: gtk/inspector/general.c:556 gtk/inspector/general.c:557
 msgctxt "Vulkan version"
 msgid "None"
 msgstr "Нет"
 
-#: gtk/inspector/general.c:884
+#: gtk/inspector/general.c:901
 msgid "IM Context is hardcoded by GTK_IM_MODULE"
 msgstr "Контекст IM жестко кодируется GTK_IM_MODULE"
 
@@ -6590,45 +6590,6 @@ msgstr "Дополнительно"
 msgid "Some of the settings in the dialog conflict"
 msgstr "Некоторые настройки в диалоговом окне конфликтуют"
 
-#: modules/media/gtkffmediafile.c:253
-#, c-format
-msgid "Unspecified error decoding media"
-msgstr "Неуказанная ошибка декодирования медиа"
-
-#: modules/media/gtkffmediafile.c:286
-#, c-format
-msgid "Cannot find decoder: %s"
-msgstr "Не удается найти декодер: %s"
-
-#: modules/media/gtkffmediafile.c:296 modules/media/gtkffmediafile.c:363
-msgid "Failed to allocate a codec context"
-msgstr "Не удалось выделить контекст кодека"
-
-#: modules/media/gtkffmediafile.c:341
-#, c-format
-msgid "Cannot find encoder: %s"
-msgstr "Не удается найти кодировщик: %s"
-
-#: modules/media/gtkffmediafile.c:352
-msgid "Cannot add new stream"
-msgstr "Не удается добавить новый поток"
-
-#: modules/media/gtkffmediafile.c:485 modules/media/gtkffmediafile.c:942
-msgid "Failed to allocate an audio frame"
-msgstr "Не удалось выделить аудиокадр"
-
-#: modules/media/gtkffmediafile.c:650 modules/media/gtkffmediafile.c:898
-msgid "Not enough memory"
-msgstr "Недостаточно памяти"
-
-#: modules/media/gtkffmediafile.c:821
-msgid "Could not allocate resampler context"
-msgstr "Не удалось выделить контекст повторной выборки"
-
-#: modules/media/gtkffmediafile.c:868
-msgid "No audio output found"
-msgstr "Аудиовыход не найден"
-
 #. Translators: These strings name the possible values of the
 #. * job priority option in the print dialog
 #.
@@ -7308,8 +7269,9 @@ msgid "Use style from CSS file"
 msgstr "Использовать стиль из файла CSS"
 
 #: tools/gtk-builder-tool-preview.c:187 tools/gtk-builder-tool-screenshot.c:370
-#: tools/gtk-builder-tool-validate.c:268 tools/gtk-rendernode-tool-render.c:203
-#: tools/gtk-rendernode-tool-show.c:113
+#: tools/gtk-builder-tool-validate.c:268
+#: tools/gtk-rendernode-tool-benchmark.c:106
+#: tools/gtk-rendernode-tool-render.c:203 tools/gtk-rendernode-tool-show.c:113
 #, c-format
 msgid "Could not initialize windowing system\n"
 msgstr "Не удалось инициализировать оконную систему\n"
@@ -7378,6 +7340,7 @@ msgid "Overwrite existing file"
 msgstr "Перезаписать существующий файл"
 
 #: tools/gtk-builder-tool-screenshot.c:363
+#: tools/gtk-rendernode-tool-benchmark.c:97
 #: tools/gtk-rendernode-tool-render.c:196
 msgid "FILE…"
 msgstr "ФАЙЛ…"
@@ -7867,6 +7830,43 @@ msgstr ""
 "  render       Сделать снимок узла\n"
 "\n"
 
+#: tools/gtk-rendernode-tool-benchmark.c:94
+msgid "Add renderer to benchmark"
+msgstr "Добавить рендерер в тест"
+
+#: tools/gtk-rendernode-tool-benchmark.c:94
+#: tools/gtk-rendernode-tool-render.c:195
+msgid "RENDERER"
+msgstr "РЕНДЕРЕР"
+
+#: tools/gtk-rendernode-tool-benchmark.c:95
+msgid "Number of runs with each renderer"
+msgstr "Количество запусков с каждым рендерером"
+
+#: tools/gtk-rendernode-tool-benchmark.c:95
+msgid "RUNS"
+msgstr "ЗАПУСКИ"
+
+#: tools/gtk-rendernode-tool-benchmark.c:96
+msgid "Don’t download result/wait for GPU to finish"
+msgstr "Не загружать результат/дождаться завершения работы GPU"
+
+#: tools/gtk-rendernode-tool-benchmark.c:114
+msgid "Benchmark rendering of a .node file."
+msgstr "Тестовый рендеринг файла .node."
+
+#: tools/gtk-rendernode-tool-benchmark.c:127
+#: tools/gtk-rendernode-tool-info.c:236 tools/gtk-rendernode-tool-render.c:224
+#: tools/gtk-rendernode-tool-show.c:134
+#, c-format
+msgid "No .node file specified\n"
+msgstr "Не указан файл .node\n"
+
+#: tools/gtk-rendernode-tool-benchmark.c:133
+#, c-format
+msgid "Can only benchmark a single .node file\n"
+msgstr "Можно выполнять тест только одного файла .node\n"
+
 #: tools/gtk-rendernode-tool-info.c:191
 #, c-format
 msgid "Number of nodes: %u\n"
@@ -7890,12 +7890,6 @@ msgstr "Источник: %g %g\n"
 #: tools/gtk-rendernode-tool-info.c:223
 msgid "Provide information about the render node."
 msgstr "Предоставить информацию об узле рендеринга."
-
-#: tools/gtk-rendernode-tool-info.c:236 tools/gtk-rendernode-tool-render.c:224
-#: tools/gtk-rendernode-tool-show.c:134
-#, c-format
-msgid "No .node file specified\n"
-msgstr "Не указан файл .node\n"
 
 #: tools/gtk-rendernode-tool-info.c:242
 #, c-format
@@ -7924,10 +7918,6 @@ msgstr "Не удалось создать рендерер: %s\n"
 #: tools/gtk-rendernode-tool-render.c:195
 msgid "Renderer to use"
 msgstr "Используемый рендерер"
-
-#: tools/gtk-rendernode-tool-render.c:195
-msgid "RENDERER"
-msgstr "РЕНДЕРЕР"
 
 #: tools/gtk-rendernode-tool-render.c:211
 msgid "Render a .node file to an image."
@@ -8068,6 +8058,36 @@ msgstr ""
 "Нет индексного файла темы в \"%s\".\n"
 "Если действительно хотите создать здесь кэш значков, используйте --ignore-"
 "theme-index.\n"
+
+#, c-format
+#~ msgid "Unspecified error decoding media"
+#~ msgstr "Неуказанная ошибка декодирования медиа"
+
+#, c-format
+#~ msgid "Cannot find decoder: %s"
+#~ msgstr "Не удается найти декодер: %s"
+
+#~ msgid "Failed to allocate a codec context"
+#~ msgstr "Не удалось выделить контекст кодека"
+
+#, c-format
+#~ msgid "Cannot find encoder: %s"
+#~ msgstr "Не удается найти кодировщик: %s"
+
+#~ msgid "Cannot add new stream"
+#~ msgstr "Не удается добавить новый поток"
+
+#~ msgid "Failed to allocate an audio frame"
+#~ msgstr "Не удалось выделить аудиокадр"
+
+#~ msgid "Not enough memory"
+#~ msgstr "Недостаточно памяти"
+
+#~ msgid "Could not allocate resampler context"
+#~ msgstr "Не удалось выделить контекст повторной выборки"
+
+#~ msgid "No audio output found"
+#~ msgstr "Аудиовыход не найден"
 
 #~ msgctxt "GL version"
 #~ msgid "Disabled"
