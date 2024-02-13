@@ -950,9 +950,13 @@ gsk_gpu_node_processor_get_node_as_image (GskGpuNodeProcessor   *self,
     {
       if (!gsk_gpu_node_processor_clip_node_bounds (self, node, &clip))
         return NULL;
-      clip_bounds = &clip;
     }
-  rect_round_to_pixels (clip_bounds, &self->scale, &self->offset, &clip);
+  else
+    {
+      if (!gsk_rect_intersection (clip_bounds, &node->bounds, &clip))
+        return NULL;
+    }
+  rect_round_to_pixels (&clip, &self->scale, &self->offset, &clip);
 
   image = gsk_gpu_get_node_as_image (self->frame,
                                      &clip,
