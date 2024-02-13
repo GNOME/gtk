@@ -208,8 +208,10 @@ compare_xfails = {
   'ngl': { 'scaled-texture-scale': ['clipped'], # 6428
            'repeat-scaling': ['clipped'], # 6429
            'radial-gradient-with-64-colorstops': ['clipped'],
+           'offscreen-pixel-alignment2': ['clipped'], # 6439
          },
   'vulkan': { 'scaled-texture-scale': ['clipped'], # 6428
+              'offscreen-pixel-alignment2': ['clipped'], # 6439
             },
 }
 
