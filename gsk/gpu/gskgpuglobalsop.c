@@ -32,7 +32,13 @@ gsk_gpu_globals_op_print (GskGpuOp    *op,
                           GString     *string,
                           guint        indent)
 {
+  GskGpuGlobalsOp *globals = (GskGpuGlobalsOp *) op;
+  GskGpuGlobalsInstance *instance = &globals->instance;
+
   gsk_gpu_print_op (string, indent, "globals");
+  g_string_append_printf (string, "scale %g %g ", instance->scale[0], instance->scale[1]);
+  g_string_append (string, "clip ");
+  gsk_gpu_print_rounded_rect (string, instance->clip);
   gsk_gpu_print_newline (string);
 }
 
