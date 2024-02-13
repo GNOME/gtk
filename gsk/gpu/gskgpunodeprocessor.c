@@ -563,7 +563,6 @@ extract_scale_from_transform (GskTransform *transform,
     {
     default:
       g_assert_not_reached ();
-      G_GNUC_FALLTHROUGH;
     case GSK_TRANSFORM_CATEGORY_IDENTITY:
     case GSK_TRANSFORM_CATEGORY_2D_TRANSLATE:
       *out_scale_x = 1.0f;

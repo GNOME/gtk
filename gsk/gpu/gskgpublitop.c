@@ -85,7 +85,6 @@ gsk_gpu_blit_op_vk_command (GskGpuOp              *op,
     {
       default:
         g_assert_not_reached ();
-        G_GNUC_FALLTHROUGH;
       case GSK_GPU_BLIT_LINEAR:
         filter = VK_FILTER_LINEAR;
         break;
@@ -160,7 +159,6 @@ gsk_gpu_blit_op_gl_command (GskGpuOp          *op,
     {
       default:
         g_assert_not_reached ();
-        G_GNUC_FALLTHROUGH;
       case GSK_GPU_BLIT_LINEAR:
         filter = GL_LINEAR;
         break;

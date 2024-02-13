@@ -54,7 +54,6 @@ gsk_gpu_render_pass_type_to_vk_image_layout (GskRenderPassType type)
   {
     default:
       g_assert_not_reached ();
-      G_GNUC_FALLTHROUGH;
     case GSK_RENDER_PASS_PRESENT:
       return VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;
     case GSK_RENDER_PASS_OFFSCREEN:
