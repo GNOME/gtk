@@ -137,6 +137,7 @@ compare_render_tests = [
   'scale0-crash',
   'shadow-behind',
   'shadow-clip-contents',
+  'shadow-huge-offset',
   'shadow-in-opacity',
   'shadow-offset-to-outside-clip',
   'shadow-opacity',
