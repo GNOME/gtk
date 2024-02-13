@@ -2057,9 +2057,17 @@ gsk_gpu_node_processor_add_texture_scale_node (GskGpuNodeProcessor *self,
       GskGpuImage *offscreen;
       graphene_rect_t clip_bounds;
 
-      if (!gsk_gpu_node_processor_clip_node_bounds (self, node, &clip_bounds))
-        return;
+      gsk_gpu_node_processor_get_clip_bounds (self, &clip_bounds);
+      /* first round to pixel boundaries, so we make sure the full pixels are covered */
+      rect_round_to_pixels (&clip_bounds, &self->scale, &self->offset, &clip_bounds);
+      /* then expand by half a pixel so that pixels needed for eventual linear
+       * filtering are available */
+      graphene_rect_inset (&clip_bounds, -0.5, -0.5);
+      /* finally, round to full pixels */
       gsk_rect_round_larger (&clip_bounds);
+      /* now intersect with actual node bounds */
+      if (!gsk_rect_intersection (&clip_bounds, &node->bounds, &clip_bounds))
+        return;
       offscreen = gsk_gpu_node_processor_create_offscreen (self->frame,
                                                            graphene_vec2_one (),
                                                            &clip_bounds,
