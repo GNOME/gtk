@@ -584,7 +584,7 @@ gsk_rounded_rect_intersect_with_rect (const GskRoundedRect  *self,
                                       const graphene_rect_t *rect,
                                       GskRoundedRect        *result)
 {
-  int px, py, qx, qy;
+  int px, py, qx, qy, rx, ry;
 
   if (!gsk_rect_intersection (&self->bounds, rect, &result->bounds))
     return GSK_INTERSECTION_EMPTY;
@@ -599,7 +599,11 @@ gsk_rounded_rect_intersect_with_rect (const GskRoundedRect  *self,
         return GSK_INTERSECTION_EMPTY;
       else if (qx == INNER && qy == INNER &&
                gsk_rounded_rect_locate_point (self, &rect_point2 (rect)) != INSIDE)
-        return GSK_INTERSECTION_EMPTY;
+        {
+          classify_point (&rect_point2 (rect), &rounded_rect_corner2 (self), &rx, &ry);
+          if (rx == BELOW || ry == BELOW)
+            return GSK_INTERSECTION_EMPTY;
+        }
       else if (qx == ABOVE && qy == ABOVE)
         result->corner[0] = self->corner[0];
       else
@@ -626,7 +630,11 @@ gsk_rounded_rect_intersect_with_rect (const GskRoundedRect  *self,
         return GSK_INTERSECTION_EMPTY;
       else if (qx == INNER && qy == INNER &&
                gsk_rounded_rect_locate_point (self, &rect_point3 (rect)) != INSIDE)
-        return GSK_INTERSECTION_EMPTY;
+        {
+          classify_point (&rect_point3 (rect), &rounded_rect_corner3 (self), &rx, &ry);
+          if (rx == ABOVE || ry == BELOW)
+            return GSK_INTERSECTION_EMPTY;
+        }
       else if (qx == BELOW && qy == ABOVE)
         result->corner[1] = self->corner[1];
       else
@@ -653,7 +661,12 @@ gsk_rounded_rect_intersect_with_rect (const GskRoundedRect  *self,
         return GSK_INTERSECTION_EMPTY;
       else if (qx == INNER && qy == INNER &&
                gsk_rounded_rect_locate_point (self, &rect_point0 (rect)) != INSIDE)
-        return GSK_INTERSECTION_EMPTY;
+        {
+
+          classify_point (&rect_point2 (rect), &rounded_rect_corner0 (self), &rx, &ry);
+          if (rx == ABOVE || ry == ABOVE)
+            return GSK_INTERSECTION_EMPTY;
+        }
       else if (qx == BELOW && qy == BELOW)
         result->corner[2] = self->corner[2];
       else
@@ -680,7 +693,11 @@ gsk_rounded_rect_intersect_with_rect (const GskRoundedRect  *self,
         return GSK_INTERSECTION_EMPTY;
       else if (qx == INNER && qy == INNER &&
                gsk_rounded_rect_locate_point (self, &rect_point1 (rect)) != INSIDE)
-        return GSK_INTERSECTION_EMPTY;
+        {
+          classify_point (&rect_point1 (rect), &rounded_rect_corner1 (self), &rx, &ry);
+          if (rx == BELOW || ry == ABOVE)
+            return GSK_INTERSECTION_EMPTY;
+        }
       else if (qx == ABOVE && qy == BELOW)
         result->corner[3] = self->corner[3];
       else

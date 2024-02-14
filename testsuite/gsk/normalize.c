@@ -73,9 +73,7 @@ test_normalize_linear_gradient (void)
 int
 main (int argc, char *argv[])
 {
-  g_test_init (&argc, &argv, NULL);
-
-  gtk_init ();
+  gtk_test_init (&argc, &argv);
 
   g_test_add_func ("/node/normalize/color", test_normalize_color);
   g_test_add_func ("/node/normalize/linear-gradient", test_normalize_linear_gradient);
