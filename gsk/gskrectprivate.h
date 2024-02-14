@@ -159,3 +159,23 @@ gsk_rect_scale (const graphene_rect_t *r,
   res->size.width = r->size.width * sx;
   res->size.height = r->size.height * sy;
 }
+
+static inline void
+gsk_rect_normalize (graphene_rect_t *r)
+{
+  if (r->size.width < 0.f)
+    {
+      float size = fabsf (r->size.width);
+
+      r->origin.x -= size;
+      r->size.width = size;
+    }
+
+  if (r->size.height < 0.f)
+    {
+      float size = fabsf (r->size.height);
+
+      r->origin.y -= size;
+      r->size.height = size;
+    }
+}
