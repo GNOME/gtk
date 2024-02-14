@@ -609,6 +609,8 @@ main (int argc, char **argv)
         }
 
       make_random_clip (&bounds, &int_clip);
+      g_print ("Random clip rectangle %d %d %d %d\n",
+               int_clip.x, int_clip.y, int_clip.width, int_clip.height);
       gsk_rect_from_cairo (&clip_rect, &int_clip);
       g_assert_true (graphene_rect_contains_rect (&bounds, &clip_rect));
       g_assert_true (graphene_rect_get_area (&clip_rect) != 0);
