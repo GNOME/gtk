@@ -44,6 +44,11 @@
 #include "gdk/gdkrgbaprivate.h"
 #include "gdk/gdksubsurfaceprivate.h"
 
+/* the epsilon we allow pixels to be off due to rounding errors.
+ * Chosen rather randomly.
+ */
+#define EPSILON 0.001
+
 /* A note about coordinate systems
  *
  * The rendering code keeps track of multiple coordinate systems to optimize rendering as
@@ -339,8 +344,8 @@ gsk_gpu_node_processor_init_draw (GskGpuNodeProcessor   *self,
 
   area.x = 0;
   area.y = 0;
-  area.width = ceilf (graphene_vec2_get_x (scale) * viewport->size.width);
-  area.height = ceilf (graphene_vec2_get_y (scale) * viewport->size.height);
+  area.width = ceilf (graphene_vec2_get_x (scale) * viewport->size.width - EPSILON);
+  area.height = ceilf (graphene_vec2_get_y (scale) * viewport->size.height - EPSILON);
 
   image = gsk_gpu_device_create_offscreen_image (gsk_gpu_frame_get_device (frame),
                                                  FALSE,

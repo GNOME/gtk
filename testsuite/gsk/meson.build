@@ -206,11 +206,11 @@ variants = {
 }
 
 compare_xfails = {
-  'ngl': { 'repeat-scaling': ['clipped'], # 6429
+  'ngl': { 
+           'repeat-scaling': ['clipped'], # 6429
            'radial-gradient-with-64-colorstops': ['clipped'],
-           'offscreen-pixel-alignment2': ['clipped'], # 6439
          },
-  'vulkan': { 'offscreen-pixel-alignment2': ['clipped'], # 6439
+  'vulkan': {
               'big-checkerboard': ['clipped'], # 6444
             },
 }
