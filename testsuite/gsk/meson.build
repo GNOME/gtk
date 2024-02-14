@@ -453,6 +453,7 @@ if os_linux
 endif
 
 tests = [
+  [ 'normalize', [ 'normalize.c', '../reftests/reftest-compare.c' ] ],
   [ 'transform' ],
   [ 'shader' ],
   [ 'path', [ 'path-utils.c' ] ],
