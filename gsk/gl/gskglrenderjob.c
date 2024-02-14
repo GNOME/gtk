@@ -4322,7 +4322,7 @@ gsk_gl_render_job_visit_node_with_offscreen (GskGLRenderJob       *job,
       gsk_gl_render_job_push_modelview (job, transform);
       gsk_transform_unref (transform);
       gsk_gl_render_job_transform_bounds (job, offscreen->bounds, &viewport);
-      graphene_rect_scale (&viewport, downscale_x, downscale_y, &viewport);
+      gsk_rect_scale (&viewport, downscale_x, downscale_y, &viewport);
     }
 
   if (downscale_x == 1)
@@ -4416,7 +4416,7 @@ gsk_gl_render_job_visit_node_with_offscreen (GskGLRenderJob       *job,
       float scale_x = flipped_x ? - downscale_x : downscale_x;
       float scale_y = flipped_y ? - downscale_y : downscale_y;
 
-      graphene_rect_scale (&job->current_clip->rect.bounds, scale_x, scale_y, &new_clip.bounds);
+      gsk_rect_scale (&job->current_clip->rect.bounds, scale_x, scale_y, &new_clip.bounds);
       rounded_rect_scale_corners (&job->current_clip->rect, &new_clip, scale_x, scale_y);
       gsk_gl_render_job_push_clip (job, &new_clip);
       reset_clip = TRUE;
