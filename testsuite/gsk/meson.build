@@ -134,6 +134,7 @@ compare_render_tests = [
   'scaled-cairo',
   'scaled-texture',
   'scaled-texture-scale',
+  'scaled-texture-scale-clip-nocairo',
   'scale0-crash',
   'shadow-behind',
   'shadow-clip-contents',
@@ -205,13 +206,11 @@ variants = {
 }
 
 compare_xfails = {
-  'ngl': { 'scaled-texture-scale': ['clipped'], # 6428
+  'ngl': { 
            'repeat-scaling': ['clipped'], # 6429
            'radial-gradient-with-64-colorstops': ['clipped'],
-           'offscreen-pixel-alignment2': ['clipped'], # 6439
          },
-  'vulkan': { 'scaled-texture-scale': ['clipped'], # 6428
-              'offscreen-pixel-alignment2': ['clipped'], # 6439
+  'vulkan': {
               'big-checkerboard': ['clipped'], # 6444
             },
 }

@@ -430,13 +430,6 @@ asan-build:
             _build
     - ninja -C _build
     - .gitlab-ci/run-tests.sh _build wayland gtk
-  artifacts:
-    when: always
-    reports:
-      junit:
-        - "${CI_PROJECT_DIR}/_build/report-wayland.xml"
-    paths:
-      - "${CI_PROJECT_DIR}/_build/meson-logs"
 
 reference:
   image: $FEDORA_IMAGE
