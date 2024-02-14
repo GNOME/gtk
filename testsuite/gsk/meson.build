@@ -212,6 +212,7 @@ compare_xfails = {
          },
   'vulkan': { 'scaled-texture-scale': ['clipped'], # 6428
               'offscreen-pixel-alignment2': ['clipped'], # 6439
+              'big-checkerboard': ['clipped'], # 6444
             },
 }
 
