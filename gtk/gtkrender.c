@@ -241,7 +241,7 @@ gtk_render_arrow (GtkStyleContext *context,
  *
  * ![](background.png)
  *
- * Since: 3.0.
+ * Since: 3.0
  **/
 void
 gtk_render_background (GtkStyleContext *context,
