@@ -251,7 +251,6 @@ macos-x86_64:
             -Dmedia-gstreamer=disabled
             -Dintrospection=enabled
             -Dcpp_std=c++11
-            -Dpixman:tests=disabled
             -Dlibjpeg-turbo:simd=disabled
             _build
     - meson compile -C _build
