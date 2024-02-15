@@ -27,6 +27,8 @@
 #include "gdk/wayland/gdkwayland.h"
 #include "text-input-unstable-v3-client-protocol.h"
 
+#define TEXT_INPUT_SUPPORTED_PROTOCOL_VERSION 2
+
 typedef struct _GtkIMContextWaylandGlobal GtkIMContextWaylandGlobal;
 typedef struct _GtkIMContextWayland GtkIMContextWayland;
 typedef struct _GtkIMContextWaylandClass GtkIMContextWaylandClass;
@@ -86,6 +88,8 @@ struct _GtkIMContextWayland
 
   char *pending_commit;
 
+  uint32_t pending_action;
+
   cairo_rectangle_int_t cursor_rect;
   guint use_preedit : 1;
 };
@@ -140,6 +144,23 @@ gtk_im_context_wayland_get_text_protocol (GdkDisplay *display)
 }
 
 static void
+notify_handled_actions (GtkIMContextWayland *context)
+{
+  GtkIMContextWaylandGlobal *global;
+  struct wl_array array;
+
+  global = gtk_im_context_wayland_get_global (context);
+
+  if (zwp_text_input_v3_get_version (global->text_input) <
+      ZWP_TEXT_INPUT_V3_SET_AVAILABLE_ACTIONS_SINCE_VERSION)
+    return;
+
+  wl_array_init (&array);
+  zwp_text_input_v3_set_available_actions (global->text_input, &array);
+  wl_array_release (&array);
+}
+
+static void
 notify_im_change (GtkIMContextWayland                 *context,
                   enum zwp_text_input_v3_change_cause  cause)
 {
@@ -156,6 +177,7 @@ notify_im_change (GtkIMContextWayland                 *context,
   notify_surrounding_text (context);
   notify_content_type (context);
   notify_cursor_location (context);
+  notify_handled_actions (context);
   commit_state (context);
 }
 
@@ -221,7 +243,7 @@ text_input_commit (void                     *data,
 
   if (!global->current)
       return;
-  
+
   context = GTK_IM_CONTEXT_WAYLAND (global->current);
 
   g_free (context->pending_commit);
@@ -254,7 +276,7 @@ text_input_delete_surrounding_text (void                     *data,
 
   if (!global->current)
       return;
-  
+
   context = GTK_IM_CONTEXT_WAYLAND (global->current);
 
   /* We already got byte lengths from text_input_v3, but GTK uses char lengths
@@ -426,8 +448,9 @@ notify_cursor_location (GtkIMContextWayland *context)
 }
 
 static uint32_t
-translate_hints (GtkInputHints   input_hints,
-                 GtkInputPurpose purpose)
+translate_hints (GtkIMContextWayland *context,
+                 GtkInputHints        input_hints,
+                 GtkInputPurpose      purpose)
 {
   uint32_t hints = 0;
 
@@ -443,6 +466,13 @@ translate_hints (GtkInputHints   input_hints,
     hints |= ZWP_TEXT_INPUT_V3_CONTENT_HINT_TITLECASE;
   if (input_hints & GTK_INPUT_HINT_UPPERCASE_SENTENCES)
     hints |= ZWP_TEXT_INPUT_V3_CONTENT_HINT_AUTO_CAPITALIZATION;
+  if (input_hints & GTK_INPUT_HINT_NO_EMOJI)
+    hints |= ZWP_TEXT_INPUT_V3_CONTENT_HINT_NO_EMOJI;
+  if (input_hints & GTK_INPUT_HINT_INHIBIT_OSK)
+    hints |= ZWP_TEXT_INPUT_V3_CONTENT_HINT_ON_SCREEN_INPUT_PROVIDED;
+
+  if (context->use_preedit)
+    hints |= ZWP_TEXT_INPUT_V3_CONTENT_HINT_PREEDIT_SHOWN;
 
   if (purpose == GTK_INPUT_PURPOSE_PIN ||
       purpose == GTK_INPUT_PURPOSE_PASSWORD)
@@ -505,7 +535,7 @@ notify_content_type (GtkIMContextWayland *context)
                 NULL);
 
   zwp_text_input_v3_set_content_type (global->text_input,
-                                      translate_hints (hints, purpose),
+                                      translate_hints (context, hints, purpose),
                                       translate_purpose (purpose));
 }
 
@@ -649,6 +679,7 @@ enable (GtkIMContextWayland       *context_wayland,
         GtkIMContextWaylandGlobal *global)
 {
   zwp_text_input_v3_enable (global->text_input);
+
   notify_im_change (context_wayland,
                     ZWP_TEXT_INPUT_V3_CHANGE_CAUSE_OTHER);
 }
@@ -700,6 +731,34 @@ text_input_leave (void                     *data,
     disable (GTK_IM_CONTEXT_WAYLAND (global->current), global);
 }
 
+static void
+text_input_action (void                     *data,
+		   struct zwp_text_input_v3 *text_input,
+		   uint32_t                  action,
+		   uint32_t                  serial)
+{
+  GtkIMContextWaylandGlobal *global = data;
+  GtkIMContextWayland *context = GTK_IM_CONTEXT_WAYLAND (global->current);
+
+  if (context)
+    context->pending_action = action;
+}
+
+static void
+text_input_language (void                     *data,
+                     struct zwp_text_input_v3 *text_input,
+                     const char               *lang)
+{
+}
+
+static void
+text_input_preedit_hint (void                                *data,
+                         struct zwp_text_input_v3            *text_input,
+                         uint32_t                             begin,
+                         uint32_t                             end,
+                         enum zwp_text_input_v3_preedit_hint  hint)
+{
+}
 
 static const struct zwp_text_input_v3_listener text_input_listener = {
   text_input_enter,
@@ -708,6 +767,9 @@ static const struct zwp_text_input_v3_listener text_input_listener = {
   text_input_commit,
   text_input_delete_surrounding_text,
   text_input_done,
+  text_input_action,
+  text_input_language,
+  text_input_preedit_hint,
 };
 
 static void
@@ -725,7 +787,8 @@ registry_handle_global (void               *data,
       global->text_input_manager_wl_id = id;
       global->text_input_manager =
         wl_registry_bind (global->registry, global->text_input_manager_wl_id,
-                          &zwp_text_input_manager_v3_interface, 1);
+                          &zwp_text_input_manager_v3_interface,
+                          MIN (version, TEXT_INPUT_SUPPORTED_PROTOCOL_VERSION));
       global->text_input =
         zwp_text_input_manager_v3_get_text_input (global->text_input_manager,
                                                   gdk_wayland_seat_get_wl_seat (seat));
@@ -917,9 +980,16 @@ gtk_im_context_wayland_activate_osk_with_event (GtkIMContext *context,
   if (global == NULL)
     return FALSE;
 
-  zwp_text_input_v3_enable (global->text_input);
-  notify_im_change (GTK_IM_CONTEXT_WAYLAND (context),
-                    ZWP_TEXT_INPUT_V3_CHANGE_CAUSE_OTHER);
+  if (zwp_text_input_v3_get_version (global->text_input) >=
+      ZWP_TEXT_INPUT_V3_SHOW_INPUT_PANEL_SINCE_VERSION)
+    zwp_text_input_v3_show_input_panel (global->text_input);
+  else
+    {
+      zwp_text_input_v3_enable (global->text_input);
+      notify_im_change (GTK_IM_CONTEXT_WAYLAND (context),
+                        ZWP_TEXT_INPUT_V3_CHANGE_CAUSE_OTHER);
+    }
+
   return TRUE;
 }
 
