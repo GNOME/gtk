@@ -628,19 +628,17 @@ else
   vulkan_pkg_found = false
 endif
 
-if cc.has_header('linux/dma-buf.h')
-  dmabuf_dep = dependency('libdrm',
-    required: os_linux)
-else
-  if os_linux
-    error('OS is Linux, but linux/dma-buf.h not found.')
-  endif
-  dmabuf_dep = dependency('', required: false)
-endif
-cdata.set('HAVE_DMABUF', dmabuf_dep.found())
+libdrm_dep = dependency('libdrm', required: os_linux)
 # We only care about drm_fourcc.h for all the fourccs,
 # but not about linking to libdrm
-dmabuf_dep = dmabuf_dep.partial_dependency(includes: true, compile_args: true)
+libdrm_dep = libdrm_dep.partial_dependency(includes: true, compile_args: true)
+cdata.set('HAVE_DRM_FOURCC_H', libdrm_dep.found())
+
+has_linux_dma_buf_h = cc.has_header('linux/dma-buf.h')
+if os_linux and not has_linux_dma_buf_h
+  error('OS is Linux, but linux/dma-buf.h not found.')
+endif
+cdata.set('HAVE_DMABUF', has_linux_dma_buf_h)
 
 cloudproviders_dep = dependency('cloudproviders',
   required: get_option('cloudproviders'),
