@@ -164,7 +164,7 @@ accessible_at_point (GtkAccessible *parent,
   if (!gtk_accessible_get_bounds (parent, &px, &py, &width, &height))
     return NULL;
 
-  if (!children_only && x >= 0 && x <= width && y >= 0 && y <= height)
+  if (!children_only && x >= px && x <= px + width && y >= py && y <= py + height)
     result = parent;
 
   for (GtkAccessible *child = gtk_accessible_get_first_accessible_child (parent);
@@ -232,6 +232,9 @@ component_handle_method (GDBusConnection       *connection,
         {
           GtkATContext *context = gtk_accessible_get_at_context (child);
           GtkAtSpiContext *ctx = GTK_AT_SPI_CONTEXT (context);
+
+          /* Realize the ATContext in order to get its ref */
+          gtk_at_context_realize (context);
 
           g_dbus_method_invocation_return_value (invocation, g_variant_new ("(@(so))", gtk_at_spi_context_to_ref (ctx)));
 
