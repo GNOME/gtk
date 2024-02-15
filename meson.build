@@ -634,11 +634,7 @@ libdrm_dep = dependency('libdrm', required: os_linux)
 libdrm_dep = libdrm_dep.partial_dependency(includes: true, compile_args: true)
 cdata.set('HAVE_DRM_FOURCC_H', libdrm_dep.found())
 
-has_linux_dma_buf_h = cc.has_header('linux/dma-buf.h')
-if os_linux and not has_linux_dma_buf_h
-  error('OS is Linux, but linux/dma-buf.h not found.')
-endif
-cdata.set('HAVE_DMABUF', has_linux_dma_buf_h)
+cdata.set('HAVE_DMABUF', cc.has_header('linux/dma-buf.h'))
 
 cloudproviders_dep = dependency('cloudproviders',
   required: get_option('cloudproviders'),
