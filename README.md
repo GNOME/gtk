@@ -12,10 +12,6 @@ Contents
 ├── atk
 │   ├── atk
 │   └── atspi2
-├── glib
-│   ├── gio
-│   ├── glib
-│   └── gobject
 ├── gtk3
 │   ├── gdk
 │   └── gtk
@@ -49,9 +45,13 @@ Similarly, the CI pipeline for the main development branch of GLib builds
 the API references for the following projects:
 
  - glib
+ - glib-unix
+ - glib-win32
  - gmodule
  - gobject
  - gio
+ - gio-unix
+ - gio-win32
  - girepository
 
 The generated documentation is stored as an artifact inside GitLab.
