@@ -250,7 +250,6 @@ macos-x86_64:
             -Dmacos-backend=true
             -Dmedia-gstreamer=disabled
             -Dintrospection=enabled
-            -Dcpp_std=c++11
             _build
     - meson compile -C _build
   artifacts:
