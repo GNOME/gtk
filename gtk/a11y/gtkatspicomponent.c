@@ -164,7 +164,7 @@ accessible_at_point (GtkAccessible *parent,
   if (!gtk_accessible_get_bounds (parent, &px, &py, &width, &height))
     return NULL;
 
-  if (!children_only && x >= 0 && x <= width && y >= 0 && y <= height)
+  if (!children_only && x >= px && x <= px + width && y >= py && y <= py + height)
     result = parent;
 
   for (GtkAccessible *child = gtk_accessible_get_first_accessible_child (parent);
