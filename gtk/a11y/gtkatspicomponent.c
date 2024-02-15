@@ -233,6 +233,9 @@ component_handle_method (GDBusConnection       *connection,
           GtkATContext *context = gtk_accessible_get_at_context (child);
           GtkAtSpiContext *ctx = GTK_AT_SPI_CONTEXT (context);
 
+          /* Realize the ATContext in order to get its ref */
+          gtk_at_context_realize (context);
+
           g_dbus_method_invocation_return_value (invocation, g_variant_new ("(@(so))", gtk_at_spi_context_to_ref (ctx)));
 
           g_object_unref (context);
