@@ -168,16 +168,16 @@ check_headers = [
   'memory.h',
   'stdint.h',
   'stdlib.h',
-  'strings.h',
   'string.h',
+  'strings.h',
   'sys/mman.h',
   'sys/param.h',
   'sys/stat.h',
   'sys/sysinfo.h',
+  'sys/sysmacros.h',
   'sys/systeminfo.h',
   'sys/time.h',
   'sys/types.h',
-  'sys/sysmacros.h',
   'unistd.h',
 ]
 
