@@ -1,7 +1,7 @@
 #pragma once
 
 #include "config.h"
-#ifdef HAVE_DMABUF
+#ifdef HAVE_DRM_FOURCC_H
 #include <drm_fourcc.h>
 #endif
 

@@ -24,7 +24,7 @@ if gstplayer_dep.found() and gstgl_dep.found()
   cdata.set('HAVE_GSTREAMER', 1)
   media_gst_deps = [ libm, libgtk_dep, gstplayer_dep, gstgl_dep ]
 
-  if dmabuf_dep.found() and gstdrm_dep.found()
+  if libdrm_dep.found() and gstdrm_dep.found()
     cdata.set('HAVE_GSTREAMER_DRM', 1)
     media_gst_deps += [ gstdrm_dep ]
   endif

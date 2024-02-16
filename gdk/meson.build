@@ -219,7 +219,7 @@ gdk_deps = [
   platform_gio_dep,
   pangocairo_dep,
   vulkan_dep,
-  dmabuf_dep,
+  libdrm_dep,
   png_dep,
   tiff_dep,
   jpeg_dep,
