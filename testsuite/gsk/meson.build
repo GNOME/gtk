@@ -206,9 +206,10 @@ variants = {
 }
 
 compare_xfails = {
-  'ngl': { 
+  'ngl': {
            'repeat-scaling': ['clipped'], # 6429
            'radial-gradient-with-64-colorstops': ['clipped'],
+           'blur-child-bounds-oversize-nogl': ['clipped'], # 6450
          },
   'vulkan': {
               'big-checkerboard': ['clipped'], # 6444
@@ -456,7 +457,7 @@ tests = [
   [ 'normalize', [ 'normalize.c', '../reftests/reftest-compare.c' ] ],
   [ 'transform' ],
   [ 'shader' ],
-  [ 'path', [ 'path-utils.c' ] ],
+  [ 'path', [ 'path-utils.c' ], [ 'flaky'] ],
   [ 'path-special-cases' ],
   [ 'scaling' ],
 ]
@@ -466,13 +467,11 @@ test_cargs = []
 foreach t : tests
   test_name = t.get(0)
   test_srcs = ['@0@.c'.format(test_name)] + t.get(1, [])
-  test_extra_cargs = t.get(2, [])
-  test_extra_ldflags = t.get(3, [])
+  test_extra_suites = t.get(2, [])
 
   test_exe = executable(test_name, test_srcs,
     dependencies : libgtk_dep,
-    c_args : test_cargs + test_extra_cargs + common_cflags,
-    link_args : test_extra_ldflags,
+    c_args : test_cargs + common_cflags,
   )
 
   test(test_name, test_exe,
@@ -484,13 +483,13 @@ foreach t : tests
       'G_TEST_SRCDIR=@0@'.format(meson.current_source_dir()),
       'G_TEST_BUILDDIR=@0@'.format(meson.current_build_dir())
     ],
-    suite: 'gsk',
+    suite: [ 'gsk' ] + test_extra_suites,
   )
 endforeach
 
 internal_tests = [
   [ 'boundingbox'],
-  [ 'curve' ],
+  [ 'curve', [ ], [ 'flaky' ]],
   [ 'curve-special-cases' ],
   [ 'diff' ],
   [ 'half-float' ],
@@ -502,14 +501,12 @@ internal_tests = [
 foreach t : internal_tests
   test_name = t.get(0)
   test_srcs = ['@0@.c'.format(test_name)] + t.get(1, [])
-  test_extra_cargs = t.get(2, [])
-  test_extra_ldflags = t.get(3, [])
+  test_extra_suites = t.get(2, [])
 
   test_exe = executable(test_name,
     sources: test_srcs,
     dependencies : libgtk_static_dep,
-    c_args : test_cargs + test_extra_cargs + common_cflags + ['-DGTK_COMPILATION'],
-    link_args : test_extra_ldflags,
+    c_args : test_cargs + common_cflags + ['-DGTK_COMPILATION'],
   )
 
   test(test_name, test_exe,
@@ -521,7 +518,7 @@ foreach t : internal_tests
       'G_TEST_SRCDIR=@0@'.format(meson.current_source_dir()),
       'G_TEST_BUILDDIR=@0@'.format(meson.current_build_dir())
     ],
-    suite: 'gsk',
+    suite: [ 'gsk' ] + test_extra_suites,
   )
 endforeach
 

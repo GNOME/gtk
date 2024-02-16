@@ -1,4 +1,5 @@
 /* Lists/Selections
+ * #Keywords: suggestion, completion
  *
  * The GtkDropDown widget is a modern alternative to GtkComboBox.
  * It uses list models instead of tree models, and the content is
