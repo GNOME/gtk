@@ -206,9 +206,10 @@ variants = {
 }
 
 compare_xfails = {
-  'ngl': { 
+  'ngl': {
            'repeat-scaling': ['clipped'], # 6429
            'radial-gradient-with-64-colorstops': ['clipped'],
+           'blur-child-bounds-oversize-nogl': ['clipped'], # 6450
          },
   'vulkan': {
               'big-checkerboard': ['clipped'], # 6444
