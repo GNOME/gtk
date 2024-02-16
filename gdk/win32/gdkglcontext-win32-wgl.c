@@ -131,7 +131,7 @@ gdk_win32_gl_context_wgl_begin_frame (GdkDrawContext *draw_context,
   GDK_DRAW_CONTEXT_CLASS (gdk_win32_gl_context_wgl_parent_class)->begin_frame (draw_context, depth, update_area);
 }
 
-#define PIXEL_ATTRIBUTES 17
+#define PIXEL_ATTRIBUTES 21
 
 static int
 get_wgl_pfd (HDC                    hdc,
@@ -176,10 +176,19 @@ get_wgl_pfd (HDC                    hdc,
       pixelAttribs[i++] = WGL_ALPHA_BITS_ARB;
       pixelAttribs[i++] = 8;
 
+      pixelAttribs[i++] = WGL_DEPTH_BITS_ARB;
+      pixelAttribs[i++] = 0;
+
+      pixelAttribs[i++] = WGL_STENCIL_BITS_ARB;
+      pixelAttribs[i++] = 0;
+
+      pixelAttribs[i++] = WGL_ACCUM_BITS_ARB;
+      pixelAttribs[i++] = 0;
+
       /* end of "Update PIXEL_ATTRIBUTES above if any groups are added here!" */
 
       pixelAttribs[i++] = 0; /* end of pixelAttribs */
-      g_assert (i <= PIXEL_ATTRIBUTES);
+      g_assert (i == PIXEL_ATTRIBUTES);
 
       if (!wglMakeCurrent (display_win32->dummy_context_wgl.hdc,
                            display_win32->dummy_context_wgl.hglrc))
