@@ -195,6 +195,8 @@ gsk_gl_image_new_for_texture (GskGLDevice      *device,
   if (format != real_format)
     flags = GSK_GPU_IMAGE_NO_BLIT | 
             (gdk_memory_format_alpha (format) == GDK_MEMORY_ALPHA_STRAIGHT ? GSK_GPU_IMAGE_STRAIGHT_ALPHA : 0);
+  else
+    flags &= ~(GSK_GPU_IMAGE_CAN_MIPMAP | GSK_GPU_IMAGE_MIPMAP);
   
   gsk_gpu_image_setup (GSK_GPU_IMAGE (self),
                        flags | extra_flags,
