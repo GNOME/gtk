@@ -221,13 +221,14 @@ macos-x86_64:
     - macosintel
   needs: []
   variables:
-    MESON_FORCE_BACKTRACKE: 1
+    EXTRA_MESON_FLAGS: ""
+    BACKEND_FLAGS: "-Dx11-backend=false -Dbroadway-backend=true"
+    FEATURE_FLAGS: "-Dmedia-gstreamer=disabled -Dintrospection=enabled -Dgobject-introspection:werror=false"
     TMPDIR: /Users/Shared/work/tmp
     SDKROOT: /opt/sdks/MacOSX10.13.4.sdk
     PIP_CACHE_DIR: /Users/Shared/build/cache
     PIPENV_CACHE_DIR: $PIP_CACHE_DIR
     PYTHONPYCACHEPREFIX: $PIP_CACHE_DIR
-    EXTRA_MESON_FLAGS: "-Dgobject-introspection:werror=false"
   before_script:
     # Not using ccache on purpose as it accelerates the build so much that it
     # can trigger race conditions in the gobject-introspection subproject.
@@ -245,17 +246,8 @@ macos-x86_64:
     - meson setup
             ${COMMON_MESON_FLAGS}
             ${EXTRA_MESON_FLAGS}
-            -Dx11-backend=false
-            -Dbroadway-backend=true
-            -Dmacos-backend=true
-            -Dmedia-gstreamer=disabled
-            -Dintrospection=enabled
-            -Dcpp_std=c++11
-            -Dpixman:tests=disabled
-            -Dlibjpeg-turbo:simd=disabled
-            -Dbuild-demos=false
-            -Dbuild-examples=false
-            -Dbuild-testsuite=false
+            ${BACKEND_FLAGS}
+            ${FEATURE_FLAGS}
             _build
     - meson compile -C _build
   artifacts:
@@ -479,3 +471,4 @@ publish-docs:
     - "curl -X POST -F token=${PAGES_TRIGGER_TOKEN} -F ref=docs-gtk-org https://gitlab.gnome.org/api/v4/projects/665/trigger/pipeline"
   rules:
     - if: $CI_COMMIT_REF_NAME == "main"
+
