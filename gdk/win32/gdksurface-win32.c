@@ -4308,6 +4308,82 @@ gdk_win32_surface_set_shadow_width (GdkSurface *window,
   impl->shadow_y = top + bottom;
 }
 
+static void
+gdk_win32_surface_set_icon_list (GdkSurface *surface,
+                                 GList      *textures)
+{
+  GdkTexture *texture, *big_texture, *small_texture;
+  gint big_diff, small_diff;
+  gint big_w, big_h, small_w, small_h;
+  gint w, h;
+  gint dw, dh, diff;
+  HICON small_hicon, big_hicon;
+  GdkWin32Surface *impl;
+
+  if (GDK_SURFACE_DESTROYED (surface))
+    return;
+
+  impl = GDK_WIN32_SURFACE (surface);
+
+  /* ideal sizes for small and large icons */
+  big_w = GetSystemMetrics (SM_CXICON);
+  big_h = GetSystemMetrics (SM_CYICON);
+  small_w = GetSystemMetrics (SM_CXSMICON);
+  small_h = GetSystemMetrics (SM_CYSMICON);
+
+  /* find closest sized icons in the list */
+  big_texture = NULL;
+  small_texture = NULL;
+  big_diff = 0;
+  small_diff = 0;
+  while (textures)
+    {
+      texture = (GdkTexture*) textures->data;
+      w = gdk_texture_get_width (texture);
+      h = gdk_texture_get_height (texture);
+
+      dw = ABS (w - big_w);
+      dh = ABS (h - big_h);
+      diff = dw*dw + dh*dh;
+      if (big_texture == NULL || diff < big_diff)
+        {
+          big_texture = texture;
+          big_diff = diff;
+        }
+
+      dw = ABS (w - small_w);
+      dh = ABS (h - small_h);
+      diff = dw*dw + dh*dh;
+      if (small_texture == NULL || diff < small_diff)
+        {
+          small_texture = texture;
+          small_diff = diff;
+        }
+
+      textures = textures->next;
+    }
+
+  if (big_texture == NULL || small_texture == NULL)
+    return;
+
+  /* Create the icons */
+  big_hicon = big_texture ? _gdk_win32_create_hicon_for_texture (big_texture, TRUE, 0, 0) : NULL;
+  small_hicon = small_texture ? _gdk_win32_create_hicon_for_texture (small_texture, TRUE, 0, 0) : NULL;
+
+  /* Set the icons */
+  SendMessage (GDK_SURFACE_HWND (surface), WM_SETICON, ICON_BIG,
+               (LPARAM)big_hicon);
+  SendMessage (GDK_SURFACE_HWND (surface), WM_SETICON, ICON_SMALL,
+               (LPARAM)small_hicon);
+
+  /* Store the icons, destroying any previous icons */
+  if (impl->hicon_big)
+    GDI_CALL (DestroyIcon, (impl->hicon_big));
+  impl->hicon_big = big_hicon;
+  if (impl->hicon_small)
+    GDI_CALL (DestroyIcon, (impl->hicon_small));
+  impl->hicon_small = small_hicon;
+}
 
 double
 _gdk_win32_surface_get_scale (GdkSurface *surface)
@@ -4738,6 +4814,8 @@ gdk_win32_toplevel_set_property (GObject      *object,
       break;
 
     case LAST_PROP + GDK_TOPLEVEL_PROP_ICON_LIST:
+      gdk_win32_surface_set_icon_list (surface, g_value_get_pointer (value));
+      g_object_notify_by_pspec (G_OBJECT (surface), pspec);
       break;
 
     case LAST_PROP + GDK_TOPLEVEL_PROP_DECORATED:

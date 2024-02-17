@@ -892,11 +892,11 @@ pixbuf_to_hicon (GdkPixbuf *pixbuf,
                  int        x,
                  int        y);
 
-static GdkWin32HCursor *
-gdk_win32hcursor_create_for_texture (GdkWin32Display *display,
-                                     GdkTexture      *texture,
-                                     int              x,
-                                     int              y)
+HICON
+_gdk_win32_create_hicon_for_texture (GdkTexture *texture,
+                                     gboolean    is_icon,
+                                     int         x,
+                                     int         y)
 {
   cairo_surface_t *surface;
   GdkPixbuf *pixbuf;
@@ -906,13 +906,24 @@ gdk_win32hcursor_create_for_texture (GdkWin32Display *display,
   surface = gdk_texture_download_surface (texture);
   width = cairo_image_surface_get_width (surface);
   height = cairo_image_surface_get_height (surface);
-  
+
   pixbuf = gdk_pixbuf_get_from_surface (surface, 0, 0, width, height);
-  
-  icon = pixbuf_to_hicon (pixbuf, FALSE, x, y);
-  
+
+  icon = pixbuf_to_hicon (pixbuf, is_icon, x, y);
+
   g_object_unref (pixbuf);
-  
+
+  return icon;
+}
+
+static GdkWin32HCursor *
+gdk_win32hcursor_create_for_texture (GdkWin32Display *display,
+                                     GdkTexture      *texture,
+                                     int              x,
+                                     int              y)
+{
+  HICON icon = _gdk_win32_create_hicon_for_texture (texture, FALSE, x, y);
+
   return gdk_win32_hcursor_new (display, (HCURSOR) icon, TRUE);
 }
 
