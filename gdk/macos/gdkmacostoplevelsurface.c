@@ -96,37 +96,26 @@ _gdk_macos_toplevel_surface_unminimize (GdkMacosToplevelSurface *self)
     [window deminiaturize:window];
 }
 
-static void
-_gdk_macos_toplevel_surface_present (GdkToplevel       *toplevel,
-                                     GdkToplevelLayout *layout)
+static gboolean
+_gdk_macos_toplevel_surface_compute_size (GdkSurface *surface)
 {
-  GdkSurface *surface = GDK_SURFACE (toplevel);
-  GdkMacosToplevelSurface *self = (GdkMacosToplevelSurface *)toplevel;
-  NSWindow *nswindow = _gdk_macos_surface_get_native (GDK_MACOS_SURFACE (self));
-  GdkDisplay *display = gdk_surface_get_display (surface);
-  GdkMonitor *monitor;
+  GdkMacosToplevelSurface *self = (GdkMacosToplevelSurface *)surface;
+  GdkMacosSurface *macos_surface = (GdkMacosSurface *)surface;
   GdkToplevelSize size;
+  GdkDisplay *display;
+  GdkMonitor *monitor;
   int bounds_width, bounds_height;
-  int width, height;
   GdkGeometry geometry;
   GdkSurfaceHints mask;
-  NSWindowStyleMask style_mask;
-  gboolean maximize;
-  gboolean fullscreen;
 
   g_assert (GDK_IS_MACOS_TOPLEVEL_SURFACE (self));
-  g_assert (GDK_IS_MACOS_WINDOW (nswindow));
 
-  if (layout != self->layout)
-    {
-      g_clear_pointer (&self->layout, gdk_toplevel_layout_unref);
-      self->layout = gdk_toplevel_layout_copy (layout);
-    }
+  if (!GDK_MACOS_SURFACE (surface)->geometry_dirty)
+    return FALSE;
 
-  _gdk_macos_toplevel_surface_attach_to_parent (self);
+  GDK_MACOS_SURFACE (surface)->geometry_dirty = FALSE;
 
-  style_mask = [nswindow styleMask];
-
+  display = gdk_surface_get_display (surface);
   monitor = gdk_display_get_monitor_at_surface (display, surface);
 
   if (monitor)
@@ -144,58 +133,127 @@ _gdk_macos_toplevel_surface_present (GdkToplevel       *toplevel,
     }
 
   gdk_toplevel_size_init (&size, bounds_width, bounds_height);
-  gdk_toplevel_notify_compute_size (toplevel, &size);
+  gdk_toplevel_notify_compute_size (GDK_TOPLEVEL (surface), &size);
+
   g_warn_if_fail (size.width > 0);
   g_warn_if_fail (size.height > 0);
-  width = size.width;
-  height = size.height;
 
-  if (gdk_toplevel_layout_get_resizable (layout))
+  if (self->layout != NULL &&
+      gdk_toplevel_layout_get_resizable (self->layout))
     {
       geometry.min_width = size.min_width;
       geometry.min_height = size.min_height;
       mask = GDK_HINT_MIN_SIZE;
-
-      /* Only set 'Resizable' mask to get native resize zones if the window is
-       * titled, otherwise we do this internally for CSD and do not need
-       * NSWindow to do it for us. Additionally, it can mess things up when
-       * doing a window resize since it can cause mouseDown to get passed
-       * through to the next window.
-       */
-      if ((style_mask & NSWindowStyleMaskTitled) != 0)
-        style_mask |= NSWindowStyleMaskResizable;
-      else
-        style_mask &= ~NSWindowStyleMaskResizable;
     }
   else
     {
-      geometry.max_width = geometry.min_width = width;
-      geometry.max_height = geometry.min_height = height;
+      geometry.max_width = geometry.min_width = size.width;
+      geometry.max_height = geometry.min_height = size.height;
       mask = GDK_HINT_MIN_SIZE | GDK_HINT_MAX_SIZE;
-
-      style_mask &= ~NSWindowStyleMaskResizable;
     }
 
-  if (style_mask != [nswindow styleMask])
-    [nswindow setStyleMask:style_mask];
-
   if (size.shadow.is_valid)
-    _gdk_macos_surface_set_shadow (GDK_MACOS_SURFACE (surface),
+    _gdk_macos_surface_set_shadow (macos_surface,
                                    size.shadow.top,
                                    size.shadow.right,
                                    size.shadow.bottom,
                                    size.shadow.left);
 
-  _gdk_macos_surface_set_geometry_hints (GDK_MACOS_SURFACE (self), &geometry, mask);
-  gdk_surface_constrain_size (&geometry, mask, width, height, &width, &height);
+  _gdk_macos_surface_set_geometry_hints (macos_surface, &geometry, mask);
 
-  GDK_DEBUG (MISC, "Resizing \"%s\" to %dx%d",
-                   GDK_MACOS_SURFACE (self)->title ?
-                   GDK_MACOS_SURFACE (self)->title :
-                   "untitled",
-                   width, height);
+  if (surface->state & (GDK_TOPLEVEL_STATE_FULLSCREEN |
+                        GDK_TOPLEVEL_STATE_MAXIMIZED |
+                        GDK_TOPLEVEL_STATE_TILED |
+                        GDK_TOPLEVEL_STATE_TOP_TILED |
+                        GDK_TOPLEVEL_STATE_RIGHT_TILED |
+                        GDK_TOPLEVEL_STATE_BOTTOM_TILED |
+                        GDK_TOPLEVEL_STATE_LEFT_TILED |
+                        GDK_TOPLEVEL_STATE_MINIMIZED) ||
+      [macos_surface->window inLiveResize])
+    return FALSE;
 
-  _gdk_macos_surface_resize (GDK_MACOS_SURFACE (self), width, height);
+  /* If we delayed a user resize until the beginning of the frame,
+   * apply it now so we can start processing updates for it.
+   */
+  if (macos_surface->next_layout.width > 0 &&
+      macos_surface->next_layout.height > 0)
+    {
+      int root_x = macos_surface->next_layout.root_x;
+      int root_y = macos_surface->next_layout.root_y;
+      int width = macos_surface->next_layout.width;
+      int height = macos_surface->next_layout.height;
+
+      gdk_surface_constrain_size (&geometry, mask,
+                                  width, height,
+                                  &width, &height);
+
+      macos_surface->next_layout.width = 0;
+      macos_surface->next_layout.height = 0;
+
+      _gdk_macos_surface_move_resize (macos_surface,
+                                      root_x, root_y,
+                                      width, height);
+
+      return FALSE;
+    }
+
+  gdk_surface_constrain_size (&geometry, mask,
+                              size.width, size.height,
+                              &size.width, &size.height);
+
+  if ((size.width != self->last_computed_width ||
+       size.height != self->last_computed_height) &&
+      (size.width != surface->width ||
+       size.height != surface->height))
+    {
+      self->last_computed_width = size.width;
+      self->last_computed_height = size.height;
+
+      _gdk_macos_surface_resize (macos_surface, size.width, size.height);
+    }
+
+  return FALSE;
+}
+
+static void
+_gdk_macos_toplevel_surface_present (GdkToplevel       *toplevel,
+                                     GdkToplevelLayout *layout)
+{
+  GdkSurface *surface = GDK_SURFACE (toplevel);
+  GdkMacosToplevelSurface *self = (GdkMacosToplevelSurface *)toplevel;
+  NSWindow *nswindow = _gdk_macos_surface_get_native (GDK_MACOS_SURFACE (self));
+  GdkDisplay *display = gdk_surface_get_display (surface);
+  NSWindowStyleMask style_mask;
+  gboolean maximize;
+  gboolean fullscreen;
+
+  g_assert (GDK_IS_MACOS_TOPLEVEL_SURFACE (self));
+  g_assert (GDK_IS_MACOS_WINDOW (nswindow));
+
+  if (layout != self->layout)
+    {
+      g_clear_pointer (&self->layout, gdk_toplevel_layout_unref);
+      self->layout = gdk_toplevel_layout_copy (layout);
+    }
+
+  _gdk_macos_toplevel_surface_attach_to_parent (self);
+  _gdk_macos_toplevel_surface_compute_size (surface);
+
+  /* Only set 'Resizable' mask to get native resize zones if the window is
+   * titled, otherwise we do this internally for CSD and do not need
+   * NSWindow to do it for us. Additionally, it can mess things up when
+   * doing a window resize since it can cause mouseDown to get passed
+   * through to the next window.
+   */
+  style_mask = [nswindow styleMask];
+  if (gdk_toplevel_layout_get_resizable (layout) &&
+      (style_mask & NSWindowStyleMaskTitled) != 0)
+    style_mask |= NSWindowStyleMaskResizable;
+  else
+    style_mask &= ~NSWindowStyleMaskResizable;
+
+  if (style_mask != [nswindow styleMask])
+    [nswindow setStyleMask:style_mask];
 
   /* Maximized state */
   if (gdk_toplevel_layout_get_maximized (layout, &maximize))
@@ -376,125 +434,6 @@ _gdk_macos_toplevel_surface_hide (GdkSurface *surface)
   _gdk_macos_toplevel_surface_detach_from_parent (self);
 
   GDK_SURFACE_CLASS (_gdk_macos_toplevel_surface_parent_class)->hide (surface);
-}
-
-static gboolean
-_gdk_macos_toplevel_surface_compute_size (GdkSurface *surface)
-{
-  GdkMacosToplevelSurface *self = (GdkMacosToplevelSurface *)surface;
-  GdkMacosSurface *macos_surface = (GdkMacosSurface *)surface;
-  GdkToplevelSize size;
-  GdkDisplay *display;
-  GdkMonitor *monitor;
-  int bounds_width, bounds_height;
-  GdkGeometry geometry;
-  GdkSurfaceHints mask;
-
-  g_assert (GDK_IS_MACOS_TOPLEVEL_SURFACE (self));
-
-  if (!GDK_MACOS_SURFACE (surface)->geometry_dirty)
-    return FALSE;
-
-  GDK_MACOS_SURFACE (surface)->geometry_dirty = FALSE;
-
-  display = gdk_surface_get_display (surface);
-  monitor = gdk_display_get_monitor_at_surface (display, surface);
-
-  if (monitor)
-    {
-      GdkRectangle workarea;
-
-      gdk_macos_monitor_get_workarea (monitor, &workarea);
-      bounds_width = workarea.width;
-      bounds_height = workarea.height;
-    }
-  else
-    {
-      bounds_width = G_MAXINT;
-      bounds_height = G_MAXINT;
-    }
-
-  gdk_toplevel_size_init (&size, bounds_width, bounds_height);
-  gdk_toplevel_notify_compute_size (GDK_TOPLEVEL (surface), &size);
-
-  g_warn_if_fail (size.width > 0);
-  g_warn_if_fail (size.height > 0);
-
-  if (self->layout != NULL &&
-      gdk_toplevel_layout_get_resizable (self->layout))
-    {
-      geometry.min_width = size.min_width;
-      geometry.min_height = size.min_height;
-      mask = GDK_HINT_MIN_SIZE;
-    }
-  else
-    {
-      geometry.max_width = geometry.min_width = size.width;
-      geometry.max_height = geometry.min_height = size.height;
-      mask = GDK_HINT_MIN_SIZE | GDK_HINT_MAX_SIZE;
-    }
-
-  if (size.shadow.is_valid)
-    _gdk_macos_surface_set_shadow (macos_surface,
-                                   size.shadow.top,
-                                   size.shadow.right,
-                                   size.shadow.bottom,
-                                   size.shadow.left);
-
-  _gdk_macos_surface_set_geometry_hints (macos_surface, &geometry, mask);
-
-  if (surface->state & (GDK_TOPLEVEL_STATE_FULLSCREEN |
-                        GDK_TOPLEVEL_STATE_MAXIMIZED |
-                        GDK_TOPLEVEL_STATE_TILED |
-                        GDK_TOPLEVEL_STATE_TOP_TILED |
-                        GDK_TOPLEVEL_STATE_RIGHT_TILED |
-                        GDK_TOPLEVEL_STATE_BOTTOM_TILED |
-                        GDK_TOPLEVEL_STATE_LEFT_TILED |
-                        GDK_TOPLEVEL_STATE_MINIMIZED) ||
-      [macos_surface->window inLiveResize])
-    return FALSE;
-
-  /* If we delayed a user resize until the beginning of the frame,
-   * apply it now so we can start processing updates for it.
-   */
-  if (macos_surface->next_layout.width > 0 &&
-      macos_surface->next_layout.height > 0)
-    {
-      int root_x = macos_surface->next_layout.root_x;
-      int root_y = macos_surface->next_layout.root_y;
-      int width = macos_surface->next_layout.width;
-      int height = macos_surface->next_layout.height;
-
-      gdk_surface_constrain_size (&geometry, mask,
-                                  width, height,
-                                  &width, &height);
-
-      macos_surface->next_layout.width = 0;
-      macos_surface->next_layout.height = 0;
-
-      _gdk_macos_surface_move_resize (macos_surface,
-                                      root_x, root_y,
-                                      width, height);
-
-      return FALSE;
-    }
-
-  gdk_surface_constrain_size (&geometry, mask,
-                              size.width, size.height,
-                              &size.width, &size.height);
-
-  if ((size.width != self->last_computed_width ||
-       size.height != self->last_computed_height) &&
-      (size.width != surface->width ||
-       size.height != surface->height))
-    {
-      self->last_computed_width = size.width;
-      self->last_computed_height = size.height;
-
-      _gdk_macos_surface_resize (macos_surface, size.width, size.height);
-    }
-
-  return FALSE;
 }
 
 static void
