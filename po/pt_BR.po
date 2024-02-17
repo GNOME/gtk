@@ -24,21 +24,23 @@
 # Matheus Barbosa <mdpb.matheus@gmail.com>, 2022.
 # Leônidas Araújo <leorusvellt@hotmail.com>, 2022-2023.
 # Rafael Fontenelle <rafaelff@gnome.org>, 2013-2023.
+# Alex Jr <alexalencarjr@outlook.com>, 2023.
+# Juliano de Souza Camargo <julianosc@pm.me>, 2024.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: GTK\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2023-09-21 10:15+0000\n"
-"PO-Revision-Date: 2023-09-25 09:58-0300\n"
-"Last-Translator: Rafael Fontenelle <rafaelff@gnome.org>\n"
+"POT-Creation-Date: 2024-01-18 04:06+0000\n"
+"PO-Revision-Date: 2024-02-17 09:14-0300\n"
+"Last-Translator: Juliano de Souza Camargo <julianosc@pm.me>\n"
 "Language-Team: Brazilian Portuguese <https://br.gnome.org/traducao>\n"
 "Language: pt_BR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1)\n"
-"X-Generator: Gtranslator 45.alpha0\n"
+"X-Generator: Gtranslator 45.3\n"
 "X-DL-Team: pt_BR\n"
 "X-DL-Module: gtk\n"
 "X-DL-Branch: main\n"
@@ -55,11 +57,11 @@ msgstr "Sem suporte ao tipo de tela Broadway: %s"
 msgid "This clipboard cannot store data."
 msgstr "Essa área de transferência não pode armazenar dados."
 
-#: gdk/gdkclipboard.c:287 gdk/gdkclipboard.c:785 gdk/gdkclipboard.c:1085
+#: gdk/gdkclipboard.c:287 gdk/gdkclipboard.c:786 gdk/gdkclipboard.c:1086
 msgid "Cannot read from empty clipboard."
 msgstr "Não é possível ler de área de transferência vazia."
 
-#: gdk/gdkclipboard.c:318 gdk/gdkclipboard.c:1135 gdk/gdkdrag.c:618
+#: gdk/gdkclipboard.c:318 gdk/gdkclipboard.c:1136 gdk/gdkdrag.c:618
 msgid "No compatible formats to transfer clipboard contents."
 msgstr ""
 "Nenhum formato compatível para transferir conteúdo de área de transferência."
@@ -75,7 +77,7 @@ msgstr "Não foi possível fornecer o conteúdo como “%s”"
 msgid "Cannot provide contents as %s"
 msgstr "Não foi possível fornecer o conteúdo como %s"
 
-#: gdk/gdkdisplay.c:156 gdk/gdkglcontext.c:442
+#: gdk/gdkdisplay.c:156 gdk/gdkglcontext.c:443
 msgid "The current backend does not support OpenGL"
 msgstr "O backend não oferece suporte a OpenGL"
 
@@ -140,33 +142,33 @@ msgstr "Não há suporte a arrastar e soltar de outros aplicativos."
 msgid "No compatible formats to transfer contents."
 msgstr "Nenhum formato compatível para transferir conteúdo de transferência."
 
-#: gdk/gdkglcontext.c:401 gdk/x11/gdkglcontext-glx.c:642
+#: gdk/gdkglcontext.c:402 gdk/x11/gdkglcontext-glx.c:642
 msgid "No GL API allowed."
 msgstr "Nenhuma API GL permitida."
 
-#: gdk/gdkglcontext.c:425 gdk/win32/gdkglcontext-win32-wgl.c:387
-#: gdk/win32/gdkglcontext-win32-wgl.c:530
-#: gdk/win32/gdkglcontext-win32-wgl.c:574 gdk/x11/gdkglcontext-glx.c:691
+#: gdk/gdkglcontext.c:426 gdk/win32/gdkglcontext-win32-wgl.c:383
+#: gdk/win32/gdkglcontext-win32-wgl.c:526
+#: gdk/win32/gdkglcontext-win32-wgl.c:570 gdk/x11/gdkglcontext-glx.c:691
 msgid "Unable to create a GL context"
 msgstr "Não foi possível criar um contexto GL"
 
-#: gdk/gdkglcontext.c:1280
+#: gdk/gdkglcontext.c:1281
 msgid "Anything but OpenGL ES disabled via GDK_DEBUG"
 msgstr "Tudo menos OpenGL ES desabilitado via GDK_DEBUG"
 
-#: gdk/gdkglcontext.c:1289
+#: gdk/gdkglcontext.c:1290
 #, c-format
 msgid "Application does not support %s API"
 msgstr "O aplicativo não é compatível com a API %s"
 
 #. translators: This is about OpenGL backend names, like
 #. * "Trying to use X11 GLX, but EGL is already in use"
-#: gdk/gdkglcontext.c:1864
+#: gdk/gdkglcontext.c:1899
 #, c-format
 msgid "Trying to use %s, but %s is already in use"
 msgstr "Tentando usar %s, mas %s já está em uso"
 
-#: gdk/gdktexture.c:528
+#: gdk/gdktexture.c:530
 msgid "Unknown image format."
 msgstr "Formato de imagem desconhecido."
 
@@ -558,7 +560,7 @@ msgstr "Erro ao interpretar arquivo de imagem JPEG (%s)"
 msgid "Unsupported JPEG colorspace (%d)"
 msgstr "Espaço de cor JPEG não suportado (%d)"
 
-#: gdk/loaders/gdkjpeg.c:203 gdk/loaders/gdkpng.c:280 gdk/loaders/gdktiff.c:467
+#: gdk/loaders/gdkjpeg.c:203 gdk/loaders/gdkpng.c:286 gdk/loaders/gdktiff.c:467
 #, c-format
 msgid "Not enough memory for image size %ux%u"
 msgstr "Memória insuficiente para o tamanho da imagem %ux%u"
@@ -568,15 +570,20 @@ msgstr "Memória insuficiente para o tamanho da imagem %ux%u"
 msgid "Error reading png (%s)"
 msgstr "Erro ao ler png (%s)"
 
-#: gdk/loaders/gdkpng.c:211
+#: gdk/loaders/gdkpng.c:212
 #, c-format
 msgid "Unsupported depth %u in png image"
 msgstr "Profundidade %u não suportada na imagem PNG"
 
-#: gdk/loaders/gdkpng.c:261
+#: gdk/loaders/gdkpng.c:262
 #, c-format
 msgid "Unsupported color type %u in png image"
 msgstr "Tipo de cor não suportado %u na imagem png"
+
+#: gdk/loaders/gdkpng.c:272
+#, c-format
+msgid "Image stride too large for image size %ux%u"
+msgstr "O passo da imagem é longo demais para o tamanho da imagem %ux%u"
 
 #: gdk/loaders/gdktiff.c:353
 msgid "Failed to load RGB data from TIFF file"
@@ -603,70 +610,70 @@ msgstr "Nenhum formato de transferência compatível localizado"
 msgid "Failed to decode contents with mime-type of '%s'"
 msgstr "Falha ao decodificar conteúdo com o tipo mime de “%s”"
 
-#: gdk/win32/gdkclipdrop-win32.c:721
+#: gdk/win32/gdkclipdrop-win32.c:719
 #, c-format
 msgid "Cannot claim clipboard ownership. OpenClipboard() timed out."
 msgstr ""
 "Não foi possível reivindicar a propriedade da área de transferência. "
 "OpenClipboard() expirou."
 
-#: gdk/win32/gdkclipdrop-win32.c:731
+#: gdk/win32/gdkclipdrop-win32.c:729
 #, c-format
 msgid "Cannot claim clipboard ownership. Another process claimed it before us."
 msgstr ""
 "Não foi possível reivindicar a propriedade da área de transferência. Outro "
 "processo reivindicou antes de nós."
 
-#: gdk/win32/gdkclipdrop-win32.c:745
+#: gdk/win32/gdkclipdrop-win32.c:743
 #, c-format
 msgid "Cannot claim clipboard ownership. OpenClipboard() failed: 0x%lx."
 msgstr ""
 "Não foi possível reivindicar a propriedade da área de transferência. "
 "OpenClipboard() falhou: 0x%lx."
 
-#: gdk/win32/gdkclipdrop-win32.c:757
+#: gdk/win32/gdkclipdrop-win32.c:755
 #, c-format
 msgid "Cannot claim clipboard ownership. EmptyClipboard() failed: 0x%lx."
 msgstr ""
 "Não foi possível reivindicar a propriedade da área de transferência. "
 "EmptyClipboard() falhou: 0x%lx."
 
-#: gdk/win32/gdkclipdrop-win32.c:800
+#: gdk/win32/gdkclipdrop-win32.c:798
 #, c-format
 msgid "Cannot set clipboard data. OpenClipboard() timed out."
 msgstr ""
 "Não foi possível definir dados da área de transferência. OpenClipboard() "
 "expirou."
 
-#: gdk/win32/gdkclipdrop-win32.c:810 gdk/win32/gdkclipdrop-win32.c:841
+#: gdk/win32/gdkclipdrop-win32.c:808 gdk/win32/gdkclipdrop-win32.c:839
 #, c-format
 msgid "Cannot set clipboard data. Another process claimed clipboard ownership."
 msgstr ""
 "Não foi possível definir dados da área de transferência. Outro processo "
 "reivindicou a sua propriedade."
 
-#: gdk/win32/gdkclipdrop-win32.c:824
+#: gdk/win32/gdkclipdrop-win32.c:822
 #, c-format
 msgid "Cannot set clipboard data. OpenClipboard() failed: 0x%lx."
 msgstr ""
 "Não foi possível definir dados da área de transferência. OpenClipboard() "
 "falhou: 0x%lx."
 
-#: gdk/win32/gdkclipdrop-win32.c:876
+#: gdk/win32/gdkclipdrop-win32.c:874
 #, c-format
 msgid "Cannot get clipboard data. GlobalLock(0x%p) failed: 0x%lx."
 msgstr ""
 "Não foi possível obter dados da área de transferência. GlobalLock(0x%p) "
 "falhou: 0x%lx."
 
-#: gdk/win32/gdkclipdrop-win32.c:887
+#: gdk/win32/gdkclipdrop-win32.c:885
 #, c-format
 msgid "Cannot get clipboard data. GlobalSize(0x%p) failed: 0x%lx."
 msgstr ""
 "Não foi possível obter dados da área de transferência. GlobalSize(0x%p) "
 "falhou: 0x%lx."
 
-#: gdk/win32/gdkclipdrop-win32.c:900
+#: gdk/win32/gdkclipdrop-win32.c:898
 #, c-format
 msgid ""
 "Cannot get clipboard data. Failed to allocate %s bytes to store the data."
@@ -674,21 +681,21 @@ msgstr ""
 "Não foi possível obter dados da área de transferência. Falha ao alocar %s "
 "bytes para armazenar os dados."
 
-#: gdk/win32/gdkclipdrop-win32.c:932
+#: gdk/win32/gdkclipdrop-win32.c:930
 #, c-format
 msgid "Cannot get clipboard data. OpenClipboard() timed out."
 msgstr ""
 "Não foi possível obter dados da área de transferência. OpenClipboard() "
 "expirou."
 
-#: gdk/win32/gdkclipdrop-win32.c:942
+#: gdk/win32/gdkclipdrop-win32.c:940
 #, c-format
 msgid "Cannot get clipboard data. Clipboard ownership changed."
 msgstr ""
 "Não foi possível obter dados da área de transferência. Propriedade da área "
 "de transferência alterada."
 
-#: gdk/win32/gdkclipdrop-win32.c:952
+#: gdk/win32/gdkclipdrop-win32.c:950
 #, c-format
 msgid ""
 "Cannot get clipboard data. Clipboard data changed before we could get it."
@@ -696,21 +703,21 @@ msgstr ""
 "Não foi possível obter dados da área de transferência. Dados da área de "
 "transferência alterados antes que nós pudéssemos obtê-los."
 
-#: gdk/win32/gdkclipdrop-win32.c:969
+#: gdk/win32/gdkclipdrop-win32.c:967
 #, c-format
 msgid "Cannot get clipboard data. OpenClipboard() failed: 0x%lx."
 msgstr ""
 "Não foi possível obter dados da área de transferência. OpenClipboard() "
 "falhou: 0x%lx."
 
-#: gdk/win32/gdkclipdrop-win32.c:994
+#: gdk/win32/gdkclipdrop-win32.c:992
 #, c-format
 msgid "Cannot get clipboard data. No compatible transfer format found."
 msgstr ""
 "Não foi possível obter dados da área de transferência. Nenhum formato de "
 "transferência compatível localizado."
 
-#: gdk/win32/gdkclipdrop-win32.c:1004
+#: gdk/win32/gdkclipdrop-win32.c:1002
 #, c-format
 msgid "Cannot get clipboard data. GetClipboardData() failed: 0x%lx."
 msgstr ""
@@ -754,21 +761,21 @@ msgstr "IDataObject_GetData (0x%x) falhou, retornando 0x%lx"
 msgid "Failed to transmute DnD data W32 format 0x%x to %p (%s)"
 msgstr "Falha ao transmutar dados DnD W32 de formato 0x%x para %p (%s)"
 
-#: gdk/win32/gdkglcontext-win32-wgl.c:319
+#: gdk/win32/gdkglcontext-win32-wgl.c:315
 msgid "No GL implementation is available"
 msgstr "Nenhuma implementação GL está disponível"
 
-#: gdk/win32/gdkglcontext-win32-wgl.c:396
+#: gdk/win32/gdkglcontext-win32-wgl.c:392
 #, c-format
 msgid "WGL version %d.%d is too low, need at least %d.%d"
 msgstr "WGL versão %d.%d é muito baixa, é necessária pelo menos %d.%d"
 
-#: gdk/win32/gdkglcontext-win32-wgl.c:414
+#: gdk/win32/gdkglcontext-win32-wgl.c:410
 #, c-format
 msgid "GL implementation cannot share GL contexts"
 msgstr "A implementação GL não consegue compartilhar contextos GL"
 
-#: gdk/win32/gdkglcontext-win32-wgl.c:696
+#: gdk/win32/gdkglcontext-win32-wgl.c:692
 msgid "No available configurations for the given pixel format"
 msgstr "Nenhuma configuração disponível para o formato de pixel dado"
 
@@ -1785,7 +1792,7 @@ msgstr "_Fechar"
 #. * suspend or screen locking, and the caller hasn't specified
 #. * a reason.
 #.
-#: gtk/gtkapplication-dbus.c:721
+#: gtk/gtkapplication-dbus.c:721 gtk/gtkapplication-dbus.c:763
 msgid "Reason not specified"
 msgstr "Monitor não especificado"
 
@@ -2261,7 +2268,7 @@ msgstr "Um arquivo com esse nome já existe"
 #: gtk/gtkmessagedialog.c:179 gtk/gtkmountoperation.c:608
 #: gtk/print/gtkpagesetupunixdialog.c:282 gtk/print/gtkprintbackend.c:638
 #: gtk/print/gtkprintunixdialog.c:682 gtk/print/gtkprintunixdialog.c:839
-#: gtk/gtkwindow.c:6242 gtk/ui/gtkappchooserdialog.ui:48
+#: gtk/gtkwindow.c:6233 gtk/ui/gtkappchooserdialog.ui:48
 #: gtk/ui/gtkassistant.ui:52 gtk/ui/gtkcolorchooserdialog.ui:36
 #: gtk/ui/gtkfontchooserdialog.ui:27
 msgid "_Cancel"
@@ -2350,7 +2357,7 @@ msgid "If you delete an item, it will be permanently lost."
 msgstr "Se você excluir um item, ele será permanentemente perdido."
 
 #: gtk/gtkfilechooserwidget.c:1185 gtk/gtkfilechooserwidget.c:1815
-#: gtk/gtklabel.c:5695 gtk/gtktext.c:6147 gtk/gtktextview.c:9018
+#: gtk/gtklabel.c:5696 gtk/gtktext.c:6147 gtk/gtktextview.c:9018
 msgid "_Delete"
 msgstr "E_xcluir"
 
@@ -2680,7 +2687,7 @@ msgstr "Variantes de estilo"
 msgid "Character Variations"
 msgstr "Variantes de caractere"
 
-#: gtk/gtkglarea.c:305
+#: gtk/gtkglarea.c:309
 msgid "OpenGL context creation failed"
 msgstr "Criação de contexto OpenGL falhou"
 
@@ -2693,31 +2700,31 @@ msgstr "Fechar"
 msgid "Close the infobar"
 msgstr "Fecha a barra de informações"
 
-#: gtk/gtklabel.c:5692 gtk/gtktext.c:6135 gtk/gtktextview.c:9006
+#: gtk/gtklabel.c:5693 gtk/gtktext.c:6135 gtk/gtktextview.c:9006
 msgid "Cu_t"
 msgstr "Recor_tar"
 
-#: gtk/gtklabel.c:5693 gtk/gtktext.c:6139 gtk/gtktextview.c:9010
+#: gtk/gtklabel.c:5694 gtk/gtktext.c:6139 gtk/gtktextview.c:9010
 msgid "_Copy"
 msgstr "_Copiar"
 
-#: gtk/gtklabel.c:5694 gtk/gtktext.c:6143 gtk/gtktextview.c:9014
+#: gtk/gtklabel.c:5695 gtk/gtktext.c:6143 gtk/gtktextview.c:9014
 msgid "_Paste"
 msgstr "C_olar"
 
-#: gtk/gtklabel.c:5700 gtk/gtktext.c:6156 gtk/gtktextview.c:9039
+#: gtk/gtklabel.c:5701 gtk/gtktext.c:6156 gtk/gtktextview.c:9039
 msgid "Select _All"
 msgstr "_Selecionar tudo"
 
-#: gtk/gtklabel.c:5705
+#: gtk/gtklabel.c:5706
 msgid "_Open Link"
 msgstr "_Abrir o link"
 
-#: gtk/gtklabel.c:5709
+#: gtk/gtklabel.c:5710
 msgid "Copy _Link Address"
 msgstr "Copiar endereço do _link"
 
-#: gtk/gtklabel.c:5753 gtk/gtktext.c:2716 gtk/gtktextview.c:9088
+#: gtk/gtklabel.c:5754 gtk/gtktext.c:2716 gtk/gtktextview.c:9088
 msgid "Context menu"
 msgstr "Menu de contexto"
 
@@ -2788,7 +2795,7 @@ msgid "Play"
 msgstr "Reproduzir"
 
 #: gtk/gtkmessagedialog.c:162 gtk/gtkmessagedialog.c:180
-#: gtk/print/gtkprintbackend.c:639 gtk/gtkwindow.c:6243
+#: gtk/print/gtkprintbackend.c:639 gtk/gtkwindow.c:6234
 msgid "_OK"
 msgstr "_OK"
 
@@ -3393,8 +3400,8 @@ msgstr "A razão mais provável é que um arquivo temporário não pôde ser cri
 
 #. window
 #: gtk/print/gtkprintoperation-portal.c:264
-#: gtk/print/gtkprintoperation-portal.c:584
-#: gtk/print/gtkprintoperation-portal.c:653 gtk/print/gtkprintunixdialog.c:3008
+#: gtk/print/gtkprintoperation-portal.c:594
+#: gtk/print/gtkprintoperation-portal.c:663 gtk/print/gtkprintunixdialog.c:3008
 msgid "Print"
 msgstr "Imprimir"
 
@@ -3650,7 +3657,7 @@ msgstr "Deslizar para direita"
 #  GtkEntry placeholder reference: https://goo.gl/e5Ehwr
 #. Translators: This is placeholder text for the search entry in the shortcuts window
 #: gtk/gtkshortcutswindow.c:855 gtk/gtkshortcutswindow.c:922
-#: gtk/gtkshortcutswindow.c:927
+#: gtk/gtkshortcutswindow.c:928
 msgid "Search Shortcuts"
 msgstr "Pesquisar atalhos"
 
@@ -3666,13 +3673,13 @@ msgstr "Atalhos"
 msgid "Search Results"
 msgstr "Resultados da pesquisa"
 
-#: gtk/gtkshortcutswindow.c:989 gtk/ui/gtkemojichooser.ui:349
+#: gtk/gtkshortcutswindow.c:990 gtk/ui/gtkemojichooser.ui:349
 #: gtk/ui/gtkfilechooserwidget.ui:239
 msgid "No Results Found"
 msgstr "Nenhum resultado encontrado"
 
 #  Texto exibido abaixo do título anterior (No Results Found).
-#: gtk/gtkshortcutswindow.c:1000 gtk/ui/gtkemojichooser.ui:362
+#: gtk/gtkshortcutswindow.c:1001 gtk/ui/gtkemojichooser.ui:362
 #: gtk/ui/gtkfilechooserwidget.ui:252 gtk/ui/gtkplacesview.ui:218
 msgid "Try a different search"
 msgstr "Tente uma pesquisa diferente"
@@ -3694,12 +3701,12 @@ msgstr "_Desfazer"
 msgid "_Redo"
 msgstr "_Refazer"
 
-#: gtk/gtkwindow.c:6231
+#: gtk/gtkwindow.c:6222
 #, c-format
 msgid "Do you want to use GTK Inspector?"
 msgstr "Você deseja usar Inspetor GTK?"
 
-#: gtk/gtkwindow.c:6233
+#: gtk/gtkwindow.c:6224
 #, c-format
 msgid ""
 "GTK Inspector is an interactive debugger that lets you explore and modify "
@@ -3710,7 +3717,7 @@ msgstr ""
 "modifique o estado interno de qualquer aplicativo GTK. Usá-lo pode fazer que "
 "o aplicativo se encerre ou falhe."
 
-#: gtk/gtkwindow.c:6238
+#: gtk/gtkwindow.c:6229
 msgid "Don’t show this message again"
 msgstr "Não mostre essa mensagem novamente"
 
@@ -7294,7 +7301,7 @@ msgstr ""
 #: tools/gtk-builder-tool-enumerate.c:56 tools/gtk-builder-tool-preview.c:179
 #: tools/gtk-builder-tool-preview.c:180 tools/gtk-builder-tool-screenshot.c:360
 #: tools/gtk-builder-tool-simplify.c:2529 tools/gtk-builder-tool-validate.c:261
-#: tools/gtk-rendernode-tool-info.c:202 tools/gtk-rendernode-tool-show.c:102
+#: tools/gtk-rendernode-tool-info.c:202 tools/gtk-rendernode-tool-show.c:106
 msgid "FILE"
 msgstr "ARQUIVO"
 
@@ -7326,7 +7333,7 @@ msgid "Use style from CSS file"
 msgstr "Usa o estilo do arquivo CSS"
 
 #: tools/gtk-builder-tool-preview.c:187 tools/gtk-builder-tool-screenshot.c:370
-#: tools/gtk-builder-tool-validate.c:268 tools/gtk-rendernode-tool-show.c:109
+#: tools/gtk-builder-tool-validate.c:268 tools/gtk-rendernode-tool-show.c:113
 #: tools/gtk-rendernode-tool-render.c:204
 #, c-format
 msgid "Could not initialize windowing system\n"
@@ -7604,7 +7611,7 @@ msgstr "Origem: %g %g\n"
 msgid "Provide information about the render node."
 msgstr "Fornece informações sobre o nó de renderização."
 
-#: tools/gtk-rendernode-tool-info.c:224 tools/gtk-rendernode-tool-show.c:130
+#: tools/gtk-rendernode-tool-info.c:224 tools/gtk-rendernode-tool-show.c:134
 #: tools/gtk-rendernode-tool-render.c:225
 #, c-format
 msgid "No .node file specified\n"
@@ -7615,11 +7622,15 @@ msgstr "Nenhum arquivo .node especificado\n"
 msgid "Can only accept a single .node file\n"
 msgstr "Pode aceitar apenas um único arquivo .node\n"
 
-#: tools/gtk-rendernode-tool-show.c:117
+#: tools/gtk-rendernode-tool-show.c:105
+msgid "Don't add a titlebar"
+msgstr "Não adicionar uma barra de título"
+
+#: tools/gtk-rendernode-tool-show.c:121
 msgid "Show the render node."
 msgstr "Mostra o nó de renderização."
 
-#: tools/gtk-rendernode-tool-show.c:136
+#: tools/gtk-rendernode-tool-show.c:140
 #, c-format
 msgid "Can only preview a single .node file\n"
 msgstr "Pode visualizar apenas  um único arquivo .node\n"
