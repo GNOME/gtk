@@ -144,8 +144,7 @@ gsk_gl_frame_submit (GskGpuFrame  *frame,
 
   glEnable (GL_SCISSOR_TEST);
 
-  glEnable (GL_DEPTH_TEST);
-  glDepthFunc (GL_LEQUAL);
+  glDisable (GL_DEPTH_TEST);
   glEnable (GL_BLEND);
 
   if (vertex_buffer)
