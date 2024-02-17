@@ -555,6 +555,25 @@ gsk_gpu_upload_glyph_op_draw (GskGpuOp *op,
                                      } }
                                  });
 
+  for (int y = 0; y < self->area.height; y++)
+    {
+      int *row = (int *) (data + y * stride);
+      if (row[0] != 0 || row[self->area.width - 1] != 0)
+        g_warning ("glyph %u overflow", self->glyph);
+      row[0] = 0xff0000ff;
+      row[self->area.width - 1] = 0xff0000ff;
+    }
+
+  for (int x = 0; x < self->area.width; x++)
+    {
+      int *row0 = (int *) data;
+      int * row1 = (int *) (data + (self->area.height - 1) * stride);
+      if (row0[x] != 0 || row1[x] != 0)
+        g_warning ("glyph %u overflow", self->glyph);
+      row0[x] = 0xff0000ff;
+      row1[x] = 0xff0000ff;
+    }
+
   cairo_destroy (cr);
 
   cairo_surface_finish (surface);
