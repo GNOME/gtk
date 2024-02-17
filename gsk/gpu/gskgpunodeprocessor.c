@@ -3032,12 +3032,19 @@ gsk_gpu_node_processor_add_glyph_node (GskGpuNodeProcessor *self,
                                           offset.y + (float) glyphs[i].geometry.y_offset / PANGO_SCALE);
       if (glyph_align)
         {
-          glyph_origin.x = roundf (glyph_origin.x * scale * 4);
-          glyph_origin.y = roundf (glyph_origin.y * scale * 4);
-          flags = ((int) glyph_origin.x & 3) |
-                  (((int) glyph_origin.y & 3) << 2);
-          glyph_origin.x = 0.25 * inv_scale * glyph_origin.x;
-          glyph_origin.y = 0.25 * inv_scale * glyph_origin.y;
+          float x, y;
+          int frac_x, frac_y;
+
+          x = glyph_origin.x * scale;
+          y = glyph_origin.y * scale;
+
+          frac_x = (int) roundf ((x - floor (x)) * 4);
+          frac_y = (int) roundf ((y - floor (y)) * 4);
+
+          flags = (frac_x & 3) | ((frac_y & 3) << 2);
+
+          glyph_origin.x = (floor (x) + (frac_x == 4 ? 1.f : 0.f)) * inv_scale;
+          glyph_origin.y = (floor (y) + (frac_y == 4 ? 1.f : 0.f)) * inv_scale;
         }
       else
         {
