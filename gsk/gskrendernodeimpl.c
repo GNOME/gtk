@@ -5854,11 +5854,19 @@ gsk_text_node_new (PangoFont              *font,
   self->glyphs = glyph_infos;
   self->num_glyphs = n;
 
+  /* Since we do subpixel positioning in device pixels, and the app and
+   * device pixel grid may not be aligned, we can end up rounding down
+   * for subpixel positioning even when we are exactly on an app pixel
+   * boundary.
+   *
+   * Play it safe, and enlarge the node bounds by one app pixel
+   * in each direction, so we don't leak ink when diffing.
+   */
   gsk_rect_init (&node->bounds,
-                 offset->x + ink_rect.x,
-                 offset->y + ink_rect.y,
-                 ink_rect.width,
-                 ink_rect.height);
+                 offset->x + ink_rect.x - 1,
+                 offset->y + ink_rect.y - 1,
+                 ink_rect.width + 2,
+                 ink_rect.height + 2);
 
   return node;
 }
