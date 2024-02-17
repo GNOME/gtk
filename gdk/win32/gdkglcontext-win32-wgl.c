@@ -214,7 +214,7 @@ get_wgl_pfd (HDC                    hdc,
       pfd->iPixelType = PFD_TYPE_RGBA;
       pfd->cColorBits = GetDeviceCaps (hdc, BITSPIXEL);
       pfd->cAlphaBits = 8;
-      pfd->dwLayerMask = PFD_MAIN_PLANE;
+      pfd->iLayerType = PFD_MAIN_PLANE;
 
       best_pf = ChoosePixelFormat (hdc, pfd);
     }
@@ -613,7 +613,7 @@ set_wgl_pixformat_for_hdc (GdkWin32Display *display_win32,
 {
   gboolean skip_acquire = FALSE;
   gboolean set_pixel_format_result = FALSE;
-  PIXELFORMATDESCRIPTOR pfd;
+  PIXELFORMATDESCRIPTOR pfd = {0};
 
   /* one is only allowed to call SetPixelFormat(), and so ChoosePixelFormat()
    * one single time per window HDC
