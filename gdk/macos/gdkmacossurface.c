@@ -56,14 +56,6 @@ enum {
 
 static GParamSpec *properties [LAST_PROP];
 
-static gboolean
-window_is_fullscreen (GdkMacosSurface *self)
-{
-  g_assert (GDK_IS_MACOS_SURFACE (self));
-
-  return ([self->window styleMask] & NSWindowStyleMaskFullScreen) != 0;
-}
-
 void
 _gdk_macos_surface_request_frame (GdkMacosSurface *self)
 {
@@ -758,7 +750,7 @@ _gdk_macos_surface_update_fullscreen_state (GdkMacosSurface *self)
   g_return_if_fail (GDK_IS_MACOS_SURFACE (self));
 
   state = GDK_SURFACE (self)->state;
-  is_fullscreen = window_is_fullscreen (self);
+  is_fullscreen = ([self->window styleMask] & NSWindowStyleMaskFullScreen) != 0;
   was_fullscreen = (state & GDK_TOPLEVEL_STATE_FULLSCREEN) != 0;
 
   if (is_fullscreen != was_fullscreen)
