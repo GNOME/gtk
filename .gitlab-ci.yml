@@ -234,8 +234,8 @@ macos-x86_64:
     # can trigger race conditions in the gobject-introspection subproject.
     - bash .gitlab-ci/show-info-osx.sh
     - python3 -m venv .venv
-    - ln -s /opt/pkg-config/bin/pkg-config .venv/bin
-    - ln -s /opt/bison/bin/bison .venv/bin
+    - curl -L $CI_API_V4_URL/projects/30437/packages/generic/pkgconfig/v0.29.2+10/pkg-config-0.29.2+10_$(uname -m).tar.xz | tar -C .venv -xJ
+    - curl -L $CI_API_V4_URL/projects/30438/packages/generic/bison/v3.8.2+3/bison-3.8.2+3_$(uname -m).tar.xz | tar -C .venv -xJ
     - source .venv/bin/activate
     - pip3 install meson==1.2.0
     - pip3 install ninja==1.11.1
