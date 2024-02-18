@@ -405,7 +405,6 @@ typedef NSString *CALayerContentsGravity;
 
 -(void)beginManualMove
 {
-  gboolean maximized = GDK_SURFACE (gdk_surface)->state & GDK_TOPLEVEL_STATE_MAXIMIZED;
   NSPoint initialMoveLocation;
   GdkPoint point;
   GdkMonitor *monitor;
@@ -423,13 +422,6 @@ typedef NSString *CALayerContentsGravity;
   gdk_macos_monitor_get_workarea (monitor, &workarea);
 
   initialMoveLocation = [NSEvent mouseLocation];
-
-  if (maximized)
-    [self setFrame:NSMakeRect (initialMoveLocation.x - (int)lastUnmaximizedFrame.size.width/2,
-                               initialMoveLocation.y,
-                               lastUnmaximizedFrame.size.width,
-                               lastUnmaximizedFrame.size.height)
-           display:YES];
 
   _gdk_macos_display_from_display_coords ([self gdkDisplay],
                                           initialMoveLocation.x,
@@ -773,26 +765,11 @@ typedef NSString *CALayerContentsGravity;
   return rect;
 }
 
+/* Implementing this method avoids new windows move around the screen. */
 -(NSRect)windowWillUseStandardFrame:(NSWindow *)nsWindow
                        defaultFrame:(NSRect)newFrame
 {
-  NSRect screenFrame = [[self screen] visibleFrame];
-  GdkMacosSurface *surface = gdk_surface;
-  gboolean maximized = GDK_SURFACE (surface)->state & GDK_TOPLEVEL_STATE_MAXIMIZED;
-
-  if (!maximized)
-    return screenFrame;
-  else
-    return lastUnmaximizedFrame;
-}
-
-// Only called on zoom, not on unzoom
--(BOOL)windowShouldZoom:(NSWindow *)nsWindow
-                toFrame:(NSRect)newFrame
-{
-  lastUnmaximizedFrame = [nsWindow frame];
-
-  return YES;
+  return newFrame;
 }
 
 -(NSSize)window:(NSWindow *)window willUseFullScreenContentSize:(NSSize)proposedSize
