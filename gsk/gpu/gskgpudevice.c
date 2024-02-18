@@ -881,6 +881,35 @@ gsk_gpu_device_cache_texture_image (GskGpuDevice *self,
   gsk_gpu_cached_use (self, (GskGpuCached *) cache, timestamp);
 }
 
+static void
+get_glyph_extents (PangoFont      *font,
+                   PangoGlyph      glyph,
+                   PangoRectangle *ink_rect)
+{
+  cairo_surface_t *surface;
+  cairo_t *cr;
+  PangoGlyphString glyphs = {
+    .num_glyphs = 1,
+    .glyphs = (PangoGlyphInfo[1]) { { .glyph = glyph } }
+  };
+  double x1, y1, x2, y2;
+
+  surface = cairo_recording_surface_create (CAIRO_CONTENT_COLOR_ALPHA, NULL);
+  cr = cairo_create (surface);
+
+  pango_cairo_glyph_string_path (cr, font, &glyphs);
+
+  cairo_path_extents (cr, &x1, &y1, &x2, &y2);
+
+  ink_rect->x = x1 * PANGO_SCALE;
+  ink_rect->y = y1 * PANGO_SCALE;
+  ink_rect->width = (x2 - x1) * PANGO_SCALE;
+  ink_rect->height = (y2 - y1) * PANGO_SCALE;
+
+  cairo_destroy (cr);
+  cairo_surface_destroy (surface);
+}
+
 GskGpuImage *
 gsk_gpu_device_lookup_glyph_image (GskGpuDevice           *self,
                                    GskGpuFrame            *frame,
@@ -918,7 +947,7 @@ gsk_gpu_device_lookup_glyph_image (GskGpuDevice           *self,
 
   subpixel_x = (flags & 3) / 4.f;
   subpixel_y = ((flags >> 2) & 3) / 4.f;
-  pango_font_get_glyph_extents (font, glyph, &ink_rect, NULL);
+  get_glyph_extents (font, glyph, &ink_rect);
   origin.x = floor (ink_rect.x * scale / PANGO_SCALE + subpixel_x);
   origin.y = floor (ink_rect.y * scale / PANGO_SCALE + subpixel_y);
   rect.size.width = ceil ((ink_rect.x + ink_rect.width) * scale / PANGO_SCALE + subpixel_x) - origin.x;
@@ -973,6 +1002,7 @@ gsk_gpu_device_lookup_glyph_image (GskGpuDevice           *self,
 
   *out_bounds = cache->bounds;
   *out_origin = cache->origin;
+
   return cache->image;
 }
 
