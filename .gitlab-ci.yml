@@ -240,7 +240,7 @@ macos:
     PIPENV_CACHE_DIR: $PIP_CACHE_DIR
     PYTHONPYCACHEPREFIX: $PIP_CACHE_DIR
   before_script:
-    - bash .gitlab-ci/show-info-osx.sh
+    - .gitlab-ci/show-info-macos.sh
     - python3 -m venv .venv
     # Building the introspection feature requires pkg-config and bison.
     - curl -L $CI_API_V4_URL/projects/30437/packages/generic/pkgconfig/v0.29.2+10/pkg-config-0.29.2+10_$(uname -m).tar.xz | tar -C .venv -xJ

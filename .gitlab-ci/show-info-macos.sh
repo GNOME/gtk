@@ -3,6 +3,11 @@
 set -eux -o pipefail
 
 xcodebuild -version || :
-xcodebuild -showsdks || :
+
+if [ -z "$SDKROOT" ]; then
+  xcodebuild -showsdks || :
+else
+  echo "SDKROOT = $SDKROOT"
+fi
 
 system_profiler SPSoftwareDataType || :
