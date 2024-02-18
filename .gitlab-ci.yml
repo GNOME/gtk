@@ -233,15 +233,12 @@ macos-x86_64:
     # Not using ccache on purpose as it accelerates the build so much that it
     # can trigger race conditions in the gobject-introspection subproject.
     - bash .gitlab-ci/show-info-osx.sh
-    - /opt/macports/bin/python3.10 -m venv .venv
-    - ln -s /opt/cmake/CMake.app/Contents/bin/cmake .venv/bin
+    - python3 -m venv .venv
     - ln -s /opt/pkg-config/bin/pkg-config .venv/bin
     - ln -s /opt/bison/bin/bison .venv/bin
     - source .venv/bin/activate
     - pip3 install meson==1.2.0
     - pip3 install ninja==1.11.1
-    - pip3 install /Users/Shared/build/pkgs/PyGObject-3.44.0-cp310-cp310-macosx_10_13_x86_64.whl
-                   /Users/Shared/build/pkgs/pycairo-1.23.0-cp310-cp310-macosx_10_13_x86_64.whl
   script:
     - meson setup
             ${COMMON_MESON_FLAGS}
