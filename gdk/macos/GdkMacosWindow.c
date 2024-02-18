@@ -371,20 +371,17 @@ typedef NSString *CALayerContentsGravity;
 
 -(void)windowDidMove:(NSNotification *)notification
 {
+  if ([self isZoomed])
+    gdk_synthesize_surface_state (GDK_SURFACE (gdk_surface), 0, GDK_TOPLEVEL_STATE_MAXIMIZED);
+  else
+    gdk_synthesize_surface_state (GDK_SURFACE (gdk_surface), GDK_TOPLEVEL_STATE_MAXIMIZED, 0);
+
   _gdk_macos_surface_configure ([self gdkSurface]);
 }
 
 -(void)windowDidResize:(NSNotification *)notification
 {
-  NSRect screenFrame = [[self screen] visibleFrame];
-  NSRect windowFrame = [self frame];
-
-  if (NSEqualRects(screenFrame, windowFrame))
-    gdk_synthesize_surface_state (GDK_SURFACE (gdk_surface), 0, GDK_TOPLEVEL_STATE_MAXIMIZED);
-  else
-    gdk_synthesize_surface_state (GDK_SURFACE (gdk_surface), GDK_TOPLEVEL_STATE_MAXIMIZED, 0);
-
-  _gdk_macos_surface_configure (gdk_surface);
+  [self windowDidMove: notification];
 
   /* If we're using server-side decorations, this notification is coming
    * in from a display-side change. We need to request a layout in
