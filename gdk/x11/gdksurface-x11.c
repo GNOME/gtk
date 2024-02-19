@@ -2655,6 +2655,7 @@ gdk_x11_surface_get_geometry (GdkSurface *surface,
 {
   GdkX11Surface *impl;
   Window root;
+  Window child;
   int tx;
   int ty;
   guint twidth;
@@ -2669,7 +2670,11 @@ gdk_x11_surface_get_geometry (GdkSurface *surface,
       XGetGeometry (GDK_SURFACE_XDISPLAY (surface),
 		    GDK_SURFACE_XID (surface),
 		    &root, &tx, &ty, &twidth, &theight, &tborder_width, &tdepth);
-      
+
+      XTranslateCoordinates (GDK_SURFACE_XDISPLAY (surface),
+                             GDK_SURFACE_XID (surface),
+                             root, 0, 0, &tx, &ty, &child);
+
       if (x)
 	*x = tx / impl->surface_scale;
       if (y)
