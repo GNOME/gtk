@@ -482,6 +482,8 @@ gtk_editable_insert_text (GtkEditable *editable,
                           int         *position)
 {
   g_return_if_fail (GTK_IS_EDITABLE (editable));
+  g_return_if_fail (text != NULL);
+  g_return_if_fail (length >= -1);
   g_return_if_fail (position != NULL);
 
   if (length < 0)
@@ -511,6 +513,8 @@ gtk_editable_delete_text (GtkEditable *editable,
                           int          end_pos)
 {
   g_return_if_fail (GTK_IS_EDITABLE (editable));
+  g_return_if_fail (start_pos >= 0);
+  g_return_if_fail (end_pos == -1 || end_pos > start_pos);
 
   GTK_EDITABLE_GET_IFACE (editable)->do_delete_text (editable, start_pos, end_pos);
 }
@@ -544,6 +548,8 @@ gtk_editable_get_chars (GtkEditable *editable,
   int start_index,end_index;
 
   g_return_val_if_fail (GTK_IS_EDITABLE (editable), NULL);
+  g_return_val_if_fail (start_pos >= 0, NULL);
+  g_return_val_if_fail (end_pos == -1 || end_pos > start_pos, NULL);
 
   text = GTK_EDITABLE_GET_IFACE (editable)->get_text (editable);
   length = g_utf8_strlen (text, -1);
