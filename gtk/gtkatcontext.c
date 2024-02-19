@@ -909,7 +909,7 @@ gtk_at_context_set_accessible_property (GtkATContext          *self,
   else
     res = gtk_accessible_attribute_set_remove (self->properties, property);
 
-  if (res)
+  if (res && self->realized)
     self->updated_properties |= (1 << property);
 }
 
