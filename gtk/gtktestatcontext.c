@@ -28,6 +28,7 @@
 #include "gtkenums.h"
 #include "gtkprivate.h"
 #include "gtktypebuiltins.h"
+#include "gtkaccessibletext-private.h"
 
 struct _GtkTestATContext
 {
@@ -38,6 +39,15 @@ struct _GtkTestATContextClass
 {
   GtkATContextClass parent_class;
 };
+
+enum {
+  UPDATE_CARET_POSITION,
+  UPDATE_SELECTION_BOUND,
+  UPDATE_TEXT_CONTENTS,
+  LAST_SIGNAL,
+};
+
+static guint signals[LAST_SIGNAL] = { 0, };
 
 G_DEFINE_TYPE (GtkTestATContext, gtk_test_at_context, GTK_TYPE_AT_CONTEXT)
 
@@ -103,12 +113,79 @@ gtk_test_at_context_platform_change (GtkATContext                *self,
 }
 
 static void
+gtk_test_at_context_update_caret_position (GtkATContext *self)
+{
+  GtkAccessible *accessible = gtk_at_context_get_accessible (self);
+  GtkAccessibleText *accessible_text = GTK_ACCESSIBLE_TEXT (accessible);
+  unsigned int position;
+
+  position = gtk_accessible_text_get_caret_position (accessible_text);
+  g_signal_emit (self, signals[UPDATE_CARET_POSITION], 0, position);
+}
+
+static void
+gtk_test_at_context_update_selection_bound (GtkATContext *self)
+{
+  g_signal_emit (self, signals[UPDATE_SELECTION_BOUND], 0);
+}
+
+static void
+gtk_test_at_context_update_text_contents (GtkATContext                   *self,
+                                          GtkAccessibleTextContentChange  change,
+                                          unsigned int                    start,
+                                          unsigned int                    end)
+{
+  GtkAccessible *accessible = gtk_at_context_get_accessible (self);
+  GtkAccessibleText *accessible_text = GTK_ACCESSIBLE_TEXT (accessible);
+  GBytes *contents;
+
+  contents = gtk_accessible_text_get_contents (accessible_text, start, end);
+  g_signal_emit (self, signals[UPDATE_TEXT_CONTENTS], 0, change, start, end, contents);
+  g_bytes_unref (contents);
+}
+
+static void
 gtk_test_at_context_class_init (GtkTestATContextClass *klass)
 {
   GtkATContextClass *context_class = GTK_AT_CONTEXT_CLASS (klass);
 
   context_class->state_change = gtk_test_at_context_state_change;
   context_class->platform_change = gtk_test_at_context_platform_change;
+
+  context_class->update_caret_position = gtk_test_at_context_update_caret_position;
+  context_class->update_selection_bound = gtk_test_at_context_update_selection_bound;
+  context_class->update_text_contents = gtk_test_at_context_update_text_contents;
+
+  signals[UPDATE_CARET_POSITION] =
+    g_signal_new ("update-caret-position",
+                  G_TYPE_FROM_CLASS (klass),
+                  G_SIGNAL_RUN_FIRST,
+                  0,
+                  NULL, NULL,
+                  NULL,
+                  G_TYPE_NONE, 1, G_TYPE_UINT);
+
+  signals[UPDATE_SELECTION_BOUND] =
+    g_signal_new ("update-selection-bound",
+                  G_TYPE_FROM_CLASS (klass),
+                  G_SIGNAL_RUN_FIRST,
+                  0,
+                  NULL, NULL,
+                  NULL,
+                  G_TYPE_NONE, 0);
+
+  signals[UPDATE_TEXT_CONTENTS] =
+    g_signal_new ("update-text-contents",
+                  G_TYPE_FROM_CLASS (klass),
+                  G_SIGNAL_RUN_FIRST,
+                  0,
+                  NULL, NULL,
+                  NULL,
+                  G_TYPE_NONE, 4,
+                  GTK_TYPE_ACCESSIBLE_TEXT_CONTENT_CHANGE,
+                  G_TYPE_UINT,
+                  G_TYPE_UINT,
+                  G_TYPE_BYTES);
 }
 
 static void
