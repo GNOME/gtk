@@ -3454,6 +3454,9 @@ gtk_text_delete_text (GtkText *self,
 {
   GtkTextPrivate *priv = gtk_text_get_instance_private (self);
 
+  if (end_pos < 0)
+    end_pos = gtk_entry_buffer_get_length (get_buffer (self));
+
   if (start_pos == end_pos)
     return;
 
