@@ -131,7 +131,7 @@ gdk_win32_gl_context_wgl_begin_frame (GdkDrawContext *draw_context,
   GDK_DRAW_CONTEXT_CLASS (gdk_win32_gl_context_wgl_parent_class)->begin_frame (draw_context, depth, update_area);
 }
 
-#define PIXEL_ATTRIBUTES 17
+#define PIXEL_ATTRIBUTES 21
 
 static int
 get_wgl_pfd (HDC                    hdc,
@@ -176,10 +176,19 @@ get_wgl_pfd (HDC                    hdc,
       pixelAttribs[i++] = WGL_ALPHA_BITS_ARB;
       pixelAttribs[i++] = 8;
 
+      pixelAttribs[i++] = WGL_DEPTH_BITS_ARB;
+      pixelAttribs[i++] = 0;
+
+      pixelAttribs[i++] = WGL_STENCIL_BITS_ARB;
+      pixelAttribs[i++] = 0;
+
+      pixelAttribs[i++] = WGL_ACCUM_BITS_ARB;
+      pixelAttribs[i++] = 0;
+
       /* end of "Update PIXEL_ATTRIBUTES above if any groups are added here!" */
 
       pixelAttribs[i++] = 0; /* end of pixelAttribs */
-      g_assert (i <= PIXEL_ATTRIBUTES);
+      g_assert (i == PIXEL_ATTRIBUTES);
 
       if (!wglMakeCurrent (display_win32->dummy_context_wgl.hdc,
                            display_win32->dummy_context_wgl.hglrc))
@@ -205,7 +214,7 @@ get_wgl_pfd (HDC                    hdc,
       pfd->iPixelType = PFD_TYPE_RGBA;
       pfd->cColorBits = GetDeviceCaps (hdc, BITSPIXEL);
       pfd->cAlphaBits = 8;
-      pfd->dwLayerMask = PFD_MAIN_PLANE;
+      pfd->iLayerType = PFD_MAIN_PLANE;
 
       best_pf = ChoosePixelFormat (hdc, pfd);
     }
@@ -604,7 +613,7 @@ set_wgl_pixformat_for_hdc (GdkWin32Display *display_win32,
 {
   gboolean skip_acquire = FALSE;
   gboolean set_pixel_format_result = FALSE;
-  PIXELFORMATDESCRIPTOR pfd;
+  PIXELFORMATDESCRIPTOR pfd = {0};
 
   /* one is only allowed to call SetPixelFormat(), and so ChoosePixelFormat()
    * one single time per window HDC
