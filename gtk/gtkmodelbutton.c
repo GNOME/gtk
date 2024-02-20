@@ -195,7 +195,7 @@ indicator_is_left (GtkWidget *widget)
 }
 
 static void
-gtk_model_button_update_state (GtkModelButton *button)
+gtk_model_button_update_state (GtkModelButton *button, GtkStateFlags previous_flags)
 {
   GtkStateFlags state;
   GtkStateFlags indicator_state;
@@ -252,7 +252,7 @@ gtk_model_button_update_state (GtkModelButton *button)
       button->role == GTK_BUTTON_ROLE_RADIO)
     {
       AtkObject *object = _gtk_widget_peek_accessible (GTK_WIDGET (button));
-      if (object)
+      if (object && (previous_flags & ATK_STATE_CHECKED) != (indicator_state & GTK_STATE_FLAG_CHECKED))
         atk_object_notify_state_change (object, ATK_STATE_CHECKED,
                                         (indicator_state & GTK_STATE_FLAG_CHECKED));
     }
@@ -290,7 +290,7 @@ static void
 gtk_model_button_state_flags_changed (GtkWidget     *widget,
                                       GtkStateFlags  previous_flags)
 {
-  gtk_model_button_update_state (GTK_MODEL_BUTTON (widget));
+  gtk_model_button_update_state (GTK_MODEL_BUTTON (widget), previous_flags);
 
   GTK_WIDGET_CLASS (gtk_model_button_parent_class)->state_flags_changed (widget, previous_flags);
 }
@@ -301,7 +301,7 @@ gtk_model_button_direction_changed (GtkWidget        *widget,
 {
   GtkModelButton *button = GTK_MODEL_BUTTON (widget);
 
-  gtk_model_button_update_state (button);
+  gtk_model_button_update_state (button, 0);
   update_node_ordering (button);
 
   GTK_WIDGET_CLASS (gtk_model_button_parent_class)->direction_changed (widget, previous_dir);
@@ -370,7 +370,7 @@ gtk_model_button_set_role (GtkModelButton *button,
 
   update_node_name (button);
 
-  gtk_model_button_update_state (button);
+  gtk_model_button_update_state (button, 0);
   gtk_widget_queue_draw (GTK_WIDGET (button));
   g_object_notify_by_pspec (G_OBJECT (button), properties[PROP_ROLE]);
 }
@@ -428,7 +428,7 @@ gtk_model_button_set_active (GtkModelButton *button,
     return;
 
   button->active = active;
-  gtk_model_button_update_state (button);
+  gtk_model_button_update_state (button, 0);
   gtk_widget_queue_draw (GTK_WIDGET (button));
   g_object_notify_by_pspec (G_OBJECT (button), properties[PROP_ACTIVE]);
 }
@@ -441,7 +441,7 @@ gtk_model_button_set_menu_name (GtkModelButton *button,
   button->menu_name = g_strdup (menu_name);
 
   update_node_name (button);
-  gtk_model_button_update_state (button);
+  gtk_model_button_update_state (button, 0);
 
   gtk_widget_queue_resize (GTK_WIDGET (button));
   g_object_notify_by_pspec (G_OBJECT (button), properties[PROP_MENU_NAME]);
@@ -456,7 +456,7 @@ gtk_model_button_set_inverted (GtkModelButton *button,
     return;
 
   button->inverted = inverted;
-  gtk_model_button_update_state (button);
+  gtk_model_button_update_state (button, 0);
   update_node_ordering (button);
   gtk_widget_queue_resize (GTK_WIDGET (button));
   g_object_notify_by_pspec (G_OBJECT (button), properties[PROP_INVERTED]);
@@ -1106,7 +1106,7 @@ gtk_model_button_get_accessible (GtkWidget *widget)
 
   object = GTK_WIDGET_CLASS (gtk_model_button_parent_class)->get_accessible (widget);
 
-  gtk_model_button_update_state (GTK_MODEL_BUTTON (widget));
+  gtk_model_button_update_state (GTK_MODEL_BUTTON (widget), 0);
 
   return object;
 }
