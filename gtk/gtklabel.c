@@ -55,6 +55,8 @@
 #include "gtkdragicon.h"
 #include "gtkcsscolorvalueprivate.h"
 #include "gtkjoinedmenuprivate.h"
+#include "gtkaccessibletext-private.h"
+#include "gtkpangoprivate.h"
 
 #include <math.h>
 #include <stdlib.h>
@@ -429,18 +431,22 @@ static void gtk_label_update_active_link  (GtkWidget *widget,
                                            double     y);
 static void     gtk_label_setup_mnemonic    (GtkLabel          *self);
 
-static void     gtk_label_buildable_interface_init   (GtkBuildableIface  *iface);
 /* For selectable labels: */
 static void gtk_label_move_cursor        (GtkLabel        *self,
                                           GtkMovementStep  step,
                                           int              count,
                                           gboolean         extend_selection);
 
+static void     gtk_label_buildable_interface_init   (GtkBuildableIface  *iface);
 static GtkBuildableIface *buildable_parent_iface = NULL;
+
+static void     gtk_label_accessible_text_init (GtkAccessibleTextInterface *iface);
 
 G_DEFINE_TYPE_WITH_CODE (GtkLabel, gtk_label, GTK_TYPE_WIDGET,
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE,
-                                                gtk_label_buildable_interface_init))
+                                                gtk_label_buildable_interface_init)
+                         G_IMPLEMENT_INTERFACE (GTK_TYPE_ACCESSIBLE_TEXT,
+                                                gtk_label_accessible_text_init))
 
 static void
 add_move_binding (GtkWidgetClass *widget_class,
@@ -5105,7 +5111,11 @@ gtk_label_select_region_index (GtkLabel *self,
             }
         }
 
+
       gtk_label_update_actions (self);
+
+      gtk_accessible_text_update_caret_position (GTK_ACCESSIBLE_TEXT (self));
+      gtk_accessible_text_update_selection_bound (GTK_ACCESSIBLE_TEXT (self));
 
       gtk_widget_queue_draw (GTK_WIDGET (self));
 
@@ -6051,3 +6061,120 @@ gtk_label_get_tabs (GtkLabel *self)
 
   return self->tabs ? pango_tab_array_copy (self->tabs) : NULL;
 }
+
+/* {{{ GtkAccessibleText implementation */
+
+static GBytes *
+gtk_label_accessible_text_get_contents (GtkAccessibleText *self,
+                                        unsigned int       start,
+                                        unsigned int       end)
+{
+  const char *text;
+  int len;
+  char *string;
+  gsize size;
+
+  text = gtk_label_get_text (GTK_LABEL (self));
+  len = g_utf8_strlen (text, -1);
+
+  start = CLAMP (start, 0, len);
+  end = CLAMP (end, 0, len);
+
+  if (end <= start)
+    {
+      string = g_strdup ("");
+      size = 1;
+    }
+  else
+    {
+      const char *p, *q;
+      p = g_utf8_offset_to_pointer (text, start);
+      q = g_utf8_offset_to_pointer (text, end);
+      size = q - p + 1;
+      string = g_strndup (p, q - p);
+    }
+
+  return g_bytes_new_take (string, size);
+}
+
+static GBytes *
+gtk_label_accessible_text_get_contents_at (GtkAccessibleText            *self,
+                                           unsigned int                  offset,
+                                           GtkAccessibleTextGranularity  granularity,
+                                           unsigned int                 *start,
+                                           unsigned int                 *end)
+{
+  PangoLayout *layout = gtk_label_get_layout (GTK_LABEL (self));
+  char *string = gtk_pango_get_string_at (layout, offset, granularity, start, end);
+
+  return g_bytes_new_take (string, strlen (string));
+}
+
+static unsigned
+gtk_label_accessible_text_get_caret_position (GtkAccessibleText *self)
+{
+  return _gtk_label_get_cursor_position (GTK_LABEL (self));
+}
+
+static gboolean
+gtk_label_accessible_text_get_selection (GtkAccessibleText       *self,
+                                         gsize                   *n_ranges,
+                                         GtkAccessibleTextRange **ranges)
+{
+  int start, end;
+
+  if (!gtk_label_get_selection_bounds (GTK_LABEL (self), &start, &end))
+    return FALSE;
+
+  *n_ranges = 1;
+  *ranges = g_new (GtkAccessibleTextRange, 1);
+  (*ranges)[0].start = start;
+  (*ranges)[0].length = end - start;
+
+  return TRUE;
+}
+
+static gboolean
+gtk_label_accessible_text_get_attributes (GtkAccessibleText        *self,
+                                          unsigned int              offset,
+                                          gsize                    *n_ranges,
+                                          GtkAccessibleTextRange  **ranges,
+                                          char                   ***attribute_names,
+                                          char                   ***attribute_values)
+{
+  PangoLayout *layout = gtk_label_get_layout (GTK_LABEL (self));
+  unsigned int start, end;
+  char **names, **values;
+
+  gtk_pango_get_run_attributes (layout, offset, &names, &values, &start, &end);
+
+  *n_ranges = g_strv_length (names);
+  *ranges = g_new (GtkAccessibleTextRange, *n_ranges);
+
+  for (unsigned i = 0; i < *n_ranges; i++)
+    {
+      GtkAccessibleTextRange *range = &(*ranges)[i];
+
+      range->start = start;
+      range->length = end - start;
+    }
+
+  *attribute_names = names;
+  *attribute_values = values;
+
+  return TRUE;
+}
+
+static void
+gtk_label_accessible_text_init (GtkAccessibleTextInterface *iface)
+{
+  iface->get_contents = gtk_label_accessible_text_get_contents;
+  iface->get_contents_at = gtk_label_accessible_text_get_contents_at;
+  iface->get_caret_position = gtk_label_accessible_text_get_caret_position;
+  iface->get_selection = gtk_label_accessible_text_get_selection;
+  iface->get_attributes = gtk_label_accessible_text_get_attributes;
+}
+
+/* }}} */
+
+/* vim:set foldmethod=marker expandtab: */
