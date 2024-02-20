@@ -44,6 +44,26 @@
 
 #include <gio/gio.h>
 
+static GtkAccessibleTextGranularity
+atspi_granularity_to_gtk (AtspiTextGranularity granularity)
+{
+  switch (granularity)
+    {
+    case ATSPI_TEXT_GRANULARITY_CHAR:
+      return GTK_ACCESSIBLE_TEXT_GRANULARITY_CHARACTER;
+    case ATSPI_TEXT_GRANULARITY_WORD:
+      return GTK_ACCESSIBLE_TEXT_GRANULARITY_WORD;
+    case ATSPI_TEXT_GRANULARITY_SENTENCE:
+      return GTK_ACCESSIBLE_TEXT_GRANULARITY_SENTENCE;
+    case ATSPI_TEXT_GRANULARITY_LINE:
+      return GTK_ACCESSIBLE_TEXT_GRANULARITY_LINE;
+    case ATSPI_TEXT_GRANULARITY_PARAGRAPH:
+      return GTK_ACCESSIBLE_TEXT_GRANULARITY_PARAGRAPH;
+    default:
+      g_assert_not_reached ();
+    }
+}
+
 /* {{{ GtkLabel */
 
 static void
@@ -179,7 +199,9 @@ label_handle_method (GDBusConnection       *connection,
 
       g_variant_get (parameters, "(iu)", &offset, &granularity);
 
-      string = gtk_pango_get_string_at (layout, offset, granularity, &start, &end);
+      string = gtk_pango_get_string_at (layout, offset,
+                                        atspi_granularity_to_gtk (granularity),
+                                        &start, &end);
 
       g_dbus_method_invocation_return_value (invocation, g_variant_new ("(sii)", string, start, end));
       g_free (string);
@@ -567,7 +589,9 @@ inscription_handle_method (GDBusConnection       *connection,
 
       g_variant_get (parameters, "(iu)", &offset, &granularity);
 
-      string = gtk_pango_get_string_at (layout, offset, granularity, &start, &end);
+      string = gtk_pango_get_string_at (layout, offset,
+                                        atspi_granularity_to_gtk (granularity),
+                                        &start, &end);
 
       g_dbus_method_invocation_return_value (invocation, g_variant_new ("(sii)", string, start, end));
       g_free (string);
@@ -901,7 +925,9 @@ editable_handle_method (GDBusConnection       *connection,
 
       g_variant_get (parameters, "(iu)", &offset, &granularity);
 
-      string = gtk_pango_get_string_at (layout, offset, granularity, &start, &end);
+      string = gtk_pango_get_string_at (layout, offset,
+                                        atspi_granularity_to_gtk (granularity),
+                                        &start, &end);
 
       g_dbus_method_invocation_return_value (invocation, g_variant_new ("(sii)", string, start, end));
       g_free (string);
@@ -1297,7 +1323,9 @@ text_view_handle_method (GDBusConnection       *connection,
 
       g_variant_get (parameters, "(iu)", &offset, &granularity);
 
-      string = gtk_text_view_get_string_at (GTK_TEXT_VIEW (widget), offset, granularity, &start, &end);
+      string = gtk_text_view_get_string_at (GTK_TEXT_VIEW (widget), offset,
+                                            granularity,
+                                            &start, &end);
 
       g_dbus_method_invocation_return_value (invocation, g_variant_new ("(sii)", string, start, end));
       g_free (string);
