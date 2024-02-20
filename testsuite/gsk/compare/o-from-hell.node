@@ -1,0 +1,16 @@
+blend {
+  mode: difference;
+  bottom: text {
+    color: rgb(255,0,0);
+    font: "Noto Sans Mono 300";
+    glyphs: "o";
+  }
+  top: transform {
+    transform: scale(100);
+    child: text {
+      color: rgb(255,0,0);
+      font: "Noto Sans Mono 3";
+      glyphs: "o";
+    }
+  }
+}
