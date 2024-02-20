@@ -190,33 +190,46 @@ label_handle_method (GDBusConnection       *connection,
       GVariantBuilder builder = G_VARIANT_BUILDER_INIT (G_VARIANT_TYPE ("a{ss}"));
       int offset;
       int start, end;
+      char **names, **values;
 
       g_variant_get (parameters, "(i)", &offset);
 
-      gtk_pango_get_run_attributes (layout, &builder, offset, &start, &end);
+      gtk_pango_get_run_attributes (layout, offset, &names, &values, &start, &end);
+
+      for (unsigned i = 0; names[i] != NULL; i++)
+        g_variant_builder_add (&builder, "{ss}", names[i], values[i]);
+
+      g_strfreev (names);
+      g_strfreev (values);
 
       g_dbus_method_invocation_return_value (invocation, g_variant_new ("(a{ss}ii)", &builder, start, end));
     }
   else if (g_strcmp0 (method_name, "GetAttributeValue") == 0)
     {
       PangoLayout *layout = gtk_label_get_layout (GTK_LABEL (widget));
-      GVariantBuilder builder = G_VARIANT_BUILDER_INIT (G_VARIANT_TYPE ("a{ss}"));
       int offset;
       const char *name;
       int start, end;
-      GVariant *attrs;
-      const char *val;
+      const char *val = "";
+      char **names, **values;
 
       g_variant_get (parameters, "(i&s)", &offset, &name);
 
-      gtk_pango_get_run_attributes (layout, &builder, offset, &start, &end);
+      gtk_pango_get_run_attributes (layout, offset, &names, &values, &start, &end);
 
-      attrs = g_variant_builder_end (&builder);
-      if (!g_variant_lookup (attrs, name, "&s", &val))
-        val = "";
+      for (unsigned i = 0; names[i] != NULL; i++)
+        {
+          if (g_strcmp0 (names[i], name) == 0)
+            {
+              val = values[i];
+              break;
+            }
+        }
 
       g_dbus_method_invocation_return_value (invocation, g_variant_new ("(s)", val));
-      g_variant_unref (attrs);
+
+      g_strfreev (names);
+      g_strfreev (values);
     }
   else if (g_strcmp0 (method_name, "GetAttributeRun") == 0)
     {
@@ -225,13 +238,28 @@ label_handle_method (GDBusConnection       *connection,
       int offset;
       gboolean include_defaults;
       int start, end;
+      char **names, **values;
 
       g_variant_get (parameters, "(ib)", &offset, &include_defaults);
 
       if (include_defaults)
-        gtk_pango_get_default_attributes (layout, &builder);
+        {
+          gtk_pango_get_default_attributes (layout, &names, &values);
 
-      gtk_pango_get_run_attributes (layout, &builder, offset, &start, &end);
+          for (unsigned i = 0; names[i] != NULL; i++)
+            g_variant_builder_add (&builder, "{ss}", names[i], values[i]);
+
+          g_strfreev (names);
+          g_strfreev (values);
+        }
+
+      gtk_pango_get_run_attributes (layout, offset, &names, &values, &start, &end);
+
+      for (unsigned i = 0; names[i] != NULL; i++)
+        g_variant_builder_add (&builder, "{ss}", names[i], values[i]);
+
+      g_strfreev (names);
+      g_strfreev (values);
 
       g_dbus_method_invocation_return_value (invocation, g_variant_new ("(a{ss}ii)", &builder, start, end));
     }
@@ -240,8 +268,15 @@ label_handle_method (GDBusConnection       *connection,
     {
       PangoLayout *layout = gtk_label_get_layout (GTK_LABEL (widget));
       GVariantBuilder builder = G_VARIANT_BUILDER_INIT (G_VARIANT_TYPE ("a{ss}"));
+      char **names, **values;
 
-      gtk_pango_get_default_attributes (layout, &builder);
+      gtk_pango_get_default_attributes (layout, &names, &values);
+
+      for (unsigned i = 0; names[i] != NULL; i++)
+        g_variant_builder_add (&builder, "{ss}", names[i], values[i]);
+
+      g_strfreev (names);
+      g_strfreev (values);
 
       g_dbus_method_invocation_return_value (invocation, g_variant_new ("(a{ss})", &builder));
     }
@@ -543,33 +578,46 @@ inscription_handle_method (GDBusConnection       *connection,
       GVariantBuilder builder = G_VARIANT_BUILDER_INIT (G_VARIANT_TYPE ("a{ss}"));
       int offset;
       int start, end;
+      char **names, **values;
 
       g_variant_get (parameters, "(i)", &offset);
 
-      gtk_pango_get_run_attributes (layout, &builder, offset, &start, &end);
+      gtk_pango_get_run_attributes (layout, offset, &names, &values, &start, &end);
+
+      for (unsigned i = 0; names[i] != NULL; i++)
+        g_variant_builder_add (&builder, "{ss}", names[i], values[i]);
+
+      g_strfreev (names);
+      g_strfreev (values);
 
       g_dbus_method_invocation_return_value (invocation, g_variant_new ("(a{ss}ii)", &builder, start, end));
     }
   else if (g_strcmp0 (method_name, "GetAttributeValue") == 0)
     {
       PangoLayout *layout = gtk_inscription_get_layout (GTK_INSCRIPTION (widget));;
-      GVariantBuilder builder = G_VARIANT_BUILDER_INIT (G_VARIANT_TYPE ("a{ss}"));
       int offset;
       const char *name;
       int start, end;
-      GVariant *attrs;
-      const char *val;
+      const char *val = "";
+      char **names, **values;
 
       g_variant_get (parameters, "(i&s)", &offset, &name);
 
-      gtk_pango_get_run_attributes (layout, &builder, offset, &start, &end);
+      gtk_pango_get_run_attributes (layout, offset, &names, &values, &start, &end);
 
-      attrs = g_variant_builder_end (&builder);
-      if (!g_variant_lookup (attrs, name, "&s", &val))
-        val = "";
+      for (unsigned i = 0; names[i] != NULL; i++)
+        {
+          if (g_strcmp0 (names[i], name) == 0)
+            {
+              val = values[i];
+              break;
+            }
+        }
 
       g_dbus_method_invocation_return_value (invocation, g_variant_new ("(s)", val));
-      g_variant_unref (attrs);
+
+      g_strfreev (names);
+      g_strfreev (values);
     }
   else if (g_strcmp0 (method_name, "GetAttributeRun") == 0)
     {
@@ -578,13 +626,28 @@ inscription_handle_method (GDBusConnection       *connection,
       int offset;
       gboolean include_defaults;
       int start, end;
+      char **names, **values;
 
       g_variant_get (parameters, "(ib)", &offset, &include_defaults);
 
       if (include_defaults)
-        gtk_pango_get_default_attributes (layout, &builder);
+        {
+          gtk_pango_get_default_attributes (layout, &names, &values);
 
-      gtk_pango_get_run_attributes (layout, &builder, offset, &start, &end);
+          for (unsigned i = 0; names[i] != NULL; i++)
+            g_variant_builder_add (&builder, "{ss}", names[i], values[i]);
+
+          g_strfreev (names);
+          g_strfreev (values);
+        }
+
+      gtk_pango_get_run_attributes (layout, offset, &names, &values, &start, &end);
+
+      for (unsigned i = 0; names[i] != NULL; i++)
+        g_variant_builder_add (&builder, "{ss}", names[i], values[i]);
+
+      g_strfreev (names);
+      g_strfreev (values);
 
       g_dbus_method_invocation_return_value (invocation, g_variant_new ("(a{ss}ii)", &builder, start, end));
     }
@@ -593,8 +656,15 @@ inscription_handle_method (GDBusConnection       *connection,
     {
       PangoLayout *layout = gtk_inscription_get_layout (GTK_INSCRIPTION (widget));;
       GVariantBuilder builder = G_VARIANT_BUILDER_INIT (G_VARIANT_TYPE ("a{ss}"));
+      char **names, **values;
 
-      gtk_pango_get_default_attributes (layout, &builder);
+      gtk_pango_get_default_attributes (layout, &names, &values);
+
+      for (unsigned i = 0; names[i] != NULL; i++)
+        g_variant_builder_add (&builder, "{ss}", names[i], values[i]);
+
+      g_strfreev (names);
+      g_strfreev (values);
 
       g_dbus_method_invocation_return_value (invocation, g_variant_new ("(a{ss})", &builder));
     }
@@ -842,32 +912,46 @@ editable_handle_method (GDBusConnection       *connection,
       GVariantBuilder builder = G_VARIANT_BUILDER_INIT (G_VARIANT_TYPE ("a{ss}"));
       int offset;
       int start, end;
+      char **names, **values;
 
       g_variant_get (parameters, "(i)", &offset);
 
-      gtk_pango_get_run_attributes (layout, &builder, offset, &start, &end);
+      gtk_pango_get_run_attributes (layout, offset, &names, &values, &start, &end);
+
+      for (unsigned i = 0; names[i] != NULL; i++)
+        g_variant_builder_add (&builder, "{ss}", names[i], values[i]);
+
+      g_strfreev (names);
+      g_strfreev (values);
 
       g_dbus_method_invocation_return_value (invocation, g_variant_new ("(a{ss}ii)", &builder, start, end));
     }
   else if (g_strcmp0 (method_name, "GetAttributeValue") == 0)
     {
       PangoLayout *layout = gtk_text_get_layout (text_widget);
-      GVariantBuilder builder = G_VARIANT_BUILDER_INIT (G_VARIANT_TYPE ("a{ss}"));
       int offset;
       const char *name;
       int start, end;
-      GVariant *attrs;
-      const char *val;
+      const char *val = "";
+      char **names, **values;
 
       g_variant_get (parameters, "(i&s)", &offset, &name);
 
-      gtk_pango_get_run_attributes (layout, &builder, offset, &start, &end);
-      attrs = g_variant_builder_end (&builder);
-      if (!g_variant_lookup (attrs, name, "&s", &val))
-        val = "";
+      gtk_pango_get_run_attributes (layout, offset, &names, &values, &start, &end);
+
+      for (unsigned i = 0; names[i] != NULL; i++)
+        {
+          if (g_strcmp0 (names[i], name) == 0)
+            {
+              val = values[i];
+              break;
+            }
+        }
 
       g_dbus_method_invocation_return_value (invocation, g_variant_new ("(s)", val));
-      g_variant_unref (attrs);
+
+      g_strfreev (names);
+      g_strfreev (values);
     }
   else if (g_strcmp0 (method_name, "GetAttributeRun") == 0)
     {
@@ -876,13 +960,28 @@ editable_handle_method (GDBusConnection       *connection,
       int offset;
       gboolean include_defaults;
       int start, end;
+      char **names, **values;
 
       g_variant_get (parameters, "(ib)", &offset, &include_defaults);
 
       if (include_defaults)
-        gtk_pango_get_default_attributes (layout, &builder);
+        {
+          gtk_pango_get_default_attributes (layout, &names, &values);
 
-      gtk_pango_get_run_attributes (layout, &builder, offset, &start, &end);
+          for (unsigned i = 0; names[i] != NULL; i++)
+            g_variant_builder_add (&builder, "{ss}", names[i], values[i]);
+
+          g_strfreev (names);
+          g_strfreev (values);
+        }
+
+      gtk_pango_get_run_attributes (layout, offset, &names, &values, &start, &end);
+
+      for (unsigned i = 0; names[i] != NULL; i++)
+        g_variant_builder_add (&builder, "{ss}", names[i], values[i]);
+
+      g_strfreev (names);
+      g_strfreev (values);
 
       g_dbus_method_invocation_return_value (invocation, g_variant_new ("(a{ss}ii)", &builder, start, end));
     }
@@ -891,8 +990,15 @@ editable_handle_method (GDBusConnection       *connection,
     {
       PangoLayout *layout = gtk_text_get_layout (text_widget);
       GVariantBuilder builder = G_VARIANT_BUILDER_INIT (G_VARIANT_TYPE ("a{ss}"));
+      char **names, **values;
 
-      gtk_pango_get_default_attributes (layout, &builder);
+      gtk_pango_get_default_attributes (layout, &names, &values);
+
+      for (unsigned i = 0; names[i] != NULL; i++)
+        g_variant_builder_add (&builder, "{ss}", names[i], values[i]);
+
+      g_strfreev (names);
+      g_strfreev (values);
 
       g_dbus_method_invocation_return_value (invocation, g_variant_new ("(a{ss})", &builder));
     }

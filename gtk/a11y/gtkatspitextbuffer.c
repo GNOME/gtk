@@ -36,7 +36,17 @@ gtk_text_view_add_default_attributes (GtkTextView     *view,
   font = text_attrs->font;
 
   if (font)
-    gtk_pango_get_font_attributes (font, builder);
+    {
+      char **names, **values;
+
+      gtk_pango_get_font_attributes (font, &names, &values);
+
+      for (unsigned i = 0; names[i] != NULL; i++)
+        g_variant_builder_add (builder, "{ss}", names[i], values[i]);
+
+      g_strfreev (names);
+      g_strfreev (values);
+    }
 
   g_variant_builder_add (builder, "{ss}", "justification",
                          gtk_justification_to_string (text_attrs->justification));

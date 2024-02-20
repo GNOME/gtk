@@ -19,18 +19,9 @@
 
 #include <pango/pangocairo.h>
 #include "gtkatspiprivate.h"
+#include "gtkpangoprivate.h"
 
 G_BEGIN_DECLS
-
-void gtk_pango_get_font_attributes (PangoFontDescription *font,
-                                    GVariantBuilder      *builder);
-void gtk_pango_get_default_attributes (PangoLayout     *layout,
-                                       GVariantBuilder *builder);
-void gtk_pango_get_run_attributes     (PangoLayout     *layout,
-                                       GVariantBuilder *builder,
-                                       int              offset,
-                                       int             *start_offset,
-                                       int             *end_offset);
 
 char *gtk_pango_get_text_before (PangoLayout           *layout,
                                  int                    offset,
@@ -45,11 +36,6 @@ char *gtk_pango_get_text_at     (PangoLayout           *layout,
 char *gtk_pango_get_text_after  (PangoLayout           *layout,
                                  int                    offset,
                                  AtspiTextBoundaryType  boundary_type,
-                                 int                   *start_offset,
-                                 int                   *end_offset);
-char *gtk_pango_get_string_at   (PangoLayout           *layout,
-                                 int                    offset,
-                                 AtspiTextGranularity   granularity,
                                  int                   *start_offset,
                                  int                   *end_offset);
 
