@@ -31,6 +31,7 @@
 #include "gskroundedrectprivate.h"
 #include "gskstrokeprivate.h"
 #include "gsktransformprivate.h"
+#include "gskprivate.h"
 
 #include "gdk/gdkmemoryformatprivate.h"
 #include "gdk/gdkprivate.h"
@@ -5791,6 +5792,12 @@ gsk_text_node_class_init (gpointer g_class,
   node_class->diff = gsk_text_node_diff;
 }
 
+static inline float
+pango_units_to_float (int i)
+{
+  return (float) i / PANGO_SCALE;
+}
+
 /**
  * gsk_text_node_new:
  * @font: the `PangoFont` containing the glyphs
@@ -5817,8 +5824,7 @@ gsk_text_node_new (PangoFont              *font,
   PangoGlyphInfo *glyph_infos;
   int n;
 
-  pango_glyph_string_extents (glyphs, font, &ink_rect, NULL);
-  pango_extents_to_pixels (&ink_rect, NULL);
+  pango_glyph_string_extents (glyphs, gsk_get_unhinted_font (font), &ink_rect, NULL);
 
   /* Don't create nodes with empty bounds */
   if (ink_rect.width == 0 || ink_rect.height == 0)
@@ -5855,10 +5861,10 @@ gsk_text_node_new (PangoFont              *font,
   self->num_glyphs = n;
 
   gsk_rect_init (&node->bounds,
-                 offset->x + ink_rect.x,
-                 offset->y + ink_rect.y,
-                 ink_rect.width,
-                 ink_rect.height);
+                 offset->x + pango_units_to_float (ink_rect.x),
+                 offset->y + pango_units_to_float (ink_rect.y),
+                 pango_units_to_float (ink_rect.width),
+                 pango_units_to_float (ink_rect.height));
 
   return node;
 }
