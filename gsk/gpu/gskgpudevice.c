@@ -11,6 +11,7 @@
 #include "gdk/gdkprofilerprivate.h"
 
 #include "gsk/gskdebugprivate.h"
+#include "gsk/gskprivate.h"
 
 #define MAX_SLICES_PER_ATLAS 64
 
@@ -918,7 +919,7 @@ gsk_gpu_device_lookup_glyph_image (GskGpuDevice           *self,
 
   subpixel_x = (flags & 3) / 4.f;
   subpixel_y = ((flags >> 2) & 3) / 4.f;
-  pango_font_get_glyph_extents (font, glyph, &ink_rect, NULL);
+  pango_font_get_glyph_extents (gsk_get_unhinted_font (font), glyph, &ink_rect, NULL);
   origin.x = floor (ink_rect.x * scale / PANGO_SCALE + subpixel_x);
   origin.y = floor (ink_rect.y * scale / PANGO_SCALE + subpixel_y);
   rect.size.width = ceil ((ink_rect.x + ink_rect.width) * scale / PANGO_SCALE + subpixel_x) - origin.x;
