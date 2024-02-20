@@ -1,5 +1,7 @@
 #include <gtk/gtk.h>
 
+#include "gtk/gtkaccessibletext-private.h"
+
 static void
 label_role (void)
 {
@@ -56,6 +58,56 @@ label_properties (void)
   g_object_unref (label);
 }
 
+static void
+label_text_interface (void)
+{
+  GtkWidget *label = gtk_label_new ("");
+  GBytes *bytes;
+  gsize len;
+  gboolean res;
+  gsize n_ranges;
+  GtkAccessibleTextRange *ranges = NULL;
+  char **attr_names, **attr_values;
+  const char *string;
+
+  g_object_ref_sink (label);
+
+  gtk_label_set_markup (GTK_LABEL (label), "<markup>a<span underline='single'>b</span>c</markup>");
+  gtk_label_set_selectable (GTK_LABEL (label), TRUE);
+  gtk_label_select_region (GTK_LABEL (label), 1, 2);
+
+  bytes = gtk_accessible_text_get_contents (GTK_ACCESSIBLE_TEXT (label), 0, G_MAXINT);
+  string = g_bytes_get_data (bytes, &len);
+  g_assert_cmpint (len, ==, 4);
+  g_assert_cmpstr (string, ==, "abc");
+  g_bytes_unref (bytes);
+
+  g_assert_cmpint (gtk_accessible_text_get_caret_position (GTK_ACCESSIBLE_TEXT (label)), ==, 2);
+
+  res = gtk_accessible_text_get_selection (GTK_ACCESSIBLE_TEXT (label), &n_ranges, &ranges);
+  g_assert_true (res);
+  g_assert_cmpint (n_ranges, ==, 1);
+  g_assert_cmpuint (ranges[0].start, ==, 1);
+  g_assert_cmpuint (ranges[0].length, ==, 1);
+  g_free (ranges);
+
+  // Waiting for the attribute api to be fixed
+  res = gtk_accessible_text_get_attributes (GTK_ACCESSIBLE_TEXT (label), 1, &n_ranges, &ranges, &attr_names, &attr_values);
+  for (int i = 0; i < n_ranges; i++)
+    g_print ("%s = %s\n", attr_names[i], attr_values[i]);
+  g_assert_true (res);
+  g_assert_cmpint (n_ranges, ==, 1);
+  g_assert_cmpuint (ranges[0].start, ==, 1);
+  g_assert_cmpuint (ranges[0].length, ==, 1);
+  g_assert_cmpstr (attr_names[0], ==, GTK_ACCESSIBLE_ATTRIBUTE_UNDERLINE);
+  g_assert_cmpstr (attr_values[0], ==, GTK_ACCESSIBLE_ATTRIBUTE_UNDERLINE_SINGLE);
+  g_free (ranges);
+  g_strfreev (attr_names);
+  g_strfreev (attr_values);
+
+  g_object_unref (label);
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -64,6 +116,7 @@ main (int argc, char *argv[])
   g_test_add_func ("/a11y/label/role", label_role);
   g_test_add_func ("/a11y/label/relations", label_relations);
   g_test_add_func ("/a11y/label/properties", label_properties);
+  g_test_add_func ("/a11y/label/text-interface", label_text_interface);
 
   return g_test_run ();
 }

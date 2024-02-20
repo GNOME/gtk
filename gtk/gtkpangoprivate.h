@@ -24,8 +24,10 @@
 
 #pragma once
 
+#include <glib.h>
 #include <pango/pangocairo.h>
-#include  "gtkbuildable.h"
+#include "gtkbuildable.h"
+#include "gtkaccessibletext.h"
 
 G_BEGIN_DECLS
 
@@ -55,10 +57,29 @@ gtk_pango_attribute_start_element (GtkBuildableParseContext  *context,
 
 const char *pango_wrap_mode_to_string (PangoWrapMode mode);
 const char *pango_underline_to_string (PangoUnderline underline);
+const char *pango_overline_to_string (PangoOverline underline);
 const char *pango_stretch_to_string (PangoStretch stretch);
 const char *pango_style_to_string (PangoStyle style);
 const char *pango_variant_to_string (PangoVariant variant);
 const char *pango_align_to_string (PangoAlignment align);
 
-G_END_DECLS
+void gtk_pango_get_font_attributes (PangoFontDescription   *font,
+                                    char                 ***attribute_names,
+                                    char                 ***attribute_values);
+void gtk_pango_get_default_attributes (PangoLayout     *layout,
+                                       char          ***attribute_names,
+                                       char          ***attribute_values);
+void gtk_pango_get_run_attributes     (PangoLayout     *layout,
+                                       unsigned int     offset,
+                                       char          ***attribute_names,
+                                       char          ***attribute_values,
+                                       unsigned int    *start_offset,
+                                       unsigned int    *end_offset);
 
+char *gtk_pango_get_string_at   (PangoLayout                  *layout,
+                                 unsigned int                  offset,
+                                 GtkAccessibleTextGranularity  granularity,
+                                 unsigned int                 *start_offset,
+                                 unsigned int                 *end_offset);
+
+G_END_DECLS

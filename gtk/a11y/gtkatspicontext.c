@@ -23,6 +23,7 @@
 #include "gtkatspicontextprivate.h"
 
 #include "gtkaccessibleprivate.h"
+#include "gtkaccessibletext-private.h"
 
 #include "gtkatspiactionprivate.h"
 #include "gtkatspieditabletextprivate.h"
@@ -1154,8 +1155,8 @@ gtk_at_spi_context_state_change (GtkATContext                *ctx,
 
   if (changed_properties & GTK_ACCESSIBLE_PROPERTY_CHANGE_DESCRIPTION)
   {
-      char *label = gtk_at_context_get_description (GTK_AT_CONTEXT (self));                                            
-      GVariant *v = g_variant_new_take_string (label);                                                                 
+      char *label = gtk_at_context_get_description (GTK_AT_CONTEXT (self));
+      GVariant *v = g_variant_new_take_string (label);
       emit_property_changed (self, "accessible-description", v);
     }
 
@@ -1568,6 +1569,117 @@ gtk_at_spi_context_announce (GtkATContext                      *context,
 }
 
 static void
+gtk_at_spi_context_update_caret_position (GtkATContext *context)
+{
+  GtkAtSpiContext *self = GTK_AT_SPI_CONTEXT (context);
+  GtkAccessible *accessible = gtk_at_context_get_accessible (context);
+  GtkAccessibleText *accessible_text = GTK_ACCESSIBLE_TEXT (accessible);
+  guint offset;
+
+  if (self->connection == NULL)
+    return;
+
+  offset = gtk_accessible_text_get_caret_position (accessible_text);
+
+  g_dbus_connection_emit_signal (self->connection,
+                                 NULL,
+                                 self->context_path,
+                                 "org.a11y.atspi.Event.Object",
+                                 "TextCaretMoved",
+                                 g_variant_new ("(siiva{sv})",
+                                                "",
+                                                (int) offset,
+                                                0,
+                                                g_variant_new_string (""),
+                                                NULL),
+                                 NULL);
+}
+
+static void
+gtk_at_spi_context_update_selection_bound (GtkATContext *context)
+{
+  GtkAtSpiContext *self = GTK_AT_SPI_CONTEXT (context);
+
+  if (self->connection == NULL)
+    return;
+
+  g_dbus_connection_emit_signal (self->connection,
+                                 NULL,
+                                 self->context_path,
+                                 "org.a11y.atspi.Event.Object",
+                                 "TextSelectionChanged",
+                                 g_variant_new ("(siiva{sv})",
+                                                "",
+                                                0,
+                                                0,
+                                                g_variant_new_string (""),
+                                                NULL),
+                                 NULL);
+}
+
+static void
+gtk_at_spi_context_update_text_contents (GtkATContext *context,
+                                         GtkAccessibleTextContentChange change,
+                                         unsigned int start,
+                                         unsigned int end)
+{
+  GtkAtSpiContext *self = GTK_AT_SPI_CONTEXT (context);
+
+  if (self->connection == NULL)
+    return;
+
+  GtkAccessible *accessible = gtk_at_context_get_accessible (context);
+  if (!GTK_IS_ACCESSIBLE_TEXT (accessible))
+    return;
+
+  const char *kind = "";
+
+  switch (change)
+    {
+    case GTK_ACCESSIBLE_TEXT_CONTENT_CHANGE_INSERT:
+      kind = "insert";
+      break;
+
+    case GTK_ACCESSIBLE_TEXT_CONTENT_CHANGE_REMOVE:
+      kind = "delete";
+      break;
+
+    default:
+      g_assert_not_reached ();
+    }
+
+  /* Retrieve the text using the given range */
+  GBytes *contents = gtk_accessible_text_get_contents (GTK_ACCESSIBLE_TEXT (accessible),
+                                                       start, end);
+  if (contents == NULL)
+    goto out;
+
+  const char *text = g_bytes_get_data (contents, NULL);
+  if (text == NULL)
+    goto out;
+
+  /* Using G_MAXUINT in GTK maps to the text length */
+  if (end == G_MAXUINT)
+    end = g_utf8_strlen (text, -1);
+
+  g_dbus_connection_emit_signal (self->connection,
+                                 NULL,
+                                 self->context_path,
+                                 "org.a11y.atspi.Event.Object",
+                                 "TextChanged",
+                                 g_variant_new ("(siiva{sv})",
+                                                kind,
+                                                start,
+                                                end - start,
+                                                g_variant_new_string (text),
+                                                NULL),
+                                 NULL);
+
+out:
+  g_clear_pointer (&contents, g_bytes_unref);
+}
+
+static void
 gtk_at_spi_context_class_init (GtkAtSpiContextClass *klass)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
@@ -1582,6 +1694,9 @@ gtk_at_spi_context_class_init (GtkAtSpiContextClass *klass)
   context_class->bounds_change = gtk_at_spi_context_bounds_change;
   context_class->child_change = gtk_at_spi_context_child_change;
   context_class->announce = gtk_at_spi_context_announce;
+  context_class->update_caret_position = gtk_at_spi_context_update_caret_position;
+  context_class->update_selection_bound = gtk_at_spi_context_update_selection_bound;
+  context_class->update_text_contents = gtk_at_spi_context_update_text_contents;
 }
 
 static void

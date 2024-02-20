@@ -19,7 +19,6 @@ tests = [
   { 'name': 'flowbox' },
   { 'name': 'general' },
   { 'name': 'image' },
-  { 'name': 'label' },
   { 'name': 'listbox' },
   { 'name': 'levelbar' },
   { 'name': 'passwordentry' },
@@ -30,13 +29,16 @@ tests = [
   { 'name': 'spinbutton' },
   { 'name': 'stack' },
   { 'name': 'switch' },
-  { 'name': 'textview' },
   { 'name': 'togglebutton' },
   { 'name': 'value' },
   { 'name': 'window' },
 ]
 
 internal_tests = [
+  { 'name': 'inscription' },
+  { 'name': 'label' },
+  { 'name': 'text' },
+  { 'name': 'textview' },
   { 'name': 'names' },
 ]
 

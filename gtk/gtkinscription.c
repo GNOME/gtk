@@ -21,6 +21,7 @@
 
 #include "gtkinscriptionprivate.h"
 
+#include "gtkaccessibletext-private.h"
 #include "gtkcssnodeprivate.h"
 #include "gtkcssstylechangeprivate.h"
 #include "gtkpangoprivate.h"
@@ -28,6 +29,8 @@
 #include "gtkrenderlayoutprivate.h"
 #include "gtktypebuiltins.h"
 #include "gtkwidgetprivate.h"
+
+#include "a11y/gtkatspipangoprivate.h"
 
 /**
  * GtkInscription:
@@ -96,7 +99,11 @@ enum
   N_PROPS
 };
 
-G_DEFINE_TYPE (GtkInscription, gtk_inscription, GTK_TYPE_WIDGET)
+static void     gtk_inscription_accessible_text_init (GtkAccessibleTextInterface *iface);
+
+G_DEFINE_TYPE_WITH_CODE (GtkInscription, gtk_inscription, GTK_TYPE_WIDGET,
+                         G_IMPLEMENT_INTERFACE (GTK_TYPE_ACCESSIBLE_TEXT,
+                                                gtk_inscription_accessible_text_init))
 
 static GParamSpec *properties[N_PROPS] = { NULL, };
 
@@ -1320,3 +1327,96 @@ gtk_inscription_set_markup (GtkInscription *self,
   g_clear_pointer (&text, g_free);
   g_clear_pointer (&attrs, pango_attr_list_unref);
 }
+
+/* {{{ GtkAccessibleText implementation */
+
+static GBytes *
+gtk_inscription_accessible_text_get_contents (GtkAccessibleText *self,
+                                              unsigned int       start,
+                                              unsigned int       end)
+{
+  const char *text;
+  int len;
+  char *string;
+  gsize size;
+
+  text = gtk_inscription_get_text (GTK_INSCRIPTION (self));
+  len = g_utf8_strlen (text, -1);
+
+  start = CLAMP (start, 0, len);
+  end = CLAMP (end, 0, len);
+
+  if (end <= start)
+    {
+      string = g_strdup ("");
+      size = 1;
+    }
+  else
+    {
+      const char *p, *q;
+      p = g_utf8_offset_to_pointer (text, start);
+      q = g_utf8_offset_to_pointer (text, end);
+      size = q - p + 1;
+      string = g_strndup (p, q - p);
+    }
+
+  return g_bytes_new_take (string, size);
+}
+
+static unsigned int
+gtk_inscription_accessible_text_get_caret_position (GtkAccessibleText *self)
+{
+  return 0;
+}
+
+static gboolean
+gtk_inscription_accessible_text_get_selection (GtkAccessibleText       *self,
+                                               gsize                   *n_ranges,
+                                               GtkAccessibleTextRange **ranges)
+{
+  return FALSE;
+}
+
+static gboolean
+gtk_inscription_accessible_text_get_attributes (GtkAccessibleText        *self,
+                                                unsigned int              offset,
+                                                gsize                    *n_ranges,
+                                                GtkAccessibleTextRange  **ranges,
+                                                char                   ***attribute_names,
+                                                char                   ***attribute_values)
+{
+  PangoLayout *layout = gtk_inscription_get_layout (GTK_INSCRIPTION (self));
+  unsigned int start, end;
+  char **names, **values;
+
+  gtk_pango_get_run_attributes (layout, offset, &names, &values, &start, &end);
+
+  *n_ranges = g_strv_length (names);
+  *ranges = g_new (GtkAccessibleTextRange, *n_ranges);
+
+  for (unsigned i = 0; i < *n_ranges; i++)
+    {
+      GtkAccessibleTextRange *range = &(*ranges)[i];
+
+      range->start = start;
+      range->length = end - start;
+    }
+
+  *attribute_names = names;
+  *attribute_values = values;
+
+  return TRUE;
+}
+
+static void
+gtk_inscription_accessible_text_init (GtkAccessibleTextInterface *iface)
+{
+  iface->get_contents = gtk_inscription_accessible_text_get_contents;
+  iface->get_caret_position = gtk_inscription_accessible_text_get_caret_position;
+  iface->get_selection = gtk_inscription_accessible_text_get_selection;
+  iface->get_attributes = gtk_inscription_accessible_text_get_attributes;
+}
+
+/* }}} */
+
+/* vim:set foldmethod=marker expandtab: */

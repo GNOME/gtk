@@ -208,6 +208,24 @@ gtk_at_context_real_unrealize (GtkATContext *self)
 }
 
 static void
+gtk_at_context_real_update_caret_position (GtkATContext *self)
+{
+}
+
+static void
+gtk_at_context_real_update_selection_bound (GtkATContext *self)
+{
+}
+
+static void
+gtk_at_context_real_update_text_contents (GtkATContext *self,
+                                          GtkAccessibleTextContentChange change,
+                                          unsigned int start,
+                                          unsigned int end)
+{
+}
+
+static void
 gtk_at_context_class_init (GtkATContextClass *klass)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
@@ -223,6 +241,9 @@ gtk_at_context_class_init (GtkATContextClass *klass)
   klass->platform_change = gtk_at_context_real_platform_change;
   klass->bounds_change = gtk_at_context_real_bounds_change;
   klass->child_change = gtk_at_context_real_child_change;
+  klass->update_caret_position = gtk_at_context_real_update_caret_position;
+  klass->update_selection_bound = gtk_at_context_real_update_selection_bound;
+  klass->update_text_contents = gtk_at_context_real_update_text_contents;
 
   /**
    * GtkATContext:accessible-role: (attributes org.gtk.Property.get=gtk_at_context_get_accessible_role)
@@ -1507,4 +1528,34 @@ gtk_at_context_announce (GtkATContext                      *self,
     return;
 
   GTK_AT_CONTEXT_GET_CLASS (self)->announce (self, message, priority);
+}
+
+void
+gtk_at_context_update_caret_position (GtkATContext *self)
+{
+  if (!self->realized)
+    return;
+
+  GTK_AT_CONTEXT_GET_CLASS (self)->update_caret_position (self);
+}
+
+void
+gtk_at_context_update_selection_bound (GtkATContext *self)
+{
+  if (!self->realized)
+    return;
+
+  GTK_AT_CONTEXT_GET_CLASS (self)->update_selection_bound (self);
+}
+
+void
+gtk_at_context_update_text_contents (GtkATContext *self,
+                                     GtkAccessibleTextContentChange change,
+                                     unsigned int start,
+                                     unsigned int end)
+{
+  if (!self->realized)
+    return;
+
+  GTK_AT_CONTEXT_GET_CLASS (self)->update_text_contents (self, change, start, end);
 }
