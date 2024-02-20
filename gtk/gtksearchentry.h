@@ -65,6 +65,18 @@ void            gtk_search_entry_set_placeholder_text (GtkSearchEntry *entry,
 GDK_AVAILABLE_IN_4_10
 const char *    gtk_search_entry_get_placeholder_text (GtkSearchEntry *entry);
 
+GDK_AVAILABLE_IN_4_14
+void            gtk_search_entry_set_input_purpose (GtkSearchEntry  *entry,
+                                                    GtkInputPurpose  purpose);
+GDK_AVAILABLE_IN_4_14
+GtkInputPurpose gtk_search_entry_get_input_purpose (GtkSearchEntry *entry);
+
+GDK_AVAILABLE_IN_4_14
+void            gtk_search_entry_set_input_hints (GtkSearchEntry *entry,
+                                                  GtkInputHints   hints);
+GDK_AVAILABLE_IN_4_14
+GtkInputHints   gtk_search_entry_get_input_hints (GtkSearchEntry *entry);
+
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkSearchEntry, g_object_unref)
 
 G_END_DECLS
