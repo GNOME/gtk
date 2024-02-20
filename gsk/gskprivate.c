@@ -94,3 +94,59 @@ gsk_get_scaled_font (PangoFont *font,
   return g_object_ref (font2);
 #endif
 }
+
+/*< private >
+ * gsk_get_hinted_font:
+ * @font: a `PangoFont`
+ * @hint_style: hint style to use
+ * @antialias: antialiasing to use
+ *
+ * Returns a font that is just like @font, but uses the
+ * given hinting options for its glyphs and metrics.
+ *
+ * Returns: (transfer full): the modified `PangoFont`
+ */
+PangoFont *
+gsk_get_hinted_font (PangoFont          *font,
+                     cairo_hint_style_t  hint_style,
+                     cairo_antialias_t   antialias)
+{
+  cairo_font_options_t *options;
+  cairo_scaled_font_t *sf;
+  static PangoContext *context = NULL;
+  PangoFontDescription *desc G_GNUC_UNUSED;
+
+  options = cairo_font_options_create ();
+  sf = pango_cairo_font_get_scaled_font (PANGO_CAIRO_FONT (font));
+  cairo_scaled_font_get_font_options (sf, options);
+
+  if (cairo_font_options_get_hint_style (options) == hint_style &&
+      cairo_font_options_get_antialias (options) == antialias &&
+      cairo_font_options_get_hint_metrics (options) == CAIRO_HINT_METRICS_OFF &&
+      cairo_font_options_get_subpixel_order (options) == CAIRO_SUBPIXEL_ORDER_DEFAULT)
+    {
+      cairo_font_options_destroy (options);
+      return g_object_ref (font);
+    }
+
+  cairo_font_options_set_hint_style (options, hint_style);
+  cairo_font_options_set_antialias (options, antialias);
+  cairo_font_options_set_hint_metrics (options, CAIRO_HINT_METRICS_OFF);
+  cairo_font_options_set_subpixel_order (options, CAIRO_SUBPIXEL_ORDER_DEFAULT);
+
+  if (!context)
+    context = pango_context_new ();
+
+  pango_cairo_context_set_font_options (context, options);
+  cairo_font_options_destroy (options);
+
+#if PANGO_VERSION_CHECK (1, 52, 0)
+  return pango_font_map_reload_font (pango_font_get_font_map (font), font, 1.0, context, NULL);
+#else
+  desc = pango_font_describe (font);
+  font = pango_font_map_load_font (pango_font_get_font_map (font), context, desc);
+  pango_font_description_free (desc);
+
+  return font;
+#endif
+}
