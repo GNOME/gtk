@@ -7,6 +7,42 @@ in different ways than the old gl renderer, and trigger new driver bugs,
 https://gitlab.gnome.org/GNOME/gtk/-/issues/6388). Therefore, it is
 recommended to use the latest mesa release (24.0) with the new renderers.
 
+* Accessibility:
+ - Add a GtkAccessibleText interface for allowing 3rd party
+   text widgets (notably vte) to be accessible
+ - Avoid duplicate accessible descriptions
+ - Fix GetAccessibleAtPoint
+
+* GSK:
+ - Avoid offscreens for disjoint containers
+ - Don't use the gpu renderers with llvmpipe
+ - Fix various rendering issues found by tests
+ - Allow unnormalized node bounds again
+ - Fix a broken case of rounded-rect intersection
+ - Fix handling of external textures in gpu renderers
+ - Make gpu renderers work with WGL on Windows
+
+* build:
+ - Allow building without dmabuf support on (old) Linux
+
+* X11:
+ - Fix monitor enter/leave signals
+
+* Translation updates:
+ Basque
+ Brazilian Portuguese
+ Catalan
+ Czech
+ Galician
+ Georgian
+ Hebrew
+ Lithuanian
+ Persian
+ Russian
+ Turkish
+ Ukrainian
+
+
 Overview of Changes in 4.13.7, 11-02-2024
 =========================================
 
