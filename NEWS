@@ -1,4 +1,4 @@
-Overview of Changes in 4.13.8, 20-02-2024
+Overview of Changes in 4.13.9, xx-xx-xxxx
 =========================================
 
 Note: The new renderers and dmabuf support are using graphics drivers
@@ -6,6 +6,10 @@ in different ways than the old gl renderer, and trigger new driver bugs,
 (see for example https://gitlab.gnome.org/GNOME/gtk/-/issues/6418 and
 https://gitlab.gnome.org/GNOME/gtk/-/issues/6388). Therefore, it is
 recommended to use the latest mesa release (24.0) with the new renderers.
+
+
+Overview of Changes in 4.13.8, 20-02-2024
+=========================================
 
 * Accessibility:
  - Add a GtkAccessibleText interface for allowing 3rd party
