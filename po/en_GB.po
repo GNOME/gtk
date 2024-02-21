@@ -10,16 +10,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2023-11-23 06:29+0000\n"
-"PO-Revision-Date: 2023-11-23 19:34+0000\n"
-"Last-Translator: Bruce Cowan <bruce@bcowan.me.uk>\n"
+"POT-Creation-Date: 2024-02-18 12:21+0000\n"
+"PO-Revision-Date: 2024-02-21 19:56+0000\n"
+"Last-Translator: Andi Chandler <andi@gowling.com>\n"
 "Language-Team: English - United Kingdom <en@li.org>\n"
 "Language: en_GB\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.4\n"
+"X-Generator: Poedit 3.4.2\n"
 
 #: gdk/broadway/gdkbroadway-server.c:135
 #, c-format
@@ -30,11 +30,11 @@ msgstr "Broadway display type not supported: %sl"
 msgid "This clipboard cannot store data."
 msgstr "This clipboard cannot store data."
 
-#: gdk/gdkclipboard.c:287 gdk/gdkclipboard.c:785 gdk/gdkclipboard.c:1085
+#: gdk/gdkclipboard.c:287 gdk/gdkclipboard.c:786 gdk/gdkclipboard.c:1086
 msgid "Cannot read from empty clipboard."
 msgstr "Cannot read from empty clipboard."
 
-#: gdk/gdkclipboard.c:318 gdk/gdkclipboard.c:1135 gdk/gdkdrag.c:618
+#: gdk/gdkclipboard.c:318 gdk/gdkclipboard.c:1136 gdk/gdkdrag.c:618
 msgid "No compatible formats to transfer clipboard contents."
 msgstr "No compatible formats to transfer clipboard contents."
 
@@ -117,9 +117,9 @@ msgstr "No compatible formats to transfer contents."
 msgid "No GL API allowed."
 msgstr "No GL API allowed."
 
-#: gdk/gdkglcontext.c:426 gdk/win32/gdkglcontext-win32-wgl.c:387
-#: gdk/win32/gdkglcontext-win32-wgl.c:530
-#: gdk/win32/gdkglcontext-win32-wgl.c:574 gdk/x11/gdkglcontext-glx.c:691
+#: gdk/gdkglcontext.c:426 gdk/win32/gdkglcontext-win32-wgl.c:383
+#: gdk/win32/gdkglcontext-win32-wgl.c:526
+#: gdk/win32/gdkglcontext-win32-wgl.c:570 gdk/x11/gdkglcontext-glx.c:691
 msgid "Unable to create a GL context"
 msgstr "Unable to create a GL context"
 
@@ -530,7 +530,7 @@ msgstr "Error interpreting JPEG image file (%s)"
 msgid "Unsupported JPEG colorspace (%d)"
 msgstr "Unsupported JPEG colourspace (%d)"
 
-#: gdk/loaders/gdkjpeg.c:203 gdk/loaders/gdkpng.c:280 gdk/loaders/gdktiff.c:467
+#: gdk/loaders/gdkjpeg.c:203 gdk/loaders/gdkpng.c:286 gdk/loaders/gdktiff.c:467
 #, c-format
 msgid "Not enough memory for image size %ux%u"
 msgstr "Not enough memory for image size %ux%u"
@@ -540,15 +540,21 @@ msgstr "Not enough memory for image size %ux%u"
 msgid "Error reading png (%s)"
 msgstr "Error reading png (%s)"
 
-#: gdk/loaders/gdkpng.c:211
+#: gdk/loaders/gdkpng.c:212
 #, c-format
 msgid "Unsupported depth %u in png image"
 msgstr "Unsupported depth %u in png image"
 
-#: gdk/loaders/gdkpng.c:261
+#: gdk/loaders/gdkpng.c:262
 #, c-format
 msgid "Unsupported color type %u in png image"
 msgstr "Unsupported colour type %u in png image"
+
+#: gdk/loaders/gdkpng.c:272
+#, c-format
+#| msgid "Not enough memory for image size %ux%u"
+msgid "Image stride too large for image size %ux%u"
+msgstr "Image stride too large for image size %ux%u"
 
 #: gdk/loaders/gdktiff.c:353
 msgid "Failed to load RGB data from TIFF file"
@@ -575,88 +581,88 @@ msgstr "No compatible transfer format found"
 msgid "Failed to decode contents with mime-type of '%s'"
 msgstr "Failed to decode contents with mime-type of '%s'"
 
-#: gdk/win32/gdkclipdrop-win32.c:721
+#: gdk/win32/gdkclipdrop-win32.c:719
 #, c-format
 msgid "Cannot claim clipboard ownership. OpenClipboard() timed out."
 msgstr "Cannot claim clipboard ownership. OpenClipboard() timed out."
 
-#: gdk/win32/gdkclipdrop-win32.c:731
+#: gdk/win32/gdkclipdrop-win32.c:729
 #, c-format
 msgid "Cannot claim clipboard ownership. Another process claimed it before us."
 msgstr ""
 "Cannot claim clipboard ownership. Another process claimed it before us."
 
-#: gdk/win32/gdkclipdrop-win32.c:745
+#: gdk/win32/gdkclipdrop-win32.c:743
 #, c-format
 msgid "Cannot claim clipboard ownership. OpenClipboard() failed: 0x%lx."
 msgstr "Cannot claim clipboard ownership. OpenClipboard() failed: 0x%lx."
 
-#: gdk/win32/gdkclipdrop-win32.c:757
+#: gdk/win32/gdkclipdrop-win32.c:755
 #, c-format
 msgid "Cannot claim clipboard ownership. EmptyClipboard() failed: 0x%lx."
 msgstr "Cannot claim clipboard ownership. EmptyClipboard() failed: 0x%lx."
 
-#: gdk/win32/gdkclipdrop-win32.c:800
+#: gdk/win32/gdkclipdrop-win32.c:798
 #, c-format
 msgid "Cannot set clipboard data. OpenClipboard() timed out."
 msgstr "Cannot set clipboard data. OpenClipboard() timed out."
 
-#: gdk/win32/gdkclipdrop-win32.c:810 gdk/win32/gdkclipdrop-win32.c:841
+#: gdk/win32/gdkclipdrop-win32.c:808 gdk/win32/gdkclipdrop-win32.c:839
 #, c-format
 msgid "Cannot set clipboard data. Another process claimed clipboard ownership."
 msgstr ""
 "Cannot set clipboard data. Another process claimed clipboard ownership."
 
-#: gdk/win32/gdkclipdrop-win32.c:824
+#: gdk/win32/gdkclipdrop-win32.c:822
 #, c-format
 msgid "Cannot set clipboard data. OpenClipboard() failed: 0x%lx."
 msgstr "Cannot set clipboard data. OpenClipboard() failed: 0x%lx."
 
-#: gdk/win32/gdkclipdrop-win32.c:876
+#: gdk/win32/gdkclipdrop-win32.c:874
 #, c-format
 msgid "Cannot get clipboard data. GlobalLock(0x%p) failed: 0x%lx."
 msgstr "Cannot get clipboard data. GlobalLock(0x%p) failed: 0x%lx."
 
-#: gdk/win32/gdkclipdrop-win32.c:887
+#: gdk/win32/gdkclipdrop-win32.c:885
 #, c-format
 msgid "Cannot get clipboard data. GlobalSize(0x%p) failed: 0x%lx."
 msgstr "Cannot get clipboard data. GlobalSize(0x%p) failed: 0x%lx."
 
-#: gdk/win32/gdkclipdrop-win32.c:900
+#: gdk/win32/gdkclipdrop-win32.c:898
 #, c-format
 msgid ""
 "Cannot get clipboard data. Failed to allocate %s bytes to store the data."
 msgstr ""
 "Cannot get clipboard data. Failed to allocate %s bytes to store the data."
 
-#: gdk/win32/gdkclipdrop-win32.c:932
+#: gdk/win32/gdkclipdrop-win32.c:930
 #, c-format
 msgid "Cannot get clipboard data. OpenClipboard() timed out."
 msgstr "Cannot get clipboard data. OpenClipboard() timed out."
 
-#: gdk/win32/gdkclipdrop-win32.c:942
+#: gdk/win32/gdkclipdrop-win32.c:940
 #, c-format
 msgid "Cannot get clipboard data. Clipboard ownership changed."
 msgstr "Cannot get clipboard data. Clipboard ownership changed."
 
-#: gdk/win32/gdkclipdrop-win32.c:952
+#: gdk/win32/gdkclipdrop-win32.c:950
 #, c-format
 msgid ""
 "Cannot get clipboard data. Clipboard data changed before we could get it."
 msgstr ""
 "Cannot get clipboard data. Clipboard data changed before we could get it."
 
-#: gdk/win32/gdkclipdrop-win32.c:969
+#: gdk/win32/gdkclipdrop-win32.c:967
 #, c-format
 msgid "Cannot get clipboard data. OpenClipboard() failed: 0x%lx."
 msgstr "Cannot get clipboard data. OpenClipboard() failed: 0x%lx."
 
-#: gdk/win32/gdkclipdrop-win32.c:994
+#: gdk/win32/gdkclipdrop-win32.c:992
 #, c-format
 msgid "Cannot get clipboard data. No compatible transfer format found."
 msgstr "Cannot get clipboard data. No compatible transfer format found."
 
-#: gdk/win32/gdkclipdrop-win32.c:1004
+#: gdk/win32/gdkclipdrop-win32.c:1002
 #, c-format
 msgid "Cannot get clipboard data. GetClipboardData() failed: 0x%lx."
 msgstr "Cannot get clipboard data. GetClipboardData() failed: 0x%lx."
@@ -696,22 +702,21 @@ msgstr "IDataObject_GetData (0x%x) failed, returning 0x%lx"
 msgid "Failed to transmute DnD data W32 format 0x%x to %p (%s)"
 msgstr "Failed to transmute DnD data W32 format 0x%x to %p (%s)"
 
-#: gdk/win32/gdkglcontext-win32-wgl.c:319
+#: gdk/win32/gdkglcontext-win32-wgl.c:315
 msgid "No GL implementation is available"
 msgstr "No GL implementation is available"
 
-#: gdk/win32/gdkglcontext-win32-wgl.c:396
+#: gdk/win32/gdkglcontext-win32-wgl.c:392
 #, c-format
-#| msgid "EGL version %d.%d is too old. GTK requires %d.%d"
 msgid "WGL version %d.%d is too low, need at least %d.%d"
 msgstr "WGL version %d.%d is too low, need at least %d.%d"
 
-#: gdk/win32/gdkglcontext-win32-wgl.c:414
+#: gdk/win32/gdkglcontext-win32-wgl.c:410
 #, c-format
 msgid "GL implementation cannot share GL contexts"
 msgstr "GL implementation cannot share GL contexts"
 
-#: gdk/win32/gdkglcontext-win32-wgl.c:696
+#: gdk/win32/gdkglcontext-win32-wgl.c:692
 msgid "No available configurations for the given pixel format"
 msgstr "No available configurations for the given pixel format"
 
@@ -1706,8 +1711,6 @@ msgid "window"
 msgstr "window"
 
 #: gtk/gtkaccessible.c:833
-#| msgctxt "accessibility"
-#| msgid "button"
 msgctxt "accessibility"
 msgid "toggle button"
 msgstr "toggle button"
@@ -1721,7 +1724,7 @@ msgstr "_Close"
 #. * suspend or screen locking, and the caller hasn't specified
 #. * a reason.
 #.
-#: gtk/gtkapplication-dbus.c:721
+#: gtk/gtkapplication-dbus.c:721 gtk/gtkapplication-dbus.c:763
 msgid "Reason not specified"
 msgstr "Reason not specified"
 
@@ -2285,7 +2288,7 @@ msgid "If you delete an item, it will be permanently lost."
 msgstr "If you delete an item, it will be permanently lost."
 
 #: gtk/gtkfilechooserwidget.c:1185 gtk/gtkfilechooserwidget.c:1815
-#: gtk/gtklabel.c:5695 gtk/gtktext.c:6147 gtk/gtktextview.c:9018
+#: gtk/gtklabel.c:5696 gtk/gtktext.c:6147 gtk/gtktextview.c:9018
 msgid "_Delete"
 msgstr "_Delete"
 
@@ -2411,7 +2414,6 @@ msgid "Yesterday"
 msgstr "Yesterday"
 
 #: gtk/gtkfilechooserwidget.c:3823
-#, c-format
 msgid "%-e %b"
 msgstr "%-e %b"
 
@@ -2612,7 +2614,7 @@ msgstr "Style Variations"
 msgid "Character Variations"
 msgstr "Character Variations"
 
-#: gtk/gtkglarea.c:305
+#: gtk/gtkglarea.c:309
 msgid "OpenGL context creation failed"
 msgstr "OpenGL context creation failed"
 
@@ -2622,35 +2624,34 @@ msgid "Close"
 msgstr "Close"
 
 #: gtk/deprecated/gtkinfobar.c:499
-#| msgid "Close the window"
 msgid "Close the infobar"
 msgstr "Close the infobar"
 
-#: gtk/gtklabel.c:5692 gtk/gtktext.c:6135 gtk/gtktextview.c:9006
+#: gtk/gtklabel.c:5693 gtk/gtktext.c:6135 gtk/gtktextview.c:9006
 msgid "Cu_t"
 msgstr "Cu_t"
 
-#: gtk/gtklabel.c:5693 gtk/gtktext.c:6139 gtk/gtktextview.c:9010
+#: gtk/gtklabel.c:5694 gtk/gtktext.c:6139 gtk/gtktextview.c:9010
 msgid "_Copy"
 msgstr "_Copy"
 
-#: gtk/gtklabel.c:5694 gtk/gtktext.c:6143 gtk/gtktextview.c:9014
+#: gtk/gtklabel.c:5695 gtk/gtktext.c:6143 gtk/gtktextview.c:9014
 msgid "_Paste"
 msgstr "_Paste"
 
-#: gtk/gtklabel.c:5700 gtk/gtktext.c:6156 gtk/gtktextview.c:9039
+#: gtk/gtklabel.c:5701 gtk/gtktext.c:6156 gtk/gtktextview.c:9039
 msgid "Select _All"
 msgstr "Select _All"
 
-#: gtk/gtklabel.c:5705
+#: gtk/gtklabel.c:5706
 msgid "_Open Link"
 msgstr "_Open Link"
 
-#: gtk/gtklabel.c:5709
+#: gtk/gtklabel.c:5710
 msgid "Copy _Link Address"
 msgstr "Copy _Link Address"
 
-#: gtk/gtklabel.c:5753 gtk/gtktext.c:2716 gtk/gtktextview.c:9088
+#: gtk/gtklabel.c:5754 gtk/gtktext.c:2716 gtk/gtktextview.c:9088
 msgid "Context menu"
 msgstr "Context menu"
 
@@ -2711,14 +2712,11 @@ msgid "%d:%02d"
 msgstr "%d:%02d"
 
 #: gtk/gtkmediacontrols.c:412
-#| msgid "_Stop"
 msgctxt "media controls tooltip"
 msgid "Stop"
 msgstr "Stop"
 
 #: gtk/gtkmediacontrols.c:417 gtk/ui/gtkmediacontrols.ui:28
-#| msgctxt "Stock label, media"
-#| msgid "_Play"
 msgctxt "media controls tooltip"
 msgid "Play"
 msgstr "Play"
@@ -3559,7 +3557,7 @@ msgstr "Swipe right"
 
 #. Translators: This is placeholder text for the search entry in the shortcuts window
 #: gtk/gtkshortcutswindow.c:855 gtk/gtkshortcutswindow.c:922
-#: gtk/gtkshortcutswindow.c:927
+#: gtk/gtkshortcutswindow.c:928
 msgid "Search Shortcuts"
 msgstr "Search Shortcuts"
 
@@ -3573,12 +3571,12 @@ msgstr "Shortcuts"
 msgid "Search Results"
 msgstr "Search Results"
 
-#: gtk/gtkshortcutswindow.c:989 gtk/ui/gtkemojichooser.ui:349
+#: gtk/gtkshortcutswindow.c:990 gtk/ui/gtkemojichooser.ui:349
 #: gtk/ui/gtkfilechooserwidget.ui:239
 msgid "No Results Found"
 msgstr "No Results Found"
 
-#: gtk/gtkshortcutswindow.c:1000 gtk/ui/gtkemojichooser.ui:362
+#: gtk/gtkshortcutswindow.c:1001 gtk/ui/gtkemojichooser.ui:362
 #: gtk/ui/gtkfilechooserwidget.ui:252 gtk/ui/gtkplacesview.ui:218
 msgid "Try a different search"
 msgstr "Try a different search"
@@ -3653,13 +3651,10 @@ msgid "Description"
 msgstr "Description"
 
 #: gtk/inspector/a11y.ui:99 gtk/inspector/misc-info.ui:296
-#| msgctxt "OpenType layout"
-#| msgid "Left Bounds"
 msgid "Bounds"
 msgstr "Bounds"
 
 #: gtk/inspector/a11y.ui:125
-#| msgid "Object path"
 msgid "Object Path"
 msgstr "Object Path"
 
@@ -3995,7 +3990,6 @@ msgid "Frame Rate"
 msgstr "Frame Rate"
 
 #: gtk/inspector/misc-info.ui:527
-#| msgid "Font Scale"
 msgid "Scale"
 msgstr "Scale"
 
@@ -4314,7 +4308,6 @@ msgid "Slowdown"
 msgstr "Slowdown"
 
 #: gtk/inspector/visual.ui:385
-#| msgid "Frame Rate"
 msgid "Show Framerate"
 msgstr "Show Framerate"
 
@@ -4355,7 +4348,6 @@ msgid "Show Focus"
 msgstr "Show Focus"
 
 #: gtk/inspector/visual.ui:635
-#| msgid "Accessibility"
 msgid "Show Accessibility warnings"
 msgstr "Show Accessibility warnings"
 
@@ -6188,7 +6180,6 @@ msgid "Search font name"
 msgstr "Search font name"
 
 #: gtk/ui/gtkfontchooserwidget.ui:77
-#| msgid "Filter by"
 msgid "Filters"
 msgstr "Filters"
 
@@ -6214,7 +6205,6 @@ msgid "No Fonts Found"
 msgstr "No Fonts Found"
 
 #: gtk/ui/gtkmediacontrols.ui:47
-#| msgid "List Position"
 msgctxt "media controls"
 msgid "Position"
 msgstr "Position"
@@ -7135,19 +7125,6 @@ msgstr "Can’t close stream"
 
 #: tools/gtk-builder-tool.c:36
 #, c-format
-#| msgid ""
-#| "Usage:\n"
-#| "  gtk-builder-tool [COMMAND] [OPTION…] FILE\n"
-#| "\n"
-#| "Perform various tasks on GtkBuilder .ui files.\n"
-#| "\n"
-#| "Commands:\n"
-#| "  validate     Validate the file\n"
-#| "  simplify     Simplify the file\n"
-#| "  enumerate    List all named objects\n"
-#| "  preview      Preview the file\n"
-#| "  screenshot   Take a screenshot of the file\n"
-#| "\n"
 msgid ""
 "Usage:\n"
 "  gtk4-builder-tool [COMMAND] [OPTION…] FILE\n"
@@ -7190,13 +7167,11 @@ msgstr "Print all named objects."
 
 #: tools/gtk-builder-tool-preview.c:128 tools/gtk-builder-tool-screenshot.c:236
 #, c-format
-#| msgid "No item for URI '%s' found"
 msgid "No object with ID '%s' found\n"
 msgstr "No object with ID '%s' found\n"
 
 #: tools/gtk-builder-tool-preview.c:130
 #, c-format
-#| msgid "No results found"
 msgid "No previewable object found\n"
 msgstr "No previewable object found\n"
 
@@ -7232,13 +7207,11 @@ msgstr "No .ui file specified\n"
 
 #: tools/gtk-builder-tool-preview.c:214
 #, c-format
-#| msgid "Can only simplify a single .ui file without --replace\n"
 msgid "Can only preview a single .ui file\n"
 msgstr "Can only preview a single .ui file\n"
 
 #: tools/gtk-builder-tool-screenshot.c:238
 #, c-format
-#| msgid "No results found"
 msgid "No object found\n"
 msgstr "No object found\n"
 
@@ -7249,7 +7222,6 @@ msgstr "Objects of type %s can't be screenshot\n"
 
 #: tools/gtk-builder-tool-screenshot.c:298
 #, c-format
-#| msgid "Failed to write hash table\n"
 msgid "Failed to take a screenshot\n"
 msgstr "Failed to take a screenshot\n"
 
@@ -7271,7 +7243,6 @@ msgstr "Output written to %s.\n"
 #: tools/gtk-builder-tool-screenshot.c:336
 #: tools/gtk-rendernode-tool-render.c:176
 #, c-format
-#| msgid "Failed to open file %s : %s\n"
 msgid "Failed to save %s: %s\n"
 msgstr "Failed to save %s: %s\n"
 
@@ -7289,7 +7260,6 @@ msgstr "Overwrite existing file"
 
 #: tools/gtk-builder-tool-screenshot.c:363
 #: tools/gtk-rendernode-tool-render.c:197
-#| msgid "FILE"
 msgid "FILE…"
 msgstr "FILE…"
 
@@ -7299,7 +7269,6 @@ msgstr "Render a .ui file to an image."
 
 #: tools/gtk-builder-tool-screenshot.c:397
 #, c-format
-#| msgid "Can only simplify a single .ui file without --replace\n"
 msgid "Can only render a single .ui file to a single output file\n"
 msgstr "Can only render a single .ui file to a single output file\n"
 
@@ -7310,25 +7279,21 @@ msgstr "%s:%d: Couldn’t parse value for property '%s': %s\n"
 
 #: tools/gtk-builder-tool-simplify.c:658
 #, c-format
-#| msgid "Cell property %s::%s not found\n"
 msgid "Property %s not found"
 msgstr "Property %s not found"
 
 #: tools/gtk-builder-tool-simplify.c:661
 #, c-format
-#| msgid "Packing property %s::%s not found\n"
 msgid "Packing property %s not found"
 msgstr "Packing property %s not found"
 
 #: tools/gtk-builder-tool-simplify.c:664
 #, c-format
-#| msgid "Cell property %s::%s not found\n"
 msgid "Cell property %s not found"
 msgstr "Cell property %s not found"
 
 #: tools/gtk-builder-tool-simplify.c:667
 #, c-format
-#| msgid "Cell property %s::%s not found\n"
 msgid "Layout property %s not found"
 msgstr "Layout property %s not found"
 
@@ -7356,7 +7321,6 @@ msgstr "Failed to read “%s”: %s\n"
 
 #: tools/gtk-builder-tool-simplify.c:2510
 #, c-format
-#| msgid "Failed to write %s: “%s”\n"
 msgid "Failed to write “%s”: “%s”\n"
 msgstr "Failed to write “%s”: “%s”\n"
 
@@ -7379,7 +7343,6 @@ msgstr "Can only simplify a single .ui file without --replace\n"
 
 #: tools/gtk-builder-tool-validate.c:45
 #, c-format
-#| msgid "Failed to open file %s : %s\n"
 msgid "Failed to lookup template parent type %s\n"
 msgstr "Failed to lookup template parent type %s\n"
 
@@ -7389,7 +7352,6 @@ msgstr "Deprecated types:\n"
 
 #: tools/gtk-builder-tool-validate.c:167
 #, c-format
-#| msgid "Failed to open file %s : %s\n"
 msgid "Failed to create an instance of the template type %s\n"
 msgstr "Failed to create an instance of the template type %s\n"
 
@@ -7499,20 +7461,17 @@ msgid "Origin: %g %g\n"
 msgstr "Origin: %g %g\n"
 
 #: tools/gtk-rendernode-tool-info.c:211
-#| msgid "Could not retrieve information about the file"
 msgid "Provide information about the render node."
 msgstr "Provide information about the render node."
 
 #: tools/gtk-rendernode-tool-info.c:224 tools/gtk-rendernode-tool-show.c:134
 #: tools/gtk-rendernode-tool-render.c:225
 #, c-format
-#| msgid "No .ui file specified\n"
 msgid "No .node file specified\n"
 msgstr "No .node file specified\n"
 
 #: tools/gtk-rendernode-tool-info.c:230
 #, c-format
-#| msgid "Can only simplify a single .ui file without --replace\n"
 msgid "Can only accept a single .node file\n"
 msgstr "Can only accept a single .node file\n"
 
@@ -7526,7 +7485,6 @@ msgstr "Show the render node."
 
 #: tools/gtk-rendernode-tool-show.c:140
 #, c-format
-#| msgid "Can only simplify a single .ui file without --replace\n"
 msgid "Can only preview a single .node file\n"
 msgstr "Can only preview a single .node file\n"
 
@@ -7541,12 +7499,10 @@ msgstr ""
 
 #: tools/gtk-rendernode-tool-render.c:137
 #, c-format
-#| msgid "Failed to open file %s : %s\n"
 msgid "Failed to generate SVG: %s\n"
 msgstr "Failed to generate SVG: %s\n"
 
 #: tools/gtk-rendernode-tool-render.c:196
-#| msgid "Renderer"
 msgid "Renderer to use"
 msgstr "Renderer to use"
 
@@ -7560,21 +7516,16 @@ msgstr "Render a .node file to an image."
 
 #: tools/gtk-rendernode-tool-render.c:231
 #, c-format
-#| msgid "Can only simplify a single .ui file without --replace\n"
 msgid "Can only render a single .node file to a single output file\n"
 msgstr "Can only render a single .node file to a single output file\n"
 
 #: tools/gtk-rendernode-tool-utils.c:51
 #, c-format
-#| msgid ""
-#| "Error creating folder \"%s\": %s\n"
-#| "%s"
 msgid "Error at %s: %s\n"
 msgstr "Error at %s: %s\n"
 
 #: tools/gtk-rendernode-tool-utils.c:69
 #, c-format
-#| msgid "Failed to open file %s : %s\n"
 msgid "Failed to load node file: %s\n"
 msgstr "Failed to load node file: %s\n"
 
