@@ -8735,11 +8735,11 @@ gtk_text_view_retrieve_surrounding_handler (GtkIMContext  *context,
   gboolean flip;
 
   gtk_text_buffer_get_iter_at_mark (text_view->priv->buffer, &start,
-                                    gtk_text_buffer_get_insert (text_view->priv->buffer));
-  gtk_text_buffer_get_iter_at_mark (text_view->priv->buffer, &end,
                                     gtk_text_buffer_get_selection_bound (text_view->priv->buffer));
+  gtk_text_buffer_get_iter_at_mark (text_view->priv->buffer, &end,
+                                    gtk_text_buffer_get_insert (text_view->priv->buffer));
 
-  flip = gtk_text_iter_compare (&start, &end) < 0;
+  flip = gtk_text_iter_compare (&start, &end) > 0;
 
   gtk_text_iter_order (&start, &end);
 
@@ -8765,13 +8765,13 @@ gtk_text_view_retrieve_surrounding_handler (GtkIMContext  *context,
 
   if (flip)
     {
-      anchor_pos = strlen (pre);
-      cursor_pos = anchor_pos + strlen (sel);
+      cursor_pos = strlen (pre);
+      anchor_pos = cursor_pos + strlen (sel);
     }
   else
     {
-      cursor_pos = strlen (pre);
-      anchor_pos = cursor_pos + strlen (sel);
+      anchor_pos = strlen (pre);
+      cursor_pos = anchor_pos + strlen (sel);
     }
 
   text = g_strconcat (pre, sel, post, NULL);

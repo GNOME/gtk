@@ -73,9 +73,10 @@ test_textview_surrounding (void)
   GtkTextBuffer *buffer;
   GtkTextIter iter;
   GtkTextIter start, end;
+  GtkTextIter bound, insert;
   gboolean ret;
   char *text;
-  int cursor_pos, selection_bound;
+  int anchor_pos, cursor_pos;
 
   widget = gtk_text_view_new ();
   controller = gtk_text_view_get_key_controller (GTK_TEXT_VIEW (widget));
@@ -89,12 +90,12 @@ test_textview_surrounding (void)
   ret = gtk_im_context_get_surrounding_with_selection (context,
                                                        &text,
                                                        &cursor_pos,
-                                                       &selection_bound);
+                                                       &anchor_pos);
 
   g_assert_true (ret);
   g_assert_cmpstr (text, ==, "abcd\nefgh\nijkl");
   g_assert_cmpint (cursor_pos, ==, 7);
-  g_assert_cmpint (selection_bound, ==, 7);
+  g_assert_cmpint (anchor_pos, ==, 7);
 
   g_free (text);
 
@@ -122,19 +123,19 @@ test_textview_surrounding (void)
 
   buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (widget));
   gtk_text_buffer_set_text (buffer, "ab cd\nef gh\nijkl", -1);
-  gtk_text_buffer_get_iter_at_line_offset (buffer, &start, 1, 4);
-  gtk_text_buffer_get_iter_at_line_offset (buffer, &end, 2, 2);
-  gtk_text_buffer_select_range (buffer, &start, &end);
+  gtk_text_buffer_get_iter_at_line_offset (buffer, &bound, 1, 4);
+  gtk_text_buffer_get_iter_at_line_offset (buffer, &insert, 2, 2);
+  gtk_text_buffer_select_range (buffer, &insert, &bound);
 
   ret = gtk_im_context_get_surrounding_with_selection (context,
                                                        &text,
                                                        &cursor_pos,
-                                                       &selection_bound);
+                                                       &anchor_pos);
 
   g_assert_true (ret);
   g_assert_cmpstr (text, ==, "cd\nef gh\nijkl");
+  g_assert_cmpint (anchor_pos, ==, 7);
   g_assert_cmpint (cursor_pos, ==, 11);
-  g_assert_cmpint (selection_bound, ==, 7);
 
   g_free (text);
 
