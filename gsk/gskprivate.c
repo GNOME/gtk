@@ -3,6 +3,7 @@
 
 #include <cairo.h>
 #include <pango/pangocairo.h>
+#include <math.h>
 
 static gpointer
 register_resources (gpointer data)
@@ -68,4 +69,56 @@ gsk_get_unhinted_font (PangoFont *font)
   cairo_font_options_destroy (options);
 
   return font2;
+}
+
+PangoFont *
+gsk_get_scaled_font (PangoFont *font,
+                     float      scale)
+{
+  GHashTable *fonts;
+  int key;
+  PangoFont *font2;
+  PangoFontDescription *desc;
+  int size;
+  PangoFontMap *fontmap;
+  PangoContext *context;
+
+  key = (int) CLAMP (roundf (scale * PANGO_SCALE), G_MININT, G_MAXINT);
+
+  if (key == PANGO_SCALE)
+    return font;
+
+  fonts = (GHashTable *) g_object_get_data (G_OBJECT (font), "gsk-scaled-fonts");
+
+  if (fonts)
+    {
+      font2 = g_hash_table_lookup (fonts, GINT_TO_POINTER (key));
+      if (font2)
+        return font2;
+    }
+  else
+    {
+      fonts = g_hash_table_new_full (g_direct_hash, g_direct_equal, NULL, g_object_unref);
+      g_object_set_data_full (G_OBJECT (font), "gsk-scaled-fonts",
+                              fonts, (GDestroyNotify) g_hash_table_unref);
+    }
+
+ desc = pango_font_describe (font);
+ size = pango_font_description_get_size (desc);
+
+ if (pango_font_description_get_size_is_absolute (desc))
+   pango_font_description_set_absolute_size (desc, size * scale);
+ else
+   pango_font_description_set_size (desc, (int) roundf (size * scale));
+
+ fontmap = pango_font_get_font_map (font);
+ context = pango_font_map_create_context (fontmap);
+ font2 = pango_font_map_load_font (fontmap, context, desc);
+
+ pango_font_description_free (desc);
+ g_object_unref (context);
+
+ g_hash_table_insert (fonts, GINT_TO_POINTER (key), font2);
+
+ return font2;
 }
