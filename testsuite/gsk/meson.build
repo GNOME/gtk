@@ -99,6 +99,7 @@ compare_render_tests = [
   'mipmap-generation-later',
   'nested-rounded-clips',
   'o-from-hell',
+  'o-from-hell2',
   'offscreen-fractional-translate-nogl',
   'offscreen-pixel-alignment-nogl-nocairo',
   'offscreen-pixel-alignment2',
