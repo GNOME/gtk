@@ -1790,6 +1790,12 @@ gtk_flow_box_size_allocate (GtkWidget *widget,
       GtkWidget *child;
       int position;
       int this_item_size;
+      int last_line_n_items = n_children % line_length;
+
+      if (last_line_n_items == 0)
+        last_line_n_items = line_length;
+
+      int last_line_extra_items = line_length - last_line_n_items;
 
       child = g_sequence_get (iter);
 
@@ -1837,18 +1843,16 @@ gtk_flow_box_size_allocate (GtkWidget *widget,
                * any leading items */
               if (line_count == n_lines -1)
                 {
-                  int extra_items = n_children % line_length;
-
                   if (priv->homogeneous)
                     {
-                      item_offset += item_size * (line_length - extra_items);
-                      item_offset += item_spacing * (line_length - extra_items);
+                      item_offset += item_size * last_line_extra_items;
+                      item_offset += item_spacing * last_line_extra_items;
                     }
                   else
                     {
                       int j;
 
-                      for (j = 0; j < (line_length - extra_items); j++)
+                      for (j = 0; j < last_line_extra_items; j++)
                         {
                           item_offset += item_sizes[j].minimum_size;
                           item_offset += item_spacing;
@@ -1860,11 +1864,7 @@ gtk_flow_box_size_allocate (GtkWidget *widget,
 
       /* Push the index along for the last line when spreading to the end */
       if (item_align == GTK_ALIGN_END && line_count == n_lines -1)
-        {
-          int extra_items = n_children % line_length;
-
-          position += line_length - extra_items;
-        }
+        position += last_line_extra_items;
 
       if (priv->homogeneous)
         this_item_size = item_size;
