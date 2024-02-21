@@ -35,7 +35,7 @@ msgstr ""
 "Project-Id-Version: gtk+ 2.8.2\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
 "POT-Creation-Date: 2024-02-12 01:46+0000\n"
-"PO-Revision-Date: 2024-02-14 22:28+0100\n"
+"PO-Revision-Date: 2024-02-21 22:28+0100\n"
 "Last-Translator: Jordi Mas i Hernàndez <jmas@softcatala.org>\n"
 "Language-Team: Catalan <tradgnome@softcatala.org>\n"
 "Language: ca\n"
@@ -3933,7 +3933,7 @@ msgstr "Cap"
 
 #: gtk/inspector/general.c:901
 msgid "IM Context is hardcoded by GTK_IM_MODULE"
-msgstr "El content IM està definit manualment per GTK_IM_MODULE"
+msgstr "El context IM està definit manualment per GTK_IM_MODULE"
 
 #: gtk/inspector/general.ui:31
 msgid "GTK Version"
@@ -7590,12 +7590,12 @@ msgstr "CAMÍ"
 
 #: tools/gtk-path-tool-decompose.c:99
 msgid "Decompose a path."
-msgstr "Descomposa un camí"
+msgstr "Descompon un camí."
 
 #: tools/gtk-path-tool-decompose.c:112 tools/gtk-path-tool-info.c:113
 #: tools/gtk-path-tool-restrict.c:64 tools/gtk-path-tool-reverse.c:58
 msgid "No paths given."
-msgstr "No s'ha proporcionat cap camí"
+msgstr "No s'ha proporcionat cap camí."
 
 #: tools/gtk-path-tool-decompose.c:140 tools/gtk-path-tool-restrict.c:94
 #: tools/gtk-path-tool-reverse.c:78
@@ -7809,7 +7809,7 @@ msgstr "Previsualització del camí"
 
 #: tools/gtk-path-tool-show.c:180
 msgid "Display the path."
-msgstr "Visualitza el camí"
+msgstr "Visualitza el camí."
 
 #: tools/gtk-path-tool-show.c:215
 msgid "Can only show a single path"
@@ -8105,50 +8105,3 @@ msgstr ""
 "No hi ha el fitxer índex de tema a «%s».\n"
 "Si realment voleu crear una memòria cau d'icones aquí, utilitzeu --ignore-theme-index.\n"
 
-#~ msgctxt "GL version"
-#~ msgid "Disabled"
-#~ msgstr "Inhabilitat"
-
-#~ msgctxt "GL vendor"
-#~ msgid "Disabled"
-#~ msgstr "Inhabilitat"
-
-#~ msgctxt "GL vendor"
-#~ msgid "None"
-#~ msgstr "Cap"
-
-#, c-format
-#~ msgid "Unspecified error decoding media"
-#~ msgstr "S'ha produït un error no especificat descodificant un mitjà"
-
-#, c-format
-#~ msgid "Cannot find decoder: %s"
-#~ msgstr "No s'ha pogut trobar el descodificador: %s"
-
-#~ msgid "Failed to allocate a codec context"
-#~ msgstr "No s'ha pogut assignar un context de còdec"
-
-#, c-format
-#~ msgid "Cannot find encoder: %s"
-#~ msgstr "No s'ha pogut trobar el codificador: %s"
-
-#~ msgid "Cannot add new stream"
-#~ msgstr "No es pot afegir un flux nou"
-
-#~ msgid "Failed to allocate an audio frame"
-#~ msgstr "No s'ha pogut assignar una trama d'àudio"
-
-#~ msgid "Not enough memory"
-#~ msgstr "No hi ha prou memòria"
-
-#~ msgid "Could not allocate resampler context"
-#~ msgstr "No s'ha pogut assignar el context del remostreig"
-
-#~ msgid "No audio output found"
-#~ msgstr "No s'ha trobat cap sortida d'àudio"
-
-#~ msgid "Show _Size Column"
-#~ msgstr "Mostra la columna de la _mida"
-
-#~ msgid "Show T_ype Column"
-#~ msgstr "Mos_tra la columna tipus"
