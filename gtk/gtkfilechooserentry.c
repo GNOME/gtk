@@ -131,6 +131,9 @@ gtk_file_chooser_entry_get_completion_text (GtkFileChooserEntry *chooser_entry)
   int start, end;
 
   gtk_editable_get_selection_bounds (editable, &start, &end);
+  if (start == end)
+    return g_strdup ("");
+
   return gtk_editable_get_chars (editable, 0, MIN (start, end));
 }
 
@@ -686,7 +689,7 @@ set_completion_folder (GtkFileChooserEntry *chooser_entry,
 
   g_free (chooser_entry->dir_part);
   chooser_entry->dir_part = g_strdup (dir_part);
-  
+
   chooser_entry->current_folder_loaded = FALSE;
 
   discard_completion_store (chooser_entry);
@@ -854,7 +857,7 @@ _gtk_file_chooser_entry_set_base_folder (GtkFileChooserEntry *chooser_entry,
   g_return_if_fail (file == NULL || G_IS_FILE (file));
 
   if (chooser_entry->base_folder == file ||
-      (file != NULL && chooser_entry->base_folder != NULL 
+      (file != NULL && chooser_entry->base_folder != NULL
        && g_file_equal (chooser_entry->base_folder, file)))
     return;
 
@@ -936,7 +939,7 @@ _gtk_file_chooser_entry_set_action (GtkFileChooserEntry *chooser_entry,
 				    GtkFileChooserAction action)
 {
   g_return_if_fail (GTK_IS_FILE_CHOOSER_ENTRY (chooser_entry));
-  
+
   if (chooser_entry->action != action)
     {
       GtkEntryCompletion *comp;
@@ -973,7 +976,7 @@ _gtk_file_chooser_entry_set_action (GtkFileChooserEntry *chooser_entry,
  * _gtk_file_chooser_entry_get_action:
  * @chooser_entry: a `GtkFileChooserEntry`
  *
- * Gets the action for this entry. 
+ * Gets the action for this entry.
  *
  * Returns: the action
  **/
@@ -982,7 +985,7 @@ _gtk_file_chooser_entry_get_action (GtkFileChooserEntry *chooser_entry)
 {
   g_return_val_if_fail (GTK_IS_FILE_CHOOSER_ENTRY (chooser_entry),
 			GTK_FILE_CHOOSER_ACTION_OPEN);
-  
+
   return chooser_entry->action;
 }
 
