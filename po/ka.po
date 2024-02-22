@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2024-02-22 11:35+0000\n"
-"PO-Revision-Date: 2024-02-22 14:55+0100\n"
+"POT-Creation-Date: 2024-02-22 15:33+0000\n"
+"PO-Revision-Date: 2024-02-22 19:48+0100\n"
 "Last-Translator: Ekaterine Papava <papava.e@gtu.ge>\n"
 "Language-Team: Georgian <http://mail.gnome.org/mailman/listinfo/gnome-ge-"
 "list>\n"
@@ -1779,6 +1779,11 @@ msgstr "სტატია"
 msgctxt "accessibility"
 msgid "comment"
 msgstr "კომენტარი"
+
+#: gtk/gtkaccessible.c:874
+msgctxt "accessibility"
+msgid "terminal"
+msgstr "ტერმინალი"
 
 #: gtk/gtkalertdialog.c:668 gtk/print/gtkcustompaperunixdialog.c:322
 #: gtk/gtkmessagedialog.c:166 gtk/ui/gtkassistant.ui:40
