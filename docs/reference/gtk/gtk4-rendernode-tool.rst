@@ -13,6 +13,7 @@ SYNOPSIS
 |   **gtk4-rendernode-tool** <COMMAND> [OPTIONS...] <FILE>
 |
 |   **gtk4-rendernode-tool** benchmark [OPTIONS...] <FILE>
+|   **gtk4-rendernode-tool** compare [OPTIONS...] <FILE1> <FILE2>
 |   **gtk4-rendernode-tool** info [OPTIONS...] <FILE>
 |   **gtk4-rendernode-tool** render [OPTIONS...] <FILE> [<FILE>]
 |   **gtk4-rendernode-tool** show [OPTIONS...] <FILE>
@@ -75,7 +76,21 @@ and prints the runtimes.
   the execution of the commands on the GPU. It can be useful to use this flag to test
   command submission performance.
 
+Compare
+^^^^^^^
 
+The ``compare`` command compares the rendering of a node with a reference image,
+or the renderings of two nodes, or two images. If any differences are found, the
+exit code is 1. If the images are identical, it is 0.
 
+``--renderer=RENDERER``
 
+  Use the given renderer.
 
+``--output=FILE``
+
+  Save the differences as a png image in ``FILE``.
+
+``--quiet``
+
+  Don't write results to stdout.`
