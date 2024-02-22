@@ -871,6 +871,7 @@ static const char *role_names[] = {
   [GTK_ACCESSIBLE_ROLE_BLOCK_QUOTE] = NC_("accessibility", "block quote"),
   [GTK_ACCESSIBLE_ROLE_ARTICLE] = NC_("accessibility", "article"),
   [GTK_ACCESSIBLE_ROLE_COMMENT] = NC_("accessibility", "comment"),
+  [GTK_ACCESSIBLE_ROLE_TERMINAL] = NC_("accessibility", "terminal"),
 };
 
 /*< private >
@@ -989,6 +990,7 @@ static struct {
   { GTK_ACCESSIBLE_ROLE_DIALOG, GTK_ACCESSIBLE_ROLE_ALERT_DIALOG },
   { GTK_ACCESSIBLE_ROLE_DOCUMENT, GTK_ACCESSIBLE_ROLE_ARTICLE },
   { GTK_ACCESSIBLE_ROLE_ARTICLE, GTK_ACCESSIBLE_ROLE_COMMENT },
+  { GTK_ACCESSIBLE_ROLE_TERMINAL, GTK_ACCESSIBLE_ROLE_WIDGET },
 };
 
 gboolean
