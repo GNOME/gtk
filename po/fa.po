@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.6\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2024-02-12 01:46+0000\n"
-"PO-Revision-Date: 2024-02-12 19:26+0330\n"
+"POT-Creation-Date: 2024-02-22 11:35+0000\n"
+"PO-Revision-Date: 2024-02-22 15:18+0330\n"
 "Last-Translator: Danial Behzadi <dani.behzi@ubuntu.com>\n"
 "Language-Team: Persian <>\n"
 "Language: fa\n"
@@ -53,7 +53,7 @@ msgstr "نمی‌توان محتوا را به شکل «%s» فراهم کرد"
 msgid "Cannot provide contents as %s"
 msgstr "نمی‌توان محتوا را به شکل %s فراهم کرد"
 
-#: gdk/gdkdisplay.c:176 gdk/gdkglcontext.c:462
+#: gdk/gdkdisplay.c:176 gdk/gdkglcontext.c:459
 msgid "The current backend does not support OpenGL"
 msgstr "پسانه در حال حاضر از OpenGL پشتیبانی نمی‌کند"
 
@@ -116,32 +116,32 @@ msgstr "کشیدن و رها کردن از دیگر برنامه‌ها پشتی
 msgid "No compatible formats to transfer contents."
 msgstr "هیچ قالب سازگاری برای انتقال محتویات وجود ندارد."
 
-#: gdk/gdkglcontext.c:422 gdk/x11/gdkglcontext-glx.c:645
+#: gdk/gdkglcontext.c:419 gdk/x11/gdkglcontext-glx.c:645
 msgid "No GL API allowed."
 msgstr "هیچ رابط برنامه‌نویسی GLای مجاز نیست."
 
-#: gdk/gdkglcontext.c:445 gdk/win32/gdkglcontext-win32-wgl.c:386
-#: gdk/win32/gdkglcontext-win32-wgl.c:529 gdk/win32/gdkglcontext-win32-wgl.c:573
+#: gdk/gdkglcontext.c:442 gdk/win32/gdkglcontext-win32-wgl.c:395
+#: gdk/win32/gdkglcontext-win32-wgl.c:538 gdk/win32/gdkglcontext-win32-wgl.c:582
 #: gdk/x11/gdkglcontext-glx.c:691
 msgid "Unable to create a GL context"
 msgstr "امکان ساخت زمینه مناسب برای GL نبود"
 
-#: gdk/gdkglcontext.c:1306
+#: gdk/gdkglcontext.c:1303
 msgid "OpenGL ES disabled via GDK_DEBUG"
 msgstr "OpenGL ES به دست GDK_DEBUG از کار افتاد"
 
-#: gdk/gdkglcontext.c:1318
+#: gdk/gdkglcontext.c:1315
 msgid "OpenGL disabled via GDK_DEBUG"
 msgstr "OpenGL به دست GDK_DEBUG از کار افتاد"
 
-#: gdk/gdkglcontext.c:1329
+#: gdk/gdkglcontext.c:1326
 #, c-format
 msgid "Application does not support %s API"
 msgstr "برنامه از API مربوط به %s پشتبانی نمی‌کند"
 
 #. translators: This is about OpenGL backend names, like
 #. * "Trying to use X11 GLX, but EGL is already in use"
-#: gdk/gdkglcontext.c:2115
+#: gdk/gdkglcontext.c:2112
 #, c-format
 msgid "Trying to use %s, but %s is already in use"
 msgstr "تلاش شد از %s استفاده شود، ولی %s از پیش در حال استفاده است"
@@ -704,21 +704,21 @@ msgstr "IDataObject_GetData (0x%x) شکست خورد. 0x%lx را برگردان�
 msgid "Failed to transmute DnD data W32 format 0x%x to %p (%s)"
 msgstr "شکست در تغییر شکل قالب W32 دادهٔ ک‌ور 0x%x به %p (%s)"
 
-#: gdk/win32/gdkglcontext-win32-wgl.c:320
+#: gdk/win32/gdkglcontext-win32-wgl.c:329
 msgid "No GL implementation is available"
 msgstr "هیچ پیاده سازی GLای پیدا نشد"
 
-#: gdk/win32/gdkglcontext-win32-wgl.c:395
+#: gdk/win32/gdkglcontext-win32-wgl.c:404
 #, c-format
 msgid "WGL version %d.%d is too low, need at least %d.%d"
 msgstr "WGL نگارش %Id. %Id بیش از حد قدیمی است. کمینه به %Id.%Id نیاز است"
 
-#: gdk/win32/gdkglcontext-win32-wgl.c:413
+#: gdk/win32/gdkglcontext-win32-wgl.c:422
 #, c-format
 msgid "GL implementation cannot share GL contexts"
 msgstr "پیاده‌سازی GL نمی‌تواند بافتارهای GL را هم‌رساند"
 
-#: gdk/win32/gdkglcontext-win32-wgl.c:693
+#: gdk/win32/gdkglcontext-win32-wgl.c:702
 msgid "No available configurations for the given pixel format"
 msgstr "هیچ پیکربندی برای قالب نقطه‌ای ارائه شده موجود نیست"
 
@@ -2308,7 +2308,7 @@ msgid "If you delete an item, it will be permanently lost."
 msgstr "اگر موردی را پاک کنید، برای همیشه از دست خواهد رفت."
 
 #: gtk/gtkfilechooserwidget.c:1188 gtk/gtkfilechooserwidget.c:1786
-#: gtk/gtklabel.c:5702 gtk/gtktext.c:6147 gtk/gtktextview.c:9018
+#: gtk/gtklabel.c:5712 gtk/gtktext.c:6193 gtk/gtktextview.c:9080
 msgid "_Delete"
 msgstr "_حذف"
 
@@ -2646,31 +2646,31 @@ msgstr "بستن"
 msgid "Close the infobar"
 msgstr "بستن نوار اطّلاعات"
 
-#: gtk/gtklabel.c:5699 gtk/gtktext.c:6135 gtk/gtktextview.c:9006
+#: gtk/gtklabel.c:5709 gtk/gtktext.c:6181 gtk/gtktextview.c:9068
 msgid "Cu_t"
 msgstr "_برش"
 
-#: gtk/gtklabel.c:5700 gtk/gtktext.c:6139 gtk/gtktextview.c:9010
+#: gtk/gtklabel.c:5710 gtk/gtktext.c:6185 gtk/gtktextview.c:9072
 msgid "_Copy"
 msgstr "_رونوشت"
 
-#: gtk/gtklabel.c:5701 gtk/gtktext.c:6143 gtk/gtktextview.c:9014
+#: gtk/gtklabel.c:5711 gtk/gtktext.c:6189 gtk/gtktextview.c:9076
 msgid "_Paste"
 msgstr "_چسباندن"
 
-#: gtk/gtklabel.c:5707 gtk/gtktext.c:6156 gtk/gtktextview.c:9039
+#: gtk/gtklabel.c:5717 gtk/gtktext.c:6202 gtk/gtktextview.c:9101
 msgid "Select _All"
 msgstr "انتخاب _همه"
 
-#: gtk/gtklabel.c:5712
+#: gtk/gtklabel.c:5722
 msgid "_Open Link"
 msgstr "_گشودن پیوند"
 
-#: gtk/gtklabel.c:5716
+#: gtk/gtklabel.c:5726
 msgid "Copy _Link Address"
 msgstr "_رونوشت از نشانی پیوند"
 
-#: gtk/gtklabel.c:5760 gtk/gtktext.c:2716 gtk/gtktextview.c:9088
+#: gtk/gtklabel.c:5770 gtk/gtktext.c:2724 gtk/gtktextview.c:9150
 msgid "Context menu"
 msgstr "فهرست بافتاری"
 
@@ -3504,7 +3504,7 @@ msgstr "نمی‌توان مورد با نشانی «%s» را به %s منتق�
 msgid "No registered application with name “%s” for item with URI “%s” found"
 msgstr "هیچ برنامهٔ ثبت شده‌ای با نام «%s» برای موردی با آدرس «%s» یافت نشد"
 
-#: gtk/gtksearchentry.c:767
+#: gtk/gtksearchentry.c:810
 msgid "Clear Entry"
 msgstr "پاک‌سازی ورودی"
 
@@ -3595,15 +3595,15 @@ msgctxt "accessibility"
 msgid "Sidebar"
 msgstr "نوار کناری"
 
-#: gtk/gtktext.c:6161 gtk/gtktextview.c:9044
+#: gtk/gtktext.c:6207 gtk/gtktextview.c:9106
 msgid "Insert _Emoji"
 msgstr "درج _ایموجی"
 
-#: gtk/gtktextview.c:9026
+#: gtk/gtktextview.c:9088
 msgid "_Undo"
 msgstr "بر_گردان"
 
-#: gtk/gtktextview.c:9030
+#: gtk/gtktextview.c:9092
 msgid "_Redo"
 msgstr "_انجام دوباره"
 
@@ -3801,39 +3801,39 @@ msgid "CSS Property"
 msgstr "مشخصه CSS"
 
 # farmaan
-#: gtk/inspector/general.c:363
+#: gtk/inspector/general.c:370
 msgctxt "GL version"
 msgid "None"
 msgstr "هیچ‌کدام"
 
-#: gtk/inspector/general.c:441
+#: gtk/inspector/general.c:461
 msgctxt "GL version"
 msgid "Unknown"
 msgstr "ناشناخته"
 
-#: gtk/inspector/general.c:503
+#: gtk/inspector/general.c:523
 msgctxt "Vulkan device"
 msgid "Disabled"
 msgstr "از کار افتاده"
 
-#: gtk/inspector/general.c:504 gtk/inspector/general.c:505
+#: gtk/inspector/general.c:524 gtk/inspector/general.c:525
 msgctxt "Vulkan version"
 msgid "Disabled"
 msgstr "از کار افتاده"
 
 # farmaan
-#: gtk/inspector/general.c:555
+#: gtk/inspector/general.c:576
 msgctxt "Vulkan device"
 msgid "None"
 msgstr "هیچ‌کدام"
 
 # farmaan
-#: gtk/inspector/general.c:556 gtk/inspector/general.c:557
+#: gtk/inspector/general.c:577 gtk/inspector/general.c:578
 msgctxt "Vulkan version"
 msgid "None"
 msgstr "هیچ‌کدام"
 
-#: gtk/inspector/general.c:901
+#: gtk/inspector/general.c:922
 msgid "IM Context is hardcoded by GTK_IM_MODULE"
 msgstr "بافتار IM به دست GTK_IM_MODULE به صورت سخت رمز شده است"
 
@@ -7724,6 +7724,7 @@ msgid ""
 "\n"
 "Commands:\n"
 "  benchmark    Benchmark rendering of a node\n"
+"  compare      Compare nodes or images\n"
 "  info         Provide information about the node\n"
 "  show         Show the node\n"
 "  render       Take a screenshot of the node\n"
@@ -7737,6 +7738,7 @@ msgstr ""
 "دستورها:\n"
 "\n"
 "  benchmark    محک پرداخت یک گره\n"
+"  compare      مقایسهٔ گره‌ها یا تصویرها\n"
 "  info         فراهم کردن اطَلاعات دربارهٔ گره\n"
 "  show         نمایش گره\n"
 "  render       نماگرفت از گره\n"
