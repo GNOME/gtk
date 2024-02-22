@@ -906,6 +906,7 @@ gsk_gpu_device_lookup_glyph_image (GskGpuDevice           *self,
   GskGpuImage *image;
   gsize atlas_x, atlas_y, padding;
   float subpixel_x, subpixel_y;
+  PangoFont *scaled_font;
 
   cache = g_hash_table_lookup (priv->glyph_cache, &lookup);
   if (cache)
@@ -917,13 +918,14 @@ gsk_gpu_device_lookup_glyph_image (GskGpuDevice           *self,
       return cache->image;
     }
 
+  scaled_font = gsk_get_scaled_font (font, scale);
   subpixel_x = (flags & 3) / 4.f;
   subpixel_y = ((flags >> 2) & 3) / 4.f;
-  pango_font_get_glyph_extents (gsk_get_unhinted_font (font), glyph, &ink_rect, NULL);
-  origin.x = floor (ink_rect.x * scale / PANGO_SCALE + subpixel_x);
-  origin.y = floor (ink_rect.y * scale / PANGO_SCALE + subpixel_y);
-  rect.size.width = ceil ((ink_rect.x + ink_rect.width) * scale / PANGO_SCALE + subpixel_x) - origin.x;
-  rect.size.height = ceil ((ink_rect.y + ink_rect.height) * scale / PANGO_SCALE + subpixel_y) - origin.y;
+  pango_font_get_glyph_extents (scaled_font, glyph, &ink_rect, NULL);
+  origin.x = floor (ink_rect.x * 1.0 / PANGO_SCALE + subpixel_x);
+  origin.y = floor (ink_rect.y * 1.0 / PANGO_SCALE + subpixel_y);
+  rect.size.width = ceil ((ink_rect.x + ink_rect.width) * 1.0 / PANGO_SCALE + subpixel_x) - origin.x;
+  rect.size.height = ceil ((ink_rect.y + ink_rect.height) * 1.0 / PANGO_SCALE + subpixel_y) - origin.y;
   padding = 1;
 
   image = gsk_gpu_device_add_atlas_image (self,
@@ -957,7 +959,7 @@ gsk_gpu_device_lookup_glyph_image (GskGpuDevice           *self,
 
   gsk_gpu_upload_glyph_op (frame,
                            cache->image,
-                           font,
+                           scaled_font,
                            glyph,
                            &(cairo_rectangle_int_t) {
                                .x = rect.origin.x - padding,
@@ -965,7 +967,7 @@ gsk_gpu_device_lookup_glyph_image (GskGpuDevice           *self,
                                .width = rect.size.width + 2 * padding,
                                .height = rect.size.height + 2 * padding,
                            },
-                           scale,
+                           1.0,
                            &GRAPHENE_POINT_INIT (cache->origin.x + padding,
                                                  cache->origin.y + padding));
 
