@@ -130,9 +130,8 @@ accessible_text_handle_method (GDBusConnection       *connection,
       if (text != NULL)
         {
           const char *str = g_bytes_get_data (text, NULL);
-
-          if (0 <= offset && offset < g_utf8_strlen (str, -1))
-            ch = g_utf8_get_char (g_utf8_offset_to_pointer (str, offset));
+          if (g_utf8_strlen (str, -1) > 0)
+            ch = g_utf8_get_char (str);
         }
 
       g_dbus_method_invocation_return_value (invocation, g_variant_new ("(i)", ch));
