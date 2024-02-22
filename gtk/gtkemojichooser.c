@@ -321,7 +321,7 @@ populate_recent_section (GtkEmojiChooser *chooser)
   GVariantIter iter;
   gboolean empty = TRUE;
 
-  variant = g_settings_get_value (chooser->settings, "recent-emoji");
+  variant = g_settings_get_value (chooser->settings, "recently-used-emoji");
   g_variant_iter_init (&iter, variant);
   while ((item = g_variant_iter_next_value (&iter)))
     {
@@ -354,8 +354,8 @@ add_recent_item (GtkEmojiChooser *chooser,
 
   g_variant_ref (item);
 
-  g_variant_builder_init (&builder, G_VARIANT_TYPE ("a((ausasu)u)"));
-  g_variant_builder_add (&builder, "(@(ausasu)u)", item, modifier);
+  g_variant_builder_init (&builder, G_VARIANT_TYPE ("a((aussasasu)u)"));
+  g_variant_builder_add (&builder, "(@(aussasasu)u)", item, modifier);
 
   children = NULL;
   for (child = gtk_widget_get_last_child (chooser->recent.box);
@@ -380,7 +380,7 @@ add_recent_item (GtkEmojiChooser *chooser,
           continue;
         }
 
-      g_variant_builder_add (&builder, "(@(ausasu)u)", item2, modifier2);
+      g_variant_builder_add (&builder, "(@(aussasasu)u)", item2, modifier2);
     }
   g_list_free (children);
 
@@ -390,7 +390,7 @@ add_recent_item (GtkEmojiChooser *chooser,
   gtk_widget_set_visible (chooser->recent.box, TRUE);
   gtk_widget_set_sensitive (chooser->recent.button, TRUE);
 
-  g_settings_set_value (chooser->settings, "recent-emoji", g_variant_builder_end (&builder));
+  g_settings_set_value (chooser->settings, "recently-used-emoji", g_variant_builder_end (&builder));
 
   g_variant_unref (item);
 }
@@ -720,7 +720,7 @@ populate_emoji_chooser (gpointer data)
 
       bytes = get_emoji_data ();
 
-      chooser->data = g_variant_ref_sink (g_variant_new_from_bytes (G_VARIANT_TYPE ("a(ausasu)"), bytes, TRUE));
+      chooser->data = g_variant_ref_sink (g_variant_new_from_bytes (G_VARIANT_TYPE ("a(aussasasu)"), bytes, TRUE));
       g_bytes_unref (bytes);
     }
 
@@ -734,7 +734,7 @@ populate_emoji_chooser (gpointer data)
     {
       guint group;
 
-      g_variant_get_child (item, 3, "u", &group);
+      g_variant_get_child (item, 5, "u", &group);
 
       if (group == chooser->people.group)
         chooser->box = chooser->people.box;
@@ -866,9 +866,12 @@ filter_func (GtkFlowBoxChild *child,
   GtkEmojiChooser *chooser;
   GVariant *emoji_data;
   const char *text;
+  const char *name_en;
   const char *name;
+  const char **keywords_en;
   const char **keywords;
   char **term_tokens;
+  char **name_tokens_en;
   char **name_tokens;
   gboolean res;
 
@@ -885,16 +888,21 @@ filter_func (GtkFlowBoxChild *child,
     goto out;
 
   term_tokens = g_str_tokenize_and_fold (text, "en", NULL);
-
-  g_variant_get_child (emoji_data, 1, "&s", &name);
-  name_tokens = g_str_tokenize_and_fold (name, "en", NULL);
-  g_variant_get_child (emoji_data, 2, "^a&s", &keywords);
+  g_variant_get_child (emoji_data, 1, "&s", &name_en);
+  name_tokens = g_str_tokenize_and_fold (name_en, "en", NULL);
+  g_variant_get_child (emoji_data, 2, "&s", &name);
+  name_tokens_en = g_str_tokenize_and_fold (name, "en", NULL);
+  g_variant_get_child (emoji_data, 3, "^a&s", &keywords_en);
+  g_variant_get_child (emoji_data, 4, "^a&s", &keywords);
 
   res = match_tokens ((const char **)term_tokens, (const char **)name_tokens) ||
-        match_tokens ((const char **)term_tokens, keywords);
+        match_tokens ((const char **)term_tokens, (const char **)name_tokens_en) ||
+        match_tokens ((const char **)term_tokens, keywords) ||
+        match_tokens ((const char **)term_tokens, keywords_en);
 
   g_strfreev (term_tokens);
   g_strfreev (name_tokens);
+  g_strfreev (name_tokens_en);
 
 out:
   if (res)
@@ -978,7 +986,7 @@ setup_section (GtkEmojiChooser *chooser,
   section->group = group;
 
   gtk_button_set_icon_name (GTK_BUTTON (section->button), icon);
-
+  
   gtk_flow_box_disable_move_cursor (GTK_FLOW_BOX (section->box));
   gtk_flow_box_set_filter_func (GTK_FLOW_BOX (section->box), filter_func, section, NULL);
   g_signal_connect_swapped (section->button, "clicked", G_CALLBACK (scroll_to_section), section);
