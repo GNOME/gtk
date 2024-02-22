@@ -80,12 +80,13 @@ nul_terminate_contents (GBytes *bytes)
   gsize size;
 
   data = g_bytes_get_data (bytes, &size);
-  if (size > 0 && data[size - 1] != '\0')
+  if (size == 0 || (size > 0 && data[size - 1] != '\0'))
     {
       guchar *copy;
 
       copy = g_new (guchar, size + 1);
-      memcpy (copy, data, size);
+      if (size > 0)
+        memcpy (copy, data, size);
       copy[size] = '\0';
 
       g_bytes_unref (bytes);
