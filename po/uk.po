@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2024-02-12 01:46+0000\n"
-"PO-Revision-Date: 2024-02-12 22:09+0200\n"
+"POT-Creation-Date: 2024-02-22 11:35+0000\n"
+"PO-Revision-Date: 2024-02-22 14:52+0200\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -50,7 +50,7 @@ msgstr "Не вдалося надати дані як «%s»"
 msgid "Cannot provide contents as %s"
 msgstr "Не вдалося надати дані як %s"
 
-#: gdk/gdkdisplay.c:176 gdk/gdkglcontext.c:462
+#: gdk/gdkdisplay.c:176 gdk/gdkglcontext.c:459
 msgid "The current backend does not support OpenGL"
 msgstr "Цей модуль не підтримує OpenGL"
 
@@ -118,34 +118,32 @@ msgstr ""
 msgid "No compatible formats to transfer contents."
 msgstr "Немає сумісних форматів для передавання даних."
 
-#: gdk/gdkglcontext.c:422 gdk/x11/gdkglcontext-glx.c:645
+#: gdk/gdkglcontext.c:419 gdk/x11/gdkglcontext-glx.c:645
 msgid "No GL API allowed."
 msgstr "Програмний інтерфейс GL заборонено."
 
-#: gdk/gdkglcontext.c:445 gdk/win32/gdkglcontext-win32-wgl.c:386
-#: gdk/win32/gdkglcontext-win32-wgl.c:529
-#: gdk/win32/gdkglcontext-win32-wgl.c:573 gdk/x11/gdkglcontext-glx.c:691
+#: gdk/gdkglcontext.c:442 gdk/win32/gdkglcontext-win32-wgl.c:395
+#: gdk/win32/gdkglcontext-win32-wgl.c:538
+#: gdk/win32/gdkglcontext-win32-wgl.c:582 gdk/x11/gdkglcontext-glx.c:691
 msgid "Unable to create a GL context"
 msgstr "Неможливо створити вміст GL"
 
-#: gdk/gdkglcontext.c:1306
-#| msgid "Anything but OpenGL ES disabled via GDK_DEBUG"
+#: gdk/gdkglcontext.c:1303
 msgid "OpenGL ES disabled via GDK_DEBUG"
 msgstr "За допомогою GDK_DEBUG вимкнено OpenGL ES"
 
-#: gdk/gdkglcontext.c:1318
-#| msgid "GL support disabled via GDK_DEBUG"
+#: gdk/gdkglcontext.c:1315
 msgid "OpenGL disabled via GDK_DEBUG"
 msgstr "OpenGL вимкнено за допомогою GDK_DEBUG"
 
-#: gdk/gdkglcontext.c:1329
+#: gdk/gdkglcontext.c:1326
 #, c-format
 msgid "Application does not support %s API"
 msgstr "У програмі не передбачено підтримки програмного інтерфейсу %s"
 
 #. translators: This is about OpenGL backend names, like
 #. * "Trying to use X11 GLX, but EGL is already in use"
-#: gdk/gdkglcontext.c:2115
+#: gdk/gdkglcontext.c:2112
 #, c-format
 msgid "Trying to use %s, but %s is already in use"
 msgstr "Намагаємося скористатися %s, але %s вже використано"
@@ -563,7 +561,6 @@ msgstr "Непідтримуваний тип кольору, %u, у зобра�
 
 #: gdk/loaders/gdkpng.c:272
 #, c-format
-#| msgid "Not enough memory for image size %ux%u"
 msgid "Image stride too large for image size %ux%u"
 msgstr "Зображення поширюється надто далеко для розміру зображення %ux%u"
 
@@ -744,21 +741,21 @@ msgstr ""
 "Не вдалося перетворити формат W32 даних перетягування зі скиданням 0x%x до "
 "%p (%s)"
 
-#: gdk/win32/gdkglcontext-win32-wgl.c:320
+#: gdk/win32/gdkglcontext-win32-wgl.c:329
 msgid "No GL implementation is available"
 msgstr "Немає жодної реалізації GL"
 
-#: gdk/win32/gdkglcontext-win32-wgl.c:395
+#: gdk/win32/gdkglcontext-win32-wgl.c:404
 #, c-format
 msgid "WGL version %d.%d is too low, need at least %d.%d"
 msgstr "Версія WGL %d.%d є надто давньою. Потрібна версія принаймні %d.%d"
 
-#: gdk/win32/gdkglcontext-win32-wgl.c:413
+#: gdk/win32/gdkglcontext-win32-wgl.c:422
 #, c-format
 msgid "GL implementation cannot share GL contexts"
 msgstr "Реалізація GL не може оприлюднювати контексти GL"
 
-#: gdk/win32/gdkglcontext-win32-wgl.c:693
+#: gdk/win32/gdkglcontext-win32-wgl.c:702
 msgid "No available configurations for the given pixel format"
 msgstr "Немає доступних налаштувань для заданого формату точок"
 
@@ -1254,7 +1251,6 @@ msgid "Mozilla Public License 2.0"
 msgstr "Громадська ліцензія Mozilla 2.0"
 
 #: gtk/gtkaboutdialog.c:137
-#| msgid "BSD 2-Clause License"
 msgid "BSD Zero-Clause License"
 msgstr "Zero-Clause ліцензія BSD"
 
@@ -1786,15 +1782,11 @@ msgid "block quote"
 msgstr "цитата"
 
 #: gtk/gtkaccessible.c:872
-#| msgctxt "sizegroup mode"
-#| msgid "Vertical"
 msgctxt "accessibility"
 msgid "article"
 msgstr "стаття"
 
 #: gtk/gtkaccessible.c:873
-#| msgctxt "accessibility"
-#| msgid "command"
 msgctxt "accessibility"
 msgid "comment"
 msgstr "коментар"
@@ -2372,7 +2364,7 @@ msgid "If you delete an item, it will be permanently lost."
 msgstr "Якщо вилучити об'єкт, його буде втрачено назавжди."
 
 #: gtk/gtkfilechooserwidget.c:1188 gtk/gtkfilechooserwidget.c:1786
-#: gtk/gtklabel.c:5702 gtk/gtktext.c:6147 gtk/gtktextview.c:9018
+#: gtk/gtklabel.c:5712 gtk/gtktext.c:6193 gtk/gtktextview.c:9080
 msgid "_Delete"
 msgstr "В_илучити"
 
@@ -2569,7 +2561,6 @@ msgid "Accessed"
 msgstr "Дозволено"
 
 #: gtk/gtkfilechooserwidget.c:7361
-#| msgid "Size"
 msgid "_Size"
 msgstr "_Розмір"
 
@@ -2578,7 +2569,6 @@ msgid "T_ype"
 msgstr "Т_ип"
 
 #: gtk/gtkfilechooserwidget.c:7369
-#| msgid "Show _Time"
 msgid "_Time"
 msgstr "_Час"
 
@@ -2712,31 +2702,31 @@ msgstr "Закрити"
 msgid "Close the infobar"
 msgstr "Закрити панель відомостей"
 
-#: gtk/gtklabel.c:5699 gtk/gtktext.c:6135 gtk/gtktextview.c:9006
+#: gtk/gtklabel.c:5709 gtk/gtktext.c:6181 gtk/gtktextview.c:9068
 msgid "Cu_t"
 msgstr "Ви_різати"
 
-#: gtk/gtklabel.c:5700 gtk/gtktext.c:6139 gtk/gtktextview.c:9010
+#: gtk/gtklabel.c:5710 gtk/gtktext.c:6185 gtk/gtktextview.c:9072
 msgid "_Copy"
 msgstr "_Копіювати"
 
-#: gtk/gtklabel.c:5701 gtk/gtktext.c:6143 gtk/gtktextview.c:9014
+#: gtk/gtklabel.c:5711 gtk/gtktext.c:6189 gtk/gtktextview.c:9076
 msgid "_Paste"
 msgstr "Вст_авити"
 
-#: gtk/gtklabel.c:5707 gtk/gtktext.c:6156 gtk/gtktextview.c:9039
+#: gtk/gtklabel.c:5717 gtk/gtktext.c:6202 gtk/gtktextview.c:9101
 msgid "Select _All"
 msgstr "Виді_лити все"
 
-#: gtk/gtklabel.c:5712
+#: gtk/gtklabel.c:5722
 msgid "_Open Link"
 msgstr "_Відкрити посилання"
 
-#: gtk/gtklabel.c:5716
+#: gtk/gtklabel.c:5726
 msgid "Copy _Link Address"
 msgstr "Копіювати _адресу посилання"
 
-#: gtk/gtklabel.c:5760 gtk/gtktext.c:2716 gtk/gtktextview.c:9088
+#: gtk/gtklabel.c:5770 gtk/gtktext.c:2724 gtk/gtktextview.c:9150
 msgid "Context menu"
 msgstr "Контекстне меню"
 
@@ -3585,7 +3575,7 @@ msgid "No registered application with name “%s” for item with URI “%s” f
 msgstr ""
 "Не знайдено зареєстрованої програми з назвою «%s» для пункту з URI «%s»"
 
-#: gtk/gtksearchentry.c:767
+#: gtk/gtksearchentry.c:810
 msgid "Clear Entry"
 msgstr "Спорожнити запис"
 
@@ -3676,15 +3666,15 @@ msgctxt "accessibility"
 msgid "Sidebar"
 msgstr "Бічна панель"
 
-#: gtk/gtktext.c:6161 gtk/gtktextview.c:9044
+#: gtk/gtktext.c:6207 gtk/gtktextview.c:9106
 msgid "Insert _Emoji"
 msgstr "Вставити _емодзі"
 
-#: gtk/gtktextview.c:9026
+#: gtk/gtktextview.c:9088
 msgid "_Undo"
 msgstr "_Скасувати"
 
-#: gtk/gtktextview.c:9030
+#: gtk/gtktextview.c:9092
 msgid "_Redo"
 msgstr "Пов_торити"
 
@@ -3881,38 +3871,37 @@ msgstr "Класи стилів"
 msgid "CSS Property"
 msgstr "Властивість CSS"
 
-#: gtk/inspector/general.c:363
+#: gtk/inspector/general.c:370
 msgctxt "GL version"
 msgid "None"
 msgstr "Немає"
 
-#: gtk/inspector/general.c:441
-#| msgid "Unknown"
+#: gtk/inspector/general.c:461
 msgctxt "GL version"
 msgid "Unknown"
 msgstr "Невідомо"
 
-#: gtk/inspector/general.c:503
+#: gtk/inspector/general.c:523
 msgctxt "Vulkan device"
 msgid "Disabled"
 msgstr "Вимкнено"
 
-#: gtk/inspector/general.c:504 gtk/inspector/general.c:505
+#: gtk/inspector/general.c:524 gtk/inspector/general.c:525
 msgctxt "Vulkan version"
 msgid "Disabled"
 msgstr "Вимкнено"
 
-#: gtk/inspector/general.c:555
+#: gtk/inspector/general.c:576
 msgctxt "Vulkan device"
 msgid "None"
 msgstr "Немає"
 
-#: gtk/inspector/general.c:556 gtk/inspector/general.c:557
+#: gtk/inspector/general.c:577 gtk/inspector/general.c:578
 msgctxt "Vulkan version"
 msgid "None"
 msgstr "Немає"
 
-#: gtk/inspector/general.c:901
+#: gtk/inspector/general.c:922
 msgid "IM Context is hardcoded by GTK_IM_MODULE"
 msgstr "Контекст способу введення жорстко встановлено у GTK_IM_MODULE"
 
@@ -3965,7 +3954,6 @@ msgid "Composited"
 msgstr "Складений"
 
 #: gtk/inspector/general.ui:538
-#| msgid "Available Protocols"
 msgid "Protocols"
 msgstr "Протоколи"
 
@@ -3974,12 +3962,10 @@ msgid "GL Version"
 msgstr "Версія GL"
 
 #: gtk/inspector/general.ui:621
-#| msgid "GL Version"
 msgid "GL Backend Version"
 msgstr "Версія модуля GL"
 
 #: gtk/inspector/general.ui:671
-#| msgid "GL Vendor"
 msgid "GL Backend Vendor"
 msgstr "Постачальник модуля GL"
 
@@ -3988,7 +3974,6 @@ msgid "GL_VENDOR"
 msgstr "GL_VENDOR"
 
 #: gtk/inspector/general.ui:727
-#| msgid "RENDERER"
 msgid "GL_RENDERER"
 msgstr "GL_RENDERER"
 
@@ -4433,11 +4418,10 @@ msgid ""
 "Tints all the places where the current renderer uses Cairo instead of the "
 "GPU."
 msgstr ""
-"Підсвітити усі місця, де поточний засіб обробки використовує Cairo замість"
-" графічного процесора."
+"Підсвітити усі місця, де поточний засіб обробки використовує Cairo замість "
+"графічного процесора."
 
 #: gtk/inspector/visual.ui:436
-#| msgid "Show Fallback Rendering"
 msgid "Show Cairo Rendering"
 msgstr "Показати обробку Cairo"
 
@@ -4474,7 +4458,6 @@ msgid "Show Accessibility warnings"
 msgstr "Показати попередження щодо доступності"
 
 #: gtk/inspector/visual.ui:661
-#| msgid "Show Graphic Updates"
 msgid "Show Graphics Offload"
 msgstr "Показувати графічне вивантаження"
 
@@ -7515,18 +7498,6 @@ msgstr "%s: помилка запускання програми: %s\n"
 
 #: tools/gtk-path-tool.c:35
 #, c-format
-#| msgid ""
-#| "Usage:\n"
-#| "  gtk4-path-tool [COMMAND] [OPTION…] PATH\n"
-#| "\n"
-#| "Perform various tasks on paths.\n"
-#| "\n"
-#| "Commands:\n"
-#| "  decompose    Decompose the path\n"
-#| "  show         Display the path in a window\n"
-#| "  render       Render the path as an image\n"
-#| "  info         Print information about the path\n"
-#| "\n"
 msgid ""
 "Usage:\n"
 "  gtk4-path-tool [COMMAND] [OPTION…] PATH\n"
@@ -7565,7 +7536,6 @@ msgid "Allow cubic Bézier curves"
 msgstr "Дозволити кубічні криві Безьє"
 
 #: tools/gtk-path-tool-decompose.c:86
-#| msgid "Allow cubic Bézier curves"
 msgid "Allow conic Bézier curves"
 msgstr "Дозволити конічні криві Безьє"
 
@@ -7632,7 +7602,6 @@ msgstr "%d кубічних апроксимацій"
 
 #: tools/gtk-path-tool-info.c:159
 #, c-format
-#| msgid "%d cubics"
 msgid "%d conics"
 msgstr "%d конічних перерізів"
 
@@ -7645,12 +7614,10 @@ msgid "Stroke the path"
 msgstr "Заштрихувати контур"
 
 #: tools/gtk-path-tool-render.c:119 tools/gtk-path-tool-show.c:142
-#| msgid "Show other locations"
 msgid "Show path points"
 msgstr "Показати точки контура"
 
 #: tools/gtk-path-tool-render.c:120 tools/gtk-path-tool-show.c:143
-#| msgid "Show other locations"
 msgid "Show control points"
 msgstr "Показати контрольні точки"
 
@@ -7673,7 +7640,6 @@ msgid "Background color"
 msgstr "Колір тла"
 
 #: tools/gtk-path-tool-render.c:124 tools/gtk-path-tool-show.c:146
-#| msgid "Pick a Color"
 msgid "Point color"
 msgstr "Колір точки"
 
@@ -7730,7 +7696,6 @@ msgid "Options related to filling"
 msgstr "Параметри, які пов'язано із заповненням"
 
 #: tools/gtk-path-tool-render.c:174 tools/gtk-path-tool-show.c:184
-#| msgid "Show other locations"
 msgid "Show help for fill options"
 msgstr "Показати довідку щодо варіантів заповнення"
 
@@ -7739,7 +7704,6 @@ msgid "Options related to stroking"
 msgstr "Параметри, які пов'язано зі штрихуванням"
 
 #: tools/gtk-path-tool-render.c:182 tools/gtk-path-tool-show.c:192
-#| msgid "Show other locations"
 msgid "Show help for stroke options"
 msgstr "Показати довідку щодо варіантів штрихування"
 
@@ -7786,12 +7750,10 @@ msgid "End of segment"
 msgstr "Кінець сегмента"
 
 #: tools/gtk-path-tool-restrict.c:51
-#| msgid "Render the path to a png image."
 msgid "Restrict a path to a segment."
 msgstr "Обмежити контур до сегмента."
 
 #: tools/gtk-path-tool-reverse.c:45
-#| msgid "Reverse portrait"
 msgid "Reverse a path."
 msgstr "Обернути контур."
 
@@ -7850,6 +7812,7 @@ msgstr "Не вдалося обробити «%s» як число"
 #| "Perform various tasks on GTK render nodes.\n"
 #| "\n"
 #| "Commands:\n"
+#| "  benchmark    Benchmark rendering of a node\n"
 #| "  info         Provide information about the node\n"
 #| "  show         Show the node\n"
 #| "  render       Take a screenshot of the node\n"
@@ -7862,6 +7825,7 @@ msgid ""
 "\n"
 "Commands:\n"
 "  benchmark    Benchmark rendering of a node\n"
+"  compare      Compare nodes or images\n"
 "  info         Provide information about the node\n"
 "  show         Show the node\n"
 "  render       Take a screenshot of the node\n"
@@ -7874,13 +7838,13 @@ msgstr ""
 "\n"
 "Команди:\n"
 "  benchmark    Тестувати обробку вузла\n"
+"  compare      Порівняти вузли або зображення\n"
 "  info         Надати дані щодо вузла\n"
 "  show         Показати вузол\n"
 "  render       Створити знімок вікна вузла\n"
 "\n"
 
 #: tools/gtk-rendernode-tool-benchmark.c:94
-#| msgid "Renderer to use"
 msgid "Add renderer to benchmark"
 msgstr "Додати обробник до тестування"
 
@@ -7915,7 +7879,6 @@ msgstr "Не вказано файл .node\n"
 
 #: tools/gtk-rendernode-tool-benchmark.c:133
 #, c-format
-#| msgid "Can only accept a single .node file\n"
 msgid "Can only benchmark a single .node file\n"
 msgstr "Можлива одночасне тестування лише за допомогою одного файла .node\n"
 
@@ -7964,7 +7927,6 @@ msgstr "Не вдалося створити SVG: %s\n"
 
 #: tools/gtk-rendernode-tool-render.c:150
 #, c-format
-#| msgid "Failed to rewrite header\n"
 msgid "Failed to create renderer: %s\n"
 msgstr "Не вдалося створити засіб обробки: %s\n"
 
@@ -8003,7 +7965,6 @@ msgstr "Помилка у %s: %s\n"
 
 #: tools/gtk-rendernode-tool-utils.c:72
 #, c-format
-#| msgid "Failed to open file %s : %s\n"
 msgid "Failed to load node file: %s\n"
 msgstr "Не вдалося завантажити файл вузла: %s\n"
 
