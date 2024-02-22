@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2024-02-12 01:46+0000\n"
-"PO-Revision-Date: 2024-02-12 12:39+0100\n"
+"POT-Creation-Date: 2024-02-22 11:35+0000\n"
+"PO-Revision-Date: 2024-02-22 14:55+0100\n"
 "Last-Translator: Ekaterine Papava <papava.e@gtu.ge>\n"
 "Language-Team: Georgian <http://mail.gnome.org/mailman/listinfo/gnome-ge-"
 "list>\n"
@@ -51,7 +51,7 @@ msgstr "შემცველობის \"%s\"-ად გამოტანა
 msgid "Cannot provide contents as %s"
 msgstr "შემცველობის %s-ად გამოტანა შეუძლებელია"
 
-#: gdk/gdkdisplay.c:176 gdk/gdkglcontext.c:462
+#: gdk/gdkdisplay.c:176 gdk/gdkglcontext.c:459
 msgid "The current backend does not support OpenGL"
 msgstr "მიმდინარე უკანაბოლოს OpenGL-ის მხარდაჭერა არ გააჩნია"
 
@@ -114,32 +114,32 @@ msgstr "სხვა აპლიკაციებიდან DnD მხარ
 msgid "No compatible formats to transfer contents."
 msgstr "შემცველობის გადატანის თავსებადი ფორმატების გარეშე."
 
-#: gdk/gdkglcontext.c:422 gdk/x11/gdkglcontext-glx.c:645
+#: gdk/gdkglcontext.c:419 gdk/x11/gdkglcontext-glx.c:645
 msgid "No GL API allowed."
 msgstr "GL API არ არის დაშვებული."
 
-#: gdk/gdkglcontext.c:445 gdk/win32/gdkglcontext-win32-wgl.c:386
-#: gdk/win32/gdkglcontext-win32-wgl.c:529
-#: gdk/win32/gdkglcontext-win32-wgl.c:573 gdk/x11/gdkglcontext-glx.c:691
+#: gdk/gdkglcontext.c:442 gdk/win32/gdkglcontext-win32-wgl.c:395
+#: gdk/win32/gdkglcontext-win32-wgl.c:538
+#: gdk/win32/gdkglcontext-win32-wgl.c:582 gdk/x11/gdkglcontext-glx.c:691
 msgid "Unable to create a GL context"
 msgstr "GL-ის კონტექსტის შექმნა შეუძლებელია"
 
-#: gdk/gdkglcontext.c:1306
+#: gdk/gdkglcontext.c:1303
 msgid "OpenGL ES disabled via GDK_DEBUG"
 msgstr "OpenGL ES გამორთულია GDK_DEBUG საშუალებით"
 
-#: gdk/gdkglcontext.c:1318
+#: gdk/gdkglcontext.c:1315
 msgid "OpenGL disabled via GDK_DEBUG"
 msgstr "OpenGL გამორთულია GDK_DEBUG საშუალებით"
 
-#: gdk/gdkglcontext.c:1329
+#: gdk/gdkglcontext.c:1326
 #, c-format
 msgid "Application does not support %s API"
 msgstr "აპლიკაციას %s-ის API-ის მხარდაჭერა არ გააცნია"
 
 #. translators: This is about OpenGL backend names, like
 #. * "Trying to use X11 GLX, but EGL is already in use"
-#: gdk/gdkglcontext.c:2115
+#: gdk/gdkglcontext.c:2112
 #, c-format
 msgid "Trying to use %s, but %s is already in use"
 msgstr "%s გამოყენების მცდელობა, მაგრამ %s უკვე გამოიყენება"
@@ -736,21 +736,21 @@ msgstr "IDataObject_GetData (0x%x) -ის შეცდომა, დააბ�
 msgid "Failed to transmute DnD data W32 format 0x%x to %p (%s)"
 msgstr "DnD-ის W32 მონაცემების ფორმატის 0x%x-დან %p-ში (%s) გადაყვანის შეცდომა"
 
-#: gdk/win32/gdkglcontext-win32-wgl.c:320
+#: gdk/win32/gdkglcontext-win32-wgl.c:329
 msgid "No GL implementation is available"
 msgstr "GL-ის იმპლემენტაცია არ არსებობს"
 
-#: gdk/win32/gdkglcontext-win32-wgl.c:395
+#: gdk/win32/gdkglcontext-win32-wgl.c:404
 #, c-format
 msgid "WGL version %d.%d is too low, need at least %d.%d"
 msgstr "WGL-ის ვერსია %d.%d ძალიან ძველია. საჭიროა მინიმუმ %d.%d"
 
-#: gdk/win32/gdkglcontext-win32-wgl.c:413
+#: gdk/win32/gdkglcontext-win32-wgl.c:422
 #, c-format
 msgid "GL implementation cannot share GL contexts"
 msgstr "GL-ის განხორციელებებს GL-ის კონტექსტების გაზიარება არ შეუძლიათ"
 
-#: gdk/win32/gdkglcontext-win32-wgl.c:693
+#: gdk/win32/gdkglcontext-win32-wgl.c:702
 msgid "No available configurations for the given pixel format"
 msgstr "მითითებული პიქსელის ფორმატისთვის ხელმისაწვდომი კონფიგურაციების გარეშე"
 
@@ -2353,7 +2353,7 @@ msgid "If you delete an item, it will be permanently lost."
 msgstr "თუ წაშლით ელემენტს, ის სამუდამოდ დაიკარგება."
 
 #: gtk/gtkfilechooserwidget.c:1188 gtk/gtkfilechooserwidget.c:1786
-#: gtk/gtklabel.c:5702 gtk/gtktext.c:6147 gtk/gtktextview.c:9018
+#: gtk/gtklabel.c:5712 gtk/gtktext.c:6193 gtk/gtktextview.c:9080
 msgid "_Delete"
 msgstr "წაშლა"
 
@@ -2692,31 +2692,31 @@ msgstr "დახურვა"
 msgid "Close the infobar"
 msgstr "საინფორმაციო ზოლის დახურვა"
 
-#: gtk/gtklabel.c:5699 gtk/gtktext.c:6135 gtk/gtktextview.c:9006
+#: gtk/gtklabel.c:5709 gtk/gtktext.c:6181 gtk/gtktextview.c:9068
 msgid "Cu_t"
 msgstr "ამოჭრა"
 
-#: gtk/gtklabel.c:5700 gtk/gtktext.c:6139 gtk/gtktextview.c:9010
+#: gtk/gtklabel.c:5710 gtk/gtktext.c:6185 gtk/gtktextview.c:9072
 msgid "_Copy"
 msgstr "ასლი"
 
-#: gtk/gtklabel.c:5701 gtk/gtktext.c:6143 gtk/gtktextview.c:9014
+#: gtk/gtklabel.c:5711 gtk/gtktext.c:6189 gtk/gtktextview.c:9076
 msgid "_Paste"
 msgstr "ჩასმა"
 
-#: gtk/gtklabel.c:5707 gtk/gtktext.c:6156 gtk/gtktextview.c:9039
+#: gtk/gtklabel.c:5717 gtk/gtktext.c:6202 gtk/gtktextview.c:9101
 msgid "Select _All"
 msgstr "ყველაფრის _მონიშვნა"
 
-#: gtk/gtklabel.c:5712
+#: gtk/gtklabel.c:5722
 msgid "_Open Link"
 msgstr "_ბმულის გახსნა"
 
-#: gtk/gtklabel.c:5716
+#: gtk/gtklabel.c:5726
 msgid "Copy _Link Address"
 msgstr "დაა_კოპირე ბმულის მისამართი"
 
-#: gtk/gtklabel.c:5760 gtk/gtktext.c:2716 gtk/gtktextview.c:9088
+#: gtk/gtklabel.c:5770 gtk/gtktext.c:2724 gtk/gtktextview.c:9150
 msgid "Context menu"
 msgstr "კონტექსტური მენიუ"
 
@@ -3560,7 +3560,7 @@ msgstr ""
 "რეგისტრირებული აპლიკაცია სახელით \"%s\" ჩანაწერისთვის ბმულით \"%s\" "
 "აღმოჩენილი არაა"
 
-#: gtk/gtksearchentry.c:767
+#: gtk/gtksearchentry.c:810
 msgid "Clear Entry"
 msgstr "ჩანაწერის გასუფთავება"
 
@@ -3651,15 +3651,15 @@ msgctxt "accessibility"
 msgid "Sidebar"
 msgstr "გვერდითა ზოლი"
 
-#: gtk/gtktext.c:6161 gtk/gtktextview.c:9044
+#: gtk/gtktext.c:6207 gtk/gtktextview.c:9106
 msgid "Insert _Emoji"
 msgstr "ემოჯის _ჩასმა"
 
-#: gtk/gtktextview.c:9026
+#: gtk/gtktextview.c:9088
 msgid "_Undo"
 msgstr "_დაბრუნება"
 
-#: gtk/gtktextview.c:9030
+#: gtk/gtktextview.c:9092
 msgid "_Redo"
 msgstr "_გამეორება"
 
@@ -3857,37 +3857,37 @@ msgstr "სტილის კლასები"
 msgid "CSS Property"
 msgstr "CSS-ის თვისება"
 
-#: gtk/inspector/general.c:363
+#: gtk/inspector/general.c:370
 msgctxt "GL version"
 msgid "None"
 msgstr "არცერთი"
 
-#: gtk/inspector/general.c:441
+#: gtk/inspector/general.c:461
 msgctxt "GL version"
 msgid "Unknown"
 msgstr "უცნობი"
 
-#: gtk/inspector/general.c:503
+#: gtk/inspector/general.c:523
 msgctxt "Vulkan device"
 msgid "Disabled"
 msgstr "გამორთულია"
 
-#: gtk/inspector/general.c:504 gtk/inspector/general.c:505
+#: gtk/inspector/general.c:524 gtk/inspector/general.c:525
 msgctxt "Vulkan version"
 msgid "Disabled"
 msgstr "გამორთულია"
 
-#: gtk/inspector/general.c:555
+#: gtk/inspector/general.c:576
 msgctxt "Vulkan device"
 msgid "None"
 msgstr "არცერთი"
 
-#: gtk/inspector/general.c:556 gtk/inspector/general.c:557
+#: gtk/inspector/general.c:577 gtk/inspector/general.c:578
 msgctxt "Vulkan version"
 msgid "None"
 msgstr "არცერთი"
 
-#: gtk/inspector/general.c:901
+#: gtk/inspector/general.c:922
 msgid "IM Context is hardcoded by GTK_IM_MODULE"
 msgstr "IM-ის კონტექსტი GTK_IM_MODULE-ში ხელითაა ჩაწერილი"
 
@@ -7789,6 +7789,7 @@ msgid ""
 "\n"
 "Commands:\n"
 "  benchmark    Benchmark rendering of a node\n"
+"  compare      Compare nodes or images\n"
 "  info         Provide information about the node\n"
 "  show         Show the node\n"
 "  render       Take a screenshot of the node\n"
@@ -7801,6 +7802,7 @@ msgstr ""
 "\n"
 "ბრძანებები:\n"
 "  benchmark   კვანძის რენდერის წარმადობის გაზომვა\n"
+"  compare   კვანძების ან გამოსახულებების შედარება\n"
 "  info     ამ კვანძის შესახებ ინფორმაციის გამოტანა\n"
 "  show     ამ კვანძის ჩვენება\n"
 "  render    კვანძის ეკრანის ანაბეჭდის აღება\n"
