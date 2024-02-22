@@ -2,7 +2,7 @@
 <schemalist>
 
   <schema id='org.gtk.gtk4.Settings.EmojiChooser' path='/org/gtk/gtk4/settings/emoji-chooser/'>
-    <key name='recent-emoji' type='a((ausasu)u)'>
+    <key name='recently-used-emoji' type='a((aussasasu)u)'>
       <default>[]</default>
       <summary>Recently used Emoji</summary>
       <description>
