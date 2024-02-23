@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2024-02-22 11:35+0000\n"
-"PO-Revision-Date: 2024-02-22 14:52+0200\n"
+"POT-Creation-Date: 2024-02-23 01:06+0000\n"
+"PO-Revision-Date: 2024-02-23 09:47+0200\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -1790,6 +1790,12 @@ msgstr "стаття"
 msgctxt "accessibility"
 msgid "comment"
 msgstr "коментар"
+
+#: gtk/gtkaccessible.c:874
+#| msgid "Terminal Pager"
+msgctxt "accessibility"
+msgid "terminal"
+msgstr "термінал"
 
 #: gtk/gtkalertdialog.c:668 gtk/print/gtkcustompaperunixdialog.c:322
 #: gtk/gtkmessagedialog.c:166 gtk/ui/gtkassistant.ui:40
@@ -7805,18 +7811,6 @@ msgstr "Не вдалося обробити «%s» як число"
 
 #: tools/gtk-rendernode-tool.c:35
 #, c-format
-#| msgid ""
-#| "Usage:\n"
-#| "  gtk4-rendernode-tool [COMMAND] [OPTION…] FILE\n"
-#| "\n"
-#| "Perform various tasks on GTK render nodes.\n"
-#| "\n"
-#| "Commands:\n"
-#| "  benchmark    Benchmark rendering of a node\n"
-#| "  info         Provide information about the node\n"
-#| "  show         Show the node\n"
-#| "  render       Take a screenshot of the node\n"
-#| "\n"
 msgid ""
 "Usage:\n"
 "  gtk4-rendernode-tool [COMMAND] [OPTION…] FILE\n"
