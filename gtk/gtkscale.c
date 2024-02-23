@@ -376,6 +376,27 @@ gtk_scale_allocate_value (GtkScale *scale)
           g_return_if_reached ();
           break;
         }
+      if (priv->has_markup && (priv->value_pos == GTK_POS_LEFT || priv->value_pos == GTK_POS_RIGHT))
+        {
+          if (priv->top_marks_widget)
+            {
+              int marks_height;
+              gtk_widget_measure (priv->top_marks_widget,
+                                  GTK_ORIENTATION_VERTICAL, -1,
+                                  &marks_height, NULL,
+                                  NULL, NULL);
+              value_alloc.y += marks_height / 2;
+            }
+          if (priv->bottom_marks_widget)
+            {
+              int marks_height;
+              gtk_widget_measure (priv->bottom_marks_widget,
+                                  GTK_ORIENTATION_VERTICAL, -1,
+                                  &marks_height, NULL,
+                                  NULL, NULL);
+              value_alloc.y -= marks_height / 2;
+            }
+        }
     }
   else /* VERTICAL */
     {
@@ -403,6 +424,27 @@ gtk_scale_allocate_value (GtkScale *scale)
 
         default:
           g_return_if_reached ();
+        }
+      if (priv->has_markup && (priv->value_pos == GTK_POS_TOP || priv->value_pos == GTK_POS_BOTTOM))
+        {
+          if (priv->top_marks_widget)
+            {
+              int marks_width;
+              gtk_widget_measure (priv->top_marks_widget,
+                                  GTK_ORIENTATION_HORIZONTAL, -1,
+                                  &marks_width, NULL,
+                                  NULL, NULL);
+              value_alloc.x += marks_width / 2;
+            }
+          if (priv->bottom_marks_widget)
+            {
+              int marks_width;
+              gtk_widget_measure (priv->bottom_marks_widget,
+                                  GTK_ORIENTATION_HORIZONTAL, -1,
+                                  &marks_width, NULL,
+                                  NULL, NULL);
+              value_alloc.x -= marks_width / 2;
+            }
         }
     }
 
