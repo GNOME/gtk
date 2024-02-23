@@ -852,7 +852,8 @@ gtk_tree_path_prepend_index (GtkTreePath *path,
       int *indices;
       path->alloc = MAX (path->alloc * 2, 1);
       indices = g_new (int, path->alloc);
-      memcpy (indices + 1, path->indices, path->depth * sizeof (int));
+      if (path->depth > 0)
+        memcpy (indices + 1, path->indices, path->depth * sizeof (int));
       g_free (path->indices);
       path->indices = indices;
     }
@@ -972,7 +973,8 @@ gtk_tree_path_copy (const GtkTreePath *path)
   retval->depth = path->depth;
   retval->alloc = retval->depth;
   retval->indices = g_new (int, path->alloc);
-  memcpy (retval->indices, path->indices, path->depth * sizeof (int));
+  if (path->depth > 0)
+    memcpy (retval->indices, path->indices, path->depth * sizeof (int));
   return retval;
 }
 
