@@ -4013,6 +4013,7 @@ gtk_icon_paintable_new_for_file (GFile *file,
     }
 
   icon->is_svg = suffix_from_name (icon->filename) == ICON_CACHE_FLAG_SVG_SUFFIX;
+  icon->is_symbolic = icon_uri_is_symbolic (icon->filename, -1);
 
   return icon;
 }
