@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.6\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2024-02-22 11:35+0000\n"
-"PO-Revision-Date: 2024-02-22 15:18+0330\n"
+"POT-Creation-Date: 2024-02-23 01:06+0000\n"
+"PO-Revision-Date: 2024-02-24 00:20+0330\n"
 "Last-Translator: Danial Behzadi <dani.behzi@ubuntu.com>\n"
 "Language-Team: Persian <>\n"
 "Language: fa\n"
@@ -1737,6 +1737,11 @@ msgstr "حرف تعریف"
 msgctxt "accessibility"
 msgid "comment"
 msgstr "نظر"
+
+#: gtk/gtkaccessible.c:874
+msgctxt "accessibility"
+msgid "terminal"
+msgstr "پایانه"
 
 #: gtk/gtkalertdialog.c:668 gtk/print/gtkcustompaperunixdialog.c:322
 #: gtk/gtkmessagedialog.c:166 gtk/ui/gtkassistant.ui:40
