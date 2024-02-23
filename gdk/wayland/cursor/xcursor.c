@@ -266,10 +266,10 @@ _XcursorReadUInt (XcursorFile *file, XcursorUInt *u)
 
     if ((*file->read) (file, bytes, 4) != 4)
 	return XcursorFalse;
-    *u = ((bytes[0] << 0) |
-	  (bytes[1] << 8) |
-	  (bytes[2] << 16) |
-	  (bytes[3] << 24));
+    *u = ((((unsigned int)(bytes[0])) << 0) |
+	  (((unsigned int)(bytes[1])) << 8) |
+	  (((unsigned int)(bytes[2])) << 16) |
+	  (((unsigned int)(bytes[3])) << 24));
     return XcursorTrue;
 }
 
