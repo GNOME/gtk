@@ -96,7 +96,8 @@ GskGpuImage *           gsk_gpu_device_lookup_glyph_image               (GskGpuD
                                                                          GskGpuGlyphLookupFlags  flags,
                                                                          float                   scale,
                                                                          graphene_rect_t        *out_bounds,
-                                                                         graphene_point_t       *out_origin);
+                                                                         graphene_point_t       *out_origin,
+                                                                         PangoFont             **out_scaled_font);
 
 
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GskGpuDevice, g_object_unref)

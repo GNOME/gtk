@@ -890,7 +890,8 @@ gsk_gpu_device_lookup_glyph_image (GskGpuDevice           *self,
                                    GskGpuGlyphLookupFlags  flags,
                                    float                   scale,
                                    graphene_rect_t        *out_bounds,
-                                   graphene_point_t       *out_origin)
+                                   graphene_point_t       *out_origin,
+                                   PangoFont             **out_scaled_font)
 {
   GskGpuDevicePrivate *priv = gsk_gpu_device_get_instance_private (self);
   GskGpuCachedGlyph lookup = {
@@ -918,7 +919,11 @@ gsk_gpu_device_lookup_glyph_image (GskGpuDevice           *self,
       return cache->image;
     }
 
-  scaled_font = gsk_get_scaled_font (font, scale);
+  if (*out_scaled_font)
+    scaled_font = *out_scaled_font;
+  else
+    scaled_font = gsk_get_scaled_font (font, scale);
+
   subpixel_x = (flags & 3) / 4.f;
   subpixel_y = ((flags >> 2) & 3) / 4.f;
   pango_font_get_glyph_extents (scaled_font, glyph, &ink_rect, NULL);
@@ -975,8 +980,7 @@ gsk_gpu_device_lookup_glyph_image (GskGpuDevice           *self,
 
   *out_bounds = cache->bounds;
   *out_origin = cache->origin;
-
-  g_object_unref (scaled_font);
+  *out_scaled_font = scaled_font;
 
   return cache->image;
 }
