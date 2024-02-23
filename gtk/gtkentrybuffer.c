@@ -162,9 +162,12 @@ gtk_entry_buffer_normal_insert_text (GtkEntryBuffer *buffer,
 
       /* Could be a password, so can't leave stuff in memory. */
       et_new = g_malloc (pv->normal_text_size);
-      memcpy (et_new, pv->normal_text, MIN (prev_size, pv->normal_text_size));
-      trash_area (pv->normal_text, prev_size);
-      g_free (pv->normal_text);
+      if (pv->normal_text)
+        {
+          memcpy (et_new, pv->normal_text, MIN (prev_size, pv->normal_text_size));
+          trash_area (pv->normal_text, prev_size);
+          g_free (pv->normal_text);
+        }
       pv->normal_text = et_new;
     }
 
