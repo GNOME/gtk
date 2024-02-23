@@ -150,6 +150,7 @@ struct _GtkScalePrivate
 
   guint         draw_value : 1;
   guint         value_pos  : 2;
+  guint         has_markup : 1;
 
   GtkScaleFormatValueFunc format_value_func;
   gpointer format_value_func_user_data;
@@ -1285,6 +1286,7 @@ gtk_scale_get_range_border (GtkRange  *range,
   if (gtk_orientable_get_orientation (GTK_ORIENTABLE (range)) == GTK_ORIENTATION_HORIZONTAL)
     {
       int height;
+      bool need_symmetry = !priv->has_markup && (priv->value_pos == GTK_POS_LEFT || priv->value_pos == GTK_POS_RIGHT || !priv->draw_value);
 
       if (priv->top_marks_widget)
         {
@@ -1293,7 +1295,11 @@ gtk_scale_get_range_border (GtkRange  *range,
                               &height, NULL,
                               NULL, NULL);
           if (height > 0)
-            border->top += height;
+            {
+              border->top += height;
+              if (need_symmetry)
+                border->bottom += height;
+            }
         }
 
       if (priv->bottom_marks_widget)
@@ -1303,12 +1309,17 @@ gtk_scale_get_range_border (GtkRange  *range,
                               &height, NULL,
                               NULL, NULL);
           if (height > 0)
-            border->bottom += height;
+            {
+              border->bottom += height;
+              if (need_symmetry)
+                border->top += height;
+            }
         }
     }
   else
     {
       int width;
+      bool need_symmetry = !priv->has_markup && (priv->value_pos == GTK_POS_TOP || priv->value_pos == GTK_POS_BOTTOM || !priv->draw_value);
 
       if (priv->top_marks_widget)
         {
@@ -1317,7 +1328,11 @@ gtk_scale_get_range_border (GtkRange  *range,
                               &width, NULL,
                               NULL, NULL);
           if (width > 0)
-            border->left += width;
+            {
+              border->left += width;
+              if (need_symmetry)
+                border->right += width;
+            }
         }
 
       if (priv->bottom_marks_widget)
@@ -1327,7 +1342,11 @@ gtk_scale_get_range_border (GtkRange  *range,
                               &width, NULL,
                               NULL, NULL);
           if (width > 0)
-            border->right += width;
+            {
+              border->right += width;
+              if (need_symmetry)
+                border->left += width;
+            }
         }
     }
 }
@@ -1642,6 +1661,7 @@ gtk_scale_clear_marks (GtkScale *scale)
 
   g_slist_free_full (priv->marks, gtk_scale_mark_free);
   priv->marks = NULL;
+  priv->has_markup = false;
 
   g_clear_pointer (&priv->top_marks_widget, gtk_widget_unparent);
   g_clear_pointer (&priv->bottom_marks_widget, gtk_widget_unparent);
@@ -1760,6 +1780,7 @@ gtk_scale_add_mark (GtkScale        *scale,
         gtk_widget_insert_after (mark->label_widget, mark->widget, NULL);
       else
         gtk_widget_insert_before (mark->label_widget, mark->widget, NULL);
+      priv->has_markup = true;
     }
 
   m = g_slist_find (priv->marks, mark);
