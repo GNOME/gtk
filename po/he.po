@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.HEAD.he\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2024-02-17 12:16+0000\n"
-"PO-Revision-Date: 2024-02-17 23:05+0200\n"
+"POT-Creation-Date: 2024-02-23 01:06+0000\n"
+"PO-Revision-Date: 2024-02-24 18:36+0200\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: Hebrew\n"
 "Language: he\n"
@@ -22,7 +22,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=4; plural=(n==1 ? 0 : n==2 ? 1 : n>10 && n%10==0 ? "
 "2 : 3);\n"
-"X-Generator: Poedit 3.4.1\n"
+"X-Generator: Poedit 3.4.2\n"
 "X-Project-Style: default\n"
 
 #: gdk/broadway/gdkbroadway-server.c:135
@@ -123,9 +123,9 @@ msgstr "אין תצורות תואמות להעברת תכנים."
 msgid "No GL API allowed."
 msgstr "אין GL API מאופשר."
 
-#: gdk/gdkglcontext.c:442 gdk/win32/gdkglcontext-win32-wgl.c:386
-#: gdk/win32/gdkglcontext-win32-wgl.c:529
-#: gdk/win32/gdkglcontext-win32-wgl.c:573 gdk/x11/gdkglcontext-glx.c:691
+#: gdk/gdkglcontext.c:442 gdk/win32/gdkglcontext-win32-wgl.c:395
+#: gdk/win32/gdkglcontext-win32-wgl.c:538
+#: gdk/win32/gdkglcontext-win32-wgl.c:582 gdk/x11/gdkglcontext-glx.c:691
 msgid "Unable to create a GL context"
 msgstr "Unable to create a GL context"
 
@@ -595,141 +595,140 @@ msgstr "פענוח התוכן מסוג MIME‏ ‚%s’ נכשל"
 #: gdk/win32/gdkclipdrop-win32.c:719
 #, c-format
 msgid "Cannot claim clipboard ownership. OpenClipboard() timed out."
-msgstr "Cannot claim clipboard ownership. OpenClipboard() timed out."
+msgstr ""
+"לא ניתן לטעון לבעלות על לוח הגזירים. הזמן שהוקצב ל־OpenClipboard()‎ הסתיים."
 
 #: gdk/win32/gdkclipdrop-win32.c:729
 #, c-format
 msgid "Cannot claim clipboard ownership. Another process claimed it before us."
-msgstr ""
-"Cannot claim clipboard ownership. Another process claimed it before us."
+msgstr "לא ניתן לטעון לבעלות על לוח הגזירים. תהליך אחר טען אותה לפנינו."
 
 #: gdk/win32/gdkclipdrop-win32.c:743
 #, c-format
 msgid "Cannot claim clipboard ownership. OpenClipboard() failed: 0x%lx."
-msgstr "Cannot claim clipboard ownership. OpenClipboard() failed: 0x%lx."
+msgstr "לא ניתן לטעון לבעלות על לוח הגזירים. OpenClipboard()‎ נכשלה: 0x%lx."
 
 #: gdk/win32/gdkclipdrop-win32.c:755
 #, c-format
 msgid "Cannot claim clipboard ownership. EmptyClipboard() failed: 0x%lx."
-msgstr "Cannot claim clipboard ownership. EmptyClipboard() failed: 0x%lx."
+msgstr "לא ניתן לטעון לבעלות על לוח הגזירים. EmptyClipboard()‎ נכשלה: 0x%lx."
 
 #: gdk/win32/gdkclipdrop-win32.c:798
 #, c-format
 msgid "Cannot set clipboard data. OpenClipboard() timed out."
-msgstr "Cannot set clipboard data. OpenClipboard() timed out."
+msgstr "לא ניתן להגדיר נתוני לוח גזירים. הזמן שהוקצב ל־OpenClipboard()‎ הסתיים."
 
 #: gdk/win32/gdkclipdrop-win32.c:808 gdk/win32/gdkclipdrop-win32.c:839
 #, c-format
 msgid "Cannot set clipboard data. Another process claimed clipboard ownership."
-msgstr ""
-"Cannot set clipboard data. Another process claimed clipboard ownership."
+msgstr "לא ניתן להגדיר נתוני לוח גזירים. תהליך אחר טען בעלות על לוח הגזירים."
 
 #: gdk/win32/gdkclipdrop-win32.c:822
 #, c-format
 msgid "Cannot set clipboard data. OpenClipboard() failed: 0x%lx."
-msgstr "Cannot set clipboard data. OpenClipboard() failed: 0x%lx."
+msgstr "לא ניתן להגדיר נתוני לוח גזירים. OpenClipboard()‎ נכשלה: 0x%lx."
 
 #: gdk/win32/gdkclipdrop-win32.c:874
 #, c-format
 msgid "Cannot get clipboard data. GlobalLock(0x%p) failed: 0x%lx."
-msgstr "Cannot get clipboard data. GlobalLock(0x%p) failed: 0x%lx."
+msgstr "לא ניתן לקבל נתונים מלוח הגזירים. GlobalLock(0x%p) נכשלה: 0x%lx."
 
 #: gdk/win32/gdkclipdrop-win32.c:885
 #, c-format
 msgid "Cannot get clipboard data. GlobalSize(0x%p) failed: 0x%lx."
-msgstr "Cannot get clipboard data. GlobalSize(0x%p) failed: 0x%lx."
+msgstr "לא ניתן לקבל נתונים מלוח הגזירים. GlobalSize(0x%p) נכשלה: 0x%lx."
 
 #: gdk/win32/gdkclipdrop-win32.c:898
 #, c-format
 msgid ""
 "Cannot get clipboard data. Failed to allocate %s bytes to store the data."
-msgstr ""
-"Cannot get clipboard data. Failed to allocate %s bytes to store the data."
+msgstr "לא ניתן לקבל נתונים מלוח הגזירים. הקצאת %s בתים לאחסון הנתונים נכשלה."
 
 #: gdk/win32/gdkclipdrop-win32.c:930
 #, c-format
 msgid "Cannot get clipboard data. OpenClipboard() timed out."
-msgstr "Cannot get clipboard data. OpenClipboard() timed out."
+msgstr ""
+"לא ניתן לקבל נתונים מלוח הגזירים. הזמן שהוקצב ל־OpenClipboard()‎ הסתיים."
 
 #: gdk/win32/gdkclipdrop-win32.c:940
 #, c-format
 msgid "Cannot get clipboard data. Clipboard ownership changed."
-msgstr "Cannot get clipboard data. Clipboard ownership changed."
+msgstr "לא ניתן לקבל נתונים מלוח הגזירים. הבעלות על לוח הגזירים הועברה."
 
 #: gdk/win32/gdkclipdrop-win32.c:950
 #, c-format
 msgid ""
 "Cannot get clipboard data. Clipboard data changed before we could get it."
 msgstr ""
-"Cannot get clipboard data. Clipboard data changed before we could get it."
+"לא ניתן לקבל נתונים מלוח הגזירים. לוח הגזירים השתנה לפני שהצלחנו לקבל אותם."
 
 #: gdk/win32/gdkclipdrop-win32.c:967
 #, c-format
 msgid "Cannot get clipboard data. OpenClipboard() failed: 0x%lx."
-msgstr "Cannot get clipboard data. OpenClipboard() failed: 0x%lx."
+msgstr "לא ניתן לקבל נתונים מלוח הגזירים. OpenClipboard()‎ נכשלה: 0x%lx."
 
 #: gdk/win32/gdkclipdrop-win32.c:992
 #, c-format
 msgid "Cannot get clipboard data. No compatible transfer format found."
-msgstr "Cannot get clipboard data. No compatible transfer format found."
+msgstr "לא ניתן לקבל נתונים מלוח הגזירים. לא נמצאה תבנית העברה תואמת."
 
 #: gdk/win32/gdkclipdrop-win32.c:1002
 #, c-format
 msgid "Cannot get clipboard data. GetClipboardData() failed: 0x%lx."
-msgstr "Cannot get clipboard data. GetClipboardData() failed: 0x%lx."
+msgstr "לא ניתן לקבל נתונים מלוח הגזירים. GetClipboardData()‎ נכשלה: 0x%lx."
 
 #: gdk/win32/gdkdrop-win32.c:949
 #, c-format
 msgid "Cannot get DnD data. GlobalLock(0x%p) failed: 0x%lx."
-msgstr "Cannot get DnD data. GlobalLock(0x%p) failed: 0x%lx."
+msgstr "לא ניתן לקבל נתוני „לא להפריע”. GlobalLock(0x%p) נכשלה: 0x%lx."
 
 #: gdk/win32/gdkdrop-win32.c:958
 #, c-format
 msgid "Cannot get DnD data. GlobalSize(0x%p) failed: 0x%lx."
-msgstr "Cannot get DnD data. GlobalSize(0x%p) failed: 0x%lx."
+msgstr "לא ניתן לקבל נתוני „לא להפריע”. GlobalSize(0x%p) נכשלה: 0x%lx."
 
 #: gdk/win32/gdkdrop-win32.c:969
 #, c-format
 msgid "Cannot get DnD data. Failed to allocate %s bytes to store the data."
-msgstr "Cannot get DnD data. Failed to allocate %s bytes to store the data."
+msgstr "לא ניתן לקבל נתוני „לא להפריע”. הקצאת %s בתים לאחסון הנתונים נכשלה."
 
 #: gdk/win32/gdkdrop-win32.c:1037
 #, c-format
 msgid "GDK surface 0x%p is not registered as a drop target"
-msgstr "GDK surface 0x%p is not registered as a drop target"
+msgstr "משטח GDK‏ 0x%p לא רשום כיעד השלכה בגרירה"
 
 #: gdk/win32/gdkdrop-win32.c:1044
 #, c-format
 msgid "Target context record 0x%p has no data object"
-msgstr "Target context record 0x%p has no data object"
+msgstr "לרשומת ההקשר המיועדת 0x%p אין עצם נתונים"
 
 #: gdk/win32/gdkdrop-win32.c:1082
 #, c-format
 msgid "IDataObject_GetData (0x%x) failed, returning 0x%lx"
-msgstr "IDataObject_GetData (0x%x) failed, returning 0x%lx"
+msgstr "IDataObject_GetData (0x%x) נכשלה, הוחזר 0x%lx"
 
 #: gdk/win32/gdkdrop-win32.c:1114
 #, c-format
 msgid "Failed to transmute DnD data W32 format 0x%x to %p (%s)"
 msgstr "Failed to transmute DnD data W32 format 0x%x to %p (%s)"
 
-#: gdk/win32/gdkglcontext-win32-wgl.c:320
+#: gdk/win32/gdkglcontext-win32-wgl.c:329
 msgid "No GL implementation is available"
 msgstr "אין מימוש GL זמין"
 
-#: gdk/win32/gdkglcontext-win32-wgl.c:395
+#: gdk/win32/gdkglcontext-win32-wgl.c:404
 #, c-format
 msgid "WGL version %d.%d is too low, need at least %d.%d"
 msgstr "גרסת ה־WGL‏ %d.%d ישנה מדי. צריך לפחות %d.%d"
 
-#: gdk/win32/gdkglcontext-win32-wgl.c:413
+#: gdk/win32/gdkglcontext-win32-wgl.c:422
 #, c-format
 msgid "GL implementation cannot share GL contexts"
 msgstr "מימוש GL לא יכול לשתף הקשרי GL"
 
-#: gdk/win32/gdkglcontext-win32-wgl.c:693
+#: gdk/win32/gdkglcontext-win32-wgl.c:702
 msgid "No available configurations for the given pixel format"
-msgstr "No available configurations for the given pixel format"
+msgstr "לא סופקו הגדרות לתצורת הפיקסלים שסופקה"
 
 #: gdk/win32/gdkhdataoutputstream-win32.c:63
 msgid "writing a closed stream"
@@ -746,7 +745,7 @@ msgstr "GlobalReAlloc()‎ נכשלה: "
 
 #: gdk/win32/gdkhdataoutputstream-win32.c:105
 msgid "Ran out of buffer space (buffer size is fixed)"
-msgstr "Ran out of buffer space (buffer size is fixed)"
+msgstr "נגמר המקום בזיכרון החוצץ (גודל הזיכרון החוצץ קבוע)"
 
 #: gdk/win32/gdkhdataoutputstream-win32.c:203
 msgid "Can’t transmute a single handle"
@@ -790,7 +789,7 @@ msgstr "מנהל לוח הגזירים לא יכול לאחסן את הבחיר�
 
 #: gdk/x11/gdkclipboard-x11.c:649
 msgid "Cannot store clipboard. No clipboard manager is active."
-msgstr "Cannot store clipboard. No clipboard manager is active."
+msgstr "אי אפשר לאחסן את לוח גזירים. אין מנהל לוח גזירים פעיל."
 
 #: gdk/x11/gdkglcontext-glx.c:810
 msgid "No GLX configurations available"
@@ -807,7 +806,7 @@ msgstr "אין תמיכה ב־GLX"
 #: gdk/x11/gdkselectioninputstream-x11.c:465
 #, c-format
 msgid "Format %s not supported"
-msgstr "Format %s not supported"
+msgstr "אין תמיכה בתצורה %s"
 
 #: gdk/x11/gdktextlistconverter-x11.c:65 gdk/x11/gdktextlistconverter-x11.c:105
 msgid "Not enough space in destination"
@@ -1811,6 +1810,11 @@ msgctxt "accessibility"
 msgid "comment"
 msgstr "הערה"
 
+#: gtk/gtkaccessible.c:874
+msgctxt "accessibility"
+msgid "terminal"
+msgstr "מסוף"
+
 #: gtk/gtkalertdialog.c:668 gtk/print/gtkcustompaperunixdialog.c:322
 #: gtk/gtkmessagedialog.c:166 gtk/ui/gtkassistant.ui:40
 msgid "_Close"
@@ -2384,7 +2388,7 @@ msgid "If you delete an item, it will be permanently lost."
 msgstr "אם פריט ימחק, הוא יאבד לצמיתות."
 
 #: gtk/gtkfilechooserwidget.c:1188 gtk/gtkfilechooserwidget.c:1786
-#: gtk/gtklabel.c:5702 gtk/gtktext.c:6147 gtk/gtktextview.c:9018
+#: gtk/gtklabel.c:5712 gtk/gtktext.c:6193 gtk/gtktextview.c:9080
 msgid "_Delete"
 msgstr "מ_חיקה"
 
@@ -2726,32 +2730,32 @@ msgstr "סגירה"
 msgid "Close the infobar"
 msgstr "סגירת פס המידע"
 
-#: gtk/gtklabel.c:5699 gtk/gtktext.c:6135 gtk/gtktextview.c:9006
+#: gtk/gtklabel.c:5709 gtk/gtktext.c:6181 gtk/gtktextview.c:9068
 msgid "Cu_t"
 msgstr "_גזירה"
 
-#: gtk/gtklabel.c:5700 gtk/gtktext.c:6139 gtk/gtktextview.c:9010
+#: gtk/gtklabel.c:5710 gtk/gtktext.c:6185 gtk/gtktextview.c:9072
 msgid "_Copy"
 msgstr "ה_עתקה"
 
-#: gtk/gtklabel.c:5701 gtk/gtktext.c:6143 gtk/gtktextview.c:9014
+#: gtk/gtklabel.c:5711 gtk/gtktext.c:6189 gtk/gtktextview.c:9076
 msgid "_Paste"
 msgstr "ה_דבקה"
 
-#: gtk/gtklabel.c:5707 gtk/gtktext.c:6156 gtk/gtktextview.c:9039
+#: gtk/gtklabel.c:5717 gtk/gtktext.c:6202 gtk/gtktextview.c:9101
 msgid "Select _All"
 msgstr "בחירה בה_כול"
 
-#: gtk/gtklabel.c:5712
+#: gtk/gtklabel.c:5722
 msgid "_Open Link"
 msgstr "_פתיחת קישור"
 
-#: gtk/gtklabel.c:5716
+#: gtk/gtklabel.c:5726
 msgid "Copy _Link Address"
 msgstr "העתקת כתובת ה_קישור"
 
 # msgctxt "OpenType layout"
-#: gtk/gtklabel.c:5760 gtk/gtktext.c:2716 gtk/gtktextview.c:9088
+#: gtk/gtklabel.c:5770 gtk/gtktext.c:2724 gtk/gtktextview.c:9150
 msgid "Context menu"
 msgstr "תפריט הקשר"
 
@@ -3599,7 +3603,7 @@ msgstr "לא נתן להעביר את הפריט עם הכתובת „%s” אל
 msgid "No registered application with name “%s” for item with URI “%s” found"
 msgstr "לא נמצא יישום הרשום בשם „%s” עבור הפריט בעל הכתובת „%s”"
 
-#: gtk/gtksearchentry.c:767
+#: gtk/gtksearchentry.c:810
 msgid "Clear Entry"
 msgstr "פינוי הרשומה"
 
@@ -3690,15 +3694,15 @@ msgctxt "accessibility"
 msgid "Sidebar"
 msgstr "סרגל צד"
 
-#: gtk/gtktext.c:6161 gtk/gtktextview.c:9044
+#: gtk/gtktext.c:6207 gtk/gtktextview.c:9106
 msgid "Insert _Emoji"
 msgstr "הוספת _רגשון"
 
-#: gtk/gtktextview.c:9026
+#: gtk/gtktextview.c:9088
 msgid "_Undo"
 msgstr "_ביטול"
 
-#: gtk/gtktextview.c:9030
+#: gtk/gtktextview.c:9092
 msgid "_Redo"
 msgstr "ביצוע _שוב"
 
@@ -7831,6 +7835,18 @@ msgstr "פענוח ‚%s’ כמספר נכשל"
 
 #: tools/gtk-rendernode-tool.c:35
 #, c-format
+#| msgid ""
+#| "Usage:\n"
+#| "  gtk4-rendernode-tool [COMMAND] [OPTION…] FILE\n"
+#| "\n"
+#| "Perform various tasks on GTK render nodes.\n"
+#| "\n"
+#| "Commands:\n"
+#| "  benchmark    Benchmark rendering of a node\n"
+#| "  info         Provide information about the node\n"
+#| "  show         Show the node\n"
+#| "  render       Take a screenshot of the node\n"
+#| "\n"
 msgid ""
 "Usage:\n"
 "  gtk4-rendernode-tool [COMMAND] [OPTION…] FILE\n"
@@ -7839,21 +7855,23 @@ msgid ""
 "\n"
 "Commands:\n"
 "  benchmark    Benchmark rendering of a node\n"
+"  compare      Compare nodes or images\n"
 "  info         Provide information about the node\n"
 "  show         Show the node\n"
 "  render       Take a screenshot of the node\n"
 "\n"
 msgstr ""
-"Usage:\n"
+"שימוש:\n"
 "  gtk4-rendernode-tool [COMMAND] [OPTION…] FILE\n"
 "\n"
-"Perform various tasks on GTK render nodes.\n"
+"ביצוע מגוון פעולות על צומתי עיבוד של GTK.\n"
 "\n"
-"Commands:\n"
-"  benchmark    Benchmark rendering of a node\n"
-"  info         Provide information about the node\n"
-"  show         Show the node\n"
-"  render       Take a screenshot of the node\n"
+"פקודות:\n"
+"  benchmark    מדידת ביצועי העיבוד של צומת\n"
+"  compare      השוואת צמתים או תמונות\n"
+"  info         אספקת מידע על הצומת\n"
+"  show         הצגת הצומת\n"
+"  render       צילום הצומת\n"
 "\n"
 
 #: tools/gtk-rendernode-tool-benchmark.c:94
@@ -7938,7 +7956,6 @@ msgstr "יצירת SVG נכשלה: %s\n"
 
 #: tools/gtk-rendernode-tool-render.c:150
 #, c-format
-#| msgid "Failed to rewrite header\n"
 msgid "Failed to create renderer: %s\n"
 msgstr "יצירת מנגנון עיבוד נכשלה: %s\n"
 
@@ -8174,8 +8191,8 @@ msgstr ""
 #~ msgid "Switch to list view"
 #~ msgstr "החלפה לתצוגת רשימה"
 
-#~ msgid "default:LTR"
-#~ msgstr "default:RTL"
+msgid "default:LTR"
+msgstr "default:RTL"
 
 #~ msgid "Other application…"
 #~ msgstr "יישום אחר…"
