@@ -967,7 +967,6 @@ gsk_gpu_device_lookup_glyph_image (GskGpuDevice           *self,
                                .width = rect.size.width + 2 * padding,
                                .height = rect.size.height + 2 * padding,
                            },
-                           1.0,
                            &GRAPHENE_POINT_INIT (cache->origin.x + padding,
                                                  cache->origin.y + padding));
 
