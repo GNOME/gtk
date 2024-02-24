@@ -485,7 +485,6 @@ struct _GskGpuUploadGlyphOp
   cairo_rectangle_int_t area;
   PangoFont *font;
   PangoGlyph glyph;
-  float scale;
   graphene_point_t origin;
 
   GskGpuBuffer *buffer;
@@ -509,11 +508,19 @@ gsk_gpu_upload_glyph_op_print (GskGpuOp    *op,
                                guint        indent)
 {
   GskGpuUploadGlyphOp *self = (GskGpuUploadGlyphOp *) op;
+  PangoFontDescription *desc;
+  char *str;
+
+  desc = pango_font_describe_with_absolute_size (self->font);
+  str = pango_font_description_to_string (desc);
 
   gsk_gpu_print_op (string, indent, "upload-glyph");
   gsk_gpu_print_int_rect (string, &self->area);
-  g_string_append_printf (string, "glyph %u @ %g ", self->glyph, self->scale);
+  g_string_append_printf (string, "glyph %u font %s ", self->glyph, str);
   gsk_gpu_print_newline (string);
+
+  g_free (str);
+  pango_font_description_free (desc);
 }
 
 static void
@@ -532,7 +539,6 @@ gsk_gpu_upload_glyph_op_draw (GskGpuOp *op,
                                                  self->area.height,
                                                  stride);
   cairo_surface_set_device_offset (surface, self->origin.x, self->origin.y);
-  cairo_surface_set_device_scale (surface, self->scale, self->scale);
 
   cr = cairo_create (surface);
   cairo_set_operator (cr, CAIRO_OPERATOR_CLEAR);
@@ -618,7 +624,6 @@ gsk_gpu_upload_glyph_op (GskGpuFrame                 *frame,
                          PangoFont                   *font,
                          const PangoGlyph             glyph,
                          const cairo_rectangle_int_t *area,
-                         float                        scale,
                          const graphene_point_t      *origin)
 {
   GskGpuUploadGlyphOp *self;
@@ -629,6 +634,5 @@ gsk_gpu_upload_glyph_op (GskGpuFrame                 *frame,
   self->area = *area;
   self->font = g_object_ref (font);
   self->glyph = glyph;
-  self->scale = scale;
   self->origin = *origin;
 }
