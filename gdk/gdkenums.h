@@ -317,6 +317,7 @@ typedef enum
  * @GDK_MEMORY_B8G8R8: 3 bytes; for blue, green, red. The data is opaque.
  * @GDK_MEMORY_N_FORMATS: The number of formats. This value will change as
  *   more formats get added, so do not rely on its concrete integer.
+ * @GDK_MEMORY_R32G32B32_FLOAT: 3 float values; for red, green, blue.
  *
  * `GdkMemoryFormat` describes formats that image data can have in memory.
  *
@@ -487,6 +488,20 @@ typedef enum
  * GDK_MEMORY_A16:
  *
  * One guint16 value; for alpha.
+ *
+ * Since: 4.12
+ */
+/**
+ * GDK_MEMORY_A16_FLOAT:
+ *
+ * One half-float value; for alpha.
+ *
+ * Since: 4.12
+ */
+/**
+ * GDK_MEMORY_A32_FLOAT:
+ *
+ * One float value; for alpha.
  *
  * Since: 4.12
  */
