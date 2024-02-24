@@ -1834,13 +1834,16 @@ typedef enum {
 
 /**
  * GtkPopoverMenuFlags:
- * @GTK_POPOVER_MENU_SLIDING: Submenus are presented as sliding submenus that
- *   replace the main menu.
  * @GTK_POPOVER_MENU_NESTED: Submenus are presented as traditional, nested
  *   popovers.
  *
  * Flags that affect how [class@Gtk.PopoverMenu] widgets built from
  * a [class@Gio.MenuModel] are created and displayed.
+ */
+/**
+ * GTK_POPOVER_MENU_SLIDING:
+ *
+ * Submenus are presented as sliding submenus that replace the main menu.
  *
  * Since: 4.14
  */
