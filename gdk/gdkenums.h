@@ -309,66 +309,201 @@ typedef enum
  *   The color values are premultiplied with the alpha value.
  * @GDK_MEMORY_R8G8B8A8_PREMULTIPLIED: 4 bytes; for red, green, blue, alpha
  *   The color values are premultiplied with the alpha value.
- * @GDK_MEMORY_A8B8G8R8_PREMULTIPLIED: 4 bytes; for alpha, blue, green, red,
- *   The color values are premultiplied with the alpha value. Since 4.14
  * @GDK_MEMORY_B8G8R8A8: 4 bytes; for blue, green, red, alpha.
  * @GDK_MEMORY_A8R8G8B8: 4 bytes; for alpha, red, green, blue.
  * @GDK_MEMORY_R8G8B8A8: 4 bytes; for red, green, blue, alpha.
  * @GDK_MEMORY_A8B8G8R8: 4 bytes; for alpha, blue, green, red.
- * @GDK_MEMORY_B8G8R8X8: 4 bytes; for blue, green, red, unused. Since 4.14
- * @GDK_MEMORY_X8R8G8B8: 4 bytes; for unused, red, green, blue. Since 4.14
- * @GDK_MEMORY_R8G8B8X8: 4 bytes; for red, green, blue, unused. Since 4.14
- * @GDK_MEMORY_X8B8G8R8: 4 bytes; for unused, blue, green, red. Since 4.14
  * @GDK_MEMORY_R8G8B8: 3 bytes; for red, green, blue. The data is opaque.
  * @GDK_MEMORY_B8G8R8: 3 bytes; for blue, green, red. The data is opaque.
- * @GDK_MEMORY_R16G16B16: 3 guint16 values; for red, green, blue. Since: 4.6
- * @GDK_MEMORY_R16G16B16A16_PREMULTIPLIED: 4 guint16 values; for red, green,
- *   blue, alpha. The color values are premultiplied with the alpha value.
- *  Since: 4.6
- * @GDK_MEMORY_R16G16B16A16: 4 guint16 values; for red, green, blue, alpha.
- *  Since: 4.6
- * @GDK_MEMORY_R16G16B16_FLOAT: 3 half-float values; for red, green, blue.
- *   The data is opaque. Since: 4.6
- * @GDK_MEMORY_R16G16B16A16_FLOAT_PREMULTIPLIED: 4 half-float values; for
- *   red, green, blue and alpha. The color values are premultiplied with
- *   the alpha value. Since: 4.6
- * @GDK_MEMORY_R16G16B16A16_FLOAT: 4 half-float values; for red, green,
- *   blue and alpha. Since: 4.6
- * @GDK_MEMORY_B32G32R32_FLOAT: 3 float values; for blue, green, red.
- *   The data is opaque. Since: 4.6
- * @GDK_MEMORY_R32G32B32A32_FLOAT_PREMULTIPLIED: 4 float values; for
- *   red, green, blue and alpha. The color values are premultiplied with
- *   the alpha value. Since: 4.6
- * @GDK_MEMORY_R32G32B32A32_FLOAT: 4 float values; for red, green, blue and
- *   alpha. Since: 4.6
-  * @GDK_MEMORY_G8A8_PREMULTIPLIED: 2 bytes; for grayscale, alpha. The color
- *   values are premultiplied with the alpha value. Since: 4.12
- * @GDK_MEMORY_G8A8: 2 bytes; for grayscale, alpha. Since: 4.12
- * @GDK_MEMORY_G8: One byte; for grayscale. The data is opaque.
- *   Since: 4.12
- * @GDK_MEMORY_G16A16_PREMULTIPLIED: 2 guint16 values; for grayscale, alpha.
- *  The color values are premultiplied with the alpha value. Since: 4.12
- * @GDK_MEMORY_G16A16: 2 guint16 values; for grayscale, alpha. Since: 4.12
- * @GDK_MEMORY_G16: One guint16 value; for grayscale. The data is opaque.
- *   Since: 4.12
- * @GDK_MEMORY_A8: One byte; for alpha.
- *   Since: 4.12
- * @GDK_MEMORY_A16: One guint16 value; for alpha.
- *   Since: 4.12
  * @GDK_MEMORY_N_FORMATS: The number of formats. This value will change as
  *   more formats get added, so do not rely on its concrete integer.
+ * @GDK_MEMORY_R32G32B32_FLOAT: 3 float values; for red, green, blue.
  *
  * `GdkMemoryFormat` describes formats that image data can have in memory.
  *
  * It describes formats by listing the contents of the memory passed to it.
- * So GDK_MEMORY_A8R8G8B8 will be 1 byte (8 bits) of alpha, followed by a
+ * So `GDK_MEMORY_A8R8G8B8` will be 1 byte (8 bits) of alpha, followed by a
  * byte each of red, green and blue. It is not endian-dependent, so
- * CAIRO_FORMAT_ARGB32 is represented by different `GdkMemoryFormats`
+ * `CAIRO_FORMAT_ARGB32` is represented by different `GdkMemoryFormats`
  * on architectures with different endiannesses.
  *
  * Its naming is modelled after
  * [VkFormat](https://www.khronos.org/registry/vulkan/specs/1.0/html/vkspec.html#VkFormat)
  * for details).
+ */
+/**
+ * GDK_MEMORY_A8B8G8R8_PREMULTIPLIED:
+ *
+ * 4 bytes; for alpha, blue, green, red, The color values are premultiplied with
+ * the alpha value.
+ *
+ * Since: 4.14
+ */
+/**
+ * GDK_MEMORY_B8G8R8X8:
+ *
+ * 4 bytes; for blue, green, red, unused.
+ *
+ * Since: 4.14
+ */
+/**
+ * GDK_MEMORY_X8R8G8B8:
+ *
+ * 4 bytes; for unused, red, green, blue.
+ *
+ * Since: 4.14
+ */
+/**
+ * GDK_MEMORY_R8G8B8X8:
+ *
+ * 4 bytes; for red, green, blue, unused.
+ *
+ * Since: 4.14
+ */
+/**
+ * GDK_MEMORY_X8B8G8R8:
+ *
+ * 4 bytes; for unused, blue, green, red.
+ *
+ * Since: 4.14
+ */
+/**
+ * GDK_MEMORY_R16G16B16:
+ *
+ * 3 guint16 values; for red, green, blue.
+ *
+ * Since: 4.6
+ */
+/**
+ * GDK_MEMORY_R16G16B16A16_PREMULTIPLIED:
+ *
+ * 4 guint16 values; for red, green, blue, alpha. The color values are
+ * premultiplied with the alpha value.
+ *
+ * Since: 4.6
+ */
+/**
+ * GDK_MEMORY_R16G16B16A16:
+ *
+ * 4 guint16 values; for red, green, blue, alpha.
+ *
+ * Since: 4.6
+ */
+/**
+ * GDK_MEMORY_R16G16B16_FLOAT:
+ *
+ * 3 half-float values; for red, green, blue. The data is opaque.
+ *
+ * Since: 4.6
+ */
+/**
+ * GDK_MEMORY_R16G16B16A16_FLOAT_PREMULTIPLIED:
+ *
+ * 4 half-float values; for red, green, blue and alpha. The color values are
+ * premultiplied with the alpha value.
+ *
+ * Since: 4.6
+ */
+/**
+ * GDK_MEMORY_R16G16B16A16_FLOAT:
+ *
+ * 4 half-float values; for red, green, blue and alpha.
+ *
+ * Since: 4.6
+ */
+/**
+ * GDK_MEMORY_B32G32R32_FLOAT:
+ *
+ * 3 float values; for blue, green, red. The data is opaque.
+ *
+ * Since: 4.6
+ */
+/**
+ * GDK_MEMORY_R32G32B32A32_FLOAT_PREMULTIPLIED:
+ *
+ * 4 float values; for red, green, blue and alpha. The color values are
+ * premultiplied with the alpha value.
+ *
+ * Since: 4.6
+ */
+/**
+ * GDK_MEMORY_R32G32B32A32_FLOAT:
+ *
+ * 4 float values; for red, green, blue and alpha.
+ *
+ * Since: 4.6
+ */
+/**
+ * GDK_MEMORY_G8A8_PREMULTIPLIED:
+ *
+ * 2 bytes; for grayscale, alpha. The color values are premultiplied with the
+ * alpha value.
+ *
+ * Since: 4.12
+ */
+/**
+ * GDK_MEMORY_G8A8:
+ *
+ * 2 bytes; for grayscale, alpha.
+ *
+ * Since: 4.12
+ */
+/**
+ * GDK_MEMORY_G8:
+ *
+ * One byte; for grayscale. The data is opaque.
+ *
+ * Since: 4.12
+ */
+/**
+ * GDK_MEMORY_G16A16_PREMULTIPLIED:
+ *
+ * 2 guint16 values; for grayscale, alpha. The color values are premultiplied
+ * with the alpha value.
+ *
+ * Since: 4.12
+ */
+/**
+ * GDK_MEMORY_G16A16:
+ *
+ * 2 guint16 values; for grayscale, alpha.
+ *
+ * Since: 4.12
+ */
+/**
+ * GDK_MEMORY_G16:
+ *
+ * One guint16 value; for grayscale. The data is opaque.
+ *
+ * Since: 4.12
+ */
+/**
+ * GDK_MEMORY_A8:
+ *
+ * One byte; for alpha.
+ *
+ * Since: 4.12
+ */
+/**
+ * GDK_MEMORY_A16:
+ *
+ * One guint16 value; for alpha.
+ *
+ * Since: 4.12
+ */
+/**
+ * GDK_MEMORY_A16_FLOAT:
+ *
+ * One half-float value; for alpha.
+ *
+ * Since: 4.12
+ */
+/**
+ * GDK_MEMORY_A32_FLOAT:
+ *
+ * One float value; for alpha.
+ *
+ * Since: 4.12
  */
 typedef enum {
   GDK_MEMORY_B8G8R8A8_PREMULTIPLIED,
