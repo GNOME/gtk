@@ -2437,7 +2437,7 @@ apply_monitor_change (GdkWaylandMonitor *monitor)
   gboolean needs_scaling = FALSE;
   double scale;
 
-  if (monitor->xdg_output_done)
+  if (!should_expect_xdg_output_done (monitor) || monitor->xdg_output_done)
     {
       logical_geometry = monitor->xdg_output_geometry;
       needs_scaling =
