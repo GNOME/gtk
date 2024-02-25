@@ -2437,12 +2437,13 @@ apply_monitor_change (GdkWaylandMonitor *monitor)
   gboolean needs_scaling = FALSE;
   double scale;
 
-  if (!should_expect_xdg_output_done (monitor) || monitor->xdg_output_done)
+  if (monitor_has_xdg_output (monitor) &&
+      monitor->xdg_output_geometry.width != 0  &&
+      monitor->xdg_output_geometry.height != 0)
     {
       logical_geometry = monitor->xdg_output_geometry;
-      needs_scaling =
-        logical_geometry.width == monitor->output_geometry.width ||
-        logical_geometry.height == monitor->output_geometry.height;
+      needs_scaling = logical_geometry.width == monitor->output_geometry.width &&
+                      logical_geometry.height == monitor->output_geometry.height;
     }
   else
     {
@@ -2453,6 +2454,7 @@ apply_monitor_change (GdkWaylandMonitor *monitor)
   if (needs_scaling)
     {
       int scale_factor = gdk_monitor_get_scale_factor (GDK_MONITOR (monitor));
+
       logical_geometry.y /= scale_factor;
       logical_geometry.x /= scale_factor;
       logical_geometry.width /= scale_factor;
