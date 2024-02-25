@@ -33,6 +33,37 @@ typedef struct _GskGpuCachedGlyph GskGpuCachedGlyph;
 typedef struct _GskGpuCachedTexture GskGpuCachedTexture;
 typedef struct _GskGpuDevicePrivate GskGpuDevicePrivate;
 
+typedef struct {
+  PangoFont *font;
+  float scale;
+} FontCacheKey;
+
+typedef struct {
+  PangoGlyph glyph;
+  GskGpuGlyphLookupFlags flags;
+} GlyphCacheKey;
+
+typedef struct {
+  FontCacheKey key;
+
+  GHashTable *cache;
+} FontGlyphCache;
+
+static void
+font_glyph_cache_free (gpointer data)
+{
+  FontGlyphCache *cache = data;
+
+  g_object_unref (cache->key.font);
+  g_hash_table_unref (cache->cache);
+  g_free (cache);
+}
+
+static FontGlyphCache no_font_cache = {
+  .key = { .font = NULL, .scale = -1 },
+  .cache = NULL
+};
+
 struct _GskGpuDevicePrivate
 {
   GdkDisplay *display;
@@ -45,6 +76,7 @@ struct _GskGpuDevicePrivate
 
   GHashTable *texture_cache;
   GHashTable *glyph_cache;
+  FontGlyphCache *last_font_cache;
 
   GskGpuCachedAtlas *current_atlas;
 
@@ -69,14 +101,15 @@ struct _GskGpuCachedClass
 struct _GskGpuCached
 {
   const GskGpuCachedClass *class;
-
   GskGpuCachedAtlas *atlas;
   GskGpuCached *next;
   GskGpuCached *prev;
 
   gint64 timestamp;
-  gboolean stale;
-  guint pixels;   /* For glyphs and textures, pixels. For atlases, dead pixels */
+
+  unsigned int stale  : 1;
+  unsigned int pixels : 31;   /* For glyphs and textures, pixels. For atlases, dead pixels */
+
 };
 
 static inline void
@@ -361,10 +394,8 @@ struct _GskGpuCachedGlyph
 {
   GskGpuCached parent;
 
-  PangoFont *font;
-  PangoGlyph glyph;
-  GskGpuGlyphLookupFlags flags;
-  float scale;
+  FontGlyphCache *font_cache;
+  GlyphCacheKey glyph_key;
 
   GskGpuImage *image;
   graphene_rect_t bounds;
@@ -377,10 +408,17 @@ gsk_gpu_cached_glyph_free (GskGpuDevice *device,
 {
   GskGpuDevicePrivate *priv = gsk_gpu_device_get_instance_private (device);
   GskGpuCachedGlyph *self = (GskGpuCachedGlyph *) cached;
+  FontGlyphCache *font_cache;
 
-  g_hash_table_remove (priv->glyph_cache, self);
+  font_cache = self->font_cache;
+  g_hash_table_remove (font_cache->cache, self);
+  if (g_hash_table_size (font_cache->cache) == 0)
+    {
+      if (priv->last_font_cache == font_cache)
+        priv->last_font_cache = &no_font_cache;
+      g_hash_table_remove (priv->glyph_cache, font_cache);
+    }
 
-  g_object_unref (self->font);
   g_object_unref (self->image);
 
   g_free (self);
@@ -404,14 +442,34 @@ gsk_gpu_cached_glyph_should_collect (GskGpuDevice *device,
 }
 
 static guint
+gsk_gpu_cached_font_hash (gconstpointer data)
+{
+  const FontGlyphCache *cache = data;
+  const FontCacheKey *key = &cache->key;
+
+  return GPOINTER_TO_UINT (key->font) ^ ((guint) key->scale * PANGO_SCALE);
+}
+
+static gboolean
+gsk_gpu_cached_font_equal (gconstpointer v1,
+                           gconstpointer v2)
+{
+  const FontGlyphCache *c1 = v1;
+  const FontCacheKey *key1 = &c1->key;
+  const FontGlyphCache *c2 = v2;
+  const FontCacheKey *key2 = &c2->key;
+
+  return key1->font == key2->font &&
+         key1->scale == key2->scale;
+}
+
+static guint
 gsk_gpu_cached_glyph_hash (gconstpointer data)
 {
   const GskGpuCachedGlyph *glyph = data;
+  const GlyphCacheKey *key = &glyph->glyph_key;
 
-  return GPOINTER_TO_UINT (glyph->font) ^
-         glyph->glyph ^
-         (glyph->flags << 24) ^
-         ((guint) glyph->scale * PANGO_SCALE);
+  return key->glyph ^ (key->flags << 24);
 }
 
 static gboolean
@@ -420,11 +478,11 @@ gsk_gpu_cached_glyph_equal (gconstpointer v1,
 {
   const GskGpuCachedGlyph *glyph1 = v1;
   const GskGpuCachedGlyph *glyph2 = v2;
+  const GlyphCacheKey *key1 = &glyph1->glyph_key;
+  const GlyphCacheKey *key2 = &glyph2->glyph_key;
 
-  return glyph1->font == glyph2->font
-      && glyph1->glyph == glyph2->glyph
-      && glyph1->flags == glyph2->flags
-      && glyph1->scale == glyph2->scale;
+  return key1->glyph == key2->glyph &&
+         key1->flags == key2->flags;
 }
 
 static const GskGpuCachedClass GSK_GPU_CACHED_GLYPH_CLASS =
@@ -623,10 +681,13 @@ gsk_gpu_device_init (GskGpuDevice *self)
 {
   GskGpuDevicePrivate *priv = gsk_gpu_device_get_instance_private (self);
 
-  priv->glyph_cache = g_hash_table_new (gsk_gpu_cached_glyph_hash,
-                                        gsk_gpu_cached_glyph_equal);
+  priv->glyph_cache = g_hash_table_new_full (gsk_gpu_cached_font_hash,
+                                             gsk_gpu_cached_font_equal,
+                                             NULL,
+                                             font_glyph_cache_free);
   priv->texture_cache = g_hash_table_new (g_direct_hash,
                                           g_direct_equal);
+  priv->last_font_cache = &no_font_cache;
 }
 
 void
@@ -894,13 +955,14 @@ gsk_gpu_device_lookup_glyph_image (GskGpuDevice           *self,
                                    PangoFont             **out_scaled_font)
 {
   GskGpuDevicePrivate *priv = gsk_gpu_device_get_instance_private (self);
-  GskGpuCachedGlyph lookup = {
-    .font = font,
-    .glyph = glyph,
-    .flags = flags,
-    .scale = scale
+  FontGlyphCache font_lookup = {
+    .key = { .font = font, .scale = scale }
   };
-  GskGpuCachedGlyph *cache;
+  GskGpuCachedGlyph glyph_lookup = {
+    .glyph_key = { .glyph = glyph, .flags = flags }
+  };
+  FontGlyphCache *font_cache = NULL;
+  GskGpuCachedGlyph *cache = NULL;
   PangoRectangle ink_rect;
   graphene_rect_t rect;
   graphene_point_t origin;
@@ -909,15 +971,38 @@ gsk_gpu_device_lookup_glyph_image (GskGpuDevice           *self,
   float subpixel_x, subpixel_y;
   PangoFont *scaled_font;
 
-  cache = g_hash_table_lookup (priv->glyph_cache, &lookup);
-  if (cache)
-    {
-      gsk_gpu_cached_use (self, (GskGpuCached *) cache, gsk_gpu_frame_get_timestamp (frame));
+  if (priv->last_font_cache->key.font == font &&
+      priv->last_font_cache->key.scale == scale)
+    font_cache = priv->last_font_cache;
+  else
+    font_cache = g_hash_table_lookup (priv->glyph_cache, &font_lookup);
 
-      *out_bounds = cache->bounds;
-      *out_origin = cache->origin;
-      return cache->image;
+  if (font_cache)
+    {
+      cache = g_hash_table_lookup (font_cache->cache, &glyph_lookup);
+      if (cache)
+        {
+          gsk_gpu_cached_use (self, (GskGpuCached *) cache, gsk_gpu_frame_get_timestamp (frame));
+
+          *out_bounds = cache->bounds;
+          *out_origin = cache->origin;
+
+          priv->last_font_cache = font_cache;
+
+          return cache->image;
+        }
     }
+  else
+    {
+      font_cache = g_new (FontGlyphCache, 1);
+      font_cache->key.font = g_object_ref (font);
+      font_cache->key.scale = scale;
+      font_cache->cache = g_hash_table_new (gsk_gpu_cached_glyph_hash,
+                                            gsk_gpu_cached_glyph_equal);
+      g_hash_table_insert (priv->glyph_cache, font_cache, font_cache);
+    }
+
+  priv->last_font_cache = font_cache;
 
   if (*out_scaled_font)
     scaled_font = *out_scaled_font;
@@ -952,10 +1037,9 @@ gsk_gpu_device_lookup_glyph_image (GskGpuDevice           *self,
       cache = gsk_gpu_cached_new (self, &GSK_GPU_CACHED_GLYPH_CLASS, NULL);
     }
 
-  cache->font = g_object_ref (font);
-  cache->glyph = glyph;
-  cache->flags = flags;
-  cache->scale = scale;
+  cache->font_cache = font_cache;
+  cache->glyph_key.glyph = glyph;
+  cache->glyph_key.flags = flags;
   cache->bounds = rect;
   cache->image = image;
   cache->origin = GRAPHENE_POINT_INIT (- origin.x + subpixel_x,
@@ -975,7 +1059,7 @@ gsk_gpu_device_lookup_glyph_image (GskGpuDevice           *self,
                            &GRAPHENE_POINT_INIT (cache->origin.x + padding,
                                                  cache->origin.y + padding));
 
-  g_hash_table_insert (priv->glyph_cache, cache, cache);
+  g_hash_table_insert (font_cache->cache, cache, cache);
   gsk_gpu_cached_use (self, (GskGpuCached *) cache, gsk_gpu_frame_get_timestamp (frame));
 
   *out_bounds = cache->bounds;
