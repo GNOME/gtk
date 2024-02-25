@@ -22,9 +22,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2024-02-12 22:55+0000\n"
-"PO-Revision-Date: 2024-02-13 15:09+0300\n"
-"Last-Translator: Emin Tufan Çetin <etcetin@gmail.com>\n"
+"POT-Creation-Date: 2024-02-22 18:50+0000\n"
+"PO-Revision-Date: 2024-02-22 21:54+0300\n"
+"Last-Translator: Sabri Ünal <libreajans@gmail.com>\n"
 "Language-Team: Türkçe <takim@gnome.org.tr>\n"
 "Language: tr\n"
 "MIME-Version: 1.0\n"
@@ -61,7 +61,7 @@ msgstr "İçerikler “%s” olarak sağlanamıyor"
 msgid "Cannot provide contents as %s"
 msgstr "İçerikler %s olarak sağlanamıyor"
 
-#: gdk/gdkdisplay.c:176 gdk/gdkglcontext.c:462
+#: gdk/gdkdisplay.c:176 gdk/gdkglcontext.c:459
 msgid "The current backend does not support OpenGL"
 msgstr "Şimdiki arka uç OpenGL’i desteklemiyor"
 
@@ -125,32 +125,32 @@ msgstr "Diğer uygulamalardan sürükle ve bırak desteklenmemektedir."
 msgid "No compatible formats to transfer contents."
 msgstr "İçerikleri aktarmak için uyumlu biçim yok."
 
-#: gdk/gdkglcontext.c:422 gdk/x11/gdkglcontext-glx.c:645
+#: gdk/gdkglcontext.c:419 gdk/x11/gdkglcontext-glx.c:645
 msgid "No GL API allowed."
 msgstr "İzin verilen GP API yok."
 
-#: gdk/gdkglcontext.c:445 gdk/win32/gdkglcontext-win32-wgl.c:386
-#: gdk/win32/gdkglcontext-win32-wgl.c:529
-#: gdk/win32/gdkglcontext-win32-wgl.c:573 gdk/x11/gdkglcontext-glx.c:691
+#: gdk/gdkglcontext.c:442 gdk/win32/gdkglcontext-win32-wgl.c:395
+#: gdk/win32/gdkglcontext-win32-wgl.c:538
+#: gdk/win32/gdkglcontext-win32-wgl.c:582 gdk/x11/gdkglcontext-glx.c:691
 msgid "Unable to create a GL context"
 msgstr "GL bağlamı oluşturulamadı"
 
-#: gdk/gdkglcontext.c:1306
+#: gdk/gdkglcontext.c:1303
 msgid "OpenGL ES disabled via GDK_DEBUG"
 msgstr "OpenGL ES, GDK_DEBUG aracılığıyla devre dışı bırakılmış"
 
-#: gdk/gdkglcontext.c:1318
+#: gdk/gdkglcontext.c:1315
 msgid "OpenGL disabled via GDK_DEBUG"
 msgstr "OpenGL, GDK_DEBUG aracılığıyla devre dışı bırakılmış"
 
-#: gdk/gdkglcontext.c:1329
+#: gdk/gdkglcontext.c:1326
 #, c-format
 msgid "Application does not support %s API"
 msgstr "Uygulama %s APIsini desteklemiyor"
 
 #. translators: This is about OpenGL backend names, like
 #. * "Trying to use X11 GLX, but EGL is already in use"
-#: gdk/gdkglcontext.c:2115
+#: gdk/gdkglcontext.c:2112
 #, c-format
 msgid "Trying to use %s, but %s is already in use"
 msgstr "%s kullanılmaya çalışılıyor ancak şu anda %s kullanılıyor"
@@ -715,21 +715,21 @@ msgstr "IDataObject_GetData (0x%x) başarısız, 0x%lx döndürüyor"
 msgid "Failed to transmute DnD data W32 format 0x%x to %p (%s)"
 msgstr "W32 biçimli 0x%x DnD verisi, %p hedefine dönüştürülemedi (%s)"
 
-#: gdk/win32/gdkglcontext-win32-wgl.c:320
+#: gdk/win32/gdkglcontext-win32-wgl.c:329
 msgid "No GL implementation is available"
 msgstr "Kullanılabilir GL uygulaması yok"
 
-#: gdk/win32/gdkglcontext-win32-wgl.c:395
+#: gdk/win32/gdkglcontext-win32-wgl.c:404
 #, c-format
 msgid "WGL version %d.%d is too low, need at least %d.%d"
 msgstr "WGL sürümü %d.%d çok düşük, en az %d.%d gerekiyor"
 
-#: gdk/win32/gdkglcontext-win32-wgl.c:413
+#: gdk/win32/gdkglcontext-win32-wgl.c:422
 #, c-format
 msgid "GL implementation cannot share GL contexts"
 msgstr "GL uygulaması GL bağlamlarını paylaşamaz"
 
-#: gdk/win32/gdkglcontext-win32-wgl.c:693
+#: gdk/win32/gdkglcontext-win32-wgl.c:702
 msgid "No available configurations for the given pixel format"
 msgstr "Verilen piksel biçimi için kullanılabilir yapılandırma yok"
 
@@ -1756,6 +1756,11 @@ msgctxt "accessibility"
 msgid "comment"
 msgstr "yorum"
 
+#: gtk/gtkaccessible.c:874
+msgctxt "accessibility"
+msgid "terminal"
+msgstr "uçbirim"
+
 #: gtk/gtkalertdialog.c:668 gtk/print/gtkcustompaperunixdialog.c:322
 #: gtk/gtkmessagedialog.c:166 gtk/ui/gtkassistant.ui:40
 msgid "_Close"
@@ -2329,7 +2334,7 @@ msgid "If you delete an item, it will be permanently lost."
 msgstr "Eğer bir öge silerseniz kalıcı olarak kaybolur."
 
 #: gtk/gtkfilechooserwidget.c:1188 gtk/gtkfilechooserwidget.c:1786
-#: gtk/gtklabel.c:5702 gtk/gtktext.c:6147 gtk/gtktextview.c:9018
+#: gtk/gtklabel.c:5712 gtk/gtktext.c:6193 gtk/gtktextview.c:9080
 msgid "_Delete"
 msgstr "_Sil"
 
@@ -2670,31 +2675,31 @@ msgstr "Kapat"
 msgid "Close the infobar"
 msgstr "Bilgi çubuğunu kapat"
 
-#: gtk/gtklabel.c:5699 gtk/gtktext.c:6135 gtk/gtktextview.c:9006
+#: gtk/gtklabel.c:5709 gtk/gtktext.c:6181 gtk/gtktextview.c:9068
 msgid "Cu_t"
 msgstr "Ke_s"
 
-#: gtk/gtklabel.c:5700 gtk/gtktext.c:6139 gtk/gtktextview.c:9010
+#: gtk/gtklabel.c:5710 gtk/gtktext.c:6185 gtk/gtktextview.c:9072
 msgid "_Copy"
 msgstr "_Kopyala"
 
-#: gtk/gtklabel.c:5701 gtk/gtktext.c:6143 gtk/gtktextview.c:9014
+#: gtk/gtklabel.c:5711 gtk/gtktext.c:6189 gtk/gtktextview.c:9076
 msgid "_Paste"
 msgstr "_Yapıştır"
 
-#: gtk/gtklabel.c:5707 gtk/gtktext.c:6156 gtk/gtktextview.c:9039
+#: gtk/gtklabel.c:5717 gtk/gtktext.c:6202 gtk/gtktextview.c:9101
 msgid "Select _All"
 msgstr "_Tümünü Seç"
 
-#: gtk/gtklabel.c:5712
+#: gtk/gtklabel.c:5722
 msgid "_Open Link"
 msgstr "Bağlantı _Aç"
 
-#: gtk/gtklabel.c:5716
+#: gtk/gtklabel.c:5726
 msgid "Copy _Link Address"
 msgstr "_Bağlantı Adresini Kopyala"
 
-#: gtk/gtklabel.c:5760 gtk/gtktext.c:2716 gtk/gtktextview.c:9088
+#: gtk/gtklabel.c:5770 gtk/gtktext.c:2724 gtk/gtktextview.c:9150
 msgid "Context menu"
 msgstr "Bağlamsal menü"
 
@@ -3536,7 +3541,7 @@ msgstr "“%s” URI’li öge “%s”e taşınamadı"
 msgid "No registered application with name “%s” for item with URI “%s” found"
 msgstr "“%2$s” URIʼli öge için “%1$s” adında kayıtlı uygulama bulunamadı"
 
-#: gtk/gtksearchentry.c:767
+#: gtk/gtksearchentry.c:810
 msgid "Clear Entry"
 msgstr "Girdiyi Temizle"
 
@@ -3627,15 +3632,15 @@ msgctxt "accessibility"
 msgid "Sidebar"
 msgstr "Kenar Çubuğu"
 
-#: gtk/gtktext.c:6161 gtk/gtktextview.c:9044
+#: gtk/gtktext.c:6207 gtk/gtktextview.c:9106
 msgid "Insert _Emoji"
 msgstr "_Emoji Ekle"
 
-#: gtk/gtktextview.c:9026
+#: gtk/gtktextview.c:9088
 msgid "_Undo"
 msgstr "_Geri Al"
 
-#: gtk/gtktextview.c:9030
+#: gtk/gtktextview.c:9092
 msgid "_Redo"
 msgstr "_Yinele"
 
@@ -7774,6 +7779,7 @@ msgid ""
 "\n"
 "Commands:\n"
 "  benchmark    Benchmark rendering of a node\n"
+"  compare      Compare nodes or images\n"
 "  info         Provide information about the node\n"
 "  show         Show the node\n"
 "  render       Take a screenshot of the node\n"
@@ -7782,10 +7788,11 @@ msgstr ""
 "Kullanım:\n"
 "  gtk4-rendernode-tool [KOMUT] [SEÇENEK…] DOSYA\n"
 "\n"
-"GTK gerçekleme düğümleri üzerinde türlü görevler gerçekleştirin.\n"
+"GTK gerçekleme düğümleri üzerinde türlü görevler gerçekleştir.\n"
 "\n"
 "Komutlar:\n"
 "  benchmark    Düğümlerin gerçeklemesini kıyasla\n"
+"  compare      Düğümleri ya da görüntüleri karşılaştır\n"
 "  info         Düğümle ilgili bilgi sağla\n"
 "  show         Düğümü göster\n"
 "  render       Düğümün ekran görüntüsünü al\n"
