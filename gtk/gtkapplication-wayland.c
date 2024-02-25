@@ -146,7 +146,8 @@ gtk_application_impl_wayland_inhibit (GtkApplicationImpl         *impl,
         }
     }
 
-  inhibitor->dbus_cookie = ((GtkApplicationImplWaylandClass *) G_OBJECT_GET_CLASS (wayland))->dbus_inhibit (impl, window, flags, reason);
+  if (flags)
+    inhibitor->dbus_cookie = ((GtkApplicationImplWaylandClass *) G_OBJECT_GET_CLASS (wayland))->dbus_inhibit (impl, window, flags, reason);
 
   return inhibitor->cookie;
 }
