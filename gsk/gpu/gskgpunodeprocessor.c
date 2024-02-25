@@ -3000,6 +3000,7 @@ gsk_gpu_node_processor_add_glyph_node (GskGpuNodeProcessor *self,
   gboolean glyph_align;
   GskGpuImage *last_image;
   guint32 descriptor = 0;
+  GskGpuClip old_clip;
 
   if (self->opacity < 1.0 &&
       gsk_text_node_has_color_glyphs (node))
@@ -3007,6 +3008,10 @@ gsk_gpu_node_processor_add_glyph_node (GskGpuNodeProcessor *self,
       gsk_gpu_node_processor_add_without_opacity (self, node);
       return;
     }
+
+  gsk_gpu_clip_init_copy (&old_clip, &self->clip);
+  if (gsk_gpu_clip_contains_rect (&self->clip, &self->offset, &node->bounds))
+    gsk_gpu_clip_init_contained (&self->clip, &node->bounds);
 
   glyph_align = gsk_gpu_frame_should_optimize (self->frame, GSK_GPU_OPTIMIZE_GLYPH_ALIGN) &&
                 gsk_transform_get_category (self->modelview) >= GSK_TRANSFORM_CATEGORY_2D;
@@ -3090,6 +3095,8 @@ gsk_gpu_node_processor_add_glyph_node (GskGpuNodeProcessor *self,
     }
 
   g_clear_object (&scaled_font);
+
+  gsk_gpu_clip_init_copy (&self->clip, &old_clip);
 }
 
 static gboolean
