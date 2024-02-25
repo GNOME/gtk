@@ -5,7 +5,7 @@
 # Mohammad DAMT <mdamt@bisnisweb.com>, 2003, 2004, 2005.
 # Ahmad Riza H Nst  <rizahnst@gnome.org>, 2006.
 # Muhammad Hilman <hilman09121991@yahoo.com>, 2008.
-# Andika Triwidada <andika@gmail.com>, 2010-2014, 2021, 2023.
+# Andika Triwidada <andika@gmail.com>, 2010-2014, 2021, 2023, 2024.
 # Dirgita <dirgitadevina@yahoo.co.id>, 2010.
 # Dirgita Devina <dirgitadevina@yahoo.co.id>, 2010, 2012.
 # Kukuh Syafaat <kukuhsyafaat@gnome.org>, 2017-2023.
@@ -14,8 +14,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk main\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2023-08-12 21:23+0000\n"
-"PO-Revision-Date: 2023-08-13 20:41+0700\n"
+"POT-Creation-Date: 2024-02-23 01:06+0000\n"
+"PO-Revision-Date: 2024-02-25 16:18+0700\n"
 "Last-Translator: Andika Triwidada <andika@gmail.com>\n"
 "Language-Team: Indonesian <gnome-l10n-id@googlegroups.com>\n"
 "Language: id\n"
@@ -23,7 +23,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Poedit 3.3.2\n"
+"X-Generator: Poedit 3.4.2\n"
 
 #: gdk/broadway/gdkbroadway-server.c:135
 #, c-format
@@ -34,11 +34,11 @@ msgstr "Tipe tampilan broadway tak didukung: %s"
 msgid "This clipboard cannot store data."
 msgstr "Papan klip ini tidak dapat menyimpan data."
 
-#: gdk/gdkclipboard.c:287 gdk/gdkclipboard.c:785 gdk/gdkclipboard.c:1085
+#: gdk/gdkclipboard.c:287 gdk/gdkclipboard.c:786 gdk/gdkclipboard.c:1086
 msgid "Cannot read from empty clipboard."
 msgstr "Tidak dapat membaca dari papan klip kosong."
 
-#: gdk/gdkclipboard.c:318 gdk/gdkclipboard.c:1135 gdk/gdkdrag.c:618
+#: gdk/gdkclipboard.c:318 gdk/gdkclipboard.c:1136 gdk/gdkdrag.c:618
 msgid "No compatible formats to transfer clipboard contents."
 msgstr "Tidak ada format yang kompatibel untuk mentransfer konten papan klip."
 
@@ -53,57 +53,57 @@ msgstr "Tidak dapat memberikan konten sebagai %s"
 msgid "Cannot provide contents as %s"
 msgstr "Tidak dapat memberikan konten sebagai \"%s\""
 
-#: gdk/gdkdisplay.c:156 gdk/gdkglcontext.c:442
+#: gdk/gdkdisplay.c:176 gdk/gdkglcontext.c:459
 msgid "The current backend does not support OpenGL"
 msgstr "Backend saat ini tak mendukung OpenGL"
 
-#: gdk/gdkdisplay.c:1245 gdk/gdksurface.c:1252
+#: gdk/gdkdisplay.c:1315 gdk/gdkvulkancontext.c:1596
 msgid "Vulkan support disabled via GDK_DEBUG"
 msgstr "Dukungan Vulkan dinonaktifkan melalui GDK_DEBUG"
 
-#: gdk/gdkdisplay.c:1277
+#: gdk/gdkdisplay.c:1369
 msgid "GL support disabled via GDK_DEBUG"
 msgstr "Dukungan GL dinonaktifkan melalui GDK_DEBUG"
 
-#: gdk/gdkdisplay.c:1575
+#: gdk/gdkdisplay.c:1665
 msgid "No EGL configuration available"
 msgstr "Tak ada konfigurasi EGL yang tersedia"
 
-#: gdk/gdkdisplay.c:1583
+#: gdk/gdkdisplay.c:1673
 msgid "Failed to get EGL configurations"
 msgstr "Gagal mendapatkan konfigurasi EGL"
 
-#: gdk/gdkdisplay.c:1613
+#: gdk/gdkdisplay.c:1703
 msgid "No EGL configuration with required features found"
 msgstr "Tidak ditemukan konfigurasi EGL dengan fitur yang diperlukan"
 
-#: gdk/gdkdisplay.c:1620
+#: gdk/gdkdisplay.c:1710
 msgid "No perfect EGL configuration found"
 msgstr "Tak ditemukan konfigurasi EGL yang sempurna"
 
-#: gdk/gdkdisplay.c:1662
+#: gdk/gdkdisplay.c:1752
 #, c-format
 msgid "EGL implementation is missing extension %s"
 msgid_plural "EGL implementation is missing %2$d extensions: %1$s"
 msgstr[0] "Implementasi EGL tidak memiliki %2$d ekstensi: %1$s"
 
-#: gdk/gdkdisplay.c:1695
+#: gdk/gdkdisplay.c:1801
 msgid "libEGL not available in this sandbox"
 msgstr "libEGL tidak tersedia di sandbox ini"
 
-#: gdk/gdkdisplay.c:1696
+#: gdk/gdkdisplay.c:1802
 msgid "libEGL not available"
 msgstr "libEGL tidak tersedia"
 
-#: gdk/gdkdisplay.c:1706
+#: gdk/gdkdisplay.c:1812
 msgid "Failed to create EGL display"
 msgstr "Gagal membuat tampilan EGL"
 
-#: gdk/gdkdisplay.c:1716
+#: gdk/gdkdisplay.c:1821
 msgid "Could not initialize EGL display"
 msgstr "Tidak bisa menginisialisasi tampilan EGL"
 
-#: gdk/gdkdisplay.c:1727
+#: gdk/gdkdisplay.c:1831
 #, c-format
 msgid "EGL version %d.%d is too old. GTK requires %d.%d"
 msgstr "EGL versi %d.%d terlalu tua. GTK memerlukan %d.%d"
@@ -116,33 +116,37 @@ msgstr "Seret dan jatuhkan dari aplikasi lain tidak didukung."
 msgid "No compatible formats to transfer contents."
 msgstr "Tidak ada format yang kompatibel untuk mentransfer konten."
 
-#: gdk/gdkglcontext.c:401 gdk/x11/gdkglcontext-glx.c:642
+#: gdk/gdkglcontext.c:419 gdk/x11/gdkglcontext-glx.c:645
 msgid "No GL API allowed."
 msgstr "Tidak ada API GL yang diizinkan."
 
-#: gdk/gdkglcontext.c:425 gdk/win32/gdkglcontext-win32-wgl.c:387
-#: gdk/win32/gdkglcontext-win32-wgl.c:530
-#: gdk/win32/gdkglcontext-win32-wgl.c:574 gdk/x11/gdkglcontext-glx.c:691
+#: gdk/gdkglcontext.c:442 gdk/win32/gdkglcontext-win32-wgl.c:395
+#: gdk/win32/gdkglcontext-win32-wgl.c:538
+#: gdk/win32/gdkglcontext-win32-wgl.c:582 gdk/x11/gdkglcontext-glx.c:691
 msgid "Unable to create a GL context"
 msgstr "Tak dapat membuat sebuah konteks GL"
 
-#: gdk/gdkglcontext.c:1280
-msgid "Anything but OpenGL ES disabled via GDK_DEBUG"
-msgstr "Apa pun kecuali OpenGL ES dinonaktifkan melalui GDK_DEBUG"
+#: gdk/gdkglcontext.c:1303
+msgid "OpenGL ES disabled via GDK_DEBUG"
+msgstr "OpenGL ES dinonaktifkan melalui GDK_DEBUG"
 
-#: gdk/gdkglcontext.c:1289
+#: gdk/gdkglcontext.c:1315
+msgid "OpenGL disabled via GDK_DEBUG"
+msgstr "OpenGL dinonaktifkan melalui GDK_DEBUG"
+
+#: gdk/gdkglcontext.c:1326
 #, c-format
 msgid "Application does not support %s API"
 msgstr "Aplikasi tidak mendukung API %s"
 
 #. translators: This is about OpenGL backend names, like
 #. * "Trying to use X11 GLX, but EGL is already in use"
-#: gdk/gdkglcontext.c:1863
+#: gdk/gdkglcontext.c:2112
 #, c-format
 msgid "Trying to use %s, but %s is already in use"
 msgstr "Mencoba menggunakan %s, tetapi %s sudah digunakan"
 
-#: gdk/gdktexture.c:528
+#: gdk/gdktexture.c:580
 msgid "Unknown image format."
 msgstr "Format gambar tidak dikenal."
 
@@ -533,7 +537,7 @@ msgstr "Galat menginterpretasi berkas citra JPEG (%s)"
 msgid "Unsupported JPEG colorspace (%d)"
 msgstr "Ruang warna JPEG yang tidak didukung (%d)"
 
-#: gdk/loaders/gdkjpeg.c:203 gdk/loaders/gdkpng.c:280 gdk/loaders/gdktiff.c:467
+#: gdk/loaders/gdkjpeg.c:203 gdk/loaders/gdkpng.c:286 gdk/loaders/gdktiff.c:472
 #, c-format
 msgid "Not enough memory for image size %ux%u"
 msgstr "Tidak cukup memori untuk ukuran gambar %ux%u"
@@ -543,33 +547,38 @@ msgstr "Tidak cukup memori untuk ukuran gambar %ux%u"
 msgid "Error reading png (%s)"
 msgstr "Galat membaca png (%s)"
 
-#: gdk/loaders/gdkpng.c:211
+#: gdk/loaders/gdkpng.c:212
 #, c-format
 msgid "Unsupported depth %u in png image"
 msgstr "Kedalaman %u yang tidak didukung dalam gambar png"
 
-#: gdk/loaders/gdkpng.c:261
+#: gdk/loaders/gdkpng.c:262
 #, c-format
 msgid "Unsupported color type %u in png image"
 msgstr "Jenis warna %u yang tidak didukung dalam gambar png"
 
-#: gdk/loaders/gdktiff.c:353
+#: gdk/loaders/gdkpng.c:272
+#, fuzzy, c-format
+msgid "Image stride too large for image size %ux%u"
+msgstr "Langkah gambar terlalu besar untuk ukuran gambar %ux%u"
+
+#: gdk/loaders/gdktiff.c:358
 msgid "Failed to load RGB data from TIFF file"
 msgstr "Gagal memuat data RGB dari berkas TIFF"
 
-#: gdk/loaders/gdktiff.c:396
+#: gdk/loaders/gdktiff.c:401
 msgid "Could not load TIFF data"
 msgstr "Tidak dapat memuat data TIFF"
 
-#: gdk/loaders/gdktiff.c:479
+#: gdk/loaders/gdktiff.c:484
 #, c-format
 msgid "Reading data failed at row %d"
 msgstr "Gagal membaca data pada baris %d"
 
-#: gdk/macos/gdkmacospasteboard.c:211 gdk/wayland/gdkclipboard-wayland.c:240
-#: gdk/wayland/gdkdrop-wayland.c:207 gdk/wayland/gdkprimary-wayland.c:343
+#: gdk/macos/gdkmacospasteboard.c:211 gdk/wayland/gdkclipboard-wayland.c:238
+#: gdk/wayland/gdkdrop-wayland.c:205 gdk/wayland/gdkprimary-wayland.c:337
 #: gdk/win32/gdkdrop-win32.c:1018 gdk/win32/gdkdrop-win32.c:1063
-#: gdk/x11/gdkclipboard-x11.c:805 gdk/x11/gdkdrop-x11.c:235
+#: gdk/x11/gdkclipboard-x11.c:799 gdk/x11/gdkdrop-x11.c:235
 msgid "No compatible transfer format found"
 msgstr "Tidak ditemukan format transfer yang kompatibel"
 
@@ -578,62 +587,62 @@ msgstr "Tidak ditemukan format transfer yang kompatibel"
 msgid "Failed to decode contents with mime-type of '%s'"
 msgstr "Gagal mendekode isi dengan tipe mime '%s'"
 
-#: gdk/win32/gdkclipdrop-win32.c:721
+#: gdk/win32/gdkclipdrop-win32.c:719
 #, c-format
 msgid "Cannot claim clipboard ownership. OpenClipboard() timed out."
 msgstr ""
 "Tidak dapat mengklaim kepemilikan papan klip. OpenClipboard() kehabisan "
 "waktu."
 
-#: gdk/win32/gdkclipdrop-win32.c:731
+#: gdk/win32/gdkclipdrop-win32.c:729
 #, c-format
 msgid "Cannot claim clipboard ownership. Another process claimed it before us."
 msgstr ""
 "Tidak dapat mengklaim kepemilikan papan klip. Proses lain mengklaimnya "
 "sebelum kita."
 
-#: gdk/win32/gdkclipdrop-win32.c:745
+#: gdk/win32/gdkclipdrop-win32.c:743
 #, c-format
 msgid "Cannot claim clipboard ownership. OpenClipboard() failed: 0x%lx."
 msgstr ""
 "Tidak dapat mengklaim kepemilikan papan klip. OpenClipboard() gagal: 0x%lx."
 
-#: gdk/win32/gdkclipdrop-win32.c:757
+#: gdk/win32/gdkclipdrop-win32.c:755
 #, c-format
 msgid "Cannot claim clipboard ownership. EmptyClipboard() failed: 0x%lx."
 msgstr ""
 "Tidak dapat mengklaim kepemilikan papan klip. EmptyClipboard() gagal: 0x%lx."
 
-#: gdk/win32/gdkclipdrop-win32.c:800
+#: gdk/win32/gdkclipdrop-win32.c:798
 #, c-format
 msgid "Cannot set clipboard data. OpenClipboard() timed out."
 msgstr "Tidak dapat mengatur data papan klip. OpenClipboard() kehabisan waktu."
 
-#: gdk/win32/gdkclipdrop-win32.c:810 gdk/win32/gdkclipdrop-win32.c:841
+#: gdk/win32/gdkclipdrop-win32.c:808 gdk/win32/gdkclipdrop-win32.c:839
 #, c-format
 msgid "Cannot set clipboard data. Another process claimed clipboard ownership."
 msgstr ""
 "Tidak dapat mengatur data papan klip. Proses lain mengklaim kepemilikan "
 "papan klip."
 
-#: gdk/win32/gdkclipdrop-win32.c:824
+#: gdk/win32/gdkclipdrop-win32.c:822
 #, c-format
 msgid "Cannot set clipboard data. OpenClipboard() failed: 0x%lx."
 msgstr "Tidak dapat mengatur data papan klip. OpenClipboard() gagal: 0x%lx."
 
-#: gdk/win32/gdkclipdrop-win32.c:876
+#: gdk/win32/gdkclipdrop-win32.c:874
 #, c-format
 msgid "Cannot get clipboard data. GlobalLock(0x%p) failed: 0x%lx."
 msgstr ""
 "Tidak dapat mendapatkan data papan klip. GlobalLock(0x%p) gagal: 0x%lx."
 
-#: gdk/win32/gdkclipdrop-win32.c:887
+#: gdk/win32/gdkclipdrop-win32.c:885
 #, c-format
 msgid "Cannot get clipboard data. GlobalSize(0x%p) failed: 0x%lx."
 msgstr ""
 "Tidak dapat mendapatkan data papan klip. GlobalSize(0x%p) gagal: 0x%lx."
 
-#: gdk/win32/gdkclipdrop-win32.c:900
+#: gdk/win32/gdkclipdrop-win32.c:898
 #, c-format
 msgid ""
 "Cannot get clipboard data. Failed to allocate %s bytes to store the data."
@@ -641,19 +650,19 @@ msgstr ""
 "Tidak bisa memperoleh data papan klip. Gagal mengalokasikan %s byte untuk "
 "menyimpan data."
 
-#: gdk/win32/gdkclipdrop-win32.c:932
+#: gdk/win32/gdkclipdrop-win32.c:930
 #, c-format
 msgid "Cannot get clipboard data. OpenClipboard() timed out."
 msgstr ""
 "Tidak dapat mendapatkan data papan klip. OpenClipboard() kehabisan waktu."
 
-#: gdk/win32/gdkclipdrop-win32.c:942
+#: gdk/win32/gdkclipdrop-win32.c:940
 #, c-format
 msgid "Cannot get clipboard data. Clipboard ownership changed."
 msgstr ""
 "Tidak dapat mendapatkan data papan klip. Kepemilikan papan klip berubah."
 
-#: gdk/win32/gdkclipdrop-win32.c:952
+#: gdk/win32/gdkclipdrop-win32.c:950
 #, c-format
 msgid ""
 "Cannot get clipboard data. Clipboard data changed before we could get it."
@@ -661,19 +670,19 @@ msgstr ""
 "Tidak dapat mendapatkan data papan klip. Data papan klip berubah sebelum "
 "kami bisa mendapatkannya."
 
-#: gdk/win32/gdkclipdrop-win32.c:969
+#: gdk/win32/gdkclipdrop-win32.c:967
 #, c-format
 msgid "Cannot get clipboard data. OpenClipboard() failed: 0x%lx."
 msgstr "Tidak dapat mendapatkan data papan klip. OpenClipboard() gagal: 0x%lx."
 
-#: gdk/win32/gdkclipdrop-win32.c:994
+#: gdk/win32/gdkclipdrop-win32.c:992
 #, c-format
 msgid "Cannot get clipboard data. No compatible transfer format found."
 msgstr ""
 "Tidak dapat mendapatkan data papan klip. Tidak ditemukan format transfer "
 "yang kompatibel."
 
-#: gdk/win32/gdkclipdrop-win32.c:1004
+#: gdk/win32/gdkclipdrop-win32.c:1002
 #, c-format
 msgid "Cannot get clipboard data. GetClipboardData() failed: 0x%lx."
 msgstr ""
@@ -716,21 +725,21 @@ msgstr "IDataObject_GetData (0x%x) gagal, menghasilkan 0x%lx"
 msgid "Failed to transmute DnD data W32 format 0x%x to %p (%s)"
 msgstr "Gagal mentransmisikan data DnD format W32 0x%x to %p (%s)"
 
-#: gdk/win32/gdkglcontext-win32-wgl.c:319
+#: gdk/win32/gdkglcontext-win32-wgl.c:329
 msgid "No GL implementation is available"
 msgstr "Tak ada implementasi GL yang tersedia"
 
-#: gdk/win32/gdkglcontext-win32-wgl.c:396
+#: gdk/win32/gdkglcontext-win32-wgl.c:404
 #, c-format
 msgid "WGL version %d.%d is too low, need at least %d.%d"
 msgstr "WGL versi %d.%d terlalu rendah, perlu paling tidak %d.%d"
 
-#: gdk/win32/gdkglcontext-win32-wgl.c:414
+#: gdk/win32/gdkglcontext-win32-wgl.c:422
 #, c-format
 msgid "GL implementation cannot share GL contexts"
 msgstr "Implementasi GL tidak bisa berbagi konteks GL"
 
-#: gdk/win32/gdkglcontext-win32-wgl.c:696
+#: gdk/win32/gdkglcontext-win32-wgl.c:702
 msgid "No available configurations for the given pixel format"
 msgstr "Tak ada konfigurasi yang tersedia bagi format piksel yang diberikan"
 
@@ -768,27 +777,27 @@ msgstr "GlobalLock() gagal: "
 msgid "GlobalAlloc() failed: "
 msgstr "GlobalAlloc() gagal: "
 
-#: gdk/x11/gdkapplaunchcontext-x11.c:299
+#: gdk/x11/gdkapplaunchcontext-x11.c:297
 #, c-format
 msgid "Starting “%s”"
 msgstr "Memulai “%s”"
 
-#: gdk/x11/gdkapplaunchcontext-x11.c:312
+#: gdk/x11/gdkapplaunchcontext-x11.c:310
 #, c-format
 msgid "Opening “%s”"
 msgstr "Membuka \"%s\""
 
-#: gdk/x11/gdkapplaunchcontext-x11.c:317
+#: gdk/x11/gdkapplaunchcontext-x11.c:315
 #, c-format
 msgid "Opening %d Item"
 msgid_plural "Opening %d Items"
 msgstr[0] "Membuka %d Butir"
 
-#: gdk/x11/gdkclipboard-x11.c:475
+#: gdk/x11/gdkclipboard-x11.c:473
 msgid "Clipboard manager could not store selection."
 msgstr "Manajer papan klip tidak dapat menyimpan pilihan."
 
-#: gdk/x11/gdkclipboard-x11.c:655
+#: gdk/x11/gdkclipboard-x11.c:649
 msgid "Cannot store clipboard. No clipboard manager is active."
 msgstr ""
 "Tidak dapat menyimpan papan klip. Tidak ada manajer papan klip yang aktif."
@@ -805,7 +814,7 @@ msgstr "Tidak ditemukan konfigurasi GLX dengan fitur yang diperlukan"
 msgid "GLX is not supported"
 msgstr "GLX tidak didukung"
 
-#: gdk/x11/gdkselectioninputstream-x11.c:467
+#: gdk/x11/gdkselectioninputstream-x11.c:465
 #, c-format
 msgid "Format %s not supported"
 msgstr "Format %s tidak didukung"
@@ -832,11 +841,16 @@ msgstr "Format tidak valid dalam konversi teks majemuk."
 msgid "Unsupported encoding “%s”"
 msgstr "Pengkodean “%s” tidak didukung"
 
-#: gsk/gl/gskglrenderer.c:132
+#: gsk/gl/gskglrenderer.c:204
 #, c-format
 msgid "This GLES %d.%d implementation does not support half-float vertex data"
 msgstr ""
 "Implementasi GLES %d.%d ini tidak mendukung data verteks setengah mengambang"
+
+#: gsk/gpu/gskgldevice.c:245
+#, c-format
+msgid "OpenGL ES 3.0 is not supported by this renderer."
+msgstr "OpenGL ES 3.0 tidak didukung oleh perender ini."
 
 #: gtk/a11y/gtkatspiaction.c:239
 msgctxt "accessibility"
@@ -941,7 +955,7 @@ msgctxt "accessibility"
 msgid "Clears the contents of the entry"
 msgstr "Bersihkan isi entri"
 
-#: gtk/a11y/gtkatspiroot.c:256 gtk/gtkaccessible.c:834
+#: gtk/a11y/gtkatspiroot.c:256 gtk/gtkaccessible.c:869
 msgctxt "accessibility"
 msgid "application"
 msgstr "aplikasi"
@@ -1035,7 +1049,7 @@ msgid "Invalid"
 msgstr "Tak valid"
 
 #. This label is displayed in a treeview cell displaying an accelerator
-#. * when the cell is clicked to change the acelerator.
+#. * when the cell is clicked to change the accelerator.
 #.
 #: gtk/deprecated/gtkcellrendereraccel.c:436
 #: gtk/deprecated/gtkcellrendereraccel.c:729
@@ -1050,19 +1064,19 @@ msgctxt "progress bar label"
 msgid "%d %%"
 msgstr "%d %%"
 
-#: gtk/deprecated/gtkcolorbutton.c:183 gtk/deprecated/gtkcolorbutton.c:311
+#: gtk/deprecated/gtkcolorbutton.c:183 gtk/deprecated/gtkcolorbutton.c:314
 #: gtk/gtkcolordialog.c:411
 msgid "Pick a Color"
 msgstr "Pilih Warna"
 
-#: gtk/deprecated/gtkcolorbutton.c:502 gtk/gtkcolorchooserwidget.c:313
-#: gtk/gtkcolordialogbutton.c:302
+#: gtk/deprecated/gtkcolorbutton.c:505 gtk/gtkcolorchooserwidget.c:313
+#: gtk/gtkcolordialogbutton.c:335
 #, c-format
 msgid "Red %d%%, Green %d%%, Blue %d%%, Alpha %d%%"
 msgstr "Merah %d%%, Hijau %d%%, Biru %d%%, Alfa %d%%"
 
-#: gtk/deprecated/gtkcolorbutton.c:508 gtk/gtkcolorchooserwidget.c:319
-#: gtk/gtkcolordialogbutton.c:308
+#: gtk/deprecated/gtkcolorbutton.c:511 gtk/gtkcolorchooserwidget.c:319
+#: gtk/gtkcolordialogbutton.c:341
 #, c-format
 msgid "Red %d%%, Green %d%%, Blue %d%%"
 msgstr "Merah %d%%, Hijau %d%%, Biru %d%%"
@@ -1071,17 +1085,17 @@ msgstr "Merah %d%%, Hijau %d%%, Biru %d%%"
 msgid "Sans 12"
 msgstr "Sans 12"
 
-#: gtk/deprecated/gtkfontbutton.c:507 gtk/deprecated/gtkfontbutton.c:621
+#: gtk/deprecated/gtkfontbutton.c:507 gtk/deprecated/gtkfontbutton.c:624
 #: gtk/gtkfontdialog.c:596
 msgid "Pick a Font"
 msgstr "Pilih Fonta"
 
-#: gtk/deprecated/gtkfontbutton.c:597 gtk/gtkfilechooserwidget.c:3871
-#: gtk/gtkfontdialogbutton.c:115 gtk/inspector/visual.ui:169
+#: gtk/deprecated/gtkfontbutton.c:600 gtk/gtkfilechooserwidget.c:3815
+#: gtk/gtkfontdialogbutton.c:126 gtk/inspector/visual.ui:169
 msgid "Font"
 msgstr "Fonta"
 
-#: gtk/deprecated/gtkfontbutton.c:1152 gtk/gtkfontdialogbutton.c:614
+#: gtk/deprecated/gtkfontbutton.c:1155 gtk/gtkfontdialogbutton.c:652
 msgctxt "font"
 msgid "None"
 msgstr "Nihil"
@@ -1213,35 +1227,39 @@ msgstr "Lisensi Apache, Versi 2.0"
 msgid "Mozilla Public License 2.0"
 msgstr "Mozilla Public License 2.0"
 
-#: gtk/gtkaboutdialog.c:963
+#: gtk/gtkaboutdialog.c:137
+msgid "BSD Zero-Clause License"
+msgstr "Lisensi BSD Zero-Clause"
+
+#: gtk/gtkaboutdialog.c:964
 msgid "Website"
 msgstr "Situs web"
 
-#: gtk/gtkaboutdialog.c:999 gtk/ui/gtkapplication-quartz.ui:6
+#: gtk/gtkaboutdialog.c:1000 gtk/ui/gtkapplication-quartz.ui:6
 #, c-format
 msgid "About %s"
 msgstr "Tentang %s"
 
-#: gtk/gtkaboutdialog.c:2089
+#: gtk/gtkaboutdialog.c:2090
 msgid "Created by"
 msgstr "Dibuat oleh"
 
-#: gtk/gtkaboutdialog.c:2092
+#: gtk/gtkaboutdialog.c:2093
 msgid "Documented by"
 msgstr "Didokumentasikan oleh"
 
-#: gtk/gtkaboutdialog.c:2102
+#: gtk/gtkaboutdialog.c:2103
 msgid "Translated by"
 msgstr "Diterjemahkan oleh"
 
-#: gtk/gtkaboutdialog.c:2107
+#: gtk/gtkaboutdialog.c:2108
 msgid "Design by"
 msgstr "Dirancang oleh"
 
 #. Translators: this is the license preamble; the string at the end
 #. * contains the name of the license as link text.
 #.
-#: gtk/gtkaboutdialog.c:2272
+#: gtk/gtkaboutdialog.c:2273
 #, c-format
 msgid ""
 "This program comes with absolutely no warranty.\n"
@@ -1335,401 +1353,427 @@ msgctxt "keyboard label"
 msgid "Backslash"
 msgstr "Backslash"
 
-#: gtk/gtkaccessible.c:755
+#: gtk/gtkaccessible.c:790
 msgctxt "accessibility"
 msgid "alert"
 msgstr "peringatan"
 
-#: gtk/gtkaccessible.c:756
+#: gtk/gtkaccessible.c:791
 msgctxt "accessibility"
 msgid "alert dialog"
 msgstr "dialog peringatan"
 
-#: gtk/gtkaccessible.c:757
+#: gtk/gtkaccessible.c:792
 msgctxt "accessibility"
 msgid "banner"
 msgstr "spanduk"
 
-#: gtk/gtkaccessible.c:758
+#: gtk/gtkaccessible.c:793
 msgctxt "accessibility"
 msgid "button"
 msgstr "tombol"
 
-#: gtk/gtkaccessible.c:759
+#: gtk/gtkaccessible.c:794
 msgctxt "accessibility"
 msgid "caption"
 msgstr "kapsi"
 
-#: gtk/gtkaccessible.c:760
+#: gtk/gtkaccessible.c:795
 msgctxt "accessibility"
 msgid "cell"
 msgstr "sel"
 
-#: gtk/gtkaccessible.c:761
+#: gtk/gtkaccessible.c:796
 msgctxt "accessibility"
 msgid "checkbox"
 msgstr "kotak centang"
 
-#: gtk/gtkaccessible.c:762
+#: gtk/gtkaccessible.c:797
 msgctxt "accessibility"
 msgid "column header"
 msgstr "tajuk kolom"
 
-#: gtk/gtkaccessible.c:763
+#: gtk/gtkaccessible.c:798
 msgctxt "accessibility"
 msgid "combo box"
 msgstr "kotak kombo"
 
 # Ini untuk perintah "top".
-#: gtk/gtkaccessible.c:764
+#: gtk/gtkaccessible.c:799
 msgctxt "accessibility"
 msgid "command"
 msgstr "perintah"
 
-#: gtk/gtkaccessible.c:765
+#: gtk/gtkaccessible.c:800
 msgctxt "accessibility"
 msgid "composite"
 msgstr "komposit"
 
-#: gtk/gtkaccessible.c:766
+#: gtk/gtkaccessible.c:801
 msgctxt "accessibility"
 msgid "dialog"
 msgstr "dialog"
 
-#: gtk/gtkaccessible.c:767
+#: gtk/gtkaccessible.c:802
 msgctxt "accessibility"
 msgid "document"
 msgstr "dokumen"
 
-#: gtk/gtkaccessible.c:768
+#: gtk/gtkaccessible.c:803
 msgctxt "accessibility"
 msgid "feed"
 msgstr "asupan"
 
-#: gtk/gtkaccessible.c:769
+#: gtk/gtkaccessible.c:804
 msgctxt "accessibility"
 msgid "form"
 msgstr "form"
 
-#: gtk/gtkaccessible.c:770
+#: gtk/gtkaccessible.c:805
 msgctxt "accessibility"
 msgid "generic"
 msgstr "generik"
 
-#: gtk/gtkaccessible.c:771
+#: gtk/gtkaccessible.c:806
 msgctxt "accessibility"
 msgid "grid"
 msgstr "kisi"
 
-#: gtk/gtkaccessible.c:772
+#: gtk/gtkaccessible.c:807
 msgctxt "accessibility"
 msgid "grid cell"
 msgstr "sel kisi"
 
-#: gtk/gtkaccessible.c:773
+#: gtk/gtkaccessible.c:808
 msgctxt "accessibility"
 msgid "group"
 msgstr "grup"
 
-#: gtk/gtkaccessible.c:774
+#: gtk/gtkaccessible.c:809
 msgctxt "accessibility"
 msgid "heading"
 msgstr "tajuk"
 
-#: gtk/gtkaccessible.c:775
+#: gtk/gtkaccessible.c:810
 msgctxt "accessibility"
 msgid "image"
 msgstr "gambar"
 
-#: gtk/gtkaccessible.c:776
+#: gtk/gtkaccessible.c:811
 msgctxt "accessibility"
 msgid "input"
 msgstr "masukan"
 
-#: gtk/gtkaccessible.c:777
+#: gtk/gtkaccessible.c:812
 msgctxt "accessibility"
 msgid "label"
 msgstr "label"
 
-#: gtk/gtkaccessible.c:778
+#: gtk/gtkaccessible.c:813
 msgctxt "accessibility"
 msgid "landmark"
 msgstr "landmark"
 
-#: gtk/gtkaccessible.c:779
+#: gtk/gtkaccessible.c:814
 msgctxt "accessibility"
 msgid "legend"
 msgstr "legenda"
 
-#: gtk/gtkaccessible.c:780
+#: gtk/gtkaccessible.c:815
 msgctxt "accessibility"
 msgid "link"
 msgstr "tautan"
 
-#: gtk/gtkaccessible.c:781
+#: gtk/gtkaccessible.c:816
 msgctxt "accessibility"
 msgid "list"
 msgstr "daftar"
 
-#: gtk/gtkaccessible.c:782
+#: gtk/gtkaccessible.c:817
 msgctxt "accessibility"
 msgid "list box"
 msgstr "kotak daftar"
 
-#: gtk/gtkaccessible.c:783
+#: gtk/gtkaccessible.c:818
 msgctxt "accessibility"
 msgid "list item"
 msgstr "butir daftar"
 
-#: gtk/gtkaccessible.c:784
+#: gtk/gtkaccessible.c:819
 msgctxt "accessibility"
 msgid "log"
 msgstr "log"
 
-#: gtk/gtkaccessible.c:785
+#: gtk/gtkaccessible.c:820
 msgctxt "accessibility"
 msgid "main"
 msgstr "utama"
 
-#: gtk/gtkaccessible.c:786
+#: gtk/gtkaccessible.c:821
 msgctxt "accessibility"
 msgid "marquee"
 msgstr "marquee"
 
-#: gtk/gtkaccessible.c:787
+#: gtk/gtkaccessible.c:822
 msgctxt "accessibility"
 msgid "math"
 msgstr "matematika"
 
-#: gtk/gtkaccessible.c:788
+#: gtk/gtkaccessible.c:823
 msgctxt "accessibility"
 msgid "meter"
 msgstr "meter"
 
-#: gtk/gtkaccessible.c:789
+#: gtk/gtkaccessible.c:824
 msgctxt "accessibility"
 msgid "menu"
 msgstr "menu"
 
-#: gtk/gtkaccessible.c:790
+#: gtk/gtkaccessible.c:825
 msgctxt "accessibility"
 msgid "menu bar"
 msgstr "bilah menu"
 
-#: gtk/gtkaccessible.c:791
+#: gtk/gtkaccessible.c:826
 msgctxt "accessibility"
 msgid "menu item"
 msgstr "butir menu"
 
-#: gtk/gtkaccessible.c:792
+#: gtk/gtkaccessible.c:827
 msgctxt "accessibility"
 msgid "menu item checkbox"
 msgstr "kotak centang butir menu"
 
-#: gtk/gtkaccessible.c:793
+#: gtk/gtkaccessible.c:828
 msgctxt "accessibility"
 msgid "menu item radio"
 msgstr "radio butir menu"
 
-#: gtk/gtkaccessible.c:794
+#: gtk/gtkaccessible.c:829
 msgctxt "accessibility"
 msgid "navigation"
 msgstr "navigasi"
 
-#: gtk/gtkaccessible.c:795
+#: gtk/gtkaccessible.c:830
 msgctxt "accessibility"
 msgid "none"
 msgstr "nihil"
 
-#: gtk/gtkaccessible.c:796
+#: gtk/gtkaccessible.c:831
 msgctxt "accessibility"
 msgid "note"
 msgstr "catatan"
 
-#: gtk/gtkaccessible.c:797
+#: gtk/gtkaccessible.c:832
 msgctxt "accessibility"
 msgid "option"
 msgstr "opsi"
 
-#: gtk/gtkaccessible.c:798
+#: gtk/gtkaccessible.c:833
 msgctxt "accessibility"
 msgid "presentation"
 msgstr "presentasi"
 
-#: gtk/gtkaccessible.c:799
+#: gtk/gtkaccessible.c:834
 msgctxt "accessibility"
 msgid "progress bar"
 msgstr "bilah kemajuan"
 
-#: gtk/gtkaccessible.c:800
+#: gtk/gtkaccessible.c:835
 msgctxt "accessibility"
 msgid "radio"
 msgstr "radio"
 
-#: gtk/gtkaccessible.c:801
+#: gtk/gtkaccessible.c:836
 msgctxt "accessibility"
 msgid "radio group"
 msgstr "grup radio"
 
-#: gtk/gtkaccessible.c:802
+#: gtk/gtkaccessible.c:837
 msgctxt "accessibility"
 msgid "range"
 msgstr "rentang"
 
-#: gtk/gtkaccessible.c:803
+#: gtk/gtkaccessible.c:838
 msgctxt "accessibility"
 msgid "region"
 msgstr "wilayah"
 
-#: gtk/gtkaccessible.c:804
+#: gtk/gtkaccessible.c:839
 msgctxt "accessibility"
 msgid "row"
 msgstr "baris"
 
-#: gtk/gtkaccessible.c:805
+#: gtk/gtkaccessible.c:840
 msgctxt "accessibility"
 msgid "row group"
 msgstr "grup baris"
 
-#: gtk/gtkaccessible.c:806
+#: gtk/gtkaccessible.c:841
 msgctxt "accessibility"
 msgid "row header"
 msgstr "tajuk baris"
 
-#: gtk/gtkaccessible.c:807
+#: gtk/gtkaccessible.c:842
 msgctxt "accessibility"
 msgid "scroll bar"
 msgstr "bilah gulir"
 
-#: gtk/gtkaccessible.c:808
+#: gtk/gtkaccessible.c:843
 msgctxt "accessibility"
 msgid "search"
 msgstr "cari"
 
-#: gtk/gtkaccessible.c:809
+#: gtk/gtkaccessible.c:844
 msgctxt "accessibility"
 msgid "search box"
 msgstr "kotak pencarian"
 
-#: gtk/gtkaccessible.c:810
+#: gtk/gtkaccessible.c:845
 msgctxt "accessibility"
 msgid "section"
 msgstr "bagian"
 
-#: gtk/gtkaccessible.c:811
+#: gtk/gtkaccessible.c:846
 msgctxt "accessibility"
 msgid "section head"
 msgstr "kepala bagian"
 
-#: gtk/gtkaccessible.c:812
+#: gtk/gtkaccessible.c:847
 msgctxt "accessibility"
 msgid "select"
 msgstr "pilih"
 
-#: gtk/gtkaccessible.c:813
+#: gtk/gtkaccessible.c:848
 msgctxt "accessibility"
 msgid "separator"
 msgstr "pemisah"
 
-#: gtk/gtkaccessible.c:814
+#: gtk/gtkaccessible.c:849
 msgctxt "accessibility"
 msgid "slider"
 msgstr "penggeser"
 
-#: gtk/gtkaccessible.c:815
+#: gtk/gtkaccessible.c:850
 msgctxt "accessibility"
 msgid "spin button"
 msgstr "tombol putar"
 
-#: gtk/gtkaccessible.c:816
+#: gtk/gtkaccessible.c:851
 msgctxt "accessibility"
 msgid "status"
 msgstr "status"
 
-#: gtk/gtkaccessible.c:817
+#: gtk/gtkaccessible.c:852
 msgctxt "accessibility"
 msgid "structure"
 msgstr "struktur"
 
-#: gtk/gtkaccessible.c:818
+#: gtk/gtkaccessible.c:853
 msgctxt "accessibility"
 msgid "switch"
 msgstr "tukar"
 
-#: gtk/gtkaccessible.c:819
+#: gtk/gtkaccessible.c:854
 msgctxt "accessibility"
 msgid "tab"
 msgstr "tab"
 
-#: gtk/gtkaccessible.c:820
+#: gtk/gtkaccessible.c:855
 msgctxt "accessibility"
 msgid "table"
 msgstr "tabel"
 
-#: gtk/gtkaccessible.c:821
+#: gtk/gtkaccessible.c:856
 msgctxt "accessibility"
 msgid "tab list"
 msgstr "daftar tab"
 
-#: gtk/gtkaccessible.c:822
+#: gtk/gtkaccessible.c:857
 msgctxt "accessibility"
 msgid "tab panel"
 msgstr "panel tab"
 
-#: gtk/gtkaccessible.c:823
+#: gtk/gtkaccessible.c:858
 msgctxt "accessibility"
 msgid "text box"
 msgstr "kotak teks"
 
-#: gtk/gtkaccessible.c:824
+#: gtk/gtkaccessible.c:859
 msgctxt "accessibility"
 msgid "time"
 msgstr "waktu"
 
-#: gtk/gtkaccessible.c:825
+#: gtk/gtkaccessible.c:860
 msgctxt "accessibility"
 msgid "timer"
 msgstr "penghitung waktu"
 
-#: gtk/gtkaccessible.c:826
+#: gtk/gtkaccessible.c:861
 msgctxt "accessibility"
 msgid "tool bar"
 msgstr "bilah alat"
 
-#: gtk/gtkaccessible.c:827
+#: gtk/gtkaccessible.c:862
 msgctxt "accessibility"
 msgid "tool tip"
 msgstr "teks bantuan"
 
-#: gtk/gtkaccessible.c:828
+#: gtk/gtkaccessible.c:863
 msgctxt "accessibility"
 msgid "tree"
 msgstr "pohon"
 
-#: gtk/gtkaccessible.c:829
+#: gtk/gtkaccessible.c:864
 msgctxt "accessibility"
 msgid "tree grid"
 msgstr "kisi pohon"
 
-#: gtk/gtkaccessible.c:830
+#: gtk/gtkaccessible.c:865
 msgctxt "accessibility"
 msgid "tree item"
 msgstr "butir pohon"
 
-#: gtk/gtkaccessible.c:831
+#: gtk/gtkaccessible.c:866
 msgctxt "accessibility"
 msgid "widget"
 msgstr "widget"
 
-#: gtk/gtkaccessible.c:832
+#: gtk/gtkaccessible.c:867
 msgctxt "accessibility"
 msgid "window"
 msgstr "jendela"
 
-#: gtk/gtkaccessible.c:833
+#: gtk/gtkaccessible.c:868
 msgctxt "accessibility"
 msgid "toggle button"
 msgstr "jungkitkan tombol"
+
+#: gtk/gtkaccessible.c:870
+msgctxt "accessibility"
+msgid "paragraph"
+msgstr "paragraf"
+
+#: gtk/gtkaccessible.c:871
+msgctxt "accessibility"
+msgid "block quote"
+msgstr "kutip blok"
+
+#: gtk/gtkaccessible.c:872
+msgctxt "accessibility"
+msgid "article"
+msgstr "artikel"
+
+# Ini untuk perintah "top".
+#: gtk/gtkaccessible.c:873
+msgctxt "accessibility"
+msgid "comment"
+msgstr "komentar"
+
+#: gtk/gtkaccessible.c:874
+msgctxt "accessibility"
+msgid "terminal"
+msgstr "terminal"
 
 #: gtk/gtkalertdialog.c:668 gtk/print/gtkcustompaperunixdialog.c:322
 #: gtk/gtkmessagedialog.c:166 gtk/ui/gtkassistant.ui:40
@@ -1740,7 +1784,7 @@ msgstr "_Tutup"
 #. * suspend or screen locking, and the caller hasn't specified
 #. * a reason.
 #.
-#: gtk/gtkapplication-dbus.c:721
+#: gtk/gtkapplication-dbus.c:721 gtk/gtkapplication-dbus.c:763
 msgid "Reason not specified"
 msgstr "Alasan tidak ditentukan"
 
@@ -2147,7 +2191,7 @@ msgstr "_Kanan:"
 msgid "Paper Margins"
 msgstr "Margin Kertas"
 
-#: gtk/gtkentry.c:3673
+#: gtk/gtkentry.c:3685
 msgid "Insert Emoji"
 msgstr "Sisipkan Emoji"
 
@@ -2212,12 +2256,12 @@ msgid "A file with that name already exists"
 msgstr "Berkas dengan nama itu sudah ada"
 
 #: gtk/gtkfilechoosernative.c:520 gtk/gtkfilechoosernative.c:600
-#: gtk/gtkfilechooserwidget.c:1185 gtk/gtkfilechooserwidget.c:5029
+#: gtk/gtkfilechooserwidget.c:1188 gtk/gtkfilechooserwidget.c:4973
 #: gtk/gtkfiledialog.c:843 gtk/gtkmessagedialog.c:170
 #: gtk/gtkmessagedialog.c:179 gtk/gtkmountoperation.c:608
 #: gtk/print/gtkpagesetupunixdialog.c:282 gtk/print/gtkprintbackend.c:638
 #: gtk/print/gtkprintunixdialog.c:682 gtk/print/gtkprintunixdialog.c:839
-#: gtk/gtkwindow.c:6242 gtk/ui/gtkappchooserdialog.ui:48
+#: gtk/gtkwindow.c:6256 gtk/ui/gtkappchooserdialog.ui:48
 #: gtk/ui/gtkassistant.ui:52 gtk/ui/gtkcolorchooserdialog.ui:36
 #: gtk/ui/gtkfontchooserdialog.ui:27
 msgid "_Cancel"
@@ -2233,7 +2277,7 @@ msgstr "Buk_a"
 msgid "_Save"
 msgstr "_Simpan"
 
-#: gtk/gtkfilechoosernativequartz.c:340 gtk/ui/gtkfilechooserwidget.ui:288
+#: gtk/gtkfilechoosernativequartz.c:344 gtk/ui/gtkfilechooserwidget.ui:288
 msgid "Select which types of files are shown"
 msgstr "Pilih jenis berkas yang ingin ditampilkan"
 
@@ -2246,252 +2290,240 @@ msgstr "Pilih jenis berkas yang ingin ditampilkan"
 msgid "%1$s on %2$s"
 msgstr "%1$s pada %2$s"
 
-#: gtk/gtkfilechooserwidget.c:345
+#: gtk/gtkfilechooserwidget.c:343
 msgid "Type name of new folder"
 msgstr "Ketikkan nama folder baru"
 
-#: gtk/gtkfilechooserwidget.c:727
+#: gtk/gtkfilechooserwidget.c:730
 msgid "The folder could not be created"
 msgstr "Folder tidak dapat dibuat"
 
-#: gtk/gtkfilechooserwidget.c:740
+#: gtk/gtkfilechooserwidget.c:743
 msgid "You need to choose a valid filename."
 msgstr "Anda perlu memilih nama berkas yang valid."
 
-#: gtk/gtkfilechooserwidget.c:743
+#: gtk/gtkfilechooserwidget.c:746
 #, c-format
 msgid "Cannot create a file under %s as it is not a folder"
 msgstr "Tak bisa membuat berkas di bawah %s karena itu bukan folder"
 
-#: gtk/gtkfilechooserwidget.c:753
+#: gtk/gtkfilechooserwidget.c:756
 msgid "Cannot create file as the filename is too long"
 msgstr "Tak bisa membuat berkas karena nama terlalu panjang"
 
-#: gtk/gtkfilechooserwidget.c:754
+#: gtk/gtkfilechooserwidget.c:757
 msgid "Try using a shorter name."
 msgstr "Cobalah memakai nama yang lebih pendek."
 
-#: gtk/gtkfilechooserwidget.c:764
+#: gtk/gtkfilechooserwidget.c:767
 msgid "You may only select folders"
 msgstr "Anda hanya boleh memilih folder"
 
-#: gtk/gtkfilechooserwidget.c:765
+#: gtk/gtkfilechooserwidget.c:768
 msgid "The item that you selected is not a folder try using a different item."
 msgstr "Butir yang Anda pilih bukan folder; cobalah memilih butir lain."
 
-#: gtk/gtkfilechooserwidget.c:773
+#: gtk/gtkfilechooserwidget.c:776
 msgid "Invalid file name"
 msgstr "Nama berkas tidak sah"
 
-#: gtk/gtkfilechooserwidget.c:782
+#: gtk/gtkfilechooserwidget.c:785
 msgid "The folder contents could not be displayed"
 msgstr "Isi folder tidak dapat ditampilkan"
 
-#: gtk/gtkfilechooserwidget.c:790
+#: gtk/gtkfilechooserwidget.c:793
 msgid "The file could not be deleted"
 msgstr "Berkas tak dapat dihapus"
 
-#: gtk/gtkfilechooserwidget.c:798
+#: gtk/gtkfilechooserwidget.c:801
 msgid "The file could not be moved to the Trash"
 msgstr "Berkas tak dapat dipindahkan ke Tong Sampah"
 
-#: gtk/gtkfilechooserwidget.c:1183
+#: gtk/gtkfilechooserwidget.c:1186
 #, c-format
 msgid "Are you sure you want to permanently delete “%s”?"
 msgstr "Anda yakin akan menghapus permanen \"%s\"?"
 
-#: gtk/gtkfilechooserwidget.c:1184
+#: gtk/gtkfilechooserwidget.c:1187
 msgid "If you delete an item, it will be permanently lost."
 msgstr "Jika Anda menghapus suatu butir, itu akan hilang selamanya."
 
-#: gtk/gtkfilechooserwidget.c:1185 gtk/gtkfilechooserwidget.c:1815
-#: gtk/gtklabel.c:5695 gtk/gtktext.c:6125 gtk/gtktextview.c:9018
+#: gtk/gtkfilechooserwidget.c:1188 gtk/gtkfilechooserwidget.c:1786
+#: gtk/gtklabel.c:5712 gtk/gtktext.c:6193 gtk/gtktextview.c:9080
 msgid "_Delete"
 msgstr "_Hapus"
 
-#: gtk/gtkfilechooserwidget.c:1298
+#: gtk/gtkfilechooserwidget.c:1301
 msgid "The file could not be renamed"
 msgstr "Berkas tak dapat diubahnama"
 
-#: gtk/gtkfilechooserwidget.c:1504
+#: gtk/gtkfilechooserwidget.c:1477
 msgid "Could not select file"
 msgstr "Tidak dapat memilih berkas"
 
-#: gtk/gtkfilechooserwidget.c:1724 gtk/ui/gtkfilechooserwidget.ui:66
+#: gtk/gtkfilechooserwidget.c:1697 gtk/ui/gtkfilechooserwidget.ui:66
 msgid "Grid View"
 msgstr "Tampilan Kisi"
 
-#: gtk/gtkfilechooserwidget.c:1730
+#: gtk/gtkfilechooserwidget.c:1703
 msgid "List View"
 msgstr "Tampilan Tabel"
 
-#: gtk/gtkfilechooserwidget.c:1795
+#: gtk/gtkfilechooserwidget.c:1766
 msgid "_Visit File"
 msgstr "Kunjungi _Berkas"
 
-#: gtk/gtkfilechooserwidget.c:1799
+#: gtk/gtkfilechooserwidget.c:1770
 msgid "_Open With File Manager"
 msgstr "_Buka Dengan Manajer Berkas"
 
-#: gtk/gtkfilechooserwidget.c:1803
+#: gtk/gtkfilechooserwidget.c:1774
 msgid "_Copy Location"
 msgstr "Salin _Lokasi"
 
-#: gtk/gtkfilechooserwidget.c:1807
+#: gtk/gtkfilechooserwidget.c:1778
 msgid "_Add to Bookmarks"
 msgstr "T_ambah dalam Markah"
 
-#: gtk/gtkfilechooserwidget.c:1811 gtk/gtkplacessidebar.c:2312
+#: gtk/gtkfilechooserwidget.c:1782 gtk/gtkplacessidebar.c:2312
 #: gtk/gtkplacessidebar.c:3270 gtk/ui/gtkfilechooserwidget.ui:410
 msgid "_Rename"
 msgstr "_Ganti Nama"
 
-#: gtk/gtkfilechooserwidget.c:1819
+#: gtk/gtkfilechooserwidget.c:1790
 msgid "_Move to Trash"
 msgstr "Pindahkan ke Tong Sa_mpah"
 
-#: gtk/gtkfilechooserwidget.c:1828
+#: gtk/gtkfilechooserwidget.c:1799
 msgid "Show _Hidden Files"
 msgstr "_Tampilkan Berkas Tersembunyi"
 
-#: gtk/gtkfilechooserwidget.c:1832
-msgid "Show _Size Column"
-msgstr "Tampilkan Kolom _Ukuran"
-
-#: gtk/gtkfilechooserwidget.c:1837
-msgid "Show T_ype Column"
-msgstr "Tampilkan Kolom _Jenis"
-
-#: gtk/gtkfilechooserwidget.c:1842
-msgid "Show _Time"
-msgstr "_Tampilkan Waktu"
-
-#: gtk/gtkfilechooserwidget.c:1847
+#: gtk/gtkfilechooserwidget.c:1803
 msgid "Sort _Folders Before Files"
 msgstr "Urutkan _Folder Sebelum Berkas"
 
-#: gtk/gtkfilechooserwidget.c:1979 gtk/gtkfilechooserwidget.c:2009
-#: gtk/gtkfilechooserwidget.c:3914
+#: gtk/gtkfilechooserwidget.c:1926 gtk/gtkfilechooserwidget.c:1956
+#: gtk/gtkfilechooserwidget.c:3858
 msgid "Unknown"
 msgstr "Tidak Diketahui"
 
-#: gtk/gtkfilechooserwidget.c:2064 gtk/gtkplacessidebar.c:1025
+#: gtk/gtkfilechooserwidget.c:2011 gtk/gtkplacessidebar.c:1025
 msgid "Home"
 msgstr "Rumah"
 
 #. this is the header for the location column in the print dialog
-#: gtk/gtkfilechooserwidget.c:2219 gtk/gtkfilechooserwidget.c:7415
+#: gtk/gtkfilechooserwidget.c:2166 gtk/gtkfilechooserwidget.c:7383
 #: gtk/inspector/css-node-tree.ui:76 gtk/print/ui/gtkprintunixdialog.ui:111
 msgid "Location"
 msgstr "Lokasi"
 
 #. Label
-#: gtk/gtkfilechooserwidget.c:2326
+#: gtk/gtkfilechooserwidget.c:2273
 msgid "_Name:"
 msgstr "_Nama:"
 
-#: gtk/gtkfilechooserwidget.c:2881 gtk/gtkfilechooserwidget.c:2895
+#: gtk/gtkfilechooserwidget.c:2828 gtk/gtkfilechooserwidget.c:2842
 #, c-format
 msgid "Searching in %s"
 msgstr "Mencari dalam %s"
 
-#: gtk/gtkfilechooserwidget.c:2901
+#: gtk/gtkfilechooserwidget.c:2848
 msgid "Searching"
 msgstr "Mencari"
 
-#: gtk/gtkfilechooserwidget.c:2907
+#: gtk/gtkfilechooserwidget.c:2854
 msgid "Enter location or URL"
 msgstr "Masukkan lokasi atau URL"
 
-#: gtk/gtkfilechooserwidget.c:3474 gtk/gtkfilechooserwidget.c:5814
-#: gtk/gtkfilechooserwidget.c:7434
+#: gtk/gtkfilechooserwidget.c:3413 gtk/gtkfilechooserwidget.c:5758
+#: gtk/gtkfilechooserwidget.c:7405
 msgid "Modified"
 msgstr "Diubah"
 
-#: gtk/gtkfilechooserwidget.c:3658
+#: gtk/gtkfilechooserwidget.c:3598
 #, c-format
 msgid "Could not read the contents of %s"
 msgstr "Tidak dapat membaca isi dari %s"
 
-#: gtk/gtkfilechooserwidget.c:3662
+#: gtk/gtkfilechooserwidget.c:3602
 msgid "Could not read the contents of the folder"
 msgstr "Tidak bisa membaca isi dari folder"
 
 #. Translators: see g_date_time_format() for details on the format
-#: gtk/gtkfilechooserwidget.c:3809 gtk/gtkfilechooserwidget.c:3852
+#: gtk/gtkfilechooserwidget.c:3753 gtk/gtkfilechooserwidget.c:3796
 msgid "%H:%M"
 msgstr "%H:%M"
 
-#: gtk/gtkfilechooserwidget.c:3811 gtk/gtkfilechooserwidget.c:3854
+#: gtk/gtkfilechooserwidget.c:3755 gtk/gtkfilechooserwidget.c:3798
 msgid "%l:%M %p"
 msgstr "%l:%M %p"
 
-#: gtk/gtkfilechooserwidget.c:3815
+#: gtk/gtkfilechooserwidget.c:3759
 msgid "Yesterday"
 msgstr "Kemarin"
 
-#: gtk/gtkfilechooserwidget.c:3823
+#: gtk/gtkfilechooserwidget.c:3767
 msgid "%-e %b"
 msgstr "%-e %b"
 
-#: gtk/gtkfilechooserwidget.c:3827
+#: gtk/gtkfilechooserwidget.c:3771
 msgid "%-e %b %Y"
 msgstr "%-e %b %Y"
 
-#: gtk/gtkfilechooserwidget.c:3869 gtk/gtkfilechooserwidget.c:3877
+#: gtk/gtkfilechooserwidget.c:3813 gtk/gtkfilechooserwidget.c:3821
 msgid "Program"
 msgstr "Program"
 
-#: gtk/gtkfilechooserwidget.c:3870
+#: gtk/gtkfilechooserwidget.c:3814
 msgid "Audio"
 msgstr "Audio"
 
-#: gtk/gtkfilechooserwidget.c:3872 gtk/gtkfilefilter.c:1035
+#: gtk/gtkfilechooserwidget.c:3816 gtk/gtkfilefilter.c:1013
 msgid "Image"
 msgstr "Citra"
 
-#: gtk/gtkfilechooserwidget.c:3873
+#: gtk/gtkfilechooserwidget.c:3817
 msgid "Archive"
 msgstr "Arsip"
 
-#: gtk/gtkfilechooserwidget.c:3874
+#: gtk/gtkfilechooserwidget.c:3818
 msgid "Markup"
 msgstr "Markup"
 
-#: gtk/gtkfilechooserwidget.c:3875 gtk/gtkfilechooserwidget.c:3876
+#: gtk/gtkfilechooserwidget.c:3819 gtk/gtkfilechooserwidget.c:3820
 msgid "Text"
 msgstr "Teks"
 
-#: gtk/gtkfilechooserwidget.c:3878
+#: gtk/gtkfilechooserwidget.c:3822
 msgid "Video"
 msgstr "Video"
 
-#: gtk/gtkfilechooserwidget.c:3879
+#: gtk/gtkfilechooserwidget.c:3823
 msgid "Contacts"
 msgstr "Kontak"
 
-#: gtk/gtkfilechooserwidget.c:3880
+#: gtk/gtkfilechooserwidget.c:3824
 msgid "Calendar"
 msgstr "Kalender"
 
-#: gtk/gtkfilechooserwidget.c:3881
+#: gtk/gtkfilechooserwidget.c:3825
 msgid "Document"
 msgstr "Dokumen"
 
-#: gtk/gtkfilechooserwidget.c:3882
+#: gtk/gtkfilechooserwidget.c:3826
 msgid "Presentation"
 msgstr "Presentasi"
 
-#: gtk/gtkfilechooserwidget.c:3883
+#: gtk/gtkfilechooserwidget.c:3827
 msgid "Spreadsheet"
 msgstr "Lembar Kerja"
 
-#: gtk/gtkfilechooserwidget.c:5021 gtk/print/gtkprintunixdialog.c:673
+#: gtk/gtkfilechooserwidget.c:4965 gtk/print/gtkprintunixdialog.c:673
 #, c-format
 msgid "A file named “%s” already exists.  Do you want to replace it?"
 msgstr "Berkas \"%s\" sudah ada. Timpa?"
 
-#: gtk/gtkfilechooserwidget.c:5023 gtk/print/gtkprintunixdialog.c:677
+#: gtk/gtkfilechooserwidget.c:4967 gtk/print/gtkprintunixdialog.c:677
 #, c-format
 msgid ""
 "The file already exists in “%s”.  Replacing it will overwrite its contents."
@@ -2499,35 +2531,47 @@ msgstr ""
 "Berkas sudah ada dalam \"%s\". Berkas lama akan diganti dengan yang baru "
 "bila Anda menimpanya."
 
-#: gtk/gtkfilechooserwidget.c:5029 gtk/print/gtkprintunixdialog.c:685
+#: gtk/gtkfilechooserwidget.c:4973 gtk/print/gtkprintunixdialog.c:685
 msgid "_Replace"
 msgstr "_Timpa"
 
-#: gtk/gtkfilechooserwidget.c:5184
+#: gtk/gtkfilechooserwidget.c:5128
 msgid "You do not have access to the specified folder."
 msgstr "Anda tak punya hak akses ke folder itu."
 
-#: gtk/gtkfilechooserwidget.c:5761
+#: gtk/gtkfilechooserwidget.c:5705
 msgid "Could not send the search request"
 msgstr "Tidak dapat mengirim permintaan pencarian"
 
-#: gtk/gtkfilechooserwidget.c:6042
+#: gtk/gtkfilechooserwidget.c:5986
 msgid "Accessed"
 msgstr "Diakses"
 
-#: gtk/gtkfilechooserwidget.c:7408 gtk/gtkplacessidebar.c:2306
+#: gtk/gtkfilechooserwidget.c:7361
+msgid "_Size"
+msgstr "_Ukuran"
+
+#: gtk/gtkfilechooserwidget.c:7365
+msgid "T_ype"
+msgstr "T_ipe"
+
+#: gtk/gtkfilechooserwidget.c:7369
+msgid "_Time"
+msgstr "_Waktu"
+
+#: gtk/gtkfilechooserwidget.c:7375 gtk/gtkplacessidebar.c:2306
 #: gtk/inspector/a11y.ui:43 gtk/inspector/actions.ui:19
 #: gtk/inspector/css-node-tree.ui:22 gtk/inspector/prop-list.ui:24
 #: gtk/ui/gtkfilechooserwidget.ui:385 gtk/print/ui/gtkprintunixdialog.ui:80
 msgid "Name"
 msgstr "Nama"
 
-#: gtk/gtkfilechooserwidget.c:7423 gtk/inspector/resource-list.ui:82
+#: gtk/gtkfilechooserwidget.c:7392 gtk/inspector/resource-list.ui:82
 #: gtk/ui/gtkfontchooserwidget.ui:217 gtk/ui/gtkfontchooserwidget.ui:386
 msgid "Size"
 msgstr "Ukuran"
 
-#: gtk/gtkfilechooserwidget.c:7428 gtk/inspector/misc-info.ui:57
+#: gtk/gtkfilechooserwidget.c:7398 gtk/inspector/misc-info.ui:57
 #: gtk/inspector/prop-list.ui:35 gtk/inspector/statistics.ui:36
 msgid "Type"
 msgstr "Tipe"
@@ -2557,7 +2601,7 @@ msgstr "Pilih Folder"
 msgid "Select a Folder"
 msgstr "Pilih Folder"
 
-#: gtk/gtkfilefilter.c:1048
+#: gtk/gtkfilefilter.c:1026
 msgid "Unspecified"
 msgstr "Tidak dinyatakan"
 
@@ -2632,7 +2676,7 @@ msgstr "Variasi Gaya"
 msgid "Character Variations"
 msgstr "Varian Karakter"
 
-#: gtk/gtkglarea.c:305
+#: gtk/gtkglarea.c:309
 msgid "OpenGL context creation failed"
 msgstr "Pembuatan konteks OpenGL gagal"
 
@@ -2645,31 +2689,31 @@ msgstr "Tutup"
 msgid "Close the infobar"
 msgstr "Tutup bilah info"
 
-#: gtk/gtklabel.c:5692 gtk/gtktext.c:6113 gtk/gtktextview.c:9006
+#: gtk/gtklabel.c:5709 gtk/gtktext.c:6181 gtk/gtktextview.c:9068
 msgid "Cu_t"
 msgstr "Po_tong"
 
-#: gtk/gtklabel.c:5693 gtk/gtktext.c:6117 gtk/gtktextview.c:9010
+#: gtk/gtklabel.c:5710 gtk/gtktext.c:6185 gtk/gtktextview.c:9072
 msgid "_Copy"
 msgstr "_Salin"
 
-#: gtk/gtklabel.c:5694 gtk/gtktext.c:6121 gtk/gtktextview.c:9014
+#: gtk/gtklabel.c:5711 gtk/gtktext.c:6189 gtk/gtktextview.c:9076
 msgid "_Paste"
 msgstr "Tem_pel"
 
-#: gtk/gtklabel.c:5700 gtk/gtktext.c:6134 gtk/gtktextview.c:9039
+#: gtk/gtklabel.c:5717 gtk/gtktext.c:6202 gtk/gtktextview.c:9101
 msgid "Select _All"
 msgstr "Pilih Semu_a"
 
-#: gtk/gtklabel.c:5705
+#: gtk/gtklabel.c:5722
 msgid "_Open Link"
 msgstr "_Buka Taut"
 
-#: gtk/gtklabel.c:5709
+#: gtk/gtklabel.c:5726
 msgid "Copy _Link Address"
 msgstr "Sa_lin Alamat Taut"
 
-#: gtk/gtklabel.c:5753 gtk/gtktext.c:2716 gtk/gtktextview.c:9088
+#: gtk/gtklabel.c:5770 gtk/gtktext.c:2724 gtk/gtktextview.c:9150
 msgid "Context menu"
 msgstr "Menu konteks"
 
@@ -2740,7 +2784,7 @@ msgid "Play"
 msgstr "Putar"
 
 #: gtk/gtkmessagedialog.c:162 gtk/gtkmessagedialog.c:180
-#: gtk/print/gtkprintbackend.c:639 gtk/gtkwindow.c:6243
+#: gtk/print/gtkprintbackend.c:639 gtk/gtkwindow.c:6257
 msgid "_OK"
 msgstr "_Ok"
 
@@ -2871,7 +2915,7 @@ msgstr "Tab sebelumnya"
 msgid "Next tab"
 msgstr "Tab selanjutnya"
 
-#: gtk/gtknotebook.c:4331 gtk/gtknotebook.c:6539
+#: gtk/gtknotebook.c:4331 gtk/gtknotebook.c:6541
 #, c-format
 msgid "Page %u"
 msgstr "Halaman %u"
@@ -3339,8 +3383,8 @@ msgstr "Alasan paling mungkin adalah berkas temporer tidak dapat dibuat."
 
 #. window
 #: gtk/print/gtkprintoperation-portal.c:264
-#: gtk/print/gtkprintoperation-portal.c:584
-#: gtk/print/gtkprintoperation-portal.c:653 gtk/print/gtkprintunixdialog.c:3008
+#: gtk/print/gtkprintoperation-portal.c:594
+#: gtk/print/gtkprintoperation-portal.c:663 gtk/print/gtkprintunixdialog.c:3008
 msgid "Print"
 msgstr "Cetak"
 
@@ -3430,42 +3474,42 @@ msgstr "Mengambil informasi pencetak…"
 #. * multiple pages on a sheet when printing
 #.
 #: gtk/print/gtkprintunixdialog.c:2753
-#: modules/printbackends/gtkprintbackendcups.c:5647
+#: modules/printbackends/gtkprintbackendcups.c:5645
 msgid "Left to right, top to bottom"
 msgstr "Kiri ke kanan, puncak ke dasar"
 
 #: gtk/print/gtkprintunixdialog.c:2753
-#: modules/printbackends/gtkprintbackendcups.c:5647
+#: modules/printbackends/gtkprintbackendcups.c:5645
 msgid "Left to right, bottom to top"
 msgstr "Kiri ke kanan, dasar ke puncak"
 
 #: gtk/print/gtkprintunixdialog.c:2754
-#: modules/printbackends/gtkprintbackendcups.c:5648
+#: modules/printbackends/gtkprintbackendcups.c:5646
 msgid "Right to left, top to bottom"
 msgstr "Kanan ke kiri, puncak ke dasar"
 
 #: gtk/print/gtkprintunixdialog.c:2754
-#: modules/printbackends/gtkprintbackendcups.c:5648
+#: modules/printbackends/gtkprintbackendcups.c:5646
 msgid "Right to left, bottom to top"
 msgstr "Kanan ke kiri, dasar ke puncak"
 
 #: gtk/print/gtkprintunixdialog.c:2755
-#: modules/printbackends/gtkprintbackendcups.c:5649
+#: modules/printbackends/gtkprintbackendcups.c:5647
 msgid "Top to bottom, left to right"
 msgstr "Puncak ke dasar, kiri ke kanan"
 
 #: gtk/print/gtkprintunixdialog.c:2755
-#: modules/printbackends/gtkprintbackendcups.c:5649
+#: modules/printbackends/gtkprintbackendcups.c:5647
 msgid "Top to bottom, right to left"
 msgstr "Puncak ke dasar, kanan ke kiri"
 
 #: gtk/print/gtkprintunixdialog.c:2756
-#: modules/printbackends/gtkprintbackendcups.c:5650
+#: modules/printbackends/gtkprintbackendcups.c:5648
 msgid "Bottom to top, left to right"
 msgstr "Dasar ke puncak, kiri ke kanan"
 
 #: gtk/print/gtkprintunixdialog.c:2756
-#: modules/printbackends/gtkprintbackendcups.c:5650
+#: modules/printbackends/gtkprintbackendcups.c:5648
 msgid "Bottom to top, right to left"
 msgstr "Dasar ke puncak, kanan ke kiri"
 
@@ -3489,7 +3533,7 @@ msgstr "Puncak ke dasar"
 msgid "Bottom to top"
 msgstr "Dasar ke puncak"
 
-#: gtk/gtkprogressbar.c:608
+#: gtk/gtkprogressbar.c:609
 #, c-format
 msgctxt "progress bar label"
 msgid "%.0f %%"
@@ -3514,7 +3558,7 @@ msgstr ""
 "Tak ditemukan aplikasi terdaftar dengan nama \"%s\" bagi butir dengan URI "
 "\"%s\""
 
-#: gtk/gtksearchentry.c:758
+#: gtk/gtksearchentry.c:810
 msgid "Clear Entry"
 msgstr "Bersihkan Entri"
 
@@ -3538,7 +3582,7 @@ msgctxt "keyboard side marker"
 msgid "R"
 msgstr "A"
 
-#: gtk/gtkshortcutssection.c:407
+#: gtk/gtkshortcutssection.c:414
 msgid "_Show All"
 msgstr "Tampilkan _Semua"
 
@@ -3575,27 +3619,27 @@ msgid "Swipe right"
 msgstr "Gesek ke kanan"
 
 #. Translators: This is placeholder text for the search entry in the shortcuts window
-#: gtk/gtkshortcutswindow.c:855 gtk/gtkshortcutswindow.c:922
-#: gtk/gtkshortcutswindow.c:927
+#: gtk/gtkshortcutswindow.c:879 gtk/gtkshortcutswindow.c:946
+#: gtk/gtkshortcutswindow.c:952
 msgid "Search Shortcuts"
 msgstr "Pintasan Cari"
 
 #. Translators: This is the window title for the shortcuts window in normal mode
-#: gtk/gtkshortcutswindow.c:887 gtk/inspector/window.ui:498
+#: gtk/gtkshortcutswindow.c:911 gtk/inspector/window.ui:498
 msgid "Shortcuts"
 msgstr "Pintasan"
 
 #. Translators: This is the window title for the shortcuts window in search mode
-#: gtk/gtkshortcutswindow.c:892
+#: gtk/gtkshortcutswindow.c:916
 msgid "Search Results"
 msgstr "Hasil Cari"
 
-#: gtk/gtkshortcutswindow.c:989 gtk/ui/gtkemojichooser.ui:349
+#: gtk/gtkshortcutswindow.c:1014 gtk/ui/gtkemojichooser.ui:349
 #: gtk/ui/gtkfilechooserwidget.ui:239
 msgid "No Results Found"
 msgstr "Tak Ada Hasil yang Ditemukan"
 
-#: gtk/gtkshortcutswindow.c:1000 gtk/ui/gtkemojichooser.ui:362
+#: gtk/gtkshortcutswindow.c:1025 gtk/ui/gtkemojichooser.ui:362
 #: gtk/ui/gtkfilechooserwidget.ui:252 gtk/ui/gtkplacesview.ui:218
 msgid "Try a different search"
 msgstr "Cobalah pencarian lain"
@@ -3605,24 +3649,24 @@ msgctxt "accessibility"
 msgid "Sidebar"
 msgstr "Bilah sisi"
 
-#: gtk/gtktext.c:6139 gtk/gtktextview.c:9044
+#: gtk/gtktext.c:6207 gtk/gtktextview.c:9106
 msgid "Insert _Emoji"
 msgstr "Sisipkan _Emoji"
 
-#: gtk/gtktextview.c:9026
+#: gtk/gtktextview.c:9088
 msgid "_Undo"
 msgstr "_Tidak Jadi"
 
-#: gtk/gtktextview.c:9030
+#: gtk/gtktextview.c:9092
 msgid "_Redo"
 msgstr "_Jadi Lagi"
 
-#: gtk/gtkwindow.c:6231
+#: gtk/gtkwindow.c:6245
 #, c-format
 msgid "Do you want to use GTK Inspector?"
 msgstr "Apakah Anda ingin memakai GTK Inspector?"
 
-#: gtk/gtkwindow.c:6233
+#: gtk/gtkwindow.c:6247
 #, c-format
 msgid ""
 "GTK Inspector is an interactive debugger that lets you explore and modify "
@@ -3633,7 +3677,7 @@ msgstr ""
 "mengeksplorasi dan mengubah internal dari sebarang aplikasi GTK. Memakainya "
 "dapat menyebabkan aplikasi rusak atau remuk."
 
-#: gtk/gtkwindow.c:6238
+#: gtk/gtkwindow.c:6252
 msgid "Don’t show this message again"
 msgstr "Jangan tampilkan pesan ini lagi"
 
@@ -3670,6 +3714,7 @@ msgid "Description"
 msgstr "Deskripsi"
 
 #: gtk/inspector/a11y.ui:99 gtk/inspector/misc-info.ui:296
+#: tools/gtk-path-tool-info.c:132
 msgid "Bounds"
 msgstr "Batas"
 
@@ -3778,8 +3823,8 @@ msgid ""
 "You can temporarily disable this custom CSS by clicking on the “Pause” "
 "button above."
 msgstr ""
-"Anda dapat mematikan sementara CSS ubahan ini dengan mengklik tombol \"Jeda"
-"\" di atas."
+"Anda dapat mematikan sementara CSS ubahan ini dengan mengklik tombol "
+"\"Jeda\" di atas."
 
 #: gtk/inspector/css-editor.c:130
 msgid "Changes are applied instantly and globally, for the whole application."
@@ -3812,47 +3857,37 @@ msgstr "Kelas Gaya"
 msgid "CSS Property"
 msgstr "Properti CSS"
 
-#: gtk/inspector/general.c:333 gtk/inspector/general.c:414
+#: gtk/inspector/general.c:370
 msgctxt "GL version"
 msgid "None"
 msgstr "Nihil"
 
-#: gtk/inspector/general.c:342
+#: gtk/inspector/general.c:461
 msgctxt "GL version"
-msgid "Disabled"
-msgstr "Dinonaktifkan"
+msgid "Unknown"
+msgstr "Tidak Dikenal"
 
-#: gtk/inspector/general.c:343
-msgctxt "GL vendor"
-msgid "Disabled"
-msgstr "Dinonaktifkan"
-
-#: gtk/inspector/general.c:415
-msgctxt "GL vendor"
-msgid "None"
-msgstr "Nihil"
-
-#: gtk/inspector/general.c:466
+#: gtk/inspector/general.c:523
 msgctxt "Vulkan device"
 msgid "Disabled"
 msgstr "Dinonaktifkan"
 
-#: gtk/inspector/general.c:467 gtk/inspector/general.c:468
+#: gtk/inspector/general.c:524 gtk/inspector/general.c:525
 msgctxt "Vulkan version"
 msgid "Disabled"
 msgstr "Dinonaktifkan"
 
-#: gtk/inspector/general.c:524
+#: gtk/inspector/general.c:576
 msgctxt "Vulkan device"
 msgid "None"
 msgstr "Nihil"
 
-#: gtk/inspector/general.c:525 gtk/inspector/general.c:526
+#: gtk/inspector/general.c:577 gtk/inspector/general.c:578
 msgctxt "Vulkan version"
 msgid "None"
 msgstr "Nihil"
 
-#: gtk/inspector/general.c:857
+#: gtk/inspector/general.c:922
 msgid "IM Context is hardcoded by GTK_IM_MODULE"
 msgstr "Konteks IM adalah di-hardcode oleh GTK_IM_MODULE"
 
@@ -3904,23 +3939,52 @@ msgstr "Visual RGBA"
 msgid "Composited"
 msgstr "Terkomposisi"
 
-#: gtk/inspector/general.ui:559
+#: gtk/inspector/general.ui:538
+msgid "Protocols"
+msgstr "Protokol"
+
+#: gtk/inspector/general.ui:594
 msgid "GL Version"
 msgstr "Versi GL"
 
-#: gtk/inspector/general.ui:609
-msgid "GL Vendor"
-msgstr "Vendor GL"
+#: gtk/inspector/general.ui:621
+msgid "GL Backend Version"
+msgstr "Versi Backend GL"
 
-#: gtk/inspector/general.ui:646
+#: gtk/inspector/general.ui:671
+msgid "GL Backend Vendor"
+msgstr "Vendor Backend GL"
+
+#: gtk/inspector/general.ui:698
+msgid "GL_VENDOR"
+msgstr "GL_VENDOR"
+
+#: gtk/inspector/general.ui:727
+#| msgid "RENDERER"
+msgid "GL_RENDERER"
+msgstr "GL_RENDERER"
+
+#: gtk/inspector/general.ui:756
+msgid "GL_VERSION"
+msgstr "GL_VERSION"
+
+#: gtk/inspector/general.ui:785
+msgid "GL_SHADING_LANGUAGE_VERSION"
+msgstr "GL_SHADING_LANGUAGE_VERSION"
+
+#: gtk/inspector/general.ui:813 gtk/inspector/general.ui:929
+msgid "Extensions"
+msgstr "Ekstensi"
+
+#: gtk/inspector/general.ui:849
 msgid "Vulkan Device"
 msgstr "Perangkat Vulkan"
 
-#: gtk/inspector/general.ui:673
+#: gtk/inspector/general.ui:876
 msgid "Vulkan API version"
 msgstr "Versi API Vulkan"
 
-#: gtk/inspector/general.ui:700
+#: gtk/inspector/general.ui:903
 msgid "Vulkan driver version"
 msgstr "Versi penggerak Vulkan"
 
@@ -3985,8 +4049,8 @@ msgid "Surface"
 msgstr "Permukaan"
 
 #: gtk/inspector/misc-info.ui:365 gtk/inspector/misc-info.ui:400
-#: gtk/inspector/misc-info.ui:435 gtk/inspector/prop-editor.c:1150
-#: gtk/inspector/prop-editor.c:1533 gtk/inspector/window.ui:396
+#: gtk/inspector/misc-info.ui:435 gtk/inspector/prop-editor.c:1153
+#: gtk/inspector/prop-editor.c:1536 gtk/inspector/window.ui:396
 msgid "Properties"
 msgstr "Properti"
 
@@ -4038,7 +4102,7 @@ msgstr "Pointer: %p"
 #. Translators: %s is a type name, for example
 #. * GtkPropertyExpression with value \"2.5\"
 #.
-#: gtk/inspector/prop-editor.c:824
+#: gtk/inspector/prop-editor.c:827
 #, c-format
 msgid "%s with value \"%s\""
 msgstr "%s dengan nilai \"%s\""
@@ -4046,7 +4110,7 @@ msgstr "%s dengan nilai \"%s\""
 #. Translators: Both %s are type names, for example
 #. * GtkPropertyExpression with type GObject
 #.
-#: gtk/inspector/prop-editor.c:835
+#: gtk/inspector/prop-editor.c:838
 #, c-format
 msgid "%s with type %s"
 msgstr "%s dengan tipe %s"
@@ -4054,7 +4118,7 @@ msgstr "%s dengan tipe %s"
 #. Translators: Both %s are type names, for example
 #. * GtkObjectExpression for GtkStringObject 0x23456789
 #.
-#: gtk/inspector/prop-editor.c:848
+#: gtk/inspector/prop-editor.c:851
 #, c-format
 msgid "%s for %s %p"
 msgstr "%s untuk %s %p"
@@ -4062,71 +4126,71 @@ msgstr "%s untuk %s %p"
 #. Translators: Both %s are type names, for example
 #. * GtkPropertyExpression with value type: gchararray
 #.
-#: gtk/inspector/prop-editor.c:878
+#: gtk/inspector/prop-editor.c:881
 #, c-format
 msgid "%s with value type %s"
 msgstr "%s dengan tipe nilai %s"
 
-#: gtk/inspector/prop-editor.c:1227
+#: gtk/inspector/prop-editor.c:1230
 #, c-format
 msgid "Uneditable property type: %s"
 msgstr "Tipe properti yang tak dapat disunting: %s"
 
-#: gtk/inspector/prop-editor.c:1385
+#: gtk/inspector/prop-editor.c:1388
 msgctxt "column number"
 msgid "None"
 msgstr "Nihil"
 
-#: gtk/inspector/prop-editor.c:1422
+#: gtk/inspector/prop-editor.c:1425
 msgid "Attribute:"
 msgstr "Atribut:"
 
-#: gtk/inspector/prop-editor.c:1425
+#: gtk/inspector/prop-editor.c:1428
 msgid "Model"
 msgstr "Model"
 
-#: gtk/inspector/prop-editor.c:1430
+#: gtk/inspector/prop-editor.c:1433
 msgid "Column:"
 msgstr "Kolom:"
 
 #. Translators: %s is a type name, for example
 #. * Action from 0x2345678 (GtkApplicationWindow)
 #.
-#: gtk/inspector/prop-editor.c:1529
+#: gtk/inspector/prop-editor.c:1532
 #, c-format
 msgid "Action from: %p (%s)"
 msgstr "Aksi dari: %p (%s)"
 
-#: gtk/inspector/prop-editor.c:1584
+#: gtk/inspector/prop-editor.c:1587
 msgid "Reset"
 msgstr "Reset"
 
-#: gtk/inspector/prop-editor.c:1592
+#: gtk/inspector/prop-editor.c:1595
 msgctxt "GtkSettings source"
 msgid "Default"
 msgstr "Baku"
 
-#: gtk/inspector/prop-editor.c:1595
+#: gtk/inspector/prop-editor.c:1598
 msgctxt "GtkSettings source"
 msgid "Theme"
 msgstr "Tema"
 
-#: gtk/inspector/prop-editor.c:1598
+#: gtk/inspector/prop-editor.c:1601
 msgctxt "GtkSettings source"
 msgid "XSettings"
 msgstr "XSettings"
 
-#: gtk/inspector/prop-editor.c:1602
+#: gtk/inspector/prop-editor.c:1605
 msgctxt "GtkSettings source"
 msgid "Application"
 msgstr "Aplikasi"
 
-#: gtk/inspector/prop-editor.c:1605
+#: gtk/inspector/prop-editor.c:1608
 msgctxt "GtkSettings source"
 msgid "Unknown"
 msgstr "Tidak Diketahui"
 
-#: gtk/inspector/prop-editor.c:1608
+#: gtk/inspector/prop-editor.c:1611
 msgid "Source:"
 msgstr "Sumber:"
 
@@ -4134,7 +4198,7 @@ msgstr "Sumber:"
 msgid "Defined At"
 msgstr "Didefinisikan Pada"
 
-#: gtk/inspector/recorder.c:1922
+#: gtk/inspector/recorder.c:1941
 #, c-format
 msgid "Saving RenderNode failed"
 msgstr "Penyimpanan RenderNode gagal"
@@ -4272,11 +4336,11 @@ msgstr "Hirarki"
 msgid "Implements"
 msgstr "Melaksanakan"
 
-#: gtk/inspector/visual.c:637 gtk/inspector/visual.c:656
+#: gtk/inspector/visual.c:674 gtk/inspector/visual.c:693
 msgid "Theme is hardcoded by GTK_THEME"
 msgstr "Tema di-hardcode oleh GTK_THEME"
 
-#: gtk/inspector/visual.c:905
+#: gtk/inspector/visual.c:942
 msgid "Backend does not support window scaling"
 msgstr "Backend tak mendukung penskalaan jendela"
 
@@ -4336,43 +4400,60 @@ msgstr "Tampilkan Laju Bingkai"
 msgid "Show Graphic Updates"
 msgstr "Tampilkan Pembaruan Grafik"
 
-#: gtk/inspector/visual.ui:435
-msgid "Show Fallback Rendering"
+#: gtk/inspector/visual.ui:430
+#, fuzzy
+msgid ""
+"Tints all the places where the current renderer uses Cairo instead of the "
+"GPU."
+msgstr ""
+"Mewarnai semua tempat di mana perender saat ini menggunakan Kairo alih-alih "
+"GPU."
+
+#: gtk/inspector/visual.ui:436
+#, fuzzy
+#| msgid "Show Fallback Rendering"
+msgid "Show Cairo Rendering"
 msgstr "Tampilkan Rendering Cadangan"
 
-#: gtk/inspector/visual.ui:460
+#: gtk/inspector/visual.ui:461
 msgid "Show Baselines"
 msgstr "Tampilkan Baseline"
 
-#: gtk/inspector/visual.ui:488
+#: gtk/inspector/visual.ui:489
 msgid "Show Layout Borders"
 msgstr "Tampilkan Batas Tata Letak"
 
-#: gtk/inspector/visual.ui:545
+#: gtk/inspector/visual.ui:546
 msgid "CSS Padding"
 msgstr "Pengisi CSS"
 
-#: gtk/inspector/visual.ui:555
+#: gtk/inspector/visual.ui:556
 msgid "CSS Border"
 msgstr "Batas CSS"
 
-#: gtk/inspector/visual.ui:565
+#: gtk/inspector/visual.ui:566
 msgid "CSS Margin"
 msgstr "Margin CSS"
 
-#: gtk/inspector/visual.ui:575
+#: gtk/inspector/visual.ui:576
 msgid "Widget Margin"
 msgstr "Margin Widget"
 
-#: gtk/inspector/visual.ui:610
+#: gtk/inspector/visual.ui:611
 msgid "Show Focus"
 msgstr "Tampilkan Fokus"
 
-#: gtk/inspector/visual.ui:635
+#: gtk/inspector/visual.ui:636
 msgid "Show Accessibility warnings"
 msgstr "Tampilkan peringatan Aksesibilitas"
 
-#: gtk/inspector/visual.ui:667
+#: gtk/inspector/visual.ui:661
+#, fuzzy
+#| msgid "Show Graphic Updates"
+msgid "Show Graphics Offload"
+msgstr "Tampilkan Pembaruan Grafik"
+
+#: gtk/inspector/visual.ui:693
 msgid "Inspect Inspector"
 msgstr "Periksa Inspektur"
 
@@ -6497,65 +6578,26 @@ msgstr "Diperluas"
 msgid "Some of the settings in the dialog conflict"
 msgstr "Beberapa ketentuan pada dialog konflik"
 
-#: modules/media/gtkffmediafile.c:253
-#, c-format
-msgid "Unspecified error decoding media"
-msgstr "Kesalahan mendekode media yang tidak jelas"
-
-#: modules/media/gtkffmediafile.c:286
-#, c-format
-msgid "Cannot find decoder: %s"
-msgstr "Tidak dapat menemukan dekoder: %s"
-
-#: modules/media/gtkffmediafile.c:296 modules/media/gtkffmediafile.c:363
-msgid "Failed to allocate a codec context"
-msgstr "Gagal mengalokasikan konteks kodek"
-
-#: modules/media/gtkffmediafile.c:341
-#, c-format
-msgid "Cannot find encoder: %s"
-msgstr "Tidak dapat menemukan enkoder: %s"
-
-#: modules/media/gtkffmediafile.c:352
-msgid "Cannot add new stream"
-msgstr "Tidak dapat menambahkan stream baru"
-
-#: modules/media/gtkffmediafile.c:485 modules/media/gtkffmediafile.c:942
-msgid "Failed to allocate an audio frame"
-msgstr "Gagal mengalokasikan bingkai audio"
-
-#: modules/media/gtkffmediafile.c:650 modules/media/gtkffmediafile.c:898
-msgid "Not enough memory"
-msgstr "Tidak cukup memori"
-
-#: modules/media/gtkffmediafile.c:821
-msgid "Could not allocate resampler context"
-msgstr "Tidak dapat mengalokasikan konteks resampler"
-
-#: modules/media/gtkffmediafile.c:868
-msgid "No audio output found"
-msgstr "Tidak ada keluaran audio yang ditemukan"
-
 #. Translators: These strings name the possible values of the
 #. * job priority option in the print dialog
 #.
 #: modules/printbackends/gtkprintbackendcpdb.c:541
-#: modules/printbackends/gtkprintbackendcups.c:5642
+#: modules/printbackends/gtkprintbackendcups.c:5640
 msgid "Urgent"
 msgstr "Penting"
 
 #: modules/printbackends/gtkprintbackendcpdb.c:541
-#: modules/printbackends/gtkprintbackendcups.c:5642
+#: modules/printbackends/gtkprintbackendcups.c:5640
 msgid "High"
 msgstr "Tinggi"
 
 #: modules/printbackends/gtkprintbackendcpdb.c:541
-#: modules/printbackends/gtkprintbackendcups.c:5642
+#: modules/printbackends/gtkprintbackendcups.c:5640
 msgid "Medium"
 msgstr "Sedang"
 
 #: modules/printbackends/gtkprintbackendcpdb.c:541
-#: modules/printbackends/gtkprintbackendcups.c:5642
+#: modules/printbackends/gtkprintbackendcups.c:5640
 msgid "Low"
 msgstr "Rendah"
 
@@ -6563,7 +6605,7 @@ msgstr "Rendah"
 #. * dialog that controls the front cover page.
 #.
 #: modules/printbackends/gtkprintbackendcpdb.c:562
-#: modules/printbackends/gtkprintbackendcups.c:5784
+#: modules/printbackends/gtkprintbackendcups.c:5782
 msgctxt "printer option"
 msgid "Before"
 msgstr "Sebelum"
@@ -6572,7 +6614,7 @@ msgstr "Sebelum"
 #. * dialog that controls the back cover page.
 #.
 #: modules/printbackends/gtkprintbackendcpdb.c:569
-#: modules/printbackends/gtkprintbackendcups.c:5799
+#: modules/printbackends/gtkprintbackendcups.c:5797
 msgctxt "printer option"
 msgid "After"
 msgstr "Sesudah"
@@ -6748,59 +6790,59 @@ msgstr "Ada masalah pada pencetak \"%s\"."
 msgid "; "
 msgstr "; "
 
-#: modules/printbackends/gtkprintbackendcups.c:4584
-#: modules/printbackends/gtkprintbackendcups.c:4651
+#: modules/printbackends/gtkprintbackendcups.c:4582
+#: modules/printbackends/gtkprintbackendcups.c:4649
 msgctxt "printing option"
 msgid "Two Sided"
 msgstr "Dua Sisi"
 
-#: modules/printbackends/gtkprintbackendcups.c:4585
+#: modules/printbackends/gtkprintbackendcups.c:4583
 msgctxt "printing option"
 msgid "Paper Type"
 msgstr "Tipe Kertas"
 
-#: modules/printbackends/gtkprintbackendcups.c:4586
+#: modules/printbackends/gtkprintbackendcups.c:4584
 msgctxt "printing option"
 msgid "Paper Source"
 msgstr "Sumber Kertas"
 
-#: modules/printbackends/gtkprintbackendcups.c:4587
-#: modules/printbackends/gtkprintbackendcups.c:4652
+#: modules/printbackends/gtkprintbackendcups.c:4585
+#: modules/printbackends/gtkprintbackendcups.c:4650
 msgctxt "printing option"
 msgid "Output Tray"
 msgstr "Baki Keluaran"
 
-#: modules/printbackends/gtkprintbackendcups.c:4588
+#: modules/printbackends/gtkprintbackendcups.c:4586
 msgctxt "printing option"
 msgid "Resolution"
 msgstr "Resolusi"
 
-#: modules/printbackends/gtkprintbackendcups.c:4589
+#: modules/printbackends/gtkprintbackendcups.c:4587
 msgctxt "printing option"
 msgid "GhostScript pre-filtering"
 msgstr "Pra penapisan GhostScript"
 
-#: modules/printbackends/gtkprintbackendcups.c:4598
+#: modules/printbackends/gtkprintbackendcups.c:4596
 msgctxt "printing option value"
 msgid "One Sided"
 msgstr "Satu Sisi"
 
 #. Translators: this is an option of "Two Sided"
-#: modules/printbackends/gtkprintbackendcups.c:4600
+#: modules/printbackends/gtkprintbackendcups.c:4598
 msgctxt "printing option value"
 msgid "Long Edge (Standard)"
 msgstr "Sisi Panjang (Standar)"
 
 #. Translators: this is an option of "Two Sided"
-#: modules/printbackends/gtkprintbackendcups.c:4602
+#: modules/printbackends/gtkprintbackendcups.c:4600
 msgctxt "printing option value"
 msgid "Short Edge (Flip)"
 msgstr "Sisi Pendek (Putar)"
 
 #. Translators: this is an option of "Paper Source"
+#: modules/printbackends/gtkprintbackendcups.c:4602
 #: modules/printbackends/gtkprintbackendcups.c:4604
-#: modules/printbackends/gtkprintbackendcups.c:4606
-#: modules/printbackends/gtkprintbackendcups.c:4614
+#: modules/printbackends/gtkprintbackendcups.c:4612
 msgctxt "printing option value"
 msgid "Auto Select"
 msgstr "Seleksi Otomatis"
@@ -6808,208 +6850,208 @@ msgstr "Seleksi Otomatis"
 # "Bawaan Pencetak" bukan "Baku Pencetak"^^
 #. Translators: this is an option of "Paper Source"
 #. Translators: this is an option of "Resolution"
+#: modules/printbackends/gtkprintbackendcups.c:4606
 #: modules/printbackends/gtkprintbackendcups.c:4608
 #: modules/printbackends/gtkprintbackendcups.c:4610
-#: modules/printbackends/gtkprintbackendcups.c:4612
-#: modules/printbackends/gtkprintbackendcups.c:4616
+#: modules/printbackends/gtkprintbackendcups.c:4614
 msgctxt "printing option value"
 msgid "Printer Default"
 msgstr "Bawaan Pencetak"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/gtkprintbackendcups.c:4618
+#: modules/printbackends/gtkprintbackendcups.c:4616
 msgctxt "printing option value"
 msgid "Embed GhostScript fonts only"
 msgstr "Tempelkan fonta GhostScript saja"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/gtkprintbackendcups.c:4620
+#: modules/printbackends/gtkprintbackendcups.c:4618
 msgctxt "printing option value"
 msgid "Convert to PS level 1"
 msgstr "Konversi ke PS tingkat 1"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/gtkprintbackendcups.c:4622
+#: modules/printbackends/gtkprintbackendcups.c:4620
 msgctxt "printing option value"
 msgid "Convert to PS level 2"
 msgstr "Konversi ke PS tingkat 2"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/gtkprintbackendcups.c:4624
+#: modules/printbackends/gtkprintbackendcups.c:4622
 msgctxt "printing option value"
 msgid "No pre-filtering"
 msgstr "Tanpa pra penapisan"
 
 #. Translators: "Miscellaneous" is the label for a button, that opens
 #. up an extra panel of settings in a print dialog.
-#: modules/printbackends/gtkprintbackendcups.c:4633
+#: modules/printbackends/gtkprintbackendcups.c:4631
 msgctxt "printing option group"
 msgid "Miscellaneous"
 msgstr "Rupa-rupa"
 
-#: modules/printbackends/gtkprintbackendcups.c:4660
+#: modules/printbackends/gtkprintbackendcups.c:4658
 msgctxt "sides"
 msgid "One Sided"
 msgstr "Satu Sisi"
 
 #. Translators: this is an option of "Two Sided"
-#: modules/printbackends/gtkprintbackendcups.c:4662
+#: modules/printbackends/gtkprintbackendcups.c:4660
 msgctxt "sides"
 msgid "Long Edge (Standard)"
 msgstr "Sisi Panjang (Standar)"
 
 #. Translators: this is an option of "Two Sided"
-#: modules/printbackends/gtkprintbackendcups.c:4664
+#: modules/printbackends/gtkprintbackendcups.c:4662
 msgctxt "sides"
 msgid "Short Edge (Flip)"
 msgstr "Sisi Pendek (Putar)"
 
 #. Translators: Top output bin
-#: modules/printbackends/gtkprintbackendcups.c:4667
+#: modules/printbackends/gtkprintbackendcups.c:4665
 msgctxt "output-bin"
 msgid "Top Bin"
 msgstr "Wadah Puncak"
 
 #. Translators: Middle output bin
-#: modules/printbackends/gtkprintbackendcups.c:4669
+#: modules/printbackends/gtkprintbackendcups.c:4667
 msgctxt "output-bin"
 msgid "Middle Bin"
 msgstr "Wadah Tengah"
 
 #. Translators: Bottom output bin
-#: modules/printbackends/gtkprintbackendcups.c:4671
+#: modules/printbackends/gtkprintbackendcups.c:4669
 msgctxt "output-bin"
 msgid "Bottom Bin"
 msgstr "Wadah Dasar"
 
 #. Translators: Side output bin
-#: modules/printbackends/gtkprintbackendcups.c:4673
+#: modules/printbackends/gtkprintbackendcups.c:4671
 msgctxt "output-bin"
 msgid "Side Bin"
 msgstr "Wadah Sisi"
 
 #. Translators: Left output bin
-#: modules/printbackends/gtkprintbackendcups.c:4675
+#: modules/printbackends/gtkprintbackendcups.c:4673
 msgctxt "output-bin"
 msgid "Left Bin"
 msgstr "Wadah Kiri"
 
 #. Translators: Right output bin
-#: modules/printbackends/gtkprintbackendcups.c:4677
+#: modules/printbackends/gtkprintbackendcups.c:4675
 msgctxt "output-bin"
 msgid "Right Bin"
 msgstr "Wadah Kanan"
 
 #. Translators: Center output bin
-#: modules/printbackends/gtkprintbackendcups.c:4679
+#: modules/printbackends/gtkprintbackendcups.c:4677
 msgctxt "output-bin"
 msgid "Center Bin"
 msgstr "Wadah Pusat"
 
 #. Translators: Rear output bin
-#: modules/printbackends/gtkprintbackendcups.c:4681
+#: modules/printbackends/gtkprintbackendcups.c:4679
 msgctxt "output-bin"
 msgid "Rear Bin"
 msgstr "Wadah Belakang"
 
 #. Translators: Output bin where one sided output is oriented in the face-up position
-#: modules/printbackends/gtkprintbackendcups.c:4683
+#: modules/printbackends/gtkprintbackendcups.c:4681
 msgctxt "output-bin"
 msgid "Face Up Bin"
 msgstr "Wadah Telentang"
 
 #. Translators: Output bin where one sided output is oriented in the face-down position
-#: modules/printbackends/gtkprintbackendcups.c:4685
+#: modules/printbackends/gtkprintbackendcups.c:4683
 msgctxt "output-bin"
 msgid "Face Down Bin"
 msgstr "Wadah Telungkup"
 
 #. Translators: Large capacity output bin
-#: modules/printbackends/gtkprintbackendcups.c:4687
+#: modules/printbackends/gtkprintbackendcups.c:4685
 msgctxt "output-bin"
 msgid "Large Capacity Bin"
 msgstr "Wadah Kapasitas Besar"
 
 #. Translators: Output stacker number %d
-#: modules/printbackends/gtkprintbackendcups.c:4709
+#: modules/printbackends/gtkprintbackendcups.c:4707
 #, c-format
 msgctxt "output-bin"
 msgid "Stacker %d"
 msgstr "Penumpuk %d"
 
 #. Translators: Output mailbox number %d
-#: modules/printbackends/gtkprintbackendcups.c:4713
+#: modules/printbackends/gtkprintbackendcups.c:4711
 #, c-format
 msgctxt "output-bin"
 msgid "Mailbox %d"
 msgstr "Kotak-surat %d"
 
 #. Translators: Private mailbox
-#: modules/printbackends/gtkprintbackendcups.c:4717
+#: modules/printbackends/gtkprintbackendcups.c:4715
 msgctxt "output-bin"
 msgid "My Mailbox"
 msgstr "Kotak-suratku"
 
 #. Translators: Output tray number %d
-#: modules/printbackends/gtkprintbackendcups.c:4721
+#: modules/printbackends/gtkprintbackendcups.c:4719
 #, c-format
 msgctxt "output-bin"
 msgid "Tray %d"
 msgstr "Baki %d"
 
 # "Bawaan Pencetak" bukan "Baku Pencetak"^^
-#: modules/printbackends/gtkprintbackendcups.c:5198
+#: modules/printbackends/gtkprintbackendcups.c:5196
 msgid "Printer Default"
 msgstr "Bawaan Pencetak"
 
 #. Translators, this string is used to label the job priority option
 #. * in the print dialog
 #.
-#: modules/printbackends/gtkprintbackendcups.c:5672
+#: modules/printbackends/gtkprintbackendcups.c:5670
 msgid "Job Priority"
 msgstr "Prioritas Tugas"
 
 #. Translators, this string is used to label the billing info entry
 #. * in the print dialog
 #.
-#: modules/printbackends/gtkprintbackendcups.c:5683
+#: modules/printbackends/gtkprintbackendcups.c:5681
 msgid "Billing Info"
 msgstr "Info Tagihan"
 
 #. Translators, these strings are names for various 'standard' cover
 #. * pages that the printing system may support.
 #.
-#: modules/printbackends/gtkprintbackendcups.c:5707
+#: modules/printbackends/gtkprintbackendcups.c:5705
 msgctxt "cover page"
 msgid "None"
 msgstr "Nihil"
 
-#: modules/printbackends/gtkprintbackendcups.c:5708
+#: modules/printbackends/gtkprintbackendcups.c:5706
 msgctxt "cover page"
 msgid "Classified"
 msgstr "Classified"
 
-#: modules/printbackends/gtkprintbackendcups.c:5709
+#: modules/printbackends/gtkprintbackendcups.c:5707
 msgctxt "cover page"
 msgid "Confidential"
 msgstr "Konfidensial"
 
-#: modules/printbackends/gtkprintbackendcups.c:5710
+#: modules/printbackends/gtkprintbackendcups.c:5708
 msgctxt "cover page"
 msgid "Secret"
 msgstr "Rahasia"
 
-#: modules/printbackends/gtkprintbackendcups.c:5711
+#: modules/printbackends/gtkprintbackendcups.c:5709
 msgctxt "cover page"
 msgid "Standard"
 msgstr "Standar"
 
-#: modules/printbackends/gtkprintbackendcups.c:5712
+#: modules/printbackends/gtkprintbackendcups.c:5710
 msgctxt "cover page"
 msgid "Top Secret"
 msgstr "Top Secret"
 
-#: modules/printbackends/gtkprintbackendcups.c:5713
+#: modules/printbackends/gtkprintbackendcups.c:5711
 msgctxt "cover page"
 msgid "Unclassified"
 msgstr "Unclassified"
@@ -7017,7 +7059,7 @@ msgstr "Unclassified"
 #. Translators, this string is used to label the pages-per-sheet option
 #. * in the print dialog
 #.
-#: modules/printbackends/gtkprintbackendcups.c:5725
+#: modules/printbackends/gtkprintbackendcups.c:5723
 msgctxt "printer option"
 msgid "Pages per Sheet"
 msgstr "Halaman per Lembar"
@@ -7025,7 +7067,7 @@ msgstr "Halaman per Lembar"
 #. Translators, this string is used to label the option in the print
 #. * dialog that controls in what order multiple pages are arranged
 #.
-#: modules/printbackends/gtkprintbackendcups.c:5742
+#: modules/printbackends/gtkprintbackendcups.c:5740
 msgctxt "printer option"
 msgid "Page Ordering"
 msgstr "Urutan Halaman"
@@ -7034,7 +7076,7 @@ msgstr "Urutan Halaman"
 #. * a print job is printed. Possible values are 'now', a specified time,
 #. * or 'on hold'
 #.
-#: modules/printbackends/gtkprintbackendcups.c:5819
+#: modules/printbackends/gtkprintbackendcups.c:5817
 msgctxt "printer option"
 msgid "Print at"
 msgstr "Dicetak pada"
@@ -7042,7 +7084,7 @@ msgstr "Dicetak pada"
 #. Translators: this is the name of the option that allows the user
 #. * to specify a time when a print job will be printed.
 #.
-#: modules/printbackends/gtkprintbackendcups.c:5830
+#: modules/printbackends/gtkprintbackendcups.c:5828
 msgctxt "printer option"
 msgid "Print at time"
 msgstr "Dicetak pada waktu"
@@ -7052,19 +7094,19 @@ msgstr "Dicetak pada waktu"
 #. * the width and height in points. E.g: "Custom
 #. * 230.4x142.9"
 #.
-#: modules/printbackends/gtkprintbackendcups.c:5877
+#: modules/printbackends/gtkprintbackendcups.c:5875
 #, c-format
 msgid "Custom %s×%s"
 msgstr "Gubahan %sx%s"
 
 #. TRANSLATORS: this is the ICC color profile to use for this job
-#: modules/printbackends/gtkprintbackendcups.c:5988
+#: modules/printbackends/gtkprintbackendcups.c:5986
 msgctxt "printer option"
 msgid "Printer Profile"
 msgstr "Profil Pencetak"
 
 #. TRANSLATORS: this is when color profile information is unavailable
-#: modules/printbackends/gtkprintbackendcups.c:5995
+#: modules/printbackends/gtkprintbackendcups.c:5993
 msgctxt "printer option value"
 msgid "Unavailable"
 msgstr "Tak tersedia"
@@ -7179,7 +7221,8 @@ msgstr ""
 #: tools/gtk-builder-tool-enumerate.c:56 tools/gtk-builder-tool-preview.c:179
 #: tools/gtk-builder-tool-preview.c:180 tools/gtk-builder-tool-screenshot.c:360
 #: tools/gtk-builder-tool-simplify.c:2529 tools/gtk-builder-tool-validate.c:261
-#: tools/gtk-rendernode-tool-info.c:208 tools/gtk-rendernode-tool-show.c:102
+#: tools/gtk-path-tool-render.c:121 tools/gtk-rendernode-tool-info.c:214
+#: tools/gtk-rendernode-tool-show.c:106
 msgid "FILE"
 msgstr "BERKAS"
 
@@ -7211,8 +7254,9 @@ msgid "Use style from CSS file"
 msgstr "Gunakan gaya dari berkas CSS"
 
 #: tools/gtk-builder-tool-preview.c:187 tools/gtk-builder-tool-screenshot.c:370
-#: tools/gtk-builder-tool-validate.c:268 tools/gtk-rendernode-tool-show.c:109
-#: tools/gtk-rendernode-tool-render.c:204
+#: tools/gtk-builder-tool-validate.c:268
+#: tools/gtk-rendernode-tool-benchmark.c:106
+#: tools/gtk-rendernode-tool-render.c:203 tools/gtk-rendernode-tool-show.c:113
 #, c-format
 msgid "Could not initialize windowing system\n"
 msgstr "Tidak bisa menginisialisasi sistem jendela\n"
@@ -7257,13 +7301,13 @@ msgstr ""
 "Gunakan --force untuk menimpa.\n"
 
 #: tools/gtk-builder-tool-screenshot.c:332
-#: tools/gtk-rendernode-tool-render.c:172
+#: tools/gtk-rendernode-tool-render.c:171
 #, c-format
 msgid "Output written to %s.\n"
 msgstr "Keluaran ditulis ke %s.\n"
 
 #: tools/gtk-builder-tool-screenshot.c:336
-#: tools/gtk-rendernode-tool-render.c:176
+#: tools/gtk-rendernode-tool-render.c:175
 #, c-format
 msgid "Failed to save %s: %s\n"
 msgstr "Gagal menyimpan %s: %s\n"
@@ -7281,7 +7325,8 @@ msgid "Overwrite existing file"
 msgstr "Timpa berkas yang sudah ada"
 
 #: tools/gtk-builder-tool-screenshot.c:363
-#: tools/gtk-rendernode-tool-render.c:197
+#: tools/gtk-rendernode-tool-benchmark.c:97
+#: tools/gtk-rendernode-tool-render.c:196
 msgid "FILE…"
 msgstr "BERKAS…"
 
@@ -7440,8 +7485,370 @@ msgstr "%s: tak ada aplikasi %s"
 msgid "%s: error launching application: %s\n"
 msgstr "%s: galat saat meluncurkan aplikasi: %s\n"
 
-#: tools/gtk-rendernode-tool.c:35
+#: tools/gtk-path-tool.c:35
+#, fuzzy, c-format
+msgid ""
+"Usage:\n"
+"  gtk4-path-tool [COMMAND] [OPTION…] PATH\n"
+"\n"
+"Perform various tasks on paths.\n"
+"\n"
+"Commands:\n"
+"  decompose    Decompose the path\n"
+"  reverse      Reverse the path\n"
+"  restrict     Restrict the path to a segment\n"
+"  show         Display the path in a window\n"
+"  render       Render the path as an image\n"
+"  info         Print information about the path\n"
+"\n"
+msgstr ""
+"Penggunaan:\n"
+"  gtk4-path-tool [PERINTAH] [OPSI...] JALAN\n"
+"\n"
+"Lakukan berbagai tugas di jalur.\n"
+"\n"
+"Perintah:\n"
+"  membusuk Menguraikan jalur\n"
+"  membalikkan Membalikkan jalur\n"
+"  membatasi Membatasi jalur ke segmen\n"
+"  memperlihatkan Menampilkan jalur di jendela\n"
+"  render Merender jalur sebagai gambar\n"
+"  info Mencetak informasi tentang jalur\n"
+"\n"
+
+#: tools/gtk-path-tool-decompose.c:84
+#, fuzzy
+msgid "Allow quadratic Bézier curves"
+msgstr "Memungkinkan kurva Bézier kuadrat"
+
+#: tools/gtk-path-tool-decompose.c:85
+#, fuzzy
+msgid "Allow cubic Bézier curves"
+msgstr "Biarkan kurva Bézier kubik"
+
+#: tools/gtk-path-tool-decompose.c:86
+#, fuzzy
+msgid "Allow conic Bézier curves"
+msgstr "Biarkan kurva Bézier berbentuk kerucut"
+
+#: tools/gtk-path-tool-decompose.c:87 tools/gtk-path-tool-info.c:88
+#: tools/gtk-path-tool-render.c:125 tools/gtk-path-tool-restrict.c:38
+#: tools/gtk-path-tool-reverse.c:34 tools/gtk-path-tool-show.c:147
+msgid "PATH"
+msgstr "PATH"
+
+#: tools/gtk-path-tool-decompose.c:99
+#, fuzzy
+msgid "Decompose a path."
+msgstr "Menguraikan jalan."
+
+#: tools/gtk-path-tool-decompose.c:112 tools/gtk-path-tool-info.c:113
+#: tools/gtk-path-tool-restrict.c:64 tools/gtk-path-tool-reverse.c:58
+#, fuzzy
+msgid "No paths given."
+msgstr "Tidak ada jalan yang diberikan."
+
+#: tools/gtk-path-tool-decompose.c:140 tools/gtk-path-tool-restrict.c:94
+#: tools/gtk-path-tool-reverse.c:78
+#, fuzzy
+msgid "That didn't work out."
+msgstr "Itu tidak berhasil."
+
+#: tools/gtk-path-tool-info.c:100
+#, fuzzy
+#| msgid "Provide information about the render node."
+msgid "Print information about a path."
+msgstr "Menyediakan informasi tentang simpul render."
+
+#: tools/gtk-path-tool-info.c:121
+msgid "Path is empty."
+msgstr "Path kosong."
+
+#: tools/gtk-path-tool-info.c:127
+msgid "Path is closed"
+msgstr "Path tertutup"
+
+#: tools/gtk-path-tool-info.c:129
+msgid "Path length"
+msgstr "Panjang path"
+
+#: tools/gtk-path-tool-info.c:138
 #, c-format
+msgid "%d contours"
+msgstr "%d kontur"
+
+#: tools/gtk-path-tool-info.c:140
+#, c-format
+msgid "%d operations"
+msgstr "%d operasi"
+
+#: tools/gtk-path-tool-info.c:144
+#, c-format
+msgid "%d lines"
+msgstr "%d garis"
+
+#: tools/gtk-path-tool-info.c:149
+#, c-format
+msgid "%d quadratics"
+msgstr "%d kuadratik"
+
+#: tools/gtk-path-tool-info.c:154
+#, c-format
+msgid "%d cubics"
+msgstr "%d kubik"
+
+#: tools/gtk-path-tool-info.c:159
+#, c-format
+msgid "%d conics"
+msgstr "%d kerucut"
+
+#: tools/gtk-path-tool-render.c:117 tools/gtk-path-tool-show.c:140
+#, fuzzy
+msgid "Fill the path (the default)"
+msgstr "Mengisi jalur (default)"
+
+#: tools/gtk-path-tool-render.c:118 tools/gtk-path-tool-show.c:141
+#, fuzzy
+msgid "Stroke the path"
+msgstr "_Sapuan ke Tapak"
+
+#: tools/gtk-path-tool-render.c:119 tools/gtk-path-tool-show.c:142
+msgid "Show path points"
+msgstr "Tampilkan titik-titik path"
+
+#: tools/gtk-path-tool-render.c:120 tools/gtk-path-tool-show.c:143
+msgid "Show control points"
+msgstr "Tampilkan titik-titik kontrol"
+
+#: tools/gtk-path-tool-render.c:121
+msgid "The output file"
+msgstr "Berkas keluaran"
+
+#: tools/gtk-path-tool-render.c:122 tools/gtk-path-tool-show.c:144
+msgid "Foreground color"
+msgstr "Warna latar depan"
+
+#: tools/gtk-path-tool-render.c:122 tools/gtk-path-tool-render.c:123
+#: tools/gtk-path-tool-render.c:124 tools/gtk-path-tool-show.c:144
+#: tools/gtk-path-tool-show.c:145 tools/gtk-path-tool-show.c:146
+msgid "COLOR"
+msgstr "WARNA"
+
+#: tools/gtk-path-tool-render.c:123 tools/gtk-path-tool-show.c:145
+msgid "Background color"
+msgstr "Warna latar belakang"
+
+#: tools/gtk-path-tool-render.c:124 tools/gtk-path-tool-show.c:146
+#, fuzzy
+#| msgid "Pick a Color"
+msgid "Point color"
+msgstr "Pilih Warna"
+
+#: tools/gtk-path-tool-render.c:129 tools/gtk-path-tool-show.c:151
+#, fuzzy
+msgid "Fill rule (winding, even-odd)"
+msgstr "Aturan isian (berliku, genap-ganjil)"
+
+#: tools/gtk-path-tool-render.c:129 tools/gtk-path-tool-render.c:133
+#: tools/gtk-path-tool-render.c:134 tools/gtk-path-tool-render.c:135
+#: tools/gtk-path-tool-render.c:136 tools/gtk-path-tool-render.c:137
+#: tools/gtk-path-tool-render.c:138 tools/gtk-path-tool-show.c:151
+#: tools/gtk-path-tool-show.c:155 tools/gtk-path-tool-show.c:156
+#: tools/gtk-path-tool-show.c:157 tools/gtk-path-tool-show.c:158
+#: tools/gtk-path-tool-show.c:159 tools/gtk-path-tool-show.c:160
+msgid "VALUE"
+msgstr "NILAI"
+
+#: tools/gtk-path-tool-render.c:133 tools/gtk-path-tool-show.c:155
+msgid "Line width (number)"
+msgstr "Lebar garis (angka)"
+
+#: tools/gtk-path-tool-render.c:134 tools/gtk-path-tool-show.c:156
+#, fuzzy
+msgid "Line cap (butt, round, square)"
+msgstr "Tutup garis (pantat, bulat, persegi)"
+
+#: tools/gtk-path-tool-render.c:135 tools/gtk-path-tool-show.c:157
+msgid "Line join (miter, miter-clip, round, bevel, arcs)"
+msgstr "Gabungan garis (miter, miter-clip, round, bevel, arcs)"
+
+#: tools/gtk-path-tool-render.c:136 tools/gtk-path-tool-show.c:158
+#, fuzzy
+msgid "Miter limit (number)"
+msgstr "Batas mitra (angka)"
+
+#: tools/gtk-path-tool-render.c:137 tools/gtk-path-tool-show.c:159
+msgid "Dash pattern (comma-separated numbers)"
+msgstr "Pola putus-putus (angka yang dipisahkan koma)"
+
+#: tools/gtk-path-tool-render.c:138 tools/gtk-path-tool-show.c:160
+#, fuzzy
+msgid "Dash offset (number)"
+msgstr "Offset tanda hubung (angka)"
+
+#: tools/gtk-path-tool-render.c:161 tools/gtk-path-tool-show.c:172
+#, fuzzy
+#| msgid "Could not initialize windowing system\n"
+msgid "Could not initialize windowing system"
+msgstr "Tidak bisa menginisialisasi sistem jendela\n"
+
+#: tools/gtk-path-tool-render.c:168
+#, fuzzy
+#| msgid "Render a .node file to an image."
+msgid "Render the path to a png image."
+msgstr "Render suatu berkas .node ke suatu gambar."
+
+#: tools/gtk-path-tool-render.c:173 tools/gtk-path-tool-show.c:183
+#, fuzzy
+msgid "Options related to filling"
+msgstr "Opsi yang terkait dengan pengisian"
+
+#: tools/gtk-path-tool-render.c:174 tools/gtk-path-tool-show.c:184
+#, fuzzy
+#| msgid "Show other locations"
+msgid "Show help for fill options"
+msgstr "Tampilkan lokasi lain"
+
+#: tools/gtk-path-tool-render.c:181 tools/gtk-path-tool-show.c:191
+#, fuzzy
+msgid "Options related to stroking"
+msgstr "Opsi yang terkait dengan membelai"
+
+#: tools/gtk-path-tool-render.c:182 tools/gtk-path-tool-show.c:192
+#, fuzzy
+#| msgid "Show other locations"
+msgid "Show help for stroke options"
+msgstr "Tampilkan lokasi lain"
+
+#: tools/gtk-path-tool-render.c:199 tools/gtk-path-tool-show.c:209
+#, fuzzy
+#| msgid "Reason not specified"
+msgid "No path specified"
+msgstr "Alasan tidak ditentukan"
+
+#: tools/gtk-path-tool-render.c:205
+#, fuzzy
+#| msgid "Can only preview a single .ui file\n"
+msgid "Can only render a single path"
+msgstr "Hanya dapat memratinjau satu berkas .ui\n"
+
+#: tools/gtk-path-tool-render.c:250 tools/gtk-path-tool-show.c:221
+#, fuzzy
+msgid "fill rule"
+msgstr "Aturan Pengisian"
+
+#: tools/gtk-path-tool-render.c:255 tools/gtk-path-tool-show.c:226
+#, fuzzy
+msgid "line cap"
+msgstr "Tudung Garis"
+
+#: tools/gtk-path-tool-render.c:256 tools/gtk-path-tool-show.c:227
+#, fuzzy
+msgid "line join"
+msgstr "gabung baris"
+
+#: tools/gtk-path-tool-render.c:310
+#, fuzzy, c-format
+#| msgid "Saving CSS failed"
+msgid "Saving png to '%s' failed"
+msgstr "Penyimpanan CSS gagal"
+
+#: tools/gtk-path-tool-render.c:317
+#, fuzzy, c-format
+#| msgid "Output written to %s.\n"
+msgid "Output written to '%s'."
+msgstr "Keluaran ditulis ke %s.\n"
+
+#: tools/gtk-path-tool-restrict.c:36
+#, fuzzy
+msgid "Beginning of segment"
+msgstr "Awal segmen"
+
+#: tools/gtk-path-tool-restrict.c:36 tools/gtk-path-tool-restrict.c:37
+msgid "LENGTH"
+msgstr "PANJANG"
+
+#: tools/gtk-path-tool-restrict.c:37
+msgid "End of segment"
+msgstr "Akhir segmen"
+
+#: tools/gtk-path-tool-restrict.c:51
+#, fuzzy
+msgid "Restrict a path to a segment."
+msgstr "Batasi jalur ke segmen."
+
+#: tools/gtk-path-tool-reverse.c:45
+#, fuzzy
+#| msgid "Reverse portrait"
+msgid "Reverse a path."
+msgstr "Tegak terjungkir"
+
+#: tools/gtk-path-tool-show.c:46 tools/gtk-path-tool-show.c:88
+#, fuzzy
+#| msgid "Pre_view"
+msgid "Path Preview"
+msgstr "_Pratinjau"
+
+#: tools/gtk-path-tool-show.c:180
+#, fuzzy
+msgid "Display the path."
+msgstr "Tampilkan jalur."
+
+#: tools/gtk-path-tool-show.c:215
+#, fuzzy
+#| msgid "Can only preview a single .ui file\n"
+msgid "Can only show a single path"
+msgstr "Hanya dapat memratinjau satu berkas .ui\n"
+
+#: tools/gtk-path-tool-utils.c:58
+#, fuzzy, c-format
+#| msgid "Failed to read “%s”: %s\n"
+msgid "Failed to read from standard input: %s\n"
+msgstr "Gagal membaca \"%s\": %s\n"
+
+#: tools/gtk-path-tool-utils.c:64
+#, fuzzy, c-format
+#| msgid "Error parsing commandline options: %s\n"
+msgid "Error reading from standard input: %s\n"
+msgstr "Galat sewaktu mengurai opsi baris perintah: %s\n"
+
+#: tools/gtk-path-tool-utils.c:83
+#, c-format
+msgid "Failed to parse '%s' as path.\n"
+msgstr "Gagal mengurai '%s' sebagai path.\n"
+
+#: tools/gtk-path-tool-utils.c:109
+#, c-format
+msgid "Failed to parse '%s' as %s."
+msgstr "Gagal mengurai '%s' sebagai %s."
+
+#: tools/gtk-path-tool-utils.c:111
+msgid "Possible values: "
+msgstr "Nilai yang mungkin:"
+
+#: tools/gtk-path-tool-utils.c:135
+#, c-format
+msgid "Could not parse '%s' as color"
+msgstr "Tidak bisa mengurai '%s' sebagai warna"
+
+#: tools/gtk-path-tool-utils.c:163
+#, c-format
+msgid "Failed to parse '%s' as number"
+msgstr "Gagal mengurai '%s' sebagai angka"
+
+#: tools/gtk-rendernode-tool.c:35
+#, fuzzy, c-format
+#| msgid ""
+#| "Usage:\n"
+#| "  gtk4-rendernode-tool [COMMAND] [OPTION…] FILE\n"
+#| "\n"
+#| "Perform various tasks on GTK render nodes.\n"
+#| "\n"
+#| "Commands:\n"
+#| "  info         Provide information about the node\n"
+#| "  show         Show the node\n"
+#| "  render       Take a screenshot of the node\n"
+#| "\n"
 msgid ""
 "Usage:\n"
 "  gtk4-rendernode-tool [COMMAND] [OPTION…] FILE\n"
@@ -7449,6 +7856,8 @@ msgid ""
 "Perform various tasks on GTK render nodes.\n"
 "\n"
 "Commands:\n"
+"  benchmark    Benchmark rendering of a node\n"
+"  compare      Compare nodes or images\n"
 "  info         Provide information about the node\n"
 "  show         Show the node\n"
 "  render       Take a screenshot of the node\n"
@@ -7465,49 +7874,79 @@ msgstr ""
 "  render       Mengambil cuplikan layar dari simpul\n"
 "\n"
 
-#: tools/gtk-rendernode-tool-info.c:185
-#, c-format
-msgid "Number of nodes: %u\n"
-msgstr "Cacah simpul: %u\n"
+#: tools/gtk-rendernode-tool-benchmark.c:94
+#, fuzzy
+#| msgid "Renderer to use"
+msgid "Add renderer to benchmark"
+msgstr "Perender yang dipakai"
 
-#: tools/gtk-rendernode-tool-info.c:192
-#, c-format
-msgid "Depth: %u\n"
-msgstr "Kedalaman: %u\n"
+#: tools/gtk-rendernode-tool-benchmark.c:94
+#: tools/gtk-rendernode-tool-render.c:195
+msgid "RENDERER"
+msgstr "PERENDER"
 
-#: tools/gtk-rendernode-tool-info.c:195
-#, c-format
-msgid "Bounds: %g x %g\n"
-msgstr "Batas: %g x %g\n"
+#: tools/gtk-rendernode-tool-benchmark.c:95
+#, fuzzy
+msgid "Number of runs with each renderer"
+msgstr "Jumlah eksekusi dengan setiap perender"
 
-#: tools/gtk-rendernode-tool-info.c:196
-#, c-format
-msgid "Origin: %g %g\n"
-msgstr "Asal: %g %g\n"
+#: tools/gtk-rendernode-tool-benchmark.c:95
+#, fuzzy
+msgid "RUNS"
+msgstr ""
+"• keamanan perangkat lunak yang berjalan langsung pada perangkat keras."
 
-#: tools/gtk-rendernode-tool-info.c:217
-msgid "Provide information about the render node."
-msgstr "Menyediakan informasi tentang simpul render."
+#: tools/gtk-rendernode-tool-benchmark.c:96
+#, fuzzy
+msgid "Don’t download result/wait for GPU to finish"
+msgstr "Jangan unduh hasil/tunggu GPU selesai"
 
-#: tools/gtk-rendernode-tool-info.c:230 tools/gtk-rendernode-tool-show.c:130
-#: tools/gtk-rendernode-tool-render.c:225
+#: tools/gtk-rendernode-tool-benchmark.c:114
+#, fuzzy
+msgid "Benchmark rendering of a .node file."
+msgstr "Rendering benchmark file .node."
+
+#: tools/gtk-rendernode-tool-benchmark.c:127
+#: tools/gtk-rendernode-tool-info.c:236 tools/gtk-rendernode-tool-render.c:224
+#: tools/gtk-rendernode-tool-show.c:134
 #, c-format
 msgid "No .node file specified\n"
 msgstr "Tidak ada berkas .node yang ditentukan\n"
 
-#: tools/gtk-rendernode-tool-info.c:236
+#: tools/gtk-rendernode-tool-benchmark.c:133
+#, fuzzy, c-format
+#| msgid "Can only accept a single .node file\n"
+msgid "Can only benchmark a single .node file\n"
+msgstr "Hanya dapat menerima satu berkas .node\n"
+
+#: tools/gtk-rendernode-tool-info.c:191
+#, c-format
+msgid "Number of nodes: %u\n"
+msgstr "Cacah simpul: %u\n"
+
+#: tools/gtk-rendernode-tool-info.c:198
+#, c-format
+msgid "Depth: %u\n"
+msgstr "Kedalaman: %u\n"
+
+#: tools/gtk-rendernode-tool-info.c:201
+#, c-format
+msgid "Bounds: %g x %g\n"
+msgstr "Batas: %g x %g\n"
+
+#: tools/gtk-rendernode-tool-info.c:202
+#, c-format
+msgid "Origin: %g %g\n"
+msgstr "Asal: %g %g\n"
+
+#: tools/gtk-rendernode-tool-info.c:223
+msgid "Provide information about the render node."
+msgstr "Menyediakan informasi tentang simpul render."
+
+#: tools/gtk-rendernode-tool-info.c:242
 #, c-format
 msgid "Can only accept a single .node file\n"
 msgstr "Hanya dapat menerima satu berkas .node\n"
-
-#: tools/gtk-rendernode-tool-show.c:117
-msgid "Show the render node."
-msgstr "Menampilkan simpul render."
-
-#: tools/gtk-rendernode-tool-show.c:136
-#, c-format
-msgid "Can only preview a single .node file\n"
-msgstr "Hanya dapat memratinjau satu berkas .node\n"
 
 #: tools/gtk-rendernode-tool-render.c:123
 #, c-format
@@ -7523,28 +7962,50 @@ msgstr ""
 msgid "Failed to generate SVG: %s\n"
 msgstr "Gagal menghasilkan SVG: %s\n"
 
-#: tools/gtk-rendernode-tool-render.c:196
+#: tools/gtk-rendernode-tool-render.c:150
+#, fuzzy, c-format
+#| msgid "Failed to rewrite header\n"
+msgid "Failed to create renderer: %s\n"
+msgstr "Gagal menulis ulang judul\n"
+
+#: tools/gtk-rendernode-tool-render.c:195
 msgid "Renderer to use"
 msgstr "Perender yang dipakai"
 
-#: tools/gtk-rendernode-tool-render.c:196
-msgid "RENDERER"
-msgstr "PERENDER"
-
-#: tools/gtk-rendernode-tool-render.c:212
+#: tools/gtk-rendernode-tool-render.c:211
 msgid "Render a .node file to an image."
 msgstr "Render suatu berkas .node ke suatu gambar."
 
-#: tools/gtk-rendernode-tool-render.c:231
+#: tools/gtk-rendernode-tool-render.c:230
 #, c-format
 msgid "Can only render a single .node file to a single output file\n"
 msgstr ""
 "Hanya dapat merender satu berkas .node ke sebuah berkas keluaran tunggal\n"
 
-#: tools/gtk-rendernode-tool-utils.c:51
+#: tools/gtk-rendernode-tool-show.c:105
+#, fuzzy
+msgid "Don't add a titlebar"
+msgstr "Jangan menambahkan bilah judul"
+
+#: tools/gtk-rendernode-tool-show.c:121
+msgid "Show the render node."
+msgstr "Menampilkan simpul render."
+
+#: tools/gtk-rendernode-tool-show.c:140
+#, c-format
+msgid "Can only preview a single .node file\n"
+msgstr "Hanya dapat memratinjau satu berkas .node\n"
+
+#: tools/gtk-rendernode-tool-utils.c:54
 #, c-format
 msgid "Error at %s: %s\n"
 msgstr "Galat di %s: %s\n"
+
+#: tools/gtk-rendernode-tool-utils.c:72
+#, fuzzy, c-format
+#| msgid "Failed to open file %s : %s\n"
+msgid "Failed to load node file: %s\n"
+msgstr "Gagal membuka berkas %s: %s\n"
 
 #: tools/updateiconcache.c:1391
 #, c-format
