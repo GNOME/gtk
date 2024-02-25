@@ -2998,6 +2998,8 @@ gsk_gpu_node_processor_add_glyph_node (GskGpuNodeProcessor *self,
   float scale, inv_scale;
   GdkRGBA color;
   gboolean glyph_align;
+  GskGpuImage *last_image;
+  guint32 descriptor = 0;
 
   if (self->opacity < 1.0 &&
       gsk_text_node_has_color_glyphs (node))
@@ -3021,12 +3023,12 @@ gsk_gpu_node_processor_add_glyph_node (GskGpuNodeProcessor *self,
   scale = MAX (graphene_vec2_get_x (&self->scale), graphene_vec2_get_y (&self->scale));
   inv_scale = 1.f / scale;
 
+  last_image = NULL;
   for (i = 0; i < num_glyphs; i++)
     {
       GskGpuImage *image;
       graphene_rect_t glyph_bounds, glyph_tex_rect;
       graphene_point_t glyph_offset, glyph_origin;
-      guint32 descriptor;
       GskGpuGlyphLookupFlags flags;
 
       glyph_origin = GRAPHENE_POINT_INIT (offset.x + (float) glyphs[i].geometry.x_offset / PANGO_SCALE,
@@ -3059,7 +3061,13 @@ gsk_gpu_node_processor_add_glyph_node (GskGpuNodeProcessor *self,
       gsk_rect_scale (&GRAPHENE_RECT_INIT(0, 0, glyph_bounds.size.width, glyph_bounds.size.height), inv_scale, inv_scale, &glyph_bounds);
       glyph_origin = GRAPHENE_POINT_INIT (glyph_origin.x - glyph_offset.x * inv_scale,
                                           glyph_origin.y - glyph_offset.y * inv_scale);
-      descriptor = gsk_gpu_node_processor_add_image (self, image, GSK_GPU_SAMPLER_DEFAULT);
+
+      if (image != last_image)
+        {
+          descriptor = gsk_gpu_node_processor_add_image (self, image, GSK_GPU_SAMPLER_DEFAULT);
+          last_image = image;
+        }
+
       if (glyphs[i].attr.is_color)
         gsk_gpu_texture_op (self->frame,
                             gsk_gpu_clip_get_shader_clip (&self->clip, &glyph_offset, &glyph_bounds),
