@@ -2055,7 +2055,7 @@ gsk_gpu_node_processor_add_texture_scale_node (GskGpuNodeProcessor *self,
   guint32 descriptor;
   gboolean need_mipmap, need_offscreen;
 
-  need_offscreen = self->modelview != NULL || 
+  need_offscreen = self->modelview != NULL ||
             !graphene_vec2_equal (&self->scale, graphene_vec2_one ());
   if (need_offscreen)
     {
@@ -3054,7 +3054,7 @@ gsk_gpu_node_processor_add_glyph_node (GskGpuNodeProcessor *self,
                                                  &glyph_offset);
 
       gsk_rect_scale (&GRAPHENE_RECT_INIT (-glyph_bounds.origin.x, -glyph_bounds.origin.y, gsk_gpu_image_get_width (image), gsk_gpu_image_get_height (image)), inv_scale, inv_scale, &glyph_tex_rect);
-      gsk_rect_scale (&GRAPHENE_RECT_INIT(0, 0, glyph_bounds.size.width, glyph_bounds.size.height), inv_scale, inv_scale, &glyph_bounds);
+      gsk_rect_scale (&GRAPHENE_RECT_INIT (0, 0, glyph_bounds.size.width, glyph_bounds.size.height), inv_scale, inv_scale, &glyph_bounds);
       glyph_origin = GRAPHENE_POINT_INIT (glyph_origin.x - glyph_offset.x * inv_scale,
                                           glyph_origin.y - glyph_offset.y * inv_scale);
       descriptor = gsk_gpu_node_processor_add_image (self, image, GSK_GPU_SAMPLER_DEFAULT);
