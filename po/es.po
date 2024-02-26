@@ -16,8 +16,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2024-02-20 18:15+0000\n"
-"PO-Revision-Date: 2024-02-21 12:33+0100\n"
+"POT-Creation-Date: 2024-02-23 01:06+0000\n"
+"PO-Revision-Date: 2024-02-26 16:25+0100\n"
 "Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
 "Language-Team: Spanish - Spain <gnome-es-list@gnome.org>\n"
 "Language: es_ES\n"
@@ -1795,6 +1795,11 @@ msgctxt "accessibility"
 msgid "comment"
 msgstr "comando"
 
+#: gtk/gtkaccessible.c:874
+msgctxt "accessibility"
+msgid "terminal"
+msgstr "terminal"
+
 #: gtk/gtkalertdialog.c:668 gtk/print/gtkcustompaperunixdialog.c:322
 #: gtk/gtkmessagedialog.c:166 gtk/ui/gtkassistant.ui:40
 msgid "_Close"
@@ -2370,7 +2375,7 @@ msgid "If you delete an item, it will be permanently lost."
 msgstr "Si elimina un elemento, se perderña definitivamente."
 
 #: gtk/gtkfilechooserwidget.c:1188 gtk/gtkfilechooserwidget.c:1786
-#: gtk/gtklabel.c:5702 gtk/gtktext.c:6150 gtk/gtktextview.c:9018
+#: gtk/gtklabel.c:5712 gtk/gtktext.c:6193 gtk/gtktextview.c:9080
 msgid "_Delete"
 msgstr "_Eliminar"
 
@@ -2709,31 +2714,31 @@ msgstr "Cerrar"
 msgid "Close the infobar"
 msgstr "Cerrar la barra de información"
 
-#: gtk/gtklabel.c:5699 gtk/gtktext.c:6138 gtk/gtktextview.c:9006
+#: gtk/gtklabel.c:5709 gtk/gtktext.c:6181 gtk/gtktextview.c:9068
 msgid "Cu_t"
 msgstr "Cor_tar"
 
-#: gtk/gtklabel.c:5700 gtk/gtktext.c:6142 gtk/gtktextview.c:9010
+#: gtk/gtklabel.c:5710 gtk/gtktext.c:6185 gtk/gtktextview.c:9072
 msgid "_Copy"
 msgstr "_Copiar"
 
-#: gtk/gtklabel.c:5701 gtk/gtktext.c:6146 gtk/gtktextview.c:9014
+#: gtk/gtklabel.c:5711 gtk/gtktext.c:6189 gtk/gtktextview.c:9076
 msgid "_Paste"
 msgstr "_Pegar"
 
-#: gtk/gtklabel.c:5707 gtk/gtktext.c:6159 gtk/gtktextview.c:9039
+#: gtk/gtklabel.c:5717 gtk/gtktext.c:6202 gtk/gtktextview.c:9101
 msgid "Select _All"
 msgstr "Seleccionar _todo"
 
-#: gtk/gtklabel.c:5712
+#: gtk/gtklabel.c:5722
 msgid "_Open Link"
 msgstr "_Abrir enlace"
 
-#: gtk/gtklabel.c:5716
+#: gtk/gtklabel.c:5726
 msgid "Copy _Link Address"
 msgstr "Copiar la dirección del _enlace"
 
-#: gtk/gtklabel.c:5760 gtk/gtktext.c:2716 gtk/gtktextview.c:9088
+#: gtk/gtklabel.c:5770 gtk/gtktext.c:2724 gtk/gtktextview.c:9150
 msgid "Context menu"
 msgstr "Menú contextual"
 
@@ -3670,15 +3675,15 @@ msgctxt "accessibility"
 msgid "Sidebar"
 msgstr "Barra lateral"
 
-#: gtk/gtktext.c:6164 gtk/gtktextview.c:9044
+#: gtk/gtktext.c:6207 gtk/gtktextview.c:9106
 msgid "Insert _Emoji"
 msgstr "Insertar _emoticono"
 
-#: gtk/gtktextview.c:9026
+#: gtk/gtktextview.c:9088
 msgid "_Undo"
 msgstr "_Deshacer"
 
-#: gtk/gtktextview.c:9030
+#: gtk/gtktextview.c:9092
 msgid "_Redo"
 msgstr "_Rehacer"
 
@@ -4430,6 +4435,8 @@ msgid ""
 "Tints all the places where the current renderer uses Cairo instead of the "
 "GPU."
 msgstr ""
+"Colorea todas las partes en las que el renderizador actual usa Cairo en "
+"lugar de GPU."
 
 #: gtk/inspector/visual.ui:436
 msgid "Show Cairo Rendering"
@@ -4468,10 +4475,8 @@ msgid "Show Accessibility warnings"
 msgstr "Mostrar advertencias de accesibilidad"
 
 #: gtk/inspector/visual.ui:661
-#, fuzzy
-#| msgid "Show Graphic Updates"
 msgid "Show Graphics Offload"
-msgstr "Mostrar actualizaciones de gráficos"
+msgstr "Mostrar descarga de gráficos"
 
 #: gtk/inspector/visual.ui:693
 msgid "Inspect Inspector"
@@ -7511,19 +7516,7 @@ msgid "%s: error launching application: %s\n"
 msgstr "%s: error al lanzar la aplicación: %s\n"
 
 #: tools/gtk-path-tool.c:35
-#, fuzzy, c-format
-#| msgid ""
-#| "Usage:\n"
-#| "  gtk4-path-tool [COMMAND] [OPTION…] PATH\n"
-#| "\n"
-#| "Perform various tasks on paths.\n"
-#| "\n"
-#| "Commands:\n"
-#| "  decompose    Decompose the path\n"
-#| "  show         Display the path in a window\n"
-#| "  render       Render the path as an image\n"
-#| "  info         Print information about the path\n"
-#| "\n"
+#, c-format
 msgid ""
 "Usage:\n"
 "  gtk4-path-tool [COMMAND] [OPTION…] PATH\n"
@@ -7540,12 +7533,14 @@ msgid ""
 "\n"
 msgstr ""
 "Uso:\n"
-"  gtk4-rendernode-tool [COMANDO] [OPCIÓN…] ARCHIVO\n"
+"  gtk4-path-tool [COMANDO] [OPCIÓN…] ARCHIVO\n"
 "\n"
 "Realiza varias tareas en rutas.\n"
 "\n"
 "Comandos:\n"
 "  decompose    Descompone la ruta\n"
+"  reverse      Invierte la ruta\n"
+"  restrict     Restringe la ruta a un segmento\n"
 "  show         Muestra la ruta en una ventana\n"
 "  render       Renderiza la ruta como una imagen\n"
 "  info         Proporciona información sobre la ruta\n"
@@ -7635,7 +7630,7 @@ msgstr "Rellenar la ruta (lo predeterminado)"
 
 #: tools/gtk-path-tool-render.c:118 tools/gtk-path-tool-show.c:141
 msgid "Stroke the path"
-msgstr ""
+msgstr "Trazar la ruta"
 
 #: tools/gtk-path-tool-render.c:119 tools/gtk-path-tool-show.c:142
 msgid "Show path points"
@@ -7715,7 +7710,7 @@ msgstr "Renderizar la ruta a una imagen .png."
 
 #: tools/gtk-path-tool-render.c:173 tools/gtk-path-tool-show.c:183
 msgid "Options related to filling"
-msgstr ""
+msgstr "Opciones relativas al relleno"
 
 #: tools/gtk-path-tool-render.c:174 tools/gtk-path-tool-show.c:184
 msgid "Show help for fill options"
@@ -7723,7 +7718,7 @@ msgstr "Mostrar ayuda para rellenar opciones"
 
 #: tools/gtk-path-tool-render.c:181 tools/gtk-path-tool-show.c:191
 msgid "Options related to stroking"
-msgstr ""
+msgstr "Opciones relativas al trazado"
 
 #: tools/gtk-path-tool-render.c:182 tools/gtk-path-tool-show.c:192
 msgid "Show help for stroke options"
@@ -7761,7 +7756,7 @@ msgstr "Salida escrita en «%s»."
 
 #: tools/gtk-path-tool-restrict.c:36
 msgid "Beginning of segment"
-msgstr ""
+msgstr "Principio del segmento"
 
 #: tools/gtk-path-tool-restrict.c:36 tools/gtk-path-tool-restrict.c:37
 msgid "LENGTH"
@@ -7826,18 +7821,7 @@ msgid "Failed to parse '%s' as number"
 msgstr "Falló al analizar «%s» como número"
 
 #: tools/gtk-rendernode-tool.c:35
-#, fuzzy, c-format
-#| msgid ""
-#| "Usage:\n"
-#| "  gtk4-rendernode-tool [COMMAND] [OPTION…] FILE\n"
-#| "\n"
-#| "Perform various tasks on GTK render nodes.\n"
-#| "\n"
-#| "Commands:\n"
-#| "  info         Provide information about the node\n"
-#| "  show         Show the node\n"
-#| "  render       Take a screenshot of the node\n"
-#| "\n"
+#, c-format
 msgid ""
 "Usage:\n"
 "  gtk4-rendernode-tool [COMMAND] [OPTION…] FILE\n"
@@ -7846,6 +7830,7 @@ msgid ""
 "\n"
 "Commands:\n"
 "  benchmark    Benchmark rendering of a node\n"
+"  compare      Compare nodes or images\n"
 "  info         Provide information about the node\n"
 "  show         Show the node\n"
 "  render       Take a screenshot of the node\n"
@@ -7857,15 +7842,15 @@ msgstr ""
 "Realiza varias tareas en nodos de renderizado GTK.\n"
 "\n"
 "Comandos:\n"
+"  benchmark    Prueba de renderizado de un nodo\n"
+"  compare      Compara nodos o imágenes\n"
 "  info         Proporciona información sobre el nodo\n"
 "  show         Muestra nodo\n"
 "  render       Hace una captura del nodo\n"
 
 #: tools/gtk-rendernode-tool-benchmark.c:94
-#, fuzzy
-#| msgid "Renderer to use"
 msgid "Add renderer to benchmark"
-msgstr "Renderizador que usar"
+msgstr "Añadir renderizador al banco de pruebas"
 
 #: tools/gtk-rendernode-tool-benchmark.c:94
 #: tools/gtk-rendernode-tool-render.c:195
@@ -7896,10 +7881,9 @@ msgid "No .node file specified\n"
 msgstr "No se ha especificado ningún archivo .node\n"
 
 #: tools/gtk-rendernode-tool-benchmark.c:133
-#, fuzzy, c-format
-#| msgid "Can only accept a single .node file\n"
+#, c-format
 msgid "Can only benchmark a single .node file\n"
-msgstr "Sólo se puede aceptar un único archivo .node\n"
+msgstr "Sólo se puede probar un único archivo .node\n"
 
 #: tools/gtk-rendernode-tool-info.c:191
 #, c-format
