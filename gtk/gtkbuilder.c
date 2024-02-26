@@ -173,10 +173,25 @@
  *
  * ### Child objects
  *
- * A `<child>` element contains an `<object>` element which describes the
- * child object. Most often, child objects are widgets inside a container,
- * but they can also be, e.g., actions in an action group, or columns in a
- * tree model.
+ * Many widgets have properties for child widgets, such as
+ * [property@Gtk.Expander:child]. In this case, the preferred way to
+ * specify the child widget in a ui file is to simply set the property:
+ *
+ * ```xml
+ * <object class="GtkExpander">
+ *   <property name="child">
+ *     <object class="GtkLabel">
+ *     ...
+ *     </object>
+ *   </property>
+ * </object>
+ * ```
+ *
+ * Generic containers that can contain an arbitrary number of children,
+ * such as [class@Gtk.Box] instead use the `<child>` element. A `<child>`
+ * element contains an `<object>` element which describes the child object.
+ * Most often, child objects are widgets inside a container, but they can
+ * also be, e.g., actions in an action group, or columns in a tree model.
  *
  * Any object type that implements the [iface@Gtk.Buildable] interface can
  * specify how children may be added to it. Since many objects and widgets that
