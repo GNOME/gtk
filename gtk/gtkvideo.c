@@ -243,6 +243,8 @@ gtk_video_map (GtkWidget *widget)
       self->media_stream &&
       gtk_media_stream_is_prepared (self->media_stream))
     gtk_media_stream_play (self->media_stream);
+
+  gtk_video_reveal_cursor (GTK_VIDEO (widget));
 }
 
 static void
@@ -378,8 +380,6 @@ gtk_video_root (GtkWidget *widget)
 
   g_signal_connect (gtk_widget_get_root (widget), "notify::fullscreened",
                     G_CALLBACK (fullscreen_changed), widget);
-
-  gtk_video_reveal_cursor (GTK_VIDEO (widget));
 }
 
 static void
