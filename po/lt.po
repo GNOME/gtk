@@ -15,8 +15,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: lt\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2024-02-17 12:16+0000\n"
-"PO-Revision-Date: 2024-02-17 23:22+0200\n"
+"POT-Creation-Date: 2024-02-23 01:06+0000\n"
+"PO-Revision-Date: 2024-02-26 22:55+0200\n"
 "Last-Translator: Aurimas Černius <aurisc4@gmail.com>\n"
 "Language-Team: Lietuvių <gnome-lt@lists.akl.lt>\n"
 "Language: lt\n"
@@ -124,9 +124,9 @@ msgstr "Nėra suderinamų formatų turinio perdavimui."
 msgid "No GL API allowed."
 msgstr "Nėra leidžiamas GL API."
 
-#: gdk/gdkglcontext.c:442 gdk/win32/gdkglcontext-win32-wgl.c:386
-#: gdk/win32/gdkglcontext-win32-wgl.c:529
-#: gdk/win32/gdkglcontext-win32-wgl.c:573 gdk/x11/gdkglcontext-glx.c:691
+#: gdk/gdkglcontext.c:442 gdk/win32/gdkglcontext-win32-wgl.c:395
+#: gdk/win32/gdkglcontext-win32-wgl.c:538
+#: gdk/win32/gdkglcontext-win32-wgl.c:582 gdk/x11/gdkglcontext-glx.c:691
 msgid "Unable to create a GL context"
 msgstr "Nepavyko sukurti GL konteksto"
 
@@ -714,21 +714,21 @@ msgstr "IDataObject_GetData (0x%x) klaida, grąžinama 0x%lx"
 msgid "Failed to transmute DnD data W32 format 0x%x to %p (%s)"
 msgstr "Nepavyko konvertuoti tempiamų duomenų W32 formato 0x%x į %p (%s)"
 
-#: gdk/win32/gdkglcontext-win32-wgl.c:320
+#: gdk/win32/gdkglcontext-win32-wgl.c:329
 msgid "No GL implementation is available"
 msgstr "Nėra galimo GL realizacijos"
 
-#: gdk/win32/gdkglcontext-win32-wgl.c:395
+#: gdk/win32/gdkglcontext-win32-wgl.c:404
 #, c-format
 msgid "WGL version %d.%d is too low, need at least %d.%d"
 msgstr "WGL versija %d.%d yra per sena. GTK reikalauja bent %d.%d"
 
-#: gdk/win32/gdkglcontext-win32-wgl.c:413
+#: gdk/win32/gdkglcontext-win32-wgl.c:422
 #, c-format
 msgid "GL implementation cannot share GL contexts"
 msgstr "GL realizacija negali dalintis GL kontekstais"
 
-#: gdk/win32/gdkglcontext-win32-wgl.c:693
+#: gdk/win32/gdkglcontext-win32-wgl.c:702
 msgid "No available configurations for the given pixel format"
 msgstr "Nėra galimų konfigūracijų nurodytam pikselių formatui"
 
@@ -1757,6 +1757,11 @@ msgctxt "accessibility"
 msgid "comment"
 msgstr "komentaras"
 
+#: gtk/gtkaccessible.c:874
+msgctxt "accessibility"
+msgid "terminal"
+msgstr "terminalas"
+
 #: gtk/gtkalertdialog.c:668 gtk/print/gtkcustompaperunixdialog.c:322
 #: gtk/gtkmessagedialog.c:166 gtk/ui/gtkassistant.ui:40
 msgid "_Close"
@@ -2330,7 +2335,7 @@ msgid "If you delete an item, it will be permanently lost."
 msgstr "Jei ištrinsite elementą, jis bus negrįžtamai prarastas."
 
 #: gtk/gtkfilechooserwidget.c:1188 gtk/gtkfilechooserwidget.c:1786
-#: gtk/gtklabel.c:5702 gtk/gtktext.c:6147 gtk/gtktextview.c:9018
+#: gtk/gtklabel.c:5712 gtk/gtktext.c:6193 gtk/gtktextview.c:9080
 msgid "_Delete"
 msgstr "Iš_trinti"
 
@@ -2668,31 +2673,31 @@ msgstr "Užverti"
 msgid "Close the infobar"
 msgstr "Užverti informacijos juostą"
 
-#: gtk/gtklabel.c:5699 gtk/gtktext.c:6135 gtk/gtktextview.c:9006
+#: gtk/gtklabel.c:5709 gtk/gtktext.c:6181 gtk/gtktextview.c:9068
 msgid "Cu_t"
 msgstr "_Iškirpti"
 
-#: gtk/gtklabel.c:5700 gtk/gtktext.c:6139 gtk/gtktextview.c:9010
+#: gtk/gtklabel.c:5710 gtk/gtktext.c:6185 gtk/gtktextview.c:9072
 msgid "_Copy"
 msgstr "_Kopijuoti"
 
-#: gtk/gtklabel.c:5701 gtk/gtktext.c:6143 gtk/gtktextview.c:9014
+#: gtk/gtklabel.c:5711 gtk/gtktext.c:6189 gtk/gtktextview.c:9076
 msgid "_Paste"
 msgstr "Į_dėti"
 
-#: gtk/gtklabel.c:5707 gtk/gtktext.c:6156 gtk/gtktextview.c:9039
+#: gtk/gtklabel.c:5717 gtk/gtktext.c:6202 gtk/gtktextview.c:9101
 msgid "Select _All"
 msgstr "P_ažymėti viską"
 
-#: gtk/gtklabel.c:5712
+#: gtk/gtklabel.c:5722
 msgid "_Open Link"
 msgstr "_Atverti nuorodą"
 
-#: gtk/gtklabel.c:5716
+#: gtk/gtklabel.c:5726
 msgid "Copy _Link Address"
 msgstr "Kopijuoti _nuorodos adresą"
 
-#: gtk/gtklabel.c:5760 gtk/gtktext.c:2716 gtk/gtktextview.c:9088
+#: gtk/gtklabel.c:5770 gtk/gtktext.c:2724 gtk/gtktextview.c:9150
 msgid "Context menu"
 msgstr "Kontekstinis meniu"
 
@@ -3536,7 +3541,7 @@ msgstr "Nepavyko perkelti elemento su URI „%s“ į „%s“"
 msgid "No registered application with name “%s” for item with URI “%s” found"
 msgstr "Nerasta registruota programa pavadinimu „%s“ elementui su URI „%s“"
 
-#: gtk/gtksearchentry.c:767
+#: gtk/gtksearchentry.c:810
 msgid "Clear Entry"
 msgstr "Išvalyti lauką"
 
@@ -3627,15 +3632,15 @@ msgctxt "accessibility"
 msgid "Sidebar"
 msgstr "Šoninė juosta"
 
-#: gtk/gtktext.c:6161 gtk/gtktextview.c:9044
+#: gtk/gtktext.c:6207 gtk/gtktextview.c:9106
 msgid "Insert _Emoji"
 msgstr "Įterpti _emoji"
 
-#: gtk/gtktextview.c:9026
+#: gtk/gtktextview.c:9088
 msgid "_Undo"
 msgstr "Atša_ukti"
 
-#: gtk/gtktextview.c:9030
+#: gtk/gtktextview.c:9092
 msgid "_Redo"
 msgstr "Paka_rtoti"
 
@@ -7768,6 +7773,7 @@ msgid ""
 "\n"
 "Commands:\n"
 "  benchmark    Benchmark rendering of a node\n"
+"  compare      Compare nodes or images\n"
 "  info         Provide information about the node\n"
 "  show         Show the node\n"
 "  render       Take a screenshot of the node\n"
@@ -7780,6 +7786,7 @@ msgstr ""
 "\n"
 "Komandos:\n"
 "  benchmark    Mautoti viršūnės piešimą\n"
+"  compare      Lyginti viršūnes ar paveikslėlius\n"
 "  info    Pateikti viršūnės informaciją\n"
 "  show    Rodyti viršūnę\n"
 "  render   Padaryti viršūnės atvaizdą\n"
