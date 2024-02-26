@@ -418,8 +418,8 @@ gtk_at_spi_socket_embed (GtkAtSpiSocket  *self,
  * usually done through a side channel with the remote side, for
  * example using sockets, or reading the output of a subprocess.
  *
- * The remote accessible object at @object_path must be a must
- * have an `org.a11y.atspi.Socket` interface with the `Embedded()`
+ * The remote accessible object at @object_path must support
+ * the `org.a11y.atspi.Socket` interface with the `Embedded()`
  * method.
  *
  * This constructor can fail, most notably if the accessibility
