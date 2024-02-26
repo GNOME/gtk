@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: gtk+ master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
 "POT-Creation-Date: 2024-02-15 02:27+0000\n"
-"PO-Revision-Date: 2024-02-20 20:41+0100\n"
+"PO-Revision-Date: 2024-02-25 18:29+0100\n"
 "Last-Translator: Matej Urbančič <mateju@src.gnome.org>\n"
 "Language-Team: Slovenian GNOME Translation Team <gnome-si@googlegroups.com>\n"
 "Language: sl_SI\n"
@@ -4426,10 +4426,8 @@ msgid ""
 msgstr ""
 
 #: gtk/inspector/visual.ui:436
-#, fuzzy
-#| msgid "Show Fallback Rendering"
 msgid "Show Cairo Rendering"
-msgstr "Pokaži povratno izrisovanje"
+msgstr "Pokaži izrisovanje Cairo"
 
 #: gtk/inspector/visual.ui:461
 msgid "Show Baselines"
@@ -7521,15 +7519,15 @@ msgstr ""
 
 #: tools/gtk-path-tool-decompose.c:84
 msgid "Allow quadratic Bézier curves"
-msgstr ""
+msgstr "Dovoli kvadratne Bezierjeve krivulje"
 
 #: tools/gtk-path-tool-decompose.c:85
 msgid "Allow cubic Bézier curves"
-msgstr ""
+msgstr "Dovoli kubične Bezierjeve krivulje"
 
 #: tools/gtk-path-tool-decompose.c:86
 msgid "Allow conic Bézier curves"
-msgstr ""
+msgstr "Dovoli konične Bezierjeve krivulje"
 
 #: tools/gtk-path-tool-decompose.c:87 tools/gtk-path-tool-info.c:88
 #: tools/gtk-path-tool-render.c:125 tools/gtk-path-tool-restrict.c:38
@@ -7549,7 +7547,7 @@ msgstr "Ni podanih poti."
 #: tools/gtk-path-tool-decompose.c:140 tools/gtk-path-tool-restrict.c:94
 #: tools/gtk-path-tool-reverse.c:78
 msgid "That didn't work out."
-msgstr ""
+msgstr "To se ni obneslo."
 
 #: tools/gtk-path-tool-info.c:100
 #, fuzzy
@@ -7559,15 +7557,15 @@ msgstr "Navesti je traba podrobnosti o vozlišču za izrisovanje."
 
 #: tools/gtk-path-tool-info.c:121
 msgid "Path is empty."
-msgstr ""
+msgstr "Pot ni navedena."
 
 #: tools/gtk-path-tool-info.c:127
 msgid "Path is closed"
-msgstr ""
+msgstr "Pot je zaprta"
 
 #: tools/gtk-path-tool-info.c:129
 msgid "Path length"
-msgstr ""
+msgstr "Dolžina poti"
 
 #: tools/gtk-path-tool-info.c:138
 #, c-format
@@ -7587,17 +7585,17 @@ msgstr "%d vrstic"
 #: tools/gtk-path-tool-info.c:149
 #, c-format
 msgid "%d quadratics"
-msgstr ""
+msgstr "%d kvadratnih"
 
 #: tools/gtk-path-tool-info.c:154
 #, c-format
 msgid "%d cubics"
-msgstr ""
+msgstr "%d kubičnih"
 
 #: tools/gtk-path-tool-info.c:159
 #, c-format
 msgid "%d conics"
-msgstr ""
+msgstr "%d koničnih"
 
 #: tools/gtk-path-tool-render.c:117 tools/gtk-path-tool-show.c:140
 msgid "Fill the path (the default)"
@@ -7608,10 +7606,8 @@ msgid "Stroke the path"
 msgstr ""
 
 #: tools/gtk-path-tool-render.c:119 tools/gtk-path-tool-show.c:142
-#, fuzzy
-#| msgid "Show other locations"
 msgid "Show path points"
-msgstr "Pokaži druga mesta"
+msgstr "Pokaži točke poti"
 
 #: tools/gtk-path-tool-render.c:120 tools/gtk-path-tool-show.c:143
 #, fuzzy
@@ -7621,11 +7617,11 @@ msgstr "Pokaži druga mesta"
 
 #: tools/gtk-path-tool-render.c:121
 msgid "The output file"
-msgstr ""
+msgstr "Odvodna datoteka"
 
 #: tools/gtk-path-tool-render.c:122 tools/gtk-path-tool-show.c:144
 msgid "Foreground color"
-msgstr ""
+msgstr "Barva pisave"
 
 #: tools/gtk-path-tool-render.c:122 tools/gtk-path-tool-render.c:123
 #: tools/gtk-path-tool-render.c:124 tools/gtk-path-tool-show.c:144
@@ -7635,7 +7631,7 @@ msgstr "BARVA"
 
 #: tools/gtk-path-tool-render.c:123 tools/gtk-path-tool-show.c:145
 msgid "Background color"
-msgstr ""
+msgstr "Barva ozadja"
 
 #: tools/gtk-path-tool-render.c:124 tools/gtk-path-tool-show.c:146
 #, fuzzy
@@ -7659,7 +7655,7 @@ msgstr "VREDNOST"
 
 #: tools/gtk-path-tool-render.c:133 tools/gtk-path-tool-show.c:155
 msgid "Line width (number)"
-msgstr ""
+msgstr "Širina vrstice (številka)"
 
 #: tools/gtk-path-tool-render.c:134 tools/gtk-path-tool-show.c:156
 msgid "Line cap (butt, round, square)"
@@ -7777,7 +7773,7 @@ msgstr "Predogled poti"
 
 #: tools/gtk-path-tool-show.c:180
 msgid "Display the path."
-msgstr ""
+msgstr "Pokaži pot"
 
 #: tools/gtk-path-tool-show.c:215
 #, fuzzy
@@ -7811,7 +7807,7 @@ msgstr "Datoteke %s ni mogoče shraniti: %s\n"
 
 #: tools/gtk-path-tool-utils.c:111
 msgid "Possible values: "
-msgstr ""
+msgstr "Mogoče vrednosti: "
 
 #: tools/gtk-path-tool-utils.c:135
 #, fuzzy, c-format
@@ -7875,11 +7871,11 @@ msgstr "IZRISOVALNIK"
 
 #: tools/gtk-rendernode-tool-benchmark.c:95
 msgid "Number of runs with each renderer"
-msgstr ""
+msgstr "Število ponovitev z vsakim izrisovalnikom"
 
 #: tools/gtk-rendernode-tool-benchmark.c:95
 msgid "RUNS"
-msgstr ""
+msgstr "PONOVITVE"
 
 #: tools/gtk-rendernode-tool-benchmark.c:96
 msgid "Don’t download result/wait for GPU to finish"
