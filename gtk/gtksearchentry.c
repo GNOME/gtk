@@ -473,6 +473,8 @@ gtk_search_entry_class_init (GtkSearchEntryClass *klass)
    *
    * The purpose for the `GtkSearchEntry` input used to alter the
    * behaviour of input methods.
+   *
+   * Since: 4.14
    */
   props[PROP_INPUT_PURPOSE] =
       g_param_spec_enum ("input-purpose", NULL, NULL,
@@ -485,6 +487,8 @@ gtk_search_entry_class_init (GtkSearchEntryClass *klass)
    *
    * The hints about input for the `GtkSearchEntry` used to alter the
    * behaviour of input methods.
+   *
+   * Since: 4.14
    */
   props[PROP_INPUT_HINTS] =
       g_param_spec_flags ("input-hints", NULL, NULL,
