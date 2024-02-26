@@ -99,9 +99,7 @@
  * Objects are described by `<object>` elements, which can contain
  * `<property>` elements to set properties, `<signal>` elements which
  * connect signals to handlers, and `<child>` elements, which describe
- * child objects (most often widgets inside a container, but also e.g.
- * actions in an action group, or columns in a tree model). A `<child>`
- * element contains an `<object>` element which describes the child object.
+ * child objects.
  *
  * Typically, the specific kind of object represented by an `<object>`
  * element is specified by the “class” attribute. If the type has not
@@ -173,6 +171,53 @@
  * exception to this rule is that an object has to be constructed before
  * it can be used as the value of a construct-only property.
  *
+ * ### Child objects
+ *
+ * Many widgets have properties for child widgets, such as
+ * [property@Gtk.Expander:child]. In this case, the preferred way to
+ * specify the child widget in a ui file is to simply set the property:
+ *
+ * ```xml
+ * <object class="GtkExpander">
+ *   <property name="child">
+ *     <object class="GtkLabel">
+ *     ...
+ *     </object>
+ *   </property>
+ * </object>
+ * ```
+ *
+ * Generic containers that can contain an arbitrary number of children,
+ * such as [class@Gtk.Box] instead use the `<child>` element. A `<child>`
+ * element contains an `<object>` element which describes the child object.
+ * Most often, child objects are widgets inside a container, but they can
+ * also be, e.g., actions in an action group, or columns in a tree model.
+ *
+ * Any object type that implements the [iface@Gtk.Buildable] interface can
+ * specify how children may be added to it. Since many objects and widgets that
+ * are included with GTK already implement the `GtkBuildable` interface,
+ * typically child objects can be added using the `<child>` element without
+ * having to be concerned about the underlying implementation.
+ *
+ * See the [`GtkWidget` documentation](class.Widget.html#gtkwidget-as-gtkbuildable)
+ * for many examples of using `GtkBuilder` with widgets, including setting
+ * child objects using the `<child>` element.
+ *
+ * A noteworthy special case to the general rule that only objects implementing
+ * `GtkBuildable` may specify how to handle the `<child>` element is that
+ * `GtkBuilder` provides special support for adding objects to a
+ * [class@Gio.ListStore] by using the `<child>` element. For instance:
+ *
+ * ```xml
+ * <object class="GListStore">
+ *   <property name="item-type">MyObject</property>
+ *   <child>
+ *     <object class="MyObject" />
+ *   </child>
+ *   ...
+ * </object>
+ * ```
+ *
  * ### Property bindings
  *
  * It is also possible to bind a property value to another object's
@@ -207,6 +252,11 @@
  *
  * For more information, see the documentation of the
  * [method@GObject.Object.bind_property] method.
+ *
+ * Please note that another way to set up bindings between objects in .ui files
+ * is to use the `GtkExpression` methodology. See the
+ * [`GtkExpression` documentation](class.Expression.html#gtkexpression-in-ui-files)
+ * for more information.
  *
  * ### Internal children
  *

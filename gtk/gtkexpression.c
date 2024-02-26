@@ -150,15 +150,32 @@
  *   <constant type='gchararray'>Hello, world</constant>
  * ```
  *
- * To create a closure expression, use the `<closure>` element. The `type` and `function`
- * attributes specify what function to use for the closure, the content of the element
- * contains the expressions for the parameters. For instance:
+ * To create a closure expression, use the `<closure>` element. The `function`
+ * attribute specifies what function to use for the closure, and the `type`
+ * attribute specifies its return type. The content of the element contains the
+ * expressions for the parameters. For instance:
  *
  * ```xml
  *   <closure type='gchararray' function='combine_args_somehow'>
  *     <constant type='gchararray'>File size:</constant>
  *     <lookup type='GFile' name='size'>myfile</lookup>
  *   </closure>
+ * ```
+ *
+ * To create a property binding, use the `<binding>` element in place of where a
+ * `<property>` tag would ordinarily be used. The `name` and `object` attributes are
+ * supported. The `name` attribute is required, and pertains to the applicable property
+ * name. The `object` attribute is optional. If provided, it will use the specified object
+ * as the `this` object when the expression is evaluated. Here is an example in which the
+ * `label` property of a `GtkLabel` is bound to the `string` property of another arbitrary
+ * object:
+ *
+ * ```xml
+ *   <object class='GtkLabel'>
+ *     <binding name='label'>
+ *       <lookup name='string'>some_other_object</lookup>
+ *     </binding>
+ *   </object>
  * ```
  */
 
