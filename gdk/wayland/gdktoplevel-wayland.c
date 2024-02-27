@@ -458,6 +458,49 @@ gdk_wayland_toplevel_compute_size (GdkSurface *surface)
   return FALSE;
 }
 
+static gboolean
+has_per_edge_tiling_info (GdkToplevelState state)
+{
+  return state & (GDK_TOPLEVEL_STATE_TOP_TILED |
+                  GDK_TOPLEVEL_STATE_RIGHT_TILED |
+                  GDK_TOPLEVEL_STATE_BOTTOM_TILED |
+                  GDK_TOPLEVEL_STATE_LEFT_TILED);
+}
+
+static GdkToplevelState
+infer_edge_constraints (GdkToplevelState state)
+{
+  if (state & (GDK_TOPLEVEL_STATE_MAXIMIZED | GDK_TOPLEVEL_STATE_FULLSCREEN))
+    return state;
+
+  if (!(state & GDK_TOPLEVEL_STATE_TILED) || !has_per_edge_tiling_info (state))
+    return state |
+           GDK_TOPLEVEL_STATE_TOP_RESIZABLE |
+           GDK_TOPLEVEL_STATE_RIGHT_RESIZABLE |
+           GDK_TOPLEVEL_STATE_BOTTOM_RESIZABLE |
+           GDK_TOPLEVEL_STATE_LEFT_RESIZABLE;
+
+  if (!(state & GDK_TOPLEVEL_STATE_TOP_TILED))
+    state |= GDK_TOPLEVEL_STATE_TOP_RESIZABLE;
+  if (!(state & GDK_TOPLEVEL_STATE_RIGHT_TILED))
+    state |= GDK_TOPLEVEL_STATE_RIGHT_RESIZABLE;
+  if (!(state & GDK_TOPLEVEL_STATE_BOTTOM_TILED))
+    state |= GDK_TOPLEVEL_STATE_BOTTOM_RESIZABLE;
+  if (!(state & GDK_TOPLEVEL_STATE_LEFT_TILED))
+    state |= GDK_TOPLEVEL_STATE_LEFT_RESIZABLE;
+
+  return state;
+}
+
+static gboolean
+supports_native_edge_constraints (GdkWaylandToplevel*toplevel)
+{
+  struct gtk_surface1 *gtk_surface = toplevel->display_server.gtk_surface;
+  if (!gtk_surface)
+    return FALSE;
+  return gtk_surface1_get_version (gtk_surface) >= GTK_SURFACE1_CONFIGURE_EDGES_SINCE_VERSION;
+}
+
 static void
 gdk_wayland_toplevel_handle_configure (GdkWaylandSurface *wayland_surface)
 {
@@ -474,6 +517,9 @@ gdk_wayland_toplevel_handle_configure (GdkWaylandSurface *wayland_surface)
 
   new_state = wayland_toplevel->pending.state;
   wayland_toplevel->pending.state = 0;
+
+  if (!supports_native_edge_constraints (wayland_toplevel))
+    new_state = infer_edge_constraints (new_state);
 
   is_resizing = wayland_toplevel->pending.is_resizing;
   wayland_toplevel->pending.is_resizing = FALSE;
@@ -1990,13 +2036,7 @@ gdk_wayland_toplevel_titlebar_gesture (GdkToplevel        *toplevel,
 static gboolean
 gdk_wayland_toplevel_supports_edge_constraints (GdkToplevel *toplevel)
 {
-  GdkWaylandToplevel *wayland_toplevel = GDK_WAYLAND_TOPLEVEL (toplevel);
-  struct gtk_surface1 *gtk_surface = wayland_toplevel->display_server.gtk_surface;
-
-  if (!gtk_surface)
-    return FALSE;
-
-  return gtk_surface1_get_version (gtk_surface) >= GTK_SURFACE1_CONFIGURE_EDGES_SINCE_VERSION;
+  return TRUE;
 }
 
 static void
