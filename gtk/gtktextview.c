@@ -10406,7 +10406,10 @@ gtk_text_view_accessible_text_get_selection (GtkAccessibleText       *self,
   int start, end;
 
    if (!gtk_text_buffer_get_selection_bounds (buffer, &start_iter, &end_iter))
-     return FALSE;
+     {
+       *n_ranges = 0;
+       return FALSE;
+     }
 
   start = gtk_text_iter_get_offset (&start_iter);
   end = gtk_text_iter_get_offset (&end_iter);
