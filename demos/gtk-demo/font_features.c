@@ -600,8 +600,8 @@ update_display (void)
   if (s->len > 0)
     {
       pango_font_description_set_variations (desc, s->str);
-      g_string_free (s, TRUE);
     }
+  g_string_free (s, TRUE);
 
   font_desc = pango_font_description_to_string (desc);
 

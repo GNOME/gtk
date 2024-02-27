@@ -242,6 +242,7 @@ gtk_emoji_chooser_finalize (GObject *object)
     g_source_remove (chooser->populate_idle);
 
   g_clear_pointer (&chooser->data, g_variant_unref);
+  g_clear_pointer (&chooser->iter, g_variant_iter_free);
   g_clear_object (&chooser->settings);
 
   G_OBJECT_CLASS (gtk_emoji_chooser_parent_class)->finalize (object);

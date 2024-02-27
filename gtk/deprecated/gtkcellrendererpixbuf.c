@@ -370,6 +370,7 @@ gtk_cell_renderer_pixbuf_set_property (GObject      *object,
       else
         texture = NULL;
       take_image_definition (cellpixbuf, gtk_image_definition_new_paintable (GDK_PAINTABLE (texture)));
+      g_clear_object (&texture);
       break;
     case PROP_PIXBUF_EXPANDER_OPEN:
       g_clear_object (&priv->pixbuf_expander_open);
