@@ -3471,7 +3471,7 @@ gsk_text_node_serialize_font (GskRenderNode *node,
   PangoFontDescription *desc;
   char *s;
 
-  desc = pango_font_describe (font);
+  desc = pango_font_describe_with_absolute_size (font);
   s = pango_font_description_to_string (desc);
   g_string_append_printf (p->str, "\"%s\"", s);
   g_free (s);
