@@ -56,7 +56,7 @@ container {
     transform {
       child: text {
         color: rgb(46,52,54);
-        font: "Cantarell 11";
+        font: "Cantarell 15px";
         glyphs: "Disabled";
         offset: 145 18;
       }
@@ -120,7 +120,7 @@ container {
       transform {
         child: text {
           color: rgb(46,52,54);
-          font: "Cantarell 11";
+          font: "Cantarell 15px";
           glyphs: "Enabled";
           offset: 147 18;
         }
@@ -163,7 +163,7 @@ container {
       transform {
         child: text {
           color: rgb(46,52,54);
-          font: "Cantarell 11";
+          font: "Cantarell 15px";
           glyphs: "Disabled";
           offset: 145 18;
         }
@@ -209,7 +209,7 @@ container {
       transform {
         child: text {
           color: rgb(46,52,54);
-          font: "Cantarell 11";
+          font: "Cantarell 15px";
           glyphs: "Enabled";
           offset: 147 18;
         }
@@ -272,7 +272,7 @@ container {
       transform {
         child: text {
           color: rgb(46,52,54);
-          font: "Cantarell 11";
+          font: "Cantarell 15px";
           glyphs: "Disabled";
           offset: 123 18;
         }

@@ -1,5 +1,5 @@
 text {
-  font: "text-mixed-color 7.5" url("data:font/ttf;base64,\
+  font: "text-mixed-color 10px" url("data:font/ttf;base64,\
 AAEAAAAKAIAAAwAgQ09MUgATAEEAAAJ8AAAALENQQUwB/wATAAACqAAAABpjbWFwAHcAPQAAATwA\
 AAA0Z2x5Zu8g4kAAAAGEAAAA0mhlYWQmofyJAAAArAAAADZoaGVhDAEEAgAAAOQAAAAkaG10eAQA\
 AQAAAAEoAAAAFGxvY2EAyAD5AAABcAAAABRtYXhwAAwACQAAAQgAAAAgbmFtZX7VdrQAAAJYAAAA\
@@ -18,6 +18,6 @@ AAEAAwAAAA4AAAAA//8A/wD//wAA/wAA\
 }
 
 text {
-  font: "Cantarell 11";
+  font: "Cantarell 15px";
   glyphs: "Hello";
 }
