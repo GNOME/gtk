@@ -771,7 +771,7 @@ emit_text_selection_changed (GtkAtSpiContext *self,
                                    "org.a11y.atspi.Event.Object",
                                    "TextCaretMoved",
                                    g_variant_new ("(siiva{sv})",
-                                                  "", cursor_position, 0, g_variant_new_string (""), NULL),
+                                                  "", cursor_position, 0, g_variant_new_int32 (0), NULL),
                                  NULL);
   else
     g_dbus_connection_emit_signal (self->connection,
@@ -1590,7 +1590,7 @@ gtk_at_spi_context_update_caret_position (GtkATContext *context)
                                                 "",
                                                 (int) offset,
                                                 0,
-                                                g_variant_new_string (""),
+                                                g_variant_new_int32 (0),
                                                 NULL),
                                  NULL);
 }

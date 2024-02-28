@@ -155,11 +155,15 @@ gtk_accessible_text_get_contents_at (GtkAccessibleText            *self,
                                      unsigned int                 *start,
                                      unsigned int                 *end)
 {
+  static const char empty[] = {0};
   GBytes *bytes;
 
   g_return_val_if_fail (GTK_IS_ACCESSIBLE_TEXT (self), NULL);
 
   bytes = GTK_ACCESSIBLE_TEXT_GET_IFACE (self)->get_contents_at (self, offset, granularity, start, end);
+
+  if (bytes == NULL)
+    return g_bytes_new_static (empty, sizeof empty);
 
   return nul_terminate_contents (bytes);
 }
