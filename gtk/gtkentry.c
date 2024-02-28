@@ -4724,7 +4724,7 @@ gtk_entry_drag_gesture_update (GtkGestureDrag *gesture,
           button = gtk_gesture_single_get_current_button (GTK_GESTURE_SINGLE (gesture));
           gtk_drag_begin_with_coordinates (widget, target_list, actions,
                                            button, (GdkEvent*) event,
-                                           priv->drag_start_x + ranges[0],
+                                           priv->drag_start_x + (n_ranges > 0 ? ranges[0] : 0),
                                            priv->drag_start_y);
           g_free (ranges);
 
@@ -9931,7 +9931,7 @@ gtk_entry_drag_begin (GtkWidget      *widget,
       gtk_entry_get_pixel_ranges (entry, &ranges, &n_ranges);
       cairo_surface_get_device_scale (surface, &sx, &sy);
       cairo_surface_set_device_offset (surface,
-                                       -(priv->drag_start_x - ranges[0]) * sx,
+                                       -(priv->drag_start_x - (n_ranges > 0 ? ranges[0] : 0)) * sx,
                                        -(priv->drag_start_y) * sy);
       g_free (ranges);
 
