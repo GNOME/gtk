@@ -325,7 +325,7 @@ stroke bounds of the path.
 | property | syntax              | default             | printed     |
 | -------- | ------------------- | ------------------- | ----------- |
 | color    | `<color>`           | black               | non-default |
-| font     | `<string>` `<url>`? | "Cantarell 11"      | always      |
+| font     | `<string>` `<url>`? | "Cantarell 15px"    | always      |
 | glyphs   | `<glyphs>`          | "Hello"             | always      |
 | offset   | `<point>`           | 0 0                 | non-default |
 
