@@ -1390,9 +1390,25 @@ gtk_at_context_get_text_accumulate (GtkATContext          *self,
     {
       const char *text = gtk_widget_get_tooltip_text (GTK_WIDGET (self->accessible));
       if (text && not_just_space (text))
-        if (!check_duplicates || ((property == GTK_ACCESSIBLE_PROPERTY_LABEL && strcmp(text, gtk_at_context_get_description_internal (self, FALSE)) != 0)
-          || (property == GTK_ACCESSIBLE_PROPERTY_DESCRIPTION && strcmp(text, gtk_at_context_get_name_internal (self, FALSE)) != 0)))
-        append_with_space (res, text);
+        {
+          gboolean append = !check_duplicates;
+
+          if (!append)
+            {
+              char *description = gtk_at_context_get_description_internal (self, FALSE);
+              char *name = gtk_at_context_get_name_internal (self, FALSE);
+
+              append =
+                (property == GTK_ACCESSIBLE_PROPERTY_LABEL && strcmp (text, description) != 0) ||
+                (property == GTK_ACCESSIBLE_PROPERTY_DESCRIPTION && strcmp (text, name) != 0);
+
+              g_free (description);
+              g_free (name);
+            }
+
+          if (append)
+            append_with_space (res, text);
+        }
     }
 }
 

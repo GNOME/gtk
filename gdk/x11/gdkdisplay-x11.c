@@ -3015,6 +3015,8 @@ gdk_x11_display_init_gl_backend (GdkX11Display  *self,
 
   self->egl_version = epoxy_egl_version (egl_display);
 
+  XFree (visinfo);
+
   return TRUE;
 }
 

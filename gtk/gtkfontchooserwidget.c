@@ -2232,6 +2232,7 @@ update_feature_example (GtkFontChooserWidget *fontchooser,
           attr->start_index = 0;
           attr->end_index = strlen (input);
           pango_attr_list_insert (attrs, attr);
+          g_free (str);
           str = g_strconcat (item->name, " 1", NULL);
           attr = pango_attr_font_features_new (str);
           attr->start_index = strlen (input) + strlen (" → ");
@@ -2241,6 +2242,7 @@ update_feature_example (GtkFontChooserWidget *fontchooser,
           attr->start_index = strlen (input) + strlen (" → ");
           attr->end_index = attr->start_index + strlen (input);
           pango_attr_list_insert (attrs, attr);
+          g_free (str);
 
           gtk_label_set_text (GTK_LABEL (item->example), text);
           gtk_label_set_attributes (GTK_LABEL (item->example), attrs);
