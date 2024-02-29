@@ -3639,6 +3639,19 @@ avahi_request_printer_list (GtkPrintBackendCups *cups_backend)
   g_bus_get (G_BUS_TYPE_SYSTEM, cups_backend->avahi_cancellable, avahi_create_browsers, cups_backend);
 }
 
+/*
+ * Print backend can be disposed together with all its printers
+ * as a reaction to user stopping enumeration of printers.
+ */
+static void
+backend_finalized_cb (gpointer  data,
+                      GObject  *where_the_object_was)
+{
+  gboolean *backend_finalized = data;
+
+  *backend_finalized = TRUE;
+}
+
 static void
 cups_request_printer_list_cb (GtkPrintBackendCups *cups_backend,
                               GtkCupsResult       *result,
@@ -3651,6 +3664,7 @@ cups_request_printer_list_cb (GtkPrintBackendCups *cups_backend,
   GList *removed_printer_checklist;
   char *remote_default_printer = NULL;
   GList *iter;
+  gboolean backend_finalized = FALSE;
 
   list_has_changed = FALSE;
 
@@ -3682,6 +3696,8 @@ cups_request_printer_list_cb (GtkPrintBackendCups *cups_backend,
    * so we may check to see if they were removed
    */
   removed_printer_checklist = gtk_print_backend_get_printer_list (backend);
+
+  g_object_weak_ref (G_OBJECT (backend), backend_finalized_cb, &backend_finalized);
 
   response = gtk_cups_result_get_response (result);
   for (attr = ippFirstAttribute (response); attr != NULL;
@@ -3800,6 +3816,9 @@ cups_request_printer_list_cb (GtkPrintBackendCups *cups_backend,
         {
 	  g_signal_emit_by_name (backend, "printer-added", printer);
 
+          if (backend_finalized)
+            break;
+
 	  gtk_printer_set_is_new (printer, FALSE);
         }
 
@@ -3837,36 +3856,44 @@ cups_request_printer_list_cb (GtkPrintBackendCups *cups_backend,
         break;
     }
 
-  /* look at the removed printers checklist and mark any printer
-     as inactive if it is in the list, emitting a printer_removed signal */
-  if (removed_printer_checklist != NULL)
+  if (!backend_finalized)
     {
-      for (iter = removed_printer_checklist; iter; iter = iter->next)
+      g_object_weak_unref (G_OBJECT (backend), backend_finalized_cb, &backend_finalized);
+
+      /* look at the removed printers checklist and mark any printer
+         as inactive if it is in the list, emitting a printer_removed signal */
+      if (removed_printer_checklist != NULL)
         {
-          if (!GTK_PRINTER_CUPS (iter->data)->avahi_browsed)
+          for (iter = removed_printer_checklist; iter; iter = iter->next)
             {
-              mark_printer_inactive (GTK_PRINTER (iter->data), backend);
-              list_has_changed = TRUE;
+              if (!GTK_PRINTER_CUPS (iter->data)->avahi_browsed)
+                {
+                  mark_printer_inactive (GTK_PRINTER (iter->data), backend);
+                  list_has_changed = TRUE;
+                }
             }
         }
-
-      g_list_free (removed_printer_checklist);
     }
+
+  g_list_free (removed_printer_checklist);
 
 done:
-  if (list_has_changed)
-    g_signal_emit_by_name (backend, "printer-list-changed");
-
-  gtk_print_backend_set_list_done (backend);
-
-  if (!cups_backend->got_default_printer && remote_default_printer != NULL)
+  if (!backend_finalized)
     {
-      set_default_printer (cups_backend, remote_default_printer);
-      g_free (remote_default_printer);
-    }
+      if (list_has_changed)
+        g_signal_emit_by_name (backend, "printer-list-changed");
 
-  if (!cups_backend->got_default_printer && cups_backend->avahi_default_printer != NULL)
-    set_default_printer (cups_backend, cups_backend->avahi_default_printer);
+      gtk_print_backend_set_list_done (backend);
+
+      if (!cups_backend->got_default_printer && remote_default_printer != NULL)
+        {
+          set_default_printer (cups_backend, remote_default_printer);
+          g_free (remote_default_printer);
+        }
+
+      if (!cups_backend->got_default_printer && cups_backend->avahi_default_printer != NULL)
+        set_default_printer (cups_backend, cups_backend->avahi_default_printer);
+    }
 }
 
 static void
