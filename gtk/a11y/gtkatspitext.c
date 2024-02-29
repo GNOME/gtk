@@ -234,7 +234,8 @@ accessible_text_handle_method (GDBusConnection       *connection,
       gsize n_ranges;
       GtkAccessibleTextRange *ranges = NULL;
 
-      gtk_accessible_text_get_selection (accessible_text, &n_ranges, &ranges);
+      if (!gtk_accessible_text_get_selection (accessible_text, &n_ranges, &ranges))
+        n_ranges = 0;
 
       g_dbus_method_invocation_return_value (invocation, g_variant_new ("(i)", (int)n_ranges));
 
@@ -248,7 +249,8 @@ accessible_text_handle_method (GDBusConnection       *connection,
 
       g_variant_get (parameters, "(i)", &num);
 
-      gtk_accessible_text_get_selection (accessible_text, &n_ranges, &ranges);
+      if (!gtk_accessible_text_get_selection (accessible_text, &n_ranges, &ranges))
+        n_ranges = 0;
 
       if (num < 0 || num >= n_ranges)
         g_dbus_method_invocation_return_error (invocation, G_DBUS_ERROR, G_DBUS_ERROR_INVALID_ARGS, "Not a valid selection: %d", num);
