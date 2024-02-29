@@ -82,6 +82,7 @@ compare_render_tests = [
   'fill-with-3d-contents-nogl-nocairo',
   'glyph-cache-overflow',
   'glyph-cache-overflow-slices',
+  'glyph-scaling',
   'huge-height',
   'huge-width',
   'inset-shadow-multiple',
@@ -194,6 +195,7 @@ compare_xfails_small_texture = [
   'big-checkerboard-scaled-down',
   'big-checkerboard-scaled-down2',
   'repeat-repeats', # only fails when rotated
+  'glyph-scaling',
 ]
 
 variants = {
