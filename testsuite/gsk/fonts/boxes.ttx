@@ -4,6 +4,7 @@
   <GlyphOrder>
     <!-- The 'id' attribute is only for humans; it is ignored when parsed. -->
     <GlyphID id="0" name=".notdef"/>
+    <GlyphID id="1" name="A"/>
   </GlyphOrder>
 
   <head>
@@ -68,11 +69,14 @@
 
   <hmtx>
     <mtx name=".notdef" width="1024" lsb="0"/>
+    <mtx name="A" width="1024" lsb="0"/>
   </hmtx>
 
   <cmap>
     <tableVersion version="0"/>
     <cmap_format_4 platformID="0" platEncID="3" language="0">
+      <map code="0x20" name=".notdef"/>
+      <map code="0x41" name="A"/>
     </cmap_format_4>
   </cmap>
 
@@ -91,6 +95,15 @@
         <pt x="1024" y="0" on="1"/>
         <pt x="1024" y="1028" on="1"/>
         <pt x="0" y="1028" on="1"/>
+      </contour>
+      <instructions/>
+    </TTGlyph>
+    <TTGlyph name="A" xMin="0" yMin="0" xMax="1024" yMax="1536">
+      <contour>
+        <pt x="0" y="0" on="1"/>
+        <pt x="1024" y="0" on="1"/>
+        <pt x="1024" y="1536" on="1"/>
+        <pt x="0" y="1536" on="1"/>
       </contour>
       <instructions/>
     </TTGlyph>

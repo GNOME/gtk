@@ -83,6 +83,7 @@ compare_render_tests = [
   'glyph-cache-overflow',
   'glyph-cache-overflow-slices',
   'glyph-scaling',
+  'glyph-antialias',
   'huge-height',
   'huge-width',
   'inset-shadow-multiple',
@@ -210,13 +211,13 @@ variants = {
 
 compare_xfails = {
   'ngl': {
-           'repeat-scaling': ['clipped'], # 6429
-           'radial-gradient-with-64-colorstops': ['clipped'],
-           'blur-child-bounds-oversize-nogl': ['clipped'], # 6450
-         },
+    'repeat-scaling': ['clipped'], # 6429
+    'radial-gradient-with-64-colorstops': ['clipped'],
+    'blur-child-bounds-oversize-nogl': ['clipped'], # 6450
+  },
   'vulkan': {
-              'big-checkerboard': ['clipped'], # 6444
-            },
+    'big-checkerboard': ['clipped'], # 6444
+  },
 }
 
 foreach renderer : renderers
