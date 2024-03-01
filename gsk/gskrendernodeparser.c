@@ -1182,6 +1182,8 @@ clear_font (gpointer inout_font)
   g_clear_object ((PangoFont **) inout_font);
 }
 
+#define GLYPH_NEEDS_WIDTH (1 << 15)
+
 static gboolean
 parse_glyphs (GtkCssParser *parser,
               Context      *context,
@@ -1208,6 +1210,7 @@ parse_glyphs (GtkCssParser *parser,
                   gtk_css_parser_error_value (parser, "Unsupported character %d in string", i);
                 }
               gi.glyph = PANGO_GLYPH_INVALID_INPUT - MAX_ASCII_GLYPH + s[i];
+              *(unsigned int *) &gi.attr |= GLYPH_NEEDS_WIDTH;
               pango_glyph_string_set_size (glyph_string, glyph_string->num_glyphs + 1);
               glyph_string->glyphs[glyph_string->num_glyphs - 1] = gi;
             }
@@ -1216,14 +1219,22 @@ parse_glyphs (GtkCssParser *parser,
         }
       else
         {
-          if (!gtk_css_parser_consume_integer (parser, &i) ||
-              !gtk_css_parser_consume_number (parser, &d))
+          if (!gtk_css_parser_consume_integer (parser, &i))
             {
               pango_glyph_string_free (glyph_string);
               return FALSE;
             }
           gi.glyph = i;
-          gi.geometry.width = (int) (d * PANGO_SCALE);
+
+          if (gtk_css_parser_has_number (parser))
+            {
+              gtk_css_parser_consume_number (parser, &d);
+              gi.geometry.width = (int) (d * PANGO_SCALE);
+            }
+          else
+            {
+              *(unsigned int *) &gi.attr |= GLYPH_NEEDS_WIDTH;
+            }
 
           if (gtk_css_parser_has_number (parser))
             {
@@ -2193,23 +2204,36 @@ unpack_glyphs (PangoFont        *font,
 
   for (i = 0; i < glyphs->num_glyphs; i++)
     {
-      PangoGlyph glyph = glyphs->glyphs[i].glyph;
+      PangoGlyphInfo *gi = &glyphs->glyphs[i];
 
-      if (glyph < PANGO_GLYPH_INVALID_INPUT - MAX_ASCII_GLYPH ||
-          glyph >= PANGO_GLYPH_INVALID_INPUT)
+      if (((*(unsigned int *) &gi->attr) & GLYPH_NEEDS_WIDTH) == 0)
         continue;
 
-      glyph = glyph - (PANGO_GLYPH_INVALID_INPUT - MAX_ASCII_GLYPH) - MIN_ASCII_GLYPH;
+      *(unsigned int *) &gi->attr &= ~GLYPH_NEEDS_WIDTH;
 
-      if (ascii == NULL)
+     if (gi->glyph >= PANGO_GLYPH_INVALID_INPUT - MAX_ASCII_GLYPH &&
+         gi->glyph < PANGO_GLYPH_INVALID_INPUT)
         {
-          ascii = create_ascii_glyphs (font);
-          if (ascii == NULL)
-            return FALSE;
-        }
+          PangoGlyph idx = gi->glyph - (PANGO_GLYPH_INVALID_INPUT - MAX_ASCII_GLYPH) - MIN_ASCII_GLYPH;
 
-      glyphs->glyphs[i].glyph = ascii->glyphs[glyph].glyph;
-      glyphs->glyphs[i].geometry.width = ascii->glyphs[glyph].geometry.width;
+          if (ascii == NULL)
+            {
+              ascii = create_ascii_glyphs (font);
+              if (ascii == NULL)
+                return FALSE;
+            }
+
+          gi->glyph = ascii->glyphs[idx].glyph;
+          gi->geometry.width = ascii->glyphs[idx].geometry.width;
+        }
+      else
+        {
+          PangoRectangle ink_rect;
+
+          pango_font_get_glyph_extents (font, gi->glyph, &ink_rect, NULL);
+
+          gi->geometry.width = ink_rect.width;
+        }
     }
 
   g_clear_pointer (&ascii, pango_glyph_string_free);
@@ -2252,6 +2276,7 @@ parse_text_node (GtkCssParser *parser,
       for (i = 0; i < strlen (text); i++)
         {
           gi.glyph = PANGO_GLYPH_INVALID_INPUT - MAX_ASCII_GLYPH + text[i];
+          *(unsigned int *) &gi.attr |= GLYPH_NEEDS_WIDTH;
           glyphs->glyphs[i] = gi;
         }
     }
