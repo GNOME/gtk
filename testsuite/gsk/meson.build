@@ -372,6 +372,7 @@ node_parser_tests = [
   'stroke.node',
   'stroke.ref.node',
   'testswitch.node',
+  'text.node',
   'text-color.node',
   'text-fail.node',
   'text-fail.ref.node',
