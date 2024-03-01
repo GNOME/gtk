@@ -1058,15 +1058,20 @@ gtk_editable_get_text_widget (GtkWidget *widget)
 {
   if (GTK_IS_EDITABLE (widget))
     {
-      GtkEditable *delegate;
+      GtkEditable *editable;
+      guint redirects = 0;
 
-      delegate = gtk_editable_get_delegate (GTK_EDITABLE (widget));
+      editable = GTK_EDITABLE (widget);
 
-      if (GTK_IS_TEXT (delegate))
-        return GTK_TEXT (delegate);
+      do {
+        if (GTK_IS_TEXT (editable))
+          return GTK_TEXT (editable);
 
-      if (GTK_IS_TEXT (widget))
-        return GTK_TEXT (widget);
+        if (++redirects >= 6)
+          g_assert_not_reached ();
+
+        editable = gtk_editable_get_delegate (editable);
+      } while (editable != NULL);
     }
 
   return NULL;
