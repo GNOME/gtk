@@ -186,7 +186,7 @@ _gtk_quartz_get_selection_data_from_pasteboard (NSPasteboard *pasteboard,
     selection_data->display = gdk_display_get_default ();
   if (target == gdk_atom_intern_static_string ("UTF8_STRING"))
     {
-      NSString *s = [pasteboard stringForType:NSStringPboardType];
+      NSString *s = [pasteboard stringForType:GDK_QUARTZ_STRING_PBOARD_TYPE];
 
       if (s)
 	{
@@ -237,7 +237,8 @@ _gtk_quartz_get_selection_data_from_pasteboard (NSPasteboard *pasteboard,
            gtk_selection_data_set_uris (selection_data, uris);
            g_free (uris);
          }
-      else if ([[pasteboard types] containsObject:NSURLPboardType])
+      else if ([[pasteboard types] containsObject:GDK_QUARTZ_URL_PBOARD_TYPE] ||
+               [[pasteboard types] containsObject:GDK_QUARTZ_FILE_PBOARD_TYPE])
         {
           gchar *uris[2];
           NSURL *url = [NSURL URLFromPasteboard:pasteboard];
@@ -258,7 +259,7 @@ _gtk_quartz_get_selection_data_from_pasteboard (NSPasteboard *pasteboard,
       name = gdk_atom_name (target);
 
       if (strcmp (name, "image/tiff") == 0)
-	data = [pasteboard dataForType:NSTIFFPboardType];
+	data = [pasteboard dataForType:GDK_QUARTZ_TIFF_PBOARD_TYPE];
       else
 	data = [pasteboard dataForType:[NSString stringWithUTF8String:name]];
 
@@ -292,10 +293,10 @@ _gtk_quartz_set_selection_data_for_pasteboard (NSPasteboard     *pasteboard,
 
   type = gdk_quartz_atom_to_pasteboard_type_libgtk_only (gtk_selection_data_get_target (selection_data));
 
-  if ([type isEqualTo:NSStringPboardType]) 
+  if ([type isEqualTo:GDK_QUARTZ_STRING_PBOARD_TYPE])
     [pasteboard setString:[NSString stringWithUTF8String:(const char *)data]
                   forType:type];
-  else if ([type isEqualTo:NSColorPboardType])
+  else if ([type isEqualTo:GDK_QUARTZ_COLOR_PBOARD_TYPE])
     {
       guint16 *color = (guint16 *)data;
       float red, green, blue, alpha;
@@ -309,7 +310,7 @@ _gtk_quartz_set_selection_data_for_pasteboard (NSPasteboard     *pasteboard,
       nscolor = [NSColor colorWithDeviceRed:red green:green blue:blue alpha:alpha];
       [nscolor writeToPasteboard:pasteboard];
     }
-  else if ([type isEqualTo:NSURLPboardType])
+  else if ([type isEqualTo:GDK_QUARTZ_URL_PBOARD_TYPE])
     {
       gchar **uris;
 

@@ -174,19 +174,6 @@ _gdk_quartz_display_text_property_to_utf8_list (GdkDisplay    *display,
     }
 }
 
-#if MAC_OS_X_VERSION_MIN_REQUIRED < 101400
-#define GDK_QUARTZ_URL_PBOARD_TYPE     NSURLPboardType
-#define GDK_QUARTZ_COLOR_PBOARD_TYPE   NSColorPboardType
-#define GDK_QUARTZ_STRING_PBOARD_TYPE  NSStringPboardType
-#define GDK_QUARTZ_TIFF_PBOARD_TYPE    NSTIFFPboardType
-#else
-#define GDK_QUARTZ_FILE_PBOARD_TYPE    NSPasteboardTypeFileURL
-#define GDK_QUARTZ_URL_PBOARD_TYPE     NSPasteboardTypeURL
-#define GDK_QUARTZ_COLOR_PBOARD_TYPE   NSPasteboardTypeColor
-#define GDK_QUARTZ_STRING_PBOARD_TYPE  NSPasteboardTypeString
-#define GDK_QUARTZ_TIFF_PBOARD_TYPE    NSPasteboardTypeTIFF
-#endif
-
 GdkAtom
 gdk_quartz_pasteboard_type_to_atom_libgtk_only (NSString *type)
 {
@@ -196,12 +183,9 @@ gdk_quartz_pasteboard_type_to_atom_libgtk_only (NSString *type)
     return gdk_atom_intern_static_string ("image/tiff");
   else if ([type isEqualToString:GDK_QUARTZ_COLOR_PBOARD_TYPE])
     return gdk_atom_intern_static_string ("application/x-color");
-  else if ([type isEqualToString:GDK_QUARTZ_URL_PBOARD_TYPE])
+  else if ([type isEqualToString:GDK_QUARTZ_URL_PBOARD_TYPE] ||
+           [type isEqualToString:GDK_QUARTZ_FILE_PBOARD_TYPE])
     return gdk_atom_intern_static_string ("text/uri-list");
-#if MAC_OS_X_VERSION_MIN_REQUIRED >= 101400
-  else if ([type isEqualToString:GDK_QUARTZ_FILE_PBOARD_TYPE])
-    return gdk_atom_intern_static_string ("text/uri-list");
-#endif
   else
     return gdk_atom_intern ([type UTF8String], FALSE);
 }
