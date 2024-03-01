@@ -524,6 +524,7 @@ gsk_gpu_upload_glyph_op_draw (GskGpuOp *op,
   GskGpuUploadGlyphOp *self = (GskGpuUploadGlyphOp *) op;
   cairo_surface_t *surface;
   cairo_t *cr;
+  PangoRectangle ink_rect = { 0, };
 
   surface = cairo_image_surface_create_for_data (data,
                                                  CAIRO_FORMAT_ARGB32,
@@ -546,12 +547,19 @@ gsk_gpu_upload_glyph_op_draw (GskGpuOp *op,
   /* Draw glyph */
   cairo_set_source_rgba (cr, 1, 1, 1, 1);
 
+  /* The pango code for drawing hex boxes uses the glyph width */
+  if (self->glyph & PANGO_GLYPH_UNKNOWN_FLAG)
+    pango_font_get_glyph_extents (self->font, self->glyph, &ink_rect, NULL);
+
   pango_cairo_show_glyph_string (cr,
                                  self->font,
                                  &(PangoGlyphString) {
                                      .num_glyphs = 1,
                                      .glyphs = (PangoGlyphInfo[1]) { {
-                                         .glyph = self->glyph
+                                         .glyph = self->glyph,
+                                         .geometry = {
+                                           .width = ink_rect.width,
+                                         }
                                      } }
                                  });
 
