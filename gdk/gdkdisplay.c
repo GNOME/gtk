@@ -2037,9 +2037,12 @@ gdk_display_get_dmabuf_formats (GdkDisplay *display)
 GdkDebugFlags
 gdk_display_get_debug_flags (GdkDisplay *display)
 {
+  if (display == NULL)
+    return _gdk_debug_flags;
+
   GdkDisplayPrivate *priv = gdk_display_get_instance_private (display);
 
-  return display ? priv->debug_flags : _gdk_debug_flags;
+  return priv->debug_flags;
 }
 
 void
