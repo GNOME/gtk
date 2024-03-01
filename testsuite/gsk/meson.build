@@ -411,7 +411,7 @@ foreach test : node_parser_tests
         'G_TEST_BUILDDIR=@0@'.format(meson.current_build_dir())
       ],
       protocol: 'exitcode',
-      suite: 'gsk',
+      suite: [ 'gsk', 'gsk-nodeparser' ]
     )
   endif
 endforeach
