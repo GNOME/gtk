@@ -336,7 +336,7 @@ font that is specified in the string. It can be either a data url containing
 a base64-encoded font file, or a regular url that points to a font file.
 
 Glyphs can be specified as an ASCII string, or as a comma-separated list of
-their glyph ID and advance width. Optionally, x and y offsets and flags can
+their glyph IDs. Optionally, the advance width, x and y offsets and flags can
 be specified as well, like this: 40 10 0 0 color.
 
 If the given font does not exist or the given glyphs are invalid for the given
