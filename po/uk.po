@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2024-02-23 01:06+0000\n"
-"PO-Revision-Date: 2024-02-23 09:47+0200\n"
+"POT-Creation-Date: 2024-03-02 15:19+0000\n"
+"PO-Revision-Date: 2024-03-02 22:39+0200\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -128,22 +128,22 @@ msgstr "Програмний інтерфейс GL заборонено."
 msgid "Unable to create a GL context"
 msgstr "Неможливо створити вміст GL"
 
-#: gdk/gdkglcontext.c:1303
+#: gdk/gdkglcontext.c:1304
 msgid "OpenGL ES disabled via GDK_DEBUG"
 msgstr "За допомогою GDK_DEBUG вимкнено OpenGL ES"
 
-#: gdk/gdkglcontext.c:1315
+#: gdk/gdkglcontext.c:1316
 msgid "OpenGL disabled via GDK_DEBUG"
 msgstr "OpenGL вимкнено за допомогою GDK_DEBUG"
 
-#: gdk/gdkglcontext.c:1326
+#: gdk/gdkglcontext.c:1327
 #, c-format
 msgid "Application does not support %s API"
 msgstr "У програмі не передбачено підтримки програмного інтерфейсу %s"
 
 #. translators: This is about OpenGL backend names, like
 #. * "Trying to use X11 GLX, but EGL is already in use"
-#: gdk/gdkglcontext.c:2112
+#: gdk/gdkglcontext.c:2113
 #, c-format
 msgid "Trying to use %s, but %s is already in use"
 msgstr "Намагаємося скористатися %s, але %s вже використано"
@@ -872,6 +872,10 @@ msgstr ""
 #, c-format
 msgid "OpenGL ES 3.0 is not supported by this renderer."
 msgstr "У цьому засобі обробки не передбачено підтримки OpenGL ES 3.0."
+
+#: gsk/gpu/gsknglrenderer.c:62
+msgid "OpenGL 3.3 required"
+msgstr "Потрібна OpenGL 3.3"
 
 #: gtk/a11y/gtkatspiaction.c:239
 msgctxt "accessibility"
@@ -1792,7 +1796,6 @@ msgid "comment"
 msgstr "коментар"
 
 #: gtk/gtkaccessible.c:874
-#| msgid "Terminal Pager"
 msgctxt "accessibility"
 msgid "terminal"
 msgstr "термінал"
@@ -2663,35 +2666,35 @@ msgctxt "Font feature value"
 msgid "Enable"
 msgstr "Увімкнути"
 
-#: gtk/gtkfontchooserwidget.c:2457
+#: gtk/gtkfontchooserwidget.c:2459
 msgid "Default"
 msgstr "Типово"
 
-#: gtk/gtkfontchooserwidget.c:2519
+#: gtk/gtkfontchooserwidget.c:2521
 msgid "Ligatures"
 msgstr "Лігатури"
 
-#: gtk/gtkfontchooserwidget.c:2520
+#: gtk/gtkfontchooserwidget.c:2522
 msgid "Letter Case"
 msgstr "Розмір літер"
 
-#: gtk/gtkfontchooserwidget.c:2521
+#: gtk/gtkfontchooserwidget.c:2523
 msgid "Number Case"
 msgstr "Розмір цифр"
 
-#: gtk/gtkfontchooserwidget.c:2522
+#: gtk/gtkfontchooserwidget.c:2524
 msgid "Number Spacing"
 msgstr "Інтервали між цифрами"
 
-#: gtk/gtkfontchooserwidget.c:2523
+#: gtk/gtkfontchooserwidget.c:2525
 msgid "Fractions"
 msgstr "Дроби"
 
-#: gtk/gtkfontchooserwidget.c:2524
+#: gtk/gtkfontchooserwidget.c:2526
 msgid "Style Variations"
 msgstr "Варіанти стилів"
 
-#: gtk/gtkfontchooserwidget.c:2526
+#: gtk/gtkfontchooserwidget.c:2528
 msgid "Character Variations"
 msgstr "Варіанти символів"
 
@@ -3581,7 +3584,7 @@ msgid "No registered application with name “%s” for item with URI “%s” f
 msgstr ""
 "Не знайдено зареєстрованої програми з назвою «%s» для пункту з URI «%s»"
 
-#: gtk/gtksearchentry.c:810
+#: gtk/gtksearchentry.c:814
 msgid "Clear Entry"
 msgstr "Спорожнити запис"
 
@@ -7237,8 +7240,8 @@ msgstr ""
 #: tools/gtk-builder-tool-enumerate.c:56 tools/gtk-builder-tool-preview.c:179
 #: tools/gtk-builder-tool-preview.c:180 tools/gtk-builder-tool-screenshot.c:360
 #: tools/gtk-builder-tool-simplify.c:2529 tools/gtk-builder-tool-validate.c:261
-#: tools/gtk-path-tool-render.c:121 tools/gtk-rendernode-tool-info.c:214
-#: tools/gtk-rendernode-tool-show.c:106
+#: tools/gtk-path-tool-render.c:121 tools/gtk-rendernode-tool-compare.c:67
+#: tools/gtk-rendernode-tool-info.c:214 tools/gtk-rendernode-tool-show.c:106
 msgid "FILE"
 msgstr "ФАЙЛ"
 
@@ -7843,6 +7846,7 @@ msgid "Add renderer to benchmark"
 msgstr "Додати обробник до тестування"
 
 #: tools/gtk-rendernode-tool-benchmark.c:94
+#: tools/gtk-rendernode-tool-compare.c:65
 #: tools/gtk-rendernode-tool-render.c:195
 msgid "RENDERER"
 msgstr "ОБРОБНИК"
@@ -7875,6 +7879,63 @@ msgstr "Не вказано файл .node\n"
 #, c-format
 msgid "Can only benchmark a single .node file\n"
 msgstr "Можлива одночасне тестування лише за допомогою одного файла .node\n"
+
+#: tools/gtk-rendernode-tool-compare.c:65
+#: tools/gtk-rendernode-tool-render.c:195
+msgid "Renderer to use"
+msgstr "Обробник, яким слід скористатися"
+
+#: tools/gtk-rendernode-tool-compare.c:67
+#| msgid "The output file"
+msgid "Output file"
+msgstr "Файл результатів"
+
+#: tools/gtk-rendernode-tool-compare.c:70
+msgid "FILE1 FILE2"
+msgstr "ФАЙЛ1 ФАЙЛ2"
+
+#: tools/gtk-rendernode-tool-compare.c:82
+msgid "Compare .node or .png files."
+msgstr "Порівняти файли .node або .png."
+
+#: tools/gtk-rendernode-tool-compare.c:95
+#, c-format
+msgid "Must specify two files\n"
+msgstr "Слід вказати два файли\n"
+
+#: tools/gtk-rendernode-tool-compare.c:102
+#: tools/gtk-rendernode-tool-render.c:150
+#, c-format
+msgid "Failed to create renderer: %s\n"
+msgstr "Не вдалося створити засіб обробки: %s\n"
+
+#: tools/gtk-rendernode-tool-compare.c:111
+#, c-format
+#| msgid "Failed to save %s: %s\n"
+msgid "Failed to load %s: %s\n"
+msgstr "Не вдалося завантажити %s: %s\n"
+
+#: tools/gtk-rendernode-tool-compare.c:122
+#, c-format
+#| msgid "Could not rename %s back to %s: %s.\n"
+msgid "Could not save diff image to %s\n"
+msgstr "Не вдалося зберегти зображення-різницю до %s\n"
+
+#: tools/gtk-rendernode-tool-compare.c:132
+#, c-format
+#| msgid "Output written to %s.\n"
+msgid "Differences witten to %s.\n"
+msgstr "Різниці записано до %s.\n"
+
+#: tools/gtk-rendernode-tool-compare.c:134
+#, c-format
+msgid "The images are different.\n"
+msgstr "Зображення є різними.\n"
+
+#: tools/gtk-rendernode-tool-compare.c:137
+#, c-format
+msgid "No differences.\n"
+msgstr "Немає різниці.\n"
 
 #: tools/gtk-rendernode-tool-info.c:191
 #, c-format
@@ -7918,15 +7979,6 @@ msgstr ""
 #, c-format
 msgid "Failed to generate SVG: %s\n"
 msgstr "Не вдалося створити SVG: %s\n"
-
-#: tools/gtk-rendernode-tool-render.c:150
-#, c-format
-msgid "Failed to create renderer: %s\n"
-msgstr "Не вдалося створити засіб обробки: %s\n"
-
-#: tools/gtk-rendernode-tool-render.c:195
-msgid "Renderer to use"
-msgstr "Обробник, яким слід скористатися"
 
 #: tools/gtk-rendernode-tool-render.c:211
 msgid "Render a .node file to an image."
