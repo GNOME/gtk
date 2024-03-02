@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2024-02-22 15:33+0000\n"
-"PO-Revision-Date: 2024-02-22 19:48+0100\n"
+"POT-Creation-Date: 2024-03-02 15:19+0000\n"
+"PO-Revision-Date: 2024-03-02 16:46+0100\n"
 "Last-Translator: Ekaterine Papava <papava.e@gtu.ge>\n"
 "Language-Team: Georgian <http://mail.gnome.org/mailman/listinfo/gnome-ge-"
 "list>\n"
@@ -124,22 +124,22 @@ msgstr "GL API არ არის დაშვებული."
 msgid "Unable to create a GL context"
 msgstr "GL-ის კონტექსტის შექმნა შეუძლებელია"
 
-#: gdk/gdkglcontext.c:1303
+#: gdk/gdkglcontext.c:1304
 msgid "OpenGL ES disabled via GDK_DEBUG"
 msgstr "OpenGL ES გამორთულია GDK_DEBUG საშუალებით"
 
-#: gdk/gdkglcontext.c:1315
+#: gdk/gdkglcontext.c:1316
 msgid "OpenGL disabled via GDK_DEBUG"
 msgstr "OpenGL გამორთულია GDK_DEBUG საშუალებით"
 
-#: gdk/gdkglcontext.c:1326
+#: gdk/gdkglcontext.c:1327
 #, c-format
 msgid "Application does not support %s API"
 msgstr "აპლიკაციას %s-ის API-ის მხარდაჭერა არ გააცნია"
 
 #. translators: This is about OpenGL backend names, like
 #. * "Trying to use X11 GLX, but EGL is already in use"
-#: gdk/gdkglcontext.c:2112
+#: gdk/gdkglcontext.c:2113
 #, c-format
 msgid "Trying to use %s, but %s is already in use"
 msgstr "%s გამოყენების მცდელობა, მაგრამ %s უკვე გამოიყენება"
@@ -863,6 +863,10 @@ msgstr ""
 #, c-format
 msgid "OpenGL ES 3.0 is not supported by this renderer."
 msgstr "OpenGL ES 3.0 ამ რენდერერის მიერ მხარდაჭერილი არაა."
+
+#: gsk/gpu/gsknglrenderer.c:62
+msgid "OpenGL 3.3 required"
+msgstr "აუცილებელია OpenGL 3.3"
 
 #: gtk/a11y/gtkatspiaction.c:239
 msgctxt "accessibility"
@@ -2652,35 +2656,35 @@ msgctxt "Font feature value"
 msgid "Enable"
 msgstr "ჩართვა"
 
-#: gtk/gtkfontchooserwidget.c:2457
+#: gtk/gtkfontchooserwidget.c:2459
 msgid "Default"
 msgstr "ნაგულისხმევი"
 
-#: gtk/gtkfontchooserwidget.c:2519
+#: gtk/gtkfontchooserwidget.c:2521
 msgid "Ligatures"
 msgstr "ლიგატურები"
 
-#: gtk/gtkfontchooserwidget.c:2520
+#: gtk/gtkfontchooserwidget.c:2522
 msgid "Letter Case"
 msgstr "დიდი თუ პატარა სიმბოლოები"
 
-#: gtk/gtkfontchooserwidget.c:2521
+#: gtk/gtkfontchooserwidget.c:2523
 msgid "Number Case"
 msgstr "დიდი თუ პატარა ციფრები"
 
-#: gtk/gtkfontchooserwidget.c:2522
+#: gtk/gtkfontchooserwidget.c:2524
 msgid "Number Spacing"
 msgstr "ციფრებს შორის დაცილება"
 
-#: gtk/gtkfontchooserwidget.c:2523
+#: gtk/gtkfontchooserwidget.c:2525
 msgid "Fractions"
 msgstr "ფრაქციები"
 
-#: gtk/gtkfontchooserwidget.c:2524
+#: gtk/gtkfontchooserwidget.c:2526
 msgid "Style Variations"
 msgstr "სტილის ვარიაციები"
 
-#: gtk/gtkfontchooserwidget.c:2526
+#: gtk/gtkfontchooserwidget.c:2528
 msgid "Character Variations"
 msgstr "სიმბოლოების ვარიანტები"
 
@@ -3565,7 +3569,7 @@ msgstr ""
 "რეგისტრირებული აპლიკაცია სახელით \"%s\" ჩანაწერისთვის ბმულით \"%s\" "
 "აღმოჩენილი არაა"
 
-#: gtk/gtksearchentry.c:810
+#: gtk/gtksearchentry.c:814
 msgid "Clear Entry"
 msgstr "ჩანაწერის გასუფთავება"
 
@@ -7218,8 +7222,8 @@ msgstr ""
 #: tools/gtk-builder-tool-enumerate.c:56 tools/gtk-builder-tool-preview.c:179
 #: tools/gtk-builder-tool-preview.c:180 tools/gtk-builder-tool-screenshot.c:360
 #: tools/gtk-builder-tool-simplify.c:2529 tools/gtk-builder-tool-validate.c:261
-#: tools/gtk-path-tool-render.c:121 tools/gtk-rendernode-tool-info.c:214
-#: tools/gtk-rendernode-tool-show.c:106
+#: tools/gtk-path-tool-render.c:121 tools/gtk-rendernode-tool-compare.c:67
+#: tools/gtk-rendernode-tool-info.c:214 tools/gtk-rendernode-tool-show.c:106
 msgid "FILE"
 msgstr "FILE"
 
@@ -7818,6 +7822,7 @@ msgid "Add renderer to benchmark"
 msgstr "რენდერერის დამატება ტესტისთვის"
 
 #: tools/gtk-rendernode-tool-benchmark.c:94
+#: tools/gtk-rendernode-tool-compare.c:65
 #: tools/gtk-rendernode-tool-render.c:195
 msgid "RENDERER"
 msgstr "რენდერერი"
@@ -7849,6 +7854,61 @@ msgstr ".ui ფაილი მითითებული არაა\n"
 #, c-format
 msgid "Can only benchmark a single .node file\n"
 msgstr "შეგიძლიათ მხოლოდ ერთი .node ფაილის დატესტვა\n"
+
+#: tools/gtk-rendernode-tool-compare.c:65
+#: tools/gtk-rendernode-tool-render.c:195
+msgid "Renderer to use"
+msgstr "გამოყენებული რენდერერი"
+
+#: tools/gtk-rendernode-tool-compare.c:67
+msgid "Output file"
+msgstr "გამოტანის ფაილი"
+
+#: tools/gtk-rendernode-tool-compare.c:70
+msgid "FILE1 FILE2"
+msgstr "ფაილი1 ფაილი2"
+
+#: tools/gtk-rendernode-tool-compare.c:82
+msgid "Compare .node or .png files."
+msgstr ".node ან .png ფაილების შედარება."
+
+#: tools/gtk-rendernode-tool-compare.c:95
+#, c-format
+msgid "Must specify two files\n"
+msgstr "აუცილებელია ორი ფაილის მითითება\n"
+
+#: tools/gtk-rendernode-tool-compare.c:102
+#: tools/gtk-rendernode-tool-render.c:150
+#, c-format
+msgid "Failed to create renderer: %s\n"
+msgstr "რენდერერის შექმნა ჩავარდა: %s\n"
+
+#: tools/gtk-rendernode-tool-compare.c:111
+#, c-format
+msgid "Failed to load %s: %s\n"
+msgstr "\"%s'-ის ჩატვირთვა ჩავარდა: %s\n"
+
+#: tools/gtk-rendernode-tool-compare.c:122
+#, c-format
+msgid "Could not save diff image to %s\n"
+msgstr ""
+"ვერ ჩავწერე სხვაობის გამოსახულება %s-ში\n"
+"\n"
+
+#: tools/gtk-rendernode-tool-compare.c:132
+#, c-format
+msgid "Differences witten to %s.\n"
+msgstr "განსხვავებები ჩაწერილია %s-ში.\n"
+
+#: tools/gtk-rendernode-tool-compare.c:134
+#, c-format
+msgid "The images are different.\n"
+msgstr "გამოსახულებები განსხვავდება.\n"
+
+#: tools/gtk-rendernode-tool-compare.c:137
+#, c-format
+msgid "No differences.\n"
+msgstr "განსხვავებების გარეშე.\n"
 
 #: tools/gtk-rendernode-tool-info.c:191
 #, c-format
@@ -7893,15 +7953,6 @@ msgstr ""
 #, c-format
 msgid "Failed to generate SVG: %s\n"
 msgstr "შეცდომა SVG-ის გენერაციისას: %s\n"
-
-#: tools/gtk-rendernode-tool-render.c:150
-#, c-format
-msgid "Failed to create renderer: %s\n"
-msgstr "რენდერერის შექმნა ჩავარდა: %s\n"
-
-#: tools/gtk-rendernode-tool-render.c:195
-msgid "Renderer to use"
-msgstr "გამოყენებული რენდერერი"
 
 #: tools/gtk-rendernode-tool-render.c:211
 msgid "Render a .node file to an image."
