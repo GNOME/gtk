@@ -59,6 +59,7 @@ gdk/x11/gdkselectioninputstream-x11.c
 gdk/x11/gdktextlistconverter-x11.c
 gsk/gl/gskglrenderer.c
 gsk/gpu/gskgldevice.c
+gsk/gpu/gsknglrenderer.c
 gsk/gskrendernodeimpl.c
 gtk/a11y/gtkatspiaction.c
 gtk/a11y/gtkatspiroot.c
@@ -436,6 +437,7 @@ tools/gtk-path-tool-show.c
 tools/gtk-path-tool-utils.c
 tools/gtk-rendernode-tool.c
 tools/gtk-rendernode-tool-benchmark.c
+tools/gtk-rendernode-tool-compare.c
 tools/gtk-rendernode-tool-info.c
 tools/gtk-rendernode-tool-render.c
 tools/gtk-rendernode-tool-show.c
