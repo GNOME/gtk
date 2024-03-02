@@ -658,6 +658,7 @@ gdk_gl_context_real_end_frame (GdkDrawContext *draw_context,
   GdkSurface *surface = gdk_gl_context_get_surface (context);
   GdkDisplay *display = gdk_surface_get_display (surface);
   EGLSurface egl_surface;
+  G_GNUC_UNUSED gint64 begin_time = GDK_PROFILER_CURRENT_TIME;
 
   if (priv->egl_context == NULL)
     return;
@@ -665,8 +666,6 @@ gdk_gl_context_real_end_frame (GdkDrawContext *draw_context,
   gdk_gl_context_make_current (context);
 
   egl_surface = gdk_surface_get_egl_surface (surface);
-
-  gdk_profiler_add_mark (GDK_PROFILER_CURRENT_TIME, 0, "EGL swap buffers", NULL);
 
   if (priv->eglSwapBuffersWithDamage)
     {
@@ -698,6 +697,8 @@ gdk_gl_context_real_end_frame (GdkDrawContext *draw_context,
   else
     eglSwapBuffers (gdk_display_get_egl_display (display), egl_surface);
 #endif
+
+  gdk_profiler_add_mark (begin_time, GDK_PROFILER_CURRENT_TIME - begin_time, "EGL swap buffers", NULL);
 }
 
 static void
