@@ -40,6 +40,7 @@
 #include "gskroundedrectprivate.h"
 #include "gskstrokeprivate.h"
 #include "gsktransformprivate.h"
+#include "gskprivate.h"
 
 #include "gdk/gdkrgbaprivate.h"
 #include "gdk/gdksubsurfaceprivate.h"
@@ -2992,11 +2993,13 @@ gsk_gpu_node_processor_add_glyph_node (GskGpuNodeProcessor *self,
   GskGpuDevice *device;
   const PangoGlyphInfo *glyphs;
   PangoFont *font;
+  PangoFont *unhinted = NULL;
   graphene_point_t offset;
   guint i, num_glyphs;
   float scale, inv_scale;
   GdkRGBA color;
   gboolean glyph_align;
+  gboolean hinting;
 
   if (self->opacity < 1.0 &&
       gsk_text_node_has_color_glyphs (node))
@@ -3005,9 +3008,8 @@ gsk_gpu_node_processor_add_glyph_node (GskGpuNodeProcessor *self,
       return;
     }
 
-  glyph_align = gsk_gpu_frame_should_optimize (self->frame, GSK_GPU_OPTIMIZE_GLYPH_ALIGN) &&
-                gsk_transform_get_category (self->modelview) >= GSK_TRANSFORM_CATEGORY_2D;
   device = gsk_gpu_frame_get_device (self->frame);
+
   color = *gsk_text_node_get_color (node);
   color.alpha *= self->opacity;
   num_glyphs = gsk_text_node_get_num_glyphs (node);
@@ -3020,6 +3022,16 @@ gsk_gpu_node_processor_add_glyph_node (GskGpuNodeProcessor *self,
   scale = MAX (graphene_vec2_get_x (&self->scale), graphene_vec2_get_y (&self->scale));
   inv_scale = 1.f / scale;
 
+  glyph_align = gsk_gpu_frame_should_optimize (self->frame, GSK_GPU_OPTIMIZE_GLYPH_ALIGN);
+  if (gsk_transform_get_category (self->modelview) < GSK_TRANSFORM_CATEGORY_2D)
+    {
+      /* With transforms, don't do either subpixel positioning or hinting */
+      glyph_align = FALSE;
+      font = unhinted = gsk_get_hinted_font (font, CAIRO_HINT_STYLE_NONE, CAIRO_ANTIALIAS_DEFAULT);
+    }
+
+  hinting = gsk_font_get_hint_style (font) != CAIRO_HINT_STYLE_NONE;
+
   for (i = 0; i < num_glyphs; i++)
     {
       GskGpuImage *image;
@@ -3030,7 +3042,18 @@ gsk_gpu_node_processor_add_glyph_node (GskGpuNodeProcessor *self,
 
       glyph_origin = GRAPHENE_POINT_INIT (offset.x + (float) glyphs[i].geometry.x_offset / PANGO_SCALE,
                                           offset.y + (float) glyphs[i].geometry.y_offset / PANGO_SCALE);
-      if (glyph_align)
+
+      if (hinting && glyph_align)
+        {
+          /* Force glyph_origin.y to be device pixel aligned.
+           * The hinter expects that.
+           */
+          glyph_origin.x = roundf (glyph_origin.x * scale * 4);
+          flags = ((int) glyph_origin.x & 3);
+          glyph_origin.x = 0.25 * inv_scale * glyph_origin.x;
+          glyph_origin.y = roundf (glyph_origin.y * scale) * inv_scale;
+        }
+      else if (glyph_align)
         {
           glyph_origin.x = roundf (glyph_origin.x * scale * 4);
           glyph_origin.y = roundf (glyph_origin.y * scale * 4);
@@ -3041,6 +3064,8 @@ gsk_gpu_node_processor_add_glyph_node (GskGpuNodeProcessor *self,
         }
       else
         {
+          glyph_origin.x = roundf (glyph_origin.x * scale) * inv_scale;
+          glyph_origin.y = roundf (glyph_origin.y * scale) * inv_scale;
           flags = 0;
         }
 
@@ -3078,6 +3103,8 @@ gsk_gpu_node_processor_add_glyph_node (GskGpuNodeProcessor *self,
 
       offset.x += (float) glyphs[i].geometry.width / PANGO_SCALE;
     }
+
+  g_clear_object (&unhinted);
 }
 
 static gboolean
