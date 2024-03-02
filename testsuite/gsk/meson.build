@@ -178,6 +178,7 @@ informative_render_tests = [
   'empty-text',
   'huge-glyph',
   'rounded-clip-in-clip-nocairo', # both cairo and gl fail this one
+  'text-missing-glyph', # https://gitlab.gnome.org/GNOME/pango/-/merge_requests/718
 ]
 
 renderers = [
