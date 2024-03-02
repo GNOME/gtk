@@ -7,6 +7,60 @@ in different ways than the old gl renderer, and trigger new driver bugs,
 https://gitlab.gnome.org/GNOME/gtk/-/issues/6388). Therefore, it is
 recommended to use the latest mesa release (24.0) with the new renderers.
 
+* GtkEditable:
+ - Fix preconditions to be not too strict
+
+* GtkEmojiChooser:
+ - Support search in the locale as well as in English
+
+* GtkIconTheme:
+ - Make gtk_icon_paintable_new_for_file support symbolics
+
+* GtkVideo:
+ - Fix a problem with cursor handling that could lead to crashes
+
+* Accessibility:
+ - Fix GetCharacterAtOffset implementation
+ - Add a Terminal role
+ - Make TextCaretMoved match gtk3
+ - Support multiple levels of GtkEditable delegates
+
+* GSK:
+ - Make the node parser more flexible for text nodes
+ - Fix handling of missing glyphs in the new renderers
+
+* X11:
+ - Don't claim to support shadows without a compositor
+
+* Wayland:
+ - Fix handling of output scales
+
+* Tools:
+ - Add a compare command to gtk4-rendernode-tool
+
+* Build:
+ - Fix some ubsan complaints
+
+* Translation updates:
+ Basque
+ British English
+ Catalan
+ Finnish
+ Galician
+ Georgian
+ Hebrew
+ Indonesian
+ Kazakh
+ Latvian
+ Lithuanian
+ Persian
+ Polish
+ Russian
+ Slovenian
+ Spanish
+ Turkish
+ Ukrainian
+
 
 Overview of Changes in 4.13.8, 20-02-2024
 =========================================
