@@ -276,7 +276,18 @@ accessible_text_handle_method (GDBusConnection       *connection,
   else if (g_strcmp0 (method_name, "GetDefaultAttributes") == 0 ||
            g_strcmp0 (method_name, "GetDefaultAttributeSet") == 0)
     {
-      g_dbus_method_invocation_return_error_literal (invocation, G_DBUS_ERROR, G_DBUS_ERROR_NOT_SUPPORTED, "");
+      GVariantBuilder builder = G_VARIANT_BUILDER_INIT (G_VARIANT_TYPE ("a{ss}"));
+      char **names, **values;
+
+      gtk_accessible_text_get_default_attributes (accessible_text, &names, &values);
+
+      for (unsigned i = 0; names[i] != NULL; i++)
+        g_variant_builder_add (&builder, "{ss}", names[i], values[i]);
+
+      g_strfreev (names);
+      g_strfreev (values);
+
+      g_dbus_method_invocation_return_value (invocation, g_variant_new ("(a{ss})", &builder));
     }
   else if (g_strcmp0 (method_name, "GetNSelections") == 0)
     {
