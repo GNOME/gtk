@@ -5825,7 +5825,7 @@ gsk_text_node_new (PangoFont              *font,
   PangoFont *unhinted;
   int n;
 
-  unhinted = gsk_get_hinted_font (font, CAIRO_HINT_STYLE_NONE, CAIRO_ANTIALIAS_GRAY);
+  unhinted = gsk_get_hinted_font (font, CAIRO_HINT_STYLE_NONE, CAIRO_ANTIALIAS_DEFAULT);
   pango_glyph_string_extents (glyphs, unhinted, &ink_rect, NULL);
   g_object_unref (unhinted);
 
