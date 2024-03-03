@@ -116,7 +116,9 @@ static gboolean gtk_shadertoy_tick          (GtkWidget     *widget,
 GtkWidget *
 gtk_shadertoy_new (void)
 {
-  return g_object_new (gtk_shadertoy_get_type (), NULL);
+  return g_object_new (gtk_shadertoy_get_type (),
+                       "allowed-apis", GDK_GL_API_GL,
+                       NULL);
 }
 
 static void
