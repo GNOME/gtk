@@ -158,3 +158,27 @@ gsk_get_hinted_font (PangoFont          *font,
   return font;
 #endif
 }
+
+/*< private >
+ * gsk_font_get_hint_style:
+ * @font: a `PangoFont`
+ *
+ * Get the hint style from the cairo font options.
+ *
+ * Returns: the hint style
+ */
+cairo_hint_style_t
+gsk_font_get_hint_style (PangoFont *font)
+{
+  cairo_scaled_font_t *sf;
+  cairo_font_options_t *options;
+  cairo_hint_style_t style;
+
+  sf = pango_cairo_font_get_scaled_font (PANGO_CAIRO_FONT (font));
+  options = cairo_font_options_create ();
+  cairo_scaled_font_get_font_options (sf, options);
+  style = cairo_font_options_get_hint_style (options);
+  cairo_font_options_destroy (options);
+
+  return style;
+}
