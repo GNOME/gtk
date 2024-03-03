@@ -3474,7 +3474,7 @@ gsk_transform_node_draw (GskRenderNode *node,
        * (like when flipping an axis at the point where scale == 0)
        * and just means that nothing should be drawn.
        * But Cairo throws lots of ugly errors instead of silently
-       * going on. So We silently go on.
+       * going on. So we silently go on.
        */
       return;
     }
