@@ -10383,6 +10383,39 @@ gtk_text_view_accessible_text_get_contents (GtkAccessibleText *self,
   return g_bytes_new_take (string, strlen (string) + 1);
 }
 
+static GBytes *
+gtk_text_view_accessible_text_get_contents_at (GtkAccessibleText            *self,
+                                               unsigned int                  offset,
+                                               GtkAccessibleTextGranularity  granularity,
+                                               unsigned int                 *start,
+                                               unsigned int                 *end)
+{
+  GtkTextViewPrivate *priv = GTK_TEXT_VIEW (self)->priv;
+  GtkTextLayout *text_layout = priv->layout;
+  GtkTextBuffer *text_buffer;
+  GtkTextIter iter;
+  GtkTextLine *line;
+  PangoLayout *line_layout;
+  char *string;
+  unsigned int line_start, line_end, line_offset;
+
+  text_buffer = gtk_text_layout_get_buffer (text_layout);
+
+  gtk_text_buffer_get_iter_at_offset (text_buffer, &iter, offset);
+  line = _gtk_text_iter_get_text_line (&iter);
+  line_offset = gtk_text_iter_get_offset (&iter) - gtk_text_iter_get_line_offset (&iter);
+
+  line_layout = gtk_text_layout_get_line_display (text_layout, line, FALSE)->layout;
+  string = gtk_pango_get_string_at (line_layout, offset - line_offset, granularity, &line_start, &line_end);
+
+  if (start != NULL)
+    *start = line_offset + line_start;
+  if (end != NULL)
+    *end = line_offset + line_end;
+
+  return g_bytes_new_take (string, strlen (string));
+}
+
 static unsigned int
 gtk_text_view_accessible_text_get_caret_position (GtkAccessibleText *self)
 {
@@ -10472,6 +10505,7 @@ static void
 gtk_text_view_accessible_text_init (GtkAccessibleTextInterface *iface)
 {
   iface->get_contents = gtk_text_view_accessible_text_get_contents;
+  iface->get_contents_at = gtk_text_view_accessible_text_get_contents_at;
   iface->get_caret_position = gtk_text_view_accessible_text_get_caret_position;
   iface->get_selection = gtk_text_view_accessible_text_get_selection;
   iface->get_attributes = gtk_text_view_accessible_text_get_attributes;

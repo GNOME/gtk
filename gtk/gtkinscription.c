@@ -1363,6 +1363,19 @@ gtk_inscription_accessible_text_get_contents (GtkAccessibleText *self,
   return g_bytes_new_take (string, size);
 }
 
+static GBytes *
+gtk_inscription_accessible_text_get_contents_at (GtkAccessibleText            *self,
+                                                 unsigned int                  offset,
+                                                 GtkAccessibleTextGranularity  granularity,
+                                                 unsigned int                 *start,
+                                                 unsigned int                 *end)
+{
+  PangoLayout *layout = gtk_inscription_get_layout (GTK_INSCRIPTION (self));
+  char *string = gtk_pango_get_string_at (layout, offset, granularity, start, end);
+
+  return g_bytes_new_take (string, strlen (string));
+}
+
 static unsigned int
 gtk_inscription_accessible_text_get_caret_position (GtkAccessibleText *self)
 {
@@ -1412,6 +1425,7 @@ static void
 gtk_inscription_accessible_text_init (GtkAccessibleTextInterface *iface)
 {
   iface->get_contents = gtk_inscription_accessible_text_get_contents;
+  iface->get_contents_at = gtk_inscription_accessible_text_get_contents_at;
   iface->get_caret_position = gtk_inscription_accessible_text_get_caret_position;
   iface->get_selection = gtk_inscription_accessible_text_get_selection;
   iface->get_attributes = gtk_inscription_accessible_text_get_attributes;
