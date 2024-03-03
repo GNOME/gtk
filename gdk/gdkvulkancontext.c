@@ -256,13 +256,13 @@ gdk_vulkan_strerror (VkResult result)
     case VK_ERROR_VIDEO_STD_VERSION_NOT_SUPPORTED_KHR:
       return "The specified video Std header version is not supported. (VK_ERROR_VIDEO_STD_VERSION_NOT_SUPPORTED_KHR)";
 #endif
-#if VK_HEADER_VERSION >= 243
-    case VK_ERROR_INVALID_VIDEO_STD_PARAMETERS_KHR:
-      return "The specified Video Std parameters do not adhere to the syntactic or semantic requirements of the used video compression standard or implementation";
-#endif
 #if VK_HEADER_VERSION >= 246
     case VK_ERROR_INCOMPATIBLE_SHADER_BINARY_EXT:
       return "The provided binary shader code is not compatible with this device. (VK_ERROR_INCOMPATIBLE_SHADER_BINARY_EXT)";
+#endif
+#if VK_HEADER_VERSION >= 274
+    case VK_ERROR_INVALID_VIDEO_STD_PARAMETERS_KHR:
+      return "The specified Video Std parameters do not adhere to the syntactic or semantic requirements of the used video compression standard or implementation";
 #endif
 
     case VK_RESULT_MAX_ENUM:
