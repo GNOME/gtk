@@ -69,17 +69,26 @@ label_text_interface (void)
   GtkAccessibleTextRange *ranges = NULL;
   char **attr_names, **attr_values;
   const char *string;
+  unsigned int start, end;
 
   g_object_ref_sink (label);
 
-  gtk_label_set_markup (GTK_LABEL (label), "<markup>a<span underline='single'>b</span>c</markup>");
+  gtk_label_set_markup (GTK_LABEL (label), "<markup>a<span underline='single'>b</span>c def</markup>");
   gtk_label_set_selectable (GTK_LABEL (label), TRUE);
   gtk_label_select_region (GTK_LABEL (label), 1, 2);
 
   bytes = gtk_accessible_text_get_contents (GTK_ACCESSIBLE_TEXT (label), 0, G_MAXINT);
   string = g_bytes_get_data (bytes, &len);
-  g_assert_cmpint (len, ==, 4);
-  g_assert_cmpstr (string, ==, "abc");
+  g_assert_cmpint (len, ==, 8);
+  g_assert_cmpstr (string, ==, "abc def");
+  g_bytes_unref (bytes);
+
+  bytes = gtk_accessible_text_get_contents_at (GTK_ACCESSIBLE_TEXT (label), 1, GTK_ACCESSIBLE_TEXT_GRANULARITY_WORD, &start, &end);
+  string = g_bytes_get_data (bytes, &len);
+  g_assert_cmpint (len, ==, 5);
+  g_assert_cmpint (start, ==, 0);
+  g_assert_cmpint (end, ==, 4);
+  g_assert_cmpstr (string, ==, "abc ");
   g_bytes_unref (bytes);
 
   g_assert_cmpint (gtk_accessible_text_get_caret_position (GTK_ACCESSIBLE_TEXT (label)), ==, 2);

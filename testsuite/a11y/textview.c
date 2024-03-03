@@ -115,6 +115,7 @@ textview_accessible_text (void)
   GtkTextBuffer *buffer;
   GtkTextTag *tag;
   GtkTextIter start, end;
+  unsigned int start_index, end_index;
 
   g_object_ref_sink (widget);
 
@@ -129,13 +130,13 @@ textview_accessible_text (void)
 
   test_data_clear (&td);
 
-  gtk_text_buffer_set_text (buffer, "abc", -1);
+  gtk_text_buffer_set_text (buffer, "abc def", -1);
 
   g_assert_cmpuint (td.update_text_contents_count, ==, 1);
   g_assert_cmpuint (td.change, ==, GTK_ACCESSIBLE_TEXT_CONTENT_CHANGE_INSERT);
   g_assert_cmpuint (td.start, ==, 0);
-  g_assert_cmpuint (td.end, ==, 3);
-  g_assert_cmpstr ("abc", ==, g_bytes_get_data (td.contents, NULL));
+  g_assert_cmpuint (td.end, ==, 7);
+  g_assert_cmpstr ("abc def", ==, g_bytes_get_data (td.contents, NULL));
 
   tag = gtk_text_tag_new ("uline");
   g_object_set (tag, "underline", PANGO_UNDERLINE_DOUBLE, NULL);
@@ -157,8 +158,16 @@ textview_accessible_text (void)
 
   bytes = gtk_accessible_text_get_contents (GTK_ACCESSIBLE_TEXT (widget), 0, G_MAXINT);
   string = g_bytes_get_data (bytes, &len);
-  g_assert_cmpint (len, ==, 4);
-  g_assert_cmpstr (string, ==, "abc");
+  g_assert_cmpint (len, ==, 8);
+  g_assert_cmpstr (string, ==, "abc def");
+  g_bytes_unref (bytes);
+
+  bytes = gtk_accessible_text_get_contents_at (GTK_ACCESSIBLE_TEXT (widget), 1, GTK_ACCESSIBLE_TEXT_GRANULARITY_WORD, &start_index, &end_index);
+  string = g_bytes_get_data (bytes, &len);
+  g_assert_cmpint (len, ==, 5);
+  g_assert_cmpint (start_index, ==, 0);
+  g_assert_cmpint (end_index, ==, 4);
+  g_assert_cmpstr (string, ==, "abc ");
   g_bytes_unref (bytes);
 
   res = gtk_accessible_text_get_selection (GTK_ACCESSIBLE_TEXT (widget), &n_ranges, &ranges);

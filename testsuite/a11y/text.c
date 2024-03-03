@@ -87,6 +87,7 @@ test_text_accessible_text (void)
   PangoAttribute *attr;
   GtkATContext *context;
   TestData td = { 0, };
+  unsigned int start, end;
 
   g_object_ref_sink (text);
 
@@ -99,13 +100,13 @@ test_text_accessible_text (void)
 
   test_data_clear (&td);
 
-  gtk_editable_set_text (GTK_EDITABLE (text), "abc");
+  gtk_editable_set_text (GTK_EDITABLE (text), "abc def");
 
   g_assert_cmpuint (td.update_text_contents_count, ==, 1);
   g_assert_cmpuint (td.change, ==, GTK_ACCESSIBLE_TEXT_CONTENT_CHANGE_INSERT);
   g_assert_cmpuint (td.start, ==, 0);
-  g_assert_cmpuint (td.end, ==, 3);
-  g_assert_cmpstr ("abc", ==, g_bytes_get_data (td.contents, NULL));
+  g_assert_cmpuint (td.end, ==, 7);
+  g_assert_cmpstr ("abc def", ==, g_bytes_get_data (td.contents, NULL));
 
   attrs = pango_attr_list_new ();
   attr = pango_attr_underline_new (PANGO_UNDERLINE_DOUBLE);
@@ -124,8 +125,16 @@ test_text_accessible_text (void)
 
   bytes = gtk_accessible_text_get_contents (GTK_ACCESSIBLE_TEXT (text), 0, G_MAXINT);
   string = g_bytes_get_data (bytes, &len);
-  g_assert_cmpint (len, ==, 4);
-  g_assert_cmpstr (string, ==, "abc");
+  g_assert_cmpint (len, ==, 8);
+  g_assert_cmpstr (string, ==, "abc def");
+  g_bytes_unref (bytes);
+
+  bytes = gtk_accessible_text_get_contents_at (GTK_ACCESSIBLE_TEXT (text), 1, GTK_ACCESSIBLE_TEXT_GRANULARITY_WORD, &start, &end);
+  string = g_bytes_get_data (bytes, &len);
+  g_assert_cmpint (len, ==, 5);
+  g_assert_cmpint (start, ==, 0);
+  g_assert_cmpint (end, ==, 4);
+  g_assert_cmpstr (string, ==, "abc ");
   g_bytes_unref (bytes);
 
   g_assert_cmpint (gtk_accessible_text_get_caret_position (GTK_ACCESSIBLE_TEXT (text)), ==, 2);

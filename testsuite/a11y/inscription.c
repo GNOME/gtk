@@ -13,15 +13,24 @@ inscription_text_interface (void)
   GtkAccessibleTextRange *ranges = NULL;
   char **attr_names, **attr_values;
   const char *string;
+  unsigned int start, end;
 
   g_object_ref_sink (inscription);
 
-  gtk_inscription_set_markup (GTK_INSCRIPTION (inscription), "<markup>a<span overline='single'>b</span>c</markup>");
+  gtk_inscription_set_markup (GTK_INSCRIPTION (inscription), "<markup>a<span overline='single'>b</span>c</markup> def");
 
   bytes = gtk_accessible_text_get_contents (GTK_ACCESSIBLE_TEXT (inscription), 0, G_MAXINT);
   string = g_bytes_get_data (bytes, &len);
-  g_assert_cmpint (len, ==, 4);
-  g_assert_cmpstr (string, ==, "abc");
+  g_assert_cmpint (len, ==, 8);
+  g_assert_cmpstr (string, ==, "abc def");
+  g_bytes_unref (bytes);
+
+  bytes = gtk_accessible_text_get_contents_at (GTK_ACCESSIBLE_TEXT (inscription), 1, GTK_ACCESSIBLE_TEXT_GRANULARITY_WORD, &start, &end);
+  string = g_bytes_get_data (bytes, &len);
+  g_assert_cmpint (len, ==, 5);
+  g_assert_cmpint (start, ==, 0);
+  g_assert_cmpint (end, ==, 4);
+  g_assert_cmpstr (string, ==, "abc ");
   g_bytes_unref (bytes);
 
   g_assert_cmpint (gtk_accessible_text_get_caret_position (GTK_ACCESSIBLE_TEXT (inscription)), ==, 0);
