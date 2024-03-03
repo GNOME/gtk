@@ -1,11 +1,15 @@
-Overview of Changes in 4.13.9, xx-xx-xxxx
+Overview of Changes in 4.14.0, xx-xx-xxxx
 =========================================
 
 Note: The new renderers and dmabuf support are using graphics drivers
 in different ways than the old gl renderer, and trigger new driver bugs,
 (see for example https://gitlab.gnome.org/GNOME/gtk/-/issues/6418 and
 https://gitlab.gnome.org/GNOME/gtk/-/issues/6388). Therefore, it is
-recommended to use the latest mesa release (24.0) with the new renderers.
+recommended to use the latest mesa release (24.x) with the new renderers.
+
+
+Overview of Changes in 4.13.9, 02-03-2024
+=========================================
 
 * GtkEditable:
  - Fix preconditions to be not too strict
@@ -27,6 +31,7 @@ recommended to use the latest mesa release (24.0) with the new renderers.
 
 * GSK:
  - Make the node parser more flexible for text nodes
+ - Change the way font scaling is handled to avoid clipping
  - Fix handling of missing glyphs in the new renderers
 
 * X11:
