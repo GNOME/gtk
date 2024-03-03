@@ -688,9 +688,6 @@ get_renderer_for_vulkan (GdkSurface *surface)
 static GType
 get_renderer_for_gles2 (GdkSurface *surface)
 {
-  if (gl_software_rendering (surface))
-    return G_TYPE_INVALID;
-
   return GSK_TYPE_GL_RENDERER;
 }
 
