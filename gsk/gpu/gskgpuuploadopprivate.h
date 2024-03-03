@@ -25,7 +25,6 @@ void                    gsk_gpu_upload_glyph_op                         (GskGpuF
                                                                          PangoFont                      *font,
                                                                          PangoGlyph                      glyph,
                                                                          const cairo_rectangle_int_t    *area,
-                                                                         float                           scale,
                                                                          const graphene_point_t         *origin);
 
 G_END_DECLS
