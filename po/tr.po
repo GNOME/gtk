@@ -1,6 +1,6 @@
 # Turkish translations of gtk.
 # Copyright (C) 1999-2003, 2004, 2006, 2007 Free Software Foundation, Inc.
-# Copyright (C) 2008-2023 gtk's COPYRIGHT HOLDER
+# Copyright (C) 2008-2024 gtk's COPYRIGHT HOLDER
 # This file is distributed under the same licence as the gtk+ package.
 #
 # Arman Aksoy <armish@linux-sevenler.de, 2003.
@@ -15,16 +15,16 @@
 # Çağatay Yiğit Şahin <cyigitsahin@outlook.com>, 2017.
 # Muhammet Kara <muhammetk@gmail.com>, 2014, 2015, 2017.
 # Furkan Ahmet Kara <furkanahmetkara.fk@gmail.com>, 2018.
-# Sabri Ünal <libreajans@gmail.com>, 2022, 2023.
-# Emin Tufan Çetin <etcetin@gmail.com>, 2018-2023.
+# Sabri Ünal <yakushabb@gmail.com>, 2022, 2024.
+# Emin Tufan Çetin <etcetin@gmail.com>, 2018-2024.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2024-02-22 18:50+0000\n"
-"PO-Revision-Date: 2024-02-22 21:54+0300\n"
-"Last-Translator: Sabri Ünal <libreajans@gmail.com>\n"
+"POT-Creation-Date: 2024-03-02 15:19+0000\n"
+"PO-Revision-Date: 2024-03-02 23:39+0300\n"
+"Last-Translator: Sabri Ünal <yakushabb@gmail.com>\n"
 "Language-Team: Türkçe <takim@gnome.org.tr>\n"
 "Language: tr\n"
 "MIME-Version: 1.0\n"
@@ -135,22 +135,22 @@ msgstr "İzin verilen GP API yok."
 msgid "Unable to create a GL context"
 msgstr "GL bağlamı oluşturulamadı"
 
-#: gdk/gdkglcontext.c:1303
+#: gdk/gdkglcontext.c:1304
 msgid "OpenGL ES disabled via GDK_DEBUG"
 msgstr "OpenGL ES, GDK_DEBUG aracılığıyla devre dışı bırakılmış"
 
-#: gdk/gdkglcontext.c:1315
+#: gdk/gdkglcontext.c:1316
 msgid "OpenGL disabled via GDK_DEBUG"
 msgstr "OpenGL, GDK_DEBUG aracılığıyla devre dışı bırakılmış"
 
-#: gdk/gdkglcontext.c:1326
+#: gdk/gdkglcontext.c:1327
 #, c-format
 msgid "Application does not support %s API"
 msgstr "Uygulama %s APIsini desteklemiyor"
 
 #. translators: This is about OpenGL backend names, like
 #. * "Trying to use X11 GLX, but EGL is already in use"
-#: gdk/gdkglcontext.c:2112
+#: gdk/gdkglcontext.c:2113
 #, c-format
 msgid "Trying to use %s, but %s is already in use"
 msgstr "%s kullanılmaya çalışılıyor ancak şu anda %s kullanılıyor"
@@ -839,6 +839,10 @@ msgstr "GLES %d.%d uyarlaması yarım kayan nokta verisini desteklemiyor"
 #, c-format
 msgid "OpenGL ES 3.0 is not supported by this renderer."
 msgstr "OpenGL ES 3.0, bu gerçekleyicice desteklenmiyor."
+
+#: gsk/gpu/gsknglrenderer.c:62
+msgid "OpenGL 3.3 required"
+msgstr "OpenGL 3.3 gerekli"
 
 #: gtk/a11y/gtkatspiaction.c:239
 msgctxt "accessibility"
@@ -2630,35 +2634,35 @@ msgctxt "Font feature value"
 msgid "Enable"
 msgstr "Etkin"
 
-#: gtk/gtkfontchooserwidget.c:2457
+#: gtk/gtkfontchooserwidget.c:2459
 msgid "Default"
 msgstr "Öntanımlı"
 
-#: gtk/gtkfontchooserwidget.c:2519
+#: gtk/gtkfontchooserwidget.c:2521
 msgid "Ligatures"
 msgstr "Bağlamalar"
 
-#: gtk/gtkfontchooserwidget.c:2520
+#: gtk/gtkfontchooserwidget.c:2522
 msgid "Letter Case"
 msgstr "Harf Durumu"
 
-#: gtk/gtkfontchooserwidget.c:2521
+#: gtk/gtkfontchooserwidget.c:2523
 msgid "Number Case"
 msgstr "Sayı Durumu"
 
-#: gtk/gtkfontchooserwidget.c:2522
+#: gtk/gtkfontchooserwidget.c:2524
 msgid "Number Spacing"
 msgstr "Numara Boşluklama"
 
-#: gtk/gtkfontchooserwidget.c:2523
+#: gtk/gtkfontchooserwidget.c:2525
 msgid "Fractions"
 msgstr "Kesirler"
 
-#: gtk/gtkfontchooserwidget.c:2524
+#: gtk/gtkfontchooserwidget.c:2526
 msgid "Style Variations"
 msgstr "Biçem Değişkeleri"
 
-#: gtk/gtkfontchooserwidget.c:2526
+#: gtk/gtkfontchooserwidget.c:2528
 msgid "Character Variations"
 msgstr "Karakter Değişkeleri"
 
@@ -3541,7 +3545,7 @@ msgstr "“%s” URI’li öge “%s”e taşınamadı"
 msgid "No registered application with name “%s” for item with URI “%s” found"
 msgstr "“%2$s” URIʼli öge için “%1$s” adında kayıtlı uygulama bulunamadı"
 
-#: gtk/gtksearchentry.c:810
+#: gtk/gtksearchentry.c:814
 msgid "Clear Entry"
 msgstr "Girdiyi Temizle"
 
@@ -7197,8 +7201,8 @@ msgstr ""
 #: tools/gtk-builder-tool-enumerate.c:56 tools/gtk-builder-tool-preview.c:179
 #: tools/gtk-builder-tool-preview.c:180 tools/gtk-builder-tool-screenshot.c:360
 #: tools/gtk-builder-tool-simplify.c:2529 tools/gtk-builder-tool-validate.c:261
-#: tools/gtk-path-tool-render.c:121 tools/gtk-rendernode-tool-info.c:214
-#: tools/gtk-rendernode-tool-show.c:106
+#: tools/gtk-path-tool-render.c:121 tools/gtk-rendernode-tool-compare.c:67
+#: tools/gtk-rendernode-tool-info.c:214 tools/gtk-rendernode-tool-show.c:106
 msgid "FILE"
 msgstr "DOSYA"
 
@@ -7803,6 +7807,7 @@ msgid "Add renderer to benchmark"
 msgstr "Gerçekleyiciyi kıyaslamaya ekle"
 
 #: tools/gtk-rendernode-tool-benchmark.c:94
+#: tools/gtk-rendernode-tool-compare.c:65
 #: tools/gtk-rendernode-tool-render.c:195
 msgid "RENDERER"
 msgstr "GERÇEKLEYİCİ"
@@ -7834,6 +7839,59 @@ msgstr ".node dosyası belirtilmedi\n"
 #, c-format
 msgid "Can only benchmark a single .node file\n"
 msgstr "Yalnızca tek bir .node dosyasını kıyaslayabilir\n"
+
+#: tools/gtk-rendernode-tool-compare.c:65
+#: tools/gtk-rendernode-tool-render.c:195
+msgid "Renderer to use"
+msgstr "Kullanılacak gerçekleyici"
+
+#: tools/gtk-rendernode-tool-compare.c:67
+msgid "Output file"
+msgstr "Çıktı dosyası"
+
+#: tools/gtk-rendernode-tool-compare.c:70
+msgid "FILE1 FILE2"
+msgstr "DOSYA1 DOSYA2"
+
+#: tools/gtk-rendernode-tool-compare.c:82
+msgid "Compare .node or .png files."
+msgstr ".node ya da .png dosyalarını karşılaştır."
+
+#: tools/gtk-rendernode-tool-compare.c:95
+#, c-format
+msgid "Must specify two files\n"
+msgstr "İki dosya belirtilmelidir\n"
+
+#: tools/gtk-rendernode-tool-compare.c:102
+#: tools/gtk-rendernode-tool-render.c:150
+#, c-format
+msgid "Failed to create renderer: %s\n"
+msgstr "Gerçekleyici oluşturulamadı: %s\n"
+
+#: tools/gtk-rendernode-tool-compare.c:111
+#, c-format
+msgid "Failed to load %s: %s\n"
+msgstr "%s yüklenemedi: %s\n"
+
+#: tools/gtk-rendernode-tool-compare.c:122
+#, c-format
+msgid "Could not save diff image to %s\n"
+msgstr "Fark görüntüsü %s dosyasına kaydedilemedi\n"
+
+#: tools/gtk-rendernode-tool-compare.c:132
+#, c-format
+msgid "Differences witten to %s.\n"
+msgstr "Farklılıklar %s dosyasına yazıldı.\n"
+
+#: tools/gtk-rendernode-tool-compare.c:134
+#, c-format
+msgid "The images are different.\n"
+msgstr "Görüntüler farklı.\n"
+
+#: tools/gtk-rendernode-tool-compare.c:137
+#, c-format
+msgid "No differences.\n"
+msgstr "Fark yok.\n"
 
 #: tools/gtk-rendernode-tool-info.c:191
 #, c-format
@@ -7877,15 +7935,6 @@ msgstr ""
 #, c-format
 msgid "Failed to generate SVG: %s\n"
 msgstr "SVG oluşturulamadı: %s\n"
-
-#: tools/gtk-rendernode-tool-render.c:150
-#, c-format
-msgid "Failed to create renderer: %s\n"
-msgstr "Gerçekleyici oluşturulamadı: %s\n"
-
-#: tools/gtk-rendernode-tool-render.c:195
-msgid "Renderer to use"
-msgstr "Kullanılacak gerçekleyici"
 
 #: tools/gtk-rendernode-tool-render.c:211
 msgid "Render a .node file to an image."
@@ -8027,51 +8076,3 @@ msgstr ""
 "“%s” içinde tema dizin dosyası yok.\n"
 "Eğer burada gerçekten bir simge önbelleği oluşturmak istiyorsanız, --ignore-"
 "theme-indexʼi kullanın.\n"
-
-#~ msgid "Unspecified error decoding media"
-#~ msgstr "Ortam çözülürken belirsiz hata"
-
-#~ msgid "Cannot find decoder: %s"
-#~ msgstr "Çözücü bulunamadı: %s"
-
-#~ msgid "Failed to allocate a codec context"
-#~ msgstr "Çözücü bağlamı bölüştürülemedi"
-
-#~ msgid "Cannot find encoder: %s"
-#~ msgstr "Kodlayıcı bulunamadı: %s"
-
-#~ msgid "Cannot add new stream"
-#~ msgstr "Yeni akış eklenemez"
-
-#~ msgid "Failed to allocate an audio frame"
-#~ msgstr "Ses çerçevesi bölüştürülemedi"
-
-#~ msgid "Not enough memory"
-#~ msgstr "Yeterli bellek yok"
-
-#~ msgid "Could not allocate resampler context"
-#~ msgstr "Yeniden örnekleyici bağlamı bölüştürülemedi"
-
-#~ msgid "No audio output found"
-#~ msgstr "Ses çıktısı bulunamadı"
-
-#~ msgctxt "GL version"
-#~ msgid "Disabled"
-#~ msgstr "Devre Dışı"
-
-#~ msgctxt "GL vendor"
-#~ msgid "Disabled"
-#~ msgstr "Devre Dışı"
-
-#~ msgctxt "GL vendor"
-#~ msgid "None"
-#~ msgstr "Hiçbiri"
-
-#~ msgid "Show _Size Column"
-#~ msgstr "_Boyut Sütununu Göster"
-
-#~ msgid "Show T_ype Column"
-#~ msgstr "T_ür Sütununu Göster"
-
-#~ msgid "Stroke the path instead of filling it"
-#~ msgstr "Doldurmak yerine yolu darbele"
