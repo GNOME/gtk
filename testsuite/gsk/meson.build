@@ -84,6 +84,8 @@ compare_render_tests = [
   'glyph-cache-overflow-slices',
   'glyph-hinting-none',
   'glyph-hinting-slight',
+  'glyph-hinting-position-nogl-nocairo',
+  'glyph-subpixel-position',
   'glyph-scaling',
   'glyph-antialias',
   'huge-height',
