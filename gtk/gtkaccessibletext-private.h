@@ -37,4 +37,10 @@ gtk_accessible_text_get_attributes (GtkAccessibleText        *self,
                                     GtkAccessibleTextRange  **ranges,
                                     char                   ***attribute_names,
                                     char                   ***attribute_values);
+
+void
+gtk_accessible_text_get_default_attributes (GtkAccessibleText   *self,
+                                            char              ***attribute_names,
+                                            char              ***attribute_values);
+
 G_END_DECLS

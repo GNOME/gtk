@@ -64,6 +64,15 @@ gtk_accessible_text_default_get_attributes (GtkAccessibleText        *self,
 }
 
 static void
+gtk_accessible_text_default_get_default_attributes (GtkAccessibleText   *self,
+                                                    char              ***attribute_names,
+                                                    char              ***attribute_values)
+{
+  *attribute_names = NULL;
+  *attribute_values = NULL;
+}
+
+static void
 gtk_accessible_text_default_init (GtkAccessibleTextInterface *iface)
 {
   iface->get_contents = gtk_accessible_text_default_get_contents;
@@ -71,6 +80,7 @@ gtk_accessible_text_default_init (GtkAccessibleTextInterface *iface)
   iface->get_caret_position = gtk_accessible_text_default_get_caret_position;
   iface->get_selection = gtk_accessible_text_default_get_selection;
   iface->get_attributes = gtk_accessible_text_default_get_attributes;
+  iface->get_default_attributes = gtk_accessible_text_default_get_default_attributes;
 }
 
 static GBytes *
@@ -262,6 +272,41 @@ gtk_accessible_text_get_attributes (GtkAccessibleText        *self,
                                                                ranges,
                                                                attribute_names,
                                                                attribute_values);
+}
+
+/*< private >
+ * gtk_accessible_text_get_default_attributes:
+ * @self: the accessible object
+ * @attribute_names: (out) (array zero-terminated=1) (element-type utf8) (optional) (transfer full):
+ *   the names of the attributes inside the accessible object
+ * @attribute_values: (out) (array zero-terminated=1) (element-type utf8) (optional) (transfer full):
+ *   the values of the attributes inside the accessible object
+ *
+ * Retrieves the default text attributes inside the accessible object.
+ *
+ * Each attribute is composed by:
+ *
+ * - a name, typically in the form of a reverse DNS identifier
+ * - a value
+ *
+ * If this function returns true, `n_attributes` will be set to a value
+ * greater than or equal to one, @ranges will be set to a newly
+ * allocated array of [struct#Gtk.AccessibleTextRange] which should
+ * be freed with g_free(), @attribute_names and @attribute_values
+ * will be set to string arrays that should be freed with g_strfreev().
+ *
+ * Since: 4.14
+ */
+void
+gtk_accessible_text_get_default_attributes (GtkAccessibleText   *self,
+                                            char              ***attribute_names,
+                                            char              ***attribute_values)
+{
+  g_return_if_fail (GTK_IS_ACCESSIBLE_TEXT (self));
+
+  GTK_ACCESSIBLE_TEXT_GET_IFACE (self)->get_default_attributes (self,
+                                                                attribute_names,
+                                                                attribute_values);
 }
 
 /**
