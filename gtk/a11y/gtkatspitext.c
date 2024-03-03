@@ -230,8 +230,11 @@ accessible_text_handle_method (GDBusConnection       *connection,
       int start, end;
       char **attr_names = NULL;
       char **attr_values = NULL;
+      GHashTable *attrs;
 
       g_variant_get (parameters, "(ib)", &offset, &include_defaults);
+
+      attrs = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, g_free);
 
       if (include_defaults)
         {
@@ -240,11 +243,7 @@ accessible_text_handle_method (GDBusConnection       *connection,
                                                       &attr_values);
 
           for (int i = 0; attr_names[i] != NULL; i++)
-            {
-              g_variant_builder_add (&builder, "{ss}",
-                                     attr_names[i],
-                                     attr_values[i]);
-            }
+            g_hash_table_insert (attrs, g_strdup (attr_names[i]), g_strdup (attr_values[i]));
 
           g_strfreev (attr_names);
           g_strfreev (attr_values);
@@ -262,13 +261,20 @@ accessible_text_handle_method (GDBusConnection       *connection,
 
       for (int i = 0; i < n_attrs; i++)
         {
-          g_variant_builder_add (&builder, "{ss}", attr_names[i], attr_values[i]);
+          g_hash_table_insert (attrs, g_strdup (attr_names[i]), g_strdup (attr_values[i]));
           start = MAX (start, ranges[i].start);
           end = MIN (end, start + ranges[i].length);
         }
 
+      GHashTableIter attr_iter;
+      gpointer key, value;
+      g_hash_table_iter_init (&attr_iter, attrs);
+      while (g_hash_table_iter_next (&attr_iter, &key, &value))
+        g_variant_builder_add (&builder, "{ss}", key, value);
+
       g_dbus_method_invocation_return_value (invocation, g_variant_new ("(a{ss}ii)", &builder, start, end));
 
+      g_clear_pointer (&attrs, g_hash_table_unref);
       g_clear_pointer (&ranges, g_free);
       g_strfreev (attr_names);
       g_strfreev (attr_values);
