@@ -10469,12 +10469,140 @@ gtk_text_view_accessible_text_get_attributes (GtkAccessibleText        *self,
 }
 
 static void
+gtk_text_view_add_default_attributes (GtkTextView     *view,
+                                      GVariantBuilder *builder)
+{
+  GtkTextAttributes *text_attrs;
+  PangoFontDescription *font;
+  char *value;
+
+  text_attrs = gtk_text_view_get_default_attributes (view);
+
+  font = text_attrs->font;
+
+  if (font)
+    {
+      char **names, **values;
+
+      gtk_pango_get_font_attributes (font, &names, &values);
+
+      for (unsigned i = 0; names[i] != NULL; i++)
+        g_variant_builder_add (builder, "{ss}", names[i], values[i]);
+
+      g_strfreev (names);
+      g_strfreev (values);
+    }
+
+  g_variant_builder_add (builder, "{ss}", "justification",
+                         gtk_justification_to_string (text_attrs->justification));
+  g_variant_builder_add (builder, "{ss}", "direction",
+                         gtk_text_direction_to_string (text_attrs->direction));
+  g_variant_builder_add (builder, "{ss}", "wrap-mode",
+                         gtk_wrap_mode_to_string (text_attrs->wrap_mode));
+  g_variant_builder_add (builder, "{ss}", "editable",
+                         text_attrs->editable ? "true" : "false");
+  g_variant_builder_add (builder, "{ss}", "invisible",
+                         text_attrs->invisible ? "true" : "false");
+  g_variant_builder_add (builder, "{ss}", "bg-full-height",
+                         text_attrs->bg_full_height ? "true" : "false");
+  g_variant_builder_add (builder, "{ss}", "strikethrough",
+                         text_attrs->appearance.strikethrough ? "true" : "false");
+  g_variant_builder_add (builder, "{ss}", "underline",
+                         pango_underline_to_string (text_attrs->appearance.underline));
+
+  value = g_strdup_printf ("%u,%u,%u",
+                           (guint)(text_attrs->appearance.bg_rgba->red * 65535),
+                           (guint)(text_attrs->appearance.bg_rgba->green * 65535),
+                           (guint)(text_attrs->appearance.bg_rgba->blue * 65535));
+  g_variant_builder_add (builder, "{ss}", "bg-color", value);
+  g_free (value);
+
+  value = g_strdup_printf ("%u,%u,%u",
+                           (guint)(text_attrs->appearance.fg_rgba->red * 65535),
+                           (guint)(text_attrs->appearance.fg_rgba->green * 65535),
+                           (guint)(text_attrs->appearance.fg_rgba->blue * 65535));
+  g_variant_builder_add (builder, "{ss}", "bg-color", value);
+  g_free (value);
+
+  value = g_strdup_printf ("%g", text_attrs->font_scale);
+  g_variant_builder_add (builder, "{ss}", "scale", value);
+  g_free (value);
+
+  value = g_strdup ((gchar *)(text_attrs->language));
+  g_variant_builder_add (builder, "{ss}", "language", value);
+  g_free (value);
+
+  value = g_strdup_printf ("%i", text_attrs->appearance.rise);
+  g_variant_builder_add (builder, "{ss}", "rise", value);
+  g_free (value);
+
+  value = g_strdup_printf ("%i", text_attrs->pixels_inside_wrap);
+  g_variant_builder_add (builder, "{ss}", "pixels-inside-wrap", value);
+  g_free (value);
+
+  value = g_strdup_printf ("%i", text_attrs->pixels_below_lines);
+  g_variant_builder_add (builder, "{ss}", "pixels-below-lines", value);
+  g_free (value);
+
+  value = g_strdup_printf ("%i", text_attrs->pixels_above_lines);
+  g_variant_builder_add (builder, "{ss}", "pixels-above-lines", value);
+  g_free (value);
+
+  value = g_strdup_printf ("%i", text_attrs->indent);
+  g_variant_builder_add (builder, "{ss}", "indent", value);
+  g_free (value);
+
+  value = g_strdup_printf ("%i", text_attrs->left_margin);
+  g_variant_builder_add (builder, "{ss}", "left-margin", value);
+  g_free (value);
+
+  value = g_strdup_printf ("%i", text_attrs->right_margin);
+  g_variant_builder_add (builder, "{ss}", "right-margin", value);
+  g_free (value);
+
+  gtk_text_attributes_unref (text_attrs);
+}
+static void
+gtk_text_view_accessible_text_get_default_attributes (GtkAccessibleText   *self,
+                                                      char              ***attribute_names,
+                                                      char              ***attribute_values)
+{
+  GVariantBuilder builder = G_VARIANT_BUILDER_INIT (G_VARIANT_TYPE ("a{ss}"));
+
+  gtk_text_view_add_default_attributes (GTK_TEXT_VIEW (self), &builder);
+
+  GVariant *v = g_variant_builder_end (&builder);
+  unsigned n = g_variant_n_children (v);
+  if (n == 0)
+    {
+      g_variant_unref (v);
+      return;
+    }
+
+  *attribute_names = g_new (char *, n + 1);
+  *attribute_values = g_new (char *, n + 1);
+
+  for (int i = 0; i < n; i++)
+    {
+      char *name, *value;
+
+      g_variant_get_child (v, i, "{ss}", &name, &value);
+      (*attribute_names)[i] = g_steal_pointer (&name);
+      (*attribute_values)[i] = g_steal_pointer (&value);
+    }
+
+  (*attribute_names)[n] = NULL;
+  (*attribute_values)[n] = NULL;
+}
+
+static void
 gtk_text_view_accessible_text_init (GtkAccessibleTextInterface *iface)
 {
   iface->get_contents = gtk_text_view_accessible_text_get_contents;
   iface->get_caret_position = gtk_text_view_accessible_text_get_caret_position;
   iface->get_selection = gtk_text_view_accessible_text_get_selection;
   iface->get_attributes = gtk_text_view_accessible_text_get_attributes;
+  iface->get_default_attributes = gtk_text_view_accessible_text_get_default_attributes;
 }
 
 /* }}} */
