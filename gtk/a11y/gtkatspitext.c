@@ -222,7 +222,56 @@ accessible_text_handle_method (GDBusConnection       *connection,
     }
   else if (g_strcmp0 (method_name, "GetAttributeRun") == 0)
     {
-      g_dbus_method_invocation_return_error_literal (invocation, G_DBUS_ERROR, G_DBUS_ERROR_NOT_SUPPORTED, "");
+      GVariantBuilder builder = G_VARIANT_BUILDER_INIT (G_VARIANT_TYPE ("a{ss}"));
+      gboolean include_defaults = FALSE;
+      int offset;
+      gsize n_attrs = 0;
+      GtkAccessibleTextRange *ranges = NULL;
+      int start, end;
+      char **attr_names = NULL;
+      char **attr_values = NULL;
+
+      g_variant_get (parameters, "(ib)", &offset, &include_defaults);
+
+      if (include_defaults)
+        {
+          gtk_accessible_text_get_default_attributes (accessible_text,
+                                                      &attr_names,
+                                                      &attr_values);
+
+          for (int i = 0; attr_names[i] != NULL; i++)
+            {
+              g_variant_builder_add (&builder, "{ss}",
+                                     attr_names[i],
+                                     attr_values[i]);
+            }
+
+          g_strfreev (attr_names);
+          g_strfreev (attr_values);
+        }
+
+      gtk_accessible_text_get_attributes (accessible_text,
+                                          offset,
+                                          &n_attrs,
+                                          &ranges,
+                                          &attr_names,
+                                          &attr_values);
+
+      start = 0;
+      end = G_MAXINT;
+
+      for (int i = 0; i < n_attrs; i++)
+        {
+          g_variant_builder_add (&builder, "{ss}", attr_names[i], attr_values[i]);
+          start = MAX (start, ranges[i].start);
+          end = MIN (end, start + ranges[i].length);
+        }
+
+      g_dbus_method_invocation_return_value (invocation, g_variant_new ("(a{ss}ii)", &builder, start, end));
+
+      g_clear_pointer (&ranges, g_free);
+      g_strfreev (attr_names);
+      g_strfreev (attr_values);
     }
   else if (g_strcmp0 (method_name, "GetDefaultAttributes") == 0 ||
            g_strcmp0 (method_name, "GetDefaultAttributeSet") == 0)
