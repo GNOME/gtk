@@ -1682,63 +1682,79 @@ text_view_handle_method (GDBusConnection       *connection,
     }
   else if (g_strcmp0 (method_name, "GetAttributes") == 0)
     {
-      GtkTextBuffer *buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (widget));
       GVariantBuilder builder = G_VARIANT_BUILDER_INIT (G_VARIANT_TYPE ("a{ss}"));
+      GHashTable *attrs;
+      GHashTableIter iter;
       int offset;
       int start, end;
+      gpointer key, value;
 
       g_variant_get (parameters, "(i)", &offset);
 
-      gtk_text_buffer_get_run_attributes (buffer, &builder, offset, &start, &end);
+      attrs = gtk_text_view_get_attributes_run (GTK_TEXT_VIEW (widget), offset, FALSE, &start, &end);
+      g_hash_table_iter_init (&iter, attrs);
+      while (g_hash_table_iter_next (&iter, &key, &value))
+        g_variant_builder_add (&builder, "{ss}", key, value != NULL ? value : "");
 
       g_dbus_method_invocation_return_value (invocation, g_variant_new ("(a{ss}ii)", &builder, start, end));
+
+      g_hash_table_unref (attrs);
     }
   else if (g_strcmp0 (method_name, "GetAttributeValue") == 0)
     {
-      GtkTextBuffer *buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (widget));
-      GVariantBuilder builder = G_VARIANT_BUILDER_INIT (G_VARIANT_TYPE ("a{ss}"));
       int offset;
       const char *name;
       int start, end;
-      GVariant *attrs;
       const char *val;
+      GHashTable *attrs;
 
       g_variant_get (parameters, "(i&s)", &offset, &name);
 
-      gtk_text_buffer_get_run_attributes (buffer, &builder, offset, &start, &end);
-
-      attrs = g_variant_builder_end (&builder);
-      if (!g_variant_lookup (attrs, name, "&s", &val))
+      attrs = gtk_text_view_get_attributes_run (GTK_TEXT_VIEW (widget), offset, FALSE, &start, &end);
+      val = g_hash_table_lookup (attrs, name);
+      if (val == NULL)
         val = "";
 
       g_dbus_method_invocation_return_value (invocation, g_variant_new ("(s)", val));
-      g_variant_unref (attrs);
+      g_hash_table_unref (attrs);
     }
   else if (g_strcmp0 (method_name, "GetAttributeRun") == 0)
     {
-      GtkTextBuffer *buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (widget));
       GVariantBuilder builder = G_VARIANT_BUILDER_INIT (G_VARIANT_TYPE ("a{ss}"));
       int offset;
       gboolean include_defaults;
       int start, end;
+      GHashTable *attrs;
+      GHashTableIter iter;
+      gpointer key, value;
 
       g_variant_get (parameters, "(ib)", &offset, &include_defaults);
 
-      if (include_defaults)
-        gtk_text_view_add_default_attributes (GTK_TEXT_VIEW (widget), &builder);
-
-      gtk_text_buffer_get_run_attributes (buffer, &builder, offset, &start, &end);
+      attrs = gtk_text_view_get_attributes_run (GTK_TEXT_VIEW (widget), offset, include_defaults, &start, &end);
+      g_hash_table_iter_init (&iter, attrs);
+      while (g_hash_table_iter_next (&iter, &key, &value))
+        g_variant_builder_add (&builder, "{ss}", key, value != NULL ? value : "");
 
       g_dbus_method_invocation_return_value (invocation, g_variant_new ("(a{ss}ii)", &builder, start, end));
+
+      g_hash_table_unref (attrs);
     }
   else if (g_strcmp0 (method_name, "GetDefaultAttributes") == 0 ||
            g_strcmp0 (method_name, "GetDefaultAttributeSet") == 0)
     {
       GVariantBuilder builder = G_VARIANT_BUILDER_INIT (G_VARIANT_TYPE ("a{ss}"));
+      GHashTable *attrs = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, g_free);
+      GHashTableIter iter;
+      gpointer key, value;
 
-      gtk_text_view_add_default_attributes (GTK_TEXT_VIEW (widget), &builder);
+      gtk_text_view_add_default_attributes (GTK_TEXT_VIEW (widget), attrs);
+      g_hash_table_iter_init (&iter, attrs);
+      while (g_hash_table_iter_next (&iter, &key, &value))
+        g_variant_builder_add (&builder, "{ss}", key, value != NULL ? value : "");
 
       g_dbus_method_invocation_return_value (invocation, g_variant_new ("(a{ss})", &builder));
+
+      g_hash_table_unref (attrs);
     }
   else if (g_strcmp0 (method_name, "GetNSelections") == 0)
     {

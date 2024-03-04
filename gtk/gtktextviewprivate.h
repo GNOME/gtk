@@ -31,6 +31,13 @@ GtkTextAttributes * gtk_text_view_get_default_attributes (GtkTextView *text_view
 
 GtkEventController *gtk_text_view_get_key_controller    (GtkTextView *text_view);
 
+GHashTable *    gtk_text_view_get_attributes_run        (GtkTextView *self,
+                                                         int          offset,
+                                                         gboolean     include_defaults,
+                                                         int         *start,
+                                                         int         *end);
+void            gtk_text_view_add_default_attributes    (GtkTextView *view,
+                                                         GHashTable  *attributes);
 
 G_END_DECLS
 

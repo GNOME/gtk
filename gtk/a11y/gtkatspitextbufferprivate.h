@@ -23,9 +23,6 @@
 
 G_BEGIN_DECLS
 
-void gtk_text_view_add_default_attributes (GtkTextView     *view,
-                                           GVariantBuilder *builder);
-
 char *gtk_text_view_get_text_before (GtkTextView           *view,
                                      int                    offset,
                                      AtspiTextBoundaryType  boundary_type,
