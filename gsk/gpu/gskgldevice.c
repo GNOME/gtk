@@ -9,6 +9,7 @@
 
 #include "gdk/gdkdisplayprivate.h"
 #include "gdk/gdkglcontextprivate.h"
+#include "gdk/gdkprofilerprivate.h"
 
 #include <glib/gi18n-lib.h>
 
@@ -473,6 +474,7 @@ gsk_gl_device_load_program (GskGLDevice               *self,
                             guint                      n_external_textures,
                             GError                   **error)
 {
+  G_GNUC_UNUSED gint64 begin_time = GDK_PROFILER_CURRENT_TIME;
   GLuint vertex_shader_id, fragment_shader_id, program_id;
   GLint link_status;
 
@@ -526,6 +528,11 @@ gsk_gl_device_load_program (GskGLDevice               *self,
 
       return 0;
     }
+
+  gdk_profiler_end_markf (begin_time,
+                          "Compile Program",
+                          "name=%s id=%u frag=%u vert=%u",
+                          op_class->shader_name, program_id, fragment_shader_id, vertex_shader_id);
 
   return program_id;
 }
