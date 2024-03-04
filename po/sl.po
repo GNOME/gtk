@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2024-02-15 02:27+0000\n"
-"PO-Revision-Date: 2024-02-25 18:29+0100\n"
+"POT-Creation-Date: 2024-02-27 17:39+0000\n"
+"PO-Revision-Date: 2024-02-27 20:39+0100\n"
 "Last-Translator: Matej Urbančič <mateju@src.gnome.org>\n"
 "Language-Team: Slovenian GNOME Translation Team <gnome-si@googlegroups.com>\n"
 "Language: sl_SI\n"
@@ -122,9 +122,9 @@ msgstr "Ni skladnih zapisov za prenos vsebine."
 msgid "No GL API allowed."
 msgstr "API GL ni dovoljen."
 
-#: gdk/gdkglcontext.c:442 gdk/win32/gdkglcontext-win32-wgl.c:386
-#: gdk/win32/gdkglcontext-win32-wgl.c:529
-#: gdk/win32/gdkglcontext-win32-wgl.c:573 gdk/x11/gdkglcontext-glx.c:691
+#: gdk/gdkglcontext.c:442 gdk/win32/gdkglcontext-win32-wgl.c:395
+#: gdk/win32/gdkglcontext-win32-wgl.c:538
+#: gdk/win32/gdkglcontext-win32-wgl.c:582 gdk/x11/gdkglcontext-glx.c:691
 msgid "Unable to create a GL context"
 msgstr "Ni mogoče ustvariti vsebine GL"
 
@@ -747,21 +747,21 @@ msgstr ""
 msgid "Failed to transmute DnD data W32 format 0x%x to %p (%s)"
 msgstr "Pretvarjanje podatkov DnD za zapis W32 0x%x to %p (%s) je spodletelo."
 
-#: gdk/win32/gdkglcontext-win32-wgl.c:320
+#: gdk/win32/gdkglcontext-win32-wgl.c:329
 msgid "No GL implementation is available"
 msgstr "Okolje GL ni na voljo"
 
-#: gdk/win32/gdkglcontext-win32-wgl.c:395
+#: gdk/win32/gdkglcontext-win32-wgl.c:404
 #, c-format
 msgid "WGL version %d.%d is too low, need at least %d.%d"
 msgstr "Različica WGL %d.%d je prestara, zahtevana je različica vsaj %d.%d"
 
-#: gdk/win32/gdkglcontext-win32-wgl.c:413
+#: gdk/win32/gdkglcontext-win32-wgl.c:422
 #, c-format
 msgid "GL implementation cannot share GL contexts"
 msgstr "Izvedba GL ne more uporabiti vsebine GL"
 
-#: gdk/win32/gdkglcontext-win32-wgl.c:693
+#: gdk/win32/gdkglcontext-win32-wgl.c:702
 msgid "No available configurations for the given pixel format"
 msgstr "Ni navedenih nastavitev za podan točkovni zapis"
 
@@ -1251,10 +1251,8 @@ msgid "Mozilla Public License 2.0"
 msgstr "Javno dovoljenje Mozilla 2.0"
 
 #: gtk/gtkaboutdialog.c:137
-#, fuzzy
-#| msgid "BSD 2-Clause License"
 msgid "BSD Zero-Clause License"
-msgstr "Dovoljenje BSD"
+msgstr "Dovoljenje BSD Zero-Clause"
 
 #: gtk/gtkaboutdialog.c:964
 msgid "Website"
@@ -1784,17 +1782,19 @@ msgid "block quote"
 msgstr "bločni navedek"
 
 #: gtk/gtkaccessible.c:872
-#, fuzzy
-#| msgctxt "sizegroup mode"
-#| msgid "Vertical"
 msgctxt "accessibility"
 msgid "article"
-msgstr "Navpično"
+msgstr ""
 
 #: gtk/gtkaccessible.c:873
 msgctxt "accessibility"
 msgid "comment"
 msgstr "opomba"
+
+#: gtk/gtkaccessible.c:874
+msgctxt "accessibility"
+msgid "terminal"
+msgstr "terminal"
 
 #: gtk/gtkalertdialog.c:668 gtk/print/gtkcustompaperunixdialog.c:322
 #: gtk/gtkmessagedialog.c:166 gtk/ui/gtkassistant.ui:40
@@ -2369,7 +2369,7 @@ msgid "If you delete an item, it will be permanently lost."
 msgstr "V primeru, da predmet izbrišete, bo trajno izgubljen."
 
 #: gtk/gtkfilechooserwidget.c:1188 gtk/gtkfilechooserwidget.c:1786
-#: gtk/gtklabel.c:5702 gtk/gtktext.c:6147 gtk/gtktextview.c:9018
+#: gtk/gtklabel.c:5712 gtk/gtktext.c:6193 gtk/gtktextview.c:9080
 msgid "_Delete"
 msgstr "_Izbriši"
 
@@ -2707,31 +2707,31 @@ msgstr "Zapri"
 msgid "Close the infobar"
 msgstr "Zapri vrstico podrobnosti"
 
-#: gtk/gtklabel.c:5699 gtk/gtktext.c:6135 gtk/gtktextview.c:9006
+#: gtk/gtklabel.c:5709 gtk/gtktext.c:6181 gtk/gtktextview.c:9068
 msgid "Cu_t"
 msgstr "Iz_reži"
 
-#: gtk/gtklabel.c:5700 gtk/gtktext.c:6139 gtk/gtktextview.c:9010
+#: gtk/gtklabel.c:5710 gtk/gtktext.c:6185 gtk/gtktextview.c:9072
 msgid "_Copy"
 msgstr "_Kopiraj"
 
-#: gtk/gtklabel.c:5701 gtk/gtktext.c:6143 gtk/gtktextview.c:9014
+#: gtk/gtklabel.c:5711 gtk/gtktext.c:6189 gtk/gtktextview.c:9076
 msgid "_Paste"
 msgstr "Pr_ilepi"
 
-#: gtk/gtklabel.c:5707 gtk/gtktext.c:6156 gtk/gtktextview.c:9039
+#: gtk/gtklabel.c:5717 gtk/gtktext.c:6202 gtk/gtktextview.c:9101
 msgid "Select _All"
 msgstr "Izberi _vse"
 
-#: gtk/gtklabel.c:5712
+#: gtk/gtklabel.c:5722
 msgid "_Open Link"
 msgstr "_Odpri povezavo"
 
-#: gtk/gtklabel.c:5716
+#: gtk/gtklabel.c:5726
 msgid "Copy _Link Address"
 msgstr "Kopiraj _naslov povezave"
 
-#: gtk/gtklabel.c:5760 gtk/gtktext.c:2716 gtk/gtktextview.c:9088
+#: gtk/gtklabel.c:5770 gtk/gtktext.c:2724 gtk/gtktextview.c:9150
 msgid "Context menu"
 msgstr "Vsebinski meni"
 
@@ -3579,7 +3579,7 @@ msgstr ""
 "Ni mogoče najti programa z imenom »%s« za odpiranje predmetov z naslovom URI "
 "»%s«."
 
-#: gtk/gtksearchentry.c:767
+#: gtk/gtksearchentry.c:814
 msgid "Clear Entry"
 msgstr "Počisti vnos"
 
@@ -3670,15 +3670,15 @@ msgctxt "accessibility"
 msgid "Sidebar"
 msgstr "Stranska vrstica"
 
-#: gtk/gtktext.c:6161 gtk/gtktextview.c:9044
+#: gtk/gtktext.c:6207 gtk/gtktextview.c:9106
 msgid "Insert _Emoji"
 msgstr "Vstavi izrazno _ikono"
 
-#: gtk/gtktextview.c:9026
+#: gtk/gtktextview.c:9088
 msgid "_Undo"
 msgstr "_Razveljavi"
 
-#: gtk/gtktextview.c:9030
+#: gtk/gtktextview.c:9092
 msgid "_Redo"
 msgstr "_Ponovno uveljavi"
 
@@ -3978,7 +3978,6 @@ msgid "GL_VENDOR"
 msgstr "GL_VENDOR"
 
 #: gtk/inspector/general.ui:727
-#| msgid "RENDERER"
 msgid "GL_RENDERER"
 msgstr "GL_RENDERER"
 
@@ -7537,7 +7536,7 @@ msgstr "POT"
 
 #: tools/gtk-path-tool-decompose.c:99
 msgid "Decompose a path."
-msgstr ""
+msgstr "Razdrobi pot."
 
 #: tools/gtk-path-tool-decompose.c:112 tools/gtk-path-tool-info.c:113
 #: tools/gtk-path-tool-restrict.c:64 tools/gtk-path-tool-reverse.c:58
@@ -7550,10 +7549,8 @@ msgid "That didn't work out."
 msgstr "To se ni obneslo."
 
 #: tools/gtk-path-tool-info.c:100
-#, fuzzy
-#| msgid "Provide information about the render node."
 msgid "Print information about a path."
-msgstr "Navesti je traba podrobnosti o vozlišču za izrisovanje."
+msgstr "Izpiši podrobnosti poti"
 
 #: tools/gtk-path-tool-info.c:121
 msgid "Path is empty."
@@ -7599,21 +7596,19 @@ msgstr "%d koničnih"
 
 #: tools/gtk-path-tool-render.c:117 tools/gtk-path-tool-show.c:140
 msgid "Fill the path (the default)"
-msgstr ""
+msgstr "Zapolni pot (privzeto)"
 
 #: tools/gtk-path-tool-render.c:118 tools/gtk-path-tool-show.c:141
 msgid "Stroke the path"
-msgstr ""
+msgstr "Obrobi pot"
 
 #: tools/gtk-path-tool-render.c:119 tools/gtk-path-tool-show.c:142
 msgid "Show path points"
 msgstr "Pokaži točke poti"
 
 #: tools/gtk-path-tool-render.c:120 tools/gtk-path-tool-show.c:143
-#, fuzzy
-#| msgid "Show other locations"
 msgid "Show control points"
-msgstr "Pokaži druga mesta"
+msgstr "Pokaži nadzorne točke"
 
 #: tools/gtk-path-tool-render.c:121
 msgid "The output file"
@@ -7634,10 +7629,8 @@ msgid "Background color"
 msgstr "Barva ozadja"
 
 #: tools/gtk-path-tool-render.c:124 tools/gtk-path-tool-show.c:146
-#, fuzzy
-#| msgid "Custom color"
 msgid "Point color"
-msgstr "Barva po meri"
+msgstr "Barva točke"
 
 #: tools/gtk-path-tool-render.c:129 tools/gtk-path-tool-show.c:151
 msgid "Fill rule (winding, even-odd)"
@@ -7678,48 +7671,36 @@ msgid "Dash offset (number)"
 msgstr ""
 
 #: tools/gtk-path-tool-render.c:161 tools/gtk-path-tool-show.c:172
-#, fuzzy
-#| msgid "Could not initialize windowing system\n"
 msgid "Could not initialize windowing system"
-msgstr "Ni mogoče začeti okenskega sistema\n"
+msgstr "Ni mogoče začeti okenskega sistema"
 
 #: tools/gtk-path-tool-render.c:168
-#, fuzzy
-#| msgid "Render a .node file to an image."
 msgid "Render the path to a png image."
-msgstr "Izriši datoteko .node v sliko."
+msgstr "Izriši pot v sliko .png."
 
 #: tools/gtk-path-tool-render.c:173 tools/gtk-path-tool-show.c:183
 msgid "Options related to filling"
-msgstr ""
+msgstr "Možnosti, povezane s polnilom"
 
 #: tools/gtk-path-tool-render.c:174 tools/gtk-path-tool-show.c:184
-#, fuzzy
-#| msgid "Show other locations"
 msgid "Show help for fill options"
-msgstr "Pokaži druga mesta"
+msgstr "Pokaži pomoč za možnosti polnila"
 
 #: tools/gtk-path-tool-render.c:181 tools/gtk-path-tool-show.c:191
 msgid "Options related to stroking"
-msgstr ""
+msgstr "Možnosti, povezane z obrobo"
 
 #: tools/gtk-path-tool-render.c:182 tools/gtk-path-tool-show.c:192
-#, fuzzy
-#| msgid "Show other locations"
 msgid "Show help for stroke options"
-msgstr "Pokaži druga mesta"
+msgstr "Pokaži pomoč za možnosti obrobe"
 
 #: tools/gtk-path-tool-render.c:199 tools/gtk-path-tool-show.c:209
-#, fuzzy
-#| msgid "Reason not specified"
 msgid "No path specified"
-msgstr "Vzrok ni naveden"
+msgstr "Ni navedene poti"
 
 #: tools/gtk-path-tool-render.c:205
-#, fuzzy
-#| msgid "Can only preview a single .ui file\n"
 msgid "Can only render a single path"
-msgstr "Predogled je mogoč le za eno datoteko .ui sočasno\n"
+msgstr "Izrisati je mogoče le eno pot"
 
 #: tools/gtk-path-tool-render.c:250 tools/gtk-path-tool-show.c:221
 msgid "fill rule"
@@ -7734,16 +7715,14 @@ msgid "line join"
 msgstr ""
 
 #: tools/gtk-path-tool-render.c:310
-#, fuzzy, c-format
-#| msgid "Saving CSS failed"
+#, c-format
 msgid "Saving png to '%s' failed"
-msgstr "Shranjevanje CSS je spodletelo"
+msgstr "Shranjevanje datoteke png v »%s« je spodletelo"
 
 #: tools/gtk-path-tool-render.c:317
-#, fuzzy, c-format
-#| msgid "Output written to %s.\n"
+#, c-format
 msgid "Output written to '%s'."
-msgstr "Odvod je zapisan v %s.\n"
+msgstr "Odvod je zapisan v »%s«."
 
 #: tools/gtk-path-tool-restrict.c:36
 msgid "Beginning of segment"
@@ -7762,10 +7741,8 @@ msgid "Restrict a path to a segment."
 msgstr ""
 
 #: tools/gtk-path-tool-reverse.c:45
-#, fuzzy
-#| msgid "Reverse portrait"
 msgid "Reverse a path."
-msgstr "Obrnjeno pokončno"
+msgstr "Obrni pot."
 
 #: tools/gtk-path-tool-show.c:46 tools/gtk-path-tool-show.c:88
 msgid "Path Preview"
@@ -7776,50 +7753,44 @@ msgid "Display the path."
 msgstr "Pokaži pot"
 
 #: tools/gtk-path-tool-show.c:215
-#, fuzzy
-#| msgid "Can only preview a single .ui file\n"
 msgid "Can only show a single path"
-msgstr "Predogled je mogoč le za eno datoteko .ui sočasno\n"
+msgstr "Pokazati je mogoče le eno pot"
 
 #: tools/gtk-path-tool-utils.c:58
-#, fuzzy, c-format
-#| msgid "Failed to load node file: %s\n"
+#, c-format
 msgid "Failed to read from standard input: %s\n"
-msgstr "Nalaganje datoteke vozlišča je spodletelo: %s\n"
+msgstr "Branje s standardnega vhoda je spodletelo: %s\n"
 
 #: tools/gtk-path-tool-utils.c:64
-#, fuzzy, c-format
-#| msgid "Error parsing commandline options: %s\n"
+#, c-format
 msgid "Error reading from standard input: %s\n"
-msgstr "Napaka med razčlenjevanjem možnosti ukazne vrstice: %s\n"
+msgstr "Prišlo je do napake med branje standardnega vhoda: %s\n"
 
 #: tools/gtk-path-tool-utils.c:83
-#, fuzzy, c-format
-#| msgid "Failed to save %s: %s\n"
+#, c-format
 msgid "Failed to parse '%s' as path.\n"
-msgstr "Datoteke %s ni mogoče shraniti: %s\n"
+msgstr ""
+"Razčlenjevanje »%s« kot pot je spodletelo.\n"
+"\n"
 
 #: tools/gtk-path-tool-utils.c:109
-#, fuzzy, c-format
-#| msgid "Failed to save %s: %s\n"
+#, c-format
 msgid "Failed to parse '%s' as %s."
-msgstr "Datoteke %s ni mogoče shraniti: %s\n"
+msgstr "Razčlenjevanje »%s« kot %s je spodletelo."
 
 #: tools/gtk-path-tool-utils.c:111
 msgid "Possible values: "
 msgstr "Mogoče vrednosti: "
 
 #: tools/gtk-path-tool-utils.c:135
-#, fuzzy, c-format
-#| msgid "Could not rename %s to %s: %s\n"
+#, c-format
 msgid "Could not parse '%s' as color"
-msgstr "%s ni mogoče preimenovati v %s: %s\n"
+msgstr "Vrednosti »%s« ni mogoče razčleniti kot barvo"
 
 #: tools/gtk-path-tool-utils.c:163
-#, fuzzy, c-format
-#| msgid "Failed to save %s: %s\n"
+#, c-format
 msgid "Failed to parse '%s' as number"
-msgstr "Datoteke %s ni mogoče shraniti: %s\n"
+msgstr "Razčlenjevanje »%s« kot število je spodletelo"
 
 #: tools/gtk-rendernode-tool.c:35
 #, fuzzy, c-format
@@ -7842,6 +7813,7 @@ msgid ""
 "\n"
 "Commands:\n"
 "  benchmark    Benchmark rendering of a node\n"
+"  compare      Compare nodes or images\n"
 "  info         Provide information about the node\n"
 "  show         Show the node\n"
 "  render       Take a screenshot of the node\n"
