@@ -228,6 +228,33 @@ struct _GtkAccessibleTextInterface
                                GtkAccessibleTextRange **ranges,
                                char ***attribute_names,
                                char ***attribute_values);
+
+  /**
+   * GtkAccessibleTextInterface::get_default_attributes:
+   * @self: the accessible object
+   * @attribute_names: (out) (array zero-terminated=1) (optional) (transfer full): the
+   *   names of the default attributes inside the accessible object
+   * @attribute_values: (out) (array zero-terminated=1) (optional) (transfer full): the
+   *   values of the default attributes inside the accessible object
+   *
+   * Retrieves the default text attributes inside the accessible object.
+   *
+   * Each attribute is composed by:
+   *
+   * - a name
+   * - a value
+   *
+   * It is left to the implementation to determine the serialization format
+   * of the value to a string.
+   *
+   * GTK provides support for various text attribute names and values, but
+   * implementations of this interface are free to add their own attributes.
+   *
+   * Since: 4.14
+   */
+  void (* get_default_attributes) (GtkAccessibleText *self,
+                                   char ***attribute_names,
+                                   char ***attribute_values);
 };
 
 GDK_AVAILABLE_IN_4_14

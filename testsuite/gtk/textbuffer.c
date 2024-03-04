@@ -1933,24 +1933,18 @@ test_serialize_wrap_mode (void)
   for (i = 0; i < G_N_ELEMENTS (values); i++)
     {
       /* Each line has a { wrap-mode: name } run */
-      GVariantBuilder expected_builder = G_VARIANT_BUILDER_INIT (G_VARIANT_TYPE ("a{ss}"));
-      g_variant_builder_add (&expected_builder, "{ss}", "wrap-mode", values[i].name);
-
-      GVariant *expected = g_variant_builder_end (&expected_builder);
-
-      GVariantBuilder result_builder = G_VARIANT_BUILDER_INIT (G_VARIANT_TYPE ("a{ss}"));
       int run_start, run_end;
 
-      gtk_text_buffer_get_run_attributes (buffer, &result_builder, 2 * i, &run_start, &run_end);
+      GHashTable *attrs = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, g_free);
 
-      GVariant *result = g_variant_builder_end (&result_builder);
+      gtk_text_buffer_add_run_attributes (buffer, 2 * i, attrs, &run_start, &run_end);
 
       g_assert_cmpint (run_start, ==, 2 * i);
       g_assert_cmpint (run_end, ==, 2 * (i + 1));
-      g_assert_cmpvariant (result, expected);
 
-      g_variant_unref (result);
-      g_variant_unref (expected);
+      const char *result = g_hash_table_lookup (attrs, "wrap-mode");
+      g_assert_cmpstr (result, ==, values[i].name);
+      g_hash_table_unref (attrs);
     }
 
   g_assert_finalize_object (buffer);

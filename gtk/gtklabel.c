@@ -6134,6 +6134,20 @@ gtk_label_accessible_text_get_selection (GtkAccessibleText       *self,
   return TRUE;
 }
 
+static void
+gtk_label_accessible_text_get_default_attributes (GtkAccessibleText   *self,
+                                                  char              ***attribute_names,
+                                                  char              ***attribute_values)
+{
+  PangoLayout *layout = gtk_label_get_layout (GTK_LABEL (self));
+  char **names, **values;
+
+  gtk_pango_get_default_attributes (layout, &names, &values);
+
+  *attribute_names = names;
+  *attribute_values = values;
+}
+
 static gboolean
 gtk_label_accessible_text_get_attributes (GtkAccessibleText        *self,
                                           unsigned int              offset,
@@ -6173,6 +6187,7 @@ gtk_label_accessible_text_init (GtkAccessibleTextInterface *iface)
   iface->get_caret_position = gtk_label_accessible_text_get_caret_position;
   iface->get_selection = gtk_label_accessible_text_get_selection;
   iface->get_attributes = gtk_label_accessible_text_get_attributes;
+  iface->get_default_attributes = gtk_label_accessible_text_get_default_attributes;
 }
 
 /* }}} */

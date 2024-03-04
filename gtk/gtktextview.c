@@ -10465,40 +10465,205 @@ gtk_text_view_accessible_text_get_attributes (GtkAccessibleText        *self,
                                               char                   ***attribute_values)
 {
   GtkTextBuffer *buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (self));
-  GVariantBuilder builder = G_VARIANT_BUILDER_INIT (G_VARIANT_TYPE ("a{ss}"));
+  GHashTable *attrs = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, g_free);
+  GHashTableIter iter;
+  gpointer key, value;
+  guint n_attrs, i;
   int start, end;
 
-  gtk_text_buffer_get_run_attributes (buffer, &builder, offset, &start, &end);
+  gtk_text_buffer_add_run_attributes (buffer, offset, attrs, &start, &end);
 
-  GVariant *v = g_variant_builder_end (&builder);
-  unsigned n = g_variant_n_children (v);
-  if (n == 0)
+  n_attrs = g_hash_table_size (attrs);
+  if (n_attrs == 0)
     {
-      g_variant_unref (v);
+      g_hash_table_unref (attrs);
+      *n_ranges = 0;
+      *ranges = NULL;
+      *attribute_names = NULL;
+      *attribute_values = NULL;
       return FALSE;
     }
 
-  *n_ranges = n;
-  *ranges = g_new (GtkAccessibleTextRange, n);
-  *attribute_names = g_new (char *, n + 1);
-  *attribute_values = g_new (char *, n + 1);
+  *n_ranges = n_attrs;
+  *ranges = g_new (GtkAccessibleTextRange, n_attrs);
+  *attribute_names = g_new (char *, n_attrs + 1);
+  *attribute_values = g_new (char *, n_attrs + 1);
 
-  for (int i = 0; i < n; i++)
+  i = 0;
+  g_hash_table_iter_init (&iter, attrs);
+  while (g_hash_table_iter_next (&iter, &key, &value))
     {
-      char *name, *value;
-
       ((*ranges)[i]).start = start;
       ((*ranges)[i]).length = end - start;
 
-      g_variant_get_child (v, i, "{ss}", &name, &value);
-      (*attribute_names)[i] = g_steal_pointer (&name);
-      (*attribute_values)[i] = g_steal_pointer (&value);
+      (*attribute_names)[i] = g_strdup (key);
+      (*attribute_values)[i] = g_strdup (value);
+
+      i += 1;
     }
 
-  (*attribute_names)[n] = NULL;
-  (*attribute_values)[n] = NULL;
+  (*attribute_names)[n_attrs] = NULL;
+  (*attribute_values)[n_attrs] = NULL;
 
   return TRUE;
+}
+
+void
+gtk_text_view_add_default_attributes (GtkTextView *view,
+                                      GHashTable  *attributes)
+{
+  GtkTextAttributes *text_attrs;
+  PangoFontDescription *font;
+
+  text_attrs = gtk_text_view_get_default_attributes (view);
+
+  font = text_attrs->font;
+
+  if (font)
+    {
+      char **names, **values;
+
+      gtk_pango_get_font_attributes (font, &names, &values);
+
+      for (unsigned i = 0; names[i] != NULL; i++)
+        g_hash_table_insert (attributes,
+                             g_steal_pointer (&names[i]),
+                             g_steal_pointer (&values[i]));
+
+      g_free (names);
+      g_free (values);
+    }
+
+#define ADD_STR_ATTR(ht,name,value) \
+  g_hash_table_insert ((ht), g_strdup ((name)), g_strdup ((value)))
+
+#define ADD_BOOL_ATTR(ht,name,value) \
+  g_hash_table_insert ((ht), g_strdup ((name)), (value) ? g_strdup ("true") : g_strdup ("false"))
+
+#define ADD_COLOR_ATTR(ht,name,color) G_STMT_START { \
+  char *__value = g_strdup_printf ("%u,%u,%u", \
+                                   (guint) ((color)->red * 65535), \
+                                   (guint) ((color)->green * 65535), \
+                                   (guint) ((color)->blue * 65535)); \
+  g_hash_table_insert (ht, g_strdup (name), __value); \
+} G_STMT_END
+
+#define ADD_FLOAT_ATTR(ht,name,value) G_STMT_START { \
+  char *__value = g_strdup_printf ("%g", (value)); \
+  g_hash_table_insert (ht, g_strdup (name), __value); \
+} G_STMT_END
+
+#define ADD_INT_ATTR(ht,name,value) G_STMT_START { \
+  char *__value = g_strdup_printf ("%i", (value)); \
+  g_hash_table_insert (ht, g_strdup (name), __value); \
+} G_STMT_END
+
+  ADD_STR_ATTR (attributes, "justification", gtk_justification_to_string (text_attrs->justification));
+  ADD_STR_ATTR (attributes, "direction", gtk_text_direction_to_string (text_attrs->direction));
+  ADD_STR_ATTR (attributes, "wrap-mode", gtk_wrap_mode_to_string (text_attrs->wrap_mode));
+  ADD_STR_ATTR (attributes, "underline", pango_underline_to_string (text_attrs->appearance.underline));
+
+  ADD_BOOL_ATTR (attributes, "editable", text_attrs->editable);
+  ADD_BOOL_ATTR (attributes, "invisible", text_attrs->invisible);
+  ADD_BOOL_ATTR (attributes, "bg-full-height", text_attrs->bg_full_height);
+  ADD_BOOL_ATTR (attributes, "strikethrough", text_attrs->appearance.strikethrough);
+
+  ADD_COLOR_ATTR (attributes, "bg-color", text_attrs->appearance.bg_rgba);
+  ADD_COLOR_ATTR (attributes, "fg-color", text_attrs->appearance.fg_rgba);
+
+  ADD_FLOAT_ATTR (attributes, "scale", text_attrs->font_scale);
+
+  ADD_STR_ATTR (attributes, "language", (const char *) text_attrs->language);
+
+  ADD_INT_ATTR (attributes, "rise", text_attrs->appearance.rise);
+  ADD_INT_ATTR (attributes, "pixels-inside-wrap", text_attrs->pixels_inside_wrap);
+  ADD_INT_ATTR (attributes, "pixels-below-lines", text_attrs->pixels_below_lines);
+  ADD_INT_ATTR (attributes, "pixels-above-lines", text_attrs->pixels_above_lines);
+  ADD_INT_ATTR (attributes, "indent", text_attrs->indent);
+  ADD_INT_ATTR (attributes, "left-margin", text_attrs->left_margin);
+  ADD_INT_ATTR (attributes, "right-margin", text_attrs->right_margin);
+
+#undef ADD_STR_ATTR
+#undef ADD_BOOL_ATTR
+#undef ADD_COLOR_ATTR
+#undef ADD_FLOAT_ATTR
+#undef ADD_INT_ATTR
+
+  gtk_text_attributes_unref (text_attrs);
+}
+
+/*< private >
+ * gtk_text_view_get_attributes_run:
+ * @self: a text view
+ * @offset: the offset, in characters
+ * @include_defaults: whether the default attributes should be included
+ * @start: (out): the beginning of the run, in characters
+ * @end: (out): the end of the run, in characters
+ *
+ * Retrieves the text attributes at the given offset.
+ *
+ * The serialization format is private to GTK, but conforms to the AT-SPI
+ * text attributes for default attribute names.
+ *
+ * Returns: (transfer full) (element-type utf8,utf8): a dictionary of
+ *   text attributes
+ */
+GHashTable *
+gtk_text_view_get_attributes_run (GtkTextView *self,
+                                  int          offset,
+                                  gboolean     include_defaults,
+                                  int         *start,
+                                  int         *end)
+{
+  GtkTextBuffer *buffer = gtk_text_view_get_buffer (self);
+  GHashTable *attrs = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, g_free);
+
+  if (include_defaults)
+    gtk_text_view_add_default_attributes (self, attrs);
+
+  gtk_text_buffer_add_run_attributes (buffer, offset, attrs, start, end);
+
+  return attrs;
+}
+
+static void
+gtk_text_view_accessible_text_get_default_attributes (GtkAccessibleText   *self,
+                                                      char              ***attribute_names,
+                                                      char              ***attribute_values)
+{
+  GHashTable *attrs = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, g_free);
+  GHashTableIter iter;
+  gpointer key, value;
+  guint n_attrs, i;
+
+  gtk_text_view_add_default_attributes (GTK_TEXT_VIEW (self), attrs);
+
+  n_attrs = g_hash_table_size (attrs);
+  if (n_attrs == 0)
+    {
+      g_hash_table_unref (attrs);
+      *attribute_names = NULL;
+      *attribute_values = NULL;
+      return;
+    }
+
+  *attribute_names = g_new (char *, n_attrs + 1);
+  *attribute_values = g_new (char *, n_attrs + 1);
+
+  i = 0;
+  g_hash_table_iter_init (&iter, attrs);
+  while (g_hash_table_iter_next (&iter, &key, &value))
+    {
+      (*attribute_names)[i] = g_strdup (key);
+      (*attribute_values)[i] = g_strdup (value);
+
+      i += 1;
+    }
+
+  (*attribute_names)[n_attrs] = NULL;
+  (*attribute_values)[n_attrs] = NULL;
+
+  g_hash_table_unref (attrs);
 }
 
 static void
@@ -10509,6 +10674,7 @@ gtk_text_view_accessible_text_init (GtkAccessibleTextInterface *iface)
   iface->get_caret_position = gtk_text_view_accessible_text_get_caret_position;
   iface->get_selection = gtk_text_view_accessible_text_get_selection;
   iface->get_attributes = gtk_text_view_accessible_text_get_attributes;
+  iface->get_default_attributes = gtk_text_view_accessible_text_get_default_attributes;
 }
 
 /* }}} */

@@ -5189,27 +5189,27 @@ gtk_wrap_mode_to_string (GtkWrapMode wrap_mode)
 }
 
 /*< private >
- * gtk_text_buffer_get_run_attributes:
+ * gtk_text_buffer_add_run_attributes:
  * @buffer: the buffer to serialize
- * @builder: the target `GVariant` builder
  * @offset: the offset into the text buffer
+ * @attributes: a hash table of serialized text attributes
  * @start_offset: (out): the start offset for the attributes run
  * @end_offset: (out): the end offset for the attributes run
  *
  * Serializes the attributes inside a text buffer at the given offset.
  *
- * All attributes are serializes as a dictionary of string keys
- * and string values, `a{ss}`.
+ * All attributes are serialized as key/value string pairs inside the
+ * provided @attributes dictionary.
  *
  * The serialization format is private to GTK and should not be
  * considered stable.
  */
 void
-gtk_text_buffer_get_run_attributes (GtkTextBuffer   *buffer,
-                                    GVariantBuilder *builder,
-                                    int              offset,
-                                    int             *start_offset,
-                                    int             *end_offset)
+gtk_text_buffer_add_run_attributes (GtkTextBuffer *buffer,
+                                    int            offset,
+                                    GHashTable    *attributes,
+                                    int           *start_offset,
+                                    int           *end_offset)
 {
   GtkTextIter iter;
   GSList *tags, *temp_tags;
@@ -5240,7 +5240,9 @@ gtk_text_buffer_get_run_attributes (GtkTextBuffer   *buffer,
                     "style", &style,
                     NULL);
       if (val_set)
-        g_variant_builder_add (builder, "{ss}", "style", pango_style_to_string (style));
+        g_hash_table_insert (attributes,
+                             g_strdup ("style"),
+                             g_strdup (pango_style_to_string (style)));
       temp_tags = temp_tags->next;
     }
   val_set = FALSE;
@@ -5256,7 +5258,9 @@ gtk_text_buffer_get_run_attributes (GtkTextBuffer   *buffer,
                     "variant", &variant,
                     NULL);
       if (val_set)
-        g_variant_builder_add (builder, "{ss}", "variant", pango_variant_to_string (variant));
+        g_hash_table_insert (attributes,
+                             g_strdup ("variant"),
+                             g_strdup (pango_variant_to_string (variant)));
       temp_tags = temp_tags->next;
     }
   val_set = FALSE;
@@ -5272,7 +5276,9 @@ gtk_text_buffer_get_run_attributes (GtkTextBuffer   *buffer,
                     "stretch", &stretch,
                     NULL);
       if (val_set)
-        g_variant_builder_add (builder, "{ss}", "stretch", pango_stretch_to_string (stretch));
+        g_hash_table_insert (attributes,
+                             g_strdup ("stretch"),
+                             g_strdup (pango_stretch_to_string (stretch)));
       temp_tags = temp_tags->next;
     }
   val_set = FALSE;
@@ -5288,7 +5294,9 @@ gtk_text_buffer_get_run_attributes (GtkTextBuffer   *buffer,
                     "justification", &justification,
                     NULL);
       if (val_set)
-        g_variant_builder_add (builder, "{ss}", "justification", gtk_justification_to_string (justification));
+        g_hash_table_insert (attributes,
+                             g_strdup ("justification"),
+                             g_strdup (gtk_justification_to_string (justification)));
       temp_tags = temp_tags->next;
     }
   val_set = FALSE;
@@ -5303,7 +5311,9 @@ gtk_text_buffer_get_run_attributes (GtkTextBuffer   *buffer,
       if (direction != GTK_TEXT_DIR_NONE)
         {
           val_set = TRUE;
-          g_variant_builder_add (builder, "{ss}", "direction", gtk_text_direction_to_string (direction));
+          g_hash_table_insert (attributes,
+                               g_strdup ("direction"),
+                               g_strdup (gtk_text_direction_to_string (direction)));
         }
       temp_tags = temp_tags->next;
     }
@@ -5320,7 +5330,9 @@ gtk_text_buffer_get_run_attributes (GtkTextBuffer   *buffer,
                     "wrap-mode", &wrap_mode,
                     NULL);
       if (val_set)
-        g_variant_builder_add (builder, "{ss}", "wrap-mode", gtk_wrap_mode_to_string (wrap_mode));
+        g_hash_table_insert (attributes,
+                             g_strdup ("wrap-mode"),
+                             g_strdup (gtk_wrap_mode_to_string (wrap_mode)));
       temp_tags = temp_tags->next;
     }
   val_set = FALSE;
@@ -5342,8 +5354,8 @@ gtk_text_buffer_get_run_attributes (GtkTextBuffer   *buffer,
                                    (guint) rgba->green * 65535,
                                    (guint) rgba->blue * 65535);
           gdk_rgba_free (rgba);
-          g_variant_builder_add (builder, "{ss}", "fg-color", value);
-          g_free (value);
+
+          g_hash_table_insert (attributes, g_strdup ("fg-color"), value);
         }
       temp_tags = temp_tags->next;
     }
@@ -5366,8 +5378,8 @@ gtk_text_buffer_get_run_attributes (GtkTextBuffer   *buffer,
                                    (guint) rgba->green * 65535,
                                    (guint) rgba->blue * 65535);
           gdk_rgba_free (rgba);
-          g_variant_builder_add (builder, "{ss}", "bg-color", value);
-          g_free (value);
+
+          g_hash_table_insert (attributes, g_strdup ("bg-color"), value);
         }
       temp_tags = temp_tags->next;
     }
@@ -5384,8 +5396,8 @@ gtk_text_buffer_get_run_attributes (GtkTextBuffer   *buffer,
         {
           char *value;
           g_object_get (tag, "family", &value, NULL);
-          g_variant_builder_add (builder, "{ss}", "family-name", value);
-          g_free (value);
+
+          g_hash_table_insert (attributes, g_strdup ("family-name"), value);
         }
       temp_tags = temp_tags->next;
     }
@@ -5402,8 +5414,7 @@ gtk_text_buffer_get_run_attributes (GtkTextBuffer   *buffer,
         {
           char *value;
           g_object_get (tag, "language", &value, NULL);
-          g_variant_builder_add (builder, "{ss}", "language", value);
-          g_free (value);
+          g_hash_table_insert (attributes, g_strdup ("language"), value);
         }
       temp_tags = temp_tags->next;
     }
@@ -5422,10 +5433,9 @@ gtk_text_buffer_get_run_attributes (GtkTextBuffer   *buffer,
 
       if (val_set)
         {
-          char *value;
-          value = g_strdup_printf ("%d", weight);
-          g_variant_builder_add (builder, "{ss}", "weight", value);
-          g_free (value);
+          g_hash_table_insert (attributes,
+                               g_strdup ("weight"),
+                               g_strdup_printf ("%d", weight));
         }
       temp_tags = temp_tags->next;
     }
@@ -5452,9 +5462,9 @@ gtk_text_buffer_get_run_attributes (GtkTextBuffer   *buffer,
     }
   if (val_set)
     {
-      char *value = g_strdup_printf ("%g", scale);
-      g_variant_builder_add (builder, "{ss}", "scale", value);
-      g_free (value);
+      g_hash_table_insert (attributes,
+                           g_strdup ("scale"),
+                           g_strdup_printf ("%g", scale));
     }
   val_set = FALSE;
 
@@ -5470,9 +5480,9 @@ gtk_text_buffer_get_run_attributes (GtkTextBuffer   *buffer,
                     NULL);
       if (val_set)
         {
-          char *value = g_strdup_printf ("%i", size);
-          g_variant_builder_add (builder, "{ss}", "size", value);
-          g_free (value);
+          g_hash_table_insert (attributes,
+                               g_strdup ("size"),
+                               g_strdup_printf ("%i", size));
         }
       temp_tags = temp_tags->next;
     }
@@ -5489,7 +5499,9 @@ gtk_text_buffer_get_run_attributes (GtkTextBuffer   *buffer,
                     "strikethrough", &strikethrough,
                     NULL);
       if (val_set)
-        g_variant_builder_add (builder, "{ss}", "strikethrough", strikethrough ? "true" : "false");
+        g_hash_table_insert (attributes,
+                             g_strdup ("strikethrough"),
+                             strikethrough ? g_strdup ("true") : g_strdup ("false"));
       temp_tags = temp_tags->next;
     }
   val_set = FALSE;
@@ -5505,8 +5517,9 @@ gtk_text_buffer_get_run_attributes (GtkTextBuffer   *buffer,
                     "underline", &underline,
                     NULL);
       if (val_set)
-        g_variant_builder_add (builder, "{ss}", "underline",
-                               pango_underline_to_string (underline));
+        g_hash_table_insert (attributes,
+                             g_strdup ("underline"),
+                             g_strdup (pango_underline_to_string (underline)));
       temp_tags = temp_tags->next;
     }
   val_set = FALSE;
@@ -5523,9 +5536,9 @@ gtk_text_buffer_get_run_attributes (GtkTextBuffer   *buffer,
                     NULL);
       if (val_set)
         {
-          char *value = g_strdup_printf ("%i", rise);
-          g_variant_builder_add (builder, "{ss}", "rise", value);
-          g_free (value);
+          g_hash_table_insert (attributes,
+                               g_strdup ("rise"),
+                               g_strdup_printf ("%i", rise));
         }
       temp_tags = temp_tags->next;
     }
@@ -5542,7 +5555,9 @@ gtk_text_buffer_get_run_attributes (GtkTextBuffer   *buffer,
                     "background-full-height", &bg_full_height,
                     NULL);
       if (val_set)
-        g_variant_builder_add (builder, "{ss}", "bg-full-height", bg_full_height ? "true" : "false");
+        g_hash_table_insert (attributes,
+                             g_strdup ("bg-full-height"),
+                             bg_full_height ? g_strdup ("true") : g_strdup ("false"));
       temp_tags = temp_tags->next;
     }
   val_set = FALSE;
@@ -5559,9 +5574,9 @@ gtk_text_buffer_get_run_attributes (GtkTextBuffer   *buffer,
                     NULL);
       if (val_set)
         {
-          char *value = g_strdup_printf ("%i", pixels);
-          g_variant_builder_add (builder, "{ss}", "pixels-inside-wrap", value);
-          g_free (value);
+          g_hash_table_insert (attributes,
+                               g_strdup ("pixels-inside-wrap"),
+                               g_strdup_printf ("%i", pixels));
         }
       temp_tags = temp_tags->next;
     }
@@ -5579,9 +5594,9 @@ gtk_text_buffer_get_run_attributes (GtkTextBuffer   *buffer,
                     NULL);
       if (val_set)
         {
-          char *value = g_strdup_printf ("%i", pixels);
-          g_variant_builder_add (builder, "{ss}", "pixels-below-lines", value);
-          g_free (value);
+          g_hash_table_insert (attributes,
+                               g_strdup ("pixels-below-lines"),
+                               g_strdup_printf ("%i", pixels));
         }
       temp_tags = temp_tags->next;
     }
@@ -5599,9 +5614,9 @@ gtk_text_buffer_get_run_attributes (GtkTextBuffer   *buffer,
                     NULL);
       if (val_set)
         {
-          char *value = g_strdup_printf ("%i", pixels);
-          g_variant_builder_add (builder, "{ss}", "pixels-above-lines", value);
-          g_free (value);
+          g_hash_table_insert (attributes,
+                               g_strdup ("pixels-above-lines"),
+                               g_strdup_printf ("%i", pixels));
         }
       temp_tags = temp_tags->next;
     }
@@ -5618,7 +5633,9 @@ gtk_text_buffer_get_run_attributes (GtkTextBuffer   *buffer,
                     "editable", &editable,
                     NULL);
       if (val_set)
-        g_variant_builder_add (builder, "{ss}", "editable", editable ? "true" : "false");
+        g_hash_table_insert (attributes,
+                             g_strdup ("editable"),
+                             editable ? g_strdup ("true") : g_strdup ("false"));
       temp_tags = temp_tags->next;
     }
   val_set = FALSE;
@@ -5634,12 +5651,14 @@ gtk_text_buffer_get_run_attributes (GtkTextBuffer   *buffer,
                     "invisible", &invisible,
                     NULL);
       if (val_set)
-        g_variant_builder_add (builder, "{ss}", "invisible", invisible ? "true" : "false");
+        g_hash_table_insert (attributes,
+                             g_strdup ("invisible"),
+                             invisible ? g_strdup ("true") : g_strdup ("false"));
       temp_tags = temp_tags->next;
     }
   val_set = FALSE;
 
- temp_tags = tags;
+  temp_tags = tags;
   while (temp_tags && !val_set)
     {
       GtkTextTag *tag = GTK_TEXT_TAG (temp_tags->data);
@@ -5651,9 +5670,9 @@ gtk_text_buffer_get_run_attributes (GtkTextBuffer   *buffer,
                     NULL);
       if (val_set)
         {
-          char *value = g_strdup_printf ("%i", indent);
-          g_variant_builder_add (builder, "{ss}", "indent", value);
-          g_free (value);
+          g_hash_table_insert (attributes,
+                               g_strdup ("indent"),
+                               g_strdup_printf ("%i", indent));
         }
       temp_tags = temp_tags->next;
     }
@@ -5671,9 +5690,9 @@ gtk_text_buffer_get_run_attributes (GtkTextBuffer   *buffer,
                     NULL);
       if (val_set)
         {
-          char *value = g_strdup_printf ("%i", margin);
-          g_variant_builder_add (builder, "{ss}", "right-margin", value);
-          g_free (value);
+          g_hash_table_insert (attributes,
+                               g_strdup ("right-margin"),
+                               g_strdup_printf ("%i", margin));
         }
       temp_tags = temp_tags->next;
     }
@@ -5691,9 +5710,9 @@ gtk_text_buffer_get_run_attributes (GtkTextBuffer   *buffer,
                     NULL);
       if (val_set)
         {
-          char *value = g_strdup_printf ("%i", margin);
-          g_variant_builder_add (builder, "{ss}", "left-margin", value);
-          g_free (value);
+          g_hash_table_insert (attributes,
+                               g_strdup ("left-margin"),
+                               g_strdup_printf ("%i", margin));
         }
       temp_tags = temp_tags->next;
     }

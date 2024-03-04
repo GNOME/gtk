@@ -1422,6 +1422,20 @@ gtk_inscription_accessible_text_get_attributes (GtkAccessibleText        *self,
 }
 
 static void
+gtk_inscription_accessible_text_get_default_attributes (GtkAccessibleText   *self,
+                                                        char              ***attribute_names,
+                                                        char              ***attribute_values)
+{
+  PangoLayout *layout = gtk_inscription_get_layout (GTK_INSCRIPTION (self));
+  char **names, **values;
+
+  gtk_pango_get_default_attributes (layout, &names, &values);
+
+  *attribute_names = names;
+  *attribute_values = values;
+}
+
+static void
 gtk_inscription_accessible_text_init (GtkAccessibleTextInterface *iface)
 {
   iface->get_contents = gtk_inscription_accessible_text_get_contents;
@@ -1429,6 +1443,7 @@ gtk_inscription_accessible_text_init (GtkAccessibleTextInterface *iface)
   iface->get_caret_position = gtk_inscription_accessible_text_get_caret_position;
   iface->get_selection = gtk_inscription_accessible_text_get_selection;
   iface->get_attributes = gtk_inscription_accessible_text_get_attributes;
+  iface->get_default_attributes = gtk_inscription_accessible_text_get_default_attributes;
 }
 
 /* }}} */
