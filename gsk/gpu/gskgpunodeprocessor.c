@@ -1649,10 +1649,13 @@ gsk_gpu_node_processor_add_transform_node (GskGpuNodeProcessor *self,
 
         extract_scale_from_transform (self->modelview, &scale_x, &scale_y);
 
-        old_pixels = graphene_vec2_get_x (&old_scale) * graphene_vec2_get_y (&old_scale) *
-                     old_clip.rect.bounds.size.width * old_clip.rect.bounds.size.height;
-        new_pixels = scale_x * scale_y * self->clip.rect.bounds.size.width * self->clip.rect.bounds.size.height;
-        if (new_pixels > 2 * old_pixels)
+        old_pixels = MAX (graphene_vec2_get_x (&old_scale) * old_clip.rect.bounds.size.width,
+                          graphene_vec2_get_y (&old_scale) * old_clip.rect.bounds.size.height);
+        new_pixels = MAX (scale_x * self->clip.rect.bounds.size.width,
+                          scale_y * self->clip.rect.bounds.size.height);
+
+        /* Check that our offscreen doesn't get too big.  1.5 ~ sqrt(2) */
+        if (new_pixels > 1.5 * old_pixels)
           {
             float forced_downscale = 2 * old_pixels / new_pixels;
             scale_x *= forced_downscale;
