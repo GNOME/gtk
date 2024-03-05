@@ -151,6 +151,57 @@ create_blank_cursor (void)
   return nscursor;
 }
 
+static NSCursor *
+create_cursor_from_texture (GdkTexture *texture,
+                            int         x,
+                            int         y)
+{
+  guint32 width;
+  guint32 height;
+  guchar *pixels;
+  gsize stride;
+  GdkTextureDownloader *downloader;
+  NSCursor *nscursor;
+  NSBitmapImageRep *nsbitmap;
+  NSImage *nsimage;
+
+  if (texture == NULL)
+    return create_blank_cursor ();
+
+  width = gdk_texture_get_width (texture);
+  height = gdk_texture_get_height (texture);
+
+  nsbitmap = [[NSBitmapImageRep alloc] initWithBitmapDataPlanes:NULL
+                                       pixelsWide:width
+                                       pixelsHigh:height
+                                       bitsPerSample:8
+                                       samplesPerPixel:4
+                                       hasAlpha:YES
+                                       isPlanar:NO
+                                       colorSpaceName:NSDeviceRGBColorSpace
+                                       bytesPerRow:0
+                                       bitsPerPixel:0];
+  pixels = [nsbitmap bitmapData];
+  stride = [nsbitmap bytesPerRow];
+
+  downloader = gdk_texture_downloader_new (texture);
+  gdk_texture_downloader_set_format (downloader, GDK_MEMORY_R8G8B8A8_PREMULTIPLIED);
+  gdk_texture_downloader_download_into (downloader,
+                                        pixels,
+                                        stride);
+  gdk_texture_downloader_free (downloader);
+
+  nsimage = [[NSImage alloc] init];
+  [nsimage addRepresentation:nsbitmap];
+  [nsimage setSize:NSMakeSize(width, height)];
+  [nsbitmap release];
+
+  nscursor = [[NSCursor alloc] initWithImage:nsimage
+                               hotSpot:NSMakePoint(x, y)];
+  [nsimage release];
+  return nscursor;
+}
+
 NSCursor *
 _gdk_macos_cursor_get_ns_cursor (GdkCursor *cursor)
 {
@@ -161,7 +212,17 @@ _gdk_macos_cursor_get_ns_cursor (GdkCursor *cursor)
   g_return_val_if_fail (!cursor || GDK_IS_CURSOR (cursor), NULL);
 
   if (cursor != NULL)
-    name = gdk_cursor_get_name (cursor);
+    {
+      name = gdk_cursor_get_name (cursor);
+
+      if (name == NULL)
+        {
+          nscursor = create_cursor_from_texture (gdk_cursor_get_texture (cursor),
+                                                 gdk_cursor_get_hotspot_x (cursor),
+                                                 gdk_cursor_get_hotspot_y (cursor));
+          return nscursor;
+        }
+    }
 
   if (name == NULL)
     goto load_cursor;
