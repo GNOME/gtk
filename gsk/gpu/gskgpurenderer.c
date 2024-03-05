@@ -31,7 +31,9 @@ static const GdkDebugKey gsk_gpu_optimization_keys[] = {
   { "gradients", GSK_GPU_OPTIMIZE_GRADIENTS, "Don't supersample gradients" },
   { "mipmap", GSK_GPU_OPTIMIZE_MIPMAP, "Avoid creating mipmaps" },
   { "glyph-align", GSK_GPU_OPTIMIZE_GLYPH_ALIGN, "Never align glyphs to the subpixel grid" },
+  { "colorize", GSK_GPU_OPTIMIZE_COLORIZE, "Don't replace color by colorize" },
 
+  /* These require hardware support */
   { "gl-baseinstance", GSK_GPU_OPTIMIZE_GL_BASE_INSTANCE, "Assume no ARB/EXT_base_instance support" },
 };
 
