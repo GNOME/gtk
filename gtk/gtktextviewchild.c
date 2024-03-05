@@ -254,8 +254,6 @@ gtk_text_view_child_snapshot (GtkWidget   *widget,
   GtkTextViewChild *self = GTK_TEXT_VIEW_CHILD (widget);
   const GList *iter;
 
-  GTK_WIDGET_CLASS (gtk_text_view_child_parent_class)->snapshot (widget, snapshot);
-
   if (self->child)
     gtk_widget_snapshot_child (widget, self->child, snapshot);
 
