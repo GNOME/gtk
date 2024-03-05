@@ -23,7 +23,7 @@
 #include "gtkatspicontextprivate.h"
 
 #include "gtkaccessibleprivate.h"
-#include "gtkaccessibletext-private.h"
+#include "gtkaccessibletextprivate.h"
 
 #include "gtkatspiactionprivate.h"
 #include "gtkatspieditabletextprivate.h"

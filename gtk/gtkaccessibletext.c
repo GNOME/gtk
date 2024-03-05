@@ -6,7 +6,7 @@
 
 #include "config.h"
 
-#include "gtkaccessibletext-private.h"
+#include "gtkaccessibletextprivate.h"
 
 #include "gtkatcontextprivate.h"
 

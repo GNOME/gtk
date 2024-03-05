@@ -29,6 +29,7 @@
 
 #include "a11y/atspi/atspi-text.h"
 
+#include "gtkaccessibletextprivate.h"
 #include "gtkatcontextprivate.h"
 #include "gtkdebug.h"
 #include "gtkeditable.h"
@@ -41,7 +42,6 @@
 #include "gtkspinbuttonprivate.h"
 #include "gtktextbufferprivate.h"
 #include "gtktextviewprivate.h"
-#include "gtkaccessibletext-private.h"
 
 #include <gio/gio.h>
 

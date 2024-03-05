@@ -1,6 +1,6 @@
 #include <gtk/gtk.h>
 
-#include "gtk/gtkaccessibletext-private.h"
+#include "gtk/gtkaccessibletextprivate.h"
 
 static void
 inscription_text_interface (void)

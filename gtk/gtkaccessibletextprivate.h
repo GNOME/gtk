@@ -1,4 +1,4 @@
-/* gtkaccessibletext-private.h: Private definitions for GtkAccessibleText
+/* gtkaccessibletextprivate.h: Private definitions for GtkAccessibleText
  *
  * SPDX-FileCopyrightText: 2023 Emmanuele Bassi
  * SPDX-License-Identifier: LGPL-2.1-or-later

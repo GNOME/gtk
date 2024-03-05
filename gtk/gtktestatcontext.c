@@ -24,11 +24,11 @@
 
 #include "gtkatcontextprivate.h"
 #include "gtkaccessibleprivate.h"
+#include "gtkaccessibletextprivate.h"
 #include "gtkdebug.h"
 #include "gtkenums.h"
 #include "gtkprivate.h"
 #include "gtktypebuiltins.h"
-#include "gtkaccessibletext-private.h"
 
 struct _GtkTestATContext
 {
