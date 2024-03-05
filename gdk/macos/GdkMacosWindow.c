@@ -371,20 +371,17 @@ typedef NSString *CALayerContentsGravity;
 
 -(void)windowDidMove:(NSNotification *)notification
 {
+  if ([self isZoomed])
+    gdk_synthesize_surface_state (GDK_SURFACE (gdk_surface), 0, GDK_TOPLEVEL_STATE_MAXIMIZED);
+  else
+    gdk_synthesize_surface_state (GDK_SURFACE (gdk_surface), GDK_TOPLEVEL_STATE_MAXIMIZED, 0);
+
   _gdk_macos_surface_configure ([self gdkSurface]);
 }
 
 -(void)windowDidResize:(NSNotification *)notification
 {
-  NSRect screenFrame = [[self screen] visibleFrame];
-  NSRect windowFrame = [self frame];
-
-  if (NSEqualRects(screenFrame, windowFrame))
-    gdk_synthesize_surface_state (GDK_SURFACE (gdk_surface), 0, GDK_TOPLEVEL_STATE_MAXIMIZED);
-  else
-    gdk_synthesize_surface_state (GDK_SURFACE (gdk_surface), GDK_TOPLEVEL_STATE_MAXIMIZED, 0);
-
-  _gdk_macos_surface_configure (gdk_surface);
+  [self windowDidMove: notification];
 
   /* If we're using server-side decorations, this notification is coming
    * in from a display-side change. We need to request a layout in
@@ -405,7 +402,6 @@ typedef NSString *CALayerContentsGravity;
 
 -(void)beginManualMove
 {
-  gboolean maximized = GDK_SURFACE (gdk_surface)->state & GDK_TOPLEVEL_STATE_MAXIMIZED;
   NSPoint initialMoveLocation;
   GdkPoint point;
   GdkMonitor *monitor;
@@ -423,13 +419,6 @@ typedef NSString *CALayerContentsGravity;
   gdk_macos_monitor_get_workarea (monitor, &workarea);
 
   initialMoveLocation = [NSEvent mouseLocation];
-
-  if (maximized)
-    [self setFrame:NSMakeRect (initialMoveLocation.x - (int)lastUnmaximizedFrame.size.width/2,
-                               initialMoveLocation.y,
-                               lastUnmaximizedFrame.size.width,
-                               lastUnmaximizedFrame.size.height)
-           display:YES];
 
   _gdk_macos_display_from_display_coords ([self gdkDisplay],
                                           initialMoveLocation.x,
@@ -773,26 +762,11 @@ typedef NSString *CALayerContentsGravity;
   return rect;
 }
 
+/* Implementing this method avoids new windows move around the screen. */
 -(NSRect)windowWillUseStandardFrame:(NSWindow *)nsWindow
                        defaultFrame:(NSRect)newFrame
 {
-  NSRect screenFrame = [[self screen] visibleFrame];
-  GdkMacosSurface *surface = gdk_surface;
-  gboolean maximized = GDK_SURFACE (surface)->state & GDK_TOPLEVEL_STATE_MAXIMIZED;
-
-  if (!maximized)
-    return screenFrame;
-  else
-    return lastUnmaximizedFrame;
-}
-
-// Only called on zoom, not on unzoom
--(BOOL)windowShouldZoom:(NSWindow *)nsWindow
-                toFrame:(NSRect)newFrame
-{
-  lastUnmaximizedFrame = [nsWindow frame];
-
-  return YES;
+  return newFrame;
 }
 
 -(NSSize)window:(NSWindow *)window willUseFullScreenContentSize:(NSSize)proposedSize
