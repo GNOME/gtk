@@ -22,6 +22,7 @@ gdk_wayland_sources = files([
   'gdktoplevel-wayland.c',
   'gdkpopup-wayland.c',
   'gdkvulkancontext-wayland.c',
+  'gdkwaylandpresentationtime.c',
   'wm-button-layout-translation.c',
 ])
 
@@ -69,6 +70,7 @@ proto_sources = [
   ['xdg-activation', 'staging', 'v1', ],
   ['fractional-scale', 'staging', 'v1', ],
   ['linux-dmabuf', 'unstable', 'v1', ],
+  ['presentation-time', 'stable', 'v1', ],
 ]
 
 gdk_wayland_gen_headers = []

@@ -58,6 +58,7 @@
 #include <wayland/xdg-foreign-unstable-v2-client-protocol.h>
 #include <wayland/server-decoration-client-protocol.h>
 #include "linux-dmabuf-unstable-v1-client-protocol.h"
+#include "presentation-time-client-protocol.h"
 
 #include "wm-button-layout-translation.h"
 
@@ -598,6 +599,13 @@ gdk_registry_handle_global (void               *data,
         wl_registry_bind (display_wayland->wl_registry, id,
                           &wp_viewporter_interface, 1);
     }
+  else if (strcmp (interface, "wp_presentation") == 0)
+    {
+      display_wayland->presentation =
+        wl_registry_bind (display_wayland->wl_registry, id,
+                          &wp_presentation_interface,
+                          MIN (version, 1));
+    }
 
 
   g_hash_table_insert (display_wayland->known_globals,
@@ -808,6 +816,7 @@ gdk_wayland_display_dispose (GObject *object)
   g_clear_pointer (&display_wayland->xdg_activation, xdg_activation_v1_destroy);
   g_clear_pointer (&display_wayland->fractional_scale, wp_fractional_scale_manager_v1_destroy);
   g_clear_pointer (&display_wayland->viewporter, wp_viewporter_destroy);
+  g_clear_pointer (&display_wayland->presentation, wp_presentation_destroy);
   g_clear_pointer (&display_wayland->linux_dmabuf, zwp_linux_dmabuf_v1_destroy);
   g_clear_pointer (&display_wayland->linux_dmabuf_feedback, zwp_linux_dmabuf_feedback_v1_destroy);
   if (display_wayland->linux_dmabuf_formats)

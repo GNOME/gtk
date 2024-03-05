@@ -39,6 +39,7 @@
 #include <gdk/wayland/xdg-activation-v1-client-protocol.h>
 #include <gdk/wayland/fractional-scale-v1-client-protocol.h>
 #include <gdk/wayland/viewporter-client-protocol.h>
+#include <gdk/wayland/presentation-time-client-protocol.h>
 
 #include <glib.h>
 #include <gdk/gdkkeys.h>
@@ -125,6 +126,7 @@ struct _GdkWaylandDisplay
   struct xdg_activation_v1 *xdg_activation;
   struct wp_fractional_scale_manager_v1 *fractional_scale;
   struct wp_viewporter *viewporter;
+  struct wp_presentation *presentation;
 
   GList *async_roundtrips;
 
