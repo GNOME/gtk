@@ -636,3 +636,134 @@ gsk_gpu_upload_glyph_op (GskGpuFrame                 *frame,
   self->glyph = glyph;
   self->origin = *origin;
 }
+
+typedef struct _GskGpuUploadSolidOp GskGpuUploadSolidOp;
+
+struct _GskGpuUploadSolidOp
+{
+  GskGpuOp op;
+
+  GskGpuImage *image;
+  cairo_rectangle_int_t area;
+  graphene_point_t origin;
+
+  GskGpuBuffer *buffer;
+};
+
+static void
+gsk_gpu_upload_solid_op_finish (GskGpuOp *op)
+{
+  GskGpuUploadSolidOp *self = (GskGpuUploadSolidOp *) op;
+
+  g_object_unref (self->image);
+
+  g_clear_object (&self->buffer);
+}
+
+static void
+gsk_gpu_upload_solid_op_print (GskGpuOp    *op,
+                               GskGpuFrame *frame,
+                               GString     *string,
+                               guint        indent)
+{
+  GskGpuUploadSolidOp *self = (GskGpuUploadSolidOp *) op;
+
+  gsk_gpu_print_op (string, indent, "upload-solid");
+  gsk_gpu_print_int_rect (string, &self->area);
+  gsk_gpu_print_newline (string);
+}
+
+static void
+gsk_gpu_upload_solid_op_draw (GskGpuOp *op,
+                              guchar   *data,
+                              gsize     stride)
+{
+  GskGpuUploadSolidOp *self = (GskGpuUploadSolidOp *) op;
+  cairo_surface_t *surface;
+  cairo_t *cr;
+
+  surface = cairo_image_surface_create_for_data (data,
+                                                 CAIRO_FORMAT_ARGB32,
+                                                 self->area.width,
+                                                 self->area.height,
+                                                 stride);
+  cairo_surface_set_device_offset (surface, self->origin.x, self->origin.y);
+
+  cr = cairo_create (surface);
+  cairo_set_operator (cr, CAIRO_OPERATOR_CLEAR);
+  cairo_paint (cr);
+  cairo_set_operator (cr, CAIRO_OPERATOR_OVER);
+
+  /* Make sure the entire surface is initialized to black */
+  cairo_set_source_rgba (cr, 0, 0, 0, 0);
+  cairo_rectangle (cr, 0.0, 0.0, self->area.width, self->area.height);
+  cairo_fill (cr);
+
+  /* Draw solid */
+  cairo_set_source_rgba (cr, 1, 1, 1, 1);
+  cairo_rectangle (cr, 0, 0, self->area.width, self->area.height);
+  cairo_fill (cr);
+
+  cairo_destroy (cr);
+
+  cairo_surface_finish (surface);
+  cairo_surface_destroy (surface);
+}
+
+#ifdef GDK_RENDERING_VULKAN
+static GskGpuOp *
+gsk_gpu_upload_solid_op_vk_command (GskGpuOp              *op,
+                                    GskGpuFrame           *frame,
+                                    GskVulkanCommandState *state)
+{
+  GskGpuUploadSolidOp *self = (GskGpuUploadSolidOp *) op;
+
+  return gsk_gpu_upload_op_vk_command_with_area (op,
+                                                 frame,
+                                                 state,
+                                                 GSK_VULKAN_IMAGE (self->image),
+                                                 &self->area,
+                                                 gsk_gpu_upload_solid_op_draw,
+                                                 &self->buffer);
+}
+#endif
+
+static GskGpuOp *
+gsk_gpu_upload_solid_op_gl_command (GskGpuOp          *op,
+                                    GskGpuFrame       *frame,
+                                    GskGLCommandState *state)
+{
+  GskGpuUploadSolidOp *self = (GskGpuUploadSolidOp *) op;
+
+  return gsk_gpu_upload_op_gl_command_with_area (op,
+                                                 frame,
+                                                 self->image,
+                                                 &self->area,
+                                                 gsk_gpu_upload_solid_op_draw);
+}
+
+static const GskGpuOpClass GSK_GPU_UPLOAD_SOLID_OP_CLASS = {
+  GSK_GPU_OP_SIZE (GskGpuUploadSolidOp),
+  GSK_GPU_STAGE_UPLOAD,
+  gsk_gpu_upload_solid_op_finish,
+  gsk_gpu_upload_solid_op_print,
+#ifdef GDK_RENDERING_VULKAN
+  gsk_gpu_upload_solid_op_vk_command,
+#endif
+  gsk_gpu_upload_solid_op_gl_command,
+};
+
+void
+gsk_gpu_upload_solid_op (GskGpuFrame                 *frame,
+                         GskGpuImage                 *image,
+                         const cairo_rectangle_int_t *area,
+                         const graphene_point_t      *origin)
+{
+  GskGpuUploadSolidOp *self;
+
+  self = (GskGpuUploadSolidOp *) gsk_gpu_op_alloc (frame, &GSK_GPU_UPLOAD_SOLID_OP_CLASS);
+
+  self->image = g_object_ref (image);
+  self->area = *area;
+  self->origin = *origin;
+}
