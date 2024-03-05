@@ -6,7 +6,7 @@
 
 #include "config.h"
 
-#include "gtkaccessibletext-private.h"
+#include "gtkaccessibletextprivate.h"
 
 #include "gtkatcontextprivate.h"
 
@@ -307,6 +307,123 @@ gtk_accessible_text_get_default_attributes (GtkAccessibleText   *self,
   GTK_ACCESSIBLE_TEXT_GET_IFACE (self)->get_default_attributes (self,
                                                                 attribute_names,
                                                                 attribute_values);
+}
+
+/*< private >
+ * gtk_accessible_text_get_attributes_run:
+ * @self: the accessible object
+ * @offset: the offset, in characters
+ * @include_defaults: whether to include the default attributes in the
+ *   returned array
+ * @n_ranges: (out): the number of attributes
+ * @ranges: (out) (array length=n_attributes) (optional): the ranges of the attributes
+ *   inside the accessible object
+ * @attribute_names: (out) (array zero-terminated=1) (element-type utf8) (optional) (transfer full):
+ *   the names of the attributes inside the accessible object
+ * @attribute_values: (out) (array zero-terminated=1) (element-type utf8) (optional) (transfer full):
+ *   the values of the attributes inside the accessible object
+ *
+ * Retrieves the text attributes inside the accessible object.
+ *
+ * Each attribute is composed by:
+ *
+ * - a range
+ * - a name, typically in the form of a reverse DNS identifier
+ * - a value
+ *
+ * If this function returns true, `n_ranges` will be set to a value
+ * greater than or equal to one, @ranges will be set to a newly
+ * allocated array of [struct#Gtk.AccessibleTextRange] which should
+ * be freed with g_free(), @attribute_names and @attribute_values
+ * will be set to string arrays that should be freed with g_strfreev().
+ *
+ * Returns: true if the accessible object has at least an attribute,
+ *   and false otherwise
+ *
+ * Since: 4.14
+ */
+gboolean
+gtk_accessible_text_get_attributes_run (GtkAccessibleText        *self,
+                                        unsigned int              offset,
+                                        gboolean                  include_defaults,
+                                        gsize                    *n_ranges,
+                                        GtkAccessibleTextRange  **ranges,
+                                        char                   ***attribute_names,
+                                        char                   ***attribute_values)
+{
+  GHashTable *attrs;
+  GHashTableIter attr_iter;
+  gpointer key, value;
+  char **attr_names, **attr_values;
+  gboolean res;
+  GStrvBuilder *names_builder;
+  GStrvBuilder *values_builder;
+
+  g_return_val_if_fail (GTK_IS_ACCESSIBLE_TEXT (self), FALSE);
+
+  attrs = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, g_free);
+
+  if (include_defaults)
+    {
+      gtk_accessible_text_get_default_attributes (self,
+                                                  &attr_names,
+                                                  &attr_values);
+
+      for (unsigned i = 0; attr_names[i] != NULL; i++)
+        {
+          g_hash_table_insert (attrs,
+                               g_steal_pointer (&attr_names[i]),
+                               g_steal_pointer (&attr_values[i]));
+        }
+
+      g_free (attr_names);
+      g_free (attr_values);
+    }
+
+  res = gtk_accessible_text_get_attributes (self,
+                                            offset,
+                                            n_ranges,
+                                            ranges,
+                                            &attr_names,
+                                            &attr_values);
+
+  /* If there are no attributes, we can bail out early */
+  if (!res && !include_defaults)
+    {
+      g_hash_table_unref (attrs);
+      *attribute_names = NULL;
+      *attribute_values = NULL;
+      return FALSE;
+    }
+
+  /* The text attributes override the default ones */
+  for (unsigned i = 0; i < *n_ranges; i++)
+    {
+      g_hash_table_insert (attrs,
+                           g_steal_pointer (&attr_names[i]),
+                           g_steal_pointer (&attr_values[i]));
+    }
+
+  g_free (attr_names);
+  g_free (attr_values);
+
+  names_builder = g_strv_builder_new ();
+  values_builder = g_strv_builder_new ();
+  g_hash_table_iter_init (&attr_iter, attrs);
+  while (g_hash_table_iter_next (&attr_iter, &key, &value))
+    {
+      g_strv_builder_add (names_builder, key);
+      g_strv_builder_add (values_builder, value);
+    }
+
+  *attribute_names = g_strv_builder_end (names_builder);
+  *attribute_values = g_strv_builder_end (values_builder);
+
+  g_strv_builder_unref (names_builder);
+  g_strv_builder_unref (values_builder);
+  g_hash_table_unref (attrs);
+
+  return TRUE;
 }
 
 /**

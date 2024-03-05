@@ -1,7 +1,7 @@
 #include <gtk/gtk.h>
 
 #include "gtk/gtkatcontextprivate.h"
-#include "gtk/gtkaccessibletext-private.h"
+#include "gtk/gtkaccessibletextprivate.h"
 
 static void
 textview_role (void)

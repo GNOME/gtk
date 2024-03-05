@@ -23,8 +23,9 @@
 
 #include "gtktextprivate.h"
 
-#include "gtkaccessibletext-private.h"
+#include "gtkaccessibletextprivate.h"
 #include "gtkactionable.h"
+#include "gtkactionmuxerprivate.h"
 #include "gtkadjustment.h"
 #include "gtkbox.h"
 #include "gtkbutton.h"
@@ -46,19 +47,20 @@
 #include "gtkimcontextprivate.h"
 #include "gtkimcontextsimple.h"
 #include "gtkimmulticontext.h"
-#include <glib/gi18n-lib.h>
+#include "gtkjoinedmenuprivate.h"
 #include "gtklabel.h"
 #include "gtkmagnifierprivate.h"
 #include "gtkmain.h"
 #include "gtkmarshalers.h"
+#include "gtknative.h"
 #include "gtkpangoprivate.h"
 #include "gtkpopovermenu.h"
 #include "gtkprivate.h"
-#include "gtksettings.h"
-#include "gtksnapshot.h"
 #include "gtkrenderbackgroundprivate.h"
 #include "gtkrenderborderprivate.h"
 #include "gtkrenderlayoutprivate.h"
+#include "gtksettings.h"
+#include "gtksnapshot.h"
 #include "gtktexthandleprivate.h"
 #include "gtktexthistoryprivate.h"
 #include "gtktextutilprivate.h"
@@ -66,15 +68,13 @@
 #include "gtktypebuiltins.h"
 #include "gtkwidgetprivate.h"
 #include "gtkwindow.h"
-#include "gtknative.h"
-#include "gtkactionmuxerprivate.h"
-#include "gtkjoinedmenuprivate.h"
+
 #include "deprecated/gtkrender.h"
-#include "gtkaccessibletext-private.h"
 #include "a11y/gtkatspipangoprivate.h"
 
-#include <cairo-gobject.h>
 #include <string.h>
+#include <cairo-gobject.h>
+#include <glib/gi18n-lib.h>
 
 /**
  * GtkText:

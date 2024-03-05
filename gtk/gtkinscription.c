@@ -21,7 +21,7 @@
 
 #include "gtkinscriptionprivate.h"
 
-#include "gtkaccessibletext-private.h"
+#include "gtkaccessibletextprivate.h"
 #include "gtkcssnodeprivate.h"
 #include "gtkcssstylechangeprivate.h"
 #include "gtkpangoprivate.h"
