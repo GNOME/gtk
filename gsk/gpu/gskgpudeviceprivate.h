@@ -98,6 +98,9 @@ GskGpuImage *           gsk_gpu_device_lookup_glyph_image               (GskGpuD
                                                                          graphene_rect_t        *out_bounds,
                                                                          graphene_point_t       *out_origin);
 
+GskGpuImage *           gsk_gpu_device_get_solid_image                  (GskGpuDevice           *self,
+                                                                         GskGpuFrame            *frame,
+                                                                         graphene_rect_t        *out_bounds);
 
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GskGpuDevice, g_object_unref)
 
