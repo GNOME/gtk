@@ -9,7 +9,7 @@
         An array of Emoji definitions to show in the Emoji chooser. Each Emoji is
         specified as an array of codepoints, name and keywords. The extra
         integer after this pair is the code of the Fitzpatrick modifier to use in
-        place of a 0 in the codepoint array.
+        place of a modifier placeholder (0 or 0x1F3FB) in the codepoint array.
       </description>
     </key>
   </schema>
