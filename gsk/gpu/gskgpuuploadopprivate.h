@@ -27,5 +27,9 @@ void                    gsk_gpu_upload_glyph_op                         (GskGpuF
                                                                          const cairo_rectangle_int_t    *area,
                                                                          const graphene_point_t         *origin);
 
+void                    gsk_gpu_upload_solid_op                         (GskGpuFrame                    *frame,
+                                                                         GskGpuImage                    *image,
+                                                                         const cairo_rectangle_int_t    *area,
+                                                                         const graphene_point_t         *origin);
 G_END_DECLS
 
