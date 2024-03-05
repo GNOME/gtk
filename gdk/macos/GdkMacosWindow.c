@@ -214,22 +214,6 @@ typedef NSString *CALayerContentsGravity;
     }
 }
 
--(void)setFrame:(NSRect)frame display:(BOOL)display
-{
-  NSRect contentRect = [self contentRectForFrameRect:frame];
-  GdkSurface *surface = GDK_SURFACE (gdk_surface);
-  gboolean maximized = (surface->state & GDK_TOPLEVEL_STATE_MAXIMIZED) != 0;
-
-  if (maximized && !inMaximizeTransition && !NSEqualRects (lastMaximizedFrame, frame))
-    {
-      gdk_synthesize_surface_state (surface, GDK_TOPLEVEL_STATE_MAXIMIZED, 0);
-      _gdk_surface_update_size (surface);
-    }
-
-  [super setFrame:frame display:display];
-  [[self contentView] setFrame:NSMakeRect (0, 0, contentRect.size.width, contentRect.size.height)];
-}
-
 -(id)initWithContentRect:(NSRect)contentRect
                styleMask:(NSWindowStyleMask)styleMask
                  backing:(NSBackingStoreType)backingType
@@ -392,6 +376,14 @@ typedef NSString *CALayerContentsGravity;
 
 -(void)windowDidResize:(NSNotification *)notification
 {
+  NSRect screenFrame = [[self screen] visibleFrame];
+  NSRect windowFrame = [self frame];
+
+  if (NSEqualRects(screenFrame, windowFrame))
+    gdk_synthesize_surface_state (GDK_SURFACE (gdk_surface), 0, GDK_TOPLEVEL_STATE_MAXIMIZED);
+  else
+    gdk_synthesize_surface_state (GDK_SURFACE (gdk_surface), GDK_TOPLEVEL_STATE_MAXIMIZED, 0);
+
   _gdk_macos_surface_configure (gdk_surface);
 
   /* If we're using server-side decorations, this notification is coming
@@ -794,30 +786,13 @@ typedef NSString *CALayerContentsGravity;
     return lastUnmaximizedFrame;
 }
 
+// Only called on zoom, not on unzoom
 -(BOOL)windowShouldZoom:(NSWindow *)nsWindow
                 toFrame:(NSRect)newFrame
 {
-  GdkMacosSurface *surface = gdk_surface;
-  GdkToplevelState state = GDK_SURFACE (surface)->state;
-
-  if (state & GDK_TOPLEVEL_STATE_MAXIMIZED)
-    {
-      lastMaximizedFrame = newFrame;
-    }
-  else
-    {
-      lastUnmaximizedFrame = [nsWindow frame];
-      gdk_synthesize_surface_state (GDK_SURFACE (gdk_surface), 0, GDK_TOPLEVEL_STATE_MAXIMIZED);
-    }
-
-  inMaximizeTransition = YES;
+  lastUnmaximizedFrame = [nsWindow frame];
 
   return YES;
-}
-
--(void)windowDidEndLiveResize:(NSNotification *)aNotification
-{
-  inMaximizeTransition = NO;
 }
 
 -(NSSize)window:(NSWindow *)window willUseFullScreenContentSize:(NSSize)proposedSize
