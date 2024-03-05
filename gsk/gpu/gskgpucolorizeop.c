@@ -34,7 +34,7 @@ gsk_gpu_colorize_op_print (GskGpuOp    *op,
   gsk_gpu_print_newline (string);
 }
 
-static const GskGpuShaderOpClass GSK_GPU_COLORIZE_OP_CLASS = {
+const GskGpuShaderOpClass GSK_GPU_COLORIZE_OP_CLASS = {
   {
     GSK_GPU_OP_SIZE (GskGpuColorizeOp),
     GSK_GPU_STAGE_SHADER,

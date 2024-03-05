@@ -6,6 +6,8 @@
 
 G_BEGIN_DECLS
 
+extern const GskGpuShaderOpClass GSK_GPU_COLORIZE_OP_CLASS;
+
 void                    gsk_gpu_colorize_op                             (GskGpuFrame                    *frame,
                                                                          GskGpuShaderClip                clip,
                                                                          GskGpuDescriptors              *desc,
