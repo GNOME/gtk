@@ -43,4 +43,13 @@ gtk_accessible_text_get_default_attributes (GtkAccessibleText   *self,
                                             char              ***attribute_names,
                                             char              ***attribute_values);
 
+gboolean
+gtk_accessible_text_get_attributes_run (GtkAccessibleText        *self,
+                                        unsigned int              offset,
+                                        gboolean                  include_defaults,
+                                        gsize                    *n_ranges,
+                                        GtkAccessibleTextRange  **ranges,
+                                        char                   ***attribute_names,
+                                        char                   ***attribute_values);
+
 G_END_DECLS
