@@ -179,6 +179,10 @@ struct _GskGpuCachedAtlas
 
   GskGpuImage *image;
 
+  gboolean has_colorize;
+  gsize colorize_x;
+  gsize colorize_y;
+
   gsize n_slices;
   struct {
     gsize width;
@@ -232,6 +236,8 @@ gsk_gpu_cached_atlas_new (GskGpuDevice *device)
 
   self = gsk_gpu_cached_new (device, &GSK_GPU_CACHED_ATLAS_CLASS, NULL);
   self->image = GSK_GPU_DEVICE_GET_CLASS (device)->create_atlas_image (device, ATLAS_SIZE, ATLAS_SIZE);
+
+  self->has_colorize = FALSE;
 
   return self;
 }
@@ -979,6 +985,44 @@ gsk_gpu_device_lookup_glyph_image (GskGpuDevice           *self,
   g_object_unref (scaled_font);
 
   return cache->image;
+}
+
+GskGpuImage *
+gsk_gpu_device_get_solid_image (GskGpuDevice    *self,
+                                GskGpuFrame     *frame,
+                                graphene_rect_t *out_bounds)
+{
+  GskGpuDevicePrivate *priv = gsk_gpu_device_get_instance_private (self);
+
+  gsk_gpu_device_ensure_atlas (self, FALSE);
+
+  if (!priv->current_atlas->has_colorize)
+    {
+      gsize x, y;
+
+      if (!gsk_gpu_cached_atlas_allocate (priv->current_atlas, 5, 5, &x, &y))
+        {
+          gsk_gpu_device_ensure_atlas (self, TRUE);
+          gsk_gpu_cached_atlas_allocate (priv->current_atlas, 5, 5, &x, &y);
+        }
+
+      gsk_gpu_upload_solid_op (frame,
+                               priv->current_atlas->image,
+                               &(cairo_rectangle_int_t) { x, y, 5, 5 },
+                               &GRAPHENE_POINT_INIT (1,  1));
+
+      priv->current_atlas->colorize_x = x + 2;
+      priv->current_atlas->colorize_y = y + 2;
+
+      priv->current_atlas->has_colorize = TRUE;
+    }
+
+  out_bounds->origin.x = priv->current_atlas->colorize_x;
+  out_bounds->origin.y = priv->current_atlas->colorize_y;
+  out_bounds->size.width = 1;
+  out_bounds->size.height = 1;
+
+  return priv->current_atlas->image;
 }
 
 /* }}} */
