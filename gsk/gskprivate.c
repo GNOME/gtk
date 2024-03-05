@@ -3,6 +3,7 @@
 
 #include <cairo.h>
 #include <pango/pangocairo.h>
+#include <pango/pangoft2.h>
 #include <math.h>
 
 static gpointer
@@ -49,6 +50,8 @@ gsk_get_scaled_font (PangoFont *font,
   PangoContext *context;
   cairo_scaled_font_t *sf;
   cairo_font_options_t *options;
+  FcPattern *pattern;
+  double dpi;
 
   key = (int) roundf (scale * PANGO_SCALE);
 
@@ -84,6 +87,10 @@ gsk_get_scaled_font (PangoFont *font,
   pango_cairo_context_set_font_options (context, options);
   cairo_font_options_destroy (options);
 
+  pattern = pango_fc_font_get_pattern (PANGO_FC_FONT (font));
+  if (FcPatternGetDouble (pattern, FC_DPI, 0, &dpi) == FcResultMatch)
+    pango_cairo_context_set_resolution (context, dpi);
+
   font2 = pango_font_map_load_font (fontmap, context, desc);
 
   pango_font_description_free (desc);
@@ -116,7 +123,11 @@ gsk_get_hinted_font (PangoFont          *font,
   cairo_font_options_t *options;
   cairo_scaled_font_t *sf;
   static PangoContext *context = NULL;
-  PangoFontDescription *desc G_GNUC_UNUSED;
+#if !PANGO_VERSION_CHECK (1, 52, 0)
+  PangoFontDescription *desc;
+  FcPattern *pattern;
+  double dpi;
+#endif
 
   options = cairo_font_options_create ();
   sf = pango_cairo_font_get_scaled_font (PANGO_CAIRO_FONT (font));
@@ -151,6 +162,11 @@ gsk_get_hinted_font (PangoFont          *font,
 #if PANGO_VERSION_CHECK (1, 52, 0)
   return pango_font_map_reload_font (pango_font_get_font_map (font), font, 1.0, context, NULL);
 #else
+
+  pattern = pango_fc_font_get_pattern (PANGO_FC_FONT (font));
+  if (FcPatternGetDouble (pattern, FC_DPI, 0, &dpi) == FcResultMatch)
+    pango_cairo_context_set_resolution (context, dpi);
+
   desc = pango_font_describe (font);
   font = pango_font_map_load_font (pango_font_get_font_map (font), context, desc);
   pango_font_description_free (desc);
