@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2024-02-23 01:06+0000\n"
-"PO-Revision-Date: 2024-02-25 10:40+0600\n"
+"POT-Creation-Date: 2024-03-02 15:19+0000\n"
+"PO-Revision-Date: 2024-03-06 08:09+0500\n"
 "Last-Translator: Baurzhan Muftakhidinov <baurthefirst@gmail.com>\n"
 "Language-Team: Kazakh <kk_KZ@googlegroups.com>\n"
 "Language: kk\n"
@@ -119,24 +119,22 @@ msgstr "GL API рұқсат етілмеген."
 msgid "Unable to create a GL context"
 msgstr "GL контекстін жасау сәтсіз"
 
-#: gdk/gdkglcontext.c:1303
-#| msgid "Anything but OpenGL ES disabled via GDK_DEBUG"
+#: gdk/gdkglcontext.c:1304
 msgid "OpenGL ES disabled via GDK_DEBUG"
 msgstr ""
 
-#: gdk/gdkglcontext.c:1315
-#| msgid "GL support disabled via GDK_DEBUG"
+#: gdk/gdkglcontext.c:1316
 msgid "OpenGL disabled via GDK_DEBUG"
 msgstr ""
 
-#: gdk/gdkglcontext.c:1326
+#: gdk/gdkglcontext.c:1327
 #, c-format
 msgid "Application does not support %s API"
 msgstr "Қолданба %s API қолдамайды"
 
 #. translators: This is about OpenGL backend names, like
 #. * "Trying to use X11 GLX, but EGL is already in use"
-#: gdk/gdkglcontext.c:2112
+#: gdk/gdkglcontext.c:2113
 #, c-format
 msgid "Trying to use %s, but %s is already in use"
 msgstr "%s қолдану талабы жасалды, бірақ, %s қолдануда болып тұр"
@@ -554,7 +552,6 @@ msgstr "PNG суретіндегі қолдау көрсетілмейтін т�
 
 #: gdk/loaders/gdkpng.c:272
 #, c-format
-#| msgid "Not enough memory for image size %ux%u"
 msgid "Image stride too large for image size %ux%u"
 msgstr ""
 
@@ -867,6 +864,10 @@ msgstr ""
 #, c-format
 msgid "OpenGL ES 3.0 is not supported by this renderer."
 msgstr ""
+
+#: gsk/gpu/gsknglrenderer.c:62
+msgid "OpenGL 3.3 required"
+msgstr "OpenGL 3.3 қажет"
 
 #: gtk/a11y/gtkatspiaction.c:239
 msgctxt "accessibility"
@@ -1244,7 +1245,6 @@ msgid "Mozilla Public License 2.0"
 msgstr "Mozilla Public License 2.0"
 
 #: gtk/gtkaboutdialog.c:137
-#| msgid "BSD 2-Clause License"
 msgid "BSD Zero-Clause License"
 msgstr ""
 
@@ -1776,15 +1776,11 @@ msgid "block quote"
 msgstr "блок дәйексөзі"
 
 #: gtk/gtkaccessible.c:872
-#| msgctxt "sizegroup mode"
-#| msgid "Vertical"
 msgctxt "accessibility"
 msgid "article"
 msgstr "мақала"
 
 #: gtk/gtkaccessible.c:873
-#| msgctxt "accessibility"
-#| msgid "command"
 msgctxt "accessibility"
 msgid "comment"
 msgstr "түсіндірме"
@@ -2662,35 +2658,35 @@ msgctxt "Font feature value"
 msgid "Enable"
 msgstr "Іске қосу"
 
-#: gtk/gtkfontchooserwidget.c:2457
+#: gtk/gtkfontchooserwidget.c:2459
 msgid "Default"
 msgstr "Үнсіз келісім бойынша"
 
-#: gtk/gtkfontchooserwidget.c:2519
+#: gtk/gtkfontchooserwidget.c:2521
 msgid "Ligatures"
 msgstr "Лигатуралар"
 
-#: gtk/gtkfontchooserwidget.c:2520
+#: gtk/gtkfontchooserwidget.c:2522
 msgid "Letter Case"
 msgstr "Әріптер регистрі"
 
-#: gtk/gtkfontchooserwidget.c:2521
+#: gtk/gtkfontchooserwidget.c:2523
 msgid "Number Case"
 msgstr "Сан регистрі"
 
-#: gtk/gtkfontchooserwidget.c:2522
+#: gtk/gtkfontchooserwidget.c:2524
 msgid "Number Spacing"
 msgstr "Сандар аралығы"
 
-#: gtk/gtkfontchooserwidget.c:2523
+#: gtk/gtkfontchooserwidget.c:2525
 msgid "Fractions"
 msgstr "Бөлшектер"
 
-#: gtk/gtkfontchooserwidget.c:2524
+#: gtk/gtkfontchooserwidget.c:2526
 msgid "Style Variations"
 msgstr "Стильдер нұсқалары"
 
-#: gtk/gtkfontchooserwidget.c:2526
+#: gtk/gtkfontchooserwidget.c:2528
 msgid "Character Variations"
 msgstr "Таңба нұсқалары"
 
@@ -3573,7 +3569,7 @@ msgstr "URI \"%s\" болатын нәрсені \"%s\" мақсатына жы�
 msgid "No registered application with name “%s” for item with URI “%s” found"
 msgstr "URI \"%s\" үшін аты \"%s\" болатын ешбір тіркелген қолданба табылмады"
 
-#: gtk/gtksearchentry.c:810
+#: gtk/gtksearchentry.c:814
 msgid "Clear Entry"
 msgstr "Жазбаны тазарту"
 
@@ -3954,7 +3950,6 @@ msgid "Composited"
 msgstr "Композитті"
 
 #: gtk/inspector/general.ui:538
-#| msgid "Available Protocols"
 msgid "Protocols"
 msgstr "Хаттамалар"
 
@@ -3963,12 +3958,10 @@ msgid "GL Version"
 msgstr "GL нұсқасы"
 
 #: gtk/inspector/general.ui:621
-#| msgid "GL Version"
 msgid "GL Backend Version"
 msgstr ""
 
 #: gtk/inspector/general.ui:671
-#| msgid "GL Vendor"
 msgid "GL Backend Vendor"
 msgstr ""
 
@@ -3977,7 +3970,6 @@ msgid "GL_VENDOR"
 msgstr "GL_VENDOR"
 
 #: gtk/inspector/general.ui:727
-#| msgid "RENDERER"
 msgid "GL_RENDERER"
 msgstr "GL_RENDERER"
 
@@ -4424,7 +4416,6 @@ msgid ""
 msgstr ""
 
 #: gtk/inspector/visual.ui:436
-#| msgid "Show Fallback Rendering"
 msgid "Show Cairo Rendering"
 msgstr ""
 
@@ -4461,7 +4452,6 @@ msgid "Show Accessibility warnings"
 msgstr "Қолжетімділік ескертулерін көрсету"
 
 #: gtk/inspector/visual.ui:661
-#| msgid "Show Graphic Updates"
 msgid "Show Graphics Offload"
 msgstr ""
 
@@ -7231,8 +7221,8 @@ msgstr ""
 #: tools/gtk-builder-tool-enumerate.c:56 tools/gtk-builder-tool-preview.c:179
 #: tools/gtk-builder-tool-preview.c:180 tools/gtk-builder-tool-screenshot.c:360
 #: tools/gtk-builder-tool-simplify.c:2529 tools/gtk-builder-tool-validate.c:261
-#: tools/gtk-path-tool-render.c:121 tools/gtk-rendernode-tool-info.c:214
-#: tools/gtk-rendernode-tool-show.c:106
+#: tools/gtk-path-tool-render.c:121 tools/gtk-rendernode-tool-compare.c:67
+#: tools/gtk-rendernode-tool-info.c:214 tools/gtk-rendernode-tool-show.c:106
 msgid "FILE"
 msgstr "ФАЙЛ"
 
@@ -7534,7 +7524,6 @@ msgid "Allow cubic Bézier curves"
 msgstr "Текшелік Безье қисықтарын рұқсат ету"
 
 #: tools/gtk-path-tool-decompose.c:86
-#| msgid "Allow cubic Bézier curves"
 msgid "Allow conic Bézier curves"
 msgstr ""
 
@@ -7601,7 +7590,6 @@ msgstr "%d текше"
 
 #: tools/gtk-path-tool-info.c:159
 #, c-format
-#| msgid "%d cubics"
 msgid "%d conics"
 msgstr "%d конус"
 
@@ -7614,12 +7602,10 @@ msgid "Stroke the path"
 msgstr ""
 
 #: tools/gtk-path-tool-render.c:119 tools/gtk-path-tool-show.c:142
-#| msgid "Show other locations"
 msgid "Show path points"
 msgstr ""
 
 #: tools/gtk-path-tool-render.c:120 tools/gtk-path-tool-show.c:143
-#| msgid "Show other locations"
 msgid "Show control points"
 msgstr "Басқару нүктелерін көрсету"
 
@@ -7642,7 +7628,6 @@ msgid "Background color"
 msgstr "Фон түсі"
 
 #: tools/gtk-path-tool-render.c:124 tools/gtk-path-tool-show.c:146
-#| msgid "Custom color"
 msgid "Point color"
 msgstr "Нүкте түсі"
 
@@ -7697,7 +7682,6 @@ msgid "Options related to filling"
 msgstr ""
 
 #: tools/gtk-path-tool-render.c:174 tools/gtk-path-tool-show.c:184
-#| msgid "Show other locations"
 msgid "Show help for fill options"
 msgstr ""
 
@@ -7706,7 +7690,6 @@ msgid "Options related to stroking"
 msgstr ""
 
 #: tools/gtk-path-tool-render.c:182 tools/gtk-path-tool-show.c:192
-#| msgid "Show other locations"
 msgid "Show help for stroke options"
 msgstr ""
 
@@ -7753,7 +7736,6 @@ msgid "End of segment"
 msgstr "Сегменттің соңы"
 
 #: tools/gtk-path-tool-restrict.c:51
-#| msgid "Render the path to a png image."
 msgid "Restrict a path to a segment."
 msgstr "Сегментке жолды шектеу."
 
@@ -7837,11 +7819,11 @@ msgstr ""
 "\n"
 
 #: tools/gtk-rendernode-tool-benchmark.c:94
-#| msgid "Renderer to use"
 msgid "Add renderer to benchmark"
 msgstr ""
 
 #: tools/gtk-rendernode-tool-benchmark.c:94
+#: tools/gtk-rendernode-tool-compare.c:65
 #: tools/gtk-rendernode-tool-render.c:195
 msgid "RENDERER"
 msgstr "ӨҢДЕГІШ"
@@ -7871,8 +7853,64 @@ msgstr "Ешбір .node файлы көрсетілмеген\n"
 
 #: tools/gtk-rendernode-tool-benchmark.c:133
 #, c-format
-#| msgid "Can only accept a single .node file\n"
 msgid "Can only benchmark a single .node file\n"
+msgstr ""
+
+#: tools/gtk-rendernode-tool-compare.c:65
+#: tools/gtk-rendernode-tool-render.c:195
+msgid "Renderer to use"
+msgstr "Қолданылатын өңдегіш"
+
+#: tools/gtk-rendernode-tool-compare.c:67
+#| msgid "The output file"
+msgid "Output file"
+msgstr "Шығыс файлы"
+
+#: tools/gtk-rendernode-tool-compare.c:70
+msgid "FILE1 FILE2"
+msgstr ""
+
+#: tools/gtk-rendernode-tool-compare.c:82
+msgid "Compare .node or .png files."
+msgstr ""
+
+#: tools/gtk-rendernode-tool-compare.c:95
+#, c-format
+msgid "Must specify two files\n"
+msgstr ""
+
+#: tools/gtk-rendernode-tool-compare.c:102
+#: tools/gtk-rendernode-tool-render.c:150
+#, c-format
+msgid "Failed to create renderer: %s\n"
+msgstr ""
+
+#: tools/gtk-rendernode-tool-compare.c:111
+#, c-format
+#| msgid "Failed to save %s: %s\n"
+msgid "Failed to load %s: %s\n"
+msgstr ""
+
+#: tools/gtk-rendernode-tool-compare.c:122
+#, c-format
+#| msgid "Could not rename %s back to %s: %s.\n"
+msgid "Could not save diff image to %s\n"
+msgstr ""
+
+#: tools/gtk-rendernode-tool-compare.c:132
+#, c-format
+#| msgid "Output written to %s.\n"
+msgid "Differences witten to %s.\n"
+msgstr ""
+
+#: tools/gtk-rendernode-tool-compare.c:134
+#, c-format
+msgid "The images are different.\n"
+msgstr ""
+
+#: tools/gtk-rendernode-tool-compare.c:137
+#, c-format
+msgid "No differences.\n"
 msgstr ""
 
 #: tools/gtk-rendernode-tool-info.c:191
@@ -7918,16 +7956,6 @@ msgstr ""
 msgid "Failed to generate SVG: %s\n"
 msgstr "SVG жасау сәтсіз аяқталды: %s\n"
 
-#: tools/gtk-rendernode-tool-render.c:150
-#, c-format
-#| msgid "Failed to rewrite header\n"
-msgid "Failed to create renderer: %s\n"
-msgstr ""
-
-#: tools/gtk-rendernode-tool-render.c:195
-msgid "Renderer to use"
-msgstr "Қолданылатын өңдегіш"
-
 #: tools/gtk-rendernode-tool-render.c:211
 msgid "Render a .node file to an image."
 msgstr ".node файлын сурет ретінде өңдеп шығару."
@@ -7957,7 +7985,6 @@ msgstr "%s жеріндегі қате: %s\n"
 
 #: tools/gtk-rendernode-tool-utils.c:72
 #, c-format
-#| msgid "Failed to open file %s : %s\n"
 msgid "Failed to load node file: %s\n"
 msgstr ""
 
