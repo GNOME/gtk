@@ -149,6 +149,7 @@ compare_render_tests = [
   'shadow-offset-clip',
   'shadow-offset-to-outside-clip',
   'shadow-opacity',
+  'shadow-replay-nocairo',
   'shrink-rounded-border',
   'stroke',
   'stroke-clipped-nogl',
