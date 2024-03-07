@@ -808,6 +808,11 @@ static const GtkAccessibleCollect collect_props[] = {
     .ctype = GTK_ACCESSIBLE_COLLECT_STRING,
     .name = "valuetext"
   },
+  [GTK_ACCESSIBLE_PROPERTY_HELP_TEXT] = {
+    .value = GTK_ACCESSIBLE_PROPERTY_HELP_TEXT,
+    .ctype = GTK_ACCESSIBLE_COLLECT_STRING,
+    .name = "helptext"
+  },
 };
 
 /* § 6.6.4 Relationship Attributes */
@@ -1692,6 +1697,7 @@ gtk_accessible_value_get_default_for_property (GtkAccessibleProperty property)
     case GTK_ACCESSIBLE_PROPERTY_PLACEHOLDER:
     case GTK_ACCESSIBLE_PROPERTY_ROLE_DESCRIPTION:
     case GTK_ACCESSIBLE_PROPERTY_VALUE_TEXT:
+    case GTK_ACCESSIBLE_PROPERTY_HELP_TEXT:
       return gtk_undefined_accessible_value_new ();
 
     /* Token properties */

@@ -328,6 +328,7 @@ static const char *property_attrs[] = {
   [GTK_ACCESSIBLE_PROPERTY_VALUE_MIN]           = "valuemin",
   [GTK_ACCESSIBLE_PROPERTY_VALUE_NOW]           = "valuenow",
   [GTK_ACCESSIBLE_PROPERTY_VALUE_TEXT]          = "valuetext",
+  [GTK_ACCESSIBLE_PROPERTY_HELP_TEXT]           = "helptext",
 };
 
 /*< private >
