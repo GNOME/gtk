@@ -409,7 +409,7 @@ has_variations (GVariant *emoji_data)
     {
       gunichar code;
       g_variant_get_child (codes, i, "u", &code);
-      if (code == 0)
+      if (code == 0 || code == 0x1f3fb)
         {
           has_variations = TRUE;
           break;
@@ -438,12 +438,13 @@ get_text (GVariant *emoji_data,
 
       g_variant_get_child (codes, i, "u", &code);
       if (code == 0)
+        code = modifier != 0 ? modifier : 0xfe0f;
+      if (code == 0x1f3fb)
         code = modifier;
       if (code != 0)
         p += g_unichar_to_utf8 (code, p);
     }
   g_variant_unref (codes);
-  p += g_unichar_to_utf8 (0xFE0F, p); /* U+FE0F is the Emoji variation selector */
   p[0] = 0;
 }
 

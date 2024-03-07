@@ -449,7 +449,7 @@ static gboolean
 has_variations (GVariant *emoji_data)
 {
   GVariant *codes;
-  int i;
+  gsize i;
   gboolean has_variations;
 
   has_variations = FALSE;
@@ -458,7 +458,7 @@ has_variations (GVariant *emoji_data)
     {
       gunichar code;
       g_variant_get_child (codes, i, "u", &code);
-      if (code == 0)
+      if (code == 0 || code == 0x1f3fb)
         {
           has_variations = TRUE;
           break;
@@ -571,14 +571,13 @@ add_emoji (GtkWidget    *box,
     {
       g_variant_get_child (codes, i, "u", &code);
       if (code == 0)
+        code = modifier != 0 ? modifier : 0xfe0f;
+      if (code == 0x1f3fb)
         code = modifier;
       if (code != 0)
         p += g_unichar_to_utf8 (code, p);
     }
   g_variant_unref (codes);
-
-  if (code != 0xFE0F && code != 0xFE0E)
-    p += g_unichar_to_utf8 (0xFE0F, p); /* Append a variation selector, if there isn't one already */
 
   p[0] = 0;
 

@@ -24,9 +24,14 @@
 
 /* The format of the generated data is: a(aussasasu).
  * Each member of the array has the following fields:
- * au - sequence of unicode codepoints. If the
- *      sequence contains a 0, it marks the point
- *      where skin tone modifiers should be inserted
+ * au - sequence of unicode codepoints, including the emoji presentation
+ *      selector (FE0F) where necessary. skin tone variations are represented
+ *      with either the first tone code point (1F3FB) or 0. the choice indicates
+ *      the handling of the generic sequence (i.e., no tone), which may have a
+ *      default text presentation and thus require the emoji presentation
+ *      selector (unlike sequences with a tone, which are always presented as
+ *      emojis). 0 indicates the text case, that is, replace this code point
+ *      with FE0F, while 1F3FB indicates this code point should be omitted.
  * s  - name in english, e.g. "man worker"
  * s  - name in locale
  * as - keywords in english, e.g. "man", "worker"
@@ -48,7 +53,8 @@
 
 gboolean
 parse_code (GVariantBuilder *b,
-            const char      *code)
+            const char      *code,
+            gboolean         needs_presentation_selector)
 {
   g_auto(GStrv) strv = NULL;
   int j;
@@ -66,10 +72,30 @@ parse_code (GVariantBuilder *b,
           return FALSE;
         }
       if (0x1f3fb <= u && u <= 0x1f3ff)
-        g_variant_builder_add (b, "u", 0);
+        {
+          if (needs_presentation_selector)
+            {
+              if (strv[j+1])
+                {
+                  g_error ("unexpected inner skin tone in default-text generic sequence: %s\n", code);
+                  return FALSE;
+                }
+              g_variant_builder_add (b, "u", 0);
+              needs_presentation_selector = FALSE;
+            }
+          else
+            {
+              g_variant_builder_add (b, "u", 0x1f3fb);
+            }
+        }
       else
-        g_variant_builder_add (b, "u", u);
+        {
+          g_variant_builder_add (b, "u", u);
+        }
     }
+
+  if (needs_presentation_selector)
+    g_variant_builder_add (b, "u", 0xfe0f);
 
   return TRUE;
 }
@@ -120,7 +146,6 @@ main (int argc, char *argv[])
   array_en = json_node_get_array (root_en);
   length_en = json_array_get_length (array_en);
 
-  
   g_variant_builder_init (&builder, G_VARIANT_TYPE ("a(aussasasu)"));
   for (i = 0; i < length; i++)
   {
@@ -133,13 +158,21 @@ main (int argc, char *argv[])
     const char *name;
     const char *name_en;
     char *code;
+    const char *text;
+    gboolean needs_presentation_selector;
+
     if (!json_object_has_member (obj, "group"))
       continue;
     if (!json_object_has_member (obj_en, "group"))
       continue;
+
     group = json_object_get_int_member (obj, "group");
     name = json_object_get_string_member (obj, "label");
     name_en = json_object_get_string_member (obj_en, "label");
+
+    if (g_str_has_suffix (name_en, "skin tone"))
+      continue;
+
     if (json_object_has_member (obj, "skins") && json_object_has_member (obj_en, "skins"))
       {
         JsonArray *a2 = json_object_get_array_member (obj, "skins");
@@ -151,9 +184,12 @@ main (int argc, char *argv[])
       {
         code = g_strdup (json_object_get_string_member (obj, "hexcode"));
       }
-    g_variant_builder_init (&b1, G_VARIANT_TYPE ("au"));
 
-    if (!parse_code (&b1, code))
+    text = json_object_get_string_member (obj, "text");
+    needs_presentation_selector = *text != '\0' && json_object_get_int_member (obj, "type") == 0;
+
+    g_variant_builder_init (&b1, G_VARIANT_TYPE ("au"));
+    if (!parse_code (&b1, code, needs_presentation_selector))
       return 1;
 
     g_variant_builder_init (&b2, G_VARIANT_TYPE ("as"));
