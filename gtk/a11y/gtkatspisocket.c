@@ -463,7 +463,7 @@ gtk_at_spi_socket_get_bus_name (GtkAtSpiSocket *self)
  * gtk_at_spi_socket_get_object_path:
  * @self: a #GtkAtSpiSocket
  *
- * Retrieves the object path of the remove accessible object that
+ * Retrieves the object path of the remote accessible object that
  * the socket is connected to.
  *
  * Returns: (transfer none): the object path of the socket remote
