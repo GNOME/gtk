@@ -14,8 +14,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk main\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2024-02-23 01:06+0000\n"
-"PO-Revision-Date: 2024-02-25 16:18+0700\n"
+"POT-Creation-Date: 2024-03-02 15:19+0000\n"
+"PO-Revision-Date: 2024-03-07 15:43+0700\n"
 "Last-Translator: Andika Triwidada <andika@gmail.com>\n"
 "Language-Team: Indonesian <gnome-l10n-id@googlegroups.com>\n"
 "Language: id\n"
@@ -126,22 +126,22 @@ msgstr "Tidak ada API GL yang diizinkan."
 msgid "Unable to create a GL context"
 msgstr "Tak dapat membuat sebuah konteks GL"
 
-#: gdk/gdkglcontext.c:1303
+#: gdk/gdkglcontext.c:1304
 msgid "OpenGL ES disabled via GDK_DEBUG"
 msgstr "OpenGL ES dinonaktifkan melalui GDK_DEBUG"
 
-#: gdk/gdkglcontext.c:1315
+#: gdk/gdkglcontext.c:1316
 msgid "OpenGL disabled via GDK_DEBUG"
 msgstr "OpenGL dinonaktifkan melalui GDK_DEBUG"
 
-#: gdk/gdkglcontext.c:1326
+#: gdk/gdkglcontext.c:1327
 #, c-format
 msgid "Application does not support %s API"
 msgstr "Aplikasi tidak mendukung API %s"
 
 #. translators: This is about OpenGL backend names, like
 #. * "Trying to use X11 GLX, but EGL is already in use"
-#: gdk/gdkglcontext.c:2112
+#: gdk/gdkglcontext.c:2113
 #, c-format
 msgid "Trying to use %s, but %s is already in use"
 msgstr "Mencoba menggunakan %s, tetapi %s sudah digunakan"
@@ -851,6 +851,10 @@ msgstr ""
 #, c-format
 msgid "OpenGL ES 3.0 is not supported by this renderer."
 msgstr "OpenGL ES 3.0 tidak didukung oleh perender ini."
+
+#: gsk/gpu/gsknglrenderer.c:62
+msgid "OpenGL 3.3 required"
+msgstr "OpenGL 3.3 diperlukan"
 
 #: gtk/a11y/gtkatspiaction.c:239
 msgctxt "accessibility"
@@ -2644,35 +2648,35 @@ msgctxt "Font feature value"
 msgid "Enable"
 msgstr "Fungsikan"
 
-#: gtk/gtkfontchooserwidget.c:2457
+#: gtk/gtkfontchooserwidget.c:2459
 msgid "Default"
 msgstr "Baku"
 
-#: gtk/gtkfontchooserwidget.c:2519
+#: gtk/gtkfontchooserwidget.c:2521
 msgid "Ligatures"
 msgstr "Ligatura"
 
-#: gtk/gtkfontchooserwidget.c:2520
+#: gtk/gtkfontchooserwidget.c:2522
 msgid "Letter Case"
 msgstr "Huruf besar kecil"
 
-#: gtk/gtkfontchooserwidget.c:2521
+#: gtk/gtkfontchooserwidget.c:2523
 msgid "Number Case"
 msgstr "Notasi Angka"
 
-#: gtk/gtkfontchooserwidget.c:2522
+#: gtk/gtkfontchooserwidget.c:2524
 msgid "Number Spacing"
 msgstr "Spasi Angka"
 
-#: gtk/gtkfontchooserwidget.c:2523
+#: gtk/gtkfontchooserwidget.c:2525
 msgid "Fractions"
 msgstr "Pecahan"
 
-#: gtk/gtkfontchooserwidget.c:2524
+#: gtk/gtkfontchooserwidget.c:2526
 msgid "Style Variations"
 msgstr "Variasi Gaya"
 
-#: gtk/gtkfontchooserwidget.c:2526
+#: gtk/gtkfontchooserwidget.c:2528
 msgid "Character Variations"
 msgstr "Varian Karakter"
 
@@ -3558,7 +3562,7 @@ msgstr ""
 "Tak ditemukan aplikasi terdaftar dengan nama \"%s\" bagi butir dengan URI "
 "\"%s\""
 
-#: gtk/gtksearchentry.c:810
+#: gtk/gtksearchentry.c:814
 msgid "Clear Entry"
 msgstr "Bersihkan Entri"
 
@@ -3960,7 +3964,6 @@ msgid "GL_VENDOR"
 msgstr "GL_VENDOR"
 
 #: gtk/inspector/general.ui:727
-#| msgid "RENDERER"
 msgid "GL_RENDERER"
 msgstr "GL_RENDERER"
 
@@ -4401,19 +4404,16 @@ msgid "Show Graphic Updates"
 msgstr "Tampilkan Pembaruan Grafik"
 
 #: gtk/inspector/visual.ui:430
-#, fuzzy
 msgid ""
 "Tints all the places where the current renderer uses Cairo instead of the "
 "GPU."
 msgstr ""
-"Mewarnai semua tempat di mana perender saat ini menggunakan Kairo alih-alih "
+"Mewarnai semua tempat di mana perender saat ini menggunakan Cairo alih-alih "
 "GPU."
 
 #: gtk/inspector/visual.ui:436
-#, fuzzy
-#| msgid "Show Fallback Rendering"
 msgid "Show Cairo Rendering"
-msgstr "Tampilkan Rendering Cadangan"
+msgstr "Tampilkan Pereenderan Cairo"
 
 #: gtk/inspector/visual.ui:461
 msgid "Show Baselines"
@@ -4448,10 +4448,8 @@ msgid "Show Accessibility warnings"
 msgstr "Tampilkan peringatan Aksesibilitas"
 
 #: gtk/inspector/visual.ui:661
-#, fuzzy
-#| msgid "Show Graphic Updates"
 msgid "Show Graphics Offload"
-msgstr "Tampilkan Pembaruan Grafik"
+msgstr "Tampilkan Offload Grafis"
 
 #: gtk/inspector/visual.ui:693
 msgid "Inspect Inspector"
@@ -7221,8 +7219,8 @@ msgstr ""
 #: tools/gtk-builder-tool-enumerate.c:56 tools/gtk-builder-tool-preview.c:179
 #: tools/gtk-builder-tool-preview.c:180 tools/gtk-builder-tool-screenshot.c:360
 #: tools/gtk-builder-tool-simplify.c:2529 tools/gtk-builder-tool-validate.c:261
-#: tools/gtk-path-tool-render.c:121 tools/gtk-rendernode-tool-info.c:214
-#: tools/gtk-rendernode-tool-show.c:106
+#: tools/gtk-path-tool-render.c:121 tools/gtk-rendernode-tool-compare.c:67
+#: tools/gtk-rendernode-tool-info.c:214 tools/gtk-rendernode-tool-show.c:106
 msgid "FILE"
 msgstr "BERKAS"
 
@@ -7486,7 +7484,7 @@ msgid "%s: error launching application: %s\n"
 msgstr "%s: galat saat meluncurkan aplikasi: %s\n"
 
 #: tools/gtk-path-tool.c:35
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Usage:\n"
 "  gtk4-path-tool [COMMAND] [OPTION…] PATH\n"
@@ -7503,9 +7501,9 @@ msgid ""
 "\n"
 msgstr ""
 "Penggunaan:\n"
-"  gtk4-path-tool [PERINTAH] [OPSI...] JALAN\n"
+"  gtk4-path-tool [PERINTAH] [OPSI…] JALAN\n"
 "\n"
-"Lakukan berbagai tugas di jalur.\n"
+"Lakukan berbagai tugas di path.\n"
 "\n"
 "Perintah:\n"
 "  membusuk Menguraikan jalur\n"
@@ -7517,19 +7515,16 @@ msgstr ""
 "\n"
 
 #: tools/gtk-path-tool-decompose.c:84
-#, fuzzy
 msgid "Allow quadratic Bézier curves"
-msgstr "Memungkinkan kurva Bézier kuadrat"
+msgstr "Izinkan kurva Bézier kuadratis"
 
 #: tools/gtk-path-tool-decompose.c:85
-#, fuzzy
 msgid "Allow cubic Bézier curves"
-msgstr "Biarkan kurva Bézier kubik"
+msgstr "Izinkan kurva Bézier kubik"
 
 #: tools/gtk-path-tool-decompose.c:86
-#, fuzzy
 msgid "Allow conic Bézier curves"
-msgstr "Biarkan kurva Bézier berbentuk kerucut"
+msgstr "Izikan kurva Bézier konik"
 
 #: tools/gtk-path-tool-decompose.c:87 tools/gtk-path-tool-info.c:88
 #: tools/gtk-path-tool-render.c:125 tools/gtk-path-tool-restrict.c:38
@@ -7544,21 +7539,17 @@ msgstr "Menguraikan jalan."
 
 #: tools/gtk-path-tool-decompose.c:112 tools/gtk-path-tool-info.c:113
 #: tools/gtk-path-tool-restrict.c:64 tools/gtk-path-tool-reverse.c:58
-#, fuzzy
 msgid "No paths given."
-msgstr "Tidak ada jalan yang diberikan."
+msgstr "Tidak ada path yang diberikan."
 
 #: tools/gtk-path-tool-decompose.c:140 tools/gtk-path-tool-restrict.c:94
 #: tools/gtk-path-tool-reverse.c:78
-#, fuzzy
 msgid "That didn't work out."
 msgstr "Itu tidak berhasil."
 
 #: tools/gtk-path-tool-info.c:100
-#, fuzzy
-#| msgid "Provide information about the render node."
 msgid "Print information about a path."
-msgstr "Menyediakan informasi tentang simpul render."
+msgstr "Cetak informasi tentang suatu path."
 
 #: tools/gtk-path-tool-info.c:121
 msgid "Path is empty."
@@ -7603,9 +7594,8 @@ msgid "%d conics"
 msgstr "%d kerucut"
 
 #: tools/gtk-path-tool-render.c:117 tools/gtk-path-tool-show.c:140
-#, fuzzy
 msgid "Fill the path (the default)"
-msgstr "Mengisi jalur (default)"
+msgstr "Penuhi path (baku)"
 
 #: tools/gtk-path-tool-render.c:118 tools/gtk-path-tool-show.c:141
 #, fuzzy
@@ -7639,10 +7629,8 @@ msgid "Background color"
 msgstr "Warna latar belakang"
 
 #: tools/gtk-path-tool-render.c:124 tools/gtk-path-tool-show.c:146
-#, fuzzy
-#| msgid "Pick a Color"
 msgid "Point color"
-msgstr "Pilih Warna"
+msgstr "Warna titik"
 
 #: tools/gtk-path-tool-render.c:129 tools/gtk-path-tool-show.c:151
 #, fuzzy
@@ -7687,32 +7675,25 @@ msgid "Dash offset (number)"
 msgstr "Offset tanda hubung (angka)"
 
 #: tools/gtk-path-tool-render.c:161 tools/gtk-path-tool-show.c:172
-#, fuzzy
-#| msgid "Could not initialize windowing system\n"
 msgid "Could not initialize windowing system"
-msgstr "Tidak bisa menginisialisasi sistem jendela\n"
+msgstr "Tidak bisa menginisialisasi sistem jendela"
 
 #: tools/gtk-path-tool-render.c:168
-#, fuzzy
-#| msgid "Render a .node file to an image."
 msgid "Render the path to a png image."
-msgstr "Render suatu berkas .node ke suatu gambar."
+msgstr "Render path ke suatu gambar png."
 
 #: tools/gtk-path-tool-render.c:173 tools/gtk-path-tool-show.c:183
-#, fuzzy
 msgid "Options related to filling"
 msgstr "Opsi yang terkait dengan pengisian"
 
 #: tools/gtk-path-tool-render.c:174 tools/gtk-path-tool-show.c:184
-#, fuzzy
-#| msgid "Show other locations"
 msgid "Show help for fill options"
-msgstr "Tampilkan lokasi lain"
+msgstr "Tampilkan bantuan untuk opsi pengisian"
 
 #: tools/gtk-path-tool-render.c:181 tools/gtk-path-tool-show.c:191
 #, fuzzy
 msgid "Options related to stroking"
-msgstr "Opsi yang terkait dengan membelai"
+msgstr "Opsi yang terkait dengan stroke"
 
 #: tools/gtk-path-tool-render.c:182 tools/gtk-path-tool-show.c:192
 #, fuzzy
@@ -7721,10 +7702,8 @@ msgid "Show help for stroke options"
 msgstr "Tampilkan lokasi lain"
 
 #: tools/gtk-path-tool-render.c:199 tools/gtk-path-tool-show.c:209
-#, fuzzy
-#| msgid "Reason not specified"
 msgid "No path specified"
-msgstr "Alasan tidak ditentukan"
+msgstr "Tidak ada path yang dinyatakan"
 
 #: tools/gtk-path-tool-render.c:205
 #, fuzzy
@@ -7733,9 +7712,8 @@ msgid "Can only render a single path"
 msgstr "Hanya dapat memratinjau satu berkas .ui\n"
 
 #: tools/gtk-path-tool-render.c:250 tools/gtk-path-tool-show.c:221
-#, fuzzy
 msgid "fill rule"
-msgstr "Aturan Pengisian"
+msgstr "aturan pengisian"
 
 #: tools/gtk-path-tool-render.c:255 tools/gtk-path-tool-show.c:226
 #, fuzzy
@@ -7748,19 +7726,16 @@ msgid "line join"
 msgstr "gabung baris"
 
 #: tools/gtk-path-tool-render.c:310
-#, fuzzy, c-format
-#| msgid "Saving CSS failed"
+#, c-format
 msgid "Saving png to '%s' failed"
-msgstr "Penyimpanan CSS gagal"
+msgstr "Menyimpan png ke '%s' gagal"
 
 #: tools/gtk-path-tool-render.c:317
-#, fuzzy, c-format
-#| msgid "Output written to %s.\n"
+#, c-format
 msgid "Output written to '%s'."
-msgstr "Keluaran ditulis ke %s.\n"
+msgstr "Keluaran ditulis ke '%s'."
 
 #: tools/gtk-path-tool-restrict.c:36
-#, fuzzy
 msgid "Beginning of segment"
 msgstr "Awal segmen"
 
@@ -7778,39 +7753,30 @@ msgid "Restrict a path to a segment."
 msgstr "Batasi jalur ke segmen."
 
 #: tools/gtk-path-tool-reverse.c:45
-#, fuzzy
-#| msgid "Reverse portrait"
 msgid "Reverse a path."
-msgstr "Tegak terjungkir"
+msgstr "Balikkan suatu path."
 
 #: tools/gtk-path-tool-show.c:46 tools/gtk-path-tool-show.c:88
-#, fuzzy
-#| msgid "Pre_view"
 msgid "Path Preview"
-msgstr "_Pratinjau"
+msgstr "Pratinjau Path"
 
 #: tools/gtk-path-tool-show.c:180
-#, fuzzy
 msgid "Display the path."
-msgstr "Tampilkan jalur."
+msgstr "Tampilkan path."
 
 #: tools/gtk-path-tool-show.c:215
-#, fuzzy
-#| msgid "Can only preview a single .ui file\n"
 msgid "Can only show a single path"
-msgstr "Hanya dapat memratinjau satu berkas .ui\n"
+msgstr "Hanya dapat menunjukkan path tunggal"
 
 #: tools/gtk-path-tool-utils.c:58
-#, fuzzy, c-format
-#| msgid "Failed to read “%s”: %s\n"
+#, c-format
 msgid "Failed to read from standard input: %s\n"
-msgstr "Gagal membaca \"%s\": %s\n"
+msgstr "Gagal membaca dari masukan standar: %s\n"
 
 #: tools/gtk-path-tool-utils.c:64
-#, fuzzy, c-format
-#| msgid "Error parsing commandline options: %s\n"
+#, c-format
 msgid "Error reading from standard input: %s\n"
-msgstr "Galat sewaktu mengurai opsi baris perintah: %s\n"
+msgstr "Galat sewaktu membaca dari masukan standar: %s\n"
 
 #: tools/gtk-path-tool-utils.c:83
 #, c-format
@@ -7824,7 +7790,7 @@ msgstr "Gagal mengurai '%s' sebagai %s."
 
 #: tools/gtk-path-tool-utils.c:111
 msgid "Possible values: "
-msgstr "Nilai yang mungkin:"
+msgstr "Nilai yang mungkin: "
 
 #: tools/gtk-path-tool-utils.c:135
 #, c-format
@@ -7837,18 +7803,7 @@ msgid "Failed to parse '%s' as number"
 msgstr "Gagal mengurai '%s' sebagai angka"
 
 #: tools/gtk-rendernode-tool.c:35
-#, fuzzy, c-format
-#| msgid ""
-#| "Usage:\n"
-#| "  gtk4-rendernode-tool [COMMAND] [OPTION…] FILE\n"
-#| "\n"
-#| "Perform various tasks on GTK render nodes.\n"
-#| "\n"
-#| "Commands:\n"
-#| "  info         Provide information about the node\n"
-#| "  show         Show the node\n"
-#| "  render       Take a screenshot of the node\n"
-#| "\n"
+#, c-format
 msgid ""
 "Usage:\n"
 "  gtk4-rendernode-tool [COMMAND] [OPTION…] FILE\n"
@@ -7864,23 +7819,24 @@ msgid ""
 "\n"
 msgstr ""
 "Cara pakai:\n"
-"  gtk4-render-tool [PERINTAH] [OPSI…] BERKAS\n"
+"  gtk4-rendernode-tool [PERINTAH] [OPSI…] BERKAS\n"
 "\n"
 "Melakukan berbagai tugas pada simpul-simpul render GTK.\n"
 "\n"
 "Perintah:\n"
+"  benchmark    Benchmark perenderan dari suatu simpul\n"
+"  compare      Bandingkan simpul atau citra\n"
 "  info         Menyediakan informasi tentang simpul\n"
 "  show         Menampilkan simpul\n"
 "  render       Mengambil cuplikan layar dari simpul\n"
 "\n"
 
 #: tools/gtk-rendernode-tool-benchmark.c:94
-#, fuzzy
-#| msgid "Renderer to use"
 msgid "Add renderer to benchmark"
-msgstr "Perender yang dipakai"
+msgstr "Tambahkan perender ke benchmark"
 
 #: tools/gtk-rendernode-tool-benchmark.c:94
+#: tools/gtk-rendernode-tool-compare.c:65
 #: tools/gtk-rendernode-tool-render.c:195
 msgid "RENDERER"
 msgstr "PERENDER"
@@ -7893,11 +7849,9 @@ msgstr "Jumlah eksekusi dengan setiap perender"
 #: tools/gtk-rendernode-tool-benchmark.c:95
 #, fuzzy
 msgid "RUNS"
-msgstr ""
-"• keamanan perangkat lunak yang berjalan langsung pada perangkat keras."
+msgstr "JALAN"
 
 #: tools/gtk-rendernode-tool-benchmark.c:96
-#, fuzzy
 msgid "Don’t download result/wait for GPU to finish"
 msgstr "Jangan unduh hasil/tunggu GPU selesai"
 
@@ -7914,10 +7868,63 @@ msgid "No .node file specified\n"
 msgstr "Tidak ada berkas .node yang ditentukan\n"
 
 #: tools/gtk-rendernode-tool-benchmark.c:133
-#, fuzzy, c-format
-#| msgid "Can only accept a single .node file\n"
+#, c-format
 msgid "Can only benchmark a single .node file\n"
-msgstr "Hanya dapat menerima satu berkas .node\n"
+msgstr "Hanya bisa mem-benchmark berkas tunggal .node\n"
+
+#: tools/gtk-rendernode-tool-compare.c:65
+#: tools/gtk-rendernode-tool-render.c:195
+msgid "Renderer to use"
+msgstr "Perender yang dipakai"
+
+#: tools/gtk-rendernode-tool-compare.c:67
+msgid "Output file"
+msgstr "Berkas keluaran"
+
+#: tools/gtk-rendernode-tool-compare.c:70
+msgid "FILE1 FILE2"
+msgstr "BERKAS1 BERKAS2"
+
+#: tools/gtk-rendernode-tool-compare.c:82
+msgid "Compare .node or .png files."
+msgstr "Bandingkan berkas .node atau .png."
+
+#: tools/gtk-rendernode-tool-compare.c:95
+#, c-format
+msgid "Must specify two files\n"
+msgstr "Harus menyatakan dua berkas\n"
+
+#: tools/gtk-rendernode-tool-compare.c:102
+#: tools/gtk-rendernode-tool-render.c:150
+#, c-format
+msgid "Failed to create renderer: %s\n"
+msgstr "Gagal membuat perender: %s\n"
+
+#: tools/gtk-rendernode-tool-compare.c:111
+#, c-format
+msgid "Failed to load %s: %s\n"
+msgstr "Gagal memuat %s: %s\n"
+
+#: tools/gtk-rendernode-tool-compare.c:122
+#, c-format
+msgid "Could not save diff image to %s\n"
+msgstr "Tidak bisa menyimpan citra perbedaan ke %s\n"
+
+# typo witten --> written
+#: tools/gtk-rendernode-tool-compare.c:132
+#, c-format
+msgid "Differences witten to %s.\n"
+msgstr "Perbedaan ditulis ke %s.\n"
+
+#: tools/gtk-rendernode-tool-compare.c:134
+#, c-format
+msgid "The images are different.\n"
+msgstr "Citra berbeda.\n"
+
+#: tools/gtk-rendernode-tool-compare.c:137
+#, c-format
+msgid "No differences.\n"
+msgstr "Tidak ada perbedaan.\n"
 
 #: tools/gtk-rendernode-tool-info.c:191
 #, c-format
@@ -7962,16 +7969,6 @@ msgstr ""
 msgid "Failed to generate SVG: %s\n"
 msgstr "Gagal menghasilkan SVG: %s\n"
 
-#: tools/gtk-rendernode-tool-render.c:150
-#, fuzzy, c-format
-#| msgid "Failed to rewrite header\n"
-msgid "Failed to create renderer: %s\n"
-msgstr "Gagal menulis ulang judul\n"
-
-#: tools/gtk-rendernode-tool-render.c:195
-msgid "Renderer to use"
-msgstr "Perender yang dipakai"
-
 #: tools/gtk-rendernode-tool-render.c:211
 msgid "Render a .node file to an image."
 msgstr "Render suatu berkas .node ke suatu gambar."
@@ -7983,9 +7980,8 @@ msgstr ""
 "Hanya dapat merender satu berkas .node ke sebuah berkas keluaran tunggal\n"
 
 #: tools/gtk-rendernode-tool-show.c:105
-#, fuzzy
 msgid "Don't add a titlebar"
-msgstr "Jangan menambahkan bilah judul"
+msgstr "Jangan tambahkan bilah judul"
 
 #: tools/gtk-rendernode-tool-show.c:121
 msgid "Show the render node."
@@ -8002,10 +7998,9 @@ msgid "Error at %s: %s\n"
 msgstr "Galat di %s: %s\n"
 
 #: tools/gtk-rendernode-tool-utils.c:72
-#, fuzzy, c-format
-#| msgid "Failed to open file %s : %s\n"
+#, c-format
 msgid "Failed to load node file: %s\n"
-msgstr "Gagal membuka berkas %s: %s\n"
+msgstr "Gagal memuat berkas simpul: %s\n"
 
 #: tools/updateiconcache.c:1391
 #, c-format
