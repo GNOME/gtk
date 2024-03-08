@@ -143,5 +143,7 @@ do_compare (int          *argc,
   g_strfreev (filenames);
   g_object_unref (texture[0]);
   g_object_unref (texture[1]);
+
+  gsk_renderer_unrealize (renderer);
   g_object_unref (renderer);
 }
