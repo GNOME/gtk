@@ -2707,7 +2707,7 @@ gdk_wayland_toplevel_set_transient_for_exported (GdkToplevel *toplevel,
   g_return_val_if_fail (GDK_IS_WAYLAND_TOPLEVEL (toplevel), FALSE);
   g_return_val_if_fail (GDK_IS_WAYLAND_DISPLAY (display), FALSE);
 
-  if (!display_wayland->xdg_importer)
+  if (!display_wayland->xdg_importer && !display_wayland->xdg_importer_v2)
     {
       g_warning ("Server is missing xdg_foreign support");
       return FALSE;
