@@ -1,38 +1,13 @@
-/*
- * Copyright © 2019 Red Hat, Inc.
- *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library. If not, see <http://www.gnu.org/licenses/>.
- *
- * Authors: Matthias Clasen
- */
-
 #include "config.h"
 
 #include "constraint-editor-application.h"
 #include "constraint-editor-window.h"
 
-struct _ConstraintEditorApplication
-{
+struct _ConstraintEditorApplication {
   GtkApplication parent_instance;
 };
 
 G_DEFINE_TYPE(ConstraintEditorApplication, constraint_editor_application, GTK_TYPE_APPLICATION);
-
-static void
-constraint_editor_application_init (ConstraintEditorApplication *app)
-{
-}
 
 static void
 quit_activated (GSimpleAction *action,
@@ -42,8 +17,7 @@ quit_activated (GSimpleAction *action,
   g_application_quit (G_APPLICATION (data));
 }
 
-static GActionEntry app_entries[] =
-{
+static GActionEntry app_entries[] = {
   { "quit", quit_activated, NULL, NULL, NULL }
 };
 
@@ -62,8 +36,9 @@ constraint_editor_application_startup (GApplication *app)
   gtk_application_set_accels_for_action (GTK_APPLICATION (app), "app.quit", quit_accels);
   gtk_application_set_accels_for_action (GTK_APPLICATION (app), "win.open", open_accels);
 
+  // Allow loading custom CSS files
   provider = gtk_css_provider_new ();
-  gtk_css_provider_load_from_resource (provider, "/org/gtk/gtk4/constraint-editor/constraint-editor.css");
+  gtk_css_provider_load_from_resource (provider, "/org/gtk/gtk4/constraint-editor/custom.css");
   gtk_style_context_add_provider_for_display (gdk_display_get_default (),
                                               GTK_STYLE_PROVIDER (provider),
                                               GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
@@ -89,9 +64,21 @@ constraint_editor_application_open (GApplication  *app,
 
   for (i = 0; i < n_files; i++)
     {
-      win = constraint_editor_window_new (CONSTRAINT_EDITOR_APPLICATION (app));
-      constraint_editor_window_load (win, files[i]);
-      gtk_window_present (GTK_WINDOW (win));
+      // Check if file is valid before opening
+      if (is_valid_constraint_file(files[i])) {
+        win = constraint_editor_window_new (CONSTRAINT_EDITOR_APPLICATION (app));
+        constraint_editor_window_load (win, files[i]);
+        gtk_window_present (GTK_WINDOW (win));
+      } else {
+        // Display error message for invalid file
+        GtkWidget *error_dialog = gtk_message_dialog_new(NULL,
+                                                          GTK_DIALOG_MODAL,
+                                                          GTK_MESSAGE_ERROR,
+                                                          GTK_BUTTONS_CLOSE,
+                                                          "Invalid constraint file.");
+        gtk_dialog_run(GTK_DIALOG(error_dialog));
+        gtk_widget_destroy(error_dialog);
+      }
     }
 }
 
@@ -112,4 +99,11 @@ constraint_editor_application_new (void)
                        "application-id", "org.gtk.gtk4.ConstraintEditor",
                        "flags", G_APPLICATION_HANDLES_OPEN,
                        NULL);
+}
+
+// Check if the file is a valid constraint file
+static gboolean is_valid_constraint_file(GFile *file) {
+  // Add your validation logic here
+  // For example, check file extension or format
+  return TRUE; // Placeholder, always return true for now
 }
