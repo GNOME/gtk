@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.HEAD\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2024-02-22 15:33+0000\n"
-"PO-Revision-Date: 2024-02-25 15:35+0200\n"
+"POT-Creation-Date: 2024-03-02 15:19+0000\n"
+"PO-Revision-Date: 2024-03-08 23:02+0200\n"
 "Last-Translator: Rūdolfs Mazurs <rudolfs.mazurs@gmail.com>\n"
 "Language-Team: Latvian <lata-l10n@googlegroups.com>\n"
 "Language: lv\n"
@@ -126,24 +126,22 @@ msgstr "Nav atļauti GL API."
 msgid "Unable to create a GL context"
 msgstr "Nevar izveidot GL kontekstu"
 
-#: gdk/gdkglcontext.c:1303
-#| msgid "Anything but OpenGL ES disabled via GDK_DEBUG"
+#: gdk/gdkglcontext.c:1304
 msgid "OpenGL ES disabled via GDK_DEBUG"
 msgstr "OpenGL ES ir izslēgts no GDK_DEBUG"
 
-#: gdk/gdkglcontext.c:1315
-#| msgid "GL support disabled via GDK_DEBUG"
+#: gdk/gdkglcontext.c:1316
 msgid "OpenGL disabled via GDK_DEBUG"
 msgstr "OpenGL ir izslēgts no GDK_DEBUG"
 
-#: gdk/gdkglcontext.c:1326
+#: gdk/gdkglcontext.c:1327
 #, c-format
 msgid "Application does not support %s API"
 msgstr "Lietotne neatbalsta %s API"
 
 #. translators: This is about OpenGL backend names, like
 #. * "Trying to use X11 GLX, but EGL is already in use"
-#: gdk/gdkglcontext.c:2112
+#: gdk/gdkglcontext.c:2113
 #, c-format
 msgid "Trying to use %s, but %s is already in use"
 msgstr "Mēģina izmantot %s, bet jau tiek izmantots %s"
@@ -561,7 +559,6 @@ msgstr "Neatbalstīts krāsu tips %u png attēlā"
 
 #: gdk/loaders/gdkpng.c:272
 #, c-format
-#| msgid "Not enough memory for image size %ux%u"
 msgid "Image stride too large for image size %ux%u"
 msgstr "Attēla solis ir pārāk liels attēlam ar izmēru %ux%u"
 
@@ -845,6 +842,10 @@ msgstr "Šī GLES %d.%d implementācija neatbalsta pus-peldošo virsotņu datus"
 #, c-format
 msgid "OpenGL ES 3.0 is not supported by this renderer."
 msgstr "OpenGL ES 3.0 nav atbalstīts uz šī renderētāja."
+
+#: gsk/gpu/gsknglrenderer.c:62
+msgid "OpenGL 3.3 required"
+msgstr "Nepieciešams OpenGL 3.3"
 
 #: gtk/a11y/gtkatspiaction.c:239
 msgctxt "accessibility"
@@ -1222,7 +1223,6 @@ msgid "Mozilla Public License 2.0"
 msgstr "Mozilla publiskā licence 2.0"
 
 #: gtk/gtkaboutdialog.c:137
-#| msgid "BSD 2-Clause License"
 msgid "BSD Zero-Clause License"
 msgstr "BSD nulle klauzulu licence"
 
@@ -1754,21 +1754,16 @@ msgid "block quote"
 msgstr "bloka citāts"
 
 #: gtk/gtkaccessible.c:872
-#| msgctxt "sizegroup mode"
-#| msgid "Vertical"
 msgctxt "accessibility"
 msgid "article"
 msgstr "raksts"
 
 #: gtk/gtkaccessible.c:873
-#| msgctxt "accessibility"
-#| msgid "command"
 msgctxt "accessibility"
 msgid "comment"
 msgstr "komentārs"
 
 #: gtk/gtkaccessible.c:874
-#| msgid "Terminal Pager"
 msgctxt "accessibility"
 msgid "terminal"
 msgstr "terminālis"
@@ -2543,7 +2538,6 @@ msgid "Accessed"
 msgstr "Izmantots"
 
 #: gtk/gtkfilechooserwidget.c:7361
-#| msgid "Size"
 msgid "_Size"
 msgstr "Izmēr_s"
 
@@ -2552,7 +2546,6 @@ msgid "T_ype"
 msgstr "_Tips"
 
 #: gtk/gtkfilechooserwidget.c:7369
-#| msgid "Show _Time"
 msgid "_Time"
 msgstr "_Laiks"
 
@@ -2641,35 +2634,35 @@ msgctxt "Font feature value"
 msgid "Enable"
 msgstr "Ieslēgt"
 
-#: gtk/gtkfontchooserwidget.c:2457
+#: gtk/gtkfontchooserwidget.c:2459
 msgid "Default"
 msgstr "Noklusējuma"
 
-#: gtk/gtkfontchooserwidget.c:2519
+#: gtk/gtkfontchooserwidget.c:2521
 msgid "Ligatures"
 msgstr "Ligatūras"
 
-#: gtk/gtkfontchooserwidget.c:2520
+#: gtk/gtkfontchooserwidget.c:2522
 msgid "Letter Case"
 msgstr "Burtu reģistrs"
 
-#: gtk/gtkfontchooserwidget.c:2521
+#: gtk/gtkfontchooserwidget.c:2523
 msgid "Number Case"
 msgstr "Skaitļu reģistrs"
 
-#: gtk/gtkfontchooserwidget.c:2522
+#: gtk/gtkfontchooserwidget.c:2524
 msgid "Number Spacing"
 msgstr "Skaitļu atstatums"
 
-#: gtk/gtkfontchooserwidget.c:2523
+#: gtk/gtkfontchooserwidget.c:2525
 msgid "Fractions"
 msgstr "Daļas"
 
-#: gtk/gtkfontchooserwidget.c:2524
+#: gtk/gtkfontchooserwidget.c:2526
 msgid "Style Variations"
 msgstr "Stila variācijas"
 
-#: gtk/gtkfontchooserwidget.c:2526
+#: gtk/gtkfontchooserwidget.c:2528
 msgid "Character Variations"
 msgstr "Rakstzīmju variācijas"
 
@@ -3253,7 +3246,7 @@ msgstr "_Savienoties"
 
 #: gtk/gtkplacesview.c:1894
 msgid "Unable to get remote server location"
-msgstr "Neizdevās saņemt attālinātā servera vietu"
+msgstr "Neizdevās saņemt attālā servera vietu"
 
 #: gtk/gtkplacesview.c:2038 gtk/gtkplacesview.c:2047
 msgid "Networks"
@@ -3555,7 +3548,7 @@ msgid "No registered application with name “%s” for item with URI “%s” f
 msgstr ""
 "Nav atrastu reģistrētu lietotņu ar nosaukumu “%s” vienumiem ar URI “%s”"
 
-#: gtk/gtksearchentry.c:810
+#: gtk/gtksearchentry.c:814
 msgid "Clear Entry"
 msgstr "Attīrīt ierakstu"
 
@@ -3771,7 +3764,7 @@ msgstr "lokāls"
 #: gtk/inspector/clipboard.c:285 gtk/inspector/clipboard.c:327
 msgctxt "clipboard"
 msgid "remote"
-msgstr "attālināts"
+msgstr "attāls"
 
 #: gtk/inspector/clipboard.ui:30
 msgid "Drag and hold here"
@@ -3857,7 +3850,6 @@ msgid "None"
 msgstr "Nekāda"
 
 #: gtk/inspector/general.c:461
-#| msgid "Unknown"
 msgctxt "GL version"
 msgid "Unknown"
 msgstr "Nezināms"
@@ -3935,7 +3927,6 @@ msgid "Composited"
 msgstr "Kompozīts"
 
 #: gtk/inspector/general.ui:538
-#| msgid "Available Protocols"
 msgid "Protocols"
 msgstr "Protokoli"
 
@@ -3944,12 +3935,10 @@ msgid "GL Version"
 msgstr "GL versija"
 
 #: gtk/inspector/general.ui:621
-#| msgid "GL Version"
 msgid "GL Backend Version"
 msgstr "GL aizmugures versija"
 
 #: gtk/inspector/general.ui:671
-#| msgid "GL Vendor"
 msgid "GL Backend Vendor"
 msgstr "GL aizmugures nodrošinātājs"
 
@@ -3958,7 +3947,6 @@ msgid "GL_VENDOR"
 msgstr "GL_VENDOR"
 
 #: gtk/inspector/general.ui:727
-#| msgid "RENDERER"
 msgid "GL_RENDERER"
 msgstr "GL_RENDERER"
 
@@ -4406,7 +4394,6 @@ msgstr ""
 "Iekrāso visas vietas, kur pašreizējais renderētājs izmanto Cairo, nevis GPU."
 
 #: gtk/inspector/visual.ui:436
-#| msgid "Show Fallback Rendering"
 msgid "Show Cairo Rendering"
 msgstr "Rādīt Cairo renderēšanu"
 
@@ -4443,7 +4430,6 @@ msgid "Show Accessibility warnings"
 msgstr "Rādīt piekļūstamības brīdinājumus"
 
 #: gtk/inspector/visual.ui:661
-#| msgid "Show Graphic Updates"
 msgid "Show Graphics Offload"
 msgstr "Rādīt grafikas atslogošanu"
 
@@ -6257,7 +6243,7 @@ msgstr "Izveidot mapi"
 
 #: gtk/ui/gtkfilechooserwidget.ui:191
 msgid "Remote location — only searching the current folder"
-msgstr "Attālinātā vieta — meklēt tikai pašreizējā mapē"
+msgstr "Attālā vieta — meklēt tikai pašreizējā mapē"
 
 #: gtk/ui/gtkfilechooserwidget.ui:323
 msgid "Folder Name"
@@ -7153,7 +7139,7 @@ msgstr "Nenorādīts profils"
 
 #: tools/encodesymbolic.c:41
 msgid "Output to this directory instead of cwd"
-msgstr "Izvadi sūtīt uz šo mapi, nevis uz cwd"
+msgstr "Izvadi sūtīt uz šo direktoriju, nevis uz cwd"
 
 #: tools/encodesymbolic.c:42
 msgid "Generate debug output"
@@ -7213,8 +7199,8 @@ msgstr ""
 #: tools/gtk-builder-tool-enumerate.c:56 tools/gtk-builder-tool-preview.c:179
 #: tools/gtk-builder-tool-preview.c:180 tools/gtk-builder-tool-screenshot.c:360
 #: tools/gtk-builder-tool-simplify.c:2529 tools/gtk-builder-tool-validate.c:261
-#: tools/gtk-path-tool-render.c:121 tools/gtk-rendernode-tool-info.c:214
-#: tools/gtk-rendernode-tool-show.c:106
+#: tools/gtk-path-tool-render.c:121 tools/gtk-rendernode-tool-compare.c:67
+#: tools/gtk-rendernode-tool-info.c:214 tools/gtk-rendernode-tool-show.c:106
 msgid "FILE"
 msgstr "DATNE"
 
@@ -7538,7 +7524,6 @@ msgid "That didn't work out."
 msgstr "Tas nenostrādāja."
 
 #: tools/gtk-path-tool-info.c:100
-#| msgid "Provide information about the render node."
 msgid "Print information about a path."
 msgstr "Drukāt informāciju par ceļu."
 
@@ -7561,14 +7546,11 @@ msgstr "%d kontūras"
 
 #: tools/gtk-path-tool-info.c:140
 #, c-format
-#| msgid "Fractions"
 msgid "%d operations"
 msgstr "%d operācijas"
 
 #: tools/gtk-path-tool-info.c:144
 #, c-format
-#| msgctxt "Script"
-#| msgid "Balinese"
 msgid "%d lines"
 msgstr "%d līnijas"
 
@@ -7596,12 +7578,10 @@ msgid "Stroke the path"
 msgstr "Vilkt ceļu"
 
 #: tools/gtk-path-tool-render.c:119 tools/gtk-path-tool-show.c:142
-#| msgid "Show other locations"
 msgid "Show path points"
 msgstr "Rādīt ceļa punktus"
 
 #: tools/gtk-path-tool-render.c:120 tools/gtk-path-tool-show.c:143
-#| msgid "Show other locations"
 msgid "Show control points"
 msgstr "Rādīt vadīklas punktus"
 
@@ -7616,7 +7596,6 @@ msgstr "Priekšplāna krāsa"
 #: tools/gtk-path-tool-render.c:122 tools/gtk-path-tool-render.c:123
 #: tools/gtk-path-tool-render.c:124 tools/gtk-path-tool-show.c:144
 #: tools/gtk-path-tool-show.c:145 tools/gtk-path-tool-show.c:146
-#| msgid "COLORS"
 msgid "COLOR"
 msgstr "KRĀSA"
 
@@ -7625,7 +7604,6 @@ msgid "Background color"
 msgstr "Fona krāsa"
 
 #: tools/gtk-path-tool-render.c:124 tools/gtk-path-tool-show.c:146
-#| msgid "Custom color"
 msgid "Point color"
 msgstr "Punkta krāsa"
 
@@ -7668,12 +7646,10 @@ msgid "Dash offset (number)"
 msgstr "Svītru nobīde (skaitlis)"
 
 #: tools/gtk-path-tool-render.c:161 tools/gtk-path-tool-show.c:172
-#| msgid "Could not initialize windowing system\n"
 msgid "Could not initialize windowing system"
 msgstr "Nevarēja inicializēt logu sistēmu"
 
 #: tools/gtk-path-tool-render.c:168
-#| msgid "Render a .node file to an image."
 msgid "Render the path to a png image."
 msgstr "Renderēt ceļu uz png attēlu."
 
@@ -7682,7 +7658,6 @@ msgid "Options related to filling"
 msgstr "Opcijas, kas ir saistītas ar aizpildīšanu"
 
 #: tools/gtk-path-tool-render.c:174 tools/gtk-path-tool-show.c:184
-#| msgid "Show other locations"
 msgid "Show help for fill options"
 msgstr "Rādīt palīdzību aizpildīšanas opcijām"
 
@@ -7691,17 +7666,14 @@ msgid "Options related to stroking"
 msgstr "Opcijas, kas ir saistītas ar vilkšanu"
 
 #: tools/gtk-path-tool-render.c:182 tools/gtk-path-tool-show.c:192
-#| msgid "Show other locations"
 msgid "Show help for stroke options"
 msgstr "Rādīt palīdzību vilkšanas opcijām"
 
 #: tools/gtk-path-tool-render.c:199 tools/gtk-path-tool-show.c:209
-#| msgid "Reason not specified"
 msgid "No path specified"
 msgstr "Ceļš nav norādīts"
 
 #: tools/gtk-path-tool-render.c:205
-#| msgid "Can only preview a single .ui file\n"
 msgid "Can only render a single path"
 msgstr "Var renderēt tikai vienu ceļu"
 
@@ -7719,13 +7691,11 @@ msgstr "līniju savienojums"
 
 #: tools/gtk-path-tool-render.c:310
 #, c-format
-#| msgid "Saving CSS failed"
 msgid "Saving png to '%s' failed"
 msgstr "Neizdevās png saglabāšana  uz “%s”"
 
 #: tools/gtk-path-tool-render.c:317
 #, c-format
-#| msgid "Output written to %s.\n"
 msgid "Output written to '%s'."
 msgstr "Izvade ir ierakstīta “%s”."
 
@@ -7746,13 +7716,10 @@ msgid "Restrict a path to a segment."
 msgstr "Ierobežot ceļu uz segmentu."
 
 #: tools/gtk-path-tool-reverse.c:45
-#| msgid "Reverse portrait"
 msgid "Reverse a path."
 msgstr "Apgriezt ceļu."
 
 #: tools/gtk-path-tool-show.c:46 tools/gtk-path-tool-show.c:88
-#| msgctxt "Stock label"
-#| msgid "Print Pre_view"
 msgid "Path Preview"
 msgstr "Ceļa priekšskatījums"
 
@@ -7761,31 +7728,26 @@ msgid "Display the path."
 msgstr "Rādīt ceļu."
 
 #: tools/gtk-path-tool-show.c:215
-#| msgid "Can only preview a single .ui file\n"
 msgid "Can only show a single path"
 msgstr "Var rādīt tikai vienu ceļu"
 
 #: tools/gtk-path-tool-utils.c:58
 #, c-format
-#| msgid "Failed to read “%s”: %s\n"
 msgid "Failed to read from standard input: %s\n"
 msgstr "Neizdevās lasīt no standarta ievades — %s\n"
 
 #: tools/gtk-path-tool-utils.c:64
 #, c-format
-#| msgid "Error parsing commandline options: %s\n"
 msgid "Error reading from standard input: %s\n"
 msgstr "Kļūda, lasot no standarta ievades — %s\n"
 
 #: tools/gtk-path-tool-utils.c:83
 #, c-format
-#| msgid "Failed to save %s: %s\n"
 msgid "Failed to parse '%s' as path.\n"
 msgstr "Neizdevās parsēt “%s” kā ceļu.\n"
 
 #: tools/gtk-path-tool-utils.c:109
 #, c-format
-#| msgid "Failed to save %s: %s\n"
 msgid "Failed to parse '%s' as %s."
 msgstr "Neizdevās parsēt “%s” kā %s."
 
@@ -7795,29 +7757,16 @@ msgstr "Iespējamās vērtības: "
 
 #: tools/gtk-path-tool-utils.c:135
 #, c-format
-#| msgid "Could not rename %s to %s: %s\n"
 msgid "Could not parse '%s' as color"
 msgstr "Neizdevās parsēt “%s”  kā krāsu"
 
 #: tools/gtk-path-tool-utils.c:163
 #, c-format
-#| msgid "Failed to save %s: %s\n"
 msgid "Failed to parse '%s' as number"
 msgstr "Neizdevās parsēt “%s” kā skaitli"
 
 #: tools/gtk-rendernode-tool.c:35
 #, c-format
-#| msgid ""
-#| "Usage:\n"
-#| "  gtk4-rendernode-tool [COMMAND] [OPTION…] FILE\n"
-#| "\n"
-#| "Perform various tasks on GTK render nodes.\n"
-#| "\n"
-#| "Commands:\n"
-#| "  info         Provide information about the node\n"
-#| "  show         Show the node\n"
-#| "  render       Take a screenshot of the node\n"
-#| "\n"
 msgid ""
 "Usage:\n"
 "  gtk4-rendernode-tool [COMMAND] [OPTION…] FILE\n"
@@ -7846,11 +7795,11 @@ msgstr ""
 "\n"
 
 #: tools/gtk-rendernode-tool-benchmark.c:94
-#| msgid "Renderer to use"
 msgid "Add renderer to benchmark"
 msgstr "Pievienot renderētāju etalonuzdevumam"
 
 #: tools/gtk-rendernode-tool-benchmark.c:94
+#: tools/gtk-rendernode-tool-compare.c:65
 #: tools/gtk-rendernode-tool-render.c:195
 msgid "RENDERER"
 msgstr "RENDERĒTĀJS"
@@ -7880,9 +7829,65 @@ msgstr "Nav norādīta .node datne\n"
 
 #: tools/gtk-rendernode-tool-benchmark.c:133
 #, c-format
-#| msgid "Can only accept a single .node file\n"
 msgid "Can only benchmark a single .node file\n"
 msgstr "Var mērīt tikai vienu .node datni\n"
+
+#: tools/gtk-rendernode-tool-compare.c:65
+#: tools/gtk-rendernode-tool-render.c:195
+msgid "Renderer to use"
+msgstr "Renderētājs, kuru izmantot"
+
+#: tools/gtk-rendernode-tool-compare.c:67
+#| msgid "The output file"
+msgid "Output file"
+msgstr "Izvaddatne"
+
+#: tools/gtk-rendernode-tool-compare.c:70
+msgid "FILE1 FILE2"
+msgstr "DATNE1 DATNE2"
+
+#: tools/gtk-rendernode-tool-compare.c:82
+msgid "Compare .node or .png files."
+msgstr "Salīdzināt .node vai .png datnes."
+
+#: tools/gtk-rendernode-tool-compare.c:95
+#, c-format
+msgid "Must specify two files\n"
+msgstr "Jānorāda divas datnes\n"
+
+#: tools/gtk-rendernode-tool-compare.c:102
+#: tools/gtk-rendernode-tool-render.c:150
+#, c-format
+msgid "Failed to create renderer: %s\n"
+msgstr "Neizdevās izveidot renderētāju — %s\n"
+
+#: tools/gtk-rendernode-tool-compare.c:111
+#, c-format
+#| msgid "Failed to save %s: %s\n"
+msgid "Failed to load %s: %s\n"
+msgstr "Neizdevās ielādēt %s — %s\n"
+
+#: tools/gtk-rendernode-tool-compare.c:122
+#, c-format
+#| msgid "Could not rename %s back to %s: %s.\n"
+msgid "Could not save diff image to %s\n"
+msgstr "Neizdevās saglabāt atšķirības attēlu uz %s\n"
+
+#: tools/gtk-rendernode-tool-compare.c:132
+#, c-format
+#| msgid "Output written to %s.\n"
+msgid "Differences witten to %s.\n"
+msgstr "Atšķirības ir ierakstītas %s.\n"
+
+#: tools/gtk-rendernode-tool-compare.c:134
+#, c-format
+msgid "The images are different.\n"
+msgstr "Attēli ir dažādi.\n"
+
+#: tools/gtk-rendernode-tool-compare.c:137
+#, c-format
+msgid "No differences.\n"
+msgstr "Nav atšķirību.\n"
 
 #: tools/gtk-rendernode-tool-info.c:191
 #, c-format
@@ -7927,16 +7932,6 @@ msgstr ""
 msgid "Failed to generate SVG: %s\n"
 msgstr "Neizdevas izveidot SVG — %s\n"
 
-#: tools/gtk-rendernode-tool-render.c:150
-#, c-format
-#| msgid "Failed to rewrite header\n"
-msgid "Failed to create renderer: %s\n"
-msgstr "Neizdevās izveidot renderētāju — %s\n"
-
-#: tools/gtk-rendernode-tool-render.c:195
-msgid "Renderer to use"
-msgstr "Renderētājs, kuru izmantot"
-
 #: tools/gtk-rendernode-tool-render.c:211
 msgid "Render a .node file to an image."
 msgstr "Renderēt .node datni par attēlu."
@@ -7966,7 +7961,6 @@ msgstr "Kļūda vietā %s — %s\n"
 
 #: tools/gtk-rendernode-tool-utils.c:72
 #, c-format
-#| msgid "Failed to open file %s : %s\n"
 msgid "Failed to load node file: %s\n"
 msgstr "Neizdevās ielādēt mezgla datni — %s\n"
 
