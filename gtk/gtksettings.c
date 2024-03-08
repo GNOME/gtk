@@ -1421,8 +1421,6 @@ settings_update_font_options (GtkSettings *settings)
   cairo_hint_style_t hint_style;
   int antialias;
   cairo_antialias_t antialias_mode;
-  char *rgba_str;
-  cairo_subpixel_order_t subpixel_order;
   gboolean hint_font_metrics;
 
   if (settings->font_options)
@@ -1432,7 +1430,6 @@ settings_update_font_options (GtkSettings *settings)
                 "gtk-xft-antialias", &antialias,
                 "gtk-xft-hinting", &hinting,
                 "gtk-xft-hintstyle", &hint_style_str,
-                "gtk-xft-rgba", &rgba_str,
                 "gtk-hint-font-metrics", &hint_font_metrics,
                 NULL);
 
@@ -1466,35 +1463,10 @@ settings_update_font_options (GtkSettings *settings)
 
   cairo_font_options_set_hint_style (settings->font_options, hint_style);
 
-  subpixel_order = CAIRO_SUBPIXEL_ORDER_DEFAULT;
-  if (rgba_str)
-    {
-      if (strcmp (rgba_str, "rgb") == 0)
-        subpixel_order = CAIRO_SUBPIXEL_ORDER_RGB;
-      else if (strcmp (rgba_str, "bgr") == 0)
-        subpixel_order = CAIRO_SUBPIXEL_ORDER_BGR;
-      else if (strcmp (rgba_str, "vrgb") == 0)
-        subpixel_order = CAIRO_SUBPIXEL_ORDER_VRGB;
-      else if (strcmp (rgba_str, "vbgr") == 0)
-        subpixel_order = CAIRO_SUBPIXEL_ORDER_VBGR;
-    }
-
-  g_free (rgba_str);
-
-  cairo_font_options_set_subpixel_order (settings->font_options, subpixel_order);
-
-  antialias_mode = CAIRO_ANTIALIAS_DEFAULT;
   if (antialias == 0)
-    {
-      antialias_mode = CAIRO_ANTIALIAS_NONE;
-    }
-  else if (antialias == 1)
-    {
-      if (subpixel_order != CAIRO_SUBPIXEL_ORDER_DEFAULT)
-        antialias_mode = CAIRO_ANTIALIAS_SUBPIXEL;
-      else
-        antialias_mode = CAIRO_ANTIALIAS_GRAY;
-    }
+    antialias_mode = CAIRO_ANTIALIAS_NONE;
+  else
+    antialias_mode = CAIRO_ANTIALIAS_GRAY;
 
   cairo_font_options_set_antialias (settings->font_options, antialias_mode);
 }
