@@ -126,7 +126,7 @@ gsk_gpu_download_op_vk_create (GskGpuDownloadOp *self)
                                           bytes,
                                           stride);
   g_bytes_unref (bytes);
-  gsk_gpu_buffer_unmap (self->buffer);
+  gsk_gpu_buffer_unmap (self->buffer, 0);
 }
 
 static GskGpuOp *

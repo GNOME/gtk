@@ -45,7 +45,8 @@ gsk_vulkan_buffer_map (GskGpuBuffer *buffer)
 }
 
 static void
-gsk_vulkan_buffer_unmap (GskGpuBuffer *buffer)
+gsk_vulkan_buffer_unmap (GskGpuBuffer *buffer,
+                         gsize         size)
 {
 }
 

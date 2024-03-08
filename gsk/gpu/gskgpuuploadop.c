@@ -110,8 +110,8 @@ gsk_gpu_upload_op_vk_command_with_area (GskGpuOp                    *op,
   data = gsk_gpu_buffer_map (*buffer);
 
   draw_func (op, data, stride);
-  
-  gsk_gpu_buffer_unmap (*buffer);
+
+  gsk_gpu_buffer_unmap (*buffer, area->height * stride);
 
   vkCmdPipelineBarrier (state->vk_command_buffer,
                         VK_PIPELINE_STAGE_HOST_BIT,
