@@ -3113,6 +3113,8 @@ gsk_gpu_node_processor_create_glyph_pattern (GskGpuPatternWriter *self,
   guint32 tex_id;
   GskGpuImage *last_image;
   graphene_point_t offset;
+  gboolean glyph_align;
+  gboolean hinting;
 
   if (gsk_text_node_has_color_glyphs (node))
     return FALSE;
@@ -3132,18 +3134,51 @@ gsk_gpu_node_processor_create_glyph_pattern (GskGpuPatternWriter *self,
   gsk_gpu_pattern_writer_append_rgba (self, gsk_text_node_get_color (node));
   gsk_gpu_pattern_writer_append_uint (self, num_glyphs);
 
+  glyph_align = gsk_gpu_frame_should_optimize (self->frame, GSK_GPU_OPTIMIZE_GLYPH_ALIGN);
+  hinting = gsk_font_get_hint_style (font) != CAIRO_HINT_STYLE_NONE;
+
   last_image = NULL;
   for (i = 0; i < num_glyphs; i++)
     {
       GskGpuImage *image;
       graphene_rect_t glyph_bounds;
-      graphene_point_t glyph_offset;
+      graphene_point_t glyph_offset, glyph_origin;
+      GskGpuGlyphLookupFlags flags;
+
+      glyph_origin = GRAPHENE_POINT_INIT (offset.x + (float) glyphs[i].geometry.x_offset / PANGO_SCALE,
+                                          offset.y + (float) glyphs[i].geometry.y_offset / PANGO_SCALE);
+
+      if (hinting && glyph_align)
+        {
+          /* Force glyph_origin.y to be device pixel aligned.
+           * The hinter expects that.
+           */
+          glyph_origin.x = roundf (glyph_origin.x * scale * 4);
+          flags = ((int) glyph_origin.x & 3);
+          glyph_origin.x = 0.25 * inv_scale * glyph_origin.x;
+          glyph_origin.y = roundf (glyph_origin.y * scale) * inv_scale;
+        }
+      else if (glyph_align)
+        {
+          glyph_origin.x = roundf (glyph_origin.x * scale * 4);
+          glyph_origin.y = roundf (glyph_origin.y * scale * 4);
+          flags = ((int) glyph_origin.x & 3) |
+                  (((int) glyph_origin.y & 3) << 2);
+          glyph_origin.x = 0.25 * inv_scale * glyph_origin.x;
+          glyph_origin.y = 0.25 * inv_scale * glyph_origin.y;
+        }
+      else
+        {
+          glyph_origin.x = roundf (glyph_origin.x * scale) * inv_scale;
+          glyph_origin.y = roundf (glyph_origin.y * scale) * inv_scale;
+          flags = 0;
+        }
 
       image = gsk_gpu_device_lookup_glyph_image (device,
                                                  self->frame,
                                                  font,
                                                  glyphs[i].glyph,
-                                                 0,
+                                                 flags,
                                                  scale,
                                                  &glyph_bounds,
                                                  &glyph_offset);
@@ -3156,8 +3191,8 @@ gsk_gpu_node_processor_create_glyph_pattern (GskGpuPatternWriter *self,
           last_image = image;
         }
 
-      glyph_offset = GRAPHENE_POINT_INIT (offset.x - glyph_offset.x * inv_scale + (float) glyphs[i].geometry.x_offset / PANGO_SCALE,
-                                          offset.y - glyph_offset.y * inv_scale + (float) glyphs[i].geometry.y_offset / PANGO_SCALE);
+      glyph_origin = GRAPHENE_POINT_INIT (glyph_origin.x - glyph_offset.x * inv_scale,
+                                          glyph_origin.y - glyph_offset.y * inv_scale);
 
       gsk_gpu_pattern_writer_append_uint (self, tex_id);
       gsk_gpu_pattern_writer_append_rect (self,
@@ -3167,7 +3202,7 @@ gsk_gpu_node_processor_create_glyph_pattern (GskGpuPatternWriter *self,
                                               glyph_bounds.size.width * inv_scale,
                                               glyph_bounds.size.height * inv_scale
                                           ),
-                                          &glyph_offset);
+                                          &glyph_origin);
       gsk_gpu_pattern_writer_append_rect (self,
                                           &GRAPHENE_RECT_INIT (
                                               - glyph_bounds.origin.x * inv_scale,
@@ -3175,7 +3210,7 @@ gsk_gpu_node_processor_create_glyph_pattern (GskGpuPatternWriter *self,
                                               gsk_gpu_image_get_width (image) * inv_scale,
                                               gsk_gpu_image_get_height (image) * inv_scale
                                           ),
-                                          &glyph_offset);
+                                          &glyph_origin);
 
       offset.x += (float) glyphs[i].geometry.width / PANGO_SCALE;
     }
