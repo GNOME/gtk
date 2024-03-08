@@ -23,7 +23,8 @@ struct _GskGpuBufferClass
   GObjectClass parent_class;
 
   guchar *              (* map)                                         (GskGpuBuffer           *self);
-  void                  (* unmap)                                       (GskGpuBuffer           *self);
+  void                  (* unmap)                                       (GskGpuBuffer           *self,
+                                                                         gsize                   used);
 };
 
 GType                   gsk_gpu_buffer_get_type                         (void) G_GNUC_CONST;
@@ -34,7 +35,8 @@ void                    gsk_gpu_buffer_setup                            (GskGpuB
 gsize                   gsk_gpu_buffer_get_size                         (GskGpuBuffer           *self);
 
 guchar *                gsk_gpu_buffer_map                              (GskGpuBuffer           *self);
-void                    gsk_gpu_buffer_unmap                            (GskGpuBuffer           *self);
+void                    gsk_gpu_buffer_unmap                            (GskGpuBuffer           *self,
+                                                                         gsize                   used);
 
 
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GskGpuBuffer, g_object_unref)

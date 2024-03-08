@@ -426,7 +426,7 @@ gsk_gpu_frame_reserve_vertex_data (GskGpuFrame *self,
       if (priv->vertex_buffer_data)
         {
           memcpy (new_data, priv->vertex_buffer_data, old_size);
-          gsk_gpu_buffer_unmap (priv->vertex_buffer);
+          gsk_gpu_buffer_unmap (priv->vertex_buffer, old_size);
         }
       g_object_unref (priv->vertex_buffer);
       priv->vertex_buffer = new_buffer;
@@ -434,7 +434,7 @@ gsk_gpu_frame_reserve_vertex_data (GskGpuFrame *self,
     }
 
   priv->vertex_buffer_used = size_needed;
-  
+
   return size_needed - size;
 }
 
@@ -480,7 +480,7 @@ gsk_gpu_frame_write_storage_buffer (GskGpuFrame  *self,
     {
       g_assert (offset > 0);
 
-      gsk_gpu_buffer_unmap (priv->storage_buffer);
+      gsk_gpu_buffer_unmap (priv->storage_buffer, 0);
       g_clear_object (&priv->storage_buffer);
       priv->storage_buffer_data = 0;
       priv->storage_buffer_used = 0;
@@ -591,14 +591,14 @@ gsk_gpu_frame_submit (GskGpuFrame *self)
 
   if (priv->vertex_buffer)
     {
-      gsk_gpu_buffer_unmap (priv->vertex_buffer);
+      gsk_gpu_buffer_unmap (priv->vertex_buffer, priv->vertex_buffer_used);
       priv->vertex_buffer_data = NULL;
       priv->vertex_buffer_used = 0;
     }
 
   if (priv->storage_buffer_data)
     {
-      gsk_gpu_buffer_unmap (priv->storage_buffer);
+      gsk_gpu_buffer_unmap (priv->storage_buffer, priv->storage_buffer_used);
       priv->storage_buffer_data = NULL;
       priv->storage_buffer_used = 0;
     }

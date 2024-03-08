@@ -45,8 +45,9 @@ gsk_gpu_buffer_map (GskGpuBuffer *self)
 }
 
 void
-gsk_gpu_buffer_unmap (GskGpuBuffer *self)
+gsk_gpu_buffer_unmap (GskGpuBuffer *self,
+                      gsize         size)
 {
-  GSK_GPU_BUFFER_GET_CLASS (self)->unmap (self);
+  GSK_GPU_BUFFER_GET_CLASS (self)->unmap (self, size);
 }
 

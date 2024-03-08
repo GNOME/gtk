@@ -34,13 +34,17 @@ gsk_gl_buffer_map (GskGpuBuffer *buffer)
 }
 
 static void
-gsk_gl_buffer_unmap (GskGpuBuffer *buffer)
+gsk_gl_buffer_unmap (GskGpuBuffer *buffer,
+                     gsize         used)
 {
   GskGLBuffer *self = GSK_GL_BUFFER (buffer);
 
+  if (used == 0)
+    return;
+
   gsk_gl_buffer_bind (self);
 
-  glBufferSubData (self->target, 0, gsk_gpu_buffer_get_size (buffer), self->data);
+  glBufferSubData (self->target, 0, used, self->data);
 }
 
 static void
