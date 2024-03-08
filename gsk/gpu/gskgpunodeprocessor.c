@@ -2996,7 +2996,6 @@ gsk_gpu_node_processor_add_glyph_node (GskGpuNodeProcessor *self,
   GskGpuDevice *device;
   const PangoGlyphInfo *glyphs;
   PangoFont *font;
-  PangoFont *unhinted = NULL;
   graphene_point_t offset;
   guint i, num_glyphs;
   float scale, inv_scale;
@@ -3026,13 +3025,6 @@ gsk_gpu_node_processor_add_glyph_node (GskGpuNodeProcessor *self,
   inv_scale = 1.f / scale;
 
   glyph_align = gsk_gpu_frame_should_optimize (self->frame, GSK_GPU_OPTIMIZE_GLYPH_ALIGN);
-  if (gsk_transform_get_category (self->modelview) < GSK_TRANSFORM_CATEGORY_2D)
-    {
-      /* With transforms, don't do either subpixel positioning or hinting */
-      glyph_align = FALSE;
-      font = unhinted = gsk_get_hinted_font (font, CAIRO_HINT_STYLE_NONE, CAIRO_ANTIALIAS_DEFAULT);
-    }
-
   hinting = gsk_font_get_hint_style (font) != CAIRO_HINT_STYLE_NONE;
 
   for (i = 0; i < num_glyphs; i++)
@@ -3106,8 +3098,6 @@ gsk_gpu_node_processor_add_glyph_node (GskGpuNodeProcessor *self,
 
       offset.x += (float) glyphs[i].geometry.width / PANGO_SCALE;
     }
-
-  g_clear_object (&unhinted);
 }
 
 static gboolean
