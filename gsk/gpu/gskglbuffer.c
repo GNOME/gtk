@@ -1,5 +1,7 @@
 #include "config.h"
 
+#include <gdk/gdkprofilerprivate.h>
+
 #include "gskglbufferprivate.h"
 
 struct _GskGLBuffer
@@ -13,6 +15,9 @@ struct _GskGLBuffer
 };
 
 G_DEFINE_TYPE (GskGLBuffer, gsk_gl_buffer, GSK_TYPE_GPU_BUFFER)
+
+static guint profiler_buffer_uploads_id;
+static gint64 profiler_buffer_uploads;
 
 static void
 gsk_gl_buffer_finalize (GObject *object)
@@ -44,7 +49,9 @@ gsk_gl_buffer_unmap (GskGpuBuffer *buffer,
 
   gsk_gl_buffer_bind (self);
 
+  profiler_buffer_uploads += used;
   glBufferSubData (self->target, 0, used, self->data);
+  gdk_profiler_set_int_counter (profiler_buffer_uploads_id, profiler_buffer_uploads);
 }
 
 static void
@@ -57,6 +64,8 @@ gsk_gl_buffer_class_init (GskGLBufferClass *klass)
   buffer_class->unmap = gsk_gl_buffer_unmap;
 
   gobject_class->finalize = gsk_gl_buffer_finalize;
+
+  profiler_buffer_uploads_id = gdk_profiler_define_int_counter ("ngl-buffer-uploads", "Number of bytes uploaded to GPU");
 }
 
 static void
