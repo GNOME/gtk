@@ -129,6 +129,25 @@ gsk_get_hinted_font (PangoFont          *font,
   double dpi;
 #endif
 
+  /* These requests often come in sequentially so keep the result
+   * around and re-use it if everything matches.
+   */
+  static PangoFont *last_font;
+  static cairo_hint_style_t last_hint_style;
+  static cairo_antialias_t last_antialias;
+  static PangoFont *last_result;
+
+  if (last_result != NULL &&
+      last_font == font &&
+      last_hint_style == hint_style &&
+      last_antialias == antialias)
+    return g_object_ref (last_result);
+
+  last_hint_style = hint_style;
+  last_antialias = antialias;
+  g_set_object (&last_font, font);
+  g_clear_object (&last_result);
+
   options = cairo_font_options_create ();
   sf = pango_cairo_font_get_scaled_font (PANGO_CAIRO_FONT (font));
   cairo_scaled_font_get_font_options (sf, options);
@@ -144,6 +163,7 @@ gsk_get_hinted_font (PangoFont          *font,
       cairo_font_options_get_hint_metrics (options) == CAIRO_HINT_METRICS_OFF &&
       cairo_font_options_get_subpixel_order (options) == CAIRO_SUBPIXEL_ORDER_DEFAULT)
     {
+      last_result = g_object_ref (font);
       cairo_font_options_destroy (options);
       return g_object_ref (font);
     }
@@ -160,7 +180,7 @@ gsk_get_hinted_font (PangoFont          *font,
   cairo_font_options_destroy (options);
 
 #if PANGO_VERSION_CHECK (1, 52, 0)
-  return pango_font_map_reload_font (pango_font_get_font_map (font), font, 1.0, context, NULL);
+  last_result = pango_font_map_reload_font (pango_font_get_font_map (font), font, 1.0, context, NULL);
 #else
 
   pattern = pango_fc_font_get_pattern (PANGO_FC_FONT (font));
@@ -168,11 +188,11 @@ gsk_get_hinted_font (PangoFont          *font,
     pango_cairo_context_set_resolution (context, dpi);
 
   desc = pango_font_describe (font);
-  font = pango_font_map_load_font (pango_font_get_font_map (font), context, desc);
+  last_result = pango_font_map_load_font (pango_font_get_font_map (font), context, desc);
   pango_font_description_free (desc);
-
-  return font;
 #endif
+
+  return g_object_ref (last_result);
 }
 
 /*< private >
