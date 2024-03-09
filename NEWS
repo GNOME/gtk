@@ -7,6 +7,39 @@ in different ways than the old gl renderer, and trigger new driver bugs,
 https://gitlab.gnome.org/GNOME/gtk/-/issues/6388). Therefore, it is
 recommended to use the latest mesa release (24.x) with the new renderers.
 
+* GtkTextView:
+ - Don't snapshot children twice
+
+* GtkEmojiChooser:
+ - Fix presentation selector handling
+
+* GtkSnapshot:
+ - Fix wrong nodes with transformed shadows
+
+* Accessibility:
+ - Implement get_contents_at for all our text widgets
+ - Add GtkAccessibleText.get_default_attributes
+
+* GSK:
+ - Don't fall back to cairo for software rendering. gl+llvmpipe is better
+ - Round vertical glyph position to a device pixel position if the font is hinted
+ - Fix problems with clip handling
+ - Make vulkan and ngl match their font handling
+
+* MacOs:
+ - Implement cursor-from-texture
+
+* Translation updates:
+ Basque
+ British English
+ French
+ Indonesian
+ Kazakh
+ Latvian
+ Lithuanian
+ Norwegian Bokmål
+ Slovenian
+ Turkish
 
 Overview of Changes in 4.13.9, 02-03-2024
 =========================================
