@@ -23,6 +23,8 @@
 #include "highlightoverlay.h"
 #include "window.h"
 
+#include "gtkbinlayout.h"
+#include "gtkbox.h"
 #include "gtkdropdown.h"
 #include "gtkframe.h"
 #include "gtklabel.h"
@@ -32,6 +34,7 @@
 #include "gtkwidgetprivate.h"
 #include "gtkstack.h"
 #include "gtkstringlist.h"
+#include "gtkscrolledwindow.h"
 
 
 typedef struct {
@@ -178,15 +181,15 @@ size_group_row_class_init (SizeGroupRowClass *class)
 
 }
 
-G_DEFINE_TYPE (GtkInspectorSizeGroups, gtk_inspector_size_groups, GTK_TYPE_BOX)
+G_DEFINE_TYPE (GtkInspectorSizeGroups, gtk_inspector_size_groups, GTK_TYPE_WIDGET)
 
 static void
 clear_view (GtkInspectorSizeGroups *sl)
 {
   GtkWidget *child;
 
-  while ((child = gtk_widget_get_first_child (GTK_WIDGET (sl))))
-    gtk_box_remove (GTK_BOX (sl), child);
+  while ((child = gtk_widget_get_first_child (GTK_WIDGET (sl->groups))))
+    gtk_box_remove (GTK_BOX (sl->groups), child);
 }
 
 static void
@@ -229,7 +232,7 @@ add_size_group (GtkInspectorSizeGroups *sl,
   modes[4] = NULL;
 
   frame = gtk_frame_new (NULL);
-  gtk_box_append (GTK_BOX (sl), frame);
+  gtk_box_append (GTK_BOX (sl->groups), frame);
   box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
   gtk_widget_add_css_class (box, "view");
   gtk_frame_set_child (GTK_FRAME (frame), box);
@@ -300,19 +303,34 @@ gtk_inspector_size_groups_set_object (GtkInspectorSizeGroups *sl,
 static void
 gtk_inspector_size_groups_init (GtkInspectorSizeGroups *sl)
 {
-  g_object_set (sl,
-                "orientation", GTK_ORIENTATION_VERTICAL,
+  sl->sw = gtk_scrolled_window_new ();
+  gtk_widget_set_parent (sl->sw, GTK_WIDGET (sl));
+  sl->groups = gtk_box_new (GTK_ORIENTATION_VERTICAL, 10);
+  g_object_set (sl->groups,
                 "margin-start", 60,
                 "margin-end", 60,
-                "margin-bottom", 60,
+                "margin-top", 30,
                 "margin-bottom", 30,
-                "spacing", 10,
                 NULL);
+  gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (sl->sw), sl->groups);
+}
+
+static void
+gtk_inspector_size_groups_dispose (GObject *object)
+{
+  GtkInspectorSizeGroups *sl = GTK_INSPECTOR_SIZE_GROUPS (object);
+
+  g_clear_pointer (&sl->sw, gtk_widget_unparent);
+
+  G_OBJECT_CLASS (gtk_inspector_size_groups_parent_class)->dispose (object);
 }
 
 static void
 gtk_inspector_size_groups_class_init (GtkInspectorSizeGroupsClass *klass)
 {
+  G_OBJECT_CLASS (klass)->dispose = gtk_inspector_size_groups_dispose;
+
+  gtk_widget_class_set_layout_manager_type (GTK_WIDGET_CLASS (klass), GTK_TYPE_BIN_LAYOUT);
 }
 
 // vim: set et sw=2 ts=2:

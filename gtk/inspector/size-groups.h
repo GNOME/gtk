@@ -17,7 +17,7 @@
 
 #pragma once
 
-#include <gtk/gtkbox.h>
+#include <gtk/gtkwidget.h>
 
 #define GTK_TYPE_INSPECTOR_SIZE_GROUPS            (gtk_inspector_size_groups_get_type())
 #define GTK_INSPECTOR_SIZE_GROUPS(obj)            (G_TYPE_CHECK_INSTANCE_CAST((obj), GTK_TYPE_INSPECTOR_SIZE_GROUPS, GtkInspectorSizeGroups))
@@ -29,12 +29,15 @@
 
 typedef struct _GtkInspectorSizeGroups
 {
-  GtkBox parent;
+  GtkWidget parent;
+
+  GtkWidget *sw;
+  GtkWidget *groups;
 } GtkInspectorSizeGroups;
 
 typedef struct _GtkInspectorSizeGroupsClass
 {
-  GtkBoxClass parent;
+  GtkWidgetClass parent;
 } GtkInspectorSizeGroupsClass;
 
 G_BEGIN_DECLS

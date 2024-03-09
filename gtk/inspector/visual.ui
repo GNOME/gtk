@@ -173,7 +173,12 @@
                               </object>
                             </child>
                             <child>
-                              <object class="GtkFontButton" id="font_button">
+                              <object class="GtkFontDialogButton" id="font_button">
+                                <property name="level">family</property>
+                                <property name="dialog">
+                                  <object class="GtkFontDialog">
+                                  </object>
+                                </property>
                                 <property name="halign">end</property>
                                 <property name="valign">baseline</property>
                                 <property name="hexpand">1</property>
@@ -256,40 +261,6 @@
                                     </items>
                                   </object>
                                 </property>
-                              </object>
-                            </child>
-                          </object>
-                        </child>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkListBoxRow">
-                        <property name="activatable">0</property>
-                        <child>
-                          <object class="GtkBox">
-                            <property name="spacing">40</property>
-                            <child>
-                              <object class="GtkLabel" id="hidpi_label">
-                                <property name="label" translatable="yes">Window Scaling</property>
-                                <property name="halign">start</property>
-                                <property name="valign">baseline</property>
-                                <property name="xalign">0.0</property>
-                              </object>
-                            </child>
-                            <child>
-                              <object class="GtkSpinButton" id="hidpi_spin">
-                                <property name="halign">end</property>
-                                <property name="valign">baseline</property>
-                                <property name="adjustment">
-                                  <object class="GtkAdjustment" id="scale_adjustment">
-                                    <property name="lower">1</property>
-                                    <property name="upper">3</property>
-                                    <property name="step-increment">1</property>
-                                    <property name="page-increment">1</property>
-                                  </object>
-                                </property>
-                                <property name="snap-to-ticks">1</property>
-                                <property name="hexpand">1</property>
                               </object>
                             </child>
                           </object>
@@ -716,7 +687,6 @@
       <widget name="cursor_size_label"/>
       <widget name="font_label"/>
       <widget name="direction_label"/>
-      <widget name="hidpi_label"/>
       <widget name="animation_label"/>
       <widget name="updates_label"/>
       <widget name="cairo_label"/>

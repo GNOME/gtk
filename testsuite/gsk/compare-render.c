@@ -307,8 +307,8 @@ apply_clip_to_pixbuf (GdkPixbuf                   *pixbuf,
 int
 main (int argc, char **argv)
 {
-  GdkTexture *reference_texture;
-  GdkTexture *rendered_texture;
+  GdkTexture *reference_texture = NULL;
+  GdkTexture *rendered_texture = NULL;
   GskRenderer *renderer;
   GdkSurface *window;
   GskRenderNode *node;
@@ -317,7 +317,7 @@ main (int argc, char **argv)
   gboolean success = TRUE;
   GError *error = NULL;
   GOptionContext *context;
-  GdkTexture *diff_texture;
+  GdkTexture *diff_texture = NULL;
 
   (g_test_init) (&argc, &argv, NULL);
 
@@ -378,10 +378,10 @@ main (int argc, char **argv)
       if (diff_texture)
         {
           save_image (diff_texture, node_file, ".diff.png");
-          g_object_unref (diff_texture);
           success = FALSE;
         }
 
+      g_clear_object (&diff_texture);
       g_clear_object (&reference_texture);
       g_clear_object (&rendered_texture);
     }
@@ -414,10 +414,10 @@ main (int argc, char **argv)
       if (diff_texture)
         {
           save_image (diff_texture, node_file, "-flipped.diff.png");
-          g_object_unref (diff_texture);
           success = FALSE;
         }
 
+      g_clear_object (&diff_texture);
       g_clear_object (&rendered_texture);
       g_clear_object (&reference_texture);
       gsk_render_node_unref (node2);
@@ -480,10 +480,10 @@ main (int argc, char **argv)
       if (diff_texture)
         {
           save_image (diff_texture, node_file, "-repeated.diff.png");
-          g_object_unref (diff_texture);
           success = FALSE;
         }
 
+      g_clear_object (&diff_texture);
       g_clear_object (&rendered_texture);
       g_clear_object (&reference_texture);
       gsk_render_node_unref (node2);
@@ -517,10 +517,10 @@ main (int argc, char **argv)
       if (diff_texture)
         {
           save_image (diff_texture, node_file, "-rotated.diff.png");
-          g_object_unref (diff_texture);
           success = FALSE;
         }
 
+      g_clear_object (&diff_texture);
       g_clear_object (&rendered_texture);
       g_clear_object (&reference_texture);
       gsk_render_node_unref (node2);
@@ -574,10 +574,10 @@ main (int argc, char **argv)
       if (diff_texture)
         {
           save_image (diff_texture, node_file, "-masked.diff.png");
-          g_object_unref (diff_texture);
           success = FALSE;
         }
 
+      g_clear_object (&diff_texture);
       g_clear_object (&rendered_texture);
       g_clear_object (&reference_texture);
       gsk_render_node_unref (node2);
@@ -615,10 +615,10 @@ main (int argc, char **argv)
       if (diff_texture)
         {
           save_image (diff_texture, node_file, "-replayed.diff.png");
-          g_object_unref (diff_texture);
           success = FALSE;
         }
 
+      g_clear_object (&diff_texture);
       g_clear_object (&rendered_texture);
       g_clear_object (&rendered_texture2);
       gsk_render_node_unref (node2);
@@ -670,10 +670,10 @@ main (int argc, char **argv)
       if (diff_texture)
         {
           save_image (diff_texture, node_file, "-clipped.diff.png");
-          g_object_unref (diff_texture);
           success = FALSE;
         }
 
+      g_clear_object (&diff_texture);
       g_clear_object (&rendered_texture);
       g_clear_object (&reference_texture);
       gsk_render_node_unref (node2);
@@ -713,10 +713,10 @@ skip_clip:
       if (diff_texture)
         {
           save_image (diff_texture, node_file, "-colorflipped.diff.png");
-          g_object_unref (diff_texture);
           success = FALSE;
         }
 
+      g_clear_object (&diff_texture);
       g_clear_object (&rendered_texture);
       g_clear_object (&reference_texture);
       gsk_render_node_unref (node2);

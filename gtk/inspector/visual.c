@@ -80,11 +80,9 @@ struct _GtkInspectorVisual
   GtkWidget *cursor_size_spin;
   GtkWidget *direction_combo;
   GtkWidget *font_button;
-  GtkWidget *hidpi_spin;
   GtkWidget *animation_switch;
   GtkWidget *font_scale_entry;
   GtkAdjustment *font_scale_adjustment;
-  GtkAdjustment *scale_adjustment;
   GtkAdjustment *slowdown_adjustment;
   GtkWidget *slowdown_entry;
   GtkAdjustment *cursor_size_adjustment;
@@ -861,18 +859,55 @@ init_cursor_size (GtkInspectorVisual *vis)
   if (size == 0)
     size = 32;
 
-  gtk_adjustment_set_value (vis->scale_adjustment, (double)size);
+  gtk_adjustment_set_value (vis->cursor_size_adjustment, (double)size);
   g_signal_connect (vis->cursor_size_adjustment, "value-changed",
                     G_CALLBACK (cursor_size_changed), vis);
+}
+
+static gboolean
+name_to_desc (GBinding     *binding,
+              const GValue *from_value,
+              GValue       *to_value,
+              gpointer      user_data)
+{
+  const char *name;
+  PangoFontDescription *desc;
+
+  name = g_value_get_string (from_value);
+  desc = pango_font_description_from_string (name);
+
+  g_value_take_boxed (to_value, desc);
+
+  return TRUE;
+}
+
+static gboolean
+name_from_desc (GBinding     *binding,
+                const GValue *from_value,
+                GValue       *to_value,
+                gpointer      user_data)
+{
+  const char *name;
+  PangoFontDescription *desc;
+
+  desc = g_value_get_boxed (from_value);
+  name = pango_font_description_get_family (desc);
+
+  g_value_set_string (to_value, name);
+
+  return TRUE;
 }
 
 static void
 init_font (GtkInspectorVisual *vis)
 {
-  g_object_bind_property (gtk_settings_get_for_display (vis->display),
-                          "gtk-font-name",
-                          vis->font_button, "font",
-                          G_BINDING_BIDIRECTIONAL|G_BINDING_SYNC_CREATE);
+  g_object_bind_property_full (gtk_settings_get_for_display (vis->display),
+                               "gtk-font-name",
+                               vis->font_button, "font-desc",
+                               G_BINDING_BIDIRECTIONAL|G_BINDING_SYNC_CREATE,
+                               name_to_desc,
+                               name_from_desc,
+                               NULL, NULL);
 }
 
 static void
@@ -886,61 +921,6 @@ init_font_scale (GtkInspectorVisual *vis)
                     G_CALLBACK (font_scale_adjustment_changed), vis);
   g_signal_connect (vis->font_scale_entry, "activate",
                     G_CALLBACK (font_scale_entry_activated), vis);
-}
-
-#if defined (GDK_WINDOWING_X11) || defined (GDK_WINDOWING_BROADWAY)
-static void
-scale_changed (GtkAdjustment *adjustment, GtkInspectorVisual *vis)
-{
-  int scale;
-
-  scale = gtk_adjustment_get_value (adjustment);
-#if defined (GDK_WINDOWING_X11)
-  if (GDK_IS_X11_DISPLAY (vis->display))
-    gdk_x11_display_set_surface_scale (vis->display, scale);
-#endif
-#if defined (GDK_WINDOWING_BROADWAY)
-  if (GDK_IS_BROADWAY_DISPLAY (vis->display))
-    gdk_broadway_display_set_surface_scale (vis->display, scale);
-#endif
-}
-#endif
-
-static void
-init_scale (GtkInspectorVisual *vis)
-{
-#if defined (GDK_WINDOWING_X11)
-  if (GDK_IS_X11_DISPLAY (vis->display))
-    {
-      double scale;
-
-      scale = gdk_monitor_get_scale_factor (gdk_x11_display_get_primary_monitor (vis->display));
-      gtk_adjustment_set_value (vis->scale_adjustment, scale);
-      g_signal_connect (vis->scale_adjustment, "value-changed",
-                        G_CALLBACK (scale_changed), vis);
-    }
-  else
-#endif
-#if defined (GDK_WINDOWING_BROADWAY)
-  if (GDK_IS_BROADWAY_DISPLAY (vis->display))
-    {
-      int scale;
-
-      scale = gdk_broadway_display_get_surface_scale (vis->display);
-      gtk_adjustment_set_value (vis->scale_adjustment, scale);
-      g_signal_connect (vis->scale_adjustment, "value-changed",
-                        G_CALLBACK (scale_changed), vis);
-    }
-  else
-#endif
-    {
-      GtkWidget *row;
-
-      gtk_adjustment_set_value (vis->scale_adjustment, 1);
-      gtk_widget_set_sensitive (vis->hidpi_spin, FALSE);
-      row = gtk_widget_get_ancestor (vis->hidpi_spin, GTK_TYPE_LIST_BOX_ROW);
-      gtk_widget_set_tooltip_text (row, _("Backend does not support window scaling"));
-    }
 }
 
 static void
@@ -1187,8 +1167,6 @@ gtk_inspector_visual_class_init (GtkInspectorVisualClass *klass)
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorVisual, cursor_size_spin);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorVisual, cursor_size_adjustment);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorVisual, icon_combo);
-  gtk_widget_class_bind_template_child (widget_class, GtkInspectorVisual, hidpi_spin);
-  gtk_widget_class_bind_template_child (widget_class, GtkInspectorVisual, scale_adjustment);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorVisual, animation_switch);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorVisual, slowdown_adjustment);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorVisual, slowdown_entry);
@@ -1234,7 +1212,6 @@ gtk_inspector_visual_set_display  (GtkInspectorVisual *vis,
   init_cursor_size (vis);
   init_font (vis);
   init_font_scale (vis);
-  init_scale (vis);
   init_animation (vis);
   init_slowdown (vis);
   init_gl (vis);
