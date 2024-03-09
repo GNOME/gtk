@@ -14,6 +14,7 @@ static gboolean repeat = FALSE;
 static gboolean mask = FALSE;
 static gboolean replay = FALSE;
 static gboolean clip = FALSE;
+static gboolean colorflip = FALSE;
 
 extern void
 replay_node (GskRenderNode *node, GtkSnapshot *snapshot);
@@ -170,6 +171,7 @@ static const GOptionEntry options[] = {
   { "mask", 0, 0, G_OPTION_ARG_NONE, &mask, "Do masked test", NULL },
   { "replay", 0, 0, G_OPTION_ARG_NONE, &replay, "Do replay test", NULL },
   { "clip", 0, 0, G_OPTION_ARG_NONE, &clip, "Do clip test", NULL },
+  { "colorflip", 0, 0, G_OPTION_ARG_NONE, &colorflip, "Swap colors", NULL },
   { NULL }
 };
 
@@ -232,6 +234,33 @@ apply_mask_to_pixbuf (GdkPixbuf *pixbuf)
             {
               p[0] = p[1] = p[2] = p[3] = 0;
             }
+        }
+    }
+
+  return copy;
+}
+
+static GdkPixbuf *
+apply_colorflip_to_pixbuf (GdkPixbuf *pixbuf)
+{
+  GdkPixbuf *copy;
+  int width, height;
+
+  copy = gdk_pixbuf_add_alpha (pixbuf, FALSE, 0, 0, 0);
+  width = gdk_pixbuf_get_width (pixbuf);
+  height = gdk_pixbuf_get_height (pixbuf);
+
+  for (unsigned int j = 0; j < height; j++)
+    {
+      guint8 *row = gdk_pixbuf_get_pixels (copy) + j * gdk_pixbuf_get_rowstride (copy);
+      for (unsigned int i = 0; i < width; i++)
+        {
+          guint8 *p = row + i * 4;
+          guint8 q;
+
+          q = p[0];
+          p[0] = p[1];
+          p[1] = q;
         }
     }
 
@@ -648,8 +677,49 @@ main (int argc, char **argv)
     }
 
 skip_clip:
-  gsk_render_node_unref (node);
 
+  if (colorflip)
+    {
+      GskRenderNode *node2;
+      GdkPixbuf *pixbuf, *pixbuf2;
+      graphene_matrix_t matrix;
+
+      graphene_matrix_init_from_float (&matrix,
+                                       (const float []) { 0, 1, 0, 0,
+                                                          1, 0, 0, 0,
+                                                          0, 0, 1, 0,
+                                                          0, 0, 0, 1 });
+
+      node2 = gsk_color_matrix_node_new (node, &matrix, graphene_vec4_zero ());
+
+      save_node (node2, node_file, "-colorflipped.node");
+
+      rendered_texture = gsk_renderer_render_texture (renderer, node2, NULL);
+      save_image (rendered_texture, node_file, "-colorflipped.out.png");
+
+      pixbuf = gdk_pixbuf_new_from_file (png_file, &error);
+      pixbuf2 = apply_colorflip_to_pixbuf (pixbuf);
+      reference_texture = gdk_texture_new_for_pixbuf (pixbuf2);
+      g_object_unref (pixbuf2);
+      g_object_unref (pixbuf);
+
+      save_image (reference_texture, node_file, "-colorflipped.ref.png");
+
+      diff_texture = reftest_compare_textures (rendered_texture, reference_texture);
+
+      if (diff_texture)
+        {
+          save_image (diff_texture, node_file, "-colorflipped.diff.png");
+          g_object_unref (diff_texture);
+          success = FALSE;
+        }
+
+      g_clear_object (&rendered_texture);
+      g_clear_object (&reference_texture);
+      gsk_render_node_unref (node2);
+    }
+
+  gsk_render_node_unref (node);
   gsk_renderer_unrealize (renderer);
   g_object_unref (renderer);
   gdk_surface_destroy (window);
