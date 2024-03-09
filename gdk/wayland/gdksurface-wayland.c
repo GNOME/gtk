@@ -201,17 +201,23 @@ get_egl_window_size (GdkSurface *surface,
 
   if (GDK_DISPLAY_DEBUG_CHECK (display, GL_NO_FRACTIONAL))
     {
-      GDK_DISPLAY_DEBUG (display, OPENGL, "Using integer scale %d for EGL window", gdk_fractional_scale_to_int (&impl->scale));
-
       *width = surface->width * gdk_fractional_scale_to_int (&impl->scale);
       *height = surface->height * gdk_fractional_scale_to_int (&impl->scale);
+
+      GDK_DISPLAY_DEBUG (display, OPENGL, "Using integer scale %d for EGL window (%d %d => %d %d)",
+                         gdk_fractional_scale_to_int (&impl->scale),
+                         surface->width, surface->height,
+                         *width, *height);
     }
   else
     {
-      GDK_DISPLAY_DEBUG (display, OPENGL, "Using fractional scale %g for EGL window", gdk_fractional_scale_to_double (&impl->scale));
-
       *width = gdk_fractional_scale_scale (&impl->scale, surface->width),
       *height = gdk_fractional_scale_scale (&impl->scale, surface->height);
+
+      GDK_DISPLAY_DEBUG (display, OPENGL, "Using fractional scale %g for EGL window (%d %d => %d %d)",
+                         gdk_fractional_scale_to_double (&impl->scale),
+                         surface->width, surface->height,
+                         *width, *height);
     }
 }
 
