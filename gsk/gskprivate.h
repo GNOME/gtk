@@ -11,9 +11,13 @@ void       gsk_ensure_resources  (void);
 PangoFont *gsk_get_scaled_font   (PangoFont *font,
                                   float      scale);
 
-PangoFont *gsk_get_hinted_font (PangoFont            *font,
-                                cairo_hint_style_t    hint_style,
-                                cairo_antialias_t     antialias);
+PangoFont *gsk_get_hinted_font   (PangoFont            *font,
+                                  cairo_hint_style_t    hint_style,
+                                  cairo_antialias_t     antialias);
+
+void       gsk_get_unhinted_glyph_string_extents (PangoGlyphString *glyphs,
+                                                  PangoFont        *font,
+                                                  PangoRectangle   *ink_rect);
 
 cairo_hint_style_t gsk_font_get_hint_style (PangoFont *font);
 

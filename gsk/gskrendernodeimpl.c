@@ -5822,12 +5822,9 @@ gsk_text_node_new (PangoFont              *font,
   GskRenderNode *node;
   PangoRectangle ink_rect;
   PangoGlyphInfo *glyph_infos;
-  PangoFont *unhinted;
   int n;
 
-  unhinted = gsk_get_hinted_font (font, CAIRO_HINT_STYLE_NONE, CAIRO_ANTIALIAS_DEFAULT);
-  pango_glyph_string_extents (glyphs, unhinted, &ink_rect, NULL);
-  g_object_unref (unhinted);
+  gsk_get_unhinted_glyph_string_extents (glyphs, font, &ink_rect);
 
   /* Don't create nodes with empty bounds */
   if (ink_rect.width == 0 || ink_rect.height == 0)
