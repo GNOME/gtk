@@ -227,7 +227,17 @@ compare_xfails = {
     'repeat-repeats-nested-nogl': ['clipped'], # 6522
     'radial-gradient-with-64-colorstops': ['colorflipped'],
     'repeating-radial-gradient-edge-colors': ['colorflipped'],
-  }
+  },
+  'gl': {
+    # 6525
+    'container-single-child-offscreen-for-opacity': ['rotated'],
+    'cross-fade-in-opacity': ['rotated'],
+    'mask-modes-in-opacity': ['rotated'],
+    'opacity-overlapping-children': ['rotated'],
+    'scaled-texture-scale': ['rotated'],
+    'shadow-opacity': ['rotated'],
+    'texture-scale-nearest-vs-linear': ['rotated'],
+  },
 }
 
 foreach renderer : renderers
