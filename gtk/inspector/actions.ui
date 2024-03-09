@@ -8,7 +8,6 @@
       <object class="GtkScrolledWindow" id="swin">
         <property name="hexpand">1</property>
         <property name="vexpand">1</property>
-        <property name="hscrollbar-policy">never</property>
         <child>
           <object class="GtkColumnView" id="list">
             <style>
@@ -17,6 +16,7 @@
             <child>
               <object class="GtkColumnViewColumn" id="name">
                 <property name="title" translatable="yes">Name</property>
+                <property name="resizable">1</property>
                 <property name="factory">
                   <object class="GtkSignalListItemFactory">
                     <signal name="setup" handler="setup_name_cb"/>
