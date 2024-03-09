@@ -866,13 +866,50 @@ init_cursor_size (GtkInspectorVisual *vis)
                     G_CALLBACK (cursor_size_changed), vis);
 }
 
+static gboolean
+name_to_desc (GBinding     *binding,
+              const GValue *from_value,
+              GValue       *to_value,
+              gpointer      user_data)
+{
+  const char *name;
+  PangoFontDescription *desc;
+
+  name = g_value_get_string (from_value);
+  desc = pango_font_description_from_string (name);
+
+  g_value_take_boxed (to_value, desc);
+
+  return TRUE;
+}
+
+static gboolean
+name_from_desc (GBinding     *binding,
+                const GValue *from_value,
+                GValue       *to_value,
+                gpointer      user_data)
+{
+  const char *name;
+  PangoFontDescription *desc;
+
+  desc = g_value_get_boxed (from_value);
+  name = pango_font_description_get_family (desc);
+
+  g_value_set_string (to_value, name);
+
+  return TRUE;
+}
+
 static void
 init_font (GtkInspectorVisual *vis)
 {
-  g_object_bind_property (gtk_settings_get_for_display (vis->display),
-                          "gtk-font-name",
-                          vis->font_button, "font",
-                          G_BINDING_BIDIRECTIONAL|G_BINDING_SYNC_CREATE);
+  g_object_bind_property_full (gtk_settings_get_for_display (vis->display),
+                               "gtk-font-name",
+                               vis->font_button, "font-desc",
+                               G_BINDING_BIDIRECTIONAL|G_BINDING_SYNC_CREATE,
+                               name_to_desc,
+                               name_from_desc,
+                               NULL, NULL);
 }
 
 static void

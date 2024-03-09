@@ -173,7 +173,12 @@
                               </object>
                             </child>
                             <child>
-                              <object class="GtkFontButton" id="font_button">
+                              <object class="GtkFontDialogButton" id="font_button">
+                                <property name="level">family</property>
+                                <property name="dialog">
+                                  <object class="GtkFontDialog">
+                                  </object>
+                                </property>
                                 <property name="halign">end</property>
                                 <property name="valign">baseline</property>
                                 <property name="hexpand">1</property>
