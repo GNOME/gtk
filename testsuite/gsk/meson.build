@@ -222,6 +222,7 @@ compare_xfails = {
   },
   'vulkan': {
     'blur-child-bounds-oversize-nogl': ['clipped'], # 6450
+    'repeat-repeats-nested-nogl': ['clipped'], # 6522
   }
 }
 
