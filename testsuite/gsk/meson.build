@@ -74,6 +74,7 @@ compare_render_tests = [
   'empty-texture',
   'empty-transform',
   'fill',
+  'fill2',
   'fill-clipped-nogl',
   'fill-fractional-translate-gradient-nogl',
   'fill-fractional-translate-nogl',
