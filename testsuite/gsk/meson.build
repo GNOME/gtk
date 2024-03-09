@@ -213,6 +213,7 @@ variants = {
   'masked': '--mask',
   'replayed': '--replay',
   'clipped': '--clip',
+  'colorflipped': '--colorflip',
 }
 
 compare_xfails = {
@@ -222,6 +223,9 @@ compare_xfails = {
   },
   'vulkan': {
     'blur-child-bounds-oversize-nogl': ['clipped'], # 6450
+    'repeat-repeats-nested-nogl': ['clipped'], # 6522
+    'radial-gradient-with-64-colorstops': ['colorflipped'],
+    'repeating-radial-gradient-edge-colors': ['colorflipped'],
   }
 }
 
