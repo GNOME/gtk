@@ -475,6 +475,9 @@ gtk_settings_class_init (GtkSettingsClass *class)
    * The type of subpixel antialiasing to use.
    *
    * The possible values are none, rgb, bgr, vrgb, vbgr.
+   *
+   * Note that GSK does not support subpixel antialiasing, and this
+   * setting has no effect on font rendering in GTK.
    */
   pspecs[PROP_XFT_RGBA] = g_param_spec_string ("gtk-xft-rgba", NULL, NULL,
                                                NULL,

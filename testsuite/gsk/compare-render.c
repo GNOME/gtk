@@ -355,33 +355,36 @@ main (int argc, char **argv)
   if (!node)
     return 1;
 
-  /* Render the .node file and download to cairo surface */
-  rendered_texture = gsk_renderer_render_texture (renderer, node, NULL);
-  g_assert_nonnull (rendered_texture);
-
-  save_image (rendered_texture, node_file, ".out.png");
-
-  /* Load the given reference png file */
-  reference_texture = gdk_texture_new_from_filename (png_file, &error);
-  if (reference_texture == NULL)
+  if (plain)
     {
-      g_print ("Error loading reference surface: %s\n", error->message);
-      g_clear_error (&error);
+      /* Render the .node file and download to cairo surface */
+      rendered_texture = gsk_renderer_render_texture (renderer, node, NULL);
+      g_assert_nonnull (rendered_texture);
+
       save_image (rendered_texture, node_file, ".out.png");
-      return 0;
-    }
 
-  /* Now compare the two */
-  diff_texture = reftest_compare_textures (rendered_texture, reference_texture);
-  if (diff_texture)
-    {
-      save_image (diff_texture, node_file, ".diff.png");
-      g_object_unref (diff_texture);
-      success = FALSE;
-    }
+      /* Load the given reference png file */
+      reference_texture = gdk_texture_new_from_filename (png_file, &error);
+      if (reference_texture == NULL)
+        {
+          g_print ("Error loading reference surface: %s\n", error->message);
+          g_clear_error (&error);
+          save_image (rendered_texture, node_file, ".out.png");
+          return 0;
+        }
 
-  g_clear_object (&reference_texture);
-  g_clear_object (&rendered_texture);
+      /* Now compare the two */
+      diff_texture = reftest_compare_textures (rendered_texture, reference_texture);
+      if (diff_texture)
+        {
+          save_image (diff_texture, node_file, ".diff.png");
+          g_object_unref (diff_texture);
+          success = FALSE;
+        }
+
+      g_clear_object (&reference_texture);
+      g_clear_object (&rendered_texture);
+    }
 
   if (flip)
     {
