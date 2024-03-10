@@ -219,11 +219,13 @@ macos:
     - if: $RUNNER == "macosintel"
       variables:
         SDKROOT: /opt/sdks/MacOSX10.13.4.sdk
+        NINJA_PKG: $CI_API_V4_URL/projects/30745/packages/generic/ninja_macos/v1.11.1.1+9/ninja-1.11.1.1-cp38-cp38-macosx_11_0_x86_64.whl
       when: manual
       allow_failure: true
     - if: $RUNNER == "macosarm"
       variables:
         SDKROOT: /opt/sdks/MacOSX11.3.sdk
+        NINJA_PKG: ninja==1.11.1.1
   stage: build
   parallel:
     matrix:
@@ -246,7 +248,7 @@ macos:
     - curl -L $CI_API_V4_URL/projects/30437/packages/generic/pkgconfig/v0.29.2+10/pkg-config-0.29.2+10_$(uname -m).tar.xz | tar -C .venv -xJ
     - curl -L $CI_API_V4_URL/projects/30438/packages/generic/bison/v3.8.2+3/bison-3.8.2+3_$(uname -m).tar.xz | tar -C .venv -xJ
     - source .venv/bin/activate
-    - pip3 install meson==1.3.2 ninja==1.11.1.1
+    - pip3 install meson==1.3.2 $NINJA_PKG
     # We're not setting up ccache here on purpose as it accelerates the build
     # so much that it triggers race conditions in the gobject-introspection
     # subproject.
