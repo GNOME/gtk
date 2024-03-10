@@ -555,7 +555,7 @@ gdk_frame_clock_paint_idle (void *data)
               priv->smoothed_frame_time_period = frame_interval;
               priv->smoothed_frame_time_reported = priv->smoothed_frame_time_base;
 
-              _gdk_frame_clock_begin_frame (clock);
+              _gdk_frame_clock_begin_frame (clock, priv->frame_time);
               /* Note "current" is different now so timings != prev_timings */
               timings = gdk_frame_clock_get_current_timings (clock);
 
