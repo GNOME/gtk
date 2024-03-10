@@ -83,7 +83,7 @@ gtk_fps_info_new (GtkWidget *widget)
 
   info = g_new0 (GtkFpsInfo, 1);
 
-  layout = gtk_widget_create_pango_layout (widget, "0000.00 fps");
+  layout = gtk_widget_create_pango_layout (widget, "000000.00 fps");
   attrs = pango_attr_list_new ();
   pango_attr_list_insert (attrs, pango_attr_font_features_new ("tnum=1"));
   pango_layout_set_attributes (layout, attrs);
@@ -202,23 +202,37 @@ gtk_fps_overlay_snapshot (GtkInspectorOverlay *overlay,
 
   if (overlay_opacity < 1.0)
     gtk_snapshot_push_opacity (snapshot, overlay_opacity);
-  gtk_snapshot_append_color (snapshot,
-                             &(GdkRGBA) { 0, 0, 0, 0.5 },
-                             &GRAPHENE_RECT_INIT (-1, -1, info->width + 2, info->height + 2));
 
   fps = gtk_fps_overlay_get_fps (widget);
   if (fps != 0.0)
     {
       GskRenderNode *fps_node;
       char fps_string[40];
+      gboolean bg_drawn = FALSE;
+      float bg_x = 0;
 
-      g_snprintf (fps_string, sizeof (fps_string), "%7.2f fps", fps);
-      for (int i = 0; i < 7; i++)
+      g_snprintf (fps_string, sizeof (fps_string), "%9.2f fps", fps);
+      for (int i = 0; i < 9; i++)
         {
-          if (g_ascii_isdigit (fps_string[i]))
-            info->glyphs->glyphs[i].glyph = info->digits->glyphs[fps_string[i] - '0'].glyph;
-          else if (fps_string[i] == ' ')
-            info->glyphs->glyphs[i].glyph = info->digits->glyphs[10].glyph;
+          if (fps_string[i] == ' ')
+            {
+              info->glyphs->glyphs[i].glyph = info->digits->glyphs[10].glyph;
+              bg_x += (float) info->glyphs->glyphs[i].geometry.width / PANGO_SCALE;
+            }
+          else
+            {
+              if (!bg_drawn)
+                {
+                  gtk_snapshot_append_color (snapshot,
+                                             &(GdkRGBA) { 0, 0, 0, 0.5 },
+                                             &GRAPHENE_RECT_INIT (bg_x - 1, -1,
+                                                                  info->width + 2 - bg_x, info->height + 2));
+                  bg_drawn = TRUE;
+                }
+
+              if (g_ascii_isdigit (fps_string[i]))
+                info->glyphs->glyphs[i].glyph = info->digits->glyphs[fps_string[i] - '0'].glyph;
+            }
         }
 
       fps_node = gsk_text_node_new (info->font,
