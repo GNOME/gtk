@@ -1435,6 +1435,39 @@ gtk_inscription_accessible_text_get_default_attributes (GtkAccessibleText   *sel
   *attribute_values = values;
 }
 
+static gboolean
+gtk_inscription_accessible_text_get_extents (GtkAccessibleText *self,
+                                             unsigned int       start,
+                                             unsigned int       end,
+                                             graphene_rect_t   *extents)
+{
+  GtkInscription *inscription = GTK_INSCRIPTION (self);
+  PangoLayout *layout;
+  const char *text;
+  float lx, ly;
+  cairo_region_t *range_clip;
+  cairo_rectangle_int_t clip_rect;
+  int range[2];
+
+  layout = inscription->layout;
+  text = inscription->text;
+  gtk_inscription_get_layout_location (inscription, &lx, &ly);
+
+  range[0] = g_utf8_pointer_to_offset (text, text + start);
+  range[1] = g_utf8_pointer_to_offset (text, text + end);
+
+  range_clip = gdk_pango_layout_get_clip_region (layout, lx, ly, range, 1);
+  cairo_region_get_extents (range_clip, &clip_rect);
+  cairo_region_destroy (range_clip);
+
+  extents->origin.x = clip_rect.x;
+  extents->origin.y = clip_rect.y;
+  extents->size.width = clip_rect.width;
+  extents->size.height = clip_rect.height;
+
+  return TRUE;
+}
+
 static void
 gtk_inscription_accessible_text_init (GtkAccessibleTextInterface *iface)
 {
@@ -1444,6 +1477,7 @@ gtk_inscription_accessible_text_init (GtkAccessibleTextInterface *iface)
   iface->get_selection = gtk_inscription_accessible_text_get_selection;
   iface->get_attributes = gtk_inscription_accessible_text_get_attributes;
   iface->get_default_attributes = gtk_inscription_accessible_text_get_default_attributes;
+  iface->get_extents = gtk_inscription_accessible_text_get_extents;
 }
 
 /* }}} */
