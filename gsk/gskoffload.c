@@ -278,6 +278,8 @@ pop_clip (GskOffload *self)
   self->clips = self->clips->next;
   if (self->clips)
     self->current_clip = self->clips->data;
+  else
+    self->current_clip = NULL;
 
   g_slist_free_1 (l);
   g_free (clip);
@@ -454,7 +456,7 @@ visit_node (GskOffload    *self,
     case GSK_MASK_NODE:
     case GSK_FILL_NODE:
     case GSK_STROKE_NODE:
-    break;
+      break;
 
     case GSK_CLIP_NODE:
       {
@@ -594,7 +596,7 @@ complex_clip:
     case GSK_NOT_A_RENDER_NODE:
     default:
       g_assert_not_reached ();
-    break;
+      break;
     }
 
   if (has_clip)
