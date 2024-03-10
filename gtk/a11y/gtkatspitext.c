@@ -330,11 +330,85 @@ accessible_text_handle_method (GDBusConnection       *connection,
     }
   else if (g_strcmp0 (method_name, "GetCharacterExtents") == 0)
     {
-      g_dbus_method_invocation_return_error_literal (invocation, G_DBUS_ERROR, G_DBUS_ERROR_NOT_SUPPORTED, "");
+      int offset;
+      unsigned int coords_type;
+      graphene_rect_t extents;
+      graphene_point_t point;
+      int x, y, w, h;
+      GtkNative *native;
+      double nx, ny;
+
+      g_variant_get (parameters, "(iu)", &offset, &coords_type);
+
+      if (coords_type != ATSPI_COORD_TYPE_WINDOW)
+        {
+          g_dbus_method_invocation_return_error_literal (invocation,
+                                                         G_DBUS_ERROR,
+                                                         G_DBUS_ERROR_NOT_SUPPORTED,
+                                                         "Unsupported coordinate space");
+          return;
+        }
+
+      native = gtk_widget_get_native (GTK_WIDGET (accessible));
+      gtk_native_get_surface_transform (native, &nx, &ny);
+
+      if (!gtk_accessible_text_get_extents (accessible_text, offset, offset + 1, &extents) ||
+          !gtk_widget_compute_point (GTK_WIDGET (accessible), GTK_WIDGET (native), &extents.origin, &point))
+        {
+          g_dbus_method_invocation_return_error_literal (invocation,
+                                                         G_DBUS_ERROR,
+                                                         G_DBUS_ERROR_FAILED,
+                                                         "Failed to get extents");
+          return;
+        }
+
+      x = floor (point.x + nx);
+      y = floor (point.y + ny);
+      w = ceilf (extents.size.width) - x;
+      h = ceilf (extents.size.height) - y;
+
+      g_dbus_method_invocation_return_value (invocation, g_variant_new ("(iiii)", x, y, w, h));
     }
   else if (g_strcmp0 (method_name, "GetRangeExtents") == 0)
     {
-      g_dbus_method_invocation_return_error_literal (invocation, G_DBUS_ERROR, G_DBUS_ERROR_NOT_SUPPORTED, "");
+      int start, end;
+      guint coords_type;
+      graphene_rect_t extents;
+      graphene_point_t point;
+      int x, y, w, h;
+      GtkNative *native;
+      double nx, ny;
+
+      g_variant_get (parameters, "(iiu)", &start, &end, &coords_type);
+
+      if (coords_type != ATSPI_COORD_TYPE_WINDOW)
+        {
+          g_dbus_method_invocation_return_error_literal (invocation,
+                                                         G_DBUS_ERROR,
+                                                         G_DBUS_ERROR_NOT_SUPPORTED,
+                                                         "Unsupported coordinate space");
+          return;
+        }
+
+      native = gtk_widget_get_native (GTK_WIDGET (accessible));
+      gtk_native_get_surface_transform (native, &nx, &ny);
+
+      if (!gtk_accessible_text_get_extents (accessible_text, start, end, &extents) ||
+          !gtk_widget_compute_point (GTK_WIDGET (accessible), GTK_WIDGET (native), &extents.origin, &point))
+        {
+          g_dbus_method_invocation_return_error_literal (invocation,
+                                                         G_DBUS_ERROR,
+                                                         G_DBUS_ERROR_FAILED,
+                                                         "Failed to get extents");
+          return;
+        }
+
+      x = floor (point.x + nx);
+      y = floor (point.y + ny);
+      w = ceilf (extents.size.width) - x;
+      h = ceilf (extents.size.height) - y;
+
+      g_dbus_method_invocation_return_value (invocation, g_variant_new ("(iiii)", x, y, w, h));
     }
   else if (g_strcmp0 (method_name, "GetBoundedRanges") == 0)
     {
