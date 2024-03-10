@@ -7555,6 +7555,38 @@ gtk_text_accessible_text_get_default_attributes (GtkAccessibleText   *self,
   *attribute_values = values;
 }
 
+static gboolean
+gtk_text_accessible_text_get_extents (GtkAccessibleText *self,
+                                      unsigned int       start,
+                                      unsigned int       end,
+                                      graphene_rect_t   *extents)
+{
+  PangoLayout *layout = gtk_text_get_layout (GTK_TEXT (self));
+  const char *text;
+  int lx, ly;
+  int range[2];
+  cairo_region_t *range_clip;
+  cairo_rectangle_int_t clip_rect;
+
+  layout = gtk_text_get_layout (GTK_TEXT (self));
+  text = gtk_entry_buffer_get_text (get_buffer (GTK_TEXT (self)));
+  get_layout_position (GTK_TEXT (self), &lx, &ly);
+
+  range[0] = g_utf8_pointer_to_offset (text, text + start);
+  range[1] = g_utf8_pointer_to_offset (text, text + end);
+
+  range_clip = gdk_pango_layout_get_clip_region (layout, lx, ly, range, 1);
+  cairo_region_get_extents (range_clip, &clip_rect);
+  cairo_region_destroy (range_clip);
+
+  extents->origin.x = clip_rect.x;
+  extents->origin.y = clip_rect.y;
+  extents->size.width = clip_rect.width;
+  extents->size.height = clip_rect.height;
+
+  return TRUE;
+}
+
 static void
 gtk_text_accessible_text_init (GtkAccessibleTextInterface *iface)
 {
@@ -7564,6 +7596,7 @@ gtk_text_accessible_text_init (GtkAccessibleTextInterface *iface)
   iface->get_selection = gtk_text_accessible_text_get_selection;
   iface->get_attributes = gtk_text_accessible_text_get_attributes;
   iface->get_default_attributes = gtk_text_accessible_text_get_default_attributes;
+  iface->get_extents = gtk_text_accessible_text_get_extents;
 }
 
 /* vim:set foldmethod=marker expandtab: */
