@@ -461,6 +461,40 @@ gtk_inscription_get_layout_location (GtkInscription *self,
   *y_out = y;
 }
 
+static gboolean
+gtk_inscription_get_layout_index (GtkInscription *self,
+                                  int             x,
+                                  int             y,
+                                  int            *index)
+{
+  int trailing = 0;
+  const char *cluster;
+  const char *cluster_end;
+  gboolean inside;
+  float lx, ly;
+
+  *index = 0;
+
+  gtk_inscription_get_layout_location (self, &lx, &ly);
+
+  inside = pango_layout_xy_to_index (self->layout,
+                                     (x - lx) * PANGO_SCALE,
+                                     (y - ly) * PANGO_SCALE,
+                                     index, &trailing);
+
+  cluster = self->text + *index;
+  cluster_end = cluster;
+  while (trailing)
+    {
+      cluster_end = g_utf8_next_char (cluster_end);
+      --trailing;
+    }
+
+  *index += (cluster_end - cluster);
+
+  return inside;
+}
+
 static void
 gtk_inscription_allocate (GtkWidget *widget,
                           int        width,
@@ -1468,6 +1502,22 @@ gtk_inscription_accessible_text_get_extents (GtkAccessibleText *self,
   return TRUE;
 }
 
+static gboolean
+gtk_inscription_accessible_text_get_offset (GtkAccessibleText      *self,
+                                            const graphene_point_t *point,
+                                            unsigned int           *offset)
+{
+  GtkInscription *inscription = GTK_INSCRIPTION (self);
+  int index;
+
+  if (!gtk_inscription_get_layout_index (inscription, point->x, point->y, &index))
+    return FALSE;
+
+  *offset = (unsigned int) g_utf8_pointer_to_offset (inscription->text, inscription->text + index);
+
+  return TRUE;
+}
+
 static void
 gtk_inscription_accessible_text_init (GtkAccessibleTextInterface *iface)
 {
@@ -1478,6 +1528,7 @@ gtk_inscription_accessible_text_init (GtkAccessibleTextInterface *iface)
   iface->get_attributes = gtk_inscription_accessible_text_get_attributes;
   iface->get_default_attributes = gtk_inscription_accessible_text_get_default_attributes;
   iface->get_extents = gtk_inscription_accessible_text_get_extents;
+  iface->get_offset = gtk_inscription_accessible_text_get_offset;
 }
 
 /* }}} */
