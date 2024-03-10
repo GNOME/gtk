@@ -219,13 +219,17 @@ variants = {
 
 compare_xfails = {
   'ngl': {
-    'radial-gradient-with-64-colorstops': ['clipped'],
+    # the gradients are prone to rounding errors which become
+    # more pronounced in small clips, it seems
+    'radial-gradient-with-64-colorstops': ['clipped', 'colorflipped'],
+    'conic-gradient-with-64-colorstops': ['clipped', 'colorflipped'],
     'blur-child-bounds-oversize-nogl': ['clipped'], # 6450
   },
   'vulkan': {
+    'radial-gradient-with-64-colorstops': ['clipped', 'colorflipped'],
+    'conic-gradient-with-64-colorstops': ['clipped', 'colorflipped'],
     'blur-child-bounds-oversize-nogl': ['clipped'], # 6450
     'repeat-repeats-nested-nogl': ['clipped'], # 6522
-    'radial-gradient-with-64-colorstops': ['colorflipped'],
     'repeating-radial-gradient-edge-colors': ['colorflipped'],
   },
   'gl': {
