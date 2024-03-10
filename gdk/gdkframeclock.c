@@ -779,7 +779,10 @@ gdk_frame_clock_get_fps (GdkFrameClock *frame_clock)
 
   start_counter = _gdk_frame_clock_get_history_start (frame_clock);
   end_counter = _gdk_frame_clock_get_frame_counter (frame_clock);
-  start = _gdk_frame_clock_get_timings (frame_clock, start_counter);
+  for (start = _gdk_frame_clock_get_timings (frame_clock, start_counter);
+       end_counter > start_counter && start != NULL && !gdk_frame_timings_get_complete (start);
+       start = _gdk_frame_clock_get_timings (frame_clock, start_counter))
+    start_counter++;
   for (end = _gdk_frame_clock_get_timings (frame_clock, end_counter);
        end_counter > start_counter && end != NULL && !gdk_frame_timings_get_complete (end);
        end = _gdk_frame_clock_get_timings (frame_clock, end_counter))
