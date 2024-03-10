@@ -38,7 +38,7 @@ typedef struct
   guint is_rectilinear     : 1;
   guint is_fully_contained : 1;
   guint is_empty           : 1;
-  guint is_complex         : 1;
+  guint is_complex         : 1; /* Inside a non-representable clip, even if fully contained */
 } Clip;
 
 struct _GskOffload
@@ -225,10 +225,13 @@ static void
 push_rect_clip (GskOffload           *self,
                 const GskRoundedRect *rect)
 {
+  Clip *current_clip = self->clips->data;
   Clip *clip = g_new0 (Clip, 1);
+
   clip->rect = *rect;
   clip->is_rectilinear = gsk_rounded_rect_is_rectilinear (rect);
   clip->is_empty = (rect->bounds.size.width == 0 || rect->bounds.size.height == 0);
+  clip->is_complex = current_clip && current_clip->is_complex;
 
   self->clips = g_slist_prepend (self->clips, clip);
   self->current_clip = self->clips->data;
@@ -249,6 +252,7 @@ push_contained_clip (GskOffload *self)
   clip->rect = current_clip->rect;
   clip->is_rectilinear = TRUE;
   clip->is_fully_contained = TRUE;
+  clip->is_complex = current_clip && current_clip->is_complex;
 
   self->clips = g_slist_prepend (self->clips, clip);
   self->current_clip = self->clips->data;
@@ -517,21 +521,21 @@ visit_node (GskOffload    *self,
               push_empty_clip (self);
             else if (result == GSK_INTERSECTION_NONEMPTY)
               push_rect_clip (self, &intersection);
+            else if (gsk_rounded_rect_contains_rect (&self->current_clip->rect, &transformed_clip.bounds))
+              push_rect_clip (self, &transformed_clip);
             else
-              goto complex_clip;
-            visit_node (self, gsk_rounded_clip_node_get_child (node));
-            pop_clip (self);
+              push_complex_clip (self);
           }
         else
           {
-complex_clip:
             if (gsk_rounded_rect_contains_rect (&self->current_clip->rect, &transformed_clip.bounds))
               push_rect_clip (self, &transformed_clip);
             else
               push_complex_clip (self);
-            visit_node (self, gsk_rounded_clip_node_get_child (node));
-            pop_clip (self);
           }
+
+        visit_node (self, gsk_rounded_clip_node_get_child (node));
+        pop_clip (self);
       }
       break;
 
@@ -566,6 +570,12 @@ complex_clip:
           {
             GDK_DISPLAY_DEBUG (gdk_surface_get_display (self->surface), OFFLOAD,
                                "Can't offload subsurface %p: clipped",
+                               subsurface);
+          }
+        else if (self->current_clip->is_complex)
+          {
+            GDK_DISPLAY_DEBUG (gdk_surface_get_display (self->surface), OFFLOAD,
+                               "Can't offload subsurface %p: inside non-representable clip",
                                subsurface);
           }
         else if (self->transforms &&
