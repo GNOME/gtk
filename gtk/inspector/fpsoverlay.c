@@ -83,7 +83,7 @@ gtk_fps_info_new (GtkWidget *widget)
 
   info = g_new0 (GtkFpsInfo, 1);
 
-  layout = gtk_widget_create_pango_layout (widget, "0000.00 fps");
+  layout = gtk_widget_create_pango_layout (widget, "000000.00 fps");
   attrs = pango_attr_list_new ();
   pango_attr_list_insert (attrs, pango_attr_font_features_new ("tnum=1"));
   pango_layout_set_attributes (layout, attrs);
@@ -211,8 +211,8 @@ gtk_fps_overlay_snapshot (GtkInspectorOverlay *overlay,
       gboolean bg_drawn = FALSE;
       float bg_x = 0;
 
-      g_snprintf (fps_string, sizeof (fps_string), "%7.2f fps", fps);
-      for (int i = 0; i < 7; i++)
+      g_snprintf (fps_string, sizeof (fps_string), "%9.2f fps", fps);
+      for (int i = 0; i < 9; i++)
         {
           if (fps_string[i] == ' ')
             {
