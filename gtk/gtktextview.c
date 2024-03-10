@@ -10733,6 +10733,29 @@ gtk_text_view_accessible_text_get_extents (GtkAccessibleText *self,
   return TRUE;
 }
 
+static gboolean
+gtk_text_view_accessible_text_get_offset (GtkAccessibleText      *self,
+                                          const graphene_point_t *point,
+                                          unsigned int           *offset)
+{
+  GtkTextView *text_view = GTK_TEXT_VIEW (self);
+  int x, y;
+  GtkTextIter iter;
+
+  x = point->x;
+  y = point->y;
+
+  _widget_to_text_surface_coords (text_view, &x, &y);
+  gtk_text_view_window_to_buffer_coords (text_view, GTK_TEXT_WINDOW_TEXT, x, y, &x, &y);
+
+  if (!gtk_text_view_get_iter_at_location (text_view, &iter, x, y))
+    return FALSE;
+
+  *offset = gtk_text_iter_get_offset (&iter);
+
+  return TRUE;
+}
+
 static void
 gtk_text_view_accessible_text_init (GtkAccessibleTextInterface *iface)
 {
@@ -10743,6 +10766,7 @@ gtk_text_view_accessible_text_init (GtkAccessibleTextInterface *iface)
   iface->get_attributes = gtk_text_view_accessible_text_get_attributes;
   iface->get_default_attributes = gtk_text_view_accessible_text_get_default_attributes;
   iface->get_extents = gtk_text_view_accessible_text_get_extents;
+  iface->get_offset = gtk_text_view_accessible_text_get_offset;
 }
 
 /* }}} */
