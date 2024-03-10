@@ -16,6 +16,7 @@ typedef enum {
   GSK_GPU_CLIP_ALL_CLIPPED,
   /* No clipping is necessary, but the clip rect is set
    * to the actual bounds of the underlying framebuffer
+   * or handled via the scissor.
    */
   GSK_GPU_CLIP_NONE,
   /* The clip exists outside the rect, so clipping must
