@@ -6179,6 +6179,22 @@ gtk_label_accessible_text_get_attributes (GtkAccessibleText        *self,
   return TRUE;
 }
 
+static gboolean
+gtk_label_accessible_text_get_offset (GtkAccessibleText      *self,
+                                      const graphene_point_t *point,
+                                      unsigned int           *offset)
+{
+  GtkLabel *label = GTK_LABEL (self);
+  int index;
+
+  if (!get_layout_index (label, roundf (point->x), roundf (point->y), &index))
+    return FALSE;
+
+  *offset = (unsigned int) g_utf8_pointer_to_offset (label->text, label->text + index);
+
+  return TRUE;
+}
+
 static void
 gtk_label_accessible_text_init (GtkAccessibleTextInterface *iface)
 {
@@ -6188,6 +6204,7 @@ gtk_label_accessible_text_init (GtkAccessibleTextInterface *iface)
   iface->get_selection = gtk_label_accessible_text_get_selection;
   iface->get_attributes = gtk_label_accessible_text_get_attributes;
   iface->get_default_attributes = gtk_label_accessible_text_get_default_attributes;
+  iface->get_offset = gtk_label_accessible_text_get_offset;
 }
 
 /* }}} */
