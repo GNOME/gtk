@@ -1780,7 +1780,7 @@ RU5ErkJggg==\
                   transform: translate(235, 0);
                   child: text {
                     color: rgba(46,52,54,0.4);
-                    font: "Cantarell 9.1669921875";
+                    font: "Cantarell 9.167";
                     glyphs: "50", 859 1, "%";
                     offset: 0 13;
                   }
