@@ -274,6 +274,22 @@ struct _GtkAccessibleTextInterface
                             unsigned int       start,
                             unsigned int       end,
                             graphene_rect_t   *extents);
+
+  /**
+   * GtkAccessibleTextInterface::get_offset:
+   * @self: the accessible object
+   * @point: a point in widget coordinates of @self
+   * @offset: (out): return location for the text offset at @point
+   *
+   * Gets the text offset at a given point.
+   *
+   * Returns: true if the offset was set, false otherwise
+   *
+   * Since: 4.16
+   */
+  gboolean (* get_offset) (GtkAccessibleText      *self,
+                           const graphene_point_t *point,
+                           unsigned int           *offset);
 };
 
 GDK_AVAILABLE_IN_4_14
