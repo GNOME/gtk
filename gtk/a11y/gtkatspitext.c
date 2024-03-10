@@ -283,7 +283,41 @@ accessible_text_handle_method (GDBusConnection       *connection,
     }
   else if (g_strcmp0 (method_name, "GetOffsetAtPoint") == 0)
     {
-      g_dbus_method_invocation_return_error_literal (invocation, G_DBUS_ERROR, G_DBUS_ERROR_NOT_SUPPORTED, "");
+      int x, y;
+      guint coords_type;
+      GtkNative *native;
+      double nx, ny;
+      graphene_point_t p;
+      unsigned int offset;
+
+      g_variant_get (parameters, "(i&s)", &x, &y, &coords_type);
+
+      if (coords_type != ATSPI_COORD_TYPE_WINDOW)
+        {
+          g_dbus_method_invocation_return_error_literal (invocation,
+                                                         G_DBUS_ERROR,
+                                                         G_DBUS_ERROR_NOT_SUPPORTED,
+                                                         "Unsupported coordinate space");
+          return;
+        }
+
+      native = gtk_widget_get_native (GTK_WIDGET (accessible));
+      gtk_native_get_surface_transform (native, &nx, &ny);
+
+      if (!gtk_widget_compute_point (GTK_WIDGET (native),
+                                     GTK_WIDGET (accessible),
+                                     &GRAPHENE_POINT_INIT (x - nx, y - ny),
+                                     &p) ||
+          !gtk_accessible_text_get_offset (accessible_text, &p, &offset))
+        {
+          g_dbus_method_invocation_return_error_literal (invocation,
+                                                         G_DBUS_ERROR,
+                                                         G_DBUS_ERROR_FAILED,
+                                                         "Could not determine offset");
+          return;
+        }
+
+      g_dbus_method_invocation_return_value (invocation, g_variant_new ("(u)", offset));
     }
   else if (g_strcmp0 (method_name, "GetNSelections") == 0)
     {
