@@ -281,6 +281,10 @@ accessible_text_handle_method (GDBusConnection       *connection,
 
       g_dbus_method_invocation_return_value (invocation, g_variant_new ("(a{ss})", &builder));
     }
+  else if (g_strcmp0 (method_name, "GetOffsetAtPoint") == 0)
+    {
+      g_dbus_method_invocation_return_error_literal (invocation, G_DBUS_ERROR, G_DBUS_ERROR_NOT_SUPPORTED, "");
+    }
   else if (g_strcmp0 (method_name, "GetNSelections") == 0)
     {
       gsize n_ranges;
@@ -707,6 +711,10 @@ label_handle_method (GDBusConnection       *connection,
 
       g_dbus_method_invocation_return_value (invocation, g_variant_new ("(a{ss})", &builder));
     }
+  else if (g_strcmp0 (method_name, "GetOffsetAtPoint") == 0)
+    {
+      g_dbus_method_invocation_return_error_literal (invocation, G_DBUS_ERROR, G_DBUS_ERROR_NOT_SUPPORTED, "");
+    }
   else if (g_strcmp0 (method_name, "GetNSelections") == 0)
     {
       int n = 0;
@@ -1097,6 +1105,10 @@ inscription_handle_method (GDBusConnection       *connection,
 
       g_dbus_method_invocation_return_value (invocation, g_variant_new ("(a{ss})", &builder));
     }
+  else if (g_strcmp0 (method_name, "GetOffsetAtPoint") == 0)
+    {
+      g_dbus_method_invocation_return_error_literal (invocation, G_DBUS_ERROR, G_DBUS_ERROR_NOT_SUPPORTED, "");
+    }
   else if (g_strcmp0 (method_name, "GetNSelections") == 0)
     {
       g_dbus_method_invocation_return_value (invocation, g_variant_new ("(i)", 0));
@@ -1437,6 +1449,10 @@ editable_handle_method (GDBusConnection       *connection,
       g_strfreev (values);
 
       g_dbus_method_invocation_return_value (invocation, g_variant_new ("(a{ss})", &builder));
+    }
+  else if (g_strcmp0 (method_name, "GetOffsetAtPoint") == 0)
+    {
+      g_dbus_method_invocation_return_error_literal (invocation, G_DBUS_ERROR, G_DBUS_ERROR_NOT_SUPPORTED, "");
     }
   else if (g_strcmp0 (method_name, "GetNSelections") == 0)
     {
@@ -1815,6 +1831,10 @@ text_view_handle_method (GDBusConnection       *connection,
       g_dbus_method_invocation_return_value (invocation, g_variant_new ("(a{ss})", &builder));
 
       g_hash_table_unref (attrs);
+    }
+  else if (g_strcmp0 (method_name, "GetOffsetAtPoint") == 0)
+    {
+      g_dbus_method_invocation_return_error_literal (invocation, G_DBUS_ERROR, G_DBUS_ERROR_NOT_SUPPORTED, "");
     }
   else if (g_strcmp0 (method_name, "GetNSelections") == 0)
     {
