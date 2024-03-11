@@ -359,6 +359,8 @@ node_parser_tests = [
   'empty-shadow.ref.node',
   'empty-stroke.node',
   'empty-stroke.ref.node',
+  'empty-subsurface.node',
+  'empty-subsurface.ref.node',
   'empty-text.node',
   'empty-text.ref.node',
   'empty-texture.node',
