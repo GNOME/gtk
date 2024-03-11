@@ -53,7 +53,7 @@ gsk_get_scaled_font (PangoFont *font,
   FcPattern *pattern;
   double dpi;
 
-  key = (int) roundf (scale * PANGO_SCALE);
+  key = (int) floor (scale * PANGO_SCALE + .5);
 
   fonts = (GHashTable *) g_object_get_data (G_OBJECT (font), "gsk-scaled-fonts");
 
@@ -76,7 +76,7 @@ gsk_get_scaled_font (PangoFont *font,
   if (pango_font_description_get_size_is_absolute (desc))
     pango_font_description_set_absolute_size (desc, size * scale);
   else
-    pango_font_description_set_size (desc, (int) roundf (size * scale));
+    pango_font_description_set_size (desc, (int) floor (size * scale + .5));
 
   fontmap = pango_font_get_font_map (font);
   context = pango_font_map_create_context (fontmap);
