@@ -148,6 +148,15 @@ static void             gsk_gpu_node_processor_add_node                 (GskGpuN
 static gboolean         gsk_gpu_node_processor_create_node_pattern      (GskGpuPatternWriter            *self,
                                                                          GskRenderNode                  *node);
 
+static inline int
+simple_roundf (float f)
+{
+  /* roundf() does not appear to get intrinsics from GCC
+   * but this does and generally gives us the same answer.
+   */
+  return floorf (f + .5);
+}
+
 static void
 gsk_gpu_node_processor_finish (GskGpuNodeProcessor *self)
 {
@@ -3043,15 +3052,15 @@ gsk_gpu_node_processor_add_glyph_node (GskGpuNodeProcessor *self,
           /* Force glyph_origin.y to be device pixel aligned.
            * The hinter expects that.
            */
-          glyph_origin.x = roundf (glyph_origin.x * scale * 4);
+          glyph_origin.x = simple_roundf (glyph_origin.x * scale * 4);
           flags = ((int) glyph_origin.x & 3);
           glyph_origin.x = 0.25 * inv_scale * glyph_origin.x;
-          glyph_origin.y = roundf (glyph_origin.y * scale) * inv_scale;
+          glyph_origin.y = simple_roundf (glyph_origin.y * scale) * inv_scale;
         }
       else if (glyph_align)
         {
-          glyph_origin.x = roundf (glyph_origin.x * scale * 4);
-          glyph_origin.y = roundf (glyph_origin.y * scale * 4);
+          glyph_origin.x = simple_roundf (glyph_origin.x * scale * 4);
+          glyph_origin.y = simple_roundf (glyph_origin.y * scale * 4);
           flags = ((int) glyph_origin.x & 3) |
                   (((int) glyph_origin.y & 3) << 2);
           glyph_origin.x = 0.25 * inv_scale * glyph_origin.x;
@@ -3059,8 +3068,8 @@ gsk_gpu_node_processor_add_glyph_node (GskGpuNodeProcessor *self,
         }
       else
         {
-          glyph_origin.x = roundf (glyph_origin.x * scale) * inv_scale;
-          glyph_origin.y = roundf (glyph_origin.y * scale) * inv_scale;
+          glyph_origin.x = simple_roundf (glyph_origin.x * scale) * inv_scale;
+          glyph_origin.y = simple_roundf (glyph_origin.y * scale) * inv_scale;
           flags = 0;
         }
 
@@ -3153,15 +3162,15 @@ gsk_gpu_node_processor_create_glyph_pattern (GskGpuPatternWriter *self,
           /* Force glyph_origin.y to be device pixel aligned.
            * The hinter expects that.
            */
-          glyph_origin.x = roundf (glyph_origin.x * scale * 4);
+          glyph_origin.x = simple_roundf (glyph_origin.x * scale * 4);
           flags = ((int) glyph_origin.x & 3);
           glyph_origin.x = 0.25 * inv_scale * glyph_origin.x;
-          glyph_origin.y = roundf (glyph_origin.y * scale) * inv_scale;
+          glyph_origin.y = simple_roundf (glyph_origin.y * scale) * inv_scale;
         }
       else if (glyph_align)
         {
-          glyph_origin.x = roundf (glyph_origin.x * scale * 4);
-          glyph_origin.y = roundf (glyph_origin.y * scale * 4);
+          glyph_origin.x = simple_roundf (glyph_origin.x * scale * 4);
+          glyph_origin.y = simple_roundf (glyph_origin.y * scale * 4);
           flags = ((int) glyph_origin.x & 3) |
                   (((int) glyph_origin.y & 3) << 2);
           glyph_origin.x = 0.25 * inv_scale * glyph_origin.x;
@@ -3169,8 +3178,8 @@ gsk_gpu_node_processor_create_glyph_pattern (GskGpuPatternWriter *self,
         }
       else
         {
-          glyph_origin.x = roundf (glyph_origin.x * scale) * inv_scale;
-          glyph_origin.y = roundf (glyph_origin.y * scale) * inv_scale;
+          glyph_origin.x = simple_roundf (glyph_origin.x * scale) * inv_scale;
+          glyph_origin.y = simple_roundf (glyph_origin.y * scale) * inv_scale;
           flags = 0;
         }
 
