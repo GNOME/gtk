@@ -1523,6 +1523,7 @@ gtk_label_dispose (GObject *object)
   GtkLabel *self = GTK_LABEL (object);
 
   gtk_label_set_mnemonic_widget (self, NULL);
+  gtk_label_clear_select_info (self);
 
   G_OBJECT_CLASS (gtk_label_parent_class)->dispose (object);
 }
