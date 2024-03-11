@@ -184,13 +184,13 @@ gsk_gpu_node_processor_init (GskGpuNodeProcessor         *self,
     {
       float scale_x = viewport->size.width / width;
       float scale_y = viewport->size.height / height;
-      gsk_gpu_clip_init_rect (&self->clip,
-                              &GRAPHENE_RECT_INIT (
-                                  scale_x * clip->x,
-                                  scale_y * clip->y,
-                                  scale_x * clip->width,
-                                  scale_y * clip->height
-                              ));
+      gsk_gpu_clip_init_empty (&self->clip,
+                               &GRAPHENE_RECT_INIT (
+                                   scale_x * clip->x,
+                                   scale_y * clip->y,
+                                   scale_x * clip->width,
+                                   scale_y * clip->height
+                               ));
     }
 
   self->modelview = NULL;
@@ -1328,7 +1328,7 @@ gsk_gpu_node_processor_add_node_clipped (GskGpuNodeProcessor   *self,
               gsk_gpu_clip_init_copy (&self->clip, &old_clip);
               return;
             }
-          else if (self->clip.type == GSK_GPU_CLIP_RECT &&
+          else if ((self->clip.type == GSK_GPU_CLIP_RECT || self->clip.type == GSK_GPU_CLIP_CONTAINED) &&
                    gsk_rect_contains_rect (&self->clip.rect.bounds, &clip))
             {
               self->clip.type = GSK_GPU_CLIP_NONE;

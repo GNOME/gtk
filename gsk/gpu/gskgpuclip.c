@@ -30,6 +30,14 @@ gsk_gpu_clip_init_rect (GskGpuClip            *clip,
   gsk_rounded_rect_init_from_rect (&clip->rect, rect, 0);
 }
 
+static void
+gsk_gpu_clip_init_rounded_rect (GskGpuClip           *self,
+                                const GskRoundedRect *rect)
+{
+  self->type = GSK_GPU_CLIP_ROUNDED;
+  gsk_rounded_rect_init_copy (&self->rect, rect);
+}
+
 void
 gsk_gpu_clip_init_copy (GskGpuClip       *self,
                         const GskGpuClip *src)
@@ -129,6 +137,13 @@ gsk_gpu_clip_intersect_rounded_rect (GskGpuClip           *dest,
       break;
 
     case GSK_GPU_CLIP_NONE:
+      res = gsk_rounded_rect_intersect_with_rect (rounded, &src->rect.bounds, &dest->rect);
+      if (gsk_gpu_clip_init_after_intersection (dest, res))
+        break;
+      /* XXX: This may grow the bounds quite substantially */
+      gsk_gpu_clip_init_rounded_rect (dest, rounded);
+      break;
+
     case GSK_GPU_CLIP_CONTAINED:
     case GSK_GPU_CLIP_RECT:
       res = gsk_rounded_rect_intersect_with_rect (rounded, &src->rect.bounds, &dest->rect);
