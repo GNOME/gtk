@@ -5,6 +5,7 @@
 #include <gdk/gdk.h>
 #include <graphene.h>
 #include <gsk/gskroundedrect.h>
+#include <gsk/gskrectprivate.h>
 
 G_BEGIN_DECLS
 
@@ -59,15 +60,50 @@ gboolean                gsk_gpu_clip_transform                          (GskGpuC
                                                                          GskTransform           *transform,
                                                                          const graphene_rect_t  *viewport) G_GNUC_WARN_UNUSED_RESULT;
 
-gboolean                gsk_gpu_clip_contains_rect                      (const GskGpuClip    *self,
-                                                                         const graphene_point_t *offset,
-                                                                         const graphene_rect_t  *rect) G_GNUC_WARN_UNUSED_RESULT;
 gboolean                gsk_gpu_clip_may_intersect_rect                 (const GskGpuClip    *self,
                                                                          const graphene_point_t *offset,
                                                                          const graphene_rect_t  *rect) G_GNUC_WARN_UNUSED_RESULT;
-GskGpuShaderClip        gsk_gpu_clip_get_shader_clip                    (const GskGpuClip    *self,
-                                                                         const graphene_point_t *offset,
-                                                                         const graphene_rect_t  *rect);
+
+static inline gboolean G_GNUC_PURE G_GNUC_WARN_UNUSED_RESULT
+gsk_gpu_clip_contains_rect (const GskGpuClip       *self,
+                            const graphene_point_t *offset,
+                            const graphene_rect_t  *rect)
+{
+  graphene_rect_t r = *rect;
+  r.origin.x += offset->x;
+  r.origin.y += offset->y;
+
+  switch (self->type)
+    {
+    default:
+      g_assert_not_reached();
+    case GSK_GPU_CLIP_ALL_CLIPPED:
+      return FALSE;
+
+    case GSK_GPU_CLIP_NONE:
+    case GSK_GPU_CLIP_CONTAINED:
+    case GSK_GPU_CLIP_RECT:
+      return gsk_rect_contains_rect (&self->rect.bounds, &r);
+
+    case GSK_GPU_CLIP_ROUNDED:
+      return gsk_rounded_rect_contains_rect (&self->rect, &r);
+    }
+}
+
+static inline GskGpuShaderClip G_GNUC_PURE
+gsk_gpu_clip_get_shader_clip (const GskGpuClip       *self,
+                              const graphene_point_t *offset,
+                              const graphene_rect_t  *rect)
+{
+  if (self->type == GSK_GPU_CLIP_NONE ||
+      self->type == GSK_GPU_CLIP_CONTAINED ||
+      gsk_gpu_clip_contains_rect (self, offset, rect))
+    return GSK_GPU_SHADER_CLIP_NONE;
+  else if (self->type == GSK_GPU_CLIP_RECT)
+    return GSK_GPU_SHADER_CLIP_RECT;
+  else
+    return GSK_GPU_SHADER_CLIP_ROUNDED;
+}
 
 G_END_DECLS
 
