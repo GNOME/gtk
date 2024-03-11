@@ -40,7 +40,6 @@
 #include "gtkdragsourceprivate.h"
 #include "gtkdropcontrollermotion.h"
 #include "gtkemojichooser.h"
-#include "gtkimcontextprivate.h"
 #include "gtkimmulticontext.h"
 #include "gtkjoinedmenuprivate.h"
 #include "gtkmagnifierprivate.h"
@@ -5764,6 +5763,8 @@ gtk_text_view_click_gesture_released (GtkGestureClick *gesture,
                                       double           y,
                                       GtkTextView     *text_view)
 {
+  GdkEvent *event =
+    gtk_event_controller_get_current_event (GTK_EVENT_CONTROLLER (gesture));
   GtkTextViewPrivate *priv = text_view->priv;
   GtkTextBuffer *buffer;
   GtkTextIter start, end;
@@ -5773,7 +5774,7 @@ gtk_text_view_click_gesture_released (GtkGestureClick *gesture,
 
   if (gtk_text_iter_compare (&start, &end) == 0 &&
       gtk_text_iter_can_insert (&start, priv->editable))
-    gtk_im_context_activate_osk (priv->im_context);
+    gtk_im_context_activate_osk (priv->im_context, event);
 }
 
 static void

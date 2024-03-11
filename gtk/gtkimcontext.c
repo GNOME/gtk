@@ -18,7 +18,6 @@
 #include "config.h"
 #include <string.h>
 #include "gtkimcontext.h"
-#include "gtkimcontextprivate.h"
 #include "gtkprivate.h"
 #include "gtktypebuiltins.h"
 #include "gtkmarshalers.h"
@@ -1007,11 +1006,30 @@ gtk_im_context_set_property (GObject      *obj,
     }
 }
 
-void
-gtk_im_context_activate_osk (GtkIMContext *context)
+/**
+ * gtk_im_context_activate_osk:
+ * @context: a `GtkIMContext`
+ * @event: (nullable): a [class@Gdk.Event]
+ *
+ * Requests the platform to show an on-screen keyboard for user input.
+ *
+ * This method will return %TRUE if this request was actually performed
+ * to the platform, other environmental factors may result in an on-screen
+ * keyboard effectively not showing up.
+ *
+ * Returns: %TRUE if an on-screen keyboard could be requested to the platform.
+ *
+ * Since: 4.14
+ **/
+gboolean
+gtk_im_context_activate_osk (GtkIMContext *context,
+			     GdkEvent     *event)
 {
-  g_return_if_fail (GTK_IS_IM_CONTEXT (context));
+  g_return_val_if_fail (GTK_IS_IM_CONTEXT (context), FALSE);
+  g_return_val_if_fail (!event || GDK_IS_EVENT (event), FALSE);
 
-  if (GTK_IM_CONTEXT_GET_CLASS (context)->activate_osk)
-    GTK_IM_CONTEXT_GET_CLASS (context)->activate_osk (context);
+  if (!GTK_IM_CONTEXT_GET_CLASS (context)->activate_osk_with_event)
+    return FALSE;
+
+  return GTK_IM_CONTEXT_GET_CLASS (context)->activate_osk_with_event (context, event);
 }
