@@ -117,6 +117,58 @@ label_text_interface (void)
   g_object_unref (label);
 }
 
+/* Some of the text interface functions require an allocated widget */
+static void
+more_label_text_interface (void)
+{
+  GtkWidget *window, *label;
+  int width, height;
+  gboolean res;
+  unsigned int offset;
+
+  window = gtk_window_new ();
+  label = gtk_label_new ("AAA");
+  gtk_widget_set_halign (label, GTK_ALIGN_CENTER);
+  gtk_widget_set_valign (label, GTK_ALIGN_CENTER);
+  gtk_window_set_child (GTK_WINDOW (window), label);
+
+  gtk_window_present (GTK_WINDOW (window));
+
+  while (gtk_widget_get_width (label) == 0)
+    g_main_context_iteration (NULL, TRUE);
+
+  width = gtk_widget_get_width (label);
+  height = gtk_widget_get_height (label);
+  g_assert_true (width > 0);
+  g_assert_true (height > 0);
+
+  res = gtk_accessible_text_get_offset (GTK_ACCESSIBLE_TEXT (label),
+                                        &GRAPHENE_POINT_INIT (0, height / 2),
+                                        &offset);
+  g_assert_true (res);
+  g_assert_cmpuint (offset, ==, 0);
+
+  res = gtk_accessible_text_get_offset (GTK_ACCESSIBLE_TEXT (label),
+                                        &GRAPHENE_POINT_INIT (width / 2 - 1, height / 2),
+                                        &offset);
+  g_assert_true (res);
+  g_assert_cmpuint (offset, ==, 1);
+
+  res = gtk_accessible_text_get_offset (GTK_ACCESSIBLE_TEXT (label),
+                                        &GRAPHENE_POINT_INIT (width - width / 4, height / 2),
+                                        &offset);
+  g_assert_true (res);
+  g_assert_cmpuint (offset, ==, 2);
+
+  res = gtk_accessible_text_get_offset (GTK_ACCESSIBLE_TEXT (label),
+                                        &GRAPHENE_POINT_INIT (width - width / 12, height / 2),
+                                        &offset);
+  g_assert_true (res);
+  g_assert_cmpuint (offset, ==, 3);
+
+  gtk_window_destroy (GTK_WINDOW (window));
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -126,6 +178,7 @@ main (int argc, char *argv[])
   g_test_add_func ("/a11y/label/relations", label_relations);
   g_test_add_func ("/a11y/label/properties", label_properties);
   g_test_add_func ("/a11y/label/text-interface", label_text_interface);
+  g_test_add_func ("/a11y/label/more-text-interface", more_label_text_interface);
 
   return g_test_run ();
 }
