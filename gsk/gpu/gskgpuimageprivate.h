@@ -18,6 +18,10 @@ typedef struct _GskGpuImageClass GskGpuImageClass;
 struct _GskGpuImage
 {
   GObject parent_instance;
+  GskGpuImageFlags flags;
+  GdkMemoryFormat format;
+  gsize width;
+  gsize height;
 };
 
 struct _GskGpuImageClass
@@ -38,16 +42,35 @@ void                    gsk_gpu_image_setup                             (GskGpuI
 void                    gsk_gpu_image_toggle_ref_texture                (GskGpuImage            *self,
                                                                          GdkTexture             *texture);
 
-GdkMemoryFormat         gsk_gpu_image_get_format                        (GskGpuImage            *self);
-gsize                   gsk_gpu_image_get_width                         (GskGpuImage            *self);
-gsize                   gsk_gpu_image_get_height                        (GskGpuImage            *self);
-GskGpuImageFlags        gsk_gpu_image_get_flags                         (GskGpuImage            *self);
 void                    gsk_gpu_image_set_flags                         (GskGpuImage            *self,
                                                                          GskGpuImageFlags        flags);
 
 void                    gsk_gpu_image_get_projection_matrix             (GskGpuImage            *self,
                                                                          graphene_matrix_t      *out_projection);
 
+static inline GdkMemoryFormat
+gsk_gpu_image_get_format (GskGpuImage *self)
+{
+  return self->format;
+}
+
+static inline gsize
+gsk_gpu_image_get_width (GskGpuImage *self)
+{
+  return self->width;
+}
+
+static inline gsize
+gsk_gpu_image_get_height (GskGpuImage *self)
+{
+  return self->height;
+}
+
+static inline GskGpuImageFlags
+gsk_gpu_image_get_flags (GskGpuImage *self)
+{
+  return self->flags;
+}
 
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GskGpuImage, g_object_unref)
 
