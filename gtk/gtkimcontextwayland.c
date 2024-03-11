@@ -71,10 +71,6 @@ struct _GtkIMContextWayland
   GtkIMContextSimple parent_instance;
   GtkWidget *widget;
 
-  GtkGesture *gesture;
-  double press_x;
-  double press_y;
-
   struct {
     char *text;
     int cursor_idx;
@@ -521,57 +517,12 @@ gtk_im_context_wayland_finalize (GObject *object)
   gtk_im_context_wayland_focus_out (GTK_IM_CONTEXT (context));
 
   g_clear_object (&context->widget);
-  g_clear_object (&context->gesture);
   g_free (context->surrounding.text);
   g_free (context->current_preedit.text);
   g_free (context->pending_preedit.text);
   g_free (context->pending_commit);
 
   G_OBJECT_CLASS (gtk_im_context_wayland_parent_class)->finalize (object);
-}
-
-static void
-pressed_cb (GtkGestureClick     *gesture,
-            int                  n_press,
-            double               x,
-            double               y,
-            GtkIMContextWayland *context)
-{
-  if (n_press == 1)
-    {
-      context->press_x = x;
-      context->press_y = y;
-    }
-}
-
-static void
-released_cb (GtkGestureClick     *gesture,
-             int                  n_press,
-             double               x,
-             double               y,
-             GtkIMContextWayland *context)
-{
-  GtkIMContextWaylandGlobal *global;
-  GtkInputHints hints;
-
-  global = gtk_im_context_wayland_get_global (context);
-  if (global == NULL)
-    return;
-
-  g_object_get (context, "input-hints", &hints, NULL);
-
-  if (global->focused &&
-      n_press == 1 &&
-      (hints & GTK_INPUT_HINT_INHIBIT_OSK) == 0 &&
-      !gtk_drag_check_threshold_double (context->widget,
-                                        context->press_x,
-                                        context->press_y,
-                                        x, y))
-    {
-      zwp_text_input_v3_enable (global->text_input);
-      notify_im_change (GTK_IM_CONTEXT_WAYLAND (context),
-                        ZWP_TEXT_INPUT_V3_CHANGE_CAUSE_OTHER);
-    }
 }
 
 static void
@@ -586,34 +537,7 @@ gtk_im_context_wayland_set_client_widget (GtkIMContext *context,
   if (context_wayland->widget)
     gtk_im_context_wayland_focus_out (context);
 
-  if (context_wayland->widget && context_wayland->gesture)
-    {
-      gtk_widget_remove_controller (context_wayland->widget,
-                                    GTK_EVENT_CONTROLLER (context_wayland->gesture));
-      context_wayland->gesture = NULL;
-    }
-
   g_set_object (&context_wayland->widget, widget);
-
-  if (widget &&
-      !GTK_IS_TEXT (widget) &&
-      !GTK_IS_TEXT_VIEW (widget))
-    {
-      GtkGesture *gesture;
-
-      gesture = gtk_gesture_click_new ();
-      gtk_event_controller_set_static_name (GTK_EVENT_CONTROLLER (gesture), "wayland-im-context-click");
-      gtk_event_controller_set_propagation_phase (GTK_EVENT_CONTROLLER (gesture),
-                                                  GTK_PHASE_CAPTURE);
-      g_signal_connect (gesture, "pressed",
-                        G_CALLBACK (pressed_cb), context);
-      g_signal_connect (gesture, "released",
-                        G_CALLBACK (released_cb), context);
-
-      gtk_widget_add_controller (context_wayland->widget,
-                                 GTK_EVENT_CONTROLLER (gesture));
-      context_wayland->gesture = gesture;
-    }
 }
 
 static void
@@ -847,9 +771,6 @@ gtk_im_context_wayland_focus_in (GtkIMContext *context)
   if (!global->text_input)
     return;
 
-  if (self->gesture)
-    gtk_event_controller_reset (GTK_EVENT_CONTROLLER (self->gesture));
-
   if (global->focused)
     enable (self, global);
 }
@@ -884,7 +805,6 @@ gtk_im_context_wayland_set_cursor_location (GtkIMContext *context,
                                             GdkRectangle *rect)
 {
   GtkIMContextWayland *context_wayland;
-  int side;
 
   context_wayland = GTK_IM_CONTEXT_WAYLAND (context);
 
@@ -893,20 +813,6 @@ gtk_im_context_wayland_set_cursor_location (GtkIMContext *context,
       context_wayland->cursor_rect.width == rect->width &&
       context_wayland->cursor_rect.height == rect->height)
     return;
-
-  /* Reset the gesture if the cursor changes too far (eg. clicking
-   * between disjoint positions in the text).
-   *
-   * Still Allow some jittering (a square almost double the cursor rect height
-   * on either side) as clicking on the exact same position between characters
-   * is hard.
-   */
-  side = context_wayland->cursor_rect.height;
-
-  if (context_wayland->gesture &&
-      (ABS (rect->x - context_wayland->cursor_rect.x) >= side ||
-       ABS (rect->y - context_wayland->cursor_rect.y) >= side))
-    gtk_event_controller_reset (GTK_EVENT_CONTROLLER (context_wayland->gesture));
 
   context_wayland->cursor_rect = *rect;
 }
@@ -974,18 +880,20 @@ gtk_im_context_wayland_commit (GtkIMContext *context,
                     ZWP_TEXT_INPUT_V3_CHANGE_CAUSE_INPUT_METHOD);
 }
 
-static void
-gtk_im_context_wayland_activate_osk (GtkIMContext *context)
+static gboolean
+gtk_im_context_wayland_activate_osk_with_event (GtkIMContext *context,
+                                                GdkEvent     *event)
 {
   GtkIMContextWaylandGlobal *global;
 
   global = gtk_im_context_wayland_get_global (GTK_IM_CONTEXT_WAYLAND (context));
   if (global == NULL)
-    return;
+    return FALSE;
 
   zwp_text_input_v3_enable (global->text_input);
   notify_im_change (GTK_IM_CONTEXT_WAYLAND (context),
                     ZWP_TEXT_INPUT_V3_CHANGE_CAUSE_OTHER);
+  return TRUE;
 }
 
 static void
@@ -1007,7 +915,7 @@ gtk_im_context_wayland_class_init (GtkIMContextWaylandClass *klass)
   im_context_class->set_surrounding_with_selection = gtk_im_context_wayland_set_surrounding;
   im_context_class->get_surrounding_with_selection = gtk_im_context_wayland_get_surrounding;
   im_context_class->commit = gtk_im_context_wayland_commit;
-  im_context_class->activate_osk = gtk_im_context_wayland_activate_osk;
+  im_context_class->activate_osk_with_event = gtk_im_context_wayland_activate_osk_with_event;
 }
 
 static void

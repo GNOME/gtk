@@ -44,7 +44,6 @@
 #include "gtkgestureclick.h"
 #include "gtkgesturesingle.h"
 #include "gtkimageprivate.h"
-#include "gtkimcontextprivate.h"
 #include "gtkimcontextsimple.h"
 #include "gtkimmulticontext.h"
 #include "gtkjoinedmenuprivate.h"
@@ -2927,11 +2926,13 @@ gtk_text_click_gesture_released (GtkGestureClick *gesture,
                                  GtkText         *self)
 {
   GtkTextPrivate *priv = gtk_text_get_instance_private (self);
+  GdkEvent *event =
+    gtk_event_controller_get_current_event (GTK_EVENT_CONTROLLER (gesture));
 
   if (n_press == 1 &&
       !priv->in_drag &&
       priv->current_pos == priv->selection_bound)
-    gtk_im_context_activate_osk (priv->im_context);
+    gtk_im_context_activate_osk (priv->im_context, event);
 }
 
 static char *
