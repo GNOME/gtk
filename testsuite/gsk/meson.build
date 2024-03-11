@@ -466,6 +466,9 @@ if os_linux
     'stop_offloading.node',
     'source.node',
     'nested.node',
+    'clipped.node',
+    'not-clipped.node',
+    'complex-clip.node',
   ]
 
   foreach test : offload_tests
