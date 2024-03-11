@@ -2,26 +2,62 @@
 
 #include "gskgputypesprivate.h"
 
+typedef struct _GskGpuImageEntry GskGpuImageEntry;
+typedef struct _GskGpuBufferEntry GskGpuBufferEntry;
+
+struct _GskGpuImageEntry
+{
+  GskGpuImage *image;
+  GskGpuSampler sampler;
+  guint32 descriptor;
+};
+
+struct _GskGpuBufferEntry
+{
+  GskGpuBuffer *buffer;
+  guint32 descriptor;
+};
+
+#define INCLUDE_DECL 1
+
+#define GDK_ARRAY_NAME gsk_gpu_image_entries
+#define GDK_ARRAY_TYPE_NAME GskGpuImageEntries
+#define GDK_ARRAY_ELEMENT_TYPE GskGpuImageEntry
+#define GDK_ARRAY_BY_VALUE 1
+#define GDK_ARRAY_PREALLOC 16
+#define GDK_ARRAY_NO_MEMSET 1
+#include "gdk/gdkarrayimpl.c"
+
+#define INCLUDE_DECL 1
+
+#define GDK_ARRAY_NAME gsk_gpu_buffer_entries
+#define GDK_ARRAY_TYPE_NAME GskGpuBufferEntries
+#define GDK_ARRAY_ELEMENT_TYPE GskGpuBufferEntry
+#define GDK_ARRAY_BY_VALUE 1
+#define GDK_ARRAY_PREALLOC 4
+#define GDK_ARRAY_NO_MEMSET 1
+#include "gdk/gdkarrayimpl.c"
+
 G_BEGIN_DECLS
 
-#define GSK_TYPE_GPU_DESCRIPTORS         (gsk_gpu_descriptors_get_type ())
-#define GSK_GPU_DESCRIPTORS(o)           (G_TYPE_CHECK_INSTANCE_CAST ((o), GSK_TYPE_GPU_DESCRIPTORS, GskGpuDescriptors))
-#define GSK_GPU_DESCRIPTORS_CLASS(k)     (G_TYPE_CHECK_CLASS_CAST ((k), GSK_TYPE_GPU_DESCRIPTORS, GskGpuDescriptorsClass))
-#define GSK_IS_GPU_DESCRIPTORS(o)        (G_TYPE_CHECK_INSTANCE_TYPE ((o), GSK_TYPE_GPU_DESCRIPTORS))
-#define GSK_IS_GPU_DESCRIPTORS_CLASS(k)  (G_TYPE_CHECK_CLASS_TYPE ((k), GSK_TYPE_GPU_DESCRIPTORS))
-#define GSK_GPU_DESCRIPTORS_GET_CLASS(o) (G_TYPE_INSTANCE_GET_CLASS ((o), GSK_TYPE_GPU_DESCRIPTORS, GskGpuDescriptorsClass))
-
+typedef struct _GskGpuDescriptors GskGpuDescriptors;
 typedef struct _GskGpuDescriptorsClass GskGpuDescriptorsClass;
+
+#define GSK_GPU_DESCRIPTORS(d) ((GskGpuDescriptors *) (d))
 
 struct _GskGpuDescriptors
 {
-  GObject parent_instance;
+  GskGpuDescriptorsClass *desc_class;
+
+  int ref_count;
+
+  GskGpuImageEntries images;
+  GskGpuBufferEntries buffers;
 };
 
 struct _GskGpuDescriptorsClass
 {
-  GObjectClass parent_class;
-
+  void                  (* finalize)                                    (GskGpuDescriptors      *self);
   gboolean              (* add_image)                                   (GskGpuDescriptors      *self,
                                                                          GskGpuImage            *image,
                                                                          GskGpuSampler           sampler,
@@ -31,7 +67,9 @@ struct _GskGpuDescriptorsClass
                                                                          guint32                *out_id);
 };
 
-GType                   gsk_gpu_descriptors_get_type                    (void) G_GNUC_CONST;
+GskGpuDescriptors *     gsk_gpu_descriptors_ref                         (GskGpuDescriptors      *self);
+void                    gsk_gpu_descriptors_unref                       (GskGpuDescriptors      *self);
+
 
 gsize                   gsk_gpu_descriptors_get_n_images                (GskGpuDescriptors      *self);
 gsize                   gsk_gpu_descriptors_get_n_buffers               (GskGpuDescriptors      *self);
@@ -55,7 +93,7 @@ gboolean                gsk_gpu_descriptors_add_buffer                  (GskGpuD
                                                                          GskGpuBuffer           *buffer,
                                                                          guint32                *out_descriptor);
 
-
-G_DEFINE_AUTOPTR_CLEANUP_FUNC(GskGpuDescriptors, g_object_unref)
+void gsk_gpu_descriptors_finalize (GskGpuDescriptors *self);
+void gsk_gpu_descriptors_init     (GskGpuDescriptors *self);
 
 G_END_DECLS
