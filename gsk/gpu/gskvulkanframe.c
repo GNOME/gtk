@@ -13,10 +13,16 @@
 #include "gdk/gdkdisplayprivate.h"
 #include "gdk/gdkdmabuftextureprivate.h"
 
+static inline void
+gsk_vulkan_real_descriptors_unref (GskVulkanRealDescriptors *desc)
+{
+  gsk_gpu_descriptors_unref (GSK_GPU_DESCRIPTORS (desc));
+}
+
 #define GDK_ARRAY_NAME gsk_descriptors
 #define GDK_ARRAY_TYPE_NAME GskDescriptors
 #define GDK_ARRAY_ELEMENT_TYPE GskVulkanRealDescriptors *
-#define GDK_ARRAY_FREE_FUNC g_object_unref
+#define GDK_ARRAY_FREE_FUNC gsk_vulkan_real_descriptors_unref
 #define GDK_ARRAY_NO_MEMSET 1
 #include "gdk/gdkarrayimpl.c"
 
@@ -262,7 +268,7 @@ gsk_vulkan_frame_create_descriptors (GskGpuFrame *frame)
       desc = gsk_vulkan_real_descriptors_new (self);
       gsk_descriptors_append (&self->descriptors, desc);
 
-      return GSK_GPU_DESCRIPTORS (g_object_ref (desc));
+      return gsk_gpu_descriptors_ref (GSK_GPU_DESCRIPTORS (desc));
     }
 }
 

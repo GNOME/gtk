@@ -6,22 +6,13 @@
 #include "gskvulkanframeprivate.h"
 #include "gskvulkanimageprivate.h"
 
-G_DEFINE_TYPE (GskVulkanDescriptors, gsk_vulkan_descriptors, GSK_TYPE_GPU_DESCRIPTORS)
-
-static void
-gsk_vulkan_descriptors_class_init (GskVulkanDescriptorsClass *klass)
-{
-}
-
-static void
-gsk_vulkan_descriptors_init (GskVulkanDescriptors *self)
-{
-}
-
 GskVulkanPipelineLayout *
 gsk_vulkan_descriptors_get_pipeline_layout (GskVulkanDescriptors *self)
 {
-  return GSK_VULKAN_DESCRIPTORS_GET_CLASS (self)->get_pipeline_layout (self);
+  GskGpuDescriptors *desc = GSK_GPU_DESCRIPTORS (self);
+  GskVulkanDescriptorsClass *class = GSK_VULKAN_DESCRIPTORS_CLASS (desc->desc_class);
+
+  return class->get_pipeline_layout (self);
 }
 
 void
@@ -48,5 +39,20 @@ gsk_vulkan_descriptors_bind (GskVulkanDescriptors *self,
                              GskVulkanDescriptors *previous,
                              VkCommandBuffer       vk_command_buffer)
 {
-  return GSK_VULKAN_DESCRIPTORS_GET_CLASS (self)->bind (self, previous, vk_command_buffer);
+  GskGpuDescriptors *desc = GSK_GPU_DESCRIPTORS (self);
+  GskVulkanDescriptorsClass *class = GSK_VULKAN_DESCRIPTORS_CLASS (desc->desc_class);
+
+  return class->bind (self, previous, vk_command_buffer);
+}
+
+void
+gsk_vulkan_descriptors_init (GskVulkanDescriptors *self)
+{
+  gsk_gpu_descriptors_init ((GskGpuDescriptors *) self);
+}
+
+void
+gsk_vulkan_descriptors_finalize (GskVulkanDescriptors *self)
+{
+  gsk_gpu_descriptors_finalize ((GskGpuDescriptors *) self);
 }

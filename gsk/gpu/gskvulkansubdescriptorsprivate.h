@@ -4,9 +4,16 @@
 
 G_BEGIN_DECLS
 
-#define GSK_TYPE_VULKAN_SUB_DESCRIPTORS (gsk_vulkan_sub_descriptors_get_type ())
+typedef struct _GskVulkanSubDescriptors GskVulkanSubDescriptors;
 
-G_DECLARE_FINAL_TYPE (GskVulkanSubDescriptors, gsk_vulkan_sub_descriptors, GSK, VULKAN_SUB_DESCRIPTORS, GskVulkanDescriptors)
+#define GSK_VULKAN_SUB_DESCRIPTORS(d) ((GskVulkanSubDescriptors *) (d))
+
+struct _GskVulkanSubDescriptors
+{
+  GskVulkanDescriptors parent_instance;
+
+  GskVulkanDescriptors *parent;
+};
 
 GskVulkanSubDescriptors *       gsk_vulkan_sub_descriptors_new          (GskVulkanDescriptors           *parent);
 

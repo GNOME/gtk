@@ -2,9 +2,7 @@
 
 #include "gskvulkanrealdescriptorsprivate.h"
 
-#include "gskvulkanbufferprivate.h"
-#include "gskvulkanframeprivate.h"
-#include "gskvulkanimageprivate.h"
+#define INCLUDE_IMPL 1
 
 #define GDK_ARRAY_NAME gsk_descriptor_image_infos
 #define GDK_ARRAY_TYPE_NAME GskDescriptorImageInfos
@@ -14,6 +12,8 @@
 #define GDK_ARRAY_NO_MEMSET 1
 #include "gdk/gdkarrayimpl.c"
 
+#define INCLUDE_IMPL 1
+
 #define GDK_ARRAY_NAME gsk_descriptor_buffer_infos
 #define GDK_ARRAY_TYPE_NAME GskDescriptorBufferInfos
 #define GDK_ARRAY_ELEMENT_TYPE VkDescriptorBufferInfo
@@ -22,30 +22,14 @@
 #define GDK_ARRAY_NO_MEMSET 1
 #include "gdk/gdkarrayimpl.c"
 
+#define INCLUDE_IMPL 1
+
 #define GDK_ARRAY_NAME gsk_samplers
 #define GDK_ARRAY_TYPE_NAME GskSamplers
 #define GDK_ARRAY_ELEMENT_TYPE VkSampler
 #define GDK_ARRAY_PREALLOC 32
 #define GDK_ARRAY_NO_MEMSET 1
 #include "gdk/gdkarrayimpl.c"
-
-struct _GskVulkanRealDescriptors
-{
-  GskVulkanDescriptors parent_instance;
-
-  GskVulkanFrame *frame; /* no reference, the frame owns us */
-
-  GskVulkanPipelineLayout *pipeline_layout;
-
-  GskSamplers immutable_samplers;
-  GskDescriptorImageInfos descriptor_immutable_images;
-  GskDescriptorImageInfos descriptor_images;
-  GskDescriptorBufferInfos descriptor_buffers;
-
-  VkDescriptorSet descriptor_sets[GSK_VULKAN_N_DESCRIPTOR_SETS];
-};
-
-G_DEFINE_TYPE (GskVulkanRealDescriptors, gsk_vulkan_real_descriptors, GSK_TYPE_VULKAN_DESCRIPTORS)
 
 static GskVulkanPipelineLayout *
 gsk_vulkan_real_descriptors_get_pipeline_layout (GskVulkanDescriptors *desc)
@@ -154,9 +138,9 @@ gsk_vulkan_real_descriptors_add_buffer (GskGpuDescriptors *desc,
 }
 
 static void
-gsk_vulkan_real_descriptors_finalize (GObject *object)
+gsk_vulkan_real_descriptors_finalize (GskGpuDescriptors *desc)
 {
-  GskVulkanRealDescriptors *self = GSK_VULKAN_REAL_DESCRIPTORS (object);
+  GskVulkanRealDescriptors *self = GSK_VULKAN_REAL_DESCRIPTORS (desc);
 
   gsk_samplers_clear (&self->immutable_samplers);
   gsk_descriptor_image_infos_clear (&self->descriptor_immutable_images);
@@ -166,28 +150,25 @@ gsk_vulkan_real_descriptors_finalize (GObject *object)
   gsk_vulkan_device_release_pipeline_layout (GSK_VULKAN_DEVICE (gsk_gpu_frame_get_device (GSK_GPU_FRAME (self->frame))),
                                              self->pipeline_layout);
 
-  G_OBJECT_CLASS (gsk_vulkan_real_descriptors_parent_class)->finalize (object);
+  gsk_vulkan_descriptors_finalize ((GskVulkanDescriptors *) desc);
 }
 
-static void
-gsk_vulkan_real_descriptors_class_init (GskVulkanRealDescriptorsClass *klass)
+static GskVulkanDescriptorsClass GSK_VULKAN_REAL_DESCRIPTORS_CLASS =
 {
-  GskVulkanDescriptorsClass *vulkan_descriptors_class = GSK_VULKAN_DESCRIPTORS_CLASS (klass);
-  GskGpuDescriptorsClass *descriptors_class = GSK_GPU_DESCRIPTORS_CLASS (klass);
-  GObjectClass *object_class = G_OBJECT_CLASS (klass);
-
-  object_class->finalize = gsk_vulkan_real_descriptors_finalize;
-
-  descriptors_class->add_image = gsk_vulkan_real_descriptors_add_image;
-  descriptors_class->add_buffer = gsk_vulkan_real_descriptors_add_buffer;
-
-  vulkan_descriptors_class->get_pipeline_layout = gsk_vulkan_real_descriptors_get_pipeline_layout;
-  vulkan_descriptors_class->bind = gsk_vulkan_real_descriptors_bind;
-}
+  .parent_class = (GskGpuDescriptorsClass) {
+    .finalize = gsk_vulkan_real_descriptors_finalize,
+    .add_image = gsk_vulkan_real_descriptors_add_image,
+    .add_buffer = gsk_vulkan_real_descriptors_add_buffer,
+   },
+  .get_pipeline_layout = gsk_vulkan_real_descriptors_get_pipeline_layout,
+  .bind = gsk_vulkan_real_descriptors_bind
+};
 
 static void
 gsk_vulkan_real_descriptors_init (GskVulkanRealDescriptors *self)
 {
+  gsk_vulkan_descriptors_init (GSK_VULKAN_DESCRIPTORS (self));
+
   gsk_samplers_init (&self->immutable_samplers);
   gsk_descriptor_image_infos_init (&self->descriptor_immutable_images);
   gsk_descriptor_image_infos_init (&self->descriptor_images);
@@ -198,8 +179,15 @@ GskVulkanRealDescriptors *
 gsk_vulkan_real_descriptors_new (GskVulkanFrame *frame)
 {
   GskVulkanRealDescriptors *self;
+  GskGpuDescriptors *desc;
 
-  self = g_object_new (GSK_TYPE_VULKAN_REAL_DESCRIPTORS, NULL);
+  self = g_new0 (GskVulkanRealDescriptors, 1);
+
+  desc = GSK_GPU_DESCRIPTORS (self);
+  desc->ref_count = 1;
+  desc->desc_class = (GskGpuDescriptorsClass *) &GSK_VULKAN_REAL_DESCRIPTORS_CLASS;
+
+  gsk_vulkan_real_descriptors_init (self);
 
   self->frame = frame;
 
