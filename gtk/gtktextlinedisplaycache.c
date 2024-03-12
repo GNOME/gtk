@@ -50,6 +50,9 @@ struct _GtkTextLineDisplayCache
 #endif
 };
 
+static GQueue purge_in_idle;
+static guint purge_in_idle_source;
+
 #if DEBUG_LINE_DISPLAY_CACHE
 # define STAT_ADD(val,n) ((val) += n)
 # define STAT_INC(val)   STAT_ADD(val,1)
@@ -78,7 +81,7 @@ gtk_text_line_display_cache_new (void)
   GtkTextLineDisplayCache *ret;
 
   ret = g_new0 (GtkTextLineDisplayCache, 1);
-  ret->sorted_by_line = g_sequence_new ((GDestroyNotify)gtk_text_line_display_unref);
+  ret->sorted_by_line = g_sequence_new (NULL);
   ret->line_to_display = g_hash_table_new (NULL, NULL);
   ret->mru_size = DEFAULT_MRU_SIZE;
 
@@ -97,6 +100,8 @@ gtk_text_line_display_cache_free (GtkTextLineDisplayCache *cache)
 #endif
 
   gtk_text_line_display_cache_invalidate (cache);
+
+  g_assert (g_sequence_get_begin_iter (cache->sorted_by_line) == g_sequence_get_end_iter (cache->sorted_by_line));
 
   g_clear_pointer (&cache->evict_source, g_source_destroy);
   g_clear_pointer (&cache->sorted_by_line, g_sequence_free);
@@ -211,6 +216,31 @@ gtk_text_line_display_cache_take_display (GtkTextLineDisplayCache *cache,
     }
 }
 
+static gboolean
+purge_text_line_display_in_idle (gpointer data)
+{
+  GQueue q = purge_in_idle;
+
+  purge_in_idle.head = NULL;
+  purge_in_idle.tail = NULL;
+  purge_in_idle.length = 0;
+
+  while (q.head)
+    {
+      GtkTextLineDisplay *display = q.head->data;
+      g_queue_unlink (&q, &display->mru_link);
+      gtk_text_line_display_unref (display);
+    }
+
+  if (purge_in_idle.head == NULL)
+    {
+      purge_in_idle_source = 0;
+      return G_SOURCE_REMOVE;
+    }
+
+  return G_SOURCE_CONTINUE;
+}
+
 /*
  * gtk_text_line_display_cache_invalidate_display:
  * @cache: a GtkTextLineDisplayCache
@@ -250,7 +280,28 @@ gtk_text_line_display_cache_invalidate_display (GtkTextLineDisplayCache *cache,
       g_queue_unlink (&cache->mru, &display->mru_link);
 
       if (iter != NULL)
-        g_sequence_remove (iter);
+        {
+          g_sequence_remove (iter);
+
+          g_queue_push_head_link (&purge_in_idle, &display->mru_link);
+
+          /* Purging a lot of GtkTextLineDisplay while processing a frame
+           * can increase the chances that we miss our frame deadline. Instead
+           * defer that work to right after the frame has completed. This can
+           * help situations where we have large, zoomed out TextView like
+           * those used in an overview map.
+           */
+          if G_UNLIKELY (purge_in_idle_source == 0)
+            {
+              GSource *source;
+
+              purge_in_idle_source = g_idle_add_full (G_PRIORITY_LOW,
+                                                      purge_text_line_display_in_idle,
+                                                      NULL, NULL);
+              source = g_main_context_find_source_by_id (NULL, purge_in_idle_source);
+              g_source_set_static_name (source, "[gtk+ line-display-cache-gc]");
+            }
+        }
     }
 
   STAT_INC (cache->inval);
