@@ -9,6 +9,7 @@ struct _GskGLMapBuffer
   GLenum target;
   GLuint buffer_id;
   GLenum access;
+  gsize size;
 };
 
 G_DEFINE_TYPE (GskGLMapBuffer, gsk_gl_map_buffer, GSK_TYPE_GPU_BUFFER)
@@ -27,10 +28,26 @@ static guchar *
 gsk_gl_map_buffer_map (GskGpuBuffer *buffer)
 {
   GskGLMapBuffer *self = GSK_GL_MAP_BUFFER (buffer);
+  int flags;
 
   gsk_gl_map_buffer_bind (self);
 
-  return glMapBuffer (self->target, self->access);
+  switch (self->access)
+    {
+    case GL_READ_ONLY:
+      flags = GL_MAP_READ_BIT;
+      break;
+    case GL_WRITE_ONLY:
+      flags = GL_MAP_WRITE_BIT;
+      break;
+    case GL_READ_WRITE:
+      flags = GL_MAP_READ_BIT | GL_MAP_WRITE_BIT;
+      break;
+    default:
+      g_assert_not_reached ();
+    }
+
+  return glMapBufferRange (self->target, 0, self->size, flags);
 }
 
 static void
@@ -73,6 +90,7 @@ gsk_gl_map_buffer_new (GLenum target,
 
   self->target = target;
   self->access = access;
+  self->size = size;
 
   glGenBuffers (1, &self->buffer_id);
   glBindBuffer (target, self->buffer_id);
