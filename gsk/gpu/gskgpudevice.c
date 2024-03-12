@@ -918,7 +918,13 @@ gsk_gpu_device_lookup_glyph_image (GskGpuDevice           *self,
       return cache->image;
     }
 
-  scaled_font = gsk_get_scaled_font (font, scale);
+  /* Note: we want to scale the font to the required size *and* ensure that
+   * metrics hinting is off. The latter is necessary since pango lets metrics
+   * hinting influence the rendering of hexboxes, and we get bad outcomes if
+   * that happens.
+   */
+  scaled_font = gsk_reload_font (font, scale, CAIRO_HINT_METRICS_OFF, CAIRO_HINT_STYLE_DEFAULT, CAIRO_ANTIALIAS_DEFAULT);
+
   subpixel_x = (flags & 3) / 4.f;
   subpixel_y = ((flags >> 2) & 3) / 4.f;
   pango_font_get_glyph_extents (scaled_font, glyph, &ink_rect, NULL);

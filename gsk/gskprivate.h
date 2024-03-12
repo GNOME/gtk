@@ -8,12 +8,11 @@ G_BEGIN_DECLS
 
 void       gsk_ensure_resources  (void);
 
-PangoFont *gsk_get_scaled_font   (PangoFont *font,
-                                  float      scale);
-
-PangoFont *gsk_get_hinted_font   (PangoFont            *font,
-                                  cairo_hint_style_t    hint_style,
-                                  cairo_antialias_t     antialias);
+PangoFont *gsk_reload_font (PangoFont            *font,
+                            float                 scale,
+                            cairo_hint_metrics_t  hint_metrics,
+                            cairo_hint_style_t    hint_style,
+                            cairo_antialias_t     antialias);
 
 void       gsk_get_unhinted_glyph_string_extents (PangoGlyphString *glyphs,
                                                   PangoFont        *font,

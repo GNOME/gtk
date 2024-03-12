@@ -2345,7 +2345,7 @@ parse_text_node (GtkCssParser *parser,
       g_assert (font);
     }
 
-  hinted = gsk_get_hinted_font (font, hint_style, antialias);
+  hinted = gsk_reload_font (font, 1.0, CAIRO_HINT_METRICS_OFF, hint_style, antialias);
   g_object_unref (font);
   font = hinted;
 
