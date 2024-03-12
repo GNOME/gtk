@@ -1,4 +1,4 @@
-Overview of Changes in 4.14.0, xx-xx-xxxx
+Overview of Changes in 4.14.0, 12-03-2024
 =========================================
 
 Note: The new renderers and dmabuf support are using graphics drivers
@@ -9,12 +9,16 @@ recommended to use the latest mesa release (24.x) with the new renderers.
 
 * GtkTextView:
  - Don't snapshot children twice
+ - Don't blink the cursor when hidden
 
 * GtkEmojiChooser:
  - Fix presentation selector handling
 
 * GtkSnapshot:
  - Fix wrong nodes with transformed shadows
+
+* GtkIMContext:
+ - Make gtk_im_context_activate_osk public
 
 * Accessibility:
  - Implement get_contents_at for all our text widgets
@@ -25,6 +29,8 @@ recommended to use the latest mesa release (24.x) with the new renderers.
  - Round vertical glyph position to a device pixel position if the font is hinted
  - Fix problems with clip handling
  - Make vulkan and ngl match their font handling
+ - Fix some corner-cases with offloading and clips
+ - Fix problem with rendering of missing glyphs in hinted fonts
 
 * MacOs:
  - Implement cursor-from-texture
@@ -39,7 +45,9 @@ recommended to use the latest mesa release (24.x) with the new renderers.
  Lithuanian
  Norwegian Bokmål
  Slovenian
+ Spanish
  Turkish
+
 
 Overview of Changes in 4.13.9, 02-03-2024
 =========================================
