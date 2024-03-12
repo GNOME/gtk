@@ -886,6 +886,14 @@ gesture_drag_begin_cb (GtkGestureDrag *gesture,
   GdkDevice *device;
   gboolean is_touch;
 
+  /* Only drag the handle when it's visible */
+  if (!gtk_widget_get_child_visible (paned->handle_widget))
+    {
+      gtk_gesture_set_state (GTK_GESTURE (gesture),
+                             GTK_EVENT_SEQUENCE_DENIED);
+      return;
+    }
+
   sequence = gtk_gesture_single_get_current_sequence (GTK_GESTURE_SINGLE (gesture));
   event = gtk_gesture_get_last_event (GTK_GESTURE (gesture), sequence);
   device = gdk_event_get_device (event);
