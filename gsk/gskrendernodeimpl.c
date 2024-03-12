@@ -5833,6 +5833,7 @@ gsk_text_node_new (PangoFont              *font,
   self = gsk_render_node_alloc (GSK_TEXT_NODE);
   node = (GskRenderNode *) self;
   node->offscreen_for_opacity = FALSE;
+  node->font_hinting = gsk_font_get_hint_style (font) != CAIRO_HINT_STYLE_NONE;
 
   self->fontmap = g_object_ref (pango_font_get_font_map (font));
   self->font = g_object_ref (font);

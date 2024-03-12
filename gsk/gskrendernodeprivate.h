@@ -34,6 +34,7 @@ struct _GskRenderNode
 
   guint preferred_depth : 2;
   guint offscreen_for_opacity : 1;
+  guint font_hinting  : 1;
 };
 
 typedef struct
@@ -99,6 +100,12 @@ GdkMemoryDepth  gsk_render_node_get_preferred_depth     (const GskRenderNode    
 gboolean        gsk_container_node_is_disjoint          (const GskRenderNode         *node) G_GNUC_PURE;
 
 gboolean        gsk_render_node_use_offscreen_for_opacity (const GskRenderNode       *node) G_GNUC_PURE;
+
+static inline gboolean
+gsk_text_node_use_font_hinting (const GskRenderNode *node)
+{
+  return node->font_hinting;
+}
 
 #define gsk_render_node_ref(node)   _gsk_render_node_ref(node)
 #define gsk_render_node_unref(node) _gsk_render_node_unref(node)
