@@ -11,20 +11,21 @@
 # Francisco Javier F. Serrador <serrador@cvs.gnome.org>, 2003 - 2006.
 # Jorge González <jorgegonz@svn.gnome.org>, 2007, 2008, 2009, 2010, 2011.
 # Daniel Mustieles <daniel.mustieles@gmail.com>, 2021-2024.
+# Daniel Mustieles García <daniel.mustieles@gmail.com>, 2024.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2024-02-23 01:06+0000\n"
-"PO-Revision-Date: 2024-02-26 16:25+0100\n"
-"Last-Translator: Daniel Mustieles <daniel.mustieles@gmail.com>\n"
+"POT-Creation-Date: 2024-03-11 18:00+0000\n"
+"PO-Revision-Date: 2024-03-12 09:34+0100\n"
+"Last-Translator: Daniel Mustieles García <daniel.mustieles@gmail.com>\n"
 "Language-Team: Spanish - Spain <gnome-es-list@gnome.org>\n"
 "Language: es_ES\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Gtranslator 45.3\n"
+"X-Generator: Gtranslator 42.0\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
 
 #: gdk/broadway/gdkbroadway-server.c:135
@@ -60,7 +61,7 @@ msgstr "No se pudo proporcionar el contenido como %s"
 msgid "The current backend does not support OpenGL"
 msgstr "El «backend» actual no soporta OpenGL"
 
-#: gdk/gdkdisplay.c:1315 gdk/gdkvulkancontext.c:1596
+#: gdk/gdkdisplay.c:1315 gdk/gdkvulkancontext.c:1601
 msgid "Vulkan support disabled via GDK_DEBUG"
 msgstr "Soporte de Vulkan desactivado mediante GDK_DEBUG"
 
@@ -132,22 +133,22 @@ msgstr "No se permite la API de GL"
 msgid "Unable to create a GL context"
 msgstr "No se pudo crear un contexto GL"
 
-#: gdk/gdkglcontext.c:1303
+#: gdk/gdkglcontext.c:1304
 msgid "OpenGL ES disabled via GDK_DEBUG"
 msgstr "OpenGL ES desactivado mediante GDK_DEBUG"
 
-#: gdk/gdkglcontext.c:1315
+#: gdk/gdkglcontext.c:1316
 msgid "OpenGL disabled via GDK_DEBUG"
 msgstr "OpenGL mediante GDK_DEBUG"
 
-#: gdk/gdkglcontext.c:1326
+#: gdk/gdkglcontext.c:1327
 #, c-format
 msgid "Application does not support %s API"
 msgstr "La aplicación no soporta la API %s"
 
 #. translators: This is about OpenGL backend names, like
 #. * "Trying to use X11 GLX, but EGL is already in use"
-#: gdk/gdkglcontext.c:2112
+#: gdk/gdkglcontext.c:2113
 #, c-format
 msgid "Trying to use %s, but %s is already in use"
 msgstr "Intentando usar %s pero %s ya está en uso"
@@ -640,22 +641,22 @@ msgstr ""
 #, c-format
 msgid "Cannot set clipboard data. OpenClipboard() failed: 0x%lx."
 msgstr ""
-"No se pueden obtener los datos del portapapeles. OpenClipboard() falló: "
-"0x%lx."
+"No se pueden obtener los datos del portapapeles. OpenClipboard() falló: 0x"
+"%lx."
 
 #: gdk/win32/gdkclipdrop-win32.c:874
 #, c-format
 msgid "Cannot get clipboard data. GlobalLock(0x%p) failed: 0x%lx."
 msgstr ""
-"No se pueden obtener los datos del portapapeles. GlobalLock(0x%p) falló: "
-"0x%lx."
+"No se pueden obtener los datos del portapapeles. GlobalLock(0x%p) falló: 0x"
+"%lx."
 
 #: gdk/win32/gdkclipdrop-win32.c:885
 #, c-format
 msgid "Cannot get clipboard data. GlobalSize(0x%p) failed: 0x%lx."
 msgstr ""
-"No se pueden obtener los datos del portapapeles. GlobalSize(0x%p) falló: "
-"0x%lx."
+"No se pueden obtener los datos del portapapeles. GlobalSize(0x%p) falló: 0x"
+"%lx."
 
 #: gdk/win32/gdkclipdrop-win32.c:898
 #, c-format
@@ -690,8 +691,8 @@ msgstr ""
 #, c-format
 msgid "Cannot get clipboard data. OpenClipboard() failed: 0x%lx."
 msgstr ""
-"No se pueden obtener los datos del portapapeles. OpenClipboard() falló: "
-"0x%lx."
+"No se pueden obtener los datos del portapapeles. OpenClipboard() falló: 0x"
+"%lx."
 
 #: gdk/win32/gdkclipdrop-win32.c:992
 #, c-format
@@ -704,8 +705,8 @@ msgstr ""
 #, c-format
 msgid "Cannot get clipboard data. GetClipboardData() failed: 0x%lx."
 msgstr ""
-"No se pueden obtener los datos del portapapeles. GetClipboardData() falló: "
-"0x%lx."
+"No se pueden obtener los datos del portapapeles. GetClipboardData() falló: 0x"
+"%lx."
 
 #: gdk/win32/gdkdrop-win32.c:949
 #, c-format
@@ -871,10 +872,14 @@ msgid "This GLES %d.%d implementation does not support half-float vertex data"
 msgstr ""
 "Esta implementación de GLES %d.%d no soporta datos de vértices semi-flotantes"
 
-#: gsk/gpu/gskgldevice.c:245
+#: gsk/gpu/gskgldevice.c:246
 #, c-format
 msgid "OpenGL ES 3.0 is not supported by this renderer."
 msgstr "OpenGL ES 3.0 no está soportado por este renderizador."
+
+#: gsk/gpu/gsknglrenderer.c:62
+msgid "OpenGL 3.3 required"
+msgstr "Se necesita OpenGL 3.3"
 
 #: gtk/a11y/gtkatspiaction.c:239
 msgctxt "accessibility"
@@ -2375,7 +2380,7 @@ msgid "If you delete an item, it will be permanently lost."
 msgstr "Si elimina un elemento, se perderña definitivamente."
 
 #: gtk/gtkfilechooserwidget.c:1188 gtk/gtkfilechooserwidget.c:1786
-#: gtk/gtklabel.c:5712 gtk/gtktext.c:6193 gtk/gtktextview.c:9080
+#: gtk/gtklabel.c:5711 gtk/gtktext.c:6194 gtk/gtktextview.c:9080
 msgid "_Delete"
 msgstr "_Eliminar"
 
@@ -2585,7 +2590,7 @@ msgid "_Time"
 msgstr "_Hora"
 
 #: gtk/gtkfilechooserwidget.c:7375 gtk/gtkplacessidebar.c:2306
-#: gtk/inspector/a11y.ui:43 gtk/inspector/actions.ui:19
+#: gtk/inspector/a11y.ui:43 gtk/inspector/actions.ui:18
 #: gtk/inspector/css-node-tree.ui:22 gtk/inspector/prop-list.ui:24
 #: gtk/ui/gtkfilechooserwidget.ui:385 gtk/print/ui/gtkprintunixdialog.ui:80
 msgid "Name"
@@ -2669,35 +2674,35 @@ msgctxt "Font feature value"
 msgid "Enable"
 msgstr "Activar"
 
-#: gtk/gtkfontchooserwidget.c:2457
+#: gtk/gtkfontchooserwidget.c:2459
 msgid "Default"
 msgstr "Predeterminada"
 
-#: gtk/gtkfontchooserwidget.c:2519
+#: gtk/gtkfontchooserwidget.c:2521
 msgid "Ligatures"
 msgstr "Ligaduras"
 
-#: gtk/gtkfontchooserwidget.c:2520
+#: gtk/gtkfontchooserwidget.c:2522
 msgid "Letter Case"
 msgstr "Letter Case"
 
-#: gtk/gtkfontchooserwidget.c:2521
+#: gtk/gtkfontchooserwidget.c:2523
 msgid "Number Case"
 msgstr "Mayúsculas y minúsculas de números"
 
-#: gtk/gtkfontchooserwidget.c:2522
+#: gtk/gtkfontchooserwidget.c:2524
 msgid "Number Spacing"
 msgstr "Espaciado de números"
 
-#: gtk/gtkfontchooserwidget.c:2523
+#: gtk/gtkfontchooserwidget.c:2525
 msgid "Fractions"
 msgstr "Fracciones"
 
-#: gtk/gtkfontchooserwidget.c:2524
+#: gtk/gtkfontchooserwidget.c:2526
 msgid "Style Variations"
 msgstr "Variantes del estilo"
 
-#: gtk/gtkfontchooserwidget.c:2526
+#: gtk/gtkfontchooserwidget.c:2528
 msgid "Character Variations"
 msgstr "Variantes del carácter"
 
@@ -2714,31 +2719,31 @@ msgstr "Cerrar"
 msgid "Close the infobar"
 msgstr "Cerrar la barra de información"
 
-#: gtk/gtklabel.c:5709 gtk/gtktext.c:6181 gtk/gtktextview.c:9068
+#: gtk/gtklabel.c:5708 gtk/gtktext.c:6182 gtk/gtktextview.c:9068
 msgid "Cu_t"
 msgstr "Cor_tar"
 
-#: gtk/gtklabel.c:5710 gtk/gtktext.c:6185 gtk/gtktextview.c:9072
+#: gtk/gtklabel.c:5709 gtk/gtktext.c:6186 gtk/gtktextview.c:9072
 msgid "_Copy"
 msgstr "_Copiar"
 
-#: gtk/gtklabel.c:5711 gtk/gtktext.c:6189 gtk/gtktextview.c:9076
+#: gtk/gtklabel.c:5710 gtk/gtktext.c:6190 gtk/gtktextview.c:9076
 msgid "_Paste"
 msgstr "_Pegar"
 
-#: gtk/gtklabel.c:5717 gtk/gtktext.c:6202 gtk/gtktextview.c:9101
+#: gtk/gtklabel.c:5716 gtk/gtktext.c:6203 gtk/gtktextview.c:9101
 msgid "Select _All"
 msgstr "Seleccionar _todo"
 
-#: gtk/gtklabel.c:5722
+#: gtk/gtklabel.c:5721
 msgid "_Open Link"
 msgstr "_Abrir enlace"
 
-#: gtk/gtklabel.c:5726
+#: gtk/gtklabel.c:5725
 msgid "Copy _Link Address"
 msgstr "Copiar la dirección del _enlace"
 
-#: gtk/gtklabel.c:5770 gtk/gtktext.c:2724 gtk/gtktextview.c:9150
+#: gtk/gtklabel.c:5769 gtk/gtktext.c:2723 gtk/gtktextview.c:9150
 msgid "Context menu"
 msgstr "Menú contextual"
 
@@ -3584,7 +3589,7 @@ msgstr ""
 "No se encontró ninguna aplicación registrada con el nombre «%s» para el "
 "elemento con el URI «%s»"
 
-#: gtk/gtksearchentry.c:810
+#: gtk/gtksearchentry.c:814
 msgid "Clear Entry"
 msgstr "Limpiar entrada"
 
@@ -3675,7 +3680,7 @@ msgctxt "accessibility"
 msgid "Sidebar"
 msgstr "Barra lateral"
 
-#: gtk/gtktext.c:6207 gtk/gtktextview.c:9106
+#: gtk/gtktext.c:6208 gtk/gtktextview.c:9106
 msgid "Insert _Emoji"
 msgstr "Insertar _emoticono"
 
@@ -3916,7 +3921,7 @@ msgctxt "Vulkan version"
 msgid "None"
 msgstr "Ninguna"
 
-#: gtk/inspector/general.c:922
+#: gtk/inspector/general.c:923
 msgid "IM Context is hardcoded by GTK_IM_MODULE"
 msgstr "El contesto IM está codificado por GTK_IM_MODULE"
 
@@ -3986,19 +3991,19 @@ msgstr "Fabricante del «backend» GL"
 
 #: gtk/inspector/general.ui:698
 msgid "GL_VENDOR"
-msgstr "FABRICANTE_GL"
+msgstr "GL_VENDOR"
 
 #: gtk/inspector/general.ui:727
 msgid "GL_RENDERER"
-msgstr "GL_RENDERIZADOR"
+msgstr "GL_RENDERER"
 
 #: gtk/inspector/general.ui:756
 msgid "GL_VERSION"
-msgstr "VERSION_GL"
+msgstr "GL_VERSION"
 
 #: gtk/inspector/general.ui:785
 msgid "GL_SHADING_LANGUAGE_VERSION"
-msgstr ""
+msgstr "GL_SHADING_LANGUAGE_VERSION"
 
 #: gtk/inspector/general.ui:813 gtk/inspector/general.ui:929
 msgid "Extensions"
@@ -4289,27 +4294,27 @@ msgid "Trigger"
 msgstr "Disparador"
 
 # src/file-manager/fm-icon-text-window.c:85
-#: gtk/inspector/size-groups.c:225
+#: gtk/inspector/size-groups.c:228
 msgctxt "sizegroup mode"
 msgid "None"
 msgstr "Ninguno"
 
-#: gtk/inspector/size-groups.c:226
+#: gtk/inspector/size-groups.c:229
 msgctxt "sizegroup mode"
 msgid "Horizontal"
 msgstr "Horizontal"
 
-#: gtk/inspector/size-groups.c:227
+#: gtk/inspector/size-groups.c:230
 msgctxt "sizegroup mode"
 msgid "Vertical"
 msgstr "Vertical"
 
-#: gtk/inspector/size-groups.c:228
+#: gtk/inspector/size-groups.c:231
 msgctxt "sizegroup mode"
 msgid "Both"
 msgstr "Ambas"
 
-#: gtk/inspector/size-groups.c:240
+#: gtk/inspector/size-groups.c:243
 msgid "Mode"
 msgstr "Modo"
 
@@ -4366,13 +4371,9 @@ msgstr "Jerarquía"
 msgid "Implements"
 msgstr "Implementa"
 
-#: gtk/inspector/visual.c:674 gtk/inspector/visual.c:693
+#: gtk/inspector/visual.c:672 gtk/inspector/visual.c:691
 msgid "Theme is hardcoded by GTK_THEME"
 msgstr "El tema está codificado en GTK_THEME"
-
-#: gtk/inspector/visual.c:942
-msgid "Backend does not support window scaling"
-msgstr "El «backend» no soporta el escalado de ventanas"
 
 #: gtk/inspector/visual.ui:34
 msgid "GTK Theme"
@@ -4394,43 +4395,39 @@ msgstr "Tamaño del cursor"
 msgid "Icon Theme"
 msgstr "Tema de iconos"
 
-#: gtk/inspector/visual.ui:194
+#: gtk/inspector/visual.ui:199
 msgid "Font Scale"
 msgstr "Escalado de tipografías"
 
-#: gtk/inspector/visual.ui:239
+#: gtk/inspector/visual.ui:244
 msgid "Text Direction"
 msgstr "Dirección del texto"
 
-#: gtk/inspector/visual.ui:254
+#: gtk/inspector/visual.ui:259
 msgid "Left-to-Right"
 msgstr "Izquierda a derecha"
 
-#: gtk/inspector/visual.ui:255
+#: gtk/inspector/visual.ui:260
 msgid "Right-to-Left"
 msgstr "Derecha a izquierda"
 
-#: gtk/inspector/visual.ui:273
-msgid "Window Scaling"
-msgstr "Escalado de la ventana"
-
-#: gtk/inspector/visual.ui:306
+#: gtk/inspector/visual.ui:277
 msgid "Animations"
 msgstr "Animaciones"
 
-#: gtk/inspector/visual.ui:331
+#: gtk/inspector/visual.ui:302
 msgid "Slowdown"
 msgstr "Ralentizar"
 
-#: gtk/inspector/visual.ui:385
+#: gtk/inspector/visual.ui:356
 msgid "Show Framerate"
 msgstr "Mostrar tasa de fotogramas"
 
-#: gtk/inspector/visual.ui:410
+#: gtk/inspector/visual.ui:381
 msgid "Show Graphic Updates"
 msgstr "Mostrar actualizaciones de gráficos"
 
-#: gtk/inspector/visual.ui:430
+#: gtk/inspector/visual.ui:401
 msgid ""
 "Tints all the places where the current renderer uses Cairo instead of the "
 "GPU."
@@ -4438,47 +4435,47 @@ msgstr ""
 "Colorea todas las partes en las que el renderizador actual usa Cairo en "
 "lugar de GPU."
 
-#: gtk/inspector/visual.ui:436
+#: gtk/inspector/visual.ui:407
 msgid "Show Cairo Rendering"
 msgstr "Mostrar renderizado Cairo"
 
-#: gtk/inspector/visual.ui:461
+#: gtk/inspector/visual.ui:432
 msgid "Show Baselines"
 msgstr "Mostrar líneas base"
 
-#: gtk/inspector/visual.ui:489
+#: gtk/inspector/visual.ui:460
 msgid "Show Layout Borders"
 msgstr "Mostrar bordes de la distribución"
 
-#: gtk/inspector/visual.ui:546
+#: gtk/inspector/visual.ui:517
 msgid "CSS Padding"
 msgstr "Espaciado CSS"
 
-#: gtk/inspector/visual.ui:556
+#: gtk/inspector/visual.ui:527
 msgid "CSS Border"
 msgstr "Borde CSS"
 
-#: gtk/inspector/visual.ui:566
+#: gtk/inspector/visual.ui:537
 msgid "CSS Margin"
 msgstr "Margen  CSS"
 
-#: gtk/inspector/visual.ui:576
+#: gtk/inspector/visual.ui:547
 msgid "Widget Margin"
 msgstr "Anchura del widget"
 
-#: gtk/inspector/visual.ui:611
+#: gtk/inspector/visual.ui:582
 msgid "Show Focus"
 msgstr "Mostrar foco"
 
-#: gtk/inspector/visual.ui:636
+#: gtk/inspector/visual.ui:607
 msgid "Show Accessibility warnings"
 msgstr "Mostrar advertencias de accesibilidad"
 
-#: gtk/inspector/visual.ui:661
+#: gtk/inspector/visual.ui:632
 msgid "Show Graphics Offload"
 msgstr "Mostrar descarga de gráficos"
 
-#: gtk/inspector/visual.ui:693
+#: gtk/inspector/visual.ui:664
 msgid "Inspect Inspector"
 msgstr "Inspeccionar inspector"
 
@@ -7253,8 +7250,8 @@ msgstr ""
 #: tools/gtk-builder-tool-enumerate.c:56 tools/gtk-builder-tool-preview.c:179
 #: tools/gtk-builder-tool-preview.c:180 tools/gtk-builder-tool-screenshot.c:360
 #: tools/gtk-builder-tool-simplify.c:2529 tools/gtk-builder-tool-validate.c:261
-#: tools/gtk-path-tool-render.c:121 tools/gtk-rendernode-tool-info.c:214
-#: tools/gtk-rendernode-tool-show.c:106
+#: tools/gtk-path-tool-render.c:121 tools/gtk-rendernode-tool-compare.c:67
+#: tools/gtk-rendernode-tool-info.c:214 tools/gtk-rendernode-tool-show.c:106
 msgid "FILE"
 msgstr "ARCHIVO"
 
@@ -7682,23 +7679,23 @@ msgstr "Anchura de línea (número)"
 
 #: tools/gtk-path-tool-render.c:134 tools/gtk-path-tool-show.c:156
 msgid "Line cap (butt, round, square)"
-msgstr ""
+msgstr "Límite de línea de línea (extremo, redonda, cuadrada)"
 
 #: tools/gtk-path-tool-render.c:135 tools/gtk-path-tool-show.c:157
 msgid "Line join (miter, miter-clip, round, bevel, arcs)"
-msgstr ""
+msgstr "Unión de líneas (inglete, clip de inglete, redondo, biselado, arcos)"
 
 #: tools/gtk-path-tool-render.c:136 tools/gtk-path-tool-show.c:158
 msgid "Miter limit (number)"
-msgstr ""
+msgstr "Límite de inglete (número)"
 
 #: tools/gtk-path-tool-render.c:137 tools/gtk-path-tool-show.c:159
 msgid "Dash pattern (comma-separated numbers)"
-msgstr ""
+msgstr "Patrón del tablero (números separados por comas)"
 
 #: tools/gtk-path-tool-render.c:138 tools/gtk-path-tool-show.c:160
 msgid "Dash offset (number)"
-msgstr ""
+msgstr "Desplazamiento del tablero (número)"
 
 #: tools/gtk-path-tool-render.c:161 tools/gtk-path-tool-show.c:172
 msgid "Could not initialize windowing system"
@@ -7738,11 +7735,11 @@ msgstr "regla de llenado"
 
 #: tools/gtk-path-tool-render.c:255 tools/gtk-path-tool-show.c:226
 msgid "line cap"
-msgstr ""
+msgstr "límite de línea"
 
 #: tools/gtk-path-tool-render.c:256 tools/gtk-path-tool-show.c:227
 msgid "line join"
-msgstr ""
+msgstr "unión de línea"
 
 #: tools/gtk-path-tool-render.c:310
 #, c-format
@@ -7853,6 +7850,7 @@ msgid "Add renderer to benchmark"
 msgstr "Añadir renderizador al banco de pruebas"
 
 #: tools/gtk-rendernode-tool-benchmark.c:94
+#: tools/gtk-rendernode-tool-compare.c:65
 #: tools/gtk-rendernode-tool-render.c:195
 msgid "RENDERER"
 msgstr "RENDERIZADOR"
@@ -7867,11 +7865,11 @@ msgstr "EJECUTA"
 
 #: tools/gtk-rendernode-tool-benchmark.c:96
 msgid "Don’t download result/wait for GPU to finish"
-msgstr ""
+msgstr "No descargar resultado/esperar a que termine la GPU"
 
 #: tools/gtk-rendernode-tool-benchmark.c:114
 msgid "Benchmark rendering of a .node file."
-msgstr ""
+msgstr "Representación comparativa de un archivo .node."
 
 #: tools/gtk-rendernode-tool-benchmark.c:127
 #: tools/gtk-rendernode-tool-info.c:236 tools/gtk-rendernode-tool-render.c:224
@@ -7884,6 +7882,59 @@ msgstr "No se ha especificado ningún archivo .node\n"
 #, c-format
 msgid "Can only benchmark a single .node file\n"
 msgstr "Sólo se puede probar un único archivo .node\n"
+
+#: tools/gtk-rendernode-tool-compare.c:65
+#: tools/gtk-rendernode-tool-render.c:195
+msgid "Renderer to use"
+msgstr "Renderizador que usar"
+
+#: tools/gtk-rendernode-tool-compare.c:67
+msgid "Output file"
+msgstr "Archivo de salida"
+
+#: tools/gtk-rendernode-tool-compare.c:70
+msgid "FILE1 FILE2"
+msgstr "ARCHIVO1 ARCHIVO2"
+
+#: tools/gtk-rendernode-tool-compare.c:82
+msgid "Compare .node or .png files."
+msgstr "Comparar archivos .node o .png"
+
+#: tools/gtk-rendernode-tool-compare.c:95
+#, c-format
+msgid "Must specify two files\n"
+msgstr "Debe especificar dos archivos\n"
+
+#: tools/gtk-rendernode-tool-compare.c:102
+#: tools/gtk-rendernode-tool-render.c:150
+#, c-format
+msgid "Failed to create renderer: %s\n"
+msgstr "Falló al crear el renderizador: %s\n"
+
+#: tools/gtk-rendernode-tool-compare.c:111
+#, c-format
+msgid "Failed to load %s: %s\n"
+msgstr "Falló al cargar %s: %s\n"
+
+#: tools/gtk-rendernode-tool-compare.c:122
+#, c-format
+msgid "Could not save diff image to %s\n"
+msgstr "No se pudieron guardar las diferencias de la imagen %s.\n"
+
+#: tools/gtk-rendernode-tool-compare.c:132
+#, c-format
+msgid "Differences witten to %s.\n"
+msgstr "Diferencias escritas en %s.\n"
+
+#: tools/gtk-rendernode-tool-compare.c:134
+#, c-format
+msgid "The images are different.\n"
+msgstr "Las imágenes son diferentes.\n"
+
+#: tools/gtk-rendernode-tool-compare.c:137
+#, c-format
+msgid "No differences.\n"
+msgstr "No hay diferencias.\n"
 
 #: tools/gtk-rendernode-tool-info.c:191
 #, c-format
@@ -7927,15 +7978,6 @@ msgstr ""
 #, c-format
 msgid "Failed to generate SVG: %s\n"
 msgstr "Falló al generar el SVG: %s\n"
-
-#: tools/gtk-rendernode-tool-render.c:150
-#, c-format
-msgid "Failed to create renderer: %s\n"
-msgstr "Falló al crear el renderizador: %s\n"
-
-#: tools/gtk-rendernode-tool-render.c:195
-msgid "Renderer to use"
-msgstr "Renderizador que usar"
 
 #: tools/gtk-rendernode-tool-render.c:211
 msgid "Render a .node file to an image."
@@ -8078,6 +8120,12 @@ msgstr ""
 "No hay archivo de índice del tema en «%s».\n"
 "Si realmente quiere crear un caché de iconos aquí, use --ignore-theme-"
 "index.\n"
+
+#~ msgid "Backend does not support window scaling"
+#~ msgstr "El «backend» no soporta el escalado de ventanas"
+
+#~ msgid "Window Scaling"
+#~ msgstr "Escalado de la ventana"
 
 #~ msgid "Show _Size Column"
 #~ msgstr "Mostrar columna de _tamaño"
