@@ -68,6 +68,7 @@ gsk_private_sources = files([
   'gl/stb_rect_pack.c',
   'gl/fp16.c',
   'gpu/gskglbuffer.c',
+  'gpu/gskglmapbuffer.c',
   'gpu/gskgldevice.c',
   'gpu/gskgldescriptors.c',
   'gpu/gskglframe.c',

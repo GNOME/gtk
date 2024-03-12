@@ -119,6 +119,8 @@ typedef enum {
   GSK_GPU_OPTIMIZE_GRADIENTS            = 1 <<  4,
   GSK_GPU_OPTIMIZE_MIPMAP               = 1 <<  5,
   GSK_GPU_OPTIMIZE_GLYPH_ALIGN          = 1 <<  6,
+  GSK_GPU_OPTIMIZE_MAP_BUFFER           = 1 <<  7,
+
   /* These require hardware support */
   GSK_GPU_OPTIMIZE_GL_BASE_INSTANCE     = 1 <<  7,
 } GskGpuOptimizations;
