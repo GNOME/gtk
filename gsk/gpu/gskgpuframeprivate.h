@@ -2,6 +2,7 @@
 
 #include "gskgpurenderer.h"
 #include "gskgputypesprivate.h"
+#include "gskgpubufferprivate.h"
 
 G_BEGIN_DECLS
 
@@ -17,6 +18,10 @@ typedef struct _GskGpuFrameClass GskGpuFrameClass;
 struct _GskGpuFrame
 {
   GObject parent_instance;
+
+  GskGpuBuffer *vertex_buffer;
+  gsize vertex_buffer_used;
+  guchar *vertex_buffer_data;
 };
 
 struct _GskGpuFrameClass
@@ -59,10 +64,8 @@ GskGpuImage *           gsk_gpu_frame_upload_texture                    (GskGpuF
                                                                          gboolean                with_mipmap,
                                                                          GdkTexture             *texture);
 GskGpuDescriptors *     gsk_gpu_frame_create_descriptors                (GskGpuFrame            *self);
-gsize                   gsk_gpu_frame_reserve_vertex_data               (GskGpuFrame            *self,
+gsize                  _gsk_gpu_frame_reserve_vertex_data               (GskGpuFrame            *self,
                                                                          gsize                   size);
-guchar *                gsk_gpu_frame_get_vertex_data                   (GskGpuFrame            *self,
-                                                                         gsize                   offset);
 GskGpuBuffer *          gsk_gpu_frame_write_storage_buffer              (GskGpuFrame            *self,
                                                                          const guchar           *data,
                                                                          gsize                   size,
@@ -84,6 +87,41 @@ void                    gsk_gpu_frame_download_texture                  (GskGpuF
                                                                          guchar                 *data,
                                                                          gsize                   stride);
 GskGpuOp               *gsk_gpu_frame_get_last_op                       (GskGpuFrame            *self);
+
+static inline gsize
+round_up (gsize number, gsize divisor)
+{
+  return (number + divisor - 1) / divisor * divisor;
+}
+
+static inline gsize
+gsk_gpu_frame_reserve_vertex_data (GskGpuFrame *self,
+                                   gsize        size)
+{
+  if (self->vertex_buffer != NULL)
+  {
+    gsize size_needed = round_up (self->vertex_buffer_used, size) + size;
+
+    if (gsk_gpu_buffer_get_size (self->vertex_buffer) >= size_needed)
+      {
+        self->vertex_buffer_used = size_needed;
+        return size_needed - size;
+      }
+  }
+
+  return _gsk_gpu_frame_reserve_vertex_data (self, size);
+}
+
+static inline guchar *
+gsk_gpu_frame_get_vertex_data (GskGpuFrame *self,
+                               gsize        offset)
+{
+  if G_UNLIKELY (self->vertex_buffer_data == NULL)
+    self->vertex_buffer_data = gsk_gpu_buffer_map (self->vertex_buffer);
+
+  return self->vertex_buffer_data + offset;
+}
+
 
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GskGpuFrame, g_object_unref)
 

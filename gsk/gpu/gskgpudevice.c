@@ -13,8 +13,6 @@
 #include "gsk/gskdebugprivate.h"
 #include "gsk/gskprivate.h"
 
-#define MAX_SLICES_PER_ATLAS 64
-
 #define ATLAS_SIZE 1024
 
 #define MAX_ATLAS_ITEM_SIZE 256
@@ -26,21 +24,8 @@
 G_STATIC_ASSERT (MAX_ATLAS_ITEM_SIZE < ATLAS_SIZE);
 G_STATIC_ASSERT (MAX_DEAD_PIXELS < ATLAS_SIZE * ATLAS_SIZE);
 
-typedef struct _GskGpuCached GskGpuCached;
-typedef struct _GskGpuCachedClass GskGpuCachedClass;
-typedef struct _GskGpuCachedAtlas GskGpuCachedAtlas;
-typedef struct _GskGpuCachedGlyph GskGpuCachedGlyph;
 typedef struct _GskGpuCachedTexture GskGpuCachedTexture;
 typedef struct _GskGpuDevicePrivate GskGpuDevicePrivate;
-
-typedef struct _GlyphKey GlyphKey;
-struct _GlyphKey
-{
-  PangoFont *font;
-  PangoGlyph glyph;
-  GskGpuGlyphLookupFlags flags;
-  float scale;
-};
 
 struct _GskGpuDevicePrivate
 {
@@ -58,11 +43,6 @@ struct _GskGpuDevicePrivate
   GskGpuCachedAtlas *current_atlas;
 
   /* atomic */ gsize dead_texture_pixels;
-
-  struct {
-    GlyphKey key;
-    GskGpuCachedGlyph *value;
-  } front[256];
 };
 
 G_DEFINE_TYPE_WITH_PRIVATE (GskGpuDevice, gsk_gpu_device, G_TYPE_OBJECT)
@@ -79,37 +59,6 @@ struct _GskGpuCachedClass
                                                          GskGpuCached           *cached,
                                                          gint64                  timestamp);
 };
-
-struct _GskGpuCached
-{
-  const GskGpuCachedClass *class;
-
-  GskGpuCachedAtlas *atlas;
-  GskGpuCached *next;
-  GskGpuCached *prev;
-
-  gint64 timestamp;
-  gboolean stale;
-  guint pixels;   /* For glyphs and textures, pixels. For atlases, dead pixels */
-};
-
-static inline void
-mark_as_stale (GskGpuCached *cached,
-               gboolean      stale)
-{
-  if (cached->stale != stale)
-    {
-      cached->stale = stale;
-
-      if (cached->atlas)
-        {
-          if (stale)
-            ((GskGpuCached *) cached->atlas)->pixels += cached->pixels;
-          else
-            ((GskGpuCached *) cached->atlas)->pixels -= cached->pixels;
-        }
-    }
-}
 
 static void
 gsk_gpu_cached_free (GskGpuDevice *device,
@@ -162,15 +111,6 @@ gsk_gpu_cached_new (GskGpuDevice            *device,
   return cached;
 }
 
-static void
-gsk_gpu_cached_use (GskGpuDevice *device,
-                    GskGpuCached *cached,
-                    gint64        timestamp)
-{
-  cached->timestamp = timestamp;
-  mark_as_stale (cached, FALSE);
-}
-
 static inline gboolean
 gsk_gpu_cached_is_old (GskGpuDevice *device,
                        GskGpuCached *cached,
@@ -186,23 +126,6 @@ gsk_gpu_cached_is_old (GskGpuDevice *device,
 
 /* }}} */
 /* {{{ CachedAtlas */
-
-struct _GskGpuCachedAtlas
-{
-  GskGpuCached parent;
-
-  GskGpuImage *image;
-
-  gboolean has_colorize;
-  gsize colorize_x;
-  gsize colorize_y;
-
-  gsize n_slices;
-  struct {
-    gsize width;
-    gsize height;
-  } slices[MAX_SLICES_PER_ATLAS];
-};
 
 static void
 gsk_gpu_cached_atlas_free (GskGpuDevice *device,
@@ -376,17 +299,6 @@ gsk_gpu_cached_texture_new (GskGpuDevice *device,
 
 /* }}} */
 /* {{{ CachedGlyph */
-
-struct _GskGpuCachedGlyph
-{
-  GskGpuCached parent;
-
-  GlyphKey key;
-
-  GskGpuImage *image;
-  graphene_rect_t bounds;
-  graphene_point_t origin;
-};
 
 static void
 gsk_gpu_cached_glyph_free (GskGpuDevice *device,
@@ -927,23 +839,11 @@ gsk_gpu_device_lookup_glyph_image (GskGpuDevice           *self,
   guint64 timestamp = gsk_gpu_frame_get_timestamp (frame);
   guint front_index = glyph & 0xFF;
 
-  if (memcmp (&lookup.key, &priv->front[front_index], sizeof (GlyphKey)) == 0)
-    {
-      cache = priv->front[front_index].value;
-
-      gsk_gpu_cached_use (self, (GskGpuCached *) cache, timestamp);
-
-      *out_bounds = cache->bounds;
-      *out_origin = cache->origin;
-
-      return cache->image;
-    }
-
   cache = g_hash_table_lookup (priv->glyph_cache, &lookup);
   if (cache)
     {
-      memcpy (&priv->front[front_index].key, &lookup.key, sizeof (GlyphKey));
-      priv->front[front_index].value = cache;
+      memcpy (&self->front[front_index].key, &lookup.key, sizeof (GlyphKey));
+      self->front[front_index].value = cache;
 
       gsk_gpu_cached_use (self, (GskGpuCached *) cache, timestamp);
 
@@ -1008,8 +908,8 @@ gsk_gpu_device_lookup_glyph_image (GskGpuDevice           *self,
   g_hash_table_insert (priv->glyph_cache, cache, cache);
   gsk_gpu_cached_use (self, (GskGpuCached *) cache, timestamp);
 
-  memcpy (&priv->front[front_index].key, &lookup.key, sizeof (GlyphKey));
-  priv->front[front_index].value = cache;
+  memcpy (&self->front[front_index].key, &lookup.key, sizeof (GlyphKey));
+  self->front[front_index].value = cache;
 
   *out_bounds = cache->bounds;
   *out_origin = cache->origin;

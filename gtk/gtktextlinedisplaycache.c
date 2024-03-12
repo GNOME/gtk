@@ -50,6 +50,9 @@ struct _GtkTextLineDisplayCache
 #endif
 };
 
+static GQueue gc_in_idle;
+static guint gc_in_idle_source;
+
 #if DEBUG_LINE_DISPLAY_CACHE
 # define STAT_ADD(val,n) ((val) += n)
 # define STAT_INC(val)   STAT_ADD(val,1)
@@ -71,6 +74,31 @@ dump_stats (gpointer data)
 # define STAT_ADD(val,n)
 # define STAT_INC(val)
 #endif
+
+static gboolean
+do_gc_in_idle (gpointer data)
+{
+  GQueue q = gc_in_idle;
+
+  gc_in_idle.head = NULL;
+  gc_in_idle.tail = NULL;
+  gc_in_idle.length = 0;
+
+  while (q.head)
+    {
+      GtkTextLineDisplay *display = q.head->data;
+      g_queue_unlink (&q, &display->mru_link);
+      gtk_text_line_display_unref (display);
+    }
+
+  if (gc_in_idle.head == NULL)
+    {
+      gc_in_idle_source = 0;
+      return G_SOURCE_REMOVE;
+    }
+
+  return G_SOURCE_CONTINUE;
+}
 
 GtkTextLineDisplayCache *
 gtk_text_line_display_cache_new (void)
@@ -249,8 +277,21 @@ gtk_text_line_display_cache_invalidate_display (GtkTextLineDisplayCache *cache,
       g_hash_table_remove (cache->line_to_display, display->line);
       g_queue_unlink (&cache->mru, &display->mru_link);
 
+      gtk_text_line_display_ref (display);
+      g_queue_push_head_link (&gc_in_idle, &display->mru_link);
+
       if (iter != NULL)
         g_sequence_remove (iter);
+
+      if G_UNLIKELY (gc_in_idle_source == 0)
+        {
+          GSource *source;
+
+          gc_in_idle_source = g_idle_add_full (G_PRIORITY_LOW + 1,
+                                               do_gc_in_idle, NULL, NULL);
+          source = g_main_context_find_source_by_id (NULL, gc_in_idle_source);
+          g_source_set_static_name (source, "[gtk+ line-display-cache-gc]");
+        }
     }
 
   STAT_INC (cache->inval);

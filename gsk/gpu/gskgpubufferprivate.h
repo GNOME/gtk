@@ -16,6 +16,7 @@ typedef struct _GskGpuBufferClass GskGpuBufferClass;
 struct _GskGpuBuffer
 {
   GObject parent_instance;
+  gsize size;
 };
 
 struct _GskGpuBufferClass
@@ -32,12 +33,15 @@ GType                   gsk_gpu_buffer_get_type                         (void) G
 void                    gsk_gpu_buffer_setup                            (GskGpuBuffer           *self,
                                                                          gsize                   size);
 
-gsize                   gsk_gpu_buffer_get_size                         (GskGpuBuffer           *self);
-
 guchar *                gsk_gpu_buffer_map                              (GskGpuBuffer           *self);
 void                    gsk_gpu_buffer_unmap                            (GskGpuBuffer           *self,
                                                                          gsize                   used);
 
+static inline gsize G_GNUC_PURE
+gsk_gpu_buffer_get_size (const GskGpuBuffer *buffer)
+{
+  return buffer->size;
+}
 
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GskGpuBuffer, g_object_unref)
 

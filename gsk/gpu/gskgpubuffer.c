@@ -25,17 +25,7 @@ void
 gsk_gpu_buffer_setup (GskGpuBuffer *self,
                       gsize         size)
 {
-  GskGpuBufferPrivate *priv = gsk_gpu_buffer_get_instance_private (self);
-
-  priv->size = size;
-}
-                     
-gsize
-gsk_gpu_buffer_get_size (GskGpuBuffer *self)
-{
-  GskGpuBufferPrivate *priv = gsk_gpu_buffer_get_instance_private (self);
-
-  return priv->size;
+  self->size = size;
 }
 
 guchar *

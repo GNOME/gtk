@@ -3,6 +3,8 @@
 #include "gskgpuopprivate.h"
 
 #include "gskgputypesprivate.h"
+#include "gskgpudescriptorsprivate.h"
+#include "gskgpuframeprivate.h"
 
 G_BEGIN_DECLS
 
@@ -28,13 +30,6 @@ struct _GskGpuShaderOpClass
   void                  (* setup_attrib_locations)                      (GLuint                  program);
   void                  (* setup_vao)                                   (gsize                   offset);
 };
-
-GskGpuShaderOp *        gsk_gpu_shader_op_alloc                         (GskGpuFrame            *frame,
-                                                                         const GskGpuShaderOpClass *op_class,
-                                                                         guint32                 variation,
-                                                                         GskGpuShaderClip        clip,
-                                                                         GskGpuDescriptors      *desc,
-                                                                         gpointer                out_vertex_data);
 
 void                    gsk_gpu_shader_op_finish                        (GskGpuOp               *op);
 
@@ -74,6 +69,31 @@ gsk_gpu_point_to_float (const graphene_point_t *point,
 {
   values[0] = point->x + offset->x;
   values[1] = point->y + offset->y;
+}
+
+static inline GskGpuShaderOp *
+gsk_gpu_shader_op_alloc (GskGpuFrame               *frame,
+                         const GskGpuShaderOpClass *op_class,
+                         guint32                    variation,
+                         GskGpuShaderClip           clip,
+                         GskGpuDescriptors         *desc,
+                         gpointer                   out_vertex_data)
+{
+  GskGpuShaderOp *self;
+
+  self = (GskGpuShaderOp *) gsk_gpu_op_alloc (frame, &op_class->parent_class);
+
+  self->variation = variation;
+  self->clip = clip;
+  if (desc)
+    self->desc = gsk_gpu_descriptors_ref (desc);
+  else
+    self->desc = NULL;
+  self->vertex_offset = gsk_gpu_frame_reserve_vertex_data (frame, op_class->vertex_size);
+
+  *((gpointer *) out_vertex_data) = gsk_gpu_frame_get_vertex_data (frame, self->vertex_offset);
+
+  return self;
 }
 
 G_END_DECLS

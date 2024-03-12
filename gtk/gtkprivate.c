@@ -274,14 +274,14 @@ _gtk_elide_underscores (const char *original)
   const char *p, *end;
   gsize len;
   gboolean last_underscore;
-  
+
   if (!original)
     return NULL;
 
   len = strlen (original);
   q = result = g_malloc (len + 1);
   last_underscore = FALSE;
-  
+
   end = original + len;
   for (p = original; p < end; p++)
     {
@@ -290,7 +290,7 @@ _gtk_elide_underscores (const char *original)
       else
         {
           last_underscore = FALSE;
-          if (original + 2 <= p && p + 1 <= end && 
+          if (original + 2 <= p && p + 1 <= end &&
               p[-2] == '(' && p[-1] == '_' && p[0] != '_' && p[1] == ')')
             {
               q--;
@@ -304,8 +304,8 @@ _gtk_elide_underscores (const char *original)
 
   if (last_underscore)
     *q++ = '_';
-  
+
   *q = '\0';
-  
+
   return result;
 }

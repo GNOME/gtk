@@ -56,7 +56,7 @@ gsk_gpu_shader_op_vk_command_n (GskGpuOp              *op,
   for (next = op->next; next && i < n; next = next->next)
     {
       GskGpuShaderOp *next_shader = (GskGpuShaderOp *) next;
-  
+
       if (next->op_class != op->op_class ||
           next_shader->desc != self->desc ||
           next_shader->variation != self->variation ||
@@ -180,30 +180,5 @@ gsk_gpu_shader_op_gl_command (GskGpuOp          *op,
                               GskGLCommandState *state)
 {
   return gsk_gpu_shader_op_gl_command_n (op, frame, state, 1);
-}
-
-GskGpuShaderOp *
-gsk_gpu_shader_op_alloc (GskGpuFrame               *frame,
-                         const GskGpuShaderOpClass *op_class,
-                         guint32                    variation,
-                         GskGpuShaderClip           clip,
-                         GskGpuDescriptors         *desc,
-                         gpointer                   out_vertex_data)
-{
-  GskGpuShaderOp *self;
-
-  self = (GskGpuShaderOp *) gsk_gpu_op_alloc (frame, &op_class->parent_class);
-
-  self->variation = variation;
-  self->clip = clip;
-  if (desc)
-    self->desc = gsk_gpu_descriptors_ref (desc);
-  else
-    self->desc = NULL;
-  self->vertex_offset = gsk_gpu_frame_reserve_vertex_data (frame, op_class->vertex_size);
-
-  *((gpointer *) out_vertex_data) = gsk_gpu_frame_get_vertex_data (frame, self->vertex_offset);
-
-  return self;
 }
 

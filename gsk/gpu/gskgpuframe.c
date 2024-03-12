@@ -42,9 +42,7 @@ struct _GskGpuFramePrivate
   GskGpuOp *first_op;
   GskGpuOp *last_op;
 
-  GskGpuBuffer *vertex_buffer;
   guchar *vertex_buffer_data;
-  gsize vertex_buffer_used;
   GskGpuBuffer *storage_buffer;
   guchar *storage_buffer_data;
   gsize storage_buffer_used;
@@ -113,7 +111,7 @@ gsk_gpu_frame_finalize (GObject *object)
 
   gsk_gpu_ops_clear (&priv->ops);
 
-  g_clear_object (&priv->vertex_buffer);
+  g_clear_object (&self->vertex_buffer);
   g_clear_object (&priv->storage_buffer);
 
   g_object_unref (priv->device);
@@ -237,7 +235,7 @@ gsk_gpu_frame_seal_ops (GskGpuFrame *self)
     }
 }
 
-typedef struct 
+typedef struct
 {
   struct {
     GskGpuOp *first;
@@ -414,55 +412,39 @@ gsk_gpu_frame_create_storage_buffer (GskGpuFrame *self,
   return GSK_GPU_FRAME_GET_CLASS (self)->create_storage_buffer (self, size);
 }
 
-static inline gsize
-round_up (gsize number, gsize divisor)
-{
-  return (number + divisor - 1) / divisor * divisor;
-}
-
 gsize
-gsk_gpu_frame_reserve_vertex_data (GskGpuFrame *self,
-                                   gsize        size)
+_gsk_gpu_frame_reserve_vertex_data (GskGpuFrame *self,
+                                    gsize        size)
 {
   GskGpuFramePrivate *priv = gsk_gpu_frame_get_instance_private (self);
   gsize size_needed;
 
-  if (priv->vertex_buffer == NULL)
-    priv->vertex_buffer = gsk_gpu_frame_create_vertex_buffer (self, DEFAULT_VERTEX_BUFFER_SIZE);
+  if (self->vertex_buffer == NULL)
+    self->vertex_buffer = gsk_gpu_frame_create_vertex_buffer (self, DEFAULT_VERTEX_BUFFER_SIZE);
 
-  size_needed = round_up (priv->vertex_buffer_used, size) + size;
+  size_needed = round_up (self->vertex_buffer_used, size) + size;
 
-  if (gsk_gpu_buffer_get_size (priv->vertex_buffer) < size_needed)
+  if (gsk_gpu_buffer_get_size (self->vertex_buffer) < size_needed)
     {
-      gsize old_size = gsk_gpu_buffer_get_size (priv->vertex_buffer);
+      gsize old_size = gsk_gpu_buffer_get_size (self->vertex_buffer);
       GskGpuBuffer *new_buffer = gsk_gpu_frame_create_vertex_buffer (self, old_size * 2);
       guchar *new_data = gsk_gpu_buffer_map (new_buffer);
 
-      if (priv->vertex_buffer_data)
+      g_print ("regrow\n");
+
+      if (self->vertex_buffer_data)
         {
-          memcpy (new_data, priv->vertex_buffer_data, old_size);
-          gsk_gpu_buffer_unmap (priv->vertex_buffer, old_size);
+          memcpy (new_data, self->vertex_buffer_data, old_size);
+          gsk_gpu_buffer_unmap (self->vertex_buffer, old_size);
         }
-      g_object_unref (priv->vertex_buffer);
-      priv->vertex_buffer = new_buffer;
-      priv->vertex_buffer_data = new_data;
+      g_object_unref (self->vertex_buffer);
+      self->vertex_buffer = new_buffer;
+      self->vertex_buffer_data = new_data;
     }
 
-  priv->vertex_buffer_used = size_needed;
+  self->vertex_buffer_used = size_needed;
 
   return size_needed - size;
-}
-
-guchar *
-gsk_gpu_frame_get_vertex_data (GskGpuFrame *self,
-                               gsize        offset)
-{
-  GskGpuFramePrivate *priv = gsk_gpu_frame_get_instance_private (self);
-
-  if (priv->vertex_buffer_data == NULL)
-    priv->vertex_buffer_data = gsk_gpu_buffer_map (priv->vertex_buffer);
-
-  return priv->vertex_buffer_data + offset;
 }
 
 static void
@@ -604,11 +586,11 @@ gsk_gpu_frame_submit (GskGpuFrame *self)
   gsk_gpu_frame_sort_ops (self);
   gsk_gpu_frame_verbose_print (self, "after sort");
 
-  if (priv->vertex_buffer)
+  if (self->vertex_buffer)
     {
-      gsk_gpu_buffer_unmap (priv->vertex_buffer, priv->vertex_buffer_used);
-      priv->vertex_buffer_data = NULL;
-      priv->vertex_buffer_used = 0;
+      gsk_gpu_buffer_unmap (self->vertex_buffer, self->vertex_buffer_used);
+      self->vertex_buffer_data = NULL;
+      self->vertex_buffer_used = 0;
     }
 
   if (priv->storage_buffer_data)
@@ -619,7 +601,7 @@ gsk_gpu_frame_submit (GskGpuFrame *self)
     }
 
   GSK_GPU_FRAME_GET_CLASS (self)->submit (self,
-                                          priv->vertex_buffer,
+                                          self->vertex_buffer,
                                           priv->first_op);
 }
 
