@@ -708,6 +708,7 @@ refresh_current_folder_and_file_part (GtkFileChooserEntry *chooser_entry)
   old_file_part = chooser_entry->file_part;
 
   text = gtk_file_chooser_entry_get_completion_text (chooser_entry);
+  g_return_if_fail (text != NULL);
 
   last_slash = strrchr (text, G_DIR_SEPARATOR);
   if (last_slash)

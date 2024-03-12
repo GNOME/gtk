@@ -306,6 +306,42 @@ test_delete (void)
   g_object_unref (entry);
 }
 
+static void
+test_editable (void)
+{
+  GtkWidget *entry;
+  int start, end;
+  gboolean res;
+  char *text;
+
+  entry = gtk_entry_new ();
+  g_object_ref_sink (entry);
+
+  res = gtk_editable_get_selection_bounds (GTK_EDITABLE (entry), &start, &end);
+  g_assert_false (res);
+  g_assert_cmpint (start, ==, end);
+
+  text = gtk_editable_get_chars (GTK_EDITABLE (entry), start, end);
+  g_assert_nonnull (text);
+  g_assert_cmpstr (text, ==, "");
+  g_free (text);
+
+  gtk_editable_set_text (GTK_EDITABLE (entry), "ABC");
+  gtk_editable_select_region (GTK_EDITABLE (entry), 1, 2);
+
+  res = gtk_editable_get_selection_bounds (GTK_EDITABLE (entry), &start, &end);
+  g_assert_true (res);
+  g_assert_cmpint (start, ==, 1);
+  g_assert_cmpint (end, ==, 2);
+
+  text = gtk_editable_get_chars (GTK_EDITABLE (entry), start, end);
+  g_assert_nonnull (text);
+  g_assert_cmpstr (text, ==, "B");
+  g_free (text);
+
+  g_object_unref (entry);
+}
+
 int
 main (int   argc,
       char *argv[])
@@ -314,6 +350,7 @@ main (int   argc,
 
   g_test_add_func ("/entry/delete", test_delete);
   g_test_add_func ("/entry/insert", test_insert);
+  g_test_add_func ("/entry/editable", test_editable);
 
   return g_test_run();
 }
