@@ -3017,6 +3017,7 @@ gsk_gpu_node_processor_add_glyph_node (GskGpuNodeProcessor *self,
   num_glyphs = gsk_text_node_get_num_glyphs (node);
   glyphs = gsk_text_node_get_glyphs (node, NULL);
   font = gsk_text_node_get_font (node);
+  hinting = gsk_text_node_use_font_hinting (node);
   offset = *gsk_text_node_get_offset (node);
   offset.x += self->offset.x;
   offset.y += self->offset.y;
@@ -3025,7 +3026,6 @@ gsk_gpu_node_processor_add_glyph_node (GskGpuNodeProcessor *self,
   inv_scale = 1.f / scale;
 
   glyph_align = gsk_gpu_frame_should_optimize (self->frame, GSK_GPU_OPTIMIZE_GLYPH_ALIGN);
-  hinting = gsk_font_get_hint_style (font) != CAIRO_HINT_STYLE_NONE;
 
   for (i = 0; i < num_glyphs; i++)
     {
