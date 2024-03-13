@@ -16,15 +16,14 @@ struct _GskGLBuffer
 
 G_DEFINE_TYPE (GskGLBuffer, gsk_gl_buffer, GSK_TYPE_GPU_BUFFER)
 
-static guint profiler_buffer_uploads_id;
-static gint64 profiler_buffer_uploads;
-
 static void
 gsk_gl_buffer_finalize (GObject *object)
 {
   GskGLBuffer *self = GSK_GL_BUFFER (object);
 
-  g_free (self->data);
+  gsk_gl_buffer_bind (self);
+
+  glUnmapBuffer (self->target);
   glDeleteBuffers (1, &self->buffer_id);
 
   G_OBJECT_CLASS (gsk_gl_buffer_parent_class)->finalize (object);
@@ -49,9 +48,7 @@ gsk_gl_buffer_unmap (GskGpuBuffer *buffer,
 
   gsk_gl_buffer_bind (self);
 
-  profiler_buffer_uploads += used;
-  glBufferSubData (self->target, 0, used, self->data);
-  gdk_profiler_set_int_counter (profiler_buffer_uploads_id, profiler_buffer_uploads);
+  glFlushMappedBufferRange (self->target, 0, used);
 }
 
 static void
@@ -64,8 +61,6 @@ gsk_gl_buffer_class_init (GskGLBufferClass *klass)
   buffer_class->unmap = gsk_gl_buffer_unmap;
 
   gobject_class->finalize = gsk_gl_buffer_finalize;
-
-  profiler_buffer_uploads_id = gdk_profiler_define_int_counter ("ngl-buffer-uploads", "Number of bytes uploaded to GPU");
 }
 
 static void
@@ -79,6 +74,7 @@ gsk_gl_buffer_new (GLenum target,
                    GLenum access)
 {
   GskGLBuffer *self;
+  int flags;
 
   self = g_object_new (GSK_TYPE_GL_BUFFER, NULL);
 
@@ -90,7 +86,23 @@ gsk_gl_buffer_new (GLenum target,
   glGenBuffers (1, &self->buffer_id);
   glBindBuffer (target, self->buffer_id);
   glBufferData (target, size, NULL, GL_STATIC_DRAW);
-  self->data = malloc (size);
+
+  switch (access)
+    {
+    case GL_READ_ONLY:
+      flags = GL_MAP_READ_BIT;
+      break;
+    case GL_WRITE_ONLY:
+      flags = GL_MAP_WRITE_BIT;
+      break;
+    case GL_READ_WRITE:
+      flags = GL_MAP_READ_BIT | GL_MAP_WRITE_BIT;
+      break;
+    default:
+      g_assert_not_reached ();
+    }
+
+  self->data = glMapBufferRange (self->target, 0, size, flags);
 
   return GSK_GPU_BUFFER (self);
 }
