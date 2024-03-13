@@ -3005,6 +3005,7 @@ gsk_gpu_node_processor_add_glyph_node (GskGpuNodeProcessor *self,
   unsigned int flags_mask;
   GskGpuImage *last_image;
   guint32 descriptor;
+  const float inv_pango_scale = 1.f / PANGO_SCALE;
 
   if (self->opacity < 1.0 &&
       gsk_text_node_has_color_glyphs (node))
@@ -3051,8 +3052,8 @@ gsk_gpu_node_processor_add_glyph_node (GskGpuNodeProcessor *self,
       graphene_point_t glyph_offset, glyph_origin;
       GskGpuGlyphLookupFlags flags;
 
-      glyph_origin = GRAPHENE_POINT_INIT (offset.x + (float) glyphs[i].geometry.x_offset / PANGO_SCALE,
-                                          offset.y + (float) glyphs[i].geometry.y_offset / PANGO_SCALE);
+      glyph_origin = GRAPHENE_POINT_INIT (offset.x + glyphs[i].geometry.x_offset * inv_pango_scale,
+                                          offset.y + glyphs[i].geometry.y_offset * inv_pango_scale);
 
       glyph_origin.x = floorf (glyph_origin.x * align_scale_x + 0.5f);
       glyph_origin.y = floorf (glyph_origin.y * align_scale_y + 0.5f);
@@ -3104,7 +3105,7 @@ gsk_gpu_node_processor_add_glyph_node (GskGpuNodeProcessor *self,
                              &glyph_tex_rect,
                              &color);
 
-      offset.x += (float) glyphs[i].geometry.width / PANGO_SCALE;
+      offset.x += glyphs[i].geometry.width * inv_pango_scale;
     }
 }
 
@@ -3124,6 +3125,7 @@ gsk_gpu_node_processor_create_glyph_pattern (GskGpuPatternWriter *self,
   float align_scale_x, align_scale_y;
   float inv_align_scale_x, inv_align_scale_y;
   unsigned int flags_mask;
+  const float inv_pango_scale = 1.f / PANGO_SCALE;
 
   if (gsk_text_node_has_color_glyphs (node))
     return FALSE;
@@ -3166,8 +3168,8 @@ gsk_gpu_node_processor_create_glyph_pattern (GskGpuPatternWriter *self,
       graphene_point_t glyph_offset, glyph_origin;
       GskGpuGlyphLookupFlags flags;
 
-      glyph_origin = GRAPHENE_POINT_INIT (offset.x + (float) glyphs[i].geometry.x_offset / PANGO_SCALE,
-                                          offset.y + (float) glyphs[i].geometry.y_offset / PANGO_SCALE);
+      glyph_origin = GRAPHENE_POINT_INIT (offset.x + glyphs[i].geometry.x_offset * inv_pango_scale,
+                                          offset.y + glyphs[i].geometry.y_offset * inv_pango_scale);
 
       glyph_origin.x = floorf (glyph_origin.x * align_scale_x + 0.5f);
       glyph_origin.y = floorf (glyph_origin.y * align_scale_y + 0.5f);
@@ -3213,7 +3215,7 @@ gsk_gpu_node_processor_create_glyph_pattern (GskGpuPatternWriter *self,
                                           ),
                                           &glyph_origin);
 
-      offset.x += (float) glyphs[i].geometry.width / PANGO_SCALE;
+      offset.x += glyphs[i].geometry.width * inv_pango_scale;
     }
 
   return TRUE;
