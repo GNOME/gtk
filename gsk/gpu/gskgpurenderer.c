@@ -43,6 +43,8 @@ struct _GskGpuRendererPrivate
   GskGpuOptimizations optimizations;
 
   GskGpuFrame *frames[GSK_GPU_MAX_FRAMES];
+
+  GskGpuFrame *last_frame;
 };
 
 static void     gsk_gpu_renderer_dmabuf_downloader_init         (GdkDmabufDownloaderInterface   *iface);
@@ -175,12 +177,22 @@ gsk_gpu_renderer_get_frame (GskGpuRenderer *self)
           if (priv->frames[i] == NULL)
             {
               priv->frames[i] = gsk_gpu_renderer_create_frame (self);
+              g_set_object (&priv->last_frame, priv->frames[i]);
               return priv->frames[i];
             }
 
+          /* Always skip re-use of previous frame */
+          if (priv->frames[i] == priv->last_frame)
+            continue;
+
           if (!gsk_gpu_frame_is_busy (priv->frames[i]))
-            return priv->frames[i];
+            {
+              g_set_object (&priv->last_frame, priv->frames[i]);
+              return priv->frames[i];
+            }
         }
+
+      g_clear_object (&priv->last_frame);
 
       GSK_GPU_RENDERER_GET_CLASS (self)->wait (self, priv->frames, GSK_GPU_MAX_FRAMES);
     }
@@ -220,6 +232,8 @@ gsk_gpu_renderer_unrealize (GskRenderer *renderer)
   gsize i, j;
 
   gsk_gpu_renderer_make_current (self);
+
+  g_clear_object (&priv->last_frame);
 
   while (TRUE)
     {
