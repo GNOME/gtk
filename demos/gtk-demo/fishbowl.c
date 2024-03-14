@@ -184,6 +184,12 @@ create_cogs (void)
   return picture;
 }
 
+static gboolean
+check_cogs (GtkFishbowl *fb)
+{
+  return GSK_IS_GL_RENDERER (gtk_native_get_renderer (gtk_widget_get_native (GTK_WIDGET (fb))));
+}
+
 static void
 mapped (GtkWidget *w)
 {
@@ -218,36 +224,41 @@ create_graph (void)
 
 static const struct {
   const char *name;
-  GtkWidget * (*create_func) (void);
+  GtkWidget * (* create_func) (void);
+  gboolean    (* check) (GtkFishbowl *fb);
 } widget_types[] = {
-  { "Icon",       create_icon           },
-  { "Button",     create_button         },
-  { "Blurbutton", create_blurred_button },
-  { "Fontbutton", create_font_button    },
-  { "Levelbar",   create_level_bar      },
-  { "Label",      create_label          },
-  { "Spinner",    create_spinner        },
-  { "Spinbutton", create_spinbutton     },
-  { "Video",      create_video          },
-  { "Gears",      create_gears          },
-  { "Switch",     create_switch         },
-  { "Menubutton", create_menu_button    },
-  { "Shader",     create_cogs           },
-  { "Tiger",      create_tiger          },
-  { "Graph",      create_graph          },
+  { "Icon",       create_icon,           NULL },
+  { "Button",     create_button,         NULL },
+  { "Blurbutton", create_blurred_button, NULL },
+  { "Fontbutton", create_font_button,    NULL },
+  { "Levelbar",   create_level_bar,      NULL },
+  { "Label",      create_label,          NULL },
+  { "Spinner",    create_spinner,        NULL },
+  { "Spinbutton", create_spinbutton,     NULL },
+  { "Video",      create_video,          NULL },
+  { "Gears",      create_gears,          NULL },
+  { "Switch",     create_switch,         NULL },
+  { "Menubutton", create_menu_button,    NULL },
+  { "Shader",     create_cogs,           check_cogs },
+  { "Tiger",      create_tiger,          NULL },
+  { "Graph",      create_graph,          NULL },
 };
 
 static int selected_widget_type = -1;
 static const int N_WIDGET_TYPES = G_N_ELEMENTS (widget_types);
 
-static void
+static gboolean
 set_widget_type (GtkFishbowl *fishbowl,
                  int          widget_type_index)
 {
   GtkWidget *window;
 
   if (widget_type_index == selected_widget_type)
-    return;
+    return TRUE;
+
+  if (widget_types[widget_type_index].check != NULL &&
+      !widget_types[widget_type_index].check (fishbowl))
+    return FALSE;
 
   selected_widget_type = widget_type_index;
 
@@ -257,6 +268,8 @@ set_widget_type (GtkFishbowl *fishbowl,
   window = GTK_WIDGET (gtk_widget_get_root (GTK_WIDGET (fishbowl)));
   gtk_window_set_title (GTK_WINDOW (window),
                         widget_types[selected_widget_type].name);
+
+  return TRUE;
 }
 
 G_MODULE_EXPORT void
@@ -264,14 +277,17 @@ fishbowl_next_button_clicked_cb (GtkButton *source,
                                  gpointer   user_data)
 {
   GtkFishbowl *fishbowl = user_data;
-  int new_index;
+  int new_index = selected_widget_type;
 
-  if (selected_widget_type + 1 >= N_WIDGET_TYPES)
-    new_index = 0;
-  else
-    new_index = selected_widget_type + 1;
+  do
+    {
+      if (new_index + 1 >= N_WIDGET_TYPES)
+        new_index = 0;
+      else
+        new_index = new_index + 1;
 
-  set_widget_type (fishbowl, new_index);
+    }
+  while (!set_widget_type (fishbowl, new_index));
 }
 
 G_MODULE_EXPORT void
@@ -279,14 +295,18 @@ fishbowl_prev_button_clicked_cb (GtkButton *source,
                                  gpointer   user_data)
 {
   GtkFishbowl *fishbowl = user_data;
-  int new_index;
+  int new_index = selected_widget_type;
 
-  if (selected_widget_type - 1 < 0)
-    new_index = N_WIDGET_TYPES - 1;
-  else
-    new_index = selected_widget_type - 1;
+  do
+    {
+      if (new_index - 1 < 0)
+        new_index = N_WIDGET_TYPES - 1;
+      else
+        new_index = new_index - 1;
 
-  set_widget_type (fishbowl, new_index);
+    }
+
+  while (!set_widget_type (fishbowl, new_index));
 }
 
 G_MODULE_EXPORT void
