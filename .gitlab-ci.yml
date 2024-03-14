@@ -422,7 +422,7 @@ asan-build:
     - export PATH="$HOME/.local/bin:$PATH"
     - CC=clang meson setup
             --buildtype=debugoptimized
-            -Db_sanitize=address
+            -Db_sanitize=address,undefined
             -Db_lundef=false
             -Dbuild-demos=false
             -Dbuild-tests=false
