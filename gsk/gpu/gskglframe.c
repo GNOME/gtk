@@ -20,6 +20,7 @@ struct _GskGLFrame
 
   GLuint globals_buffer_id;
   guint next_texture_slot;
+  GLsync sync;
 
   GHashTable *vaos;
 };
@@ -34,7 +35,23 @@ G_DEFINE_TYPE (GskGLFrame, gsk_gl_frame, GSK_TYPE_GPU_FRAME)
 static gboolean
 gsk_gl_frame_is_busy (GskGpuFrame *frame)
 {
-  return FALSE;
+  GskGLFrame *self = GSK_GL_FRAME (frame);
+
+  if (!self->sync)
+    return FALSE;
+
+  return glClientWaitSync (self->sync, 0, 0) == GL_TIMEOUT_EXPIRED;
+}
+
+static void
+gsk_gl_frame_wait (GskGpuFrame *frame)
+{
+  GskGLFrame *self = GSK_GL_FRAME (frame);
+
+  if (!self->sync)
+    return;
+
+  glClientWaitSync (self->sync, 0, G_MAXINT64);
 }
 
 static void
@@ -49,6 +66,12 @@ static void
 gsk_gl_frame_cleanup (GskGpuFrame *frame)
 {
   GskGLFrame *self = GSK_GL_FRAME (frame);
+
+  if (self->sync)
+    {
+      glClientWaitSync (self->sync, 0, -1);
+      glDeleteSync (self->sync);
+    }
 
   self->next_texture_slot = 0;
 
@@ -160,6 +183,8 @@ gsk_gl_frame_submit (GskGpuFrame  *frame,
     {
       op = gsk_gpu_op_gl_command (op, frame, &state);
     }
+
+  self->sync = glFenceSync (GL_SYNC_GPU_COMMANDS_COMPLETE, 0);
 }
 
 static void
@@ -180,6 +205,7 @@ gsk_gl_frame_class_init (GskGLFrameClass *klass)
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
   gpu_frame_class->is_busy = gsk_gl_frame_is_busy;
+  gpu_frame_class->wait = gsk_gl_frame_wait;
   gpu_frame_class->setup = gsk_gl_frame_setup;
   gpu_frame_class->cleanup = gsk_gl_frame_cleanup;
   gpu_frame_class->upload_texture = gsk_gl_frame_upload_texture;

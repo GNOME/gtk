@@ -119,13 +119,6 @@ gsk_ngl_renderer_get_backbuffer (GskGpuRenderer *renderer)
   return self->backbuffer;
 }
 
-static void
-gsk_ngl_renderer_wait (GskGpuRenderer  *self,
-                       GskGpuFrame    **frame,
-                       gsize            n_frames)
-{
-}
-
 static double
 gsk_ngl_renderer_get_scale (GskGpuRenderer *self)
 {
@@ -164,7 +157,6 @@ gsk_ngl_renderer_class_init (GskNglRendererClass *klass)
   gpu_renderer_class->create_context = gsk_ngl_renderer_create_context;
   gpu_renderer_class->make_current = gsk_ngl_renderer_make_current;
   gpu_renderer_class->get_backbuffer = gsk_ngl_renderer_get_backbuffer;
-  gpu_renderer_class->wait = gsk_ngl_renderer_wait;
   gpu_renderer_class->get_scale = gsk_ngl_renderer_get_scale;
   gpu_renderer_class->get_dmabuf_formats = gsk_ngl_renderer_get_dmabuf_formats;
 

@@ -75,6 +75,21 @@ gsk_vulkan_frame_is_busy (GskGpuFrame *frame)
 }
 
 static void
+gsk_vulkan_frame_wait (GskGpuFrame *frame)
+{
+  GskVulkanFrame *self = GSK_VULKAN_FRAME (frame);
+  VkDevice vk_device;
+
+  vk_device = gsk_vulkan_device_get_vk_device (GSK_VULKAN_DEVICE (gsk_gpu_frame_get_device (frame)));
+
+  GSK_VK_CHECK (vkWaitForFences, vk_device,
+                                 1,
+                                 &self->vk_fence,
+                                 VK_FALSE,
+                                 INT64_MAX);
+}
+
+static void
 gsk_vulkan_frame_setup (GskGpuFrame *frame)
 {
   GskVulkanFrame *self = GSK_VULKAN_FRAME (frame);
@@ -387,6 +402,7 @@ gsk_vulkan_frame_class_init (GskVulkanFrameClass *klass)
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
   gpu_frame_class->is_busy = gsk_vulkan_frame_is_busy;
+  gpu_frame_class->wait = gsk_vulkan_frame_wait;
   gpu_frame_class->setup = gsk_vulkan_frame_setup;
   gpu_frame_class->cleanup = gsk_vulkan_frame_cleanup;
   gpu_frame_class->upload_texture = gsk_vulkan_frame_upload_texture;
