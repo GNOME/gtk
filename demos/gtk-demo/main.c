@@ -827,12 +827,24 @@ demo_search_changed_cb (GtkSearchEntry *entry,
   gtk_filter_changed (filter, GTK_FILTER_CHANGE_DIFFERENT);
 }
 
+static gboolean
+demo_can_run (GtkWidget  *window,
+              const char *name)
+{
+  if (name != NULL && strcmp (name, "gltransition") == 0)
+    return GSK_IS_GL_RENDERER (gtk_native_get_renderer (GTK_NATIVE (window)));
+
+  return TRUE;
+}
+
 static GListModel *
-create_demo_model (void)
+create_demo_model (GtkWidget *window)
 {
   GListStore *store = g_list_store_new (GTK_TYPE_DEMO);
   DemoData *demo = gtk_demos;
   GtkDemo *d;
+
+  gtk_widget_realize (window);
 
   d = GTK_DEMO (g_object_new (GTK_TYPE_DEMO, NULL));
   d->name = "main";
@@ -845,16 +857,20 @@ create_demo_model (void)
 
   while (demo->title)
     {
-      d = GTK_DEMO (g_object_new (GTK_TYPE_DEMO, NULL));
-      DemoData *children = demo->children;
+       DemoData *children = demo->children;
 
-      d->name = demo->name;
-      d->title = demo->title;
-      d->keywords = demo->keywords;
-      d->filename = demo->filename;
-      d->func = demo->func;
+      if (demo_can_run (window, demo->name))
+        {
+          d = GTK_DEMO (g_object_new (GTK_TYPE_DEMO, NULL));
 
-      g_list_store_append (store, d);
+          d->name = demo->name;
+          d->title = demo->title;
+          d->keywords = demo->keywords;
+          d->filename = demo->filename;
+          d->func = demo->func;
+
+          g_list_store_append (store, d);
+        }
 
       if (children)
         {
@@ -862,15 +878,19 @@ create_demo_model (void)
 
           while (children->title)
             {
-              GtkDemo *child = GTK_DEMO (g_object_new (GTK_TYPE_DEMO, NULL));
+              if (demo_can_run (window, children->name))
+                {
+                  GtkDemo *child = GTK_DEMO (g_object_new (GTK_TYPE_DEMO, NULL));
 
-              child->name = children->name;
-              child->title = children->title;
-              child->keywords = children->keywords;
-              child->filename = children->filename;
-              child->func = children->func;
+                  child->name = children->name;
+                  child->title = children->title;
+                  child->keywords = children->keywords;
+                  child->filename = children->filename;
+                  child->func = children->func;
 
-              g_list_store_append (G_LIST_STORE (d->children_model), child);
+                  g_list_store_append (G_LIST_STORE (d->children_model), child);
+                }
+
               children++;
             }
         }
@@ -936,7 +956,7 @@ activate (GApplication *app)
   search_bar = GTK_WIDGET (gtk_builder_get_object (builder, "searchbar"));
   g_signal_connect (search_bar, "notify::search-mode-enabled", G_CALLBACK (clear_search), NULL);
 
-  listmodel = create_demo_model ();
+  listmodel = create_demo_model (window);
   treemodel = gtk_tree_list_model_new (G_LIST_MODEL (listmodel),
                                        FALSE,
                                        TRUE,
