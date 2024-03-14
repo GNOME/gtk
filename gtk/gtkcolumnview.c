@@ -484,7 +484,7 @@ gtk_column_view_allocate (GtkWidget *widget,
                           int        baseline)
 {
   GtkColumnView *self = GTK_COLUMN_VIEW (widget);
-  int full_width, header_height, min, nat, x;
+  int full_width, header_height, min, nat, x, dx;
 
   x = gtk_adjustment_get_value (self->hadjustment);
   full_width = gtk_column_view_allocate_columns (self, width);
@@ -494,12 +494,15 @@ gtk_column_view_allocate (GtkWidget *widget,
     header_height = min;
   else
     header_height = nat;
+
+  dx = (_gtk_widget_get_direction (widget) != GTK_TEXT_DIR_RTL) ? -x : width - full_width + x;
+
   gtk_widget_allocate (self->header, full_width, header_height, -1,
-                       gsk_transform_translate (NULL, &GRAPHENE_POINT_INIT (-x, 0)));
+                       gsk_transform_translate (NULL, &GRAPHENE_POINT_INIT (dx, 0)));
 
   gtk_widget_allocate (GTK_WIDGET (self->listview),
                        full_width, height - header_height, -1,
-                       gsk_transform_translate (NULL, &GRAPHENE_POINT_INIT (-x, header_height)));
+                       gsk_transform_translate (NULL, &GRAPHENE_POINT_INIT (dx, header_height)));
 
   gtk_adjustment_configure (self->hadjustment,  x, 0, full_width, width * 0.1, width * 0.9, width);
 }
