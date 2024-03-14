@@ -129,31 +129,6 @@ gsk_vulkan_renderer_get_backbuffer (GskGpuRenderer *renderer)
   return self->targets[gdk_vulkan_context_get_draw_index (context)];
 }
 
-static void
-gsk_vulkan_renderer_wait (GskGpuRenderer  *renderer,
-                          GskGpuFrame    **frames,
-                          gsize            n_frames)
-{
-  VkFence *fences;
-  VkDevice vk_device;
-  gsize i;
-
-  vk_device = gsk_vulkan_device_get_vk_device (GSK_VULKAN_DEVICE (gsk_gpu_renderer_get_device (renderer)));
-
-  fences = g_alloca (sizeof (VkFence) * n_frames);
-
-  for (i = 0; i < n_frames; i++)
-    {
-      fences[i] = gsk_vulkan_frame_get_vk_fence (GSK_VULKAN_FRAME (frames[i]));
-    }
-
-  GSK_VK_CHECK (vkWaitForFences, vk_device,
-                                 n_frames,
-                                 fences,
-                                 VK_FALSE,
-                                 INT64_MAX);
-}
-
 static GdkDmabufFormats *
 gsk_vulkan_renderer_get_dmabuf_formats (GskGpuRenderer *renderer)
 {
@@ -189,7 +164,6 @@ gsk_vulkan_renderer_class_init (GskVulkanRendererClass *klass)
   gpu_renderer_class->create_context = gsk_vulkan_renderer_create_context;
   gpu_renderer_class->make_current = gsk_vulkan_renderer_make_current;
   gpu_renderer_class->get_backbuffer = gsk_vulkan_renderer_get_backbuffer;
-  gpu_renderer_class->wait = gsk_vulkan_renderer_wait;
   gpu_renderer_class->get_dmabuf_formats = gsk_vulkan_renderer_get_dmabuf_formats;
 
   renderer_class->unrealize = gsk_vulkan_renderer_unrealize;

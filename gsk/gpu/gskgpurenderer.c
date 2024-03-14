@@ -166,24 +166,36 @@ static GskGpuFrame *
 gsk_gpu_renderer_get_frame (GskGpuRenderer *self)
 {
   GskGpuRendererPrivate *priv = gsk_gpu_renderer_get_instance_private (self);
+  GskGpuFrame *earliest_frame = NULL;
+  gint64 earliest_time = G_MAXINT64;
   guint i;
 
-  while (TRUE)
+  for (i = 0; i < G_N_ELEMENTS (priv->frames); i++)
     {
-      for (i = 0; i < G_N_ELEMENTS (priv->frames); i++)
-        {
-          if (priv->frames[i] == NULL)
-            {
-              priv->frames[i] = gsk_gpu_renderer_create_frame (self);
-              return priv->frames[i];
-            }
+      gint64 timestamp;
 
-          if (!gsk_gpu_frame_is_busy (priv->frames[i]))
-            return priv->frames[i];
+      if (priv->frames[i] == NULL)
+        {
+          priv->frames[i] = gsk_gpu_renderer_create_frame (self);
+          return priv->frames[i];
         }
 
-      GSK_GPU_RENDERER_GET_CLASS (self)->wait (self, priv->frames, GSK_GPU_MAX_FRAMES);
+      if (!gsk_gpu_frame_is_busy (priv->frames[i]))
+        return priv->frames[i];
+
+      timestamp = gsk_gpu_frame_get_timestamp (priv->frames[i]);
+      if (timestamp < earliest_time)
+        {
+          earliest_time = timestamp;
+          earliest_frame = priv->frames[i];
+        }
     }
+
+  g_assert (earliest_frame);
+
+  gsk_gpu_frame_wait (earliest_frame);
+
+  return earliest_frame;
 }
 
 static gboolean
@@ -217,31 +229,17 @@ gsk_gpu_renderer_unrealize (GskRenderer *renderer)
 {
   GskGpuRenderer *self = GSK_GPU_RENDERER (renderer);
   GskGpuRendererPrivate *priv = gsk_gpu_renderer_get_instance_private (self);
-  gsize i, j;
+  gsize i;
 
   gsk_gpu_renderer_make_current (self);
 
-  while (TRUE)
+  for (i = 0; i < G_N_ELEMENTS (priv->frames); i++)
     {
-      for (i = 0, j = 0; i < G_N_ELEMENTS (priv->frames); i++)
-        {
-          if (priv->frames[i] == NULL)
-            break;
-          if (gsk_gpu_frame_is_busy (priv->frames[i]))
-            {
-              if (i > j)
-                {
-                  priv->frames[j] = priv->frames[i];
-                  priv->frames[i] = NULL;
-                }
-              j++;
-              continue;
-            }
-          g_clear_object (&priv->frames[i]);
-        }
-      if (j == 0)
+      if (priv->frames[i] == NULL)
         break;
-      GSK_GPU_RENDERER_GET_CLASS (self)->wait (self, priv->frames, j);
+      if (gsk_gpu_frame_is_busy (priv->frames[i]))
+        gsk_gpu_frame_wait (priv->frames[i]);
+      g_clear_object (&priv->frames[i]);
     }
 
   g_clear_object (&priv->context);

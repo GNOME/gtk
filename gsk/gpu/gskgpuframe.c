@@ -505,6 +505,12 @@ gsk_gpu_frame_is_busy (GskGpuFrame *self)
   return GSK_GPU_FRAME_GET_CLASS (self)->is_busy (self);
 }
 
+void
+gsk_gpu_frame_wait (GskGpuFrame *self)
+{
+  GSK_GPU_FRAME_GET_CLASS (self)->wait (self);
+}
+
 static void
 copy_texture (gpointer    user_data,
               GdkTexture *texture)

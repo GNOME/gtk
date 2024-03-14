@@ -35,9 +35,6 @@ struct _GskGpuRendererClass
 
   void                  (* make_current)                                (GskGpuRenderer         *self);
   GskGpuImage *         (* get_backbuffer)                              (GskGpuRenderer         *self);
-  void                  (* wait)                                        (GskGpuRenderer         *self,
-                                                                         GskGpuFrame           **frame,
-                                                                         gsize                   n_frames);
 
   double                (* get_scale)                                   (GskGpuRenderer         *self);
   GdkDmabufFormats *    (* get_dmabuf_formats)                          (GskGpuRenderer         *self);

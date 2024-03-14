@@ -44,6 +44,17 @@ gsk_gl_frame_is_busy (GskGpuFrame *frame)
 }
 
 static void
+gsk_gl_frame_wait (GskGpuFrame *frame)
+{
+  GskGLFrame *self = GSK_GL_FRAME (frame);
+
+  if (!self->sync)
+    return;
+
+  glClientWaitSync (self->sync, 0, G_MAXINT64);
+}
+
+static void
 gsk_gl_frame_setup (GskGpuFrame *frame)
 {
   GskGLFrame *self = GSK_GL_FRAME (frame);
@@ -194,6 +205,7 @@ gsk_gl_frame_class_init (GskGLFrameClass *klass)
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
   gpu_frame_class->is_busy = gsk_gl_frame_is_busy;
+  gpu_frame_class->wait = gsk_gl_frame_wait;
   gpu_frame_class->setup = gsk_gl_frame_setup;
   gpu_frame_class->cleanup = gsk_gl_frame_cleanup;
   gpu_frame_class->upload_texture = gsk_gl_frame_upload_texture;

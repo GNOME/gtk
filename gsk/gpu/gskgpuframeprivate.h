@@ -24,6 +24,7 @@ struct _GskGpuFrameClass
   GObjectClass parent_class;
 
   gboolean              (* is_busy)                                     (GskGpuFrame            *self);
+  void                  (* wait)                                        (GskGpuFrame            *self);
   void                  (* setup)                                       (GskGpuFrame            *self);
   void                  (* cleanup)                                     (GskGpuFrame            *self);
   GskGpuImage *         (* upload_texture)                              (GskGpuFrame            *self,
@@ -69,6 +70,7 @@ GskGpuBuffer *          gsk_gpu_frame_write_storage_buffer              (GskGpuF
                                                                          gsize                  *out_offset);
 
 gboolean                gsk_gpu_frame_is_busy                           (GskGpuFrame            *self);
+void                    gsk_gpu_frame_wait                              (GskGpuFrame            *self);
 
 void                    gsk_gpu_frame_render                            (GskGpuFrame            *self,
                                                                          gint64                  timestamp,
