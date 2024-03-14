@@ -86,6 +86,8 @@ translate_coordinates_to_accessible (GtkAccessible  *accessible,
       parent = gtk_accessible_get_accessible_parent (accessible);
       while (parent != NULL)
         {
+          g_object_unref (parent);
+
           if (gtk_accessible_get_bounds (parent, &x, &y, &width, &height))
             {
               *xo = *xo - x;
@@ -138,6 +140,8 @@ translate_coordinates_from_accessible (GtkAccessible *accessible,
       parent = gtk_accessible_get_accessible_parent (accessible);
       while (parent != NULL)
         {
+          g_object_unref (parent);
+
           if (gtk_accessible_get_bounds (parent, &x, &y, &width, &height))
             {
               *xo = *xo + x;
@@ -172,6 +176,7 @@ accessible_at_point (GtkAccessible *parent,
        child = gtk_accessible_get_next_accessible_sibling (child))
     {
       GtkAccessible *found = accessible_at_point (child, x - px, y - py, FALSE);
+      g_object_unref (child);
       if (found)
         result = found;
     }

@@ -1087,6 +1087,7 @@ gtk_accessible_platform_changed (GtkAccessible               *self,
 
       if (parent != NULL)
         {
+          g_clear_object (&context);
           context = gtk_accessible_get_at_context (parent);
           g_object_unref (parent);
         }
