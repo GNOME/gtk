@@ -229,19 +229,39 @@ gsk_gpu_shader_op_alloc (GskGpuFrame               *frame,
                          GskGpuDescriptors         *desc,
                          gpointer                   out_vertex_data)
 {
-  GskGpuShaderOp *self;
+  GskGpuOp *last;
+  GskGpuShaderOp *last_shader;
+  gsize vertex_offset;
 
-  self = (GskGpuShaderOp *) gsk_gpu_op_alloc (frame, &op_class->parent_class);
+  vertex_offset = gsk_gpu_frame_reserve_vertex_data (frame, op_class->vertex_size);
 
-  self->variation = variation;
-  self->clip = clip;
-  if (desc)
-    self->desc = g_object_ref (desc);
+  last = gsk_gpu_frame_get_last_op (frame);
+  /* careful: We're casting without checking, but the if() does the check */
+  last_shader = (GskGpuShaderOp *) last;
+  if (last &&
+      last->op_class == (const GskGpuOpClass *) op_class &&
+      last_shader->desc == desc &&
+      last_shader->variation == variation &&
+      last_shader->clip == clip &&
+      last_shader->vertex_offset + last_shader->n_ops * op_class->vertex_size == vertex_offset)
+    {
+      last_shader->n_ops++;
+    }
   else
-    self->desc = NULL;
-  self->vertex_offset = gsk_gpu_frame_reserve_vertex_data (frame, op_class->vertex_size);
-  self->n_ops = 1;
+    {
+      GskGpuShaderOp *self;
+      self = (GskGpuShaderOp *) gsk_gpu_op_alloc (frame, &op_class->parent_class);
 
-  *((gpointer *) out_vertex_data) = gsk_gpu_frame_get_vertex_data (frame, self->vertex_offset);
+      self->variation = variation;
+      self->clip = clip;
+      self->vertex_offset = vertex_offset;
+      if (desc)
+        self->desc = g_object_ref (desc);
+      else
+        self->desc = NULL;
+      self->n_ops = 1;
+    }
+
+  *((gpointer *) out_vertex_data) = gsk_gpu_frame_get_vertex_data (frame, vertex_offset);
 }
 
