@@ -170,7 +170,6 @@ gtk_box_gadget_distribute (GtkBoxGadget     *gadget,
 
   if G_UNLIKELY (size < 0)
     {
-      g_critical ("%s: assertion 'size >= 0' failed in %s", G_STRFUNC, G_OBJECT_TYPE_NAME (gtk_css_gadget_get_owner (GTK_CSS_GADGET (gadget))));
       return;
     }
 
