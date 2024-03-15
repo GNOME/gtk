@@ -70,7 +70,7 @@ gsk_gl_frame_cleanup (GskGpuFrame *frame)
   if (self->sync)
     {
       glClientWaitSync (self->sync, 0, -1);
-      glDeleteSync (self->sync);
+      g_clear_pointer (&self->sync, glDeleteSync);
     }
 
   self->next_texture_slot = 0;
