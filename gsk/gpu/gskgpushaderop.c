@@ -68,15 +68,15 @@ gsk_gpu_shader_op_vk_command_n (GskGpuOp              *op,
   GskGpuShaderOpClass *shader_op_class = (GskGpuShaderOpClass *) op->op_class;
   GskVulkanDescriptors *desc;
   GskGpuOp *next;
-  gsize i, n;
+  gsize i, n_ops, max_ops_per_draw;
 
   if (gsk_gpu_frame_should_optimize (frame, GSK_GPU_OPTIMIZE_MERGE) &&
       gsk_vulkan_device_has_feature (GSK_VULKAN_DEVICE (gsk_gpu_frame_get_device (frame)),
                                      GDK_VULKAN_FEATURE_NONUNIFORM_INDEXING))
-    n = MAX_MERGE_OPS;
+    max_ops_per_draw = MAX_MERGE_OPS;
   else
-    n = 1;
-  i = self->n_ops;
+    max_ops_per_draw = 1;
+
   desc = GSK_VULKAN_DESCRIPTORS (self->desc);
   if (desc && state->desc != desc)
     {
@@ -84,7 +84,8 @@ gsk_gpu_shader_op_vk_command_n (GskGpuOp              *op,
       state->desc = desc;
     }
 
-  for (next = op->next; next && i < n; next = next->next)
+  n_ops = self->n_ops;
+  for (next = op->next; next; next = next->next)
     {
       GskGpuShaderOp *next_shader = (GskGpuShaderOp *) next;
   
@@ -92,10 +93,10 @@ gsk_gpu_shader_op_vk_command_n (GskGpuOp              *op,
           next_shader->desc != self->desc ||
           next_shader->variation != self->variation ||
           next_shader->clip != self->clip ||
-          next_shader->vertex_offset != self->vertex_offset + i * shader_op_class->vertex_size)
+          next_shader->vertex_offset != self->vertex_offset + n_ops * shader_op_class->vertex_size)
         break;
 
-      i += next_shader->n_ops;
+      n_ops += next_shader->n_ops;
     }
 
   vkCmdBindPipeline (state->vk_command_buffer,
@@ -109,10 +110,13 @@ gsk_gpu_shader_op_vk_command_n (GskGpuOp              *op,
                                                         state->vk_format,
                                                         state->vk_render_pass));
 
-  vkCmdDraw (state->vk_command_buffer,
-             6 * instance_scale, i,
-             0, self->vertex_offset / shader_op_class->vertex_size);
-
+  for (i = 0; i < n_ops; i += max_ops_per_draw)
+    {
+      vkCmdDraw (state->vk_command_buffer,
+                 6 * instance_scale, MIN (max_ops_per_draw, n_ops - i),
+                 0, self->vertex_offset / shader_op_class->vertex_size + i);
+    }
+ 
   return next;
 }
 
@@ -135,7 +139,7 @@ gsk_gpu_shader_op_gl_command_n (GskGpuOp          *op,
   GskGpuShaderOpClass *shader_op_class = (GskGpuShaderOpClass *) op->op_class;
   GskGLDescriptors *desc;
   GskGpuOp *next;
-  gsize i, n, n_external;
+  gsize i, n_ops, n_external, max_ops_per_draw;
 
   desc = GSK_GL_DESCRIPTORS (self->desc);
   if (desc)
@@ -166,11 +170,12 @@ gsk_gpu_shader_op_gl_command_n (GskGpuOp          *op,
     }
 
   if (gsk_gpu_frame_should_optimize (frame, GSK_GPU_OPTIMIZE_MERGE))
-    n = MAX_MERGE_OPS;
+    max_ops_per_draw = MAX_MERGE_OPS;
   else
-    n = 1;
-  i = self->n_ops;
-  for (next = op->next; next && i < n; next = next->next)
+    max_ops_per_draw = 1;
+
+  n_ops = self->n_ops;
+  for (next = op->next; next; next = next->next)
     {
       GskGpuShaderOp *next_shader = (GskGpuShaderOp *) next;
 
@@ -178,28 +183,31 @@ gsk_gpu_shader_op_gl_command_n (GskGpuOp          *op,
           next_shader->desc != self->desc ||
           next_shader->variation != self->variation ||
           next_shader->clip != self->clip ||
-          next_shader->vertex_offset != self->vertex_offset + i * shader_op_class->vertex_size)
+          next_shader->vertex_offset != self->vertex_offset + n_ops * shader_op_class->vertex_size)
         break;
 
-      i += next_shader->n_ops;
+      n_ops += next_shader->n_ops;
     }
 
-  if (gsk_gpu_frame_should_optimize (frame, GSK_GPU_OPTIMIZE_GL_BASE_INSTANCE))
+  for (i = 0; i < n_ops; i += max_ops_per_draw)
     {
-      glDrawArraysInstancedBaseInstance (GL_TRIANGLES,
-                                         0,
-                                         6 * instance_scale,
-                                         i,
-                                         self->vertex_offset / shader_op_class->vertex_size);
-    }
-  else
-    {
-      shader_op_class->setup_vao (self->vertex_offset);
+      if (gsk_gpu_frame_should_optimize (frame, GSK_GPU_OPTIMIZE_GL_BASE_INSTANCE))
+        {
+          glDrawArraysInstancedBaseInstance (GL_TRIANGLES,
+                                             0,
+                                             6 * instance_scale,
+                                             MIN (max_ops_per_draw, n_ops - i),
+                                             self->vertex_offset / shader_op_class->vertex_size + i);
+        }
+      else
+        {
+          shader_op_class->setup_vao (self->vertex_offset + i * shader_op_class->vertex_size);
 
-      glDrawArraysInstanced (GL_TRIANGLES,
-                             0,
-                             6 * instance_scale,
-                             i);
+          glDrawArraysInstanced (GL_TRIANGLES,
+                                 0,
+                                 6 * instance_scale,
+                                 MIN (max_ops_per_draw, n_ops - i));
+        }
     }
 
   return next;
