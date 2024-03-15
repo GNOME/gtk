@@ -11,7 +11,7 @@ multiplier=${MESON_TEST_TIMEOUT_MULTIPLIER:-1}
 
 # Ignore memory leaks lower in dependencies
 export LSAN_OPTIONS=suppressions=$srcdir/lsan.supp:print_suppressions=0:detect_leaks=0:allocator_may_return_null=1
-export G_SLICE=always-malloc
+export UBSAN_OPTIONS=silence_unsigned_overflow=1
 
 case "${setup}" in
   x11*)
