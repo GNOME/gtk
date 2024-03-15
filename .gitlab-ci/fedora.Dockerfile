@@ -2,8 +2,6 @@ FROM fedora:39
 
 RUN dnf -y install \
     adwaita-icon-theme \
-    atk-devel \
-    at-spi2-atk-devel \
     avahi-gobject-devel \
     cairo-devel \
     cairo-gobject-devel \
@@ -18,7 +16,6 @@ RUN dnf -y install \
     dejavu-sans-mono-fonts \
     desktop-file-utils \
     diffutils \
-    docbook-style-xsl \
     elfutils-libelf-devel \
     expat-devel \
     fribidi-devel \
