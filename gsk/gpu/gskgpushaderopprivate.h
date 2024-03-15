@@ -32,7 +32,7 @@ struct _GskGpuShaderOpClass
   void                  (* setup_vao)                                   (gsize                   offset);
 };
 
-GskGpuShaderOp *        gsk_gpu_shader_op_alloc                         (GskGpuFrame            *frame,
+void                    gsk_gpu_shader_op_alloc                         (GskGpuFrame            *frame,
                                                                          const GskGpuShaderOpClass *op_class,
                                                                          guint32                 variation,
                                                                          GskGpuShaderClip        clip,

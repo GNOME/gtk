@@ -204,7 +204,7 @@ gsk_gpu_shader_op_gl_command (GskGpuOp          *op,
   return gsk_gpu_shader_op_gl_command_n (op, frame, state, 1);
 }
 
-GskGpuShaderOp *
+void
 gsk_gpu_shader_op_alloc (GskGpuFrame               *frame,
                          const GskGpuShaderOpClass *op_class,
                          guint32                    variation,
@@ -225,7 +225,5 @@ gsk_gpu_shader_op_alloc (GskGpuFrame               *frame,
   self->vertex_offset = gsk_gpu_frame_reserve_vertex_data (frame, op_class->vertex_size);
 
   *((gpointer *) out_vertex_data) = gsk_gpu_frame_get_vertex_data (frame, self->vertex_offset);
-
-  return self;
 }
 
