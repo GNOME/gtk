@@ -290,7 +290,7 @@ gdk_gl_context_create_egl_context (GdkGLContext *context,
   GdkDisplay *display = gdk_gl_context_get_display (context);
   EGLDisplay egl_display = gdk_display_get_egl_display (display);
   GdkGLContext *share = gdk_display_get_gl_context (display);
-  GdkGLContextPrivate *share_priv = gdk_gl_context_get_instance_private (share);
+  GdkGLContextPrivate *share_priv = share ? gdk_gl_context_get_instance_private (share) : NULL;
   EGLConfig egl_config;
   EGLContext ctx;
   EGLint context_attribs[N_EGL_ATTRS], i = 0, flags = 0;
