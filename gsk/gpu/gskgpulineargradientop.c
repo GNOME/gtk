@@ -19,23 +19,15 @@ struct _GskGpuLinearGradientOp
 };
 
 static void
-gsk_gpu_linear_gradient_op_print (GskGpuOp    *op,
-                                  GskGpuFrame *frame,
-                                  GString     *string,
-                                  guint        indent)
+gsk_gpu_linear_gradient_op_print_instance (GskGpuShaderOp *shader,
+                                           gpointer        instance_,
+                                           GString        *string)
 {
-  GskGpuShaderOp *shader = (GskGpuShaderOp *) op;
-  GskGpuLineargradientInstance *instance;
-
-  instance = (GskGpuLineargradientInstance *) gsk_gpu_frame_get_vertex_data (frame, shader->vertex_offset);
+  GskGpuLineargradientInstance *instance = (GskGpuLineargradientInstance *) instance_;
 
   if (shader->variation & VARIATION_REPEATING)
-    gsk_gpu_print_op (string, indent, "repeating-linear-gradient");
-  else
-    gsk_gpu_print_op (string, indent, "linear-gradient");
-  gsk_gpu_print_shader_info (string, shader->clip);
+    gsk_gpu_print_string (string, "repeating");
   gsk_gpu_print_rect (string, instance->rect);
-  gsk_gpu_print_newline (string);
 }
 
 static const GskGpuShaderOpClass GSK_GPU_LINEAR_GRADIENT_OP_CLASS = {
@@ -43,7 +35,7 @@ static const GskGpuShaderOpClass GSK_GPU_LINEAR_GRADIENT_OP_CLASS = {
     GSK_GPU_OP_SIZE (GskGpuLinearGradientOp),
     GSK_GPU_STAGE_SHADER,
     gsk_gpu_shader_op_finish,
-    gsk_gpu_linear_gradient_op_print,
+    gsk_gpu_shader_op_print,
 #ifdef GDK_RENDERING_VULKAN
     gsk_gpu_shader_op_vk_command,
 #endif
@@ -54,6 +46,7 @@ static const GskGpuShaderOpClass GSK_GPU_LINEAR_GRADIENT_OP_CLASS = {
 #ifdef GDK_RENDERING_VULKAN
   &gsk_gpu_lineargradient_info,
 #endif
+  gsk_gpu_linear_gradient_op_print_instance,
   gsk_gpu_lineargradient_setup_attrib_locations,
   gsk_gpu_lineargradient_setup_vao
 };

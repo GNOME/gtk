@@ -16,22 +16,15 @@ struct _GskGpuMaskOp
 };
 
 static void
-gsk_gpu_mask_op_print (GskGpuOp    *op,
-                       GskGpuFrame *frame,
-                       GString     *string,
-                       guint        indent)
+gsk_gpu_mask_op_print_instance (GskGpuShaderOp *shader,
+                                gpointer        instance_,
+                                GString        *string)
 {
-  GskGpuShaderOp *shader = (GskGpuShaderOp *) op;
-  GskGpuMaskInstance *instance;
+  GskGpuMaskInstance *instance = (GskGpuMaskInstance *) instance_;
 
-  instance = (GskGpuMaskInstance *) gsk_gpu_frame_get_vertex_data (frame, shader->vertex_offset);
-
-  gsk_gpu_print_op (string, indent, "mask");
-  gsk_gpu_print_shader_info (string, shader->clip);
   gsk_gpu_print_rect (string, instance->rect);
   gsk_gpu_print_image_descriptor (string, shader->desc, instance->source_id);
   gsk_gpu_print_image_descriptor (string, shader->desc, instance->mask_id);
-  gsk_gpu_print_newline (string);
 }
 
 static const GskGpuShaderOpClass GSK_GPU_MASK_OP_CLASS = {
@@ -39,7 +32,7 @@ static const GskGpuShaderOpClass GSK_GPU_MASK_OP_CLASS = {
     GSK_GPU_OP_SIZE (GskGpuMaskOp),
     GSK_GPU_STAGE_SHADER,
     gsk_gpu_shader_op_finish,
-    gsk_gpu_mask_op_print,
+    gsk_gpu_shader_op_print,
 #ifdef GDK_RENDERING_VULKAN
     gsk_gpu_shader_op_vk_command,
 #endif
@@ -50,6 +43,7 @@ static const GskGpuShaderOpClass GSK_GPU_MASK_OP_CLASS = {
 #ifdef GDK_RENDERING_VULKAN
   &gsk_gpu_mask_info,
 #endif
+  gsk_gpu_mask_op_print_instance,
   gsk_gpu_mask_setup_attrib_locations,
   gsk_gpu_mask_setup_vao
 };

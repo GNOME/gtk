@@ -3,6 +3,7 @@
 #include "gskgpushaderopprivate.h"
 
 #include "gskgpuframeprivate.h"
+#include "gskgpuprintprivate.h"
 #include "gskgldescriptorsprivate.h"
 #include "gskgldeviceprivate.h"
 #include "gskglframeprivate.h"
@@ -24,6 +25,27 @@ gsk_gpu_shader_op_finish (GskGpuOp *op)
   GskGpuShaderOp *self = (GskGpuShaderOp *) op;
 
   g_clear_object (&self->desc);
+}
+
+void
+gsk_gpu_shader_op_print (GskGpuOp    *op,
+                         GskGpuFrame *frame,
+                         GString     *string,
+                         guint        indent)
+{
+  GskGpuShaderOp *shader = (GskGpuShaderOp *) op;
+  const GskGpuShaderOpClass *shader_class = (const GskGpuShaderOpClass *) op->op_class;
+  gpointer instance;
+
+  instance = gsk_gpu_frame_get_vertex_data (frame, shader->vertex_offset);
+
+  if (g_str_has_prefix (shader_class->shader_name, "gskgpu"))
+    gsk_gpu_print_op (string, indent, shader_class->shader_name + 6);
+  else
+    gsk_gpu_print_op (string, indent, shader_class->shader_name);
+  gsk_gpu_print_shader_info (string, shader->clip);
+  shader_class->print_instance (shader, instance, string);
+  gsk_gpu_print_newline (string);
 }
 
 #ifdef GDK_RENDERING_VULKAN
