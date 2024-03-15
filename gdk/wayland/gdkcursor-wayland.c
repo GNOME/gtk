@@ -423,6 +423,36 @@ _gdk_wayland_display_get_cursor_for_type_with_scale (GdkDisplay    *display,
 
   g_free (cursor_name);
 
+  if (!result)
+    {
+      const char *name = NULL;
+
+      /* Map cursors back to standard names.
+       * Currently, we just list the cursor values
+       * that are used in GTK. More can be added.
+       */
+      switch ((int)cursor_type)
+        {
+        case GDK_XTERM:
+          name = "text";
+          break;
+        case GDK_FLEUR:
+          name = "move";
+          break;
+        case GDK_CROSSHAIR:
+          name = "cross";
+          break;
+        default:
+          name = "default";
+          break;
+        }
+
+      if (name)
+        result = _gdk_wayland_display_get_cursor_for_name_with_scale (display,
+                                                                      name,
+                                                                      scale);
+    }
+
   return result;
 }
 
