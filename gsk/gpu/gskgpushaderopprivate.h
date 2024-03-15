@@ -14,6 +14,7 @@ struct _GskGpuShaderOp
   guint32 variation;
   GskGpuShaderClip clip;
   gsize vertex_offset;
+  gsize n_ops;
 };
 
 struct _GskGpuShaderOpClass
