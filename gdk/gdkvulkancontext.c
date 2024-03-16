@@ -1366,7 +1366,7 @@ gdk_display_create_vulkan_device (GdkDisplay  *display,
   first = 0;
   last = n_devices;
 
-  skip_features = gdk_parse_debug_var ("GDK_VULKAN_SKIP",
+  skip_features = gdk_parse_debug_var ("GDK_VULKAN_DISABLE",
                                        gsk_vulkan_feature_keys,
                                        G_N_ELEMENTS (gsk_vulkan_feature_keys));
 
@@ -1539,7 +1539,7 @@ gdk_display_create_vulkan_device (GdkDisplay  *display,
               display->vk_queue_family_index = j;
               display->vulkan_features = features;
 
-              GDK_DISPLAY_DEBUG (display, VULKAN, "Enabled features (use GDK_VULKAN_SKIP env var to disable):");
+              GDK_DISPLAY_DEBUG (display, VULKAN, "Enabled features (use GDK_VULKAN_DISABLE env var to disable):");
               for (i = 0; i < G_N_ELEMENTS (gsk_vulkan_feature_keys); i++)
                 {
                   GDK_DISPLAY_DEBUG (display, VULKAN, "    %s: %s",

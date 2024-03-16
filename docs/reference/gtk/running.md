@@ -376,7 +376,7 @@ the default selection of the device that is used for Vulkan rendering.
 The special value `list` can be used to obtain a list of all Vulkan
 devices.
 
-### `GDK_VULKAN_SKIP`
+### `GDK_VULKAN_DISABLE`
 
 This variable can be set to a list of values, which cause GDK to
 disable features of the Vulkan support.
