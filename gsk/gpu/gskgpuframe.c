@@ -40,6 +40,7 @@ struct _GskGpuFramePrivate
 
   GskGpuOps ops;
   GskGpuOp *first_op;
+  GskGpuOp *last_op;
 
   GskGpuBuffer *vertex_buffer;
   guchar *vertex_buffer_data;
@@ -70,6 +71,8 @@ gsk_gpu_frame_default_cleanup (GskGpuFrame *self)
       gsk_gpu_op_finish (op);
     }
   gsk_gpu_ops_set_size (&priv->ops, 0);
+
+  priv->last_op = NULL;
 }
 
 static void
@@ -331,7 +334,7 @@ gsk_gpu_frame_sort_ops (GskGpuFrame *self)
 {
   GskGpuFramePrivate *priv = gsk_gpu_frame_get_instance_private (self);
   SortData sort_data = { { NULL, }, };
-  
+
   gsk_gpu_frame_sort_render_pass (self, priv->first_op, &sort_data);
 
   if (sort_data.upload.first)
@@ -343,6 +346,8 @@ gsk_gpu_frame_sort_ops (GskGpuFrame *self)
     priv->first_op = sort_data.command.first;
   if (sort_data.command.last)
     sort_data.command.last->next = NULL;
+
+  priv->last_op = NULL;
 }
 
 gpointer
@@ -360,7 +365,17 @@ gsk_gpu_frame_alloc_op (GskGpuFrame *self,
                       NULL,
                       size);
 
-  return gsk_gpu_ops_index (&priv->ops, pos);
+  priv->last_op = (GskGpuOp *) gsk_gpu_ops_index (&priv->ops, pos);
+
+  return priv->last_op;
+}
+
+GskGpuOp *
+gsk_gpu_frame_get_last_op (GskGpuFrame *self)
+{
+  GskGpuFramePrivate *priv = gsk_gpu_frame_get_instance_private (self);
+
+  return priv->last_op;
 }
 
 GskGpuImage *

@@ -17,23 +17,16 @@ struct _GskGpuBlendModeOp
 };
 
 static void
-gsk_gpu_blend_mode_op_print (GskGpuOp    *op,
-                             GskGpuFrame *frame,
-                             GString     *string,
-                             guint        indent)
+gsk_gpu_blend_mode_op_print_instance (GskGpuShaderOp *shader,
+                                      gpointer        instance_,
+                                      GString        *string)
 {
-  GskGpuShaderOp *shader = (GskGpuShaderOp *) op;
-  GskGpuBlendmodeInstance *instance;
+  GskGpuBlendmodeInstance *instance = (GskGpuBlendmodeInstance *) instance_;
 
-  instance = (GskGpuBlendmodeInstance *) gsk_gpu_frame_get_vertex_data (frame, shader->vertex_offset);
-
-  gsk_gpu_print_op (string, indent, "blend-mode");
-  gsk_gpu_print_shader_info (string, shader->clip);
   gsk_gpu_print_rect (string, instance->rect);
   gsk_gpu_print_image_descriptor (string, shader->desc, instance->bottom_id);
   gsk_gpu_print_enum (string, GSK_TYPE_BLEND_MODE, shader->variation);
   gsk_gpu_print_image_descriptor (string, shader->desc, instance->top_id);
-  gsk_gpu_print_newline (string);
 }
 
 static const GskGpuShaderOpClass GSK_GPU_BLEND_MODE_OP_CLASS = {
@@ -41,7 +34,7 @@ static const GskGpuShaderOpClass GSK_GPU_BLEND_MODE_OP_CLASS = {
     GSK_GPU_OP_SIZE (GskGpuBlendModeOp),
     GSK_GPU_STAGE_SHADER,
     gsk_gpu_shader_op_finish,
-    gsk_gpu_blend_mode_op_print,
+    gsk_gpu_shader_op_print,
 #ifdef GDK_RENDERING_VULKAN
     gsk_gpu_shader_op_vk_command,
 #endif
@@ -52,6 +45,7 @@ static const GskGpuShaderOpClass GSK_GPU_BLEND_MODE_OP_CLASS = {
 #ifdef GDK_RENDERING_VULKAN
   &gsk_gpu_blendmode_info,
 #endif
+  gsk_gpu_blend_mode_op_print_instance,
   gsk_gpu_blendmode_setup_attrib_locations,
   gsk_gpu_blendmode_setup_vao
 };

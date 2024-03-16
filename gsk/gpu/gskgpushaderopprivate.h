@@ -14,6 +14,7 @@ struct _GskGpuShaderOp
   guint32 variation;
   GskGpuShaderClip clip;
   gsize vertex_offset;
+  gsize n_ops;
 };
 
 struct _GskGpuShaderOpClass
@@ -25,11 +26,14 @@ struct _GskGpuShaderOpClass
 #ifdef GDK_RENDERING_VULKAN
   const VkPipelineVertexInputStateCreateInfo *vertex_input_state;
 #endif
+  void                  (* print_instance)                              (GskGpuShaderOp         *shader,
+                                                                         gpointer                instance,
+                                                                         GString                *string);
   void                  (* setup_attrib_locations)                      (GLuint                  program);
   void                  (* setup_vao)                                   (gsize                   offset);
 };
 
-GskGpuShaderOp *        gsk_gpu_shader_op_alloc                         (GskGpuFrame            *frame,
+void                    gsk_gpu_shader_op_alloc                         (GskGpuFrame            *frame,
                                                                          const GskGpuShaderOpClass *op_class,
                                                                          guint32                 variation,
                                                                          GskGpuShaderClip        clip,
@@ -38,6 +42,10 @@ GskGpuShaderOp *        gsk_gpu_shader_op_alloc                         (GskGpuF
 
 void                    gsk_gpu_shader_op_finish                        (GskGpuOp               *op);
 
+void                    gsk_gpu_shader_op_print                         (GskGpuOp               *op,
+                                                                         GskGpuFrame            *frame,
+                                                                         GString                *string,
+                                                                         guint                   indent);
 #ifdef GDK_RENDERING_VULKAN
 GskGpuOp *              gsk_gpu_shader_op_vk_command_n                  (GskGpuOp               *op,
                                                                          GskGpuFrame            *frame,

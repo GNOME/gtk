@@ -3,6 +3,7 @@
 #include "gskgpushaderopprivate.h"
 
 #include "gskgpuframeprivate.h"
+#include "gskgpuprintprivate.h"
 #include "gskgldescriptorsprivate.h"
 #include "gskgldeviceprivate.h"
 #include "gskglframeprivate.h"
@@ -26,6 +27,36 @@ gsk_gpu_shader_op_finish (GskGpuOp *op)
   g_clear_object (&self->desc);
 }
 
+void
+gsk_gpu_shader_op_print (GskGpuOp    *op,
+                         GskGpuFrame *frame,
+                         GString     *string,
+                         guint        indent)
+{
+  GskGpuShaderOp *self = (GskGpuShaderOp *) op;
+  const GskGpuShaderOpClass *shader_class = (const GskGpuShaderOpClass *) op->op_class;
+  const char *shader_name;
+  guchar *instance;
+  gsize i;
+
+  if (g_str_has_prefix (shader_class->shader_name, "gskgpu"))
+    shader_name = shader_class->shader_name + 6;
+  else
+    shader_name = shader_class->shader_name;
+
+  instance = gsk_gpu_frame_get_vertex_data (frame, self->vertex_offset);
+
+  for (i = 0; i < self->n_ops; i++)
+    {
+      gsk_gpu_print_op (string, indent, shader_name);
+      gsk_gpu_print_shader_info (string, self->clip);
+      shader_class->print_instance (self,
+                                    instance + i * shader_class->vertex_size,
+                                    string);
+      gsk_gpu_print_newline (string);
+    }
+}
+
 #ifdef GDK_RENDERING_VULKAN
 GskGpuOp *
 gsk_gpu_shader_op_vk_command_n (GskGpuOp              *op,
@@ -37,15 +68,15 @@ gsk_gpu_shader_op_vk_command_n (GskGpuOp              *op,
   GskGpuShaderOpClass *shader_op_class = (GskGpuShaderOpClass *) op->op_class;
   GskVulkanDescriptors *desc;
   GskGpuOp *next;
-  gsize i, n;
+  gsize i, n_ops, max_ops_per_draw;
 
   if (gsk_gpu_frame_should_optimize (frame, GSK_GPU_OPTIMIZE_MERGE) &&
       gsk_vulkan_device_has_feature (GSK_VULKAN_DEVICE (gsk_gpu_frame_get_device (frame)),
                                      GDK_VULKAN_FEATURE_NONUNIFORM_INDEXING))
-    n = MAX_MERGE_OPS;
+    max_ops_per_draw = MAX_MERGE_OPS;
   else
-    n = 1;
-  i = 1;
+    max_ops_per_draw = 1;
+
   desc = GSK_VULKAN_DESCRIPTORS (self->desc);
   if (desc && state->desc != desc)
     {
@@ -53,7 +84,8 @@ gsk_gpu_shader_op_vk_command_n (GskGpuOp              *op,
       state->desc = desc;
     }
 
-  for (next = op->next; next && i < n; next = next->next)
+  n_ops = self->n_ops;
+  for (next = op->next; next; next = next->next)
     {
       GskGpuShaderOp *next_shader = (GskGpuShaderOp *) next;
   
@@ -61,10 +93,10 @@ gsk_gpu_shader_op_vk_command_n (GskGpuOp              *op,
           next_shader->desc != self->desc ||
           next_shader->variation != self->variation ||
           next_shader->clip != self->clip ||
-          next_shader->vertex_offset != self->vertex_offset + i * shader_op_class->vertex_size)
+          next_shader->vertex_offset != self->vertex_offset + n_ops * shader_op_class->vertex_size)
         break;
 
-      i++;
+      n_ops += next_shader->n_ops;
     }
 
   vkCmdBindPipeline (state->vk_command_buffer,
@@ -78,10 +110,13 @@ gsk_gpu_shader_op_vk_command_n (GskGpuOp              *op,
                                                         state->vk_format,
                                                         state->vk_render_pass));
 
-  vkCmdDraw (state->vk_command_buffer,
-             6 * instance_scale, i,
-             0, self->vertex_offset / shader_op_class->vertex_size);
-
+  for (i = 0; i < n_ops; i += max_ops_per_draw)
+    {
+      vkCmdDraw (state->vk_command_buffer,
+                 6 * instance_scale, MIN (max_ops_per_draw, n_ops - i),
+                 0, self->vertex_offset / shader_op_class->vertex_size + i);
+    }
+ 
   return next;
 }
 
@@ -104,7 +139,7 @@ gsk_gpu_shader_op_gl_command_n (GskGpuOp          *op,
   GskGpuShaderOpClass *shader_op_class = (GskGpuShaderOpClass *) op->op_class;
   GskGLDescriptors *desc;
   GskGpuOp *next;
-  gsize i, n, n_external;
+  gsize i, n_ops, n_external, max_ops_per_draw;
 
   desc = GSK_GL_DESCRIPTORS (self->desc);
   if (desc)
@@ -135,11 +170,12 @@ gsk_gpu_shader_op_gl_command_n (GskGpuOp          *op,
     }
 
   if (gsk_gpu_frame_should_optimize (frame, GSK_GPU_OPTIMIZE_MERGE))
-    n = MAX_MERGE_OPS;
+    max_ops_per_draw = MAX_MERGE_OPS;
   else
-    n = 1;
-  i = 1;
-  for (next = op->next; next && i < n; next = next->next)
+    max_ops_per_draw = 1;
+
+  n_ops = self->n_ops;
+  for (next = op->next; next; next = next->next)
     {
       GskGpuShaderOp *next_shader = (GskGpuShaderOp *) next;
 
@@ -147,28 +183,31 @@ gsk_gpu_shader_op_gl_command_n (GskGpuOp          *op,
           next_shader->desc != self->desc ||
           next_shader->variation != self->variation ||
           next_shader->clip != self->clip ||
-          next_shader->vertex_offset != self->vertex_offset + i * shader_op_class->vertex_size)
+          next_shader->vertex_offset != self->vertex_offset + n_ops * shader_op_class->vertex_size)
         break;
 
-      i++;
+      n_ops += next_shader->n_ops;
     }
 
-  if (gsk_gpu_frame_should_optimize (frame, GSK_GPU_OPTIMIZE_GL_BASE_INSTANCE))
+  for (i = 0; i < n_ops; i += max_ops_per_draw)
     {
-      glDrawArraysInstancedBaseInstance (GL_TRIANGLES,
-                                         0,
-                                         6 * instance_scale,
-                                         i,
-                                         self->vertex_offset / shader_op_class->vertex_size);
-    }
-  else
-    {
-      shader_op_class->setup_vao (self->vertex_offset);
+      if (gsk_gpu_frame_should_optimize (frame, GSK_GPU_OPTIMIZE_GL_BASE_INSTANCE))
+        {
+          glDrawArraysInstancedBaseInstance (GL_TRIANGLES,
+                                             0,
+                                             6 * instance_scale,
+                                             MIN (max_ops_per_draw, n_ops - i),
+                                             self->vertex_offset / shader_op_class->vertex_size + i);
+        }
+      else
+        {
+          shader_op_class->setup_vao (self->vertex_offset + i * shader_op_class->vertex_size);
 
-      glDrawArraysInstanced (GL_TRIANGLES,
-                             0,
-                             6 * instance_scale,
-                             i);
+          glDrawArraysInstanced (GL_TRIANGLES,
+                                 0,
+                                 6 * instance_scale,
+                                 MIN (max_ops_per_draw, n_ops - i));
+        }
     }
 
   return next;
@@ -182,7 +221,7 @@ gsk_gpu_shader_op_gl_command (GskGpuOp          *op,
   return gsk_gpu_shader_op_gl_command_n (op, frame, state, 1);
 }
 
-GskGpuShaderOp *
+void
 gsk_gpu_shader_op_alloc (GskGpuFrame               *frame,
                          const GskGpuShaderOpClass *op_class,
                          guint32                    variation,
@@ -190,20 +229,39 @@ gsk_gpu_shader_op_alloc (GskGpuFrame               *frame,
                          GskGpuDescriptors         *desc,
                          gpointer                   out_vertex_data)
 {
-  GskGpuShaderOp *self;
+  GskGpuOp *last;
+  GskGpuShaderOp *last_shader;
+  gsize vertex_offset;
 
-  self = (GskGpuShaderOp *) gsk_gpu_op_alloc (frame, &op_class->parent_class);
+  vertex_offset = gsk_gpu_frame_reserve_vertex_data (frame, op_class->vertex_size);
 
-  self->variation = variation;
-  self->clip = clip;
-  if (desc)
-    self->desc = g_object_ref (desc);
+  last = gsk_gpu_frame_get_last_op (frame);
+  /* careful: We're casting without checking, but the if() does the check */
+  last_shader = (GskGpuShaderOp *) last;
+  if (last &&
+      last->op_class == (const GskGpuOpClass *) op_class &&
+      last_shader->desc == desc &&
+      last_shader->variation == variation &&
+      last_shader->clip == clip &&
+      last_shader->vertex_offset + last_shader->n_ops * op_class->vertex_size == vertex_offset)
+    {
+      last_shader->n_ops++;
+    }
   else
-    self->desc = NULL;
-  self->vertex_offset = gsk_gpu_frame_reserve_vertex_data (frame, op_class->vertex_size);
+    {
+      GskGpuShaderOp *self;
+      self = (GskGpuShaderOp *) gsk_gpu_op_alloc (frame, &op_class->parent_class);
 
-  *((gpointer *) out_vertex_data) = gsk_gpu_frame_get_vertex_data (frame, self->vertex_offset);
+      self->variation = variation;
+      self->clip = clip;
+      self->vertex_offset = vertex_offset;
+      if (desc)
+        self->desc = g_object_ref (desc);
+      else
+        self->desc = NULL;
+      self->n_ops = 1;
+    }
 
-  return self;
+  *((gpointer *) out_vertex_data) = gsk_gpu_frame_get_vertex_data (frame, vertex_offset);
 }
 
