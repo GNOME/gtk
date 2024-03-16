@@ -184,7 +184,9 @@ gsk_gl_frame_submit (GskGpuFrame  *frame,
       op = gsk_gpu_op_gl_command (op, frame, &state);
     }
 
-  self->sync = glFenceSync (GL_SYNC_GPU_COMMANDS_COMPLETE, 0);
+  if (gdk_gl_context_has_feature (GDK_GL_CONTEXT (gsk_gpu_frame_get_context (frame)),
+                                  GDK_GL_FEATURE_SYNC))
+    self->sync = glFenceSync (GL_SYNC_GPU_COMMANDS_COMPLETE, 0);
 }
 
 static void
