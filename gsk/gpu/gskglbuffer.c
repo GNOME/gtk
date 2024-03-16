@@ -8,7 +8,6 @@ struct _GskGLBuffer
 
   GLenum target;
   GLuint buffer_id;
-  GLenum access;
   guchar *data;
 };
 
@@ -66,8 +65,7 @@ gsk_gl_buffer_init (GskGLBuffer *self)
 
 GskGpuBuffer *
 gsk_gl_buffer_new (GLenum target,
-                   gsize  size,
-                   GLenum access)
+                   gsize  size)
 {
   GskGLBuffer *self;
 
@@ -76,7 +74,6 @@ gsk_gl_buffer_new (GLenum target,
   gsk_gpu_buffer_setup (GSK_GPU_BUFFER (self), size);
 
   self->target = target;
-  self->access = access;
 
   glGenBuffers (1, &self->buffer_id);
   glBindBuffer (target, self->buffer_id);

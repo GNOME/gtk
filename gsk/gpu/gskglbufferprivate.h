@@ -11,8 +11,7 @@ G_BEGIN_DECLS
 G_DECLARE_FINAL_TYPE (GskGLBuffer, gsk_gl_buffer, GSK, GL_BUFFER, GskGpuBuffer)
 
 GskGpuBuffer *          gsk_gl_buffer_new                               (GLenum                  target,
-                                                                         gsize                   size,
-                                                                         GLenum                  access);
+                                                                         gsize                   size);
 
 void                    gsk_gl_buffer_bind                              (GskGLBuffer            *self);
 void                    gsk_gl_buffer_bind_base                         (GskGLBuffer            *self,

@@ -147,14 +147,14 @@ gsk_gl_frame_create_vertex_buffer (GskGpuFrame *frame,
    */
   g_hash_table_remove_all (self->vaos);
 
-  return gsk_gl_buffer_new (GL_ARRAY_BUFFER, size, GL_WRITE_ONLY);
+  return gsk_gl_buffer_new (GL_ARRAY_BUFFER, size);
 }
 
 static GskGpuBuffer *
 gsk_gl_frame_create_storage_buffer (GskGpuFrame *frame,
                                     gsize        size)
 {
-  return gsk_gl_buffer_new (GL_UNIFORM_BUFFER, size, GL_WRITE_ONLY);
+  return gsk_gl_buffer_new (GL_UNIFORM_BUFFER, size);
 }
 
 static void
