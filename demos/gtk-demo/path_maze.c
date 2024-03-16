@@ -338,7 +338,7 @@ do_path_maze (GtkWidget *do_widget)
       GskPath *path;
 
       window = gtk_window_new ();
-      gtk_window_set_resizable (GTK_WINDOW (window), TRUE);
+      gtk_window_set_resizable (GTK_WINDOW (window), FALSE);
       gtk_window_set_title (GTK_WINDOW (window), "Follow the maze with the mouse");
       g_object_add_weak_pointer (G_OBJECT (window), (gpointer *)&window);
 
