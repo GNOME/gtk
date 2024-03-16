@@ -49,7 +49,6 @@
 
   EdgeSnapping     snapping;
 
-  NSRect           lastUnfullscreenFrame;
   BOOL             inFullscreenTransition;
 }
 
