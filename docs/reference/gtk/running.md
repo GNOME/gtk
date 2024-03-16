@@ -283,9 +283,6 @@ are only available when GTK has been configured with `-Ddebug=true`.
 `shaders`
 : Information about shaders
 
-`surface`
-: Information about surfaces
-
 `fallback`
 : Information about fallback usage in renderers
 
@@ -302,9 +299,6 @@ A number of options affect behavior instead of logging:
 
 `full-redraw`
 : Force full redraws
-
-`sync`
-: Sync after each frame
 
 `staging`
 : Use a staging image for texture upload (Vulkan only)
