@@ -108,6 +108,7 @@ static const GdkDebugKey gdk_gl_feature_keys[] = {
   { "unpack-subimage", GDK_GL_FEATURE_UNPACK_SUBIMAGE, "GL_EXT_unpack_subimage" },
   { "half-float", GDK_GL_FEATURE_VERTEX_HALF_FLOAT, "GL_OES_vertex_half_float" },
   { "sync", GDK_GL_FEATURE_SYNC, "GL_ARB_sync" },
+  { "base-instance", GDK_GL_FEATURE_BASE_INSTANCE, "GL_ARB_base_instance" },
 };
 
 typedef struct _GdkGLContextPrivate GdkGLContextPrivate;
@@ -1696,6 +1697,11 @@ gdk_gl_context_check_features (GdkGLContext *context)
       epoxy_has_gl_extension ("GL_ARB_sync") ||
       epoxy_has_gl_extension ("GL_APPLE_sync"))
     features |= GDK_GL_FEATURE_SYNC;
+
+  if (gdk_gl_context_check_version (context, "4.2", "9.9") ||
+      epoxy_has_gl_extension ("GL_EXT_base_instance") ||
+      epoxy_has_gl_extension ("GL_ARB_base_instance"))
+    features |= GDK_GL_FEATURE_BASE_INSTANCE;
 
   return features;
 }

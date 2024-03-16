@@ -366,6 +366,9 @@ does not support them.
 `sync`
 :GL_ARB_sync
 
+`base-instance`
+:GL_EXT_base_instance
+
 ### `GDK_VULKAN_DEVICE`
 
 This variable can be set to the index of a Vulkan device to override
@@ -472,9 +475,6 @@ disable certain optimizations of the "ngl" and "vulkan" renderer.
 
 `mipmap`
 : Avoid creating mipmaps
-
-`gl-baseinstance`
-: Assume no ARB/EXT_base_instance support
 
 The special value `all` can be used to turn on all values. The special
 value `help` can be used to obtain a list of all supported values.
