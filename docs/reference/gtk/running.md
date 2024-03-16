@@ -366,9 +366,6 @@ does not support them.
 `sync`
 :GL_ARB_sync
 
-`bgra`
-:GL_EXT_texture_format_BGRA8888
-
 ### `GDK_VULKAN_DEVICE`
 
 This variable can be set to the index of a Vulkan device to override
