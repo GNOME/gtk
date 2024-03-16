@@ -136,6 +136,7 @@ compare_render_tests = [
   'repeat-scaling',
   'repeat-texture',
   'repeating-gradient-scaled',
+  'reuse-of-texture-nested-in-offscreens',
   'rounded-clip-with-huge-bounds-nogl',
   'scale-textures-negative-ngl',
   'scale-up-down',

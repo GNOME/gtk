@@ -251,27 +251,35 @@ gsk_gpu_frame_sort_render_pass (GskGpuFrame *self,
                                 SortData    *sort_data)
 {
   SortData subpasses = { { NULL, NULL }, { NULL, NULL } };
+  SortData pass = { { NULL, NULL }, { NULL, NULL } };
+
+  if (op->op_class->stage == GSK_GPU_STAGE_BEGIN_PASS)
+    {
+      pass.command.first = op;
+      pass.command.last = op;
+      op = op->next;
+    }
 
   while (op)
     {
       switch (op->op_class->stage)
       {
         case GSK_GPU_STAGE_UPLOAD:
-          if (sort_data->upload.first == NULL)
-            sort_data->upload.first = op;
+          if (pass.upload.first == NULL)
+            pass.upload.first = op;
           else
-            sort_data->upload.last->next = op;
-          sort_data->upload.last = op;
+            pass.upload.last->next = op;
+          pass.upload.last = op;
           op = op->next;
           break;
 
         case GSK_GPU_STAGE_COMMAND:
         case GSK_GPU_STAGE_SHADER:
-          if (sort_data->command.first == NULL)
-            sort_data->command.first = op;
+          if (pass.command.first == NULL)
+            pass.command.first = op;
           else
-            sort_data->command.last->next = op;
-          sort_data->command.last = op;
+            pass.command.last->next = op;
+          pass.command.last = op;
           op = op->next;
           break;
 
@@ -285,19 +293,13 @@ gsk_gpu_frame_sort_render_pass (GskGpuFrame *self,
           break;
 
         case GSK_GPU_STAGE_BEGIN_PASS:
-          if (subpasses.command.first == NULL)
-            subpasses.command.first = op;
-          else
-            subpasses.command.last->next = op;
-          subpasses.command.last = op;
-
           /* append subpass to existing subpasses */
-          op = gsk_gpu_frame_sort_render_pass (self, op->next, &subpasses);
+          op = gsk_gpu_frame_sort_render_pass (self, op, &subpasses);
           break;
 
         case GSK_GPU_STAGE_END_PASS:
-          sort_data->command.last->next = op;
-          sort_data->command.last = op;
+          pass.command.last->next = op;
+          pass.command.last = op;
           op = op->next;
           goto out;
 
@@ -308,22 +310,38 @@ gsk_gpu_frame_sort_render_pass (GskGpuFrame *self,
     }
 
 out:
-  /* prepend subpasses to the current pass */
+  /* append to the sort data, first the subpasses, then the current pass */
   if (subpasses.upload.first)
     {
       if (sort_data->upload.first != NULL)
-        subpasses.upload.last->next = sort_data->upload.first;
+        sort_data->upload.last->next = subpasses.upload.first;
       else
-        sort_data->upload.last = subpasses.upload.last;
-      sort_data->upload.first = subpasses.upload.first;
+        sort_data->upload.first = subpasses.upload.first;
+      sort_data->upload.last = subpasses.upload.last;
+    }
+  if (pass.upload.first)
+    {
+      if (sort_data->upload.first != NULL)
+        sort_data->upload.last->next = pass.upload.first;
+      else
+        sort_data->upload.first = pass.upload.first;
+      sort_data->upload.last = pass.upload.last;
     }
   if (subpasses.command.first)
     {
       if (sort_data->command.first != NULL)
-        subpasses.command.last->next = sort_data->command.first;
+        sort_data->command.last->next = subpasses.command.first;
       else
-        sort_data->command.last = subpasses.command.last;
-      sort_data->command.first = subpasses.command.first;
+        sort_data->command.first = subpasses.command.first;
+      sort_data->command.last = subpasses.command.last;
+    }
+  if (pass.command.first)
+    {
+      if (sort_data->command.first != NULL)
+        sort_data->command.last->next = pass.command.first;
+      else
+        sort_data->command.first = pass.command.first;
+      sort_data->command.last = pass.command.last;
     }
 
   return op;
@@ -334,8 +352,13 @@ gsk_gpu_frame_sort_ops (GskGpuFrame *self)
 {
   GskGpuFramePrivate *priv = gsk_gpu_frame_get_instance_private (self);
   SortData sort_data = { { NULL, }, };
+  GskGpuOp *op;
 
-  gsk_gpu_frame_sort_render_pass (self, priv->first_op, &sort_data);
+  op = priv->first_op;
+  while (op)
+    {
+      op = gsk_gpu_frame_sort_render_pass (self, op, &sort_data);
+    }
 
   if (sort_data.upload.first)
     {
