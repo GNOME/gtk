@@ -1622,7 +1622,7 @@ gsk_gl_command_queue_do_upload_texture_chunk (GskGLCommandQueue *self,
     {
       glTexSubImage2D (GL_TEXTURE_2D, 0, x, y, width, height, gl_format, gl_type, data);
     }
-  else if (stride % bpp == 0 && gdk_gl_context_has_unpack_subimage (self->context))
+  else if (stride % bpp == 0 && gdk_gl_context_has_feature (self->context, GDK_GL_FEATURE_UNPACK_SUBIMAGE))
     {
       glPixelStorei (GL_UNPACK_ROW_LENGTH, stride / bpp);
 

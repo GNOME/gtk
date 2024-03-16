@@ -494,7 +494,7 @@ gdk_gl_texture_new_from_builder (GdkGLTextureBuilder *builder,
   self->id = gdk_gl_texture_builder_get_id (builder);
   GDK_TEXTURE (self)->format = gdk_gl_texture_builder_get_format (builder);
   self->has_mipmap = gdk_gl_texture_builder_get_has_mipmap (builder);
-  if (gdk_gl_context_has_sync (self->context))
+  if (gdk_gl_context_has_feature (self->context, GDK_GL_FEATURE_SYNC))
     self->sync = gdk_gl_texture_builder_get_sync (builder);
   self->destroy = destroy;
   self->data = data;

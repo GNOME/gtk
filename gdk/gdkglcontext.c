@@ -112,13 +112,9 @@ struct _GdkGLContextPrivate
 
   GdkGLMemoryFlags memory_flags[GDK_MEMORY_N_FORMATS];
 
-  guint has_khr_debug : 1;
+  GdkGLFeatures features;
   guint use_khr_debug : 1;
-  guint has_half_float : 1;
-  guint has_sync : 1;
-  guint has_unpack_subimage : 1;
   guint has_debug_output : 1;
-  guint has_bgra : 1;
   guint extensions_checked : 1;
   guint debug_enabled : 1;
   guint forward_compatible : 1;
@@ -898,11 +894,12 @@ gdk_gl_context_label_object_printf  (GdkGLContext *context,
 
 
 gboolean
-gdk_gl_context_has_unpack_subimage (GdkGLContext *context)
+gdk_gl_context_has_feature (GdkGLContext  *self,
+                            GdkGLFeatures  feature)
 {
-  GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (context);
+  GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (self);
 
-  return priv->has_unpack_subimage;
+  return (priv->features & feature) == feature;
 }
 
 static gboolean
@@ -1692,34 +1689,39 @@ gdk_gl_context_check_extensions (GdkGLContext *context)
 
   if (gdk_gl_context_get_use_es (context))
     {
-      priv->has_unpack_subimage = gdk_gl_version_greater_equal (&priv->gl_version, &GDK_GL_VERSION_INIT (3, 0)) ||
-                                  epoxy_has_gl_extension ("GL_EXT_unpack_subimage");
-      priv->has_khr_debug = epoxy_has_gl_extension ("GL_KHR_debug");
-      priv->has_bgra = epoxy_has_gl_extension ("GL_EXT_texture_format_BGRA8888");
+      if (gdk_gl_version_greater_equal (&priv->gl_version, &GDK_GL_VERSION_INIT (3, 0)) ||
+          epoxy_has_gl_extension ("GL_EXT_unpack_subimage"))
+        priv->features |= GDK_GL_FEATURE_UNPACK_SUBIMAGE;
+      if (epoxy_has_gl_extension ("GL_EXT_texture_format_BGRA8888"))
+        priv->features |= GDK_GL_FEATURE_BGRA;
     }
   else
     {
-      priv->has_unpack_subimage = TRUE;
-      priv->has_khr_debug = epoxy_has_gl_extension ("GL_KHR_debug");
-      priv->has_bgra = TRUE;
+      priv->features |= GDK_GL_FEATURE_UNPACK_SUBIMAGE | GDK_GL_FEATURE_BGRA;
 
       /* We asked for a core profile, but we didn't get one, so we're in legacy mode */
       if (!gdk_gl_version_greater_equal (&priv->gl_version, &GDK_GL_VERSION_INIT (3, 2)))
         priv->is_legacy = TRUE;
     }
 
-  if (priv->has_khr_debug && gl_debug)
+  if (epoxy_has_gl_extension ("GL_KHR_debug"))
     {
-      priv->use_khr_debug = TRUE;
-      glGetIntegerv (GL_MAX_LABEL_LENGTH, &priv->max_debug_label_length);
+      priv->features |= GDK_GL_FEATURE_DEBUG;
+      if (gl_debug)
+        {
+          priv->use_khr_debug = TRUE;
+          glGetIntegerv (GL_MAX_LABEL_LENGTH, &priv->max_debug_label_length);
+        }
     }
 
-  priv->has_half_float = gdk_gl_context_check_version (context, "3.0", "3.0") ||
-                         epoxy_has_gl_extension ("GL_OES_vertex_half_float");
+  if (gdk_gl_context_check_version (context, "3.0", "3.0") ||
+      epoxy_has_gl_extension ("GL_OES_vertex_half_float"))
+    priv->features |= GDK_GL_FEATURE_VERTEX_HALF_FLOAT;
 
-  priv->has_sync = gdk_gl_context_check_version (context, "3.2", "3.0") ||
-                   epoxy_has_gl_extension ("GL_ARB_sync") ||
-                   epoxy_has_gl_extension ("GL_APPLE_sync");
+  if (gdk_gl_context_check_version (context, "3.2", "3.0") ||
+      epoxy_has_gl_extension ("GL_ARB_sync") ||
+      epoxy_has_gl_extension ("GL_APPLE_sync"))
+    priv->features |= GDK_GL_FEATURE_SYNC;
 
   gdk_gl_context_init_memory_flags (context);
 
@@ -1729,23 +1731,12 @@ gdk_gl_context_check_extensions (GdkGLContext *context)
     GDK_DISPLAY_DEBUG (gdk_draw_context_get_display (GDK_DRAW_CONTEXT (context)), OPENGL,
                        "%s version: %d.%d (%s)\n"
                        "* GLSL version: %s\n"
-                       "* Max texture size: %d\n"
-                       "* Extensions checked:\n"
-                       " - GL_KHR_debug: %s\n"
-                       " - GL_EXT_unpack_subimage: %s\n"
-                       " - half float: %s\n"
-                       " - sync: %s\n"
-                       " - bgra: %s",
+                       "* Max texture size: %d\n",
                        gdk_gl_context_get_use_es (context) ? "OpenGL ES" : "OpenGL",
                        gdk_gl_version_get_major (&priv->gl_version), gdk_gl_version_get_minor (&priv->gl_version),
                        priv->is_legacy ? "legacy" : "core",
                        glGetString (GL_SHADING_LANGUAGE_VERSION),
-                       max_texture_size,
-                       priv->has_khr_debug ? "yes" : "no",
-                       priv->has_unpack_subimage ? "yes" : "no",
-                       priv->has_half_float ? "yes" : "no",
-                       priv->has_sync ? "yes" : "no",
-                       priv->has_bgra ? "yes" : "no");
+                       max_texture_size);
   }
 
   priv->extensions_checked = TRUE;
@@ -2013,30 +2004,6 @@ gdk_gl_context_get_format_flags (GdkGLContext    *self,
   GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (self);
 
   return priv->memory_flags[format];
-}
-
-gboolean
-gdk_gl_context_has_debug (GdkGLContext *self)
-{
-  GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (self);
-
-  return priv->debug_enabled || priv->use_khr_debug;
-}
-
-gboolean
-gdk_gl_context_has_vertex_half_float (GdkGLContext *self)
-{
-  GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (self);
-
-  return priv->has_half_float;
-}
-
-gboolean
-gdk_gl_context_has_sync (GdkGLContext *self)
-{
-  GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (self);
-
-  return priv->has_sync;
 }
 
 /* Return if glGenVertexArrays, glBindVertexArray and glDeleteVertexArrays
