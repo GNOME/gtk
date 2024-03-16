@@ -1685,7 +1685,6 @@ gdk_gl_context_check_extensions (GdkGLContext *context)
 
   if (priv->has_debug_output && gl_debug)
     {
-      gdk_gl_context_make_current (context);
       glEnable (GL_DEBUG_OUTPUT);
       glEnable (GL_DEBUG_OUTPUT_SYNCHRONOUS);
       glDebugMessageCallback (gl_debug_message_callback, NULL);
