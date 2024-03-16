@@ -347,6 +347,28 @@ a `*`, which means: try all remaining backends. The special value
 backends. For more information about selecting backends,
 see the [func@Gdk.DisplayManager.get] function.
 
+### `GDK_GL_DISABLE`
+
+This variable can be set to a list of values, which cause GDK to
+disable extension features of the OpenGL support.
+Note that these features may already be disabled if the GL driver
+does not support them.
+
+`debug`
+: GL_KHR_debug
+
+`unpack-subimage`
+:GL_EXT_unpack_subimage
+
+`half-float`
+:GL_OES_vertex_half_float
+
+`sync`
+:GL_ARB_sync
+
+`bgra`
+:GL_EXT_texture_format_BGRA8888
+
 ### `GDK_VULKAN_DEVICE`
 
 This variable can be set to the index of a Vulkan device to override

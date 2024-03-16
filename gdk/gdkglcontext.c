@@ -103,6 +103,14 @@
 
 #define DEFAULT_ALLOWED_APIS GDK_GL_API_GL | GDK_GL_API_GLES
 
+static const GdkDebugKey gdk_gl_feature_keys[] = {
+  { "debug", GDK_GL_FEATURE_DEBUG, "GL_KHR_debug" },
+  { "unpack-subimage", GDK_GL_FEATURE_UNPACK_SUBIMAGE, "GL_EXT_unpack_subimage" },
+  { "half-float", GDK_GL_FEATURE_VERTEX_HALF_FLOAT, "GL_OES_vertex_half_float" },
+  { "sync", GDK_GL_FEATURE_SYNC, "GL_ARB_sync" },
+  { "bgra", GDK_GL_FEATURE_BGRA, "GL_EXT_texture_format_BGRA8888" },
+};
+
 typedef struct _GdkGLContextPrivate GdkGLContextPrivate;
 
 struct _GdkGLContextPrivate
@@ -1699,6 +1707,7 @@ static void
 gdk_gl_context_check_extensions (GdkGLContext *context)
 {
   GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (context);
+  GdkGLFeatures supported_features, disabled_features;
   gboolean gl_debug = FALSE;
   GdkDisplay *display;
 
@@ -1726,7 +1735,12 @@ gdk_gl_context_check_extensions (GdkGLContext *context)
       !gdk_gl_version_greater_equal (&priv->gl_version, &GDK_GL_VERSION_INIT (3, 2)))
     priv->is_legacy = TRUE;
 
-  priv->features = gdk_gl_context_check_features (context);
+  supported_features = gdk_gl_context_check_features (context);
+  disabled_features = gdk_parse_debug_var ("GDK_GL_DISABLE",
+                                           gdk_gl_feature_keys,
+                                           G_N_ELEMENTS (gdk_gl_feature_keys));
+
+  priv->features = supported_features & ~disabled_features;
 
   gdk_gl_context_init_memory_flags (context);
 
@@ -1736,19 +1750,29 @@ gdk_gl_context_check_extensions (GdkGLContext *context)
       glGetIntegerv (GL_MAX_LABEL_LENGTH, &priv->max_debug_label_length);
     }
 
-  {
-    int max_texture_size;
-    glGetIntegerv (GL_MAX_TEXTURE_SIZE, &max_texture_size);
-    GDK_DISPLAY_DEBUG (gdk_draw_context_get_display (GDK_DRAW_CONTEXT (context)), OPENGL,
-                       "%s version: %d.%d (%s)\n"
-                       "* GLSL version: %s\n"
-                       "* Max texture size: %d\n",
-                       gdk_gl_context_get_use_es (context) ? "OpenGL ES" : "OpenGL",
-                       gdk_gl_version_get_major (&priv->gl_version), gdk_gl_version_get_minor (&priv->gl_version),
-                       priv->is_legacy ? "legacy" : "core",
-                       glGetString (GL_SHADING_LANGUAGE_VERSION),
-                       max_texture_size);
-  }
+  if (GDK_DISPLAY_DEBUG_CHECK (display, OPENGL))
+    {
+      int i, max_texture_size;
+      glGetIntegerv (GL_MAX_TEXTURE_SIZE, &max_texture_size);
+      gdk_debug_message ("%s version: %d.%d (%s)\n"
+                         "* GLSL version: %s\n"
+                         "* Max texture size: %d\n",
+                         gdk_gl_context_get_use_es (context) ? "OpenGL ES" : "OpenGL",
+                         gdk_gl_version_get_major (&priv->gl_version), gdk_gl_version_get_minor (&priv->gl_version),
+                         priv->is_legacy ? "legacy" : "core",
+                         glGetString (GL_SHADING_LANGUAGE_VERSION),
+                         max_texture_size);
+      gdk_debug_message ("Enabled features (use GDK_GL_DISABLE env var to disable):");
+      for (i = 0; i < G_N_ELEMENTS (gdk_gl_feature_keys); i++)
+        {
+          gdk_debug_message ("    %s: %s",
+                             gdk_gl_feature_keys[i].key,
+                             (priv->features & gdk_gl_feature_keys[i].value) ? "YES" :
+                             ((disabled_features & gdk_gl_feature_keys[i].value) ? "disabled via env var" :
+                             (((supported_features & gdk_gl_feature_keys[i].value) == 0) ? "not supported" :
+                             "Hum, what? This should not happen.")));
+        }
+    }
 
   priv->extensions_checked = TRUE;
 }
