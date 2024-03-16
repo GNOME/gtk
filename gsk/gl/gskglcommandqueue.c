@@ -488,12 +488,14 @@ gsk_gl_command_queue_new (GdkGLContext      *context,
       int max_texture_size = atoi (g_getenv ("GSK_MAX_TEXTURE_SIZE"));
       if (max_texture_size == 0)
         {
-          g_warning ("Failed to parse GSK_MAX_TEXTURE_SIZE");
+          g_warning ("Failed to parse %s", "GSK_MAX_TEXTURE_SIZE");
         }
       else
         {
           max_texture_size = MAX (max_texture_size, 512);
-          GSK_DEBUG(OPENGL, "Limiting max texture size to %d", max_texture_size);
+          GSK_DEBUG (RENDERER,
+                     "Limiting texture size in the GL renderer to %d (via %s)",
+                     max_texture_size, "GSK_MAX_TEXTURE_SIZE");
           self->max_texture_size = MIN (self->max_texture_size, max_texture_size);
         }
     }

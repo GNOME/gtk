@@ -129,12 +129,6 @@
               </object>
             </child>
             <child>
-              <object class="GtkCheckButton" id="opengl_gsk">
-                <property name="label">OpenGL</property>
-                <signal name="toggled" handler="flag_toggled"/>
-              </object>
-            </child>
-            <child>
               <object class="GtkCheckButton" id="vulkan_gsk">
                 <property name="label">Vulkan</property>
                 <signal name="toggled" handler="flag_toggled"/>
@@ -143,12 +137,6 @@
             <child>
               <object class="GtkCheckButton" id="shaders">
                 <property name="label">Shaders</property>
-                <signal name="toggled" handler="flag_toggled"/>
-              </object>
-            </child>
-            <child>
-              <object class="GtkCheckButton" id="surface">
-                <property name="label">Surface</property>
                 <signal name="toggled" handler="flag_toggled"/>
               </object>
             </child>
