@@ -347,6 +347,28 @@ a `*`, which means: try all remaining backends. The special value
 backends. For more information about selecting backends,
 see the [func@Gdk.DisplayManager.get] function.
 
+### `GDK_GL_DISABLE`
+
+This variable can be set to a list of values, which cause GDK to
+disable extension features of the OpenGL support.
+Note that these features may already be disabled if the GL driver
+does not support them.
+
+`debug`
+: GL_KHR_debug
+
+`unpack-subimage`
+:GL_EXT_unpack_subimage
+
+`half-float`
+:GL_OES_vertex_half_float
+
+`sync`
+:GL_ARB_sync
+
+`base-instance`
+:GL_EXT_base_instance
+
 ### `GDK_VULKAN_DEVICE`
 
 This variable can be set to the index of a Vulkan device to override
@@ -354,7 +376,7 @@ the default selection of the device that is used for Vulkan rendering.
 The special value `list` can be used to obtain a list of all Vulkan
 devices.
 
-### `GDK_VULKAN_SKIP`
+### `GDK_VULKAN_DISABLE`
 
 This variable can be set to a list of values, which cause GDK to
 disable features of the Vulkan support.
@@ -434,7 +456,7 @@ using and the GDK backend supports them:
     installation.
 
 
-### `GSK_GPU_SKIP`
+### `GSK_GPU_DISABLE`
 
 This variable can be set to a list of values, which cause GSK to
 disable certain optimizations of the "ngl" and "vulkan" renderer.
@@ -453,9 +475,6 @@ disable certain optimizations of the "ngl" and "vulkan" renderer.
 
 `mipmap`
 : Avoid creating mipmaps
-
-`gl-baseinstance`
-: Assume no ARB/EXT_base_instance support
 
 The special value `all` can be used to turn on all values. The special
 value `help` can be used to obtain a list of all supported values.

@@ -28,6 +28,14 @@
 G_BEGIN_DECLS
 
 typedef enum {
+  GDK_GL_FEATURE_DEBUG                      = 1 << 0,
+  GDK_GL_FEATURE_UNPACK_SUBIMAGE            = 1 << 1,
+  GDK_GL_FEATURE_VERTEX_HALF_FLOAT          = 1 << 2,
+  GDK_GL_FEATURE_SYNC                       = 1 << 3,
+  GDK_GL_FEATURE_BASE_INSTANCE              = 1 << 4,
+} GdkGLFeatures;
+
+typedef enum {
   GDK_GL_NONE = 0,
   GDK_GL_EGL,
   GDK_GL_GLX,
@@ -142,7 +150,6 @@ void                    gdk_gl_context_get_matching_version     (GdkGLContext   
                                                                  gboolean                legacy,
                                                                  GdkGLVersion           *out_version);
 
-gboolean                gdk_gl_context_has_unpack_subimage      (GdkGLContext    *context);
 void                    gdk_gl_context_push_debug_group         (GdkGLContext    *context,
                                                                  const char      *message);
 void                    gdk_gl_context_push_debug_group_printf  (GdkGLContext    *context,
@@ -163,13 +170,10 @@ const char *            gdk_gl_context_get_glsl_version_string  (GdkGLContext   
 
 GdkGLMemoryFlags        gdk_gl_context_get_format_flags         (GdkGLContext    *self,
                                                                  GdkMemoryFormat  format) G_GNUC_PURE;
-gboolean                gdk_gl_context_has_debug                (GdkGLContext    *self) G_GNUC_PURE;
+gboolean                gdk_gl_context_has_feature              (GdkGLContext    *self,
+                                                                 GdkGLFeatures    feature) G_GNUC_PURE;
 
 gboolean                gdk_gl_context_use_es_bgra              (GdkGLContext    *context);
-
-gboolean                gdk_gl_context_has_vertex_half_float    (GdkGLContext    *self) G_GNUC_PURE;
-
-gboolean                gdk_gl_context_has_sync                 (GdkGLContext    *self) G_GNUC_PURE;
 
 gboolean                gdk_gl_context_has_vertex_arrays        (GdkGLContext    *self) G_GNUC_PURE;
 

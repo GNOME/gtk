@@ -552,9 +552,8 @@ physical_device_supports_extension (VkPhysicalDevice  device,
   return FALSE;
 }
 
-static gboolean
-physical_device_check_features (VkPhysicalDevice   device,
-                                GdkVulkanFeatures *out_features)
+static GdkVulkanFeatures
+physical_device_check_features (VkPhysicalDevice device)
 {
   VkPhysicalDeviceVulkan12Features v12_features = {
       .sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_VULKAN_1_2_FEATURES,
@@ -563,15 +562,16 @@ physical_device_check_features (VkPhysicalDevice   device,
       .sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_SAMPLER_YCBCR_CONVERSION_FEATURES,
       .pNext = &v12_features
   };
-  VkPhysicalDeviceFeatures2 features = {
+  VkPhysicalDeviceFeatures2 v10_features = {
       .sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_FEATURES_2,
       .pNext = &ycbcr_features
   };
   VkExternalSemaphoreProperties semaphore_props = {
       .sType = VK_STRUCTURE_TYPE_EXTERNAL_SEMAPHORE_PROPERTIES,
   };
+  GdkVulkanFeatures features;
 
-  vkGetPhysicalDeviceFeatures2 (device, &features);
+  vkGetPhysicalDeviceFeatures2 (device, &v10_features);
   vkGetPhysicalDeviceExternalSemaphoreProperties (device,
                                                   &(VkPhysicalDeviceExternalSemaphoreInfo) {
 		                                      .sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_EXTERNAL_SEMAPHORE_INFO,
@@ -579,46 +579,46 @@ physical_device_check_features (VkPhysicalDevice   device,
 	                                          },
                                                   &semaphore_props);
 
-  *out_features = 0;
+  features = 0;
 
-  if (features.features.shaderUniformBufferArrayDynamicIndexing &&
-      features.features.shaderSampledImageArrayDynamicIndexing)
-    *out_features |= GDK_VULKAN_FEATURE_DYNAMIC_INDEXING;
+  if (v10_features.features.shaderUniformBufferArrayDynamicIndexing &&
+      v10_features.features.shaderSampledImageArrayDynamicIndexing)
+    features |= GDK_VULKAN_FEATURE_DYNAMIC_INDEXING;
 
   if (v12_features.descriptorIndexing &&
       v12_features.descriptorBindingPartiallyBound &&
       v12_features.descriptorBindingVariableDescriptorCount &&
       v12_features.descriptorBindingSampledImageUpdateAfterBind &&
       v12_features.descriptorBindingStorageBufferUpdateAfterBind)
-    *out_features |= GDK_VULKAN_FEATURE_DESCRIPTOR_INDEXING;
+    features |= GDK_VULKAN_FEATURE_DESCRIPTOR_INDEXING;
   else if (physical_device_supports_extension (device, VK_EXT_DESCRIPTOR_INDEXING_EXTENSION_NAME))
-    *out_features |= GDK_VULKAN_FEATURE_DESCRIPTOR_INDEXING;
+    features |= GDK_VULKAN_FEATURE_DESCRIPTOR_INDEXING;
 
   if (v12_features.shaderSampledImageArrayNonUniformIndexing &&
       v12_features.shaderStorageBufferArrayNonUniformIndexing)
-    *out_features |= GDK_VULKAN_FEATURE_NONUNIFORM_INDEXING;
+    features |= GDK_VULKAN_FEATURE_NONUNIFORM_INDEXING;
 
   if (ycbcr_features.samplerYcbcrConversion ||
       physical_device_supports_extension (device, VK_KHR_SAMPLER_YCBCR_CONVERSION_EXTENSION_NAME))
-    *out_features |= GDK_VULKAN_FEATURE_YCBCR;
+    features |= GDK_VULKAN_FEATURE_YCBCR;
 
   if (physical_device_supports_extension (device, VK_KHR_EXTERNAL_MEMORY_FD_EXTENSION_NAME) &&
       physical_device_supports_extension (device, VK_EXT_IMAGE_DRM_FORMAT_MODIFIER_EXTENSION_NAME))
-    *out_features |= GDK_VULKAN_FEATURE_DMABUF;
+    features |= GDK_VULKAN_FEATURE_DMABUF;
 
   if (physical_device_supports_extension (device, VK_KHR_EXTERNAL_SEMAPHORE_FD_EXTENSION_NAME))
     {
       if (semaphore_props.externalSemaphoreFeatures & VK_EXTERNAL_SEMAPHORE_FEATURE_EXPORTABLE_BIT)
-        *out_features |= GDK_VULKAN_FEATURE_SEMAPHORE_EXPORT;
+        features |= GDK_VULKAN_FEATURE_SEMAPHORE_EXPORT;
 
       if (semaphore_props.externalSemaphoreFeatures & VK_EXTERNAL_SEMAPHORE_FEATURE_IMPORTABLE_BIT)
-        *out_features |= GDK_VULKAN_FEATURE_SEMAPHORE_IMPORT;
+        features |= GDK_VULKAN_FEATURE_SEMAPHORE_IMPORT;
     }
 
   if (physical_device_supports_extension (device, VK_KHR_INCREMENTAL_PRESENT_EXTENSION_NAME))
-    *out_features |= GDK_VULKAN_FEATURE_INCREMENTAL_PRESENT;
+    features |= GDK_VULKAN_FEATURE_INCREMENTAL_PRESENT;
 
-  return TRUE;
+  return features;
 }
 
 static void
@@ -1366,7 +1366,7 @@ gdk_display_create_vulkan_device (GdkDisplay  *display,
   first = 0;
   last = n_devices;
 
-  skip_features = gdk_parse_debug_var ("GDK_VULKAN_SKIP",
+  skip_features = gdk_parse_debug_var ("GDK_VULKAN_DISABLE",
                                        gsk_vulkan_feature_keys,
                                        G_N_ELEMENTS (gsk_vulkan_feature_keys));
 
@@ -1454,8 +1454,7 @@ gdk_display_create_vulkan_device (GdkDisplay  *display,
       GdkVulkanFeatures features, device_features;
       uint32_t n_queue_props;
 
-      if (!physical_device_check_features (devices[i], &device_features))
-        continue;
+      device_features = physical_device_check_features (devices[i]);
 
       features = device_features & ~skip_features;
 
@@ -1540,7 +1539,7 @@ gdk_display_create_vulkan_device (GdkDisplay  *display,
               display->vk_queue_family_index = j;
               display->vulkan_features = features;
 
-              GDK_DISPLAY_DEBUG (display, VULKAN, "Enabled features (use GDK_VULKAN_SKIP env var to disable):");
+              GDK_DISPLAY_DEBUG (display, VULKAN, "Enabled features (use GDK_VULKAN_DISABLE env var to disable):");
               for (i = 0; i < G_N_ELEMENTS (gsk_vulkan_feature_keys); i++)
                 {
                   GDK_DISPLAY_DEBUG (display, VULKAN, "    %s: %s",

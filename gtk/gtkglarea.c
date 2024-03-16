@@ -776,7 +776,7 @@ gtk_gl_area_snapshot (GtkWidget   *widget,
       priv->texture = NULL;
       priv->textures = g_list_prepend (priv->textures, texture);
 
-      if (gdk_gl_context_has_sync (priv->context))
+      if (gdk_gl_context_has_feature (priv->context, GDK_GL_FEATURE_SYNC))
         sync = glFenceSync (GL_SYNC_GPU_COMMANDS_COMPLETE, 0);
 
       gdk_gl_texture_builder_set_sync (texture->builder, sync);

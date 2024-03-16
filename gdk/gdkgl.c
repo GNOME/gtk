@@ -125,7 +125,7 @@ gdk_cairo_draw_from_gl (cairo_t              *cr,
    * the GL_UNPACK_ROW_LENGTH support
    */
   if (gdk_gl_context_get_use_es (paint_context) &&
-      !(version >= 300 || gdk_gl_context_has_unpack_subimage (paint_context)))
+      !(version >= 300 || gdk_gl_context_has_feature (paint_context, GDK_GL_FEATURE_UNPACK_SUBIMAGE)))
     return;
 
   /* TODO: avoid reading back non-required data due to dest clip */

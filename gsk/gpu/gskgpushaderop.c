@@ -13,6 +13,8 @@
 #include "gskvulkandeviceprivate.h"
 #endif
 
+#include "gdkglcontextprivate.h"
+
 /* maximum number of ops to merge into one call
  * If this number is too high, the command may take too long
  * causing the driver to kill us.
@@ -191,7 +193,8 @@ gsk_gpu_shader_op_gl_command_n (GskGpuOp          *op,
 
   for (i = 0; i < n_ops; i += max_ops_per_draw)
     {
-      if (gsk_gpu_frame_should_optimize (frame, GSK_GPU_OPTIMIZE_GL_BASE_INSTANCE))
+      if (gdk_gl_context_has_feature (GDK_GL_CONTEXT (gsk_gpu_frame_get_context (frame)),
+                                      GDK_GL_FEATURE_BASE_INSTANCE))
         {
           glDrawArraysInstancedBaseInstance (GL_TRIANGLES,
                                              0,

@@ -194,7 +194,7 @@ gsk_gl_renderer_realize (GskRenderer  *renderer,
     {
       gdk_gl_context_make_current (context);
 
-      if (!gdk_gl_context_has_vertex_half_float (context))
+      if (!gdk_gl_context_has_feature (context, GDK_GL_FEATURE_VERTEX_HALF_FLOAT))
         {
           int major, minor;
 

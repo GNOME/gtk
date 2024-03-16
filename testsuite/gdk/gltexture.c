@@ -179,7 +179,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
 
   id = make_gl_texture (context, surface);
 
-  if (gdk_gl_context_has_sync (context))
+  if (gdk_gl_context_has_feature (context, GDK_GL_FEATURE_SYNC))
     sync = glFenceSync (GL_SYNC_GPU_COMMANDS_COMPLETE, 0);
   else
     sync = NULL;

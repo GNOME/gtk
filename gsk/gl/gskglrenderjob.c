@@ -1235,7 +1235,7 @@ gsk_gl_render_job_visit_as_fallback (GskGLRenderJob      *job,
   texture = gdk_texture_new_for_surface (surface);
   texture_id = gsk_gl_driver_load_texture (job->driver, texture, FALSE);
 
-  if (gdk_gl_context_has_debug (job->command_queue->context))
+  if (gdk_gl_context_has_feature (job->command_queue->context, GDK_GL_FEATURE_DEBUG))
     gdk_gl_context_label_object_printf (job->command_queue->context, GL_TEXTURE, texture_id,
                                         "Fallback %s %d",
                                         g_type_name_from_instance ((GTypeInstance *) node),
@@ -2532,7 +2532,7 @@ gsk_gl_render_job_visit_blurred_outset_shadow_node (GskGLRenderJob      *job,
                                           get_target_format (job, node),
                                           &render_target);
 
-      if (gdk_gl_context_has_debug (context))
+      if (gdk_gl_context_has_feature (context, GDK_GL_FEATURE_DEBUG))
         {
           gdk_gl_context_label_object_printf (context,
                                               GL_TEXTURE,
@@ -4382,7 +4382,7 @@ gsk_gl_render_job_visit_node_with_offscreen (GskGLRenderJob       *job,
                                            &render_target))
     g_assert_not_reached ();
 
-  if (gdk_gl_context_has_debug (job->command_queue->context))
+  if (gdk_gl_context_has_feature (job->command_queue->context, GDK_GL_FEATURE_DEBUG))
     {
       gdk_gl_context_label_object_printf (job->command_queue->context,
                                           GL_TEXTURE,

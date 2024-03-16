@@ -272,7 +272,7 @@ gsk_gpu_download_op_gl_command (GskGpuOp          *op,
   data->context = g_object_ref (context);
   data->texture_id = gsk_gl_image_steal_texture (GSK_GL_IMAGE (self->image));
 
-  if (gdk_gl_context_has_sync (context))
+  if (gdk_gl_context_has_feature (context, GDK_GL_FEATURE_SYNC))
     data->sync = glFenceSync (GL_SYNC_GPU_COMMANDS_COMPLETE, 0);
 
   builder = gdk_gl_texture_builder_new ();

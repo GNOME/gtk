@@ -52,7 +52,7 @@ gsk_gpu_upload_op_gl_command_with_area (GskGpuOp                    *op,
     {
       glTexSubImage2D (GL_TEXTURE_2D, 0, area->x, area->y, area->width, area->height, gl_format, gl_type, data);
     }
-  else if (stride % bpp == 0 && gdk_gl_context_has_unpack_subimage (context))
+  else if (stride % bpp == 0 && gdk_gl_context_has_feature (context, GDK_GL_FEATURE_UNPACK_SUBIMAGE))
     {
       glPixelStorei (GL_UNPACK_ROW_LENGTH, stride / bpp);
 

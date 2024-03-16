@@ -339,6 +339,9 @@ main (int argc, char **argv)
 
   g_option_context_free (context);
 
+  if (!plain && !flip && !rotate && !repeat && !mask && !replay && !clip && !colorflip)
+    plain = TRUE;
+
   gtk_init ();
 
   node_file = argv[1];
