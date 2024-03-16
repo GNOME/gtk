@@ -453,7 +453,7 @@ gsk_gpu_renderer_class_init (GskGpuRendererClass *klass)
   gsk_ensure_resources ();
 
   klass->optimizations = -1;
-  klass->optimizations &= ~gdk_parse_debug_var ("GSK_GPU_SKIP",
+  klass->optimizations &= ~gdk_parse_debug_var ("GSK_GPU_DISABLE",
                                                 gsk_gpu_optimization_keys,
                                                 G_N_ELEMENTS (gsk_gpu_optimization_keys));
   klass->get_scale = gsk_gpu_renderer_real_get_scale;

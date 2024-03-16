@@ -456,7 +456,7 @@ using and the GDK backend supports them:
     installation.
 
 
-### `GSK_GPU_SKIP`
+### `GSK_GPU_DISABLE`
 
 This variable can be set to a list of values, which cause GSK to
 disable certain optimizations of the "ngl" and "vulkan" renderer.
