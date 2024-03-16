@@ -183,6 +183,7 @@ gtk_at_spi_socket_get_bounds (GtkAccessible *accessible,
                               int           *height)
 {
   GtkAccessible *accessible_parent;
+  gboolean res = FALSE;
 
   g_assert (GTK_IS_AT_SPI_SOCKET (accessible));
 
@@ -190,7 +191,11 @@ gtk_at_spi_socket_get_bounds (GtkAccessible *accessible,
   if (accessible_parent == NULL)
     return FALSE;
 
-  return gtk_accessible_get_bounds (accessible_parent, x, y, width, height);
+  res = gtk_accessible_get_bounds (accessible_parent, x, y, width, height);
+
+  g_object_unref (accessible_parent);
+
+  return res;
 }
 
 static void

@@ -541,6 +541,7 @@ gtk_at_context_set_accessible_parent (GtkATContext *self,
           parent_context = get_parent_context (self);
           if (parent_context && parent_context->realized)
             gtk_at_context_realize (self);
+          g_clear_object (&parent_context);
         }
     }
 }
