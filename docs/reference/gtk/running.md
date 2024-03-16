@@ -278,7 +278,7 @@ are only available when GTK has been configured with `-Ddebug=true`.
 : OpenGL renderer information
 
 `vulkan`
-: Vulkan renderer information
+: Check Vulkan errors
 
 `shaders`
 : Information about shaders
