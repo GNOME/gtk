@@ -147,14 +147,22 @@ gsk_gl_frame_create_vertex_buffer (GskGpuFrame *frame,
    */
   g_hash_table_remove_all (self->vaos);
 
-  return gsk_gl_buffer_new (GL_ARRAY_BUFFER, size);
+  if (gdk_gl_context_has_feature (GDK_GL_CONTEXT (gsk_gpu_frame_get_context (frame)),
+                                  GDK_GL_FEATURE_BUFFER_STORAGE))
+    return gsk_gl_mapped_buffer_new (GL_ARRAY_BUFFER, size);
+  else
+    return gsk_gl_copied_buffer_new (GL_ARRAY_BUFFER, size);
 }
 
 static GskGpuBuffer *
 gsk_gl_frame_create_storage_buffer (GskGpuFrame *frame,
                                     gsize        size)
 {
-  return gsk_gl_buffer_new (GL_UNIFORM_BUFFER, size);
+  if (gdk_gl_context_has_feature (GDK_GL_CONTEXT (gsk_gpu_frame_get_context (frame)),
+                                  GDK_GL_FEATURE_BUFFER_STORAGE))
+    return gsk_gl_mapped_buffer_new (GL_UNIFORM_BUFFER, size);
+  else
+    return gsk_gl_copied_buffer_new (GL_UNIFORM_BUFFER, size);
 }
 
 static void
