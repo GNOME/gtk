@@ -1,7 +1,7 @@
 Title: CSS in GTK
 Slug: css
 
-This chapter describes how GTK uses CSS for styling and layout. 
+This chapter describes how GTK uses CSS for styling and layout.
 It is not meant to be an explanation of CSS from first principles,
 but focuses on listing supported CSS features and differences
 between Web CSS and GTK.

@@ -482,10 +482,10 @@ n seconds. The default timeout is 15 seconds.
 
 ### `GSK_MAX_TEXTURE_SIZE`
 
-Limit texture size to the minimum of this value and the OpenGL limit
-for texture sizes. This can be used to debug issues with texture slicing
-on systems where the OpenGL texture size limit would otherwise make
-texture slicing difficult to test.
+Limit texture size to the minimum of this value and the OpenGL limit for
+texture sizes in the "gl" renderer. This can be used to debug issues with
+texture slicing on systems where the OpenGL texture size limit would
+otherwise make texture slicing difficult to test.
 
 ### `GTK_CSD`
 
