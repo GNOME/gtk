@@ -109,6 +109,7 @@ static const GdkDebugKey gdk_gl_feature_keys[] = {
   { "half-float", GDK_GL_FEATURE_VERTEX_HALF_FLOAT, "GL_OES_vertex_half_float" },
   { "sync", GDK_GL_FEATURE_SYNC, "GL_ARB_sync" },
   { "base-instance", GDK_GL_FEATURE_BASE_INSTANCE, "GL_ARB_base_instance" },
+  { "buffer-storage", GDK_GL_FEATURE_BUFFER_STORAGE, "GL_EXT_buffer_storage" },
 };
 
 typedef struct _GdkGLContextPrivate GdkGLContextPrivate;
@@ -1702,6 +1703,11 @@ gdk_gl_context_check_features (GdkGLContext *context)
       epoxy_has_gl_extension ("GL_EXT_base_instance") ||
       epoxy_has_gl_extension ("GL_ARB_base_instance"))
     features |= GDK_GL_FEATURE_BASE_INSTANCE;
+
+  if (gdk_gl_context_check_version (context, "4.4", "9.9") ||
+      epoxy_has_gl_extension ("GL_EXT_buffer_storage") ||
+      epoxy_has_gl_extension ("GL_ARB_buffer_storage"))
+    features |= GDK_GL_FEATURE_BUFFER_STORAGE;
 
   return features;
 }
