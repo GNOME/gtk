@@ -998,7 +998,9 @@ _gdk_macos_display_get_nsevent (GdkEvent *event)
     {
       const GdkToNSEventMap *map = iter->data;
 
-      if (map->gdk_event == event)
+      if (map->gdk_event->event_type == event->event_type &&
+          map->gdk_event->device == event->device &&
+          map->gdk_event->time == event->time)
         return map->nsevent;
     }
 
