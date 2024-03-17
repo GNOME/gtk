@@ -1,5 +1,41 @@
-Overview of Changes in 4.14.1, xx-xx-xxxx
+Overview of Changes in 4.14.1, 16-03-2024
 =========================================
+
+* GtkTextView:
+ - Fix a mixup of cursor and anchor when retrieving surrounding text
+   in input methods
+
+* Printing:
+ - Avoid accessing freed printers
+
+* Accessibility:
+ - Fix memory leaks
+
+* GDK:
+ - Rename the GDK_VULKAN_SKIP environment variable to GDK_VULKAN_DISABLE
+ - Add a GDK_GL_DISABLE environment variable
+
+* GSK:
+ - Rename the GSK_GPU_SKIP environment variable to GSK_GPU_DISABLE
+ - Speed up handling of repeated ops, which should help for text
+ - Speed up the inner loop of text node conversion
+ - Drop the glyph-align optimization flag
+ - ngl: Avoid reusing frames while they are in use
+ - Fix flickering thumbnails in nautilus
+ - Speed up buffer handling in both ngl and Vulkan
+
+* Demos:
+ - Skip demos using gl shaders when we're not using the gl renderer
+
+* Build:
+ - Fix some ubsan warnings
+ - Avoid zink in ci since it spams stderr
+
+* Translation updates:
+ Czech
+ German
+ Korean
+ Russian
 
 
 Overview of Changes in 4.14.0, 12-03-2024
