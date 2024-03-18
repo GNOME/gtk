@@ -606,7 +606,13 @@ gdk_registry_handle_global (void               *data,
                           &wp_presentation_interface,
                           MIN (version, 1));
     }
-
+  else if (strcmp (interface, wp_single_pixel_buffer_manager_v1_interface.name) == 0)
+    {
+      display_wayland->single_pixel_buffer =
+        wl_registry_bind (display_wayland->wl_registry, id,
+                          &wp_single_pixel_buffer_manager_v1_interface,
+                          MIN (version, 1));
+    }
 
   g_hash_table_insert (display_wayland->known_globals,
                        GUINT_TO_POINTER (id), g_strdup (interface));
@@ -817,6 +823,7 @@ gdk_wayland_display_dispose (GObject *object)
   g_clear_pointer (&display_wayland->fractional_scale, wp_fractional_scale_manager_v1_destroy);
   g_clear_pointer (&display_wayland->viewporter, wp_viewporter_destroy);
   g_clear_pointer (&display_wayland->presentation, wp_presentation_destroy);
+  g_clear_pointer (&display_wayland->single_pixel_buffer, wp_single_pixel_buffer_manager_v1_destroy);
   g_clear_pointer (&display_wayland->linux_dmabuf, zwp_linux_dmabuf_v1_destroy);
   g_clear_pointer (&display_wayland->linux_dmabuf_feedback, zwp_linux_dmabuf_feedback_v1_destroy);
   if (display_wayland->linux_dmabuf_formats)

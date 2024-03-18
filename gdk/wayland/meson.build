@@ -66,6 +66,7 @@ proto_sources = [
   wlmod.find_protocol('fractional-scale', state: 'staging', version: 1),
   wlmod.find_protocol('linux-dmabuf', state: 'unstable', version: 1),
   wlmod.find_protocol('presentation-time', state: 'stable'),
+  wlmod.find_protocol('single-pixel-buffer', state: 'staging', version: 1),
 ]
 
 gdk_wayland_gen_headers = []

@@ -694,6 +694,7 @@ add_wayland_protocols (GdkDisplay          *display,
       append_wayland_protocol_row (gen, (struct wl_proxy *)d->fractional_scale);
       append_wayland_protocol_row (gen, (struct wl_proxy *)d->viewporter);
       append_wayland_protocol_row (gen, (struct wl_proxy *)d->presentation);
+      append_wayland_protocol_row (gen, (struct wl_proxy *)d->single_pixel_buffer);
     }
 }
 #endif
