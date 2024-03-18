@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2024-03-16 23:08+0000\n"
-"PO-Revision-Date: 2024-03-17 11:25+0100\n"
+"POT-Creation-Date: 2024-03-17 10:28+0000\n"
+"PO-Revision-Date: 2024-03-18 18:36+0100\n"
 "Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language-Team: Slovenian GNOME Translation Team <gnome-si@googlegroups.com>\n"
 "Language: sl_SI\n"
@@ -52,7 +52,7 @@ msgstr "Ni mogoče določiti vsebine kot »%s«."
 msgid "Cannot provide contents as %s"
 msgstr "Ni mogoče določiti vsebine kot %s."
 
-#: gdk/gdkdisplay.c:176 gdk/gdkglcontext.c:463
+#: gdk/gdkdisplay.c:176 gdk/gdkglcontext.c:464
 msgid "The current backend does not support OpenGL"
 msgstr "Trenutno zagnan ozadnji program ne podpira OpenGL"
 
@@ -118,32 +118,32 @@ msgstr "Funkcija Poteg/Spust iz drugih programov ni podprta."
 msgid "No compatible formats to transfer contents."
 msgstr "Ni skladnih zapisov za prenos vsebine."
 
-#: gdk/gdkglcontext.c:423 gdk/x11/gdkglcontext-glx.c:645
+#: gdk/gdkglcontext.c:424 gdk/x11/gdkglcontext-glx.c:645
 msgid "No GL API allowed."
 msgstr "API GL ni dovoljen."
 
-#: gdk/gdkglcontext.c:446 gdk/win32/gdkglcontext-win32-wgl.c:395
+#: gdk/gdkglcontext.c:447 gdk/win32/gdkglcontext-win32-wgl.c:395
 #: gdk/win32/gdkglcontext-win32-wgl.c:538
 #: gdk/win32/gdkglcontext-win32-wgl.c:582 gdk/x11/gdkglcontext-glx.c:691
 msgid "Unable to create a GL context"
 msgstr "Ni mogoče ustvariti vsebine GL"
 
-#: gdk/gdkglcontext.c:1309
+#: gdk/gdkglcontext.c:1310
 msgid "OpenGL ES disabled via GDK_DEBUG"
 msgstr "Podpora OpenGL ES je onemogočena z GDK_DEBUG"
 
-#: gdk/gdkglcontext.c:1321
+#: gdk/gdkglcontext.c:1322
 msgid "OpenGL disabled via GDK_DEBUG"
 msgstr "Podpora GL je onemogočena z GDK_DEBUG"
 
-#: gdk/gdkglcontext.c:1332
+#: gdk/gdkglcontext.c:1333
 #, c-format
 msgid "Application does not support %s API"
 msgstr "Program ne podpira vmesnika API %s"
 
 #. translators: This is about OpenGL backend names, like
 #. * "Trying to use X11 GLX, but EGL is already in use"
-#: gdk/gdkglcontext.c:2117
+#: gdk/gdkglcontext.c:2123
 #, c-format
 msgid "Trying to use %s, but %s is already in use"
 msgstr "Podana je zahteva za uporabo %s, a je %s že v uporabi."
@@ -872,8 +872,9 @@ msgid "OpenGL ES 3.0 is not supported by this renderer."
 msgstr "Izrisovalnik ne podpira OpenGL ES 3.0"
 
 #: gsk/gpu/gsknglrenderer.c:62
+#, fuzzy
 msgid "OpenGL 3.3 required"
-msgstr ""
+msgstr "Potrebujete OpenGL 3.3"
 
 #: gtk/a11y/gtkatspiaction.c:239
 msgctxt "accessibility"
@@ -4411,7 +4412,6 @@ msgid "Show Graphic Updates"
 msgstr "Pokaži grafične posodobitve"
 
 #: gtk/inspector/visual.ui:401
-#, fuzzy
 msgid ""
 "Tints all the places where the current renderer uses Cairo instead of the "
 "GPU."
@@ -4456,9 +4456,8 @@ msgstr "Pokaži opozorila o dostopnosti"
 
 #: gtk/inspector/visual.ui:632
 #, fuzzy
-#| msgid "Show Graphic Updates"
 msgid "Show Graphics Offload"
-msgstr "Pokaži grafične posodobitve"
+msgstr "Pokaži grafično razbremenitev"
 
 #: gtk/inspector/visual.ui:664
 msgid "Inspect Inspector"
@@ -7627,8 +7626,9 @@ msgid "Point color"
 msgstr "Barva točke"
 
 #: tools/gtk-path-tool-render.c:129 tools/gtk-path-tool-show.c:151
+#, fuzzy
 msgid "Fill rule (winding, even-odd)"
-msgstr ""
+msgstr "Pravilo polnjenja (navijajoče, sodo-liho)"
 
 #: tools/gtk-path-tool-render.c:129 tools/gtk-path-tool-render.c:133
 #: tools/gtk-path-tool-render.c:134 tools/gtk-path-tool-render.c:135
@@ -7645,25 +7645,23 @@ msgid "Line width (number)"
 msgstr "Širina vrstice (številka)"
 
 #: tools/gtk-path-tool-render.c:134 tools/gtk-path-tool-show.c:156
+#, fuzzy
 msgid "Line cap (butt, round, square)"
-msgstr ""
+msgstr "Konec črte (zaobljeno, okroglo, oglato)"
 
 #: tools/gtk-path-tool-render.c:135 tools/gtk-path-tool-show.c:157
 msgid "Line join (miter, miter-clip, round, bevel, arcs)"
 msgstr ""
 
 #: tools/gtk-path-tool-render.c:136 tools/gtk-path-tool-show.c:158
-#, fuzzy
 msgid "Miter limit (number)"
 msgstr "Meja sredice (število)"
 
 #: tools/gtk-path-tool-render.c:137 tools/gtk-path-tool-show.c:159
-#, fuzzy
 msgid "Dash pattern (comma-separated numbers)"
 msgstr "Črtkan vzorec (številke, ločene z vejico)"
 
 #: tools/gtk-path-tool-render.c:138 tools/gtk-path-tool-show.c:160
-#, fuzzy
 msgid "Dash offset (number)"
 msgstr "Zamik črtic (številka)"
 
@@ -7700,16 +7698,19 @@ msgid "Can only render a single path"
 msgstr "Izrisati je mogoče le eno pot"
 
 #: tools/gtk-path-tool-render.c:250 tools/gtk-path-tool-show.c:221
+#, fuzzy
 msgid "fill rule"
-msgstr ""
+msgstr "pravilo polnjenja"
 
 #: tools/gtk-path-tool-render.c:255 tools/gtk-path-tool-show.c:226
+#, fuzzy
 msgid "line cap"
-msgstr ""
+msgstr "konec črte"
 
 #: tools/gtk-path-tool-render.c:256 tools/gtk-path-tool-show.c:227
+#, fuzzy
 msgid "line join"
-msgstr ""
+msgstr "spoj črte"
 
 #: tools/gtk-path-tool-render.c:310
 #, c-format
@@ -7722,19 +7723,20 @@ msgid "Output written to '%s'."
 msgstr "Odvod je zapisan v »%s«."
 
 #: tools/gtk-path-tool-restrict.c:36
+#, fuzzy
 msgid "Beginning of segment"
-msgstr ""
+msgstr "Začetek odseka"
 
 #: tools/gtk-path-tool-restrict.c:36 tools/gtk-path-tool-restrict.c:37
 msgid "LENGTH"
 msgstr "DOLŽINA"
 
 #: tools/gtk-path-tool-restrict.c:37
+#, fuzzy
 msgid "End of segment"
-msgstr ""
+msgstr "Konec odseka"
 
 #: tools/gtk-path-tool-restrict.c:51
-#, fuzzy
 msgid "Restrict a path to a segment."
 msgstr "Omejite pot na odsek."
 
@@ -7839,12 +7841,14 @@ msgid "RUNS"
 msgstr "PONOVITVE"
 
 #: tools/gtk-rendernode-tool-benchmark.c:96
+#, fuzzy
 msgid "Don’t download result/wait for GPU to finish"
-msgstr ""
+msgstr "Ne prenašaj rezultatov/čakajte na zaključek dela GPE"
 
 #: tools/gtk-rendernode-tool-benchmark.c:114
+#, fuzzy
 msgid "Benchmark rendering of a .node file."
-msgstr ""
+msgstr "Preizkusno izrisovanje datoteke .node."
 
 #: tools/gtk-rendernode-tool-benchmark.c:127
 #: tools/gtk-rendernode-tool-info.c:236 tools/gtk-rendernode-tool-render.c:224
@@ -7855,9 +7859,8 @@ msgstr "Ni določene nobene datoteke .node\n"
 
 #: tools/gtk-rendernode-tool-benchmark.c:133
 #, fuzzy, c-format
-#| msgid "Can only accept a single .node file\n"
 msgid "Can only benchmark a single .node file\n"
-msgstr "Sprejeti je mogoče le eno datoteko .node\n"
+msgstr "Preizkušati je mogoče le eno datoteko .node\n"
 
 #: tools/gtk-rendernode-tool-compare.c:65
 #: tools/gtk-rendernode-tool-render.c:195
@@ -7896,9 +7899,8 @@ msgstr "Datoteke %s ni mogoče naložiti: %s\n"
 
 #: tools/gtk-rendernode-tool-compare.c:122
 #, fuzzy, c-format
-#| msgid "Could not rename %s back to %s: %s.\n"
 msgid "Could not save diff image to %s\n"
-msgstr "%s ni mogoče preimenovati nazaj v %s: %s\n"
+msgstr "Datoteke diff ni možno shraniti v %s\n"
 
 #: tools/gtk-rendernode-tool-compare.c:132
 #, c-format
