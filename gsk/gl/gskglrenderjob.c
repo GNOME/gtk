@@ -52,8 +52,6 @@
 #include "ninesliceprivate.h"
 #include "fp16private.h"
 
-#define ALLOW_OFFLOAD_FOR_ANY_TEXTURE 1
-
 #define ORTHO_NEAR_PLANE   -10000
 #define ORTHO_FAR_PLANE     10000
 #define MAX_GRADIENT_STOPS  6
@@ -176,6 +174,8 @@ struct _GskGLRenderJob
    * looking at the format of the framebuffer we are rendering on.
    */
   int target_format;
+
+  guint offscreen_count; /* if > 0, we're rendering to an offscreen */
 };
 
 typedef struct _GskGLRenderOffscreen
@@ -4002,9 +4002,15 @@ gsk_gl_render_job_visit_subsurface_node (GskGLRenderJob      *job,
     {
       if (!gdk_subsurface_is_above_parent (subsurface))
         {
-          /* Clear the area so we can see through */
-          if (gsk_gl_render_job_begin_draw (job, CHOOSE_PROGRAM (job, color)))
+          if (job->offscreen_count > 0)
             {
+              GDK_DISPLAY_DEBUG (gdk_gl_context_get_display (job->command_queue->context), OFFLOAD, "Hiding subsurface %p in offscreen context", subsurface);
+              gdk_subsurface_detach (subsurface);
+              gsk_gl_render_job_visit_node (job, gsk_subsurface_node_get_child (node));
+            }
+          else if (gsk_gl_render_job_begin_draw (job, CHOOSE_PROGRAM (job, color)))
+            {
+              /* Clear the area so we can see through */
               GskGLCommandBatch *batch;
               guint16 color[4];
               rgba_to_half (&(GdkRGBA){0,0,0,0}, color);
@@ -4422,7 +4428,11 @@ gsk_gl_render_job_visit_node_with_offscreen (GskGLRenderJob       *job,
       reset_clip = TRUE;
     }
 
+  job->offscreen_count++;
+
   gsk_gl_render_job_visit_node (job, node);
+
+  job->offscreen_count--;
 
   if (reset_clip)
     gsk_gl_render_job_pop_clip (job);
