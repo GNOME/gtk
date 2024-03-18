@@ -48,6 +48,7 @@ typedef struct
 
   GtkActionMuxer *muxer;
   GMenu *combined;
+  GMenuModel *standard_app_menu;
 
   GSList *inhibitors;
   int quit_inhibit;
@@ -179,7 +180,6 @@ gtk_application_impl_quartz_startup (GtkApplicationImpl *impl,
 {
   GtkApplicationImplQuartz *quartz = (GtkApplicationImplQuartz *) impl;
   GSimpleActionGroup *gtkinternal;
-  GMenuModel *app_menu;
   const char *pref_accel[] = {"<Control>comma", NULL};
   const char *hide_others_accel[] = {"<Control><Alt>h", NULL};
   const char *hide_accel[] = {"<Control>h", NULL};
@@ -208,8 +208,7 @@ gtk_application_impl_quartz_startup (GtkApplicationImpl *impl,
   g_object_unref (gtkinternal);
 
   /* now setup the menu */
-  app_menu = g_object_get_data (G_OBJECT (impl), "APP_MENU");
-  if (app_menu == NULL)
+  if (quartz->standard_app_menu == NULL)
     {
       GtkBuilder *builder;
 
@@ -219,11 +218,11 @@ gtk_application_impl_quartz_startup (GtkApplicationImpl *impl,
        * app menu at index 0 in 'combined'.
        */
       builder = gtk_builder_new_from_resource ("/org/gtk/libgtk/ui/gtkapplication-quartz.ui");
-      app_menu = G_MENU_MODEL (gtk_builder_get_object (builder, "app-menu"));
-      g_object_set_data_full (G_OBJECT (impl), "APP_DATA", g_object_ref (app_menu), g_object_unref);
+      quartz->standard_app_menu = G_MENU_MODEL (gtk_builder_get_object (builder, "app-menu"));
       g_object_unref (builder);
     }
-  gtk_application_impl_quartz_set_app_menu (impl, app_menu);
+
+  gtk_application_impl_quartz_set_app_menu (impl, quartz->standard_app_menu);
 
   /* This may or may not add an item to 'combined' */
   gtk_application_impl_set_menubar (impl, gtk_application_get_menubar (impl->application));
@@ -370,6 +369,7 @@ gtk_application_impl_quartz_finalize (GObject *object)
   GtkApplicationImplQuartz *quartz = (GtkApplicationImplQuartz *) object;
 
   g_clear_object (&quartz->combined);
+  g_clear_object (&quartz->standard_app_menu);
 
   G_OBJECT_CLASS (gtk_application_impl_quartz_parent_class)->finalize (object);
 }
