@@ -226,6 +226,7 @@ compare_xfails = {
     'conic-gradient-with-64-colorstops': ['clipped', 'colorflipped'],
     'blur-child-bounds-oversize-nogl': ['clipped'], # 6450
     'rounded-clip-with-huge-bounds-nogl': ['plain','flipped','rotated','repeated','masked','replayed','clipped','colorflipped'], # 6532
+    'big-checkerboard': ['clipped'], # 6444
   },
   'vulkan': {
     'radial-gradient-with-64-colorstops': ['clipped', 'colorflipped'],
@@ -234,6 +235,7 @@ compare_xfails = {
     'repeat-repeats-nested-nogl': ['clipped'], # 6522
     'repeating-radial-gradient-edge-colors': ['colorflipped'],
     'rounded-clip-with-huge-bounds-nogl': ['plain','flipped','rotated','repeated','masked','replayed','clipped','colorflipped'], # 6532
+    'big-checkerboard': ['clipped'], # 6444
   },
   'gl': {
     # 6525
