@@ -74,6 +74,10 @@
  * It is also possible to provide the menubar manually using
  * [method@Gtk.Application.set_menubar].
  *
+ * A custom 'Application' menu can be set using [method@Gtk.Application.set_app_menu].
+ * This is mainly relevant on macOS, where GTK will otherwise provide a standard
+ * app menu.
+ *
  * `GtkApplication` will also automatically setup an icon search path for
  * the default icon theme by appending "icons" to the resource base
  * path. This allows your application to easily store its icons as
@@ -125,6 +129,7 @@ enum {
   PROP_ZERO,
   PROP_REGISTER_SESSION,
   PROP_SCREENSAVER_ACTIVE,
+  PROP_APP_MENU,
   PROP_MENUBAR,
   PROP_ACTIVE_WINDOW,
   NUM_PROPERTIES
@@ -139,6 +144,7 @@ typedef struct
 
   GList *windows;
 
+  GMenuModel      *app_menu;
   GMenuModel      *menubar;
   guint            last_window_id;
 
@@ -215,6 +221,9 @@ gtk_application_load_resources (GtkApplication *application)
       {
         GObject *menu;
 
+        menu = gtk_builder_get_object (priv->menus_builder, "app-menu");
+        if (menu != NULL && G_IS_MENU_MODEL (menu))
+          gtk_application_set_app_menu (application, G_MENU_MODEL (menu));
         menu = gtk_builder_get_object (priv->menus_builder, "menubar");
         if (menu != NULL && G_IS_MENU_MODEL (menu))
           gtk_application_set_menubar (application, G_MENU_MODEL (menu));
@@ -438,6 +447,10 @@ gtk_application_get_property (GObject    *object,
       g_value_set_boolean (value, priv->screensaver_active);
       break;
 
+    case PROP_APP_MENU:
+      g_value_set_object (value, gtk_application_get_app_menu (application));
+      break;
+
     case PROP_MENUBAR:
       g_value_set_object (value, gtk_application_get_menubar (application));
       break;
@@ -467,6 +480,10 @@ gtk_application_set_property (GObject      *object,
       priv->register_session = g_value_get_boolean (value);
       break;
 
+    case PROP_APP_MENU:
+      gtk_application_set_app_menu (application, g_value_get_object (value));
+      break;
+
     case PROP_MENUBAR:
       gtk_application_set_menubar (application, g_value_get_object (value));
       break;
@@ -484,6 +501,7 @@ gtk_application_finalize (GObject *object)
   GtkApplicationPrivate *priv = gtk_application_get_instance_private (application);
 
   g_clear_object (&priv->menus_builder);
+  g_clear_object (&priv->app_menu);
   g_clear_object (&priv->menubar);
   g_clear_object (&priv->muxer);
   g_clear_object (&priv->accels);
@@ -610,6 +628,21 @@ gtk_application_class_init (GtkApplicationClass *class)
     g_param_spec_boolean ("screensaver-active", NULL, NULL,
                           FALSE,
                           G_PARAM_READABLE|G_PARAM_STATIC_STRINGS);
+
+  /**
+   * GtkApplication:app-menu: (attributes org.gtk.Property.get=gtk_application_get_app_menu org.gtk.Property.set=gtk_application_set_app_menu)
+   *
+   * The `GMenuModel` to be used for the application's app menu.
+   *
+   * This is mainly relevant on macOS, where GTK will provide a
+   * standard app menu, unless it is overwritten by setting this property.
+   *
+   * Since: 4.16
+   */
+  gtk_application_props[PROP_APP_MENU] =
+    g_param_spec_object ("app-menu", NULL, NULL,
+                         G_TYPE_MENU_MODEL,
+                         G_PARAM_READWRITE|G_PARAM_STATIC_STRINGS);
 
   /**
    * GtkApplication:menubar: (attributes org.gtk.Property.get=gtk_application_get_menubar org.gtk.Property.set=gtk_application_set_menubar)
@@ -831,6 +864,75 @@ gtk_application_update_accels (GtkApplication *application)
 
   for (l = priv->windows; l != NULL; l = l->next)
     _gtk_window_notify_keys_changed (l->data);
+}
+
+/**
+ * gtk_application_set_app_menu:
+ * @application: a #GtkApplication
+ * @app_menu: (allow-none): a #GMenuModel, or %NULL
+ *
+ * Sets or unsets the application menu for @application.
+ *
+ * This can only be done in the primary instance of the application,
+ * after it has been registered.  #GApplication::startup is a good place
+ * to call this.
+ *
+ * The application menu is a single menu containing items that typically
+ * impact the application as a whole, rather than acting on a specific
+ * window or document.  For example, you would expect to see
+ * “Preferences” or “Quit” in an application menu, but not “Save” or
+ * “Print”.
+ *
+ * If supported, the application menu will be rendered by the desktop
+ * environment.
+ *
+ * Use the base #GActionMap interface to add actions, to respond to the user
+ * selecting these menu items.
+ *
+ * Note that setting an app menu is mainly relevant on macOS, where GTK
+ * provides a standard app menu unless overwritten by this function.
+ *
+ * Since: 4.16
+ */
+void
+gtk_application_set_app_menu (GtkApplication *application,
+                              GMenuModel     *app_menu)
+{
+  GtkApplicationPrivate *priv = gtk_application_get_instance_private (application);
+
+  g_return_if_fail (GTK_IS_APPLICATION (application));
+  g_return_if_fail (g_application_get_is_registered (G_APPLICATION (application)));
+  g_return_if_fail (!g_application_get_is_remote (G_APPLICATION (application)));
+  g_return_if_fail (app_menu == NULL || G_IS_MENU_MODEL (app_menu));
+
+  if (g_set_object (&priv->app_menu, app_menu))
+    {
+      gtk_application_impl_set_app_menu (priv->impl, app_menu);
+
+      g_object_notify_by_pspec (G_OBJECT (application), gtk_application_props[PROP_APP_MENU]
+);
+    }
+}
+
+/**
+ * gtk_application_get_app_menu:
+ * @application: a #GtkApplication
+ *
+ * Returns the menu model that has been set with gtk_application_set_app_menu().
+ *
+ * Returns: (transfer none) (nullable): the application menu of @application
+ *   or %NULL if no application menu has been set.
+ *
+ * Since: 4.16
+ */
+GMenuModel *
+gtk_application_get_app_menu (GtkApplication *application)
+{
+  GtkApplicationPrivate *priv = gtk_application_get_instance_private (application);
+
+  g_return_val_if_fail (GTK_IS_APPLICATION (application), NULL);
+
+  return priv->app_menu;
 }
 
 /**

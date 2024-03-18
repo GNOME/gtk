@@ -84,6 +84,12 @@ void             gtk_application_remove_window (GtkApplication    *application,
 GDK_AVAILABLE_IN_ALL
 GList *          gtk_application_get_windows   (GtkApplication    *application);
 
+GDK_AVAILABLE_IN_4_16
+GMenuModel *     gtk_application_get_app_menu  (GtkApplication    *application);
+GDK_AVAILABLE_IN_4_16
+void             gtk_application_set_app_menu  (GtkApplication    *application,
+                                                GMenuModel        *app_menu);
+
 GDK_AVAILABLE_IN_ALL
 GMenuModel *     gtk_application_get_menubar   (GtkApplication    *application);
 GDK_AVAILABLE_IN_ALL
