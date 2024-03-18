@@ -223,8 +223,7 @@ gtk_application_impl_quartz_startup (GtkApplicationImpl *impl,
       g_object_set_data_full (G_OBJECT (impl), "APP_DATA", g_object_ref (app_menu), g_object_unref);
       g_object_unref (builder);
     }
-  else
-    gtk_application_impl_quartz_set_app_menu (impl, app_menu);
+  gtk_application_impl_quartz_set_app_menu (impl, app_menu);
 
   /* This may or may not add an item to 'combined' */
   gtk_application_impl_set_menubar (impl, gtk_application_get_menubar (impl->application));
