@@ -296,23 +296,12 @@ typedef NSString *CALayerContentsGravity;
   GdkMonitor *monitor;
   GdkRectangle geometry;
   GdkRectangle workarea;
-  int shadow_top = 0;
-  int shadow_left = 0;
-  int shadow_right = 0;
-  int shadow_bottom = 0;
   GdkRectangle window_gdk;
   GdkPoint pointer_position;
   GdkPoint new_origin;
 
   if (!inManualMove)
     return NO;
-
-  /* Get our shadow so we can adjust the window position sans-shadow */
-  _gdk_macos_surface_get_shadow (gdk_surface,
-                                 &shadow_top,
-                                 &shadow_right,
-                                 &shadow_bottom,
-                                 &shadow_left);
 
   windowFrame = [self frame];
   currentLocation = [NSEvent mouseLocation];
@@ -339,20 +328,8 @@ typedef NSString *CALayerContentsGravity;
   window_gdk.width = windowFrame.size.width;
   window_gdk.height = windowFrame.size.height;
 
-  /* Subtract our shadowin from the window */
-  window_gdk.x += shadow_left;
-  window_gdk.y += shadow_top;
-  window_gdk.width = window_gdk.width - shadow_left - shadow_right;
-  window_gdk.height = window_gdk.height - shadow_top - shadow_bottom;
-
   /* Now place things on the monitor */
   _edge_snapping_motion (&self->snapping, &pointer_position, &window_gdk);
-
-  /* And add our shadow back to the frame */
-  window_gdk.x -= shadow_left;
-  window_gdk.y -= shadow_top;
-  window_gdk.width += shadow_left + shadow_right;
-  window_gdk.height += shadow_top + shadow_bottom;
 
   /* Convert to quartz coordinates */
   _gdk_macos_display_to_display_coords ([self gdkDisplay],
@@ -737,17 +714,11 @@ typedef NSString *CALayerContentsGravity;
 
 -(NSRect)constrainFrameRect:(NSRect)frameRect toScreen:(NSScreen *)screen
 {
-  GdkMacosSurface *surface = gdk_surface;
   NSRect rect;
-  int shadow_top;
 
-  /* Allow the window to move up "shadow_top" more than normally allowed
-   * by the default impl. This makes it possible to move windows with
-   * client side shadow right up to the screen's menu bar. */
-  _gdk_macos_surface_get_shadow (surface, &shadow_top, NULL, NULL, NULL);
   rect = [super constrainFrameRect:frameRect toScreen:screen];
   if (frameRect.origin.y > rect.origin.y)
-    rect.origin.y = MIN (frameRect.origin.y, rect.origin.y + shadow_top);
+    rect.origin.y = MIN (frameRect.origin.y, rect.origin.y);
 
   return rect;
 }

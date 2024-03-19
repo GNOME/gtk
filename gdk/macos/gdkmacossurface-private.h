@@ -61,11 +61,6 @@ struct _GdkMacosSurface
     int height;
   } next_layout;
 
-  int shadow_top;
-  int shadow_right;
-  int shadow_bottom;
-  int shadow_left;
-
   cairo_rectangle_int_t next_frame;
 
   gint64 pending_frame_counter;
@@ -91,16 +86,6 @@ CGDirectDisplayID  _gdk_macos_surface_get_screen_id           (GdkMacosSurface  
 const char        *_gdk_macos_surface_get_title               (GdkMacosSurface      *self);
 void               _gdk_macos_surface_set_title               (GdkMacosSurface      *self,
                                                                const char           *title);
-void               _gdk_macos_surface_get_shadow              (GdkMacosSurface      *self,
-                                                               int                  *top,
-                                                               int                  *right,
-                                                               int                  *bottom,
-                                                               int                  *left);
-void               _gdk_macos_surface_set_shadow              (GdkMacosSurface      *self,
-                                                               int                   top,
-                                                               int                   right,
-                                                               int                   bottom,
-                                                               int                   left);
 gboolean           _gdk_macos_surface_is_opaque               (GdkMacosSurface      *self);
 NSView            *_gdk_macos_surface_get_view                (GdkMacosSurface      *self);
 gboolean           _gdk_macos_surface_get_modal_hint          (GdkMacosSurface      *self);

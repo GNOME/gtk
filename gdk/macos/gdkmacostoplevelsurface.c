@@ -152,13 +152,6 @@ _gdk_macos_toplevel_surface_compute_size (GdkSurface *surface)
       mask = GDK_HINT_MIN_SIZE | GDK_HINT_MAX_SIZE;
     }
 
-  if (size.shadow.is_valid)
-    _gdk_macos_surface_set_shadow (macos_surface,
-                                   size.shadow.top,
-                                   size.shadow.right,
-                                   size.shadow.bottom,
-                                   size.shadow.left);
-
   _gdk_macos_surface_set_geometry_hints (macos_surface, &geometry, mask);
 
   if (surface->state & (GDK_TOPLEVEL_STATE_FULLSCREEN |
