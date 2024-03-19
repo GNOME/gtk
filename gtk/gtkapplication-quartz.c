@@ -218,7 +218,7 @@ gtk_application_impl_quartz_startup (GtkApplicationImpl *impl,
        * app menu at index 0 in 'combined'.
        */
       builder = gtk_builder_new_from_resource ("/org/gtk/libgtk/ui/gtkapplication-quartz.ui");
-      quartz->standard_app_menu = G_MENU_MODEL (gtk_builder_get_object (builder, "app-menu"));
+      quartz->standard_app_menu = G_MENU_MODEL (g_object_ref (gtk_builder_get_object (builder, "app-menu")));
       g_object_unref (builder);
     }
 
