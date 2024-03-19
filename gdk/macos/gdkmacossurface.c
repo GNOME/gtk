@@ -236,32 +236,6 @@ gdk_macos_surface_get_scale (GdkSurface *surface)
   return [self->window backingScaleFactor];
 }
 
-void
-_gdk_macos_surface_set_shadow (GdkMacosSurface *surface,
-                               int              top,
-                               int              right,
-                               int              bottom,
-                               int              left)
-{
-  GdkMacosSurface *self = (GdkMacosSurface *)surface;
-
-  g_assert (GDK_IS_MACOS_SURFACE (self));
-
-  if (self->shadow_top == top &&
-      self->shadow_right == right &&
-      self->shadow_bottom == bottom &&
-      self->shadow_left == left)
-    return;
-
-  self->shadow_top = top;
-  self->shadow_right = right;
-  self->shadow_bottom = bottom;
-  self->shadow_left = left;
-
-  if (top || right || bottom || left)
-    [self->window setHasShadow:NO];
-}
-
 static void
 gdk_macos_surface_begin_frame (GdkMacosSurface *self)
 {
@@ -577,29 +551,6 @@ gdk_macos_surface_init (GdkMacosSurface *self)
   self->main.data = self;
   self->sorted.data = self;
   self->monitors = g_ptr_array_new_with_free_func (g_object_unref);
-}
-
-void
-_gdk_macos_surface_get_shadow (GdkMacosSurface *self,
-                               int             *top,
-                               int             *right,
-                               int             *bottom,
-                               int             *left)
-{
-
-  g_return_if_fail (GDK_IS_MACOS_SURFACE (self));
-
-  if (top)
-    *top = self->shadow_top;
-
-  if (left)
-    *left = self->shadow_left;
-
-  if (bottom)
-    *bottom = self->shadow_bottom;
-
-  if (right)
-    *right = self->shadow_right;
 }
 
 gboolean
@@ -1097,16 +1048,12 @@ _gdk_macos_surface_monitor_changed (GdkMacosSurface *self)
 
           g_set_object (&child->best_monitor, best);
 
-          area.x = self->root_x + GDK_SURFACE (child)->x + child->shadow_left;
-          area.y = self->root_y + GDK_SURFACE (child)->y + child->shadow_top;
-          area.width = GDK_SURFACE (child)->width - child->shadow_left - child->shadow_right;
-          area.height = GDK_SURFACE (child)->height - child->shadow_top - child->shadow_bottom;
+          area.x = self->root_x + GDK_SURFACE (child)->x;
+          area.y = self->root_y + GDK_SURFACE (child)->y;
+          area.width = GDK_SURFACE (child)->width;
+          area.height = GDK_SURFACE (child)->height;
 
           _gdk_macos_monitor_clamp (GDK_MACOS_MONITOR (best), &area);
-
-          area.x -= child->shadow_left;
-          area.y -= child->shadow_top;
-
           _gdk_macos_surface_move (child, area.x, area.y);
           gdk_surface_invalidate_rect (GDK_SURFACE (child), NULL);
         }
