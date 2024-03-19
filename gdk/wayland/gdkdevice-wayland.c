@@ -310,7 +310,10 @@ gdk_wayland_device_update_surface_cursor (GdkDevice *device)
   if (buffer)
     {
       wl_surface_attach (pointer->pointer_surface, buffer, 0, 0);
-      wl_surface_set_buffer_scale (pointer->pointer_surface, scale);
+      if (pointer->pointer_surface_viewport)
+        wp_viewport_set_destination (pointer->pointer_surface_viewport, w, h);
+      else
+        wl_surface_set_buffer_scale (pointer->pointer_surface, scale);
       wl_surface_damage (pointer->pointer_surface,  0, 0, w, h);
       wl_surface_commit (pointer->pointer_surface);
     }
