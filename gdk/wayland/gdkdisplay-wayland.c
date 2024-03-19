@@ -95,7 +95,6 @@
 #define GTK_SHELL1_VERSION       5
 #define OUTPUT_VERSION_WITH_DONE 2
 #define NO_XDG_OUTPUT_DONE_SINCE_VERSION 3
-#define XDG_ACTIVATION_VERSION   1
 #define OUTPUT_VERSION           3
 
 #ifdef HAVE_TOPLEVEL_STATE_SUSPENDED
@@ -585,22 +584,19 @@ gdk_registry_handle_global (void               *data,
     {
       display_wayland->xdg_activation =
         wl_registry_bind (display_wayland->wl_registry, id,
-                          &xdg_activation_v1_interface,
-                          MIN (version, XDG_ACTIVATION_VERSION));
+                          &xdg_activation_v1_interface, 1);
     }
   else if (strcmp (interface, "wp_fractional_scale_manager_v1") == 0)
     {
       display_wayland->fractional_scale =
         wl_registry_bind (display_wayland->wl_registry, id,
-                          &wp_fractional_scale_manager_v1_interface,
-                          MIN (version, 1));
+                          &wp_fractional_scale_manager_v1_interface, 1);
     }
   else if (strcmp (interface, "wp_viewporter") == 0)
     {
       display_wayland->viewporter =
         wl_registry_bind (display_wayland->wl_registry, id,
-                          &wp_viewporter_interface,
-                          MIN (version, 1));
+                          &wp_viewporter_interface, 1);
     }
 
 
@@ -700,7 +696,8 @@ _gdk_wayland_display_open (const char *display_name)
   process_on_globals_closures (display_wayland);
 
   /* Wait for initializing to complete. This means waiting for all
-   * asynchronous roundtrips that were triggered during initial roundtrip. */
+   * asynchronous roundtrips that were triggered during initial roundtrip.
+   */
   while (display_wayland->async_roundtrips != NULL)
     {
       if (wl_display_dispatch (display_wayland->wl_display) < 0)
@@ -708,6 +705,18 @@ _gdk_wayland_display_open (const char *display_name)
           g_object_unref (display);
           return NULL;
         }
+    }
+
+  /* Check that we got all the required globals */
+  if (display_wayland->compositor == NULL ||
+      display_wayland->shm == NULL ||
+      display_wayland->data_device_manager == NULL)
+    {
+      g_warning ("The Wayland compositor does not provide one or more of the required interfaces, "
+                 "not using Wayland display");
+      g_object_unref (display);
+
+      return NULL;
     }
 
   if (display_wayland->xdg_wm_base_id)
