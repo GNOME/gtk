@@ -1068,7 +1068,9 @@ gtk_column_view_in_resize_rect (GtkColumnView       *self,
   gtk_column_view_column_get_allocation (column, NULL, &width);
   rect.size.width = width;
 
-  rect.origin.x += rect.size.width - DRAG_WIDTH / 2;
+  if (_gtk_widget_get_direction (GTK_WIDGET (self)) != GTK_TEXT_DIR_RTL)
+    rect.origin.x += rect.size.width;
+  rect.origin.x -= DRAG_WIDTH / 2;
   rect.size.width = DRAG_WIDTH;
 
   return graphene_rect_contains_point (&rect, &(graphene_point_t) { x, y});
@@ -1145,7 +1147,14 @@ header_drag_begin (GtkGestureDrag *gesture,
           gtk_column_view_column_set_fixed_width (column, size);
 
           self->drag_pos = i;
-          self->drag_x = start_x - size;
+          if (_gtk_widget_get_direction (GTK_WIDGET (self)) != GTK_TEXT_DIR_RTL)
+            self->drag_x = start_x - size;
+          else
+            {
+              int width = gtk_widget_get_width (GTK_WIDGET (self->header));
+
+              self->drag_x = width - (start_x + size);
+            }
           self->in_column_resize = TRUE;
 
           set_resize_cursor (self, TRUE);
@@ -1256,6 +1265,13 @@ update_column_resize (GtkColumnView *self,
                       double         x)
 {
   GtkColumnViewColumn *column;
+
+  if (_gtk_widget_get_direction (GTK_WIDGET (self)) == GTK_TEXT_DIR_RTL)
+    {
+      int width = gtk_widget_get_width (GTK_WIDGET (self->header));
+
+      x = width - x;
+    }
 
   column = g_list_model_get_item (G_LIST_MODEL (self->columns), self->drag_pos);
   gtk_column_view_column_set_fixed_width (column, MAX (x - self->drag_x, 0));
