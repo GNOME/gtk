@@ -104,6 +104,7 @@ compare_render_tests = [
   'mask-modes-with-alpha',
   'mask-texture-color-alpha',
   'mipmap-generation-later',
+  'mipmap-with-1x1',
   'nested-rounded-clips',
   'offscreen-forced-downscale',
   'offscreen-fractional-translate-nogl',

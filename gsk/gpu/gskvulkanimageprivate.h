@@ -71,7 +71,7 @@ static inline guint
 gsk_vulkan_mipmap_levels (gsize width,
                           gsize height)
 {
-  return g_bit_nth_msf (MAX (width, height) - 1, -1) + 1;
+  return g_bit_nth_msf (MAX (MAX (width, height) - 1, 1), -1) + 1;
 }
 
 G_END_DECLS
