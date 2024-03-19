@@ -50,18 +50,6 @@
 #include "gdkenumtypes.h"
 #include "gdkeventsprivate.h"
 
-static struct {
-  GdkDragAction action;
-  const char   *name;
-  GdkCursor    *cursor;
-} drag_cursors[] = {
-  { GDK_ACTION_ASK,     "dnd-ask",  NULL },
-  { GDK_ACTION_COPY,    "copy", NULL },
-  { GDK_ACTION_MOVE,    "move", NULL },
-  { GDK_ACTION_LINK,    "alias", NULL },
-  { 0,                  "no-drop", NULL },
-};
-
 enum {
   PROP_0,
   PROP_CONTENT,
@@ -785,6 +773,18 @@ gdk_drag_handle_source_event (GdkEvent *event)
 
   return FALSE;
 }
+
+static struct {
+  GdkDragAction action;
+  const char   *name;
+  GdkCursor    *cursor;
+} drag_cursors[] = {
+  { 0,               "default", NULL },
+  { GDK_ACTION_ASK,  "dnd-ask", NULL },
+  { GDK_ACTION_COPY, "copy",    NULL },
+  { GDK_ACTION_MOVE, "move",    NULL },
+  { GDK_ACTION_LINK, "alias",   NULL },
+};
 
 GdkCursor *
 gdk_drag_get_cursor (GdkDrag       *drag,
