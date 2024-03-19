@@ -466,9 +466,9 @@ gdk_wayland_surface_create_subsurface (GdkSurface *surface)
   GdkWaylandSubsurface *sub;
   struct wl_region *region;
 
-  if (disp->viewporter == NULL)
+  if (disp->subcompositor == NULL || disp->viewporter == NULL)
     {
-      GDK_DISPLAY_DEBUG (display, OFFLOAD, "Can't use subsurfaces without viewporter");
+      GDK_DISPLAY_DEBUG (display, OFFLOAD, "Can't use subsurfaces without subcompositor and viewporter");
       return NULL;
     }
 
