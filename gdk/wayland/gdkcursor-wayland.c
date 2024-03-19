@@ -154,15 +154,19 @@ static const struct wl_buffer_listener buffer_listener = {
 struct wl_buffer *
 _gdk_wayland_cursor_get_buffer (GdkWaylandDisplay *display,
                                 GdkCursor         *cursor,
-                                guint              desired_scale,
+                                double             desired_scale,
+                                gboolean           use_viewporter,
                                 guint              image_index,
                                 int               *hotspot_x,
                                 int               *hotspot_y,
                                 int               *width,
                                 int               *height,
-                                int               *scale)
+                                double            *scale)
 {
   GdkTexture *texture;
+  int desired_scale_factor;
+
+  desired_scale_factor = (int) ceil (desired_scale);
 
   if (gdk_cursor_get_name (cursor))
     {
@@ -173,7 +177,7 @@ _gdk_wayland_cursor_get_buffer (GdkWaylandDisplay *display,
 
       c = gdk_wayland_cursor_load_for_name (display,
                                             _gdk_wayland_display_get_cursor_theme (display),
-                                            desired_scale,
+                                            desired_scale_factor,
                                             gdk_cursor_get_name (cursor));
       if (c && c->image_count > 0)
         {
@@ -190,7 +194,7 @@ _gdk_wayland_cursor_get_buffer (GdkWaylandDisplay *display,
 
           image = c->images[image_index];
 
-          cursor_scale = desired_scale;
+          cursor_scale = desired_scale_factor;
           if ((image->width % cursor_scale != 0) ||
               (image->height % cursor_scale != 0))
             {
@@ -251,11 +255,14 @@ from_texture:
     }
   else
     {
-      *scale = desired_scale;
+      if (!use_viewporter)
+        *scale = desired_scale_factor;
+      else
+        *scale = desired_scale;
 
       texture = gdk_cursor_get_texture_for_size (cursor,
                                                  display->cursor_theme_size,
-                                                 desired_scale,
+                                                 *scale,
                                                  width,
                                                  height,
                                                  hotspot_x,
@@ -289,6 +296,7 @@ from_texture:
     return _gdk_wayland_cursor_get_buffer (display,
                                            gdk_cursor_get_fallback (cursor),
                                            desired_scale,
+                                           use_viewporter,
                                            image_index,
                                            hotspot_x, hotspot_y,
                                            width, height,

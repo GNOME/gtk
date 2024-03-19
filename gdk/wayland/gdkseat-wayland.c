@@ -3877,6 +3877,7 @@ gdk_wayland_pointer_data_finalize (GdkWaylandPointerData *pointer)
   g_clear_object (&pointer->cursor);
   wl_surface_destroy (pointer->pointer_surface);
   g_slist_free (pointer->pointer_surface_outputs);
+  g_clear_pointer (&pointer->pointer_surface_viewport, wp_viewport_destroy);
 }
 
 static void
@@ -4240,6 +4241,9 @@ init_pointer_data (GdkWaylandPointerData *pointer_data,
   wl_surface_add_listener (pointer_data->pointer_surface,
                            &pointer_surface_listener,
                            logical_device);
+
+  if (display_wayland->viewporter && g_getenv ("POINTER_USE_VIEWPORT"))
+    pointer_data->pointer_surface_viewport = wp_viewporter_get_viewport (display_wayland->viewporter, pointer_data->pointer_surface);
 }
 
 void
