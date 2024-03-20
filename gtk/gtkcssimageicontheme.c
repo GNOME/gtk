@@ -138,11 +138,12 @@ gtk_css_image_icon_theme_print (GtkCssImage *image,
 }
 
 static GtkCssImage *
-gtk_css_image_icon_theme_compute (GtkCssImage      *image,
-                                  guint             property_id,
-                                  GtkStyleProvider *provider,
-                                  GtkCssStyle      *style,
-                                  GtkCssStyle      *parent_style)
+gtk_css_image_icon_theme_compute (GtkCssImage       *image,
+                                  guint              property_id,
+                                  GtkStyleProvider  *provider,
+                                  GtkCssStyle       *style,
+                                  GtkCssStyle       *parent_style,
+                                  GtkCssVariableSet *variables)
 {
   GtkCssImageIconTheme *icon_theme = GTK_CSS_IMAGE_ICON_THEME (image);
   GtkCssImageIconTheme *copy;
