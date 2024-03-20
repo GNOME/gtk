@@ -1498,10 +1498,14 @@ gdk_win32_display_get_win32hcursor (GdkWin32Display *display,
   if (cursor_name)
     win32hcursor = gdk_win32hcursor_create_for_name (display, cursor_name);
   else
-    win32hcursor = gdk_win32hcursor_create_for_texture (display,
-                                                        gdk_cursor_get_texture (cursor),
-                                                        gdk_cursor_get_hotspot_x (cursor),
-                                                        gdk_cursor_get_hotspot_y (cursor));
+    {
+      GdkTexture *texture = gdk_cursor_create_texture (cursor, 1);
+      win32hcursor = gdk_win32hcursor_create_for_texture (display,
+                                                          texture,
+                                                          gdk_cursor_get_hotspot_x (cursor),
+                                                          gdk_cursor_get_hotspot_y (cursor));
+      g_object_unref (texture);
+    }
 
   if (win32hcursor != NULL)
     {
