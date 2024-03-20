@@ -102,6 +102,12 @@ compute_change (GtkCssStyleChange *change)
                                                       change->new_style,
                                                       &change->changes,
                                                       &change->affects);
+
+  if (change->old_style->variables != change->new_style->variables)
+    gtk_css_custom_values_compute_changes_and_affects (change->old_style,
+                                                       change->new_style,
+                                                       &change->changes,
+                                                       &change->affects);
 }
 
 void

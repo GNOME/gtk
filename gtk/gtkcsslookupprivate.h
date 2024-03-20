@@ -23,6 +23,8 @@
 #include "gtk/gtkcssstaticstyleprivate.h"
 
 #include "gtk/css/gtkcsssection.h"
+#include "gtk/css/gtkcsstokenizerprivate.h"
+#include "gtk/css/gtkcssvariablevalueprivate.h"
 
 
 G_BEGIN_DECLS
@@ -37,6 +39,7 @@ typedef struct {
 struct _GtkCssLookup {
   GtkBitmask *set_values;
   GtkCssLookupValue  values[GTK_CSS_PROPERTY_N_PROPERTIES];
+  GHashTable *custom_values;
 };
 
 void                    _gtk_css_lookup_init                    (GtkCssLookup               *lookup);
@@ -47,6 +50,9 @@ void                    _gtk_css_lookup_set                     (GtkCssLookup   
                                                                  guint                       id,
                                                                  GtkCssSection              *section,
                                                                  GtkCssValue                *value);
+void                    _gtk_css_lookup_set_custom              (GtkCssLookup               *lookup,
+                                                                 int                         id,
+                                                                 GtkCssVariableValue        *value);
 
 static inline const GtkBitmask *
 _gtk_css_lookup_get_set_values (const GtkCssLookup *lookup)
