@@ -271,7 +271,7 @@ gdk_wayland_device_update_surface_cursor (GdkDevice *device)
     {
       buffer = _gdk_wayland_cursor_get_buffer (GDK_WAYLAND_DISPLAY (seat->display),
                                                pointer->cursor,
-                                               pointer->current_output_scale,
+                                               (int) ceil (pointer->current_output_scale),
                                                pointer->cursor_image_index,
                                                &x, &y, &w, &h, &scale);
     }
