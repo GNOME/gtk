@@ -1112,7 +1112,7 @@ gtk_css_provider_load_from_data (GtkCssProvider  *css_provider,
   if (length < 0)
     length = strlen (data);
 
-  bytes = g_bytes_new_static (data, length);
+  bytes = g_bytes_new (data, length);
 
   gtk_css_provider_load_from_bytes (css_provider, bytes);
 
@@ -1139,7 +1139,7 @@ gtk_css_provider_load_from_string (GtkCssProvider *css_provider,
   g_return_if_fail (GTK_IS_CSS_PROVIDER (css_provider));
   g_return_if_fail (string != NULL);
 
-  bytes = g_bytes_new_static (string, strlen (string));
+  bytes = g_bytes_new (string, strlen (string));
 
   gtk_css_provider_load_from_bytes (css_provider, bytes);
 
