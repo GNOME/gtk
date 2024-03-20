@@ -36,7 +36,14 @@ struct _GtkCssTokenizer
   const char            *end;
 
   GtkCssLocation         position;
+  GArray                *saved_states;
 };
+
+typedef struct
+{
+  GtkCssLocation         position;
+  const char            *data;
+} GtkCssTokenizerSavedState;
 
 void
 gtk_css_token_clear (GtkCssToken *token)
@@ -580,6 +587,7 @@ gtk_css_tokenizer_new (GBytes *bytes)
   tokenizer->end = tokenizer->data + g_bytes_get_size (bytes);
 
   gtk_css_location_init (&tokenizer->position);
+  tokenizer->saved_states = g_array_new (FALSE, FALSE, sizeof (GtkCssTokenizerSavedState));
 
   return tokenizer;
 }
@@ -601,6 +609,7 @@ gtk_css_tokenizer_unref (GtkCssTokenizer *tokenizer)
 
   g_string_free (tokenizer->name_buffer, TRUE);
   g_bytes_unref (tokenizer->bytes);
+  g_array_unref (tokenizer->saved_states);
   g_free (tokenizer);
 }
 
@@ -1484,3 +1493,29 @@ gtk_css_tokenizer_read_token (GtkCssTokenizer  *tokenizer,
     }
 }
 
+void
+gtk_css_tokenizer_save (GtkCssTokenizer *tokenizer)
+{
+  GtkCssTokenizerSavedState state;
+
+  state.position = tokenizer->position;
+  state.data = tokenizer->data;
+
+  g_array_append_val (tokenizer->saved_states, state);
+}
+
+void
+gtk_css_tokenizer_restore (GtkCssTokenizer *tokenizer)
+{
+  GtkCssTokenizerSavedState state;
+
+  int index = tokenizer->saved_states->len - 1;
+
+  g_assert (index >= 0);
+
+  state = g_array_index (tokenizer->saved_states, GtkCssTokenizerSavedState, index);
+  g_array_remove_index_fast (tokenizer->saved_states, index);
+
+  tokenizer->position = state.position;
+  tokenizer->data = state.data;
+}
