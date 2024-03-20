@@ -217,9 +217,11 @@ _gdk_macos_cursor_get_ns_cursor (GdkCursor *cursor)
 
       if (name == NULL)
         {
-          nscursor = create_cursor_from_texture (gdk_cursor_get_texture (cursor),
+          GdkTexture *texture = gdk_cursor_create_texture (cursor, 1);
+          nscursor = create_cursor_from_texture (texture,
                                                  gdk_cursor_get_hotspot_x (cursor),
                                                  gdk_cursor_get_hotspot_y (cursor));
+          g_object_unref (texture);
           return nscursor;
         }
     }
