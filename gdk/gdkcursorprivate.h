@@ -56,5 +56,8 @@ guint                   gdk_cursor_hash                         (gconstpointer  
 gboolean                gdk_cursor_equal                        (gconstpointer          a,
                                                                  gconstpointer          b);
 
+GdkTexture *            gdk_cursor_create_texture               (GdkCursor             *cursor,
+                                                                 double                 scale);
+
 G_END_DECLS
 

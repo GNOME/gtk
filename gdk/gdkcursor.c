@@ -30,10 +30,13 @@
 #include "gdkcursor.h"
 #include "gdkcursorprivate.h"
 #include "gdktexture.h"
+#include "gdkdisplay.h"
 #include <glib/gi18n-lib.h>
 
 #include <math.h>
 #include <errno.h>
+
+#include <graphene.h>
 
 /**
  * GdkCursor:
@@ -554,4 +557,75 @@ gdk_cursor_get_hotspot_y (GdkCursor *cursor)
   g_return_val_if_fail (GDK_IS_CURSOR (cursor), 0);
 
   return cursor->hotspot_y;
+}
+
+/* Hack. We don't include gsk/gsk.h here to avoid a build order problem
+ * with the generated header gskenumtypes.h, so we need to hack around
+ * a bit to access the gsk and gtk api we need.
+ */
+
+typedef struct _GskRenderer GskRenderer;
+typedef struct _GskRenderNode GskRenderNode;
+typedef struct _GdkSnapshot GtkSnapshot;
+
+extern GskRenderer *   gsk_cairo_renderer_new           (void);
+extern gboolean        gsk_renderer_realize_for_display (GskRenderer            *renderer,
+                                                         GdkDisplay             *display,
+                                                         GError                **error);
+extern void            gsk_renderer_unrealize           (GskRenderer            *renderer);
+extern GdkTexture *    gsk_renderer_render_texture      (GskRenderer            *renderer,
+                                                         GskRenderNode          *root,
+                                                         const graphene_rect_t  *viewport);
+
+extern void            gsk_render_node_get_bounds       (GskRenderNode          *node,
+                                                         graphene_rect_t        *bounds);
+
+extern void            gsk_render_node_unref            (GskRenderNode          *node);
+
+extern GtkSnapshot *   gtk_snapshot_new                 (void);
+extern GskRenderNode * gtk_snapshot_free_to_node        (GtkSnapshot            *snapshot);
+
+static GdkTexture *
+paintable_to_texture (GdkPaintable *paintable,
+                      double        scale)
+{
+  GtkSnapshot *snapshot;
+  GskRenderNode *node;
+  GskRenderer *renderer;
+  int width, height;
+  GdkTexture *texture;
+  graphene_rect_t bounds;
+
+  width = gdk_paintable_get_intrinsic_width (paintable);
+  height = gdk_paintable_get_intrinsic_height (paintable);
+
+  snapshot = gtk_snapshot_new ();
+  gdk_paintable_snapshot (paintable, snapshot, width * scale, height * scale);
+  node = gtk_snapshot_free_to_node (snapshot);
+
+  /* FIXME: use a proper renderer, and cache it */
+  renderer = gsk_cairo_renderer_new ();
+  gsk_renderer_realize_for_display (renderer, gdk_display_get_default (), NULL);
+
+  gsk_render_node_get_bounds (node, &bounds);
+  texture = gsk_renderer_render_texture (renderer, node, &bounds);
+
+  gsk_renderer_unrealize (renderer);
+  g_object_unref (renderer);
+
+  gsk_render_node_unref (node);
+
+  return texture;
+}
+
+GdkTexture *
+gdk_cursor_create_texture (GdkCursor *cursor,
+                           double     scale)
+{
+  if (cursor->texture)
+    return g_object_ref (cursor->texture);
+  else if (cursor->paintable)
+    return paintable_to_texture (cursor->paintable, scale);
+  else
+    return NULL;
 }
