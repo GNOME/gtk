@@ -50,5 +50,13 @@ GtkCssValue *       _gtk_css_keyframes_get_value              (GtkCssKeyframes  
                                                                double                  progress,
                                                                GtkCssValue            *default_value);
 
+guint               _gtk_css_keyframes_get_n_variables        (GtkCssKeyframes        *keyframes);
+int                 _gtk_css_keyframes_get_variable_id        (GtkCssKeyframes        *keyframes,
+                                                               guint                   id);
+GtkCssVariableValue *_gtk_css_keyframes_get_variable          (GtkCssKeyframes        *keyframes,
+                                                               guint                   id,
+                                                               double                  progress,
+                                                               GtkCssVariableValue    *default_value);
+
 G_END_DECLS
 

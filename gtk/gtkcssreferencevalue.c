@@ -31,6 +31,12 @@
 
 #define MAX_TOKEN_LENGTH 65536
 
+typedef enum {
+  RESOLVE_SUCCESS,
+  RESOLVE_INVALID,
+  RESOLVE_ANIMATION_TAINTED,
+} ResolveResult;
+
 struct _GtkCssValue {
   GTK_CSS_VALUE_BASE
 
@@ -48,8 +54,9 @@ gtk_css_value_reference_free (GtkCssValue *value)
     g_object_unref (value->file);
 }
 
-static gboolean
+static ResolveResult
 resolve_references_do (GtkCssVariableValue *value,
+                       guint                property_id,
                        GtkCssVariableSet   *style_variables,
                        GtkCssVariableSet   *keyframes_variables,
                        gboolean             root,
@@ -61,9 +68,30 @@ resolve_references_do (GtkCssVariableValue *value,
   gsize i;
   gsize length = value->length;
   gsize n_refs = 0;
+  ResolveResult ret = RESOLVE_SUCCESS;
+
+  if (value->is_animation_tainted)
+    {
+      GtkCssStyleProperty *prop = _gtk_css_style_property_lookup_by_id (property_id);
+
+      if (!_gtk_css_style_property_is_animated (prop))
+        {
+          /* Animation-tainted variables make other variables that reference
+           * them animation-tainted too, so unlike regular invalid variables it
+           * propagates to the root. For example, if --test is animation-tainted,
+           * --test2: var(--test, fallback1); prop: var(--test2, fallback2); will\
+           * resolve to fallback2 and _not_ to fallback1. So we'll propagate it
+           * up until the root, and treat it same as invalid there instead. */
+          ret = RESOLVE_ANIMATION_TAINTED;
+          goto error;
+        }
+    }
 
   if (value->is_invalid)
-    goto error;
+    {
+      ret = RESOLVE_INVALID;
+      goto error;
+    }
 
   if (!root)
     {
@@ -78,6 +106,7 @@ resolve_references_do (GtkCssVariableValue *value,
       GtkCssVariableValue *var_value = NULL;
       gsize var_length, var_refs;
       GtkCssVariableSet *source = style_variables;
+      ResolveResult result = RESOLVE_INVALID;
 
       if (keyframes_variables)
         var_value = gtk_css_variable_set_lookup (keyframes_variables, id, NULL);
@@ -85,21 +114,48 @@ resolve_references_do (GtkCssVariableValue *value,
       if (!var_value && style_variables)
         var_value = gtk_css_variable_set_lookup (style_variables, id, &source);
 
-      if (!var_value || !resolve_references_do (var_value, source, keyframes_variables,
-                                                FALSE, refs, &var_length, &var_refs))
+      if (var_value)
         {
-          var_value = ref->fallback;
+          result = resolve_references_do (var_value, property_id, source,
+                                          keyframes_variables, FALSE,
+                                          refs, &var_length, &var_refs);
 
-          if (!var_value || !resolve_references_do (var_value, style_variables, keyframes_variables,
-                                                    FALSE, refs, &var_length, &var_refs))
-            goto error;
+          if (root && result == RESOLVE_ANIMATION_TAINTED)
+            result = RESOLVE_INVALID;
+        }
+
+      if (result == RESOLVE_INVALID)
+        {
+          if (ref->fallback)
+            {
+              result = resolve_references_do (ref->fallback, property_id,
+                                              style_variables, keyframes_variables,
+                                              FALSE, refs, &var_length, &var_refs);
+
+              if (root && result == RESOLVE_ANIMATION_TAINTED)
+                result = RESOLVE_INVALID;
+            }
+
+          if (result != RESOLVE_SUCCESS)
+            {
+              ret = result;
+              goto error;
+            }
+        }
+      else if (result == RESOLVE_ANIMATION_TAINTED)
+        {
+          ret = RESOLVE_ANIMATION_TAINTED;
+          goto error;
         }
 
       length += var_length - ref->length;
       n_refs += var_refs;
 
       if (length > MAX_TOKEN_LENGTH)
-        goto error;
+        {
+          ret = RESOLVE_INVALID;
+          goto error;
+        }
     }
 
   if (out_length)
@@ -108,7 +164,7 @@ resolve_references_do (GtkCssVariableValue *value,
   if (out_n_refs)
     *out_n_refs = n_refs;
 
-  return TRUE;
+  return ret;
 
 error:
   /* Remove the references we added as if nothing happened */
@@ -120,11 +176,12 @@ error:
   if (out_n_refs)
     *out_n_refs = 0;
 
-  return FALSE;
+  return ret;
 }
 
 static GtkCssVariableValue **
 resolve_references (GtkCssVariableValue *input,
+                    guint                property_id,
                     GtkCssStyle         *style,
                     GtkCssVariableSet   *keyframes_variables,
                     gsize               *n_refs)
@@ -132,8 +189,12 @@ resolve_references (GtkCssVariableValue *input,
   GPtrArray *refs = g_ptr_array_new ();
   GtkCssVariableValue **out_refs;
 
-  if (!resolve_references_do (input, style->variables, keyframes_variables, TRUE, refs, NULL, NULL))
-    return NULL;
+  if (resolve_references_do (input, property_id, style->variables,
+                             keyframes_variables, TRUE, refs,
+                             NULL, NULL) != RESOLVE_SUCCESS)
+    {
+      return NULL;
+    }
 
   out_refs = (GtkCssVariableValue **) g_ptr_array_steal (refs, n_refs);
 
@@ -173,7 +234,7 @@ gtk_css_value_reference_compute (GtkCssValue       *value,
   GtkCssVariableValue **refs;
   gsize n_refs = 0;
 
-  refs = resolve_references (value->value, style, variables, &n_refs);
+  refs = resolve_references (value->value, property_id, style, variables, &n_refs);
 
   if (refs != NULL)
     {
