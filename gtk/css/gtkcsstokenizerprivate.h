@@ -148,5 +148,8 @@ gboolean                gtk_css_tokenizer_read_token            (GtkCssTokenizer
                                                                  GtkCssToken            *token,
                                                                  GError                **error);
 
+void                     gtk_css_tokenizer_save                 (GtkCssTokenizer        *tokenizer);
+void                     gtk_css_tokenizer_restore              (GtkCssTokenizer        *tokenizer);
+
 G_END_DECLS
 

@@ -36,6 +36,9 @@ struct _GtkCssTokenizer
   const char            *end;
 
   GtkCssLocation         position;
+
+  GtkCssLocation         saved_position;
+  const char            *saved_data;
 };
 
 void
@@ -1484,3 +1487,23 @@ gtk_css_tokenizer_read_token (GtkCssTokenizer  *tokenizer,
     }
 }
 
+void
+gtk_css_tokenizer_save (GtkCssTokenizer *tokenizer)
+{
+  g_assert (!tokenizer->saved_data);
+
+  tokenizer->saved_position = tokenizer->position;
+  tokenizer->saved_data = tokenizer->data;
+}
+
+void
+gtk_css_tokenizer_restore (GtkCssTokenizer *tokenizer)
+{
+  g_assert (tokenizer->saved_data);
+
+  tokenizer->position = tokenizer->saved_position;
+  tokenizer->data = tokenizer->saved_data;
+
+  gtk_css_location_init (&tokenizer->saved_position);
+  tokenizer->saved_data = NULL;
+}
