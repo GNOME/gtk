@@ -402,10 +402,13 @@ _gtk_css_array_value_new_from_array (GtkCssValue **values,
   for (i = 0; i < n_values; i ++)
     {
       if (!gtk_css_value_is_computed (values[i]))
-        {
-          result->is_computed = FALSE;
-          break;
-        }
+        result->is_computed = FALSE;
+
+      if (gtk_css_value_contains_variables (values[i]))
+        result->contains_variables = TRUE;
+
+      if (!result->is_computed && result->contains_variables)
+        break;
     }
 
   return result;
@@ -466,4 +469,5 @@ _gtk_css_array_value_get_n_values (const GtkCssValue *value)
 
   return value->n_values;
 }
+
 
