@@ -125,6 +125,7 @@ static const GtkCssValueClass GTK_CSS_VALUE_STRING = {
   gtk_css_value_string_transition,
   NULL,
   NULL,
+  NULL,
   gtk_css_value_string_print
 };
 
@@ -134,6 +135,7 @@ static const GtkCssValueClass GTK_CSS_VALUE_IDENT = {
   gtk_css_value_string_compute,
   gtk_css_value_string_equal,
   gtk_css_value_string_transition,
+  NULL,
   NULL,
   NULL,
   gtk_css_value_ident_print

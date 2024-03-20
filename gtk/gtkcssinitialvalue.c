@@ -109,6 +109,7 @@ static const GtkCssValueClass GTK_CSS_VALUE_INITIAL = {
   gtk_css_value_initial_transition,
   NULL,
   NULL,
+  NULL,
   gtk_css_value_initial_print
 };
 

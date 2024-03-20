@@ -798,6 +798,7 @@ static const GtkCssValueClass GTK_CSS_VALUE_TRANSFORM = {
   gtk_css_value_transform_transition,
   NULL,
   NULL,
+  NULL,
   gtk_css_value_transform_print
 };
 

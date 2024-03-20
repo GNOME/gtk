@@ -130,6 +130,7 @@ static const GtkCssValueClass GTK_CSS_VALUE_IMAGE = {
   gtk_css_value_image_transition,
   gtk_css_value_image_is_dynamic,
   gtk_css_value_image_get_dynamic_value,
+  NULL,
   gtk_css_value_image_print
 };
 

@@ -83,6 +83,7 @@ static const GtkCssValueClass GTK_CSS_VALUE_BORDER_STYLE = {
   gtk_css_value_enum_transition,
   NULL,
   NULL,
+  NULL,
   gtk_css_value_enum_print
 };
 
@@ -139,6 +140,7 @@ static const GtkCssValueClass GTK_CSS_VALUE_BLEND_MODE = {
   gtk_css_value_enum_compute,
   gtk_css_value_enum_equal,
   gtk_css_value_enum_transition,
+  NULL,
   NULL,
   NULL,
   gtk_css_value_enum_print
@@ -292,6 +294,7 @@ static const GtkCssValueClass GTK_CSS_VALUE_FONT_SIZE = {
   gtk_css_value_enum_transition,
   NULL,
   NULL,
+  NULL,
   gtk_css_value_enum_print
 };
 
@@ -347,6 +350,7 @@ static const GtkCssValueClass GTK_CSS_VALUE_FONT_STYLE = {
   gtk_css_value_enum_compute,
   gtk_css_value_enum_equal,
   gtk_css_value_enum_transition,
+  NULL,
   NULL,
   NULL,
   gtk_css_value_enum_print
@@ -448,6 +452,7 @@ static const GtkCssValueClass GTK_CSS_VALUE_FONT_WEIGHT = {
   NULL,
   NULL,
   NULL,
+  NULL,
   gtk_css_value_enum_print
 };
 
@@ -496,6 +501,7 @@ static const GtkCssValueClass GTK_CSS_VALUE_FONT_STRETCH = {
   gtk_css_value_enum_compute,
   gtk_css_value_enum_equal,
   gtk_css_value_enum_transition,
+  NULL,
   NULL,
   NULL,
   gtk_css_value_enum_print
@@ -555,6 +561,7 @@ static const GtkCssValueClass GTK_CSS_VALUE_TEXT_DECORATION_STYLE = {
   gtk_css_value_enum_transition,
   NULL,
   NULL,
+  NULL,
   gtk_css_value_enum_print
 };
 
@@ -604,6 +611,7 @@ static const GtkCssValueClass GTK_CSS_VALUE_AREA = {
   gtk_css_value_enum_compute,
   gtk_css_value_enum_equal,
   gtk_css_value_enum_transition,
+  NULL,
   NULL,
   NULL,
   gtk_css_value_enum_print
@@ -661,6 +669,7 @@ static const GtkCssValueClass GTK_CSS_VALUE_DIRECTION = {
   gtk_css_value_enum_compute,
   gtk_css_value_enum_equal,
   gtk_css_value_enum_transition,
+  NULL,
   NULL,
   NULL,
   gtk_css_value_enum_print
@@ -724,6 +733,7 @@ static const GtkCssValueClass GTK_CSS_VALUE_PLAY_STATE = {
   gtk_css_value_enum_transition,
   NULL,
   NULL,
+  NULL,
   gtk_css_value_enum_print
 };
 
@@ -778,6 +788,7 @@ static const GtkCssValueClass GTK_CSS_VALUE_FILL_MODE = {
   gtk_css_value_enum_compute,
   gtk_css_value_enum_equal,
   gtk_css_value_enum_transition,
+  NULL,
   NULL,
   NULL,
   gtk_css_value_enum_print
@@ -838,6 +849,7 @@ static const GtkCssValueClass GTK_CSS_VALUE_ICON_STYLE = {
   gtk_css_value_enum_transition,
   NULL,
   NULL,
+  NULL,
   gtk_css_value_enum_print
 };
 
@@ -893,6 +905,7 @@ static const GtkCssValueClass GTK_CSS_VALUE_FONT_KERNING = {
   gtk_css_value_enum_compute,
   gtk_css_value_enum_equal,
   gtk_css_value_enum_transition,
+  NULL,
   NULL,
   NULL,
   gtk_css_value_enum_print
@@ -952,6 +965,7 @@ static const GtkCssValueClass GTK_CSS_VALUE_FONT_VARIANT_POSITION = {
   gtk_css_value_enum_transition,
   NULL,
   NULL,
+  NULL,
   gtk_css_value_enum_print
 };
 
@@ -1007,6 +1021,7 @@ static const GtkCssValueClass GTK_CSS_VALUE_FONT_VARIANT_CAPS = {
   gtk_css_value_enum_compute,
   gtk_css_value_enum_equal,
   gtk_css_value_enum_transition,
+  NULL,
   NULL,
   NULL,
   gtk_css_value_enum_print
@@ -1068,6 +1083,7 @@ static const GtkCssValueClass GTK_CSS_VALUE_FONT_VARIANT_ALTERNATE = {
   gtk_css_value_enum_compute,
   gtk_css_value_enum_equal,
   gtk_css_value_enum_transition,
+  NULL,
   NULL,
   NULL,
   gtk_css_value_enum_print
@@ -1178,6 +1194,7 @@ static const GtkCssValueClass GTK_CSS_VALUE_TEXT_DECORATION_LINE = {
   gtk_css_value_enum_transition,
   NULL,
   NULL,
+  NULL,
   gtk_css_text_decoration_line_value_print
 };
 
@@ -1275,6 +1292,7 @@ static const GtkCssValueClass GTK_CSS_VALUE_FONT_VARIANT_LIGATURE = {
   gtk_css_value_enum_compute,
   gtk_css_value_flags_equal,
   gtk_css_value_enum_transition,
+  NULL,
   NULL,
   NULL,
   gtk_css_font_variant_ligature_value_print
@@ -1385,6 +1403,7 @@ static const GtkCssValueClass GTK_CSS_VALUE_FONT_VARIANT_NUMERIC = {
   gtk_css_value_enum_transition,
   NULL,
   NULL,
+  NULL,
   gtk_css_font_variant_numeric_value_print
 };
 
@@ -1490,6 +1509,7 @@ static const GtkCssValueClass GTK_CSS_VALUE_FONT_VARIANT_EAST_ASIAN = {
   gtk_css_value_enum_transition,
   NULL,
   NULL,
+  NULL,
   gtk_css_font_variant_east_asian_value_print
 };
 
@@ -1577,6 +1597,7 @@ static const GtkCssValueClass GTK_CSS_VALUE_TEXT_TRANSFORM = {
   gtk_css_value_enum_compute,
   gtk_css_value_enum_equal,
   gtk_css_value_enum_transition,
+  NULL,
   NULL,
   NULL,
   gtk_css_value_enum_print

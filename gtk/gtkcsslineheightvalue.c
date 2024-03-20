@@ -113,6 +113,7 @@ static const GtkCssValueClass GTK_CSS_VALUE_LINE_HEIGHT = {
   gtk_css_value_line_height_transition,
   NULL,
   NULL,
+  NULL,
   gtk_css_value_line_height_print
 };
 

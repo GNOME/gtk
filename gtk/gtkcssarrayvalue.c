@@ -342,6 +342,20 @@ gtk_css_value_array_get_dynamic_value (GtkCssValue *value,
   return result;
 }
 
+static gboolean
+gtk_css_value_array_contains_variables (const GtkCssValue *value)
+{
+  guint i;
+
+  for (i = 0; i < value->n_values; i++)
+    {
+      if (gtk_css_value_contains_variables (value->values[i]))
+        return TRUE;
+    }
+
+  return FALSE;
+}
+
 static void
 gtk_css_value_array_print (const GtkCssValue *value,
                            GString           *string)
@@ -370,6 +384,7 @@ static const GtkCssValueClass GTK_CSS_VALUE_ARRAY = {
   gtk_css_value_array_transition,
   gtk_css_value_array_is_dynamic,
   gtk_css_value_array_get_dynamic_value,
+  gtk_css_value_array_contains_variables,
   gtk_css_value_array_print
 };
 

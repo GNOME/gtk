@@ -156,6 +156,7 @@ static const GtkCssValueClass GTK_CSS_VALUE_POSITION = {
   gtk_css_value_position_transition,
   NULL,
   NULL,
+  NULL,
   gtk_css_value_position_print
 };
 

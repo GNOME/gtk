@@ -57,6 +57,7 @@ struct _GtkCssValueClass {
   gboolean      (* is_dynamic)                        (const GtkCssValue          *value);
   GtkCssValue * (* get_dynamic_value)                 (GtkCssValue                *value,
                                                        gint64                      monotonic_time);
+  gboolean      (* contains_variables)                (const GtkCssValue          *value);
   void          (* print)                             (const GtkCssValue          *value,
                                                        GString                    *string);
 };
@@ -93,6 +94,7 @@ char *       _gtk_css_value_to_string                 (const GtkCssValue        
 void         _gtk_css_value_print                     (const GtkCssValue          *value,
                                                        GString                    *string);
 gboolean     gtk_css_value_is_computed                (const GtkCssValue          *value) G_GNUC_PURE;
+gboolean     gtk_css_value_contains_variables         (const GtkCssValue          *value) G_GNUC_PURE;
 
 G_END_DECLS
 

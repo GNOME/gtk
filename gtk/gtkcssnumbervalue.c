@@ -337,6 +337,7 @@ static const GtkCssValueClass GTK_CSS_VALUE_NUMBER = {
   gtk_css_value_number_transition,
   NULL,
   NULL,
+  NULL,
   gtk_css_value_number_print
 };
 

@@ -367,3 +367,14 @@ gtk_css_value_is_computed (const GtkCssValue *value)
 {
   return value->is_computed;
 }
+
+gboolean
+gtk_css_value_contains_variables (const GtkCssValue *value)
+{
+  gtk_internal_return_val_if_fail (value != NULL, FALSE);
+
+  if (!value->class->contains_variables)
+    return FALSE;
+
+  return value->class->contains_variables (value);
+}
