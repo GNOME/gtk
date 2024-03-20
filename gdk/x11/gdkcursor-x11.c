@@ -43,6 +43,10 @@
 #endif
 #include <string.h>
 
+#include "gtk/gtksnapshot.h"
+#include "gsk/gskrenderer.h"
+#include "gsk/gskrendernodeprivate.h"
+
 static void
 gdk_x11_cursor_remove_from_cache (gpointer data, GObject *cursor)
 {
@@ -371,10 +375,15 @@ gdk_x11_display_get_xcursor (GdkDisplay *display,
   if (gdk_cursor_get_name (cursor))
     xcursor = gdk_x11_cursor_create_for_name (display, gdk_cursor_get_name (cursor));
   else
-    xcursor = gdk_x11_cursor_create_for_texture (display,
-                                                 gdk_cursor_get_texture (cursor),
-                                                 gdk_cursor_get_hotspot_x (cursor),
-                                                 gdk_cursor_get_hotspot_y (cursor));
+    {
+      GdkTexture *texture = gdk_cursor_create_texture (cursor, 1);
+
+      xcursor = gdk_x11_cursor_create_for_texture (display,
+                                                   texture,
+                                                   gdk_cursor_get_hotspot_x (cursor),
+                                                   gdk_cursor_get_hotspot_y (cursor));
+      g_object_unref (texture);
+    }
 
   if (xcursor != None)
     {
