@@ -24,6 +24,7 @@
 
 #include "gtkcssanimationprivate.h"
 #include "gtkcssarrayvalueprivate.h"
+#include "gtkcsscustompropertypoolprivate.h"
 #include "gtkcssenumvalueprivate.h"
 #include "gtkcssinheritvalueprivate.h"
 #include "gtkcssinitialvalueprivate.h"
@@ -72,6 +73,9 @@ gtk_css_style_finalize (GObject *object)
   gtk_css_values_unref ((GtkCssValues *)style->transition);
   gtk_css_values_unref ((GtkCssValues *)style->size);
   gtk_css_values_unref ((GtkCssValues *)style->other);
+
+  if (style->variables)
+    gtk_css_variable_set_unref (style->variables);
 
   G_OBJECT_CLASS (gtk_css_style_parent_class)->finalize (object);
 }
@@ -367,6 +371,34 @@ gtk_css_style_print (GtkCssStyle *style,
 
       retval = TRUE;
     }
+
+    if (style->variables)
+      {
+        GtkCssCustomPropertyPool *pool = gtk_css_custom_property_pool_get ();
+        GArray *ids = gtk_css_variable_set_list_ids (style->variables);
+
+        for (i = 0; i < ids->len; i++)
+          {
+            int id = g_array_index (ids, int, i);
+            const char *name = gtk_css_custom_property_pool_get_name (pool, id);
+            GtkCssVariableValue *value = gtk_css_variable_set_lookup (style->variables, id, NULL);
+
+            g_string_append_printf (string, "%*s%s: ", indent, "", name);
+            gtk_css_variable_value_print (value, string);
+            g_string_append_c (string, ';');
+
+            if (value->section)
+              {
+                g_string_append (string, " /* ");
+                gtk_css_section_print (value->section, string);
+                g_string_append (string, " */");
+              }
+
+            g_string_append_c (string, '\n');
+          }
+
+        retval = TRUE;
+      }
 
   return retval;
 }
@@ -836,4 +868,14 @@ gtk_css_values_new (GtkCssValuesType type)
   values->type = type;
 
   return values;
+}
+
+GtkCssVariableValue *
+gtk_css_style_get_custom_property (GtkCssStyle *style,
+                                   int          id)
+{
+  if (style->variables)
+    return gtk_css_variable_set_lookup (style->variables, id, NULL);
+
+  return NULL;
 }

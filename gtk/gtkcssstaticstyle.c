@@ -912,6 +912,35 @@ gtk_css_lookup_resolve (GtkCssLookup      *lookup,
   gtk_internal_return_if_fail (GTK_IS_CSS_STATIC_STYLE (style));
   gtk_internal_return_if_fail (parent_style == NULL || GTK_IS_CSS_STYLE (parent_style));
 
+  if (lookup->custom_values)
+    {
+      GHashTableIter iter;
+      gpointer id;
+      GtkCssVariableValue *value;
+
+      style->variables = gtk_css_variable_set_new ();
+
+      g_hash_table_iter_init (&iter, lookup->custom_values);
+
+      while (g_hash_table_iter_next (&iter, &id, (gpointer) &value))
+        gtk_css_variable_set_add (style->variables, GPOINTER_TO_INT (id), value);
+
+      gtk_css_variable_set_resolve_cycles (style->variables);
+
+      if (parent_style)
+        {
+          GtkCssStyle *parent_sstyle = GTK_CSS_STYLE (parent_style);
+          gtk_css_variable_set_set_parent (style->variables,
+                                           parent_sstyle->variables);
+        }
+    }
+  else if (parent_style)
+    {
+      GtkCssStyle *parent_sstyle = GTK_CSS_STYLE (parent_style);
+      if (parent_sstyle->variables)
+        style->variables = gtk_css_variable_set_ref (parent_sstyle->variables);
+    }
+
   if (_gtk_bitmask_is_empty (_gtk_css_lookup_get_set_values (lookup)))
     {
       style->background = (GtkCssBackgroundValues *)gtk_css_values_ref (gtk_css_background_initial_values);
@@ -1106,4 +1135,16 @@ gtk_css_static_style_get_change (GtkCssStaticStyle *style)
   g_return_val_if_fail (GTK_IS_CSS_STATIC_STYLE (style), GTK_CSS_CHANGE_ANY);
 
   return style->change;
+}
+
+void
+gtk_css_custom_values_compute_changes_and_affects (GtkCssStyle    *style1,
+                                                   GtkCssStyle    *style2,
+                                                   GtkBitmask    **changes,
+                                                   GtkCssAffects  *affects)
+{
+  if (gtk_css_variable_set_equal (style1->variables, style2->variables))
+    return;
+
+  *changes = _gtk_bitmask_set (*changes, GTK_CSS_PROPERTY_CUSTOM, TRUE);
 }

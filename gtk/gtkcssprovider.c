@@ -22,10 +22,13 @@
 #include <gtk/css/gtkcss.h>
 #include "gtk/css/gtkcsstokenizerprivate.h"
 #include "gtk/css/gtkcssparserprivate.h"
+#include "gtk/css/gtkcssvariablevalueprivate.h"
 #include "gtkbitmaskprivate.h"
 #include "gtkcssarrayvalueprivate.h"
 #include "gtkcsscolorvalueprivate.h"
+#include "gtkcsscustompropertypoolprivate.h"
 #include "gtkcsskeyframesprivate.h"
+#include "gtkcssreferencevalueprivate.h"
 #include "gtkcssselectorprivate.h"
 #include "gtkcssshorthandpropertyprivate.h"
 #include "gtksettingsprivate.h"
@@ -113,6 +116,7 @@ struct GtkCssRuleset
   PropertyValue *styles;
   guint n_styles;
   guint owns_styles : 1;
+  GHashTable *custom_properties;
 };
 
 struct _GtkCssScanner
@@ -270,6 +274,8 @@ gtk_css_ruleset_clear (GtkCssRuleset *ruleset)
 	    gtk_css_section_unref (ruleset->styles[i].section);
         }
       g_free (ruleset->styles);
+      if (ruleset->custom_properties)
+        g_hash_table_unref (ruleset->custom_properties);
     }
   if (ruleset->selector)
     _gtk_css_selector_free (ruleset->selector);
@@ -285,7 +291,7 @@ gtk_css_ruleset_add (GtkCssRuleset       *ruleset,
 {
   guint i;
 
-  g_return_if_fail (ruleset->owns_styles || ruleset->n_styles == 0);
+  g_return_if_fail (ruleset->owns_styles || (ruleset->n_styles == 0 && ruleset->custom_properties == NULL));
 
   ruleset->owns_styles = TRUE;
 
@@ -313,6 +319,39 @@ gtk_css_ruleset_add (GtkCssRuleset       *ruleset,
     ruleset->styles[i].section = gtk_css_section_ref (section);
   else
     ruleset->styles[i].section = NULL;
+}
+
+static void
+unref_custom_property_name (gpointer pointer)
+{
+  GtkCssCustomPropertyPool *pool = gtk_css_custom_property_pool_get ();
+
+  gtk_css_custom_property_pool_unref (pool, GPOINTER_TO_INT (pointer));
+}
+
+static void
+gtk_css_ruleset_add_custom (GtkCssRuleset       *ruleset,
+                            const char          *name,
+                            GtkCssVariableValue *value)
+{
+  GtkCssCustomPropertyPool *pool;
+  int id;
+
+  g_return_if_fail (ruleset->owns_styles || (ruleset->n_styles == 0 && ruleset->custom_properties == NULL));
+
+  ruleset->owns_styles = TRUE;
+
+  if (ruleset->custom_properties == NULL)
+    {
+      ruleset->custom_properties = g_hash_table_new_full (g_direct_hash, g_direct_equal,
+                                                          unref_custom_property_name,
+                                                          (GDestroyNotify) gtk_css_variable_value_unref);
+    }
+
+  pool = gtk_css_custom_property_pool_get ();
+  id = gtk_css_custom_property_pool_add (pool, name);
+
+  g_hash_table_replace (ruleset->custom_properties, GINT_TO_POINTER (id), value);
 }
 
 static void
@@ -490,7 +529,7 @@ gtk_css_style_provider_lookup (GtkStyleProvider             *provider,
         {
           ruleset = gtk_css_selector_matches_get (&tree_rules, i);
 
-          if (ruleset->styles == NULL)
+          if (ruleset->styles == NULL && ruleset->custom_properties == NULL)
             continue;
 
           for (j = 0; j < ruleset->n_styles; j++)
@@ -505,6 +544,18 @@ gtk_css_style_provider_lookup (GtkStyleProvider             *provider,
                                    id,
                                    ruleset->styles[j].section,
                                    ruleset->styles[j].value);
+            }
+
+          if (ruleset->custom_properties)
+            {
+              GHashTableIter iter;
+              gpointer id;
+              GtkCssVariableValue *value;
+
+              g_hash_table_iter_init (&iter, ruleset->custom_properties);
+
+              while (g_hash_table_iter_next (&iter, &id, (gpointer) &value))
+                _gtk_css_lookup_set_custom (lookup, GPOINTER_TO_INT (id), value);
             }
         }
     }
@@ -572,7 +623,7 @@ css_provider_commit (GtkCssProvider  *css_provider,
   GtkCssProviderPrivate *priv = gtk_css_provider_get_instance_private (css_provider);
   guint i;
 
-  if (ruleset->styles == NULL)
+  if (ruleset->styles == NULL && ruleset->custom_properties == NULL)
     {
       for (i = 0; i < gtk_css_selectors_get_size (selectors); i++)
         _gtk_css_selector_free (gtk_css_selectors_get (selectors, i));
@@ -814,6 +865,42 @@ parse_declaration (GtkCssScanner *scanner,
   if (name == NULL)
     goto out;
 
+  /* This is a custom property */
+  if (name[0] == '-' && name[1] == '-')
+    {
+      GtkCssVariableValue *value;
+      GtkCssSection *section;
+
+      if (!gtk_css_parser_try_token (scanner->parser, GTK_CSS_TOKEN_COLON))
+        {
+          gtk_css_parser_error_syntax (scanner->parser, "Expected ':'");
+          goto out;
+        }
+
+      value = gtk_css_parser_parse_value_into_token_stream (scanner->parser);
+      if (value == NULL)
+        goto out;
+
+      if (gtk_keep_css_sections)
+        {
+          section = gtk_css_section_new (gtk_css_parser_get_file (scanner->parser),
+                                         gtk_css_parser_get_block_location (scanner->parser),
+                                         gtk_css_parser_get_end_location (scanner->parser));
+        }
+      else
+        section = NULL;
+
+      if (section != NULL)
+        {
+          gtk_css_variable_value_set_section (value, section);
+          gtk_css_section_unref (section);
+        }
+
+      gtk_css_ruleset_add_custom (ruleset, name, value);
+
+      goto out;
+    }
+
   property = _gtk_style_property_lookup (name);
 
   if (property)
@@ -827,15 +914,60 @@ parse_declaration (GtkCssScanner *scanner,
           goto out;
         }
 
-      value = _gtk_style_property_parse_value (property, scanner->parser);
-
-      if (value == NULL)
-        goto out;
-
-      if (!gtk_css_parser_has_token (scanner->parser, GTK_CSS_TOKEN_EOF))
+      if (gtk_css_parser_has_references (scanner->parser))
         {
-          gtk_css_parser_error_syntax (scanner->parser, "Junk at end of value for %s", property->name);
-          goto out;
+          GtkCssVariableValue *var_value;
+
+          var_value = gtk_css_parser_parse_value_into_token_stream (scanner->parser);
+          if (var_value == NULL)
+            goto out;
+
+          if (GTK_IS_CSS_SHORTHAND_PROPERTY (property))
+            {
+              GtkCssShorthandProperty *shorthand = GTK_CSS_SHORTHAND_PROPERTY (property);
+              guint i, n;
+              GtkCssValue **values;
+
+              n = _gtk_css_shorthand_property_get_n_subproperties (shorthand);
+
+              values = g_new (GtkCssValue *, n);
+
+              for (i = 0; i < n; i++)
+                {
+                  GtkCssValue *child =
+                    _gtk_css_reference_value_new (property,
+                                                  var_value,
+                                                  gtk_css_parser_get_file (scanner->parser));
+                  _gtk_css_reference_value_set_subproperty (child, i);
+
+                  values[i] = _gtk_css_array_value_get_nth (child, i);
+                }
+
+              value = _gtk_css_array_value_new_from_array (values, n);
+              g_free (values);
+            }
+          else
+            {
+              value = _gtk_css_reference_value_new (property,
+                                                    var_value,
+                                                    gtk_css_parser_get_file (scanner->parser));
+            }
+
+          gtk_css_variable_value_unref (var_value);
+        }
+      else
+        {
+          value = _gtk_style_property_parse_value (property, scanner->parser);
+
+          if (value == NULL)
+            goto out;
+
+          if (!gtk_css_parser_has_token (scanner->parser, GTK_CSS_TOKEN_EOF))
+            {
+              gtk_css_parser_error_syntax (scanner->parser, "Junk at end of value for %s", property->name);
+              gtk_css_value_unref (value);
+              goto out;
+            }
         }
 
       if (gtk_keep_css_sections)
@@ -1473,6 +1605,20 @@ compare_properties (gconstpointer a, gconstpointer b, gpointer style)
                  _gtk_style_property_get_name (GTK_STYLE_PROPERTY (styles[*ub].property)));
 }
 
+static int
+compare_custom_properties (gconstpointer a, gconstpointer b, gpointer user_data)
+{
+  GtkCssCustomPropertyPool *pool = user_data;
+  int id1 = GPOINTER_TO_INT (*((gconstpointer *) a));
+  int id2 = GPOINTER_TO_INT (*((gconstpointer *) b));
+  const char *name1, *name2;
+
+  name1 = gtk_css_custom_property_pool_get_name (pool, id1);
+  name2 = gtk_css_custom_property_pool_get_name (pool, id2);
+
+  return strcmp (name1, name2);
+}
+
 static void
 gtk_css_ruleset_print (const GtkCssRuleset *ruleset,
                        GString             *str)
@@ -1502,6 +1648,31 @@ gtk_css_ruleset_print (const GtkCssRuleset *ruleset,
           _gtk_css_value_print (prop->value, str);
           g_string_append (str, ";\n");
         }
+
+        if (ruleset->custom_properties)
+          {
+            GtkCssCustomPropertyPool *pool = gtk_css_custom_property_pool_get ();
+            GPtrArray *keys;
+
+            keys = g_hash_table_get_keys_as_ptr_array (ruleset->custom_properties);
+            g_ptr_array_sort_with_data (keys, compare_custom_properties, pool);
+
+            for (i = 0; i < keys->len; i++)
+              {
+                int id = GPOINTER_TO_INT (g_ptr_array_index (keys, i));
+                const char *name = gtk_css_custom_property_pool_get_name (pool, id);
+                GtkCssVariableValue *value = g_hash_table_lookup (ruleset->custom_properties,
+                                                                  GINT_TO_POINTER (id));
+
+                g_string_append (str, "  ");
+                g_string_append (str, name);
+                g_string_append (str, ": ");
+                gtk_css_variable_value_print (value, str);
+                g_string_append (str, ";\n");
+              }
+
+            g_ptr_array_unref (keys);
+          }
 
       g_free (sorted);
     }

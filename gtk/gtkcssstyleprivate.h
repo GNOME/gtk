@@ -24,6 +24,8 @@
 
 #include "gtk/gtkbitmaskprivate.h"
 #include "gtk/gtkcssvalueprivate.h"
+#include "gtk/gtkcssvariablesetprivate.h"
+#include "gtk/css/gtkcssvariablevalueprivate.h"
 
 G_BEGIN_DECLS
 
@@ -232,6 +234,10 @@ struct _GtkCssStyle
   GtkCssTransitionValues  *transition;
   GtkCssSizeValues        *size;
   GtkCssOtherValues       *other;
+  GtkCssVariableSet       *variables;
+
+  GtkCssValue             *variable_values;
+  int                      n_variable_values;
 };
 
 struct _GtkCssStyleClass
@@ -267,6 +273,9 @@ PangoTextTransform      gtk_css_style_get_pango_text_transform  (GtkCssStyle    
 char *                  gtk_css_style_compute_font_features     (GtkCssStyle            *style);
 PangoAttrList *         gtk_css_style_get_pango_attributes      (GtkCssStyle            *style);
 PangoFontDescription *  gtk_css_style_get_pango_font            (GtkCssStyle            *style);
+
+GtkCssVariableValue *   gtk_css_style_get_custom_property       (GtkCssStyle            *style,
+                                                                int                      id);
 
 GtkCssValues *gtk_css_values_new   (GtkCssValuesType  type);
 GtkCssValues *gtk_css_values_ref   (GtkCssValues     *values);
@@ -314,6 +323,10 @@ void gtk_css_size_values_compute_changes_and_affects (GtkCssStyle *style1,
                                                       GtkBitmask    **changes,
                                                       GtkCssAffects *affects);
 void gtk_css_other_values_compute_changes_and_affects (GtkCssStyle *style1,
+                                                      GtkCssStyle *style2,
+                                                      GtkBitmask    **changes,
+                                                      GtkCssAffects *affects);
+void gtk_css_custom_values_compute_changes_and_affects (GtkCssStyle *style1,
                                                       GtkCssStyle *style2,
                                                       GtkBitmask    **changes,
                                                       GtkCssAffects *affects);
