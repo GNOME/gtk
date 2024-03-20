@@ -56,6 +56,30 @@ follows:
 1 value:
 : all
 
+## Custom Properties
+
+GTK supports custom properties as defined in the
+[CSS Custom Properties for Cascading Variables](https://www.w3.org/TR/css-variables-1)
+spec.
+
+Custom properties are defined as follows:
+
+```css
+--prop: red;
+```
+
+and used via the `var` keyword:
+
+```css
+color: var(--prop);
+```
+
+Custom properties can have a fallback for when the referred property is invalid:
+
+```css
+color: var(--prop, green);
+```
+
 ## Colors
 
 GTK extends the CSS syntax with several additional ways to specify colors.
