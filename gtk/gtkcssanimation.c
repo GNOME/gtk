@@ -110,6 +110,20 @@ gtk_css_animation_apply_values (GtkStyleAnimation    *style_animation,
                                                    base_style,
                                                    parent_style);
 
+  for (i = 0; i < _gtk_css_keyframes_get_n_variables (resolved_keyframes); i++)
+    {
+      GtkCssVariableValue *value;
+      int variable_id;
+
+      variable_id = _gtk_css_keyframes_get_variable_id (resolved_keyframes, i);
+
+      value = _gtk_css_keyframes_get_variable (resolved_keyframes,
+                                               i,
+                                               progress,
+                                               gtk_css_animated_style_get_intrinsic_custom_value (style, variable_id));
+      gtk_css_animated_style_set_animated_custom_value (style, variable_id, value);
+    }
+
   for (i = 0; i < _gtk_css_keyframes_get_n_properties (resolved_keyframes); i++)
     {
       GtkCssValue *value;

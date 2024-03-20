@@ -252,6 +252,9 @@ struct _GtkCssStyleClass
   gboolean              (* is_static)                           (GtkCssStyle            *style);
 
   GtkCssStaticStyle *   (* get_static_style)                    (GtkCssStyle            *style);
+
+  GtkCssValue *         (* get_original_value)                  (GtkCssStyle            *style,
+                                                                 guint                   id);
 };
 
 GType                   gtk_css_style_get_type                  (void) G_GNUC_CONST;
@@ -262,6 +265,9 @@ GtkCssSection *         gtk_css_style_get_section               (GtkCssStyle    
                                                                  guint                   id) G_GNUC_PURE;
 gboolean                gtk_css_style_is_static                 (GtkCssStyle            *style) G_GNUC_PURE;
 GtkCssStaticStyle *     gtk_css_style_get_static_style          (GtkCssStyle            *style);
+
+GtkCssValue *           gtk_css_style_get_original_value        (GtkCssStyle            *style,
+                                                                 guint                   id) G_GNUC_PURE;
 
 char *                  gtk_css_style_to_string                 (GtkCssStyle            *style);
 gboolean                gtk_css_style_print                     (GtkCssStyle            *style,
