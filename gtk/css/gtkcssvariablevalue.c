@@ -142,3 +142,9 @@ gtk_css_variable_value_set_section (GtkCssVariableValue *self,
 {
   self->section = gtk_css_section_ref (section);
 }
+
+void
+gtk_css_variable_value_taint (GtkCssVariableValue *self)
+{
+  self->is_animation_tainted = TRUE;
+}

@@ -67,9 +67,14 @@ GtkCssStyle *           gtk_css_animated_style_new_advance      (GtkCssAnimatedS
 void                    gtk_css_animated_style_set_animated_value(GtkCssAnimatedStyle   *style,
                                                                  guint                   id,
                                                                  GtkCssValue            *value);
-
 GtkCssValue *           gtk_css_animated_style_get_intrinsic_value (GtkCssAnimatedStyle *style,
                                                                  guint                   id);
+
+void                    gtk_css_animated_style_set_animated_custom_value (GtkCssAnimatedStyle *animated,
+                                                                 int                     id,
+                                                                 GtkCssVariableValue    *value);
+GtkCssVariableValue *   gtk_css_animated_style_get_intrinsic_custom_value (GtkCssAnimatedStyle *style,
+                                                                 int                     id);
 
 GtkCssStyle *           gtk_css_animated_style_get_base_style   (GtkCssAnimatedStyle    *style);
 GtkCssStyle *           gtk_css_animated_style_get_parent_style (GtkCssAnimatedStyle    *style);
