@@ -584,6 +584,14 @@ gtk_css_token_init_dimension (GtkCssToken     *token,
 GtkCssTokenizer *
 gtk_css_tokenizer_new (GBytes *bytes)
 {
+  return gtk_css_tokenizer_new_for_range (bytes, 0, g_bytes_get_size (bytes));
+}
+
+GtkCssTokenizer *
+gtk_css_tokenizer_new_for_range (GBytes *bytes,
+                                 gsize   offset,
+                                 gsize   length)
+{
   GtkCssTokenizer *tokenizer;
 
   tokenizer = g_new0 (GtkCssTokenizer, 1);
@@ -591,8 +599,8 @@ gtk_css_tokenizer_new (GBytes *bytes)
   tokenizer->bytes = g_bytes_ref (bytes);
   tokenizer->name_buffer = g_string_new (NULL);
 
-  tokenizer->data = g_bytes_get_data (bytes, NULL);
-  tokenizer->end = tokenizer->data + g_bytes_get_size (bytes);
+  tokenizer->data = g_bytes_get_region (bytes, 1, offset, length);
+  tokenizer->end = tokenizer->data + length;
 
   gtk_css_location_init (&tokenizer->position);
   gtk_css_tokenizer_states_init (&tokenizer->state_stack);
@@ -618,6 +626,12 @@ gtk_css_tokenizer_unref (GtkCssTokenizer *tokenizer)
   g_string_free (tokenizer->name_buffer, TRUE);
   g_bytes_unref (tokenizer->bytes);
   g_free (tokenizer);
+}
+
+GBytes *
+gtk_css_tokenizer_get_bytes (GtkCssTokenizer *tokenizer)
+{
+  return tokenizer->bytes;
 }
 
 const GtkCssLocation *
