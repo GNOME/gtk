@@ -1,0 +1,146 @@
+/********************
+ * GtkMessageDialog *
+ ********************/
+
+window.dialog.message {
+  .titlebar {
+    min-height: 20px;
+    background: none;
+    box-shadow: none;
+    border-style: none;
+    border-top-left-radius: 7px;
+    border-top-right-radius: 7px;
+  }
+
+  box.dialog-vbox.vertical {
+    margin-top: 6px;
+    border-spacing: 24px;
+
+    > box > box > box > label.title {
+      font-weight: 800;
+      font-size: 15pt;
+    }
+  }
+
+  &.csd {
+    // bigger radius for better antialiasing
+    border-bottom-left-radius: $window_radius+1;
+    border-bottom-right-radius: $window_radius+1;
+
+    .dialog-action-area {
+      border-top: 1px solid $border_color;
+      margin: 0;
+      border-spacing: 0;
+
+      > button {
+        @extend %button_basic_flat;
+        padding: 10px 14px; // labels are not vertically centered on message dialog, this is a workaround
+        border-radius: 0;
+        border: none;
+        background-clip: padding-box;
+        border-left: 1px solid $border_color;
+
+        &:first-child {
+          border-bottom-left-radius: $window_radius+1;
+          border-left: none;
+        }
+
+        &:last-child {
+          border-bottom-right-radius: $window_radius+1;
+        }
+
+        &.suggested-action {
+          color: $accent_color;
+        }
+
+        &.destructive-action {
+          color: $destructive_color;
+        }
+      }
+    }
+  }
+}
+
+/********************
+ * AdwMessageDialog *
+ ********************/
+
+window.messagedialog {
+  background-color: $dialog_bg_color;
+  color: $dialog_fg_color;
+
+  @if $contrast != 'high' {
+    &.csd {
+      outline: none;
+    }
+  }
+
+  .message-area {
+    padding: 24px 30px;
+    border-spacing: 24px;
+
+    &.has-heading.has-body {
+      border-spacing: 10px;
+    }
+  }
+
+  .response-area > button {
+    padding: 10px 14px;
+    border-radius: 0;
+
+    @if $contrast == 'high' {
+      &:hover,
+      &.keyboard-activating,
+      &:active,
+      &:checked {
+        box-shadow: none;
+      }
+    }
+
+    &.suggested {
+      color: $accent_color;
+    }
+
+    &.destructive {
+      color: $accent_color;
+      --accent-color: var(--destructive-color);
+      --accent-bg-color: var(--destructive-bg-color);
+      --accent-fg-color: var(--destructive-fg-color);
+    }
+  }
+
+  &.csd:not(.solid-csd) {
+    border-radius: $window_radius+1;
+
+    .response-area {
+      &:not(.compact) > button {
+        margin-top: -1px;
+        margin-right: -1px;
+        margin-left: -1px;
+
+        &:first-child:dir(ltr),
+        &:last-child:dir(rtl) {
+          border-bottom-left-radius: $window_radius+1;
+          margin-left: 0;
+        }
+
+        &:last-child:dir(ltr),
+        &:first-child:dir(rtl) {
+          border-bottom-right-radius: $window_radius+1;
+          margin-right: 0;
+        }
+      }
+
+      &.compact > button {
+        margin-top: -1px;
+        margin-bottom: -1px;
+
+        &:first-child {
+          border-bottom-left-radius: $window_radius+1;
+          border-bottom-right-radius: $window_radius+1;
+          margin-bottom: 0;
+        }
+      }
+    }
+  }
+}

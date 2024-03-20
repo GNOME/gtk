@@ -1,0 +1,228 @@
+/**********
+ * Frames *
+ **********/
+frame,
+.frame {
+  border: 1px solid $border_color;
+}
+
+frame {
+  border-radius: $card_radius;
+
+  > label {
+    margin: 4px;
+  }
+}
+
+/**************
+ * Separators *
+ **************/
+
+separator {
+  background: $border_color;
+  min-width: 1px;
+  min-height: 1px;
+
+  &.spacer {
+    background: none;
+
+    &.horizontal { min-width: 12px; }
+    &.vertical { min-height: 12px; }
+  }
+}
+
+/*********************
+ * App Notifications *
+ *********************/
+
+.app-notification {
+  @extend %osd;
+
+  padding: 10px;
+  border-spacing: 10px;
+  border-radius: 0 0 $card_radius $card_radius;
+  background-color: $osd_bg_color;
+  background-image: linear-gradient(to bottom, transparentize(black, 0.8),
+                                               transparent 2px);
+  background-clip: padding-box;
+
+  border { border: none; }
+}
+
+/**********
+ * Toasts *
+ **********/
+
+toast {
+  @extend %osd;
+
+  margin: 12px;
+  margin-bottom: 24px;
+
+  border-radius: 150px;
+  border-spacing: 6px;
+  padding: 6px;
+
+  &:dir(ltr) { padding-left: 12px; }
+  &:dir(rtl) { padding-right: 12px; }
+
+  > widget {
+    margin: 0 6px;
+  }
+
+  @if $contrast == 'high' {
+    box-shadow: 0 0 0 1px $border_color;
+  }
+}
+
+/**************
+ * GtkVideo *
+ **************/
+
+video {
+  & image.osd {
+    min-width: 64px;
+    min-height: 64px;
+    border-radius: 32px;
+  }
+  background: black;
+}
+
+/******************
+ * AdwAboutWindow *
+ ******************/
+
+window.about {
+  .main-page {
+    > viewport > clamp > box {
+      margin: 12px;
+      border-spacing: 6px;
+
+      > box {
+        margin-top: 18px;
+        border-spacing: 18px;
+        margin-bottom: 6px;
+      }
+    }
+
+    .app-version {
+      padding: 3px 18px;
+      color: $accent_color;
+      border-radius: 999px;
+      margin-top: 3px;
+    }
+  }
+
+  .subpage {
+    > viewport > clamp > box {
+      margin: 18px 12px;
+      border-spacing: 18px;
+    }
+
+    > clamp > textview {
+      background: none;
+      color: inherit;
+    }
+  }
+}
+
+/*****************
+ * AdwStatusPage *
+ *****************/
+
+statuspage {
+  > scrolledwindow > viewport > box {
+    margin: 36px 12px;
+    border-spacing: 36px;
+
+    > clamp > box {
+      border-spacing: 12px;
+
+      > .icon {
+        -gtk-icon-size: 128px;
+
+        color: gtkalpha(currentColor, $dim_label_opacity);
+
+        &:disabled {
+          opacity: $disabled_opacity;
+        }
+
+        &:not(:last-child) {
+          margin-bottom: 24px;
+        }
+      }
+    }
+  }
+
+  &.compact > scrolledwindow > viewport > box {
+    margin: 24px 12px;
+    border-spacing: 24px;
+
+    > clamp > box {
+      > .icon {
+        -gtk-icon-size: 96px;
+
+        &:not(:last-child) {
+          margin-bottom: 12px;
+        }
+      }
+
+      > .title {
+        font-size: 18pt;
+      }
+    }
+  }
+}
+
+/* Cards */
+
+.card {
+  @at-root %card, & {
+    background-color: $card_bg_color;
+    color: $card_fg_color;
+    border-radius: $card_radius;
+    box-shadow: 0 0 0 1px if($contrast == 'high', $border_color, transparentize(black, 0.97)),
+                0 1px 3px 1px transparentize(black, .93),
+                0 2px 6px 2px transparentize(black, .97);
+
+    .osd &, &.osd {
+      background-color: gtkalpha(currentColor, .1);
+      color: inherit;
+
+      @if $contrast == 'high' {
+        box-shadow: 0 0 0 1px $border_color;
+      } @else {
+        box-shadow: none;
+      }
+    }
+  }
+
+  @include focus-ring($offset: -1px);
+
+  .osd &, &.osd {
+    &:focus:focus-visible {
+      outline-color: $osd_focus_color;
+    }
+  }
+
+  &.activatable {
+    transition: $focus_transition, $button_transition;
+
+    &:hover {
+      background-image: image(gtkalpha(currentColor, .03));
+    }
+
+    &:active {
+      background-image: image(gtkalpha(currentColor, .08));
+    }
+  }
+}
+
+/* Transition shadows */
+
+flap,
+leaflet,
+navigation-view,
+overlay-split-view {
+  @include transition-shadows($shade_color);
+}

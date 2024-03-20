@@ -1,0 +1,458 @@
+$row_transition: background-color 200ms $ease-out-quad,
+                 border-radius 200ms $ease-out-quad;
+
+listview,
+list {
+  color: $view_fg_color;
+  background-color: $view_bg_color;
+  background-clip: padding-box;
+  border-color: $border_color;
+
+  > row {
+    padding: 2px;
+    background-clip: padding-box;
+  }
+
+  > row.expander { padding: 0px; }
+  > row.expander .row-header { padding: 2px; }
+
+  &.horizontal row.separator,
+  &.separators.horizontal > row:not(.separator) {
+    border-left: 1px solid $border_color;
+  }
+
+  &:not(.horizontal) row.separator,
+  &.separators:not(.horizontal) > row:not(.separator) {
+    border-bottom: 1px solid $border_color;
+  }
+}
+
+listview > header {
+  @extend .heading;
+  padding: 2px;
+  padding-top: 18px;
+  padding-bottom: 6px;
+}
+
+row {
+  @include focus-ring();
+
+  .osd & {
+    &:focus:focus-visible {
+      outline-color: $osd_focus_color;
+    }
+
+    &.activatable {
+      &:hover { background-color: $hover_color; }
+
+      &:active { background-color: $active_color; }
+
+      // this is for indicathing which row generated a popover see https://bugzilla.gnome.org/show_bug.cgi?id=754411
+      &.has-open-popup { background-color: $hover_color; }
+
+      &:selected {
+        &:hover { background-color: $selected_hover_color; }
+
+        &:active { background-color: $selected_active_color; }
+
+        &.has-open-popup { background-color: $selected_hover_color; }
+      }
+    }
+
+    &:selected {
+      background-color: $selected_color;
+    }
+  }
+
+  background-clip: padding-box;
+
+  &.activatable {
+    &:hover { background-color: $view_hover_color; }
+
+    &:active { background-color: $view_active_color; }
+
+    // this is for indicathing which row generated a popover see https://bugzilla.gnome.org/show_bug.cgi?id=754411
+    &.has-open-popup { background-color: $view_hover_color; }
+
+    &:selected {
+      &:hover { background-color: $view_selected_hover_color; }
+
+      &:active { background-color: $view_selected_active_color; }
+
+      &.has-open-popup { background-color: $view_selected_hover_color; }
+    }
+  }
+
+  &:selected {
+    background-color: $view_selected_color;
+  }
+}
+
+/*******************************************************
+ * Rich Lists                                          *
+ * Large list usually containing lots of widgets       *
+ * https://gitlab.gnome.org/GNOME/gtk/-/issues/3073    *
+ *******************************************************/
+
+.rich-list { /* rich lists usually containing other widgets than just labels/text */
+  > row {
+    padding: 8px 12px;
+    min-height: 32px; /* should be tall even when only containing a label */
+
+    > box {
+      border-spacing: 12px;
+    }
+  }
+
+  > header {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+}
+
+/****************
+ * AdwActionRow *
+ ****************/
+
+row {
+  label.subtitle {
+    font-size: smaller;
+    @extend .dim-label;
+  }
+
+  > box.header {
+    margin-left: 12px;
+    margin-right: 12px;
+    border-spacing: 6px;
+    min-height: 50px;
+
+    > .icon:disabled {
+      filter: opacity($disabled_opacity);
+    }
+
+    > box.title {
+      margin-top: 6px;
+      margin-bottom: 6px;
+      border-spacing: 3px;
+      padding: 0;
+
+      // Specificity bump for header bar
+      &,
+      > .title,
+      > .subtitle {
+        padding: 0;
+        font-weight: inherit;
+      }
+    }
+
+    > .prefixes,
+    > .suffixes {
+      border-spacing: 6px;
+    }
+
+    > .icon,
+    > .prefixes {
+      &:dir(ltr) { margin-right: 6px; }
+      &:dir(rtl) { margin-left: 6px; }
+    }
+  }
+
+  &.property > box.header > box.title > {
+    .title {
+      @extend .caption;
+      @extend .dim-label;
+    }
+
+    .subtitle {
+      font-size: inherit;
+      opacity: 1;
+    }
+  }
+}
+
+/******************************
+ * AdwEntryRow and AdwSpinRow *
+ ******************************/
+
+row.entry {
+  &:not(:selected).activatable.focused:hover,
+  &:not(:selected).activatable.focused:active {
+    background-color: transparent;
+  }
+
+  &:disabled {
+    text {
+      opacity: $disabled_opacity;
+    }
+
+    .dim-label, .subtitle {
+      opacity: 1;
+    }
+  }
+
+  .edit-icon, .indicator {
+    min-width: 24px;
+    min-height: 24px;
+    padding: 5px;
+  }
+
+  .edit-icon:disabled {
+    opacity: $strong_disabled_opacity;
+  }
+
+  .indicator {
+    opacity: $dimmer_opacity;
+  }
+
+  &.monospace {
+    font-family: inherit;
+
+    text {
+      font-family: monospace;
+    }
+  }
+}
+
+row.spin {
+  &:not(:selected).activatable.focused:hover,
+  &:not(:selected).activatable.focused:active {
+    background-color: transparent;
+  }
+
+  spinbutton {
+    background: none;
+    border-spacing: 6px;
+    box-shadow: none;
+
+    &, &:focus {
+      outline: none;
+    }
+
+    > button.image-button.up:not(.flat):not(.raised):not(.suggested-action):not(.destructive-action):not(.opaque):last-child,
+    > button.image-button.down:not(.flat):not(.raised):not(.suggested-action):not(.destructive-action):not(.opaque) {
+      &, &:dir(ltr):last-child, &:dir(rtl):first-child {
+        @extend %button_basic;
+        @extend %circular_button;
+        min-width: 30px;
+        min-height: 30px;
+        margin: 10px 2px;
+        border: none;
+      }
+    }
+  }
+
+  &:disabled spinbutton {
+    > button.image-button.up:not(.flat):not(.raised):not(.suggested-action):not(.destructive-action):not(.opaque):last-child,
+    > button.image-button.down:not(.flat):not(.raised):not(.suggested-action):not(.destructive-action):not(.opaque) {
+      &, &:dir(ltr):last-child, &:dir(rtl):first-child {
+        &:disabled {
+          filter: none;
+        }
+      }
+    }
+  }
+}
+
+row.entry,
+row.spin {
+  @include focus-ring($focus-state: '.focused', $offset: -1px, $transition: $row_transition);
+
+  &:not(:selected).activatable.focused:hover,
+  &:not(:selected).activatable.focused:active {
+    background-color: transparent;
+  }
+
+  @each $e_type, $e_color, $e_bg_color, $e_fg_color in (error,   $error_color,   $error_bg_color,   $error_fg_color),
+                                                       (warning, $warning_color, $warning_bg_color, $warning_fg_color),
+                                                       (success, $success_color, $success_bg_color, $success_fg_color) {
+    &.#{$e_type} {
+      @include focus-ring($focus-state: '.focused', $offset: -1px, $fc: gtkalpha(currentColor, $focus_border_opacity), $transition: $row_transition);
+
+      text {
+        > selection:focus-within { background-color: gtkalpha($e_color, .2); }
+
+        > cursor-handle > contents { background-color: currentColor; }
+      }
+
+      .dim-label, .subtitle {
+        opacity: 1;
+      }
+
+      .suggested-action {
+        background-color: $e_bg_color;
+        color: $e_fg_color;
+      }
+    }
+  }
+}
+
+/***************
+ * AdwComboRow *
+ ***************/
+
+row.combo {
+  image.dropdown-arrow:disabled {
+    filter: opacity($disabled_opacity);
+  }
+
+  listview.inline {
+    background: none;
+    border: none;
+    box-shadow: none;
+    color: inherit;
+
+    &, &:disabled {
+      background: none;
+      color: inherit;
+    }
+  }
+
+  popover > contents {
+    min-width: 120px;
+
+    .combo-searchbar {
+      margin: 6px;
+
+      + scrolledwindow {
+        @include undershoot(top, $popover_shade_color);
+      }
+    }
+  }
+}
+
+/******************
+ * AdwExpanderRow *
+ ******************/
+
+@mixin margin-start($margin) {
+  &:dir(ltr) {
+    margin-left: $margin;
+  }
+
+  &:dir(rtl) {
+    margin-right: $margin;
+  }
+}
+
+%boxed_list_row {
+  @include focus-ring($offset: -1px, $transition: $row_transition);
+
+  .osd &:focus:focus-visible {
+    outline-color: $osd_focus_color;
+  }
+
+  border-bottom: 1px solid if($contrast == 'high', $border_color, $card_shade_color);
+
+  &:not(:selected).activatable {
+    &:hover {
+      background-color: gtkalpha(currentColor, .03);
+    }
+
+    &:active {
+      background-color: gtkalpha(currentColor, .08);
+    }
+
+    &.has-open-popup {
+      background-color: gtkalpha(currentColor, .03);
+    }
+  }
+}
+
+row.expander {
+  // Drop transparent background on expander rows to let nested rows handle it,
+  // avoiding double highlights.
+  background: none;
+  padding: 0px;
+
+  > box > list {
+    background: none;
+    color: inherit;
+  }
+
+  list.nested {
+    background-color: gtkalpha($card_shade_color, .5);
+    color: inherit;
+  }
+
+  list.nested > row {
+    @extend %boxed_list_row;
+  }
+
+  // AdwExpanderRow arrow rotation
+
+  image.expander-row-arrow {
+    @extend .dim-label;
+
+    transition: -gtk-icon-transform 200ms $ease-out-quad;
+    @include margin-start(6px);
+
+    &:dir(ltr) {
+      -gtk-icon-transform: rotate(0.5turn);
+    }
+
+    &:dir(rtl) {
+      -gtk-icon-transform: rotate(-0.5turn);
+    }
+
+    &:disabled {
+      filter: opacity($disabled_opacity);
+    }
+  }
+
+  &:checked image.expander-row-arrow {
+    -gtk-icon-transform: rotate(0turn);
+    opacity: 1;
+
+    &:not(:disabled) {
+      color: $accent_color;
+    }
+  }
+
+  .osd &:checked image.expander-row-arrow:not(:disabled) {
+    color: inherit;
+  }
+
+  &.property box > list > row {
+    @extend .property;
+  }
+}
+
+/*****************
+ * Boxed Lists *
+ *****************/
+
+list.boxed-list {
+  @extend %card;
+
+  > row {
+    // Regular rows and expander header rows background
+    &, &.expander row.header {
+      @extend %boxed_list_row;
+    }
+
+    &.expander {
+      border: none;
+    }
+
+    // Rounded top
+    &:first-child {
+      &, &.expander row.header {
+        border-top-left-radius: $card_radius;
+        border-top-right-radius: $card_radius;
+      }
+    }
+
+    // Rounded bottom
+    &:last-child {
+      &,
+      &.expander:not(:checked),
+      &.expander:not(:checked) row.header,
+      &.expander:checked list.nested,
+      &.expander:checked list.nested > row:last-child {
+        border-bottom-left-radius: $card_radius;
+        border-bottom-right-radius: $card_radius;
+        border-bottom-width: 0;
+      }
+    }
+  }
+}

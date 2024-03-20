@@ -1,0 +1,55 @@
+shortcuts-section {
+  margin: 20px;
+}
+
+.shortcuts-search-results {
+  margin: 20px;
+  border-spacing: 24px;
+}
+
+// shortcut window keys
+shortcut {
+  border-spacing: 6px;
+  border-radius: 6px;
+  @include focus-ring($outer: true, $offset: 4px);
+
+  > .keycap {
+    min-width: 20px;
+    min-height: 25px;
+    padding: 2px 6px;
+
+    @extend %card;
+
+    border-radius: $button_radius;
+    font-size: smaller;
+  }
+}
+
+shortcuts-section stackswitcher.circular {
+  border-spacing: 12px;
+
+  > button.circular,
+  > button.text-button.circular {
+    min-width: 32px;
+    min-height: 32px;
+    padding: 0;
+  }
+}
+
+window.shortcuts {
+  headerbar.titlebar {
+    @extend .flat;
+    @extend %headerbar-shrunk;
+
+    > windowhandle {
+      padding-top: 3px;
+    }
+  }
+
+  searchbar {
+    @extend %searchbar-flat;
+    @extend %searchbar-shrunk;
+
+    background: none;
+  }
+}

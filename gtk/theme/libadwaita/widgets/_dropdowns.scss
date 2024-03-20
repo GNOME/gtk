@@ -1,0 +1,38 @@
+dropdown {
+  > button > box {
+    border-spacing: 6px;
+
+    > stack > row.activatable {
+      &:hover, &:active { background: none; }
+    }
+  }
+
+  arrow {
+    -gtk-icon-source: -gtk-icontheme('pan-down-symbolic');
+    min-height: 16px;
+    min-width: 16px;
+  }
+
+  &:drop(active) { // FIXME: untested
+    box-shadow: none;
+
+    button.combo { @extend %button_basic_drop_active; }
+  }
+
+  popover.menu {
+    padding-top: 6px;
+
+    listview > row {
+      min-width: 0;
+    }
+
+    // dropdowns with searchboxes on top
+    .dropdown-searchbar {
+      padding: 6px;
+
+      + scrolledwindow {
+        @include undershoot(top, $popover_shade_color);
+      }
+    }
+  }
+}

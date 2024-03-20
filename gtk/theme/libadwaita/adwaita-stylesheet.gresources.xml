@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gresources>
+  <gresource prefix="/org/gnome/Adwaita/styles">
+    <file>base.css</file>
+    <file>base-hc.css</file>
+    <file>defaults-light.css</file>
+    <file>defaults-dark.css</file>
+
+    <file>assets/bullet-symbolic.symbolic.png</file>
+    <file>assets/bullet@2-symbolic.symbolic.png</file>
+    <file>assets/check-symbolic.symbolic.png</file>
+    <file>assets/check@2-symbolic.symbolic.png</file>
+    <file>assets/dash-symbolic.symbolic.png</file>
+    <file>assets/dash@2-symbolic.symbolic.png</file>
+
+    <file>assets/bullet-symbolic.svg</file>
+    <file>assets/check-symbolic.svg</file>
+    <file>assets/dash-symbolic.svg</file>
+
+    <file>assets/devel-symbolic.svg</file>
+  </gresource>
+
+  <gresource prefix="/org/gtk/libgtk/theme/Adwaita">
+    <file>gtk.css</file>
+    <file>gtk-dark.css</file>
+  </gresource>
+
+  <gresource prefix="/org/gtk/libgtk/theme/Adwaita-HC">
+    <file alias="gtk.css">gtk-hc.css</file>
+    <file alias="gtk-dark.css">gtk-hc-dark.css</file>
+  </gresource>
+</gresources>

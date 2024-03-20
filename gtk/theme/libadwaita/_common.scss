@@ -1,0 +1,107 @@
+$ease-out-quad: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+$backdrop_transition: 200ms ease-out;
+$focus_transition: outline-color 200ms $ease-out-quad,
+                   outline-width 200ms $ease-out-quad,
+                   outline-offset 200ms $ease-out-quad;
+$button_transition: background 200ms $ease-out-quad,
+                    box-shadow 200ms $ease-out-quad;
+$button_radius: 6px;
+$card_radius: $button_radius + 6;
+$menu_radius: 6px;
+$menu_margin: 6px; //margin around menuitems & sidebar items
+$menu_padding: 12px; //inner menuitem padding
+$window_radius: $button_radius + 6;
+$popover_radius: $window_radius;
+
+.background {
+  color: $window_fg_color;
+  background-color: $window_bg_color;
+}
+
+dnd {
+  color: $window_fg_color;
+}
+
+.normal-icons {
+  -gtk-icon-size: 16px;
+}
+
+.large-icons {
+  -gtk-icon-size: 32px;
+}
+
+%osd,
+.osd {
+  color: $osd_fg_color;
+  border: none;
+  background-color: $osd_bg_color;
+  background-clip: padding-box;
+}
+
+/* Text selection */
+
+selection {
+  background-color: gtkalpha($view_fg_color, 0.1);
+  color: transparent;
+
+  &:focus-within {
+    background-color: gtkalpha($accent_bg_color, 0.3);
+  }
+}
+
+:not(window):drop(active):focus,
+:not(window):drop(active) { // FIXME needs to be done widget by widget, this wildcard should really die
+  border-color: $drop_target_color;
+  box-shadow: inset 0 0 0 1px $drop_target_color;
+  caret-color: $drop_target_color;
+}
+
+.navigation-sidebar,
+placessidebar,
+stackswitcher,
+expander-widget {
+  :not(window):drop(active):focus,
+  :not(window):drop(active) {
+    box-shadow: none;
+  }
+}
+
+/* Outline for low res icons */
+.lowres-icon {
+    -gtk-icon-shadow: 0 -1px rgba(0,0,0,0.05),
+      1px 0 rgba(0,0,0,0.1),
+      0 1px rgba(0,0,0,0.3),
+      -1px 0 rgba(0,0,0,0.1);
+}
+
+/* Drop shadow for large icons */
+.icon-dropshadow {
+  -gtk-icon-shadow: 0 1px 12px rgba(0,0,0,0.05),
+      0 -1px rgba(0,0,0,0.05),
+      1px 0 rgba(0,0,0,0.1),
+      0 1px rgba(0,0,0,0.3),
+      -1px 0 rgba(0,0,0,0.1);
+}
+
+@keyframes needs_attention {
+  from { background-image: radial-gradient(farthest-side, transparent 0%, transparent 0%); } // TODO
+  to { background-image: radial-gradient(farthest-side, transparent 95%, transparent); } // TODO
+}
+
+%needs_attention {
+  // the dot is drawn by using two radial gradient, the first one is the actual dot, the other
+  // simulates the shadow labels and icons normally have in buttons.
+  animation: needs_attention 150ms ease-in;
+
+  background-image: radial-gradient(farthest-side, $accent_color 96%, transparent);
+  background-size: 6px 6px;
+  background-repeat: no-repeat;
+
+  background-position: right 3px;
+
+  &:dir(rtl) {
+    background-position: left 3px;
+  }
+}
+
+@import 'widgets';

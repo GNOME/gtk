@@ -1,0 +1,225 @@
+headerbar {
+  min-height: 47px;
+  background-color: $headerbar_bg_color;
+  color: $headerbar_fg_color;
+  box-shadow: inset 0 -1px if($contrast == 'high', $headerbar_border_color, $headerbar_shade_color),
+              inset  1px 0 $headerbar_border_color,
+              inset -1px 0 $headerbar_border_color;
+
+  margin-left: -1px;
+  margin-right: -1px;
+
+  @extend %toolbar;
+
+  > windowhandle > box {
+    padding: 6px 7px 7px 7px;
+
+    > box.start,
+    > box.end {
+      border-spacing: 6px;
+    }
+
+    &, > widget {
+      > box.start:dir(ltr),
+      > box.end:dir(rtl) {
+        margin-right: 6px;
+      }
+
+      > box.start:dir(rtl),
+      > box.end:dir(ltr) {
+        margin-left: 6px;
+      }
+    }
+  }
+
+  &:backdrop {
+    background-color: $headerbar_backdrop_color;
+    transition: background-color $backdrop_transition;
+
+    > windowhandle {
+      // opacity looks weird with GtkSwitch, but filter works fine
+      filter: opacity(0.5);
+
+      transition: filter $backdrop_transition;
+    }
+  }
+
+  &.default-decoration {
+    min-height: 37px;
+
+    > windowhandle > box {
+      padding: 3px 4px 4px 4px;
+    }
+
+    windowcontrols {
+      > button {
+        min-height: 22px;
+        min-width: 22px;
+        padding: 4px;
+      }
+
+      > .icon {
+        margin: 7px;
+      }
+    }
+  }
+}
+
+window > {
+  .titlebar:not(.flat) {
+    box-shadow: 0 1px if($contrast == 'high', $border_color, gtkalpha($headerbar_shade_color, .5)),
+                0 2px 4px gtkalpha($headerbar_shade_color, .5);
+  }
+
+  .titlebar headerbar:not(.flat) {
+    box-shadow: inset  1px 0 $headerbar_border_color,
+                inset -1px 0 $headerbar_border_color;
+  }
+
+  headerbar.titlebar,
+  .titlebar headerbar {
+    min-height: 46px;
+
+    > windowhandle > box {
+      padding-bottom: 6px;
+    }
+
+    &.default-decoration {
+      min-height: 36px;
+
+      > windowhandle > box {
+        padding-bottom: 3px;
+      }
+    }
+  }
+}
+
+%headerbar-flat {
+  background: none;
+  box-shadow: none;
+  color: inherit;
+
+  min-height: 46px;
+
+  > windowhandle > box {
+    padding-bottom: 6px;
+  }
+
+  &.default-decoration {
+    min-height: 36px;
+
+    > windowhandle > box {
+      padding-bottom: 3px;
+    }
+  }
+}
+
+%headerbar-inline {
+  @extend %headerbar-flat;
+
+  &:backdrop {
+    transition: none;
+
+    > windowhandle {
+      filter: none;
+      transition: none;
+    }
+  }
+
+  window.devel & > windowhandle {
+    background-image: none;
+  }
+}
+
+%headerbar-shrunk {
+  min-height: 40px;
+
+  > windowhandle > box {
+    padding-top: 3px;
+    padding-bottom: 3px;
+  }
+
+  &.default-decoration {
+    min-height: 30px;
+
+    > windowhandle > box {
+      padding-top: 0px;
+      padding-bottom: 0px;
+    }
+  }
+}
+
+.titlebar:not(headerbar) {
+  separator { background-color: $headerbar_border_color; }
+}
+
+/*********************
+ * GtkWindowControls *
+ *********************/
+
+windowcontrols {
+  border-spacing: 3px;
+
+  > button {
+    min-width: 24px;
+    padding: 5px;
+    box-shadow: none;
+
+    > image {
+      background-color: $button_color;
+      border-radius: 100%;
+      padding: 2px;
+      transition: $button_transition;
+      @if $contrast == 'high' {
+        box-shadow: inset 0 0 0 1px $border_color;
+      }
+    }
+
+    &, &:hover, &:active {
+      background: none;
+    }
+
+    &:hover > image { background-color: $button_hover_color; }
+    &:active > image { background-color: $button_active_color; }
+  }
+
+  > .icon {
+    margin: 9px;
+  }
+}
+
+/******************
+ * AdwWindowTitle *
+ ******************/
+
+headerbar,
+windowtitle {
+  .title {
+    padding-left: 12px;
+    padding-right: 12px;
+    font-weight: bold;
+  }
+
+  .subtitle {
+    font-size: smaller;
+    padding-left: 12px;
+    padding-right: 12px;
+    @extend .dim-label;
+  }
+}
+
+windowtitle {
+  margin-top: -6px;
+  margin-bottom: -6px;
+  min-height: 12px;
+}
+
+// Development versions of apps to use a differently styled headerbar
+
+window.devel {
+  headerbar > windowhandle {
+    background-image: cross-fade(5% -gtk-recolor(url("assets/devel-symbolic.svg")),
+                                 image(transparent));
+    background-repeat: repeat-x;
+  }
+}

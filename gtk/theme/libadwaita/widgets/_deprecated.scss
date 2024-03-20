@@ -1,0 +1,343 @@
+// The following styles are deprecated in GTK and should be removed for GTK 5.x
+
+// .linked >                  element            child
+$deprecated_linked_widgets: ("combobox",         "> box > button.combo"),
+                            ("appchooserbutton", "> combobox > box > button.combo");
+
+/***********************
+ * GtkAppChooserDialog *
+ ***********************/
+
+window.appchooser {
+  headerbar.titlebar {
+    @extend .flat;
+    @extend %headerbar-shrunk;
+
+    > windowhandle {
+      padding-top: 3px;
+    }
+
+    box.start + box {
+      margin-top: -6px;
+      margin-bottom: -6px;
+      min-height: 12px;
+    }
+  }
+
+  searchbar {
+    @extend %searchbar-flat;
+
+    background: none;
+  }
+
+  &.csd searchbar {
+    @extend %searchbar-shrunk;
+  }
+
+  .dialog-vbox > box > box:not(.dialog-action-area) {
+    margin: 6px;
+  }
+
+  .dialog-action-area {
+    margin-top: 0;
+  }
+}
+
+/****************
+ * GtkAssistant *
+ ****************/
+
+window.assistant {
+  .sidebar {
+    padding: $menu-margin;
+    background-color: $sidebar_bg_color;
+    color: $sidebar_fg_color;
+
+    &:not(separator) {
+      &:dir(ltr) {
+        border-right: none;
+        box-shadow: inset -1px 0 if($contrast == 'high', $border_color, $sidebar_shade_color);
+      }
+
+      &:dir(rtl) {
+        box-shadow: inset 1px 0 if($contrast == 'high', $border_color, $sidebar_shade_color);
+      }
+    }
+
+    &:backdrop {
+      background-color: $sidebar_backdrop_color;
+      transition: background-color $backdrop_transition;
+    }
+
+    > label {
+      padding: 6px 12px;
+      border-radius: $menu_radius;
+
+      &.highlight {
+        background-color: $selected_color;
+
+        @if $contrast == 'high' {
+          box-shadow: inset 0 0 0 1px $border_color;
+        }
+      }
+    }
+  }
+}
+
+/***************
+ * GtkComboBox *
+ ***************/
+
+combobox {
+  @extend dropdown;
+
+  // Since cell view is taller than a plain label, make sure
+  // the button doesn't get stretched with a larger font
+  button {
+    padding-top: 2px;
+    padding-bottom: 2px;
+    min-height: 30px;
+  }
+}
+
+/***************
+ * GtkIconView *
+ ***************/
+
+iconview {
+  @extend %view;
+
+  @if $contrast == 'high' {
+    &:selected {
+      box-shadow: inset 0 0 0 1px $border_color;
+    }
+  }
+
+  @include focus-ring();
+
+  &:drop(active) {
+    box-shadow: none;
+  }
+
+  > dndtarget:drop(active) {
+    border-style: solid;
+    border-width: 1px;
+    border-color: $drop_target_color;
+  }
+}
+
+/**************
+ * GtkInfoBar *
+ **************/
+
+infobar {
+  > revealer > box {
+    padding: 6px;
+    padding-bottom: 7px;
+    border-spacing: 6px;
+    box-shadow: inset 0 -1px if($contrast == 'high', $border_color, $shade_color);
+
+    > box {
+      border-spacing: 6px;
+    }
+  }
+
+  &.action:hover > revealer > box {
+    background-image: image(gtkalpha(currentColor, .05));
+  }
+
+  &.action:active > revealer > box {
+    background-image: image(gtkalpha(currentColor, .1));
+  }
+
+  @each $i_type, $i_color in (info, $accent_bg_color),
+                             (question, $accent_bg_color),
+                             (warning, $warning_bg_color),
+                             (error, $error_bg_color) {
+    &.#{$i_type} > revealer > box {
+      background-color: gtkmix($i_color, $window_bg_color, 30%);
+      color: $window_fg_color;
+    }
+  }
+
+ .close {
+    min-width: 18px;
+    min-height: 18px;
+    padding: 4px;
+    border-radius: 50%;
+    @extend %button_basic_flat;
+  }
+}
+
+/****************
+ * GtkStatusBar *
+ ****************/
+
+statusbar {
+  padding: 6px 10px 6px 10px;
+}
+
+/***************
+ * GtkTreeView *
+ ***************/
+
+// To be used for opaque elements overlaid atop the selected row
+$treeview_selection_opaque: gtkmix(currentColor, $view_bg_color, 10%);
+$treeview_borders_opaque: gtkmix(currentColor, $view_bg_color, if($contrast == 'high', 40%, 20%));
+
+treeview.view {
+  @extend columnview;
+
+  border-left-color: $treeview_borders_opaque; // this is actually the tree lines color,
+  border-top-color: $treeview_borders_opaque; // while this is the grid lines color, better then nothing
+
+  &:selected {
+    &:focus, & {
+      border-radius: 0;
+    }
+  }
+
+  &.separator {
+    min-height: 2px;
+    color: $border_color;
+  }
+
+  &.expander {
+    // GtkTreeView uses the larger of the expander’s min-width and min-height
+    min-width: 16px;
+    min-height: 16px;
+    -gtk-icon-source: -gtk-icontheme('pan-end-symbolic');
+
+    &:dir(rtl) { -gtk-icon-source: -gtk-icontheme('pan-end-symbolic-rtl'); }
+
+    color: gtkalpha(currentColor, .7);
+
+    &:hover, &:active { color: currentColor; }
+
+    &:checked { -gtk-icon-source: -gtk-icontheme('pan-down-symbolic'); }
+
+    &:disabled { color: gtkalpha(currentColor, $disabled_opacity); }
+  }
+
+  > dndtarget:drop(active) {
+    border-style: solid none;
+    border-width: 1px;
+    border-color: $drop_target_color;
+
+    &.after { border-top-style: none; }
+
+    &.before { border-bottom-style: none; }
+  }
+
+  > header > button {
+    padding-left: 4px;
+    padding-right: 4px;
+    border-bottom: 1px solid $border_color;
+  }
+
+  &.progressbar { // progress bar in treeviews
+    &, &:selected {
+      background-color: $accent_bg_color;
+      color: $accent_fg_color;
+    }
+
+    box-shadow: none;
+  }
+
+  &.trough { // progress bar trough in treeviews
+    background-color: gtkalpha(currentColor, 0.1);
+  }
+
+  ~ undershoot.top {
+    box-shadow: none;
+    background: none;
+  }
+
+  acceleditor > label {
+    // see tests/testaccel in GTK to test
+    background-color: $treeview_selection_opaque;
+  }
+}
+
+treeview.navigation-sidebar {
+  padding: 0;
+
+  &:selected {
+    &:focus, & {
+      background-color: $selected_color;
+    }
+  }
+}
+
+treeview entry {
+  &:focus-within {
+    &:dir(rtl), &:dir(ltr) { // specificity bump hack
+      background-color: $view_bg_color;
+      transition-property: color, background;
+    }
+  }
+
+  &.flat, & {
+    border-radius: 0;
+    background-image: none;
+    background-color: $view_bg_color;
+
+    &:focus-within { border-color: $accent_color; }
+  }
+}
+
+treeview spinbutton:not(.vertical) {
+  min-height: 0;
+  border-style: none;
+  border-radius: 0;
+
+  > text {
+    min-height: 0;
+    padding: 1px 2px;
+  }
+}
+
+// The following styles are deprecated in libadwaita and should be removed in 2.x
+
+// Deprecated: use .boxed-list instead
+list.content {
+  @extend .boxed-list;
+}
+
+// Deprecated: use .navigation-sidebar instead
+.sidebar {
+  &:not(separator) {
+    &:dir(ltr),
+    &.left,
+    &.left:dir(rtl) {
+      border-right: 1px solid $border_color;
+      border-left-style: none;
+    }
+
+    &:dir(rtl),
+    &.right {
+      border-left: 1px solid $border_color;
+      border-right-style: none;
+    }
+  }
+
+  listview.view,
+  list {
+    background-color: transparent;
+    color: inherit;
+  }
+
+  paned & { &.left, &.right, &.left:dir(rtl), &:dir(rtl), &:dir(ltr), & { border-style: none; }}
+}
+
+// Deprecated: use .title-1
+.large-title {
+  font-weight: 300;
+  font-size: 24pt;
+}
+
+// Deprecated: use AdwToolbarView
+
+headerbar.flat {
+  @extend %headerbar-flat;
+}

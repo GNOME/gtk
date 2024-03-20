@@ -1,0 +1,232 @@
+$_slider_border_color: transparentize(black, if($contrast == 'high', .65, .9));
+
+%scale_trough {
+  border-radius: 99px;
+  background-color: $trough_color;
+
+  @if $contrast == "high" {
+    box-shadow: inset 0 0 0 1px $border_color;
+  }
+}
+
+%scale_highlight {
+  border-radius: 99px;
+  background-color: $fill_color;
+  color: $fill_text_color;
+}
+
+scale {
+  // sizing
+  $_marks_length: 6px;
+  $_marks_distance: 6px;
+
+  min-height: 10px;
+  min-width: 10px;
+  padding: 12px;
+
+  @include focus-ring("> trough > slider", $offset: 0);
+
+  > trough {
+    @extend %scale_trough;
+
+    // the colored part of the backing bit
+    > highlight { @extend %scale_highlight; }
+
+    // this is another differently styled part of the backing bit, the most relevant use case is for example
+    // in media player to indicate how much video stream as been cached
+    > fill {
+      @extend %scale_trough;
+    }
+
+    > slider {
+      background-color: $slider_color;
+      box-shadow: 0 0 0 1px $_slider_border_color, 0 2px 4px transparentize(black, .8);
+
+      border-radius: 100%;
+
+      // the slider is inside the trough, so to have make it bigger there's a negative margin
+      min-width: 20px;
+      min-height: 20px;
+      margin: -8px;
+    }
+  }
+
+  &:hover, &:active {
+    > trough {
+      background-color: $trough_hover_color;
+
+      > highlight {
+        background-image: image(gtkalpha(currentColor, .1));
+      }
+
+      > slider {
+        background-color: $slider_hover_color;
+      }
+    }
+  }
+
+  .osd & {
+    &:focus:focus-visible > trough {
+      outline-color: $osd_focus_color;
+    }
+
+    > trough > highlight {
+      background-color: $osd_fill_bg_color;
+      color: $osd_fill_fg_color;
+    }
+  }
+
+  &:disabled {
+    filter: opacity($disabled_opacity);
+
+    > trough > slider {
+      box-shadow: 0 0 0 1px $_slider_border_color, 0 2px 4px transparent;
+      outline-color: transparentize(black, if($contrast == 'high', .5, .8));
+    }
+  }
+
+  // click-and-hold the slider to activate
+  &.fine-tune {
+    padding: 9px;
+
+    &.horizontal {
+      min-height: 16px;
+    }
+
+    &.vertical {
+      min-width: 16px;
+    }
+
+    > trough {
+      // to make the trough grow in fine-tune mode
+      > slider { margin: -5px; }
+    }
+  }
+
+  > value {
+    @extend .dim-label;
+    @extend .numeric;
+  }
+
+  &.marks-before:not(.marks-after),
+  &.marks-after:not(.marks-before) {
+    > trough > slider {
+      transform: rotate(45deg);
+
+      // Adjust box-shadow for the 45deg rotation, for 0px 2px we ideally want
+      // 1/√2px 1/√2px, round that to 1px 1px
+      box-shadow: 0 0 0 1px $_slider_border_color, 1px 1px 4px transparentize(black, .8);
+
+      &:disabled {
+        box-shadow: 0 0 0 1px $_slider_border_color, 1px 1px 4px transparent;
+      }
+    }
+  }
+
+  &.horizontal {
+    > marks {
+      color: gtkalpha(currentColor, $dim_label_opacity);
+      &.top    { margin-bottom: $_marks_distance; }
+      &.bottom { margin-top: $_marks_distance; }
+
+      indicator {
+        background-color: currentColor;
+        min-height: $_marks_length;
+        min-width: 1px;
+      }
+    }
+
+    > value.left  { margin-right: 9px; }
+    > value.right { margin-left: 9px; }
+
+    &.fine-tune > marks {
+      &.top { margin-top: 3px; }
+      &.bottom { margin-bottom: 3px; }
+
+      indicator { min-height: ($_marks_length - 3px); }
+    }
+
+    &.marks-before {
+      padding-top: 0;
+
+       > trough > slider {
+        border-top-left-radius: 0;
+      }
+    }
+
+    &.marks-after {
+      padding-bottom: 0;
+
+      > trough > slider {
+        border-bottom-right-radius: 0;
+      }
+    }
+
+    &.marks-before.marks-after > trough > slider {
+      border-radius: 100%;
+    }
+  }
+
+  &.vertical {
+    > marks {
+      color: gtkalpha(currentColor, $dim_label_opacity);
+      &.top    { margin-right: $_marks_distance; }
+      &.bottom { margin-left: $_marks_distance; }
+
+      indicator {
+        background-color: currentColor;
+        min-height: 1px;
+        min-width: $_marks_length;
+      }
+    }
+
+    > value.top    { margin-bottom: 9px; }
+    > value.bottom { margin-top: 9px; }
+
+    &.fine-tune > marks {
+      &.top { margin-left: 3px; }
+      &.bottom { margin-right: 3px; }
+
+      indicator { min-height: ($_marks_length - 3px); }
+    }
+
+    &.marks-before {
+      padding-left: 0;
+
+      > trough > slider {
+        border-bottom-left-radius: 0;
+      }
+    }
+
+    &.marks-after {
+      padding-right: 0;
+
+      > trough > slider {
+        border-top-right-radius: 0;
+      }
+    }
+  }
+
+  &.color {
+    padding: 0;
+
+    > trough {
+      border: none;
+      background: none;
+      border-radius: 10px;
+
+      > slider {
+        margin: 0;
+        background-color: transparentize(white, .2);
+      }
+    }
+
+    &.fine-tune {
+      padding: 2px;
+
+      > trough > slider {
+        margin: -2px;
+      }
+    }
+  }
+}

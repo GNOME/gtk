@@ -1,0 +1,62 @@
+switch {
+  // similar to GtkScale
+  border-radius: 14px;
+  padding: 2px;
+
+  background-color: $trough_color;
+
+  &:hover { background-color: $trough_hover_color; }
+  &:active { background-color: $trough_active_color; }
+
+  > image { color: if($contrast == 'high', white, transparent); }
+
+  @include focus-ring($offset: 1px, $outer: true);
+
+  &:disabled {
+    filter: opacity($disabled_opacity);
+  }
+
+  > slider {
+    min-width: 22px;
+    min-height: 22px;
+    border-radius: 50%;
+    background-color: $slider_color;
+    box-shadow: 0 2px 4px transparentize(black, .8);
+
+    &:disabled {
+      box-shadow: 0 2px 4px transparent;
+    }
+  }
+
+  &:hover > slider,
+  &:active > slider {
+    background: $slider_hover_color;
+  }
+
+  &:checked {
+    color: $fill_text_color;
+    background-color: $fill_color;
+
+    &:hover { background-image: image(gtkalpha(currentColor, .1)); }
+    &:active { background-image: image(transparentize(black, .8)); }
+
+    > slider {
+      background-color: $slider_hover_color;
+    }
+
+    @if $contrast == "high" {
+      > image {  color: inherit; }
+    }
+  }
+
+  .osd & {
+    &:focus:focus-visible {
+      outline-color: $osd_focus_color;
+    }
+
+    &:checked {
+      background-color: transparentize($osd_fill_bg_color, .15);
+      color: $osd_fill_fg_color;
+    }
+  }
+}

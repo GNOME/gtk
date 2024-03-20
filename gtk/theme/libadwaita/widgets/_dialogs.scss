@@ -1,0 +1,65 @@
+.dialog-action-area {
+  margin: 6px;
+  border-spacing: 6px;
+}
+
+/****************
+ * Print dialog *
+*****************/
+
+window.print {
+  drawing {
+    color: $window_fg_color;
+    background: none;
+    border: none;
+    padding: 0;
+
+    paper {
+      background-color: white;
+      color: transparentize(black, .2);
+      background-clip: padding-box;
+      border: 1px solid $border_color;
+    }
+  }
+
+  headerbar.titlebar {
+    @extend .flat;
+  }
+
+  .dialog-action-box {
+    @extend .view;
+  }
+}
+
+/********************
+ * Page setup dalog *
+ ********************/
+
+window.pagesetup {
+  headerbar.titlebar {
+    @extend .flat;
+  }
+}
+
+/******************
+ * GtkAboutDialog *
+ ******************/
+
+window.aboutdialog {
+  headerbar.titlebar {
+    @extend .flat;
+  }
+
+  image.large-icons {
+    -gtk-icon-size: 128px;
+  }
+}
+
+/*************************
+ * GtkColorChooserDialog *
+ *************************/
+window.colorchooser {
+  headerbar.titlebar {
+    @extend .flat;
+  }
+}

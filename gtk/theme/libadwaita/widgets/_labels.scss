@@ -1,0 +1,92 @@
+label {
+  caret-color: currentColor;
+
+  &.separator {
+    @extend .dim-label;
+  }
+
+  &:disabled {
+    filter: opacity($disabled_opacity);
+  }
+}
+
+.dim-label {
+  opacity: $dim_label_opacity;
+}
+
+.accent {
+  color: $accent_color;
+}
+
+.success {
+  color: $success_color;
+}
+
+.warning {
+  color: $warning_color;
+}
+
+.error {
+  color: $error_color;
+}
+
+/**********************
+ * General Typography *
+ **********************/
+
+.title-1 {
+  font-weight: 800;
+  font-size: 20pt;
+}
+
+.title-2 {
+  font-weight: 800;
+  font-size: 15pt;
+}
+
+.title-3 {
+  font-weight: 700;
+  font-size: 15pt;
+}
+
+.title-4 {
+  font-weight: 700;
+  font-size: 13pt;
+}
+
+.heading {
+  font-weight: 700;
+  font-size: 11pt;
+}
+
+.body {
+  font-weight: 400;
+  font-size: 11pt;
+}
+
+.caption-heading {
+  font-weight: 700;
+  font-size: 9pt;
+}
+
+.caption {
+  font-weight: 400;
+  font-size: 9pt;
+}
+
+.monospace {
+  font-family: monospace;
+}
+
+.numeric {
+  font-feature-settings: "tnum";
+}
+
+/*******************
+ * Editable Labels *
+ *******************/
+
+editablelabel > stack > text {
+  color: $view_fg_color;
+  background-color: $view_bg_color;
+}

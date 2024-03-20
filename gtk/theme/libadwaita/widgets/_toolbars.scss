@@ -1,0 +1,305 @@
+%toolbar {
+  button:not(.raised):not(.suggested-action):not(.destructive-action):not(.opaque) {
+    &.arrow-button,
+    &.image-button,
+    &.image-text-button {
+      @extend %button_basic_flat;
+    }
+  }
+
+  &.osd button:not(.raised):not(.suggested-action):not(.destructive-action):not(.opaque) {
+    &:focus:focus-visible {
+      outline-color: $osd_focus_color;
+    }
+  }
+
+  menubutton:not(.raised):not(.suggested-action):not(.destructive-action):not(.opaque) {
+    &.image-button > button {
+      @extend %button_basic_flat;
+    }
+  }
+
+  .linked button:not(.raised):not(.suggested-action):not(.destructive-action):not(.opaque) {
+    &.arrow-button,
+    &.image-button,
+    &.image-text-button {
+      @extend %button_basic_raised;
+    }
+  }
+
+  menubutton.raised > button:not(.raised):not(.suggested-action):not(.destructive-action):not(.opaque) {
+    &.arrow-button,
+    &.image-button,
+    &.image-text-button {
+      @extend %button_basic_raised;
+    }
+  }
+
+  menubutton.suggested-action,
+  menubutton.destructive-action,
+  menubutton.opaque {
+    > button:not(.raised):not(.suggested-action):not(.destructive-action):not(.opaque) {
+      @extend %opaque_button;
+
+      color: inherit;
+      background-color: transparent;
+    }
+  }
+
+  splitbutton:not(.raised):not(.suggested-action):not(.destructive-action):not(.opaque) {
+    @extend %flat_split_button;
+  }
+
+  switch {
+    margin-top: 4px;
+    margin-bottom: 4px;
+  }
+
+  // Reset styles for popovers
+  popover {
+    button:not(.flat):not(.raised):not(.suggested-action):not(.destructive-action):not(.opaque) {
+      &.arrow-button,
+      &.image-button,
+      &.image-text-button {
+        @extend %button_basic_raised;
+      }
+    }
+
+    menubutton:not(.flat):not(.raised):not(.suggested-action):not(.destructive-action):not(.opaque) {
+      &.image-button > button {
+        @extend %button_basic_raised;
+      }
+    }
+  }
+}
+
+.toolbar {
+  padding: 6px;
+  border-spacing: 6px;
+
+  @extend %toolbar;
+
+  // stand-alone OSD toolbars
+  &.osd {
+    padding: 12px;
+    border-radius: $card_radius;
+  }
+}
+
+%toolbar-shrunk {
+  padding-top: 3px;
+  padding-bottom: 3px;
+}
+
+/****************
+ * GtkSearchBar *
+ ****************/
+
+searchbar {
+  > revealer > box {
+    padding: 6px 6px 7px 6px;
+
+    background-color: $headerbar_bg_color;
+    color: $headerbar_fg_color;
+    box-shadow: inset 0 -1px if($contrast == 'high', $headerbar_border_color, $headerbar_shade_color);
+
+    &:backdrop {
+      background-color: $headerbar_backdrop_color;
+      transition: background-color $backdrop_transition;
+
+      > * {
+        filter: opacity(.5);
+        transition: filter $backdrop_transition;
+      }
+    }
+
+    @extend %toolbar;
+
+   .close {
+      min-width: 18px;
+      min-height: 18px;
+      padding: 4px;
+      border-radius: 50%;
+      @extend %button_basic_flat;
+
+      &:dir(ltr) {
+        margin-left: 10px;
+        margin-right: 4px;
+      }
+
+      &:dir(rtl) {
+        margin-left: 4px;
+        margin-right: 10px;
+      }
+    }
+  }
+
+  &.inline {
+    @extend %searchbar-inline;
+  }
+}
+
+%searchbar-flat > revealer > box {
+  background-color: transparent;
+  color: inherit;
+  box-shadow: none;
+  padding-bottom: 6px;
+}
+
+%searchbar-inline {
+  @extend %searchbar-flat;
+
+  > revealer > box:backdrop {
+    background-color: transparent;
+    transition: none;
+
+    > * {
+      filter: none;
+      transition: none;
+    }
+  }
+}
+
+%searchbar-shrunk > revealer > box {
+  padding-top: 3px;
+  padding-bottom: 3px;
+}
+
+/****************
+ * GtkActionBar *
+ ****************/
+
+actionbar > revealer > box {
+  background-color: $headerbar_bg_color;
+  color: $headerbar_fg_color;
+  box-shadow: inset 0 1px if($contrast == 'high', $headerbar_border_color, $headerbar_shade_color);
+  padding: 7px 6px 6px 6px;
+
+  @extend %toolbar;
+
+  &, > box.start, > box.end {
+    border-spacing: 6px;
+  }
+
+  &:backdrop {
+    background-color: $headerbar_backdrop_color;
+    transition: background-color $backdrop_transition;
+
+    > * {
+      filter: opacity(.5);
+      transition: filter $backdrop_transition;
+    }
+  }
+}
+
+%actionbar-inline > revealer > box {
+  background-color: transparent;
+  color: inherit;
+  box-shadow: none;
+  padding-top: 6px;
+
+  &:backdrop {
+    background-color: transparent;
+    transition: none;
+
+    > * {
+      filter: none;
+      transition: none;
+    }
+  }
+}
+
+%actionbar-shrunk > revealer > box {
+  padding-top: 3px;
+  padding-bottom: 3px;
+}
+
+/*************
+ * AdwBanner *
+ *************/
+banner > revealer > widget {
+  /* There are 2 more instances in _sidebars.css, keep in sync with that */
+  background-color: gtkmix($accent_bg_color, $window_bg_color, 30%);
+  color: $window_fg_color;
+  padding: 6px;
+
+  &:backdrop {
+    background-color: gtkmix($accent_bg_color, $window_bg_color, 15%);
+    transition: background-color $backdrop_transition;
+
+    > label, > button {
+      filter: opacity(.5);
+      transition: filter $backdrop_transition;
+    }
+  }
+}
+
+/******************
+ * AdwToolbarView *
+ ******************/
+toolbarview {
+  > .top-bar,
+  > .bottom-bar {
+    headerbar { @extend %headerbar-inline; }
+    searchbar { @extend %searchbar-inline; }
+    actionbar { @extend %actionbar-inline; }
+    menubar   { @extend %menubar-inline; }
+    tabbar    { @extend %tabbar-inline; }
+
+    .collapse-spacing {
+      padding-top: 3px;
+      padding-bottom: 3px;
+
+      headerbar { @extend %headerbar-shrunk; }
+      searchbar { @extend %searchbar-shrunk; }
+      actionbar { @extend %actionbar-shrunk; }
+      menubar   { @extend %menubar-shrunk; }
+      .toolbar  { @extend %toolbar-shrunk; }
+      tabbar    { @extend %tabbar-shrunk; }
+
+      viewswitcherbar { @extend %viewswitcherbar-shrunk; }
+    }
+
+    &.raised {
+      background-color: $headerbar_bg_color;
+      color: $headerbar_fg_color;
+
+      &:backdrop {
+        background-color: $headerbar_backdrop_color;
+        transition: background-color $backdrop_transition;
+      }
+    }
+
+    &:backdrop > windowhandle {
+      filter: opacity(.5);
+      transition: filter $backdrop_transition;
+    }
+  }
+
+  > .top-bar.raised {
+    box-shadow: 0 1px if($contrast == 'high', $border_color, gtkalpha($headerbar_shade_color, .5)),
+                0 2px 4px gtkalpha($headerbar_shade_color, .5);
+
+    &.border {
+      box-shadow: 0 1px if($contrast == 'high', $border_color, $headerbar_darker_shade_color);
+    }
+  }
+
+  > .bottom-bar.raised {
+    box-shadow: 0 -1px if($contrast == 'high', $border_color, gtkalpha($headerbar_shade_color, .5)),
+                0 -2px 4px gtkalpha($headerbar_shade_color, .5);
+
+    &.border {
+      box-shadow: 0 -1px if($contrast == 'high', $border_color, $headerbar_darker_shade_color);
+    }
+  }
+
+  &.undershoot-top    scrolledwindow { @include undershoot(top); }
+  &.undershoot-bottom scrolledwindow { @include undershoot(bottom); }
+
+  window.devel & > .top-bar {
+    background-image: cross-fade(5% -gtk-recolor(url("assets/devel-symbolic.svg")),
+                                 image(transparent));
+    background-repeat: repeat-x;
+  }
+}

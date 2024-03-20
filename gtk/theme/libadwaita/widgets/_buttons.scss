@@ -1,0 +1,627 @@
+$button_color: gtkalpha(currentColor, .1);
+$button_hover_color: gtkalpha(currentColor, .15);
+$button_active_color: gtkalpha(currentColor, .3);
+$button_checked_color: gtkalpha(currentColor, .3);
+$button_checked_hover_color: gtkalpha(currentColor, .35);
+$button_checked_active_color: gtkalpha(currentColor, .4);
+
+$opaque_button_default_bg: gtkmix($window_bg_color, $window_fg_color, 85%);
+
+%button,
+button {
+  @at-root %button_basic, & {
+    min-height: 24px;
+    min-width: 16px;
+    padding: 5px 10px;
+    border-radius: $button_radius;
+    font-weight: bold;
+
+    @include focus-ring($transition: $button_transition);
+
+    .osd &:focus:focus-visible {
+      outline-color: $osd_focus_color;
+    }
+
+    @at-root %button_basic_raised, & {
+      background-color: $button_color;
+
+      @if $contrast == 'high' {
+        box-shadow: inset 0 0 0 1px $border_color;
+      }
+
+      &:hover {
+        background-color: $button_hover_color;
+      }
+
+      &.keyboard-activating,
+      &:active {
+        background-color: $button_active_color;
+      }
+
+      &:checked {
+        background-color: $button_checked_color;
+
+        &:hover {
+          background-color: $button_checked_hover_color;
+        }
+
+        &.keyboard-activating,
+        &:active {
+          background-color: $button_checked_active_color;
+        }
+      }
+    }
+
+    &:disabled {
+      filter: opacity($disabled_opacity);
+
+      label {
+        filter: none;
+      }
+    }
+
+    &.image-button {
+      min-width: 24px;
+      padding-left: 5px;
+      padding-right: 5px;
+    }
+
+    &.text-button {
+      padding-left: 17px;
+      padding-right: 17px;
+    }
+
+    &.text-button.image-button,
+    &.image-text-button {
+      padding-left: 9px;
+      padding-right: 9px;
+
+      > box,
+      > box > box {
+        border-spacing: 4px;
+
+        > label {
+          padding-left: 2px;
+          padding-right: 2px;
+        }
+      }
+    }
+
+    &.arrow-button {
+      padding-left: 9px;
+      padding-right: 9px;
+
+      > box { border-spacing: 4px; }
+
+      &.text-button {
+        > box { border-spacing: 4px; }
+      }
+    }
+
+    @at-root %button_basic_drop_active,
+    &:drop(active) {
+      color: $drop_target_color;
+      box-shadow: inset 0 0 0 2px $drop_target_color;
+    }
+  }
+
+  // big standalone buttons like in Documents pager
+  @at-root %osd_button,
+  &.osd {
+    min-width: 32px;
+    min-height: 32px;
+    @include focus-ring($outer: true, $offset: 1px, $transition: $button_transition);
+
+    color: $osd_fg_color;
+    background-color: transparentize(black, .35);
+
+    @if $contrast == 'high' {
+      box-shadow: 0 0 0 1px currentColor;
+    }
+
+    &:hover {
+      color: white;
+      background-color: gtkalpha(gtkmix(black, currentColor, 85%), .65);
+    }
+
+    &.keyboard-activating,
+    &:active {
+      color: white;
+      background-color: gtkalpha(gtkmix(black, currentColor, 75%), .65);
+    }
+
+    &:checked {
+      background-color: gtkalpha(gtkmix(black, currentColor, 80%), .65);
+
+      &:hover {
+        background-color: gtkalpha(gtkmix(black, currentColor, 75%), .65);
+      }
+
+      &.keyboard-activating,
+      &:active {
+        background-color: gtkalpha(gtkmix(black, currentColor, 65%), .65);
+      }
+    }
+
+    // Specificity bump
+    &:drop(active) {
+      @extend %button_basic_drop_active;
+    }
+
+    .osd &:focus:focus-visible {
+      outline-color: $osd_focus_color;
+    }
+  }
+
+  @at-root %opaque_button {
+    box-shadow: none;
+
+    @include focus-ring($outer: true, $offset: 1px, $transition: $button_transition);
+
+    .osd &:focus:focus-visible {
+      outline-color: $osd_focus_color;
+    }
+
+    &:hover {
+      background-image: image(gtkalpha(currentColor, .1));
+    }
+
+    &.keyboard-activating,
+    &:active {
+      background-image: image(transparentize(black, .8));
+    }
+
+    &:checked {
+      background-image: image(transparentize(black, .85));
+
+      &:hover {
+        background-image: image(transparentize(black, .95));
+      }
+
+      &.keyboard-activating,
+      &:active {
+        background-image: image(transparentize(black, .7));
+      }
+    }
+  }
+
+  &.opaque {
+    @extend %opaque_button;
+
+    background-color: $opaque_button_default_bg;
+    color: $window_fg_color;
+  }
+
+  &.destructive-action {
+    @extend %opaque_button;
+
+    color: $accent_fg_color;
+
+    &, &:checked {
+      background-color: $accent_bg_color;
+    }
+
+    --accent-color: var(--destructive-color);
+    --accent-bg-color: var(--destructive-bg-color);
+    --accent-fg-color: var(--destructive-fg-color);
+  }
+
+  &.suggested-action {
+    @extend %opaque_button;
+
+    color: $accent_fg_color;
+
+    &, &:checked {
+      background-color: $accent_bg_color;
+    }
+  }
+
+  @at-root %button_basic_flat,
+  &.flat {
+    background: transparent;
+    @include focus-ring($transition: $button_transition);
+
+    .osd &:focus:focus-visible {
+      outline-color: $osd_focus_color;
+    }
+
+    box-shadow: none;
+
+    @if $contrast == 'high' {
+      &:hover,
+      &.keyboard-activating,
+      &:active,
+      &:checked {
+        box-shadow: inset 0 0 0 1px $border_color;
+      }
+    }
+
+    &:hover {
+      background: $hover_color;
+    }
+
+    &.keyboard-activating,
+    &:active {
+      background: $active_color;
+    }
+
+    &:checked {
+      background: $selected_color;
+
+      &:hover {
+        background: $selected_hover_color;
+      }
+
+      &.keyboard-activating,
+      &:active {
+        background: $selected_active_color;
+      }
+    }
+
+    &:disabled:not(:checked) {
+      filter: opacity($strong_disabled_opacity);
+    }
+
+    // Specificity bump
+    &:drop(active) {
+      @extend %button_basic_drop_active;
+    }
+  }
+
+  stackswitcher > & {
+    // to position the needs attention dot, padding is added to the button
+    // child, a label needs just lateral padding while an icon needs vertical
+    // padding added too.
+
+    > label {
+      padding: 0 6px;
+      margin: 0 -6px;
+    }
+
+    > image {
+      padding: 3px 6px;
+      margin: -3px -6px;
+    }
+
+    &.text-button { min-width: 100px; }
+
+    &.needs-attention {
+      > label,
+      > image { @extend %needs_attention; }
+    }
+  }
+
+  // hide separators
+  &.font {
+    separator { background-color: transparent; }
+    > box { border-spacing: 6px; }
+    > box > box > label { font-weight: bold; }
+  }
+
+  @at-root %circular_button,
+  &.circular { // force circular button shape
+    min-width: 34px;
+    min-height: 34px;
+    padding: 0;
+    border-radius: 9999px;
+
+    label { padding: 0; }
+  }
+
+  @at-root %pill_button,
+  &.pill {
+    padding: 10px 32px;
+    border-radius: 9999px;
+  }
+
+  &.card {
+    background-color: $card_bg_color;
+    background-clip: padding-box;
+    font-weight: inherit;
+    padding: 0;
+
+    @include focus-ring($offset: -1px, $transition: $button_transition);
+
+    &:hover {
+      background-image: image($view_hover_color);
+    }
+
+    &.keyboard-activating,
+    &:active {
+      background-image: image($view_active_color);
+    }
+
+    &:checked {
+      background-color: $card_bg_color;
+      background-image: image($view_selected_color);
+
+      &:hover { background-image: image($view_selected_hover_color); }
+
+      &.keyboard-activating,
+      &:active { background-image: image($view_selected_active_color); }
+
+      &.has-open-popup { background-image: image($view_selected_hover_color); }
+
+      .osd & {
+        background-color: gtkalpha(currentColor, .1);
+      }
+    }
+
+    &:drop(active) {
+      color: $drop_target_color;
+      box-shadow: inset 0 0 0 1px $drop_target_color;
+    }
+  }
+}
+
+%undecorated_button {
+  background-color: transparent;
+}
+
+button.color {
+  padding: 5px;
+
+  > colorswatch:only-child {
+    border-radius: 2.5px;
+
+    > overlay {
+      border-radius: 2px;
+    }
+
+    &:disabled {
+      filter: none;
+    }
+
+    &.light > overlay {
+      border-color: gtkalpha($view_fg_color, 0.1);
+    }
+  }
+}
+
+menubutton {
+  &.osd {
+    background: none;
+    color: inherit;
+
+    > button { @extend %osd_button; }
+  }
+
+  &.circular > button { @extend %circular_button; }
+  &.flat > button { @extend %button_basic_flat; }
+  &.pill > button { @extend %pill_button; }
+
+  &.suggested-action {
+    background-color: $accent_bg_color;
+    color: $accent_fg_color;
+  }
+
+  &.opaque {
+    background-color: $opaque_button_default_bg;
+    color: $window_fg_color;
+  }
+
+  &.suggested-action,
+  &.destructive-action,
+  &.opaque {
+    border-radius: $button_radius;
+
+    &.circular, &.pill {
+      border-radius: 9999px;
+    }
+
+    > button {
+      @extend %opaque_button;
+
+      &, &:checked {
+        background-color: transparent;
+        color: inherit;
+      }
+    }
+  }
+
+  &.image-button > button {
+    min-width: 24px;
+    padding-left: 5px;
+    padding-right: 5px;
+  }
+
+  &.card > button {
+    border-radius: $card_radius;
+  }
+
+  arrow {
+    min-height: 16px;
+    min-width: 16px;
+    &.none {
+      -gtk-icon-source: -gtk-icontheme('open-menu-symbolic');
+    }
+    &.down {
+      -gtk-icon-source: -gtk-icontheme('pan-down-symbolic');
+    }
+    &.up {
+      -gtk-icon-source: -gtk-icontheme('pan-up-symbolic');
+    }
+    &.left {
+      -gtk-icon-source: -gtk-icontheme('pan-start-symbolic');
+    }
+    &.right {
+      -gtk-icon-source: -gtk-icontheme('pan-end-symbolic');
+    }
+  }
+}
+
+splitbutton {
+  border-radius: $button_radius;
+
+  &, & > separator {
+    transition: $button_transition;
+    transition-property: background;
+  }
+
+  > separator {
+    margin-top: 6px;
+    margin-bottom: 6px;
+    background: none;
+  }
+
+  > menubutton > button {
+    padding-left: 4px;
+    padding-right: 4px;
+  }
+
+  // Since the inner button doesn't have any style classes on it,
+  // we have to add them manually
+  &.image-button > button {
+    min-width: 24px;
+    padding-left: 5px;
+    padding-right: 5px;
+  }
+
+  &.text-button.image-button > button,
+  &.image-text-button > button {
+    padding-left: 9px;
+    padding-right: 9px;
+
+    > box {
+      border-spacing: 6px;
+    }
+  }
+
+  &:disabled {
+    filter: opacity($disabled_opacity);
+
+    > button, > menubutton > button {
+      filter: none;
+    }
+  }
+
+  // Reimplementing linked so we don't blow up css
+  > button:dir(ltr),
+  > menubutton > button:dir(rtl) {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    margin-right: -1px;
+  }
+
+  > button:dir(rtl),
+  > menubutton > button:dir(ltr) {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    margin-left: -1px;
+  }
+
+  @at-root %flat_split_button,
+  &.flat {
+    > separator {
+      background: gtkalpha(currentColor, $dimmer_opacity);
+    }
+
+    &:hover,
+    &:active,
+    &:checked {
+      background: $hover_color;
+
+      > separator {
+        background: none;
+      }
+
+      @if $contrast == 'high' {
+        box-shadow: inset 0 0 0 1px $thin_border_color;
+      }
+    }
+
+    &:disabled {
+      filter: opacity($strong_disabled_opacity);
+
+      > button:disabled, > menubutton > button:disabled {
+        filter: none;
+      }
+    }
+
+    &:focus-within:focus-visible > separator {
+      background: none;
+    }
+
+    > button,
+    > menubutton > button {
+      @extend %button_basic_flat;
+
+      border-radius: $button_radius;
+    }
+  }
+
+  &.suggested-action {
+    background-color: $accent_bg_color;
+    color: $accent_fg_color;
+  }
+
+  &.destructive-action {
+    background-color: $destructive_bg_color;
+    color: $destructive_fg_color;
+  }
+
+  &.opaque {
+    background-color: $opaque_button_default_bg;
+    color: $window_fg_color;
+  }
+
+  &.suggested-action,
+  &.destructive-action,
+  &.opaque {
+    > button, > menubutton > button {
+      @extend %opaque_button;
+
+      &, &:checked {
+        color: inherit;
+        background-color: transparent;
+      }
+    }
+
+    $_separator_color: gtkalpha(currentColor, $dimmer_opacity);
+    > menubutton > button {
+      &:dir(ltr) { box-shadow: inset 1px 0 $_separator_color; }
+      &:dir(rtl) { box-shadow: inset -1px 0 $_separator_color; }
+    }
+  }
+
+  > menubutton > button > arrow.none {
+    -gtk-icon-source: -gtk-icontheme('pan-down-symbolic');
+  }
+}
+
+buttoncontent {
+  > box {
+    border-spacing: 6px;
+
+    > label {
+      font-weight: bold;
+
+      &:dir(ltr) { padding-right: 2px; }
+      &:dir(rtl) { padding-left: 2px; }
+    }
+  }
+
+  .arrow-button > box > &,
+  splitbutton > button > & {
+    > box > label {
+      &:dir(ltr) { padding-right: 0; }
+      &:dir(rtl) { padding-left: 0; }
+    }
+  }
+}
+
+tabbutton {
+  label {
+    font-weight: 800;
+    font-size: 8pt;
+
+    &.small {
+      font-size: 6pt;
+    }
+  }
+
+  indicatorbin > indicator,
+  indicatorbin > mask {
+    transform: translate(-1px, 1px);
+  }
+}

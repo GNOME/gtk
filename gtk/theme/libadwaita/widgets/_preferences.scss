@@ -1,0 +1,18 @@
+preferencespage > scrolledwindow > viewport > clamp > box {
+  margin: 24px 12px;
+  border-spacing: 24px;
+}
+
+preferencesgroup > box {
+  &, .labels {
+    border-spacing: 6px;
+  }
+
+  > box.header:not(.single-line) {
+    margin-bottom: 6px;
+  }
+
+  > box.single-line {
+    min-height: 34px;
+  }
+}

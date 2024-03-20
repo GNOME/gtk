@@ -1,0 +1,122 @@
+viewswitcher {
+  border-spacing: 3px;
+
+  &.narrow {
+    margin-top: -3px;
+    margin-bottom: -3px;
+  }
+
+  button.toggle {
+    padding: 0;
+
+    > stack > box {
+      &.narrow {
+        font-size: 0.75rem;
+        padding-top: 4px;
+
+        > label {
+          min-height: 18px;
+          padding-left: 3px;
+          padding-right: 3px;
+          padding-bottom: 2px;
+        }
+      }
+
+      &.wide {
+        padding: 2px 12px;
+        border-spacing: 6px;
+      }
+    }
+  }
+}
+
+/**********************
+ * AdwViewSwitcherBar *
+ **********************/
+
+viewswitcherbar actionbar > revealer > box {
+  padding-left: 0;
+  padding-right: 0;
+  padding-top: 7px;
+}
+
+%viewswitcherbar-shrunk actionbar > revealer > box {
+  // Not 0px because view switcher has negative margin
+  padding-top: 6px;
+}
+
+/************************
+ * AdwViewSwitcherTitle *
+ ************************/
+
+viewswitchertitle {
+  margin-top: -6px;
+  margin-bottom: -6px;
+
+  viewswitcher {
+    margin-left: 12px;
+    margin-right: 12px;
+
+    &.narrow {
+      margin-top: 3px;
+      margin-bottom: 3px;
+    }
+
+    &.wide {
+      margin-top: 6px;
+      margin-bottom: 6px;
+    }
+  }
+
+  windowtitle {
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+}
+
+/*******************
+ * AdwIndicatorBin *
+ *******************/
+
+indicatorbin {
+  > indicator, > mask {
+    min-width: 6px;
+    min-height: 6px;
+    border-radius: 100px;
+  }
+
+  > indicator {
+    margin: 1px;
+    background: gtkalpha(currentColor, .4);
+  }
+
+  > mask {
+    padding: 1px;
+    background: black;
+  }
+
+  &.needs-attention > indicator {
+    background: $accent_color;
+  }
+
+  &.badge {
+    > indicator,
+    > mask {
+      min-height: 13px;
+    }
+
+    > indicator > label {
+      font-size: 0.6rem;
+      font-weight: bold;
+      padding-left: 4px;
+      padding-right: 4px;
+      color: white;
+    }
+
+    &.needs-attention > indicator {
+      background: $accent_bg_color;
+
+      > label { color: $accent_fg_color; }
+    }
+  }
+}

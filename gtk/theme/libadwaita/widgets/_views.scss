@@ -1,0 +1,75 @@
+.view,
+%view {
+  color: $view_fg_color;
+  background-color: $view_bg_color;
+
+  &:disabled {
+    color: gtkalpha(currentColor, .5);
+    background-color: gtkmix($window_bg_color, $view_bg_color, 60%);
+  }
+
+  &:selected {
+    &:focus, & {
+      background-color: $view_selected_color;
+
+      border-radius: $button_radius;
+    }
+  }
+}
+
+textview {
+  caret-color: currentColor;
+
+  > text {
+    @extend %view;
+
+    background-color: transparent;
+  }
+
+  > border {
+    background-color: gtkmix($window_bg_color, $view_bg_color, 50%);
+  }
+
+  &:drop(active) {
+    caret-color: $drop_target_color;
+  }
+}
+
+rubberband {
+  border: 1px solid $accent_color;
+  background-color: gtkalpha($accent_color, 0.2);
+}
+
+flowbox > flowboxchild,
+gridview > child {
+  padding: 3px;
+  border-radius: $button_radius;
+
+  @include focus-ring();
+
+  &:selected {
+    background-color: $view_selected_color;
+
+    @if $contrast == 'high' {
+      box-shadow: inset 0 0 0 1px $border_color;
+    }
+  }
+}
+
+gridview > child.activatable {
+  &:hover { background-color: $view_hover_color; }
+
+  &:active { background-color: $view_active_color; }
+
+  &:selected {
+    &:hover { background-color: $view_selected_hover_color; }
+
+    &:active { background-color: $view_selected_active_color; }
+  }
+
+  @if $contrast == 'high' {
+    &:hover, &:active {
+      box-shadow: inset 0 0 0 1px $border_color;
+    }
+  }
+}
