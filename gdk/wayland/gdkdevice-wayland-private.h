@@ -69,7 +69,7 @@ struct _GdkWaylandPointerData {
   guint cursor_image_delay;
   guint touchpad_event_sequence;
 
-  guint current_output_scale;
+  double current_output_scale;
   GSList *pointer_surface_outputs;
 
   /* Accumulated event data for a pointer frame */
