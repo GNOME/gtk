@@ -110,14 +110,14 @@ static const GtkCssValueClass GTK_CSS_VALUE_CORNER = {
 };
 
 static GtkCssValue corner_singletons[] = {
-  { &GTK_CSS_VALUE_CORNER, 1, TRUE, NULL, NULL },
-  { &GTK_CSS_VALUE_CORNER, 1, TRUE, NULL, NULL },
-  { &GTK_CSS_VALUE_CORNER, 1, TRUE, NULL, NULL },
-  { &GTK_CSS_VALUE_CORNER, 1, TRUE, NULL, NULL },
-  { &GTK_CSS_VALUE_CORNER, 1, TRUE, NULL, NULL },
-  { &GTK_CSS_VALUE_CORNER, 1, TRUE, NULL, NULL },
-  { &GTK_CSS_VALUE_CORNER, 1, TRUE, NULL, NULL },
-  { &GTK_CSS_VALUE_CORNER, 1, TRUE, NULL, NULL },
+  { &GTK_CSS_VALUE_CORNER, 1, TRUE, FALSE, NULL, NULL },
+  { &GTK_CSS_VALUE_CORNER, 1, TRUE, FALSE, NULL, NULL },
+  { &GTK_CSS_VALUE_CORNER, 1, TRUE, FALSE, NULL, NULL },
+  { &GTK_CSS_VALUE_CORNER, 1, TRUE, FALSE, NULL, NULL },
+  { &GTK_CSS_VALUE_CORNER, 1, TRUE, FALSE, NULL, NULL },
+  { &GTK_CSS_VALUE_CORNER, 1, TRUE, FALSE, NULL, NULL },
+  { &GTK_CSS_VALUE_CORNER, 1, TRUE, FALSE, NULL, NULL },
+  { &GTK_CSS_VALUE_CORNER, 1, TRUE, FALSE, NULL, NULL },
 };
 
 static inline void
@@ -226,3 +226,4 @@ gtk_css_corner_value_is_zero (const GtkCssValue *corner)
   return gtk_css_dimension_value_is_zero (corner->x) &&
          gtk_css_dimension_value_is_zero (corner->y);
 }
+
