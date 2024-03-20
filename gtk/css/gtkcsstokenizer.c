@@ -26,6 +26,20 @@
 #include <math.h>
 #include <string.h>
 
+typedef struct
+{
+  GtkCssLocation         position;
+  const char            *data;
+} GtkCssTokenizerSavedState;
+
+#define GDK_ARRAY_NAME gtk_css_tokenizer_states
+#define GDK_ARRAY_TYPE_NAME GtkCssTokenizerStates
+#define GDK_ARRAY_ELEMENT_TYPE GtkCssTokenizerSavedState
+#define GDK_ARRAY_BY_VALUE 1
+#define GDK_ARRAY_PREALLOC 16
+#define GDK_ARRAY_NO_MEMSET 1
+#include "gdk/gdkarrayimpl.c"
+
 struct _GtkCssTokenizer
 {
   int                    ref_count;
@@ -36,6 +50,7 @@ struct _GtkCssTokenizer
   const char            *end;
 
   GtkCssLocation         position;
+  GtkCssTokenizerStates  state_stack;
 };
 
 void
@@ -580,6 +595,7 @@ gtk_css_tokenizer_new (GBytes *bytes)
   tokenizer->end = tokenizer->data + g_bytes_get_size (bytes);
 
   gtk_css_location_init (&tokenizer->position);
+  gtk_css_tokenizer_states_init (&tokenizer->state_stack);
 
   return tokenizer;
 }
@@ -1484,3 +1500,30 @@ gtk_css_tokenizer_read_token (GtkCssTokenizer  *tokenizer,
     }
 }
 
+void
+gtk_css_tokenizer_save (GtkCssTokenizer *tokenizer)
+{
+  GtkCssTokenizerSavedState state;
+
+  state.position = tokenizer->position;
+  state.data = tokenizer->data;
+
+  gtk_css_tokenizer_states_append (&tokenizer->state_stack, &state);
+}
+
+void
+gtk_css_tokenizer_restore (GtkCssTokenizer *tokenizer)
+{
+  GtkCssTokenizerSavedState *state;
+
+  int index = gtk_css_tokenizer_states_get_size (&tokenizer->state_stack) - 1;
+
+  g_assert (index >= 0);
+
+  state = gtk_css_tokenizer_states_get (&tokenizer->state_stack, index);
+
+  tokenizer->position = state->position;
+  tokenizer->data = state->data;
+
+  gtk_css_tokenizer_states_splice (&tokenizer->state_stack, index, 1, FALSE, NULL, 0);
+}
