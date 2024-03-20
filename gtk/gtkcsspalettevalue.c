@@ -103,11 +103,12 @@ gtk_css_value_palette_free (GtkCssValue *value)
 }
 
 static GtkCssValue *
-gtk_css_value_palette_compute (GtkCssValue      *specified,
-                               guint             property_id,
-                               GtkStyleProvider *provider,
-                               GtkCssStyle      *style,
-                               GtkCssStyle      *parent_style)
+gtk_css_value_palette_compute (GtkCssValue       *specified,
+                               guint              property_id,
+                               GtkStyleProvider  *provider,
+                               GtkCssStyle       *style,
+                               GtkCssStyle       *parent_style,
+                               GtkCssVariableSet *variables)
 {
   GtkCssValue *computed_color;
   GtkCssValue *result;
@@ -120,7 +121,7 @@ gtk_css_value_palette_compute (GtkCssValue      *specified,
     {
       GtkCssValue *value = specified->color_values[i];
 
-      computed_color = _gtk_css_value_compute (value, property_id, provider, style, parent_style);
+      computed_color = _gtk_css_value_compute (value, property_id, provider, style, parent_style, variables);
       result->color_names[i] = g_strdup (specified->color_names[i]);
       result->color_values[i] = computed_color;
 

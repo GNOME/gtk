@@ -1114,7 +1114,7 @@ gtk_css_static_style_compute_value (GtkCssStaticStyle *style,
    */
   if (specified)
     {
-      value = _gtk_css_value_compute (specified, id, provider, (GtkCssStyle *)style, parent_style);
+      value = _gtk_css_value_compute (specified, id, provider, (GtkCssStyle *)style, parent_style, NULL);
     }
   else if (parent_style && _gtk_css_style_property_is_inherit (_gtk_css_style_property_lookup_by_id (id)))
     {

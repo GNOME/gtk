@@ -200,11 +200,12 @@ gtk_css_image_recolor_snapshot (GtkCssImage *image,
 }
 
 static GtkCssImage *
-gtk_css_image_recolor_compute (GtkCssImage      *image,
-                               guint             property_id,
-                               GtkStyleProvider *provider,
-                               GtkCssStyle      *style,
-                               GtkCssStyle      *parent_style)
+gtk_css_image_recolor_compute (GtkCssImage       *image,
+                               guint              property_id,
+                               GtkStyleProvider  *provider,
+                               GtkCssStyle       *style,
+                               GtkCssStyle       *parent_style,
+                               GtkCssVariableSet *variables)
 {
   GtkCssImageRecolor *recolor = GTK_CSS_IMAGE_RECOLOR (image);
   GtkCssValue *palette;
@@ -215,7 +216,7 @@ gtk_css_image_recolor_compute (GtkCssImage      *image,
   scale = gtk_style_provider_get_scale (provider);
 
   if (recolor->palette)
-    palette = _gtk_css_value_compute (recolor->palette, property_id, provider, style, parent_style);
+    palette = _gtk_css_value_compute (recolor->palette, property_id, provider, style, parent_style, variables);
   else
     palette = _gtk_css_value_ref (style->core->icon_palette);
 

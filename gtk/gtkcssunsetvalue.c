@@ -35,11 +35,12 @@ gtk_css_value_unset_free (GtkCssValue *value)
 }
 
 static GtkCssValue *
-gtk_css_value_unset_compute (GtkCssValue      *value,
-                             guint             property_id,
-                             GtkStyleProvider *provider,
-                             GtkCssStyle      *style,
-                             GtkCssStyle      *parent_style)
+gtk_css_value_unset_compute (GtkCssValue       *value,
+                             guint              property_id,
+                             GtkStyleProvider  *provider,
+                             GtkCssStyle       *style,
+                             GtkCssStyle       *parent_style,
+                             GtkCssVariableSet *variables)
 {
   GtkCssStyleProperty *property;
   GtkCssValue *unset_value;
@@ -55,7 +56,8 @@ gtk_css_value_unset_compute (GtkCssValue      *value,
                                  property_id,
                                  provider,
                                  style,
-                                 parent_style);
+                                 parent_style,
+                                 variables);
 }
 
 static gboolean

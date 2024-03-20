@@ -133,11 +133,12 @@ gtk_css_image_fallback_dispose (GObject *object)
 
 
 static GtkCssImage *
-gtk_css_image_fallback_compute (GtkCssImage      *image,
-                                guint             property_id,
-                                GtkStyleProvider *provider,
-                                GtkCssStyle      *style,
-                                GtkCssStyle      *parent_style)
+gtk_css_image_fallback_compute (GtkCssImage       *image,
+                                guint              property_id,
+                                GtkStyleProvider  *provider,
+                                GtkCssStyle       *style,
+                                GtkCssStyle       *parent_style,
+                                GtkCssVariableSet *variables)
 {
   GtkCssImageFallback *fallback = GTK_CSS_IMAGE_FALLBACK (image);
   GtkCssImageFallback *copy;
@@ -152,7 +153,8 @@ gtk_css_image_fallback_compute (GtkCssImage      *image,
                                                  property_id,
                                                  provider,
                                                  style,
-                                                 parent_style);
+                                                 parent_style,
+                                                 variables);
 
       /* image($color) that didn't change */
       if (computed_color && !fallback->images &&
@@ -168,7 +170,8 @@ gtk_css_image_fallback_compute (GtkCssImage      *image,
                                                     property_id,
                                                     provider,
                                                     style,
-                                                    parent_style);
+                                                    parent_style,
+                                                    variables);
 
           if (gtk_css_image_is_invalid (copy->images[i]))
             continue;

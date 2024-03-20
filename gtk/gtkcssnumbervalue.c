@@ -108,11 +108,12 @@ get_base_font_size_px (guint             property_id,
 }
 
 static GtkCssValue *
-gtk_css_value_number_compute (GtkCssValue      *number,
-                              guint             property_id,
-                              GtkStyleProvider *provider,
-                              GtkCssStyle      *style,
-                              GtkCssStyle      *parent_style)
+gtk_css_value_number_compute (GtkCssValue       *number,
+                              guint              property_id,
+                              GtkStyleProvider  *provider,
+                              GtkCssStyle       *style,
+                              GtkCssStyle       *parent_style,
+                              GtkCssVariableSet *variables)
 {
   double value;
 
@@ -130,7 +131,8 @@ gtk_css_value_number_compute (GtkCssValue      *number,
         {
           GtkCssValue *computed = _gtk_css_value_compute (number->calc.terms[i],
                                                           property_id, provider, style,
-                                                          parent_style);
+                                                          parent_style,
+                                                          variables);
           changed |= computed != number->calc.terms[i];
           new_values[i] = computed;
         }
