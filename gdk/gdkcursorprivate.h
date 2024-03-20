@@ -45,6 +45,10 @@ struct _GdkCursor
   GdkPaintable *paintable;
   int hotspot_x;
   int hotspot_y;
+
+  GdkCursorGetTextureCallback callback;
+  gpointer data;
+  GDestroyNotify destroy;
 };
 
 struct _GdkCursorClass
@@ -58,6 +62,14 @@ gboolean                gdk_cursor_equal                        (gconstpointer  
 
 GdkTexture *            gdk_cursor_create_texture               (GdkCursor             *cursor,
                                                                  double                 scale);
+
+GdkTexture *            gdk_cursor_get_dynamic_texture          (GdkCursor *cursor,
+                                                                 int        cursor_size,
+                                                                 double     scale,
+                                                                 int       *width,
+                                                                 int       *height,
+                                                                 int       *hotspot_x,
+                                                                 int       *hotspot_y);
 
 G_END_DECLS
 

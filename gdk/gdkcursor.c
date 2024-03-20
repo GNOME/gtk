@@ -87,6 +87,8 @@ enum {
   PROP_PAINTABLE,
 };
 
+static guint invalidate_signal;
+
 G_DEFINE_TYPE (GdkCursor, gdk_cursor, G_TYPE_OBJECT)
 
 static void
@@ -166,6 +168,9 @@ gdk_cursor_finalize (GObject *object)
   g_clear_object (&cursor->texture);
   g_clear_object (&cursor->fallback);
   g_clear_object (&cursor->paintable);
+
+  if (cursor->destroy)
+    cursor->destroy (cursor->data);
 
   G_OBJECT_CLASS (gdk_cursor_parent_class)->finalize (object);
 }
@@ -265,6 +270,14 @@ gdk_cursor_class_init (GdkCursorClass *cursor_class)
                                                         GDK_TYPE_PAINTABLE,
                                                         G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY |
                                                         G_PARAM_STATIC_STRINGS));
+
+  invalidate_signal = g_signal_new ("invalidate",
+                                    GDK_TYPE_CURSOR,
+                                    G_SIGNAL_RUN_LAST,
+                                    0,
+                                    NULL, NULL,
+                                    NULL,
+                                    G_TYPE_NONE, 0);
 }
 
 static void
@@ -629,3 +642,149 @@ gdk_cursor_create_texture (GdkCursor *cursor,
   else
     return NULL;
 }
+
+/**
+ * GdkCursorGetTestureCallback:
+ * @cursor: the `GdkCursor`
+ * @cursor_size: the nominal cursor size, in application pixels
+ * @scale: the device scale
+ * @width: (out): return location for the actual cursor width,
+ *   in application pixels
+ * @height: (out): return location for the actual cursor height,
+ *   in application pixels
+ * @hotspot_x: (out): return location for the hotspot X position,
+ *   in application pixels
+ * @hotspot_y: (out): return location for the hotspot Y position,
+ *   in application pixels
+ * @data: User data for the callback
+ *
+ * The type of callback used by a dynamic `GdkCursor` to generate
+ * a texture for the cursor image at the given @cursor_size
+ * and @scale.
+ *
+ * The actual cursor size in application pixels may be different
+ * from @cursor_size x @cursor_size, and will be returned in
+ * @width, @height.
+ *
+ * The returned texture should have a size that corresponds to
+ * the actual cursor size, in device pixels.
+ *
+ * This function may fail and return `NULL`, in which case
+ * the backend should use the fallback cursor.
+ *
+ * Returns: (nullable) (transfer full): the cursor image, or
+ *   `NULL` if none could be produced.
+ */
+
+/**
+ * gdk_cursor_new_dynamic:
+ * @callback: the `GdkCursorGetTextureCallback`
+ * @data: data to pass to @callback
+ * @destroy: destroy notify for @data
+ * @fallback: (nullable): the `GdkCursor` to fall back to when
+ *   this one cannot be supported
+ *
+ * Creates a new dynamic cursor object.
+ *
+ * Dynamic cursors produce textures for the cursor image
+ * on demand, when the @callback is called.
+ *
+ * Returns: (nullable): a new `GdkCursor`
+ *
+ * Since: 4.16
+ */
+GdkCursor *
+gdk_cursor_new_dynamic (GdkCursorGetTextureCallback  callback,
+                        gpointer                     data,
+                        GDestroyNotify               destroy,
+                        GdkCursor                   *fallback)
+{
+  GdkCursor *cursor;
+
+  g_return_val_if_fail (callback != NULL, NULL);
+  g_return_val_if_fail (fallback == NULL || GDK_IS_CURSOR (fallback), NULL);
+
+  cursor = g_object_new (GDK_TYPE_CURSOR,
+                         "fallback", fallback,
+                         NULL);
+
+  cursor->callback = callback;
+  cursor->data = data;
+  cursor->destroy = destroy;
+
+  return cursor;
+}
+
+/**
+ * gdk_cursor_invalidate:
+ * @cursor: a `GdkCursor`
+ *
+ * Emits the invalidate signal to indicate that the cursor
+ * has changed and backends should recreate their cursor
+ * image.
+ *
+ * This function does nothing unless the cursor has been
+ * created with [constructor@Gdk.Cursor.new_dynamic].
+ *
+ * Since: 4.16
+ */
+void
+gdk_cursor_invalidate (GdkCursor *cursor)
+{
+  if (cursor->callback == NULL)
+    return;
+
+  g_signal_emit (cursor, invalidate_signal, 0);
+}
+
+/*< private >
+ * gdk_cursor_get_dynamic_texture:
+ * @cursor: a dynamic `GdkCursor`
+ * @cursor_size: the nominal size of the cursor image
+ *   to produce, in application pixels
+ * @scale: the device scale to use
+ * @width: return location for the cursor width,
+ *   in application pixels
+ * @height : return location for the cursor height,
+ *   in application pixels
+ * @hotspot_x: return location for the hotspot X position,
+ *   in application pixels
+ * @hotspot_y: return location for the hotspot X position,
+ *   in application pixels
+ *
+ * Call the callback of a dynamic cursor to generate
+ * a texture for the cursor image at the given @cursor_size
+ * and @scale.
+ *
+ * The actual cursor size in application pixels may be different
+ * from @cursor_size x @cursor_size, and will be returned in
+ * @width, @height.
+ *
+ * The returned texture should have a size that corresponds to
+ * the actual cursor size, in device pixels.
+ *
+ * This function may fail and return `NULL`, in which case
+ * the backend should use the fallback cursor.
+ *
+ * Returns: (nullable) (transfer full): the cursor image, or
+ *   `NULL` if none could be produced.
+ */
+GdkTexture *
+gdk_cursor_get_dynamic_texture (GdkCursor *cursor,
+                                int        cursor_size,
+                                double     scale,
+                                int       *width,
+                                int       *height,
+                                int       *hotspot_x,
+                                int       *hotspot_y)
+{
+  if (cursor->callback == NULL)
+    return NULL;
+
+  return cursor->callback (cursor,
+                           cursor_size, scale,
+                           width, height,
+                           hotspot_x, hotspot_y,
+                           cursor->data);
+}
+

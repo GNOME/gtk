@@ -73,6 +73,24 @@ int         gdk_cursor_get_hotspot_x     (GdkCursor       *cursor);
 GDK_AVAILABLE_IN_ALL
 int         gdk_cursor_get_hotspot_y     (GdkCursor       *cursor);
 
+typedef GdkTexture * (* GdkCursorGetTextureCallback) (GdkCursor   *cursor,
+                                                      int          cursor_size,
+                                                      double       scale,
+                                                      int         *width,
+                                                      int         *height,
+                                                      int         *hotspot_x,
+                                                      int         *hotspot_y,
+                                                      gpointer     data);
+
+GDK_AVAILABLE_IN_4_14
+GdkCursor * gdk_cursor_new_dynamic       (GdkCursorGetTextureCallback  callback,
+                                          gpointer                     data,
+                                          GDestroyNotify               destroy,
+                                          GdkCursor                   *fallback);
+
+GDK_AVAILABLE_IN_4_14
+void        gdk_cursor_invalidate        (GdkCursor *cursor);
+
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GdkCursor, g_object_unref)
 
 G_END_DECLS
