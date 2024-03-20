@@ -58,6 +58,7 @@ gtk_css_value_reference_free (GtkCssValue *value)
 static gboolean
 resolve_references_do (GtkCssVariableValue *value,
                        GtkCssVariableSet   *style_variables,
+                       GtkCssVariableSet   *keyframes_variables,
                        gboolean             root,
                        GtkCssRefs          *refs,
                        gsize               *out_length,
@@ -85,15 +86,18 @@ resolve_references_do (GtkCssVariableValue *value,
       gsize var_length, var_refs;
       GtkCssVariableSet *source = style_variables;
 
+      if (keyframes_variables)
+        var_value = gtk_css_variable_set_lookup (keyframes_variables, id, NULL);
+
       if (!var_value && style_variables)
         var_value = gtk_css_variable_set_lookup (style_variables, id, &source);
 
-      if (!var_value || !resolve_references_do (var_value, source,
+      if (!var_value || !resolve_references_do (var_value, source, keyframes_variables,
                                                 FALSE, refs, &var_length, &var_refs))
         {
           var_value = ref->fallback;
 
-          if (!var_value || !resolve_references_do (var_value, style_variables,
+          if (!var_value || !resolve_references_do (var_value, style_variables, keyframes_variables,
                                                     FALSE, refs, &var_length, &var_refs))
             goto error;
         }
@@ -129,9 +133,9 @@ error:
 static void
 resolve_references (GtkCssVariableValue *input,
                     GtkCssStyle         *style,
+                    GtkCssVariableSet   *keyframes_variables,
                     GtkCssRefs          *refs)
-{
-  if (!resolve_references_do (input, style->variables, TRUE, refs, NULL, NULL))
+  if (!resolve_references_do (input, style->variables, keyframes_variables, TRUE, refs, NULL, NULL))
     gtk_css_refs_clear (refs);
 }
 
@@ -155,18 +159,19 @@ parser_error (GtkCssParser         *parser,
 }
 
 static GtkCssValue *
-gtk_css_value_reference_compute (GtkCssValue      *value,
-                                 guint             property_id,
-                                 GtkStyleProvider *provider,
-                                 GtkCssStyle      *style,
-                                 GtkCssStyle      *parent_style)
+gtk_css_value_reference_compute (GtkCssValue       *value,
+                                 guint              property_id,
+                                 GtkStyleProvider  *provider,
+                                 GtkCssStyle       *style,
+                                 GtkCssStyle       *parent_style,
+                                 GtkCssVariableSet *variables)
 {
   GtkCssValue *result = NULL, *computed;
   GtkCssRefs refs;
 
   gtk_css_refs_init (&refs);
 
-  resolve_references (value->value, style, &refs);
+  resolve_references (value->value, style, variables, &refs);
 
   if (gtk_css_refs_get_size (&refs) > 0)
     {
@@ -197,7 +202,8 @@ gtk_css_value_reference_compute (GtkCssValue      *value,
                                      property_id,
                                      provider,
                                      style,
-                                     parent_style);
+                                     parent_style,
+                                     variables);
   computed->is_computed = TRUE;
 
   gtk_css_value_unref (result);
