@@ -1,0 +1,46 @@
+paned {
+  > separator {
+    min-width: 1px;
+    min-height: 1px;
+    background: none;
+    background-size: 1px 1px;
+
+    &.wide {
+      min-width: 5px;
+      min-height: 5px;
+    }
+  }
+
+  &.horizontal > separator {
+    &:dir(ltr) {
+      margin: 0 -8px 0 0;
+      padding: 0 8px 0 0;
+      box-shadow: inset 1px 0 $border_color;
+    }
+    &:dir(rtl) {
+      margin: 0 0 0 -8px;
+      padding: 0 0 0 8px;
+      box-shadow: inset -1px 0 $border_color;
+    }
+
+    &.wide {
+      margin: 0;
+      padding: 0;
+      box-shadow: inset  1px 0 $border_color,
+                  inset -1px 0 $border_color;
+    }
+  }
+
+  &.vertical > separator {
+    margin: 0 0 -8px 0;
+    padding: 0 0 8px 0;
+    box-shadow: inset 0 1px $border_color;
+
+    &.wide {
+      margin: 0;
+      padding: 0;
+      box-shadow: inset 0  1px $border_color,
+                  inset 0 -1px $border_color;
+    }
+  }
+}

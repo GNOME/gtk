@@ -1,0 +1,125 @@
+.dialog-action-area {
+  margin: 6px;
+  border-spacing: 6px;
+}
+
+/****************
+ * Print dialog *
+*****************/
+
+window.print {
+  drawing {
+    color: $window_fg_color;
+    background: none;
+    border: none;
+    padding: 0;
+
+    paper {
+      background-color: white;
+      color: transparentize(black, .2);
+      background-clip: padding-box;
+      border: 1px solid $border_color;
+    }
+  }
+
+  headerbar.titlebar {
+    @extend .flat;
+  }
+
+  .dialog-action-box {
+    @extend .view;
+  }
+}
+
+/********************
+ * Page setup dalog *
+ ********************/
+
+window.pagesetup {
+  headerbar.titlebar {
+    @extend .flat;
+  }
+}
+
+/******************
+ * GtkAboutDialog *
+ ******************/
+
+window.aboutdialog {
+  headerbar.titlebar {
+    @extend .flat;
+  }
+
+  image.large-icons {
+    -gtk-icon-size: 128px;
+  }
+}
+
+/*************************
+ * GtkColorChooserDialog *
+ *************************/
+window.colorchooser {
+  headerbar.titlebar {
+    @extend .flat;
+  }
+}
+
+/*************
+ * AdwDialog *
+ *************/
+
+floating-sheet {
+  > dimming {
+    background-color: gtkalpha($shade_color, 2);
+  }
+
+  > sheet {
+    border-radius: $window_radius;
+    box-shadow: 0 2px 8px 2px transparentize(black, 0.93),
+                0 3px 20px 10px transparentize(black, 0.95),
+                0 6px 32px 16px transparentize(black, 0.98),
+                0 0 0 1px transparentize(black, if($contrast == 'high', .2, .95));
+    outline: 1px solid $window_outline_color;
+    outline-offset: -1px;
+  }
+}
+
+dialog.bottom-sheet {
+  &.landscape sheet {
+    margin-left: 30px;
+    margin-right: 30px;
+
+    > outline {
+      &.flush-left, &.flush-right, &.flush-left.flush-right {
+        box-shadow: inset 1px 0 $window_outline_color,
+                    inset -1px 0 $window_outline_color,
+                    inset 0 1px $window_outline_color;
+      }
+    }
+  }
+}
+
+dialog-host > dialog.background {
+  background: none;
+
+  sheet {
+    background-color: $window_bg_color;
+    color: $window_fg_color;
+  }
+}
+
+dialog-host > dialog.view {
+  background: none;
+
+  sheet {
+    @extend %view;
+  }
+}
+
+dialog-host > dialog.osd {
+  background: none;
+
+  sheet {
+    @extend %osd;
+  }
+}

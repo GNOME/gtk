@@ -1,0 +1,115 @@
+columnview {
+  @include focus-ring();
+
+  &:drop(active) {
+    box-shadow: none;
+  }
+
+  > header > button {
+    @extend %undecorated_button;
+    padding-top: 3px;
+    padding-bottom: 3px;
+    padding-left: 6px;
+    padding-right: 6px;
+    border-radius: 0;
+    box-shadow: none;
+    line-height: 100%;
+    border-left: 1px solid transparent;
+
+    &:first-child {
+      border-left-width: 0;
+    }
+
+    > box {
+      color: gtkalpha(currentColor, if($contrast == 'high', .6, .4));
+      font-weight: 700;
+      font-size: 9pt;
+      border-spacing: 6px;
+    }
+
+    &:hover > box {
+      color: gtkalpha(currentColor, if($contrast == 'high', .9, .7));
+      box-shadow: none;
+    }
+
+    &:active > box {
+      color: currentColor;
+    }
+
+    sort-indicator {
+      &.ascending {
+        -gtk-icon-source: -gtk-icontheme('pan-up-symbolic');
+      }
+      &.descending {
+        -gtk-icon-source: -gtk-icontheme('pan-down-symbolic');
+      }
+
+      min-height: 16px;
+      min-width: 16px;
+    }
+  }
+
+  button.dnd,
+  header.button.dnd { // for treeview-like derive widgets
+    &:active, &:selected, &:hover, & {
+      color: $accent_fg_color;
+      background-color: $accent_bg_color;
+      transition: none;
+    }
+  }
+
+  // Remove the default background of the internal list view
+  // since we already apply a background to the column view
+  // with the .view class. Doing this will avoid overdraw.
+  &.view > listview.view {
+    background: none;
+    color: inherit;
+  }
+
+  // move padding to child cells
+  > listview > row {
+    padding: 0;
+
+    // align horizontal sizing with header buttons
+    > cell {
+      padding: 8px 6px;
+
+      &:not(:first-child) {
+        border-left: 1px solid transparent;
+      }
+    }
+  }
+
+  // make column separators visible when :show-column-separators is true
+  &.column-separators {
+    > listview > row > cell,
+    > header > button {
+      border-left-color: $border_color;
+    }
+  }
+
+  > listview:not(.horizontal).separators > row:not(.separator) {
+    border-top: 1px solid $border_color;
+    border-bottom: none;
+  }
+
+  // shrink vertically for .data-table
+  &.data-table > listview > row > cell {
+    padding-top: 2px;
+    padding-bottom: 2px;
+  }
+
+  @include undershoot(top, $shade_color, true);
+}
+
+columnview row:not(:selected) cell editablelabel:not(.editing):focus-within {
+  outline: 2px solid $focus_border_color;
+}
+
+columnview row:not(:selected) cell editablelabel.editing:focus-within {
+  outline: 2px solid $accent_color;
+}
+
+treeexpander {
+  border-spacing: 4px;
+}

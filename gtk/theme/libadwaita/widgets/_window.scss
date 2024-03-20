@@ -1,0 +1,81 @@
+window {
+  &.csd {
+    box-shadow: 0 1px 3px 3px transparent,
+                0 2px 8px 2px transparentize(black, 0.87),
+                0 3px 20px 10px transparentize(black, 0.91),
+                0 6px 32px 16px transparentize(black, 0.96),
+                0 0 0 1px transparentize(black, if($contrast == 'high', .2, .95));
+    margin: 0px;
+    border-radius: $window_radius;
+
+    outline: 1px solid $window_outline_color;
+    outline-offset: -1px;
+
+    &:backdrop {
+      // the transparent shadow here is to enforce that the shadow extents don't
+      // change when we go to backdrop, to prevent jumping windows.
+      // The biggest shadow should be in the same order then in the active state
+      // or the jumping will happen during the transition.
+      box-shadow: 0 1px 3px 3px transparentize(black, 0.91),
+                  0 2px 14px 5px transparentize(black, 0.95),
+                  0 4px 28px 12px transparentize(black, 0.97),
+                  0 6px 32px 16px transparent,
+                  0 0 0 1px transparentize(black, if($contrast == 'high', .2, .98));
+      transition: box-shadow $backdrop_transition;
+    }
+
+    &.dialog.message,
+    &.messagedialog {
+      box-shadow: 0 2px 8px 2px transparentize(black, 0.93),
+                  0 3px 20px 10px transparentize(black, 0.95),
+                  0 6px 32px 16px transparentize(black, 0.98),
+                  0 0 0 1px transparentize(black, if($contrast == 'high', .2, .95));
+    }
+
+    &.tiled,
+    &.tiled-top,
+    &.tiled-left,
+    &.tiled-right,
+    &.tiled-bottom {
+      border-radius: 0;
+      outline: none;
+
+      box-shadow: 0 0 0 1px $border_color,
+                  0 0 0 20px transparent; //transparent control workaround -- #3670
+
+      &:backdrop {
+        box-shadow: 0 0 0 1px $border_color,
+                    0 0 0 20px transparent;
+      }
+    }
+
+    &.maximized,
+    &.fullscreen {
+      border-radius: 0;
+      outline: none;
+      box-shadow: none;
+      transition: none;
+    }
+  }
+
+  &.solid-csd {
+    margin: 0;
+    padding: 5px;
+    border-radius: 0;
+    box-shadow: inset 0 0 0 5px $border_color,
+                inset 0 0 0 4px $headerbar_bg_color,
+                inset 0 0 0 1px $border_color;
+
+    &:backdrop {
+      box-shadow: inset 0 0 0 5px $border_color,
+                  inset 0 0 0 4px $headerbar_backdrop_color,
+                  inset 0 0 0 1px $border_color;
+    }
+  }
+
+  // server-side decorations as used by mutter
+  &.ssd {
+    // just doing borders, wm draws actual shadows
+    box-shadow: 0 0 0 1px transparentize(black, if($contrast == 'high', .2, .95));
+  }
+}

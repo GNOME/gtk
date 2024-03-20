@@ -1,0 +1,30 @@
+cursor-handle {
+  all: unset;
+  padding: 24px 20px;
+
+  > contents {
+    min-width: 20px;
+    min-height: 20px;
+    border-radius: 50%;
+
+    background-color: $accent_bg_color;
+  }
+
+  &.top > contents {
+    border-top-right-radius: 0;
+  }
+
+  &.bottom > contents {
+    border-top-left-radius: 0;
+    transform: translateX(1px);
+  }
+
+  &.insertion-cursor > contents {
+    border-top-left-radius: 0;
+    transform: translateX(1px) translateY(4px) rotate(45deg);
+  }
+}
+
+magnifier {
+  background-color: $view_bg_color;
+}

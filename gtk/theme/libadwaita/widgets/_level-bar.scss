@@ -1,0 +1,100 @@
+$_levelbar_size: 8px;
+$_levelbar_border_radius: 99px;
+
+levelbar {
+  &:disabled {
+    filter: opacity($disabled_opacity);
+  }
+
+  &.horizontal {
+    trough > block {
+      min-height: $_levelbar_size;
+      border-radius: $_levelbar_border_radius;
+
+      &.empty,
+      &.full {
+        border-radius: $_levelbar_border_radius;
+      }
+    }
+
+    // segmented level bar
+    &.discrete > trough > block {
+      min-height: $_levelbar_size;
+      margin-right: 2px;
+      min-width: 26px;
+      border-radius: 0;
+
+      &:first-child {
+        border-radius: $_levelbar_border_radius 0 0 $_levelbar_border_radius;
+      }
+
+      &:last-child {
+        border-radius: 0 $_levelbar_border_radius $_levelbar_border_radius 0;
+        margin-right: 0;
+      }
+    }
+  }
+
+  &.vertical {
+    trough > block {
+      min-width: $_levelbar_size;
+      border-radius: $_levelbar_border_radius;
+
+      &.empty,
+      &.full {
+        border-radius: $_levelbar_border_radius;
+      }
+    }
+
+    // segmented level bar
+    &.discrete > trough > block {
+      min-width: $_levelbar_size;
+      margin-bottom: 2px;
+      min-height: 26px;
+      border-radius: 0;
+
+      &:first-child {
+        border-radius: $_levelbar_border_radius $_levelbar_border_radius 0 0;
+      }
+
+      &:last-child {
+        border-radius: 0 0 $_levelbar_border_radius $_levelbar_border_radius;
+        margin-bottom: 0;
+      }
+    }
+  }
+
+  > trough {
+    padding: 0;
+
+    // level bar colours
+    > block {
+      &.low {
+        background-color: $warning_bg_color;
+      }
+
+      &.high,
+      &:not(.empty) {
+        background-color: $fill_color;
+      }
+
+      &.full {
+        background-color: $success_bg_color;
+      }
+
+      &.empty {
+        background-color: $trough_color;
+
+        @if $contrast == "high" {
+          box-shadow: inset 0 0 0 1px $border_color;
+        }
+      }
+    }
+  }
+
+  .osd & > trough > block {
+    &.high, &:not(.empty) {
+      background-color: $osd_fill_bg_color;
+    }
+  }
+}

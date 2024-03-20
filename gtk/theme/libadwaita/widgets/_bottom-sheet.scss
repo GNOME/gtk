@@ -1,0 +1,45 @@
+
+bottom-sheet {
+  > dimming {
+    background-color: gtkalpha($shade_color, 2);
+  }
+
+  > sheet {
+    border-top-left-radius: $window_radius;
+    border-top-right-radius: $window_radius;
+    box-shadow: 0 2px 8px 2px transparentize(black, 0.93),
+                0 3px 20px 10px transparentize(black, 0.95),
+                0 6px 32px 16px transparentize(black, 0.98),
+                0 0 0 1px transparentize(black, if($contrast == 'high', .2, .95));
+
+    > drag-handle {
+      background-color: gtkalpha(currentColor, .25);
+      min-width: 60px;
+      min-height: 4px;
+      margin: 6px;
+      border-radius: 99px;
+    }
+
+    > outline {
+      border-top-left-radius: $window_radius;
+      border-top-right-radius: $window_radius;
+      box-shadow: inset 1px 0 $window_outline_color,
+                  inset -1px 0 $window_outline_color,
+                  inset 0 1px $window_outline_color;
+
+      &.flush-left {
+        box-shadow: inset -1px 0 $window_outline_color,
+                    inset 0 1px $window_outline_color;
+      }
+
+      &.flush-right {
+        box-shadow: inset 1px 0 $window_outline_color,
+                    inset 0 1px $window_outline_color;
+      }
+
+      &.flush-left.flush-right {
+        box-shadow: inset 0 1px $window_outline_color;
+      }
+    }
+  }
+}

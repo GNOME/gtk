@@ -1,0 +1,83 @@
+toolbarview.undershoot-top    popover scrolledwindow undershoot.top,
+toolbarview.undershoot-bottom popover scrolledwindow undershoot.bottom {
+  background: none;
+  box-shadow: none;
+}
+
+popover {
+  &.background {
+    background-color: transparent;
+    font: initial;
+  }
+
+  > arrow,
+  > contents {
+    background-color: $popover_bg_color;
+    color: $popover_fg_color;
+    background-clip: padding-box;
+    border: 1px solid if($contrast == 'high', $border_color, transparentize(black, .86));
+    box-shadow: 0 1px 5px 1px transparentize(black, .91),
+                0 2px 14px 3px transparentize(black, .95);
+  }
+
+  > contents {
+    padding: 8px;
+    border-radius: $popover_radius;
+
+    > list,
+    > .view,
+    > toolbar {
+      border-style: none;
+      background-color: transparent;
+    }
+  }
+
+  .osd &,
+  &.touch-selection,
+  &.magnifier {
+    background-color: transparent;
+
+    > arrow,
+    > contents {
+      @extend %osd;
+
+      border: 1px solid transparentize(white, 0.9);
+      box-shadow: none;
+    }
+  }
+
+  toolbarview.undershoot-top scrolledwindow {
+    @include undershoot(top, $popover_shade_color);
+  }
+
+  toolbarview.undershoot-bottom scrolledwindow {
+    @include undershoot(bottom, $popover_shade_color);
+  }
+
+  scrolledwindow {
+    &.undershoot-top {
+      @include undershoot(top, $popover_shade_color);
+    }
+
+    &.undershoot-bottom {
+      @include undershoot(bottom, $popover_shade_color)
+    }
+
+    &.undershoot-start {
+      &:dir(ltr) { @include undershoot(left, $popover_shade_color); }
+      &:dir(rtl) { @include undershoot(right, $popover_shade_color); }
+    }
+
+    &.undershoot-end {
+      &:dir(ltr) { @include undershoot(right, $popover_shade_color); }
+      &:dir(rtl) { @include undershoot(left, $popover_shade_color); }
+    }
+  }
+
+  flap,
+  leaflet,
+  navigation-view,
+  overlay-split-view {
+    @include transition-shadows($popover_shade_color);
+  }
+}

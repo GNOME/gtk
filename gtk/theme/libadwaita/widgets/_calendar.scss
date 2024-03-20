@@ -1,0 +1,54 @@
+calendar {
+  color: $view_fg_color;
+  background-clip: padding-box;
+  border: 1px solid $border_color;
+  font-feature-settings: "tnum";
+
+  > header {
+    border-bottom: 1px solid $border_color;
+
+    > button {
+      @extend %button_basic_flat;
+      border-radius: 0;
+    }
+  }
+
+  > grid {
+    padding-left: 3px;
+    padding-bottom: 3px;
+
+    > label.today {
+      box-shadow: inset 0px -2px $border_color;
+
+      &:selected {
+        box-shadow: none;
+      }
+    }
+
+    > label {
+      @include focus-ring($focus-state: ':focus');
+      margin-top: 3px;
+      margin-right: 3px;
+
+      &.day-number {
+        padding: 3px;
+
+        &:checked {
+          border-radius: $button_radius;
+          background-color: gtkalpha($accent_bg_color, 0.3);
+        }
+
+        &:selected {
+          border-radius: $button_radius;
+
+          background-color: $accent_bg_color;
+          color: $accent_fg_color;
+        }
+      }
+
+      &.day-number.other-month {
+        color: gtkalpha(currentColor, 0.3);
+      }
+    }
+  }
+}
