@@ -58,11 +58,12 @@ gdk_wayland_device_set_surface_cursor (GdkDevice  *device,
     {
       if (!pointer->cursor_is_default)
         {
+          gdk_wayland_seat_stop_cursor_animation (seat, pointer);
+
           g_clear_object (&pointer->cursor);
           pointer->cursor = gdk_cursor_new_from_name ("default", NULL);
           pointer->cursor_is_default = TRUE;
 
-          gdk_wayland_seat_stop_cursor_animation (seat, pointer);
           gdk_wayland_device_update_surface_cursor (device);
         }
       else
@@ -72,10 +73,11 @@ gdk_wayland_device_set_surface_cursor (GdkDevice  *device,
     }
   else
     {
+      gdk_wayland_seat_stop_cursor_animation (seat, pointer);
+
       g_set_object (&pointer->cursor, cursor);
       pointer->cursor_is_default = FALSE;
 
-      gdk_wayland_seat_stop_cursor_animation (seat, pointer);
       gdk_wayland_device_update_surface_cursor (device);
     }
 }
@@ -330,6 +332,23 @@ gdk_wayland_device_update_surface_cursor (GdkDevice *device)
     {
       wl_surface_attach (pointer->pointer_surface, NULL, 0, 0);
       wl_surface_commit (pointer->pointer_surface);
+    }
+
+  GdkPaintable *paintable = gdk_cursor_get_paintable (pointer->cursor);
+
+  if (paintable)
+    {
+      if ((gdk_paintable_get_flags (paintable) & GDK_PAINTABLE_STATIC_CONTENTS) == 0)
+        {
+          if (pointer->cursor_invalidated_handler == 0)
+            {
+              pointer->cursor_invalidated_handler =
+                  g_signal_connect_swapped (paintable, "invalidate-contents",
+                                            G_CALLBACK (gdk_wayland_device_update_surface_cursor), device);
+            }
+        }
+
+      return G_SOURCE_REMOVE;
     }
 
   next_image_index =

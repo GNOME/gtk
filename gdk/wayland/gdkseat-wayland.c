@@ -117,6 +117,15 @@ gdk_wayland_seat_stop_cursor_animation (GdkWaylandSeat        *seat,
     }
 
   pointer->cursor_image_index = 0;
+
+  if (pointer->cursor_invalidated_handler != 0)
+    {
+      GdkPaintable *paintable;
+
+      paintable = gdk_cursor_get_paintable (pointer->cursor);
+      g_signal_handler_disconnect (paintable, pointer->cursor_invalidated_handler);
+      pointer->cursor_invalidated_handler = 0;
+    }
 }
 
 GdkWaylandTabletData *

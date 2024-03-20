@@ -169,6 +169,7 @@ _gdk_wayland_cursor_get_buffer (GdkWaylandDisplay *display,
 {
   GdkTexture *texture;
   int desired_scale_factor;
+  gboolean can_cache = TRUE;
 
   desired_scale_factor = (int) ceil (desired_scale);
 
@@ -220,7 +221,7 @@ _gdk_wayland_cursor_get_buffer (GdkWaylandDisplay *display,
     }
   else if (gdk_cursor_get_texture (cursor))
     {
-      cairo_surface_t *surface;
+      cairo_surface_t *surface = NULL;
       struct wl_buffer *buffer;
 
       texture = g_object_ref (gdk_cursor_get_texture (cursor));
@@ -234,7 +235,9 @@ from_texture2:
       *hotspot_x = gdk_cursor_get_hotspot_x (cursor);
       *hotspot_y = gdk_cursor_get_hotspot_y (cursor);
 
-      surface = g_hash_table_lookup (display->cursor_surface_cache, cursor);
+      if (can_cache)
+        surface = g_hash_table_lookup (display->cursor_surface_cache, cursor);
+
       if (surface == NULL)
         {
           surface = gdk_wayland_display_create_shm_surface (display,
@@ -247,8 +250,12 @@ from_texture2:
                                 cairo_image_surface_get_stride (surface));
           cairo_surface_mark_dirty (surface);
 
-          g_object_weak_ref (G_OBJECT (cursor), gdk_wayland_cursor_remove_from_cache, display);
-          g_hash_table_insert (display->cursor_surface_cache, cursor, surface);
+          if (can_cache)
+            {
+              g_object_weak_ref (G_OBJECT (cursor), gdk_wayland_cursor_remove_from_cache, display);
+
+              g_hash_table_insert (display->cursor_surface_cache, cursor, surface);
+            }
         }
 
       cairo_surface_reference (surface);
@@ -273,6 +280,8 @@ from_texture2:
         *scale = desired_scale;
 
       texture = gdk_cursor_create_texture (cursor, *scale);
+
+      can_cache = (gdk_paintable_get_flags (paintable) & GDK_PAINTABLE_STATIC_CONTENTS) != 0;
 
       can_cache = (gdk_paintable_get_flags (paintable) & GDK_PAINTABLE_STATIC_CONTENTS) != 0;
 

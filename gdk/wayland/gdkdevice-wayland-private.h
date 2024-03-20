@@ -68,6 +68,7 @@ struct _GdkWaylandPointerData {
   guint cursor_timeout_id;
   guint cursor_image_index;
   guint cursor_image_delay;
+  gulong cursor_invalidated_handler;
   guint touchpad_event_sequence;
 
   double current_output_scale;
