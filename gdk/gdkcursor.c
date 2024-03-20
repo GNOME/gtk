@@ -81,6 +81,7 @@ enum {
   PROP_HOTSPOT_Y,
   PROP_NAME,
   PROP_TEXTURE,
+  PROP_PAINTABLE,
 };
 
 G_DEFINE_TYPE (GdkCursor, gdk_cursor, G_TYPE_OBJECT)
@@ -109,6 +110,9 @@ gdk_cursor_get_property (GObject    *object,
       break;
     case PROP_TEXTURE:
       g_value_set_object (value, cursor->texture);
+      break;
+    case PROP_PAINTABLE:
+      g_value_set_object (value, cursor->paintable);
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -141,6 +145,9 @@ gdk_cursor_set_property (GObject      *object,
     case PROP_TEXTURE:
       cursor->texture = g_value_dup_object (value);
       break;
+    case PROP_PAINTABLE:
+      cursor->paintable = g_value_dup_object (value);
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -155,6 +162,7 @@ gdk_cursor_finalize (GObject *object)
   g_free (cursor->name);
   g_clear_object (&cursor->texture);
   g_clear_object (&cursor->fallback);
+  g_clear_object (&cursor->paintable);
 
   G_OBJECT_CLASS (gdk_cursor_parent_class)->finalize (object);
 }
@@ -231,6 +239,29 @@ gdk_cursor_class_init (GdkCursorClass *cursor_class)
                                                         GDK_TYPE_TEXTURE,
                                                         G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY |
                                                         G_PARAM_STATIC_STRINGS));
+
+  /**
+   * GdkCursor:paintable:
+   *
+   * The paintable displayed by this cursor.
+   *
+   * The intrinsic size of the paintable determines
+   * the size of the cursor.
+   *
+   * If the GDK backend has the capability, non-static paintables
+   * may create animated cursors.
+   *
+   * The paintable will be %NULL if the cursor was created
+   * from a name or texture.
+   *
+   * Since: 4.16
+   */
+  g_object_class_install_property (object_class,
+                                   PROP_PAINTABLE,
+                                   g_param_spec_object ("paintable", NULL, NULL,
+                                                        GDK_TYPE_PAINTABLE,
+                                                        G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY |
+                                                        G_PARAM_STATIC_STRINGS));
 }
 
 static void
@@ -253,6 +284,8 @@ gdk_cursor_hash (gconstpointer pointer)
     hash ^= g_str_hash (cursor->name);
   else if (cursor->texture)
     hash ^= g_direct_hash (cursor->texture);
+  else if (cursor->paintable)
+    hash ^= g_direct_hash (cursor->paintable);
 
   hash ^= (cursor->hotspot_x << 8) | cursor->hotspot_y;
 
@@ -275,6 +308,9 @@ gdk_cursor_equal (gconstpointer a,
     return FALSE;
 
   if (ca->texture != cb->texture)
+    return FALSE;
+
+  if (ca->paintable != cb->paintable)
     return FALSE;
 
   if (ca->hotspot_x != cb->hotspot_x ||
@@ -356,6 +392,45 @@ gdk_cursor_new_from_texture (GdkTexture *texture,
 }
 
 /**
+ * gdk_cursor_new_from_paintable:
+ * @paintable: the paintable providing the pixel data
+ * @hotspot_x: the horizontal offset of the “hotspot” of the cursor
+ * @hotspot_y: the vertical offset of the “hotspot” of the cursor
+ * @fallback: (nullable): the `GdkCursor` to fall back to when
+ *   this one cannot be supported
+ *
+ * Creates a new cursor from a `GdkPaintable`.
+ *
+ * The intrinsic size of the paintable determines
+ * the size of the cursor.
+ *
+ * If the GDK backend has the capability, non-static paintables
+ * may create animated cursors.
+ *
+ * Returns: a new `GdkCursor`
+ *
+ * Since: 4.16
+ */
+GdkCursor *
+gdk_cursor_new_from_paintable (GdkPaintable *paintable,
+                               int           hotspot_x,
+                               int           hotspot_y,
+                               GdkCursor    *fallback)
+{
+  g_return_val_if_fail (GDK_IS_PAINTABLE (paintable), NULL);
+  g_return_val_if_fail (0 <= hotspot_x && hotspot_x < gdk_paintable_get_intrinsic_width (paintable), NULL);
+  g_return_val_if_fail (0 <= hotspot_y && hotspot_y < gdk_paintable_get_intrinsic_height (paintable), NULL);
+  g_return_val_if_fail (fallback == NULL || GDK_IS_CURSOR (fallback), NULL);
+
+  return g_object_new (GDK_TYPE_CURSOR,
+                       "paintable", paintable,
+                       "hotspot-x", hotspot_x,
+                       "hotspot-y", hotspot_y,
+                       "fallback", fallback,
+                       NULL);
+}
+
+/**
  * gdk_cursor_get_fallback: (attributes org.gtk.Method.get_property=fallback)
  * @cursor: a `GdkCursor`
  *
@@ -414,6 +489,27 @@ gdk_cursor_get_texture (GdkCursor *cursor)
   g_return_val_if_fail (GDK_IS_CURSOR (cursor), NULL);
 
   return cursor->texture;
+}
+
+/**
+ * gdk_cursor_get_paintable:
+ * @cursor: a `GdkCursor`
+ *
+ * Returns the paintable for the cursor.
+ *
+ * If the cursor is a named or texture cursor, %NULL will be returned.
+ *
+ * Returns: (transfer none) (nullable): the paintable for @cursor
+ *   or %NULL if it is a named or texture cursor
+ *
+ * Since: 4.16
+ */
+GdkPaintable *
+gdk_cursor_get_paintable (GdkCursor *cursor)
+{
+  g_return_val_if_fail (GDK_IS_CURSOR (cursor), NULL);
+
+  return cursor->paintable;
 }
 
 /**

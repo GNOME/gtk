@@ -29,6 +29,7 @@
 #endif
 
 #include <gdk/gdktypes.h>
+#include <gdk/gdkpaintable.h>
 
 G_BEGIN_DECLS
 
@@ -47,6 +48,13 @@ GdkCursor* gdk_cursor_new_from_texture   (GdkTexture      *texture,
                                           int              hotspot_x,
                                           int              hotspot_y,
                                           GdkCursor       *fallback);
+
+GDK_AVAILABLE_IN_4_14
+GdkCursor * gdk_cursor_new_from_paintable (GdkPaintable   *paintable,
+                                           int             hotspot_x,
+                                           int             hotspot_y,
+                                           GdkCursor      *fallback);
+
 GDK_AVAILABLE_IN_ALL
 GdkCursor*  gdk_cursor_new_from_name     (const char      *name,
                                           GdkCursor       *fallback);
@@ -57,6 +65,9 @@ GDK_AVAILABLE_IN_ALL
 const char *gdk_cursor_get_name          (GdkCursor       *cursor);
 GDK_AVAILABLE_IN_ALL
 GdkTexture *gdk_cursor_get_texture       (GdkCursor       *cursor);
+GDK_AVAILABLE_IN_4_14
+GdkPaintable *
+            gdk_cursor_get_paintable     (GdkCursor       *cursor);
 GDK_AVAILABLE_IN_ALL
 int         gdk_cursor_get_hotspot_x     (GdkCursor       *cursor);
 GDK_AVAILABLE_IN_ALL

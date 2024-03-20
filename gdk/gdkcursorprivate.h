@@ -42,6 +42,7 @@ struct _GdkCursor
   GdkCursor *fallback;
   char *name;
   GdkTexture *texture;
+  GdkPaintable *paintable;
   int hotspot_x;
   int hotspot_y;
 };
