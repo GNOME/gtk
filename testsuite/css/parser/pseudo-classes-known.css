@@ -49,3 +49,7 @@
 :drop(active) {
   color: red;
 }
+
+:root {
+  color: red;
+}

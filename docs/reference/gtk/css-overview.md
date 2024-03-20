@@ -74,6 +74,7 @@ in a selector, widget names must be prefixed with a &num; character.
 | E:not(selector) | [CSS Selector Level 3](https://www.w3.org/TR/css3-selectors/#negation) | |
 | E:dir(ltr), E:dir(rtl) | [CSS Selector Level 4](https://drafts.csswg.org/selectors/#the-dir-pseudo) | |
 | E:drop(active) | [CSS Selector Level 4](https://drafts.csswg.org/selectors/#drag-pseudos) | |
+| E:root | [CSS Selector Level 3](https://www.w3.org/TR/selectors-3/#root-pseudo) | |
 | E F | [CSS Selector Level 3](https://www.w3.org/TR/css3-selectors/#descendent-combinators) | |
 | E > F | [CSS Selector Level 3](https://www.w3.org/TR/css3-selectors/#child-combinators) | |
 | E ~ F | [CSS Selector Level 3](https://www.w3.org/TR/css3-selectors/#general-sibling-combinators) | |
