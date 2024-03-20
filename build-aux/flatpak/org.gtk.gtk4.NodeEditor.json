@@ -114,7 +114,6 @@
             "builddir" : true,
             "config-opts" : [
                 "--libdir=/app/lib",
-                "-Dvulkan=disabled",
                 "-Dbuildtype=debugoptimized",
                 "-Ddemo-profile=devel"
             ],
@@ -131,7 +130,6 @@
         "env" : {
             "DBUS_SESSION_BUS_ADDRESS" : "''",
             "GSK_RENDERER" : "opengl",
-            "GDK_DEBUG" : "vulkan-disable",
             "G_ENABLE_DEBUG" : "true"
         }
     }
