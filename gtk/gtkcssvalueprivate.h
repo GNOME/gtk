@@ -37,7 +37,8 @@ typedef struct _GtkCssValueClass      GtkCssValueClass;
 #define GTK_CSS_VALUE_BASE \
   const GtkCssValueClass *class; \
   int ref_count; \
-  guint is_computed: 1;
+  guint is_computed: 1; \
+  guint contains_variables: 1;
 
 struct _GtkCssValueClass {
   const char *type_name;
@@ -93,6 +94,7 @@ char *       _gtk_css_value_to_string                 (const GtkCssValue        
 void         _gtk_css_value_print                     (const GtkCssValue          *value,
                                                        GString                    *string);
 gboolean     gtk_css_value_is_computed                (const GtkCssValue          *value) G_GNUC_PURE;
+gboolean     gtk_css_value_contains_variables         (const GtkCssValue          *value) G_GNUC_PURE;
 
 G_END_DECLS
 
