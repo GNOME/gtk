@@ -273,12 +273,13 @@ gtk_css_value_transform_free (GtkCssValue *value)
 
 /* returns TRUE if dest == src */
 static gboolean
-gtk_css_transform_compute (GtkCssTransform  *dest,
-                           GtkCssTransform  *src,
-                           guint             property_id,
-                           GtkStyleProvider *provider,
-                           GtkCssStyle      *style,
-                           GtkCssStyle      *parent_style)
+gtk_css_transform_compute (GtkCssTransform   *dest,
+                           GtkCssTransform   *src,
+                           guint              property_id,
+                           GtkStyleProvider  *provider,
+                           GtkCssStyle       *style,
+                           GtkCssStyle       *parent_style,
+                           GtkCssVariableSet *variables)
 {
   dest->type = src->type;
 
@@ -288,41 +289,41 @@ gtk_css_transform_compute (GtkCssTransform  *dest,
       memcpy (dest, src, sizeof (GtkCssTransform));
       return TRUE;
     case GTK_CSS_TRANSFORM_TRANSLATE:
-      dest->translate.x = _gtk_css_value_compute (src->translate.x, property_id, provider, style, parent_style);
-      dest->translate.y = _gtk_css_value_compute (src->translate.y, property_id, provider, style, parent_style);
-      dest->translate.z = _gtk_css_value_compute (src->translate.z, property_id, provider, style, parent_style);
+      dest->translate.x = _gtk_css_value_compute (src->translate.x, property_id, provider, style, parent_style, variables);
+      dest->translate.y = _gtk_css_value_compute (src->translate.y, property_id, provider, style, parent_style, variables);
+      dest->translate.z = _gtk_css_value_compute (src->translate.z, property_id, provider, style, parent_style, variables);
       return dest->translate.x == src->translate.x
           && dest->translate.y == src->translate.y
           && dest->translate.z == src->translate.z;
     case GTK_CSS_TRANSFORM_ROTATE:
-      dest->rotate.x = _gtk_css_value_compute (src->rotate.x, property_id, provider, style, parent_style);
-      dest->rotate.y = _gtk_css_value_compute (src->rotate.y, property_id, provider, style, parent_style);
-      dest->rotate.z = _gtk_css_value_compute (src->rotate.z, property_id, provider, style, parent_style);
-      dest->rotate.angle = _gtk_css_value_compute (src->rotate.angle, property_id, provider, style, parent_style);
+      dest->rotate.x = _gtk_css_value_compute (src->rotate.x, property_id, provider, style, parent_style, variables);
+      dest->rotate.y = _gtk_css_value_compute (src->rotate.y, property_id, provider, style, parent_style, variables);
+      dest->rotate.z = _gtk_css_value_compute (src->rotate.z, property_id, provider, style, parent_style, variables);
+      dest->rotate.angle = _gtk_css_value_compute (src->rotate.angle, property_id, provider, style, parent_style, variables);
       return dest->rotate.x == src->rotate.x
           && dest->rotate.y == src->rotate.y
           && dest->rotate.z == src->rotate.z
           && dest->rotate.angle == src->rotate.angle;
     case GTK_CSS_TRANSFORM_SCALE:
-      dest->scale.x = _gtk_css_value_compute (src->scale.x, property_id, provider, style, parent_style);
-      dest->scale.y = _gtk_css_value_compute (src->scale.y, property_id, provider, style, parent_style);
-      dest->scale.z = _gtk_css_value_compute (src->scale.z, property_id, provider, style, parent_style);
+      dest->scale.x = _gtk_css_value_compute (src->scale.x, property_id, provider, style, parent_style, variables);
+      dest->scale.y = _gtk_css_value_compute (src->scale.y, property_id, provider, style, parent_style, variables);
+      dest->scale.z = _gtk_css_value_compute (src->scale.z, property_id, provider, style, parent_style, variables);
       return dest->scale.x == src->scale.x
           && dest->scale.y == src->scale.y
           && dest->scale.z == src->scale.z;
     case GTK_CSS_TRANSFORM_SKEW:
-      dest->skew.x = _gtk_css_value_compute (src->skew.x, property_id, provider, style, parent_style);
-      dest->skew.y = _gtk_css_value_compute (src->skew.y, property_id, provider, style, parent_style);
+      dest->skew.x = _gtk_css_value_compute (src->skew.x, property_id, provider, style, parent_style, variables);
+      dest->skew.y = _gtk_css_value_compute (src->skew.y, property_id, provider, style, parent_style, variables);
       return dest->skew.x == src->skew.x
           && dest->skew.y == src->skew.y;
     case GTK_CSS_TRANSFORM_SKEW_X:
-      dest->skew_x.skew = _gtk_css_value_compute (src->skew_x.skew, property_id, provider, style, parent_style);
+      dest->skew_x.skew = _gtk_css_value_compute (src->skew_x.skew, property_id, provider, style, parent_style, variables);
       return dest->skew_x.skew == src->skew_x.skew;
     case GTK_CSS_TRANSFORM_SKEW_Y:
-      dest->skew_y.skew = _gtk_css_value_compute (src->skew_y.skew, property_id, provider, style, parent_style);
+      dest->skew_y.skew = _gtk_css_value_compute (src->skew_y.skew, property_id, provider, style, parent_style, variables);
       return dest->skew_y.skew == src->skew_y.skew;
     case GTK_CSS_TRANSFORM_PERSPECTIVE:
-      dest->perspective.depth = _gtk_css_value_compute (src->perspective.depth, property_id, provider, style, parent_style);
+      dest->perspective.depth = _gtk_css_value_compute (src->perspective.depth, property_id, provider, style, parent_style, variables);
       return dest->perspective.depth == src->perspective.depth;
     case GTK_CSS_TRANSFORM_NONE:
     default:
@@ -332,11 +333,12 @@ gtk_css_transform_compute (GtkCssTransform  *dest,
 }
 
 static GtkCssValue *
-gtk_css_value_transform_compute (GtkCssValue      *value,
-                                 guint             property_id,
-                                 GtkStyleProvider *provider,
-                                 GtkCssStyle      *style,
-                                 GtkCssStyle      *parent_style)
+gtk_css_value_transform_compute (GtkCssValue       *value,
+                                 guint              property_id,
+                                 GtkStyleProvider  *provider,
+                                 GtkCssStyle       *style,
+                                 GtkCssStyle       *parent_style,
+                                 GtkCssVariableSet *variables)
 {
   GtkCssValue *result;
   gboolean changes;
@@ -356,7 +358,8 @@ gtk_css_value_transform_compute (GtkCssValue      *value,
                                              property_id,
                                              provider,
                                              style,
-                                             parent_style);
+                                             parent_style,
+                                             variables);
     }
 
   if (!changes)

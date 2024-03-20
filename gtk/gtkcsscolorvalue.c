@@ -94,10 +94,11 @@ gtk_css_value_color_free (GtkCssValue *color)
 }
 
 static GtkCssValue *
-gtk_css_value_color_get_fallback (guint             property_id,
-                                  GtkStyleProvider *provider,
-                                  GtkCssStyle      *style,
-                                  GtkCssStyle      *parent_style)
+gtk_css_value_color_get_fallback (guint              property_id,
+                                  GtkStyleProvider  *provider,
+                                  GtkCssStyle       *style,
+                                  GtkCssStyle       *parent_style,
+                                  GtkCssVariableSet *variables)
 {
   switch (property_id)
     {
@@ -120,7 +121,8 @@ gtk_css_value_color_get_fallback (guint             property_id,
                                        property_id,
                                        provider,
                                        style,
-                                       parent_style);
+                                       parent_style,
+                                       variables);
       case GTK_CSS_PROPERTY_ICON_PALETTE:
         return _gtk_css_value_ref (style->core->color);
       default:
@@ -132,11 +134,12 @@ gtk_css_value_color_get_fallback (guint             property_id,
 }
 
 static GtkCssValue *
-gtk_css_value_color_compute (GtkCssValue      *value,
-                             guint             property_id,
-                             GtkStyleProvider *provider,
-                             GtkCssStyle      *style,
-                             GtkCssStyle      *parent_style)
+gtk_css_value_color_compute (GtkCssValue       *value,
+                             guint              property_id,
+                             GtkStyleProvider  *provider,
+                             GtkCssStyle       *style,
+                             GtkCssStyle       *parent_style,
+                             GtkCssVariableSet *variables)
 {
   GtkCssValue *resolved;
 
@@ -173,7 +176,7 @@ gtk_css_value_color_compute (GtkCssValue      *value,
     }
 
   if (resolved == NULL)
-    return gtk_css_value_color_get_fallback (property_id, provider, style, parent_style);
+    return gtk_css_value_color_get_fallback (property_id, provider, style, parent_style, variables);
 
   return resolved;
 }

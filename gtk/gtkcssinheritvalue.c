@@ -34,11 +34,12 @@ gtk_css_value_inherit_free (GtkCssValue *value)
 }
 
 static GtkCssValue *
-gtk_css_value_inherit_compute (GtkCssValue      *value,
-                               guint             property_id,
-                               GtkStyleProvider *provider,
-                               GtkCssStyle      *style,
-                               GtkCssStyle      *parent_style)
+gtk_css_value_inherit_compute (GtkCssValue       *value,
+                               guint              property_id,
+                               GtkStyleProvider  *provider,
+                               GtkCssStyle       *style,
+                               GtkCssStyle       *parent_style,
+                               GtkCssVariableSet *variables)
 {
   if (parent_style)
     {
@@ -50,7 +51,8 @@ gtk_css_value_inherit_compute (GtkCssValue      *value,
                                      property_id,
                                      provider,
                                      style,
-                                     parent_style);
+                                     parent_style,
+                                     variables);
     }
 }
 

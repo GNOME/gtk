@@ -112,11 +112,12 @@ gtk_css_image_url_snapshot (GtkCssImage *image,
 }
 
 static GtkCssImage *
-gtk_css_image_url_compute (GtkCssImage      *image,
-                           guint             property_id,
-                           GtkStyleProvider *provider,
-                           GtkCssStyle      *style,
-                           GtkCssStyle      *parent_style)
+gtk_css_image_url_compute (GtkCssImage       *image,
+                           guint              property_id,
+                           GtkStyleProvider  *provider,
+                           GtkCssStyle       *style,
+                           GtkCssStyle       *parent_style,
+                           GtkCssVariableSet *variables)
 {
   GtkCssImageUrl *url = GTK_CSS_IMAGE_URL (image);
   GtkCssImage *copy;
