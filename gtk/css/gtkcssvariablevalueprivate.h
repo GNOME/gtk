@@ -48,6 +48,7 @@ struct _GtkCssVariableValue
 
   GtkCssSection *section;
   gboolean is_invalid;
+  gboolean is_animation_tainted;
 };
 
 GtkCssVariableValue *gtk_css_variable_value_new         (GBytes                       *bytes,
@@ -70,5 +71,6 @@ GtkCssVariableValue *gtk_css_variable_value_transition  (GtkCssVariableValue    
                                                          double                        progress);
 void                 gtk_css_variable_value_set_section (GtkCssVariableValue          *self,
                                                          GtkCssSection                *section);
+void                 gtk_css_variable_value_taint       (GtkCssVariableValue          *self);
 
 G_END_DECLS

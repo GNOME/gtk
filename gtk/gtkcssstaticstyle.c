@@ -199,6 +199,12 @@ gtk_css_static_style_dispose (GObject *object)
       style->sections = NULL;
     }
 
+  if (style->original_values)
+    {
+      g_ptr_array_unref (style->original_values);
+      style->original_values = NULL;
+    }
+
   G_OBJECT_CLASS (gtk_css_static_style_parent_class)->dispose (object);
 }
 
@@ -206,6 +212,19 @@ static GtkCssStaticStyle *
 gtk_css_static_style_get_static_style (GtkCssStyle *style)
 {
   return (GtkCssStaticStyle *)style;
+}
+
+static GtkCssValue *
+gtk_css_static_style_get_original_value (GtkCssStyle *style,
+                                         guint        id)
+{
+  GtkCssStaticStyle *sstyle = GTK_CSS_STATIC_STYLE (style);
+
+  if (sstyle->original_values == NULL ||
+      id >= sstyle->original_values->len)
+    return NULL;
+
+  return g_ptr_array_index (sstyle->original_values, id);
 }
 
 static void
@@ -218,6 +237,7 @@ gtk_css_static_style_class_init (GtkCssStaticStyleClass *klass)
 
   style_class->get_section = gtk_css_static_style_get_section;
   style_class->get_static_style = gtk_css_static_style_get_static_style;
+  style_class->get_original_value = gtk_css_static_style_get_original_value;
 
   gtk_css_core_values_init ();
   gtk_css_background_values_init ();
@@ -246,6 +266,13 @@ maybe_unref_section (gpointer section)
     gtk_css_section_unref (section);
 }
 
+static void
+maybe_unref_value (gpointer value)
+{
+  if (value)
+    _gtk_css_value_unref (value);
+}
+
 static inline void
 gtk_css_take_value (GtkCssValue **variable,
                     GtkCssValue  *value)
@@ -259,6 +286,7 @@ static void
 gtk_css_static_style_set_value (GtkCssStaticStyle *sstyle,
                                 guint              id,
                                 GtkCssValue       *value,
+                                GtkCssValue       *original_value,
                                 GtkCssSection     *section)
 {
   GtkCssStyle *style = (GtkCssStyle *)sstyle;
@@ -560,6 +588,22 @@ gtk_css_static_style_set_value (GtkCssStaticStyle *sstyle,
       if (sstyle->sections->len <= id)
         g_ptr_array_set_size (sstyle->sections, id + 1);
       g_ptr_array_index (sstyle->sections, id) = gtk_css_section_ref (section);
+    }
+
+  if (sstyle->original_values && sstyle->original_values->len > id &&
+      g_ptr_array_index (sstyle->original_values, id))
+    {
+      _gtk_css_value_unref (g_ptr_array_index (sstyle->original_values, id));
+      g_ptr_array_index (sstyle->original_values, id) = NULL;
+    }
+
+  if (original_value)
+    {
+      if (sstyle->original_values == NULL)
+        sstyle->original_values = g_ptr_array_new_with_free_func (maybe_unref_value);
+      if (sstyle->original_values->len <= id)
+        g_ptr_array_set_size (sstyle->original_values, id + 1);
+      g_ptr_array_index (sstyle->original_values, id) = _gtk_css_value_ref (original_value);
     }
 }
 
@@ -950,7 +994,7 @@ gtk_css_static_style_compute_value (GtkCssStaticStyle *style,
                                     GtkCssValue       *specified,
                                     GtkCssSection     *section)
 {
-  GtkCssValue *value;
+  GtkCssValue *value, *original_value;
   GtkBorderStyle border_style;
 
   gtk_internal_return_if_fail (id < GTK_CSS_PROPERTY_N_PROPERTIES);
@@ -971,7 +1015,7 @@ gtk_css_static_style_compute_value (GtkCssStaticStyle *style,
         border_style = _gtk_css_border_style_value_get (gtk_css_style_get_value ((GtkCssStyle *)style, id - 1));
         if (border_style == GTK_BORDER_STYLE_NONE || border_style == GTK_BORDER_STYLE_HIDDEN)
           {
-            gtk_css_static_style_set_value (style, id, gtk_css_dimension_value_new (0, GTK_CSS_NUMBER), section);
+            gtk_css_static_style_set_value (style, id, gtk_css_dimension_value_new (0, GTK_CSS_NUMBER), NULL, section);
             return;
           }
         break;
@@ -989,18 +1033,33 @@ gtk_css_static_style_compute_value (GtkCssStaticStyle *style,
   if (specified)
     {
       value = _gtk_css_value_compute (specified, id, provider, (GtkCssStyle *)style, parent_style, NULL);
+
+      if (gtk_css_value_contains_variables (specified))
+        original_value = specified;
+      else
+        original_value = NULL;
     }
   else if (parent_style && _gtk_css_style_property_is_inherit (_gtk_css_style_property_lookup_by_id (id)))
     {
+      GtkCssValue *parent_original_value;
+
       /* Just take the style from the parent */
       value = _gtk_css_value_ref (gtk_css_style_get_value (parent_style, id));
+
+      parent_original_value = gtk_css_style_get_original_value (parent_style, id);
+
+      if (parent_original_value)
+        original_value = parent_original_value;
+      else
+        original_value = NULL;
     }
   else
     {
       value = _gtk_css_initial_value_new_compute (id, provider, (GtkCssStyle *)style, parent_style);
+      original_value = NULL;
     }
 
-  gtk_css_static_style_set_value (style, id, value, section);
+  gtk_css_static_style_set_value (style, id, value, original_value, section);
 }
 
 GtkCssChange

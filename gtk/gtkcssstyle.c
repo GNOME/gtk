@@ -316,6 +316,15 @@ gtk_css_style_get_static_style (GtkCssStyle *style)
   return GTK_CSS_STYLE_GET_CLASS (style)->get_static_style (style);
 }
 
+GtkCssValue *
+gtk_css_style_get_original_value (GtkCssStyle *style,
+                                  guint        id)
+{
+  gtk_internal_return_val_if_fail (GTK_IS_CSS_STYLE (style), NULL);
+
+  return GTK_CSS_STYLE_GET_CLASS (style)->get_original_value (style, id);
+}
+
 /*
  * gtk_css_style_print:
  * @style: a `GtkCssStyle`

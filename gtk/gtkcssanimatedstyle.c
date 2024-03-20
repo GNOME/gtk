@@ -33,13 +33,59 @@
 #include "gtkcssstringvalueprivate.h"
 #include "gtkcssstylepropertyprivate.h"
 #include "gtkcsstransitionprivate.h"
+#include "gtkcssvaluesprivate.h"
 #include "gtkprivate.h"
 #include "gtkstyleanimationprivate.h"
 #include "gtkstylepropertyprivate.h"
 #include "gtkstyleproviderprivate.h"
+#include "gtkcsscustompropertypoolprivate.h"
 
 G_DEFINE_TYPE (GtkCssAnimatedStyle, gtk_css_animated_style, GTK_TYPE_CSS_STYLE)
 
+#define DEFINE_VALUES(ENUM, TYPE, NAME) \
+static inline void \
+gtk_css_ ## NAME ## _values_recompute (GtkCssAnimatedStyle *animated) \
+{ \
+  GtkCssStyle *style = (GtkCssStyle *)animated; \
+  GtkCssValue **values = (GtkCssValue **)((guint8*)(animated->style->NAME) + sizeof (GtkCssValues)); \
+  int i; \
+\
+  for (i = 0; i < G_N_ELEMENTS (NAME ## _props); i++) \
+    { \
+      guint id = NAME ## _props[i]; \
+      GtkCssValue *original, *computed; \
+\
+      if (values[i] == NULL) \
+        continue; \
+\
+      original = gtk_css_style_get_original_value (style, id); \
+      if (original == NULL) \
+        continue; \
+\
+      computed = _gtk_css_value_compute (original, \
+                                         id, \
+                                         animated->provider, \
+                                         style, \
+                                         animated->parent_style, \
+                                         NULL); \
+      if (computed == NULL) \
+        continue; \
+\
+      gtk_css_animated_style_set_animated_value (animated, id, computed); \
+    } \
+}
+
+DEFINE_VALUES (CORE, Core, core)
+DEFINE_VALUES (BACKGROUND, Background, background)
+DEFINE_VALUES (BORDER, Border, border)
+DEFINE_VALUES (ICON, Icon, icon)
+DEFINE_VALUES (OUTLINE, Outline, outline)
+DEFINE_VALUES (FONT, Font, font)
+DEFINE_VALUES (FONT_VARIANT, FontVariant, font_variant)
+DEFINE_VALUES (ANIMATION, Animation, animation)
+DEFINE_VALUES (TRANSITION, Transition, transition)
+DEFINE_VALUES (SIZE, Size, size)
+DEFINE_VALUES (OTHER, Other, other)
 
 static GtkCssSection *
 gtk_css_animated_style_get_section (GtkCssStyle *style,
@@ -72,6 +118,15 @@ gtk_css_animated_style_get_static_style (GtkCssStyle *style)
   GtkCssAnimatedStyle *animated = (GtkCssAnimatedStyle *) style;
 
   return (GtkCssStaticStyle *)animated->style;
+}
+
+static GtkCssValue *
+gtk_css_animated_style_get_original_value (GtkCssStyle *style,
+                                           guint        id)
+{
+  GtkCssAnimatedStyle *animated = GTK_CSS_ANIMATED_STYLE (style);
+
+  return gtk_css_style_get_original_value (animated->style, id);
 }
 
 static void
@@ -115,6 +170,7 @@ gtk_css_animated_style_class_init (GtkCssAnimatedStyleClass *klass)
   style_class->get_section = gtk_css_animated_style_get_section;
   style_class->is_static = gtk_css_animated_style_is_static;
   style_class->get_static_style = gtk_css_animated_style_get_static_style;
+  style_class->get_original_value = gtk_css_animated_style_get_original_value;
 }
 
 static void
@@ -549,6 +605,51 @@ gtk_css_animated_style_get_intrinsic_value (GtkCssAnimatedStyle *style,
   return gtk_css_style_get_value (style->style, id);
 }
 
+void
+gtk_css_animated_style_set_animated_custom_value (GtkCssAnimatedStyle *animated,
+                                                  int                  id,
+                                                  GtkCssVariableValue *value)
+{
+  GtkCssStyle *style = (GtkCssStyle *)animated;
+
+  gtk_internal_return_if_fail (GTK_IS_CSS_ANIMATED_STYLE (style));
+  gtk_internal_return_if_fail (value != NULL);
+
+  if (style->variables == NULL)
+    {
+      style->variables = gtk_css_variable_set_new ();
+      if (animated->parent_style)
+        gtk_css_variable_set_set_parent (style->variables,
+                                         animated->parent_style->variables);
+    }
+  else if (style->variables == animated->style->variables)
+    {
+      gtk_css_variable_set_unref (style->variables);
+      style->variables = gtk_css_variable_set_copy (animated->style->variables);
+    }
+
+  gtk_css_variable_set_add (style->variables, id, value);
+
+  gtk_css_core_values_recompute (animated);
+  gtk_css_background_values_recompute (animated);
+  gtk_css_border_values_recompute (animated);
+  gtk_css_icon_values_recompute (animated);
+  gtk_css_outline_values_recompute (animated);
+  gtk_css_font_values_recompute (animated);
+  gtk_css_font_variant_values_recompute (animated);
+  gtk_css_animation_values_recompute (animated);
+  gtk_css_transition_values_recompute (animated);
+  gtk_css_size_values_recompute (animated);
+  gtk_css_other_values_recompute (animated);
+}
+
+GtkCssVariableValue *
+gtk_css_animated_style_get_intrinsic_custom_value (GtkCssAnimatedStyle *style,
+                                                   int                  id)
+{
+  return gtk_css_style_get_custom_property (style->style, id);
+}
+
 static GPtrArray *
 gtk_css_animated_style_create_dynamic (GPtrArray   *animations,
                                        GtkCssStyle *style,
@@ -920,6 +1021,8 @@ gtk_css_animated_style_new (GtkCssStyle      *base_style,
   style->transition = (GtkCssTransitionValues *)gtk_css_values_ref ((GtkCssValues *)base_style->transition);
   style->size = (GtkCssSizeValues *)gtk_css_values_ref ((GtkCssValues *)base_style->size);
   style->other = (GtkCssOtherValues *)gtk_css_values_ref ((GtkCssValues *)base_style->other);
+  if (base_style->variables)
+    style->variables = gtk_css_variable_set_ref (base_style->variables);
 
   gtk_css_animated_style_apply_animations (result);
 
@@ -991,6 +1094,8 @@ gtk_css_animated_style_new_advance (GtkCssAnimatedStyle *source,
   style->transition = (GtkCssTransitionValues *)gtk_css_values_ref ((GtkCssValues *)base_style->transition);
   style->size = (GtkCssSizeValues *)gtk_css_values_ref ((GtkCssValues *)base_style->size);
   style->other = (GtkCssOtherValues *)gtk_css_values_ref ((GtkCssValues *)base_style->other);
+  if (base_style->variables)
+    style->variables = gtk_css_variable_set_ref (base_style->variables);
 
   gtk_css_animated_style_apply_animations (result);
 
