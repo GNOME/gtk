@@ -606,6 +606,7 @@ test_data = [
   'value-none.css',
   'value-none.errors',
   'value-none.ref.css',
+  'variables.css',
 ]
 
 foreach testname : test_data

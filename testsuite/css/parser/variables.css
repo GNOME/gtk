@@ -1,0 +1,6 @@
+* {
+  color: var(--test3);
+  --test1: test;
+  --test2: var(--test1, red);
+  --test3: var(--test2);
+}
