@@ -35,6 +35,10 @@
 #include <gdk-pixbuf/gdk-pixbuf.h>
 #include "cursor/wayland-cursor.h"
 
+#include "gtk/gtksnapshot.h"
+#include "gsk/gskrenderer.h"
+#include "gsk/gskrendernodeprivate.h"
+
 static void
 gdk_wayland_cursor_remove_from_cache (gpointer data, GObject *cursor)
 {
@@ -210,7 +214,7 @@ _gdk_wayland_cursor_get_buffer (GdkWaylandDisplay *display,
           return wl_cursor_image_get_buffer (image);
         }
     }
-  else
+  else if (gdk_cursor_get_texture (cursor))
     {
       cairo_surface_t *surface;
       struct wl_buffer *buffer;
@@ -218,6 +222,14 @@ _gdk_wayland_cursor_get_buffer (GdkWaylandDisplay *display,
       texture = g_object_ref (gdk_cursor_get_texture (cursor));
 
 from_texture:
+      *width = gdk_texture_get_width (texture);
+      *height = gdk_texture_get_height (texture);
+      *scale = 1;
+
+from_texture2:
+      *hotspot_x = gdk_cursor_get_hotspot_x (cursor);
+      *hotspot_y = gdk_cursor_get_hotspot_y (cursor);
+
       surface = g_hash_table_lookup (display->cursor_surface_cache, cursor);
       if (surface == NULL)
         {
@@ -225,7 +237,7 @@ from_texture:
                                                             gdk_texture_get_width (texture),
                                                             gdk_texture_get_height (texture),
                                                             &GDK_FRACTIONAL_SCALE_INIT_INT (1));
-          
+
           gdk_texture_download (texture,
                                 cairo_image_surface_get_data (surface),
                                 cairo_image_surface_get_stride (surface));
@@ -235,12 +247,6 @@ from_texture:
           g_hash_table_insert (display->cursor_surface_cache, cursor, surface);
         }
 
-      *hotspot_x = gdk_cursor_get_hotspot_x (cursor);
-      *hotspot_y = gdk_cursor_get_hotspot_y (cursor);
-      *width = gdk_texture_get_width (texture);
-      *height = gdk_texture_get_height (texture);
-      *scale = 1;
-
       cairo_surface_reference (surface);
       buffer = _gdk_wayland_shm_surface_get_wl_buffer (surface);
       wl_buffer_add_listener (buffer, &buffer_listener, surface);
@@ -249,10 +255,24 @@ from_texture:
 
       return buffer;
     }
+  else
+    {
+      GdkPaintable *paintable;
+
+      paintable = gdk_cursor_get_paintable (cursor);
+
+      *width = gdk_paintable_get_intrinsic_width (paintable);
+      *height = gdk_paintable_get_intrinsic_height (paintable);
+      *scale = desired_scale;
+
+      texture = gdk_cursor_create_texture (cursor, desired_scale);
+
+      goto from_texture2;
+    }
 
   if (gdk_cursor_get_fallback (cursor))
     return _gdk_wayland_cursor_get_buffer (display,
-                                           gdk_cursor_get_fallback (cursor), 
+                                           gdk_cursor_get_fallback (cursor),
                                            desired_scale,
                                            image_index,
                                            hotspot_x, hotspot_y,
