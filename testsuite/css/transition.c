@@ -223,16 +223,16 @@ test_transition (gconstpointer data)
 
   value1 = value_from_string (prop, test->value1);
   g_assert_nonnull (value1);
-  computed1 = _gtk_css_value_compute (value1, test->prop, provider, style, NULL);
+  computed1 = _gtk_css_value_compute (value1, test->prop, provider, style, NULL, NULL);
 
   value2 = value_from_string (prop, test->value2);
   g_assert_nonnull (value2);
-  computed2 = _gtk_css_value_compute (value2, test->prop, provider, style, NULL);
+  computed2 = _gtk_css_value_compute (value2, test->prop, provider, style, NULL, NULL);
 
   if (test->value3)
     {
       value3 = value_from_string (prop, test->value3);
-      computed3 = _gtk_css_value_compute (value3, test->prop, provider, style, NULL);
+      computed3 = _gtk_css_value_compute (value3, test->prop, provider, style, NULL, NULL);
     }
   else
     {

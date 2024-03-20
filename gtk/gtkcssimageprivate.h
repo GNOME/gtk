@@ -26,6 +26,7 @@
 #include "gtk/css/gtkcsstokenizerprivate.h"
 #include "gtk/css/gtkcssparserprivate.h"
 #include "gtk/gtkcsstypesprivate.h"
+#include "gtk/gtkcssvariablesetprivate.h"
 #include "gtk/gtksnapshot.h"
 #include "gtk/gtkstyleprovider.h"
 
@@ -62,7 +63,8 @@ struct _GtkCssImageClass
                                                     guint                       property_id,
                                                     GtkStyleProvider           *provider,
                                                     GtkCssStyle                *style,
-                                                    GtkCssStyle                *parent_style);
+                                                    GtkCssStyle                *parent_style,
+                                                    GtkCssVariableSet          *variables);
   /* compare two images for equality */
   gboolean     (* equal)                           (GtkCssImage                *image1,
                                                     GtkCssImage                *image2);
@@ -106,7 +108,8 @@ GtkCssImage *  _gtk_css_image_compute              (GtkCssImage                *
                                                     guint                       property_id,
                                                     GtkStyleProvider           *provider,
                                                     GtkCssStyle                *style,
-                                                    GtkCssStyle                *parent_style);
+                                                    GtkCssStyle                *parent_style,
+                                                    GtkCssVariableSet          *variables);
 gboolean       _gtk_css_image_equal                (GtkCssImage                *image1,
                                                     GtkCssImage                *image2) G_GNUC_PURE;
 GtkCssImage *  _gtk_css_image_transition           (GtkCssImage                *start,

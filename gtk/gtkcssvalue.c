@@ -199,6 +199,7 @@ gtk_css_value_unref (GtkCssValue *value)
  * @provider: Style provider for looking up extra information
  * @style: Style to compute for
  * @parent_style: parent style to use for inherited values
+ * @variables: an additional set of variables to use along with @style
  *
  * Converts the specified @value into the computed value for the CSS
  * property given by @property_id using the information in @context.
@@ -208,11 +209,12 @@ gtk_css_value_unref (GtkCssValue *value)
  * Returns: the computed value
  **/
 GtkCssValue *
-_gtk_css_value_compute (GtkCssValue      *value,
-                        guint             property_id,
-                        GtkStyleProvider *provider,
-                        GtkCssStyle      *style,
-                        GtkCssStyle      *parent_style)
+_gtk_css_value_compute (GtkCssValue       *value,
+                        guint              property_id,
+                        GtkStyleProvider  *provider,
+                        GtkCssStyle       *style,
+                        GtkCssStyle       *parent_style,
+                        GtkCssVariableSet *variables)
 {
   if (gtk_css_value_is_computed (value))
     return _gtk_css_value_ref (value);
@@ -221,7 +223,7 @@ _gtk_css_value_compute (GtkCssValue      *value,
   get_accounting_data (value->class->type_name)->computed++;
 #endif
 
-  return value->class->compute (value, property_id, provider, style, parent_style);
+  return value->class->compute (value, property_id, provider, style, parent_style, variables);
 }
 
 gboolean
