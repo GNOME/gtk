@@ -34,6 +34,7 @@
 #include <gdk/wayland/gdkwayland.h>
 #include <gdk/wayland/gdkdisplay-wayland.h>
 #include <gdk/wayland/gdkseat-wayland.h>
+#include <gdk/wayland/gdkwaylandpresentationtime-private.h>
 
 #include <xkbcommon/xkbcommon.h>
 

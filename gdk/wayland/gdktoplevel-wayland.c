@@ -34,6 +34,7 @@
 #include "gdktoplevelprivate.h"
 #include "gdkdevice-wayland-private.h"
 
+#include <wayland/presentation-time-client-protocol.h>
 #include <wayland/xdg-shell-unstable-v6-client-protocol.h>
 #include <wayland/xdg-foreign-unstable-v2-client-protocol.h>
 
@@ -121,6 +122,8 @@ struct _GdkWaylandToplevel
   size_t idle_inhibitor_refcount;
 
   struct wl_output *initial_fullscreen_output;
+
+  struct wp_presentation_feedback *feedback;
 
   struct {
     GdkToplevelState unset_flags;
