@@ -116,6 +116,7 @@
     <file>w_resize_cursor.png</file>
     <file>zoom_in_cursor.png</file>
     <file>zoom_out_cursor.png</file>
+    <file>gtk-logo.svg</file>
   </gresource>
   <gresource prefix="/dnd">
     <file>dnd.css</file>

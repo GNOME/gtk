@@ -15,12 +15,54 @@ on_destroy (gpointer data)
   window = NULL;
 }
 
+static GdkTexture *
+cursor_callback (GdkCursor *cursor,
+                 int        cursor_size,
+                 double     scale,
+                 int       *width,
+                 int       *height,
+                 int       *hotspot_x,
+                 int       *hotspot_y,
+                 gpointer   data)
+{
+  GdkPixbuf *pixbuf;
+  GdkTexture *texture;
+  GError *error = NULL;
+  int scaled_size;
+
+  scaled_size = ceil (cursor_size * scale);
+
+  pixbuf = gdk_pixbuf_new_from_resource_at_scale ("/cursors/images/gtk-logo.svg",
+                                                  scaled_size, scaled_size,
+                                                  TRUE,
+                                                  &error);
+  if (!pixbuf)
+    {
+      g_print ("%s\n", error->message);
+      g_error_free (error);
+      return NULL;
+    }
+
+  texture = gdk_texture_new_for_pixbuf (pixbuf);
+
+  g_object_unref (pixbuf);
+
+  *width = cursor_size;
+  *height = cursor_size;
+  *hotspot_x = 18 * cursor_size / 32.0;
+  *hotspot_y = 2 * cursor_size / 32.0;
+
+  return texture;
+}
+
 GtkWidget *
 do_cursors (GtkWidget *do_widget)
 {
   if (!window)
     {
       GtkBuilder *builder;
+      GtkWidget *logo_callback;
+      GdkCursor *cursor;
 
       builder = gtk_builder_new_from_resource ("/cursors/cursors.ui");
       window = GTK_WIDGET (gtk_builder_get_object (builder, "window"));
@@ -29,6 +71,10 @@ do_cursors (GtkWidget *do_widget)
                               gtk_widget_get_display (do_widget));
       g_signal_connect (window, "destroy",
                         G_CALLBACK (on_destroy), NULL);
+      logo_callback = GTK_WIDGET (gtk_builder_get_object (builder, "logo_callback"));
+      cursor = gdk_cursor_new_from_callback (cursor_callback, NULL, NULL, NULL);
+      gtk_widget_set_cursor (logo_callback, cursor);
+      g_object_unref (cursor);
       g_object_unref (builder);
     }
 
