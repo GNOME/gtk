@@ -156,6 +156,9 @@ gdk_cursor_finalize (GObject *object)
   g_clear_object (&cursor->texture);
   g_clear_object (&cursor->fallback);
 
+  if (cursor->destroy)
+    cursor->destroy (cursor->data);
+
   G_OBJECT_CLASS (gdk_cursor_parent_class)->finalize (object);
 }
 
@@ -253,6 +256,11 @@ gdk_cursor_hash (gconstpointer pointer)
     hash ^= g_str_hash (cursor->name);
   else if (cursor->texture)
     hash ^= g_direct_hash (cursor->texture);
+  else if (cursor->callback)
+    {
+      hash ^= g_direct_hash (cursor->callback);
+      hash ^= g_direct_hash (cursor->data);
+    }
 
   hash ^= (cursor->hotspot_x << 8) | cursor->hotspot_y;
 
@@ -279,6 +287,10 @@ gdk_cursor_equal (gconstpointer a,
 
   if (ca->hotspot_x != cb->hotspot_x ||
       ca->hotspot_y != cb->hotspot_y)
+    return FALSE;
+
+  if (ca->callback != cb->callback ||
+      ca->data != cb->data)
     return FALSE;
 
   return TRUE;
@@ -353,6 +365,45 @@ gdk_cursor_new_from_texture (GdkTexture *texture,
                        "hotspot-y", hotspot_y,
                        "fallback", fallback,
                        NULL);
+}
+
+/**
+ * gdk_cursor_new_from_callback:
+ * @callback: the `GdkCursorGetTextureCallback`
+ * @data: data to pass to @callback
+ * @destroy: destroy notify for @data
+ * @fallback: (nullable): the `GdkCursor` to fall back to when
+ *   this one cannot be supported
+ *
+ * Creates a new callback-based cursor object.
+ *
+ * Cursors of this kind produce textures for the cursor
+ * image on demand, when the @callback is called.
+ *
+ * Returns: (nullable): a new `GdkCursor`
+ *
+ * Since: 4.16
+ */
+GdkCursor *
+gdk_cursor_new_from_callback (GdkCursorGetTextureCallback  callback,
+                              gpointer                     data,
+                              GDestroyNotify               destroy,
+                              GdkCursor                   *fallback)
+{
+  GdkCursor *cursor;
+
+  g_return_val_if_fail (callback != NULL, NULL);
+  g_return_val_if_fail (fallback == NULL || GDK_IS_CURSOR (fallback), NULL);
+
+  cursor = g_object_new (GDK_TYPE_CURSOR,
+                         "fallback", fallback,
+                         NULL);
+
+  cursor->callback = callback;
+  cursor->data = data;
+  cursor->destroy = destroy;
+
+  return cursor;
 }
 
 /**
@@ -458,4 +509,23 @@ gdk_cursor_get_hotspot_y (GdkCursor *cursor)
   g_return_val_if_fail (GDK_IS_CURSOR (cursor), 0);
 
   return cursor->hotspot_y;
+}
+
+GdkTexture *
+gdk_cursor_get_texture_for_size (GdkCursor *cursor,
+                                 int        cursor_size,
+                                 double     scale,
+                                 int       *width,
+                                 int       *height,
+                                 int       *hotspot_x,
+                                 int       *hotspot_y)
+{
+  if (cursor->callback == NULL)
+    return NULL;
+
+  return cursor->callback (cursor,
+                           cursor_size, scale,
+                           width, height,
+                           hotspot_x, hotspot_y,
+                           cursor->data);
 }
