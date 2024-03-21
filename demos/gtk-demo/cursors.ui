@@ -40,10 +40,6 @@
     <property name="hotspot-x">18</property>
     <property name="hotspot-y">2</property>
   </object>
-  <object class="GdkCursor" id="gtk-logo_cursor_fallback">
-    <property name="name">gtk-logo</property>
-    <property name="fallback">gtk-logo_cursor_image</property>
-  </object>
   <object class="GdkCursor" id="gtk-logo_cursor_image_fallback">
     <property name="texture">resource:///cursors/images/gtk_logo_cursor.png</property>
     <property name="hotspot-x">18</property>
@@ -827,15 +823,14 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">gtk-logo_cursor_image</property>
-                                <property name="tooltip-text" translatable="yes">An image cursor</property>
+                                <property name="tooltip-text" translatable="yes">An image cursor for the GTK logo</property>
                               </object>
                             </child>
                             <child>
-                              <object class="GtkFrame">
+                              <object class="GtkFrame" id="logo_callback">
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
-                                <property name="cursor">gtk-logo_cursor_fallback</property>
-                                <property name="tooltip-text" translatable="yes">The &quot;gtk-logo&quot; named cursor falling back to an image cursor</property>
+                                <property name="tooltip-text" translatable="yes">A callback cursor for the GTK logo</property>
                               </object>
                             </child>
                             <child>
