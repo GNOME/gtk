@@ -699,7 +699,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">default_cursor</property>
-                                <property name="tooltip-text" translatable="yes">The &quot;default&quot; named cursor.</property>
+                                <property name="tooltip-text" translatable="yes">The &quot;default&quot; named cursor</property>
                               </object>
                             </child>
                             <child>
@@ -707,7 +707,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">default_cursor_image</property>
-                                <property name="tooltip-text" translatable="yes">An image cursor.</property>
+                                <property name="tooltip-text" translatable="yes">An image cursor</property>
                               </object>
                             </child>
                             <child>
@@ -715,7 +715,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">default_cursor_fallback</property>
-                                <property name="tooltip-text" translatable="yes">The &quot;default&quot; named cursor falling back to an image cursor.</property>
+                                <property name="tooltip-text" translatable="yes">The &quot;default&quot; named cursor falling back to an image cursor</property>
                               </object>
                             </child>
                             <child>
@@ -723,7 +723,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">default_cursor_image_fallback</property>
-                                <property name="tooltip-text" translatable="yes">An image cursor falling back to the &quot;default&quot; cursor.</property>
+                                <property name="tooltip-text" translatable="yes">An image cursor falling back to the &quot;default&quot; cursor</property>
                               </object>
                             </child>
                           </object>
@@ -759,7 +759,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">none_cursor</property>
-                                <property name="tooltip-text" translatable="yes">The &quot;none&quot; named cursor.</property>
+                                <property name="tooltip-text" translatable="yes">The &quot;none&quot; named cursor</property>
                               </object>
                             </child>
                             <child>
@@ -767,7 +767,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">none_cursor_image</property>
-                                <property name="tooltip-text" translatable="yes">An image cursor.</property>
+                                <property name="tooltip-text" translatable="yes">An image cursor</property>
                               </object>
                             </child>
                             <child>
@@ -775,7 +775,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">none_cursor_fallback</property>
-                                <property name="tooltip-text" translatable="yes">The &quot;none&quot; named cursor falling back to an image cursor.</property>
+                                <property name="tooltip-text" translatable="yes">The &quot;none&quot; named cursor falling back to an image cursor</property>
                               </object>
                             </child>
                             <child>
@@ -783,7 +783,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">none_cursor_image_fallback</property>
-                                <property name="tooltip-text" translatable="yes">An image cursor falling back to the &quot;none&quot; cursor.</property>
+                                <property name="tooltip-text" translatable="yes">An image cursor falling back to the &quot;none&quot; cursor</property>
                               </object>
                             </child>
                           </object>
@@ -819,7 +819,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">gtk-logo_cursor</property>
-                                <property name="tooltip-text" translatable="yes">The &quot;gtk-logo&quot; named cursor.</property>
+                                <property name="tooltip-text" translatable="yes">The &quot;gtk-logo&quot; named cursor</property>
                               </object>
                             </child>
                             <child>
@@ -827,7 +827,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">gtk-logo_cursor_image</property>
-                                <property name="tooltip-text" translatable="yes">An image cursor.</property>
+                                <property name="tooltip-text" translatable="yes">An image cursor</property>
                               </object>
                             </child>
                             <child>
@@ -835,7 +835,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">gtk-logo_cursor_fallback</property>
-                                <property name="tooltip-text" translatable="yes">The &quot;gtk-logo&quot; named cursor falling back to an image cursor.</property>
+                                <property name="tooltip-text" translatable="yes">The &quot;gtk-logo&quot; named cursor falling back to an image cursor</property>
                               </object>
                             </child>
                             <child>
@@ -843,7 +843,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">gtk-logo_cursor_image_fallback</property>
-                                <property name="tooltip-text" translatable="yes">An image cursor falling back to the &quot;gtk-logo&quot; cursor.</property>
+                                <property name="tooltip-text" translatable="yes">An image cursor falling back to the &quot;gtk-logo&quot; cursor</property>
                               </object>
                             </child>
                           </object>
@@ -892,7 +892,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">context-menu_cursor</property>
-                                <property name="tooltip-text" translatable="yes">The &quot;context-menu&quot; named cursor.</property>
+                                <property name="tooltip-text" translatable="yes">The &quot;context-menu&quot; named cursor</property>
                               </object>
                             </child>
                             <child>
@@ -900,7 +900,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">context-menu_cursor_image</property>
-                                <property name="tooltip-text" translatable="yes">An image cursor.</property>
+                                <property name="tooltip-text" translatable="yes">An image cursor</property>
                               </object>
                             </child>
                             <child>
@@ -908,7 +908,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">context-menu_cursor_fallback</property>
-                                <property name="tooltip-text" translatable="yes">The &quot;context-menu&quot; named cursor falling back to an image cursor.</property>
+                                <property name="tooltip-text" translatable="yes">The &quot;context-menu&quot; named cursor falling back to an image cursor</property>
                               </object>
                             </child>
                             <child>
@@ -916,7 +916,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">context-menu_cursor_image_fallback</property>
-                                <property name="tooltip-text" translatable="yes">An image cursor falling back to the &quot;context-menu&quot; cursor.</property>
+                                <property name="tooltip-text" translatable="yes">An image cursor falling back to the &quot;context-menu&quot; cursor</property>
                               </object>
                             </child>
                           </object>
@@ -952,7 +952,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">help_cursor</property>
-                                <property name="tooltip-text" translatable="yes">The &quot;help&quot; named cursor.</property>
+                                <property name="tooltip-text" translatable="yes">The &quot;help&quot; named cursor</property>
                               </object>
                             </child>
                             <child>
@@ -960,7 +960,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">help_cursor_image</property>
-                                <property name="tooltip-text" translatable="yes">An image cursor.</property>
+                                <property name="tooltip-text" translatable="yes">An image cursor</property>
                               </object>
                             </child>
                             <child>
@@ -968,7 +968,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">help_cursor_fallback</property>
-                                <property name="tooltip-text" translatable="yes">The &quot;help&quot; named cursor falling back to an image cursor.</property>
+                                <property name="tooltip-text" translatable="yes">The &quot;help&quot; named cursor falling back to an image cursor</property>
                               </object>
                             </child>
                             <child>
@@ -976,7 +976,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">help_cursor_image_fallback</property>
-                                <property name="tooltip-text" translatable="yes">An image cursor falling back to the &quot;help&quot; cursor.</property>
+                                <property name="tooltip-text" translatable="yes">An image cursor falling back to the &quot;help&quot; cursor</property>
                               </object>
                             </child>
                           </object>
@@ -1012,7 +1012,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">pointer_cursor</property>
-                                <property name="tooltip-text" translatable="yes">The &quot;pointer&quot; named cursor.</property>
+                                <property name="tooltip-text" translatable="yes">The &quot;pointer&quot; named cursor</property>
                               </object>
                             </child>
                             <child>
@@ -1020,7 +1020,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">pointer_cursor_image</property>
-                                <property name="tooltip-text" translatable="yes">An image cursor.</property>
+                                <property name="tooltip-text" translatable="yes">An image cursor</property>
                               </object>
                             </child>
                             <child>
@@ -1028,7 +1028,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">pointer_cursor_fallback</property>
-                                <property name="tooltip-text" translatable="yes">The &quot;pointer&quot; named cursor falling back to an image cursor.</property>
+                                <property name="tooltip-text" translatable="yes">The &quot;pointer&quot; named cursor falling back to an image cursor</property>
                               </object>
                             </child>
                             <child>
@@ -1036,7 +1036,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">pointer_cursor_image_fallback</property>
-                                <property name="tooltip-text" translatable="yes">An image cursor falling back to the &quot;pointer&quot; cursor.</property>
+                                <property name="tooltip-text" translatable="yes">An image cursor falling back to the &quot;pointer&quot; cursor</property>
                               </object>
                             </child>
                           </object>
@@ -1072,7 +1072,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">progress_cursor</property>
-                                <property name="tooltip-text" translatable="yes">The &quot;progress&quot; named cursor.</property>
+                                <property name="tooltip-text" translatable="yes">The &quot;progress&quot; named cursor</property>
                               </object>
                             </child>
                             <child>
@@ -1080,7 +1080,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">progress_cursor_image</property>
-                                <property name="tooltip-text" translatable="yes">An image cursor.</property>
+                                <property name="tooltip-text" translatable="yes">An image cursor</property>
                               </object>
                             </child>
                             <child>
@@ -1088,7 +1088,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">progress_cursor_fallback</property>
-                                <property name="tooltip-text" translatable="yes">The &quot;progress&quot; named cursor falling back to an image cursor.</property>
+                                <property name="tooltip-text" translatable="yes">The &quot;progress&quot; named cursor falling back to an image cursor</property>
                               </object>
                             </child>
                             <child>
@@ -1096,7 +1096,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">progress_cursor_image_fallback</property>
-                                <property name="tooltip-text" translatable="yes">An image cursor falling back to the &quot;progress&quot; cursor.</property>
+                                <property name="tooltip-text" translatable="yes">An image cursor falling back to the &quot;progress&quot; cursor</property>
                               </object>
                             </child>
                           </object>
@@ -1132,7 +1132,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">wait_cursor</property>
-                                <property name="tooltip-text" translatable="yes">The &quot;wait&quot; named cursor.</property>
+                                <property name="tooltip-text" translatable="yes">The &quot;wait&quot; named cursor</property>
                               </object>
                             </child>
                             <child>
@@ -1140,7 +1140,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">wait_cursor_image</property>
-                                <property name="tooltip-text" translatable="yes">An image cursor.</property>
+                                <property name="tooltip-text" translatable="yes">An image cursor</property>
                               </object>
                             </child>
                             <child>
@@ -1148,7 +1148,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">wait_cursor_fallback</property>
-                                <property name="tooltip-text" translatable="yes">The &quot;wait&quot; named cursor falling back to an image cursor.</property>
+                                <property name="tooltip-text" translatable="yes">The &quot;wait&quot; named cursor falling back to an image cursor</property>
                               </object>
                             </child>
                             <child>
@@ -1156,7 +1156,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">wait_cursor_image_fallback</property>
-                                <property name="tooltip-text" translatable="yes">An image cursor falling back to the &quot;wait&quot; cursor.</property>
+                                <property name="tooltip-text" translatable="yes">An image cursor falling back to the &quot;wait&quot; cursor</property>
                               </object>
                             </child>
                           </object>
@@ -1205,7 +1205,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">cell_cursor</property>
-                                <property name="tooltip-text" translatable="yes">The &quot;cell&quot; named cursor.</property>
+                                <property name="tooltip-text" translatable="yes">The &quot;cell&quot; named cursor</property>
                               </object>
                             </child>
                             <child>
@@ -1213,7 +1213,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">cell_cursor_image</property>
-                                <property name="tooltip-text" translatable="yes">An image cursor.</property>
+                                <property name="tooltip-text" translatable="yes">An image cursor</property>
                               </object>
                             </child>
                             <child>
@@ -1221,7 +1221,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">cell_cursor_fallback</property>
-                                <property name="tooltip-text" translatable="yes">The &quot;cell&quot; named cursor falling back to an image cursor.</property>
+                                <property name="tooltip-text" translatable="yes">The &quot;cell&quot; named cursor falling back to an image cursor</property>
                               </object>
                             </child>
                             <child>
@@ -1229,7 +1229,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">cell_cursor_image_fallback</property>
-                                <property name="tooltip-text" translatable="yes">An image cursor falling back to the &quot;cell&quot; cursor.</property>
+                                <property name="tooltip-text" translatable="yes">An image cursor falling back to the &quot;cell&quot; cursor</property>
                               </object>
                             </child>
                           </object>
@@ -1265,7 +1265,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">crosshair_cursor</property>
-                                <property name="tooltip-text" translatable="yes">The &quot;crosshair&quot; named cursor.</property>
+                                <property name="tooltip-text" translatable="yes">The &quot;crosshair&quot; named cursor</property>
                               </object>
                             </child>
                             <child>
@@ -1273,7 +1273,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">crosshair_cursor_image</property>
-                                <property name="tooltip-text" translatable="yes">An image cursor.</property>
+                                <property name="tooltip-text" translatable="yes">An image cursor</property>
                               </object>
                             </child>
                             <child>
@@ -1281,7 +1281,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">crosshair_cursor_fallback</property>
-                                <property name="tooltip-text" translatable="yes">The &quot;crosshair&quot; named cursor falling back to an image cursor.</property>
+                                <property name="tooltip-text" translatable="yes">The &quot;crosshair&quot; named cursor falling back to an image cursor</property>
                               </object>
                             </child>
                             <child>
@@ -1289,7 +1289,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">crosshair_cursor_image_fallback</property>
-                                <property name="tooltip-text" translatable="yes">An image cursor falling back to the &quot;crosshair&quot; cursor.</property>
+                                <property name="tooltip-text" translatable="yes">An image cursor falling back to the &quot;crosshair&quot; cursor</property>
                               </object>
                             </child>
                           </object>
@@ -1325,7 +1325,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">text_cursor</property>
-                                <property name="tooltip-text" translatable="yes">The &quot;text&quot; named cursor.</property>
+                                <property name="tooltip-text" translatable="yes">The &quot;text&quot; named cursor</property>
                               </object>
                             </child>
                             <child>
@@ -1333,7 +1333,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">text_cursor_image</property>
-                                <property name="tooltip-text" translatable="yes">An image cursor.</property>
+                                <property name="tooltip-text" translatable="yes">An image cursor</property>
                               </object>
                             </child>
                             <child>
@@ -1341,7 +1341,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">text_cursor_fallback</property>
-                                <property name="tooltip-text" translatable="yes">The &quot;text&quot; named cursor falling back to an image cursor.</property>
+                                <property name="tooltip-text" translatable="yes">The &quot;text&quot; named cursor falling back to an image cursor</property>
                               </object>
                             </child>
                             <child>
@@ -1349,7 +1349,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">text_cursor_image_fallback</property>
-                                <property name="tooltip-text" translatable="yes">An image cursor falling back to the &quot;text&quot; cursor.</property>
+                                <property name="tooltip-text" translatable="yes">An image cursor falling back to the &quot;text&quot; cursor</property>
                               </object>
                             </child>
                           </object>
@@ -1385,7 +1385,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">vertical-text_cursor</property>
-                                <property name="tooltip-text" translatable="yes">The &quot;vertical-text&quot; named cursor.</property>
+                                <property name="tooltip-text" translatable="yes">The &quot;vertical-text&quot; named cursor</property>
                               </object>
                             </child>
                             <child>
@@ -1393,7 +1393,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">vertical-text_cursor_image</property>
-                                <property name="tooltip-text" translatable="yes">An image cursor.</property>
+                                <property name="tooltip-text" translatable="yes">An image cursor</property>
                               </object>
                             </child>
                             <child>
@@ -1401,7 +1401,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">vertical-text_cursor_fallback</property>
-                                <property name="tooltip-text" translatable="yes">The &quot;vertical-text&quot; named cursor falling back to an image cursor.</property>
+                                <property name="tooltip-text" translatable="yes">The &quot;vertical-text&quot; named cursor falling back to an image cursor</property>
                               </object>
                             </child>
                             <child>
@@ -1409,7 +1409,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">vertical-text_cursor_image_fallback</property>
-                                <property name="tooltip-text" translatable="yes">An image cursor falling back to the &quot;vertical-text&quot; cursor.</property>
+                                <property name="tooltip-text" translatable="yes">An image cursor falling back to the &quot;vertical-text&quot; cursor</property>
                               </object>
                             </child>
                           </object>
@@ -1458,7 +1458,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">alias_cursor</property>
-                                <property name="tooltip-text" translatable="yes">The &quot;alias&quot; named cursor.</property>
+                                <property name="tooltip-text" translatable="yes">The &quot;alias&quot; named cursor</property>
                               </object>
                             </child>
                             <child>
@@ -1466,7 +1466,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">alias_cursor_image</property>
-                                <property name="tooltip-text" translatable="yes">An image cursor.</property>
+                                <property name="tooltip-text" translatable="yes">An image cursor</property>
                               </object>
                             </child>
                             <child>
@@ -1474,7 +1474,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">alias_cursor_fallback</property>
-                                <property name="tooltip-text" translatable="yes">The &quot;alias&quot; named cursor falling back to an image cursor.</property>
+                                <property name="tooltip-text" translatable="yes">The &quot;alias&quot; named cursor falling back to an image cursor</property>
                               </object>
                             </child>
                             <child>
@@ -1482,7 +1482,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">alias_cursor_image_fallback</property>
-                                <property name="tooltip-text" translatable="yes">An image cursor falling back to the &quot;alias&quot; cursor.</property>
+                                <property name="tooltip-text" translatable="yes">An image cursor falling back to the &quot;alias&quot; cursor</property>
                               </object>
                             </child>
                           </object>
@@ -1518,7 +1518,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">copy_cursor</property>
-                                <property name="tooltip-text" translatable="yes">The &quot;copy&quot; named cursor.</property>
+                                <property name="tooltip-text" translatable="yes">The &quot;copy&quot; named cursor</property>
                               </object>
                             </child>
                             <child>
@@ -1526,7 +1526,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">copy_cursor_image</property>
-                                <property name="tooltip-text" translatable="yes">An image cursor.</property>
+                                <property name="tooltip-text" translatable="yes">An image cursor</property>
                               </object>
                             </child>
                             <child>
@@ -1534,7 +1534,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">copy_cursor_fallback</property>
-                                <property name="tooltip-text" translatable="yes">The &quot;copy&quot; named cursor falling back to an image cursor.</property>
+                                <property name="tooltip-text" translatable="yes">The &quot;copy&quot; named cursor falling back to an image cursor</property>
                               </object>
                             </child>
                             <child>
@@ -1542,7 +1542,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">copy_cursor_image_fallback</property>
-                                <property name="tooltip-text" translatable="yes">An image cursor falling back to the &quot;copy&quot; cursor.</property>
+                                <property name="tooltip-text" translatable="yes">An image cursor falling back to the &quot;copy&quot; cursor</property>
                               </object>
                             </child>
                           </object>
@@ -1578,7 +1578,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">move_cursor</property>
-                                <property name="tooltip-text" translatable="yes">The &quot;move&quot; named cursor.</property>
+                                <property name="tooltip-text" translatable="yes">The &quot;move&quot; named cursor</property>
                               </object>
                             </child>
                             <child>
@@ -1586,7 +1586,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">move_cursor_image</property>
-                                <property name="tooltip-text" translatable="yes">An image cursor.</property>
+                                <property name="tooltip-text" translatable="yes">An image cursor</property>
                               </object>
                             </child>
                             <child>
@@ -1594,7 +1594,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">move_cursor_fallback</property>
-                                <property name="tooltip-text" translatable="yes">The &quot;move&quot; named cursor falling back to an image cursor.</property>
+                                <property name="tooltip-text" translatable="yes">The &quot;move&quot; named cursor falling back to an image cursor</property>
                               </object>
                             </child>
                             <child>
@@ -1602,7 +1602,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">move_cursor_image_fallback</property>
-                                <property name="tooltip-text" translatable="yes">An image cursor falling back to the &quot;move&quot; cursor.</property>
+                                <property name="tooltip-text" translatable="yes">An image cursor falling back to the &quot;move&quot; cursor</property>
                               </object>
                             </child>
                           </object>
@@ -1638,7 +1638,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">no-drop_cursor</property>
-                                <property name="tooltip-text" translatable="yes">The &quot;no-drop&quot; named cursor.</property>
+                                <property name="tooltip-text" translatable="yes">The &quot;no-drop&quot; named cursor</property>
                               </object>
                             </child>
                             <child>
@@ -1646,7 +1646,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">no-drop_cursor_image</property>
-                                <property name="tooltip-text" translatable="yes">An image cursor.</property>
+                                <property name="tooltip-text" translatable="yes">An image cursor</property>
                               </object>
                             </child>
                             <child>
@@ -1654,7 +1654,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">no-drop_cursor_fallback</property>
-                                <property name="tooltip-text" translatable="yes">The &quot;no-drop&quot; named cursor falling back to an image cursor.</property>
+                                <property name="tooltip-text" translatable="yes">The &quot;no-drop&quot; named cursor falling back to an image cursor</property>
                               </object>
                             </child>
                             <child>
@@ -1662,7 +1662,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">no-drop_cursor_image_fallback</property>
-                                <property name="tooltip-text" translatable="yes">An image cursor falling back to the &quot;no-drop&quot; cursor.</property>
+                                <property name="tooltip-text" translatable="yes">An image cursor falling back to the &quot;no-drop&quot; cursor</property>
                               </object>
                             </child>
                           </object>
@@ -1698,7 +1698,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">not-allowed_cursor</property>
-                                <property name="tooltip-text" translatable="yes">The &quot;not-allowed&quot; named cursor.</property>
+                                <property name="tooltip-text" translatable="yes">The &quot;not-allowed&quot; named cursor</property>
                               </object>
                             </child>
                             <child>
@@ -1706,7 +1706,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">not-allowed_cursor_image</property>
-                                <property name="tooltip-text" translatable="yes">An image cursor.</property>
+                                <property name="tooltip-text" translatable="yes">An image cursor</property>
                               </object>
                             </child>
                             <child>
@@ -1714,7 +1714,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">not-allowed_cursor_fallback</property>
-                                <property name="tooltip-text" translatable="yes">The &quot;not-allowed&quot; named cursor falling back to an image cursor.</property>
+                                <property name="tooltip-text" translatable="yes">The &quot;not-allowed&quot; named cursor falling back to an image cursor</property>
                               </object>
                             </child>
                             <child>
@@ -1722,7 +1722,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">not-allowed_cursor_image_fallback</property>
-                                <property name="tooltip-text" translatable="yes">An image cursor falling back to the &quot;not-allowed&quot; cursor.</property>
+                                <property name="tooltip-text" translatable="yes">An image cursor falling back to the &quot;not-allowed&quot; cursor</property>
                               </object>
                             </child>
                           </object>
@@ -1758,7 +1758,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">grab_cursor</property>
-                                <property name="tooltip-text" translatable="yes">The &quot;grab&quot; named cursor.</property>
+                                <property name="tooltip-text" translatable="yes">The &quot;grab&quot; named cursor</property>
                               </object>
                             </child>
                             <child>
@@ -1766,7 +1766,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">grab_cursor_image</property>
-                                <property name="tooltip-text" translatable="yes">An image cursor.</property>
+                                <property name="tooltip-text" translatable="yes">An image cursor</property>
                               </object>
                             </child>
                             <child>
@@ -1774,7 +1774,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">grab_cursor_fallback</property>
-                                <property name="tooltip-text" translatable="yes">The &quot;grab&quot; named cursor falling back to an image cursor.</property>
+                                <property name="tooltip-text" translatable="yes">The &quot;grab&quot; named cursor falling back to an image cursor</property>
                               </object>
                             </child>
                             <child>
@@ -1782,7 +1782,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">grab_cursor_image_fallback</property>
-                                <property name="tooltip-text" translatable="yes">An image cursor falling back to the &quot;grab&quot; cursor.</property>
+                                <property name="tooltip-text" translatable="yes">An image cursor falling back to the &quot;grab&quot; cursor</property>
                               </object>
                             </child>
                           </object>
@@ -1818,7 +1818,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">grabbing_cursor</property>
-                                <property name="tooltip-text" translatable="yes">The &quot;grabbing&quot; named cursor.</property>
+                                <property name="tooltip-text" translatable="yes">The &quot;grabbing&quot; named cursor</property>
                               </object>
                             </child>
                             <child>
@@ -1826,7 +1826,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">grabbing_cursor_image</property>
-                                <property name="tooltip-text" translatable="yes">An image cursor.</property>
+                                <property name="tooltip-text" translatable="yes">An image cursor</property>
                               </object>
                             </child>
                             <child>
@@ -1834,7 +1834,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">grabbing_cursor_fallback</property>
-                                <property name="tooltip-text" translatable="yes">The &quot;grabbing&quot; named cursor falling back to an image cursor.</property>
+                                <property name="tooltip-text" translatable="yes">The &quot;grabbing&quot; named cursor falling back to an image cursor</property>
                               </object>
                             </child>
                             <child>
@@ -1842,7 +1842,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">grabbing_cursor_image_fallback</property>
-                                <property name="tooltip-text" translatable="yes">An image cursor falling back to the &quot;grabbing&quot; cursor.</property>
+                                <property name="tooltip-text" translatable="yes">An image cursor falling back to the &quot;grabbing&quot; cursor</property>
                               </object>
                             </child>
                           </object>
@@ -1891,7 +1891,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">all-scroll_cursor</property>
-                                <property name="tooltip-text" translatable="yes">The &quot;all-scroll&quot; named cursor.</property>
+                                <property name="tooltip-text" translatable="yes">The &quot;all-scroll&quot; named cursor</property>
                               </object>
                             </child>
                             <child>
@@ -1899,7 +1899,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">all-scroll_cursor_image</property>
-                                <property name="tooltip-text" translatable="yes">An image cursor.</property>
+                                <property name="tooltip-text" translatable="yes">An image cursor</property>
                               </object>
                             </child>
                             <child>
@@ -1907,7 +1907,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">all-scroll_cursor_fallback</property>
-                                <property name="tooltip-text" translatable="yes">The &quot;all-scroll&quot; named cursor falling back to an image cursor.</property>
+                                <property name="tooltip-text" translatable="yes">The &quot;all-scroll&quot; named cursor falling back to an image cursor</property>
                               </object>
                             </child>
                             <child>
@@ -1915,7 +1915,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">all-scroll_cursor_image_fallback</property>
-                                <property name="tooltip-text" translatable="yes">An image cursor falling back to the &quot;all-scroll&quot; cursor.</property>
+                                <property name="tooltip-text" translatable="yes">An image cursor falling back to the &quot;all-scroll&quot; cursor</property>
                               </object>
                             </child>
                           </object>
@@ -1951,7 +1951,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">col-resize_cursor</property>
-                                <property name="tooltip-text" translatable="yes">The &quot;col-resize&quot; named cursor.</property>
+                                <property name="tooltip-text" translatable="yes">The &quot;col-resize&quot; named cursor</property>
                               </object>
                             </child>
                             <child>
@@ -1959,7 +1959,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">col-resize_cursor_image</property>
-                                <property name="tooltip-text" translatable="yes">An image cursor.</property>
+                                <property name="tooltip-text" translatable="yes">An image cursor</property>
                               </object>
                             </child>
                             <child>
@@ -1967,7 +1967,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">col-resize_cursor_fallback</property>
-                                <property name="tooltip-text" translatable="yes">The &quot;col-resize&quot; named cursor falling back to an image cursor.</property>
+                                <property name="tooltip-text" translatable="yes">The &quot;col-resize&quot; named cursor falling back to an image cursor</property>
                               </object>
                             </child>
                             <child>
@@ -1975,7 +1975,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">col-resize_cursor_image_fallback</property>
-                                <property name="tooltip-text" translatable="yes">An image cursor falling back to the &quot;col-resize&quot; cursor.</property>
+                                <property name="tooltip-text" translatable="yes">An image cursor falling back to the &quot;col-resize&quot; cursor</property>
                               </object>
                             </child>
                           </object>
@@ -2011,7 +2011,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">row-resize_cursor</property>
-                                <property name="tooltip-text" translatable="yes">The &quot;row-resize&quot; named cursor.</property>
+                                <property name="tooltip-text" translatable="yes">The &quot;row-resize&quot; named cursor</property>
                               </object>
                             </child>
                             <child>
@@ -2019,7 +2019,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">row-resize_cursor_image</property>
-                                <property name="tooltip-text" translatable="yes">An image cursor.</property>
+                                <property name="tooltip-text" translatable="yes">An image cursor</property>
                               </object>
                             </child>
                             <child>
@@ -2027,7 +2027,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">row-resize_cursor_fallback</property>
-                                <property name="tooltip-text" translatable="yes">The &quot;row-resize&quot; named cursor falling back to an image cursor.</property>
+                                <property name="tooltip-text" translatable="yes">The &quot;row-resize&quot; named cursor falling back to an image cursor</property>
                               </object>
                             </child>
                             <child>
@@ -2035,7 +2035,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">row-resize_cursor_image_fallback</property>
-                                <property name="tooltip-text" translatable="yes">An image cursor falling back to the &quot;row-resize&quot; cursor.</property>
+                                <property name="tooltip-text" translatable="yes">An image cursor falling back to the &quot;row-resize&quot; cursor</property>
                               </object>
                             </child>
                           </object>
@@ -2071,7 +2071,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">n-resize_cursor</property>
-                                <property name="tooltip-text" translatable="yes">The &quot;n-resize&quot; named cursor.</property>
+                                <property name="tooltip-text" translatable="yes">The &quot;n-resize&quot; named cursor</property>
                               </object>
                             </child>
                             <child>
@@ -2079,7 +2079,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">n-resize_cursor_image</property>
-                                <property name="tooltip-text" translatable="yes">An image cursor.</property>
+                                <property name="tooltip-text" translatable="yes">An image cursor</property>
                               </object>
                             </child>
                             <child>
@@ -2087,7 +2087,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">n-resize_cursor_fallback</property>
-                                <property name="tooltip-text" translatable="yes">The &quot;n-resize&quot; named cursor falling back to an image cursor.</property>
+                                <property name="tooltip-text" translatable="yes">The &quot;n-resize&quot; named cursor falling back to an image cursor</property>
                               </object>
                             </child>
                             <child>
@@ -2095,7 +2095,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">n-resize_cursor_image_fallback</property>
-                                <property name="tooltip-text" translatable="yes">An image cursor falling back to the &quot;n-resize&quot; cursor.</property>
+                                <property name="tooltip-text" translatable="yes">An image cursor falling back to the &quot;n-resize&quot; cursor</property>
                               </object>
                             </child>
                           </object>
@@ -2131,7 +2131,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">e-resize_cursor</property>
-                                <property name="tooltip-text" translatable="yes">The &quot;e-resize&quot; named cursor.</property>
+                                <property name="tooltip-text" translatable="yes">The &quot;e-resize&quot; named cursor</property>
                               </object>
                             </child>
                             <child>
@@ -2139,7 +2139,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">e-resize_cursor_image</property>
-                                <property name="tooltip-text" translatable="yes">An image cursor.</property>
+                                <property name="tooltip-text" translatable="yes">An image cursor</property>
                               </object>
                             </child>
                             <child>
@@ -2147,7 +2147,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">e-resize_cursor_fallback</property>
-                                <property name="tooltip-text" translatable="yes">The &quot;e-resize&quot; named cursor falling back to an image cursor.</property>
+                                <property name="tooltip-text" translatable="yes">The &quot;e-resize&quot; named cursor falling back to an image cursor</property>
                               </object>
                             </child>
                             <child>
@@ -2155,7 +2155,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">e-resize_cursor_image_fallback</property>
-                                <property name="tooltip-text" translatable="yes">An image cursor falling back to the &quot;e-resize&quot; cursor.</property>
+                                <property name="tooltip-text" translatable="yes">An image cursor falling back to the &quot;e-resize&quot; cursor</property>
                               </object>
                             </child>
                           </object>
@@ -2191,7 +2191,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">s-resize_cursor</property>
-                                <property name="tooltip-text" translatable="yes">The &quot;s-resize&quot; named cursor.</property>
+                                <property name="tooltip-text" translatable="yes">The &quot;s-resize&quot; named cursor</property>
                               </object>
                             </child>
                             <child>
@@ -2199,7 +2199,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">s-resize_cursor_image</property>
-                                <property name="tooltip-text" translatable="yes">An image cursor.</property>
+                                <property name="tooltip-text" translatable="yes">An image cursor</property>
                               </object>
                             </child>
                             <child>
@@ -2207,7 +2207,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">s-resize_cursor_fallback</property>
-                                <property name="tooltip-text" translatable="yes">The &quot;s-resize&quot; named cursor falling back to an image cursor.</property>
+                                <property name="tooltip-text" translatable="yes">The &quot;s-resize&quot; named cursor falling back to an image cursor</property>
                               </object>
                             </child>
                             <child>
@@ -2215,7 +2215,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">s-resize_cursor_image_fallback</property>
-                                <property name="tooltip-text" translatable="yes">An image cursor falling back to the &quot;s-resize&quot; cursor.</property>
+                                <property name="tooltip-text" translatable="yes">An image cursor falling back to the &quot;s-resize&quot; cursor</property>
                               </object>
                             </child>
                           </object>
@@ -2251,7 +2251,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">w-resize_cursor</property>
-                                <property name="tooltip-text" translatable="yes">The &quot;w-resize&quot; named cursor.</property>
+                                <property name="tooltip-text" translatable="yes">The &quot;w-resize&quot; named cursor</property>
                               </object>
                             </child>
                             <child>
@@ -2259,7 +2259,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">w-resize_cursor_image</property>
-                                <property name="tooltip-text" translatable="yes">An image cursor.</property>
+                                <property name="tooltip-text" translatable="yes">An image cursor</property>
                               </object>
                             </child>
                             <child>
@@ -2267,7 +2267,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">w-resize_cursor_fallback</property>
-                                <property name="tooltip-text" translatable="yes">The &quot;w-resize&quot; named cursor falling back to an image cursor.</property>
+                                <property name="tooltip-text" translatable="yes">The &quot;w-resize&quot; named cursor falling back to an image cursor</property>
                               </object>
                             </child>
                             <child>
@@ -2275,7 +2275,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">w-resize_cursor_image_fallback</property>
-                                <property name="tooltip-text" translatable="yes">An image cursor falling back to the &quot;w-resize&quot; cursor.</property>
+                                <property name="tooltip-text" translatable="yes">An image cursor falling back to the &quot;w-resize&quot; cursor</property>
                               </object>
                             </child>
                           </object>
@@ -2311,7 +2311,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">ne-resize_cursor</property>
-                                <property name="tooltip-text" translatable="yes">The &quot;ne-resize&quot; named cursor.</property>
+                                <property name="tooltip-text" translatable="yes">The &quot;ne-resize&quot; named cursor</property>
                               </object>
                             </child>
                             <child>
@@ -2319,7 +2319,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">ne-resize_cursor_image</property>
-                                <property name="tooltip-text" translatable="yes">An image cursor.</property>
+                                <property name="tooltip-text" translatable="yes">An image cursor</property>
                               </object>
                             </child>
                             <child>
@@ -2327,7 +2327,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">ne-resize_cursor_fallback</property>
-                                <property name="tooltip-text" translatable="yes">The &quot;ne-resize&quot; named cursor falling back to an image cursor.</property>
+                                <property name="tooltip-text" translatable="yes">The &quot;ne-resize&quot; named cursor falling back to an image cursor</property>
                               </object>
                             </child>
                             <child>
@@ -2335,7 +2335,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">ne-resize_cursor_image_fallback</property>
-                                <property name="tooltip-text" translatable="yes">An image cursor falling back to the &quot;ne-resize&quot; cursor.</property>
+                                <property name="tooltip-text" translatable="yes">An image cursor falling back to the &quot;ne-resize&quot; cursor</property>
                               </object>
                             </child>
                           </object>
@@ -2371,7 +2371,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">nw-resize_cursor</property>
-                                <property name="tooltip-text" translatable="yes">The &quot;nw-resize&quot; named cursor.</property>
+                                <property name="tooltip-text" translatable="yes">The &quot;nw-resize&quot; named cursor</property>
                               </object>
                             </child>
                             <child>
@@ -2379,7 +2379,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">nw-resize_cursor_image</property>
-                                <property name="tooltip-text" translatable="yes">An image cursor.</property>
+                                <property name="tooltip-text" translatable="yes">An image cursor</property>
                               </object>
                             </child>
                             <child>
@@ -2387,7 +2387,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">nw-resize_cursor_fallback</property>
-                                <property name="tooltip-text" translatable="yes">The &quot;nw-resize&quot; named cursor falling back to an image cursor.</property>
+                                <property name="tooltip-text" translatable="yes">The &quot;nw-resize&quot; named cursor falling back to an image cursor</property>
                               </object>
                             </child>
                             <child>
@@ -2395,7 +2395,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">nw-resize_cursor_image_fallback</property>
-                                <property name="tooltip-text" translatable="yes">An image cursor falling back to the &quot;nw-resize&quot; cursor.</property>
+                                <property name="tooltip-text" translatable="yes">An image cursor falling back to the &quot;nw-resize&quot; cursor</property>
                               </object>
                             </child>
                           </object>
@@ -2431,7 +2431,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">sw-resize_cursor</property>
-                                <property name="tooltip-text" translatable="yes">The &quot;sw-resize&quot; named cursor.</property>
+                                <property name="tooltip-text" translatable="yes">The &quot;sw-resize&quot; named cursor</property>
                               </object>
                             </child>
                             <child>
@@ -2439,7 +2439,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">sw-resize_cursor_image</property>
-                                <property name="tooltip-text" translatable="yes">An image cursor.</property>
+                                <property name="tooltip-text" translatable="yes">An image cursor</property>
                               </object>
                             </child>
                             <child>
@@ -2447,7 +2447,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">sw-resize_cursor_fallback</property>
-                                <property name="tooltip-text" translatable="yes">The &quot;sw-resize&quot; named cursor falling back to an image cursor.</property>
+                                <property name="tooltip-text" translatable="yes">The &quot;sw-resize&quot; named cursor falling back to an image cursor</property>
                               </object>
                             </child>
                             <child>
@@ -2455,7 +2455,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">sw-resize_cursor_image_fallback</property>
-                                <property name="tooltip-text" translatable="yes">An image cursor falling back to the &quot;sw-resize&quot; cursor.</property>
+                                <property name="tooltip-text" translatable="yes">An image cursor falling back to the &quot;sw-resize&quot; cursor</property>
                               </object>
                             </child>
                           </object>
@@ -2491,7 +2491,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">se-resize_cursor</property>
-                                <property name="tooltip-text" translatable="yes">The &quot;se-resize&quot; named cursor.</property>
+                                <property name="tooltip-text" translatable="yes">The &quot;se-resize&quot; named cursor</property>
                               </object>
                             </child>
                             <child>
@@ -2499,7 +2499,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">se-resize_cursor_image</property>
-                                <property name="tooltip-text" translatable="yes">An image cursor.</property>
+                                <property name="tooltip-text" translatable="yes">An image cursor</property>
                               </object>
                             </child>
                             <child>
@@ -2507,7 +2507,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">se-resize_cursor_fallback</property>
-                                <property name="tooltip-text" translatable="yes">The &quot;se-resize&quot; named cursor falling back to an image cursor.</property>
+                                <property name="tooltip-text" translatable="yes">The &quot;se-resize&quot; named cursor falling back to an image cursor</property>
                               </object>
                             </child>
                             <child>
@@ -2515,7 +2515,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">se-resize_cursor_image_fallback</property>
-                                <property name="tooltip-text" translatable="yes">An image cursor falling back to the &quot;se-resize&quot; cursor.</property>
+                                <property name="tooltip-text" translatable="yes">An image cursor falling back to the &quot;se-resize&quot; cursor</property>
                               </object>
                             </child>
                           </object>
@@ -2551,7 +2551,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">ew-resize_cursor</property>
-                                <property name="tooltip-text" translatable="yes">The &quot;ew-resize&quot; named cursor.</property>
+                                <property name="tooltip-text" translatable="yes">The &quot;ew-resize&quot; named cursor</property>
                               </object>
                             </child>
                             <child>
@@ -2559,7 +2559,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">ew-resize_cursor_image</property>
-                                <property name="tooltip-text" translatable="yes">An image cursor.</property>
+                                <property name="tooltip-text" translatable="yes">An image cursor</property>
                               </object>
                             </child>
                             <child>
@@ -2567,7 +2567,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">ew-resize_cursor_fallback</property>
-                                <property name="tooltip-text" translatable="yes">The &quot;ew-resize&quot; named cursor falling back to an image cursor.</property>
+                                <property name="tooltip-text" translatable="yes">The &quot;ew-resize&quot; named cursor falling back to an image cursor</property>
                               </object>
                             </child>
                             <child>
@@ -2575,7 +2575,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">ew-resize_cursor_image_fallback</property>
-                                <property name="tooltip-text" translatable="yes">An image cursor falling back to the &quot;ew-resize&quot; cursor.</property>
+                                <property name="tooltip-text" translatable="yes">An image cursor falling back to the &quot;ew-resize&quot; cursor</property>
                               </object>
                             </child>
                           </object>
@@ -2611,7 +2611,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">ns-resize_cursor</property>
-                                <property name="tooltip-text" translatable="yes">The &quot;ns-resize&quot; named cursor.</property>
+                                <property name="tooltip-text" translatable="yes">The &quot;ns-resize&quot; named cursor</property>
                               </object>
                             </child>
                             <child>
@@ -2619,7 +2619,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">ns-resize_cursor_image</property>
-                                <property name="tooltip-text" translatable="yes">An image cursor.</property>
+                                <property name="tooltip-text" translatable="yes">An image cursor</property>
                               </object>
                             </child>
                             <child>
@@ -2627,7 +2627,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">ns-resize_cursor_fallback</property>
-                                <property name="tooltip-text" translatable="yes">The &quot;ns-resize&quot; named cursor falling back to an image cursor.</property>
+                                <property name="tooltip-text" translatable="yes">The &quot;ns-resize&quot; named cursor falling back to an image cursor</property>
                               </object>
                             </child>
                             <child>
@@ -2635,7 +2635,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">ns-resize_cursor_image_fallback</property>
-                                <property name="tooltip-text" translatable="yes">An image cursor falling back to the &quot;ns-resize&quot; cursor.</property>
+                                <property name="tooltip-text" translatable="yes">An image cursor falling back to the &quot;ns-resize&quot; cursor</property>
                               </object>
                             </child>
                           </object>
@@ -2671,7 +2671,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">nesw-resize_cursor</property>
-                                <property name="tooltip-text" translatable="yes">The &quot;nesw-resize&quot; named cursor.</property>
+                                <property name="tooltip-text" translatable="yes">The &quot;nesw-resize&quot; named cursor</property>
                               </object>
                             </child>
                             <child>
@@ -2679,7 +2679,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">nesw-resize_cursor_image</property>
-                                <property name="tooltip-text" translatable="yes">An image cursor.</property>
+                                <property name="tooltip-text" translatable="yes">An image cursor</property>
                               </object>
                             </child>
                             <child>
@@ -2687,7 +2687,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">nesw-resize_cursor_fallback</property>
-                                <property name="tooltip-text" translatable="yes">The &quot;nesw-resize&quot; named cursor falling back to an image cursor.</property>
+                                <property name="tooltip-text" translatable="yes">The &quot;nesw-resize&quot; named cursor falling back to an image cursor</property>
                               </object>
                             </child>
                             <child>
@@ -2695,7 +2695,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">nesw-resize_cursor_image_fallback</property>
-                                <property name="tooltip-text" translatable="yes">An image cursor falling back to the &quot;nesw-resize&quot; cursor.</property>
+                                <property name="tooltip-text" translatable="yes">An image cursor falling back to the &quot;nesw-resize&quot; cursor</property>
                               </object>
                             </child>
                           </object>
@@ -2731,7 +2731,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">nwse-resize_cursor</property>
-                                <property name="tooltip-text" translatable="yes">The &quot;nwse-resize&quot; named cursor.</property>
+                                <property name="tooltip-text" translatable="yes">The &quot;nwse-resize&quot; named cursor</property>
                               </object>
                             </child>
                             <child>
@@ -2739,7 +2739,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">nwse-resize_cursor_image</property>
-                                <property name="tooltip-text" translatable="yes">An image cursor.</property>
+                                <property name="tooltip-text" translatable="yes">An image cursor</property>
                               </object>
                             </child>
                             <child>
@@ -2747,7 +2747,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">nwse-resize_cursor_fallback</property>
-                                <property name="tooltip-text" translatable="yes">The &quot;nwse-resize&quot; named cursor falling back to an image cursor.</property>
+                                <property name="tooltip-text" translatable="yes">The &quot;nwse-resize&quot; named cursor falling back to an image cursor</property>
                               </object>
                             </child>
                             <child>
@@ -2755,7 +2755,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">nwse-resize_cursor_image_fallback</property>
-                                <property name="tooltip-text" translatable="yes">An image cursor falling back to the &quot;nwse-resize&quot; cursor.</property>
+                                <property name="tooltip-text" translatable="yes">An image cursor falling back to the &quot;nwse-resize&quot; cursor</property>
                               </object>
                             </child>
                           </object>
@@ -2804,7 +2804,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">zoom-in_cursor</property>
-                                <property name="tooltip-text" translatable="yes">The &quot;zoom-in&quot; named cursor.</property>
+                                <property name="tooltip-text" translatable="yes">The &quot;zoom-in&quot; named cursor</property>
                               </object>
                             </child>
                             <child>
@@ -2812,7 +2812,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">zoom-in_cursor_image</property>
-                                <property name="tooltip-text" translatable="yes">An image cursor.</property>
+                                <property name="tooltip-text" translatable="yes">An image cursor</property>
                               </object>
                             </child>
                             <child>
@@ -2820,7 +2820,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">zoom-in_cursor_fallback</property>
-                                <property name="tooltip-text" translatable="yes">The &quot;zoom-in&quot; named cursor falling back to an image cursor.</property>
+                                <property name="tooltip-text" translatable="yes">The &quot;zoom-in&quot; named cursor falling back to an image cursor</property>
                               </object>
                             </child>
                             <child>
@@ -2828,7 +2828,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">zoom-in_cursor_image_fallback</property>
-                                <property name="tooltip-text" translatable="yes">An image cursor falling back to the &quot;zoom-in&quot; cursor.</property>
+                                <property name="tooltip-text" translatable="yes">An image cursor falling back to the &quot;zoom-in&quot; cursor</property>
                               </object>
                             </child>
                           </object>
@@ -2864,7 +2864,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">zoom-out_cursor</property>
-                                <property name="tooltip-text" translatable="yes">The &quot;zoom-out&quot; named cursor.</property>
+                                <property name="tooltip-text" translatable="yes">The &quot;zoom-out&quot; named cursor</property>
                               </object>
                             </child>
                             <child>
@@ -2872,7 +2872,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">zoom-out_cursor_image</property>
-                                <property name="tooltip-text" translatable="yes">An image cursor.</property>
+                                <property name="tooltip-text" translatable="yes">An image cursor</property>
                               </object>
                             </child>
                             <child>
@@ -2880,7 +2880,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">zoom-out_cursor_fallback</property>
-                                <property name="tooltip-text" translatable="yes">The &quot;zoom-out&quot; named cursor falling back to an image cursor.</property>
+                                <property name="tooltip-text" translatable="yes">The &quot;zoom-out&quot; named cursor falling back to an image cursor</property>
                               </object>
                             </child>
                             <child>
@@ -2888,7 +2888,7 @@
                                 <property name="width-request">32</property>
                                 <property name="height-request">32</property>
                                 <property name="cursor">zoom-out_cursor_image_fallback</property>
-                                <property name="tooltip-text" translatable="yes">An image cursor falling back to the &quot;zoom-out&quot; cursor.</property>
+                                <property name="tooltip-text" translatable="yes">An image cursor falling back to the &quot;zoom-out&quot; cursor</property>
                               </object>
                             </child>
                           </object>
