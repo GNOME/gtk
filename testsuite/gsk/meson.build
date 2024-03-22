@@ -171,6 +171,7 @@ compare_render_tests = [
   'texture-scale-filters-nocairo',
   'texture-scale-magnify-10000x',
   'texture-scale-magnify-rotate',
+  'texture-scale-nearest-noninteger-scaled-nogl',
   'texture-scale-nearest-vs-linear',
   'texture-scale-offset',
   'texture-scale-stripes',
