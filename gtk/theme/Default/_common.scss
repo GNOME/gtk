@@ -402,7 +402,11 @@ entry {
     margin-bottom: 2px;
   }
 
-  progress > trough > progress {
+  > progress > trough {
+    min-height: 2px;
+  }
+
+  > progress > trough > progress {
     background-color: transparent;
     background-image: none;
     border-radius: 0;
@@ -410,7 +414,6 @@ entry {
     border-color: $selected_bg_color;
     border-style: solid;
     box-shadow: none;
-
   }
 
    // linked entries
