@@ -779,11 +779,13 @@ static struct {
   const char   *name;
   GdkCursor    *cursor;
 } drag_cursors[] = {
-  { 0,               "default", NULL },
-  { GDK_ACTION_ASK,  "dnd-ask", NULL },
-  { GDK_ACTION_COPY, "copy",    NULL },
-  { GDK_ACTION_MOVE, "move",    NULL },
-  { GDK_ACTION_LINK, "alias",   NULL },
+  { 0,               "default",  NULL },
+  { GDK_ACTION_ASK,  "dnd-ask",  NULL },
+  { GDK_ACTION_COPY, "copy",     NULL },
+  { GDK_ACTION_MOVE, "dnd-move", NULL }, /* Not using move here, since move is stuck using
+                                          * a mismatched visual metaphor in Adwaita
+                                          */
+  { GDK_ACTION_LINK, "alias",    NULL },
 };
 
 GdkCursor *
