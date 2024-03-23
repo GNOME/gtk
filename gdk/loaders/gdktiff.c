@@ -26,6 +26,7 @@
 #include "gdktexturedownloaderprivate.h"
 
 #include <tiffio.h>
+#include <malloc.h>
 
 /* Our main interest in tiff as an image format is that it is
  * flexible enough to save all our texture formats without
@@ -499,6 +500,8 @@ gdk_load_tiff (GBytes  *input_bytes,
   g_bytes_unref (bytes);
 
   TIFFClose (tif);
+
+  malloc_trim (0);
 
   if (GDK_PROFILER_IS_RUNNING)
     {

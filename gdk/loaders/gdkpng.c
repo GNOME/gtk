@@ -27,6 +27,7 @@
 #include "gsk/gl/fp16private.h"
 #include <png.h>
 #include <stdio.h>
+#include <malloc.h>
 
 /* The main difference between the png load/save code here and
  * gdk-pixbuf is that we can support loading 16-bit data in the
@@ -299,6 +300,8 @@ gdk_load_png (GBytes  *bytes,
 
   g_free (row_pointers);
   png_destroy_read_struct (&png, &info, NULL);
+
+  malloc_trim (0);
 
   if (GDK_PROFILER_IS_RUNNING)
     {

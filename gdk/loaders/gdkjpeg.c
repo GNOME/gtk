@@ -30,6 +30,7 @@
 #include <jpeglib.h>
 #include <jerror.h>
 #include <setjmp.h>
+#include <malloc.h>
 
 /* {{{ Error handling */
 
@@ -237,8 +238,10 @@ gdk_load_jpeg (GBytes  *input_bytes,
 
   g_bytes_unref (bytes);
 
+  malloc_trim (0);
+
   gdk_profiler_end_mark (before, "Load jpeg", NULL);
- 
+
   return texture;
 }
 
