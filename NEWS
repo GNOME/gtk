@@ -1,6 +1,40 @@
 Overview of Changes in 4.14.2, xx-xx-xxxx
 =========================================
 
+* GtkScale:
+ - Improve positioning of values in some cases
+
+* Theme:
+ - Make progress in entries visible
+
+* GDK:
+ - dnd: Use the default cursor durion motion
+ - dnd: Use a better cursor for indicating the move action
+
+* GSK:
+ - gl: Handle offloads in offscreen context better
+
+* Wayland:
+ - Tighten up some protocol version checks
+ - Use the presentation time protocol
+
+* macOS:
+ - Fix up the app menu support
+
+* Windows:
+ - Fix problems with minimization
+
+* Demos:
+ - Clean up the application demo
+ - Update cursor images for the cursor demo
+
+* Translation updates:
+ Catalan
+ Czech
+ French
+ Slovenian
+
+
 Overview of Changes in 4.14.1, 16-03-2024
 =========================================
 
