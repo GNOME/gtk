@@ -4004,7 +4004,7 @@ gtk_icon_paintable_new_for_file (GFile *file,
       char *uri;
 
       uri = g_file_get_uri (file);
-      icon->filename = g_strdup (uri + 11); /* resource:// */
+      icon->filename = g_strdup (uri + strlen ("resource://"));
       g_free (uri);
     }
   else
