@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: gtk+ master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
 "POT-Creation-Date: 2024-03-18 17:37+0000\n"
-"PO-Revision-Date: 2024-03-25 00:16+0100\n"
+"PO-Revision-Date: 2024-03-25 00:19+0100\n"
 "Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language-Team: Slovenian GNOME Translation Team <gnome-si@googlegroups.com>\n"
 "Language: sl_SI\n"
@@ -560,10 +560,9 @@ msgid "Unsupported color type %u in png image"
 msgstr "Nepodprta barvna globina %u v sliki PNG"
 
 #: gdk/loaders/gdkpng.c:272
-#, fuzzy, c-format
-#| msgid "Not enough memory for image size %ux%u"
+#, c-format
 msgid "Image stride too large for image size %ux%u"
-msgstr "Ni dovolj pomnilnika za sliko velikosti %ux%u"
+msgstr "Korak slike je prevelik za velikost slike %ux%u"
 
 #: gdk/loaders/gdktiff.c:358
 msgid "Failed to load RGB data from TIFF file"
