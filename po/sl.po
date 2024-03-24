@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2024-03-17 10:28+0000\n"
-"PO-Revision-Date: 2024-03-18 18:36+0100\n"
+"POT-Creation-Date: 2024-03-18 17:37+0000\n"
+"PO-Revision-Date: 2024-03-25 00:16+0100\n"
 "Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language-Team: Slovenian GNOME Translation Team <gnome-si@googlegroups.com>\n"
 "Language: sl_SI\n"
@@ -872,7 +872,6 @@ msgid "OpenGL ES 3.0 is not supported by this renderer."
 msgstr "Izrisovalnik ne podpira OpenGL ES 3.0"
 
 #: gsk/gpu/gsknglrenderer.c:62
-#, fuzzy
 msgid "OpenGL 3.3 required"
 msgstr "Potrebujete OpenGL 3.3"
 
@@ -1785,7 +1784,7 @@ msgstr "bločni navedek"
 #: gtk/gtkaccessible.c:872
 msgctxt "accessibility"
 msgid "article"
-msgstr ""
+msgstr "članek"
 
 #: gtk/gtkaccessible.c:873
 msgctxt "accessibility"
@@ -4455,7 +4454,6 @@ msgid "Show Accessibility warnings"
 msgstr "Pokaži opozorila o dostopnosti"
 
 #: gtk/inspector/visual.ui:632
-#, fuzzy
 msgid "Show Graphics Offload"
 msgstr "Pokaži grafično razbremenitev"
 
@@ -7508,6 +7506,19 @@ msgid ""
 "  info         Print information about the path\n"
 "\n"
 msgstr ""
+"Uporaba:\n"
+"  gtk4-path-tool [UKAZ] [MOŽNOST ...] POT\n"
+"\n"
+"Opravite različna opravila na poteh.\n"
+"\n"
+"Ukazi:\n"
+"  decompose    Razčleni pot\n"
+"  reverse      Preobrni pot\n"
+"  restrict     Omeji pot na odsek\n"
+"  show         Prikaži pot v oknu\n"
+"  render       Upodobi pot kot sliko\n"
+"  info         Izpis informacij o poti\n"
+"\n"
 
 #: tools/gtk-path-tool-decompose.c:84
 msgid "Allow quadratic Bézier curves"
@@ -7626,7 +7637,6 @@ msgid "Point color"
 msgstr "Barva točke"
 
 #: tools/gtk-path-tool-render.c:129 tools/gtk-path-tool-show.c:151
-#, fuzzy
 msgid "Fill rule (winding, even-odd)"
 msgstr "Pravilo polnjenja (navijajoče, sodo-liho)"
 
@@ -7645,13 +7655,12 @@ msgid "Line width (number)"
 msgstr "Širina vrstice (številka)"
 
 #: tools/gtk-path-tool-render.c:134 tools/gtk-path-tool-show.c:156
-#, fuzzy
 msgid "Line cap (butt, round, square)"
 msgstr "Konec črte (zaobljeno, okroglo, oglato)"
 
 #: tools/gtk-path-tool-render.c:135 tools/gtk-path-tool-show.c:157
 msgid "Line join (miter, miter-clip, round, bevel, arcs)"
-msgstr ""
+msgstr "Spoj črt (sredica, sredica-sponka, okrogla, izbočena, loki)"
 
 #: tools/gtk-path-tool-render.c:136 tools/gtk-path-tool-show.c:158
 msgid "Miter limit (number)"
@@ -7698,17 +7707,14 @@ msgid "Can only render a single path"
 msgstr "Izrisati je mogoče le eno pot"
 
 #: tools/gtk-path-tool-render.c:250 tools/gtk-path-tool-show.c:221
-#, fuzzy
 msgid "fill rule"
 msgstr "pravilo polnjenja"
 
 #: tools/gtk-path-tool-render.c:255 tools/gtk-path-tool-show.c:226
-#, fuzzy
 msgid "line cap"
 msgstr "konec črte"
 
 #: tools/gtk-path-tool-render.c:256 tools/gtk-path-tool-show.c:227
-#, fuzzy
 msgid "line join"
 msgstr "spoj črte"
 
@@ -7723,7 +7729,6 @@ msgid "Output written to '%s'."
 msgstr "Odvod je zapisan v »%s«."
 
 #: tools/gtk-path-tool-restrict.c:36
-#, fuzzy
 msgid "Beginning of segment"
 msgstr "Začetek odseka"
 
@@ -7732,7 +7737,6 @@ msgid "LENGTH"
 msgstr "DOLŽINA"
 
 #: tools/gtk-path-tool-restrict.c:37
-#, fuzzy
 msgid "End of segment"
 msgstr "Konec odseka"
 
@@ -7793,7 +7797,7 @@ msgid "Failed to parse '%s' as number"
 msgstr "Razčlenjevanje »%s« kot število je spodletelo"
 
 #: tools/gtk-rendernode-tool.c:35
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Usage:\n"
 "  gtk4-rendernode-tool [COMMAND] [OPTION…] FILE\n"
@@ -7814,17 +7818,16 @@ msgstr ""
 "Izvajanje različnih opravil z vozlišči izrisovanja GTK.\n"
 "\n"
 "Ukazi:\n"
-"  benchmark    Testno izrisovanje vozlišča\n"
+"  benchmark    Preizkusno izrisovanje vozlišča\n"
 "  compare      Primerja vozlišča ali slike\n"
 "  info         Izpiše podatke o vozlišču\n"
-"  show         Prikaže vozlišče\n"
+"  show         Pokaže vozlišče\n"
 "  render       Izdela zaslonsko sliko vozlišča\n"
 "\n"
 
 #: tools/gtk-rendernode-tool-benchmark.c:94
-#, fuzzy
 msgid "Add renderer to benchmark"
-msgstr "Dodaj izrisovalnik v benchmark"
+msgstr "Dodaj izrisovalnik v preizkušanje"
 
 #: tools/gtk-rendernode-tool-benchmark.c:94
 #: tools/gtk-rendernode-tool-compare.c:65
@@ -7841,12 +7844,10 @@ msgid "RUNS"
 msgstr "PONOVITVE"
 
 #: tools/gtk-rendernode-tool-benchmark.c:96
-#, fuzzy
 msgid "Don’t download result/wait for GPU to finish"
-msgstr "Ne prenašaj rezultatov/čakajte na zaključek dela GPE"
+msgstr "Ne prenašaj rezultatov/čakaj na zaključek dela GPE"
 
 #: tools/gtk-rendernode-tool-benchmark.c:114
-#, fuzzy
 msgid "Benchmark rendering of a .node file."
 msgstr "Preizkusno izrisovanje datoteke .node."
 
@@ -7858,7 +7859,7 @@ msgid "No .node file specified\n"
 msgstr "Ni določene nobene datoteke .node\n"
 
 #: tools/gtk-rendernode-tool-benchmark.c:133
-#, fuzzy, c-format
+#, c-format
 msgid "Can only benchmark a single .node file\n"
 msgstr "Preizkušati je mogoče le eno datoteko .node\n"
 
@@ -7898,9 +7899,9 @@ msgid "Failed to load %s: %s\n"
 msgstr "Datoteke %s ni mogoče naložiti: %s\n"
 
 #: tools/gtk-rendernode-tool-compare.c:122
-#, fuzzy, c-format
+#, c-format
 msgid "Could not save diff image to %s\n"
-msgstr "Datoteke diff ni možno shraniti v %s\n"
+msgstr "Slike diff ni možno shraniti v %s\n"
 
 #: tools/gtk-rendernode-tool-compare.c:132
 #, c-format
