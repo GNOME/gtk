@@ -1559,13 +1559,14 @@ describe_egl_config (EGLDisplay egl_display,
 
   if (!eglGetConfigAttrib (egl_display, egl_config, EGL_DEPTH_SIZE, &depth))
     depth = 0;
+
   if (!eglGetConfigAttrib (egl_display, egl_config, EGL_STENCIL_SIZE, &stencil))
     stencil = 0;
 
-  return g_strdup_printf ("R%dG%dB%dA%d%s%s%s", red, green, blue, alpha,
+  return g_strdup_printf ("R%dG%dB%dA%d%s, depth %d, stencil %d", red, green, blue, alpha,
                           type == EGL_COLOR_COMPONENT_TYPE_FIXED_EXT ? "" : " float",
-                          depth > 0 ? ", depth buffer" : "",
-                          stencil > 0 ? ", stencil buffer" : "");
+                          depth,
+                          stencil);
 }
 
 gpointer
