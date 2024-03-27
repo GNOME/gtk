@@ -3452,7 +3452,7 @@ gtk_text_insert_text (GtkText    *self,
   gtk_accessible_text_update_contents (GTK_ACCESSIBLE_TEXT (self),
                                        GTK_ACCESSIBLE_TEXT_CONTENT_CHANGE_INSERT,
                                        *position,
-                                       n_inserted);
+                                       *position + n_inserted);
 
   *position += n_inserted;
 
