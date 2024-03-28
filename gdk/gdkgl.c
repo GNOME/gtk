@@ -540,6 +540,30 @@ gdk_cairo_draw_from_gl (cairo_t              *cr,
       /* Translate to impl coords */
       cairo_region_translate (clip_region, dx, dy);
 
+      if (alpha_size != 0)
+        {
+          cairo_region_t *opaque_region, *blend_region;
+
+          opaque_region = cairo_region_copy (clip_region);
+          cairo_region_subtract (opaque_region, impl_window->current_paint.flushed_region);
+          cairo_region_subtract (opaque_region, impl_window->current_paint.need_blend_region);
+
+          if (!cairo_region_is_empty (opaque_region))
+            gdk_gl_texture_from_surface (impl_window->current_paint.surface,
+                                         opaque_region);
+
+          blend_region = cairo_region_copy (clip_region);
+          cairo_region_intersect (blend_region, impl_window->current_paint.need_blend_region);
+
+          glEnable (GL_BLEND);
+          if (!cairo_region_is_empty (blend_region))
+            gdk_gl_texture_from_surface (impl_window->current_paint.surface,
+                                         blend_region);
+
+          cairo_region_destroy (opaque_region);
+          cairo_region_destroy (blend_region);
+        }
+
       glBindTexture (GL_TEXTURE_2D, source);
 
       if (gdk_gl_context_get_use_es (paint_context) ||
