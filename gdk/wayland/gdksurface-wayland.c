@@ -271,6 +271,20 @@ gdk_wayland_surface_update_size (GdkSurface               *surface,
   _gdk_surface_update_size (surface);
 }
 
+static void
+gdk_wayland_surface_clear_frame_callback (GdkWaylandSurface *self)
+{
+  GdkSurface *surface = GDK_SURFACE (self);
+
+  g_clear_pointer (&self->frame_callback, wl_callback_destroy);
+
+  for (gsize i = 0; i < gdk_surface_get_n_subsurfaces (surface); i++)
+    {
+      GdkSubsurface *subsurface = gdk_surface_get_subsurface (surface, i);
+      gdk_wayland_subsurface_clear_frame_callback (subsurface);
+    }
+}
+
 void
 gdk_wayland_surface_frame_callback (GdkSurface *surface,
                                     uint32_t    time)
@@ -284,13 +298,7 @@ gdk_wayland_surface_frame_callback (GdkSurface *surface,
   gdk_profiler_add_mark (GDK_PROFILER_CURRENT_TIME, 0, "Wayland frame event", NULL);
   GDK_DISPLAY_DEBUG (GDK_DISPLAY (display_wayland), EVENTS, "frame %p", surface);
 
-  g_clear_pointer (&impl->frame_callback, wl_callback_destroy);
-
-  for (gsize i = 0; i < gdk_surface_get_n_subsurfaces (surface); i++)
-    {
-      GdkSubsurface *subsurface = gdk_surface_get_subsurface (surface, i);
-      gdk_wayland_subsurface_clear_frame_callback (subsurface);
-    }
+  gdk_wayland_surface_clear_frame_callback (impl);
 
   GDK_WAYLAND_SURFACE_GET_CLASS (impl)->handle_frame (impl);
 
@@ -1061,7 +1069,7 @@ gdk_wayland_surface_hide_surface (GdkSurface *surface)
   unmap_popups_for_surface (surface);
 
   g_clear_pointer (&impl->presentation_time, gdk_wayland_presentation_time_free);
-  g_clear_pointer (&impl->frame_callback, wl_callback_destroy);
+  gdk_wayland_surface_clear_frame_callback (impl);
   if (impl->awaiting_frame_frozen)
     {
       impl->awaiting_frame_frozen = FALSE;
