@@ -44,7 +44,7 @@ export CCACHE_DIR="${CCACHE_BASEDIR}/_ccache"
 ccache --zero-stats
 ccache --show-stats
 export CCACHE_DISABLE=true
-meson \
+meson setup \
     -Dx11-backend=false \
     -Dwayland-backend=false \
     -Dwin32-backend=true \
