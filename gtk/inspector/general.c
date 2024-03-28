@@ -469,7 +469,7 @@ init_gl (GtkInspectorGeneral *gen)
   gdk_gl_context_make_current (context);
   gdk_gl_context_get_version (context, &major, &minor);
   s = g_strdup_printf ("%s %u.%u",
-                       gdk_gl_context_get_use_es (context) ? "GLES " : "OpenGL ", 
+                       gdk_gl_context_get_use_es (context) ? "GLES " : "OpenGL ",
                        major, minor);
   gtk_label_set_text (GTK_LABEL (gen->gl_version), s);
   g_free (s);
