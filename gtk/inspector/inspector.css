@@ -59,3 +59,7 @@ picture.light {
 row:not(:selected) > .highlight {
   background-color: rgba(135, 206, 250, 0.4);
 }
+
+scale.inline {
+  padding: 0;
+}

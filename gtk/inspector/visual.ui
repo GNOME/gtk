@@ -198,13 +198,13 @@
                               <object class="GtkLabel" id="font_scale_label">
                                 <property name="label" translatable="yes">Font Scale</property>
                                 <property name="halign">start</property>
-                                <property name="valign">baseline</property>
+                                <property name="valign">baseline-fill</property>
                                 <property name="xalign">0.0</property>
                               </object>
                             </child>
                             <child>
                               <object class="GtkScale" id="font_scale_scale">
-                                <property name="valign">baseline</property>
+                                <property name="valign">baseline-fill</property>
                                 <property name="adjustment">
                                   <object class="GtkAdjustment" id="font_scale_adjustment">
                                     <property name="lower">0.5</property>
@@ -218,12 +218,15 @@
                                 <marks>
                                   <mark value="1.0" position="top"></mark>
                                 </marks>
+                                <style>
+                                  <class name="inline"/>
+                                </style>
                               </object>
                             </child>
                             <child>
                               <object class="GtkEntry" id="font_scale_entry">
                                 <property name="halign">end</property>
-                                <property name="valign">baseline</property>
+                                <property name="valign">baseline-center</property>
                                 <property name="width-chars">4</property>
                                 <property name="max-width-chars">4</property>
                                 <property name="input-purpose">number</property>
@@ -301,7 +304,7 @@
                               <object class="GtkLabel" id="slowdown_label">
                                 <property name="label" translatable="yes">Slowdown</property>
                                 <property name="halign">start</property>
-                                <property name="valign">baseline</property>
+                                <property name="valign">baseline-fill</property>
                                 <property name="xalign">0.0</property>
                               </object>
                             </child>
@@ -315,18 +318,21 @@
                                     <property name="page-increment">1</property>
                                   </object>
                                 </property>
-                                <property name="valign">baseline</property>
+                                <property name="valign">baseline-fill</property>
                                 <property name="draw-value">0</property>
                                 <property name="hexpand">1</property>
                                 <marks>
                                   <mark value="0.0" position="top"></mark>
                                 </marks>
+                                <style>
+                                  <class name="inline"/>
+                                </style>
                               </object>
                             </child>
                             <child>
                               <object class="GtkEntry" id="slowdown_entry">
                                 <property name="halign">end</property>
-                                <property name="valign">baseline</property>
+                                <property name="valign">baseline-center</property>
                                 <property name="width-chars">4</property>
                                 <property name="max-width-chars">4</property>
                                 <property name="input-purpose">number</property>
