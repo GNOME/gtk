@@ -31,7 +31,7 @@
  * It presents a `GListModel` and fills it asynchronously with the `GFileInfo`s
  * returned from that function.
  *
- * Enumeration will start automatically when a the
+ * Enumeration will start automatically when the
  * [property@Gtk.DirectoryList:file] property is set.
  *
  * While the `GtkDirectoryList` is being filled, the
