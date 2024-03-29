@@ -59,7 +59,7 @@ typedef enum {
  * @get_current_image: return a `GdkPaintable` that does not change over
  *   time. This means the `GDK_PAINTABLE_STATIC_SIZE` and
  *   `GDK_PAINTABLE_STATIC_CONTENTS` flag are set.
- * @get_flags: Get the flags for this instance. See [enum@Gdk.PaintableFlags]
+ * @get_flags: Get the flags for this instance. See [flags@Gdk.PaintableFlags]
  *   for details.
  * @get_intrinsic_width: The preferred width for this object to be
  *   snapshot at or 0 if none. This is purely a hint. The object must still
