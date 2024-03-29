@@ -198,17 +198,8 @@ static void
 gdk_wayland_cairo_context_empty_frame (GdkDrawContext *draw_context)
 {
   GdkSurface *surface = gdk_draw_context_get_surface (draw_context);
-  GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
 
-  if (!impl->has_pending_subsurface_commits)
-    return;
-
-  gdk_wayland_surface_sync (surface);
-  gdk_wayland_surface_request_frame (surface);
-
-  gdk_profiler_add_mark (GDK_PROFILER_CURRENT_TIME, 0, "Wayland surface commit", NULL);
-  gdk_wayland_surface_commit (surface);
-  gdk_wayland_surface_notify_committed (surface);
+  gdk_wayland_surface_handle_empty_frame (surface);
 }
 
 static void
