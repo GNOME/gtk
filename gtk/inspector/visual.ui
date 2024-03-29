@@ -165,84 +165,6 @@
                           <object class="GtkBox">
                             <property name="spacing">40</property>
                             <child>
-                              <object class="GtkLabel" id="font_label">
-                                <property name="label" translatable="yes">Font</property>
-                                <property name="halign">start</property>
-                                <property name="valign">baseline</property>
-                                <property name="xalign">0.0</property>
-                              </object>
-                            </child>
-                            <child>
-                              <object class="GtkFontDialogButton" id="font_button">
-                                <property name="level">family</property>
-                                <property name="dialog">
-                                  <object class="GtkFontDialog">
-                                  </object>
-                                </property>
-                                <property name="halign">end</property>
-                                <property name="valign">baseline</property>
-                                <property name="hexpand">1</property>
-                              </object>
-                            </child>
-                          </object>
-                        </child>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkListBoxRow">
-                        <property name="activatable">0</property>
-                        <child>
-                          <object class="GtkBox">
-                            <property name="spacing">20</property>
-                            <child>
-                              <object class="GtkLabel" id="font_scale_label">
-                                <property name="label" translatable="yes">Font Scale</property>
-                                <property name="halign">start</property>
-                                <property name="valign">baseline-fill</property>
-                                <property name="xalign">0.0</property>
-                              </object>
-                            </child>
-                            <child>
-                              <object class="GtkScale" id="font_scale_scale">
-                                <property name="valign">baseline-fill</property>
-                                <property name="adjustment">
-                                  <object class="GtkAdjustment" id="font_scale_adjustment">
-                                    <property name="lower">0.5</property>
-                                    <property name="upper">2</property>
-                                    <property name="step-increment">0.01</property>
-                                    <property name="page-increment">0.01</property>
-                                  </object>
-                                </property>
-                                <property name="draw-value">0</property>
-                                <property name="hexpand">1</property>
-                                <marks>
-                                  <mark value="1.0" position="top"></mark>
-                                </marks>
-                                <style>
-                                  <class name="inline"/>
-                                </style>
-                              </object>
-                            </child>
-                            <child>
-                              <object class="GtkEntry" id="font_scale_entry">
-                                <property name="halign">end</property>
-                                <property name="valign">baseline-center</property>
-                                <property name="width-chars">4</property>
-                                <property name="max-width-chars">4</property>
-                                <property name="input-purpose">number</property>
-                              </object>
-                            </child>
-                          </object>
-                        </child>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkListBoxRow">
-                        <property name="activatable">0</property>
-                        <child>
-                          <object class="GtkBox">
-                            <property name="spacing">40</property>
-                            <child>
                               <object class="GtkLabel" id="direction_label">
                                 <property name="label" translatable="yes">Text Direction</property>
                                 <property name="halign">start</property>
@@ -336,6 +258,179 @@
                                 <property name="width-chars">4</property>
                                 <property name="max-width-chars">4</property>
                                 <property name="input-purpose">number</property>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkListBox" id="font_box">
+                    <property name="selection-mode">none</property>
+                    <property name="halign">center</property>
+                    <style>
+                      <class name="rich-list"/>
+                      <class name="boxed-list"/>
+                    </style>
+                    <child>
+                      <object class="GtkListBoxRow">
+                        <property name="activatable">0</property>
+                        <child>
+                          <object class="GtkBox">
+                            <property name="spacing">40</property>
+                            <child>
+                              <object class="GtkLabel" id="font_label">
+                                <property name="label" translatable="yes">Font</property>
+                                <property name="halign">start</property>
+                                <property name="valign">baseline</property>
+                                <property name="xalign">0.0</property>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkFontDialogButton" id="font_button">
+                                <property name="level">family</property>
+                                <property name="dialog">
+                                  <object class="GtkFontDialog">
+                                  </object>
+                                </property>
+                                <property name="halign">end</property>
+                                <property name="valign">baseline</property>
+                                <property name="hexpand">1</property>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkListBoxRow">
+                        <property name="activatable">0</property>
+                        <child>
+                          <object class="GtkBox">
+                            <property name="spacing">20</property>
+                            <child>
+                              <object class="GtkLabel" id="font_scale_label">
+                                <property name="label" translatable="yes">Scale</property>
+                                <property name="halign">start</property>
+                                <property name="valign">baseline-fill</property>
+                                <property name="xalign">0.0</property>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkScale" id="font_scale_scale">
+                                <property name="valign">baseline-fill</property>
+                                <property name="adjustment">
+                                  <object class="GtkAdjustment" id="font_scale_adjustment">
+                                    <property name="lower">0.5</property>
+                                    <property name="upper">2</property>
+                                    <property name="step-increment">0.01</property>
+                                    <property name="page-increment">0.01</property>
+                                  </object>
+                                </property>
+                                <property name="draw-value">0</property>
+                                <property name="hexpand">1</property>
+                                <marks>
+                                  <mark value="1.0" position="top"></mark>
+                                </marks>
+                                <style>
+                                  <class name="inline"/>
+                                </style>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkEntry" id="font_scale_entry">
+                                <property name="halign">end</property>
+                                <property name="valign">baseline-center</property>
+                                <property name="width-chars">4</property>
+                                <property name="max-width-chars">4</property>
+                                <property name="input-purpose">number</property>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkListBoxRow">
+                        <child>
+                          <object class="GtkBox">
+                            <property name="spacing">40</property>
+                            <child>
+                              <object class="GtkLabel" id="font_aa_label">
+                                <property name="label" translatable="yes">Antialiasing</property>
+                                <property name="halign">start</property>
+                                <property name="valign">baseline</property>
+                                <property name="xalign">0.0</property>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkSwitch" id="font_aa_switch">
+                                <property name="halign">end</property>
+                                <property name="valign">center</property>
+                                <property name="hexpand">1</property>
+                                <signal name="notify::active" handler="font_aa_activate"/>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkListBoxRow">
+                        <child>
+                          <object class="GtkBox">
+                            <property name="spacing">40</property>
+                            <child>
+                              <object class="GtkLabel" id="font_hinting_label">
+                                <property name="label" translatable="yes">Hinting</property>
+                                <property name="halign">start</property>
+                                <property name="valign">baseline</property>
+                                <property name="xalign">0.0</property>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkDropDown" id="font_hinting_combo">
+                                <property name="halign">end</property>
+                                <property name="valign">baseline-center</property>
+                                <property name="hexpand">1</property>
+                                <signal name="notify::selected" handler="font_hinting_changed"/>
+                                <property name="model">
+                                  <object class="GtkStringList">
+                                    <items>
+                                      <item translatable="yes">None</item>
+                                      <item translatable="yes">Slight</item>
+                                      <item translatable="yes">Medium</item>
+                                      <item translatable="yes">Full</item>
+                                    </items>
+                                  </object>
+                                </property>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkListBoxRow">
+                        <child>
+                          <object class="GtkBox">
+                            <property name="spacing">40</property>
+                            <child>
+                              <object class="GtkLabel" id="metrics_hinting_label">
+                                <property name="label" translatable="yes">Metrics Hinting</property>
+                                <property name="halign">start</property>
+                                <property name="valign">baseline</property>
+                                <property name="xalign">0.0</property>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkSwitch" id="metrics_hinting_switch">
+                                <property name="halign">end</property>
+                                <property name="valign">center</property>
+                                <property name="hexpand">1</property>
+                                <signal name="notify::active" handler="metrics_hinting_activate"/>
                               </object>
                             </child>
                           </object>
@@ -692,6 +787,9 @@
       <widget name="cursor_label"/>
       <widget name="cursor_size_label"/>
       <widget name="font_label"/>
+      <widget name="font_aa_label"/>
+      <widget name="font_hinting_label"/>
+      <widget name="metrics_hinting_label"/>
       <widget name="direction_label"/>
       <widget name="animation_label"/>
       <widget name="updates_label"/>
@@ -715,11 +813,13 @@
       <widget name="cursor_combo"/>
       <widget name="font_button"/>
       <widget name="direction_combo"/>
+      <widget name="font_hinting_combo"/>
     </widgets>
   </object>
   <object class="GtkSizeGroup">
     <widgets>
       <widget name="visual_box"/>
+      <widget name="font_box"/>
       <widget name="debug_box"/>
       <widget name="inspector_box"/>
     </widgets>
