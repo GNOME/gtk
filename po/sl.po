@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2024-03-18 17:37+0000\n"
-"PO-Revision-Date: 2024-03-25 00:19+0100\n"
+"POT-Creation-Date: 2024-03-30 09:15+0000\n"
+"PO-Revision-Date: 2024-03-30 18:02+0100\n"
 "Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language-Team: Slovenian GNOME Translation Team <gnome-si@googlegroups.com>\n"
 "Language: sl_SI\n"
@@ -37,7 +37,7 @@ msgstr "V tem odložišču ni mogoče shranjevati podatkov."
 msgid "Cannot read from empty clipboard."
 msgstr "Ni mogoče brati iz praznega odložišča."
 
-#: gdk/gdkclipboard.c:318 gdk/gdkclipboard.c:1136 gdk/gdkdrag.c:618
+#: gdk/gdkclipboard.c:318 gdk/gdkclipboard.c:1136 gdk/gdkdrag.c:606
 msgid "No compatible formats to transfer clipboard contents."
 msgstr "Ni skladnih zapisov za prenos vsebine odložišča."
 
@@ -64,23 +64,23 @@ msgstr "Podpora Vulkan je onemogočena prek GDK_DEBUG"
 msgid "GL support disabled via GDK_DEBUG"
 msgstr "Podpora GL je onemogočena prek GDK_DEBUG"
 
-#: gdk/gdkdisplay.c:1674
+#: gdk/gdkdisplay.c:1675
 msgid "No EGL configuration available"
 msgstr "Nastavitve EGL niso na voljo"
 
-#: gdk/gdkdisplay.c:1682
+#: gdk/gdkdisplay.c:1683
 msgid "Failed to get EGL configurations"
 msgstr "Pridobivanje nastavitev EGL je sodletelo"
 
-#: gdk/gdkdisplay.c:1712
+#: gdk/gdkdisplay.c:1713
 msgid "No EGL configuration with required features found"
 msgstr "Ni mogoče najti nastavitev EGL za zahtevane možnosti"
 
-#: gdk/gdkdisplay.c:1719
+#: gdk/gdkdisplay.c:1720
 msgid "No perfect EGL configuration found"
 msgstr "Nastavitve EGL ni mogoče najti"
 
-#: gdk/gdkdisplay.c:1761
+#: gdk/gdkdisplay.c:1762
 #, c-format
 msgid "EGL implementation is missing extension %s"
 msgid_plural "EGL implementation is missing %2$d extensions: %1$s"
@@ -89,23 +89,23 @@ msgstr[1] "Vstavku EGL manjka %2$d razširitev: %1$s"
 msgstr[2] "Vstavku EGL manjkata %2$d razširitvi: %1$s"
 msgstr[3] "Vstavku EGL manjkajo %2$d razširitve: %1$s"
 
-#: gdk/gdkdisplay.c:1810
+#: gdk/gdkdisplay.c:1811
 msgid "libEGL not available in this sandbox"
 msgstr "Sandbox ne podpira knjižnice libEGL"
 
-#: gdk/gdkdisplay.c:1811
+#: gdk/gdkdisplay.c:1812
 msgid "libEGL not available"
 msgstr "Knjižnica libEL ni na voljo"
 
-#: gdk/gdkdisplay.c:1821
+#: gdk/gdkdisplay.c:1822
 msgid "Failed to create EGL display"
 msgstr "Ustvarjanje zaslona EGL je sodletelo"
 
-#: gdk/gdkdisplay.c:1830
+#: gdk/gdkdisplay.c:1831
 msgid "Could not initialize EGL display"
 msgstr "Ni mogoče začeti zaslona EGL"
 
-#: gdk/gdkdisplay.c:1840
+#: gdk/gdkdisplay.c:1841
 #, c-format
 msgid "EGL version %d.%d is too old. GTK requires %d.%d"
 msgstr "Različica EGL %d.%d je prestara, Oklje GTK zahteva različico %d.%d"
@@ -1113,7 +1113,7 @@ msgid "Pick a Font"
 msgstr "Izberite pisavo"
 
 #: gtk/deprecated/gtkfontbutton.c:600 gtk/gtkfilechooserwidget.c:3815
-#: gtk/gtkfontdialogbutton.c:126 gtk/inspector/visual.ui:169
+#: gtk/gtkfontdialogbutton.c:126 gtk/inspector/visual.ui:285
 msgid "Font"
 msgstr "Pisava"
 
@@ -3904,7 +3904,7 @@ msgctxt "Vulkan version"
 msgid "None"
 msgstr "Neopredeljeno"
 
-#: gtk/inspector/general.c:923
+#: gtk/inspector/general.c:924
 msgid "IM Context is hardcoded by GTK_IM_MODULE"
 msgstr "Vsebina IM je določena z vrednostjo GTK_IM_MODULE"
 
@@ -4090,7 +4090,7 @@ msgstr "Števec sličic"
 msgid "Frame Rate"
 msgstr "Hitrost sličic"
 
-#: gtk/inspector/misc-info.ui:527
+#: gtk/inspector/misc-info.ui:527 gtk/inspector/visual.ui:315
 msgid "Scale"
 msgstr "Merilo pisave"
 
@@ -4353,7 +4353,7 @@ msgstr "Hierarhija"
 msgid "Implements"
 msgstr "Vgradnje"
 
-#: gtk/inspector/visual.c:672 gtk/inspector/visual.c:691
+#: gtk/inspector/visual.c:765 gtk/inspector/visual.c:784
 msgid "Theme is hardcoded by GTK_THEME"
 msgstr "Tema je vključena v privzeto temo GTK_THEME"
 
@@ -4377,86 +4377,111 @@ msgstr "Velikost kazalca"
 msgid "Icon Theme"
 msgstr "Tema ikon"
 
-#: gtk/inspector/visual.ui:199
-msgid "Font Scale"
-msgstr "Merilo pisave"
-
-#: gtk/inspector/visual.ui:244
+#: gtk/inspector/visual.ui:169
 msgid "Text Direction"
 msgstr "Usmerjenost besedila"
 
-#: gtk/inspector/visual.ui:259
+#: gtk/inspector/visual.ui:184
 msgid "Left-to-Right"
 msgstr "Z leve proti desni"
 
-#: gtk/inspector/visual.ui:260
+#: gtk/inspector/visual.ui:185
 msgid "Right-to-Left"
 msgstr "Z desne proti levi"
 
-#: gtk/inspector/visual.ui:277
+#: gtk/inspector/visual.ui:202
 msgid "Animations"
 msgstr "Animacije"
 
-#: gtk/inspector/visual.ui:302
+#: gtk/inspector/visual.ui:227
 msgid "Slowdown"
 msgstr "Upočasni"
 
-#: gtk/inspector/visual.ui:356
+#: gtk/inspector/visual.ui:362
+msgid "Antialiasing"
+msgstr "Glajenje robov"
+
+#: gtk/inspector/visual.ui:387
+msgid "Hinting"
+msgstr "Namigovanje"
+
+#: gtk/inspector/visual.ui:402
+msgid "None"
+msgstr "Brez"
+
+#: gtk/inspector/visual.ui:403
+msgid "Slight"
+msgstr "Rahlo"
+
+#: gtk/inspector/visual.ui:404 modules/printbackends/gtkprintbackendcpdb.c:541
+#: modules/printbackends/gtkprintbackendcups.c:5667
+msgid "Medium"
+msgstr "Srednje"
+
+#: gtk/inspector/visual.ui:405
+msgid "Full"
+msgstr "Polno"
+
+#: gtk/inspector/visual.ui:422
+msgid "Metrics Hinting"
+msgstr "Metrično namigovanje"
+
+#: gtk/inspector/visual.ui:457
 msgid "Show Framerate"
 msgstr "Pokaži hitrost sličic"
 
-#: gtk/inspector/visual.ui:381
+#: gtk/inspector/visual.ui:482
 msgid "Show Graphic Updates"
 msgstr "Pokaži grafične posodobitve"
 
-#: gtk/inspector/visual.ui:401
+#: gtk/inspector/visual.ui:502
 msgid ""
 "Tints all the places where the current renderer uses Cairo instead of the "
 "GPU."
 msgstr ""
 "Obarva vsa mesta, kjer trenutni izrisovalnik uporablja Kairo namesto GPU."
 
-#: gtk/inspector/visual.ui:407
+#: gtk/inspector/visual.ui:508
 msgid "Show Cairo Rendering"
 msgstr "Pokaži izrisovanje Cairo"
 
-#: gtk/inspector/visual.ui:432
+#: gtk/inspector/visual.ui:533
 msgid "Show Baselines"
 msgstr "Pokaži črte vrstic"
 
-#: gtk/inspector/visual.ui:460
+#: gtk/inspector/visual.ui:561
 msgid "Show Layout Borders"
 msgstr "Pokaži razporeditev okvirjev"
 
-#: gtk/inspector/visual.ui:517
+#: gtk/inspector/visual.ui:618
 msgid "CSS Padding"
 msgstr "Blazinjenje CSS"
 
-#: gtk/inspector/visual.ui:527
+#: gtk/inspector/visual.ui:628
 msgid "CSS Border"
 msgstr "Obroba CSS"
 
-#: gtk/inspector/visual.ui:537
+#: gtk/inspector/visual.ui:638
 msgid "CSS Margin"
 msgstr "Rob CSS"
 
-#: gtk/inspector/visual.ui:547
+#: gtk/inspector/visual.ui:648
 msgid "Widget Margin"
 msgstr "Robovi gradnika"
 
-#: gtk/inspector/visual.ui:582
+#: gtk/inspector/visual.ui:683
 msgid "Show Focus"
 msgstr "Pokaži žarišče"
 
-#: gtk/inspector/visual.ui:607
+#: gtk/inspector/visual.ui:708
 msgid "Show Accessibility warnings"
 msgstr "Pokaži opozorila o dostopnosti"
 
-#: gtk/inspector/visual.ui:632
+#: gtk/inspector/visual.ui:733
 msgid "Show Graphics Offload"
 msgstr "Pokaži grafično razbremenitev"
 
-#: gtk/inspector/visual.ui:664
+#: gtk/inspector/visual.ui:765
 msgid "Inspect Inspector"
 msgstr "Preuči inšpektorja"
 
@@ -6594,11 +6619,6 @@ msgstr "Nujno"
 #: modules/printbackends/gtkprintbackendcups.c:5667
 msgid "High"
 msgstr "Visoka"
-
-#: modules/printbackends/gtkprintbackendcpdb.c:541
-#: modules/printbackends/gtkprintbackendcups.c:5667
-msgid "Medium"
-msgstr "Srednja"
 
 #: modules/printbackends/gtkprintbackendcpdb.c:541
 #: modules/printbackends/gtkprintbackendcups.c:5667
