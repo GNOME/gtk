@@ -72,6 +72,8 @@ test_calendar_set_get_year (void)
   int year;
 
   calendar = gtk_calendar_new ();
+  gtk_calendar_set_day (GTK_CALENDAR (calendar), 10); /* avoid days that don't exist in all years */
+
   gtk_calendar_set_year (GTK_CALENDAR (calendar), 2024);
   year = gtk_calendar_get_year (GTK_CALENDAR (calendar));
   g_assert_cmpint (year, ==, 2024);
@@ -84,6 +86,8 @@ test_calendar_set_get_month (void)
   int month;
 
   calendar = gtk_calendar_new ();
+  gtk_calendar_set_day (GTK_CALENDAR (calendar), 10); /* avoid days that don't exist in all months */
+
   gtk_calendar_set_month (GTK_CALENDAR (calendar), 1); /* February */
   month = gtk_calendar_get_month (GTK_CALENDAR (calendar));
   g_assert_cmpint (month, ==, 1);
@@ -97,8 +101,10 @@ test_calendar_set_get_day (void)
 
   calendar = gtk_calendar_new ();
   gtk_calendar_set_day (GTK_CALENDAR (calendar), 10);
+
+  gtk_calendar_set_day (GTK_CALENDAR (calendar), 11);
   day = gtk_calendar_get_day (GTK_CALENDAR (calendar));
-  g_assert_cmpint (day, ==, 10);
+  g_assert_cmpint (day, ==, 11);
 }
 
 int
