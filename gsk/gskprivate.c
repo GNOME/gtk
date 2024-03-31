@@ -1,9 +1,13 @@
+#include "config.h"
+
 #include "gskresources.h"
 #include "gskprivate.h"
 
 #include <cairo.h>
 #include <pango/pangocairo.h>
+#ifdef HAVE_PANGOFT
 #include <pango/pangoft2.h>
+#endif
 #include <math.h>
 
 static gpointer
@@ -119,9 +123,11 @@ gsk_reload_font (PangoFont            *font,
   last_result = pango_font_map_reload_font (pango_font_get_font_map (font), font, scale, context, NULL);
 #else
 
+#ifdef HAVE_PANGOFT
   pattern = pango_fc_font_get_pattern (PANGO_FC_FONT (font));
   if (FcPatternGetDouble (pattern, FC_DPI, 0, &dpi) == FcResultMatch)
     pango_cairo_context_set_resolution (context, dpi);
+#endif
 
   desc = pango_font_describe_with_absolute_size (font);
   size = pango_font_description_get_size (desc);
