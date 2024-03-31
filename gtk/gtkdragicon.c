@@ -399,6 +399,17 @@ gtk_drag_icon_init (GtkDragIcon *self)
   gtk_widget_set_can_target (GTK_WIDGET (self), FALSE);
 }
 
+static void
+selected_action_changed (GdkDrag    *drag,
+                         GParamSpec *pspec,
+                         GtkWidget  *self)
+{
+  if (gdk_drag_get_selected_action (drag) == 0)
+    gtk_widget_add_css_class (self, "no-drop");
+  else
+    gtk_widget_remove_css_class (self, "no-drop");
+}
+
 /**
  * gtk_drag_icon_get_for_drag: (constructor)
  * @drag: a `GdkDrag`
@@ -427,6 +438,9 @@ gtk_drag_icon_get_for_drag (GdkDrag *drag)
       self = g_object_new (GTK_TYPE_DRAG_ICON, NULL);
 
       GTK_DRAG_ICON (self)->surface = g_object_ref (gdk_drag_get_drag_surface (drag));
+
+      g_signal_connect_object (drag, "notify::selected-action", G_CALLBACK (selected_action_changed), self, 0);
+      selected_action_changed (drag, NULL, self);
 
       g_object_set_qdata_full (G_OBJECT (drag), drag_icon_quark, g_object_ref_sink (self), g_object_unref);
 

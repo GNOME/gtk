@@ -31,6 +31,10 @@ dnd {
   color: $fg-color;
 }
 
+dnd.no-drop {
+  filter: opacity(0.5);
+}
+
 .normal-icons {
   -gtk-icon-size: 16px;
 }
