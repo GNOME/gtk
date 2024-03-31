@@ -5824,7 +5824,7 @@ gsk_text_node_new (PangoFont              *font,
   PangoGlyphInfo *glyph_infos;
   int n;
 
-  gsk_get_unhinted_glyph_string_extents (glyphs, font, &ink_rect);
+  pango_glyph_string_extents (glyphs, font, &ink_rect, NULL);
 
   /* Don't create nodes with empty bounds */
   if (ink_rect.width == 0 || ink_rect.height == 0)
