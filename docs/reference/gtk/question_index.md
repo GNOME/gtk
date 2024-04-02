@@ -27,7 +27,7 @@ the question you have, this list is a good place to start.
     Every major version of GTK comes with a [migration guide](#migrating). You may also
     find useful information in the documentation for specific widgets and functions. If
     you have a question not covered in the manual, feel free to ask, and please
-    [file a bug report](https://gitlab.gnome.org/GNOME/gtk/issues/new) against the
+    [file a bug report](https://gitlab.gnome.org/GNOME/gtk/issues/) against the
     documentation.
 
 *  Should I maintain parallel versions of my UI in GTK x and GTK y?
@@ -54,7 +54,7 @@ the question you have, this list is a good place to start.
     For strings returned from functions, they will be declared "const" if they should
     not be freed. Non-const strings should be freed with `g_free()`. Arrays follow the
     same rule. If you find an undocumented exception to the rules, please
-    [file a bug report.](https://gitlab.gnome.org/GNOME/gtk/issues/new).
+    [file a bug report.](https://gitlab.gnome.org/GNOME/gtk/issues/).
 
     The transfer annotations for gobject-introspection that are part of the
     documentation can provide useful hints for memory handling semantics as well.

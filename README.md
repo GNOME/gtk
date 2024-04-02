@@ -125,7 +125,7 @@ version, for example `gtk-4-10`.
 How to report bugs
 ------------------
 
-Bugs should be reported on the [issues page](https://gitlab.gnome.org/GNOME/gtk/issues/new).
+Bugs should be reported on the [issues page](https://gitlab.gnome.org/GNOME/gtk/issues/).
 
 In the bug report please include:
 

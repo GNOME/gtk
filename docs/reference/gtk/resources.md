@@ -4,7 +4,7 @@ Slug: gtk-resources
 ## Opening a bug or feature request
 
 If you encounter a bug, misfeature, or missing feature in GTK, please
-file a bug report on our [GitLab project](https://gitlab.gnome.org/GNOME/gtk/issues/new).
+file a bug report on our [GitLab project](https://gitlab.gnome.org/GNOME/gtk/issues/).
 You should also file issues if the documentation is out of date with the
 existing API, or unclear.
 
