@@ -14,10 +14,6 @@ PangoFont *gsk_reload_font (PangoFont            *font,
                             cairo_hint_style_t    hint_style,
                             cairo_antialias_t     antialias);
 
-void       gsk_get_unhinted_glyph_string_extents (PangoGlyphString *glyphs,
-                                                  PangoFont        *font,
-                                                  PangoRectangle   *ink_rect);
-
 cairo_hint_style_t gsk_font_get_hint_style (PangoFont *font);
 
 G_END_DECLS
