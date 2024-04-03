@@ -420,6 +420,7 @@ static void gtk_label_do_popup                   (GtkLabel      *self,
                                                   double         y);
 static void gtk_label_ensure_select_info  (GtkLabel *self);
 static void gtk_label_clear_select_info   (GtkLabel *self);
+static void gtk_label_clear_provider_info (GtkLabel *self);
 static void gtk_label_clear_layout        (GtkLabel *self);
 static void gtk_label_ensure_layout       (GtkLabel *self);
 static void gtk_label_select_region_index (GtkLabel *self,
@@ -1524,6 +1525,7 @@ gtk_label_dispose (GObject *object)
 
   gtk_label_set_mnemonic_widget (self, NULL);
   gtk_label_clear_select_info (self);
+  gtk_label_clear_provider_info (self);
 
   G_OBJECT_CLASS (gtk_label_parent_class)->dispose (object);
 }
@@ -1562,7 +1564,7 @@ gtk_label_finalize (GObject *object)
   g_clear_pointer (&self->attrs, pango_attr_list_unref);
   g_clear_pointer (&self->markup_attrs, pango_attr_list_unref);
 
-  if (self->select_info)
+  if (self->select_info && self->select_info->provider)
     g_object_unref (self->select_info->provider);
 
   gtk_label_clear_links (self);
@@ -4925,7 +4927,7 @@ gtk_label_clear_select_info (GtkLabel *self)
       gtk_widget_remove_controller (GTK_WIDGET (self), self->select_info->motion_controller);
       gtk_widget_remove_controller (GTK_WIDGET (self), self->select_info->focus_controller);
       GTK_LABEL_CONTENT (self->select_info->provider)->label = NULL;
-      g_object_unref (self->select_info->provider);
+      g_clear_object (&self->select_info->provider);
 
       g_free (self->select_info);
       self->select_info = NULL;
@@ -4934,6 +4936,15 @@ gtk_label_clear_select_info (GtkLabel *self)
 
       gtk_widget_set_focusable (GTK_WIDGET (self), FALSE);
     }
+}
+
+static void
+gtk_label_clear_provider_info (GtkLabel *self)
+{
+  if (self->select_info == NULL)
+    return;
+
+  GTK_LABEL_CONTENT (self->select_info->provider)->label = NULL;
 }
 
 /**
