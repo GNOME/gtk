@@ -1640,6 +1640,7 @@ touch_handle_down (void              *data,
   touch->x = wl_fixed_to_double (x);
   touch->y = wl_fixed_to_double (y);
   touch->touch_down_serial = serial;
+  seat->latest_touch_down_serial = serial;
 
   event = gdk_touch_event_new (GDK_TOUCH_BEGIN,
                                GDK_SLOT_TO_EVENT_SEQUENCE (touch->id),
@@ -4390,14 +4391,23 @@ _gdk_wayland_seat_get_last_implicit_grab_serial (GdkWaylandSeat    *seat,
         serial = tablet->pointer_info.press_serial;
     }
 
-  while (g_hash_table_iter_next (&iter, NULL, (gpointer *) &touch))
+  if (g_hash_table_size (seat->touches) > 0)
     {
-      if (touch->touch_down_serial > serial)
+      while (g_hash_table_iter_next (&iter, NULL, (gpointer *) &touch))
         {
-          if (sequence)
-            *sequence = GDK_SLOT_TO_EVENT_SEQUENCE (touch->id);
-          serial = touch->touch_down_serial;
+          if (touch->touch_down_serial > serial)
+            {
+              if (sequence)
+                *sequence = GDK_SLOT_TO_EVENT_SEQUENCE (touch->id);
+              serial = touch->touch_down_serial;
+
+            }
         }
+    }
+  else
+    {
+      if (seat->latest_touch_down_serial > serial)
+        serial = seat->latest_touch_down_serial;
     }
 
   return serial;
