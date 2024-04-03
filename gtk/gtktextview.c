@@ -10685,6 +10685,54 @@ gtk_text_view_accessible_text_get_default_attributes (GtkAccessibleText   *self,
   g_hash_table_unref (attrs);
 }
 
+static gboolean
+gtk_text_view_accessible_text_get_extents (GtkAccessibleText *self,
+                                           unsigned int       start,
+                                           unsigned int       end,
+                                           graphene_rect_t   *extents)
+{
+  GtkTextBuffer *buffer;
+  GtkTextIter start_iter, end_iter;
+  cairo_region_t *region;
+  GdkRectangle rect;
+
+  buffer = get_buffer (GTK_TEXT_VIEW (self));
+  gtk_text_buffer_get_iter_at_offset (buffer, &start_iter, start);
+  gtk_text_buffer_get_iter_at_offset (buffer, &end_iter, end);
+
+  region = cairo_region_create ();
+  do
+    {
+      gtk_text_view_get_iter_location (GTK_TEXT_VIEW (self), &start_iter, &rect);
+      cairo_region_union_rectangle (region, &rect);
+
+      gtk_text_iter_forward_to_line_end (&start_iter);
+      gtk_text_iter_order (&start_iter, &end_iter);
+
+      gtk_text_view_get_iter_location (GTK_TEXT_VIEW (self), &end_iter, &rect);
+      cairo_region_union_rectangle (region, &rect);
+
+      gtk_text_iter_forward_line (&start_iter);
+    }
+  while (gtk_text_iter_compare (&start_iter, &end_iter) < 0);
+
+  cairo_region_get_extents (region, &rect);
+  cairo_region_destroy (region);
+
+  gtk_text_view_buffer_to_window_coords (GTK_TEXT_VIEW (self),
+                                         GTK_TEXT_WINDOW_TEXT,
+                                         rect.x, rect.y,
+                                         &rect.x, &rect.y);
+  _text_window_to_widget_coords (GTK_TEXT_VIEW (self), &rect.x, &rect.y);
+
+  extents->origin.x = rect.x;
+  extents->origin.y = rect.y;
+  extents->size.width = rect.width;
+  extents->size.height = rect.height;
+
+  return TRUE;
+}
+
 static void
 gtk_text_view_accessible_text_init (GtkAccessibleTextInterface *iface)
 {
@@ -10694,6 +10742,7 @@ gtk_text_view_accessible_text_init (GtkAccessibleTextInterface *iface)
   iface->get_selection = gtk_text_view_accessible_text_get_selection;
   iface->get_attributes = gtk_text_view_accessible_text_get_attributes;
   iface->get_default_attributes = gtk_text_view_accessible_text_get_default_attributes;
+  iface->get_extents = gtk_text_view_accessible_text_get_extents;
 }
 
 /* }}} */
