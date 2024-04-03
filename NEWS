@@ -1,4 +1,4 @@
-Overview of Changes in 4.14.2, xx-xx-xxxx
+Overview of Changes in 4.14.2, 03-04-2024
 =========================================
 
 * GtkScale:
@@ -7,22 +7,32 @@ Overview of Changes in 4.14.2, xx-xx-xxxx
 * Theme:
  - Make progress in entries visible
 
+* Accessibility:
+ - Fix text insertion handling
+
 * GDK:
  - dnd: Use the default cursor durion motion
  - dnd: Use a better cursor for indicating the move action
 
 * GSK:
  - gl: Handle offloads in offscreen context better
+ - Fix text rendering problems with some fonts
 
 * Wayland:
  - Tighten up some protocol version checks
  - Use the presentation time protocol
+ - Fix a crash with subsurfaces
+ - Improve settings portal handling
 
 * macOS:
  - Fix up the app menu support
 
 * Windows:
  - Fix problems with minimization
+ - Fix build without fontconfig
+
+* Debugging:
+ - Add font settings in the inspector
 
 * Demos:
  - Clean up the application demo
@@ -32,7 +42,12 @@ Overview of Changes in 4.14.2, xx-xx-xxxx
  Catalan
  Czech
  French
+ Georgian
+ Hebrew
+ Persian
  Slovenian
+ Turkish
+ Ukrainian
 
 
 Overview of Changes in 4.14.1, 16-03-2024
