@@ -7587,6 +7587,24 @@ gtk_text_accessible_text_get_extents (GtkAccessibleText *self,
   return TRUE;
 }
 
+static gboolean
+gtk_text_accessible_text_get_offset (GtkAccessibleText      *self,
+                                     const graphene_point_t *point,
+                                     unsigned int           *offset)
+{
+  int lx;
+  int index;
+  const char *text;
+
+  gtk_text_get_layout_offsets (GTK_TEXT (self), &lx, NULL);
+  index = gtk_text_find_position (GTK_TEXT (self), point->x - lx);
+  text = gtk_entry_buffer_get_text (get_buffer (GTK_TEXT (self)));
+
+  *offset = (unsigned int) g_utf8_pointer_to_offset (text, text + index);
+
+  return TRUE;
+}
+
 static void
 gtk_text_accessible_text_init (GtkAccessibleTextInterface *iface)
 {
@@ -7597,6 +7615,7 @@ gtk_text_accessible_text_init (GtkAccessibleTextInterface *iface)
   iface->get_attributes = gtk_text_accessible_text_get_attributes;
   iface->get_default_attributes = gtk_text_accessible_text_get_default_attributes;
   iface->get_extents = gtk_text_accessible_text_get_extents;
+  iface->get_offset = gtk_text_accessible_text_get_offset;
 }
 
 /* vim:set foldmethod=marker expandtab: */
