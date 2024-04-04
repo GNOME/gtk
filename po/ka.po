@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2024-03-30 09:15+0000\n"
-"PO-Revision-Date: 2024-03-30 19:22+0100\n"
+"POT-Creation-Date: 2024-04-04 17:02+0000\n"
+"PO-Revision-Date: 2024-04-04 21:05+0200\n"
 "Last-Translator: Ekaterine Papava <papava.e@gtu.ge>\n"
 "Language-Team: Georgian <http://mail.gnome.org/mailman/listinfo/gnome-ge-"
 "list>\n"
@@ -1114,7 +1114,7 @@ msgstr "შრიფტი"
 #: gtk/deprecated/gtkfontbutton.c:1155 gtk/gtkfontdialogbutton.c:652
 msgctxt "font"
 msgid "None"
-msgstr "არცერთი"
+msgstr "არაფერი"
 
 #: gtk/deprecated/gtklockbutton.c:294 gtk/ui/gtklockbutton.ui:20
 msgid "Lock"
@@ -3414,7 +3414,7 @@ msgstr "არ არის ქაღალდი"
 
 #. Translators: this is a printer status.
 #: gtk/print/gtkprintoperation-win32.c:640
-#: modules/printbackends/gtkprintbackendcpdb.c:1528
+#: modules/printbackends/gtkprintbackendcpdb.c:1533
 #: modules/printbackends/gtkprintbackendcups.c:2639
 msgid "Paused"
 msgstr "შეჩერებულია"
@@ -3485,42 +3485,42 @@ msgstr "პრინტერის ინფორმაციის მიღ�
 #. * multiple pages on a sheet when printing
 #.
 #: gtk/print/gtkprintunixdialog.c:2753
-#: modules/printbackends/gtkprintbackendcups.c:5672
+#: modules/printbackends/gtkprintbackendcups.c:5677
 msgid "Left to right, top to bottom"
 msgstr "მარცხნიდან მარჯვნივ, ქვევიდან ზემოთ"
 
 #: gtk/print/gtkprintunixdialog.c:2753
-#: modules/printbackends/gtkprintbackendcups.c:5672
+#: modules/printbackends/gtkprintbackendcups.c:5677
 msgid "Left to right, bottom to top"
 msgstr "მარცხნიდან მარჯვნივ, ქვემოდან ზემოთ"
 
 #: gtk/print/gtkprintunixdialog.c:2754
-#: modules/printbackends/gtkprintbackendcups.c:5673
+#: modules/printbackends/gtkprintbackendcups.c:5678
 msgid "Right to left, top to bottom"
 msgstr "მარჯვნიდან მარცხნივ, ზევიდან ქვემოთ"
 
 #: gtk/print/gtkprintunixdialog.c:2754
-#: modules/printbackends/gtkprintbackendcups.c:5673
+#: modules/printbackends/gtkprintbackendcups.c:5678
 msgid "Right to left, bottom to top"
 msgstr "მარჯვნიდან მარცხნივ, ქვემოდან ზემოთ"
 
 #: gtk/print/gtkprintunixdialog.c:2755
-#: modules/printbackends/gtkprintbackendcups.c:5674
+#: modules/printbackends/gtkprintbackendcups.c:5679
 msgid "Top to bottom, left to right"
 msgstr "ზემოდან ქვემოთ, მარცხნიდან მარჯვნივ"
 
 #: gtk/print/gtkprintunixdialog.c:2755
-#: modules/printbackends/gtkprintbackendcups.c:5674
+#: modules/printbackends/gtkprintbackendcups.c:5679
 msgid "Top to bottom, right to left"
 msgstr "ზემოდან ქვემოთ, მარჯვნიდან მარცხნივ"
 
 #: gtk/print/gtkprintunixdialog.c:2756
-#: modules/printbackends/gtkprintbackendcups.c:5675
+#: modules/printbackends/gtkprintbackendcups.c:5680
 msgid "Bottom to top, left to right"
 msgstr "ქვემოდან ზემოთ, მარცხნიდან მარჯვნივ"
 
 #: gtk/print/gtkprintunixdialog.c:2756
-#: modules/printbackends/gtkprintbackendcups.c:5675
+#: modules/printbackends/gtkprintbackendcups.c:5680
 msgid "Bottom to top, right to left"
 msgstr "ქვემოდან ზემოთ, მარჯვნიდან მარცხნივ"
 
@@ -3802,7 +3802,7 @@ msgstr "ძირითადი"
 #: gtk/inspector/controllers.c:126
 msgctxt "event phase"
 msgid "None"
-msgstr "არცერთი"
+msgstr "არაფერი"
 
 #: gtk/inspector/controllers.c:129
 msgctxt "event phase"
@@ -3869,7 +3869,7 @@ msgstr "CSS-ის თვისება"
 #: gtk/inspector/general.c:370
 msgctxt "GL version"
 msgid "None"
-msgstr "არცერთი"
+msgstr "არაფერი"
 
 #: gtk/inspector/general.c:461
 msgctxt "GL version"
@@ -3889,12 +3889,12 @@ msgstr "გამორთულია"
 #: gtk/inspector/general.c:576
 msgctxt "Vulkan device"
 msgid "None"
-msgstr "არცერთი"
+msgstr "არაფერი"
 
 #: gtk/inspector/general.c:577 gtk/inspector/general.c:578
 msgctxt "Vulkan version"
 msgid "None"
-msgstr "არცერთი"
+msgstr "არაფერი"
 
 #: gtk/inspector/general.c:924
 msgid "IM Context is hardcoded by GTK_IM_MODULE"
@@ -4147,7 +4147,7 @@ msgstr "თვისების არაჩასწორებადი ტ�
 #: gtk/inspector/prop-editor.c:1388
 msgctxt "column number"
 msgid "None"
-msgstr "არცერთი"
+msgstr "არაფერი"
 
 #: gtk/inspector/prop-editor.c:1425
 msgid "Attribute:"
@@ -4270,7 +4270,7 @@ msgstr "ტრიგერი"
 #: gtk/inspector/size-groups.c:228
 msgctxt "sizegroup mode"
 msgid "None"
-msgstr "არცერთი"
+msgstr "არაფერი"
 
 #: gtk/inspector/size-groups.c:229
 msgctxt "sizegroup mode"
@@ -4397,19 +4397,22 @@ msgid "Hinting"
 msgstr "მომრგვალება"
 
 #: gtk/inspector/visual.ui:402
+msgctxt "Font hinting style"
 msgid "None"
-msgstr "არცერთი"
+msgstr "არაფერი"
 
 #: gtk/inspector/visual.ui:403
+msgctxt "Font hinting style"
 msgid "Slight"
 msgstr "ოდნავ"
 
-#: gtk/inspector/visual.ui:404 modules/printbackends/gtkprintbackendcpdb.c:541
-#: modules/printbackends/gtkprintbackendcups.c:5667
+#: gtk/inspector/visual.ui:404
+msgctxt "Font hinting style"
 msgid "Medium"
 msgstr "საშუალო"
 
 #: gtk/inspector/visual.ui:405
+msgctxt "Font hinting style"
 msgid "Full"
 msgstr "სრული"
 
@@ -6599,29 +6602,35 @@ msgstr "დამატებითი"
 msgid "Some of the settings in the dialog conflict"
 msgstr "კონფლიქტი ფანჯრის რამდენიმე პარამეტრს შორის"
 
-#. Translators: These strings name the possible values of the
-#. * job priority option in the print dialog
-#.
-#: modules/printbackends/gtkprintbackendcpdb.c:541
-#: modules/printbackends/gtkprintbackendcups.c:5667
+#: modules/printbackends/gtkprintbackendcpdb.c:542
+#: modules/printbackends/gtkprintbackendcups.c:5668
+msgctxt "Print job priority"
 msgid "Urgent"
-msgstr "გადაუდებელი"
+msgstr "სასწრაფო"
 
-#: modules/printbackends/gtkprintbackendcpdb.c:541
-#: modules/printbackends/gtkprintbackendcups.c:5667
+#: modules/printbackends/gtkprintbackendcpdb.c:543
+#: modules/printbackends/gtkprintbackendcups.c:5669
+msgctxt "Print job priority"
 msgid "High"
 msgstr "მაღალი"
 
-#: modules/printbackends/gtkprintbackendcpdb.c:541
-#: modules/printbackends/gtkprintbackendcups.c:5667
+#: modules/printbackends/gtkprintbackendcpdb.c:544
+#: modules/printbackends/gtkprintbackendcups.c:5670
+msgctxt "Print job priority"
+msgid "Medium"
+msgstr "საშუალო"
+
+#: modules/printbackends/gtkprintbackendcpdb.c:545
+#: modules/printbackends/gtkprintbackendcups.c:5671
+msgctxt "Print job priority"
 msgid "Low"
 msgstr "დაბალი"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the front cover page.
 #.
-#: modules/printbackends/gtkprintbackendcpdb.c:562
-#: modules/printbackends/gtkprintbackendcups.c:5809
+#: modules/printbackends/gtkprintbackendcpdb.c:567
+#: modules/printbackends/gtkprintbackendcups.c:5814
 msgctxt "printer option"
 msgid "Before"
 msgstr "ჯერ"
@@ -6629,33 +6638,33 @@ msgstr "ჯერ"
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the back cover page.
 #.
-#: modules/printbackends/gtkprintbackendcpdb.c:569
-#: modules/printbackends/gtkprintbackendcups.c:5824
+#: modules/printbackends/gtkprintbackendcpdb.c:574
+#: modules/printbackends/gtkprintbackendcups.c:5829
 msgctxt "printer option"
 msgid "After"
 msgstr "შემდეგ"
 
-#: modules/printbackends/gtkprintbackendcpdb.c:592
+#: modules/printbackends/gtkprintbackendcpdb.c:597
 msgid "Print at"
 msgstr "დაბეჭდვის დრო"
 
-#: modules/printbackends/gtkprintbackendcpdb.c:602
+#: modules/printbackends/gtkprintbackendcpdb.c:607
 msgid "Print at time"
 msgstr "დაბეჭდვის დრო"
 
-#: modules/printbackends/gtkprintbackendcpdb.c:665
+#: modules/printbackends/gtkprintbackendcpdb.c:670
 msgctxt "print option"
 msgid "Borderless"
 msgstr "საზღვრების გარეშე"
 
 #. Translators: this is a printer status.
-#: modules/printbackends/gtkprintbackendcpdb.c:1525
+#: modules/printbackends/gtkprintbackendcpdb.c:1530
 #: modules/printbackends/gtkprintbackendcups.c:2636
 msgid "Paused; Rejecting Jobs"
 msgstr "შეყოვნებულია; დავალებების უარყოფა"
 
 #. Translators: this is a printer status.
-#: modules/printbackends/gtkprintbackendcpdb.c:1531
+#: modules/printbackends/gtkprintbackendcpdb.c:1536
 #: modules/printbackends/gtkprintbackendcups.c:2642
 msgid "Rejecting Jobs"
 msgstr "დავალებების უარყოფა"
@@ -7021,51 +7030,51 @@ msgstr "ნაგულისხმევი პრინტერი"
 #. Translators, this string is used to label the job priority option
 #. * in the print dialog
 #.
-#: modules/printbackends/gtkprintbackendcups.c:5697
+#: modules/printbackends/gtkprintbackendcups.c:5702
 msgid "Job Priority"
 msgstr "ამოცანის პრიორიტეტი"
 
 #. Translators, this string is used to label the billing info entry
 #. * in the print dialog
 #.
-#: modules/printbackends/gtkprintbackendcups.c:5708
+#: modules/printbackends/gtkprintbackendcups.c:5713
 msgid "Billing Info"
 msgstr "ანგარიშთა ინფორმაცია"
 
 #. Translators, these strings are names for various 'standard' cover
 #. * pages that the printing system may support.
 #.
-#: modules/printbackends/gtkprintbackendcups.c:5732
+#: modules/printbackends/gtkprintbackendcups.c:5737
 msgctxt "cover page"
 msgid "None"
 msgstr "არცერთი"
 
-#: modules/printbackends/gtkprintbackendcups.c:5733
+#: modules/printbackends/gtkprintbackendcups.c:5738
 msgctxt "cover page"
 msgid "Classified"
 msgstr "საიდუმლო"
 
-#: modules/printbackends/gtkprintbackendcups.c:5734
+#: modules/printbackends/gtkprintbackendcups.c:5739
 msgctxt "cover page"
 msgid "Confidential"
 msgstr "კონფიდენციალური"
 
-#: modules/printbackends/gtkprintbackendcups.c:5735
+#: modules/printbackends/gtkprintbackendcups.c:5740
 msgctxt "cover page"
 msgid "Secret"
 msgstr "სამხედრო საიდუმლო"
 
-#: modules/printbackends/gtkprintbackendcups.c:5736
+#: modules/printbackends/gtkprintbackendcups.c:5741
 msgctxt "cover page"
 msgid "Standard"
 msgstr "სტანდარტული"
 
-#: modules/printbackends/gtkprintbackendcups.c:5737
+#: modules/printbackends/gtkprintbackendcups.c:5742
 msgctxt "cover page"
 msgid "Top Secret"
 msgstr "უმაღლესი დონის საიდუმლო"
 
-#: modules/printbackends/gtkprintbackendcups.c:5738
+#: modules/printbackends/gtkprintbackendcups.c:5743
 msgctxt "cover page"
 msgid "Unclassified"
 msgstr "არასაიდუმლო"
@@ -7073,7 +7082,7 @@ msgstr "არასაიდუმლო"
 #. Translators, this string is used to label the pages-per-sheet option
 #. * in the print dialog
 #.
-#: modules/printbackends/gtkprintbackendcups.c:5750
+#: modules/printbackends/gtkprintbackendcups.c:5755
 msgctxt "printer option"
 msgid "Pages per Sheet"
 msgstr "გვერდები ფურცელზე"
@@ -7081,7 +7090,7 @@ msgstr "გვერდები ფურცელზე"
 #. Translators, this string is used to label the option in the print
 #. * dialog that controls in what order multiple pages are arranged
 #.
-#: modules/printbackends/gtkprintbackendcups.c:5767
+#: modules/printbackends/gtkprintbackendcups.c:5772
 msgctxt "printer option"
 msgid "Page Ordering"
 msgstr "გვერდის დალაგება"
@@ -7090,7 +7099,7 @@ msgstr "გვერდის დალაგება"
 #. * a print job is printed. Possible values are 'now', a specified time,
 #. * or 'on hold'
 #.
-#: modules/printbackends/gtkprintbackendcups.c:5844
+#: modules/printbackends/gtkprintbackendcups.c:5849
 msgctxt "printer option"
 msgid "Print at"
 msgstr "დაბეჭდვის დრო"
@@ -7098,7 +7107,7 @@ msgstr "დაბეჭდვის დრო"
 #. Translators: this is the name of the option that allows the user
 #. * to specify a time when a print job will be printed.
 #.
-#: modules/printbackends/gtkprintbackendcups.c:5855
+#: modules/printbackends/gtkprintbackendcups.c:5860
 msgctxt "printer option"
 msgid "Print at time"
 msgstr "დაბეჭდვის დრო"
@@ -7108,19 +7117,19 @@ msgstr "დაბეჭდვის დრო"
 #. * the width and height in points. E.g: "Custom
 #. * 230.4x142.9"
 #.
-#: modules/printbackends/gtkprintbackendcups.c:5902
+#: modules/printbackends/gtkprintbackendcups.c:5907
 #, c-format
 msgid "Custom %s×%s"
 msgstr "ხელით %s×%s"
 
 #. TRANSLATORS: this is the ICC color profile to use for this job
-#: modules/printbackends/gtkprintbackendcups.c:6013
+#: modules/printbackends/gtkprintbackendcups.c:6018
 msgctxt "printer option"
 msgid "Printer Profile"
 msgstr "პრინტერის პროფილი"
 
 #. TRANSLATORS: this is when color profile information is unavailable
-#: modules/printbackends/gtkprintbackendcups.c:6020
+#: modules/printbackends/gtkprintbackendcups.c:6025
 msgctxt "printer option value"
 msgid "Unavailable"
 msgstr "მიუწვდომელია"
