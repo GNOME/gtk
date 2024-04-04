@@ -5664,7 +5664,12 @@ cups_printer_get_options (GtkPrinter           *printer,
   /* Translators: These strings name the possible values of the
    * job priority option in the print dialog
    */
-  const char *prio_display[] = {N_("Urgent"), N_("High"), N_("Medium"), N_("Low") };
+  const char *prio_display[] = {
+    NC_("Print job priority", "Urgent"),
+    NC_("Print job priority", "High"),
+    NC_("Print job priority", "Medium"),
+    NC_("Print job priority", "Low")
+  };
   const char *n_up_layout[] = { "lrtb", "lrbt", "rltb", "rlbt", "tblr", "tbrl", "btlr", "btrl" };
   /* Translators: These strings name the possible arrangements of
    * multiple pages on a sheet when printing
