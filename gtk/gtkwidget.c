@@ -6466,7 +6466,6 @@ gtk_widget_update_pango_context (GtkWidget        *widget,
   cairo_font_options_t *font_options;
   guint old_serial;
   gboolean hint_font_metrics = FALSE;
-  int scale;
 
   old_serial = pango_context_get_serial (context);
 
@@ -6474,17 +6473,11 @@ gtk_widget_update_pango_context (GtkWidget        *widget,
   pango_context_set_font_description (context, font_desc);
   pango_font_description_free (font_desc);
 
-  scale = gtk_widget_get_scale_factor (widget);
   settings = gtk_widget_get_settings (widget);
 
   if (settings)
     {
       g_object_get (settings, "gtk-hint-font-metrics", &hint_font_metrics, NULL);
-
-      /* Override the user setting on non-HiDPI */
-      if (scale == 1)
-        hint_font_metrics = TRUE;
-
       pango_context_set_round_glyph_positions (context, hint_font_metrics);
     }
 
