@@ -49,11 +49,11 @@ gtk_at_spi_translate_coordinates_to_accessible (GtkAccessible  *accessible,
 
 
 void
-gtk_at_spi_translate_coordinates_from_accessible (GtkAccessible *accessible,
-                                                  AtspiCoordType     coordtype,
-                                                  int                xi,
-                                                  int                yi,
-                                                  int               *xo,
-                                                  int               *yo);
+gtk_at_spi_translate_coordinates_from_accessible (GtkAccessible  *accessible,
+                                                  AtspiCoordType  coordtype,
+                                                  int             xi,
+                                                  int             yi,
+                                                  int            *xo,
+                                                  int            *yo);
 
 G_END_DECLS

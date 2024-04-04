@@ -388,7 +388,7 @@ accessible_text_handle_method (GDBusConnection       *connection,
           return;
         }
 
-      gtk_at_spi_translate_coordinates_from_accessible(accessible, coords_type, extents.origin.x, extents.origin.y, &x, &y);
+      gtk_at_spi_translate_coordinates_from_accessible (accessible, coords_type, extents.origin.x, extents.origin.y, &x, &y);
       w = extents.size.width;
       h = extents.size.height;
 
@@ -421,7 +421,7 @@ accessible_text_handle_method (GDBusConnection       *connection,
           return;
         }
 
-      gtk_at_spi_translate_coordinates_from_accessible(accessible, coords_type, extents.origin.x, extents.origin.y, &x, &y);
+      gtk_at_spi_translate_coordinates_from_accessible (accessible, coords_type, extents.origin.x, extents.origin.y, &x, &y);
       w = extents.size.width;
       h = extents.size.height;
 

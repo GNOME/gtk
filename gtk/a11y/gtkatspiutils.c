@@ -394,11 +394,11 @@ gtk_at_spi_translate_coordinates_to_accessible (GtkAccessible  *accessible,
       return;
     }
 
-         // Transform coords to our parent, we will need that in any case
+  /* Transform coords to our parent, we will need that in any case */
   *xo = xi - x;
   *yo = yi - y;
 
-         // If that's what the caller requested, we're done
+  /* If that's what the caller requested, we're done */
   if (coordtype == ATSPI_COORD_TYPE_PARENT)
     return;
 
@@ -448,11 +448,11 @@ gtk_at_spi_translate_coordinates_from_accessible (GtkAccessible *accessible,
       return;
     }
 
-         // Transform coords to our parent, we will need that in any case
+  /* Transform coords to our parent, we will need that in any case */
   *xo = xi + x;
   *yo = yi + y;
 
-         // If that's what the caller requested, we're done
+  /* If that's what the caller requested, we're done */
   if (coordtype == ATSPI_COORD_TYPE_PARENT)
     return;
 
