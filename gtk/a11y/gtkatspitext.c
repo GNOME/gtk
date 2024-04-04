@@ -317,7 +317,7 @@ accessible_text_handle_method (GDBusConnection       *connection,
           return;
         }
 
-      g_dbus_method_invocation_return_value (invocation, g_variant_new ("(u)", offset));
+      g_dbus_method_invocation_return_value (invocation, g_variant_new ("(i)", (int)offset));
     }
   else if (g_strcmp0 (method_name, "GetNSelections") == 0)
     {
