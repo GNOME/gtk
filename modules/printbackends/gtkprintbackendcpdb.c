@@ -538,7 +538,12 @@ cpdb_printer_get_options (GtkPrinter            *printer,
     {
       /* job-priority is represented as a number from 1-100 */
       const char *prio[] = {"100", "80", "50", "30"};
-      const char *prio_display[] = {N_("Urgent"), N_("High"), N_("Medium"), N_("Low")};
+      const char *prio_display[] = {
+        NC_("Print job priority", "Urgent"),
+        NC_("Print job priority", "High"),
+        NC_("Print job priority", "Medium"),
+        NC_("Print job priority", "Low")
+      };
 
       for (int i = 0; i < G_N_ELEMENTS(prio_display); i++)
         prio_display[i] = _(prio_display[i]);
