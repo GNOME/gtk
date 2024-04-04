@@ -295,7 +295,7 @@ static void gtk_spin_button_activate       (GtkText            *entry,
 static void gtk_spin_button_unset_adjustment (GtkSpinButton *spin_button);
 static void gtk_spin_button_set_orientation (GtkSpinButton     *spin_button,
                                              GtkOrientation     orientation);
-static double gtk_spin_button_snap         (GtkSpinButton      *spin_button,
+static void gtk_spin_button_snap           (GtkSpinButton      *spin_button,
                                             double              val);
 static void gtk_spin_button_insert_text    (GtkEditable        *editable,
                                             const char         *new_text,
@@ -1519,24 +1519,25 @@ gtk_spin_button_real_change_value (GtkSpinButton *spin,
     gtk_widget_error_bell (GTK_WIDGET (spin));
 }
 
-static double
+static void
 gtk_spin_button_snap (GtkSpinButton *spin_button,
                       double         val)
 {
   double inc;
-  double tmp;
 
   inc = gtk_adjustment_get_step_increment (spin_button->adjustment);
-  if (inc == 0)
-    return val;
+  if (inc != 0)
+    {
+      double tmp;
 
-  tmp = (val - gtk_adjustment_get_lower (spin_button->adjustment)) / inc;
-  if (tmp - floor (tmp) < ceil (tmp) - tmp)
-    val = gtk_adjustment_get_lower (spin_button->adjustment) + floor (tmp) * inc;
-  else
-    val = gtk_adjustment_get_lower (spin_button->adjustment) + ceil (tmp) * inc;
+      tmp = (val - gtk_adjustment_get_lower (spin_button->adjustment)) / inc;
+      if (tmp - floor (tmp) < ceil (tmp) - tmp)
+        val = gtk_adjustment_get_lower (spin_button->adjustment) + floor (tmp) * inc;
+      else
+        val = gtk_adjustment_get_lower (spin_button->adjustment) + ceil (tmp) * inc;
+    }
 
-  return val;
+  gtk_spin_button_set_value (spin_button, val);
 }
 
 static void
@@ -2538,22 +2539,26 @@ gtk_spin_button_update (GtkSpinButton *spin_button)
   else if (return_val == GTK_INPUT_ERROR)
     error = 1;
 
-  const double lower = gtk_adjustment_get_lower (spin_button->adjustment);
-  const double upper = gtk_adjustment_get_upper (spin_button->adjustment);
-
   if (spin_button->update_policy == GTK_UPDATE_ALWAYS)
     {
-      val = CLAMP (val, lower, upper);
-
-      if (spin_button->snap_to_ticks)
-        val = gtk_spin_button_snap (spin_button, val);
-
-      gtk_spin_button_set_value (spin_button, val);
+      if (val < gtk_adjustment_get_lower (spin_button->adjustment))
+        val = gtk_adjustment_get_lower (spin_button->adjustment);
+      else if (val > gtk_adjustment_get_upper (spin_button->adjustment))
+        val = gtk_adjustment_get_upper (spin_button->adjustment);
     }
-  else if (error || val < lower || val > upper)
+  else if ((spin_button->update_policy == GTK_UPDATE_IF_VALID) &&
+           (error ||
+            val < gtk_adjustment_get_lower (spin_button->adjustment) ||
+            val > gtk_adjustment_get_upper (spin_button->adjustment)))
     {
       gtk_spin_button_value_changed (spin_button->adjustment, spin_button);
+      return;
     }
+
+  if (spin_button->snap_to_ticks)
+    gtk_spin_button_snap (spin_button, val);
+  else
+    gtk_spin_button_set_value (spin_button, val);
 }
 
 GtkText *
@@ -2561,3 +2566,4 @@ gtk_spin_button_get_text_widget (GtkSpinButton *spin_button)
 {
   return GTK_TEXT (spin_button->entry);
 }
+
