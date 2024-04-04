@@ -1524,17 +1524,18 @@ gtk_spin_button_snap (GtkSpinButton *spin_button,
                       double         val)
 {
   double inc;
-  double tmp;
 
   inc = gtk_adjustment_get_step_increment (spin_button->adjustment);
-  if (inc == 0)
-    return;
+  if (inc != 0)
+    {
+      double tmp;
 
-  tmp = (val - gtk_adjustment_get_lower (spin_button->adjustment)) / inc;
-  if (tmp - floor (tmp) < ceil (tmp) - tmp)
-    val = gtk_adjustment_get_lower (spin_button->adjustment) + floor (tmp) * inc;
-  else
-    val = gtk_adjustment_get_lower (spin_button->adjustment) + ceil (tmp) * inc;
+      tmp = (val - gtk_adjustment_get_lower (spin_button->adjustment)) / inc;
+      if (tmp - floor (tmp) < ceil (tmp) - tmp)
+        val = gtk_adjustment_get_lower (spin_button->adjustment) + floor (tmp) * inc;
+      else
+        val = gtk_adjustment_get_lower (spin_button->adjustment) + ceil (tmp) * inc;
+    }
 
   gtk_spin_button_set_value (spin_button, val);
 }
