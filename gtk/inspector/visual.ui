@@ -399,10 +399,10 @@
                                 <property name="model">
                                   <object class="GtkStringList">
                                     <items>
-                                      <item translatable="yes">None</item>
-                                      <item translatable="yes">Slight</item>
-                                      <item translatable="yes">Medium</item>
-                                      <item translatable="yes">Full</item>
+                                      <item translatable="yes" context="Font hinting style">None</item>
+                                      <item translatable="yes" context="Font hinting style">Slight</item>
+                                      <item translatable="yes" context="Font hinting style">Medium</item>
+                                      <item translatable="yes" context="Font hinting style">Full</item>
                                     </items>
                                   </object>
                                 </property>
