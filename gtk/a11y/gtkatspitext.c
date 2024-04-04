@@ -371,14 +371,11 @@ accessible_text_handle_method (GDBusConnection       *connection,
       int offset;
       unsigned int coords_type;
       graphene_rect_t extents;
-      graphene_point_t point;
       int x, y, w, h;
-      GtkNative *native;
-      double nx, ny;
 
       g_variant_get (parameters, "(iu)", &offset, &coords_type);
 
-      if (coords_type != ATSPI_COORD_TYPE_WINDOW)
+      if (coords_type != ATSPI_COORD_TYPE_PARENT && coords_type != ATSPI_COORD_TYPE_WINDOW)
         {
           g_dbus_method_invocation_return_error_literal (invocation,
                                                          G_DBUS_ERROR,
@@ -387,11 +384,7 @@ accessible_text_handle_method (GDBusConnection       *connection,
           return;
         }
 
-      native = gtk_widget_get_native (GTK_WIDGET (accessible));
-      gtk_native_get_surface_transform (native, &nx, &ny);
-
-      if (!gtk_accessible_text_get_extents (accessible_text, offset, offset + 1, &extents) ||
-          !gtk_widget_compute_point (GTK_WIDGET (accessible), GTK_WIDGET (native), &extents.origin, &point))
+      if (!gtk_accessible_text_get_extents (accessible_text, offset, offset + 1, &extents))
         {
           g_dbus_method_invocation_return_error_literal (invocation,
                                                          G_DBUS_ERROR,
@@ -400,10 +393,9 @@ accessible_text_handle_method (GDBusConnection       *connection,
           return;
         }
 
-      x = floor (point.x + nx);
-      y = floor (point.y + ny);
-      w = ceilf (extents.size.width) - x;
-      h = ceilf (extents.size.height) - y;
+      gtk_at_spi_translate_coordinates_from_accessible(accessible, coords_type, extents.origin.x, extents.origin.y, &x, &y);
+      w = extents.size.width;
+      h = extents.size.height;
 
       g_dbus_method_invocation_return_value (invocation, g_variant_new ("(iiii)", x, y, w, h));
     }
@@ -412,14 +404,11 @@ accessible_text_handle_method (GDBusConnection       *connection,
       int start, end;
       guint coords_type;
       graphene_rect_t extents;
-      graphene_point_t point;
       int x, y, w, h;
-      GtkNative *native;
-      double nx, ny;
 
       g_variant_get (parameters, "(iiu)", &start, &end, &coords_type);
 
-      if (coords_type != ATSPI_COORD_TYPE_WINDOW)
+      if (coords_type != ATSPI_COORD_TYPE_PARENT && coords_type != ATSPI_COORD_TYPE_WINDOW)
         {
           g_dbus_method_invocation_return_error_literal (invocation,
                                                          G_DBUS_ERROR,
@@ -428,11 +417,7 @@ accessible_text_handle_method (GDBusConnection       *connection,
           return;
         }
 
-      native = gtk_widget_get_native (GTK_WIDGET (accessible));
-      gtk_native_get_surface_transform (native, &nx, &ny);
-
-      if (!gtk_accessible_text_get_extents (accessible_text, start, end, &extents) ||
-          !gtk_widget_compute_point (GTK_WIDGET (accessible), GTK_WIDGET (native), &extents.origin, &point))
+      if (!gtk_accessible_text_get_extents (accessible_text, start, end, &extents))
         {
           g_dbus_method_invocation_return_error_literal (invocation,
                                                          G_DBUS_ERROR,
@@ -441,10 +426,9 @@ accessible_text_handle_method (GDBusConnection       *connection,
           return;
         }
 
-      x = floor (point.x + nx);
-      y = floor (point.y + ny);
-      w = ceilf (extents.size.width) - x;
-      h = ceilf (extents.size.height) - y;
+      gtk_at_spi_translate_coordinates_from_accessible(accessible, coords_type, extents.origin.x, extents.origin.y, &x, &y);
+      w = extents.size.width;
+      h = extents.size.height;
 
       g_dbus_method_invocation_return_value (invocation, g_variant_new ("(iiii)", x, y, w, h));
     }
