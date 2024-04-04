@@ -51,12 +51,6 @@ gsk_reload_font (PangoFont            *font,
   static cairo_font_options_t *options = NULL;
   static PangoContext *context = NULL;
   cairo_scaled_font_t *sf;
-#if !PANGO_VERSION_CHECK (1, 52, 0)
-  PangoFontDescription *desc;
-  FcPattern *pattern;
-  double dpi;
-  int size;
-#endif
 
   /* These requests often come in sequentially so keep the result
    * around and re-use it if everything matches.
@@ -119,22 +113,7 @@ gsk_reload_font (PangoFont            *font,
 
   pango_cairo_context_set_font_options (context, options);
 
-#if PANGO_VERSION_CHECK (1, 52, 0)
   last_result = pango_font_map_reload_font (pango_font_get_font_map (font), font, scale, context, NULL);
-#else
-
-#ifdef HAVE_PANGOFT
-  pattern = pango_fc_font_get_pattern (PANGO_FC_FONT (font));
-  if (FcPatternGetDouble (pattern, FC_DPI, 0, &dpi) == FcResultMatch)
-    pango_cairo_context_set_resolution (context, dpi);
-#endif
-
-  desc = pango_font_describe_with_absolute_size (font);
-  size = pango_font_description_get_size (desc);
-  pango_font_description_set_absolute_size (desc, size * scale);
-  last_result = pango_font_map_load_font (pango_font_get_font_map (font), context, desc);
-  pango_font_description_free (desc);
-#endif
 
   return g_object_ref (last_result);
 }
