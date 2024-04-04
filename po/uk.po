@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2024-03-30 09:15+0000\n"
-"PO-Revision-Date: 2024-03-30 11:26+0200\n"
+"POT-Creation-Date: 2024-04-04 17:02+0000\n"
+"PO-Revision-Date: 2024-04-04 22:02+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian\n"
 "Language: uk\n"
@@ -3430,7 +3430,7 @@ msgstr "Немає паперу"
 
 #. Translators: this is a printer status.
 #: gtk/print/gtkprintoperation-win32.c:640
-#: modules/printbackends/gtkprintbackendcpdb.c:1528
+#: modules/printbackends/gtkprintbackendcpdb.c:1533
 #: modules/printbackends/gtkprintbackendcups.c:2639
 msgid "Paused"
 msgstr "Призупинено"
@@ -3501,42 +3501,42 @@ msgstr "Одержання інформації про принтер…"
 #. * multiple pages on a sheet when printing
 #.
 #: gtk/print/gtkprintunixdialog.c:2753
-#: modules/printbackends/gtkprintbackendcups.c:5672
+#: modules/printbackends/gtkprintbackendcups.c:5677
 msgid "Left to right, top to bottom"
 msgstr "Зліва направо, згори вниз"
 
 #: gtk/print/gtkprintunixdialog.c:2753
-#: modules/printbackends/gtkprintbackendcups.c:5672
+#: modules/printbackends/gtkprintbackendcups.c:5677
 msgid "Left to right, bottom to top"
 msgstr "Зліва направо, знизу вгору"
 
 #: gtk/print/gtkprintunixdialog.c:2754
-#: modules/printbackends/gtkprintbackendcups.c:5673
+#: modules/printbackends/gtkprintbackendcups.c:5678
 msgid "Right to left, top to bottom"
 msgstr "Справа наліво, згори вниз"
 
 #: gtk/print/gtkprintunixdialog.c:2754
-#: modules/printbackends/gtkprintbackendcups.c:5673
+#: modules/printbackends/gtkprintbackendcups.c:5678
 msgid "Right to left, bottom to top"
 msgstr "Справа наліво, знизу вгору"
 
 #: gtk/print/gtkprintunixdialog.c:2755
-#: modules/printbackends/gtkprintbackendcups.c:5674
+#: modules/printbackends/gtkprintbackendcups.c:5679
 msgid "Top to bottom, left to right"
 msgstr "Згори вниз, зліва направо"
 
 #: gtk/print/gtkprintunixdialog.c:2755
-#: modules/printbackends/gtkprintbackendcups.c:5674
+#: modules/printbackends/gtkprintbackendcups.c:5679
 msgid "Top to bottom, right to left"
 msgstr "Згори вниз, справа наліво"
 
 #: gtk/print/gtkprintunixdialog.c:2756
-#: modules/printbackends/gtkprintbackendcups.c:5675
+#: modules/printbackends/gtkprintbackendcups.c:5680
 msgid "Bottom to top, left to right"
 msgstr "Знизу вгору, зліва направо"
 
 #: gtk/print/gtkprintunixdialog.c:2756
-#: modules/printbackends/gtkprintbackendcups.c:5675
+#: modules/printbackends/gtkprintbackendcups.c:5680
 msgid "Bottom to top, right to left"
 msgstr "Знизу вгору, справа наліво"
 
@@ -4407,35 +4407,34 @@ msgid "Antialiasing"
 msgstr "Згладжування"
 
 #: gtk/inspector/visual.ui:387
-#| msgctxt "print operation status"
-#| msgid "Printing"
 msgid "Hinting"
 msgstr "Гінтинґ"
 
 #: gtk/inspector/visual.ui:402
-#| msgctxt "font"
 #| msgid "None"
+msgctxt "Font hinting style"
 msgid "None"
 msgstr "Немає"
 
 #: gtk/inspector/visual.ui:403
-#| msgctxt "keyboard label"
-#| msgid "Right"
+#| msgid "Slight"
+msgctxt "Font hinting style"
 msgid "Slight"
 msgstr "Слабкий"
 
-#: gtk/inspector/visual.ui:404 modules/printbackends/gtkprintbackendcpdb.c:541
-#: modules/printbackends/gtkprintbackendcups.c:5667
+#: gtk/inspector/visual.ui:404
+#| msgid "Medium"
+msgctxt "Font hinting style"
 msgid "Medium"
 msgstr "Середній"
 
 #: gtk/inspector/visual.ui:405
+#| msgid "Full"
+msgctxt "Font hinting style"
 msgid "Full"
 msgstr "Повний"
 
 #: gtk/inspector/visual.ui:422
-#| msgctxt "OpenType layout"
-#| msgid "Vertical Writing"
 msgid "Metrics Hinting"
 msgstr "Гінтинґ метрики"
 
@@ -6621,29 +6620,39 @@ msgstr "Додатково"
 msgid "Some of the settings in the dialog conflict"
 msgstr "Деякі параметри у діалоговому вікні конфліктують"
 
-#. Translators: These strings name the possible values of the
-#. * job priority option in the print dialog
-#.
-#: modules/printbackends/gtkprintbackendcpdb.c:541
-#: modules/printbackends/gtkprintbackendcups.c:5667
+#: modules/printbackends/gtkprintbackendcpdb.c:542
+#: modules/printbackends/gtkprintbackendcups.c:5668
+#| msgid "Urgent"
+msgctxt "Print job priority"
 msgid "Urgent"
-msgstr "Терміново"
+msgstr "Терміновий"
 
-#: modules/printbackends/gtkprintbackendcpdb.c:541
-#: modules/printbackends/gtkprintbackendcups.c:5667
+#: modules/printbackends/gtkprintbackendcpdb.c:543
+#: modules/printbackends/gtkprintbackendcups.c:5669
+#| msgid "High"
+msgctxt "Print job priority"
 msgid "High"
 msgstr "Високий"
 
-#: modules/printbackends/gtkprintbackendcpdb.c:541
-#: modules/printbackends/gtkprintbackendcups.c:5667
+#: modules/printbackends/gtkprintbackendcpdb.c:544
+#: modules/printbackends/gtkprintbackendcups.c:5670
+#| msgid "Medium"
+msgctxt "Print job priority"
+msgid "Medium"
+msgstr "Середній"
+
+#: modules/printbackends/gtkprintbackendcpdb.c:545
+#: modules/printbackends/gtkprintbackendcups.c:5671
+#| msgid "Low"
+msgctxt "Print job priority"
 msgid "Low"
 msgstr "Низький"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the front cover page.
 #.
-#: modules/printbackends/gtkprintbackendcpdb.c:562
-#: modules/printbackends/gtkprintbackendcups.c:5809
+#: modules/printbackends/gtkprintbackendcpdb.c:567
+#: modules/printbackends/gtkprintbackendcups.c:5814
 msgctxt "printer option"
 msgid "Before"
 msgstr "Перед"
@@ -6651,33 +6660,33 @@ msgstr "Перед"
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the back cover page.
 #.
-#: modules/printbackends/gtkprintbackendcpdb.c:569
-#: modules/printbackends/gtkprintbackendcups.c:5824
+#: modules/printbackends/gtkprintbackendcpdb.c:574
+#: modules/printbackends/gtkprintbackendcups.c:5829
 msgctxt "printer option"
 msgid "After"
 msgstr "Після"
 
-#: modules/printbackends/gtkprintbackendcpdb.c:592
+#: modules/printbackends/gtkprintbackendcpdb.c:597
 msgid "Print at"
 msgstr "Надрукувати"
 
-#: modules/printbackends/gtkprintbackendcpdb.c:602
+#: modules/printbackends/gtkprintbackendcpdb.c:607
 msgid "Print at time"
 msgstr "Надрукувати о"
 
-#: modules/printbackends/gtkprintbackendcpdb.c:665
+#: modules/printbackends/gtkprintbackendcpdb.c:670
 msgctxt "print option"
 msgid "Borderless"
 msgstr "Без рамки"
 
 #. Translators: this is a printer status.
-#: modules/printbackends/gtkprintbackendcpdb.c:1525
+#: modules/printbackends/gtkprintbackendcpdb.c:1530
 #: modules/printbackends/gtkprintbackendcups.c:2636
 msgid "Paused; Rejecting Jobs"
 msgstr "Призупинено ; скасування завдань"
 
 #. Translators: this is a printer status.
-#: modules/printbackends/gtkprintbackendcpdb.c:1531
+#: modules/printbackends/gtkprintbackendcpdb.c:1536
 #: modules/printbackends/gtkprintbackendcups.c:2642
 msgid "Rejecting Jobs"
 msgstr "Скасування завдань"
@@ -7046,51 +7055,51 @@ msgstr "Типовий принтер"
 #. Translators, this string is used to label the job priority option
 #. * in the print dialog
 #.
-#: modules/printbackends/gtkprintbackendcups.c:5697
+#: modules/printbackends/gtkprintbackendcups.c:5702
 msgid "Job Priority"
 msgstr "Пріоритет завдання"
 
 #. Translators, this string is used to label the billing info entry
 #. * in the print dialog
 #.
-#: modules/printbackends/gtkprintbackendcups.c:5708
+#: modules/printbackends/gtkprintbackendcups.c:5713
 msgid "Billing Info"
 msgstr "Інформація про облік"
 
 #. Translators, these strings are names for various 'standard' cover
 #. * pages that the printing system may support.
 #.
-#: modules/printbackends/gtkprintbackendcups.c:5732
+#: modules/printbackends/gtkprintbackendcups.c:5737
 msgctxt "cover page"
 msgid "None"
 msgstr "Немає"
 
-#: modules/printbackends/gtkprintbackendcups.c:5733
+#: modules/printbackends/gtkprintbackendcups.c:5738
 msgctxt "cover page"
 msgid "Classified"
 msgstr "Класифіковано"
 
-#: modules/printbackends/gtkprintbackendcups.c:5734
+#: modules/printbackends/gtkprintbackendcups.c:5739
 msgctxt "cover page"
 msgid "Confidential"
 msgstr "Конфіденційно"
 
-#: modules/printbackends/gtkprintbackendcups.c:5735
+#: modules/printbackends/gtkprintbackendcups.c:5740
 msgctxt "cover page"
 msgid "Secret"
 msgstr "Таємно"
 
-#: modules/printbackends/gtkprintbackendcups.c:5736
+#: modules/printbackends/gtkprintbackendcups.c:5741
 msgctxt "cover page"
 msgid "Standard"
 msgstr "Стандартно"
 
-#: modules/printbackends/gtkprintbackendcups.c:5737
+#: modules/printbackends/gtkprintbackendcups.c:5742
 msgctxt "cover page"
 msgid "Top Secret"
 msgstr "Цілковито таємно"
 
-#: modules/printbackends/gtkprintbackendcups.c:5738
+#: modules/printbackends/gtkprintbackendcups.c:5743
 msgctxt "cover page"
 msgid "Unclassified"
 msgstr "Не класифіковано"
@@ -7098,7 +7107,7 @@ msgstr "Не класифіковано"
 #. Translators, this string is used to label the pages-per-sheet option
 #. * in the print dialog
 #.
-#: modules/printbackends/gtkprintbackendcups.c:5750
+#: modules/printbackends/gtkprintbackendcups.c:5755
 msgctxt "printer option"
 msgid "Pages per Sheet"
 msgstr "Сторінок на аркуш"
@@ -7106,7 +7115,7 @@ msgstr "Сторінок на аркуш"
 #. Translators, this string is used to label the option in the print
 #. * dialog that controls in what order multiple pages are arranged
 #.
-#: modules/printbackends/gtkprintbackendcups.c:5767
+#: modules/printbackends/gtkprintbackendcups.c:5772
 msgctxt "printer option"
 msgid "Page Ordering"
 msgstr "Порядок сторінок"
@@ -7115,7 +7124,7 @@ msgstr "Порядок сторінок"
 #. * a print job is printed. Possible values are 'now', a specified time,
 #. * or 'on hold'
 #.
-#: modules/printbackends/gtkprintbackendcups.c:5844
+#: modules/printbackends/gtkprintbackendcups.c:5849
 msgctxt "printer option"
 msgid "Print at"
 msgstr "Надрукувати"
@@ -7123,7 +7132,7 @@ msgstr "Надрукувати"
 #. Translators: this is the name of the option that allows the user
 #. * to specify a time when a print job will be printed.
 #.
-#: modules/printbackends/gtkprintbackendcups.c:5855
+#: modules/printbackends/gtkprintbackendcups.c:5860
 msgctxt "printer option"
 msgid "Print at time"
 msgstr "Надрукувати о"
@@ -7133,19 +7142,19 @@ msgstr "Надрукувати о"
 #. * the width and height in points. E.g: "Custom
 #. * 230.4x142.9"
 #.
-#: modules/printbackends/gtkprintbackendcups.c:5902
+#: modules/printbackends/gtkprintbackendcups.c:5907
 #, c-format
 msgid "Custom %s×%s"
 msgstr "Інший %s×%s"
 
 #. TRANSLATORS: this is the ICC color profile to use for this job
-#: modules/printbackends/gtkprintbackendcups.c:6013
+#: modules/printbackends/gtkprintbackendcups.c:6018
 msgctxt "printer option"
 msgid "Printer Profile"
 msgstr "Профіль принтера"
 
 #. TRANSLATORS: this is when color profile information is unavailable
-#: modules/printbackends/gtkprintbackendcups.c:6020
+#: modules/printbackends/gtkprintbackendcups.c:6025
 msgctxt "printer option value"
 msgid "Unavailable"
 msgstr "Недоступно"
