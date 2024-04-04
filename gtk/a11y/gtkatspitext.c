@@ -290,7 +290,7 @@ accessible_text_handle_method (GDBusConnection       *connection,
       graphene_point_t p;
       unsigned int offset;
 
-      g_variant_get (parameters, "(i&s)", &x, &y, &coords_type);
+      g_variant_get (parameters, "(iiu)", &x, &y, &coords_type);
 
       if (coords_type != ATSPI_COORD_TYPE_WINDOW)
         {
