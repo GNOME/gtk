@@ -285,14 +285,13 @@ accessible_text_handle_method (GDBusConnection       *connection,
     {
       int x, y;
       guint coords_type;
-      GtkNative *native;
-      double nx, ny;
+      int nx, ny;
       graphene_point_t p;
       unsigned int offset;
 
       g_variant_get (parameters, "(iiu)", &x, &y, &coords_type);
 
-      if (coords_type != ATSPI_COORD_TYPE_WINDOW)
+      if (coords_type != ATSPI_COORD_TYPE_PARENT && coords_type != ATSPI_COORD_TYPE_WINDOW)
         {
           g_dbus_method_invocation_return_error_literal (invocation,
                                                          G_DBUS_ERROR,
@@ -301,14 +300,10 @@ accessible_text_handle_method (GDBusConnection       *connection,
           return;
         }
 
-      native = gtk_widget_get_native (GTK_WIDGET (accessible));
-      gtk_native_get_surface_transform (native, &nx, &ny);
+      gtk_at_spi_translate_coordinates_to_accessible (accessible, coords_type, x, y, &nx, &ny);
 
-      if (!gtk_widget_compute_point (GTK_WIDGET (native),
-                                     GTK_WIDGET (accessible),
-                                     &GRAPHENE_POINT_INIT (x - nx, y - ny),
-                                     &p) ||
-          !gtk_accessible_text_get_offset (accessible_text, &p, &offset))
+      p = GRAPHENE_POINT_INIT (nx, ny);
+      if (!gtk_accessible_text_get_offset (accessible_text, &p, &offset))
         {
           g_dbus_method_invocation_return_error_literal (invocation,
                                                          G_DBUS_ERROR,
