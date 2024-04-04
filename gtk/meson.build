@@ -725,6 +725,7 @@ if macos_enabled
     'gtksearchenginequartz.c',
     'gtkapplication-quartz.c',
     'gtkapplication-quartz-menu.c',
+    'gtkcolorpickerquartz.c',
     'gtkfilechoosernativequartz.c',
     'gtkimcontextquartz.c',
     'gtkquartz.c',
