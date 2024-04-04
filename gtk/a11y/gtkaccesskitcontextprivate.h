@@ -22,6 +22,8 @@
 
 #include "gtkatcontextprivate.h"
 
+#include <accesskit.h>
+
 G_BEGIN_DECLS
 
 #define GTK_TYPE_ACCESSKIT_CONTEXT (gtk_accesskit_context_get_type())
@@ -32,5 +34,9 @@ GtkATContext *
 gtk_accesskit_create_context (GtkAccessibleRole  accessible_role,
                               GtkAccessible     *accessible,
                               GdkDisplay        *display);
+
+accesskit_node *
+gtk_accesskit_context_build_node (GtkAccessKitContext      *self,
+                                  accesskit_node_class_set *node_classes);
 
 G_END_DECLS

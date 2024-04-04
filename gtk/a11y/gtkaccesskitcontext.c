@@ -29,7 +29,9 @@
 #include "gtkprivate.h"
 #include "gtkeditable.h"
 #include "gtkentryprivate.h"
+#include "gtkpasswordentry.h"
 #include "gtkroot.h"
+#include "gtkscrolledwindow.h"
 #include "gtkstack.h"
 #include "gtktextview.h"
 #include "gtktypebuiltins.h"
@@ -181,4 +183,300 @@ gtk_accesskit_create_context (GtkAccessibleRole  accessible_role,
                        "accessible", accessible,
                        "display", display,
                        NULL);
+}
+
+static accesskit_role
+gtk_accessible_role_to_accesskit_role (GtkAccessibleRole role)
+{
+  switch (role)
+    {
+    case GTK_ACCESSIBLE_ROLE_ALERT:
+      return ACCESSKIT_ROLE_ALERT;
+
+    case GTK_ACCESSIBLE_ROLE_ALERT_DIALOG:
+      return ACCESSKIT_ROLE_ALERT_DIALOG;
+
+    case GTK_ACCESSIBLE_ROLE_APPLICATION:
+      return ACCESSKIT_ROLE_APPLICATION;
+
+    case GTK_ACCESSIBLE_ROLE_ARTICLE:
+      return ACCESSKIT_ROLE_ARTICLE;
+
+    case GTK_ACCESSIBLE_ROLE_BANNER:
+      return ACCESSKIT_ROLE_BANNER;
+
+    case GTK_ACCESSIBLE_ROLE_BLOCK_QUOTE:
+      return ACCESSKIT_ROLE_BLOCKQUOTE;
+
+    case GTK_ACCESSIBLE_ROLE_BUTTON:
+      return ACCESSKIT_ROLE_BUTTON;
+
+    case GTK_ACCESSIBLE_ROLE_CAPTION:
+      return ACCESSKIT_ROLE_CAPTION;
+
+    case GTK_ACCESSIBLE_ROLE_CELL:
+      return ACCESSKIT_ROLE_CELL;
+
+    case GTK_ACCESSIBLE_ROLE_CHECKBOX:
+      return ACCESSKIT_ROLE_CHECK_BOX;
+
+    case GTK_ACCESSIBLE_ROLE_COLUMN_HEADER:
+      return ACCESSKIT_ROLE_COLUMN_HEADER;
+
+    case GTK_ACCESSIBLE_ROLE_COMBO_BOX:
+      return ACCESSKIT_ROLE_COMBO_BOX;
+
+    case GTK_ACCESSIBLE_ROLE_COMMAND:
+      return ACCESSKIT_ROLE_GENERIC_CONTAINER;
+
+    case GTK_ACCESSIBLE_ROLE_COMMENT:
+      return ACCESSKIT_ROLE_COMMENT;
+
+    case GTK_ACCESSIBLE_ROLE_COMPOSITE:
+      return ACCESSKIT_ROLE_GENERIC_CONTAINER;
+
+    case GTK_ACCESSIBLE_ROLE_DIALOG:
+      return ACCESSKIT_ROLE_DIALOG;
+
+    case GTK_ACCESSIBLE_ROLE_DOCUMENT:
+      return ACCESSKIT_ROLE_DOCUMENT;
+
+    case GTK_ACCESSIBLE_ROLE_FEED:
+      return ACCESSKIT_ROLE_FEED;
+
+    case GTK_ACCESSIBLE_ROLE_FORM:
+      return ACCESSKIT_ROLE_FORM;
+
+    case GTK_ACCESSIBLE_ROLE_GENERIC:
+      return ACCESSKIT_ROLE_GENERIC_CONTAINER;
+
+    case GTK_ACCESSIBLE_ROLE_GRID:
+      return ACCESSKIT_ROLE_GRID;
+
+    case GTK_ACCESSIBLE_ROLE_GRID_CELL:
+      return ACCESSKIT_ROLE_CELL;
+
+    case GTK_ACCESSIBLE_ROLE_GROUP:
+      return ACCESSKIT_ROLE_GROUP;
+
+    case GTK_ACCESSIBLE_ROLE_HEADING:
+      return ACCESSKIT_ROLE_HEADING;
+
+    case GTK_ACCESSIBLE_ROLE_IMG:
+      return ACCESSKIT_ROLE_IMAGE;
+
+    case GTK_ACCESSIBLE_ROLE_INPUT:
+      return ACCESSKIT_ROLE_TEXT_INPUT;
+
+    case GTK_ACCESSIBLE_ROLE_LABEL:
+      return ACCESSKIT_ROLE_STATIC_TEXT;
+
+    case GTK_ACCESSIBLE_ROLE_LANDMARK:
+      return ACCESSKIT_ROLE_GENERIC_CONTAINER;
+
+    case GTK_ACCESSIBLE_ROLE_LEGEND:
+      return ACCESSKIT_ROLE_LEGEND;
+
+    case GTK_ACCESSIBLE_ROLE_LINK:
+      return ACCESSKIT_ROLE_LINK;
+
+    case GTK_ACCESSIBLE_ROLE_LIST:
+      return ACCESSKIT_ROLE_LIST;
+
+    case GTK_ACCESSIBLE_ROLE_LIST_BOX:
+      return ACCESSKIT_ROLE_LIST_BOX;
+
+    case GTK_ACCESSIBLE_ROLE_LIST_ITEM:
+      return ACCESSKIT_ROLE_LIST_ITEM;
+
+    case GTK_ACCESSIBLE_ROLE_LOG:
+      return ACCESSKIT_ROLE_LOG;
+
+    case GTK_ACCESSIBLE_ROLE_MAIN:
+      return ACCESSKIT_ROLE_MAIN;
+
+    case GTK_ACCESSIBLE_ROLE_MARQUEE:
+      return ACCESSKIT_ROLE_MARQUEE;
+
+    case GTK_ACCESSIBLE_ROLE_MATH:
+      return ACCESSKIT_ROLE_MATH;
+
+    case GTK_ACCESSIBLE_ROLE_METER:
+      return ACCESSKIT_ROLE_METER;
+
+    case GTK_ACCESSIBLE_ROLE_MENU:
+      return ACCESSKIT_ROLE_MENU;
+
+    case GTK_ACCESSIBLE_ROLE_MENU_BAR:
+      return ACCESSKIT_ROLE_MENU_BAR;
+
+    case GTK_ACCESSIBLE_ROLE_MENU_ITEM:
+      return ACCESSKIT_ROLE_MENU_ITEM;
+
+    case GTK_ACCESSIBLE_ROLE_MENU_ITEM_CHECKBOX:
+      return ACCESSKIT_ROLE_MENU_ITEM_CHECK_BOX;
+
+    case GTK_ACCESSIBLE_ROLE_MENU_ITEM_RADIO:
+      return ACCESSKIT_ROLE_MENU_ITEM_RADIO;
+
+    case GTK_ACCESSIBLE_ROLE_NAVIGATION:
+      return ACCESSKIT_ROLE_NAVIGATION;
+
+    case GTK_ACCESSIBLE_ROLE_NONE:
+      return ACCESSKIT_ROLE_GENERIC_CONTAINER;
+
+    case GTK_ACCESSIBLE_ROLE_NOTE:
+      return ACCESSKIT_ROLE_NOTE;
+
+    case GTK_ACCESSIBLE_ROLE_OPTION:
+      return ACCESSKIT_ROLE_LIST_BOX_OPTION;
+
+    case GTK_ACCESSIBLE_ROLE_PARAGRAPH:
+      return ACCESSKIT_ROLE_PARAGRAPH;
+
+    case GTK_ACCESSIBLE_ROLE_PRESENTATION:
+      return ACCESSKIT_ROLE_GENERIC_CONTAINER;
+
+    case GTK_ACCESSIBLE_ROLE_PROGRESS_BAR:
+      return ACCESSKIT_ROLE_PROGRESS_INDICATOR;
+
+    case GTK_ACCESSIBLE_ROLE_RADIO:
+      return ACCESSKIT_ROLE_RADIO_BUTTON;
+
+    case GTK_ACCESSIBLE_ROLE_RADIO_GROUP:
+      return ACCESSKIT_ROLE_RADIO_GROUP;
+
+    case GTK_ACCESSIBLE_ROLE_RANGE:
+      return ACCESSKIT_ROLE_GENERIC_CONTAINER;
+
+    case GTK_ACCESSIBLE_ROLE_REGION:
+      return ACCESSKIT_ROLE_REGION;
+
+    case GTK_ACCESSIBLE_ROLE_ROW:
+      return ACCESSKIT_ROLE_ROW;
+
+    case GTK_ACCESSIBLE_ROLE_ROW_GROUP:
+      return ACCESSKIT_ROLE_ROW_GROUP;
+
+    case GTK_ACCESSIBLE_ROLE_ROW_HEADER:
+      return ACCESSKIT_ROLE_ROW_HEADER;
+
+    case GTK_ACCESSIBLE_ROLE_SCROLLBAR:
+      return ACCESSKIT_ROLE_SCROLL_BAR;
+
+    case GTK_ACCESSIBLE_ROLE_SEARCH:
+      return ACCESSKIT_ROLE_SEARCH;
+
+    case GTK_ACCESSIBLE_ROLE_SEARCH_BOX:
+      return ACCESSKIT_ROLE_SEARCH_INPUT;
+
+    case GTK_ACCESSIBLE_ROLE_SECTION:
+      return ACCESSKIT_ROLE_SECTION;
+
+    case GTK_ACCESSIBLE_ROLE_SECTION_HEAD:
+      return ACCESSKIT_ROLE_GENERIC_CONTAINER;
+
+    case GTK_ACCESSIBLE_ROLE_SELECT:
+      return ACCESSKIT_ROLE_GENERIC_CONTAINER;
+
+    case GTK_ACCESSIBLE_ROLE_SEPARATOR:
+      return ACCESSKIT_ROLE_GENERIC_CONTAINER;
+
+    case GTK_ACCESSIBLE_ROLE_SLIDER:
+      return ACCESSKIT_ROLE_SLIDER;
+
+    case GTK_ACCESSIBLE_ROLE_SPIN_BUTTON:
+      return ACCESSKIT_ROLE_SPIN_BUTTON;
+
+    case GTK_ACCESSIBLE_ROLE_STATUS:
+      return ACCESSKIT_ROLE_STATUS;
+
+    case GTK_ACCESSIBLE_ROLE_STRUCTURE:
+      return ACCESSKIT_ROLE_GENERIC_CONTAINER;
+
+    case GTK_ACCESSIBLE_ROLE_SWITCH:
+      return ACCESSKIT_ROLE_SWITCH;
+
+    case GTK_ACCESSIBLE_ROLE_TAB:
+      return ACCESSKIT_ROLE_TAB;
+
+    case GTK_ACCESSIBLE_ROLE_TABLE:
+      return ACCESSKIT_ROLE_TABLE;
+
+    case GTK_ACCESSIBLE_ROLE_TAB_LIST:
+      return ACCESSKIT_ROLE_TAB_LIST;
+
+    case GTK_ACCESSIBLE_ROLE_TAB_PANEL:
+      return ACCESSKIT_ROLE_TAB_PANEL;
+
+    case GTK_ACCESSIBLE_ROLE_TEXT_BOX:
+      return ACCESSKIT_ROLE_TEXT_INPUT;
+
+    case GTK_ACCESSIBLE_ROLE_TIME:
+      return ACCESSKIT_ROLE_TIME_INPUT;
+
+    case GTK_ACCESSIBLE_ROLE_TIMER:
+      return ACCESSKIT_ROLE_TIMER;
+
+    case GTK_ACCESSIBLE_ROLE_TOOLBAR:
+      return ACCESSKIT_ROLE_TOOLBAR;
+
+    case GTK_ACCESSIBLE_ROLE_TOOLTIP:
+      return ACCESSKIT_ROLE_TOOLTIP;
+
+    case GTK_ACCESSIBLE_ROLE_TREE:
+      return ACCESSKIT_ROLE_TREE;
+
+    case GTK_ACCESSIBLE_ROLE_TREE_GRID:
+      return ACCESSKIT_ROLE_TREE_GRID;
+
+    case GTK_ACCESSIBLE_ROLE_TREE_ITEM:
+      return ACCESSKIT_ROLE_TREE_ITEM;
+
+    case GTK_ACCESSIBLE_ROLE_WIDGET:
+      return ACCESSKIT_ROLE_UNKNOWN;
+
+    case GTK_ACCESSIBLE_ROLE_WINDOW:
+      return ACCESSKIT_ROLE_WINDOW;
+
+    case GTK_ACCESSIBLE_ROLE_TOGGLE_BUTTON:
+      return ACCESSKIT_ROLE_TOGGLE_BUTTON;
+
+    case GTK_ACCESSIBLE_ROLE_TERMINAL:
+      return ACCESSKIT_ROLE_TERMINAL;
+
+    default:
+      break;
+    }
+
+  return ACCESSKIT_ROLE_UNKNOWN;
+}
+
+static accesskit_role
+accesskit_role_for_context (GtkATContext *context)
+{
+  GtkAccessible *accessible = gtk_at_context_get_accessible (context);
+  GtkAccessibleRole role = gtk_at_context_get_accessible_role (context);
+
+  /* ARIA does not have a "password entry" role, so we need to fudge it here */
+  if (GTK_IS_PASSWORD_ENTRY (accessible))
+    return ACCESSKIT_ROLE_PASSWORD_INPUT;
+
+  /* ARIA does not have a "scroll area" role */
+  if (GTK_IS_SCROLLED_WINDOW (accessible))
+    return ACCESSKIT_ROLE_SCROLL_VIEW;
+
+  return gtk_accessible_role_to_accesskit_role (role);
+}
+
+accesskit_node *
+gtk_accesskit_context_build_node (GtkAccessKitContext      *self,
+                                  accesskit_node_class_set *node_classes)
+{
+  accesskit_role role = accesskit_role_for_context (GTK_AT_CONTEXT (self));
+  accesskit_node_builder *builder = accesskit_node_builder_new (role);
+
+  /* TODO: properties */
+
+  return accesskit_node_builder_build (builder, node_classes);
 }
