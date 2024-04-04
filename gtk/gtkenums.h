@@ -1631,7 +1631,7 @@ typedef enum {
  *    of aria-valuenow for a range widget. Value type: string
  * @GTK_ACCESSIBLE_PROPERTY_HELP_TEXT: Defines a string value that provides a
  *   description of non-standard keyboard interactions of the current element. Value type: string
- * Since: 4.14
+ * Since: 4.16
  *
  * The possible accessible properties of a [iface@Accessible].
  */
