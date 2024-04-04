@@ -48,114 +48,6 @@ find_first_accessible_non_socket (GtkAccessible *accessible)
   return NULL;
 }
 
-static void
-translate_coordinates_to_accessible (GtkAccessible  *accessible,
-                                     AtspiCoordType  coordtype,
-                                     int             xi,
-                                     int             yi,
-                                     int            *xo,
-                                     int            *yo)
-{
-  GtkAccessible *parent;
-  int x, y, width, height;
-
-  if (coordtype == ATSPI_COORD_TYPE_SCREEN)
-    {
-      *xo = 0;
-      *yo = 0;
-      return;
-    }
-
-  if (!gtk_accessible_get_bounds (accessible, &x, &y, &width, &height))
-    {
-      *xo = xi;
-      *yo = yi;
-      return;
-    }
-
-  // Transform coords to our parent, we will need that in any case
-  *xo = xi - x;
-  *yo = yi - y;
-
-  // If that's what the caller requested, we're done
-  if (coordtype == ATSPI_COORD_TYPE_PARENT)
-    return;
-
-  if (coordtype == ATSPI_COORD_TYPE_WINDOW)
-    {
-      parent = gtk_accessible_get_accessible_parent (accessible);
-      while (parent != NULL)
-        {
-          g_object_unref (parent);
-
-          if (gtk_accessible_get_bounds (parent, &x, &y, &width, &height))
-            {
-              *xo = *xo - x;
-              *yo = *yo - y;
-              parent = gtk_accessible_get_accessible_parent (parent);
-            }
-          else
-            break;
-        }
-    }
-  else
-    g_assert_not_reached ();
-}
-
-static void
-translate_coordinates_from_accessible (GtkAccessible *accessible,
-                                 AtspiCoordType     coordtype,
-                                 int                xi,
-                                 int                yi,
-                                 int               *xo,
-                                 int               *yo)
-{
-  GtkAccessible *parent;
-  int x, y, width, height;
-
-  if (coordtype == ATSPI_COORD_TYPE_SCREEN)
-    {
-      *xo = 0;
-      *yo = 0;
-      return;
-    }
-
-  if (!gtk_accessible_get_bounds (accessible, &x, &y, &width, &height))
-    {
-      *xo = xi;
-      *yo = yi;
-      return;
-    }
-
-  // Transform coords to our parent, we will need that in any case
-  *xo = xi + x;
-  *yo = yi + y;
-
-  // If that's what the caller requested, we're done
-  if (coordtype == ATSPI_COORD_TYPE_PARENT)
-    return;
-
-  if (coordtype == ATSPI_COORD_TYPE_WINDOW)
-    {
-      parent = gtk_accessible_get_accessible_parent (accessible);
-      while (parent != NULL)
-        {
-          g_object_unref (parent);
-
-          if (gtk_accessible_get_bounds (parent, &x, &y, &width, &height))
-            {
-              *xo = *xo + x;
-              *yo = *yo + y;
-              parent = gtk_accessible_get_accessible_parent (parent);
-            }
-          else
-            break;
-        }
-    }
-  else
-    g_assert_not_reached ();
-}
-
 static GtkAccessible *
 accessible_at_point (GtkAccessible *parent,
                      int            x,
@@ -209,7 +101,7 @@ component_handle_method (GDBusConnection       *connection,
 
       g_variant_get (parameters, "(iiu)", &x, &y, &coordtype);
 
-      translate_coordinates_to_accessible (accessible, coordtype, x, y, &x, &y);
+      gtk_at_spi_translate_coordinates_to_accessible (accessible, coordtype, x, y, &x, &y);
 
       if (gtk_accessible_get_bounds (accessible, &bounds_x, &bounds_y, &width, &height))
         ret = x >= 0 && x <= bounds_x && y >= 0 && y <= bounds_y;
@@ -225,8 +117,7 @@ component_handle_method (GDBusConnection       *connection,
       GtkAccessible *child;
 
       g_variant_get (parameters, "(iiu)", &x, &y, &coordtype);
-
-      translate_coordinates_to_accessible (accessible, coordtype, x, y, &x, &y);
+      gtk_at_spi_translate_coordinates_to_accessible (accessible, coordtype, x, y, &x, &y);
 
       child = accessible_at_point (accessible, x, y, TRUE);
       if (!child)
@@ -255,7 +146,7 @@ component_handle_method (GDBusConnection       *connection,
 
       g_variant_get (parameters, "(u)", &coordtype);
 
-      translate_coordinates_from_accessible (accessible, coordtype, 0, 0, &x, &y);
+      gtk_at_spi_translate_coordinates_from_accessible (accessible, coordtype, 0, 0, &x, &y);
 
       g_dbus_method_invocation_return_value (invocation, g_variant_new ("((iiii))", x, y, width, height));
     }
@@ -266,7 +157,7 @@ component_handle_method (GDBusConnection       *connection,
 
       g_variant_get (parameters, "(u)", &coordtype);
 
-      translate_coordinates_from_accessible (accessible, coordtype, 0, 0, &x, &y);
+      gtk_at_spi_translate_coordinates_from_accessible (accessible, coordtype, 0, 0, &x, &y);
 
       g_dbus_method_invocation_return_value (invocation, g_variant_new ("(ii)", x, y));
     }

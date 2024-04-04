@@ -39,4 +39,21 @@ gtk_at_spi_emit_children_changed (GDBusConnection         *connection,
                                   GVariant                *child_ref,
                                   GVariant                *sender_ref);
 
+void
+gtk_at_spi_translate_coordinates_to_accessible (GtkAccessible  *accessible,
+                                                AtspiCoordType  coordtype,
+                                                int             xi,
+                                                int             yi,
+                                                int            *xo,
+                                                int            *yo);
+
+
+void
+gtk_at_spi_translate_coordinates_from_accessible (GtkAccessible  *accessible,
+                                                  AtspiCoordType  coordtype,
+                                                  int             xi,
+                                                  int             yi,
+                                                  int            *xo,
+                                                  int            *yo);
+
 G_END_DECLS
