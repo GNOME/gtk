@@ -507,7 +507,7 @@ gtk_settings_class_init (GtkSettingsClass *class)
    * Since: 4.6
    */
   pspecs[PROP_HINT_FONT_METRICS] = g_param_spec_boolean ("gtk-hint-font-metrics", NULL, NULL,
-                                                         FALSE,
+                                                         TRUE,
                                                          GTK_PARAM_READWRITE);
 
   /**
