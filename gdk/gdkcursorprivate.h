@@ -44,6 +44,10 @@ struct _GdkCursor
   GdkTexture *texture;
   int hotspot_x;
   int hotspot_y;
+
+  GdkCursorGetTextureCallback callback;
+  gpointer data;
+  GDestroyNotify destroy;
 };
 
 struct _GdkCursorClass
@@ -54,6 +58,14 @@ struct _GdkCursorClass
 guint                   gdk_cursor_hash                         (gconstpointer          pointer);
 gboolean                gdk_cursor_equal                        (gconstpointer          a,
                                                                  gconstpointer          b);
+
+GdkTexture *            gdk_cursor_get_texture_for_size         (GdkCursor *cursor,
+                                                                 int        cursor_size,
+                                                                 double     scale,
+                                                                 int       *width,
+                                                                 int       *height,
+                                                                 int       *hotspot_x,
+                                                                 int       *hotspot_y);
 
 G_END_DECLS
 

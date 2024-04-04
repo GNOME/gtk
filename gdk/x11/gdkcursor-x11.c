@@ -370,11 +370,33 @@ gdk_x11_display_get_xcursor (GdkDisplay *display,
 
   if (gdk_cursor_get_name (cursor))
     xcursor = gdk_x11_cursor_create_for_name (display, gdk_cursor_get_name (cursor));
-  else
+  else if (gdk_cursor_get_texture (cursor))
     xcursor = gdk_x11_cursor_create_for_texture (display,
                                                  gdk_cursor_get_texture (cursor),
                                                  gdk_cursor_get_hotspot_x (cursor),
                                                  gdk_cursor_get_hotspot_y (cursor));
+  else
+    {
+      int size;
+      GdkTexture *texture;
+      int width, height;
+      int hotspot_x, hotspot_y;
+
+      size = XcursorGetDefaultSize (GDK_DISPLAY_XDISPLAY (display));
+
+      texture = gdk_cursor_get_texture_for_size  (cursor, size, 1,
+                                                  &width, &height,
+                                                  &hotspot_x, &hotspot_y);
+
+      if (texture)
+        {
+          xcursor = gdk_x11_cursor_create_for_texture (display,
+                                                       texture,
+                                                       hotspot_x,
+                                                       hotspot_y);
+          g_object_unref (texture);
+        }
+    }
 
   if (xcursor != None)
     {

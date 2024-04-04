@@ -21,6 +21,7 @@
 #include "gdkcursor.h"
 #include "gdkwin32.h"
 #include "gdktextureprivate.h"
+#include "gdkcursorprivate.h"
 
 #include "gdkdisplay-win32.h"
 
@@ -1481,6 +1482,7 @@ gdk_win32_display_get_win32hcursor (GdkWin32Display *display,
   GdkWin32Display *win32_display = GDK_WIN32_DISPLAY (display);
   GdkWin32HCursor *win32hcursor;
   const char      *cursor_name;
+  GdkTexture      *texture;
   GdkCursor       *fallback;
 
   g_return_val_if_fail (cursor != NULL, NULL);
@@ -1494,14 +1496,32 @@ gdk_win32_display_get_win32hcursor (GdkWin32Display *display,
     return win32hcursor;
 
   cursor_name = gdk_cursor_get_name (cursor);
+  texture = gdk_cursor_get_texture (cursor);
 
   if (cursor_name)
     win32hcursor = gdk_win32hcursor_create_for_name (display, cursor_name);
-  else
+  else if (texture)
     win32hcursor = gdk_win32hcursor_create_for_texture (display,
-                                                        gdk_cursor_get_texture (cursor),
+                                                        texture,
                                                         gdk_cursor_get_hotspot_x (cursor),
                                                         gdk_cursor_get_hotspot_y (cursor));
+  else
+    {
+      int size = display->cursor_theme_size;
+      int width, height, hotspot_x, hotspot_y;
+
+      texture = gdk_cursor_get_texture_for_size (cursor, size, 1,
+                                                 &width, &height,
+                                                 &hotspot_x, &hotspot_y);
+      if (texture)
+        {
+          win32hcursor = gdk_win32hcursor_create_for_texture (display,
+                                                              texture,
+                                                              hotspot_x,
+                                                              hotspot_y);
+          g_object_unref (texture);
+        }
+    }
 
   if (win32hcursor != NULL)
     {

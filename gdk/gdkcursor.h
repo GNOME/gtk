@@ -51,6 +51,52 @@ GDK_AVAILABLE_IN_ALL
 GdkCursor*  gdk_cursor_new_from_name     (const char      *name,
                                           GdkCursor       *fallback);
 
+/**
+ * GdkCursorGetTestureCallback:
+ * @cursor: the `GdkCursor`
+ * @cursor_size: the nominal cursor size, in application pixels
+ * @scale: the device scale
+ * @width: (out): return location for the actual cursor width,
+ *   in application pixels
+ * @height: (out): return location for the actual cursor height,
+ *   in application pixels
+ * @hotspot_x: (out): return location for the hotspot X position,
+ *   in application pixels
+ * @hotspot_y: (out): return location for the hotspot Y position,
+ *   in application pixels
+ * @data: User data for the callback
+ *
+ * The type of callback used by a dynamic `GdkCursor` to generate
+ * a texture for the cursor image at the given @cursor_size
+ * and @scale.
+ *
+ * The actual cursor size in application pixels may be different
+ * from @cursor_size x @cursor_size, and will be returned in
+ * @width, @height. The returned texture should have a size that
+ * corresponds to the actual cursor size, in device pixels (i.e.
+ * application pixels, multiplied by @scale).
+ *
+ * This function may fail and return `NULL`, in which case
+ * the fallback cursor will be used.
+ *
+ * Returns: (nullable) (transfer full): the cursor image, or
+ *   `NULL` if none could be produced.
+ */
+typedef GdkTexture * (* GdkCursorGetTextureCallback) (GdkCursor   *cursor,
+                                                      int          cursor_size,
+                                                      double       scale,
+                                                      int         *width,
+                                                      int         *height,
+                                                      int         *hotspot_x,
+                                                      int         *hotspot_y,
+                                                      gpointer     data);
+
+GDK_AVAILABLE_IN_4_16
+GdkCursor * gdk_cursor_new_from_callback (GdkCursorGetTextureCallback  callback,
+                                          gpointer                     data,
+                                          GDestroyNotify               destroy,
+                                          GdkCursor                   *fallback);
+
 GDK_AVAILABLE_IN_ALL
 GdkCursor * gdk_cursor_get_fallback      (GdkCursor       *cursor);
 GDK_AVAILABLE_IN_ALL

@@ -62,6 +62,7 @@ struct _GdkWaylandPointerData {
   uint32_t grab_time;
 
   struct wl_surface *pointer_surface;
+  struct wp_viewport *pointer_surface_viewport;
   guint cursor_is_default: 1;
   GdkCursor *cursor;
   guint cursor_timeout_id;
@@ -69,7 +70,7 @@ struct _GdkWaylandPointerData {
   guint cursor_image_delay;
   guint touchpad_event_sequence;
 
-  guint current_output_scale;
+  double current_output_scale;
   GSList *pointer_surface_outputs;
 
   /* Accumulated event data for a pointer frame */

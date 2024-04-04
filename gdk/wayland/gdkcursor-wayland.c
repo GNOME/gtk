@@ -155,15 +155,19 @@ static const struct wl_buffer_listener buffer_listener = {
 struct wl_buffer *
 _gdk_wayland_cursor_get_buffer (GdkWaylandDisplay *display,
                                 GdkCursor         *cursor,
-                                guint              desired_scale,
+                                double             desired_scale,
+                                gboolean           use_viewporter,
                                 guint              image_index,
                                 int               *hotspot_x,
                                 int               *hotspot_y,
                                 int               *width,
                                 int               *height,
-                                int               *scale)
+                                double            *scale)
 {
   GdkTexture *texture;
+  int desired_scale_factor;
+
+  desired_scale_factor = (int) ceil (desired_scale);
 
   if (gdk_cursor_get_name (cursor))
     {
@@ -174,7 +178,7 @@ _gdk_wayland_cursor_get_buffer (GdkWaylandDisplay *display,
 
       c = gdk_wayland_cursor_load_for_name (display,
                                             _gdk_wayland_display_get_cursor_theme (display),
-                                            desired_scale,
+                                            desired_scale_factor,
                                             gdk_cursor_get_name (cursor));
       if (c && c->image_count > 0)
         {
@@ -191,7 +195,7 @@ _gdk_wayland_cursor_get_buffer (GdkWaylandDisplay *display,
 
           image = c->images[image_index];
 
-          cursor_scale = desired_scale;
+          cursor_scale = desired_scale_factor;
           if ((image->width % cursor_scale != 0) ||
               (image->height % cursor_scale != 0))
             {
@@ -211,7 +215,7 @@ _gdk_wayland_cursor_get_buffer (GdkWaylandDisplay *display,
           return wl_cursor_image_get_buffer (image);
         }
     }
-  else
+  else if (gdk_cursor_get_texture (cursor))
     {
       cairo_surface_t *surface;
       struct wl_buffer *buffer;
@@ -226,7 +230,7 @@ from_texture:
                                                             gdk_texture_get_width (texture),
                                                             gdk_texture_get_height (texture),
                                                             &GDK_FRACTIONAL_SCALE_INIT_INT (1));
-          
+
           gdk_texture_download (texture,
                                 cairo_image_surface_get_data (surface),
                                 cairo_image_surface_get_stride (surface));
@@ -250,11 +254,50 @@ from_texture:
 
       return buffer;
     }
+  else
+    {
+      if (!use_viewporter)
+        *scale = desired_scale_factor;
+      else
+        *scale = desired_scale;
+
+      texture = gdk_cursor_get_texture_for_size (cursor,
+                                                 display->cursor_theme_size,
+                                                 *scale,
+                                                 width,
+                                                 height,
+                                                 hotspot_x,
+                                                 hotspot_y);
+
+      if (texture)
+        {
+          cairo_surface_t *surface;
+          struct wl_buffer *buffer;
+
+          surface = gdk_wayland_display_create_shm_surface (display,
+                                                            gdk_texture_get_width (texture),
+                                                            gdk_texture_get_height (texture),
+                                                            &GDK_FRACTIONAL_SCALE_INIT_INT (1));
+
+          gdk_texture_download (texture,
+                                cairo_image_surface_get_data (surface),
+                                cairo_image_surface_get_stride (surface));
+          cairo_surface_mark_dirty (surface);
+
+          buffer = _gdk_wayland_shm_surface_get_wl_buffer (surface);
+          wl_buffer_add_listener (buffer, &buffer_listener, surface);
+
+          g_object_unref (texture);
+
+          return buffer;
+        }
+    }
 
   if (gdk_cursor_get_fallback (cursor))
     return _gdk_wayland_cursor_get_buffer (display,
-                                           gdk_cursor_get_fallback (cursor), 
+                                           gdk_cursor_get_fallback (cursor),
                                            desired_scale,
+                                           use_viewporter,
                                            image_index,
                                            hotspot_x, hotspot_y,
                                            width, height,

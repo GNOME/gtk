@@ -22,6 +22,7 @@
 #include <string.h>
 
 #include "gdkmacoscursor-private.h"
+#include "gdkcursorprivate.h"
 
 @interface NSCursor()
 -(long long)_coreCursorType;
@@ -217,9 +218,25 @@ _gdk_macos_cursor_get_ns_cursor (GdkCursor *cursor)
 
       if (name == NULL)
         {
-          nscursor = create_cursor_from_texture (gdk_cursor_get_texture (cursor),
-                                                 gdk_cursor_get_hotspot_x (cursor),
-                                                 gdk_cursor_get_hotspot_y (cursor));
+          GdkTexture *texture;
+          int hotspot_x, hotspot_y;
+
+          texture = gdk_cursor_get_texture (cursor);
+          hotspot_x = gdk_cursor_get_hotspot_x (cursor);
+          hotspot_y = gdk_cursor_get_hotspot_y (cursor);
+
+          if (texture == NULL)
+            {
+              int size = 32; // FIXME
+              int width, height;
+
+              texture = gdk_cursor_get_texture_for_size (cursor, size, 1,
+                                                         &width, &height,
+                                                         &hotspot_x, &hotspot_y);
+            }
+
+          nscursor = create_cursor_from_texture (texture, hotspot_x, hotspot_y);
+
           return nscursor;
         }
     }

@@ -3767,8 +3767,7 @@ pointer_surface_update_scale (GdkDevice *device)
   GdkWaylandDevice *wayland_device = GDK_WAYLAND_DEVICE (device);
   GdkWaylandPointerData *pointer =
     gdk_wayland_device_get_pointer (wayland_device);
-  GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (seat->display);
-  guint32 scale;
+  double scale;
   GSList *l;
 
   if (wl_surface_get_version (pointer->pointer_surface) < WL_SURFACE_SET_BUFFER_SCALE_SINCE_VERSION)
@@ -3783,8 +3782,8 @@ pointer_surface_update_scale (GdkDevice *device)
   scale = 1;
   for (l = pointer->pointer_surface_outputs; l != NULL; l = l->next)
     {
-      guint32 output_scale = gdk_wayland_display_get_output_scale (display_wayland, l->data);
-      scale = MAX (scale, output_scale);
+      GdkMonitor *monitor = gdk_wayland_display_get_monitor_for_output (seat->display, l->data);
+      scale = MAX (scale, gdk_monitor_get_scale (monitor));
     }
 
   if (pointer->current_output_scale == scale)
@@ -3879,6 +3878,7 @@ gdk_wayland_pointer_data_finalize (GdkWaylandPointerData *pointer)
   g_clear_object (&pointer->cursor);
   wl_surface_destroy (pointer->pointer_surface);
   g_slist_free (pointer->pointer_surface_outputs);
+  g_clear_pointer (&pointer->pointer_surface_viewport, wp_viewport_destroy);
 }
 
 static void
@@ -4242,6 +4242,9 @@ init_pointer_data (GdkWaylandPointerData *pointer_data,
   wl_surface_add_listener (pointer_data->pointer_surface,
                            &pointer_surface_listener,
                            logical_device);
+
+  if (display_wayland->viewporter)
+    pointer_data->pointer_surface_viewport = wp_viewporter_get_viewport (display_wayland->viewporter, pointer_data->pointer_surface);
 }
 
 void
