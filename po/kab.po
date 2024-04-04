@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk main\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2024-03-25 16:50+0000\n"
-"PO-Revision-Date: 2024-03-26 12:31+0100\n"
+"POT-Creation-Date: 2024-04-04 10:03+0000\n"
+"PO-Revision-Date: 2024-04-04 13:12+0100\n"
 "Last-Translator: ButterflyOfFire <ButterflyOfFire@protonmail.com>\n"
 "Language-Team: Kabyle <>\n"
 "Language: kab\n"
@@ -18,6 +18,11 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n>1\n"
 "X-Generator: Gtranslator 41.0\n"
+"X-DL-Team: kab\n"
+"X-DL-Module: gtk\n"
+"X-DL-Branch: main\n"
+"X-DL-Domain: po\n"
+"X-DL-State: Translating\n"
 
 #: gdk/broadway/gdkbroadway-server.c:135
 #, c-format
@@ -59,46 +64,46 @@ msgstr ""
 msgid "GL support disabled via GDK_DEBUG"
 msgstr ""
 
-#: gdk/gdkdisplay.c:1674
+#: gdk/gdkdisplay.c:1675
 msgid "No EGL configuration available"
 msgstr ""
 
-#: gdk/gdkdisplay.c:1682
+#: gdk/gdkdisplay.c:1683
 msgid "Failed to get EGL configurations"
 msgstr ""
 
-#: gdk/gdkdisplay.c:1712
+#: gdk/gdkdisplay.c:1713
 msgid "No EGL configuration with required features found"
 msgstr ""
 
-#: gdk/gdkdisplay.c:1719
+#: gdk/gdkdisplay.c:1720
 msgid "No perfect EGL configuration found"
 msgstr ""
 
-#: gdk/gdkdisplay.c:1761
+#: gdk/gdkdisplay.c:1762
 #, c-format
 msgid "EGL implementation is missing extension %s"
 msgid_plural "EGL implementation is missing %2$d extensions: %1$s"
 msgstr[0] ""
 msgstr[1] ""
 
-#: gdk/gdkdisplay.c:1810
+#: gdk/gdkdisplay.c:1811
 msgid "libEGL not available in this sandbox"
 msgstr ""
 
-#: gdk/gdkdisplay.c:1811
+#: gdk/gdkdisplay.c:1812
 msgid "libEGL not available"
 msgstr ""
 
-#: gdk/gdkdisplay.c:1821
+#: gdk/gdkdisplay.c:1822
 msgid "Failed to create EGL display"
 msgstr ""
 
-#: gdk/gdkdisplay.c:1830
+#: gdk/gdkdisplay.c:1831
 msgid "Could not initialize EGL display"
 msgstr ""
 
-#: gdk/gdkdisplay.c:1840
+#: gdk/gdkdisplay.c:1841
 #, c-format
 msgid "EGL version %d.%d is too old. GTK requires %d.%d"
 msgstr ""
@@ -445,7 +450,7 @@ msgstr "Imayl"
 #: gdk/keynamesprivate.h:6901
 msgctxt "keyboard label"
 msgid "WWW"
-msgstr ""
+msgstr "WWW"
 
 #: gdk/keynamesprivate.h:6902
 msgctxt "keyboard label"
@@ -723,7 +728,7 @@ msgstr ""
 
 #: gdk/win32/gdkhdataoutputstream-win32.c:85
 msgid "g_try_realloc () failed"
-msgstr ""
+msgstr "g_try_realloc () yecceḍ"
 
 #: gdk/win32/gdkhdataoutputstream-win32.c:93
 #: gdk/win32/gdkhdataoutputstream-win32.c:231
@@ -745,21 +750,21 @@ msgstr ""
 
 #: gdk/win32/gdkhdataoutputstream-win32.c:250
 msgid "GlobalLock() failed: "
-msgstr ""
+msgstr "GlobalLock() yecceḍ: "
 
 #: gdk/win32/gdkhdataoutputstream-win32.c:364
 msgid "GlobalAlloc() failed: "
-msgstr ""
+msgstr "GlobalAlloc() yecceḍ: "
 
 #: gdk/x11/gdkapplaunchcontext-x11.c:297
 #, c-format
 msgid "Starting “%s”"
-msgstr ""
+msgstr "Asenker n “%s”"
 
 #: gdk/x11/gdkapplaunchcontext-x11.c:310
 #, c-format
 msgid "Opening “%s”"
-msgstr ""
+msgstr "Alday n “%s”"
 
 #: gdk/x11/gdkapplaunchcontext-x11.c:315
 #, c-format
@@ -1068,7 +1073,7 @@ msgid "Pick a Font"
 msgstr "Fren tasefsit"
 
 #: gtk/deprecated/gtkfontbutton.c:600 gtk/gtkfilechooserwidget.c:3815
-#: gtk/gtkfontdialogbutton.c:126 gtk/inspector/visual.ui:169
+#: gtk/gtkfontdialogbutton.c:126 gtk/inspector/visual.ui:285
 msgid "Font"
 msgstr "Tasefsit"
 
@@ -1132,7 +1137,7 @@ msgstr "Turagt"
 
 #: gtk/gtkaboutdialog.c:120
 msgid "Custom License"
-msgstr ""
+msgstr "Turagt tudmawant"
 
 #: gtk/gtkaboutdialog.c:121
 msgid "GNU General Public License, version 2 or later"
@@ -2315,7 +2320,7 @@ msgid "If you delete an item, it will be permanently lost."
 msgstr "Ma tekkseḍ aferdis, ad iṛuḥ i lebda."
 
 #: gtk/gtkfilechooserwidget.c:1188 gtk/gtkfilechooserwidget.c:1786
-#: gtk/gtklabel.c:5712 gtk/gtktext.c:6194 gtk/gtktextview.c:9099
+#: gtk/gtklabel.c:5723 gtk/gtktext.c:6194 gtk/gtktextview.c:9099
 msgid "_Delete"
 msgstr "Kkes (_D)"
 
@@ -2653,31 +2658,31 @@ msgstr "Mdel"
 msgid "Close the infobar"
 msgstr ""
 
-#: gtk/gtklabel.c:5709 gtk/gtktext.c:6182 gtk/gtktextview.c:9087
+#: gtk/gtklabel.c:5720 gtk/gtktext.c:6182 gtk/gtktextview.c:9087
 msgid "Cu_t"
 msgstr "Gzem (_T)"
 
-#: gtk/gtklabel.c:5710 gtk/gtktext.c:6186 gtk/gtktextview.c:9091
+#: gtk/gtklabel.c:5721 gtk/gtktext.c:6186 gtk/gtktextview.c:9091
 msgid "_Copy"
 msgstr "Nɣel (_C)"
 
-#: gtk/gtklabel.c:5711 gtk/gtktext.c:6190 gtk/gtktextview.c:9095
+#: gtk/gtklabel.c:5722 gtk/gtktext.c:6190 gtk/gtktextview.c:9095
 msgid "_Paste"
 msgstr "Senteḍ (_P)"
 
-#: gtk/gtklabel.c:5717 gtk/gtktext.c:6203 gtk/gtktextview.c:9120
+#: gtk/gtklabel.c:5728 gtk/gtktext.c:6203 gtk/gtktextview.c:9120
 msgid "Select _All"
 msgstr "Fren _Akk"
 
-#: gtk/gtklabel.c:5722
+#: gtk/gtklabel.c:5733
 msgid "_Open Link"
 msgstr "Ldi aseɣwen (_O)"
 
-#: gtk/gtklabel.c:5726
+#: gtk/gtklabel.c:5737
 msgid "Copy _Link Address"
 msgstr "Nɣel asaɣ n tansa (_L)"
 
-#: gtk/gtklabel.c:5770 gtk/gtktext.c:2723 gtk/gtktextview.c:9169
+#: gtk/gtklabel.c:5781 gtk/gtktext.c:2723 gtk/gtktextview.c:9169
 msgid "Context menu"
 msgstr ""
 
@@ -4023,7 +4028,7 @@ msgstr ""
 msgid "Frame Rate"
 msgstr ""
 
-#: gtk/inspector/misc-info.ui:527
+#: gtk/inspector/misc-info.ui:527 gtk/inspector/visual.ui:315
 msgid "Scale"
 msgstr "Ales tisekta"
 
@@ -4285,13 +4290,13 @@ msgstr ""
 msgid "Implements"
 msgstr ""
 
-#: gtk/inspector/visual.c:672 gtk/inspector/visual.c:691
+#: gtk/inspector/visual.c:765 gtk/inspector/visual.c:784
 msgid "Theme is hardcoded by GTK_THEME"
 msgstr ""
 
 #: gtk/inspector/visual.ui:34
 msgid "GTK Theme"
-msgstr ""
+msgstr "Asentel n GTK"
 
 #: gtk/inspector/visual.ui:58
 msgid "Dark Variant"
@@ -4307,87 +4312,120 @@ msgstr "Tiddi n teḥnacaḍt"
 
 #: gtk/inspector/visual.ui:144
 msgid "Icon Theme"
-msgstr ""
+msgstr "Asentel n tignitin"
 
-#: gtk/inspector/visual.ui:199
-msgid "Font Scale"
-msgstr ""
-
-#: gtk/inspector/visual.ui:244
+#: gtk/inspector/visual.ui:169
 msgid "Text Direction"
 msgstr "Tanila n uḍris"
 
-#: gtk/inspector/visual.ui:259
+#: gtk/inspector/visual.ui:184
 msgid "Left-to-Right"
 msgstr "Seg uzelmaḍ ɣer uyeffus"
 
-#: gtk/inspector/visual.ui:260
+#: gtk/inspector/visual.ui:185
 msgid "Right-to-Left"
 msgstr "Seg uyeffus ɣer uzelmaḍ"
 
-#: gtk/inspector/visual.ui:277
+#: gtk/inspector/visual.ui:202
 msgid "Animations"
 msgstr "Ismusuyen"
 
-#: gtk/inspector/visual.ui:302
+#: gtk/inspector/visual.ui:227
 msgid "Slowdown"
 msgstr ""
 
-#: gtk/inspector/visual.ui:356
+#: gtk/inspector/visual.ui:362
+msgid "Antialiasing"
+msgstr ""
+
+#: gtk/inspector/visual.ui:387
+#| msgctxt "print operation status"
+#| msgid "Printing"
+msgid "Hinting"
+msgstr ""
+
+#: gtk/inspector/visual.ui:402
+#| msgctxt "font"
+#| msgid "None"
+msgid "None"
+msgstr "Ula d yiwet"
+
+#: gtk/inspector/visual.ui:403
+#| msgctxt "keyboard label"
+#| msgid "Right"
+msgid "Slight"
+msgstr ""
+
+#: gtk/inspector/visual.ui:404 modules/printbackends/gtkprintbackendcpdb.c:541
+#: modules/printbackends/gtkprintbackendcups.c:5667
+msgid "Medium"
+msgstr "D alemmas"
+
+#: gtk/inspector/visual.ui:405
+msgid "Full"
+msgstr ""
+
+#: gtk/inspector/visual.ui:422
+#| msgctxt "print operation status"
+#| msgid "Printing"
+msgid "Metrics Hinting"
+msgstr ""
+
+#: gtk/inspector/visual.ui:457
 msgid "Show Framerate"
 msgstr ""
 
-#: gtk/inspector/visual.ui:381
+#: gtk/inspector/visual.ui:482
 msgid "Show Graphic Updates"
 msgstr ""
 
-#: gtk/inspector/visual.ui:401
+#: gtk/inspector/visual.ui:502
 msgid ""
 "Tints all the places where the current renderer uses Cairo instead of the "
 "GPU."
 msgstr ""
 
-#: gtk/inspector/visual.ui:407
+#: gtk/inspector/visual.ui:508
 msgid "Show Cairo Rendering"
 msgstr ""
 
-#: gtk/inspector/visual.ui:432
+#: gtk/inspector/visual.ui:533
 msgid "Show Baselines"
 msgstr ""
 
-#: gtk/inspector/visual.ui:460
+#: gtk/inspector/visual.ui:561
 msgid "Show Layout Borders"
 msgstr ""
 
-#: gtk/inspector/visual.ui:517
+#: gtk/inspector/visual.ui:618
 msgid "CSS Padding"
 msgstr ""
 
-#: gtk/inspector/visual.ui:527
+#: gtk/inspector/visual.ui:628
 msgid "CSS Border"
 msgstr ""
 
-#: gtk/inspector/visual.ui:537
+#: gtk/inspector/visual.ui:638
 msgid "CSS Margin"
 msgstr ""
 
-#: gtk/inspector/visual.ui:547
+#: gtk/inspector/visual.ui:648
 msgid "Widget Margin"
 msgstr ""
 
-#: gtk/inspector/visual.ui:582
+#: gtk/inspector/visual.ui:683
 msgid "Show Focus"
 msgstr ""
 
-#: gtk/inspector/visual.ui:607
+#: gtk/inspector/visual.ui:708
 msgid "Show Accessibility warnings"
 msgstr ""
 
-#: gtk/inspector/visual.ui:632
+#: gtk/inspector/visual.ui:733
 msgid "Show Graphics Offload"
 msgstr ""
 
-#: gtk/inspector/visual.ui:664
+#: gtk/inspector/visual.ui:765
 msgid "Inspect Inspector"
 msgstr ""
 
@@ -5968,7 +6006,7 @@ msgstr ""
 #: gtk/print/paper_names_offsets.c:174
 msgctxt "paper size"
 msgid "prc 16k"
-msgstr ""
+msgstr "prc 16k"
 
 #: gtk/print/paper_names_offsets.c:175
 msgctxt "paper size"
@@ -5983,7 +6021,7 @@ msgstr ""
 #: gtk/print/paper_names_offsets.c:177
 msgctxt "paper size"
 msgid "prc 32k"
-msgstr ""
+msgstr "prc 32k"
 
 #: gtk/print/paper_names_offsets.c:178
 msgctxt "paper size"
@@ -6116,7 +6154,7 @@ msgstr ""
 #: gtk/ui/gtkcoloreditor.ui:157
 msgctxt "Color channel"
 msgid "A"
-msgstr ""
+msgstr "A"
 
 #: gtk/ui/gtkcoloreditor.ui:193
 msgctxt "Color channel"
@@ -6525,11 +6563,6 @@ msgstr "Ɛlay"
 
 #: modules/printbackends/gtkprintbackendcpdb.c:541
 #: modules/printbackends/gtkprintbackendcups.c:5667
-msgid "Medium"
-msgstr "D alemmas"
-
-#: modules/printbackends/gtkprintbackendcpdb.c:541
-#: modules/printbackends/gtkprintbackendcups.c:5667
 msgid "Low"
 msgstr "Yuder"
 
@@ -6656,12 +6689,12 @@ msgstr ""
 #: modules/printbackends/gtkprintbackendcups.c:2568
 #, c-format
 msgid "Printer “%s” is low on toner."
-msgstr ""
+msgstr "Aṭunir n tsaggazt “%s” qrib ad ifak."
 
 #: modules/printbackends/gtkprintbackendcups.c:2572
 #, c-format
 msgid "Printer “%s” has no toner left."
-msgstr ""
+msgstr "Aṭunir n tsaggazt “%s” d ilem."
 
 #. Translators: "Developer" like on photo development context
 #: modules/printbackends/gtkprintbackendcups.c:2577
@@ -6690,22 +6723,22 @@ msgstr ""
 #: modules/printbackends/gtkprintbackendcups.c:2596
 #, c-format
 msgid "The cover is open on printer “%s”."
-msgstr ""
+msgstr "Aɣumu n tsaggazt “%s” yeldi."
 
 #: modules/printbackends/gtkprintbackendcups.c:2600
 #, c-format
 msgid "The door is open on printer “%s”."
-msgstr ""
+msgstr "Tawwurt n tsaggazt “%s” teldi."
 
 #: modules/printbackends/gtkprintbackendcups.c:2604
 #, c-format
 msgid "Printer “%s” is low on paper."
-msgstr ""
+msgstr "Akaɣeḍ qrib ad ifak di tsaggazt “%s”."
 
 #: modules/printbackends/gtkprintbackendcups.c:2608
 #, c-format
 msgid "Printer “%s” is out of paper."
-msgstr ""
+msgstr "Ifuk-as ukaɣeḍ.i tsaggazt “%s”."
 
 #: modules/printbackends/gtkprintbackendcups.c:2612
 #, c-format
@@ -6715,7 +6748,7 @@ msgstr ""
 #: modules/printbackends/gtkprintbackendcups.c:2616
 #, c-format
 msgid "There is a problem on printer “%s”."
-msgstr ""
+msgstr "Tasaggazt “%s” tesɛa ugur."
 
 #. Translators: this string connects multiple printer states together.
 #: modules/printbackends/gtkprintbackendcups.c:2683
@@ -6731,7 +6764,7 @@ msgstr ""
 #: modules/printbackends/gtkprintbackendcups.c:4610
 msgctxt "printing option"
 msgid "Paper Type"
-msgstr ""
+msgstr "Anaw n ukaɣeḍ"
 
 #: modules/printbackends/gtkprintbackendcups.c:4611
 msgctxt "printing option"
