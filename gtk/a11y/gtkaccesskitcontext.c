@@ -473,8 +473,21 @@ accesskit_node *
 gtk_accesskit_context_build_node (GtkAccessKitContext      *self,
                                   accesskit_node_class_set *node_classes)
 {
-  accesskit_role role = accesskit_role_for_context (GTK_AT_CONTEXT (self));
+  GtkATContext *ctx = GTK_AT_CONTEXT (self);
+  accesskit_role role = accesskit_role_for_context (ctx);
   accesskit_node_builder *builder = accesskit_node_builder_new (role);
+  GtkAccessible *accessible = gtk_at_context_get_accessible (ctx);
+  GtkAccessible *child = gtk_accessible_get_first_accessible_child (accessible);
+
+  while (child)
+    {
+      GtkATContext *child_ctx = gtk_accessible_get_at_context (child);
+      GtkAccessKitContext *child_accesskit_ctx = GTK_ACCESSKIT_CONTEXT (child_ctx);
+
+      gtk_at_context_realize (child_ctx);
+      accesskit_node_builder_push_child (builder, child_accesskit_ctx->node_id);
+      child = gtk_accessible_get_next_accessible_sibling (child);
+    }
 
   /* TODO: properties */
 
