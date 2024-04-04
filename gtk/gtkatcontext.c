@@ -49,6 +49,7 @@
 #include "gtkscalebutton.h"
 #include "print/gtkprinteroptionwidgetprivate.h"
 
+#include "a11y/gtkaccesskitcontextprivate.h"
 #if defined(GDK_WINDOWING_X11) || defined(GDK_WINDOWING_WAYLAND)
 #include "a11y/gtkatspicontextprivate.h"
 #endif
@@ -670,6 +671,7 @@ static const struct {
                                      GtkAccessible    *accessible,
                                      GdkDisplay       *display);
 } a11y_backends[] = {
+  { "AccessKit", "accesskit", gtk_accesskit_create_context },
 #if defined(GDK_WINDOWING_WAYLAND) || defined(GDK_WINDOWING_X11)
   { "AT-SPI", "atspi", gtk_at_spi_create_context },
 #endif
@@ -708,10 +710,11 @@ gtk_at_context_create (GtkAccessibleRole  accessible_role,
         {
           g_print ("Supported arguments for GTK_A11Y environment variable:\n");
 
+          g_print ("   accesskit - Use the AccessKit accessibility backend\n");
 #if defined(GDK_WINDOWING_X11) || defined(GDK_WINDOWING_WAYLAND)
-          g_print ("   atspi - Use the AT-SPI accessibility backend\n");
+          g_print ("       atspi - Use the AT-SPI accessibility backend\n");
 #endif
-          g_print ("    test - Use the test accessibility backend\n");
+          g_print ("        test - Use the test accessibility backend\n");
           g_print ("    none - Disable the accessibility backend\n");
           g_print ("    help - Print this help\n\n");
           g_print ("Other arguments will cause a warning and be ignored.\n");

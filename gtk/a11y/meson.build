@@ -33,3 +33,15 @@ if gtk_a11y_backends.contains('atspi')
 
   install_headers(gtk_atspi_public_headers, 'gtkatspi.h', subdir: 'gtk-4.0/gtk/a11y/')
 endif
+
+# TODO: Make the AccessKit backend conditional?
+gtk_a11y_backends += 'accesskit'
+
+if gtk_a11y_backends.contains('accesskit')
+  gtk_a11y_backend_info += { 'accesskit': { 'description': 'GTK AccessKit accessibility support' } }
+
+  gtk_a11y_src += files([
+    'gtkaccesskitcontext.c',
+    'gtkaccesskitroot.c',
+  ])
+endif
