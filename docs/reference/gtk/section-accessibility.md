@@ -217,7 +217,9 @@ are accessible as part of the development process. The GTK Inspector shows
 the accessible attributes of each widget, and also provides an overlay that
 can highlight accessibility issues.
 
-If you support some non-standard keyboard interactions for a widget, you **should** set an appropriate `GTK_ACCESSIBLE_HELP_TEXT` to help discoverability of the behavior.
+If you support some non-standard keyboard interactions for a widget, you
+**should** set an appropriate `GTK_ACCESSIBLE_PROPERTY_HELP_TEXT` to help
+discoverability of the behavior.
 
 It is possible to set accessible attributes in UI files as well:
 ```xml
