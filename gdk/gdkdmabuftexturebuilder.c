@@ -25,6 +25,7 @@
 #include "gdkdisplay.h"
 #include "gdkenumtypes.h"
 #include "gdkdmabuftextureprivate.h"
+#include "gdkdmabuftexturebuilderprivate.h"
 
 #include <cairo-gobject.h>
 

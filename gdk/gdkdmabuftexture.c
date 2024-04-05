@@ -25,6 +25,7 @@
 #include "gdkdmabufformatsbuilderprivate.h"
 #include "gdkdmabuffourccprivate.h"
 #include "gdkdmabufprivate.h"
+#include "gdkdmabuftexturebuilderprivate.h"
 #include "gdktextureprivate.h"
 #include <gdk/gdkglcontext.h>
 #include <gdk/gdkgltexturebuilder.h>
