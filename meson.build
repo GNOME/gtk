@@ -16,7 +16,7 @@ introspection_req  = '>= 1.76.0' # keep this in sync with glib
 pango_req          = '>= 1.52.0' # keep this in sync with .gitlab-ci/test-msys.sh
 harfbuzz_req       = '>= 2.6.0'
 fribidi_req        = '>= 1.0.6'
-cairo_req          = '>= 1.14.0'
+cairo_req          = '>= 1.18.0'
 gdk_pixbuf_req     = '>= 2.30.0'
 wayland_proto_req  = '>= 1.31'
 wayland_req        = '>= 1.21.0'
