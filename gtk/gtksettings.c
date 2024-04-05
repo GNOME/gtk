@@ -202,6 +202,7 @@ enum {
   PROP_LONG_PRESS_TIME,
   PROP_KEYNAV_USE_CARET,
   PROP_OVERLAY_SCROLLING,
+  PROP_FONT_RENDERING,
 
   NUM_PROPERTIES
 };
@@ -955,6 +956,18 @@ gtk_settings_class_init (GtkSettingsClass *class)
                                                          TRUE,
                                                          GTK_PARAM_READWRITE);
 
+  /**
+   * GtkSettings:gtk-font-rendering:
+   *
+   * How GTK font rendering is set up.
+   *
+   * Since: 4.16
+   */
+  pspecs[PROP_FONT_RENDERING] = g_param_spec_enum ("gtk-font-rendering", NULL, NULL,
+                                                   GTK_TYPE_FONT_RENDERING,
+                                                   GTK_FONT_RENDERING_AUTOMATIC,
+                                                   GTK_PARAM_READWRITE);
+
   g_object_class_install_properties (gobject_class, NUM_PROPERTIES, pspecs);
 }
 
@@ -1259,6 +1272,9 @@ gtk_settings_notify (GObject    *object,
     case PROP_FONTCONFIG_TIMESTAMP:
       if (settings_update_fontconfig (settings))
         gtk_system_setting_changed (settings->display, GTK_SYSTEM_SETTING_FONT_CONFIG);
+      break;
+    case PROP_FONT_RENDERING:
+      gtk_system_setting_changed (settings->display, GTK_SYSTEM_SETTING_FONT_CONFIG);
       break;
     case PROP_ENABLE_ANIMATIONS:
       settings_invalidate_style (settings);

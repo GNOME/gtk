@@ -74,6 +74,7 @@
 
 #include "gdk/gdkeventsprivate.h"
 #include "gdk/gdkprofilerprivate.h"
+#include "gdk/gdkmonitorprivate.h"
 #include "gsk/gskdebugprivate.h"
 #include "gsk/gskrendererprivate.h"
 
@@ -6464,6 +6465,7 @@ gtk_widget_update_pango_context (GtkWidget        *widget,
   PangoFontDescription *font_desc;
   GtkSettings *settings;
   guint old_serial;
+  GtkFontRendering font_rendering;
 
   old_serial = pango_context_get_serial (context);
 
@@ -6483,6 +6485,11 @@ gtk_widget_update_pango_context (GtkWidget        *widget,
   settings = gtk_widget_get_settings (widget);
 
   if (settings)
+    g_object_get (settings, "gtk-font-rendering", &font_rendering, NULL);
+  else
+    font_rendering = GTK_FONT_RENDERING_AUTOMATIC;
+
+  if (font_rendering == GTK_FONT_RENDERING_MANUAL)
     {
       gboolean hint_font_metrics;
       cairo_font_options_t *font_options, *options;
@@ -6499,6 +6506,46 @@ gtk_widget_update_pango_context (GtkWidget        *widget,
                                                                   : CAIRO_HINT_METRICS_OFF);
 
       pango_context_set_round_glyph_positions (context, hint_font_metrics);
+      pango_cairo_context_set_font_options (context, options);
+
+      cairo_font_options_destroy (options);
+    }
+  else
+    {
+      cairo_font_options_t *options;
+      double dpi = 96.;
+      GdkSurface *surface;
+
+      surface = gtk_widget_get_surface (widget);
+      if (surface)
+        {
+          GdkDisplay *display;
+          GdkMonitor *monitor;
+
+          display = gdk_surface_get_display (surface);
+          monitor = gdk_display_get_monitor_at_surface (display, surface);
+          if (monitor)
+            dpi = gdk_monitor_get_dpi (monitor);
+        }
+
+      options = cairo_font_options_create ();
+
+      cairo_font_options_set_antialias (options, CAIRO_ANTIALIAS_GRAY);
+
+      if (dpi < 200.)
+        {
+          /* Not high-dpi. Prefer sharpness by enabling hinting */
+          cairo_font_options_set_hint_metrics (options, CAIRO_HINT_METRICS_ON);
+          cairo_font_options_set_hint_style (options, CAIRO_HINT_STYLE_SLIGHT);
+        }
+      else
+        {
+          /* High-dpi. Prefer precise positioning */
+          cairo_font_options_set_hint_metrics (options, CAIRO_HINT_METRICS_OFF);
+          cairo_font_options_set_hint_style (options, CAIRO_HINT_STYLE_NONE);
+        }
+
+      pango_context_set_round_glyph_positions (context, FALSE);
       pango_cairo_context_set_font_options (context, options);
 
       cairo_font_options_destroy (options);
