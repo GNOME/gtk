@@ -1005,3 +1005,19 @@ gdk_dmabuf_texture_builder_get_dmabuf (GdkDmabufTextureBuilder *self)
 {
   return &self->dmabuf;
 }
+
+void
+gdk_dmabuf_texture_builder_set_dmabuf (GdkDmabufTextureBuilder *self,
+                                       const GdkDmabuf         *dmabuf)
+{
+  gdk_dmabuf_texture_builder_set_fourcc (self, dmabuf->fourcc);
+  gdk_dmabuf_texture_builder_set_modifier (self, dmabuf->modifier);
+  gdk_dmabuf_texture_builder_set_n_planes (self, dmabuf->n_planes);
+
+  for (unsigned int i = 0; i < dmabuf->n_planes; i++)
+    {
+      gdk_dmabuf_texture_builder_set_fd (self, i, dmabuf->planes[i].fd);
+      gdk_dmabuf_texture_builder_set_stride (self, i, dmabuf->planes[i].stride);
+      gdk_dmabuf_texture_builder_set_offset (self, i, dmabuf->planes[i].offset);
+    }
+}
