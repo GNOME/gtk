@@ -265,15 +265,20 @@ gdk_wayland_device_update_surface_cursor (GdkDevice *device)
   guint next_image_index, next_image_delay;
   gboolean retval = G_SOURCE_REMOVE;
   GdkWaylandTabletData *tablet;
+  gboolean use_viewport;
 
   tablet = gdk_wayland_seat_find_tablet (seat, device);
+
+  use_viewport = pointer->pointer_surface_viewport != NULL;
+  if (g_getenv ("NO_POINTER_VIEWPORT"))
+    use_viewport = FALSE;
 
   if (pointer->cursor)
     {
       buffer = _gdk_wayland_cursor_get_buffer (GDK_WAYLAND_DISPLAY (seat->display),
                                                pointer->cursor,
                                                pointer->current_output_scale,
-                                               pointer->pointer_surface_viewport != NULL,
+                                               use_viewport,
                                                pointer->cursor_image_index,
                                                &x, &y, &w, &h, &scale);
     }
@@ -312,7 +317,7 @@ gdk_wayland_device_update_surface_cursor (GdkDevice *device)
   if (buffer)
     {
       wl_surface_attach (pointer->pointer_surface, buffer, 0, 0);
-      if (pointer->pointer_surface_viewport)
+      if (use_viewport)
         {
           wp_viewport_set_source (pointer->pointer_surface_viewport,
                                   wl_fixed_from_int (0),
