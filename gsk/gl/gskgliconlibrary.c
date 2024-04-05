@@ -125,7 +125,7 @@ gsk_gl_icon_library_add (GskGLIconLibrary     *self,
     {
       pixel_data = surface_data;
       gl_format = GL_BGRA;
-      gl_type = GL_UNSIGNED_BYTE;
+      gl_type = GL_UNSIGNED_INT_8_8_8_8_REV;
     }
 
   texture_id = GSK_GL_TEXTURE_ATLAS_ENTRY_TEXTURE (icon_data);
