@@ -6463,23 +6463,13 @@ gtk_widget_update_pango_context (GtkWidget        *widget,
   GtkCssStyle *style = gtk_css_node_get_style (priv->cssnode);
   PangoFontDescription *font_desc;
   GtkSettings *settings;
-  cairo_font_options_t *font_options;
   guint old_serial;
-  gboolean hint_font_metrics = FALSE;
 
   old_serial = pango_context_get_serial (context);
 
   font_desc = gtk_css_style_get_pango_font (style);
   pango_context_set_font_description (context, font_desc);
   pango_font_description_free (font_desc);
-
-  settings = gtk_widget_get_settings (widget);
-
-  if (settings)
-    {
-      g_object_get (settings, "gtk-hint-font-metrics", &hint_font_metrics, NULL);
-      pango_context_set_round_glyph_positions (context, hint_font_metrics);
-    }
 
   if (direction != GTK_TEXT_DIR_NONE)
     pango_context_set_base_dir (context, direction == GTK_TEXT_DIR_LTR
@@ -6488,35 +6478,31 @@ gtk_widget_update_pango_context (GtkWidget        *widget,
 
   pango_cairo_context_set_resolution (context, _gtk_css_number_value_get (style->core->dpi, 100));
 
-  font_options = (cairo_font_options_t*)g_object_get_qdata (G_OBJECT (widget), quark_font_options);
-  if (settings && font_options)
-    {
-      cairo_font_options_t *options;
-
-      options = cairo_font_options_copy (gtk_settings_get_font_options (settings));
-      cairo_font_options_merge (options, font_options);
-
-      cairo_font_options_set_hint_metrics (options,
-                                           hint_font_metrics == 1 ? CAIRO_HINT_METRICS_ON
-                                                                  : CAIRO_HINT_METRICS_OFF);
-
-      pango_cairo_context_set_font_options (context, options);
-      cairo_font_options_destroy (options);
-    }
-  else if (settings)
-    {
-      cairo_font_options_t *options;
-
-      options = cairo_font_options_copy (gtk_settings_get_font_options (settings));
-      cairo_font_options_set_hint_metrics (options,
-                                           hint_font_metrics == 1 ? CAIRO_HINT_METRICS_ON
-                                                                  : CAIRO_HINT_METRICS_OFF);
-
-      pango_cairo_context_set_font_options (context, options);
-      cairo_font_options_destroy (options);
-    }
-
   pango_context_set_font_map (context, gtk_widget_get_effective_font_map (widget));
+
+  settings = gtk_widget_get_settings (widget);
+
+  if (settings)
+    {
+      gboolean hint_font_metrics;
+      cairo_font_options_t *font_options, *options;
+
+      g_object_get (settings, "gtk-hint-font-metrics", &hint_font_metrics, NULL);
+
+      options = cairo_font_options_copy (gtk_settings_get_font_options (settings));
+      font_options = (cairo_font_options_t*)g_object_get_qdata (G_OBJECT (widget), quark_font_options);
+      if (font_options)
+        cairo_font_options_merge (options, font_options);
+
+      cairo_font_options_set_hint_metrics (options,
+                                           hint_font_metrics == 1 ? CAIRO_HINT_METRICS_ON
+                                                                  : CAIRO_HINT_METRICS_OFF);
+
+      pango_context_set_round_glyph_positions (context, hint_font_metrics);
+      pango_cairo_context_set_font_options (context, options);
+
+      cairo_font_options_destroy (options);
+    }
 
   return old_serial != pango_context_get_serial (context);
 }
