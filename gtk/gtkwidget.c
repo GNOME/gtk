@@ -6477,8 +6477,7 @@ gtk_widget_update_pango_context (GtkWidget        *widget,
   scale = gtk_widget_get_scale_factor (widget);
   settings = gtk_widget_get_settings (widget);
 
-  if (settings != NULL &&
-      cairo_version () >= CAIRO_VERSION_ENCODE (1, 17, 4))
+  if (settings)
     {
       g_object_get (settings, "gtk-hint-font-metrics", &hint_font_metrics, NULL);
 
