@@ -653,12 +653,14 @@ gsk_offload_new (GdkSurface     *surface,
                                                         info->texture,
                                                         &info->source,
                                                         &info->dest,
+                                                        GDK_TEXTURE_TRANSFORM_NORMAL,
                                                         TRUE, NULL);
           else
             info->is_offloaded = gdk_subsurface_attach (info->subsurface,
                                                         info->texture,
                                                         &info->source,
                                                         &info->dest,
+                                                        GDK_TEXTURE_TRANSFORM_NORMAL,
                                                         info->place_above != NULL,
                                                         info->place_above);
         }

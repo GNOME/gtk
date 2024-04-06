@@ -2,6 +2,7 @@
 
 #include "gdksubsurfaceprivate.h"
 
+#include "wayland-client-protocol.h"
 
 typedef struct _GdkWaylandSubsurface GdkWaylandSubsurface;
 typedef struct _GdkWaylandSubsurfaceClass GdkWaylandSubsurfaceClass;
@@ -23,6 +24,7 @@ struct _GdkWaylandSubsurface
   GdkTexture *texture;
   cairo_rectangle_int_t dest;
   graphene_rect_t source;
+  enum wl_output_transform transform;
 
   struct wl_region *opaque_region;
 

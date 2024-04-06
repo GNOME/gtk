@@ -47,6 +47,16 @@ struct _GdkSubsurface
   GdkSubsurface *sibling_below;
 };
 
+typedef enum {
+  GDK_TEXTURE_TRANSFORM_NORMAL,
+  GDK_TEXTURE_TRANSFORM_90,
+  GDK_TEXTURE_TRANSFORM_180,
+  GDK_TEXTURE_TRANSFORM_270,
+  GDK_TEXTURE_TRANSFORM_FLIPPED,
+  GDK_TEXTURE_TRANSFORM_FLIPPED_90,
+  GDK_TEXTURE_TRANSFORM_FLIPPED_180,
+  GDK_TEXTURE_TRANSFORM_FLIPPED_270,
+} GdkTextureTransform;
 
 struct _GdkSubsurfaceClass
 {
@@ -56,6 +66,7 @@ struct _GdkSubsurfaceClass
                                     GdkTexture            *texture,
                                     const graphene_rect_t *source,
                                     const graphene_rect_t *dest,
+                                    GdkTextureTransform    transform,
                                     gboolean               above,
                                     GdkSubsurface         *sibling);
   void         (* detach)          (GdkSubsurface         *subsurface);
@@ -64,15 +75,19 @@ struct _GdkSubsurfaceClass
                                     graphene_rect_t       *source);
   void         (* get_dest)        (GdkSubsurface         *subsurface,
                                     graphene_rect_t       *dest);
+  GdkTextureTransform
+               (* get_transform)   (GdkSubsurface         *subsurface);
 };
 
 GType           gdk_subsurface_get_type        (void) G_GNUC_CONST;
 
 GdkSurface *    gdk_subsurface_get_parent      (GdkSubsurface         *subsurface);
+
 gboolean        gdk_subsurface_attach          (GdkSubsurface         *subsurface,
                                                 GdkTexture            *texture,
                                                 const graphene_rect_t *source,
                                                 const graphene_rect_t *dest,
+                                                GdkTextureTransform    transform,
                                                 gboolean               above,
                                                 GdkSubsurface         *sibling);
 void            gdk_subsurface_detach          (GdkSubsurface         *subsurface);
@@ -82,6 +97,8 @@ void            gdk_subsurface_get_source      (GdkSubsurface         *subsurfac
 void            gdk_subsurface_get_dest        (GdkSubsurface         *subsurface,
                                                graphene_rect_t       *dest);
 gboolean        gdk_subsurface_is_above_parent (GdkSubsurface         *subsurface);
+GdkTextureTransform
+                gdk_subsurface_get_transform   (GdkSubsurface         *subsurface);
 
 
 G_END_DECLS

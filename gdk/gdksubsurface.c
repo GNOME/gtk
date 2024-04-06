@@ -113,6 +113,7 @@ gdk_subsurface_attach (GdkSubsurface         *subsurface,
                        GdkTexture            *texture,
                        const graphene_rect_t *source,
                        const graphene_rect_t *dest,
+                       GdkTextureTransform    transform,
                        gboolean               above,
                        GdkSubsurface         *sibling)
 {
@@ -155,7 +156,7 @@ gdk_subsurface_attach (GdkSubsurface         *subsurface,
         }
     }
 
-  return GDK_SUBSURFACE_GET_CLASS (subsurface)->attach (subsurface, texture, source, dest, above, sibling);
+  return GDK_SUBSURFACE_GET_CLASS (subsurface)->attach (subsurface, texture, source, dest, transform, above, sibling);
 }
 
 void
@@ -203,3 +204,12 @@ gdk_subsurface_is_above_parent (GdkSubsurface *subsurface)
 
   return subsurface->above_parent;
 }
+
+GdkTextureTransform
+gdk_subsurface_get_transform (GdkSubsurface *subsurface)
+{
+  g_return_val_if_fail (GDK_IS_SUBSURFACE (subsurface), GDK_TEXTURE_TRANSFORM_NORMAL);
+
+  return GDK_SUBSURFACE_GET_CLASS (subsurface)->get_transform (subsurface);
+}
+
