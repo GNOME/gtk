@@ -76,6 +76,7 @@ void            gdk_monitor_set_subpixel_layout (GdkMonitor        *monitor,
 void            gdk_monitor_invalidate          (GdkMonitor *monitor);
 void            gdk_monitor_set_description     (GdkMonitor *monitor,
                                                  const char *description);
+double          gdk_monitor_get_dpi             (GdkMonitor *monitor);
 
 G_END_DECLS
 

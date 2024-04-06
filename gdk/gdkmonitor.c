@@ -744,3 +744,11 @@ gdk_monitor_set_description (GdkMonitor *monitor,
   g_object_notify_by_pspec (G_OBJECT (monitor), props[PROP_DESCRIPTION]);
 }
 
+#define MM_PER_INCH 25.4
+
+double
+gdk_monitor_get_dpi (GdkMonitor *monitor)
+{
+  return MAX ((monitor->geometry.width * monitor->scale) / (monitor->width_mm / MM_PER_INCH),
+              (monitor->geometry.height * monitor->scale) / (monitor->height_mm / MM_PER_INCH));
+}
