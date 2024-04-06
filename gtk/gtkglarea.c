@@ -34,6 +34,12 @@
 #include "gtkcssnodeprivate.h"
 #include "gdk/gdkgltextureprivate.h"
 #include "gdk/gdkglcontextprivate.h"
+#include "gdk/gdkdmabuftexturebuilderprivate.h"
+#include "gdk/gdkdmabuftextureprivate.h"
+
+#ifdef HAVE_UNISTD_H
+#include <unistd.h>
+#endif
 
 #include <epoxy/gl.h>
 
@@ -716,6 +722,26 @@ release_texture (gpointer data)
 }
 
 static void
+release_dmabuf (const GdkDmabuf *dmabuf)
+{
+#ifndef G_OS_WIN32
+  for (unsigned int i = 0; i < dmabuf->n_planes; i++)
+    close (dmabuf->planes[i].fd);
+#endif
+}
+
+static void
+release_dmabuf_texture (gpointer data)
+{
+  Texture *texture = data;
+
+  release_dmabuf (gdk_dmabuf_texture_get_dmabuf (GDK_DMABUF_TEXTURE (texture->holder)));
+  g_object_set_data (G_OBJECT (texture->holder), "gltexture", NULL);
+
+  texture->holder = NULL;
+}
+
+static void
 gtk_gl_area_snapshot (GtkWidget   *widget,
                       GtkSnapshot *snapshot)
 {
@@ -758,6 +784,8 @@ gtk_gl_area_snapshot (GtkWidget   *widget,
     {
       Texture *texture;
       gpointer sync = NULL;
+      GdkTexture *gltexture;
+      GdkDmabuf dmabuf;
 
       if (priv->needs_render || priv->auto_render)
         {
@@ -781,9 +809,33 @@ gtk_gl_area_snapshot (GtkWidget   *widget,
 
       gdk_gl_texture_builder_set_sync (texture->builder, sync);
 
-      texture->holder = gdk_gl_texture_builder_build (texture->builder,
-                                                      release_texture,
-                                                      texture);
+      gltexture = gdk_gl_texture_builder_build (texture->builder,
+                                                release_texture,
+                                                texture);
+
+      if (gdk_gl_context_export_dmabuf (priv->context,
+                                        gdk_gl_texture_builder_get_id (texture->builder),
+                                        &dmabuf))
+        {
+          GdkDmabufTextureBuilder *builder = gdk_dmabuf_texture_builder_new ();
+
+          gdk_dmabuf_texture_builder_set_display (builder, gdk_gl_context_get_display (priv->context));
+          gdk_dmabuf_texture_builder_set_width (builder, gdk_texture_get_width (gltexture));
+          gdk_dmabuf_texture_builder_set_height (builder, gdk_texture_get_height (gltexture));
+          gdk_dmabuf_texture_builder_set_premultiplied (builder, TRUE);
+          gdk_dmabuf_texture_builder_set_dmabuf (builder, &dmabuf);
+
+          texture->holder = gdk_dmabuf_texture_builder_build (builder, release_dmabuf_texture, texture, NULL);
+
+          g_object_unref (builder);
+
+          if (texture->holder != NULL)
+            g_object_set_data_full (G_OBJECT (texture->holder), "gltexture", gltexture, g_object_unref);
+          else
+            release_dmabuf (&dmabuf);
+        }
+      else
+        texture->holder = gltexture;
 
       /* Our texture is rendered by OpenGL, so it is upside down,
        * compared to what GSK expects, so flip it back.
