@@ -6551,6 +6551,8 @@ gtk_widget_update_default_pango_context (GtkWidget *widget)
  *
  * When not set, the default font options for the `GdkDisplay`
  * will be used.
+ *
+ * Deprecated: 4.16
  */
 void
 gtk_widget_set_font_options (GtkWidget                  *widget,
@@ -6580,8 +6582,9 @@ gtk_widget_set_font_options (GtkWidget                  *widget,
  *
  * Seee [method@Gtk.Widget.set_font_options].
  *
- * Returns: (transfer none) (nullable): the `cairo_font_options_t`
- *   of widget
+ * Returns: (transfer none) (nullable): the `cairo_font_options_t` of widget
+ *
+ * Deprecated: 4.16
  */
 const cairo_font_options_t *
 gtk_widget_get_font_options (GtkWidget *widget)
