@@ -149,11 +149,24 @@ get_wl_buffer (GdkWaylandSubsurface *self,
   return buffer;
 }
 
+static inline enum wl_output_transform
+gdk_texture_transform_to_wl (GdkTextureTransform transform)
+{
+  return (enum wl_output_transform) transform;
+}
+
+static inline GdkTextureTransform
+wl_output_transform_to_gdk (enum wl_output_transform transform)
+{
+  return (GdkTextureTransform) transform;
+}
+
 static gboolean
 gdk_wayland_subsurface_attach (GdkSubsurface         *sub,
                                GdkTexture            *texture,
                                const graphene_rect_t *source,
                                const graphene_rect_t *dest,
+                               GdkTextureTransform    transform,
                                gboolean               above,
                                GdkSubsurface         *sibling)
 {
@@ -187,6 +200,8 @@ gdk_wayland_subsurface_attach (GdkSubsurface         *sub,
   self->source.origin.y = source->origin.y;
   self->source.size.width = source->size.width;
   self->source.size.height = source->size.height;
+
+  self->transform = gdk_texture_transform_to_wl (transform);
 
   scale = gdk_fractional_scale_to_double (&parent->scale);
 
@@ -302,6 +317,7 @@ gdk_wayland_subsurface_attach (GdkSubsurface         *sub,
 
   if (result)
     {
+      wl_surface_set_buffer_transform (self->surface, self->transform);
       wl_subsurface_set_position (self->subsurface, self->dest.x, self->dest.y);
       wp_viewport_set_destination (self->viewport, self->dest.width, self->dest.height);
       wp_viewport_set_source (self->viewport,
@@ -406,6 +422,14 @@ gdk_wayland_subsurface_get_source (GdkSubsurface   *sub,
   source->size.height = self->source.size.height;
 }
 
+static GdkTextureTransform
+gdk_wayland_subsurface_get_transform (GdkSubsurface *sub)
+{
+  GdkWaylandSubsurface *self = GDK_WAYLAND_SUBSURFACE (sub);
+
+  return wl_output_transform_to_gdk (self->transform);
+}
+
 static void
 gdk_wayland_subsurface_class_init (GdkWaylandSubsurfaceClass *class)
 {
@@ -419,6 +443,7 @@ gdk_wayland_subsurface_class_init (GdkWaylandSubsurfaceClass *class)
   subsurface_class->get_texture = gdk_wayland_subsurface_get_texture;
   subsurface_class->get_source = gdk_wayland_subsurface_get_source;
   subsurface_class->get_dest = gdk_wayland_subsurface_get_dest;
+  subsurface_class->get_transform = gdk_wayland_subsurface_get_transform;
 };
 
 static void
