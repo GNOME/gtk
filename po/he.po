@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.HEAD.he\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-13 21:16+0000\n"
-"PO-Revision-Date: 2024-01-14 08:56+0200\n"
+"POT-Creation-Date: 2024-04-04 09:09+0000\n"
+"PO-Revision-Date: 2024-04-07 08:12+0300\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: Hebrew <yoseforb@gmail.com>\n"
 "Language: he\n"
@@ -3673,42 +3673,42 @@ msgstr "נתוני המדפסת מתקבלים…"
 #. * multiple pages on a sheet when printing
 #.
 #: gtk/gtkprintunixdialog.c:3120
-#: modules/printbackends/cups/gtkprintbackendcups.c:5709
+#: modules/printbackends/cups/gtkprintbackendcups.c:5736
 msgid "Left to right, top to bottom"
 msgstr "שמאל לימין, מלמעלה למטה"
 
 #: gtk/gtkprintunixdialog.c:3120
-#: modules/printbackends/cups/gtkprintbackendcups.c:5709
+#: modules/printbackends/cups/gtkprintbackendcups.c:5736
 msgid "Left to right, bottom to top"
 msgstr "שמאל לימין, מלמטה למעלה"
 
 #: gtk/gtkprintunixdialog.c:3121
-#: modules/printbackends/cups/gtkprintbackendcups.c:5710
+#: modules/printbackends/cups/gtkprintbackendcups.c:5737
 msgid "Right to left, top to bottom"
 msgstr "ימין לשמאל, מלמעלה למטה"
 
 #: gtk/gtkprintunixdialog.c:3121
-#: modules/printbackends/cups/gtkprintbackendcups.c:5710
+#: modules/printbackends/cups/gtkprintbackendcups.c:5737
 msgid "Right to left, bottom to top"
 msgstr "ימין לשמאל, מלמטה למעלה"
 
 #: gtk/gtkprintunixdialog.c:3122
-#: modules/printbackends/cups/gtkprintbackendcups.c:5711
+#: modules/printbackends/cups/gtkprintbackendcups.c:5738
 msgid "Top to bottom, left to right"
 msgstr "מלמעלה למטה, משמאל לימין"
 
 #: gtk/gtkprintunixdialog.c:3122
-#: modules/printbackends/cups/gtkprintbackendcups.c:5711
+#: modules/printbackends/cups/gtkprintbackendcups.c:5738
 msgid "Top to bottom, right to left"
 msgstr "מלמעלה למטה, מימין לשמאל"
 
 #: gtk/gtkprintunixdialog.c:3123
-#: modules/printbackends/cups/gtkprintbackendcups.c:5712
+#: modules/printbackends/cups/gtkprintbackendcups.c:5739
 msgid "Bottom to top, left to right"
 msgstr "מלמטה למעלה, משמאל לימין"
 
 #: gtk/gtkprintunixdialog.c:3123
-#: modules/printbackends/cups/gtkprintbackendcups.c:5712
+#: modules/printbackends/cups/gtkprintbackendcups.c:5739
 msgid "Bottom to top, right to left"
 msgstr "מלמטה למעלה, מימין לשמאל"
 
@@ -6845,7 +6845,7 @@ msgstr "ג׳אוואנית"
 #: gtk/script-names.c:101
 msgctxt "Script"
 msgid "Kaithi"
-msgstr ""
+msgstr "קאיתי"
 
 #: gtk/script-names.c:102
 msgctxt "Script"
@@ -6900,7 +6900,7 @@ msgstr "מנדאית"
 #: gtk/script-names.c:112
 msgctxt "Script"
 msgid "Chakma"
-msgstr ""
+msgstr "צ׳אקמה"
 
 #: gtk/script-names.c:113
 msgctxt "Script"
@@ -6920,22 +6920,22 @@ msgstr "מיאו"
 #: gtk/script-names.c:116
 msgctxt "Script"
 msgid "Sharada"
-msgstr ""
+msgstr "שרדה"
 
 #: gtk/script-names.c:117
 msgctxt "Script"
 msgid "Sora Sompeng"
-msgstr ""
+msgstr "סורה סומפנג"
 
 #: gtk/script-names.c:118
 msgctxt "Script"
 msgid "Takri"
-msgstr ""
+msgstr "טאקרי"
 
 #: gtk/script-names.c:119
 msgctxt "Script"
 msgid "Bassa"
-msgstr ""
+msgstr "באסה ואה"
 
 #: gtk/script-names.c:120
 msgctxt "Script"
@@ -6945,7 +6945,7 @@ msgstr "אלבנית קווקזית"
 #: gtk/script-names.c:121
 msgctxt "Script"
 msgid "Duployan"
-msgstr ""
+msgstr "דובילרן"
 
 #: gtk/script-names.c:122
 msgctxt "Script"
@@ -6955,17 +6955,17 @@ msgstr "אלבסן"
 #: gtk/script-names.c:123
 msgctxt "Script"
 msgid "Grantha"
-msgstr ""
+msgstr "גרנתה"
 
 #: gtk/script-names.c:124
 msgctxt "Script"
 msgid "Khojki"
-msgstr ""
+msgstr "חוג׳קי"
 
 #: gtk/script-names.c:125
 msgctxt "Script"
 msgid "Khudawadi, Sindhi"
-msgstr ""
+msgstr "חודוואדי, סינדית"
 
 #: gtk/script-names.c:126
 msgctxt "Script"
@@ -6975,17 +6975,17 @@ msgstr "קווי א׳"
 #: gtk/script-names.c:127
 msgctxt "Script"
 msgid "Mahajani"
-msgstr ""
+msgstr "מהג׳אני"
 
 #: gtk/script-names.c:128
 msgctxt "Script"
 msgid "Manichaean"
-msgstr ""
+msgstr "מניצ׳י"
 
 #: gtk/script-names.c:129
 msgctxt "Script"
 msgid "Mende Kikakui"
-msgstr ""
+msgstr "מנדה קיקקוי"
 
 #: gtk/script-names.c:130
 msgctxt "Script"
@@ -7015,42 +7015,42 @@ msgstr "פרמית עתיקה"
 #: gtk/script-names.c:135
 msgctxt "Script"
 msgid "Pahawh Hmong"
-msgstr ""
+msgstr "פאהח המונג"
 
 #: gtk/script-names.c:136
 msgctxt "Script"
 msgid "Palmyrene"
-msgstr ""
+msgstr "פלמירן"
 
 #: gtk/script-names.c:137
 msgctxt "Script"
 msgid "Pau Cin Hau"
-msgstr ""
+msgstr "פאו צ׳ין האו"
 
 #: gtk/script-names.c:138
 msgctxt "Script"
 msgid "Psalter Pahlavi"
-msgstr ""
+msgstr "מזמור פהלווי"
 
 #: gtk/script-names.c:139
 msgctxt "Script"
 msgid "Siddham"
-msgstr ""
+msgstr "סידהם"
 
 #: gtk/script-names.c:140
 msgctxt "Script"
 msgid "Tirhuta"
-msgstr ""
+msgstr "תרותא"
 
 #: gtk/script-names.c:141
 msgctxt "Script"
 msgid "Warang Citi"
-msgstr ""
+msgstr "ווראנג סיטי"
 
 #: gtk/script-names.c:142
 msgctxt "Script"
 msgid "Ahom"
-msgstr ""
+msgstr "אהום"
 
 #: gtk/script-names.c:143
 msgctxt "Script"
@@ -7060,12 +7060,12 @@ msgstr "הירוגליפים אנטוליים"
 #: gtk/script-names.c:144
 msgctxt "Script"
 msgid "Hatran"
-msgstr ""
+msgstr "חטרן"
 
 #: gtk/script-names.c:145
 msgctxt "Script"
 msgid "Multani"
-msgstr ""
+msgstr "מולטני"
 
 #: gtk/script-names.c:146
 msgctxt "Script"
@@ -7080,27 +7080,27 @@ msgstr "שפת סימנים בכתב"
 #: gtk/script-names.c:148
 msgctxt "Script"
 msgid "Adlam"
-msgstr ""
+msgstr "אדלם"
 
 #: gtk/script-names.c:149
 msgctxt "Script"
 msgid "Bhaiksuki"
-msgstr ""
+msgstr "בהיקסוקי"
 
 #: gtk/script-names.c:150
 msgctxt "Script"
 msgid "Marchen"
-msgstr ""
+msgstr "מרצ׳ן"
 
 #: gtk/script-names.c:151
 msgctxt "Script"
 msgid "Newa"
-msgstr ""
+msgstr "נווארית"
 
 #: gtk/script-names.c:152
 msgctxt "Script"
 msgid "Osage"
-msgstr ""
+msgstr "אוסייג׳"
 
 #: gtk/script-names.c:153
 msgctxt "Script"
@@ -7110,7 +7110,7 @@ msgstr "טנגוט"
 #: gtk/script-names.c:154
 msgctxt "Script"
 msgid "Masaram Gondi"
-msgstr ""
+msgstr "מסארם גונדי"
 
 #: gtk/script-names.c:155
 msgctxt "Script"
@@ -7990,282 +7990,282 @@ msgstr "דוחה עבודות"
 msgid "; "
 msgstr "; "
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:4655
-#: modules/printbackends/cups/gtkprintbackendcups.c:4722
+#: modules/printbackends/cups/gtkprintbackendcups.c:4682
+#: modules/printbackends/cups/gtkprintbackendcups.c:4749
 msgctxt "printing option"
 msgid "Two Sided"
 msgstr "דו צדדי"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:4656
+#: modules/printbackends/cups/gtkprintbackendcups.c:4683
 msgctxt "printing option"
 msgid "Paper Type"
 msgstr "סוג נייר"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:4657
+#: modules/printbackends/cups/gtkprintbackendcups.c:4684
 msgctxt "printing option"
 msgid "Paper Source"
 msgstr "מקור נייר"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:4658
-#: modules/printbackends/cups/gtkprintbackendcups.c:4723
+#: modules/printbackends/cups/gtkprintbackendcups.c:4685
+#: modules/printbackends/cups/gtkprintbackendcups.c:4750
 msgctxt "printing option"
 msgid "Output Tray"
 msgstr "מגש פלט"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:4659
+#: modules/printbackends/cups/gtkprintbackendcups.c:4686
 msgctxt "printing option"
 msgid "Resolution"
 msgstr "הבחנה"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:4660
+#: modules/printbackends/cups/gtkprintbackendcups.c:4687
 msgctxt "printing option"
 msgid "GhostScript pre-filtering"
 msgstr "סינון קדם של GhostScript"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:4669
+#: modules/printbackends/cups/gtkprintbackendcups.c:4696
 msgctxt "printing option value"
 msgid "One Sided"
 msgstr "צד אחד"
 
 #. Translators: this is an option of "Two Sided"
-#: modules/printbackends/cups/gtkprintbackendcups.c:4671
+#: modules/printbackends/cups/gtkprintbackendcups.c:4698
 msgctxt "printing option value"
 msgid "Long Edge (Standard)"
 msgstr "הצד הארוך (תקני)"
 
 #. Translators: this is an option of "Two Sided"
-#: modules/printbackends/cups/gtkprintbackendcups.c:4673
+#: modules/printbackends/cups/gtkprintbackendcups.c:4700
 msgctxt "printing option value"
 msgid "Short Edge (Flip)"
 msgstr "הצד הקצר (היפוך)"
 
 #. Translators: this is an option of "Paper Source"
-#: modules/printbackends/cups/gtkprintbackendcups.c:4675
-#: modules/printbackends/cups/gtkprintbackendcups.c:4677
-#: modules/printbackends/cups/gtkprintbackendcups.c:4685
+#: modules/printbackends/cups/gtkprintbackendcups.c:4702
+#: modules/printbackends/cups/gtkprintbackendcups.c:4704
+#: modules/printbackends/cups/gtkprintbackendcups.c:4712
 msgctxt "printing option value"
 msgid "Auto Select"
 msgstr "בחירה אוטומטית"
 
 #. Translators: this is an option of "Paper Source"
 #. Translators: this is an option of "Resolution"
-#: modules/printbackends/cups/gtkprintbackendcups.c:4679
-#: modules/printbackends/cups/gtkprintbackendcups.c:4681
-#: modules/printbackends/cups/gtkprintbackendcups.c:4683
-#: modules/printbackends/cups/gtkprintbackendcups.c:4687
+#: modules/printbackends/cups/gtkprintbackendcups.c:4706
+#: modules/printbackends/cups/gtkprintbackendcups.c:4708
+#: modules/printbackends/cups/gtkprintbackendcups.c:4710
+#: modules/printbackends/cups/gtkprintbackendcups.c:4714
 msgctxt "printing option value"
 msgid "Printer Default"
 msgstr "בררת מחדל עבור המדפסת"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:4689
+#: modules/printbackends/cups/gtkprintbackendcups.c:4716
 msgctxt "printing option value"
 msgid "Embed GhostScript fonts only"
 msgstr "הטמעת גופני PostScript בלבד"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:4691
+#: modules/printbackends/cups/gtkprintbackendcups.c:4718
 msgctxt "printing option value"
 msgid "Convert to PS level 1"
 msgstr "המרה ל־PS רמה 1"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:4693
+#: modules/printbackends/cups/gtkprintbackendcups.c:4720
 msgctxt "printing option value"
 msgid "Convert to PS level 2"
 msgstr "המרה ל־PS רמה 2"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:4695
+#: modules/printbackends/cups/gtkprintbackendcups.c:4722
 msgctxt "printing option value"
 msgid "No pre-filtering"
 msgstr "אין סינון קדם"
 
 #. Translators: "Miscellaneous" is the label for a button, that opens
 #. up an extra panel of settings in a print dialog.
-#: modules/printbackends/cups/gtkprintbackendcups.c:4704
+#: modules/printbackends/cups/gtkprintbackendcups.c:4731
 msgctxt "printing option group"
 msgid "Miscellaneous"
 msgstr "שונות"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:4731
+#: modules/printbackends/cups/gtkprintbackendcups.c:4758
 msgctxt "sides"
 msgid "One Sided"
 msgstr "חד צדדי"
 
 #. Translators: this is an option of "Two Sided"
-#: modules/printbackends/cups/gtkprintbackendcups.c:4733
+#: modules/printbackends/cups/gtkprintbackendcups.c:4760
 msgctxt "sides"
 msgid "Long Edge (Standard)"
 msgstr "צד ארוך (תקני)"
 
 #. Translators: this is an option of "Two Sided"
-#: modules/printbackends/cups/gtkprintbackendcups.c:4735
+#: modules/printbackends/cups/gtkprintbackendcups.c:4762
 msgctxt "sides"
 msgid "Short Edge (Flip)"
 msgstr "צד קצר (היפוך)"
 
 #. Translators: Top output bin
-#: modules/printbackends/cups/gtkprintbackendcups.c:4738
+#: modules/printbackends/cups/gtkprintbackendcups.c:4765
 msgctxt "output-bin"
 msgid "Top Bin"
 msgstr "מגש עליון"
 
 #. Translators: Middle output bin
-#: modules/printbackends/cups/gtkprintbackendcups.c:4740
+#: modules/printbackends/cups/gtkprintbackendcups.c:4767
 msgctxt "output-bin"
 msgid "Middle Bin"
 msgstr "מגש אמצעי"
 
 #. Translators: Bottom output bin
-#: modules/printbackends/cups/gtkprintbackendcups.c:4742
+#: modules/printbackends/cups/gtkprintbackendcups.c:4769
 msgctxt "output-bin"
 msgid "Bottom Bin"
 msgstr "מגש תחתון"
 
 #. Translators: Side output bin
-#: modules/printbackends/cups/gtkprintbackendcups.c:4744
+#: modules/printbackends/cups/gtkprintbackendcups.c:4771
 msgctxt "output-bin"
 msgid "Side Bin"
 msgstr "מגש צדי"
 
 #. Translators: Left output bin
-#: modules/printbackends/cups/gtkprintbackendcups.c:4746
+#: modules/printbackends/cups/gtkprintbackendcups.c:4773
 msgctxt "output-bin"
 msgid "Left Bin"
 msgstr "מגש שמאלי"
 
 #. Translators: Right output bin
-#: modules/printbackends/cups/gtkprintbackendcups.c:4748
+#: modules/printbackends/cups/gtkprintbackendcups.c:4775
 msgctxt "output-bin"
 msgid "Right Bin"
 msgstr "מגש ימני"
 
 #. Translators: Center output bin
-#: modules/printbackends/cups/gtkprintbackendcups.c:4750
+#: modules/printbackends/cups/gtkprintbackendcups.c:4777
 msgctxt "output-bin"
 msgid "Center Bin"
 msgstr "מגש מרכזי"
 
 #. Translators: Rear output bin
-#: modules/printbackends/cups/gtkprintbackendcups.c:4752
+#: modules/printbackends/cups/gtkprintbackendcups.c:4779
 msgctxt "output-bin"
 msgid "Rear Bin"
 msgstr "מגש אחורי"
 
 #. Translators: Output bin where one sided output is oriented in the face-up position
-#: modules/printbackends/cups/gtkprintbackendcups.c:4754
+#: modules/printbackends/cups/gtkprintbackendcups.c:4781
 msgctxt "output-bin"
 msgid "Face Up Bin"
 msgstr "מגש עם הפנים כלפי מעלה"
 
 #. Translators: Output bin where one sided output is oriented in the face-down position
-#: modules/printbackends/cups/gtkprintbackendcups.c:4756
+#: modules/printbackends/cups/gtkprintbackendcups.c:4783
 msgctxt "output-bin"
 msgid "Face Down Bin"
 msgstr "מגש עם הפנים כלפי מטה"
 
 #. Translators: Large capacity output bin
-#: modules/printbackends/cups/gtkprintbackendcups.c:4758
+#: modules/printbackends/cups/gtkprintbackendcups.c:4785
 msgctxt "output-bin"
 msgid "Large Capacity Bin"
 msgstr "מגש בעל קיבולת מוגדלת"
 
 #. Translators: Output stacker number %d
-#: modules/printbackends/cups/gtkprintbackendcups.c:4780
+#: modules/printbackends/cups/gtkprintbackendcups.c:4807
 #, c-format
 msgctxt "output-bin"
 msgid "Stacker %d"
 msgstr "מערם פלט נייר %d"
 
 #. Translators: Output mailbox number %d
-#: modules/printbackends/cups/gtkprintbackendcups.c:4784
+#: modules/printbackends/cups/gtkprintbackendcups.c:4811
 #, c-format
 msgctxt "output-bin"
 msgid "Mailbox %d"
 msgstr "התקן למיון פלט הדפסה %d"
 
 #. Translators: Private mailbox
-#: modules/printbackends/cups/gtkprintbackendcups.c:4788
+#: modules/printbackends/cups/gtkprintbackendcups.c:4815
 msgctxt "output-bin"
 msgid "My Mailbox"
 msgstr "התקן למיון פלט ההדפסה שלי"
 
 #. Translators: Output tray number %d
-#: modules/printbackends/cups/gtkprintbackendcups.c:4792
+#: modules/printbackends/cups/gtkprintbackendcups.c:4819
 #, c-format
 msgctxt "output-bin"
 msgid "Tray %d"
 msgstr "מגירת הזנת נייר %d"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:5263
+#: modules/printbackends/cups/gtkprintbackendcups.c:5290
 msgid "Printer Default"
 msgstr "בררת מחדל עבור המדפסת"
 
 #. Translators: These strings name the possible values of the
 #. * job priority option in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:5704
+#: modules/printbackends/cups/gtkprintbackendcups.c:5731
 msgid "Urgent"
 msgstr "דחוף"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:5704
+#: modules/printbackends/cups/gtkprintbackendcups.c:5731
 msgid "High"
 msgstr "גבוה"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:5704
+#: modules/printbackends/cups/gtkprintbackendcups.c:5731
 msgid "Medium"
 msgstr "בינוני"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:5704
+#: modules/printbackends/cups/gtkprintbackendcups.c:5731
 msgid "Low"
 msgstr "נמוך"
 
 #. Translators, this string is used to label the job priority option
 #. * in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:5734
+#: modules/printbackends/cups/gtkprintbackendcups.c:5761
 msgid "Job Priority"
 msgstr "עדיפות המשימה"
 
 #. Translators, this string is used to label the billing info entry
 #. * in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:5745
+#: modules/printbackends/cups/gtkprintbackendcups.c:5772
 msgid "Billing Info"
 msgstr "נתוני חיוב"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:5769
+#: modules/printbackends/cups/gtkprintbackendcups.c:5796
 msgctxt "cover page"
 msgid "None"
 msgstr "ללא"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:5770
+#: modules/printbackends/cups/gtkprintbackendcups.c:5797
 msgctxt "cover page"
 msgid "Classified"
 msgstr "מסווג"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:5771
+#: modules/printbackends/cups/gtkprintbackendcups.c:5798
 msgctxt "cover page"
 msgid "Confidential"
 msgstr "חסוי"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:5772
+#: modules/printbackends/cups/gtkprintbackendcups.c:5799
 msgctxt "cover page"
 msgid "Secret"
 msgstr "סודי"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:5773
+#: modules/printbackends/cups/gtkprintbackendcups.c:5800
 msgctxt "cover page"
 msgid "Standard"
 msgstr "רגיל"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:5774
+#: modules/printbackends/cups/gtkprintbackendcups.c:5801
 msgctxt "cover page"
 msgid "Top Secret"
 msgstr "סודי ביותר"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:5775
+#: modules/printbackends/cups/gtkprintbackendcups.c:5802
 msgctxt "cover page"
 msgid "Unclassified"
 msgstr "לא מסווג"
@@ -8273,7 +8273,7 @@ msgstr "לא מסווג"
 #. Translators, this string is used to label the pages-per-sheet option
 #. * in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:5787
+#: modules/printbackends/cups/gtkprintbackendcups.c:5814
 msgctxt "printer option"
 msgid "Pages per Sheet"
 msgstr "מספר העמודים בדף"
@@ -8281,7 +8281,7 @@ msgstr "מספר העמודים בדף"
 #. Translators, this string is used to label the option in the print
 #. * dialog that controls in what order multiple pages are arranged
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:5804
+#: modules/printbackends/cups/gtkprintbackendcups.c:5831
 msgctxt "printer option"
 msgid "Page Ordering"
 msgstr "סדר דפים"
@@ -8289,7 +8289,7 @@ msgstr "סדר דפים"
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the front cover page.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:5846
+#: modules/printbackends/cups/gtkprintbackendcups.c:5873
 msgctxt "printer option"
 msgid "Before"
 msgstr "לפני"
@@ -8297,7 +8297,7 @@ msgstr "לפני"
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the back cover page.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:5861
+#: modules/printbackends/cups/gtkprintbackendcups.c:5888
 msgctxt "printer option"
 msgid "After"
 msgstr "אחרי"
@@ -8306,7 +8306,7 @@ msgstr "אחרי"
 #. * a print job is printed. Possible values are 'now', a specified time,
 #. * or 'on hold'
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:5881
+#: modules/printbackends/cups/gtkprintbackendcups.c:5908
 msgctxt "printer option"
 msgid "Print at"
 msgstr "הדפסה"
@@ -8314,7 +8314,7 @@ msgstr "הדפסה"
 #. Translators: this is the name of the option that allows the user
 #. * to specify a time when a print job will be printed.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:5892
+#: modules/printbackends/cups/gtkprintbackendcups.c:5919
 msgctxt "printer option"
 msgid "Print at time"
 msgstr "הדפסה"
@@ -8324,18 +8324,18 @@ msgstr "הדפסה"
 #. * the width and height in points. E.g: "Custom
 #. * 230.4x142.9"
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:5937
+#: modules/printbackends/cups/gtkprintbackendcups.c:5964
 #, c-format
 msgid "Custom %s×%s"
 msgstr "מותאם אישית ‎%s‏×%s"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:6047
+#: modules/printbackends/cups/gtkprintbackendcups.c:6074
 msgctxt "printer option"
 msgid "Printer Profile"
 msgstr "פרופיל מדפסת"
 
 #. TRANSLATORS: this is when color profile information is unavailable
-#: modules/printbackends/cups/gtkprintbackendcups.c:6054
+#: modules/printbackends/cups/gtkprintbackendcups.c:6081
 msgctxt "printer option value"
 msgid "Unavailable"
 msgstr "לא זמין"
