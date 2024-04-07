@@ -949,22 +949,20 @@ gdk_dmabuf_texture_builder_set_update_region (GdkDmabufTextureBuilder *self,
  *
  * Builds a new `GdkTexture` with the values set up in the builder.
  *
- * It is a programming error to call this function if any mandatory
- * property has not been set.
+ * It is a programming error to call this function if any mandatory property has not been set.
  *
- * If the dmabuf is not supported by GTK, %NULL will be returned and @error will be set.
+ * Not all formats defined in the `drm_fourcc.h` header are supported. You can use
+ * [method@Gdk.Display.get_dmabuf_formats] to get a list of supported formats. If the
+ * format is not supported by GTK, %NULL will be returned and @error will be set.
  *
  * The `destroy` function gets called when the returned texture gets released.
- *
- * It is possible to call this function multiple times to create multiple textures,
- * possibly with changing properties in between.
  *
  * It is the responsibility of the caller to keep the file descriptors for the planes
  * open until the created texture is no longer used, and close them afterwards (possibly
  * using the @destroy notify).
  *
- * Not all formats defined in the `drm_fourcc.h` header are supported. You can use
- * [method@Gdk.Display.get_dmabuf_formats] to get a list of supported formats.
+ * It is possible to call this function multiple times to create multiple textures,
+ * possibly with changing properties in between.
  *
  * Returns: (transfer full) (nullable): a newly built `GdkTexture` or `NULL`
  *   if the format is not supported
