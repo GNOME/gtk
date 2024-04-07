@@ -2602,17 +2602,18 @@ output_handle_geometry (void             *data,
                         const char       *model,
                         int32_t           transform)
 {
-  GdkWaylandMonitor *monitor = (GdkWaylandMonitor *)data;
+  GdkMonitor *monitor = GDK_MONITOR (data);
+  GdkWaylandMonitor *wayland_monitor = (GdkWaylandMonitor *)monitor;
 
   GDK_DEBUG (MISC, "handle geometry output %d, position %d %d, phys. size %d %d, subpixel layout %s, manufacturer %s, model %s, transform %s",
-                   monitor->id, x, y,
+                   wayland_monitor->id, x, y,
                    physical_width, physical_height,
                    subpixel_to_string (subpixel),
                    make, model,
                    transform_to_string (transform));
 
-  monitor->output_geometry.x = x;
-  monitor->output_geometry.y = y;
+  wayland_monitor->output_geometry.x = x;
+  wayland_monitor->output_geometry.y = y;
 
   switch (transform)
     {
@@ -2620,20 +2621,19 @@ output_handle_geometry (void             *data,
     case WL_OUTPUT_TRANSFORM_270:
     case WL_OUTPUT_TRANSFORM_FLIPPED_90:
     case WL_OUTPUT_TRANSFORM_FLIPPED_270:
-      gdk_monitor_set_physical_size (GDK_MONITOR (monitor),
-				     physical_height, physical_width);
+      gdk_monitor_set_physical_size (monitor, physical_height, physical_width);
       break;
     default:
-      gdk_monitor_set_physical_size (GDK_MONITOR (monitor),
-				     physical_width, physical_height);
+      gdk_monitor_set_physical_size (monitor, physical_width, physical_height);
     }
 
-  gdk_monitor_set_subpixel_layout (GDK_MONITOR (monitor), subpixel);
-  gdk_monitor_set_manufacturer (GDK_MONITOR (monitor), make);
-  gdk_monitor_set_model (GDK_MONITOR (monitor), model);
+  gdk_monitor_set_subpixel_layout (monitor, subpixel);
+  gdk_monitor_set_manufacturer (monitor, make);
+  gdk_monitor_set_model (monitor, model);
+  gdk_monitor_set_transform (monitor, (GdkTextureTransform) transform);
 
-  if (should_update_monitor (monitor) || !monitor_has_xdg_output (monitor))
-    apply_monitor_change (monitor);
+  if (should_update_monitor (wayland_monitor) || !monitor_has_xdg_output (wayland_monitor))
+    apply_monitor_change (wayland_monitor);
 }
 
 static void

@@ -54,6 +54,7 @@ enum {
   PROP_HEIGHT_MM,
   PROP_REFRESH_RATE,
   PROP_SUBPIXEL_LAYOUT,
+  PROP_TRANSFORM,
   PROP_VALID,
   LAST_PROP
 };
@@ -75,6 +76,7 @@ gdk_monitor_init (GdkMonitor *monitor)
   monitor->scale_factor = 1;
   monitor->scale = 1.0;
   monitor->scale_set = FALSE;
+  monitor->transform = GDK_TEXTURE_TRANSFORM_NORMAL,
   monitor->valid = TRUE;
 }
 
@@ -134,6 +136,10 @@ gdk_monitor_get_property (GObject    *object,
 
     case PROP_SUBPIXEL_LAYOUT:
       g_value_set_enum (value, monitor->subpixel_layout);
+      break;
+
+    case PROP_TRANSFORM:
+      g_value_set_enum (value, monitor->transform);
       break;
 
     case PROP_VALID:
@@ -316,6 +322,17 @@ gdk_monitor_class_init (GdkMonitorClass *class)
     g_param_spec_enum ("subpixel-layout", NULL, NULL,
                        GDK_TYPE_SUBPIXEL_LAYOUT,
                        GDK_SUBPIXEL_LAYOUT_UNKNOWN,
+                       G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
+
+  /**
+   * GdkMonitor:transform: (attributes org.gtk.Property.get=gdk_monitor_get_transform)
+   *
+   * The transform that is applied when showing content on the monitor.
+   */
+  props[PROP_TRANSFORM] =
+    g_param_spec_enum ("transform", NULL, NULL,
+                       GDK_TYPE_TEXTURE_TRANSFORM,
+                       GDK_TEXTURE_TRANSFORM_NORMAL,
                        G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
 
   /**
@@ -744,3 +761,21 @@ gdk_monitor_set_description (GdkMonitor *monitor,
   g_object_notify_by_pspec (G_OBJECT (monitor), props[PROP_DESCRIPTION]);
 }
 
+GdkTextureTransform
+gdk_monitor_get_transform (GdkMonitor *monitor)
+{
+  g_return_val_if_fail (GDK_IS_MONITOR (monitor), GDK_TEXTURE_TRANSFORM_NORMAL);
+
+  return monitor->transform;
+}
+
+void
+gdk_monitor_set_transform (GdkMonitor          *monitor,
+                           GdkTextureTransform  transform)
+{
+  if (monitor->transform == transform)
+    return;
+
+  monitor->transform = transform;
+  g_object_notify_by_pspec (G_OBJECT (monitor), props[PROP_TRANSFORM]);
+}

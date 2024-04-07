@@ -121,11 +121,6 @@ gdk_subsurface_attach (GdkSubsurface         *subsurface,
 
   g_return_val_if_fail (GDK_IS_SUBSURFACE (subsurface), FALSE);
   g_return_val_if_fail (GDK_IS_TEXTURE (texture), FALSE);
-  g_return_val_if_fail (source != NULL &&
-                        gsk_rect_contains_rect (&GRAPHENE_RECT_INIT (0, 0,
-                                                                     gdk_texture_get_width (texture),
-                                                                     gdk_texture_get_height (texture)),
-                                                source), FALSE);
   g_return_val_if_fail (dest != NULL, FALSE);
   g_return_val_if_fail (sibling != subsurface, FALSE);
   g_return_val_if_fail (sibling == NULL || GDK_IS_SUBSURFACE (sibling), FALSE);

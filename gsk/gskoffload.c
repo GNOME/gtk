@@ -55,29 +55,71 @@ struct _GskOffload
   GskOffloadInfo *last_info;
 };
 
-static GdkTextureTransform
-find_texture_transform (GskTransform *transform)
+static inline gboolean
+texture_transform_flips (GdkTextureTransform transform)
 {
-  float sx, sy, dx, dy;
-
-  g_assert (gsk_transform_get_category (transform) >= GSK_TRANSFORM_CATEGORY_2D_AFFINE);
-
-  gsk_transform_to_affine (transform, &sx, &sy, &dx, &dy);
-
-  if (sx > 0)
+  switch ((int)transform)
     {
-      if (sy > 0)
-        return GDK_TEXTURE_TRANSFORM_NORMAL;
-      else
-        return GDK_TEXTURE_TRANSFORM_FLIPPED_180;
+    case GDK_TEXTURE_TRANSFORM_90:
+    case GDK_TEXTURE_TRANSFORM_270:
+    case GDK_TEXTURE_TRANSFORM_FLIPPED_90:
+    case GDK_TEXTURE_TRANSFORM_FLIPPED_270:
+      return TRUE;
+    default:
+      return FALSE;
     }
-  else
+}
+
+static gboolean
+find_texture_transform (GskTransform        *transform,
+                        GdkTextureTransform *out)
+{
+  float skx, sky, sx, sy, angle, dx, dy;
+  int idx;
+  GdkTextureTransform transforms[16] = {
+    GDK_TEXTURE_TRANSFORM_NORMAL,
+    GDK_TEXTURE_TRANSFORM_90,
+    GDK_TEXTURE_TRANSFORM_180,
+    GDK_TEXTURE_TRANSFORM_270,
+    GDK_TEXTURE_TRANSFORM_FLIPPED,
+    GDK_TEXTURE_TRANSFORM_FLIPPED_90,
+    GDK_TEXTURE_TRANSFORM_FLIPPED,
+    GDK_TEXTURE_TRANSFORM_FLIPPED_270,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+  };
+
+  g_assert (gsk_transform_get_category (transform) >= GSK_TRANSFORM_CATEGORY_2D);
+
+  gsk_transform_to_2d_components (transform, &skx, &sky, &sx, &sy, &angle, &dx, &dy);
+
+  if (skx != 0 || sky != 0)
     {
-      if (sy > 0)
-        return GDK_TEXTURE_TRANSFORM_FLIPPED;
-      else
-        return GDK_TEXTURE_TRANSFORM_180;
+      g_print ("transform has skew: %f %f\n", skx, sky);
+      return FALSE;
     }
+  if (angle < 0)
+    angle += 360;
+
+  if (angle != 0 && angle != 90 && angle != 180 && angle != 270)
+    {
+      g_print ("transform has rotation: %f\n", angle);
+      return FALSE;
+    }
+
+  idx = (((int)angle)/90) | ((sy < 0) << 2) | ((sx < 0) << 3);
+
+  *out = transforms[idx];
+
+  g_print ("texture transform: flips %d %d angle %d -> idx %d, transform %d\n", sx < 0, sy < 0, (int)angle, idx, *out);
+
+  return TRUE;
 }
 
 static GdkTexture *
@@ -115,11 +157,11 @@ find_texture_to_attach (GskOffload          *self,
           {
             GskTransform *t = gsk_transform_node_get_transform (node);
 
-            if (gsk_transform_get_category (t) < GSK_TRANSFORM_CATEGORY_2D_AFFINE)
+            if (gsk_transform_get_category (t) < GSK_TRANSFORM_CATEGORY_2D)
               {
                 char *s = gsk_transform_to_string (t);
                 GDK_DISPLAY_DEBUG (gdk_surface_get_display (self->surface), OFFLOAD,
-                                   "Can't offload subsurface %p: transform %s is not just scale/translate",
+                                   "Can't offload subsurface %p: transform %s is not a 2D transform",
                                    subsurface, s);
                 g_free (s);
                 goto out;
@@ -165,14 +207,34 @@ find_texture_to_attach (GskOffload          *self,
           {
             GdkTexture *texture = gsk_texture_node_get_texture (node);
 
-            *out_texture_transform = find_texture_transform (transform);
+            if (!find_texture_transform (transform, out_texture_transform))
+              {
+                char *s = gsk_transform_to_string (transform);
+                GDK_DISPLAY_DEBUG (gdk_surface_get_display (self->surface), OFFLOAD,
+                                   "Can't offload subsurface %p: transform %s is not suitable",
+                                   subsurface, s);
+                g_free (s);
+                goto out;
+              }
 
             if (has_clip)
               {
-                float dx = node->bounds.origin.x;
-                float dy = node->bounds.origin.y;
-                float sx = gdk_texture_get_width (texture) / node->bounds.size.width;
-                float sy = gdk_texture_get_height (texture) / node->bounds.size.height;
+                float dx, dy, sx, sy;
+
+                if (texture_transform_flips (*out_texture_transform))
+                  {
+                    dx = node->bounds.origin.y;
+                    dy = node->bounds.origin.x;
+                    sx = gdk_texture_get_height (texture) / node->bounds.size.width;
+                    sy = gdk_texture_get_width (texture) / node->bounds.size.height;
+                  }
+                else
+                  {
+                    dx = node->bounds.origin.x;
+                    dy = node->bounds.origin.y;
+                    sx = gdk_texture_get_width (texture) / node->bounds.size.width;
+                    sy = gdk_texture_get_height (texture) / node->bounds.size.height;
+                  }
 
                 gsk_rect_intersection (&node->bounds, &clip, &clip);
 
@@ -185,8 +247,16 @@ find_texture_to_attach (GskOffload          *self,
               {
                 out_clip->origin.x = 0;
                 out_clip->origin.y = 0;
-                out_clip->size.width = gdk_texture_get_width (texture);
-                out_clip->size.height = gdk_texture_get_height (texture);
+                if (texture_transform_flips (*out_texture_transform))
+                  {
+                    out_clip->size.width = gdk_texture_get_height (texture);
+                    out_clip->size.height = gdk_texture_get_width (texture);
+                  }
+                else
+                  {
+                    out_clip->size.width = gdk_texture_get_width (texture);
+                    out_clip->size.height = gdk_texture_get_height (texture);
+                  }
               }
 
             ret = texture;

@@ -47,17 +47,6 @@ struct _GdkSubsurface
   GdkSubsurface *sibling_below;
 };
 
-typedef enum {
-  GDK_TEXTURE_TRANSFORM_NORMAL,
-  GDK_TEXTURE_TRANSFORM_90,
-  GDK_TEXTURE_TRANSFORM_180,
-  GDK_TEXTURE_TRANSFORM_270,
-  GDK_TEXTURE_TRANSFORM_FLIPPED,
-  GDK_TEXTURE_TRANSFORM_FLIPPED_90,
-  GDK_TEXTURE_TRANSFORM_FLIPPED_180,
-  GDK_TEXTURE_TRANSFORM_FLIPPED_270,
-} GdkTextureTransform;
-
 struct _GdkSubsurfaceClass
 {
   GObjectClass parent_class;

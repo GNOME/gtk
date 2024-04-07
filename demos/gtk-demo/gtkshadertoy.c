@@ -205,6 +205,24 @@ gtk_shadertoy_finalize (GObject *obj)
 }
 
 static void
+gtk_shadertoy_snapshot (GtkWidget   *widget,
+                        GtkSnapshot *snapshot)
+{
+  float factor;
+
+  factor = MIN (gtk_widget_get_width (widget) / (float) gtk_widget_get_height (widget),
+                gtk_widget_get_height (widget) / (float) gtk_widget_get_width (widget));
+
+  gtk_snapshot_save (snapshot);
+  //gtk_snapshot_scale (snapshot, factor, factor);
+  gtk_snapshot_rotate (snapshot, 90);
+  gtk_snapshot_translate (snapshot, &GRAPHENE_POINT_INIT (0, //-gtk_widget_get_width (widget),
+                                                          -gtk_widget_get_height (widget)));
+  GTK_WIDGET_CLASS (gtk_shadertoy_parent_class)->snapshot (widget, snapshot);
+  gtk_snapshot_restore (snapshot);
+}
+
+static void
 gtk_shadertoy_class_init (GtkShadertoyClass *klass)
 {
   GTK_GL_AREA_CLASS (klass)->render = gtk_shadertoy_render;
@@ -212,6 +230,8 @@ gtk_shadertoy_class_init (GtkShadertoyClass *klass)
 
   GTK_WIDGET_CLASS (klass)->realize = gtk_shadertoy_realize;
   GTK_WIDGET_CLASS (klass)->unrealize = gtk_shadertoy_unrealize;
+
+  GTK_WIDGET_CLASS (klass)->snapshot = gtk_shadertoy_snapshot;
 
   G_OBJECT_CLASS (klass)->finalize = gtk_shadertoy_finalize;
 }

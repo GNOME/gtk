@@ -88,6 +88,10 @@ gboolean          gdk_monitor_is_valid            (GdkMonitor   *monitor);
 GDK_AVAILABLE_IN_4_10
 const char *      gdk_monitor_get_description     (GdkMonitor   *monitor);
 
+GDK_AVAILABLE_IN_4_16
+GdkTextureTransform
+                  gdk_monitor_get_transform       (GdkMonitor   *monitor);
+
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GdkMonitor, g_object_unref)
 
 G_END_DECLS
