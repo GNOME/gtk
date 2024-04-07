@@ -82,8 +82,8 @@ gtk_shortcut_manager_get_model (GtkShortcutManager  *self,
 }
 
 static void
-gtk_shortcut_manager_default_add_controller (GtkShortcutManager    *self,
-                                             GtkShortcutController *controller)
+gtk_shortcut_manager_add_controller (GtkShortcutManager    *self,
+                                     GtkShortcutController *controller)
 {
   GtkFlattenListModel *model;
   GtkPropagationPhase phase;
@@ -98,13 +98,12 @@ gtk_shortcut_manager_default_add_controller (GtkShortcutManager    *self,
 }
 
 static void
-gtk_shortcut_manager_default_remove_controller (GtkShortcutManager    *self,
-                                                GtkShortcutController *controller)
+gtk_shortcut_manager_remove_controller_for_phase (GtkShortcutManager    *self,
+                                                  GtkShortcutController *controller,
+                                                  GtkPropagationPhase    phase)
 {
   GtkFlattenListModel *model;
-  GtkPropagationPhase phase;
 
-  phase = gtk_event_controller_get_propagation_phase (GTK_EVENT_CONTROLLER (controller));
   model = gtk_shortcut_manager_get_model (self, phase);
   if (model)
     {
@@ -115,6 +114,41 @@ gtk_shortcut_manager_default_remove_controller (GtkShortcutManager    *self,
       if (g_list_store_find (G_LIST_STORE (store), controller, &position))
         g_list_store_remove (G_LIST_STORE (store), position);
     }
+}
+
+static void
+propagation_phase_changed (GtkShortcutController *controller,
+                           GParamSpec            *pspec,
+                           GtkShortcutManager    *self)
+{
+  /* Remove from all models and readd */
+  gtk_shortcut_manager_remove_controller_for_phase (self, controller, GTK_PHASE_CAPTURE);
+  gtk_shortcut_manager_remove_controller_for_phase (self, controller, GTK_PHASE_BUBBLE);
+
+  gtk_shortcut_manager_add_controller (self, controller);
+}
+
+static void
+gtk_shortcut_manager_default_add_controller (GtkShortcutManager    *self,
+                                             GtkShortcutController *controller)
+{
+  gtk_shortcut_manager_add_controller (self, controller);
+
+  g_signal_connect_object (controller, "notify::propagation-phase",
+                           G_CALLBACK (propagation_phase_changed), self, G_CONNECT_DEFAULT);
+
+}
+
+static void
+gtk_shortcut_manager_default_remove_controller (GtkShortcutManager    *self,
+                                                GtkShortcutController *controller)
+{
+  GtkPropagationPhase phase;
+
+  phase = gtk_event_controller_get_propagation_phase (GTK_EVENT_CONTROLLER (controller));
+  gtk_shortcut_manager_remove_controller_for_phase (self, controller, phase);
+
+  g_signal_handlers_disconnect_by_func (controller, propagation_phase_changed, self);
 }
 
 static void
