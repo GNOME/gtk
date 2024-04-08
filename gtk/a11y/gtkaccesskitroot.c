@@ -21,19 +21,25 @@
 #include "config.h"
 
 #include "gtkaccesskitrootprivate.h"
+#include "gtkaccesskitcontextprivate.h"
+#include "gtkroot.h"
+
+#include <accesskit.h>
 
 struct _GtkAccessKitRoot
 {
   GObject parent_instance;
 
-  GdkSurface *surface;
+  GtkRoot *root_widget;
 
+  accesskit_node_class_set *node_classes;
+  accesskit_node_id next_id;
   /* TODO */
 };
 
 enum
 {
-  PROP_SURFACE = 1,
+  PROP_ROOT_WIDGET = 1,
 
   N_PROPS
 };
@@ -45,6 +51,9 @@ G_DEFINE_TYPE (GtkAccessKitRoot, gtk_accesskit_root, G_TYPE_OBJECT)
 static void
 gtk_accesskit_root_finalize (GObject *gobject)
 {
+  GtkAccessKitRoot *self = GTK_ACCESSKIT_ROOT (gobject);
+
+  g_clear_pointer (&self->node_classes, accesskit_node_class_set_free);
   /* TODO */
 
   G_OBJECT_CLASS (gtk_accesskit_root_parent_class)->finalize (gobject);
@@ -68,8 +77,8 @@ gtk_accesskit_root_set_property (GObject      *gobject,
 
   switch (prop_id)
     {
-    case PROP_SURFACE:
-      self->surface = g_value_get_object (value);
+    case PROP_ROOT_WIDGET:
+      self->root_widget = g_value_get_object (value);
       break;
 
     default:
@@ -87,8 +96,8 @@ gtk_accesskit_root_get_property (GObject    *gobject,
 
   switch (prop_id)
     {
-    case PROP_SURFACE:
-      g_value_set_object (value, self->surface);
+    case PROP_ROOT_WIDGET:
+      g_value_set_object (value, self->root_widget);
       break;
 
     default:
@@ -99,6 +108,9 @@ gtk_accesskit_root_get_property (GObject    *gobject,
 static void
 gtk_accesskit_root_constructed (GObject *gobject)
 {
+  GtkAccessKitRoot *self = GTK_ACCESSKIT_ROOT (gobject);
+
+  self->node_classes = accesskit_node_class_set_new ();
   /* TODO */
 
   G_OBJECT_CLASS (gtk_accesskit_root_parent_class)->constructed (gobject);
@@ -115,9 +127,9 @@ gtk_accesskit_root_class_init (GtkAccessKitRootClass *klass)
   gobject_class->dispose = gtk_accesskit_root_dispose;
   gobject_class->finalize = gtk_accesskit_root_finalize;
 
-  obj_props[PROP_SURFACE] =
-    g_param_spec_object ("surface", NULL, NULL,
-                         GDK_TYPE_SURFACE,
+  obj_props[PROP_ROOT_WIDGET] =
+    g_param_spec_object ("root-widget", NULL, NULL,
+                         GTK_TYPE_ROOT,
                          G_PARAM_CONSTRUCT_ONLY |
                          G_PARAM_READWRITE |
                          G_PARAM_STATIC_STRINGS);
@@ -130,4 +142,50 @@ gtk_accesskit_root_init (GtkAccessKitRoot *self)
 {
 }
 
+static void
+add_subtree_to_update (GtkAccessKitRoot      *self,
+                       accesskit_tree_update *update,
+                       GtkAccessible         *accessible)
+{
+  GtkATContext *ctx = gtk_accessible_get_at_context (accessible);
+  GtkAccessKitContext *accesskit_ctx = GTK_ACCESSKIT_CONTEXT (ctx);
+  accesskit_node_id id;
+  accesskit_node *node;
+  GtkAccessible *child = gtk_accessible_get_first_accessible_child (accessible);
+
+  gtk_at_context_realize (ctx);
+  id = gtk_accesskit_context_get_id (accesskit_ctx);
+  node = gtk_accesskit_context_build_node (accesskit_ctx, self->node_classes);
+  accesskit_tree_update_push_node (update, id, node);
+
+  while (child)
+    {
+      add_subtree_to_update (self, update, child);
+      child = gtk_accessible_get_next_accessible_sibling (child);
+    }
+}
+
 /* TODO */
+
+GtkAccessKitRoot *
+gtk_accesskit_root_new (GtkRoot *root_widget)
+{
+  return g_object_new (GTK_TYPE_ACCESSKIT_ROOT,
+                       "root-widget", root_widget,
+                       NULL);
+}
+
+accesskit_node_id
+gtk_accesskit_root_add_context (GtkAccessKitRoot    *self,
+                                GtkAccessKitContext *context)
+{
+  accesskit_node_id id = self->next_id++;
+  /* TODO: add to a hash table */
+  return id;
+}
+
+void
+gtk_accesskit_root_remove_context (GtkAccessKitRoot *self, accesskit_node_id id)
+{
+  /* TODO: remove from a hash table */
+}

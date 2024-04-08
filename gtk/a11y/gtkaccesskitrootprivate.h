@@ -21,12 +21,25 @@
 #pragma once
 
 #include "gtkaccesskitcontextprivate.h"
+#include "gtkroot.h"
+
+#include <accesskit.h>
 
 G_BEGIN_DECLS
 
 #define GTK_TYPE_ACCESSKIT_ROOT (gtk_accesskit_root_get_type())
 
 G_DECLARE_FINAL_TYPE (GtkAccessKitRoot, gtk_accesskit_root, GTK, ACCESSKIT_ROOT, GObject)
+
+GtkAccessKitRoot *
+gtk_accesskit_root_new (GtkRoot *root_widget);
+
+accesskit_node_id
+gtk_accesskit_root_add_context (GtkAccessKitRoot    *self,
+                                GtkAccessKitContext *context);
+
+void
+gtk_accesskit_root_remove_context (GtkAccessKitRoot *self, accesskit_node_id id);
 
 /* TODO: declare functions */
 

@@ -47,10 +47,40 @@ struct _GtkAccessKitContext
   GtkAccessKitRoot *root;
 
   /* The AccessKit node ID; meaningless if root is null */
-  uint64_t node_id;
+  accesskit_node_id id;
 };
 
 G_DEFINE_TYPE (GtkAccessKitContext, gtk_accesskit_context, GTK_TYPE_AT_CONTEXT)
+
+static void
+gtk_accesskit_context_finalize (GObject *gobject)
+{
+  GtkAccessKitContext *self = GTK_ACCESSKIT_CONTEXT (gobject);
+
+  g_clear_object (&self->root);
+
+  G_OBJECT_CLASS (gtk_accesskit_context_parent_class)->finalize (gobject);
+}
+
+static void
+gtk_accesskit_context_realize (GtkATContext *context)
+{
+  GtkAccessKitContext *self = GTK_ACCESSKIT_CONTEXT (context);
+  GtkAccessible *accessible = gtk_at_context_get_accessible (context);
+
+  if (GTK_IS_ROOT (accessible))
+    self->root = gtk_accesskit_root_new (GTK_ROOT (accessible));
+  else
+    {
+      GtkAccessible *parent = gtk_accessible_get_accessible_parent (accessible);
+      GtkATContext *parent_ctx = gtk_accessible_get_at_context (parent);
+      GtkAccessKitContext *parent_accesskit_ctx = GTK_ACCESSKIT_CONTEXT (parent_ctx);
+      self->root = parent_accesskit_ctx->root;
+      g_object_ref (self->root);
+    }
+
+  self->id = gtk_accesskit_root_add_context (self->root, self);
+}
 
 static void
 gtk_accesskit_context_unrealize (GtkATContext *context)
@@ -58,27 +88,16 @@ gtk_accesskit_context_unrealize (GtkATContext *context)
   GtkAccessKitContext *self = GTK_ACCESSKIT_CONTEXT (context);
   GtkAccessible *accessible = gtk_at_context_get_accessible (context);
 
-  if (!self->root)
-    return;
-
   GTK_DEBUG (A11Y, "Unrealizing AccessKit context for accessible '%s'",
                    G_OBJECT_TYPE_NAME (accessible));
 
-  /* TODO: unregister from root? */
+  gtk_accesskit_root_remove_context (self->root, self->id);
 
   g_clear_object (&self->root);
 }
 
 static void
-gtk_accesskit_context_finalize (GObject *gobject)
-{
-  gtk_accesskit_context_unrealize (GTK_AT_CONTEXT (gobject));
-
-  G_OBJECT_CLASS (gtk_accesskit_context_parent_class)->finalize (gobject);
-}
-
-static void
-gtk_accesskit_context_realize (GtkATContext *context)
+queue_update (GtkAccessKitContext *self)
 {
   /* TODO */
 }
@@ -92,20 +111,27 @@ gtk_accesskit_context_state_change (GtkATContext                *ctx,
                                     GtkAccessibleAttributeSet   *properties,
                                     GtkAccessibleAttributeSet   *relations)
 {
-  /* TODO */
+  GtkAccessKitContext *self = GTK_ACCESSKIT_CONTEXT (ctx);
+
+  queue_update (self);
 }
 
 static void
 gtk_accesskit_context_platform_change (GtkATContext                *ctx,
                                        GtkAccessiblePlatformChange  changed_platform)
 {
-  /* TODO */
+  GtkAccessKitContext *self = GTK_ACCESSKIT_CONTEXT (ctx);
+
+  queue_update (self);
+  /* TODO: anything else? */
 }
 
 static void
 gtk_accesskit_context_bounds_change (GtkATContext *ctx)
 {
-  /* TODO */
+  GtkAccessKitContext *self = GTK_ACCESSKIT_CONTEXT (ctx);
+
+  queue_update (self);
 }
 
 static void
@@ -113,7 +139,10 @@ gtk_accesskit_context_child_change (GtkATContext             *ctx,
                                     GtkAccessibleChildChange  change,
                                     GtkAccessible            *child)
 {
-  /* TODO */
+  GtkAccessKitContext *self = GTK_ACCESSKIT_CONTEXT (ctx);
+
+  queue_update (self);
+  /* TODO: when a child is added, mark the whole subtree for updating? */
 }
 
 static void
@@ -125,19 +154,23 @@ gtk_accesskit_context_announce (GtkATContext                      *context,
 }
 
 static void
-gtk_accesskit_context_update_caret_position (GtkATContext *context)
+gtk_accesskit_context_update_caret_position (GtkATContext *ctx)
 {
-  /* TODO */
+  GtkAccessKitContext *self = GTK_ACCESSKIT_CONTEXT (ctx);
+
+  queue_update (self);
 }
 
 static void
-gtk_accesskit_context_update_selection_bound (GtkATContext *context)
+gtk_accesskit_context_update_selection_bound (GtkATContext *ctx)
 {
-  /* TODO */
+  GtkAccessKitContext *self = GTK_ACCESSKIT_CONTEXT (ctx);
+
+  queue_update (self);
 }
 
 static void
-gtk_accesskit_context_update_text_contents (GtkATContext *context,
+gtk_accesskit_context_update_text_contents (GtkATContext *ctx,
                                             GtkAccessibleTextContentChange change,
                                             unsigned int start,
                                             unsigned int end)
@@ -469,6 +502,13 @@ accesskit_role_for_context (GtkATContext *context)
   return gtk_accessible_role_to_accesskit_role (role);
 }
 
+accesskit_node_id
+gtk_accesskit_context_get_id (GtkAccessKitContext *self)
+{
+  g_assert (self->root);
+  return self->id;
+}
+
 accesskit_node *
 gtk_accesskit_context_build_node (GtkAccessKitContext      *self,
                                   accesskit_node_class_set *node_classes)
@@ -485,7 +525,7 @@ gtk_accesskit_context_build_node (GtkAccessKitContext      *self,
       GtkAccessKitContext *child_accesskit_ctx = GTK_ACCESSKIT_CONTEXT (child_ctx);
 
       gtk_at_context_realize (child_ctx);
-      accesskit_node_builder_push_child (builder, child_accesskit_ctx->node_id);
+      accesskit_node_builder_push_child (builder, child_accesskit_ctx->id);
       child = gtk_accessible_get_next_accessible_sibling (child);
     }
 
