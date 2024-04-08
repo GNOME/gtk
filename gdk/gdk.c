@@ -142,31 +142,50 @@ static const GdkDebugKey gdk_debug_keys[] = {
 
 #ifdef G_HAS_CONSTRUCTORS
 #ifdef G_DEFINE_CONSTRUCTOR_NEEDS_PRAGMA
-#pragma G_DEFINE_CONSTRUCTOR_PRAGMA_ARGS(stash_desktop_startup_notification_id)
+#pragma G_DEFINE_CONSTRUCTOR_PRAGMA_ARGS(stash_and_unset_environment)
 #endif
-G_DEFINE_CONSTRUCTOR(stash_desktop_startup_notification_id)
+G_DEFINE_CONSTRUCTOR(stash_and_unset_environment)
 #endif
 
 static char *startup_notification_id = NULL;
+static char *xdg_activation_token = NULL;
 
 static void
-stash_desktop_startup_notification_id (void)
+stash_and_unset_environment (void)
 {
-  const char *desktop_startup_id;
-
-  desktop_startup_id = g_getenv ("DESKTOP_STARTUP_ID");
-  if (desktop_startup_id && *desktop_startup_id != '\0')
-    {
-      if (!g_utf8_validate (desktop_startup_id, -1, NULL))
-        g_warning ("DESKTOP_STARTUP_ID contains invalid UTF-8");
-      else
-        startup_notification_id = g_strdup (desktop_startup_id);
-    }
-
-  /* Clear the environment variable so it won't be inherited by
+  /* Copies environment variables and unsets them so they won't be inherited by
    * child processes and confuse things.
+   *
+   * Changing environment variables can be racy so we try to do this as early as
+   * possible in the program flow and before any printing that might involve
+   * environment variables.
    */
-  g_unsetenv ("DESKTOP_STARTUP_ID");
+  struct {
+    const char *key;
+    char **dst;
+  } vars[] = {
+    { "DESKTOP_STARTUP_ID", &startup_notification_id },
+    { "XDG_ACTIVATION_TOKEN", &xdg_activation_token },
+  };
+  size_t i;
+
+  for (i = 0; i < G_N_ELEMENTS (vars); i++)
+    *vars[i].dst = g_strdup (g_getenv (vars[i].key));
+
+  for (i = 0; i < G_N_ELEMENTS (vars); i++)
+    g_unsetenv (vars[i].key);
+
+  for (i = 0; i < G_N_ELEMENTS (vars); i++)
+    {
+      if (*vars[i].dst == NULL)
+        continue;
+
+      if (!g_utf8_validate (*vars[i].dst, -1, NULL))
+        {
+          g_warning ("%s contains invalid UTF-8", vars[i].key);
+          g_clear_pointer (vars[i].dst, g_free);
+        }
+    }
 }
 
 static gpointer
@@ -291,7 +310,7 @@ gdk_pre_parse (void)
     gdk_gl_backend_use (GDK_GL_WGL);
 
 #ifndef G_HAS_CONSTRUCTORS
-  stash_desktop_startup_notification_id ();
+  stash_and_unset_environment ();
 #endif
 }
 
@@ -325,15 +344,20 @@ gdk_display_open_default (void)
 /*< private >
  * gdk_get_startup_notification_id:
  *
- * Returns the original value of the DESKTOP_STARTUP_ID environment
- * variable if it was defined and valid, or %NULL otherwise.
+ * Returns the original value of the XDG_ACTIVATION_TOKEN environment
+ * variable if it was defined and valid, otherwise it returns the original
+ * value of the DESKTOP_STARTUP_ID environment variable if it was defined
+ * and valid, or %NULL if neither of them were defined and valid.
  *
  * Returns: (nullable) (transfer none): the original value of the
- *   DESKTOP_STARTUP_ID environment variable
+ *   XDG_ACTIVATION_TOKEN or DESKTOP_STARTUP_ID environment variable
  */
 const char *
 gdk_get_startup_notification_id (void)
 {
+  if (xdg_activation_token)
+    return xdg_activation_token;
+
   return startup_notification_id;
 }
 
