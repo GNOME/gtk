@@ -84,7 +84,9 @@ test_parse (gconstpointer d)
   GError *error = NULL;
   GString *string;
 
-  g_test_message ("filename: %s", filename);
+  if (g_test_verbose ())
+    g_test_message ("filename: %s", filename);
+
   expected_file = get_expected_filename (filename);
 
   string = g_string_sized_new (0);
@@ -129,12 +131,14 @@ main (int argc, char *argv[])
   g_assert_no_error (error);
   while ((name = g_dir_read_name (dir)) != NULL)
     {
+      char *filename;
+
       if (!g_str_has_suffix (name, ".ui"))
         continue;
 
       path = g_strdup_printf ("/builder/parse/%s", name);
-      g_test_add_data_func_full (path, g_test_build_filename (G_TEST_DIST, "ui", name, NULL),
-                                 test_parse, g_free);
+      filename = g_test_build_filename (G_TEST_DIST, "ui", name, NULL);
+      g_test_add_data_func_full (path, filename, test_parse, g_free);
       g_free (path);
     }
   g_dir_close (dir);

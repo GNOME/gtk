@@ -1,0 +1,10 @@
+<interface>
+  <object class="GtkInscription">
+    <property name="attributes">
+      0 10 foreground red
+      5 15 weight bold
+      0 100 font-desc "Sans 10px"
+    </property>
+    <property name="text">Behind the wheel of a large automobile</property>
+  </object>
+</interface>

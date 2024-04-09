@@ -37,6 +37,7 @@
 
 #include "gdk/gdkdebugprivate.h"
 #include "gdk/gdkdisplayprivate.h"
+#include "gdk/gdkmonitorprivate.h"
 
 #include "profile_conf.h"
 
@@ -798,6 +799,10 @@ add_monitor (GtkInspectorGeneral *gen,
                            gdk_monitor_get_width_mm (monitor),
                            gdk_monitor_get_height_mm (monitor));
   add_label_row (gen, list, "Size", value, 10);
+  g_free (value);
+
+  value = g_strdup_printf ("%.1f dpi", gdk_monitor_get_dpi (monitor));
+  add_label_row (gen, list, "Resolution", value, 10);
   g_free (value);
 
   if (gdk_monitor_get_refresh_rate (monitor) != 0)
