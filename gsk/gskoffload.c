@@ -82,34 +82,59 @@ find_texture_transform (GskTransform *transform)
 
 static GdkTexture *
 find_texture_to_attach (GskOffload          *self,
-                        GdkSubsurface       *subsurface,
-                        const GskRenderNode *node,
+                        const GskRenderNode *subsurface_node,
                         graphene_rect_t     *out_clip,
-                        GdkTextureTransform *out_texture_transform)
+                        GdkTextureTransform *out_texture_transform,
+                        gboolean            *out_lightbox)
 {
+  GdkSubsurface *subsurface;
+  const GskRenderNode *node;
   gboolean has_clip = FALSE;
   graphene_rect_t clip;
   GskTransform *transform = NULL;
   GdkTexture *ret = NULL;
+
+  *out_texture_transform = GDK_TEXTURE_TRANSFORM_NORMAL;
+  *out_lightbox = FALSE;
+
+  subsurface = gsk_subsurface_node_get_subsurface (subsurface_node);
+  node = subsurface_node;
 
   for (;;)
     {
       switch ((int) GSK_RENDER_NODE_TYPE (node))
         {
         case GSK_DEBUG_NODE:
+        case GSK_SUBSURFACE_NODE:
           node = gsk_debug_node_get_child (node);
           break;
 
         case GSK_CONTAINER_NODE:
-          if (gsk_container_node_get_n_children (node) != 1)
+          if (gsk_container_node_get_n_children (node) == 1)
             {
-              GDK_DISPLAY_DEBUG (gdk_surface_get_display (self->surface), OFFLOAD,
-                                 "Can't offload subsurface %p: too much content, container with %d children",
-                                 subsurface, gsk_container_node_get_n_children (node));
-              goto out;
+              node = gsk_container_node_get_child (node, 0);
+              break;
             }
-          node = gsk_container_node_get_child (node, 0);
-          break;
+          else if (gsk_container_node_get_n_children (node) == 2)
+            {
+              GskRenderNode *child;
+
+              child = gsk_container_node_get_child (node, 0);
+              if (GSK_RENDER_NODE_TYPE (child) == GSK_COLOR_NODE &&
+                  gsk_rect_equal (&child->bounds, &subsurface_node->bounds) &&
+                  gdk_rgba_equal (gsk_color_node_get_color (child), &(GdkRGBA) { 0, 0, 0, 1 }))
+                {
+                  g_print ("found lightbox\n");
+                  *out_lightbox = TRUE;
+                  node = gsk_container_node_get_child (node, 1);
+                  break;
+                }
+            }
+
+          GDK_DISPLAY_DEBUG (gdk_surface_get_display (self->surface), OFFLOAD,
+                             "Can't offload subsurface %p: too much content, container with %d children",
+                             subsurface, gsk_container_node_get_n_children (node));
+          goto out;
 
         case GSK_TRANSFORM_NODE:
           {
@@ -615,7 +640,7 @@ complex_clip:
           }
         else
           {
-            info->texture = find_texture_to_attach (self, subsurface, gsk_subsurface_node_get_child (node), &info->source, &info->transform);
+            info->texture = find_texture_to_attach (self, node, &info->source, &info->transform, &info->lightbox);
             if (info->texture)
               {
                 info->can_offload = TRUE;
@@ -691,6 +716,7 @@ gsk_offload_new (GdkSurface     *surface,
                                                         &info->source,
                                                         &info->dest,
                                                         info->transform,
+                                                        info->lightbox,
                                                         TRUE, NULL);
           else
             info->is_offloaded = gdk_subsurface_attach (info->subsurface,
@@ -698,6 +724,7 @@ gsk_offload_new (GdkSurface     *surface,
                                                         &info->source,
                                                         &info->dest,
                                                         info->transform,
+                                                        info->lightbox,
                                                         info->place_above != NULL,
                                                         info->place_above);
         }

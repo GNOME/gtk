@@ -42,9 +42,9 @@ test_subsurface_stacking (void)
 
   texture = gdk_texture_new_from_resource ("/org/gtk/libgtk/icons/16x16/actions/media-eject.png");
 
-  gdk_subsurface_attach (sub0, texture, &TEXTURE_RECT (texture), &GRAPHENE_RECT_INIT (0, 0, 10, 10), GDK_TEXTURE_TRANSFORM_NORMAL, TRUE, NULL);
-  gdk_subsurface_attach (sub1, texture, &TEXTURE_RECT (texture), &GRAPHENE_RECT_INIT (0, 0, 10, 10), GDK_TEXTURE_TRANSFORM_NORMAL, TRUE, NULL);
-  gdk_subsurface_attach (sub2, texture, &TEXTURE_RECT (texture), &GRAPHENE_RECT_INIT (0, 0, 10, 10), GDK_TEXTURE_TRANSFORM_NORMAL, TRUE, NULL);
+  gdk_subsurface_attach (sub0, texture, &TEXTURE_RECT (texture), &GRAPHENE_RECT_INIT (0, 0, 10, 10), GDK_TEXTURE_TRANSFORM_NORMAL, FALSE, TRUE, NULL);
+  gdk_subsurface_attach (sub1, texture, &TEXTURE_RECT (texture), &GRAPHENE_RECT_INIT (0, 0, 10, 10), GDK_TEXTURE_TRANSFORM_NORMAL, FALSE, TRUE, NULL);
+  gdk_subsurface_attach (sub2, texture, &TEXTURE_RECT (texture), &GRAPHENE_RECT_INIT (0, 0, 10, 10), GDK_TEXTURE_TRANSFORM_NORMAL, FALSE, TRUE, NULL);
 
   g_assert_true (surface->subsurfaces_above == sub2);
   g_assert_true (sub2->sibling_below == NULL);
@@ -67,7 +67,7 @@ test_subsurface_stacking (void)
   g_assert_true (sub0->sibling_above == NULL);
   g_assert_true (sub0->above_parent);
 
-  gdk_subsurface_attach (sub2, texture, &TEXTURE_RECT (texture), &GRAPHENE_RECT_INIT (0, 0, 10, 10), GDK_TEXTURE_TRANSFORM_NORMAL, FALSE, NULL);
+  gdk_subsurface_attach (sub2, texture, &TEXTURE_RECT (texture), &GRAPHENE_RECT_INIT (0, 0, 10, 10), GDK_TEXTURE_TRANSFORM_NORMAL, FALSE, FALSE, NULL);
 
   g_assert_true (surface->subsurfaces_above == sub0);
   g_assert_true (sub0->sibling_below == NULL);
@@ -79,7 +79,7 @@ test_subsurface_stacking (void)
   g_assert_true (sub2->sibling_above == NULL);
   g_assert_false (sub2->above_parent);
 
-  gdk_subsurface_attach (sub1, texture, &TEXTURE_RECT (texture), &GRAPHENE_RECT_INIT (0, 0, 10, 10), GDK_TEXTURE_TRANSFORM_NORMAL, TRUE, sub2);
+  gdk_subsurface_attach (sub1, texture, &TEXTURE_RECT (texture), &GRAPHENE_RECT_INIT (0, 0, 10, 10), GDK_TEXTURE_TRANSFORM_NORMAL, FALSE, TRUE, sub2);
 
   g_assert_true (surface->subsurfaces_below == sub1);
   g_assert_true (sub1->sibling_above == NULL);

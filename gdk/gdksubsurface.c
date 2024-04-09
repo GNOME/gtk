@@ -114,6 +114,7 @@ gdk_subsurface_attach (GdkSubsurface         *subsurface,
                        const graphene_rect_t *source,
                        const graphene_rect_t *dest,
                        GdkTextureTransform    transform,
+                       gboolean               lightbox,
                        gboolean               above,
                        GdkSubsurface         *sibling)
 {
@@ -156,7 +157,7 @@ gdk_subsurface_attach (GdkSubsurface         *subsurface,
         }
     }
 
-  return GDK_SUBSURFACE_GET_CLASS (subsurface)->attach (subsurface, texture, source, dest, transform, above, sibling);
+  return GDK_SUBSURFACE_GET_CLASS (subsurface)->attach (subsurface, texture, source, dest, transform, lightbox, above, sibling);
 }
 
 void
@@ -213,3 +214,10 @@ gdk_subsurface_get_transform (GdkSubsurface *subsurface)
   return GDK_SUBSURFACE_GET_CLASS (subsurface)->get_transform (subsurface);
 }
 
+gboolean
+gdk_subsurface_get_lightbox (GdkSubsurface *subsurface)
+{
+  g_return_val_if_fail (GDK_IS_SUBSURFACE (subsurface), FALSE);
+
+  return GDK_SUBSURFACE_GET_CLASS (subsurface)->get_lightbox (subsurface);
+}

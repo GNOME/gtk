@@ -34,6 +34,7 @@ typedef struct
   graphene_rect_t dest;
   graphene_rect_t source;
   GdkTextureTransform transform;
+  gboolean lightbox;
 
   guint was_offloaded : 1;
   guint can_offload   : 1;

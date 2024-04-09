@@ -67,6 +67,7 @@ struct _GdkSubsurfaceClass
                                     const graphene_rect_t *source,
                                     const graphene_rect_t *dest,
                                     GdkTextureTransform    transform,
+                                    gboolean               lightbox,
                                     gboolean               above,
                                     GdkSubsurface         *sibling);
   void         (* detach)          (GdkSubsurface         *subsurface);
@@ -77,6 +78,7 @@ struct _GdkSubsurfaceClass
                                     graphene_rect_t       *dest);
   GdkTextureTransform
                (* get_transform)   (GdkSubsurface         *subsurface);
+  gboolean     (* get_lightbox)    (GdkSubsurface         *subsurface);
 };
 
 GType           gdk_subsurface_get_type        (void) G_GNUC_CONST;
@@ -88,6 +90,7 @@ gboolean        gdk_subsurface_attach          (GdkSubsurface         *subsurfac
                                                 const graphene_rect_t *source,
                                                 const graphene_rect_t *dest,
                                                 GdkTextureTransform    transform,
+                                                gboolean               lightbox,
                                                 gboolean               above,
                                                 GdkSubsurface         *sibling);
 void            gdk_subsurface_detach          (GdkSubsurface         *subsurface);
@@ -99,6 +102,7 @@ void            gdk_subsurface_get_dest        (GdkSubsurface         *subsurfac
 gboolean        gdk_subsurface_is_above_parent (GdkSubsurface         *subsurface);
 GdkTextureTransform
                 gdk_subsurface_get_transform   (GdkSubsurface         *subsurface);
+gboolean        gdk_subsurface_get_lightbox    (GdkSubsurface         *subsurface);
 
 
 G_END_DECLS

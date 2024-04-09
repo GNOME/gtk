@@ -168,6 +168,7 @@ gdk_wayland_subsurface_attach (GdkSubsurface         *sub,
                                const graphene_rect_t *dest,
                                GdkTextureTransform    transform,
                                gboolean               above,
+                               gboolean               lightbox,
                                GdkSubsurface         *sibling)
 {
   GdkWaylandSubsurface *self = GDK_WAYLAND_SUBSURFACE (sub);
@@ -202,6 +203,7 @@ gdk_wayland_subsurface_attach (GdkSubsurface         *sub,
   self->source.size.height = source->size.height;
 
   self->transform = gdk_texture_transform_to_wl (transform);
+  self->lightbox = lightbox;
 
   scale = gdk_fractional_scale_to_double (&parent->scale);
 
@@ -430,6 +432,14 @@ gdk_wayland_subsurface_get_transform (GdkSubsurface *sub)
   return wl_output_transform_to_gdk (self->transform);
 }
 
+static gboolean
+gdk_wayland_subsurface_get_lightbox (GdkSubsurface *sub)
+{
+  GdkWaylandSubsurface *self = GDK_WAYLAND_SUBSURFACE (sub);
+
+  return self->lightbox;
+}
+
 static void
 gdk_wayland_subsurface_class_init (GdkWaylandSubsurfaceClass *class)
 {
@@ -444,6 +454,7 @@ gdk_wayland_subsurface_class_init (GdkWaylandSubsurfaceClass *class)
   subsurface_class->get_source = gdk_wayland_subsurface_get_source;
   subsurface_class->get_dest = gdk_wayland_subsurface_get_dest;
   subsurface_class->get_transform = gdk_wayland_subsurface_get_transform;
+  subsurface_class->get_lightbox = gdk_wayland_subsurface_get_lightbox;
 };
 
 static void

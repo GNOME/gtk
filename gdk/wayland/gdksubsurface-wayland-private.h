@@ -25,6 +25,7 @@ struct _GdkWaylandSubsurface
   cairo_rectangle_int_t dest;
   graphene_rect_t source;
   enum wl_output_transform transform;
+  gboolean lightbox;
 
   struct wl_region *opaque_region;
 
