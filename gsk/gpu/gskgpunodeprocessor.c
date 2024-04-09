@@ -2077,6 +2077,8 @@ gsk_gpu_node_processor_add_texture_scale_node (GskGpuNodeProcessor *self,
       /* now intersect with actual node bounds */
       if (!gsk_rect_intersection (&clip_bounds, &node->bounds, &clip_bounds))
         return;
+      clip_bounds.size.width = ceilf (clip_bounds.size.width);
+      clip_bounds.size.height = ceilf (clip_bounds.size.height);
       offscreen = gsk_gpu_node_processor_create_offscreen (self->frame,
                                                            graphene_vec2_one (),
                                                            &clip_bounds,

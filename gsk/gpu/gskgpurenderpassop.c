@@ -245,7 +245,9 @@ gsk_gpu_render_pass_end_op_vk_command (GskGpuOp              *op,
 
   vkCmdEndRenderPass (state->vk_command_buffer);
 
-  if (gsk_gpu_image_get_flags (self->target) & GSK_GPU_IMAGE_CAN_MIPMAP)
+  if ((gsk_gpu_image_get_flags (self->target) & GSK_GPU_IMAGE_CAN_MIPMAP) &&
+      (gsk_gpu_image_get_width (self->target) > 1 ||
+       gsk_gpu_image_get_height (self->target) > 1))
     {
       vkCmdPipelineBarrier (state->vk_command_buffer,
                             gsk_vulkan_image_get_vk_pipeline_stage (GSK_VULKAN_IMAGE (self->target)),
