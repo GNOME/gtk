@@ -456,41 +456,31 @@ gtk_fishbowl_do_update (GtkFishbowl *fishbowl)
 {
   GtkFishbowlPrivate *priv = gtk_fishbowl_get_instance_private (fishbowl);
   GdkFrameClock *frame_clock;
-  GdkFrameTimings *start, *end;
-  gint64 start_counter, end_counter;
-  gint64 n_frames, expected_frames;
-  gint64 start_timestamp, end_timestamp;
+  GdkFrameTimings *end;
+  gint64 end_counter;
+  double fps, expected_fps;
   gint64 interval;
 
   frame_clock = gtk_widget_get_frame_clock (GTK_WIDGET (fishbowl));
   if (frame_clock == NULL)
     return;
 
-  start_counter = gdk_frame_clock_get_history_start (frame_clock);
-  end_counter = gdk_frame_clock_get_frame_counter (frame_clock);
-  start = gdk_frame_clock_get_timings (frame_clock, start_counter);
-  for (end = gdk_frame_clock_get_timings (frame_clock, end_counter);
-       end_counter > start_counter && end != NULL && !gdk_frame_timings_get_complete (end);
-       end = gdk_frame_clock_get_timings (frame_clock, end_counter))
-    end_counter--;
-  if (end_counter - start_counter < 4)
+  fps = gdk_frame_clock_get_fps (frame_clock);
+  if (fps <= 0.0)
     return;
 
-  start_timestamp = gdk_frame_timings_get_presentation_time (start);
-  end_timestamp = gdk_frame_timings_get_presentation_time (end);
-  if (start_timestamp == 0 || end_timestamp == 0)
-    {
-      start_timestamp = gdk_frame_timings_get_frame_time (start);
-      end_timestamp = gdk_frame_timings_get_frame_time (end);
-    }
-
-  n_frames = end_counter - start_counter;
-  priv->framerate = ((double) n_frames) * G_USEC_PER_SEC / (end_timestamp - start_timestamp);
-  priv->framerate = ((int)(priv->framerate * 100))/100.0;
-
+  priv->framerate = fps;
   g_object_notify_by_pspec (G_OBJECT (fishbowl), props[PROP_FRAMERATE]);
 
   if (!priv->benchmark)
+    return;
+
+  end_counter = gdk_frame_clock_get_frame_counter (frame_clock);
+  for (end = gdk_frame_clock_get_timings (frame_clock, end_counter);
+       end != NULL && !gdk_frame_timings_get_complete (end);
+       end = gdk_frame_clock_get_timings (frame_clock, end_counter))
+    end_counter--;
+  if (end == NULL)
     return;
 
   interval = gdk_frame_timings_get_refresh_interval (end);
@@ -500,16 +490,16 @@ gtk_fishbowl_do_update (GtkFishbowl *fishbowl)
       if (interval == 0)
         return;
     }
-  expected_frames = round ((double) (end_timestamp - start_timestamp) / interval);
+  expected_fps = (double) G_USEC_PER_SEC / interval;
 
-  if (n_frames >= expected_frames)
+  if (fps > (expected_fps - 1))
     {
       if (priv->last_benchmark_change > 0)
         priv->last_benchmark_change *= 2;
       else
         priv->last_benchmark_change = 1;
     }
-  else if (n_frames + 1 < expected_frames)
+  else if (0.95 * fps < expected_fps)
     {
       if (priv->last_benchmark_change < 0)
         priv->last_benchmark_change--;
