@@ -8659,8 +8659,8 @@ gtk_widget_accessible_get_bounds (GtkAccessible *self,
     {
       *x = floorf (graphene_rect_get_x (&bounds));
       *y = floorf (graphene_rect_get_y (&bounds));
-      *width = ceilf (graphene_rect_get_width (&bounds));
-      *height = ceilf (graphene_rect_get_height (&bounds));
+      *width = ceil (*x + graphene_rect_get_width (&bounds)) - *x;
+      *height = ceil (*y + graphene_rect_get_height (&bounds)) - *y;
     }
 
   return TRUE;
