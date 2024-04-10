@@ -520,7 +520,7 @@ create_device (GdkX11DeviceManagerXI2 *device_manager,
   if (GDK_DISPLAY_DEBUG_CHECK (display, INPUT))
     {
       const char *type_names[] = { "logical", "physical", "floating" };
-      const char *source_names[] = { "mouse", "pen", "eraser", "cursor", "keyboard", "direct touch", "indirect touch", "trackpoint", "pad" };
+      const char *source_names[] = { "mouse", "pen", "keyboard", "direct touch", "indirect touch", "trackpoint", "pad" };
       gdk_debug_message ("input device:\n\tname: %s\n\ttype: %s\n\tsource: %s\n\thas cursor: %d\n\ttouches: %d",
                          dev->name,
                          type_names[type],
