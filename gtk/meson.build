@@ -665,12 +665,12 @@ if x11_enabled
 endif
 
 if wayland_enabled
-  im_wayland_sources = files('gtkimcontextwayland.c')
   xml = wlmod.find_protocol('text-input', state: 'unstable', version: 3)
-  im_wayland_sources += wlmod.scan_xml(xml)
-
-  gtk_sources += ['gtkapplication-wayland.c']
-  gtk_sources += im_wayland_sources
+  gtk_sources += [
+    wlmod.scan_xml(xml),
+    'gtkimcontextwayland.c',
+    'gtkapplication-wayland.c',
+  ]
 endif
 
 if x11_enabled or wayland_enabled
