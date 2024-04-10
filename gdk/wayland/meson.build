@@ -117,12 +117,7 @@ foreach p: proto_sources
 endforeach
 
 libgdk_wayland = static_library('gdk-wayland',
-  sources: [
-    gdk_wayland_sources,
-    gdk_wayland_gen_headers,
-    gdkconfig,
-    gdkenum_h,
-  ],
+  sources: [ gdk_wayland_sources, gdk_wayland_gen_headers, gdk_gen_headers ],
   include_directories: [ confinc, gdkinc, ],
   c_args: [
     '-DGTK_COMPILATION',

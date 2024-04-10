@@ -73,12 +73,7 @@ gdk_x11_deps = [
 ]
 
 libgdk_x11 = static_library('gdk-x11',
-  sources: [
-    gdkmarshal_h,
-    gdkenum_h,
-    gdkconfig,
-    gdk_x11_sources,
-  ],
+  sources: [ gdk_gen_headers, gdk_x11_sources ],
   include_directories: [ confinc, gdkinc, ],
   c_args: [
     '-DGTK_COMPILATION',
