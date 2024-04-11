@@ -3071,20 +3071,6 @@ gdk_event_translate (MSG *msg,
             }
 	}
 
-      if ((windowpos->flags & SWP_HIDEWINDOW) &&
-	  !GDK_SURFACE_DESTROYED (window))
-	{
-	  /* Make transient parent the foreground window when window unmaps */
-	  impl = GDK_WIN32_SURFACE (window);
-
-	  if (impl->transient_owner &&
-	      GetForegroundWindow () == GDK_SURFACE_HWND (window))
-	    {
-	      SetForegroundWindow (GDK_SURFACE_HWND (impl->transient_owner));
-	      SetCapture (GDK_SURFACE_HWND (impl->transient_owner));
-	    }
-	}
-
       if (!(windowpos->flags & SWP_NOCLIENTSIZE))
 	{
 	  if (window->resize_count > 1)

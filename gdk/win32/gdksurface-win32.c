@@ -4200,82 +4200,13 @@ BOOL WINAPI
 GtkShowWindow (GdkSurface *window,
                int        cmd_show)
 {
-  cairo_t *cr;
-  cairo_surface_t *surface;
-  RECT window_rect;
-  HDC hdc;
-  POINT window_position;
-  SIZE window_size;
-  POINT source_point;
-  BLENDFUNCTION blender;
-
-  HWND hwnd = GDK_SURFACE_HWND (window);
   GdkWin32Surface *impl = GDK_WIN32_SURFACE (window);
-
-  switch (cmd_show)
-    {
-    case SW_FORCEMINIMIZE:
-    case SW_HIDE:
-    case SW_MINIMIZE:
-      break;
-    case SW_MAXIMIZE:
-    case SW_RESTORE:
-    case SW_SHOW:
-    case SW_SHOWDEFAULT:
-    case SW_SHOWMINIMIZED:
-    case SW_SHOWMINNOACTIVE:
-    case SW_SHOWNA:
-    case SW_SHOWNOACTIVATE:
-    case SW_SHOWNORMAL:
-      if (IsWindowVisible (hwnd))
-        break;
-
-      /* Window was hidden, will be shown. Erase it, GDK will repaint soon,
-       * but not soon enough, so it's possible to see old content before
-       * the next redraw, unless we erase the window first.
-       */
-      GetWindowRect (hwnd, &window_rect);
-      source_point.x = source_point.y = 0;
-
-      window_position.x = window_rect.left;
-      window_position.y = window_rect.top;
-      window_size.cx = window_rect.right - window_rect.left;
-      window_size.cy = window_rect.bottom - window_rect.top;
-
-      blender.BlendOp = AC_SRC_OVER;
-      blender.BlendFlags = 0;
-      blender.AlphaFormat = AC_SRC_ALPHA;
-      blender.SourceConstantAlpha = 255;
-
-      /* Create a surface of appropriate size and clear it */
-      surface = cairo_win32_surface_create_with_dib (CAIRO_FORMAT_ARGB32,
-                                                     window_size.cx,
-                                                     window_size.cy);
-      cairo_surface_set_device_scale (surface, impl->surface_scale, impl->surface_scale);
-      cr = cairo_create (surface);
-      cairo_set_operator (cr, CAIRO_OPERATOR_SOURCE);
-      cairo_set_source_rgba (cr, 1.0, 1.0, 1.0, 0.0);
-      cairo_paint (cr);
-      cairo_destroy (cr);
-      cairo_surface_flush (surface);
-      hdc = cairo_win32_surface_get_dc (surface);
-
-      /* No API_CALL() wrapper, don't check for errors */
-      UpdateLayeredWindow (hwnd, NULL,
-                           &window_position, &window_size,
-                           hdc, &source_point,
-                           0, &blender, ULW_ALPHA);
-
-      cairo_surface_destroy (surface);
-
-      break;
-    }
 
   /* Ensure that maximized window size is corrected later on */
   if (cmd_show == SW_MAXIMIZE)
     impl->maximizing = TRUE;
 
-  return ShowWindow (hwnd, cmd_show);
+  return ShowWindow (GDK_SURFACE_HWND (window), cmd_show);
 }
 
 static void
@@ -4804,10 +4735,7 @@ gdk_win32_toplevel_set_property (GObject      *object,
       GDK_SURFACE (surface)->modal_hint = g_value_get_boolean (value);
 
       if (GDK_SURFACE (surface)->modal_hint)
-        {
-          SetCapture (GDK_SURFACE_HWND (surface));
-          _gdk_push_modal_window (surface);
-        }
+        _gdk_push_modal_window (surface);
 
       g_object_notify_by_pspec (G_OBJECT (surface), pspec);
       break;
