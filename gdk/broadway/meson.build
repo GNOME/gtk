@@ -52,8 +52,7 @@ broadwayjs_h = custom_target('broadwayjs.h',
 )
 
 libgdk_broadway = static_library('gdk-broadway',
-  clienthtml_h, broadwayjs_h,
-  gdk_broadway_sources, gdkconfig, gdkenum_h,
+  sources: [ clienthtml_h, broadwayjs_h, gdk_broadway_sources, gdk_gen_headers ],
   include_directories: [confinc, gdkinc],
   c_args: [
     '-DGTK_COMPILATION',

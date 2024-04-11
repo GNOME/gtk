@@ -202,7 +202,13 @@ gdkwayland_inc = include_directories('wayland')
 wlinc = include_directories('.')
 win32rcinc = include_directories('win32/rc')
 
-gdk_gen_headers = [gdkenum_h, gdkmarshal_h, gdkconfig, gdkversionmacros_h, gdk_visibility_h]
+gdk_gen_headers = [
+  gdkenum_h,
+  gdkmarshal_h,
+  gdkconfig,
+  gdkversionmacros_h,
+  gdk_visibility_h,
+]
 
 gdk_deps = [
   libm,
@@ -278,7 +284,7 @@ if gdk_backends.length() == 0
 endif
 
 libgdk = static_library('gdk',
-  sources: [gdk_sources, gdk_backends_gen_headers, gdkconfig],
+  sources: [gdk_sources, gdk_backends_gen_headers, gdk_gen_headers],
   dependencies: gdk_deps + [libgtk_css_dep],
   link_with: [libgtk_css],
   include_directories: [confinc, gdkx11_inc, wlinc],
@@ -290,7 +296,7 @@ libgdk = static_library('gdk',
 # list the dependencies and generated headers and such, for use in the
 # "public" libgtk_dep used by internal executables.
 libgdk_dep = declare_dependency(
-  sources: ['gdk.h', gdkconfig, gdkenum_h],
+  sources: ['gdk.h', gdk_gen_headers],
   include_directories: [confinc, gdkx11_inc, wlinc],
   dependencies: gdk_deps + [libgtk_css_dep],
 )
