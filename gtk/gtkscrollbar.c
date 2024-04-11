@@ -128,10 +128,10 @@ accessible_range_set_current_value (GtkAccessibleRange *range,
   if (adjustment)
     {
       gtk_adjustment_set_value (adjustment, value);
-      return true;
+      return TRUE;
     }
 
-  return false;
+  return FALSE;
 }
 
 static void
