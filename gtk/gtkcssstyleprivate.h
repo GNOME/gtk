@@ -285,6 +285,7 @@ void                    gtk_css_style_lookup_symbolic_colors    (GtkCssStyle    
 
 GtkCssVariableValue *   gtk_css_style_get_custom_property       (GtkCssStyle            *style,
                                                                  int                     id);
+GArray *                gtk_css_style_list_custom_properties    (GtkCssStyle            *style);
 
 GtkCssValues *gtk_css_values_new   (GtkCssValuesType  type);
 GtkCssValues *gtk_css_values_ref   (GtkCssValues     *values);
