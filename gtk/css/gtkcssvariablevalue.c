@@ -101,6 +101,14 @@ gtk_css_variable_value_print (GtkCssVariableValue *self,
   g_string_append_len (string, (const char *) data, len);
 }
 
+char *
+gtk_css_variable_value_to_string (GtkCssVariableValue *self)
+{
+  GString *string = g_string_new (NULL);
+  gtk_css_variable_value_print (self, string);
+  return g_string_free (string, FALSE);
+}
+
 gboolean
 gtk_css_variable_value_equal (const GtkCssVariableValue *value1,
                               const GtkCssVariableValue *value2)

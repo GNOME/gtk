@@ -64,6 +64,7 @@ GtkCssVariableValue *gtk_css_variable_value_ref         (GtkCssVariableValue    
 void                 gtk_css_variable_value_unref       (GtkCssVariableValue          *self);
 void                 gtk_css_variable_value_print       (GtkCssVariableValue          *self,
                                                          GString                      *string);
+char *               gtk_css_variable_value_to_string   (GtkCssVariableValue          *self);
 gboolean             gtk_css_variable_value_equal       (const GtkCssVariableValue    *value1,
                                                          const GtkCssVariableValue    *value2) G_GNUC_PURE;
 GtkCssVariableValue *gtk_css_variable_value_transition  (GtkCssVariableValue          *start,
