@@ -925,3 +925,12 @@ gtk_css_style_get_custom_property (GtkCssStyle *style,
 
   return NULL;
 }
+
+GArray *
+gtk_css_style_list_custom_properties (GtkCssStyle *style)
+{
+  if (style->variables)
+    return gtk_css_variable_set_list_ids (style->variables);
+
+  return NULL;
+}
