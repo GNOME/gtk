@@ -28,6 +28,7 @@
 #include "gtkscrollbar.h"
 #include "gtkrange.h"
 
+#include "gtkaccessiblerange.h"
 #include "gtkadjustment.h"
 #include "gtkorientable.h"
 #include "gtkprivate.h"
@@ -107,12 +108,37 @@ enum {
   LAST_PROP = PROP_ORIENTATION
 };
 
+static void gtk_scrollbar_accessible_range_init (GtkAccessibleRangeInterface *iface);
+
 G_DEFINE_TYPE_WITH_CODE (GtkScrollbar, gtk_scrollbar, GTK_TYPE_WIDGET,
                          G_ADD_PRIVATE (GtkScrollbar)
-                         G_IMPLEMENT_INTERFACE (GTK_TYPE_ORIENTABLE, NULL))
-
+                         G_IMPLEMENT_INTERFACE (GTK_TYPE_ORIENTABLE, NULL)
+                         G_IMPLEMENT_INTERFACE (GTK_TYPE_ACCESSIBLE_RANGE, 
+                         gtk_scrollbar_accessible_range_init))
 
 static GParamSpec *props[LAST_PROP] = { NULL, };
+
+static gboolean
+accessible_range_set_current_value (GtkAccessibleRange *range,
+                                    double              value)
+{
+  GtkScrollbar *self = GTK_SCROLLBAR (range);
+  GtkAdjustment *adjustment = gtk_scrollbar_get_adjustment (self);
+
+  if (adjustment)
+    {
+      gtk_adjustment_set_value (adjustment, value);
+      return TRUE;
+    }
+
+  return FALSE;
+}
+
+static void
+gtk_scrollbar_accessible_range_init (GtkAccessibleRangeInterface *iface)
+{
+  iface->set_current_value = accessible_range_set_current_value;
+}
 
 static void
 gtk_scrollbar_get_property (GObject    *object,
