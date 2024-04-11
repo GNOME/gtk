@@ -490,8 +490,6 @@ if wayland_enabled
   wlprotocolsdep = dependency('wayland-protocols', version: wayland_proto_req)
   wlegldep       = dependency('wayland-egl')
 
-  wlproto_dir = wlprotocolsdep.get_variable('pkgdatadir')
-
   wayland_pkgs = [
     'wayland-client @0@'.format(wayland_req),
     'xkbcommon @0@'.format(xkbcommon_req),

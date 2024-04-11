@@ -636,49 +636,6 @@ install_headers(gtk_print_headers, subdir: 'gtk-4.0/gtk/print')
 
 gtk_sources = gtk_public_sources + gtk_private_sources
 
-proto_sources = [
-  ['text-input', 'unstable', 'v3', ],
-]
-
-im_wayland_sources = files('gtkimcontextwayland.c')
-
-foreach p: proto_sources
-  proto_name = p.get(0)
-  proto_stability = p.get(1)
-
-  if wayland_enabled
-    if proto_stability == 'stable'
-      output_base = proto_name
-      input = files('@0@.xml'.format(proto_name))
-    else
-      proto_version = p.get(2)
-      output_base = '@0@-@1@-@2@'.format(proto_name, proto_stability, proto_version)
-      input = files(join_paths(wlproto_dir, '@0@/@1@/@2@.xml'.format(proto_stability, proto_name, output_base)))
-    endif
-
-    # wayland_scanner is defined in gdk/wayland/meson.build
-    im_wayland_sources += custom_target('@0@ client header'.format(output_base),
-      input: input,
-      output: '@0@-client-protocol.h'.format(output_base),
-      command: [
-        wayland_scanner,
-        'client-header',
-        '@INPUT@', '@OUTPUT@',
-      ],
-    )
-
-    im_wayland_sources += custom_target('@0@ source'.format(output_base),
-      input: input,
-      output: '@0@-protocol.c'.format(output_base),
-      command: [
-        wayland_scanner,
-        'private-code',
-        '@INPUT@', '@OUTPUT@',
-      ],
-    )
-  endif
-endforeach
-
 if os_unix and tracker3_dep.found()
   gtk_sources += 'gtksearchenginetracker3.c'
 endif
@@ -708,8 +665,12 @@ if x11_enabled
 endif
 
 if wayland_enabled
-  gtk_sources += ['gtkapplication-wayland.c']
-  gtk_sources += im_wayland_sources
+  xml = wlmod.find_protocol('text-input', state: 'unstable', version: 3)
+  gtk_sources += [
+    wlmod.scan_xml(xml),
+    'gtkimcontextwayland.c',
+    'gtkapplication-wayland.c',
+  ]
 endif
 
 if x11_enabled or wayland_enabled
