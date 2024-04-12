@@ -775,7 +775,7 @@ gdk_wayland_surface_sync (GdkSurface *surface)
   gdk_wayland_surface_sync_viewport (surface);
 }
 
-gboolean
+static gboolean
 gdk_wayland_surface_needs_commit (GdkSurface *surface)
 {
   GdkWaylandSurface *self = GDK_WAYLAND_SURFACE (surface);
@@ -785,6 +785,20 @@ gdk_wayland_surface_needs_commit (GdkSurface *surface)
          self->input_region_dirty ||
          self->buffer_scale_dirty ||
          self->viewport_dirty;
+}
+
+void
+gdk_wayland_surface_handle_empty_frame (GdkSurface *surface)
+{
+  if (!gdk_wayland_surface_needs_commit (surface))
+    return;
+
+  gdk_wayland_surface_sync (surface);
+  gdk_wayland_surface_request_frame (surface);
+
+  gdk_profiler_add_mark (GDK_PROFILER_CURRENT_TIME, 0, "Wayland surface commit", NULL);
+  gdk_wayland_surface_commit (surface);
+  gdk_wayland_surface_notify_committed (surface);
 }
 
 static void
