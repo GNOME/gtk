@@ -27,6 +27,9 @@
 #include <gst/gl/gl.h>
 #include <gst/video/gstvideosink.h>
 #include <gst/video/video.h>
+#ifdef HAVE_GSTREAMER_DRM
+#include <gst/video/video-info-dma.h>
+#endif
 
 #define GTK_TYPE_GST_SINK            (gtk_gst_sink_get_type())
 #define GTK_GST_SINK(obj)            (G_TYPE_CHECK_INSTANCE_CAST((obj),GTK_TYPE_GST_SINK,GtkGstSink))
