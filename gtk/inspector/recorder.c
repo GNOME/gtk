@@ -117,7 +117,7 @@ object_property_get_property (GObject    *object,
       break;
 
     case OBJECT_PROPERTY_PROP_VALUE:
-      g_value_set_string (value, self->value);
+      g_value_set_string (value, self->value ? self->value : "");
       break;
 
     case OBJECT_PROPERTY_PROP_TEXTURE:
@@ -854,11 +854,19 @@ get_linear_gradient_texture (gsize n_stops, const GskColorStop *stops)
 }
 
 static void
+list_store_adopt (GListStore *store,
+                  gpointer    object)
+{
+  g_list_store_append (store, object);
+  g_object_unref (object);
+}
+
+static void
 add_text_row (GListStore *store,
               const char *name,
               const char *text)
 {
-  g_list_store_append (store, object_property_new (name, text, NULL));
+  list_store_adopt (store, object_property_new (name, text, NULL));
 }
 
 static void
@@ -871,7 +879,7 @@ add_color_row (GListStore    *store,
 
   text = gdk_rgba_to_string (color);
   texture = get_color_texture (color);
-  g_list_store_append (store, object_property_new (name, text, texture));
+  list_store_adopt (store, object_property_new (name, text, texture));
   g_free (text);
   g_object_unref (texture);
 }
@@ -971,14 +979,14 @@ populate_render_node_properties (GListStore    *store,
         texture = gdk_texture_new_for_surface (drawn_surface);
         cairo_surface_destroy (drawn_surface);
 
-        g_list_store_append (store, object_property_new ("Surface", "", texture));
+        list_store_adopt (store, object_property_new ("Surface", NULL, texture));
       }
       break;
 
     case GSK_TEXTURE_NODE:
       {
         GdkTexture *texture = g_object_ref (gsk_texture_node_get_texture (node));
-        g_list_store_append (store, object_property_new ("Texture", "", texture));
+        list_store_adopt (store, object_property_new ("Texture", NULL, texture));
       }
       break;
 
@@ -986,7 +994,7 @@ populate_render_node_properties (GListStore    *store,
       {
         GdkTexture *texture = g_object_ref (gsk_texture_scale_node_get_texture (node));
         GskScalingFilter filter = gsk_texture_scale_node_get_filter (node);
-        g_list_store_append (store, object_property_new ("Texture", "", texture));
+        list_store_adopt (store, object_property_new ("Texture", NULL, texture));
 
         tmp = g_enum_to_string (GSK_TYPE_SCALING_FILTER, filter);
         add_text_row (store, "Filter", tmp);
@@ -1022,7 +1030,7 @@ populate_render_node_properties (GListStore    *store,
           }
 
         texture = get_linear_gradient_texture (n_stops, stops);
-        g_list_store_append (store, object_property_new ("Color Stops", s->str, texture));
+        list_store_adopt (store, object_property_new ("Color Stops", s->str, texture));
         g_object_unref (texture);
 
         g_string_free (s, TRUE);
@@ -1064,7 +1072,7 @@ populate_render_node_properties (GListStore    *store,
           }
 
         texture = get_linear_gradient_texture (n_stops, stops);
-        g_list_store_append (store, object_property_new ("Color Stops", s->str, texture));
+        list_store_adopt (store, object_property_new ("Color Stops", s->str, texture));
         g_object_unref (texture);
 
         g_string_free (s, TRUE);
@@ -1098,7 +1106,7 @@ populate_render_node_properties (GListStore    *store,
           }
 
         texture = get_linear_gradient_texture (n_stops, stops);
-        g_list_store_append (store, object_property_new ("Color Stops", s->str, texture));
+        list_store_adopt (store, object_property_new ("Color Stops", s->str, texture));
         g_object_unref (texture);
 
         g_string_free (s, TRUE);
@@ -1147,7 +1155,7 @@ populate_render_node_properties (GListStore    *store,
             text = gdk_rgba_to_string (&colors[i]);
             tmp = g_strdup_printf ("%.2f, %s", widths[i], text);
             texture = get_color_texture (&colors[i]);
-            g_list_store_append (store, object_property_new (name[i], tmp, texture));
+            list_store_adopt (store, object_property_new (name[i], tmp, texture));
             g_object_unref (texture);
 
             g_free (text);
