@@ -46,7 +46,6 @@ gdk_wayland_subsurface_finalize (GObject *object)
   g_clear_pointer (&self->viewport, wp_viewport_destroy);
   g_clear_pointer (&self->subsurface, wl_subsurface_destroy);
   g_clear_pointer (&self->surface, wl_surface_destroy);
-  g_clear_pointer (&self->subsurface, wl_subsurface_destroy);
 
   G_OBJECT_CLASS (gdk_wayland_subsurface_parent_class)->finalize (object);
 }
