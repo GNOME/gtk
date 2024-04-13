@@ -208,7 +208,7 @@ gdk_subsurface_get_dest (GdkSubsurface   *subsurface,
 gboolean
 gdk_subsurface_is_above_parent (GdkSubsurface *subsurface)
 {
-  g_return_val_if_fail (GDK_IS_SUBSURFACE (subsurface), FALSE);
+  g_return_val_if_fail (GDK_IS_SUBSURFACE (subsurface), TRUE);
 
   return subsurface->above_parent;
 }
@@ -219,14 +219,4 @@ gdk_subsurface_get_transform (GdkSubsurface *subsurface)
   g_return_val_if_fail (GDK_IS_SUBSURFACE (subsurface), GDK_TEXTURE_TRANSFORM_NORMAL);
 
   return GDK_SUBSURFACE_GET_CLASS (subsurface)->get_transform (subsurface);
-}
-
-void
-gdk_subsurface_get_background (GdkSubsurface   *subsurface,
-                               graphene_rect_t *background)
-{
-  g_return_if_fail (GDK_IS_SUBSURFACE (subsurface));
-  g_return_if_fail (background != NULL);
-
-  GDK_SUBSURFACE_GET_CLASS (subsurface)->get_background (subsurface, background);
 }

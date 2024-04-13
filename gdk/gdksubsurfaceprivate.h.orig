@@ -78,8 +78,6 @@ struct _GdkSubsurfaceClass
                                     graphene_rect_t       *dest);
   GdkTextureTransform
                (* get_transform)   (GdkSubsurface         *subsurface);
-  void         (* get_background)  (GdkSubsurface         *subsurface,
-                                    graphene_rect_t       *background);
 };
 
 GType           gdk_subsurface_get_type        (void) G_GNUC_CONST;
@@ -99,12 +97,10 @@ GdkTexture *    gdk_subsurface_get_texture     (GdkSubsurface         *subsurfac
 void            gdk_subsurface_get_source      (GdkSubsurface         *subsurface,
                                                 graphene_rect_t       *source);
 void            gdk_subsurface_get_dest        (GdkSubsurface         *subsurface,
-                                                graphene_rect_t       *dest);
+                                               graphene_rect_t       *dest);
 gboolean        gdk_subsurface_is_above_parent (GdkSubsurface         *subsurface);
 GdkTextureTransform
                 gdk_subsurface_get_transform   (GdkSubsurface         *subsurface);
-void            gdk_subsurface_get_background  (GdkSubsurface         *subsurface,
-                                                graphene_rect_t       *background);
 
 
 G_END_DECLS

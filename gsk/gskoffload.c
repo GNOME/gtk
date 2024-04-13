@@ -691,6 +691,7 @@ gsk_offload_new (GdkSurface     *surface,
                                                         &info->source,
                                                         &info->dest,
                                                         info->transform,
+                                                        &GRAPHENE_RECT_INIT (0, 0, 0, 0),
                                                         TRUE, NULL);
           else
             info->is_offloaded = gdk_subsurface_attach (info->subsurface,
@@ -698,6 +699,7 @@ gsk_offload_new (GdkSurface     *surface,
                                                         &info->source,
                                                         &info->dest,
                                                         info->transform,
+                                                        &GRAPHENE_RECT_INIT (0, 0, 0, 0),
                                                         info->place_above != NULL,
                                                         info->place_above);
         }
