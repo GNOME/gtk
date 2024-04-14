@@ -210,11 +210,11 @@ collect_offload_info (GdkSurface *surface,
                                   gdk_texture_get_width (info->texture),
                                   gdk_texture_get_height (info->texture));
           g_string_append_printf (s, "source: %g %g %g %g, ",
-                                  info->source.origin.x, info->source.origin.y,
-                                  info->source.size.width, info->source.size.height);
+                                  info->source_rect.origin.x, info->source_rect.origin.y,
+                                  info->source_rect.size.width, info->source_rect.size.height);
           g_string_append_printf (s, "dest: %g %g %g %g\n",
-                                  info->dest.origin.x, info->dest.origin.y,
-                                  info->dest.size.width, info->dest.size.height);
+                                  info->texture_rect.origin.x, info->texture_rect.origin.y,
+                                  info->texture_rect.size.width, info->texture_rect.size.height);
         }
       else
         g_string_append_printf (s, "%u: %snot offloaded\n",
@@ -416,8 +416,11 @@ parse_node_file (GFile *file, const char *generate)
   g_assert_no_error (error);
   if (diff && g_bytes_get_size (diff) > 0)
     {
-      g_print ("Resulting .offload file doesn't match reference:\n%s\n",
+      char *basename = g_path_get_basename (reference_file);
+      g_print ("Resulting file doesn't match reference (%s):\n%s\n",
+               basename,
                (const char *) g_bytes_get_data (diff, NULL));
+      g_free (basename);
       result = FALSE;
     }
 
@@ -452,8 +455,11 @@ parse_node_file (GFile *file, const char *generate)
       g_assert_no_error (error);
       if (diff && g_bytes_get_size (diff) > 0)
         {
-          g_print ("Resulting .offload2 file doesn't match reference:\n%s\n",
+          char *basename = g_path_get_basename (reference_file);
+          g_print ("Resulting file doesn't match reference (%s):\n%s\n",
+                   basename,
                    (const char *) g_bytes_get_data (diff, NULL));
+          g_free (basename);
           result = FALSE;
         }
 

@@ -83,8 +83,8 @@ find_texture_transform (GskTransform *transform)
 static GdkTexture *
 find_texture_to_attach (GskOffload           *self,
                         const GskRenderNode  *subsurface_node,
-                        graphene_rect_t      *out_bounds,
-                        graphene_rect_t      *out_clip,
+                        graphene_rect_t      *out_texture_rect,
+                        graphene_rect_t      *out_source_rect,
                         gboolean             *has_background,
                         GdkTextureTransform  *out_texture_transform)
 {
@@ -186,7 +186,7 @@ find_texture_to_attach (GskOffload           *self,
               }
             else
               {
-                gsk_transform_transform_bounds (transform, &node->bounds, out_bounds);
+                gsk_transform_transform_bounds (transform, &node->bounds, out_texture_rect);
                 clip = *c;
                 has_clip = TRUE;
               }
@@ -210,18 +210,18 @@ find_texture_to_attach (GskOffload           *self,
 
                 gsk_rect_intersection (&node->bounds, &clip, &clip);
 
-                out_clip->origin.x = (clip.origin.x - dx) * sx;
-                out_clip->origin.y = (clip.origin.y - dy) * sy;
-                out_clip->size.width = clip.size.width * sx;
-                out_clip->size.height = clip.size.height * sy;
+                out_source_rect->origin.x = (clip.origin.x - dx) * sx;
+                out_source_rect->origin.y = (clip.origin.y - dy) * sy;
+                out_source_rect->size.width = clip.size.width * sx;
+                out_source_rect->size.height = clip.size.height * sy;
               }
             else
               {
-                gsk_transform_transform_bounds (transform, &node->bounds, out_bounds);
-                out_clip->origin.x = 0;
-                out_clip->origin.y = 0;
-                out_clip->size.width = gdk_texture_get_width (texture);
-                out_clip->size.height = gdk_texture_get_height (texture);
+                gsk_transform_transform_bounds (transform, &node->bounds, out_texture_rect);
+                out_source_rect->origin.x = 0;
+                out_source_rect->origin.y = 0;
+                out_source_rect->size.width = gdk_texture_get_width (texture);
+                out_source_rect->size.height = gdk_texture_get_height (texture);
               }
 
             ret = texture;
@@ -479,8 +479,8 @@ visit_node (GskOffload    *self,
 
       if (info->can_raise)
         {
-          if (gsk_rect_intersects (&transformed_bounds, &info->dest) ||
-              gsk_rect_intersects (&transformed_bounds, &info->bg))
+          if (gsk_rect_intersects (&transformed_bounds, &info->texture_rect) ||
+              gsk_rect_intersects (&transformed_bounds, &info->background_rect))
             {
               GskRenderNodeType type = GSK_RENDER_NODE_TYPE (node);
 
@@ -653,17 +653,14 @@ complex_clip:
           {
             gboolean has_background;
 
-            info->texture = find_texture_to_attach (self, node, &info->dest, &info->source, &has_background, &info->transform);
+            info->texture = find_texture_to_attach (self, node, &info->texture_rect, &info->source_rect, &has_background, &info->transform);
             if (info->texture)
               {
                 info->can_offload = TRUE;
                 info->can_raise = TRUE;
-                transform_bounds (self, &info->dest, &info->dest);
-                if (has_background)
-                  transform_bounds (self, &node->bounds, &info->bg);
-                else
-                  graphene_rect_init (&info->bg, 0, 0, 0, 0);
-
+                transform_bounds (self, &info->texture_rect, &info->texture_rect);
+                info->has_background = has_background;
+                transform_bounds (self, &node->bounds, &info->background_rect);
                 info->place_above = self->last_info ? self->last_info->subsurface : NULL;
                 self->last_info = info;
               }
@@ -703,9 +700,12 @@ gsk_offload_new (GdkSurface     *surface,
   for (gsize i = 0; i < self->n_subsurfaces; i++)
     {
       GskOffloadInfo *info = &self->subsurfaces[i];
+      graphene_rect_t rect;
+
       info->subsurface = gdk_surface_get_subsurface (self->surface, i);
       info->was_offloaded = gdk_subsurface_get_texture (info->subsurface) != NULL;
       info->was_above = gdk_subsurface_is_above_parent (info->subsurface);
+      info->had_background = gdk_subsurface_get_background_rect (info->subsurface, &rect);
     }
 
   if (self->n_subsurfaces > 0)
@@ -732,18 +732,18 @@ gsk_offload_new (GdkSurface     *surface,
           if (info->can_raise)
             info->is_offloaded = gdk_subsurface_attach (info->subsurface,
                                                         info->texture,
-                                                        &info->source,
-                                                        &info->dest,
+                                                        &info->source_rect,
+                                                        &info->texture_rect,
                                                         info->transform,
-                                                        &info->bg,
+                                                        info->has_background ? &info->background_rect : NULL,
                                                         TRUE, NULL);
           else
             info->is_offloaded = gdk_subsurface_attach (info->subsurface,
                                                         info->texture,
-                                                        &info->source,
-                                                        &info->dest,
+                                                        &info->source_rect,
+                                                        &info->texture_rect,
                                                         info->transform,
-                                                        &info->bg,
+                                                        info->has_background ? &info->background_rect : NULL,
                                                         info->place_above != NULL,
                                                         info->place_above);
         }
