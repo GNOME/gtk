@@ -725,8 +725,8 @@ gsk_offload_new (GdkSurface     *surface,
       graphene_rect_t old_dest;
       graphene_rect_t old_background;
 
-      gdk_subsurface_get_dest (info->subsurface, &old_dest);
-      gdk_subsurface_get_background (info->subsurface, &old_background);
+      gdk_subsurface_get_texture_rect (info->subsurface, &old_dest);
+      gdk_subsurface_get_background_rect (info->subsurface, &old_background);
 
       if (info->can_offload)
         {

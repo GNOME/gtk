@@ -601,27 +601,27 @@ gdk_wayland_subsurface_get_texture (GdkSubsurface *sub)
 }
 
 static void
-gdk_wayland_subsurface_get_dest (GdkSubsurface   *sub,
-                                 graphene_rect_t *dest)
+gdk_wayland_subsurface_get_texture_rect (GdkSubsurface   *sub,
+                                         graphene_rect_t *rect)
 {
   GdkWaylandSubsurface *self = GDK_WAYLAND_SUBSURFACE (sub);
 
-  dest->origin.x = self->dest.x;
-  dest->origin.y = self->dest.y;
-  dest->size.width = self->dest.width;
-  dest->size.height = self->dest.height;
+  rect->origin.x = self->dest.x;
+  rect->origin.y = self->dest.y;
+  rect->size.width = self->dest.width;
+  rect->size.height = self->dest.height;
 }
 
 static void
-gdk_wayland_subsurface_get_source (GdkSubsurface   *sub,
-                                   graphene_rect_t *source)
+gdk_wayland_subsurface_get_source_rect (GdkSubsurface   *sub,
+                                        graphene_rect_t *rect)
 {
   GdkWaylandSubsurface *self = GDK_WAYLAND_SUBSURFACE (sub);
 
-  source->origin.x = self->source.origin.x;
-  source->origin.y = self->source.origin.y;
-  source->size.width = self->source.size.width;
-  source->size.height = self->source.size.height;
+  rect->origin.x = self->source.origin.x;
+  rect->origin.y = self->source.origin.y;
+  rect->size.width = self->source.size.width;
+  rect->size.height = self->source.size.height;
 }
 
 static GdkTextureTransform
@@ -632,16 +632,18 @@ gdk_wayland_subsurface_get_transform (GdkSubsurface *sub)
   return wl_output_transform_to_gdk (self->transform);
 }
 
-static void
-gdk_wayland_subsurface_get_background (GdkSubsurface   *sub,
-                                       graphene_rect_t *background)
+static gboolean
+gdk_wayland_subsurface_get_background_rect (GdkSubsurface   *sub,
+                                            graphene_rect_t *rect)
 {
   GdkWaylandSubsurface *self = GDK_WAYLAND_SUBSURFACE (sub);
 
-  background->origin.x = self->bg_rect.x;
-  background->origin.y = self->bg_rect.y;
-  background->size.width = self->bg_rect.width;
-  background->size.height = self->bg_rect.height;
+  rect->origin.x = self->bg_rect.x;
+  rect->origin.y = self->bg_rect.y;
+  rect->size.width = self->bg_rect.width;
+  rect->size.height = self->bg_rect.height;
+
+  return rect->size.width > 0 && rect->size.height > 0;
 }
 
 static void
@@ -655,10 +657,10 @@ gdk_wayland_subsurface_class_init (GdkWaylandSubsurfaceClass *class)
   subsurface_class->attach = gdk_wayland_subsurface_attach;
   subsurface_class->detach = gdk_wayland_subsurface_detach;
   subsurface_class->get_texture = gdk_wayland_subsurface_get_texture;
-  subsurface_class->get_source = gdk_wayland_subsurface_get_source;
-  subsurface_class->get_dest = gdk_wayland_subsurface_get_dest;
+  subsurface_class->get_source_rect = gdk_wayland_subsurface_get_source_rect;
+  subsurface_class->get_texture_rect = gdk_wayland_subsurface_get_texture_rect;
   subsurface_class->get_transform = gdk_wayland_subsurface_get_transform;
-  subsurface_class->get_background = gdk_wayland_subsurface_get_background;
+  subsurface_class->get_background_rect = gdk_wayland_subsurface_get_background_rect;
 };
 
 static void

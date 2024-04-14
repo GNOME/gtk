@@ -47,11 +47,11 @@ test_subsurface_basics (void)
   g_assert_true (gdk_subsurface_get_texture (sub) == texture);
   g_assert_true (gdk_subsurface_is_above_parent (sub));
   g_assert_true (gdk_subsurface_get_transform (sub) == GDK_TEXTURE_TRANSFORM_90);
-  gdk_subsurface_get_source (sub, &rect);
+  gdk_subsurface_get_source_rect (sub, &rect);
   g_assert_true (graphene_rect_equal (&rect, &TEXTURE_RECT (texture)));
-  gdk_subsurface_get_dest (sub, &rect);
+  gdk_subsurface_get_texture_rect (sub, &rect);
   g_assert_true (graphene_rect_equal (&rect, &GRAPHENE_RECT_INIT (0, 0, 10, 10)));
-  gdk_subsurface_get_background (sub, &rect);
+  gdk_subsurface_get_background_rect (sub, &rect);
   g_assert_true (graphene_rect_equal (&rect, &GRAPHENE_RECT_INIT (0, 0, 20, 20)));
 
   g_object_unref (sub);
