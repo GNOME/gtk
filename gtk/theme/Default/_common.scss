@@ -3940,7 +3940,9 @@ video {
     min-height: 64px;
     border-radius: 32px;
   }
-  background: black;
+  & graphicsoffload > picture {
+    background: black;
+  }
 }
 
 /************
