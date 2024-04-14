@@ -722,11 +722,10 @@ gsk_offload_new (GdkSurface     *surface,
   for (gsize i = 0; i < self->n_subsurfaces; i++)
     {
       GskOffloadInfo *info = &self->subsurfaces[i];
-      graphene_rect_t old_dest;
-      graphene_rect_t old_background;
+      graphene_rect_t old_bounds;
+      graphene_rect_t bounds;
 
-      gdk_subsurface_get_texture_rect (info->subsurface, &old_dest);
-      gdk_subsurface_get_background_rect (info->subsurface, &old_background);
+      gdk_subsurface_get_bounds (info->subsurface, &old_bounds);
 
       if (info->can_offload)
         {
@@ -764,27 +763,23 @@ gsk_offload_new (GdkSurface     *surface,
           info->is_above = TRUE;
         }
 
+      gdk_subsurface_get_bounds (info->subsurface, &bounds);
+
       if (info->is_offloaded != info->was_offloaded ||
           info->is_above != info->was_above ||
-          (info->is_offloaded &&
-           (!gsk_rect_equal (&info->dest, &old_dest) ||
-            !gsk_rect_equal (&info->bg, &old_background))))
+          (info->is_offloaded && !gsk_rect_equal (&bounds, &old_bounds)))
         {
           /* We changed things, need to invalidate everything */
           cairo_rectangle_int_t rect;
 
           if (info->is_offloaded)
             {
-              gsk_rect_to_cairo_grow (&info->dest, &rect);
-              cairo_region_union_rectangle (diff, &rect);
-              gsk_rect_to_cairo_grow (&info->bg, &rect);
+              gsk_rect_to_cairo_grow (&bounds, &rect);
               cairo_region_union_rectangle (diff, &rect);
             }
           if (info->was_offloaded)
             {
-              gsk_rect_to_cairo_grow (&old_dest, &rect);
-              cairo_region_union_rectangle (diff, &rect);
-              gsk_rect_to_cairo_grow (&old_background, &rect);
+              gsk_rect_to_cairo_grow (&old_bounds, &rect);
               cairo_region_union_rectangle (diff, &rect);
             }
         }
