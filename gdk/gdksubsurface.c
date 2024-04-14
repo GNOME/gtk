@@ -200,7 +200,7 @@ gdk_subsurface_get_dest (GdkSubsurface   *subsurface,
 gboolean
 gdk_subsurface_is_above_parent (GdkSubsurface *subsurface)
 {
-  g_return_val_if_fail (GDK_IS_SUBSURFACE (subsurface), TRUE);
+  g_return_val_if_fail (GDK_IS_SUBSURFACE (subsurface), FALSE);
 
   return subsurface->above_parent;
 }
