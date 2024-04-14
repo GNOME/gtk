@@ -54,6 +54,8 @@
 #include "linux-dmabuf-unstable-v1-client-protocol.h"
 #include "presentation-time-client-protocol.h"
 
+#include "gsk/gskrectprivate.h"
+
 
 /**
  * GdkWaylandSurface:
@@ -657,6 +659,7 @@ static void
 gdk_wayland_surface_sync_opaque_region (GdkSurface *surface)
 {
   GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
+  GdkWaylandDisplay *display = GDK_WAYLAND_DISPLAY (gdk_surface_get_display (surface));
   struct wl_region *wl_region = NULL;
 
   if (!impl->display_server.wl_surface)
@@ -679,16 +682,21 @@ gdk_wayland_surface_sync_opaque_region (GdkSurface *surface)
                 continue;
 
               if (sub->texture != NULL)
-                cairo_region_subtract_rectangle (region, &sub->dest);
+                {
+                  graphene_rect_t bounds;
+                  cairo_rectangle_int_t rect;
+
+                  gdk_subsurface_get_bounds (subsurface, &bounds);
+                  gsk_rect_to_cairo_grow (&bounds, &rect);
+                  cairo_region_subtract_rectangle (region, &rect);
+                }
             }
 
-          wl_region = wl_region_from_cairo_region (GDK_WAYLAND_DISPLAY (gdk_surface_get_display (surface)),
-                                                   region);
+          wl_region = wl_region_from_cairo_region (display, region);
           cairo_region_destroy (region);
         }
       else
-        wl_region = wl_region_from_cairo_region (GDK_WAYLAND_DISPLAY (gdk_surface_get_display (surface)),
-                                                 impl->opaque_region);
+        wl_region = wl_region_from_cairo_region (display, impl->opaque_region);
     }
 
   wl_surface_set_opaque_region (impl->display_server.wl_surface, wl_region);
