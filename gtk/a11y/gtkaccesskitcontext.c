@@ -527,6 +527,7 @@ gtk_accesskit_context_build_node (GtkAccessKitContext      *self,
   accesskit_node_builder *builder = accesskit_node_builder_new (role);
   GtkAccessible *accessible = gtk_at_context_get_accessible (ctx);
   GtkAccessible *child = gtk_accessible_get_first_accessible_child (accessible);
+  gchar *str;
 
   while (child)
     {
@@ -540,6 +541,11 @@ gtk_accesskit_context_build_node (GtkAccessKitContext      *self,
       g_object_unref (child);
       child = next;
     }
+
+  str = gtk_at_context_get_name (ctx);
+  if (str && *str)
+    accesskit_node_builder_set_name (builder, str);
+  g_free (str);
 
   /* TODO: properties */
 
