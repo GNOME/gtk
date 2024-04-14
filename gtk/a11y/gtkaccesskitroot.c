@@ -71,8 +71,8 @@ gtk_accesskit_root_finalize (GObject *gobject)
   GtkAccessKitRoot *self = GTK_ACCESSKIT_ROOT (gobject);
 
   g_clear_pointer (&self->node_classes, accesskit_node_class_set_free);
-  g_hash_table_destroy (self->contexts);
-  g_clear_pointer (&self->contexts, g_slist_free);
+  g_clear_pointer (&self->contexts, g_hash_table_destroy);
+  g_clear_pointer (&self->update_queue, g_slist_free);
   g_clear_handle_id (&self->update_id, g_source_remove);
 
 #if defined(GDK_WINDOWING_WIN32)
@@ -344,7 +344,7 @@ add_to_update_queue (GtkAccessKitRoot *self, guint id)
         return;
     }
 
-  g_slist_prepend (self->update_queue, data);
+  self->update_queue = g_slist_prepend (self->update_queue, data);
 }
 
 guint32
@@ -364,7 +364,7 @@ void
 gtk_accesskit_root_remove_context (GtkAccessKitRoot *self, guint32 id)
 {
   g_hash_table_remove (self->contexts, GUINT_TO_POINTER (id));
-  g_slist_remove (self->update_queue, GUINT_TO_POINTER (id));
+  self->update_queue = g_slist_remove (self->update_queue, GUINT_TO_POINTER (id));
 }
 
 static accesskit_tree_update *
