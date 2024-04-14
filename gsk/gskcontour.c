@@ -556,7 +556,7 @@ gsk_standard_contour_init (GskContour             *contour,
                            gsize                   n_points,
                            const gskpathop        *ops,
                            gsize                   n_ops,
-                           ptrdiff_t               offset);
+                           gssize                  offset);
 
 static void
 gsk_standard_contour_copy (const GskContour *contour,
