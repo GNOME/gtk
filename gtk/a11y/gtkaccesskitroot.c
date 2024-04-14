@@ -27,6 +27,8 @@
 
 #if defined(GDK_WINDOWING_WIN32)
 #include "win32/gdkwin32.h"
+#elif defined(GDK_WINDOWING_WAYLAND)
+#include "wayland/gdkwayland.h"
 #endif
 
 #include <accesskit.h>
@@ -46,6 +48,8 @@ struct _GtkAccessKitRoot
 
 #if defined(GDK_WINDOWING_WIN32)
   accesskit_windows_subclassing_adapter *adapter;
+#elif defined(GDK_WINDOWING_WAYLAND)
+  accesskit_newton_adapter *adapter;
 /* TODO: other platforms */
 #endif
 };
@@ -73,6 +77,8 @@ gtk_accesskit_root_finalize (GObject *gobject)
 
 #if defined(GDK_WINDOWING_WIN32)
   g_clear_pointer (&self->adapter, accesskit_windows_subclassing_adapter_free);
+#elif defined(GDK_WINDOWING_WAYLAND)
+  g_clear_pointer (&self->adapter, accesskit_newton_adapter_free);
 /* TODO: other platforms */
 #endif
 
@@ -205,6 +211,19 @@ update_if_active (GtkAccessKitRoot *self, accesskit_tree_update_factory factory)
                                                             factory, self);
   if (events)
     accesskit_windows_queued_events_raise (events);
+#elif defined(GDK_WINDOWING_WAYLAND)
+  /* TBD: Newton treats accessibility tree updates as double-buffered state,
+     meaning the surface has to be committed after the update is sent.
+     Can we more tightly integrate accessibility updates with rendering,
+     so everything happens atomically as intended, rather than queuing
+     an idle callback for the accessibility update, then committing
+     the surface? */
+  GdkSurface *surface = gtk_native_get_surface (GTK_NATIVE (self->root_widget));
+  struct wl_surface *wl_surface =
+    gdk_wayland_surface_get_wl_surface (GDK_WAYLAND_SURFACE (surface));
+
+  accesskit_newton_adapter_update_if_active (self->adapter, factory, self);
+  wl_surface_commit (wl_surface);
 /* TODO: other platforms */
 #endif
 }
@@ -262,6 +281,17 @@ gtk_accesskit_root_constructed (GObject *gobject)
     accesskit_windows_subclassing_adapter_new (GDK_SURFACE_HWND (surface),
                                                request_initial_tree_main_thread,
                                                self, do_action, self);
+#elif defined(GDK_WINDOWING_WAYLAND)
+  GdkDisplay *display = gtk_root_get_display (self->root_widget);
+  struct wl_display *wl_display =
+    gdk_wayland_display_get_wl_display (GDK_WAYLAND_DISPLAY (display));
+  struct wl_surface *wl_surface =
+    gdk_wayland_surface_get_wl_surface (GDK_WAYLAND_SURFACE (surface));
+  self->adapter =
+    accesskit_newton_adapter_new (wl_display, wl_surface,
+                                  request_initial_tree_other_thread, self,
+                                  do_action, self,
+                                  deactivate_accessibility, self);
 /* TODO: other platforms */
 #endif
 
