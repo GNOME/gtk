@@ -3855,6 +3855,7 @@ gtk_window_show (GtkWidget *widget)
   gtk_css_node_validate (gtk_widget_get_css_node (widget));
 
   gtk_widget_realize (widget);
+  gtk_widget_realize_at_context (widget);
 
   gtk_window_present_toplevel (window);
 

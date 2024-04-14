@@ -46,8 +46,14 @@ struct _GtkAccessKitContext
   /* Root object for the surface */
   GtkAccessKitRoot *root;
 
-  /* The AccessKit node ID; meaningless if root is null */
-  accesskit_node_id id;
+  /* The AccessKit node ID; meaningless if root is null. Note that this ID
+     is not a full 64-bit AccessKit node ID, for two reasons:
+     1. It isn't possible to convert 64-bit integers to pointers
+        (as required to use these IDs as GHashTable keys) on all platforms.
+     2. By using only 32 bits for the IDs of AT contexts, we can use the other
+        32 bits to identify inline text boxes or other children within
+        a given context. */
+  guint32 id;
 };
 
 G_DEFINE_TYPE (GtkAccessKitContext, gtk_accesskit_context, GTK_TYPE_AT_CONTEXT)
@@ -75,8 +81,10 @@ gtk_accesskit_context_realize (GtkATContext *context)
       GtkAccessible *parent = gtk_accessible_get_accessible_parent (accessible);
       GtkATContext *parent_ctx = gtk_accessible_get_at_context (parent);
       GtkAccessKitContext *parent_accesskit_ctx = GTK_ACCESSKIT_CONTEXT (parent_ctx);
-      self->root = parent_accesskit_ctx->root;
-      g_object_ref (self->root);
+      gtk_at_context_realize (parent_ctx);
+      self->root = g_object_ref (parent_accesskit_ctx->root);
+      g_object_unref (parent_ctx);
+      g_object_unref (parent);
     }
 
   self->id = gtk_accesskit_root_add_context (self->root, self);
@@ -99,7 +107,10 @@ gtk_accesskit_context_unrealize (GtkATContext *context)
 static void
 queue_update (GtkAccessKitContext *self)
 {
-  /* TODO */
+  if (!self->root)
+    return;
+
+  gtk_accesskit_root_queue_update (self->root, self->id);
 }
 
 static void
@@ -123,7 +134,6 @@ gtk_accesskit_context_platform_change (GtkATContext                *ctx,
   GtkAccessKitContext *self = GTK_ACCESSKIT_CONTEXT (ctx);
 
   queue_update (self);
-  /* TODO: anything else? */
 }
 
 static void
@@ -142,7 +152,6 @@ gtk_accesskit_context_child_change (GtkATContext             *ctx,
   GtkAccessKitContext *self = GTK_ACCESSKIT_CONTEXT (ctx);
 
   queue_update (self);
-  /* TODO: when a child is added, mark the whole subtree for updating? */
 }
 
 static void
@@ -230,7 +239,7 @@ gtk_accessible_role_to_accesskit_role (GtkAccessibleRole role)
       return ACCESSKIT_ROLE_ALERT_DIALOG;
 
     case GTK_ACCESSIBLE_ROLE_APPLICATION:
-      return ACCESSKIT_ROLE_APPLICATION;
+      return ACCESSKIT_ROLE_WINDOW;
 
     case GTK_ACCESSIBLE_ROLE_ARTICLE:
       return ACCESSKIT_ROLE_ARTICLE;
@@ -502,7 +511,7 @@ accesskit_role_for_context (GtkATContext *context)
   return gtk_accessible_role_to_accesskit_role (role);
 }
 
-accesskit_node_id
+guint32
 gtk_accesskit_context_get_id (GtkAccessKitContext *self)
 {
   g_assert (self->root);
@@ -523,10 +532,13 @@ gtk_accesskit_context_build_node (GtkAccessKitContext      *self,
     {
       GtkATContext *child_ctx = gtk_accessible_get_at_context (child);
       GtkAccessKitContext *child_accesskit_ctx = GTK_ACCESSKIT_CONTEXT (child_ctx);
+      GtkAccessible *next = gtk_accessible_get_next_accessible_sibling (child);
 
       gtk_at_context_realize (child_ctx);
       accesskit_node_builder_push_child (builder, child_accesskit_ctx->id);
-      child = gtk_accessible_get_next_accessible_sibling (child);
+      g_object_unref (child_ctx);
+      g_object_unref (child);
+      child = next;
     }
 
   /* TODO: properties */

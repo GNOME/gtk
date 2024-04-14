@@ -34,13 +34,14 @@ G_DECLARE_FINAL_TYPE (GtkAccessKitRoot, gtk_accesskit_root, GTK, ACCESSKIT_ROOT,
 GtkAccessKitRoot *
 gtk_accesskit_root_new (GtkRoot *root_widget);
 
-accesskit_node_id
+guint32
 gtk_accesskit_root_add_context (GtkAccessKitRoot    *self,
                                 GtkAccessKitContext *context);
 
 void
-gtk_accesskit_root_remove_context (GtkAccessKitRoot *self, accesskit_node_id id);
+gtk_accesskit_root_remove_context (GtkAccessKitRoot *self, guint32 id);
 
-/* TODO: declare functions */
+void
+gtk_accesskit_root_queue_update (GtkAccessKitRoot *self, guint32 id);
 
 G_END_DECLS

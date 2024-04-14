@@ -35,7 +35,7 @@ gtk_accesskit_create_context (GtkAccessibleRole  accessible_role,
                               GtkAccessible     *accessible,
                               GdkDisplay        *display);
 
-accesskit_node_id
+guint32
 gtk_accesskit_context_get_id (GtkAccessKitContext *self);
 
 accesskit_node *
