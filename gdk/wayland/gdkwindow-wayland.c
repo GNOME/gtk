@@ -1082,6 +1082,14 @@ gdk_window_impl_wayland_end_paint (GdkWindow *window)
 
       impl->pending_commit = TRUE;
     }
+  else if (window->current_paint.use_gl &&
+           window->current_paint.surface_needs_composite &&
+           impl->pending_commit)
+    {
+      /* Discard issuing pending commit, as when we reach here, it means it'll
+       * be done implicitly by eglSwapBuffers(). */
+      impl->pending_commit = FALSE;
+    }
 
   gdk_wayland_window_sync_margin (window);
   gdk_wayland_window_sync_opaque_region (window);
@@ -1714,6 +1722,7 @@ gdk_wayland_window_handle_configure (GdkWindow *window,
   GdkWindowImplWayland *impl = GDK_WINDOW_IMPL_WAYLAND (window->impl);
   GdkWaylandDisplay *display_wayland =
     GDK_WAYLAND_DISPLAY (gdk_window_get_display (window));
+  GdkFrameClock *frame_clock = gdk_window_get_frame_clock (window);
   GdkWindowState new_state;
   gboolean suspended;
   int width = impl->pending.width;
@@ -1863,6 +1872,10 @@ gdk_wayland_window_handle_configure (GdkWindow *window,
   if (impl->hint != GDK_WINDOW_TYPE_HINT_DIALOG &&
       new_state & GDK_WINDOW_STATE_FOCUSED)
     gdk_wayland_window_update_dialogs (window);
+
+  impl->pending_commit = TRUE;
+  gdk_frame_clock_request_phase (frame_clock,
+                                 GDK_FRAME_CLOCK_PHASE_AFTER_PAINT);
 }
 
 static void
