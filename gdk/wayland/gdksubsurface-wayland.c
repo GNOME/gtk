@@ -311,6 +311,7 @@ gdk_wayland_subsurface_attach (GdkSubsurface         *sub,
 {
   GdkWaylandSubsurface *self = GDK_WAYLAND_SUBSURFACE (sub);
   GdkWaylandSurface *parent = GDK_WAYLAND_SURFACE (sub->parent);
+  GdkWaylandDisplay *display = GDK_WAYLAND_DISPLAY (gdk_surface_get_display (sub->parent));
   struct wl_buffer *buffer = NULL;
   gboolean result = FALSE;
   GdkWaylandSubsurface *sib = sibling ? GDK_WAYLAND_SUBSURFACE (sibling) : NULL;
@@ -455,6 +456,12 @@ gdk_wayland_subsurface_attach (GdkSubsurface         *sub,
                          "Cannot offload non-opaque %dx%d texture below, hiding subsurface %p",
                          gdk_texture_get_width (texture),
                          gdk_texture_get_height (texture),
+                         self);
+    }
+  else if (has_background && !display->single_pixel_buffer)
+    {
+      GDK_DISPLAY_DEBUG (gdk_surface_get_display (sub->parent), OFFLOAD,
+                         "Cannot offload subsurface %p with background, no single-pixel buffer support",
                          self);
     }
   else
