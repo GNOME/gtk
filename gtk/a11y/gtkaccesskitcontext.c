@@ -542,6 +542,15 @@ gtk_accesskit_context_build_node (GtkAccessKitContext      *self,
       child = next;
     }
 
+  if (gtk_at_context_has_accessible_state (ctx, GTK_ACCESSIBLE_STATE_HIDDEN))
+    {
+      GtkAccessibleValue *value;
+
+      value = gtk_at_context_get_accessible_state (ctx, GTK_ACCESSIBLE_STATE_HIDDEN);
+      if (gtk_boolean_accessible_value_get (value))
+        accesskit_node_builder_set_hidden (builder);
+    }
+
   str = gtk_at_context_get_name (ctx);
   if (str && *str)
     accesskit_node_builder_set_name (builder, str);
