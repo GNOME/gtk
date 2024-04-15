@@ -150,6 +150,7 @@ gdk_subsurface_attach (GdkSubsurface         *subsurface,
                        GdkSubsurface         *sibling)
 {
   GdkSurface *parent = subsurface->parent;
+  gboolean result;
 
   g_return_val_if_fail (GDK_IS_SUBSURFACE (subsurface), FALSE);
   g_return_val_if_fail (GDK_IS_TEXTURE (texture), FALSE);
@@ -162,6 +163,15 @@ gdk_subsurface_attach (GdkSubsurface         *subsurface,
   g_return_val_if_fail (sibling != subsurface, FALSE);
   g_return_val_if_fail (sibling == NULL || GDK_IS_SUBSURFACE (sibling), FALSE);
   g_return_val_if_fail (sibling == NULL || sibling->parent == subsurface->parent, FALSE);
+
+  result = GDK_SUBSURFACE_GET_CLASS (subsurface)->attach (subsurface,
+                                                          texture,
+                                                          source,
+                                                          dest,
+                                                          transform,
+                                                          background,
+                                                          above,
+                                                          sibling);
 
   remove_subsurface (subsurface);
 
@@ -188,14 +198,7 @@ gdk_subsurface_attach (GdkSubsurface         *subsurface,
         }
     }
 
-  return GDK_SUBSURFACE_GET_CLASS (subsurface)->attach (subsurface,
-                                                        texture,
-                                                        source,
-                                                        dest,
-                                                        transform,
-                                                        background,
-                                                        above,
-                                                        sibling);
+  return result;
 }
 
 /*< private >
