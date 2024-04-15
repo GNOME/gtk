@@ -212,9 +212,14 @@ collect_offload_info (GdkSurface *surface,
           g_string_append_printf (s, "source: %g %g %g %g, ",
                                   info->source_rect.origin.x, info->source_rect.origin.y,
                                   info->source_rect.size.width, info->source_rect.size.height);
-          g_string_append_printf (s, "dest: %g %g %g %g\n",
+          g_string_append_printf (s, "dest: %g %g %g %g",
                                   info->texture_rect.origin.x, info->texture_rect.origin.y,
                                   info->texture_rect.size.width, info->texture_rect.size.height);
+          if (info->has_background)
+            g_string_append_printf (s, ", background: %g %g %g %g",
+                                    info->background_rect.origin.x, info->background_rect.origin.y,
+                                    info->background_rect.size.width, info->background_rect.size.height);
+          g_string_append (s, "\n");
         }
       else
         g_string_append_printf (s, "%u: %snot offloaded\n",

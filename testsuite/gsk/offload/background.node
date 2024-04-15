@@ -1,0 +1,71 @@
+container {
+
+  transform {
+    child: subsurface {
+      child: container {
+        color {
+          bounds: 0 0 100 100;
+          color: black;
+        }
+        texture {
+          texture: url('data:image/svg+xml;utf-8,<svg width="13" height="17"></svg>');
+        }
+      }
+    }
+  }
+
+  debug {
+    message: "Non-black background doesn't work";
+    child: subsurface {
+      child: container {
+        color {
+          bounds: 0 0 100 100;
+          color: red;
+        }
+        texture {
+          texture: url('data:image/svg+xml;utf-8,<svg width="13" height="17"></svg>');
+        }
+      }
+    }
+  }
+
+  debug {
+    message: "Can't have too much content";
+    child: subsurface {
+      child: container {
+        color {
+          bounds: 0 0 100 100;
+          color: black;
+        }
+        color {
+          bounds: 0 0 20 20;
+          color: red;
+        }
+        texture {
+          texture: url('data:image/svg+xml;utf-8,<svg width="13" height="17"></svg>');
+        }
+      }
+    }
+  }
+
+  debug {
+    message: "Texture can be deeper in";
+    child: subsurface {
+      child: container {
+        color {
+          bounds: 0 0 100 100;
+          color: black;
+        }
+        container {
+          debug {
+            message: "bla";
+            child: texture {
+              texture: url('data:image/svg+xml;utf-8,<svg width="13" height="17"></svg>');
+            }
+          }
+        }
+      }
+    }
+  }
+
+}
