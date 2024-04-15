@@ -35,7 +35,7 @@ The issue tracker is meant to be used for actionable issues only.
 
 You should not open a new issue for security related questions.
 
-When in doubt, follow [security](https://security.gnome.org/).
+When in doubt, follow the process for [GNOME security issues](https://security.gnome.org/).
 
 ### Bug reports
 
@@ -144,32 +144,27 @@ $ git clone https://gitlab.gnome.org/yourusername/gtk.git
 $ cd gtk
 ```
 
-**Note**: if you plan to push changes to back to the main repository and
-have a GNOME account, you can skip the fork, and use the following instead:
-
-```sh
-$ git clone git@gitlab.gnome.org:GNOME/gtk.git
-$ cd gtk
-```
-
 To compile the Git version of GTK on your system, you will need to
 configure your build using Meson:
 
 ```sh
-$ meson _builddir .
-$ cd _builddir
-$ ninja
+$ meson setup _builddir .
+$ meson compile -C _builddir
 ```
 
 Typically, you should work on your own branch:
 
 ```sh
-$ git checkout -b your-branch
+$ git switch -C your-branch
 ```
 
 Once you've finished working on the bug fix or feature, push the branch
 to the Git repository and open a new merge request, to let the GTK
 maintainers review your contribution.
+
+**Important**: Do **not** attach a diff or a patch file to a GitLab issue.
+Patches cannot be reviewed, and do not not go through the CI pipeline. If
+you wish to submit your changes to GTK, always use a merge request.
 
 ### Code reviews
 
@@ -262,4 +257,4 @@ people committing to GTK to follow a few rules:
 
 If you have been contributing to GTK for a while and you don't have commit
 access to the repository, you may ask to obtain it following the [GNOME account
-process](https://wiki.gnome.org/AccountsTeam/NewAccounts).
+process](https://handbook.gnome.org/infrastructure/developer-access.html).
