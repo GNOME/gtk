@@ -318,6 +318,14 @@ gdk_wayland_subsurface_attach (GdkSubsurface         *sub,
   double scale;
   graphene_rect_t device_rect;
   gboolean has_background;
+  enum wl_output_transform tf;
+  gboolean dest_changed = FALSE;
+  gboolean source_changed = FALSE;
+  gboolean transform_changed = FALSE;
+  gboolean stacking_changed = FALSE;
+  gboolean needs_commit = FALSE;
+  gboolean background_changed = FALSE;
+  gboolean needs_bg_commit = FALSE;
 
   if (sibling)
     will_be_above = sibling->above_parent;
@@ -330,22 +338,56 @@ gdk_wayland_subsurface_attach (GdkSubsurface         *sub,
       return FALSE;
     }
 
-  self->dest.x = dest->origin.x;
-  self->dest.y = dest->origin.y;
-  self->dest.width = dest->size.width;
-  self->dest.height = dest->size.height;
+  if (self->dest.x != dest->origin.x ||
+      self->dest.y != dest->origin.y ||
+      self->dest.width != dest->size.width ||
+      self->dest.height != dest->size.height)
+    {
+      self->dest.x = dest->origin.x;
+      self->dest.y = dest->origin.y;
+      self->dest.width = dest->size.width;
+      self->dest.height = dest->size.height;
+      dest_changed = TRUE;
+    }
 
-  self->source.origin.x = source->origin.x;
-  self->source.origin.y = source->origin.y;
-  self->source.size.width = source->size.width;
-  self->source.size.height = source->size.height;
+  if (!gsk_rect_equal (&self->source, source))
+    {
+      self->source.origin.x = source->origin.x;
+      self->source.origin.y = source->origin.y;
+      self->source.size.width = source->size.width;
+      self->source.size.height = source->size.height;
+      source_changed = TRUE;
+    }
 
-  self->transform = gdk_texture_transform_to_wl (transform);
+  tf = gdk_texture_transform_to_wl (transform);
+  if (self->transform != tf)
+    {
+      self->transform = tf;
+      transform_changed = TRUE;
+    }
+
+  if (sibling != gdk_subsurface_get_sibling (sub, above) ||
+      will_be_above != gdk_subsurface_is_above_parent (sub))
+    stacking_changed = TRUE;
+
+  if (self->texture == NULL)
+    {
+      dest_changed = TRUE;
+      source_changed = TRUE;
+      transform_changed = TRUE;
+      stacking_changed = TRUE;
+    }
 
   scale = gdk_fractional_scale_to_double (&parent->scale);
 
   if (background)
     {
+      background_changed =
+          !self->bg_attached ||
+          self->bg_rect.x != background->origin.x ||
+          self->bg_rect.y != background->origin.y ||
+          self->bg_rect.width != background->size.width ||
+          self->bg_rect.height != background->size.height;
       self->bg_rect.x = background->origin.x;
       self->bg_rect.y = background->origin.y;
       self->bg_rect.width = background->size.width;
@@ -353,6 +395,7 @@ gdk_wayland_subsurface_attach (GdkSubsurface         *sub,
     }
   else
     {
+      background_changed = self->bg_attached;
       self->bg_rect.x = 0;
       self->bg_rect.y = 0;
       self->bg_rect.width = 0;
@@ -360,6 +403,9 @@ gdk_wayland_subsurface_attach (GdkSubsurface         *sub,
     }
 
   has_background = self->bg_rect.width > 0 && self->bg_rect.height > 0;
+
+  if (has_background)
+    ensure_bg_surface (self);
 
   if (self->dest.x != dest->origin.x ||
       self->dest.y != dest->origin.y ||
@@ -470,14 +516,28 @@ gdk_wayland_subsurface_attach (GdkSubsurface         *sub,
 
   if (result)
     {
-      wl_surface_set_buffer_transform (self->surface, self->transform);
-      wl_subsurface_set_position (self->subsurface, self->dest.x, self->dest.y);
-      wp_viewport_set_destination (self->viewport, self->dest.width, self->dest.height);
-      wp_viewport_set_source (self->viewport,
-                              wl_fixed_from_double (self->source.origin.x),
-                              wl_fixed_from_double (self->source.origin.y),
-                              wl_fixed_from_double (self->source.size.width),
-                              wl_fixed_from_double (self->source.size.height));
+      if (transform_changed)
+        {
+          wl_surface_set_buffer_transform (self->surface, self->transform);
+          needs_commit = TRUE;
+        }
+
+      if (dest_changed)
+        {
+          wl_subsurface_set_position (self->subsurface, self->dest.x, self->dest.y);
+          wp_viewport_set_destination (self->viewport, self->dest.width, self->dest.height);
+          needs_commit = TRUE;
+        }
+
+      if (source_changed)
+        {
+          wp_viewport_set_source (self->viewport,
+                                  wl_fixed_from_double (self->source.origin.x),
+                                  wl_fixed_from_double (self->source.origin.y),
+                                  wl_fixed_from_double (self->source.size.width),
+                                  wl_fixed_from_double (self->source.size.height));
+          needs_commit = TRUE;
+        }
 
       if (buffer)
         {
@@ -486,38 +546,39 @@ gdk_wayland_subsurface_attach (GdkSubsurface         *sub,
                                     0, 0,
                                     gdk_texture_get_width (texture),
                                     gdk_texture_get_height (texture));
-
+          needs_commit = TRUE;
         }
 
       if (has_background)
         {
-          ensure_bg_surface (self);
-
-          if (self->bg_surface)
+          if (background_changed)
             {
               wl_subsurface_set_position (self->bg_subsurface, self->bg_rect.x, self->bg_rect.y);
               wp_viewport_set_destination (self->bg_viewport, self->bg_rect.width, self->bg_rect.height);
+              needs_bg_commit = TRUE;
+            }
+
+          if (!self->bg_attached)
+            {
+              self->bg_attached = TRUE;
+
               wp_viewport_set_source (self->bg_viewport,
                                       wl_fixed_from_int (0),
                                       wl_fixed_from_int (0),
                                       wl_fixed_from_int (1),
                                       wl_fixed_from_int (1));
-
-              if (!self->bg_attached)
-                {
-                  self->bg_attached = TRUE;
-
-                  wl_surface_attach (self->bg_surface, get_sp_buffer (self), 0, 0);
-                  wl_surface_damage_buffer (self->bg_surface, 0, 0, 1, 1);
-                }
+              wl_surface_attach (self->bg_surface, get_sp_buffer (self), 0, 0);
+              wl_surface_damage_buffer (self->bg_surface, 0, 0, 1, 1);
+              needs_bg_commit = TRUE;
             }
         }
       else
         {
-          if (self->bg_surface && self->bg_attached)
+          if (self->bg_attached)
             {
               self->bg_attached = FALSE;
               wl_surface_attach (self->bg_surface, NULL, 0, 0);
+              needs_bg_commit = TRUE;
             }
         }
 
@@ -525,42 +586,55 @@ gdk_wayland_subsurface_attach (GdkSubsurface         *sub,
     }
   else
     {
-      g_set_object (&self->texture, NULL);
+      if (g_set_object (&self->texture, NULL))
+        {
+          wl_surface_attach (self->surface, NULL, 0, 0);
+          needs_commit = TRUE;
+        }
 
-      wl_surface_attach (self->surface, NULL, 0, 0);
-      if (self->bg_surface)
+      if (self->bg_attached)
         {
           self->bg_attached = FALSE;
           wl_surface_attach (self->bg_surface, NULL, 0, 0);
+          needs_bg_commit = TRUE;
         }
     }
 
-  if (sib)
+  if (stacking_changed)
     {
-      if (above)
-        wl_subsurface_place_above (self->subsurface, sib->surface);
+      if (sib)
+        {
+          if (above)
+            wl_subsurface_place_above (self->subsurface, sib->surface);
+          else
+            wl_subsurface_place_below (self->subsurface, sib->surface);
+        }
       else
-        wl_subsurface_place_below (self->subsurface, sib->surface);
-    }
-  else
-    {
-      if (above)
-        wl_subsurface_place_above (self->subsurface,
-                                   GDK_WAYLAND_SURFACE (sub->parent)->display_server.wl_surface);
-      else
-        wl_subsurface_place_below (self->subsurface,
-                                   GDK_WAYLAND_SURFACE (sub->parent)->display_server.wl_surface);
+        {
+          if (above)
+            wl_subsurface_place_above (self->subsurface,
+                                       GDK_WAYLAND_SURFACE (sub->parent)->display_server.wl_surface);
+          else
+            wl_subsurface_place_below (self->subsurface,
+                                       GDK_WAYLAND_SURFACE (sub->parent)->display_server.wl_surface);
+        }
+      needs_commit = TRUE;
+
+      if (self->bg_attached)
+        {
+          wl_subsurface_place_below (self->bg_subsurface, self->surface);
+          needs_bg_commit = TRUE;
+        }
     }
 
-  if (self->bg_attached)
-    wl_subsurface_place_below (self->bg_subsurface, self->surface);
+  if (needs_commit)
+    wl_surface_commit (self->surface);
 
-  wl_surface_commit (self->surface);
-  if (self->bg_surface)
+  if (needs_bg_commit)
     wl_surface_commit (self->bg_surface);
 
-  ((GdkWaylandSurface *)sub->parent)->has_pending_subsurface_commits = TRUE;
-  GDK_WAYLAND_SURFACE (sub->parent)->opaque_region_dirty = TRUE;
+  ((GdkWaylandSurface *)sub->parent)->has_pending_subsurface_commits = needs_commit || needs_bg_commit;
+  GDK_WAYLAND_SURFACE (sub->parent)->opaque_region_dirty = stacking_changed || dest_changed || background_changed;
 
   return result;
 }
