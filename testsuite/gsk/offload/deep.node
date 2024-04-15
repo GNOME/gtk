@@ -43,7 +43,7 @@ subsurface {
 }
 subsurface {
   child: debug {
-    message: "Clips (regardless how large) are not ok";
+    message: "Clips are ok";
     child: clip {
       clip: 0 0 400 400;
       child: texture { }
