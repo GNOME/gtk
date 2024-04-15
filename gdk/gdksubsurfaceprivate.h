@@ -101,13 +101,14 @@ void            gdk_subsurface_get_source_rect     (GdkSubsurface         *subsu
 void            gdk_subsurface_get_texture_rect    (GdkSubsurface         *subsurface,
                                                     graphene_rect_t       *rect);
 gboolean        gdk_subsurface_is_above_parent     (GdkSubsurface         *subsurface);
+GdkSubsurface * gdk_subsurface_get_sibling         (GdkSubsurface         *subsurface,
+                                                    gboolean               above);
 GdkTextureTransform
                 gdk_subsurface_get_transform       (GdkSubsurface         *subsurface);
 gboolean        gdk_subsurface_get_background_rect (GdkSubsurface         *subsurface,
                                                     graphene_rect_t       *rect);
 void            gdk_subsurface_get_bounds          (GdkSubsurface         *subsurface,
                                                     graphene_rect_t       *bounds);
-
 
 G_END_DECLS
 

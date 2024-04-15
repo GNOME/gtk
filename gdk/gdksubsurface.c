@@ -286,6 +286,28 @@ gdk_subsurface_is_above_parent (GdkSubsurface *subsurface)
   return subsurface->above_parent;
 }
 
+/*< private>
+ * gdk_subsurface_get_sibling:
+ * @subsurface: the `GdkSubsurface`
+ * @above: whether to get the subsurface above
+ *
+ * Returns the subsurface above (or below) @subsurface in
+ * the stacking order.
+ *
+ * Returns: the sibling, or `NULL` if there is none.
+ */
+GdkSubsurface *
+gdk_subsurface_get_sibling (GdkSubsurface *subsurface,
+                            gboolean       above)
+{
+  g_return_val_if_fail (GDK_IS_SUBSURFACE (subsurface), NULL);
+
+  if (above)
+    return subsurface->sibling_above;
+  else
+    return subsurface->sibling_below;
+}
+
 /*< private >
  * gdk_subsurface_get_transform:
  * @subsurface: a `GdkSubsurface`
