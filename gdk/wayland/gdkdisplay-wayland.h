@@ -40,6 +40,7 @@
 #include <gdk/wayland/fractional-scale-v1-client-protocol.h>
 #include <gdk/wayland/viewporter-client-protocol.h>
 #include <gdk/wayland/presentation-time-client-protocol.h>
+#include <gdk/wayland/single-pixel-buffer-v1-client-protocol.h>
 
 #include <glib.h>
 #include <gdk/gdkkeys.h>
@@ -127,6 +128,7 @@ struct _GdkWaylandDisplay
   struct wp_fractional_scale_manager_v1 *fractional_scale;
   struct wp_viewporter *viewporter;
   struct wp_presentation *presentation;
+  struct wp_single_pixel_buffer_manager_v1 *single_pixel_buffer;
 
   GList *async_roundtrips;
 

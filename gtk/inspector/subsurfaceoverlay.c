@@ -50,7 +50,7 @@ gtk_subsurface_overlay_snapshot (GtkInspectorOverlay *overlay,
       else
         gdk_rgba_parse (&color, "magenta");
 
-      gdk_subsurface_get_dest (subsurface, &dest);
+      gdk_subsurface_get_texture_rect (subsurface, &dest);
 
       /* Use 4 color nodes since a border node overlaps and prevents
        * the subsurface from being raised.
