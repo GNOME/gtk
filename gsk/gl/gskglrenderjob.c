@@ -4013,7 +4013,7 @@ gsk_gl_render_job_visit_subsurface_node (GskGLRenderJob      *job,
               /* Clear the area so we can see through */
               GskGLCommandBatch *batch;
               guint16 color[4];
-              rgba_to_half (&(GdkRGBA){0,0,0,0}, color);
+              rgba_to_half (&GDK_RGBA_BLACK, color);
 
               batch = gsk_gl_command_queue_get_batch (job->command_queue);
               batch->draw.blend = 0;
