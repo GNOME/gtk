@@ -1,6 +1,63 @@
 Overview of Changes in 4.15.0, xx-xx-xxxx
 =========================================
 
+* GtkShortcutManager:
+ - Track the propagation phase of added controllers
+
+* GtkGLArea:
+ - Produce dmabuf textures, so graphics offload is possible
+
+* Accessibility:
+ - Add support for GetRangeExtents to GtkAccessibleText
+ - Add support for GetOffsetAtPoint to GtkAccessibleText
+ - Implement GtkAccessibleRange for scrollbars
+
+* GDK:
+ - Add a callback-based cursor API
+
+* GSK:
+ - Avoid an infinite recursion with offscreens in some cases
+ - Optimize graphics offload to make it more likely that compositors
+   can use direct scanout
+
+* X11:
+ - Fix some confusing debug messages
+
+* macOS:
+ - Implement the color picker for macOS 10.15+
+
+* Debugging:
+ - Snow monitor resolution in the inspector
+
+* Demos:
+ - Use graphics offload in the shadertoy demo
+ - Show more reliable fps numbers in the fishbowl demo
+
+* Tools:
+ - Support generating pdf in gtk4-rendernode-tool
+
+* Build:
+ - Require pango 1.52
+ - Require cairo 1.18
+ - Add a missing dependency that was causing build failures
+
+* Deprecations:
+ - gdk_widget_set/get_font_options
+
+* Translation updates:
+ Basque
+ Brazilian Portuguese
+ Chinese (China)
+ Hebrew
+ Kabyle
+ Persian
+ Polish
+ Russian
+ Slovenian
+ Swedish
+ Turkish
+
+
 Overview of Changes in 4.14.2, 03-04-2024
 =========================================
 
