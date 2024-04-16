@@ -98,9 +98,9 @@ gdk_rgba_free (GdkRGBA *rgba)
  * Returns: %TRUE if the @rgba is clear
  */
 gboolean
-gdk_rgba_is_clear (const GdkRGBA *rgba)
+(gdk_rgba_is_clear) (const GdkRGBA *rgba)
 {
-  return rgba->alpha < ((float) 0x00ff / (float) 0xffff);
+  return _gdk_rgba_is_clear (rgba);
 }
 
 /**
@@ -115,9 +115,9 @@ gdk_rgba_is_clear (const GdkRGBA *rgba)
  * Returns: %TRUE if the @rgba is opaque
  */
 gboolean
-gdk_rgba_is_opaque (const GdkRGBA *rgba)
+(gdk_rgba_is_opaque) (const GdkRGBA *rgba)
 {
-  return rgba->alpha > ((float)0xff00 / (float)0xffff);
+  return _gdk_rgba_is_opaque (rgba);
 }
 
 #define SKIP_WHITESPACES(s) while (*(s) == ' ') (s)++;
@@ -368,21 +368,10 @@ gdk_rgba_hash (gconstpointer p)
  * Returns: %TRUE if the two colors compare equal
  */
 gboolean
-gdk_rgba_equal (gconstpointer p1,
-                gconstpointer p2)
+(gdk_rgba_equal) (gconstpointer p1,
+                  gconstpointer p2)
 {
-  const GdkRGBA *rgba1, *rgba2;
-
-  rgba1 = p1;
-  rgba2 = p2;
-
-  if (rgba1->red == rgba2->red &&
-      rgba1->green == rgba2->green &&
-      rgba1->blue == rgba2->blue &&
-      rgba1->alpha == rgba2->alpha)
-    return TRUE;
-
-  return FALSE;
+  return _gdk_rgba_equal (p1, p2);
 }
 
 /**
