@@ -67,4 +67,11 @@ GDK_AVAILABLE_IN_4_14
 GtkGraphicsOffloadEnabled
                  gtk_graphics_offload_get_enabled  (GtkGraphicsOffload        *self);
 
+GDK_AVAILABLE_IN_4_16
+void             gtk_graphics_offload_set_black_background (GtkGraphicsOffload *self,
+                                                            gboolean            value);
+
+GDK_AVAILABLE_IN_4_16
+gboolean         gtk_graphics_offload_get_black_background (GtkGraphicsOffload *self);
+
 G_END_DECLS
