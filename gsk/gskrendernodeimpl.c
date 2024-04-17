@@ -39,6 +39,7 @@
 #include "gdk/gdksubsurfaceprivate.h"
 #include "gdk/gdktextureprivate.h"
 #include "gdk/gdktexturedownloaderprivate.h"
+#include "gdk/gdkrgbaprivate.h"
 
 #include <cairo.h>
 #ifdef CAIRO_HAS_SVG_SURFACE

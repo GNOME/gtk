@@ -29,6 +29,7 @@
 #include "gskdebugprivate.h"
 #include "gskrendernodeprivate.h"
 #include "gdksurfaceprivate.h"
+#include "gdkrgbaprivate.h"
 
 #include <graphene.h>
 
@@ -127,7 +128,7 @@ find_texture_to_attach (GskOffload           *self,
               gsk_transform_transform_bounds (transform, &child->bounds, &bounds);
               if (GSK_RENDER_NODE_TYPE (child) == GSK_COLOR_NODE &&
                   gsk_rect_equal (&bounds, &subsurface_node->bounds) &&
-                  gdk_rgba_equal (gsk_color_node_get_color (child), &(GdkRGBA) { 0, 0, 0, 1 }))
+                  gdk_rgba_equal (gsk_color_node_get_color (child), &GDK_RGBA_BLACK))
                 {
                   GDK_DISPLAY_DEBUG (gdk_surface_get_display (self->surface), OFFLOAD,
                                      "Offloading subsurface %p with background",

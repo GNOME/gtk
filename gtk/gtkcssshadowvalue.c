@@ -29,6 +29,7 @@
 
 #include "gsk/gskcairoblurprivate.h"
 #include "gsk/gskroundedrectprivate.h"
+#include "gdk/gdkrgbaprivate.h"
 
 #include <math.h>
 

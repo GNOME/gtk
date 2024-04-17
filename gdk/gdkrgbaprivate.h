@@ -43,5 +43,34 @@
 gboolean               gdk_rgba_parser_parse                    (GtkCssParser           *parser,
                                                                  GdkRGBA                *rgba);
 
+#define gdk_rgba_is_clear(rgba) _gdk_rgba_is_clear (rgba)
+#define gdk_rgba_is_opaque(rgba) _gdk_rgba_is_opaque (rgba)
+#define gdk_rgba_equal(p1, p2) _gdk_rgba_equal (p1, p2)
+
+static inline gboolean
+_gdk_rgba_is_clear (const GdkRGBA *rgba)
+{
+  return rgba->alpha < ((float) 0x00ff / (float) 0xffff);
+}
+
+static inline gboolean
+_gdk_rgba_is_opaque (const GdkRGBA *rgba)
+{
+  return rgba->alpha > ((float)0xff00 / (float)0xffff);
+}
+
+static inline gboolean
+_gdk_rgba_equal (gconstpointer p1,
+                 gconstpointer p2)
+{
+  const GdkRGBA *rgba1 = p1;
+  const GdkRGBA *rgba2 = p2;
+
+  return rgba1->red == rgba2->red &&
+         rgba1->green == rgba2->green &&
+         rgba1->blue == rgba2->blue &&
+         rgba1->alpha == rgba2->alpha;
+}
+
 G_END_DECLS
 

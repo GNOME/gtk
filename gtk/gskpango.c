@@ -27,6 +27,7 @@
 #include "gtktextviewprivate.h"
 #include "gtkwidgetprivate.h"
 #include "gtkcsscolorvalueprivate.h"
+#include "gdk/gdkrgbaprivate.h"
 
 #include <math.h>
 
@@ -201,7 +202,7 @@ gsk_pango_renderer_draw_error_underline (PangoRenderer *renderer,
   gtk_snapshot_append_color (crenderer->snapshot, &rgba, &dot.bounds);
   gtk_snapshot_pop (crenderer->snapshot);
   gtk_snapshot_append_color (crenderer->snapshot,
-                             &(GdkRGBA) { 0.f, 0.f, 0.f, 0.f },
+                             &GDK_RGBA_TRANSPARENT,
                              &GRAPHENE_RECT_INIT (xx, yy, 1.5 * hh, hh));
 
   gtk_snapshot_pop (crenderer->snapshot);
