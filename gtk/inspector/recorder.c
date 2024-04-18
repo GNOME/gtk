@@ -97,16 +97,16 @@ object_property_finalize (GObject *object)
 
   g_free (self->name);
   g_free (self->value);
-  g_object_unref (self->texture);
+  g_clear_object (&self->texture);
 
   G_OBJECT_CLASS (object_property_parent_class)->finalize (object);
 }
 
 static void
 object_property_get_property (GObject    *object,
-                                   guint       property_id,
-                                   GValue     *value,
-                                   GParamSpec *pspec)
+                              guint       property_id,
+                              GValue     *value,
+                              GParamSpec *pspec)
 {
   ObjectProperty *self = OBJECT_PROPERTY (object);
 
@@ -854,9 +854,12 @@ get_linear_gradient_texture (gsize n_stops, const GskColorStop *stops)
 }
 
 static void
-list_store_adopt (GListStore *store,
-                  gpointer    object)
+list_store_add_object_property (GListStore *store,
+                                const char *name,
+                                const char *value,
+                                GdkTexture *texture)
 {
+  gpointer object = object_property_new (name, value, texture);
   g_list_store_append (store, object);
   g_object_unref (object);
 }
@@ -866,7 +869,7 @@ add_text_row (GListStore *store,
               const char *name,
               const char *text)
 {
-  list_store_adopt (store, object_property_new (name, text, NULL));
+  list_store_add_object_property (store, name, text, NULL);
 }
 
 static void
@@ -879,7 +882,7 @@ add_color_row (GListStore    *store,
 
   text = gdk_rgba_to_string (color);
   texture = get_color_texture (color);
-  list_store_adopt (store, object_property_new (name, text, texture));
+  list_store_add_object_property (store, name, text, texture);
   g_free (text);
   g_object_unref (texture);
 }
@@ -979,22 +982,23 @@ populate_render_node_properties (GListStore    *store,
         texture = gdk_texture_new_for_surface (drawn_surface);
         cairo_surface_destroy (drawn_surface);
 
-        list_store_adopt (store, object_property_new ("Surface", NULL, texture));
+        list_store_add_object_property (store, "Surface", NULL, texture);
+        g_object_unref (texture);
       }
       break;
 
     case GSK_TEXTURE_NODE:
       {
-        GdkTexture *texture = g_object_ref (gsk_texture_node_get_texture (node));
-        list_store_adopt (store, object_property_new ("Texture", NULL, texture));
+        GdkTexture *texture = gsk_texture_node_get_texture (node);
+        list_store_add_object_property (store, "Texture", NULL, texture);
       }
       break;
 
     case GSK_TEXTURE_SCALE_NODE:
       {
-        GdkTexture *texture = g_object_ref (gsk_texture_scale_node_get_texture (node));
+        GdkTexture *texture = gsk_texture_scale_node_get_texture (node);
         GskScalingFilter filter = gsk_texture_scale_node_get_filter (node);
-        list_store_adopt (store, object_property_new ("Texture", NULL, texture));
+        list_store_add_object_property (store, "Texture", NULL, texture);
 
         tmp = g_enum_to_string (GSK_TYPE_SCALING_FILTER, filter);
         add_text_row (store, "Filter", tmp);
@@ -1030,7 +1034,7 @@ populate_render_node_properties (GListStore    *store,
           }
 
         texture = get_linear_gradient_texture (n_stops, stops);
-        list_store_adopt (store, object_property_new ("Color Stops", s->str, texture));
+        list_store_add_object_property (store, "Color Stops", s->str, texture);
         g_object_unref (texture);
 
         g_string_free (s, TRUE);
@@ -1072,7 +1076,7 @@ populate_render_node_properties (GListStore    *store,
           }
 
         texture = get_linear_gradient_texture (n_stops, stops);
-        list_store_adopt (store, object_property_new ("Color Stops", s->str, texture));
+        list_store_add_object_property (store, "Color Stops", s->str, texture);
         g_object_unref (texture);
 
         g_string_free (s, TRUE);
@@ -1106,7 +1110,7 @@ populate_render_node_properties (GListStore    *store,
           }
 
         texture = get_linear_gradient_texture (n_stops, stops);
-        list_store_adopt (store, object_property_new ("Color Stops", s->str, texture));
+        list_store_add_object_property (store, "Color Stops", s->str, texture);
         g_object_unref (texture);
 
         g_string_free (s, TRUE);
@@ -1155,7 +1159,7 @@ populate_render_node_properties (GListStore    *store,
             text = gdk_rgba_to_string (&colors[i]);
             tmp = g_strdup_printf ("%.2f, %s", widths[i], text);
             texture = get_color_texture (&colors[i]);
-            list_store_adopt (store, object_property_new (name[i], tmp, texture));
+            list_store_add_object_property (store, name[i], tmp, texture);
             g_object_unref (texture);
 
             g_free (text);

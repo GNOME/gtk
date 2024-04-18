@@ -7,6 +7,9 @@ Overview of Changes in 4.15.0, xx-xx-xxxx
 * GtkGLArea:
  - Produce dmabuf textures, so graphics offload is possible
 
+* GtkGraphicsOffload:
+ - Add a black-background property
+
 * Accessibility:
  - Add support for GetRangeExtents to GtkAccessibleText
  - Add support for GetOffsetAtPoint to GtkAccessibleText
@@ -22,6 +25,8 @@ Overview of Changes in 4.15.0, xx-xx-xxxx
 
 * X11:
  - Fix some confusing debug messages
+ - Drop a no-longer-relevant optimization that was interfering with
+   getting the current window manager capabilities
 
 * macOS:
  - Implement the color picker for macOS 10.15+
