@@ -57,6 +57,9 @@ static const GdkDebugKey gsk_vulkan_feature_keys[] = {
  *
  * Support for `GdkVulkanContext` is platform-specific and context creation
  * can fail, returning %NULL context.
+ *
+ * Deprecated: 4.14: GTK does not expose any Vulkan internals. This
+ *   struct is a leftover that was accidentally exposed.
  */
 
 typedef struct _GdkVulkanContextPrivate GdkVulkanContextPrivate;
