@@ -31,6 +31,9 @@
 #ifdef CAIRO_HAS_SVG_SURFACE
 #include <cairo-svg.h>
 #endif
+#ifdef CAIRO_HAS_PDF_SURFACE
+#include <cairo-pdf.h>
+#endif
 
 static char *
 get_save_filename (const char *filename)
@@ -51,7 +54,7 @@ get_save_filename (const char *filename)
   return result;
 }
 
-#ifdef CAIRO_HAS_SVG_SURFACE
+#if defined(CAIRO_HAS_SVG_SURFACE) || defined(CAIRO_HAS_PDF_SURFACE)
 static cairo_status_t
 cairo_serializer_write (gpointer             user_data,
                         const unsigned char *data,
@@ -61,7 +64,9 @@ cairo_serializer_write (gpointer             user_data,
 
   return CAIRO_STATUS_SUCCESS;
 }
+#endif
 
+#ifdef CAIRO_HAS_SVG_SURFACE
 static GBytes *
 create_svg (GskRenderNode  *node,
             GError        **error)
@@ -83,6 +88,48 @@ create_svg (GskRenderNode  *node,
 
   cr = cairo_create (surface);
   gsk_render_node_draw (node, cr);
+  cairo_destroy (cr);
+
+  cairo_surface_finish (surface);
+  if (cairo_surface_status (surface) == CAIRO_STATUS_SUCCESS)
+    {
+      cairo_surface_destroy (surface);
+      return g_byte_array_free_to_bytes (array);
+    }
+  else
+    {
+      g_set_error (error,
+                   G_IO_ERROR, G_IO_ERROR_FAILED,
+                   "%s", cairo_status_to_string (cairo_surface_status (surface)));
+      cairo_surface_destroy (surface);
+      g_byte_array_unref (array);
+      return NULL;
+    }
+}
+#endif
+
+#ifdef CAIRO_HAS_PDF_SURFACE
+static GBytes *
+create_pdf (GskRenderNode  *node,
+            GError        **error)
+{
+  cairo_surface_t *surface;
+  cairo_t *cr;
+  graphene_rect_t bounds;
+  GByteArray *array;
+
+  gsk_render_node_get_bounds (node, &bounds);
+  array = g_byte_array_new ();
+
+  surface = cairo_pdf_surface_create_for_stream (cairo_serializer_write,
+                                                 array,
+                                                 bounds.size.width,
+                                                 bounds.size.height);
+  cairo_surface_set_device_offset (surface, -bounds.origin.x, -bounds.origin.y);
+
+  cr = cairo_create (surface);
+  gsk_render_node_draw (node, cr);
+  cairo_show_page (cr);
   cairo_destroy (cr);
 
   cairo_surface_finish (surface);
@@ -132,6 +179,18 @@ render_file (const char *filename,
   if (g_str_has_suffix (save_to, ".svg"))
     {
       bytes = create_svg (node, &error);
+      if (bytes == NULL)
+        {
+          g_printerr (_("Failed to generate SVG: %s\n"), error->message);
+          exit (1);
+        }
+    }
+  else
+#endif
+#ifdef CAIRO_HAS_PDF_SURFACE
+  if (g_str_has_suffix (save_to, ".pdf"))
+    {
+      bytes = create_pdf (node, &error);
       if (bytes == NULL)
         {
           g_printerr (_("Failed to generate SVG: %s\n"), error->message);

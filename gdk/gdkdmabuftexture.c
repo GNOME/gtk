@@ -71,7 +71,10 @@ gdk_dmabuf_texture_dispose (GObject *object)
   GdkDmabufTexture *self = GDK_DMABUF_TEXTURE (object);
 
   if (self->destroy)
-    self->destroy (self->data);
+    {
+      self->destroy (self->data);
+      self->destroy = NULL;
+    }
 
   g_clear_object (&self->downloader);
   g_clear_object (&self->display);

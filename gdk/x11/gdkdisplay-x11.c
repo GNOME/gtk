@@ -665,7 +665,6 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
       if (x11_screen->wmspec_check_window == xevent->xdestroywindow.window)
         {
           x11_screen->wmspec_check_window = None;
-          x11_screen->last_wmspec_check_time = 0;
           g_free (x11_screen->window_manager_name);
           x11_screen->window_manager_name = g_strdup ("unknown");
 

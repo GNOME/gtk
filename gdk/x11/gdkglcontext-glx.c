@@ -490,7 +490,7 @@ gdk_x11_context_create_glx_context (GdkGLContext *context,
   GdkGLContext *share = gdk_display_get_gl_context (display);
   GdkX11GLContextGLX *share_glx = NULL;
   GdkSurface *surface = gdk_gl_context_get_surface (context);
-  GLXContext ctx;
+  GLXContext ctx = NULL;
   int context_attribs[N_GLX_ATTRS], i = 0, flags = 0;
   gsize major_idx, minor_idx;
   GdkGLVersion version;
