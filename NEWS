@@ -1,6 +1,33 @@
 Overview of Changes in 4.14.3, xx-xx-xxxx
 =========================================
 
+* GtkShortcutManager:
+ - Track the propagation phase of added controllers
+
+* Accessibility:
+ - Implement GtkAccessibleRange for scrollbars
+
+* X11:
+ - Fix some confusing debug messages
+ - Drop a no-longer-relevant optimization that was interfering with
+   getting the current window manager capabilities
+
+* Tools:
+ - Support generating pdf in gtk4-rendernode-tool
+
+* Translation updates:
+ Basque
+ Brazilian Portuguese
+ Georgian
+ Hebrew
+ Kabyle
+ Persian
+ Polish
+ Slovenian
+ Swedish
+ Ukrainian
+
+
 Overview of Changes in 4.14.2, 03-04-2024
 =========================================
 
