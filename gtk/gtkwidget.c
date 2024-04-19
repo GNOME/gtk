@@ -74,6 +74,7 @@
 
 #include "gdk/gdkeventsprivate.h"
 #include "gdk/gdkprofilerprivate.h"
+#include "gdk/gdkmonitorprivate.h"
 #include "gsk/gskdebugprivate.h"
 #include "gsk/gskrendererprivate.h"
 
@@ -6463,30 +6464,14 @@ gtk_widget_update_pango_context (GtkWidget        *widget,
   GtkCssStyle *style = gtk_css_node_get_style (priv->cssnode);
   PangoFontDescription *font_desc;
   GtkSettings *settings;
-  cairo_font_options_t *font_options;
   guint old_serial;
-  gboolean hint_font_metrics = FALSE;
-  int scale;
+  GtkFontRendering font_rendering;
 
   old_serial = pango_context_get_serial (context);
 
   font_desc = gtk_css_style_get_pango_font (style);
   pango_context_set_font_description (context, font_desc);
   pango_font_description_free (font_desc);
-
-  scale = gtk_widget_get_scale_factor (widget);
-  settings = gtk_widget_get_settings (widget);
-
-  if (settings)
-    {
-      g_object_get (settings, "gtk-hint-font-metrics", &hint_font_metrics, NULL);
-
-      /* Override the user setting on non-HiDPI */
-      if (scale == 1)
-        hint_font_metrics = TRUE;
-
-      pango_context_set_round_glyph_positions (context, hint_font_metrics);
-    }
 
   if (direction != GTK_TEXT_DIR_NONE)
     pango_context_set_base_dir (context, direction == GTK_TEXT_DIR_LTR
@@ -6495,35 +6480,76 @@ gtk_widget_update_pango_context (GtkWidget        *widget,
 
   pango_cairo_context_set_resolution (context, _gtk_css_number_value_get (style->core->dpi, 100));
 
-  font_options = (cairo_font_options_t*)g_object_get_qdata (G_OBJECT (widget), quark_font_options);
-  if (settings && font_options)
-    {
-      cairo_font_options_t *options;
-
-      options = cairo_font_options_copy (gtk_settings_get_font_options (settings));
-      cairo_font_options_merge (options, font_options);
-
-      cairo_font_options_set_hint_metrics (options,
-                                           hint_font_metrics == 1 ? CAIRO_HINT_METRICS_ON
-                                                                  : CAIRO_HINT_METRICS_OFF);
-
-      pango_cairo_context_set_font_options (context, options);
-      cairo_font_options_destroy (options);
-    }
-  else if (settings)
-    {
-      cairo_font_options_t *options;
-
-      options = cairo_font_options_copy (gtk_settings_get_font_options (settings));
-      cairo_font_options_set_hint_metrics (options,
-                                           hint_font_metrics == 1 ? CAIRO_HINT_METRICS_ON
-                                                                  : CAIRO_HINT_METRICS_OFF);
-
-      pango_cairo_context_set_font_options (context, options);
-      cairo_font_options_destroy (options);
-    }
-
   pango_context_set_font_map (context, gtk_widget_get_effective_font_map (widget));
+
+  settings = gtk_widget_get_settings (widget);
+
+  if (settings)
+    g_object_get (settings, "gtk-font-rendering", &font_rendering, NULL);
+  else
+    font_rendering = GTK_FONT_RENDERING_AUTOMATIC;
+
+  if (font_rendering == GTK_FONT_RENDERING_MANUAL)
+    {
+      gboolean hint_font_metrics;
+      cairo_font_options_t *font_options, *options;
+
+      g_object_get (settings, "gtk-hint-font-metrics", &hint_font_metrics, NULL);
+
+      options = cairo_font_options_copy (gtk_settings_get_font_options (settings));
+      font_options = (cairo_font_options_t*)g_object_get_qdata (G_OBJECT (widget), quark_font_options);
+      if (font_options)
+        cairo_font_options_merge (options, font_options);
+
+      cairo_font_options_set_hint_metrics (options,
+                                           hint_font_metrics == 1 ? CAIRO_HINT_METRICS_ON
+                                                                  : CAIRO_HINT_METRICS_OFF);
+
+      pango_context_set_round_glyph_positions (context, hint_font_metrics);
+      pango_cairo_context_set_font_options (context, options);
+
+      cairo_font_options_destroy (options);
+    }
+  else
+    {
+      cairo_font_options_t *options;
+      double dpi = 96.;
+      GdkSurface *surface;
+
+      surface = gtk_widget_get_surface (widget);
+      if (surface)
+        {
+          GdkDisplay *display;
+          GdkMonitor *monitor;
+
+          display = gdk_surface_get_display (surface);
+          monitor = gdk_display_get_monitor_at_surface (display, surface);
+          if (monitor)
+            dpi = gdk_monitor_get_dpi (monitor);
+        }
+
+      options = cairo_font_options_create ();
+
+      cairo_font_options_set_antialias (options, CAIRO_ANTIALIAS_GRAY);
+
+      if (dpi < 200.)
+        {
+          /* Not high-dpi. Prefer sharpness by enabling hinting */
+          cairo_font_options_set_hint_metrics (options, CAIRO_HINT_METRICS_ON);
+          cairo_font_options_set_hint_style (options, CAIRO_HINT_STYLE_SLIGHT);
+        }
+      else
+        {
+          /* High-dpi. Prefer precise positioning */
+          cairo_font_options_set_hint_metrics (options, CAIRO_HINT_METRICS_OFF);
+          cairo_font_options_set_hint_style (options, CAIRO_HINT_STYLE_NONE);
+        }
+
+      pango_context_set_round_glyph_positions (context, FALSE);
+      pango_cairo_context_set_font_options (context, options);
+
+      cairo_font_options_destroy (options);
+    }
 
   return old_serial != pango_context_get_serial (context);
 }
