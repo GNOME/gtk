@@ -1773,7 +1773,6 @@ settings_update_xsetting (GtkSettings *settings,
                           gboolean     force)
 {
   GType value_type;
-  GType fundamental_type;
   gboolean retval = FALSE;
 
   if (settings->property_values[pspec->param_id - 1].source == GTK_SETTINGS_SOURCE_APPLICATION)
@@ -1783,10 +1782,8 @@ settings_update_xsetting (GtkSettings *settings,
     return FALSE;
 
   value_type = G_PARAM_SPEC_VALUE_TYPE (pspec);
-  fundamental_type = G_TYPE_FUNDAMENTAL (value_type);
 
-  if ((g_value_type_transformable (G_TYPE_INT, value_type) &&
-       !(fundamental_type == G_TYPE_ENUM || fundamental_type == G_TYPE_FLAGS)) ||
+  if (g_value_type_transformable (G_TYPE_INT, value_type) ||
       g_value_type_transformable (G_TYPE_STRING, value_type) ||
       g_value_type_transformable (GDK_TYPE_RGBA, value_type))
     {

@@ -2201,6 +2201,11 @@ set_value_from_entry (GdkDisplay       *display,
                                   ? g_settings_get_boolean (settings, entry->key)
                                   : entry->fallback.b);
       break;
+    case G_TYPE_ENUM:
+      g_value_set_enum (value, settings && entry->valid
+                               ? g_settings_get_enum (settings, entry->key)
+                               : entry->fallback.i);
+      break;
     case G_TYPE_NONE:
       if (g_str_equal (entry->setting, "gtk-fontconfig-timestamp"))
         g_value_set_uint (value, (guint)entry->fallback.i);
