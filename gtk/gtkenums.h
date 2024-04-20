@@ -55,7 +55,7 @@ G_BEGIN_DECLS
  * are interpreted relative to text direction.
  *
  * Baseline support is optional for containers and widgets, and is only available
- * for vertical alignment. `GTK_ALIGN_BASELINE_CENTER and `GTK_ALIGN_BASELINE_FILL`
+ * for vertical alignment. `GTK_ALIGN_BASELINE_CENTER` and `GTK_ALIGN_BASELINE_FILL`
  * are treated similar to `GTK_ALIGN_CENTER` and `GTK_ALIGN_FILL`, except that it
  * positions the widget to line up the baselines, where that is supported.
  */
