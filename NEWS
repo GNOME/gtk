@@ -80,6 +80,7 @@ the new property to 'manual'.
 
 * Deprecations:
  - gdk_widget_set/get_font_options
+ - gdk_wayland/x11_display_set_cursor_theme
 
 * Translation updates:
  Basque
