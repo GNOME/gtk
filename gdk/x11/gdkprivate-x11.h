@@ -206,6 +206,10 @@ GdkFilterReturn
 gdk_surface_cache_shape_filter (const XEvent *xevent,
                                 gpointer      data);
 
+void _gdk_x11_display_set_cursor_theme (GdkDisplay  *display,
+                                        const char *theme,
+                                        const int    size);
+
 void _gdk_x11_cursor_display_finalize (GdkDisplay *display);
 
 void _gdk_x11_surface_register_dnd (GdkSurface *window);

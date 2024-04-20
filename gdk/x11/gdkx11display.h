@@ -88,7 +88,7 @@ GDK_AVAILABLE_IN_ALL
 void          gdk_x11_display_set_program_class                   (GdkDisplay  *display,
                                                                    const char  *program_class);
 
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_16
 void          gdk_x11_display_set_cursor_theme (GdkDisplay  *display,
                                                 const char *theme,
                                                 const int    size);

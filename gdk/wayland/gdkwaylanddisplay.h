@@ -48,7 +48,7 @@ GDK_AVAILABLE_IN_ALL
 struct wl_display      *gdk_wayland_display_get_wl_display      (GdkDisplay *display);
 GDK_AVAILABLE_IN_ALL
 struct wl_compositor   *gdk_wayland_display_get_wl_compositor   (GdkDisplay *display);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_16
 void                    gdk_wayland_display_set_cursor_theme    (GdkDisplay  *display,
                                                                  const char *name,
                                                                  int          size);
@@ -60,7 +60,7 @@ void                    gdk_wayland_display_set_startup_notification_id (GdkDisp
 
 GDK_AVAILABLE_IN_ALL
 gboolean                gdk_wayland_display_query_registry      (GdkDisplay  *display,
-								 const char *global);
+                                                                 const char *global);
 
 GDK_AVAILABLE_IN_4_4
 gpointer                gdk_wayland_display_get_egl_display     (GdkDisplay  *display);
