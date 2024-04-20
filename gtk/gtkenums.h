@@ -1862,14 +1862,6 @@ typedef enum { /*< prefix=GTK_POPOVER_MENU >*/
  * Values for the [property@Gtk.Settings:gtk-font-rendering] setting
  * that influence how GTK renders fonts.
  *
- * The @GTK_FONT_RENDERING_AUTOMATIC value allows GTK to disregard the
- * low-level font-related settings:
- * [property@Gtk.Settings:gtk-hint-font-metrics],
- * [property@Gtk.Settings:gtk-xft-antialias],
- * [property@Gtk.Settings:gtk-xft-hinting],
- * [property@Gtk.Settings:gtk-xft-hintstyle] and
- * [property@Gtk.Settings:gtk-xft-rgba].
- *
  * Since: 4.16
  */
 typedef enum {
