@@ -343,20 +343,20 @@ gsk_pango_renderer_prepare_run (PangoRenderer  *renderer,
       GTK_IS_TEXT_VIEW (crenderer->widget))
     {
       GtkCssNode *node;
-      GtkCssValue *value;
+      GtkCssStyle *style;
 
       node = gtk_text_view_get_selection_node ((GtkTextView *)crenderer->widget);
-      value = gtk_css_node_get_style (node)->core->color;
-      fg_rgba = gtk_css_color_value_get_rgba (value);
+      style = gtk_css_node_get_style (node);
+      fg_rgba = gtk_css_color_value_get_rgba (style->core->color);
     }
   else if (crenderer->state == GSK_PANGO_RENDERER_CURSOR && gtk_widget_has_focus (crenderer->widget))
     {
       GtkCssNode *node;
-      GtkCssValue *value;
+      GtkCssStyle *style;
 
       node = gtk_widget_get_css_node (crenderer->widget);
-      value = gtk_css_node_get_style (node)->background->background_color;
-      fg_rgba = gtk_css_color_value_get_rgba (value);
+      style = gtk_css_node_get_style (node);
+      fg_rgba = gtk_css_color_value_get_rgba (style->background->background_color);
     }
   else
     fg_rgba = appearance->fg_rgba;
