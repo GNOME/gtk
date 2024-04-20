@@ -263,7 +263,7 @@ gtk_graphics_offload_class_init (GtkGraphicsOffloadClass *class)
  *
  * Creates a new GtkGraphicsOffload widget.
  *
- * Returns: (transfer full): the new widget
+ * Returns: the new widget
  *
  * Since: 4.14
  */
