@@ -1,5 +1,4 @@
 /* GSK - The GTK Scene Kit
- *
  * Copyright 2016  Endless
  *
  * This library is free software; you can redistribute it and/or
@@ -685,6 +684,26 @@ get_renderer_for_vulkan (GdkSurface *surface)
 #endif
 }
 
+static gboolean
+vulkan_friendly_platform (GdkSurface *surface)
+{
+#ifdef GDK_WINDOWING_WAYLAND
+  if (GDK_IS_WAYLAND_DISPLAY (gdk_surface_get_display (surface)))
+    return TRUE;
+#endif
+
+  return FALSE;
+}
+
+static GType
+get_renderer_for_vulkan_friendly_platform (GdkSurface *surface)
+{
+  if (vulkan_friendly_platform (surface))
+    return get_renderer_for_vulkan (surface);
+
+  return G_TYPE_INVALID;
+}
+
 static GType
 get_renderer_for_gles2 (GdkSurface *surface)
 {
@@ -703,8 +722,9 @@ static struct {
   { get_renderer_for_display },
   { get_renderer_for_env_var },
   { get_renderer_for_backend },
-  { get_renderer_for_vulkan },
+  { get_renderer_for_vulkan_friendly_platform },
   { get_renderer_for_gl },
+  { get_renderer_for_vulkan },
   { get_renderer_for_gles2 },
   { get_renderer_fallback },
 };

@@ -445,7 +445,6 @@ reference:
             --force-fallback-for=gdk-pixbuf,pango
             -Dintrospection=enabled
             -Ddocumentation=true
-            -Dgtk_doc=true
             -Dgdk-pixbuf:gtk_doc=true
             -Dpango:gtk_doc=true
             -Dbuild-demos=false
