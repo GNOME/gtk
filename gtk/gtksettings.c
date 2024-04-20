@@ -961,6 +961,15 @@ gtk_settings_class_init (GtkSettingsClass *class)
    *
    * How GTK font rendering is set up.
    *
+   * When set to [enum@Gtk.FontRendering.MANUAL], GTK respects the low-level
+   * font-related settings ([property@Gtk.Settings:gtk-hint-font-metrics],
+   * [property@Gtk.Settings:gtk-xft-antialias], [property@Gtk.Settings:gtk-xft-hinting],
+   * [property@Gtk.Settings:gtk-xft-hintstyle] and [property@Gtk.Settings:gtk-xft-rgba])
+   * as much as practical.
+   *
+   * When set to [enum@Gtk.FontRendering.AUTOMATIC], GTK will consider factors such
+   * as screen resolution and scale in deciding how to render fonts.
+   *
    * Since: 4.16
    */
   pspecs[PROP_FONT_RENDERING] = g_param_spec_enum ("gtk-font-rendering", NULL, NULL,

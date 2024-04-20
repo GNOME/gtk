@@ -1,14 +1,45 @@
 Overview of Changes in 4.15.0, xx-xx-xxxx
 =========================================
 
+This release changes the default GSK renderer to be vulkan.
+
+The intent of this change is to get wider testing and verify that
+Vulkan drivers are good enough for this. If significant problems
+show up, we will revert this change for 4.16.
+
+You can still override the renderer choice using the GSK_RENDERER
+environment variable.
+
+---
+
+This release also changes font rendering settings by introducing
+a new high-level gtk-font-rendering settings which gives GTK more
+freedom to decide on font rendering.
+
+You can still use the low-level font-related settings by changing
+the new property to 'manual'.
+
+---
+
+* GtkColumnView:
+ - Fix infinite loops in dispose
+ - Fix problems with weak ref cycles in GtkExpression
+
+* GtkListView:
 * GtkShortcutManager:
  - Track the propagation phase of added controllers
 
 * GtkGLArea:
  - Produce dmabuf textures, so graphics offload is possible
 
+* GtkTextView:
+ - Support text shadows
+
 * GtkGraphicsOffload:
  - Add a black-background property
+
+* Settings:
+ - Add a new gtk-font-rendering setting
 
 * Accessibility:
  - Add support for GetRangeExtents to GtkAccessibleText
@@ -19,6 +50,7 @@ Overview of Changes in 4.15.0, xx-xx-xxxx
  - Add a callback-based cursor API
 
 * GSK:
+-  Use the Vulkan renderer by default
  - Avoid an infinite recursion with offscreens in some cases
  - Optimize graphics offload to make it more likely that compositors
    can use direct scanout
@@ -52,6 +84,7 @@ Overview of Changes in 4.15.0, xx-xx-xxxx
 * Translation updates:
  Basque
  Brazilian Portuguese
+ British English
  Chinese (China)
  Hebrew
  Kabyle
