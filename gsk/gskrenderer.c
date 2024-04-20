@@ -703,9 +703,9 @@ static struct {
   { get_renderer_for_display },
   { get_renderer_for_env_var },
   { get_renderer_for_backend },
+  { get_renderer_for_vulkan },
   { get_renderer_for_gl },
   { get_renderer_for_gles2 },
-  { get_renderer_for_vulkan },
   { get_renderer_fallback },
 };
 
