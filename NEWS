@@ -1,7 +1,8 @@
 Overview of Changes in 4.15.0, xx-xx-xxxx
 =========================================
 
-This release changes the default GSK renderer to be vulkan.
+This release changes the default GSK renderer to be Vulkan, on
+Wayland. Other platforms still use ngl.
 
 The intent of this change is to get wider testing and verify that
 Vulkan drivers are good enough for this. If significant problems
