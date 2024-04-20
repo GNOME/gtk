@@ -274,11 +274,22 @@ gdk_x11_cursor_create_for_name (GdkDisplay  *display,
  * will have to be handled by the application (GTK applications can learn
  * about cursor theme changes by listening for change notification
  * for the corresponding `GtkSetting`).
+ *
+ * Deprecated: 4.16: Use the cursor-related properties of
+ *   [GtkSettings](../gtk4/class.Settings.html) to set the cursor theme
  */
 void
 gdk_x11_display_set_cursor_theme (GdkDisplay  *display,
                                   const char *theme,
                                   const int    size)
+{
+  _gdk_x11_display_set_cursor_theme (display, theme, size);
+}
+
+void
+_gdk_x11_display_set_cursor_theme (GdkDisplay  *display,
+                                   const char *theme,
+                                   const int    size)
 {
 #if defined(HAVE_XCURSOR) && defined(HAVE_XFIXES) && XFIXES_MAJOR >= 2
   GdkX11Screen *x11_screen;

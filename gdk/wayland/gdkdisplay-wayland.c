@@ -105,6 +105,9 @@
 #endif
 
 static void _gdk_wayland_display_load_cursor_theme (GdkWaylandDisplay *display_wayland);
+static void _gdk_wayland_display_set_cursor_theme  (GdkDisplay        *display,
+                                                    const char        *name,
+                                                    int                size);
 
 G_DEFINE_TYPE (GdkWaylandDisplay, gdk_wayland_display, GDK_TYPE_DISPLAY)
 
@@ -1129,7 +1132,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
   display_class->get_monitors = gdk_wayland_display_get_monitors;
   display_class->get_monitor_at_surface = gdk_wayland_display_get_monitor_at_surface;
   display_class->get_setting = gdk_wayland_display_get_setting;
-  display_class->set_cursor_theme = gdk_wayland_display_set_cursor_theme;
+  display_class->set_cursor_theme = _gdk_wayland_display_set_cursor_theme;
 }
 
 static void
@@ -1202,11 +1205,22 @@ get_cursor_theme (GdkWaylandDisplay *display_wayland,
  * @size: the size to use for cursors
  *
  * Sets the cursor theme for the given @display.
+ *
+ * Deprecated: 4.16: Use the cursor-related properties of
+ *   [GtkSettings](../gtk4/class.Settings.html) to set the cursor theme
  */
 void
 gdk_wayland_display_set_cursor_theme (GdkDisplay *display,
                                       const char *name,
                                       int         size)
+{
+  _gdk_wayland_display_set_cursor_theme (display, name, size);
+}
+
+static void
+_gdk_wayland_display_set_cursor_theme (GdkDisplay *display,
+                                       const char *name,
+                                       int         size)
 {
   GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY(display);
   struct wl_cursor_theme *theme;
@@ -1275,7 +1289,7 @@ _gdk_wayland_display_load_cursor_theme (GdkWaylandDisplay *display_wayland)
   else
     name = "default";
 
-  gdk_wayland_display_set_cursor_theme (GDK_DISPLAY (display_wayland), name, size);
+  _gdk_wayland_display_set_cursor_theme (GDK_DISPLAY (display_wayland), name, size);
   g_value_unset (&v);
 
   gdk_profiler_end_mark (before, "Wayland cursor theme load", NULL);
