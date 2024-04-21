@@ -73,7 +73,7 @@
  * utilities that let the user change these settings.
  *
  * On Wayland, the settings are obtained either via a settings portal,
- * or by reading desktop settings from DConf.
+ * or by reading desktop settings from [class@Gio.Settings].
  *
  * On macOS, the settings are obtained from `NSUserDefaults`.
  *
