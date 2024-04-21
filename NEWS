@@ -1,11 +1,12 @@
 Overview of Changes in 4.15.0, xx-xx-xxxx
 =========================================
 
-This release changes the default GSK renderer to be vulkan.
+This release changes the default GSK renderer to be Vulkan, on
+Wayland. Other platforms still use ngl.
 
 The intent of this change is to get wider testing and verify that
-Vulkan drivers are good enough for this. If significant problems
-show up, we will revert this change for 4.16.
+Vulkan drivers are good enough for us to rely on. If significant
+problems show up, we will revert this change for 4.16.
 
 You can still override the renderer choice using the GSK_RENDERER
 environment variable.
@@ -77,6 +78,11 @@ the new property to 'manual'.
  - Require pango 1.52
  - Require cairo 1.18
  - Add a missing dependency that was causing build failures
+ - Drop deprecated build options:
+   gtk_doc -> documentation
+   update_screenshots -> screenshots
+   demo-profile -> profile
+   demos -> build-demos
 
 * Deprecations:
  - gdk_widget_set/get_font_options
