@@ -80,7 +80,7 @@ if get_option('man-pages') and rst2man.found()
     [ 'gtk4-path-tool', '1', ],
   ]
 
-  if get_option('demos')
+  if get_option('build-demos')
     rst_files += [
       [ 'gtk4-demo', '1', ],
       [ 'gtk4-demo-application', '1', ],
