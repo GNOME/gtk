@@ -8,6 +8,10 @@ gtk4-icon-browser
 List themed icons
 -----------------
 
+:Version: GTK
+:Manual section: 1
+:Manual group: GTK commands
+
 SYNOPSIS
 --------
 
