@@ -8,6 +8,10 @@ gtk4-widget-factory
 Showcase GTK widgets and styles
 -------------------------------
 
+:Version: GTK
+:Manual section: 1
+:Manual group: GTK commands
+
 SYNOPSIS
 --------
 

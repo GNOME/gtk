@@ -8,6 +8,10 @@ gtk4-rendernode-tool
 GskRenderNode Utility
 -----------------------
 
+:Version: GTK
+:Manual section: 1
+:Manual group: GTK commands
+
 SYNOPSIS
 --------
 |   **gtk4-rendernode-tool** <COMMAND> [OPTIONS...] <FILE>

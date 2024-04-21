@@ -8,6 +8,10 @@ gtk4-broadwayd
 The Broadway display server
 ---------------------------
 
+:Version: GTK
+:Manual section: 1
+:Manual group: GTK commands
+
 SYNOPSIS
 --------
 |   **gtk4-broadwayd** [OPTIONS...] <DISPLAY>

@@ -8,6 +8,10 @@ gtk4-query-settings
 Print name and value of GTK settings
 ------------------------------------
 
+:Version: GTK
+:Manual section: 1
+:Manual group: GTK commands
+
 SYNOPSIS
 --------
 

@@ -8,6 +8,10 @@ gtk4-node-editor
 Editor render nodes
 -----------------
 
+:Version: GTK
+:Manual section: 1
+:Manual group: GTK commands
+
 SYNOPSIS
 --------
 
