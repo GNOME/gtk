@@ -93,22 +93,10 @@ option('documentation',
        value: false,
        description : 'Build API reference and tools documentation')
 
-option('gtk_doc',
-       type: 'boolean',
-       value: false,
-       description : 'Build API reference and tools documentation',
-       deprecated: 'documentation')
-
 option('screenshots',
        type: 'boolean',
        value: false,
        description : 'Regenerate screenshots for the documentation')
-
-option('update_screenshots',
-       type: 'boolean',
-       value: false,
-       description : 'Regenerate screenshots for the documentation',
-       deprecated: 'screenshots')
 
 option('man-pages',
        type: 'boolean',
@@ -116,12 +104,6 @@ option('man-pages',
        description : 'Build man pages for installed tools')
 
 # Demos, examples and tests
-
-option('demo-profile',
-       type: 'combo',
-       choices: [ 'auto', 'default', 'devel' ],
-       value: 'auto',
-       deprecated: 'profile')
 
 option('profile',
        type: 'combo',
@@ -133,11 +115,6 @@ option('build-demos',
        type: 'boolean',
        value: true,
        description : 'Build demo programs')
-
-option('demos',
-       type: 'boolean',
-       value: true,
-       deprecated: 'build-demos')
 
 option('build-testsuite',
        type: 'boolean',
