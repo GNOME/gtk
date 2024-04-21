@@ -821,6 +821,11 @@ gdk_wayland_surface_fractional_scale_preferred_scale_cb (void *data,
   gdk_wayland_surface_update_size (surface,
                                    surface->width, surface->height,
                                    &GDK_FRACTIONAL_SCALE_INIT (scale));
+
+  GDK_DISPLAY_DEBUG (gdk_surface_get_display (surface), EVENTS,
+                     "preferred fractional scale, surface %p scale %f",
+                     surface,
+                     gdk_fractional_scale_to_double (&GDK_FRACTIONAL_SCALE_INIT (scale)));
 }
 
 static const struct wp_fractional_scale_v1_listener fractional_scale_listener = {
@@ -837,8 +842,8 @@ surface_enter (void              *data,
   GdkDisplay *display = gdk_surface_get_display (surface);
   GdkMonitor *monitor;
 
-  GDK_DISPLAY_DEBUG(gdk_surface_get_display (surface), EVENTS,
-                    "surface enter, surface %p output %p", surface, output);
+  GDK_DISPLAY_DEBUG (gdk_surface_get_display (surface), EVENTS,
+                     "surface enter, surface %p output %p", surface, output);
 
   impl->display_server.outputs = g_slist_prepend (impl->display_server.outputs, output);
 
@@ -870,9 +875,38 @@ surface_leave (void              *data,
   gdk_surface_leave_monitor (surface, monitor);
 }
 
+static void
+surface_preferred_buffer_scale (void              *data,
+                                struct wl_surface *wl_surface,
+                                int32_t            factor)
+{
+  GdkSurface *surface = GDK_SURFACE (data);
+
+  GDK_DISPLAY_DEBUG (gdk_surface_get_display (surface), EVENTS,
+                     "preferred buffer scale, surface %p scale %d",
+                     surface, factor);
+}
+
+static void
+surface_preferred_buffer_transform (void              *data,
+                                    struct wl_surface *wl_surface,
+                                    uint32_t           transform)
+{
+  GdkSurface *surface = GDK_SURFACE (data);
+  const char *transform_name[] = {
+    "normal", "90", "180", "270", "flipped", "flipped-90", "flipped-180", "flipped-270"
+  };
+
+  GDK_DISPLAY_DEBUG (gdk_surface_get_display (surface), EVENTS,
+                     "preferred buffer transform, surface %p transform %s",
+                     surface, transform_name[transform]);
+}
+
 static const struct wl_surface_listener surface_listener = {
   surface_enter,
-  surface_leave
+  surface_leave,
+  surface_preferred_buffer_scale,
+  surface_preferred_buffer_transform,
 };
 
 static void
