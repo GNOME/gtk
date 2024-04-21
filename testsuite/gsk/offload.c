@@ -196,10 +196,7 @@ collect_offload_info (GdkSurface *surface,
       else
         g_snprintf (above, sizeof (above), "-");
 
-      /* NOTE: We look at can_offload here, not is_offloaded, since we don't have
-       * dmabuf textures here, so attaching them to subsurfaces won't succeed.
-       */
-      if (info->can_offload)
+      if (info->is_offloaded)
         {
           g_string_append_printf (s, "%u: offloaded, %s%sabove: %s, ",
                                   i,
