@@ -1,0 +1,26 @@
+window.background:dir(ltr)
+  --my-color: red; /* variables.css:2:3-19 */
+  --my-width: 2px; /* variables.css:3:3-19 */
+
+  box.horizontal:dir(ltr)
+    color: rgb(255,0,0); /* variables.css:8:3-26 */
+    font-size: 12px; /* variables.css:9:3-45 */
+    font-family: "Cantarell"; /* variables.css:9:3-45 */
+    font-style: normal; /* variables.css:9:3-45 */
+    font-weight: 400; /* variables.css:9:3-45 */
+    font-stretch: normal; /* variables.css:9:3-45 */
+    font-variant-caps: normal; /* variables.css:9:3-45 */
+    margin-top: 2px; /* variables.css:7:3-31 */
+    --my-color: red; /* variables.css:2:3-19 */
+    --my-width: 2px; /* variables.css:3:3-19 */
+
+    label:dir(ltr)
+      color: rgb(0,128,0); /* variables.css:15:3-26 */
+      margin-top: 2px; /* variables.css:14:3-31 */
+      --my-color: green; /* variables.css:13:3-21 */
+    image:dir(ltr)
+      color: rgb(255,0,0); /* variables.css:20:3-26 */
+      --my-width: 3px; /* variables.css:19:3-19 */
+    picture:dir(ltr)
+      --my-color: red; /* variables.css:2:3-19 */
+      --my-width: 2px; /* variables.css:3:3-19 */

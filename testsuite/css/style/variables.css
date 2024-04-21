@@ -1,0 +1,21 @@
+:root {
+  --my-color: red;
+  --my-width: 2px;
+}
+
+box {
+  margin-top: var(--my-width);
+  color: var(--my-color);
+  font: calc(6 * var(--my-width)) Cantarell;
+}
+
+label {
+  --my-color: green;
+  margin-top: var(--my-width);
+  color: var(--my-color);
+}
+
+image {
+  --my-width: 3px;
+  color: var(--my-color);
+}
