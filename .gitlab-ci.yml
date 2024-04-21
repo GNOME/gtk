@@ -446,7 +446,7 @@ reference:
             -Dintrospection=enabled
             -Ddocumentation=true
             -Dgdk-pixbuf:gtk_doc=true
-            -Dpango:gtk_doc=true
+            -Dpango:documentation=true
             -Dbuild-demos=false
             -Dbuild-examples=false
             -Dbuild-tests=false
