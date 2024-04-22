@@ -992,16 +992,22 @@ _gdk_macos_display_warp_pointer (GdkMacosDisplay *self,
 }
 
 NSEvent *
-_gdk_macos_display_get_nsevent (GdkEvent *event)
+_gdk_macos_display_pop_nsevent (GdkEvent *event)
 {
-  for (const GList *iter = event_map.head; iter; iter = iter->next)
+  for (GList *iter = event_map.head; iter; iter = iter->next)
     {
-      const GdkToNSEventMap *map = iter->data;
+      GdkToNSEventMap *map = iter->data;
 
       if (map->gdk_event->event_type == event->event_type &&
           map->gdk_event->device == event->device &&
           map->gdk_event->time == event->time)
-        return map->nsevent;
+        {
+          NSEvent *nsevent = map->nsevent;
+          g_queue_unlink (&event_map, iter);
+          gdk_event_unref (map->gdk_event);
+          g_free (map);
+          return nsevent;
+        }
     }
 
   return NULL;
