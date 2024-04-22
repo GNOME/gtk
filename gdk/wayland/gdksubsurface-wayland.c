@@ -491,12 +491,14 @@ gdk_wayland_subsurface_attach (GdkSubsurface         *sub,
                 }
 
               GDK_DISPLAY_DEBUG (gdk_surface_get_display (sub->parent), OFFLOAD,
-                                 "Attached %dx%d texture to subsurface %p at %d %d %d %d",
+                                 "Attached %dx%d texture to subsurface %p at %d %d %d %d%s%s",
                                  gdk_texture_get_width (texture),
                                  gdk_texture_get_height (texture),
                                  self,
                                  self->dest.x, self->dest.y,
-                                 self->dest.width, self->dest.height);
+                                 self->dest.width, self->dest.height,
+                                 will_be_above ? ", above parent" : "",
+                                 has_background ? ", with background" : "");
               result = TRUE;
             }
           else
