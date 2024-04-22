@@ -1,0 +1,13 @@
+:root {
+  color: red;
+}
+
+window {
+  /* :root has higher priority */
+  color: blue;
+}
+
+label {
+  /* :root doesn't apply so it's still green */
+  color: green;
+}
