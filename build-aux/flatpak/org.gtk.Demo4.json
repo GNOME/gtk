@@ -186,7 +186,7 @@
             "config-opts" : [
                 "--libdir=/app/lib",
                 "-Dbuildtype=debugoptimized",
-                "-Ddemo-profile=devel"
+                "-Dprofile=devel"
             ],
             "sources" : [
                 {
