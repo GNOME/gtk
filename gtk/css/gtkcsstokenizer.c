@@ -1020,7 +1020,7 @@ gtk_css_tokenizer_read_ident_like (GtkCssTokenizer  *tokenizer,
 {
   gtk_css_tokenizer_read_name (tokenizer);
 
-  if (*tokenizer->data == '(')
+  if (gtk_css_tokenizer_remaining (tokenizer) > 0 && *tokenizer->data == '(')
     {
       gtk_css_tokenizer_consume_ascii (tokenizer);
       if (g_ascii_strcasecmp (tokenizer->name_buffer->str, "url") == 0)
