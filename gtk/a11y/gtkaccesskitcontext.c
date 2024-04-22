@@ -526,8 +526,18 @@ gtk_accesskit_context_build_node (GtkAccessKitContext      *self,
   accesskit_role role = accesskit_role_for_context (ctx);
   accesskit_node_builder *builder = accesskit_node_builder_new (role);
   GtkAccessible *accessible = gtk_at_context_get_accessible (ctx);
+  int x, y, width, height;
   GtkAccessible *child = gtk_accessible_get_first_accessible_child (accessible);
   gchar *str;
+
+  if (gtk_accessible_get_bounds (accessible, &x, &y, &width, &height))
+    {
+      accesskit_vec2 p = {x, y};
+      accesskit_affine transform = accesskit_affine_translate (p);
+      accesskit_rect bounds = {0, 0, width, height};
+      accesskit_node_builder_set_transform (builder, transform);
+      accesskit_node_builder_set_bounds (builder, bounds);
+    }
 
   while (child)
     {
