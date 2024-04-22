@@ -661,7 +661,7 @@ gdk_wayland_subsurface_detach (GdkSubsurface *sub)
 
   if (sub->parent == NULL)
     {
-      g_warning ("Can't draw to destroyed subsurface %p", self);
+      g_warning ("Can't detach from destroyed subsurface %p", self);
       return;
     }
 
