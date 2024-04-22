@@ -990,10 +990,12 @@ GtkActionMuxer *
 gtk_application_get_parent_muxer_for_window (GtkWindow *window)
 {
   GtkApplication *application = gtk_window_get_application (window);
-  GtkApplicationPrivate *priv = gtk_application_get_instance_private (application);
+  GtkApplicationPrivate *priv;
 
   if (!application)
     return NULL;
+
+  priv = gtk_application_get_instance_private (application);
 
   return priv->muxer;
 }
