@@ -408,10 +408,7 @@ gdk_wayland_subsurface_attach (GdkSubsurface         *sub,
   if (has_background)
     ensure_bg_surface (self);
 
-  if (self->dest.x != dest->origin.x ||
-      self->dest.y != dest->origin.y ||
-      self->dest.width != dest->size.width ||
-      self->dest.height != dest->size.height)
+  if (!scaled_rect_is_integral (dest, 1, &device_rect))
     {
       GDK_DISPLAY_DEBUG (gdk_surface_get_display (sub->parent), OFFLOAD,
                          "Non-integer coordinates %g %g %g %g for %dx%d texture, hiding subsurface %p",
@@ -430,10 +427,18 @@ gdk_wayland_subsurface_attach (GdkSubsurface         *sub,
                          scale,
                          self);
     }
+  else if (background && !scaled_rect_is_integral (background, 1, &device_rect))
+    {
+      GDK_DISPLAY_DEBUG (gdk_surface_get_display (sub->parent), OFFLOAD,
+                         "Non-integral background coordinates %g %g %g %g, hiding subsurface %p",
+                         background->origin.x, background->origin.y,
+                         background->size.width, background->size.height,
+                         self);
+    }
   else if (background && !scaled_rect_is_integral (background, scale, &device_rect))
     {
       GDK_DISPLAY_DEBUG (gdk_surface_get_display (sub->parent), OFFLOAD,
-                         "Non-integral background device coordinates %g %g %g %g (fractional scale %.2f), hiding background of subsurface %p",
+                         "Non-integral background device coordinates %g %g %g %g (fractional scale %.2f), hiding subsurface %p",
                          device_rect.origin.x, device_rect.origin.y,
                          device_rect.size.width, device_rect.size.height,
                          scale,
