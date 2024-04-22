@@ -1917,6 +1917,7 @@ apply_portal_setting (TranslationEntry *entry,
       entry->fallback.s = g_intern_string (g_variant_get_string (value, NULL));
       break;
     case G_TYPE_INT:
+    case G_TYPE_ENUM:
       entry->fallback.i = g_variant_get_int32 (value);
       break;
     case G_TYPE_BOOLEAN:
@@ -2165,6 +2166,9 @@ set_value_from_entry (GdkDisplay       *display,
           break;
         case G_TYPE_BOOLEAN:
           g_value_set_boolean (value, entry->fallback.b);
+          break;
+        case G_TYPE_ENUM:
+          g_value_set_enum (value, entry->fallback.i);
           break;
         case G_TYPE_NONE:
           if (g_str_equal (entry->setting, "gtk-fontconfig-timestamp"))
