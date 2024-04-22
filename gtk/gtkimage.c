@@ -637,7 +637,7 @@ resource_is_pixdata (const char *resource_path)
   if (data_size < sizeof(guint32))
     goto out;
 
-  magic = (stream[0] << 24) + (stream[1] << 16) + (stream[2] << 8) + stream[3];
+  magic = (((guint32)(stream[0])) << 24) | (((guint32)(stream[1])) << 16) | (((guint32)(stream[2])) << 8) | (guint32)(stream[3]);
   if (magic == GDK_PIXBUF_MAGIC_NUMBER)
     ret = TRUE;
 
