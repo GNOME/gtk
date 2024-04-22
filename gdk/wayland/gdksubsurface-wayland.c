@@ -408,10 +408,7 @@ gdk_wayland_subsurface_attach (GdkSubsurface         *sub,
   if (has_background)
     ensure_bg_surface (self);
 
-  if (self->dest.x != dest->origin.x ||
-      self->dest.y != dest->origin.y ||
-      self->dest.width != dest->size.width ||
-      self->dest.height != dest->size.height)
+  if (!scaled_rect_is_integral (dest, 1, &device_rect))
     {
       GDK_DISPLAY_DEBUG (gdk_surface_get_display (sub->parent), OFFLOAD,
                          "Non-integer coordinates %g %g %g %g for %dx%d texture, hiding subsurface %p",
@@ -430,10 +427,18 @@ gdk_wayland_subsurface_attach (GdkSubsurface         *sub,
                          scale,
                          self);
     }
+  else if (background && !scaled_rect_is_integral (background, 1, &device_rect))
+    {
+      GDK_DISPLAY_DEBUG (gdk_surface_get_display (sub->parent), OFFLOAD,
+                         "Non-integral background coordinates %g %g %g %g, hiding subsurface %p",
+                         background->origin.x, background->origin.y,
+                         background->size.width, background->size.height,
+                         self);
+    }
   else if (background && !scaled_rect_is_integral (background, scale, &device_rect))
     {
       GDK_DISPLAY_DEBUG (gdk_surface_get_display (sub->parent), OFFLOAD,
-                         "Non-integral background device coordinates %g %g %g %g (fractional scale %.2f), hiding background of subsurface %p",
+                         "Non-integral background device coordinates %g %g %g %g (fractional scale %.2f), hiding subsurface %p",
                          device_rect.origin.x, device_rect.origin.y,
                          device_rect.size.width, device_rect.size.height,
                          scale,
@@ -491,12 +496,14 @@ gdk_wayland_subsurface_attach (GdkSubsurface         *sub,
                 }
 
               GDK_DISPLAY_DEBUG (gdk_surface_get_display (sub->parent), OFFLOAD,
-                                 "Attached %dx%d texture to subsurface %p at %d %d %d %d",
+                                 "Attached %dx%d texture to subsurface %p at %d %d %d %d%s%s",
                                  gdk_texture_get_width (texture),
                                  gdk_texture_get_height (texture),
                                  self,
                                  self->dest.x, self->dest.y,
-                                 self->dest.width, self->dest.height);
+                                 self->dest.width, self->dest.height,
+                                 will_be_above ? ", above parent" : "",
+                                 has_background ? ", with background" : "");
               result = TRUE;
             }
           else
@@ -654,7 +661,7 @@ gdk_wayland_subsurface_detach (GdkSubsurface *sub)
 
   if (sub->parent == NULL)
     {
-      g_warning ("Can't draw to destroyed subsurface %p", self);
+      g_warning ("Can't detach from destroyed subsurface %p", self);
       return;
     }
 

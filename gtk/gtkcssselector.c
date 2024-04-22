@@ -541,9 +541,9 @@ match_any (const GtkCssSelector *selector,
 
 #undef GTK_CSS_CHANGE_ANY
 #define GTK_CSS_CHANGE_ANY 0
-DEFINE_SIMPLE_SELECTOR(any, ANY, print_any, match_any, 
-                       gtk_css_selector_default_hash_one, gtk_css_selector_default_compare_one,
-                       FALSE, FALSE, FALSE, TRUE)
+DEFINE_SIMPLE_SELECTOR (any, ANY, print_any, match_any,
+                        gtk_css_selector_default_hash_one, gtk_css_selector_default_compare_one,
+                        FALSE, FALSE, FALSE, TRUE)
 #undef GTK_CSS_CHANGE_ANY
 
 /* NAME */
@@ -575,7 +575,7 @@ comp_name (const GtkCssSelector *a,
   return a->name.name - b->name.name;
 }
 
-DEFINE_SIMPLE_SELECTOR(name, NAME, print_name, match_name, hash_name, comp_name, FALSE, FALSE, TRUE, FALSE)
+DEFINE_SIMPLE_SELECTOR (name, NAME, print_name, match_name, hash_name, comp_name, FALSE, FALSE, TRUE, FALSE)
 
 /* CLASS */
 
@@ -612,7 +612,7 @@ comp_class (const GtkCssSelector *a,
     return 0;
 }
 
-DEFINE_SIMPLE_SELECTOR(class, CLASS, print_class, match_class, hash_class, comp_class, FALSE, TRUE, FALSE, FALSE)
+DEFINE_SIMPLE_SELECTOR (class, CLASS, print_class, match_class, hash_class, comp_class, FALSE, TRUE, FALSE, FALSE)
 
 /* ID */
 
@@ -644,7 +644,7 @@ comp_id (const GtkCssSelector *a,
   return a->id.name - b->id.name;
 }
 
-DEFINE_SIMPLE_SELECTOR(id, ID, print_id, match_id, hash_id, comp_id, TRUE, FALSE, FALSE, FALSE)
+DEFINE_SIMPLE_SELECTOR (id, ID, print_id, match_id, hash_id, comp_id, TRUE, FALSE, FALSE, FALSE)
 
 /* PSEUDOCLASS FOR STATE */
 static void
@@ -700,8 +700,8 @@ change_pseudoclass_state (const GtkCssSelector *selector)
 }
 
 #define GTK_CSS_CHANGE_PSEUDOCLASS_STATE change_pseudoclass_state (selector)
-DEFINE_SIMPLE_SELECTOR(pseudoclass_state, PSEUDOCLASS_STATE, print_pseudoclass_state,
-                       match_pseudoclass_state, hash_pseudoclass_state, comp_pseudoclass_state,
+DEFINE_SIMPLE_SELECTOR (pseudoclass_state, PSEUDOCLASS_STATE, print_pseudoclass_state,
+                        match_pseudoclass_state, hash_pseudoclass_state, comp_pseudoclass_state,
                        FALSE, TRUE, FALSE, TRUE)
 #undef GTK_CSS_CHANGE_PSEUDOCLASS_STATE
 
@@ -888,9 +888,9 @@ change_pseudoclass_position (const GtkCssSelector *selector)
 }
 
 #define GTK_CSS_CHANGE_PSEUDOCLASS_POSITION change_pseudoclass_position(selector)
-DEFINE_SIMPLE_SELECTOR(pseudoclass_position, PSEUDOCLASS_POSITION, print_pseudoclass_position,
-                       match_pseudoclass_position, hash_pseudoclass_position, comp_pseudoclass_position,
-                       FALSE, TRUE, FALSE, TRUE)
+DEFINE_SIMPLE_SELECTOR (pseudoclass_position, PSEUDOCLASS_POSITION, print_pseudoclass_position,
+                        match_pseudoclass_position, hash_pseudoclass_position, comp_pseudoclass_position,
+                        FALSE, TRUE, FALSE, TRUE)
 #undef GTK_CSS_CHANGE_PSEUDOCLASS_POSITION
 /* API */
 

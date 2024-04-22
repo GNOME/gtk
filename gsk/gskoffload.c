@@ -130,11 +130,7 @@ find_texture_to_attach (GskOffload           *self,
                   gsk_rect_equal (&bounds, &subsurface_node->bounds) &&
                   gdk_rgba_equal (gsk_color_node_get_color (child), &GDK_RGBA_BLACK))
                 {
-                  GDK_DISPLAY_DEBUG (gdk_surface_get_display (self->surface), OFFLOAD,
-                                     "Offloading subsurface %p with background",
-                                     subsurface);
                   *has_background = TRUE;
-
                   node = gsk_container_node_get_child (node, 1);
                   break;
                 }
@@ -684,7 +680,6 @@ gsk_offload_new (GdkSurface     *surface,
                  GskRenderNode  *root,
                  cairo_region_t *diff)
 {
-  GdkDisplay *display = gdk_surface_get_display (surface);
   GskOffload *self;
 
   self = g_new0 (GskOffload, 1);
@@ -752,17 +747,10 @@ gsk_offload_new (GdkSurface     *surface,
         {
           info->is_offloaded = FALSE;
           if (info->was_offloaded)
-            {
-              GDK_DISPLAY_DEBUG (display, OFFLOAD, "Hiding subsurface %p", info->subsurface);
-              gdk_subsurface_detach (info->subsurface);
-            }
+            gdk_subsurface_detach (info->subsurface);
         }
 
-      if (info->is_offloaded && gdk_subsurface_is_above_parent (info->subsurface))
-        {
-          GDK_DISPLAY_DEBUG (display, OFFLOAD, "Raising subsurface %p", info->subsurface);
-          info->is_above = TRUE;
-        }
+      info->is_above = info->is_offloaded && gdk_subsurface_is_above_parent (info->subsurface);
 
       gdk_subsurface_get_bounds (info->subsurface, &bounds);
 
