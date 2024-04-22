@@ -24,7 +24,7 @@ flatpak build ${builddir} meson \
                 -Dbuild-examples=false \
                 -Dintrospection=disabled \
                 -Dbuild-demos=true \
-                -Ddemo-profile=devel \
+                -Dprofile=devel \
                 _flatpak_build
 
 flatpak build --env=CI_COMMIT_SHORT_SHA=$CI_COMMIT_SHORT_SHA ${builddir} ninja -C _flatpak_build install
