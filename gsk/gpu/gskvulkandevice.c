@@ -9,6 +9,7 @@
 
 #include "gdk/gdkdisplayprivate.h"
 #include "gdk/gdkvulkancontextprivate.h"
+#include "gdk/gdkprofilerprivate.h"
 
 struct _GskVulkanDevice
 {
@@ -949,6 +950,7 @@ gsk_vulkan_device_get_vk_pipeline (GskVulkanDevice           *self,
   GdkDisplay *display;
   const char *version_string;
   char *vertex_shader_name, *fragment_shader_name;
+  G_GNUC_UNUSED gint64 begin_time = GDK_PROFILER_CURRENT_TIME;
 
   cache_key = (PipelineCacheKey) {
     .op_class = op_class,
@@ -1124,6 +1126,10 @@ gsk_vulkan_device_get_vk_pipeline (GskVulkanDevice           *self,
                                            },
                                            NULL,
                                            &pipeline);
+
+  gdk_profiler_end_markf (begin_time,
+                          "Create Vulkan pipeline frag=%s vert=%s",
+                          fragment_shader_name, vertex_shader_name);
 
   g_free (fragment_shader_name);
   g_free (vertex_shader_name);
