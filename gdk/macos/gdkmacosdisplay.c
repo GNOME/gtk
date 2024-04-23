@@ -77,6 +77,9 @@ gdk_macos_display_get_setting (GdkDisplay  *display,
                                const char *setting,
                                GValue      *value)
 {
+  if (gdk_display_get_debug_flags (display) & GDK_DEBUG_DEFAULT_SETTINGS)
+    return FALSE;
+
   return _gdk_macos_display_get_setting (GDK_MACOS_DISPLAY (display), setting, value);
 }
 
