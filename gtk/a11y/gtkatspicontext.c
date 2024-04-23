@@ -1178,12 +1178,6 @@ gtk_at_spi_context_state_change (GtkATContext                *ctx,
                              g_variant_new_double (gtk_number_accessible_value_get (value)));
     }
     if (changed_properties & GTK_ACCESSIBLE_PROPERTY_CHANGE_HELP_TEXT)
-    {
-      value = gtk_accessible_attribute_set_get_value (properties, GTK_ACCESSIBLE_PROPERTY_HELP_TEXT);
-      emit_property_changed (self,
-                             "accessible-help-text",
-                             g_variant_new_string (gtk_string_accessible_value_get (value)));
-    if (changed_properties & GTK_ACCESSIBLE_PROPERTY_CHANGE_HELP_TEXT)
       {
         value = gtk_accessible_attribute_set_get_value (properties, GTK_ACCESSIBLE_PROPERTY_HELP_TEXT);
         emit_property_changed (self,
