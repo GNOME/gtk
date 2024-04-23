@@ -1,0 +1,14 @@
+/* test variable changes */
+
+box {
+  --test: red;
+  color: var(--test, green);
+}
+
+label:hover {
+  --test: blue;
+}
+
+label:active {
+  --test: initial;
+}
