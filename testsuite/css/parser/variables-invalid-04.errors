@@ -1,0 +1,5 @@
+variables-invalid-04.css:2:10-4:1: error: GTK_CSS_PARSER_WARNING_SYNTAX
+variables-invalid-04.css:2:10-14: error: GTK_CSS_PARSER_ERROR_SYNTAX
+variables-invalid-04.css:2:10-4:1: error: GTK_CSS_PARSER_WARNING_SYNTAX
+variables-invalid-04.css:2:3-4:1: error: GTK_CSS_PARSER_WARNING_SYNTAX
+variables-invalid-04.css:1:7-4:1: error: GTK_CSS_PARSER_WARNING_SYNTAX

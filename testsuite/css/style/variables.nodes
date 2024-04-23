@@ -1,0 +1,184 @@
+window.background:dir(ltr)
+  --color1: red; /* variables.css:2:13-16 */
+
+  box.horizontal:dir(ltr)
+    --color1: red; /* variables.css:2:13-16 */
+
+    label.label-1:dir(ltr)
+      color: rgb(255,0,0); /* variables.css:10:3-24 */
+      background-color: rgb(255,0,0); /* variables.css:13:3-42 */
+      box-shadow: 0 0 3px rgb(0,128,0) inset; /* variables.css:16:3-65 */
+      --color1: red; /* variables.css:2:13-16 */
+    label.label-2:dir(ltr)
+      color: rgb(255,255,0); /* variables.css:22:3-24 */
+      background-color: rgb(0,128,0); /* variables.css:25:3-42 */
+      box-shadow: 0 0 3px rgb(0,128,0) inset; /* variables.css:28:3-50 */
+      --color1: yellow; /* variables.css:21:13-19 */
+    label.label-3:dir(ltr)
+      color: rgb(0,128,0); /* variables.css:34:3-31 */
+      border-top-style: solid; /* variables.css:39:3-46 */
+      border-top-width: 3px; /* variables.css:39:3-46 */
+      border-left-style: solid; /* variables.css:39:3-46 */
+      border-left-width: 3px; /* variables.css:39:3-46 */
+      border-bottom-style: solid; /* variables.css:39:3-46 */
+      border-bottom-width: 3px; /* variables.css:39:3-46 */
+      border-right-style: solid; /* variables.css:39:3-46 */
+      border-right-width: 3px; /* variables.css:39:3-46 */
+      border-top-color: rgb(255,0,0); /* variables.css:39:3-46 */
+      border-right-color: rgb(255,0,0); /* variables.css:39:3-46 */
+      border-bottom-color: rgb(255,0,0); /* variables.css:39:3-46 */
+      border-left-color: rgb(255,0,0); /* variables.css:39:3-46 */
+      border-image-source: none; /* variables.css:39:3-46 */
+      border-image-repeat: stretch; /* variables.css:39:3-46 */
+      border-image-slice: 100%; /* variables.css:39:3-46 */
+      border-image-width: 1; /* variables.css:39:3-46 */
+      --border1: 3px; /* variables.css:37:14-17 */
+      --border2: solid red; /* variables.css:38:14-23 */
+      --color1: initial; /* variables.css:33:13-20 */
+    label.label-4:dir(ltr)
+      color: rgb(0,128,0); /* variables.css:45:3-30 */
+      background-color: rgb(128,0,128); /* variables.css:49:3-42 */
+    label.label-5:dir(ltr)
+      color: rgb(255,0,0); /* variables.css:55:3-30 */
+      background-color: rgb(0,128,0); /* variables.css:56:3-41 */
+      box-shadow: 0 0 3px rgb(0,128,0) inset; /* variables.css:81:3-50 */
+      --prop1: lol; /* variables.css:58:12-15 */
+      --prop10: var(--prop9) var(--prop9); /* variables.css:67:13-38 */
+      --prop11: var(--prop10) var(--prop10); /* variables.css:68:13-40 */
+      --prop12: var(--prop11) var(--prop11); /* variables.css:69:13-40 */
+      --prop13: var(--prop12) var(--prop12); /* variables.css:70:13-40 */
+      --prop14: var(--prop13) var(--prop13); /* variables.css:71:13-40 */
+      --prop15: var(--prop14) var(--prop14); /* variables.css:72:13-40 */
+      --prop16: var(--prop15) var(--prop15); /* variables.css:73:13-40 */
+      --prop17: var(--prop16) var(--prop16); /* variables.css:74:13-40 */
+      --prop18: var(--prop17) var(--prop17); /* variables.css:75:13-40 */
+      --prop19: var(--prop18) var(--prop18); /* variables.css:76:13-40 */
+      --prop2: var(--prop1) var(--prop1); /* variables.css:59:12-37 */
+      --prop20: var(--prop19) var(--prop19); /* variables.css:77:13-40 */
+      --prop3: var(--prop2) var(--prop2); /* variables.css:60:12-37 */
+      --prop4: var(--prop3) var(--prop3); /* variables.css:61:12-37 */
+      --prop5: var(--prop4) var(--prop4); /* variables.css:62:12-37 */
+      --prop6: var(--prop5) var(--prop5); /* variables.css:63:12-37 */
+      --prop7: var(--prop6) var(--prop6); /* variables.css:64:12-37 */
+      --prop8: var(--prop7) var(--prop7); /* variables.css:65:12-37 */
+      --prop9: var(--prop8) var(--prop8); /* variables.css:66:12-37 */
+      --test1: red; /* variables.css:54:12-15 */
+    label.label-6:dir(ltr)
+      color: rgb(255,0,0); /* variables.css:88:3-31 */
+      -gtk-dpi: 96; /* variables.css:85:3-14 */
+      font-size: 13.333333333333334px; /* variables.css:85:3-14 */
+      -gtk-icon-palette: error rgb(255,255,255), success rgb(255,255,255), warning rgb(255,255,255); /* variables.css:85:3-14 */
+      background-color: rgba(0,0,0,0); /* variables.css:85:3-14 */
+      font-family: "Sans"; /* variables.css:85:3-14 */
+      font-style: normal; /* variables.css:85:3-14 */
+      font-weight: 400; /* variables.css:85:3-14 */
+      font-stretch: normal; /* variables.css:85:3-14 */
+      letter-spacing: 0; /* variables.css:85:3-14 */
+      text-decoration-line: none; /* variables.css:85:3-14 */
+      text-decoration-color: rgb(255,0,0); /* variables.css:85:3-14 */
+      text-decoration-style: solid; /* variables.css:85:3-14 */
+      text-transform: none; /* variables.css:85:3-14 */
+      font-kerning: auto; /* variables.css:85:3-14 */
+      font-variant-ligatures: normal; /* variables.css:85:3-14 */
+      font-variant-position: normal; /* variables.css:85:3-14 */
+      font-variant-caps: normal; /* variables.css:85:3-14 */
+      font-variant-numeric: normal; /* variables.css:85:3-14 */
+      font-variant-alternates: normal; /* variables.css:85:3-14 */
+      font-variant-east-asian: normal; /* variables.css:85:3-14 */
+      text-shadow: none; /* variables.css:85:3-14 */
+      box-shadow: none; /* variables.css:85:3-14 */
+      margin-top: 0; /* variables.css:85:3-14 */
+      margin-left: 0; /* variables.css:85:3-14 */
+      margin-bottom: 0; /* variables.css:85:3-14 */
+      margin-right: 0; /* variables.css:85:3-14 */
+      padding-top: 0; /* variables.css:85:3-14 */
+      padding-left: 0; /* variables.css:85:3-14 */
+      padding-bottom: 0; /* variables.css:85:3-14 */
+      padding-right: 0; /* variables.css:85:3-14 */
+      border-top-style: none; /* variables.css:85:3-14 */
+      border-top-width: 0; /* variables.css:85:3-14 */
+      border-left-style: none; /* variables.css:85:3-14 */
+      border-left-width: 0; /* variables.css:85:3-14 */
+      border-bottom-style: none; /* variables.css:85:3-14 */
+      border-bottom-width: 0; /* variables.css:85:3-14 */
+      border-right-style: none; /* variables.css:85:3-14 */
+      border-right-width: 0; /* variables.css:85:3-14 */
+      border-top-left-radius: 0; /* variables.css:85:3-14 */
+      border-top-right-radius: 0; /* variables.css:85:3-14 */
+      border-bottom-right-radius: 0; /* variables.css:85:3-14 */
+      border-bottom-left-radius: 0; /* variables.css:85:3-14 */
+      outline-style: none; /* variables.css:85:3-14 */
+      outline-width: 0; /* variables.css:85:3-14 */
+      outline-offset: 0; /* variables.css:85:3-14 */
+      background-clip: border-box; /* variables.css:85:3-14 */
+      background-origin: padding-box; /* variables.css:85:3-14 */
+      background-size: auto; /* variables.css:85:3-14 */
+      background-position: left top; /* variables.css:85:3-14 */
+      border-top-color: rgb(255,0,0); /* variables.css:85:3-14 */
+      border-right-color: rgb(255,0,0); /* variables.css:85:3-14 */
+      border-bottom-color: rgb(255,0,0); /* variables.css:85:3-14 */
+      border-left-color: rgb(255,0,0); /* variables.css:85:3-14 */
+      outline-color: rgb(255,0,0); /* variables.css:85:3-14 */
+      background-repeat: repeat; /* variables.css:85:3-14 */
+      background-image: none; /* variables.css:85:3-14 */
+      background-blend-mode: normal; /* variables.css:85:3-14 */
+      border-image-source: none; /* variables.css:85:3-14 */
+      border-image-repeat: stretch; /* variables.css:85:3-14 */
+      border-image-slice: 100%; /* variables.css:85:3-14 */
+      border-image-width: 1; /* variables.css:85:3-14 */
+      -gtk-icon-source: none; /* variables.css:85:3-14 */
+      -gtk-icon-size: 16px; /* variables.css:85:3-14 */
+      -gtk-icon-shadow: none; /* variables.css:85:3-14 */
+      -gtk-icon-style: requested; /* variables.css:85:3-14 */
+      -gtk-icon-transform: none; /* variables.css:85:3-14 */
+      -gtk-icon-filter: none; /* variables.css:85:3-14 */
+      border-spacing: 0 0; /* variables.css:85:3-14 */
+      transform: none; /* variables.css:85:3-14 */
+      transform-origin: center; /* variables.css:85:3-14 */
+      min-width: 0; /* variables.css:85:3-14 */
+      min-height: 0; /* variables.css:85:3-14 */
+      transition-property: all; /* variables.css:85:3-14 */
+      transition-duration: 0; /* variables.css:85:3-14 */
+      transition-timing-function: ease; /* variables.css:85:3-14 */
+      transition-delay: 0; /* variables.css:85:3-14 */
+      animation-name: none; /* variables.css:85:3-14 */
+      animation-duration: 0; /* variables.css:85:3-14 */
+      animation-timing-function: ease; /* variables.css:85:3-14 */
+      animation-iteration-count: 1; /* variables.css:85:3-14 */
+      animation-direction: normal; /* variables.css:85:3-14 */
+      animation-play-state: running; /* variables.css:85:3-14 */
+      animation-delay: 0; /* variables.css:85:3-14 */
+      animation-fill-mode: none; /* variables.css:85:3-14 */
+      opacity: 1; /* variables.css:85:3-14 */
+      filter: none; /* variables.css:85:3-14 */
+      caret-color: rgb(255,255,255); /* variables.css:85:3-14 */
+      -gtk-secondary-caret-color: rgb(255,255,255); /* variables.css:85:3-14 */
+      font-feature-settings: normal; /* variables.css:85:3-14 */
+      font-variation-settings: normal; /* variables.css:85:3-14 */
+      line-height: normal; /* variables.css:85:3-14 */
+      --color1: red; /* variables.css:2:13-16 */
+    label.label-7:dir(ltr)
+      color: rgb(255,0,0); /* variables.css:93:3-39 */
+      background-color: rgb(255,0,0); /* variables.css:95:3-25 */
+      --color1: red; /* variables.css:2:13-16 */
+    label.label-8:dir(ltr)
+      color: rgb(255,192,203); /* variables.css:130:3-31 */
+      background-color: rgb(255,255,0); /* variables.css:133:3-42 */
+      box-shadow: 0 0 3px rgb(255,255,0) inset; /* variables.css:136:3-50 */
+      padding-left: 1px; /* variables.css:118:3-19 */
+      padding-right: 10px; /* variables.css:119:3-20 */
+      transition-duration: 4s; /* variables.css:140:3-45 */
+      animation-name: test; /* variables.css:125:3-39 */
+      animation-duration: 10s; /* variables.css:125:3-39 */
+      animation-timing-function: linear; /* variables.css:125:3-39 */
+      animation-iteration-count: infinite; /* variables.css:125:3-39 */
+      animation-direction: normal; /* variables.css:125:3-39 */
+      animation-delay: 0; /* variables.css:125:3-39 */
+      animation-fill-mode: none; /* variables.css:125:3-39 */
+      --duration: 2s;
+      --duration2: var(--duration, 4s); /* variables.css:139:16-35 */
+      --padding-right: 10px;
+      --padding1: 1px; /* variables.css:121:15-18 */
+      --padding2: 2px; /* variables.css:122:15-18 */
+      --test1: red;
+      --test2: blue;
