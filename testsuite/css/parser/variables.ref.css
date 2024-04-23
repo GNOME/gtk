@@ -1,0 +1,20 @@
+@keyframes aaaa {
+  from {
+    --test: red;
+    --test2: green;
+  }
+  to {
+    --test: blue;
+    --test3: cyan;
+  }
+}
+
+label {
+  background-color: var(--color2, green);
+  color: var(--color1);
+}
+
+:root {
+  --color1: red;
+  --color2: initial;
+}

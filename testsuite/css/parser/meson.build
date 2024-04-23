@@ -606,6 +606,23 @@ test_data = [
   'value-none.css',
   'value-none.errors',
   'value-none.ref.css',
+  'variables.css',
+  'variables.ref.css',
+  'variables-invalid-01.css',
+  'variables-invalid-01.errors',
+  'variables-invalid-01.ref.css',
+  'variables-invalid-02.css',
+  'variables-invalid-02.errors',
+  'variables-invalid-02.ref.css',
+  'variables-invalid-03.css',
+  'variables-invalid-03.errors',
+  'variables-invalid-03.ref.css',
+  'variables-invalid-04.css',
+  'variables-invalid-04.errors',
+  'variables-invalid-04.ref.css',
+  'variables-invalid-05.css',
+  'variables-invalid-05.errors',
+  'variables-invalid-05.ref.css',
 ]
 
 foreach testname : test_data
