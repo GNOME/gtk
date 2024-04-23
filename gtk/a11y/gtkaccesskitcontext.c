@@ -566,6 +566,9 @@ gtk_accesskit_context_build_node (GtkAccessKitContext      *self,
     accesskit_node_builder_set_name (builder, str);
   g_free (str);
 
+  accesskit_node_builder_set_class_name (builder,
+                                         g_type_name (G_TYPE_FROM_INSTANCE (accessible)));
+
   /* TODO: properties */
 
   return accesskit_node_builder_build (builder, node_classes);
