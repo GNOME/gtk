@@ -518,6 +518,31 @@ gtk_accesskit_context_get_id (GtkAccessKitContext *self)
   return self->id;
 }
 
+typedef void (*AccessKitStringSetter) (accesskit_node_builder *, const char *);
+
+static gboolean
+set_string_property (GtkATContext           *ctx,
+                     GtkAccessibleProperty   property,
+                     AccessKitStringSetter   setter,
+                     accesskit_node_builder *builder)
+{
+  if (gtk_at_context_has_accessible_property (ctx, property))
+    {
+      GtkAccessibleValue *value;
+      const char *str;
+
+      value = gtk_at_context_get_accessible_property (ctx, property);
+      str = gtk_string_accessible_value_get (value);
+      if (str)
+        {
+          setter (builder, str);
+          return TRUE;
+        }
+    }
+
+  return FALSE;
+}
+
 accesskit_node *
 gtk_accesskit_context_build_node (GtkAccessKitContext      *self,
                                   accesskit_node_class_set *node_classes)
@@ -528,7 +553,6 @@ gtk_accesskit_context_build_node (GtkAccessKitContext      *self,
   GtkAccessible *accessible = gtk_at_context_get_accessible (ctx);
   int x, y, width, height;
   GtkAccessible *child = gtk_accessible_get_first_accessible_child (accessible);
-  gchar *str;
 
   if (gtk_accessible_get_bounds (accessible, &x, &y, &width, &height))
     {
@@ -561,10 +585,18 @@ gtk_accesskit_context_build_node (GtkAccessKitContext      *self,
         accesskit_node_builder_set_hidden (builder);
     }
 
-  str = gtk_at_context_get_name (ctx);
-  if (str && *str)
-    accesskit_node_builder_set_name (builder, str);
-  g_free (str);
+  set_string_property (ctx, GTK_ACCESSIBLE_PROPERTY_DESCRIPTION,
+                       accesskit_node_builder_set_description, builder);
+  set_string_property (ctx, GTK_ACCESSIBLE_PROPERTY_KEY_SHORTCUTS,
+                       accesskit_node_builder_set_keyboard_shortcut, builder);
+  set_string_property (ctx, GTK_ACCESSIBLE_PROPERTY_LABEL,
+                       accesskit_node_builder_set_name, builder);
+  set_string_property (ctx, GTK_ACCESSIBLE_PROPERTY_PLACEHOLDER,
+                       accesskit_node_builder_set_placeholder, builder);
+  set_string_property (ctx, GTK_ACCESSIBLE_PROPERTY_ROLE_DESCRIPTION,
+                       accesskit_node_builder_set_role_description, builder);
+  set_string_property (ctx, GTK_ACCESSIBLE_PROPERTY_VALUE_TEXT,
+                       accesskit_node_builder_set_value, builder);
 
   accesskit_node_builder_set_class_name (builder,
                                          g_type_name (G_TYPE_FROM_INSTANCE (accessible)));
