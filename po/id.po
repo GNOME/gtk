@@ -14,8 +14,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk main\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2024-03-02 15:19+0000\n"
-"PO-Revision-Date: 2024-03-07 15:43+0700\n"
+"POT-Creation-Date: 2024-04-22 13:22+0000\n"
+"PO-Revision-Date: 2024-04-23 14:25+0700\n"
 "Last-Translator: Andika Triwidada <andika@gmail.com>\n"
 "Language-Team: Indonesian <gnome-l10n-id@googlegroups.com>\n"
 "Language: id\n"
@@ -38,7 +38,7 @@ msgstr "Papan klip ini tidak dapat menyimpan data."
 msgid "Cannot read from empty clipboard."
 msgstr "Tidak dapat membaca dari papan klip kosong."
 
-#: gdk/gdkclipboard.c:318 gdk/gdkclipboard.c:1136 gdk/gdkdrag.c:618
+#: gdk/gdkclipboard.c:318 gdk/gdkclipboard.c:1136 gdk/gdkdrag.c:606
 msgid "No compatible formats to transfer clipboard contents."
 msgstr "Tidak ada format yang kompatibel untuk mentransfer konten papan klip."
 
@@ -53,11 +53,11 @@ msgstr "Tidak dapat memberikan konten sebagai %s"
 msgid "Cannot provide contents as %s"
 msgstr "Tidak dapat memberikan konten sebagai \"%s\""
 
-#: gdk/gdkdisplay.c:176 gdk/gdkglcontext.c:459
+#: gdk/gdkdisplay.c:176 gdk/gdkglcontext.c:464
 msgid "The current backend does not support OpenGL"
 msgstr "Backend saat ini tak mendukung OpenGL"
 
-#: gdk/gdkdisplay.c:1315 gdk/gdkvulkancontext.c:1596
+#: gdk/gdkdisplay.c:1315 gdk/gdkvulkancontext.c:1600
 msgid "Vulkan support disabled via GDK_DEBUG"
 msgstr "Dukungan Vulkan dinonaktifkan melalui GDK_DEBUG"
 
@@ -65,45 +65,45 @@ msgstr "Dukungan Vulkan dinonaktifkan melalui GDK_DEBUG"
 msgid "GL support disabled via GDK_DEBUG"
 msgstr "Dukungan GL dinonaktifkan melalui GDK_DEBUG"
 
-#: gdk/gdkdisplay.c:1665
+#: gdk/gdkdisplay.c:1675
 msgid "No EGL configuration available"
 msgstr "Tak ada konfigurasi EGL yang tersedia"
 
-#: gdk/gdkdisplay.c:1673
+#: gdk/gdkdisplay.c:1683
 msgid "Failed to get EGL configurations"
 msgstr "Gagal mendapatkan konfigurasi EGL"
 
-#: gdk/gdkdisplay.c:1703
+#: gdk/gdkdisplay.c:1713
 msgid "No EGL configuration with required features found"
 msgstr "Tidak ditemukan konfigurasi EGL dengan fitur yang diperlukan"
 
-#: gdk/gdkdisplay.c:1710
+#: gdk/gdkdisplay.c:1720
 msgid "No perfect EGL configuration found"
 msgstr "Tak ditemukan konfigurasi EGL yang sempurna"
 
-#: gdk/gdkdisplay.c:1752
+#: gdk/gdkdisplay.c:1762
 #, c-format
 msgid "EGL implementation is missing extension %s"
 msgid_plural "EGL implementation is missing %2$d extensions: %1$s"
 msgstr[0] "Implementasi EGL tidak memiliki %2$d ekstensi: %1$s"
 
-#: gdk/gdkdisplay.c:1801
+#: gdk/gdkdisplay.c:1811
 msgid "libEGL not available in this sandbox"
 msgstr "libEGL tidak tersedia di sandbox ini"
 
-#: gdk/gdkdisplay.c:1802
+#: gdk/gdkdisplay.c:1812
 msgid "libEGL not available"
 msgstr "libEGL tidak tersedia"
 
-#: gdk/gdkdisplay.c:1812
+#: gdk/gdkdisplay.c:1822
 msgid "Failed to create EGL display"
 msgstr "Gagal membuat tampilan EGL"
 
-#: gdk/gdkdisplay.c:1821
+#: gdk/gdkdisplay.c:1831
 msgid "Could not initialize EGL display"
 msgstr "Tidak bisa menginisialisasi tampilan EGL"
 
-#: gdk/gdkdisplay.c:1831
+#: gdk/gdkdisplay.c:1841
 #, c-format
 msgid "EGL version %d.%d is too old. GTK requires %d.%d"
 msgstr "EGL versi %d.%d terlalu tua. GTK memerlukan %d.%d"
@@ -116,32 +116,32 @@ msgstr "Seret dan jatuhkan dari aplikasi lain tidak didukung."
 msgid "No compatible formats to transfer contents."
 msgstr "Tidak ada format yang kompatibel untuk mentransfer konten."
 
-#: gdk/gdkglcontext.c:419 gdk/x11/gdkglcontext-glx.c:645
+#: gdk/gdkglcontext.c:424 gdk/x11/gdkglcontext-glx.c:645
 msgid "No GL API allowed."
 msgstr "Tidak ada API GL yang diizinkan."
 
-#: gdk/gdkglcontext.c:442 gdk/win32/gdkglcontext-win32-wgl.c:395
+#: gdk/gdkglcontext.c:447 gdk/win32/gdkglcontext-win32-wgl.c:395
 #: gdk/win32/gdkglcontext-win32-wgl.c:538
 #: gdk/win32/gdkglcontext-win32-wgl.c:582 gdk/x11/gdkglcontext-glx.c:691
 msgid "Unable to create a GL context"
 msgstr "Tak dapat membuat sebuah konteks GL"
 
-#: gdk/gdkglcontext.c:1304
+#: gdk/gdkglcontext.c:1310
 msgid "OpenGL ES disabled via GDK_DEBUG"
 msgstr "OpenGL ES dinonaktifkan melalui GDK_DEBUG"
 
-#: gdk/gdkglcontext.c:1316
+#: gdk/gdkglcontext.c:1322
 msgid "OpenGL disabled via GDK_DEBUG"
 msgstr "OpenGL dinonaktifkan melalui GDK_DEBUG"
 
-#: gdk/gdkglcontext.c:1327
+#: gdk/gdkglcontext.c:1333
 #, c-format
 msgid "Application does not support %s API"
 msgstr "Aplikasi tidak mendukung API %s"
 
 #. translators: This is about OpenGL backend names, like
 #. * "Trying to use X11 GLX, but EGL is already in use"
-#: gdk/gdkglcontext.c:2113
+#: gdk/gdkglcontext.c:2123
 #, c-format
 msgid "Trying to use %s, but %s is already in use"
 msgstr "Mencoba menggunakan %s, tetapi %s sudah digunakan"
@@ -847,7 +847,7 @@ msgid "This GLES %d.%d implementation does not support half-float vertex data"
 msgstr ""
 "Implementasi GLES %d.%d ini tidak mendukung data verteks setengah mengambang"
 
-#: gsk/gpu/gskgldevice.c:245
+#: gsk/gpu/gskgldevice.c:246
 #, c-format
 msgid "OpenGL ES 3.0 is not supported by this renderer."
 msgstr "OpenGL ES 3.0 tidak didukung oleh perender ini."
@@ -1095,7 +1095,7 @@ msgid "Pick a Font"
 msgstr "Pilih Fonta"
 
 #: gtk/deprecated/gtkfontbutton.c:600 gtk/gtkfilechooserwidget.c:3815
-#: gtk/gtkfontdialogbutton.c:126 gtk/inspector/visual.ui:169
+#: gtk/gtkfontdialogbutton.c:126 gtk/inspector/visual.ui:285
 msgid "Font"
 msgstr "Fonta"
 
@@ -2353,7 +2353,7 @@ msgid "If you delete an item, it will be permanently lost."
 msgstr "Jika Anda menghapus suatu butir, itu akan hilang selamanya."
 
 #: gtk/gtkfilechooserwidget.c:1188 gtk/gtkfilechooserwidget.c:1786
-#: gtk/gtklabel.c:5712 gtk/gtktext.c:6193 gtk/gtktextview.c:9080
+#: gtk/gtklabel.c:5712 gtk/gtktext.c:6194 gtk/gtktextview.c:9099
 msgid "_Delete"
 msgstr "_Hapus"
 
@@ -2564,7 +2564,7 @@ msgid "_Time"
 msgstr "_Waktu"
 
 #: gtk/gtkfilechooserwidget.c:7375 gtk/gtkplacessidebar.c:2306
-#: gtk/inspector/a11y.ui:43 gtk/inspector/actions.ui:19
+#: gtk/inspector/a11y.ui:43 gtk/inspector/actions.ui:18
 #: gtk/inspector/css-node-tree.ui:22 gtk/inspector/prop-list.ui:24
 #: gtk/ui/gtkfilechooserwidget.ui:385 gtk/print/ui/gtkprintunixdialog.ui:80
 msgid "Name"
@@ -2693,19 +2693,19 @@ msgstr "Tutup"
 msgid "Close the infobar"
 msgstr "Tutup bilah info"
 
-#: gtk/gtklabel.c:5709 gtk/gtktext.c:6181 gtk/gtktextview.c:9068
+#: gtk/gtklabel.c:5709 gtk/gtktext.c:6182 gtk/gtktextview.c:9087
 msgid "Cu_t"
 msgstr "Po_tong"
 
-#: gtk/gtklabel.c:5710 gtk/gtktext.c:6185 gtk/gtktextview.c:9072
+#: gtk/gtklabel.c:5710 gtk/gtktext.c:6186 gtk/gtktextview.c:9091
 msgid "_Copy"
 msgstr "_Salin"
 
-#: gtk/gtklabel.c:5711 gtk/gtktext.c:6189 gtk/gtktextview.c:9076
+#: gtk/gtklabel.c:5711 gtk/gtktext.c:6190 gtk/gtktextview.c:9095
 msgid "_Paste"
 msgstr "Tem_pel"
 
-#: gtk/gtklabel.c:5717 gtk/gtktext.c:6202 gtk/gtktextview.c:9101
+#: gtk/gtklabel.c:5717 gtk/gtktext.c:6203 gtk/gtktextview.c:9120
 msgid "Select _All"
 msgstr "Pilih Semu_a"
 
@@ -2717,7 +2717,7 @@ msgstr "_Buka Taut"
 msgid "Copy _Link Address"
 msgstr "Sa_lin Alamat Taut"
 
-#: gtk/gtklabel.c:5770 gtk/gtktext.c:2724 gtk/gtktextview.c:9150
+#: gtk/gtklabel.c:5770 gtk/gtktext.c:2723 gtk/gtktextview.c:9169
 msgid "Context menu"
 msgstr "Menu konteks"
 
@@ -3407,7 +3407,7 @@ msgstr "Habis kertas"
 
 #. Translators: this is a printer status.
 #: gtk/print/gtkprintoperation-win32.c:640
-#: modules/printbackends/gtkprintbackendcpdb.c:1528
+#: modules/printbackends/gtkprintbackendcpdb.c:1533
 #: modules/printbackends/gtkprintbackendcups.c:2639
 msgid "Paused"
 msgstr "Ditahan"
@@ -3478,42 +3478,42 @@ msgstr "Mengambil informasi pencetak…"
 #. * multiple pages on a sheet when printing
 #.
 #: gtk/print/gtkprintunixdialog.c:2753
-#: modules/printbackends/gtkprintbackendcups.c:5645
+#: modules/printbackends/gtkprintbackendcups.c:5677
 msgid "Left to right, top to bottom"
 msgstr "Kiri ke kanan, puncak ke dasar"
 
 #: gtk/print/gtkprintunixdialog.c:2753
-#: modules/printbackends/gtkprintbackendcups.c:5645
+#: modules/printbackends/gtkprintbackendcups.c:5677
 msgid "Left to right, bottom to top"
 msgstr "Kiri ke kanan, dasar ke puncak"
 
 #: gtk/print/gtkprintunixdialog.c:2754
-#: modules/printbackends/gtkprintbackendcups.c:5646
+#: modules/printbackends/gtkprintbackendcups.c:5678
 msgid "Right to left, top to bottom"
 msgstr "Kanan ke kiri, puncak ke dasar"
 
 #: gtk/print/gtkprintunixdialog.c:2754
-#: modules/printbackends/gtkprintbackendcups.c:5646
+#: modules/printbackends/gtkprintbackendcups.c:5678
 msgid "Right to left, bottom to top"
 msgstr "Kanan ke kiri, dasar ke puncak"
 
 #: gtk/print/gtkprintunixdialog.c:2755
-#: modules/printbackends/gtkprintbackendcups.c:5647
+#: modules/printbackends/gtkprintbackendcups.c:5679
 msgid "Top to bottom, left to right"
 msgstr "Puncak ke dasar, kiri ke kanan"
 
 #: gtk/print/gtkprintunixdialog.c:2755
-#: modules/printbackends/gtkprintbackendcups.c:5647
+#: modules/printbackends/gtkprintbackendcups.c:5679
 msgid "Top to bottom, right to left"
 msgstr "Puncak ke dasar, kanan ke kiri"
 
 #: gtk/print/gtkprintunixdialog.c:2756
-#: modules/printbackends/gtkprintbackendcups.c:5648
+#: modules/printbackends/gtkprintbackendcups.c:5680
 msgid "Bottom to top, left to right"
 msgstr "Dasar ke puncak, kiri ke kanan"
 
 #: gtk/print/gtkprintunixdialog.c:2756
-#: modules/printbackends/gtkprintbackendcups.c:5648
+#: modules/printbackends/gtkprintbackendcups.c:5680
 msgid "Bottom to top, right to left"
 msgstr "Dasar ke puncak, kanan ke kiri"
 
@@ -3653,15 +3653,15 @@ msgctxt "accessibility"
 msgid "Sidebar"
 msgstr "Bilah sisi"
 
-#: gtk/gtktext.c:6207 gtk/gtktextview.c:9106
+#: gtk/gtktext.c:6208 gtk/gtktextview.c:9125
 msgid "Insert _Emoji"
 msgstr "Sisipkan _Emoji"
 
-#: gtk/gtktextview.c:9088
+#: gtk/gtktextview.c:9107
 msgid "_Undo"
 msgstr "_Tidak Jadi"
 
-#: gtk/gtktextview.c:9092
+#: gtk/gtktextview.c:9111
 msgid "_Redo"
 msgstr "_Jadi Lagi"
 
@@ -3891,7 +3891,7 @@ msgctxt "Vulkan version"
 msgid "None"
 msgstr "Nihil"
 
-#: gtk/inspector/general.c:922
+#: gtk/inspector/general.c:924
 msgid "IM Context is hardcoded by GTK_IM_MODULE"
 msgstr "Konteks IM adalah di-hardcode oleh GTK_IM_MODULE"
 
@@ -4077,7 +4077,7 @@ msgstr "Cacah Bingkai"
 msgid "Frame Rate"
 msgstr "Laju Bingkai"
 
-#: gtk/inspector/misc-info.ui:527
+#: gtk/inspector/misc-info.ui:527 gtk/inspector/visual.ui:315
 msgid "Scale"
 msgstr "Skala"
 
@@ -4262,27 +4262,27 @@ msgstr "Ukuran:"
 msgid "Trigger"
 msgstr "Pemicu"
 
-#: gtk/inspector/size-groups.c:225
+#: gtk/inspector/size-groups.c:228
 msgctxt "sizegroup mode"
 msgid "None"
 msgstr "Nihil"
 
-#: gtk/inspector/size-groups.c:226
+#: gtk/inspector/size-groups.c:229
 msgctxt "sizegroup mode"
 msgid "Horizontal"
 msgstr "Horisontal"
 
-#: gtk/inspector/size-groups.c:227
+#: gtk/inspector/size-groups.c:230
 msgctxt "sizegroup mode"
 msgid "Vertical"
 msgstr "Vertikal"
 
-#: gtk/inspector/size-groups.c:228
+#: gtk/inspector/size-groups.c:231
 msgctxt "sizegroup mode"
 msgid "Both"
 msgstr "Keduanya"
 
-#: gtk/inspector/size-groups.c:240
+#: gtk/inspector/size-groups.c:243
 msgid "Mode"
 msgstr "Mode"
 
@@ -4339,13 +4339,9 @@ msgstr "Hirarki"
 msgid "Implements"
 msgstr "Melaksanakan"
 
-#: gtk/inspector/visual.c:674 gtk/inspector/visual.c:693
+#: gtk/inspector/visual.c:765 gtk/inspector/visual.c:784
 msgid "Theme is hardcoded by GTK_THEME"
 msgstr "Tema di-hardcode oleh GTK_THEME"
-
-#: gtk/inspector/visual.c:942
-msgid "Backend does not support window scaling"
-msgstr "Backend tak mendukung penskalaan jendela"
 
 #: gtk/inspector/visual.ui:34
 msgid "GTK Theme"
@@ -4367,43 +4363,69 @@ msgstr "Ukuran Kursor"
 msgid "Icon Theme"
 msgstr "Tema Ikon"
 
-#: gtk/inspector/visual.ui:194
-msgid "Font Scale"
-msgstr "Skala Fonta"
-
-#: gtk/inspector/visual.ui:239
+#: gtk/inspector/visual.ui:169
 msgid "Text Direction"
 msgstr "Arah Teks"
 
-#: gtk/inspector/visual.ui:254
+#: gtk/inspector/visual.ui:184
 msgid "Left-to-Right"
 msgstr "Kiri ke Kanan"
 
-#: gtk/inspector/visual.ui:255
+#: gtk/inspector/visual.ui:185
 msgid "Right-to-Left"
 msgstr "Kanan ke Kiri"
 
-#: gtk/inspector/visual.ui:273
-msgid "Window Scaling"
-msgstr "Penskalaan Jendela"
-
-#: gtk/inspector/visual.ui:306
+#: gtk/inspector/visual.ui:202
 msgid "Animations"
 msgstr "Animasi"
 
-#: gtk/inspector/visual.ui:331
+#: gtk/inspector/visual.ui:227
 msgid "Slowdown"
 msgstr "Melambat"
 
-#: gtk/inspector/visual.ui:385
+#: gtk/inspector/visual.ui:362
+msgid "Antialiasing"
+msgstr "Antialias"
+
+#: gtk/inspector/visual.ui:387
+#, fuzzy
+msgid "Hinting"
+msgstr "Hinting"
+
+#: gtk/inspector/visual.ui:402
+msgctxt "Font hinting style"
+msgid "None"
+msgstr "Nihil"
+
+#: gtk/inspector/visual.ui:403
+msgctxt "Font hinting style"
+msgid "Slight"
+msgstr "Sedikit"
+
+#: gtk/inspector/visual.ui:404
+msgctxt "Font hinting style"
+msgid "Medium"
+msgstr "Sedang"
+
+#: gtk/inspector/visual.ui:405
+msgctxt "Font hinting style"
+msgid "Full"
+msgstr "Penuh"
+
+#: gtk/inspector/visual.ui:422
+#, fuzzy
+msgid "Metrics Hinting"
+msgstr "Hinting Metrik"
+
+#: gtk/inspector/visual.ui:457
 msgid "Show Framerate"
 msgstr "Tampilkan Laju Bingkai"
 
-#: gtk/inspector/visual.ui:410
+#: gtk/inspector/visual.ui:482
 msgid "Show Graphic Updates"
 msgstr "Tampilkan Pembaruan Grafik"
 
-#: gtk/inspector/visual.ui:430
+#: gtk/inspector/visual.ui:502
 msgid ""
 "Tints all the places where the current renderer uses Cairo instead of the "
 "GPU."
@@ -4411,47 +4433,47 @@ msgstr ""
 "Mewarnai semua tempat di mana perender saat ini menggunakan Cairo alih-alih "
 "GPU."
 
-#: gtk/inspector/visual.ui:436
+#: gtk/inspector/visual.ui:508
 msgid "Show Cairo Rendering"
 msgstr "Tampilkan Pereenderan Cairo"
 
-#: gtk/inspector/visual.ui:461
+#: gtk/inspector/visual.ui:533
 msgid "Show Baselines"
 msgstr "Tampilkan Baseline"
 
-#: gtk/inspector/visual.ui:489
+#: gtk/inspector/visual.ui:561
 msgid "Show Layout Borders"
 msgstr "Tampilkan Batas Tata Letak"
 
-#: gtk/inspector/visual.ui:546
+#: gtk/inspector/visual.ui:618
 msgid "CSS Padding"
 msgstr "Pengisi CSS"
 
-#: gtk/inspector/visual.ui:556
+#: gtk/inspector/visual.ui:628
 msgid "CSS Border"
 msgstr "Batas CSS"
 
-#: gtk/inspector/visual.ui:566
+#: gtk/inspector/visual.ui:638
 msgid "CSS Margin"
 msgstr "Margin CSS"
 
-#: gtk/inspector/visual.ui:576
+#: gtk/inspector/visual.ui:648
 msgid "Widget Margin"
 msgstr "Margin Widget"
 
-#: gtk/inspector/visual.ui:611
+#: gtk/inspector/visual.ui:683
 msgid "Show Focus"
 msgstr "Tampilkan Fokus"
 
-#: gtk/inspector/visual.ui:636
+#: gtk/inspector/visual.ui:708
 msgid "Show Accessibility warnings"
 msgstr "Tampilkan peringatan Aksesibilitas"
 
-#: gtk/inspector/visual.ui:661
+#: gtk/inspector/visual.ui:733
 msgid "Show Graphics Offload"
 msgstr "Tampilkan Offload Grafis"
 
-#: gtk/inspector/visual.ui:693
+#: gtk/inspector/visual.ui:765
 msgid "Inspect Inspector"
 msgstr "Periksa Inspektur"
 
@@ -6576,34 +6598,37 @@ msgstr "Diperluas"
 msgid "Some of the settings in the dialog conflict"
 msgstr "Beberapa ketentuan pada dialog konflik"
 
-#. Translators: These strings name the possible values of the
-#. * job priority option in the print dialog
-#.
-#: modules/printbackends/gtkprintbackendcpdb.c:541
-#: modules/printbackends/gtkprintbackendcups.c:5640
+#: modules/printbackends/gtkprintbackendcpdb.c:542
+#: modules/printbackends/gtkprintbackendcups.c:5668
+#, fuzzy
+#| msgid "Urgent"
+msgctxt "Print job priority"
 msgid "Urgent"
 msgstr "Penting"
 
-#: modules/printbackends/gtkprintbackendcpdb.c:541
-#: modules/printbackends/gtkprintbackendcups.c:5640
+#: modules/printbackends/gtkprintbackendcpdb.c:543
+#: modules/printbackends/gtkprintbackendcups.c:5669
+msgctxt "Print job priority"
 msgid "High"
 msgstr "Tinggi"
 
-#: modules/printbackends/gtkprintbackendcpdb.c:541
-#: modules/printbackends/gtkprintbackendcups.c:5640
+#: modules/printbackends/gtkprintbackendcpdb.c:544
+#: modules/printbackends/gtkprintbackendcups.c:5670
+msgctxt "Print job priority"
 msgid "Medium"
 msgstr "Sedang"
 
-#: modules/printbackends/gtkprintbackendcpdb.c:541
-#: modules/printbackends/gtkprintbackendcups.c:5640
+#: modules/printbackends/gtkprintbackendcpdb.c:545
+#: modules/printbackends/gtkprintbackendcups.c:5671
+msgctxt "Print job priority"
 msgid "Low"
 msgstr "Rendah"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the front cover page.
 #.
-#: modules/printbackends/gtkprintbackendcpdb.c:562
-#: modules/printbackends/gtkprintbackendcups.c:5782
+#: modules/printbackends/gtkprintbackendcpdb.c:567
+#: modules/printbackends/gtkprintbackendcups.c:5814
 msgctxt "printer option"
 msgid "Before"
 msgstr "Sebelum"
@@ -6611,33 +6636,33 @@ msgstr "Sebelum"
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the back cover page.
 #.
-#: modules/printbackends/gtkprintbackendcpdb.c:569
-#: modules/printbackends/gtkprintbackendcups.c:5797
+#: modules/printbackends/gtkprintbackendcpdb.c:574
+#: modules/printbackends/gtkprintbackendcups.c:5829
 msgctxt "printer option"
 msgid "After"
 msgstr "Sesudah"
 
-#: modules/printbackends/gtkprintbackendcpdb.c:592
+#: modules/printbackends/gtkprintbackendcpdb.c:597
 msgid "Print at"
 msgstr "Cetak pada"
 
-#: modules/printbackends/gtkprintbackendcpdb.c:602
+#: modules/printbackends/gtkprintbackendcpdb.c:607
 msgid "Print at time"
 msgstr "Cetak pada waktu"
 
-#: modules/printbackends/gtkprintbackendcpdb.c:665
+#: modules/printbackends/gtkprintbackendcpdb.c:670
 msgctxt "print option"
 msgid "Borderless"
 msgstr "Tanpa batas"
 
 #. Translators: this is a printer status.
-#: modules/printbackends/gtkprintbackendcpdb.c:1525
+#: modules/printbackends/gtkprintbackendcpdb.c:1530
 #: modules/printbackends/gtkprintbackendcups.c:2636
 msgid "Paused; Rejecting Jobs"
 msgstr "Diistirahatkan; Menolak Tugas"
 
 #. Translators: this is a printer status.
-#: modules/printbackends/gtkprintbackendcpdb.c:1531
+#: modules/printbackends/gtkprintbackendcpdb.c:1536
 #: modules/printbackends/gtkprintbackendcups.c:2642
 msgid "Rejecting Jobs"
 msgstr "Menolak Tugas"
@@ -6788,59 +6813,59 @@ msgstr "Ada masalah pada pencetak \"%s\"."
 msgid "; "
 msgstr "; "
 
-#: modules/printbackends/gtkprintbackendcups.c:4582
-#: modules/printbackends/gtkprintbackendcups.c:4649
+#: modules/printbackends/gtkprintbackendcups.c:4609
+#: modules/printbackends/gtkprintbackendcups.c:4676
 msgctxt "printing option"
 msgid "Two Sided"
 msgstr "Dua Sisi"
 
-#: modules/printbackends/gtkprintbackendcups.c:4583
+#: modules/printbackends/gtkprintbackendcups.c:4610
 msgctxt "printing option"
 msgid "Paper Type"
 msgstr "Tipe Kertas"
 
-#: modules/printbackends/gtkprintbackendcups.c:4584
+#: modules/printbackends/gtkprintbackendcups.c:4611
 msgctxt "printing option"
 msgid "Paper Source"
 msgstr "Sumber Kertas"
 
-#: modules/printbackends/gtkprintbackendcups.c:4585
-#: modules/printbackends/gtkprintbackendcups.c:4650
+#: modules/printbackends/gtkprintbackendcups.c:4612
+#: modules/printbackends/gtkprintbackendcups.c:4677
 msgctxt "printing option"
 msgid "Output Tray"
 msgstr "Baki Keluaran"
 
-#: modules/printbackends/gtkprintbackendcups.c:4586
+#: modules/printbackends/gtkprintbackendcups.c:4613
 msgctxt "printing option"
 msgid "Resolution"
 msgstr "Resolusi"
 
-#: modules/printbackends/gtkprintbackendcups.c:4587
+#: modules/printbackends/gtkprintbackendcups.c:4614
 msgctxt "printing option"
 msgid "GhostScript pre-filtering"
 msgstr "Pra penapisan GhostScript"
 
-#: modules/printbackends/gtkprintbackendcups.c:4596
+#: modules/printbackends/gtkprintbackendcups.c:4623
 msgctxt "printing option value"
 msgid "One Sided"
 msgstr "Satu Sisi"
 
 #. Translators: this is an option of "Two Sided"
-#: modules/printbackends/gtkprintbackendcups.c:4598
+#: modules/printbackends/gtkprintbackendcups.c:4625
 msgctxt "printing option value"
 msgid "Long Edge (Standard)"
 msgstr "Sisi Panjang (Standar)"
 
 #. Translators: this is an option of "Two Sided"
-#: modules/printbackends/gtkprintbackendcups.c:4600
+#: modules/printbackends/gtkprintbackendcups.c:4627
 msgctxt "printing option value"
 msgid "Short Edge (Flip)"
 msgstr "Sisi Pendek (Putar)"
 
 #. Translators: this is an option of "Paper Source"
-#: modules/printbackends/gtkprintbackendcups.c:4602
-#: modules/printbackends/gtkprintbackendcups.c:4604
-#: modules/printbackends/gtkprintbackendcups.c:4612
+#: modules/printbackends/gtkprintbackendcups.c:4629
+#: modules/printbackends/gtkprintbackendcups.c:4631
+#: modules/printbackends/gtkprintbackendcups.c:4639
 msgctxt "printing option value"
 msgid "Auto Select"
 msgstr "Seleksi Otomatis"
@@ -6848,208 +6873,208 @@ msgstr "Seleksi Otomatis"
 # "Bawaan Pencetak" bukan "Baku Pencetak"^^
 #. Translators: this is an option of "Paper Source"
 #. Translators: this is an option of "Resolution"
-#: modules/printbackends/gtkprintbackendcups.c:4606
-#: modules/printbackends/gtkprintbackendcups.c:4608
-#: modules/printbackends/gtkprintbackendcups.c:4610
-#: modules/printbackends/gtkprintbackendcups.c:4614
+#: modules/printbackends/gtkprintbackendcups.c:4633
+#: modules/printbackends/gtkprintbackendcups.c:4635
+#: modules/printbackends/gtkprintbackendcups.c:4637
+#: modules/printbackends/gtkprintbackendcups.c:4641
 msgctxt "printing option value"
 msgid "Printer Default"
 msgstr "Bawaan Pencetak"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/gtkprintbackendcups.c:4616
+#: modules/printbackends/gtkprintbackendcups.c:4643
 msgctxt "printing option value"
 msgid "Embed GhostScript fonts only"
 msgstr "Tempelkan fonta GhostScript saja"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/gtkprintbackendcups.c:4618
+#: modules/printbackends/gtkprintbackendcups.c:4645
 msgctxt "printing option value"
 msgid "Convert to PS level 1"
 msgstr "Konversi ke PS tingkat 1"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/gtkprintbackendcups.c:4620
+#: modules/printbackends/gtkprintbackendcups.c:4647
 msgctxt "printing option value"
 msgid "Convert to PS level 2"
 msgstr "Konversi ke PS tingkat 2"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/gtkprintbackendcups.c:4622
+#: modules/printbackends/gtkprintbackendcups.c:4649
 msgctxt "printing option value"
 msgid "No pre-filtering"
 msgstr "Tanpa pra penapisan"
 
 #. Translators: "Miscellaneous" is the label for a button, that opens
 #. up an extra panel of settings in a print dialog.
-#: modules/printbackends/gtkprintbackendcups.c:4631
+#: modules/printbackends/gtkprintbackendcups.c:4658
 msgctxt "printing option group"
 msgid "Miscellaneous"
 msgstr "Rupa-rupa"
 
-#: modules/printbackends/gtkprintbackendcups.c:4658
+#: modules/printbackends/gtkprintbackendcups.c:4685
 msgctxt "sides"
 msgid "One Sided"
 msgstr "Satu Sisi"
 
 #. Translators: this is an option of "Two Sided"
-#: modules/printbackends/gtkprintbackendcups.c:4660
+#: modules/printbackends/gtkprintbackendcups.c:4687
 msgctxt "sides"
 msgid "Long Edge (Standard)"
 msgstr "Sisi Panjang (Standar)"
 
 #. Translators: this is an option of "Two Sided"
-#: modules/printbackends/gtkprintbackendcups.c:4662
+#: modules/printbackends/gtkprintbackendcups.c:4689
 msgctxt "sides"
 msgid "Short Edge (Flip)"
 msgstr "Sisi Pendek (Putar)"
 
 #. Translators: Top output bin
-#: modules/printbackends/gtkprintbackendcups.c:4665
+#: modules/printbackends/gtkprintbackendcups.c:4692
 msgctxt "output-bin"
 msgid "Top Bin"
 msgstr "Wadah Puncak"
 
 #. Translators: Middle output bin
-#: modules/printbackends/gtkprintbackendcups.c:4667
+#: modules/printbackends/gtkprintbackendcups.c:4694
 msgctxt "output-bin"
 msgid "Middle Bin"
 msgstr "Wadah Tengah"
 
 #. Translators: Bottom output bin
-#: modules/printbackends/gtkprintbackendcups.c:4669
+#: modules/printbackends/gtkprintbackendcups.c:4696
 msgctxt "output-bin"
 msgid "Bottom Bin"
 msgstr "Wadah Dasar"
 
 #. Translators: Side output bin
-#: modules/printbackends/gtkprintbackendcups.c:4671
+#: modules/printbackends/gtkprintbackendcups.c:4698
 msgctxt "output-bin"
 msgid "Side Bin"
 msgstr "Wadah Sisi"
 
 #. Translators: Left output bin
-#: modules/printbackends/gtkprintbackendcups.c:4673
+#: modules/printbackends/gtkprintbackendcups.c:4700
 msgctxt "output-bin"
 msgid "Left Bin"
 msgstr "Wadah Kiri"
 
 #. Translators: Right output bin
-#: modules/printbackends/gtkprintbackendcups.c:4675
+#: modules/printbackends/gtkprintbackendcups.c:4702
 msgctxt "output-bin"
 msgid "Right Bin"
 msgstr "Wadah Kanan"
 
 #. Translators: Center output bin
-#: modules/printbackends/gtkprintbackendcups.c:4677
+#: modules/printbackends/gtkprintbackendcups.c:4704
 msgctxt "output-bin"
 msgid "Center Bin"
 msgstr "Wadah Pusat"
 
 #. Translators: Rear output bin
-#: modules/printbackends/gtkprintbackendcups.c:4679
+#: modules/printbackends/gtkprintbackendcups.c:4706
 msgctxt "output-bin"
 msgid "Rear Bin"
 msgstr "Wadah Belakang"
 
 #. Translators: Output bin where one sided output is oriented in the face-up position
-#: modules/printbackends/gtkprintbackendcups.c:4681
+#: modules/printbackends/gtkprintbackendcups.c:4708
 msgctxt "output-bin"
 msgid "Face Up Bin"
 msgstr "Wadah Telentang"
 
 #. Translators: Output bin where one sided output is oriented in the face-down position
-#: modules/printbackends/gtkprintbackendcups.c:4683
+#: modules/printbackends/gtkprintbackendcups.c:4710
 msgctxt "output-bin"
 msgid "Face Down Bin"
 msgstr "Wadah Telungkup"
 
 #. Translators: Large capacity output bin
-#: modules/printbackends/gtkprintbackendcups.c:4685
+#: modules/printbackends/gtkprintbackendcups.c:4712
 msgctxt "output-bin"
 msgid "Large Capacity Bin"
 msgstr "Wadah Kapasitas Besar"
 
 #. Translators: Output stacker number %d
-#: modules/printbackends/gtkprintbackendcups.c:4707
+#: modules/printbackends/gtkprintbackendcups.c:4734
 #, c-format
 msgctxt "output-bin"
 msgid "Stacker %d"
 msgstr "Penumpuk %d"
 
 #. Translators: Output mailbox number %d
-#: modules/printbackends/gtkprintbackendcups.c:4711
+#: modules/printbackends/gtkprintbackendcups.c:4738
 #, c-format
 msgctxt "output-bin"
 msgid "Mailbox %d"
 msgstr "Kotak-surat %d"
 
 #. Translators: Private mailbox
-#: modules/printbackends/gtkprintbackendcups.c:4715
+#: modules/printbackends/gtkprintbackendcups.c:4742
 msgctxt "output-bin"
 msgid "My Mailbox"
 msgstr "Kotak-suratku"
 
 #. Translators: Output tray number %d
-#: modules/printbackends/gtkprintbackendcups.c:4719
+#: modules/printbackends/gtkprintbackendcups.c:4746
 #, c-format
 msgctxt "output-bin"
 msgid "Tray %d"
 msgstr "Baki %d"
 
 # "Bawaan Pencetak" bukan "Baku Pencetak"^^
-#: modules/printbackends/gtkprintbackendcups.c:5196
+#: modules/printbackends/gtkprintbackendcups.c:5223
 msgid "Printer Default"
 msgstr "Bawaan Pencetak"
 
 #. Translators, this string is used to label the job priority option
 #. * in the print dialog
 #.
-#: modules/printbackends/gtkprintbackendcups.c:5670
+#: modules/printbackends/gtkprintbackendcups.c:5702
 msgid "Job Priority"
 msgstr "Prioritas Tugas"
 
 #. Translators, this string is used to label the billing info entry
 #. * in the print dialog
 #.
-#: modules/printbackends/gtkprintbackendcups.c:5681
+#: modules/printbackends/gtkprintbackendcups.c:5713
 msgid "Billing Info"
 msgstr "Info Tagihan"
 
 #. Translators, these strings are names for various 'standard' cover
 #. * pages that the printing system may support.
 #.
-#: modules/printbackends/gtkprintbackendcups.c:5705
+#: modules/printbackends/gtkprintbackendcups.c:5737
 msgctxt "cover page"
 msgid "None"
 msgstr "Nihil"
 
-#: modules/printbackends/gtkprintbackendcups.c:5706
+#: modules/printbackends/gtkprintbackendcups.c:5738
 msgctxt "cover page"
 msgid "Classified"
 msgstr "Classified"
 
-#: modules/printbackends/gtkprintbackendcups.c:5707
+#: modules/printbackends/gtkprintbackendcups.c:5739
 msgctxt "cover page"
 msgid "Confidential"
 msgstr "Konfidensial"
 
-#: modules/printbackends/gtkprintbackendcups.c:5708
+#: modules/printbackends/gtkprintbackendcups.c:5740
 msgctxt "cover page"
 msgid "Secret"
 msgstr "Rahasia"
 
-#: modules/printbackends/gtkprintbackendcups.c:5709
+#: modules/printbackends/gtkprintbackendcups.c:5741
 msgctxt "cover page"
 msgid "Standard"
 msgstr "Standar"
 
-#: modules/printbackends/gtkprintbackendcups.c:5710
+#: modules/printbackends/gtkprintbackendcups.c:5742
 msgctxt "cover page"
 msgid "Top Secret"
 msgstr "Top Secret"
 
-#: modules/printbackends/gtkprintbackendcups.c:5711
+#: modules/printbackends/gtkprintbackendcups.c:5743
 msgctxt "cover page"
 msgid "Unclassified"
 msgstr "Unclassified"
@@ -7057,7 +7082,7 @@ msgstr "Unclassified"
 #. Translators, this string is used to label the pages-per-sheet option
 #. * in the print dialog
 #.
-#: modules/printbackends/gtkprintbackendcups.c:5723
+#: modules/printbackends/gtkprintbackendcups.c:5755
 msgctxt "printer option"
 msgid "Pages per Sheet"
 msgstr "Halaman per Lembar"
@@ -7065,7 +7090,7 @@ msgstr "Halaman per Lembar"
 #. Translators, this string is used to label the option in the print
 #. * dialog that controls in what order multiple pages are arranged
 #.
-#: modules/printbackends/gtkprintbackendcups.c:5740
+#: modules/printbackends/gtkprintbackendcups.c:5772
 msgctxt "printer option"
 msgid "Page Ordering"
 msgstr "Urutan Halaman"
@@ -7074,7 +7099,7 @@ msgstr "Urutan Halaman"
 #. * a print job is printed. Possible values are 'now', a specified time,
 #. * or 'on hold'
 #.
-#: modules/printbackends/gtkprintbackendcups.c:5817
+#: modules/printbackends/gtkprintbackendcups.c:5849
 msgctxt "printer option"
 msgid "Print at"
 msgstr "Dicetak pada"
@@ -7082,7 +7107,7 @@ msgstr "Dicetak pada"
 #. Translators: this is the name of the option that allows the user
 #. * to specify a time when a print job will be printed.
 #.
-#: modules/printbackends/gtkprintbackendcups.c:5828
+#: modules/printbackends/gtkprintbackendcups.c:5860
 msgctxt "printer option"
 msgid "Print at time"
 msgstr "Dicetak pada waktu"
@@ -7092,19 +7117,19 @@ msgstr "Dicetak pada waktu"
 #. * the width and height in points. E.g: "Custom
 #. * 230.4x142.9"
 #.
-#: modules/printbackends/gtkprintbackendcups.c:5875
+#: modules/printbackends/gtkprintbackendcups.c:5907
 #, c-format
 msgid "Custom %s×%s"
 msgstr "Gubahan %sx%s"
 
 #. TRANSLATORS: this is the ICC color profile to use for this job
-#: modules/printbackends/gtkprintbackendcups.c:5986
+#: modules/printbackends/gtkprintbackendcups.c:6018
 msgctxt "printer option"
 msgid "Printer Profile"
 msgstr "Profil Pencetak"
 
 #. TRANSLATORS: this is when color profile information is unavailable
-#: modules/printbackends/gtkprintbackendcups.c:5993
+#: modules/printbackends/gtkprintbackendcups.c:6025
 msgctxt "printer option value"
 msgid "Unavailable"
 msgstr "Tak tersedia"
@@ -7254,7 +7279,7 @@ msgstr "Gunakan gaya dari berkas CSS"
 #: tools/gtk-builder-tool-preview.c:187 tools/gtk-builder-tool-screenshot.c:370
 #: tools/gtk-builder-tool-validate.c:268
 #: tools/gtk-rendernode-tool-benchmark.c:106
-#: tools/gtk-rendernode-tool-render.c:203 tools/gtk-rendernode-tool-show.c:113
+#: tools/gtk-rendernode-tool-render.c:262 tools/gtk-rendernode-tool-show.c:113
 #, c-format
 msgid "Could not initialize windowing system\n"
 msgstr "Tidak bisa menginisialisasi sistem jendela\n"
@@ -7299,13 +7324,13 @@ msgstr ""
 "Gunakan --force untuk menimpa.\n"
 
 #: tools/gtk-builder-tool-screenshot.c:332
-#: tools/gtk-rendernode-tool-render.c:171
+#: tools/gtk-rendernode-tool-render.c:230
 #, c-format
 msgid "Output written to %s.\n"
 msgstr "Keluaran ditulis ke %s.\n"
 
 #: tools/gtk-builder-tool-screenshot.c:336
-#: tools/gtk-rendernode-tool-render.c:175
+#: tools/gtk-rendernode-tool-render.c:234
 #, c-format
 msgid "Failed to save %s: %s\n"
 msgstr "Gagal menyimpan %s: %s\n"
@@ -7324,7 +7349,7 @@ msgstr "Timpa berkas yang sudah ada"
 
 #: tools/gtk-builder-tool-screenshot.c:363
 #: tools/gtk-rendernode-tool-benchmark.c:97
-#: tools/gtk-rendernode-tool-render.c:196
+#: tools/gtk-rendernode-tool-render.c:255
 msgid "FILE…"
 msgstr "BERKAS…"
 
@@ -7535,7 +7560,7 @@ msgstr "PATH"
 #: tools/gtk-path-tool-decompose.c:99
 #, fuzzy
 msgid "Decompose a path."
-msgstr "Menguraikan jalan."
+msgstr "Menguraikan jalur."
 
 #: tools/gtk-path-tool-decompose.c:112 tools/gtk-path-tool-info.c:113
 #: tools/gtk-path-tool-restrict.c:64 tools/gtk-path-tool-reverse.c:58
@@ -7600,7 +7625,7 @@ msgstr "Penuhi path (baku)"
 #: tools/gtk-path-tool-render.c:118 tools/gtk-path-tool-show.c:141
 #, fuzzy
 msgid "Stroke the path"
-msgstr "_Sapuan ke Tapak"
+msgstr "Sapu jalur"
 
 #: tools/gtk-path-tool-render.c:119 tools/gtk-path-tool-show.c:142
 msgid "Show path points"
@@ -7663,7 +7688,7 @@ msgstr "Gabungan garis (miter, miter-clip, round, bevel, arcs)"
 #: tools/gtk-path-tool-render.c:136 tools/gtk-path-tool-show.c:158
 #, fuzzy
 msgid "Miter limit (number)"
-msgstr "Batas mitra (angka)"
+msgstr "Batas miter (angka)"
 
 #: tools/gtk-path-tool-render.c:137 tools/gtk-path-tool-show.c:159
 msgid "Dash pattern (comma-separated numbers)"
@@ -7672,7 +7697,7 @@ msgstr "Pola putus-putus (angka yang dipisahkan koma)"
 #: tools/gtk-path-tool-render.c:138 tools/gtk-path-tool-show.c:160
 #, fuzzy
 msgid "Dash offset (number)"
-msgstr "Offset tanda hubung (angka)"
+msgstr "Ofset tanda hubung (angka)"
 
 #: tools/gtk-path-tool-render.c:161 tools/gtk-path-tool-show.c:172
 msgid "Could not initialize windowing system"
@@ -7697,19 +7722,16 @@ msgstr "Opsi yang terkait dengan stroke"
 
 #: tools/gtk-path-tool-render.c:182 tools/gtk-path-tool-show.c:192
 #, fuzzy
-#| msgid "Show other locations"
 msgid "Show help for stroke options"
-msgstr "Tampilkan lokasi lain"
+msgstr "Tampilkan bantuan untuk opsi stroke"
 
 #: tools/gtk-path-tool-render.c:199 tools/gtk-path-tool-show.c:209
 msgid "No path specified"
 msgstr "Tidak ada path yang dinyatakan"
 
 #: tools/gtk-path-tool-render.c:205
-#, fuzzy
-#| msgid "Can only preview a single .ui file\n"
 msgid "Can only render a single path"
-msgstr "Hanya dapat memratinjau satu berkas .ui\n"
+msgstr "Hanya dapat merender satu jalur"
 
 #: tools/gtk-path-tool-render.c:250 tools/gtk-path-tool-show.c:221
 msgid "fill rule"
@@ -7718,12 +7740,12 @@ msgstr "aturan pengisian"
 #: tools/gtk-path-tool-render.c:255 tools/gtk-path-tool-show.c:226
 #, fuzzy
 msgid "line cap"
-msgstr "Tudung Garis"
+msgstr "tudung garis"
 
 #: tools/gtk-path-tool-render.c:256 tools/gtk-path-tool-show.c:227
 #, fuzzy
 msgid "line join"
-msgstr "gabung baris"
+msgstr "sambung garis"
 
 #: tools/gtk-path-tool-render.c:310
 #, c-format
@@ -7748,7 +7770,6 @@ msgid "End of segment"
 msgstr "Akhir segmen"
 
 #: tools/gtk-path-tool-restrict.c:51
-#, fuzzy
 msgid "Restrict a path to a segment."
 msgstr "Batasi jalur ke segmen."
 
@@ -7837,19 +7858,17 @@ msgstr "Tambahkan perender ke benchmark"
 
 #: tools/gtk-rendernode-tool-benchmark.c:94
 #: tools/gtk-rendernode-tool-compare.c:65
-#: tools/gtk-rendernode-tool-render.c:195
+#: tools/gtk-rendernode-tool-render.c:254
 msgid "RENDERER"
 msgstr "PERENDER"
 
 #: tools/gtk-rendernode-tool-benchmark.c:95
-#, fuzzy
 msgid "Number of runs with each renderer"
 msgstr "Jumlah eksekusi dengan setiap perender"
 
 #: tools/gtk-rendernode-tool-benchmark.c:95
-#, fuzzy
 msgid "RUNS"
-msgstr "JALAN"
+msgstr "EKSEKUSI"
 
 #: tools/gtk-rendernode-tool-benchmark.c:96
 msgid "Don’t download result/wait for GPU to finish"
@@ -7858,10 +7877,10 @@ msgstr "Jangan unduh hasil/tunggu GPU selesai"
 #: tools/gtk-rendernode-tool-benchmark.c:114
 #, fuzzy
 msgid "Benchmark rendering of a .node file."
-msgstr "Rendering benchmark file .node."
+msgstr "Benchmark perenderan suatu berkas .node."
 
 #: tools/gtk-rendernode-tool-benchmark.c:127
-#: tools/gtk-rendernode-tool-info.c:236 tools/gtk-rendernode-tool-render.c:224
+#: tools/gtk-rendernode-tool-info.c:236 tools/gtk-rendernode-tool-render.c:283
 #: tools/gtk-rendernode-tool-show.c:134
 #, c-format
 msgid "No .node file specified\n"
@@ -7873,7 +7892,7 @@ msgid "Can only benchmark a single .node file\n"
 msgstr "Hanya bisa mem-benchmark berkas tunggal .node\n"
 
 #: tools/gtk-rendernode-tool-compare.c:65
-#: tools/gtk-rendernode-tool-render.c:195
+#: tools/gtk-rendernode-tool-render.c:254
 msgid "Renderer to use"
 msgstr "Perender yang dipakai"
 
@@ -7895,7 +7914,7 @@ msgid "Must specify two files\n"
 msgstr "Harus menyatakan dua berkas\n"
 
 #: tools/gtk-rendernode-tool-compare.c:102
-#: tools/gtk-rendernode-tool-render.c:150
+#: tools/gtk-rendernode-tool-render.c:209
 #, c-format
 msgid "Failed to create renderer: %s\n"
 msgstr "Gagal membuat perender: %s\n"
@@ -7955,7 +7974,7 @@ msgstr "Menyediakan informasi tentang simpul render."
 msgid "Can only accept a single .node file\n"
 msgstr "Hanya dapat menerima satu berkas .node\n"
 
-#: tools/gtk-rendernode-tool-render.c:123
+#: tools/gtk-rendernode-tool-render.c:170
 #, c-format
 msgid ""
 "File %s exists.\n"
@@ -7964,16 +7983,17 @@ msgstr ""
 "Berkas '%s' sudah ada.\n"
 "Bila Anda ingin menimpanya, nyatakan nama berkas.\n"
 
-#: tools/gtk-rendernode-tool-render.c:137
+#: tools/gtk-rendernode-tool-render.c:184
+#: tools/gtk-rendernode-tool-render.c:196
 #, c-format
 msgid "Failed to generate SVG: %s\n"
 msgstr "Gagal menghasilkan SVG: %s\n"
 
-#: tools/gtk-rendernode-tool-render.c:211
+#: tools/gtk-rendernode-tool-render.c:270
 msgid "Render a .node file to an image."
 msgstr "Render suatu berkas .node ke suatu gambar."
 
-#: tools/gtk-rendernode-tool-render.c:230
+#: tools/gtk-rendernode-tool-render.c:289
 #, c-format
 msgid "Can only render a single .node file to a single output file\n"
 msgstr ""
@@ -8109,3 +8129,12 @@ msgstr ""
 "Tidak ada berkas indeks tema dalam \"%s\".\n"
 "JIka Anda memang ingin membuat singgahan ikon di sini, gunakan --ignore-"
 "theme-index.\n"
+
+#~ msgid "Backend does not support window scaling"
+#~ msgstr "Backend tak mendukung penskalaan jendela"
+
+#~ msgid "Font Scale"
+#~ msgstr "Skala Fonta"
+
+#~ msgid "Window Scaling"
+#~ msgstr "Penskalaan Jendela"
