@@ -543,6 +543,40 @@ set_string_property (GtkATContext           *ctx,
   return FALSE;
 }
 
+typedef void (*AccessKitNodeIdPusher) (accesskit_node_builder *, accesskit_node_id);
+
+static gboolean
+set_multi_relation (GtkATContext           *ctx,
+                    GtkAccessibleRelation   relation,
+                    AccessKitNodeIdPusher   pusher,
+                    accesskit_node_builder *builder)
+{
+  if (gtk_at_context_has_accessible_relation (ctx, relation))
+    {
+      GtkAccessibleValue *value;
+      GList *l;
+      gboolean has_target;
+
+      value = gtk_at_context_get_accessible_relation (ctx, relation);
+      l = gtk_reference_list_accessible_value_get (value);
+      has_target = (l != NULL);
+
+      for (; l; l = l->next)
+        {
+          GtkATContext *target_ctx =
+            gtk_accessible_get_at_context (GTK_ACCESSIBLE (l->data));
+
+          gtk_at_context_realize (target_ctx);
+          pusher (builder, GTK_ACCESSKIT_CONTEXT (target_ctx)->id);
+          g_object_unref (target_ctx);
+        }
+
+      return has_target;
+    }
+
+  return FALSE;
+}
+
 accesskit_node *
 gtk_accesskit_context_build_node (GtkAccessKitContext      *self,
                                   accesskit_node_class_set *node_classes)
@@ -597,6 +631,17 @@ gtk_accesskit_context_build_node (GtkAccessKitContext      *self,
                        accesskit_node_builder_set_role_description, builder);
   set_string_property (ctx, GTK_ACCESSIBLE_PROPERTY_VALUE_TEXT,
                        accesskit_node_builder_set_value, builder);
+
+  set_multi_relation (ctx, GTK_ACCESSIBLE_RELATION_CONTROLS,
+                      accesskit_node_builder_push_controlled, builder);
+  set_multi_relation (ctx, GTK_ACCESSIBLE_RELATION_DESCRIBED_BY,
+                      accesskit_node_builder_push_described_by, builder);
+  set_multi_relation (ctx, GTK_ACCESSIBLE_RELATION_DETAILS,
+                      accesskit_node_builder_push_detail, builder);
+  set_multi_relation (ctx, GTK_ACCESSIBLE_RELATION_FLOW_TO,
+                      accesskit_node_builder_push_flow_to, builder);
+  set_multi_relation (ctx, GTK_ACCESSIBLE_RELATION_LABELLED_BY,
+                      accesskit_node_builder_push_labelled_by, builder);
 
   accesskit_node_builder_set_class_name (builder,
                                          g_type_name (G_TYPE_FROM_INSTANCE (accessible)));
