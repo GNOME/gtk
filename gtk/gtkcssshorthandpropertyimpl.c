@@ -966,7 +966,7 @@ pack_border (GtkCssShorthandProperty *shorthand,
 {
   GtkCssStyleProperty *prop;
   GtkBorder border;
-  GValue v;
+  GValue v = G_VALUE_INIT;
 
   prop = _gtk_css_shorthand_property_get_subproperty (shorthand, 0);
   _gtk_style_property_query (GTK_STYLE_PROPERTY (prop), &v, query_func, query_data);
