@@ -394,7 +394,8 @@ gtk_scale_button_class_init (GtkScaleButtonClass *klass)
   gtk_widget_class_bind_template_callback (widget_class, cb_popup_mapped);
 
   gtk_widget_class_set_css_name (widget_class, I_("scalebutton"));
-  gtk_widget_class_set_accessible_role (widget_class, GTK_ACCESSIBLE_ROLE_GROUP);
+  gtk_widget_class_set_accessible_role (widget_class,
+                                        GTK_ACCESSIBLE_ROLE_AUTHOR_CONTROLLED_PARENT);
 }
 
 static gboolean

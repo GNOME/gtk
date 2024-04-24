@@ -115,6 +115,8 @@ gtk_printer_option_widget_class_init (GtkPrinterOptionWidgetClass *class)
 							GTK_TYPE_PRINTER_OPTION,
 							G_PARAM_READWRITE | G_PARAM_CONSTRUCT));
 
+  gtk_widget_class_set_accessible_role (widget_class,
+                                        GTK_ACCESSIBLE_ROLE_AUTHOR_CONTROLLED_PARENT);
 }
 
 static void

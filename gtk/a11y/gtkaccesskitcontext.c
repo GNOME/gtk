@@ -244,6 +244,9 @@ gtk_accessible_role_to_accesskit_role (GtkAccessibleRole role)
     case GTK_ACCESSIBLE_ROLE_ARTICLE:
       return ACCESSKIT_ROLE_ARTICLE;
 
+    case GTK_ACCESSIBLE_ROLE_AUTHOR_CONTROLLED_PARENT:
+      return ACCESSKIT_ROLE_AUTHOR_CONTROLLED_PARENT;
+
     case GTK_ACCESSIBLE_ROLE_BANNER:
       return ACCESSKIT_ROLE_BANNER;
 
