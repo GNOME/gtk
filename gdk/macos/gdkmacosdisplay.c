@@ -991,6 +991,9 @@ _gdk_macos_display_warp_pointer (GdkMacosDisplay *self,
   CGWarpMouseCursorPosition ((CGPoint) { x, y });
 }
 
+/* Find the matching `NSEvent` for an `GdkEvent`. This function
+ * return the `NSEvent`, also for rewritten `GdkEvent`'s.
+ */
 NSEvent *
 _gdk_macos_display_get_matching_nsevent (GdkEvent *event)
 {
@@ -1009,6 +1012,9 @@ _gdk_macos_display_get_matching_nsevent (GdkEvent *event)
   return NULL;
 }
 
+/* Find the matching `NSEvent` for the original `GdkEvent`.
+ * If an event was rewritten, it returns `NULL`.
+ */
 NSEvent *
 _gdk_macos_display_get_exact_nsevent (GdkEvent *event)
 {
