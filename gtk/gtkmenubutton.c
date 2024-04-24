@@ -82,7 +82,9 @@
  *
  * # Accessibility
  *
- * `GtkMenuButton` uses the %GTK_ACCESSIBLE_ROLE_BUTTON role.
+ * `GtkMenuButton` uses the %GTK_ACCESSIBLE_ROLE_COMPOSITE role so that the
+ * parent widget is ignored, while the child button uses the
+ * %GTK_ACCESSIBLE_ROLE_BUTTON role.
  */
 
 #include "config.h"
@@ -582,7 +584,7 @@ gtk_menu_button_class_init (GtkMenuButtonClass *klass)
   gtk_widget_class_set_activate_signal (widget_class, signals[ACTIVATE]);
 
   gtk_widget_class_set_css_name (widget_class, I_("menubutton"));
-  gtk_widget_class_set_accessible_role (widget_class, GTK_ACCESSIBLE_ROLE_BUTTON);
+  gtk_widget_class_set_accessible_role (widget_class, GTK_ACCESSIBLE_ROLE_COMPOSITE);
 }
 
 static void
@@ -682,6 +684,9 @@ gtk_menu_button_init (GtkMenuButton *self)
 
   self->button = gtk_toggle_button_new ();
   gtk_widget_set_parent (self->button, GTK_WIDGET (self));
+  gtk_accessible_update_relation (GTK_ACCESSIBLE (self->button),
+                                  GTK_ACCESSIBLE_RELATION_LABELLED_BY,
+                                  GTK_ACCESSIBLE (self), NULL, -1);
   g_signal_connect_swapped (self->button, "toggled", G_CALLBACK (gtk_menu_button_toggled), self);
   add_arrow (self);
   update_style_classes (self);
