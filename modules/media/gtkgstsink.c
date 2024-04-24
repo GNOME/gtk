@@ -72,14 +72,17 @@ GST_DEBUG_CATEGORY (gtk_debug_gst_sink);
 
 #define NOGL_CAPS GST_VIDEO_CAPS_MAKE (FORMATS)
 
+#ifdef HAVE_GSTREAMER_DRM
+# define GST_VIDEO_DMA_DRM_CAPS_MAKE_STR GST_VIDEO_DMA_DRM_CAPS_MAKE "; "
+#else
+# define GST_VIDEO_DMA_DRM_CAPS_MAKE_STR
+#endif
+
 static GstStaticPadTemplate gtk_gst_sink_template =
 GST_STATIC_PAD_TEMPLATE ("sink",
     GST_PAD_SINK,
     GST_PAD_ALWAYS,
-    GST_STATIC_CAPS (
-#ifdef HAVE_GSTREAMER_DRM
-                     GST_VIDEO_DMA_DRM_CAPS_MAKE "; "
-#endif
+    GST_STATIC_CAPS (GST_VIDEO_DMA_DRM_CAPS_MAKE_STR
                      "video/x-raw(" GST_CAPS_FEATURE_MEMORY_GL_MEMORY "), "
                      "format = (string) RGBA, "
                      "width = " GST_VIDEO_SIZE_RANGE ", "
@@ -88,6 +91,8 @@ GST_STATIC_PAD_TEMPLATE ("sink",
                      "texture-target = (string) 2D"
                      "; " NOGL_CAPS)
     );
+
+#undef GST_VIDEO_DMA_DRM_CAPS_MAKE_STR
 
 G_DEFINE_TYPE_WITH_CODE (GtkGstSink, gtk_gst_sink,
     GST_TYPE_VIDEO_SINK,
