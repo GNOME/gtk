@@ -619,6 +619,10 @@ gtk_accesskit_context_build_node (GtkAccessKitContext      *self,
   int x, y, width, height;
   GtkAccessible *child = gtk_accessible_get_first_accessible_child (accessible);
 
+  if (gtk_accessible_get_platform_state (accessible,
+                                         GTK_ACCESSIBLE_PLATFORM_STATE_FOCUSABLE))
+    accesskit_node_builder_add_action (builder, ACCESSKIT_ACTION_FOCUS);
+
   if (gtk_accessible_get_bounds (accessible, &x, &y, &width, &height))
     {
       accesskit_vec2 p = {x, y};
