@@ -721,15 +721,15 @@ handle_accessible_get_property (GDBusConnection       *connection,
   else if (g_strcmp0 (property_name, "ChildCount") == 0)
     res = g_variant_new_int32 (gtk_at_spi_context_get_child_count (self));
   else if (g_strcmp0 (property_name, "HelpText"))
-  {
-    if (gtk_at_context_has_accessible_property (GTK_AT_CONTEXT (self), GTK_ACCESSIBLE_PROPERTY_HELP_TEXT))
-      {
-        GtkAccessibleValue *value = gtk_at_context_get_accessible_property (GTK_AT_CONTEXT (self), GTK_ACCESSIBLE_PROPERTY_HELP_TEXT);
-        res = g_variant_new_string (gtk_string_accessible_value_get (value));
-      }
-    else
-      res = g_variant_new_string ("");
-  }
+    {
+      if (gtk_at_context_has_accessible_property (GTK_AT_CONTEXT (self), GTK_ACCESSIBLE_PROPERTY_HELP_TEXT))
+        {
+          GtkAccessibleValue *value = gtk_at_context_get_accessible_property (GTK_AT_CONTEXT (self), GTK_ACCESSIBLE_PROPERTY_HELP_TEXT);
+          res = g_variant_new_string (gtk_string_accessible_value_get (value));
+        }
+      else
+        res = g_variant_new_string ("");
+    }
   else
     g_set_error (error, G_IO_ERROR, G_IO_ERROR_NOT_SUPPORTED,
                  "Unknown property '%s'", property_name);
@@ -1164,7 +1164,7 @@ gtk_at_spi_context_state_change (GtkATContext                *ctx,
     }
 
   if (changed_properties & GTK_ACCESSIBLE_PROPERTY_CHANGE_DESCRIPTION)
-  {
+    {
       char *label = gtk_at_context_get_description (GTK_AT_CONTEXT (self));
       GVariant *v = g_variant_new_take_string (label);
       emit_property_changed (self, "accessible-description", v);
@@ -1177,13 +1177,14 @@ gtk_at_spi_context_state_change (GtkATContext                *ctx,
                              "accessible-value",
                              g_variant_new_double (gtk_number_accessible_value_get (value)));
     }
-    if (changed_properties & GTK_ACCESSIBLE_PROPERTY_CHANGE_HELP_TEXT)
-      {
-        value = gtk_accessible_attribute_set_get_value (properties, GTK_ACCESSIBLE_PROPERTY_HELP_TEXT);
-        emit_property_changed (self,
-                               "accessible-help-text",
-                               g_variant_new_string (gtk_string_accessible_value_get (value)));
-      }
+
+  if (changed_properties & GTK_ACCESSIBLE_PROPERTY_CHANGE_HELP_TEXT)
+    {
+      value = gtk_accessible_attribute_set_get_value (properties, GTK_ACCESSIBLE_PROPERTY_HELP_TEXT);
+      emit_property_changed (self,
+                             "accessible-help-text",
+                             g_variant_new_string (gtk_string_accessible_value_get (value)));
+    }
 }
 
 static void
