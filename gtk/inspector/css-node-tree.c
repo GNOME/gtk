@@ -610,11 +610,17 @@ compare_name_cb (gconstpointer a,
   const CssProperty *prop_b = b;
   gboolean a_var = prop_a->name[0] == '-' && prop_a->name[1] == '-';
   gboolean b_var = prop_b->name[0] == '-' && prop_b->name[1] == '-';
+  gboolean a_gtk = prop_a->name[0] == '-' && prop_a->name[1] != '-';
+  gboolean b_gtk = prop_b->name[0] == '-' && prop_b->name[1] != '-';
   int ret;
 
   if (a_var && !b_var)
     ret = 1;
   else if (b_var && !a_var)
+    ret = -1;
+  else if (a_gtk && !b_gtk)
+    ret = 1;
+  else if (b_gtk && !a_gtk)
     ret = -1;
   else
     ret = g_utf8_collate (prop_a->name, prop_b->name);
