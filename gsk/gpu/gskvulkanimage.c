@@ -825,7 +825,7 @@ gsk_vulkan_image_new_for_dmabuf (GskVulkanDevice *device,
   self->vk_tiling = VK_IMAGE_TILING_DRM_FORMAT_MODIFIER_EXT;
   self->vk_format = vk_format;
   self->vk_pipeline_stage = VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT;
-  self->vk_image_layout = VK_IMAGE_LAYOUT_UNDEFINED;
+  self->vk_image_layout = VK_IMAGE_LAYOUT_GENERAL;
   self->vk_access = 0;
 
   res  = vkCreateImage (vk_device,
