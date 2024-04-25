@@ -485,7 +485,7 @@ gtk_accessible_role_to_accesskit_role (GtkAccessibleRole role)
       return ACCESSKIT_ROLE_WINDOW;
 
     case GTK_ACCESSIBLE_ROLE_TOGGLE_BUTTON:
-      return ACCESSKIT_ROLE_TOGGLE_BUTTON;
+      return ACCESSKIT_ROLE_BUTTON;
 
     case GTK_ACCESSIBLE_ROLE_TERMINAL:
       return ACCESSKIT_ROLE_TERMINAL;
