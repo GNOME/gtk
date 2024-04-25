@@ -137,7 +137,7 @@ find_texture_to_attach (GskOffload           *self,
             }
 
           GDK_DISPLAY_DEBUG (gdk_surface_get_display (self->surface), OFFLOAD,
-                             "Can't offload subsurface %p: too much content, container with %d children",
+                             "[%p] 🗙 Too much content, container with %d children",
                              subsurface, gsk_container_node_get_n_children (node));
           goto out;
 
@@ -149,7 +149,7 @@ find_texture_to_attach (GskOffload           *self,
               {
                 char *s = gsk_transform_to_string (t);
                 GDK_DISPLAY_DEBUG (gdk_surface_get_display (self->surface), OFFLOAD,
-                                   "Can't offload subsurface %p: transform %s is not just scale/translate",
+                                   "[%p] 🗙 Transform %s is not just scale/translate",
                                    subsurface, s);
                 g_free (s);
                 goto out;
@@ -177,7 +177,7 @@ find_texture_to_attach (GskOffload           *self,
                 if (!gsk_rect_intersection (c, &clip, &clip))
                   {
                     GDK_DISPLAY_DEBUG (gdk_surface_get_display (self->surface), OFFLOAD,
-                                      "Can't offload subsurface %p: empty clip", subsurface);
+                                       "[%p] 🗙 Empty clip", subsurface);
                     goto out;
                   }
               }
@@ -227,7 +227,7 @@ find_texture_to_attach (GskOffload           *self,
 
         default:
           GDK_DISPLAY_DEBUG (gdk_surface_get_display (self->surface), OFFLOAD,
-                             "Can't offload subsurface %p: Only textures supported but found %s",
+                             "[%p] 🗙 Only textures supported (found %s)",
                              subsurface, g_type_name_from_instance ((GTypeInstance *) node));
           goto out;
         }
@@ -488,7 +488,7 @@ visit_node (GskOffload    *self,
                   type != GSK_DEBUG_NODE)
                 {
                   GDK_DISPLAY_DEBUG (gdk_surface_get_display (self->surface), OFFLOAD,
-                                     "Can't raise subsurface %p because a %s overlaps",
+                                     "[%p]   Lowering because a %s overlaps",
                                      info->subsurface,
                                      g_type_name_from_instance ((GTypeInstance *) node));
                   info->can_raise = FALSE;
@@ -631,19 +631,19 @@ complex_clip:
         if (info == NULL)
           {
             GDK_DISPLAY_DEBUG (gdk_surface_get_display (self->surface), OFFLOAD,
-                               "Can't offload: unknown subsurface %p",
+                               "[%p] 🗙 Unknown subsurface",
                                subsurface);
           }
         else if (!self->current_clip->is_fully_contained)
           {
             GDK_DISPLAY_DEBUG (gdk_surface_get_display (self->surface), OFFLOAD,
-                               "Can't offload subsurface %p: clipped",
+                               "[%p] 🗙 Clipped",
                                subsurface);
           }
         else if (gsk_transform_get_category (transform) < GSK_TRANSFORM_CATEGORY_2D_AFFINE)
           {
             GDK_DISPLAY_DEBUG (gdk_surface_get_display (self->surface), OFFLOAD,
-                               "Can't offload subsurface %p: non-affine transform",
+                               "[%p] 🗙 Non-affine transform",
                                subsurface);
           }
         else
