@@ -208,7 +208,8 @@ gtk_graphics_offload_snapshot (GtkWidget   *widget,
   if (self->subsurface)
     gtk_snapshot_push_subsurface (snapshot, self->subsurface);
 
-  gtk_widget_snapshot_child (widget, self->child, snapshot);
+  if (self->child)
+    gtk_widget_snapshot_child (widget, self->child, snapshot);
 
   if (self->subsurface)
     gtk_snapshot_pop (snapshot);
