@@ -521,6 +521,49 @@ gtk_accesskit_context_get_id (GtkAccessKitContext *self)
   return self->id;
 }
 
+typedef void (*AccessKitFlagSetter) (accesskit_node_builder *);
+
+static gboolean
+set_flag_from_state (GtkATContext           *ctx,
+                     GtkAccessibleState      state,
+                     AccessKitFlagSetter     setter,
+                     accesskit_node_builder *builder)
+{
+  if (gtk_at_context_has_accessible_state (ctx, state))
+    {
+      GtkAccessibleValue *value;
+
+      value = gtk_at_context_get_accessible_state (ctx, state);
+      if (gtk_boolean_accessible_value_get (value))
+        {
+          setter (builder);
+          return TRUE;
+        }
+    }
+
+  return FALSE;
+}
+
+typedef void (*AccessKitOptionalFlagSetter) (accesskit_node_builder *, bool);
+
+static gboolean
+set_optional_flag_from_state (GtkATContext               *ctx,
+                              GtkAccessibleState          state,
+                              AccessKitOptionalFlagSetter setter,
+                              accesskit_node_builder     *builder)
+{
+  if (gtk_at_context_has_accessible_state (ctx, state))
+    {
+      GtkAccessibleValue *value;
+
+      value = gtk_at_context_get_accessible_state (ctx, state);
+      setter (builder, gtk_boolean_accessible_value_get (value));
+      return TRUE;
+    }
+
+  return FALSE;
+}
+
 typedef void (*AccessKitStringSetter) (accesskit_node_builder *, const char *);
 
 static gboolean
@@ -648,14 +691,19 @@ gtk_accesskit_context_build_node (GtkAccessKitContext      *self,
       child = next;
     }
 
-  if (gtk_at_context_has_accessible_state (ctx, GTK_ACCESSIBLE_STATE_HIDDEN))
-    {
-      GtkAccessibleValue *value;
+  set_flag_from_state (ctx, GTK_ACCESSIBLE_STATE_BUSY,
+                       accesskit_node_builder_set_busy, builder);
+  set_flag_from_state (ctx, GTK_ACCESSIBLE_STATE_DISABLED,
+                       accesskit_node_builder_set_disabled, builder);
+  set_flag_from_state (ctx, GTK_ACCESSIBLE_STATE_HIDDEN,
+                       accesskit_node_builder_set_hidden, builder);
+  set_flag_from_state (ctx, GTK_ACCESSIBLE_STATE_VISITED,
+                       accesskit_node_builder_set_visited, builder);
 
-      value = gtk_at_context_get_accessible_state (ctx, GTK_ACCESSIBLE_STATE_HIDDEN);
-      if (gtk_boolean_accessible_value_get (value))
-        accesskit_node_builder_set_hidden (builder);
-    }
+  set_optional_flag_from_state (ctx, GTK_ACCESSIBLE_STATE_EXPANDED,
+                                accesskit_node_builder_set_expanded, builder);
+  set_optional_flag_from_state (ctx, GTK_ACCESSIBLE_STATE_SELECTED,
+                                accesskit_node_builder_set_selected, builder);
 
   set_string_property (ctx, GTK_ACCESSIBLE_PROPERTY_DESCRIPTION,
                        accesskit_node_builder_set_description, builder);
