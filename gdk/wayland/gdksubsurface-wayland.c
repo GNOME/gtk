@@ -411,63 +411,61 @@ gdk_wayland_subsurface_attach (GdkSubsurface         *sub,
   if (!scaled_rect_is_integral (dest, 1, &device_rect))
     {
       GDK_DISPLAY_DEBUG (gdk_surface_get_display (sub->parent), OFFLOAD,
-                         "Non-integer coordinates %g %g %g %g for %dx%d texture, hiding subsurface %p",
+                         "[%p] 🗙 Non-integral coordinates %g %g %g %g",
+                         self,
                          dest->origin.x, dest->origin.y,
-                         dest->size.width, dest->size.height,
-                         gdk_texture_get_width (texture),
-                         gdk_texture_get_height (texture),
-                         self);
+                         dest->size.width, dest->size.height);
     }
   else if (!scaled_rect_is_integral (dest, scale, &device_rect))
     {
       GDK_DISPLAY_DEBUG (gdk_surface_get_display (sub->parent), OFFLOAD,
-                         "Non-integral device coordinates %g %g %g %g (fractional scale %.2f), hiding subsurface %p",
+                         "[%p] 🗙 Non-integral device coordinates %g %g %g %g (scale %.2f)",
+                         self,
                          device_rect.origin.x, device_rect.origin.y,
                          device_rect.size.width, device_rect.size.height,
-                         scale,
-                         self);
+                         scale);
     }
   else if (background && !scaled_rect_is_integral (background, 1, &device_rect))
     {
       GDK_DISPLAY_DEBUG (gdk_surface_get_display (sub->parent), OFFLOAD,
-                         "Non-integral background coordinates %g %g %g %g, hiding subsurface %p",
+                         "[%p] 🗙 Non-integral background coordinates %g %g %g %g",
+                         self,
                          background->origin.x, background->origin.y,
-                         background->size.width, background->size.height,
-                         self);
+                         background->size.width, background->size.height);
     }
   else if (background && !scaled_rect_is_integral (background, scale, &device_rect))
     {
       GDK_DISPLAY_DEBUG (gdk_surface_get_display (sub->parent), OFFLOAD,
-                         "Non-integral background device coordinates %g %g %g %g (fractional scale %.2f), hiding subsurface %p",
+                         "[%p] 🗙 Non-integral background device coordinates %g %g %g %g (scale %.2f)",
+                         self,
                          device_rect.origin.x, device_rect.origin.y,
                          device_rect.size.width, device_rect.size.height,
-                         scale,
-                         self);
+                         scale);
     }
   else if (!GDK_IS_DMABUF_TEXTURE (texture) &&
            !GDK_DISPLAY_DEBUG_CHECK (gdk_surface_get_display (sub->parent), FORCE_OFFLOAD))
     {
       GDK_DISPLAY_DEBUG (gdk_surface_get_display (sub->parent), OFFLOAD,
-                         "%dx%d %s is not a GdkDmabufTexture, hiding subsurface %p",
-                         gdk_texture_get_width (texture),
-                         gdk_texture_get_height (texture),
+                         "[%p] 🗙 %s (%dx%d) is not a GdkDmabufTexture",
+                         self,
                          G_OBJECT_TYPE_NAME (texture),
-                         self);
+                         gdk_texture_get_width (texture),
+                         gdk_texture_get_height (texture));
     }
   else if (!will_be_above &&
            gdk_memory_format_alpha (gdk_texture_get_format (texture)) != GDK_MEMORY_ALPHA_OPAQUE &&
            !has_background)
     {
       GDK_DISPLAY_DEBUG (gdk_surface_get_display (sub->parent), OFFLOAD,
-                         "Cannot offload non-opaque %dx%d texture below, hiding subsurface %p",
+                         "[%p] 🗙 Non-opaque texture (%dx%d) below",
+                         self,
                          gdk_texture_get_width (texture),
-                         gdk_texture_get_height (texture),
-                         self);
+                         gdk_texture_get_height (texture));
     }
   else if (has_background && !display->single_pixel_buffer)
     {
       GDK_DISPLAY_DEBUG (gdk_surface_get_display (sub->parent), OFFLOAD,
-                         "Cannot offload subsurface %p with background, no single-pixel buffer support",
+                         "[%p] 🗙 Texture has background, but no single-pixel buffer support",
                          self);
     }
   else
@@ -496,35 +494,39 @@ gdk_wayland_subsurface_attach (GdkSubsurface         *sub,
                 }
 
               GDK_DISPLAY_DEBUG (gdk_surface_get_display (sub->parent), OFFLOAD,
-                                 "Attached %dx%d texture to subsurface %p at %d %d %d %d%s%s",
+                                 "[%p] %s Attaching texture (%dx%d) at %d %d %d %d",
+                                 self,
+                                 will_be_above
+                                   ? (has_background ? "▲" : "△")
+                                   : (has_background ? "▼" : "▽"),
                                  gdk_texture_get_width (texture),
                                  gdk_texture_get_height (texture),
-                                 self,
                                  self->dest.x, self->dest.y,
-                                 self->dest.width, self->dest.height,
-                                 will_be_above ? ", above parent" : "",
-                                 has_background ? ", with background" : "");
+                                 self->dest.width, self->dest.height);
               result = TRUE;
             }
           else
             {
               GDK_DISPLAY_DEBUG (gdk_surface_get_display (sub->parent), OFFLOAD,
-                                 "Compositor failed to create wl_buffer for %dx%d texture, hiding subsurface %p",
-                                 gdk_texture_get_width (texture),
-                                 gdk_texture_get_height (texture),
+                                 "[%p] 🗙 Failed to create wl_buffer",
                                  self);
             }
         }
       else
         {
+          if (dest_changed)
+            GDK_DISPLAY_DEBUG (gdk_surface_get_display (sub->parent), OFFLOAD,
+                               "[%p] %s Moving texture (%dx%d) to %d %d %d %d",
+                               self,
+                               will_be_above
+                                 ? (has_background ? "▲" : "△")
+                                 : (has_background ? "▼" : "▽"),
+                               gdk_texture_get_width (texture),
+                               gdk_texture_get_height (texture),
+                               self->dest.x, self->dest.y,
+                               self->dest.width, self->dest.height);
+
           buffer = NULL;
-          GDK_DISPLAY_DEBUG (gdk_surface_get_display (sub->parent), OFFLOAD,
-                             "Moved %dx%d texture in subsurface %p to %d %d %d %d",
-                             gdk_texture_get_width (texture),
-                             gdk_texture_get_height (texture),
-                             self,
-                             self->dest.x, self->dest.y,
-                             self->dest.width, self->dest.height);
           result = TRUE;
         }
     }
