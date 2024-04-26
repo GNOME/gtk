@@ -185,7 +185,7 @@ quartz_filter_keypress (GtkIMContext *context,
   keyval = gdk_key_event_get_keyval (event);
   keycode = gdk_key_event_get_keycode (event);
 
-  NSEvent *nsevent = _gdk_macos_display_get_nsevent ((GdkEvent *)event);
+  NSEvent *nsevent = _gdk_macos_display_get_matching_nsevent ((GdkEvent *)event);
 
   if (!nsevent)
     {
