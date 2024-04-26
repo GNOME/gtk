@@ -564,6 +564,42 @@ set_optional_flag_from_state (GtkATContext               *ctx,
   return FALSE;
 }
 
+static gboolean
+set_toggled (GtkATContext           *ctx,
+             GtkAccessibleState      state,
+             accesskit_node_builder *builder)
+{
+  if (gtk_at_context_has_accessible_state (ctx, state))
+    {
+      GtkAccessibleValue *value;
+      GtkAccessibleTristate tristate;
+      accesskit_toggled toggled;
+
+      value = gtk_at_context_get_accessible_state (ctx, state);
+      tristate = gtk_tristate_accessible_value_get (value);
+
+      switch (tristate)
+        {
+        case GTK_ACCESSIBLE_TRISTATE_FALSE:
+          toggled = ACCESSKIT_TOGGLED_FALSE;
+          break;
+
+        case GTK_ACCESSIBLE_TRISTATE_TRUE:
+          toggled = ACCESSKIT_TOGGLED_TRUE;
+          break;
+
+        case GTK_ACCESSIBLE_TRISTATE_MIXED:
+          toggled = ACCESSKIT_TOGGLED_MIXED;
+          break;
+        }
+
+      accesskit_node_builder_set_toggled (builder, toggled);
+      return TRUE;
+    }
+
+  return FALSE;
+}
+
 typedef void (*AccessKitStringSetter) (accesskit_node_builder *, const char *);
 
 static gboolean
@@ -704,6 +740,9 @@ gtk_accesskit_context_build_node (GtkAccessKitContext      *self,
                                 accesskit_node_builder_set_expanded, builder);
   set_optional_flag_from_state (ctx, GTK_ACCESSIBLE_STATE_SELECTED,
                                 accesskit_node_builder_set_selected, builder);
+
+  if (!set_toggled (ctx, GTK_ACCESSIBLE_STATE_CHECKED, builder))
+    set_toggled (ctx, GTK_ACCESSIBLE_STATE_PRESSED, builder);
 
   set_string_property (ctx, GTK_ACCESSIBLE_PROPERTY_DESCRIPTION,
                        accesskit_node_builder_set_description, builder);
