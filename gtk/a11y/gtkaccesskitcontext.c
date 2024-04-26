@@ -502,6 +502,7 @@ accesskit_role_for_context (GtkATContext *context)
 {
   GtkAccessible *accessible = gtk_at_context_get_accessible (context);
   GtkAccessibleRole role = gtk_at_context_get_accessible_role (context);
+  accesskit_role accesskit_role;
 
   /* ARIA does not have a "password entry" role, so we need to fudge it here */
   if (GTK_IS_PASSWORD_ENTRY (accessible))
@@ -511,7 +512,20 @@ accesskit_role_for_context (GtkATContext *context)
   if (GTK_IS_SCROLLED_WINDOW (accessible))
     return ACCESSKIT_ROLE_SCROLL_VIEW;
 
-  return gtk_accessible_role_to_accesskit_role (role);
+  accesskit_role = gtk_accessible_role_to_accesskit_role (role);
+
+  if (accesskit_role == ACCESSKIT_ROLE_TEXT_INPUT &&
+      gtk_at_context_has_accessible_property (context, GTK_ACCESSIBLE_PROPERTY_MULTI_LINE))
+    {
+      GtkAccessibleValue *value;
+
+      value = gtk_at_context_get_accessible_property (context,
+                                                      GTK_ACCESSIBLE_PROPERTY_MULTI_LINE);
+      if (gtk_boolean_accessible_value_get (value))
+        accesskit_role = ACCESSKIT_ROLE_MULTILINE_TEXT_INPUT;
+    }
+
+  return accesskit_role;
 }
 
 guint32
@@ -534,6 +548,27 @@ set_flag_from_state (GtkATContext           *ctx,
       GtkAccessibleValue *value;
 
       value = gtk_at_context_get_accessible_state (ctx, state);
+      if (gtk_boolean_accessible_value_get (value))
+        {
+          setter (builder);
+          return TRUE;
+        }
+    }
+
+  return FALSE;
+}
+
+static gboolean
+set_flag_from_property (GtkATContext           *ctx,
+                        GtkAccessibleProperty   property,
+                        AccessKitFlagSetter     setter,
+                        accesskit_node_builder *builder)
+{
+  if (gtk_at_context_has_accessible_property (ctx, property))
+    {
+      GtkAccessibleValue *value;
+
+      value = gtk_at_context_get_accessible_property (ctx, property);
       if (gtk_boolean_accessible_value_get (value))
         {
           setter (builder);
@@ -618,6 +653,64 @@ set_string_property (GtkATContext           *ctx,
           setter (builder, str);
           return TRUE;
         }
+    }
+
+  return FALSE;
+}
+
+typedef void (*AccessKitSizeSetter) (accesskit_node_builder *, size_t);
+
+static gboolean
+set_size_from_property (GtkATContext           *ctx,
+                        GtkAccessibleProperty   property,
+                        AccessKitSizeSetter     setter,
+                        accesskit_node_builder *builder)
+{
+  if (gtk_at_context_has_accessible_property (ctx, property))
+    {
+      GtkAccessibleValue *value;
+
+      value = gtk_at_context_get_accessible_property (ctx, property);
+      setter (builder, gtk_int_accessible_value_get (value));
+      return TRUE;
+    }
+
+  return FALSE;
+}
+
+static gboolean
+set_size_from_relation (GtkATContext           *ctx,
+                        GtkAccessibleRelation   relation,
+                        AccessKitSizeSetter     setter,
+                        accesskit_node_builder *builder)
+{
+  if (gtk_at_context_has_accessible_relation (ctx, relation))
+    {
+      GtkAccessibleValue *value;
+
+      value = gtk_at_context_get_accessible_relation (ctx, relation);
+      setter (builder, gtk_int_accessible_value_get (value));
+      return TRUE;
+    }
+
+  return FALSE;
+}
+
+typedef void (*AccessKitDoubleSetter) (accesskit_node_builder *, double);
+
+static gboolean
+set_double_property (GtkATContext           *ctx,
+                     GtkAccessibleProperty   property,
+                     AccessKitDoubleSetter   setter,
+                     accesskit_node_builder *builder)
+{
+  if (gtk_at_context_has_accessible_property (ctx, property))
+    {
+      GtkAccessibleValue *value;
+
+      value = gtk_at_context_get_accessible_property (ctx, property);
+      setter (builder, gtk_number_accessible_value_get (value));
+      return TRUE;
     }
 
   return FALSE;
@@ -769,6 +862,15 @@ gtk_accesskit_context_build_node (GtkAccessKitContext      *self,
         }
     }
 
+  set_flag_from_property (ctx, GTK_ACCESSIBLE_PROPERTY_MODAL,
+                          accesskit_node_builder_set_modal, builder);
+  set_flag_from_property (ctx, GTK_ACCESSIBLE_PROPERTY_MULTI_SELECTABLE,
+                          accesskit_node_builder_set_multiselectable, builder);
+  set_flag_from_property (ctx, GTK_ACCESSIBLE_PROPERTY_READ_ONLY,
+                          accesskit_node_builder_set_read_only, builder);
+  set_flag_from_property (ctx, GTK_ACCESSIBLE_PROPERTY_REQUIRED,
+                          accesskit_node_builder_set_required, builder);
+
   set_string_property (ctx, GTK_ACCESSIBLE_PROPERTY_DESCRIPTION,
                        accesskit_node_builder_set_description, builder);
   set_string_property (ctx, GTK_ACCESSIBLE_PROPERTY_KEY_SHORTCUTS,
@@ -782,7 +884,92 @@ gtk_accesskit_context_build_node (GtkAccessKitContext      *self,
   set_string_property (ctx, GTK_ACCESSIBLE_PROPERTY_VALUE_TEXT,
                        accesskit_node_builder_set_value, builder);
 
-  /* TODO: properties */
+  set_size_from_property (ctx, GTK_ACCESSIBLE_PROPERTY_LEVEL,
+                          accesskit_node_builder_set_level, builder);
+
+  set_double_property (ctx, GTK_ACCESSIBLE_PROPERTY_VALUE_MAX,
+                       accesskit_node_builder_set_max_numeric_value, builder);
+  set_double_property (ctx, GTK_ACCESSIBLE_PROPERTY_VALUE_MIN,
+                       accesskit_node_builder_set_min_numeric_value, builder);
+  set_double_property (ctx, GTK_ACCESSIBLE_PROPERTY_VALUE_NOW,
+                       accesskit_node_builder_set_numeric_value, builder);
+
+  if (gtk_at_context_has_accessible_property (ctx, GTK_ACCESSIBLE_PROPERTY_AUTOCOMPLETE))
+    {
+      GtkAccessibleValue *value;
+
+      value = gtk_at_context_get_accessible_property (ctx, GTK_ACCESSIBLE_PROPERTY_AUTOCOMPLETE);
+
+      switch (gtk_autocomplete_accessible_value_get (value))
+        {
+        case GTK_ACCESSIBLE_AUTOCOMPLETE_NONE:
+          break;
+
+        case GTK_ACCESSIBLE_AUTOCOMPLETE_INLINE:
+          accesskit_node_builder_set_auto_complete (builder, ACCESSKIT_AUTO_COMPLETE_INLINE);
+          break;
+
+        case GTK_ACCESSIBLE_AUTOCOMPLETE_LIST:
+          accesskit_node_builder_set_auto_complete (builder, ACCESSKIT_AUTO_COMPLETE_LIST);
+          break;
+
+        case GTK_ACCESSIBLE_AUTOCOMPLETE_BOTH:
+          accesskit_node_builder_set_auto_complete (builder, ACCESSKIT_AUTO_COMPLETE_BOTH);
+          break;
+        }
+    }
+
+  if (gtk_at_context_has_accessible_property (ctx, GTK_ACCESSIBLE_PROPERTY_HAS_POPUP))
+    {
+      GtkAccessibleValue *value;
+
+      value = gtk_at_context_get_accessible_property (ctx, GTK_ACCESSIBLE_PROPERTY_HAS_POPUP);
+      if (gtk_boolean_accessible_value_get (value))
+        accesskit_node_builder_set_has_popup(builder, ACCESSKIT_HAS_POPUP_TRUE);
+    }
+
+  if (gtk_at_context_has_accessible_property (ctx, GTK_ACCESSIBLE_PROPERTY_ORIENTATION))
+    {
+      GtkAccessibleValue *value;
+
+      value = gtk_at_context_get_accessible_property (ctx, GTK_ACCESSIBLE_PROPERTY_ORIENTATION);
+
+      switch (gtk_orientation_accessible_value_get (value))
+        {
+        case GTK_ORIENTATION_HORIZONTAL:
+          accesskit_node_builder_set_orientation (builder, ACCESSKIT_ORIENTATION_HORIZONTAL);
+          break;
+
+        case GTK_ORIENTATION_VERTICAL:
+          accesskit_node_builder_set_orientation (builder, ACCESSKIT_ORIENTATION_VERTICAL);
+          break;
+        }
+    }
+
+  if (gtk_at_context_has_accessible_property (ctx, GTK_ACCESSIBLE_PROPERTY_SORT))
+    {
+      GtkAccessibleValue *value;
+
+      value = gtk_at_context_get_accessible_property (ctx, GTK_ACCESSIBLE_PROPERTY_SORT);
+
+      switch (gtk_sort_accessible_value_get (value))
+        {
+        case GTK_ACCESSIBLE_SORT_NONE:
+          break;
+
+        case GTK_ACCESSIBLE_SORT_ASCENDING:
+          accesskit_node_builder_set_sort_direction (builder, ACCESSKIT_SORT_DIRECTION_ASCENDING);
+          break;
+
+        case GTK_ACCESSIBLE_SORT_DESCENDING:
+          accesskit_node_builder_set_sort_direction (builder, ACCESSKIT_SORT_DIRECTION_DESCENDING);
+          break;
+
+        case GTK_ACCESSIBLE_SORT_OTHER:
+          accesskit_node_builder_set_sort_direction (builder, ACCESSKIT_SORT_DIRECTION_OTHER);
+          break;
+        }
+    }
 
   set_single_relation (ctx, GTK_ACCESSIBLE_RELATION_ACTIVE_DESCENDANT,
                        accesskit_node_builder_set_active_descendant, builder);
@@ -800,7 +987,12 @@ gtk_accesskit_context_build_node (GtkAccessKitContext      *self,
   set_multi_relation (ctx, GTK_ACCESSIBLE_RELATION_LABELLED_BY,
                       accesskit_node_builder_push_labelled_by, builder);
 
-  /* TODO: relations that are actually properties */
+  set_size_from_relation (ctx, GTK_ACCESSIBLE_RELATION_POS_IN_SET,
+                          accesskit_node_builder_set_position_in_set, builder);
+  set_size_from_relation (ctx, GTK_ACCESSIBLE_RELATION_SET_SIZE,
+                          accesskit_node_builder_set_size_of_set, builder);
+
+  /* TODO: table relations that are actually properties */
 
   accesskit_node_builder_set_class_name (builder,
                                          g_type_name (G_TYPE_FROM_INSTANCE (accessible)));
