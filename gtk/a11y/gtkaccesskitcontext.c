@@ -800,6 +800,8 @@ gtk_accesskit_context_build_node (GtkAccessKitContext      *self,
   set_multi_relation (ctx, GTK_ACCESSIBLE_RELATION_LABELLED_BY,
                       accesskit_node_builder_push_labelled_by, builder);
 
+  /* TODO: relations that are actually properties */
+
   accesskit_node_builder_set_class_name (builder,
                                          g_type_name (G_TYPE_FROM_INSTANCE (accessible)));
 
