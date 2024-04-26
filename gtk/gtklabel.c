@@ -2111,6 +2111,28 @@ gtk_label_unroot (GtkWidget *widget)
   GTK_WIDGET_CLASS (gtk_label_parent_class)->unroot (widget);
 }
 
+static void
+launch_done (GObject      *source,
+             GAsyncResult *result,
+             gpointer      data)
+{
+  GError *error = NULL;
+  gboolean success;
+
+  if (GTK_IS_FILE_LAUNCHER (source))
+    success = gtk_file_launcher_launch_finish (GTK_FILE_LAUNCHER (source), result, &error);
+  else if (GTK_IS_URI_LAUNCHER (source))
+    success = gtk_uri_launcher_launch_finish (GTK_URI_LAUNCHER (source), result, &error);
+  else
+    g_assert_not_reached ();
+
+  if (!success)
+    {
+      g_warning ("Failed to launch handler: %s", error->message);
+      g_error_free (error);
+    }
+}
+
 static gboolean
 gtk_label_activate_link (GtkLabel    *self,
                          const char *uri)
@@ -2130,7 +2152,7 @@ gtk_label_activate_link (GtkLabel    *self,
 
       file = g_file_new_for_uri (uri);
       launcher = gtk_file_launcher_new (file);
-      gtk_file_launcher_launch (launcher, GTK_WINDOW (toplevel), NULL, NULL, NULL);
+      gtk_file_launcher_launch (launcher, GTK_WINDOW (toplevel), NULL, launch_done, NULL);
       g_object_unref (launcher);
       g_object_unref (file);
     }
@@ -2139,7 +2161,7 @@ gtk_label_activate_link (GtkLabel    *self,
       GtkUriLauncher *launcher;
 
       launcher = gtk_uri_launcher_new (uri);
-      gtk_uri_launcher_launch (launcher, GTK_WINDOW (toplevel), NULL, NULL, NULL);
+      gtk_uri_launcher_launch (launcher, GTK_WINDOW (toplevel), NULL, launch_done, NULL);
       g_object_unref (launcher);
     }
 
