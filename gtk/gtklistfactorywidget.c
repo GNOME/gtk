@@ -586,7 +586,7 @@ gtk_list_factory_widget_set_activatable (GtkListFactoryWidget *self,
   else
     gtk_widget_remove_css_class (GTK_WIDGET (self), "activatable");
 
-  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_SINGLE_CLICK_ACTIVATE]);
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_ACTIVATABLE]);
 }
 
 gboolean
@@ -608,7 +608,7 @@ gtk_list_factory_widget_set_selectable (GtkListFactoryWidget *self,
 
   priv->selectable = selectable;
 
-  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_SINGLE_CLICK_ACTIVATE]);
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_SELECTABLE]);
 }
 
 gboolean
