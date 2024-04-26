@@ -572,13 +572,11 @@ set_toggled (GtkATContext           *ctx,
   if (gtk_at_context_has_accessible_state (ctx, state))
     {
       GtkAccessibleValue *value;
-      GtkAccessibleTristate tristate;
       accesskit_toggled toggled;
 
       value = gtk_at_context_get_accessible_state (ctx, state);
-      tristate = gtk_tristate_accessible_value_get (value);
 
-      switch (tristate)
+      switch (gtk_tristate_accessible_value_get (value))
         {
         case GTK_ACCESSIBLE_TRISTATE_FALSE:
           toggled = ACCESSKIT_TOGGLED_FALSE;
@@ -743,6 +741,31 @@ gtk_accesskit_context_build_node (GtkAccessKitContext      *self,
 
   if (!set_toggled (ctx, GTK_ACCESSIBLE_STATE_CHECKED, builder))
     set_toggled (ctx, GTK_ACCESSIBLE_STATE_PRESSED, builder);
+
+  if (gtk_at_context_has_accessible_state (ctx, GTK_ACCESSIBLE_STATE_INVALID))
+    {
+      GtkAccessibleValue *value;
+
+      value = gtk_at_context_get_accessible_state (ctx, GTK_ACCESSIBLE_STATE_INVALID);
+
+      switch (gtk_invalid_accessible_value_get (value))
+        {
+        case GTK_ACCESSIBLE_INVALID_FALSE:
+          break;
+
+        case GTK_ACCESSIBLE_INVALID_TRUE:
+          accesskit_node_builder_set_invalid (builder, ACCESSKIT_INVALID_TRUE);
+          break;
+
+        case GTK_ACCESSIBLE_INVALID_GRAMMAR:
+          accesskit_node_builder_set_invalid (builder, ACCESSKIT_INVALID_GRAMMAR);
+          break;
+
+        case GTK_ACCESSIBLE_INVALID_SPELLING:
+          accesskit_node_builder_set_invalid (builder, ACCESSKIT_INVALID_SPELLING);
+          break;
+        }
+    }
 
   set_string_property (ctx, GTK_ACCESSIBLE_PROPERTY_DESCRIPTION,
                        accesskit_node_builder_set_description, builder);
