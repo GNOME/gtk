@@ -258,9 +258,9 @@ gtk_drop_target_async_handle_event (GtkEventController *controller,
 
 static void
 gtk_drop_target_async_handle_crossing (GtkEventController    *controller,
-                                 const GtkCrossingData *crossing,
-                                 double                 x,
-                                 double                 y)
+                                       const GtkCrossingData *crossing,
+                                       double                 x,
+                                       double                 y)
 {
   GtkDropTargetAsync *self = GTK_DROP_TARGET_ASYNC (controller);
   GtkWidget *widget = gtk_event_controller_get_widget (controller);
@@ -340,9 +340,9 @@ gtk_drop_target_async_set_property (GObject      *object,
 
 static void
 gtk_drop_target_async_get_property (GObject    *object,
-                            guint       prop_id,
-                            GValue     *value,
-                            GParamSpec *pspec)
+                                    guint       prop_id,
+                                    GValue     *value,
+                                    GParamSpec *pspec)
 {
   GtkDropTargetAsync *self = GTK_DROP_TARGET_ASYNC (object);
 
