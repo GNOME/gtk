@@ -123,6 +123,14 @@ gtk_list_item_widget_setup_object (GtkListFactoryWidget *fw,
   gtk_list_factory_widget_set_selectable (fw, list_item->selectable);
   gtk_widget_set_focusable (GTK_WIDGET (self), list_item->focusable);
 
+  if (list_item->selectable)
+    gtk_accessible_update_state (GTK_ACCESSIBLE (self),
+                                 GTK_ACCESSIBLE_STATE_SELECTED, FALSE,
+                                 -1);
+  else
+    gtk_accessible_reset_state (GTK_ACCESSIBLE (self),
+                                GTK_ACCESSIBLE_STATE_SELECTED);
+
   gtk_accessible_update_property (GTK_ACCESSIBLE (self),
                                   GTK_ACCESSIBLE_PROPERTY_LABEL, list_item->accessible_label,
                                   GTK_ACCESSIBLE_PROPERTY_DESCRIPTION, list_item->accessible_description,
@@ -175,6 +183,11 @@ gtk_list_item_widget_update_object (GtkListFactoryWidget *fw,
   GtkListItem *list_item = object;
   /* Track notify manually instead of freeze/thaw_notify for performance reasons. */
   gboolean notify_item = FALSE, notify_position = FALSE, notify_selected = FALSE;
+
+  if (list_item->selectable)
+    gtk_accessible_update_state (GTK_ACCESSIBLE (self),
+                                 GTK_ACCESSIBLE_STATE_SELECTED, selected,
+                                 -1);
 
   /* FIXME: It's kinda evil to notify external objects from here... */
   notify_item = gtk_list_item_base_get_item (base) != item;
