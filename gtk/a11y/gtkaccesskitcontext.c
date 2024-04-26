@@ -703,6 +703,8 @@ gtk_accesskit_context_build_node (GtkAccessKitContext      *self,
                                          GTK_ACCESSIBLE_PLATFORM_STATE_FOCUSABLE))
     accesskit_node_builder_add_action (builder, ACCESSKIT_ACTION_FOCUS);
 
+  /* TODO: actions */
+
   if (gtk_accessible_get_bounds (accessible, &x, &y, &width, &height))
     {
       accesskit_vec2 p = {x, y};
@@ -780,16 +782,19 @@ gtk_accesskit_context_build_node (GtkAccessKitContext      *self,
   set_string_property (ctx, GTK_ACCESSIBLE_PROPERTY_VALUE_TEXT,
                        accesskit_node_builder_set_value, builder);
 
+  /* TODO: properties */
+
   set_single_relation (ctx, GTK_ACCESSIBLE_RELATION_ACTIVE_DESCENDANT,
                        accesskit_node_builder_set_active_descendant, builder);
+  set_single_relation (ctx, GTK_ACCESSIBLE_RELATION_ERROR_MESSAGE,
+                       accesskit_node_builder_set_error_message, builder);
+
   set_multi_relation (ctx, GTK_ACCESSIBLE_RELATION_CONTROLS,
                       accesskit_node_builder_push_controlled, builder);
   set_multi_relation (ctx, GTK_ACCESSIBLE_RELATION_DESCRIBED_BY,
                       accesskit_node_builder_push_described_by, builder);
   set_multi_relation (ctx, GTK_ACCESSIBLE_RELATION_DETAILS,
                       accesskit_node_builder_push_detail, builder);
-  set_single_relation (ctx, GTK_ACCESSIBLE_RELATION_ERROR_MESSAGE,
-                       accesskit_node_builder_set_error_message, builder);
   set_multi_relation (ctx, GTK_ACCESSIBLE_RELATION_FLOW_TO,
                       accesskit_node_builder_push_flow_to, builder);
   set_multi_relation (ctx, GTK_ACCESSIBLE_RELATION_LABELLED_BY,
@@ -798,7 +803,7 @@ gtk_accesskit_context_build_node (GtkAccessKitContext      *self,
   accesskit_node_builder_set_class_name (builder,
                                          g_type_name (G_TYPE_FROM_INSTANCE (accessible)));
 
-  /* TODO: properties */
+  /* TODO: text */
 
   return accesskit_node_builder_build (builder, node_classes);
 }
