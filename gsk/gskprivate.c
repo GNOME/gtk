@@ -25,11 +25,27 @@ gsk_ensure_resources (void)
   g_once (&register_resources_once, register_resources, NULL);
 }
 
+static cairo_font_options_t *font_options = NULL;
+
+static inline cairo_font_options_t *
+pango_font_get_cairo_font_options (PangoFont *font)
+{
+  cairo_scaled_font_t *sf;
+
+  if (G_UNLIKELY (font_options == NULL))
+    font_options = cairo_font_options_create ();
+
+  sf = pango_cairo_font_get_scaled_font (PANGO_CAIRO_FONT (font));
+  cairo_scaled_font_get_font_options (sf, font_options);
+
+  return font_options;
+}
+
 /*< private >
  * gsk_reload_font:
  * @font: a `PangoFont`
  * @scale: the scale to apply
- * @hint_metris: hint metrics to use or `CAIRO_HINT_METRICS_DEFAILT` to keep the
+ * @hint_metris: hint metrics to use or `CAIRO_HINT_METRICS_DEFAULT` to keep the
  *   hint metrics of the font unchanged
  * @hint_style: hint style to use or `CAIRO_HINT_STYLE_DEFAULT` to keep the
  *   hint style of @font unchanged
@@ -48,9 +64,8 @@ gsk_reload_font (PangoFont            *font,
                  cairo_hint_style_t    hint_style,
                  cairo_antialias_t     antialias)
 {
-  static cairo_font_options_t *options = NULL;
   static PangoContext *context = NULL;
-  cairo_scaled_font_t *sf;
+  cairo_font_options_t *options;
 
   /* These requests often come in sequentially so keep the result
    * around and re-use it if everything matches.
@@ -78,11 +93,7 @@ gsk_reload_font (PangoFont            *font,
   g_set_object (&last_font, font);
   g_clear_object (&last_result);
 
-  if (G_UNLIKELY (options == NULL))
-    options = cairo_font_options_create ();
-
-  sf = pango_cairo_font_get_scaled_font (PANGO_CAIRO_FONT (font));
-  cairo_scaled_font_get_font_options (sf, options);
+  options = pango_font_get_cairo_font_options (font);
 
   if (hint_metrics == CAIRO_HINT_METRICS_DEFAULT)
     hint_metrics = cairo_font_options_get_hint_metrics (options);
@@ -118,6 +129,21 @@ gsk_reload_font (PangoFont            *font,
   return g_object_ref (last_result);
 }
 
+static inline double
+gsk_font_get_size (PangoFont *font)
+{
+  PangoFontDescription *desc;
+  double size;
+
+  desc = pango_font_describe_with_absolute_size (font);
+
+  size = pango_font_description_get_size (desc);
+
+  pango_font_description_free (desc);
+
+  return size / PANGO_SCALE;
+}
+
 /*< private >
  * gsk_font_get_hint_style:
  * @font: a `PangoFont`
@@ -129,16 +155,57 @@ gsk_reload_font (PangoFont            *font,
 cairo_hint_style_t
 gsk_font_get_hint_style (PangoFont *font)
 {
-  static cairo_font_options_t *options = NULL;
-  cairo_scaled_font_t *sf;
-  cairo_hint_style_t style;
+  return cairo_font_options_get_hint_style (pango_font_get_cairo_font_options (font));
+}
 
-  if (G_UNLIKELY (options == NULL))
-    options = cairo_font_options_create ();
+/*< private >
+ * gsk_font_get_rendering:
+ * @font: a `PangoFont`
+ * @scale: the scale to use
+ * @hint_metrics: (out): return location for metrics hinting
+ * @hint_style: (out): return location for hint style
+ * @antialias: (out): return location for antialiasing
+ *
+ * Determines the font options to use for rendering with
+ * the font at the given scale.
+ */
+void
+gsk_font_get_rendering (PangoFont            *font,
+                        float                 scale,
+                        cairo_hint_metrics_t *hint_metrics,
+                        cairo_hint_style_t   *hint_style,
+                        cairo_antialias_t    *antialias)
+{
+  const cairo_font_options_t *options;
 
-  sf = pango_cairo_font_get_scaled_font (PANGO_CAIRO_FONT (font));
-  cairo_scaled_font_get_font_options (sf, options);
-  style = cairo_font_options_get_hint_style (options);
+  options = pango_font_get_cairo_font_options (font);
 
-  return style;
+  /* Keep this in sync with gtkwidget.c:update_pango_context */
+  if (cairo_font_options_get_antialias (options) == CAIRO_ANTIALIAS_GOOD)
+    {
+      double font_size;
+
+      font_size = gsk_font_get_size (font) * scale;
+
+      *antialias = CAIRO_ANTIALIAS_GRAY;
+      *hint_metrics = CAIRO_HINT_METRICS_OFF;
+
+      /* 31 pixels is equivalent to an 11 pt font at 200 dpi */
+      if (font_size > 31)
+        *hint_style = CAIRO_HINT_STYLE_NONE;
+      else
+        *hint_style = CAIRO_HINT_STYLE_SLIGHT;
+    }
+  else
+    {
+      *antialias = cairo_font_options_get_antialias (options);
+      *hint_metrics = cairo_font_options_get_hint_metrics (options);
+      *hint_style = cairo_font_options_get_hint_style (options);
+    }
+
+  /* The combination of hint-style != none and hint-metrics == off
+   * leads to broken rendering with some fonts.
+   */
+  if (*hint_style != CAIRO_HINT_STYLE_NONE)
+    *hint_metrics = CAIRO_HINT_METRICS_ON;
 }

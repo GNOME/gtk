@@ -15,6 +15,11 @@ PangoFont *gsk_reload_font (PangoFont            *font,
                             cairo_antialias_t     antialias);
 
 cairo_hint_style_t gsk_font_get_hint_style (PangoFont *font);
+void               gsk_font_get_rendering (PangoFont            *font,
+                                           float                 scale,
+                                           cairo_hint_metrics_t *hint_metrics,
+                                           cairo_hint_style_t   *hint_style,
+                                           cairo_antialias_t    *antialias);
 
 G_END_DECLS
 
