@@ -746,7 +746,7 @@ update_display (void)
   if (do_waterfall)
     {
       waterfall = g_string_new ("");
-      int sizes[] = { 7, 8, 9, 10, 12, 14, 16, 20, 24, 30, 40, 50, 60, 70, 90 };
+      int sizes[] = { 3, 4, 5, 6, 7, 8, 9, 10, 12, 14, 16, 20, 24, 30, 40, 50, 60, 70, 90 };
       start = 0;
       for (int i = 0; i < G_N_ELEMENTS (sizes); i++)
         {
