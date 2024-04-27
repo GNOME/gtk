@@ -100,6 +100,7 @@ struct _GdkWaylandDisplay
   struct wl_shm *shm;
   struct zwp_linux_dmabuf_v1 *linux_dmabuf;
   DmabufFormatsInfo *dmabuf_formats_info;
+  GdkDmabufFormats *wayland_dmabuf_formats;
   struct xdg_wm_base *xdg_wm_base;
   struct zxdg_shell_v6 *zxdg_shell_v6;
   struct gtk_shell1 *gtk_shell;

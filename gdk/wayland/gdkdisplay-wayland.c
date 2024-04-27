@@ -338,6 +338,16 @@ static void gdk_wayland_display_init_xdg_output   (GdkWaylandDisplay *display_wa
 static void gdk_wayland_display_get_xdg_output    (GdkWaylandMonitor *monitor);
 
 static void
+dmabuf_formats_callback (gpointer           data,
+                         DmabufFormatsInfo *info)
+{
+  GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (data);
+
+  g_clear_pointer (&display_wayland->wayland_dmabuf_formats, gdk_dmabuf_formats_unref);
+  display_wayland->wayland_dmabuf_formats = gdk_dmabuf_formats_ref (info->formats);
+}
+
+static void
 gdk_registry_handle_global (void               *data,
                             struct wl_registry *registry,
                             uint32_t            id,
@@ -370,7 +380,10 @@ gdk_registry_handle_global (void               *data,
       feedback = zwp_linux_dmabuf_v1_get_default_feedback (display_wayland->linux_dmabuf);
       display_wayland->dmabuf_formats_info = dmabuf_formats_info_new (GDK_DISPLAY (display_wayland),
                                                                       "default",
-                                                                      feedback);
+                                                                      NULL,
+                                                                      feedback,
+                                                                      dmabuf_formats_callback,
+                                                                      display_wayland);
       _gdk_wayland_display_async_roundtrip (display_wayland);
     }
   else if (strcmp (interface, "xdg_wm_base") == 0)
@@ -744,6 +757,7 @@ gdk_wayland_display_dispose (GObject *object)
   g_clear_pointer (&display_wayland->single_pixel_buffer, wp_single_pixel_buffer_manager_v1_destroy);
   g_clear_pointer (&display_wayland->linux_dmabuf, zwp_linux_dmabuf_v1_destroy);
   g_clear_pointer (&display_wayland->dmabuf_formats_info, dmabuf_formats_info_free);
+  g_clear_pointer (&display_wayland->wayland_dmabuf_formats, gdk_dmabuf_formats_unref);
 
   g_clear_pointer (&display_wayland->shm, wl_shm_destroy);
   g_clear_pointer (&display_wayland->wl_registry, wl_registry_destroy);

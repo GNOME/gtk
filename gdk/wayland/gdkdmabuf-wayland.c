@@ -46,44 +46,116 @@ dmabuf_formats_free (DmabufFormats *formats)
   g_free (formats);
 }
 
-static void
-update_dmabuf_formats (DmabufFormatsInfo *info)
+static gboolean
+is_in_tranche (GdkDmabufFormats *formats,
+               gsize             idx,
+               guint32           fourcc,
+               guint64           modifier)
 {
-  DmabufFormats *formats = info->dmabuf_formats;
+  gsize end;
+  guint32 f;
+  guint64 m;
 
-  GDK_DISPLAY_DEBUG (info->display, MISC,
-                     "dmabuf format table (%lu entries)", info->n_dmabuf_formats);
-  GDK_DISPLAY_DEBUG (info->display, MISC,
-                     "dmabuf main device: %u %u",
-                     major (formats->main_device),
-                     minor (formats->main_device));
-
-  for (gsize i = 0; i < formats->tranches->len; i++)
+  end = gdk_dmabuf_formats_next_priority (formats, idx);
+  for (gsize i = idx; i < end; i++)
     {
-      DmabufTranche *tranche = g_ptr_array_index (formats->tranches, i);
+      gdk_dmabuf_formats_get_format (formats, i, &f, &m);
+      if (f == fourcc && m == modifier)
+        return TRUE;
+    }
 
-      GDK_DISPLAY_DEBUG (info->display, MISC,
-                         "dmabuf tranche target device: %u %u",
-                         major (tranche->target_device),
-                         minor (tranche->target_device));
+  return FALSE;
+}
 
-      GDK_DISPLAY_DEBUG (info->display, MISC,
-                         "dmabuf%s tranche (%lu entries):",
-                         tranche->flags & ZWP_LINUX_DMABUF_FEEDBACK_V1_TRANCHE_FLAGS_SCANOUT ? " scanout" : "",
-                         tranche->n_formats);
+static void
+gdk_wayland_dmabuf_formats_dump (GdkDmabufFormats *formats,
+                                 const char       *name)
+{
+  gdk_debug_message ("Wayland %s dmabuf formats: (%lu entries)", name, formats->n_formats);
+  gdk_debug_message ("Main device: %u %u",
+                     major (formats->device),
+                     minor (formats->device));
 
-      for (gsize j = 0; j < tranche->n_formats; j++)
+  gsize i = 0;
+  while (i < formats->n_formats)
+    {
+      GdkDmabufFormat *format = &formats->formats[i];
+      gsize next_priority = format->next_priority;
+
+      if (i > 0)
+        gdk_debug_message ("------");
+
+      gdk_debug_message ("Tranche target device: %u %u",
+                         major (format->device),
+                         minor (format->device));
+      if (format->flags & ZWP_LINUX_DMABUF_FEEDBACK_V1_TRANCHE_FLAGS_SCANOUT)
+        gdk_debug_message ("Tranche is scanout");
+      gdk_debug_message ("Tranche formats (%lu entries)", next_priority - i);
+
+      for (; i < next_priority; i++)
         {
-          GDK_DISPLAY_DEBUG (info->display, MISC,
-                             "  %.4s:%#" G_GINT64_MODIFIER "x",
-                             (char *) &(tranche->formats[j].fourcc),
-                             tranche->formats[j].modifier);
+          format = &formats->formats[i];
+          gdk_debug_message ("  %.4s:%#" G_GINT64_MODIFIER "x", (char *) &format->fourcc, format->modifier);
         }
     }
 }
 
 static void
-linux_dmabuf_done (void *data,
+update_dmabuf_formats (DmabufFormatsInfo *info)
+{
+  GdkDmabufFormatsBuilder *builder;
+  GdkDmabufFormats *egl_formats = info->egl_formats;
+  DmabufFormats *formats = info->dmabuf_formats;
+
+  builder = gdk_dmabuf_formats_builder_new ();
+
+  for (gsize i = 0; i < formats->tranches->len; i++)
+    {
+      DmabufTranche *tranche = g_ptr_array_index (formats->tranches, i);
+
+      if (egl_formats)
+        {
+          for (gsize k = 0; k < gdk_dmabuf_formats_get_n_formats (egl_formats); k = gdk_dmabuf_formats_next_priority (egl_formats, k))
+            {
+              for (gsize j = 0; j < tranche->n_formats; j++)
+                {
+                  if (is_in_tranche (egl_formats, k,
+                                     tranche->formats[j].fourcc,
+                                     tranche->formats[j].modifier))
+                    gdk_dmabuf_formats_builder_add_format_for_device (builder,
+                                                                      tranche->formats[j].fourcc,
+                                                                      tranche->flags,
+                                                                      tranche->formats[j].modifier,
+                                                                      tranche->target_device);
+                }
+              gdk_dmabuf_formats_builder_next_priority (builder);
+            }
+        }
+      else
+        {
+          for (gsize j = 0; j < tranche->n_formats; j++)
+            {
+              gdk_dmabuf_formats_builder_add_format_for_device (builder,
+                                                                tranche->formats[j].fourcc,
+                                                                tranche->flags,
+                                                                tranche->formats[j].modifier,
+                                                                tranche->target_device);
+            }
+          gdk_dmabuf_formats_builder_next_priority (builder);
+        }
+    }
+
+  g_clear_pointer (&info->formats, gdk_dmabuf_formats_unref);
+  info->formats = gdk_dmabuf_formats_builder_free_to_formats_for_device (builder, formats->main_device);
+
+  if (GDK_DISPLAY_DEBUG_CHECK (info->display, DMABUF))
+    gdk_wayland_dmabuf_formats_dump (info->formats, info->name);
+
+  info->callback (info->data, info);
+}
+
+static void
+linux_dmabuf_done (void                                *data,
                    struct zwp_linux_dmabuf_feedback_v1 *feedback)
 {
   DmabufFormatsInfo *info = data;
@@ -97,10 +169,10 @@ linux_dmabuf_done (void *data,
 }
 
 static void
-linux_dmabuf_format_table (void *data,
+linux_dmabuf_format_table (void                                *data,
                            struct zwp_linux_dmabuf_feedback_v1 *feedback,
-                           int32_t fd,
-                           uint32_t size)
+                           int32_t                              fd,
+                           uint32_t                             size)
 {
   DmabufFormatsInfo *info = data;
 
@@ -112,9 +184,9 @@ linux_dmabuf_format_table (void *data,
 }
 
 static void
-linux_dmabuf_main_device (void *data,
+linux_dmabuf_main_device (void                                *data,
                           struct zwp_linux_dmabuf_feedback_v1 *feedback,
-                          struct wl_array *device)
+                          struct wl_array                     *device)
 {
   DmabufFormatsInfo *info = data;
   dev_t dev;
@@ -128,7 +200,7 @@ linux_dmabuf_main_device (void *data,
 }
 
 static void
-linux_dmabuf_tranche_done (void *data,
+linux_dmabuf_tranche_done (void                                *data,
                            struct zwp_linux_dmabuf_feedback_v1 *feedback)
 {
   DmabufFormatsInfo *info = data;
@@ -140,9 +212,9 @@ linux_dmabuf_tranche_done (void *data,
 }
 
 static void
-linux_dmabuf_tranche_target_device (void *data,
+linux_dmabuf_tranche_target_device (void                                *data,
                                     struct zwp_linux_dmabuf_feedback_v1 *feedback,
-                                    struct wl_array *device)
+                                    struct wl_array                     *device)
 {
   DmabufFormatsInfo *info = data;
   dev_t dev;
@@ -159,9 +231,9 @@ linux_dmabuf_tranche_target_device (void *data,
 }
 
 static void
-linux_dmabuf_tranche_formats (void *data,
+linux_dmabuf_tranche_formats (void                                *data,
                               struct zwp_linux_dmabuf_feedback_v1 *feedback,
-                              struct wl_array *indices)
+                              struct wl_array                     *indices)
 {
   DmabufFormatsInfo *info = data;
   DmabufTranche *tranche;
@@ -182,9 +254,9 @@ linux_dmabuf_tranche_formats (void *data,
 }
 
 static void
-linux_dmabuf_tranche_flags (void *data,
+linux_dmabuf_tranche_flags (void                                *data,
                             struct zwp_linux_dmabuf_feedback_v1 *feedback,
-                            uint32_t flags)
+                            uint32_t                             flags)
 {
   DmabufFormatsInfo *info = data;
   DmabufTranche *tranche;
@@ -207,7 +279,10 @@ static const struct zwp_linux_dmabuf_feedback_v1_listener feedback_listener = {
 DmabufFormatsInfo *
 dmabuf_formats_info_new (GdkDisplay                          *display,
                          const char                          *name,
-                         struct zwp_linux_dmabuf_feedback_v1 *feedback)
+                         GdkDmabufFormats                    *egl_formats,
+                         struct zwp_linux_dmabuf_feedback_v1 *feedback,
+                         DmabufFormatsUpdateCallback          callback,
+                         gpointer                             data)
 {
   DmabufFormatsInfo *info;
 
@@ -215,11 +290,21 @@ dmabuf_formats_info_new (GdkDisplay                          *display,
 
   info->display = display;
   info->name = g_strdup (name);
+  if (egl_formats)
+    {
+      info->egl_formats = gdk_dmabuf_formats_ref (egl_formats);
+      info->formats = gdk_dmabuf_formats_ref (egl_formats);
+    }
   info->feedback = feedback;
+
+  info->callback = callback;
+  info->data = data;
 
   if (info->feedback)
     zwp_linux_dmabuf_feedback_v1_add_listener (info->feedback,
                                                &feedback_listener, info);
+  else
+    info->callback (info->data, info);
 
   return info;
 }
@@ -228,6 +313,8 @@ void
 dmabuf_formats_info_free (DmabufFormatsInfo *info)
 {
   g_free (info->name);
+  g_clear_pointer (&info->formats, gdk_dmabuf_formats_unref);
+  g_clear_pointer (&info->egl_formats, gdk_dmabuf_formats_unref);
   g_clear_pointer (&info->feedback, zwp_linux_dmabuf_feedback_v1_destroy);
   if (info->dmabuf_format_table)
     {
@@ -239,6 +326,19 @@ dmabuf_formats_info_free (DmabufFormatsInfo *info)
   g_clear_pointer (&info->pending_tranche, dmabuf_tranche_free);
 
   g_free (info);
+}
+
+void
+dmabuf_formats_info_set_egl_formats (DmabufFormatsInfo *info,
+                                     GdkDmabufFormats  *egl_formats)
+{
+  if (info->egl_formats)
+    return;
+
+  info->egl_formats = gdk_dmabuf_formats_ref (egl_formats);
+
+  if (info->dmabuf_formats)
+    update_dmabuf_formats (info);
 }
 
 /**

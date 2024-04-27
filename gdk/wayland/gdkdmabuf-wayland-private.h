@@ -54,11 +54,17 @@ typedef struct
 
 typedef struct DmabufFormatsInfo DmabufFormatsInfo;
 
+typedef void (* DmabufFormatsUpdateCallback) (gpointer           data,
+                                              DmabufFormatsInfo *formats);
+
 struct DmabufFormatsInfo
 {
   GdkDisplay *display;
   char *name;
   struct zwp_linux_dmabuf_feedback_v1 *feedback;
+
+  DmabufFormatsUpdateCallback callback;
+  gpointer data;
 
   gsize n_dmabuf_formats;
   DmabufFormat *dmabuf_format_table;
@@ -66,12 +72,22 @@ struct DmabufFormatsInfo
   DmabufFormats *dmabuf_formats;
   DmabufFormats *pending_dmabuf_formats;
   DmabufTranche *pending_tranche;
+
+  GdkDmabufFormats *egl_formats;
+  GdkDmabufFormats *formats;
 };
 
 DmabufFormatsInfo * dmabuf_formats_info_new  (GdkDisplay                          *display,
                                               const char                          *name,
-                                              struct zwp_linux_dmabuf_feedback_v1 *feedback);
+                                              GdkDmabufFormats                    *egl_formats,
+                                              struct zwp_linux_dmabuf_feedback_v1 *feedback,
+                                              DmabufFormatsUpdateCallback          callback,
+                                              gpointer                             data);
 
 void                dmabuf_formats_info_free (DmabufFormatsInfo                   *info);
+
+void                dmabuf_formats_info_set_egl_formats
+                                             (DmabufFormatsInfo                   *info,
+                                              GdkDmabufFormats                    *egl_formats);
 
 G_END_DECLS
