@@ -145,20 +145,6 @@ gsk_font_get_size (PangoFont *font)
 }
 
 /*< private >
- * gsk_font_get_hint_style:
- * @font: a `PangoFont`
- *
- * Get the hint style from the cairo font options.
- *
- * Returns: the hint style
- */
-cairo_hint_style_t
-gsk_font_get_hint_style (PangoFont *font)
-{
-  return cairo_font_options_get_hint_style (pango_font_get_cairo_font_options (font));
-}
-
-/*< private >
  * gsk_font_get_rendering:
  * @font: a `PangoFont`
  * @scale: the scale to use
