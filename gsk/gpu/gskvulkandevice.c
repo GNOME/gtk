@@ -1128,7 +1128,7 @@ gsk_vulkan_device_get_vk_pipeline (GskVulkanDevice           *self,
                                            &pipeline);
 
   gdk_profiler_end_markf (begin_time,
-                          "Create Vulkan pipeline frag=%s vert=%s",
+                          "Create Vulkan pipeline", "frag=%s vert=%s",
                           fragment_shader_name, vertex_shader_name);
 
   g_free (fragment_shader_name);
