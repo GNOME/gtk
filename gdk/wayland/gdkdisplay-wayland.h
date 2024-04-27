@@ -49,6 +49,7 @@
 
 #include "gdkdisplayprivate.h"
 #include "gdkwaylanddevice.h"
+#include "gdkdmabuf-wayland-private.h"
 #include "cursor/wayland-cursor.h"
 
 #include <epoxy/egl.h>
@@ -72,13 +73,6 @@ typedef enum _GdkWaylandShellVariant
   GDK_WAYLAND_SHELL_VARIANT_XDG_SHELL,
   GDK_WAYLAND_SHELL_VARIANT_ZXDG_SHELL_V6
 } GdkWaylandShellVariant;
-
-typedef struct
-{
-  uint32_t fourcc;
-  uint32_t padding;
-  uint64_t modifier;
-} LinuxDmabufFormat;
 
 struct _GdkWaylandDisplay
 {
@@ -105,9 +99,7 @@ struct _GdkWaylandDisplay
   struct wl_compositor *compositor;
   struct wl_shm *shm;
   struct zwp_linux_dmabuf_v1 *linux_dmabuf;
-  struct zwp_linux_dmabuf_feedback_v1 *linux_dmabuf_feedback;
-  gsize linux_dmabuf_n_formats;
-  LinuxDmabufFormat *linux_dmabuf_formats;
+  DmabufFormatsInfo *dmabuf_formats_info;
   struct xdg_wm_base *xdg_wm_base;
   struct zxdg_shell_v6 *zxdg_shell_v6;
   struct gtk_shell1 *gtk_shell;

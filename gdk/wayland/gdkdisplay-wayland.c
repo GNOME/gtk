@@ -288,97 +288,6 @@ static const struct wl_shm_listener wl_shm_listener = {
 };
 
 static void
-linux_dmabuf_done (void *data,
-                   struct zwp_linux_dmabuf_feedback_v1 *zwp_linux_dmabuf_feedback_v1)
-{
-  GDK_DEBUG (MISC, "dmabuf feedback done");
-}
-
-static void
-linux_dmabuf_format_table (void *data,
-                           struct zwp_linux_dmabuf_feedback_v1 *zwp_linux_dmabuf_feedback_v1,
-                           int32_t fd,
-                           uint32_t size)
-{
-  GdkWaylandDisplay *display_wayland = data;
-
-  display_wayland->linux_dmabuf_n_formats = size / 16;
-  display_wayland->linux_dmabuf_formats = mmap (NULL, size, PROT_READ, MAP_PRIVATE, fd, 0);
-
-  GDK_DEBUG (MISC, "got dmabuf format table (%lu entries)", display_wayland->linux_dmabuf_n_formats);
-}
-
-static void
-linux_dmabuf_main_device (void *data,
-                          struct zwp_linux_dmabuf_feedback_v1 *zwp_linux_dmabuf_feedback_v1,
-                          struct wl_array *device)
-{
-  dev_t dev G_GNUC_UNUSED;
-
-  memcpy (&dev, device->data, sizeof (dev_t));
-
-  GDK_DEBUG (MISC, "got dmabuf main device: %u %u", major (dev), minor (dev));
-}
-
-static void
-linux_dmabuf_tranche_done (void *data,
-                           struct zwp_linux_dmabuf_feedback_v1 *zwp_linux_dmabuf_feedback_v1)
-{
-  GDK_DEBUG (MISC, "dmabuf feedback tranche done");
-}
-
-static void
-linux_dmabuf_tranche_target_device (void *data,
-                                    struct zwp_linux_dmabuf_feedback_v1 *zwp_linux_dmabuf_feedback_v1,
-                                    struct wl_array *device)
-{
-  dev_t dev G_GNUC_UNUSED;
-
-  memcpy (&dev, device->data, sizeof (dev_t));
-
-  GDK_DEBUG (MISC, "got dmabuf tranche target device: %u %u", major (dev), minor (dev));
-}
-
-static void
-linux_dmabuf_tranche_formats (void *data,
-                              struct zwp_linux_dmabuf_feedback_v1 *zwp_linux_dmabuf_feedback_v1,
-                              struct wl_array *indices)
-{
-  GdkWaylandDisplay *display_wayland = data;
-
-  GDK_DEBUG (MISC, "got dmabuf tranche formats (%lu entries):", indices->size / sizeof (guint16));
-  guint16 *pos;
-
-  wl_array_for_each (pos, indices)
-    {
-      LinuxDmabufFormat *fmt G_GNUC_UNUSED = &display_wayland->linux_dmabuf_formats[*pos];
-      uint32_t f G_GNUC_UNUSED = fmt->fourcc;
-      uint64_t m G_GNUC_UNUSED = fmt->modifier;
-      GDK_DEBUG (MISC, "  %.4s:%#" G_GINT64_MODIFIER "x", (char *) &f, m);
-    }
-}
-
-static void
-linux_dmabuf_tranche_flags (void *data,
-                            struct zwp_linux_dmabuf_feedback_v1 *zwp_linux_dmabuf_feedback_v1,
-                            uint32_t flags)
-{
-  GDK_DEBUG (MISC,
-             "got dmabuf tranche flags: %s",
-             flags & ZWP_LINUX_DMABUF_FEEDBACK_V1_TRANCHE_FLAGS_SCANOUT ? "scanout" : "");
-}
-
-static const struct zwp_linux_dmabuf_feedback_v1_listener linux_dmabuf_feedback_listener = {
-  linux_dmabuf_done,
-  linux_dmabuf_format_table,
-  linux_dmabuf_main_device,
-  linux_dmabuf_tranche_done,
-  linux_dmabuf_tranche_target_device,
-  linux_dmabuf_tranche_formats,
-  linux_dmabuf_tranche_flags,
-};
-
-static void
 server_decoration_manager_default_mode (void                                          *data,
                                         struct org_kde_kwin_server_decoration_manager *manager,
                                         uint32_t                                       mode)
@@ -454,12 +363,14 @@ gdk_registry_handle_global (void               *data,
     }
   else if (strcmp (interface, "zwp_linux_dmabuf_v1") == 0 && version >= 4)
     {
+      struct zwp_linux_dmabuf_feedback_v1 *feedback;
+
       display_wayland->linux_dmabuf =
         wl_registry_bind (display_wayland->wl_registry, id, &zwp_linux_dmabuf_v1_interface, version);
-      display_wayland->linux_dmabuf_feedback =
-        zwp_linux_dmabuf_v1_get_default_feedback (display_wayland->linux_dmabuf);
-     zwp_linux_dmabuf_feedback_v1_add_listener (display_wayland->linux_dmabuf_feedback,
-                                                &linux_dmabuf_feedback_listener, display_wayland);
+      feedback = zwp_linux_dmabuf_v1_get_default_feedback (display_wayland->linux_dmabuf);
+      display_wayland->dmabuf_formats_info = dmabuf_formats_info_new (GDK_DISPLAY (display_wayland),
+                                                                      "default",
+                                                                      feedback);
       _gdk_wayland_display_async_roundtrip (display_wayland);
     }
   else if (strcmp (interface, "xdg_wm_base") == 0)
@@ -832,9 +743,7 @@ gdk_wayland_display_dispose (GObject *object)
   g_clear_pointer (&display_wayland->presentation, wp_presentation_destroy);
   g_clear_pointer (&display_wayland->single_pixel_buffer, wp_single_pixel_buffer_manager_v1_destroy);
   g_clear_pointer (&display_wayland->linux_dmabuf, zwp_linux_dmabuf_v1_destroy);
-  g_clear_pointer (&display_wayland->linux_dmabuf_feedback, zwp_linux_dmabuf_feedback_v1_destroy);
-  if (display_wayland->linux_dmabuf_formats)
-    munmap (display_wayland->linux_dmabuf_formats, display_wayland->linux_dmabuf_n_formats * 16);
+  g_clear_pointer (&display_wayland->dmabuf_formats_info, dmabuf_formats_info_free);
 
   g_clear_pointer (&display_wayland->shm, wl_shm_destroy);
   g_clear_pointer (&display_wayland->wl_registry, wl_registry_destroy);

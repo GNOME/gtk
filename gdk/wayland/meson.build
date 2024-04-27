@@ -8,6 +8,7 @@ gdk_wayland_sources = files([
   'gdkdevice-wayland.c',
   'gdkdevicepad-wayland.c',
   'gdkdisplay-wayland.c',
+  'gdkdmabuf-wayland.c',
   'gdkdrag-wayland.c',
   'gdkdragsurface-wayland.c',
   'gdkdrop-wayland.c',
