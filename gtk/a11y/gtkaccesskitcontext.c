@@ -658,6 +658,29 @@ set_string_property (GtkATContext           *ctx,
   return FALSE;
 }
 
+static gboolean
+set_string_from_relation (GtkATContext           *ctx,
+                          GtkAccessibleRelation   relation,
+                          AccessKitStringSetter   setter,
+                          accesskit_node_builder *builder)
+{
+  if (gtk_at_context_has_accessible_relation (ctx, relation))
+    {
+      GtkAccessibleValue *value;
+      const char *str;
+
+      value = gtk_at_context_get_accessible_relation (ctx, relation);
+      str = gtk_string_accessible_value_get (value);
+      if (str)
+        {
+          setter (builder, str);
+          return TRUE;
+        }
+    }
+
+  return FALSE;
+}
+
 typedef void (*AccessKitSizeSetter) (accesskit_node_builder *, size_t);
 
 static gboolean
@@ -986,13 +1009,30 @@ gtk_accesskit_context_build_node (GtkAccessKitContext      *self,
                       accesskit_node_builder_push_flow_to, builder);
   set_multi_relation (ctx, GTK_ACCESSIBLE_RELATION_LABELLED_BY,
                       accesskit_node_builder_push_labelled_by, builder);
+  set_multi_relation (ctx, GTK_ACCESSIBLE_RELATION_OWNS,
+                      accesskit_node_builder_push_owned, builder);
 
+  set_size_from_relation (ctx, GTK_ACCESSIBLE_RELATION_COL_COUNT,
+                          accesskit_node_builder_set_column_count, builder);
+  set_size_from_relation (ctx, GTK_ACCESSIBLE_RELATION_COL_INDEX,
+                          accesskit_node_builder_set_column_index, builder);
+  set_size_from_relation (ctx, GTK_ACCESSIBLE_RELATION_COL_SPAN,
+                          accesskit_node_builder_set_column_span, builder);
   set_size_from_relation (ctx, GTK_ACCESSIBLE_RELATION_POS_IN_SET,
                           accesskit_node_builder_set_position_in_set, builder);
+  set_size_from_relation (ctx, GTK_ACCESSIBLE_RELATION_ROW_COUNT,
+                          accesskit_node_builder_set_row_count, builder);
+  set_size_from_relation (ctx, GTK_ACCESSIBLE_RELATION_ROW_INDEX,
+                          accesskit_node_builder_set_row_index, builder);
+  set_size_from_relation (ctx, GTK_ACCESSIBLE_RELATION_ROW_SPAN,
+                          accesskit_node_builder_set_row_span, builder);
   set_size_from_relation (ctx, GTK_ACCESSIBLE_RELATION_SET_SIZE,
                           accesskit_node_builder_set_size_of_set, builder);
 
-  /* TODO: table relations that are actually properties */
+  set_string_from_relation (ctx, GTK_ACCESSIBLE_RELATION_COL_INDEX_TEXT,
+                            accesskit_node_builder_set_column_index_text, builder);
+  set_string_from_relation (ctx, GTK_ACCESSIBLE_RELATION_ROW_INDEX_TEXT,
+                            accesskit_node_builder_set_row_index_text, builder);
 
   accesskit_node_builder_set_class_name (builder,
                                          g_type_name (G_TYPE_FROM_INSTANCE (accessible)));
