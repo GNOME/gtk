@@ -907,7 +907,9 @@ gsk_gpu_device_lookup_glyph_image (GskGpuDevice           *self,
   gsize atlas_x, atlas_y, padding;
   float subpixel_x, subpixel_y;
   PangoFont *scaled_font;
+  cairo_antialias_t antialias;
   cairo_hint_metrics_t hint_metrics;
+  cairo_hint_style_t hint_style;
 
   cache = g_hash_table_lookup (priv->glyph_cache, &lookup);
   if (cache)
@@ -919,15 +921,8 @@ gsk_gpu_device_lookup_glyph_image (GskGpuDevice           *self,
       return cache->image;
     }
 
-  /* The combination of hint-style != none and hint-metrics == off
-   * leads to broken rendering with some fonts.
-   */
-  if (gsk_font_get_hint_style (font) != CAIRO_HINT_STYLE_NONE)
-    hint_metrics = CAIRO_HINT_METRICS_ON;
-  else
-    hint_metrics = CAIRO_HINT_METRICS_DEFAULT;
-
-  scaled_font = gsk_reload_font (font, scale, hint_metrics, CAIRO_HINT_STYLE_DEFAULT, CAIRO_ANTIALIAS_DEFAULT);
+  gsk_font_get_rendering (font, scale, &hint_metrics, &hint_style, &antialias);
+  scaled_font = gsk_reload_font (font, scale, hint_metrics, hint_style, antialias);
 
   subpixel_x = (flags & 3) / 4.f;
   subpixel_y = ((flags >> 2) & 3) / 4.f;
