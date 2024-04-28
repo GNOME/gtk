@@ -127,15 +127,18 @@ png_simple_warning_callback (png_structp     png,
 }
 
 /* }}} */
-/* {{{ Public API */ 
+/* {{{ Public API */
 
 GdkTexture *
-gdk_load_png (GBytes  *bytes,
-              GError **error)
+gdk_load_png (GBytes      *bytes,
+              GHashTable  *options,
+              GError     **error)
 {
   png_io io;
   png_struct *png = NULL;
   png_info *info;
+  png_textp text;
+  int num_texts;
   guint width, height;
   gsize i, stride;
   int depth, color_type;
@@ -296,6 +299,17 @@ gdk_load_png (GBytes  *bytes,
   out_bytes = g_bytes_new_take (buffer, height * stride);
   texture = gdk_memory_texture_new (width, height, format, out_bytes, stride);
   g_bytes_unref (out_bytes);
+
+  if (options && png_get_text (png, info, &text, &num_texts))
+    {
+      for (i = 0; i < num_texts; i++)
+        {
+          if (text->compression != -1)
+            continue;
+
+          g_hash_table_insert (options, g_strdup (text->key), g_strdup (text->text));
+        }
+    }
 
   g_free (row_pointers);
   png_destroy_read_struct (&png, &info, NULL);
