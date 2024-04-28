@@ -21,8 +21,15 @@
 #include "gtkscalerprivate.h"
 
 #include "gdk/gdktextureprivate.h"
+#include "gdk/loaders/gdkpngprivate.h"
 
 /* {{{ Pixbuf helpers */
+
+static inline gboolean
+pixbuf_is_only_fg (GdkPixbuf *pixbuf)
+{
+  return gdk_pixbuf_get_option (pixbuf, "tEXt::only-foreground") != NULL;
+}
 
 static GdkPixbuf *
 load_from_stream (GdkPixbufLoader  *loader,
@@ -246,7 +253,7 @@ load_symbolic_svg (const char     *escaped_file_data,
   return pixbuf;
 }
 
-static void
+static gboolean
 extract_plane (GdkPixbuf *src,
                GdkPixbuf *dst,
                int        from_plane,
@@ -257,6 +264,7 @@ extract_plane (GdkPixbuf *src,
   gsize src_stride, dst_stride;
   guchar *src_row, *dst_row;
   int x, y;
+  gboolean all_clear = TRUE;
 
   width = gdk_pixbuf_get_width (src);
   height = gdk_pixbuf_get_height (src);
@@ -276,11 +284,16 @@ extract_plane (GdkPixbuf *src,
       dst_row = dst_data + dst_stride * y;
       for (x = 0; x < width; x++)
         {
+          if (src_row[from_plane] != 0)
+            all_clear = FALSE;
+
           dst_row[to_plane] = src_row[from_plane];
           src_row += 4;
           dst_row += 4;
         }
     }
+
+  return all_clear;
 }
 
 GdkPixbuf *
@@ -303,6 +316,7 @@ gtk_make_symbolic_pixbuf_from_data (const char  *file_data,
   int icon_width, icon_height;
   char *escaped_file_data;
   gsize len;
+  gboolean only_fg;
 
   /* Fetch size from the original icon */
   GInputStream *stream = g_memory_input_stream_new_from_data (file_data, file_len, NULL);
@@ -328,6 +342,7 @@ gtk_make_symbolic_pixbuf_from_data (const char  *file_data,
   if (height == 0)
     height = icon_height * scale;
 
+  only_fg = TRUE;
   for (plane = 0; plane < 3; plane++)
     {
       /* Here we render the svg with all colors solid, this should
@@ -374,10 +389,13 @@ gtk_make_symbolic_pixbuf_from_data (const char  *file_data,
       if (plane == 0)
         extract_plane (loaded, pixbuf, 3, 3);
 
-      extract_plane (loaded, pixbuf, 0, plane);
+      only_fg &= extract_plane (loaded, pixbuf, 0, plane);
 
       g_object_unref (loaded);
     }
+
+  if (only_fg)
+    gdk_pixbuf_set_option (pixbuf, "tEXt::only-foreground", "true");
 
   g_free (escaped_file_data);
 
@@ -458,11 +476,65 @@ make_symbolic_pixbuf_from_file (GFile       *file,
 /* }}} */
 /* {{{ Texture API */
 
+static GdkTexture *
+texture_new_from_bytes (GBytes    *bytes,
+                        gboolean  *only_fg,
+                        GError   **error)
+{
+  GHashTable *options;
+  GdkTexture *texture;
+
+  if (!gdk_is_png (bytes))
+    return gdk_texture_new_from_bytes (bytes, error);
+
+  options = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, g_free);
+  texture = gdk_load_png (bytes, options, error);
+  *only_fg = g_hash_table_contains (options, "foreground-only");
+  g_hash_table_unref (options);
+
+  return texture;
+}
+
+GdkTexture *
+gdk_texture_new_from_filename_with_fg (const char    *filename,
+                                       gboolean      *only_fg,
+                                       GError       **error)
+{
+  GFile *file;
+  GBytes *bytes;
+  GdkTexture *texture = NULL;
+
+  file = g_file_new_for_path (filename);
+  bytes = g_file_load_bytes (file, NULL, NULL, error);
+  if (bytes)
+    texture = texture_new_from_bytes (bytes, only_fg, error);
+  g_bytes_unref (bytes);
+  g_object_unref (file);
+
+  return texture;
+}
+
+GdkTexture *
+gdk_texture_new_from_resource_with_fg (const char *path,
+                                       gboolean   *only_fg)
+{
+  GBytes *bytes;
+  GdkTexture *texture = NULL;
+
+  bytes = g_resources_lookup_data (path, 0, NULL);
+  if (bytes)
+    texture = texture_new_from_bytes (bytes, only_fg, NULL);
+  g_bytes_unref (bytes);
+
+  return texture;
+}
+
 GdkTexture *
 gdk_texture_new_from_stream_at_scale (GInputStream  *stream,
                                       int            width,
                                       int            height,
                                       gboolean       aspect,
+                                      gboolean      *only_fg,
                                       GCancellable  *cancellable,
                                       GError       **error)
 {
@@ -472,6 +544,7 @@ gdk_texture_new_from_stream_at_scale (GInputStream  *stream,
   pixbuf = _gdk_pixbuf_new_from_stream_at_scale (stream, width, height, aspect, cancellable, error);
   if (pixbuf)
     {
+      *only_fg = pixbuf_is_only_fg (pixbuf);
       texture = gdk_texture_new_for_pixbuf (pixbuf);
       g_object_unref (pixbuf);
     }
@@ -481,6 +554,7 @@ gdk_texture_new_from_stream_at_scale (GInputStream  *stream,
 
 GdkTexture *
 gdk_texture_new_from_stream (GInputStream  *stream,
+                             gboolean      *only_fg,
                              GCancellable  *cancellable,
                              GError       **error)
 {
@@ -490,6 +564,7 @@ gdk_texture_new_from_stream (GInputStream  *stream,
   pixbuf = _gdk_pixbuf_new_from_stream_scaled (stream, 0, cancellable, error);
   if (pixbuf)
     {
+      *only_fg = pixbuf_is_only_fg (pixbuf);
       texture = gdk_texture_new_for_pixbuf (pixbuf);
       g_object_unref (pixbuf);
     }
@@ -502,6 +577,7 @@ gdk_texture_new_from_resource_at_scale (const char    *path,
                                         int            width,
                                         int            height,
                                         gboolean       preserve_aspect,
+                                        gboolean      *only_fg,
                                         GError       **error)
 {
   GdkPixbuf *pixbuf;
@@ -510,6 +586,7 @@ gdk_texture_new_from_resource_at_scale (const char    *path,
   pixbuf = _gdk_pixbuf_new_from_resource_at_scale (path, width, height, preserve_aspect, error);
   if (pixbuf)
     {
+      *only_fg = pixbuf_is_only_fg (pixbuf);
       texture = gdk_texture_new_for_pixbuf (pixbuf);
       g_object_unref (pixbuf);
     }
@@ -525,6 +602,7 @@ gdk_texture_new_from_path_symbolic (const char    *path,
                                     int            width,
                                     int            height,
                                     double         scale,
+                                    gboolean      *only_fg,
                                     GError       **error)
 {
   GdkPixbuf *pixbuf;
@@ -533,6 +611,7 @@ gdk_texture_new_from_path_symbolic (const char    *path,
   pixbuf = make_symbolic_pixbuf_from_path (path, width, height, scale, error);
   if (pixbuf)
     {
+      *only_fg = pixbuf_is_only_fg (pixbuf);
       texture = gdk_texture_new_for_pixbuf (pixbuf);
       g_object_unref (pixbuf);
     }
@@ -551,6 +630,7 @@ gdk_texture_new_from_resource_symbolic (const char  *path,
                                         int          width,
                                         int          height,
                                         double       scale,
+                                        gboolean    *only_fg,
                                         GError     **error)
 {
   GdkPixbuf *pixbuf;
@@ -559,6 +639,7 @@ gdk_texture_new_from_resource_symbolic (const char  *path,
   pixbuf = make_symbolic_pixbuf_from_resource (path, width, height, scale, error);
   if (pixbuf)
     {
+      *only_fg = pixbuf_is_only_fg (pixbuf);
       texture = gdk_texture_new_for_pixbuf (pixbuf);
       g_object_unref (pixbuf);
     }
@@ -593,14 +674,19 @@ gdk_texture_new_from_file_symbolic (GFile       *file,
                                     int          width,
                                     int          height,
                                     double       scale,
+                                    gboolean    *only_fg,
                                     GError     **error)
 {
   GdkPixbuf *pixbuf;
-  GdkTexture *texture;
+  GdkTexture *texture = NULL;
 
   pixbuf = make_symbolic_pixbuf_from_file (file, width, height, scale, error);
-  texture = gdk_texture_new_for_pixbuf (pixbuf);
-  g_object_unref (pixbuf);
+  if (pixbuf)
+    {
+      *only_fg = pixbuf_is_only_fg (pixbuf);
+      texture = gdk_texture_new_for_pixbuf (pixbuf);
+      g_object_unref (pixbuf);
+    }
 
   return texture;
 }

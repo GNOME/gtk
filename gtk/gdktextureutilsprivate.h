@@ -29,35 +29,46 @@ GdkPixbuf *gtk_make_symbolic_pixbuf_from_data       (const char    *data,
                                                      const char    *debug_output_to,
                                                      GError       **error);
 
+GdkTexture *gdk_texture_new_from_filename_with_fg   (const char    *filename,
+                                                     gboolean      *only_fg,
+                                                     GError       **error);
+GdkTexture *gdk_texture_new_from_resource_with_fg   (const char    *path,
+                                                     gboolean      *only_fg);
 GdkTexture *gdk_texture_new_from_stream             (GInputStream  *stream,
+                                                     gboolean      *only_fg,
                                                      GCancellable  *cancellable,
                                                      GError       **error);
 GdkTexture *gdk_texture_new_from_stream_at_scale    (GInputStream  *stream,
                                                      int            width,
                                                      int            height,
                                                      gboolean       aspect,
+                                                     gboolean      *only_fg,
                                                      GCancellable  *cancellable,
                                                      GError       **error);
 GdkTexture *gdk_texture_new_from_resource_at_scale  (const char    *path,
                                                      int            width,
                                                      int            height,
                                                      gboolean       aspect,
+                                                     gboolean      *only_fg,
                                                      GError       **error);
 
 GdkTexture *gdk_texture_new_from_path_symbolic      (const char    *path,
                                                      int            width,
                                                      int            height,
                                                      double         scale,
+                                                     gboolean      *only_fg,
                                                      GError       **error);
 GdkTexture *gdk_texture_new_from_file_symbolic      (GFile         *file,
                                                      int            width,
                                                      int            height,
                                                      double         scale,
+                                                     gboolean      *only_fg,
                                                      GError       **error);
 GdkTexture *gdk_texture_new_from_resource_symbolic  (const char    *path,
                                                      int            width,
                                                      int            height,
                                                      double         scale,
+                                                     gboolean      *only_fg,
                                                      GError       **error);
 
 GdkTexture *gtk_load_symbolic_texture_from_file     (GFile         *file);
