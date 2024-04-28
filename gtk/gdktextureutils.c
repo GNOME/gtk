@@ -199,6 +199,7 @@ _gdk_pixbuf_new_from_resource_at_scale (const char   *resource_path,
 
 static GdkPixbuf *
 load_symbolic_svg (const char     *escaped_file_data,
+                   gsize           len,
                    int             width,
                    int             height,
                    const char     *icon_width_str,
@@ -214,30 +215,31 @@ load_symbolic_svg (const char     *escaped_file_data,
   char *data;
 
   data = g_strconcat ("<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"no\"?>\n"
-                      "<svg version=\"1.1\"\n"
-                      "     xmlns=\"http://www.w3.org/2000/svg\"\n"
-                      "     xmlns:xi=\"http://www.w3.org/2001/XInclude\"\n"
-                      "     width=\"", icon_width_str, "\"\n"
-                      "     height=\"", icon_height_str, "\">\n"
-                      "  <style type=\"text/css\">\n"
-                      "    rect,circle,path {\n"
-                      "      fill: ", fg_string," !important;\n"
-                      "    }\n"
-                      "    .warning {\n"
-                      "      fill: ", warning_color_string, " !important;\n"
-                      "    }\n"
-                      "    .error {\n"
-                      "      fill: ", error_color_string ," !important;\n"
-                      "    }\n"
-                      "    .success {\n"
-                      "      fill: ", success_color_string, " !important;\n"
-                      "    }\n"
-                      "  </style>\n"
-                      "  <xi:include href=\"data:text/xml;base64,", escaped_file_data, "\"/>\n"
-                      "</svg>",
+                      "<svg version=\"1.1\" "
+                           "xmlns=\"http://www.w3.org/2000/svg\" "
+                           "xmlns:xi=\"http://www.w3.org/2001/XInclude\" "
+                           "width=\"", icon_width_str, "\" "
+                           "height=\"", icon_height_str, "\">"
+                        "<style type=\"text/css\">"
+                          "rect,circle,path {"
+                            "fill: ", fg_string," !important;"
+                          "}\n"
+                          ".warning {"
+                             "fill: ", warning_color_string, " !important;"
+                          "}\n"
+                          ".error {"
+                            "fill: ", error_color_string ," !important;"
+                          "}\n"
+                          ".success {"
+                            "fill: ", success_color_string, " !important;"
+                          "}"
+                        "</style>"
+                        "<xi:include href=\"data:text/xml;base64,",
                       NULL);
 
   stream = g_memory_input_stream_new_from_data (data, -1, g_free);
+  g_memory_input_stream_add_data (G_MEMORY_INPUT_STREAM (stream), escaped_file_data, len, NULL);
+  g_memory_input_stream_add_data (G_MEMORY_INPUT_STREAM (stream), "\"/></svg>", strlen ("\"/></svg>"), NULL);
   pixbuf = gdk_pixbuf_new_from_stream_at_scale (stream, width, height, TRUE, NULL, error);
   g_object_unref (stream);
 
@@ -300,6 +302,7 @@ gtk_make_symbolic_pixbuf_from_data (const char  *file_data,
   int plane;
   int icon_width, icon_height;
   char *escaped_file_data;
+  gsize len;
 
   /* Fetch size from the original icon */
   GInputStream *stream = g_memory_input_stream_new_from_data (file_data, file_len, NULL);
@@ -315,6 +318,8 @@ gtk_make_symbolic_pixbuf_from_data (const char  *file_data,
   g_object_unref (reference);
 
   escaped_file_data = g_base64_encode ((guchar *) file_data, file_len);
+  len = strlen (escaped_file_data);
+
   icon_width_str = g_strdup_printf ("%d", icon_width);
   icon_height_str = g_strdup_printf ("%d", icon_height);
 
@@ -337,7 +342,7 @@ gtk_make_symbolic_pixbuf_from_data (const char  *file_data,
        * channels, with the color of the fg being implicitly
        * the "rest", as all color fractions should add up to 1.
        */
-      loaded = load_symbolic_svg (escaped_file_data, width, height,
+      loaded = load_symbolic_svg (escaped_file_data, len, width, height,
                                   icon_width_str,
                                   icon_height_str,
                                   g_string,
