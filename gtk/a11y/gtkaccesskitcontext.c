@@ -805,8 +805,7 @@ set_multi_relation (GtkATContext           *ctx,
 }
 
 accesskit_node *
-gtk_accesskit_context_build_node (GtkAccessKitContext      *self,
-                                  accesskit_node_class_set *node_classes)
+gtk_accesskit_context_build_node (GtkAccessKitContext *self)
 {
   GtkATContext *ctx = GTK_AT_CONTEXT (self);
   accesskit_role role = accesskit_role_for_context (ctx);
@@ -1039,5 +1038,5 @@ gtk_accesskit_context_build_node (GtkAccessKitContext      *self,
 
   /* TODO: text */
 
-  return accesskit_node_builder_build (builder, node_classes);
+  return accesskit_node_builder_build (builder);
 }

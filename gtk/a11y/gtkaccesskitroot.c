@@ -39,7 +39,6 @@ struct _GtkAccessKitRoot
 
   GtkRoot *root_widget;
 
-  accesskit_node_class_set *node_classes;
   guint32 next_id;
   GHashTable *contexts;
   GSList *update_queue;
@@ -70,7 +69,6 @@ gtk_accesskit_root_finalize (GObject *gobject)
 {
   GtkAccessKitRoot *self = GTK_ACCESSKIT_ROOT (gobject);
 
-  g_clear_pointer (&self->node_classes, accesskit_node_class_set_free);
   g_clear_pointer (&self->contexts, g_hash_table_destroy);
   g_clear_pointer (&self->update_queue, g_slist_free);
   g_clear_handle_id (&self->update_id, g_source_remove);
@@ -160,7 +158,7 @@ add_subtree_to_update (GtkAccessKitRoot      *self,
 
   g_assert (gtk_at_context_is_realized (ctx));
   id = gtk_accesskit_context_get_id (accesskit_ctx);
-  node = gtk_accesskit_context_build_node (accesskit_ctx, self->node_classes);
+  node = gtk_accesskit_context_build_node (accesskit_ctx);
   accesskit_tree_update_push_node (update, id, node);
 
   while (child)
@@ -273,7 +271,6 @@ gtk_accesskit_root_constructed (GObject *gobject)
   GtkAccessKitRoot *self = GTK_ACCESSKIT_ROOT (gobject);
   GdkSurface *surface = gtk_native_get_surface (GTK_NATIVE (self->root_widget));
 
-  self->node_classes = accesskit_node_class_set_new ();
   self->contexts = g_hash_table_new (NULL, NULL);
 
 #if defined(GDK_WINDOWING_WIN32)
@@ -385,8 +382,7 @@ build_incremental_update (void *data)
           guint32 id = GPOINTER_TO_UINT (l->data);
           GtkAccessKitContext *accesskit_ctx =
             g_hash_table_lookup (self->contexts, l->data);
-          accesskit_node *node =
-            gtk_accesskit_context_build_node (accesskit_ctx, self->node_classes);
+          accesskit_node *node = gtk_accesskit_context_build_node (accesskit_ctx);
           accesskit_tree_update_push_node (update, id, node);
         }
 

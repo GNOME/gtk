@@ -39,7 +39,6 @@ guint32
 gtk_accesskit_context_get_id (GtkAccessKitContext *self);
 
 accesskit_node *
-gtk_accesskit_context_build_node (GtkAccessKitContext      *self,
-                                  accesskit_node_class_set *node_classes);
+gtk_accesskit_context_build_node (GtkAccessKitContext *self);
 
 G_END_DECLS
