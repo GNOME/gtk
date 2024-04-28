@@ -955,40 +955,40 @@ add_texture_rows (GListStore *store,
                   GdkTexture *texture)
 {
   list_store_add_object_property (store, "Texture", NULL, texture);
-  add_text_row (store, "type", "%s", G_OBJECT_TYPE_NAME (texture));
-  add_text_row (store, "size", "%u x %u", gdk_texture_get_width (texture), gdk_texture_get_height (texture));
-  add_text_row (store, "format", "%s", enum_to_nick (GDK_TYPE_MEMORY_FORMAT, gdk_texture_get_format (texture)));
+  add_text_row (store, "Type", "%s", G_OBJECT_TYPE_NAME (texture));
+  add_text_row (store, "Size", "%u x %u", gdk_texture_get_width (texture), gdk_texture_get_height (texture));
+  add_text_row (store, "Format", "%s", enum_to_nick (GDK_TYPE_MEMORY_FORMAT, gdk_texture_get_format (texture)));
   if (GDK_IS_MEMORY_TEXTURE (texture))
     {
       GBytes *bytes;
       gsize stride;
 
       bytes = gdk_memory_texture_get_bytes (GDK_MEMORY_TEXTURE (texture), &stride);
-      add_uint_row (store, "buffer size", g_bytes_get_size (bytes));
-      add_uint_row (store, "stride", stride);
+      add_uint_row (store, "Buffer Size", g_bytes_get_size (bytes));
+      add_uint_row (store, "Stride", stride);
     }
   else if (GDK_IS_GL_TEXTURE (texture))
     {
-      add_uint_row (store, "texture id", gdk_gl_texture_get_id (GDK_GL_TEXTURE (texture)));
-      add_text_row (store, "mipmap", gdk_gl_texture_has_mipmap (GDK_GL_TEXTURE (texture)) ? "yes" : "no");
-      add_text_row (store, "sync", gdk_gl_texture_get_sync (GDK_GL_TEXTURE (texture)) ? "yes" : "no");
+      add_uint_row (store, "Texture Id", gdk_gl_texture_get_id (GDK_GL_TEXTURE (texture)));
+      add_text_row (store, "Mipmap", gdk_gl_texture_has_mipmap (GDK_GL_TEXTURE (texture)) ? "yes" : "no");
+      add_text_row (store, "Sync", gdk_gl_texture_get_sync (GDK_GL_TEXTURE (texture)) ? "yes" : "no");
     }
   else if (GDK_IS_DMABUF_TEXTURE (texture))
     {
       const GdkDmabuf *dmabuf = gdk_dmabuf_texture_get_dmabuf (GDK_DMABUF_TEXTURE (texture));
       unsigned i;
 
-      add_text_row (store, "dmabuf fourcc", "%.4s:%#" G_GINT64_MODIFIER "x", (char *) &dmabuf->fourcc, dmabuf->modifier);
-      add_uint_row (store, "planes", dmabuf->n_planes);
+      add_text_row (store, "Dmabuf Format", "%.4s:%#" G_GINT64_MODIFIER "x", (char *) &dmabuf->fourcc, dmabuf->modifier);
+      add_uint_row (store, "Planes", dmabuf->n_planes);
       for (i = 0; i < dmabuf->n_planes; i++)
         {
-          char *name = g_strdup_printf ("fd %u", i);
+          char *name = g_strdup_printf ("File Descriptor %u", i);
           add_int_row (store, name, dmabuf->planes[i].fd);
           g_free (name);
-          name = g_strdup_printf ("stride %u", i);
+          name = g_strdup_printf ("Stride %u", i);
           add_uint_row (store, name, dmabuf->planes[i].stride);
           g_free (name);
-          name = g_strdup_printf ("offset %u", i);
+          name = g_strdup_printf ("Offset %u", i);
           add_uint_row (store, name, dmabuf->planes[i].offset);
           g_free (name);
         }
