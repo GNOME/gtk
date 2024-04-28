@@ -82,10 +82,7 @@
  *
  * # Accessibility
  *
- * `GtkMenuButton` uses the %GTK_ACCESSIBLE_ROLE_AUTHOR_CONTROLLED_PARENT
- * role so that the parent widget is filtered out of the accessibility tree
- * while being used as a source of author-provided properties, while the child
- * button uses the %GTK_ACCESSIBLE_ROLE_TOGGLE_BUTTON role.
+ * `GtkMenuButton` uses the %GTK_ACCESSIBLE_ROLE_BUTTON role.
  */
 
 #include "config.h"
@@ -585,8 +582,7 @@ gtk_menu_button_class_init (GtkMenuButtonClass *klass)
   gtk_widget_class_set_activate_signal (widget_class, signals[ACTIVATE]);
 
   gtk_widget_class_set_css_name (widget_class, I_("menubutton"));
-  gtk_widget_class_set_accessible_role (widget_class,
-                                        GTK_ACCESSIBLE_ROLE_AUTHOR_CONTROLLED_PARENT);
+  gtk_widget_class_set_accessible_role (widget_class, GTK_ACCESSIBLE_ROLE_BUTTON);
 }
 
 static void

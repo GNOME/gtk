@@ -42,8 +42,12 @@
 
 #include "gtkbutton.h"
 #include "gtktogglebutton.h"
+#include "gtkmenubutton.h"
 #include "gtkdropdown.h"
-#include "gtkeditable.h"
+#include "gtkcolordialogbutton.h"
+#include "gtkfontdialogbutton.h"
+#include "gtkscalebutton.h"
+#include "print/gtkprinteroptionwidgetprivate.h"
 
 #include "a11y/gtkaccesskitcontextprivate.h"
 #if defined(GDK_WINDOWING_X11) || defined(GDK_WINDOWING_WAYLAND)
@@ -1086,7 +1090,6 @@ static guint8 naming[] = {
   [GTK_ACCESSIBLE_ROLE_ALERT_DIALOG] = NAME_FROM_AUTHOR|GTK_ACCESSIBLE_NAME_REQUIRED,
   [GTK_ACCESSIBLE_ROLE_APPLICATION] = NAME_FROM_AUTHOR|GTK_ACCESSIBLE_NAME_REQUIRED,
   [GTK_ACCESSIBLE_ROLE_ARTICLE] = NAME_FROM_AUTHOR,
-  [GTK_ACCESSIBLE_ROLE_AUTHOR_CONTROLLED_PARENT] = NAME_FROM_AUTHOR|GTK_ACCESSIBLE_NAME_REQUIRED,
   [GTK_ACCESSIBLE_ROLE_BANNER] = GTK_ACCESSIBLE_NAME_PROHIBITED,
   [GTK_ACCESSIBLE_ROLE_BLOCK_QUOTE] = NAME_FROM_AUTHOR,
   [GTK_ACCESSIBLE_ROLE_BUTTON] = NAME_FROM_AUTHOR|NAME_FROM_CONTENT|GTK_ACCESSIBLE_NAME_REQUIRED,
@@ -1229,7 +1232,21 @@ is_nested_button (GtkATContext *self)
   widget = GTK_WIDGET (accessible);
   parent = gtk_widget_get_parent (widget);
 
-  if (GTK_IS_TOGGLE_BUTTON (widget) && GTK_IS_DROP_DOWN (parent))
+  if ((GTK_IS_TOGGLE_BUTTON (widget) && GTK_IS_DROP_DOWN (parent)) ||
+      (GTK_IS_TOGGLE_BUTTON (widget) && GTK_IS_MENU_BUTTON (parent)) ||
+      (GTK_IS_BUTTON (widget) && GTK_IS_COLOR_DIALOG_BUTTON (parent)) ||
+      (GTK_IS_BUTTON (widget) && GTK_IS_FONT_DIALOG_BUTTON (parent)) ||
+      (GTK_IS_BUTTON (widget) && GTK_IS_SCALE_BUTTON (parent))
+#ifdef G_OS_UNIX
+      || (GTK_IS_PRINTER_OPTION_WIDGET (parent) &&
+          (GTK_IS_CHECK_BUTTON (widget) ||
+           GTK_IS_DROP_DOWN (widget) ||
+           GTK_IS_ENTRY (widget) ||
+           GTK_IS_IMAGE (widget) ||
+           GTK_IS_LABEL (widget) ||
+           GTK_IS_BUTTON (widget)))
+#endif
+      )
     return TRUE;
 
   return FALSE;
@@ -1426,29 +1443,6 @@ gtk_at_context_get_text_accumulate (GtkATContext          *self,
 
           if (append)
             append_with_space (res, text);
-        }
-    }
-
-  /* Non-ARIA step: If we didn't get anything, see if the parent
-     has the GTK_ACCESSIBLE_ROLE_AUTHOR_CONTROLLED_PARENT role, and if so,
-     look there. */
-  if (!is_ref && !is_child && !res->len)
-    {
-      GtkAccessible *accessible = gtk_at_context_get_accessible (self);
-      GtkAccessible *parent = gtk_accessible_get_accessible_parent (accessible);
-
-      if (parent)
-        {
-          GtkATContext *parent_ctx = gtk_accessible_get_at_context (parent);
-
-          if (gtk_at_context_get_accessible_role (parent_ctx) ==
-              GTK_ACCESSIBLE_ROLE_AUTHOR_CONTROLLED_PARENT)
-            gtk_at_context_get_text_accumulate (parent_ctx, nodes, res,
-                                                property, relation, TRUE,
-                                                FALSE, check_duplicates);
-
-          g_object_unref (parent_ctx);
-          g_object_unref (parent);
         }
     }
 }

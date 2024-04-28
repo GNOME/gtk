@@ -51,9 +51,6 @@ gtk_accessible_role_to_atspi_role (GtkAccessibleRole role)
     case GTK_ACCESSIBLE_ROLE_ARTICLE:
       return ATSPI_ROLE_ARTICLE;
 
-    case GTK_ACCESSIBLE_ROLE_AUTHOR_CONTROLLED_PARENT:
-      break;
-
     case GTK_ACCESSIBLE_ROLE_BANNER:
       break;
 

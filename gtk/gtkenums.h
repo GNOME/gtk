@@ -1439,18 +1439,6 @@ typedef enum {
  *
  * Since: 4.14
  */
-
-/**
- * GTK_ACCESSIBLE_ROLE_AUTHOR_CONTROLLED_PARENT:
- *
- * Non-ARIA role for widgets like GtkMenuButton, where the parent widget
- * has the accessible name and/or description, but the more generic child
- * widget receives the focus, so the parent should be filtered out of the
- * platform accessibility tree while the child inherits the name and/or
- * description if it doesn't have its own.
- *
- * Since: 4.16
- */
 typedef enum {
   GTK_ACCESSIBLE_ROLE_ALERT,
   GTK_ACCESSIBLE_ROLE_ALERT_DIALOG,
@@ -1536,8 +1524,7 @@ typedef enum {
   GTK_ACCESSIBLE_ROLE_BLOCK_QUOTE GDK_AVAILABLE_ENUMERATOR_IN_4_14,
   GTK_ACCESSIBLE_ROLE_ARTICLE GDK_AVAILABLE_ENUMERATOR_IN_4_14,
   GTK_ACCESSIBLE_ROLE_COMMENT GDK_AVAILABLE_ENUMERATOR_IN_4_14,
-  GTK_ACCESSIBLE_ROLE_TERMINAL GDK_AVAILABLE_ENUMERATOR_IN_4_14,
-  GTK_ACCESSIBLE_ROLE_AUTHOR_CONTROLLED_PARENT
+  GTK_ACCESSIBLE_ROLE_TERMINAL GDK_AVAILABLE_ENUMERATOR_IN_4_14
 } GtkAccessibleRole;
 
 /**
