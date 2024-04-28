@@ -48,9 +48,13 @@
 #include <gsk/gsktransformprivate.h>
 
 #include <glib/gi18n-lib.h>
-#include <gdk/gdktextureprivate.h>
-#include <gdk/gdksurfaceprivate.h>
+#include <gdk/gdkdmabufprivate.h>
+#include <gdk/gdkdmabuftextureprivate.h>
+#include <gdk/gdkgltextureprivate.h>
+#include <gdk/gdkmemorytextureprivate.h>
 #include <gdk/gdksubsurfaceprivate.h>
+#include <gdk/gdksurfaceprivate.h>
+#include <gdk/gdktextureprivate.h>
 #include "gtk/gtkdebug.h"
 #include "gtk/gtkbuiltiniconprivate.h"
 #include "gtk/gtkrendernodepaintableprivate.h"
@@ -909,11 +913,11 @@ add_int_row (GListStore  *store,
 }
 
 static void
-add_uint_row (GListStore  *store,
-              const char  *name,
-              guint        value)
+add_uint_row (GListStore         *store,
+              const char         *name,
+              unsigned long long  value)
 {
-  add_text_row (store, name, "%u", value);
+  add_text_row (store, name, "%llu", value);
 }
 
 static void
@@ -944,6 +948,51 @@ enum_to_nick (GType type,
   g_type_class_unref (class);
 
   return v->value_nick;
+}
+
+static void
+add_texture_rows (GListStore *store,
+                  GdkTexture *texture)
+{
+  list_store_add_object_property (store, "Texture", NULL, texture);
+  add_text_row (store, "type", "%s", G_OBJECT_TYPE_NAME (texture));
+  add_text_row (store, "size", "%u x %u", gdk_texture_get_width (texture), gdk_texture_get_height (texture));
+  add_text_row (store, "format", "%s", enum_to_nick (GDK_TYPE_MEMORY_FORMAT, gdk_texture_get_format (texture)));
+  if (GDK_IS_MEMORY_TEXTURE (texture))
+    {
+      GBytes *bytes;
+      gsize stride;
+
+      bytes = gdk_memory_texture_get_bytes (GDK_MEMORY_TEXTURE (texture), &stride);
+      add_uint_row (store, "buffer size", g_bytes_get_size (bytes));
+      add_uint_row (store, "stride", stride);
+    }
+  else if (GDK_IS_GL_TEXTURE (texture))
+    {
+      add_uint_row (store, "texture id", gdk_gl_texture_get_id (GDK_GL_TEXTURE (texture)));
+      add_text_row (store, "mipmap", gdk_gl_texture_has_mipmap (GDK_GL_TEXTURE (texture)) ? "yes" : "no");
+      add_text_row (store, "sync", gdk_gl_texture_get_sync (GDK_GL_TEXTURE (texture)) ? "yes" : "no");
+    }
+  else if (GDK_IS_DMABUF_TEXTURE (texture))
+    {
+      const GdkDmabuf *dmabuf = gdk_dmabuf_texture_get_dmabuf (GDK_DMABUF_TEXTURE (texture));
+      unsigned i;
+
+      add_text_row (store, "dmabuf fourcc", "%.4s:%#" G_GINT64_MODIFIER "x", (char *) &dmabuf->fourcc, dmabuf->modifier);
+      add_uint_row (store, "planes", dmabuf->n_planes);
+      for (i = 0; i < dmabuf->n_planes; i++)
+        {
+          char *name = g_strdup_printf ("fd %u", i);
+          add_int_row (store, name, dmabuf->planes[i].fd);
+          g_free (name);
+          name = g_strdup_printf ("stride %u", i);
+          add_uint_row (store, name, dmabuf->planes[i].stride);
+          g_free (name);
+          name = g_strdup_printf ("offset %u", i);
+          add_uint_row (store, name, dmabuf->planes[i].offset);
+          g_free (name);
+        }
+    }
 }
 
 static void
@@ -995,7 +1044,8 @@ populate_render_node_properties (GListStore    *store,
     case GSK_TEXTURE_NODE:
       {
         GdkTexture *texture = gsk_texture_node_get_texture (node);
-        list_store_add_object_property (store, "Texture", NULL, texture);
+
+        add_texture_rows (store, texture);
       }
       break;
 
@@ -1004,7 +1054,8 @@ populate_render_node_properties (GListStore    *store,
         GdkTexture *texture = gsk_texture_scale_node_get_texture (node);
         GskScalingFilter filter = gsk_texture_scale_node_get_filter (node);
         gchar *tmp;
-        list_store_add_object_property (store, "Texture", NULL, texture);
+
+        add_texture_rows (store, texture);
 
         tmp = g_enum_to_string (GSK_TYPE_SCALING_FILTER, filter);
         add_text_row (store, "Filter", "%s", tmp);
