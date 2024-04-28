@@ -9,8 +9,8 @@
             <property name="orientation">1</property>
             <child>
               <object class="GtkLabel">
-                <property name="label">Hello
-World</property>
+                <property name="label">perfectly
+cromulent</property>
               </object>
             </child>
             <child>
