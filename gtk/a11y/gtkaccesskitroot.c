@@ -152,14 +152,10 @@ add_subtree_to_update (GtkAccessKitRoot      *self,
 {
   GtkATContext *ctx = gtk_accessible_get_at_context (accessible);
   GtkAccessKitContext *accesskit_ctx = GTK_ACCESSKIT_CONTEXT (ctx);
-  guint32 id;
-  accesskit_node *node;
   GtkAccessible *child = gtk_accessible_get_first_accessible_child (accessible);
 
   g_assert (gtk_at_context_is_realized (ctx));
-  id = gtk_accesskit_context_get_id (accesskit_ctx);
-  node = gtk_accesskit_context_build_node (accesskit_ctx);
-  accesskit_tree_update_push_node (update, id, node);
+  gtk_accesskit_context_add_to_update (accesskit_ctx, update);
 
   while (child)
     {
@@ -382,8 +378,7 @@ build_incremental_update (void *data)
           guint32 id = GPOINTER_TO_UINT (l->data);
           GtkAccessKitContext *accesskit_ctx =
             g_hash_table_lookup (self->contexts, l->data);
-          accesskit_node *node = gtk_accesskit_context_build_node (accesskit_ctx);
-          accesskit_tree_update_push_node (update, id, node);
+          gtk_accesskit_context_add_to_update (accesskit_ctx, update);
         }
 
       g_slist_free (current_queue);

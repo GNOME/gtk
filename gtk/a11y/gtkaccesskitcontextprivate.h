@@ -38,7 +38,8 @@ gtk_accesskit_create_context (GtkAccessibleRole  accessible_role,
 guint32
 gtk_accesskit_context_get_id (GtkAccessKitContext *self);
 
-accesskit_node *
-gtk_accesskit_context_build_node (GtkAccessKitContext *self);
+void
+gtk_accesskit_context_add_to_update (GtkAccessKitContext   *self,
+                                     accesskit_tree_update *update);
 
 G_END_DECLS
