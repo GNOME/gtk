@@ -37,6 +37,12 @@
 #include "gtktypebuiltins.h"
 #include "gtkwindow.h"
 
+#include "gtkmenubutton.h"
+#include "gtkcolordialogbutton.h"
+#include "gtkfontdialogbutton.h"
+#include "gtkscalebutton.h"
+#include "print/gtkprinteroptionwidgetprivate.h"
+
 #include <locale.h>
 
 struct _GtkAccessKitContext
@@ -500,6 +506,16 @@ accesskit_role_for_context (GtkATContext *context)
   GtkAccessible *accessible = gtk_at_context_get_accessible (context);
   GtkAccessibleRole role = gtk_at_context_get_accessible_role (context);
   accesskit_role accesskit_role;
+
+  if (GTK_IS_MENU_BUTTON (accessible) ||
+      GTK_IS_COLOR_DIALOG_BUTTON (accessible) ||
+      GTK_IS_FONT_DIALOG_BUTTON (accessible) ||
+      GTK_IS_SCALE_BUTTON (accessible)
+#ifdef G_OS_UNIX
+      || GTK_IS_PRINTER_OPTION_WIDGET (accessible))
+#endif
+    )
+    return ACCESSKIT_ROLE_GENERIC_CONTAINER;
 
   /* ARIA does not have a "password entry" role, so we need to fudge it here */
   if (GTK_IS_PASSWORD_ENTRY (accessible))
@@ -1032,6 +1048,20 @@ gtk_accesskit_context_build_node (GtkAccessKitContext *self)
 
   accesskit_node_builder_set_class_name (builder,
                                          g_type_name (G_TYPE_FROM_INSTANCE (accessible)));
+
+  if (!(gtk_at_context_has_accessible_property (ctx, GTK_ACCESSIBLE_PROPERTY_LABEL) ||
+        gtk_at_context_has_accessible_relation (ctx, GTK_ACCESSIBLE_RELATION_LABELLED_BY)) &&
+      gtk_at_context_is_nested_button (ctx))
+    {
+      GtkAccessible *parent = gtk_accessible_get_accessible_parent (accessible);
+      GtkATContext *parent_ctx = gtk_accessible_get_at_context (parent);
+
+      gtk_at_context_realize (parent_ctx);
+      accesskit_node_builder_push_labelled_by (builder,
+                                               GTK_ACCESSKIT_CONTEXT (parent_ctx)->id);
+      g_object_unref (parent_ctx);
+      g_object_unref (parent);
+    }
 
   /* TODO: text */
 

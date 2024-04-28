@@ -1218,8 +1218,8 @@ gtk_accessible_role_get_naming (GtkAccessibleRole role)
   return (GtkAccessibleNaming) (naming[role] & ~(NAME_FROM_AUTHOR|NAME_FROM_CONTENT));
 }
 
-static gboolean
-is_nested_button (GtkATContext *self)
+gboolean
+gtk_at_context_is_nested_button (GtkATContext *self)
 {
   GtkAccessible *accessible;
   GtkWidget *widget, *parent;
@@ -1467,11 +1467,11 @@ gboolean              check_duplicates)
    * ui file and carries all the a11y attributes, but the
    * focus ends up on the toggle button.
    */
-  if (is_nested_button (self))
+  if (gtk_at_context_is_nested_button (self))
     {
       parent = get_parent_context (self);
       self = parent;
-      if (is_nested_button (self))
+      if (gtk_at_context_is_nested_button (self))
         {
           parent = get_parent_context (parent);
           g_object_unref (self);
