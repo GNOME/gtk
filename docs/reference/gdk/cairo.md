@@ -5,8 +5,11 @@ Title: Cairo interaction
 [Cairo](http://cairographics.org) is a graphics library that supports vector
 graphics and image compositing that can be used with GTK.
 
-GDK does not wrap the Cairo API; instead it allows to create Cairo
-drawing contexts which can be used to draw on [class@Gdk.Surface]s.
+GDK does not wrap the Cairo API and it is not possible to use cairo directly
+to draw on a [class@Gdk.Surface]. You can either use a
+[GtkDrawingArea](../gtk4/class.DrawingArea.html) widget or
+[gtk_snapshot_append_cairo](../gtk4/func.Snapshot.append_cairo.html)
+for drawing with cairo in a GTK4 application.
 
 Additional functions allow use [struct@Gdk.Rectangle]s with Cairo
 and to use [struct@Gdk.RGBA], `GdkPixbuf`, and [class@Gdk.Surface]
