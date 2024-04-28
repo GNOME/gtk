@@ -563,7 +563,7 @@ gdk_texture_new_from_bytes_internal (GBytes  *bytes,
 {
   if (gdk_is_png (bytes))
     {
-      return gdk_load_png (bytes, error);
+      return gdk_load_png (bytes, NULL, error);
     }
   else if (gdk_is_jpeg (bytes))
     {
