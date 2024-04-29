@@ -629,20 +629,8 @@ gtk_gst_sink_initialize_gl (GtkGstSink *self)
 
           if (gl_api & (GST_GL_API_OPENGL3 | GST_GL_API_OPENGL))
             {
-#ifdef HAVE_GST_GL_DISPLAY_NEW_WITH_TYPE
               self->gst_display = gst_gl_display_new_with_type (GST_GL_DISPLAY_TYPE_WIN32);
-#else
-#if GST_GL_HAVE_PLATFORM_EGL
-              g_message ("If media fails to play, set the envvar `GST_DEBUG=1`, and if GstGL context creation fails");
-              g_message ("due to \"Couldn't create GL context: Cannot share context with non-EGL context\",");
-              g_message ("set in the environment `GST_GL_PLATFORM=wgl` and `GST_GL_WINDOW=win32`,");
-              g_message ("and restart the GTK application");
-#endif
-
-              self->gst_display = gst_gl_display_new ();
-#endif
             }
-
 #if GST_GL_HAVE_PLATFORM_EGL
           else
             {
