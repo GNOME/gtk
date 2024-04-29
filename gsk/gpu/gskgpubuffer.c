@@ -19,7 +19,7 @@ static gint64 profiler_buffer_uploads;
 static void
 gsk_gpu_buffer_class_init (GskGpuBufferClass *klass)
 {
-  profiler_buffer_uploads_id = gdk_profiler_define_int_counter ("ngl-buffer-uploads", "Number of bytes uploaded to GPU");
+  profiler_buffer_uploads_id = gdk_profiler_define_int_counter ("buffer-uploads", "Number of bytes uploaded to GPU");
 }
 
 static void
