@@ -6,13 +6,6 @@ extra_c_args = ['-DGTK_COMPILATION']
 extra_c_args += common_cflags
 
 if gstplayer_dep.found() and gstgl_dep.found() and gstallocators_dep.found()
-  extra_win_cflags = []
-
-  if host_machine.system() == 'windows' and gstgl_dep.version().version_compare('>=1.19.1')
-    message('libgstgl has gst_gl_display_new_with_type()')
-    extra_win_cflags += '-DHAVE_GST_GL_DISPLAY_NEW_WITH_TYPE'
-  endif
-
   media_backends += 'gstreamer'
   cdata.set('HAVE_GSTREAMER', 1)
   media_gst_deps = [ libm, libgtk_dep, gstplayer_dep, gstgl_dep, gstallocators_dep ]
@@ -23,7 +16,7 @@ if gstplayer_dep.found() and gstgl_dep.found() and gstallocators_dep.found()
       'gtkgstpaintable.c',
       'gtkgstsink.c',
     ],
-    c_args: extra_c_args + extra_win_cflags,
+    c_args: extra_c_args,
     dependencies: media_gst_deps,
     name_suffix: module_suffix,
     install_dir: media_install_dir,
