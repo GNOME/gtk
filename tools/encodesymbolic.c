@@ -56,6 +56,9 @@ main (int argc, char **argv)
   GFile *dest;
   char *data;
   gsize len;
+  GHashTable *options;
+  GPtrArray *keys;
+  GPtrArray *values;
 
   setlocale (LC_ALL, "");
 
@@ -142,7 +145,19 @@ main (int argc, char **argv)
       return 1;
     }
 
-  if (!gdk_pixbuf_save_to_stream (symbolic, G_OUTPUT_STREAM (out), "png", NULL, &error, NULL))
+  options = gdk_pixbuf_get_options (symbolic);
+  keys = g_hash_table_get_keys_as_ptr_array (options);
+  values = g_hash_table_get_values_as_ptr_array (options);
+  g_ptr_array_add (keys, NULL);
+  g_ptr_array_add (values, NULL);
+
+  if (!gdk_pixbuf_save_to_streamv (symbolic,
+                                   G_OUTPUT_STREAM (out),
+                                   "png",
+                                   (char **) keys->pdata,
+                                   (char **) values->pdata,
+                                   NULL,
+                                   &error))
     {
       g_printerr (_("Can’t save file %s: %s\n"), pngpath, error->message);
       return 1;
@@ -153,6 +168,10 @@ main (int argc, char **argv)
       g_printerr (_("Can’t close stream"));
       return 1;
     }
+
+  g_ptr_array_unref (keys);
+  g_ptr_array_unref (values);
+  g_hash_table_unref (options);
 
   g_object_unref (out);
   g_free (pngpath);
