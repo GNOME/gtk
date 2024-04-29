@@ -29,6 +29,7 @@
 #include "gdkdmabuffourccprivate.h"
 #include "gdkdmabuftextureprivate.h"
 #include "gdkdisplayprivate.h"
+#include "gdkprofilerprivate.h"
 #include <glib/gi18n-lib.h>
 #include <math.h>
 
@@ -1345,6 +1346,7 @@ static gboolean
 gdk_display_create_vulkan_device (GdkDisplay  *display,
                                   GError     **error)
 {
+  G_GNUC_UNUSED gint64 start_time = GDK_PROFILER_CURRENT_TIME;
   uint32_t i, j, k;
   const char *override;
   gboolean list_devices;
@@ -1553,6 +1555,8 @@ gdk_display_create_vulkan_device (GdkDisplay  *display,
                                        "Hum, what? This should not happen.")));
                 }
 
+              gdk_profiler_end_mark (start_time, "Create Vulkan device", NULL);
+
               return TRUE;
             }
         }
@@ -1591,6 +1595,7 @@ static gboolean
 gdk_display_create_vulkan_instance (GdkDisplay  *display,
                                     GError     **error)
 {
+  G_GNUC_UNUSED gint64 start_time = GDK_PROFILER_CURRENT_TIME;
   uint32_t i;
   GPtrArray *used_extensions;
   GPtrArray *used_layers;
@@ -1751,6 +1756,8 @@ gdk_display_create_vulkan_instance (GdkDisplay  *display,
   gdk_display_create_pipeline_cache (display);
 
   display->vk_shader_modules = g_hash_table_new (g_str_hash, g_str_equal);
+
+  gdk_profiler_end_mark (start_time, "Create Vulkan instance", NULL);
 
   return TRUE;
 }
