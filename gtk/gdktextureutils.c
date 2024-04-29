@@ -624,6 +624,26 @@ gdk_texture_new_from_resource_with_fg (const char *path,
 }
 
 GdkTexture *
+gdk_texture_new_from_stream_with_fg (GInputStream  *stream,
+                                     gboolean      *only_fg,
+                                     GCancellable  *cancellable,
+                                     GError       **error)
+{
+  GdkPixbuf *pixbuf;
+  GdkTexture *texture = NULL;
+
+  pixbuf = _gdk_pixbuf_new_from_stream_scaled (stream, 0, cancellable, error);
+  if (pixbuf)
+    {
+      *only_fg = pixbuf_is_only_fg (pixbuf);
+      texture = gdk_texture_new_for_pixbuf (pixbuf);
+      g_object_unref (pixbuf);
+    }
+
+  return texture;
+}
+
+GdkTexture *
 gdk_texture_new_from_stream_at_scale (GInputStream  *stream,
                                       int            width,
                                       int            height,
@@ -636,26 +656,6 @@ gdk_texture_new_from_stream_at_scale (GInputStream  *stream,
   GdkTexture *texture = NULL;
 
   pixbuf = _gdk_pixbuf_new_from_stream_at_scale (stream, width, height, aspect, cancellable, error);
-  if (pixbuf)
-    {
-      *only_fg = pixbuf_is_only_fg (pixbuf);
-      texture = gdk_texture_new_for_pixbuf (pixbuf);
-      g_object_unref (pixbuf);
-    }
-
-  return texture;
-}
-
-GdkTexture *
-gdk_texture_new_from_stream (GInputStream  *stream,
-                             gboolean      *only_fg,
-                             GCancellable  *cancellable,
-                             GError       **error)
-{
-  GdkPixbuf *pixbuf;
-  GdkTexture *texture = NULL;
-
-  pixbuf = _gdk_pixbuf_new_from_stream_scaled (stream, 0, cancellable, error);
   if (pixbuf)
     {
       *only_fg = pixbuf_is_only_fg (pixbuf);

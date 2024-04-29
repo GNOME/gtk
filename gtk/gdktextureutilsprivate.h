@@ -34,7 +34,7 @@ GdkTexture *gdk_texture_new_from_filename_with_fg   (const char    *filename,
                                                      GError       **error);
 GdkTexture *gdk_texture_new_from_resource_with_fg   (const char    *path,
                                                      gboolean      *only_fg);
-GdkTexture *gdk_texture_new_from_stream             (GInputStream  *stream,
+GdkTexture *gdk_texture_new_from_stream_with_fg     (GInputStream  *stream,
                                                      gboolean      *only_fg,
                                                      GCancellable  *cancellable,
                                                      GError       **error);

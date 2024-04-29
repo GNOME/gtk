@@ -3811,7 +3811,7 @@ icon_ensure_texture__locked (GtkIconPaintable *icon,
                                                                   NULL,
                                                                   &load_error);
           else
-            icon->texture = gdk_texture_new_from_stream (stream, &only_fg, NULL, &load_error);
+            icon->texture = gdk_texture_new_from_stream_with_fg (stream, &only_fg, NULL, &load_error);
 
           g_object_unref (stream);
         }
