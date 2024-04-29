@@ -28,7 +28,7 @@ struct _GtkScaler
   GObject parent_instance;
 
   GdkPaintable *paintable;
-  double scale_factor;
+  double scale;
 };
 
 struct _GtkScalerClass
@@ -46,12 +46,12 @@ gtk_scaler_paintable_snapshot (GdkPaintable *paintable,
 
   gtk_snapshot_save (snapshot);
 
-  gtk_snapshot_scale (snapshot, 1.0 / self->scale_factor, 1.0 / self->scale_factor);
+  gtk_snapshot_scale (snapshot, 1.0 / self->scale, 1.0 / self->scale);
 
   gdk_paintable_snapshot (self->paintable,
                           snapshot,
-                          width * self->scale_factor,
-                          height * self->scale_factor);
+                          width * self->scale,
+                          height * self->scale);
 
   gtk_snapshot_restore (snapshot);
 }
@@ -63,7 +63,7 @@ gtk_scaler_paintable_get_current_image (GdkPaintable *paintable)
   GdkPaintable *current_paintable, *current_self;
 
   current_paintable = gdk_paintable_get_current_image (self->paintable);
-  current_self = gtk_scaler_new (current_paintable, self->scale_factor);
+  current_self = gtk_scaler_new (current_paintable, self->scale);
   g_object_unref (current_paintable);
 
   return current_self;
@@ -82,7 +82,7 @@ gtk_scaler_paintable_get_intrinsic_width (GdkPaintable *paintable)
 {
   GtkScaler *self = GTK_SCALER (paintable);
 
-  return gdk_paintable_get_intrinsic_width (self->paintable) / self->scale_factor;
+  return gdk_paintable_get_intrinsic_width (self->paintable) / self->scale;
 }
 
 static int
@@ -90,7 +90,7 @@ gtk_scaler_paintable_get_intrinsic_height (GdkPaintable *paintable)
 {
   GtkScaler *self = GTK_SCALER (paintable);
 
-  return gdk_paintable_get_intrinsic_height (self->paintable) / self->scale_factor;
+  return gdk_paintable_get_intrinsic_height (self->paintable) / self->scale;
 }
 
 static double gtk_scaler_paintable_get_intrinsic_aspect_ratio (GdkPaintable *paintable)
@@ -147,18 +147,18 @@ gtk_scaler_class_init (GtkScalerClass *klass)
 static void
 gtk_scaler_init (GtkScaler *self)
 {
-  self->scale_factor = 1.0;
+  self->scale = 1.0;
 }
 
 GdkPaintable *
 gtk_scaler_new (GdkPaintable *paintable,
-                double        scale_factor)
+                double        scale)
 {
   GtkScaler *self;
   guint flags;
 
   g_return_val_if_fail (GDK_IS_PAINTABLE (paintable), NULL);
-  g_return_val_if_fail (scale_factor > 0.0, NULL);
+  g_return_val_if_fail (scale > 0.0, NULL);
 
   self = g_object_new (GTK_TYPE_SCALER, NULL);
 
@@ -171,7 +171,7 @@ gtk_scaler_new (GdkPaintable *paintable,
   if ((flags & GDK_PAINTABLE_STATIC_SIZE) == 0)
     g_signal_connect_swapped (paintable, "invalidate-size", G_CALLBACK (gdk_paintable_invalidate_size), self);
 
-  self->scale_factor = scale_factor;
+  self->scale = scale;
 
   return GDK_PAINTABLE (self);
 }

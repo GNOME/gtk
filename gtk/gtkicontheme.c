@@ -3762,11 +3762,11 @@ icon_ensure_texture__locked (GtkIconPaintable *icon,
       if (icon->is_svg)
         {
           if (icon->is_symbolic)
-            icon->texture = gdk_texture_new_from_path_symbolic (icon->filename,
-                                                                pixel_size, pixel_size,
-                                                                icon->desired_scale,
-                                                                &only_fg,
-                                                                &load_error);
+            icon->texture = gdk_texture_new_from_filename_symbolic (icon->filename,
+                                                                    pixel_size, pixel_size,
+                                                                    icon->desired_scale,
+                                                                    &only_fg,
+                                                                    &load_error);
           else
             {
               GFile *file = g_file_new_for_path (icon->filename);
@@ -3811,7 +3811,7 @@ icon_ensure_texture__locked (GtkIconPaintable *icon,
                                                                   NULL,
                                                                   &load_error);
           else
-            icon->texture = gdk_texture_new_from_stream (stream, &only_fg, NULL, &load_error);
+            icon->texture = gdk_texture_new_from_stream_with_fg (stream, &only_fg, NULL, &load_error);
 
           g_object_unref (stream);
         }

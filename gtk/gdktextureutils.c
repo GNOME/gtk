@@ -296,6 +296,99 @@ extract_plane (GdkPixbuf *src,
   return all_clear;
 }
 
+static void
+keep_alpha (GdkPixbuf *src)
+{
+  guchar *data;
+  int width, height;
+  gsize stride;
+
+  data = gdk_pixbuf_get_pixels (src);
+  width = gdk_pixbuf_get_width (src);
+  height = gdk_pixbuf_get_height (src);
+  stride = gdk_pixbuf_get_rowstride (src);
+
+  for (int y = 0; y < height; y++)
+    {
+      guchar *row = data + stride * y;
+      for (int x = 0; x < width; x++)
+        {
+          row[0] = row[1] = row[2] = 0;
+          row += 4;
+        }
+    }
+}
+
+static void
+svg_find_size_strings (const char  *data,
+                       gsize        len,
+                       char       **width,
+                       char       **height)
+{
+  gsize i, j, k, l;
+
+  *width = NULL;
+  *height = NULL;
+
+  for (i = 0; i < len - 4; i++)
+    {
+      if (strncmp (data + i, "<svg", 4) == 0)
+        {
+          for (j = i + strlen ("<svg"); j < len - 9; j++)
+            {
+              if (strncmp (data + j, "height=\"", strlen ("height=\"")) == 0)
+                {
+                  k = l = j + strlen ("height=\"");
+                  while (l < len && data[l] != '\"')
+                    l++;
+
+                  *height = g_strndup (data + k, l - k);
+
+                  if (*width && *height)
+                    return;
+
+                  j = l;
+                }
+              else if (strncmp (data + j, "width=\"", strlen ("width=\"")) == 0)
+                {
+                  k = l = j + strlen ("width=\"");
+                  while (l < len && data[l] != '\"')
+                    l++;
+
+                  *width = g_strndup (data + k, l - k);
+
+                  if (*width && *height)
+                    return;
+
+                  j = l;
+                }
+              else if (data[j] == '>')
+                {
+                  break;
+                }
+            }
+
+          break;
+        }
+    }
+
+  *width = g_strdup ("16px");
+  *height = g_strdup ("16px");
+}
+
+static gboolean
+svg_has_symbolic_classes (const char *data,
+                          gsize       len)
+{
+#ifdef HAVE_MEMMEM
+  return memmem (data, len, "class=\"error\"", strlen ("class=\"error\"")) != NULL ||
+         memmem (data, len, "class=\"warning\"", strlen ("class=\"warning\"")) != NULL ||
+         memmem (data, len, "class=\"success\"", strlen ("class=\"success\"")) != NULL;
+#else
+  return TRUE;
+#endif
+}
+
 GdkPixbuf *
 gtk_make_symbolic_pixbuf_from_data (const char  *file_data,
                                     gsize        file_len,
@@ -308,43 +401,46 @@ gtk_make_symbolic_pixbuf_from_data (const char  *file_data,
 {
   const char *r_string = "rgb(255,0,0)";
   const char *g_string = "rgb(0,255,0)";
-  char *icon_width_str;
-  char *icon_height_str;
-  GdkPixbuf *loaded;
-  GdkPixbuf *pixbuf = NULL;
-  int plane;
-  int icon_width, icon_height;
-  char *escaped_file_data;
+  char *icon_width_str = NULL;
+  char *icon_height_str = NULL;
+  char *escaped_file_data = NULL;
   gsize len;
-  gboolean only_fg;
+  GdkPixbuf *pixbuf = NULL;
+  gboolean has_symbolic_classes;
+  gboolean only_fg = TRUE;
+
+  has_symbolic_classes = svg_has_symbolic_classes (file_data, file_len);
 
   /* Fetch size from the original icon */
-  GInputStream *stream = g_memory_input_stream_new_from_data (file_data, file_len, NULL);
-  GdkPixbuf *reference = gdk_pixbuf_new_from_stream (stream, NULL, error);
+  if (has_symbolic_classes || width == 0 || height == 0)
+    svg_find_size_strings (file_data, file_len, &icon_width_str, &icon_height_str);
 
-  g_object_unref (stream);
+  if (width == 0)
+    width = (int) (g_ascii_strtoull (icon_width_str, NULL, 0) * scale);
+  if (height == 0)
+    height = (int) (g_ascii_strtoull (icon_height_str, NULL, 0) * scale);
 
-  if (!reference)
-    return NULL;
+  if (!has_symbolic_classes)
+    {
+      GInputStream *stream;
 
-  icon_width = gdk_pixbuf_get_width (reference);
-  icon_height = gdk_pixbuf_get_height (reference);
-  g_object_unref (reference);
+      stream = g_memory_input_stream_new_from_data (file_data, file_len, NULL);
+      pixbuf = gdk_pixbuf_new_from_stream_at_scale (stream, width, height, TRUE, NULL, error);
+      g_object_unref (stream);
+
+      if (pixbuf)
+        keep_alpha (pixbuf);
+
+      goto out;
+    }
 
   escaped_file_data = g_base64_encode ((guchar *) file_data, file_len);
   len = strlen (escaped_file_data);
 
-  icon_width_str = g_strdup_printf ("%d", icon_width);
-  icon_height_str = g_strdup_printf ("%d", icon_height);
-
-  if (width == 0)
-    width = icon_width * scale;
-  if (height == 0)
-    height = icon_height * scale;
-
-  only_fg = TRUE;
-  for (plane = 0; plane < 3; plane++)
+  for (int plane = 0; plane < 3; plane++)
     {
+      GdkPixbuf *loaded;
+
       /* Here we render the svg with all colors solid, this should
        * always make the alpha channel the same and it should match
        * the final alpha channel for all possible renderings. We
@@ -378,28 +474,26 @@ gtk_make_symbolic_pixbuf_from_data (const char  *file_data,
           g_free (filename);
         }
 
-      if (pixbuf == NULL)
+      if (plane == 0)
         {
           pixbuf = gdk_pixbuf_new (GDK_COLORSPACE_RGB, TRUE, 8,
                                    gdk_pixbuf_get_width (loaded),
                                    gdk_pixbuf_get_height (loaded));
-          gdk_pixbuf_fill (pixbuf, 0);
-        }
+          memset (gdk_pixbuf_get_pixels (pixbuf), 0, gdk_pixbuf_get_byte_length (pixbuf));
 
-      if (plane == 0)
-        extract_plane (loaded, pixbuf, 3, 3);
+          extract_plane (loaded, pixbuf, 3, 3);
+        }
 
       only_fg &= extract_plane (loaded, pixbuf, 0, plane);
 
       g_object_unref (loaded);
     }
 
-  if (only_fg)
+out:
+  if (only_fg && pixbuf)
     gdk_pixbuf_set_option (pixbuf, "tEXt::only-foreground", "true");
 
   g_free (escaped_file_data);
-
-out:
   g_free (icon_width_str);
   g_free (icon_height_str);
 
@@ -432,17 +526,17 @@ make_symbolic_pixbuf_from_resource (const char  *path,
 }
 
 static GdkPixbuf *
-make_symbolic_pixbuf_from_path (const char  *path,
-                                int          width,
-                                int          height,
-                                double       scale,
-                                GError     **error)
+make_symbolic_pixbuf_from_filename (const char  *filename,
+                                    int          width,
+                                    int          height,
+                                    double       scale,
+                                    GError     **error)
 {
   char *data;
   gsize size;
   GdkPixbuf *pixbuf;
 
-  if (!g_file_get_contents (path, &data, &size, error))
+  if (!g_file_get_contents (filename, &data, &size, error))
     return NULL;
 
   pixbuf = gtk_make_symbolic_pixbuf_from_data (data, size, width, height, scale, NULL, error);
@@ -530,6 +624,26 @@ gdk_texture_new_from_resource_with_fg (const char *path,
 }
 
 GdkTexture *
+gdk_texture_new_from_stream_with_fg (GInputStream  *stream,
+                                     gboolean      *only_fg,
+                                     GCancellable  *cancellable,
+                                     GError       **error)
+{
+  GdkPixbuf *pixbuf;
+  GdkTexture *texture = NULL;
+
+  pixbuf = _gdk_pixbuf_new_from_stream_scaled (stream, 0, cancellable, error);
+  if (pixbuf)
+    {
+      *only_fg = pixbuf_is_only_fg (pixbuf);
+      texture = gdk_texture_new_for_pixbuf (pixbuf);
+      g_object_unref (pixbuf);
+    }
+
+  return texture;
+}
+
+GdkTexture *
 gdk_texture_new_from_stream_at_scale (GInputStream  *stream,
                                       int            width,
                                       int            height,
@@ -542,26 +656,6 @@ gdk_texture_new_from_stream_at_scale (GInputStream  *stream,
   GdkTexture *texture = NULL;
 
   pixbuf = _gdk_pixbuf_new_from_stream_at_scale (stream, width, height, aspect, cancellable, error);
-  if (pixbuf)
-    {
-      *only_fg = pixbuf_is_only_fg (pixbuf);
-      texture = gdk_texture_new_for_pixbuf (pixbuf);
-      g_object_unref (pixbuf);
-    }
-
-  return texture;
-}
-
-GdkTexture *
-gdk_texture_new_from_stream (GInputStream  *stream,
-                             gboolean      *only_fg,
-                             GCancellable  *cancellable,
-                             GError       **error)
-{
-  GdkPixbuf *pixbuf;
-  GdkTexture *texture = NULL;
-
-  pixbuf = _gdk_pixbuf_new_from_stream_scaled (stream, 0, cancellable, error);
   if (pixbuf)
     {
       *only_fg = pixbuf_is_only_fg (pixbuf);
@@ -598,17 +692,17 @@ gdk_texture_new_from_resource_at_scale (const char    *path,
 /* {{{ Symbolic texture API */
 
 GdkTexture *
-gdk_texture_new_from_path_symbolic (const char    *path,
-                                    int            width,
-                                    int            height,
-                                    double         scale,
-                                    gboolean      *only_fg,
-                                    GError       **error)
+gdk_texture_new_from_filename_symbolic (const char    *filename,
+                                        int            width,
+                                        int            height,
+                                        double         scale,
+                                        gboolean      *only_fg,
+                                        GError       **error)
 {
   GdkPixbuf *pixbuf;
   GdkTexture *texture = NULL;
 
-  pixbuf = make_symbolic_pixbuf_from_path (path, width, height, scale, error);
+  pixbuf = make_symbolic_pixbuf_from_filename (filename, width, height, scale, error);
   if (pixbuf)
     {
       *only_fg = pixbuf_is_only_fg (pixbuf);
@@ -695,7 +789,7 @@ gdk_texture_new_from_file_symbolic (GFile       *file,
 /* {{{ Scaled paintable API */
 
 typedef struct {
-  int scale_factor;
+  double scale;
 } LoaderData;
 
 static void
@@ -711,24 +805,24 @@ on_loader_size_prepared (GdkPixbufLoader *loader,
   format = gdk_pixbuf_loader_get_format (loader);
   if (!gdk_pixbuf_format_is_scalable (format))
     {
-      loader_data->scale_factor = 1;
+      loader_data->scale = 1.0;
       return;
     }
 
   gdk_pixbuf_loader_set_size (loader,
-                              width * loader_data->scale_factor,
-                              height * loader_data->scale_factor);
+                              width * loader_data->scale,
+                              height * loader_data->scale);
 }
 
 static GdkPaintable *
 gdk_paintable_new_from_bytes_scaled (GBytes *bytes,
-                                     int     scale_factor)
+                                     double  scale)
 {
   LoaderData loader_data;
   GdkTexture *texture;
   GdkPaintable *paintable;
 
-  loader_data.scale_factor = scale_factor;
+  loader_data.scale = scale;
 
   if (gdk_texture_can_load (bytes))
     {
@@ -758,8 +852,8 @@ gdk_paintable_new_from_bytes_scaled (GBytes *bytes,
       texture = gdk_texture_new_for_pixbuf (gdk_pixbuf_loader_get_pixbuf (loader));
       g_object_unref (loader);
 
-      if (loader_data.scale_factor != 1)
-        paintable = gtk_scaler_new (GDK_PAINTABLE (texture), loader_data.scale_factor);
+      if (loader_data.scale != 1.0)
+        paintable = gtk_scaler_new (GDK_PAINTABLE (texture), loader_data.scale);
       else
         paintable = g_object_ref (GDK_PAINTABLE (texture));
 
@@ -770,20 +864,20 @@ gdk_paintable_new_from_bytes_scaled (GBytes *bytes,
 }
 
 GdkPaintable *
-gdk_paintable_new_from_path_scaled (const char *path,
-                                    int         scale_factor)
+gdk_paintable_new_from_filename_scaled (const char *filename,
+                                        double      scale)
 {
   char *contents;
   gsize length;
   GBytes *bytes;
   GdkPaintable *paintable;
 
-  if (!g_file_get_contents (path, &contents, &length, NULL))
+  if (!g_file_get_contents (filename, &contents, &length, NULL))
     return NULL;
 
   bytes = g_bytes_new_take (contents, length);
 
-  paintable = gdk_paintable_new_from_bytes_scaled (bytes, scale_factor);
+  paintable = gdk_paintable_new_from_bytes_scaled (bytes, scale);
 
   g_bytes_unref (bytes);
 
@@ -792,7 +886,7 @@ gdk_paintable_new_from_path_scaled (const char *path,
 
 GdkPaintable *
 gdk_paintable_new_from_resource_scaled (const char *path,
-                                        int         scale_factor)
+                                        double      scale)
 {
   GBytes *bytes;
   GdkPaintable *paintable;
@@ -801,15 +895,16 @@ gdk_paintable_new_from_resource_scaled (const char *path,
   if (!bytes)
     return NULL;
 
-  paintable = gdk_paintable_new_from_bytes_scaled (bytes, scale_factor);
+  paintable = gdk_paintable_new_from_bytes_scaled (bytes, scale);
+
   g_bytes_unref (bytes);
 
   return paintable;
 }
 
 GdkPaintable *
-gdk_paintable_new_from_file_scaled (GFile *file,
-                                    int    scale_factor)
+gdk_paintable_new_from_file_scaled (GFile  *file,
+                                    double  scale)
 {
   GBytes *bytes;
   GdkPaintable *paintable;
@@ -818,7 +913,7 @@ gdk_paintable_new_from_file_scaled (GFile *file,
   if (!bytes)
     return NULL;
 
-  paintable = gdk_paintable_new_from_bytes_scaled (bytes, scale_factor);
+  paintable = gdk_paintable_new_from_bytes_scaled (bytes, scale);
 
   g_bytes_unref (bytes);
 
