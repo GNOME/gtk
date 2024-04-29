@@ -239,7 +239,7 @@ gdk_dmabuf_egl_create_image (GdkDisplay      *display,
   attribs[i++] = EGL_YUV_COLOR_SPACE_HINT_EXT;
   attribs[i++] = EGL_ITU_REC601_EXT;
   attribs[i++] = EGL_SAMPLE_RANGE_HINT_EXT;
-  attribs[i++] = EGL_YUV_FULL_RANGE_EXT;
+  attribs[i++] = EGL_YUV_NARROW_RANGE_EXT;
 
 #define ADD_PLANE(plane) \
   { \
@@ -265,6 +265,7 @@ gdk_dmabuf_egl_create_image (GdkDisplay      *display,
   if (dmabuf->n_planes > 3) ADD_PLANE (3);
 
   attribs[i++] = EGL_NONE;
+  g_assert (i < G_N_ELEMENTS (attribs));
 
   image = eglCreateImageKHR (egl_display,
                              EGL_NO_CONTEXT,
