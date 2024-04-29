@@ -23,6 +23,7 @@
 #include <gtk/gtk.h>
 #include <gdk/gdksurfaceprivate.h>
 #include <gdk/gdksubsurfaceprivate.h>
+#include <gdk/gdkdebugprivate.h>
 #include <gsk/gskrendernodeparserprivate.h>
 #include <gsk/gskrendernodeprivate.h>
 #include <gsk/gskoffloadprivate.h>
@@ -380,6 +381,12 @@ parse_node_file (GFile *file, const char *generate)
 
   surface = make_toplevel ();
 
+  if (gdk_surface_get_scale (surface) != 1.0)
+    {
+      g_print ("Offload tests don't work with fractional scales");
+      exit (77);
+    }
+
   subsurface = gdk_surface_create_subsurface (surface);
   if (subsurface == NULL)
     exit (77); /* subsurfaces aren't supported, skip these tests */
@@ -387,9 +394,7 @@ parse_node_file (GFile *file, const char *generate)
 
   node = node_from_file (file);
   if (node == NULL)
-    {
-      return FALSE;
-    }
+    return FALSE;
 
   tmp = gsk_render_node_attach (node, surface);
   gsk_render_node_unref (node);
@@ -502,7 +507,7 @@ test_file (GFile *file)
   if (g_test_verbose ())
     g_test_message ("%s", g_file_peek_path (file));
 
-  return parse_node_file (file, FALSE);
+  return parse_node_file (file, NULL);
 }
 
 static int
