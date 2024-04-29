@@ -428,21 +428,6 @@ gsk_renderer_render_texture (GskRenderer           *renderer,
 
   texture = GSK_RENDERER_GET_CLASS (renderer)->render_texture (renderer, root, viewport);
 
-  if (GSK_RENDERER_DEBUG_CHECK (renderer, RENDERER))
-    {
-      GString *buf = g_string_new ("*** Texture stats ***\n\n");
-
-      gsk_profiler_append_counters (priv->profiler, buf);
-      g_string_append_c (buf, '\n');
-
-      gsk_profiler_append_timers (priv->profiler, buf);
-      g_string_append_c (buf, '\n');
-
-      g_print ("%s\n***\n\n", buf->str);
-
-      g_string_free (buf, TRUE);
-    }
-
   return texture;
 }
 
@@ -508,21 +493,6 @@ gsk_renderer_render (GskRenderer          *renderer,
     }
 
   renderer_class->render (renderer, root, clip);
-
-  if (GSK_RENDERER_DEBUG_CHECK (renderer, RENDERER))
-    {
-      GString *buf = g_string_new ("*** Frame stats ***\n\n");
-
-      gsk_profiler_append_counters (priv->profiler, buf);
-      g_string_append_c (buf, '\n');
-
-      gsk_profiler_append_timers (priv->profiler, buf);
-      g_string_append_c (buf, '\n');
-
-      g_print ("%s\n***\n\n", buf->str);
-
-      g_string_free (buf, TRUE);
-    }
 
   g_clear_pointer (&priv->prev_node, gsk_render_node_unref);
   cairo_region_destroy (clip);
