@@ -688,15 +688,16 @@ get_renderer_fallback (GdkSurface *surface)
 
 static struct {
   GType (* get_renderer) (GdkSurface *surface);
+  const char *name;
 } renderer_possibilities[] = {
-  { get_renderer_for_display },
-  { get_renderer_for_env_var },
-  { get_renderer_for_backend },
-  { get_renderer_for_vulkan_friendly_platform },
-  { get_renderer_for_gl },
-  { get_renderer_for_vulkan },
-  { get_renderer_for_gles2 },
-  { get_renderer_fallback },
+  { get_renderer_for_display, "Display" },
+  { get_renderer_for_env_var, "Environment variable" },
+  { get_renderer_for_backend, "Backend" },
+  { get_renderer_for_vulkan_friendly_platform, "Vulkan-friendly platform" },
+  { get_renderer_for_gl, "GL support" },
+  { get_renderer_for_vulkan, "Vulkan support" },
+  { get_renderer_for_gles2, "GLES2 support" },
+  { get_renderer_fallback, "Fallback" },
 };
 
 /**
@@ -734,9 +735,10 @@ gsk_renderer_new_for_surface (GdkSurface *surface)
       if (gsk_renderer_realize (renderer, surface, &error))
         {
           GSK_RENDERER_DEBUG (renderer, RENDERER,
-                              "Using renderer of type '%s' for surface '%s'",
+                              "Using renderer of type '%s' for surface '%s' (reason: %s)",
                               G_OBJECT_TYPE_NAME (renderer),
-                              G_OBJECT_TYPE_NAME (surface));
+                              G_OBJECT_TYPE_NAME (surface),
+                              renderer_possibilities[i].name);
           return renderer;
         }
 
