@@ -52,7 +52,7 @@ GdkTexture *gdk_texture_new_from_resource_at_scale  (const char    *path,
                                                      gboolean      *only_fg,
                                                      GError       **error);
 
-GdkTexture *gdk_texture_new_from_path_symbolic      (const char    *path,
+GdkTexture *gdk_texture_new_from_filename_symbolic  (const char    *path,
                                                      int            width,
                                                      int            height,
                                                      double         scale,
@@ -72,9 +72,9 @@ GdkTexture *gdk_texture_new_from_resource_symbolic  (const char    *path,
                                                      GError       **error);
 
 GdkTexture *gtk_load_symbolic_texture_from_file     (GFile         *file);
-GdkTexture *gtk_load_symbolic_texture_from_resource (const char    *data);
+GdkTexture *gtk_load_symbolic_texture_from_resource (const char    *path);
 
-GdkPaintable *gdk_paintable_new_from_path_scaled     (const char    *path,
+GdkPaintable *gdk_paintable_new_from_filename_scaled (const char    *filename,
                                                       double         scale);
 GdkPaintable *gdk_paintable_new_from_resource_scaled (const char    *path,
                                                       double         scale);

@@ -526,17 +526,17 @@ make_symbolic_pixbuf_from_resource (const char  *path,
 }
 
 static GdkPixbuf *
-make_symbolic_pixbuf_from_path (const char  *path,
-                                int          width,
-                                int          height,
-                                double       scale,
-                                GError     **error)
+make_symbolic_pixbuf_from_filename (const char  *filename,
+                                    int          width,
+                                    int          height,
+                                    double       scale,
+                                    GError     **error)
 {
   char *data;
   gsize size;
   GdkPixbuf *pixbuf;
 
-  if (!g_file_get_contents (path, &data, &size, error))
+  if (!g_file_get_contents (filename, &data, &size, error))
     return NULL;
 
   pixbuf = gtk_make_symbolic_pixbuf_from_data (data, size, width, height, scale, NULL, error);
@@ -692,17 +692,17 @@ gdk_texture_new_from_resource_at_scale (const char    *path,
 /* {{{ Symbolic texture API */
 
 GdkTexture *
-gdk_texture_new_from_path_symbolic (const char    *path,
-                                    int            width,
-                                    int            height,
-                                    double         scale,
-                                    gboolean      *only_fg,
-                                    GError       **error)
+gdk_texture_new_from_filename_symbolic (const char    *filename,
+                                        int            width,
+                                        int            height,
+                                        double         scale,
+                                        gboolean      *only_fg,
+                                        GError       **error)
 {
   GdkPixbuf *pixbuf;
   GdkTexture *texture = NULL;
 
-  pixbuf = make_symbolic_pixbuf_from_path (path, width, height, scale, error);
+  pixbuf = make_symbolic_pixbuf_from_filename (filename, width, height, scale, error);
   if (pixbuf)
     {
       *only_fg = pixbuf_is_only_fg (pixbuf);
@@ -864,15 +864,15 @@ gdk_paintable_new_from_bytes_scaled (GBytes *bytes,
 }
 
 GdkPaintable *
-gdk_paintable_new_from_path_scaled (const char *path,
-                                    double      scale)
+gdk_paintable_new_from_filename_scaled (const char *filename,
+                                        double      scale)
 {
   char *contents;
   gsize length;
   GBytes *bytes;
   GdkPaintable *paintable;
 
-  if (!g_file_get_contents (path, &contents, &length, NULL))
+  if (!g_file_get_contents (filename, &contents, &length, NULL))
     return NULL;
 
   bytes = g_bytes_new_take (contents, length);

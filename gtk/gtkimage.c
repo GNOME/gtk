@@ -598,7 +598,7 @@ gtk_image_set_from_file (GtkImage    *image,
     }
 
   scale_factor = gtk_widget_get_scale_factor (GTK_WIDGET (image));
-  paintable = gdk_paintable_new_from_path_scaled (filename, scale_factor);
+  paintable = gdk_paintable_new_from_filename_scaled (filename, scale_factor);
 
   if (paintable == NULL)
     {
