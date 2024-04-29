@@ -405,21 +405,27 @@ if win32_enabled
   pangowin32_dep = dependency('pangowin32')
 endif
 
-pangocairo_dep = dependency('pangocairo', version: pango_req)
-pixbuf_dep     = dependency('gdk-pixbuf-2.0', version: gdk_pixbuf_req,
-                            default_options: ['png=enabled', 'jpeg=enabled', 'builtin_loaders=png,jpeg', 'man=false'])
-png_dep        = dependency('libpng', 'png')
-tiff_dep       = dependency('libtiff-4', 'tiff')
-jpeg_dep       = dependency('libjpeg', 'jpeg')
+pangocairo_dep    = dependency('pangocairo', version: pango_req)
+pixbuf_dep        = dependency('gdk-pixbuf-2.0', version: gdk_pixbuf_req,
+                               default_options: ['png=enabled', 'jpeg=enabled', 'builtin_loaders=png,jpeg', 'man=false'])
+png_dep           = dependency('libpng', 'png')
+tiff_dep          = dependency('libtiff-4', 'tiff')
+jpeg_dep          = dependency('libjpeg', 'jpeg')
 
-epoxy_dep      = dependency('epoxy', version: epoxy_req)
-xkbdep         = dependency('xkbcommon', version: xkbcommon_req, required: wayland_enabled)
-graphene_dep   = dependency('graphene-gobject-1.0', version: graphene_req,
-                            default_options: ['tests=false', 'gobject_types=true'])
-iso_codes_dep  = dependency('iso-codes', required: false)
-gi_dep         = dependency('gobject-introspection-1.0', version: introspection_req,
-                            required: get_option('introspection').enabled() and
-                                      get_option('build-tests'))
+epoxy_dep         = dependency('epoxy', version: epoxy_req)
+xkbdep            = dependency('xkbcommon', version: xkbcommon_req, required: wayland_enabled)
+graphene_dep      = dependency('graphene-gobject-1.0', version: graphene_req,
+                               default_options: ['tests=false', 'gobject_types=true'])
+iso_codes_dep     = dependency('iso-codes', required: false)
+gi_dep            = dependency('gobject-introspection-1.0', version: introspection_req,
+                               required: get_option('introspection').enabled() and
+                                         get_option('build-tests'))
+gstplayer_dep     = dependency('gstreamer-player-1.0', version: gstreamer_req,
+                               required: get_option('media-gstreamer'))
+gstgl_dep         = dependency('gstreamer-gl-1.0', version: gstreamer_req,
+                               required: get_option('media-gstreamer'))
+gstallocators_dep = dependency('gstreamer-allocators-1.0', version: gstreamer_req,
+                               required: get_option('media-gstreamer'))
 
 fontconfig_dep = [] # only used in x11 backend
 
