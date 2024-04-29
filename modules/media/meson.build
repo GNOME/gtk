@@ -5,14 +5,14 @@ media_backends = []
 extra_c_args = ['-DGTK_COMPILATION']
 extra_c_args += common_cflags
 
-gstplayer_dep = dependency('gstreamer-player-1.0', version: '>= 1.12.3',
+gstplayer_dep = dependency('gstreamer-player-1.0', version: gstreamer_req,
                            required: get_option('media-gstreamer'))
-gstgl_dep = dependency('gstreamer-gl-1.0', version: '>= 1.12.3',
+gstgl_dep = dependency('gstreamer-gl-1.0', version: gstreamer_req,
                        required: get_option('media-gstreamer'))
-gstallocators_dep = dependency('gstreamer-allocators-1.0', version: '>= 1.23.1',
+gstallocators_dep = dependency('gstreamer-allocators-1.0', version: gstreamer_req,
                         required: get_option('media-gstreamer'))
 
-if gstplayer_dep.found() and gstgl_dep.found()
+if gstplayer_dep.found() and gstgl_dep.found() and gstallocators_dep.found()
   extra_win_cflags = []
 
   if host_machine.system() == 'windows' and gstgl_dep.version().version_compare('>=1.19.1')
