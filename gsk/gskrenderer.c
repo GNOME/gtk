@@ -428,21 +428,6 @@ gsk_renderer_render_texture (GskRenderer           *renderer,
 
   texture = GSK_RENDERER_GET_CLASS (renderer)->render_texture (renderer, root, viewport);
 
-  if (GSK_RENDERER_DEBUG_CHECK (renderer, RENDERER))
-    {
-      GString *buf = g_string_new ("*** Texture stats ***\n\n");
-
-      gsk_profiler_append_counters (priv->profiler, buf);
-      g_string_append_c (buf, '\n');
-
-      gsk_profiler_append_timers (priv->profiler, buf);
-      g_string_append_c (buf, '\n');
-
-      g_print ("%s\n***\n\n", buf->str);
-
-      g_string_free (buf, TRUE);
-    }
-
   return texture;
 }
 
@@ -508,21 +493,6 @@ gsk_renderer_render (GskRenderer          *renderer,
     }
 
   renderer_class->render (renderer, root, clip);
-
-  if (GSK_RENDERER_DEBUG_CHECK (renderer, RENDERER))
-    {
-      GString *buf = g_string_new ("*** Frame stats ***\n\n");
-
-      gsk_profiler_append_counters (priv->profiler, buf);
-      g_string_append_c (buf, '\n');
-
-      gsk_profiler_append_timers (priv->profiler, buf);
-      g_string_append_c (buf, '\n');
-
-      g_print ("%s\n***\n\n", buf->str);
-
-      g_string_free (buf, TRUE);
-    }
 
   g_clear_pointer (&priv->prev_node, gsk_render_node_unref);
   cairo_region_destroy (clip);
@@ -609,12 +579,17 @@ get_renderer_for_display (GdkSurface *surface)
 static GType
 get_renderer_for_env_var (GdkSurface *surface)
 {
-  static GType env_var_type = G_TYPE_NONE;
+  static GType env_var_type = G_TYPE_INVALID;
 
-  if (env_var_type == G_TYPE_NONE)
+  if (env_var_type == G_TYPE_INVALID)
     {
       const char *renderer_name = g_getenv ("GSK_RENDERER");
       env_var_type = get_renderer_for_name (renderer_name);
+      if (env_var_type != G_TYPE_INVALID)
+        GSK_DEBUG (RENDERER,
+                   "Environment variable GSK_RENDERER=%s set, trying %s",
+                   renderer_name,
+                   g_type_name (env_var_type));
     }
 
   return env_var_type;
@@ -632,83 +607,115 @@ get_renderer_for_backend (GdkSurface *surface)
 }
 
 static gboolean
-gl_software_rendering (GdkSurface *surface)
+gl_supported_platform (GdkSurface *surface,
+                       GType       renderer_type,
+                       gboolean    as_fallback)
 {
   GdkDisplay *display = gdk_surface_get_display (surface);
   GdkGLContext *context;
+  GError *error = NULL;
 
-  if (!gdk_display_prepare_gl (display, NULL))
-    return G_TYPE_INVALID;
+  if (!gdk_display_prepare_gl (display, &error))
+    {
+      if (!as_fallback)
+        GSK_DEBUG (RENDERER, "Not using GL: %s", error->message);
+      g_clear_error (&error);
+      return FALSE;
+    }
+
+  if (as_fallback)
+    return TRUE;
 
   context = gdk_display_get_gl_context (display);
   gdk_gl_context_make_current (context);
 
-  return strstr ((const char *) glGetString (GL_RENDERER), "llvmpipe") != NULL;
+  if (strstr ((const char *) glGetString (GL_RENDERER), "llvmpipe") != NULL)
+    {
+      GSK_DEBUG (RENDERER, "Not using '%s': renderer is llvmpipe", g_type_name (renderer_type));
+      return FALSE;
+    }
+
+  return TRUE;
 }
 
 static GType
 get_renderer_for_gl (GdkSurface *surface)
 {
-  if (gl_software_rendering (surface))
+  if (!gl_supported_platform (surface, gsk_ngl_renderer_get_type (), FALSE))
     return G_TYPE_INVALID;
 
   return gsk_ngl_renderer_get_type ();
 }
 
+static GType
+get_renderer_for_gl_fallback (GdkSurface *surface)
+{
+  if (!gl_supported_platform (surface, GSK_TYPE_GL_RENDERER, TRUE))
+    return G_TYPE_INVALID;
+
+  return GSK_TYPE_GL_RENDERER;
+}
+
 #ifdef GDK_RENDERING_VULKAN
 static gboolean
-vulkan_software_rendering (GdkSurface *surface)
+vulkan_supported_platform (GdkSurface *surface,
+                           GType       renderer_type,
+                           gboolean    as_fallback)
 {
   GdkDisplay *display = gdk_surface_get_display (surface);
   VkPhysicalDeviceProperties props;
+  GError *error = NULL;
 
-  if (!gdk_display_init_vulkan (display, NULL))
-    return G_TYPE_INVALID;
+  if (!gdk_display_init_vulkan (display, &error))
+    {
+      if (!as_fallback)
+        GSK_DEBUG (RENDERER, "Not using Vulkan: %s", error->message);
+      g_clear_error (&error);
+      return FALSE;
+    }
 
   vkGetPhysicalDeviceProperties (display->vk_physical_device, &props);
 
-  return props.deviceType == VK_PHYSICAL_DEVICE_TYPE_CPU;
-}
-#endif
+  if (props.deviceType == VK_PHYSICAL_DEVICE_TYPE_CPU)
+    {
+      if (!as_fallback)
+        GSK_DEBUG (RENDERER,
+                   "Not using '%s': device is CPU",
+                   g_type_name (renderer_type));
+      return FALSE;
+    }
 
-static GType
-get_renderer_for_vulkan (GdkSurface *surface)
-{
-#ifdef GDK_RENDERING_VULKAN
-  if (vulkan_software_rendering (surface))
-    return G_TYPE_INVALID;
+  if (as_fallback)
+    return TRUE;
 
-  return GSK_TYPE_VULKAN_RENDERER;
-#else
-  return G_TYPE_INVALID;
-#endif
-}
-
-static gboolean
-vulkan_friendly_platform (GdkSurface *surface)
-{
 #ifdef GDK_WINDOWING_WAYLAND
   if (GDK_IS_WAYLAND_DISPLAY (gdk_surface_get_display (surface)))
     return TRUE;
 #endif
 
+  GSK_DEBUG (RENDERER, "Not using '%s': platform is not Wayland", g_type_name (renderer_type));
+
   return FALSE;
 }
 
 static GType
-get_renderer_for_vulkan_friendly_platform (GdkSurface *surface)
+get_renderer_for_vulkan (GdkSurface *surface)
 {
-  if (vulkan_friendly_platform (surface))
-    return get_renderer_for_vulkan (surface);
+  if (!vulkan_supported_platform (surface, GSK_TYPE_VULKAN_RENDERER, FALSE))
+    return G_TYPE_INVALID;
 
-  return G_TYPE_INVALID;
+  return GSK_TYPE_VULKAN_RENDERER;
 }
 
 static GType
-get_renderer_for_gles2 (GdkSurface *surface)
+get_renderer_for_vulkan_fallback (GdkSurface *surface)
 {
-  return GSK_TYPE_GL_RENDERER;
+  if (!vulkan_supported_platform (surface, GSK_TYPE_VULKAN_RENDERER, TRUE))
+    return G_TYPE_INVALID;
+
+  return GSK_TYPE_VULKAN_RENDERER;
 }
+#endif
 
 static GType
 get_renderer_fallback (GdkSurface *surface)
@@ -722,10 +729,14 @@ static struct {
   { get_renderer_for_display },
   { get_renderer_for_env_var },
   { get_renderer_for_backend },
-  { get_renderer_for_vulkan_friendly_platform },
-  { get_renderer_for_gl },
+#ifdef GDK_RENDERING_VULKAN
   { get_renderer_for_vulkan },
-  { get_renderer_for_gles2 },
+#endif
+  { get_renderer_for_gl },
+#ifdef GDK_RENDERING_VULKAN
+  { get_renderer_for_vulkan_fallback },
+#endif
+  { get_renderer_for_gl_fallback },
   { get_renderer_fallback },
 };
 
@@ -763,17 +774,19 @@ gsk_renderer_new_for_surface (GdkSurface *surface)
 
       if (gsk_renderer_realize (renderer, surface, &error))
         {
-          GSK_RENDERER_DEBUG (renderer, RENDERER,
-                              "Using renderer of type '%s' for surface '%s'",
-                              G_OBJECT_TYPE_NAME (renderer),
-                              G_OBJECT_TYPE_NAME (surface));
+          GSK_DEBUG (RENDERER,
+                     "Using renderer '%s' for surface '%s'",
+                     G_OBJECT_TYPE_NAME (renderer),
+                     G_OBJECT_TYPE_NAME (surface));
           return renderer;
         }
 
-      g_message ("Failed to realize renderer of type '%s' for surface '%s': %s\n",
+      GSK_DEBUG (RENDERER,
+                 "Failed to realize renderer '%s' for surface '%s': %s",
                  G_OBJECT_TYPE_NAME (renderer),
                  G_OBJECT_TYPE_NAME (surface),
                  error->message);
+
       g_object_unref (renderer);
       g_clear_error (&error);
     }
