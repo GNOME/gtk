@@ -69,12 +69,18 @@ gdk_x11_vulkan_context_end_frame (GdkDrawContext *context,
 }
 
 static void
+gdk_x11_vulkan_context_empty_frame (GdkDrawContext *draw_context)
+{
+}
+
+static void
 gdk_x11_vulkan_context_class_init (GdkX11VulkanContextClass *klass)
 {
   GdkVulkanContextClass *context_class = GDK_VULKAN_CONTEXT_CLASS (klass);
   GdkDrawContextClass *draw_context_class = GDK_DRAW_CONTEXT_CLASS (klass);
 
   draw_context_class->end_frame = gdk_x11_vulkan_context_end_frame;
+  draw_context_class->empty_frame = gdk_x11_vulkan_context_empty_frame;
 
   context_class->create_surface = gdk_x11_vulkan_context_create_surface;
 }
