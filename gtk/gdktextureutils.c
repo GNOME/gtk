@@ -789,7 +789,7 @@ gdk_texture_new_from_file_symbolic (GFile       *file,
 /* {{{ Scaled paintable API */
 
 typedef struct {
-  int scale_factor;
+  double scale;
 } LoaderData;
 
 static void
@@ -805,24 +805,24 @@ on_loader_size_prepared (GdkPixbufLoader *loader,
   format = gdk_pixbuf_loader_get_format (loader);
   if (!gdk_pixbuf_format_is_scalable (format))
     {
-      loader_data->scale_factor = 1;
+      loader_data->scale = 1.0;
       return;
     }
 
   gdk_pixbuf_loader_set_size (loader,
-                              width * loader_data->scale_factor,
-                              height * loader_data->scale_factor);
+                              width * loader_data->scale,
+                              height * loader_data->scale);
 }
 
 static GdkPaintable *
 gdk_paintable_new_from_bytes_scaled (GBytes *bytes,
-                                     int     scale_factor)
+                                     double  scale)
 {
   LoaderData loader_data;
   GdkTexture *texture;
   GdkPaintable *paintable;
 
-  loader_data.scale_factor = scale_factor;
+  loader_data.scale = scale;
 
   if (gdk_texture_can_load (bytes))
     {
@@ -852,8 +852,8 @@ gdk_paintable_new_from_bytes_scaled (GBytes *bytes,
       texture = gdk_texture_new_for_pixbuf (gdk_pixbuf_loader_get_pixbuf (loader));
       g_object_unref (loader);
 
-      if (loader_data.scale_factor != 1)
-        paintable = gtk_scaler_new (GDK_PAINTABLE (texture), loader_data.scale_factor);
+      if (loader_data.scale != 1.0)
+        paintable = gtk_scaler_new (GDK_PAINTABLE (texture), loader_data.scale);
       else
         paintable = g_object_ref (GDK_PAINTABLE (texture));
 
@@ -865,7 +865,7 @@ gdk_paintable_new_from_bytes_scaled (GBytes *bytes,
 
 GdkPaintable *
 gdk_paintable_new_from_path_scaled (const char *path,
-                                    int         scale_factor)
+                                    double      scale)
 {
   char *contents;
   gsize length;
@@ -877,7 +877,7 @@ gdk_paintable_new_from_path_scaled (const char *path,
 
   bytes = g_bytes_new_take (contents, length);
 
-  paintable = gdk_paintable_new_from_bytes_scaled (bytes, scale_factor);
+  paintable = gdk_paintable_new_from_bytes_scaled (bytes, scale);
 
   g_bytes_unref (bytes);
 
@@ -886,7 +886,7 @@ gdk_paintable_new_from_path_scaled (const char *path,
 
 GdkPaintable *
 gdk_paintable_new_from_resource_scaled (const char *path,
-                                        int         scale_factor)
+                                        double      scale)
 {
   GBytes *bytes;
   GdkPaintable *paintable;
@@ -895,15 +895,16 @@ gdk_paintable_new_from_resource_scaled (const char *path,
   if (!bytes)
     return NULL;
 
-  paintable = gdk_paintable_new_from_bytes_scaled (bytes, scale_factor);
+  paintable = gdk_paintable_new_from_bytes_scaled (bytes, scale);
+
   g_bytes_unref (bytes);
 
   return paintable;
 }
 
 GdkPaintable *
-gdk_paintable_new_from_file_scaled (GFile *file,
-                                    int    scale_factor)
+gdk_paintable_new_from_file_scaled (GFile  *file,
+                                    double  scale)
 {
   GBytes *bytes;
   GdkPaintable *paintable;
@@ -912,7 +913,7 @@ gdk_paintable_new_from_file_scaled (GFile *file,
   if (!bytes)
     return NULL;
 
-  paintable = gdk_paintable_new_from_bytes_scaled (bytes, scale_factor);
+  paintable = gdk_paintable_new_from_bytes_scaled (bytes, scale);
 
   g_bytes_unref (bytes);
 
