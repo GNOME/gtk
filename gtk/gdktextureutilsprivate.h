@@ -75,10 +75,10 @@ GdkTexture *gtk_load_symbolic_texture_from_file     (GFile         *file);
 GdkTexture *gtk_load_symbolic_texture_from_resource (const char    *data);
 
 GdkPaintable *gdk_paintable_new_from_path_scaled     (const char    *path,
-                                                      int            scale_factor);
+                                                      double         scale);
 GdkPaintable *gdk_paintable_new_from_resource_scaled (const char    *path,
-                                                      int            scale_factor);
+                                                      double         scale);
 GdkPaintable *gdk_paintable_new_from_file_scaled     (GFile         *file,
-                                                      int            scale_factor);
+                                                      double         scale);
 
 G_END_DECLS
