@@ -87,6 +87,8 @@ VkShaderModule          gdk_display_get_vk_shader_module                (GdkDisp
                                                                          const char            *resource_name);
 
 void                    gdk_display_vulkan_pipeline_cache_updated       (GdkDisplay            *display);
+gboolean                gdk_display_vulkan_pipeline_cache_save          (GdkDisplay            *display);
+GFile *                 gdk_display_vulkan_pipeline_cache_file          (GdkDisplay            *display);
 
 VkInstance              gdk_vulkan_context_get_instance                 (GdkVulkanContext      *context);
 VkPhysicalDevice        gdk_vulkan_context_get_physical_device          (GdkVulkanContext      *context);

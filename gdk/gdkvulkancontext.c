@@ -1229,6 +1229,18 @@ gdk_display_vulkan_pipeline_cache_updated (GdkDisplay *display)
                                                                        NULL);
 }
 
+gboolean
+gdk_display_vulkan_pipeline_cache_save (GdkDisplay *display)
+{
+  return gdk_vulkan_save_pipeline_cache (display);
+}
+
+GFile *
+gdk_display_vulkan_pipeline_cache_file (GdkDisplay *display)
+{
+  return gdk_vulkan_get_pipeline_cache_file (display);
+}
+
 static void
 gdk_display_create_pipeline_cache (GdkDisplay *display)
 {
