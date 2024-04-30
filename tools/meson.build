@@ -52,6 +52,13 @@ gtk_tools = [
   ['gtk4-encode-symbolic-svg', ['encodesymbolic.c'], [ libgtk_static_dep ] ],
 ]
 
+if vulkan_dep.found()
+  gtk_tools += [[ 'gtk4-shader-tool',
+                [ 'gtk-shader-tool.c',
+                  'gtk-shader-tool-compile.c' ],
+                [ libgtk_static_dep ]]]
+endif
+
 if os_unix
   gtk_tools += [['gtk4-launch', ['gtk-launch.c'], [libgtk_dep]]]
 endif
@@ -64,7 +71,7 @@ foreach tool: gtk_tools
   exe = executable(tool_name,
     sources: tool_srcs,
     include_directories: [confinc],
-    c_args: common_cflags + [ '-DBUILD_TOOLS' ],
+    c_args: common_cflags + [ '-DBUILD_TOOLS', '-I../gsk' ],
     dependencies: tool_deps,
     install: true,
   )
