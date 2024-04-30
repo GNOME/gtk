@@ -1126,13 +1126,12 @@ gdk_vulkan_save_pipeline_cache (GdkDisplay *display)
   GDK_VK_CHECK (vkGetPipelineCacheData, device, cache, &size, NULL);
   if (size == 0)
     return TRUE;
-  
+
   if (size == display->vk_pipeline_cache_size)
     {
       GDK_DEBUG (VULKAN, "pipeline cache size (%zu bytes) unchanged, skipping save", size);
       return TRUE;
     }
-
 
   data = g_malloc (size);
   if (GDK_VK_CHECK (vkGetPipelineCacheData, device, cache, &size, data) != VK_SUCCESS)
@@ -1153,7 +1152,7 @@ gdk_vulkan_save_pipeline_cache (GdkDisplay *display)
 
   file = gdk_vulkan_get_pipeline_cache_file (display);
 
-  GDK_DEBUG (VULKAN, "Saving pipeline cache to %s", g_file_peek_path (file));
+  GDK_DEBUG (VULKAN, "Saving pipeline cache of size %lu to %s", size, g_file_peek_path (file));
 
   if (!g_file_replace_contents (file,
                                 data,
@@ -1196,13 +1195,14 @@ gdk_vulkan_save_pipeline_cache (GdkDisplay *display)
     }
 
   gdk_profiler_end_markf (begin_time,
-                          "Save Vulkan pipeline cache", "%s size %ld",
+                          "Save Vulkan pipeline cache", "%s size %lu",
                           g_file_peek_path (file), size);
 
   g_object_unref (file);
   g_free (data);
   g_free (display->vk_pipeline_cache_etag);
   display->vk_pipeline_cache_etag = etag;
+  display->vk_pipeline_cache_size = size;
 
   return TRUE;
 }
@@ -1242,6 +1242,11 @@ gdk_display_create_pipeline_cache (GdkDisplay *display)
                                            },
                                            NULL,
                                            &display->vk_pipeline_cache);
+      GDK_DEBUG (VULKAN, "Creating empty pipeline cache");
+    }
+  else
+    {
+      GDK_DEBUG (VULKAN, "Loading pipeline cache (%lu bytes)", display->vk_pipeline_cache_size);
     }
 }
 
