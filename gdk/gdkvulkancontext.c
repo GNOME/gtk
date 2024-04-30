@@ -1111,6 +1111,7 @@ gdk_display_load_pipeline_cache (GdkDisplay *display)
 static gboolean
 gdk_vulkan_save_pipeline_cache (GdkDisplay *display)
 {
+  G_GNUC_UNUSED gint64 begin_time = GDK_PROFILER_CURRENT_TIME;
   GError *error = NULL;
   VkDevice device;
   VkPipelineCache cache;
@@ -1167,7 +1168,7 @@ gdk_vulkan_save_pipeline_cache (GdkDisplay *display)
       if (g_error_matches (error, G_IO_ERROR, G_IO_ERROR_WRONG_ETAG))
         {
           VkPipelineCache new_cache;
-          
+
           GDK_DEBUG (VULKAN, "Pipeline cache file modified, merging into current");
           new_cache = gdk_display_load_pipeline_cache (display);
           if (new_cache)
@@ -1193,6 +1194,10 @@ gdk_vulkan_save_pipeline_cache (GdkDisplay *display)
       g_free (data);
       return FALSE;
     }
+
+  gdk_profiler_end_markf (begin_time,
+                          "Save Vulkan pipeline cache", "%s size %ld",
+                          g_file_peek_path (file), size);
 
   g_object_unref (file);
   g_free (data);
