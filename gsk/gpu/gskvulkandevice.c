@@ -951,6 +951,8 @@ gsk_vulkan_device_get_vk_pipeline (GskVulkanDevice           *self,
   const char *version_string;
   char *vertex_shader_name, *fragment_shader_name;
   G_GNUC_UNUSED gint64 begin_time = GDK_PROFILER_CURRENT_TIME;
+  const char *clip_name[] = { "NONE", "RECT", "ROUNDED" };
+  const char *blend_name[] = { "OVER", "ADD", "CLEAR" };
 
   cache_key = (PipelineCacheKey) {
     .op_class = op_class,
@@ -1128,8 +1130,25 @@ gsk_vulkan_device_get_vk_pipeline (GskVulkanDevice           *self,
                                            &pipeline);
 
   gdk_profiler_end_markf (begin_time,
-                          "Create Vulkan pipeline", "frag=%s vert=%s",
-                          fragment_shader_name, vertex_shader_name);
+                          "Create Vulkan pipeline", "%s version=%s variation=%u clip=%s blend=%s format=%u",
+                          op_class->shader_name,
+                          version_string + 1,
+                          variation,
+                          clip_name[clip],
+                          blend_name[blend],
+                          format);
+
+  GSK_DEBUG (SHADERS,
+             "Create Vulkan pipeline (%s %s, %u/%s/%s/%u) for layout (%lu/%lu/%lu)",
+             op_class->shader_name,
+             version_string + 1,
+             variation,
+             clip_name[clip],
+             blend_name[blend],
+             format,
+             layout->setup.n_buffers,
+             layout->setup.n_samplers,
+             layout->setup.n_immutable_samplers);
 
   g_free (fragment_shader_name);
   g_free (vertex_shader_name);
