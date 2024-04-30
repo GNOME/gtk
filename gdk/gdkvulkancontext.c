@@ -1202,6 +1202,7 @@ gdk_vulkan_save_pipeline_cache (GdkDisplay *display)
   g_free (data);
   g_free (display->vk_pipeline_cache_etag);
   display->vk_pipeline_cache_etag = etag;
+  display->vk_pipeline_cache_size = size;
 
   return TRUE;
 }
