@@ -20,6 +20,7 @@
 #include "config.h"
 #include <gtk/gtk.h>
 #include <glib/gstdio.h>
+#include <glib/gi18n.h>
 
 #include "demos.h"
 #include "fontify.h"
@@ -924,6 +925,34 @@ clear_search (GtkSearchBar *bar)
 }
 
 static void
+search_results_update (GObject    *filter_model,
+                       GParamSpec *pspec,
+                       GtkEntry   *entry)
+{
+  gsize n_items = g_list_model_get_n_items (G_LIST_MODEL (filter_model));
+
+  if (strlen (gtk_editable_get_text (GTK_EDITABLE (entry))) > 0)
+    {
+      char *text;
+
+      if (n_items > 0)
+        text = g_strdup_printf (ngettext ("%ld search result", "%ld search results", n_items), n_items);
+      else
+        text = g_strdup (_("No search results"));
+
+      gtk_accessible_update_property (GTK_ACCESSIBLE (entry),
+                                      GTK_ACCESSIBLE_PROPERTY_DESCRIPTION, text,
+                                      -1);
+
+      g_free (text);
+    }
+  else
+    {
+      gtk_accessible_reset_property (GTK_ACCESSIBLE (entry), GTK_ACCESSIBLE_PROPERTY_DESCRIPTION);
+    }
+}
+
+static void
 activate (GApplication *app)
 {
   GtkBuilder *builder;
@@ -970,6 +999,7 @@ activate (GApplication *app)
 
   search_entry = GTK_WIDGET (gtk_builder_get_object (builder, "search-entry"));
   g_signal_connect (search_entry, "search-changed", G_CALLBACK (demo_search_changed_cb), filter);
+  g_signal_connect (filter_model, "notify::n-items", G_CALLBACK (search_results_update), search_entry);
 
   selection = gtk_single_selection_new (G_LIST_MODEL (filter_model));
   g_signal_connect (selection, "notify::selected-item", G_CALLBACK (selection_cb), NULL);
