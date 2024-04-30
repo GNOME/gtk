@@ -26,7 +26,7 @@ gsk_gpu_color_matrix_op_print_instance (GskGpuShaderOp *shader,
   gsk_gpu_print_image_descriptor (string, shader->desc, instance->tex_id);
 }
 
-static const GskGpuShaderOpClass GSK_GPU_COLOR_MATRIX_OP_CLASS = {
+const GskGpuShaderOpClass GSK_GPU_COLOR_MATRIX_OP_CLASS = {
   {
     GSK_GPU_OP_SIZE (GskGpuColorMatrixOp),
     GSK_GPU_STAGE_SHADER,

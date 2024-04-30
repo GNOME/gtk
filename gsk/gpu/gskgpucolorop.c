@@ -27,7 +27,7 @@ gsk_gpu_color_op_print_instance (GskGpuShaderOp *shader,
   gsk_gpu_print_rgba (string, instance->color);
 }
 
-static const GskGpuShaderOpClass GSK_GPU_COLOR_OP_CLASS = {
+const GskGpuShaderOpClass GSK_GPU_COLOR_OP_CLASS = {
   {
     GSK_GPU_OP_SIZE (GskGpuColorOp),
     GSK_GPU_STAGE_SHADER,

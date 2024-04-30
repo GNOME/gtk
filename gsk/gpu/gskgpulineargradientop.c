@@ -30,7 +30,7 @@ gsk_gpu_linear_gradient_op_print_instance (GskGpuShaderOp *shader,
   gsk_gpu_print_rect (string, instance->rect);
 }
 
-static const GskGpuShaderOpClass GSK_GPU_LINEAR_GRADIENT_OP_CLASS = {
+const GskGpuShaderOpClass GSK_GPU_LINEAR_GRADIENT_OP_CLASS = {
   {
     GSK_GPU_OP_SIZE (GskGpuLinearGradientOp),
     GSK_GPU_STAGE_SHADER,

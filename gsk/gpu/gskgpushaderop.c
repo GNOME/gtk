@@ -268,3 +268,45 @@ gsk_gpu_shader_op_alloc (GskGpuFrame               *frame,
   *((gpointer *) out_vertex_data) = gsk_gpu_frame_get_vertex_data (frame, vertex_offset);
 }
 
+extern const GskGpuShaderOpClass GSK_GPU_BLEND_MODE_OP_CLASS;
+extern const GskGpuShaderOpClass GSK_GPU_BLUR_OP_CLASS;
+extern const GskGpuShaderOpClass GSK_GPU_BORDER_OP_CLASS;
+extern const GskGpuShaderOpClass GSK_GPU_BOX_SHADOW_OP_CLASS;
+extern const GskGpuShaderOpClass GSK_GPU_COLORIZE_OP_CLASS;
+extern const GskGpuShaderOpClass GSK_GPU_COLOR_MATRIX_OP_CLASS;
+extern const GskGpuShaderOpClass GSK_GPU_COLOR_OP_CLASS;
+extern const GskGpuShaderOpClass GSK_GPU_CONIC_GRADIENT_OP_CLASS;
+extern const GskGpuShaderOpClass GSK_GPU_CROSS_FADE_OP_CLASS;
+extern const GskGpuShaderOpClass GSK_GPU_LINEAR_GRADIENT_OP_CLASS;
+extern const GskGpuShaderOpClass GSK_GPU_MASK_OP_CLASS;
+extern const GskGpuShaderOpClass GSK_GPU_RADIAL_GRADIENT_OP_CLASS;
+extern const GskGpuShaderOpClass GSK_GPU_ROUNDED_COLOR_OP_CLASS;
+extern const GskGpuShaderOpClass GSK_GPU_STRAIGHT_ALPHA_OP_CLASS;
+extern const GskGpuShaderOpClass GSK_GPU_TEXTURE_OP_CLASS;
+extern const GskGpuShaderOpClass GSK_GPU_UBER_OP_CLASS;
+
+#define CHECK_CLASS(class) if (strcmp (name, class.shader_name) == 0) return &class
+
+const GskGpuShaderOpClass *
+gsk_gpu_shader_op_class_from_name (const char *name)
+{
+  CHECK_CLASS (GSK_GPU_BLEND_MODE_OP_CLASS);
+  else CHECK_CLASS (GSK_GPU_BLUR_OP_CLASS);
+  else CHECK_CLASS (GSK_GPU_BORDER_OP_CLASS);
+  else CHECK_CLASS (GSK_GPU_BOX_SHADOW_OP_CLASS);
+  else CHECK_CLASS (GSK_GPU_COLORIZE_OP_CLASS);
+  else CHECK_CLASS (GSK_GPU_COLOR_MATRIX_OP_CLASS);
+  else CHECK_CLASS (GSK_GPU_COLOR_OP_CLASS);
+  else CHECK_CLASS (GSK_GPU_CROSS_FADE_OP_CLASS);
+  else CHECK_CLASS (GSK_GPU_LINEAR_GRADIENT_OP_CLASS);
+  else CHECK_CLASS (GSK_GPU_MASK_OP_CLASS);
+  else CHECK_CLASS (GSK_GPU_RADIAL_GRADIENT_OP_CLASS);
+  else CHECK_CLASS (GSK_GPU_ROUNDED_COLOR_OP_CLASS);
+  else CHECK_CLASS (GSK_GPU_STRAIGHT_ALPHA_OP_CLASS);
+  else CHECK_CLASS (GSK_GPU_TEXTURE_OP_CLASS);
+  else CHECK_CLASS (GSK_GPU_UBER_OP_CLASS);
+
+  g_warning ("No such shader op: %s\n", name);
+
+  return NULL;
+}

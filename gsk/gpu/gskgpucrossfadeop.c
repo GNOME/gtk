@@ -28,7 +28,7 @@ gsk_gpu_cross_fade_op_print_instance (GskGpuShaderOp *shader,
   g_string_append_printf (string, "%g%%", 100 * instance->opacity_progress[1]);
 }
 
-static const GskGpuShaderOpClass GSK_GPU_CROSS_FADE_OP_CLASS = {
+const GskGpuShaderOpClass GSK_GPU_CROSS_FADE_OP_CLASS = {
   {
     GSK_GPU_OP_SIZE (GskGpuCrossFadeOp),
     GSK_GPU_STAGE_SHADER,

@@ -84,5 +84,7 @@ gsk_gpu_point_to_float (const graphene_point_t *point,
   values[1] = point->y + offset->y;
 }
 
+const GskGpuShaderOpClass * gsk_gpu_shader_op_class_from_name (const char *name);
+
 G_END_DECLS
 

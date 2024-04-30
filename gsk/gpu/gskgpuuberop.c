@@ -26,7 +26,7 @@ gsk_gpu_uber_op_print_instance (GskGpuShaderOp *shader,
   gsk_gpu_print_rect (string, instance->rect);
 }
 
-static const GskGpuShaderOpClass GSK_GPU_UBER_OP_CLASS = {
+const GskGpuShaderOpClass GSK_GPU_UBER_OP_CLASS = {
   {
     GSK_GPU_OP_SIZE (GskGpuUberOp),
     GSK_GPU_STAGE_SHADER,

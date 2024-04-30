@@ -29,7 +29,7 @@ gsk_gpu_blend_mode_op_print_instance (GskGpuShaderOp *shader,
   gsk_gpu_print_image_descriptor (string, shader->desc, instance->top_id);
 }
 
-static const GskGpuShaderOpClass GSK_GPU_BLEND_MODE_OP_CLASS = {
+const GskGpuShaderOpClass GSK_GPU_BLEND_MODE_OP_CLASS = {
   {
     GSK_GPU_OP_SIZE (GskGpuBlendModeOp),
     GSK_GPU_STAGE_SHADER,

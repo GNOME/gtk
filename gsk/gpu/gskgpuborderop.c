@@ -72,7 +72,7 @@ gsk_gpu_border_op_gl_command (GskGpuOp          *op,
   return gsk_gpu_shader_op_gl_command_n (op, frame, state, 8);
 }
 
-static const GskGpuShaderOpClass GSK_GPU_BORDER_OP_CLASS = {
+const GskGpuShaderOpClass GSK_GPU_BORDER_OP_CLASS = {
   {
     GSK_GPU_OP_SIZE (GskGpuBorderOp),
     GSK_GPU_STAGE_SHADER,
