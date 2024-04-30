@@ -161,7 +161,7 @@ gtk_css_value_alloc (const GtkCssValueClass *klass,
 }
 
 GtkCssValue *
-gtk_css_value_ref (GtkCssValue *value)
+(gtk_css_value_ref) (GtkCssValue *value)
 {
   gtk_internal_return_val_if_fail (value != NULL, NULL);
 
@@ -171,7 +171,7 @@ gtk_css_value_ref (GtkCssValue *value)
 }
 
 void
-gtk_css_value_unref (GtkCssValue *value)
+(gtk_css_value_unref) (GtkCssValue *value)
 {
   if (value == NULL)
     return;
@@ -360,16 +360,4 @@ gtk_css_value_get_dynamic_value (GtkCssValue *value,
     return gtk_css_value_ref (value);
 
   return value->class->get_dynamic_value (value, monotonic_time);
-}
-
-gboolean
-gtk_css_value_is_computed (const GtkCssValue *value)
-{
-  return value->is_computed;
-}
-
-gboolean
-gtk_css_value_contains_variables (const GtkCssValue *value)
-{
-  return value->contains_variables;
 }

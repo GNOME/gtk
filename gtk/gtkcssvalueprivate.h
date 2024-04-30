@@ -75,8 +75,8 @@ GtkCssValue * gtk_css_value_alloc                     (const GtkCssValueClass   
                                                        gsize                       size);
 #define gtk_css_value_new(name, klass) ((name *) gtk_css_value_alloc ((klass), sizeof (name)))
 
-GtkCssValue * gtk_css_value_ref                       (GtkCssValue                *value);
-void          gtk_css_value_unref                     (GtkCssValue                *value);
+GtkCssValue * (gtk_css_value_ref)                     (GtkCssValue                *value);
+void          (gtk_css_value_unref)                   (GtkCssValue                *value);
 
 GtkCssValue * gtk_css_value_compute                   (GtkCssValue                *value,
                                                        guint                       property_id,
@@ -96,8 +96,51 @@ GtkCssValue *  gtk_css_value_get_dynamic_value        (GtkCssValue              
 char *         gtk_css_value_to_string                (const GtkCssValue          *value);
 void           gtk_css_value_print                    (const GtkCssValue          *value,
                                                        GString                    *string);
-gboolean       gtk_css_value_is_computed              (const GtkCssValue          *value) G_GNUC_PURE;
-gboolean       gtk_css_value_contains_variables       (const GtkCssValue          *value) G_GNUC_PURE;
+
+typedef struct { GTK_CSS_VALUE_BASE } GtkCssValueBase;
+
+static inline GtkCssValue *
+gtk_css_value_ref_inline (GtkCssValue *value)
+{
+  GtkCssValueBase *value_base = (GtkCssValueBase *) value;
+
+  value_base->ref_count += 1;
+
+  return value;
+}
+
+static inline void
+gtk_css_value_unref_inline (GtkCssValue *value)
+{
+  GtkCssValueBase *value_base = (GtkCssValueBase *) value;
+
+  if (value_base && value_base->ref_count > 1)
+    {
+      value_base->ref_count -= 1;
+      return;
+    }
+
+  (gtk_css_value_unref) (value);
+}
+
+#define gtk_css_value_ref(value) gtk_css_value_ref_inline (value)
+#define gtk_css_value_unref(value) gtk_css_value_unref_inline (value)
+
+static inline gboolean
+gtk_css_value_is_computed (const GtkCssValue *value)
+{
+  GtkCssValueBase *value_base = (GtkCssValueBase *) value;
+
+  return value_base->is_computed;
+}
+
+static inline gboolean
+gtk_css_value_contains_variables (const GtkCssValue *value)
+{
+  GtkCssValueBase *value_base = (GtkCssValueBase *) value;
+
+  return value_base->contains_variables;
+}
 
 G_END_DECLS
 

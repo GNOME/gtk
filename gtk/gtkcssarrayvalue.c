@@ -397,6 +397,7 @@ _gtk_css_array_value_new_from_array (GtkCssValue **values,
   memcpy (&result->values[0], values, sizeof (GtkCssValue *) * n_values);
 
   result->is_computed = TRUE;
+  result->contains_variables = FALSE;
   for (i = 0; i < n_values; i ++)
     {
       if (!gtk_css_value_is_computed (values[i]))
