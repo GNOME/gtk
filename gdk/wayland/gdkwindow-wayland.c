@@ -952,6 +952,7 @@ buffer_release_callback (void             *_data,
   /* Release came in, we haven't done any interim updates, so we can just use
    * the old committed buffer again.
    */
+  g_clear_pointer (&impl->staging_cairo_surface, cairo_surface_destroy);
   impl->staging_cairo_surface = g_steal_pointer (&impl->committed_cairo_surface);
 }
 
