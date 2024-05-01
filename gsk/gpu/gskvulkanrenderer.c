@@ -110,6 +110,11 @@ gsk_vulkan_renderer_create_context (GskGpuRenderer       *renderer,
       !gdk_display_has_vulkan_feature (display, GDK_VULKAN_FEATURE_NONUNIFORM_INDEXING))
     *supported &= ~GSK_GPU_OPTIMIZE_UBER;
 
+  /* Sadly, there are too many systems out there where compiling the uber shader
+   * takes multiple seconds, or even minutes. So just disabled it for now.
+   */
+  *supported &= ~GSK_GPU_OPTIMIZE_UBER;
+
   return GDK_DRAW_CONTEXT (context);
 }
 
