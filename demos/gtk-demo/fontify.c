@@ -363,7 +363,9 @@ insert_markup_idle (gpointer data)
 
       if (g_get_monotonic_time () - begin > G_TIME_SPAN_MILLISECOND)
         {
-          g_idle_add (insert_markup_idle, data);
+          guint id;
+          id = g_idle_add (insert_markup_idle, data);
+          g_source_set_name_by_id (id, "[gtk-demo] insert_markup_idle");
           return G_SOURCE_REMOVE;
         }
 
@@ -398,7 +400,9 @@ parse_markup_idle (gpointer data)
   do {
     if (g_get_monotonic_time () - begin > G_TIME_SPAN_MILLISECOND)
       {
-        g_idle_add (parse_markup_idle, data);
+        guint id;
+        id = g_idle_add (parse_markup_idle, data);
+        g_source_set_name_by_id (id, "[gtk-demo] parse_markup_idle");
         return G_SOURCE_REMOVE;
       }
 
