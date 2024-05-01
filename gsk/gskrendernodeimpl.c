@@ -5867,6 +5867,31 @@ gsk_text_node_new (PangoFont              *font,
                  pango_units_to_float (ink_rect.width),
                  pango_units_to_float (ink_rect.height));
 
+  static gboolean recursion_check = FALSE;
+  if (!recursion_check)
+    {
+      recursion_check = TRUE;
+      GBytes *bytes = gsk_render_node_serialize (node);
+      GskRenderNode *compare = gsk_render_node_deserialize (bytes, NULL, NULL);
+
+      g_assert (compare);
+
+      if (!gsk_rect_equal (&node->bounds, &compare->bounds))
+        {
+          GskRenderNode *old = node;
+          g_warning ("Wrong bounds %g %g %g %g instead of %g %g %g %g for this text node: \n%s",
+                     node->bounds.origin.x, node->bounds.origin.y, node->bounds.size.width, node->bounds.size.height, 
+                     compare->bounds.origin.x, compare->bounds.origin.y, compare->bounds.size.width, compare->bounds.size.height, 
+                     (char *) g_bytes_get_data (bytes, NULL));
+          node = compare;
+          gsk_render_node_unref (old);
+        }
+      else
+        gsk_render_node_unref (compare);
+      g_bytes_unref (bytes);
+      recursion_check = FALSE;
+    }
+
   return node;
 }
 
