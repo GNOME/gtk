@@ -2302,7 +2302,8 @@ parse_antialias (GtkCssParser *parser,
     return FALSE;
 
   if (*(cairo_antialias_t *) out != CAIRO_ANTIALIAS_NONE &&
-      *(cairo_antialias_t *) out != CAIRO_ANTIALIAS_GRAY)
+      *(cairo_antialias_t *) out != CAIRO_ANTIALIAS_GRAY &&
+      *(cairo_antialias_t *) out != CAIRO_ANTIALIAS_GOOD)
     {
       gtk_css_parser_error_value (parser, "Unsupported value for enum \"%s\"",
                                   g_type_name (CAIRO_GOBJECT_TYPE_ANTIALIAS));
@@ -3662,9 +3663,11 @@ gsk_text_node_serialize_font_options (GskRenderNode *node,
     append_enum_param (p, "hint-style", CAIRO_GOBJECT_TYPE_HINT_STYLE, hint_style);
 
   /* CAIRO_ANTIALIAS_NONE is the only value we ever emit here, since gray is the default,
-   * and we don't accept any other values.
+   * and we don't accept any other values. We do accept GOOD as GTK uses that to pass
+   * the gtk-font-rendering value down.
    */
-  if (antialias == CAIRO_ANTIALIAS_NONE)
+  if (antialias == CAIRO_ANTIALIAS_NONE ||
+      antialias == CAIRO_ANTIALIAS_GOOD)
     append_enum_param (p, "antialias", CAIRO_GOBJECT_TYPE_ANTIALIAS, antialias);
 
   /* CAIRO_HINT_METRICS_ON is the only value we ever emit here, since off is the default,
