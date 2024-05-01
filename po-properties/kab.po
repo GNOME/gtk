@@ -8,45 +8,45 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk gtk-3-24\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-04-07 05:15+0000\n"
-"PO-Revision-Date: 2024-04-07 11:21+0100\n"
-"Last-Translator: ButterflyOfFire <ButterflyOfFire@protonmail.com>\n"
+"POT-Creation-Date: 2024-04-22 13:20+0000\n"
+"PO-Revision-Date: 2024-04-25 22:36+0200\n"
+"Last-Translator: sa\n"
 "Language-Team: Kabyle <>\n"
 "Language: kab\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n>1;\n"
-"X-Generator: Gtranslator 41.0\n"
+"X-Generator: Poedit 3.4.2\n"
 
 #: gdk/gdkapplaunchcontext.c:127 gdk/gdkcursor.c:139 gdk/gdkdevicemanager.c:185
 #: gdk/gdkglcontext.c:320 gdk/gdkseat.c:202 gdk/gdkseat.c:203
 msgid "Display"
-msgstr ""
+msgstr "Sken"
 
 #: gdk/gdkcursor.c:131
 msgid "Cursor type"
-msgstr ""
+msgstr "Anaw n teḥnaccaḍt"
 
 #: gdk/gdkcursor.c:132
 msgid "Standard cursor type"
-msgstr ""
+msgstr "Anaw n teḥnaccaḍt alugan"
 
 #: gdk/gdkcursor.c:140
 msgid "Display of this cursor"
-msgstr ""
+msgstr "Askan n teḥnaccaḍt-a"
 
 #: gdk/gdkdevice.c:123
 msgid "Device Display"
-msgstr ""
+msgstr "Askan n yibenk"
 
 #: gdk/gdkdevice.c:124
 msgid "Display which the device belongs to"
-msgstr ""
+msgstr "Sken n yibenk wuɣur i ttekka"
 
 #: gdk/gdkdevice.c:138
 msgid "Device manager"
-msgstr ""
+msgstr "Amsefrak n yibenk"
 
 #: gdk/gdkdevice.c:139
 msgid "Device manager which the device belongs to"
@@ -58,15 +58,15 @@ msgstr "Isem n yibenk"
 
 #: gdk/gdkdevice.c:166
 msgid "Device type"
-msgstr ""
+msgstr "Anaw n yibenk"
 
 #: gdk/gdkdevice.c:167
 msgid "Device role in the device manager"
-msgstr ""
+msgstr "Talilt n yibenk deg umsefrak n yibenk"
 
 #: gdk/gdkdevice.c:183
 msgid "Associated device"
-msgstr ""
+msgstr "Ibenk yeqqnen"
 
 #: gdk/gdkdevice.c:184
 msgid "Associated pointer or keyboard with this device"
@@ -74,19 +74,19 @@ msgstr ""
 
 #: gdk/gdkdevice.c:197
 msgid "Input source"
-msgstr ""
+msgstr "Aɣbalu n unekcum"
 
 #: gdk/gdkdevice.c:198
 msgid "Source type for the device"
-msgstr ""
+msgstr "Anaw n uɣbalu i yibenk"
 
 #: gdk/gdkdevice.c:213 gdk/gdkdevice.c:214
 msgid "Input mode for the device"
-msgstr ""
+msgstr "Asakr n unekcum i yibenk"
 
 #: gdk/gdkdevice.c:229
 msgid "Whether the device has a cursor"
-msgstr ""
+msgstr "Ma yella ibenk yesεa taḥnaccaḍt"
 
 #: gdk/gdkdevice.c:230
 msgid "Whether there is a visible cursor following device motion"
@@ -98,15 +98,15 @@ msgstr ""
 
 #: gdk/gdkdevice.c:259 gdk/gdkdevice.c:260
 msgid "Vendor ID"
-msgstr ""
+msgstr "Asulay n usaǧǧaw"
 
 #: gdk/gdkdevice.c:274 gdk/gdkdevice.c:275
 msgid "Product ID"
-msgstr ""
+msgstr "Asulay n ufaris"
 
 #: gdk/gdkdevice.c:289 gdk/gdkdevice.c:290
 msgid "Seat"
-msgstr ""
+msgstr "Tɣimit"
 
 #: gdk/gdkdevice.c:306 gdk/gdkdevice.c:307
 msgid "Number of concurrent touches"
@@ -114,7 +114,7 @@ msgstr ""
 
 #: gdk/gdkdevice.c:321 gdk/gdkdevice.c:322
 msgid "Axes"
-msgstr ""
+msgstr "Igellusen"
 
 #: gdk/gdkdevice.c:328
 msgid "Tool"
@@ -130,7 +130,7 @@ msgstr ""
 
 #: gdk/gdkdisplaymanager.c:162
 msgid "Default Display"
-msgstr ""
+msgstr "Askan amezwer"
 
 #: gdk/gdkdisplaymanager.c:163
 msgid "The default display for GDK"
@@ -142,7 +142,7 @@ msgstr ""
 
 #: gdk/gdkglcontext.c:336 gtk/gtkwidget.c:1351
 msgid "Window"
-msgstr ""
+msgstr "Asfaylu"
 
 #: gdk/gdkglcontext.c:337
 msgid "The GDK window bound to the GL context"
@@ -150,7 +150,7 @@ msgstr ""
 
 #: gdk/gdkglcontext.c:352
 msgid "Shared context"
-msgstr ""
+msgstr "Asentel i yettwabḍan"
 
 #: gdk/gdkglcontext.c:353
 msgid "The GL context this context shares data with"
@@ -158,7 +158,7 @@ msgstr ""
 
 #: gdk/gdkscreen.c:93
 msgid "Font options"
-msgstr ""
+msgstr "Tixtiṛiyin n tsefst"
 
 #: gdk/gdkscreen.c:94
 msgid "The default font options for the screen"
@@ -166,7 +166,7 @@ msgstr ""
 
 #: gdk/gdkscreen.c:101
 msgid "Font resolution"
-msgstr ""
+msgstr "Afray n tsefsit"
 
 #: gdk/gdkscreen.c:102
 msgid "The resolution for fonts on the screen"
@@ -174,7 +174,7 @@ msgstr ""
 
 #: gdk/gdkwindow.c:354 gdk/gdkwindow.c:355
 msgid "Cursor"
-msgstr ""
+msgstr "Taḥnaccaḍt"
 
 #: gdk/x11/gdkdevicemanager-xi2.c:132
 msgid "Opcode"
@@ -186,7 +186,7 @@ msgstr ""
 
 #: gdk/x11/gdkdevicemanager-xi2.c:139
 msgid "Major"
-msgstr ""
+msgstr "Ameqqran"
 
 #: gdk/x11/gdkdevicemanager-xi2.c:140
 msgid "Major version number"
@@ -194,7 +194,7 @@ msgstr ""
 
 #: gdk/x11/gdkdevicemanager-xi2.c:146
 msgid "Minor"
-msgstr ""
+msgstr "Amecṭuḥ"
 
 #: gdk/x11/gdkdevicemanager-xi2.c:147
 msgid "Minor version number"
@@ -206,7 +206,7 @@ msgstr "ID n yibenk"
 
 #: gdk/x11/gdkdevice-xi2.c:143
 msgid "Device identifier"
-msgstr ""
+msgstr "Asulay n yibenk"
 
 #: gtk/a11y/gtkrenderercellaccessible.c:97
 msgid "Cell renderer"
@@ -230,7 +230,7 @@ msgstr ""
 #: gtk/gtkframe.c:232 gtk/gtklabel.c:806 gtk/gtkmenuitem.c:791
 #: gtk/gtktoolbutton.c:243 gtk/gtktoolitemgroup.c:1639
 msgid "Label"
-msgstr ""
+msgstr "Aglam"
 
 #: gtk/deprecated/gtkaction.c:265
 msgid "The label used for menu items and buttons that activate this action."
@@ -238,7 +238,7 @@ msgstr ""
 
 #: gtk/deprecated/gtkaction.c:284
 msgid "Short label"
-msgstr ""
+msgstr "Tabzimt tawezzlant"
 
 #: gtk/deprecated/gtkaction.c:285
 msgid "A shorter label that may be used on toolbar buttons."
@@ -246,7 +246,7 @@ msgstr ""
 
 #: gtk/deprecated/gtkaction.c:300
 msgid "Tooltip"
-msgstr ""
+msgstr "Tilillect n telɣut"
 
 #: gtk/deprecated/gtkaction.c:301
 msgid "A tooltip for this action."
@@ -322,7 +322,7 @@ msgstr ""
 
 #: gtk/deprecated/gtkaction.c:451
 msgid "Hide if empty"
-msgstr ""
+msgstr "Ffer ma yella d ilem"
 
 #: gtk/deprecated/gtkaction.c:452
 msgid "When TRUE, empty menu proxies for this action are hidden."
@@ -349,7 +349,7 @@ msgstr ""
 
 #: gtk/deprecated/gtkaction.c:497
 msgid "Action Group"
-msgstr ""
+msgstr "Agraw n tigawt"
 
 #: gtk/deprecated/gtkaction.c:498
 msgid ""
@@ -510,7 +510,7 @@ msgstr ""
 
 #: gtk/deprecated/gtkcolorsel.c:332
 msgid "Has palette"
-msgstr ""
+msgstr "Γur-s RGBA"
 
 #: gtk/deprecated/gtkcolorsel.c:333
 msgid "Whether a palette should be used"
@@ -522,11 +522,11 @@ msgstr "Ini amiran"
 
 #: gtk/deprecated/gtkcolorsel.c:348
 msgid "The current color"
-msgstr ""
+msgstr "Ini imiran"
 
 #: gtk/deprecated/gtkcolorsel.c:354 gtk/gtkcolorbutton.c:217
 msgid "Current Alpha"
-msgstr ""
+msgstr "Alpha imiran"
 
 #: gtk/deprecated/gtkcolorsel.c:355
 msgid "The current opacity value (0 fully transparent, 65535 fully opaque)"
@@ -534,7 +534,7 @@ msgstr ""
 
 #: gtk/deprecated/gtkcolorsel.c:369
 msgid "Current RGBA"
-msgstr ""
+msgstr "RGBA imiran"
 
 #: gtk/deprecated/gtkcolorsel.c:370
 msgid "The current RGBA color"
@@ -542,7 +542,7 @@ msgstr ""
 
 #: gtk/deprecated/gtkcolorseldialog.c:136
 msgid "Color Selection"
-msgstr ""
+msgstr "Tafrant n yini"
 
 #: gtk/deprecated/gtkcolorseldialog.c:137
 msgid "The color selection embedded in the dialog."
@@ -550,7 +550,7 @@ msgstr ""
 
 #: gtk/deprecated/gtkcolorseldialog.c:143
 msgid "OK Button"
-msgstr ""
+msgstr "Taqeffalt IH"
 
 #: gtk/deprecated/gtkcolorseldialog.c:144
 msgid "The OK button of the dialog."
@@ -558,7 +558,7 @@ msgstr ""
 
 #: gtk/deprecated/gtkcolorseldialog.c:150
 msgid "Cancel Button"
-msgstr ""
+msgstr "Sefsex taqeffalt"
 
 #: gtk/deprecated/gtkcolorseldialog.c:151
 msgid "The cancel button of the dialog."
@@ -608,7 +608,7 @@ msgstr ""
 
 #: gtk/deprecated/gtkhandlebox.c:241
 msgid "Snap edge"
-msgstr ""
+msgstr "Tama n zzerb"
 
 #: gtk/deprecated/gtkhandlebox.c:242
 msgid ""
@@ -698,7 +698,7 @@ msgstr ""
 
 #: gtk/deprecated/gtknumerableicon.c:642
 msgid "Icon's count"
-msgstr ""
+msgstr "Amḍan n tignitin"
 
 #: gtk/deprecated/gtknumerableicon.c:643
 msgid "The count of the emblem currently displayed"
@@ -738,7 +738,7 @@ msgstr ""
 
 #: gtk/deprecated/gtkradioaction.c:120
 msgid "The value"
-msgstr ""
+msgstr "Azal"
 
 #: gtk/deprecated/gtkradioaction.c:121
 msgid ""
@@ -749,7 +749,7 @@ msgstr ""
 #: gtk/deprecated/gtkradioaction.c:139 gtk/gtkradiobutton.c:184
 #: gtk/gtkradiomenuitem.c:424 gtk/gtkradiotoolbutton.c:83
 msgid "Group"
-msgstr ""
+msgstr "Agraw"
 
 #: gtk/deprecated/gtkradioaction.c:140
 msgid "The radio action whose group this action belongs to."
@@ -757,7 +757,7 @@ msgstr ""
 
 #: gtk/deprecated/gtkradioaction.c:157
 msgid "The current value"
-msgstr ""
+msgstr "Azal-a"
 
 #: gtk/deprecated/gtkradioaction.c:158
 msgid ""
@@ -767,7 +767,7 @@ msgstr ""
 
 #: gtk/deprecated/gtkrecentaction.c:674 gtk/gtkrecentchoosermenu.c:239
 msgid "Show Numbers"
-msgstr ""
+msgstr "Sken uṭṭunen"
 
 #: gtk/deprecated/gtkrecentaction.c:675 gtk/gtkrecentchoosermenu.c:240
 msgid "Whether the items should be displayed with a number"
@@ -892,7 +892,7 @@ msgstr ""
 
 #: gtk/deprecated/gtktable.c:185
 msgid "Rows"
-msgstr ""
+msgstr "Aduren"
 
 #: gtk/deprecated/gtktable.c:186
 msgid "The number of rows in the table"
@@ -900,7 +900,7 @@ msgstr ""
 
 #: gtk/deprecated/gtktable.c:194
 msgid "Columns"
-msgstr ""
+msgstr "Tigejda"
 
 #: gtk/deprecated/gtktable.c:195
 msgid "The number of columns in the table"
@@ -933,7 +933,7 @@ msgstr ""
 
 #: gtk/deprecated/gtktable.c:229 gtk/gtkgrid.c:1795
 msgid "Left attachment"
-msgstr ""
+msgstr "Amedday n uzelmaḍ"
 
 #: gtk/deprecated/gtktable.c:230 gtk/gtkgrid.c:1796 gtk/gtkmenu.c:966
 msgid "The column number to attach the left side of the child to"
@@ -941,7 +941,7 @@ msgstr ""
 
 #: gtk/deprecated/gtktable.c:236
 msgid "Right attachment"
-msgstr ""
+msgstr "Amedday n uyeffus"
 
 #: gtk/deprecated/gtktable.c:237
 msgid "The column number to attach the right side of a child widget to"
@@ -949,7 +949,7 @@ msgstr ""
 
 #: gtk/deprecated/gtktable.c:243 gtk/gtkgrid.c:1802
 msgid "Top attachment"
-msgstr ""
+msgstr "Amedday n ufella"
 
 #: gtk/deprecated/gtktable.c:244
 msgid "The row number to attach the top of a child widget to"
@@ -957,7 +957,7 @@ msgstr ""
 
 #: gtk/deprecated/gtktable.c:250
 msgid "Bottom attachment"
-msgstr ""
+msgstr "Amedday n wadda"
 
 #: gtk/deprecated/gtktable.c:251 gtk/gtkmenu.c:990
 msgid "The row number to attach the bottom of the child to"
@@ -965,7 +965,7 @@ msgstr ""
 
 #: gtk/deprecated/gtktable.c:257
 msgid "Horizontal options"
-msgstr ""
+msgstr "Tixtiṛiyin tiglawanin"
 
 #: gtk/deprecated/gtktable.c:258
 msgid "Options specifying the horizontal behaviour of the child"
@@ -973,7 +973,7 @@ msgstr ""
 
 #: gtk/deprecated/gtktable.c:264
 msgid "Vertical options"
-msgstr ""
+msgstr "Tixtiṛiyin irataken"
 
 #: gtk/deprecated/gtktable.c:265
 msgid "Options specifying the vertical behaviour of the child"
@@ -1033,7 +1033,7 @@ msgstr ""
 
 #: gtk/deprecated/gtktrayicon-x11.c:144
 msgid "Error color"
-msgstr ""
+msgstr "Ini n tuccḍiwin"
 
 #: gtk/deprecated/gtktrayicon-x11.c:145
 msgid "Error color for symbolic icons"
@@ -1057,7 +1057,7 @@ msgstr ""
 
 #: gtk/deprecated/gtktrayicon-x11.c:168 gtk/gtkbox.c:350
 msgid "Padding"
-msgstr ""
+msgstr "Taččart"
 
 #: gtk/deprecated/gtktrayicon-x11.c:169
 msgid "Padding that should be put around icons in the tray"
@@ -1089,7 +1089,7 @@ msgstr ""
 
 #: gtk/gtkaboutdialog.c:349
 msgid "Program name"
-msgstr ""
+msgstr "Isem n wahil"
 
 #: gtk/gtkaboutdialog.c:350
 msgid ""
@@ -1099,27 +1099,27 @@ msgstr ""
 
 #: gtk/gtkaboutdialog.c:363
 msgid "Program version"
-msgstr ""
+msgstr "Lqem n wahil"
 
 #: gtk/gtkaboutdialog.c:364
 msgid "The version of the program"
-msgstr ""
+msgstr "Lqem n wahil"
 
 #: gtk/gtkaboutdialog.c:377
 msgid "Copyright string"
-msgstr ""
+msgstr "Azrir n yizerfan"
 
 #: gtk/gtkaboutdialog.c:378
 msgid "Copyright information for the program"
-msgstr ""
+msgstr "Talɣut n yizerfan i wahil"
 
 #: gtk/gtkaboutdialog.c:393
 msgid "Comments string"
-msgstr ""
+msgstr "Azrir n yiwenniten"
 
 #: gtk/gtkaboutdialog.c:394
 msgid "Comments about the program"
-msgstr ""
+msgstr "Iwenniten ɣef wahil"
 
 #: gtk/gtkaboutdialog.c:414
 msgid "License"
@@ -1127,7 +1127,7 @@ msgstr "Turagt"
 
 #: gtk/gtkaboutdialog.c:415
 msgid "The license of the program"
-msgstr ""
+msgstr "Turagt n wahil"
 
 #: gtk/gtkaboutdialog.c:442
 msgid "License Type"
@@ -1135,7 +1135,7 @@ msgstr "Anaw n turagt"
 
 #: gtk/gtkaboutdialog.c:443
 msgid "The license type of the program"
-msgstr ""
+msgstr "Anaw n turagt n wahil"
 
 #: gtk/gtkaboutdialog.c:458
 msgid "Website URL"
@@ -1147,7 +1147,7 @@ msgstr ""
 
 #: gtk/gtkaboutdialog.c:472
 msgid "Website label"
-msgstr ""
+msgstr "Tabzimt n usmel web"
 
 #: gtk/gtkaboutdialog.c:473
 msgid "The label for the link to the website of the program"
@@ -1231,7 +1231,7 @@ msgstr ""
 #: gtk/gtkaccessible.c:156 gtk/gtkeventcontroller.c:168
 #: gtk/gtktreeviewcolumn.c:337
 msgid "Widget"
-msgstr ""
+msgstr "Awiǧit"
 
 #: gtk/gtkaccessible.c:157
 msgid "The widget referenced by this accessible."
@@ -1267,7 +1267,7 @@ msgstr ""
 #: gtk/gtknotebook.c:841 gtk/gtkpaned.c:368 gtk/gtkpopover.c:1768
 #: gtk/gtkpopovermenu.c:384 gtk/gtkstack.c:537 gtk/gtktoolitemgroup.c:1716
 msgid "Position"
-msgstr ""
+msgstr "Adeg"
 
 #: gtk/gtkactionbar.c:346 gtk/gtkbox.c:366 gtk/gtkheaderbar.c:2021
 #: gtk/gtknotebook.c:842 gtk/gtkpopovermenu.c:385 gtk/gtkstack.c:538
@@ -1343,7 +1343,7 @@ msgstr ""
 
 #: gtk/gtkappchooserbutton.c:647 gtk/gtkappchooserdialog.c:688
 msgid "Heading"
-msgstr ""
+msgstr "Azwel"
 
 #: gtk/gtkappchooserbutton.c:648 gtk/gtkappchooserdialog.c:689
 msgid "The text to show at the top of the dialog"
@@ -1399,7 +1399,7 @@ msgstr ""
 
 #: gtk/gtkappchooserwidget.c:987
 msgid "Show all apps"
-msgstr ""
+msgstr "Sken-d akk isnasen"
 
 #: gtk/gtkappchooserwidget.c:988
 msgid "Whether the widget should show all applications"
@@ -1439,7 +1439,7 @@ msgstr ""
 
 #: gtk/gtkapplication.c:865
 msgid "Menubar"
-msgstr ""
+msgstr "Tafeggagt n wumuɣ"
 
 #: gtk/gtkapplication.c:866
 msgid "The GMenuModel for the menubar"
@@ -1479,7 +1479,7 @@ msgstr ""
 
 #: gtk/gtkaspectframe.c:125
 msgid "Ratio"
-msgstr ""
+msgstr "Assaɣ"
 
 #: gtk/gtkaspectframe.c:126
 msgid "Aspect ratio if obey_child is FALSE"
@@ -1527,7 +1527,7 @@ msgstr ""
 
 #: gtk/gtkassistant.c:589
 msgid "Page title"
-msgstr ""
+msgstr "Azwel n usebtar"
 
 #: gtk/gtkassistant.c:590
 msgid "The title of the assistant page"
@@ -1599,7 +1599,7 @@ msgstr ""
 
 #: gtk/gtkbbox.c:275
 msgid "Layout style"
-msgstr ""
+msgstr "Aɣanib n tneɣruft"
 
 #: gtk/gtkbbox.c:276
 msgid ""
@@ -1628,7 +1628,7 @@ msgstr ""
 #: gtk/gtkbox.c:278 gtk/gtkcellareabox.c:310 gtk/gtkexpander.c:342
 #: gtk/gtkheaderbar.c:2048 gtk/gtkiconview.c:524 gtk/gtktreeviewcolumn.c:276
 msgid "Spacing"
-msgstr ""
+msgstr "Tallunt"
 
 #: gtk/gtkbox.c:279 gtk/gtkheaderbar.c:2049
 msgid "The amount of space between children"
@@ -1659,7 +1659,7 @@ msgstr ""
 
 #: gtk/gtkbox.c:335 gtk/gtktoolitemgroup.c:1702
 msgid "Fill"
-msgstr ""
+msgstr "Aččar"
 
 #: gtk/gtkbox.c:336
 msgid ""
@@ -1673,7 +1673,7 @@ msgstr ""
 
 #: gtk/gtkbuilder.c:292
 msgid "Translation Domain"
-msgstr ""
+msgstr "Taɣult n usuqqel"
 
 #: gtk/gtkbuilder.c:293
 msgid "The translation domain used by gettext"
@@ -1688,7 +1688,7 @@ msgstr ""
 #: gtk/gtkbutton.c:288 gtk/gtkexpander.c:317 gtk/gtklabel.c:827
 #: gtk/gtkmenuitem.c:805 gtk/gtktoolbutton.c:250
 msgid "Use underline"
-msgstr ""
+msgstr "Seqdec aderrer"
 
 #: gtk/gtkbutton.c:289 gtk/gtkexpander.c:318 gtk/gtklabel.c:828
 #: gtk/gtkmenuitem.c:806
@@ -1724,7 +1724,7 @@ msgstr ""
 
 #: gtk/gtkbutton.c:374
 msgid "Image position"
-msgstr ""
+msgstr "Adig n tugna"
 
 #: gtk/gtkbutton.c:375
 msgid "The position of the image relative to the text"
@@ -1732,7 +1732,7 @@ msgstr ""
 
 #: gtk/gtkbutton.c:523
 msgid "Default Spacing"
-msgstr ""
+msgstr "Asiẓi amezwer"
 
 #: gtk/gtkbutton.c:524
 msgid "Extra space to add for GTK_CAN_DEFAULT buttons"
@@ -1786,7 +1786,7 @@ msgstr ""
 
 #: gtk/gtkbutton.c:626
 msgid "Image spacing"
-msgstr ""
+msgstr "Asiẓi n tugna"
 
 #: gtk/gtkbutton.c:627
 msgid "Spacing in pixels between the image and label"
@@ -1794,7 +1794,7 @@ msgstr ""
 
 #: gtk/gtkcalendar.c:398
 msgid "Year"
-msgstr ""
+msgstr "Aseggas"
 
 #: gtk/gtkcalendar.c:399
 msgid "The selected year"
@@ -1802,7 +1802,7 @@ msgstr ""
 
 #: gtk/gtkcalendar.c:412
 msgid "Month"
-msgstr ""
+msgstr "Aggur"
 
 #: gtk/gtkcalendar.c:413
 msgid "The selected month (as a number between 0 and 11)"
@@ -1810,7 +1810,7 @@ msgstr ""
 
 #: gtk/gtkcalendar.c:427
 msgid "Day"
-msgstr ""
+msgstr "Ass"
 
 #: gtk/gtkcalendar.c:428
 msgid ""
@@ -1820,23 +1820,23 @@ msgstr ""
 
 #: gtk/gtkcalendar.c:442
 msgid "Show Heading"
-msgstr ""
+msgstr "Sken azwel"
 
 #: gtk/gtkcalendar.c:443
 msgid "If TRUE, a heading is displayed"
-msgstr ""
+msgstr "Ma yella d TIDET, azwel ad yili yettwaskan"
 
 #: gtk/gtkcalendar.c:457
 msgid "Show Day Names"
-msgstr ""
+msgstr "Sken ismawen n wass"
 
 #: gtk/gtkcalendar.c:458
 msgid "If TRUE, day names are displayed"
-msgstr ""
+msgstr "Ma yella d TIDET, isem ad yili yettwaskan"
 
 #: gtk/gtkcalendar.c:471
 msgid "No Month Change"
-msgstr ""
+msgstr "Ulac asenfel n wayyur"
 
 #: gtk/gtkcalendar.c:472
 msgid "If TRUE, the selected month cannot be changed"
@@ -1844,7 +1844,7 @@ msgstr ""
 
 #: gtk/gtkcalendar.c:486
 msgid "Show Week Numbers"
-msgstr ""
+msgstr "Sken uṭṭunen n umalas"
 
 #: gtk/gtkcalendar.c:487
 msgid "If TRUE, week numbers are displayed"
@@ -1852,11 +1852,11 @@ msgstr ""
 
 #: gtk/gtkcalendar.c:502
 msgid "Details Width"
-msgstr ""
+msgstr "Talqayt n tehri"
 
 #: gtk/gtkcalendar.c:503
 msgid "Details width in characters"
-msgstr ""
+msgstr "Talqayt n tehri deg yisekkilen"
 
 #: gtk/gtkcalendar.c:518
 msgid "Details Height"
@@ -1868,7 +1868,7 @@ msgstr ""
 
 #: gtk/gtkcalendar.c:535
 msgid "Show Details"
-msgstr ""
+msgstr "Sken tealqayt"
 
 #: gtk/gtkcalendar.c:536
 msgid "If TRUE, details are shown"
@@ -1908,7 +1908,7 @@ msgstr ""
 
 #: gtk/gtkcellareabox.c:346
 msgid "Align"
-msgstr ""
+msgstr "Tarigla"
 
 #: gtk/gtkcellareabox.c:347
 msgid "Whether cell should align with adjacent rows"
@@ -1958,7 +1958,7 @@ msgstr ""
 
 #: gtk/gtkcellareacontext.c:115
 msgid "Area"
-msgstr ""
+msgstr "Tamennaḍt"
 
 #: gtk/gtkcellareacontext.c:116
 msgid "The Cell Area this context was created for"
@@ -2131,7 +2131,7 @@ msgstr ""
 
 #: gtk/gtkcellrenderer.c:432
 msgid "Editing"
-msgstr ""
+msgstr "Asiẓreg"
 
 #: gtk/gtkcellrenderer.c:433
 msgid "Whether the cell renderer is currently in editing mode"
@@ -2147,7 +2147,7 @@ msgstr ""
 
 #: gtk/gtkcellrenderercombo.c:128
 msgid "Model"
-msgstr ""
+msgstr "Tamudemt"
 
 #: gtk/gtkcellrenderercombo.c:129
 msgid "The model containing the possible values for the combo box"
@@ -2155,7 +2155,7 @@ msgstr ""
 
 #: gtk/gtkcellrenderercombo.c:151
 msgid "Text Column"
-msgstr ""
+msgstr "Tigejdit n uḍris"
 
 #: gtk/gtkcellrenderercombo.c:152
 msgid "A column in the data source model to get the strings from"
@@ -2195,7 +2195,7 @@ msgstr ""
 
 #: gtk/gtkcellrendererpixbuf.c:180
 msgid "surface"
-msgstr ""
+msgstr "tajumma"
 
 #: gtk/gtkcellrendererpixbuf.c:181
 msgid "The surface to render"
@@ -2211,7 +2211,7 @@ msgstr ""
 
 #: gtk/gtkcellrendererpixbuf.c:227
 msgid "Detail"
-msgstr ""
+msgstr "Talqayt"
 
 #: gtk/gtkcellrendererpixbuf.c:228
 msgid "Render detail to pass to the theme engine"
@@ -2219,7 +2219,7 @@ msgstr ""
 
 #: gtk/gtkcellrendererpixbuf.c:263
 msgid "Follow State"
-msgstr ""
+msgstr "Ḍfer addad"
 
 #: gtk/gtkcellrendererpixbuf.c:264
 msgid "Whether the rendered pixbuf should be colorized according to the state"
@@ -2228,7 +2228,7 @@ msgstr ""
 #: gtk/gtkcellrendererpixbuf.c:281 gtk/gtkimage.c:359 gtk/gtkmodelbutton.c:1168
 #: gtk/gtkshortcutsshortcut.c:551 gtk/gtkwindow.c:844
 msgid "Icon"
-msgstr ""
+msgstr "Tignit"
 
 #: gtk/gtkcellrendererprogress.c:139
 msgid "Value of the progress bar"
@@ -2238,7 +2238,7 @@ msgstr ""
 #: gtk/gtkentrybuffer.c:350 gtk/gtkentry.c:953 gtk/gtkmessagedialog.c:214
 #: gtk/gtkmodelbutton.c:1182 gtk/gtkprogressbar.c:287 gtk/gtktextbuffer.c:219
 msgid "Text"
-msgstr ""
+msgstr "Aḍris"
 
 #: gtk/gtkcellrendererprogress.c:157
 msgid "Text on the progress bar"
@@ -2275,7 +2275,7 @@ msgstr ""
 #: gtk/gtkcellrendererprogress.c:226 gtk/gtklevelbar.c:1097
 #: gtk/gtkmodelbutton.c:1244 gtk/gtkprogressbar.c:264 gtk/gtkrange.c:441
 msgid "Inverted"
-msgstr ""
+msgstr "Yetti"
 
 #: gtk/gtkcellrendererprogress.c:227 gtk/gtkprogressbar.c:265
 msgid "Invert the direction in which the progress bar grows"
@@ -2300,7 +2300,7 @@ msgstr ""
 
 #: gtk/gtkcellrendererspin.c:143 gtk/gtkscale.c:767 gtk/gtkspinbutton.c:395
 msgid "Digits"
-msgstr ""
+msgstr "Izwilen"
 
 #: gtk/gtkcellrendererspin.c:144 gtk/gtkspinbutton.c:396
 msgid "The number of decimal places to display"
@@ -2324,7 +2324,7 @@ msgstr ""
 
 #: gtk/gtkcellrenderertext.c:262
 msgid "Markup"
-msgstr ""
+msgstr "Ticreḍt"
 
 #: gtk/gtkcellrenderertext.c:263
 msgid "Marked up text to render"
@@ -2332,7 +2332,7 @@ msgstr ""
 
 #: gtk/gtkcellrenderertext.c:269 gtk/gtkentry.c:1493 gtk/gtklabel.c:813
 msgid "Attributes"
-msgstr ""
+msgstr "Iraten"
 
 #: gtk/gtkcellrenderertext.c:270
 msgid "A list of style attributes to apply to the text of the renderer"
@@ -2348,52 +2348,52 @@ msgstr ""
 
 #: gtk/gtkcellrenderertext.c:283 gtk/gtkcellview.c:217 gtk/gtktexttag.c:216
 msgid "Background color name"
-msgstr ""
+msgstr "Isem n yini n ugilal"
 
 #: gtk/gtkcellrenderertext.c:284 gtk/gtkcellview.c:218 gtk/gtktexttag.c:217
 msgid "Background color as a string"
-msgstr ""
+msgstr "Ini n ugilal am yizrir"
 
 #: gtk/gtkcellrenderertext.c:298 gtk/gtkcellview.c:233 gtk/gtktexttag.c:231
 msgid "Background color"
-msgstr ""
+msgstr "Ini n ugilal"
 
 #: gtk/gtkcellrenderertext.c:299 gtk/gtkcellview.c:234 gtk/gtktexttag.c:232
 msgid "Background color as a GdkColor"
-msgstr ""
+msgstr "Ini n ugilal am GdkColor"
 
 #: gtk/gtkcellrenderertext.c:313
 msgid "Background color as RGBA"
-msgstr ""
+msgstr "Ini n ugilal am RGBA"
 
 #: gtk/gtkcellrenderertext.c:314 gtk/gtkcellview.c:249 gtk/gtktexttag.c:247
 msgid "Background color as a GdkRGBA"
-msgstr ""
+msgstr "Ini n ugilal am GdkRGBA"
 
 #: gtk/gtkcellrenderertext.c:319 gtk/gtktexttag.c:262
 msgid "Foreground color name"
-msgstr ""
+msgstr "Isem n yini n uzdat-ɣawas"
 
 #: gtk/gtkcellrenderertext.c:320 gtk/gtktexttag.c:263
 msgid "Foreground color as a string"
-msgstr ""
+msgstr "Ini n uzdat-ɣawas am uzrir"
 
 #: gtk/gtkcellrenderertext.c:335 gtk/gtktexttag.c:278
 msgid "Foreground color as a GdkColor"
-msgstr ""
+msgstr "Ini n uzdat-ɣawas am GdkColor"
 
 #: gtk/gtkcellrenderertext.c:349
 msgid "Foreground color as RGBA"
-msgstr ""
+msgstr "Ini n uzdat-ɣawas am RGBA"
 
 #: gtk/gtkcellrenderertext.c:350 gtk/gtktexttag.c:293
 msgid "Foreground color as a GdkRGBA"
-msgstr ""
+msgstr "Ini n uzdat-ɣawas am GdkRGBA"
 
 #: gtk/gtkcellrenderertext.c:357 gtk/gtkentry.c:861 gtk/gtktexttag.c:309
 #: gtk/gtktextview.c:826
 msgid "Editable"
-msgstr ""
+msgstr "Yettwabeddal"
 
 #: gtk/gtkcellrenderertext.c:358 gtk/gtktexttag.c:310 gtk/gtktextview.c:827
 msgid "Whether the text can be modified by the user"
@@ -2402,7 +2402,7 @@ msgstr ""
 #: gtk/gtkcellrenderertext.c:364 gtk/gtkcellrenderertext.c:371
 #: gtk/gtkfontchooser.c:64 gtk/gtktexttag.c:325 gtk/gtktexttag.c:333
 msgid "Font"
-msgstr ""
+msgstr "Tasefsit"
 
 #: gtk/gtkcellrenderertext.c:365 gtk/gtkfontchooser.c:65 gtk/gtktexttag.c:326
 msgid "Font description as a string, e.g. \"Sans Italic 12\""
@@ -2414,7 +2414,7 @@ msgstr ""
 
 #: gtk/gtkcellrenderertext.c:378 gtk/gtktexttag.c:341
 msgid "Font family"
-msgstr ""
+msgstr "Tasefsit"
 
 #: gtk/gtkcellrenderertext.c:379 gtk/gtktexttag.c:342
 msgid "Name of the font family, e.g. Sans, Helvetica, Times, Monospace"
@@ -2423,47 +2423,47 @@ msgstr ""
 #: gtk/gtkcellrenderertext.c:385 gtk/gtkcellrenderertext.c:386
 #: gtk/gtktexttag.c:349
 msgid "Font style"
-msgstr ""
+msgstr "Aɣanid n tsefsit"
 
 #: gtk/gtkcellrenderertext.c:393 gtk/gtkcellrenderertext.c:394
 #: gtk/gtktexttag.c:358
 msgid "Font variant"
-msgstr ""
+msgstr "Talmest n tsefsit"
 
 #: gtk/gtkcellrenderertext.c:401 gtk/gtkcellrenderertext.c:402
 #: gtk/gtktexttag.c:367
 msgid "Font weight"
-msgstr ""
+msgstr "Tuzert n tsefsit"
 
 #: gtk/gtkcellrenderertext.c:409 gtk/gtkcellrenderertext.c:410
 #: gtk/gtktexttag.c:378
 msgid "Font stretch"
-msgstr ""
+msgstr "Ajbad n tsefsit"
 
 #: gtk/gtkcellrenderertext.c:417 gtk/gtkcellrenderertext.c:418
 #: gtk/gtktexttag.c:387
 msgid "Font size"
-msgstr ""
+msgstr "Teɣzi n tsefsit"
 
 #: gtk/gtkcellrenderertext.c:425 gtk/gtktexttag.c:407
 msgid "Font points"
-msgstr ""
+msgstr "Agazen n tsefsit"
 
 #: gtk/gtkcellrenderertext.c:426 gtk/gtktexttag.c:408
 msgid "Font size in points"
-msgstr ""
+msgstr "Teɣzi n tsefsit deg wagazen"
 
 #: gtk/gtkcellrenderertext.c:433 gtk/gtktexttag.c:397
 msgid "Font scale"
-msgstr ""
+msgstr "Tafesna n tsefsit"
 
 #: gtk/gtkcellrenderertext.c:434
 msgid "Font scaling factor"
-msgstr ""
+msgstr "Ameskar n trigla n tsefsit"
 
 #: gtk/gtkcellrenderertext.c:441 gtk/gtktexttag.c:476
 msgid "Rise"
-msgstr ""
+msgstr "Snerni"
 
 #: gtk/gtkcellrenderertext.c:442
 msgid ""
@@ -2472,7 +2472,7 @@ msgstr ""
 
 #: gtk/gtkcellrenderertext.c:450 gtk/gtktexttag.c:516
 msgid "Strikethrough"
-msgstr ""
+msgstr "Jerreḍ"
 
 #: gtk/gtkcellrenderertext.c:451 gtk/gtktexttag.c:517
 msgid "Whether to strike through the text"
@@ -2480,7 +2480,7 @@ msgstr ""
 
 #: gtk/gtkcellrenderertext.c:457 gtk/gtktexttag.c:524
 msgid "Underline"
-msgstr ""
+msgstr "Derrer"
 
 #: gtk/gtkcellrenderertext.c:458 gtk/gtktexttag.c:525
 msgid "Style of underline for this text"
@@ -2488,7 +2488,7 @@ msgstr ""
 
 #: gtk/gtkcellrenderertext.c:465 gtk/gtkfontchooser.c:154 gtk/gtktexttag.c:436
 msgid "Language"
-msgstr ""
+msgstr "Tutlayt"
 
 #: gtk/gtkcellrenderertext.c:466
 msgid ""
@@ -2526,7 +2526,7 @@ msgstr ""
 
 #: gtk/gtkcellrenderertext.c:542 gtk/gtktexttag.c:569
 msgid "Wrap mode"
-msgstr ""
+msgstr "Askar n ukbel"
 
 #: gtk/gtkcellrenderertext.c:543
 msgid ""
@@ -2536,7 +2536,7 @@ msgstr ""
 
 #: gtk/gtkcellrenderertext.c:561 gtk/gtkcombobox.c:923
 msgid "Wrap width"
-msgstr ""
+msgstr "Teɣzi n ukbel"
 
 #: gtk/gtkcellrenderertext.c:562
 msgid "The width at which the text is wrapped"
@@ -2544,7 +2544,7 @@ msgstr ""
 
 #: gtk/gtkcellrenderertext.c:580 gtk/gtktreeviewcolumn.c:344
 msgid "Alignment"
-msgstr ""
+msgstr "Areyyec"
 
 #: gtk/gtkcellrenderertext.c:581
 msgid "How to align the lines"
@@ -2568,7 +2568,7 @@ msgstr ""
 
 #: gtk/gtkcellrenderertext.c:610 gtk/gtktexttag.c:730
 msgid "Foreground set"
-msgstr ""
+msgstr "Taggayt n uzdat-ɣawas"
 
 #: gtk/gtkcellrenderertext.c:611 gtk/gtktexttag.c:731
 msgid "Whether this tag affects the foreground color"
@@ -2592,7 +2592,7 @@ msgstr ""
 
 #: gtk/gtkcellrenderertext.c:622 gtk/gtktexttag.c:742
 msgid "Font style set"
-msgstr ""
+msgstr "Taggayt n uɣanib n tsefsit"
 
 #: gtk/gtkcellrenderertext.c:623 gtk/gtktexttag.c:743
 msgid "Whether this tag affects the font style"
@@ -2600,7 +2600,7 @@ msgstr ""
 
 #: gtk/gtkcellrenderertext.c:626 gtk/gtktexttag.c:746
 msgid "Font variant set"
-msgstr ""
+msgstr "Taggayt n tulmist n tsefsit"
 
 #: gtk/gtkcellrenderertext.c:627 gtk/gtktexttag.c:747
 msgid "Whether this tag affects the font variant"
@@ -2608,7 +2608,7 @@ msgstr ""
 
 #: gtk/gtkcellrenderertext.c:630 gtk/gtktexttag.c:750
 msgid "Font weight set"
-msgstr ""
+msgstr "Taggayt n teɣzi n tsefsit"
 
 #: gtk/gtkcellrenderertext.c:631 gtk/gtktexttag.c:751
 msgid "Whether this tag affects the font weight"
@@ -2616,7 +2616,7 @@ msgstr ""
 
 #: gtk/gtkcellrenderertext.c:634 gtk/gtktexttag.c:754
 msgid "Font stretch set"
-msgstr ""
+msgstr "Taggayt n ujbad n tsefsit"
 
 #: gtk/gtkcellrenderertext.c:635 gtk/gtktexttag.c:755
 msgid "Whether this tag affects the font stretch"
@@ -2664,7 +2664,7 @@ msgstr ""
 
 #: gtk/gtkcellrenderertext.c:658 gtk/gtktexttag.c:770
 msgid "Language set"
-msgstr ""
+msgstr "Taggayt n tutlayt"
 
 #: gtk/gtkcellrenderertext.c:659 gtk/gtktexttag.c:771
 msgid "Whether this tag affects the language the text is rendered as"
@@ -2704,7 +2704,7 @@ msgstr ""
 
 #: gtk/gtkcellrenderertoggle.c:154 gtk/gtklistbox.c:3920
 msgid "Activatable"
-msgstr ""
+msgstr "Activatable"
 
 #: gtk/gtkcellrenderertoggle.c:155
 msgid "The toggle button can be activated"
@@ -2720,16 +2720,16 @@ msgstr ""
 
 #: gtk/gtkcellrenderertoggle.c:170
 msgid "Indicator size"
-msgstr ""
+msgstr "Teɣzi n unamal"
 
 #: gtk/gtkcellrenderertoggle.c:171 gtk/gtkcheckbutton.c:233
 #: gtk/gtkcheckmenuitem.c:241
 msgid "Size of check or radio indicator"
-msgstr ""
+msgstr "Teɣzi n usenqed neɣ n unamal n uṛadyu"
 
 #: gtk/gtkcellview.c:248
 msgid "Background RGBA color"
-msgstr ""
+msgstr "Ini n RGBA n ugilal"
 
 #: gtk/gtkcellview.c:263
 msgid "CellView model"
@@ -2767,7 +2767,7 @@ msgstr ""
 
 #: gtk/gtkcellview.c:343
 msgid "Fit Model"
-msgstr ""
+msgstr "Askar amezgay"
 
 #: gtk/gtkcellview.c:344
 msgid "Whether to request enough space for every row in the model"
@@ -2775,11 +2775,11 @@ msgstr ""
 
 #: gtk/gtkcheckbutton.c:232 gtk/gtkcheckmenuitem.c:240
 msgid "Indicator Size"
-msgstr ""
+msgstr "Teɣzi n unamal"
 
 #: gtk/gtkcheckbutton.c:249 gtk/gtkexpander.c:414
 msgid "Indicator Spacing"
-msgstr ""
+msgstr "Asiẓi n unamal"
 
 #: gtk/gtkcheckbutton.c:250
 msgid "Spacing around check or radio indicator"
@@ -2807,7 +2807,7 @@ msgstr ""
 
 #: gtk/gtkcolorbutton.c:168 gtk/gtkcolorchooser.c:87
 msgid "Use alpha"
-msgstr ""
+msgstr "Seqdec Al^pha"
 
 #: gtk/gtkcolorbutton.c:169
 msgid "Whether to give the color an alpha value"
@@ -2815,11 +2815,11 @@ msgstr ""
 
 #: gtk/gtkcolorbutton.c:184
 msgid "The title of the color selection dialog"
-msgstr ""
+msgstr "Azwel n udiwenni n tefrant n yiselsa"
 
 #: gtk/gtkcolorbutton.c:202
 msgid "The selected color"
-msgstr ""
+msgstr "Ini i yettwafernen"
 
 #: gtk/gtkcolorbutton.c:218
 msgid "The selected opacity value (0 fully transparent, 65535 fully opaque)"
@@ -2827,15 +2827,15 @@ msgstr ""
 
 #: gtk/gtkcolorbutton.c:232
 msgid "Current RGBA Color"
-msgstr ""
+msgstr "Ini n RGBA imiran"
 
 #: gtk/gtkcolorbutton.c:233
 msgid "The selected RGBA color"
-msgstr ""
+msgstr "Ini RGBA i yettwafernen"
 
 #: gtk/gtkcolorbutton.c:274
 msgid "Show Editor"
-msgstr ""
+msgstr "Sken amaẓrag"
 
 #: gtk/gtkcolorbutton.c:275
 msgid "Whether to show the color editor right away"
@@ -2843,7 +2843,7 @@ msgstr ""
 
 #: gtk/gtkcolorchooser.c:67
 msgid "Color"
-msgstr ""
+msgstr "Ini"
 
 #: gtk/gtkcolorchooser.c:68
 msgid "Current color, as a GdkRGBA"
@@ -2855,23 +2855,23 @@ msgstr ""
 
 #: gtk/gtkcolorchooserdialog.c:213 gtk/gtkcolorchooserwidget.c:695
 msgid "Show editor"
-msgstr ""
+msgstr "Sken amaẓrag"
 
 #: gtk/gtkcolorscale.c:258
 msgid "Scale type"
-msgstr ""
+msgstr "Anaw n tfesna"
 
 #: gtk/gtkcolorswatch.c:719
 msgid "RGBA Color"
-msgstr ""
+msgstr "Ini n RGBA"
 
 #: gtk/gtkcolorswatch.c:719
 msgid "Color as RGBA"
-msgstr ""
+msgstr "Ini am RGBA"
 
 #: gtk/gtkcolorswatch.c:722 gtk/gtklabel.c:909 gtk/gtklistbox.c:3934
 msgid "Selectable"
-msgstr ""
+msgstr "Yettwafran"
 
 #: gtk/gtkcolorswatch.c:722
 msgid "Whether the swatch is selectable"
@@ -2879,7 +2879,7 @@ msgstr ""
 
 #: gtk/gtkcolorswatch.c:725
 msgid "Has Menu"
-msgstr ""
+msgstr "Γur-s umuɣ"
 
 #: gtk/gtkcolorswatch.c:725
 msgid "Whether the swatch should offer customization"
@@ -2915,7 +2915,7 @@ msgstr ""
 
 #: gtk/gtkcombobox.c:988
 msgid "Active item"
-msgstr ""
+msgstr "Aferdis urmid"
 
 #: gtk/gtkcombobox.c:989
 msgid "The item which is currently active"
@@ -2927,7 +2927,7 @@ msgstr ""
 
 #: gtk/gtkcombobox.c:1026 gtk/gtkentry.c:883
 msgid "Has Frame"
-msgstr ""
+msgstr "Γur-s akatar"
 
 #: gtk/gtkcombobox.c:1027
 msgid "Whether the combo box draws a frame around the child"
@@ -2965,7 +2965,7 @@ msgstr ""
 
 #: gtk/gtkcombobox.c:1111
 msgid "Entry Text Column"
-msgstr ""
+msgstr "Sekcem n tgejdit n uḍris"
 
 #: gtk/gtkcombobox.c:1112
 msgid ""
@@ -2975,7 +2975,7 @@ msgstr ""
 
 #: gtk/gtkcombobox.c:1129
 msgid "ID Column"
-msgstr ""
+msgstr "Tigejdit n usulay"
 
 #: gtk/gtkcombobox.c:1130
 msgid ""
@@ -2985,7 +2985,7 @@ msgstr ""
 
 #: gtk/gtkcombobox.c:1145
 msgid "Active id"
-msgstr ""
+msgstr "Asulay urmid"
 
 #: gtk/gtkcombobox.c:1146
 msgid "The value of the id column for the active row"
@@ -3011,7 +3011,7 @@ msgstr ""
 
 #: gtk/gtkcombobox.c:1209
 msgid "Arrow Size"
-msgstr ""
+msgstr "Tiddi n tneccabt"
 
 #: gtk/gtkcombobox.c:1210
 msgid "The minimum size of the arrow in the combo box"
@@ -3043,7 +3043,7 @@ msgstr ""
 
 #: gtk/gtkcontainer.c:549
 msgid "Child"
-msgstr ""
+msgstr "Aqrur"
 
 #: gtk/gtkcontainer.c:550
 msgid "Can be used to add a new child to the container"
@@ -3051,27 +3051,27 @@ msgstr ""
 
 #: gtk/gtkcssnode.c:628
 msgid "Style Classes"
-msgstr ""
+msgstr "Ismilen n uɣanib"
 
 #: gtk/gtkcssnode.c:628
 msgid "List of classes"
-msgstr ""
+msgstr "Tabdart n yismilen"
 
 #: gtk/gtkcssnode.c:633 gtk/gtkcssstyleproperty.c:223
 msgid "ID"
-msgstr ""
+msgstr "Asulay"
 
 #: gtk/gtkcssnode.c:633
 msgid "Unique ID"
-msgstr ""
+msgstr "Asulay asuf"
 
 #: gtk/gtkcssnode.c:643 gtk/gtkswitch.c:894
 msgid "State"
-msgstr ""
+msgstr "Addad"
 
 #: gtk/gtkcssnode.c:643
 msgid "State flags"
-msgstr ""
+msgstr "Anayen n waddad"
 
 #: gtk/gtkcssnode.c:649
 msgid "If other nodes can see this node"
@@ -3079,7 +3079,7 @@ msgstr ""
 
 #: gtk/gtkcssnode.c:654
 msgid "Widget type"
-msgstr ""
+msgstr "Anaw n uwiǧit"
 
 #: gtk/gtkcssnode.c:654
 msgid "GType of the widget"
@@ -3095,7 +3095,7 @@ msgstr ""
 
 #: gtk/gtkcssstyleproperty.c:208
 msgid "Animated"
-msgstr ""
+msgstr "Yettembiwil"
 
 #: gtk/gtkcssstyleproperty.c:209
 msgid "Set if the value can be animated"
@@ -3103,7 +3103,7 @@ msgstr ""
 
 #: gtk/gtkcssstyleproperty.c:215
 msgid "Affects"
-msgstr ""
+msgstr "Yettḥaz"
 
 #: gtk/gtkcssstyleproperty.c:216
 msgid "Set if the value affects the sizing of elements"
@@ -3115,7 +3115,7 @@ msgstr ""
 
 #: gtk/gtkcssstyleproperty.c:230
 msgid "Inherit"
-msgstr ""
+msgstr "Awṛat"
 
 #: gtk/gtkcssstyleproperty.c:231
 msgid "Set if the value is inherited by default"
@@ -3123,7 +3123,7 @@ msgstr ""
 
 #: gtk/gtkcssstyleproperty.c:237
 msgid "Initial value"
-msgstr ""
+msgstr "Azal n tazwara"
 
 #: gtk/gtkcssstyleproperty.c:238
 msgid "The initial specified value used for this property"
@@ -3147,7 +3147,7 @@ msgstr ""
 
 #: gtk/gtkdialog.c:615 gtk/gtkinfobar.c:565
 msgid "Button spacing"
-msgstr ""
+msgstr "Asiẓi n tqeffalt"
 
 #: gtk/gtkdialog.c:616 gtk/gtkinfobar.c:566
 msgid "Spacing between buttons"
@@ -3167,7 +3167,7 @@ msgstr ""
 
 #: gtk/gtkentrybuffer.c:364 gtk/gtkentry.c:1030
 msgid "Text length"
-msgstr ""
+msgstr "Teɣzi n uḍris"
 
 #: gtk/gtkentrybuffer.c:365
 msgid "Length of the text currently in the buffer"
@@ -3191,7 +3191,7 @@ msgstr ""
 
 #: gtk/gtkentry.c:845 gtk/gtklabel.c:931
 msgid "Cursor Position"
-msgstr ""
+msgstr "Asun n teḥnacaḍt"
 
 #: gtk/gtkentry.c:846 gtk/gtklabel.c:932
 msgid "The current position of the insertion cursor in chars"
@@ -3199,7 +3199,7 @@ msgstr ""
 
 #: gtk/gtkentry.c:853 gtk/gtklabel.c:939
 msgid "Selection Bound"
-msgstr ""
+msgstr "Tilisa n tefrayt"
 
 #: gtk/gtkentry.c:854 gtk/gtklabel.c:940
 msgid ""
@@ -3212,7 +3212,7 @@ msgstr ""
 
 #: gtk/gtkentry.c:876
 msgid "Visibility"
-msgstr ""
+msgstr "Tawalit"
 
 #: gtk/gtkentry.c:877
 msgid ""
@@ -3239,7 +3239,7 @@ msgstr ""
 
 #: gtk/gtkentry.c:913
 msgid "Activates default"
-msgstr ""
+msgstr "Iremmed imezwer"
 
 #: gtk/gtkentry.c:914
 msgid ""
@@ -3491,7 +3491,7 @@ msgstr ""
 
 #: gtk/gtkentry.c:1457 gtk/gtkimcontext.c:337 gtk/gtktextview.c:1012
 msgid "Purpose"
-msgstr ""
+msgstr "Asentel"
 
 #: gtk/gtkentry.c:1458 gtk/gtkimcontext.c:338 gtk/gtktextview.c:1013
 msgid "Purpose of the text field"
@@ -3527,11 +3527,11 @@ msgstr ""
 
 #: gtk/gtkentry.c:1537
 msgid "Emoji icon"
-msgstr ""
+msgstr "Tignit n yimujit"
 
 #: gtk/gtkentry.c:1538
 msgid "Whether to show an icon for Emoji"
-msgstr ""
+msgstr "Ma yella yeskan tignit i yimujit"
 
 #: gtk/gtkentry.c:1544
 msgid "Enable Emoji completion"
@@ -3579,7 +3579,7 @@ msgstr ""
 
 #: gtk/gtkentrycompletion.c:370 gtk/gtkiconview.c:445
 msgid "Text column"
-msgstr ""
+msgstr "Aris n tgejdit"
 
 #: gtk/gtkentrycompletion.c:371
 msgid "The column of the model containing the strings."
@@ -3675,7 +3675,7 @@ msgstr ""
 
 #: gtk/gtkexpander.c:325 gtk/gtklabel.c:820 gtk/gtkmodelbutton.c:1198
 msgid "Use markup"
-msgstr ""
+msgstr "Seqdec acraḍ"
 
 #: gtk/gtkexpander.c:326 gtk/gtklabel.c:821
 msgid "The text of the label includes XML markup. See pango_parse_markup()"
@@ -3688,7 +3688,7 @@ msgstr ""
 #: gtk/gtkexpander.c:352 gtk/gtkframe.c:263 gtk/gtktoolbutton.c:257
 #: gtk/gtktoolitemgroup.c:1646
 msgid "Label widget"
-msgstr ""
+msgstr "Awiǧit n tebzemt"
 
 #: gtk/gtkexpander.c:353
 msgid "A widget to display in place of the usual expander label"
@@ -3696,7 +3696,7 @@ msgstr ""
 
 #: gtk/gtkexpander.c:367
 msgid "Label fill"
-msgstr ""
+msgstr "Taččart n tebzimt"
 
 #: gtk/gtkexpander.c:368
 msgid "Whether the label widget should fill all available horizontal space"
@@ -3742,7 +3742,7 @@ msgstr ""
 
 #: gtk/gtkfilechooser.c:375
 msgid "Action"
-msgstr ""
+msgstr "Tigawt"
 
 #: gtk/gtkfilechooser.c:376
 msgid "The type of operation that the file selector is performing"
@@ -3750,7 +3750,7 @@ msgstr ""
 
 #: gtk/gtkfilechooser.c:382 gtk/gtkrecentchooser.c:266
 msgid "Filter"
-msgstr ""
+msgstr "Imsizdeg"
 
 #: gtk/gtkfilechooser.c:383
 msgid "The current filter for selecting which files are displayed"
@@ -3759,7 +3759,7 @@ msgstr ""
 #: gtk/gtkfilechooser.c:388 gtk/gtkplacessidebar.c:4839
 #: gtk/gtkplacesview.c:2345
 msgid "Local Only"
-msgstr ""
+msgstr "Adigan kan"
 
 #: gtk/gtkfilechooser.c:389
 msgid "Whether the selected file(s) should be limited to local file: URLs"
@@ -3800,7 +3800,7 @@ msgstr ""
 
 #: gtk/gtkfilechooser.c:418 gtk/gtkrecentchooser.c:206
 msgid "Select Multiple"
-msgstr ""
+msgstr "Fren aṭas"
 
 #: gtk/gtkfilechooser.c:419
 msgid "Whether to allow multiple files to be selected"
@@ -3808,7 +3808,7 @@ msgstr ""
 
 #: gtk/gtkfilechooser.c:425
 msgid "Show Hidden"
-msgstr ""
+msgstr "Sken uffir"
 
 #: gtk/gtkfilechooser.c:426
 msgid "Whether the hidden files and folders should be displayed"
@@ -3836,7 +3836,7 @@ msgstr ""
 
 #: gtk/gtkfilechoosernative.c:827
 msgid "Accept label"
-msgstr ""
+msgstr "Qbel tabzimt"
 
 #: gtk/gtkfilechoosernative.c:828
 msgid "The label on the accept button"
@@ -3844,7 +3844,7 @@ msgstr ""
 
 #: gtk/gtkfilechoosernative.c:840
 msgid "Cancel label"
-msgstr ""
+msgstr "Sefsex tabzimt"
 
 #: gtk/gtkfilechoosernative.c:841
 msgid "The label on the cancel button"
@@ -3852,7 +3852,7 @@ msgstr ""
 
 #: gtk/gtkfilechooserwidget.c:8674 gtk/gtkfilechooserwidget.c:8675
 msgid "Search mode"
-msgstr ""
+msgstr "Nadi askar"
 
 #: gtk/gtkfilechooserwidget.c:8681 gtk/gtkfilechooserwidget.c:8682
 #: gtk/gtkheaderbar.c:2034 gtk/gtkshortcutsshortcut.c:592
@@ -3861,7 +3861,7 @@ msgstr "Aduzwel"
 
 #: gtk/gtkfixed.c:156 gtk/gtklayout.c:648 gtk/gtktreeviewcolumn.c:260
 msgid "X position"
-msgstr ""
+msgstr "Ideg X"
 
 #: gtk/gtkfixed.c:157 gtk/gtklayout.c:649
 msgid "X position of child widget"
@@ -3869,7 +3869,7 @@ msgstr ""
 
 #: gtk/gtkfixed.c:164 gtk/gtklayout.c:658
 msgid "Y position"
-msgstr ""
+msgstr "Ideg Y"
 
 #: gtk/gtkfixed.c:165 gtk/gtklayout.c:659
 msgid "Y position of child widget"
@@ -3878,16 +3878,16 @@ msgstr ""
 #: gtk/gtkflowbox.c:3822 gtk/gtkiconview.c:408 gtk/gtklistbox.c:485
 #: gtk/gtktreeselection.c:131
 msgid "Selection mode"
-msgstr ""
+msgstr "Anaw n tefrayt"
 
 #: gtk/gtkflowbox.c:3823 gtk/gtkiconview.c:409 gtk/gtklistbox.c:486
 msgid "The selection mode"
-msgstr ""
+msgstr "Askan n tefrant"
 
 #: gtk/gtkflowbox.c:3836 gtk/gtkiconview.c:665 gtk/gtklistbox.c:493
 #: gtk/gtktreeview.c:1221
 msgid "Activate on Single Click"
-msgstr ""
+msgstr "Rmed s yiwen n usiti"
 
 #: gtk/gtkflowbox.c:3837 gtk/gtkiconview.c:666 gtk/gtklistbox.c:494
 #: gtk/gtktreeview.c:1222
@@ -3940,7 +3940,7 @@ msgstr ""
 
 #: gtk/gtkfontbutton.c:523
 msgid "Use font in label"
-msgstr ""
+msgstr "Seqdec tasefsit deg tebzimt"
 
 #: gtk/gtkfontbutton.c:524
 msgid "Whether the label is drawn in the selected font"
@@ -3948,7 +3948,7 @@ msgstr ""
 
 #: gtk/gtkfontbutton.c:539
 msgid "Use size in label"
-msgstr ""
+msgstr "Seqdec teɣzi deg tebzimt"
 
 #: gtk/gtkfontbutton.c:540
 msgid "Whether the label is drawn with the selected font size"
@@ -3956,7 +3956,7 @@ msgstr ""
 
 #: gtk/gtkfontbutton.c:556
 msgid "Show style"
-msgstr ""
+msgstr "Sken aɣanib"
 
 #: gtk/gtkfontbutton.c:557
 msgid "Whether the selected font style is shown in the label"
@@ -3964,7 +3964,7 @@ msgstr ""
 
 #: gtk/gtkfontbutton.c:572
 msgid "Show size"
-msgstr ""
+msgstr "Sken teɣzi"
 
 #: gtk/gtkfontbutton.c:573
 msgid "Whether selected font size is shown in the label"
@@ -3972,7 +3972,7 @@ msgstr ""
 
 #: gtk/gtkfontchooser.c:77
 msgid "Font description"
-msgstr ""
+msgstr "Aglam n tsefsit"
 
 #: gtk/gtkfontchooser.c:103
 msgid "Show preview text entry"
@@ -3984,7 +3984,7 @@ msgstr ""
 
 #: gtk/gtkfontchooser.c:118
 msgid "Selection level"
-msgstr ""
+msgstr "Aswir n tefrant"
 
 #: gtk/gtkfontchooser.c:119
 msgid "Whether to select family, face or font"
@@ -3992,7 +3992,7 @@ msgstr ""
 
 #: gtk/gtkfontchooser.c:137
 msgid "Font features"
-msgstr ""
+msgstr "Timahilin n tsefsit"
 
 #: gtk/gtkfontchooser.c:138
 msgid "Font features as a string"
@@ -4032,7 +4032,7 @@ msgstr ""
 
 #: gtk/gtkframe.c:255
 msgid "Frame shadow"
-msgstr ""
+msgstr "Tili n ukatar"
 
 #: gtk/gtkframe.c:256
 msgid "Appearance of the frame border"
@@ -4044,7 +4044,7 @@ msgstr ""
 
 #: gtk/gtkgesture.c:879
 msgid "Number of points"
-msgstr ""
+msgstr "Uṭṭun n tenqiḍin"
 
 #: gtk/gtkgesture.c:880
 msgid "Number of points needed to trigger the gesture"
@@ -4080,7 +4080,7 @@ msgstr ""
 
 #: gtk/gtkgesturesingle.c:291
 msgid "Button number"
-msgstr ""
+msgstr "Uṭṭun n tqeffalt"
 
 #: gtk/gtkgesturesingle.c:292
 msgid "Button number to listen to"
@@ -4088,11 +4088,11 @@ msgstr ""
 
 #: gtk/gtkglarea.c:784
 msgid "Context"
-msgstr ""
+msgstr "Asatal"
 
 #: gtk/gtkglarea.c:785
 msgid "The GL context"
-msgstr ""
+msgstr "Asatal n GL"
 
 #: gtk/gtkglarea.c:807
 msgid "Auto render"
@@ -4104,7 +4104,7 @@ msgstr ""
 
 #: gtk/gtkglarea.c:828
 msgid "Has alpha"
-msgstr ""
+msgstr "Γur-s Alfa"
 
 #: gtk/gtkglarea.c:829
 msgid "Whether the color buffer has an alpha component"
@@ -4164,7 +4164,7 @@ msgstr ""
 
 #: gtk/gtkgrid.c:1809 gtk/gtklayout.c:674 gtk/gtktreeviewcolumn.c:268
 msgid "Width"
-msgstr ""
+msgstr "Tehri"
 
 #: gtk/gtkgrid.c:1810
 msgid "The number of columns that a child spans"
@@ -4172,7 +4172,7 @@ msgstr ""
 
 #: gtk/gtkgrid.c:1816 gtk/gtklayout.c:683 gtk/gtkshortcutsgroup.c:362
 msgid "Height"
-msgstr ""
+msgstr "Teɣzi"
 
 #: gtk/gtkgrid.c:1817
 msgid "The number of rows that a child spans"
@@ -4180,15 +4180,15 @@ msgstr ""
 
 #: gtk/gtkheaderbar.c:2028
 msgid "The title to display"
-msgstr ""
+msgstr "Azwel ara yettwaskanen"
 
 #: gtk/gtkheaderbar.c:2035
 msgid "The subtitle to display"
-msgstr ""
+msgstr "Agduzwil ara yettwaskanen"
 
 #: gtk/gtkheaderbar.c:2041
 msgid "Custom Title"
-msgstr ""
+msgstr "Sagen azwel"
 
 #: gtk/gtkheaderbar.c:2042
 msgid "Custom title widget to display"
@@ -4220,7 +4220,7 @@ msgstr ""
 
 #: gtk/gtkheaderbar.c:2114
 msgid "Has Subtitle"
-msgstr ""
+msgstr "Γur-s agduzwil"
 
 #: gtk/gtkheaderbar.c:2115
 msgid "Whether to reserve space for a subtitle"
@@ -4256,7 +4256,7 @@ msgstr ""
 
 #: gtk/gtkiconview.c:490
 msgid "Number of columns"
-msgstr ""
+msgstr "Amḍan n ijga"
 
 #: gtk/gtkiconview.c:491
 msgid "Number of columns to display"
@@ -4292,7 +4292,7 @@ msgstr ""
 
 #: gtk/gtkiconview.c:572
 msgid "Margin"
-msgstr ""
+msgstr "Tama"
 
 #: gtk/gtkiconview.c:573
 msgid "Space which is inserted at the edges of the icon view"
@@ -4300,7 +4300,7 @@ msgstr ""
 
 #: gtk/gtkiconview.c:588
 msgid "Item Orientation"
-msgstr ""
+msgstr "Tanila n uferdis"
 
 #: gtk/gtkiconview.c:589
 msgid ""
@@ -4349,7 +4349,7 @@ msgstr ""
 
 #: gtk/gtkimage.c:263
 msgid "Surface"
-msgstr ""
+msgstr "Tajumma"
 
 #: gtk/gtkimage.c:264
 msgid "A cairo_surface_t to display"
@@ -4357,7 +4357,7 @@ msgstr ""
 
 #: gtk/gtkimage.c:295
 msgid "Icon set"
-msgstr ""
+msgstr "Tagrumma n tignitin"
 
 #: gtk/gtkimage.c:296
 msgid "Icon set to display"
@@ -4366,7 +4366,7 @@ msgstr ""
 #: gtk/gtkimage.c:303 gtk/gtkscalebutton.c:208 gtk/gtktoolbar.c:564
 #: gtk/gtktoolpalette.c:965
 msgid "Icon size"
-msgstr ""
+msgstr "Tiddi n tignit"
 
 #: gtk/gtkimage.c:304
 msgid "Symbolic size to use for stock icon, icon set or named icon"
@@ -4374,7 +4374,7 @@ msgstr ""
 
 #: gtk/gtkimage.c:320
 msgid "Pixel size"
-msgstr ""
+msgstr "Teɣzi s piksal"
 
 #: gtk/gtkimage.c:321
 msgid "Pixel size to use for named icon"
@@ -4382,7 +4382,7 @@ msgstr ""
 
 #: gtk/gtkimage.c:328
 msgid "Animation"
-msgstr ""
+msgstr "Asmussu"
 
 #: gtk/gtkimage.c:329
 msgid "GdkPixbufAnimation to display"
@@ -4390,7 +4390,7 @@ msgstr ""
 
 #: gtk/gtkimage.c:373
 msgid "Resource"
-msgstr ""
+msgstr "Aɣbalu"
 
 #: gtk/gtkimage.c:374
 msgid "The resource path being displayed"
@@ -4406,7 +4406,7 @@ msgstr ""
 
 #: gtk/gtkinfobar.c:450 gtk/gtkmessagedialog.c:189
 msgid "Message Type"
-msgstr ""
+msgstr "Anaw n yizen"
 
 #: gtk/gtkinfobar.c:451 gtk/gtkmessagedialog.c:190
 msgid "The type of message"
@@ -4414,7 +4414,7 @@ msgstr ""
 
 #: gtk/gtkinfobar.c:465 gtk/gtksearchbar.c:425
 msgid "Show Close Button"
-msgstr ""
+msgstr "Sken taqeffalt n umdal"
 
 #: gtk/gtkinfobar.c:466
 msgid "Whether to include a standard close button"
@@ -4461,7 +4461,7 @@ msgstr ""
 
 #: gtk/gtklabel.c:878
 msgid "Pattern"
-msgstr ""
+msgstr "Udlif"
 
 #: gtk/gtklabel.c:879
 msgid ""
@@ -4471,7 +4471,7 @@ msgstr ""
 
 #: gtk/gtklabel.c:885
 msgid "Line wrap"
-msgstr ""
+msgstr "Tuɣalin ɣer ujerriḍ"
 
 #: gtk/gtklabel.c:886
 msgid "If set, wrap lines if the text becomes too wide"
@@ -4491,7 +4491,7 @@ msgstr ""
 
 #: gtk/gtklabel.c:916
 msgid "Mnemonic key"
-msgstr ""
+msgstr "Tasarut Mnemonic"
 
 #: gtk/gtklabel.c:917
 msgid "The mnemonic accelerator key for this label"
@@ -4513,7 +4513,7 @@ msgstr ""
 
 #: gtk/gtklabel.c:1003
 msgid "Single Line Mode"
-msgstr ""
+msgstr "Askar n yizirig asuf"
 
 #: gtk/gtklabel.c:1004
 msgid "Whether the label is in single line mode"
@@ -4521,7 +4521,7 @@ msgstr ""
 
 #: gtk/gtklabel.c:1020
 msgid "Angle"
-msgstr ""
+msgstr "Tiɣmert"
 
 #: gtk/gtklabel.c:1021
 msgid "Angle at which the label is rotated"
@@ -4541,7 +4541,7 @@ msgstr ""
 
 #: gtk/gtklabel.c:1074
 msgid "Number of lines"
-msgstr ""
+msgstr "Amḍan n izirigen"
 
 #: gtk/gtklabel.c:1075
 msgid "The desired number of lines, when ellipsizing a wrapping label"
@@ -4617,7 +4617,7 @@ msgstr ""
 
 #: gtk/gtklinkbutton.c:184
 msgid "Visited"
-msgstr ""
+msgstr "Yemmẓer"
 
 #: gtk/gtklinkbutton.c:185
 msgid "Whether this link has been visited."
@@ -4633,7 +4633,7 @@ msgstr ""
 
 #: gtk/gtklockbutton.c:265
 msgid "Permission"
-msgstr ""
+msgstr "Tisirag"
 
 #: gtk/gtklockbutton.c:266
 msgid "The GPermission object controlling this button"
@@ -4641,7 +4641,7 @@ msgstr ""
 
 #: gtk/gtklockbutton.c:273
 msgid "Lock Text"
-msgstr ""
+msgstr "Sekkeṛ aḍris"
 
 #: gtk/gtklockbutton.c:274
 msgid "The text to display when prompting the user to lock"
@@ -4649,7 +4649,7 @@ msgstr ""
 
 #: gtk/gtklockbutton.c:282
 msgid "Unlock Text"
-msgstr ""
+msgstr "Kkes asekkeṛ i uḍris"
 
 #: gtk/gtklockbutton.c:283
 msgid "The text to display when prompting the user to unlock"
@@ -4682,7 +4682,7 @@ msgstr ""
 
 #: gtk/gtkmagnifier.c:295
 msgid "Inspected"
-msgstr ""
+msgstr "Yettwasweḍ"
 
 #: gtk/gtkmagnifier.c:296
 msgid "Inspected widget"
@@ -4694,7 +4694,7 @@ msgstr ""
 
 #: gtk/gtkmagnifier.c:309 gtk/gtkmagnifier.c:310
 msgid "resize"
-msgstr ""
+msgstr "semsawi teɣzi"
 
 #: gtk/gtkmenubar.c:219
 msgid "Pack direction"
@@ -4726,7 +4726,7 @@ msgstr ""
 
 #: gtk/gtkmenubutton.c:486
 msgid "Popup"
-msgstr ""
+msgstr "Asfaylu udhim"
 
 #: gtk/gtkmenubutton.c:487
 msgid "The dropdown menu."
@@ -4734,7 +4734,7 @@ msgstr ""
 
 #: gtk/gtkmenubutton.c:505
 msgid "Menu model"
-msgstr ""
+msgstr "Tamudemt n wumuɣ"
 
 #: gtk/gtkmenubutton.c:506
 msgid "The model from which the popup is made."
@@ -4751,7 +4751,7 @@ msgstr ""
 #: gtk/gtkmenubutton.c:534 gtk/gtkshortcutsshortcut.c:646
 #: gtk/gtkstylecontext.c:243
 msgid "Direction"
-msgstr ""
+msgstr "Tanila"
 
 #: gtk/gtkmenubutton.c:535
 msgid "The direction the arrow should point."
@@ -4813,7 +4813,7 @@ msgstr ""
 
 #: gtk/gtkmenu.c:735
 msgid "Monitor"
-msgstr ""
+msgstr "Asefrak"
 
 #: gtk/gtkmenu.c:736
 msgid "The monitor the menu will be popped up on"
@@ -4915,11 +4915,11 @@ msgstr ""
 
 #: gtk/gtkmenu.c:965
 msgid "Left Attach"
-msgstr ""
+msgstr "Amedday ɣer zelmeḍ"
 
 #: gtk/gtkmenu.c:973
 msgid "Right Attach"
-msgstr ""
+msgstr "Amedday ɣer yeffus"
 
 #: gtk/gtkmenu.c:974
 msgid "The column number to attach the right side of the child to"
@@ -4927,7 +4927,7 @@ msgstr ""
 
 #: gtk/gtkmenu.c:981
 msgid "Top Attach"
-msgstr ""
+msgstr "Amedday ɣer usawen"
 
 #: gtk/gtkmenu.c:982
 msgid "The row number to attach the top of the child to"
@@ -4935,7 +4935,7 @@ msgstr ""
 
 #: gtk/gtkmenu.c:989
 msgid "Bottom Attach"
-msgstr ""
+msgstr "Amedday ɣer ukessar"
 
 #: gtk/gtkmenu.c:1007
 msgid "Arbitrary constant to scale down the size of the scroll arrow"
@@ -4952,7 +4952,7 @@ msgstr ""
 
 #: gtk/gtkmenuitem.c:761 gtk/gtkpopovermenu.c:376
 msgid "Submenu"
-msgstr ""
+msgstr "Umuɣ n ddaw"
 
 #: gtk/gtkmenuitem.c:762
 msgid "The submenu attached to the menu item, or NULL if it has none"
@@ -4980,7 +4980,7 @@ msgstr ""
 
 #: gtk/gtkmenushell.c:419
 msgid "Take Focus"
-msgstr ""
+msgstr "Ṭṭef asaḍas"
 
 #: gtk/gtkmenushell.c:420
 msgid "A boolean that determines whether the menu grabs the keyboard focus"
@@ -4988,7 +4988,7 @@ msgstr ""
 
 #: gtk/gtkmenutoolbutton.c:267
 msgid "Menu"
-msgstr ""
+msgstr "Umuɣ"
 
 #: gtk/gtkmenutoolbutton.c:268
 msgid "The dropdown menu"
@@ -4996,7 +4996,7 @@ msgstr ""
 
 #: gtk/gtkmessagedialog.c:174
 msgid "label border"
-msgstr ""
+msgstr "tama n tebzimt"
 
 #: gtk/gtkmessagedialog.c:175
 msgid "Width of border around the label in the message dialog"
@@ -5004,7 +5004,7 @@ msgstr ""
 
 #: gtk/gtkmessagedialog.c:197
 msgid "Message Buttons"
-msgstr ""
+msgstr "Tiqeffalin n yizen"
 
 #: gtk/gtkmessagedialog.c:198
 msgid "The buttons shown in the message dialog"
@@ -5016,7 +5016,7 @@ msgstr ""
 
 #: gtk/gtkmessagedialog.c:230
 msgid "Use Markup"
-msgstr ""
+msgstr "Seqdec acraḍ"
 
 #: gtk/gtkmessagedialog.c:231
 msgid "The primary text of the title includes Pango markup."
@@ -5024,7 +5024,7 @@ msgstr ""
 
 #: gtk/gtkmessagedialog.c:245
 msgid "Secondary Text"
-msgstr ""
+msgstr "Aḍris wis sin"
 
 #: gtk/gtkmessagedialog.c:246
 msgid "The secondary text of the message dialog"
@@ -5048,7 +5048,7 @@ msgstr "Tugna-nni"
 
 #: gtk/gtkmessagedialog.c:294
 msgid "Message area"
-msgstr ""
+msgstr "Tamnaḍt n yizen"
 
 #: gtk/gtkmessagedialog.c:295
 msgid "GtkBox that holds the dialog's primary and secondary labels"
@@ -5056,19 +5056,19 @@ msgstr ""
 
 #: gtk/gtkmodelbutton.c:1152
 msgid "Role"
-msgstr ""
+msgstr "Tamlilt"
 
 #: gtk/gtkmodelbutton.c:1153
 msgid "The role of this button"
-msgstr ""
+msgstr "Tamlilt n tqeffalt-a"
 
 #: gtk/gtkmodelbutton.c:1169
 msgid "The icon"
-msgstr ""
+msgstr "Tignit"
 
 #: gtk/gtkmodelbutton.c:1183
 msgid "The text"
-msgstr ""
+msgstr "Aḍris"
 
 #: gtk/gtkmodelbutton.c:1199
 msgid "The text of the button includes XML markup. See pango_parse_markup()"
@@ -5076,19 +5076,19 @@ msgstr ""
 
 #: gtk/gtkmodelbutton.c:1228
 msgid "Menu name"
-msgstr ""
+msgstr "Isem n wumuɣ"
 
 #: gtk/gtkmodelbutton.c:1229
 msgid "The name of the menu to open"
-msgstr ""
+msgstr "Isem n wumuɣ ara yeldin"
 
 #: gtk/gtkmodelbutton.c:1245
 msgid "Whether the menu is a parent"
-msgstr ""
+msgstr "Ma yella umuɣ d amaraw"
 
 #: gtk/gtkmodelbutton.c:1259
 msgid "Centered"
-msgstr ""
+msgstr "Di telemmast"
 
 #: gtk/gtkmodelbutton.c:1260
 msgid "Whether to center the contents"
@@ -5104,7 +5104,7 @@ msgstr ""
 
 #: gtk/gtkmountoperation.c:167 gtk/gtkstylecontext.c:259
 msgid "Parent"
-msgstr ""
+msgstr "Amarraw"
 
 #: gtk/gtkmountoperation.c:168
 msgid "The parent window"
@@ -5112,11 +5112,11 @@ msgstr ""
 
 #: gtk/gtkmountoperation.c:175
 msgid "Is Showing"
-msgstr ""
+msgstr "Yettwaskanay"
 
 #: gtk/gtkmountoperation.c:176
 msgid "Are we showing a dialog"
-msgstr ""
+msgstr "Ad d-nesken adiwenni"
 
 #: gtk/gtkmountoperation.c:184
 msgid "The screen where this window will be displayed."
@@ -5124,7 +5124,7 @@ msgstr ""
 
 #: gtk/gtknativedialog.c:214
 msgid "Dialog Title"
-msgstr ""
+msgstr "Azwel n udiwenni"
 
 #: gtk/gtknativedialog.c:215
 msgid "The title of the file chooser dialog"
@@ -5162,7 +5162,7 @@ msgstr ""
 
 #: gtk/gtknotebook.c:774
 msgid "Tab Position"
-msgstr ""
+msgstr "Adig n yiccer"
 
 #: gtk/gtknotebook.c:775
 msgid "Which side of the notebook holds the tabs"
@@ -5170,7 +5170,7 @@ msgstr ""
 
 #: gtk/gtknotebook.c:782
 msgid "Show Tabs"
-msgstr ""
+msgstr "Sken accaren"
 
 #: gtk/gtknotebook.c:783
 msgid "Whether tabs should be shown"
@@ -5178,7 +5178,7 @@ msgstr ""
 
 #: gtk/gtknotebook.c:789
 msgid "Show Border"
-msgstr ""
+msgstr "Sken tama"
 
 #: gtk/gtknotebook.c:790
 msgid "Whether the border should be shown"
@@ -5186,7 +5186,7 @@ msgstr ""
 
 #: gtk/gtknotebook.c:796
 msgid "Scrollable"
-msgstr ""
+msgstr "Tabzimt n udrurem"
 
 #: gtk/gtknotebook.c:797
 msgid "If TRUE, scroll arrows are added if there are too many tabs to fit"
@@ -5194,7 +5194,7 @@ msgstr ""
 
 #: gtk/gtknotebook.c:803
 msgid "Enable Popup"
-msgstr ""
+msgstr "Rmed asfaylu udhim"
 
 #: gtk/gtknotebook.c:804
 msgid ""
@@ -5212,7 +5212,7 @@ msgstr ""
 
 #: gtk/gtknotebook.c:827
 msgid "Tab label"
-msgstr ""
+msgstr "Tabzimt n yiccer"
 
 #: gtk/gtknotebook.c:828
 msgid "The string displayed on the child's tab label"
@@ -5220,7 +5220,7 @@ msgstr ""
 
 #: gtk/gtknotebook.c:834
 msgid "Menu label"
-msgstr ""
+msgstr "Tabzimt n wumuɣ"
 
 #: gtk/gtknotebook.c:835
 msgid "The string displayed in the child's menu entry"
@@ -5236,7 +5236,7 @@ msgstr ""
 
 #: gtk/gtknotebook.c:855
 msgid "Tab fill"
-msgstr ""
+msgstr "Taččart n yiccer"
 
 #: gtk/gtknotebook.c:856
 msgid "Whether the child's tab should fill the allocated area"
@@ -5346,7 +5346,7 @@ msgstr ""
 
 #: gtk/gtkoverlay.c:802
 msgid "Index"
-msgstr ""
+msgstr "Amatar"
 
 #: gtk/gtkoverlay.c:803
 msgid "The index of the overlay in the parent, -1 for the main child"
@@ -5354,7 +5354,7 @@ msgstr ""
 
 #: gtk/gtkpadcontroller.c:373
 msgid "Action group"
-msgstr ""
+msgstr "Agraw n tigawt"
 
 #: gtk/gtkpadcontroller.c:374
 msgid "Action group to launch actions from"
@@ -5415,7 +5415,7 @@ msgstr ""
 
 #: gtk/gtkpaned.c:459
 msgid "Resize"
-msgstr ""
+msgstr "Ales tisekta"
 
 #: gtk/gtkpaned.c:460
 msgid "If TRUE, the child expands and shrinks along with the paned widget"
@@ -5423,7 +5423,7 @@ msgstr ""
 
 #: gtk/gtkpaned.c:475
 msgid "Shrink"
-msgstr ""
+msgstr "Fneẓ"
 
 #: gtk/gtkpaned.c:476
 msgid "If TRUE, the child can be made smaller than its requisition"
@@ -5596,7 +5596,7 @@ msgstr ""
 
 #: gtk/gtkpopover.c:1740
 msgid "Relative to"
-msgstr ""
+msgstr "D amassaɣ ɣer"
 
 #: gtk/gtkpopover.c:1741
 msgid "Widget the bubble window points to"
@@ -5628,7 +5628,7 @@ msgstr ""
 
 #: gtk/gtkpopover.c:1815
 msgid "Constraint"
-msgstr ""
+msgstr "Aḥettem"
 
 #: gtk/gtkpopover.c:1816
 msgid "Constraint for the popover position"
@@ -5684,7 +5684,7 @@ msgstr ""
 
 #: gtk/gtkprinter.c:156
 msgid "State Message"
-msgstr ""
+msgstr "Izen n waddad"
 
 #: gtk/gtkprinter.c:157
 msgid "String giving the current state of the printer"
@@ -5704,7 +5704,7 @@ msgstr ""
 
 #: gtk/gtkprinter.c:177
 msgid "Job Count"
-msgstr ""
+msgstr "Amḍan n yimahilen"
 
 #: gtk/gtkprinter.c:178
 msgid "Number of jobs queued in the printer"
@@ -5732,11 +5732,11 @@ msgstr ""
 
 #: gtk/gtkprinteroption.c:104
 msgid "Value of the option"
-msgstr ""
+msgstr "Azal n textiṛt"
 
 #: gtk/gtkprinteroptionwidget.c:126
 msgid "Source option"
-msgstr ""
+msgstr "Taxtiṛt n uɣbalu"
 
 #: gtk/gtkprinteroptionwidget.c:127
 msgid "The PrinterOption backing this widget"
@@ -5764,7 +5764,7 @@ msgstr "Iɣewwaṛen n tsaggazt"
 
 #: gtk/gtkprintjob.c:160 gtk/gtkprintjob.c:161 gtk/gtkprintunixdialog.c:413
 msgid "Page Setup"
-msgstr ""
+msgstr "Asbadu n yisebtar"
 
 #: gtk/gtkprintjob.c:169 gtk/gtkprintoperation.c:1237
 msgid "Track Print Status"
@@ -5786,7 +5786,7 @@ msgstr ""
 
 #: gtk/gtkprintoperation.c:1128 gtk/gtkprintunixdialog.c:431
 msgid "Print Settings"
-msgstr ""
+msgstr "Iɣewwaṛen n usiggez"
 
 #: gtk/gtkprintoperation.c:1129 gtk/gtkprintunixdialog.c:432
 msgid "The GtkPrintSettings used for initializing the dialog"
@@ -5794,7 +5794,7 @@ msgstr ""
 
 #: gtk/gtkprintoperation.c:1147
 msgid "Job Name"
-msgstr ""
+msgstr "Isem n umahil"
 
 #: gtk/gtkprintoperation.c:1148
 msgid "A string used for identifying the print job."
@@ -5802,7 +5802,7 @@ msgstr ""
 
 #: gtk/gtkprintoperation.c:1172
 msgid "Number of Pages"
-msgstr ""
+msgstr "Amḍan n yisebtar"
 
 #: gtk/gtkprintoperation.c:1173
 msgid "The number of pages in the document."
@@ -5810,7 +5810,7 @@ msgstr ""
 
 #: gtk/gtkprintoperation.c:1194 gtk/gtkprintunixdialog.c:421
 msgid "Current Page"
-msgstr ""
+msgstr "Asebtar amiran"
 
 #: gtk/gtkprintoperation.c:1195 gtk/gtkprintunixdialog.c:422
 msgid "The current page in the document"
@@ -5818,7 +5818,7 @@ msgstr ""
 
 #: gtk/gtkprintoperation.c:1216
 msgid "Use full page"
-msgstr ""
+msgstr "Seqdec akk asebter"
 
 #: gtk/gtkprintoperation.c:1217
 msgid ""
@@ -5834,7 +5834,7 @@ msgstr ""
 
 #: gtk/gtkprintoperation.c:1255
 msgid "Unit"
-msgstr ""
+msgstr "Aferdis"
 
 #: gtk/gtkprintoperation.c:1256
 msgid "The unit in which distances can be measured in the context"
@@ -5842,7 +5842,7 @@ msgstr ""
 
 #: gtk/gtkprintoperation.c:1273
 msgid "Show Dialog"
-msgstr ""
+msgstr "Sken adiwenni"
 
 #: gtk/gtkprintoperation.c:1274
 msgid "TRUE if a progress dialog is shown while printing."
@@ -5862,7 +5862,7 @@ msgstr ""
 
 #: gtk/gtkprintoperation.c:1335
 msgid "Status"
-msgstr ""
+msgstr "Addad"
 
 #: gtk/gtkprintoperation.c:1336
 msgid "The status of the print operation"
@@ -5870,7 +5870,7 @@ msgstr ""
 
 #: gtk/gtkprintoperation.c:1356
 msgid "Status String"
-msgstr ""
+msgstr "Azrir n waddad"
 
 #: gtk/gtkprintoperation.c:1357
 msgid "A human-readable description of the status"
@@ -5886,7 +5886,7 @@ msgstr ""
 
 #: gtk/gtkprintoperation.c:1391 gtk/gtkprintunixdialog.c:456
 msgid "Support Selection"
-msgstr ""
+msgstr "Tafrant n tallalt"
 
 #: gtk/gtkprintoperation.c:1392
 msgid "TRUE if the print operation will support print of selection."
@@ -5894,7 +5894,7 @@ msgstr ""
 
 #: gtk/gtkprintoperation.c:1408 gtk/gtkprintunixdialog.c:464
 msgid "Has Selection"
-msgstr ""
+msgstr "Γur-s tafrant"
 
 #: gtk/gtkprintoperation.c:1409
 msgid "TRUE if a selection exists."
@@ -5922,7 +5922,7 @@ msgstr ""
 
 #: gtk/gtkprintunixdialog.c:439
 msgid "Selected Printer"
-msgstr ""
+msgstr "Tasiggezt i yettwafernen"
 
 #: gtk/gtkprintunixdialog.c:440
 msgid "The GtkPrinter which is selected"
@@ -5946,7 +5946,7 @@ msgstr ""
 
 #: gtk/gtkprogressbar.c:271
 msgid "Fraction"
-msgstr ""
+msgstr "Taẓunt"
 
 #: gtk/gtkprogressbar.c:272
 msgid "The fraction of total work that has been completed"
@@ -6220,7 +6220,7 @@ msgstr ""
 
 #: gtk/gtkrecentchooser.c:236
 msgid "Limit"
-msgstr ""
+msgstr "Tilist"
 
 #: gtk/gtkrecentchooser.c:237
 msgid "The maximum number of items to be displayed"
@@ -6617,7 +6617,7 @@ msgstr ""
 
 #: gtk/gtksettings.c:470
 msgid "Theme Name"
-msgstr ""
+msgstr "Isem n usentel"
 
 #: gtk/gtksettings.c:471
 msgid "Name of theme to load"
@@ -6665,7 +6665,7 @@ msgstr ""
 
 #: gtk/gtksettings.c:544
 msgid "Font Name"
-msgstr ""
+msgstr "Isem n tsefsit"
 
 #: gtk/gtksettings.c:545
 msgid "The default font family and size to use"
@@ -7294,7 +7294,7 @@ msgstr ""
 
 #: gtk/gtkshortcutsshortcut.c:563
 msgid "Icon Set"
-msgstr ""
+msgstr "Asbadu n tignit"
 
 #: gtk/gtkshortcutsshortcut.c:564
 msgid "Whether an icon has been set"
@@ -7338,7 +7338,7 @@ msgstr ""
 
 #: gtk/gtksizegroup.c:229 gtk/gtktreeselection.c:130
 msgid "Mode"
-msgstr ""
+msgstr "Askar"
 
 #: gtk/gtksizegroup.c:230
 msgid ""
@@ -7383,7 +7383,7 @@ msgstr ""
 
 #: gtk/gtkspinbutton.c:419
 msgid "Wrap"
-msgstr ""
+msgstr "Uɣal ar ujeṛṛid"
 
 #: gtk/gtkspinbutton.c:420
 msgid "Whether a spin button should wrap upon reaching its limits"
@@ -7492,7 +7492,7 @@ msgstr ""
 #: gtk/gtkstackswitcher.c:696 gtk/inspector/gtkstackcombo.c:232
 #: gtk/inspector/gtkstackcombo.c:233
 msgid "Stack"
-msgstr ""
+msgstr "Tanebdant"
 
 #: gtk/gtkstacksidebar.c:450
 msgid "Associated stack for this GtkStackSidebar"
@@ -7520,7 +7520,7 @@ msgstr ""
 
 #: gtk/gtkstylecontext.c:244 gtk/gtktexttag.c:300
 msgid "Text direction"
-msgstr ""
+msgstr "Tanila n uḍris"
 
 #: gtk/gtkstylecontext.c:260
 msgid "The parent style context"
@@ -7568,7 +7568,7 @@ msgstr ""
 
 #: gtk/gtktextbuffer.c:203
 msgid "Text Tag Table"
-msgstr ""
+msgstr "Tafelwit n tebzimt n uḍris"
 
 #: gtk/gtktextbuffer.c:220
 msgid "Current text of the buffer"
@@ -7576,7 +7576,7 @@ msgstr ""
 
 #: gtk/gtktextbuffer.c:233
 msgid "Has selection"
-msgstr ""
+msgstr "Tafrant-is"
 
 #: gtk/gtktextbuffer.c:234
 msgid "Whether the buffer has some text currently selected"
@@ -7584,7 +7584,7 @@ msgstr ""
 
 #: gtk/gtktextbuffer.c:249
 msgid "Cursor position"
-msgstr ""
+msgstr "Adig n teḥnaccaḍt"
 
 #: gtk/gtktextbuffer.c:250
 msgid ""
@@ -7616,7 +7616,7 @@ msgstr ""
 
 #: gtk/gtktextmark.c:137
 msgid "Mark name"
-msgstr ""
+msgstr "Isem n ucraḍ"
 
 #: gtk/gtktextmark.c:151
 msgid "Left gravity"
@@ -7628,7 +7628,7 @@ msgstr ""
 
 #: gtk/gtktexttag.c:206
 msgid "Tag name"
-msgstr ""
+msgstr "Isem n ticṛeḍt"
 
 #: gtk/gtktexttag.c:207
 msgid "Name used to refer to the text tag. NULL for anonymous tags"
@@ -7636,7 +7636,7 @@ msgstr ""
 
 #: gtk/gtktexttag.c:246
 msgid "Background RGBA"
-msgstr ""
+msgstr "RGBA n ugilal"
 
 #: gtk/gtktexttag.c:254
 msgid "Background full height"
@@ -7697,7 +7697,7 @@ msgstr ""
 
 #: gtk/gtktexttag.c:444
 msgid "Left margin"
-msgstr ""
+msgstr "Tama tazelmaḍt"
 
 #: gtk/gtktexttag.c:445 gtk/gtktextview.c:865
 msgid "Width of the left margin in pixels"
@@ -7705,7 +7705,7 @@ msgstr ""
 
 #: gtk/gtktexttag.c:454
 msgid "Right margin"
-msgstr ""
+msgstr "Tama tayeffust"
 
 #: gtk/gtktexttag.c:455 gtk/gtktextview.c:885
 msgid "Width of the right margin in pixels"
@@ -7713,7 +7713,7 @@ msgstr ""
 
 #: gtk/gtktexttag.c:465 gtk/gtktextview.c:934
 msgid "Indent"
-msgstr ""
+msgstr "Asiẓi"
 
 #: gtk/gtktexttag.c:466 gtk/gtktextview.c:935
 msgid "Amount to indent the paragraph, in pixels"
@@ -7776,7 +7776,7 @@ msgstr ""
 
 #: gtk/gtktexttag.c:598
 msgid "Invisible"
-msgstr ""
+msgstr "Uffir"
 
 #: gtk/gtktexttag.c:599
 msgid "Whether this text is hidden."
@@ -7816,7 +7816,7 @@ msgstr ""
 
 #: gtk/gtktexttag.c:678
 msgid "Letter Spacing"
-msgstr ""
+msgstr "Tallunt gar yisekkilen"
 
 #: gtk/gtktexttag.c:679
 msgid "Extra spacing between graphemes"
@@ -7824,7 +7824,7 @@ msgstr ""
 
 #: gtk/gtktexttag.c:693
 msgid "Font Features"
-msgstr ""
+msgstr "Timahilin n tsefsit"
 
 #: gtk/gtktexttag.c:694
 msgid "OpenType Font Features to use"
@@ -7988,15 +7988,15 @@ msgstr ""
 
 #: gtk/gtktextview.c:864
 msgid "Left Margin"
-msgstr ""
+msgstr "Tama tazelmaḍt"
 
 #: gtk/gtktextview.c:884
 msgid "Right Margin"
-msgstr ""
+msgstr "Tama tayefust"
 
 #: gtk/gtktextview.c:905
 msgid "Top Margin"
-msgstr ""
+msgstr "Tama n ufella"
 
 #: gtk/gtktextview.c:906
 msgid "Height of the top margin in pixels"
@@ -8004,7 +8004,7 @@ msgstr ""
 
 #: gtk/gtktextview.c:926
 msgid "Bottom Margin"
-msgstr ""
+msgstr "Tama n wadda"
 
 #: gtk/gtktextview.c:927
 msgid "Height of the bottom margin in pixels"
@@ -8523,7 +8523,7 @@ msgstr ""
 
 #: gtk/gtktreeview.c:1305
 msgid "Grid line pattern"
-msgstr ""
+msgstr "Udlifen n izirigen n uferrug"
 
 #: gtk/gtktreeview.c:1306
 msgid "Dash pattern used to draw the tree view grid lines"
@@ -8567,7 +8567,7 @@ msgstr ""
 
 #: gtk/gtktreeviewcolumn.c:292
 msgid "Fixed Width"
-msgstr ""
+msgstr "Tehri tusbiḍt"
 
 #: gtk/gtktreeviewcolumn.c:293
 msgid "Current fixed width of the column"
@@ -8623,7 +8623,7 @@ msgstr ""
 
 #: gtk/gtktreeviewcolumn.c:365
 msgid "Sort order"
-msgstr ""
+msgstr "Amizzwer n wefran"
 
 #: gtk/gtktreeviewcolumn.c:366
 msgid "Sort direction the sort indicator should indicate"
@@ -8763,7 +8763,7 @@ msgstr ""
 
 #: gtk/gtkwidget.c:1250
 msgid "Style"
-msgstr ""
+msgstr "Aɣanib"
 
 #: gtk/gtkwidget.c:1251
 msgid ""
@@ -8773,7 +8773,7 @@ msgstr ""
 
 #: gtk/gtkwidget.c:1259
 msgid "Events"
-msgstr ""
+msgstr "Tidyanin"
 
 #: gtk/gtkwidget.c:1260
 msgid "The event mask that decides what kind of GdkEvents this widget gets"
@@ -9208,7 +9208,7 @@ msgstr ""
 
 #: gtk/gtkwindow.c:943
 msgid "Urgent"
-msgstr ""
+msgstr "Izreb"
 
 #: gtk/gtkwindow.c:944
 msgid "TRUE if the window should be brought to the user's attention."
@@ -9216,7 +9216,7 @@ msgstr ""
 
 #: gtk/gtkwindow.c:957
 msgid "Accept focus"
-msgstr ""
+msgstr "Qbel asaḍas"
 
 #: gtk/gtkwindow.c:958
 msgid "TRUE if the window should receive the input focus."
@@ -9240,7 +9240,7 @@ msgstr ""
 
 #: gtk/gtkwindow.c:999
 msgid "Deletable"
-msgstr ""
+msgstr "Yettwakkas"
 
 #: gtk/gtkwindow.c:1000
 msgid "Whether the window frame should have a close button"
@@ -9264,7 +9264,7 @@ msgstr ""
 
 #: gtk/gtkwindow.c:1051
 msgid "Gravity"
-msgstr ""
+msgstr "Taẓeyt"
 
 #: gtk/gtkwindow.c:1052
 msgid "The window gravity of the window"
@@ -9272,7 +9272,7 @@ msgstr ""
 
 #: gtk/gtkwindow.c:1087
 msgid "Attached to Widget"
-msgstr ""
+msgstr "Yedda d uwiǧit"
 
 #: gtk/gtkwindow.c:1088
 msgid "The widget where the window is attached"
@@ -9280,7 +9280,7 @@ msgstr ""
 
 #: gtk/gtkwindow.c:1094
 msgid "Is maximized"
-msgstr ""
+msgstr "Yettwasemɣer"
 
 #: gtk/gtkwindow.c:1095
 msgid "Whether the window is maximized"
@@ -9288,7 +9288,7 @@ msgstr ""
 
 #: gtk/gtkwindow.c:1116
 msgid "GtkApplication"
-msgstr ""
+msgstr "AsnasGtk"
 
 #: gtk/gtkwindow.c:1117
 msgid "The GtkApplication for the window"
@@ -9304,8 +9304,8 @@ msgstr ""
 
 #: modules/printbackends/cups/gtkprintercups.c:93
 msgid "Color Profile Title"
-msgstr ""
+msgstr "Azwel n umaɣnu n yini"
 
 #: modules/printbackends/cups/gtkprintercups.c:94
 msgid "The title of the color profile to use"
-msgstr ""
+msgstr "Azwel n umaɣnu n yini ara yettwasqedcen"
