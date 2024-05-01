@@ -8,16 +8,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk main\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2024-04-05 08:43+0000\n"
-"PO-Revision-Date: 2024-04-05 10:18+0100\n"
-"Last-Translator: ButterflyOfFire <ButterflyOfFire@protonmail.com>\n"
+"POT-Creation-Date: 2024-04-29 11:55+0000\n"
+"PO-Revision-Date: 2024-04-30 22:03+0200\n"
+"Last-Translator: sa\n"
 "Language-Team: Kabyle <>\n"
 "Language: kab\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=n>1\n"
-"X-Generator: Gtranslator 41.0\n"
+"Plural-Forms: nplurals=2; plural=n>1;\n"
+"X-Generator: Poedit 3.4.2\n"
 "X-DL-Team: kab\n"
 "X-DL-Module: gtk\n"
 "X-DL-Branch: gtk-4-14\n"
@@ -796,7 +796,7 @@ msgstr ""
 #: gdk/x11/gdkselectioninputstream-x11.c:465
 #, c-format
 msgid "Format %s not supported"
-msgstr ""
+msgstr "Amasal %s ur yettwasefrak ara"
 
 #: gdk/x11/gdktextlistconverter-x11.c:65 gdk/x11/gdktextlistconverter-x11.c:105
 msgid "Not enough space in destination"
@@ -809,7 +809,7 @@ msgstr ""
 #: gdk/x11/gdktextlistconverter-x11.c:216
 #: gdk/x11/gdktextlistconverter-x11.c:250
 msgid "Invalid byte sequence in conversion input"
-msgstr ""
+msgstr "Tigezmi n yibiten d tarameɣtut deg unekcum n udiwenni"
 
 #: gdk/x11/gdktextlistconverter-x11.c:242
 msgid "Invalid formats in compound text conversion."
@@ -1055,13 +1055,13 @@ msgstr "Fren ini"
 #: gtk/gtkcolordialogbutton.c:335
 #, c-format
 msgid "Red %d%%, Green %d%%, Blue %d%%, Alpha %d%%"
-msgstr ""
+msgstr "Azewwaɣ %d%%, Azegzaw %d%%, Amidadi %d%%, Alpha %d%%"
 
 #: gtk/deprecated/gtkcolorbutton.c:511 gtk/gtkcolorchooserwidget.c:319
 #: gtk/gtkcolordialogbutton.c:341
 #, c-format
 msgid "Red %d%%, Green %d%%, Blue %d%%"
-msgstr ""
+msgstr "Azewwaɣ %d%%, Azegzaw %d%%, Amidadi %d%%"
 
 #: gtk/deprecated/gtkfontbutton.c:396
 msgid "Sans 12"
@@ -1141,23 +1141,24 @@ msgstr "Turagt tudmawant"
 
 #: gtk/gtkaboutdialog.c:121
 msgid "GNU General Public License, version 2 or later"
-msgstr ""
+msgstr "Turagt tazayazt tamatut GNU, lqem wis 2 neɣ tamaynut ugar"
 
 #: gtk/gtkaboutdialog.c:122
 msgid "GNU General Public License, version 3 or later"
-msgstr ""
+msgstr "Turagt tazayazt tamatut GNU, lqem wis 3 neɣ tamaynut ugar"
 
 #: gtk/gtkaboutdialog.c:123
 msgid "GNU Lesser General Public License, version 2.1 or later"
 msgstr ""
+"Turagt tazayazt tamatut yesεan tilas GNU, lqem wis 2.1 neɣ tamaynut ugar"
 
 #: gtk/gtkaboutdialog.c:124
 msgid "GNU Lesser General Public License, version 3 or later"
-msgstr ""
+msgstr "Turagt tazayazt tamatut yesεan tilas GNU, lqem wis 3 neɣ tamaynut ugar"
 
 #: gtk/gtkaboutdialog.c:125
 msgid "BSD 2-Clause License"
-msgstr ""
+msgstr "Turagt BSD-Clause"
 
 #: gtk/gtkaboutdialog.c:126
 msgid "The MIT License (MIT)"
@@ -1165,47 +1166,47 @@ msgstr "Turagt MIT (MIT)"
 
 #: gtk/gtkaboutdialog.c:127
 msgid "Artistic License 2.0"
-msgstr ""
+msgstr "Turagt n tẓuri 2.0"
 
 #: gtk/gtkaboutdialog.c:128
 msgid "GNU General Public License, version 2 only"
-msgstr ""
+msgstr "Turagt tazayazt tamatut GNU, lqem wis 2 kan"
 
 #: gtk/gtkaboutdialog.c:129
 msgid "GNU General Public License, version 3 only"
-msgstr ""
+msgstr "Turagt tazayazt tamatut GNU, lqem wis 3 kan"
 
 #: gtk/gtkaboutdialog.c:130
 msgid "GNU Lesser General Public License, version 2.1 only"
-msgstr ""
+msgstr "Turagt tazayazt tamatut yesεan tilas GNU, lqem wis 2.1 kan"
 
 #: gtk/gtkaboutdialog.c:131
 msgid "GNU Lesser General Public License, version 3 only"
-msgstr ""
+msgstr "Turagt tazayazt tamatut yesεan tilas GNU, lqem wis 3 kan"
 
 #: gtk/gtkaboutdialog.c:132
 msgid "GNU Affero General Public License, version 3 or later"
-msgstr ""
+msgstr "Turagt tazayazt tamatut yesεan GNU Affero, lqem wis 3 neɣ amaynut ugar"
 
 #: gtk/gtkaboutdialog.c:133
 msgid "GNU Affero General Public License, version 3 only"
-msgstr ""
+msgstr "Turagt tazayazt tamatut yesεan GNU Affero, lqem wis 3 kan"
 
 #: gtk/gtkaboutdialog.c:134
 msgid "BSD 3-Clause License"
-msgstr ""
+msgstr "Turagt BSD 3-Clause"
 
 #: gtk/gtkaboutdialog.c:135
 msgid "Apache License, Version 2.0"
-msgstr ""
+msgstr "Turagt Apache, lqem 2.0"
 
 #: gtk/gtkaboutdialog.c:136
 msgid "Mozilla Public License 2.0"
-msgstr ""
+msgstr "Turagt tazayazt n Mozella 2.0"
 
 #: gtk/gtkaboutdialog.c:137
 msgid "BSD Zero-Clause License"
-msgstr ""
+msgstr "Turagt BSD Zero-Clause"
 
 #: gtk/gtkaboutdialog.c:964
 msgid "Website"
@@ -1230,7 +1231,7 @@ msgstr "Yessuqel-it-id"
 
 #: gtk/gtkaboutdialog.c:2108
 msgid "Design by"
-msgstr ""
+msgstr "Yettufeṣṣel s"
 
 #. Translators: this is the license preamble; the string at the end
 #. * contains the name of the license as link text.
@@ -1315,7 +1316,7 @@ msgstr "Meta"
 #: gtk/gtkaccelgroup.c:942
 msgctxt "keyboard label"
 msgid "KP"
-msgstr ""
+msgstr "KP"
 
 #: gtk/gtkaccelgroup.c:949
 msgctxt "keyboard label"
@@ -1340,7 +1341,7 @@ msgstr ""
 #: gtk/gtkaccessible.c:792
 msgctxt "accessibility"
 msgid "banner"
-msgstr ""
+msgstr "aɣarrac"
 
 #: gtk/gtkaccessible.c:793
 msgctxt "accessibility"
@@ -1395,7 +1396,7 @@ msgstr "isemli"
 #: gtk/gtkaccessible.c:803
 msgctxt "accessibility"
 msgid "feed"
-msgstr ""
+msgstr "efk-d rray"
 
 #: gtk/gtkaccessible.c:804
 msgctxt "accessibility"
@@ -1485,7 +1486,7 @@ msgstr ""
 #: gtk/gtkaccessible.c:821
 msgctxt "accessibility"
 msgid "marquee"
-msgstr ""
+msgstr "marquee"
 
 #: gtk/gtkaccessible.c:822
 msgctxt "accessibility"
@@ -1773,7 +1774,7 @@ msgstr ""
 #: gtk/gtkbuilder-menus.c:224
 #, c-format
 msgid "Element <%s> not allowed inside <%s>"
-msgstr ""
+msgstr "Aferdis <%s> ur yettwasireg ara daxel n <%s>"
 
 #: gtk/gtkbuilder-menus.c:230
 #, c-format
@@ -1783,7 +1784,7 @@ msgstr ""
 #: gtk/gtkbuilder-menus.c:319
 #, c-format
 msgid "Text may not appear inside <%s>"
-msgstr ""
+msgstr "Aḍris yezmer ad d-iban deg <%s>"
 
 #. Translate to calendar:week_start:0 if you want Sunday to be the
 #. * first day of the week to calendar:week_start:1 if you want Monday
@@ -1861,7 +1862,7 @@ msgstr ""
 #: gtk/gtkcolorchooserwidget.c:442
 msgctxt "Color name"
 msgid "Light Blue"
-msgstr ""
+msgstr "Amidadi imceεlel"
 
 #: gtk/gtkcolorchooserwidget.c:443
 msgctxt "Color name"
@@ -1871,17 +1872,17 @@ msgstr "Azegzaw"
 #: gtk/gtkcolorchooserwidget.c:444
 msgctxt "Color name"
 msgid "Dark Blue"
-msgstr ""
+msgstr "Amidadi aḥemqen"
 
 #: gtk/gtkcolorchooserwidget.c:445
 msgctxt "Color name"
 msgid "Very Dark Blue"
-msgstr ""
+msgstr "Amidadi iḥemqen aṭas"
 
 #: gtk/gtkcolorchooserwidget.c:446
 msgctxt "Color name"
 msgid "Very Light Green"
-msgstr ""
+msgstr "Azegzaw aceεlal aṭas"
 
 #: gtk/gtkcolorchooserwidget.c:447
 msgctxt "Color name"
@@ -1896,22 +1897,22 @@ msgstr "Adal"
 #: gtk/gtkcolorchooserwidget.c:449
 msgctxt "Color name"
 msgid "Dark Green"
-msgstr ""
+msgstr "Azegzaw iḥemqen"
 
 #: gtk/gtkcolorchooserwidget.c:450
 msgctxt "Color name"
 msgid "Very Dark Green"
-msgstr ""
+msgstr "Azegzaw iḥemqen aṭas"
 
 #: gtk/gtkcolorchooserwidget.c:451
 msgctxt "Color name"
 msgid "Very Light Yellow"
-msgstr ""
+msgstr "Awreɣ imceεlel aṭas"
 
 #: gtk/gtkcolorchooserwidget.c:452
 msgctxt "Color name"
 msgid "Light Yellow"
-msgstr ""
+msgstr "Awreɣ imceεlel"
 
 #: gtk/gtkcolorchooserwidget.c:453
 msgctxt "Color name"
@@ -1921,17 +1922,17 @@ msgstr "Awraɣ"
 #: gtk/gtkcolorchooserwidget.c:454
 msgctxt "Color name"
 msgid "Dark Yellow"
-msgstr ""
+msgstr "Awreɣ iḥemqen"
 
 #: gtk/gtkcolorchooserwidget.c:455
 msgctxt "Color name"
 msgid "Very Dark Yellow"
-msgstr ""
+msgstr "Awreɣ iḥemqen aṭas"
 
 #: gtk/gtkcolorchooserwidget.c:456
 msgctxt "Color name"
 msgid "Very Light Orange"
-msgstr ""
+msgstr "Aččini imceεlel aṭas"
 
 #: gtk/gtkcolorchooserwidget.c:457
 msgctxt "Color name"
@@ -1951,17 +1952,17 @@ msgstr "Aččinawi aɣmayan"
 #: gtk/gtkcolorchooserwidget.c:460
 msgctxt "Color name"
 msgid "Very Dark Orange"
-msgstr ""
+msgstr "Aččini iḥemqen aṭas"
 
 #: gtk/gtkcolorchooserwidget.c:461
 msgctxt "Color name"
 msgid "Very Light Red"
-msgstr ""
+msgstr "Aččini imceεlel aṭas"
 
 #: gtk/gtkcolorchooserwidget.c:462
 msgctxt "Color name"
 msgid "Light Red"
-msgstr ""
+msgstr "Azewwaɣ imceεlel"
 
 #: gtk/gtkcolorchooserwidget.c:463
 msgctxt "Color name"
@@ -1976,17 +1977,17 @@ msgstr "Azeggaɣ aqesḥan"
 #: gtk/gtkcolorchooserwidget.c:465
 msgctxt "Color name"
 msgid "Very Dark Red"
-msgstr ""
+msgstr "Azewwaɣ iḥemqen aṭas"
 
 #: gtk/gtkcolorchooserwidget.c:466
 msgctxt "Color name"
 msgid "Very Light Purple"
-msgstr ""
+msgstr "Axuxi imceεlel aṭas"
 
 #: gtk/gtkcolorchooserwidget.c:467
 msgctxt "Color name"
 msgid "Light Purple"
-msgstr ""
+msgstr "Axuxi imceεlel"
 
 #: gtk/gtkcolorchooserwidget.c:468
 msgctxt "Color name"
@@ -1996,22 +1997,22 @@ msgstr "Amidadi"
 #: gtk/gtkcolorchooserwidget.c:469
 msgctxt "Color name"
 msgid "Dark Purple"
-msgstr ""
+msgstr "Axuxi iḥemqen"
 
 #: gtk/gtkcolorchooserwidget.c:470
 msgctxt "Color name"
 msgid "Very Dark Purple"
-msgstr ""
+msgstr "Axuxi iḥemqen aṭas"
 
 #: gtk/gtkcolorchooserwidget.c:471
 msgctxt "Color name"
 msgid "Very Light Brown"
-msgstr ""
+msgstr "Aqehwi imceεlel aṭas"
 
 #: gtk/gtkcolorchooserwidget.c:472
 msgctxt "Color name"
 msgid "Light Brown"
-msgstr ""
+msgstr "Aqehwi imceεlel"
 
 #: gtk/gtkcolorchooserwidget.c:473
 msgctxt "Color name"
@@ -2021,12 +2022,12 @@ msgstr "Aqahwi"
 #: gtk/gtkcolorchooserwidget.c:474
 msgctxt "Color name"
 msgid "Dark Brown"
-msgstr ""
+msgstr "Aqehwi iḥemqen"
 
 #: gtk/gtkcolorchooserwidget.c:475
 msgctxt "Color name"
 msgid "Very Dark Brown"
-msgstr ""
+msgstr "Aqehwi iḥemqen aṭas"
 
 #: gtk/gtkcolorchooserwidget.c:476
 msgctxt "Color name"
@@ -2036,42 +2037,42 @@ msgstr "Amellal"
 #: gtk/gtkcolorchooserwidget.c:477
 msgctxt "Color name"
 msgid "Light Gray 1"
-msgstr ""
+msgstr "Awinaɣ imceεlel 1"
 
 #: gtk/gtkcolorchooserwidget.c:478
 msgctxt "Color name"
 msgid "Light Gray 2"
-msgstr ""
+msgstr "Awinaɣ imceεlel 2"
 
 #: gtk/gtkcolorchooserwidget.c:479
 msgctxt "Color name"
 msgid "Light Gray 3"
-msgstr ""
+msgstr "Awinaɣ imceεlel 3"
 
 #: gtk/gtkcolorchooserwidget.c:480
 msgctxt "Color name"
 msgid "Light Gray 4"
-msgstr ""
+msgstr "Awinaɣ imceεlel 4"
 
 #: gtk/gtkcolorchooserwidget.c:481
 msgctxt "Color name"
 msgid "Dark Gray 1"
-msgstr ""
+msgstr "Awinaɣ iḥemqen 1"
 
 #: gtk/gtkcolorchooserwidget.c:482
 msgctxt "Color name"
 msgid "Dark Gray 2"
-msgstr ""
+msgstr "Awinaɣ iḥemqen 2"
 
 #: gtk/gtkcolorchooserwidget.c:483
 msgctxt "Color name"
 msgid "Dark Gray 3"
-msgstr ""
+msgstr "Awinaɣ iḥemqen 3"
 
 #: gtk/gtkcolorchooserwidget.c:484
 msgctxt "Color name"
 msgid "Dark Gray 4"
-msgstr ""
+msgstr "Awinaɣ iḥemqen 4"
 
 #: gtk/gtkcolorchooserwidget.c:485
 msgctxt "Color name"
@@ -2128,7 +2129,7 @@ msgstr "mm"
 #: gtk/print/gtkcustompaperunixdialog.c:598
 #, c-format
 msgid "Custom Size %d"
-msgstr ""
+msgstr "Teɣzi tudmawant %d"
 
 #: gtk/print/gtkcustompaperunixdialog.c:908
 msgid "_Width:"
@@ -2160,11 +2161,11 @@ msgstr "Ayeffus (R) :"
 
 #: gtk/print/gtkcustompaperunixdialog.c:993
 msgid "Paper Margins"
-msgstr ""
+msgstr "Tamiwin n lkaɣeḍ"
 
 #: gtk/gtkentry.c:3685
 msgid "Insert Emoji"
-msgstr ""
+msgstr "Ger imujit"
 
 #: gtk/gtkfilechooserdialog.c:557
 msgid "_Name"
@@ -2342,11 +2343,11 @@ msgstr "Tamuɣli s tebdart"
 
 #: gtk/gtkfilechooserwidget.c:1766
 msgid "_Visit File"
-msgstr ""
+msgstr "Kcem ɣer ufaylu (_V)"
 
 #: gtk/gtkfilechooserwidget.c:1770
 msgid "_Open With File Manager"
-msgstr ""
+msgstr "Ldi s s umsefrak n ufaylu (_O)"
 
 #: gtk/gtkfilechooserwidget.c:1774
 msgid "_Copy Location"
@@ -2371,7 +2372,7 @@ msgstr "Sken ifuyla yeffren (_H)"
 
 #: gtk/gtkfilechooserwidget.c:1803
 msgid "Sort _Folders Before Files"
-msgstr ""
+msgstr "Smizzwer ikaramen send ifuyla (_F)"
 
 #: gtk/gtkfilechooserwidget.c:1926 gtk/gtkfilechooserwidget.c:1956
 #: gtk/gtkfilechooserwidget.c:3858
@@ -2692,7 +2693,7 @@ msgstr "Nɣel URL (_C)"
 
 #: gtk/gtklinkbutton.c:567
 msgid "Invalid URI"
-msgstr ""
+msgstr "URI arameɣtu"
 
 #. hour:minutes:seconds
 #. Translators: This is a time format, like "9:05:02" for 9
@@ -2775,11 +2776,11 @@ msgstr "Qqen amzun d"
 
 #: gtk/gtkmountoperation.c:685
 msgid "_Anonymous"
-msgstr ""
+msgstr "Udrig (_A)"
 
 #: gtk/gtkmountoperation.c:692
 msgid "Registered U_ser"
-msgstr ""
+msgstr "Aseqdac yettwajerrden (_s)"
 
 #: gtk/gtkmountoperation.c:702
 msgid "_Username"
@@ -2791,7 +2792,7 @@ msgstr "Taɣult (_D)"
 
 #: gtk/gtkmountoperation.c:716
 msgid "Volume type"
-msgstr ""
+msgstr "Anaw n ubleɣ"
 
 #: gtk/gtkmountoperation.c:726
 msgid "_Hidden"
@@ -2799,7 +2800,7 @@ msgstr "Yeffer (_H)"
 
 #: gtk/gtkmountoperation.c:729
 msgid "_Windows system"
-msgstr ""
+msgstr "Anagraw n _Windows"
 
 #: gtk/gtkmountoperation.c:732
 msgid "_PIM"
@@ -2815,7 +2816,7 @@ msgstr "Ttu awal n uɛedd_i din din"
 
 #: gtk/gtkmountoperation.c:770
 msgid "Remember password until you _logout"
-msgstr ""
+msgstr "Cfu ɣef wawal uffir alamma d tuffɣa (_l)"
 
 #: gtk/gtkmountoperation.c:781
 msgid "Remember _forever"
@@ -2834,7 +2835,7 @@ msgstr ""
 #: gtk/gtkmountoperation.c:1396
 #, c-format
 msgid "Unable to end process"
-msgstr ""
+msgstr "D awezɣi ad yemmed ukala"
 
 #: gtk/gtkmountoperation.c:1546
 msgid "_End Process"
@@ -2852,7 +2853,7 @@ msgstr ""
 
 #: gtk/gtkmountoperation-x11.c:987
 msgid "Top Command"
-msgstr ""
+msgstr "Taladna tafellayt"
 
 #: gtk/gtkmountoperation-x11.c:988
 msgid "Bourne Again Shell"
@@ -2936,7 +2937,7 @@ msgstr "Sken aḍris"
 
 #: gtk/gtkpasswordentry.c:215
 msgid "Caps Lock is on"
-msgstr ""
+msgstr "Isekkilen imeqqranen remden"
 
 #: gtk/gtkpasswordentry.c:700
 msgid "_Show Text"
@@ -2982,7 +2983,7 @@ msgstr "Sekcem adig"
 
 #: gtk/gtkplacessidebar.c:1058
 msgid "Manually enter a location"
-msgstr ""
+msgstr "Sekcem adig s ufus"
 
 #: gtk/gtkplacessidebar.c:1068
 msgid "Trash"
@@ -3000,7 +3001,7 @@ msgstr "Serkeb sakin ldi “%s”"
 
 #: gtk/gtkplacessidebar.c:1304
 msgid "Open the contents of the file system"
-msgstr ""
+msgstr "Ldi igburen n unagraw n yifuyla"
 
 #: gtk/gtkplacessidebar.c:1387
 msgid "New bookmark"
@@ -3029,7 +3030,7 @@ msgstr ""
 #: gtk/gtkplacessidebar.c:2000
 #, c-format
 msgid "Error unlocking “%s”"
-msgstr ""
+msgstr "Tuccḍa deg tukksa n usekkeṛ i “%s”"
 
 #: gtk/gtkplacessidebar.c:2002
 #, c-format
@@ -3043,12 +3044,12 @@ msgstr "isem-a yettwasekles yakan"
 #: gtk/gtkplacessidebar.c:2525
 #, c-format
 msgid "Unable to unmount “%s”"
-msgstr ""
+msgstr "D awezɣi ad yefsi \"%s\""
 
 #: gtk/gtkplacessidebar.c:2701
 #, c-format
 msgid "Unable to stop “%s”"
-msgstr ""
+msgstr "D awezɣi aseḥbes n \"%s\""
 
 #: gtk/gtkplacessidebar.c:2730
 #, c-format
@@ -3117,7 +3118,7 @@ msgstr "_Sekker ibenk aget-aḍebsi"
 
 #: gtk/gtkplacessidebar.c:3322
 msgid "_Unlock Device"
-msgstr ""
+msgstr "Kkes asekkeṛ i yibenk (_U)"
 
 #: gtk/gtkplacessidebar.c:3332
 msgid "_Stop"
@@ -3137,7 +3138,7 @@ msgstr "Ḥbe_s ibenk aget-aḍebsi"
 
 #: gtk/gtkplacessidebar.c:3337
 msgid "_Lock Device"
-msgstr ""
+msgstr "Sekkeṛ ibenk (_L)"
 
 #: gtk/gtkplacessidebar.c:3827 gtk/gtkplacesview.c:1089
 msgid "Computer"
@@ -3177,7 +3178,7 @@ msgstr "AppleTalk"
 
 #: gtk/gtkplacesview.c:1598
 msgid "File Transfer Protocol"
-msgstr ""
+msgstr "Aneggaf n usiweḍ n yifuyla"
 
 #. Translators: do not translate ftp:// and ftps://
 #: gtk/gtkplacesview.c:1600
@@ -3186,7 +3187,7 @@ msgstr "ftp:// neɣ ftps://"
 
 #: gtk/gtkplacesview.c:1606
 msgid "Network File System"
-msgstr ""
+msgstr "Anagraw n yifuyla n uzeṭṭa"
 
 #: gtk/gtkplacesview.c:1612
 msgid "Samba"
@@ -3238,8 +3239,8 @@ msgstr "Deg uselkim-agi"
 #, c-format
 msgid "%s / %s available"
 msgid_plural "%s / %s available"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%s / %s i yellan"
+msgstr[1] "%s / %s i yellan"
 
 #: gtk/gtkplacesviewrow.c:471
 msgid "Disconnect"
@@ -3386,12 +3387,12 @@ msgstr "Ulac tasaggazt i yetwafen"
 
 #: gtk/print/gtkprintoperation-win32.c:1624
 msgid "Invalid argument to CreateDC"
-msgstr ""
+msgstr "Yir afakul i CreateDC"
 
 #: gtk/print/gtkprintoperation-win32.c:1660
 #: gtk/print/gtkprintoperation-win32.c:1906
 msgid "Error from StartDoc"
-msgstr ""
+msgstr "Tuccḍa seg StartDoc"
 
 #: gtk/print/gtkprintoperation-win32.c:1761
 #: gtk/print/gtkprintoperation-win32.c:1784
@@ -3401,11 +3402,11 @@ msgstr ""
 
 #: gtk/print/gtkprintoperation-win32.c:1837
 msgid "Invalid argument to PrintDlgEx"
-msgstr ""
+msgstr "Yir afakyl i PrintDIgEx"
 
 #: gtk/print/gtkprintoperation-win32.c:1842
 msgid "Invalid pointer to PrintDlgEx"
-msgstr ""
+msgstr "Yir asewwaṛ i PrintDIgEx"
 
 #: gtk/print/gtkprintoperation-win32.c:1847
 msgid "Invalid handle to PrintDlgEx"
@@ -3425,11 +3426,11 @@ msgstr "Siggez (_P)"
 
 #: gtk/print/gtkprintunixdialog.c:961
 msgid "Getting printer information failed"
-msgstr ""
+msgstr "Awway n telɣut n tsiggezt yeccḍen"
 
 #: gtk/print/gtkprintunixdialog.c:1885
 msgid "Getting printer information…"
-msgstr ""
+msgstr "Awi-d isallen n tsiggezt…"
 
 #. Translators: These strings name the possible arrangements of
 #. * multiple pages on a sheet when printing (same as in gtkprintbackendcups.c)
@@ -3440,42 +3441,42 @@ msgstr ""
 #: gtk/print/gtkprintunixdialog.c:2753
 #: modules/printbackends/gtkprintbackendcups.c:5677
 msgid "Left to right, top to bottom"
-msgstr ""
+msgstr "Seg uzelmaḍ ɣer uyeffus, seg usawen ɣer ukessar"
 
 #: gtk/print/gtkprintunixdialog.c:2753
 #: modules/printbackends/gtkprintbackendcups.c:5677
 msgid "Left to right, bottom to top"
-msgstr ""
+msgstr "Seg uzelmaḍ ɣer uyeffus, seg ukessar ɣer usawen"
 
 #: gtk/print/gtkprintunixdialog.c:2754
 #: modules/printbackends/gtkprintbackendcups.c:5678
 msgid "Right to left, top to bottom"
-msgstr ""
+msgstr "Seg uyeffus ɣer uzelmaḍ, seg usawen ɣer ukessar"
 
 #: gtk/print/gtkprintunixdialog.c:2754
 #: modules/printbackends/gtkprintbackendcups.c:5678
 msgid "Right to left, bottom to top"
-msgstr ""
+msgstr "Seg uyeffus ɣer uzelmaḍ, seg ukessar ɣer usawen"
 
 #: gtk/print/gtkprintunixdialog.c:2755
 #: modules/printbackends/gtkprintbackendcups.c:5679
 msgid "Top to bottom, left to right"
-msgstr ""
+msgstr "Seg usawen ɣer ukessar, seg uzelmaḍ ɣer uyeffus"
 
 #: gtk/print/gtkprintunixdialog.c:2755
 #: modules/printbackends/gtkprintbackendcups.c:5679
 msgid "Top to bottom, right to left"
-msgstr ""
+msgstr "Seg usawen ɣer ukessar, seg uyeffus ɣer uzelmaḍ"
 
 #: gtk/print/gtkprintunixdialog.c:2756
 #: modules/printbackends/gtkprintbackendcups.c:5680
 msgid "Bottom to top, left to right"
-msgstr ""
+msgstr "Seg ukessar ɣer usawen, seg uzelmaḍ ɣer uyeffus"
 
 #: gtk/print/gtkprintunixdialog.c:2756
 #: modules/printbackends/gtkprintbackendcups.c:5680
 msgid "Bottom to top, right to left"
-msgstr ""
+msgstr "Seg ukessar ɣer usawen, seg uyeffus ɣer uzelmaḍ"
 
 #: gtk/print/gtkprintunixdialog.c:2760 gtk/print/gtkprintunixdialog.c:2773
 msgid "Page Ordering"
@@ -3679,7 +3680,7 @@ msgstr ""
 
 #: gtk/inspector/a11y.ui:125
 msgid "Object Path"
-msgstr ""
+msgstr "Abrid n tɣawsa"
 
 #: gtk/inspector/a11y.ui:164
 msgid "Attribute"
@@ -3705,7 +3706,7 @@ msgstr "Yermed"
 
 #: gtk/inspector/actions.ui:42
 msgid "Parameter Type"
-msgstr ""
+msgstr "Anaw n uɣewwar"
 
 #: gtk/inspector/actions.ui:53 gtk/inspector/css-node-tree.ui:41
 #: gtk/inspector/misc-info.ui:108
@@ -3793,7 +3794,7 @@ msgstr "Asekles n CSS yerreẓ"
 
 #: gtk/inspector/css-editor.ui:30
 msgid "Disable this custom CSS"
-msgstr ""
+msgstr "Snes CSS-a udmawan"
 
 #: gtk/inspector/css-editor.ui:37
 msgid "Save the current CSS"
@@ -3806,11 +3807,11 @@ msgstr "Asulay"
 
 #: gtk/inspector/css-node-tree.ui:34
 msgid "Style Classes"
-msgstr ""
+msgstr "Ismilen n uɣanib"
 
 #: gtk/inspector/css-node-tree.ui:64
 msgid "CSS Property"
-msgstr ""
+msgstr "Arat n CSS"
 
 #: gtk/inspector/general.c:370
 msgctxt "GL version"
@@ -3872,11 +3873,11 @@ msgstr "Tarrayt n usekcem"
 
 #: gtk/inspector/general.ui:198
 msgid "Application ID"
-msgstr ""
+msgstr "Asulay n usnas"
 
 #: gtk/inspector/general.ui:224
 msgid "Resource Path"
-msgstr ""
+msgstr "Abrid n uɣbalu"
 
 #: gtk/inspector/general.ui:261 gtk/ui/gtkplacesview.ui:67
 msgid "Prefix"
@@ -3900,7 +3901,7 @@ msgstr ""
 
 #: gtk/inspector/general.ui:594
 msgid "GL Version"
-msgstr ""
+msgstr "Lqem n GL"
 
 #: gtk/inspector/general.ui:621
 msgid "GL Backend Version"
@@ -4014,7 +4015,7 @@ msgstr ""
 
 #: gtk/inspector/misc-info.ui:416
 msgid "Frame Clock"
-msgstr ""
+msgstr "Tamrilt n ukatar"
 
 #: gtk/inspector/misc-info.ui:451
 msgid "Tick Callback"
@@ -4026,7 +4027,7 @@ msgstr ""
 
 #: gtk/inspector/misc-info.ui:502
 msgid "Frame Rate"
-msgstr ""
+msgstr "Aktum n ukatar"
 
 #: gtk/inspector/misc-info.ui:527 gtk/inspector/visual.ui:315
 msgid "Scale"
@@ -4038,7 +4039,7 @@ msgstr ""
 
 #: gtk/inspector/misc-info.ui:578
 msgid "Realized"
-msgstr ""
+msgstr "Yettwag"
 
 #: gtk/inspector/misc-info.ui:604
 msgid "Is Toplevel"
@@ -4259,7 +4260,7 @@ msgstr ""
 
 #: gtk/inspector/statistics.ui:61
 msgid "Self"
-msgstr ""
+msgstr "Iman"
 
 #: gtk/inspector/statistics.ui:66
 msgid "Cumulative"
@@ -4280,7 +4281,7 @@ msgstr "Rnu"
 
 #: gtk/inspector/tree-data.ui:10
 msgid "Show data"
-msgstr ""
+msgstr "Sken isefka"
 
 #: gtk/inspector/type-info.ui:14
 msgid "Hierarchy"
@@ -4343,20 +4344,16 @@ msgid "Hinting"
 msgstr ""
 
 #: gtk/inspector/visual.ui:402
-#| msgid "None"
 msgctxt "Font hinting style"
 msgid "None"
 msgstr "Ula d yiwet"
 
 #: gtk/inspector/visual.ui:403
-#| msgctxt "keyboard label"
-#| msgid "Right"
 msgctxt "Font hinting style"
 msgid "Slight"
 msgstr "Afessas"
 
 #: gtk/inspector/visual.ui:404
-#| msgid "Medium"
 msgctxt "Font hinting style"
 msgid "Medium"
 msgstr "D alemmas"
@@ -4364,7 +4361,7 @@ msgstr "D alemmas"
 #: gtk/inspector/visual.ui:405
 msgctxt "Font hinting style"
 msgid "Full"
-msgstr ""
+msgstr "Ummid"
 
 #: gtk/inspector/visual.ui:422
 msgid "Metrics Hinting"
@@ -4580,7 +4577,7 @@ msgstr "Taẓunin niḍen"
 #: gtk/open-type-layout.h:19
 msgctxt "OpenType layout"
 msgid "Akhands"
-msgstr ""
+msgstr "Akhands"
 
 #: gtk/open-type-layout.h:20
 msgctxt "OpenType layout"
@@ -4600,7 +4597,7 @@ msgstr "Isenfal ddaw taffa"
 #: gtk/open-type-layout.h:23
 msgctxt "OpenType layout"
 msgid "Contextual Alternates"
-msgstr ""
+msgstr "Imlelliyen isatalen"
 
 #: gtk/open-type-layout.h:24
 msgctxt "OpenType layout"
@@ -4610,12 +4607,12 @@ msgstr "Talɣiwin ittḥulfun i tejṛut n usekkil"
 #: gtk/open-type-layout.h:25
 msgctxt "OpenType layout"
 msgid "Glyph Composition / Decomposition"
-msgstr ""
+msgstr "Asuddes/Afsay n tugna tazamult"
 
 #: gtk/open-type-layout.h:26
 msgctxt "OpenType layout"
 msgid "Conjunct Form After Ro"
-msgstr ""
+msgstr "Talɣa tasɣunant seld Ro"
 
 #: gtk/open-type-layout.h:27
 msgctxt "OpenType layout"
@@ -4625,7 +4622,7 @@ msgstr "Talɣiwin inetḍen"
 #: gtk/open-type-layout.h:28
 msgctxt "OpenType layout"
 msgid "Contextual Ligatures"
-msgstr ""
+msgstr "Isekkilen uddisen isatalen"
 
 #: gtk/open-type-layout.h:29
 msgctxt "OpenType layout"
@@ -4640,22 +4637,22 @@ msgstr "Tallunt gar isekkilen imeqqranen"
 #: gtk/open-type-layout.h:31
 msgctxt "OpenType layout"
 msgid "Contextual Swash"
-msgstr ""
+msgstr "Talɣiwin n tira tisatalin"
 
 #: gtk/open-type-layout.h:32
 msgctxt "OpenType layout"
 msgid "Cursive Positioning"
-msgstr ""
+msgstr "Aselfu n tira yemlalen"
 
 #: gtk/open-type-layout.h:33
 msgctxt "OpenType layout"
 msgid "Petite Capitals From Capitals"
-msgstr ""
+msgstr "Isekkilen imeqqranen s tira tameẓẓyant seg yimeqqranen"
 
 #: gtk/open-type-layout.h:34
 msgctxt "OpenType layout"
 msgid "Small Capitals From Capitals"
-msgstr ""
+msgstr "Isekkilen imeqqranen s tira tamecṭuḥt seg yimeqqranen"
 
 #: gtk/open-type-layout.h:35
 msgctxt "OpenType layout"
@@ -4665,12 +4662,12 @@ msgstr "Imeccaqen"
 #: gtk/open-type-layout.h:36
 msgctxt "OpenType layout"
 msgid "Discretionary Ligatures"
-msgstr ""
+msgstr "Tirziwin tifrayanin"
 
 #: gtk/open-type-layout.h:37
 msgctxt "OpenType layout"
 msgid "Denominators"
-msgstr ""
+msgstr "Ibeṭṭayen"
 
 #: gtk/open-type-layout.h:38
 msgctxt "OpenType layout"
@@ -4685,7 +4682,7 @@ msgstr "Talɣiwin n yimussnawen"
 #: gtk/open-type-layout.h:40
 msgctxt "OpenType layout"
 msgid "Final Glyph on Line Alternates"
-msgstr ""
+msgstr "Tugna tazamult taneggarut ɣef umlellay n yizirig"
 
 #: gtk/open-type-layout.h:41
 msgctxt "OpenType layout"
@@ -4705,7 +4702,7 @@ msgstr "Talɣiwin n Terminal #2"
 #: gtk/open-type-layout.h:44
 msgctxt "OpenType layout"
 msgid "Flattened accent forms"
-msgstr ""
+msgstr "Talɣiwin n ufeskil ugniw"
 
 #: gtk/open-type-layout.h:45
 msgctxt "OpenType layout"
@@ -4730,7 +4727,7 @@ msgstr "Talɣiwin Halant"
 #: gtk/open-type-layout.h:49
 msgctxt "OpenType layout"
 msgid "Alternate Half Widths"
-msgstr ""
+msgstr "Azgen n tehri n umlelluy"
 
 #: gtk/open-type-layout.h:50
 msgctxt "OpenType layout"
@@ -4740,17 +4737,17 @@ msgstr "Talɣiwin timazrayin"
 #: gtk/open-type-layout.h:51
 msgctxt "OpenType layout"
 msgid "Horizontal Kana Alternates"
-msgstr ""
+msgstr "Imlelluyen n Kana iglawanen"
 
 #: gtk/open-type-layout.h:52
 msgctxt "OpenType layout"
 msgid "Historical Ligatures"
-msgstr ""
+msgstr "Tirziwin tizrayanin"
 
 #: gtk/open-type-layout.h:53
 msgctxt "OpenType layout"
 msgid "Hangul"
-msgstr ""
+msgstr "Hangul"
 
 #: gtk/open-type-layout.h:54
 msgctxt "OpenType layout"
@@ -4760,7 +4757,7 @@ msgstr "Talɣiwin Hojo Kanji"
 #: gtk/open-type-layout.h:55
 msgctxt "OpenType layout"
 msgid "Half Widths"
-msgstr ""
+msgstr "Azgen n tehri"
 
 #: gtk/open-type-layout.h:56
 msgctxt "OpenType layout"
@@ -4780,7 +4777,7 @@ msgstr "Uknanen"
 #: gtk/open-type-layout.h:59
 msgctxt "OpenType layout"
 msgid "Justification Alternates"
-msgstr ""
+msgstr "Imlelliyen n usmisi"
 
 #: gtk/open-type-layout.h:60
 msgctxt "OpenType layout"
@@ -4805,17 +4802,17 @@ msgstr "Talɣiwin JIS2004"
 #: gtk/open-type-layout.h:64
 msgctxt "OpenType layout"
 msgid "Kerning"
-msgstr ""
+msgstr "Kerning"
 
 #: gtk/open-type-layout.h:65
 msgctxt "OpenType layout"
 msgid "Left Bounds"
-msgstr ""
+msgstr "Tilisa n zelmeḍ"
 
 #: gtk/open-type-layout.h:66
 msgctxt "OpenType layout"
 msgid "Standard Ligatures"
-msgstr ""
+msgstr "Tirziwin tiluganin"
 
 #: gtk/open-type-layout.h:67
 msgctxt "OpenType layout"
@@ -4825,7 +4822,7 @@ msgstr "Talɣiwin Jamo tigejdayin"
 #: gtk/open-type-layout.h:68
 msgctxt "OpenType layout"
 msgid "Lining Figures"
-msgstr ""
+msgstr "Izwilen imsisligen"
 
 #: gtk/open-type-layout.h:69
 msgctxt "OpenType layout"
@@ -4835,7 +4832,7 @@ msgstr "Tiferkiyin yettwasuqqlen"
 #: gtk/open-type-layout.h:70
 msgctxt "OpenType layout"
 msgid "Left-to-right alternates"
-msgstr ""
+msgstr "Imlelliyen seg zelmeḍ ɣer yeffus"
 
 #: gtk/open-type-layout.h:71
 msgctxt "OpenType layout"
@@ -4845,7 +4842,7 @@ msgstr "Talɣiwin yettin seg uzelmaḍ ɣer uyeffus"
 #: gtk/open-type-layout.h:72
 msgctxt "OpenType layout"
 msgid "Mark Positioning"
-msgstr ""
+msgstr "Aselfu n tecreḍt"
 
 #: gtk/open-type-layout.h:73
 msgctxt "OpenType layout"
@@ -4860,22 +4857,22 @@ msgstr "Talɣiwin tilemmasin"
 #: gtk/open-type-layout.h:75
 msgctxt "OpenType layout"
 msgid "Mathematical Greek"
-msgstr ""
+msgstr "Tagrirgit tusnakt"
 
 #: gtk/open-type-layout.h:76
 msgctxt "OpenType layout"
 msgid "Mark to Mark Positioning"
-msgstr ""
+msgstr "Sers tacriḍt i uselfu n tecreḍt"
 
 #: gtk/open-type-layout.h:77
 msgctxt "OpenType layout"
 msgid "Mark Positioning via Substitution"
-msgstr ""
+msgstr "Aselfu n tecreḍt s yisemselsiyen"
 
 #: gtk/open-type-layout.h:78
 msgctxt "OpenType layout"
 msgid "Alternate Annotation Forms"
-msgstr ""
+msgstr "Talɣiwin n usegzi n umlelluy"
 
 #: gtk/open-type-layout.h:79
 msgctxt "OpenType layout"
@@ -4890,87 +4887,87 @@ msgstr "Talɣiwin Nukta"
 #: gtk/open-type-layout.h:81
 msgctxt "OpenType layout"
 msgid "Numerators"
-msgstr ""
+msgstr "Ifellamḍanen"
 
 #: gtk/open-type-layout.h:82
 msgctxt "OpenType layout"
 msgid "Oldstyle Figures"
-msgstr ""
+msgstr "Izwilen s n zik"
 
 #: gtk/open-type-layout.h:83
 msgctxt "OpenType layout"
 msgid "Optical Bounds"
-msgstr ""
+msgstr "Tilisa tisekdanin"
 
 #: gtk/open-type-layout.h:84
 msgctxt "OpenType layout"
 msgid "Ordinals"
-msgstr ""
+msgstr "Imugna"
 
 #: gtk/open-type-layout.h:85
 msgctxt "OpenType layout"
 msgid "Ornaments"
-msgstr ""
+msgstr "Acebbeḥ"
 
 #: gtk/open-type-layout.h:86
 msgctxt "OpenType layout"
 msgid "Proportional Alternate Widths"
-msgstr ""
+msgstr "Tehri tamlellayt tamẓunant"
 
 #: gtk/open-type-layout.h:87
 msgctxt "OpenType layout"
 msgid "Petite Capitals"
-msgstr ""
+msgstr "Isekkilen immeqqranen imeẓẓyanen"
 
 #: gtk/open-type-layout.h:88
 msgctxt "OpenType layout"
 msgid "Proportional Kana"
-msgstr ""
+msgstr "Kana amẓunan"
 
 #: gtk/open-type-layout.h:89
 msgctxt "OpenType layout"
 msgid "Proportional Figures"
-msgstr ""
+msgstr "Izwilen imẓunanen"
 
 #: gtk/open-type-layout.h:90
 msgctxt "OpenType layout"
 msgid "Pre-Base Forms"
-msgstr ""
+msgstr "Talɣiwin send azadur"
 
 #: gtk/open-type-layout.h:91
 msgctxt "OpenType layout"
 msgid "Pre-base Substitutions"
-msgstr ""
+msgstr "Isemselsiyen send azadur"
 
 #: gtk/open-type-layout.h:92
 msgctxt "OpenType layout"
 msgid "Post-base Forms"
-msgstr ""
+msgstr "Talɣiwin seld azadur"
 
 #: gtk/open-type-layout.h:93
 msgctxt "OpenType layout"
 msgid "Post-base Substitutions"
-msgstr ""
+msgstr "Isemselsiyen seld azadur"
 
 #: gtk/open-type-layout.h:94
 msgctxt "OpenType layout"
 msgid "Proportional Widths"
-msgstr ""
+msgstr "Tehri tamẓunant"
 
 #: gtk/open-type-layout.h:95
 msgctxt "OpenType layout"
 msgid "Quarter Widths"
-msgstr ""
+msgstr "Tarebεet n tehri"
 
 #: gtk/open-type-layout.h:96
 msgctxt "OpenType layout"
 msgid "Randomize"
-msgstr ""
+msgstr "S ugacur"
 
 #: gtk/open-type-layout.h:97
 msgctxt "OpenType layout"
 msgid "Required Contextual Alternates"
-msgstr ""
+msgstr "Imlellayen isatalen ttwasran"
 
 #: gtk/open-type-layout.h:98
 msgctxt "OpenType layout"
@@ -4980,7 +4977,7 @@ msgstr "Talɣiwin Rakar"
 #: gtk/open-type-layout.h:99
 msgctxt "OpenType layout"
 msgid "Required Ligatures"
-msgstr ""
+msgstr "Ttwasrant tirziwin"
 
 #: gtk/open-type-layout.h:100
 msgctxt "OpenType layout"
@@ -4990,37 +4987,37 @@ msgstr "Talɣiwin Reph"
 #: gtk/open-type-layout.h:101
 msgctxt "OpenType layout"
 msgid "Right Bounds"
-msgstr ""
+msgstr "Tilisa ɣer yeffus"
 
 #: gtk/open-type-layout.h:102
 msgctxt "OpenType layout"
 msgid "Right-to-left alternates"
-msgstr ""
+msgstr "Imlellayen seg yeffus ɣer zelmeḍ"
 
 #: gtk/open-type-layout.h:103
 msgctxt "OpenType layout"
 msgid "Right-to-left mirrored forms"
-msgstr ""
+msgstr "Talɣiwin timuttiyin seg yeffus ɣer zelmeḍ"
 
 #: gtk/open-type-layout.h:104
 msgctxt "OpenType layout"
 msgid "Ruby Notation Forms"
-msgstr ""
+msgstr "Talɣiwin n tira Ruby"
 
 #: gtk/open-type-layout.h:105
 msgctxt "OpenType layout"
 msgid "Required Variation Alternates"
-msgstr ""
+msgstr "Imlellayen n yigellusen ttwasran"
 
 #: gtk/open-type-layout.h:106
 msgctxt "OpenType layout"
 msgid "Stylistic Alternates"
-msgstr ""
+msgstr "Imlelliyen isenɣanmanen"
 
 #: gtk/open-type-layout.h:107
 msgctxt "OpenType layout"
 msgid "Scientific Inferiors"
-msgstr ""
+msgstr "Imazdaren ussnanen"
 
 #: gtk/open-type-layout.h:108
 msgctxt "OpenType layout"
@@ -5040,12 +5037,12 @@ msgstr "Talɣiwin tifessasin"
 #: gtk/open-type-layout.h:111
 msgctxt "OpenType layout"
 msgid "Math script style alternates"
-msgstr ""
+msgstr "Imlelluyen n uɣanib n usekript usnak"
 
 #: gtk/open-type-layout.h:112
 msgctxt "OpenType layout"
 msgid "Stretching Glyph Decomposition"
-msgstr ""
+msgstr "Ajbad n ufsay n tugna tazamult"
 
 #: gtk/open-type-layout.h:113
 msgctxt "OpenType layout"
@@ -5060,62 +5057,62 @@ msgstr "Taɣalaḍt"
 #: gtk/open-type-layout.h:115
 msgctxt "OpenType layout"
 msgid "Swash"
-msgstr ""
+msgstr "Talɣa n tira"
 
 #: gtk/open-type-layout.h:116
 msgctxt "OpenType layout"
 msgid "Titling"
-msgstr ""
+msgstr "Asezwel"
 
 #: gtk/open-type-layout.h:117
 msgctxt "OpenType layout"
 msgid "Trailing Jamo Forms"
-msgstr ""
+msgstr "Talɣiwin Jamo n taggara"
 
 #: gtk/open-type-layout.h:118
 msgctxt "OpenType layout"
 msgid "Traditional Name Forms"
-msgstr ""
+msgstr "Talɣiwin timensayin n yismawen imaẓlayen"
 
 #: gtk/open-type-layout.h:119
 msgctxt "OpenType layout"
 msgid "Tabular Figures"
-msgstr ""
+msgstr "Izwilen d tirigliwin"
 
 #: gtk/open-type-layout.h:120
 msgctxt "OpenType layout"
 msgid "Traditional Forms"
-msgstr ""
+msgstr "Talɣiwin timensayin"
 
 #: gtk/open-type-layout.h:121
 msgctxt "OpenType layout"
 msgid "Third Widths"
-msgstr ""
+msgstr "Tehri tis kraḍet"
 
 #: gtk/open-type-layout.h:122
 msgctxt "OpenType layout"
 msgid "Unicase"
-msgstr ""
+msgstr "Addad asuf"
 
 #: gtk/open-type-layout.h:123
 msgctxt "OpenType layout"
 msgid "Alternate Vertical Metrics"
-msgstr ""
+msgstr "Asket aratak amlellay"
 
 #: gtk/open-type-layout.h:124
 msgctxt "OpenType layout"
 msgid "Vattu Variants"
-msgstr ""
+msgstr "Timeskalin Vattu"
 
 #: gtk/open-type-layout.h:125
 msgctxt "OpenType layout"
 msgid "Vertical Writing"
-msgstr ""
+msgstr "Tira taratakt"
 
 #: gtk/open-type-layout.h:126
 msgctxt "OpenType layout"
 msgid "Alternate Vertical Half Metrics"
-msgstr ""
+msgstr "Azgenasket aratak amlellay"
 
 #: gtk/open-type-layout.h:127
 msgctxt "OpenType layout"
@@ -5125,32 +5122,32 @@ msgstr "Talɣiwin Jamo n tiɣra"
 #: gtk/open-type-layout.h:128
 msgctxt "OpenType layout"
 msgid "Vertical Kana Alternates"
-msgstr ""
+msgstr "Imellalyen Kana irataken"
 
 #: gtk/open-type-layout.h:129
 msgctxt "OpenType layout"
 msgid "Vertical Kerning"
-msgstr ""
+msgstr "Kerning aratak"
 
 #: gtk/open-type-layout.h:130
 msgctxt "OpenType layout"
 msgid "Proportional Alternate Vertical Metrics"
-msgstr ""
+msgstr "Asket aratak amlellay amẓunan"
 
 #: gtk/open-type-layout.h:131
 msgctxt "OpenType layout"
 msgid "Vertical Alternates and Rotation"
-msgstr ""
+msgstr "Imlellayen irataken akked tuzzya"
 
 #: gtk/open-type-layout.h:132
 msgctxt "OpenType layout"
 msgid "Vertical Alternates for Rotation"
-msgstr ""
+msgstr "Imlellayen irataken i tuzzya"
 
 #: gtk/open-type-layout.h:133
 msgctxt "OpenType layout"
 msgid "Slashed Zero"
-msgstr ""
+msgstr "Ilem uzrig"
 
 #: gtk/print/paper_names_offsets.c:4
 msgctxt "paper size"
@@ -5845,32 +5842,32 @@ msgstr ""
 #: gtk/print/paper_names_offsets.c:142
 msgctxt "paper size"
 msgid "US Legal"
-msgstr ""
+msgstr "US Legal"
 
 #: gtk/print/paper_names_offsets.c:143
 msgctxt "paper size"
 msgid "US Legal Extra"
-msgstr ""
+msgstr "US Legal Extra"
 
 #: gtk/print/paper_names_offsets.c:144
 msgctxt "paper size"
 msgid "US Letter"
-msgstr ""
+msgstr "US Letter"
 
 #: gtk/print/paper_names_offsets.c:145
 msgctxt "paper size"
 msgid "US Letter Extra"
-msgstr ""
+msgstr "US Letter Extra"
 
 #: gtk/print/paper_names_offsets.c:146
 msgctxt "paper size"
 msgid "US Letter Plus"
-msgstr ""
+msgstr "US Letter Plus"
 
 #: gtk/print/paper_names_offsets.c:147
 msgctxt "paper size"
 msgid "Monarch Envelope"
-msgstr ""
+msgstr "Tanattalt Munaṛč"
 
 #: gtk/print/paper_names_offsets.c:148
 msgctxt "paper size"
@@ -5905,7 +5902,7 @@ msgstr "Oficio"
 #: gtk/print/paper_names_offsets.c:154
 msgctxt "paper size"
 msgid "Personal Envelope"
-msgstr ""
+msgstr "Tanattalt tudmawant"
 
 #: gtk/print/paper_names_offsets.c:155
 msgctxt "paper size"
@@ -6020,7 +6017,7 @@ msgstr ""
 #: gtk/print/paper_names_offsets.c:177
 msgctxt "paper size"
 msgid "prc 32k"
-msgstr ""
+msgstr "prc 32k"
 
 #: gtk/print/paper_names_offsets.c:178
 msgctxt "paper size"
@@ -6234,7 +6231,7 @@ msgstr "Rnu akaram"
 
 #: gtk/ui/gtkfilechooserwidget.ui:191
 msgid "Remote location — only searching the current folder"
-msgstr ""
+msgstr "Adig anmeggag - anadi kan ɣef ukaram-a"
 
 #: gtk/ui/gtkfilechooserwidget.ui:323
 msgid "Folder Name"
@@ -6289,7 +6286,7 @@ msgstr "Ableɣ"
 
 #: gtk/print/ui/gtkpagesetupunixdialog.ui:30
 msgid "_Format for:"
-msgstr ""
+msgstr "_Amasal i:"
 
 #: gtk/print/ui/gtkpagesetupunixdialog.ui:54
 #: gtk/print/ui/gtkprintunixdialog.ui:704
@@ -6308,7 +6305,7 @@ msgstr "S teẓɣzi"
 #: gtk/print/ui/gtkpagesetupunixdialog.ui:112
 #: gtk/print/ui/gtkprintunixdialog.ui:746
 msgid "Reverse portrait"
-msgstr ""
+msgstr "Tti asunaɣ"
 
 #: gtk/print/ui/gtkpagesetupunixdialog.ui:124
 #: gtk/print/ui/gtkprintunixdialog.ui:745
@@ -6331,12 +6328,12 @@ msgstr ""
 
 #: gtk/ui/gtkplacesview.ui:54
 msgid "Available Protocols"
-msgstr ""
+msgstr "Ineggafen i yellan"
 
 #. Translators: Server as any successfully connected network address
 #: gtk/ui/gtkplacesview.ui:106
 msgid "No recent servers found"
-msgstr ""
+msgstr "Ulac iqeddacen imiranen i yettwafen"
 
 #: gtk/ui/gtkplacesview.ui:129
 msgid "Recent Servers"
@@ -6462,7 +6459,7 @@ msgstr ""
 
 #: gtk/print/ui/gtkprintunixdialog.ui:805
 msgid "Job Details"
-msgstr ""
+msgstr "Talqayt n umahil"
 
 #: gtk/print/ui/gtkprintunixdialog.ui:820
 msgid "Pri_ority:"
@@ -6508,7 +6505,7 @@ msgstr ""
 
 #: gtk/print/ui/gtkprintunixdialog.ui:965
 msgid "Add Cover Page"
-msgstr ""
+msgstr "Rnu asebter n tduli"
 
 #. this is the label used for the option in the print dialog that controls the front cover page.
 #: gtk/print/ui/gtkprintunixdialog.ui:980
@@ -6549,28 +6546,24 @@ msgstr ""
 
 #: modules/printbackends/gtkprintbackendcpdb.c:542
 #: modules/printbackends/gtkprintbackendcups.c:5668
-#| msgid "Urgent"
 msgctxt "Print job priority"
 msgid "Urgent"
 msgstr "Izreb"
 
 #: modules/printbackends/gtkprintbackendcpdb.c:543
 #: modules/printbackends/gtkprintbackendcups.c:5669
-#| msgid "High"
 msgctxt "Print job priority"
 msgid "High"
 msgstr "Ɛlay"
 
 #: modules/printbackends/gtkprintbackendcpdb.c:544
 #: modules/printbackends/gtkprintbackendcups.c:5670
-#| msgid "Medium"
 msgctxt "Print job priority"
 msgid "Medium"
 msgstr "D alemmas"
 
 #: modules/printbackends/gtkprintbackendcpdb.c:545
 #: modules/printbackends/gtkprintbackendcups.c:5671
-#| msgid "Low"
 msgctxt "Print job priority"
 msgid "Low"
 msgstr "Yuder"
@@ -6632,45 +6625,45 @@ msgstr "Awal n uɛeddi :"
 #: modules/printbackends/gtkprintbackendcups.c:1471
 #, c-format
 msgid "Authentication is required to print document “%s” on printer %s"
-msgstr ""
+msgstr "Asesteb yettwasra i usiggez n yisemli \"%s\" ɣef tsiggezt %s"
 
 #: modules/printbackends/gtkprintbackendcups.c:1183
 #, c-format
 msgid "Authentication is required to print a document on %s"
-msgstr ""
+msgstr "Asesteb yettwasra i usiggez n yisemli ɣef %s"
 
 #: modules/printbackends/gtkprintbackendcups.c:1187
 #, c-format
 msgid "Authentication is required to get attributes of job “%s”"
-msgstr ""
+msgstr "Asesteb yettwasra i wawway n yimyarren n uahil \"%s\""
 
 #: modules/printbackends/gtkprintbackendcups.c:1189
 msgid "Authentication is required to get attributes of a job"
-msgstr ""
+msgstr "Asesteb yettwasra i wawway n yimyarren n uahil"
 
 #: modules/printbackends/gtkprintbackendcups.c:1193
 #, c-format
 msgid "Authentication is required to get attributes of printer %s"
-msgstr ""
+msgstr "Asesteb yettwasra i wawway n yimyarren n tsiggezt \"%s\""
 
 #: modules/printbackends/gtkprintbackendcups.c:1195
 msgid "Authentication is required to get attributes of a printer"
-msgstr ""
+msgstr "Asesteb yettwasra i wawway n yimyarren n tsiggezt"
 
 #: modules/printbackends/gtkprintbackendcups.c:1198
 #, c-format
 msgid "Authentication is required to get default printer of %s"
-msgstr ""
+msgstr "Asesteb yettwasra i wawway n tsiggezt tamezwert %s"
 
 #: modules/printbackends/gtkprintbackendcups.c:1201
 #, c-format
 msgid "Authentication is required to get printers from %s"
-msgstr ""
+msgstr "Asesteb yettwasra i wawway n tsiggaz seg %s"
 
 #: modules/printbackends/gtkprintbackendcups.c:1206
 #, c-format
 msgid "Authentication is required to get a file from %s"
-msgstr ""
+msgstr "Asesteb yettwasra i wawway n ufaylu seg %s"
 
 #: modules/printbackends/gtkprintbackendcups.c:1208
 #, c-format
@@ -6684,16 +6677,16 @@ msgstr "Taɣult :"
 #: modules/printbackends/gtkprintbackendcups.c:1473
 #, c-format
 msgid "Authentication is required to print document “%s”"
-msgstr ""
+msgstr "Asesteb yettwasra i usiggez n yisemli \"%s\""
 
 #: modules/printbackends/gtkprintbackendcups.c:1478
 #, c-format
 msgid "Authentication is required to print this document on printer %s"
-msgstr ""
+msgstr "Asesteb yettwasra i usiggez n yisemli-a ɣef tsiggezt %s"
 
 #: modules/printbackends/gtkprintbackendcups.c:1480
 msgid "Authentication is required to print this document"
-msgstr ""
+msgstr "Asesteb yettwasra i usiggez n yisemli-a"
 
 #: modules/printbackends/gtkprintbackendcups.c:2568
 #, c-format
@@ -6829,7 +6822,7 @@ msgstr ""
 #: modules/printbackends/gtkprintbackendcups.c:4641
 msgctxt "printing option value"
 msgid "Printer Default"
-msgstr ""
+msgstr "Tasiggezt tamezwert"
 
 #. Translators: this is an option of "GhostScript"
 #: modules/printbackends/gtkprintbackendcups.c:4643
@@ -6974,14 +6967,14 @@ msgstr ""
 
 #: modules/printbackends/gtkprintbackendcups.c:5223
 msgid "Printer Default"
-msgstr ""
+msgstr "Tasiggezt tamezwert"
 
 #. Translators, this string is used to label the job priority option
 #. * in the print dialog
 #.
 #: modules/printbackends/gtkprintbackendcups.c:5702
 msgid "Job Priority"
-msgstr ""
+msgstr "Tazwart n ymahil"
 
 #. Translators, this string is used to label the billing info entry
 #. * in the print dialog
@@ -7105,7 +7098,7 @@ msgstr "SVG"
 
 #: modules/printbackends/gtkprintbackendfile.c:649
 msgid "Pages per _sheet:"
-msgstr ""
+msgstr "Asebtar i yal tiferkit: (_s)"
 
 #: modules/printbackends/gtkprintbackendfile.c:709
 msgid "File"
@@ -7215,7 +7208,7 @@ msgstr ""
 #: tools/gtk-builder-tool-preview.c:187 tools/gtk-builder-tool-screenshot.c:370
 #: tools/gtk-builder-tool-validate.c:268
 #: tools/gtk-rendernode-tool-benchmark.c:106
-#: tools/gtk-rendernode-tool-render.c:203 tools/gtk-rendernode-tool-show.c:113
+#: tools/gtk-rendernode-tool-render.c:262 tools/gtk-rendernode-tool-show.c:113
 #, c-format
 msgid "Could not initialize windowing system\n"
 msgstr ""
@@ -7258,13 +7251,13 @@ msgid ""
 msgstr ""
 
 #: tools/gtk-builder-tool-screenshot.c:332
-#: tools/gtk-rendernode-tool-render.c:171
+#: tools/gtk-rendernode-tool-render.c:230
 #, c-format
 msgid "Output written to %s.\n"
 msgstr ""
 
 #: tools/gtk-builder-tool-screenshot.c:336
-#: tools/gtk-rendernode-tool-render.c:175
+#: tools/gtk-rendernode-tool-render.c:234
 #, c-format
 msgid "Failed to save %s: %s\n"
 msgstr ""
@@ -7283,7 +7276,7 @@ msgstr ""
 
 #: tools/gtk-builder-tool-screenshot.c:363
 #: tools/gtk-rendernode-tool-benchmark.c:97
-#: tools/gtk-rendernode-tool-render.c:196
+#: tools/gtk-rendernode-tool-render.c:255
 msgid "FILE…"
 msgstr "AFAYLU…"
 
@@ -7385,7 +7378,7 @@ msgstr ""
 
 #: tools/gtk-launch.c:40
 msgid "Show program version"
-msgstr ""
+msgstr "Sken lqem n wahil"
 
 #. Translators: this message will appear immediately after the
 #. usage string - Usage: COMMAND [OPTION…] <THIS_MESSAGE>
@@ -7404,12 +7397,12 @@ msgstr ""
 #: tools/gtk-launch.c:88
 #, c-format
 msgid "Error parsing commandline options: %s\n"
-msgstr ""
+msgstr "Tuccḍa lawan n uslaḍ n textiṛiyin n yizirig n tladna: %s\n"
 
 #: tools/gtk-launch.c:90 tools/gtk-launch.c:111
 #, c-format
 msgid "Try “%s --help” for more information."
-msgstr ""
+msgstr "Ԑreḍ “%s --tallalt” i wugar n talɣut."
 
 #. Translators: the %s is the program name. This error message
 #. means the user is calling gtk-launch without any argument.
@@ -7583,7 +7576,7 @@ msgstr ""
 #: tools/gtk-path-tool-show.c:157 tools/gtk-path-tool-show.c:158
 #: tools/gtk-path-tool-show.c:159 tools/gtk-path-tool-show.c:160
 msgid "VALUE"
-msgstr ""
+msgstr "AZAL"
 
 #: tools/gtk-path-tool-render.c:133 tools/gtk-path-tool-show.c:155
 msgid "Line width (number)"
@@ -7752,7 +7745,7 @@ msgstr ""
 
 #: tools/gtk-rendernode-tool-benchmark.c:94
 #: tools/gtk-rendernode-tool-compare.c:65
-#: tools/gtk-rendernode-tool-render.c:195
+#: tools/gtk-rendernode-tool-render.c:254
 msgid "RENDERER"
 msgstr ""
 
@@ -7773,7 +7766,7 @@ msgid "Benchmark rendering of a .node file."
 msgstr ""
 
 #: tools/gtk-rendernode-tool-benchmark.c:127
-#: tools/gtk-rendernode-tool-info.c:236 tools/gtk-rendernode-tool-render.c:224
+#: tools/gtk-rendernode-tool-info.c:236 tools/gtk-rendernode-tool-render.c:283
 #: tools/gtk-rendernode-tool-show.c:134
 #, c-format
 msgid "No .node file specified\n"
@@ -7785,13 +7778,13 @@ msgid "Can only benchmark a single .node file\n"
 msgstr ""
 
 #: tools/gtk-rendernode-tool-compare.c:65
-#: tools/gtk-rendernode-tool-render.c:195
+#: tools/gtk-rendernode-tool-render.c:254
 msgid "Renderer to use"
 msgstr ""
 
 #: tools/gtk-rendernode-tool-compare.c:67
 msgid "Output file"
-msgstr ""
+msgstr "Afaylu n tuffɣa"
 
 #: tools/gtk-rendernode-tool-compare.c:70
 msgid "FILE1 FILE2"
@@ -7807,7 +7800,7 @@ msgid "Must specify two files\n"
 msgstr ""
 
 #: tools/gtk-rendernode-tool-compare.c:102
-#: tools/gtk-rendernode-tool-render.c:150
+#: tools/gtk-rendernode-tool-render.c:209
 #, c-format
 msgid "Failed to create renderer: %s\n"
 msgstr ""
@@ -7866,23 +7859,24 @@ msgstr ""
 msgid "Can only accept a single .node file\n"
 msgstr ""
 
-#: tools/gtk-rendernode-tool-render.c:123
+#: tools/gtk-rendernode-tool-render.c:170
 #, c-format
 msgid ""
 "File %s exists.\n"
 "If you want to overwrite, specify the filename.\n"
 msgstr ""
 
-#: tools/gtk-rendernode-tool-render.c:137
+#: tools/gtk-rendernode-tool-render.c:184
+#: tools/gtk-rendernode-tool-render.c:196
 #, c-format
 msgid "Failed to generate SVG: %s\n"
 msgstr ""
 
-#: tools/gtk-rendernode-tool-render.c:211
+#: tools/gtk-rendernode-tool-render.c:270
 msgid "Render a .node file to an image."
 msgstr ""
 
-#: tools/gtk-rendernode-tool-render.c:230
+#: tools/gtk-rendernode-tool-render.c:289
 #, c-format
 msgid "Can only render a single .node file to a single output file\n"
 msgstr ""
@@ -7996,17 +7990,17 @@ msgstr ""
 #: tools/updateiconcache.c:1724
 #, c-format
 msgid "File not found: %s\n"
-msgstr ""
+msgstr "Afylu ur yettwaf ara: %s\n"
 
 #: tools/updateiconcache.c:1730
 #, c-format
 msgid "Not a valid icon cache: %s\n"
-msgstr ""
+msgstr "Mačči d tuffirt n tignit tameɣtut: %s\n"
 
 #: tools/updateiconcache.c:1743
 #, c-format
 msgid "No theme index file.\n"
-msgstr ""
+msgstr "Ulac afaylu n umatar n usentel.\n"
 
 #: tools/updateiconcache.c:1747
 #, c-format
