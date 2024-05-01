@@ -195,3 +195,31 @@ gsk_font_get_rendering (PangoFont            *font,
   if (*hint_style != CAIRO_HINT_STYLE_NONE)
     *hint_metrics = CAIRO_HINT_METRICS_ON;
 }
+
+/*< private >
+ * gsk_font_get_extents:
+ * @font: a `PangoFont`
+ * @glyphs: a `PangoGlyphString`
+ * @ink_rect: (out): rectangle used to store the extents of the glyph
+ *   string as drawn
+ *
+ * Compute the ink extents of a glyph string.
+ *
+ * This is like [method@Pango.GlyphString.extents], but it provides
+ * unhinted extents.
+ */
+void
+gsk_font_get_extents (PangoFont        *font,
+                      PangoGlyphString *glyphs,
+                      PangoRectangle   *ink_rect)
+{
+  PangoFont *unhinted;
+
+  unhinted = gsk_reload_font (font, 1.0, CAIRO_HINT_METRICS_OFF,
+                                         CAIRO_HINT_STYLE_NONE,
+                                         CAIRO_ANTIALIAS_GRAY);
+
+  pango_glyph_string_extents (glyphs, unhinted, ink_rect, NULL);
+
+  g_object_unref (unhinted);
+}
