@@ -2312,6 +2312,25 @@ parse_antialias (GtkCssParser *parser,
   return TRUE;
 }
 
+static gboolean
+parse_hint_metrics (GtkCssParser *parser,
+                    Context      *context,
+                    gpointer      out)
+{
+  if (!parse_enum (parser, CAIRO_GOBJECT_TYPE_HINT_METRICS, out))
+    return FALSE;
+
+  if (*(cairo_hint_metrics_t *) out != CAIRO_HINT_METRICS_OFF &&
+      *(cairo_hint_metrics_t *) out != CAIRO_HINT_METRICS_ON)
+    {
+      gtk_css_parser_error_value (parser, "Unsupported value for enum \"%s\"",
+                                  g_type_name (CAIRO_GOBJECT_TYPE_HINT_METRICS));
+      return FALSE;
+    }
+
+  return TRUE;
+}
+
 static GskRenderNode *
 parse_text_node (GtkCssParser *parser,
                  Context      *context)
@@ -2322,6 +2341,7 @@ parse_text_node (GtkCssParser *parser,
   PangoGlyphString *glyphs = NULL;
   cairo_hint_style_t hint_style = CAIRO_HINT_STYLE_SLIGHT;
   cairo_antialias_t antialias = CAIRO_ANTIALIAS_GRAY;
+  cairo_hint_metrics_t hint_metrics = CAIRO_HINT_METRICS_OFF;
   PangoFont *hinted;
   const Declaration declarations[] = {
     { "font", parse_font, clear_font, &font },
@@ -2330,6 +2350,7 @@ parse_text_node (GtkCssParser *parser,
     { "glyphs", parse_glyphs, clear_glyphs, &glyphs },
     { "hint-style", parse_hint_style, NULL, &hint_style },
     { "antialias", parse_antialias, NULL, &antialias },
+    { "hint-metrics", parse_hint_metrics, NULL, &hint_metrics },
   };
   GskRenderNode *result;
 
@@ -2341,7 +2362,7 @@ parse_text_node (GtkCssParser *parser,
       g_assert (font);
     }
 
-  hinted = gsk_reload_font (font, 1.0, CAIRO_HINT_METRICS_OFF, hint_style, antialias);
+  hinted = gsk_reload_font (font, 1.0, hint_metrics, hint_style, antialias);
   g_object_unref (font);
   font = hinted;
 
@@ -3623,11 +3644,13 @@ gsk_text_node_serialize_font_options (GskRenderNode *node,
   cairo_font_options_t *options;
   cairo_hint_style_t hint_style;
   cairo_antialias_t antialias;
+  cairo_hint_metrics_t hint_metrics;
 
   options = cairo_font_options_create ();
   cairo_scaled_font_get_font_options (sf, options);
   hint_style = cairo_font_options_get_hint_style (options);
   antialias = cairo_font_options_get_antialias (options);
+  hint_metrics = cairo_font_options_get_hint_metrics (options);
   cairo_font_options_destroy (options);
 
   /* medium and full are identical in the absence of subpixel modes */
@@ -3643,6 +3666,12 @@ gsk_text_node_serialize_font_options (GskRenderNode *node,
    */
   if (antialias == CAIRO_ANTIALIAS_NONE)
     append_enum_param (p, "antialias", CAIRO_GOBJECT_TYPE_ANTIALIAS, antialias);
+
+  /* CAIRO_HINT_METRICS_ON is the only value we ever emit here, since off is the default,
+   * and we don't accept any other values.
+   */
+  if (hint_metrics == CAIRO_HINT_METRICS_ON)
+    append_enum_param (p, "hint-metrics", CAIRO_GOBJECT_TYPE_HINT_METRICS, CAIRO_HINT_METRICS_ON);
 }
 
 void

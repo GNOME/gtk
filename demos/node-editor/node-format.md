@@ -330,6 +330,7 @@ stroke bounds of the path.
 | offset       | `<point>`           | 0 0                 | non-default |
 | hint-style   | `<hint style>`      | slight              | non-default |
 | antialias    | `<antialias>`       | gray                | non-default |
+| hint-metrics | `<hint metrics>`    | off                 | non-default |
 
 Creates a node like `gsk_text_node_new()` with the given properties.
 
@@ -346,6 +347,7 @@ font, an error node will be returned.
 
 Possible values for hint-style are none, slight or full.
 Possible value for antialias are none or gray.
+Possible value for hint-metrics are on or off.
 
 ### texture
 
