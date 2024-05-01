@@ -184,10 +184,4 @@
         </signal>
 </interface>
 
-<interface name="org.a11y.atspi.Event.Focus">
-	<signal name="Focus"><arg direction="in" type="(suuv)"/>
-          <annotation name="org.qtproject.QtDBus.QtTypeName.In0" value="QSpiEvent"/>
-        </signal>
-</interface>
-
 </node>
