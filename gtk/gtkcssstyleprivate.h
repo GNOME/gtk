@@ -268,6 +268,9 @@ char *                  gtk_css_style_compute_font_features     (GtkCssStyle    
 PangoAttrList *         gtk_css_style_get_pango_attributes      (GtkCssStyle            *style);
 PangoFontDescription *  gtk_css_style_get_pango_font            (GtkCssStyle            *style);
 
+void                    gtk_css_style_lookup_symbolic_colors    (GtkCssStyle            *style,
+                                                                 GdkRGBA                 color_out[4]);
+
 GtkCssValues *gtk_css_values_new   (GtkCssValuesType  type);
 GtkCssValues *gtk_css_values_ref   (GtkCssValues     *values);
 void          gtk_css_values_unref (GtkCssValues     *values);
