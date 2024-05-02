@@ -649,6 +649,7 @@ main (int argc, char *argv[])
   g_test_add_data_func ("/a11y/property/value-min", GUINT_TO_POINTER (GTK_ACCESSIBLE_PROPERTY_VALUE_MIN), test_number_property);
   g_test_add_data_func ("/a11y/property/value-now", GUINT_TO_POINTER (GTK_ACCESSIBLE_PROPERTY_VALUE_NOW), test_number_property);
   g_test_add_data_func ("/a11y/property/value-text", GUINT_TO_POINTER (GTK_ACCESSIBLE_PROPERTY_VALUE_TEXT), test_string_property);
+  g_test_add_data_func ("/a11y/property/help-text", GUINT_TO_POINTER (GTK_ACCESSIBLE_PROPERTY_HELP_TEXT), test_string_property);
 
   g_test_add_func ("/a11y/property/update-multiple", test_update_multiple_properties);
 
