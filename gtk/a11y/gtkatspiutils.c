@@ -97,7 +97,7 @@ gtk_accessible_role_to_atspi_role (GtkAccessibleRole role)
       return ATSPI_ROLE_FORM;
 
     case GTK_ACCESSIBLE_ROLE_GENERIC:
-      return ATSPI_ROLE_FILLER;
+      return ATSPI_ROLE_PANEL;
 
     case GTK_ACCESSIBLE_ROLE_GRID:
       return ATSPI_ROLE_TABLE;
@@ -106,7 +106,7 @@ gtk_accessible_role_to_atspi_role (GtkAccessibleRole role)
       return ATSPI_ROLE_TABLE_CELL;
 
     case GTK_ACCESSIBLE_ROLE_GROUP:
-      return ATSPI_ROLE_PANEL;
+      return ATSPI_ROLE_GROUPING;
 
     case GTK_ACCESSIBLE_ROLE_HEADING:
       return ATSPI_ROLE_HEADING;
