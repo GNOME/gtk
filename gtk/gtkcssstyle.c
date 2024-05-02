@@ -29,6 +29,7 @@
 #include "gtkcssinitialvalueprivate.h"
 #include "gtkcssnumbervalueprivate.h"
 #include "gtkcsscolorvalueprivate.h"
+#include "gtkcsspalettevalueprivate.h"
 #include "gtkcssshorthandpropertyprivate.h"
 #include "gtkcssstringvalueprivate.h"
 #include "gtkcssfontvariationsvalueprivate.h"
@@ -748,6 +749,33 @@ gtk_css_style_get_pango_font (GtkCssStyle *style)
   g_free (str);
 
   return description;
+}
+
+void
+gtk_css_style_lookup_symbolic_colors (GtkCssStyle *style,
+                                      GdkRGBA      color_out[4])
+{
+  GtkCssValue *palette, *color;
+  const char *names[4] = {
+    [GTK_SYMBOLIC_COLOR_ERROR] = "error",
+    [GTK_SYMBOLIC_COLOR_WARNING] = "warning",
+    [GTK_SYMBOLIC_COLOR_SUCCESS] = "success"
+  };
+
+  color = style->core->color;
+  palette = style->core->icon_palette;
+  color_out[GTK_SYMBOLIC_COLOR_FOREGROUND] = *gtk_css_color_value_get_rgba (color);
+
+  for (gsize i = 1; i < 4; i++)
+    {
+      const GdkRGBA *lookup;
+
+      lookup = gtk_css_palette_value_get_color (palette, names[i]);
+      if (lookup)
+        color_out[i] = *lookup;
+      else
+        color_out[i] = color_out[GTK_SYMBOLIC_COLOR_FOREGROUND];
+    }
 }
 
 /* Refcounted value structs */

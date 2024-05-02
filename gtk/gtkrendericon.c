@@ -21,6 +21,7 @@
 
 #include "gtkrendericonprivate.h"
 
+#include "gtkcsscolorvalueprivate.h"
 #include "gtkcssfiltervalueprivate.h"
 #include "gtkcssimagevalueprivate.h"
 #include "gtkcssshadowvalueprivate.h"
@@ -116,7 +117,7 @@ gtk_css_style_snapshot_icon_paintable (GtkCssStyle  *style,
   is_symbolic_paintable = GTK_IS_SYMBOLIC_PAINTABLE (paintable);
   if (is_symbolic_paintable)
     {
-      gtk_icon_theme_lookup_symbolic_colors (style, colors);
+      gtk_css_style_lookup_symbolic_colors (style, colors);
 
       if (gdk_rgba_is_clear (&colors[0]))
         goto transparent;
