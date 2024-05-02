@@ -1,5 +1,40 @@
-Overview of Changes in 4.14.4, xx-xx-xxxx
+Overview of Changes in 4.14.4, 02-05-2024
 =========================================
+
+* GtkGraphicsOffload:
+ - Don't crash without a child
+
+* Icontheme:
+ - Make symbolic svg loading more efficient
+ - Handle color-free symbolics more efficiently
+
+* Accessibility:
+ - Make the gtk-demo sidebar search more accessible
+ - Stop emitting focus events
+
+* GDK:
+ - Support XDG_ACTIVATION_TOKEN
+ - dmabuf: Be more defensive when importing unknown formats to G
+ - dmabuf: Use narrow range for YUV
+
+* GSK:
+ - gpu: Handle  tiny offscreens correctl
+
+* Build:
+ - Fix many ubsan warning
+
+* macOS
+ - Fix problems with events handed back to the OS
+ - Respect GDK_DEBUG=default-settings
+
+* Translation updates:
+ German
+ Indonesian
+ Kabyle
+ Korean
+ Lithuanian
+ Russian
+
 
 Overview of Changes in 4.14.3, 18-04-2024
 =========================================
