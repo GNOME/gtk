@@ -1006,7 +1006,7 @@ gtk_check_button_set_group (GtkCheckButton *self,
                             GtkCheckButton *group)
 {
   GtkCheckButtonPrivate *priv = gtk_check_button_get_instance_private (self);
-  GtkCheckButtonPrivate *group_priv = gtk_check_button_get_instance_private (group);
+  GtkCheckButtonPrivate *group_priv;
 
   g_return_if_fail (GTK_IS_CHECK_BUTTON (self));
   g_return_if_fail (self != group);
@@ -1036,6 +1036,8 @@ gtk_check_button_set_group (GtkCheckButton *self,
 
   if (priv->group_next == group)
     return;
+
+  group_priv = gtk_check_button_get_instance_private (group);
 
   priv->group_prev = NULL;
   if (group_priv->group_prev)

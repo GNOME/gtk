@@ -598,7 +598,7 @@ gtk_image_set_from_file (GtkImage    *image,
     }
 
   scale_factor = gtk_widget_get_scale_factor (GTK_WIDGET (image));
-  paintable = gdk_paintable_new_from_path_scaled (filename, scale_factor);
+  paintable = gdk_paintable_new_from_filename_scaled (filename, scale_factor);
 
   if (paintable == NULL)
     {
@@ -637,7 +637,7 @@ resource_is_pixdata (const char *resource_path)
   if (data_size < sizeof(guint32))
     goto out;
 
-  magic = (stream[0] << 24) + (stream[1] << 16) + (stream[2] << 8) + stream[3];
+  magic = (((guint32)(stream[0])) << 24) | (((guint32)(stream[1])) << 16) | (((guint32)(stream[2])) << 8) | (guint32)(stream[3]);
   if (magic == GDK_PIXBUF_MAGIC_NUMBER)
     ret = TRUE;
 

@@ -5835,19 +5835,20 @@ gtk_window_is_active (GtkWindow *window)
 GtkWindowGroup *
 gtk_window_get_group (GtkWindow *window)
 {
-  GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
+  static GtkWindowGroup *default_group = NULL;
 
-  if (window && priv->group)
-    return priv->group;
-  else
+  if (window)
     {
-      static GtkWindowGroup *default_group = NULL;
+      GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
 
-      if (!default_group)
-	default_group = gtk_window_group_new ();
-
-      return default_group;
+      if (priv->group)
+        return priv->group;
     }
+
+  if (!default_group)
+    default_group = gtk_window_group_new ();
+
+  return default_group;
 }
 
 /**

@@ -28,7 +28,9 @@ G_BEGIN_DECLS
 
 typedef enum
 {
+  /* path has only lines */
   GSK_PATH_FLAT,
+  /* all contours are closed */
   GSK_PATH_CLOSED
 } GskPathFlags;
 

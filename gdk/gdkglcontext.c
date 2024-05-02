@@ -2198,12 +2198,78 @@ gdk_gl_context_import_dmabuf (GdkGLContext    *self,
 
   gdk_display_init_dmabuf (display);
 
-  if (!gdk_dmabuf_formats_contains (display->egl_external_formats, dmabuf->fourcc, dmabuf->modifier))
+  if (gdk_dmabuf_formats_contains (display->egl_dmabuf_formats, dmabuf->fourcc, dmabuf->modifier))
     {
+      /* This is the path for modern drivers that support modifiers */
+
+      if (!gdk_dmabuf_formats_contains (display->egl_external_formats, dmabuf->fourcc, dmabuf->modifier))
+        {
+          texture_id = gdk_gl_context_import_dmabuf_for_target (self,
+                                                                width, height,
+                                                                dmabuf,
+                                                                GL_TEXTURE_2D);
+          if (texture_id == 0)
+            {
+              GDK_DISPLAY_DEBUG (display, DMABUF,
+                                 "Import of %dx%d %.4s:%#" G_GINT64_MODIFIER "x dmabuf failed",
+                                 width, height,
+                                 (char *) &dmabuf->fourcc, dmabuf->modifier);
+              return 0;
+            }
+
+          GDK_DISPLAY_DEBUG (display, DMABUF,
+                             "Imported %dx%d %.4s:%#" G_GINT64_MODIFIER "x dmabuf as GL_TEXTURE_2D texture",
+                             width, height,
+                             (char *) &dmabuf->fourcc, dmabuf->modifier);
+          *external = FALSE;
+          return texture_id;
+        }
+
+      if (!gdk_gl_context_get_use_es (self))
+        {
+          GDK_DISPLAY_DEBUG (display, DMABUF,
+                             "Can't import external_only %.4s:%#" G_GINT64_MODIFIER "x outside of GLES",
+                             (char *) &dmabuf->fourcc, dmabuf->modifier);
+          return 0;
+        }
+
       texture_id = gdk_gl_context_import_dmabuf_for_target (self,
                                                             width, height,
                                                             dmabuf,
-                                                            GL_TEXTURE_2D);
+                                                            GL_TEXTURE_EXTERNAL_OES);
+      if (texture_id == 0)
+        {
+          GDK_DISPLAY_DEBUG (display, DMABUF,
+                             "Import of external_only %dx%d %.4s:%#" G_GINT64_MODIFIER "x dmabuf failed",
+                             width, height,
+                             (char *) &dmabuf->fourcc, dmabuf->modifier);
+          return 0;
+        }
+
+      GDK_DISPLAY_DEBUG (display, DMABUF,
+                         "Imported %dx%d %.4s:%#" G_GINT64_MODIFIER "x dmabuf as GL_TEXTURE_EXTERNAL_OES texture",
+                         width, height,
+                         (char *) &dmabuf->fourcc, dmabuf->modifier);
+      *external = TRUE;
+      return texture_id;
+    }
+  else
+    {
+      /* This is the opportunistic path.
+       * We hit it both for drivers that do not support modifiers as well as for dmabufs
+       * that the driver did not explicitly advertise. */
+      int target;
+
+      if (gdk_gl_context_get_use_es (self))
+        target = GL_TEXTURE_EXTERNAL_OES;
+      else
+        target = GL_TEXTURE_2D;
+
+      texture_id = gdk_gl_context_import_dmabuf_for_target (self,
+                                                            width, height,
+                                                            dmabuf,
+                                                            target);
+
       if (texture_id == 0)
         {
           GDK_DISPLAY_DEBUG (display, DMABUF,
@@ -2214,40 +2280,13 @@ gdk_gl_context_import_dmabuf (GdkGLContext    *self,
         }
 
       GDK_DISPLAY_DEBUG (display, DMABUF,
-                         "Imported %dx%d %.4s:%#" G_GINT64_MODIFIER "x dmabuf as GL_TEXTURE_2D texture",
+                         "Imported %dx%d %.4s:%#" G_GINT64_MODIFIER "x dmabuf as %s texture",
                          width, height,
-                         (char *) &dmabuf->fourcc, dmabuf->modifier);
-      *external = FALSE;
+                         (char *) &dmabuf->fourcc, dmabuf->modifier,
+                         target == GL_TEXTURE_EXTERNAL_OES ? "GL_TEXTURE_EXTERNAL_OES" : "GL_TEXTURE_2D");
+      *external = target == GL_TEXTURE_EXTERNAL_OES;
       return texture_id;
     }
-
-  if (!gdk_gl_context_get_use_es (self))
-    {
-      GDK_DISPLAY_DEBUG (display, DMABUF,
-                         "Can't import external_only %.4s:%#" G_GINT64_MODIFIER "x outside of GLES",
-                         (char *) &dmabuf->fourcc, dmabuf->modifier);
-      return 0;
-    }
-
-  texture_id = gdk_gl_context_import_dmabuf_for_target (self,
-                                                        width, height,
-                                                        dmabuf,
-                                                        GL_TEXTURE_EXTERNAL_OES);
-  if (texture_id == 0)
-    {
-      GDK_DISPLAY_DEBUG (display, DMABUF,
-                         "Import of external_only %dx%d %.4s:%#" G_GINT64_MODIFIER "x dmabuf failed",
-                         width, height,
-                         (char *) &dmabuf->fourcc, dmabuf->modifier);
-      return 0;
-    }
-
-  GDK_DISPLAY_DEBUG (display, DMABUF,
-                     "Imported %dx%d %.4s:%#" G_GINT64_MODIFIER "x dmabuf as GL_TEXTURE_EXTERNAL_OES texture",
-                     width, height,
-                     (char *) &dmabuf->fourcc, dmabuf->modifier);
-  *external = TRUE;
-  return texture_id;
 }
 
 gboolean

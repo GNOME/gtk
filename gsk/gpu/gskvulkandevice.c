@@ -786,7 +786,7 @@ gsk_vulkan_device_get_vk_conversion (GskVulkanDevice *self,
                                                     .sType = VK_STRUCTURE_TYPE_SAMPLER_YCBCR_CONVERSION_CREATE_INFO,
                                                     .format = vk_format,
                                                     .ycbcrModel = VK_SAMPLER_YCBCR_MODEL_CONVERSION_YCBCR_601,
-                                                    .ycbcrRange = VK_SAMPLER_YCBCR_RANGE_ITU_FULL,
+                                                    .ycbcrRange = VK_SAMPLER_YCBCR_RANGE_ITU_NARROW,
                                                     .components = (VkComponentMapping) {
                                                         VK_COMPONENT_SWIZZLE_IDENTITY,
                                                         VK_COMPONENT_SWIZZLE_IDENTITY,

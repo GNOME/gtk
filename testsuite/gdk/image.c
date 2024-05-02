@@ -49,7 +49,7 @@ test_load_image (gconstpointer data)
 
   /* use the internal api, we want to avoid pixbuf fallback here */
   if (g_str_has_suffix (filename, ".png"))
-    texture = gdk_load_png (bytes, &error);
+    texture = gdk_load_png (bytes, NULL, &error);
   else if (g_str_has_suffix (filename, ".tiff"))
     texture = gdk_load_tiff (bytes, &error);
   else if (g_str_has_suffix (filename, ".jpeg"))

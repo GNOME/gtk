@@ -144,8 +144,8 @@ struct _YUVCoefficients
 };
 
 /* multiplied by 65536 */
-//static const YUVCoefficients itu601_narrow = { 104597, -25675, -53279, 132201 };
-static const YUVCoefficients itu601_wide = { 74711, -25864, -38050, 133176 };
+static const YUVCoefficients itu601_narrow = { 104597, -25675, -53279, 132201 };
+//static const YUVCoefficients itu601_wide = { 74711, -25864, -38050, 133176 };
 
 static inline void
 get_uv_values (const YUVCoefficients *coeffs,
@@ -229,7 +229,7 @@ download_nv12 (guchar          *dst_data,
           int r, g, b;
           gsize xs, ys;
 
-          get_uv_values (&itu601_wide, uv_data[x / X_SUB * 2 + U], uv_data[x / X_SUB * 2 + V], &r, &g, &b);
+          get_uv_values (&itu601_narrow, uv_data[x / X_SUB * 2 + U], uv_data[x / X_SUB * 2 + V], &r, &g, &b);
 
           for (ys = 0; ys < Y_SUB && y + ys < height; ys++)
             for (xs = 0; xs < X_SUB && x + xs < width; xs++)
@@ -309,7 +309,7 @@ download_yuv_3 (guchar          *dst_data,
           int r, g, b;
           gsize xs, ys;
 
-          get_uv_values (&itu601_wide, u_data[x / X_SUB], v_data[x / X_SUB], &r, &g, &b);
+          get_uv_values (&itu601_narrow, u_data[x / X_SUB], v_data[x / X_SUB], &r, &g, &b);
 
           for (ys = 0; ys < Y_SUB && y + ys < height; ys++)
             for (xs = 0; xs < X_SUB && x + xs < width; xs++)
@@ -365,7 +365,7 @@ download_yuyv (guchar          *dst_data,
         {
           int r, g, b;
 
-          get_uv_values (&itu601_wide, src_data[2 * x + U], src_data[2 * x + V], &r, &g, &b);
+          get_uv_values (&itu601_narrow, src_data[2 * x + U], src_data[2 * x + V], &r, &g, &b);
           set_rgb_values (&dst_data[3 * x], src_data[2 * x + Y1], r, g, b);
           if (x + 1 < width)
             set_rgb_values (&dst_data[3 * (x + 1)], src_data[2 * x + Y2], r, g, b);

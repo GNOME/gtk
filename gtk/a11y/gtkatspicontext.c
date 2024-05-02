@@ -900,24 +900,6 @@ emit_children_changed (GtkAtSpiContext         *self,
 }
 
 static void
-emit_focus (GtkAtSpiContext *self,
-            gboolean         focus_in)
-{
-  if (self->connection == NULL)
-    return;
-
-  if (focus_in)
-    g_dbus_connection_emit_signal (self->connection,
-                                   NULL,
-                                   self->context_path,
-                                   "org.a11y.atspi.Event.Focus",
-                                   "Focus",
-                                   g_variant_new ("(siiva{sv})",
-                                                  "", 0, 0, g_variant_new_string ("0"), NULL),
-                                   NULL);
-}
-
-static void
 emit_window_event (GtkAtSpiContext *self,
                    const char      *event_type)
 {
@@ -1196,7 +1178,6 @@ gtk_at_spi_context_platform_change (GtkATContext                *ctx,
       gboolean state = gtk_accessible_get_platform_state (GTK_ACCESSIBLE (widget),
                                                           GTK_ACCESSIBLE_PLATFORM_STATE_FOCUSED);
       emit_state_changed (self, "focused", state);
-      emit_focus (self, state);
     }
 
   if (changed_platform & GTK_ACCESSIBLE_PLATFORM_CHANGE_ACTIVE)

@@ -28,7 +28,7 @@ G_BEGIN_DECLS
 G_DECLARE_FINAL_TYPE (GtkScaler, gtk_scaler, GTK, SCALER, GObject)
 
 GdkPaintable *  gtk_scaler_new                  (GdkPaintable   *paintable,
-                                                 double          scale_factor);
+                                                 double          scale);
 
 G_END_DECLS
 

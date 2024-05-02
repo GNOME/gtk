@@ -310,7 +310,9 @@ linux_dmabuf_main_device (void *data,
                           struct zwp_linux_dmabuf_feedback_v1 *zwp_linux_dmabuf_feedback_v1,
                           struct wl_array *device)
 {
-  dev_t dev G_GNUC_UNUSED = *(dev_t *)device->data;
+  dev_t dev G_GNUC_UNUSED;
+
+  memcpy (&dev, device->data, sizeof (dev_t));
 
   GDK_DEBUG (MISC, "got dmabuf main device: %u %u", major (dev), minor (dev));
 }
@@ -327,7 +329,9 @@ linux_dmabuf_tranche_target_device (void *data,
                                     struct zwp_linux_dmabuf_feedback_v1 *zwp_linux_dmabuf_feedback_v1,
                                     struct wl_array *device)
 {
-  dev_t dev G_GNUC_UNUSED = *(dev_t *)device->data;
+  dev_t dev G_GNUC_UNUSED;
+
+  memcpy (&dev, device->data, sizeof (dev_t));
 
   GDK_DEBUG (MISC, "got dmabuf tranche target device: %u %u", major (dev), minor (dev));
 }
