@@ -1757,14 +1757,15 @@ headerbar {
   }
 
   &.default-decoration {
-    min-height: 28px;
-    padding: 4px;
+    padding: 0px 2px;
 
     button.titlebutton {
-      min-height: 26px;
-      min-width: 26px;
+      min-height: 18px;
+      min-width: 18px;
       margin: 0;
       padding: 0;
+      min-height: 0;
+      min-width: 0;
     }
   }
   
