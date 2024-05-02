@@ -277,27 +277,3 @@ make_pot = find_program ('make-pot', dirs: meson.project_source_root())
 test('potfiles', make_pot,
      workdir: meson.project_source_root(),
      suite: ['gtk', 'translations' ])
-
-if false and get_option ('profiler')
-
-  performance_env = test_env
-  performance_env.set('GTK_THEME', 'Empty')
-
-  test('performance-layout', test_performance,
-    args: [
-      '--mark', 'size allocation',
-      join_paths(meson.current_build_dir(), '../../demos/widget-factory/gtk4-widget-factory'),
-    ],
-    env: performance_env,
-    suite: [ 'gtk' ],
-  )
-
-  test('performance-snapshot', test_performance,
-    args: [
-      '--mark', 'widget snapshot',
-      join_paths(meson.current_build_dir(), '../../demos/widget-factory/gtk4-widget-factory'),
-    ],
-    env: performance_env,
-    suite: [ 'gtk' ],
-  )
-endif

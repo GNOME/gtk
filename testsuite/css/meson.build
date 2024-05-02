@@ -52,31 +52,3 @@ test('transition', transition,
      suite: 'css'
 )
 
-if false and get_option ('profiler')
-
-  adwaita_env = csstest_env
-  adwaita_env.set('GTK_THEME', 'Adwaita')
-  test('performance-adwaita', test_performance,
-    args: [
-      '--mark', 'css validation',
-      '--name', 'performance-adwaita',
-      '--output', join_paths(meson.current_build_dir(), 'output'),
-      join_paths(meson.current_build_dir(), '../../demos/widget-factory/gtk4-widget-factory'),
-    ],
-    env: adwaita_env,
-    suite: [ 'css' ],
-  )
-
-  empty_env = csstest_env
-  empty_env.set('GTK_THEME', 'Empty')
-  test('performance-empty', test_performance,
-    args: [
-      '--mark', 'css validation',
-      '--name', 'performance-empty',
-      '--output', join_paths(meson.current_build_dir(), 'output'),
-      join_paths(meson.current_build_dir(), '../../demos/widget-factory/gtk4-widget-factory'),
-    ],
-    env: empty_env,
-    suite: [ 'css' ],
-  )
-endif
