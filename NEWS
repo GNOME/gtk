@@ -1,6 +1,54 @@
 Overview of Changes in 4.15.1, xx-xx-xxxx
 =========================================
 
+* GtkGraphicsOffload:
+ - Don't crash without a child
+
+* CSS:
+ - Support the :root selector
+
+* Icontheme:
+ - Make symbolic svg loading more efficient
+ - Handle color-free symbolics more efficiently
+
+* Accessibility:
+ - Make the gtk-demo sidebar search more accessible
+ - Stop emitting focus events
+
+* GDK:
+ - Support XDG_ACTIVATION_TOKEN
+ - dmabuf: Be more defensive when importing unknown formats to GL
+ - dmabuf: Use narrow range for YUV
+
+* GSK:
+ - Improve logging for GDK_DEBUG=offload
+ - Improve logging for GSK_DEBUG=renderer
+ - gpu: Warn about inefficient texture import
+ - gpu: Handle  tiny offscreens correctly
+ - vulkan: Add profiler marks in various places
+ - vulkan: Fix a problem with imported dmabufs showing up black
+
+* Wayland:
+ - Use wl_compositor version 6
+
+* X11:
+ - Implement a missing method
+
+* Build:
+ - Fix many ubsan warnings
+
+* Debugging:
+ - Show more texture details in the recorder
+
+* macOS:
+ - Fix problems with events handed back to the OS
+ - Respect GDK_DEBUG=default-settings
+
+* Translation updates:
+ Korean
+ Turkish
+
+
 Overview of Changes in 4.15.0, 21-04-2024
 =========================================
 
