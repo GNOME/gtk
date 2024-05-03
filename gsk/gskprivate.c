@@ -221,5 +221,11 @@ gsk_font_get_extents (PangoFont        *font,
 
   pango_glyph_string_extents (glyphs, unhinted, ink_rect, NULL);
 
+  /* Hack: Without this, cff fonts like Fira get clipped */
+  ink_rect->x -= 1024;
+  ink_rect->y -= 1024;
+  ink_rect->width += 2048;
+  ink_rect->height += 2048;
+
   g_object_unref (unhinted);
 }
