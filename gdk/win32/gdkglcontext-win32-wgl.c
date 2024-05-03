@@ -267,7 +267,7 @@ create_dummy_gl_window (void)
 {
   WNDCLASS wclass = { 0, };
   ATOM klass;
-  HWND hwnd;
+  HWND hwnd = NULL;
 
   wclass.lpszClassName = "GdkGLDummyWindow";
   wclass.lpfnWndProc = DefWindowProc;
