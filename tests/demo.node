@@ -1,0 +1,66 @@
+transform {
+  transform: scale(1);
+  child: container {
+
+    color {
+      color: white;
+      bounds: -5 -20 140 30;
+    }
+    text {
+      font: "Fira Sans Medium 21px";
+      glyphs: "e";
+      offset: -2 0;
+    }
+    text {
+      font: "Fira Sans Medium 20.5px";
+      glyphs: "e";
+      offset: 11 0;
+    }
+    text {
+      font: "Fira Sans Medium 20px";
+      glyphs: "e";
+      offset: 24 0;
+    }
+    text {
+      font: "Fira Sans Medium 19.5px";
+      glyphs: "e";
+      offset: 36 0;
+    }
+    text {
+      font: "Fira Sans Medium 19px";
+      glyphs: "e";
+      offset: 48 0;
+    }
+    text {
+      font: "Fira Sans Medium 18.5px";
+      glyphs: "e";
+      offset: 60 0;
+    }
+    text {
+      font: "Fira Sans Medium 18px";
+      glyphs: "e";
+      offset: 72 0;
+    }
+    text {
+      font: "Fira Sans Medium 17.5px";
+      glyphs: "e";
+      offset: 84 0;
+    }
+    text {
+      font: "Fira Sans Medium 17px";
+      glyphs: "e";
+      offset: 96 0;
+    }
+    text {
+      font: "Fira Sans Medium 16.5px";
+      glyphs: "e";
+      offset: 108 0;
+    }
+    text {
+      font: "Fira Sans Medium 16px";
+      glyphs: "e";
+      offset: 120 0;
+    }
+
+  }
+}
