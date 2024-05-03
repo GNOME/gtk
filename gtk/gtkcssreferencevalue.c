@@ -28,6 +28,14 @@
 #include "gtkcssunsetvalueprivate.h"
 #include "gtkcssvalueprivate.h"
 #include "gtkstyleproviderprivate.h"
+#include "gdk/gdkprofilerprivate.h"
+
+#define GDK_ARRAY_NAME gtk_css_refs
+#define GDK_ARRAY_TYPE_NAME GtkCssRefs
+#define GDK_ARRAY_ELEMENT_TYPE gpointer
+#define GDK_ARAY_PREALLOC 32
+#define GDK_ARRAY_NO_MEMSET 1
+#include "gdk/gdkarrayimpl.c"
 
 #define MAX_TOKEN_LENGTH 65536
 
@@ -60,7 +68,7 @@ resolve_references_do (GtkCssVariableValue *value,
                        GtkCssVariableSet   *style_variables,
                        GtkCssVariableSet   *keyframes_variables,
                        gboolean             root,
-                       GPtrArray           *refs,
+                       GtkCssRefs          *refs,
                        gsize               *out_length,
                        gsize               *out_n_refs)
 {
@@ -96,7 +104,7 @@ resolve_references_do (GtkCssVariableValue *value,
   if (!root)
     {
       n_refs += 1;
-      g_ptr_array_add (refs, value);
+      gtk_css_refs_append (refs, value);
     }
 
   for (i = 0; i < value->n_references; i++)
@@ -168,7 +176,7 @@ resolve_references_do (GtkCssVariableValue *value,
 
 error:
   /* Remove the references we added as if nothing happened */
-  g_ptr_array_remove_range (refs, refs->len - n_refs, n_refs);
+  gtk_css_refs_splice (refs, gtk_css_refs_get_size (refs) - n_refs, n_refs, TRUE, NULL, 0);
 
   if (out_length)
     *out_length = 0;
@@ -179,28 +187,17 @@ error:
   return ret;
 }
 
-static GtkCssVariableValue **
+static void
 resolve_references (GtkCssVariableValue *input,
                     guint                property_id,
                     GtkCssStyle         *style,
                     GtkCssVariableSet   *keyframes_variables,
-                    gsize               *n_refs)
+                    GtkCssRefs          *refs)
 {
-  GPtrArray *refs = g_ptr_array_new ();
-  GtkCssVariableValue **out_refs;
-
   if (resolve_references_do (input, property_id, style->variables,
                              keyframes_variables, TRUE, refs,
                              NULL, NULL) != RESOLVE_SUCCESS)
-    {
-      return NULL;
-    }
-
-  out_refs = (GtkCssVariableValue **) g_ptr_array_steal (refs, n_refs);
-
-  g_ptr_array_unref (refs);
-
-  return out_refs;
+    gtk_css_refs_clear (refs);
 }
 
 static void
@@ -231,23 +228,35 @@ gtk_css_value_reference_compute (GtkCssValue       *value,
                                  GtkCssVariableSet *variables)
 {
   GtkCssValue *result = NULL, *computed;
-  GtkCssVariableValue **refs;
-  gsize n_refs = 0;
+  GtkCssRefs refs;
+  gint64 start;
 
-  refs = resolve_references (value->value, property_id, style, variables, &n_refs);
+  start = GDK_PROFILER_CURRENT_TIME;
 
-  if (refs != NULL)
+  gtk_css_refs_init (&refs);
+
+  resolve_references (value->value, property_id, style, variables, &refs);
+
+  gdk_profiler_end_mark (start, "resolve refs", "");
+
+  if (gtk_css_refs_get_size (&refs) > 0)
     {
+      start = GDK_PROFILER_CURRENT_TIME;
+
       GtkCssParser *value_parser =
         gtk_css_parser_new_for_token_stream (value->value,
                                              value->file,
-                                             refs,
-                                             n_refs,
+                                             (GtkCssVariableValue **) refs.start,
+                                             gtk_css_refs_get_size (&refs),
                                              parser_error, provider, NULL);
 
       result = _gtk_style_property_parse_value (value->property, value_parser);
       gtk_css_parser_unref (value_parser);
+
+      gdk_profiler_end_mark (start, "reparse", "");
     }
+
+  gtk_css_refs_clear (&refs);
 
   if (result == NULL)
     result = _gtk_css_unset_value_new ();

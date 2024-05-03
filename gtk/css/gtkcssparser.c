@@ -168,7 +168,6 @@ gtk_css_parser_finalize (GtkCssParser *self)
   if (self->blocks->len)
     g_critical ("Finalizing CSS parser with %u remaining blocks", self->blocks->len);
   g_array_free (self->blocks, TRUE);
-  g_free (self->refs);
 
   g_free (self);
 }
