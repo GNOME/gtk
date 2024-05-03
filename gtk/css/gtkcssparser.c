@@ -100,10 +100,7 @@ gtk_css_parser_new (GtkCssTokenizer       *tokenizer,
   g_ptr_array_add (self->tokenizers, gtk_css_tokenizer_ref (tokenizer));
 
   if (file)
-    {
-      self->file = g_object_ref (file);
-      self->directory = g_file_get_parent (file);
-    }
+    self->file = g_object_ref (file);
 
   self->error_func = error_func;
   self->user_data = user_data;
@@ -246,7 +243,12 @@ gtk_css_parser_resolve_url (GtkCssParser *self,
     }
 
   if (self->directory == NULL)
-    return NULL;
+    {
+      if (self->file)
+        self->directory = g_file_get_parent (self->file);
+      if (self->directory == NULL)
+        return NULL;
+    }
 
   return g_file_resolve_relative_path (self->directory, url);
 }
