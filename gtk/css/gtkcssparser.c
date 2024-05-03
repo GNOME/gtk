@@ -29,6 +29,33 @@
 typedef struct _GtkCssParserBlock GtkCssParserBlock;
 typedef struct _GtkCssParserTokenStreamData GtkCssParserTokenStreamData;
 
+struct _GtkCssParserBlock
+{
+  GtkCssLocation start_location;
+  GtkCssTokenType end_token;
+  GtkCssTokenType inherited_end_token;
+  GtkCssTokenType alternative_token;
+};
+
+#define GDK_ARRAY_NAME gtk_css_parser_blocks
+#define GDK_ARRAY_TYPE_NAME GtkCssParserBlocks
+#define GDK_ARRAY_ELEMENT_TYPE GtkCssParserBlock
+#define GDK_ARAY_PREALLOC 32
+#define GDK_ARRAY_NO_MEMSET 1
+#include "gdk/gdkarrayimpl.c"
+
+static inline GtkCssParserBlock *
+gtk_css_parser_blocks_get_last (GtkCssParserBlocks *blocks)
+{
+  return gtk_css_parser_blocks_index (blocks, gtk_css_parser_blocks_get_size (blocks) - 1);
+}
+
+static inline void
+gtk_css_parser_blocks_drop_last (GtkCssParserBlocks *blocks)
+{
+  gtk_css_parser_blocks_set_size (blocks, gtk_css_parser_blocks_get_size (blocks) - 1);
+}
+
 struct _GtkCssParser
 {
   volatile int ref_count;
@@ -40,7 +67,7 @@ struct _GtkCssParser
   gpointer user_data;
   GDestroyNotify user_destroy;
 
-  GArray *blocks;
+  GtkCssParserBlocks blocks;
   GtkCssLocation location;
   GtkCssToken token;
 
@@ -48,14 +75,6 @@ struct _GtkCssParser
   gsize n_refs;
   gsize next_ref;
   gboolean var_fallback;
-};
-
-struct _GtkCssParserBlock
-{
-  GtkCssLocation start_location;
-  GtkCssTokenType end_token;
-  GtkCssTokenType inherited_end_token;
-  GtkCssTokenType alternative_token;
 };
 
 static inline GtkCssTokenizer *
@@ -89,7 +108,7 @@ gtk_css_parser_new (GtkCssTokenizer       *tokenizer,
   self->error_func = error_func;
   self->user_data = user_data;
   self->user_destroy = user_destroy;
-  self->blocks = g_array_new (FALSE, FALSE, sizeof (GtkCssParserBlock));
+  gtk_css_parser_blocks_init (&self->blocks);
 
   return self;
 }
@@ -165,9 +184,9 @@ gtk_css_parser_finalize (GtkCssParser *self)
   g_clear_pointer (&self->tokenizers, g_ptr_array_unref);
   g_clear_object (&self->file);
   g_clear_object (&self->directory);
-  if (self->blocks->len)
-    g_critical ("Finalizing CSS parser with %u remaining blocks", self->blocks->len);
-  g_array_free (self->blocks, TRUE);
+  if (gtk_css_parser_blocks_get_size (&self->blocks) > 0)
+    g_critical ("Finalizing CSS parser with %lu remaining blocks", gtk_css_parser_blocks_get_size (&self->blocks));
+  gtk_css_parser_blocks_clear (&self->blocks);
 
   g_free (self);
 }
@@ -298,13 +317,13 @@ gtk_css_parser_get_block_location (GtkCssParser *self)
 {
   const GtkCssParserBlock *block;
 
-  if (self->blocks->len == 0)
+  if (gtk_css_parser_blocks_get_size (&self->blocks) == 0)
     {
       static const GtkCssLocation start_of_document = { 0, };
       return &start_of_document;
     }
 
-  block = &g_array_index (self->blocks, GtkCssParserBlock, self->blocks->len - 1);
+  block = gtk_css_parser_blocks_get_last (&self->blocks);
   return &block->start_location;
 }
 
@@ -374,9 +393,9 @@ gtk_css_parser_peek_token (GtkCssParser *self)
 
   gtk_css_parser_ensure_token (self);
 
-  if (self->blocks->len)
+  if (gtk_css_parser_blocks_get_size (&self->blocks) > 0)
     {
-      const GtkCssParserBlock *block = &g_array_index (self->blocks, GtkCssParserBlock, self->blocks->len - 1);
+      const GtkCssParserBlock *block = gtk_css_parser_blocks_get_last (&self->blocks);
       if (gtk_css_token_is (&self->token, block->end_token) ||
           gtk_css_token_is (&self->token, block->inherited_end_token) ||
           gtk_css_token_is (&self->token, block->alternative_token))
@@ -431,7 +450,7 @@ gtk_css_parser_start_block (GtkCssParser *self)
   block.inherited_end_token = GTK_CSS_TOKEN_EOF;
   block.alternative_token = GTK_CSS_TOKEN_EOF;
   block.start_location = self->location;
-  g_array_append_val (self->blocks, block);
+  gtk_css_parser_blocks_append (&self->blocks, block);
 
   gtk_css_token_clear (&self->token);
 }
@@ -443,13 +462,13 @@ gtk_css_parser_start_semicolon_block (GtkCssParser    *self,
   GtkCssParserBlock block;
 
   block.end_token = GTK_CSS_TOKEN_SEMICOLON;
-  if (self->blocks->len)
-    block.inherited_end_token = g_array_index (self->blocks, GtkCssParserBlock, self->blocks->len - 1).end_token;
+  if (gtk_css_parser_blocks_get_size (&self->blocks) > 0)
+    block.inherited_end_token = gtk_css_parser_blocks_get_last (&self->blocks)->end_token;
   else
     block.inherited_end_token = GTK_CSS_TOKEN_EOF;
   block.alternative_token = alternative_token;
   block.start_location = self->location;
-  g_array_append_val (self->blocks, block);
+  gtk_css_parser_blocks_append (&self->blocks, block);
 }
 
 void
@@ -457,9 +476,9 @@ gtk_css_parser_end_block_prelude (GtkCssParser *self)
 {
   GtkCssParserBlock *block;
 
-  g_return_if_fail (self->blocks->len > 0);
+  g_return_if_fail (gtk_css_parser_blocks_get_size (&self->blocks) > 0);
 
-  block = &g_array_index (self->blocks, GtkCssParserBlock, self->blocks->len - 1);
+  block = gtk_css_parser_blocks_get_last (&self->blocks);
 
   if (block->alternative_token == GTK_CSS_TOKEN_EOF)
     return;
@@ -484,11 +503,11 @@ gtk_css_parser_end_block (GtkCssParser *self)
 {
   GtkCssParserBlock *block;
 
-  g_return_if_fail (self->blocks->len > 0);
+  g_return_if_fail (gtk_css_parser_blocks_get_size (&self->blocks) > 0);
 
   gtk_css_parser_skip_until (self, GTK_CSS_TOKEN_EOF);
 
-  block = &g_array_index (self->blocks, GtkCssParserBlock, self->blocks->len - 1);
+  block = gtk_css_parser_blocks_get_last (&self->blocks);
 
   if (gtk_css_token_is (&self->token, GTK_CSS_TOKEN_EOF))
     {
@@ -497,7 +516,7 @@ gtk_css_parser_end_block (GtkCssParser *self)
                            gtk_css_parser_get_block_location (self),
                            gtk_css_parser_get_start_location (self),
                            "Unterminated block at end of document");
-      g_array_set_size (self->blocks, self->blocks->len - 1);
+      gtk_css_parser_blocks_drop_last (&self->blocks);
     }
   else if (gtk_css_token_is (&self->token, block->inherited_end_token))
     {
@@ -507,11 +526,11 @@ gtk_css_parser_end_block (GtkCssParser *self)
                            gtk_css_parser_get_block_location (self),
                            gtk_css_parser_get_start_location (self),
                            "Expected ';' at end of block");
-      g_array_set_size (self->blocks, self->blocks->len - 1);
+      gtk_css_parser_blocks_drop_last (&self->blocks);
     }
   else
     {
-      g_array_set_size (self->blocks, self->blocks->len - 1);
+      gtk_css_parser_blocks_drop_last (&self->blocks);
       if (gtk_css_token_is_preserved (&self->token, NULL))
         {
           gtk_css_token_clear (&self->token);
