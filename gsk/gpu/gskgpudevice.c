@@ -546,7 +546,7 @@ gsk_gpu_device_maybe_gc (GskGpuDevice *self)
 
   if (priv->cache_timeout == 0 || dead_texture_pixels > 1000000)
     {
-      GSK_DEBUG (GLYPH_CACHE, "Pre-frame GC (%lu dead pixels)", dead_texture_pixels);
+      GSK_DEBUG (GLYPH_CACHE, "Pre-frame GC (%" G_GSIZE_FORMAT " dead pixels)", dead_texture_pixels);
       gsk_gpu_device_gc (self, g_get_monotonic_time ());
     }
 }

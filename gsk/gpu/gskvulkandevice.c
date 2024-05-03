@@ -1139,7 +1139,7 @@ gsk_vulkan_device_get_vk_pipeline (GskVulkanDevice           *self,
                           format);
 
   GSK_DEBUG (SHADERS,
-             "Create Vulkan pipeline (%s %s, %u/%s/%s/%u) for layout (%lu/%lu/%lu)",
+             "Create Vulkan pipeline (%s %s, %u/%s/%s/%u) for layout (%" G_GSIZE_FORMAT "/%" G_GSIZE_FORMAT "/%" G_GSIZE_FORMAT ")",
              op_class->shader_name,
              version_string + 1,
              variation,
