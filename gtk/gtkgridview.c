@@ -1109,6 +1109,8 @@ gtk_grid_view_class_init (GtkGridViewClass *klass)
    * GtkGridView:factory: (attributes org.gtk.Property.get=gtk_grid_view_get_factory org.gtk.Property.set=gtk_grid_view_set_factory)
    *
    * Factory for populating list items.
+   *
+   * The factory must be for configuring [class@Gtk.ListItem] objects.
    */
   properties[PROP_FACTORY] =
     g_param_spec_object ("factory", NULL, NULL,

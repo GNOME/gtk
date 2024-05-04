@@ -32,8 +32,12 @@
  * `GtkBuilderListItemFactory` is a `GtkListItemFactory` that creates
  * widgets by instantiating `GtkBuilder` UI templates.
  *
- * The templates must be extending `GtkListItem`, and typically use
- * `GtkExpression`s to obtain data from the items in the model.
+ * The templates must extend the class that the parent widget expects.
+ * For example, a factory provided to [property@Gtk.ListView:factory] must have
+ * a template that extends [class@Gtk.ListItem].
+ *
+ * Templates typically use `GtkExpression`s to obtain data from the items
+ * in the model.
  *
  * Example:
  * ```xml
@@ -203,7 +207,7 @@ gtk_builder_list_item_factory_set_property (GObject      *object,
     case PROP_RESOURCE:
       {
         GError *error = NULL;
-        GBytes *bytes;  
+        GBytes *bytes;
         const char *resource;
 
         resource = g_value_get_string (value);
