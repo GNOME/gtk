@@ -54,6 +54,8 @@
 #include <pango/pangofc-fontmap.h>
 #endif
 
+#include <hb-subset.h>
+
 #include <glib/gstdio.h>
 
 typedef struct _Context Context;
@@ -946,22 +948,21 @@ create_ascii_glyphs (PangoFont *font)
   PangoGlyphString *result, *glyph_string;
   guint i;
 
-  coverage = pango_font_get_coverage (font, language);
-  for (i = MIN_ASCII_GLYPH; i < MAX_ASCII_GLYPH; i++)
-    {
-      if (!pango_coverage_get (coverage, i))
-        break;
-    }
-  g_object_unref (coverage);
-  if (i < MAX_ASCII_GLYPH)
-    return NULL;
-
   result = pango_glyph_string_new ();
+
+  coverage = pango_font_get_coverage (font, language);
+
   pango_glyph_string_set_size (result, N_ASCII_GLYPHS);
   glyph_string = pango_glyph_string_new ();
   for (i = MIN_ASCII_GLYPH; i < MAX_ASCII_GLYPH; i++)
     {
       const char text[2] = { i, 0 };
+
+      if (!pango_coverage_get (coverage, i))
+        {
+          result->glyphs[i - MIN_ASCII_GLYPH].glyph = PANGO_GLYPH_INVALID_INPUT;
+          continue;
+        }
 
       pango_shape_with_flags (text, 1,
                               text, 1,
@@ -970,13 +971,12 @@ create_ascii_glyphs (PangoFont *font)
                               PANGO_SHAPE_NONE);
 
       if (glyph_string->num_glyphs != 1)
-        {
-          pango_glyph_string_free (glyph_string);
-          pango_glyph_string_free (result);
-          return NULL;
-        }
-      result->glyphs[i - MIN_ASCII_GLYPH] = glyph_string->glyphs[0];
+        result->glyphs[i - MIN_ASCII_GLYPH].glyph = PANGO_GLYPH_INVALID_INPUT;
+      else
+        result->glyphs[i - MIN_ASCII_GLYPH] = glyph_string->glyphs[0];
     }
+
+  g_object_unref (coverage);
 
   pango_glyph_string_free (glyph_string);
 
@@ -1183,6 +1183,9 @@ parse_font (GtkCssParser *parser,
                                         "The given url does not define a font named \"%s\"",
                                         font_name);
                 }
+
+              /* Mark the font as created from a url, so we don't try to subset it again */
+              g_object_set_data (G_OBJECT (font), "from-url", GINT_TO_POINTER (1));
             }
         }
     }
@@ -2255,6 +2258,12 @@ unpack_glyphs (PangoFont        *font,
                 return FALSE;
             }
 
+          if (ascii->glyphs[idx].glyph == PANGO_GLYPH_INVALID_INPUT)
+            {
+              g_clear_pointer (&ascii, pango_glyph_string_free);
+              return FALSE;
+            }
+
           gi->glyph = ascii->glyphs[idx].glyph;
           gi->geometry.width = ascii->glyphs[idx].geometry.width;
         }
@@ -2946,7 +2955,7 @@ typedef struct
   gsize named_node_counter;
   GHashTable *named_textures;
   gsize named_texture_counter;
-  GHashTable *serialized_fonts;
+  GHashTable *fonts;
 } Printer;
 
 static void
@@ -2959,6 +2968,59 @@ printer_init_check_texture (Printer    *printer,
     g_hash_table_insert (printer->named_textures, texture, NULL);
   else if (name == NULL)
     g_hash_table_insert (printer->named_textures, texture, g_strdup (""));
+}
+
+typedef struct {
+  hb_face_t *face;
+  hb_subset_input_t *input;
+  gboolean serialized;
+} FontInfo;
+
+static void
+font_info_free (gpointer data)
+{
+  FontInfo *info = (FontInfo *) data;
+
+  hb_face_destroy (info->face);
+  if (info->input)
+    hb_subset_input_destroy (info->input);
+  g_free (info);
+}
+
+static void
+printer_init_collect_font_info (Printer       *printer,
+                                GskRenderNode *node)
+{
+  PangoFont *font;
+  FontInfo *info;
+
+  font = gsk_text_node_get_font (node);
+
+  info = (FontInfo *) g_hash_table_lookup (printer->fonts, font);
+  if (!info)
+    {
+      info = g_new0 (FontInfo, 1);
+
+      info->face = hb_face_reference (hb_font_get_face (pango_font_get_hb_font (font)));
+      if (!g_object_get_data (G_OBJECT (font), "from-url"))
+        {
+          info->input = hb_subset_input_create_or_fail ();
+          hb_subset_input_set_flags (info->input, HB_SUBSET_FLAGS_RETAIN_GIDS);
+        }
+
+      g_hash_table_insert (printer->fonts, g_object_ref (font), info);
+    }
+
+  if (info->input)
+    {
+      const PangoGlyphInfo *glyphs;
+      guint n_glyphs;
+
+      glyphs = gsk_text_node_get_glyphs (node, &n_glyphs);
+
+      for (guint i = 0; i < n_glyphs; i++)
+        hb_set_add (hb_subset_input_glyph_set (info->input), glyphs[i].glyph);
+    }
 }
 
 static void
@@ -2976,6 +3038,9 @@ printer_init_duplicates_for_node (Printer       *printer,
     {
     case GSK_CAIRO_NODE:
     case GSK_TEXT_NODE:
+      printer_init_collect_font_info (printer, node);
+      break;
+
     case GSK_COLOR_NODE:
     case GSK_LINEAR_GRADIENT_NODE:
     case GSK_REPEATING_LINEAR_GRADIENT_NODE:
@@ -3099,7 +3164,7 @@ printer_init (Printer       *self,
   self->named_node_counter = 0;
   self->named_textures = g_hash_table_new_full (NULL, NULL, NULL, g_free);
   self->named_texture_counter = 0;
-  self->serialized_fonts = g_hash_table_new (g_str_hash, g_str_equal);
+  self->fonts = g_hash_table_new_full (g_direct_hash, g_direct_equal, g_object_unref, font_info_free);
 
   printer_init_duplicates_for_node (self, node);
 }
@@ -3111,7 +3176,7 @@ printer_clear (Printer *self)
     g_string_free (self->str, TRUE);
   g_hash_table_unref (self->named_nodes);
   g_hash_table_unref (self->named_textures);
-  g_hash_table_unref (self->serialized_fonts);
+  g_hash_table_unref (self->fonts);
 }
 
 #define IDENT_LEVEL 2 /* Spaces per level */
@@ -3576,9 +3641,14 @@ gsk_text_node_serialize_font (GskRenderNode *node,
                               Printer       *p)
 {
   PangoFont *font = gsk_text_node_get_font (node);
-  PangoFontMap *fontmap = pango_font_get_font_map (font);
   PangoFontDescription *desc;
   char *s;
+  FontInfo *info;
+  hb_face_t *face;
+  hb_blob_t *blob;
+  const char *data;
+  guint length;
+  char *b64;
 
   desc = pango_font_describe_with_absolute_size (font);
   s = pango_font_description_to_string (desc);
@@ -3586,42 +3656,29 @@ gsk_text_node_serialize_font (GskRenderNode *node,
   g_free (s);
   pango_font_description_free (desc);
 
-  /* Check if this is  a custom font that we created from a url */
-  if (!g_object_get_data (G_OBJECT (fontmap), "font-files"))
+  info = g_hash_table_lookup (p->fonts, font);
+  if (info->serialized)
     return;
 
-#ifdef HAVE_PANGOFT
-  {
-    FcPattern *pat;
-    FcResult res;
-    const char *file;
-    char *data;
-    gsize len;
-    char *b64;
+  if (info->input)
+    face = hb_subset_or_fail (info->face, info->input);
+  else
+    face = hb_face_reference (info->face);
 
-    pat = pango_fc_font_get_pattern (PANGO_FC_FONT (font));
-    res = FcPatternGetString (pat, FC_FILE, 0, (FcChar8 **)&file);
-    if (res != FcResultMatch)
-      return;
+  blob = hb_face_reference_blob (face);
+  data = hb_blob_get_data (blob, &length);
 
-    if (g_hash_table_contains (p->serialized_fonts, file))
-      return;
+  b64 = base64_encode_with_linebreaks ((const guchar *) data, length);
 
-    if (!g_file_get_contents (file, &data, &len, NULL))
-      return;
+  g_string_append (p->str, " url(\"data:font/ttf;base64,\\\n");
+  append_escaping_newlines (p->str, b64);
+  g_string_append (p->str, "\")");
 
-    g_hash_table_add (p->serialized_fonts, (gpointer) file);
+  g_free (b64);
+  hb_blob_destroy (blob);
+  hb_face_destroy (face);
 
-    b64 = base64_encode_with_linebreaks ((const guchar *) data, len);
-
-    g_string_append (p->str, " url(\"data:font/ttf;base64,\\\n");
-    append_escaping_newlines (p->str, b64);
-    g_string_append (p->str, "\")");
-
-    g_free (b64);
-    g_free (data);
-  }
-#endif
+  info->serialized = TRUE;
 }
 
 static void

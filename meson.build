@@ -399,6 +399,7 @@ fribidi_dep    = dependency('fribidi', version: fribidi_req,
                             default_options: ['docs=false'])
 harfbuzz_dep   = dependency('harfbuzz', version: harfbuzz_req,
                             default_options: ['coretext=enabled'])
+hb_subset_dep  = dependency('harfbuzz-subset', version: harfbuzz_req)
 
 # Require PangoFT2 if on X11 or wayland
 pangoft_dep    = dependency('pangoft2', version: pango_req,
