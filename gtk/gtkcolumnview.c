@@ -861,6 +861,8 @@ gtk_column_view_class_init (GtkColumnViewClass *klass)
    *
    * The factory used for configuring rows.
    *
+   * The factory must be for configuring [class@Gtk.ColumnViewRow] objects.
+   *
    * Since: 4.12
    */
   properties[PROP_ROW_FACTORY] =
@@ -925,6 +927,8 @@ gtk_column_view_class_init (GtkColumnViewClass *klass)
    * GtkColumnView:header-factory: (attributes org.gtk.Property.get=gtk_column_view_get_header_factory org.gtk.Property.set=gtk_column_view_set_header_factory)
    *
    * Factory for creating header widgets.
+   *
+   * The factory must be for configuring [class@Gtk.ListHeader] objects.
    *
    * Since: 4.12
    */

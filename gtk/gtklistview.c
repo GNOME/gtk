@@ -881,6 +881,8 @@ gtk_list_view_class_init (GtkListViewClass *klass)
    * GtkListView:factory: (attributes org.gtk.Property.get=gtk_list_view_get_factory org.gtk.Property.set=gtk_list_view_set_factory)
    *
    * Factory for populating list items.
+   *
+   * The factory must be for configuring [class@Gtk.ListItem] objects.
    */
   properties[PROP_FACTORY] =
     g_param_spec_object ("factory", NULL, NULL,
@@ -891,6 +893,8 @@ gtk_list_view_class_init (GtkListViewClass *klass)
    * GtkListView:header-factory: (attributes org.gtk.Property.get=gtk_list_view_get_header_factory org.gtk.Property.set=gtk_list_view_set_header_factory)
    *
    * Factory for creating header widgets.
+   *
+   * The factory must be for configuring [class@Gtk.ListHeader] objects.
    *
    * Since: 4.12
    */
@@ -1355,7 +1359,7 @@ gtk_list_view_get_tab_behavior (GtkListView *self)
  * @pos: position of the item
  * @flags: actions to perform
  * @scroll: (nullable) (transfer full): details of how to perform
- *   the scroll operation or %NULL to scroll into view 
+ *   the scroll operation or %NULL to scroll into view
  *
  * Scrolls to the item at the given position and performs the actions
  * specified in @flags.
