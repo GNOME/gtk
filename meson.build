@@ -833,7 +833,10 @@ endif
 
 profiler_enabled = get_option('profiler')
 if profiler_enabled
-  profiler_dep = dependency('sysprof-capture-3', static: true, required: true)
+  profiler_dep = dependency('sysprof-capture-3', static: true, required: false)
+  if not profiler_dep.found()
+    profiler_dep = dependency('sysprof-capture-4', static: true, required: false)
+  endif
   if profiler_dep.found()
     cdata.set('HAVE_SYSPROF_CAPTURE', profiler_dep.found())
   else
