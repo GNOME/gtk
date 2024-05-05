@@ -3560,13 +3560,13 @@ append_texture_param (Printer    *p,
     case GDK_MEMORY_U8:
     case GDK_MEMORY_U16:
       bytes = gdk_texture_save_to_png_bytes (texture);
-      g_string_append (p->str, "url(\"data:image/png;base64,");
+      g_string_append (p->str, "url(\"data:image/png;base64,\\\n");
       break;
 
     case GDK_MEMORY_FLOAT16:
     case GDK_MEMORY_FLOAT32:
       bytes = gdk_texture_save_to_tiff_bytes (texture);
-      g_string_append (p->str, "url(\"data:image/tiff;base64,");
+      g_string_append (p->str, "url(\"data:image/tiff;base64,\\\n");
       break;
 
     default:
@@ -3625,7 +3625,7 @@ gsk_text_node_serialize_font (GskRenderNode *node,
 
     b64 = base64_encode_with_linebreaks ((const guchar *) data, len);
 
-    g_string_append (p->str, " url(\"data:font/ttf;base64,");
+    g_string_append (p->str, " url(\"data:font/ttf;base64,\\\n");
     append_escaping_newlines (p->str, b64);
     g_string_append (p->str, "\")");
 
@@ -4443,7 +4443,7 @@ render_node_print (Printer       *p,
             cairo_surface_write_to_png_stream (surface, cairo_write_array, array);
 
             _indent (p);
-            g_string_append (p->str, "pixels: url(\"data:image/png;base64,");
+            g_string_append (p->str, "pixels: url(\"data:image/png;base64,\\\n");
             b64 = base64_encode_with_linebreaks (array->data, array->len);
             append_escaping_newlines (p->str, b64);
             g_free (b64);
@@ -4463,7 +4463,7 @@ render_node_print (Printer       *p,
                 if (cairo_script_from_recording_surface (script, surface) == CAIRO_STATUS_SUCCESS)
                   {
                     _indent (p);
-                    g_string_append (p->str, "script: url(\"data:;base64,");
+                    g_string_append (p->str, "script: url(\"data:;base64,\\\n");
                     b64 = base64_encode_with_linebreaks (array->data, array->len);
                     append_escaping_newlines (p->str, b64);
                     g_free (b64);
