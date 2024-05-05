@@ -1774,6 +1774,10 @@ populate_event_properties (GListStore *store,
     case GDK_KEY_RELEASE:
       {
         char *tmp;
+
+        tmp = modifier_names (gdk_key_event_get_consumed_modifiers (event));
+        add_text_row (store, "Consumed modifiers", "%s", tmp);
+        g_free (tmp);
         add_int_row (store, "Keycode", gdk_key_event_get_keycode (event));
         add_int_row (store, "Keyval", gdk_key_event_get_keyval (event));
         tmp = key_event_string (event);
