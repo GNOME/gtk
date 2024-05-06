@@ -1257,10 +1257,13 @@ gtk_at_spi_context_child_change (GtkATContext             *ctx,
     }
 
   if (change & GTK_ACCESSIBLE_CHILD_CHANGE_ADDED)
+  {
+    gtk_at_context_realize (child_context);
     emit_children_changed (self,
                            GTK_AT_SPI_CONTEXT (child_context),
                            idx,
                            GTK_ACCESSIBLE_CHILD_STATE_ADDED);
+  }
   else if (change & GTK_ACCESSIBLE_CHILD_CHANGE_REMOVED)
     emit_children_changed (self,
                            GTK_AT_SPI_CONTEXT (child_context),
