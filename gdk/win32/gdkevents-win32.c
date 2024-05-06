@@ -419,7 +419,7 @@ set_up_low_level_keyboard_hook (void)
   else
     WIN32_API_FAILED ("SetWindowsHookEx");
 
-  aerosnap_message = RegisterWindowMessage ("GDK_WIN32_AEROSNAP_MESSAGE");
+  aerosnap_message = RegisterWindowMessage (L"GDK_WIN32_AEROSNAP_MESSAGE");
 }
 
 void
@@ -470,7 +470,7 @@ _gdk_events_init (GdkDisplay *display)
   };
 #endif
 
-  got_gdk_events_message = RegisterWindowMessage ("GDK_WIN32_GOT_EVENTS");
+  got_gdk_events_message = RegisterWindowMessage (L"GDK_WIN32_GOT_EVENTS");
 
 #if 0
   /* Check if we have some input locale identifier loaded that uses a
@@ -1685,7 +1685,7 @@ _gdk_win32_surface_fill_min_max_info (GdkSurface  *window,
       nearest_monitor = MonitorFromWindow (GDK_SURFACE_HWND (window), MONITOR_DEFAULTTONEAREST);
       nearest_info.cbSize = sizeof (nearest_info);
 
-      if (GetMonitorInfoA (nearest_monitor, &nearest_info))
+      if (GetMonitorInfo (nearest_monitor, &nearest_info))
         {
           /* MSDN says that we must specify maximized window
            * size as if it was located on the primary monitor.

@@ -48,18 +48,18 @@ this_module (void)
 
 static BOOL CALLBACK
 find_first_manifest (HMODULE  module_handle,
-                     LPCSTR   resource_type,
-                     LPSTR    resource_name,
+                     LPCWSTR  resource_type,
+                     LPWSTR   resource_name,
                      LONG_PTR user_data)
 {
-  LPSTR *result_name = (LPSTR *) user_data;
+  LPWSTR *result_name = (LPWSTR *) user_data;
 
   if (resource_type == RT_MANIFEST)
     {
       if (IS_INTRESOURCE (resource_name))
         *result_name = resource_name;
       else
-        *result_name = g_strdup (resource_name);
+        *result_name = g_wcsdup (resource_name);
       return FALSE;
     }
   return TRUE;
@@ -82,12 +82,12 @@ find_first_manifest (HMODULE  module_handle,
  * g_once_init_enter (leaking once is OK, Windows will clean up after us).
  */
 void
-_gtk_load_dll_with_libgtk3_manifest (const char *dll_name)
+_gtk_load_dll_with_libgtk3_manifest (const wchar_t *dll_name)
 {
   HANDLE activation_ctx_handle;
-  ACTCTXA activation_ctx_descriptor;
+  ACTCTX activation_ctx_descriptor;
   ULONG_PTR activation_cookie;
-  LPSTR resource_name;
+  LPWSTR resource_name;
   BOOL activated;
   DWORD error_code;
 
@@ -96,7 +96,7 @@ _gtk_load_dll_with_libgtk3_manifest (const char *dll_name)
                      (LONG_PTR) &resource_name);
 
   if (resource_name == NULL)
-    resource_name = MAKEINTRESOURCEA (EMPIRIC_MANIFEST_RESOURCE_INDEX);
+    resource_name = MAKEINTRESOURCE (EMPIRIC_MANIFEST_RESOURCE_INDEX);
 
   memset (&activation_ctx_descriptor, 0, sizeof (activation_ctx_descriptor));
   activation_ctx_descriptor.cbSize = sizeof (activation_ctx_descriptor);
@@ -120,7 +120,7 @@ _gtk_load_dll_with_libgtk3_manifest (const char *dll_name)
       if (!activated)
         g_warning ("Failed to ActivateActCtx: %lu", GetLastError ());
 
-      LoadLibraryA (dll_name);
+      LoadLibrary (dll_name);
 
       if (activated && !DeactivateActCtx (0, activation_cookie))
         g_warning ("Failed to DeactivateActCtx: %lu", GetLastError ());
@@ -218,4 +218,21 @@ _gtk_get_data_prefix (void)
     gtk_data_prefix = g_win32_get_package_installation_directory_of_module (this_module ());
 
   return gtk_data_prefix;
+}
+
+wchar_t *
+g_wcsdup (const wchar_t *wcs)
+{
+  wchar_t *new_wcs = NULL;
+  gsize length;
+
+  if G_LIKELY (wcs)
+    {
+      length = wcslen (wcs) + 1;
+      new_wcs = g_new (wchar_t, length);
+      wcscpy (new_wcs, wcs);
+      new_wcs[length - 1] = L'\0';
+    }
+
+  return new_wcs;
 }

@@ -121,7 +121,7 @@ gdk_device_manager_win32_finalize (GObject *object)
 #if DEBUG_WINTAB
 
 static void
-print_lc(LOGCONTEXT *lc)
+print_lc(LOGCONTEXTA *lc)
 {
   g_print ("lcName = %s\n", lc->lcName);
   g_print ("lcOptions =");
@@ -374,13 +374,13 @@ wintab_init_check (GdkDeviceManagerWin32 *device_manager)
 
   wintab_contexts = NULL;
 
-  n = GetSystemDirectory (&dummy, 0);
+  n = GetSystemDirectoryA (&dummy, 0);
 
   if (n <= 0)
     return;
 
   wintab32_dll_path = g_malloc (n + 1 + strlen (WINTAB32_DLL));
-  k = GetSystemDirectory (wintab32_dll_path, n);
+  k = GetSystemDirectoryA (wintab32_dll_path, n);
 
   if (k == 0 || k > n)
     {
@@ -392,7 +392,7 @@ wintab_init_check (GdkDeviceManagerWin32 *device_manager)
     strcat (wintab32_dll_path, G_DIR_SEPARATOR_S);
   strcat (wintab32_dll_path, WINTAB32_DLL);
 
-  if ((wintab32 = LoadLibrary (wintab32_dll_path)) == NULL)
+  if ((wintab32 = LoadLibraryA (wintab32_dll_path)) == NULL)
     return;
 
   if ((p_WTInfoA = (t_WTInfoA) GetProcAddress (wintab32, "WTInfoA")) == NULL)
@@ -433,7 +433,7 @@ wintab_init_check (GdkDeviceManagerWin32 *device_manager)
 
   for (devix = 0; devix < ndevices; devix++)
     {
-      LOGCONTEXT lc;
+      LOGCONTEXTA lc;
 
       /* We open the Wintab device (hmm, what if there are several, or
        * can there even be several, probably not?) as a system
