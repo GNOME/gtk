@@ -163,6 +163,8 @@ gdk_dmabuf_get_egl_downloader (GdkDisplay              *display,
     return NULL;
 
   previous = gdk_gl_context_get_current ();
+  if (previous)
+    g_object_ref (previous);
   formats = gdk_dmabuf_formats_builder_new ();
   external = gdk_dmabuf_formats_builder_new ();
 
@@ -194,7 +196,10 @@ gdk_dmabuf_get_egl_downloader (GdkDisplay              *display,
     }
 
   if (previous)
-    gdk_gl_context_make_current (previous);
+    {
+      gdk_gl_context_make_current (previous);
+      g_object_unref (previous);
+    }
 
   return GDK_DMABUF_DOWNLOADER (renderer);
 }
