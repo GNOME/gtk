@@ -1,0 +1,41 @@
+clip {
+  /* Numbers that trigger rounding errors at 125%:
+     9, 13, 18, 21, 26, 31, 36, 42, 47, 52, 57, 62, 67, 72, 77, 84, 89, 94, 99, ...
+   */
+  clip: 0 0 9 13;
+  child: transform {
+    /* This is a typical fractional scale factor. It is 5/4.
+       The inverse is 4/5, and that number cannot be represented as
+       a float.
+       The renderer does however operate in the scaled coordinate system,
+       So this will translate the clip rect above to the scaled clip rect
+       0 0 7.20000029 10.4000006
+     */
+    transform: scale(1.25);
+    child: container {
+      /* This color node exists just so that the bounds of the clipped node
+         are large enough. Otherwise the node bounds computation might end
+         up detecting that the clip is actually empty, because it scales
+         the other way: It multiplies by 1.25, not by 0.8.
+       */
+      color {
+        color: black;
+        bounds: 0 0 50 50;
+      }
+      /* This node has bounds of 7.2 0 10 10 - which gets translated to
+         7.19999981 0 10.000001 10 during parsing of the path.
+
+         And because 7.19999981 < 7.20000029 this node might not be considered
+         fully clipped, even though it really should be.
+       */
+      fill {
+        path: "M 7.2 0 l 10 0 l 0 10 l -10 0 z";
+        child: color {
+          color: red;
+          bounds: 0 0 50 50;
+        }
+      }
+    }
+  }
+}
+

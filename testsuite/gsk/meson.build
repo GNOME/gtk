@@ -73,6 +73,7 @@ compare_render_tests = [
   'empty-shadow',
   'empty-texture',
   'empty-transform',
+  'empty-fallback',
   'fill',
   'fill2',
   'fill-clipped-nogl',
