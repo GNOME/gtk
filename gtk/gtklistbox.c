@@ -2087,7 +2087,7 @@ gtk_list_box_focus (GtkWidget        *widget,
                 i = NULL;
             }
 
-          while (!g_sequence_iter_is_end (i))
+          while (i != NULL && !g_sequence_iter_is_end (i))
             {
               if (gtk_widget_get_sensitive (g_sequence_get (i)))
                 {
