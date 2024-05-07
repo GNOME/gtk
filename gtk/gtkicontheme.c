@@ -2434,7 +2434,7 @@ load_icon_thread (GTask        *task,
  * @self: a `GtkIconTheme`
  * @icon_name: the name of the icon to lookup
  * @fallbacks: (nullable) (array zero-terminated=1):
- * @size: desired icon size.
+ * @size: desired icon size, in application pixels
  * @scale: the window scale this will be displayed on
  * @direction: text direction the icon will be displayed in
  * @flags: flags modifying the behavior of the icon lookup
@@ -3975,7 +3975,7 @@ icon_symbolic_paintable_init (GtkSymbolicPaintableInterface *iface)
 /**
  * gtk_icon_paintable_new_for_file:
  * @file: a `GFile`
- * @size: desired icon size
+ * @size: desired icon size, in application pixels
  * @scale: the desired scale
  *
  * Creates a `GtkIconPaintable` for a file with a given size and scale.
@@ -4019,7 +4019,7 @@ gtk_icon_paintable_new_for_file (GFile *file,
  * gtk_icon_theme_lookup_by_gicon:
  * @self: a `GtkIconTheme`
  * @icon: the `GIcon` to look up
- * @size: desired icon size
+ * @size: desired icon size, in application pixels
  * @scale: the desired scale
  * @direction: text direction the icon will be displayed in
  * @flags: flags modifying the behavior of the icon lookup
