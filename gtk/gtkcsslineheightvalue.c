@@ -44,11 +44,12 @@ gtk_css_value_line_height_compute (GtkCssValue       *value,
                                    GtkStyleProvider  *provider,
                                    GtkCssStyle       *style,
                                    GtkCssStyle       *parent_style,
-                                   GtkCssVariableSet *variables)
+                                   GtkCssVariableSet *variables,
+                                   GtkCssValue       *shorthands[])
 {
   GtkCssValue *height;
 
-  height = _gtk_css_value_compute (value->height, property_id, provider, style, parent_style, variables);
+  height = _gtk_css_value_compute (value->height, property_id, provider, style, parent_style, variables, shorthands);
 
   if (gtk_css_number_value_get_dimension (height) == GTK_CSS_DIMENSION_PERCENTAGE)
     {

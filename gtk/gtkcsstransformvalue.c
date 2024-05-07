@@ -279,7 +279,8 @@ gtk_css_transform_compute (GtkCssTransform   *dest,
                            GtkStyleProvider  *provider,
                            GtkCssStyle       *style,
                            GtkCssStyle       *parent_style,
-                           GtkCssVariableSet *variables)
+                           GtkCssVariableSet *variables,
+                           GtkCssValue       *shorthands[])
 {
   dest->type = src->type;
 
@@ -289,41 +290,41 @@ gtk_css_transform_compute (GtkCssTransform   *dest,
       memcpy (dest, src, sizeof (GtkCssTransform));
       return TRUE;
     case GTK_CSS_TRANSFORM_TRANSLATE:
-      dest->translate.x = _gtk_css_value_compute (src->translate.x, property_id, provider, style, parent_style, variables);
-      dest->translate.y = _gtk_css_value_compute (src->translate.y, property_id, provider, style, parent_style, variables);
-      dest->translate.z = _gtk_css_value_compute (src->translate.z, property_id, provider, style, parent_style, variables);
+      dest->translate.x = _gtk_css_value_compute (src->translate.x, property_id, provider, style, parent_style, variables, shorthands);
+      dest->translate.y = _gtk_css_value_compute (src->translate.y, property_id, provider, style, parent_style, variables, shorthands);
+      dest->translate.z = _gtk_css_value_compute (src->translate.z, property_id, provider, style, parent_style, variables, shorthands);
       return dest->translate.x == src->translate.x
           && dest->translate.y == src->translate.y
           && dest->translate.z == src->translate.z;
     case GTK_CSS_TRANSFORM_ROTATE:
-      dest->rotate.x = _gtk_css_value_compute (src->rotate.x, property_id, provider, style, parent_style, variables);
-      dest->rotate.y = _gtk_css_value_compute (src->rotate.y, property_id, provider, style, parent_style, variables);
-      dest->rotate.z = _gtk_css_value_compute (src->rotate.z, property_id, provider, style, parent_style, variables);
-      dest->rotate.angle = _gtk_css_value_compute (src->rotate.angle, property_id, provider, style, parent_style, variables);
+      dest->rotate.x = _gtk_css_value_compute (src->rotate.x, property_id, provider, style, parent_style, variables, shorthands);
+      dest->rotate.y = _gtk_css_value_compute (src->rotate.y, property_id, provider, style, parent_style, variables, shorthands);
+      dest->rotate.z = _gtk_css_value_compute (src->rotate.z, property_id, provider, style, parent_style, variables, shorthands);
+      dest->rotate.angle = _gtk_css_value_compute (src->rotate.angle, property_id, provider, style, parent_style, variables, shorthands);
       return dest->rotate.x == src->rotate.x
           && dest->rotate.y == src->rotate.y
           && dest->rotate.z == src->rotate.z
           && dest->rotate.angle == src->rotate.angle;
     case GTK_CSS_TRANSFORM_SCALE:
-      dest->scale.x = _gtk_css_value_compute (src->scale.x, property_id, provider, style, parent_style, variables);
-      dest->scale.y = _gtk_css_value_compute (src->scale.y, property_id, provider, style, parent_style, variables);
-      dest->scale.z = _gtk_css_value_compute (src->scale.z, property_id, provider, style, parent_style, variables);
+      dest->scale.x = _gtk_css_value_compute (src->scale.x, property_id, provider, style, parent_style, variables, shorthands);
+      dest->scale.y = _gtk_css_value_compute (src->scale.y, property_id, provider, style, parent_style, variables, shorthands);
+      dest->scale.z = _gtk_css_value_compute (src->scale.z, property_id, provider, style, parent_style, variables, shorthands);
       return dest->scale.x == src->scale.x
           && dest->scale.y == src->scale.y
           && dest->scale.z == src->scale.z;
     case GTK_CSS_TRANSFORM_SKEW:
-      dest->skew.x = _gtk_css_value_compute (src->skew.x, property_id, provider, style, parent_style, variables);
-      dest->skew.y = _gtk_css_value_compute (src->skew.y, property_id, provider, style, parent_style, variables);
+      dest->skew.x = _gtk_css_value_compute (src->skew.x, property_id, provider, style, parent_style, variables, shorthands);
+      dest->skew.y = _gtk_css_value_compute (src->skew.y, property_id, provider, style, parent_style, variables, shorthands);
       return dest->skew.x == src->skew.x
           && dest->skew.y == src->skew.y;
     case GTK_CSS_TRANSFORM_SKEW_X:
-      dest->skew_x.skew = _gtk_css_value_compute (src->skew_x.skew, property_id, provider, style, parent_style, variables);
+      dest->skew_x.skew = _gtk_css_value_compute (src->skew_x.skew, property_id, provider, style, parent_style, variables, shorthands);
       return dest->skew_x.skew == src->skew_x.skew;
     case GTK_CSS_TRANSFORM_SKEW_Y:
-      dest->skew_y.skew = _gtk_css_value_compute (src->skew_y.skew, property_id, provider, style, parent_style, variables);
+      dest->skew_y.skew = _gtk_css_value_compute (src->skew_y.skew, property_id, provider, style, parent_style, variables, shorthands);
       return dest->skew_y.skew == src->skew_y.skew;
     case GTK_CSS_TRANSFORM_PERSPECTIVE:
-      dest->perspective.depth = _gtk_css_value_compute (src->perspective.depth, property_id, provider, style, parent_style, variables);
+      dest->perspective.depth = _gtk_css_value_compute (src->perspective.depth, property_id, provider, style, parent_style, variables, shorthands);
       return dest->perspective.depth == src->perspective.depth;
     case GTK_CSS_TRANSFORM_NONE:
     default:
@@ -338,7 +339,8 @@ gtk_css_value_transform_compute (GtkCssValue       *value,
                                  GtkStyleProvider  *provider,
                                  GtkCssStyle       *style,
                                  GtkCssStyle       *parent_style,
-                                 GtkCssVariableSet *variables)
+                                 GtkCssVariableSet *variables,
+                                 GtkCssValue       *shorthands[])
 {
   GtkCssValue *result;
   gboolean changes;
@@ -359,7 +361,8 @@ gtk_css_value_transform_compute (GtkCssValue       *value,
                                              provider,
                                              style,
                                              parent_style,
-                                             variables);
+                                             variables,
+                                             shorthands);
     }
 
   if (!changes)

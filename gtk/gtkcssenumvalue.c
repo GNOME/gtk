@@ -46,7 +46,8 @@ gtk_css_value_enum_compute (GtkCssValue       *value,
                             GtkStyleProvider  *provider,
                             GtkCssStyle       *style,
                             GtkCssStyle       *parent_style,
-                            GtkCssVariableSet *variables)
+                            GtkCssVariableSet *variables,
+                            GtkCssValue       *shorthands[])
 {
   return _gtk_css_value_ref (value);
 }
@@ -235,7 +236,8 @@ gtk_css_value_font_size_compute (GtkCssValue       *value,
                                  GtkStyleProvider  *provider,
                                  GtkCssStyle       *style,
                                  GtkCssStyle       *parent_style,
-                                 GtkCssVariableSet *variables)
+                                 GtkCssVariableSet *variables,
+                                 GtkCssValue       *shorthands[])
 {
   double font_size;
 
@@ -403,7 +405,8 @@ gtk_css_value_font_weight_compute (GtkCssValue       *value,
                                    GtkStyleProvider  *provider,
                                    GtkCssStyle       *style,
                                    GtkCssStyle       *parent_style,
-                                   GtkCssVariableSet *variables)
+                                   GtkCssVariableSet *variables,
+                                   GtkCssValue       *shorthands[])
 {
   PangoWeight new_weight;
   int parent_value;

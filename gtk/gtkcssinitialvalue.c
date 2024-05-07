@@ -43,7 +43,8 @@ gtk_css_value_initial_compute (GtkCssValue       *value,
                                GtkStyleProvider  *provider,
                                GtkCssStyle       *style,
                                GtkCssStyle       *parent_style,
-                               GtkCssVariableSet *variables)
+                               GtkCssVariableSet *variables,
+                               GtkCssValue       *shorthands[])
 {
   GtkSettings *settings;
 
@@ -77,7 +78,8 @@ gtk_css_value_initial_compute (GtkCssValue       *value,
                                  provider,
                                  style,
                                  parent_style,
-                                 variables);
+                                 variables,
+                                 shorthands);
 }
 
 static gboolean
@@ -138,5 +140,5 @@ _gtk_css_initial_value_new_compute (guint             property_id,
                                         provider,
                                         style,
                                         parent_style,
-                                        NULL);
+                                        NULL, NULL);
 }

@@ -44,7 +44,8 @@ static void gtk_css_static_style_compute_value (GtkCssStaticStyle *style,
                                                 GtkCssStyle       *parent_style,
                                                 guint              id,
                                                 GtkCssValue       *specified,
-                                                GtkCssSection     *section);
+                                                GtkCssSection     *section,
+                                                GtkCssValue       *shorthands[]);
 
 #define GET_VALUES(v) (GtkCssValue **)((guint8*)(v) + sizeof (GtkCssValues))
 
@@ -75,7 +76,8 @@ static inline void \
 gtk_css_ ## NAME ## _values_new_compute (GtkCssStaticStyle *sstyle, \
                                          GtkStyleProvider *provider, \
                                          GtkCssStyle *parent_style, \
-                                         GtkCssLookup *lookup) \
+                                         GtkCssLookup *lookup, \
+                                         GtkCssValue *shorthands[]) \
 { \
   GtkCssStyle *style = (GtkCssStyle *)sstyle; \
   int i; \
@@ -90,7 +92,8 @@ gtk_css_ ## NAME ## _values_new_compute (GtkCssStaticStyle *sstyle, \
                                           parent_style, \
                                           id, \
                                           lookup->values[id].value, \
-                                          lookup->values[id].section); \
+                                          lookup->values[id].section, \
+                                          shorthands); \
     } \
 } \
 static GtkBitmask * gtk_css_ ## NAME ## _values_mask; \
@@ -827,6 +830,7 @@ gtk_css_lookup_resolve (GtkCssLookup      *lookup,
                         GtkCssStyle       *parent_style)
 {
   GtkCssStyle *style = (GtkCssStyle *)sstyle;
+  GtkCssValue *shorthands[GTK_CSS_SHORTHAND_PROPERTY_N_PROPERTIES] = { NULL, };
 
   gtk_internal_return_if_fail (lookup != NULL);
   gtk_internal_return_if_fail (GTK_IS_STYLE_PROVIDER (provider));
@@ -879,9 +883,9 @@ gtk_css_lookup_resolve (GtkCssLookup      *lookup,
         }
       else
         {
-          gtk_css_core_values_new_compute (sstyle, provider, parent_style, lookup);
-          gtk_css_icon_values_new_compute (sstyle, provider, parent_style, lookup);
-          gtk_css_font_values_new_compute (sstyle, provider, parent_style, lookup);
+          gtk_css_core_values_new_compute (sstyle, provider, parent_style, lookup, shorthands);
+          gtk_css_icon_values_new_compute (sstyle, provider, parent_style, lookup, shorthands);
+          gtk_css_font_values_new_compute (sstyle, provider, parent_style, lookup, shorthands);
         }
 
       return;
@@ -890,57 +894,63 @@ gtk_css_lookup_resolve (GtkCssLookup      *lookup,
   if (parent_style && gtk_css_core_values_unset (lookup))
     style->core = (GtkCssCoreValues *)gtk_css_values_ref ((GtkCssValues *)parent_style->core);
   else
-    gtk_css_core_values_new_compute (sstyle, provider, parent_style, lookup);
+    gtk_css_core_values_new_compute (sstyle, provider, parent_style, lookup, shorthands);
 
   if (gtk_css_background_values_unset (lookup))
     style->background = (GtkCssBackgroundValues *)gtk_css_values_ref (gtk_css_background_initial_values);
   else
-    gtk_css_background_values_new_compute (sstyle, provider, parent_style, lookup);
+    gtk_css_background_values_new_compute (sstyle, provider, parent_style, lookup, shorthands);
 
   if (gtk_css_border_values_unset (lookup))
     style->border = (GtkCssBorderValues *)gtk_css_values_ref (gtk_css_border_initial_values);
   else
-    gtk_css_border_values_new_compute (sstyle, provider, parent_style, lookup);
+    gtk_css_border_values_new_compute (sstyle, provider, parent_style, lookup, shorthands);
 
   if (parent_style && gtk_css_icon_values_unset (lookup))
     style->icon = (GtkCssIconValues *)gtk_css_values_ref ((GtkCssValues *)parent_style->icon);
   else
-    gtk_css_icon_values_new_compute (sstyle, provider, parent_style, lookup);
+    gtk_css_icon_values_new_compute (sstyle, provider, parent_style, lookup, shorthands);
 
   if (gtk_css_outline_values_unset (lookup))
     style->outline = (GtkCssOutlineValues *)gtk_css_values_ref (gtk_css_outline_initial_values);
   else
-    gtk_css_outline_values_new_compute (sstyle, provider, parent_style, lookup);
+    gtk_css_outline_values_new_compute (sstyle, provider, parent_style, lookup, shorthands);
 
   if (parent_style && gtk_css_font_values_unset (lookup))
     style->font = (GtkCssFontValues *)gtk_css_values_ref ((GtkCssValues *)parent_style->font);
   else
-    gtk_css_font_values_new_compute (sstyle, provider, parent_style, lookup);
+    gtk_css_font_values_new_compute (sstyle, provider, parent_style, lookup, shorthands);
 
   if (gtk_css_font_variant_values_unset (lookup))
     style->font_variant = (GtkCssFontVariantValues *)gtk_css_values_ref (gtk_css_font_variant_initial_values);
   else
-    gtk_css_font_variant_values_new_compute (sstyle, provider, parent_style, lookup);
+    gtk_css_font_variant_values_new_compute (sstyle, provider, parent_style, lookup, shorthands);
 
   if (gtk_css_animation_values_unset (lookup))
     style->animation = (GtkCssAnimationValues *)gtk_css_values_ref (gtk_css_animation_initial_values);
   else
-    gtk_css_animation_values_new_compute (sstyle, provider, parent_style, lookup);
+    gtk_css_animation_values_new_compute (sstyle, provider, parent_style, lookup, shorthands);
 
   if (gtk_css_transition_values_unset (lookup))
     style->transition = (GtkCssTransitionValues *)gtk_css_values_ref (gtk_css_transition_initial_values);
   else
-    gtk_css_transition_values_new_compute (sstyle, provider, parent_style, lookup);
+    gtk_css_transition_values_new_compute (sstyle, provider, parent_style, lookup, shorthands);
 
   if (gtk_css_size_values_unset (lookup))
     style->size = (GtkCssSizeValues *)gtk_css_values_ref (gtk_css_size_initial_values);
   else
-    gtk_css_size_values_new_compute (sstyle, provider, parent_style, lookup);
+    gtk_css_size_values_new_compute (sstyle, provider, parent_style, lookup, shorthands);
 
   if (gtk_css_other_values_unset (lookup))
     style->other = (GtkCssOtherValues *)gtk_css_values_ref (gtk_css_other_initial_values);
   else
-    gtk_css_other_values_new_compute (sstyle, provider, parent_style, lookup);
+    gtk_css_other_values_new_compute (sstyle, provider, parent_style, lookup, shorthands);
+
+  for (unsigned int i = 0; i < GTK_CSS_SHORTHAND_PROPERTY_N_PROPERTIES; i++)
+    {
+      if (shorthands[i])
+        gtk_css_value_unref (shorthands[i]);
+    }
 }
 
 GtkCssStyle *
@@ -993,7 +1003,8 @@ gtk_css_static_style_compute_value (GtkCssStaticStyle *style,
                                     GtkCssStyle       *parent_style,
                                     guint              id,
                                     GtkCssValue       *specified,
-                                    GtkCssSection     *section)
+                                    GtkCssSection     *section,
+                                    GtkCssValue       *shorthands[])
 {
   GtkCssValue *value, *original_value;
   GtkBorderStyle border_style;
@@ -1033,7 +1044,7 @@ gtk_css_static_style_compute_value (GtkCssStaticStyle *style,
    */
   if (specified)
     {
-      value = _gtk_css_value_compute (specified, id, provider, (GtkCssStyle *)style, parent_style, NULL);
+      value = _gtk_css_value_compute (specified, id, provider, (GtkCssStyle *)style, parent_style, NULL, shorthands);
 
       if (gtk_css_value_contains_variables (specified))
         original_value = specified;

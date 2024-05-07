@@ -39,7 +39,8 @@ gtk_css_value_inherit_compute (GtkCssValue       *value,
                                GtkStyleProvider  *provider,
                                GtkCssStyle       *style,
                                GtkCssStyle       *parent_style,
-                               GtkCssVariableSet *variables)
+                               GtkCssVariableSet *variables,
+                               GtkCssValue       *shorthands[])
 {
   if (parent_style)
     {
@@ -52,7 +53,8 @@ gtk_css_value_inherit_compute (GtkCssValue       *value,
                                      provider,
                                      style,
                                      parent_style,
-                                     variables);
+                                     variables,
+                                     shorthands);
     }
 }
 

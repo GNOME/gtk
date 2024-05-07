@@ -642,7 +642,8 @@ _gtk_css_keyframes_compute (GtkCssKeyframes  *keyframes,
                                                                       provider,
                                                                       style,
                                                                       parent_style,
-                                                                      keyframes->variables ? keyframes->variables[k] : NULL);
+                                                                      keyframes->variables ? keyframes->variables[k] : NULL,
+                                                                      NULL);
         }
     }
 

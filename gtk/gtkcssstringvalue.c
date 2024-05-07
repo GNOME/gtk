@@ -40,7 +40,8 @@ gtk_css_value_string_compute (GtkCssValue       *value,
                               GtkStyleProvider  *provider,
                               GtkCssStyle       *style,
                               GtkCssStyle       *parent_style,
-                              GtkCssVariableSet *variables)
+                              GtkCssVariableSet *variables,
+                              GtkCssValue       *shorthands[])
 {
   return _gtk_css_value_ref (value);
 }
