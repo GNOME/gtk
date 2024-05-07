@@ -70,7 +70,8 @@ gtk_css_image_real_compute (GtkCssImage       *image,
                             GtkStyleProvider  *provider,
                             GtkCssStyle       *style,
                             GtkCssStyle       *parent_style,
-                            GtkCssVariableSet *variables)
+                            GtkCssVariableSet *variables,
+                            GtkCssValue       *shorthands[])
 {
   return g_object_ref (image);
 }
@@ -179,7 +180,8 @@ _gtk_css_image_compute (GtkCssImage       *image,
                         GtkStyleProvider  *provider,
                         GtkCssStyle       *style,
                         GtkCssStyle       *parent_style,
-                        GtkCssVariableSet *variables)
+                        GtkCssVariableSet *variables,
+                        GtkCssValue       *shorthands[])
 {
   GtkCssImageClass *klass;
 
@@ -189,7 +191,7 @@ _gtk_css_image_compute (GtkCssImage       *image,
 
   klass = GTK_CSS_IMAGE_GET_CLASS (image);
 
-  return klass->compute (image, property_id, provider, style, parent_style, variables);
+  return klass->compute (image, property_id, provider, style, parent_style, variables, shorthands);
 }
 
 GtkCssImage *

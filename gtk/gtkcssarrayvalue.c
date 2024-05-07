@@ -46,7 +46,8 @@ gtk_css_value_array_compute (GtkCssValue       *value,
                              GtkStyleProvider  *provider,
                              GtkCssStyle       *style,
                              GtkCssStyle       *parent_style,
-                             GtkCssVariableSet *variables)
+                             GtkCssVariableSet *variables,
+                             GtkCssValue       *shorthands[])
 {
   GtkCssValue *result;
   GtkCssValue *i_value;
@@ -55,7 +56,7 @@ gtk_css_value_array_compute (GtkCssValue       *value,
   result = NULL;
   for (i = 0; i < value->n_values; i++)
     {
-      i_value =  _gtk_css_value_compute (value->values[i], property_id, provider, style, parent_style, variables);
+      i_value =  _gtk_css_value_compute (value->values[i], property_id, provider, style, parent_style, variables, shorthands);
 
       if (result == NULL &&
 	  i_value != value->values[i])

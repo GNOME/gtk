@@ -226,10 +226,22 @@ gtk_css_value_reference_compute (GtkCssValue       *value,
                                  GtkStyleProvider  *provider,
                                  GtkCssStyle       *style,
                                  GtkCssStyle       *parent_style,
-                                 GtkCssVariableSet *variables)
+                                 GtkCssVariableSet *variables,
+                                 GtkCssValue       *shorthands[])
 {
   GtkCssValue *result = NULL, *computed;
   GtkCssRefs refs;
+  guint shorthand_id = G_MAXUINT;
+
+  if (GTK_IS_CSS_SHORTHAND_PROPERTY (value->property))
+    {
+      shorthand_id = _gtk_css_shorthand_property_get_id (GTK_CSS_SHORTHAND_PROPERTY (value->property));
+      if (shorthands && shorthands[shorthand_id])
+        {
+          result = gtk_css_value_ref (shorthands[shorthand_id]);
+          goto pick_subproperty;
+        }
+    }
 
   gtk_css_refs_init (&refs);
 
@@ -253,9 +265,18 @@ gtk_css_value_reference_compute (GtkCssValue       *value,
   if (result == NULL)
     result = _gtk_css_unset_value_new ();
 
-  if (GTK_IS_CSS_SHORTHAND_PROPERTY (value->property))
+  if (shorthand_id != G_MAXUINT)
     {
-      GtkCssValue *sub = gtk_css_value_ref (_gtk_css_array_value_get_nth (result, value->subproperty));
+      GtkCssValue *sub;
+
+      if (shorthands)
+        {
+          g_assert (shorthands[shorthand_id] == NULL);
+          shorthands[shorthand_id] = gtk_css_value_ref (result);
+        }
+
+pick_subproperty:
+      sub = gtk_css_value_ref (_gtk_css_array_value_get_nth (result, value->subproperty));
       gtk_css_value_unref (result);
       result = sub;
     }
@@ -265,7 +286,8 @@ gtk_css_value_reference_compute (GtkCssValue       *value,
                                      provider,
                                      style,
                                      parent_style,
-                                     variables);
+                                     variables,
+                                     shorthands);
   computed->is_computed = TRUE;
 
   gtk_css_value_unref (result);

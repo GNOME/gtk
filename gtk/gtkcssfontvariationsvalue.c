@@ -57,7 +57,8 @@ gtk_css_value_font_variations_compute (GtkCssValue       *specified,
                                        GtkStyleProvider  *provider,
                                        GtkCssStyle       *style,
                                        GtkCssStyle       *parent_style,
-                                       GtkCssVariableSet *variables)
+                                       GtkCssVariableSet *variables,
+                                       GtkCssValue       *shorthands[])
 {
   return _gtk_css_value_ref (specified);
 }

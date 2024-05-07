@@ -143,7 +143,8 @@ gtk_css_image_icon_theme_compute (GtkCssImage       *image,
                                   GtkStyleProvider  *provider,
                                   GtkCssStyle       *style,
                                   GtkCssStyle       *parent_style,
-                                  GtkCssVariableSet *variables)
+                                  GtkCssVariableSet *variables,
+                                  GtkCssValue       *shorthands[])
 {
   GtkCssImageIconTheme *icon_theme = GTK_CSS_IMAGE_ICON_THEME (image);
   GtkCssImageIconTheme *copy;

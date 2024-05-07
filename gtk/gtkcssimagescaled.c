@@ -102,7 +102,8 @@ gtk_css_image_scaled_compute (GtkCssImage       *image,
                               GtkStyleProvider  *provider,
                               GtkCssStyle       *style,
                               GtkCssStyle       *parent_style,
-                              GtkCssVariableSet *variables)
+                              GtkCssVariableSet *variables,
+                              GtkCssValue       *shorthands[])
 {
   GtkCssImageScaled *scaled = GTK_CSS_IMAGE_SCALED (image);
   int scale;
@@ -139,7 +140,8 @@ gtk_css_image_scaled_compute (GtkCssImage       *image,
                                            provider,
                                            style,
                                            parent_style,
-                                           variables);
+                                           variables,
+                                           shorthands);
   res->scales[0] = scaled->scales[best];
 
   return GTK_CSS_IMAGE (res);

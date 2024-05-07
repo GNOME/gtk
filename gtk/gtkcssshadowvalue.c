@@ -118,7 +118,8 @@ gtk_css_value_shadow_compute (GtkCssValue       *value,
                               GtkStyleProvider  *provider,
                               GtkCssStyle       *style,
                               GtkCssStyle       *parent_style,
-                              GtkCssVariableSet *variables)
+                              GtkCssVariableSet *variables,
+                              GtkCssValue       *shorthands[])
 {
   guint i;
   ShadowValue *shadows;
@@ -129,11 +130,11 @@ gtk_css_value_shadow_compute (GtkCssValue       *value,
     {
       const ShadowValue *shadow = &value->shadows[i];
 
-      shadows[i].hoffset = _gtk_css_value_compute (shadow->hoffset, property_id, provider, style, parent_style, variables);
-      shadows[i].voffset = _gtk_css_value_compute (shadow->voffset, property_id, provider, style, parent_style, variables);
-      shadows[i].radius = _gtk_css_value_compute (shadow->radius, property_id, provider, style, parent_style, variables);
-      shadows[i].spread = _gtk_css_value_compute (shadow->spread, property_id, provider, style, parent_style, variables),
-      shadows[i].color = _gtk_css_value_compute (shadow->color, property_id, provider, style, parent_style, variables);
+      shadows[i].hoffset = _gtk_css_value_compute (shadow->hoffset, property_id, provider, style, parent_style, variables, shorthands);
+      shadows[i].voffset = _gtk_css_value_compute (shadow->voffset, property_id, provider, style, parent_style, variables, shorthands);
+      shadows[i].radius = _gtk_css_value_compute (shadow->radius, property_id, provider, style, parent_style, variables, shorthands);
+      shadows[i].spread = _gtk_css_value_compute (shadow->spread, property_id, provider, style, parent_style, variables, shorthands),
+      shadows[i].color = _gtk_css_value_compute (shadow->color, property_id, provider, style, parent_style, variables, shorthands);
       shadows[i].inset = shadow->inset;
     }
 

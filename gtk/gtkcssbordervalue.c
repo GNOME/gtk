@@ -47,7 +47,8 @@ gtk_css_value_border_compute (GtkCssValue       *value,
                               GtkStyleProvider  *provider,
                               GtkCssStyle       *style,
                               GtkCssStyle       *parent_style,
-                              GtkCssVariableSet *variables)
+                              GtkCssVariableSet *variables,
+                              GtkCssValue       *shorthands[])
 {
   GtkCssValue *values[4];
   GtkCssValue *computed;
@@ -58,7 +59,7 @@ gtk_css_value_border_compute (GtkCssValue       *value,
     {
       if (value->values[i])
         {
-          values[i] = _gtk_css_value_compute (value->values[i], property_id, provider, style, parent_style, variables);
+          values[i] = _gtk_css_value_compute (value->values[i], property_id, provider, style, parent_style, variables, shorthands);
           changed |= (values[i] != value->values[i]);
         }
       else

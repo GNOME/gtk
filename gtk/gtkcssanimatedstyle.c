@@ -67,7 +67,7 @@ gtk_css_ ## NAME ## _values_recompute (GtkCssAnimatedStyle *animated) \
                                          animated->provider, \
                                          style, \
                                          animated->parent_style, \
-                                         NULL); \
+                                         NULL, NULL); \
       if (computed == NULL) \
         continue; \
 \

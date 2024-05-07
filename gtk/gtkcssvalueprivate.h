@@ -50,7 +50,8 @@ struct _GtkCssValueClass {
                                                        GtkStyleProvider           *provider,
                                                        GtkCssStyle                *style,
                                                        GtkCssStyle                *parent_style,
-                                                       GtkCssVariableSet          *variables);
+                                                       GtkCssVariableSet          *variables,
+                                                       GtkCssValue                *shorthands[]);
   gboolean      (* equal)                             (const GtkCssValue          *value1,
                                                        const GtkCssValue          *value2);
   GtkCssValue * (* transition)                        (GtkCssValue                *start,
@@ -80,7 +81,8 @@ GtkCssValue *_gtk_css_value_compute                   (GtkCssValue              
                                                        GtkStyleProvider           *provider,
                                                        GtkCssStyle                *style,
                                                        GtkCssStyle                *parent_style,
-                                                       GtkCssVariableSet          *variables) G_GNUC_PURE;
+                                                       GtkCssVariableSet          *variables,
+                                                       GtkCssValue                *shorthands[]) G_GNUC_PURE;
 gboolean     _gtk_css_value_equal                     (const GtkCssValue          *value1,
                                                        const GtkCssValue          *value2) G_GNUC_PURE;
 gboolean     _gtk_css_value_equal0                    (const GtkCssValue          *value1,

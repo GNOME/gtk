@@ -39,7 +39,8 @@ gtk_css_value_image_compute (GtkCssValue       *value,
                              GtkStyleProvider  *provider,
                              GtkCssStyle       *style,
                              GtkCssStyle       *parent_style,
-                             GtkCssVariableSet *variables)
+                             GtkCssVariableSet *variables,
+                             GtkCssValue       *shorthands[])
 {
   GtkCssImage *image, *computed;
   
@@ -48,7 +49,7 @@ gtk_css_value_image_compute (GtkCssValue       *value,
   if (image == NULL)
     return _gtk_css_value_ref (value);
 
-  computed = _gtk_css_image_compute (image, property_id, provider, style, parent_style, variables);
+  computed = _gtk_css_image_compute (image, property_id, provider, style, parent_style, variables, shorthands);
 
   if (computed == image)
     {

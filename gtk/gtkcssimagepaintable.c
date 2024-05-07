@@ -20,6 +20,7 @@
 #include "config.h"
 
 #include "gtkcssimagepaintableprivate.h"
+#include "gtkcssvalueprivate.h"
 
 #include "gtkprivate.h"
 
@@ -101,7 +102,8 @@ gtk_css_image_paintable_compute (GtkCssImage       *image,
                                  GtkStyleProvider  *provider,
                                  GtkCssStyle       *style,
                                  GtkCssStyle       *parent_style,
-                                 GtkCssVariableSet *variables)
+                                 GtkCssVariableSet *variables,
+                                 GtkCssValue       *shorthands[])
 {
   return gtk_css_image_paintable_get_static_image (image);
 }

@@ -138,7 +138,8 @@ gtk_css_image_fallback_compute (GtkCssImage       *image,
                                 GtkStyleProvider  *provider,
                                 GtkCssStyle       *style,
                                 GtkCssStyle       *parent_style,
-                                GtkCssVariableSet *variables)
+                                GtkCssVariableSet *variables,
+                                GtkCssValue       *shorthands[])
 {
   GtkCssImageFallback *fallback = GTK_CSS_IMAGE_FALLBACK (image);
   GtkCssImageFallback *copy;
@@ -154,7 +155,8 @@ gtk_css_image_fallback_compute (GtkCssImage       *image,
                                                  provider,
                                                  style,
                                                  parent_style,
-                                                 variables);
+                                                 variables,
+                                                 shorthands);
 
       /* image($color) that didn't change */
       if (computed_color && !fallback->images &&
@@ -171,7 +173,8 @@ gtk_css_image_fallback_compute (GtkCssImage       *image,
                                                     provider,
                                                     style,
                                                     parent_style,
-                                                    variables);
+                                                    variables,
+                                                    shorthands);
 
           if (gtk_css_image_is_invalid (copy->images[i]))
             continue;

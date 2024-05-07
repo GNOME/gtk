@@ -113,7 +113,8 @@ gtk_css_value_number_compute (GtkCssValue       *number,
                               GtkStyleProvider  *provider,
                               GtkCssStyle       *style,
                               GtkCssStyle       *parent_style,
-                              GtkCssVariableSet *variables)
+                              GtkCssVariableSet *variables,
+                              GtkCssValue       *shorthands[])
 {
   double value;
 
@@ -132,7 +133,8 @@ gtk_css_value_number_compute (GtkCssValue       *number,
           GtkCssValue *computed = _gtk_css_value_compute (number->calc.terms[i],
                                                           property_id, provider, style,
                                                           parent_style,
-                                                          variables);
+                                                          variables,
+                                                          shorthands);
           changed |= computed != number->calc.terms[i];
           new_values[i] = computed;
         }
