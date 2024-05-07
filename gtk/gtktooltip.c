@@ -366,9 +366,10 @@ gtk_tooltip_trigger_tooltip_query (GtkWidget *widget)
   GdkSeat *seat;
   GdkDevice *device;
   GdkSurface *surface;
-  double x, y;
-  graphene_point_t p;
+  double px, py;
+  int x, y;
   GtkWidget *toplevel;
+  GtkWidget *target_widget;
 
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
@@ -381,7 +382,7 @@ gtk_tooltip_trigger_tooltip_query (GtkWidget *widget)
   else
     device = NULL;
   if (device)
-    surface = gdk_device_get_surface_at_position (device, &x, &y);
+    surface = gdk_device_get_surface_at_position (device, &px, &py);
   else
     surface = NULL;
   if (!surface)
@@ -395,10 +396,12 @@ gtk_tooltip_trigger_tooltip_query (GtkWidget *widget)
   if (gtk_native_get_surface (GTK_NATIVE (toplevel)) != surface)
     return;
 
-  if (!gtk_widget_compute_point (toplevel, widget, &GRAPHENE_POINT_INIT (x, y), &p))
-    graphene_point_init (&p, x, y);
+  x = round (px);
+  y = round (py);
 
-  gtk_tooltip_handle_event_internal (GDK_MOTION_NOTIFY, surface, widget, p.x, p.y);
+  target_widget = _gtk_widget_find_at_coords (surface, x, y, &x, &y);
+
+  gtk_tooltip_handle_event_internal (GDK_MOTION_NOTIFY, surface, target_widget, x, y);
 }
 
 static void
