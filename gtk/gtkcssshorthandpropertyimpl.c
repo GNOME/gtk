@@ -1093,6 +1093,7 @@ parse_all (GtkCssShorthandProperty  *shorthand,
 
 static void
 gtk_css_shorthand_property_register (const char                        *name,
+                                     unsigned int                       id,
                                      const char                       **subproperties,
                                      GtkCssShorthandPropertyParseFunc   parse_func)
 {
@@ -1102,6 +1103,8 @@ gtk_css_shorthand_property_register (const char                        *name,
                        "name", name,
                        "subproperties", subproperties,
                        NULL);
+
+  node->id = id;
 
   node->parse = parse_func;
 }
@@ -1158,65 +1161,85 @@ _gtk_css_shorthand_property_init_properties (void)
   const char **all_subproperties;
 
   gtk_css_shorthand_property_register   ("font",
+                                         GTK_CSS_SHORTHAND_PROPERTY_FONT,
                                          font_subproperties,
                                          parse_font);
   gtk_css_shorthand_property_register   ("margin",
+                                         GTK_CSS_SHORTHAND_PROPERTY_MARGIN,
                                          margin_subproperties,
                                          parse_margin);
   gtk_css_shorthand_property_register   ("padding",
+                                         GTK_CSS_SHORTHAND_PROPERTY_PADDING,
                                          padding_subproperties,
                                          parse_padding);
   gtk_css_shorthand_property_register   ("border-width",
+                                         GTK_CSS_SHORTHAND_PROPERTY_BORDER_WIDTH,
                                          border_width_subproperties,
                                          parse_border_width);
   gtk_css_shorthand_property_register   ("border-radius",
+                                         GTK_CSS_SHORTHAND_PROPERTY_BORDER_RADIUS,
                                          border_radius_subproperties,
                                          parse_border_radius);
   gtk_css_shorthand_property_register   ("border-color",
+                                         GTK_CSS_SHORTHAND_PROPERTY_BORDER_COLOR,
                                          border_color_subproperties,
                                          parse_border_color);
   gtk_css_shorthand_property_register   ("border-style",
+                                         GTK_CSS_SHORTHAND_PROPERTY_BORDER_STYLE,
                                          border_style_subproperties,
                                          parse_border_style);
   gtk_css_shorthand_property_register   ("border-image",
+                                         GTK_CSS_SHORTHAND_PROPERTY_BORDER_IMAGE,
                                          border_image_subproperties,
                                          parse_border_image);
   gtk_css_shorthand_property_register   ("border-top",
+                                         GTK_CSS_SHORTHAND_PROPERTY_BORDER_TOP,
                                          border_top_subproperties,
                                          parse_border_side);
   gtk_css_shorthand_property_register   ("border-right",
+                                         GTK_CSS_SHORTHAND_PROPERTY_BORDER_RIGHT,
                                          border_right_subproperties,
                                          parse_border_side);
   gtk_css_shorthand_property_register   ("border-bottom",
+                                         GTK_CSS_SHORTHAND_PROPERTY_BORDER_BOTTOM,
                                          border_bottom_subproperties,
                                          parse_border_side);
   gtk_css_shorthand_property_register   ("border-left",
+                                         GTK_CSS_SHORTHAND_PROPERTY_BORDER_LEFT,
                                          border_left_subproperties,
                                          parse_border_side);
   gtk_css_shorthand_property_register   ("border",
+                                         GTK_CSS_SHORTHAND_PROPERTY_BORDER,
                                          border_subproperties,
                                          parse_border);
   gtk_css_shorthand_property_register   ("outline",
+                                         GTK_CSS_SHORTHAND_PROPERTY_OUTLINE,
                                          outline_subproperties,
                                          parse_border_side);
   gtk_css_shorthand_property_register   ("background",
+                                         GTK_CSS_SHORTHAND_PROPERTY_BACKGROUND,
                                          background_subproperties,
                                          parse_background);
   gtk_css_shorthand_property_register   ("transition",
+                                         GTK_CSS_SHORTHAND_PROPERTY_TRANSITION,
                                          transition_subproperties,
                                          parse_transition);
   gtk_css_shorthand_property_register   ("animation",
+                                         GTK_CSS_SHORTHAND_PROPERTY_ANIMATION,
                                          animation_subproperties,
                                          parse_animation);
   gtk_css_shorthand_property_register   ("text-decoration",
+                                         GTK_CSS_SHORTHAND_PROPERTY_TEXT_DECORATION,
                                          text_decoration_subproperties,
                                          parse_text_decoration);
   gtk_css_shorthand_property_register   ("font-variant",
+                                         GTK_CSS_SHORTHAND_PROPERTY_FONT_VARIANT,
                                          font_variant_subproperties,
                                          parse_font_variant);
 
   all_subproperties = get_all_subproperties ();
   gtk_css_shorthand_property_register   ("all",
+                                         GTK_CSS_SHORTHAND_PROPERTY_ALL,
                                          all_subproperties,
                                          parse_all);
   g_free (all_subproperties);
