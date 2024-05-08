@@ -928,11 +928,30 @@ parse_declaration (GtkCssScanner *scanner,
 
       if (gtk_css_parser_has_references (scanner->parser))
         {
+          GtkCssLocation start_location;
           GtkCssVariableValue *var_value;
+
+          gtk_css_parser_skip_whitespace (scanner->parser);
+
+          if (gtk_keep_css_sections)
+            start_location = *gtk_css_parser_get_start_location (scanner->parser);
 
           var_value = gtk_css_parser_parse_value_into_token_stream (scanner->parser);
           if (var_value == NULL)
             goto out;
+
+          if (gtk_keep_css_sections)
+            section = gtk_css_section_new (gtk_css_parser_get_file (scanner->parser),
+                                           &start_location,
+                                           gtk_css_parser_get_start_location (scanner->parser));
+          else
+            section = NULL;
+
+          if (section != NULL)
+            {
+              gtk_css_variable_value_set_section (var_value, section);
+              gtk_css_section_unref (section);
+            }
 
           if (GTK_IS_CSS_SHORTHAND_PROPERTY (property))
             {
