@@ -34,6 +34,7 @@
 #include "gtkwidgetprivate.h"
 #include "gdk/gdkprofilerprivate.h"
 #include "gtksymbolicpaintable.h"
+#include "gtkiconprovider.h"
 
 struct _GtkIconHelper
 {
@@ -112,12 +113,24 @@ ensure_paintable_for_gicon (GtkIconHelper    *self,
 }
 
 static GdkPaintable *
+ensure_paintable_for_icon_name (GtkIconHelper *self,
+                                const char    *name)
+{
+  int size;
+  float scale;
+
+  size = gtk_icon_helper_get_size (self);
+  scale = gtk_widget_get_scale_factor (self->owner);
+
+  return gtk_lookup_icon (gtk_widget_get_display (self->owner), name, size, scale);
+}
+
+static GdkPaintable *
 gtk_icon_helper_load_paintable (GtkIconHelper   *self,
                                 gboolean         preload,
                                 gboolean        *out_symbolic)
 {
   GdkPaintable *paintable;
-  GIcon *gicon;
   gboolean symbolic;
 
   switch (gtk_image_definition_get_storage_type (self->def))
@@ -128,18 +141,12 @@ gtk_icon_helper_load_paintable (GtkIconHelper   *self,
       break;
 
     case GTK_IMAGE_ICON_NAME:
-      if (self->use_fallback)
-        gicon = g_themed_icon_new_with_default_fallbacks (gtk_image_definition_get_icon_name (self->def));
+      paintable = ensure_paintable_for_icon_name (self,
+                                                  gtk_image_definition_get_icon_name (self->def));
+      if (GTK_IS_ICON_PAINTABLE (paintable))
+        symbolic = gtk_icon_paintable_is_symbolic (GTK_ICON_PAINTABLE (paintable));
       else
-        gicon = g_themed_icon_new (gtk_image_definition_get_icon_name (self->def));
-      paintable = ensure_paintable_for_gicon (self,
-                                              gtk_css_node_get_style (self->node),
-                                              gtk_widget_get_scale_factor (self->owner),
-                                              gtk_widget_get_direction (self->owner),
-                                              preload,
-                                              gicon,
-                                              &symbolic);
-      g_object_unref (gicon);
+        symbolic = GTK_IS_SYMBOLIC_PAINTABLE (paintable);
       break;
 
     case GTK_IMAGE_GICON:
