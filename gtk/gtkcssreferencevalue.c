@@ -237,6 +237,8 @@ gtk_css_value_reference_compute (GtkCssValue       *value,
 
   if (gtk_css_refs_get_size (&refs) > 0)
     {
+      const GtkCssToken *token;
+
       GtkCssParser *value_parser =
         gtk_css_parser_new_for_token_stream (value->value,
                                              value->file,
@@ -245,6 +247,19 @@ gtk_css_value_reference_compute (GtkCssValue       *value,
                                              parser_error, provider, NULL);
 
       result = _gtk_style_property_parse_value (value->property, value_parser);
+      token = gtk_css_parser_peek_token (value_parser);
+      if (!gtk_css_token_is (token, GTK_CSS_TOKEN_EOF))
+        {
+          char *junk;
+
+          junk = gtk_css_token_to_string (token);
+          gtk_css_parser_error_syntax (value_parser,
+                                       "Junk at end of %s value: %s",
+                                       value->property->name, junk);
+          g_free (junk);
+
+          g_clear_pointer (&result, gtk_css_value_unref);
+        }
       gtk_css_parser_unref (value_parser);
     }
 
