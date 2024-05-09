@@ -60,6 +60,9 @@ struct _GtkAccessKitContext
         32 bits to identify inline text boxes or other children within
         a given context. */
   guint32 id;
+
+  guint text_layout_serial;
+  GArray *text_layout_children;
 };
 
 G_DEFINE_TYPE (GtkAccessKitContext, gtk_accesskit_context, GTK_TYPE_AT_CONTEXT)
@@ -70,6 +73,7 @@ gtk_accesskit_context_finalize (GObject *gobject)
   GtkAccessKitContext *self = GTK_ACCESSKIT_CONTEXT (gobject);
 
   g_clear_object (&self->root);
+  g_clear_pointer (&self->text_layout_children, g_array_unref);
 
   G_OBJECT_CLASS (gtk_accesskit_context_parent_class)->finalize (gobject);
 }
@@ -817,6 +821,326 @@ set_multi_relation (GtkATContext           *ctx,
   return FALSE;
 }
 
+static void
+set_bounds_from_pango (accesskit_node_builder *builder,
+                       PangoRectangle         *pango_rect)
+{
+  accesskit_rect rect;
+
+  rect.x0 = (double)(pango_rect->x) / PANGO_SCALE;
+  rect.y0 = (double)(pango_rect->y) / PANGO_SCALE;
+  rect.x1 = (double)(pango_rect->x + pango_rect->width) / PANGO_SCALE;
+  rect.y1 = (double)(pango_rect->y + pango_rect->height) / PANGO_SCALE;
+  accesskit_node_builder_set_bounds (builder, rect);
+}
+
+static accesskit_node_id
+run_node_id (GtkAccessKitContext *self,
+             gint                 start_index)
+{
+  return ((accesskit_node_id)self->id << 32) | start_index;
+}
+
+static void
+add_run_node (GtkAccessKitContext    *self,
+              accesskit_tree_update  *update,
+              gint                    start_index,
+              accesskit_node_builder *builder)
+{
+  accesskit_node_id id = run_node_id (self, start_index);
+  accesskit_node *node = accesskit_node_builder_build (builder);
+
+  accesskit_tree_update_push_node (update, id, node);
+  g_array_append_val (self->text_layout_children, id);
+}
+
+typedef struct _GtkAccessKitRunInfo
+{
+  PangoLayoutRun *run;
+  PangoRectangle extents;
+} GtkAccessKitRunInfo;
+
+static int
+compare_run_info (gconstpointer a, gconstpointer b)
+{
+  const GtkAccessKitRunInfo *run_info_a = a;
+  const GtkAccessKitRunInfo *run_info_b = b;
+  int a_offset = run_info_a->run->item->offset;
+  int b_offset = run_info_b->run->item->offset;
+
+  if (a_offset < b_offset)
+    return -1;
+  if (a_offset > b_offset)
+    return 1;
+  return 0;
+}
+
+static void
+add_text_layout_inner (GtkAccessKitContext   *self,
+                       accesskit_tree_update *update,
+                       PangoLayout           *layout)
+{
+  const char *text = pango_layout_get_text (layout);
+  const PangoLogAttr *log_attrs =
+    pango_layout_get_log_attrs_readonly (layout, NULL);
+  PangoLayoutIter *iter = pango_layout_get_iter (layout);
+  GArray *line_runs = NULL;
+  guint usv_offset = 0, byte_offset = 0;
+
+  do
+    {
+      PangoLayoutRun *run = pango_layout_iter_get_run_readonly (iter);
+
+      if (run)
+        {
+          GtkAccessKitRunInfo run_info;
+
+          run_info.run = run;
+          pango_layout_iter_get_run_extents (iter, NULL, &run_info.extents);
+
+          if (!line_runs)
+            line_runs = g_array_new (FALSE, FALSE, sizeof (GtkAccessKitRunInfo));
+          g_array_append_val (line_runs, run_info);
+        }
+      else
+        {
+          PangoLayoutLine *line = pango_layout_iter_get_line_readonly (iter);
+
+          if (line_runs)
+            {
+              GtkAccessKitRunInfo *line_runs_data =
+                (GtkAccessKitRunInfo *) (line_runs->data);
+              guint i;
+
+              g_array_sort (line_runs, compare_run_info);
+
+              for (i = 0; i < line_runs->len; i++)
+                {
+                  GtkAccessKitRunInfo *run_info = &line_runs_data[i];
+                  PangoLayoutRun *run = run_info->run;
+                  PangoItem *item = run->item;
+                  accesskit_node_builder *builder =
+                    accesskit_node_builder_new (ACCESSKIT_ROLE_INLINE_TEXT_BOX);
+                  guint node_text_byte_count;
+                  gchar *node_text;
+                  accesskit_text_direction dir;
+                  int *log_widths = g_new0 (int, item->num_chars);
+                  GArray *char_lengths =
+                    g_array_new (FALSE, FALSE, sizeof (uint8_t));
+                  GArray *word_lengths =
+                    g_array_new (FALSE, FALSE, sizeof (uint8_t));
+                  GArray *char_positions =
+                    g_array_new (FALSE, FALSE, sizeof (float));
+                  GArray *char_widths =
+                    g_array_new (FALSE, FALSE, sizeof (float));
+                  guint node_start_usv_offset = usv_offset;
+                  guint last_word_start_char_offset = 0;
+                  guint char_count = 0;
+                  float char_pos = 0.0f;
+
+                  g_assert (byte_offset == item->offset);
+
+                  if (i > 0)
+                    {
+                      accesskit_node_id id =
+                        run_node_id (self,
+                                     line_runs_data[i - 1].run->item->offset);
+                      accesskit_node_builder_set_previous_on_line (builder, id);
+                    }
+
+                  if (i < (line_runs->len - 1))
+                    {
+                      accesskit_node_id id =
+                        run_node_id (self,
+                                     line_runs_data[i + 1].run->item->offset);
+                      accesskit_node_builder_set_next_on_line (builder, id);
+                    }
+
+                  set_bounds_from_pango (builder, &run_info->extents);
+
+                  if (i == (line_runs->len - 1))
+                    node_text_byte_count =
+                      line->length - (item->offset - line->start_index);
+                  else
+                    node_text_byte_count = item->length;
+                  node_text = g_strndup (text + item->offset,
+                                         node_text_byte_count);
+                  accesskit_node_builder_set_value (builder, node_text);
+
+                  /* The following logic for determining the run's direction
+                     is copied from update_run in pango-layout.c. */
+                  if ((item->analysis.level % 2) == 0)
+                    dir = ACCESSKIT_TEXT_DIRECTION_LEFT_TO_RIGHT;
+                  else
+                    dir = ACCESSKIT_TEXT_DIRECTION_RIGHT_TO_LEFT;
+                  accesskit_node_builder_set_text_direction (builder, dir);
+
+                  /* TODO: attributes, once the AccessKit backends support them */
+
+                  pango_glyph_item_get_logical_widths (run, text, log_widths);
+
+                  while (byte_offset < (item->offset + node_text_byte_count))
+                    {
+                      guint char_start_byte_offset = byte_offset;
+                      uint8_t char_len;
+
+                      if (log_attrs[usv_offset].is_word_start &&
+                          (char_count > last_word_start_char_offset))
+                        {
+                          uint8_t word_len =
+                            char_count - last_word_start_char_offset;
+
+                          g_array_append_val (word_lengths, word_len);
+                          last_word_start_char_offset = char_count;
+                        }
+
+                      if (byte_offset >= (item->offset + item->length))
+                        {
+                          float width = 0.0f;
+
+                          byte_offset =
+                            item->offset + node_text_byte_count;
+                          usv_offset +=
+                            g_utf8_strlen (node_text + item->length,
+                                           node_text_byte_count - item->length);
+                          g_array_append_val (char_positions, char_pos);
+                          g_array_append_val (char_widths, width);
+                        }
+                      else
+                        {
+                          float width = 0.0f;
+
+                          do
+                            {
+                              width +=
+                                (float) (log_widths[usv_offset - node_start_usv_offset]) / PANGO_SCALE;
+                              byte_offset =
+                                g_utf8_next_char (text + byte_offset) - text;
+                              usv_offset++;
+                            }
+                          while (byte_offset < (item->offset + item->length) &&
+                                 !log_attrs[usv_offset].is_cursor_position);
+
+                          g_array_append_val (char_positions, char_pos);
+                          g_array_append_val (char_widths, width);
+                          char_pos += width;
+                        }
+
+                      char_len = byte_offset - char_start_byte_offset;
+                      g_array_append_val (char_lengths, char_len);
+                      char_count++;
+                    }
+
+                  if (char_count > last_word_start_char_offset)
+                    {
+                      uint8_t word_len =
+                        char_count - last_word_start_char_offset;
+
+                      g_array_append_val (word_lengths, word_len);
+                    }
+
+                  accesskit_node_builder_set_character_lengths (builder,
+                                                                char_lengths->len,
+                                                                (uint8_t *) char_lengths->data);
+                  g_array_unref (char_lengths);
+                  accesskit_node_builder_set_word_lengths (builder,
+                                                           word_lengths->len,
+                                                           (uint8_t *) word_lengths->data);
+                  g_array_unref (word_lengths);
+                  accesskit_node_builder_set_character_positions (builder,
+                                                                  char_positions->len,
+                                                                  (float *) char_positions->data);
+                  g_array_unref (char_positions);
+                  accesskit_node_builder_set_character_widths (builder,
+                                                               char_widths->len,
+                                                               (float *) char_widths->data);
+                  g_array_unref (char_widths);
+
+                  add_run_node (self, update, item->offset, builder);
+                  g_free (node_text);
+                  g_free (log_widths);
+                }
+
+              g_clear_pointer (&line_runs, g_array_unref);
+            }
+          else
+            {
+              accesskit_node_builder *builder =
+                accesskit_node_builder_new (ACCESSKIT_ROLE_INLINE_TEXT_BOX);
+              PangoRectangle extents;
+              gchar *line_text =
+                g_strndup (text + line->start_index, line->length);
+              accesskit_text_direction dir;
+              uint8_t char_len = line->length;
+              uint8_t char_count = line->length ? 1 : 0;
+              float coord = 0.0f;
+
+              g_assert (byte_offset == line->start_index);
+
+              pango_layout_iter_get_run_extents (iter, NULL, &extents);
+              set_bounds_from_pango (builder, &extents);
+              accesskit_node_builder_set_value (builder, line_text);
+
+              switch (pango_layout_line_get_resolved_direction (line))
+                {
+                case PANGO_DIRECTION_RTL:
+                case PANGO_DIRECTION_TTB_RTL:
+                case PANGO_DIRECTION_WEAK_RTL:
+                  dir = ACCESSKIT_TEXT_DIRECTION_RIGHT_TO_LEFT;
+                  break;
+
+                default:
+                  dir = ACCESSKIT_TEXT_DIRECTION_LEFT_TO_RIGHT;
+                  break;
+                }
+              accesskit_node_builder_set_text_direction (builder, dir);
+
+              accesskit_node_builder_set_character_lengths (builder, char_count,
+                                                            &char_len);
+              accesskit_node_builder_set_word_lengths (builder, 1,
+                                                       &char_count);
+              accesskit_node_builder_set_character_positions (builder, char_count,
+                                                              &coord);
+              accesskit_node_builder_set_character_widths (builder, char_count,
+                                                           &coord);
+
+              add_run_node (self, update, line->start_index, builder);
+              byte_offset += line->length;
+              usv_offset += g_utf8_strlen (line_text, line->length);
+              g_free (line_text);
+            }
+        }
+    }
+  while (pango_layout_iter_next_run (iter));
+
+  /* Iteration should always end with a null run, and processing that null run
+     should dispose of line_runs (see above). */
+  g_assert (!line_runs);
+}
+
+static void
+add_text_layout (GtkAccessKitContext    *self,
+                 accesskit_tree_update  *update,
+                 accesskit_node_builder *parent_builder,
+                 PangoLayout            *layout)
+{
+  guint serial = pango_layout_get_serial (layout);
+
+  if (serial != self->text_layout_serial)
+    {
+      self->text_layout_serial = serial;
+      g_clear_pointer (&self->text_layout_children, g_array_unref);
+      self->text_layout_children =
+        g_array_new (FALSE, FALSE, sizeof (accesskit_node_id));
+      add_text_layout_inner (self, update, layout);
+    }
+
+  accesskit_node_builder_set_children (parent_builder,
+                                       self->text_layout_children->len,
+                                       (accesskit_node_id *)
+                                       self->text_layout_children->data);
+}
+
 void
 gtk_accesskit_context_add_to_update (GtkAccessKitContext   *self,
                                      accesskit_tree_update *update)
@@ -1064,6 +1388,11 @@ gtk_accesskit_context_add_to_update (GtkAccessKitContext   *self,
       g_object_unref (parent);
     }
 
+  if (GTK_IS_LABEL (accessible))
+    {
+      PangoLayout *layout = gtk_label_get_layout (GTK_LABEL (accessible));
+      add_text_layout (self, update, builder, layout);
+    }
   /* TODO: text */
 
   accesskit_tree_update_push_node (update, self->id,
