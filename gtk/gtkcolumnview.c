@@ -2184,7 +2184,8 @@ gtk_column_view_set_header_factory (GtkColumnView      *self,
 /**
  * gtk_column_view_scroll_to:
  * @self: The columnview to scroll in
- * @pos: position of the item
+ * @pos: position of the item. Must be less than the number of
+ *   items in the view.
  * @column: (nullable) (transfer none): The column to scroll to
  *   or %NULL to not scroll columns.
  * @flags: actions to perform
@@ -2207,6 +2208,7 @@ gtk_column_view_scroll_to (GtkColumnView       *self,
                            GtkScrollInfo       *scroll)
 {
   g_return_if_fail (GTK_IS_COLUMN_VIEW (self));
+  g_return_if_fail (pos < gtk_list_base_get_n_items (GTK_LIST_BASE (self)));
   g_return_if_fail (column == NULL || GTK_IS_COLUMN_VIEW_COLUMN (column));
   if (column)
     {
