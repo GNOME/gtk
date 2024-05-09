@@ -37,7 +37,6 @@ static void clear_ref (GtkCssVariableValueReference *ref);
 #include "gdk/gdkarrayimpl.c"
 
 typedef struct _GtkCssParserBlock GtkCssParserBlock;
-typedef struct _GtkCssParserTokenStreamData GtkCssParserTokenStreamData;
 
 struct _GtkCssParserBlock
 {
@@ -50,7 +49,7 @@ struct _GtkCssParserBlock
 #define GDK_ARRAY_NAME gtk_css_parser_blocks
 #define GDK_ARRAY_TYPE_NAME GtkCssParserBlocks
 #define GDK_ARRAY_ELEMENT_TYPE GtkCssParserBlock
-#define GDK_ARAY_PREALLOC 32
+#define GDK_ARRAY_PREALLOC 32
 #define GDK_ARRAY_NO_MEMSET 1
 #include "gdk/gdkarrayimpl.c"
 
@@ -66,11 +65,47 @@ gtk_css_parser_blocks_drop_last (GtkCssParserBlocks *blocks)
   gtk_css_parser_blocks_set_size (blocks, gtk_css_parser_blocks_get_size (blocks) - 1);
 }
 
+typedef struct _GtkCssTokenizerData GtkCssTokenizerData;
+
+struct _GtkCssTokenizerData
+{
+  GtkCssTokenizer *tokenizer;
+};
+
+static void
+gtk_css_tokenizer_data_clear (gpointer data)
+{
+  GtkCssTokenizerData *td = data;
+
+  gtk_css_tokenizer_unref (td->tokenizer);
+}
+
+#define GDK_ARRAY_NAME gtk_css_tokenizers
+#define GDK_ARRAY_TYPE_NAME GtkCssTokenizers
+#define GDK_ARRAY_ELEMENT_TYPE GtkCssTokenizerData
+#define GDK_ARRAY_FREE_FUNC gtk_css_tokenizer_data_clear
+#define GDK_ARRAY_BY_VALUE 1
+#define GDK_ARRAY_PREALLOC 16
+#define GDK_ARRAY_NO_MEMSET 1
+#include "gdk/gdkarrayimpl.c"
+
+static inline GtkCssTokenizerData *
+gtk_css_tokenizers_get_last (GtkCssTokenizers *tokenizers)
+{
+  return gtk_css_tokenizers_index (tokenizers, gtk_css_tokenizers_get_size (tokenizers) - 1);
+}
+
+static inline void
+gtk_css_tokenizers_drop_last (GtkCssTokenizers *tokenizers)
+{
+  gtk_css_tokenizers_set_size (tokenizers, gtk_css_tokenizers_get_size (tokenizers) - 1);
+}
+
 struct _GtkCssParser
 {
   volatile int ref_count;
 
-  GPtrArray *tokenizers;
+  GtkCssTokenizers tokenizers;
   GFile *file;
   GFile *directory;
   GtkCssParserErrorFunc error_func;
@@ -90,7 +125,7 @@ struct _GtkCssParser
 static inline GtkCssTokenizer *
 get_tokenizer (GtkCssParser *self)
 {
-  return g_ptr_array_index (self->tokenizers, self->tokenizers->len - 1);
+  return gtk_css_tokenizers_get_last (&self->tokenizers)->tokenizer;
 }
 
 static GtkCssParser *
@@ -106,8 +141,8 @@ gtk_css_parser_new (GtkCssTokenizer       *tokenizer,
 
   self->ref_count = 1;
 
-  self->tokenizers = g_ptr_array_new_with_free_func ((GDestroyNotify) gtk_css_tokenizer_unref);
-  g_ptr_array_add (self->tokenizers, gtk_css_tokenizer_ref (tokenizer));
+  gtk_css_tokenizers_init (&self->tokenizers);
+  gtk_css_tokenizers_append (&self->tokenizers, &(GtkCssTokenizerData) { gtk_css_tokenizer_ref (tokenizer) });
 
   if (file)
     self->file = g_object_ref (file);
@@ -150,7 +185,7 @@ gtk_css_parser_new_for_bytes (GBytes                *bytes,
 {
   GtkCssTokenizer *tokenizer;
   GtkCssParser *result;
-  
+
   tokenizer = gtk_css_tokenizer_new (bytes);
   result = gtk_css_parser_new (tokenizer, file, error_func, user_data, user_destroy);
   gtk_css_tokenizer_unref (tokenizer);
@@ -188,7 +223,7 @@ gtk_css_parser_finalize (GtkCssParser *self)
   if (self->user_destroy)
     self->user_destroy (self->user_data);
 
-  g_clear_pointer (&self->tokenizers, g_ptr_array_unref);
+  gtk_css_tokenizers_clear (&self->tokenizers);
   g_clear_object (&self->file);
   g_clear_object (&self->directory);
   if (gtk_css_parser_blocks_get_size (&self->blocks) > 0)
@@ -365,9 +400,9 @@ gtk_css_parser_ensure_token (GtkCssParser *self)
       g_clear_error (&error);
     }
 
-  if (self->tokenizers->len > 1 && gtk_css_token_is (&self->token, GTK_CSS_TOKEN_EOF))
+  if (gtk_css_tokenizers_get_size (&self->tokenizers) > 1 && gtk_css_token_is (&self->token, GTK_CSS_TOKEN_EOF))
     {
-      g_ptr_array_remove_index_fast (self->tokenizers, self->tokenizers->len - 1);
+      gtk_css_tokenizers_drop_last (&self->tokenizers);
       gtk_css_parser_ensure_token (self);
       return;
     }
@@ -398,7 +433,7 @@ gtk_css_parser_ensure_token (GtkCssParser *self)
       ref = self->refs[self->next_ref++];
       ref_tokenizer = gtk_css_tokenizer_new_for_range (ref->bytes, ref->offset,
                                                        ref->end_offset - ref->offset);
-      g_ptr_array_add (self->tokenizers, ref_tokenizer);
+      gtk_css_tokenizers_append (&self->tokenizers, &(GtkCssTokenizerData) { ref_tokenizer });
 
       gtk_css_parser_ensure_token (self);
     }
