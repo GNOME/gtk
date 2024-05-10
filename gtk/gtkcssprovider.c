@@ -382,9 +382,10 @@ gtk_css_scanner_parser_error (GtkCssParser         *parser,
   GtkCssScanner *scanner = user_data;
   GtkCssSection *section;
 
-  section = gtk_css_section_new (gtk_css_parser_get_file (parser),
-                                 start,
-                                 end);
+  section = gtk_css_section_new_with_bytes (gtk_css_parser_get_file (parser),
+                                            gtk_css_parser_get_bytes (parser),
+                                            start,
+                                            end);
 
   gtk_css_style_provider_emit_error (GTK_STYLE_PROVIDER (scanner->provider), section, error);
 
@@ -881,6 +882,7 @@ parse_declaration (GtkCssScanner *scanner,
   if (name[0] == '-' && name[1] == '-')
     {
       GtkCssVariableValue *value;
+      GtkCssLocation start_location;
       GtkCssSection *section;
 
       if (!gtk_css_parser_try_token (scanner->parser, GTK_CSS_TOKEN_COLON))
@@ -889,15 +891,21 @@ parse_declaration (GtkCssScanner *scanner,
           goto out;
         }
 
+      gtk_css_parser_skip_whitespace (scanner->parser);
+
+      if (gtk_keep_css_sections)
+        start_location = *gtk_css_parser_get_start_location (scanner->parser);
+
       value = gtk_css_parser_parse_value_into_token_stream (scanner->parser);
       if (value == NULL)
         goto out;
 
       if (gtk_keep_css_sections)
         {
-          section = gtk_css_section_new (gtk_css_parser_get_file (scanner->parser),
-                                         gtk_css_parser_get_block_location (scanner->parser),
-                                         gtk_css_parser_get_end_location (scanner->parser));
+          section = gtk_css_section_new_with_bytes (gtk_css_parser_get_file (scanner->parser),
+                                                    gtk_css_parser_get_bytes (scanner->parser),
+                                                    &start_location,
+                                                    gtk_css_parser_get_start_location (scanner->parser));
         }
       else
         section = NULL;
@@ -941,9 +949,10 @@ parse_declaration (GtkCssScanner *scanner,
             goto out;
 
           if (gtk_keep_css_sections)
-            section = gtk_css_section_new (gtk_css_parser_get_file (scanner->parser),
-                                           &start_location,
-                                           gtk_css_parser_get_start_location (scanner->parser));
+            section = gtk_css_section_new_with_bytes (gtk_css_parser_get_file (scanner->parser),
+                                                      gtk_css_parser_get_bytes (scanner->parser),
+                                                      &start_location,
+                                                      gtk_css_parser_get_start_location (scanner->parser));
           else
             section = NULL;
 
@@ -1003,9 +1012,10 @@ parse_declaration (GtkCssScanner *scanner,
 
       if (gtk_keep_css_sections)
         {
-          section = gtk_css_section_new (gtk_css_parser_get_file (scanner->parser),
-                                         gtk_css_parser_get_block_location (scanner->parser),
-                                         gtk_css_parser_get_end_location (scanner->parser));
+          section = gtk_css_section_new_with_bytes (gtk_css_parser_get_file (scanner->parser),
+                                                    gtk_css_parser_get_bytes (scanner->parser),
+                                                    gtk_css_parser_get_block_location (scanner->parser),
+                                                    gtk_css_parser_get_end_location (scanner->parser));
         }
       else
         section = NULL;
@@ -1803,4 +1813,3 @@ gtk_css_provider_to_string (GtkCssProvider *provider)
 
   return g_string_free (str, FALSE);
 }
-
