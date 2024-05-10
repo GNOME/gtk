@@ -1174,9 +1174,19 @@ gtk_accesskit_context_add_to_update (GtkAccessKitContext   *self,
 
   if (gtk_accessible_get_bounds (accessible, &x, &y, &width, &height))
     {
-      accesskit_vec2 p = {x, y};
-      accesskit_affine transform = accesskit_affine_translate (p);
+      accesskit_vec2 p;
+      accesskit_affine transform;
       accesskit_rect bounds = {0, 0, width, height};
+
+      if (GTK_IS_ROOT (accessible) && GTK_IS_NATIVE (accessible))
+        gtk_native_get_surface_transform (GTK_NATIVE (accessible), &p.x, &p.y);
+      else
+        {
+          p.x = x;
+          p.y = y;
+        }
+
+      transform = accesskit_affine_translate (p);
       accesskit_node_builder_set_transform (builder, transform);
       accesskit_node_builder_set_bounds (builder, bounds);
     }
