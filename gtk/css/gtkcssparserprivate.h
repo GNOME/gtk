@@ -89,6 +89,7 @@ void                    gtk_css_parser_end_block                (GtkCssParser   
 void                    gtk_css_parser_skip                     (GtkCssParser                   *self);
 void                    gtk_css_parser_skip_until               (GtkCssParser                   *self,
                                                                  GtkCssTokenType                 token_type);
+void                    gtk_css_parser_skip_whitespace          (GtkCssParser                   *self);
 
 void                    gtk_css_parser_emit_error               (GtkCssParser                   *self,
                                                                  const GtkCssLocation           *start,

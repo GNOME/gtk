@@ -613,6 +613,19 @@ gtk_css_parser_skip_until (GtkCssParser    *self,
 }
 
 void
+gtk_css_parser_skip_whitespace (GtkCssParser *self)
+{
+  const GtkCssToken *token;
+
+  for (token = gtk_css_parser_peek_token (self);
+       gtk_css_token_is (token, GTK_CSS_TOKEN_WHITESPACE);
+       token = gtk_css_parser_peek_token (self))
+    {
+      gtk_css_parser_consume_token (self);
+    }
+}
+
+void
 gtk_css_parser_emit_error (GtkCssParser         *self,
                            const GtkCssLocation *start,
                            const GtkCssLocation *end,
