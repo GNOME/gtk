@@ -113,13 +113,9 @@ gtk_css_value_shadow_free (GtkCssValue *value)
 }
 
 static GtkCssValue *
-gtk_css_value_shadow_compute (GtkCssValue       *value,
-                              guint              property_id,
-                              GtkStyleProvider  *provider,
-                              GtkCssStyle       *style,
-                              GtkCssStyle       *parent_style,
-                              GtkCssVariableSet *variables,
-                              GtkCssValue       *shorthands[])
+gtk_css_value_shadow_compute (GtkCssValue          *value,
+                              guint                 property_id,
+                              GtkCssComputeContext *context)
 {
   guint i;
   ShadowValue *shadows;
@@ -130,11 +126,11 @@ gtk_css_value_shadow_compute (GtkCssValue       *value,
     {
       const ShadowValue *shadow = &value->shadows[i];
 
-      shadows[i].hoffset = _gtk_css_value_compute (shadow->hoffset, property_id, provider, style, parent_style, variables, shorthands);
-      shadows[i].voffset = _gtk_css_value_compute (shadow->voffset, property_id, provider, style, parent_style, variables, shorthands);
-      shadows[i].radius = _gtk_css_value_compute (shadow->radius, property_id, provider, style, parent_style, variables, shorthands);
-      shadows[i].spread = _gtk_css_value_compute (shadow->spread, property_id, provider, style, parent_style, variables, shorthands),
-      shadows[i].color = _gtk_css_value_compute (shadow->color, property_id, provider, style, parent_style, variables, shorthands);
+      shadows[i].hoffset = _gtk_css_value_compute (shadow->hoffset, property_id, context);
+      shadows[i].voffset = _gtk_css_value_compute (shadow->voffset, property_id, context);
+      shadows[i].radius = _gtk_css_value_compute (shadow->radius, property_id, context);
+      shadows[i].spread = _gtk_css_value_compute (shadow->spread, property_id, context),
+      shadows[i].color = _gtk_css_value_compute (shadow->color, property_id, context);
       shadows[i].inset = shadow->inset;
     }
 

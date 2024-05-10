@@ -313,13 +313,9 @@ gtk_css_image_conic_print (GtkCssImage *image,
 }
 
 static GtkCssImage *
-gtk_css_image_conic_compute (GtkCssImage       *image,
-                             guint              property_id,
-                             GtkStyleProvider  *provider,
-                             GtkCssStyle       *style,
-                             GtkCssStyle       *parent_style,
-                             GtkCssVariableSet *variables,
-                             GtkCssValue       *shorthands[])
+gtk_css_image_conic_compute (GtkCssImage          *image,
+                             guint                 property_id,
+                             GtkCssComputeContext *context)
 {
   GtkCssImageConic *self = GTK_CSS_IMAGE_CONIC (image);
   GtkCssImageConic *copy;
@@ -327,8 +323,8 @@ gtk_css_image_conic_compute (GtkCssImage       *image,
 
   copy = g_object_new (GTK_TYPE_CSS_IMAGE_CONIC, NULL);
 
-  copy->center = _gtk_css_value_compute (self->center, property_id, provider, style, parent_style, variables, shorthands);
-  copy->rotation = _gtk_css_value_compute (self->rotation, property_id, provider, style, parent_style, variables, shorthands);
+  copy->center = _gtk_css_value_compute (self->center, property_id, context);
+  copy->rotation = _gtk_css_value_compute (self->rotation, property_id, context);
 
   copy->n_stops = self->n_stops;
   copy->color_stops = g_malloc (sizeof (GtkCssImageConicColorStop) * copy->n_stops);
@@ -337,11 +333,11 @@ gtk_css_image_conic_compute (GtkCssImage       *image,
       const GtkCssImageConicColorStop *stop = &self->color_stops[i];
       GtkCssImageConicColorStop *scopy = &copy->color_stops[i];
 
-      scopy->color = _gtk_css_value_compute (stop->color, property_id, provider, style, parent_style, variables, shorthands);
+      scopy->color = _gtk_css_value_compute (stop->color, property_id, context);
 
       if (stop->offset)
         {
-          scopy->offset = _gtk_css_value_compute (stop->offset, property_id, provider, style, parent_style, variables, shorthands);
+          scopy->offset = _gtk_css_value_compute (stop->offset, property_id, context);
         }
       else
         {

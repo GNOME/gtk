@@ -53,13 +53,9 @@ gtk_css_value_font_features_free (GtkCssValue *value)
 }
 
 static GtkCssValue *
-gtk_css_value_font_features_compute (GtkCssValue       *specified,
-                                     guint              property_id,
-                                     GtkStyleProvider  *provider,
-                                     GtkCssStyle       *style,
-                                     GtkCssStyle       *parent_style,
-                                     GtkCssVariableSet *variables,
-                                     GtkCssValue       *shorthands[])
+gtk_css_value_font_features_compute (GtkCssValue          *specified,
+                                     guint                 property_id,
+                                     GtkCssComputeContext *context)
 {
   return _gtk_css_value_ref (specified);
 }

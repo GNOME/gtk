@@ -307,57 +307,53 @@ gtk_css_value_filter_free (GtkCssValue *value)
 
 /* returns TRUE if dest == src */
 static gboolean
-gtk_css_filter_compute (GtkCssFilter      *dest,
-                        GtkCssFilter      *src,
-                        guint              property_id,
-                        GtkStyleProvider  *provider,
-                        GtkCssStyle       *style,
-                        GtkCssStyle       *parent_style,
-                        GtkCssVariableSet *variables,
-                        GtkCssValue       *shorthands[])
+gtk_css_filter_compute (GtkCssFilter         *dest,
+                        GtkCssFilter         *src,
+                        guint                 property_id,
+                        GtkCssComputeContext *context)
 {
   dest->type = src->type;
 
   switch (src->type)
     {
     case GTK_CSS_FILTER_BRIGHTNESS:
-      dest->brightness.value = _gtk_css_value_compute (src->brightness.value, property_id, provider, style, parent_style, variables, shorthands);
+      dest->brightness.value = _gtk_css_value_compute (src->brightness.value, property_id, context);
       return dest->brightness.value == src->brightness.value;
 
     case GTK_CSS_FILTER_CONTRAST:
-      dest->contrast.value = _gtk_css_value_compute (src->contrast.value, property_id, provider, style, parent_style, variables, shorthands);
+      dest->contrast.value = _gtk_css_value_compute (src->contrast.value, property_id, context);
       return dest->contrast.value == src->contrast.value;
 
     case GTK_CSS_FILTER_GRAYSCALE:
-      dest->grayscale.value = _gtk_css_value_compute (src->grayscale.value, property_id, provider, style, parent_style, variables, shorthands);
+      dest->grayscale.value = _gtk_css_value_compute (src->grayscale.value, property_id, context);
       return dest->grayscale.value == src->grayscale.value;
 
     case GTK_CSS_FILTER_HUE_ROTATE:
-      dest->hue_rotate.value = _gtk_css_value_compute (src->hue_rotate.value, property_id, provider, style, parent_style, variables, shorthands);
+      dest->hue_rotate.value = _gtk_css_value_compute (src->hue_rotate.value, property_id, context);
       return dest->hue_rotate.value == src->hue_rotate.value;
 
     case GTK_CSS_FILTER_INVERT:
-      dest->invert.value = _gtk_css_value_compute (src->invert.value, property_id, provider, style, parent_style, variables, shorthands);
+      dest->invert.value = _gtk_css_value_compute (src->invert.value, property_id, context);
       return dest->invert.value == src->invert.value;
 
     case GTK_CSS_FILTER_OPACITY:
-      dest->opacity.value = _gtk_css_value_compute (src->opacity.value, property_id, provider, style, parent_style, variables, shorthands);
+      dest->opacity.value = _gtk_css_value_compute (src->opacity.value, property_id, context);
       return dest->opacity.value == src->opacity.value;
 
     case GTK_CSS_FILTER_SATURATE:
-      dest->saturate.value = _gtk_css_value_compute (src->saturate.value, property_id, provider, style, parent_style, variables, shorthands);
+      dest->saturate.value = _gtk_css_value_compute (src->saturate.value, property_id, context);
       return dest->saturate.value == src->saturate.value;
 
     case GTK_CSS_FILTER_SEPIA:
-      dest->sepia.value = _gtk_css_value_compute (src->sepia.value, property_id, provider, style, parent_style, variables, shorthands);
+      dest->sepia.value = _gtk_css_value_compute (src->sepia.value, property_id, context);
       return dest->sepia.value == src->sepia.value;
 
     case GTK_CSS_FILTER_BLUR:
-      dest->blur.value = _gtk_css_value_compute (src->blur.value, property_id, provider, style, parent_style, variables, shorthands);
+      dest->blur.value = _gtk_css_value_compute (src->blur.value, property_id, context);
       return dest->blur.value == src->blur.value;
 
     case GTK_CSS_FILTER_DROP_SHADOW:
-      dest->drop_shadow.value = _gtk_css_value_compute (src->drop_shadow.value, property_id, provider, style, parent_style, variables, shorthands);
+      dest->drop_shadow.value = _gtk_css_value_compute (src->drop_shadow.value, property_id, context);
       return dest->drop_shadow.value == src->drop_shadow.value;
 
     case GTK_CSS_FILTER_NONE:
@@ -368,13 +364,9 @@ gtk_css_filter_compute (GtkCssFilter      *dest,
 }
 
 static GtkCssValue *
-gtk_css_value_filter_compute (GtkCssValue       *value,
-                              guint              property_id,
-                              GtkStyleProvider  *provider,
-                              GtkCssStyle       *style,
-                              GtkCssStyle       *parent_style,
-                              GtkCssVariableSet *variables,
-                              GtkCssValue       *shorthands[])
+gtk_css_value_filter_compute (GtkCssValue          *value,
+                              guint                 property_id,
+                              GtkCssComputeContext *context)
 {
   GtkCssValue *result;
   gboolean changes;
@@ -392,11 +384,7 @@ gtk_css_value_filter_compute (GtkCssValue       *value,
       changes |= !gtk_css_filter_compute (&result->filters[i],
                                           &value->filters[i],
                                           property_id,
-                                          provider,
-                                          style,
-                                          parent_style,
-                                          variables,
-                                          shorthands);
+                                          context);
     }
 
   if (!changes)

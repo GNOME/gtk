@@ -97,13 +97,9 @@ gtk_css_image_scaled_dispose (GObject *object)
 
 
 static GtkCssImage *
-gtk_css_image_scaled_compute (GtkCssImage       *image,
-                              guint              property_id,
-                              GtkStyleProvider  *provider,
-                              GtkCssStyle       *style,
-                              GtkCssStyle       *parent_style,
-                              GtkCssVariableSet *variables,
-                              GtkCssValue       *shorthands[])
+gtk_css_image_scaled_compute (GtkCssImage          *image,
+                              guint                 property_id,
+                              GtkCssComputeContext *context)
 {
   GtkCssImageScaled *scaled = GTK_CSS_IMAGE_SCALED (image);
   int scale;
@@ -111,7 +107,7 @@ gtk_css_image_scaled_compute (GtkCssImage       *image,
   int i;
   int best;
 
-  scale = gtk_style_provider_get_scale (provider);
+  scale = gtk_style_provider_get_scale (context->provider);
   scale = MAX(scale, 1);
 
   best = 0;
@@ -137,11 +133,7 @@ gtk_css_image_scaled_compute (GtkCssImage       *image,
 
   res->images[0] = _gtk_css_image_compute (scaled->images[best],
                                            property_id,
-                                           provider,
-                                           style,
-                                           parent_style,
-                                           variables,
-                                           shorthands);
+                                           context);
   res->scales[0] = scaled->scales[best];
 
   return GTK_CSS_IMAGE (res);

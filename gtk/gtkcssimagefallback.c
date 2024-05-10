@@ -133,13 +133,9 @@ gtk_css_image_fallback_dispose (GObject *object)
 
 
 static GtkCssImage *
-gtk_css_image_fallback_compute (GtkCssImage       *image,
-                                guint              property_id,
-                                GtkStyleProvider  *provider,
-                                GtkCssStyle       *style,
-                                GtkCssStyle       *parent_style,
-                                GtkCssVariableSet *variables,
-                                GtkCssValue       *shorthands[])
+gtk_css_image_fallback_compute (GtkCssImage          *image,
+                                guint                 property_id,
+                                GtkCssComputeContext *context)
 {
   GtkCssImageFallback *fallback = GTK_CSS_IMAGE_FALLBACK (image);
   GtkCssImageFallback *copy;
@@ -152,11 +148,7 @@ gtk_css_image_fallback_compute (GtkCssImage       *image,
       if (fallback->color)
         computed_color = _gtk_css_value_compute (fallback->color,
                                                  property_id,
-                                                 provider,
-                                                 style,
-                                                 parent_style,
-                                                 variables,
-                                                 shorthands);
+                                                 context);
 
       /* image($color) that didn't change */
       if (computed_color && !fallback->images &&
@@ -170,11 +162,7 @@ gtk_css_image_fallback_compute (GtkCssImage       *image,
         {
           copy->images[i] = _gtk_css_image_compute (fallback->images[i],
                                                     property_id,
-                                                    provider,
-                                                    style,
-                                                    parent_style,
-                                                    variables,
-                                                    shorthands);
+                                                    context);
 
           if (gtk_css_image_is_invalid (copy->images[i]))
             continue;

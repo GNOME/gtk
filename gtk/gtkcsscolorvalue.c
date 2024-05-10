@@ -94,12 +94,8 @@ gtk_css_value_color_free (GtkCssValue *color)
 }
 
 static GtkCssValue *
-gtk_css_value_color_get_fallback (guint              property_id,
-                                  GtkStyleProvider  *provider,
-                                  GtkCssStyle       *style,
-                                  GtkCssStyle       *parent_style,
-                                  GtkCssVariableSet *variables,
-                                  GtkCssValue       *shorthands[])
+gtk_css_value_color_get_fallback (guint                 property_id,
+                                  GtkCssComputeContext *context)
 {
   switch (property_id)
     {
@@ -120,13 +116,9 @@ gtk_css_value_color_get_fallback (guint              property_id,
       case GTK_CSS_PROPERTY_SECONDARY_CARET_COLOR:
         return _gtk_css_value_compute (_gtk_css_style_property_get_initial_value (_gtk_css_style_property_lookup_by_id (property_id)),
                                        property_id,
-                                       provider,
-                                       style,
-                                       parent_style,
-                                       variables,
-                                       shorthands);
+                                       context);
       case GTK_CSS_PROPERTY_ICON_PALETTE:
-        return _gtk_css_value_ref (style->core->color);
+        return _gtk_css_value_ref (context->style->core->color);
       default:
         if (property_id < GTK_CSS_PROPERTY_N_PROPERTIES)
           g_warning ("No fallback color defined for property '%s'", 
@@ -136,13 +128,9 @@ gtk_css_value_color_get_fallback (guint              property_id,
 }
 
 static GtkCssValue *
-gtk_css_value_color_compute (GtkCssValue       *value,
-                             guint              property_id,
-                             GtkStyleProvider  *provider,
-                             GtkCssStyle       *style,
-                             GtkCssStyle       *parent_style,
-                             GtkCssVariableSet *variables,
-                             GtkCssValue       *shorthands[])
+gtk_css_value_color_compute (GtkCssValue          *value,
+                             guint                 property_id,
+                             GtkCssComputeContext *context)
 {
   GtkCssValue *resolved;
 
@@ -154,13 +142,13 @@ gtk_css_value_color_compute (GtkCssValue       *value,
     {
       GtkCssValue *current;
 
-      if (parent_style)
-        current = parent_style->core->color;
+      if (context->parent_style)
+        current = context->parent_style->core->color;
       else
         current = NULL;
 
       resolved = _gtk_css_color_value_resolve (value,
-                                               provider,
+                                               context->provider,
                                                current,
                                                NULL);
     }
@@ -170,16 +158,16 @@ gtk_css_value_color_compute (GtkCssValue       *value,
     }
   else
     {
-      GtkCssValue *current = style->core->color;
+      GtkCssValue *current = context->style->core->color;
 
       resolved = _gtk_css_color_value_resolve (value,
-                                               provider,
+                                               context->provider,
                                                current,
                                                NULL);
     }
 
   if (resolved == NULL)
-    return gtk_css_value_color_get_fallback (property_id, provider, style, parent_style, variables, shorthands);
+    return gtk_css_value_color_get_fallback (property_id, context);
 
   return resolved;
 }

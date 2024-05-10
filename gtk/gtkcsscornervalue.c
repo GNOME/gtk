@@ -37,18 +37,14 @@ gtk_css_value_corner_free (GtkCssValue *value)
 }
 
 static GtkCssValue *
-gtk_css_value_corner_compute (GtkCssValue       *corner,
-                              guint              property_id,
-                              GtkStyleProvider  *provider,
-                              GtkCssStyle       *style,
-                              GtkCssStyle       *parent_style,
-                              GtkCssVariableSet *variables,
-                              GtkCssValue       *shorthands[])
+gtk_css_value_corner_compute (GtkCssValue          *corner,
+                              guint                 property_id,
+                              GtkCssComputeContext *context)
 {
   GtkCssValue *x, *y;
 
-  x = _gtk_css_value_compute (corner->x, property_id, provider, style, parent_style, variables, shorthands);
-  y = _gtk_css_value_compute (corner->y, property_id, provider, style, parent_style, variables, shorthands);
+  x = _gtk_css_value_compute (corner->x, property_id, context);
+  y = _gtk_css_value_compute (corner->y, property_id, context);
   if (x == corner->x && y == corner->y)
     {
       _gtk_css_value_unref (x);

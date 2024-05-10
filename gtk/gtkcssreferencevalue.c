@@ -221,13 +221,9 @@ parser_error (GtkCssParser         *parser,
 }
 
 static GtkCssValue *
-gtk_css_value_reference_compute (GtkCssValue       *value,
-                                 guint              property_id,
-                                 GtkStyleProvider  *provider,
-                                 GtkCssStyle       *style,
-                                 GtkCssStyle       *parent_style,
-                                 GtkCssVariableSet *variables,
-                                 GtkCssValue       *shorthands[])
+gtk_css_value_reference_compute (GtkCssValue          *value,
+                                 guint                 property_id,
+                                 GtkCssComputeContext *context)
 {
   GtkCssValue *result = NULL, *computed;
   GtkCssRefs refs;
@@ -236,16 +232,16 @@ gtk_css_value_reference_compute (GtkCssValue       *value,
   if (GTK_IS_CSS_SHORTHAND_PROPERTY (value->property))
     {
       shorthand_id = _gtk_css_shorthand_property_get_id (GTK_CSS_SHORTHAND_PROPERTY (value->property));
-      if (shorthands && shorthands[shorthand_id])
+      if (context->shorthands && context->shorthands[shorthand_id])
         {
-          result = gtk_css_value_ref (shorthands[shorthand_id]);
+          result = gtk_css_value_ref (context->shorthands[shorthand_id]);
           goto pick_subproperty;
         }
     }
 
   gtk_css_refs_init (&refs);
 
-  resolve_references (value->value, property_id, style, variables, &refs);
+  resolve_references (value->value, property_id, context->style, context->variables, &refs);
 
   if (gtk_css_refs_get_size (&refs) > 0)
     {
@@ -254,7 +250,8 @@ gtk_css_value_reference_compute (GtkCssValue       *value,
                                              value->file,
                                              (GtkCssVariableValue **) refs.start,
                                              gtk_css_refs_get_size (&refs),
-                                             parser_error, provider, NULL);
+                                             parser_error, context->provider,
+                                             NULL);
 
       result = _gtk_style_property_parse_value (value->property, value_parser);
       gtk_css_parser_unref (value_parser);
@@ -269,10 +266,10 @@ gtk_css_value_reference_compute (GtkCssValue       *value,
     {
       GtkCssValue *sub;
 
-      if (shorthands)
+      if (context->shorthands)
         {
-          g_assert (shorthands[shorthand_id] == NULL);
-          shorthands[shorthand_id] = gtk_css_value_ref (result);
+          g_assert (context->shorthands[shorthand_id] == NULL);
+          context->shorthands[shorthand_id] = gtk_css_value_ref (result);
         }
 
 pick_subproperty:
@@ -281,13 +278,7 @@ pick_subproperty:
       result = sub;
     }
 
-  computed = _gtk_css_value_compute (result,
-                                     property_id,
-                                     provider,
-                                     style,
-                                     parent_style,
-                                     variables,
-                                     shorthands);
+  computed = _gtk_css_value_compute (result, property_id, context);
   computed->is_computed = TRUE;
 
   gtk_css_value_unref (result);

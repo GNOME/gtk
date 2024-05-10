@@ -615,6 +615,7 @@ _gtk_css_keyframes_compute (GtkCssKeyframes  *keyframes,
                             GtkCssStyle      *style,
                             GtkCssStyle      *parent_style)
 {
+  GtkCssComputeContext context = { NULL, };
   GtkCssKeyframes *resolved;
   guint k, p;
 
@@ -630,6 +631,10 @@ _gtk_css_keyframes_compute (GtkCssKeyframes  *keyframes,
   resolved->property_ids = g_memdup2 (keyframes->property_ids, keyframes->n_properties * sizeof (guint));
   resolved->values = g_new0 (GtkCssValue *, resolved->n_keyframes * resolved->n_properties);
 
+  context.provider = provider;
+  context.style = style;
+  context.parent_style = parent_style;
+
   for (p = 0; p < resolved->n_properties; p++)
     {
       for (k = 0; k < resolved->n_keyframes; k++)
@@ -637,13 +642,11 @@ _gtk_css_keyframes_compute (GtkCssKeyframes  *keyframes,
           if (KEYFRAMES_VALUE (keyframes, k, p) == NULL)
             continue;
 
+          context.variables = keyframes->variables ? keyframes->variables[k] : NULL;
+
           KEYFRAMES_VALUE (resolved, k, p) =  _gtk_css_value_compute (KEYFRAMES_VALUE (keyframes, k, p),
                                                                       resolved->property_ids[p],
-                                                                      provider,
-                                                                      style,
-                                                                      parent_style,
-                                                                      keyframes->variables ? keyframes->variables[k] : NULL,
-                                                                      NULL);
+                                                                      &context);
         }
     }
 

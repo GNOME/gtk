@@ -97,13 +97,9 @@ gtk_css_image_paintable_get_static_image (GtkCssImage *image)
 }
 
 static GtkCssImage *
-gtk_css_image_paintable_compute (GtkCssImage       *image,
-                                 guint              property_id,
-                                 GtkStyleProvider  *provider,
-                                 GtkCssStyle       *style,
-                                 GtkCssStyle       *parent_style,
-                                 GtkCssVariableSet *variables,
-                                 GtkCssValue       *shorthands[])
+gtk_css_image_paintable_compute (GtkCssImage          *image,
+                                 guint                 property_id,
+                                 GtkCssComputeContext *context)
 {
   return gtk_css_image_paintable_get_static_image (image);
 }

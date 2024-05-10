@@ -39,17 +39,13 @@ gtk_css_value_line_height_free (GtkCssValue *value)
 }
 
 static GtkCssValue *
-gtk_css_value_line_height_compute (GtkCssValue       *value,
-                                   guint              property_id,
-                                   GtkStyleProvider  *provider,
-                                   GtkCssStyle       *style,
-                                   GtkCssStyle       *parent_style,
-                                   GtkCssVariableSet *variables,
-                                   GtkCssValue       *shorthands[])
+gtk_css_value_line_height_compute (GtkCssValue          *value,
+                                   guint                 property_id,
+                                   GtkCssComputeContext *context)
 {
   GtkCssValue *height;
 
-  height = _gtk_css_value_compute (value->height, property_id, provider, style, parent_style, variables, shorthands);
+  height = _gtk_css_value_compute (value->height, property_id, context);
 
   if (gtk_css_number_value_get_dimension (height) == GTK_CSS_DIMENSION_PERCENTAGE)
     {
@@ -57,7 +53,7 @@ gtk_css_value_line_height_compute (GtkCssValue       *value,
       GtkCssValue *computed;
 
       factor = _gtk_css_number_value_get (height, 1);
-      computed = gtk_css_number_value_multiply (style->core->font_size, factor);
+      computed = gtk_css_number_value_multiply (context->style->core->font_size, factor);
 
       _gtk_css_value_unref (height);
 

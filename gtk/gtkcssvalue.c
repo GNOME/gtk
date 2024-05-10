@@ -210,13 +210,9 @@ gtk_css_value_unref (GtkCssValue *value)
  * Returns: the computed value
  **/
 GtkCssValue *
-_gtk_css_value_compute (GtkCssValue       *value,
-                        guint              property_id,
-                        GtkStyleProvider  *provider,
-                        GtkCssStyle       *style,
-                        GtkCssStyle       *parent_style,
-                        GtkCssVariableSet *variables,
-                        GtkCssValue       *shorthands[])
+_gtk_css_value_compute (GtkCssValue          *value,
+                        guint                 property_id,
+                        GtkCssComputeContext *context)
 {
   if (gtk_css_value_is_computed (value))
     return _gtk_css_value_ref (value);
@@ -225,7 +221,7 @@ _gtk_css_value_compute (GtkCssValue       *value,
   get_accounting_data (value->class->type_name)->computed++;
 #endif
 
-  return value->class->compute (value, property_id, provider, style, parent_style, variables, shorthands);
+  return value->class->compute (value, property_id, context);
 }
 
 gboolean

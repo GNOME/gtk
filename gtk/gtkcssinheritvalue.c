@@ -34,27 +34,19 @@ gtk_css_value_inherit_free (GtkCssValue *value)
 }
 
 static GtkCssValue *
-gtk_css_value_inherit_compute (GtkCssValue       *value,
-                               guint              property_id,
-                               GtkStyleProvider  *provider,
-                               GtkCssStyle       *style,
-                               GtkCssStyle       *parent_style,
-                               GtkCssVariableSet *variables,
-                               GtkCssValue       *shorthands[])
+gtk_css_value_inherit_compute (GtkCssValue          *value,
+                               guint                 property_id,
+                               GtkCssComputeContext *context)
 {
-  if (parent_style)
+  if (context->parent_style)
     {
-      return _gtk_css_value_ref (gtk_css_style_get_value (parent_style, property_id));
+      return _gtk_css_value_ref (gtk_css_style_get_value (context->parent_style, property_id));
     }
   else
     {
       return _gtk_css_value_compute (_gtk_css_initial_value_get (),
                                      property_id,
-                                     provider,
-                                     style,
-                                     parent_style,
-                                     variables,
-                                     shorthands);
+                                     context);
     }
 }
 

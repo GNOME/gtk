@@ -489,13 +489,9 @@ gtk_css_image_radial_print (GtkCssImage *image,
 }
 
 static GtkCssImage *
-gtk_css_image_radial_compute (GtkCssImage       *image,
-                              guint              property_id,
-                              GtkStyleProvider  *provider,
-                              GtkCssStyle       *style,
-                              GtkCssStyle       *parent_style,
-                              GtkCssVariableSet *variables,
-                              GtkCssValue       *shorthands[])
+gtk_css_image_radial_compute (GtkCssImage          *image,
+                              guint                 property_id,
+                              GtkCssComputeContext *context)
 {
   GtkCssImageRadial *radial = GTK_CSS_IMAGE_RADIAL (image);
   GtkCssImageRadial *copy;
@@ -506,13 +502,13 @@ gtk_css_image_radial_compute (GtkCssImage       *image,
   copy->circle = radial->circle;
   copy->size = radial->size;
 
-  copy->position = _gtk_css_value_compute (radial->position, property_id, provider, style, parent_style, variables, shorthands);
+  copy->position = _gtk_css_value_compute (radial->position, property_id, context);
 
   if (radial->sizes[0])
-    copy->sizes[0] = _gtk_css_value_compute (radial->sizes[0], property_id, provider, style, parent_style, variables, shorthands);
+    copy->sizes[0] = _gtk_css_value_compute (radial->sizes[0], property_id, context);
 
   if (radial->sizes[1])
-    copy->sizes[1] = _gtk_css_value_compute (radial->sizes[1], property_id, provider, style, parent_style, variables, shorthands);
+    copy->sizes[1] = _gtk_css_value_compute (radial->sizes[1], property_id, context);
 
   copy->n_stops = radial->n_stops;
   copy->color_stops = g_malloc (sizeof (GtkCssImageRadialColorStop) * copy->n_stops);
@@ -521,11 +517,11 @@ gtk_css_image_radial_compute (GtkCssImage       *image,
       const GtkCssImageRadialColorStop *stop = &radial->color_stops[i];
       GtkCssImageRadialColorStop *scopy = &copy->color_stops[i];
 
-      scopy->color = _gtk_css_value_compute (stop->color, property_id, provider, style, parent_style, variables, shorthands);
+      scopy->color = _gtk_css_value_compute (stop->color, property_id, context);
 
       if (stop->offset)
         {
-          scopy->offset = _gtk_css_value_compute (stop->offset, property_id, provider, style, parent_style, variables, shorthands);
+          scopy->offset = _gtk_css_value_compute (stop->offset, property_id, context);
         }
       else
         {
