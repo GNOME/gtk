@@ -39,7 +39,7 @@ struct _GtkCssParserBlock
 #define GDK_ARRAY_NAME gtk_css_parser_blocks
 #define GDK_ARRAY_TYPE_NAME GtkCssParserBlocks
 #define GDK_ARRAY_ELEMENT_TYPE GtkCssParserBlock
-#define GDK_ARAY_PREALLOC 32
+#define GDK_ARRAY_PREALLOC 12
 #define GDK_ARRAY_NO_MEMSET 1
 #include "gdk/gdkarrayimpl.c"
 
