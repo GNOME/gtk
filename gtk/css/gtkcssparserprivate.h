@@ -164,5 +164,10 @@ gboolean                gtk_css_parser_has_references           (GtkCssParser   
 
 GtkCssVariableValue *   gtk_css_parser_parse_value_into_token_stream (GtkCssParser              *parser);
 
+void                    gtk_css_parser_get_expanding_variables (GtkCssParser              *parser,
+                                                                GtkCssVariableValue     ***variables,
+                                                                char                    ***names,
+                                                                gsize                     *n_variables);
+
 G_END_DECLS
 

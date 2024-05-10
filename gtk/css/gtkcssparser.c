@@ -70,6 +70,8 @@ typedef struct _GtkCssTokenizerData GtkCssTokenizerData;
 struct _GtkCssTokenizerData
 {
   GtkCssTokenizer *tokenizer;
+  char *var_name;
+  GtkCssVariableValue *variable;
 };
 
 static void
@@ -78,6 +80,10 @@ gtk_css_tokenizer_data_clear (gpointer data)
   GtkCssTokenizerData *td = data;
 
   gtk_css_tokenizer_unref (td->tokenizer);
+  if (td->var_name)
+    g_free (td->var_name);
+  if (td->variable)
+    gtk_css_variable_value_unref (td->variable);
 }
 
 #define GDK_ARRAY_NAME gtk_css_tokenizers
@@ -130,6 +136,7 @@ get_tokenizer (GtkCssParser *self)
 
 static GtkCssParser *
 gtk_css_parser_new (GtkCssTokenizer       *tokenizer,
+                    GtkCssVariableValue   *value,
                     GFile                 *file,
                     GtkCssParserErrorFunc  error_func,
                     gpointer               user_data,
@@ -142,7 +149,11 @@ gtk_css_parser_new (GtkCssTokenizer       *tokenizer,
   self->ref_count = 1;
 
   gtk_css_tokenizers_init (&self->tokenizers);
-  gtk_css_tokenizers_append (&self->tokenizers, &(GtkCssTokenizerData) { gtk_css_tokenizer_ref (tokenizer) });
+  gtk_css_tokenizers_append (&self->tokenizers,
+                             &(GtkCssTokenizerData) {
+                               gtk_css_tokenizer_ref (tokenizer),
+                               NULL,
+                               value ? gtk_css_variable_value_ref (value) : NULL });
 
   if (file)
     self->file = g_object_ref (file);
@@ -187,7 +198,7 @@ gtk_css_parser_new_for_bytes (GBytes                *bytes,
   GtkCssParser *result;
 
   tokenizer = gtk_css_tokenizer_new (bytes);
-  result = gtk_css_parser_new (tokenizer, file, error_func, user_data, user_destroy);
+  result = gtk_css_parser_new (tokenizer, NULL, file, error_func, user_data, user_destroy);
   gtk_css_tokenizer_unref (tokenizer);
 
   return result;
@@ -207,7 +218,7 @@ gtk_css_parser_new_for_token_stream (GtkCssVariableValue    *value,
 
   tokenizer = gtk_css_tokenizer_new_for_range (value->bytes, value->offset,
                                                value->end_offset - value->offset);
-  result = gtk_css_parser_new (tokenizer, file, error_func, user_data, user_destroy);
+  result = gtk_css_parser_new (tokenizer, value, file, error_func, user_data, user_destroy);
   gtk_css_tokenizer_unref (tokenizer);
 
   result->refs = refs;
@@ -419,7 +430,6 @@ gtk_css_parser_ensure_token (GtkCssParser *self)
 
       char *var_name = gtk_css_parser_consume_ident (self);
       g_assert (var_name[0] == '-' && var_name[1] == '-');
-      g_free (var_name);
 
       /* If we encounter var() in a fallback when we can already resolve the
        * actual variable, skip it */
@@ -433,9 +443,15 @@ gtk_css_parser_ensure_token (GtkCssParser *self)
       ref = self->refs[self->next_ref++];
       ref_tokenizer = gtk_css_tokenizer_new_for_range (ref->bytes, ref->offset,
                                                        ref->end_offset - ref->offset);
-      gtk_css_tokenizers_append (&self->tokenizers, &(GtkCssTokenizerData) { ref_tokenizer });
+      gtk_css_tokenizers_append (&self->tokenizers,
+                                 &(GtkCssTokenizerData) {
+                                   ref_tokenizer,
+                                   g_strdup (var_name),
+                                   gtk_css_variable_value_ref (ref)
+                                 });
 
       gtk_css_parser_ensure_token (self);
+      g_free (var_name);
     }
 }
 
@@ -1554,4 +1570,41 @@ error:
   gtk_css_parser_references_clear (&refs);
 
   return NULL;
+}
+
+void
+gtk_css_parser_get_expanding_variables (GtkCssParser          *self,
+                                        GtkCssVariableValue ***variables,
+                                        char                ***variable_names,
+                                        gsize                 *n_variables)
+{
+  gsize len = gtk_css_tokenizers_get_size (&self->tokenizers);
+  GtkCssVariableValue **vars = NULL;
+  char **names = NULL;
+  gsize n;
+
+  if (variables)
+    vars = g_new0 (GtkCssVariableValue *, len + 1);
+  if (variable_names)
+    names = g_new0 (char *, len + 1);
+
+  n = 0;
+  for (gsize i = 0; i < gtk_css_tokenizers_get_size (&self->tokenizers); i++)
+    {
+      GtkCssTokenizerData *data = gtk_css_tokenizers_index (&self->tokenizers, i);
+      if (variables && data->variable)
+        vars[n] = gtk_css_variable_value_ref (data->variable);
+      if (variable_names)
+        names[n] = g_strdup (data->var_name);
+      n++;
+    }
+
+  if (variables)
+    *variables = vars;
+
+  if (variable_names)
+    *variable_names = names;
+
+  if (n_variables)
+    *n_variables = n;
 }
