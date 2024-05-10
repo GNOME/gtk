@@ -6397,6 +6397,10 @@ gsk_mask_node_draw (GskRenderNode *node,
   graphene_matrix_t color_matrix;
   graphene_vec4_t color_offset;
 
+  /* clip so the push_group() creates a smaller surface */
+  gsk_cairo_rectangle (cr, &node->bounds);
+  cairo_clip (cr);
+
   if (has_empty_clip (cr))
     return;
 
