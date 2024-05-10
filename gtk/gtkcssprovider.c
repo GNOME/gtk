@@ -137,6 +137,7 @@ struct _GtkCssProviderPrivate
   GtkCssSelectorTree *tree;
   GResource *resource;
   char *path;
+  GBytes *bytes; /* *no* reference */
 };
 
 enum {
@@ -565,6 +566,16 @@ gtk_css_style_provider_lookup (GtkStyleProvider             *provider,
     *change = gtk_css_selector_tree_get_change_all (priv->tree, filter, node);
 }
 
+static gboolean
+gtk_css_style_provider_has_section (GtkStyleProvider *provider,
+                                    GtkCssSection    *section)
+{
+  GtkCssProvider *self = GTK_CSS_PROVIDER (provider);
+  GtkCssProviderPrivate *priv = gtk_css_provider_get_instance_private (self);
+
+  return priv->bytes == gtk_css_section_get_bytes (section);
+}
+
 static void
 gtk_css_style_provider_iface_init (GtkStyleProviderInterface *iface)
 {
@@ -572,6 +583,7 @@ gtk_css_style_provider_iface_init (GtkStyleProviderInterface *iface)
   iface->get_keyframes = gtk_css_style_provider_get_keyframes;
   iface->lookup = gtk_css_style_provider_lookup;
   iface->emit_error = gtk_css_style_provider_emit_error;
+  iface->has_section = gtk_css_style_provider_has_section;
 }
 
 static void
@@ -1157,6 +1169,7 @@ gtk_css_provider_load_internal (GtkCssProvider *self,
                                 GFile          *file,
                                 GBytes         *bytes)
 {
+  GtkCssProviderPrivate *priv = gtk_css_provider_get_instance_private (self);
   gint64 before G_GNUC_UNUSED;
 
   before = GDK_PROFILER_CURRENT_TIME;
@@ -1190,6 +1203,8 @@ gtk_css_provider_load_internal (GtkCssProvider *self,
           g_error_free (load_error);
         }
     }
+
+  priv->bytes = bytes;
 
   if (bytes)
     {
