@@ -52,6 +52,8 @@ struct _GtkStyleProviderInterface
                                                  const GError            *error);
   /* signal */
   void                  (* changed)             (GtkStyleProvider        *provider);
+  gboolean              (* has_section)         (GtkStyleProvider        *provider,
+                                                 GtkCssSection           *section);
 };
 
 GtkSettings *           gtk_style_provider_get_settings          (GtkStyleProvider        *provider);
@@ -71,6 +73,8 @@ void                    gtk_style_provider_changed               (GtkStyleProvid
 void                    gtk_style_provider_emit_error            (GtkStyleProvider        *provider,
                                                                   GtkCssSection           *section,
                                                                   GError                  *error);
+gboolean                gtk_style_provider_has_section           (GtkStyleProvider        *provider,
+                                                                  GtkCssSection           *section);
 
 G_END_DECLS
 
