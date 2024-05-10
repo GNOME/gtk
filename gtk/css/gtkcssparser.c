@@ -228,6 +228,12 @@ gtk_css_parser_get_file (GtkCssParser *self)
   return self->file;
 }
 
+GBytes *
+gtk_css_parser_get_bytes (GtkCssParser *self)
+{
+  return gtk_css_tokenizer_get_bytes (gtk_css_tokenizers_get (&self->tokenizers, 0)->tokenizer);
+}
+
 /**
  * gtk_css_parser_resolve_url:
  * @self: a `GtkCssParser`
