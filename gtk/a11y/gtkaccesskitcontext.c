@@ -29,6 +29,8 @@
 #include "gtkprivate.h"
 #include "gtkeditable.h"
 #include "gtkentryprivate.h"
+#include "gtkinscriptionprivate.h"
+#include "gtklabelprivate.h"
 #include "gtkpasswordentry.h"
 #include "gtkroot.h"
 #include "gtkscrolledwindow.h"
@@ -61,6 +63,8 @@ struct _GtkAccessKitContext
         a given context. */
   guint32 id;
 
+  double text_layout_x;
+  double text_layout_y;
   guint text_layout_serial;
   GArray *text_layout_children;
 };
@@ -823,14 +827,16 @@ set_multi_relation (GtkATContext           *ctx,
 
 static void
 set_bounds_from_pango (accesskit_node_builder *builder,
+                       double                 base_x,
+                       double                 base_y,
                        PangoRectangle         *pango_rect)
 {
   accesskit_rect rect;
 
-  rect.x0 = (double)(pango_rect->x) / PANGO_SCALE;
-  rect.y0 = (double)(pango_rect->y) / PANGO_SCALE;
-  rect.x1 = (double)(pango_rect->x + pango_rect->width) / PANGO_SCALE;
-  rect.y1 = (double)(pango_rect->y + pango_rect->height) / PANGO_SCALE;
+  rect.x0 = base_x + (double)(pango_rect->x) / PANGO_SCALE;
+  rect.y0 = base_y + (double)(pango_rect->y) / PANGO_SCALE;
+  rect.x1 = base_x + (double)(pango_rect->x + pango_rect->width) / PANGO_SCALE;
+  rect.y1 = base_y + (double)(pango_rect->y + pango_rect->height) / PANGO_SCALE;
   accesskit_node_builder_set_bounds (builder, rect);
 }
 
@@ -878,7 +884,9 @@ compare_run_info (gconstpointer a, gconstpointer b)
 static void
 add_text_layout_inner (GtkAccessKitContext   *self,
                        accesskit_tree_update *update,
-                       PangoLayout           *layout)
+                       PangoLayout           *layout,
+                       double                 base_x,
+                       double                 base_y)
 {
   const char *text = pango_layout_get_text (layout);
   const PangoLogAttr *log_attrs =
@@ -956,7 +964,8 @@ add_text_layout_inner (GtkAccessKitContext   *self,
                       accesskit_node_builder_set_next_on_line (builder, id);
                     }
 
-                  set_bounds_from_pango (builder, &run_info->extents);
+                  set_bounds_from_pango (builder, base_x, base_y,
+                                         &run_info->extents);
 
                   if (i == (line_runs->len - 1))
                     node_text_byte_count =
@@ -1078,7 +1087,7 @@ add_text_layout_inner (GtkAccessKitContext   *self,
               g_assert (byte_offset == line->start_index);
 
               pango_layout_iter_get_run_extents (iter, NULL, &extents);
-              set_bounds_from_pango (builder, &extents);
+              set_bounds_from_pango (builder, base_x, base_y, &extents);
               accesskit_node_builder_set_value (builder, line_text);
 
               switch (pango_layout_line_get_resolved_direction (line))
@@ -1122,17 +1131,22 @@ static void
 add_text_layout (GtkAccessKitContext    *self,
                  accesskit_tree_update  *update,
                  accesskit_node_builder *parent_builder,
-                 PangoLayout            *layout)
+                 PangoLayout            *layout,
+                 double                  base_x,
+                 double                  base_y)
 {
   guint serial = pango_layout_get_serial (layout);
 
-  if (serial != self->text_layout_serial)
+  if (serial != self->text_layout_serial || base_x != self->text_layout_x ||
+      base_y != self->text_layout_y)
     {
       self->text_layout_serial = serial;
+      self->text_layout_x = base_x;
+      self->text_layout_y = base_y;
       g_clear_pointer (&self->text_layout_children, g_array_unref);
       self->text_layout_children =
         g_array_new (FALSE, FALSE, sizeof (accesskit_node_id));
-      add_text_layout_inner (self, update, layout);
+      add_text_layout_inner (self, update, layout, base_x, base_y);
     }
 
   accesskit_node_builder_set_children (parent_builder,
@@ -1390,8 +1404,21 @@ gtk_accesskit_context_add_to_update (GtkAccessKitContext   *self,
 
   if (GTK_IS_LABEL (accessible))
     {
-      PangoLayout *layout = gtk_label_get_layout (GTK_LABEL (accessible));
-      add_text_layout (self, update, builder, layout);
+      GtkLabel *label = GTK_LABEL (accessible);
+      PangoLayout *layout = gtk_label_get_layout (label);
+      float x, y;
+
+      gtk_label_get_layout_location (label, &x, &y);
+      add_text_layout (self, update, builder, layout, x, y);
+    }
+  else if (GTK_IS_INSCRIPTION (accessible))
+    {
+      GtkInscription *inscription = GTK_INSCRIPTION (accessible);
+      PangoLayout *layout = gtk_inscription_get_layout (inscription);
+      float x, y;
+
+      gtk_inscription_get_layout_location (inscription, &x, &y);
+      add_text_layout (self, update, builder, layout, x, y);
     }
   /* TODO: text */
 
