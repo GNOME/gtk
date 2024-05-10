@@ -20,7 +20,7 @@
 #include "gdkwaylanddevice.h"
 #include "gdkdevice-wayland-private.h"
 
-#include "tablet-unstable-v2-client-protocol.h"
+#include "tablet-v2-client-protocol.h"
 
 #include <gdk/gdkdevicepadprivate.h>
 

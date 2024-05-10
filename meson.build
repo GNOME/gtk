@@ -8,7 +8,7 @@ project('gtk', 'c',
           'c_std=gnu11',
           'cpp_std=c++11',
         ],
-        meson_version : '>= 1.2.0',
+        meson_version : '>= 1.5.0',
         license: 'LGPL-2.1-or-later')
 
 glib_major_req = 2

@@ -358,7 +358,7 @@ macos-arm64:
     - |
       python3 -m venv .venv
       source .venv/bin/activate
-      pip3 install meson==1.4.0 ninja==1.11.1.1 toml2json
+      pip3 install meson==1.5.0 ninja==1.11.1.1 toml2json
     # The introspection feature requires 'pkg-config' and 'bison'.
     - curl -L $CI_API_V4_URL/projects/30437/packages/generic/pkgconfig/v0.29.2+10/pkg-config-0.29.2+10_$(uname -m).tar.xz | tar -C .venv -xJ
     - curl -L $CI_API_V4_URL/projects/30438/packages/generic/bison/v3.8.2+3/bison-3.8.2+3_$(uname -m).tar.xz | tar -C .venv -xJ

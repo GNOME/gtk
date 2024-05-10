@@ -42,7 +42,7 @@
 #include "gdkprivate.h"
 
 #include "pointer-gestures-unstable-v1-client-protocol.h"
-#include "tablet-unstable-v2-client-protocol.h"
+#include "tablet-v2-client-protocol.h"
 #include "cursor-shape-v1-client-protocol.h"
 
 #include <xkbcommon/xkbcommon.h>

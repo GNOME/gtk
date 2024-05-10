@@ -54,7 +54,7 @@
 #include "gdkeventsource.h"
 
 #include <wayland/pointer-gestures-unstable-v1-client-protocol.h>
-#include "tablet-unstable-v2-client-protocol.h"
+#include "tablet-v2-client-protocol.h"
 #include <wayland/xdg-shell-unstable-v6-client-protocol.h>
 #include <wayland/xdg-foreign-unstable-v1-client-protocol.h>
 #include <wayland/xdg-foreign-unstable-v2-client-protocol.h>
