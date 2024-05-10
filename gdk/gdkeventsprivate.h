@@ -571,6 +571,14 @@ GdkEvent * gdk_pad_event_new_strip      (GdkSurface      *surface,
                                          guint            mode,
                                          double           value);
 
+GdkEvent * gdk_pad_event_new_dial       (GdkSurface      *surface,
+                                         GdkDevice       *device,
+                                         guint32          time,
+                                         guint            group,
+                                         guint            index,
+                                         guint            mode,
+                                         double           value);
+
 GdkEvent * gdk_pad_event_new_button     (GdkEventType     type,
                                          GdkSurface      *surface,
                                          GdkDevice       *device,

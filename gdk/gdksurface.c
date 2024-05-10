@@ -3066,6 +3066,7 @@ add_event_mark (GdkEvent *event,
     case GDK_PAD_BUTTON_RELEASE:
     case GDK_PAD_RING:
     case GDK_PAD_STRIP:
+    case GDK_PAD_DIAL:
     case GDK_PAD_GROUP_MODE:
     case GDK_GRAB_BROKEN:
     case GDK_DELETE:

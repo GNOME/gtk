@@ -44,19 +44,21 @@ typedef struct _GtkPadActionEntry GtkPadActionEntry;
  * @GTK_PAD_ACTION_BUTTON: Action is triggered by a pad button
  * @GTK_PAD_ACTION_RING: Action is triggered by a pad ring
  * @GTK_PAD_ACTION_STRIP: Action is triggered by a pad strip
+ * @GTK_PAD_ACTION_DIAL: Action is triggered by a pad dial
  *
  * The type of a pad action.
  */
 typedef enum {
   GTK_PAD_ACTION_BUTTON,
   GTK_PAD_ACTION_RING,
-  GTK_PAD_ACTION_STRIP
+  GTK_PAD_ACTION_STRIP,
+  GTK_PAD_ACTION_DIAL
 } GtkPadActionType;
 
 /**
  * GtkPadActionEntry:
  * @type: the type of pad feature that will trigger this action entry.
- * @index: the 0-indexed button/ring/strip number that will trigger this action
+ * @index: the 0-indexed button/ring/strip/dial number that will trigger this action
  *   entry.
  * @mode: the mode that will trigger this action entry, or -1 for all modes.
  * @label: Human readable description of this action entry, this string should
