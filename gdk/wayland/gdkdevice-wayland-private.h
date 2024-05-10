@@ -138,6 +138,7 @@ struct _GdkWaylandTabletData
   char *path;
   uint32_t vid;
   uint32_t pid;
+  uint32_t bustype;
 
   GdkDevice *logical_device;
   GdkDevice *stylus_device;

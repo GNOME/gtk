@@ -107,7 +107,7 @@
 #define OUTPUT_VERSION                  4
 #define XDG_OUTPUT_MIN_VERSION          3
 #define XDG_OUTPUT_VERSION              3
-#define TABLET_VERSION                  1
+#define TABLET_VERSION                  2
 #define EXPORTER_V1_VERSION             1
 #define EXPORTER_V2_VERSION             1
 #define IMPORTER_V1_VERSION             1
@@ -574,7 +574,7 @@ gdk_registry_handle_global (void               *data,
     {
       display_wayland->tablet_manager =
         wl_registry_bind(display_wayland->wl_registry, id,
-                         &zwp_tablet_manager_v2_interface, TABLET_VERSION);
+                         &zwp_tablet_manager_v2_interface, MIN (version, TABLET_VERSION));
     }
   else if (match_global (display_wayland, interface, version, zxdg_exporter_v1_interface.name, 0))
     {
