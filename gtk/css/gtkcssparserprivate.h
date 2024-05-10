@@ -70,6 +70,7 @@ GtkCssParser *          gtk_css_parser_ref                      (GtkCssParser   
 void                    gtk_css_parser_unref                    (GtkCssParser                   *self);
 
 GFile *                 gtk_css_parser_get_file                 (GtkCssParser                   *self) G_GNUC_PURE;
+GBytes *                gtk_css_parser_get_bytes                (GtkCssParser                   *self) G_GNUC_PURE;
 GFile *                 gtk_css_parser_resolve_url              (GtkCssParser                   *self,
                                                                  const char                     *url);
 
