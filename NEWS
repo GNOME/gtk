@@ -6,6 +6,7 @@ Overview of Changes in 4.15.1, xx-xx-xxxx
 
 * CSS:
  - Support the :root selector
+ - Support variables and custom properties
 
 * Icontheme:
  - Make symbolic svg loading more efficient
@@ -14,19 +15,22 @@ Overview of Changes in 4.15.1, xx-xx-xxxx
 * Accessibility:
  - Make the gtk-demo sidebar search more accessible
  - Stop emitting focus events
+ - Realize child contexts when necessary
 
 * GDK:
  - Support XDG_ACTIVATION_TOKEN
  - dmabuf: Be more defensive when importing unknown formats to GL
  - dmabuf: Use narrow range for YUV
+ - vulkan: Recreate swapchains when necessary or beneficial
 
 * GSK:
  - Improve logging for GDK_DEBUG=offload
  - Improve logging for GSK_DEBUG=renderer
  - gpu: Warn about inefficient texture import
- - gpu: Handle  tiny offscreens correctly
+ - gpu: Handle tiny offscreens correctly
  - vulkan: Add profiler marks in various places
  - vulkan: Fix a problem with imported dmabufs showing up black
+ - cairo: Speed up mask nodes, since we use them for symbolic icons
 
 * Wayland:
  - Use wl_compositor version 6
@@ -46,6 +50,7 @@ Overview of Changes in 4.15.1, xx-xx-xxxx
 
 * Translation updates:
  Korean
+ Portuguese
  Turkish
 
 
