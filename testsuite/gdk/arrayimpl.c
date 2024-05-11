@@ -110,6 +110,7 @@ gdk_array(test_splice) (void)
 #undef gdk_array_paste
 #undef gdk_array
 #undef GDK_ARRAY_REAL_SIZE
+#undef GDK_ARRAY_MAX_SIZE
 
 #undef GDK_ARRAY_ELEMENT_TYPE
 #undef GDK_ARRAY_NAME
