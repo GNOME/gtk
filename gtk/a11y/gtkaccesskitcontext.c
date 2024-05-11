@@ -946,6 +946,7 @@ add_text_layout_inner (GtkAccessKitContext   *self,
             {
               GtkAccessKitRunInfo *line_runs_data =
                 (GtkAccessKitRunInfo *) (line_runs->data);
+              guint prev_run_usv_offset = 0;
               guint i;
 
               g_array_sort (line_runs, compare_run_info);
@@ -969,7 +970,7 @@ add_text_layout_inner (GtkAccessKitContext   *self,
                     g_array_new (FALSE, FALSE, sizeof (float));
                   GArray *char_widths =
                     g_array_new (FALSE, FALSE, sizeof (float));
-                  guint node_start_usv_offset = usv_offset;
+                  guint run_start_usv_offset = usv_offset;
                   guint last_word_start_char_offset = 0;
                   guint char_count = 0;
                   float char_pos = 0.0f;
@@ -979,17 +980,8 @@ add_text_layout_inner (GtkAccessKitContext   *self,
                   if (i > 0)
                     {
                       accesskit_node_id id =
-                        run_node_id (self,
-                                     line_runs_data[i - 1].run->item->offset);
+                        run_node_id (self, prev_run_usv_offset);
                       accesskit_node_builder_set_previous_on_line (builder, id);
-                    }
-
-                  if (i < (line_runs->len - 1))
-                    {
-                      accesskit_node_id id =
-                        run_node_id (self,
-                                     line_runs_data[i + 1].run->item->offset);
-                      accesskit_node_builder_set_next_on_line (builder, id);
                     }
 
                   set_bounds_from_pango (builder, base_x, base_y,
@@ -1050,7 +1042,7 @@ add_text_layout_inner (GtkAccessKitContext   *self,
                           do
                             {
                               width +=
-                                (float) (log_widths[usv_offset - node_start_usv_offset]) / PANGO_SCALE;
+                                (float) (log_widths[usv_offset - run_start_usv_offset]) / PANGO_SCALE;
                               byte_offset =
                                 g_utf8_next_char (text + byte_offset) - text;
                               usv_offset++;
@@ -1093,7 +1085,14 @@ add_text_layout_inner (GtkAccessKitContext   *self,
                                                                (float *) char_widths->data);
                   g_array_unref (char_widths);
 
-                  add_run_node (self, update, node_start_usv_offset, builder);
+                  if (i < (line_runs->len - 1))
+                    {
+                      accesskit_node_id id = run_node_id (self, usv_offset);
+                      accesskit_node_builder_set_next_on_line (builder, id);
+                    }
+
+                  add_run_node (self, update, run_start_usv_offset, builder);
+                  prev_run_usv_offset = run_start_usv_offset;
                   g_free (node_text);
                   g_free (log_widths);
                 }
