@@ -23,6 +23,21 @@ G_BEGIN_DECLS
 
 GtkCssValue *   gtk_css_calc_value_parse            (GtkCssParser           *parser,
                                                      GtkCssNumberParseFlags  flags);
+GtkCssValue *   gtk_css_clamp_value_parse           (GtkCssParser           *parser,
+                                                     GtkCssNumberParseFlags  flags,
+                                                     guint                   type);
+GtkCssValue *   gtk_css_round_value_parse           (GtkCssParser           *parser,
+                                                     GtkCssNumberParseFlags  flags,
+                                                     guint                   type);
+GtkCssValue *   gtk_css_arg2_value_parse            (GtkCssParser           *parser,
+                                                     GtkCssNumberParseFlags  flags,
+                                                     guint                   min_args,
+                                                     guint                   max_args,
+                                                     const char             *function,
+                                                     guint                   type);
+GtkCssValue *   gtk_css_argn_value_parse            (GtkCssParser           *parser,
+                                                     GtkCssNumberParseFlags  flags,
+                                                     const char             *function,
+                                                     guint                   type);
 
 G_END_DECLS
-

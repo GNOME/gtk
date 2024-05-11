@@ -1,0 +1,88 @@
+a {
+  margin-left: min(3px, 1em, 20cm);
+  margin-right: min(3px, 5px, 30px);
+  margin-top: calc(1px * min(3, 5, 10));
+}
+
+b {
+  padding-left: max(3px, 4em, 2px, 20cm);
+  padding-top: calc(1cm * max(3, 5, 7));
+  transition-duration: max(1s, 100ms);
+}
+
+c {
+  background-size: clamp(none, calc(pi * 1pt), 10cm);
+  border-left-width: clamp(2px, calc(e * 1px), none);
+  margin-left: clamp(2px, 1em, 10cm);
+}
+
+d {
+  background-size: round(nearest, 17.3px, 2.2px);
+  border-left-width: round(down, 17px, 3ex);
+  border-right-width: calc(1px * round(17.5));
+  border-top-width: round(up, 17px, 3px);
+}
+
+e {
+  background-size: rem(17.3px, 2.2px);
+}
+
+f {
+  border-top-left-radius: mod(-17.3px, 2.2px);
+}
+
+g {
+  border-bottom-right-radius: calc(1px * sin(20));
+}
+
+h {
+  margin-left: calc(1px * cos(20));
+}
+
+i {
+  margin-right: calc(1px * tan(20));
+}
+
+j {
+  filter: hue-rotate(asin(20));
+}
+
+k {
+  filter: hue-rotate(acos(20));
+}
+
+l {
+  filter: hue-rotate(atan(20));
+}
+
+m {
+  filter: hue-rotate(atan2(20px, 30px));
+}
+
+n {
+  margin-top: calc(1px * pow(2, 3.5));
+}
+
+o {
+  margin-bottom: calc(1px * sqrt(2));
+}
+
+p {
+  padding-left: calc(1px * hypot(2, 3, 4, 5));
+}
+
+q {
+  padding-right: calc(1px * log(8, 3));
+}
+
+r {
+  padding-top: calc(1px * exp(5.4));
+}
+
+s {
+  padding-bottom: calc(1px * abs(sin(e)));
+}
+
+t {
+  border-width: calc(1px * pow(pi, sign(-infinity)));
+}

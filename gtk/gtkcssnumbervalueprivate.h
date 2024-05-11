@@ -36,6 +36,8 @@ typedef enum /*< skip >*/ {
   GTK_CSS_PARSE_TIME = (1 << 5)
 } GtkCssNumberParseFlags;
 
+#define GTK_CSS_PARSE_DIMENSION (GTK_CSS_PARSE_LENGTH|GTK_CSS_PARSE_ANGLE|GTK_CSS_PARSE_TIME)
+
 GtkCssValue *   gtk_css_dimension_value_new         (double                  value,
                                                      GtkCssUnit              unit);
 
@@ -57,6 +59,18 @@ double          _gtk_css_number_value_get           (const GtkCssValue      *num
                                                      double                  one_hundred_percent) G_GNUC_PURE;
 
 gboolean        gtk_css_dimension_value_is_zero     (const GtkCssValue      *value) G_GNUC_PURE;
+
+enum {
+  ROUND_NEAREST,
+  ROUND_UP,
+  ROUND_DOWN,
+  ROUND_TO_ZERO,
+};
+
+GtkCssValue *   gtk_css_math_value_new              (guint                    type,
+                                                     guint                    mode,
+                                                     GtkCssValue            **values,
+                                                     guint                    n_values);
 
 G_END_DECLS
 

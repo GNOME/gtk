@@ -1,0 +1,50 @@
+a {
+  margin-left: calc(1px * mod(5, 0));
+  margin-right: calc(1px * mod(infinity, 2));
+  margin-top: calc(1px * mod(-1, infinity));
+
+  padding-left: mod(18px, 5px);
+  padding-right: mod(18px, -5px);
+  padding-top: mod(-18px, 5px);
+}
+
+b {
+  margin-left: calc(1px * rem(5, 0));
+  margin-right: calc(1px * rem(infinity, 2));
+  margin-top: calc(1px * rem(-1, infinity));
+
+  padding-left: rem(18px, 5px);
+  padding-right: rem(18px, -5px);
+  padding-top: rem(-18px, 5px);
+}
+
+c {
+  margin-bottom: round(to-zero, 18px, 5px);
+  margin-left: round(up, 18px, 5px);
+  margin-right: round(down, 18px, 5px);
+  margin-top: round(nearest, 18px, 5px);
+}
+
+d {
+  margin-left: abs(20px);
+  margin-right: round(1px * cos(abs(-90deg)), 1px);
+  margin-top: calc(1px * sign(-20deg));
+}
+
+e {
+  margin-bottom: calc(1px * round(18, 0));
+  margin-left: calc(1px * round(infinity, infinity));
+  margin-right: calc(1px * round(infinity, 5));
+  margin-top: calc(1px * round(18, infinity));
+
+  padding-bottom: calc(1px * round(nearest, 18, infinity));
+  padding-left: calc(1px * round(up, 18, infinity));
+  padding-right: calc(1px * round(down, -18, infinity));
+  padding-top: calc(1px * round(to-zero, 18, infinity));
+}
+
+f {
+  margin-bottom: mod(18px, 0px);
+  margin-left: mod(calc(infinity * 1px), 5px);
+  margin-right: mod(-18px, calc(infinity * 1px));
+}
