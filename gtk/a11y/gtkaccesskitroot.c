@@ -24,6 +24,7 @@
 #include "gtkaccesskitcontextprivate.h"
 #include "gtknative.h"
 #include "gtkroot.h"
+#include "gtktext.h"
 
 #if defined(GDK_WINDOWING_WIN32)
 #include "win32/gdkwin32.h"
@@ -127,20 +128,50 @@ gtk_accesskit_root_get_property (GObject    *gobject,
     }
 }
 
+static GtkAccessible *
+get_focus (GtkAccessKitRoot *self)
+{
+  GtkWidget *widget = gtk_root_get_focus (self->root_widget);
+  GtkAccessible *accessible;
+
+  if (!widget)
+    return NULL;
+
+  accessible = g_object_ref (GTK_ACCESSIBLE (widget));
+
+  if (GTK_IS_TEXT (accessible))
+    {
+      GtkAccessible *parent = gtk_accessible_get_accessible_parent (accessible);
+      g_object_unref (accessible);
+      accessible = parent;
+    }
+
+  while (accessible &&
+         !gtk_accessible_get_platform_state (accessible, GTK_ACCESSIBLE_PLATFORM_STATE_FOCUSED))
+    {
+      GtkAccessible *parent = gtk_accessible_get_accessible_parent (accessible);
+      g_object_unref (accessible);
+      accessible = parent;
+    }
+
+  return accessible;
+}
+
 static accesskit_tree_update *
 new_tree_update (GtkAccessKitRoot *self)
 {
-  GtkWidget *focus = gtk_root_get_focus (self->root_widget);
+  GtkAccessible *focus = get_focus (self);
   GtkATContext *focus_ctx;
   guint32 focus_id;
 
   if (!focus)
-    focus = GTK_WIDGET (self->root_widget);
+    focus = g_object_ref (GTK_ACCESSIBLE (self->root_widget));
 
-  focus_ctx = gtk_accessible_get_at_context (GTK_ACCESSIBLE (focus));
+  focus_ctx = gtk_accessible_get_at_context (focus);
   gtk_at_context_realize (focus_ctx);
   focus_id = gtk_accesskit_context_get_id (GTK_ACCESSKIT_CONTEXT (focus_ctx));
   g_object_unref (focus_ctx);
+  g_object_unref (focus);
 
   return accesskit_tree_update_with_focus (focus_id);
 }

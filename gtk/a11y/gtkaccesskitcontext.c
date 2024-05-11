@@ -192,13 +192,41 @@ gtk_accesskit_context_update_selection_bound (GtkATContext *ctx)
   queue_update (self);
 }
 
+/* Adapted from gtkatspitext.c */
+static GtkText *
+gtk_editable_get_text_widget (GtkEditable *editable)
+{
+  guint redirects = 0;
+
+  do {
+    if (GTK_IS_TEXT (editable))
+      return GTK_TEXT (editable);
+
+    if (++redirects >= 6)
+      g_assert_not_reached ();
+
+    editable = gtk_editable_get_delegate (editable);
+  } while (editable != NULL);
+
+  return NULL;
+}
+
 static void
 gtk_accesskit_context_update_text_contents (GtkATContext *ctx,
                                             GtkAccessibleTextContentChange change,
                                             unsigned int start,
                                             unsigned int end)
 {
-  /* TODO */
+  GtkAccessKitContext *self = GTK_ACCESSKIT_CONTEXT (ctx);
+
+  /* Force layout invalidation here. This is necessary because GtkText
+     keeps recreating the layout, so the serial number ends up the same
+     whenever text changes. */
+  self->text_layout_serial = 0;
+
+  queue_update (self);
+
+  /* TODO? */
 }
 
 static void
@@ -1428,6 +1456,15 @@ gtk_accesskit_context_add_to_update (GtkAccessKitContext   *self,
       float x, y;
 
       gtk_inscription_get_layout_location (inscription, &x, &y);
+      add_text_layout (self, update, builder, layout, x, y);
+    }
+  else if (GTK_IS_TEXT (accessible))
+    {
+      GtkText *text = GTK_TEXT (accessible);
+      PangoLayout *layout = gtk_text_get_layout (text);
+      int x, y;
+
+      gtk_text_get_layout_offsets (text, &x, &y);
       add_text_layout (self, update, builder, layout, x, y);
     }
   /* TODO: text */
