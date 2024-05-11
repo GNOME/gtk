@@ -41,11 +41,9 @@ gtk_css_value_array_free (GtkCssValue *value)
 }
 
 static GtkCssValue *
-gtk_css_value_array_compute (GtkCssValue      *value,
-                             guint             property_id,
-                             GtkStyleProvider *provider,
-                             GtkCssStyle      *style,
-                             GtkCssStyle      *parent_style)
+gtk_css_value_array_compute (GtkCssValue          *value,
+                             guint                 property_id,
+                             GtkCssComputeContext *context)
 {
   GtkCssValue *result;
   GtkCssValue *i_value;
@@ -54,7 +52,7 @@ gtk_css_value_array_compute (GtkCssValue      *value,
   result = NULL;
   for (i = 0; i < value->n_values; i++)
     {
-      i_value =  _gtk_css_value_compute (value->values[i], property_id, provider, style, parent_style);
+      i_value =  _gtk_css_value_compute (value->values[i], property_id, context);
 
       if (result == NULL &&
 	  i_value != value->values[i])
@@ -402,10 +400,13 @@ _gtk_css_array_value_new_from_array (GtkCssValue **values,
   for (i = 0; i < n_values; i ++)
     {
       if (!gtk_css_value_is_computed (values[i]))
-        {
-          result->is_computed = FALSE;
-          break;
-        }
+        result->is_computed = FALSE;
+
+      if (gtk_css_value_contains_variables (values[i]))
+        result->contains_variables = TRUE;
+
+      if (!result->is_computed && result->contains_variables)
+        break;
     }
 
   return result;
@@ -466,4 +467,5 @@ _gtk_css_array_value_get_n_values (const GtkCssValue *value)
 
   return value->n_values;
 }
+
 

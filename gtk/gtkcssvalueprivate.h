@@ -22,6 +22,7 @@
 #include <glib-object.h>
 
 #include "gtkcsstypesprivate.h"
+#include "gtkcssvariablesetprivate.h"
 #include "gtkstyleprovider.h"
 
 G_BEGIN_DECLS
@@ -37,7 +38,16 @@ typedef struct _GtkCssValueClass      GtkCssValueClass;
 #define GTK_CSS_VALUE_BASE \
   const GtkCssValueClass *class; \
   int ref_count; \
-  guint is_computed: 1;
+  guint is_computed: 1; \
+  guint contains_variables: 1;
+
+typedef struct {
+  GtkStyleProvider   *provider;
+  GtkCssStyle        *style;
+  GtkCssStyle        *parent_style;
+  GtkCssVariableSet  *variables;
+  GtkCssValue       **shorthands;
+} GtkCssComputeContext;
 
 struct _GtkCssValueClass {
   const char *type_name;
@@ -45,9 +55,7 @@ struct _GtkCssValueClass {
 
   GtkCssValue * (* compute)                           (GtkCssValue                *value,
                                                        guint                       property_id,
-                                                       GtkStyleProvider           *provider,
-                                                       GtkCssStyle                *style,
-                                                       GtkCssStyle                *parent_style);
+                                                       GtkCssComputeContext       *context);
   gboolean      (* equal)                             (const GtkCssValue          *value1,
                                                        const GtkCssValue          *value2);
   GtkCssValue * (* transition)                        (GtkCssValue                *start,
@@ -74,9 +82,7 @@ void            gtk_css_value_unref                   (GtkCssValue              
 
 GtkCssValue *_gtk_css_value_compute                   (GtkCssValue                *value,
                                                        guint                       property_id,
-                                                       GtkStyleProvider           *provider,
-                                                       GtkCssStyle                *style,
-                                                       GtkCssStyle                *parent_style) G_GNUC_PURE;
+                                                       GtkCssComputeContext       *context) G_GNUC_PURE;
 gboolean     _gtk_css_value_equal                     (const GtkCssValue          *value1,
                                                        const GtkCssValue          *value2) G_GNUC_PURE;
 gboolean     _gtk_css_value_equal0                    (const GtkCssValue          *value1,
@@ -93,6 +99,7 @@ char *       _gtk_css_value_to_string                 (const GtkCssValue        
 void         _gtk_css_value_print                     (const GtkCssValue          *value,
                                                        GString                    *string);
 gboolean     gtk_css_value_is_computed                (const GtkCssValue          *value) G_GNUC_PURE;
+gboolean     gtk_css_value_contains_variables         (const GtkCssValue          *value) G_GNUC_PURE;
 
 G_END_DECLS
 

@@ -215,24 +215,28 @@ test_transition (gconstpointer data)
   GtkCssValue *result;
   GtkStyleProvider *provider;
   GtkCssStyle *style;
+  GtkCssComputeContext context = { NULL, };
 
   provider = GTK_STYLE_PROVIDER (gtk_settings_get_default ());
   style = gtk_css_static_style_get_default ();
+
+  context.provider = provider;
+  context.style = style;
 
   prop = (GtkStyleProperty *)_gtk_css_style_property_lookup_by_id (test->prop);
 
   value1 = value_from_string (prop, test->value1);
   g_assert_nonnull (value1);
-  computed1 = _gtk_css_value_compute (value1, test->prop, provider, style, NULL);
+  computed1 = _gtk_css_value_compute (value1, test->prop, &context);
 
   value2 = value_from_string (prop, test->value2);
   g_assert_nonnull (value2);
-  computed2 = _gtk_css_value_compute (value2, test->prop, provider, style, NULL);
+  computed2 = _gtk_css_value_compute (value2, test->prop, &context);
 
   if (test->value3)
     {
       value3 = value_from_string (prop, test->value3);
-      computed3 = _gtk_css_value_compute (value3, test->prop, provider, style, NULL);
+      computed3 = _gtk_css_value_compute (value3, test->prop, &context);
     }
   else
     {

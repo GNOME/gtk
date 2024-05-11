@@ -38,18 +38,16 @@ gtk_css_value_initial_free (GtkCssValue *value)
 }
 
 static GtkCssValue *
-gtk_css_value_initial_compute (GtkCssValue      *value,
-                               guint             property_id,
-                               GtkStyleProvider *provider,
-                               GtkCssStyle      *style,
-                               GtkCssStyle      *parent_style)
+gtk_css_value_initial_compute (GtkCssValue          *value,
+                               guint                 property_id,
+                               GtkCssComputeContext *context)
 {
   GtkSettings *settings;
 
   switch (property_id)
     {
     case GTK_CSS_PROPERTY_DPI:
-      settings = gtk_style_provider_get_settings (provider);
+      settings = gtk_style_provider_get_settings (context->provider);
       if (settings)
         {
           int dpi_int;
@@ -62,7 +60,7 @@ gtk_css_value_initial_compute (GtkCssValue      *value,
       break;
 
     case GTK_CSS_PROPERTY_FONT_FAMILY:
-      settings = gtk_style_provider_get_settings (provider);
+      settings = gtk_style_provider_get_settings (context->provider);
       if (settings && gtk_settings_get_font_family (settings) != NULL)
         return _gtk_css_array_value_new (_gtk_css_string_value_new (gtk_settings_get_font_family (settings)));
       break;
@@ -73,9 +71,7 @@ gtk_css_value_initial_compute (GtkCssValue      *value,
 
   return _gtk_css_value_compute (_gtk_css_style_property_get_initial_value (_gtk_css_style_property_lookup_by_id (property_id)),
                                  property_id,
-                                 provider,
-                                 style,
-                                 parent_style);
+                                 context);
 }
 
 static gboolean
@@ -126,14 +122,10 @@ _gtk_css_initial_value_get (void)
   return &initial;
 }
 GtkCssValue *
-_gtk_css_initial_value_new_compute (guint             property_id,
-                                    GtkStyleProvider *provider,
-                                    GtkCssStyle      *style,
-                                    GtkCssStyle      *parent_style)
+_gtk_css_initial_value_new_compute (guint                 property_id,
+                                    GtkCssComputeContext *context)
 {
   return gtk_css_value_initial_compute (NULL,
                                         property_id,
-                                        provider,
-                                        style,
-                                        parent_style);
+                                        context);
 }

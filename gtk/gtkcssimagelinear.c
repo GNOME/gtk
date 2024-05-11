@@ -488,11 +488,9 @@ gtk_css_image_linear_print (GtkCssImage *image,
 }
 
 static GtkCssImage *
-gtk_css_image_linear_compute (GtkCssImage      *image,
-                              guint             property_id,
-                              GtkStyleProvider *provider,
-                              GtkCssStyle      *style,
-                              GtkCssStyle      *parent_style)
+gtk_css_image_linear_compute (GtkCssImage          *image,
+                              guint                 property_id,
+                              GtkCssComputeContext *context)
 {
   GtkCssImageLinear *linear = GTK_CSS_IMAGE_LINEAR (image);
   GtkCssImageLinear *copy;
@@ -503,7 +501,7 @@ gtk_css_image_linear_compute (GtkCssImage      *image,
   copy->side = linear->side;
 
   if (linear->angle)
-    copy->angle = _gtk_css_value_compute (linear->angle, property_id, provider, style, parent_style);
+    copy->angle = _gtk_css_value_compute (linear->angle, property_id, context);
 
   copy->n_stops = linear->n_stops;
   copy->color_stops = g_malloc (sizeof (GtkCssImageLinearColorStop) * copy->n_stops);
@@ -512,11 +510,11 @@ gtk_css_image_linear_compute (GtkCssImage      *image,
       const GtkCssImageLinearColorStop *stop = &linear->color_stops[i];
       GtkCssImageLinearColorStop *scopy = &copy->color_stops[i];
 
-      scopy->color = _gtk_css_value_compute (stop->color, property_id, provider, style, parent_style);
+      scopy->color = _gtk_css_value_compute (stop->color, property_id, context);
 
       if (stop->offset)
         {
-          scopy->offset = _gtk_css_value_compute (stop->offset, property_id, provider, style, parent_style);
+          scopy->offset = _gtk_css_value_compute (stop->offset, property_id, context);
         }
       else
         {

@@ -34,11 +34,9 @@ gtk_css_value_image_free (GtkCssValue *value)
 }
 
 static GtkCssValue *
-gtk_css_value_image_compute (GtkCssValue      *value,
-                             guint             property_id,
-                             GtkStyleProvider *provider,
-                             GtkCssStyle      *style,
-                             GtkCssStyle      *parent_style)
+gtk_css_value_image_compute (GtkCssValue          *value,
+                             guint                 property_id,
+                             GtkCssComputeContext *context)
 {
   GtkCssImage *image, *computed;
   
@@ -47,7 +45,7 @@ gtk_css_value_image_compute (GtkCssValue      *value,
   if (image == NULL)
     return _gtk_css_value_ref (value);
 
-  computed = _gtk_css_image_compute (image, property_id, provider, style, parent_style);
+  computed = _gtk_css_image_compute (image, property_id, context);
 
   if (computed == image)
     {
@@ -136,7 +134,7 @@ static const GtkCssValueClass GTK_CSS_VALUE_IMAGE = {
 GtkCssValue *
 _gtk_css_image_value_new (GtkCssImage *image)
 {
-  static GtkCssValue image_none_singleton = { &GTK_CSS_VALUE_IMAGE, 1, TRUE, NULL };
+  static GtkCssValue image_none_singleton = { &GTK_CSS_VALUE_IMAGE, 1, TRUE, FALSE, NULL };
   GtkCssValue *value;
 
   if (image == NULL)

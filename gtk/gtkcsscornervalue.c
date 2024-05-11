@@ -37,16 +37,14 @@ gtk_css_value_corner_free (GtkCssValue *value)
 }
 
 static GtkCssValue *
-gtk_css_value_corner_compute (GtkCssValue      *corner,
-                              guint             property_id,
-                              GtkStyleProvider *provider,
-                              GtkCssStyle      *style,
-                              GtkCssStyle      *parent_style)
+gtk_css_value_corner_compute (GtkCssValue          *corner,
+                              guint                 property_id,
+                              GtkCssComputeContext *context)
 {
   GtkCssValue *x, *y;
 
-  x = _gtk_css_value_compute (corner->x, property_id, provider, style, parent_style);
-  y = _gtk_css_value_compute (corner->y, property_id, provider, style, parent_style);
+  x = _gtk_css_value_compute (corner->x, property_id, context);
+  y = _gtk_css_value_compute (corner->y, property_id, context);
   if (x == corner->x && y == corner->y)
     {
       _gtk_css_value_unref (x);
@@ -110,14 +108,14 @@ static const GtkCssValueClass GTK_CSS_VALUE_CORNER = {
 };
 
 static GtkCssValue corner_singletons[] = {
-  { &GTK_CSS_VALUE_CORNER, 1, TRUE, NULL, NULL },
-  { &GTK_CSS_VALUE_CORNER, 1, TRUE, NULL, NULL },
-  { &GTK_CSS_VALUE_CORNER, 1, TRUE, NULL, NULL },
-  { &GTK_CSS_VALUE_CORNER, 1, TRUE, NULL, NULL },
-  { &GTK_CSS_VALUE_CORNER, 1, TRUE, NULL, NULL },
-  { &GTK_CSS_VALUE_CORNER, 1, TRUE, NULL, NULL },
-  { &GTK_CSS_VALUE_CORNER, 1, TRUE, NULL, NULL },
-  { &GTK_CSS_VALUE_CORNER, 1, TRUE, NULL, NULL },
+  { &GTK_CSS_VALUE_CORNER, 1, TRUE, FALSE, NULL, NULL },
+  { &GTK_CSS_VALUE_CORNER, 1, TRUE, FALSE, NULL, NULL },
+  { &GTK_CSS_VALUE_CORNER, 1, TRUE, FALSE, NULL, NULL },
+  { &GTK_CSS_VALUE_CORNER, 1, TRUE, FALSE, NULL, NULL },
+  { &GTK_CSS_VALUE_CORNER, 1, TRUE, FALSE, NULL, NULL },
+  { &GTK_CSS_VALUE_CORNER, 1, TRUE, FALSE, NULL, NULL },
+  { &GTK_CSS_VALUE_CORNER, 1, TRUE, FALSE, NULL, NULL },
+  { &GTK_CSS_VALUE_CORNER, 1, TRUE, FALSE, NULL, NULL },
 };
 
 static inline void
@@ -226,3 +224,4 @@ gtk_css_corner_value_is_zero (const GtkCssValue *corner)
   return gtk_css_dimension_value_is_zero (corner->x) &&
          gtk_css_dimension_value_is_zero (corner->y);
 }
+

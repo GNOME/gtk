@@ -138,11 +138,9 @@ gtk_css_image_icon_theme_print (GtkCssImage *image,
 }
 
 static GtkCssImage *
-gtk_css_image_icon_theme_compute (GtkCssImage      *image,
-                                  guint             property_id,
-                                  GtkStyleProvider *provider,
-                                  GtkCssStyle      *style,
-                                  GtkCssStyle      *parent_style)
+gtk_css_image_icon_theme_compute (GtkCssImage          *image,
+                                  guint                 property_id,
+                                  GtkCssComputeContext *context)
 {
   GtkCssImageIconTheme *icon_theme = GTK_CSS_IMAGE_ICON_THEME (image);
   GtkCssImageIconTheme *copy;
@@ -151,12 +149,12 @@ gtk_css_image_icon_theme_compute (GtkCssImage      *image,
 
   copy = g_object_new (GTK_TYPE_CSS_IMAGE_ICON_THEME, NULL);
   copy->name = g_strdup (icon_theme->name);
-  settings = gtk_style_provider_get_settings (provider);
+  settings = gtk_style_provider_get_settings (context->provider);
   display = _gtk_settings_get_display (settings);
   copy->icon_theme = gtk_icon_theme_get_for_display (display);
   copy->serial = gtk_icon_theme_get_serial (copy->icon_theme);
-  copy->scale = gtk_style_provider_get_scale (provider);
-  gtk_css_style_lookup_symbolic_colors (style, copy->colors);
+  copy->scale = gtk_style_provider_get_scale (context->provider);
+  gtk_css_style_lookup_symbolic_colors (context->style, copy->colors);
 
   return GTK_CSS_IMAGE (copy);
 }

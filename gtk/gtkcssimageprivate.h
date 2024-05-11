@@ -26,6 +26,8 @@
 #include "gtk/css/gtkcsstokenizerprivate.h"
 #include "gtk/css/gtkcssparserprivate.h"
 #include "gtk/gtkcsstypesprivate.h"
+#include "gtk/gtkcssvariablesetprivate.h"
+#include "gtk/gtkcssvalueprivate.h"
 #include "gtk/gtksnapshot.h"
 #include "gtk/gtkstyleprovider.h"
 
@@ -60,9 +62,7 @@ struct _GtkCssImageClass
   /* create "computed value" in CSS terms, returns a new reference */
   GtkCssImage *(* compute)                         (GtkCssImage                *image,
                                                     guint                       property_id,
-                                                    GtkStyleProvider           *provider,
-                                                    GtkCssStyle                *style,
-                                                    GtkCssStyle                *parent_style);
+                                                    GtkCssComputeContext       *context);
   /* compare two images for equality */
   gboolean     (* equal)                           (GtkCssImage                *image1,
                                                     GtkCssImage                *image2);
@@ -104,9 +104,7 @@ double         _gtk_css_image_get_aspect_ratio     (GtkCssImage                *
 
 GtkCssImage *  _gtk_css_image_compute              (GtkCssImage                *image,
                                                     guint                       property_id,
-                                                    GtkStyleProvider           *provider,
-                                                    GtkCssStyle                *style,
-                                                    GtkCssStyle                *parent_style);
+                                                    GtkCssComputeContext       *context);
 gboolean       _gtk_css_image_equal                (GtkCssImage                *image1,
                                                     GtkCssImage                *image2) G_GNUC_PURE;
 GtkCssImage *  _gtk_css_image_transition           (GtkCssImage                *start,
