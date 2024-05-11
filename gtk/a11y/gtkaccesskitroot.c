@@ -358,7 +358,7 @@ gtk_accesskit_root_new (GtkRoot *root_widget)
 }
 
 static void
-remove_update_from_queue (GtkAccessKitRoot *self, guint id)
+remove_from_update_queue (GtkAccessKitRoot *self, guint id)
 {
   guint i;
 
@@ -409,7 +409,7 @@ void
 gtk_accesskit_root_remove_context (GtkAccessKitRoot *self, guint32 id)
 {
   g_hash_table_remove (self->contexts, GUINT_TO_POINTER (id));
-  remove_update_from_queue (self, id);
+  remove_from_update_queue (self, id);
 }
 
 static accesskit_tree_update *
