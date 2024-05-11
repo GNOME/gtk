@@ -165,25 +165,29 @@ _gdk_wayland_cursor_get_buffer (GdkWaylandDisplay *display,
                                 double            *scale)
 {
   GdkTexture *texture;
-  int desired_scale_factor;
-
-  desired_scale_factor = (int) ceil (desired_scale);
 
   if (gdk_cursor_get_name (cursor))
     {
       struct wl_cursor *c;
+      int scale_factor;
 
       if (g_str_equal (gdk_cursor_get_name (cursor), "none"))
-        goto none;
+        {
+          *hotspot_x = *hotspot_y = 0;
+          *width = *height = 0;
+          *scale = 1;
+          return NULL;
+        }
+
+      scale_factor = (int) ceil (desired_scale);
 
       c = gdk_wayland_cursor_load_for_name (display,
-                                            _gdk_wayland_display_get_cursor_theme (display),
-                                            desired_scale_factor,
+                                            display->cursor_theme,
+                                            scale_factor,
                                             gdk_cursor_get_name (cursor));
       if (c && c->image_count > 0)
         {
           struct wl_cursor_image *image;
-          int cursor_scale;
 
           if (image_index >= c->image_count)
             {
@@ -195,22 +199,22 @@ _gdk_wayland_cursor_get_buffer (GdkWaylandDisplay *display,
 
           image = c->images[image_index];
 
-          cursor_scale = desired_scale_factor;
-          if ((image->width % cursor_scale != 0) ||
-              (image->height % cursor_scale != 0))
+          *width = display->cursor_theme_size;
+          *height = display->cursor_theme_size;
+          *scale = image->width / (double) *width;
+          *hotspot_x = image->hotspot_x / scale_factor;
+          *hotspot_y = image->hotspot_y / scale_factor;
+
+          if (*scale != scale_factor && !use_viewporter)
             {
-              g_warning (G_STRLOC " cursor image size (%dx%d) not an integer "
-                         "multiple of scale (%d)", image->width, image->height,
-                         cursor_scale);
-              cursor_scale = 1;
+              g_warning (G_STRLOC " cursor image size (%d) not an integer "
+                         "multiple of theme size (%d)", image->width, *width);
+              *width = image->width;
+              *height = image->height;
+              *hotspot_x = image->hotspot_x;
+              *hotspot_y = image->hotspot_y;
+              *scale = 1;
             }
-
-          *hotspot_x = image->hotspot_x / cursor_scale;
-          *hotspot_y = image->hotspot_y / cursor_scale;
-
-          *width = image->width / cursor_scale;
-          *height = image->height / cursor_scale;
-          *scale = cursor_scale;
 
           return wl_cursor_image_get_buffer (image);
         }
@@ -257,7 +261,7 @@ from_texture:
   else
     {
       if (!use_viewporter)
-        *scale = desired_scale_factor;
+        *scale = ceil (desired_scale);
       else
         *scale = desired_scale;
 
@@ -294,28 +298,23 @@ from_texture:
     }
 
   if (gdk_cursor_get_fallback (cursor))
-    return _gdk_wayland_cursor_get_buffer (display,
-                                           gdk_cursor_get_fallback (cursor),
-                                           desired_scale,
-                                           use_viewporter,
-                                           image_index,
-                                           hotspot_x, hotspot_y,
-                                           width, height,
-                                           scale);
+    {
+      return _gdk_wayland_cursor_get_buffer (display,
+                                             gdk_cursor_get_fallback (cursor),
+                                             desired_scale,
+                                             use_viewporter,
+                                             image_index,
+                                             hotspot_x, hotspot_y,
+                                             width, height,
+                                             scale);
+    }
   else
     {
       texture = gdk_texture_new_from_resource ("/org/gtk/libgdk/cursor/default");
       goto from_texture;
     }
 
-none:
-  *hotspot_x = 0;
-  *hotspot_y = 0;
-  *width = 0;
-  *height = 0;
-  *scale = 1;
-
-  return NULL;
+  g_assert_not_reached ();
 }
 
 guint
