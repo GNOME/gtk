@@ -42,7 +42,7 @@ struct _GtkAccessKitRoot
 
   guint32 next_id;
   GHashTable *contexts;
-  GSList *update_queue;
+  GArray *update_queue;
   gboolean did_initial_update;
   gint update_id;
 
@@ -71,7 +71,7 @@ gtk_accesskit_root_finalize (GObject *gobject)
   GtkAccessKitRoot *self = GTK_ACCESSKIT_ROOT (gobject);
 
   g_clear_pointer (&self->contexts, g_hash_table_destroy);
-  g_clear_pointer (&self->update_queue, g_slist_free);
+  g_clear_pointer (&self->update_queue, g_array_unref);
   g_clear_handle_id (&self->update_id, g_source_remove);
 
 #if defined(GDK_WINDOWING_WIN32)
@@ -357,18 +357,38 @@ gtk_accesskit_root_new (GtkRoot *root_widget)
 }
 
 static void
+remove_update_from_queue (GtkAccessKitRoot *self, guint id)
+{
+  guint i;
+
+  if (!self->update_queue)
+    return;
+
+  for (i = 0; i < self->update_queue->len; i++)
+    {
+      if (g_array_index (self->update_queue, guint, i) == id)
+        {
+          g_array_remove_index (self->update_queue, i);
+          return;
+        }
+    }
+}
+
+static void
 add_to_update_queue (GtkAccessKitRoot *self, guint id)
 {
-  gpointer data = GUINT_TO_POINTER (id);
-  GSList *l;
+  guint i;
 
-  for (l = self->update_queue; l; l = l->next)
+  if (!self->update_queue)
+    self->update_queue = g_array_new (FALSE, FALSE, sizeof (guint));
+
+  for (i = 0; i < self->update_queue->len; i++)
     {
-      if (l->data == data)
+      if (g_array_index (self->update_queue, guint, i) == id)
         return;
     }
 
-  self->update_queue = g_slist_prepend (self->update_queue, data);
+  g_array_append_val (self->update_queue, id);
 }
 
 guint32
@@ -388,7 +408,7 @@ void
 gtk_accesskit_root_remove_context (GtkAccessKitRoot *self, guint32 id)
 {
   g_hash_table_remove (self->contexts, GUINT_TO_POINTER (id));
-  self->update_queue = g_slist_remove (self->update_queue, GUINT_TO_POINTER (id));
+  remove_update_from_queue (self, id);
 }
 
 static accesskit_tree_update *
@@ -399,20 +419,20 @@ build_incremental_update (void *data)
 
   while (self->update_queue)
     {
-      GSList *current_queue = self->update_queue;
-      GSList *l;
+      GArray *current_queue = self->update_queue;
+      guint i;
 
       self->update_queue = NULL;
 
-      for (l = current_queue; l; l = l->next)
+      for (i = 0; i < current_queue->len; i++)
         {
-          guint32 id = GPOINTER_TO_UINT (l->data);
+          guint id = g_array_index (current_queue, guint, i);
           GtkAccessKitContext *accesskit_ctx =
-            g_hash_table_lookup (self->contexts, l->data);
+            g_hash_table_lookup (self->contexts, GUINT_TO_POINTER (id));
           gtk_accesskit_context_add_to_update (accesskit_ctx, update);
         }
 
-      g_slist_free (current_queue);
+      g_array_unref (current_queue);
     }
 
   return update;
