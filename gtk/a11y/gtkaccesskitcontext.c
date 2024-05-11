@@ -944,8 +944,6 @@ add_text_layout_inner (GtkAccessKitContext   *self,
 
           if (line_runs)
             {
-              GtkAccessKitRunInfo *line_runs_data =
-                (GtkAccessKitRunInfo *) (line_runs->data);
               guint prev_run_usv_offset = 0;
               guint i;
 
@@ -953,7 +951,8 @@ add_text_layout_inner (GtkAccessKitContext   *self,
 
               for (i = 0; i < line_runs->len; i++)
                 {
-                  GtkAccessKitRunInfo *run_info = &line_runs_data[i];
+                  GtkAccessKitRunInfo *run_info =
+                    &(g_array_index (line_runs, GtkAccessKitRunInfo, i));
                   PangoLayoutRun *run = run_info->run;
                   PangoItem *item = run->item;
                   accesskit_node_builder *builder =
