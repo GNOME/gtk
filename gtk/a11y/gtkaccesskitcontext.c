@@ -1093,7 +1093,7 @@ add_text_layout_inner (GtkAccessKitContext   *self,
                                                                (float *) char_widths->data);
                   g_array_unref (char_widths);
 
-                  add_run_node (self, update, item->offset, builder);
+                  add_run_node (self, update, node_start_usv_offset, builder);
                   g_free (node_text);
                   g_free (log_widths);
                 }
@@ -1141,7 +1141,7 @@ add_text_layout_inner (GtkAccessKitContext   *self,
               accesskit_node_builder_set_character_widths (builder, char_count,
                                                            &coord);
 
-              add_run_node (self, update, line->start_index, builder);
+              add_run_node (self, update, usv_offset, builder);
               byte_offset += line->length;
               usv_offset += g_utf8_strlen (line_text, line->length);
               g_free (line_text);
