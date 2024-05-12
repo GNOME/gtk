@@ -1776,11 +1776,6 @@ _gdk_x11_display_is_root_window (GdkDisplay *display,
   return GDK_SCREEN_XROOTWIN (display_x11->screen) == xroot_window;
 }
 
-struct XPointerUngrabInfo {
-  GdkDisplay *display;
-  guint32 time;
-};
-
 static void
 device_grab_update_callback (GdkDisplay *display,
                              gpointer    data,
