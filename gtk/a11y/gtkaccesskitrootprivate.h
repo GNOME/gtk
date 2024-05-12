@@ -42,6 +42,8 @@ void
 gtk_accesskit_root_remove_context (GtkAccessKitRoot *self, guint32 id);
 
 void
-gtk_accesskit_root_queue_update (GtkAccessKitRoot *self, guint32 id);
+gtk_accesskit_root_queue_update (GtkAccessKitRoot *self,
+                                 guint32           id,
+                                 gboolean          force_to_end);
 
 G_END_DECLS

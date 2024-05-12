@@ -185,9 +185,6 @@ add_subtree_to_update (GtkAccessKitRoot      *self,
   GtkAccessKitContext *accesskit_ctx = GTK_ACCESSKIT_CONTEXT (ctx);
   GtkAccessible *child = gtk_accessible_get_first_accessible_child (accessible);
 
-  g_assert (gtk_at_context_is_realized (ctx));
-  gtk_accesskit_context_add_to_update (accesskit_ctx, update);
-
   while (child)
     {
       GtkAccessible *next = gtk_accessible_get_next_accessible_sibling (child);
@@ -196,6 +193,9 @@ add_subtree_to_update (GtkAccessKitRoot      *self,
       g_object_unref (child);
       child = next;
     }
+
+  gtk_at_context_realize (ctx);
+  gtk_accesskit_context_add_to_update (accesskit_ctx, update);
 
   g_object_unref (ctx);
 }
@@ -376,17 +376,22 @@ remove_from_update_queue (GtkAccessKitRoot *self, guint id)
 }
 
 static void
-add_to_update_queue (GtkAccessKitRoot *self, guint id)
+add_to_update_queue (GtkAccessKitRoot *self, guint id, gboolean force_to_end)
 {
   guint i;
 
   if (!self->update_queue)
     self->update_queue = g_array_new (FALSE, FALSE, sizeof (guint));
 
-  for (i = 0; i < self->update_queue->len; i++)
+  if (force_to_end)
+    remove_from_update_queue (self, id);
+  else
     {
-      if (g_array_index (self->update_queue, guint, i) == id)
-        return;
+      for (i = 0; i < self->update_queue->len; i++)
+        {
+          if (g_array_index (self->update_queue, guint, i) == id)
+            return;
+        }
     }
 
   g_array_append_val (self->update_queue, id);
@@ -400,7 +405,7 @@ gtk_accesskit_root_add_context (GtkAccessKitRoot    *self,
   g_hash_table_insert (self->contexts, GUINT_TO_POINTER (id), context);
 
   if (self->did_initial_update)
-    add_to_update_queue (self, id);
+    add_to_update_queue (self, id, FALSE);
 
   return id;
 }
@@ -410,6 +415,39 @@ gtk_accesskit_root_remove_context (GtkAccessKitRoot *self, guint32 id)
 {
   g_hash_table_remove (self->contexts, GUINT_TO_POINTER (id));
   remove_from_update_queue (self, id);
+}
+
+static void
+add_unrealized_descendants_to_update (GtkAccessKitRoot      *self,
+                                      accesskit_tree_update *update,
+                                      GtkAccessKitContext   *accesskit_ctx)
+{
+  GtkATContext *ctx = GTK_AT_CONTEXT (accesskit_ctx);
+  GtkAccessible *accessible = gtk_at_context_get_accessible (ctx);
+  GtkAccessible *child = gtk_accessible_get_first_accessible_child (accessible);
+
+  while (child)
+    {
+      GtkAccessible *next = gtk_accessible_get_next_accessible_sibling (child);
+      GtkATContext *child_ctx = gtk_accessible_get_at_context (child);
+
+      if (!gtk_at_context_is_realized (child_ctx))
+        {
+          GtkAccessKitContext *child_accesskit_ctx =
+            GTK_ACCESSKIT_CONTEXT (child_ctx);
+
+          gtk_at_context_realize (child_ctx);
+          remove_from_update_queue (self,
+                                    gtk_accesskit_context_get_id (child_accesskit_ctx));
+          add_unrealized_descendants_to_update (self, update,
+                                                child_accesskit_ctx);
+          gtk_accesskit_context_add_to_update (child_accesskit_ctx, update);
+        }
+
+      g_object_unref (child_ctx);
+      g_object_unref (child);
+      child = next;
+    }
 }
 
 static accesskit_tree_update *
@@ -430,6 +468,7 @@ build_incremental_update (void *data)
           guint id = g_array_index (current_queue, guint, i);
           GtkAccessKitContext *accesskit_ctx =
             g_hash_table_lookup (self->contexts, GUINT_TO_POINTER (id));
+          add_unrealized_descendants_to_update (self, update, accesskit_ctx);
           gtk_accesskit_context_add_to_update (accesskit_ctx, update);
         }
 
@@ -451,12 +490,14 @@ incremental_update (gpointer data)
 }
 
 void
-gtk_accesskit_root_queue_update (GtkAccessKitRoot *self, guint32 id)
+gtk_accesskit_root_queue_update (GtkAccessKitRoot *self,
+                                 guint32           id,
+                                 gboolean          force_to_end)
 {
   if (!self->did_initial_update)
     return;
 
-  add_to_update_queue (self, id);
+  add_to_update_queue (self, id, force_to_end);
 
   if (!self->update_id)
     self->update_id = g_idle_add (incremental_update, self);

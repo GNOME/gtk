@@ -119,12 +119,12 @@ gtk_accesskit_context_unrealize (GtkATContext *context)
 }
 
 static void
-queue_update (GtkAccessKitContext *self)
+queue_update (GtkAccessKitContext *self, gboolean force_to_end)
 {
   if (!self->root)
     return;
 
-  gtk_accesskit_root_queue_update (self->root, self->id);
+  gtk_accesskit_root_queue_update (self->root, self->id, force_to_end);
 }
 
 static void
@@ -138,7 +138,7 @@ gtk_accesskit_context_state_change (GtkATContext                *ctx,
 {
   GtkAccessKitContext *self = GTK_ACCESSKIT_CONTEXT (ctx);
 
-  queue_update (self);
+  queue_update (self, FALSE);
 }
 
 static void
@@ -147,7 +147,7 @@ gtk_accesskit_context_platform_change (GtkATContext                *ctx,
 {
   GtkAccessKitContext *self = GTK_ACCESSKIT_CONTEXT (ctx);
 
-  queue_update (self);
+  queue_update (self, FALSE);
 }
 
 static void
@@ -155,7 +155,7 @@ gtk_accesskit_context_bounds_change (GtkATContext *ctx)
 {
   GtkAccessKitContext *self = GTK_ACCESSKIT_CONTEXT (ctx);
 
-  queue_update (self);
+  queue_update (self, FALSE);
 }
 
 static void
@@ -165,7 +165,7 @@ gtk_accesskit_context_child_change (GtkATContext             *ctx,
 {
   GtkAccessKitContext *self = GTK_ACCESSKIT_CONTEXT (ctx);
 
-  queue_update (self);
+  queue_update (self, FALSE);
 }
 
 static void
@@ -181,7 +181,47 @@ gtk_accesskit_context_update_caret_position (GtkATContext *ctx)
 {
   GtkAccessKitContext *self = GTK_ACCESSKIT_CONTEXT (ctx);
 
-  queue_update (self);
+  queue_update (self, FALSE);
+}
+
+static GtkAccessible *
+editable_ancestor (GtkAccessible *accessible)
+{
+  GtkAccessible *ancestor = gtk_accessible_get_accessible_parent (accessible);
+
+  while (ancestor)
+    {
+      GtkAccessible *next;
+
+      if (GTK_IS_EDITABLE (ancestor))
+        return ancestor;
+
+      next = gtk_accessible_get_accessible_parent (ancestor);
+      g_object_unref (ancestor);
+      ancestor = next;
+    }
+
+  return NULL;
+}
+
+static void
+queue_update_on_editable_ancestor (GtkAccessKitContext *self)
+{
+  GtkATContext *ctx = GTK_AT_CONTEXT (self);
+  GtkAccessible *accessible = gtk_at_context_get_accessible (ctx);
+  GtkAccessible *ancestor = editable_ancestor (accessible);
+  GtkATContext *ancestor_ctx;
+
+  if (!ancestor)
+    return;
+
+  ancestor_ctx =gtk_accessible_get_at_context (ancestor);
+  /* The editable ancestor must come after the GtkText instance in the
+     update queue, to ensure the AccessKit representation of the layout
+     is rebuilt before the selection is updated on the ancestor. */
+  queue_update (GTK_ACCESSKIT_CONTEXT (ancestor_ctx), TRUE /* force_to_end */);
+  g_object_unref (ancestor_ctx);
+  g_object_unref (ancestor);
 }
 
 static void
@@ -189,26 +229,8 @@ gtk_accesskit_context_update_selection_bound (GtkATContext *ctx)
 {
   GtkAccessKitContext *self = GTK_ACCESSKIT_CONTEXT (ctx);
 
-  queue_update (self);
-}
-
-/* Adapted from gtkatspitext.c */
-static GtkText *
-gtk_editable_get_text_widget (GtkEditable *editable)
-{
-  guint redirects = 0;
-
-  do {
-    if (GTK_IS_TEXT (editable))
-      return GTK_TEXT (editable);
-
-    if (++redirects >= 6)
-      g_assert_not_reached ();
-
-    editable = gtk_editable_get_delegate (editable);
-  } while (editable != NULL);
-
-  return NULL;
+  queue_update (self, FALSE);
+  queue_update_on_editable_ancestor (self);
 }
 
 static void
@@ -224,7 +246,8 @@ gtk_accesskit_context_update_text_contents (GtkATContext *ctx,
      whenever text changes. */
   self->text_layout_serial = 0;
 
-  queue_update (self);
+  queue_update (self, FALSE);
+  queue_update_on_editable_ancestor (self);
 
   /* TODO? */
 }
@@ -1181,6 +1204,56 @@ add_text_layout (GtkAccessKitContext    *self,
                                        self->text_layout_children->data);
 }
 
+/* Adapted from gtkatspitext.c */
+static GtkText *
+gtk_editable_get_text_widget (GtkEditable *editable)
+{
+  guint redirects = 0;
+
+  do {
+    if (GTK_IS_TEXT (editable))
+      return GTK_TEXT (editable);
+
+    if (++redirects >= 6)
+      g_assert_not_reached ();
+
+    editable = gtk_editable_get_delegate (editable);
+  } while (editable != NULL);
+
+  return NULL;
+}
+
+static void
+usv_offset_to_text_position (GtkAccessKitContext     *self,
+                             PangoLayout             *layout,
+                             guint                    usv_offset,
+                             accesskit_text_position *pos)
+{
+  gint i;
+  accesskit_node_id id;
+  guint run_start_usv_offset;
+  const PangoLogAttr *log_attrs =
+    pango_layout_get_log_attrs_readonly (layout, NULL);
+
+  for (i = self->text_layout_children->len - 1; i >= 0; i--)
+    {
+      id = g_array_index (self->text_layout_children, accesskit_node_id, i);
+      run_start_usv_offset = id & 0xffffffff;
+
+      if (run_start_usv_offset <= usv_offset)
+        break;
+    }
+
+  pos->node = id;
+  pos->character_index = 0;
+
+  for (i = run_start_usv_offset; i < usv_offset; i++)
+    {
+      if (log_attrs[i].is_cursor_position)
+        pos->character_index++;
+    }
+}
+
 void
 gtk_accesskit_context_add_to_update (GtkAccessKitContext   *self,
                                      accesskit_tree_update *update)
@@ -1223,7 +1296,7 @@ gtk_accesskit_context_add_to_update (GtkAccessKitContext   *self,
       GtkAccessKitContext *child_accesskit_ctx = GTK_ACCESSKIT_CONTEXT (child_ctx);
       GtkAccessible *next = gtk_accessible_get_next_accessible_sibling (child);
 
-      gtk_at_context_realize (child_ctx);
+      g_assert (gtk_at_context_is_realized (child_ctx));
       accesskit_node_builder_push_child (builder, child_accesskit_ctx->id);
       g_object_unref (child_ctx);
       g_object_unref (child);
@@ -1465,7 +1538,34 @@ gtk_accesskit_context_add_to_update (GtkAccessKitContext   *self,
       gtk_text_get_layout_offsets (text, &x, &y);
       add_text_layout (self, update, builder, layout, x, y);
     }
-  /* TODO: text */
+
+  if (GTK_IS_EDITABLE (accessible) && role != ACCESSKIT_ROLE_GENERIC_CONTAINER)
+    {
+      GtkText *text = gtk_editable_get_text_widget (GTK_EDITABLE (accessible));
+
+      if (text)
+        {
+          GtkATContext *text_ctx = gtk_accessible_get_at_context (GTK_ACCESSIBLE (text));
+          GtkAccessKitContext *text_accesskit_ctx = GTK_ACCESSKIT_CONTEXT (text_ctx);
+          PangoLayout *layout = gtk_text_get_layout (text);
+          int start, end;
+          accesskit_text_selection selection;
+
+          g_assert (gtk_at_context_is_realized (text_ctx));
+          g_assert (text_accesskit_ctx->text_layout_children);
+
+          gtk_editable_get_selection_bounds (GTK_EDITABLE (text), &start, &end);
+          usv_offset_to_text_position (text_accesskit_ctx, layout, start,
+                                       &selection.anchor);
+          usv_offset_to_text_position (text_accesskit_ctx, layout, end,
+                                       &selection.focus);
+          accesskit_node_builder_set_text_selection (builder, selection);
+
+          g_object_unref (text_ctx);
+        }
+    }
+
+  /* TODO: other text widget types */
 
   accesskit_tree_update_push_node (update, self->id,
                                    accesskit_node_builder_build (builder));
