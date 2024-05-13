@@ -525,11 +525,9 @@ gail_focus_notify (GtkWidget *widget)
       /*
        * Do not report focus on redundant object
        */
-      G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
       if (atk_obj &&
 	  (atk_object_get_role(atk_obj) != ATK_ROLE_REDUNDANT_OBJECT))
-	  atk_focus_tracker_notify (atk_obj);
-      G_GNUC_END_IGNORE_DEPRECATIONS;
+	  atk_object_notify_state_change (atk_obj, ATK_STATE_FOCUSED, TRUE);
       if (atk_obj && transient)
         g_object_unref (atk_obj);
       if (subsequent_focus_widget)
