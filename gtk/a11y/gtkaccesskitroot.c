@@ -244,8 +244,7 @@ update_if_active (GtkAccessKitRoot *self, accesskit_tree_update_factory factory)
      an idle callback for the accessibility update, then committing
      the surface? */
   GdkSurface *surface = gtk_native_get_surface (GTK_NATIVE (self->root_widget));
-  struct wl_surface *wl_surface =
-    gdk_wayland_surface_get_wl_surface (GDK_WAYLAND_SURFACE (surface));
+  struct wl_surface *wl_surface = gdk_wayland_surface_get_wl_surface (surface);
 
   accesskit_newton_adapter_update_if_active (self->adapter, factory, self);
   wl_surface_commit (wl_surface);
@@ -308,10 +307,8 @@ gtk_accesskit_root_constructed (GObject *gobject)
                                                self, do_action, self);
 #elif defined(GDK_WINDOWING_WAYLAND)
   GdkDisplay *display = gtk_root_get_display (self->root_widget);
-  struct wl_display *wl_display =
-    gdk_wayland_display_get_wl_display (GDK_WAYLAND_DISPLAY (display));
-  struct wl_surface *wl_surface =
-    gdk_wayland_surface_get_wl_surface (GDK_WAYLAND_SURFACE (surface));
+  struct wl_display *wl_display = gdk_wayland_display_get_wl_display (display);
+  struct wl_surface *wl_surface = gdk_wayland_surface_get_wl_surface (surface);
   self->adapter =
     accesskit_newton_adapter_new (wl_display, wl_surface,
                                   request_initial_tree_other_thread, self,

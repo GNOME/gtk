@@ -573,7 +573,7 @@ accesskit_role_for_context (GtkATContext *context)
       GTK_IS_FONT_DIALOG_BUTTON (accessible) ||
       GTK_IS_SCALE_BUTTON (accessible)
 #ifdef G_OS_UNIX
-      || GTK_IS_PRINTER_OPTION_WIDGET (accessible))
+      || GTK_IS_PRINTER_OPTION_WIDGET (accessible)
 #endif
     )
     return ACCESSKIT_ROLE_GENERIC_CONTAINER;
