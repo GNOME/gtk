@@ -269,6 +269,17 @@ add_tests_for_files_in_directory (GFile *dir)
 int
 main (int argc, char **argv)
 {
+  if (argc >= 2 && strcmp (argv[1], "--generate") == 0)
+    {
+      GFile *file;
+
+      file = g_file_new_for_commandline_arg (argv[2]);
+      parse_css_file (file, TRUE);
+      g_object_unref (file);
+
+      return 0;
+    }
+
   gtk_test_init (&argc, &argv);
 
   if (argc < 2)
@@ -282,27 +293,14 @@ main (int argc, char **argv)
 
       g_object_unref (dir);
     }
-  else if (strcmp (argv[1], "--generate") == 0)
-    {
-      if (argc >= 3)
-        {
-          GFile *file = g_file_new_for_commandline_arg (argv[2]);
-
-          parse_css_file (file, TRUE);
-
-          g_object_unref (file);
-        }
-    }
   else
     {
-      guint i;
-
-      for (i = 1; i < argc; i++)
+      for (guint i = 1; i < argc; i++)
         {
-          GFile *file = g_file_new_for_commandline_arg (argv[i]);
+          GFile *file;
 
+          file = g_file_new_for_commandline_arg (argv[i]);
           add_test_for_file (file);
-
           g_object_unref (file);
         }
     }
