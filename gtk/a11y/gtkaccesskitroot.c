@@ -286,7 +286,7 @@ deactivate_accessibility (void *data)
 {
   GtkAccessKitRoot *self = data;
 
-  g_clear_pointer (&self->contexts, g_hash_table_destroy);
+  /* TODO: Unrealize AT contexts. Which ones? */
   g_clear_pointer (&self->update_queue, g_array_unref);
   g_clear_handle_id (&self->update_id, g_source_remove);
   self->did_initial_update = FALSE;
