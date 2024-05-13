@@ -23,7 +23,9 @@
               <object class="GtkCustomFilter" id="custom_filter"/>
             </child>
             <child>
-              <object class="GtkCustomFilter" id="user_filter"/>
+              <object class="GtkFontFilter" id="user_filter">
+                <property name="monospace" bind-source="monospace_button" bind-property="active"/>
+              </object>
             </child>
           </object>
         </property>
@@ -97,7 +99,6 @@
                                 <child>
                                   <object class="GtkCheckButton" id="monospace_button">
                                     <property name="label" translatable="yes">Monospace</property>
-                                    <signal name="notify::active" handler="monospace_check_changed"/>
                                   </object>
                                 </child>
                                 <child>

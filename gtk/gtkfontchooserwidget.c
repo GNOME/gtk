@@ -23,6 +23,7 @@
 
 #include "deprecated/gtkfontchooserwidget.h"
 #include "gtkfontchooserwidgetprivate.h"
+#include "gtkfontfilterprivate.h"
 
 #include "gtkadjustment.h"
 #include "gtkbuildable.h"
@@ -108,10 +109,10 @@ struct _GtkFontChooserWidget
   GtkWidget    *family_face_list;
   GtkWidget    *list_stack;
   GtkSingleSelection *selection;
-  GtkCustomFilter      *custom_filter;
-  GtkCustomFilter      *user_filter;
-  GtkCustomFilter      *multi_filter;
-  GtkFilterListModel   *filter_model;
+  GtkCustomFilter    *custom_filter;
+  GtkFontFilter      *user_filter;
+  GtkCustomFilter    *multi_filter;
+  GtkFilterListModel *filter_model;
 
   GtkWidget       *preview;
   GtkWidget       *preview2;
@@ -130,15 +131,11 @@ struct _GtkFontChooserWidget
   GtkWidget       *axis_grid;
   GtkWidget       *feature_box;
 
-  GtkFrame          *language_button;
+  GtkCheckButton    *language_button;
   GtkFrame          *language_frame;
   GtkWidget         *language_list;
   GtkStringList     *languages;
   GHashTable        *language_table;
-
-  PangoLanguage     *filter_language;
-  gboolean           filter_by_language;
-  gboolean           filter_by_monospace;
 
   PangoFontMap         *font_map;
 
@@ -348,77 +345,29 @@ output_cb (GtkSpinButton *spin,
   return TRUE;
 }
 
-static gboolean
-user_filter_cb (gpointer item,
-                gpointer data)
+static void
+update_filter_language (GtkFontChooserWidget *self)
 {
-  GtkFontChooserWidget *self = GTK_FONT_CHOOSER_WIDGET (data);
-  PangoFontFamily *family;
-  PangoFontFace *face;
+  gboolean should_filter_language;
 
-  if (PANGO_IS_FONT_FAMILY (item))
+  should_filter_language = gtk_check_button_get_active (self->language_button);
+  if (!should_filter_language)
     {
-      family = item;
-      face = pango_font_family_get_face (family, NULL);
+      _gtk_font_filter_set_language (self->user_filter, NULL);
     }
   else
     {
-      face = PANGO_FONT_FACE (item);
-      family = pango_font_face_get_family (face);
+      GtkSelectionModel *model;
+      gpointer obj;
+      PangoLanguage *language = NULL;
+
+      model = gtk_list_view_get_model (GTK_LIST_VIEW (self->language_list));
+      obj = gtk_single_selection_get_selected_item (GTK_SINGLE_SELECTION (model));
+      if (obj)
+        language = pango_language_from_string (gtk_string_object_get_string (obj));
+
+      _gtk_font_filter_set_language (self->user_filter, language);
     }
-
-  if (self->filter_by_monospace &&
-      !pango_font_family_is_monospace (family))
-    return FALSE;
-
-  if (self->filter_by_language &&
-      self->filter_language)
-    {
-      PangoFontDescription *desc;
-      PangoContext *context;
-      PangoFont *font;
-      gboolean ret;
-      PangoLanguage **langs;
-
-      desc = pango_font_face_describe (face);
-      pango_font_description_set_size (desc, 20);
-
-      context = gtk_widget_get_pango_context (GTK_WIDGET (self));
-      font = pango_context_load_font (context, desc);
-
-      ret = FALSE;
-
-      langs = pango_font_get_languages (font);
-      if (langs)
-        {
-          for (int i = 0; langs[i]; i++)
-            {
-              if (langs[i] == self->filter_language)
-                {
-                  ret = TRUE;
-                  break;
-                }
-            }
-        }
-
-      g_object_unref (font);
-      pango_font_description_free (desc);
-
-      return ret;
-    }
-
-  return TRUE;
-}
-
-static void
-monospace_check_changed (GtkCheckButton       *check,
-                         GParamSpec           *pspec,
-                         GtkFontChooserWidget *self)
-{
-  self->filter_by_monospace = gtk_check_button_get_active (check);
-  gtk_filter_changed (GTK_FILTER (self->user_filter),
-                      self->filter_by_monospace ? GTK_FILTER_CHANGE_MORE_STRICT
-                                                : GTK_FILTER_CHANGE_LESS_STRICT);
 }
 
 static void
@@ -426,10 +375,7 @@ language_check_changed (GtkCheckButton       *check,
                         GParamSpec           *pspec,
                         GtkFontChooserWidget *self)
 {
-  self->filter_by_language = gtk_check_button_get_active (check);
-  gtk_filter_changed (GTK_FILTER (self->user_filter),
-                      self->filter_by_language ? GTK_FILTER_CHANGE_MORE_STRICT
-                                               : GTK_FILTER_CHANGE_LESS_STRICT);
+  update_filter_language (self);
 }
 
 static void
@@ -551,6 +497,7 @@ maybe_update_preview_text (GtkFontChooserWidget *self,
 {
   PangoContext *context;
   PangoFont *font;
+  PangoLanguage *filter_lang;
   const char *sample;
   PangoLanguage **languages;
   GHashTable *langs = NULL;
@@ -564,9 +511,10 @@ maybe_update_preview_text (GtkFontChooserWidget *self,
   if (self->preview_text_set)
     return;
 
-  if (self->filter_by_language && self->filter_language)
+  filter_lang = _gtk_font_filter_get_language (self->user_filter);
+  if (filter_lang != NULL)
     {
-      sample = pango_language_get_sample_string (self->filter_language);
+      sample = pango_language_get_sample_string (filter_lang);
       gtk_font_chooser_widget_set_preview_text (self, sample);
       return;
     }
@@ -840,15 +788,23 @@ gtk_font_chooser_widget_unmap (GtkWidget *widget)
 static void
 gtk_font_chooser_widget_root (GtkWidget *widget)
 {
+  GtkFontChooserWidget *self = GTK_FONT_CHOOSER_WIDGET (widget);
+
   GTK_WIDGET_CLASS (gtk_font_chooser_widget_parent_class)->root (widget);
 
   g_signal_connect_swapped (gtk_widget_get_root (widget), "notify::focus-widget",
                             G_CALLBACK (update_key_capture), widget);
+  _gtk_font_filter_set_pango_context (self->user_filter,
+                                      gtk_widget_get_pango_context (widget));
 }
 
 static void
 gtk_font_chooser_widget_unroot (GtkWidget *widget)
 {
+  GtkFontChooserWidget *self = GTK_FONT_CHOOSER_WIDGET (widget);
+
+  _gtk_font_filter_set_pango_context (self->user_filter,
+                                      gtk_widget_get_pango_context (widget));
   g_signal_handlers_disconnect_by_func (gtk_widget_get_root (widget),
                                         update_key_capture, widget);
 
@@ -880,6 +836,7 @@ gtk_font_chooser_widget_class_init (GtkFontChooserWidgetClass *klass)
   GParamSpec *pspec;
 
   g_type_ensure (G_TYPE_THEMED_ICON);
+  g_type_ensure (GTK_TYPE_FONT_FILTER);
 
   widget_class->root = gtk_font_chooser_widget_root;
   widget_class->unroot = gtk_font_chooser_widget_unroot;
@@ -945,7 +902,6 @@ gtk_font_chooser_widget_class_init (GtkFontChooserWidgetClass *klass)
   gtk_widget_class_bind_template_callback (widget_class, output_cb);
   gtk_widget_class_bind_template_callback (widget_class, selection_changed_cb);
   gtk_widget_class_bind_template_callback (widget_class, resize_by_scroll_cb);
-  gtk_widget_class_bind_template_callback (widget_class, monospace_check_changed);
   gtk_widget_class_bind_template_callback (widget_class, language_check_changed);
 
   gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BIN_LAYOUT);
@@ -1212,17 +1168,7 @@ language_selection_changed (GtkSelectionModel    *model,
                             guint                 n_items,
                             GtkFontChooserWidget *self)
 {
-  gpointer obj;
-
-  obj = gtk_single_selection_get_selected_item (GTK_SINGLE_SELECTION (model));
-
-  if (obj)
-    self->filter_language = pango_language_from_string (gtk_string_object_get_string (obj));
-  else
-    self->filter_language = NULL;
-
-  if (self->filter_by_language)
-    gtk_filter_changed (GTK_FILTER (self->user_filter), GTK_FILTER_CHANGE_DIFFERENT);
+  update_filter_language (self);
 }
 
 static gboolean
@@ -1292,8 +1238,6 @@ gtk_font_chooser_widget_init (GtkFontChooserWidget *self)
   gtk_font_chooser_widget_populate_features (self);
 
   gtk_font_chooser_widget_take_font_desc (self, NULL);
-
-  gtk_custom_filter_set_filter_func (self->user_filter, user_filter_cb, self, NULL);
 
   setup_language_list (self);
 }
