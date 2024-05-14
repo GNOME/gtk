@@ -508,7 +508,7 @@ copy_rectangle_argb32 (cairo_surface_t *dest, cairo_surface_t *source,
                   owner: self
                   userInfo: nil];
   [self addTrackingArea: trackingArea];
-  trackingRect = (NSInteger)[trackingArea retain];
+  trackingRect = (NSInteger)trackingArea;
 #else
   trackingRect = [self addTrackingRect: rect
 		  owner: self
