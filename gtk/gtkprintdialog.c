@@ -142,7 +142,7 @@ gtk_print_setup_unref (GtkPrintSetup *setup)
  * They may be different from the `GtkPrintDialog`'s settings
  * if the user changed them during the setup process.
  *
- * Returns: (nullable) (transfer none): the print settings, or `NULL`
+ * Returns: (transfer none): the print settings, or `NULL`
  *
  * Since: 4.14
  */
@@ -168,7 +168,7 @@ gtk_print_setup_set_print_settings (GtkPrintSetup    *setup,
  * It may be different from the `GtkPrintDialog`'s page setup
  * if the user changed it during the setup process.
  *
- * Returns: (nullable) (transfer none): the page setup, or `NULL`
+ * Returns: (transfer none): the page setup, or `NULL`
  *
  * Since: 4.14
  */
