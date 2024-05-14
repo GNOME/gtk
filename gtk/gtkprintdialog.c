@@ -142,7 +142,7 @@ gtk_print_setup_unref (GtkPrintSetup *setup)
  * They may be different from the `GtkPrintDialog`'s settings
  * if the user changed them during the setup process.
  *
- * Returns: (nullable) (transfer none): the print settings, or `NULL`
+ * Returns: (transfer none): the print settings, or `NULL`
  *
  * Since: 4.14
  */
@@ -168,7 +168,7 @@ gtk_print_setup_set_print_settings (GtkPrintSetup    *setup,
  * It may be different from the `GtkPrintDialog`'s page setup
  * if the user changed it during the setup process.
  *
- * Returns: (nullable) (transfer none): the page setup, or `NULL`
+ * Returns: (transfer none): the page setup, or `NULL`
  *
  * Since: 4.14
  */
@@ -585,7 +585,7 @@ gtk_print_dialog_set_modal (GtkPrintDialog *self,
  *
  * Returns the page setup.
  *
- * Returns: (transfer none): the page setup
+ * Returns: (nullable) (transfer none): the page setup
  *
  * Since: 4.14
  */
@@ -623,7 +623,7 @@ gtk_print_dialog_set_page_setup (GtkPrintDialog *self,
  *
  * Returns the print settings for the print dialog.
  *
- * Returns: (transfer none): the settings
+ * Returns: (nullable) (transfer none): the settings
  *
  * Since: 4.14
  */
@@ -1502,7 +1502,7 @@ gtk_print_dialog_setup (GtkPrintDialog       *self,
  * which contains the print settings and page setup information that
  * will be used to print.
  *
- * Returns: (nullable): The `GtkPrintSetup` object that resulted from the call,
+ * Returns: The `GtkPrintSetup` object that resulted from the call,
  *   or `NULL` if the call was not successful
  *
  * Since: 4.14
@@ -1628,7 +1628,7 @@ gtk_print_dialog_print (GtkPrintDialog       *self,
  * call may not be instant as it operation will for the printer to finish
  * printing.
  *
- * Returns: (nullable) (transfer full): a [class@Gio.OutputStream]
+ * Returns: (transfer full): a [class@Gio.OutputStream]
  *
  * Since: 4.14
  */
