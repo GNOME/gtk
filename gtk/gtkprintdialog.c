@@ -585,7 +585,7 @@ gtk_print_dialog_set_modal (GtkPrintDialog *self,
  *
  * Returns the page setup.
  *
- * Returns: (transfer none): the page setup
+ * Returns: (nullable) (transfer none): the page setup
  *
  * Since: 4.14
  */
@@ -623,7 +623,7 @@ gtk_print_dialog_set_page_setup (GtkPrintDialog *self,
  *
  * Returns the print settings for the print dialog.
  *
- * Returns: (transfer none): the settings
+ * Returns: (nullable) (transfer none): the settings
  *
  * Since: 4.14
  */
