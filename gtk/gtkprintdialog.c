@@ -1502,7 +1502,7 @@ gtk_print_dialog_setup (GtkPrintDialog       *self,
  * which contains the print settings and page setup information that
  * will be used to print.
  *
- * Returns: (nullable): The `GtkPrintSetup` object that resulted from the call,
+ * Returns: The `GtkPrintSetup` object that resulted from the call,
  *   or `NULL` if the call was not successful
  *
  * Since: 4.14
@@ -1628,7 +1628,7 @@ gtk_print_dialog_print (GtkPrintDialog       *self,
  * call may not be instant as it operation will for the printer to finish
  * printing.
  *
- * Returns: (nullable) (transfer full): a [class@Gio.OutputStream]
+ * Returns: (transfer full): a [class@Gio.OutputStream]
  *
  * Since: 4.14
  */
