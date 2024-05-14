@@ -948,7 +948,7 @@ add_text_layout_inner (GtkAccessKitContext   *self,
   GArray *line_runs = NULL;
   guint usv_offset = 0, byte_offset = 0;
 
-  do
+  while (true)
     {
       PangoLayoutRun *run = pango_layout_iter_get_run_readonly (iter);
 
@@ -962,10 +962,29 @@ add_text_layout_inner (GtkAccessKitContext   *self,
           if (!line_runs)
             line_runs = g_array_new (FALSE, FALSE, sizeof (GtkAccessKitRunInfo));
           g_array_append_val (line_runs, run_info);
+
+          /* We can always assume there's at least one more null run. */
+          pango_layout_iter_next_run (iter);
         }
       else
         {
           PangoLayoutLine *line = pango_layout_iter_get_line_readonly (iter);
+          PangoRectangle extents;
+          PangoLayoutLine *next_line;
+          guint line_end_byte_offset;
+
+          pango_layout_iter_get_run_extents (iter, NULL, &extents);
+
+          if (pango_layout_iter_next_line (iter))
+            {
+              next_line = pango_layout_iter_get_line_readonly (iter);
+              line_end_byte_offset = next_line->start_index;
+            }
+          else
+            {
+              next_line = NULL;
+              line_end_byte_offset = line->start_index + line->length;
+            }
 
           if (line_runs)
             {
@@ -1013,7 +1032,7 @@ add_text_layout_inner (GtkAccessKitContext   *self,
 
                   if (i == (line_runs->len - 1))
                     node_text_byte_count =
-                      line->length - (item->offset - line->start_index);
+                      line_end_byte_offset - byte_offset;
                   else
                     node_text_byte_count = item->length;
                   node_text = g_strndup (text + item->offset,
@@ -1127,17 +1146,14 @@ add_text_layout_inner (GtkAccessKitContext   *self,
             {
               accesskit_node_builder *builder =
                 accesskit_node_builder_new (ACCESSKIT_ROLE_INLINE_TEXT_BOX);
-              PangoRectangle extents;
-              gchar *line_text =
-                g_strndup (text + line->start_index, line->length);
+              uint8_t char_len = line_end_byte_offset - line->start_index;
+              gchar *line_text = g_strndup (text + line->start_index, char_len);
               accesskit_text_direction dir;
-              uint8_t char_len = line->length;
-              uint8_t char_count = line->length ? 1 : 0;
+              uint8_t char_count = char_len ? 1 : 0;
               float coord = 0.0f;
 
               g_assert (byte_offset == line->start_index);
 
-              pango_layout_iter_get_run_extents (iter, NULL, &extents);
               set_bounds_from_pango (builder, base_x, base_y, &extents);
               accesskit_node_builder_set_value (builder, line_text);
 
@@ -1165,13 +1181,15 @@ add_text_layout_inner (GtkAccessKitContext   *self,
                                                            &coord);
 
               add_run_node (self, update, usv_offset, builder);
-              byte_offset += line->length;
-              usv_offset += g_utf8_strlen (line_text, line->length);
+              byte_offset = line_end_byte_offset;
+              usv_offset += g_utf8_strlen (line_text, char_len);
               g_free (line_text);
             }
+
+          if (!next_line)
+            break;
         }
     }
-  while (pango_layout_iter_next_run (iter));
 
   /* Iteration should always end with a null run, and processing that null run
      should dispose of line_runs (see above). */
