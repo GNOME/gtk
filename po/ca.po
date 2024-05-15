@@ -6661,7 +6661,7 @@ msgstr "Color"
 #. This will appear as a tab label in the print dialog. It's a typographical term, as in "Binding and finishing"
 #: gtk/print/ui/gtkprintunixdialog.ui:1118
 msgid "Finishing"
-msgstr "S'ha finalitzat"
+msgstr "Finalitzat"
 
 #: gtk/print/ui/gtkprintunixdialog.ui:1147
 msgid "Advanced"
@@ -8003,7 +8003,7 @@ msgstr "No s'ha pogut desar la imatge diff a %s\n"
 #: tools/gtk-rendernode-tool-compare.c:132
 #, c-format
 msgid "Differences witten to %s.\n"
-msgstr "Diferències escrites a %s\n"
+msgstr "Diferències escrites a %s.\n"
 
 #: tools/gtk-rendernode-tool-compare.c:134
 #, c-format
