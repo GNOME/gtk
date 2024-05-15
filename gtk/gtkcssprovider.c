@@ -269,7 +269,7 @@ gtk_css_ruleset_clear (GtkCssRuleset *ruleset)
 
       for (i = 0; i < ruleset->n_styles; i++)
         {
-          _gtk_css_value_unref (ruleset->styles[i].value);
+          gtk_css_value_unref (ruleset->styles[i].value);
 	  ruleset->styles[i].value = NULL;
 	  if (ruleset->styles[i].section)
 	    gtk_css_section_unref (ruleset->styles[i].section);
@@ -300,7 +300,7 @@ gtk_css_ruleset_add (GtkCssRuleset       *ruleset,
     {
       if (ruleset->styles[i].property == property)
         {
-          _gtk_css_value_unref (ruleset->styles[i].value);
+          gtk_css_value_unref (ruleset->styles[i].value);
 	  ruleset->styles[i].value = NULL;
 	  if (ruleset->styles[i].section)
 	    gtk_css_section_unref (ruleset->styles[i].section);
@@ -440,7 +440,7 @@ gtk_css_provider_init (GtkCssProvider *css_provider)
 
   priv->symbolic_colors = g_hash_table_new_full (g_str_hash, g_str_equal,
                                                  (GDestroyNotify) g_free,
-                                                 (GDestroyNotify) _gtk_css_value_unref);
+                                                 (GDestroyNotify) gtk_css_value_unref);
   priv->keyframes = g_hash_table_new_full (g_str_hash, g_str_equal,
                                            (GDestroyNotify) g_free,
                                            (GDestroyNotify) _gtk_css_keyframes_unref);
@@ -778,7 +778,7 @@ parse_color_definition (GtkCssScanner *scanner)
   if (!gtk_css_parser_has_token (scanner->parser, GTK_CSS_TOKEN_EOF))
     {
       g_free (name);
-      _gtk_css_value_unref (color);
+      gtk_css_value_unref (color);
       gtk_css_parser_error_syntax (scanner->parser,
                                    "Missing semicolon at end of color definition");
       return TRUE;
@@ -1030,10 +1030,10 @@ parse_declaration (GtkCssScanner *scanner,
               GtkCssStyleProperty *child = _gtk_css_shorthand_property_get_subproperty (shorthand, i);
               GtkCssValue *sub = _gtk_css_array_value_get_nth (value, i);
 
-              gtk_css_ruleset_add (ruleset, child, _gtk_css_value_ref (sub), section);
+              gtk_css_ruleset_add (ruleset, child, gtk_css_value_ref (sub), section);
             }
 
-            _gtk_css_value_unref (value);
+            gtk_css_value_unref (value);
         }
       else if (GTK_IS_CSS_STYLE_PROPERTY (property))
         {
@@ -1043,7 +1043,7 @@ parse_declaration (GtkCssScanner *scanner,
       else
         {
           g_assert_not_reached ();
-          _gtk_css_value_unref (value);
+          gtk_css_value_unref (value);
         }
 
       g_clear_pointer (&section, gtk_css_section_unref);
@@ -1689,7 +1689,7 @@ gtk_css_ruleset_print (const GtkCssRuleset *ruleset,
           g_string_append (str, "  ");
           g_string_append (str, _gtk_style_property_get_name (GTK_STYLE_PROPERTY (prop->property)));
           g_string_append (str, ": ");
-          _gtk_css_value_print (prop->value, str);
+          gtk_css_value_print (prop->value, str);
           g_string_append (str, ";\n");
         }
 
@@ -1742,7 +1742,7 @@ gtk_css_provider_print_colors (GHashTable *colors,
       g_string_append (str, "@define-color ");
       g_string_append (str, name);
       g_string_append (str, " ");
-      _gtk_css_value_print (color, str);
+      gtk_css_value_print (color, str);
       g_string_append (str, ";\n");
     }
 

@@ -65,34 +65,34 @@ gtk_css_filter_clear (GtkCssFilter *filter)
   switch (filter->type)
     {
     case GTK_CSS_FILTER_BRIGHTNESS:
-      _gtk_css_value_unref (filter->brightness.value);
+      gtk_css_value_unref (filter->brightness.value);
       break;
     case GTK_CSS_FILTER_CONTRAST:
-      _gtk_css_value_unref (filter->contrast.value);
+      gtk_css_value_unref (filter->contrast.value);
       break;
     case GTK_CSS_FILTER_GRAYSCALE:
-      _gtk_css_value_unref (filter->grayscale.value);
+      gtk_css_value_unref (filter->grayscale.value);
       break;
     case GTK_CSS_FILTER_HUE_ROTATE:
-      _gtk_css_value_unref (filter->hue_rotate.value);
+      gtk_css_value_unref (filter->hue_rotate.value);
       break;
     case GTK_CSS_FILTER_INVERT:
-      _gtk_css_value_unref (filter->invert.value);
+      gtk_css_value_unref (filter->invert.value);
       break;
     case GTK_CSS_FILTER_OPACITY:
-      _gtk_css_value_unref (filter->opacity.value);
+      gtk_css_value_unref (filter->opacity.value);
       break;
     case GTK_CSS_FILTER_SATURATE:
-      _gtk_css_value_unref (filter->saturate.value);
+      gtk_css_value_unref (filter->saturate.value);
       break;
     case GTK_CSS_FILTER_SEPIA:
-      _gtk_css_value_unref (filter->sepia.value);
+      gtk_css_value_unref (filter->sepia.value);
       break;
     case GTK_CSS_FILTER_BLUR:
-      _gtk_css_value_unref (filter->blur.value);
+      gtk_css_value_unref (filter->blur.value);
       break;
     case GTK_CSS_FILTER_DROP_SHADOW:
-      _gtk_css_value_unref (filter->drop_shadow.value);
+      gtk_css_value_unref (filter->drop_shadow.value);
       break;
     case GTK_CSS_FILTER_NONE:
     default:
@@ -317,43 +317,43 @@ gtk_css_filter_compute (GtkCssFilter         *dest,
   switch (src->type)
     {
     case GTK_CSS_FILTER_BRIGHTNESS:
-      dest->brightness.value = _gtk_css_value_compute (src->brightness.value, property_id, context);
+      dest->brightness.value = gtk_css_value_compute (src->brightness.value, property_id, context);
       return dest->brightness.value == src->brightness.value;
 
     case GTK_CSS_FILTER_CONTRAST:
-      dest->contrast.value = _gtk_css_value_compute (src->contrast.value, property_id, context);
+      dest->contrast.value = gtk_css_value_compute (src->contrast.value, property_id, context);
       return dest->contrast.value == src->contrast.value;
 
     case GTK_CSS_FILTER_GRAYSCALE:
-      dest->grayscale.value = _gtk_css_value_compute (src->grayscale.value, property_id, context);
+      dest->grayscale.value = gtk_css_value_compute (src->grayscale.value, property_id, context);
       return dest->grayscale.value == src->grayscale.value;
 
     case GTK_CSS_FILTER_HUE_ROTATE:
-      dest->hue_rotate.value = _gtk_css_value_compute (src->hue_rotate.value, property_id, context);
+      dest->hue_rotate.value = gtk_css_value_compute (src->hue_rotate.value, property_id, context);
       return dest->hue_rotate.value == src->hue_rotate.value;
 
     case GTK_CSS_FILTER_INVERT:
-      dest->invert.value = _gtk_css_value_compute (src->invert.value, property_id, context);
+      dest->invert.value = gtk_css_value_compute (src->invert.value, property_id, context);
       return dest->invert.value == src->invert.value;
 
     case GTK_CSS_FILTER_OPACITY:
-      dest->opacity.value = _gtk_css_value_compute (src->opacity.value, property_id, context);
+      dest->opacity.value = gtk_css_value_compute (src->opacity.value, property_id, context);
       return dest->opacity.value == src->opacity.value;
 
     case GTK_CSS_FILTER_SATURATE:
-      dest->saturate.value = _gtk_css_value_compute (src->saturate.value, property_id, context);
+      dest->saturate.value = gtk_css_value_compute (src->saturate.value, property_id, context);
       return dest->saturate.value == src->saturate.value;
 
     case GTK_CSS_FILTER_SEPIA:
-      dest->sepia.value = _gtk_css_value_compute (src->sepia.value, property_id, context);
+      dest->sepia.value = gtk_css_value_compute (src->sepia.value, property_id, context);
       return dest->sepia.value == src->sepia.value;
 
     case GTK_CSS_FILTER_BLUR:
-      dest->blur.value = _gtk_css_value_compute (src->blur.value, property_id, context);
+      dest->blur.value = gtk_css_value_compute (src->blur.value, property_id, context);
       return dest->blur.value == src->blur.value;
 
     case GTK_CSS_FILTER_DROP_SHADOW:
-      dest->drop_shadow.value = _gtk_css_value_compute (src->drop_shadow.value, property_id, context);
+      dest->drop_shadow.value = gtk_css_value_compute (src->drop_shadow.value, property_id, context);
       return dest->drop_shadow.value == src->drop_shadow.value;
 
     case GTK_CSS_FILTER_NONE:
@@ -374,7 +374,7 @@ gtk_css_value_filter_compute (GtkCssValue          *value,
 
   /* Special case the 99% case of "none" */
   if (gtk_css_filter_value_is_none (value))
-    return _gtk_css_value_ref (value);
+    return gtk_css_value_ref (value);
 
   changes = FALSE;
   result = gtk_css_filter_value_alloc (value->n_filters);
@@ -389,8 +389,8 @@ gtk_css_value_filter_compute (GtkCssValue          *value,
 
   if (!changes)
     {
-      _gtk_css_value_unref (result);
-      result = _gtk_css_value_ref (value);
+      gtk_css_value_unref (result);
+      result = gtk_css_value_ref (value);
     }
 
   return result;
@@ -406,34 +406,34 @@ gtk_css_filter_equal (const GtkCssFilter *filter1,
   switch (filter1->type)
     {
     case GTK_CSS_FILTER_BRIGHTNESS:
-      return _gtk_css_value_equal (filter1->brightness.value, filter2->brightness.value);
+      return gtk_css_value_equal (filter1->brightness.value, filter2->brightness.value);
 
     case GTK_CSS_FILTER_CONTRAST:
-      return _gtk_css_value_equal (filter1->contrast.value, filter2->contrast.value);
+      return gtk_css_value_equal (filter1->contrast.value, filter2->contrast.value);
 
     case GTK_CSS_FILTER_GRAYSCALE:
-      return _gtk_css_value_equal (filter1->grayscale.value, filter2->grayscale.value);
+      return gtk_css_value_equal (filter1->grayscale.value, filter2->grayscale.value);
 
     case GTK_CSS_FILTER_HUE_ROTATE:
-      return _gtk_css_value_equal (filter1->hue_rotate.value, filter2->hue_rotate.value);
+      return gtk_css_value_equal (filter1->hue_rotate.value, filter2->hue_rotate.value);
 
     case GTK_CSS_FILTER_INVERT:
-      return _gtk_css_value_equal (filter1->invert.value, filter2->invert.value);
+      return gtk_css_value_equal (filter1->invert.value, filter2->invert.value);
 
     case GTK_CSS_FILTER_OPACITY:
-      return _gtk_css_value_equal (filter1->opacity.value, filter2->opacity.value);
+      return gtk_css_value_equal (filter1->opacity.value, filter2->opacity.value);
 
     case GTK_CSS_FILTER_SATURATE:
-      return _gtk_css_value_equal (filter1->saturate.value, filter2->saturate.value);
+      return gtk_css_value_equal (filter1->saturate.value, filter2->saturate.value);
 
     case GTK_CSS_FILTER_SEPIA:
-      return _gtk_css_value_equal (filter1->sepia.value, filter2->sepia.value);
+      return gtk_css_value_equal (filter1->sepia.value, filter2->sepia.value);
 
     case GTK_CSS_FILTER_BLUR:
-      return _gtk_css_value_equal (filter1->blur.value, filter2->blur.value);
+      return gtk_css_value_equal (filter1->blur.value, filter2->blur.value);
 
     case GTK_CSS_FILTER_DROP_SHADOW:
-      return _gtk_css_value_equal (filter1->drop_shadow.value, filter2->drop_shadow.value);
+      return gtk_css_value_equal (filter1->drop_shadow.value, filter2->drop_shadow.value);
 
     case GTK_CSS_FILTER_NONE:
     default:
@@ -488,43 +488,43 @@ gtk_css_filter_transition (GtkCssFilter       *result,
   switch (start->type)
     {
     case GTK_CSS_FILTER_BRIGHTNESS:
-      result->brightness.value = _gtk_css_value_transition (start->brightness.value, end->brightness.value, property_id, progress);
+      result->brightness.value = gtk_css_value_transition (start->brightness.value, end->brightness.value, property_id, progress);
       break;
 
     case GTK_CSS_FILTER_CONTRAST:
-      result->contrast.value = _gtk_css_value_transition (start->contrast.value, end->contrast.value, property_id, progress);
+      result->contrast.value = gtk_css_value_transition (start->contrast.value, end->contrast.value, property_id, progress);
       break;
 
     case GTK_CSS_FILTER_GRAYSCALE:
-      result->grayscale.value = _gtk_css_value_transition (start->grayscale.value, end->grayscale.value, property_id, progress);
+      result->grayscale.value = gtk_css_value_transition (start->grayscale.value, end->grayscale.value, property_id, progress);
       break;
 
     case GTK_CSS_FILTER_HUE_ROTATE:
-      result->hue_rotate.value = _gtk_css_value_transition (start->hue_rotate.value, end->hue_rotate.value, property_id, progress);
+      result->hue_rotate.value = gtk_css_value_transition (start->hue_rotate.value, end->hue_rotate.value, property_id, progress);
       break;
 
     case GTK_CSS_FILTER_INVERT:
-      result->invert.value = _gtk_css_value_transition (start->invert.value, end->invert.value, property_id, progress);
+      result->invert.value = gtk_css_value_transition (start->invert.value, end->invert.value, property_id, progress);
       break;
 
     case GTK_CSS_FILTER_OPACITY:
-      result->opacity.value = _gtk_css_value_transition (start->opacity.value, end->opacity.value, property_id, progress);
+      result->opacity.value = gtk_css_value_transition (start->opacity.value, end->opacity.value, property_id, progress);
       break;
 
     case GTK_CSS_FILTER_SATURATE:
-      result->saturate.value = _gtk_css_value_transition (start->saturate.value, end->saturate.value, property_id, progress);
+      result->saturate.value = gtk_css_value_transition (start->saturate.value, end->saturate.value, property_id, progress);
       break;
 
     case GTK_CSS_FILTER_SEPIA:
-      result->sepia.value = _gtk_css_value_transition (start->sepia.value, end->sepia.value, property_id, progress);
+      result->sepia.value = gtk_css_value_transition (start->sepia.value, end->sepia.value, property_id, progress);
       break;
 
     case GTK_CSS_FILTER_BLUR:
-      result->blur.value = _gtk_css_value_transition (start->blur.value, end->blur.value, property_id, progress);
+      result->blur.value = gtk_css_value_transition (start->blur.value, end->blur.value, property_id, progress);
       break;
 
     case GTK_CSS_FILTER_DROP_SHADOW:
-      result->drop_shadow.value = _gtk_css_value_transition (start->drop_shadow.value, end->drop_shadow.value, property_id, progress);
+      result->drop_shadow.value = gtk_css_value_transition (start->drop_shadow.value, end->drop_shadow.value, property_id, progress);
       break;
 
     case GTK_CSS_FILTER_NONE:
@@ -546,7 +546,7 @@ gtk_css_value_filter_transition (GtkCssValue *start,
   if (gtk_css_filter_value_is_none (start))
     {
       if (gtk_css_filter_value_is_none (end))
-        return _gtk_css_value_ref (start);
+        return gtk_css_value_ref (start);
 
       n = 0;
     }
@@ -620,61 +620,61 @@ gtk_css_filter_print (const GtkCssFilter *filter,
     {
     case GTK_CSS_FILTER_BRIGHTNESS:
       g_string_append (string, "brightness(");
-      _gtk_css_value_print (filter->brightness.value, string);
+      gtk_css_value_print (filter->brightness.value, string);
       g_string_append (string, ")");
       break;
 
     case GTK_CSS_FILTER_CONTRAST:
       g_string_append (string, "contrast(");
-      _gtk_css_value_print (filter->contrast.value, string);
+      gtk_css_value_print (filter->contrast.value, string);
       g_string_append (string, ")");
       break;
 
     case GTK_CSS_FILTER_GRAYSCALE:
       g_string_append (string, "grayscale(");
-      _gtk_css_value_print (filter->grayscale.value, string);
+      gtk_css_value_print (filter->grayscale.value, string);
       g_string_append (string, ")");
       break;
 
     case GTK_CSS_FILTER_HUE_ROTATE:
       g_string_append (string, "hue-rotate(");
-      _gtk_css_value_print (filter->hue_rotate.value, string);
+      gtk_css_value_print (filter->hue_rotate.value, string);
       g_string_append (string, ")");
       break;
 
     case GTK_CSS_FILTER_INVERT:
       g_string_append (string, "invert(");
-      _gtk_css_value_print (filter->invert.value, string);
+      gtk_css_value_print (filter->invert.value, string);
       g_string_append (string, ")");
       break;
 
     case GTK_CSS_FILTER_OPACITY:
       g_string_append (string, "opacity(");
-      _gtk_css_value_print (filter->opacity.value, string);
+      gtk_css_value_print (filter->opacity.value, string);
       g_string_append (string, ")");
       break;
 
     case GTK_CSS_FILTER_SATURATE:
       g_string_append (string, "saturate(");
-      _gtk_css_value_print (filter->saturate.value, string);
+      gtk_css_value_print (filter->saturate.value, string);
       g_string_append (string, ")");
       break;
 
     case GTK_CSS_FILTER_SEPIA:
       g_string_append (string, "sepia(");
-      _gtk_css_value_print (filter->sepia.value, string);
+      gtk_css_value_print (filter->sepia.value, string);
       g_string_append (string, ")");
       break;
 
     case GTK_CSS_FILTER_BLUR:
       g_string_append (string, "blur(");
-      _gtk_css_value_print (filter->blur.value, string);
+      gtk_css_value_print (filter->blur.value, string);
       g_string_append (string, ")");
       break;
 
     case GTK_CSS_FILTER_DROP_SHADOW:
       g_string_append (string, "drop-shadow(");
-      _gtk_css_value_print (filter->drop_shadow.value, string);
+      gtk_css_value_print (filter->drop_shadow.value, string);
       g_string_append (string, ")");
       break;
 
@@ -726,7 +726,7 @@ gtk_css_filter_value_alloc (guint n_filters)
 
   g_return_val_if_fail (n_filters > 0, NULL);
 
-  result = _gtk_css_value_alloc (&GTK_CSS_VALUE_FILTER, sizeof (GtkCssValue) + sizeof (GtkCssFilter) * (n_filters - 1));
+  result = gtk_css_value_alloc (&GTK_CSS_VALUE_FILTER, sizeof (GtkCssValue) + sizeof (GtkCssFilter) * (n_filters - 1));
   result->n_filters = n_filters;
 
   return result;
@@ -735,7 +735,7 @@ gtk_css_filter_value_alloc (guint n_filters)
 GtkCssValue *
 gtk_css_filter_value_new_none (void)
 {
-  return _gtk_css_value_ref (&filter_none_singleton);
+  return gtk_css_value_ref (&filter_none_singleton);
 }
 
 static gboolean

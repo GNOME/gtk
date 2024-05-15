@@ -822,7 +822,7 @@ gtk_inspector_css_node_tree_update_style (GtkInspectorCssNodeTree *cnt,
 
       if (new_style)
         {
-          value = _gtk_css_value_to_string (gtk_css_style_get_value (new_style, i));
+          value = gtk_css_value_to_string (gtk_css_style_get_value (new_style, i));
 
           section = gtk_css_style_get_section (new_style, i);
           if (section)

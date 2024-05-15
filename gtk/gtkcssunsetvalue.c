@@ -49,7 +49,7 @@ gtk_css_value_unset_compute (GtkCssValue          *value,
   else
     unset_value = _gtk_css_initial_value_get ();
 
-  return _gtk_css_value_compute (unset_value, property_id, context);
+  return gtk_css_value_compute (unset_value, property_id, context);
 }
 
 static gboolean
@@ -91,5 +91,5 @@ static GtkCssValue unset = { &GTK_CSS_VALUE_UNSET, 1 };
 GtkCssValue *
 _gtk_css_unset_value_new (void)
 {
-  return _gtk_css_value_ref (&unset);
+  return gtk_css_value_ref (&unset);
 }

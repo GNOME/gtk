@@ -186,12 +186,12 @@ gtk_css_style_change_print (GtkCssStyleChange *change,
 
           g_string_append_printf (string, "%s: ", name);
           value = gtk_css_style_get_value (old, i);
-          _gtk_css_value_print (value, string);
+          gtk_css_value_print (value, string);
           g_string_append (string, "\n");
 
           g_string_append_printf (string, "%s: ", name);
           value = gtk_css_style_get_value (new, i);
-          _gtk_css_value_print (value, string);
+          gtk_css_value_print (value, string);
           g_string_append (string, "\n");
         }
     }

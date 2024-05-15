@@ -171,7 +171,7 @@ gtk_css_animation_free (GtkStyleAnimation *animation)
 
   g_free (self->name);
   _gtk_css_keyframes_unref (self->keyframes);
-  _gtk_css_value_unref (self->ease);
+  gtk_css_value_unref (self->ease);
 
   g_free (self);
 }
@@ -211,7 +211,7 @@ _gtk_css_animation_new (const char      *name,
 
   animation->name = g_strdup (name);
   animation->keyframes = _gtk_css_keyframes_ref (keyframes);
-  animation->ease = _gtk_css_value_ref (ease);
+  animation->ease = gtk_css_value_ref (ease);
   animation->direction = direction;
   animation->play_state = play_state;
   animation->fill_mode = fill_mode;
@@ -242,7 +242,7 @@ _gtk_css_animation_advance_with_play_state (GtkCssAnimation *source,
 
   animation->name = g_strdup (source->name);
   animation->keyframes = _gtk_css_keyframes_ref (source->keyframes);
-  animation->ease = _gtk_css_value_ref (source->ease);
+  animation->ease = gtk_css_value_ref (source->ease);
   animation->direction = source->direction;
   animation->play_state = play_state;
   animation->fill_mode = source->fill_mode;

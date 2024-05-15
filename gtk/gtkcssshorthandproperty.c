@@ -104,7 +104,7 @@ gtk_css_shorthand_property_parse_value (GtkStyleProperty *property,
       for (i = 0; i < n_props; i++)
         {
           if (data[i] != NULL)
-            _gtk_css_value_unref (data[i]);
+            gtk_css_value_unref (data[i]);
         }
       return NULL;
     }

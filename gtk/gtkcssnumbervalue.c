@@ -78,7 +78,7 @@ gtk_css_value_number_free (GtkCssValue *number)
       const guint n_terms = number->calc.n_terms;
 
       for (guint i = 0; i < n_terms; i++)
-        _gtk_css_value_unref (number->calc.terms[i]);
+        gtk_css_value_unref (number->calc.terms[i]);
     }
 
   g_free (number);
@@ -129,9 +129,9 @@ gtk_css_value_number_compute (GtkCssValue          *number,
 
       for (i = 0; i < n_terms; i++)
         {
-          GtkCssValue *computed = _gtk_css_value_compute (number->calc.terms[i],
-                                                          property_id,
-                                                          context);
+          GtkCssValue *computed = gtk_css_value_compute (number->calc.terms[i],
+                                                         property_id,
+                                                         context);
           changed |= computed != number->calc.terms[i];
           new_values[i] = computed;
         }
@@ -145,7 +145,7 @@ gtk_css_value_number_compute (GtkCssValue          *number,
           for (i = 0; i < n_terms; i++)
             gtk_css_value_unref (new_values[i]);
 
-          result = _gtk_css_value_ref (number);
+          result = gtk_css_value_ref (number);
         }
 
       return result;
@@ -167,7 +167,7 @@ gtk_css_value_number_compute (GtkCssValue          *number,
     case GTK_CSS_PX:
     case GTK_CSS_DEG:
     case GTK_CSS_S:
-      return _gtk_css_value_ref (number);
+      return gtk_css_value_ref (number);
     case GTK_CSS_PT:
       return gtk_css_dimension_value_new (value * get_dpi (style) / 72.0,
                                           GTK_CSS_PX);
@@ -235,7 +235,7 @@ gtk_css_value_number_equal (const GtkCssValue *val1,
 
   for (i = 0; i < val1->calc.n_terms; i++)
     {
-      if (!_gtk_css_value_equal (val1->calc.terms[i], val2->calc.terms[i]))
+      if (!gtk_css_value_equal (val1->calc.terms[i], val2->calc.terms[i]))
         return FALSE;
     }
 
@@ -287,12 +287,12 @@ gtk_css_value_number_print (const GtkCssValue *value,
   g_assert (value->type == TYPE_CALC);
 
   g_string_append (string, "calc(");
-  _gtk_css_value_print (value->calc.terms[0], string);
+  gtk_css_value_print (value->calc.terms[0], string);
 
   for (i = 1; i < value->calc.n_terms; i++)
     {
       g_string_append (string, " + ");
-      _gtk_css_value_print (value->calc.terms[i], string);
+      gtk_css_value_print (value->calc.terms[i], string);
     }
   g_string_append (string, ")");
 }
@@ -306,7 +306,7 @@ gtk_css_value_number_transition (GtkCssValue *start,
   GtkCssValue *result, *mul_start, *mul_end;
 
   if (start == end)
-    return _gtk_css_value_ref (start);
+    return gtk_css_value_ref (start);
 
   if (G_LIKELY (start->type == TYPE_DIMENSION && end->type == TYPE_DIMENSION))
     {
@@ -324,8 +324,8 @@ gtk_css_value_number_transition (GtkCssValue *start,
 
   result = gtk_css_number_value_add (mul_start, mul_end);
 
-  _gtk_css_value_unref (mul_start);
-  _gtk_css_value_unref (mul_end);
+  gtk_css_value_unref (mul_start);
+  gtk_css_value_unref (mul_end);
 
   return result;
 }
@@ -354,8 +354,8 @@ gtk_css_calc_value_new (guint n_terms)
 {
   GtkCssValue *result;
 
-  result = _gtk_css_value_alloc (&GTK_CSS_VALUE_NUMBER,
-                                 gtk_css_value_calc_get_size (n_terms));
+  result = gtk_css_value_alloc (&GTK_CSS_VALUE_NUMBER,
+                                gtk_css_value_calc_get_size (n_terms));
   result->type = TYPE_CALC;
   result->calc.n_terms = n_terms;
 
@@ -406,10 +406,10 @@ gtk_css_dimension_value_new (double     value,
     {
     case GTK_CSS_NUMBER:
       if (value == 0 || value == 1)
-        return _gtk_css_value_ref (&number_singletons[(int) value]);
+        return gtk_css_value_ref (&number_singletons[(int) value]);
 
       if (value == 96)
-        return _gtk_css_value_ref (&number_singletons[2]);
+        return gtk_css_value_ref (&number_singletons[2]);
 
       break;
 
@@ -423,41 +423,41 @@ gtk_css_dimension_value_new (double     value,
           value == 6 ||
           value == 7 ||
           value == 8)
-        return _gtk_css_value_ref (&px_singletons[(int) value]);
+        return gtk_css_value_ref (&px_singletons[(int) value]);
       if (value == 16)
-        return _gtk_css_value_ref (&px_singletons[9]);
+        return gtk_css_value_ref (&px_singletons[9]);
       if (value == 32)
-        return _gtk_css_value_ref (&px_singletons[10]);
+        return gtk_css_value_ref (&px_singletons[10]);
       if (value == 64)
-        return _gtk_css_value_ref (&px_singletons[11]);
+        return gtk_css_value_ref (&px_singletons[11]);
 
       break;
 
     case GTK_CSS_PERCENT:
       if (value == 0)
-        return _gtk_css_value_ref (&percent_singletons[0]);
+        return gtk_css_value_ref (&percent_singletons[0]);
       if (value == 50)
-        return _gtk_css_value_ref (&percent_singletons[1]);
+        return gtk_css_value_ref (&percent_singletons[1]);
       if (value == 100)
-        return _gtk_css_value_ref (&percent_singletons[2]);
+        return gtk_css_value_ref (&percent_singletons[2]);
 
       break;
 
     case GTK_CSS_S:
       if (value == 0 || value == 1)
-        return _gtk_css_value_ref (&second_singletons[(int)value]);
+        return gtk_css_value_ref (&second_singletons[(int)value]);
 
       break;
 
     case GTK_CSS_DEG:
       if (value == 0)
-        return _gtk_css_value_ref (&deg_singletons[0]);
+        return gtk_css_value_ref (&deg_singletons[0]);
       if (value == 90)
-        return _gtk_css_value_ref (&deg_singletons[1]);
+        return gtk_css_value_ref (&deg_singletons[1]);
       if (value == 180)
-        return _gtk_css_value_ref (&deg_singletons[2]);
+        return gtk_css_value_ref (&deg_singletons[2]);
       if (value == 270)
-        return _gtk_css_value_ref (&deg_singletons[3]);
+        return gtk_css_value_ref (&deg_singletons[3]);
 
       break;
 
@@ -465,7 +465,7 @@ gtk_css_dimension_value_new (double     value,
       ;
     }
 
-  result = _gtk_css_value_new (GtkCssValue, &GTK_CSS_VALUE_NUMBER);
+  result = gtk_css_value_new (GtkCssValue, &GTK_CSS_VALUE_NUMBER);
   result->type = TYPE_DIMENSION;
   result->dimension.unit = unit;
   result->dimension.value = value;
@@ -541,7 +541,7 @@ gtk_css_calc_array_add (GPtrArray *array, GtkCssValue *value)
       if (sum)
         {
           g_ptr_array_index (array, i) = sum;
-          _gtk_css_value_unref (value);
+          gtk_css_value_unref (value);
           return;
         }
       else if (gtk_css_number_value_get_calc_term_order (g_ptr_array_index (array, i)) > calc_term_order)
@@ -569,12 +569,12 @@ gtk_css_calc_value_new_sum (GtkCssValue *value1,
     {
       for (i = 0; i < value1->calc.n_terms; i++)
         {
-          gtk_css_calc_array_add (array, _gtk_css_value_ref (value1->calc.terms[i]));
+          gtk_css_calc_array_add (array, gtk_css_value_ref (value1->calc.terms[i]));
         }
     }
   else
     {
-      gtk_css_calc_array_add (array, _gtk_css_value_ref (value1));
+      gtk_css_calc_array_add (array, gtk_css_value_ref (value1));
     }
 
   if (value2->class == &GTK_CSS_VALUE_NUMBER &&
@@ -582,12 +582,12 @@ gtk_css_calc_value_new_sum (GtkCssValue *value1,
     {
       for (i = 0; i < value2->calc.n_terms; i++)
         {
-          gtk_css_calc_array_add (array, _gtk_css_value_ref (value2->calc.terms[i]));
+          gtk_css_calc_array_add (array, gtk_css_value_ref (value2->calc.terms[i]));
         }
     }
   else
     {
-      gtk_css_calc_array_add (array, _gtk_css_value_ref (value2));
+      gtk_css_calc_array_add (array, gtk_css_value_ref (value2));
     }
 
   result = gtk_css_calc_value_new_from_array ((GtkCssValue **)array->pdata, array->len);
@@ -644,7 +644,7 @@ gtk_css_number_value_multiply (GtkCssValue *value,
   guint i;
 
   if (factor == 1)
-    return _gtk_css_value_ref (value);
+    return gtk_css_value_ref (value);
 
   if (G_LIKELY (value->type == TYPE_DIMENSION))
     {
@@ -687,10 +687,10 @@ gtk_css_number_value_try_add (GtkCssValue *value1,
         return NULL;
 
       if (value1->dimension.value == 0)
-        return _gtk_css_value_ref (value2);
+        return gtk_css_value_ref (value2);
 
       if (value2->dimension.value == 0)
-        return _gtk_css_value_ref (value1);
+        return gtk_css_value_ref (value1);
 
       return gtk_css_dimension_value_new (value1->dimension.value + value2->dimension.value,
                                           value1->dimension.unit);

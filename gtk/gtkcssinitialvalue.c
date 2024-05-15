@@ -69,7 +69,7 @@ gtk_css_value_initial_compute (GtkCssValue          *value,
       break;
     }
 
-  return _gtk_css_value_compute (_gtk_css_style_property_get_initial_value (_gtk_css_style_property_lookup_by_id (property_id)),
+  return gtk_css_value_compute (_gtk_css_style_property_get_initial_value (_gtk_css_style_property_lookup_by_id (property_id)),
                                  property_id,
                                  context);
 }
@@ -113,7 +113,7 @@ static GtkCssValue initial = { &GTK_CSS_VALUE_INITIAL, 1 };
 GtkCssValue *
 _gtk_css_initial_value_new (void)
 {
-  return _gtk_css_value_ref (&initial);
+  return gtk_css_value_ref (&initial);
 }
 
 GtkCssValue *

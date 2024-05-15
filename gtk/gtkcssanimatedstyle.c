@@ -63,9 +63,9 @@ gtk_css_ ## NAME ## _values_recompute (GtkCssAnimatedStyle  *animated, \
       if (original == NULL) \
         continue; \
 \
-      computed = _gtk_css_value_compute (original, \
-                                         id, \
-                                         context); \
+      computed = gtk_css_value_compute (original, \
+                                        id, \
+                                        context); \
       if (computed == NULL) \
         continue; \
 \
@@ -819,7 +819,7 @@ gtk_css_animated_style_create_css_transitions (GPtrArray   *animations,
           start = gtk_css_animated_style_get_intrinsic_value ((GtkCssAnimatedStyle *)source, i);
           end = gtk_css_style_get_value (base_style, i);
 
-          if (_gtk_css_value_equal (start, end))
+          if (gtk_css_value_equal (start, end))
             {
               animation = gtk_css_animated_style_find_transition ((GtkCssAnimatedStyle *)source, i);
               if (animation)
@@ -835,8 +835,8 @@ gtk_css_animated_style_create_css_transitions (GPtrArray   *animations,
             }
         }
 
-      if (_gtk_css_value_equal (gtk_css_style_get_value (source, i),
-                                gtk_css_style_get_value (base_style, i)))
+      if (gtk_css_value_equal (gtk_css_style_get_value (source, i),
+                               gtk_css_style_get_value (base_style, i)))
         continue;
 
       animation = _gtk_css_transition_new (i,

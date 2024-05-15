@@ -61,7 +61,7 @@ gtk_css_## NAME ## _values_compute_changes_and_affects (GtkCssStyle *style1, \
     { \
       GtkCssValue *v1 = g1[i] ? g1[i] : style1->core->color; \
       GtkCssValue *v2 = g2[i] ? g2[i] : style2->core->color; \
-      if (!_gtk_css_value_equal (v1, v2)) \
+      if (!gtk_css_value_equal (v1, v2)) \
         { \
           guint id = NAME ## _props[i]; \
           *changes = _gtk_bitmask_set (*changes, id, TRUE); \
@@ -267,7 +267,7 @@ static void
 maybe_unref_value (gpointer value)
 {
   if (value)
-    _gtk_css_value_unref (value);
+    gtk_css_value_unref (value);
 }
 
 static inline void
@@ -590,7 +590,7 @@ gtk_css_static_style_set_value (GtkCssStaticStyle *sstyle,
   if (sstyle->original_values && sstyle->original_values->len > id &&
       g_ptr_array_index (sstyle->original_values, id))
     {
-      _gtk_css_value_unref (g_ptr_array_index (sstyle->original_values, id));
+      gtk_css_value_unref (g_ptr_array_index (sstyle->original_values, id));
       g_ptr_array_index (sstyle->original_values, id) = NULL;
     }
 
@@ -600,7 +600,7 @@ gtk_css_static_style_set_value (GtkCssStaticStyle *sstyle,
         sstyle->original_values = g_ptr_array_new_with_free_func (maybe_unref_value);
       if (sstyle->original_values->len <= id)
         g_ptr_array_set_size (sstyle->original_values, id + 1);
-      g_ptr_array_index (sstyle->original_values, id) = _gtk_css_value_ref (original_value);
+      g_ptr_array_index (sstyle->original_values, id) = gtk_css_value_ref (original_value);
     }
 }
 
@@ -1050,7 +1050,7 @@ gtk_css_static_style_compute_value (GtkCssStaticStyle    *style,
    */
   if (specified)
     {
-      value = _gtk_css_value_compute (specified, id, context);
+      value = gtk_css_value_compute (specified, id, context);
 
       if (gtk_css_value_contains_variables (specified))
         original_value = specified;
@@ -1062,7 +1062,7 @@ gtk_css_static_style_compute_value (GtkCssStaticStyle    *style,
       GtkCssValue *parent_original_value;
 
       /* Just take the style from the parent */
-      value = _gtk_css_value_ref (gtk_css_style_get_value (context->parent_style, id));
+      value = gtk_css_value_ref (gtk_css_style_get_value (context->parent_style, id));
 
       parent_original_value = gtk_css_style_get_original_value (context->parent_style, id);
 

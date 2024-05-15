@@ -90,33 +90,33 @@ gtk_css_transform_clear (GtkCssTransform *transform)
     case GTK_CSS_TRANSFORM_MATRIX:
       break;
     case GTK_CSS_TRANSFORM_TRANSLATE:
-      _gtk_css_value_unref (transform->translate.x);
-      _gtk_css_value_unref (transform->translate.y);
-      _gtk_css_value_unref (transform->translate.z);
+      gtk_css_value_unref (transform->translate.x);
+      gtk_css_value_unref (transform->translate.y);
+      gtk_css_value_unref (transform->translate.z);
       break;
     case GTK_CSS_TRANSFORM_ROTATE:
-      _gtk_css_value_unref (transform->rotate.x);
-      _gtk_css_value_unref (transform->rotate.y);
-      _gtk_css_value_unref (transform->rotate.z);
-      _gtk_css_value_unref (transform->rotate.angle);
+      gtk_css_value_unref (transform->rotate.x);
+      gtk_css_value_unref (transform->rotate.y);
+      gtk_css_value_unref (transform->rotate.z);
+      gtk_css_value_unref (transform->rotate.angle);
       break;
     case GTK_CSS_TRANSFORM_SCALE:
-      _gtk_css_value_unref (transform->scale.x);
-      _gtk_css_value_unref (transform->scale.y);
-      _gtk_css_value_unref (transform->scale.z);
+      gtk_css_value_unref (transform->scale.x);
+      gtk_css_value_unref (transform->scale.y);
+      gtk_css_value_unref (transform->scale.z);
       break;
     case GTK_CSS_TRANSFORM_SKEW:
-      _gtk_css_value_unref (transform->skew.x);
-      _gtk_css_value_unref (transform->skew.y);
+      gtk_css_value_unref (transform->skew.x);
+      gtk_css_value_unref (transform->skew.y);
       break;
     case GTK_CSS_TRANSFORM_SKEW_X:
-      _gtk_css_value_unref (transform->skew_x.skew);
+      gtk_css_value_unref (transform->skew_x.skew);
       break;
     case GTK_CSS_TRANSFORM_SKEW_Y:
-      _gtk_css_value_unref (transform->skew_y.skew);
+      gtk_css_value_unref (transform->skew_y.skew);
       break;
     case GTK_CSS_TRANSFORM_PERSPECTIVE:
-      _gtk_css_value_unref (transform->perspective.depth);
+      gtk_css_value_unref (transform->perspective.depth);
       break;
     case GTK_CSS_TRANSFORM_NONE:
     default:
@@ -286,41 +286,41 @@ gtk_css_transform_compute (GtkCssTransform      *dest,
       memcpy (dest, src, sizeof (GtkCssTransform));
       return TRUE;
     case GTK_CSS_TRANSFORM_TRANSLATE:
-      dest->translate.x = _gtk_css_value_compute (src->translate.x, property_id, context);
-      dest->translate.y = _gtk_css_value_compute (src->translate.y, property_id, context);
-      dest->translate.z = _gtk_css_value_compute (src->translate.z, property_id, context);
+      dest->translate.x = gtk_css_value_compute (src->translate.x, property_id, context);
+      dest->translate.y = gtk_css_value_compute (src->translate.y, property_id, context);
+      dest->translate.z = gtk_css_value_compute (src->translate.z, property_id, context);
       return dest->translate.x == src->translate.x
           && dest->translate.y == src->translate.y
           && dest->translate.z == src->translate.z;
     case GTK_CSS_TRANSFORM_ROTATE:
-      dest->rotate.x = _gtk_css_value_compute (src->rotate.x, property_id, context);
-      dest->rotate.y = _gtk_css_value_compute (src->rotate.y, property_id, context);
-      dest->rotate.z = _gtk_css_value_compute (src->rotate.z, property_id, context);
-      dest->rotate.angle = _gtk_css_value_compute (src->rotate.angle, property_id, context);
+      dest->rotate.x = gtk_css_value_compute (src->rotate.x, property_id, context);
+      dest->rotate.y = gtk_css_value_compute (src->rotate.y, property_id, context);
+      dest->rotate.z = gtk_css_value_compute (src->rotate.z, property_id, context);
+      dest->rotate.angle = gtk_css_value_compute (src->rotate.angle, property_id, context);
       return dest->rotate.x == src->rotate.x
           && dest->rotate.y == src->rotate.y
           && dest->rotate.z == src->rotate.z
           && dest->rotate.angle == src->rotate.angle;
     case GTK_CSS_TRANSFORM_SCALE:
-      dest->scale.x = _gtk_css_value_compute (src->scale.x, property_id, context);
-      dest->scale.y = _gtk_css_value_compute (src->scale.y, property_id, context);
-      dest->scale.z = _gtk_css_value_compute (src->scale.z, property_id, context);
+      dest->scale.x = gtk_css_value_compute (src->scale.x, property_id, context);
+      dest->scale.y = gtk_css_value_compute (src->scale.y, property_id, context);
+      dest->scale.z = gtk_css_value_compute (src->scale.z, property_id, context);
       return dest->scale.x == src->scale.x
           && dest->scale.y == src->scale.y
           && dest->scale.z == src->scale.z;
     case GTK_CSS_TRANSFORM_SKEW:
-      dest->skew.x = _gtk_css_value_compute (src->skew.x, property_id, context);
-      dest->skew.y = _gtk_css_value_compute (src->skew.y, property_id, context);
+      dest->skew.x = gtk_css_value_compute (src->skew.x, property_id, context);
+      dest->skew.y = gtk_css_value_compute (src->skew.y, property_id, context);
       return dest->skew.x == src->skew.x
           && dest->skew.y == src->skew.y;
     case GTK_CSS_TRANSFORM_SKEW_X:
-      dest->skew_x.skew = _gtk_css_value_compute (src->skew_x.skew, property_id, context);
+      dest->skew_x.skew = gtk_css_value_compute (src->skew_x.skew, property_id, context);
       return dest->skew_x.skew == src->skew_x.skew;
     case GTK_CSS_TRANSFORM_SKEW_Y:
-      dest->skew_y.skew = _gtk_css_value_compute (src->skew_y.skew, property_id, context);
+      dest->skew_y.skew = gtk_css_value_compute (src->skew_y.skew, property_id, context);
       return dest->skew_y.skew == src->skew_y.skew;
     case GTK_CSS_TRANSFORM_PERSPECTIVE:
-      dest->perspective.depth = _gtk_css_value_compute (src->perspective.depth, property_id, context);
+      dest->perspective.depth = gtk_css_value_compute (src->perspective.depth, property_id, context);
       return dest->perspective.depth == src->perspective.depth;
     case GTK_CSS_TRANSFORM_NONE:
     default:
@@ -340,7 +340,7 @@ gtk_css_value_transform_compute (GtkCssValue          *value,
 
   /* Special case the 99% case of "none" */
   if (gtk_css_transform_value_is_none (value))
-    return _gtk_css_value_ref (value);
+    return gtk_css_value_ref (value);
 
   changes = FALSE;
   result = gtk_css_transform_value_alloc (value->n_transforms);
@@ -355,8 +355,8 @@ gtk_css_value_transform_compute (GtkCssValue          *value,
 
   if (!changes)
     {
-      _gtk_css_value_unref (result);
-      result = _gtk_css_value_ref (value);
+      gtk_css_value_unref (result);
+      result = gtk_css_value_ref (value);
     }
 
   return result;
@@ -385,27 +385,27 @@ gtk_css_transform_equal (const GtkCssTransform *transform1,
         return TRUE;
       }
     case GTK_CSS_TRANSFORM_TRANSLATE:
-      return _gtk_css_value_equal (transform1->translate.x, transform2->translate.x)
-          && _gtk_css_value_equal (transform1->translate.y, transform2->translate.y)
-          && _gtk_css_value_equal (transform1->translate.z, transform2->translate.z);
+      return gtk_css_value_equal (transform1->translate.x, transform2->translate.x)
+          && gtk_css_value_equal (transform1->translate.y, transform2->translate.y)
+          && gtk_css_value_equal (transform1->translate.z, transform2->translate.z);
     case GTK_CSS_TRANSFORM_ROTATE:
-      return _gtk_css_value_equal (transform1->rotate.x, transform2->rotate.x)
-          && _gtk_css_value_equal (transform1->rotate.y, transform2->rotate.y)
-          && _gtk_css_value_equal (transform1->rotate.z, transform2->rotate.z)
-          && _gtk_css_value_equal (transform1->rotate.angle, transform2->rotate.angle);
+      return gtk_css_value_equal (transform1->rotate.x, transform2->rotate.x)
+          && gtk_css_value_equal (transform1->rotate.y, transform2->rotate.y)
+          && gtk_css_value_equal (transform1->rotate.z, transform2->rotate.z)
+          && gtk_css_value_equal (transform1->rotate.angle, transform2->rotate.angle);
     case GTK_CSS_TRANSFORM_SCALE:
-      return _gtk_css_value_equal (transform1->scale.x, transform2->scale.x)
-          && _gtk_css_value_equal (transform1->scale.y, transform2->scale.y)
-          && _gtk_css_value_equal (transform1->scale.z, transform2->scale.z);
+      return gtk_css_value_equal (transform1->scale.x, transform2->scale.x)
+          && gtk_css_value_equal (transform1->scale.y, transform2->scale.y)
+          && gtk_css_value_equal (transform1->scale.z, transform2->scale.z);
     case GTK_CSS_TRANSFORM_SKEW:
-      return _gtk_css_value_equal (transform1->skew.x, transform2->skew.x)
-          && _gtk_css_value_equal (transform1->skew.y, transform2->skew.y);
+      return gtk_css_value_equal (transform1->skew.x, transform2->skew.x)
+          && gtk_css_value_equal (transform1->skew.y, transform2->skew.y);
     case GTK_CSS_TRANSFORM_SKEW_X:
-      return _gtk_css_value_equal (transform1->skew_x.skew, transform2->skew_x.skew);
+      return gtk_css_value_equal (transform1->skew_x.skew, transform2->skew_x.skew);
     case GTK_CSS_TRANSFORM_SKEW_Y:
-      return _gtk_css_value_equal (transform1->skew_y.skew, transform2->skew_y.skew);
+      return gtk_css_value_equal (transform1->skew_y.skew, transform2->skew_y.skew);
     case GTK_CSS_TRANSFORM_PERSPECTIVE:
-      return _gtk_css_value_equal (transform1->perspective.depth, transform2->perspective.depth);
+      return gtk_css_value_equal (transform1->perspective.depth, transform2->perspective.depth);
     case GTK_CSS_TRANSFORM_NONE:
     default:
       g_assert_not_reached ();
@@ -498,30 +498,30 @@ gtk_css_transform_transition (GtkCssTransform       *result,
                                    &result->matrix.matrix);
       break;
     case GTK_CSS_TRANSFORM_TRANSLATE:
-      result->translate.x = _gtk_css_value_transition (start->translate.x, end->translate.x, property_id, progress);
-      result->translate.y = _gtk_css_value_transition (start->translate.y, end->translate.y, property_id, progress);
-      result->translate.z = _gtk_css_value_transition (start->translate.z, end->translate.z, property_id, progress);
+      result->translate.x = gtk_css_value_transition (start->translate.x, end->translate.x, property_id, progress);
+      result->translate.y = gtk_css_value_transition (start->translate.y, end->translate.y, property_id, progress);
+      result->translate.z = gtk_css_value_transition (start->translate.z, end->translate.z, property_id, progress);
       break;
     case GTK_CSS_TRANSFORM_ROTATE:
-      result->rotate.x = _gtk_css_value_transition (start->rotate.x, end->rotate.x, property_id, progress);
-      result->rotate.y = _gtk_css_value_transition (start->rotate.y, end->rotate.y, property_id, progress);
-      result->rotate.z = _gtk_css_value_transition (start->rotate.z, end->rotate.z, property_id, progress);
-      result->rotate.angle = _gtk_css_value_transition (start->rotate.angle, end->rotate.angle, property_id, progress);
+      result->rotate.x = gtk_css_value_transition (start->rotate.x, end->rotate.x, property_id, progress);
+      result->rotate.y = gtk_css_value_transition (start->rotate.y, end->rotate.y, property_id, progress);
+      result->rotate.z = gtk_css_value_transition (start->rotate.z, end->rotate.z, property_id, progress);
+      result->rotate.angle = gtk_css_value_transition (start->rotate.angle, end->rotate.angle, property_id, progress);
       break;
     case GTK_CSS_TRANSFORM_SCALE:
-      result->scale.x = _gtk_css_value_transition (start->scale.x, end->scale.x, property_id, progress);
-      result->scale.y = _gtk_css_value_transition (start->scale.y, end->scale.y, property_id, progress);
-      result->scale.z = _gtk_css_value_transition (start->scale.z, end->scale.z, property_id, progress);
+      result->scale.x = gtk_css_value_transition (start->scale.x, end->scale.x, property_id, progress);
+      result->scale.y = gtk_css_value_transition (start->scale.y, end->scale.y, property_id, progress);
+      result->scale.z = gtk_css_value_transition (start->scale.z, end->scale.z, property_id, progress);
       break;
     case GTK_CSS_TRANSFORM_SKEW:
-      result->skew.x = _gtk_css_value_transition (start->skew.x, end->skew.x, property_id, progress);
-      result->skew.y = _gtk_css_value_transition (start->skew.y, end->skew.y, property_id, progress);
+      result->skew.x = gtk_css_value_transition (start->skew.x, end->skew.x, property_id, progress);
+      result->skew.y = gtk_css_value_transition (start->skew.y, end->skew.y, property_id, progress);
       break;
     case GTK_CSS_TRANSFORM_SKEW_X:
-      result->skew_x.skew = _gtk_css_value_transition (start->skew_x.skew, end->skew_x.skew, property_id, progress);
+      result->skew_x.skew = gtk_css_value_transition (start->skew_x.skew, end->skew_x.skew, property_id, progress);
       break;
     case GTK_CSS_TRANSFORM_SKEW_Y:
-      result->skew_y.skew = _gtk_css_value_transition (start->skew_y.skew, end->skew_y.skew, property_id, progress);
+      result->skew_y.skew = gtk_css_value_transition (start->skew_y.skew, end->skew_y.skew, property_id, progress);
       break;
     case GTK_CSS_TRANSFORM_PERSPECTIVE:
       gtk_css_transform_transition_default (result, start, end, property_id, progress);
@@ -545,7 +545,7 @@ gtk_css_value_transform_transition (GtkCssValue *start,
   if (gtk_css_transform_value_is_none (start))
     {
       if (gtk_css_transform_value_is_none (end))
-        return _gtk_css_value_ref (start);
+        return gtk_css_value_ref (start);
 
       n = 0;
     }
@@ -693,67 +693,67 @@ gtk_css_transform_print (const GtkCssTransform *transform,
       break;
     case GTK_CSS_TRANSFORM_TRANSLATE:
       g_string_append (string, "translate3d(");
-      _gtk_css_value_print (transform->translate.x, string);
+      gtk_css_value_print (transform->translate.x, string);
       g_string_append (string, ", ");
-      _gtk_css_value_print (transform->translate.y, string);
+      gtk_css_value_print (transform->translate.y, string);
       g_string_append (string, ", ");
-      _gtk_css_value_print (transform->translate.z, string);
+      gtk_css_value_print (transform->translate.z, string);
       g_string_append (string, ")");
       break;
     case GTK_CSS_TRANSFORM_ROTATE:
       g_string_append (string, "rotate3d(");
-      _gtk_css_value_print (transform->rotate.x, string);
+      gtk_css_value_print (transform->rotate.x, string);
       g_string_append (string, ", ");
-      _gtk_css_value_print (transform->rotate.y, string);
+      gtk_css_value_print (transform->rotate.y, string);
       g_string_append (string, ", ");
-      _gtk_css_value_print (transform->rotate.z, string);
+      gtk_css_value_print (transform->rotate.z, string);
       g_string_append (string, ", ");
-      _gtk_css_value_print (transform->rotate.angle, string);
+      gtk_css_value_print (transform->rotate.angle, string);
       g_string_append (string, ")");
       break;
     case GTK_CSS_TRANSFORM_SCALE:
       if (_gtk_css_number_value_get (transform->scale.z, 100) == 1)
         {
           g_string_append (string, "scale(");
-          _gtk_css_value_print (transform->scale.x, string);
-          if (!_gtk_css_value_equal (transform->scale.x, transform->scale.y))
+          gtk_css_value_print (transform->scale.x, string);
+          if (!gtk_css_value_equal (transform->scale.x, transform->scale.y))
             {
               g_string_append (string, ", ");
-              _gtk_css_value_print (transform->scale.y, string);
+              gtk_css_value_print (transform->scale.y, string);
             }
           g_string_append (string, ")");
         }
       else
         {
           g_string_append (string, "scale3d(");
-          _gtk_css_value_print (transform->scale.x, string);
+          gtk_css_value_print (transform->scale.x, string);
           g_string_append (string, ", ");
-          _gtk_css_value_print (transform->scale.y, string);
+          gtk_css_value_print (transform->scale.y, string);
           g_string_append (string, ", ");
-          _gtk_css_value_print (transform->scale.z, string);
+          gtk_css_value_print (transform->scale.z, string);
           g_string_append (string, ")");
         }
       break;
     case GTK_CSS_TRANSFORM_SKEW:
       g_string_append (string, "skew(");
-      _gtk_css_value_print (transform->skew.x, string);
+      gtk_css_value_print (transform->skew.x, string);
       g_string_append (string, ", ");
-      _gtk_css_value_print (transform->skew.y, string);
+      gtk_css_value_print (transform->skew.y, string);
       g_string_append (string, ")");
       break;
     case GTK_CSS_TRANSFORM_SKEW_X:
       g_string_append (string, "skewX(");
-      _gtk_css_value_print (transform->skew_x.skew, string);
+      gtk_css_value_print (transform->skew_x.skew, string);
       g_string_append (string, ")");
       break;
     case GTK_CSS_TRANSFORM_SKEW_Y:
       g_string_append (string, "skewY(");
-      _gtk_css_value_print (transform->skew_y.skew, string);
+      gtk_css_value_print (transform->skew_y.skew, string);
       g_string_append (string, ")");
       break;
     case GTK_CSS_TRANSFORM_PERSPECTIVE:
       g_string_append (string, "perspective(");
-      _gtk_css_value_print (transform->perspective.depth, string);
+      gtk_css_value_print (transform->perspective.depth, string);
       g_string_append (string, ")");
       break;
     case GTK_CSS_TRANSFORM_NONE:
@@ -804,7 +804,7 @@ gtk_css_transform_value_alloc (guint n_transforms)
            
   g_return_val_if_fail (n_transforms > 0, NULL);
          
-  result = _gtk_css_value_alloc (&GTK_CSS_VALUE_TRANSFORM, sizeof (GtkCssValue) + sizeof (GtkCssTransform) * (n_transforms - 1));
+  result = gtk_css_value_alloc (&GTK_CSS_VALUE_TRANSFORM, sizeof (GtkCssValue) + sizeof (GtkCssTransform) * (n_transforms - 1));
   result->n_transforms = n_transforms;
             
   return result;
@@ -813,7 +813,7 @@ gtk_css_transform_value_alloc (guint n_transforms)
 GtkCssValue *
 _gtk_css_transform_value_new_none (void)
 {
-  return _gtk_css_value_ref (&transform_none_singleton);
+  return gtk_css_value_ref (&transform_none_singleton);
 }
 
 static gboolean

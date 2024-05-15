@@ -786,7 +786,7 @@ gtk_style_context_resolve_color (GtkStyleContext    *context,
     return FALSE;
 
   *result = *gtk_css_color_value_get_rgba (val);
-  _gtk_css_value_unref (val);
+  gtk_css_value_unref (val);
   return TRUE;
 }
 
