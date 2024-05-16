@@ -30,8 +30,8 @@ struct _GtkCssValue {
 static void
 gtk_css_value_corner_free (GtkCssValue *value)
 {
-  _gtk_css_value_unref (value->x);
-  _gtk_css_value_unref (value->y);
+  gtk_css_value_unref (value->x);
+  gtk_css_value_unref (value->y);
 
   g_free (value);
 }
@@ -43,13 +43,13 @@ gtk_css_value_corner_compute (GtkCssValue          *corner,
 {
   GtkCssValue *x, *y;
 
-  x = _gtk_css_value_compute (corner->x, property_id, context);
-  y = _gtk_css_value_compute (corner->y, property_id, context);
+  x = gtk_css_value_compute (corner->x, property_id, context);
+  y = gtk_css_value_compute (corner->y, property_id, context);
   if (x == corner->x && y == corner->y)
     {
-      _gtk_css_value_unref (x);
-      _gtk_css_value_unref (y);
-      return _gtk_css_value_ref (corner);
+      gtk_css_value_unref (x);
+      gtk_css_value_unref (y);
+      return gtk_css_value_ref (corner);
     }
 
   return _gtk_css_corner_value_new (x, y);
@@ -59,8 +59,8 @@ static gboolean
 gtk_css_value_corner_equal (const GtkCssValue *corner1,
                             const GtkCssValue *corner2)
 {
-  return _gtk_css_value_equal (corner1->x, corner2->x)
-      && _gtk_css_value_equal (corner1->y, corner2->y);
+  return gtk_css_value_equal (corner1->x, corner2->x)
+      && gtk_css_value_equal (corner1->y, corner2->y);
 }
 
 static GtkCssValue *
@@ -71,13 +71,13 @@ gtk_css_value_corner_transition (GtkCssValue *start,
 {
   GtkCssValue *x, *y;
 
-  x = _gtk_css_value_transition (start->x, end->x, property_id, progress);
+  x = gtk_css_value_transition (start->x, end->x, property_id, progress);
   if (x == NULL)
     return NULL;
-  y = _gtk_css_value_transition (start->y, end->y, property_id, progress);
+  y = gtk_css_value_transition (start->y, end->y, property_id, progress);
   if (y == NULL)
     {
-      _gtk_css_value_unref (x);
+      gtk_css_value_unref (x);
       return NULL;
     }
 
@@ -88,11 +88,11 @@ static void
 gtk_css_value_corner_print (const GtkCssValue *corner,
                             GString           *string)
 {
-  _gtk_css_value_print (corner->x, string);
-  if (!_gtk_css_value_equal (corner->x, corner->y))
+  gtk_css_value_print (corner->x, string);
+  if (!gtk_css_value_equal (corner->x, corner->y))
     {
       g_string_append_c (string, ' ');
-      _gtk_css_value_print (corner->y, string);
+      gtk_css_value_print (corner->y, string);
     }
 }
 
@@ -158,7 +158,7 @@ _gtk_css_corner_value_new (GtkCssValue *x,
         }
     }
 
-  result = _gtk_css_value_new (GtkCssValue, &GTK_CSS_VALUE_CORNER);
+  result = gtk_css_value_new (GtkCssValue, &GTK_CSS_VALUE_CORNER);
   result->x = x;
   result->y = y;
 
@@ -178,7 +178,7 @@ _gtk_css_corner_value_parse (GtkCssParser *parser)
     return NULL;
 
   if (!gtk_css_number_value_can_parse (parser))
-    y = _gtk_css_value_ref (x);
+    y = gtk_css_value_ref (x);
   else
     {
       y = _gtk_css_number_value_parse (parser,
@@ -187,7 +187,7 @@ _gtk_css_corner_value_parse (GtkCssParser *parser)
                                        | GTK_CSS_PARSE_LENGTH);
       if (y == NULL)
         {
-          _gtk_css_value_unref (x);
+          gtk_css_value_unref (x);
           return NULL;
         }
     }

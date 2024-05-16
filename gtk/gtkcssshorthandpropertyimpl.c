@@ -77,7 +77,7 @@ parse_four_numbers (GtkCssShorthandProperty  *shorthand,
 
   for (; i < 4; i++)
     {
-      values[i] = _gtk_css_value_ref (values[(i - 1) >> 1]);
+      values[i] = gtk_css_value_ref (values[(i - 1) >> 1]);
     }
 
   return TRUE;
@@ -148,7 +148,7 @@ parse_border_radius (GtkCssShorthandProperty  *shorthand,
    * according to spec. Feel free to check the 4 cases
    */
   for (; i < 4; i++)
-    x[i] = _gtk_css_value_ref (x[(i - 1) >> 1]);
+    x[i] = gtk_css_value_ref (x[(i - 1) >> 1]);
 
   if (gtk_css_parser_try_delim (parser, '/'))
     {
@@ -171,12 +171,12 @@ parse_border_radius (GtkCssShorthandProperty  *shorthand,
         }
 
       for (; i < 4; i++)
-        y[i] = _gtk_css_value_ref (y[(i - 1) >> 1]);
+        y[i] = gtk_css_value_ref (y[(i - 1) >> 1]);
     }
   else
     {
       for (i = 0; i < 4; i++)
-        y[i] = _gtk_css_value_ref (x[i]);
+        y[i] = gtk_css_value_ref (x[i]);
     }
 
   for (i = 0; i < 4; i++)
@@ -190,9 +190,9 @@ fail:
   for (i = 0; i < 4; i++)
     {
       if (x[i])
-        _gtk_css_value_unref (x[i]);
+        gtk_css_value_unref (x[i]);
       if (y[i])
-        _gtk_css_value_unref (y[i]);
+        gtk_css_value_unref (y[i]);
     }
   return FALSE;
 }
@@ -216,7 +216,7 @@ parse_border_color (GtkCssShorthandProperty  *shorthand,
 
   for (i++; i < 4; i++)
     {
-      values[i] = _gtk_css_value_ref (values[(i - 1) >> 1]);
+      values[i] = gtk_css_value_ref (values[(i - 1) >> 1]);
     }
 
   return TRUE;
@@ -243,7 +243,7 @@ parse_border_style (GtkCssShorthandProperty  *shorthand,
     }
 
   for (; i < 4; i++)
-    values[i] = _gtk_css_value_ref (values[(i - 1) >> 1]);
+    values[i] = gtk_css_value_ref (values[(i - 1) >> 1]);
 
   return TRUE;
 }
@@ -371,16 +371,16 @@ parse_border (GtkCssShorthandProperty  *shorthand,
                                                  | GTK_CSS_PARSE_LENGTH);
         if (values[0] == NULL)
           return FALSE;
-        values[1] = _gtk_css_value_ref (values[0]);
-        values[2] = _gtk_css_value_ref (values[0]);
-        values[3] = _gtk_css_value_ref (values[0]);
+        values[1] = gtk_css_value_ref (values[0]);
+        values[2] = gtk_css_value_ref (values[0]);
+        values[3] = gtk_css_value_ref (values[0]);
       }
     else if (values[4] == NULL &&
              (values[4] = _gtk_css_border_style_value_try_parse (parser)))
       {
-        values[5] = _gtk_css_value_ref (values[4]);
-        values[6] = _gtk_css_value_ref (values[4]);
-        values[7] = _gtk_css_value_ref (values[4]);
+        values[5] = gtk_css_value_ref (values[4]);
+        values[6] = gtk_css_value_ref (values[4]);
+        values[7] = gtk_css_value_ref (values[4]);
       }
     else if (values[8] == NULL)
       {
@@ -388,9 +388,9 @@ parse_border (GtkCssShorthandProperty  *shorthand,
         if (values[8] == NULL)
           return FALSE;
 
-        values[9] = _gtk_css_value_ref (values[8]);
-        values[10] = _gtk_css_value_ref (values[8]);
-        values[11] = _gtk_css_value_ref (values[8]);
+        values[9] = gtk_css_value_ref (values[8]);
+        values[10] = gtk_css_value_ref (values[8]);
+        values[11] = gtk_css_value_ref (values[8]);
       }
     else
       {
@@ -557,7 +557,7 @@ parse_one_background (GtkCssShorthandProperty  *shorthand,
         {
           value = _gtk_css_color_value_parse (parser);
           if (value == NULL)
-            values[6] = _gtk_css_value_ref (_gtk_css_style_property_get_initial_value 
+            values[6] = gtk_css_value_ref (_gtk_css_style_property_get_initial_value 
                                             (_gtk_css_shorthand_property_get_subproperty (shorthand, 6)));
           else
             values[6] = value;
@@ -576,7 +576,7 @@ parse_one_background (GtkCssShorthandProperty  *shorthand,
   while (!value_is_done_parsing (parser));
 
   if (values[5] != NULL && values[4] == NULL)
-    values[4] = _gtk_css_value_ref (values[5]);
+    values[4] = gtk_css_value_ref (values[5]);
 
   return TRUE;
 }
@@ -603,7 +603,7 @@ parse_background (GtkCssShorthandProperty  *shorthand,
       {
         for (i = 0; i < 6; i++)
           {
-            g_ptr_array_set_free_func (arrays[i], (GDestroyNotify) _gtk_css_value_unref);
+            g_ptr_array_set_free_func (arrays[i], (GDestroyNotify) gtk_css_value_unref);
             g_ptr_array_unref (arrays[i]);
           }
         return FALSE;
@@ -615,7 +615,7 @@ parse_background (GtkCssShorthandProperty  *shorthand,
             {
               GtkCssValue *initial = _gtk_css_style_property_get_initial_value (
                                          _gtk_css_shorthand_property_get_subproperty (shorthand, i));
-              step_values[i] = _gtk_css_value_ref (_gtk_css_array_value_get_nth (initial, 0));
+              step_values[i] = gtk_css_value_ref (_gtk_css_array_value_get_nth (initial, 0));
             }
 
           g_ptr_array_add (arrays[i], step_values[i]);
@@ -714,7 +714,7 @@ parse_transition (GtkCssShorthandProperty  *shorthand,
       {
         for (i = 0; i < 4; i++)
           {
-            g_ptr_array_set_free_func (arrays[i], (GDestroyNotify) _gtk_css_value_unref);
+            g_ptr_array_set_free_func (arrays[i], (GDestroyNotify) gtk_css_value_unref);
             g_ptr_array_unref (arrays[i]);
           }
         return FALSE;
@@ -726,7 +726,7 @@ parse_transition (GtkCssShorthandProperty  *shorthand,
             {
               GtkCssValue *initial = _gtk_css_style_property_get_initial_value (
                                          _gtk_css_shorthand_property_get_subproperty (shorthand, i));
-              step_values[i] = _gtk_css_value_ref (_gtk_css_array_value_get_nth (initial, 0));
+              step_values[i] = gtk_css_value_ref (_gtk_css_array_value_get_nth (initial, 0));
             }
 
           g_ptr_array_add (arrays[i], step_values[i]);
@@ -831,7 +831,7 @@ parse_animation (GtkCssShorthandProperty  *shorthand,
       {
         for (i = 0; i < 7; i++)
           {
-            g_ptr_array_set_free_func (arrays[i], (GDestroyNotify) _gtk_css_value_unref);
+            g_ptr_array_set_free_func (arrays[i], (GDestroyNotify) gtk_css_value_unref);
             g_ptr_array_unref (arrays[i]);
           }
         return FALSE;
@@ -843,7 +843,7 @@ parse_animation (GtkCssShorthandProperty  *shorthand,
             {
               GtkCssValue *initial = _gtk_css_style_property_get_initial_value (
                                          _gtk_css_shorthand_property_get_subproperty (shorthand, i));
-              step_values[i] = _gtk_css_value_ref (_gtk_css_array_value_get_nth (initial, 0));
+              step_values[i] = gtk_css_value_ref (_gtk_css_array_value_get_nth (initial, 0));
             }
 
           g_ptr_array_add (arrays[i], step_values[i]);

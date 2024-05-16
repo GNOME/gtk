@@ -317,7 +317,7 @@ pick_subproperty:
       result = sub;
     }
 
-  computed = _gtk_css_value_compute (result, property_id, context);
+  computed = gtk_css_value_compute (result, property_id, context);
   computed->is_computed = TRUE;
 
   gtk_css_value_unref (result);
@@ -366,7 +366,7 @@ _gtk_css_reference_value_new (GtkStyleProperty    *property,
 {
   GtkCssValue *result;
 
-  result = _gtk_css_value_new (GtkCssValue, &GTK_CSS_VALUE_REFERENCE);
+  result = gtk_css_value_new (GtkCssValue, &GTK_CSS_VALUE_REFERENCE);
   result->property = property;
   result->value = gtk_css_variable_value_ref (value);
   result->contains_variables = TRUE;

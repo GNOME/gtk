@@ -99,8 +99,8 @@ gtk_css_calc_value_parse_product (GtkCssParser           *parser,
             temp = gtk_css_number_value_multiply (result, _gtk_css_number_value_get (value, 100));
           else
             temp = gtk_css_number_value_multiply (value, _gtk_css_number_value_get (result, 100));
-          _gtk_css_value_unref (value);
-          _gtk_css_value_unref (result);
+          gtk_css_value_unref (value);
+          gtk_css_value_unref (result);
           result = temp;
         }
       else if (gtk_css_parser_try_delim (parser, '/'))
@@ -109,8 +109,8 @@ gtk_css_calc_value_parse_product (GtkCssParser           *parser,
           if (value == NULL)
             goto fail;
           temp = gtk_css_number_value_multiply (result, 1.0 / _gtk_css_number_value_get (value, 100));
-          _gtk_css_value_unref (value);
-          _gtk_css_value_unref (result);
+          gtk_css_value_unref (value);
+          gtk_css_value_unref (result);
           result = temp;
         }
       else
@@ -132,7 +132,7 @@ gtk_css_calc_value_parse_product (GtkCssParser           *parser,
   return result;
 
 fail:
-  _gtk_css_value_unref (result);
+  gtk_css_value_unref (result);
   return NULL;
 }
 
@@ -162,7 +162,7 @@ gtk_css_calc_value_parse_sum (GtkCssParser           *parser,
           if (temp == NULL)
             goto fail;
           next = gtk_css_number_value_multiply (temp, -1);
-          _gtk_css_value_unref (temp);
+          gtk_css_value_unref (temp);
         }
       else
         {
@@ -178,15 +178,15 @@ gtk_css_calc_value_parse_sum (GtkCssParser           *parser,
         }
 
       temp = gtk_css_number_value_add (result, next);
-      _gtk_css_value_unref (result);
-      _gtk_css_value_unref (next);
+      gtk_css_value_unref (result);
+      gtk_css_value_unref (next);
       result = temp;
     }
 
   return result;
 
 fail:
-  _gtk_css_value_unref (result);
+  gtk_css_value_unref (result);
   return NULL;
 }
 

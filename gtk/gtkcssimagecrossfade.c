@@ -293,7 +293,7 @@ parse_progress (GtkCssParser *parser,
   if (number == NULL)
     return FALSE;
   *progress = _gtk_css_number_value_get (number, 1);
-  _gtk_css_value_unref (number);
+  gtk_css_value_unref (number);
 
   if (*progress > 1.0)
     {

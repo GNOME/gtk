@@ -45,7 +45,7 @@ gtk_css_value_enum_compute (GtkCssValue          *value,
                             guint                 property_id,
                             GtkCssComputeContext *context)
 {
-  return _gtk_css_value_ref (value);
+  return gtk_css_value_ref (value);
 }
 
 static gboolean
@@ -102,7 +102,7 @@ _gtk_css_border_style_value_new (GtkBorderStyle border_style)
 {
   g_return_val_if_fail (border_style < G_N_ELEMENTS (border_style_values), NULL);
 
-  return _gtk_css_value_ref (&border_style_values[border_style]);
+  return gtk_css_value_ref (&border_style_values[border_style]);
 }
 
 GtkCssValue *
@@ -115,7 +115,7 @@ _gtk_css_border_style_value_try_parse (GtkCssParser *parser)
   for (i = 0; i < G_N_ELEMENTS (border_style_values); i++)
     {
       if (gtk_css_parser_try_ident (parser, border_style_values[i].name))
-        return _gtk_css_value_ref (&border_style_values[i]);
+        return gtk_css_value_ref (&border_style_values[i]);
     }
 
   return NULL;
@@ -166,7 +166,7 @@ _gtk_css_blend_mode_value_new (GskBlendMode blend_mode)
 {
   g_return_val_if_fail (blend_mode < G_N_ELEMENTS (blend_mode_values), NULL);
 
-  return _gtk_css_value_ref (&blend_mode_values[blend_mode]);
+  return gtk_css_value_ref (&blend_mode_values[blend_mode]);
 }
 
 GtkCssValue *
@@ -179,7 +179,7 @@ _gtk_css_blend_mode_value_try_parse (GtkCssParser *parser)
   for (i = 0; i < G_N_ELEMENTS (blend_mode_values); i++)
     {
       if (gtk_css_parser_try_ident (parser, blend_mode_values[i].name))
-        return _gtk_css_value_ref (&blend_mode_values[i]);
+        return gtk_css_value_ref (&blend_mode_values[i]);
     }
 
   return NULL;
@@ -312,7 +312,7 @@ _gtk_css_font_size_value_new (GtkCssFontSize font_size)
 {
   g_return_val_if_fail (font_size < G_N_ELEMENTS (font_size_values), NULL);
 
-  return _gtk_css_value_ref (&font_size_values[font_size]);
+  return gtk_css_value_ref (&font_size_values[font_size]);
 }
 
 GtkCssValue *
@@ -325,7 +325,7 @@ _gtk_css_font_size_value_try_parse (GtkCssParser *parser)
   for (i = 0; i < G_N_ELEMENTS (font_size_values); i++)
     {
       if (gtk_css_parser_try_ident (parser, font_size_values[i].name))
-        return _gtk_css_value_ref (&font_size_values[i]);
+        return gtk_css_value_ref (&font_size_values[i]);
     }
 
   return NULL;
@@ -363,7 +363,7 @@ _gtk_css_font_style_value_new (PangoStyle font_style)
 {
   g_return_val_if_fail (font_style < G_N_ELEMENTS (font_style_values), NULL);
 
-  return _gtk_css_value_ref (&font_style_values[font_style]);
+  return gtk_css_value_ref (&font_style_values[font_style]);
 }
 
 GtkCssValue *
@@ -376,7 +376,7 @@ _gtk_css_font_style_value_try_parse (GtkCssParser *parser)
   for (i = 0; i < G_N_ELEMENTS (font_style_values); i++)
     {
       if (gtk_css_parser_try_ident (parser, font_style_values[i].name))
-        return _gtk_css_value_ref (&font_style_values[i]);
+        return gtk_css_value_ref (&font_style_values[i]);
     }
 
   return NULL;
@@ -404,7 +404,7 @@ gtk_css_value_font_weight_compute (GtkCssValue          *value,
   int parent_value;
 
   if (value->value >= 0)
-    return _gtk_css_value_ref (value);
+    return gtk_css_value_ref (value);
 
   if (context->parent_style)
     parent_value = _gtk_css_number_value_get (context->parent_style->font->font_weight, 100);
@@ -464,7 +464,7 @@ gtk_css_font_weight_value_try_parse (GtkCssParser *parser)
   for (i = 0; i < G_N_ELEMENTS (font_weight_values); i++)
     {
       if (gtk_css_parser_try_ident (parser, font_weight_values[i].name))
-        return _gtk_css_value_ref (&font_weight_values[i]);
+        return gtk_css_value_ref (&font_weight_values[i]);
     }
 
   if (gtk_css_parser_try_ident (parser, "normal"))
@@ -516,7 +516,7 @@ _gtk_css_font_stretch_value_new (PangoStretch font_stretch)
 {
   g_return_val_if_fail (font_stretch < G_N_ELEMENTS (font_stretch_values), NULL);
 
-  return _gtk_css_value_ref (&font_stretch_values[font_stretch]);
+  return gtk_css_value_ref (&font_stretch_values[font_stretch]);
 }
 
 GtkCssValue *
@@ -529,7 +529,7 @@ _gtk_css_font_stretch_value_try_parse (GtkCssParser *parser)
   for (i = 0; i < G_N_ELEMENTS (font_stretch_values); i++)
     {
       if (gtk_css_parser_try_ident (parser, font_stretch_values[i].name))
-        return _gtk_css_value_ref (&font_stretch_values[i]);
+        return gtk_css_value_ref (&font_stretch_values[i]);
     }
 
   return NULL;
@@ -567,7 +567,7 @@ _gtk_css_text_decoration_style_value_new (GtkTextDecorationStyle style)
 {
   g_return_val_if_fail (style < G_N_ELEMENTS (text_decoration_style_values), NULL);
 
-  return _gtk_css_value_ref (&text_decoration_style_values[style]);
+  return gtk_css_value_ref (&text_decoration_style_values[style]);
 }
 
 GtkCssValue *
@@ -580,7 +580,7 @@ _gtk_css_text_decoration_style_value_try_parse (GtkCssParser *parser)
   for (i = 0; i < G_N_ELEMENTS (text_decoration_style_values); i++)
     {
       if (gtk_css_parser_try_ident (parser, text_decoration_style_values[i].name))
-        return _gtk_css_value_ref (&text_decoration_style_values[i]);
+        return gtk_css_value_ref (&text_decoration_style_values[i]);
     }
 
   return NULL;
@@ -621,7 +621,7 @@ _gtk_css_area_value_new (GtkCssArea area)
   for (i = 0; i < G_N_ELEMENTS (area_values); i++)
     {
       if (area_values[i].value == area)
-        return _gtk_css_value_ref (&area_values[i]);
+        return gtk_css_value_ref (&area_values[i]);
     }
 
   g_return_val_if_reached (NULL);
@@ -637,7 +637,7 @@ _gtk_css_area_value_try_parse (GtkCssParser *parser)
   for (i = 0; i < G_N_ELEMENTS (area_values); i++)
     {
       if (gtk_css_parser_try_ident (parser, area_values[i].name))
-        return _gtk_css_value_ref (&area_values[i]);
+        return gtk_css_value_ref (&area_values[i]);
     }
 
   return NULL;
@@ -679,7 +679,7 @@ _gtk_css_direction_value_new (GtkCssDirection direction)
   for (i = 0; i < G_N_ELEMENTS (direction_values); i++)
     {
       if (direction_values[i].value == direction)
-        return _gtk_css_value_ref (&direction_values[i]);
+        return gtk_css_value_ref (&direction_values[i]);
     }
 
   g_return_val_if_reached (NULL);
@@ -698,7 +698,7 @@ _gtk_css_direction_value_try_parse (GtkCssParser *parser)
   for (i = G_N_ELEMENTS (direction_values) - 1; i >= 0; i--)
     {
       if (gtk_css_parser_try_ident (parser, direction_values[i].name))
-        return _gtk_css_value_ref (&direction_values[i]);
+        return gtk_css_value_ref (&direction_values[i]);
     }
 
   return NULL;
@@ -738,7 +738,7 @@ _gtk_css_play_state_value_new (GtkCssPlayState play_state)
   for (i = 0; i < G_N_ELEMENTS (play_state_values); i++)
     {
       if (play_state_values[i].value == play_state)
-        return _gtk_css_value_ref (&play_state_values[i]);
+        return gtk_css_value_ref (&play_state_values[i]);
     }
 
   g_return_val_if_reached (NULL);
@@ -754,7 +754,7 @@ _gtk_css_play_state_value_try_parse (GtkCssParser *parser)
   for (i = 0; i < G_N_ELEMENTS (play_state_values); i++)
     {
       if (gtk_css_parser_try_ident (parser, play_state_values[i].name))
-        return _gtk_css_value_ref (&play_state_values[i]);
+        return gtk_css_value_ref (&play_state_values[i]);
     }
 
   return NULL;
@@ -796,7 +796,7 @@ _gtk_css_fill_mode_value_new (GtkCssFillMode fill_mode)
   for (i = 0; i < G_N_ELEMENTS (fill_mode_values); i++)
     {
       if (fill_mode_values[i].value == fill_mode)
-        return _gtk_css_value_ref (&fill_mode_values[i]);
+        return gtk_css_value_ref (&fill_mode_values[i]);
     }
 
   g_return_val_if_reached (NULL);
@@ -812,7 +812,7 @@ _gtk_css_fill_mode_value_try_parse (GtkCssParser *parser)
   for (i = 0; i < G_N_ELEMENTS (fill_mode_values); i++)
     {
       if (gtk_css_parser_try_ident (parser, fill_mode_values[i].name))
-        return _gtk_css_value_ref (&fill_mode_values[i]);
+        return gtk_css_value_ref (&fill_mode_values[i]);
     }
 
   return NULL;
@@ -853,7 +853,7 @@ _gtk_css_icon_style_value_new (GtkCssIconStyle icon_style)
   for (i = 0; i < G_N_ELEMENTS (icon_style_values); i++)
     {
       if (icon_style_values[i].value == icon_style)
-        return _gtk_css_value_ref (&icon_style_values[i]);
+        return gtk_css_value_ref (&icon_style_values[i]);
     }
 
   g_return_val_if_reached (NULL);
@@ -869,7 +869,7 @@ _gtk_css_icon_style_value_try_parse (GtkCssParser *parser)
   for (i = 0; i < G_N_ELEMENTS (icon_style_values); i++)
     {
       if (gtk_css_parser_try_ident (parser, icon_style_values[i].name))
-        return _gtk_css_value_ref (&icon_style_values[i]);
+        return gtk_css_value_ref (&icon_style_values[i]);
     }
 
   return NULL;
@@ -910,7 +910,7 @@ _gtk_css_font_kerning_value_new (GtkCssFontKerning kerning)
   for (i = 0; i < G_N_ELEMENTS (font_kerning_values); i++)
     {
       if (font_kerning_values[i].value == kerning)
-        return _gtk_css_value_ref (&font_kerning_values[i]);
+        return gtk_css_value_ref (&font_kerning_values[i]);
     }
 
   g_return_val_if_reached (NULL);
@@ -926,7 +926,7 @@ _gtk_css_font_kerning_value_try_parse (GtkCssParser *parser)
   for (i = 0; i < G_N_ELEMENTS (font_kerning_values); i++)
     {
       if (gtk_css_parser_try_ident (parser, font_kerning_values[i].name))
-        return _gtk_css_value_ref (&font_kerning_values[i]);
+        return gtk_css_value_ref (&font_kerning_values[i]);
     }
 
   return NULL;
@@ -967,7 +967,7 @@ _gtk_css_font_variant_position_value_new (GtkCssFontVariantPosition position)
   for (i = 0; i < G_N_ELEMENTS (font_variant_position_values); i++)
     {
       if (font_variant_position_values[i].value == position)
-        return _gtk_css_value_ref (&font_variant_position_values[i]);
+        return gtk_css_value_ref (&font_variant_position_values[i]);
     }
 
   g_return_val_if_reached (NULL);
@@ -983,7 +983,7 @@ _gtk_css_font_variant_position_value_try_parse (GtkCssParser *parser)
   for (i = 0; i < G_N_ELEMENTS (font_variant_position_values); i++)
     {
       if (gtk_css_parser_try_ident (parser, font_variant_position_values[i].name))
-        return _gtk_css_value_ref (&font_variant_position_values[i]);
+        return gtk_css_value_ref (&font_variant_position_values[i]);
     }
 
   return NULL;
@@ -1028,7 +1028,7 @@ _gtk_css_font_variant_caps_value_new (GtkCssFontVariantCaps caps)
   for (i = 0; i < G_N_ELEMENTS (font_variant_caps_values); i++)
     {
       if (font_variant_caps_values[i].value == caps)
-        return _gtk_css_value_ref (&font_variant_caps_values[i]);
+        return gtk_css_value_ref (&font_variant_caps_values[i]);
     }
 
   g_return_val_if_reached (NULL);
@@ -1044,7 +1044,7 @@ _gtk_css_font_variant_caps_value_try_parse (GtkCssParser *parser)
   for (i = 0; i < G_N_ELEMENTS (font_variant_caps_values); i++)
     {
       if (gtk_css_parser_try_ident (parser, font_variant_caps_values[i].name))
-        return _gtk_css_value_ref (&font_variant_caps_values[i]);
+        return gtk_css_value_ref (&font_variant_caps_values[i]);
     }
 
   return NULL;
@@ -1084,7 +1084,7 @@ _gtk_css_font_variant_alternate_value_new (GtkCssFontVariantAlternate alternate)
   for (i = 0; i < G_N_ELEMENTS (font_variant_alternate_values); i++)
     {
       if (font_variant_alternate_values[i].value == alternate)
-        return _gtk_css_value_ref (&font_variant_alternate_values[i]);
+        return gtk_css_value_ref (&font_variant_alternate_values[i]);
     }
 
   g_return_val_if_reached (NULL);
@@ -1100,7 +1100,7 @@ _gtk_css_font_variant_alternate_value_try_parse (GtkCssParser *parser)
   for (i = 0; i < G_N_ELEMENTS (font_variant_alternate_values); i++)
     {
       if (gtk_css_parser_try_ident (parser, font_variant_alternate_values[i].name))
-        return _gtk_css_value_ref (&font_variant_alternate_values[i]);
+        return gtk_css_value_ref (&font_variant_alternate_values[i]);
     }
 
   return NULL;
@@ -1197,7 +1197,7 @@ _gtk_css_text_decoration_line_value_new (GtkTextDecorationLine line)
   if (!text_decoration_line_is_valid (line))
     return NULL;
 
-  value = _gtk_css_value_new (GtkCssValue, &GTK_CSS_VALUE_TEXT_DECORATION_LINE);
+  value = gtk_css_value_new (GtkCssValue, &GTK_CSS_VALUE_TEXT_DECORATION_LINE);
   value->value = line;
   value->name = NULL;
   value->is_computed = TRUE;
@@ -1306,7 +1306,7 @@ _gtk_css_font_variant_ligature_value_new (GtkCssFontVariantLigature ligatures)
   if (!ligature_value_is_valid (ligatures))
     return NULL;
 
-  value = _gtk_css_value_new (GtkCssValue, &GTK_CSS_VALUE_FONT_VARIANT_LIGATURE);
+  value = gtk_css_value_new (GtkCssValue, &GTK_CSS_VALUE_FONT_VARIANT_LIGATURE);
   value->value = ligatures;
   value->name = NULL;
   value->is_computed = TRUE;
@@ -1410,7 +1410,7 @@ _gtk_css_font_variant_numeric_value_new (GtkCssFontVariantNumeric numeric)
   if (!numeric_value_is_valid (numeric))
     return NULL;
 
-  value = _gtk_css_value_new (GtkCssValue, &GTK_CSS_VALUE_FONT_VARIANT_NUMERIC);
+  value = gtk_css_value_new (GtkCssValue, &GTK_CSS_VALUE_FONT_VARIANT_NUMERIC);
   value->value = numeric;
   value->name = NULL;
   value->is_computed = TRUE;
@@ -1521,7 +1521,7 @@ _gtk_css_font_variant_east_asian_value_new (GtkCssFontVariantEastAsian east_asia
   if (!east_asian_value_is_valid (east_asian))
     return NULL;
 
-  value = _gtk_css_value_new (GtkCssValue, &GTK_CSS_VALUE_FONT_VARIANT_EAST_ASIAN);
+  value = gtk_css_value_new (GtkCssValue, &GTK_CSS_VALUE_FONT_VARIANT_EAST_ASIAN);
   value->value = east_asian;
   value->name = NULL;
   value->is_computed = TRUE;
@@ -1592,7 +1592,7 @@ _gtk_css_text_transform_value_new (GtkTextTransform transform)
 {
   g_return_val_if_fail (transform < G_N_ELEMENTS (text_transform_values), NULL);
 
-  return _gtk_css_value_ref (&text_transform_values[transform]);
+  return gtk_css_value_ref (&text_transform_values[transform]);
 }
 
 GtkCssValue *
@@ -1605,7 +1605,7 @@ _gtk_css_text_transform_value_try_parse (GtkCssParser *parser)
   for (i = 0; i < G_N_ELEMENTS (text_transform_values); i++)
     {
       if (gtk_css_parser_try_ident (parser, text_transform_values[i].name))
-        return _gtk_css_value_ref (&text_transform_values[i]);
+        return gtk_css_value_ref (&text_transform_values[i]);
     }
 
   return NULL;

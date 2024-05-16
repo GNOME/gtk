@@ -38,7 +38,7 @@ gtk_css_value_repeat_compute (GtkCssValue          *value,
                               guint                 property_id,
                               GtkCssComputeContext *context)
 {
-  return _gtk_css_value_ref (value);
+  return gtk_css_value_ref (value);
 }
 
 static gboolean
@@ -167,7 +167,7 @@ GtkCssValue *
 _gtk_css_background_repeat_value_new (GtkCssRepeatStyle x,
                                       GtkCssRepeatStyle y)
 {
-  return _gtk_css_value_ref (&background_repeat_values[x].values[y]);
+  return gtk_css_value_ref (&background_repeat_values[x].values[y]);
 }
 
 static gboolean
@@ -261,7 +261,7 @@ GtkCssValue *
 _gtk_css_border_repeat_value_new (GtkCssRepeatStyle x,
                                   GtkCssRepeatStyle y)
 {
-  return _gtk_css_value_ref (&border_repeat_values[x].values[y]);
+  return gtk_css_value_ref (&border_repeat_values[x].values[y]);
 }
 
 static gboolean

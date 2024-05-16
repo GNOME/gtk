@@ -367,7 +367,7 @@ gtk_css_style_print (GtkCssStyle *style,
       value = gtk_css_style_get_value (style, i);
 
       g_string_append_printf (string, "%*s%s: ", indent, "", name);
-      _gtk_css_value_print (value, string);
+      gtk_css_value_print (value, string);
       g_string_append_c (string, ';');
 
       if (section)

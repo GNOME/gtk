@@ -44,7 +44,7 @@ gtk_css_image_recolor_print (GtkCssImage *image,
   if (recolor->palette)
     {
       g_string_append (string, ",");
-      _gtk_css_value_print (recolor->palette, string);
+      gtk_css_value_print (recolor->palette, string);
     }
   g_string_append (string, ")");
 }
@@ -54,7 +54,7 @@ gtk_css_image_recolor_dispose (GObject *object)
 {
   GtkCssImageRecolor *recolor = GTK_CSS_IMAGE_RECOLOR (object);
 
-  g_clear_pointer (&recolor->palette, _gtk_css_value_unref);
+  g_clear_pointer (&recolor->palette, gtk_css_value_unref);
   g_clear_object (&recolor->file);
   g_clear_object (&recolor->texture);
 
@@ -214,9 +214,9 @@ gtk_css_image_recolor_compute (GtkCssImage          *image,
   scale = gtk_style_provider_get_scale (context->provider);
 
   if (recolor->palette)
-    palette = _gtk_css_value_compute (recolor->palette, property_id, context);
+    palette = gtk_css_value_compute (recolor->palette, property_id, context);
   else
-    palette = _gtk_css_value_ref (context->style->core->icon_palette);
+    palette = gtk_css_value_ref (context->style->core->icon_palette);
 
   img = gtk_css_image_recolor_load (recolor, context->style, palette, scale, &error);
 
@@ -227,7 +227,7 @@ gtk_css_image_recolor_compute (GtkCssImage          *image,
       g_error_free (error);
     }
 
-  _gtk_css_value_unref (palette);
+  gtk_css_value_unref (palette);
 
   return img;
 }

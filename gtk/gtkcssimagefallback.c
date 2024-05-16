@@ -105,7 +105,7 @@ gtk_css_image_fallback_print (GtkCssImage *image,
     {
       if (fallback->n_images > 0)
         g_string_append (string, ",");
-      _gtk_css_value_print (fallback->color, string);
+      gtk_css_value_print (fallback->color, string);
     }
 
   g_string_append (string, ")");
@@ -124,7 +124,7 @@ gtk_css_image_fallback_dispose (GObject *object)
 
   if (fallback->color)
     {
-      _gtk_css_value_unref (fallback->color);
+      gtk_css_value_unref (fallback->color);
       fallback->color = NULL;
     }
 
@@ -146,9 +146,9 @@ gtk_css_image_fallback_compute (GtkCssImage          *image,
       GtkCssValue *computed_color = NULL;
 
       if (fallback->color)
-        computed_color = _gtk_css_value_compute (fallback->color,
-                                                 property_id,
-                                                 context);
+        computed_color = gtk_css_value_compute (fallback->color,
+                                                property_id,
+                                                context);
 
       /* image($color) that didn't change */
       if (computed_color && !fallback->images &&
@@ -234,7 +234,7 @@ gtk_css_image_fallback_parse (GtkCssImage  *image,
 
   if (!gtk_css_parser_consume_function (parser, 1, G_MAXUINT, gtk_css_image_fallback_parse_arg, &data))
     {
-      g_clear_pointer (&data.color, _gtk_css_value_unref);
+      g_clear_pointer (&data.color, gtk_css_value_unref);
       if (data.images)
         g_ptr_array_free (data.images, TRUE);
       return FALSE;
@@ -267,7 +267,7 @@ gtk_css_image_fallback_equal (GtkCssImage *image1,
       if (fallback2->used >= 0)
         return FALSE;
 
-      return _gtk_css_value_equal (fallback1->color, fallback2->color);
+      return gtk_css_value_equal (fallback1->color, fallback2->color);
     }
 
   if (fallback2->used < 0)

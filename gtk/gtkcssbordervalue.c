@@ -35,7 +35,7 @@ gtk_css_value_border_free (GtkCssValue *value)
   for (i = 0; i < 4; i++)
     {
       if (value->values[i])
-        _gtk_css_value_unref (value->values[i]);
+        gtk_css_value_unref (value->values[i]);
     }
 
   g_free (value);
@@ -55,7 +55,7 @@ gtk_css_value_border_compute (GtkCssValue          *value,
     {
       if (value->values[i])
         {
-          values[i] = _gtk_css_value_compute (value->values[i], property_id, context);
+          values[i] = gtk_css_value_compute (value->values[i], property_id, context);
           changed |= (values[i] != value->values[i]);
         }
       else
@@ -69,9 +69,9 @@ gtk_css_value_border_compute (GtkCssValue          *value,
       for (i = 0; i < 4; i++)
         {
           if (values[i] != NULL)
-            _gtk_css_value_unref (values[i]);
+            gtk_css_value_unref (values[i]);
         }
-      return _gtk_css_value_ref (value);
+      return gtk_css_value_ref (value);
     }
 
   computed = _gtk_css_border_value_new (values[0], values[1], values[2], values[3]);
@@ -91,7 +91,7 @@ gtk_css_value_border_equal (const GtkCssValue *value1,
 
   for (i = 0; i < 4; i++)
     {
-      if (!_gtk_css_value_equal0 (value1->values[i], value2->values[i]))
+      if (!gtk_css_value_equal0 (value1->values[i], value2->values[i]))
         return FALSE;
     }
 
@@ -113,11 +113,11 @@ gtk_css_value_border_print (const GtkCssValue *value,
 {
   guint i, n;
 
-  if (!_gtk_css_value_equal0 (value->values[GTK_CSS_RIGHT], value->values[GTK_CSS_LEFT]))
+  if (!gtk_css_value_equal0 (value->values[GTK_CSS_RIGHT], value->values[GTK_CSS_LEFT]))
     n = 4;
-  else if (!_gtk_css_value_equal0 (value->values[GTK_CSS_TOP], value->values[GTK_CSS_BOTTOM]))
+  else if (!gtk_css_value_equal0 (value->values[GTK_CSS_TOP], value->values[GTK_CSS_BOTTOM]))
     n = 3;
-  else if (!_gtk_css_value_equal0 (value->values[GTK_CSS_TOP], value->values[GTK_CSS_RIGHT]))
+  else if (!gtk_css_value_equal0 (value->values[GTK_CSS_TOP], value->values[GTK_CSS_RIGHT]))
     n = 2;
   else
     n = 1;
@@ -130,7 +130,7 @@ gtk_css_value_border_print (const GtkCssValue *value,
       if (value->values[i] == NULL)
         g_string_append (string, "auto");
       else
-        _gtk_css_value_print (value->values[i], string);
+        gtk_css_value_print (value->values[i], string);
     }
 
   if (value->fill)
@@ -156,7 +156,7 @@ _gtk_css_border_value_new (GtkCssValue *top,
 {
   GtkCssValue *result;
 
-  result = _gtk_css_value_new (GtkCssValue, &GTK_CSS_VALUE_BORDER);
+  result = gtk_css_value_new (GtkCssValue, &GTK_CSS_VALUE_BORDER);
   result->values[GTK_CSS_TOP] = top;
   result->values[GTK_CSS_RIGHT] = right;
   result->values[GTK_CSS_BOTTOM] = bottom;
@@ -194,7 +194,7 @@ _gtk_css_border_value_parse (GtkCssParser           *parser,
       result->values[i] = _gtk_css_number_value_parse (parser, flags);
       if (result->values[i] == NULL)
         {
-          _gtk_css_value_unref (result);
+          gtk_css_value_unref (result);
           return NULL;
         }
     }
@@ -202,7 +202,7 @@ _gtk_css_border_value_parse (GtkCssParser           *parser,
   if (i == 0)
     {
       gtk_css_parser_error_syntax (parser, "Expected a number");
-      _gtk_css_value_unref (result);
+      gtk_css_value_unref (result);
       return NULL;
     }
 
@@ -212,7 +212,7 @@ _gtk_css_border_value_parse (GtkCssParser           *parser,
   for (; i < 4; i++)
     {
       if (result->values[(i - 1) >> 1])
-        result->values[i] = _gtk_css_value_ref (result->values[(i - 1) >> 1]);
+        result->values[i] = gtk_css_value_ref (result->values[(i - 1) >> 1]);
     }
 
   result->is_computed = TRUE;

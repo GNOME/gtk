@@ -284,7 +284,7 @@ gtk_css_image_linear_parse_color_stop (GtkCssImageLinear *self,
                                                  | GTK_CSS_PARSE_LENGTH);
       if (stop.offset == NULL)
         {
-          _gtk_css_value_unref (stop.color);
+          gtk_css_value_unref (stop.color);
           return 0;
         }
     }
@@ -464,7 +464,7 @@ gtk_css_image_linear_print (GtkCssImage *image,
     }
   else
     {
-      _gtk_css_value_print (linear->angle, string);
+      gtk_css_value_print (linear->angle, string);
       g_string_append (string, ", ");
     }
 
@@ -475,12 +475,12 @@ gtk_css_image_linear_print (GtkCssImage *image,
       if (i > 0)
         g_string_append (string, ", ");
 
-      _gtk_css_value_print (stop->color, string);
+      gtk_css_value_print (stop->color, string);
 
       if (stop->offset)
         {
           g_string_append (string, " ");
-          _gtk_css_value_print (stop->offset, string);
+          gtk_css_value_print (stop->offset, string);
         }
     }
 
@@ -501,7 +501,7 @@ gtk_css_image_linear_compute (GtkCssImage          *image,
   copy->side = linear->side;
 
   if (linear->angle)
-    copy->angle = _gtk_css_value_compute (linear->angle, property_id, context);
+    copy->angle = gtk_css_value_compute (linear->angle, property_id, context);
 
   copy->n_stops = linear->n_stops;
   copy->color_stops = g_malloc (sizeof (GtkCssImageLinearColorStop) * copy->n_stops);
@@ -510,11 +510,11 @@ gtk_css_image_linear_compute (GtkCssImage          *image,
       const GtkCssImageLinearColorStop *stop = &linear->color_stops[i];
       GtkCssImageLinearColorStop *scopy = &copy->color_stops[i];
 
-      scopy->color = _gtk_css_value_compute (stop->color, property_id, context);
+      scopy->color = gtk_css_value_compute (stop->color, property_id, context);
 
       if (stop->offset)
         {
-          scopy->offset = _gtk_css_value_compute (stop->offset, property_id, context);
+          scopy->offset = gtk_css_value_compute (stop->offset, property_id, context);
         }
       else
         {
@@ -556,7 +556,7 @@ gtk_css_image_linear_transition (GtkCssImage *start_image,
 
   result->side = start->side;
   if (result->side == 0)
-    result->angle = _gtk_css_value_transition (start->angle, end->angle, property_id, progress);
+    result->angle = gtk_css_value_transition (start->angle, end->angle, property_id, progress);
   if (result->angle == NULL)
     goto fail;
 
@@ -578,22 +578,22 @@ gtk_css_image_linear_transition (GtkCssImage *start_image,
         }
       else
         {
-          stop->offset = _gtk_css_value_transition (start_stop->offset,
-                                                    end_stop->offset,
-                                                    property_id,
-                                                    progress);
+          stop->offset = gtk_css_value_transition (start_stop->offset,
+                                                   end_stop->offset,
+                                                   property_id,
+                                                   progress);
           if (stop->offset == NULL)
             goto fail;
         }
 
-      stop->color = _gtk_css_value_transition (start_stop->color,
-                                               end_stop->color,
-                                               property_id,
-                                               progress);
+      stop->color = gtk_css_value_transition (start_stop->color,
+                                              end_stop->color,
+                                              property_id,
+                                              progress);
       if (stop->color == NULL)
         {
           if (stop->offset)
-            _gtk_css_value_unref (stop->offset);
+            gtk_css_value_unref (stop->offset);
           goto fail;
         }
 
@@ -617,7 +617,7 @@ gtk_css_image_linear_equal (GtkCssImage *image1,
 
   if (linear1->repeating != linear2->repeating ||
       linear1->side != linear2->side ||
-      (linear1->side == 0 && !_gtk_css_value_equal (linear1->angle, linear2->angle)) ||
+      (linear1->side == 0 && !gtk_css_value_equal (linear1->angle, linear2->angle)) ||
       linear1->n_stops != linear2->n_stops)
     return FALSE;
 
@@ -626,8 +626,8 @@ gtk_css_image_linear_equal (GtkCssImage *image1,
       const GtkCssImageLinearColorStop *stop1 = &linear1->color_stops[i];
       const GtkCssImageLinearColorStop *stop2 = &linear2->color_stops[i];
 
-      if (!_gtk_css_value_equal0 (stop1->offset, stop2->offset) ||
-          !_gtk_css_value_equal (stop1->color, stop2->color))
+      if (!gtk_css_value_equal0 (stop1->offset, stop2->offset) ||
+          !gtk_css_value_equal (stop1->color, stop2->color))
         return FALSE;
     }
 
@@ -644,16 +644,16 @@ gtk_css_image_linear_dispose (GObject *object)
     {
       GtkCssImageLinearColorStop *stop = &linear->color_stops[i];
 
-      _gtk_css_value_unref (stop->color);
+      gtk_css_value_unref (stop->color);
       if (stop->offset)
-        _gtk_css_value_unref (stop->offset);
+        gtk_css_value_unref (stop->offset);
     }
   g_free (linear->color_stops);
 
   linear->side = 0;
   if (linear->angle)
     {
-      _gtk_css_value_unref (linear->angle);
+      gtk_css_value_unref (linear->angle);
       linear->angle = NULL;
     }
 

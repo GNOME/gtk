@@ -35,7 +35,7 @@ gtk_css_value_array_free (GtkCssValue *value)
   guint i;
 
   for (i = 0; i < value->n_values; i++)
-    _gtk_css_value_unref (value->values[i]);
+    gtk_css_value_unref (value->values[i]);
 
   g_free (value);
 }
@@ -52,24 +52,24 @@ gtk_css_value_array_compute (GtkCssValue          *value,
   result = NULL;
   for (i = 0; i < value->n_values; i++)
     {
-      i_value =  _gtk_css_value_compute (value->values[i], property_id, context);
+      i_value =  gtk_css_value_compute (value->values[i], property_id, context);
 
       if (result == NULL &&
 	  i_value != value->values[i])
 	{
 	  result = _gtk_css_array_value_new_from_array (value->values, value->n_values);
 	  for (j = 0; j < i; j++)
-	    _gtk_css_value_ref (result->values[j]);
+	    gtk_css_value_ref (result->values[j]);
 	}
 
       if (result != NULL)
 	result->values[i] = i_value;
       else
-	_gtk_css_value_unref (i_value);
+	gtk_css_value_unref (i_value);
     }
 
   if (result == NULL)
-    return _gtk_css_value_ref (value);
+    return gtk_css_value_ref (value);
 
   return result;
 }
@@ -85,8 +85,8 @@ gtk_css_value_array_equal (const GtkCssValue *value1,
 
   for (i = 0; i < value1->n_values; i++)
     {
-      if (!_gtk_css_value_equal (value1->values[i],
-                                 value2->values[i]))
+      if (!gtk_css_value_equal (value1->values[i],
+                                value2->values[i]))
         return FALSE;
     }
 
@@ -125,14 +125,14 @@ gtk_css_value_array_transition_repeat (GtkCssValue *start,
 
   for (i = 0; i < n; i++)
     {
-      transitions[i] = _gtk_css_value_transition (start->values[i % start->n_values],
-                                                  end->values[i % end->n_values],
-                                                  property_id,
-                                                  progress);
+      transitions[i] = gtk_css_value_transition (start->values[i % start->n_values],
+                                                 end->values[i % end->n_values],
+                                                 property_id,
+                                                 progress);
       if (transitions[i] == NULL)
         {
           while (i--)
-            _gtk_css_value_unref (transitions[i]);
+            gtk_css_value_unref (transitions[i]);
           return NULL;
         }
     }
@@ -166,14 +166,14 @@ gtk_css_value_array_transition_extend (GtkCssValue *start,
 
   for (i = 0; i < MIN (start->n_values, end->n_values); i++)
     {
-      transitions[i] = _gtk_css_value_transition (start->values[i],
-                                                  end->values[i],
-                                                  property_id,
-                                                  progress);
+      transitions[i] = gtk_css_value_transition (start->values[i],
+                                                 end->values[i],
+                                                 property_id,
+                                                 progress);
       if (transitions[i] == NULL)
         {
           while (i--)
-            _gtk_css_value_unref (transitions[i]);
+            gtk_css_value_unref (transitions[i]);
           return NULL;
         }
     }
@@ -186,28 +186,28 @@ gtk_css_value_array_transition_extend (GtkCssValue *start,
 
       for (; i < start->n_values; i++)
         {
-          transitions[i] = _gtk_css_value_transition (start->values[i],
-                                                      default_value,
-                                                      property_id,
-                                                      progress);
+          transitions[i] = gtk_css_value_transition (start->values[i],
+                                                     default_value,
+                                                     property_id,
+                                                     progress);
           if (transitions[i] == NULL)
             {
               while (i--)
-                _gtk_css_value_unref (transitions[i]);
+                gtk_css_value_unref (transitions[i]);
               return NULL;
             }
         }
 
       for (; i < end->n_values; i++)
         {
-          transitions[i] = _gtk_css_value_transition (default_value,
-                                                      end->values[i],
-                                                      property_id,
-                                                      progress);
+          transitions[i] = gtk_css_value_transition (default_value,
+                                                     end->values[i],
+                                                     property_id,
+                                                     progress);
           if (transitions[i] == NULL)
             {
               while (i--)
-                _gtk_css_value_unref (transitions[i]);
+                gtk_css_value_unref (transitions[i]);
               return NULL;
             }
         }
@@ -325,17 +325,17 @@ gtk_css_value_array_get_dynamic_value (GtkCssValue *value,
 	{
 	  result = _gtk_css_array_value_new_from_array (value->values, value->n_values);
 	  for (j = 0; j < i; j++)
-	    _gtk_css_value_ref (result->values[j]);
+	    gtk_css_value_ref (result->values[j]);
 	}
 
       if (result != NULL)
 	result->values[i] = i_value;
       else
-	_gtk_css_value_unref (i_value);
+	gtk_css_value_unref (i_value);
     }
 
   if (result == NULL)
-    return _gtk_css_value_ref (value);
+    return gtk_css_value_ref (value);
 
   return result;
 }
@@ -356,7 +356,7 @@ gtk_css_value_array_print (const GtkCssValue *value,
     {
       if (i > 0)
         g_string_append (string, ", ");
-      _gtk_css_value_print (value->values[i], string);
+      gtk_css_value_print (value->values[i], string);
     }
 }
 
@@ -392,11 +392,12 @@ _gtk_css_array_value_new_from_array (GtkCssValue **values,
   if (n_values == 1)
     return values[0];
 
-  result = _gtk_css_value_alloc (&GTK_CSS_VALUE_ARRAY, sizeof (GtkCssValue) + sizeof (GtkCssValue *) * (n_values - 1));
+  result = gtk_css_value_alloc (&GTK_CSS_VALUE_ARRAY, sizeof (GtkCssValue) + sizeof (GtkCssValue *) * (n_values - 1));
   result->n_values = n_values;
   memcpy (&result->values[0], values, sizeof (GtkCssValue *) * n_values);
 
   result->is_computed = TRUE;
+  result->contains_variables = FALSE;
   for (i = 0; i < n_values; i ++)
     {
       if (!gtk_css_value_is_computed (values[i]))
@@ -427,7 +428,7 @@ _gtk_css_array_value_parse (GtkCssParser *parser,
     if (value == NULL)
       {
         for (i = 0; i < n_values; i ++)
-          _gtk_css_value_unref (values[i]);
+          gtk_css_value_unref (values[i]);
 
         return NULL;
       }

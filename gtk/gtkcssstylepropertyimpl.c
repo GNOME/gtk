@@ -84,7 +84,7 @@ gtk_css_style_property_register (const char *                   name,
 
   node->parse_value = parse_value;
 
-  _gtk_css_value_unref (initial_value);
+  gtk_css_value_unref (initial_value);
 
   g_assert (_gtk_css_style_property_get_id (node) == expected_id);
 }
@@ -1434,5 +1434,5 @@ _gtk_css_style_property_init_properties (void)
                                           GTK_STYLE_PROPERTY_INHERIT | GTK_STYLE_PROPERTY_ANIMATED,
                                           GTK_CSS_AFFECTS_TEXT_ATTRS | GTK_CSS_AFFECTS_TEXT_SIZE,
                                           parse_line_height,
-                                          _gtk_css_value_ref (gtk_css_line_height_value_get_default ()));
+                                          gtk_css_value_ref (gtk_css_line_height_value_get_default ()));
 }

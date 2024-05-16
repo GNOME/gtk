@@ -74,7 +74,7 @@ _gtk_css_keyframes_unref (GtkCssKeyframes *keyframes)
     {
       for (p = 0; p < keyframes->n_properties; p++)
         {
-          _gtk_css_value_unref (KEYFRAMES_VALUE (keyframes, k, p));
+          gtk_css_value_unref (KEYFRAMES_VALUE (keyframes, k, p));
           KEYFRAMES_VALUE (keyframes, k, p) = NULL;
         }
 
@@ -103,7 +103,7 @@ gtk_css_keyframes_add_keyframe (GtkCssKeyframes *keyframes,
               if (KEYFRAMES_VALUE (keyframes, k, p) == NULL)
                 continue;
 
-              _gtk_css_value_unref (KEYFRAMES_VALUE (keyframes, k, p));
+              gtk_css_value_unref (KEYFRAMES_VALUE (keyframes, k, p));
               KEYFRAMES_VALUE (keyframes, k, p) = NULL;
 
               /* XXX: GC properties that are now unset
@@ -244,9 +244,9 @@ keyframes_set_value (GtkCssKeyframes     *keyframes,
   p = gtk_css_keyframes_lookup_property (keyframes, _gtk_css_style_property_get_id (property));
   
   if (KEYFRAMES_VALUE (keyframes, k, p))
-    _gtk_css_value_unref (KEYFRAMES_VALUE (keyframes, k, p));
+    gtk_css_value_unref (KEYFRAMES_VALUE (keyframes, k, p));
 
-  KEYFRAMES_VALUE (keyframes, k, p) = _gtk_css_value_ref (value);
+  KEYFRAMES_VALUE (keyframes, k, p) = gtk_css_value_ref (value);
 
   return TRUE;
 }
@@ -376,7 +376,7 @@ gtk_css_keyframes_parse_declaration (GtkCssKeyframes *keyframes,
   if (!gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_EOF))
     {
       gtk_css_parser_error_syntax (parser, "Junk at end of value");
-      _gtk_css_value_unref (value);
+      gtk_css_value_unref (value);
       return FALSE;
     }
 
@@ -407,7 +407,7 @@ gtk_css_keyframes_parse_declaration (GtkCssKeyframes *keyframes,
       g_assert_not_reached ();
     }
       
-  _gtk_css_value_unref (value);
+  gtk_css_value_unref (value);
 
   return TRUE;
 }
@@ -566,7 +566,7 @@ _gtk_css_keyframes_print (GtkCssKeyframes *keyframes,
                                                         GTK_STYLE_PROPERTY (
                                                           _gtk_css_style_property_lookup_by_id (
                                                             keyframes->property_ids[sorted[p]]))));
-          _gtk_css_value_print (KEYFRAMES_VALUE (keyframes, k, sorted[p]), string);
+          gtk_css_value_print (KEYFRAMES_VALUE (keyframes, k, sorted[p]), string);
           g_string_append (string, ";\n");
         }
 
@@ -644,9 +644,9 @@ _gtk_css_keyframes_compute (GtkCssKeyframes  *keyframes,
 
           context.variables = keyframes->variables ? keyframes->variables[k] : NULL;
 
-          KEYFRAMES_VALUE (resolved, k, p) =  _gtk_css_value_compute (KEYFRAMES_VALUE (keyframes, k, p),
-                                                                      resolved->property_ids[p],
-                                                                      &context);
+          KEYFRAMES_VALUE (resolved, k, p) =  gtk_css_value_compute (KEYFRAMES_VALUE (keyframes, k, p),
+                                                                     resolved->property_ids[p],
+                                                                     &context);
         }
     }
 
@@ -712,7 +712,7 @@ _gtk_css_keyframes_get_value (GtkCssKeyframes *keyframes,
 
       if (keyframes->keyframe_progress[k] == progress)
         {
-          return _gtk_css_value_ref (KEYFRAMES_VALUE (keyframes, k, id));
+          return gtk_css_value_ref (KEYFRAMES_VALUE (keyframes, k, id));
         }
       else if (keyframes->keyframe_progress[k] < progress)
         {
@@ -729,14 +729,14 @@ _gtk_css_keyframes_get_value (GtkCssKeyframes *keyframes,
 
   progress = (progress - start_progress) / (end_progress - start_progress);
 
-  result = _gtk_css_value_transition (start_value,
-                                      end_value,
-                                      keyframes->property_ids[id],
-                                      progress);
+  result = gtk_css_value_transition (start_value,
+                                     end_value,
+                                     keyframes->property_ids[id],
+                                     progress);
 
   /* XXX: Dear spec, what's the correct thing to do here? */
   if (result == NULL)
-    return _gtk_css_value_ref (start_value);
+    return gtk_css_value_ref (start_value);
 
   return result;
 }

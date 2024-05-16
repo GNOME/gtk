@@ -43,14 +43,14 @@ gtk_css_value_image_compute (GtkCssValue          *value,
   image = _gtk_css_image_value_get_image (value);
 
   if (image == NULL)
-    return _gtk_css_value_ref (value);
+    return gtk_css_value_ref (value);
 
   computed = _gtk_css_image_compute (image, property_id, context);
 
   if (computed == image)
     {
       g_object_unref (computed);
-      return _gtk_css_value_ref (value);
+      return gtk_css_value_ref (value);
     }
 
   return _gtk_css_image_value_new (computed);
@@ -138,9 +138,9 @@ _gtk_css_image_value_new (GtkCssImage *image)
   GtkCssValue *value;
 
   if (image == NULL)
-    return _gtk_css_value_ref (&image_none_singleton);
+    return gtk_css_value_ref (&image_none_singleton);
 
-  value = _gtk_css_value_new (GtkCssValue, &GTK_CSS_VALUE_IMAGE);
+  value = gtk_css_value_new (GtkCssValue, &GTK_CSS_VALUE_IMAGE);
   value->image = image;
   value->is_computed = gtk_css_image_is_computed (image);
 

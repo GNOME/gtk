@@ -30,8 +30,8 @@ struct _GtkCssValue {
 static void
 gtk_css_value_position_free (GtkCssValue *value)
 {
-  _gtk_css_value_unref (value->x);
-  _gtk_css_value_unref (value->y);
+  gtk_css_value_unref (value->x);
+  gtk_css_value_unref (value->y);
   g_free (value);
 }
 
@@ -42,13 +42,13 @@ gtk_css_value_position_compute (GtkCssValue          *position,
 {
   GtkCssValue *x, *y;
 
-  x = _gtk_css_value_compute (position->x, property_id, context);
-  y = _gtk_css_value_compute (position->y, property_id, context);
+  x = gtk_css_value_compute (position->x, property_id, context);
+  y = gtk_css_value_compute (position->y, property_id, context);
   if (x == position->x && y == position->y)
     {
-      _gtk_css_value_unref (x);
-      _gtk_css_value_unref (y);
-      return _gtk_css_value_ref (position);
+      gtk_css_value_unref (x);
+      gtk_css_value_unref (y);
+      return gtk_css_value_ref (position);
     }
 
   return _gtk_css_position_value_new (x, y);
@@ -58,8 +58,8 @@ static gboolean
 gtk_css_value_position_equal (const GtkCssValue *position1,
                               const GtkCssValue *position2)
 {
-  return _gtk_css_value_equal (position1->x, position2->x)
-      && _gtk_css_value_equal (position1->y, position2->y);
+  return gtk_css_value_equal (position1->x, position2->x)
+      && gtk_css_value_equal (position1->y, position2->y);
 }
 
 static GtkCssValue *
@@ -70,13 +70,13 @@ gtk_css_value_position_transition (GtkCssValue *start,
 {
   GtkCssValue *x, *y;
 
-  x = _gtk_css_value_transition (start->x, end->x, property_id, progress);
+  x = gtk_css_value_transition (start->x, end->x, property_id, progress);
   if (x == NULL)
     return NULL;
-  y = _gtk_css_value_transition (start->y, end->y, property_id, progress);
+  y = gtk_css_value_transition (start->y, end->y, property_id, progress);
   if (y == NULL)
     {
-      _gtk_css_value_unref (x);
+      gtk_css_value_unref (x);
       return NULL;
     }
 
@@ -98,9 +98,9 @@ gtk_css_value_position_print (const GtkCssValue *position,
   GtkCssValue *center = _gtk_css_number_value_new (50, GTK_CSS_PERCENT);
   guint i;
 
-  if (_gtk_css_value_equal (position->x, center))
+  if (gtk_css_value_equal (position->x, center))
     {
-      if (_gtk_css_value_equal (position->y, center))
+      if (gtk_css_value_equal (position->y, center))
         {
           g_string_append (string, "center");
           goto done;
@@ -110,16 +110,16 @@ gtk_css_value_position_print (const GtkCssValue *position,
     {
       for (i = 0; i < G_N_ELEMENTS (values); i++)
         {
-          if (_gtk_css_value_equal (position->x, values[i].number))
+          if (gtk_css_value_equal (position->x, values[i].number))
             {
               g_string_append (string, values[i].x_name);
               break;
             }
         }
       if (i == G_N_ELEMENTS (values))
-        _gtk_css_value_print (position->x, string);
+        gtk_css_value_print (position->x, string);
 
-      if (_gtk_css_value_equal (position->y, center))
+      if (gtk_css_value_equal (position->y, center))
         goto done;
 
       g_string_append_c (string, ' ');
@@ -127,7 +127,7 @@ gtk_css_value_position_print (const GtkCssValue *position,
 
   for (i = 0; i < G_N_ELEMENTS (values); i++)
     {
-      if (_gtk_css_value_equal (position->y, values[i].number))
+      if (gtk_css_value_equal (position->y, values[i].number))
         {
           g_string_append (string, values[i].y_name);
           goto done;
@@ -135,15 +135,15 @@ gtk_css_value_position_print (const GtkCssValue *position,
     }
   if (i == G_N_ELEMENTS (values))
     {
-      if (_gtk_css_value_equal (position->x, center))
+      if (gtk_css_value_equal (position->x, center))
         g_string_append (string, "center ");
-      _gtk_css_value_print (position->y, string);
+      gtk_css_value_print (position->y, string);
     }
 
 done:
   for (i = 0; i < G_N_ELEMENTS (values); i++)
-    _gtk_css_value_unref (values[i].number);
-  _gtk_css_value_unref (center);
+    gtk_css_value_unref (values[i].number);
+  gtk_css_value_unref (center);
 }
 
 static const GtkCssValueClass GTK_CSS_VALUE_POSITION = {
@@ -163,7 +163,7 @@ _gtk_css_position_value_new (GtkCssValue *x,
 {
   GtkCssValue *result;
 
-  result = _gtk_css_value_new (GtkCssValue, &GTK_CSS_VALUE_POSITION);
+  result = gtk_css_value_new (GtkCssValue, &GTK_CSS_VALUE_POSITION);
   result->x = x;
   result->y = y;
   result->is_computed = gtk_css_value_is_computed (x) &&
@@ -263,7 +263,7 @@ position_value_parse (GtkCssParser *parser, gboolean try)
             {
               if (!try)
                 gtk_css_parser_error_syntax (parser, "Invalid combination of values");
-              _gtk_css_value_unref (y);
+              gtk_css_value_unref (y);
               return NULL;
             }
           y = _gtk_css_number_value_parse (parser,
@@ -271,7 +271,7 @@ position_value_parse (GtkCssParser *parser, gboolean try)
                                            | GTK_CSS_PARSE_LENGTH);
           if (y == NULL)
             {
-              _gtk_css_value_unref (x);
+              gtk_css_value_unref (x);
 	      return NULL;
             }
         }
@@ -313,13 +313,13 @@ gtk_css_position_value_parse_spacing (GtkCssParser *parser)
       y = _gtk_css_number_value_parse (parser, GTK_CSS_PARSE_LENGTH | GTK_CSS_POSITIVE_ONLY);
       if (y == NULL)
         {
-          _gtk_css_value_unref (x);
+          gtk_css_value_unref (x);
           return NULL;
         }
     }
   else
     {
-      y = _gtk_css_value_ref (x);
+      y = gtk_css_value_ref (x);
     }
 
   return _gtk_css_position_value_new (x, y);
