@@ -60,7 +60,7 @@ struct _GtkCssValue
       GtkCssValue *color2;
       double factor;
     } mix;
-  } sym_col;
+  };
 };
 
 static void
@@ -72,17 +72,17 @@ gtk_css_value_color_free (GtkCssValue *color)
   switch (color->type)
     {
     case COLOR_TYPE_NAME:
-      g_free (color->sym_col.name);
+      g_free (color->name);
       break;
     case COLOR_TYPE_SHADE:
-      gtk_css_value_unref (color->sym_col.shade.color);
+      gtk_css_value_unref (color->shade.color);
       break;
     case COLOR_TYPE_ALPHA:
-      gtk_css_value_unref (color->sym_col.alpha.color);
+      gtk_css_value_unref (color->alpha.color);
       break;
     case COLOR_TYPE_MIX:
-      gtk_css_value_unref (color->sym_col.mix.color1);
-      gtk_css_value_unref (color->sym_col.mix.color2);
+      gtk_css_value_unref (color->mix.color1);
+      gtk_css_value_unref (color->mix.color2);
       break;
     case COLOR_TYPE_LITERAL:
     case COLOR_TYPE_CURRENT_COLOR:
@@ -121,7 +121,7 @@ gtk_css_value_color_get_fallback (guint                 property_id,
         return gtk_css_value_ref (context->style->core->color);
       default:
         if (property_id < GTK_CSS_PROPERTY_N_PROPERTIES)
-          g_warning ("No fallback color defined for property '%s'", 
+          g_warning ("No fallback color defined for property '%s'",
                      _gtk_style_property_get_name (GTK_STYLE_PROPERTY (_gtk_css_style_property_lookup_by_id (property_id))));
         return gtk_css_color_value_new_transparent ();
     }
@@ -136,7 +136,7 @@ gtk_css_value_color_compute (GtkCssValue          *value,
 
   /* The computed value of the ‘currentColor’ keyword is the computed
    * value of the ‘color’ property. If the ‘currentColor’ keyword is
-   * set on the ‘color’ property itself, it is treated as ‘color: inherit’. 
+   * set on the ‘color’ property itself, it is treated as ‘color: inherit’.
    */
   if (property_id == GTK_CSS_PROPERTY_COLOR)
     {
@@ -180,23 +180,23 @@ gtk_css_value_color_equal (const GtkCssValue *value1,
   switch (value1->type)
     {
     case COLOR_TYPE_LITERAL:
-      return gdk_rgba_equal (&value1->sym_col.rgba, &value2->sym_col.rgba);
+      return gdk_rgba_equal (&value1->rgba, &value2->rgba);
     case COLOR_TYPE_NAME:
-      return g_str_equal (value1->sym_col.name, value2->sym_col.name);
+      return g_str_equal (value1->name, value2->name);
     case COLOR_TYPE_SHADE:
-      return value1->sym_col.shade.factor == value2->sym_col.shade.factor &&
-             gtk_css_value_equal (value1->sym_col.shade.color,
-                                  value2->sym_col.shade.color);
+      return value1->shade.factor == value2->shade.factor &&
+             gtk_css_value_equal (value1->shade.color,
+                                  value2->shade.color);
     case COLOR_TYPE_ALPHA:
-      return value1->sym_col.alpha.factor == value2->sym_col.alpha.factor &&
-             gtk_css_value_equal (value1->sym_col.alpha.color,
-                                  value2->sym_col.alpha.color);
+      return value1->alpha.factor == value2->alpha.factor &&
+             gtk_css_value_equal (value1->alpha.color,
+                                  value2->alpha.color);
     case COLOR_TYPE_MIX:
-      return value1->sym_col.mix.factor == value2->sym_col.mix.factor &&
-             gtk_css_value_equal (value1->sym_col.mix.color1,
-                                  value2->sym_col.mix.color1) &&
-             gtk_css_value_equal (value1->sym_col.mix.color2,
-                                  value2->sym_col.mix.color2);
+      return value1->mix.factor == value2->mix.factor &&
+             gtk_css_value_equal (value1->mix.color1,
+                                  value2->mix.color1) &&
+             gtk_css_value_equal (value1->mix.color2,
+                                  value2->mix.color2);
     case COLOR_TYPE_CURRENT_COLOR:
       return TRUE;
     default:
@@ -222,23 +222,23 @@ gtk_css_value_color_print (const GtkCssValue *value,
     {
     case COLOR_TYPE_LITERAL:
       {
-        char *s = gdk_rgba_to_string (&value->sym_col.rgba);
+        char *s = gdk_rgba_to_string (&value->rgba);
         g_string_append (string, s);
         g_free (s);
       }
       break;
     case COLOR_TYPE_NAME:
       g_string_append (string, "@");
-      g_string_append (string, value->sym_col.name);
+      g_string_append (string, value->name);
       break;
     case COLOR_TYPE_SHADE:
       {
         char factor[G_ASCII_DTOSTR_BUF_SIZE];
 
         g_string_append (string, "shade(");
-        gtk_css_value_print (value->sym_col.shade.color, string);
+        gtk_css_value_print (value->shade.color, string);
         g_string_append (string, ", ");
-        g_ascii_dtostr (factor, sizeof (factor), value->sym_col.shade.factor);
+        g_ascii_dtostr (factor, sizeof (factor), value->shade.factor);
         g_string_append (string, factor);
         g_string_append (string, ")");
       }
@@ -248,9 +248,9 @@ gtk_css_value_color_print (const GtkCssValue *value,
         char factor[G_ASCII_DTOSTR_BUF_SIZE];
 
         g_string_append (string, "alpha(");
-        gtk_css_value_print (value->sym_col.alpha.color, string);
+        gtk_css_value_print (value->alpha.color, string);
         g_string_append (string, ", ");
-        g_ascii_dtostr (factor, sizeof (factor), value->sym_col.alpha.factor);
+        g_ascii_dtostr (factor, sizeof (factor), value->alpha.factor);
         g_string_append (string, factor);
         g_string_append (string, ")");
       }
@@ -260,11 +260,11 @@ gtk_css_value_color_print (const GtkCssValue *value,
         char factor[G_ASCII_DTOSTR_BUF_SIZE];
 
         g_string_append (string, "mix(");
-        gtk_css_value_print (value->sym_col.mix.color1, string);
+        gtk_css_value_print (value->mix.color1, string);
         g_string_append (string, ", ");
-        gtk_css_value_print (value->sym_col.mix.color2, string);
+        gtk_css_value_print (value->mix.color2, string);
         g_string_append (string, ", ");
-        g_ascii_dtostr (factor, sizeof (factor), value->sym_col.mix.factor);
+        g_ascii_dtostr (factor, sizeof (factor), value->mix.factor);
         g_string_append (string, factor);
         g_string_append (string, ")");
       }
@@ -355,7 +355,7 @@ gtk_css_color_value_do_resolve (GtkCssValue      *color,
       return gtk_css_value_ref (color);
     case COLOR_TYPE_NAME:
       {
-	GtkCssValue *named;
+        GtkCssValue *named;
         GSList cycle = { color, cycle_list };
 
         /* If color exists in cycle_list, we're currently resolving it.
@@ -363,13 +363,13 @@ gtk_css_color_value_do_resolve (GtkCssValue      *color,
         if (g_slist_find (cycle_list, color))
           return NULL;
 
-        named = gtk_style_provider_get_color (provider, color->sym_col.name);
-	if (named == NULL)
-	  return NULL;
+        named = gtk_style_provider_get_color (provider, color->name);
+        if (named == NULL)
+          return NULL;
 
         value = gtk_css_color_value_do_resolve (named, provider, current, &cycle);
-	if (value == NULL)
-	  return NULL;
+        if (value == NULL)
+          return NULL;
       }
 
       break;
@@ -379,12 +379,12 @@ gtk_css_color_value_do_resolve (GtkCssValue      *color,
         GtkCssValue *val;
         GdkRGBA shade;
 
-        val = gtk_css_color_value_do_resolve (color->sym_col.shade.color, provider, current, cycle_list);
+        val = gtk_css_color_value_do_resolve (color->shade.color, provider, current, cycle_list);
         if (val == NULL)
           return NULL;
         c = gtk_css_color_value_get_rgba (val);
 
-        apply_shade (c, &shade, color->sym_col.shade.factor);
+        apply_shade (c, &shade, color->shade.factor);
 
         value = gtk_css_color_value_new_literal (&shade);
         gtk_css_value_unref (val);
@@ -397,12 +397,12 @@ gtk_css_color_value_do_resolve (GtkCssValue      *color,
         GtkCssValue *val;
         GdkRGBA alpha;
 
-        val = gtk_css_color_value_do_resolve (color->sym_col.alpha.color, provider, current, cycle_list);
+        val = gtk_css_color_value_do_resolve (color->alpha.color, provider, current, cycle_list);
         if (val == NULL)
           return NULL;
         c = gtk_css_color_value_get_rgba (val);
 
-        apply_alpha (c, &alpha, color->sym_col.alpha.factor);
+        apply_alpha (c, &alpha, color->alpha.factor);
 
         value = gtk_css_color_value_new_literal (&alpha);
         gtk_css_value_unref (val);
@@ -415,17 +415,17 @@ gtk_css_color_value_do_resolve (GtkCssValue      *color,
         GtkCssValue *val1, *val2;
         GdkRGBA res;
 
-        val1 = gtk_css_color_value_do_resolve (color->sym_col.mix.color1, provider, current, cycle_list);
+        val1 = gtk_css_color_value_do_resolve (color->mix.color1, provider, current, cycle_list);
         if (val1 == NULL)
           return NULL;
         color1 = gtk_css_color_value_get_rgba (val1);
 
-        val2 = gtk_css_color_value_do_resolve (color->sym_col.mix.color2, provider, current, cycle_list);
+        val2 = gtk_css_color_value_do_resolve (color->mix.color2, provider, current, cycle_list);
         if (val2 == NULL)
           return NULL;
         color2 = gtk_css_color_value_get_rgba (val2);
 
-        apply_mix (color1, color2, &res, color->sym_col.mix.factor);
+        apply_mix (color1, color2, &res, color->mix.factor);
 
         value = gtk_css_color_value_new_literal (&res);
         gtk_css_value_unref (val1);
@@ -474,9 +474,9 @@ gtk_css_color_value_resolve (GtkCssValue      *color,
 }
 
 static GtkCssValue transparent_black_singleton = { &GTK_CSS_VALUE_COLOR, 1, TRUE, FALSE, COLOR_TYPE_LITERAL, NULL,
-                                                   .sym_col.rgba = {0, 0, 0, 0} };
+                                                   .rgba = {0, 0, 0, 0} };
 static GtkCssValue white_singleton             = { &GTK_CSS_VALUE_COLOR, 1, TRUE, FALSE, COLOR_TYPE_LITERAL, NULL,
-                                                   .sym_col.rgba = {1, 1, 1, 1} };
+                                                   .rgba = {1, 1, 1, 1} };
 
 
 GtkCssValue *
@@ -498,16 +498,16 @@ gtk_css_color_value_new_literal (const GdkRGBA *color)
 
   g_return_val_if_fail (color != NULL, NULL);
 
-  if (gdk_rgba_equal (color, &white_singleton.sym_col.rgba))
+  if (gdk_rgba_equal (color, &white_singleton.rgba))
     return gtk_css_value_ref (&white_singleton);
 
-  if (gdk_rgba_equal (color, &transparent_black_singleton.sym_col.rgba))
+  if (gdk_rgba_equal (color, &transparent_black_singleton.rgba))
     return gtk_css_value_ref (&transparent_black_singleton);
 
   value = gtk_css_value_new (GtkCssValue, &GTK_CSS_VALUE_COLOR);
   value->type = COLOR_TYPE_LITERAL;
   value->is_computed = TRUE;
-  value->sym_col.rgba = *color;
+  value->rgba = *color;
 
   return value;
 }
@@ -521,7 +521,7 @@ gtk_css_color_value_new_name (const char *name)
 
   value = gtk_css_value_new (GtkCssValue, &GTK_CSS_VALUE_COLOR);
   value->type = COLOR_TYPE_NAME;
-  value->sym_col.name = g_strdup (name);
+  value->name = g_strdup (name);
 
   return value;
 }
@@ -538,15 +538,15 @@ gtk_css_color_value_new_shade (GtkCssValue *color,
     {
       GdkRGBA c;
 
-      apply_shade (&color->sym_col.rgba, &c, factor);
+      apply_shade (&color->rgba, &c, factor);
 
       return gtk_css_color_value_new_literal (&c);
     }
 
   value = gtk_css_value_new (GtkCssValue, &GTK_CSS_VALUE_COLOR);
   value->type = COLOR_TYPE_SHADE;
-  value->sym_col.shade.color = gtk_css_value_ref (color);
-  value->sym_col.shade.factor = factor;
+  value->shade.color = gtk_css_value_ref (color);
+  value->shade.factor = factor;
 
   return value;
 }
@@ -563,15 +563,15 @@ gtk_css_color_value_new_alpha (GtkCssValue *color,
     {
       GdkRGBA c;
 
-      apply_alpha (&color->sym_col.rgba, &c, factor);
+      apply_alpha (&color->rgba, &c, factor);
 
       return gtk_css_color_value_new_literal (&c);
     }
 
   value = gtk_css_value_new (GtkCssValue, &GTK_CSS_VALUE_COLOR);
   value->type = COLOR_TYPE_ALPHA;
-  value->sym_col.alpha.color = gtk_css_value_ref (color);
-  value->sym_col.alpha.factor = factor;
+  value->alpha.color = gtk_css_value_ref (color);
+  value->alpha.factor = factor;
 
   return value;
 }
@@ -591,7 +591,7 @@ gtk_css_color_value_new_mix (GtkCssValue *color1,
     {
       GdkRGBA result;
 
-      apply_mix (&color1->sym_col.rgba, &color2->sym_col.rgba, &result, factor);
+      apply_mix (&color1->rgba, &color2->rgba, &result, factor);
 
       return gtk_css_color_value_new_literal (&result);
 
@@ -599,9 +599,9 @@ gtk_css_color_value_new_mix (GtkCssValue *color1,
 
   value = gtk_css_value_new (GtkCssValue, &GTK_CSS_VALUE_COLOR);
   value->type = COLOR_TYPE_MIX;
-  value->sym_col.mix.color1 = gtk_css_value_ref (color1);
-  value->sym_col.mix.color2 = gtk_css_value_ref (color2);
-  value->sym_col.mix.factor = factor;
+  value->mix.color1 = gtk_css_value_ref (color1);
+  value->mix.color2 = gtk_css_value_ref (color2);
+  value->mix.factor = factor;
 
   return value;
 }
@@ -614,7 +614,7 @@ gtk_css_color_value_new_current_color (void)
   return gtk_css_value_ref (&current_color);
 }
 
-typedef struct 
+typedef struct
 {
   GtkCssValue *color;
   GtkCssValue *color2;
@@ -780,5 +780,5 @@ gtk_css_color_value_get_rgba (const GtkCssValue *color)
   g_assert (color->class == &GTK_CSS_VALUE_COLOR);
   g_assert (color->type == COLOR_TYPE_LITERAL);
 
-  return &color->sym_col.rgba;
+  return &color->rgba;
 }
