@@ -97,11 +97,12 @@ gtk_list_item_base_update (GtkListItemBase *self,
         gtk_widget_set_state_flags (GTK_WIDGET (self), GTK_STATE_FLAG_SELECTED, FALSE);
       else
         gtk_widget_unset_state_flags (GTK_WIDGET (self), GTK_STATE_FLAG_SELECTED);
-
-      gtk_accessible_update_state (GTK_ACCESSIBLE (self),
-                                   GTK_ACCESSIBLE_STATE_SELECTED, priv->selected,
-                                   -1);
     }
+
+  /* We're updating the a11y state at least once because of the side-effects, subsequent same state filtering is done on the a11y layer. */
+  gtk_accessible_update_state (GTK_ACCESSIBLE (self),
+                               GTK_ACCESSIBLE_STATE_SELECTED, priv->selected,
+                               -1);
 }
 
 guint
