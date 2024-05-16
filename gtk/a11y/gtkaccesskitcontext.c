@@ -1518,17 +1518,30 @@ gtk_accesskit_context_add_to_update (GtkAccessKitContext   *self,
                                          g_type_name (G_TYPE_FROM_INSTANCE (accessible)));
 
   if (!(gtk_at_context_has_accessible_property (ctx, GTK_ACCESSIBLE_PROPERTY_LABEL) ||
-        gtk_at_context_has_accessible_relation (ctx, GTK_ACCESSIBLE_RELATION_LABELLED_BY)) &&
-      gtk_at_context_is_nested_button (ctx))
+        gtk_at_context_has_accessible_relation (ctx, GTK_ACCESSIBLE_RELATION_LABELLED_BY)))
     {
-      GtkAccessible *parent = gtk_accessible_get_accessible_parent (accessible);
-      GtkATContext *parent_ctx = gtk_accessible_get_at_context (parent);
+      const char *tooltip_text;
 
-      gtk_at_context_realize (parent_ctx);
-      accesskit_node_builder_push_labelled_by (builder,
-                                               GTK_ACCESSKIT_CONTEXT (parent_ctx)->id);
-      g_object_unref (parent_ctx);
-      g_object_unref (parent);
+      if (GTK_IS_WIDGET (accessible))
+        {
+          tooltip_text = gtk_widget_get_tooltip_text (GTK_WIDGET (accessible));
+          if (tooltip_text)
+            accesskit_node_builder_set_name (builder, tooltip_text);
+        }
+      else
+        tooltip_text = NULL;
+
+      if (!tooltip_text && gtk_at_context_is_nested_button (ctx))
+        {
+          GtkAccessible *parent = gtk_accessible_get_accessible_parent (accessible);
+          GtkATContext *parent_ctx = gtk_accessible_get_at_context (parent);
+
+          gtk_at_context_realize (parent_ctx);
+          accesskit_node_builder_push_labelled_by (builder,
+                                                   GTK_ACCESSKIT_CONTEXT (parent_ctx)->id);
+          g_object_unref (parent_ctx);
+          g_object_unref (parent);
+        }
     }
 
   if (GTK_IS_LABEL (accessible))
