@@ -2212,7 +2212,7 @@ gtk_column_view_scroll_to (GtkColumnView       *self,
                            GtkScrollInfo       *scroll)
 {
   g_return_if_fail (GTK_IS_COLUMN_VIEW (self));
-  g_return_if_fail (pos < gtk_list_base_get_n_items (GTK_LIST_BASE (self)));
+  g_return_if_fail (pos < gtk_list_base_get_n_items (GTK_LIST_BASE (self->listview)));
   g_return_if_fail (column == NULL || GTK_IS_COLUMN_VIEW_COLUMN (column));
   if (column)
     {
