@@ -134,7 +134,7 @@ get_focus (GtkAccessKitRoot *self)
   GtkWidget *widget = gtk_root_get_focus (self->root_widget);
   GtkAccessible *accessible;
 
-  if (!widget)
+  if (!widget || !gtk_widget_get_mapped (widget))
     return NULL;
 
   accessible = g_object_ref (GTK_ACCESSIBLE (widget));
@@ -157,41 +157,12 @@ get_focus (GtkAccessKitRoot *self)
   return accessible;
 }
 
-static gboolean
-is_rooted (GtkAccessible *accessible)
-{
-  g_object_ref (accessible);
-
-  while (accessible)
-    {
-      GtkAccessible *parent;
-
-      if (GTK_IS_ROOT (accessible))
-        {
-          g_object_unref (accessible);
-          return TRUE;
-        }
-
-      parent = gtk_accessible_get_accessible_parent (accessible);
-      g_object_unref (accessible);
-      accessible = parent;
-    }
-
-  return FALSE;
-}
-
 static accesskit_tree_update *
 new_tree_update (GtkAccessKitRoot *self)
 {
   GtkAccessible *focus = get_focus (self);
   GtkATContext *focus_ctx;
   guint32 focus_id;
-
-  if (focus && !is_rooted (focus))
-    {
-      g_object_unref (focus);
-      focus = NULL;
-    }
 
   if (!focus)
     focus = g_object_ref (GTK_ACCESSIBLE (self->root_widget));
@@ -287,8 +258,12 @@ initial_update (gpointer data)
   GtkAccessKitRoot *self = data;
 
   self->update_id = 0;
-  update_if_active (self, build_full_update);
-  self->did_initial_update = TRUE;
+
+  if (gtk_widget_get_mapped (GTK_WIDGET (self->root_widget)))
+    {
+      update_if_active (self, build_full_update);
+      self->did_initial_update = TRUE;
+    }
 
   return G_SOURCE_REMOVE;
 }
@@ -510,7 +485,9 @@ incremental_update (gpointer data)
   GtkAccessKitRoot *self = data;
 
   self->update_id = 0;
-  update_if_active (self, build_incremental_update);
+
+  if (gtk_widget_get_mapped (GTK_WIDGET (self->root_widget)))
+    update_if_active (self, build_incremental_update);
 
   return G_SOURCE_REMOVE;
 }

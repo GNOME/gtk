@@ -88,6 +88,7 @@ gtk_accesskit_context_realize (GtkATContext *context)
   GtkAccessKitContext *self = GTK_ACCESSKIT_CONTEXT (context);
   GtkAccessible *accessible = gtk_at_context_get_accessible (context);
 
+
   if (GTK_IS_ROOT (accessible))
     self->root = gtk_accesskit_root_new (GTK_ROOT (accessible));
   else
