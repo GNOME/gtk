@@ -340,6 +340,16 @@ apply_mix (const GdkRGBA *in1,
     }
 }
 
+/* This function can be called at compute time or at use time.
+ *
+ * When called at compute time, it needs to be given a provider
+ * (for looking up named colors), and current must be NULL,
+ * since currentcolor computed to itself.
+ *
+ * When called at use time, provider can be NULL (since named
+ * colors should have already been resolved at compute time),
+ * and current must be the value to use for currentcolor.
+ */
 static GtkCssValue *
 gtk_css_color_value_do_resolve (GtkCssValue      *color,
                                 GtkStyleProvider *provider,
@@ -474,11 +484,12 @@ gtk_css_color_value_resolve (GtkCssValue      *color,
   return gtk_css_color_value_do_resolve (color, provider, current, NULL);
 }
 
-static GtkCssValue transparent_black_singleton = { &GTK_CSS_VALUE_COLOR, 1, TRUE, FALSE, COLOR_TYPE_LITERAL, NULL,
+static GtkCssValue transparent_black_singleton = { &GTK_CSS_VALUE_COLOR, 1, 1, 0, 0, COLOR_TYPE_LITERAL, NULL,
                                                    .rgba = {0, 0, 0, 0} };
-static GtkCssValue white_singleton             = { &GTK_CSS_VALUE_COLOR, 1, TRUE, FALSE, COLOR_TYPE_LITERAL, NULL,
+static GtkCssValue white_singleton             = { &GTK_CSS_VALUE_COLOR, 1, 1, 0, 0, COLOR_TYPE_LITERAL, NULL,
                                                    .rgba = {1, 1, 1, 1} };
 
+static GtkCssValue current_color_singleton     = { &GTK_CSS_VALUE_COLOR, 1, 0, 0, 1, COLOR_TYPE_CURRENT_COLOR, NULL, };
 
 GtkCssValue *
 gtk_css_color_value_new_transparent (void)
@@ -490,6 +501,12 @@ GtkCssValue *
 gtk_css_color_value_new_white (void)
 {
   return gtk_css_value_ref (&white_singleton);
+}
+
+GtkCssValue *
+gtk_css_color_value_new_current_color (void)
+{
+  return gtk_css_value_ref (&current_color_singleton);
 }
 
 GtkCssValue *
@@ -546,6 +563,7 @@ gtk_css_color_value_new_shade (GtkCssValue *color,
 
   value = gtk_css_value_new (GtkCssValue, &GTK_CSS_VALUE_COLOR);
   value->type = COLOR_TYPE_SHADE;
+  value->contains_current_color = color->contains_current_color;
   value->shade.color = gtk_css_value_ref (color);
   value->shade.factor = factor;
 
@@ -571,6 +589,7 @@ gtk_css_color_value_new_alpha (GtkCssValue *color,
 
   value = gtk_css_value_new (GtkCssValue, &GTK_CSS_VALUE_COLOR);
   value->type = COLOR_TYPE_ALPHA;
+  value->contains_current_color = color->contains_current_color;
   value->alpha.color = gtk_css_value_ref (color);
   value->alpha.factor = factor;
 
@@ -600,19 +619,13 @@ gtk_css_color_value_new_mix (GtkCssValue *color1,
 
   value = gtk_css_value_new (GtkCssValue, &GTK_CSS_VALUE_COLOR);
   value->type = COLOR_TYPE_MIX;
+  value->contains_current_color = color1->contains_current_color ||
+                                  color2->contains_current_color;
   value->mix.color1 = gtk_css_value_ref (color1);
   value->mix.color2 = gtk_css_value_ref (color2);
   value->mix.factor = factor;
 
   return value;
-}
-
-GtkCssValue *
-gtk_css_color_value_new_current_color (void)
-{
-  static GtkCssValue current_color = { &GTK_CSS_VALUE_COLOR, 1, FALSE, FALSE, COLOR_TYPE_CURRENT_COLOR, NULL, };
-
-  return gtk_css_value_ref (&current_color);
 }
 
 typedef struct

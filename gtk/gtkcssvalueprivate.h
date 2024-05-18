@@ -39,7 +39,8 @@ typedef struct _GtkCssValueClass      GtkCssValueClass;
   const GtkCssValueClass *class; \
   int ref_count; \
   guint is_computed: 1; \
-  guint contains_variables: 1;
+  guint contains_variables: 1; \
+  guint contains_current_color: 1;
 
 typedef struct {
   GtkStyleProvider   *provider;
@@ -140,6 +141,14 @@ gtk_css_value_contains_variables (const GtkCssValue *value)
   GtkCssValueBase *value_base = (GtkCssValueBase *) value;
 
   return value_base->contains_variables;
+}
+
+static inline gboolean
+gtk_css_value_contains_current_color (const GtkCssValue *value)
+{
+  GtkCssValueBase *value_base = (GtkCssValueBase *) value;
+
+  return value_base->contains_current_color;
 }
 
 G_END_DECLS
