@@ -43,8 +43,7 @@ GtkCssValue *   gtk_css_color_value_parse               (GtkCssParser   *parser)
 
 GtkCssValue *   gtk_css_color_value_resolve             (GtkCssValue      *color,
                                                          GtkStyleProvider *provider,
-                                                         GtkCssValue      *current,
-                                                         GSList           *cycle_list);
+                                                         GtkCssValue      *current);
 const GdkRGBA * gtk_css_color_value_get_rgba            (const GtkCssValue *color) G_GNUC_CONST;
 
 
