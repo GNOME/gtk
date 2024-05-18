@@ -1550,7 +1550,7 @@ create_application_page (GtkPrintOperation *op,
   wcscpy_s (template->typeface, LF_FACESIZE, L"MS Shell Dlg");
 
   /* Create an invisible dialog to measure dialog base units */
-  measure_dialog = CreateDialogIndirectW (NULL, template, hwndOwner, measure_dialog_procedure);
+  measure_dialog = CreateDialogIndirectW (NULL, (LPCDLGTEMPLATE) template, hwndOwner, measure_dialog_procedure);
   if (!measure_dialog)
     g_warning ("CreateDialogIndirectW failed");
   else
@@ -1580,7 +1580,7 @@ create_application_page (GtkPrintOperation *op,
   page.dwSize = sizeof (page);
   page.dwFlags = PSP_DLGINDIRECT | PSP_USETITLE | PSP_PREMATURE;
   page.hInstance = GetModuleHandle (NULL);
-  page.pResource = template;
+  page.pResource = (LPCDLGTEMPLATE) template;
   
   tab_label = op->priv->custom_tab_label;
   if (tab_label == NULL)
