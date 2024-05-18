@@ -795,7 +795,7 @@ static const GtkCssValueClass GTK_CSS_VALUE_TRANSFORM = {
   gtk_css_value_transform_print
 };
 
-static GtkCssValue transform_none_singleton = { &GTK_CSS_VALUE_TRANSFORM, 1, TRUE, FALSE, 0, {  { GTK_CSS_TRANSFORM_NONE } } };
+static GtkCssValue transform_none_singleton = { &GTK_CSS_VALUE_TRANSFORM, 1, 1, 0, 0, 0, {  { GTK_CSS_TRANSFORM_NONE } } };
 
 static GtkCssValue *
 gtk_css_transform_value_alloc (guint n_transforms)
