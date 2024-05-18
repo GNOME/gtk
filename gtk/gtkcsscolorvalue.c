@@ -135,36 +135,7 @@ gtk_css_value_color_compute (GtkCssValue          *value,
 {
   GtkCssValue *resolved;
 
-  /* The computed value of the ‘currentColor’ keyword is the computed
-   * value of the ‘color’ property. If the ‘currentColor’ keyword is
-   * set on the ‘color’ property itself, it is treated as ‘color: inherit’.
-   */
-  if (property_id == GTK_CSS_PROPERTY_COLOR)
-    {
-      GtkCssValue *current;
-
-      if (context->parent_style)
-        current = context->parent_style->core->color;
-      else
-        current = NULL;
-
-      resolved = gtk_css_color_value_resolve (value,
-                                              context->provider,
-                                              current);
-    }
-  else if (value->type == COLOR_TYPE_LITERAL)
-    {
-      resolved = gtk_css_value_ref (value);
-    }
-  else
-    {
-      GtkCssValue *current = context->style->core->color;
-
-      resolved = gtk_css_color_value_resolve (value,
-                                              context->provider,
-                                              current);
-    }
-
+  resolved = gtk_css_color_value_resolve (value, context->provider, NULL);
   if (resolved == NULL)
     return gtk_css_value_color_get_fallback (property_id, context);
 
@@ -364,10 +335,13 @@ gtk_css_color_value_do_resolve (GtkCssValue      *color,
     {
     case COLOR_TYPE_LITERAL:
       return gtk_css_value_ref (color);
+
     case COLOR_TYPE_NAME:
       {
         GtkCssValue *named;
         GSList cycle = { color, cycle_list };
+
+        g_assert (provider != NULL);
 
         /* If color exists in cycle_list, we're currently resolving it.
          * So we've detected a cycle. */
@@ -382,8 +356,8 @@ gtk_css_color_value_do_resolve (GtkCssValue      *color,
         if (value == NULL)
           return NULL;
       }
-
       break;
+
     case COLOR_TYPE_SHADE:
       {
         GtkCssValue *val;
@@ -408,8 +382,8 @@ gtk_css_color_value_do_resolve (GtkCssValue      *color,
 
         gtk_css_value_unref (val);
       }
-
       break;
+
     case COLOR_TYPE_ALPHA:
       {
         GtkCssValue *val;
@@ -463,21 +437,16 @@ gtk_css_color_value_do_resolve (GtkCssValue      *color,
         gtk_css_value_unref (val1);
         gtk_css_value_unref (val2);
       }
-
       break;
+
     case COLOR_TYPE_CURRENT_COLOR:
-      if (current == NULL)
-        {
-          current = _gtk_css_style_property_get_initial_value (_gtk_css_style_property_lookup_by_id (GTK_CSS_PROPERTY_COLOR));
-
-          g_assert (current->class == &GTK_CSS_VALUE_COLOR);
-          g_assert (current->type == COLOR_TYPE_LITERAL);
-        }
-
+      if (current)
         value = gtk_css_value_ref (current);
+      else
+        value = gtk_css_value_ref (color);
       break;
+
     default:
-      value = NULL;
       g_assert_not_reached ();
     }
 
