@@ -434,23 +434,15 @@ gtk_css_color_value_do_resolve (GtkCssValue      *color,
 
       break;
     case COLOR_TYPE_CURRENT_COLOR:
-      if (current)
+      if (current == NULL)
         {
-          return gtk_css_value_ref (current);
-        }
-      else
-        {
-          GtkCssValue *initial = _gtk_css_style_property_get_initial_value (_gtk_css_style_property_lookup_by_id (GTK_CSS_PROPERTY_COLOR));
+          current = _gtk_css_style_property_get_initial_value (_gtk_css_style_property_lookup_by_id (GTK_CSS_PROPERTY_COLOR));
 
-          if (initial->class == &GTK_CSS_VALUE_COLOR)
-            {
-              return gtk_css_color_value_do_resolve (initial, provider, NULL, cycle_list);
-            }
-          else
-            {
-              return gtk_css_value_ref (initial);
-            }
+          g_assert (current->class == &GTK_CSS_VALUE_COLOR);
+          g_assert (current->type == COLOR_TYPE_LITERAL);
         }
+
+        value = gtk_css_value_ref (current);
       break;
     default:
       value = NULL;
