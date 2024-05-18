@@ -273,7 +273,7 @@ gtk_css_image_linear_parse_color_stop (GtkCssImageLinear *self,
 {
   GtkCssImageLinearColorStop stop;
 
-  stop.color = _gtk_css_color_value_parse (parser);
+  stop.color = gtk_css_color_value_parse (parser);
   if (stop.color == NULL)
     return 0;
 

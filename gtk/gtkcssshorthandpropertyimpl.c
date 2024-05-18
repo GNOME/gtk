@@ -206,7 +206,7 @@ parse_border_color (GtkCssShorthandProperty  *shorthand,
 
   for (i = 0; i < 4; i++)
     {
-      values[i] = _gtk_css_color_value_parse (parser);
+      values[i] = gtk_css_color_value_parse (parser);
       if (values[i] == NULL)
         return FALSE;
 
@@ -338,7 +338,7 @@ parse_border_side (GtkCssShorthandProperty  *shorthand,
       }
     else if (values[2] == NULL)
       {
-        values[2] = _gtk_css_color_value_parse (parser);
+        values[2] = gtk_css_color_value_parse (parser);
         if (values[2] == NULL)
           return FALSE;
       }
@@ -384,7 +384,7 @@ parse_border (GtkCssShorthandProperty  *shorthand,
       }
     else if (values[8] == NULL)
       {
-        values[8] = _gtk_css_color_value_parse (parser);
+        values[8] = gtk_css_color_value_parse (parser);
         if (values[8] == NULL)
           return FALSE;
 
@@ -555,7 +555,7 @@ parse_one_background (GtkCssShorthandProperty  *shorthand,
         }
       else if (values[6] == NULL)
         {
-          value = _gtk_css_color_value_parse (parser);
+          value = gtk_css_color_value_parse (parser);
           if (value == NULL)
             values[6] = gtk_css_value_ref (_gtk_css_style_property_get_initial_value 
                                             (_gtk_css_shorthand_property_get_subproperty (shorthand, 6)));
@@ -891,7 +891,7 @@ parse_text_decoration (GtkCssShorthandProperty  *shorthand,
       }
     else if (values[2] == NULL)
       {
-        values[2] = _gtk_css_color_value_parse (parser);
+        values[2] = gtk_css_color_value_parse (parser);
         if (values[2] == NULL)
           return FALSE;
       }

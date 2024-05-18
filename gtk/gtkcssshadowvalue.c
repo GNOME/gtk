@@ -426,7 +426,7 @@ parse_color (GtkCssParser *parser,
 {
   GtkCssValue **color = option_data;
   
-  *color = _gtk_css_color_value_parse (parser);
+  *color = gtk_css_color_value_parse (parser);
   if (*color == NULL)
     return FALSE;
 
@@ -459,7 +459,7 @@ gtk_css_shadow_value_parse_one (GtkCssParser *parser,
     }
 
   if (color == NULL)
-    color = _gtk_css_color_value_new_current_color ();
+    color = gtk_css_color_value_new_current_color ();
 
   result->hoffset = values[HOFFSET];
   result->voffset = values[VOFFSET];
