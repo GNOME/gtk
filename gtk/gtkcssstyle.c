@@ -74,6 +74,7 @@ gtk_css_style_finalize (GObject *object)
   gtk_css_values_unref ((GtkCssValues *)style->transition);
   gtk_css_values_unref ((GtkCssValues *)style->size);
   gtk_css_values_unref ((GtkCssValues *)style->other);
+  gtk_css_values_unref ((GtkCssValues *)style->used);
 
   if (style->variables)
     gtk_css_variable_set_unref (style->variables);
@@ -841,7 +842,8 @@ static const int values_size[] = {
   sizeof (GtkCssAnimationValues),
   sizeof (GtkCssTransitionValues),
   sizeof (GtkCssSizeValues),
-  sizeof (GtkCssOtherValues)
+  sizeof (GtkCssOtherValues),
+  sizeof (GtkCssUsedValues)
 };
 
 #define TYPE_INDEX(type) ((type) - ((type) % 2))

@@ -59,6 +59,7 @@ typedef enum {
   GTK_CSS_SIZE_INITIAL_VALUES,
   GTK_CSS_OTHER_VALUES,
   GTK_CSS_OTHER_INITIAL_VALUES,
+  GTK_CSS_USED_VALUES,
 } GtkCssValuesType;
 
 typedef struct _GtkCssValues GtkCssValues;
@@ -73,6 +74,7 @@ typedef struct _GtkCssAnimationValues GtkCssAnimationValues;
 typedef struct _GtkCssTransitionValues GtkCssTransitionValues;
 typedef struct _GtkCssSizeValues GtkCssSizeValues;
 typedef struct _GtkCssOtherValues GtkCssOtherValues;
+typedef struct _GtkCssUsedValues GtkCssUsedValues;
 
 struct _GtkCssValues {
   int ref_count;
@@ -227,6 +229,28 @@ struct _GtkCssOtherValues {
   GtkCssValue *filter;
 };
 
+struct _GtkCssUsedValues {
+  GtkCssValues base;
+
+  GtkCssValue *color;
+  GtkCssValue *icon_palette;
+  GtkCssValue *background_color;
+  GtkCssValue *box_shadow;
+  GtkCssValue *background_image;
+  GtkCssValue *border_top_color;
+  GtkCssValue *border_right_color;
+  GtkCssValue *border_bottom_color;
+  GtkCssValue *border_left_color;
+  GtkCssValue *border_image_source;
+  GtkCssValue *icon_shadow;
+  GtkCssValue *outline_color;
+  GtkCssValue *caret_color;
+  GtkCssValue *secondary_caret_color;
+  GtkCssValue *text_shadow;
+  GtkCssValue *text_decoration_color;
+  GtkCssValue *icon_source;
+};
+
 /* typedef struct _GtkCssStyle           GtkCssStyle; */
 typedef struct _GtkCssStyleClass      GtkCssStyleClass;
 
@@ -245,6 +269,8 @@ struct _GtkCssStyle
   GtkCssTransitionValues  *transition;
   GtkCssSizeValues        *size;
   GtkCssOtherValues       *other;
+  GtkCssUsedValues        *used;
+
   GtkCssVariableSet       *variables;
 
   GtkCssValue             *variable_values;
