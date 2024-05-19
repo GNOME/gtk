@@ -56,5 +56,8 @@ gboolean        gtk_css_shadow_value_push_snapshot    (const GtkCssValue        
 void            gtk_css_shadow_value_pop_snapshot     (const GtkCssValue        *value,
                                                        GtkSnapshot              *snapshot);
 
+GtkCssValue *   gtk_css_shadow_value_resolve          (GtkCssValue              *value,
+                                                       GtkCssValue              *current_color);
+
 G_END_DECLS
 
