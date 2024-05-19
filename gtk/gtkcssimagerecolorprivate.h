@@ -39,12 +39,9 @@ struct _GtkCssImageRecolor
   GtkCssImage parent;
 
   GFile *file;
+  GtkCssValue *color;
   GtkCssValue *palette;
   GdkTexture *texture;
-  GdkRGBA color;
-  GdkRGBA success;
-  GdkRGBA warning;
-  GdkRGBA error;
 };
 
 struct _GtkCssImageRecolorClass

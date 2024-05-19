@@ -748,6 +748,63 @@ gtk_css_image_radial_is_computed (GtkCssImage *image)
 
   return computed;
 }
+
+static gboolean
+gtk_css_image_radial_contains_current_color (GtkCssImage *image)
+{
+  GtkCssImageRadial *radial = GTK_CSS_IMAGE_RADIAL (image);
+
+  for (guint i = 0; i < radial->n_stops; i ++)
+    {
+      const GtkCssImageRadialColorStop *stop = &radial->color_stops[i];
+
+      if (gtk_css_value_contains_current_color (stop->color))
+        return TRUE;
+    }
+
+  return FALSE;
+}
+
+static GtkCssImage *
+gtk_css_image_radial_resolve (GtkCssImage          *image,
+                              GtkCssComputeContext *context,
+                              GtkCssValue          *current_color)
+{
+  GtkCssImageRadial *radial = GTK_CSS_IMAGE_RADIAL (image);
+  GtkCssImageRadial *copy;
+
+  copy = g_object_new (GTK_TYPE_CSS_IMAGE_RADIAL, NULL);
+  copy->repeating = radial->repeating;
+  copy->circle = radial->circle;
+  copy->size = radial->size;
+
+  copy->position = gtk_css_value_ref (radial->position);
+
+  if (radial->sizes[0])
+    copy->sizes[0] = gtk_css_value_ref (radial->sizes[0]);
+
+  if (radial->sizes[1])
+    copy->sizes[1] = gtk_css_value_ref (radial->sizes[1]);
+
+  copy->n_stops = radial->n_stops;
+  copy->color_stops = g_new (GtkCssImageRadialColorStop, copy->n_stops);
+
+  for (guint i = 0; i < radial->n_stops; i++)
+    {
+      const GtkCssImageRadialColorStop *stop = &radial->color_stops[i];
+      GtkCssImageRadialColorStop *scopy = &copy->color_stops[i];
+
+      scopy->color = gtk_css_color_value_resolve (stop->color, context, current_color);
+
+      if (stop->offset)
+        scopy->offset = gtk_css_value_ref (stop->offset);
+      else
+        scopy->offset = NULL;
+    }
+
+  return GTK_CSS_IMAGE (copy);
+}
+
 static void
 _gtk_css_image_radial_class_init (GtkCssImageRadialClass *klass)
 {
@@ -761,6 +818,8 @@ _gtk_css_image_radial_class_init (GtkCssImageRadialClass *klass)
   image_class->transition = gtk_css_image_radial_transition;
   image_class->equal = gtk_css_image_radial_equal;
   image_class->is_computed = gtk_css_image_radial_is_computed;
+  image_class->contains_current_color = gtk_css_image_radial_contains_current_color;
+  image_class->resolve = gtk_css_image_radial_resolve;
 
   object_class->dispose = gtk_css_image_radial_dispose;
 }
