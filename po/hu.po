@@ -1,27 +1,27 @@
 # Hungarian translation for gtk.
-# Copyright (C) 1999, 2000, 2001, 2002, 2004, 2005, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021 Free Software Foundation, Inc.
+# Copyright (C) 1999, 2000, 2001, 2002, 2004, 2005, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2024 Free Software Foundation, Inc.
 # This file is distributed under the same license as the gtk+ package.
 #
 # Szabolcs Ban <shooby at gnome dot hu>, 1999, 2000, 2001, 2002.
 # Andras Timar <timar at gnome dot hu>, 2002.
 # Laszlo Dvornik <dvornik at gnome dot hu>, 2004, 2005.
 # Gabor Kelemen <kelemeng at gnome dot hu>, 2004, 2005, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017.
-# Balázs Úr <ur.balazs at fsf dot hu>, 2012, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021.
+# Balázs Úr <ur.balazs at fsf dot hu>, 2012, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2024.
 # Balázs Meskó <mesko.balazs at fsf dot hu>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2021-09-10 13:56+0000\n"
-"PO-Revision-Date: 2021-09-12 01:39+0200\n"
+"POT-Creation-Date: 2024-03-16 21:10+0000\n"
+"PO-Revision-Date: 2024-05-20 01:54+0200\n"
 "Last-Translator: Balázs Úr <ur.balazs at fsf dot hu>\n"
-"Language-Team: Hungarian <gnome-hu-list at gnome dot org>\n"
+"Language-Team: Hungarian <openscope at fsf dot hu>\n"
 "Language: hu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 19.12.3\n"
+"X-Generator: Lokalize 23.08.4\n"
 
 #: gdk/broadway/gdkbroadway-server.c:135
 #, c-format
@@ -499,15 +499,15 @@ msgstr ""
 #, c-format
 msgid "Cannot claim clipboard ownership. OpenClipboard() failed: 0x%lx."
 msgstr ""
-"Nem lehet elkérni a vágólap tulajdonjogát. Az OpenClipboard() sikertelen: 0x"
-"%lx."
+"Nem lehet elkérni a vágólap tulajdonjogát. Az OpenClipboard() sikertelen: "
+"0x%lx."
 
 #: gdk/win32/gdkclipdrop-win32.c:754
 #, c-format
 msgid "Cannot claim clipboard ownership. EmptyClipboard() failed: 0x%lx."
 msgstr ""
-"Nem lehet elkérni a vágólap tulajdonjogát. Az EmptyClipboard() sikertelen: 0x"
-"%lx."
+"Nem lehet elkérni a vágólap tulajdonjogát. Az EmptyClipboard() sikertelen: "
+"0x%lx."
 
 #: gdk/win32/gdkclipdrop-win32.c:797
 #, c-format
@@ -3553,15 +3553,11 @@ msgid "CSS Property"
 msgstr "CSS tulajdonság"
 
 #: gtk/inspector/general.c:299
-#| msgctxt "Accelerator"
-#| msgid "Disabled"
 msgctxt "GL version"
 msgid "Disabled"
 msgstr "Letiltva"
 
 #: gtk/inspector/general.c:300
-#| msgctxt "Accelerator"
-#| msgid "Disabled"
 msgctxt "GL vendor"
 msgid "Disabled"
 msgstr "Letiltva"
@@ -3577,15 +3573,11 @@ msgid "None"
 msgstr "Nincs"
 
 #: gtk/inspector/general.c:410
-#| msgctxt "Accelerator"
-#| msgid "Disabled"
 msgctxt "Vulkan device"
 msgid "Disabled"
 msgstr "Letiltva"
 
 #: gtk/inspector/general.c:411 gtk/inspector/general.c:412
-#| msgctxt "Accelerator"
-#| msgid "Disabled"
 msgctxt "Vulkan version"
 msgid "Disabled"
 msgstr "Letiltva"
@@ -6250,7 +6242,7 @@ msgstr "Kaithi"
 #: gtk/script-names.c:100
 msgctxt "Script"
 msgid "Lisu"
-msgstr ""
+msgstr "Lisu"
 
 #: gtk/script-names.c:101
 msgctxt "Script"
@@ -6315,17 +6307,17 @@ msgstr "Meroita hieroglifák"
 #: gtk/script-names.c:113
 msgctxt "Script"
 msgid "Miao"
-msgstr ""
+msgstr "Miao"
 
 #: gtk/script-names.c:114
 msgctxt "Script"
 msgid "Sharada"
-msgstr ""
+msgstr "Sharada"
 
 #: gtk/script-names.c:115
 msgctxt "Script"
 msgid "Sora Sompeng"
-msgstr ""
+msgstr "Sora Sompeng"
 
 #: gtk/script-names.c:116
 msgctxt "Script"
@@ -6335,7 +6327,7 @@ msgstr "Takri"
 #: gtk/script-names.c:117
 msgctxt "Script"
 msgid "Bassa"
-msgstr ""
+msgstr "Bassa"
 
 #: gtk/script-names.c:118
 msgctxt "Script"
@@ -6345,22 +6337,22 @@ msgstr "Kaukázusi albaniai"
 #: gtk/script-names.c:119
 msgctxt "Script"
 msgid "Duployan"
-msgstr ""
+msgstr "Duployan"
 
 #: gtk/script-names.c:120
 msgctxt "Script"
 msgid "Elbasan"
-msgstr ""
+msgstr "Elbasan"
 
 #: gtk/script-names.c:121
 msgctxt "Script"
 msgid "Grantha"
-msgstr ""
+msgstr "Grantha"
 
 #: gtk/script-names.c:122
 msgctxt "Script"
 msgid "Khojki"
-msgstr ""
+msgstr "Khojki"
 
 #: gtk/script-names.c:123
 msgctxt "Script"
@@ -6375,7 +6367,7 @@ msgstr "Lineáris A"
 #: gtk/script-names.c:125
 msgctxt "Script"
 msgid "Mahajani"
-msgstr ""
+msgstr "Mahajani"
 
 #: gtk/script-names.c:126
 msgctxt "Script"
@@ -6445,7 +6437,7 @@ msgstr "Tirhuta"
 #: gtk/script-names.c:139
 msgctxt "Script"
 msgid "Warang Citi"
-msgstr ""
+msgstr "Warang Citi"
 
 #: gtk/script-names.c:140
 msgctxt "Script"
@@ -6480,12 +6472,12 @@ msgstr "Jelnyelv"
 #: gtk/script-names.c:146
 msgctxt "Script"
 msgid "Adlam"
-msgstr ""
+msgstr "Adlam"
 
 #: gtk/script-names.c:147
 msgctxt "Script"
 msgid "Bhaiksuki"
-msgstr ""
+msgstr "Bhaiksuki"
 
 #: gtk/script-names.c:148
 msgctxt "Script"
@@ -6520,7 +6512,7 @@ msgstr "Nushu"
 #: gtk/script-names.c:154
 msgctxt "Script"
 msgid "Soyombo"
-msgstr ""
+msgstr "Soyombo"
 
 #: gtk/script-names.c:155
 msgctxt "Script"
@@ -6540,17 +6532,17 @@ msgstr "Gunjalai gondi"
 #: gtk/script-names.c:158
 msgctxt "Script"
 msgid "Hanifi Rohingya"
-msgstr ""
+msgstr "Hanifi Rohingya"
 
 #: gtk/script-names.c:159
 msgctxt "Script"
 msgid "Makasar"
-msgstr ""
+msgstr "Makasar"
 
 #: gtk/script-names.c:160
 msgctxt "Script"
 msgid "Medefaidrin"
-msgstr ""
+msgstr "Medefaidrin"
 
 #: gtk/script-names.c:161
 msgctxt "Script"
@@ -6565,42 +6557,42 @@ msgstr "Szogd"
 #: gtk/script-names.c:165 gtk/script-names.c:170
 msgctxt "Script"
 msgid "Elym"
-msgstr ""
+msgstr "Elym"
 
 #: gtk/script-names.c:166 gtk/script-names.c:171
 msgctxt "Script"
 msgid "Nand"
-msgstr ""
+msgstr "Nand"
 
 #: gtk/script-names.c:167 gtk/script-names.c:172
 msgctxt "Script"
 msgid "Rohg"
-msgstr ""
+msgstr "Rohg"
 
 #: gtk/script-names.c:168 gtk/script-names.c:173
 msgctxt "Script"
 msgid "Wcho"
-msgstr ""
+msgstr "Wcho"
 
 #: gtk/script-names.c:176 gtk/script-names.c:181
 msgctxt "Script"
 msgid "Chorasmian"
-msgstr ""
+msgstr "Chorasmian"
 
 #: gtk/script-names.c:177 gtk/script-names.c:182
 msgctxt "Script"
 msgid "Dives Akuru"
-msgstr ""
+msgstr "Dives Akuru"
 
 #: gtk/script-names.c:178 gtk/script-names.c:183
 msgctxt "Script"
 msgid "Khitan small script"
-msgstr ""
+msgstr "Khitan kis írásrendszer"
 
 #: gtk/script-names.c:179 gtk/script-names.c:184
 msgctxt "Script"
 msgid "Yezidi"
-msgstr ""
+msgstr "Jezidita"
 
 #: gtk/ui/gtkaboutdialog.ui:62
 msgid "About"
@@ -6635,7 +6627,6 @@ msgid "Services"
 msgstr "Szolgáltatások"
 
 #: gtk/ui/gtkapplication-quartz.ui:25
-#, c-format
 msgid "Hide %s"
 msgstr "%s elrejtése"
 
@@ -6648,7 +6639,6 @@ msgid "Show All"
 msgstr "Összes megjelenítése"
 
 #: gtk/ui/gtkapplication-quartz.ui:42
-#, c-format
 msgid "Quit %s"
 msgstr "%s bezárása"
 
