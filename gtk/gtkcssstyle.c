@@ -841,7 +841,8 @@ static const int values_size[] = {
   sizeof (GtkCssAnimationValues),
   sizeof (GtkCssTransitionValues),
   sizeof (GtkCssSizeValues),
-  sizeof (GtkCssOtherValues)
+  sizeof (GtkCssOtherValues),
+  sizeof (GtkCssUsedValues)
 };
 
 #define TYPE_INDEX(type) ((type) - ((type) % 2))
