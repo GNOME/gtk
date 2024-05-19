@@ -386,59 +386,80 @@ gtk_css_color_value_do_resolve (GtkCssValue      *color,
       break;
     case COLOR_TYPE_SHADE:
       {
-        const GdkRGBA *c;
         GtkCssValue *val;
-        GdkRGBA shade;
 
         val = gtk_css_color_value_do_resolve (color->shade.color, provider, current, cycle_list);
+
         if (val == NULL)
           return NULL;
-        c = gtk_css_color_value_get_rgba (val);
 
-        apply_shade (c, &shade, color->shade.factor);
+        if (val->type == COLOR_TYPE_LITERAL)
+          {
+            const GdkRGBA *c = gtk_css_color_value_get_rgba (val);
+            GdkRGBA shade;
 
-        value = gtk_css_color_value_new_literal (&shade);
+            apply_shade (c, &shade, color->shade.factor);
+            value = gtk_css_color_value_new_literal (&shade);
+          }
+        else
+          {
+            value = gtk_css_color_value_new_shade (val, color->shade.factor);
+          }
+
         gtk_css_value_unref (val);
       }
 
       break;
     case COLOR_TYPE_ALPHA:
       {
-        const GdkRGBA *c;
         GtkCssValue *val;
-        GdkRGBA alpha;
 
         val = gtk_css_color_value_do_resolve (color->alpha.color, provider, current, cycle_list);
+
         if (val == NULL)
           return NULL;
-        c = gtk_css_color_value_get_rgba (val);
 
-        apply_alpha (c, &alpha, color->alpha.factor);
+        if (val->type == COLOR_TYPE_LITERAL)
+          {
+            const GdkRGBA *c = gtk_css_color_value_get_rgba (val);
+            GdkRGBA alpha;
 
-        value = gtk_css_color_value_new_literal (&alpha);
+            apply_alpha (c, &alpha, color->alpha.factor);
+            value = gtk_css_color_value_new_literal (&alpha);
+          }
+        else
+          {
+            value = gtk_css_color_value_new_alpha (val, color->alpha.factor);
+          }
+
         gtk_css_value_unref (val);
       }
       break;
 
     case COLOR_TYPE_MIX:
       {
-        const GdkRGBA *color1, *color2;
         GtkCssValue *val1, *val2;
-        GdkRGBA res;
 
         val1 = gtk_css_color_value_do_resolve (color->mix.color1, provider, current, cycle_list);
-        if (val1 == NULL)
-          return NULL;
-        color1 = gtk_css_color_value_get_rgba (val1);
-
         val2 = gtk_css_color_value_do_resolve (color->mix.color2, provider, current, cycle_list);
-        if (val2 == NULL)
+
+        if (val1 == NULL || val2 == NULL)
           return NULL;
-        color2 = gtk_css_color_value_get_rgba (val2);
 
-        apply_mix (color1, color2, &res, color->mix.factor);
+        if (val1->type == COLOR_TYPE_LITERAL && val2->type == COLOR_TYPE_LITERAL)
+          {
+            const GdkRGBA *color1 = gtk_css_color_value_get_rgba (val1);
+            const GdkRGBA *color2 = gtk_css_color_value_get_rgba (val2);
+            GdkRGBA res;
 
-        value = gtk_css_color_value_new_literal (&res);
+            apply_mix (color1, color2, &res, color->mix.factor);
+            value = gtk_css_color_value_new_literal (&res);
+          }
+        else
+          {
+            value = gtk_css_color_value_new_mix (val1, val2, color->mix.factor);
+          }
+
         gtk_css_value_unref (val1);
         gtk_css_value_unref (val2);
       }
