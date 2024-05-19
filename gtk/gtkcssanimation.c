@@ -95,6 +95,7 @@ gtk_css_animation_apply_values (GtkStyleAnimation    *style_animation,
   GtkCssKeyframes *resolved_keyframes;
   double progress;
   guint i;
+  gboolean needs_recompute = FALSE;
 
   if (!gtk_css_animation_is_executing (animation))
     return;
@@ -128,7 +129,12 @@ gtk_css_animation_apply_values (GtkStyleAnimation    *style_animation,
       gtk_css_animated_style_set_animated_custom_value (style, variable_id, value);
 
       gtk_css_variable_value_unref (value);
+
+      needs_recompute = TRUE;
     }
+
+  if (needs_recompute)
+    gtk_css_animated_style_recompute (style);
 
   for (i = 0; i < _gtk_css_keyframes_get_n_properties (resolved_keyframes); i++)
     {

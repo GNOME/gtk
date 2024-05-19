@@ -609,7 +609,6 @@ gtk_css_animated_style_set_animated_custom_value (GtkCssAnimatedStyle *animated,
                                                   GtkCssVariableValue *value)
 {
   GtkCssStyle *style = (GtkCssStyle *)animated;
-  GtkCssComputeContext context = { NULL, };
 
   gtk_internal_return_if_fail (GTK_IS_CSS_ANIMATED_STYLE (style));
   gtk_internal_return_if_fail (value != NULL);
@@ -628,22 +627,28 @@ gtk_css_animated_style_set_animated_custom_value (GtkCssAnimatedStyle *animated,
     }
 
   gtk_css_variable_set_add (style->variables, id, value);
+}
 
-  context.style = animated->style;
-  context.parent_style = animated->parent_style;
-  context.provider = animated->provider;
+void
+gtk_css_animated_style_recompute (GtkCssAnimatedStyle *style)
+{
+  GtkCssComputeContext context = { NULL, };
 
-  gtk_css_core_values_recompute (animated, &context);
-  gtk_css_background_values_recompute (animated, &context);
-  gtk_css_border_values_recompute (animated, &context);
-  gtk_css_icon_values_recompute (animated, &context);
-  gtk_css_outline_values_recompute (animated, &context);
-  gtk_css_font_values_recompute (animated, &context);
-  gtk_css_font_variant_values_recompute (animated, &context);
-  gtk_css_animation_values_recompute (animated, &context);
-  gtk_css_transition_values_recompute (animated, &context);
-  gtk_css_size_values_recompute (animated, &context);
-  gtk_css_other_values_recompute (animated, &context);
+  context.provider = style->provider;
+  context.style = style->style;
+  context.parent_style = style->parent_style;
+
+  gtk_css_core_values_recompute (style, &context);
+  gtk_css_background_values_recompute (style, &context);
+  gtk_css_border_values_recompute (style, &context);
+  gtk_css_icon_values_recompute (style, &context);
+  gtk_css_outline_values_recompute (style, &context);
+  gtk_css_font_values_recompute (style, &context);
+  gtk_css_font_variant_values_recompute (style, &context);
+  gtk_css_animation_values_recompute (style, &context);
+  gtk_css_transition_values_recompute (style, &context);
+  gtk_css_size_values_recompute (style, &context);
+  gtk_css_other_values_recompute (style, &context);
 }
 
 GtkCssVariableValue *

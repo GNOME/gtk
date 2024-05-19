@@ -73,6 +73,7 @@ GtkCssValue *           gtk_css_animated_style_get_intrinsic_value (GtkCssAnimat
 void                    gtk_css_animated_style_set_animated_custom_value (GtkCssAnimatedStyle *animated,
                                                                  int                     id,
                                                                  GtkCssVariableValue    *value);
+void                    gtk_css_animated_style_recompute        (GtkCssAnimatedStyle    *style);
 GtkCssVariableValue *   gtk_css_animated_style_get_intrinsic_custom_value (GtkCssAnimatedStyle *style,
                                                                  int                     id);
 
