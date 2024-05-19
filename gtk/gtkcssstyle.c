@@ -561,16 +561,23 @@ gtk_css_style_print (GtkCssStyle *style,
     {
       GtkCssSection *section;
       GtkCssStyleProperty *prop;
-      GtkCssValue *value;
+      GtkCssValue *value, *computed, *initial;
       const char *name;
-
-      section = gtk_css_style_get_section (style, i);
-      if (!section && skip_initial)
-        continue;
 
       prop = _gtk_css_style_property_lookup_by_id (i);
       name = _gtk_style_property_get_name (GTK_STYLE_PROPERTY (prop));
-      value = gtk_css_style_get_value (style, i);
+      computed = gtk_css_style_get_computed_value (style, i);
+      value = gtk_css_style_get_used_value (style, i);
+      initial = _gtk_css_style_property_get_initial_value (prop);
+
+      section = gtk_css_style_get_section (style, i);
+      if (skip_initial)
+        {
+          if (!section &&
+              (computed == initial ||
+               !gtk_css_value_contains_current_color (computed)))
+            continue;
+        }
 
       g_string_append_printf (string, "%*s%s: ", indent, "", name);
       gtk_css_value_print (value, string);
