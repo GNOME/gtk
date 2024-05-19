@@ -54,11 +54,14 @@ value_is_near (int          prop,
       break;
 
     case GTK_CSS_PROPERTY_ICON_PALETTE:
-      return color_is_near (gtk_css_palette_value_get_color (value1, "error"),
+      return value_is_near (GTK_CSS_PROPERTY_COLOR,
+                            gtk_css_palette_value_get_color (value1, "error"),
                             gtk_css_palette_value_get_color (value2, "error")) &&
-             color_is_near (gtk_css_palette_value_get_color (value1, "warning"),
+             value_is_near (GTK_CSS_PROPERTY_COLOR,
+                            gtk_css_palette_value_get_color (value1, "warning"),
                             gtk_css_palette_value_get_color (value2, "warning")) &&
-             color_is_near (gtk_css_palette_value_get_color (value1, "test"),
+             value_is_near (GTK_CSS_PROPERTY_COLOR,
+                            gtk_css_palette_value_get_color (value1, "test"),
                             gtk_css_palette_value_get_color (value2, "test"));
       break;
 

@@ -323,6 +323,7 @@ gtk_css_palette_value_parse (GtkCssParser *parser)
       }
 
     result->is_computed = result->is_computed && gtk_css_value_is_computed (color);
+    result->contains_current_color = result->contains_current_color || gtk_css_value_contains_current_color (color);
 
     g_ptr_array_add (names, ident);
     g_ptr_array_add (colors, color);
@@ -336,7 +337,7 @@ gtk_css_palette_value_parse (GtkCssParser *parser)
   return result;
 }
 
-const GdkRGBA *
+GtkCssValue *
 gtk_css_palette_value_get_color (GtkCssValue *value,
                                  const char  *name)
 {
@@ -347,8 +348,27 @@ gtk_css_palette_value_get_color (GtkCssValue *value,
   for (i = 0; i < value->n_colors; i ++)
     {
       if (strcmp (value->color_names[i], name) == 0)
-        return gtk_css_color_value_get_rgba (value->color_values[i]);
+        return value->color_values[i];
     }
 
   return NULL;
+}
+
+GtkCssValue *
+gtk_css_palette_value_resolve (GtkCssValue *value,
+                               GtkCssValue *current_color)
+{
+  GtkCssValue *result;
+
+  if (!gtk_css_value_contains_current_color (value))
+    return gtk_css_value_ref (value);
+
+  result = gtk_css_palette_value_new_sized (value->n_colors);
+  for (guint i = 0; i < value->n_colors; i++)
+    {
+      result->color_names[i] = g_strdup (value->color_names[i]);
+      result->color_values[i] = gtk_css_color_value_resolve (value->color_values[i], NULL, current_color);
+    }
+
+  return result;
 }
