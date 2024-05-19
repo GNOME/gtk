@@ -26,11 +26,13 @@
 #include "gtkcssarrayvalueprivate.h"
 #include "gtkcsscustompropertypoolprivate.h"
 #include "gtkcssenumvalueprivate.h"
+#include "gtkcssimagevalueprivate.h"
 #include "gtkcssinheritvalueprivate.h"
 #include "gtkcssinitialvalueprivate.h"
 #include "gtkcssnumbervalueprivate.h"
 #include "gtkcsscolorvalueprivate.h"
 #include "gtkcsspalettevalueprivate.h"
+#include "gtkcssshadowvalueprivate.h"
 #include "gtkcssshorthandpropertyprivate.h"
 #include "gtkcssstringvalueprivate.h"
 #include "gtkcssfontvariationsvalueprivate.h"
@@ -41,6 +43,7 @@
 #include "gtkstyleanimationprivate.h"
 #include "gtkstylepropertyprivate.h"
 #include "gtkstyleproviderprivate.h"
+#include "gtkcssvaluesprivate.h"
 
 G_DEFINE_ABSTRACT_TYPE (GtkCssStyle, gtk_css_style, G_TYPE_OBJECT)
 
@@ -100,6 +103,209 @@ gtk_css_style_init (GtkCssStyle *style)
 GtkCssValue *
 gtk_css_style_get_value (GtkCssStyle *style,
                          guint        id)
+{
+  return gtk_css_style_get_used_value (style, id);
+}
+
+GtkCssValue *
+gtk_css_style_get_used_value (GtkCssStyle *style,
+                              guint        id)
+{
+  switch (id)
+    {
+    case GTK_CSS_PROPERTY_COLOR:
+      return style->used->color;
+    case GTK_CSS_PROPERTY_DPI:
+      return style->core->dpi;
+    case GTK_CSS_PROPERTY_FONT_SIZE:
+      return style->core->font_size;
+    case GTK_CSS_PROPERTY_ICON_PALETTE:
+      return style->used->icon_palette;
+    case GTK_CSS_PROPERTY_BACKGROUND_COLOR:
+      return style->used->background_color;
+    case GTK_CSS_PROPERTY_FONT_FAMILY:
+      return style->font->font_family;
+    case GTK_CSS_PROPERTY_FONT_STYLE:
+      return style->font->font_style;
+    case GTK_CSS_PROPERTY_FONT_WEIGHT:
+      return style->font->font_weight;
+    case GTK_CSS_PROPERTY_FONT_STRETCH:
+      return style->font->font_stretch;
+    case GTK_CSS_PROPERTY_LETTER_SPACING:
+      return style->font->letter_spacing;
+    case GTK_CSS_PROPERTY_LINE_HEIGHT:
+      return style->font->line_height;
+    case GTK_CSS_PROPERTY_TEXT_DECORATION_LINE:
+      return style->font_variant->text_decoration_line;
+    case GTK_CSS_PROPERTY_TEXT_DECORATION_COLOR:
+      return style->used->text_decoration_color;
+    case GTK_CSS_PROPERTY_TEXT_DECORATION_STYLE:
+      return style->font_variant->text_decoration_style;
+    case GTK_CSS_PROPERTY_TEXT_TRANSFORM:
+      return style->font_variant->text_transform;
+    case GTK_CSS_PROPERTY_FONT_KERNING:
+      return style->font_variant->font_kerning;
+    case GTK_CSS_PROPERTY_FONT_VARIANT_LIGATURES:
+      return style->font_variant->font_variant_ligatures;
+    case GTK_CSS_PROPERTY_FONT_VARIANT_POSITION:
+      return style->font_variant->font_variant_position;
+    case GTK_CSS_PROPERTY_FONT_VARIANT_CAPS:
+      return style->font_variant->font_variant_caps;
+    case GTK_CSS_PROPERTY_FONT_VARIANT_NUMERIC:
+      return style->font_variant->font_variant_numeric;
+    case GTK_CSS_PROPERTY_FONT_VARIANT_ALTERNATES:
+      return style->font_variant->font_variant_alternates;
+    case GTK_CSS_PROPERTY_FONT_VARIANT_EAST_ASIAN:
+      return style->font_variant->font_variant_east_asian;
+    case GTK_CSS_PROPERTY_TEXT_SHADOW:
+      return style->used->text_shadow;
+    case GTK_CSS_PROPERTY_BOX_SHADOW:
+      return style->used->box_shadow;
+    case GTK_CSS_PROPERTY_MARGIN_TOP:
+      return style->size->margin_top;
+    case GTK_CSS_PROPERTY_MARGIN_LEFT:
+      return style->size->margin_left;
+    case GTK_CSS_PROPERTY_MARGIN_BOTTOM:
+      return style->size->margin_bottom;
+    case GTK_CSS_PROPERTY_MARGIN_RIGHT:
+      return style->size->margin_right;
+    case GTK_CSS_PROPERTY_PADDING_TOP:
+      return style->size->padding_top;
+    case GTK_CSS_PROPERTY_PADDING_LEFT:
+      return style->size->padding_left;
+    case GTK_CSS_PROPERTY_PADDING_BOTTOM:
+      return style->size->padding_bottom;
+    case GTK_CSS_PROPERTY_PADDING_RIGHT:
+      return style->size->padding_right;
+    case GTK_CSS_PROPERTY_BORDER_TOP_STYLE:
+      return style->border->border_top_style;
+    case GTK_CSS_PROPERTY_BORDER_TOP_WIDTH:
+      return style->border->border_top_width;
+    case GTK_CSS_PROPERTY_BORDER_LEFT_STYLE:
+      return style->border->border_left_style;
+    case GTK_CSS_PROPERTY_BORDER_LEFT_WIDTH:
+      return style->border->border_left_width;
+    case GTK_CSS_PROPERTY_BORDER_BOTTOM_STYLE:
+      return style->border->border_bottom_style;
+    case GTK_CSS_PROPERTY_BORDER_BOTTOM_WIDTH:
+      return style->border->border_bottom_width;
+    case GTK_CSS_PROPERTY_BORDER_RIGHT_STYLE:
+      return style->border->border_right_style;
+    case GTK_CSS_PROPERTY_BORDER_RIGHT_WIDTH:
+      return style->border->border_right_width;
+    case GTK_CSS_PROPERTY_BORDER_TOP_LEFT_RADIUS:
+      return style->border->border_top_left_radius;
+    case GTK_CSS_PROPERTY_BORDER_TOP_RIGHT_RADIUS:
+      return style->border->border_top_right_radius;
+    case GTK_CSS_PROPERTY_BORDER_BOTTOM_RIGHT_RADIUS:
+      return style->border->border_bottom_right_radius;
+    case GTK_CSS_PROPERTY_BORDER_BOTTOM_LEFT_RADIUS:
+      return style->border->border_bottom_left_radius;
+    case GTK_CSS_PROPERTY_OUTLINE_STYLE:
+      return style->outline->outline_style;
+    case GTK_CSS_PROPERTY_OUTLINE_WIDTH:
+      return style->outline->outline_width;
+    case GTK_CSS_PROPERTY_OUTLINE_OFFSET:
+      return style->outline->outline_offset;
+    case GTK_CSS_PROPERTY_BACKGROUND_CLIP:
+      return style->background->background_clip;
+    case GTK_CSS_PROPERTY_BACKGROUND_ORIGIN:
+      return style->background->background_origin;
+    case GTK_CSS_PROPERTY_BACKGROUND_SIZE:
+      return style->background->background_size;
+    case GTK_CSS_PROPERTY_BACKGROUND_POSITION:
+      return style->background->background_position;
+    case GTK_CSS_PROPERTY_BORDER_TOP_COLOR:
+      return style->used->border_top_color;
+    case GTK_CSS_PROPERTY_BORDER_RIGHT_COLOR:
+      return style->used->border_right_color;
+    case GTK_CSS_PROPERTY_BORDER_BOTTOM_COLOR:
+      return style->used->border_bottom_color;
+    case GTK_CSS_PROPERTY_BORDER_LEFT_COLOR:
+      return style->used->border_left_color;
+    case GTK_CSS_PROPERTY_OUTLINE_COLOR:
+      return style->used->outline_color;
+    case GTK_CSS_PROPERTY_BACKGROUND_REPEAT:
+      return style->background->background_repeat;
+    case GTK_CSS_PROPERTY_BACKGROUND_IMAGE:
+      return style->used->background_image;
+    case GTK_CSS_PROPERTY_BACKGROUND_BLEND_MODE:
+      return style->background->background_blend_mode;
+    case GTK_CSS_PROPERTY_BORDER_IMAGE_SOURCE:
+      return style->used->border_image_source;
+    case GTK_CSS_PROPERTY_BORDER_IMAGE_REPEAT:
+      return style->border->border_image_repeat;
+    case GTK_CSS_PROPERTY_BORDER_IMAGE_SLICE:
+      return style->border->border_image_slice;
+    case GTK_CSS_PROPERTY_BORDER_IMAGE_WIDTH:
+      return style->border->border_image_width;
+    case GTK_CSS_PROPERTY_ICON_SOURCE:
+      return style->used->icon_source;
+    case GTK_CSS_PROPERTY_ICON_SIZE:
+      return style->icon->icon_size;
+    case GTK_CSS_PROPERTY_ICON_SHADOW:
+      return style->used->icon_shadow;
+    case GTK_CSS_PROPERTY_ICON_STYLE:
+      return style->icon->icon_style;
+    case GTK_CSS_PROPERTY_ICON_TRANSFORM:
+      return style->other->icon_transform;
+    case GTK_CSS_PROPERTY_ICON_FILTER:
+      return style->other->icon_filter;
+    case GTK_CSS_PROPERTY_BORDER_SPACING:
+      return style->size->border_spacing;
+    case GTK_CSS_PROPERTY_TRANSFORM:
+      return style->other->transform;
+    case GTK_CSS_PROPERTY_TRANSFORM_ORIGIN:
+      return style->other->transform_origin;
+    case GTK_CSS_PROPERTY_MIN_WIDTH:
+      return style->size->min_width;
+    case GTK_CSS_PROPERTY_MIN_HEIGHT:
+      return style->size->min_height;
+    case GTK_CSS_PROPERTY_TRANSITION_PROPERTY:
+      return style->transition->transition_property;
+    case GTK_CSS_PROPERTY_TRANSITION_DURATION:
+      return style->transition->transition_duration;
+    case GTK_CSS_PROPERTY_TRANSITION_TIMING_FUNCTION:
+      return style->transition->transition_timing_function;
+    case GTK_CSS_PROPERTY_TRANSITION_DELAY:
+      return style->transition->transition_delay;
+    case GTK_CSS_PROPERTY_ANIMATION_NAME:
+      return style->animation->animation_name;
+    case GTK_CSS_PROPERTY_ANIMATION_DURATION:
+      return style->animation->animation_duration;
+    case GTK_CSS_PROPERTY_ANIMATION_TIMING_FUNCTION:
+      return style->animation->animation_timing_function;
+    case GTK_CSS_PROPERTY_ANIMATION_ITERATION_COUNT:
+      return style->animation->animation_iteration_count;
+    case GTK_CSS_PROPERTY_ANIMATION_DIRECTION:
+      return style->animation->animation_direction;
+    case GTK_CSS_PROPERTY_ANIMATION_PLAY_STATE:
+      return style->animation->animation_play_state;
+    case GTK_CSS_PROPERTY_ANIMATION_DELAY:
+      return style->animation->animation_delay;
+    case GTK_CSS_PROPERTY_ANIMATION_FILL_MODE:
+      return style->animation->animation_fill_mode;
+    case GTK_CSS_PROPERTY_OPACITY:
+      return style->other->opacity;
+    case GTK_CSS_PROPERTY_FILTER:
+      return style->other->filter;
+    case GTK_CSS_PROPERTY_CARET_COLOR:
+      return style->used->caret_color;
+    case GTK_CSS_PROPERTY_SECONDARY_CARET_COLOR:
+      return style->used->secondary_caret_color;
+    case GTK_CSS_PROPERTY_FONT_FEATURE_SETTINGS:
+      return style->font->font_feature_settings;
+    case GTK_CSS_PROPERTY_FONT_VARIATION_SETTINGS:
+      return style->font->font_variation_settings;
+
+    default:
+      g_assert_not_reached ();
+    }
+}
+
+GtkCssValue *
+gtk_css_style_get_computed_value (GtkCssStyle *style,
+                                  guint        id)
 {
   switch (id)
     {
@@ -932,4 +1138,98 @@ gtk_css_style_list_custom_properties (GtkCssStyle *style)
     return gtk_css_variable_set_list_ids (style->variables);
 
   return NULL;
+}
+
+static GtkCssValue *
+gtk_css_style_resolve_used_value (GtkCssStyle          *style,
+                                  GtkCssValue          *value,
+                                  guint                 id,
+                                  GtkCssComputeContext *context)
+{
+  GtkCssValue *used;
+
+  switch (id)
+    {
+    case GTK_CSS_PROPERTY_COLOR:
+      {
+        GtkCssValue *current;
+
+        if (context->parent_style)
+          current = context->parent_style->used->color;
+        else
+          current = _gtk_css_style_property_get_initial_value (_gtk_css_style_property_lookup_by_id (GTK_CSS_PROPERTY_COLOR));
+
+        used = gtk_css_color_value_resolve (value, NULL, current);
+      }
+      break;
+
+    case GTK_CSS_PROPERTY_BACKGROUND_COLOR:
+    case GTK_CSS_PROPERTY_TEXT_DECORATION_COLOR:
+    case GTK_CSS_PROPERTY_BORDER_TOP_COLOR:
+    case GTK_CSS_PROPERTY_BORDER_RIGHT_COLOR:
+    case GTK_CSS_PROPERTY_BORDER_BOTTOM_COLOR:
+    case GTK_CSS_PROPERTY_BORDER_LEFT_COLOR:
+    case GTK_CSS_PROPERTY_OUTLINE_COLOR:
+    case GTK_CSS_PROPERTY_CARET_COLOR:
+    case GTK_CSS_PROPERTY_SECONDARY_CARET_COLOR:
+      used = gtk_css_color_value_resolve (value, NULL, style->used->color);
+      break;
+
+    case GTK_CSS_PROPERTY_BOX_SHADOW:
+    case GTK_CSS_PROPERTY_TEXT_SHADOW:
+    case GTK_CSS_PROPERTY_ICON_SHADOW:
+      used = gtk_css_shadow_value_resolve (value, style->used->color);
+      break;
+
+    case GTK_CSS_PROPERTY_ICON_PALETTE:
+      used = gtk_css_palette_value_resolve (value, style->used->color);
+      break;
+
+    case GTK_CSS_PROPERTY_BACKGROUND_IMAGE:
+    case GTK_CSS_PROPERTY_ICON_SOURCE:
+    case GTK_CSS_PROPERTY_BORDER_IMAGE_SOURCE:
+      used = gtk_css_image_value_resolve (value, style->used->color);
+      break;
+
+    default:
+      return NULL;
+    }
+
+  g_assert (!gtk_css_value_contains_current_color (used));
+
+  return used;
+}
+
+static inline void
+gtk_css_take_value (GtkCssValue **variable,
+                    GtkCssValue  *value)
+{
+  if (*variable)
+    gtk_css_value_unref (*variable);
+  *variable = value;
+}
+
+void
+gtk_css_style_resolve_used_values (GtkCssStyle          *style,
+                                   GtkCssComputeContext *context)
+{
+  GtkCssValue **values;
+
+  style->used = (GtkCssUsedValues *) gtk_css_values_new (GTK_CSS_USED_VALUES);
+  values = &style->used->color;
+
+  for (guint i = 0; i < G_N_ELEMENTS (used_props); i++)
+    {
+      guint id = used_props[i];
+      GtkCssValue *value, *used;
+
+      value = gtk_css_style_get_computed_value (style, id);
+
+      if (gtk_css_value_contains_current_color (value))
+        used = gtk_css_style_resolve_used_value (style, value, id, context);
+      else
+        used = gtk_css_value_ref (value);
+
+      gtk_css_take_value (&values[i], used);
+    }
 }
