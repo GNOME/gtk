@@ -327,7 +327,7 @@ gtk_css_image_conic_compute (GtkCssImage          *image,
   copy->rotation = gtk_css_value_compute (self->rotation, property_id, context);
 
   copy->n_stops = self->n_stops;
-  copy->color_stops = g_malloc (sizeof (GtkCssImageConicColorStop) * copy->n_stops);
+  copy->color_stops = g_new (GtkCssImageConicColorStop, self->n_stops);
   for (i = 0; i < self->n_stops; i++)
     {
       const GtkCssImageConicColorStop *stop = &self->color_stops[i];
@@ -503,6 +503,53 @@ gtk_css_image_conic_is_computed (GtkCssImage *image)
   return computed;
 }
 
+static gboolean
+gtk_css_image_conic_contains_current_color (GtkCssImage *image)
+{
+  GtkCssImageConic *self = GTK_CSS_IMAGE_CONIC (image);
+
+  for (guint i = 0; i < self->n_stops; i ++)
+    {
+      const GtkCssImageConicColorStop *stop = &self->color_stops[i];
+
+      if (gtk_css_value_contains_current_color (stop->color))
+        return TRUE;
+    }
+
+  return FALSE;
+}
+
+static GtkCssImage *
+gtk_css_image_conic_resolve (GtkCssImage *image,
+                             GtkCssValue *current_color)
+{
+  GtkCssImageConic *self = GTK_CSS_IMAGE_CONIC (image);
+  GtkCssImageConic *resolved;
+
+  if (!gtk_css_image_conic_contains_current_color (image))
+    return g_object_ref (image);
+
+  resolved = g_object_new (GTK_TYPE_CSS_IMAGE_CONIC, NULL);
+
+  resolved->center = gtk_css_value_ref (self->center);
+  resolved->rotation = gtk_css_value_ref (self->rotation);
+
+  resolved->n_stops = self->n_stops;
+  resolved->color_stops = g_new (GtkCssImageConicColorStop, self->n_stops);
+
+  for (guint i = 0; i < self->n_stops; i++)
+    {
+      if (self->color_stops[i].offset)
+        resolved->color_stops[i].offset = gtk_css_value_ref (self->color_stops[i].offset);
+      else
+        resolved->color_stops[i].offset = NULL;
+
+      resolved->color_stops[i].color = gtk_css_color_value_resolve (self->color_stops[i].color, NULL, current_color);
+    }
+
+  return GTK_CSS_IMAGE (resolved);
+}
+
 static void
 gtk_css_image_conic_class_init (GtkCssImageConicClass *klass)
 {
@@ -516,6 +563,8 @@ gtk_css_image_conic_class_init (GtkCssImageConicClass *klass)
   image_class->equal = gtk_css_image_conic_equal;
   image_class->transition = gtk_css_image_conic_transition;
   image_class->is_computed = gtk_css_image_conic_is_computed;
+  image_class->contains_current_color = gtk_css_image_conic_contains_current_color;
+  image_class->resolve = gtk_css_image_conic_resolve;
 
   object_class->dispose = gtk_css_image_conic_dispose;
 }

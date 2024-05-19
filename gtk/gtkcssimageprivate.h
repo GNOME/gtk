@@ -91,6 +91,9 @@ struct _GtkCssImageClass
   void         (* print)                           (GtkCssImage                *image,
                                                     GString                    *string);
   gboolean     (* is_computed)                     (GtkCssImage                *image);
+  gboolean     (* contains_current_color)          (GtkCssImage                *image);
+  GtkCssImage *( * resolve)                        (GtkCssImage                *image,
+                                                    GtkCssValue                *current_color);
 };
 
 GType          _gtk_css_image_get_type             (void) G_GNUC_CONST;
@@ -112,10 +115,6 @@ GtkCssImage *  _gtk_css_image_transition           (GtkCssImage                *
                                                     guint                       property_id,
                                                     double                      progress);
 
-void           _gtk_css_image_draw                 (GtkCssImage                *image,
-                                                    cairo_t                    *cr,
-                                                    double                      width,
-                                                    double                      height);
 void           gtk_css_image_snapshot              (GtkCssImage                *image,
                                                     GtkSnapshot                *snapshot,
                                                     double                      width,
@@ -142,6 +141,10 @@ cairo_surface_t *
                                                     int                         surface_height);
 gboolean       gtk_css_image_is_computed           (GtkCssImage                *image) G_GNUC_PURE;
 
+gboolean       gtk_css_image_contains_current_color (GtkCssImage *image) G_GNUC_PURE;
+
+GtkCssImage *  gtk_css_image_resolve                (GtkCssImage *image,
+                                                     GtkCssValue *current_color);
 
 G_END_DECLS
 
