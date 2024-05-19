@@ -1,0 +1,11 @@
+.a {
+  color: red;
+}
+
+.b {
+  color: color-mix(in srgb, blue, currentcolor);
+}
+
+.c {
+  background-color: currentcolor;
+}
