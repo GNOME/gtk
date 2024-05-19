@@ -316,13 +316,13 @@ _gdk_macos_popup_surface_constructed (GObject *object)
                                                  defer:NO
                                                 screen:screen];
 
+  _gdk_macos_surface_set_native (GDK_MACOS_SURFACE (self), window);
+
   [window setOpaque:NO];
   [window setBackgroundColor:[NSColor clearColor]];
   [window setDecorated:NO];
   [window setExcludedFromWindowsMenu:YES];
   [window setLevel:NSPopUpMenuWindowLevel];
-
-  _gdk_macos_surface_set_native (GDK_MACOS_SURFACE (self), window);
 
   gdk_surface_set_frame_clock (surface, gdk_surface_get_frame_clock (surface->parent));
 
