@@ -197,10 +197,10 @@ _gtk_css_bg_size_value_parse (GtkCssParser *parser)
     x = NULL;
   else
     {
-      x = _gtk_css_number_value_parse (parser,
-                                       GTK_CSS_POSITIVE_ONLY
-                                       | GTK_CSS_PARSE_PERCENT
-                                       | GTK_CSS_PARSE_LENGTH);
+      x = gtk_css_number_value_parse (parser,
+                                      GTK_CSS_POSITIVE_ONLY
+                                      | GTK_CSS_PARSE_PERCENT
+                                      | GTK_CSS_PARSE_LENGTH);
       if (x == NULL)
         return NULL;
     }
@@ -211,10 +211,10 @@ _gtk_css_bg_size_value_parse (GtkCssParser *parser)
     y = NULL;
   else
     {
-      y = _gtk_css_number_value_parse (parser,
-                                       GTK_CSS_POSITIVE_ONLY
-                                       | GTK_CSS_PARSE_PERCENT
-                                       | GTK_CSS_PARSE_LENGTH);
+      y = gtk_css_number_value_parse (parser,
+                                      GTK_CSS_POSITIVE_ONLY
+                                      | GTK_CSS_PARSE_PERCENT
+                                      | GTK_CSS_PARSE_LENGTH);
       if (y == NULL)
         {
           gtk_css_value_unref (x);
@@ -280,8 +280,8 @@ _gtk_css_bg_size_value_compute_size (const GtkCssValue *value,
       double x, y;
 
       /* note: 0 does the right thing later for 'auto' */
-      x = value->x ? _gtk_css_number_value_get (value->x, area_width) : 0;
-      y = value->y ? _gtk_css_number_value_get (value->y, area_height) : 0;
+      x = value->x ? gtk_css_number_value_get (value->x, area_width) : 0;
+      y = value->y ? gtk_css_number_value_get (value->y, area_height) : 0;
 
       if ((x <= 0 && value->x) ||
           (y <= 0 && value->y))

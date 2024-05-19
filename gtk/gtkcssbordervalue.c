@@ -191,7 +191,7 @@ _gtk_css_border_value_parse (GtkCssParser           *parser,
       if (!gtk_css_number_value_can_parse (parser))
         break;
 
-      result->values[i] = _gtk_css_number_value_parse (parser, flags);
+      result->values[i] = gtk_css_number_value_parse (parser, flags);
       if (result->values[i] == NULL)
         {
           gtk_css_value_unref (result);

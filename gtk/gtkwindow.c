@@ -1395,7 +1395,7 @@ constraints_for_edge (GdkSurfaceEdge edge)
 static int
 get_number (GtkCssValue *value)
 {
-  double d = _gtk_css_number_value_get (value, 100);
+  double d = gtk_css_number_value_get (value, 100);
 
   if (d < 1)
     return ceil (d);

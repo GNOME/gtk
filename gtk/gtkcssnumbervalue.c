@@ -155,7 +155,7 @@ gtk_css_value_number_free (GtkCssValue *number)
 static double
 get_dpi (GtkCssStyle *style)
 {
-  return _gtk_css_number_value_get (style->core->dpi, 96);
+  return gtk_css_number_value_get (style->core->dpi, 96);
 }
 
 static double
@@ -167,12 +167,12 @@ get_base_font_size_px (guint             property_id,
   if (property_id == GTK_CSS_PROPERTY_FONT_SIZE)
     {
       if (parent_style)
-        return _gtk_css_number_value_get (parent_style->core->font_size, 100);
+        return gtk_css_number_value_get (parent_style->core->font_size, 100);
       else
         return gtk_css_font_size_get_default_px (provider, style);
     }
 
-  return _gtk_css_number_value_get (style->core->font_size, 100);
+  return gtk_css_number_value_get (style->core->font_size, 100);
 }
 
 /* Canonical units that can be used before compute time
@@ -252,7 +252,7 @@ get_converted_value (GtkCssValue *value,
   if (value->type != TYPE_DIMENSION)
     return NAN;
 
-  v = _gtk_css_number_value_get (value, 100);
+  v = gtk_css_number_value_get (value, 100);
 
   if (unit == value->dimension.unit)
     {
@@ -984,7 +984,7 @@ gtk_css_number_value_multiply (GtkCssValue *value,
         GtkCssValue *a = gtk_css_number_value_multiply (value->calc.terms[0], factor);
         GtkCssValue *b = value->calc.n_terms > 0
                            ? gtk_css_number_value_multiply (value->calc.terms[1], factor)
-                           : _gtk_css_number_value_new (factor, GTK_CSS_NUMBER);
+                           : gtk_css_number_value_new (factor, GTK_CSS_NUMBER);
 
         return gtk_css_round_value_new (value->calc.mode, a, b);
       }
@@ -1018,7 +1018,7 @@ gtk_css_number_value_multiply (GtkCssValue *value,
  return gtk_css_math_value_new (TYPE_PRODUCT, 0,
                                 (GtkCssValue *[]) {
                                    gtk_css_value_ref (value),
-                                   _gtk_css_number_value_new (factor, GTK_CSS_NUMBER)
+                                   gtk_css_number_value_new (factor, GTK_CSS_NUMBER)
                                 }, 2);
 }
 
@@ -1066,8 +1066,8 @@ gtk_css_number_value_try_add (GtkCssValue *value1,
 }
 
 GtkCssValue *
-_gtk_css_number_value_new (double     value,
-                           GtkCssUnit unit)
+gtk_css_number_value_new (double     value,
+                          GtkCssUnit unit)
 {
   return gtk_css_dimension_value_new (value, unit);
 }
@@ -1405,8 +1405,8 @@ gtk_css_number_value_can_parse (GtkCssParser *parser)
 }
 
 GtkCssValue *
-_gtk_css_number_value_parse (GtkCssParser           *parser,
-                             GtkCssNumberParseFlags  flags)
+gtk_css_number_value_parse (GtkCssParser           *parser,
+                            GtkCssNumberParseFlags  flags)
 {
   const GtkCssToken *token = gtk_css_parser_get_token (parser);
 
@@ -1476,7 +1476,7 @@ _gtk_css_number_value_parse (GtkCssParser           *parser,
           if (g_ascii_strcasecmp (name, constants[i].name) == 0)
             {
               gtk_css_parser_consume_token (parser);
-              return _gtk_css_number_value_new (constants[i].value, GTK_CSS_NUMBER);
+              return gtk_css_number_value_new (constants[i].value, GTK_CSS_NUMBER);
             }
         }
     }
@@ -1488,8 +1488,8 @@ _gtk_css_number_value_parse (GtkCssParser           *parser,
  * units are canonical and all lengths are in px at that time.
  */
 double
-_gtk_css_number_value_get (const GtkCssValue *value,
-                           double             one_hundred_percent)
+gtk_css_number_value_get (const GtkCssValue *value,
+                          double             one_hundred_percent)
 {
   guint type = value->type;
   guint mode = value->calc.mode;
@@ -1509,7 +1509,7 @@ _gtk_css_number_value_get (const GtkCssValue *value,
         double result = 0.0;
 
         for (guint i = 0; i < n_terms; i++)
-          result += _gtk_css_number_value_get (terms[i], one_hundred_percent);
+          result += gtk_css_number_value_get (terms[i], one_hundred_percent);
 
         return result;
       }
@@ -1519,7 +1519,7 @@ _gtk_css_number_value_get (const GtkCssValue *value,
         double result = 1.0;
 
         for (guint i = 0; i < n_terms; i++)
-          result *= _gtk_css_number_value_get (terms[i], one_hundred_percent);
+          result *= gtk_css_number_value_get (terms[i], one_hundred_percent);
 
         return result;
       }
@@ -1529,7 +1529,7 @@ _gtk_css_number_value_get (const GtkCssValue *value,
         double result = G_MAXDOUBLE;
 
         for (guint i = 0; i < n_terms; i++)
-          result = MIN (result, _gtk_css_number_value_get (terms[i], one_hundred_percent));
+          result = MIN (result, gtk_css_number_value_get (terms[i], one_hundred_percent));
 
         return result;
       }
@@ -1539,7 +1539,7 @@ _gtk_css_number_value_get (const GtkCssValue *value,
         double result = -G_MAXDOUBLE;
 
         for (guint i = 0; i < n_terms; i++)
-          result = MAX (result, _gtk_css_number_value_get (terms[i], one_hundred_percent));
+          result = MAX (result, gtk_css_number_value_get (terms[i], one_hundred_percent));
 
         return result;
       }
@@ -1551,58 +1551,58 @@ _gtk_css_number_value_get (const GtkCssValue *value,
         GtkCssValue *max = terms[2];
         double result;
 
-        result = _gtk_css_number_value_get (center, one_hundred_percent);
+        result = gtk_css_number_value_get (center, one_hundred_percent);
 
         if (max)
-          result = MIN (result, _gtk_css_number_value_get (max, one_hundred_percent));
+          result = MIN (result, gtk_css_number_value_get (max, one_hundred_percent));
         if (min)
-          result = MAX (result, _gtk_css_number_value_get (min, one_hundred_percent));
+          result = MAX (result, gtk_css_number_value_get (min, one_hundred_percent));
 
         return result;
       }
 
     case TYPE_ROUND:
       {
-        double a = _gtk_css_number_value_get (terms[0], one_hundred_percent);
+        double a = gtk_css_number_value_get (terms[0], one_hundred_percent);
 
-        double b = terms[1] != NULL ? _gtk_css_number_value_get (terms[1], one_hundred_percent) : 1;
+        double b = terms[1] != NULL ? gtk_css_number_value_get (terms[1], one_hundred_percent) : 1;
 
         return _round (mode, a, b);
       }
 
     case TYPE_MOD:
       {
-        double a = _gtk_css_number_value_get (terms[0], one_hundred_percent);
-        double b = _gtk_css_number_value_get (terms[1], one_hundred_percent);
+        double a = gtk_css_number_value_get (terms[0], one_hundred_percent);
+        double b = gtk_css_number_value_get (terms[1], one_hundred_percent);
 
         return _mod (a, b);
       }
 
     case TYPE_REM:
       {
-        double a = _gtk_css_number_value_get (terms[0], one_hundred_percent);
-        double b = _gtk_css_number_value_get (terms[1], one_hundred_percent);
+        double a = gtk_css_number_value_get (terms[0], one_hundred_percent);
+        double b = gtk_css_number_value_get (terms[1], one_hundred_percent);
 
         return _rem (a, b);
       }
 
     case TYPE_ABS:
       {
-        double a = _gtk_css_number_value_get (terms[0], one_hundred_percent);
+        double a = gtk_css_number_value_get (terms[0], one_hundred_percent);
 
         return fabs (a);
       }
 
     case TYPE_SIGN:
       {
-        double a = _gtk_css_number_value_get (terms[0], one_hundred_percent);
+        double a = gtk_css_number_value_get (terms[0], one_hundred_percent);
 
         return _sign (a);
       }
 
     case TYPE_SIN:
       {
-        double a = _gtk_css_number_value_get (terms[0], one_hundred_percent);
+        double a = gtk_css_number_value_get (terms[0], one_hundred_percent);
 
         if (gtk_css_number_value_get_dimension (value) == GTK_CSS_DIMENSION_ANGLE)
           a = DEG_TO_RAD (a);
@@ -1612,7 +1612,7 @@ _gtk_css_number_value_get (const GtkCssValue *value,
 
     case TYPE_COS:
       {
-        double a = _gtk_css_number_value_get (terms[0], one_hundred_percent);
+        double a = gtk_css_number_value_get (terms[0], one_hundred_percent);
 
         if (gtk_css_number_value_get_dimension (value) == GTK_CSS_DIMENSION_ANGLE)
           a = DEG_TO_RAD (a);
@@ -1622,7 +1622,7 @@ _gtk_css_number_value_get (const GtkCssValue *value,
 
     case TYPE_TAN:
       {
-        double a = _gtk_css_number_value_get (terms[0], one_hundred_percent);
+        double a = gtk_css_number_value_get (terms[0], one_hundred_percent);
 
         if (gtk_css_number_value_get_dimension (value) == GTK_CSS_DIMENSION_ANGLE)
           a = DEG_TO_RAD (a);
@@ -1632,51 +1632,51 @@ _gtk_css_number_value_get (const GtkCssValue *value,
 
     case TYPE_ASIN:
       {
-        double a = _gtk_css_number_value_get (terms[0], one_hundred_percent);
+        double a = gtk_css_number_value_get (terms[0], one_hundred_percent);
 
         return RAD_TO_DEG (asin (a));
       }
 
     case TYPE_ACOS:
       {
-        double a = _gtk_css_number_value_get (terms[0], one_hundred_percent);
+        double a = gtk_css_number_value_get (terms[0], one_hundred_percent);
 
         return RAD_TO_DEG (acos (a));
       }
 
     case TYPE_ATAN:
       {
-        double a = _gtk_css_number_value_get (terms[0], one_hundred_percent);
+        double a = gtk_css_number_value_get (terms[0], one_hundred_percent);
 
         return RAD_TO_DEG (atan (a));
       }
 
     case TYPE_ATAN2:
       {
-        double a = _gtk_css_number_value_get (terms[0], one_hundred_percent);
-        double b = _gtk_css_number_value_get (terms[1], one_hundred_percent);
+        double a = gtk_css_number_value_get (terms[0], one_hundred_percent);
+        double b = gtk_css_number_value_get (terms[1], one_hundred_percent);
 
         return RAD_TO_DEG (atan2 (a, b));
       }
 
     case TYPE_POW:
       {
-        double a = _gtk_css_number_value_get (terms[0], one_hundred_percent);
-        double b = _gtk_css_number_value_get (terms[1], one_hundred_percent);
+        double a = gtk_css_number_value_get (terms[0], one_hundred_percent);
+        double b = gtk_css_number_value_get (terms[1], one_hundred_percent);
 
         return pow (a, b);
       }
 
     case TYPE_SQRT:
       {
-        double a = _gtk_css_number_value_get (terms[0], one_hundred_percent);
+        double a = gtk_css_number_value_get (terms[0], one_hundred_percent);
 
         return sqrt (a);
       }
 
     case TYPE_EXP:
       {
-        double a = _gtk_css_number_value_get (terms[0], one_hundred_percent);
+        double a = gtk_css_number_value_get (terms[0], one_hundred_percent);
 
         return exp (a);
       }
@@ -1684,14 +1684,14 @@ _gtk_css_number_value_get (const GtkCssValue *value,
     case TYPE_LOG:
       if (n_terms > 1)
         {
-          double a = _gtk_css_number_value_get (terms[0], one_hundred_percent);
-          double b = _gtk_css_number_value_get (terms[1], one_hundred_percent);
+          double a = gtk_css_number_value_get (terms[0], one_hundred_percent);
+          double b = gtk_css_number_value_get (terms[1], one_hundred_percent);
 
           return log (a) / log (b);
         }
       else
         {
-          double a = _gtk_css_number_value_get (terms[0], one_hundred_percent);
+          double a = gtk_css_number_value_get (terms[0], one_hundred_percent);
 
           return log (a);
         }
@@ -1702,7 +1702,7 @@ _gtk_css_number_value_get (const GtkCssValue *value,
 
         for (guint i = 0; i < n_terms; i++)
           {
-            double a = _gtk_css_number_value_get (terms[i], one_hundred_percent);
+            double a = gtk_css_number_value_get (terms[i], one_hundred_percent);
 
             acc += a * a;
           }

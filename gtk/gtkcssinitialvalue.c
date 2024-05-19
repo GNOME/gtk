@@ -55,7 +55,7 @@ gtk_css_value_initial_compute (GtkCssValue          *value,
           g_object_get (settings, "gtk-xft-dpi", &dpi_int, NULL);
 
           if (dpi_int > 0.0)
-            return _gtk_css_number_value_new (dpi_int / 1024., GTK_CSS_NUMBER);
+            return gtk_css_number_value_new (dpi_int / 1024., GTK_CSS_NUMBER);
         }
       break;
 

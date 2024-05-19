@@ -84,7 +84,7 @@ fetch_request_mode (GtkWidget *widget)
 static int
 get_number (GtkCssValue *value)
 {
-  double d = _gtk_css_number_value_get (value, 100);
+  double d = gtk_css_number_value_get (value, 100);
 
   if (d < 1)
     return ceil (d);
@@ -96,7 +96,7 @@ get_number (GtkCssValue *value)
 static int
 get_number_ceil (GtkCssValue *value)
 {
-  return ceil (_gtk_css_number_value_get (value, 100));
+  return ceil (gtk_css_number_value_get (value, 100));
 }
 
 static void

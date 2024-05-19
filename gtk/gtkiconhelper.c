@@ -456,7 +456,7 @@ gtk_icon_helper_get_size (GtkIconHelper *self)
     return self->pixel_size;
 
   style = gtk_css_node_get_style (self->node);
-  return _gtk_css_number_value_get (style->icon->icon_size, 100);
+  return gtk_css_number_value_get (style->icon->icon_size, 100);
 }
 
 void

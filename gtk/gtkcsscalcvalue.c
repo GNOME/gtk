@@ -60,7 +60,7 @@ gtk_css_calc_value_parse_value (GtkCssParser           *parser,
       return result;
     }
 
-  return _gtk_css_number_value_parse (parser, flags);
+  return gtk_css_number_value_parse (parser, flags);
 }
 
 static gboolean
@@ -96,9 +96,9 @@ gtk_css_calc_value_parse_product (GtkCssParser           *parser,
           if (value == NULL)
             goto fail;
           if (is_number (value))
-            temp = gtk_css_number_value_multiply (result, _gtk_css_number_value_get (value, 100));
+            temp = gtk_css_number_value_multiply (result, gtk_css_number_value_get (value, 100));
           else
-            temp = gtk_css_number_value_multiply (value, _gtk_css_number_value_get (result, 100));
+            temp = gtk_css_number_value_multiply (value, gtk_css_number_value_get (result, 100));
           gtk_css_value_unref (value);
           gtk_css_value_unref (result);
           result = temp;
@@ -108,7 +108,7 @@ gtk_css_calc_value_parse_product (GtkCssParser           *parser,
           value = gtk_css_calc_value_parse_product (parser, GTK_CSS_PARSE_NUMBER);
           if (value == NULL)
             goto fail;
-          temp = gtk_css_number_value_multiply (result, 1.0 / _gtk_css_number_value_get (value, 100));
+          temp = gtk_css_number_value_multiply (result, 1.0 / gtk_css_number_value_get (value, 100));
           gtk_css_value_unref (value);
           gtk_css_value_unref (result);
           result = temp;

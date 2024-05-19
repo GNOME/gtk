@@ -46,7 +46,7 @@ gtk_css_image_linear_get_repeating_start_end (GtkCssImageLinear *linear,
   if (stop->offset == NULL)
     *start = 0;
   else
-    *start = _gtk_css_number_value_get (stop->offset, length) / length;
+    *start = gtk_css_number_value_get (stop->offset, length) / length;
 
   *end = *start;
 
@@ -57,7 +57,7 @@ gtk_css_image_linear_get_repeating_start_end (GtkCssImageLinear *linear,
       if (stop->offset == NULL)
         continue;
 
-      pos = _gtk_css_number_value_get (stop->offset, length) / length;
+      pos = gtk_css_number_value_get (stop->offset, length) / length;
 
       *end = MAX (pos, *end);
     }
@@ -174,7 +174,7 @@ gtk_css_image_linear_snapshot (GtkCssImage        *image,
     }
   else
     {
-      angle = _gtk_css_number_value_get (linear->angle, 100);
+      angle = gtk_css_number_value_get (linear->angle, 100);
     }
 
   gtk_css_image_linear_compute_start_point (angle,
@@ -224,7 +224,7 @@ gtk_css_image_linear_snapshot (GtkCssImage        *image,
         }
       else
         {
-          pos = _gtk_css_number_value_get (stop->offset, length) / length;
+          pos = gtk_css_number_value_get (stop->offset, length) / length;
           pos = CLAMP (pos, 0.0, 1.0);
         }
 
@@ -279,9 +279,9 @@ gtk_css_image_linear_parse_color_stop (GtkCssImageLinear *self,
 
   if (gtk_css_number_value_can_parse (parser))
     {
-      stop.offset = _gtk_css_number_value_parse (parser,
-                                                 GTK_CSS_PARSE_PERCENT
-                                                 | GTK_CSS_PARSE_LENGTH);
+      stop.offset = gtk_css_number_value_parse (parser,
+                                                GTK_CSS_PARSE_PERCENT
+                                                | GTK_CSS_PARSE_LENGTH);
       if (stop.offset == NULL)
         {
           gtk_css_value_unref (stop.color);
@@ -359,7 +359,7 @@ gtk_css_image_linear_parse_first_arg (GtkCssImageLinear *linear,
     }
   else if (gtk_css_number_value_can_parse (parser))
     {
-      linear->angle = _gtk_css_number_value_parse (parser, GTK_CSS_PARSE_ANGLE);
+      linear->angle = gtk_css_number_value_parse (parser, GTK_CSS_PARSE_ANGLE);
       if (linear->angle == NULL)
         return 0;
 

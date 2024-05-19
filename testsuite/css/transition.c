@@ -63,8 +63,8 @@ value_is_near (int          prop,
       break;
 
     case GTK_CSS_PROPERTY_FONT_SIZE:
-      return fabs (_gtk_css_number_value_get (value1, 100) -
-                   _gtk_css_number_value_get (value2, 100)) < FLT_EPSILON;
+      return fabs (gtk_css_number_value_get (value1, 100) -
+                   gtk_css_number_value_get (value2, 100)) < FLT_EPSILON;
       break;
 
     default:

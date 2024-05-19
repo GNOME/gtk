@@ -41,10 +41,10 @@ typedef enum /*< skip >*/ {
 GtkCssValue *   gtk_css_dimension_value_new         (double                  value,
                                                      GtkCssUnit              unit);
 
-GtkCssValue *   _gtk_css_number_value_new           (double                  value,
+GtkCssValue *   gtk_css_number_value_new            (double                  value,
                                                      GtkCssUnit              unit);
 gboolean        gtk_css_number_value_can_parse      (GtkCssParser           *parser);
-GtkCssValue *   _gtk_css_number_value_parse         (GtkCssParser           *parser,
+GtkCssValue *   gtk_css_number_value_parse          (GtkCssParser           *parser,
                                                      GtkCssNumberParseFlags  flags);
 
 GtkCssDimension gtk_css_number_value_get_dimension  (const GtkCssValue      *value) G_GNUC_PURE;
@@ -55,7 +55,7 @@ GtkCssValue *   gtk_css_number_value_add            (GtkCssValue            *val
                                                      GtkCssValue            *value2);
 GtkCssValue *   gtk_css_number_value_try_add        (GtkCssValue            *value1,
                                                      GtkCssValue            *value2);
-double          _gtk_css_number_value_get           (const GtkCssValue      *number,
+double          gtk_css_number_value_get            (const GtkCssValue      *number,
                                                      double                  one_hundred_percent) G_GNUC_PURE;
 
 gboolean        gtk_css_dimension_value_is_zero     (const GtkCssValue      *value) G_GNUC_PURE;
