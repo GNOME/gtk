@@ -1696,12 +1696,12 @@ follow_if_link (GtkAboutDialog *about,
 
       if (uri && !g_ptr_array_find_with_equal_func (about->visited_links, uri, (GCompareFunc)strcmp, NULL))
         {
-          GdkRGBA visited_link_color;
+          const GdkRGBA *visited_link_color;
           GtkCssStyle *style;
 
           style = gtk_css_node_get_style (about->visited_link_node);
-          visited_link_color = *gtk_css_color_value_get_rgba (style->core->color);
-          g_object_set (G_OBJECT (tag), "foreground-rgba", &visited_link_color, NULL);
+          visited_link_color = gtk_css_color_value_get_rgba (style->used->color);
+          g_object_set (G_OBJECT (tag), "foreground-rgba", visited_link_color, NULL);
 
           g_ptr_array_add (about->visited_links, g_strdup (uri));
         }
@@ -1836,17 +1836,18 @@ text_buffer_new (GtkAboutDialog  *about,
   char **p;
   char *q0, *q1, *q2, *r1, *r2;
   GtkTextBuffer *buffer;
-  GdkRGBA color;
-  GdkRGBA link_color;
-  GdkRGBA visited_link_color;
+  const GdkRGBA *color;
+  const GdkRGBA *link_color;
+  const GdkRGBA *visited_link_color;
   GtkTextIter start_iter, end_iter;
   GtkTextTag *tag;
   GtkCssStyle *style;
 
   style = gtk_css_node_get_style (about->link_node);
-  link_color = *gtk_css_color_value_get_rgba (style->core->color);
+  link_color = gtk_css_color_value_get_rgba (style->used->color);
+
   style = gtk_css_node_get_style (about->visited_link_node);
-  visited_link_color = *gtk_css_color_value_get_rgba (style->core->color);
+  visited_link_color = gtk_css_color_value_get_rgba (style->used->color);
 
   buffer = gtk_text_buffer_new (NULL);
 
@@ -1907,7 +1908,7 @@ text_buffer_new (GtkAboutDialog  *about,
                 color = link_color;
 
               tag = gtk_text_buffer_create_tag (buffer, NULL,
-                                                "foreground-rgba", &color,
+                                                "foreground-rgba", color,
                                                 "underline", PANGO_UNDERLINE_SINGLE,
                                                 NULL);
               if (strcmp (link_type, "email") == 0)

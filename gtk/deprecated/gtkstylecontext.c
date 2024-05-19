@@ -928,10 +928,10 @@ _gtk_style_context_get_cursor_color (GtkStyleContext *context,
   style = gtk_style_context_lookup_style (context);
 
   if (primary_color)
-    *primary_color = *gtk_css_color_value_get_rgba (style->font->caret_color ? style->font->caret_color : style->core->color);
+    *primary_color = *gtk_css_color_value_get_rgba (style->used->caret_color);
 
   if (secondary_color)
-    *secondary_color = *gtk_css_color_value_get_rgba (style->font->secondary_caret_color ? style->font->secondary_caret_color : style->core->color);
+    *secondary_color = *gtk_css_color_value_get_rgba (style->used->secondary_caret_color);
 }
 
 /**

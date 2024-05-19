@@ -4834,7 +4834,7 @@ gtk_text_draw_cursor (GtkText     *self,
       gtk_css_boxes_init_border_box (&boxes, style, 0, 0, width, height);
       gtk_snapshot_push_clip (snapshot, &bounds);
       gtk_css_style_snapshot_background (&boxes, snapshot);
-      gtk_css_style_snapshot_layout (&boxes,snapshot, x, y, layout);
+      gtk_css_style_snapshot_layout (&boxes, snapshot, x, y, layout);
       gtk_snapshot_pop (snapshot);
     }
 

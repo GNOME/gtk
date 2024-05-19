@@ -1627,7 +1627,7 @@ create_arrow_render_node (GtkPopover *popover)
     {
       const GdkRGBA *border_color;
 
-      border_color = gtk_css_color_value_get_rgba (style->border->border_left_color ? style->border->border_left_color : style->core->color);
+      border_color = gtk_css_color_value_get_rgba (style->used->border_left_color);
 
       gtk_popover_apply_tail_path (popover, cr);
       gdk_cairo_set_source_rgba (cr, border_color);

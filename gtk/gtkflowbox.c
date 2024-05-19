@@ -2609,7 +2609,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
           cairo_append_path (cr, path);
           cairo_path_destroy (path);
 
-          border_color = gtk_css_color_value_get_rgba (style->border->border_top_color ? style->border->border_top_color : style->core->color);
+          border_color = gtk_css_color_value_get_rgba (style->used->border_top_color);
           border_width = round (gtk_css_number_value_get (style->border->border_left_width, 100));
 
           cairo_set_line_width (cr, border_width);
