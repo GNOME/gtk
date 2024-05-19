@@ -1482,9 +1482,9 @@ gtk_css_parser_parse_value_into_token_stream (GtkCssParser *self)
                   GtkCssVariableValueReference ref;
                   char *var_name = g_strdup (gtk_css_token_get_string (token));
 
-                  if (var_name[0] != '-' || var_name[1] != '-')
+                  if (strlen (var_name) < 3 || var_name[0] != '-' || var_name[1] != '-')
                     {
-                      gtk_css_parser_error_value (self, "Invalid variable name: %s", var_name);
+                      gtk_css_parser_error_syntax (self, "Invalid variable name: %s", var_name);
                       g_free (var_name);
                       goto error;
                     }
@@ -1526,6 +1526,20 @@ gtk_css_parser_parse_value_into_token_stream (GtkCssParser *self)
                     }
 
                   gtk_css_parser_references_append (&refs, &ref);
+                }
+              else
+                {
+                  if (gtk_css_token_is (token, GTK_CSS_TOKEN_EOF))
+                    {
+                      gtk_css_parser_error_syntax (self, "Missing variable name");
+                    }
+                  else
+                    {
+                      char *s = gtk_css_token_to_string (token);
+                      gtk_css_parser_error_syntax (self, "Expected a variable name, not %s", s);
+                      g_free (s);
+                    }
+                  goto error;
                 }
             }
         }
