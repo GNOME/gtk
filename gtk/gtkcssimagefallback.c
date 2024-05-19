@@ -211,7 +211,7 @@ gtk_css_image_fallback_parse_arg (GtkCssParser *parser,
     }
   else
     {
-      data->color = _gtk_css_color_value_parse (parser);
+      data->color = gtk_css_color_value_parse (parser);
       if (data->color == NULL)
         return 0;
 

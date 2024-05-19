@@ -768,7 +768,7 @@ parse_color_definition (GtkCssScanner *scanner)
   if (name == NULL)
     return TRUE;
 
-  color = _gtk_css_color_value_parse (scanner->parser);
+  color = gtk_css_color_value_parse (scanner->parser);
   if (color == NULL)
     {
       g_free (name);

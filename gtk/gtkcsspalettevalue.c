@@ -280,11 +280,11 @@ gtk_css_palette_value_new_default (void)
     {
       default_palette = gtk_css_palette_value_new_sized (3);
       gtk_css_palette_value_set_color (default_palette, 0, g_strdup ("error"),
-                                       _gtk_css_color_value_new_name ("error_color"));
+                                       gtk_css_color_value_new_name ("error_color"));
       gtk_css_palette_value_set_color (default_palette, 1, g_strdup ("success"),
-                                       _gtk_css_color_value_new_name ("success_color"));
+                                       gtk_css_color_value_new_name ("success_color"));
       gtk_css_palette_value_set_color (default_palette, 2, g_strdup ("warning"),
-                                       _gtk_css_color_value_new_name ("warning_color"));
+                                       gtk_css_color_value_new_name ("warning_color"));
       /* Above is already sorted */
     }
 
@@ -314,7 +314,7 @@ gtk_css_palette_value_parse (GtkCssParser *parser)
         return NULL;
       }
 
-    color = _gtk_css_color_value_parse (parser);
+    color = gtk_css_color_value_parse (parser);
     if (color == NULL)
       {
         g_free (ident);

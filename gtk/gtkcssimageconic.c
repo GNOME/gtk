@@ -119,7 +119,7 @@ parse_color (GtkCssParser *parser,
 {
   GtkCssValue **color = option_data;
   
-  *color = _gtk_css_color_value_parse (parser);
+  *color = gtk_css_color_value_parse (parser);
   if (*color == NULL)
     return FALSE;
 

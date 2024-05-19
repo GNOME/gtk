@@ -95,7 +95,7 @@ static GtkCssValue *
 color_parse (GtkCssStyleProperty *property,
              GtkCssParser        *parser)
 {
-  return _gtk_css_color_value_parse (parser);
+  return gtk_css_color_value_parse (parser);
 }
 
 static GtkCssValue *
@@ -921,7 +921,7 @@ _gtk_css_style_property_init_properties (void)
                                           GTK_STYLE_PROPERTY_ANIMATED,
                                           GTK_CSS_AFFECTS_TEXT_ATTRS,
                                           color_parse,
-                                          _gtk_css_color_value_new_current_color ());
+                                          gtk_css_color_value_new_current_color ());
   gtk_css_style_property_register        ("text-decoration-style",
                                           GTK_CSS_PROPERTY_TEXT_DECORATION_STYLE,
                                           0,
@@ -1168,31 +1168,31 @@ _gtk_css_style_property_init_properties (void)
                                           GTK_STYLE_PROPERTY_ANIMATED,
                                           GTK_CSS_AFFECTS_BORDER,
                                           color_parse,
-                                          _gtk_css_color_value_new_current_color ());
+                                          gtk_css_color_value_new_current_color ());
   gtk_css_style_property_register        ("border-right-color",
                                           GTK_CSS_PROPERTY_BORDER_RIGHT_COLOR,
                                           GTK_STYLE_PROPERTY_ANIMATED,
                                           GTK_CSS_AFFECTS_BORDER,
                                           color_parse,
-                                          _gtk_css_color_value_new_current_color ());
+                                          gtk_css_color_value_new_current_color ());
   gtk_css_style_property_register        ("border-bottom-color",
                                           GTK_CSS_PROPERTY_BORDER_BOTTOM_COLOR,
                                           GTK_STYLE_PROPERTY_ANIMATED,
                                           GTK_CSS_AFFECTS_BORDER,
                                           color_parse,
-                                          _gtk_css_color_value_new_current_color ());
+                                          gtk_css_color_value_new_current_color ());
   gtk_css_style_property_register        ("border-left-color",
                                           GTK_CSS_PROPERTY_BORDER_LEFT_COLOR,
                                           GTK_STYLE_PROPERTY_ANIMATED,
                                           GTK_CSS_AFFECTS_BORDER,
                                           color_parse,
-                                          _gtk_css_color_value_new_current_color ());
+                                          gtk_css_color_value_new_current_color ());
   gtk_css_style_property_register        ("outline-color",
                                           GTK_CSS_PROPERTY_OUTLINE_COLOR,
                                           GTK_STYLE_PROPERTY_ANIMATED,
                                           GTK_CSS_AFFECTS_OUTLINE,
                                           color_parse,
-                                          _gtk_css_color_value_new_current_color ());
+                                          gtk_css_color_value_new_current_color ());
 
   gtk_css_style_property_register        ("background-repeat",
                                           GTK_CSS_PROPERTY_BACKGROUND_REPEAT,
@@ -1410,13 +1410,13 @@ _gtk_css_style_property_init_properties (void)
                                           GTK_STYLE_PROPERTY_INHERIT | GTK_STYLE_PROPERTY_ANIMATED,
                                           GTK_CSS_AFFECTS_CONTENT,
                                           color_parse,
-                                          _gtk_css_color_value_new_current_color ());
+                                          gtk_css_color_value_new_current_color ());
   gtk_css_style_property_register        ("-gtk-secondary-caret-color",
                                           GTK_CSS_PROPERTY_SECONDARY_CARET_COLOR,
                                           GTK_STYLE_PROPERTY_INHERIT | GTK_STYLE_PROPERTY_ANIMATED,
                                           GTK_CSS_AFFECTS_CONTENT,
                                           color_parse,
-                                          _gtk_css_color_value_new_current_color ());
+                                          gtk_css_color_value_new_current_color ());
   gtk_css_style_property_register        ("font-feature-settings",
                                           GTK_CSS_PROPERTY_FONT_FEATURE_SETTINGS,
                                           GTK_STYLE_PROPERTY_INHERIT | GTK_STYLE_PROPERTY_ANIMATED,
