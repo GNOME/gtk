@@ -28,6 +28,9 @@ GtkCssValue *   _gtk_css_image_value_new           (GtkCssImage         *image);
 
 GtkCssImage *   _gtk_css_image_value_get_image     (const GtkCssValue   *image);
 
+GtkCssValue *    gtk_css_image_value_resolve       (GtkCssValue *value,
+                                                    GtkCssValue *current_color);
+
 
 G_END_DECLS
 
