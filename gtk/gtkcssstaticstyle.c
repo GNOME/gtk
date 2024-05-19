@@ -39,6 +39,7 @@
 #include "gtkstyleproviderprivate.h"
 #include "gtkcssdimensionvalueprivate.h"
 
+
 static void gtk_css_static_style_compute_value (GtkCssStaticStyle    *style,
                                                 guint                 id,
                                                 GtkCssValue          *specified,
@@ -174,7 +175,7 @@ G_DEFINE_TYPE (GtkCssStaticStyle, gtk_css_static_style, GTK_TYPE_CSS_STYLE)
 
 static GtkCssSection *
 gtk_css_static_style_get_section (GtkCssStyle *style,
-                                    guint        id)
+                                  guint        id)
 {
   GtkCssStaticStyle *sstyle = GTK_CSS_STATIC_STYLE (style);
 

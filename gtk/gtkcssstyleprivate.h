@@ -81,6 +81,7 @@ struct _GtkCssValues {
 
 struct _GtkCssCoreValues {
   GtkCssValues base;
+
   GtkCssValue *color;
   GtkCssValue *dpi;
   GtkCssValue *font_size;
@@ -89,6 +90,7 @@ struct _GtkCssCoreValues {
 
 struct _GtkCssBackgroundValues {
   GtkCssValues base;
+
   GtkCssValue *background_color;
   GtkCssValue *box_shadow;
   GtkCssValue *background_clip;
@@ -102,6 +104,7 @@ struct _GtkCssBackgroundValues {
 
 struct _GtkCssBorderValues {
   GtkCssValues base;
+
   GtkCssValue *border_top_style;
   GtkCssValue *border_top_width;
   GtkCssValue *border_left_style;
@@ -126,6 +129,7 @@ struct _GtkCssBorderValues {
 
 struct _GtkCssIconValues {
   GtkCssValues base;
+
   GtkCssValue *icon_size;
   GtkCssValue *icon_shadow;
   GtkCssValue *icon_style;
@@ -134,6 +138,7 @@ struct _GtkCssIconValues {
 
 struct _GtkCssOutlineValues {
   GtkCssValues base;
+
   GtkCssValue *outline_style;
   GtkCssValue *outline_width;
   GtkCssValue *outline_offset;
@@ -142,6 +147,7 @@ struct _GtkCssOutlineValues {
 
 struct _GtkCssFontValues {
   GtkCssValues base;
+
   GtkCssValue *font_family;
   GtkCssValue *font_style;
   GtkCssValue *font_weight;
@@ -157,6 +163,7 @@ struct _GtkCssFontValues {
 
 struct _GtkCssFontVariantValues {
   GtkCssValues base;
+
   GtkCssValue *text_decoration_line;
   GtkCssValue *text_decoration_color; // NULL if currentColor
   GtkCssValue *text_decoration_style;
@@ -172,6 +179,7 @@ struct _GtkCssFontVariantValues {
 
 struct _GtkCssAnimationValues {
   GtkCssValues base;
+
   GtkCssValue *animation_name;
   GtkCssValue *animation_duration;
   GtkCssValue *animation_timing_function;
@@ -184,6 +192,7 @@ struct _GtkCssAnimationValues {
 
 struct _GtkCssTransitionValues {
   GtkCssValues base;
+
   GtkCssValue *transition_property;
   GtkCssValue *transition_duration;
   GtkCssValue *transition_timing_function;
@@ -192,6 +201,7 @@ struct _GtkCssTransitionValues {
 
 struct _GtkCssSizeValues {
   GtkCssValues base;
+
   GtkCssValue *margin_top;
   GtkCssValue *margin_left;
   GtkCssValue *margin_bottom;
@@ -207,6 +217,7 @@ struct _GtkCssSizeValues {
 
 struct _GtkCssOtherValues {
   GtkCssValues base;
+
   GtkCssValue *icon_source;
   GtkCssValue *icon_transform;
   GtkCssValue *icon_filter;
