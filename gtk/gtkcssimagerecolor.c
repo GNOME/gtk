@@ -69,25 +69,25 @@ lookup_symbolic_colors (GtkCssStyle *style,
                         GdkRGBA     *warning_out,
                         GdkRGBA     *error_out)
 {
-  const GdkRGBA *lookup;
+  GtkCssValue *lookup;
 
   *color_out = *gtk_css_color_value_get_rgba (style->core->color);
 
   lookup = gtk_css_palette_value_get_color (palette, "success");
   if (lookup)
-    *success_out = *lookup;
+    *success_out = *gtk_css_color_value_get_rgba (lookup);
   else
     *success_out = *color_out;
 
   lookup = gtk_css_palette_value_get_color (palette, "warning");
   if (lookup)
-    *warning_out = *lookup;
+    *warning_out = *gtk_css_color_value_get_rgba (lookup);
   else
     *warning_out = *color_out;
 
   lookup = gtk_css_palette_value_get_color (palette, "error");
   if (lookup)
-    *error_out = *lookup;
+    *error_out = *gtk_css_color_value_get_rgba (lookup);
   else
     *error_out = *color_out;
 }

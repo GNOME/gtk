@@ -818,11 +818,11 @@ gtk_css_style_lookup_symbolic_colors (GtkCssStyle *style,
 
   for (gsize i = 1; i < 4; i++)
     {
-      const GdkRGBA *lookup;
+      GtkCssValue *lookup;
 
       lookup = gtk_css_palette_value_get_color (palette, names[i]);
       if (lookup)
-        color_out[i] = *lookup;
+        color_out[i] = *gtk_css_color_value_get_rgba (lookup);
       else
         color_out[i] = color_out[GTK_SYMBOLIC_COLOR_FOREGROUND];
     }
