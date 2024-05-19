@@ -1,0 +1,9 @@
+window.a:dir(ltr)
+  color: rgb(255,0,0); /* currentcolor2.css:2:3-14 */
+
+  box.b:dir(ltr)
+    color: rgb(128,0,128); /* currentcolor2.css:6:3-39 */
+
+    label.c:dir(ltr)
+      color: rgb(64,0,191);
+      background-color: rgb(64,0,191); /* currentcolor2.css:10:3-34 */

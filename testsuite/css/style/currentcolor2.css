@@ -1,0 +1,11 @@
+.a {
+  color: red;
+}
+
+.b {
+  color: mix(blue, currentcolor, 0.5);
+}
+
+.c {
+  background-color: currentcolor;
+}
