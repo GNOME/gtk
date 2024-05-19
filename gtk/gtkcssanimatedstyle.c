@@ -1047,6 +1047,7 @@ gtk_css_animated_style_new (GtkCssStyle      *base_style,
   GtkCssAnimatedStyle *result;
   GtkCssStyle *style;
   GPtrArray *animations = NULL;
+  GtkCssComputeContext context = { NULL, };
 
   gtk_internal_return_val_if_fail (GTK_IS_CSS_STYLE (base_style), NULL);
   gtk_internal_return_val_if_fail (parent_style == NULL || GTK_IS_CSS_STYLE (parent_style), NULL);
@@ -1092,6 +1093,12 @@ gtk_css_animated_style_new (GtkCssStyle      *base_style,
 
   gtk_css_animated_style_apply_animations (result);
 
+  context.provider = provider;
+  context.style = base_style;
+  context.parent_style = parent_style;
+
+  gtk_css_style_resolve_used_values ((GtkCssStyle *) result, &context);
+
   return GTK_CSS_STYLE (result);
 }
 
@@ -1106,6 +1113,7 @@ gtk_css_animated_style_new_advance (GtkCssAnimatedStyle *source,
   GtkCssStyle *style;
   GPtrArray *animations;
   guint i;
+  GtkCssComputeContext context = { NULL, };
 
   gtk_internal_return_val_if_fail (GTK_IS_CSS_ANIMATED_STYLE (source), NULL);
   gtk_internal_return_val_if_fail (GTK_IS_CSS_STYLE (base_style), NULL);
@@ -1164,6 +1172,12 @@ gtk_css_animated_style_new_advance (GtkCssAnimatedStyle *source,
     style->variables = gtk_css_variable_set_ref (base_style->variables);
 
   gtk_css_animated_style_apply_animations (result);
+
+  context.provider = provider;
+  context.style = base_style;
+  context.parent_style = parent_style;
+
+  gtk_css_style_resolve_used_values ((GtkCssStyle *) result, &context);
 
   return GTK_CSS_STYLE (result);
 }
