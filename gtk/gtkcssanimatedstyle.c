@@ -629,7 +629,6 @@ gtk_css_animated_style_set_animated_custom_value (GtkCssAnimatedStyle *animated,
 
   gtk_css_variable_set_add (style->variables, id, value);
 
-  context.provider = animated->provider;
   context.style = animated->style;
   context.parent_style = animated->parent_style;
   context.provider = animated->provider;
