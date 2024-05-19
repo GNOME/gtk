@@ -328,6 +328,10 @@ GtkCssVariableValue *   gtk_css_style_get_custom_property       (GtkCssStyle    
                                                                  int                     id);
 GArray *                gtk_css_style_list_custom_properties    (GtkCssStyle            *style);
 
+GtkCssValue *           gtk_css_style_resolve_used_value        (GtkCssStyle            *style,
+                                                                 GtkCssValue            *value,
+                                                                 guint                   property_id,
+                                                                 GtkCssComputeContext   *context);
 void                    gtk_css_style_resolve_used_values       (GtkCssStyle            *style,
                                                                  GtkCssComputeContext   *context);
 

@@ -74,13 +74,7 @@ gboolean                gtk_css_animated_style_set_animated_custom_value (GtkCss
                                                                  int                     id,
                                                                  GtkCssVariableValue    *value);
 
-typedef enum {
-  GTK_CSS_ANIMATION_CHANGE_VARIABLES = 1 << 0,
-  GTK_CSS_ANIMATION_CHANGE_COLOR     = 1 << 1,
-} GtkCssAnimationChange;
-
-void                    gtk_css_animated_style_recompute        (GtkCssAnimatedStyle    *style,
-                                                                 GtkCssAnimationChange   change);
+void                    gtk_css_animated_style_recompute        (GtkCssAnimatedStyle    *style);
 GtkCssVariableValue *   gtk_css_animated_style_get_intrinsic_custom_value (GtkCssAnimatedStyle *style,
                                                                  int                     id);
 

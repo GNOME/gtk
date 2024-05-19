@@ -991,7 +991,7 @@ gtk_css_style_list_custom_properties (GtkCssStyle *style)
   return NULL;
 }
 
-static GtkCssValue *
+GtkCssValue *
 gtk_css_style_resolve_used_value (GtkCssStyle          *style,
                                   GtkCssValue          *value,
                                   guint                 id,
