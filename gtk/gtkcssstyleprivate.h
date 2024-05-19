@@ -119,10 +119,10 @@ struct _GtkCssBorderValues {
   GtkCssValue *border_top_right_radius;
   GtkCssValue *border_bottom_right_radius;
   GtkCssValue *border_bottom_left_radius;
-  GtkCssValue *border_top_color; // NULL if currentColor
-  GtkCssValue *border_right_color; // NULL if currentColor
-  GtkCssValue *border_bottom_color; // NULL if currentColor
-  GtkCssValue *border_left_color; // NULL if currentColor
+  GtkCssValue *border_top_color;
+  GtkCssValue *border_right_color;
+  GtkCssValue *border_bottom_color;
+  GtkCssValue *border_left_color;
   GtkCssValue *border_image_source;
   GtkCssValue *border_image_repeat;
   GtkCssValue *border_image_slice;
@@ -144,7 +144,7 @@ struct _GtkCssOutlineValues {
   GtkCssValue *outline_style;
   GtkCssValue *outline_width;
   GtkCssValue *outline_offset;
-  GtkCssValue *outline_color; // NULL if currentColor
+  GtkCssValue *outline_color;
 };
 
 struct _GtkCssFontValues {
@@ -156,8 +156,8 @@ struct _GtkCssFontValues {
   GtkCssValue *font_stretch;
   GtkCssValue *letter_spacing;
   GtkCssValue *text_shadow;
-  GtkCssValue *caret_color; // NULL if currentColor
-  GtkCssValue *secondary_caret_color; // NULL if currentColor
+  GtkCssValue *caret_color;
+  GtkCssValue *secondary_caret_color;
   GtkCssValue *font_feature_settings;
   GtkCssValue *font_variation_settings;
   GtkCssValue *line_height;
@@ -167,7 +167,7 @@ struct _GtkCssFontVariantValues {
   GtkCssValues base;
 
   GtkCssValue *text_decoration_line;
-  GtkCssValue *text_decoration_color; // NULL if currentColor
+  GtkCssValue *text_decoration_color;
   GtkCssValue *text_decoration_style;
   GtkCssValue *text_transform;
   GtkCssValue *font_kerning;

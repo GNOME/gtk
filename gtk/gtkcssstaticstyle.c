@@ -57,14 +57,17 @@ gtk_css_## NAME ## _values_compute_changes_and_affects (GtkCssStyle *style1, \
 { \
   GtkCssValue **g1 = GET_VALUES (style1->NAME); \
   GtkCssValue **g2 = GET_VALUES (style2->NAME); \
+  GtkCssValue **u1 = GET_VALUES (style1->used); \
+  GtkCssValue **u2 = GET_VALUES (style2->used); \
   int i; \
   for (i = 0; i < G_N_ELEMENTS (NAME ## _props); i++) \
     { \
-      GtkCssValue *v1 = g1[i] ? g1[i] : style1->core->color; \
-      GtkCssValue *v2 = g2[i] ? g2[i] : style2->core->color; \
+      guint id = NAME ## _props[i]; \
+      int j = used_props_map[id]; \
+      GtkCssValue *v1 = j < 0 ? g1[i] : u1[j]; \
+      GtkCssValue *v2 = j < 0 ? g2[i] : u2[j]; \
       if (!gtk_css_value_equal (v1, v2)) \
         { \
-          guint id = NAME ## _props[i]; \
           *changes = _gtk_bitmask_set (*changes, id, TRUE); \
           *affects |= _gtk_css_style_property_get_affects (_gtk_css_style_property_lookup_by_id (id)); \
         } \
@@ -171,6 +174,21 @@ verify_style_groups (void)
 
 #undef VERIFY_MASK
 
+static void
+verify_used_map (void)
+{
+  for (guint id = 0; id < GTK_CSS_PROPERTY_N_PROPERTIES; id++)
+    {
+      if (used_props_map[id] != -1)
+        g_assert (used_props[used_props_map[id]] == id);
+    }
+
+  for (guint i = 0; i < G_N_ELEMENTS (used_props); i++)
+    {
+      g_assert (used_props_map[used_props[i]] == i);
+    }
+}
+
 G_DEFINE_TYPE (GtkCssStaticStyle, gtk_css_static_style, GTK_TYPE_CSS_STYLE)
 
 static GtkCssSection *
@@ -250,6 +268,7 @@ gtk_css_static_style_class_init (GtkCssStaticStyleClass *klass)
   gtk_css_other_values_init ();
 
   verify_style_groups ();
+  verify_used_map ();
 }
 
 static void
@@ -642,8 +661,8 @@ static GtkCssValues *
 gtk_css_core_create_initial_values (void)
 {
   return NULL;
-
 }
+
 static GtkCssValues *
 gtk_css_background_create_initial_values (void)
 {
@@ -685,10 +704,10 @@ gtk_css_border_create_initial_values (void)
   values->border_top_right_radius = _gtk_css_initial_value_new_compute (GTK_CSS_PROPERTY_BORDER_TOP_RIGHT_RADIUS, &context);
   values->border_bottom_left_radius = _gtk_css_initial_value_new_compute (GTK_CSS_PROPERTY_BORDER_BOTTOM_LEFT_RADIUS, &context);
   values->border_bottom_right_radius = _gtk_css_initial_value_new_compute (GTK_CSS_PROPERTY_BORDER_BOTTOM_RIGHT_RADIUS, &context);
-  values->border_top_color = NULL;
-  values->border_right_color = NULL;
-  values->border_bottom_color = NULL;
-  values->border_left_color = NULL;
+  values->border_top_color = _gtk_css_initial_value_new_compute (GTK_CSS_PROPERTY_BORDER_TOP_COLOR, &context);
+  values->border_right_color = _gtk_css_initial_value_new_compute (GTK_CSS_PROPERTY_BORDER_RIGHT_COLOR, &context);
+  values->border_bottom_color = _gtk_css_initial_value_new_compute (GTK_CSS_PROPERTY_BORDER_BOTTOM_COLOR, &context);
+  values->border_left_color = _gtk_css_initial_value_new_compute (GTK_CSS_PROPERTY_BORDER_LEFT_COLOR, &context);
   values->border_image_source = _gtk_css_initial_value_new_compute (GTK_CSS_PROPERTY_BORDER_IMAGE_SOURCE, &context);
   values->border_image_repeat = _gtk_css_initial_value_new_compute (GTK_CSS_PROPERTY_BORDER_IMAGE_REPEAT, &context);
   values->border_image_slice = _gtk_css_initial_value_new_compute (GTK_CSS_PROPERTY_BORDER_IMAGE_SLICE, &context);
@@ -708,7 +727,7 @@ gtk_css_outline_create_initial_values (void)
   values->outline_style = _gtk_css_initial_value_new_compute (GTK_CSS_PROPERTY_OUTLINE_STYLE, &context);
   values->outline_width = _gtk_css_initial_value_new_compute (GTK_CSS_PROPERTY_OUTLINE_WIDTH, &context);
   values->outline_offset = _gtk_css_initial_value_new_compute (GTK_CSS_PROPERTY_OUTLINE_OFFSET, &context);
-  values->outline_color = NULL;
+  values->outline_color = _gtk_css_initial_value_new_compute (GTK_CSS_PROPERTY_OUTLINE_COLOR, &context);
 
   return (GtkCssValues *)values;
 }
@@ -734,7 +753,7 @@ gtk_css_font_variant_create_initial_values (void)
   values = (GtkCssFontVariantValues *)gtk_css_values_new (GTK_CSS_FONT_VARIANT_INITIAL_VALUES);
 
   values->text_decoration_line = _gtk_css_initial_value_new_compute (GTK_CSS_PROPERTY_TEXT_DECORATION_LINE, &context);
-  values->text_decoration_color = NULL;
+  values->text_decoration_color = _gtk_css_initial_value_new_compute (GTK_CSS_PROPERTY_TEXT_DECORATION_COLOR, &context);
   values->text_decoration_style = _gtk_css_initial_value_new_compute (GTK_CSS_PROPERTY_TEXT_DECORATION_STYLE, &context);
   values->text_transform = _gtk_css_initial_value_new_compute (GTK_CSS_PROPERTY_TEXT_TRANSFORM, &context);
   values->font_kerning = _gtk_css_initial_value_new_compute (GTK_CSS_PROPERTY_FONT_KERNING, &context);
@@ -872,6 +891,7 @@ gtk_css_lookup_resolve (GtkCssLookup      *lookup,
   context.provider = provider;
   context.style = (GtkCssStyle *) sstyle;
   context.parent_style = parent_style;
+  context.variables = style->variables;
   context.shorthands = shorthands;
 
   if (_gtk_bitmask_is_empty (_gtk_css_lookup_get_set_values (lookup)))
@@ -898,7 +918,7 @@ gtk_css_lookup_resolve (GtkCssLookup      *lookup,
           gtk_css_font_values_new_compute (sstyle, lookup, &context);
         }
 
-      return;
+      goto resolve;
     }
 
   if (parent_style && gtk_css_core_values_unset (lookup))
@@ -955,6 +975,9 @@ gtk_css_lookup_resolve (GtkCssLookup      *lookup,
     style->other = (GtkCssOtherValues *)gtk_css_values_ref (gtk_css_other_initial_values);
   else
     gtk_css_other_values_new_compute (sstyle, lookup, &context);
+
+resolve:
+  gtk_css_style_resolve_used_values (style, &context);
 
   for (unsigned int i = 0; i < GTK_CSS_SHORTHAND_PROPERTY_N_PROPERTIES; i++)
     {
@@ -1064,7 +1087,7 @@ gtk_css_static_style_compute_value (GtkCssStaticStyle    *style,
       GtkCssValue *parent_original_value;
 
       /* Just take the style from the parent */
-      value = gtk_css_value_ref (gtk_css_style_get_value (context->parent_style, id));
+      value = gtk_css_value_ref (gtk_css_style_get_computed_value (context->parent_style, id));
 
       parent_original_value = gtk_css_style_get_original_value (context->parent_style, id);
 
