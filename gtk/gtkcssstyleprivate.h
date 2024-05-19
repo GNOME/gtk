@@ -298,6 +298,10 @@ GType                   gtk_css_style_get_type                  (void) G_GNUC_CO
 
 GtkCssValue *           gtk_css_style_get_value                 (GtkCssStyle            *style,
                                                                  guint                   id) G_GNUC_PURE;
+GtkCssValue *           gtk_css_style_get_computed_value        (GtkCssStyle            *style,
+                                                                 guint                   id) G_GNUC_PURE;
+GtkCssValue *           gtk_css_style_get_used_value            (GtkCssStyle            *style,
+                                                                 guint                   id) G_GNUC_PURE;
 GtkCssSection *         gtk_css_style_get_section               (GtkCssStyle            *style,
                                                                  guint                   id) G_GNUC_PURE;
 gboolean                gtk_css_style_is_static                 (GtkCssStyle            *style) G_GNUC_PURE;
@@ -323,6 +327,9 @@ void                    gtk_css_style_lookup_symbolic_colors    (GtkCssStyle    
 GtkCssVariableValue *   gtk_css_style_get_custom_property       (GtkCssStyle            *style,
                                                                  int                     id);
 GArray *                gtk_css_style_list_custom_properties    (GtkCssStyle            *style);
+
+void                    gtk_css_style_resolve_used_values       (GtkCssStyle            *style,
+                                                                 GtkCssComputeContext   *context);
 
 GtkCssValues *gtk_css_values_new   (GtkCssValuesType  type);
 GtkCssValues *gtk_css_values_ref   (GtkCssValues     *values);
