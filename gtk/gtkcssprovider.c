@@ -124,6 +124,7 @@ struct _GtkCssScanner
   GtkCssProvider *provider;
   GtkCssParser *parser;
   GtkCssScanner *parent;
+  gboolean may_have_var;
 };
 
 struct _GtkCssProviderPrivate
@@ -392,6 +393,17 @@ gtk_css_scanner_parser_error (GtkCssParser         *parser,
   gtk_css_section_unref (section);
 }
 
+static gboolean
+check_for_var (GBytes *bytes)
+{
+  const char *data;
+  gsize len;
+
+  data = g_bytes_get_data (bytes, &len);
+
+  return memmem (data, len, "var(", 4) != NULL;
+}
+
 static GtkCssScanner *
 gtk_css_scanner_new (GtkCssProvider *provider,
                      GtkCssScanner  *parent,
@@ -405,6 +417,7 @@ gtk_css_scanner_new (GtkCssProvider *provider,
   g_object_ref (provider);
   scanner->provider = provider;
   scanner->parent = parent;
+  scanner->may_have_var = check_for_var (bytes);
 
   scanner->parser = gtk_css_parser_new_for_bytes (bytes,
                                                   file,
@@ -934,7 +947,8 @@ parse_declaration (GtkCssScanner *scanner,
           goto out;
         }
 
-      if (gtk_css_parser_has_references (scanner->parser))
+      if (scanner->may_have_var &&
+          gtk_css_parser_has_references (scanner->parser))
         {
           GtkCssLocation start_location;
           GtkCssVariableValue *var_value;
