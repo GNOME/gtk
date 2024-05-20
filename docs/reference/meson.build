@@ -1,4 +1,5 @@
 if get_option('gtk_doc')
+    fs = import('fs')
     glib_prefix = dependency('glib-2.0').get_variable(pkgconfig: 'prefix')
     glib_docpath = join_paths(glib_prefix, 'share', 'gtk-doc', 'html')
 
@@ -14,7 +15,7 @@ if get_option('gtk_doc')
     version_conf.set('GTK_VERSION', meson.project_version())
 
     src_dir_conf = configuration_data()
-    src_dir_conf.set('abs_top_srcdir', meson.source_root())
+    src_dir_conf.set('abs_top_srcdir', fs.as_posix(meson.source_root()))
 endif
 
 subdir('gdk')
