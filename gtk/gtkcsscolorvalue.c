@@ -711,6 +711,8 @@ gtk_css_color_value_parse (GtkCssParser *parser)
     {
       const GtkCssToken *token = gtk_css_parser_get_token (parser);
 
+      gtk_css_parser_warn_deprecated (parser, "@define-color and named colors are deprecated");
+
       value = gtk_css_color_value_new_name (gtk_css_token_get_string (token));
       gtk_css_parser_consume_token (parser);
 
