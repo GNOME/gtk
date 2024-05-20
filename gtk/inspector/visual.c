@@ -274,7 +274,7 @@ get_font_hinting (GtkInspectorVisual *vis)
     {
       hint_style = 0;
     }
-  else
+  else if (hint_style_str != NULL)
     {
       if (strcmp (hint_style_str, "hintnone") == 0)
         hint_style = 0;
@@ -286,7 +286,8 @@ get_font_hinting (GtkInspectorVisual *vis)
         hint_style = 3;
     }
 
-  g_free (hint_style_str);
+  if (hint_style_str != NULL)
+    g_free (hint_style_str);
 
   return hint_style;
 }
