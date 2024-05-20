@@ -6,6 +6,7 @@
 label {
   color: var(--color1);
   background-color: var(--color2, green);
+  --extra-color: mix(var(--color1,), var(--color2, var(--color1)), var(--factor, 0.2));
 }
 
 @keyframes aaaa {

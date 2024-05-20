@@ -12,6 +12,7 @@
 label {
   background-color: var(--color2, green);
   color: var(--color1);
+  --extra-color: mix(var(--color1,), var(--color2, var(--color1)), var(--factor, 0.2));
 }
 
 :root {

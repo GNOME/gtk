@@ -860,10 +860,9 @@ GtkCssValues *gtk_css_values_ref (GtkCssValues *values)
 static void
 gtk_css_values_free (GtkCssValues *values)
 {
-  int i;
   GtkCssValue **v = GET_VALUES (values);
 
-  for (i = 0; i < N_VALUES (values->type); i++)
+  for (int i = 0; i < N_VALUES (values->type); i++)
     {
       if (v[i])
         gtk_css_value_unref (v[i]);
@@ -888,14 +887,13 @@ gtk_css_values_copy (GtkCssValues *values)
 {
   GtkCssValues *copy;
   GtkCssValue **v, **v2;
-  int i;
 
-  copy = gtk_css_values_new (TYPE_INDEX(values->type));
+  copy = gtk_css_values_new (TYPE_INDEX (values->type));
 
   v = GET_VALUES (values);
   v2 = GET_VALUES (copy);
 
-  for (i = 0; i < N_VALUES (values->type); i++)
+  for (int i = 0; i < N_VALUES (values->type); i++)
     {
       if (v[i])
         v2[i] = gtk_css_value_ref (v[i]);
@@ -909,7 +907,7 @@ gtk_css_values_new (GtkCssValuesType type)
 {
   GtkCssValues *values;
 
-  values = (GtkCssValues *)g_malloc0 (VALUES_SIZE(type));
+  values = (GtkCssValues *) g_malloc0 (VALUES_SIZE (type));
   values->ref_count = 1;
   values->type = type;
 
