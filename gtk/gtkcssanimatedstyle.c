@@ -657,7 +657,7 @@ gtk_css_animated_style_set_animated_custom_value (GtkCssAnimatedStyle *animated,
   gtk_internal_return_val_if_fail (value != NULL, FALSE);
 
   old_value = gtk_css_style_get_custom_property (style, id);
-  if (gtk_css_value_equal0 ((GtkCssValue *) old_value, (GtkCssValue *) value))
+  if (gtk_css_variable_value_equal (old_value, value))
     return FALSE;
 
   if (style->variables == NULL)
