@@ -1300,6 +1300,9 @@ gtk_css_parser_has_references (GtkCssParser *self)
   gboolean ret = FALSE;
   int inner_blocks = 0, i;
 
+  /* We don't want gtk_css_parser_ensure_token to expand references on us here */
+  g_assert (self->n_refs == 0);
+
   gtk_css_tokenizer_save (tokenizer);
 
   do {
@@ -1315,7 +1318,7 @@ gtk_css_parser_has_references (GtkCssParser *self)
           if (gtk_css_token_is (token, GTK_CSS_TOKEN_CLOSE_PARENS) ||
               gtk_css_token_is (token, GTK_CSS_TOKEN_CLOSE_SQUARE))
             {
-              goto error;
+              goto done;
             }
         }
 
@@ -1338,7 +1341,7 @@ gtk_css_parser_has_references (GtkCssParser *self)
           inner_blocks++;
           gtk_css_parser_start_block (self);
 
-          if (!ret && is_var)
+          if (is_var)
             {
               token = gtk_css_parser_get_token (self);
 
@@ -1346,18 +1349,18 @@ gtk_css_parser_has_references (GtkCssParser *self)
                 {
                   const char *var_name = gtk_css_token_get_string (token);
 
-                  if (var_name[0] != '-' || var_name[1] != '-')
-                    goto error;
+                  if (strlen (var_name) < 3 || var_name[0] != '-' || var_name[1] != '-')
+                    goto done;
 
                   gtk_css_parser_consume_token (self);
 
                   if (!gtk_css_parser_has_token (self, GTK_CSS_TOKEN_EOF) &&
                       !gtk_css_parser_has_token (self, GTK_CSS_TOKEN_COMMA))
-                    {
-                      goto error;
-                    }
+                    goto done;
 
                   ret = TRUE;
+                  /* We got our answer. Now get it out as fast as possible! */
+                  goto done;
                 }
             }
         }
@@ -1365,18 +1368,7 @@ gtk_css_parser_has_references (GtkCssParser *self)
   while (!gtk_css_parser_has_token (self, GTK_CSS_TOKEN_SEMICOLON) &&
          !gtk_css_parser_has_token (self, GTK_CSS_TOKEN_CLOSE_CURLY));
 
-  if (inner_blocks > 0)
-    goto error;
-
-  g_assert (tokenizer == get_tokenizer (self));
-
-  gtk_css_tokenizer_restore (tokenizer);
-  self->location = *gtk_css_tokenizer_get_location (tokenizer);
-  gtk_css_tokenizer_read_token (tokenizer, &self->token, NULL);
-
-  return ret;
-
-error:
+done:
   for (i = 0; i < inner_blocks; i++)
     gtk_css_parser_end_block (self);
 
@@ -1386,7 +1378,7 @@ error:
   self->location = *gtk_css_tokenizer_get_location (tokenizer);
   gtk_css_tokenizer_read_token (tokenizer, &self->token, NULL);
 
-  return FALSE;
+  return ret;
 }
 
 static void
