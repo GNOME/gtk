@@ -120,6 +120,9 @@ void                    gtk_css_parser_warn                     (GtkCssParser   
 void                    gtk_css_parser_warn_syntax              (GtkCssParser                   *self,
                                                                  const char                     *format,
                                                                  ...) G_GNUC_PRINTF(2, 3);
+void                    gtk_css_parser_warn_deprecated          (GtkCssParser                   *self,
+                                                                 const char                     *format,
+                                                                 ...) G_GNUC_PRINTF(2, 3);
 
 
 gboolean                gtk_css_parser_has_token                (GtkCssParser                   *self,
