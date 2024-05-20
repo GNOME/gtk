@@ -42,10 +42,37 @@
 
 G_DEFINE_TYPE (GtkCssAnimatedStyle, gtk_css_animated_style, GTK_TYPE_CSS_STYLE)
 
+static inline gboolean
+property_has_color (guint id)
+{
+  switch (id)
+    {
+    case GTK_CSS_PROPERTY_COLOR:
+    case GTK_CSS_PROPERTY_ICON_PALETTE:
+    case GTK_CSS_PROPERTY_TEXT_DECORATION_COLOR:
+    case GTK_CSS_PROPERTY_TEXT_SHADOW:
+    case GTK_CSS_PROPERTY_BOX_SHADOW:
+    case GTK_CSS_PROPERTY_BORDER_TOP_COLOR:
+    case GTK_CSS_PROPERTY_BORDER_RIGHT_COLOR:
+    case GTK_CSS_PROPERTY_BORDER_BOTTOM_COLOR:
+    case GTK_CSS_PROPERTY_BORDER_LEFT_COLOR:
+    case GTK_CSS_PROPERTY_OUTLINE_COLOR:
+    case GTK_CSS_PROPERTY_BACKGROUND_IMAGE:
+    case GTK_CSS_PROPERTY_ICON_SOURCE:
+    case GTK_CSS_PROPERTY_ICON_SHADOW:
+    case GTK_CSS_PROPERTY_CARET_COLOR:
+    case GTK_CSS_PROPERTY_SECONDARY_CARET_COLOR:
+      return TRUE;
+    default:
+       return FALSE;
+    }
+}
+
 #define DEFINE_VALUES(ENUM, TYPE, NAME) \
 static inline void \
-gtk_css_ ## NAME ## _values_recompute (GtkCssAnimatedStyle  *animated, \
-                                       GtkCssComputeContext *context) \
+gtk_css_ ## NAME ## _values_recompute (GtkCssAnimatedStyle   *animated, \
+                                       GtkCssComputeContext  *context, \
+                                       GtkCssAnimationChange  change) \
 { \
   GtkCssStyle *style = (GtkCssStyle *)animated; \
   GtkCssValue **values = (GtkCssValue **)((guint8*)(animated->style->NAME) + sizeof (GtkCssValues)); \
@@ -55,12 +82,24 @@ gtk_css_ ## NAME ## _values_recompute (GtkCssAnimatedStyle  *animated, \
     { \
       guint id = NAME ## _props[i]; \
       GtkCssValue *original, *computed; \
+      gboolean needs_recompute = FALSE; \
 \
       if (values[i] == NULL) \
         continue; \
 \
       original = gtk_css_style_get_original_value (style, id); \
       if (original == NULL) \
+        continue; \
+\
+      if ((change & GTK_CSS_ANIMATION_CHANGE_VARIABLES) && \
+           gtk_css_value_contains_variables (original)) \
+        needs_recompute = TRUE; \
+\
+      if ((change & GTK_CSS_ANIMATION_CHANGE_COLOR) && \
+          property_has_color (id)) \
+        needs_recompute = TRUE; \
+\
+      if (!needs_recompute) \
         continue; \
 \
       computed = gtk_css_value_compute (original, \
@@ -70,6 +109,9 @@ gtk_css_ ## NAME ## _values_recompute (GtkCssAnimatedStyle  *animated, \
         continue; \
 \
       gtk_css_animated_style_set_animated_value (animated, id, computed); \
+\
+      if (id == GTK_CSS_PROPERTY_COLOR) \
+        change |= GTK_CSS_ANIMATION_CHANGE_COLOR; \
     } \
 }
 
@@ -630,7 +672,8 @@ gtk_css_animated_style_set_animated_custom_value (GtkCssAnimatedStyle *animated,
 }
 
 void
-gtk_css_animated_style_recompute (GtkCssAnimatedStyle *style)
+gtk_css_animated_style_recompute (GtkCssAnimatedStyle   *style,
+                                  GtkCssAnimationChange  change)
 {
   GtkCssComputeContext context = { NULL, };
   GtkCssValue *shorthands[GTK_CSS_SHORTHAND_PROPERTY_N_PROPERTIES] = { NULL, };
@@ -640,17 +683,17 @@ gtk_css_animated_style_recompute (GtkCssAnimatedStyle *style)
   context.parent_style = style->parent_style;
   context.shorthands = shorthands;
 
-  gtk_css_core_values_recompute (style, &context);
-  gtk_css_background_values_recompute (style, &context);
-  gtk_css_border_values_recompute (style, &context);
-  gtk_css_icon_values_recompute (style, &context);
-  gtk_css_outline_values_recompute (style, &context);
-  gtk_css_font_values_recompute (style, &context);
-  gtk_css_font_variant_values_recompute (style, &context);
-  gtk_css_animation_values_recompute (style, &context);
-  gtk_css_transition_values_recompute (style, &context);
-  gtk_css_size_values_recompute (style, &context);
-  gtk_css_other_values_recompute (style, &context);
+  gtk_css_core_values_recompute (style, &context, change);
+  gtk_css_background_values_recompute (style, &context, change);
+  gtk_css_border_values_recompute (style, &context, change);
+  gtk_css_icon_values_recompute (style, &context, change);
+  gtk_css_outline_values_recompute (style, &context, change);
+  gtk_css_font_values_recompute (style, &context, change);
+  gtk_css_font_variant_values_recompute (style, &context, change);
+  gtk_css_animation_values_recompute (style, &context, change);
+  gtk_css_transition_values_recompute (style, &context, change);
+  gtk_css_size_values_recompute (style, &context, change);
+  gtk_css_other_values_recompute (style, &context, change);
 
   for (unsigned int i = 0; i < GTK_CSS_SHORTHAND_PROPERTY_N_PROPERTIES; i++)
     {
