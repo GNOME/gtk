@@ -64,7 +64,7 @@ parse_four_numbers (GtkCssShorthandProperty  *shorthand,
       if (!gtk_css_number_value_can_parse (parser))
         break;
 
-      values[i] = _gtk_css_number_value_parse (parser, flags);
+      values[i] = gtk_css_number_value_parse (parser, flags);
       if (values[i] == NULL)
         return FALSE;
     }
@@ -130,10 +130,10 @@ parse_border_radius (GtkCssShorthandProperty  *shorthand,
     {
       if (!gtk_css_number_value_can_parse (parser))
         break;
-      x[i] = _gtk_css_number_value_parse (parser,
-                                          GTK_CSS_POSITIVE_ONLY
-                                          | GTK_CSS_PARSE_PERCENT
-                                          | GTK_CSS_PARSE_LENGTH);
+      x[i] = gtk_css_number_value_parse (parser,
+                                         GTK_CSS_POSITIVE_ONLY
+                                         | GTK_CSS_PARSE_PERCENT
+                                         | GTK_CSS_PARSE_LENGTH);
       if (x[i] == NULL)
         goto fail;
     }
@@ -156,10 +156,10 @@ parse_border_radius (GtkCssShorthandProperty  *shorthand,
         {
           if (!gtk_css_number_value_can_parse (parser))
             break;
-          y[i] = _gtk_css_number_value_parse (parser,
-                                              GTK_CSS_POSITIVE_ONLY
-                                              | GTK_CSS_PARSE_PERCENT
-                                              | GTK_CSS_PARSE_LENGTH);
+          y[i] = gtk_css_number_value_parse (parser,
+                                             GTK_CSS_POSITIVE_ONLY
+                                             | GTK_CSS_PARSE_PERCENT
+                                             | GTK_CSS_PARSE_LENGTH);
           if (y[i] == NULL)
             goto fail;
         }
@@ -325,9 +325,9 @@ parse_border_side (GtkCssShorthandProperty  *shorthand,
     if (values[0] == NULL &&
         gtk_css_number_value_can_parse (parser))
       {
-        values[0] = _gtk_css_number_value_parse (parser,
-                                                 GTK_CSS_POSITIVE_ONLY
-                                                 | GTK_CSS_PARSE_LENGTH);
+        values[0] = gtk_css_number_value_parse (parser,
+                                                GTK_CSS_POSITIVE_ONLY
+                                                | GTK_CSS_PARSE_LENGTH);
         if (values[0] == NULL)
           return FALSE;
       }
@@ -366,9 +366,9 @@ parse_border (GtkCssShorthandProperty  *shorthand,
     if (values[0] == NULL &&
         gtk_css_number_value_can_parse (parser))
       {
-        values[0] = _gtk_css_number_value_parse (parser,
-                                                 GTK_CSS_POSITIVE_ONLY
-                                                 | GTK_CSS_PARSE_LENGTH);
+        values[0] = gtk_css_number_value_parse (parser,
+                                                GTK_CSS_POSITIVE_ONLY
+                                                | GTK_CSS_PARSE_LENGTH);
         if (values[0] == NULL)
           return FALSE;
         values[1] = gtk_css_value_ref (values[0]);
@@ -449,11 +449,11 @@ parse_font (GtkCssShorthandProperty  *shorthand,
           if (values[3] == NULL && gtk_css_number_value_can_parse (parser))
             {
               /* This needs to check for font-size, too */
-              GtkCssValue *num = _gtk_css_number_value_parse (parser,
-                                                              GTK_CSS_PARSE_NUMBER |
-                                                              GTK_CSS_PARSE_LENGTH |
-                                                              GTK_CSS_PARSE_PERCENT |
-                                                              GTK_CSS_POSITIVE_ONLY);
+              GtkCssValue *num = gtk_css_number_value_parse (parser,
+                                                             GTK_CSS_PARSE_NUMBER |
+                                                             GTK_CSS_PARSE_LENGTH |
+                                                             GTK_CSS_PARSE_PERCENT |
+                                                             GTK_CSS_POSITIVE_ONLY);
               if (num == NULL)
                 return FALSE;
 
@@ -464,8 +464,8 @@ parse_font (GtkCssShorthandProperty  *shorthand,
                 }
 
               values[3] = num;
-              if (_gtk_css_number_value_get (values[3], 100) < 1 || 
-                  _gtk_css_number_value_get (values[3], 100) > 1000)
+              if (gtk_css_number_value_get (values[3], 100) < 1 || 
+                  gtk_css_number_value_get (values[3], 100) > 1000)
                 {
                   gtk_css_parser_error_value (parser, "Font weight values must be between 1 and 1000");
                   g_clear_pointer (&values[3], gtk_css_value_unref);
@@ -662,7 +662,7 @@ parse_transition_time (GtkCssParser *parser,
 {
   GtkCssValue **value = option_data;
 
-  *value = _gtk_css_number_value_parse (parser, GTK_CSS_PARSE_TIME);
+  *value = gtk_css_number_value_parse (parser, GTK_CSS_PARSE_TIME);
 
   return *value != NULL;
 }
@@ -752,17 +752,17 @@ parse_one_animation (GtkCssShorthandProperty  *shorthand,
     {
       if (values[1] == NULL && gtk_css_parser_try_ident (parser, "infinite"))
         {
-          values[1] = _gtk_css_number_value_new (HUGE_VAL, GTK_CSS_NUMBER);
+          values[1] = gtk_css_number_value_new (HUGE_VAL, GTK_CSS_NUMBER);
         }
       else if ((values[1] == NULL || values[3] == NULL) &&
                gtk_css_number_value_can_parse (parser))
         {
           GtkCssValue *value;
           
-          value = _gtk_css_number_value_parse (parser,
-                                               GTK_CSS_POSITIVE_ONLY
-                                               | (values[1] == NULL ? GTK_CSS_PARSE_NUMBER : 0)
-                                               | (values[3] == NULL ? GTK_CSS_PARSE_TIME : 0));
+          value = gtk_css_number_value_parse (parser,
+                                              GTK_CSS_POSITIVE_ONLY
+                                              | (values[1] == NULL ? GTK_CSS_PARSE_NUMBER : 0)
+                                              | (values[3] == NULL ? GTK_CSS_PARSE_TIME : 0));
           if (value == NULL)
             return FALSE;
 

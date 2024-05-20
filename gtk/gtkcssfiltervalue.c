@@ -108,31 +108,31 @@ gtk_css_filter_init_identity (GtkCssFilter       *filter,
   switch (other->type)
     {
     case GTK_CSS_FILTER_BRIGHTNESS:
-      filter->brightness.value = _gtk_css_number_value_new (1, GTK_CSS_NUMBER);
+      filter->brightness.value = gtk_css_number_value_new (1, GTK_CSS_NUMBER);
       break;
     case GTK_CSS_FILTER_CONTRAST:
-      filter->contrast.value = _gtk_css_number_value_new (1, GTK_CSS_NUMBER);
+      filter->contrast.value = gtk_css_number_value_new (1, GTK_CSS_NUMBER);
       break;
     case GTK_CSS_FILTER_GRAYSCALE:
-      filter->grayscale.value = _gtk_css_number_value_new (0, GTK_CSS_NUMBER);
+      filter->grayscale.value = gtk_css_number_value_new (0, GTK_CSS_NUMBER);
       break;
     case GTK_CSS_FILTER_HUE_ROTATE:
-      filter->hue_rotate.value = _gtk_css_number_value_new (0, GTK_CSS_DEG);
+      filter->hue_rotate.value = gtk_css_number_value_new (0, GTK_CSS_DEG);
       break;
     case GTK_CSS_FILTER_INVERT:
-      filter->invert.value = _gtk_css_number_value_new (0, GTK_CSS_NUMBER);
+      filter->invert.value = gtk_css_number_value_new (0, GTK_CSS_NUMBER);
       break;
     case GTK_CSS_FILTER_OPACITY:
-      filter->opacity.value = _gtk_css_number_value_new (1, GTK_CSS_NUMBER);
+      filter->opacity.value = gtk_css_number_value_new (1, GTK_CSS_NUMBER);
       break;
     case GTK_CSS_FILTER_SATURATE:
-      filter->saturate.value = _gtk_css_number_value_new (1, GTK_CSS_NUMBER);
+      filter->saturate.value = gtk_css_number_value_new (1, GTK_CSS_NUMBER);
       break;
     case GTK_CSS_FILTER_SEPIA:
-      filter->sepia.value = _gtk_css_number_value_new (0, GTK_CSS_NUMBER);
+      filter->sepia.value = gtk_css_number_value_new (0, GTK_CSS_NUMBER);
       break;
     case GTK_CSS_FILTER_BLUR:
-      filter->blur.value = _gtk_css_number_value_new (0, GTK_CSS_PX);
+      filter->blur.value = gtk_css_number_value_new (0, GTK_CSS_PX);
       break;
     case GTK_CSS_FILTER_DROP_SHADOW:
       filter->drop_shadow.value = gtk_css_shadow_value_new_filter (other->drop_shadow.value);
@@ -160,19 +160,19 @@ gtk_css_filter_get_matrix (const GtkCssFilter *filter,
   switch (filter->type)
     {
     case GTK_CSS_FILTER_BRIGHTNESS:
-      value = _gtk_css_number_value_get (filter->brightness.value, 1.0);
+      value = gtk_css_number_value_get (filter->brightness.value, 1.0);
       graphene_matrix_init_scale (matrix, value, value, value);
       graphene_vec4_init (offset, 0.0, 0.0, 0.0, 0.0);
       break;
 
     case GTK_CSS_FILTER_CONTRAST:
-      value = _gtk_css_number_value_get (filter->contrast.value, 1.0);
+      value = gtk_css_number_value_get (filter->contrast.value, 1.0);
       graphene_matrix_init_scale (matrix, value, value, value);
       graphene_vec4_init (offset, 0.5 - 0.5 * value, 0.5 - 0.5 * value, 0.5 - 0.5 * value, 0.0);
       break;
 
     case GTK_CSS_FILTER_GRAYSCALE:
-      value = _gtk_css_number_value_get (filter->grayscale.value, 1.0);
+      value = gtk_css_number_value_get (filter->grayscale.value, 1.0);
       graphene_matrix_init_from_float (matrix, (float[16]) {
                                            1.0 - (1.0 - R) * value, R * value, R * value, 0.0,
                                            G * value, 1.0 - (1.0 - G) * value, G * value, 0.0,
@@ -185,7 +185,7 @@ gtk_css_filter_get_matrix (const GtkCssFilter *filter,
     case GTK_CSS_FILTER_HUE_ROTATE:
       {
         double c, s;
-        value = _gtk_css_number_value_get (filter->grayscale.value, 1.0) * G_PI / 180.0;
+        value = gtk_css_number_value_get (filter->grayscale.value, 1.0) * G_PI / 180.0;
         c = cos (value);
         s = sin (value);
         graphene_matrix_init_from_float (matrix, (float[16]) {
@@ -208,13 +208,13 @@ gtk_css_filter_get_matrix (const GtkCssFilter *filter,
       break;
 
     case GTK_CSS_FILTER_INVERT:
-      value = _gtk_css_number_value_get (filter->invert.value, 1.0);
+      value = gtk_css_number_value_get (filter->invert.value, 1.0);
       graphene_matrix_init_scale (matrix, 1.0 - 2 * value, 1.0 - 2 * value, 1.0 - 2 * value);
       graphene_vec4_init (offset, value, value, value, 0.0);
       break;
 
     case GTK_CSS_FILTER_OPACITY:
-      value = _gtk_css_number_value_get (filter->opacity.value, 1.0);
+      value = gtk_css_number_value_get (filter->opacity.value, 1.0);
       graphene_matrix_init_from_float (matrix, (float[16]) {
                                            1.0, 0.0, 0.0, 0.0,
                                            0.0, 1.0, 0.0, 0.0,
@@ -225,7 +225,7 @@ gtk_css_filter_get_matrix (const GtkCssFilter *filter,
       break;
 
     case GTK_CSS_FILTER_SATURATE:
-      value = _gtk_css_number_value_get (filter->saturate.value, 1.0);
+      value = gtk_css_number_value_get (filter->saturate.value, 1.0);
       graphene_matrix_init_from_float (matrix, (float[16]) {
                                            R + (1.0 - R) * value, R - R * value, R - R * value, 0.0,
                                            G - G * value, G + (1.0 - G) * value, G - G * value, 0.0,
@@ -236,7 +236,7 @@ gtk_css_filter_get_matrix (const GtkCssFilter *filter,
       break;
 
     case GTK_CSS_FILTER_SEPIA:
-      value = _gtk_css_number_value_get (filter->sepia.value, 1.0);
+      value = gtk_css_number_value_get (filter->sepia.value, 1.0);
       graphene_matrix_init_from_float (matrix, (float[16]) {
                                            1.0 - 0.607 * value, 0.349 * value, 0.272 * value, 0.0,
                                            0.769 * value, 1.0 - 0.314 * value, 0.534 * value, 0.0,
@@ -751,7 +751,7 @@ gtk_css_filter_parse_number (GtkCssParser *parser,
 {
   GtkCssValue **values = data;
 
-  values[n] = _gtk_css_number_value_parse (parser, GTK_CSS_PARSE_NUMBER | GTK_CSS_PARSE_PERCENT | GTK_CSS_POSITIVE_ONLY);
+  values[n] = gtk_css_number_value_parse (parser, GTK_CSS_PARSE_NUMBER | GTK_CSS_PARSE_PERCENT | GTK_CSS_POSITIVE_ONLY);
   if (values[n] == NULL)
     return 0;
 
@@ -765,7 +765,7 @@ gtk_css_filter_parse_length (GtkCssParser *parser,
 {
   GtkCssValue **values = data;
 
-  values[n] = _gtk_css_number_value_parse (parser, GTK_CSS_PARSE_LENGTH | GTK_CSS_POSITIVE_ONLY);
+  values[n] = gtk_css_number_value_parse (parser, GTK_CSS_PARSE_LENGTH | GTK_CSS_POSITIVE_ONLY);
   if (values[n] == NULL)
     return 0;
 
@@ -779,7 +779,7 @@ gtk_css_filter_parse_angle (GtkCssParser *parser,
 {
   GtkCssValue **values = data;
 
-  values[n] = _gtk_css_number_value_parse (parser, GTK_CSS_PARSE_ANGLE);
+  values[n] = gtk_css_number_value_parse (parser, GTK_CSS_PARSE_ANGLE);
   if (values[n] == NULL)
     return 0;
 
@@ -957,7 +957,7 @@ gtk_css_filter_value_push_snapshot (const GtkCssValue *filter,
         {
           if (filter->filters[j].type == GTK_CSS_FILTER_BLUR)
             {
-              double std_dev = _gtk_css_number_value_get (filter->filters[j].blur.value, 100.0);
+              double std_dev = gtk_css_number_value_get (filter->filters[j].blur.value, 100.0);
               gtk_snapshot_push_blur (snapshot, 2 * std_dev);
             }
           else if (filter->filters[j].type == GTK_CSS_FILTER_DROP_SHADOW)

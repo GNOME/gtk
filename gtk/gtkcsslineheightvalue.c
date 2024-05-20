@@ -52,7 +52,7 @@ gtk_css_value_line_height_compute (GtkCssValue          *value,
       double factor;
       GtkCssValue *computed;
 
-      factor = _gtk_css_number_value_get (height, 1);
+      factor = gtk_css_number_value_get (height, 1);
       computed = gtk_css_number_value_multiply (context->style->core->font_size, factor);
 
       gtk_css_value_unref (height);
@@ -154,10 +154,10 @@ gtk_css_line_height_value_parse (GtkCssParser *parser)
   if (gtk_css_parser_try_ident (parser, "normal"))
     return gtk_css_value_ref (gtk_css_line_height_value_get_default ());
 
-  height = _gtk_css_number_value_parse (parser, GTK_CSS_PARSE_NUMBER |
-                                                GTK_CSS_PARSE_PERCENT |
-                                                GTK_CSS_PARSE_LENGTH |
-                                                GTK_CSS_POSITIVE_ONLY);
+  height = gtk_css_number_value_parse (parser, GTK_CSS_PARSE_NUMBER |
+                                               GTK_CSS_PARSE_PERCENT |
+                                               GTK_CSS_PARSE_LENGTH |
+                                               GTK_CSS_POSITIVE_ONLY);
   if (!height)
     return NULL;
 
@@ -170,5 +170,5 @@ gtk_css_line_height_value_get (const GtkCssValue *value)
   if (value->class == &GTK_CSS_VALUE_LINE_HEIGHT)
     return 0.0;
 
-  return _gtk_css_number_value_get (value, 1);
+  return gtk_css_number_value_get (value, 1);
 }

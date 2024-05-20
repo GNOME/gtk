@@ -349,7 +349,7 @@ get_translucent_border_edge (const GtkCssValue *color,
     border_color = color;
 
   if (!gdk_rgba_is_opaque (gtk_css_color_value_get_rgba (border_color)))
-    return round (_gtk_css_number_value_get (border_width, 100));
+    return round (gtk_css_number_value_get (border_width, 100));
 
   return 0;
 }

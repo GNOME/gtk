@@ -2691,8 +2691,8 @@ gtk_tree_view_get_expander_size (GtkTreeView *tree_view)
   gtk_style_context_add_class (context, "expander");
 
   style = gtk_style_context_lookup_style (context);
-  min_width = _gtk_css_number_value_get (style->size->min_width, 100);
-  min_height = _gtk_css_number_value_get (style->size->min_height, 100);
+  min_width = gtk_css_number_value_get (style->size->min_width, 100);
+  min_height = gtk_css_number_value_get (style->size->min_height, 100);
 
   gtk_style_context_restore (context);
 
@@ -5521,7 +5521,7 @@ get_separator_height (GtkTreeView *tree_view)
   gtk_style_context_add_class (context, "separator");
 
   style = gtk_style_context_lookup_style (context);
-  d = _gtk_css_number_value_get (style->size->min_height, 100);
+  d = gtk_css_number_value_get (style->size->min_height, 100);
 
   if (d < 1)
     min_size = ceil (d);

@@ -61,7 +61,7 @@ gtk_css_image_conic_snapshot (GtkCssImage        *image,
         }
       else
         {
-          pos = _gtk_css_number_value_get (stop->offset, 360) / 360;
+          pos = gtk_css_number_value_get (stop->offset, 360) / 360;
           pos = CLAMP (pos, 0.0, 1.0);
         }
 
@@ -86,7 +86,7 @@ gtk_css_image_conic_snapshot (GtkCssImage        *image,
           &GRAPHENE_RECT_INIT (0, 0, width, height),
           &GRAPHENE_POINT_INIT (_gtk_css_position_value_get_x (self->center, width),
                                 _gtk_css_position_value_get_y (self->center, height)),
-          _gtk_css_number_value_get (self->rotation, 360),
+          gtk_css_number_value_get (self->rotation, 360),
           stops,
           self->n_stops);
 }
@@ -98,13 +98,13 @@ parse_angles (GtkCssParser *parser,
 {
   GtkCssValue **angles = option_data;
   
-  angles[0] = _gtk_css_number_value_parse (parser, GTK_CSS_PARSE_ANGLE | GTK_CSS_PARSE_PERCENT);
+  angles[0] = gtk_css_number_value_parse (parser, GTK_CSS_PARSE_ANGLE | GTK_CSS_PARSE_PERCENT);
   if (angles[0] == NULL)
     return FALSE;
 
   if (gtk_css_number_value_can_parse (parser))
     {
-      angles[1] = _gtk_css_number_value_parse (parser, GTK_CSS_PARSE_ANGLE | GTK_CSS_PARSE_PERCENT);
+      angles[1] = gtk_css_number_value_parse (parser, GTK_CSS_PARSE_ANGLE | GTK_CSS_PARSE_PERCENT);
       if (angles[1] == NULL)
         return FALSE;
     }
@@ -176,14 +176,14 @@ gtk_css_image_conic_parse_first_arg (GtkCssImageConic *self,
 
   if (gtk_css_parser_try_ident (parser, "from"))
     {
-      self->rotation = _gtk_css_number_value_parse (parser, GTK_CSS_PARSE_ANGLE);
+      self->rotation = gtk_css_number_value_parse (parser, GTK_CSS_PARSE_ANGLE);
       if (self->rotation == NULL)
         return 0;
       nothing_parsed = FALSE;
     }
   else
     {
-      self->rotation = _gtk_css_number_value_new (0, GTK_CSS_DEG);
+      self->rotation = gtk_css_number_value_new (0, GTK_CSS_DEG);
     }
 
   if (gtk_css_parser_try_ident (parser, "at"))
@@ -195,8 +195,8 @@ gtk_css_image_conic_parse_first_arg (GtkCssImageConic *self,
     }
   else
     {
-      self->center = _gtk_css_position_value_new (_gtk_css_number_value_new (50, GTK_CSS_PERCENT),
-                                                   _gtk_css_number_value_new (50, GTK_CSS_PERCENT));
+      self->center = _gtk_css_position_value_new (gtk_css_number_value_new (50, GTK_CSS_PERCENT),
+                                                  gtk_css_number_value_new (50, GTK_CSS_PERCENT));
     }
 
   if (!nothing_parsed)
@@ -269,8 +269,8 @@ gtk_css_image_conic_print (GtkCssImage *image,
 
   if (self->center)
     {
-      GtkCssValue *compare = _gtk_css_position_value_new (_gtk_css_number_value_new (50, GTK_CSS_PERCENT),
-                                                          _gtk_css_number_value_new (50, GTK_CSS_PERCENT));
+      GtkCssValue *compare = _gtk_css_position_value_new (gtk_css_number_value_new (50, GTK_CSS_PERCENT),
+                                                          gtk_css_number_value_new (50, GTK_CSS_PERCENT));
 
       if (!gtk_css_value_equal (self->center, compare))
         {
@@ -282,7 +282,7 @@ gtk_css_image_conic_print (GtkCssImage *image,
       gtk_css_value_unref (compare);
     }
 
-  if (self->rotation && _gtk_css_number_value_get (self->rotation, 360) != 0)
+  if (self->rotation && gtk_css_number_value_get (self->rotation, 360) != 0)
     {
       if (written)
         g_string_append_c (string, ' ');

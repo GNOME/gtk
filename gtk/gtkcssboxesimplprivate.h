@@ -84,17 +84,17 @@ gtk_css_boxes_rect_grow (GskRoundedRect *dest,
       if (gtk_css_dimension_value_is_zero (right))
         dest->bounds.size.width = src->bounds.size.width;
       else
-        dest->bounds.size.width = src->bounds.size.width + _gtk_css_number_value_get (right, 100);
+        dest->bounds.size.width = src->bounds.size.width + gtk_css_number_value_get (right, 100);
     }
   else
     {
-      const double left_value = _gtk_css_number_value_get (left, 100);
+      const double left_value = gtk_css_number_value_get (left, 100);
 
       dest->bounds.origin.x = src->bounds.origin.x - left_value;
       if (gtk_css_dimension_value_is_zero (right))
         dest->bounds.size.width = src->bounds.size.width + left_value;
       else
-        dest->bounds.size.width = src->bounds.size.width + left_value + _gtk_css_number_value_get (right, 100);
+        dest->bounds.size.width = src->bounds.size.width + left_value + gtk_css_number_value_get (right, 100);
 
     }
 
@@ -105,17 +105,17 @@ gtk_css_boxes_rect_grow (GskRoundedRect *dest,
       if (gtk_css_dimension_value_is_zero (bottom))
         dest->bounds.size.height = src->bounds.size.height;
       else
-        dest->bounds.size.height = src->bounds.size.height + _gtk_css_number_value_get (bottom, 100);
+        dest->bounds.size.height = src->bounds.size.height + gtk_css_number_value_get (bottom, 100);
     }
   else
     {
-      const double top_value = _gtk_css_number_value_get (top, 100);
+      const double top_value = gtk_css_number_value_get (top, 100);
 
       dest->bounds.origin.y = src->bounds.origin.y - top_value;
       if (gtk_css_dimension_value_is_zero (bottom))
         dest->bounds.size.height = src->bounds.size.height + top_value;
       else
-        dest->bounds.size.height = src->bounds.size.height + top_value + _gtk_css_number_value_get (bottom, 100);
+        dest->bounds.size.height = src->bounds.size.height + top_value + gtk_css_number_value_get (bottom, 100);
     }
 }
 
@@ -127,10 +127,10 @@ gtk_css_boxes_rect_shrink (GskRoundedRect *dest,
                            GtkCssValue    *bottom_value,
                            GtkCssValue    *left_value)
 {
-  double top = _gtk_css_number_value_get (top_value, 100);
-  double right = _gtk_css_number_value_get (right_value, 100);
-  double bottom = _gtk_css_number_value_get (bottom_value, 100);
-  double left = _gtk_css_number_value_get (left_value, 100);
+  double top = gtk_css_number_value_get (top_value, 100);
+  double right = gtk_css_number_value_get (right_value, 100);
+  double bottom = gtk_css_number_value_get (bottom_value, 100);
+  double left = gtk_css_number_value_get (left_value, 100);
 
   /* FIXME: Do we need underflow checks here? */
   dest->bounds.origin.x = src->bounds.origin.x + left;
@@ -255,8 +255,8 @@ gtk_css_boxes_compute_outline_rect (GtkCssBoxes *boxes)
   dest = &boxes->box[GTK_CSS_AREA_OUTLINE_BOX].bounds;
   src = &boxes->box[GTK_CSS_AREA_BORDER_BOX].bounds;
 
-  d = _gtk_css_number_value_get (boxes->style->outline->outline_offset, 100) +
-      _gtk_css_number_value_get (boxes->style->outline->outline_width, 100);
+  d = gtk_css_number_value_get (boxes->style->outline->outline_offset, 100) +
+      gtk_css_number_value_get (boxes->style->outline->outline_width, 100);
 
   dest->origin.x = src->origin.x - d;
   dest->origin.y = src->origin.y - d;
@@ -483,8 +483,8 @@ gtk_css_boxes_compute_outline_box (GtkCssBoxes *boxes)
   src = &boxes->box[GTK_CSS_AREA_BORDER_BOX];
   dest = &boxes->box[GTK_CSS_AREA_OUTLINE_BOX];
 
-  d = _gtk_css_number_value_get (boxes->style->outline->outline_offset, 100) +
-      _gtk_css_number_value_get (boxes->style->outline->outline_width, 100);
+  d = gtk_css_number_value_get (boxes->style->outline->outline_offset, 100) +
+      gtk_css_number_value_get (boxes->style->outline->outline_width, 100);
 
   /* Grow border rect into outline rect */
   dest->bounds.origin.x = src->bounds.origin.x - d;

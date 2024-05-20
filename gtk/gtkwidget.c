@@ -3683,7 +3683,7 @@ gtk_widget_get_frame_clock (GtkWidget *widget)
 static int
 get_number (GtkCssValue *value)
 {
-  double d = _gtk_css_number_value_get (value, 100);
+  double d = gtk_css_number_value_get (value, 100);
 
   if (d < 1)
     return ceil (d);
@@ -6478,7 +6478,7 @@ gtk_widget_update_pango_context (GtkWidget        *widget,
                                          ? PANGO_DIRECTION_LTR
                                          : PANGO_DIRECTION_RTL);
 
-  pango_cairo_context_set_resolution (context, _gtk_css_number_value_get (style->core->dpi, 100));
+  pango_cairo_context_set_resolution (context, gtk_css_number_value_get (style->core->dpi, 100));
 
   pango_context_set_font_map (context, gtk_widget_get_effective_font_map (widget));
 
@@ -11857,7 +11857,7 @@ gtk_widget_create_render_node (GtkWidget   *widget,
 
   style = gtk_css_node_get_style (priv->cssnode);
 
-  css_opacity = _gtk_css_number_value_get (style->other->opacity, 100);
+  css_opacity = gtk_css_number_value_get (style->other->opacity, 100);
   opacity = CLAMP (css_opacity, 0.0, 1.0) * priv->user_alpha / 255.0;
 
   if (opacity <= 0.0)

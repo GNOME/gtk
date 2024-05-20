@@ -229,7 +229,7 @@ gtk_css_font_variations_value_parse (GtkCssParser *parser)
         return NULL;
       }
 
-    coord = _gtk_css_number_value_parse (parser, GTK_CSS_PARSE_NUMBER);
+    coord = gtk_css_number_value_parse (parser, GTK_CSS_PARSE_NUMBER);
     if (coord == NULL)
       {
         g_free (name);
@@ -268,7 +268,7 @@ gtk_css_font_variations_value_get_variations (GtkCssValue *value)
       else
         g_string_append (string, ",");
       g_string_append_printf (string, "%s=%g", name,
-                              _gtk_css_number_value_get (coord, 100));
+                              gtk_css_number_value_get (coord, 100));
     }
 
   return g_string_free (string, FALSE);

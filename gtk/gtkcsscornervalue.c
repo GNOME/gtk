@@ -170,10 +170,10 @@ _gtk_css_corner_value_parse (GtkCssParser *parser)
 {
   GtkCssValue *x, *y;
 
-  x = _gtk_css_number_value_parse (parser,
-                                   GTK_CSS_POSITIVE_ONLY
-                                   | GTK_CSS_PARSE_PERCENT
-                                   | GTK_CSS_PARSE_LENGTH);
+  x = gtk_css_number_value_parse (parser,
+                                  GTK_CSS_POSITIVE_ONLY
+                                  | GTK_CSS_PARSE_PERCENT
+                                  | GTK_CSS_PARSE_LENGTH);
   if (x == NULL)
     return NULL;
 
@@ -181,10 +181,10 @@ _gtk_css_corner_value_parse (GtkCssParser *parser)
     y = gtk_css_value_ref (x);
   else
     {
-      y = _gtk_css_number_value_parse (parser,
-                                       GTK_CSS_POSITIVE_ONLY
-                                       | GTK_CSS_PARSE_PERCENT
-                                       | GTK_CSS_PARSE_LENGTH);
+      y = gtk_css_number_value_parse (parser,
+                                      GTK_CSS_POSITIVE_ONLY
+                                      | GTK_CSS_PARSE_PERCENT
+                                      | GTK_CSS_PARSE_LENGTH);
       if (y == NULL)
         {
           gtk_css_value_unref (x);
@@ -202,7 +202,7 @@ _gtk_css_corner_value_get_x (const GtkCssValue *corner,
   g_return_val_if_fail (corner != NULL, 0.0);
   g_return_val_if_fail (corner->class == &GTK_CSS_VALUE_CORNER, 0.0);
 
-  return _gtk_css_number_value_get (corner->x, one_hundred_percent);
+  return gtk_css_number_value_get (corner->x, one_hundred_percent);
 }
 
 double
@@ -212,7 +212,7 @@ _gtk_css_corner_value_get_y (const GtkCssValue *corner,
   g_return_val_if_fail (corner != NULL, 0.0);
   g_return_val_if_fail (corner->class == &GTK_CSS_VALUE_CORNER, 0.0);
 
-  return _gtk_css_number_value_get (corner->y, one_hundred_percent);
+  return gtk_css_number_value_get (corner->y, one_hundred_percent);
 }
 
 gboolean

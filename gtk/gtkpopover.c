@@ -1246,9 +1246,9 @@ gtk_popover_get_gap_coords (GtkPopover *popover,
 
   style = gtk_css_node_get_style (gtk_widget_get_css_node (priv->contents_widget));
   border_radius = round (get_border_radius (widget));
-  border_top = _gtk_css_number_value_get (style->border->border_top_width, 100);
-  border_right = _gtk_css_number_value_get (style->border->border_right_width, 100);
-  border_bottom = _gtk_css_number_value_get (style->border->border_bottom_width, 100);
+  border_top = gtk_css_number_value_get (style->border->border_top_width, 100);
+  border_right = gtk_css_number_value_get (style->border->border_right_width, 100);
+  border_bottom = gtk_css_number_value_get (style->border->border_bottom_width, 100);
 
   gtk_css_shadow_value_get_extents (style->background->box_shadow, &shadow_width);
 
@@ -1327,10 +1327,10 @@ get_border (GtkCssNode *node,
 
   style = gtk_css_node_get_style (node);
 
-  border->top = _gtk_css_number_value_get (style->border->border_top_width, 100);
-  border->right = _gtk_css_number_value_get (style->border->border_right_width, 100);
-  border->bottom = _gtk_css_number_value_get (style->border->border_bottom_width, 100);
-  border->left = _gtk_css_number_value_get (style->border->border_left_width, 100);
+  border->top = gtk_css_number_value_get (style->border->border_top_width, 100);
+  border->right = gtk_css_number_value_get (style->border->border_right_width, 100);
+  border->bottom = gtk_css_number_value_get (style->border->border_bottom_width, 100);
+  border->left = gtk_css_number_value_get (style->border->border_left_width, 100);
 }
 
 static void

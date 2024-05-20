@@ -848,8 +848,8 @@ gtk_css_animated_style_create_css_transitions (GPtrArray   *animations,
 
   if (_gtk_css_array_value_get_n_values (durations) == 1 &&
       _gtk_css_array_value_get_n_values (delays) == 1 &&
-      _gtk_css_number_value_get (_gtk_css_array_value_get_nth (durations, 0), 100) +
-      _gtk_css_number_value_get (_gtk_css_array_value_get_nth (delays, 0), 100) == 0)
+      gtk_css_number_value_get (_gtk_css_array_value_get_nth (durations, 0), 100) +
+      gtk_css_number_value_get (_gtk_css_array_value_get_nth (delays, 0), 100) == 0)
     return animations;
 
   transition_infos_set (transitions, base_style->transition->transition_property);
@@ -864,8 +864,8 @@ gtk_css_animated_style_create_css_transitions (GPtrArray   *animations,
       if (!transitions[i].pending)
         continue;
 
-      duration = _gtk_css_number_value_get (_gtk_css_array_value_get_nth (durations, transitions[i].index), 100);
-      delay = _gtk_css_number_value_get (_gtk_css_array_value_get_nth (delays, transitions[i].index), 100);
+      duration = gtk_css_number_value_get (_gtk_css_array_value_get_nth (durations, transitions[i].index), 100);
+      delay = gtk_css_number_value_get (_gtk_css_array_value_get_nth (delays, transitions[i].index), 100);
       if (duration + delay == 0.0)
         continue;
 
@@ -997,13 +997,13 @@ gtk_css_animated_style_create_css_animations (GPtrArray        *animations,
           animation = _gtk_css_animation_new (name,
                                               keyframes,
                                               timestamp,
-                                              _gtk_css_number_value_get (_gtk_css_array_value_get_nth (delays, i), 100) * G_USEC_PER_SEC,
-                                              _gtk_css_number_value_get (_gtk_css_array_value_get_nth (durations, i), 100) * G_USEC_PER_SEC,
+                                              gtk_css_number_value_get (_gtk_css_array_value_get_nth (delays, i), 100) * G_USEC_PER_SEC,
+                                              gtk_css_number_value_get (_gtk_css_array_value_get_nth (durations, i), 100) * G_USEC_PER_SEC,
                                               _gtk_css_array_value_get_nth (timing_functions, i),
                                               _gtk_css_direction_value_get (_gtk_css_array_value_get_nth (directions, i)),
                                               _gtk_css_play_state_value_get (_gtk_css_array_value_get_nth (play_states, i)),
                                               _gtk_css_fill_mode_value_get (_gtk_css_array_value_get_nth (fill_modes, i)),
-                                              _gtk_css_number_value_get (_gtk_css_array_value_get_nth (iteration_counts, i), 100));
+                                              gtk_css_number_value_get (_gtk_css_array_value_get_nth (iteration_counts, i), 100));
         }
 
       if (!animations)

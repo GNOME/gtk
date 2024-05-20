@@ -198,7 +198,7 @@ _gtk_css_blend_mode_value_get (const GtkCssValue *value)
 static double
 get_dpi (GtkCssStyle *style)
 {
-  return _gtk_css_number_value_get (style->core->dpi, 96);
+  return gtk_css_number_value_get (style->core->dpi, 96);
 }
 
 /* XXX: Kinda bad to have that machinery here, nobody expects vital font
@@ -265,7 +265,7 @@ gtk_css_value_font_size_compute (GtkCssValue          *value,
       break;
     case GTK_CSS_FONT_SIZE_SMALLER:
       if (parent_style)
-        font_size = _gtk_css_number_value_get (parent_style->core->font_size, 100);
+        font_size = gtk_css_number_value_get (parent_style->core->font_size, 100);
       else
         font_size = gtk_css_font_size_get_default_px (provider, style);
       /* This is what WebKit does... */
@@ -273,7 +273,7 @@ gtk_css_value_font_size_compute (GtkCssValue          *value,
       break;
     case GTK_CSS_FONT_SIZE_LARGER:
       if (parent_style)
-        font_size = _gtk_css_number_value_get (parent_style->core->font_size, 100);
+        font_size = gtk_css_number_value_get (parent_style->core->font_size, 100);
       else
         font_size = gtk_css_font_size_get_default_px (provider, style);
       /* This is what WebKit does... */
@@ -281,7 +281,7 @@ gtk_css_value_font_size_compute (GtkCssValue          *value,
       break;
   }
 
-  return _gtk_css_number_value_new (font_size, GTK_CSS_PX);
+  return gtk_css_number_value_new (font_size, GTK_CSS_PX);
 }
 
 static const GtkCssValueClass GTK_CSS_VALUE_FONT_SIZE = {
@@ -407,7 +407,7 @@ gtk_css_value_font_weight_compute (GtkCssValue          *value,
     return gtk_css_value_ref (value);
 
   if (context->parent_style)
-    parent_value = _gtk_css_number_value_get (context->parent_style->font->font_weight, 100);
+    parent_value = gtk_css_number_value_get (context->parent_style->font->font_weight, 100);
   else
     parent_value = 400;
 
@@ -435,7 +435,7 @@ gtk_css_value_font_weight_compute (GtkCssValue          *value,
       new_weight = PANGO_WEIGHT_NORMAL;
     }
 
-  return _gtk_css_number_value_new (new_weight, GTK_CSS_NUMBER);
+  return gtk_css_number_value_new (new_weight, GTK_CSS_NUMBER);
 }
 
 static const GtkCssValueClass GTK_CSS_VALUE_FONT_WEIGHT = {
@@ -468,9 +468,9 @@ gtk_css_font_weight_value_try_parse (GtkCssParser *parser)
     }
 
   if (gtk_css_parser_try_ident (parser, "normal"))
-    return _gtk_css_number_value_new (PANGO_WEIGHT_NORMAL, GTK_CSS_NUMBER);
+    return gtk_css_number_value_new (PANGO_WEIGHT_NORMAL, GTK_CSS_NUMBER);
   if (gtk_css_parser_try_ident (parser, "bold"))
-    return _gtk_css_number_value_new (PANGO_WEIGHT_BOLD, GTK_CSS_NUMBER);
+    return gtk_css_number_value_new (PANGO_WEIGHT_BOLD, GTK_CSS_NUMBER);
 
   return NULL;
 }

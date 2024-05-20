@@ -47,7 +47,7 @@ gtk_css_image_radial_get_start_end (GtkCssImageRadial *radial,
       if (stop->offset == NULL)
         *start = 0;
       else
-        *start = _gtk_css_number_value_get (stop->offset, radius) / radius;
+        *start = gtk_css_number_value_get (stop->offset, radius) / radius;
 
       *end = *start;
 
@@ -58,7 +58,7 @@ gtk_css_image_radial_get_start_end (GtkCssImageRadial *radial,
           if (stop->offset == NULL)
             continue;
 
-          pos = _gtk_css_number_value_get (stop->offset, radius) / radius;
+          pos = gtk_css_number_value_get (stop->offset, radius) / radius;
 
           *end = MAX (pos, *end);
         }
@@ -96,7 +96,7 @@ gtk_css_image_radial_snapshot (GtkCssImage *image,
       switch (radial->size)
         {
         case GTK_CSS_EXPLICIT_SIZE:
-          hradius = _gtk_css_number_value_get (radial->sizes[0], width);
+          hradius = gtk_css_number_value_get (radial->sizes[0], width);
           break;
         case GTK_CSS_CLOSEST_SIDE:
           hradius = MIN (MIN (x, width - x), MIN (y, height - y));
@@ -128,8 +128,8 @@ gtk_css_image_radial_snapshot (GtkCssImage *image,
       switch (radial->size)
         {
         case GTK_CSS_EXPLICIT_SIZE:
-          hradius = _gtk_css_number_value_get (radial->sizes[0], width);
-          vradius = _gtk_css_number_value_get (radial->sizes[1], height);
+          hradius = gtk_css_number_value_get (radial->sizes[0], width);
+          vradius = gtk_css_number_value_get (radial->sizes[1], height);
           break;
         case GTK_CSS_CLOSEST_SIDE:
           hradius = MIN (x, width - x);
@@ -176,7 +176,7 @@ gtk_css_image_radial_snapshot (GtkCssImage *image,
             continue;
         }
       else
-        pos = MIN (1.0, _gtk_css_number_value_get (stop->offset, hradius) / hradius);
+        pos = MIN (1.0, gtk_css_number_value_get (stop->offset, hradius) / hradius);
 
       pos = MAX (pos, offset);
       step = (pos - offset) / (i - last);
@@ -229,9 +229,9 @@ gtk_css_image_radial_parse_color_stop (GtkCssImageRadial *radial,
 
   if (gtk_css_number_value_can_parse (parser))
     {
-      stop.offset = _gtk_css_number_value_parse (parser,
-                                                 GTK_CSS_PARSE_PERCENT
-                                                 | GTK_CSS_PARSE_LENGTH);
+      stop.offset = gtk_css_number_value_parse (parser,
+                                                GTK_CSS_PARSE_PERCENT
+                                                | GTK_CSS_PARSE_LENGTH);
       if (stop.offset == NULL)
         {
           gtk_css_value_unref (stop.color);
@@ -294,12 +294,12 @@ gtk_css_image_radial_parse_first_arg (GtkCssImageRadial *radial,
 
         if (!has_size && gtk_css_number_value_can_parse (parser))
           {
-            radial->sizes[0] = _gtk_css_number_value_parse (parser, GTK_CSS_PARSE_LENGTH | GTK_CSS_PARSE_PERCENT);
+            radial->sizes[0] = gtk_css_number_value_parse (parser, GTK_CSS_PARSE_LENGTH | GTK_CSS_PARSE_PERCENT);
             if (radial->sizes[0] == NULL)
               return 0;
             if (gtk_css_number_value_can_parse (parser))
               {
-                radial->sizes[1] = _gtk_css_number_value_parse (parser, GTK_CSS_PARSE_LENGTH | GTK_CSS_PARSE_PERCENT);
+                radial->sizes[1] = gtk_css_number_value_parse (parser, GTK_CSS_PARSE_LENGTH | GTK_CSS_PARSE_PERCENT);
                 if (radial->sizes[1] == NULL)
                   return 0;
               }
@@ -323,8 +323,8 @@ gtk_css_image_radial_parse_first_arg (GtkCssImageRadial *radial,
     }
   else
     {
-      radial->position = _gtk_css_position_value_new (_gtk_css_number_value_new (50, GTK_CSS_PERCENT),
-                                                      _gtk_css_number_value_new (50, GTK_CSS_PERCENT));
+      radial->position = _gtk_css_position_value_new (gtk_css_number_value_new (50, GTK_CSS_PERCENT),
+                                                      gtk_css_number_value_new (50, GTK_CSS_PERCENT));
     }
 
   if (!has_size)

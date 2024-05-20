@@ -60,7 +60,7 @@ gtk_css_calc_value_parse_value (GtkCssParser           *parser,
       return result;
     }
 
-  return _gtk_css_number_value_parse (parser, flags);
+  return gtk_css_number_value_parse (parser, flags);
 }
 
 static gboolean
@@ -96,9 +96,9 @@ gtk_css_calc_value_parse_product (GtkCssParser           *parser,
           if (value == NULL)
             goto fail;
           if (is_number (value))
-            temp = gtk_css_number_value_multiply (result, _gtk_css_number_value_get (value, 100));
+            temp = gtk_css_number_value_multiply (result, gtk_css_number_value_get (value, 100));
           else
-            temp = gtk_css_number_value_multiply (value, _gtk_css_number_value_get (result, 100));
+            temp = gtk_css_number_value_multiply (value, gtk_css_number_value_get (result, 100));
           gtk_css_value_unref (value);
           gtk_css_value_unref (result);
           result = temp;
@@ -108,7 +108,7 @@ gtk_css_calc_value_parse_product (GtkCssParser           *parser,
           value = gtk_css_calc_value_parse_product (parser, GTK_CSS_PARSE_NUMBER);
           if (value == NULL)
             goto fail;
-          temp = gtk_css_number_value_multiply (result, 1.0 / _gtk_css_number_value_get (value, 100));
+          temp = gtk_css_number_value_multiply (result, 1.0 / gtk_css_number_value_get (value, 100));
           gtk_css_value_unref (value);
           gtk_css_value_unref (result);
           result = temp;
@@ -230,5 +230,309 @@ gtk_css_calc_value_parse (GtkCssParser           *parser,
     return NULL;
 
   return data.value;
+}
+
+typedef struct
+{
+  GtkCssNumberParseFlags flags;
+  GPtrArray *values;
+} ParseArgnData;
+
+static guint
+gtk_css_argn_value_parse_arg (GtkCssParser *parser,
+                              guint         arg,
+                              gpointer      data_)
+{
+  ParseArgnData *data = data_;
+  GtkCssValue *value;
+
+  value = gtk_css_calc_value_parse_sum (parser, data->flags);
+  if (value == NULL)
+    return 0;
+
+  g_ptr_array_add (data->values, value);
+
+  return 1;
+}
+
+typedef struct
+{
+  GtkCssNumberParseFlags flags;
+  GtkCssValue *values[3];
+} ParseClampData;
+
+static guint
+gtk_css_clamp_value_parse_arg (GtkCssParser *parser,
+                               guint         arg,
+                               gpointer      data_)
+{
+  ParseClampData *data = data_;
+
+  if ((arg == 0 || arg == 2))
+    {
+      if (gtk_css_parser_try_ident (parser, "none"))
+        {
+          data->values[arg] = NULL;
+          return 1;
+        }
+    }
+
+  data->values[arg] = gtk_css_calc_value_parse_sum (parser, data->flags);
+  if (data->values[arg] == NULL)
+    return 0;
+
+  return 1;
+}
+
+GtkCssValue *
+gtk_css_clamp_value_parse (GtkCssParser           *parser,
+                           GtkCssNumberParseFlags  flags,
+                           guint                   type)
+{
+  ParseClampData data;
+  GtkCssValue *result = NULL;
+
+  if (!gtk_css_parser_has_function (parser, "clamp"))
+    {
+      gtk_css_parser_error_syntax (parser, "Expected 'clamp('");
+      return NULL;
+    }
+
+  /* This can only be handled at compute time, we allow '-' after all */
+  data.flags = flags & ~GTK_CSS_POSITIVE_ONLY;
+  data.values[0] = NULL;
+  data.values[1] = NULL;
+  data.values[2] = NULL;
+
+  if (gtk_css_parser_consume_function (parser, 3, 3, gtk_css_clamp_value_parse_arg, &data))
+    {
+      GtkCssDimension dim = gtk_css_number_value_get_dimension (data.values[1]);
+      if ((data.values[0] && gtk_css_number_value_get_dimension (data.values[0]) != dim) ||
+          (data.values[2] && gtk_css_number_value_get_dimension (data.values[2]) != dim))
+        gtk_css_parser_error_syntax (parser, "Inconsistent types in 'clamp('");
+      else
+        result = gtk_css_math_value_new (type, 0, data.values, 3);
+    }
+
+  if (result == NULL)
+    {
+      g_clear_pointer (&data.values[0], gtk_css_value_unref);
+      g_clear_pointer (&data.values[1], gtk_css_value_unref);
+      g_clear_pointer (&data.values[2], gtk_css_value_unref);
+    }
+
+  return result;
+}
+
+typedef struct {
+  GtkCssNumberParseFlags flags;
+  guint mode;
+  gboolean has_mode;
+  GtkCssValue *values[2];
+} ParseRoundData;
+
+static guint
+gtk_css_round_value_parse_arg (GtkCssParser *parser,
+                               guint         arg,
+                               gpointer      data_)
+{
+  ParseRoundData *data = data_;
+
+  if (arg == 0)
+    {
+      const char *modes[] = { "nearest", "up", "down", "to-zero" };
+
+      for (guint i = 0; i < G_N_ELEMENTS (modes); i++)
+        {
+          if (gtk_css_parser_try_ident (parser, modes[i]))
+            {
+              data->mode = i;
+              data->has_mode = TRUE;
+              return 1;
+            }
+        }
+
+      data->values[0] = gtk_css_calc_value_parse_sum (parser, data->flags);
+      if (data->values[0] == NULL)
+        return 0;
+    }
+  else if (arg == 1)
+    {
+      GtkCssValue *value = gtk_css_calc_value_parse_sum (parser, data->flags);
+
+      if (value == NULL)
+        return 0;
+
+      if (data->has_mode)
+        data->values[0] = value;
+      else
+        data->values[1] = value;
+    }
+  else
+    {
+      if (!data->has_mode)
+        {
+          gtk_css_parser_error_syntax (parser, "Too many argument for 'round'");
+          return 0;
+        }
+
+      data->values[1] = gtk_css_calc_value_parse_sum (parser, data->flags);
+
+      if (data->values[1] == NULL)
+        return 0;
+    }
+
+  return 1;
+}
+
+GtkCssValue *
+gtk_css_round_value_parse (GtkCssParser           *parser,
+                           GtkCssNumberParseFlags  flags,
+                           guint                   type)
+{
+  ParseRoundData data;
+  GtkCssValue *result = NULL;
+
+  if (!gtk_css_parser_has_function (parser, "round"))
+    {
+      gtk_css_parser_error_syntax (parser, "Expected 'round('");
+      return NULL;
+    }
+
+  data.flags = flags & ~GTK_CSS_POSITIVE_ONLY;
+  data.mode = ROUND_NEAREST;
+  data.has_mode = FALSE;
+  data.values[0] = NULL;
+  data.values[1] = NULL;
+
+  if (gtk_css_parser_consume_function (parser, 1, 3, gtk_css_round_value_parse_arg, &data) &&
+      data.values[0] != NULL)
+    {
+      if (data.values[1] != NULL &&
+          gtk_css_number_value_get_dimension (data.values[0]) !=
+          gtk_css_number_value_get_dimension (data.values[1]))
+        gtk_css_parser_error_syntax (parser, "Inconsistent types in 'round('");
+      else if (data.values[1] == NULL &&
+               gtk_css_number_value_get_dimension (data.values[0]) != GTK_CSS_DIMENSION_NUMBER)
+        gtk_css_parser_error_syntax (parser, "Can't omit second argument to 'round(' here");
+      else
+        result = gtk_css_math_value_new (type, data.mode, data.values, data.values[1] != NULL ? 2 : 1);
+    }
+
+  if (result == NULL)
+    {
+      g_clear_pointer (&data.values[0], gtk_css_value_unref);
+      g_clear_pointer (&data.values[1], gtk_css_value_unref);
+    }
+
+  return result;
+}
+
+typedef struct {
+  GtkCssNumberParseFlags flags;
+  GtkCssValue *values[2];
+} ParseArg2Data;
+
+static guint
+gtk_css_arg2_value_parse_arg (GtkCssParser *parser,
+                              guint         arg,
+                              gpointer      data_)
+{
+  ParseArg2Data *data = data_;
+
+  data->values[arg] = gtk_css_calc_value_parse_sum (parser, data->flags);
+  if (data->values[arg] == NULL)
+    return 0;
+
+  return 1;
+}
+
+GtkCssValue *
+gtk_css_arg2_value_parse (GtkCssParser           *parser,
+                          GtkCssNumberParseFlags  flags,
+                          guint                   min_args,
+                          guint                   max_args,
+                          const char             *function,
+                          guint                   type)
+{
+  ParseArg2Data data;
+  GtkCssValue *result = NULL;
+
+  g_assert (1 <= min_args && min_args <= max_args && max_args <= 2);
+
+  if (!gtk_css_parser_has_function (parser, function))
+    {
+      gtk_css_parser_error_syntax (parser, "Expected '%s('", function);
+      return NULL;
+    }
+
+  data.flags = flags & ~GTK_CSS_POSITIVE_ONLY;
+  data.values[0] = NULL;
+  data.values[1] = NULL;
+
+  if (gtk_css_parser_consume_function (parser, min_args, max_args, gtk_css_arg2_value_parse_arg, &data))
+    {
+      if (data.values[1] != NULL &&
+          gtk_css_number_value_get_dimension (data.values[0]) !=
+          gtk_css_number_value_get_dimension (data.values[1]))
+        gtk_css_parser_error_syntax (parser, "Inconsistent types in '%s('", function);
+      else
+        result = gtk_css_math_value_new (type, 0, data.values, data.values[1] != NULL ? 2 : 1);
+    }
+
+  if (result == NULL)
+    {
+      g_clear_pointer (&data.values[0], gtk_css_value_unref);
+      g_clear_pointer (&data.values[1], gtk_css_value_unref);
+    }
+
+  return result;
+}
+
+GtkCssValue *
+gtk_css_argn_value_parse (GtkCssParser           *parser,
+                          GtkCssNumberParseFlags  flags,
+                          const char             *function,
+                          guint                   type)
+{
+  ParseArgnData data;
+  GtkCssValue *result = NULL;
+
+  if (!gtk_css_parser_has_function (parser, function))
+    {
+      gtk_css_parser_error_syntax (parser, "Expected '%s('", function);
+      return NULL;
+    }
+
+  /* This can only be handled at compute time, we allow '-' after all */
+  data.flags = flags & ~GTK_CSS_POSITIVE_ONLY;
+  data.values = g_ptr_array_new ();
+
+  if (gtk_css_parser_consume_function (parser, 1, G_MAXUINT, gtk_css_argn_value_parse_arg, &data))
+    {
+      GtkCssValue *val = (GtkCssValue *) g_ptr_array_index (data.values, 0);
+      GtkCssDimension dim = gtk_css_number_value_get_dimension (val);
+      guint i;
+      for (i = 1; i < data.values->len; i++)
+        {
+          val = (GtkCssValue *) g_ptr_array_index (data.values, i);
+          if (gtk_css_number_value_get_dimension (val) != dim)
+            break;
+        }
+      if (i < data.values->len)
+        gtk_css_parser_error_syntax (parser, "Inconsistent types in '%s('", function);
+      else
+        result = gtk_css_math_value_new (type, 0, (GtkCssValue **)data.values->pdata, data.values->len);
+    }
+
+  if (result == NULL)
+    {
+      for (guint i = 0; i < data.values->len; i++)
+        gtk_css_value_unref ((GtkCssValue *)g_ptr_array_index (data.values, i));
+    }
+
+  g_ptr_array_unref (data.values);
+
+  return result;
 }
 

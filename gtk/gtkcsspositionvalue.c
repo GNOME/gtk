@@ -92,10 +92,10 @@ gtk_css_value_position_print (const GtkCssValue *position,
     const char *y_name;
     GtkCssValue *number;
   } values[] = { 
-    { "left",   "top",    _gtk_css_number_value_new (0, GTK_CSS_PERCENT) },
-    { "right",  "bottom", _gtk_css_number_value_new (100, GTK_CSS_PERCENT) }
+    { "left",   "top",    gtk_css_number_value_new (0, GTK_CSS_PERCENT) },
+    { "right",  "bottom", gtk_css_number_value_new (100, GTK_CSS_PERCENT) }
   };
-  GtkCssValue *center = _gtk_css_number_value_new (50, GTK_CSS_PERCENT);
+  GtkCssValue *center = gtk_css_number_value_new (50, GTK_CSS_PERCENT);
   guint i;
 
   if (gtk_css_value_equal (position->x, center))
@@ -196,9 +196,9 @@ position_value_parse (GtkCssParser *parser, gboolean try)
       if (gtk_css_parser_try_ident (parser, names[i].name))
         {
           if (names[i].horizontal)
-	    x = _gtk_css_number_value_new (names[i].percentage, GTK_CSS_PERCENT);
+	    x = gtk_css_number_value_new (names[i].percentage, GTK_CSS_PERCENT);
           else
-	    y = _gtk_css_number_value_new (names[i].percentage, GTK_CSS_PERCENT);
+	    y = gtk_css_number_value_new (names[i].percentage, GTK_CSS_PERCENT);
           swap = names[i].swap;
           break;
         }
@@ -207,9 +207,9 @@ position_value_parse (GtkCssParser *parser, gboolean try)
     {
       if (gtk_css_number_value_can_parse (parser))
         {
-          x = _gtk_css_number_value_parse (parser,
-                                           GTK_CSS_PARSE_PERCENT
-                                           | GTK_CSS_PARSE_LENGTH);
+          x = gtk_css_number_value_parse (parser,
+                                          GTK_CSS_PARSE_PERCENT
+                                          | GTK_CSS_PARSE_LENGTH);
 
           if (x == NULL)
             return NULL;
@@ -239,17 +239,17 @@ position_value_parse (GtkCssParser *parser, gboolean try)
               if (names[i].horizontal && !names[i].swap)
                 {
                   y = x;
-	          x = _gtk_css_number_value_new (names[i].percentage, GTK_CSS_PERCENT);
+	          x = gtk_css_number_value_new (names[i].percentage, GTK_CSS_PERCENT);
                 }
               else
                 {
-	          y = _gtk_css_number_value_new (names[i].percentage, GTK_CSS_PERCENT);
+	          y = gtk_css_number_value_new (names[i].percentage, GTK_CSS_PERCENT);
                 }
             }
           else
             {
               g_assert (names[i].horizontal || names[i].swap);
-	      x = _gtk_css_number_value_new (names[i].percentage, GTK_CSS_PERCENT);
+	      x = gtk_css_number_value_new (names[i].percentage, GTK_CSS_PERCENT);
             }
           break;
         }
@@ -266,9 +266,9 @@ position_value_parse (GtkCssParser *parser, gboolean try)
               gtk_css_value_unref (y);
               return NULL;
             }
-          y = _gtk_css_number_value_parse (parser,
-                                           GTK_CSS_PARSE_PERCENT
-                                           | GTK_CSS_PARSE_LENGTH);
+          y = gtk_css_number_value_parse (parser,
+                                          GTK_CSS_PARSE_PERCENT
+                                          | GTK_CSS_PARSE_LENGTH);
           if (y == NULL)
             {
               gtk_css_value_unref (x);
@@ -278,9 +278,9 @@ position_value_parse (GtkCssParser *parser, gboolean try)
       else
         {
           if (y)
-            x = _gtk_css_number_value_new (50, GTK_CSS_PERCENT);
+            x = gtk_css_number_value_new (50, GTK_CSS_PERCENT);
           else
-            y = _gtk_css_number_value_new (50, GTK_CSS_PERCENT);
+            y = gtk_css_number_value_new (50, GTK_CSS_PERCENT);
         }
     }
 
@@ -304,13 +304,13 @@ gtk_css_position_value_parse_spacing (GtkCssParser *parser)
 {
   GtkCssValue *x, *y;
 
-  x = _gtk_css_number_value_parse (parser, GTK_CSS_PARSE_LENGTH | GTK_CSS_POSITIVE_ONLY);
+  x = gtk_css_number_value_parse (parser, GTK_CSS_PARSE_LENGTH | GTK_CSS_POSITIVE_ONLY);
   if (x == NULL)
     return NULL;
 
   if (gtk_css_number_value_can_parse (parser))
     {
-      y = _gtk_css_number_value_parse (parser, GTK_CSS_PARSE_LENGTH | GTK_CSS_POSITIVE_ONLY);
+      y = gtk_css_number_value_parse (parser, GTK_CSS_PARSE_LENGTH | GTK_CSS_POSITIVE_ONLY);
       if (y == NULL)
         {
           gtk_css_value_unref (x);
@@ -332,7 +332,7 @@ _gtk_css_position_value_get_x (const GtkCssValue *position,
   g_return_val_if_fail (position != NULL, 0.0);
   g_return_val_if_fail (position->class == &GTK_CSS_VALUE_POSITION, 0.0);
 
-  return _gtk_css_number_value_get (position->x, one_hundred_percent);
+  return gtk_css_number_value_get (position->x, one_hundred_percent);
 }
 
 double
@@ -342,6 +342,6 @@ _gtk_css_position_value_get_y (const GtkCssValue *position,
   g_return_val_if_fail (position != NULL, 0.0);
   g_return_val_if_fail (position->class == &GTK_CSS_VALUE_POSITION, 0.0);
 
-  return _gtk_css_number_value_get (position->y, one_hundred_percent);
+  return gtk_css_number_value_get (position->y, one_hundred_percent);
 }
 

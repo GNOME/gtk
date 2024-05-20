@@ -683,7 +683,7 @@ gtk_css_style_get_pango_attributes (GtkCssStyle *style)
     }
 
   /* letter-spacing */
-  letter_spacing = _gtk_css_number_value_get (style->font->letter_spacing, 100);
+  letter_spacing = gtk_css_number_value_get (style->font->letter_spacing, 100);
   if (letter_spacing != 0)
     {
       attrs = add_pango_attr (attrs, pango_attr_letter_spacing_new (letter_spacing * PANGO_SCALE));
@@ -781,13 +781,13 @@ gtk_css_style_get_pango_font (GtkCssStyle *style)
     }
 
   v = style->core->font_size;
-  pango_font_description_set_absolute_size (description, round (_gtk_css_number_value_get (v, 100) * PANGO_SCALE));
+  pango_font_description_set_absolute_size (description, round (gtk_css_number_value_get (v, 100) * PANGO_SCALE));
 
   v = style->font->font_style;
   pango_font_description_set_style (description, _gtk_css_font_style_value_get (v));
 
   v = style->font->font_weight;
-  pango_font_description_set_weight (description, _gtk_css_number_value_get (v, 100));
+  pango_font_description_set_weight (description, gtk_css_number_value_get (v, 100));
 
   v = style->font->font_stretch;
   pango_font_description_set_stretch (description, _gtk_css_font_stretch_value_get (v));
