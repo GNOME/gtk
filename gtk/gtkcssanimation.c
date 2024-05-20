@@ -126,11 +126,10 @@ gtk_css_animation_apply_values (GtkStyleAnimation    *style_animation,
       if (!value)
         continue;
 
-      gtk_css_animated_style_set_animated_custom_value (style, variable_id, value);
+      if (gtk_css_animated_style_set_animated_custom_value (style, variable_id, value))
+        change |= GTK_CSS_ANIMATION_CHANGE_VARIABLES;
 
       gtk_css_variable_value_unref (value);
-
-      change |= GTK_CSS_ANIMATION_CHANGE_VARIABLES;
     }
 
   for (i = 0; i < _gtk_css_keyframes_get_n_properties (resolved_keyframes); i++)

@@ -645,15 +645,20 @@ gtk_css_animated_style_get_intrinsic_value (GtkCssAnimatedStyle *style,
   return gtk_css_style_get_value (style->style, id);
 }
 
-void
+gboolean
 gtk_css_animated_style_set_animated_custom_value (GtkCssAnimatedStyle *animated,
                                                   int                  id,
                                                   GtkCssVariableValue *value)
 {
   GtkCssStyle *style = (GtkCssStyle *)animated;
+  GtkCssVariableValue *old_value;
 
-  gtk_internal_return_if_fail (GTK_IS_CSS_ANIMATED_STYLE (style));
-  gtk_internal_return_if_fail (value != NULL);
+  gtk_internal_return_val_if_fail (GTK_IS_CSS_ANIMATED_STYLE (style), FALSE);
+  gtk_internal_return_val_if_fail (value != NULL, FALSE);
+
+  old_value = gtk_css_style_get_custom_property (style, id);
+  if (gtk_css_value_equal0 ((GtkCssValue *) old_value, (GtkCssValue *) value))
+    return FALSE;
 
   if (style->variables == NULL)
     {
@@ -669,6 +674,8 @@ gtk_css_animated_style_set_animated_custom_value (GtkCssAnimatedStyle *animated,
     }
 
   gtk_css_variable_set_add (style->variables, id, value);
+
+  return TRUE;
 }
 
 void
