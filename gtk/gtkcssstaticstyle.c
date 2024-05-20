@@ -865,7 +865,9 @@ gtk_css_lookup_resolve (GtkCssLookup      *lookup,
   else if (parent_style && parent_style->variables)
     {
       g_clear_pointer (&style->variables, gtk_css_variable_set_unref);
-      style->variables = gtk_css_variable_set_ref (parent_style->variables);
+      style->variables = gtk_css_variable_set_new ();
+      gtk_css_variable_set_set_parent (style->variables,
+                                       parent_style->variables);
     }
 
   context.provider = provider;
