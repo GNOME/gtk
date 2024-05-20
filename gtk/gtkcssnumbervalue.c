@@ -1715,6 +1715,16 @@ gtk_css_number_value_get (const GtkCssValue *value,
     }
 }
 
+double
+gtk_css_number_value_get_canonical (GtkCssValue *number,
+                                    double       one_hundred_percent)
+{
+  if (number->type == TYPE_DIMENSION && number->dimension.unit != GTK_CSS_PERCENT)
+    return get_converted_value (number, canonical_unit (number->dimension.unit));
+
+  return gtk_css_number_value_get (number, one_hundred_percent);
+}
+
 gboolean
 gtk_css_dimension_value_is_zero (const GtkCssValue *value)
 {

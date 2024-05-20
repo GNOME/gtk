@@ -57,6 +57,8 @@ GtkCssValue *   gtk_css_number_value_try_add        (GtkCssValue            *val
                                                      GtkCssValue            *value2);
 double          gtk_css_number_value_get            (const GtkCssValue      *number,
                                                      double                  one_hundred_percent) G_GNUC_PURE;
+double          gtk_css_number_value_get_canonical  (GtkCssValue            *number,
+                                                     double                  one_hundred_percent) G_GNUC_PURE;
 
 gboolean        gtk_css_dimension_value_is_zero     (const GtkCssValue      *value) G_GNUC_PURE;
 
