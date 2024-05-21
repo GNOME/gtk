@@ -21,7 +21,7 @@ Percentage
 : %, calc()
 
 Angle
-: deg, grad, turn, calc()
+: deg, rad, grad, turn, calc()
 
 Time
 : s, ms, calc()

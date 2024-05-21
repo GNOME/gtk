@@ -71,3 +71,27 @@ q {
 r {
   color: @mygreen;
 }
+
+s {
+  color: rgb(255,0,0);
+}
+
+t {
+  color: rgb(255,0,0);
+}
+
+u {
+  color: rgba(255,0,0,0.5);
+}
+
+v {
+  color: rgba(255,0,0,0.5);
+}
+
+w {
+  color: rgb(255,0,0);
+}
+
+x {
+  color: rgba(255,0,0,0.5);
+}
