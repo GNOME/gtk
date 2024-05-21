@@ -1029,7 +1029,8 @@ gtk_css_color_value_parse (GtkCssParser *parser)
 
       has_alpha = gtk_css_parser_has_function (parser, "rgba");
 
-      parse_color_function (parser, has_alpha, has_alpha, parse_rgba_color_channel, &data);
+      if (!parse_color_function (parser, has_alpha, has_alpha, parse_rgba_color_channel, &data))
+        return NULL;
 
       return gtk_css_color_value_new_literal (&rgba);
     }
@@ -1040,7 +1041,7 @@ gtk_css_color_value_parse (GtkCssParser *parser)
       hsla.alpha = 1.0;
 
       if (!parse_color_function (parser, TRUE, FALSE, parse_hsla_color_channel, &hsla))
-        return FALSE;
+        return NULL;
 
       _gdk_rgba_init_from_hsla (&rgba, &hsla);
 
