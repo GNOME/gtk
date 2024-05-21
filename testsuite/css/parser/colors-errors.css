@@ -30,3 +30,38 @@ h {
   color: rgb(100%,0,0);
 }
 
+i {
+  color: rgb(1 2 3 4);
+}
+
+j {
+  color: rgb(1 2 3 /);
+}
+
+k {
+  color: rgb(1 2 / 3 4);
+}
+
+l {
+  color: rgb(1, 2 3);
+}
+
+m {
+  color: rgb(1 2, 3 / 4);
+}
+
+n {
+  color: rgba(1 2 3 4);
+}
+
+o {
+  color: rgba(1 2 3 /);
+}
+
+p {
+  color: rgba(1 2 / 3 4);
+}
+
+q {
+  color: rgba(1, 2 3 / 4);
+}
