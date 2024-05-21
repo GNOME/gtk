@@ -32,7 +32,6 @@
 
 #include "gdk/gdkeventsprivate.h"
 
-#define GDK_MOD2_MASK (1 << 4)
 #define GRIP_WIDTH 15
 #define GRIP_HEIGHT 15
 #define GDK_LION_RESIZE 5
@@ -175,7 +174,7 @@ get_keyboard_modifiers_from_ns_flags (NSUInteger nsflags)
   if (nsflags & NSEventModifierFlagOption)
     modifiers |= GDK_ALT_MASK;
   if (nsflags & NSEventModifierFlagCommand)
-    modifiers |= GDK_MOD2_MASK;
+    modifiers |= GDK_META_MASK;
 
   return modifiers;
 }
@@ -314,13 +313,6 @@ get_group_from_ns_event (NSEvent *nsevent)
   return ([nsevent modifierFlags] & NSEventModifierFlagOption) ? 1 : 0;
 }
 
-static void
-add_virtual_modifiers (GdkModifierType *state)
-{
-  if (*state & GDK_MOD2_MASK)
-    *state |= GDK_META_MASK;
-}
-
 static GdkEvent *
 fill_key_event (GdkMacosDisplay *display,
                 GdkMacosSurface *surface,
@@ -367,7 +359,7 @@ fill_key_event (GdkMacosDisplay *display,
         {
         case GDK_KEY_Meta_R:
         case GDK_KEY_Meta_L:
-          mask = GDK_MOD2_MASK;
+          mask = GDK_META_MASK;
           break;
         case GDK_KEY_Shift_R:
         case GDK_KEY_Shift_L:
@@ -395,7 +387,6 @@ fill_key_event (GdkMacosDisplay *display,
     }
 
   state |= _gdk_macos_display_get_current_mouse_modifiers (display);
-  add_virtual_modifiers (&state);
 
   translated.keyval = keyval;
   translated.consumed = consumed;
