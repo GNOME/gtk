@@ -465,6 +465,9 @@ gtk_list_factory_widget_click_gesture_released (GtkGestureClick      *gesture,
       state = gdk_event_get_modifier_state (event);
       extend = (state & GDK_SHIFT_MASK) != 0;
       modify = (state & GDK_CONTROL_MASK) != 0;
+#ifdef __APPLE__
+      modify = modify | ((state & GDK_META_MASK) != 0);
+#endif
 
       gtk_widget_activate_action (GTK_WIDGET (self),
                                   "list.select-item",
