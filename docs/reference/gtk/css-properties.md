@@ -15,16 +15,16 @@ spec.
 The following units are supported for basic datatypes:
 
 Length
-: px, pt, em, ex, rem, pc, in, cm, mm, calc()
+: px, pt, em, ex, rem, pc, in, cm, mm
 
 Percentage
-: %, calc()
+: %
 
 Angle
-: deg, rad, grad, turn, calc()
+: deg, rad, grad, turn
 
 Time
-: s, ms, calc()
+: s, ms
 
 Length values with the em or ex units are resolved using the font
 size value, unless they occur in setting the font-size itself, in
@@ -33,11 +33,15 @@ which case they are resolved using the inherited font size value.
 The rem unit is resolved using the initial font size value, which is
 not quite the same as the CSS definition of rem.
 
-The calc() notation adds considerable expressive power. There are limits
-on what types can be combined in such an expression (e.g. it does not make
-sense to add a number and a time). For the full details, see the
-[CSS3 Values and Units](https://www.w3.org/TR/css3-values/#calc-notation)
-spec.
+Length values using physical units (pt, pc, in, cm, mm) are translated
+to px using the dpi value specified by the -gtk-dpi property, which is
+different from the CSS definition, which uses a fixed dpi of 96.
+
+The calc() notation adds considerable expressive power to all of these
+datatypes. There are limits on what types can be combined in such an
+expression (e.g. it does not make sense to add a number and a time).
+For the full details, see the
+[CSS Values and Units](https://www.w3.org/TR/css-values-4/) spec.
 
 A common pattern among shorthand properties (called 'four sides') is one
 where one to four values can be specified, to determine a value for each
@@ -82,36 +86,53 @@ color: var(--prop, green);
 
 ## Colors
 
+### CSS Colors
+
+Colors can be expressed in numerous ways in CSS (see the
+[Color Module](https://www.w3.org/TR/css-color-5/). GTK supports
+many (but not all) of these.
+
+You can use rgb(), rgba(), hsl() with both the legacy or the modern CSS
+syntax, and calc() can be used as well in color expressions.
+
+### Non-CSS Colors
+
 GTK extends the CSS syntax with several additional ways to specify colors.
+
+These extensions are deprecated and should be replaced by the equivalent
+standard CSS notions.
 
 The first is a reference to a color defined via a @define-color rule in CSS.
 The syntax for @define-color rules is as follows:
 
 ```
-@define-color Name Color
+@define-color name color
 ```
 
 To refer to the color defined by a @define-color rule, prefix the name with @.
+
+The standard CSS mechanisms that should be used instead of @define-color are
+custom properties, :root and var().
 
 GTK also supports color expressions, which allow colors to be transformed to
 new ones. Color expressions can be nested, providing a rich language to
 define colors. Color expressions resemble functions, taking 1 or more colors
 and in some cases a number as arguments.
 
-`lighter(Color)`
- : produces a brighter variant of Color
+`lighter(color)`
+ : produces a brighter variant of `color`.
 
-`darker(Color)`
- : produces a darker variant of Color
+`darker(color)`
+ : produces a darker variant of `color`.
 
-`shade(Color, Number)`
- : changes the lightness of Color. The number ranges from 0 for black to 2 for white.
+`shade(color, number)`
+ : changes the lightness of `color`. The `number` ranges from 0 for black to 2 for white.
 
-`alpha(Color, Number)`
- : replaces the alpha value of color with number (between 0 and 1)
+`alpha(color, number)`
+ : multiplies the alpha value of `color` by `number` (between 0 and 1).
 
-`mix(Color1, Color2, Number)`
- : interpolates between the two colors
+`mix(color1, color2, number)`
+ : interpolates between the two colors.
 
 ## Images
 
@@ -119,7 +140,7 @@ GTK extends the CSS syntax for images and also uses it for specifying icons.
 To load a themed icon, use
 
 ```
--gtk-icontheme(Name)
+-gtk-icontheme(name)
 ```
 
 The specified icon name is used to look up a themed icon, while taking into
@@ -148,14 +169,14 @@ and the
 syntax makes this available. -gtk-recolor requires a url as first argument.
 The remaining arguments specify the color palette to use. If the palette is
 not explicitly specified, the current value of the -gtk-icon-palette property
-is used. 
+is used.
 
 GTK supports scaled rendering on hi-resolution displays. This works best if
 images can specify normal and hi-resolution variants. From CSS, this can be
 done with
 
 ```
--gtk-scaled(Image1, Image2)
+-gtk-scaled(image1, image2)
 ```
 
 ## GTK CSS Properties
