@@ -113,6 +113,7 @@ gtk_private_sources = files([
   'gtkfilechoosercell.c',
   'gtkfilesystemmodel.c',
   'gtkfilethumbnail.c',
+  'gtkfontfilter.c',
   'gtkgizmo.c',
   'gtkiconcache.c',
   'gtkiconcachevalidator.c',
@@ -412,6 +413,7 @@ gtk_public_sources += gtk_print_sources
 
 gtk_private_type_headers = files([
   'gtkcsstypesprivate.h',
+  'gtkfontfilterprivate.h',
   'gtktexthandleprivate.h',
   'gtkplacessidebarprivate.h',
 ])
