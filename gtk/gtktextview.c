@@ -1778,7 +1778,51 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
   add_move_binding (widget_class, GDK_KEY_KP_Page_Down, GDK_CONTROL_MASK,
                     GTK_MOVEMENT_HORIZONTAL_PAGES, 1);
 
+#ifdef __APPLE__
+  add_move_binding (widget_class, GDK_KEY_Right, GDK_ALT_MASK,
+                    GTK_MOVEMENT_WORDS, 1);
+
+  add_move_binding (widget_class, GDK_KEY_Left, GDK_ALT_MASK,
+                    GTK_MOVEMENT_WORDS, -1);
+
+  add_move_binding (widget_class, GDK_KEY_KP_Right, GDK_ALT_MASK,
+                    GTK_MOVEMENT_WORDS, 1);
+
+  add_move_binding (widget_class, GDK_KEY_KP_Left, GDK_ALT_MASK,
+                    GTK_MOVEMENT_WORDS, -1);
+
+  add_move_binding (widget_class, GDK_KEY_Right, GDK_ALT_MASK,
+                    GTK_MOVEMENT_DISPLAY_LINE_ENDS, 1);
+
+  add_move_binding (widget_class, GDK_KEY_Left, GDK_ALT_MASK,
+                    GTK_MOVEMENT_DISPLAY_LINE_ENDS, -1);
+
+  add_move_binding (widget_class, GDK_KEY_KP_Right, GDK_ALT_MASK,
+                    GTK_MOVEMENT_DISPLAY_LINE_ENDS, 1);
+
+  add_move_binding (widget_class, GDK_KEY_KP_Left, GDK_ALT_MASK,
+                    GTK_MOVEMENT_DISPLAY_LINE_ENDS, -1);
+
+  add_move_binding (widget_class, GDK_KEY_Up, GDK_META_MASK,
+                    GTK_MOVEMENT_BUFFER_ENDS, -1);
+
+  add_move_binding (widget_class, GDK_KEY_Down, GDK_META_MASK,
+                    GTK_MOVEMENT_BUFFER_ENDS, 1);
+
+  add_move_binding (widget_class, GDK_KEY_KP_Up, GDK_META_MASK,
+                    GTK_MOVEMENT_BUFFER_ENDS, -1);
+
+  add_move_binding (widget_class, GDK_KEY_KP_Down, GDK_META_MASK,
+                    GTK_MOVEMENT_BUFFER_ENDS, 1);
+#endif
+
   /* Select all */
+#ifdef __APPLE__
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       GDK_KEY_a, GDK_META_MASK,
+                                       "select-all",
+                                       "(b)", TRUE);
+#else
   gtk_widget_class_add_binding_signal (widget_class,
                                        GDK_KEY_a, GDK_CONTROL_MASK,
                                        "select-all",
@@ -1788,8 +1832,15 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
                                        GDK_KEY_slash, GDK_CONTROL_MASK,
                                        "select-all",
                                        "(b)", TRUE);
+#endif
 
   /* Unselect all */
+#ifdef __APPLE__
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       GDK_KEY_a, GDK_SHIFT_MASK | GDK_META_MASK,
+                                       "select-all",
+                                       "(b)", FALSE);
+#else
   gtk_widget_class_add_binding_signal (widget_class,
                                        GDK_KEY_backslash, GDK_CONTROL_MASK,
                                        "select-all",
@@ -1799,6 +1850,7 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
                                        GDK_KEY_a, GDK_SHIFT_MASK | GDK_CONTROL_MASK,
                                        "select-all",
                                        "(b)", FALSE);
+#endif
 
   /* Deleting text */
   gtk_widget_class_add_binding_signal (widget_class,
@@ -1837,6 +1889,17 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
                                        "delete-from-cursor",
                                        "(ii)", GTK_DELETE_WORD_ENDS, -1);
 
+#ifdef __APPLE__
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       GDK_KEY_Delete, GDK_ALT_MASK,
+                                       "delete-from-cursor",
+                                       "(ii)", GTK_DELETE_WORD_ENDS, 1);
+
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       GDK_KEY_BackSpace, GDK_ALT_MASK,
+                                       "delete-from-cursor",
+                                       "(ii)", GTK_DELETE_WORD_ENDS, -1);
+#else
   gtk_widget_class_add_binding_signal (widget_class,
                                        GDK_KEY_Delete, GDK_SHIFT_MASK | GDK_CONTROL_MASK,
                                        "delete-from-cursor",
@@ -1851,9 +1914,23 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
                                        GDK_KEY_BackSpace, GDK_SHIFT_MASK | GDK_CONTROL_MASK,
                                        "delete-from-cursor",
                                        "(ii)", GTK_DELETE_PARAGRAPH_ENDS, -1);
+#endif
 
   /* Cut/copy/paste */
-
+#ifdef __APPLE__
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       GDK_KEY_x, GDK_META_MASK,
+                                       "cut-clipboard",
+                                       NULL);
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       GDK_KEY_c, GDK_META_MASK,
+                                       "copy-clipboard",
+                                       NULL);
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       GDK_KEY_v, GDK_META_MASK,
+                                       "paste-clipboard",
+                                       NULL);
+#else
   gtk_widget_class_add_binding_signal (widget_class,
                                        GDK_KEY_x, GDK_CONTROL_MASK,
                                        "cut-clipboard",
@@ -1892,8 +1969,17 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
                                        GDK_KEY_Insert, GDK_SHIFT_MASK,
                                        "paste-clipboard",
                                        NULL);
+#endif
 
   /* Undo/Redo */
+#ifdef __APPLE__
+  gtk_widget_class_add_binding_action (widget_class,
+                                       GDK_KEY_z, GDK_META_MASK,
+                                       "text.undo", NULL);
+  gtk_widget_class_add_binding_action (widget_class,
+                                       GDK_KEY_z, GDK_META_MASK | GDK_SHIFT_MASK,
+                                       "text.redo", NULL);
+#else
   gtk_widget_class_add_binding_action (widget_class,
                                        GDK_KEY_z, GDK_CONTROL_MASK,
                                        "text.undo", NULL);
@@ -1903,6 +1989,7 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
   gtk_widget_class_add_binding_action (widget_class,
                                        GDK_KEY_z, GDK_CONTROL_MASK | GDK_SHIFT_MASK,
                                        "text.redo", NULL);
+#endif
 
   /* Overwrite */
   gtk_widget_class_add_binding_signal (widget_class,
