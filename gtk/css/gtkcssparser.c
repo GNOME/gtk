@@ -812,6 +812,26 @@ gtk_css_parser_warn_syntax (GtkCssParser *self,
   va_end (args);
 }
 
+void
+gtk_css_parser_warn_deprecated (GtkCssParser *self,
+                                 const char   *format,
+                                 ...)
+{
+  va_list args;
+  GError *error;
+
+  va_start (args, format);
+  error = g_error_new_valist (GTK_CSS_PARSER_WARNING,
+                              GTK_CSS_PARSER_WARNING_DEPRECATED,
+                              format, args);
+  gtk_css_parser_emit_error (self,
+                             gtk_css_parser_get_start_location (self),
+                             gtk_css_parser_get_end_location (self),
+                             error);
+  g_error_free (error);
+  va_end (args);
+}
+
 gboolean
 gtk_css_parser_consume_function (GtkCssParser *self,
                                  guint         min_args,

@@ -184,10 +184,12 @@ gtk_css_provider_parsing_error (GtkCssProvider  *provider,
     {
       char *s = gtk_css_section_to_string (section);
 
-      g_warning ("Theme parser %s: %s: %s",
-                 error->domain == GTK_CSS_PARSER_WARNING ? "warning" : "error",
-                 s,
-                 error->message);
+      if (GTK_DEBUG_CHECK (CSS) ||
+          !g_error_matches (error, GTK_CSS_PARSER_WARNING, GTK_CSS_PARSER_WARNING_DEPRECATED))
+        g_warning ("Theme parser %s: %s: %s",
+                   error->domain == GTK_CSS_PARSER_WARNING ? "warning" : "error",
+                   s,
+                   error->message);
 
       g_free (s);
     }

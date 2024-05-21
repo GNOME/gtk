@@ -96,6 +96,7 @@ typedef enum {
   GTK_DEBUG_A11Y            = 1 << 17,
   GTK_DEBUG_ICONFALLBACK    = 1 << 18,
   GTK_DEBUG_INVERT_TEXT_DIR = 1 << 19,
+  GTK_DEBUG_CSS             = 1 << 20,
 } GtkDebugFlags;
 
 #define GTK_DEBUG_CHECK(type) G_UNLIKELY (gtk_get_debug_flags () & GTK_DEBUG_##type)
