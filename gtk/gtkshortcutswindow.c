@@ -850,6 +850,13 @@ gtk_shortcuts_window_class_init (GtkShortcutsWindowClass *klass)
                                        "search",
                                        NULL);
 
+#ifdef __APPLE__
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       GDK_KEY_f, GDK_META_MASK,
+                                       "search",
+                                       NULL);
+#endif
+
   g_type_ensure (GTK_TYPE_SHORTCUTS_GROUP);
   g_type_ensure (GTK_TYPE_SHORTCUTS_SHORTCUT);
 
