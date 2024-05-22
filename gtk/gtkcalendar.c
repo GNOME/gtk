@@ -1381,6 +1381,11 @@ gtk_calendar_key_controller_key_pressed (GtkEventControllerKey *controller,
   int old_focus_row;
   int old_focus_col;
   int row, col, day;
+#ifdef __APPLE__
+  GdkModifierType modifier = GDK_META_MASK;
+#else
+  GdkModifierType modifier = GDK_CONTROL_MASK;
+#endif
 
   return_val = FALSE;
 
@@ -1392,7 +1397,7 @@ gtk_calendar_key_controller_key_pressed (GtkEventControllerKey *controller,
     case GDK_KEY_KP_Left:
     case GDK_KEY_Left:
       return_val = TRUE;
-      if (state & GDK_CONTROL_MASK)
+      if (state & modifier)
         calendar_set_month_prev (calendar);
       else
         {
@@ -1404,7 +1409,7 @@ gtk_calendar_key_controller_key_pressed (GtkEventControllerKey *controller,
     case GDK_KEY_KP_Right:
     case GDK_KEY_Right:
       return_val = TRUE;
-      if (state & GDK_CONTROL_MASK)
+      if (state & modifier)
         calendar_set_month_next (calendar);
       else
         {
@@ -1416,7 +1421,7 @@ gtk_calendar_key_controller_key_pressed (GtkEventControllerKey *controller,
     case GDK_KEY_KP_Up:
     case GDK_KEY_Up:
       return_val = TRUE;
-      if (state & GDK_CONTROL_MASK)
+      if (state & modifier)
         calendar_set_year_prev (calendar);
       else
         {
@@ -1428,7 +1433,7 @@ gtk_calendar_key_controller_key_pressed (GtkEventControllerKey *controller,
     case GDK_KEY_KP_Down:
     case GDK_KEY_Down:
       return_val = TRUE;
-      if (state & GDK_CONTROL_MASK)
+      if (state & modifier)
         calendar_set_year_next (calendar);
       else
         {
