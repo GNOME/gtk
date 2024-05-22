@@ -96,11 +96,11 @@ _gdk_macos_drag_surface_constructed (GObject *object)
                                                  defer:NO
                                                 screen:screen];
 
+  _gdk_macos_surface_set_native (self, window);
+
   [window setOpaque:NO];
   [window setBackgroundColor:[NSColor clearColor]];
   [window setDecorated:NO];
-
-  _gdk_macos_surface_set_native (self, window);
 
   frame_clock = _gdk_frame_clock_idle_new ();
   gdk_surface_set_frame_clock (surface, frame_clock);
