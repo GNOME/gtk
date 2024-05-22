@@ -216,6 +216,7 @@ if win32_enabled
                cc.find_library('comctl32'),
                cc.find_library('dwmapi'),
                cc.find_library('imm32'),
+               cc.find_library('opengl32'),
                cc.find_library('setupapi'),
                cc.find_library('winmm')]
 

@@ -397,12 +397,12 @@ gdk_win32_gl_context_dispose_wgl (GObject *gobject)
     {
       GdkWindow *window = gdk_gl_context_get_window (context);
 
-      if (wglGetCurrentContext () == context_wgl->wgl_context)
-        wglMakeCurrent (NULL, NULL);
+      if (gdk_win32_private_wglGetCurrentContext () == context_wgl->wgl_context)
+        gdk_win32_private_wglMakeCurrent (NULL, NULL);
 
       GDK_NOTE (OPENGL, g_print ("Destroying WGL context\n"));
 
-      wglDeleteContext (context_wgl->wgl_context);
+      gdk_win32_private_wglDeleteContext (context_wgl->wgl_context);
       context_wgl->wgl_context = NULL;
 
       gdk_win32_gl_context_cleanup (context);
@@ -843,7 +843,7 @@ gdk_win32_display_make_wgl_context_current (GdkDisplay   *display,
 
   if (context == NULL)
     {
-      wglMakeCurrent(NULL, NULL);
+      gdk_win32_private_wglMakeCurrent (NULL, NULL);
 
       return TRUE;
     }
@@ -851,8 +851,8 @@ gdk_win32_display_make_wgl_context_current (GdkDisplay   *display,
   context_win32 = GDK_WIN32_GL_CONTEXT (context);
   window = gdk_gl_context_get_window (context);
 
-  if (!wglMakeCurrent (context_win32->gl_hdc,
-                       GDK_WIN32_GL_CONTEXT_WGL (context)->wgl_context))
+  if (!gdk_win32_private_wglMakeCurrent (context_win32->gl_hdc,
+                                         GDK_WIN32_GL_CONTEXT_WGL (context)->wgl_context))
     {
       GDK_NOTE (OPENGL, g_print ("Making WGL context current failed\n"));
       return FALSE;
