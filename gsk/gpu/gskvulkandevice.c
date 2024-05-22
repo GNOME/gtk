@@ -1261,7 +1261,7 @@ gsk_vulkan_device_find_allocator (GskVulkanDevice       *self,
 
   g_assert (found < properties.memoryTypeCount);
 
-  return gsk_vulkan_allocator_ref (gsk_vulkan_device_get_allocator (self, i, &properties.memoryTypes[i]));
+  return gsk_vulkan_allocator_ref (gsk_vulkan_device_get_allocator (self, found, &properties.memoryTypes[found]));
 }
 
 GskVulkanAllocator *
