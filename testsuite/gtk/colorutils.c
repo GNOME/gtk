@@ -123,6 +123,40 @@ test_roundtrips_rgb_oklab (void)
     }
 }
 
+static void
+test_roundtrips_rgb_linear_srgb (void)
+{
+  struct {
+    float red, green, blue;
+    float linear_red, linear_green, linear_blue;
+  } tests[] = {
+    { 0, 0, 0, 0, 0, 0 },
+    { 1, 1, 1, 1, 1, 1 },
+    { 0.691, 0.139, 0.26, 0.435, 0.017, 0.055 },
+    { 0.25, 0.5, 0.75, 0.0508, 0.214, 0.522 },
+  };
+  const float EPSILON = 1e-3;
+
+  for (unsigned int i = 0; i < G_N_ELEMENTS (tests); i++)
+    {
+      float red, green, blue;
+
+      gtk_linear_srgb_to_rgb (tests[i].linear_red,
+                              tests[i].linear_green,
+                              tests[i].linear_blue,
+                              &red, &green, &blue);
+      g_assert_cmpfloat_with_epsilon (red, tests[i].red, EPSILON);
+      g_assert_cmpfloat_with_epsilon (green, tests[i].green, EPSILON);
+      g_assert_cmpfloat_with_epsilon (blue, tests[i].blue, EPSILON);
+
+      gtk_rgb_to_linear_srgb (tests[i].red, tests[i].green, tests[i].blue,
+                              &red, &green, &blue);
+      g_assert_cmpfloat_with_epsilon (red, tests[i].linear_red, EPSILON);
+      g_assert_cmpfloat_with_epsilon (green, tests[i].linear_green, EPSILON);
+      g_assert_cmpfloat_with_epsilon (blue, tests[i].linear_blue, EPSILON);
+    }
+}
+
 int
 main (int   argc,
       char *argv[])
@@ -132,6 +166,7 @@ main (int   argc,
   g_test_add_func ("/color/roundtrips/rgb-hsv", test_roundtrips_rgb_hsv);
   g_test_add_func ("/color/roundtrips/rgb-hwb", test_roundtrips_rgb_hwb);
   g_test_add_func ("/color/roundtrips/rgb-oklab", test_roundtrips_rgb_oklab);
+  g_test_add_func ("/color/roundtrips/rgb-linear-srgb", test_roundtrips_rgb_linear_srgb);
 
   return g_test_run();
 }

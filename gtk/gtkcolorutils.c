@@ -335,18 +335,16 @@ gtk_oklab_to_rgb (float  L,   float  a,     float  b,
   float linear_green = -1.2684380046f * l + 2.6097574011f * m - 0.3413193965f * s;
   float linear_blue = -0.0041960863f * l - 0.7034186147f * m + 1.7076147010f * s;
 
-  *red = apply_gamma (linear_red);
-  *green = apply_gamma (linear_green);
-  *blue = apply_gamma (linear_blue);
+  gtk_linear_srgb_to_rgb (linear_red, linear_green, linear_blue, red, green, blue);
 }
 
 void
 gtk_rgb_to_oklab (float  red, float  green, float  blue,
                   float *L,   float *a,     float *b)
 {
-  float linear_red = unapply_gamma (red);
-  float linear_green = unapply_gamma (green);
-  float linear_blue = unapply_gamma (blue);
+  float linear_red, linear_green, linear_blue;
+
+  gtk_rgb_to_linear_srgb (red, green, blue, &linear_red, &linear_green, &linear_blue);
 
   float l = 0.4122214708f * linear_red + 0.5363325363f * linear_green + 0.0514459929f * linear_blue;
   float m = 0.2119034982f * linear_red + 0.6806995451f * linear_green + 0.1073969566f * linear_blue;
@@ -359,4 +357,22 @@ gtk_rgb_to_oklab (float  red, float  green, float  blue,
   *L = 0.2104542553f*l + 0.7936177850f*m - 0.0040720468f*s;
   *a = 1.9779984951f*l - 2.4285922050f*m + 0.4505937099f*s;
   *b = 0.0259040371f*l + 0.7827717662f*m - 0.8086757660f*s;
+}
+
+void
+gtk_rgb_to_linear_srgb (float  red,        float  green,        float  blue,
+                        float *linear_red, float *linear_green, float *linear_blue)
+{
+  *linear_red = unapply_gamma (red);
+  *linear_green = unapply_gamma (green);
+  *linear_blue = unapply_gamma (blue);
+}
+
+void
+gtk_linear_srgb_to_rgb (float  linear_red, float  linear_green, float  linear_blue,
+                        float *red,        float *green,        float *blue)
+{
+  *red = apply_gamma (linear_red);
+  *green = apply_gamma (linear_green);
+  *blue = apply_gamma (linear_blue);
 }
