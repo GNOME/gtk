@@ -37,6 +37,7 @@ static struct {
   { "appstarting", IDC_APPSTARTING },
   { "arrow", IDC_ARROW },
   { "cross", IDC_CROSS },
+  { "dnd-move", IDC_ARROW },
   { "hand",  IDC_HAND },
   { "help",  IDC_HELP },
   { "ibeam", IDC_IBEAM },
