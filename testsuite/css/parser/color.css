@@ -95,3 +95,19 @@ w {
 x {
   color: rgba(255 0 0 / 0.5);
 }
+
+y {
+  color: color(srgb 1 0 0);
+}
+
+z {
+  color: color(srgb 99% 98.5% 98% / 0.5);
+}
+
+aa {
+  color: color(srgb 1.5 -150% 0 / 200%);
+}
+
+ab {
+  color: color(srgb-linear 1 0.5 0 / 50%);
+}

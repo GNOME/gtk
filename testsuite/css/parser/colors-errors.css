@@ -65,3 +65,23 @@ p {
 q {
   color: rgba(1, 2 3 / 4);
 }
+
+r {
+  color: color(not-a-color-space 255 0 0 / 0.5);
+}
+
+s {
+  color: color(srgb 255);
+}
+
+t {
+  color: color(srgb 1 0 0 0.5);
+}
+
+u {
+  color: color(srgb 1 0 / 0 0.5);
+}
+
+v {
+  color: color(srgb, 1, 0, 0);
+}
