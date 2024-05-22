@@ -5417,6 +5417,8 @@ paste_received (GObject      *clipboard,
 
   if (priv->truncate_multiline)
     length = truncate_multiline (text);
+  else
+    length = strlen (text);
 
   begin_change (self);
   if (priv->selection_bound != priv->current_pos)
