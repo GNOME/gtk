@@ -128,8 +128,8 @@ install_headers(gdk_deprecated_headers, subdir: 'gtk-4.0/gdk/deprecated')
 gdk_sources = gdk_public_sources + gdk_deprecated_sources
 
 gdk_private_h_sources = files([
-  'gdkeventsprivate.h',
   'gdkdevicetoolprivate.h',
+  'gdkeventsprivate.h',
   'gdkhslaprivate.h',
   'gdkmonitorprivate.h',
   'gdkseatdefaultprivate.h',
