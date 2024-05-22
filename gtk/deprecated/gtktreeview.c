@@ -1472,11 +1472,17 @@ gtk_tree_view_class_init (GtkTreeViewClass *class)
   gtk_widget_class_add_binding_signal (widget_class, GDK_KEY_space, GDK_CONTROL_MASK, "toggle-cursor-row", NULL);
   gtk_widget_class_add_binding_signal (widget_class, GDK_KEY_KP_Space, GDK_CONTROL_MASK, "toggle-cursor-row", NULL);
 
+
+#ifdef __APPLE__
+  gtk_widget_class_add_binding_signal (widget_class, GDK_KEY_a, GDK_META_MASK, "select-all", NULL);
+  gtk_widget_class_add_binding_signal (widget_class, GDK_KEY_A, GDK_META_MASK | GDK_SHIFT_MASK, "unselect-all", NULL);
+#else
   gtk_widget_class_add_binding_signal (widget_class, GDK_KEY_a, GDK_CONTROL_MASK, "select-all", NULL);
   gtk_widget_class_add_binding_signal (widget_class, GDK_KEY_slash, GDK_CONTROL_MASK, "select-all", NULL);
 
   gtk_widget_class_add_binding_signal (widget_class, GDK_KEY_A, GDK_CONTROL_MASK | GDK_SHIFT_MASK, "unselect-all", NULL);
   gtk_widget_class_add_binding_signal (widget_class, GDK_KEY_backslash, GDK_CONTROL_MASK, "unselect-all", NULL);
+#endif
 
   gtk_widget_class_add_binding_signal (widget_class, GDK_KEY_space, GDK_SHIFT_MASK, "select-cursor-row", "(b)", TRUE);
   gtk_widget_class_add_binding_signal (widget_class, GDK_KEY_KP_Space, GDK_SHIFT_MASK, "select-cursor-row", "(b)", TRUE);
@@ -2712,6 +2718,9 @@ get_current_selection_modifiers (GtkEventController *controller,
 
   state = gtk_event_controller_get_current_event_state (controller);
   *modify = (state & GDK_CONTROL_MASK) != 0;
+#ifdef __APPLE__
+  *modify = *modify | ((state & GDK_META_MASK) != 0);
+#endif
   *extend = (state & GDK_SHIFT_MASK) != 0;
 }
 
@@ -13816,7 +13825,11 @@ gtk_tree_view_search_key_pressed (GtkEventControllerKey *key,
 {
   GtkTreeViewPrivate *priv = gtk_tree_view_get_instance_private (tree_view);
   GtkWidget *widget = priv->search_entry;
-  GdkModifierType default_accel;
+#ifdef __APPLE__
+  GdkModifierType default_accel = GDK_META_MASK;
+#else
+  GdkModifierType default_accel = GDK_CONTROL_MASK;
+#endif
   gboolean retval = FALSE;
 
   g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
@@ -13829,8 +13842,6 @@ gtk_tree_view_search_key_pressed (GtkEventControllerKey *key,
       gtk_tree_view_search_popover_hide (priv->search_popover, tree_view);
       return TRUE;
     }
-
-  default_accel = GDK_CONTROL_MASK;
 
   /* select previous matching iter */
   if (keyval == GDK_KEY_Up || keyval == GDK_KEY_KP_Up)
