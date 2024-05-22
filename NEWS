@@ -1,12 +1,20 @@
-Overview of Changes in 4.15.1, xx-xx-xxxx
+Overview of Changes in 4.15.2, xx-xx-xxxx
+=========================================
+
+Overview of Changes in 4.15.1, 21-05-2024
 =========================================
 
 * GtkGraphicsOffload:
  - Don't crash without a child
 
+* GtkSpinner:
+ - Don't animate when unmapped
+
 * CSS:
  - Support the :root selector
- - Support variables and custom properties
+ - Support variables and custom properties (https://www.w3.org/TR/css-variables-1/)
+ - Implement math functions (https://www.w3.org/TR/css-values-4/)
+ - Support modern syntax and calc in rgb() and hsl()
 
 * Icontheme:
  - Make symbolic svg loading more efficient
@@ -43,12 +51,20 @@ Overview of Changes in 4.15.1, xx-xx-xxxx
 
 * Debugging:
  - Show more texture details in the recorder
+ - Use GTK_DEBUG=css to see CSS deprecations
 
 * macOS:
  - Fix problems with events handed back to the OS
  - Respect GDK_DEBUG=default-settings
+ - Allow applictions to handle Dock > Quit
+
+* Deprecations:
+ - Use of @name colors in CSS
 
 * Translation updates:
+ Catalan
+ Georgian
+ Hungarian
  Korean
  Portuguese
  Turkish
