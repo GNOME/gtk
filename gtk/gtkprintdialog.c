@@ -1430,10 +1430,8 @@ print_response_cb (GtkPrintUnixDialog *window,
  * and set up print settings and page setup.
  *
  * The @callback will be called when the dialog is dismissed.
- * It should call [method@Gtk.PrintDialog.setup_finish]
- * to obtain the results in the form of a [struct@Gtk.PrintSetup],
- * that can then be passed to [method@Gtk.PrintDialog.print]
- * or [method@Gtk.PrintDialog.print_file].
+ * The obtained [struct@Gtk.PrintSetup] can then be passed
+ * to [method@Gtk.PrintDialog.print] or [method@Gtk.PrintDialog.print_file].
  *
  * One possible use for this method is to have the user select a printer,
  * then show a page setup UI in the application (e.g. to arrange images
@@ -1533,8 +1531,7 @@ gtk_print_dialog_setup_finish (GtkPrintDialog    *self,
  * If you pass `NULL` as @setup, then this method will present a print dialog.
  * Otherwise, it will attempt to print directly, without user interaction.
  *
- * The @callback will be called when the printing is done. It should call
- * [method@Gtk.PrintDialog.print_finish] to obtain the results.
+ * The @callback will be called when the printing is done.
  *
  * Since: 4.14
  */
@@ -1658,9 +1655,6 @@ gtk_print_dialog_print_finish (GtkPrintDialog  *self,
  *
  * If you pass `NULL` as @setup, then this method will present a print dialog.
  * Otherwise, it will attempt to print directly, without user interaction.
- *
- * The @callback will be called when the printing is done. It should call
- * [method@Gtk.PrintDialog.print_file_finish] to obtain the results.
  *
  * Since: 4.14
  */

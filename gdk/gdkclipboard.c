@@ -522,8 +522,6 @@ gdk_clipboard_get_content (GdkClipboard *clipboard)
  *
  * If the clipboard is not local, this function does nothing but report success.
  *
- * The @callback must call [method@Gdk.Clipboard.store_finish].
- *
  * The purpose of this call is to preserve clipboard contents beyond the
  * lifetime of an application, so this function is typically called on
  * exit. Depending on the platform, the functionality may not be available
@@ -637,9 +635,6 @@ gdk_clipboard_read_internal (GdkClipboard        *clipboard,
  *
  * Asynchronously requests an input stream to read the @clipboard's
  * contents from.
- *
- * When the operation is finished @callback will be called. You must then
- * call [method@Gdk.Clipboard.read_finish] to get the result of the operation.
  *
  * The clipboard will choose the most suitable mime type from the given list
  * to fulfill the request, preferring the ones listed first.
@@ -834,9 +829,6 @@ gdk_clipboard_read_value_internal (GdkClipboard        *clipboard,
  * Asynchronously request the @clipboard contents converted to the given
  * @type.
  *
- * When the operation is finished @callback will be called. You must then call
- * [method@Gdk.Clipboard.read_value_finish] to get the resulting `GValue`.
- *
  * For local clipboard contents that are available in the given `GType`,
  * the value will be copied directly. Otherwise, GDK will try to use
  * [func@content_deserialize_async] to convert the clipboard's data.
@@ -894,9 +886,6 @@ gdk_clipboard_read_value_finish (GdkClipboard  *clipboard,
  * @user_data: (closure): the data to pass to callback function
  *
  * Asynchronously request the @clipboard contents converted to a `GdkPixbuf`.
- *
- * When the operation is finished @callback will be called. You must then
- * call [method@Gdk.Clipboard.read_texture_finish] to get the result.
  *
  * This is a simple wrapper around [method@Gdk.Clipboard.read_value_async].
  * Use that function or [method@Gdk.Clipboard.read_async] directly if you
@@ -959,9 +948,6 @@ gdk_clipboard_read_texture_finish (GdkClipboard  *clipboard,
  * @user_data: (closure): the data to pass to callback function
  *
  * Asynchronously request the @clipboard contents converted to a string.
- *
- * When the operation is finished @callback will be called. You must then
- * call [method@Gdk.Clipboard.read_text_finish] to get the result.
  *
  * This is a simple wrapper around [method@Gdk.Clipboard.read_value_async].
  * Use that function or [method@Gdk.Clipboard.read_async] directly if you

@@ -37,8 +37,6 @@
  * right away.
  *
  * The operation is started with the [method@Gtk.FileLauncher.launch] function.
- * This API follows the GIO async pattern, and the result can be obtained by
- * calling [method@Gtk.FileLauncher.launch_finish].
  *
  * To launch uris that don't represent files, use [class@Gtk.UriLauncher].
  *
@@ -464,10 +462,6 @@ G_GNUC_END_IGNORE_DEPRECATIONS
  *
  * This may present an app chooser dialog to the user.
  *
- * The @callback will be called when the operation is completed.
- * It should call [method@Gtk.FileLauncher.launch_finish] to obtain
- * the result.
- *
  * Since: 4.10
  */
 void
@@ -557,10 +551,6 @@ gtk_file_launcher_launch_finish (GtkFileLauncher  *self,
  *
  * This is only supported native files. It will fail if @file
  * is e.g. a http:// uri.
- *
- * The @callback will be called when the operation is completed.
- * It should call [method@Gtk.FileLauncher.open_containing_folder_finish]
- * to obtain the result.
  *
  * Since: 4.10
  */
