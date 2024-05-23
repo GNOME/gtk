@@ -21,20 +21,29 @@
 #ifndef __GDK_WIN32_GL_CONTEXT__
 #define __GDK_WIN32_GL_CONTEXT__
 
-#include <epoxy/gl.h>
-#include <epoxy/wgl.h>
+#ifdef DONT_INCLUDE_LIBEPOXY
+# define WIN32_LEAN_AND_MEAN
+# include <windows.h>
+# include <GL/gl.h>
 
-#ifdef GDK_WIN32_ENABLE_EGL
-# include <epoxy/egl.h>
+# include <glib.h>
+#else
+# include <epoxy/gl.h>
+# include <epoxy/wgl.h>
+
+# ifdef GDK_WIN32_ENABLE_EGL
+#  include <epoxy/egl.h>
+# endif
+
+# include "gdkglcontextprivate.h"
+# include "gdkdisplayprivate.h"
+# include "gdkvisual.h"
+# include "gdkwindow.h"
 #endif
-
-#include "gdkglcontextprivate.h"
-#include "gdkdisplayprivate.h"
-#include "gdkvisual.h"
-#include "gdkwindow.h"
 
 G_BEGIN_DECLS
 
+#ifndef DONT_INCLUDE_LIBEPOXY
 void
 gdk_win32_window_invalidate_egl_framebuffer (GdkWindow      *window);
 
@@ -51,6 +60,14 @@ gdk_win32_window_invalidate_for_new_frame   (GdkWindow      *window,
 gboolean
 gdk_win32_display_make_gl_context_current   (GdkDisplay     *display,
                                              GdkGLContext   *context);
+
+#endif /* !DONT_INCLUDE_LIBEPOXY */
+
+HGLRC     gdk_win32_private_wglGetCurrentContext (void);
+BOOL      gdk_win32_private_wglMakeCurrent       (HDC hdc,
+                                                  HGLRC hglrc);
+void      gdk_win32_private_wglDeleteContext     (HGLRC hglrc);
+
 
 G_END_DECLS
 
