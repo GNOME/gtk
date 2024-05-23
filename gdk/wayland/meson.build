@@ -48,36 +48,128 @@ gdk_wayland_deps = [
   wlegldep,
 ]
 
-wlmod = import('unstable-wayland')
+# Fields:
+#  - name: protocol name
+#  - stability: protocol stability ('private', 'stable' or 'unstable')
+#  - version: protocol version
+#  - required: wayland_protocols version check
 proto_sources = [
-  'protocol/gtk-shell.xml',
-  'protocol/server-decoration.xml',
-  wlmod.find_protocol('primary-selection', state: 'unstable', version: 1),
-  wlmod.find_protocol('pointer-gestures', state: 'unstable', version: 1),
-  wlmod.find_protocol('viewporter', state: 'stable'),
-  wlmod.find_protocol('xdg-shell', state: 'unstable', version: 6),
-  wlmod.find_protocol('xdg-shell', state: 'stable'),
-  wlmod.find_protocol('xdg-foreign', state: 'unstable', version: 1),
-  wlmod.find_protocol('xdg-foreign', state: 'unstable', version: 2),
-  wlmod.find_protocol('tablet', state: 'unstable', version: 2),
-  wlmod.find_protocol('keyboard-shortcuts-inhibit', state: 'unstable', version: 1),
-  wlmod.find_protocol('xdg-output', state: 'unstable', version: 1),
-  wlmod.find_protocol('idle-inhibit', state: 'unstable', version: 1),
-  wlmod.find_protocol('xdg-activation', state: 'staging', version: 1),
-  wlmod.find_protocol('fractional-scale', state: 'staging', version: 1),
-  wlmod.find_protocol('linux-dmabuf', state: 'unstable', version: 1),
-  wlmod.find_protocol('presentation-time', state: 'stable'),
-  wlmod.find_protocol('single-pixel-buffer', state: 'staging', version: 1),
+  {
+    'name': 'gtk-shell',
+    'stability': 'private',
+  },
+  {
+    'name': 'primary-selection',
+    'stability': 'unstable',
+    'version': 1,
+  },
+  {
+    'name': 'pointer-gestures',
+    'stability': 'unstable',
+    'version': 1,
+  },
+  {
+    'name': 'viewporter',
+    'stability': 'stable',
+  },
+  {
+    'name': 'xdg-shell',
+    'stability': 'unstable',
+    'version': 6,
+  },
+  {
+    'name': 'xdg-shell',
+    'stability': 'stable',
+  },
+  {
+    'name': 'xdg-foreign',
+    'stability': 'unstable',
+    'version': 1,
+  },
+  {
+    'name': 'xdg-foreign',
+    'stability': 'unstable',
+    'version': 2,
+  },
+  {
+    'name': 'tablet',
+    'stability': 'unstable',
+    'version': 2,
+  },
+  {
+    'name': 'keyboard-shortcuts-inhibit',
+    'stability': 'unstable',
+    'version': 1,
+  },
+  {
+    'name': 'server-decoration',
+    'stability': 'private',
+  },
+  {
+    'name': 'xdg-output',
+    'stability': 'unstable',
+    'version': 1,
+  },
+  {
+    'name': 'idle-inhibit',
+    'stability': 'unstable',
+    'version': 1,
+  },
+  {
+    'name': 'xdg-activation',
+    'stability': 'staging',
+    'version': 1,
+  },
+  {
+    'name': 'fractional-scale',
+    'stability': 'staging',
+    'version': 1,
+  },
+  {
+    'name': 'linux-dmabuf',
+    'stability': 'unstable',
+    'version': 1,
+  },
+  {
+    'name': 'presentation-time',
+    'stability': 'stable',
+    'version': 1,
+  },
+  {
+    'name': 'single-pixel-buffer',
+    'stability': 'staging',
+    'version': 1,
+  },
 ]
 
 gdk_wayland_gen_headers = []
 
+wlmod = import('unstable-wayland')
 foreach p: proto_sources
-  # Returns a list [.c, .h]
-  gen = wlmod.scan_xml(p)
-  assert(gen.length() == 2)
-  gdk_wayland_sources += gen[0]
-  gdk_wayland_gen_headers += gen[1]
+  if wlprotocolsdep.version().version_compare(p.get('required', '>=0'))
+    if p.get('stability') == 'private'
+      if (p.has_key('version'))
+        proto_file = 'protocol/@0@-v@1@.xml'.format(p.get('name'), p.get('version'))
+      else
+        proto_file = 'protocol/@0@.xml'.format(p.get('name'))
+      endif
+    elif p.get('stability') == 'stable'
+      proto_file = wlmod.find_protocol(p.get('name'),
+        state: p.get('stability'),
+      )
+    else
+      proto_file = wlmod.find_protocol(p.get('name'),
+        state: p.get('stability'),
+        version: p.get('version'),
+      )
+    endif
+
+    # Returns a list [.c, .h]
+    gen = wlmod.scan_xml(proto_file)
+    assert(gen.length() == 2)
+    gdk_wayland_sources += gen[0]
+    gdk_wayland_gen_headers += gen[1]
+  endif
 endforeach
 
 libgdk_wayland = static_library('gdk-wayland',
