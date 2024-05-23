@@ -249,7 +249,13 @@ gsk_gl_texture_data_free (gpointer user_data)
 
   gdk_gl_context_make_current (data->context);
 
-  g_clear_pointer (&data->sync, glDeleteSync);
+  /* can't use g_clear_pointer() on glDeleteSync(), see MR !7294 */
+  if (data->sync)
+    {
+      glDeleteSync (data->sync);
+      data->sync = NULL;
+    }
+
   glDeleteTextures (1, &data->texture_id);
   g_object_unref (data->context);
 
