@@ -53,6 +53,21 @@ gtk_css_section_new (GFile                *file,
   return gtk_css_section_new_with_bytes (file, NULL,start, end);
 }
 
+/**
+ * gtk_css_section_new_with_bytes: (constructor)
+ * @file: (nullable) (transfer none): The file this section refers to
+ * @bytes: (nullable) (transfer none): The bytes this sections refers to
+ * @start: The start location
+ * @end: The end location
+ *
+ * Creates a new `GtkCssSection` referring to the section
+ * in the given `file` or the given `bytes` from the `start` location to the
+ * `end` location.
+ *
+ * Returns: (transfer full): a new `GtkCssSection`
+ *
+ * Since: 4.16
+ **/
 GtkCssSection *
 gtk_css_section_new_with_bytes (GFile  *file,
                                 GBytes *bytes,
@@ -165,6 +180,17 @@ gtk_css_section_get_file (const GtkCssSection *section)
   return section->file;
 }
 
+/**
+ * gtk_css_section_get_bytes:
+ * @section: the section
+ *
+ * Gets the bytes that @section was parsed from.
+ *
+ * Returns: (transfer none) (nullable): the `GBytes` from which the `section`
+ *   was parsed
+ *
+ * Since: 4.16
+ **/
 GBytes *
 gtk_css_section_get_bytes (const GtkCssSection *section)
 {
@@ -242,7 +268,7 @@ gtk_css_section_print (const GtkCssSection  *section,
       g_string_append (string, "<data>");
     }
 
-  g_string_append_printf (string, ":%zu:%zu", 
+  g_string_append_printf (string, ":%zu:%zu",
                           section->start_location.lines + 1,
                           section->start_location.line_chars + 1);
   if (section->start_location.lines != section->end_location.lines ||
