@@ -99,7 +99,6 @@ window_handle_exported (GtkWindow  *window,
  * a given uri.
  *
  * The @callback will be called when the launch is completed.
- * It should call gtk_show_uri_full_finish() to obtain the result.
  *
  * This is the recommended call to be used as it passes information
  * necessary for sandbox helpers to parent their dialogs properly.
@@ -153,8 +152,8 @@ gtk_show_uri_full (GtkWindow           *parent,
  * Returns: %TRUE if the URI was shown successfully.
  *   Otherwise, %FALSE is returned and @error is set
  *
- * Deprecated: 4.10: Use [method@Gtk.FileLauncher.launch_finish] or
- *   [method@Gtk.UriLauncher.launch_finish] instead
+ * Deprecated: 4.10: Use [method@Gtk.FileLauncher.launch] or
+ *   [method@Gtk.UriLauncher.launch] instead
  */
 gboolean
 gtk_show_uri_full_finish (GtkWindow     *parent,

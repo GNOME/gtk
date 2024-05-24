@@ -279,10 +279,6 @@ gdk_content_provider_content_changed (GdkContentProvider *provider)
  * Asynchronously writes the contents of @provider to @stream in the given
  * @mime_type.
  *
- * When the operation is finished @callback will be called. You must then call
- * [method@Gdk.ContentProvider.write_mime_type_finish] to get the result
- * of the operation.
- *
  * The given mime type does not need to be listed in the formats returned by
  * [method@Gdk.ContentProvider.ref_formats]. However, if the given `GType` is
  * not supported, `G_IO_ERROR_NOT_SUPPORTED` will be reported.

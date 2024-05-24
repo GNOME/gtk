@@ -546,9 +546,6 @@ serialize_not_found (GdkContentSerializer *serializer)
  *
  * The default I/O priority is %G_PRIORITY_DEFAULT (i.e. 0), and lower numbers
  * indicate a higher priority.
- *
- * When the operation is finished, @callback will be called. You must then
- * call [func@Gdk.content_serialize_finish] to get the result of the operation.
  */
 void
 gdk_content_serialize_async (GOutputStream       *stream,

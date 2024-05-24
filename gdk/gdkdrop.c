@@ -134,7 +134,7 @@ gdk_drop_read_local_async (GdkDrop             *self,
 
   g_object_get (priv->drag, "content", &content, NULL);
   content_formats = gdk_content_provider_ref_formats (content);
-  g_object_unref (content); 
+  g_object_unref (content);
   content_formats = gdk_content_formats_union_serialize_mime_types (content_formats);
   mime_type = gdk_content_formats_match_mime_type (content_formats, formats);
 
@@ -784,7 +784,7 @@ gdk_drop_read_value_internal (GdkDrop             *self,
   GdkContentFormats *formats;
   GValue *value;
   GTask *task;
- 
+
   g_return_if_fail (priv->state != GDK_DROP_STATE_FINISHED);
 
   task = g_task_new (self, cancellable, callback, user_data);
@@ -848,10 +848,6 @@ gdk_drop_read_value_internal (GdkDrop             *self,
  *
  * Asynchronously request the drag operation's contents converted
  * to the given @type.
- *
- * When the operation is finished @callback will be called. You must
- * then call [method@Gdk.Drop.read_value_finish] to get the resulting
- * `GValue`.
  *
  * For local drag-and-drop operations that are available in the given
  * `GType`, the value will be copied directly. Otherwise, GDK will
