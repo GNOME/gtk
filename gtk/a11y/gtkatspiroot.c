@@ -486,66 +486,6 @@ gtk_at_spi_root_child_changed (GtkAtSpiRoot             *self,
                                     window_ref);
 }
 
-typedef struct {
-  GtkAtSpiRoot *root;
-  GtkAtSpiRootRegisterFunc register_func;
-} RegistrationData;
-
-static void
-on_registration_reply (GObject      *gobject,
-                       GAsyncResult *result,
-                       gpointer      user_data)
-{
-  RegistrationData *data = user_data;
-  GtkAtSpiRoot *self = data->root;
-
-  GError *error = NULL;
-  GVariant *reply = g_dbus_connection_call_finish (G_DBUS_CONNECTION (gobject), result, &error);
-
-  self->register_id = 0;
-
-  if (error != NULL)
-    {
-      g_critical ("Unable to register the application: %s", error->message);
-      g_error_free (error);
-      return;
-    }
-
-  if (reply != NULL)
-    {
-      g_variant_get (reply, "((so))",
-                     &self->desktop_name,
-                     &self->desktop_path);
-      g_variant_unref (reply);
-
-      GTK_DEBUG (A11Y, "Connected to the a11y registry at (%s, %s)",
-                       self->desktop_name,
-                       self->desktop_path);
-    }
-
-  /* Register the cache object */
-  self->cache = gtk_at_spi_cache_new (self->connection, ATSPI_CACHE_PATH, self);
-
-  /* Drain the list of queued GtkAtSpiContexts, and add them to the cache */
-  if (self->queued_contexts != NULL)
-    {
-      self->queued_contexts = g_list_reverse (self->queued_contexts);
-      for (GList *l = self->queued_contexts; l != NULL; l = l->next)
-        {
-          if (data->register_func != NULL)
-            data->register_func (self, l->data);
-
-          gtk_at_spi_cache_add_context (self->cache, l->data);
-        }
-
-      g_clear_pointer (&self->queued_contexts, g_list_free);
-    }
-
-  self->toplevels = gtk_window_get_toplevels ();
-
-  g_free (data);
-}
-
 static void
 on_event_listener_registered (GDBusConnection *connection,
                               const char *sender_name,
@@ -621,6 +561,143 @@ on_event_listener_deregistered (GDBusConnection *connection,
     }
 }
 
+static void
+on_registered_events_reply (GObject *gobject,
+                            GAsyncResult *result,
+                            gpointer data)
+{
+  GError *error = NULL;
+  GVariant *reply = g_dbus_connection_call_finish (G_DBUS_CONNECTION (gobject), result, &error);
+  if (error != NULL)
+    {
+      g_critical ("Unable to get the list of registered event listeners: %s", error->message);
+      g_error_free (error);
+      return;
+    }
+
+  GtkAtSpiRoot *self = data;
+  GVariant *listeners = g_variant_get_child_value (reply, 0);
+  GVariantIter *iter;
+  const char *sender, *event_name;
+
+  if (self->event_listeners == NULL)
+    self->event_listeners = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
+
+  g_variant_get (listeners, "a(ss)", &iter);
+  while (g_variant_iter_loop (iter, "(&s&s)", &sender, &event_name))
+    {
+      GTK_DEBUG (A11Y, "Registering event listener (%s, %s) on the a11y bus",
+                 sender,
+                 event_name[0] != 0 ? event_name : "(none)");
+
+      if (!g_hash_table_contains (self->event_listeners, sender))
+        g_hash_table_add (self->event_listeners, g_strdup (sender));
+    }
+
+  g_variant_iter_free (iter);
+  g_variant_unref (listeners);
+  g_variant_unref (reply);
+}
+
+typedef struct {
+  GtkAtSpiRoot *root;
+  GtkAtSpiRootRegisterFunc register_func;
+} RegistrationData;
+
+static void
+on_registration_reply (GObject      *gobject,
+                       GAsyncResult *result,
+                       gpointer      user_data)
+{
+  RegistrationData *data = user_data;
+  GtkAtSpiRoot *self = data->root;
+
+  GError *error = NULL;
+  GVariant *reply = g_dbus_connection_call_finish (G_DBUS_CONNECTION (gobject), result, &error);
+
+  self->register_id = 0;
+
+  if (error != NULL)
+    {
+      g_critical ("Unable to register the application: %s", error->message);
+      g_error_free (error);
+      return;
+    }
+
+  if (reply != NULL)
+    {
+      g_variant_get (reply, "((so))",
+                     &self->desktop_name,
+                     &self->desktop_path);
+      g_variant_unref (reply);
+
+      GTK_DEBUG (A11Y, "Connected to the a11y registry at (%s, %s)",
+                       self->desktop_name,
+                       self->desktop_path);
+    }
+
+  /* Register the cache object */
+  self->cache = gtk_at_spi_cache_new (self->connection, ATSPI_CACHE_PATH, self);
+
+  /* Drain the list of queued GtkAtSpiContexts, and add them to the cache */
+  if (self->queued_contexts != NULL)
+    {
+      self->queued_contexts = g_list_reverse (self->queued_contexts);
+      for (GList *l = self->queued_contexts; l != NULL; l = l->next)
+        {
+          if (data->register_func != NULL)
+            data->register_func (self, l->data);
+
+          gtk_at_spi_cache_add_context (self->cache, l->data);
+        }
+
+      g_clear_pointer (&self->queued_contexts, g_list_free);
+    }
+
+  self->toplevels = gtk_window_get_toplevels ();
+
+  g_free (data);
+
+  /* Subscribe to notifications on the registered event listeners */
+  g_dbus_connection_signal_subscribe (self->connection,
+                                      "org.a11y.atspi.Registry",
+                                      "org.a11y.atspi.Registry",
+                                      "EventListenerRegistered",
+                                      ATSPI_REGISTRY_PATH,
+                                      NULL,
+                                      G_DBUS_SIGNAL_FLAGS_NONE,
+                                      on_event_listener_registered,
+                                      self,
+                                      NULL);
+  g_dbus_connection_signal_subscribe (self->connection,
+                                      "org.a11y.atspi.Registry",
+                                      "org.a11y.atspi.Registry",
+                                      "EventListenerDeregistered",
+                                      ATSPI_REGISTRY_PATH,
+                                      NULL,
+                                      G_DBUS_SIGNAL_FLAGS_NONE,
+                                      on_event_listener_deregistered,
+                                      self,
+                                      NULL);
+
+  /* Get the list of ATs listening to events, in case they were started
+   * before the application; we want to delay the D-Bus traffic as much
+   * as possible until we know something is listening on the accessibility
+   * bus
+   */
+  g_dbus_connection_call (self->connection,
+                          "org.a11y.atspi.Registry",
+                          ATSPI_REGISTRY_PATH,
+                          "org.a11y.atspi.Registry",
+                          "GetRegisteredEvents",
+                          g_variant_new ("()"),
+                          G_VARIANT_TYPE ("(a(ss))"),
+                          G_DBUS_CALL_FLAGS_NONE, -1,
+                          NULL,
+                          on_registered_events_reply,
+                          self);
+}
+
 static gboolean
 root_register (gpointer user_data)
 {
@@ -666,27 +743,6 @@ root_register (gpointer user_data)
                                      self,
                                      NULL,
                                      NULL);
-
-  g_dbus_connection_signal_subscribe (self->connection,
-                                      "org.a11y.atspi.Registry",
-                                      "org.a11y.atspi.Registry",
-                                      "EventListenerRegistered",
-                                      ATSPI_REGISTRY_PATH,
-                                      NULL,
-                                      G_DBUS_SIGNAL_FLAGS_NONE,
-                                      on_event_listener_registered,
-                                      self,
-                                      NULL);
-  g_dbus_connection_signal_subscribe (self->connection,
-                                      "org.a11y.atspi.Registry",
-                                      "org.a11y.atspi.Registry",
-                                      "EventListenerDeregistered",
-                                      ATSPI_REGISTRY_PATH,
-                                      NULL,
-                                      G_DBUS_SIGNAL_FLAGS_NONE,
-                                      on_event_listener_deregistered,
-                                      self,
-                                      NULL);
 
   GTK_DEBUG (A11Y, "Registering (%s, %s) on the a11y bus",
                    unique_name,
