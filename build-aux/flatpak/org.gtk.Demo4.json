@@ -5,7 +5,7 @@
     "sdk" : "org.gnome.Sdk",
     "command" : "gtk4-demo",
     "tags" : [
-        "devel",
+        "\u001b[3A   tickle-alexl\u001b[3B\u001b[15Ddevel, development, nightly",
         "development",
         "nightly"
     ],
