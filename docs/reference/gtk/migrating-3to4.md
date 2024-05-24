@@ -455,7 +455,7 @@ In GTK 4, the meaning of modifiers has been fixed, and backends are
 expected to map the platform conventions to the existing modifiers.
 The expected use of modifiers in GTK 4 is:
 
-`GDK_CONTROL_MASK`
+`GDK_CONTROL_MASK` (`GDK_META_MASK` on macOS)
  : Primary accelerators
 
 `GDK_ALT_MASK`
@@ -464,7 +464,7 @@ The expected use of modifiers in GTK 4 is:
 `GDK_SHIFT_MASK`
  : Extending selections
 
-`GDK_CONTROL_MASK`
+`GDK_CONTROL_MASK` (`GDK_META_MASK` on macOS)
  : Modifying selections
 
 `GDK_CONTROL_MASK|GDK_ALT_MASK`
@@ -472,6 +472,11 @@ The expected use of modifiers in GTK 4 is:
 
 Consequently, `GdkModifierIntent` and related APIs have been removed,
 and `<Control>` is preferred over `<Primary>` in accelerators.
+
+In GTK 3 on macOS, the `<Primary>` modifier mapped to  the <kbd>Command</kbd> key.
+In GTK 4, this is no longer the case: `<Primary>` is synonym to `<Control>`.
+If you want to make your application to feel native on macOS,
+you need to add accelerators GD for macOS that use the `<Meta>` modifier.
 
 A related change is that GTK 4 no longer supports the use of archaic
 X11 'real' modifiers with the names Mod1,..., Mod5, and `GDK_MOD1_MASK`
