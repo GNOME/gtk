@@ -45,6 +45,7 @@
 #define ATSPI_PATH_PREFIX       "/org/a11y/atspi"
 #define ATSPI_ROOT_PATH         ATSPI_PATH_PREFIX "/accessible/root"
 #define ATSPI_CACHE_PATH        ATSPI_PATH_PREFIX "/cache"
+#define ATSPI_REGISTRY_PATH     ATSPI_PATH_PREFIX "/registry"
 
 struct _GtkAtSpiRoot
 {
@@ -71,6 +72,9 @@ struct _GtkAtSpiRoot
   GtkAtSpiCache *cache;
 
   GListModel *toplevels;
+
+  /* HashTable<str, str> */
+  GHashTable *event_listeners;
 };
 
 enum
@@ -90,6 +94,7 @@ gtk_at_spi_root_finalize (GObject *gobject)
   GtkAtSpiRoot *self = GTK_AT_SPI_ROOT (gobject);
 
   g_clear_handle_id (&self->register_id, g_source_remove);
+  g_clear_pointer (&self->event_listeners, g_hash_table_unref);
 
   g_free (self->bus_address);
   g_free (self->base_path);
@@ -541,6 +546,81 @@ on_registration_reply (GObject      *gobject,
   g_free (data);
 }
 
+static void
+on_event_listener_registered (GDBusConnection *connection,
+                              const char *sender_name,
+                              const char *object_path,
+                              const char *interface_name,
+                              const char *signal_name,
+                              GVariant *parameters,
+                              gpointer user_data)
+{
+  GtkAtSpiRoot *self = user_data;
+
+  if (g_strcmp0 (object_path, ATSPI_REGISTRY_PATH) == 0 &&
+      g_strcmp0 (interface_name, "org.a11y.atspi.Registry") == 0 &&
+      g_strcmp0 (signal_name, "EventListenerRegistered") == 0)
+    {
+      char *sender = NULL;
+      char *event_name = NULL;
+      char **event_types = NULL;
+
+      if (self->event_listeners == NULL)
+        self->event_listeners = g_hash_table_new_full (g_str_hash, g_str_equal,
+                                                       g_free,
+                                                       NULL);
+
+      g_variant_get (parameters, "(ssas)", &sender, &event_name, &event_types);
+
+      GTK_DEBUG (A11Y, "Registering event listener (%s, %s) on the a11y bus",
+                 sender,
+                 event_name[0] != 0 ? event_name : "(none)");
+
+      g_hash_table_add (self->event_listeners, sender);
+
+      g_free (event_name);
+      g_strfreev (event_types);
+    }
+}
+
+static void
+on_event_listener_deregistered (GDBusConnection *connection,
+                                const char *sender_name,
+                                const char *object_path,
+                                const char *interface_name,
+                                const char *signal_name,
+                                GVariant *parameters,
+                                gpointer user_data)
+{
+  GtkAtSpiRoot *self = user_data;
+
+  if (g_strcmp0 (object_path, ATSPI_REGISTRY_PATH) == 0 &&
+      g_strcmp0 (interface_name, "org.a11y.atspi.Registry") == 0 &&
+      g_strcmp0 (signal_name, "EventListenerDeregistered") == 0)
+    {
+      const char *sender = NULL;
+      const char *event = NULL;
+
+      if (self->event_listeners == NULL)
+        {
+          g_critical ("Received org.a11y.atspi.Registry::EventListenerDeregistered without "
+                      "a corresponding EventListenerRegistered signal.");
+          return;
+        }
+
+      g_variant_get (parameters, "(&s&s)", &sender, &event);
+
+      if (g_hash_table_contains (self->event_listeners, sender))
+        {
+          GTK_DEBUG (A11Y, "Deregistering event listener (%s, %s) on the a11y bus",
+                     sender,
+                     event[0] != 0 ? event : "(none)");
+
+          g_hash_table_remove (self->event_listeners, sender);
+        }
+    }
+}
+
 static gboolean
 root_register (gpointer user_data)
 {
@@ -586,6 +666,27 @@ root_register (gpointer user_data)
                                      self,
                                      NULL,
                                      NULL);
+
+  g_dbus_connection_signal_subscribe (self->connection,
+                                      "org.a11y.atspi.Registry",
+                                      "org.a11y.atspi.Registry",
+                                      "EventListenerRegistered",
+                                      ATSPI_REGISTRY_PATH,
+                                      NULL,
+                                      G_DBUS_SIGNAL_FLAGS_NONE,
+                                      on_event_listener_registered,
+                                      self,
+                                      NULL);
+  g_dbus_connection_signal_subscribe (self->connection,
+                                      "org.a11y.atspi.Registry",
+                                      "org.a11y.atspi.Registry",
+                                      "EventListenerDeregistered",
+                                      ATSPI_REGISTRY_PATH,
+                                      NULL,
+                                      G_DBUS_SIGNAL_FLAGS_NONE,
+                                      on_event_listener_deregistered,
+                                      self,
+                                      NULL);
 
   GTK_DEBUG (A11Y, "Registering (%s, %s) on the a11y bus",
                    unique_name,
@@ -817,4 +918,13 @@ gtk_at_spi_root_get_base_path (GtkAtSpiRoot *self)
   g_return_val_if_fail (GTK_IS_AT_SPI_ROOT (self), NULL);
 
   return self->base_path;
+}
+
+gboolean
+gtk_at_spi_root_has_event_listeners (GtkAtSpiRoot *self)
+{
+  g_return_val_if_fail (GTK_IS_AT_SPI_ROOT (self), FALSE);
+
+  return self->event_listeners != NULL &&
+         g_hash_table_size (self->event_listeners) != 0;
 }

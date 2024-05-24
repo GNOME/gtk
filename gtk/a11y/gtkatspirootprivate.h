@@ -63,4 +63,7 @@ gtk_at_spi_root_child_changed (GtkAtSpiRoot             *self,
                                GtkAccessibleChildChange  change,
                                GtkAccessible            *child);
 
+gboolean
+gtk_at_spi_root_has_event_listeners (GtkAtSpiRoot *self);
+
 G_END_DECLS
