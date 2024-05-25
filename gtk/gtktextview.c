@@ -10058,6 +10058,8 @@ gtk_text_view_set_input_purpose (GtkTextView     *text_view,
  * @text_view: a `GtkTextView`
  *
  * Gets the `input-purpose` of the `GtkTextView`.
+ *
+ * Returns: the input purpose
  */
 GtkInputPurpose
 gtk_text_view_get_input_purpose (GtkTextView *text_view)
@@ -10106,6 +10108,8 @@ gtk_text_view_set_input_hints (GtkTextView   *text_view,
  * @text_view: a `GtkTextView`
  *
  * Gets the `input-hints` of the `GtkTextView`.
+ *
+ * Returns: the input hints
  */
 GtkInputHints
 gtk_text_view_get_input_hints (GtkTextView *text_view)

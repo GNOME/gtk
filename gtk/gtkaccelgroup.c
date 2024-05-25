@@ -505,6 +505,8 @@ out:
  *
  * If the parse operation fails, @accelerator_key and @accelerator_mods will
  * be set to 0 (zero).
+ *
+ * Returns: whether parsing succeeded
  */
 gboolean
 gtk_accelerator_parse (const char      *accelerator,

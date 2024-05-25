@@ -776,6 +776,8 @@ gtk_scrolled_window_class_init (GtkScrolledWindowClass *class)
    *
    * The horizontal or vertical adjustment is updated which triggers a
    * signal that the scrolled window’s child may listen to and scroll itself.
+   *
+   * Returns: whether the scroll happened
    */
   signals[SCROLL_CHILD] =
     g_signal_new (I_("scroll-child"),

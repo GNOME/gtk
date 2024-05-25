@@ -1231,6 +1231,8 @@ gtk_editable_delegate_get_property (GObject    *object,
  * delegate the %GTK_ACCESSIBLE_ROLE_TEXT_BOX role, or you can
  * change your tree to allow this function to work.
  *
+ * Returns: the accessible platform state of the delegate
+ *
  * Since: 4.10
  */
 gboolean
