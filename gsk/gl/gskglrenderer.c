@@ -41,6 +41,15 @@
 #include <gsk/gskroundedrectprivate.h>
 #include <gsk/gskrectprivate.h>
 
+/**
+ * GskGLRenderer:
+ *
+ * A GL based renderer.
+ *
+ * See [class@Gsk.Renderer].
+ *
+ * Since: 4.2
+ */
 struct _GskGLRendererClass
 {
   GskRendererClass parent_class;
