@@ -368,6 +368,11 @@ gtk_message_dialog_class_init (GtkMessageDialogClass *class)
                                                       GTK_TYPE_MESSAGE_TYPE,
                                                       GTK_MESSAGE_INFO,
                                                       GTK_PARAM_READWRITE|G_PARAM_CONSTRUCT|G_PARAM_EXPLICIT_NOTIFY));
+  /**
+   * GtkMessageDialog:buttons:
+   *
+   * Set of buttons to display on the dialog.
+   */
   g_object_class_install_property (gobject_class,
                                    PROP_BUTTONS,
                                    g_param_spec_enum ("buttons", NULL, NULL,
