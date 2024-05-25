@@ -3675,7 +3675,7 @@ gtk_flow_box_class_init (GtkFlowBoxClass *class)
                           GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkFlwoBox:accept-unpaired-release:
+   * GtkFlowBox:accept-unpaired-release:
    *
    * Whether to accept unpaired release events.
    */
@@ -3835,9 +3835,9 @@ gtk_flow_box_class_init (GtkFlowBoxClass *class)
    *   move by individual children
    * - <kbd>Home</kbd>, <kbd>End</kbd> move to the ends of the box
    * - <kbd>PgUp</kbd>, <kbd>PgDn</kbd> move vertically by pages
-
+   *
    * Returns: %TRUE to stop other handlers from being invoked for the event.
-   * %FALSE to propagate the event further.
+   *   %FALSE to propagate the event further.
    */
   signals[MOVE_CURSOR] = g_signal_new (I_("move-cursor"),
                                        GTK_TYPE_FLOW_BOX,
