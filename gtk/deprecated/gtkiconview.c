@@ -723,6 +723,8 @@ gtk_icon_view_class_init (GtkIconViewClass *klass)
    * programmatically.
    *
    * The default bindings for this signal are Space, Return and Enter.
+   *
+   * Returns: whether the item was activated
    */
   icon_view_signals[ACTIVATE_CURSOR_ITEM] =
     g_signal_new (I_("activate-cursor-item"),
@@ -758,6 +760,8 @@ gtk_icon_view_class_init (GtkIconViewClass *klass)
    * - PageUp/PageDown which move by "pages"
    * All of these will extend the selection when combined with
    * the Shift modifier.
+   *
+   * Returns: whether the cursor was moved
    */
   icon_view_signals[MOVE_CURSOR] =
     g_signal_new (I_("move-cursor"),
