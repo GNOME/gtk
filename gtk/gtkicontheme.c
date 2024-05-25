@@ -2433,7 +2433,7 @@ load_icon_thread (GTask        *task,
  * gtk_icon_theme_lookup_icon:
  * @self: a `GtkIconTheme`
  * @icon_name: the name of the icon to lookup
- * @fallbacks: (nullable) (array zero-terminated=1):
+ * @fallbacks: (nullable) (array zero-terminated=1): fallback names
  * @size: desired icon size, in application pixels
  * @scale: the window scale this will be displayed on
  * @direction: text direction the icon will be displayed in
