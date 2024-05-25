@@ -779,7 +779,7 @@ gtk_print_settings_set_collate (GtkPrintSettings *settings,
  *
  * Gets the value of %GTK_PRINT_SETTINGS_REVERSE.
  *
- * Returns:  whether to reverse the order of the printed pages
+ * Returns: whether to reverse the order of the printed pages
  */
 gboolean
 gtk_print_settings_get_reverse (GtkPrintSettings *settings)
