@@ -271,7 +271,7 @@ gtk_graphics_offload_class_init (GtkGraphicsOffloadClass *class)
                                                 GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   /**
-   * GtkGraphicsOffload:black_background: (attributes org.gtk.Property.get=gtk_graphics_offload_get_black_background org.gtk.Property.set=gtk_graphics_offload_set_black_background)
+   * GtkGraphicsOffload:black-background: (attributes org.gtk.Property.get=gtk_graphics_offload_get_black_background org.gtk.Property.set=gtk_graphics_offload_set_black_background)
    *
    * Whether to draw a black background.
    *
