@@ -1371,6 +1371,8 @@ gdk_event_get_modifier_state (GdkEvent *event)
  * Extract the event surface relative x/y coordinates from an event.
  *
  * This position is in [surface coordinates](coordinates.html).
+ *
+ * Returns: whether the positions were set
  */
 gboolean
 gdk_event_get_position (GdkEvent *event,
