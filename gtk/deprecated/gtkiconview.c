@@ -410,6 +410,11 @@ gtk_icon_view_class_init (GtkIconViewClass *klass)
 						     -1, G_MAXINT, -1,
 						     GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
+  /**
+   * GtkIconView:model:
+   *
+   * The model of the icon view.
+   */
   g_object_class_install_property (gobject_class,
                                    PROP_MODEL,
                                    g_param_spec_object ("model", NULL, NULL,
@@ -516,6 +521,12 @@ gtk_icon_view_class_init (GtkIconViewClass *klass)
 							 FALSE,
 							 G_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
+    /**
+     * GtkIconView:tooltip-column:
+     *
+     * The column of the icon view model which is being used for displaying
+     * tooltips on it's rows.
+     */
     g_object_class_install_property (gobject_class,
                                      PROP_TOOLTIP_COLUMN,
                                      g_param_spec_int ("tooltip-column", NULL, NULL,
