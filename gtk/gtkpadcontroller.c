@@ -366,10 +366,20 @@ gtk_pad_controller_class_init (GtkPadControllerClass *klass)
   object_class->dispose = gtk_pad_controller_dispose;
   object_class->finalize = gtk_pad_controller_finalize;
 
+  /**
+   * GtkPadController:action-group:
+   *
+   * The action group of the controller.
+   */
   pspecs[PROP_ACTION_GROUP] =
     g_param_spec_object ("action-group", NULL, NULL,
                          G_TYPE_ACTION_GROUP,
                          GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY);
+  /**
+   * GtkPadController:pad:
+   *
+   * The pad of the controller.
+   */
   pspecs[PROP_PAD] =
     g_param_spec_object ("pad", NULL, NULL,
                          GDK_TYPE_DEVICE,
