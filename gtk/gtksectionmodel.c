@@ -188,7 +188,7 @@ gtk_list_model_get_section (GListModel *self,
 }
 
 /**
- * gtk_section_model_section_changed:
+ * gtk_section_model_sections_changed:
  * @self: a `GtkSectionModel`
  * @position: the first changed item
  * @n_items: the number of changed items
