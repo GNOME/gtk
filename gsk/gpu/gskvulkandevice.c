@@ -80,6 +80,7 @@ struct _PipelineCacheKey
   GskGpuShaderClip clip;
   GskGpuBlend blend;
   VkFormat format;
+  VkPipeline pipeline;
 };
 
 struct _RenderPassCacheKey
@@ -87,6 +88,7 @@ struct _RenderPassCacheKey
   VkFormat format;
   VkImageLayout from_layout;
   VkImageLayout to_layout;
+  VkRenderPass render_pass;
 };
 
 static guint
@@ -296,8 +298,10 @@ gsk_vulkan_pipeline_layout_unref (GskVulkanDevice         *self,
   g_hash_table_iter_init (&iter, layout->pipeline_cache);
   while (g_hash_table_iter_next (&iter, &key, &value))
     {
+      vkDestroyPipeline (display->vk_device,
+                         ((PipelineCacheKey *)key)->pipeline,
+                         NULL);
       g_free (key);
-      vkDestroyPipeline (display->vk_device, value, NULL);
     }
   g_hash_table_unref (layout->pipeline_cache);
 
@@ -462,8 +466,10 @@ gsk_vulkan_device_finalize (GObject *object)
   g_hash_table_iter_init (&iter, self->render_pass_cache);
   while (g_hash_table_iter_next (&iter, &key, &value))
     {
+      vkDestroyRenderPass (display->vk_device,
+                           ((RenderPassCacheKey *)key)->render_pass,
+                           NULL);
       g_free (key);
-      vkDestroyRenderPass (display->vk_device, value, NULL);
     }
   g_hash_table_unref (self->render_pass_cache);
 
@@ -823,6 +829,7 @@ gsk_vulkan_device_get_vk_render_pass (GskVulkanDevice *self,
                                       VkImageLayout    to_layout)
 {
   RenderPassCacheKey cache_key;
+  RenderPassCacheKey *cached_result;
   VkRenderPass render_pass;
   GdkDisplay *display;
 
@@ -831,9 +838,9 @@ gsk_vulkan_device_get_vk_render_pass (GskVulkanDevice *self,
     .from_layout = from_layout,
     .to_layout = to_layout,
   };
-  render_pass = g_hash_table_lookup (self->render_pass_cache, &cache_key);
-  if (render_pass)
-    return render_pass;
+  cached_result = g_hash_table_lookup (self->render_pass_cache, &cache_key);
+  if (cached_result)
+    return cached_result->render_pass;
 
   display = gsk_gpu_device_get_display (GSK_GPU_DEVICE (self));
 
@@ -877,7 +884,10 @@ gsk_vulkan_device_get_vk_render_pass (GskVulkanDevice *self,
                                       NULL,
                                       &render_pass);
 
-  g_hash_table_insert (self->render_pass_cache, g_memdup (&cache_key, sizeof (RenderPassCacheKey)), render_pass);
+  cached_result = g_memdup (&cache_key, sizeof (RenderPassCacheKey));
+  cached_result->render_pass = render_pass;
+
+  g_hash_table_insert (self->render_pass_cache, cached_result, cached_result);
 
   return render_pass;
 }
@@ -945,6 +955,7 @@ gsk_vulkan_device_get_vk_pipeline (GskVulkanDevice           *self,
                                    VkRenderPass               render_pass)
 {
   PipelineCacheKey cache_key;
+  PipelineCacheKey *cached_result;
   VkPipeline pipeline;
   GdkDisplay *display;
   const char *version_string;
@@ -957,9 +968,9 @@ gsk_vulkan_device_get_vk_pipeline (GskVulkanDevice           *self,
     .blend = blend,
     .format = format,
   };
-  pipeline = g_hash_table_lookup (layout->pipeline_cache, &cache_key);
-  if (pipeline)
-    return pipeline;
+  cached_result = g_hash_table_lookup (layout->pipeline_cache, &cache_key);
+  if (cached_result)
+    return cached_result->pipeline;
 
   display = gsk_gpu_device_get_display (GSK_GPU_DEVICE (self));
   if (gsk_vulkan_device_has_feature (self, GDK_VULKAN_FEATURE_DYNAMIC_INDEXING) &&
@@ -1128,7 +1139,9 @@ gsk_vulkan_device_get_vk_pipeline (GskVulkanDevice           *self,
   g_free (fragment_shader_name);
   g_free (vertex_shader_name);
 
-  g_hash_table_insert (layout->pipeline_cache, g_memdup (&cache_key, sizeof (PipelineCacheKey)), pipeline);
+  cached_result = g_memdup (&cache_key, sizeof (PipelineCacheKey));
+  cached_result->pipeline = pipeline;
+  g_hash_table_insert (layout->pipeline_cache, cached_result, cached_result);
   gdk_display_vulkan_pipeline_cache_updated (display);
 
   return pipeline;
