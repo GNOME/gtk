@@ -257,3 +257,6 @@ name = "StyleProvider"
   [[object.signal]]
   name = "gtk-private-changed"
   hidden = true
+
+[check]
+skip_deprecated = true
