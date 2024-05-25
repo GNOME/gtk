@@ -1859,8 +1859,9 @@ gdk_display_unref_vulkan (GdkDisplay *display)
     {
       g_free (key);
       vkDestroyShaderModule (display->vk_device,
-                             value,
+                             *((VkShaderModule *)value),
                              NULL);
+      g_free (value);
     }
   g_hash_table_unref (display->vk_shader_modules);
 
@@ -1988,13 +1989,13 @@ VkShaderModule
 gdk_display_get_vk_shader_module (GdkDisplay *self,
                                   const char *resource_name)
 {
-  VkShaderModule shader;
+  VkShaderModule *shader;
   GError *error = NULL;
   GBytes *bytes;
 
   shader = g_hash_table_lookup (self->vk_shader_modules, resource_name);
   if (shader)
-    return shader;
+    return *shader;
 
   bytes = g_resources_lookup_data (resource_name, 0, &error);
   if (bytes == NULL)
@@ -2004,6 +2005,7 @@ gdk_display_get_vk_shader_module (GdkDisplay *self,
       return VK_NULL_HANDLE;
     }
 
+  shader = g_new0 (VkShaderModule, 1);
   if (GDK_VK_CHECK (vkCreateShaderModule, self->vk_device,
                                           &(VkShaderModuleCreateInfo) {
                                               .sType = VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO,
@@ -2011,18 +2013,20 @@ gdk_display_get_vk_shader_module (GdkDisplay *self,
                                               .pCode = (uint32_t *) g_bytes_get_data (bytes, NULL),
                                           },
                                           NULL,
-                                          &shader) == VK_SUCCESS)
+                                          shader) == VK_SUCCESS)
     {
       g_hash_table_insert (self->vk_shader_modules, g_strdup (resource_name), shader);
     }
   else
     {
-      shader = VK_NULL_HANDLE;
+      g_free (shader);
+
+      return VK_NULL_HANDLE;
     }
 
   g_bytes_unref (bytes);
 
-  return shader;
+  return *shader;
 }
 
 #else /* GDK_RENDERING_VULKAN */
