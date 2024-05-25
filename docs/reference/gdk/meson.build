@@ -29,6 +29,18 @@ if get_option('documentation')
     install_dir: docs_dir,
   )
 
+  test('doc-check-gdk',
+    gidocgen,
+    args: [
+      'check',
+      '--config', gdk4_toml,
+      '--add-include-path=@0@'.format(meson.current_build_dir() / '../../../gtk'),
+      gdk_gir[0],
+    ],
+    depends: gdk_gir[0],
+    suite: ['docs'],
+  )
+
   if x11_enabled
     gdk4x11_toml = configure_file(
       input: 'gdk4-x11.toml.in',
@@ -86,6 +98,18 @@ if get_option('documentation')
       build_by_default: true,
       install: true,
       install_dir: docs_dir,
+    )
+
+    test('doc-check-gdk-wayland',
+      gidocgen,
+      args: [
+        'check',
+        '--config', gdk4wayland_toml,
+        '--add-include-path=@0@'.format(meson.current_build_dir() / '../../../gtk'),
+        gdk_wayland_gir[0],
+      ],
+      depends: gdk_wayland_gir[0],
+      suite: ['docs'],
     )
   endif
 endif

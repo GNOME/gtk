@@ -30,4 +30,16 @@ if get_option('documentation')
     install: true,
     install_dir: docs_dir,
   )
+
+  test('doc-check-gsk',
+    gidocgen,
+    args: [
+      'check',
+      '--config', gsk4_toml,
+      '--add-include-path=@0@'.format(meson.current_build_dir() / '../../../gtk'),
+      gsk_gir[0],
+    ],
+    depends: gsk_gir[0],
+    suite: ['docs'],
+  )
 endif
