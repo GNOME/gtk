@@ -118,9 +118,12 @@ typedef enum
 
 /**
  * GdkTitlebarGesture:
- * @GDK_TITLEBAR_GESTURE_DOUBLE_CLICK:
- * @GDK_TITLEBAR_GESTURE_RIGHT_CLICK:
- * @GDK_TITLEBAR_GESTURE_MIDDLE_CLICK:
+ * @GDK_TITLEBAR_GESTURE_DOUBLE_CLICK: double click gesture
+ * @GDK_TITLEBAR_GESTURE_RIGHT_CLICK: right click gesture
+ * @GDK_TITLEBAR_GESTURE_MIDDLE_CLICK: middle click gesture
+ *
+ * The kind of title bar gesture to emit with
+ * [method@Gdk.Toplevel.titlebar_gesture].
  *
  * Since: 4.4
  */
