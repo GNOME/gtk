@@ -48,6 +48,13 @@
 
 #include <gobject/gvaluecollector.h>
 
+/**
+ * gsk_serialization_error_quark:
+ *
+ * Registers an error quark for [class@Gsk.RenderNode] errors.
+ *
+ * Returns: the error quark
+ **/
 G_DEFINE_QUARK (gsk-serialization-error-quark, gsk_serialization_error)
 
 #define GSK_RENDER_NODE_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GSK_TYPE_RENDER_NODE, GskRenderNodeClass))
