@@ -2953,6 +2953,13 @@ gtk_builder_get_type_from_name (GtkBuilder  *builder,
   return type;
 }
 
+/**
+ * gtk_builder_error_quark:
+ *
+ * Registers an error quark for [class@Gtk.Builder] errors.
+ *
+ * Returns: the error quark
+ **/
 GQuark
 gtk_builder_error_quark (void)
 {

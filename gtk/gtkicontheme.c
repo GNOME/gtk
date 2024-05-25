@@ -2526,7 +2526,13 @@ gtk_icon_theme_lookup_icon (GtkIconTheme       *self,
   return icon;
 }
 
-/* Error quark */
+/**
+ * gtk_icon_theme_error_quark:
+ *
+ * Registers an error quark for [class@Gtk.IconTheme] errors.
+ *
+ * Returns: the error quark
+ **/
 GQuark
 gtk_icon_theme_error_quark (void)
 {
