@@ -68,7 +68,7 @@
  *
  * A widget that displays the contents of a [class@Gtk.TextBuffer].
  *
- * ![An example GtkTextview](multiline-text.png)
+ * ![An example GtkTextView](multiline-text.png)
  *
  * You may wish to begin by reading the [conceptual overview](section-text-widget.html),
  * which gives an overview of all the objects and data types related to the
@@ -883,7 +883,7 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
    */
 
   /**
-   * GtkTextview:pixels-above-lines: (attributes org.gtk.Property.get=gtk_text_view_get_pixels_above_lines org.gtk.Property.set=gtk_text_view_set_pixels_above_lines)
+   * GtkTextView:pixels-above-lines: (attributes org.gtk.Property.get=gtk_text_view_get_pixels_above_lines org.gtk.Property.set=gtk_text_view_set_pixels_above_lines)
    *
    * Pixels of blank space above paragraphs.
    */
@@ -894,7 +894,7 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
                                                      GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   /**
-   * GtkTextview:pixels-below-lines: (attributes org.gtk.Property.get=gtk_text_view_get_pixels_below_lines org.gtk.Property.set=gtk_text_view_set_pixels_below_lines)
+   * GtkTextView:pixels-below-lines: (attributes org.gtk.Property.get=gtk_text_view_get_pixels_below_lines org.gtk.Property.set=gtk_text_view_set_pixels_below_lines)
    *
    * Pixels of blank space below paragraphs.
    */
@@ -905,7 +905,7 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
                                                      GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   /**
-   * GtkTextview:pixels-inside-wrap: (attributes org.gtk.Property.get=gtk_text_view_get_pixels_inside_wrap org.gtk.Property.set=gtk_text_view_set_pixels_inside_wrap)
+   * GtkTextView:pixels-inside-wrap: (attributes org.gtk.Property.get=gtk_text_view_get_pixels_inside_wrap org.gtk.Property.set=gtk_text_view_set_pixels_inside_wrap)
    *
    * Pixels of blank space between wrapped lines in a paragraph.
    */
@@ -916,7 +916,7 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
                                                      GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   /**
-   * GtkTextview:editable: (attributes org.gtk.Property.get=gtk_text_view_get_editable org.gtk.Property.set=gtk_text_view_set_editable)
+   * GtkTextView:editable: (attributes org.gtk.Property.get=gtk_text_view_get_editable org.gtk.Property.set=gtk_text_view_set_editable)
    *
    * Whether the text can be modified by the user.
    */
@@ -927,7 +927,7 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
                                                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   /**
-   * GtkTextview:wrap-mode: (attributes org.gtk.Property.get=gtk_text_view_get_wrap_mode org.gtk.Property.set=gtk_text_view_set_wrap_mode)
+   * GtkTextView:wrap-mode: (attributes org.gtk.Property.get=gtk_text_view_get_wrap_mode org.gtk.Property.set=gtk_text_view_set_wrap_mode)
    *
    * Whether to wrap lines never, at word boundaries, or at character boundaries.
    */
@@ -939,7 +939,7 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
                                                       GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   /**
-   * GtkTextview:justification: (attributes org.gtk.Property.get=gtk_text_view_get_justification org.gtk.Property.set=gtk_text_view_set_justification)
+   * GtkTextView:justification: (attributes org.gtk.Property.get=gtk_text_view_get_justification org.gtk.Property.set=gtk_text_view_set_justification)
    *
    * Left, right, or center justification.
    */
@@ -1035,7 +1035,7 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
                                                      GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   /**
-   * GtkTextview:tabs: (attributes org.gtk.Property.get=gtk_text_view_get_tabs org.gtk.Property.set=gtk_text_view_set_tabs)
+   * GtkTextView:tabs: (attributes org.gtk.Property.get=gtk_text_view_get_tabs org.gtk.Property.set=gtk_text_view_set_tabs)
    *
    * Custom tabs for this text.
    */
