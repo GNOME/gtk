@@ -514,6 +514,8 @@ gtk_string_list_class_init (GtkStringListClass *class)
   /**
    * GtkStringList:strings:
    *
+   * The strings in the model.
+   *
    * Since: 4.10
    */
   properties[PROP_STRINGS] =
