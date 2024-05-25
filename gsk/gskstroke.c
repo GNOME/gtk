@@ -354,6 +354,8 @@ gsk_stroke_set_miter_limit (GskStroke  *self,
  *
  * Returns the miter limit of a `GskStroke`.
  *
+ * Returns: the miter limit
+ *
  * Since: 4.14
  */
 float
@@ -477,6 +479,8 @@ gsk_stroke_set_dash_offset (GskStroke *self,
  * @self: a `GskStroke`
  *
  * Returns the dash_offset of a `GskStroke`.
+ *
+ * Returns: the dash_offset
  *
  * Since: 4.14
  */
