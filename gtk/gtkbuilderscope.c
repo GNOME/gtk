@@ -434,11 +434,10 @@ gtk_builder_cscope_new (void)
 
 /**
  * gtk_builder_cscope_add_callback:
- * @self: a `GtkBuilderCScope`
- * @callback_symbols: (scope async): The callback pointer
+ * @scope: a `GtkBuilderCScope`
+ * @callback: (scope async): The callback pointer
  *
- * Adds the @callback_symbol to the scope of @builder under its
- * own name.
+ * Adds the @callback to the scope of @builder under its own name.
  *
  * This is a convenience wrapper of [method@Gtk.BuilderCScope.add_callback_symbol].
  *
