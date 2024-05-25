@@ -32,6 +32,15 @@ typedef struct _GtkPrintSettings GtkPrintSettings;
 #define GTK_PRINT_SETTINGS(obj)    (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_PRINT_SETTINGS, GtkPrintSettings))
 #define GTK_IS_PRINT_SETTINGS(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_PRINT_SETTINGS))
 
+/**
+ * GtkPrintSettingsFunc:
+ * @key: the setting key
+ * @value: the setting value
+ * @user_data: (closure): The user data provided with the function
+ *
+ * Function called by [method@Gtk.PrintSettings.foreach] on every key/value pair
+ * inside a [class@Gtk.PrintSettings].
+ */
 typedef void  (*GtkPrintSettingsFunc)  (const char *key,
 					const char *value,
 					gpointer     user_data);
