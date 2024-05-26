@@ -51,8 +51,10 @@ cocoa_dep = dependency('appleframeworks', modules : 'Cocoa', required : true)
 carbon_dep = dependency('appleframeworks', modules : 'Carbon', required : true)
 quartzcore_dep = dependency('appleframeworks', modules : 'QuartzCore', required : true)
 iosurface_dep = dependency('appleframeworks', modules: 'IOSurface', required: true)
+utident_dep = dependency('appleframeworks', modules: 'UniformTypeIdentifiers', required: true)
 
 gdk_quartz_deps = [ core_graphics_dep, appkit_dep, cocoa_dep, carbon_dep, quartzcore_dep, iosurface_dep ]
+gdk_quartz_deps += [ utident_dep ]
 
 libgdk_quartz = static_library('gdk-quartz',
   gdk_quartz_sources, gdkconfig, gdkenum_h,
