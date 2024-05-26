@@ -1388,6 +1388,35 @@ usv_offset_to_text_position (GtkAccessKitTextLayout  *layout,
 }
 
 static void
+text_view_mark_to_text_position (GtkAccessKitContext     *self,
+                                 GtkTextView             *text_view,
+                                 GtkTextMark             *mark,
+                                 accesskit_text_position *pos)
+{
+  GtkTextBuffer *buffer = gtk_text_view_get_buffer (text_view);
+  GtkTextLayout *layout = gtk_text_view_get_layout (text_view);
+  GtkTextIter iter;
+  GtkTextLine *line;
+  GtkAccessKitTextLayout *line_layout;
+  GtkTextLineDisplay *display;
+
+  gtk_text_buffer_get_iter_at_mark (buffer, &iter, mark);
+  line = _gtk_text_iter_get_text_line (&iter);
+
+  g_assert (self->text_view_lines);
+  line_layout = g_hash_table_lookup (self->text_view_lines, line);
+  g_assert (line_layout);
+  g_assert (line_layout->children);
+
+  display = gtk_text_layout_get_line_display (layout, line, FALSE);
+
+  usv_offset_to_text_position (line_layout, display->layout,
+                               gtk_text_iter_get_line_offset (&iter), pos);
+
+  gtk_text_line_display_unref (display);
+}
+
+static void
 destroy_text_view_lines_value (gpointer data)
 {
   GtkAccessKitTextLayout *layout = data;
@@ -1777,7 +1806,22 @@ gtk_accesskit_context_add_to_update (GtkAccessKitContext   *self,
         }
     }
 
-  if (GTK_IS_EDITABLE (accessible) && role != ACCESSKIT_ROLE_GENERIC_CONTAINER)
+  if (GTK_IS_TEXT_VIEW (accessible))
+    {
+      GtkTextView *text_view = GTK_TEXT_VIEW (accessible);
+      GtkTextBuffer *buffer = gtk_text_view_get_buffer (text_view);
+      GtkTextMark *anchor_mark = gtk_text_buffer_get_selection_bound (buffer);
+      GtkTextMark *focus_mark = gtk_text_buffer_get_insert (buffer);
+      accesskit_text_selection selection;
+
+      text_view_mark_to_text_position (self, text_view, anchor_mark,
+                                       &selection.anchor);
+      text_view_mark_to_text_position (self, text_view, focus_mark,
+                                       &selection.focus);
+      accesskit_node_builder_set_text_selection (builder, selection);
+    }
+  else if (GTK_IS_EDITABLE (accessible) &&
+           role != ACCESSKIT_ROLE_GENERIC_CONTAINER)
     {
       GtkText *text = gtk_editable_get_text_widget (GTK_EDITABLE (accessible));
 
