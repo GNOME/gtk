@@ -164,9 +164,23 @@ gtk_accesskit_context_platform_change (GtkATContext                *ctx,
 }
 
 static void
+invalidate_text_view_line_layout (gpointer key,
+                                  gpointer value,
+                                  gpointer user_data)
+{
+  GtkAccessKitTextLayout *layout = value;
+  g_clear_pointer (&layout->children, g_array_unref);
+}
+
+static void
 gtk_accesskit_context_bounds_change (GtkATContext *ctx)
 {
   GtkAccessKitContext *self = GTK_ACCESSKIT_CONTEXT (ctx);
+
+  g_clear_pointer (&self->single_text_layout.children, g_array_unref);
+  if (self->text_view_lines)
+    g_hash_table_foreach (self->text_view_lines,
+                          invalidate_text_view_line_layout, NULL);
 
   queue_update (self, FALSE);
 }
