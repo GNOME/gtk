@@ -399,10 +399,16 @@ add_to_update_queue (GtkAccessKitRoot *self, guint id, gboolean force_to_end)
 }
 
 guint32
+gtk_accesskit_root_new_id (GtkAccessKitRoot *self)
+{
+  return ++self->next_id;
+}
+
+guint32
 gtk_accesskit_root_add_context (GtkAccessKitRoot    *self,
                                 GtkAccessKitContext *context)
 {
-  guint32 id = ++self->next_id;
+  guint32 id = gtk_accesskit_root_new_id (self);
   g_hash_table_insert (self->contexts, GUINT_TO_POINTER (id), context);
 
   if (self->did_initial_update)

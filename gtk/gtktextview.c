@@ -8251,6 +8251,15 @@ gtk_text_view_ensure_layout (GtkTextView *text_view)
     }
 }
 
+GtkTextLayout *
+gtk_text_view_get_layout (GtkTextView *text_view)
+{
+  GtkTextViewPrivate *priv = text_view->priv;
+
+  gtk_text_view_ensure_layout (text_view);
+  return priv->layout;
+}
+
 GtkTextAttributes*
 gtk_text_view_get_default_attributes (GtkTextView *text_view)
 {

@@ -36,6 +36,9 @@
 #include "gtkscrolledwindow.h"
 #include "gtkstack.h"
 #include "gtktextview.h"
+#include "gtktextviewprivate.h"
+#include "gtktextbufferprivate.h"
+#include "gtktextiterprivate.h"
 #include "gtktypebuiltins.h"
 #include "gtkwindow.h"
 
@@ -46,6 +49,14 @@
 #include "print/gtkprinteroptionwidgetprivate.h"
 
 #include <locale.h>
+
+typedef struct _GtkAccessKitTextLayout
+{
+  guint32 id;
+  double offset_x;
+  double offset_y;
+  GArray *children;
+} GtkAccessKitTextLayout;
 
 struct _GtkAccessKitContext
 {
@@ -63,10 +74,8 @@ struct _GtkAccessKitContext
         a given context. */
   guint32 id;
 
-  double text_layout_x;
-  double text_layout_y;
-  guint text_layout_serial;
-  GArray *text_layout_children;
+  GtkAccessKitTextLayout single_text_layout;
+  GHashTable *text_view_lines;
 };
 
 G_DEFINE_TYPE (GtkAccessKitContext, gtk_accesskit_context, GTK_TYPE_AT_CONTEXT)
@@ -77,7 +86,8 @@ gtk_accesskit_context_finalize (GObject *gobject)
   GtkAccessKitContext *self = GTK_ACCESSKIT_CONTEXT (gobject);
 
   g_clear_object (&self->root);
-  g_clear_pointer (&self->text_layout_children, g_array_unref);
+  g_clear_pointer (&self->single_text_layout.children, g_array_unref);
+  g_clear_pointer (&self->text_view_lines, g_hash_table_destroy);
 
   G_OBJECT_CLASS (gtk_accesskit_context_parent_class)->finalize (gobject);
 }
@@ -117,8 +127,8 @@ gtk_accesskit_context_unrealize (GtkATContext *context)
   gtk_accesskit_root_remove_context (self->root, self->id);
 
   g_clear_object (&self->root);
-  self->text_layout_serial = 0;
-  g_clear_pointer (&self->text_layout_children, g_array_unref);
+  g_clear_pointer (&self->single_text_layout.children, g_array_unref);
+  g_clear_pointer (&self->text_view_lines, g_hash_table_destroy);
 }
 
 static void
@@ -239,20 +249,51 @@ gtk_accesskit_context_update_selection_bound (GtkATContext *ctx)
 static void
 gtk_accesskit_context_update_text_contents (GtkATContext *ctx,
                                             GtkAccessibleTextContentChange change,
-                                            unsigned int start,
-                                            unsigned int end)
+                                            unsigned int start_offset,
+                                            unsigned int end_offset)
 {
   GtkAccessKitContext *self = GTK_ACCESSKIT_CONTEXT (ctx);
+  GtkAccessible *accessible = gtk_at_context_get_accessible (ctx);
 
-  /* Force layout invalidation here. This is necessary because GtkText
-     keeps recreating the layout, so the serial number ends up the same
-     whenever text changes. */
-  self->text_layout_serial = 0;
+  g_clear_pointer (&self->single_text_layout.children, g_array_unref);
+
+  if (GTK_IS_TEXT_VIEW (accessible) && self->text_view_lines)
+    {
+      GtkTextView *text_view = GTK_TEXT_VIEW (accessible);
+      GtkTextBuffer *buffer = gtk_text_view_get_buffer (text_view);
+      GtkTextIter current, end;
+
+      gtk_text_buffer_get_iter_at_offset (buffer, &current, start_offset);
+      gtk_text_buffer_get_iter_at_offset (buffer, &end, end_offset);
+
+      do
+        {
+          GtkTextLine *line = _gtk_text_iter_get_text_line (&current);
+          GtkAccessKitTextLayout *layout =
+            g_hash_table_lookup (self->text_view_lines, line);
+
+          if (layout)
+            {
+              if (change == GTK_ACCESSIBLE_TEXT_CONTENT_CHANGE_REMOVE &&
+                  gtk_text_iter_get_line_offset (&current) == 0 &&
+                  (gtk_text_iter_get_offset (&current) +
+                   gtk_text_iter_get_chars_in_line (&current)) <= end_offset)
+                g_hash_table_remove (self->text_view_lines, line);
+              else
+                g_clear_pointer (&layout->children, g_array_unref);
+            }
+
+          if (gtk_text_iter_compare (&current, &end) == 0)
+            break;
+          gtk_text_iter_forward_line (&current);
+        }
+      while (gtk_text_iter_compare (&current, &end) <= 0);
+    }
+
+  /* TODO: other text widget types */
 
   queue_update (self, FALSE);
   queue_update_on_editable_ancestor (self);
-
-  /* TODO? */
 }
 
 static void
@@ -881,37 +922,37 @@ set_multi_relation (GtkATContext           *ctx,
 
 static void
 set_bounds_from_pango (accesskit_node_builder *builder,
-                       double                 base_x,
-                       double                 base_y,
-                       PangoRectangle         *pango_rect)
+                       PangoRectangle         *pango_rect,
+                       double                  offset_x,
+                       double                  offset_y)
 {
   accesskit_rect rect;
 
-  rect.x0 = base_x + (double)(pango_rect->x) / PANGO_SCALE;
-  rect.y0 = base_y + (double)(pango_rect->y) / PANGO_SCALE;
-  rect.x1 = base_x + (double)(pango_rect->x + pango_rect->width) / PANGO_SCALE;
-  rect.y1 = base_y + (double)(pango_rect->y + pango_rect->height) / PANGO_SCALE;
+  rect.x0 = offset_x + (double)(pango_rect->x) / PANGO_SCALE;
+  rect.y0 = offset_y + (double)(pango_rect->y) / PANGO_SCALE;
+  rect.x1 = offset_x + (double)(pango_rect->x + pango_rect->width) / PANGO_SCALE;
+  rect.y1 = offset_y + (double)(pango_rect->y + pango_rect->height) / PANGO_SCALE;
   accesskit_node_builder_set_bounds (builder, rect);
 }
 
 static accesskit_node_id
-run_node_id (GtkAccessKitContext *self,
-             gint                 start_index)
+run_node_id (GtkAccessKitTextLayout *layout,
+             gint                    start_index)
 {
-  return ((accesskit_node_id)self->id << 32) | start_index;
+  return ((accesskit_node_id)layout->id << 32) | start_index;
 }
 
 static void
-add_run_node (GtkAccessKitContext    *self,
+add_run_node (GtkAccessKitTextLayout *layout,
               accesskit_tree_update  *update,
               gint                    start_index,
               accesskit_node_builder *builder)
 {
-  accesskit_node_id id = run_node_id (self, start_index);
+  accesskit_node_id id = run_node_id (layout, start_index);
   accesskit_node *node = accesskit_node_builder_build (builder);
 
   accesskit_tree_update_push_node (update, id, node);
-  g_array_append_val (self->text_layout_children, id);
+  g_array_append_val (layout->children, id);
 }
 
 typedef struct _GtkAccessKitRunInfo
@@ -936,16 +977,17 @@ compare_run_info (gconstpointer a, gconstpointer b)
 }
 
 static void
-add_text_layout_inner (GtkAccessKitContext   *self,
-                       accesskit_tree_update *update,
-                       PangoLayout           *layout,
-                       double                 base_x,
-                       double                 base_y)
+add_text_layout_inner (GtkAccessKitTextLayout *layout,
+                       accesskit_tree_update  *update,
+                       PangoLayout            *pango_layout,
+                       const char             *end_delimiter,
+                       double                  offset_x,
+                       double                  offset_y)
 {
-  const char *text = pango_layout_get_text (layout);
+  const char *text = pango_layout_get_text (pango_layout);
   const PangoLogAttr *log_attrs =
-    pango_layout_get_log_attrs_readonly (layout, NULL);
-  PangoLayoutIter *iter = pango_layout_get_iter (layout);
+    pango_layout_get_log_attrs_readonly (pango_layout, NULL);
+  PangoLayoutIter *iter = pango_layout_get_iter (pango_layout);
   GArray *line_runs = NULL;
   guint usv_offset = 0, byte_offset = 0;
 
@@ -1024,12 +1066,12 @@ add_text_layout_inner (GtkAccessKitContext   *self,
                   if (i > 0)
                     {
                       accesskit_node_id id =
-                        run_node_id (self, prev_run_usv_offset);
+                        run_node_id (layout, prev_run_usv_offset);
                       accesskit_node_builder_set_previous_on_line (builder, id);
                     }
 
-                  set_bounds_from_pango (builder, base_x, base_y,
-                                         &run_info->extents);
+                  set_bounds_from_pango (builder, &run_info->extents, offset_x,
+                                         offset_y);
 
                   if (i == (line_runs->len - 1))
                     node_text_byte_count =
@@ -1038,6 +1080,16 @@ add_text_layout_inner (GtkAccessKitContext   *self,
                     node_text_byte_count = item->length;
                   node_text = g_strndup (text + item->offset,
                                          node_text_byte_count);
+
+                  if (i == (line_runs->len - 1) && !next_line && end_delimiter)
+                    {
+                      gchar *new_text = g_strconcat (node_text, end_delimiter,
+                                                     NULL);
+                      node_text_byte_count += strlen (end_delimiter);
+                      g_free (node_text);
+                      node_text = new_text;
+                    }
+
                   accesskit_node_builder_set_value (builder, node_text);
 
                   /* The following logic for determining the run's direction
@@ -1057,16 +1109,6 @@ add_text_layout_inner (GtkAccessKitContext   *self,
                       guint char_start_byte_offset = byte_offset;
                       uint8_t char_len;
 
-                      if (log_attrs[usv_offset].is_word_start &&
-                          (char_count > last_word_start_char_offset))
-                        {
-                          uint8_t word_len =
-                            char_count - last_word_start_char_offset;
-
-                          g_array_append_val (word_lengths, word_len);
-                          last_word_start_char_offset = char_count;
-                        }
-
                       if (byte_offset >= (item->offset + item->length))
                         {
                           float width = 0.0f;
@@ -1082,6 +1124,16 @@ add_text_layout_inner (GtkAccessKitContext   *self,
                       else
                         {
                           float width = 0.0f;
+
+                          if (log_attrs[usv_offset].is_word_start &&
+                              (char_count > last_word_start_char_offset))
+                            {
+                              uint8_t word_len =
+                                char_count - last_word_start_char_offset;
+
+                              g_array_append_val (word_lengths, word_len);
+                              last_word_start_char_offset = char_count;
+                            }
 
                           do
                             {
@@ -1131,11 +1183,11 @@ add_text_layout_inner (GtkAccessKitContext   *self,
 
                   if (i < (line_runs->len - 1))
                     {
-                      accesskit_node_id id = run_node_id (self, usv_offset);
+                      accesskit_node_id id = run_node_id (layout, usv_offset);
                       accesskit_node_builder_set_next_on_line (builder, id);
                     }
 
-                  add_run_node (self, update, run_start_usv_offset, builder);
+                  add_run_node (layout, update, run_start_usv_offset, builder);
                   prev_run_usv_offset = run_start_usv_offset;
                   g_free (node_text);
                   g_free (log_widths);
@@ -1150,12 +1202,21 @@ add_text_layout_inner (GtkAccessKitContext   *self,
               uint8_t char_len = line_end_byte_offset - line->start_index;
               gchar *line_text = g_strndup (text + line->start_index, char_len);
               accesskit_text_direction dir;
-              uint8_t char_count = char_len ? 1 : 0;
+              uint8_t char_count;
               float coord = 0.0f;
 
               g_assert (byte_offset == line->start_index);
 
-              set_bounds_from_pango (builder, base_x, base_y, &extents);
+              set_bounds_from_pango (builder, &extents, offset_x, offset_y);
+
+              if (!next_line && end_delimiter)
+                {
+                  gchar *new_text = g_strconcat (line_text, end_delimiter, NULL);
+                  char_len += strlen (end_delimiter);
+                  g_free (line_text);
+                  line_text = new_text;
+                }
+              char_count = char_len ? 1 : 0;
               accesskit_node_builder_set_value (builder, line_text);
 
               switch (pango_layout_line_get_resolved_direction (line))
@@ -1181,8 +1242,8 @@ add_text_layout_inner (GtkAccessKitContext   *self,
               accesskit_node_builder_set_character_widths (builder, char_count,
                                                            &coord);
 
-              add_run_node (self, update, usv_offset, builder);
-              byte_offset = line_end_byte_offset;
+              add_run_node (layout, update, usv_offset, builder);
+              byte_offset += char_len;
               usv_offset += g_utf8_strlen (line_text, char_len);
               g_free (line_text);
             }
@@ -1195,34 +1256,71 @@ add_text_layout_inner (GtkAccessKitContext   *self,
   /* Iteration should always end with a null run, and processing that null run
      should dispose of line_runs (see above). */
   g_assert (!line_runs);
+
+  pango_layout_iter_free (iter);
 }
 
 static void
-add_text_layout (GtkAccessKitContext    *self,
+add_text_layout (GtkAccessKitTextLayout *layout,
                  accesskit_tree_update  *update,
                  accesskit_node_builder *parent_builder,
-                 PangoLayout            *layout,
-                 double                  base_x,
-                 double                  base_y)
+                 PangoLayout            *pango_layout,
+                 const char             *end_delimiter,
+                 double                  offset_x,
+                 double                  offset_y,
+                 double                  inner_offset_x,
+                 double                  inner_offset_y)
 {
-  guint serial = pango_layout_get_serial (layout);
+  g_assert (layout->id);
 
-  if (serial != self->text_layout_serial || base_x != self->text_layout_x ||
-      base_y != self->text_layout_y)
+  if (!layout->children || offset_x != layout->offset_x ||
+      offset_y != layout->offset_y)
     {
-      self->text_layout_serial = serial;
-      self->text_layout_x = base_x;
-      self->text_layout_y = base_y;
-      g_clear_pointer (&self->text_layout_children, g_array_unref);
-      self->text_layout_children =
-        g_array_new (FALSE, FALSE, sizeof (accesskit_node_id));
-      add_text_layout_inner (self, update, layout, base_x, base_y);
+      accesskit_node_builder *container_builder =
+        accesskit_node_builder_new (ACCESSKIT_ROLE_GENERIC_CONTAINER);
+      accesskit_vec2 p = {offset_x, offset_y};
+      accesskit_node *container;
+
+      layout->offset_x = offset_x;
+      layout->offset_y = offset_y;
+
+      if (offset_x || offset_y)
+        accesskit_node_builder_set_transform (container_builder,
+                                              accesskit_affine_translate (p));
+
+      if (!layout->children)
+        {
+          layout->children =
+            g_array_new (FALSE, FALSE, sizeof (accesskit_node_id));
+          add_text_layout_inner (layout, update, pango_layout, end_delimiter,
+                                 inner_offset_x, inner_offset_y);
+        }
+
+      accesskit_node_builder_set_children (container_builder,
+                                           layout->children->len,
+                                           (accesskit_node_id *)
+                                           layout->children->data);
+
+      container = accesskit_node_builder_build (container_builder);
+      accesskit_tree_update_push_node (update, layout->id, container);
     }
 
-  accesskit_node_builder_set_children (parent_builder,
-                                       self->text_layout_children->len,
-                                       (accesskit_node_id *)
-                                       self->text_layout_children->data);
+  accesskit_node_builder_push_child (parent_builder, layout->id);
+}
+
+static void
+add_single_text_layout (GtkAccessKitContext    *self,
+                        accesskit_tree_update  *update,
+                        accesskit_node_builder *parent_builder,
+                        PangoLayout            *pango_layout,
+                        double                  offset_x,
+                        double                  offset_y)
+{
+  if (!self->single_text_layout.id)
+    self->single_text_layout.id = gtk_accesskit_root_new_id (self->root);
+
+  add_text_layout (&self->single_text_layout, update, parent_builder,
+                   pango_layout, NULL, offset_x, offset_y, 0.0, 0.0);
 }
 
 /* Adapted from gtkatspitext.c */
@@ -1245,8 +1343,8 @@ gtk_editable_get_text_widget (GtkEditable *editable)
 }
 
 static void
-usv_offset_to_text_position (GtkAccessKitContext     *self,
-                             PangoLayout             *layout,
+usv_offset_to_text_position (GtkAccessKitTextLayout  *layout,
+                             PangoLayout             *pango_layout,
                              guint                    usv_offset,
                              accesskit_text_position *pos)
 {
@@ -1254,11 +1352,11 @@ usv_offset_to_text_position (GtkAccessKitContext     *self,
   accesskit_node_id id;
   guint run_start_usv_offset;
   const PangoLogAttr *log_attrs =
-    pango_layout_get_log_attrs_readonly (layout, NULL);
+    pango_layout_get_log_attrs_readonly (pango_layout, NULL);
 
-  for (i = self->text_layout_children->len - 1; i >= 0; i--)
+  for (i = layout->children->len - 1; i >= 0; i--)
     {
-      id = g_array_index (self->text_layout_children, accesskit_node_id, i);
+      id = g_array_index (layout->children, accesskit_node_id, i);
       run_start_usv_offset = id & 0xffffffff;
 
       if (run_start_usv_offset <= usv_offset)
@@ -1273,6 +1371,15 @@ usv_offset_to_text_position (GtkAccessKitContext     *self,
       if (log_attrs[i].is_cursor_position)
         pos->character_index++;
     }
+}
+
+static void
+destroy_text_view_lines_value (gpointer data)
+{
+  GtkAccessKitTextLayout *layout = data;
+
+  g_clear_pointer (&layout->children, g_array_unref);
+  g_free (layout);
 }
 
 void
@@ -1552,7 +1659,7 @@ gtk_accesskit_context_add_to_update (GtkAccessKitContext   *self,
       float x, y;
 
       gtk_label_get_layout_location (label, &x, &y);
-      add_text_layout (self, update, builder, layout, x, y);
+      add_single_text_layout (self, update, builder, layout, x, y);
     }
   else if (GTK_IS_INSCRIPTION (accessible))
     {
@@ -1561,7 +1668,7 @@ gtk_accesskit_context_add_to_update (GtkAccessKitContext   *self,
       float x, y;
 
       gtk_inscription_get_layout_location (inscription, &x, &y);
-      add_text_layout (self, update, builder, layout, x, y);
+      add_single_text_layout (self, update, builder, layout, x, y);
     }
   else if (GTK_IS_TEXT (accessible))
     {
@@ -1570,7 +1677,90 @@ gtk_accesskit_context_add_to_update (GtkAccessKitContext   *self,
       int x, y;
 
       gtk_text_get_layout_offsets (text, &x, &y);
-      add_text_layout (self, update, builder, layout, x, y);
+      add_single_text_layout (self, update, builder, layout, x, y);
+    }
+  else if (GTK_IS_TEXT_VIEW (accessible))
+    {
+      GtkTextView *text_view = GTK_TEXT_VIEW (accessible);
+      GtkTextBuffer *buffer = gtk_text_view_get_buffer (text_view);
+      GtkTextLayout *layout = gtk_text_view_get_layout (text_view);
+      GtkTextBTree *btree = _gtk_text_buffer_get_btree (buffer);
+      GtkTextIter current;
+
+      if (!self->text_view_lines)
+        self->text_view_lines =
+          g_hash_table_new_full (NULL, NULL, NULL, destroy_text_view_lines_value);
+
+      gtk_text_buffer_get_start_iter (buffer, &current);
+
+      while (true)
+        {
+          GtkTextLine *line = _gtk_text_iter_get_text_line (&current);
+          GtkAccessKitTextLayout *line_layout =
+            g_hash_table_lookup (self->text_view_lines, line);
+          GtkTextIter line_end = current;
+          GtkTextLineDisplay *display;
+          PangoLayout *pango_layout;
+          char *end_delimiter;
+          int inner_offset_x, inner_offset_y;
+          int buffer_offset_y;
+          int widget_offset_x, widget_offset_y;
+
+          if (!line_layout)
+            {
+              line_layout = g_new0 (GtkAccessKitTextLayout, 1);
+              line_layout->id = gtk_accesskit_root_new_id (self->root);
+              g_hash_table_insert (self->text_view_lines, line, line_layout);
+            }
+
+          if (!gtk_text_iter_ends_line (&line_end))
+            gtk_text_iter_forward_to_line_end (&line_end);
+
+          if (line_layout->children)
+            {
+              display = NULL;
+              pango_layout = NULL;
+              end_delimiter = NULL;
+              inner_offset_x = inner_offset_y = 0;
+            }
+          else
+            {
+              display = gtk_text_layout_create_display (layout, line, FALSE);
+              pango_layout = display->layout;
+
+              if (gtk_text_iter_is_end (&line_end))
+                end_delimiter = NULL;
+              else
+                {
+                  GtkTextIter next_line = line_end;
+                  gtk_text_iter_forward_line (&next_line);
+                  end_delimiter =
+                    gtk_text_buffer_get_text (buffer, &line_end, &next_line,
+                                              TRUE);
+                }
+
+              inner_offset_x = display->x_offset;
+              inner_offset_y = display->top_margin;
+            }
+
+          buffer_offset_y = _gtk_text_btree_find_line_top (btree, line, layout);
+          gtk_text_view_buffer_to_window_coords (text_view,
+                                                 GTK_TEXT_WINDOW_WIDGET,
+                                                 0, buffer_offset_y,
+                                                 &widget_offset_x,
+                                                 &widget_offset_y);
+
+          add_text_layout (line_layout, update, builder, pango_layout,
+                           end_delimiter, widget_offset_x, widget_offset_y,
+                           inner_offset_x, inner_offset_y);
+
+          g_clear_pointer (&display, gtk_text_line_display_unref);
+          g_clear_pointer (&end_delimiter, g_free);
+
+          if (gtk_text_iter_is_end (&line_end))
+            break;
+          gtk_text_iter_forward_line (&current);
+        }
     }
 
   if (GTK_IS_EDITABLE (accessible) && role != ACCESSKIT_ROLE_GENERIC_CONTAINER)
@@ -1586,13 +1776,13 @@ gtk_accesskit_context_add_to_update (GtkAccessKitContext   *self,
           accesskit_text_selection selection;
 
           g_assert (gtk_at_context_is_realized (text_ctx));
-          g_assert (text_accesskit_ctx->text_layout_children);
+          g_assert (text_accesskit_ctx->single_text_layout.children);
 
           gtk_editable_get_selection_bounds (GTK_EDITABLE (text), &start, &end);
-          usv_offset_to_text_position (text_accesskit_ctx, layout, start,
-                                       &selection.anchor);
-          usv_offset_to_text_position (text_accesskit_ctx, layout, end,
-                                       &selection.focus);
+          usv_offset_to_text_position (&text_accesskit_ctx->single_text_layout,
+                                       layout, start, &selection.anchor);
+          usv_offset_to_text_position (&text_accesskit_ctx->single_text_layout,
+                                       layout, end, &selection.focus);
           accesskit_node_builder_set_text_selection (builder, selection);
 
           g_object_unref (text_ctx);

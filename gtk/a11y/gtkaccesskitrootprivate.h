@@ -35,6 +35,9 @@ GtkAccessKitRoot *
 gtk_accesskit_root_new (GtkRoot *root_widget);
 
 guint32
+gtk_accesskit_root_new_id (GtkAccessKitRoot *self);
+
+guint32
 gtk_accesskit_root_add_context (GtkAccessKitRoot    *self,
                                 GtkAccessKitContext *context);
 
