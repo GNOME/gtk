@@ -178,7 +178,7 @@ gsk_vulkan_buddy_allocator_alloc (GskVulkanAllocator  *allocator,
       if (self->cache.vk_memory)
         {
           *alloc = self->cache;
-          self->cache.vk_memory = NULL;
+          self->cache.vk_memory = VK_NULL_HANDLE;
         }
       else
         {
@@ -240,7 +240,7 @@ restart:
           alloc->size <<= 1;
           if (slot == 0)
             {
-              if (self->cache.vk_memory == NULL)
+              if (self->cache.vk_memory == VK_NULL_HANDLE)
                 self->cache = *alloc;
               else
                 gsk_vulkan_free (self->allocator, alloc);
