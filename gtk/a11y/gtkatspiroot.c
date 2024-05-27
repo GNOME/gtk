@@ -73,7 +73,7 @@ struct _GtkAtSpiRoot
 
   GListModel *toplevels;
 
-  /* HashTable<str, str> */
+  /* HashTable<str, uint> */
   GHashTable *event_listeners;
 };
 
@@ -504,19 +504,34 @@ on_event_listener_registered (GDBusConnection *connection,
       char *sender = NULL;
       char *event_name = NULL;
       char **event_types = NULL;
+      unsigned int *count;
 
       if (self->event_listeners == NULL)
         self->event_listeners = g_hash_table_new_full (g_str_hash, g_str_equal,
                                                        g_free,
-                                                       NULL);
+                                                       g_free);
 
       g_variant_get (parameters, "(ssas)", &sender, &event_name, &event_types);
 
-      GTK_DEBUG (A11Y, "Registering event listener (%s, %s) on the a11y bus",
-                 sender,
-                 event_name[0] != 0 ? event_name : "(none)");
-
-      g_hash_table_add (self->event_listeners, sender);
+      count = g_hash_table_lookup (self->event_listeners, sender);
+      if (count == NULL)
+        {
+          GTK_DEBUG (A11Y, "Registering event listener (%s, %s) on the a11y bus",
+                     sender,
+                     event_name[0] != 0 ? event_name : "(none)");
+          count = g_new (unsigned int, 1);
+          *count = 1;
+          g_hash_table_insert (self->event_listeners, sender, count);
+        }
+      else if (*count == G_MAXUINT)
+        {
+          g_critical ("Reference count for event listener %s reached saturation", sender);
+        }
+      else
+        {
+          GTK_DEBUG (A11Y, "Incrementing refcount for event listener %s", sender);
+          *count += 1;
+        }
 
       g_free (event_name);
       g_strfreev (event_types);
@@ -540,22 +555,37 @@ on_event_listener_deregistered (GDBusConnection *connection,
     {
       const char *sender = NULL;
       const char *event = NULL;
-
-      if (self->event_listeners == NULL)
-        {
-          g_critical ("Received org.a11y.atspi.Registry::EventListenerDeregistered without "
-                      "a corresponding EventListenerRegistered signal.");
-          return;
-        }
+      unsigned int *count;
 
       g_variant_get (parameters, "(&s&s)", &sender, &event);
 
-      if (g_hash_table_contains (self->event_listeners, sender))
+      if (G_UNLIKELY (self->event_listeners == NULL))
         {
-          GTK_DEBUG (A11Y, "Deregistering event listener (%s, %s) on the a11y bus",
-                     sender,
-                     event[0] != 0 ? event : "(none)");
+          g_critical ("Received org.a11y.atspi.Registry::EventListenerDeregistered for "
+                      "sender (%s, %s) without a corresponding EventListenerRegistered "
+                      "signal.",
+                      sender, event[0] != '\0' ? event : "(no event)");
+          return;
+        }
 
+      count = g_hash_table_lookup (self->event_listeners, sender);
+      if (G_UNLIKELY (count == NULL))
+        {
+          g_critical ("Received org.a11y.atspi.Registry::EventListenerDeregistered for "
+                      "sender (%s, %s) without a corresponding EventListenerRegistered "
+                      "signal.",
+                      sender, event[0] != '\0' ? event : "(no event)");
+          return;
+        }
+
+      if (*count > 1)
+        {
+          GTK_DEBUG (A11Y, "Decreasing refcount for listener %s", sender);
+          *count -= 1;
+        }
+      else
+        {
+          GTK_DEBUG (A11Y, "Deregistering event listener %s on the a11y bus", sender);
           g_hash_table_remove (self->event_listeners, sender);
         }
     }
@@ -586,12 +616,25 @@ on_registered_events_reply (GObject *gobject,
   g_variant_get (listeners, "a(ss)", &iter);
   while (g_variant_iter_loop (iter, "(&s&s)", &sender, &event_name))
     {
+      unsigned int *count;
+
       GTK_DEBUG (A11Y, "Registering event listener (%s, %s) on the a11y bus",
                  sender,
                  event_name[0] != 0 ? event_name : "(none)");
 
-      if (!g_hash_table_contains (self->event_listeners, sender))
-        g_hash_table_add (self->event_listeners, g_strdup (sender));
+      count = g_hash_table_lookup (self->event_listeners, sender);
+      if (count == NULL)
+        {
+          count = g_new (unsigned int, 1);
+          *count = 1;
+          g_hash_table_insert (self->event_listeners, g_strdup (sender), count);
+        }
+      else if (*count == G_MAXUINT)
+        {
+          g_critical ("Reference count for event listener %s reached saturation", sender);
+        }
+      else
+        *count += 1;
     }
 
   g_variant_iter_free (iter);
