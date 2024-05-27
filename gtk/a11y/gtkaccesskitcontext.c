@@ -127,6 +127,7 @@ gtk_accesskit_context_unrealize (GtkATContext *context)
   gtk_accesskit_root_remove_context (self->root, self->id);
 
   g_clear_object (&self->root);
+  self->single_text_layout.id = 0;
   g_clear_pointer (&self->single_text_layout.children, g_array_unref);
   g_clear_pointer (&self->text_view_lines, g_hash_table_destroy);
 }
