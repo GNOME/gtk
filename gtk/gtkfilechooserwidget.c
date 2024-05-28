@@ -1033,6 +1033,8 @@ selection_check (GtkFileChooserWidget *impl,
       g_clear_object (&info);
     }
 
+  g_clear_pointer (&bitset, gtk_bitset_unref);
+
   g_assert (n_selected == 0 || !(all_files && all_folders));
 
   if (out_num_selected)
@@ -1137,6 +1139,8 @@ add_to_shortcuts_cb (GSimpleAction *action,
 
       g_clear_object (&info);
     }
+
+  g_clear_pointer (&bitset, gtk_bitset_unref);
 }
 
 typedef struct {
@@ -1217,6 +1221,8 @@ delete_file_cb (GSimpleAction *action,
 
       g_clear_object (&info);
     }
+
+  g_clear_pointer (&bitset, gtk_bitset_unref);
 }
 
 static void
@@ -1247,6 +1253,8 @@ trash_file_cb (GSimpleAction *action,
 
       g_clear_object (&info);
     }
+
+  g_clear_pointer (&bitset, gtk_bitset_unref);
 }
 
 static void
@@ -2589,6 +2597,8 @@ location_bar_update (GtkFileChooserWidget *impl)
 
           if (gtk_bitset_iter_init_first (&iter, bitset, &position))
             put_recent_folder_in_pathbar (impl, position);
+
+          g_clear_pointer (&bitset, gtk_bitset_unref);
         }
       visible = FALSE;
       break;
@@ -3983,6 +3993,8 @@ update_chooser_entry (GtkFileChooserWidget *impl)
         n_selected++;
     }
 
+  g_clear_pointer (&bitset, gtk_bitset_unref);
+
   if (n_selected == 0)
     {
       if (impl->operation_mode == OPERATION_MODE_RECENT)
@@ -4469,6 +4481,8 @@ gtk_file_chooser_widget_unselect_file (GtkFileChooser *chooser,
 
   if (gtk_bitset_iter_is_valid (&iter))
     gtk_selection_model_unselect_item (impl->selection_model, i);
+
+  g_clear_pointer (&bitset, gtk_bitset_unref);
 }
 
 static void
@@ -4685,6 +4699,8 @@ gtk_file_chooser_widget_get_files (GtkFileChooser *chooser)
             g_list_store_append (result, file);
         }
 
+      g_clear_pointer (&bitset, gtk_bitset_unref);
+
       /* If there is no selection in the file list, we probably have this situation:
        *
        * 1. The user typed a filename in the SAVE filename entry ("foo.txt").
@@ -4895,12 +4911,15 @@ switch_to_selected_folder (GtkFileChooserWidget *impl)
 
           file = _gtk_file_info_get_file (info);
           change_folder_and_display_error (impl, file, FALSE);
+          g_clear_pointer (&bitset, gtk_bitset_unref);
           g_object_unref (info);
           return;
         }
 
       g_clear_object (&info);
     }
+
+  g_clear_pointer (&bitset, gtk_bitset_unref);
 }
 
 /* Gets the display name of the selected file in the file list; assumes single
@@ -5629,6 +5648,8 @@ gtk_file_chooser_widget_get_selected_files (GtkFileChooserWidget *impl)
 
       g_clear_object (&info);
     }
+
+  g_clear_pointer (&bitset, gtk_bitset_unref);
 
   return result;
 }
