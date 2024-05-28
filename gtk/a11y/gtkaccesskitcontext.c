@@ -1853,3 +1853,12 @@ gtk_accesskit_context_add_to_update (GtkAccessKitContext   *self,
   accesskit_tree_update_push_node (update, self->id,
                                    accesskit_node_builder_build (builder));
 }
+
+void
+gtk_accesskit_context_update_tree (GtkAccessKitContext *self)
+{
+  if (!gtk_at_context_is_realized (GTK_AT_CONTEXT (self)))
+    return;
+
+  gtk_accesskit_root_update_tree (self->root);
+}

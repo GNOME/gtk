@@ -49,4 +49,7 @@ gtk_accesskit_root_queue_update (GtkAccessKitRoot *self,
                                  guint32           id,
                                  gboolean          force_to_end);
 
+void
+gtk_accesskit_root_update_tree (GtkAccessKitRoot *self);
+
 G_END_DECLS

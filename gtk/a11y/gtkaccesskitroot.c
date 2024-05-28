@@ -44,7 +44,7 @@ struct _GtkAccessKitRoot
   GHashTable *contexts;
   GArray *update_queue;
   gboolean did_initial_update;
-  gint update_id;
+  gboolean requested_initial_tree;
 
 #if defined(GDK_WINDOWING_WIN32)
   accesskit_windows_subclassing_adapter *adapter;
@@ -72,7 +72,6 @@ gtk_accesskit_root_finalize (GObject *gobject)
 
   g_clear_pointer (&self->contexts, g_hash_table_destroy);
   g_clear_pointer (&self->update_queue, g_array_unref);
-  g_clear_handle_id (&self->update_id, g_source_remove);
 
 #if defined(GDK_WINDOWING_WIN32)
   g_clear_pointer (&self->adapter, accesskit_windows_subclassing_adapter_free);
@@ -223,6 +222,7 @@ request_initial_tree_main_thread (void *data)
 {
   GtkAccessKitRoot *self = data;
   accesskit_tree_update *update = build_full_update (self);
+  self->requested_initial_tree = TRUE;
   self->did_initial_update = TRUE;
   return update;
 }
@@ -237,35 +237,21 @@ update_if_active (GtkAccessKitRoot *self, accesskit_tree_update_factory factory)
   if (events)
     accesskit_windows_queued_events_raise (events);
 #elif defined(GDK_WINDOWING_WAYLAND)
-  /* TBD: Newton treats accessibility tree updates as double-buffered state,
-     meaning the surface has to be committed after the update is sent.
-     Can we more tightly integrate accessibility updates with rendering,
-     so everything happens atomically as intended, rather than queuing
-     an idle callback for the accessibility update, then committing
-     the surface? */
   GdkSurface *surface = gtk_native_get_surface (GTK_NATIVE (self->root_widget));
-  struct wl_surface *wl_surface = gdk_wayland_surface_get_wl_surface (surface);
-
+  gdk_wayland_surface_force_next_commit (surface);
   accesskit_newton_adapter_update_if_active (self->adapter, factory, self);
-  wl_surface_commit (wl_surface);
 /* TODO: other platforms */
 #endif
 }
 
-static gboolean
-initial_update (gpointer data)
+static void
+queue_tree_update (GtkAccessKitRoot *self)
 {
-  GtkAccessKitRoot *self = data;
+  if (!gtk_widget_get_mapped (GTK_WIDGET (self->root_widget)))
+    return;
 
-  self->update_id = 0;
-
-  if (gtk_widget_get_mapped (GTK_WIDGET (self->root_widget)))
-    {
-      update_if_active (self, build_full_update);
-      self->did_initial_update = TRUE;
-    }
-
-  return G_SOURCE_REMOVE;
+  GdkSurface *surface = gtk_native_get_surface (GTK_NATIVE (self->root_widget));
+  gdk_surface_queue_render (surface);
 }
 
 static accesskit_tree_update *
@@ -273,8 +259,8 @@ request_initial_tree_other_thread (void *data)
 {
   GtkAccessKitRoot *self = data;
 
-  if (!self->update_id)
-    self->update_id = g_idle_add (initial_update, self);
+  queue_tree_update (self);
+  self->requested_initial_tree = TRUE;
 
   return NULL;
 }
@@ -292,8 +278,8 @@ deactivate_accessibility (void *data)
 
   /* TODO: Unrealize AT contexts. Which ones? */
   g_clear_pointer (&self->update_queue, g_array_unref);
-  g_clear_handle_id (&self->update_id, g_source_remove);
   self->did_initial_update = FALSE;
+  self->requested_initial_tree = FALSE;
 }
 
 static void
@@ -485,19 +471,6 @@ build_incremental_update (void *data)
   return update;
 }
 
-static gboolean
-incremental_update (gpointer data)
-{
-  GtkAccessKitRoot *self = data;
-
-  self->update_id = 0;
-
-  if (gtk_widget_get_mapped (GTK_WIDGET (self->root_widget)))
-    update_if_active (self, build_incremental_update);
-
-  return G_SOURCE_REMOVE;
-}
-
 void
 gtk_accesskit_root_queue_update (GtkAccessKitRoot *self,
                                  guint32           id,
@@ -508,6 +481,17 @@ gtk_accesskit_root_queue_update (GtkAccessKitRoot *self,
 
   add_to_update_queue (self, id, force_to_end);
 
-  if (!self->update_id)
-    self->update_id = g_idle_add (incremental_update, self);
+  queue_tree_update (self);
+}
+
+void
+gtk_accesskit_root_update_tree (GtkAccessKitRoot *self)
+{
+  if (self->did_initial_update && self->update_queue)
+    update_if_active (self, build_incremental_update);
+  else if (self->requested_initial_tree)
+    {
+      update_if_active (self, build_full_update);
+      self->did_initial_update = TRUE;
+    }
 }
