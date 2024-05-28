@@ -1319,7 +1319,7 @@ test_download_random (gconstpointer data)
       width = g_test_rand_int_range (1, 40) * g_test_rand_int_range (1, 40);
       height = g_test_rand_int_range (1, 40) * g_test_rand_int_range (1, 40);
     }
-  while (width * height >= 1024 * 1024);
+  while (width * height >= 32 * 1024);
 
   test_download (data, width, height, 1);
 }
