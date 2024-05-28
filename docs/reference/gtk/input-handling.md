@@ -141,8 +141,8 @@ Under the hood, all shortcuts are represented as instances of `GtkShortcut`,
 and they are managed by `GtkShortcutController`.
 
 Note that GTK does not do anything to map the primary shortcut modifier
-to <kbd>Command</kbd> on macOS. If you want to let your application work
-on macOS, you explicitly need to provide keyboard shortcuts.
+to <kbd>Command</kbd> on macOS. If you want to let your application to follow
+macOS user experience conventions, you must create macOS-specific keyboard shortcuts.
 The <kbd>Command</kbd> is named `Meta` (`GDK_META_MASK`) in GTK.
 
 ## Text input
