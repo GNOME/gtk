@@ -224,11 +224,11 @@ parser_error (GtkCssParser         *parser,
 
           if (names[i + 1])
             g_set_error (&new_error,
-                         GTK_CSS_PARSER_ERROR, GTK_CSS_PARSER_ERROR_UNKNOWN_VALUE,
+                         error->domain, error->code,
                          "While expanding %s: %s", names[i + 1], error->message);
           else
             g_set_error_literal (&new_error,
-                                 GTK_CSS_PARSER_ERROR, GTK_CSS_PARSER_ERROR_UNKNOWN_VALUE,
+                                 error->domain, error->code,
                                  error->message);
 
           if (vars[i]->section == NULL)
