@@ -220,6 +220,9 @@ gtk_css_provider_class_init (GtkCssProviderClass *klass)
    *
    * Signals that a parsing error occurred.
    *
+   * The expected error values are in the [error@Gtk.CssParserError]
+   * and [enum@Gtk.CssParserWarning] enumerations.
+   *
    * The @path, @line and @position describe the actual location of
    * the error as accurately as possible.
    *
@@ -227,6 +230,9 @@ gtk_css_provider_class_init (GtkCssProviderClass *klass)
    * the error. Errors may however cause parts of the given data or
    * even all of it to not be parsed at all. So it is a useful idea
    * to check that the parsing succeeds by connecting to this signal.
+   *
+   * Errors in the [enum@Gtk.CssParserWarning] enumeration should not
+   * be treated as fatal errors.
    *
    * Note that this signal may be emitted at any time as the css provider
    * may opt to defer parsing parts or all of the input to a later time
