@@ -2370,17 +2370,20 @@ static void
 cascade_popdown (GtkPopover *popover)
 {
   GtkWidget *parent;
+  GtkWidget *new_focus;
 
   /* Do not trigger cascade close from non-modal popovers */
   if (!gtk_popover_get_autohide (popover))
     return;
 
   parent = gtk_widget_get_parent (GTK_WIDGET (popover));
+  new_focus = parent;;
 
   while (parent)
     {
       if (GTK_IS_POPOVER (parent))
         {
+          new_focus = gtk_widget_get_parent (parent);
           if (gtk_popover_get_cascade_popdown (GTK_POPOVER (parent)))
             gtk_widget_set_visible (parent, FALSE);
           else
@@ -2389,6 +2392,7 @@ cascade_popdown (GtkPopover *popover)
 
       parent = gtk_widget_get_parent (parent);
     }
+    gtk_widget_grab_focus (new_focus);
 }
 
 /**
