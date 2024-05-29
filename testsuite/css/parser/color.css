@@ -111,3 +111,15 @@ aa {
 ab {
   color: color(srgb-linear 1 0.5 0 / 50%);
 }
+
+ac {
+  color: oklab(0.8 0 0.3 / 0.5);
+}
+
+ad {
+  color: oklch(0.8 0.3 200 / 0.5);
+}
+
+ae {
+  color: hwb(200 10 90 / 0.5);
+}
