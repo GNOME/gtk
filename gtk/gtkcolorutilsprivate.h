@@ -36,5 +36,10 @@ void gtk_oklab_to_rgb (float  L,   float  a,     float  b,
 void gtk_rgb_to_oklab (float  red, float  green, float  blue,
                        float *L,   float *a,     float *b);
 
+void gtk_rgb_to_linear_srgb (float  red,        float  green,        float  blue,
+                             float *linear_red, float *linear_green, float *linear_blue);
+void gtk_linear_srgb_to_rgb (float  linear_red, float  linear_green, float  linear_blue,
+                             float *red,        float *green,        float *blue);
+
 G_END_DECLS
 

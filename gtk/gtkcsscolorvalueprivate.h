@@ -24,10 +24,16 @@
 
 G_BEGIN_DECLS
 
+typedef enum {
+  GTK_CSS_COLOR_SPACE_SRGB,
+  GTK_CSS_COLOR_SPACE_SRGB_LINEAR,
+} GtkCssColorSpace;
 
 GtkCssValue *   gtk_css_color_value_new_transparent     (void) G_GNUC_PURE;
 GtkCssValue *   gtk_css_color_value_new_white           (void) G_GNUC_PURE;
 GtkCssValue *   gtk_css_color_value_new_literal         (const GdkRGBA  *color) G_GNUC_PURE;
+GtkCssValue *   gtk_css_value_value_new_color           (GtkCssColorSpace color_space,
+                                                         float            values[4]) G_GNUC_PURE;
 GtkCssValue *   gtk_css_color_value_new_name            (const char     *name) G_GNUC_PURE;
 GtkCssValue *   gtk_css_color_value_new_shade           (GtkCssValue    *color,
                                                          double          factor) G_GNUC_PURE;
