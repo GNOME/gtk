@@ -14,6 +14,7 @@ expand_content_md_files = [
   'running.md',
   'migrating-2to4.md',
   'migrating-3to4.md',
+  'migrating-4to5.md',
   'actions.md',
   'input-handling.md',
   'drawing-model.md',
