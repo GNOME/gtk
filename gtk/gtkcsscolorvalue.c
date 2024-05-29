@@ -37,7 +37,9 @@ typedef enum {
   COLOR_TYPE_SHADE,
   COLOR_TYPE_ALPHA,
   COLOR_TYPE_MIX,
-  COLOR_TYPE_CURRENT_COLOR
+  COLOR_TYPE_CURRENT_COLOR,
+  COLOR_TYPE_OKLAB,
+  COLOR_TYPE_OKLCH,
 } ColorType;
 
 struct _GtkCssValue
@@ -69,6 +71,14 @@ struct _GtkCssValue
       GtkCssValue *color2;
       double factor;
     } mix;
+    struct
+    {
+      float L, a, b, alpha;
+    } oklab;
+    struct
+    {
+      float L, C, H, alpha;
+    } oklch;
   };
 };
 
@@ -96,6 +106,8 @@ gtk_css_value_color_free (GtkCssValue *color)
     case COLOR_TYPE_LITERAL:
     case COLOR_TYPE_COLOR:
     case COLOR_TYPE_CURRENT_COLOR:
+    case COLOR_TYPE_OKLAB:
+    case COLOR_TYPE_OKLCH:
     default:
       break;
     }
@@ -212,6 +224,16 @@ gtk_css_value_color_equal (const GtkCssValue *value1,
                                   value2->mix.color2);
     case COLOR_TYPE_CURRENT_COLOR:
       return TRUE;
+    case COLOR_TYPE_OKLAB:
+      return value1->oklab.L == value2->oklab.L &&
+             value1->oklab.a == value2->oklab.a &&
+             value1->oklab.b == value2->oklab.b &&
+             value1->oklab.alpha == value2->oklab.alpha;
+    case COLOR_TYPE_OKLCH:
+      return value1->oklch.L == value2->oklch.L &&
+             value1->oklch.C == value2->oklch.C &&
+             value1->oklch.H == value2->oklch.H &&
+             value1->oklch.alpha == value2->oklch.alpha;
     default:
       g_assert_not_reached ();
       return FALSE;
@@ -328,6 +350,50 @@ gtk_css_value_color_print (const GtkCssValue *value,
       break;
     case COLOR_TYPE_CURRENT_COLOR:
       g_string_append (string, "currentColor");
+      break;
+    case COLOR_TYPE_OKLAB:
+      {
+        char buffer[G_ASCII_DTOSTR_BUF_SIZE];
+
+        g_string_append (string, "oklab(");
+        g_ascii_dtostr (buffer, sizeof (buffer), value->oklab.L);
+        g_string_append (string, buffer);
+        g_string_append_c (string, ' ');
+        g_ascii_dtostr (buffer, sizeof (buffer), value->oklab.a);
+        g_string_append (string, buffer);
+        g_string_append_c (string, ' ');
+        g_ascii_dtostr (buffer, sizeof (buffer), value->oklab.b);
+        g_string_append (string, buffer);
+        if (value->oklab.alpha < 0.999)
+          {
+            g_string_append (string, " / ");
+            g_ascii_dtostr (buffer, sizeof (buffer), value->oklab.alpha);
+            g_string_append (string, buffer);
+          }
+        g_string_append (string, ")");
+      }
+      break;
+    case COLOR_TYPE_OKLCH:
+      {
+        char buffer[G_ASCII_DTOSTR_BUF_SIZE];
+
+        g_string_append (string, "oklch(");
+        g_ascii_dtostr (buffer, sizeof (buffer), value->oklch.L);
+        g_string_append (string, buffer);
+        g_string_append_c (string, ' ');
+        g_ascii_dtostr (buffer, sizeof (buffer), value->oklch.C);
+        g_string_append (string, buffer);
+        g_string_append_c (string, ' ');
+        g_ascii_dtostr (buffer, sizeof (buffer), value->oklch.H);
+        g_string_append (string, buffer);
+        if (value->oklch.alpha < 0.999)
+          {
+            g_string_append (string, " / ");
+            g_ascii_dtostr (buffer, sizeof (buffer), value->oklch.alpha);
+            g_string_append (string, buffer);
+          }
+        g_string_append (string, ")");
+      }
       break;
     default:
       g_assert_not_reached ();
@@ -528,6 +594,32 @@ gtk_css_color_value_do_resolve (GtkCssValue      *color,
 
         value = gtk_css_value_ref (current);
       break;
+    case COLOR_TYPE_OKLAB:
+      {
+        GdkRGBA rgba;
+
+        gtk_oklab_to_rgb (color->oklab.L, color->oklab.a, color->oklab.b,
+                          &rgba.red, &rgba.green, &rgba.blue);
+        rgba.alpha = color->oklab.alpha;
+
+        value = gtk_css_color_value_new_literal (&rgba);
+      }
+      break;
+
+    case COLOR_TYPE_OKLCH:
+      {
+        float L, a, b;
+        GdkRGBA rgba;
+
+        gtk_oklch_to_oklab (color->oklch.L, color->oklch.C, color->oklch.H, &L, &a, &b);
+        gtk_oklab_to_rgb (L, a, b, &rgba.red, &rgba.green, &rgba.blue);
+
+        rgba.alpha = color->oklab.alpha;
+
+        value = gtk_css_color_value_new_literal (&rgba);
+      }
+      break;
+
     default:
       value = NULL;
       g_assert_not_reached ();
@@ -710,6 +802,42 @@ gtk_css_color_value_new_current_color (void)
   static GtkCssValue current_color = { &GTK_CSS_VALUE_COLOR, 1, FALSE, FALSE, COLOR_TYPE_CURRENT_COLOR, NULL, };
 
   return gtk_css_value_ref (&current_color);
+}
+
+GtkCssValue *
+gtk_css_color_value_new_oklab (float L,
+                               float a,
+                               float b,
+                               float alpha)
+{
+  GtkCssValue *value;
+
+  value = gtk_css_value_new (GtkCssValue, &GTK_CSS_VALUE_COLOR);
+  value->type = COLOR_TYPE_OKLAB;
+  value->oklab.L = L;
+  value->oklab.a = a;
+  value->oklab.b = b;
+  value->oklab.alpha = alpha;
+
+  return value;
+}
+
+GtkCssValue *
+gtk_css_color_value_new_oklch (float L,
+                               float C,
+                               float H,
+                               float alpha)
+{
+  GtkCssValue *value;
+
+  value = gtk_css_value_new (GtkCssValue, &GTK_CSS_VALUE_COLOR);
+  value->type = COLOR_TYPE_OKLCH;
+  value->oklab.L = L;
+  value->oklab.a = C;
+  value->oklab.b = H;
+  value->oklab.alpha = alpha;
+
+  return value;
 }
 
 typedef struct
@@ -1456,28 +1584,20 @@ gtk_css_color_value_parse (GtkCssParser *parser)
       if (!parse_color_function (parser, COLOR_SYNTAX_MODERN, FALSE, TRUE, FALSE, parse_oklab_color_channel, &oklab))
         return NULL;
 
-      gtk_oklab_to_rgb (oklab.L, oklab.a, oklab.b, &rgba.red, &rgba.green, &rgba.blue);
-      rgba.alpha = oklab.alpha;
-
-      return gtk_css_color_value_new_literal (&rgba);
+      return gtk_css_color_value_new_oklab (oklab.L, oklab.a, oklab.b, oklab.alpha);
     }
   else if (gtk_css_parser_has_function (parser, "oklch"))
     {
       LchData oklch = { 0, };
-      float L, a, b;
-      float red, green, blue;
 
       oklch.alpha = 1.0;
 
       if (!parse_color_function (parser, COLOR_SYNTAX_MODERN, FALSE, TRUE, FALSE, parse_oklch_color_channel, &oklch))
         return NULL;
 
-      gtk_oklch_to_oklab (oklch.L, oklch.C, oklch.H, &L, &a, &b);
-      gtk_oklab_to_rgb (L, a, b, &red, &green, &blue);
-
       rgba.alpha = oklch.alpha;
 
-      return gtk_css_color_value_new_literal (&rgba);
+      return gtk_css_color_value_new_oklch (oklch.L, oklch.C, oklch.H, oklch.alpha);
     }
   else if (gtk_css_parser_has_function (parser, "color"))
     {

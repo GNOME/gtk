@@ -43,6 +43,14 @@ GtkCssValue *   gtk_css_color_value_new_mix             (GtkCssValue    *color1,
                                                          GtkCssValue    *color2,
                                                          double          factor) G_GNUC_PURE;
 GtkCssValue *   gtk_css_color_value_new_current_color   (void) G_GNUC_PURE;
+GtkCssValue *   gtk_css_color_value_new_oklab           (float           L,
+                                                         float           a,
+                                                         float           b,
+                                                         float           alpha) G_GNUC_PURE;
+GtkCssValue *   gtk_css_color_value_new_oklch           (float           L,
+                                                         float           C,
+                                                         float           H,
+                                                         float           alpha) G_GNUC_PURE;
 
 gboolean        gtk_css_color_value_can_parse           (GtkCssParser   *parser);
 GtkCssValue *   gtk_css_color_value_parse               (GtkCssParser   *parser);
