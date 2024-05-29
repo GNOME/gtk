@@ -58,7 +58,7 @@ use a GtkLabel.
 If you have a need for custom drawing that fits into the current
 (dark or light) theme, e.g. for rendering a graph, you can still
 get the current style foreground color, using
-[method@Gtk.Widget.get_style_color].
+[method@Gtk.Widget.get_color].
 
 ## Local stylesheets are going away
 
