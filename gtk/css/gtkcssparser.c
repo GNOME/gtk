@@ -28,8 +28,7 @@
 
 /* We cannot include gtkdebug.h, so we must keep this in sync */
 extern unsigned int gtk_get_debug_flags (void);
-#define DEBUG_CSS (1 << 20)
-#define DEBUG_CHECK_CSS ((gtk_get_debug_flags () & DEBUG_CSS) != 0)
+#define DEBUG_CHECK_CSS ((gtk_get_debug_flags () & GTK_CSS_PARSER_DEBUG_CSS) != 0)
 
 static void clear_ref (GtkCssVariableValueReference *ref);
 

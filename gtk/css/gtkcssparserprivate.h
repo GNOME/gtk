@@ -172,5 +172,9 @@ void                    gtk_css_parser_get_expanding_variables (GtkCssParser    
                                                                 char                    ***names,
                                                                 gsize                     *n_variables);
 
+
+/* We cannot include gtkdebug.h, so we must keep this in sync */
+#define GTK_CSS_PARSER_DEBUG_CSS (1 << 20)
+
 G_END_DECLS
 
