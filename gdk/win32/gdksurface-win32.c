@@ -326,7 +326,7 @@ RegisterGdkClass (GType wtype)
   static WNDCLASSEXW wcl;
   ATOM klass = 0;
 
-  wcl.cbSize = sizeof (WNDCLASSEX);
+  wcl.cbSize = sizeof (WNDCLASSEXW);
   wcl.style = 0; /* DON'T set CS_<H,V>REDRAW. It causes total redraw
                   * on WM_SIZE and WM_MOVE. Flicker, Performance!
                   */
@@ -340,7 +340,7 @@ RegisterGdkClass (GType wtype)
   /* initialize once! */
   if (0 == hAppIcon && 0 == hAppIconSm)
     {
-      char sLoc [MAX_PATH+1];
+      wchar_t sLoc [MAX_PATH+1];
 
       // try to load first icon of executable program
       if (0 != GetModuleFileName (NULL, sLoc, MAX_PATH))
@@ -2064,7 +2064,7 @@ stash_window (GdkSurface          *window,
   hmonitor = MonitorFromWindow (GDK_SURFACE_HWND (window), MONITOR_DEFAULTTONEAREST);
   hmonitor_info.cbSize = sizeof (hmonitor_info);
 
-  if (!GetMonitorInfoA (hmonitor, &hmonitor_info))
+  if (!GetMonitorInfo (hmonitor, &hmonitor_info))
     return;
 
   if (impl->snap_stash == NULL)

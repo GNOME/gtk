@@ -1408,7 +1408,7 @@ register_clipboard_notification ()
   WNDCLASS wclass = { 0, };
   ATOM klass;
 
-  wclass.lpszClassName = "GdkClipboardNotification";
+  wclass.lpszClassName = L"GdkClipboardNotification";
   wclass.lpfnWndProc = _clipboard_window_procedure;
   wclass.hInstance = this_module ();
   wclass.cbWndExtra = sizeof (GdkWin32ClipboardThread *);
@@ -1506,9 +1506,9 @@ gdk_win32_clipdrop_init (GdkWin32Clipdrop *win32_clipdrop)
   GdkWin32ContentFormatPair fmt;
   HMODULE                   user32;
 
-  thread_wakeup_message = RegisterWindowMessage ("GDK_WORKER_THREAD_WEAKEUP");
+  thread_wakeup_message = RegisterWindowMessage (L"GDK_WORKER_THREAD_WEAKEUP");
 
-  user32 = LoadLibrary ("user32.dll");
+  user32 = LoadLibrary (L"user32.dll");
   win32_clipdrop->GetUpdatedClipboardFormats = (GetUpdatedClipboardFormatsFunc) GetProcAddress (user32, "GetUpdatedClipboardFormats");
   FreeLibrary (user32);
 
@@ -1557,21 +1557,21 @@ gdk_win32_clipdrop_init (GdkWin32Clipdrop *win32_clipdrop)
    * the lead and map the GDK contentformat "image/png" to the clipboard
    * format name "PNG" etc.
    */
-  _gdk_cf_array_index (cfs, GDK_WIN32_CF_INDEX_PNG) = RegisterClipboardFormatA ("PNG");
-  _gdk_cf_array_index (cfs, GDK_WIN32_CF_INDEX_JFIF) = RegisterClipboardFormatA ("JFIF");
-  _gdk_cf_array_index (cfs, GDK_WIN32_CF_INDEX_GIF) = RegisterClipboardFormatA ("GIF");
+  _gdk_cf_array_index (cfs, GDK_WIN32_CF_INDEX_PNG) = RegisterClipboardFormat (L"PNG");
+  _gdk_cf_array_index (cfs, GDK_WIN32_CF_INDEX_JFIF) = RegisterClipboardFormat (L"JFIF");
+  _gdk_cf_array_index (cfs, GDK_WIN32_CF_INDEX_GIF) = RegisterClipboardFormat (L"GIF");
 
-  _gdk_cf_array_index (cfs, GDK_WIN32_CF_INDEX_UNIFORMRESOURCELOCATORW) = RegisterClipboardFormatA ("UniformResourceLocatorW");
-  _gdk_cf_array_index (cfs, GDK_WIN32_CF_INDEX_CFSTR_SHELLIDLIST) = RegisterClipboardFormatA (CFSTR_SHELLIDLIST);
-  _gdk_cf_array_index (cfs, GDK_WIN32_CF_INDEX_HTML_FORMAT) = RegisterClipboardFormatA ("HTML Format");
-  _gdk_cf_array_index (cfs, GDK_WIN32_CF_INDEX_TEXT_HTML) = RegisterClipboardFormatA ("text/html");
+  _gdk_cf_array_index (cfs, GDK_WIN32_CF_INDEX_UNIFORMRESOURCELOCATORW) = RegisterClipboardFormat (L"UniformResourceLocatorW");
+  _gdk_cf_array_index (cfs, GDK_WIN32_CF_INDEX_CFSTR_SHELLIDLIST) = RegisterClipboardFormat (CFSTR_SHELLIDLIST);
+  _gdk_cf_array_index (cfs, GDK_WIN32_CF_INDEX_HTML_FORMAT) = RegisterClipboardFormat (L"HTML Format");
+  _gdk_cf_array_index (cfs, GDK_WIN32_CF_INDEX_TEXT_HTML) = RegisterClipboardFormat (L"text/html");
 
-  _gdk_cf_array_index (cfs, GDK_WIN32_CF_INDEX_IMAGE_PNG) = RegisterClipboardFormatA ("image/png");
-  _gdk_cf_array_index (cfs, GDK_WIN32_CF_INDEX_IMAGE_JPEG) = RegisterClipboardFormatA ("image/jpeg");
-  _gdk_cf_array_index (cfs, GDK_WIN32_CF_INDEX_IMAGE_BMP) = RegisterClipboardFormatA ("image/bmp");
-  _gdk_cf_array_index (cfs, GDK_WIN32_CF_INDEX_IMAGE_GIF) = RegisterClipboardFormatA ("image/gif");
-  _gdk_cf_array_index (cfs, GDK_WIN32_CF_INDEX_TEXT_URI_LIST) = RegisterClipboardFormatA ("text/uri-list");
-  _gdk_cf_array_index (cfs, GDK_WIN32_CF_INDEX_TEXT_PLAIN_UTF8) = RegisterClipboardFormatA ("text/plain;charset=utf-8");
+  _gdk_cf_array_index (cfs, GDK_WIN32_CF_INDEX_IMAGE_PNG) = RegisterClipboardFormat (L"image/png");
+  _gdk_cf_array_index (cfs, GDK_WIN32_CF_INDEX_IMAGE_JPEG) = RegisterClipboardFormat (L"image/jpeg");
+  _gdk_cf_array_index (cfs, GDK_WIN32_CF_INDEX_IMAGE_BMP) = RegisterClipboardFormat (L"image/bmp");
+  _gdk_cf_array_index (cfs, GDK_WIN32_CF_INDEX_IMAGE_GIF) = RegisterClipboardFormat (L"image/gif");
+  _gdk_cf_array_index (cfs, GDK_WIN32_CF_INDEX_TEXT_URI_LIST) = RegisterClipboardFormat (L"text/uri-list");
+  _gdk_cf_array_index (cfs, GDK_WIN32_CF_INDEX_TEXT_PLAIN_UTF8) = RegisterClipboardFormat (L"text/plain;charset=utf-8");
 
   win32_clipdrop->active_source_drags = g_hash_table_new_full (NULL, NULL, (GDestroyNotify) g_object_unref, NULL);
 
@@ -2364,9 +2364,9 @@ transmute_cf_dib_to_image_bmp (const guchar    *data,
        * check?
        */
       (IsClipboardFormatAvailable
-       (RegisterClipboardFormatA ("application/x-moz-nativeimage")) ||
+       (RegisterClipboardFormat (L"application/x-moz-nativeimage")) ||
        IsClipboardFormatAvailable
-       (RegisterClipboardFormatA ("UniformResourceLocatorW"))) &&
+       (RegisterClipboardFormat (L"UniformResourceLocatorW"))) &&
 #endif
       TRUE)
     {

@@ -658,7 +658,7 @@ _gdk_win32_dnd_thread_main (gpointer data)
   /* Create a message queue */
   PeekMessage (&msg, NULL, WM_USER, WM_USER, PM_NOREMOVE);
 
-  thread_wakeup_message = RegisterWindowMessage ("GDK_WORKER_THREAD_WEAKEUP");
+  thread_wakeup_message = RegisterWindowMessage (L"GDK_WORKER_THREAD_WEAKEUP");
 
   /* Signal the main thread that we're ready.
    * This is the only time the queue works in reverse.

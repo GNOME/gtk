@@ -283,7 +283,7 @@ create_dummy_gl_window (void)
   ATOM klass;
   HWND hwnd = NULL;
 
-  wclass.lpszClassName = "GdkGLDummyWindow";
+  wclass.lpszClassName = L"GdkGLDummyWindow";
   wclass.lpfnWndProc = DefWindowProc;
   wclass.hInstance = this_module ();
   wclass.style = CS_OWNDC;

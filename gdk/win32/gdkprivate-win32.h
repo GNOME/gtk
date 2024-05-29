@@ -197,7 +197,7 @@ typedef struct _Win32Cursor Win32Cursor;
 
 struct _Win32Cursor {
   GdkWin32CursorLoadType load_type;
-  gunichar2 *resource_name;
+  wchar_t *resource_name;
   int width;
   int height;
   guint load_flags;

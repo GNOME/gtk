@@ -1730,7 +1730,7 @@ gtk_print_operation_run_with_dialog (GtkPrintOperation *op,
       if (!initialized)
         g_warning ("Failed to InitCommonControlsEx: %lu", GetLastError ());
 
-      _gtk_load_dll_with_libgtk3_manifest ("comdlg32.dll");
+      _gtk_load_dll_with_libgtk3_manifest (L"comdlg32.dll");
 
       g_once_init_leave (&common_controls_initialized, initialized ? 1 : 0);
     }
@@ -1816,7 +1816,7 @@ gtk_print_operation_run_with_dialog (GtkPrintOperation *op,
 
   callback = print_callback_new ();
   printdlgex->lpCallback = (IUnknown *)callback;
-  got_gdk_events_message = RegisterWindowMessage ("GDK_WIN32_GOT_EVENTS");
+  got_gdk_events_message = RegisterWindowMessage (L"GDK_WIN32_GOT_EVENTS");
 
   hResult = PrintDlgExW (printdlgex);
   IUnknown_Release ((IUnknown *)callback);
@@ -2159,7 +2159,7 @@ gtk_print_run_page_setup_dialog (GtkWindow        *parent,
 
   pagesetupdlg->Flags |= PSD_ENABLEPAGESETUPHOOK;
   pagesetupdlg->lpfnPageSetupHook = run_mainloop_hook;
-  got_gdk_events_message = RegisterWindowMessage ("GDK_WIN32_GOT_EVENTS");
+  got_gdk_events_message = RegisterWindowMessage (L"GDK_WIN32_GOT_EVENTS");
   
   res = PageSetupDlgW (pagesetupdlg);
   gdk_win32_set_modal_dialog_libgtk_only (NULL);
