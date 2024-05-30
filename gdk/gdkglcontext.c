@@ -128,6 +128,7 @@ struct _GdkGLContextPrivate
   guint debug_enabled : 1;
   guint forward_compatible : 1;
   guint is_legacy : 1;
+  guint has_surface_sub_post : 1;
 
   GdkGLAPI allowed_apis;
   GdkGLAPI api;
@@ -482,35 +483,56 @@ gdk_gl_context_real_get_damage (GdkGLContext *context)
   GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (context);
   GdkDisplay *display = gdk_draw_context_get_display (GDK_DRAW_CONTEXT (context));
 
-  if (priv->egl_context && display->have_egl_buffer_age)
+  if (priv->egl_context && (display->have_egl_buffer_age || display->have_egl_nv_post_sub_buffer))
     {
       EGLSurface egl_surface;
       int buffer_age = 0;
+      cairo_region_t *damage;
+	  EGLBoolean has_surface_sub_post = EGL_FALSE;
+
       egl_surface = gdk_surface_get_egl_surface (surface);
       gdk_gl_context_make_current (context);
-      eglQuerySurface (gdk_display_get_egl_display (display), egl_surface,
-                       EGL_BUFFER_AGE_EXT, &buffer_age);
 
-      if (buffer_age > 0 && buffer_age <= GDK_GL_MAX_TRACKED_BUFFERS)
+      if (display->have_egl_buffer_age)
+        eglQuerySurface (gdk_display_get_egl_display (display), egl_surface,
+                         EGL_BUFFER_AGE_EXT, &buffer_age);
+      else
+        eglQuerySurface (gdk_display_get_egl_display (display), egl_surface,
+                         EGL_POST_SUB_BUFFER_SUPPORTED_NV, &has_surface_sub_post);
+
+      priv->has_surface_sub_post = has_surface_sub_post;
+
+      if ((buffer_age > 0 && buffer_age <= GDK_GL_MAX_TRACKED_BUFFERS) || has_surface_sub_post)
         {
-          cairo_region_t *damage = cairo_region_create ();
+          damage = cairo_region_create ();
           int i;
+          int max_count_plus_one = buffer_age > 0 ? buffer_age : GDK_GL_MAX_TRACKED_BUFFERS;
 
-          for (i = 0; i < buffer_age - 1; i++)
+          for (i = 0; i < max_count_plus_one - 1; i++)
             {
-              if (context->old_updated_area[i] == NULL)
+              damage = cairo_region_create ();
+              int i;
+
+              for (i = 0; i < buffer_age - 1; i++)
                 {
-                  cairo_region_create_rectangle (&(GdkRectangle) {
-                                                     0, 0,
-                                                     gdk_surface_get_width (surface),
-                                                     gdk_surface_get_height (surface)
-                                                 });
-                  break;
+                  if (context->old_updated_area[i] == NULL)
+                    {
+                      cairo_region_create_rectangle (&(GdkRectangle) {
+                                                         0, 0,
+                                                         gdk_surface_get_width (surface),
+                                                         gdk_surface_get_height (surface)
+                                                     });
+                      break;
+                    }
+                  cairo_region_union (damage, context->old_updated_area[i]);
                 }
-              cairo_region_union (damage, context->old_updated_area[i]);
             }
 
-          return damage;
+          return damage != NULL ? damage : cairo_region_create_rectangle (&(GdkRectangle) {
+                                            0, 0,
+                                            gdk_surface_get_width (surface),
+                                            gdk_surface_get_height (surface)
+                                        });;
         }
     }
 #endif
@@ -643,6 +665,23 @@ gdk_gl_context_real_begin_frame (GdkDrawContext *draw_context,
 
   ww = (int) ceil (gdk_surface_get_width (surface) * scale);
   wh = (int) ceil (gdk_surface_get_height (surface) * scale);
+
+#ifdef HAVE_EGL
+  if (gdk_gl_context_get_use_es (context) && priv->has_surface_sub_post)
+    {
+      int num_rects = cairo_region_num_rectangles (region);
+      GdkRectangle rect;
+
+      for (i = 0; i < num_rects; i ++)
+        {
+          cairo_region_get_rectangle (region, i, &rect);
+
+          eglPostSubBufferNV (gdk_display_get_egl_display (gdk_surface_get_display (surface)),
+                              gdk_surface_get_egl_surface (surface),
+                              rect.x, rect.y, rect.width, rect.height);
+        }
+    }
+#endif
 
   gdk_gl_context_make_current (context);
 

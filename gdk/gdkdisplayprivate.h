@@ -130,6 +130,7 @@ struct _GdkDisplay
   guint have_egl_pixel_format_float : 1;
   guint have_egl_dma_buf_import : 1;
   guint have_egl_dma_buf_export : 1;
+  guint have_egl_nv_post_sub_buffer : 1;
 
   GdkDmabufFormats *dmabuf_formats;
   GdkDmabufDownloader *dmabuf_downloaders[4];

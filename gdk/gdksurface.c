@@ -1139,12 +1139,16 @@ gdk_surface_get_egl_surface (GdkSurface *self)
   return priv->egl_surface;
 }
 
+#define MAX_EGL_CREATE_SURFACE_ATTRIBS 10
+
 void
 gdk_surface_ensure_egl_surface (GdkSurface *self,
                                 gboolean    high_depth)
 {
   GdkSurfacePrivate *priv = gdk_surface_get_instance_private (self);
   GdkDisplay *display = gdk_surface_get_display (self);
+  EGLint surface_attribs[MAX_EGL_CREATE_SURFACE_ATTRIBS];
+  int i = 0;
 
   g_return_if_fail (priv->egl_native_window != NULL);
 
@@ -1157,13 +1161,20 @@ gdk_surface_ensure_egl_surface (GdkSurface *self,
       priv->egl_surface = NULL;
     }
 
+  if (display->have_egl_nv_post_sub_buffer)
+    {
+      surface_attribs[i++] = EGL_POST_SUB_BUFFER_SUPPORTED_NV;
+      surface_attribs[i++] = EGL_TRUE;
+    }
+
+  surface_attribs[i++] = EGL_NONE;
   if (priv->egl_surface == NULL)
     {
       priv->egl_surface = eglCreateWindowSurface (gdk_display_get_egl_display (display),
                                                   high_depth ? gdk_display_get_egl_config_high_depth (display)
                                                              : gdk_display_get_egl_config (display),
                                                   (EGLNativeWindowType) priv->egl_native_window,
-                                                  NULL);
+                                                  surface_attribs);
       priv->egl_surface_high_depth = high_depth;
     }
 #endif
