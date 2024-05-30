@@ -2377,7 +2377,7 @@ cascade_popdown (GtkPopover *popover)
     return;
 
   parent = gtk_widget_get_parent (GTK_WIDGET (popover));
-  new_focus = parent;;
+  new_focus = parent;
 
   while (parent)
     {
