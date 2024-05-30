@@ -53,4 +53,3 @@ void gtk_linear_srgb_to_rgb (float  linear_red, float  linear_green, float  line
 
 
 G_END_DECLS
-
