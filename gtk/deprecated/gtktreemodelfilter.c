@@ -527,12 +527,22 @@ gtk_tree_model_filter_class_init (GtkTreeModelFilterClass *filter_class)
   filter_class->visible = gtk_tree_model_filter_real_visible;
   filter_class->modify  = gtk_tree_model_filter_real_modify;
 
+  /**
+   * GtkTreeModelFilter:child-model:
+   *
+   * The child model of the tree model filter.
+   */
   g_object_class_install_property (object_class,
                                    PROP_CHILD_MODEL,
                                    g_param_spec_object ("child-model", NULL, NULL,
                                                         GTK_TYPE_TREE_MODEL,
                                                         GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
 
+  /**
+   * GtkTreeModelFilter:virtual-root:
+   *
+   * The virtual root of the tree model filter.
+   */
   g_object_class_install_property (object_class,
                                    PROP_VIRTUAL_ROOT,
                                    g_param_spec_boxed ("virtual-root", NULL, NULL,
