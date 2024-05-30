@@ -70,10 +70,12 @@ struct _GtkCssValue
       GtkCssValue *color2;
       double factor;
     } mix;
+
     struct
     {
       float L, a, b, alpha;
     } oklab;
+
     struct
     {
       float L, C, H, alpha;
@@ -209,7 +211,7 @@ gtk_css_value_color_equal (const GtkCssValue *value1,
 
     case COLOR_TYPE_COLOR:
       return value1->color.color_space == value2->color.color_space &&
-             memcmp (value1->color.values, value2->color.values, sizeof(float) * 4) == 0;
+             memcmp (value1->color.values, value2->color.values, sizeof (float) * 4) == 0;
 
     case COLOR_TYPE_NAME:
       return g_str_equal (value1->name, value2->name);
@@ -674,7 +676,7 @@ gtk_css_value_value_new_color (GtkCssColorSpace color_space,
   value = gtk_css_value_new (GtkCssValue, &GTK_CSS_VALUE_COLOR);
   value->type = COLOR_TYPE_COLOR;
   value->color.color_space = color_space;
-  memcpy (value->color.values, values, sizeof(float) * 4);
+  memcpy (value->color.values, values, sizeof (float) * 4);
 
   return value;
 }
