@@ -31,6 +31,15 @@
 #include "gtkcolorutilsprivate.h"
 
 typedef enum {
+  GTK_CSS_COLOR_SPACE_SRGB,
+  GTK_CSS_COLOR_SPACE_SRGB_LINEAR,
+} GtkCssColorSpace;
+
+static GtkCssValue * gtk_css_color_value_new_mix (GtkCssValue *color1,
+                                                  GtkCssValue *color2,
+                                                  double       factor);
+
+typedef enum {
   COLOR_TYPE_LITERAL,
   COLOR_TYPE_COLOR,
   COLOR_TYPE_NAME,
@@ -667,7 +676,7 @@ gtk_css_color_value_new_literal (const GdkRGBA *color)
   return value;
 }
 
-GtkCssValue *
+static GtkCssValue *
 gtk_css_value_value_new_color (GtkCssColorSpace color_space,
                                float            values[4])
 {
@@ -695,7 +704,7 @@ gtk_css_color_value_new_name (const char *name)
   return value;
 }
 
-GtkCssValue *
+static GtkCssValue *
 gtk_css_color_value_new_shade (GtkCssValue *color,
                                double       factor)
 {
@@ -720,7 +729,7 @@ gtk_css_color_value_new_shade (GtkCssValue *color,
   return value;
 }
 
-GtkCssValue *
+static GtkCssValue *
 gtk_css_color_value_new_alpha (GtkCssValue *color,
                                double       factor)
 {
@@ -745,7 +754,7 @@ gtk_css_color_value_new_alpha (GtkCssValue *color,
   return value;
 }
 
-GtkCssValue *
+static GtkCssValue *
 gtk_css_color_value_new_mix (GtkCssValue *color1,
                              GtkCssValue *color2,
                              double       factor)
@@ -783,7 +792,7 @@ gtk_css_color_value_new_current_color (void)
   return gtk_css_value_ref (&current_color);
 }
 
-GtkCssValue *
+static GtkCssValue *
 gtk_css_color_value_new_oklab (float L,
                                float a,
                                float b,
@@ -801,7 +810,7 @@ gtk_css_color_value_new_oklab (float L,
   return value;
 }
 
-GtkCssValue *
+static GtkCssValue *
 gtk_css_color_value_new_oklch (float L,
                                float C,
                                float H,
