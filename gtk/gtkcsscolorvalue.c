@@ -46,7 +46,6 @@ struct _GtkCssValue
 {
   GTK_CSS_VALUE_BASE
   ColorType type;
-  GtkCssValue *last_value;
 
   union
   {
@@ -85,9 +84,6 @@ struct _GtkCssValue
 static void
 gtk_css_value_color_free (GtkCssValue *color)
 {
-  if (color->last_value)
-    gtk_css_value_unref (color->last_value);
-
   switch (color->type)
     {
     case COLOR_TYPE_NAME:
@@ -625,19 +621,6 @@ gtk_css_color_value_do_resolve (GtkCssValue      *color,
       g_assert_not_reached ();
     }
 
-  if (color->last_value != NULL &&
-      gtk_css_value_equal (color->last_value, value))
-    {
-      gtk_css_value_unref (value);
-      value = gtk_css_value_ref (color->last_value);
-    }
-  else
-    {
-      if (color->last_value != NULL)
-        gtk_css_value_unref (color->last_value);
-      color->last_value = gtk_css_value_ref (value);
-    }
-
   return value;
 }
 
@@ -649,9 +632,9 @@ gtk_css_color_value_resolve (GtkCssValue      *color,
   return gtk_css_color_value_do_resolve (color, provider, current, NULL);
 }
 
-static GtkCssValue transparent_black_singleton = { &GTK_CSS_VALUE_COLOR, 1, TRUE, FALSE, COLOR_TYPE_LITERAL, NULL,
+static GtkCssValue transparent_black_singleton = { &GTK_CSS_VALUE_COLOR, 1, TRUE, FALSE, COLOR_TYPE_LITERAL,
                                                    .rgba = {0, 0, 0, 0} };
-static GtkCssValue white_singleton             = { &GTK_CSS_VALUE_COLOR, 1, TRUE, FALSE, COLOR_TYPE_LITERAL, NULL,
+static GtkCssValue white_singleton             = { &GTK_CSS_VALUE_COLOR, 1, TRUE, FALSE, COLOR_TYPE_LITERAL,
                                                    .rgba = {1, 1, 1, 1} };
 
 
@@ -799,7 +782,7 @@ gtk_css_color_value_new_mix (GtkCssValue *color1,
 GtkCssValue *
 gtk_css_color_value_new_current_color (void)
 {
-  static GtkCssValue current_color = { &GTK_CSS_VALUE_COLOR, 1, FALSE, FALSE, COLOR_TYPE_CURRENT_COLOR, NULL, };
+  static GtkCssValue current_color = { &GTK_CSS_VALUE_COLOR, 1, FALSE, FALSE, COLOR_TYPE_CURRENT_COLOR, };
 
   return gtk_css_value_ref (&current_color);
 }
