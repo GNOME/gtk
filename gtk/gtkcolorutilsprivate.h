@@ -21,7 +21,12 @@
 
 G_BEGIN_DECLS
 
-void gtk_rgb_to_hwb (float  red, float  green, float blue,
+void gtk_rgb_to_hsl (float  red, float  green,      float  blue,
+                     float *hue, float *saturation, float *lightness);
+void gtk_hsl_to_rgb (float  hue, float  saturation, float  lightness,
+                     float *red, float *green,      float *blue);
+
+void gtk_rgb_to_hwb (float  red, float  green, float  blue,
                      float *hue, float *white, float *black);
 void gtk_hwb_to_rgb (float  hue, float  white, float  black,
                      float *red, float *green, float *blue);
@@ -30,6 +35,11 @@ void gtk_oklab_to_oklch (float  L,  float  a, float  b,
                          float *L2, float *C, float *H);
 void gtk_oklch_to_oklab (float  L,  float  C, float  H,
                          float *L2, float *a, float *b);
+
+void gtk_oklab_to_linear_srgb (float  L,   float  a,     float  b,
+                               float *red, float *green, float *blue);
+void gtk_linear_srgb_to_oklab (float  red, float  green, float  blue,
+                               float *L,   float *a,     float *b);
 
 void gtk_oklab_to_rgb (float  L,   float  a,     float  b,
                        float *red, float *green, float *blue);
@@ -40,6 +50,7 @@ void gtk_rgb_to_linear_srgb (float  red,        float  green,        float  blue
                              float *linear_red, float *linear_green, float *linear_blue);
 void gtk_linear_srgb_to_rgb (float  linear_red, float  linear_green, float  linear_blue,
                              float *red,        float *green,        float *blue);
+
 
 G_END_DECLS
 
