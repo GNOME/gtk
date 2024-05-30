@@ -7,7 +7,7 @@ b {
 }
 
 c {
-  box-shadow: 3px 0.25pt 0.125pt -1em currentColor inset;
+  box-shadow: 3px 0.25pt 0.125pt -1em currentcolor inset;
 }
 
 d {
@@ -19,7 +19,7 @@ e {
 }
 
 f {
-  box-shadow: 0 0 1em currentColor inset;
+  box-shadow: 0 0 1em currentcolor inset;
 }
 
 g {
@@ -27,11 +27,11 @@ g {
 }
 
 h {
-  box-shadow: 0.25pt 0 0.125pt -1em currentColor inset;
+  box-shadow: 0.25pt 0 0.125pt -1em currentcolor inset;
 }
 
 i {
-  box-shadow: 0.25pt 3px currentColor inset;
+  box-shadow: 0.25pt 3px currentcolor inset;
 }
 
 j {
@@ -55,23 +55,23 @@ n {
 }
 
 o {
-  box-shadow: 3px -1em 0.125pt currentColor inset;
+  box-shadow: 3px -1em 0.125pt currentcolor inset;
 }
 
 p {
-  box-shadow: 0 3px currentColor inset;
+  box-shadow: 0 3px currentcolor inset;
 }
 
 q {
-  box-shadow: 3px 0.25pt currentColor inset;
+  box-shadow: 3px 0.25pt currentcolor inset;
 }
 
 r {
-  box-shadow: 3px -1em 3px 0.25pt currentColor inset;
+  box-shadow: 3px -1em 3px 0.25pt currentcolor inset;
 }
 
 s {
-  box-shadow: -1em -1em currentColor inset;
+  box-shadow: -1em -1em currentcolor inset;
 }
 
 t {
@@ -87,7 +87,7 @@ v {
 }
 
 w {
-  box-shadow: 0.25pt -1em currentColor inset;
+  box-shadow: 0.25pt -1em currentcolor inset;
 }
 
 x {
@@ -111,7 +111,7 @@ bb {
 }
 
 cb {
-  box-shadow: 0 0 currentColor;
+  box-shadow: 0 0 currentcolor;
 }
 
 db {
@@ -123,7 +123,7 @@ eb {
 }
 
 fb {
-  box-shadow: 3px 3px 3px 0.25pt currentColor;
+  box-shadow: 3px 3px 3px 0.25pt currentcolor;
 }
 
 gb {
@@ -135,7 +135,7 @@ hb {
 }
 
 ib {
-  box-shadow: -1em 0.25pt currentColor;
+  box-shadow: -1em 0.25pt currentcolor;
 }
 
 jb {
@@ -147,7 +147,7 @@ kb {
 }
 
 lb {
-  box-shadow: 3px -1em currentColor inset;
+  box-shadow: 3px -1em currentcolor inset;
 }
 
 mb {
@@ -155,7 +155,7 @@ mb {
 }
 
 nb {
-  box-shadow: -1em 0 0 -1em currentColor inset;
+  box-shadow: -1em 0 0 -1em currentcolor inset;
 }
 
 ob {
@@ -163,7 +163,7 @@ ob {
 }
 
 pb {
-  box-shadow: 0.25pt 0 0.125pt currentColor;
+  box-shadow: 0.25pt 0 0.125pt currentcolor;
 }
 
 qb {
@@ -195,11 +195,11 @@ wb {
 }
 
 xb {
-  box-shadow: 3px 0.25pt 3px 0.25pt currentColor;
+  box-shadow: 3px 0.25pt 3px 0.25pt currentcolor;
 }
 
 yb {
-  box-shadow: 0.25pt 3px 1em -1em currentColor inset;
+  box-shadow: 0.25pt 3px 1em -1em currentcolor inset;
 }
 
 zb {
@@ -207,15 +207,15 @@ zb {
 }
 
 ac {
-  box-shadow: 0.25pt -1em 3px -1em currentColor;
+  box-shadow: 0.25pt -1em 3px -1em currentcolor;
 }
 
 bc {
-  box-shadow: -1em 0 currentColor;
+  box-shadow: -1em 0 currentcolor;
 }
 
 cc {
-  box-shadow: -1em 3px 0 -1em currentColor inset;
+  box-shadow: -1em 3px 0 -1em currentcolor inset;
 }
 
 dc {
@@ -243,7 +243,7 @@ ic {
 }
 
 jc {
-  box-shadow: 0 -1em 3px currentColor inset;
+  box-shadow: 0 -1em 3px currentcolor inset;
 }
 
 kc {
@@ -267,7 +267,7 @@ oc {
 }
 
 pc {
-  box-shadow: 3px -1em currentColor inset;
+  box-shadow: 3px -1em currentcolor inset;
 }
 
 qc {
@@ -279,15 +279,15 @@ rc {
 }
 
 sc {
-  box-shadow: 3px 0.25pt currentColor inset;
+  box-shadow: 3px 0.25pt currentcolor inset;
 }
 
 tc {
-  box-shadow: 3px -1em 0 -1em currentColor inset;
+  box-shadow: 3px -1em 0 -1em currentcolor inset;
 }
 
 uc {
-  box-shadow: 0.25pt 0 currentColor;
+  box-shadow: 0.25pt 0 currentcolor;
 }
 
 vc {
@@ -295,11 +295,11 @@ vc {
 }
 
 wc {
-  box-shadow: -1em 0.25pt currentColor inset;
+  box-shadow: -1em 0.25pt currentcolor inset;
 }
 
 xc {
-  box-shadow: 3px 0.25pt 0 -1em currentColor inset;
+  box-shadow: 3px 0.25pt 0 -1em currentcolor inset;
 }
 
 yc {
@@ -307,7 +307,7 @@ yc {
 }
 
 zc {
-  box-shadow: -1em -1em currentColor inset;
+  box-shadow: -1em -1em currentcolor inset;
 }
 
 ad {
@@ -327,7 +327,7 @@ dd {
 }
 
 ed {
-  box-shadow: 0.25pt 0 currentColor;
+  box-shadow: 0.25pt 0 currentcolor;
 }
 
 fd {
@@ -347,7 +347,7 @@ id {
 }
 
 jd {
-  box-shadow: 0 0.25pt 1em currentColor;
+  box-shadow: 0 0.25pt 1em currentcolor;
 }
 
 kd {
@@ -371,11 +371,11 @@ od {
 }
 
 pd {
-  box-shadow: 3px 3px 1em 0.25pt currentColor;
+  box-shadow: 3px 3px 1em 0.25pt currentcolor;
 }
 
 qd {
-  box-shadow: 3px 0 currentColor inset;
+  box-shadow: 3px 0 currentcolor inset;
 }
 
 rd {
@@ -387,11 +387,11 @@ sd {
 }
 
 td {
-  box-shadow: 3px 3px currentColor inset;
+  box-shadow: 3px 3px currentcolor inset;
 }
 
 ud {
-  box-shadow: -1em -1em currentColor;
+  box-shadow: -1em -1em currentcolor;
 }
 
 vd {

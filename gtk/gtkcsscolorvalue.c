@@ -346,7 +346,7 @@ gtk_css_value_color_print (const GtkCssValue *value,
       break;
 
     case COLOR_TYPE_CURRENT_COLOR:
-      g_string_append (string, "currentColor");
+      g_string_append (string, "currentcolor");
       break;
 
     case COLOR_TYPE_OKLAB:
@@ -1487,7 +1487,7 @@ gtk_css_color_value_parse (GtkCssParser *parser)
   GtkCssValue *value;
   GdkRGBA rgba;
 
-  if (gtk_css_parser_try_ident (parser, "currentColor"))
+  if (gtk_css_parser_try_ident (parser, "currentcolor"))
     {
       return gtk_css_color_value_new_current_color ();
     }

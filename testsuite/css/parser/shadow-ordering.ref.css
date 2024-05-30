@@ -1,9 +1,9 @@
 a {
-  box-shadow: 0 0 currentColor;
+  box-shadow: 0 0 currentcolor;
 }
 
 b {
-  box-shadow: 0 0 currentColor inset;
+  box-shadow: 0 0 currentcolor inset;
 }
 
 c {
@@ -19,7 +19,7 @@ e {
 }
 
 f {
-  box-shadow: 0 0 currentColor inset;
+  box-shadow: 0 0 currentcolor inset;
 }
 
 g {
