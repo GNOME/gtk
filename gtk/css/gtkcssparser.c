@@ -26,23 +26,17 @@
 #include "gtkcsserror.h"
 #include "gtkcsslocationprivate.h"
 
+static void clear_ref (GtkCssVariableValueReference *ref);
+
+#define GDK_ARRAY_NAME gtk_css_parser_references
+#define GDK_ARRAY_TYPE_NAME GtkCssParserReferences
+#define GDK_ARRAY_ELEMENT_TYPE GtkCssVariableValueReference
+#define GDK_ARRAY_BY_VALUE 1
+#define GDK_ARRAY_NO_MEMSET 1
+#define GDK_ARRAY_FREE_FUNC clear_ref
+#include "gdk/gdkarrayimpl.c"
+
 typedef struct _GtkCssParserBlock GtkCssParserBlock;
-
-struct _GtkCssParser
-{
-  volatile int ref_count;
-
-  GtkCssTokenizer *tokenizer;
-  GFile *file;
-  GFile *directory;
-  GtkCssParserErrorFunc error_func;
-  gpointer user_data;
-  GDestroyNotify user_destroy;
-
-  GArray *blocks;
-  GtkCssLocation location;
-  GtkCssToken token;
-};
 
 struct _GtkCssParserBlock
 {
@@ -52,8 +46,97 @@ struct _GtkCssParserBlock
   GtkCssTokenType alternative_token;
 };
 
+#define GDK_ARRAY_NAME gtk_css_parser_blocks
+#define GDK_ARRAY_TYPE_NAME GtkCssParserBlocks
+#define GDK_ARRAY_ELEMENT_TYPE GtkCssParserBlock
+#define GDK_ARRAY_PREALLOC 12
+#define GDK_ARRAY_NO_MEMSET 1
+#include "gdk/gdkarrayimpl.c"
+
+static inline GtkCssParserBlock *
+gtk_css_parser_blocks_get_last (GtkCssParserBlocks *blocks)
+{
+  return gtk_css_parser_blocks_index (blocks, gtk_css_parser_blocks_get_size (blocks) - 1);
+}
+
+static inline void
+gtk_css_parser_blocks_drop_last (GtkCssParserBlocks *blocks)
+{
+  gtk_css_parser_blocks_set_size (blocks, gtk_css_parser_blocks_get_size (blocks) - 1);
+}
+
+typedef struct _GtkCssTokenizerData GtkCssTokenizerData;
+
+struct _GtkCssTokenizerData
+{
+  GtkCssTokenizer *tokenizer;
+  char *var_name;
+  GtkCssVariableValue *variable;
+};
+
+static void
+gtk_css_tokenizer_data_clear (gpointer data)
+{
+  GtkCssTokenizerData *td = data;
+
+  gtk_css_tokenizer_unref (td->tokenizer);
+  if (td->var_name)
+    g_free (td->var_name);
+  if (td->variable)
+    gtk_css_variable_value_unref (td->variable);
+}
+
+#define GDK_ARRAY_NAME gtk_css_tokenizers
+#define GDK_ARRAY_TYPE_NAME GtkCssTokenizers
+#define GDK_ARRAY_ELEMENT_TYPE GtkCssTokenizerData
+#define GDK_ARRAY_FREE_FUNC gtk_css_tokenizer_data_clear
+#define GDK_ARRAY_BY_VALUE 1
+#define GDK_ARRAY_PREALLOC 16
+#define GDK_ARRAY_NO_MEMSET 1
+#include "gdk/gdkarrayimpl.c"
+
+static inline GtkCssTokenizerData *
+gtk_css_tokenizers_get_last (GtkCssTokenizers *tokenizers)
+{
+  return gtk_css_tokenizers_index (tokenizers, gtk_css_tokenizers_get_size (tokenizers) - 1);
+}
+
+static inline void
+gtk_css_tokenizers_drop_last (GtkCssTokenizers *tokenizers)
+{
+  gtk_css_tokenizers_set_size (tokenizers, gtk_css_tokenizers_get_size (tokenizers) - 1);
+}
+
+struct _GtkCssParser
+{
+  volatile int ref_count;
+
+  GtkCssTokenizers tokenizers;
+  GFile *file;
+  GFile *directory;
+  GtkCssParserErrorFunc error_func;
+  gpointer user_data;
+  GDestroyNotify user_destroy;
+
+  GtkCssParserBlocks blocks;
+  GtkCssLocation location;
+  GtkCssToken token;
+
+  GtkCssVariableValue **refs;
+  gsize n_refs;
+  gsize next_ref;
+  gboolean var_fallback;
+};
+
+static inline GtkCssTokenizer *
+get_tokenizer (GtkCssParser *self)
+{
+  return gtk_css_tokenizers_get_last (&self->tokenizers)->tokenizer;
+}
+
 static GtkCssParser *
 gtk_css_parser_new (GtkCssTokenizer       *tokenizer,
+                    GtkCssVariableValue   *value,
                     GFile                 *file,
                     GtkCssParserErrorFunc  error_func,
                     gpointer               user_data,
@@ -64,17 +147,21 @@ gtk_css_parser_new (GtkCssTokenizer       *tokenizer,
   self = g_new0 (GtkCssParser, 1);
 
   self->ref_count = 1;
-  self->tokenizer = gtk_css_tokenizer_ref (tokenizer);
+
+  gtk_css_tokenizers_init (&self->tokenizers);
+  gtk_css_tokenizers_append (&self->tokenizers,
+                             &(GtkCssTokenizerData) {
+                               gtk_css_tokenizer_ref (tokenizer),
+                               NULL,
+                               value ? gtk_css_variable_value_ref (value) : NULL });
+
   if (file)
-    {
-      self->file = g_object_ref (file);
-      self->directory = g_file_get_parent (file);
-    }
+    self->file = g_object_ref (file);
 
   self->error_func = error_func;
   self->user_data = user_data;
   self->user_destroy = user_destroy;
-  self->blocks = g_array_new (FALSE, FALSE, sizeof (GtkCssParserBlock));
+  gtk_css_parser_blocks_init (&self->blocks);
 
   return self;
 }
@@ -109,10 +196,34 @@ gtk_css_parser_new_for_bytes (GBytes                *bytes,
 {
   GtkCssTokenizer *tokenizer;
   GtkCssParser *result;
-  
+
   tokenizer = gtk_css_tokenizer_new (bytes);
-  result = gtk_css_parser_new (tokenizer, file, error_func, user_data, user_destroy);
+  result = gtk_css_parser_new (tokenizer, NULL, file, error_func, user_data, user_destroy);
   gtk_css_tokenizer_unref (tokenizer);
+
+  return result;
+}
+
+GtkCssParser *
+gtk_css_parser_new_for_token_stream (GtkCssVariableValue    *value,
+                                     GFile                  *file,
+                                     GtkCssVariableValue   **refs,
+                                     gsize                   n_refs,
+                                     GtkCssParserErrorFunc   error_func,
+                                     gpointer                user_data,
+                                     GDestroyNotify          user_destroy)
+{
+  GtkCssTokenizer *tokenizer;
+  GtkCssParser *result;
+
+  tokenizer = gtk_css_tokenizer_new_for_range (value->bytes, value->offset,
+                                               value->end_offset - value->offset);
+  result = gtk_css_parser_new (tokenizer, value, file, error_func, user_data, user_destroy);
+  gtk_css_tokenizer_unref (tokenizer);
+
+  result->refs = refs;
+  result->n_refs = n_refs;
+  result->next_ref = 0;
 
   return result;
 }
@@ -123,12 +234,12 @@ gtk_css_parser_finalize (GtkCssParser *self)
   if (self->user_destroy)
     self->user_destroy (self->user_data);
 
-  g_clear_pointer (&self->tokenizer, gtk_css_tokenizer_unref);
+  gtk_css_tokenizers_clear (&self->tokenizers);
   g_clear_object (&self->file);
   g_clear_object (&self->directory);
-  if (self->blocks->len)
-    g_critical ("Finalizing CSS parser with %u remaining blocks", self->blocks->len);
-  g_array_free (self->blocks, TRUE);
+  if (gtk_css_parser_blocks_get_size (&self->blocks) > 0)
+    g_critical ("Finalizing CSS parser with %lu remaining blocks", gtk_css_parser_blocks_get_size (&self->blocks));
+  gtk_css_parser_blocks_clear (&self->blocks);
 
   g_free (self);
 }
@@ -163,6 +274,12 @@ gtk_css_parser_get_file (GtkCssParser *self)
   return self->file;
 }
 
+GBytes *
+gtk_css_parser_get_bytes (GtkCssParser *self)
+{
+  return gtk_css_tokenizer_get_bytes (gtk_css_tokenizers_get (&self->tokenizers, 0)->tokenizer);
+}
+
 /**
  * gtk_css_parser_resolve_url:
  * @self: a `GtkCssParser`
@@ -188,7 +305,12 @@ gtk_css_parser_resolve_url (GtkCssParser *self,
     }
 
   if (self->directory == NULL)
-    return NULL;
+    {
+      if (self->file)
+        self->directory = g_file_get_parent (self->file);
+      if (self->directory == NULL)
+        return NULL;
+    }
 
   return g_file_resolve_relative_path (self->directory, url);
 }
@@ -239,7 +361,7 @@ gtk_css_parser_get_start_location (GtkCssParser *self)
 const GtkCssLocation *
 gtk_css_parser_get_end_location (GtkCssParser *self)
 {
-  return gtk_css_tokenizer_get_location (self->tokenizer);
+  return gtk_css_tokenizer_get_location (get_tokenizer (self));
 }
 
 /**
@@ -259,13 +381,13 @@ gtk_css_parser_get_block_location (GtkCssParser *self)
 {
   const GtkCssParserBlock *block;
 
-  if (self->blocks->len == 0)
+  if (gtk_css_parser_blocks_get_size (&self->blocks) == 0)
     {
       static const GtkCssLocation start_of_document = { 0, };
       return &start_of_document;
     }
 
-  block = &g_array_index (self->blocks, GtkCssParserBlock, self->blocks->len - 1);
+  block = gtk_css_parser_blocks_get_last (&self->blocks);
   return &block->start_location;
 }
 
@@ -273,18 +395,63 @@ static void
 gtk_css_parser_ensure_token (GtkCssParser *self)
 {
   GError *error = NULL;
+  GtkCssTokenizer *tokenizer;
 
   if (!gtk_css_token_is (&self->token, GTK_CSS_TOKEN_EOF))
     return;
 
-  self->location = *gtk_css_tokenizer_get_location (self->tokenizer);
-  if (!gtk_css_tokenizer_read_token (self->tokenizer, &self->token, &error))
+  tokenizer = get_tokenizer (self);
+  self->location = *gtk_css_tokenizer_get_location (tokenizer);
+  if (!gtk_css_tokenizer_read_token (tokenizer, &self->token, &error))
     {
       /* We ignore the error here, because the resulting token will
        * likely already trigger an error in the parsing code and
        * duplicate errors are rather useless.
        */
       g_clear_error (&error);
+    }
+
+  if (gtk_css_tokenizers_get_size (&self->tokenizers) > 1 && gtk_css_token_is (&self->token, GTK_CSS_TOKEN_EOF))
+    {
+      gtk_css_tokenizers_drop_last (&self->tokenizers);
+      gtk_css_parser_ensure_token (self);
+      return;
+    }
+
+  /* Resolve var(--name): skip it and insert the resolved reference instead */
+  if (self->n_refs > 0 && gtk_css_token_is_function (&self->token, "var") && self->var_fallback == 0)
+    {
+      GtkCssVariableValue *ref;
+      GtkCssTokenizer *ref_tokenizer;
+
+      gtk_css_parser_start_block (self);
+
+      g_assert (gtk_css_parser_has_token (self, GTK_CSS_TOKEN_IDENT));
+
+      char *var_name = gtk_css_parser_consume_ident (self);
+      g_assert (var_name[0] == '-' && var_name[1] == '-');
+
+      /* If we encounter var() in a fallback when we can already resolve the
+       * actual variable, skip it */
+      self->var_fallback++;
+      gtk_css_parser_skip (self);
+      gtk_css_parser_end_block (self);
+      self->var_fallback--;
+
+      g_assert (self->next_ref < self->n_refs);
+
+      ref = self->refs[self->next_ref++];
+      ref_tokenizer = gtk_css_tokenizer_new_for_range (ref->bytes, ref->offset,
+                                                       ref->end_offset - ref->offset);
+      gtk_css_tokenizers_append (&self->tokenizers,
+                                 &(GtkCssTokenizerData) {
+                                   ref_tokenizer,
+                                   g_strdup (var_name),
+                                   gtk_css_variable_value_ref (ref)
+                                 });
+
+      gtk_css_parser_ensure_token (self);
+      g_free (var_name);
     }
 }
 
@@ -295,9 +462,9 @@ gtk_css_parser_peek_token (GtkCssParser *self)
 
   gtk_css_parser_ensure_token (self);
 
-  if (self->blocks->len)
+  if (gtk_css_parser_blocks_get_size (&self->blocks) > 0)
     {
-      const GtkCssParserBlock *block = &g_array_index (self->blocks, GtkCssParserBlock, self->blocks->len - 1);
+      const GtkCssParserBlock *block = gtk_css_parser_blocks_get_last (&self->blocks);
       if (gtk_css_token_is (&self->token, block->end_token) ||
           gtk_css_token_is (&self->token, block->inherited_end_token) ||
           gtk_css_token_is (&self->token, block->alternative_token))
@@ -352,7 +519,7 @@ gtk_css_parser_start_block (GtkCssParser *self)
   block.inherited_end_token = GTK_CSS_TOKEN_EOF;
   block.alternative_token = GTK_CSS_TOKEN_EOF;
   block.start_location = self->location;
-  g_array_append_val (self->blocks, block);
+  gtk_css_parser_blocks_append (&self->blocks, block);
 
   gtk_css_token_clear (&self->token);
 }
@@ -364,13 +531,13 @@ gtk_css_parser_start_semicolon_block (GtkCssParser    *self,
   GtkCssParserBlock block;
 
   block.end_token = GTK_CSS_TOKEN_SEMICOLON;
-  if (self->blocks->len)
-    block.inherited_end_token = g_array_index (self->blocks, GtkCssParserBlock, self->blocks->len - 1).end_token;
+  if (gtk_css_parser_blocks_get_size (&self->blocks) > 0)
+    block.inherited_end_token = gtk_css_parser_blocks_get_last (&self->blocks)->end_token;
   else
     block.inherited_end_token = GTK_CSS_TOKEN_EOF;
   block.alternative_token = alternative_token;
   block.start_location = self->location;
-  g_array_append_val (self->blocks, block);
+  gtk_css_parser_blocks_append (&self->blocks, block);
 }
 
 void
@@ -378,9 +545,9 @@ gtk_css_parser_end_block_prelude (GtkCssParser *self)
 {
   GtkCssParserBlock *block;
 
-  g_return_if_fail (self->blocks->len > 0);
+  g_return_if_fail (gtk_css_parser_blocks_get_size (&self->blocks) > 0);
 
-  block = &g_array_index (self->blocks, GtkCssParserBlock, self->blocks->len - 1);
+  block = gtk_css_parser_blocks_get_last (&self->blocks);
 
   if (block->alternative_token == GTK_CSS_TOKEN_EOF)
     return;
@@ -405,11 +572,11 @@ gtk_css_parser_end_block (GtkCssParser *self)
 {
   GtkCssParserBlock *block;
 
-  g_return_if_fail (self->blocks->len > 0);
+  g_return_if_fail (gtk_css_parser_blocks_get_size (&self->blocks) > 0);
 
   gtk_css_parser_skip_until (self, GTK_CSS_TOKEN_EOF);
 
-  block = &g_array_index (self->blocks, GtkCssParserBlock, self->blocks->len - 1);
+  block = gtk_css_parser_blocks_get_last (&self->blocks);
 
   if (gtk_css_token_is (&self->token, GTK_CSS_TOKEN_EOF))
     {
@@ -418,7 +585,7 @@ gtk_css_parser_end_block (GtkCssParser *self)
                            gtk_css_parser_get_block_location (self),
                            gtk_css_parser_get_start_location (self),
                            "Unterminated block at end of document");
-      g_array_set_size (self->blocks, self->blocks->len - 1);
+      gtk_css_parser_blocks_drop_last (&self->blocks);
     }
   else if (gtk_css_token_is (&self->token, block->inherited_end_token))
     {
@@ -428,11 +595,11 @@ gtk_css_parser_end_block (GtkCssParser *self)
                            gtk_css_parser_get_block_location (self),
                            gtk_css_parser_get_start_location (self),
                            "Expected ';' at end of block");
-      g_array_set_size (self->blocks, self->blocks->len - 1);
+      gtk_css_parser_blocks_drop_last (&self->blocks);
     }
   else
     {
-      g_array_set_size (self->blocks, self->blocks->len - 1);
+      gtk_css_parser_blocks_drop_last (&self->blocks);
       if (gtk_css_token_is_preserved (&self->token, NULL))
         {
           gtk_css_token_clear (&self->token);
@@ -499,6 +666,19 @@ gtk_css_parser_skip_until (GtkCssParser    *self,
        token = gtk_css_parser_get_token (self))
     {
       gtk_css_parser_skip (self);
+    }
+}
+
+void
+gtk_css_parser_skip_whitespace (GtkCssParser *self)
+{
+  const GtkCssToken *token;
+
+  for (token = gtk_css_parser_peek_token (self);
+       gtk_css_token_is (token, GTK_CSS_TOKEN_WHITESPACE);
+       token = gtk_css_parser_peek_token (self))
+    {
+      gtk_css_parser_consume_token (self);
     }
 }
 
@@ -623,6 +803,26 @@ gtk_css_parser_warn_syntax (GtkCssParser *self,
   va_start (args, format);
   error = g_error_new_valist (GTK_CSS_PARSER_WARNING,
                               GTK_CSS_PARSER_WARNING_SYNTAX,
+                              format, args);
+  gtk_css_parser_emit_error (self,
+                             gtk_css_parser_get_start_location (self),
+                             gtk_css_parser_get_end_location (self),
+                             error);
+  g_error_free (error);
+  va_end (args);
+}
+
+void
+gtk_css_parser_warn_deprecated (GtkCssParser *self,
+                                 const char   *format,
+                                 ...)
+{
+  va_list args;
+  GError *error;
+
+  va_start (args, format);
+  error = g_error_new_valist (GTK_CSS_PARSER_WARNING,
+                              GTK_CSS_PARSER_WARNING_DEPRECATED,
                               format, args);
   gtk_css_parser_emit_error (self,
                              gtk_css_parser_get_start_location (self),
@@ -1111,4 +1311,326 @@ gtk_css_parser_consume_any (GtkCssParser            *parser,
     }
 
   return result;
+}
+
+gboolean
+gtk_css_parser_has_references (GtkCssParser *self)
+{
+  GtkCssTokenizer *tokenizer = get_tokenizer (self);
+  gboolean ret = FALSE;
+  int inner_blocks = 0, i;
+
+  /* We don't want gtk_css_parser_ensure_token to expand references on us here */
+  g_assert (self->n_refs == 0);
+
+  gtk_css_tokenizer_save (tokenizer);
+
+  do {
+      const GtkCssToken *token;
+
+      token = gtk_css_parser_get_token (self);
+
+      if (inner_blocks == 0)
+        {
+          if (gtk_css_token_is (token, GTK_CSS_TOKEN_EOF))
+            break;
+
+          if (gtk_css_token_is (token, GTK_CSS_TOKEN_CLOSE_PARENS) ||
+              gtk_css_token_is (token, GTK_CSS_TOKEN_CLOSE_SQUARE))
+            {
+              goto done;
+            }
+        }
+
+      if (gtk_css_token_is_preserved (token, NULL))
+        {
+          if (inner_blocks > 0 && gtk_css_token_is (token, GTK_CSS_TOKEN_EOF))
+            {
+              gtk_css_parser_end_block (self);
+              inner_blocks--;
+            }
+          else
+            {
+              gtk_css_parser_consume_token (self);
+            }
+        }
+      else
+        {
+          gboolean is_var = gtk_css_token_is_function (token, "var");
+
+          inner_blocks++;
+          gtk_css_parser_start_block (self);
+
+          if (is_var)
+            {
+              token = gtk_css_parser_get_token (self);
+
+              if (gtk_css_token_is (token, GTK_CSS_TOKEN_IDENT))
+                {
+                  const char *var_name = gtk_css_token_get_string (token);
+
+                  if (strlen (var_name) < 3 || var_name[0] != '-' || var_name[1] != '-')
+                    goto done;
+
+                  gtk_css_parser_consume_token (self);
+
+                  if (!gtk_css_parser_has_token (self, GTK_CSS_TOKEN_EOF) &&
+                      !gtk_css_parser_has_token (self, GTK_CSS_TOKEN_COMMA))
+                    goto done;
+
+                  ret = TRUE;
+                  /* We got our answer. Now get it out as fast as possible! */
+                  goto done;
+                }
+            }
+        }
+    }
+  while (!gtk_css_parser_has_token (self, GTK_CSS_TOKEN_SEMICOLON) &&
+         !gtk_css_parser_has_token (self, GTK_CSS_TOKEN_CLOSE_CURLY));
+
+done:
+  for (i = 0; i < inner_blocks; i++)
+    gtk_css_parser_end_block (self);
+
+  g_assert (tokenizer == get_tokenizer (self));
+
+  gtk_css_tokenizer_restore (tokenizer);
+  self->location = *gtk_css_tokenizer_get_location (tokenizer);
+  gtk_css_tokenizer_read_token (tokenizer, &self->token, NULL);
+
+  return ret;
+}
+
+static void
+clear_ref (GtkCssVariableValueReference *ref)
+{
+  g_free (ref->name);
+  if (ref->fallback)
+    gtk_css_variable_value_unref (ref->fallback);
+}
+
+#define GDK_ARRAY_NAME gtk_css_parser_references
+#define GDK_ARRAY_TYPE_NAME GtkCssParserReferences
+#define GDK_ARRAY_ELEMENT_TYPE GtkCssVariableValueReference
+
+GtkCssVariableValue *
+gtk_css_parser_parse_value_into_token_stream (GtkCssParser *self)
+{
+  GBytes *bytes = gtk_css_tokenizer_get_bytes (get_tokenizer (self));
+  const GtkCssToken *token;
+  gsize offset;
+  gsize length = 0;
+  GtkCssParserReferences refs;
+  int inner_blocks = 0, i;
+  gboolean is_initial = FALSE;
+
+  for (token = gtk_css_parser_peek_token (self);
+       gtk_css_token_is (token, GTK_CSS_TOKEN_WHITESPACE);
+       token = gtk_css_parser_peek_token (self))
+    {
+      gtk_css_parser_consume_token (self);
+    }
+
+  gtk_css_parser_references_init (&refs);
+
+  offset = self->location.bytes;
+
+  do {
+      token = gtk_css_parser_get_token (self);
+
+      if (length == 0 && gtk_css_token_is_ident (token, "initial"))
+        is_initial = TRUE;
+
+      if (gtk_css_token_is (token, GTK_CSS_TOKEN_BAD_STRING) ||
+          gtk_css_token_is (token, GTK_CSS_TOKEN_BAD_URL))
+        {
+          gtk_css_parser_error_syntax (self, "Invalid property value");
+          goto error;
+        }
+
+      if (inner_blocks == 0)
+        {
+          if (gtk_css_token_is (token, GTK_CSS_TOKEN_EOF))
+            break;
+
+          if (gtk_css_token_is (token, GTK_CSS_TOKEN_CLOSE_PARENS) ||
+              gtk_css_token_is (token, GTK_CSS_TOKEN_CLOSE_SQUARE))
+            {
+              gtk_css_parser_error_syntax (self, "Invalid property value");
+              goto error;
+            }
+        }
+
+      if (gtk_css_token_is_preserved (token, NULL))
+        {
+          if (inner_blocks > 0 && gtk_css_token_is (token, GTK_CSS_TOKEN_EOF))
+            {
+              length++;
+              gtk_css_parser_end_block (self);
+
+              inner_blocks--;
+            }
+          else
+            {
+              length++;
+              gtk_css_parser_consume_token (self);
+            }
+        }
+      else
+        {
+          gboolean is_var = gtk_css_token_is_function (token, "var");
+
+          length++;
+          inner_blocks++;
+
+          gtk_css_parser_start_block (self);
+
+          if (is_var)
+            {
+              token = gtk_css_parser_get_token (self);
+
+              if (gtk_css_token_is (token, GTK_CSS_TOKEN_IDENT))
+                {
+                  GtkCssVariableValueReference ref;
+                  char *var_name = g_strdup (gtk_css_token_get_string (token));
+
+                  if (strlen (var_name) < 3 || var_name[0] != '-' || var_name[1] != '-')
+                    {
+                      gtk_css_parser_error_syntax (self, "Invalid variable name: %s", var_name);
+                      g_free (var_name);
+                      goto error;
+                    }
+
+                  length++;
+                  gtk_css_parser_consume_token (self);
+
+                  if (!gtk_css_parser_has_token (self, GTK_CSS_TOKEN_EOF) &&
+                      !gtk_css_parser_has_token (self, GTK_CSS_TOKEN_COMMA))
+                    {
+                      gtk_css_parser_error_syntax (self, "Invalid property value");
+                      g_free (var_name);
+                      goto error;
+                    }
+
+                  ref.name = var_name;
+
+                  if (gtk_css_parser_has_token (self, GTK_CSS_TOKEN_EOF))
+                    {
+                      ref.length = 3;
+                      ref.fallback = NULL;
+                    }
+                  else
+                    {
+                      length++;
+                      gtk_css_parser_consume_token (self);
+
+                      ref.fallback = gtk_css_parser_parse_value_into_token_stream (self);
+
+                      if (ref.fallback == NULL)
+                        {
+                          gtk_css_parser_error_value (self, "Invalid fallback for: %s", var_name);
+                          g_free (var_name);
+                          goto error;
+                        }
+
+                      ref.length = 4 + ref.fallback->length;
+                      length += ref.fallback->length;
+                    }
+
+                  gtk_css_parser_references_append (&refs, &ref);
+                }
+              else
+                {
+                  if (gtk_css_token_is (token, GTK_CSS_TOKEN_EOF))
+                    {
+                      gtk_css_parser_error_syntax (self, "Missing variable name");
+                    }
+                  else
+                    {
+                      char *s = gtk_css_token_to_string (token);
+                      gtk_css_parser_error_syntax (self, "Expected a variable name, not %s", s);
+                      g_free (s);
+                    }
+                  goto error;
+                }
+            }
+        }
+    }
+  while (!gtk_css_parser_has_token (self, GTK_CSS_TOKEN_SEMICOLON) &&
+         !gtk_css_parser_has_token (self, GTK_CSS_TOKEN_CLOSE_CURLY));
+
+  if (inner_blocks > 0)
+    {
+      gtk_css_parser_error_syntax (self, "Invalid property value");
+      goto error;
+    }
+
+  if (is_initial && length == 1)
+    {
+      gtk_css_parser_references_clear (&refs);
+
+      return gtk_css_variable_value_new_initial (bytes,
+                                                 offset,
+                                                 self->location.bytes);
+    }
+  else
+    {
+      GtkCssVariableValueReference *out_refs;
+      gsize n_refs;
+
+      n_refs = gtk_css_parser_references_get_size (&refs);
+      out_refs = gtk_css_parser_references_steal (&refs);
+
+      return gtk_css_variable_value_new (bytes,
+                                         offset,
+                                         self->location.bytes,
+                                         length,
+                                         out_refs,
+                                         n_refs);
+    }
+
+error:
+  for (i = 0; i < inner_blocks; i++)
+    gtk_css_parser_end_block (self);
+
+  gtk_css_parser_references_clear (&refs);
+
+  return NULL;
+}
+
+void
+gtk_css_parser_get_expanding_variables (GtkCssParser          *self,
+                                        GtkCssVariableValue ***variables,
+                                        char                ***variable_names,
+                                        gsize                 *n_variables)
+{
+  gsize len = gtk_css_tokenizers_get_size (&self->tokenizers);
+  GtkCssVariableValue **vars = NULL;
+  char **names = NULL;
+  gsize n;
+
+  if (variables)
+    vars = g_new0 (GtkCssVariableValue *, len + 1);
+  if (variable_names)
+    names = g_new0 (char *, len + 1);
+
+  n = 0;
+  for (gsize i = 0; i < gtk_css_tokenizers_get_size (&self->tokenizers); i++)
+    {
+      GtkCssTokenizerData *data = gtk_css_tokenizers_index (&self->tokenizers, i);
+      if (variables && data->variable)
+        vars[n] = gtk_css_variable_value_ref (data->variable);
+      if (variable_names)
+        names[n] = g_strdup (data->var_name);
+      n++;
+    }
+
+  if (variables)
+    *variables = vars;
+
+  if (variable_names)
+    *variable_names = names;
+
+  if (n_variables)
+    *n_variables = n;
 }

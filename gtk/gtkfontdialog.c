@@ -37,9 +37,7 @@
  * should be modal.
  *
  * The dialog is shown with the [method@Gtk.FontDialog.choose_font]
- * function or its variants. This API follows the GIO async pattern,
- * and the result can be obtained by calling the corresponding
- * finish function, such as [method@Gtk.FontDialog.choose_font_finish].
+ * function or its variants.
  *
  * See [class@Gtk.FontDialogButton] for a convenient control
  * that uses `GtkFontDialog` and presents the results.
@@ -627,10 +625,6 @@ G_GNUC_END_IGNORE_DEPRECATIONS
  * This function initiates a font selection operation by
  * presenting a dialog to the user for selecting a font family.
  *
- * The @callback will be called when the dialog is dismissed.
- * It should call [method@Gtk.FontDialog.choose_family_finish]
- * to obtain the result.
- *
  * Since: 4.10
  */
 void
@@ -716,10 +710,6 @@ gtk_font_dialog_choose_family_finish (GtkFontDialog  *self,
  * presenting a dialog to the user for selecting a font face
  * (i.e. a font family and style, but not a specific font size).
  *
- * The @callback will be called when the dialog is dismissed.
- * It should call [method@Gtk.FontDialog.choose_face_finish]
- * to obtain the result.
- *
  * Since: 4.10
  */
 void
@@ -797,10 +787,6 @@ gtk_font_dialog_choose_face_finish (GtkFontDialog  *self,
  *
  * This function initiates a font selection operation by
  * presenting a dialog to the user for selecting a font.
- *
- * The @callback will be called when the dialog is dismissed.
- * It should call [method@Gtk.FontDialog.choose_font_finish]
- * to obtain the result.
  *
  * If you want to let the user select font features as well,
  * use [method@Gtk.FontDialog.choose_font_and_features] instead.
@@ -882,10 +868,6 @@ gtk_font_dialog_choose_font_finish (GtkFontDialog  *self,
  *
  * Font features affect how the font is rendered, for example
  * enabling glyph variants or ligatures.
- *
- * The @callback will be called when the dialog is dismissed.
- * It should call [method@Gtk.FontDialog.choose_font_and_features_finish]
- * to obtain the result.
  *
  * Since: 4.10
  */

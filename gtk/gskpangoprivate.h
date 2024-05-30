@@ -20,6 +20,7 @@
 
 #include <pango/pango.h>
 #include "gtk/gtksnapshot.h"
+#include "gtk/gtkcssstyleprivate.h"
 
 G_BEGIN_DECLS
 
@@ -58,6 +59,7 @@ struct _GskPangoRenderer
   GtkWidget             *widget;
   GtkSnapshot           *snapshot;
   const GdkRGBA         *fg_color;
+  GtkCssStyle           *shadow_style;
 
   /* Error underline color for this widget */
   GdkRGBA               *error_color;

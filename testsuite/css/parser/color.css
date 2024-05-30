@@ -71,3 +71,55 @@ q {
 r {
   color: @mygreen;
 }
+
+s {
+  color: rgb(255 0 0);
+}
+
+t {
+  color: rgb(255% 0 0);
+}
+
+u {
+  color: rgb(255 0 0 / 50%);
+}
+
+v {
+  color: rgb(calc(128 + 127) calc(10 - 10) calc(100 * 0) / calc(1 / 2));
+}
+
+w {
+  color: rgba(255 0 0);
+}
+
+x {
+  color: rgba(255 0 0 / 0.5);
+}
+
+y {
+  color: color(srgb 1 0 0);
+}
+
+z {
+  color: color(srgb 99% 98.5% 98% / 0.5);
+}
+
+aa {
+  color: color(srgb 1.5 -150% 0 / 200%);
+}
+
+ab {
+  color: color(srgb-linear 1 0.5 0 / 50%);
+}
+
+ac {
+  color: oklab(0.8 0 0.3 / 0.5);
+}
+
+ad {
+  color: oklch(0.8 0.3 200 / 0.5);
+}
+
+ae {
+  color: hwb(200 10 90 / 0.5);
+}

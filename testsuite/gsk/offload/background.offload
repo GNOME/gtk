@@ -1,0 +1,4 @@
+0: offloaded, above: -, texture: 13x17, source: 0 0 13 17, dest: 0 0 50 50, background: 0 0 100 100
+1: not offloaded
+2: not offloaded
+3: offloaded, raised, above: 0, texture: 13x17, source: 0 0 13 17, dest: 0 0 50 50, background: 0 0 100 100

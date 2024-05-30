@@ -54,6 +54,8 @@
 #include "linux-dmabuf-unstable-v1-client-protocol.h"
 #include "presentation-time-client-protocol.h"
 
+#include "gsk/gskrectprivate.h"
+
 
 /**
  * GdkWaylandSurface:
@@ -657,6 +659,7 @@ static void
 gdk_wayland_surface_sync_opaque_region (GdkSurface *surface)
 {
   GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
+  GdkWaylandDisplay *display = GDK_WAYLAND_DISPLAY (gdk_surface_get_display (surface));
   struct wl_region *wl_region = NULL;
 
   if (!impl->display_server.wl_surface)
@@ -679,16 +682,21 @@ gdk_wayland_surface_sync_opaque_region (GdkSurface *surface)
                 continue;
 
               if (sub->texture != NULL)
-                cairo_region_subtract_rectangle (region, &sub->dest);
+                {
+                  graphene_rect_t bounds;
+                  cairo_rectangle_int_t rect;
+
+                  gdk_subsurface_get_bounds (subsurface, &bounds);
+                  gsk_rect_to_cairo_grow (&bounds, &rect);
+                  cairo_region_subtract_rectangle (region, &rect);
+                }
             }
 
-          wl_region = wl_region_from_cairo_region (GDK_WAYLAND_DISPLAY (gdk_surface_get_display (surface)),
-                                                   region);
+          wl_region = wl_region_from_cairo_region (display, region);
           cairo_region_destroy (region);
         }
       else
-        wl_region = wl_region_from_cairo_region (GDK_WAYLAND_DISPLAY (gdk_surface_get_display (surface)),
-                                                 impl->opaque_region);
+        wl_region = wl_region_from_cairo_region (display, impl->opaque_region);
     }
 
   wl_surface_set_opaque_region (impl->display_server.wl_surface, wl_region);
@@ -775,7 +783,7 @@ gdk_wayland_surface_sync (GdkSurface *surface)
   gdk_wayland_surface_sync_viewport (surface);
 }
 
-gboolean
+static gboolean
 gdk_wayland_surface_needs_commit (GdkSurface *surface)
 {
   GdkWaylandSurface *self = GDK_WAYLAND_SURFACE (surface);
@@ -785,6 +793,20 @@ gdk_wayland_surface_needs_commit (GdkSurface *surface)
          self->input_region_dirty ||
          self->buffer_scale_dirty ||
          self->viewport_dirty;
+}
+
+void
+gdk_wayland_surface_handle_empty_frame (GdkSurface *surface)
+{
+  if (!gdk_wayland_surface_needs_commit (surface))
+    return;
+
+  gdk_wayland_surface_sync (surface);
+  gdk_wayland_surface_request_frame (surface);
+
+  gdk_profiler_add_mark (GDK_PROFILER_CURRENT_TIME, 0, "Wayland surface commit", NULL);
+  gdk_wayland_surface_commit (surface);
+  gdk_wayland_surface_notify_committed (surface);
 }
 
 static void
@@ -799,6 +821,11 @@ gdk_wayland_surface_fractional_scale_preferred_scale_cb (void *data,
   gdk_wayland_surface_update_size (surface,
                                    surface->width, surface->height,
                                    &GDK_FRACTIONAL_SCALE_INIT (scale));
+
+  GDK_DISPLAY_DEBUG (gdk_surface_get_display (surface), EVENTS,
+                     "preferred fractional scale, surface %p scale %f",
+                     surface,
+                     gdk_fractional_scale_to_double (&GDK_FRACTIONAL_SCALE_INIT (scale)));
 }
 
 static const struct wp_fractional_scale_v1_listener fractional_scale_listener = {
@@ -815,8 +842,8 @@ surface_enter (void              *data,
   GdkDisplay *display = gdk_surface_get_display (surface);
   GdkMonitor *monitor;
 
-  GDK_DISPLAY_DEBUG(gdk_surface_get_display (surface), EVENTS,
-                    "surface enter, surface %p output %p", surface, output);
+  GDK_DISPLAY_DEBUG (gdk_surface_get_display (surface), EVENTS,
+                     "surface enter, surface %p output %p", surface, output);
 
   impl->display_server.outputs = g_slist_prepend (impl->display_server.outputs, output);
 
@@ -848,9 +875,38 @@ surface_leave (void              *data,
   gdk_surface_leave_monitor (surface, monitor);
 }
 
+static void
+surface_preferred_buffer_scale (void              *data,
+                                struct wl_surface *wl_surface,
+                                int32_t            factor)
+{
+  GdkSurface *surface = GDK_SURFACE (data);
+
+  GDK_DISPLAY_DEBUG (gdk_surface_get_display (surface), EVENTS,
+                     "preferred buffer scale, surface %p scale %d",
+                     surface, factor);
+}
+
+static void
+surface_preferred_buffer_transform (void              *data,
+                                    struct wl_surface *wl_surface,
+                                    uint32_t           transform)
+{
+  GdkSurface *surface = GDK_SURFACE (data);
+  const char *transform_name[] = {
+    "normal", "90", "180", "270", "flipped", "flipped-90", "flipped-180", "flipped-270"
+  };
+
+  GDK_DISPLAY_DEBUG (gdk_surface_get_display (surface), EVENTS,
+                     "preferred buffer transform, surface %p transform %s",
+                     surface, transform_name[transform]);
+}
+
 static const struct wl_surface_listener surface_listener = {
   surface_enter,
-  surface_leave
+  surface_leave,
+  surface_preferred_buffer_scale,
+  surface_preferred_buffer_transform,
 };
 
 static void

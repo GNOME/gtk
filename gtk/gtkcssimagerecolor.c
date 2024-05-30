@@ -44,7 +44,7 @@ gtk_css_image_recolor_print (GtkCssImage *image,
   if (recolor->palette)
     {
       g_string_append (string, ",");
-      _gtk_css_value_print (recolor->palette, string);
+      gtk_css_value_print (recolor->palette, string);
     }
   g_string_append (string, ")");
 }
@@ -54,7 +54,7 @@ gtk_css_image_recolor_dispose (GObject *object)
 {
   GtkCssImageRecolor *recolor = GTK_CSS_IMAGE_RECOLOR (object);
 
-  g_clear_pointer (&recolor->palette, _gtk_css_value_unref);
+  g_clear_pointer (&recolor->palette, gtk_css_value_unref);
   g_clear_object (&recolor->file);
   g_clear_object (&recolor->texture);
 
@@ -97,6 +97,7 @@ gtk_css_image_recolor_load_texture (GtkCssImageRecolor  *recolor,
                                     GError             **error)
 {
   char *uri;
+  gboolean only_fg;
 
   if (recolor->texture)
     return;
@@ -110,7 +111,7 @@ gtk_css_image_recolor_load_texture (GtkCssImageRecolor  *recolor,
       if (g_str_has_suffix (uri, ".symbolic.png"))
         recolor->texture = gtk_load_symbolic_texture_from_resource (resource_path);
       else
-        recolor->texture = gdk_texture_new_from_resource_symbolic (resource_path, 0, 0, 1.0, NULL);
+        recolor->texture = gdk_texture_new_from_resource_symbolic (resource_path, 0, 0, 1.0, &only_fg, NULL);
 
       g_free (resource_path);
     }
@@ -119,7 +120,7 @@ gtk_css_image_recolor_load_texture (GtkCssImageRecolor  *recolor,
       if (g_str_has_suffix (uri, ".symbolic.png"))
         recolor->texture = gtk_load_symbolic_texture_from_file (recolor->file);
       else
-        recolor->texture = gdk_texture_new_from_file_symbolic (recolor->file, 0, 0, 1.0, NULL);
+        recolor->texture = gdk_texture_new_from_file_symbolic (recolor->file, 0, 0, 1.0, &only_fg, NULL);
     }
 
   g_free (uri);
@@ -200,11 +201,9 @@ gtk_css_image_recolor_snapshot (GtkCssImage *image,
 }
 
 static GtkCssImage *
-gtk_css_image_recolor_compute (GtkCssImage      *image,
-                               guint             property_id,
-                               GtkStyleProvider *provider,
-                               GtkCssStyle      *style,
-                               GtkCssStyle      *parent_style)
+gtk_css_image_recolor_compute (GtkCssImage          *image,
+                               guint                 property_id,
+                               GtkCssComputeContext *context)
 {
   GtkCssImageRecolor *recolor = GTK_CSS_IMAGE_RECOLOR (image);
   GtkCssValue *palette;
@@ -212,23 +211,23 @@ gtk_css_image_recolor_compute (GtkCssImage      *image,
   int scale;
   GError *error = NULL;
 
-  scale = gtk_style_provider_get_scale (provider);
+  scale = gtk_style_provider_get_scale (context->provider);
 
   if (recolor->palette)
-    palette = _gtk_css_value_compute (recolor->palette, property_id, provider, style, parent_style);
+    palette = gtk_css_value_compute (recolor->palette, property_id, context);
   else
-    palette = _gtk_css_value_ref (style->core->icon_palette);
+    palette = gtk_css_value_ref (context->style->core->icon_palette);
 
-  img = gtk_css_image_recolor_load (recolor, style, palette, scale, &error);
+  img = gtk_css_image_recolor_load (recolor, context->style, palette, scale, &error);
 
   if (error)
     {
-      GtkCssSection *section = gtk_css_style_get_section (style, property_id);
-      gtk_style_provider_emit_error (provider, section, error);
+      GtkCssSection *section = gtk_css_style_get_section (context->style, property_id);
+      gtk_style_provider_emit_error (context->provider, section, error);
       g_error_free (error);
     }
 
-  _gtk_css_value_unref (palette);
+  gtk_css_value_unref (palette);
 
   return img;
 }

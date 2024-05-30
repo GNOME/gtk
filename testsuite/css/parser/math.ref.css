@@ -1,0 +1,91 @@
+a {
+  margin-left: min(3px, 1em, 20cm);
+  margin-right: 3px;
+  margin-top: 3px;
+}
+
+b {
+  padding-left: max(3px, 4em, 20cm);
+  padding-top: 7cm;
+  transition-duration: 1s;
+}
+
+c {
+  background-size: 1.1082840819977162mm;
+  border-left-width: 2.7182818284590451px;
+  margin-left: clamp(2px, 1em, 10cm);
+}
+
+d {
+  background-size: 17.600000000000001px;
+  border-left-width: round(down, 17px, 3ex);
+  border-right-width: 18px;
+  border-top-width: 18px;
+}
+
+e {
+  background-size: 1.8999999999999995;
+}
+
+f {
+  border-top-left-radius: 0.30000000000000071;
+}
+
+g {
+  border-bottom-right-radius: 0.91294525072762767px;
+}
+
+h {
+  margin-left: 0.40808206181339196px;
+}
+
+i {
+  margin-right: 2.2371609442247422px;
+}
+
+j {
+  filter: hue-rotate(NaN);
+}
+
+k {
+  filter: hue-rotate(NaN);
+}
+
+l {
+  filter: hue-rotate(87.137594773888253deg);
+}
+
+m {
+  filter: hue-rotate(33.690067525979785deg);
+}
+
+n {
+  margin-top: 11.313708498984761px;
+}
+
+o {
+  margin-bottom: 1.4142135623730951px;
+}
+
+p {
+  padding-left: 7.3484692283495345px;
+}
+
+q {
+  padding-right: 1.8927892607143719px;
+}
+
+r {
+  padding-top: 221.40641620418717px;
+}
+
+s {
+  padding-bottom: 0.41078129050290885px;
+}
+
+t {
+  border-bottom-width: 0.31830988618379069px;
+  border-left-width: 0.31830988618379069px;
+  border-right-width: 0.31830988618379069px;
+  border-top-width: 0.31830988618379069px;
+}

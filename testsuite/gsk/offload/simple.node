@@ -15,11 +15,14 @@ container {
       }
     }
   }
-  opacity {
-    opacity: 0.5;
-    child: subsurface {
-      child: texture {
-        texture: url('data:image/svg+xml;utf-8,<svg width="16" height="16"></svg>');
+  transform {
+    transform: translate(0,200);
+    child: opacity {
+      opacity: 0.5;
+      child: subsurface {
+        child: texture {
+          texture: url('data:image/svg+xml;utf-8,<svg width="16" height="16"></svg>');
+        }
       }
     }
   }

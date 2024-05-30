@@ -23,6 +23,7 @@
 #include <gtk/gtk.h>
 #include <gdk/gdksurfaceprivate.h>
 #include <gdk/gdksubsurfaceprivate.h>
+#include <gdk/gdkdebugprivate.h>
 #include <gsk/gskrendernodeparserprivate.h>
 #include <gsk/gskrendernodeprivate.h>
 #include <gsk/gskoffloadprivate.h>
@@ -196,10 +197,7 @@ collect_offload_info (GdkSurface *surface,
       else
         g_snprintf (above, sizeof (above), "-");
 
-      /* NOTE: We look at can_offload here, not is_offloaded, since we don't have
-       * dmabuf textures here, so attaching them to subsurfaces won't succeed.
-       */
-      if (info->can_offload)
+      if (info->is_offloaded)
         {
           g_string_append_printf (s, "%u: offloaded, %s%sabove: %s, ",
                                   i,
@@ -210,11 +208,16 @@ collect_offload_info (GdkSurface *surface,
                                   gdk_texture_get_width (info->texture),
                                   gdk_texture_get_height (info->texture));
           g_string_append_printf (s, "source: %g %g %g %g, ",
-                                  info->source.origin.x, info->source.origin.y,
-                                  info->source.size.width, info->source.size.height);
-          g_string_append_printf (s, "dest: %g %g %g %g\n",
-                                  info->dest.origin.x, info->dest.origin.y,
-                                  info->dest.size.width, info->dest.size.height);
+                                  info->source_rect.origin.x, info->source_rect.origin.y,
+                                  info->source_rect.size.width, info->source_rect.size.height);
+          g_string_append_printf (s, "dest: %g %g %g %g",
+                                  info->texture_rect.origin.x, info->texture_rect.origin.y,
+                                  info->texture_rect.size.width, info->texture_rect.size.height);
+          if (info->has_background)
+            g_string_append_printf (s, ", background: %g %g %g %g",
+                                    info->background_rect.origin.x, info->background_rect.origin.y,
+                                    info->background_rect.size.width, info->background_rect.size.height);
+          g_string_append (s, "\n");
         }
       else
         g_string_append_printf (s, "%u: %snot offloaded\n",
@@ -380,6 +383,18 @@ parse_node_file (GFile *file, const char *generate)
 
   surface = make_toplevel ();
 
+  if (!GDK_DISPLAY_DEBUG_CHECK (gdk_display_get_default (), FORCE_OFFLOAD))
+    {
+      g_print ("Offload tests require GDK_DEBUG=force-offload");
+      exit (77);
+    }
+
+  if (gdk_surface_get_scale (surface) != 1.0)
+    {
+      g_print ("Offload tests don't work with fractional scales");
+      exit (77);
+    }
+
   subsurface = gdk_surface_create_subsurface (surface);
   if (subsurface == NULL)
     exit (77); /* subsurfaces aren't supported, skip these tests */
@@ -387,9 +402,7 @@ parse_node_file (GFile *file, const char *generate)
 
   node = node_from_file (file);
   if (node == NULL)
-    {
-      return FALSE;
-    }
+    return FALSE;
 
   tmp = gsk_render_node_attach (node, surface);
   gsk_render_node_unref (node);
@@ -416,8 +429,11 @@ parse_node_file (GFile *file, const char *generate)
   g_assert_no_error (error);
   if (diff && g_bytes_get_size (diff) > 0)
     {
-      g_print ("Resulting .offload file doesn't match reference:\n%s\n",
+      char *basename = g_path_get_basename (reference_file);
+      g_print ("Resulting file doesn't match reference (%s):\n%s\n",
+               basename,
                (const char *) g_bytes_get_data (diff, NULL));
+      g_free (basename);
       result = FALSE;
     }
 
@@ -452,8 +468,11 @@ parse_node_file (GFile *file, const char *generate)
       g_assert_no_error (error);
       if (diff && g_bytes_get_size (diff) > 0)
         {
-          g_print ("Resulting .offload2 file doesn't match reference:\n%s\n",
+          char *basename = g_path_get_basename (reference_file);
+          g_print ("Resulting file doesn't match reference (%s):\n%s\n",
+                   basename,
                    (const char *) g_bytes_get_data (diff, NULL));
+          g_free (basename);
           result = FALSE;
         }
 
@@ -502,7 +521,7 @@ test_file (GFile *file)
   if (g_test_verbose ())
     g_test_message ("%s", g_file_peek_path (file));
 
-  return parse_node_file (file, FALSE);
+  return parse_node_file (file, NULL);
 }
 
 static int

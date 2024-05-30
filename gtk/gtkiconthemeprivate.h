@@ -26,8 +26,5 @@ const char *gtk_string_set_add (GtkStringSet *set,
 
 #define IMAGE_MISSING_RESOURCE_PATH "/org/gtk/libgtk/icons/16x16/status/image-missing.png"
 
-void gtk_icon_theme_lookup_symbolic_colors   (GtkCssStyle      *style,
-                                              GdkRGBA           color_out[4]);
-
 int gtk_icon_theme_get_serial (GtkIconTheme *self);
 

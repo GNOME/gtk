@@ -37,6 +37,7 @@
 #include <wayland/presentation-time-client-protocol.h>
 #include <wayland/xdg-shell-unstable-v6-client-protocol.h>
 #include <wayland/xdg-foreign-unstable-v2-client-protocol.h>
+#include <wayland/xdg-dialog-v1-client-protocol.h>
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -84,6 +85,7 @@ struct _GdkWaylandToplevel
     struct gtk_surface1 *gtk_surface;
     struct xdg_toplevel *xdg_toplevel;
     struct zxdg_toplevel_v6 *zxdg_toplevel_v6;
+    struct xdg_dialog_v1 *xdg_dialog;
   } display_server;
 
   GdkWaylandToplevel *transient_for;
@@ -205,6 +207,7 @@ gdk_wayland_toplevel_clear_saved_size (GdkWaylandToplevel *toplevel)
 
 static void maybe_set_gtk_surface_dbus_properties (GdkWaylandToplevel *wayland_toplevel);
 static void maybe_set_gtk_surface_modal (GdkWaylandToplevel *wayland_toplevel);
+static gboolean maybe_set_xdg_dialog_modal (GdkWaylandToplevel *wayland_toplevel);
 
 static void
 gdk_wayland_toplevel_hide_surface (GdkWaylandSurface *wayland_surface)
@@ -215,6 +218,7 @@ gdk_wayland_toplevel_hide_surface (GdkWaylandSurface *wayland_surface)
 
   g_clear_pointer (&toplevel->display_server.xdg_toplevel, xdg_toplevel_destroy);
   g_clear_pointer (&toplevel->display_server.zxdg_toplevel_v6, zxdg_toplevel_v6_destroy);
+  g_clear_pointer (&toplevel->display_server.xdg_dialog, xdg_dialog_v1_destroy);
 
   if (toplevel->display_server.gtk_surface)
     {
@@ -877,7 +881,8 @@ gdk_wayland_surface_create_xdg_toplevel (GdkWaylandToplevel *wayland_toplevel)
   gdk_wayland_toplevel_set_application_id (GDK_TOPLEVEL (wayland_toplevel), app_id);
 
   maybe_set_gtk_surface_dbus_properties (wayland_toplevel);
-  maybe_set_gtk_surface_modal (wayland_toplevel);
+  if (!maybe_set_xdg_dialog_modal (wayland_toplevel))
+    maybe_set_gtk_surface_modal (wayland_toplevel);
 
   gdk_profiler_add_mark (GDK_PROFILER_CURRENT_TIME, 0, "Wayland surface commit", NULL);
   wl_surface_commit (wayland_surface->display_server.wl_surface);
@@ -1089,12 +1094,40 @@ maybe_set_gtk_surface_modal (GdkWaylandToplevel *wayland_toplevel)
 
 }
 
+static gboolean
+maybe_set_xdg_dialog_modal (GdkWaylandToplevel *wayland_toplevel)
+{
+  GdkWaylandDisplay *display_wayland =
+    GDK_WAYLAND_DISPLAY (gdk_surface_get_display (GDK_SURFACE (wayland_toplevel)));
+
+  if (!display_wayland->xdg_wm_dialog)
+    return FALSE;
+  if (!is_realized_toplevel (GDK_WAYLAND_SURFACE (wayland_toplevel)))
+    return FALSE;
+
+  if (!wayland_toplevel->display_server.xdg_dialog)
+    {
+      wayland_toplevel->display_server.xdg_dialog =
+        xdg_wm_dialog_v1_get_xdg_dialog (display_wayland->xdg_wm_dialog,
+                                         wayland_toplevel->display_server.xdg_toplevel);
+    }
+
+  if (GDK_SURFACE (wayland_toplevel)->modal_hint)
+    xdg_dialog_v1_set_modal (wayland_toplevel->display_server.xdg_dialog);
+  else
+    xdg_dialog_v1_unset_modal (wayland_toplevel->display_server.xdg_dialog);
+
+  return TRUE;
+}
+
 static void
 gdk_wayland_toplevel_set_modal_hint (GdkWaylandToplevel *wayland_toplevel,
                                      gboolean            modal)
 {
   GDK_SURFACE (wayland_toplevel)->modal_hint = modal;
-  maybe_set_gtk_surface_modal (wayland_toplevel);
+
+  if (!maybe_set_xdg_dialog_modal (wayland_toplevel))
+    maybe_set_gtk_surface_modal (wayland_toplevel);
 }
 
 void

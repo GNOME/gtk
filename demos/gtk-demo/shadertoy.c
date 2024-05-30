@@ -120,7 +120,7 @@ create_shadertoy_window (GtkWidget *do_widget)
   gtk_box_append (GTK_BOX (box), aspect);
 
   shadertoy = new_shadertoy ("/shadertoy/alienplanet.glsl");
-  gtk_aspect_frame_set_child (GTK_ASPECT_FRAME (aspect), shadertoy);
+  gtk_aspect_frame_set_child (GTK_ASPECT_FRAME (aspect), gtk_graphics_offload_new (shadertoy));
 
   sw = gtk_scrolled_window_new ();
   gtk_scrolled_window_set_min_content_height (GTK_SCROLLED_WINDOW (sw), 250);

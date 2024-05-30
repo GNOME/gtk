@@ -591,10 +591,10 @@ _gdk_macos_toplevel_surface_constructed (GObject *object)
                                                  defer:NO
                                                 screen:screen];
 
+  _gdk_macos_surface_set_native (GDK_MACOS_SURFACE (self), window);
+
   /* Allow NSWindow to go fullscreen */
   [window setCollectionBehavior:NSWindowCollectionBehaviorFullScreenPrimary];
-
-  _gdk_macos_surface_set_native (GDK_MACOS_SURFACE (self), window);
 
   frame_clock = _gdk_frame_clock_idle_new ();
   gdk_surface_set_frame_clock (surface, frame_clock);

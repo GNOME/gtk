@@ -57,22 +57,22 @@ gtk_css_transition_apply_values (GtkStyleAnimation   *style_animation,
   state = gtk_progress_tracker_get_state (&transition->tracker);
 
   if (state == GTK_PROGRESS_STATE_BEFORE)
-    value = _gtk_css_value_ref (transition->start);
+    value = gtk_css_value_ref (transition->start);
   else if (state == GTK_PROGRESS_STATE_DURING)
     {
       progress = gtk_progress_tracker_get_progress (&transition->tracker, FALSE);
       progress = _gtk_css_ease_value_transform (transition->ease, progress);
 
-      value = _gtk_css_value_transition (transition->start,
-                                         end,
-                                         transition->property,
-                                         progress);
+      value = gtk_css_value_transition (transition->start,
+                                        end,
+                                        transition->property,
+                                        progress);
     }
   else
     return;
 
   if (value == NULL)
-    value = _gtk_css_value_ref (end);
+    value = gtk_css_value_ref (end);
 
   gtk_css_animated_style_set_animated_value (style, transition->property, value);
 }
@@ -124,8 +124,8 @@ gtk_css_transition_advance (GtkStyleAnimation    *style_animation,
   transition->parent.ref_count = 1;
 
   transition->property = source->property;
-  transition->start = _gtk_css_value_ref (source->start);
-  transition->ease = _gtk_css_value_ref (source->ease);
+  transition->start = gtk_css_value_ref (source->start);
+  transition->ease = gtk_css_value_ref (source->ease);
 
   gtk_progress_tracker_init_copy (&source->tracker, &transition->tracker);
   gtk_progress_tracker_advance_frame (&transition->tracker, timestamp);
@@ -151,8 +151,8 @@ _gtk_css_transition_new (guint        property,
   transition->parent.ref_count = 1;
 
   transition->property = property;
-  transition->start = _gtk_css_value_ref (start);
-  transition->ease = _gtk_css_value_ref (ease);
+  transition->start = gtk_css_value_ref (start);
+  transition->ease = gtk_css_value_ref (ease);
   gtk_progress_tracker_start (&transition->tracker, duration_us, delay_us, 1.0);
   gtk_progress_tracker_advance_frame (&transition->tracker, timestamp);
   transition->finished = gtk_progress_tracker_get_state (&transition->tracker) == GTK_PROGRESS_STATE_AFTER;

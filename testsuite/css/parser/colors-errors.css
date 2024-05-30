@@ -30,3 +30,58 @@ h {
   color: rgb(100%,0,0);
 }
 
+i {
+  color: rgb(1 2 3 4);
+}
+
+j {
+  color: rgb(1 2 3 /);
+}
+
+k {
+  color: rgb(1 2 / 3 4);
+}
+
+l {
+  color: rgb(1, 2 3);
+}
+
+m {
+  color: rgb(1 2, 3 / 4);
+}
+
+n {
+  color: rgba(1 2 3 4);
+}
+
+o {
+  color: rgba(1 2 3 /);
+}
+
+p {
+  color: rgba(1 2 / 3 4);
+}
+
+q {
+  color: rgba(1, 2 3 / 4);
+}
+
+r {
+  color: color(not-a-color-space 255 0 0 / 0.5);
+}
+
+s {
+  color: color(srgb 255);
+}
+
+t {
+  color: color(srgb 1 0 0 0.5);
+}
+
+u {
+  color: color(srgb 1 0 / 0 0.5);
+}
+
+v {
+  color: color(srgb, 1, 0, 0);
+}

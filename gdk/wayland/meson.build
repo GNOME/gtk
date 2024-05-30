@@ -8,6 +8,7 @@ gdk_wayland_sources = files([
   'gdkdevice-wayland.c',
   'gdkdevicepad-wayland.c',
   'gdkdisplay-wayland.c',
+  'gdkdmabuf-wayland.c',
   'gdkdrag-wayland.c',
   'gdkdragsurface-wayland.c',
   'gdkdrop-wayland.c',
@@ -47,82 +48,137 @@ gdk_wayland_deps = [
   wlegldep,
 ]
 
-wayland_scanner = find_program('wayland-scanner')
-
-# Format:
-#  - protocol name
-#  - protocol stability ('private', 'stable' or 'unstable')
-#  - protocol version (if stability is 'unstable')
+# Fields:
+#  - name: protocol name
+#  - stability: protocol stability ('private', 'stable' or 'unstable')
+#  - version: protocol version
+#  - required: wayland_protocols version check
 proto_sources = [
-  ['gtk-shell', 'private', ],
-  ['primary-selection', 'unstable', 'v1', ],
-  ['pointer-gestures', 'unstable', 'v1', ],
-  ['viewporter', 'stable', ],
-  ['xdg-shell', 'unstable', 'v6', ],
-  ['xdg-shell', 'stable', ],
-  ['xdg-foreign', 'unstable', 'v1', ],
-  ['xdg-foreign', 'unstable', 'v2', ],
-  ['tablet', 'unstable', 'v2', ],
-  ['keyboard-shortcuts-inhibit', 'unstable', 'v1', ],
-  ['server-decoration', 'private' ],
-  ['xdg-output', 'unstable', 'v1', ],
-  ['idle-inhibit', 'unstable', 'v1', ],
-  ['xdg-activation', 'staging', 'v1', ],
-  ['fractional-scale', 'staging', 'v1', ],
-  ['linux-dmabuf', 'unstable', 'v1', ],
-  ['presentation-time', 'stable', 'v1', ],
+  {
+    'name': 'gtk-shell',
+    'stability': 'private',
+  },
+  {
+    'name': 'primary-selection',
+    'stability': 'unstable',
+    'version': 1,
+  },
+  {
+    'name': 'pointer-gestures',
+    'stability': 'unstable',
+    'version': 1,
+  },
+  {
+    'name': 'viewporter',
+    'stability': 'stable',
+  },
+  {
+    'name': 'xdg-shell',
+    'stability': 'unstable',
+    'version': 6,
+  },
+  {
+    'name': 'xdg-shell',
+    'stability': 'stable',
+  },
+  {
+    'name': 'xdg-foreign',
+    'stability': 'unstable',
+    'version': 1,
+  },
+  {
+    'name': 'xdg-foreign',
+    'stability': 'unstable',
+    'version': 2,
+  },
+  {
+    'name': 'tablet',
+    'stability': 'unstable',
+    'version': 2,
+  },
+  {
+    'name': 'keyboard-shortcuts-inhibit',
+    'stability': 'unstable',
+    'version': 1,
+  },
+  {
+    'name': 'server-decoration',
+    'stability': 'private',
+  },
+  {
+    'name': 'xdg-output',
+    'stability': 'unstable',
+    'version': 1,
+  },
+  {
+    'name': 'idle-inhibit',
+    'stability': 'unstable',
+    'version': 1,
+  },
+  {
+    'name': 'xdg-activation',
+    'stability': 'staging',
+    'version': 1,
+  },
+  {
+    'name': 'fractional-scale',
+    'stability': 'staging',
+    'version': 1,
+  },
+  {
+    'name': 'linux-dmabuf',
+    'stability': 'unstable',
+    'version': 1,
+  },
+  {
+    'name': 'presentation-time',
+    'stability': 'stable',
+    'version': 1,
+  },
+  {
+    'name': 'single-pixel-buffer',
+    'stability': 'staging',
+    'version': 1,
+  },
+  {
+    'name': 'xdg-dialog',
+    'stability': 'staging',
+    'version': 1,
+  },
 ]
 
 gdk_wayland_gen_headers = []
 
+wlmod = import('unstable-wayland')
 foreach p: proto_sources
-  proto_name = p.get(0)
-  proto_stability = p.get(1)
+  if wlprotocolsdep.version().version_compare(p.get('required', '>=0'))
+    if p.get('stability') == 'private'
+      if (p.has_key('version'))
+        proto_file = 'protocol/@0@-v@1@.xml'.format(p.get('name'), p.get('version'))
+      else
+        proto_file = 'protocol/@0@.xml'.format(p.get('name'))
+      endif
+    elif p.get('stability') == 'stable'
+      proto_file = wlmod.find_protocol(p.get('name'),
+        state: p.get('stability'),
+      )
+    else
+      proto_file = wlmod.find_protocol(p.get('name'),
+        state: p.get('stability'),
+        version: p.get('version'),
+      )
+    endif
 
-  if proto_stability == 'stable'
-    output_base = proto_name
-    input = files(join_paths(wlproto_dir, '@0@/@1@/@2@.xml'.format(proto_stability, proto_name, output_base)))
-  elif proto_stability == 'staging'
-    proto_version = p.get(2)
-    output_base = '@0@-@1@'.format(proto_name, proto_version)
-    input = files(join_paths(wlproto_dir, '@0@/@1@/@2@.xml'.format(proto_stability, proto_name, output_base)))
-  elif proto_stability == 'private'
-    output_base = proto_name
-    input = files('protocol/@0@.xml'.format(proto_name))
-  else
-    proto_version = p.get(2)
-    output_base = '@0@-@1@-@2@'.format(proto_name, proto_stability, proto_version)
-    input = files(join_paths(wlproto_dir, '@0@/@1@/@2@.xml'.format(proto_stability, proto_name, output_base)))
+    # Returns a list [.c, .h]
+    gen = wlmod.scan_xml(proto_file)
+    assert(gen.length() == 2)
+    gdk_wayland_sources += gen[0]
+    gdk_wayland_gen_headers += gen[1]
   endif
-
-  gdk_wayland_gen_headers += custom_target('@0@ client header'.format(output_base),
-    input: input,
-    output: '@0@-client-protocol.h'.format(output_base),
-    command: [
-      wayland_scanner,
-      'client-header',
-      '@INPUT@', '@OUTPUT@',
-    ],
-  )
-
-  gdk_wayland_sources += custom_target('@0@ source'.format(output_base),
-    input: input,
-    output: '@0@-protocol.c'.format(output_base),
-    command: [
-      wayland_scanner,
-      'private-code',
-      '@INPUT@', '@OUTPUT@',
-    ],
-  )
 endforeach
 
 libgdk_wayland = static_library('gdk-wayland',
-  sources: [
-    gdk_wayland_sources,
-    gdk_wayland_gen_headers,
-    gdkconfig,
-    gdkenum_h,
-  ],
+  sources: [ gdk_wayland_sources, gdk_wayland_gen_headers, gdk_gen_headers ],
   include_directories: [ confinc, gdkinc, ],
   c_args: [
     '-DGTK_COMPILATION',

@@ -778,15 +778,15 @@ gtk_style_context_resolve_color (GtkStyleContext    *context,
   g_return_val_if_fail (color != NULL, FALSE);
   g_return_val_if_fail (result != NULL, FALSE);
 
-  val = _gtk_css_color_value_resolve (color,
-                                      GTK_STYLE_PROVIDER (priv->cascade),
-                                      _gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_COLOR),
-                                      NULL);
+  val = gtk_css_color_value_resolve (color,
+                                     GTK_STYLE_PROVIDER (priv->cascade),
+                                     _gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_COLOR));
+
   if (val == NULL)
     return FALSE;
 
   *result = *gtk_css_color_value_get_rgba (val);
-  _gtk_css_value_unref (val);
+  gtk_css_value_unref (val);
   return TRUE;
 }
 
@@ -860,10 +860,10 @@ gtk_style_context_get_border (GtkStyleContext *context,
 
   style = gtk_style_context_lookup_style (context);
 
-  border->top = round (_gtk_css_number_value_get (style->border->border_top_width, 100));
-  border->right = round (_gtk_css_number_value_get (style->border->border_right_width, 100));
-  border->bottom = round (_gtk_css_number_value_get (style->border->border_bottom_width, 100));
-  border->left = round (_gtk_css_number_value_get (style->border->border_left_width, 100));
+  border->top = round (gtk_css_number_value_get (style->border->border_top_width, 100));
+  border->right = round (gtk_css_number_value_get (style->border->border_right_width, 100));
+  border->bottom = round (gtk_css_number_value_get (style->border->border_bottom_width, 100));
+  border->left = round (gtk_css_number_value_get (style->border->border_left_width, 100));
 }
 
 /**
@@ -886,10 +886,10 @@ gtk_style_context_get_padding (GtkStyleContext *context,
 
   style = gtk_style_context_lookup_style (context);
 
-  padding->top = round (_gtk_css_number_value_get (style->size->padding_top, 100));
-  padding->right = round (_gtk_css_number_value_get (style->size->padding_right, 100));
-  padding->bottom = round (_gtk_css_number_value_get (style->size->padding_bottom, 100));
-  padding->left = round (_gtk_css_number_value_get (style->size->padding_left, 100));
+  padding->top = round (gtk_css_number_value_get (style->size->padding_top, 100));
+  padding->right = round (gtk_css_number_value_get (style->size->padding_right, 100));
+  padding->bottom = round (gtk_css_number_value_get (style->size->padding_bottom, 100));
+  padding->left = round (gtk_css_number_value_get (style->size->padding_left, 100));
 }
 
 /**
@@ -912,10 +912,10 @@ gtk_style_context_get_margin (GtkStyleContext *context,
 
   style = gtk_style_context_lookup_style (context);
 
-  margin->top = round (_gtk_css_number_value_get (style->size->margin_top, 100));
-  margin->right = round (_gtk_css_number_value_get (style->size->margin_right, 100));
-  margin->bottom = round (_gtk_css_number_value_get (style->size->margin_bottom, 100));
-  margin->left = round (_gtk_css_number_value_get (style->size->margin_left, 100));
+  margin->top = round (gtk_css_number_value_get (style->size->margin_top, 100));
+  margin->right = round (gtk_css_number_value_get (style->size->margin_right, 100));
+  margin->bottom = round (gtk_css_number_value_get (style->size->margin_bottom, 100));
+  margin->left = round (gtk_css_number_value_get (style->size->margin_left, 100));
 }
 
 void

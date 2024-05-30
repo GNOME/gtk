@@ -61,7 +61,7 @@ gtk_css_image_conic_snapshot (GtkCssImage        *image,
         }
       else
         {
-          pos = _gtk_css_number_value_get (stop->offset, 360) / 360;
+          pos = gtk_css_number_value_get (stop->offset, 360) / 360;
           pos = CLAMP (pos, 0.0, 1.0);
         }
 
@@ -86,7 +86,7 @@ gtk_css_image_conic_snapshot (GtkCssImage        *image,
           &GRAPHENE_RECT_INIT (0, 0, width, height),
           &GRAPHENE_POINT_INIT (_gtk_css_position_value_get_x (self->center, width),
                                 _gtk_css_position_value_get_y (self->center, height)),
-          _gtk_css_number_value_get (self->rotation, 360),
+          gtk_css_number_value_get (self->rotation, 360),
           stops,
           self->n_stops);
 }
@@ -98,13 +98,13 @@ parse_angles (GtkCssParser *parser,
 {
   GtkCssValue **angles = option_data;
   
-  angles[0] = _gtk_css_number_value_parse (parser, GTK_CSS_PARSE_ANGLE | GTK_CSS_PARSE_PERCENT);
+  angles[0] = gtk_css_number_value_parse (parser, GTK_CSS_PARSE_ANGLE | GTK_CSS_PARSE_PERCENT);
   if (angles[0] == NULL)
     return FALSE;
 
   if (gtk_css_number_value_can_parse (parser))
     {
-      angles[1] = _gtk_css_number_value_parse (parser, GTK_CSS_PARSE_ANGLE | GTK_CSS_PARSE_PERCENT);
+      angles[1] = gtk_css_number_value_parse (parser, GTK_CSS_PARSE_ANGLE | GTK_CSS_PARSE_PERCENT);
       if (angles[1] == NULL)
         return FALSE;
     }
@@ -119,7 +119,7 @@ parse_color (GtkCssParser *parser,
 {
   GtkCssValue **color = option_data;
   
-  *color = _gtk_css_color_value_parse (parser);
+  *color = gtk_css_color_value_parse (parser);
   if (*color == NULL)
     return FALSE;
 
@@ -176,14 +176,14 @@ gtk_css_image_conic_parse_first_arg (GtkCssImageConic *self,
 
   if (gtk_css_parser_try_ident (parser, "from"))
     {
-      self->rotation = _gtk_css_number_value_parse (parser, GTK_CSS_PARSE_ANGLE);
+      self->rotation = gtk_css_number_value_parse (parser, GTK_CSS_PARSE_ANGLE);
       if (self->rotation == NULL)
         return 0;
       nothing_parsed = FALSE;
     }
   else
     {
-      self->rotation = _gtk_css_number_value_new (0, GTK_CSS_DEG);
+      self->rotation = gtk_css_number_value_new (0, GTK_CSS_DEG);
     }
 
   if (gtk_css_parser_try_ident (parser, "at"))
@@ -195,8 +195,8 @@ gtk_css_image_conic_parse_first_arg (GtkCssImageConic *self,
     }
   else
     {
-      self->center = _gtk_css_position_value_new (_gtk_css_number_value_new (50, GTK_CSS_PERCENT),
-                                                   _gtk_css_number_value_new (50, GTK_CSS_PERCENT));
+      self->center = _gtk_css_position_value_new (gtk_css_number_value_new (50, GTK_CSS_PERCENT),
+                                                  gtk_css_number_value_new (50, GTK_CSS_PERCENT));
     }
 
   if (!nothing_parsed)
@@ -269,25 +269,25 @@ gtk_css_image_conic_print (GtkCssImage *image,
 
   if (self->center)
     {
-      GtkCssValue *compare = _gtk_css_position_value_new (_gtk_css_number_value_new (50, GTK_CSS_PERCENT),
-                                                          _gtk_css_number_value_new (50, GTK_CSS_PERCENT));
+      GtkCssValue *compare = _gtk_css_position_value_new (gtk_css_number_value_new (50, GTK_CSS_PERCENT),
+                                                          gtk_css_number_value_new (50, GTK_CSS_PERCENT));
 
-      if (!_gtk_css_value_equal (self->center, compare))
+      if (!gtk_css_value_equal (self->center, compare))
         {
           g_string_append (string, "from ");
-          _gtk_css_value_print (self->center, string);
+          gtk_css_value_print (self->center, string);
           written = TRUE;
         }
 
       gtk_css_value_unref (compare);
     }
 
-  if (self->rotation && _gtk_css_number_value_get (self->rotation, 360) != 0)
+  if (self->rotation && gtk_css_number_value_get (self->rotation, 360) != 0)
     {
       if (written)
         g_string_append_c (string, ' ');
       g_string_append (string, "at ");
-      _gtk_css_value_print (self->rotation, string);
+      gtk_css_value_print (self->rotation, string);
     }
 
   if (written)
@@ -300,12 +300,12 @@ gtk_css_image_conic_print (GtkCssImage *image,
       if (i > 0)
         g_string_append (string, ", ");
 
-      _gtk_css_value_print (stop->color, string);
+      gtk_css_value_print (stop->color, string);
 
       if (stop->offset)
         {
           g_string_append (string, " ");
-          _gtk_css_value_print (stop->offset, string);
+          gtk_css_value_print (stop->offset, string);
         }
     }
 
@@ -313,11 +313,9 @@ gtk_css_image_conic_print (GtkCssImage *image,
 }
 
 static GtkCssImage *
-gtk_css_image_conic_compute (GtkCssImage      *image,
-                             guint             property_id,
-                             GtkStyleProvider *provider,
-                             GtkCssStyle      *style,
-                             GtkCssStyle      *parent_style)
+gtk_css_image_conic_compute (GtkCssImage          *image,
+                             guint                 property_id,
+                             GtkCssComputeContext *context)
 {
   GtkCssImageConic *self = GTK_CSS_IMAGE_CONIC (image);
   GtkCssImageConic *copy;
@@ -325,8 +323,8 @@ gtk_css_image_conic_compute (GtkCssImage      *image,
 
   copy = g_object_new (GTK_TYPE_CSS_IMAGE_CONIC, NULL);
 
-  copy->center = _gtk_css_value_compute (self->center, property_id, provider, style, parent_style);
-  copy->rotation = _gtk_css_value_compute (self->rotation, property_id, provider, style, parent_style);
+  copy->center = gtk_css_value_compute (self->center, property_id, context);
+  copy->rotation = gtk_css_value_compute (self->rotation, property_id, context);
 
   copy->n_stops = self->n_stops;
   copy->color_stops = g_malloc (sizeof (GtkCssImageConicColorStop) * copy->n_stops);
@@ -335,11 +333,11 @@ gtk_css_image_conic_compute (GtkCssImage      *image,
       const GtkCssImageConicColorStop *stop = &self->color_stops[i];
       GtkCssImageConicColorStop *scopy = &copy->color_stops[i];
 
-      scopy->color = _gtk_css_value_compute (stop->color, property_id, provider, style, parent_style);
+      scopy->color = gtk_css_value_compute (stop->color, property_id, context);
 
       if (stop->offset)
         {
-          scopy->offset = _gtk_css_value_compute (stop->offset, property_id, provider, style, parent_style);
+          scopy->offset = gtk_css_value_compute (stop->offset, property_id, context);
         }
       else
         {
@@ -374,11 +372,11 @@ gtk_css_image_conic_transition (GtkCssImage *start_image,
 
   result = g_object_new (GTK_TYPE_CSS_IMAGE_CONIC, NULL);
 
-  result->center = _gtk_css_value_transition (start->center, end->center, property_id, progress);
+  result->center = gtk_css_value_transition (start->center, end->center, property_id, progress);
   if (result->center == NULL)
     goto fail;
 
-  result->rotation = _gtk_css_value_transition (start->rotation, end->rotation, property_id, progress);
+  result->rotation = gtk_css_value_transition (start->rotation, end->rotation, property_id, progress);
   if (result->rotation == NULL)
     goto fail;
 
@@ -399,22 +397,22 @@ gtk_css_image_conic_transition (GtkCssImage *start_image,
         }
       else
         {
-          stop->offset = _gtk_css_value_transition (start_stop->offset,
-                                                    end_stop->offset,
-                                                    property_id,
-                                                    progress);
+          stop->offset = gtk_css_value_transition (start_stop->offset,
+                                                   end_stop->offset,
+                                                   property_id,
+                                                   progress);
           if (stop->offset == NULL)
             goto fail;
         }
 
-      stop->color = _gtk_css_value_transition (start_stop->color,
-                                               end_stop->color,
-                                               property_id,
-                                               progress);
+      stop->color = gtk_css_value_transition (start_stop->color,
+                                              end_stop->color,
+                                              property_id,
+                                              progress);
       if (stop->color == NULL)
         {
           if (stop->offset)
-            _gtk_css_value_unref (stop->offset);
+            gtk_css_value_unref (stop->offset);
           goto fail;
         }
 
@@ -436,8 +434,8 @@ gtk_css_image_conic_equal (GtkCssImage *image1,
   GtkCssImageConic *conic2 = (GtkCssImageConic *) image2;
   guint i;
 
-  if (!_gtk_css_value_equal (conic1->center, conic2->center) ||
-      !_gtk_css_value_equal (conic1->rotation, conic2->rotation))
+  if (!gtk_css_value_equal (conic1->center, conic2->center) ||
+      !gtk_css_value_equal (conic1->rotation, conic2->rotation))
     return FALSE;
 
   for (i = 0; i < conic1->n_stops; i++)
@@ -445,8 +443,8 @@ gtk_css_image_conic_equal (GtkCssImage *image1,
       const GtkCssImageConicColorStop *stop1 = &conic1->color_stops[i];
       const GtkCssImageConicColorStop *stop2 = &conic2->color_stops[i];
 
-      if (!_gtk_css_value_equal0 (stop1->offset, stop2->offset) ||
-          !_gtk_css_value_equal (stop1->color, stop2->color))
+      if (!gtk_css_value_equal0 (stop1->offset, stop2->offset) ||
+          !gtk_css_value_equal (stop1->color, stop2->color))
         return FALSE;
     }
 
@@ -463,9 +461,9 @@ gtk_css_image_conic_dispose (GObject *object)
     {
       GtkCssImageConicColorStop *stop = &self->color_stops[i];
 
-      _gtk_css_value_unref (stop->color);
+      gtk_css_value_unref (stop->color);
       if (stop->offset)
-        _gtk_css_value_unref (stop->offset);
+        gtk_css_value_unref (stop->offset);
     }
   g_free (self->color_stops);
 

@@ -7922,7 +7922,7 @@ gtk_text_view_set_attributes_from_style (GtkTextView        *text_view,
     }
 
   /* letter-spacing */
-  values->letter_spacing = _gtk_css_number_value_get (style->font->letter_spacing, 100) * PANGO_SCALE;
+  values->letter_spacing = gtk_css_number_value_get (style->font->letter_spacing, 100) * PANGO_SCALE;
 
   /* line-height */
 

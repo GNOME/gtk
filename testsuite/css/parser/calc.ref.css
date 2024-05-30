@@ -3,7 +3,7 @@ a {
 }
 
 b {
-  transition-duration: calc(-200ms + 1s);
+  transition-duration: 0.80000000000000004s;
 }
 
 c {

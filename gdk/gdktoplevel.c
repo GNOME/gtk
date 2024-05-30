@@ -767,9 +767,6 @@ gdk_toplevel_titlebar_gesture (GdkToplevel        *toplevel,
  * This function asynchronously obtains a handle for a toplevel surface
  * that can be passed to other processes.
  *
- * When a handle has been obtained, @callback will be called, and can
- * receive the handle via [method@Gdk.Toplevel.export_handle_finish].
- *
  * It is an error to call this function on a surface that is already
  * exported.
  *

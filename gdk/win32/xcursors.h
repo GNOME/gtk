@@ -1,4 +1,4 @@
-static const struct { const char *name; const char *builtin; int type; guchar width; guchar height; guchar hotx; guchar hoty; char *data; } cursors[] = {
+static const struct { const char *name; const wchar_t *builtin; int type; guchar width; guchar height; guchar hotx; guchar hoty; char *data; } cursors[] = {
   { "X_cursor", NULL, 0, 16, 16, 7, 7, 
     "\125\000\000\125\152\100\001\251\152\220\006\251\152\244\032\251"
     "\032\251\152\244\006\252\252\220\001\252\252\100\000\152\251\000"

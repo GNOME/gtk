@@ -881,6 +881,8 @@ gtk_list_view_class_init (GtkListViewClass *klass)
    * GtkListView:factory: (attributes org.gtk.Property.get=gtk_list_view_get_factory org.gtk.Property.set=gtk_list_view_set_factory)
    *
    * Factory for populating list items.
+   *
+   * The factory must be for configuring [class@Gtk.ListItem] objects.
    */
   properties[PROP_FACTORY] =
     g_param_spec_object ("factory", NULL, NULL,
@@ -891,6 +893,8 @@ gtk_list_view_class_init (GtkListViewClass *klass)
    * GtkListView:header-factory: (attributes org.gtk.Property.get=gtk_list_view_get_header_factory org.gtk.Property.set=gtk_list_view_set_header_factory)
    *
    * Factory for creating header widgets.
+   *
+   * The factory must be for configuring [class@Gtk.ListHeader] objects.
    *
    * Since: 4.12
    */
@@ -1352,10 +1356,11 @@ gtk_list_view_get_tab_behavior (GtkListView *self)
 /**
  * gtk_list_view_scroll_to:
  * @self: The listview to scroll in
- * @pos: position of the item
+ * @pos: position of the item. Must be less than the number of
+ *   items in the view.
  * @flags: actions to perform
  * @scroll: (nullable) (transfer full): details of how to perform
- *   the scroll operation or %NULL to scroll into view 
+ *   the scroll operation or %NULL to scroll into view
  *
  * Scrolls to the item at the given position and performs the actions
  * specified in @flags.
@@ -1372,6 +1377,7 @@ gtk_list_view_scroll_to (GtkListView        *self,
                          GtkScrollInfo      *scroll)
 {
   g_return_if_fail (GTK_IS_LIST_VIEW (self));
+  g_return_if_fail (pos < gtk_list_base_get_n_items (GTK_LIST_BASE (self)));
 
   gtk_list_base_scroll_to (GTK_LIST_BASE (self), pos, flags, scroll);
 }

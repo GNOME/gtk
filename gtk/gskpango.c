@@ -27,6 +27,8 @@
 #include "gtktextviewprivate.h"
 #include "gtkwidgetprivate.h"
 #include "gtkcsscolorvalueprivate.h"
+#include "gdk/gdkrgbaprivate.h"
+#include "gtkcssshadowvalueprivate.h"
 
 #include <math.h>
 
@@ -96,6 +98,11 @@ gsk_pango_renderer_draw_glyph_item (PangoRenderer  *renderer,
 {
   GskPangoRenderer *crenderer = (GskPangoRenderer *) (renderer);
   GdkRGBA color;
+  gboolean has_shadow = FALSE;
+
+  if (crenderer->shadow_style)
+    has_shadow = gtk_css_shadow_value_push_snapshot (crenderer->shadow_style->font->text_shadow,
+                                                     crenderer->snapshot);
 
   get_color (crenderer, PANGO_RENDER_PART_FOREGROUND, &color);
 
@@ -105,6 +112,9 @@ gsk_pango_renderer_draw_glyph_item (PangoRenderer  *renderer,
                             &color,
                             (float) x / PANGO_SCALE,
                             (float) y / PANGO_SCALE);
+
+  if (has_shadow)
+    gtk_snapshot_pop (crenderer->snapshot);
 }
 
 static void
@@ -201,7 +211,7 @@ gsk_pango_renderer_draw_error_underline (PangoRenderer *renderer,
   gtk_snapshot_append_color (crenderer->snapshot, &rgba, &dot.bounds);
   gtk_snapshot_pop (crenderer->snapshot);
   gtk_snapshot_append_color (crenderer->snapshot,
-                             &(GdkRGBA) { 0.f, 0.f, 0.f, 0.f },
+                             &GDK_RGBA_TRANSPARENT,
                              &GRAPHENE_RECT_INIT (xx, yy, 1.5 * hh, hh));
 
   gtk_snapshot_pop (crenderer->snapshot);
@@ -342,20 +352,20 @@ gsk_pango_renderer_prepare_run (PangoRenderer  *renderer,
       GTK_IS_TEXT_VIEW (crenderer->widget))
     {
       GtkCssNode *node;
-      GtkCssValue *value;
+      GtkCssStyle *style;
 
       node = gtk_text_view_get_selection_node ((GtkTextView *)crenderer->widget);
-      value = gtk_css_node_get_style (node)->core->color;
-      fg_rgba = gtk_css_color_value_get_rgba (value);
+      style = gtk_css_node_get_style (node);
+      fg_rgba = gtk_css_color_value_get_rgba (style->core->color);
     }
   else if (crenderer->state == GSK_PANGO_RENDERER_CURSOR && gtk_widget_has_focus (crenderer->widget))
     {
       GtkCssNode *node;
-      GtkCssValue *value;
+      GtkCssStyle *style;
 
       node = gtk_widget_get_css_node (crenderer->widget);
-      value = gtk_css_node_get_style (node)->background->background_color;
-      fg_rgba = gtk_css_color_value_get_rgba (value);
+      style = gtk_css_node_get_style (node);
+      fg_rgba = gtk_css_color_value_get_rgba (style->background->background_color);
     }
   else
     fg_rgba = appearance->fg_rgba;
@@ -381,6 +391,15 @@ gsk_pango_renderer_prepare_run (PangoRenderer  *renderer,
     }
   else
     text_renderer_set_rgba (crenderer, PANGO_RENDER_PART_UNDERLINE, fg_rgba);
+
+  crenderer->shadow_style = NULL;
+  if (GTK_IS_TEXT_VIEW (crenderer->widget))
+    {
+      if (crenderer->state == GSK_PANGO_RENDERER_SELECTED)
+        crenderer->shadow_style = gtk_css_node_get_style (gtk_text_view_get_selection_node ((GtkTextView *)crenderer->widget));
+      else if (crenderer->state != GSK_PANGO_RENDERER_CURSOR)
+        crenderer->shadow_style = gtk_css_node_get_style (gtk_widget_get_css_node (crenderer->widget));
+    }
 }
 
 static void
@@ -438,6 +457,7 @@ gsk_pango_renderer_release (GskPangoRenderer *renderer)
     {
       renderer->widget = NULL;
       renderer->snapshot = NULL;
+      renderer->shadow_style = NULL;
 
       if (renderer->error_color)
         {

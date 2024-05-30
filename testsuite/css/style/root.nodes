@@ -1,0 +1,6 @@
+window.background:dir(ltr)
+  color: rgb(255,0,0); /* root.css:2:3-14 */
+
+  box.horizontal:dir(ltr)
+    label:dir(ltr)
+      color: rgb(0,128,0); /* root.css:12:3-16 */

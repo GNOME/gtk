@@ -81,9 +81,7 @@ struct _GtkInspectorVisual
   GtkWidget *cursor_size_spin;
   GtkWidget *direction_combo;
   GtkWidget *font_button;
-  GtkWidget *font_aa_switch;
-  GtkWidget *font_hinting_combo;
-  GtkWidget *metrics_hinting_switch;
+  GtkWidget *font_rendering_combo;
   GtkWidget *animation_switch;
   GtkWidget *font_scale_entry;
   GtkAdjustment *font_scale_adjustment;
@@ -110,6 +108,7 @@ struct _GtkInspectorVisual
   GtkInspectorOverlay *subsurface_overlay;
 
   GdkDisplay *display;
+  GtkSettings *settings;
 };
 
 typedef struct _GtkInspectorVisualClass
@@ -197,27 +196,22 @@ get_dpi_ratio (GtkInspectorVisual *vis)
 static double
 get_font_scale (GtkInspectorVisual *vis)
 {
-  double ratio = get_dpi_ratio (vis);
   int dpi_int;
 
-  g_object_get (gtk_settings_get_for_display (vis->display),
-                "gtk-xft-dpi", &dpi_int,
-                NULL);
+  g_object_get (vis->settings, "gtk-xft-dpi", &dpi_int, NULL);
 
-  return dpi_int / ratio;
+  return dpi_int / get_dpi_ratio (vis);
 }
 
 static void
 update_font_scale (GtkInspectorVisual *vis,
                    double              factor,
                    gboolean            update_adjustment,
-                   gboolean            update_entry)
+                   gboolean            update_entry,
+                   gboolean            write_back)
 {
-  double ratio = get_dpi_ratio (vis);
-
-  g_object_set (gtk_settings_get_for_display (vis->display),
-                "gtk-xft-dpi", (int)(factor * ratio),
-                NULL);
+  if (write_back)
+    g_object_set (vis->settings, "gtk-xft-dpi", (int)(factor * get_dpi_ratio (vis)), NULL);
 
   if (update_adjustment)
     gtk_adjustment_set_value (vis->font_scale_adjustment, factor);
@@ -238,98 +232,29 @@ font_scale_adjustment_changed (GtkAdjustment      *adjustment,
   double factor;
 
   factor = gtk_adjustment_get_value (adjustment);
-  update_font_scale (vis, factor, FALSE, TRUE);
+  update_font_scale (vis, factor, FALSE, TRUE, TRUE);
 }
 
-static gboolean
-get_font_aa (GtkInspectorVisual *vis)
+static GtkFontRendering
+get_font_rendering (GtkInspectorVisual *vis)
 {
-  int aa;
+  GtkFontRendering font_rendering;
 
-  g_object_get (gtk_settings_get_for_display (vis->display),
-                "gtk-xft-antialias", &aa,
-                NULL);
+  g_object_get (vis->settings, "gtk-font-rendering", &font_rendering, NULL);
 
-  return aa != 0;
-}
-
-static gboolean
-get_metrics_hinting (GtkInspectorVisual *vis)
-{
-  gboolean hinting;
-
-  g_object_get (gtk_settings_get_for_display (vis->display),
-                "gtk-hint-font-metrics", &hinting,
-                NULL);
-
-  return hinting;
-}
-
-static unsigned int
-get_font_hinting (GtkInspectorVisual *vis)
-{
-  int hinting;
-  char *hint_style_str;
-  unsigned int hint_style;
-
-  g_object_get (gtk_settings_get_for_display (vis->display),
-                "gtk-xft-hinting", &hinting,
-                "gtk-xft-hintstyle", &hint_style_str,
-                NULL);
-
-  hint_style = 1;
-  if (hinting == 0)
-    {
-      hint_style = 0;
-    }
-  else
-    {
-      if (strcmp (hint_style_str, "hintnone") == 0)
-        hint_style = 0;
-      else if (strcmp (hint_style_str, "hintslight") == 0)
-        hint_style = 1;
-      else if (strcmp (hint_style_str, "hintmedium") == 0)
-        hint_style = 2;
-      else if (strcmp (hint_style_str, "hintfull") == 0)
-        hint_style = 3;
-    }
-
-  g_free (hint_style_str);
-
-  return hint_style;
+  return font_rendering;
 }
 
 static void
-update_font_hinting (GtkInspectorVisual *vis,
-                     unsigned int        hint_style)
+update_font_rendering (GtkInspectorVisual *vis,
+                       GtkFontRendering    font_rendering)
 {
-  const char *styles[] = { "hintnone", "hintslight", "hintmedium", "hintfull" };
+  if (get_font_rendering (vis) == font_rendering)
+    return;
 
-  g_object_set (gtk_settings_get_for_display (vis->display),
-                "gtk-xft-hinting", hint_style != 0,
-                "gtk-xft-hintstyle", styles[hint_style],
-                NULL);
+  g_object_set (vis->settings, "gtk-font-rendering", font_rendering, NULL);
 }
 
-static void
-font_aa_activate (GtkSwitch          *sw,
-                  GParamSpec         *pspec,
-                  GtkInspectorVisual *vis)
-{
-  g_object_set (gtk_settings_get_for_display (vis->display),
-                "gtk-xft-antialias", gtk_switch_get_active (sw) ? 1 : 0,
-                NULL);
-}
-
-static void
-metrics_hinting_activate (GtkSwitch          *sw,
-                          GParamSpec         *pspec,
-                          GtkInspectorVisual *vis)
-{
-  g_object_set (gtk_settings_get_for_display (vis->display),
-                "gtk-hint-font-metrics", gtk_switch_get_active (sw),
-                NULL);
-}
 static void
 font_scale_entry_activated (GtkEntry           *entry,
                             GtkInspectorVisual *vis)
@@ -339,7 +264,7 @@ font_scale_entry_activated (GtkEntry           *entry,
 
   factor = g_strtod (gtk_editable_get_text (GTK_EDITABLE (entry)), &err);
   if (err != NULL)
-    update_font_scale (vis, factor, TRUE, FALSE);
+    update_font_scale (vis, factor, TRUE, FALSE, TRUE);
 }
 
 static void
@@ -750,7 +675,7 @@ init_theme (GtkInspectorVisual *vis)
 
   gtk_drop_down_set_model (GTK_DROP_DOWN (vis->theme_combo), G_LIST_MODEL (names));
 
-  g_object_bind_property_full (gtk_settings_get_for_display (vis->display), "gtk-theme-name",
+  g_object_bind_property_full (vis->settings, "gtk-theme-name",
                                vis->theme_combo, "selected",
                                G_BINDING_BIDIRECTIONAL | G_BINDING_SYNC_CREATE,
                                theme_to_pos, pos_to_theme, names, (GDestroyNotify)g_object_unref);
@@ -769,8 +694,7 @@ init_theme (GtkInspectorVisual *vis)
 static void
 init_dark (GtkInspectorVisual *vis)
 {
-  g_object_bind_property (gtk_settings_get_for_display (vis->display),
-                          "gtk-application-prefer-dark-theme",
+  g_object_bind_property (vis->settings, "gtk-application-prefer-dark-theme",
                           vis->dark_switch, "active",
                           G_BINDING_BIDIRECTIONAL | G_BINDING_SYNC_CREATE);
 
@@ -854,7 +778,7 @@ init_icons (GtkInspectorVisual *vis)
 
   gtk_drop_down_set_model (GTK_DROP_DOWN (vis->icon_combo), G_LIST_MODEL (names));
 
-  g_object_bind_property_full (gtk_settings_get_for_display (vis->display), "gtk-icon-theme-name",
+  g_object_bind_property_full (vis->settings, "gtk-icon-theme-name",
                                vis->icon_combo, "selected",
                                G_BINDING_BIDIRECTIONAL | G_BINDING_SYNC_CREATE,
                                theme_to_pos, pos_to_theme, names, (GDestroyNotify)g_object_unref);
@@ -928,7 +852,7 @@ init_cursors (GtkInspectorVisual *vis)
 
   gtk_drop_down_set_model (GTK_DROP_DOWN (vis->cursor_combo), G_LIST_MODEL (names));
 
-  g_object_bind_property_full (gtk_settings_get_for_display (vis->display), "gtk-cursor-theme-name",
+  g_object_bind_property_full (vis->settings, "gtk-cursor-theme-name",
                                vis->cursor_combo, "selected",
                                G_BINDING_BIDIRECTIONAL | G_BINDING_SYNC_CREATE,
                                theme_to_pos, pos_to_theme, names, (GDestroyNotify)g_object_unref);
@@ -940,7 +864,7 @@ cursor_size_changed (GtkAdjustment *adjustment, GtkInspectorVisual *vis)
   int size;
 
   size = gtk_adjustment_get_value (adjustment);
-  g_object_set (gtk_settings_get_for_display (vis->display), "gtk-cursor-theme-size", size, NULL);
+  g_object_set (vis->settings, "gtk-cursor-theme-size", size, NULL);
 }
 
 static void
@@ -948,7 +872,7 @@ init_cursor_size (GtkInspectorVisual *vis)
 {
   int size;
 
-  g_object_get (gtk_settings_get_for_display (vis->display), "gtk-cursor-theme-size", &size, NULL);
+  g_object_get (vis->settings, "gtk-cursor-theme-size", &size, NULL);
   if (size == 0)
     size = 32;
 
@@ -994,8 +918,7 @@ name_from_desc (GBinding     *binding,
 static void
 init_font (GtkInspectorVisual *vis)
 {
-  g_object_bind_property_full (gtk_settings_get_for_display (vis->display),
-                               "gtk-font-name",
+  g_object_bind_property_full (vis->settings, "gtk-font-name",
                                vis->font_button, "font-desc",
                                G_BINDING_BIDIRECTIONAL|G_BINDING_SYNC_CREATE,
                                name_to_desc,
@@ -1009,7 +932,7 @@ init_font_scale (GtkInspectorVisual *vis)
   double scale;
 
   scale = get_font_scale (vis);
-  update_font_scale (vis, scale, TRUE, TRUE);
+  update_font_scale (vis, scale, TRUE, TRUE, FALSE);
   g_signal_connect (vis->font_scale_adjustment, "value-changed",
                     G_CALLBACK (font_scale_adjustment_changed), vis);
   g_signal_connect (vis->font_scale_entry, "activate",
@@ -1017,35 +940,23 @@ init_font_scale (GtkInspectorVisual *vis)
 }
 
 static void
-init_font_aa (GtkInspectorVisual *vis)
+font_rendering_changed (GtkDropDown        *combo,
+                        GParamSpec         *pspec,
+                        GtkInspectorVisual *vis)
 {
-  gtk_switch_set_active (GTK_SWITCH (vis->font_aa_switch), get_font_aa (vis));
+  update_font_rendering (vis, gtk_drop_down_get_selected (combo));
 }
 
 static void
-font_hinting_changed (GtkDropDown        *combo,
-                      GParamSpec         *pspec,
-                      GtkInspectorVisual *vis)
+init_font_rendering (GtkInspectorVisual *vis)
 {
-  update_font_hinting (vis, gtk_drop_down_get_selected (combo));
-}
-
-static void
-init_font_hinting (GtkInspectorVisual *vis)
-{
-  gtk_drop_down_set_selected (GTK_DROP_DOWN (vis->font_hinting_combo), get_font_hinting (vis));
-}
-
-static void
-init_metrics_hinting (GtkInspectorVisual *vis)
-{
-  gtk_switch_set_active (GTK_SWITCH (vis->metrics_hinting_switch), get_metrics_hinting (vis));
+  gtk_drop_down_set_selected (GTK_DROP_DOWN (vis->font_rendering_combo), get_font_rendering (vis));
 }
 
 static void
 init_animation (GtkInspectorVisual *vis)
 {
-  g_object_bind_property (gtk_settings_get_for_display (vis->display), "gtk-enable-animations",
+  g_object_bind_property (vis->settings, "gtk-enable-animations",
                           vis->animation_switch, "active",
                           G_BINDING_BIDIRECTIONAL|G_BINDING_SYNC_CREATE);
 }
@@ -1290,9 +1201,7 @@ gtk_inspector_visual_class_init (GtkInspectorVisualClass *klass)
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorVisual, slowdown_adjustment);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorVisual, slowdown_entry);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorVisual, visual_box);
-  gtk_widget_class_bind_template_child (widget_class, GtkInspectorVisual, font_aa_switch);
-  gtk_widget_class_bind_template_child (widget_class, GtkInspectorVisual, font_hinting_combo);
-  gtk_widget_class_bind_template_child (widget_class, GtkInspectorVisual, metrics_hinting_switch);
+  gtk_widget_class_bind_template_child (widget_class, GtkInspectorVisual, font_rendering_combo);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorVisual, debug_box);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorVisual, font_button);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorVisual, font_scale_entry);
@@ -1310,9 +1219,7 @@ gtk_inspector_visual_class_init (GtkInspectorVisualClass *klass)
   gtk_widget_class_bind_template_callback (widget_class, updates_activate);
   gtk_widget_class_bind_template_callback (widget_class, cairo_activate);
   gtk_widget_class_bind_template_callback (widget_class, direction_changed);
-  gtk_widget_class_bind_template_callback (widget_class, font_aa_activate);
-  gtk_widget_class_bind_template_callback (widget_class, font_hinting_changed);
-  gtk_widget_class_bind_template_callback (widget_class, metrics_hinting_activate);
+  gtk_widget_class_bind_template_callback (widget_class, font_rendering_changed);
   gtk_widget_class_bind_template_callback (widget_class, baselines_activate);
   gtk_widget_class_bind_template_callback (widget_class, layout_activate);
   gtk_widget_class_bind_template_callback (widget_class, focus_activate);
@@ -1324,10 +1231,11 @@ gtk_inspector_visual_class_init (GtkInspectorVisualClass *klass)
 }
 
 void
-gtk_inspector_visual_set_display  (GtkInspectorVisual *vis,
-                                   GdkDisplay *display)
+gtk_inspector_visual_set_display (GtkInspectorVisual *vis,
+                                  GdkDisplay         *display)
 {
   vis->display = display;
+  vis->settings = gtk_settings_get_for_display (display);
 
   init_direction (vis);
   init_theme (vis);
@@ -1337,9 +1245,7 @@ gtk_inspector_visual_set_display  (GtkInspectorVisual *vis,
   init_cursor_size (vis);
   init_font (vis);
   init_font_scale (vis);
-  init_font_aa (vis);
-  init_font_hinting (vis);
-  init_metrics_hinting (vis);
+  init_font_rendering (vis);
   init_animation (vis);
   init_slowdown (vis);
   init_gl (vis);

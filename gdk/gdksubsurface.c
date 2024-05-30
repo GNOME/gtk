@@ -48,6 +48,14 @@ gdk_subsurface_class_init (GdkSubsurfaceClass *class)
   object_class->finalize = gdk_subsurface_finalize;
 }
 
+/*< private >
+ * gdk_subsurface_get_parent:
+ * @subsurface: a `GdkSubsurface`
+ *
+ * Returns the parent surface of @subsurface.
+ *
+ * Returns: the parent surface
+ */
 GdkSurface *
 gdk_subsurface_get_parent (GdkSubsurface *subsurface)
 {
@@ -108,15 +116,41 @@ insert_subsurface (GdkSubsurface *subsurface,
     }
 }
 
+/*< private >
+ * gdk_subsurface_attach:
+ * @subsurface: the `GdkSubsurface`
+ * @texture: the texture to attach. This typically has to be a `GdkDmabufTexture`
+ * @source: the source rectangle (i.e. the subset of the texture) to display
+ * @dest: the dest rectangle, in application pixels, relative to the parent surface.
+ *   It must be integral in application and device pixels, or attaching will fail
+ * @transform: the transform to apply to the texture contents before displaying
+ * @background: (nullable): the background rectangle, in application pixels relative
+ *   to the parent surface. This tells GDK to put a black background of this
+ *   size below the subsurface. It must be integral in application and device pixels,
+ *   or attaching will fail
+ * @above: whether the subsurface should be above its sibling
+ * @sibling: (nullable): the sibling subsurface to stack relative to, or `NULL` to
+ *   stack relative to the parent surface
+ *
+ * Attaches content to a subsurface.
+ *
+ * This function takes all the necessary arguments to determine the subsurface
+ * configuration, including its position, size, content, background and stacking.
+ *
+ * Returns: `TRUE` if the attaching succeeded
+ */
 gboolean
 gdk_subsurface_attach (GdkSubsurface         *subsurface,
                        GdkTexture            *texture,
                        const graphene_rect_t *source,
                        const graphene_rect_t *dest,
+                       GdkTextureTransform    transform,
+                       const graphene_rect_t *background,
                        gboolean               above,
                        GdkSubsurface         *sibling)
 {
   GdkSurface *parent = subsurface->parent;
+  gboolean result;
 
   g_return_val_if_fail (GDK_IS_SUBSURFACE (subsurface), FALSE);
   g_return_val_if_fail (GDK_IS_TEXTURE (texture), FALSE);
@@ -129,6 +163,15 @@ gdk_subsurface_attach (GdkSubsurface         *subsurface,
   g_return_val_if_fail (sibling != subsurface, FALSE);
   g_return_val_if_fail (sibling == NULL || GDK_IS_SUBSURFACE (sibling), FALSE);
   g_return_val_if_fail (sibling == NULL || sibling->parent == subsurface->parent, FALSE);
+
+  result = GDK_SUBSURFACE_GET_CLASS (subsurface)->attach (subsurface,
+                                                          texture,
+                                                          source,
+                                                          dest,
+                                                          transform,
+                                                          background,
+                                                          above,
+                                                          sibling);
 
   remove_subsurface (subsurface);
 
@@ -155,9 +198,17 @@ gdk_subsurface_attach (GdkSubsurface         *subsurface,
         }
     }
 
-  return GDK_SUBSURFACE_GET_CLASS (subsurface)->attach (subsurface, texture, source, dest, above, sibling);
+  return result;
 }
 
+/*< private >
+ * gdk_subsurface_detach:
+ * @subsurface: a `GdkSubsurface`
+ *
+ * Hides the subsurface.
+ *
+ * To show it again, you need to call gdk_subsurface_attach().
+ */
 void
 gdk_subsurface_detach (GdkSubsurface *subsurface)
 {
@@ -168,6 +219,14 @@ gdk_subsurface_detach (GdkSubsurface *subsurface)
   GDK_SUBSURFACE_GET_CLASS (subsurface)->detach (subsurface);
 }
 
+/*< private >
+ * gdk_subsurface_get_texture:
+ * @subsurface: a `GdkSubsurface`
+ *
+ * Gets the texture that is currently displayed by the subsurface.
+ *
+ * Returns: (nullable): the texture that is displayed
+ */
 GdkTexture *
 gdk_subsurface_get_texture (GdkSubsurface *subsurface)
 {
@@ -176,30 +235,138 @@ gdk_subsurface_get_texture (GdkSubsurface *subsurface)
   return GDK_SUBSURFACE_GET_CLASS (subsurface)->get_texture (subsurface);
 }
 
+/*< private >
+ * gdk_subsurface_get_source_rect:
+ * @subsurface: a `GdkSubsurface`
+ * @rect: (out caller-allocates): return location for the rectangle
+ *
+ * Returns the source rect that was specified in the most recent
+ * gdk_subsurface_attach() call for @subsurface.
+ */
 void
-gdk_subsurface_get_source (GdkSubsurface   *subsurface,
-                           graphene_rect_t *source)
+gdk_subsurface_get_source_rect (GdkSubsurface   *subsurface,
+                                graphene_rect_t *rect)
 {
   g_return_if_fail (GDK_IS_SUBSURFACE (subsurface));
-  g_return_if_fail (source != NULL);
+  g_return_if_fail (rect != NULL);
 
-  GDK_SUBSURFACE_GET_CLASS (subsurface)->get_source (subsurface, source);
+  GDK_SUBSURFACE_GET_CLASS (subsurface)->get_source_rect (subsurface, rect);
 }
 
+/*< private >
+ * gdk_subsurface_get_texture_rect:
+ * @subsurface: a `GdkSubsurface`
+ * @rect: (out caller-allocates): return location for the rectangle
+ *
+ * Returns the texture rect that was specified in the most recent
+ * gdk_subsurface_attach() call for @subsurface.
+ */
 void
-gdk_subsurface_get_dest (GdkSubsurface   *subsurface,
-                         graphene_rect_t *dest)
+gdk_subsurface_get_texture_rect (GdkSubsurface   *subsurface,
+                                 graphene_rect_t *rect)
 {
   g_return_if_fail (GDK_IS_SUBSURFACE (subsurface));
-  g_return_if_fail (dest != NULL);
+  g_return_if_fail (rect != NULL);
 
-  GDK_SUBSURFACE_GET_CLASS (subsurface)->get_dest (subsurface, dest);
+  GDK_SUBSURFACE_GET_CLASS (subsurface)->get_texture_rect (subsurface, rect);
 }
 
+/*< private >
+ * gdk_subsurface_is_above_parent:
+ * @subsurface: a `GdkSubsurface`
+ *
+ * Returns whether the subsurface is above the parent surface
+ * or below. Note that a subsurface can be above its parent
+ * surface, and still be covered by sibling subsurfaces.
+ *
+ * Returns: `TRUE` if @subsurface is above its parent
+ */
 gboolean
 gdk_subsurface_is_above_parent (GdkSubsurface *subsurface)
 {
-  g_return_val_if_fail (GDK_IS_SUBSURFACE (subsurface), TRUE);
+  g_return_val_if_fail (GDK_IS_SUBSURFACE (subsurface), FALSE);
 
   return subsurface->above_parent;
+}
+
+/*< private>
+ * gdk_subsurface_get_sibling:
+ * @subsurface: the `GdkSubsurface`
+ * @above: whether to get the subsurface above
+ *
+ * Returns the subsurface above (or below) @subsurface in
+ * the stacking order.
+ *
+ * Returns: the sibling, or `NULL` if there is none.
+ */
+GdkSubsurface *
+gdk_subsurface_get_sibling (GdkSubsurface *subsurface,
+                            gboolean       above)
+{
+  g_return_val_if_fail (GDK_IS_SUBSURFACE (subsurface), NULL);
+
+  if (above)
+    return subsurface->sibling_above;
+  else
+    return subsurface->sibling_below;
+}
+
+/*< private >
+ * gdk_subsurface_get_transform:
+ * @subsurface: a `GdkSubsurface`
+ *
+ * Returns the transform that was specified in the most recent call to
+ * gdk_subsurface_attach() call for @subsurface.
+ *
+ * Returns: the transform
+ */
+GdkTextureTransform
+gdk_subsurface_get_transform (GdkSubsurface *subsurface)
+{
+  g_return_val_if_fail (GDK_IS_SUBSURFACE (subsurface), GDK_TEXTURE_TRANSFORM_NORMAL);
+
+  return GDK_SUBSURFACE_GET_CLASS (subsurface)->get_transform (subsurface);
+}
+
+/*< private >
+ * gdk_subsurface_get_background_rect:
+ * @subsurface: a `GdkSubsurface`
+ * @rect: (out caller-allocates): return location for the rectangle
+ *
+ * Obtains the background rect that was specified in the most recent
+ * gdk_subsurface_attach() call for @subsurface.
+ *
+ * Returns: `TRUE` if @subsurface has a background
+ */
+gboolean
+gdk_subsurface_get_background_rect (GdkSubsurface   *subsurface,
+                                    graphene_rect_t *rect)
+{
+  g_return_val_if_fail (GDK_IS_SUBSURFACE (subsurface), FALSE);
+  g_return_val_if_fail (rect != NULL, FALSE);
+
+  return GDK_SUBSURFACE_GET_CLASS (subsurface)->get_background_rect (subsurface, rect);
+}
+
+/*< private >
+ * gdk_subsurface_get_bounds:
+ * @subsurface: a `GdkSubsurface`
+ * @bounds: (out caller-allocates): return location for the bounds
+ *
+ * Returns the bounds of the subsurface.
+ *
+ * The bounds are the union of the texture and background rects.
+ */
+void
+gdk_subsurface_get_bounds (GdkSubsurface   *subsurface,
+                           graphene_rect_t *bounds)
+{
+  graphene_rect_t background;
+
+  g_return_if_fail (GDK_IS_SUBSURFACE (subsurface));
+  g_return_if_fail (bounds != NULL);
+
+  gdk_subsurface_get_texture_rect (subsurface, bounds);
+  if (gdk_subsurface_get_background_rect (subsurface, &background))
+    graphene_rect_union (bounds, &background, bounds);
 }

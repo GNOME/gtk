@@ -217,6 +217,10 @@ A number of options affect behavior instead of logging:
 `no-portals`
 : Disable use of [portals](https://docs.flatpak.org/en/latest/portals.html)
 
+`force-offload`
+: Force graphics offload for all textures, even when slower. This allows
+  to debug offloading in the absence of dmabufs.
+
 `gl-disable`
 : Disable OpenGL support
 

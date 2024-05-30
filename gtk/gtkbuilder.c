@@ -2695,8 +2695,10 @@ gtk_builder_value_from_string_type (GtkBuilder   *builder,
         {
           GtkShortcutAction *action = gtk_shortcut_action_parse_builder (builder, string, error);
 
-          /* Works for success and failure (NULL) case */
-          g_value_take_object (value, action);
+          if (action)
+            g_value_take_object (value, action);
+          else
+            ret = FALSE;
         }
       else
         {

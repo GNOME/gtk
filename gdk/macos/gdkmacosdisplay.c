@@ -77,6 +77,9 @@ gdk_macos_display_get_setting (GdkDisplay  *display,
                                const char *setting,
                                GValue      *value)
 {
+  if (gdk_display_get_debug_flags (display) & GDK_DEBUG_DEFAULT_SETTINGS)
+    return FALSE;
+
   return _gdk_macos_display_get_setting (GDK_MACOS_DISPLAY (display), setting, value);
 }
 
@@ -991,17 +994,41 @@ _gdk_macos_display_warp_pointer (GdkMacosDisplay *self,
   CGWarpMouseCursorPosition ((CGPoint) { x, y });
 }
 
+/* Find the matching `NSEvent` for an `GdkEvent`. This function
+ * return the `NSEvent`, also for rewritten `GdkEvent`'s.
+ */
 NSEvent *
-_gdk_macos_display_get_nsevent (GdkEvent *event)
+_gdk_macos_display_get_matching_nsevent (GdkEvent *event)
 {
-  for (const GList *iter = event_map.head; iter; iter = iter->next)
+  for (GList *iter = event_map.head; iter; iter = iter->next)
     {
-      const GdkToNSEventMap *map = iter->data;
+      GdkToNSEventMap *map = iter->data;
 
       if (map->gdk_event->event_type == event->event_type &&
           map->gdk_event->device == event->device &&
           map->gdk_event->time == event->time)
-        return map->nsevent;
+        {
+          return map->nsevent;
+        }
+    }
+
+  return NULL;
+}
+
+/* Find the matching `NSEvent` for the original `GdkEvent`.
+ * If an event was rewritten, it returns `NULL`.
+ */
+NSEvent *
+_gdk_macos_display_get_exact_nsevent (GdkEvent *event)
+{
+  for (GList *iter = event_map.head; iter; iter = iter->next)
+    {
+      GdkToNSEventMap *map = iter->data;
+
+      if (map->gdk_event == event)
+        {
+          return map->nsevent;
+        }
     }
 
   return NULL;

@@ -31,12 +31,13 @@
 
 static struct {
   char *name;
-  char *id;
+  const wchar_t *id;
 } default_cursors[] = {
   /* -- Win32 cursor names: -- */
   { "appstarting", IDC_APPSTARTING },
   { "arrow", IDC_ARROW },
   { "cross", IDC_CROSS },
+  { "dnd-move", IDC_ARROW },
   { "hand",  IDC_HAND },
   { "help",  IDC_HELP },
   { "ibeam", IDC_IBEAM },
@@ -456,32 +457,32 @@ win32_cursor_create_win32hcursor (GdkWin32Display *display,
         break;
       case GDK_WIN32_CURSOR_LOAD_FROM_RESOURCE_NULL:
         result = gdk_win32_hcursor_new (display,
-                                        LoadImageA (NULL,
-                                                    (const char *) cursor->resource_name,
-                                                    IMAGE_CURSOR,
-                                                    cursor->width,
-                                                    cursor->height,
-                                                    cursor->load_flags),
+                                        LoadImage (NULL,
+                                                   cursor->resource_name,
+                                                   IMAGE_CURSOR,
+                                                   cursor->width,
+                                                   cursor->height,
+                                                   cursor->load_flags),
                                         cursor->load_flags & LR_SHARED ? FALSE : TRUE);
         break;
       case GDK_WIN32_CURSOR_LOAD_FROM_RESOURCE_THIS:
         result = gdk_win32_hcursor_new (display,
-                                        LoadImageA (GetModuleHandle (NULL),
-                                                    (const char *) cursor->resource_name,
-                                                    IMAGE_CURSOR,
-                                                    cursor->width,
-                                                    cursor->height,
-                                                    cursor->load_flags),
+                                        LoadImage (GetModuleHandle (NULL),
+                                                   cursor->resource_name,
+                                                   IMAGE_CURSOR,
+                                                   cursor->width,
+                                                   cursor->height,
+                                                   cursor->load_flags),
                                         cursor->load_flags & LR_SHARED ? FALSE : TRUE);
         break;
       case GDK_WIN32_CURSOR_LOAD_FROM_RESOURCE_GTK:
         result = gdk_win32_hcursor_new (display,
-                                        LoadImageA (this_module (),
-                                                    (const char *) cursor->resource_name,
-                                                    IMAGE_CURSOR,
-                                                    cursor->width,
-                                                    cursor->height,
-                                                    cursor->load_flags),
+                                        LoadImage (this_module (),
+                                                   cursor->resource_name,
+                                                   IMAGE_CURSOR,
+                                                   cursor->width,
+                                                   cursor->height,
+                                                   cursor->load_flags),
                                         cursor->load_flags & LR_SHARED ? FALSE : TRUE);
         break;
       case GDK_WIN32_CURSOR_CREATE:
@@ -498,12 +499,12 @@ win32_cursor_create_win32hcursor (GdkWin32Display *display,
 }
 
 static Win32Cursor *
-win32_cursor_new (GdkWin32CursorLoadType load_type,
-                  gpointer               resource_name,
-                  int                    width,
-                  int                    height,
-                  guint                  load_flags,
-                  int                    xcursor_number)
+win32_cursor_new (GdkWin32CursorLoadType  load_type,
+                  wchar_t                *resource_name,
+                  int                     width,
+                  int                     height,
+                  guint                   load_flags,
+                  int                     xcursor_number)
 {
   Win32Cursor *result;
 
@@ -631,9 +632,9 @@ win32_cursor_theme_load_system (Win32CursorTheme *theme,
 
       /* Prefer W32 cursors */
       if (cursors[i].builtin)
-        shared_hcursor = LoadImageA (NULL, cursors[i].builtin, IMAGE_CURSOR,
-                                     size, size,
-                                     LR_SHARED | (size == 0 ? LR_DEFAULTSIZE : 0));
+        shared_hcursor = LoadImage (NULL, cursors[i].builtin, IMAGE_CURSOR,
+                                    size, size,
+                                    LR_SHARED | (size == 0 ? LR_DEFAULTSIZE : 0));
 
       /* Fall back to X cursors, but only if we've got no theme cursor */
       if (shared_hcursor == NULL && g_hash_table_lookup (theme->named_cursors, cursors[i].name) == NULL)
@@ -645,7 +646,7 @@ win32_cursor_theme_load_system (Win32CursorTheme *theme,
         DestroyCursor (x_hcursor);
 
       cursor = win32_cursor_new (shared_hcursor ? GDK_WIN32_CURSOR_LOAD_FROM_RESOURCE_NULL : GDK_WIN32_CURSOR_CREATE,
-                                 (gpointer) cursors[i].builtin,
+                                 (wchar_t*) cursors[i].builtin,
                                  size,
                                  size,
                                  LR_SHARED | (size == 0 ? LR_DEFAULTSIZE : 0),
@@ -660,14 +661,14 @@ win32_cursor_theme_load_system (Win32CursorTheme *theme,
       if (default_cursors[i].name == NULL)
         break;
 
-      shared_hcursor = LoadImageA (NULL, default_cursors[i].id, IMAGE_CURSOR, size, size,
-                                   LR_SHARED | (size == 0 ? LR_DEFAULTSIZE : 0));
+      shared_hcursor = LoadImage (NULL, default_cursors[i].id, IMAGE_CURSOR, size, size,
+                                  LR_SHARED | (size == 0 ? LR_DEFAULTSIZE : 0));
 
       if (shared_hcursor == NULL)
         continue;
 
       cursor = win32_cursor_new (GDK_WIN32_CURSOR_LOAD_FROM_RESOURCE_NULL,
-                                 (gpointer) default_cursors[i].id,
+                                 (wchar_t*) default_cursors[i].id,
                                  size,
                                  size,
                                  LR_SHARED | (size == 0 ? LR_DEFAULTSIZE : 0),
@@ -779,8 +780,8 @@ win32hcursor_idc_from_name (GdkWin32Display *display,
         continue;
 
       return gdk_win32_hcursor_new (display,
-                                    LoadImageA (NULL, default_cursors[i].id, IMAGE_CURSOR, 0, 0,
-                                                LR_SHARED | LR_DEFAULTSIZE),
+                                    LoadImage (NULL, default_cursors[i].id, IMAGE_CURSOR, 0, 0,
+                                               LR_SHARED | LR_DEFAULTSIZE),
                                     FALSE);
     }
 
@@ -884,7 +885,7 @@ gdk_win32hcursor_create_for_name (GdkWin32Display  *display,
   /* Allow to load named cursor resources linked into the executable.
    * Cursors obtained with LoadCursor() cannot be destroyed.
    */
-  return gdk_win32_hcursor_new (display, LoadCursor (hinstance, name), FALSE);
+  return gdk_win32_hcursor_new (display, LoadCursorA (hinstance, name), FALSE);
 }
 
 static HICON
@@ -908,7 +909,9 @@ _gdk_win32_create_hicon_for_texture (GdkTexture *texture,
   width = cairo_image_surface_get_width (surface);
   height = cairo_image_surface_get_height (surface);
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   pixbuf = gdk_pixbuf_get_from_surface (surface, 0, 0, width, height);
+G_GNUC_END_IGNORE_DEPRECATIONS
 
   icon = pixbuf_to_hicon (pixbuf, is_icon, x, y);
 

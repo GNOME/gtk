@@ -49,7 +49,7 @@ GtkWidget *       gtk_graphics_offload_get_child    (GtkGraphicsOffload        *
  * @GTK_GRAPHICS_OFFLOAD_ENABLED: Graphics offloading is enabled.
  * @GTK_GRAPHICS_OFFLOAD_DISABLED: Graphics offloading is disabled.
  *
- * Represents the state of graphics offlodading.
+ * Represents the state of graphics offloading.
  *
  * Since: 4.14
  */
@@ -66,5 +66,12 @@ void             gtk_graphics_offload_set_enabled (GtkGraphicsOffload        *se
 GDK_AVAILABLE_IN_4_14
 GtkGraphicsOffloadEnabled
                  gtk_graphics_offload_get_enabled  (GtkGraphicsOffload        *self);
+
+GDK_AVAILABLE_IN_4_16
+void             gtk_graphics_offload_set_black_background (GtkGraphicsOffload *self,
+                                                            gboolean            value);
+
+GDK_AVAILABLE_IN_4_16
+gboolean         gtk_graphics_offload_get_black_background (GtkGraphicsOffload *self);
 
 G_END_DECLS

@@ -1,0 +1,4 @@
+variables-invalid-07.css:2:26-27: error: GTK_CSS_PARSER_ERROR_SYNTAX
+variables-invalid-07.css:6:26-27: error: GTK_CSS_PARSER_ERROR_SYNTAX
+variables-invalid-07.css:10:26-27: error: GTK_CSS_PARSER_ERROR_SYNTAX
+variables-invalid-07.css:14:26-28: error: GTK_CSS_PARSER_ERROR_SYNTAX

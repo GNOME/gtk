@@ -102,6 +102,12 @@ compute_change (GtkCssStyleChange *change)
                                                       change->new_style,
                                                       &change->changes,
                                                       &change->affects);
+
+  if (change->old_style->variables != change->new_style->variables)
+    gtk_css_custom_values_compute_changes_and_affects (change->old_style,
+                                                       change->new_style,
+                                                       &change->changes,
+                                                       &change->affects);
 }
 
 void
@@ -180,12 +186,12 @@ gtk_css_style_change_print (GtkCssStyleChange *change,
 
           g_string_append_printf (string, "%s: ", name);
           value = gtk_css_style_get_value (old, i);
-          _gtk_css_value_print (value, string);
+          gtk_css_value_print (value, string);
           g_string_append (string, "\n");
 
           g_string_append_printf (string, "%s: ", name);
           value = gtk_css_style_get_value (new, i);
-          _gtk_css_value_print (value, string);
+          gtk_css_value_print (value, string);
           g_string_append (string, "\n");
         }
     }

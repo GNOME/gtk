@@ -142,7 +142,7 @@ gtk_print_setup_unref (GtkPrintSetup *setup)
  * They may be different from the `GtkPrintDialog`'s settings
  * if the user changed them during the setup process.
  *
- * Returns: (nullable) (transfer none): the print settings, or `NULL`
+ * Returns: (transfer none): the print settings, or `NULL`
  *
  * Since: 4.14
  */
@@ -168,7 +168,7 @@ gtk_print_setup_set_print_settings (GtkPrintSetup    *setup,
  * It may be different from the `GtkPrintDialog`'s page setup
  * if the user changed it during the setup process.
  *
- * Returns: (nullable) (transfer none): the page setup, or `NULL`
+ * Returns: (transfer none): the page setup, or `NULL`
  *
  * Since: 4.14
  */
@@ -585,7 +585,7 @@ gtk_print_dialog_set_modal (GtkPrintDialog *self,
  *
  * Returns the page setup.
  *
- * Returns: (transfer none): the page setup
+ * Returns: (nullable) (transfer none): the page setup
  *
  * Since: 4.14
  */
@@ -623,7 +623,7 @@ gtk_print_dialog_set_page_setup (GtkPrintDialog *self,
  *
  * Returns the print settings for the print dialog.
  *
- * Returns: (transfer none): the settings
+ * Returns: (nullable) (transfer none): the settings
  *
  * Since: 4.14
  */
@@ -1430,10 +1430,8 @@ print_response_cb (GtkPrintUnixDialog *window,
  * and set up print settings and page setup.
  *
  * The @callback will be called when the dialog is dismissed.
- * It should call [method@Gtk.PrintDialog.setup_finish]
- * to obtain the results in the form of a [struct@Gtk.PrintSetup],
- * that can then be passed to [method@Gtk.PrintDialog.print]
- * or [method@Gtk.PrintDialog.print_file].
+ * The obtained [struct@Gtk.PrintSetup] can then be passed
+ * to [method@Gtk.PrintDialog.print] or [method@Gtk.PrintDialog.print_file].
  *
  * One possible use for this method is to have the user select a printer,
  * then show a page setup UI in the application (e.g. to arrange images
@@ -1502,7 +1500,7 @@ gtk_print_dialog_setup (GtkPrintDialog       *self,
  * which contains the print settings and page setup information that
  * will be used to print.
  *
- * Returns: (nullable): The `GtkPrintSetup` object that resulted from the call,
+ * Returns: The `GtkPrintSetup` object that resulted from the call,
  *   or `NULL` if the call was not successful
  *
  * Since: 4.14
@@ -1533,8 +1531,7 @@ gtk_print_dialog_setup_finish (GtkPrintDialog    *self,
  * If you pass `NULL` as @setup, then this method will present a print dialog.
  * Otherwise, it will attempt to print directly, without user interaction.
  *
- * The @callback will be called when the printing is done. It should call
- * [method@Gtk.PrintDialog.print_finish] to obtain the results.
+ * The @callback will be called when the printing is done.
  *
  * Since: 4.14
  */
@@ -1628,7 +1625,7 @@ gtk_print_dialog_print (GtkPrintDialog       *self,
  * call may not be instant as it operation will for the printer to finish
  * printing.
  *
- * Returns: (nullable) (transfer full): a [class@Gio.OutputStream]
+ * Returns: (transfer full): a [class@Gio.OutputStream]
  *
  * Since: 4.14
  */
@@ -1658,9 +1655,6 @@ gtk_print_dialog_print_finish (GtkPrintDialog  *self,
  *
  * If you pass `NULL` as @setup, then this method will present a print dialog.
  * Otherwise, it will attempt to print directly, without user interaction.
- *
- * The @callback will be called when the printing is done. It should call
- * [method@Gtk.PrintDialog.print_file_finish] to obtain the results.
  *
  * Since: 4.14
  */

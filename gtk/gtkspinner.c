@@ -64,6 +64,8 @@ typedef struct _GtkSpinnerClass GtkSpinnerClass;
 struct _GtkSpinner
 {
   GtkWidget parent;
+
+  guint spinning : 1;
 };
 
 struct _GtkSpinnerClass
@@ -82,6 +84,17 @@ G_DEFINE_TYPE (GtkSpinner, gtk_spinner, GTK_TYPE_WIDGET)
 #define DEFAULT_SIZE 16
 
 static void
+update_state_flags (GtkSpinner *spinner)
+{
+  if (spinner->spinning && gtk_widget_get_mapped (GTK_WIDGET (spinner)))
+    gtk_widget_set_state_flags (GTK_WIDGET (spinner),
+                                GTK_STATE_FLAG_CHECKED, FALSE);
+  else
+    gtk_widget_unset_state_flags (GTK_WIDGET (spinner),
+                                  GTK_STATE_FLAG_CHECKED);
+}
+
+static void
 gtk_spinner_measure (GtkWidget      *widget,
                      GtkOrientation  orientation,
                      int             for_size,
@@ -93,7 +106,7 @@ gtk_spinner_measure (GtkWidget      *widget,
   GtkCssStyle *style;
 
   style = gtk_css_node_get_style (gtk_widget_get_css_node (widget));
-  *minimum = *natural = _gtk_css_number_value_get (style->icon->icon_size, 100);
+  *minimum = *natural = gtk_css_number_value_get (style->icon->icon_size, 100);
 }
 
 static void
@@ -106,6 +119,26 @@ gtk_spinner_snapshot (GtkWidget   *widget,
                                snapshot,
                                gtk_widget_get_width (widget),
                                gtk_widget_get_height (widget));
+}
+
+static void
+gtk_spinner_map (GtkWidget *widget)
+{
+  GtkSpinner *spinner = GTK_SPINNER (widget);
+
+  GTK_WIDGET_CLASS (gtk_spinner_parent_class)->map (widget);
+
+  update_state_flags (spinner);
+}
+
+static void
+gtk_spinner_unmap (GtkWidget *widget)
+{
+  GtkSpinner *spinner = GTK_SPINNER (widget);
+
+  GTK_WIDGET_CLASS (gtk_spinner_parent_class)->unmap (widget);
+
+  update_state_flags (spinner);
 }
 
 static void
@@ -139,7 +172,7 @@ gtk_spinner_get_spinning (GtkSpinner *spinner)
 {
   g_return_val_if_fail (GTK_IS_SPINNER (spinner), FALSE);
 
-  return (gtk_widget_get_state_flags ((GtkWidget *)spinner) & GTK_STATE_FLAG_CHECKED) > 0;
+  return spinner->spinning;
 }
 
 /**
@@ -157,17 +190,14 @@ gtk_spinner_set_spinning (GtkSpinner *spinner,
 
   spinning = !!spinning;
 
-  if (spinning != gtk_spinner_get_spinning (spinner))
-    {
-      g_object_notify (G_OBJECT (spinner), "spinning");
+  if (spinning == spinner->spinning)
+    return;
 
-      if (spinning)
-        gtk_widget_set_state_flags (GTK_WIDGET (spinner),
-                                    GTK_STATE_FLAG_CHECKED, FALSE);
-      else
-        gtk_widget_unset_state_flags (GTK_WIDGET (spinner),
-                                      GTK_STATE_FLAG_CHECKED);
-    }
+  spinner->spinning = spinning;
+
+  update_state_flags (spinner);
+
+  g_object_notify (G_OBJECT (spinner), "spinning");
 }
 
 static void
@@ -215,6 +245,8 @@ gtk_spinner_class_init (GtkSpinnerClass *klass)
   widget_class = GTK_WIDGET_CLASS(klass);
   widget_class->snapshot = gtk_spinner_snapshot;
   widget_class->measure = gtk_spinner_measure;
+  widget_class->map = gtk_spinner_map;
+  widget_class->unmap = gtk_spinner_unmap;
   widget_class->css_changed = gtk_spinner_css_changed;
 
   /**

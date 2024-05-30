@@ -1,5 +1,179 @@
-Overview of Changes in 4.15.0, xx-xx-xxxx
+Overview of Changes in 4.15.2, xx-xx-xxxx
 =========================================
+
+Overview of Changes in 4.15.1, 21-05-2024
+=========================================
+
+* GtkGraphicsOffload:
+ - Don't crash without a child
+
+* GtkSpinner:
+ - Don't animate when unmapped
+
+* CSS:
+ - Support the :root selector
+ - Support variables and custom properties (https://www.w3.org/TR/css-variables-1/)
+ - Implement math functions (https://www.w3.org/TR/css-values-4/)
+ - Support modern syntax and calc in rgb() and hsl()
+
+* Icontheme:
+ - Make symbolic svg loading more efficient
+ - Handle color-free symbolics more efficiently
+
+* Accessibility:
+ - Make the gtk-demo sidebar search more accessible
+ - Stop emitting focus events
+ - Realize child contexts when necessary
+
+* GDK:
+ - Support XDG_ACTIVATION_TOKEN
+ - dmabuf: Be more defensive when importing unknown formats to GL
+ - dmabuf: Use narrow range for YUV
+ - vulkan: Recreate swapchains when necessary or beneficial
+
+* GSK:
+ - Improve logging for GDK_DEBUG=offload
+ - Improve logging for GSK_DEBUG=renderer
+ - gpu: Warn about inefficient texture import
+ - gpu: Handle tiny offscreens correctly
+ - vulkan: Add profiler marks in various places
+ - vulkan: Fix a problem with imported dmabufs showing up black
+ - cairo: Speed up mask nodes, since we use them for symbolic icons
+
+* Wayland:
+ - Use wl_compositor version 6
+
+* X11:
+ - Implement a missing method
+
+* Build:
+ - Fix many ubsan warnings
+
+* Debugging:
+ - Show more texture details in the recorder
+ - Use GTK_DEBUG=css to see CSS deprecations
+
+* macOS:
+ - Fix problems with events handed back to the OS
+ - Respect GDK_DEBUG=default-settings
+ - Allow applictions to handle Dock > Quit
+
+* Deprecations:
+ - Use of @name colors in CSS
+
+* Translation updates:
+ Catalan
+ Georgian
+ Hungarian
+ Korean
+ Portuguese
+ Turkish
+
+
+Overview of Changes in 4.15.0, 21-04-2024
+=========================================
+
+This release changes the default GSK renderer to be Vulkan, on
+Wayland. Other platforms still use ngl.
+
+The intent of this change is to get wider testing and verify that
+Vulkan drivers are good enough for us to rely on. If significant
+problems show up, we will revert this change for 4.16.
+
+You can still override the renderer choice using the GSK_RENDERER
+environment variable.
+
+---
+
+This release also changes font rendering settings by introducing
+a new high-level gtk-font-rendering settings which gives GTK more
+freedom to decide on font rendering.
+
+You can still use the low-level font-related settings by changing
+the new property to 'manual'.
+
+---
+
+* GtkColumnView:
+ - Fix infinite loops in dispose
+ - Fix problems with weak ref cycles in GtkExpression
+
+* GtkListView:
+* GtkShortcutManager:
+ - Track the propagation phase of added controllers
+
+* GtkGLArea:
+ - Produce dmabuf textures, so graphics offload is possible
+
+* GtkTextView:
+ - Support text shadows
+
+* GtkGraphicsOffload:
+ - Add a black-background property
+
+* Settings:
+ - Add a new gtk-font-rendering setting
+
+* Accessibility:
+ - Add support for GetRangeExtents to GtkAccessibleText
+ - Add support for GetOffsetAtPoint to GtkAccessibleText
+ - Implement GtkAccessibleRange for scrollbars
+
+* GDK:
+ - Add a callback-based cursor API
+
+* GSK:
+-  Use the Vulkan renderer by default
+ - Avoid an infinite recursion with offscreens in some cases
+ - Optimize graphics offload to make it more likely that compositors
+   can use direct scanout
+
+* X11:
+ - Fix some confusing debug messages
+ - Drop a no-longer-relevant optimization that was interfering with
+   getting the current window manager capabilities
+
+* macOS:
+ - Implement the color picker for macOS 10.15+
+
+* Debugging:
+ - Snow monitor resolution in the inspector
+
+* Demos:
+ - Use graphics offload in the shadertoy demo
+ - Show more reliable fps numbers in the fishbowl demo
+
+* Tools:
+ - Support generating pdf in gtk4-rendernode-tool
+
+* Build:
+ - Require pango 1.52
+ - Require cairo 1.18
+ - Add a missing dependency that was causing build failures
+ - Drop deprecated build options:
+   gtk_doc -> documentation
+   update_screenshots -> screenshots
+   demo-profile -> profile
+   demos -> build-demos
+
+* Deprecations:
+ - gdk_widget_set/get_font_options
+ - gdk_wayland/x11_display_set_cursor_theme
+
+* Translation updates:
+ Basque
+ Brazilian Portuguese
+ British English
+ Chinese (China)
+ Hebrew
+ Kabyle
+ Persian
+ Polish
+ Russian
+ Slovenian
+ Swedish
+ Turkish
+
 
 Overview of Changes in 4.14.2, 03-04-2024
 =========================================

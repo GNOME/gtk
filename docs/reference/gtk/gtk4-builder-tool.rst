@@ -8,6 +8,10 @@ gtk4-builder-tool
 GtkBuilder File Utility
 -----------------------
 
+:Version: GTK
+:Manual section: 1
+:Manual group: GTK commands
+
 SYNOPSIS
 --------
 |   **gtk4-builder-tool** <COMMAND> [OPTIONS...] <FILE>

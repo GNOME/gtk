@@ -48,5 +48,5 @@ gsk_vulkan_descriptors_bind (GskVulkanDescriptors *self,
                              GskVulkanDescriptors *previous,
                              VkCommandBuffer       vk_command_buffer)
 {
-  return GSK_VULKAN_DESCRIPTORS_GET_CLASS (self)->bind (self, previous, vk_command_buffer);
+  GSK_VULKAN_DESCRIPTORS_GET_CLASS (self)->bind (self, previous, vk_command_buffer);
 }

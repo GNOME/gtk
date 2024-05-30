@@ -255,6 +255,8 @@ gtk_column_view_column_class_init (GtkColumnViewColumnClass *klass)
    * GtkColumnViewColumn:factory: (attributes org.gtk.Property.get=gtk_column_view_column_get_factory org.gtk.Property.set=gtk_column_view_column_set_factory)
    *
    * Factory for populating list items.
+   *
+   * The factory must be for configuring [class@Gtk.ColumnViewCell] objects.
    */
   properties[PROP_FACTORY] =
     g_param_spec_object ("factory", NULL, NULL,
@@ -761,7 +763,7 @@ gtk_column_view_column_remove_from_sorter (GtkColumnViewColumn *self)
 {
   if (self->view == NULL)
     return;
-  
+
   gtk_column_view_sorter_remove_column (GTK_COLUMN_VIEW_SORTER (gtk_column_view_get_sorter (self->view)), self);
 }
 

@@ -781,8 +781,8 @@ pointer_handle_motion (void              *data,
     {
       double x, y;
       gdk_event_get_position (event, &x, &y);
-      g_message ("motion %f %f, seat %p state %d",
-                 x, y, seat, gdk_event_get_modifier_state (event));
+      gdk_debug_message ("motion %f %f, seat %p state %d",
+                         x, y, seat, gdk_event_get_modifier_state (event));
     }
 
   if (wl_seat_get_version (seat->wl_seat) < WL_POINTER_HAS_FRAME)
@@ -1664,7 +1664,7 @@ touch_handle_down (void              *data,
     {
       double xx, yy;
       gdk_event_get_position (event, &xx, &yy);
-      g_message ("touch begin %f %f", xx, yy);
+      gdk_debug_message ("touch begin %f %f", xx, yy);
     }
 
   _gdk_wayland_display_deliver_event (seat->display, event);
@@ -1699,7 +1699,7 @@ touch_handle_up (void            *data,
     {
       double x, y;
       gdk_event_get_position (event, &x, &y);
-      g_message ("touch end %f %f", x, y);
+      gdk_debug_message ("touch end %f %f", x, y);
     }
 
   _gdk_wayland_display_deliver_event (seat->display, event);
@@ -1747,7 +1747,7 @@ touch_handle_motion (void            *data,
     {
       double xx, yy;
       gdk_event_get_position (event, &xx, &yy);
-      g_message ("touch update %f %f", xx, yy);
+      gdk_debug_message ("touch update %f %f", xx, yy);
     }
 
   _gdk_wayland_display_deliver_event (seat->display, event);
@@ -1841,9 +1841,9 @@ emit_gesture_swipe_event (GdkWaylandSeat          *seat,
     {
       double x, y;
       gdk_event_get_position (event, &x, &y);
-      g_message ("swipe event %d, coords: %f %f, seat %p state %d",
-                 gdk_event_get_event_type (event), x, y, seat,
-                 gdk_event_get_modifier_state (event));
+      gdk_debug_message ("swipe event %d, coords: %f %f, seat %p state %d",
+                         gdk_event_get_event_type (event), x, y, seat,
+                         gdk_event_get_modifier_state (event));
     }
 
   _gdk_wayland_display_deliver_event (seat->display, event);
@@ -1936,10 +1936,10 @@ emit_gesture_pinch_event (GdkWaylandSeat          *seat,
     {
       double x, y;
       gdk_event_get_position (event, &x, &y);
-      g_message ("pinch event %d, coords: %f %f, seat %p state %d",
-                       gdk_event_get_event_type (event),
-                       x, y, seat,
-                       gdk_event_get_modifier_state (event));
+      gdk_debug_message ("pinch event %d, coords: %f %f, seat %p state %d",
+                         gdk_event_get_event_type (event),
+                         x, y, seat,
+                         gdk_event_get_modifier_state (event));
     }
 
   _gdk_wayland_display_deliver_event (seat->display, event);
@@ -2030,10 +2030,10 @@ emit_gesture_hold_event (GdkWaylandSeat          *seat,
     {
       double x, y;
       gdk_event_get_position (event, &x, &y);
-      g_message ("hold event %d, coords: %f %f, seat %p state %d",
-                 gdk_event_get_event_type (event),
-                 x, y, seat,
-                 gdk_event_get_modifier_state (event));
+      gdk_debug_message ("hold event %d, coords: %f %f, seat %p state %d",
+                         gdk_event_get_event_type (event),
+                         x, y, seat,
+                         gdk_event_get_modifier_state (event));
     }
 
   _gdk_wayland_display_deliver_event (seat->display, event);

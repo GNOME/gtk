@@ -41,8 +41,10 @@ G_BEGIN_DECLS
 
 #ifdef GDK_ARRAY_NULL_TERMINATED
 #define GDK_ARRAY_REAL_SIZE(_size) ((_size) + 1)
+#define GDK_ARRAY_MAX_SIZE (G_MAXSIZE / sizeof (_T_) - 1)
 #else
 #define GDK_ARRAY_REAL_SIZE(_size) (_size)
+#define GDK_ARRAY_MAX_SIZE (G_MAXSIZE / sizeof (_T_))
 #endif
 
 /* make this readable */
@@ -177,18 +179,23 @@ G_GNUC_UNUSED static inline void
 gdk_array(reserve) (GdkArray *self,
                     gsize      n)
 {
-  gsize new_size, size;
+  gsize new_capacity, size, capacity;
 
-  if (n <= gdk_array(get_capacity) (self))
-    return;
+  if (G_UNLIKELY (n > GDK_ARRAY_MAX_SIZE))
+    g_error ("requesting array size of %zu, but maximum size is %zu", n, GDK_ARRAY_MAX_SIZE);
+
+  capacity = gdk_array(get_capacity) (self);
+  if (n <= capacity)
+     return;
 
   size = gdk_array(get_size) (self);
-  new_size = ((gsize) 1) << g_bit_storage (MAX (GDK_ARRAY_REAL_SIZE (n), 16) - 1);
+  /* capacity * 2 can overflow, that's why we MAX() */
+  new_capacity = MAX (GDK_ARRAY_REAL_SIZE (n), capacity * 2);
 
 #ifdef GDK_ARRAY_PREALLOC
   if (self->start == self->preallocated)
     {
-      self->start = g_new (_T_, new_size);
+      self->start = g_new (_T_, new_capacity);
       memcpy (self->start, self->preallocated, sizeof (_T_) * GDK_ARRAY_REAL_SIZE (size));
     }
   else
@@ -196,15 +203,15 @@ gdk_array(reserve) (GdkArray *self,
 #ifdef GDK_ARRAY_NULL_TERMINATED
   if (self->start == NULL)
     {
-      self->start = g_new (_T_, new_size);
+      self->start = g_new (_T_, new_capacity);
       *self->start = *(_T_[1]) { 0 };
     }
   else
 #endif
-    self->start = g_renew (_T_, self->start, new_size);
+    self->start = g_renew (_T_, self->start, new_capacity);
 
   self->end = self->start + size;
-  self->end_allocation = self->start + new_size;
+  self->end_allocation = self->start + new_capacity;
 #ifdef GDK_ARRAY_NULL_TERMINATED
   self->end_allocation--;
 #endif
@@ -312,6 +319,7 @@ gdk_array(get) (const GdkArray *self,
 #undef gdk_array_paste
 #undef gdk_array
 #undef GDK_ARRAY_REAL_SIZE
+#undef GDK_ARRAY_MAX_SIZE
 
 #undef GDK_ARRAY_BY_VALUE
 #undef GDK_ARRAY_ELEMENT_TYPE

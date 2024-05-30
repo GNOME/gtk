@@ -104,7 +104,7 @@ gtk_css_shorthand_property_parse_value (GtkStyleProperty *property,
       for (i = 0; i < n_props; i++)
         {
           if (data[i] != NULL)
-            _gtk_css_value_unref (data[i]);
+            gtk_css_value_unref (data[i]);
         }
       return NULL;
     }
@@ -160,7 +160,14 @@ guint
 _gtk_css_shorthand_property_get_n_subproperties (GtkCssShorthandProperty *shorthand)
 {
   g_return_val_if_fail (GTK_IS_CSS_SHORTHAND_PROPERTY (shorthand), 0);
-  
+
   return shorthand->subproperties->len;
 }
 
+guint
+_gtk_css_shorthand_property_get_id (GtkCssShorthandProperty *shorthand)
+{
+  g_return_val_if_fail (GTK_IS_CSS_SHORTHAND_PROPERTY (shorthand), 0);
+
+  return shorthand->id;
+}

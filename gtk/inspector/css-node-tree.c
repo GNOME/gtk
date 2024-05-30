@@ -28,6 +28,7 @@
 
 #include "gtklabel.h"
 #include "gtk/gtkwidgetprivate.h"
+#include "gtkcsscustompropertypoolprivate.h"
 #include "gtkcssproviderprivate.h"
 #include "gtkcssstylepropertyprivate.h"
 #include "gtkcssstyleprivate.h"
@@ -600,6 +601,33 @@ bind_node_state (GtkSignalListItemFactory *factory,
   g_free (text);
 }
 
+static int
+compare_name_cb (gconstpointer a,
+                 gconstpointer b,
+                 gpointer      user_data)
+{
+  const CssProperty *prop_a = a;
+  const CssProperty *prop_b = b;
+  gboolean a_var = prop_a->name[0] == '-' && prop_a->name[1] == '-';
+  gboolean b_var = prop_b->name[0] == '-' && prop_b->name[1] == '-';
+  gboolean a_gtk = prop_a->name[0] == '-' && prop_a->name[1] != '-';
+  gboolean b_gtk = prop_b->name[0] == '-' && prop_b->name[1] != '-';
+  int ret;
+
+  if (a_var && !b_var)
+    ret = 1;
+  else if (b_var && !a_var)
+    ret = -1;
+  else if (a_gtk && !b_gtk)
+    ret = 1;
+  else if (b_gtk && !a_gtk)
+    ret = -1;
+  else
+    ret = g_utf8_collate (prop_a->name, prop_b->name);
+
+  return gtk_ordering_from_cmpfunc (ret);
+}
+
 static void
 gtk_inspector_css_node_tree_init (GtkInspectorCssNodeTree *cnt)
 {
@@ -676,7 +704,7 @@ gtk_inspector_css_node_tree_init (GtkInspectorCssNodeTree *cnt)
   g_signal_connect (factory, "setup", G_CALLBACK (setup_label), NULL);
   g_signal_connect (factory, "bind", G_CALLBACK (bind_name), NULL);
   gtk_column_view_column_set_factory (column, factory);
-  sorter = GTK_SORTER (gtk_string_sorter_new (gtk_property_expression_new (css_property_get_type (), NULL, "name")));
+  sorter = GTK_SORTER (gtk_custom_sorter_new ((GCompareDataFunc) compare_name_cb, NULL, NULL));
   gtk_column_view_column_set_sorter (column, sorter);
   gtk_column_view_sort_by_column (GTK_COLUMN_VIEW (priv->prop_tree), column, GTK_SORT_ASCENDING);
   g_object_unref (sorter);
@@ -773,9 +801,14 @@ gtk_inspector_css_node_tree_update_style (GtkInspectorCssNodeTree *cnt,
                                           GtkCssStyle             *new_style)
 {
   GtkInspectorCssNodeTreePrivate *priv = cnt->priv;
-  int i;
+  GtkCssCustomPropertyPool *pool = gtk_css_custom_property_pool_get ();
+  GArray *custom_props;
+  int i, n, n_props;
 
-  for (i = 0; i < _gtk_css_style_property_get_n_properties (); i++)
+  n_props = _gtk_css_style_property_get_n_properties ();
+  n = g_list_model_get_n_items (G_LIST_MODEL (priv->prop_model));
+
+  for (i = 0; i < n_props; i++)
     {
       GtkCssStyleProperty *prop;
       const char *name;
@@ -789,7 +822,7 @@ gtk_inspector_css_node_tree_update_style (GtkInspectorCssNodeTree *cnt,
 
       if (new_style)
         {
-          value = _gtk_css_value_to_string (gtk_css_style_get_value (new_style, i));
+          value = gtk_css_value_to_string (gtk_css_style_get_value (new_style, i));
 
           section = gtk_css_style_get_section (new_style, i);
           if (section)
@@ -808,6 +841,47 @@ gtk_inspector_css_node_tree_update_style (GtkInspectorCssNodeTree *cnt,
 
       g_free (location);
       g_free (value);
+    }
+
+  g_list_store_splice (priv->prop_model, n_props, n - n_props, NULL, 0);
+
+  if (new_style)
+    {
+      custom_props = gtk_css_style_list_custom_properties (new_style);
+
+      if (custom_props)
+        {
+          for (i = 0; i < custom_props->len; i++)
+            {
+              GtkCssVariableValue *var_value;
+              int id;
+              const char *name;
+              GtkCssSection *section;
+              char *location;
+              char *value;
+              CssProperty *property;
+
+              id = g_array_index (custom_props, int, i);
+              name = gtk_css_custom_property_pool_get_name (pool, id);
+              var_value = gtk_css_style_get_custom_property (new_style, id);
+
+              value = gtk_css_variable_value_to_string (var_value);
+
+              section = var_value->section;
+              if (section)
+                location = gtk_css_section_to_string (section);
+              else
+                location = NULL;
+
+              property = css_property_new (name, value, location);
+              g_list_store_append (priv->prop_model, property);
+
+              g_free (location);
+              g_free (value);
+            }
+
+          g_array_unref (custom_props);
+        }
     }
 }
 

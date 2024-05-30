@@ -23,6 +23,7 @@
 #define PNG_SIGNATURE "\x89PNG"
 
 GdkTexture *gdk_load_png        (GBytes         *bytes,
+                                 GHashTable     *options,
                                  GError        **error);
 
 GBytes     *gdk_save_png        (GdkTexture     *texture);

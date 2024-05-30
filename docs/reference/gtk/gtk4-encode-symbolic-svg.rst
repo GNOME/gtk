@@ -8,6 +8,10 @@ gtk4-encode-symbolic-svg
 Symbolic icon conversion utility
 --------------------------------
 
+:Version: GTK
+:Manual section: 1
+:Manual group: GTK commands
+
 SYNOPSIS
 --------
 

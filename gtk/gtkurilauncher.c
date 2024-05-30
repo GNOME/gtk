@@ -37,8 +37,6 @@
  * right away.
  *
  * The operation is started with the [method@Gtk.UriLauncher.launch] function.
- * This API follows the GIO async pattern, and the result can be obtained by
- * calling [method@Gtk.UriLauncher.launch_finish].
  *
  * To launch a file, use [class@Gtk.FileLauncher].
  *
@@ -269,10 +267,6 @@ G_GNUC_END_IGNORE_DEPRECATIONS
  * Launch an application to open the uri.
  *
  * This may present an app chooser dialog to the user.
- *
- * The @callback will be called when the operation is completed.
- * It should call [method@Gtk.UriLauncher.launch_finish] to obtain
- * the result.
  *
  * Since: 4.10
  */

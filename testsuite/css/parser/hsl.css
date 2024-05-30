@@ -21,3 +21,47 @@ e {
 f {
   color: hsl(1, 2, 3);
 }
+
+g {
+  color: hsl(120 100% 50);
+}
+
+h {
+  color: hsl(120 100% 50 / 50%);
+}
+
+i {
+  color: hsl(0.5turn 100 50);
+}
+
+j {
+  color: hsla(0.5turn 100 50);
+}
+
+k {
+  color: hsla(calc(0.5turn + 90deg) calc(50% + 50) calc(100 / 2) / calc(1 / 2));
+}
+
+l {
+  color: hsl(0.5turn, 100%, 50%);
+}
+
+m {
+  color: hsl(1, 2 3);
+}
+
+n {
+  color: hsl(1 2 3 4);
+}
+
+o {
+  color: hsl(1 2 3 /);
+}
+
+p {
+  color: hsla(1 2 / 3 4);
+}
+
+q {
+  color: hsla(1, 2 3 / 4);
+}

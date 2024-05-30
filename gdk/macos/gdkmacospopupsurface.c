@@ -52,6 +52,7 @@ gdk_macos_popup_surface_layout (GdkMacosPopupSurface *self,
   GdkRectangle bounds;
   GdkRectangle final_rect;
   int x, y;
+  int shadow_left, shadow_right, shadow_top, shadow_bottom;
 
   g_assert (GDK_IS_MACOS_POPUP_SURFACE (self));
   g_assert (layout != NULL);
@@ -68,10 +69,19 @@ gdk_macos_popup_surface_layout (GdkMacosPopupSurface *self,
     monitor = _gdk_macos_surface_get_best_monitor (GDK_MACOS_SURFACE (self));
   gdk_macos_monitor_get_workarea (monitor, &bounds);
 
+  gdk_popup_layout_get_shadow_width (layout,
+                                     &shadow_left,
+                                     &shadow_right,
+                                     &shadow_top,
+                                     &shadow_bottom);
+
   gdk_surface_layout_popup_helper (GDK_SURFACE (self),
                                    width,
                                    height,
-                                   0, 0, 0, 0, /* shadow-left/right/top/bottom */
+                                   shadow_left,
+                                   shadow_right,
+                                   shadow_top,
+                                   shadow_bottom,
                                    monitor,
                                    &bounds,
                                    self->layout,
@@ -306,13 +316,13 @@ _gdk_macos_popup_surface_constructed (GObject *object)
                                                  defer:NO
                                                 screen:screen];
 
+  _gdk_macos_surface_set_native (GDK_MACOS_SURFACE (self), window);
+
   [window setOpaque:NO];
   [window setBackgroundColor:[NSColor clearColor]];
   [window setDecorated:NO];
   [window setExcludedFromWindowsMenu:YES];
   [window setLevel:NSPopUpMenuWindowLevel];
-
-  _gdk_macos_surface_set_native (GDK_MACOS_SURFACE (self), window);
 
   gdk_surface_set_frame_clock (surface, gdk_surface_get_frame_clock (surface->parent));
 

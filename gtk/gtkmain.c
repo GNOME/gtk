@@ -200,6 +200,7 @@ static const GdkDebugKey gtk_debug_keys[] = {
   { "accessibility", GTK_DEBUG_A11Y, "Information about accessibility state changes" },
   { "iconfallback", GTK_DEBUG_ICONFALLBACK, "Information about icon fallback" },
   { "invert-text-dir", GTK_DEBUG_INVERT_TEXT_DIR, "Invert the default text direction" },
+  { "css", GTK_DEBUG_CSS, "Information about deprecated CSS features" },
 };
 
 /* This checks to see if the process is running suid or sgid
@@ -277,7 +278,7 @@ static char *script_to_check = NULL;
 static gboolean setlocale_called = FALSE;
 
 static BOOL CALLBACK
-enum_locale_proc (LPTSTR locale)
+enum_locale_proc (LPSTR locale)
 {
   LCID lcid;
   char iso639[10];
@@ -287,8 +288,8 @@ enum_locale_proc (LPTSTR locale)
 
   lcid = strtoul (locale, &endptr, 16);
   if (*endptr == '\0' &&
-      GetLocaleInfo (lcid, LOCALE_SISO639LANGNAME, iso639, sizeof (iso639)) &&
-      GetLocaleInfo (lcid, LOCALE_SISO3166CTRYNAME, iso3166, sizeof (iso3166)))
+      GetLocaleInfoA (lcid, LOCALE_SISO639LANGNAME, iso639, sizeof (iso639)) &&
+      GetLocaleInfoA (lcid, LOCALE_SISO3166CTRYNAME, iso3166, sizeof (iso3166)))
     {
       if (strcmp (iso639, iso639_to_check) == 0 &&
           ((iso3166_to_check != NULL &&
@@ -341,8 +342,8 @@ enum_locale_proc (LPTSTR locale)
 
           SetThreadLocale (lcid);
 
-          if (GetLocaleInfo (lcid, LOCALE_SENGLANGUAGE, language, sizeof (language)) &&
-              GetLocaleInfo (lcid, LOCALE_SENGCOUNTRY, country, sizeof (country)))
+          if (GetLocaleInfoA (lcid, LOCALE_SENGLANGUAGE, language, sizeof (language)) &&
+              GetLocaleInfoA (lcid, LOCALE_SENGCOUNTRY, country, sizeof (country)))
             {
               char str[300];
 
@@ -424,7 +425,7 @@ setlocale_initialization (void)
                     iso3166_to_check = (char *) "SP";
                 }
 
-              EnumSystemLocales (enum_locale_proc, LCID_SUPPORTED);
+              EnumSystemLocalesA (enum_locale_proc, LCID_SUPPORTED);
             }
           g_free (p);
         }

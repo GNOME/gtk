@@ -27,7 +27,7 @@ struct _GtkCssValue {
   GTK_CSS_VALUE_BASE
 };
 
-G_DEFINE_BOXED_TYPE (GtkCssValue, _gtk_css_value, _gtk_css_value_ref, _gtk_css_value_unref)
+G_DEFINE_BOXED_TYPE (GtkCssValue, gtk_css_value, gtk_css_value_ref, gtk_css_value_unref)
 
 #undef CSS_VALUE_ACCOUNTING
 
@@ -137,8 +137,8 @@ get_accounting_data (const char *class)
 #endif
 
 GtkCssValue *
-_gtk_css_value_alloc (const GtkCssValueClass *klass,
-                      gsize                   size)
+gtk_css_value_alloc (const GtkCssValueClass *klass,
+                     gsize                   size)
 {
   GtkCssValue *value;
 
@@ -161,7 +161,7 @@ _gtk_css_value_alloc (const GtkCssValueClass *klass,
 }
 
 GtkCssValue *
-gtk_css_value_ref (GtkCssValue *value)
+(gtk_css_value_ref) (GtkCssValue *value)
 {
   gtk_internal_return_val_if_fail (value != NULL, NULL);
 
@@ -171,7 +171,7 @@ gtk_css_value_ref (GtkCssValue *value)
 }
 
 void
-gtk_css_value_unref (GtkCssValue *value)
+(gtk_css_value_unref) (GtkCssValue *value)
 {
   if (value == NULL)
     return;
@@ -193,12 +193,14 @@ gtk_css_value_unref (GtkCssValue *value)
 }
 
 /**
- * _gtk_css_value_compute:
+ * gtk_css_value_compute:
  * @value: the value to compute from
  * @property_id: the ID of the property to compute
  * @provider: Style provider for looking up extra information
  * @style: Style to compute for
  * @parent_style: parent style to use for inherited values
+ * @variables: an additional set of variables to use along with @style
+ * @shorthands: (nullable): Already computed values for shorthands
  *
  * Converts the specified @value into the computed value for the CSS
  * property given by @property_id using the information in @context.
@@ -208,25 +210,23 @@ gtk_css_value_unref (GtkCssValue *value)
  * Returns: the computed value
  **/
 GtkCssValue *
-_gtk_css_value_compute (GtkCssValue      *value,
-                        guint             property_id,
-                        GtkStyleProvider *provider,
-                        GtkCssStyle      *style,
-                        GtkCssStyle      *parent_style)
+gtk_css_value_compute (GtkCssValue          *value,
+                       guint                 property_id,
+                       GtkCssComputeContext *context)
 {
   if (gtk_css_value_is_computed (value))
-    return _gtk_css_value_ref (value);
+    return gtk_css_value_ref (value);
 
 #ifdef CSS_VALUE_ACCOUNTING
   get_accounting_data (value->class->type_name)->computed++;
 #endif
 
-  return value->class->compute (value, property_id, provider, style, parent_style);
+  return value->class->compute (value, property_id, context);
 }
 
 gboolean
-_gtk_css_value_equal (const GtkCssValue *value1,
-                      const GtkCssValue *value2)
+gtk_css_value_equal (const GtkCssValue *value1,
+                     const GtkCssValue *value2)
 {
   gtk_internal_return_val_if_fail (value1 != NULL, FALSE);
   gtk_internal_return_val_if_fail (value2 != NULL, FALSE);
@@ -241,8 +241,8 @@ _gtk_css_value_equal (const GtkCssValue *value1,
 }
 
 gboolean
-_gtk_css_value_equal0 (const GtkCssValue *value1,
-                       const GtkCssValue *value2)
+gtk_css_value_equal0 (const GtkCssValue *value1,
+                      const GtkCssValue *value2)
 {
   /* Includes both values being NULL */
   if (value1 == value2)
@@ -251,14 +251,14 @@ _gtk_css_value_equal0 (const GtkCssValue *value1,
   if (value1 == NULL || value2 == NULL)
     return FALSE;
 
-  return _gtk_css_value_equal (value1, value2);
+  return gtk_css_value_equal (value1, value2);
 }
 
 GtkCssValue *
-_gtk_css_value_transition (GtkCssValue *start,
-                           GtkCssValue *end,
-                           guint        property_id,
-                           double       progress)
+gtk_css_value_transition (GtkCssValue *start,
+                          GtkCssValue *end,
+                          guint        property_id,
+                          double       progress)
 {
   gtk_internal_return_val_if_fail (start != NULL, NULL);
   gtk_internal_return_val_if_fail (end != NULL, NULL);
@@ -267,13 +267,13 @@ _gtk_css_value_transition (GtkCssValue *start,
     return NULL;
 
   if (progress == 0)
-    return _gtk_css_value_ref (start);
+    return gtk_css_value_ref (start);
 
   if (progress == 1)
-    return _gtk_css_value_ref (end);
+    return gtk_css_value_ref (end);
 
   if (start == end)
-    return _gtk_css_value_ref (start);
+    return gtk_css_value_ref (start);
 
 #ifdef CSS_VALUE_ACCOUNTING
   get_accounting_data (start->class->type_name)->transitioned++;
@@ -283,19 +283,19 @@ _gtk_css_value_transition (GtkCssValue *start,
 }
 
 char *
-_gtk_css_value_to_string (const GtkCssValue *value)
+gtk_css_value_to_string (const GtkCssValue *value)
 {
   GString *string;
 
   gtk_internal_return_val_if_fail (value != NULL, NULL);
 
   string = g_string_new (NULL);
-  _gtk_css_value_print (value, string);
+  gtk_css_value_print (value, string);
   return g_string_free (string, FALSE);
 }
 
 /**
- * _gtk_css_value_print:
+ * gtk_css_value_print:
  * @value: the value to print
  * @string: the string to print to
  *
@@ -304,8 +304,8 @@ _gtk_css_value_to_string (const GtkCssValue *value)
  * via _gtk_style_property_assign().
  **/
 void
-_gtk_css_value_print (const GtkCssValue *value,
-                      GString           *string)
+gtk_css_value_print (const GtkCssValue *value,
+                     GString           *string)
 {
   gtk_internal_return_if_fail (value != NULL);
   gtk_internal_return_if_fail (string != NULL);
@@ -360,10 +360,4 @@ gtk_css_value_get_dynamic_value (GtkCssValue *value,
     return gtk_css_value_ref (value);
 
   return value->class->get_dynamic_value (value, monotonic_time);
-}
-
-gboolean
-gtk_css_value_is_computed (const GtkCssValue *value)
-{
-  return value->is_computed;
 }

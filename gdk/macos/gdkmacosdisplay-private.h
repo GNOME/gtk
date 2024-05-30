@@ -161,7 +161,8 @@ void             _gdk_macos_display_send_event                     (GdkMacosDisp
 void             _gdk_macos_display_warp_pointer                   (GdkMacosDisplay *self,
                                                                     int              x,
                                                                     int              y);
-NSEvent         *_gdk_macos_display_get_nsevent                    (GdkEvent        *event);
+NSEvent         *_gdk_macos_display_get_matching_nsevent           (GdkEvent        *event);
+NSEvent         *_gdk_macos_display_get_exact_nsevent              (GdkEvent        *event);
 NSEvent         *_gdk_macos_display_get_last_nsevent               (void);
 GdkDrag         *_gdk_macos_display_find_drag                      (GdkMacosDisplay *self,
                                                                     NSInteger        sequence_number);

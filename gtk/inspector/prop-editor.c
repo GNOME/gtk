@@ -936,7 +936,7 @@ property_editor (GObject                *object,
                                 G_PARAM_SPEC_INT (spec)->minimum,
                                 G_PARAM_SPEC_INT (spec)->maximum,
                                 1,
-                                MAX ((G_PARAM_SPEC_INT (spec)->maximum - G_PARAM_SPEC_INT (spec)->minimum) / 10, 1),
+                                MAX ((((double) G_PARAM_SPEC_INT (spec)->maximum - (double)G_PARAM_SPEC_INT (spec)->minimum)) / 10, 1),
                                 0.0);
 
       prop_edit = gtk_spin_button_new (adj, 1.0, 0);

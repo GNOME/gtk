@@ -22,8 +22,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2024-03-30 09:15+0000\n"
-"PO-Revision-Date: 2024-03-30 13:39+0300\n"
+"POT-Creation-Date: 2024-04-19 17:35+0000\n"
+"PO-Revision-Date: 2024-04-20 16:10+0300\n"
 "Last-Translator: Artur So <arturios2005@mail.ru>\n"
 "Language-Team: Русский <gnome-cyr@gnome.org>\n"
 "Language: ru\n"
@@ -67,7 +67,7 @@ msgstr "Не удалось предоставить содержимое как
 msgid "The current backend does not support OpenGL"
 msgstr "Текущий движок не поддерживает OpenGL"
 
-#: gdk/gdkdisplay.c:1315 gdk/gdkvulkancontext.c:1600
+#: gdk/gdkdisplay.c:1315 gdk/gdkvulkancontext.c:1603
 msgid "Vulkan support disabled via GDK_DEBUG"
 msgstr "Поддержка Vulkan отключена через GDK_DEBUG"
 
@@ -2370,7 +2370,7 @@ msgid "If you delete an item, it will be permanently lost."
 msgstr "Если вы удалите элемент, он будет навсегда утерян."
 
 #: gtk/gtkfilechooserwidget.c:1188 gtk/gtkfilechooserwidget.c:1786
-#: gtk/gtklabel.c:5712 gtk/gtktext.c:6194 gtk/gtktextview.c:9099
+#: gtk/gtklabel.c:5723 gtk/gtktext.c:6194 gtk/gtktextview.c:9099
 msgid "_Delete"
 msgstr "_Удалить"
 
@@ -2699,7 +2699,7 @@ msgstr "Вариации стилей"
 msgid "Character Variations"
 msgstr "Вариации символов"
 
-#: gtk/gtkglarea.c:309
+#: gtk/gtkglarea.c:316
 msgid "OpenGL context creation failed"
 msgstr "Не удалось создать контекст OpenGL"
 
@@ -2712,31 +2712,31 @@ msgstr "Закрыть"
 msgid "Close the infobar"
 msgstr "Закрыть информационную панель"
 
-#: gtk/gtklabel.c:5709 gtk/gtktext.c:6182 gtk/gtktextview.c:9087
+#: gtk/gtklabel.c:5720 gtk/gtktext.c:6182 gtk/gtktextview.c:9087
 msgid "Cu_t"
 msgstr "В_ырезать"
 
-#: gtk/gtklabel.c:5710 gtk/gtktext.c:6186 gtk/gtktextview.c:9091
+#: gtk/gtklabel.c:5721 gtk/gtktext.c:6186 gtk/gtktextview.c:9091
 msgid "_Copy"
 msgstr "_Копировать"
 
-#: gtk/gtklabel.c:5711 gtk/gtktext.c:6190 gtk/gtktextview.c:9095
+#: gtk/gtklabel.c:5722 gtk/gtktext.c:6190 gtk/gtktextview.c:9095
 msgid "_Paste"
 msgstr "Вст_авить"
 
-#: gtk/gtklabel.c:5717 gtk/gtktext.c:6203 gtk/gtktextview.c:9120
+#: gtk/gtklabel.c:5728 gtk/gtktext.c:6203 gtk/gtktextview.c:9120
 msgid "Select _All"
 msgstr "Выделить вс_ё"
 
-#: gtk/gtklabel.c:5722
+#: gtk/gtklabel.c:5733
 msgid "_Open Link"
 msgstr "_Открыть ссылку"
 
-#: gtk/gtklabel.c:5726
+#: gtk/gtklabel.c:5737
 msgid "Copy _Link Address"
 msgstr "Копировать адрес _ссылки"
 
-#: gtk/gtklabel.c:5770 gtk/gtktext.c:2723 gtk/gtktextview.c:9169
+#: gtk/gtklabel.c:5781 gtk/gtktext.c:2723 gtk/gtktextview.c:9169
 msgid "Context menu"
 msgstr "Контекстное меню"
 
@@ -3431,7 +3431,7 @@ msgstr "Нет бумаги"
 
 #. Translators: this is a printer status.
 #: gtk/print/gtkprintoperation-win32.c:640
-#: modules/printbackends/gtkprintbackendcpdb.c:1528
+#: modules/printbackends/gtkprintbackendcpdb.c:1533
 #: modules/printbackends/gtkprintbackendcups.c:2639
 msgid "Paused"
 msgstr "Приостановлено"
@@ -3502,42 +3502,42 @@ msgstr "Получение информации о принтере…"
 #. * multiple pages on a sheet when printing
 #.
 #: gtk/print/gtkprintunixdialog.c:2753
-#: modules/printbackends/gtkprintbackendcups.c:5672
+#: modules/printbackends/gtkprintbackendcups.c:5677
 msgid "Left to right, top to bottom"
 msgstr "Слева направо, сверху вниз"
 
 #: gtk/print/gtkprintunixdialog.c:2753
-#: modules/printbackends/gtkprintbackendcups.c:5672
+#: modules/printbackends/gtkprintbackendcups.c:5677
 msgid "Left to right, bottom to top"
 msgstr "Слева направо, снизу вверх"
 
 #: gtk/print/gtkprintunixdialog.c:2754
-#: modules/printbackends/gtkprintbackendcups.c:5673
+#: modules/printbackends/gtkprintbackendcups.c:5678
 msgid "Right to left, top to bottom"
 msgstr "Справа налево, сверху вниз"
 
 #: gtk/print/gtkprintunixdialog.c:2754
-#: modules/printbackends/gtkprintbackendcups.c:5673
+#: modules/printbackends/gtkprintbackendcups.c:5678
 msgid "Right to left, bottom to top"
 msgstr "Справа налево, снизу вверх"
 
 #: gtk/print/gtkprintunixdialog.c:2755
-#: modules/printbackends/gtkprintbackendcups.c:5674
+#: modules/printbackends/gtkprintbackendcups.c:5679
 msgid "Top to bottom, left to right"
 msgstr "Сверху вниз, слева направо"
 
 #: gtk/print/gtkprintunixdialog.c:2755
-#: modules/printbackends/gtkprintbackendcups.c:5674
+#: modules/printbackends/gtkprintbackendcups.c:5679
 msgid "Top to bottom, right to left"
 msgstr "Сверху вниз, справа налево"
 
 #: gtk/print/gtkprintunixdialog.c:2756
-#: modules/printbackends/gtkprintbackendcups.c:5675
+#: modules/printbackends/gtkprintbackendcups.c:5680
 msgid "Bottom to top, left to right"
 msgstr "Снизу вверх, слева направо"
 
 #: gtk/print/gtkprintunixdialog.c:2756
-#: modules/printbackends/gtkprintbackendcups.c:5675
+#: modules/printbackends/gtkprintbackendcups.c:5680
 msgid "Bottom to top, right to left"
 msgstr "Снизу вверх, справа налево"
 
@@ -3884,37 +3884,37 @@ msgstr "Классы стилей"
 msgid "CSS Property"
 msgstr "Свойство CSS"
 
-#: gtk/inspector/general.c:370
+#: gtk/inspector/general.c:371
 msgctxt "GL version"
 msgid "None"
 msgstr "Нет"
 
-#: gtk/inspector/general.c:461
+#: gtk/inspector/general.c:462
 msgctxt "GL version"
 msgid "Unknown"
 msgstr "Неизвестно"
 
-#: gtk/inspector/general.c:523
+#: gtk/inspector/general.c:524
 msgctxt "Vulkan device"
 msgid "Disabled"
 msgstr "Выключено"
 
-#: gtk/inspector/general.c:524 gtk/inspector/general.c:525
+#: gtk/inspector/general.c:525 gtk/inspector/general.c:526
 msgctxt "Vulkan version"
 msgid "Disabled"
 msgstr "Выключено"
 
-#: gtk/inspector/general.c:576
+#: gtk/inspector/general.c:577
 msgctxt "Vulkan device"
 msgid "None"
 msgstr "Нет"
 
-#: gtk/inspector/general.c:577 gtk/inspector/general.c:578
+#: gtk/inspector/general.c:578 gtk/inspector/general.c:579
 msgctxt "Vulkan version"
 msgid "None"
 msgstr "Нет"
 
-#: gtk/inspector/general.c:924
+#: gtk/inspector/general.c:930
 msgid "IM Context is hardcoded by GTK_IM_MODULE"
 msgstr "Контекст IM жестко кодируется GTK_IM_MODULE"
 
@@ -4226,7 +4226,7 @@ msgstr "Источник:"
 msgid "Defined At"
 msgstr "Определён в"
 
-#: gtk/inspector/recorder.c:1941
+#: gtk/inspector/recorder.c:1953
 #, c-format
 msgid "Saving RenderNode failed"
 msgstr "Сбой при сохранении RenderNode"
@@ -4364,7 +4364,7 @@ msgstr "Иерархия"
 msgid "Implements"
 msgstr "Реализует"
 
-#: gtk/inspector/visual.c:765 gtk/inspector/visual.c:784
+#: gtk/inspector/visual.c:690 gtk/inspector/visual.c:708
 msgid "Theme is hardcoded by GTK_THEME"
 msgstr "Тема жёстко задана с помощью GTK_THEME"
 
@@ -4409,89 +4409,74 @@ msgid "Slowdown"
 msgstr "Замедлить"
 
 #: gtk/inspector/visual.ui:362
-msgid "Antialiasing"
-msgstr "Сглаживание"
+msgid "Rendering"
+msgstr "Рендеринг"
 
-#: gtk/inspector/visual.ui:387
-msgid "Hinting"
-msgstr "Хинтинг"
+#: gtk/inspector/visual.ui:377
+msgctxt "Font rendering"
+msgid "Automatic"
+msgstr "Автоматически"
 
-#: gtk/inspector/visual.ui:402
-msgid "None"
-msgstr "Нет"
-
-#: gtk/inspector/visual.ui:403
-msgid "Slight"
-msgstr "Незначительный"
-
-#: gtk/inspector/visual.ui:404 modules/printbackends/gtkprintbackendcpdb.c:541
-#: modules/printbackends/gtkprintbackendcups.c:5667
-msgid "Medium"
-msgstr "Средний"
+#: gtk/inspector/visual.ui:378
+msgctxt "Font rendering"
+msgid "Manual"
+msgstr "Вручную"
 
 #: gtk/inspector/visual.ui:405
-msgid "Full"
-msgstr "Полный"
-
-#: gtk/inspector/visual.ui:422
-msgid "Metrics Hinting"
-msgstr "Метрика хинтинга"
-
-#: gtk/inspector/visual.ui:457
 msgid "Show Framerate"
 msgstr "Показать частоту кадров"
 
-#: gtk/inspector/visual.ui:482
+#: gtk/inspector/visual.ui:430
 msgid "Show Graphic Updates"
 msgstr "Показывать графические обновления"
 
-#: gtk/inspector/visual.ui:502
+#: gtk/inspector/visual.ui:450
 msgid ""
 "Tints all the places where the current renderer uses Cairo instead of the "
 "GPU."
 msgstr "Оттеняет все места, где текущий рендер использует Cairo вместо GPU."
 
-#: gtk/inspector/visual.ui:508
+#: gtk/inspector/visual.ui:456
 msgid "Show Cairo Rendering"
 msgstr "Показать Cairo рендеринг"
 
-#: gtk/inspector/visual.ui:533
+#: gtk/inspector/visual.ui:481
 msgid "Show Baselines"
 msgstr "Показывать базовые линии"
 
-#: gtk/inspector/visual.ui:561
+#: gtk/inspector/visual.ui:509
 msgid "Show Layout Borders"
 msgstr "Показывать границы разметки"
 
-#: gtk/inspector/visual.ui:618
+#: gtk/inspector/visual.ui:566
 msgid "CSS Padding"
 msgstr "CSS отступ"
 
-#: gtk/inspector/visual.ui:628
+#: gtk/inspector/visual.ui:576
 msgid "CSS Border"
 msgstr "CSS Граница"
 
-#: gtk/inspector/visual.ui:638
+#: gtk/inspector/visual.ui:586
 msgid "CSS Margin"
 msgstr "CSS отступ"
 
-#: gtk/inspector/visual.ui:648
+#: gtk/inspector/visual.ui:596
 msgid "Widget Margin"
 msgstr "Отступ от виджета"
 
-#: gtk/inspector/visual.ui:683
+#: gtk/inspector/visual.ui:631
 msgid "Show Focus"
 msgstr "Показать фокус"
 
-#: gtk/inspector/visual.ui:708
+#: gtk/inspector/visual.ui:656
 msgid "Show Accessibility warnings"
 msgstr "Показать предупреждения специальных возможностей"
 
-#: gtk/inspector/visual.ui:733
+#: gtk/inspector/visual.ui:681
 msgid "Show Graphics Offload"
 msgstr "Показать графическую выгрузку"
 
-#: gtk/inspector/visual.ui:765
+#: gtk/inspector/visual.ui:713
 msgid "Inspect Inspector"
 msgstr "Инспектор контроля"
 
@@ -6616,29 +6601,35 @@ msgstr "Дополнительно"
 msgid "Some of the settings in the dialog conflict"
 msgstr "Некоторые настройки в диалоговом окне конфликтуют"
 
-#. Translators: These strings name the possible values of the
-#. * job priority option in the print dialog
-#.
-#: modules/printbackends/gtkprintbackendcpdb.c:541
-#: modules/printbackends/gtkprintbackendcups.c:5667
+#: modules/printbackends/gtkprintbackendcpdb.c:542
+#: modules/printbackends/gtkprintbackendcups.c:5668
+msgctxt "Print job priority"
 msgid "Urgent"
 msgstr "Срочный"
 
-#: modules/printbackends/gtkprintbackendcpdb.c:541
-#: modules/printbackends/gtkprintbackendcups.c:5667
+#: modules/printbackends/gtkprintbackendcpdb.c:543
+#: modules/printbackends/gtkprintbackendcups.c:5669
+msgctxt "Print job priority"
 msgid "High"
 msgstr "Высокий"
 
-#: modules/printbackends/gtkprintbackendcpdb.c:541
-#: modules/printbackends/gtkprintbackendcups.c:5667
+#: modules/printbackends/gtkprintbackendcpdb.c:544
+#: modules/printbackends/gtkprintbackendcups.c:5670
+msgctxt "Print job priority"
+msgid "Medium"
+msgstr "Средний"
+
+#: modules/printbackends/gtkprintbackendcpdb.c:545
+#: modules/printbackends/gtkprintbackendcups.c:5671
+msgctxt "Print job priority"
 msgid "Low"
 msgstr "Низкий"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the front cover page.
 #.
-#: modules/printbackends/gtkprintbackendcpdb.c:562
-#: modules/printbackends/gtkprintbackendcups.c:5809
+#: modules/printbackends/gtkprintbackendcpdb.c:567
+#: modules/printbackends/gtkprintbackendcups.c:5814
 msgctxt "printer option"
 msgid "Before"
 msgstr "До"
@@ -6646,33 +6637,33 @@ msgstr "До"
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the back cover page.
 #.
-#: modules/printbackends/gtkprintbackendcpdb.c:569
-#: modules/printbackends/gtkprintbackendcups.c:5824
+#: modules/printbackends/gtkprintbackendcpdb.c:574
+#: modules/printbackends/gtkprintbackendcups.c:5829
 msgctxt "printer option"
 msgid "After"
 msgstr "После"
 
-#: modules/printbackends/gtkprintbackendcpdb.c:592
+#: modules/printbackends/gtkprintbackendcpdb.c:597
 msgid "Print at"
 msgstr "Печать в"
 
-#: modules/printbackends/gtkprintbackendcpdb.c:602
+#: modules/printbackends/gtkprintbackendcpdb.c:607
 msgid "Print at time"
 msgstr "Время начала печати"
 
-#: modules/printbackends/gtkprintbackendcpdb.c:665
+#: modules/printbackends/gtkprintbackendcpdb.c:670
 msgctxt "print option"
 msgid "Borderless"
 msgstr "Без границ"
 
 #. Translators: this is a printer status.
-#: modules/printbackends/gtkprintbackendcpdb.c:1525
+#: modules/printbackends/gtkprintbackendcpdb.c:1530
 #: modules/printbackends/gtkprintbackendcups.c:2636
 msgid "Paused; Rejecting Jobs"
 msgstr "Приостановлено; отмена заданий"
 
 #. Translators: this is a printer status.
-#: modules/printbackends/gtkprintbackendcpdb.c:1531
+#: modules/printbackends/gtkprintbackendcpdb.c:1536
 #: modules/printbackends/gtkprintbackendcups.c:2642
 msgid "Rejecting Jobs"
 msgstr "Отмена заданий"
@@ -7043,51 +7034,51 @@ msgstr "Умолчания принтера"
 #. Translators, this string is used to label the job priority option
 #. * in the print dialog
 #.
-#: modules/printbackends/gtkprintbackendcups.c:5697
+#: modules/printbackends/gtkprintbackendcups.c:5702
 msgid "Job Priority"
 msgstr "Приоритет"
 
 #. Translators, this string is used to label the billing info entry
 #. * in the print dialog
 #.
-#: modules/printbackends/gtkprintbackendcups.c:5708
+#: modules/printbackends/gtkprintbackendcups.c:5713
 msgid "Billing Info"
 msgstr "Расположение"
 
 #. Translators, these strings are names for various 'standard' cover
 #. * pages that the printing system may support.
 #.
-#: modules/printbackends/gtkprintbackendcups.c:5732
+#: modules/printbackends/gtkprintbackendcups.c:5737
 msgctxt "cover page"
 msgid "None"
 msgstr "Нет"
 
-#: modules/printbackends/gtkprintbackendcups.c:5733
+#: modules/printbackends/gtkprintbackendcups.c:5738
 msgctxt "cover page"
 msgid "Classified"
 msgstr "Классифицировано"
 
-#: modules/printbackends/gtkprintbackendcups.c:5734
+#: modules/printbackends/gtkprintbackendcups.c:5739
 msgctxt "cover page"
 msgid "Confidential"
 msgstr "Конфиденциально"
 
-#: modules/printbackends/gtkprintbackendcups.c:5735
+#: modules/printbackends/gtkprintbackendcups.c:5740
 msgctxt "cover page"
 msgid "Secret"
 msgstr "Секретно"
 
-#: modules/printbackends/gtkprintbackendcups.c:5736
+#: modules/printbackends/gtkprintbackendcups.c:5741
 msgctxt "cover page"
 msgid "Standard"
 msgstr "Стандарт"
 
-#: modules/printbackends/gtkprintbackendcups.c:5737
+#: modules/printbackends/gtkprintbackendcups.c:5742
 msgctxt "cover page"
 msgid "Top Secret"
 msgstr "Совершенно секретно"
 
-#: modules/printbackends/gtkprintbackendcups.c:5738
+#: modules/printbackends/gtkprintbackendcups.c:5743
 msgctxt "cover page"
 msgid "Unclassified"
 msgstr "Не классифицировано"
@@ -7095,7 +7086,7 @@ msgstr "Не классифицировано"
 #. Translators, this string is used to label the pages-per-sheet option
 #. * in the print dialog
 #.
-#: modules/printbackends/gtkprintbackendcups.c:5750
+#: modules/printbackends/gtkprintbackendcups.c:5755
 msgctxt "printer option"
 msgid "Pages per Sheet"
 msgstr "Страниц на лист"
@@ -7103,7 +7094,7 @@ msgstr "Страниц на лист"
 #. Translators, this string is used to label the option in the print
 #. * dialog that controls in what order multiple pages are arranged
 #.
-#: modules/printbackends/gtkprintbackendcups.c:5767
+#: modules/printbackends/gtkprintbackendcups.c:5772
 msgctxt "printer option"
 msgid "Page Ordering"
 msgstr "Порядок страниц"
@@ -7112,7 +7103,7 @@ msgstr "Порядок страниц"
 #. * a print job is printed. Possible values are 'now', a specified time,
 #. * or 'on hold'
 #.
-#: modules/printbackends/gtkprintbackendcups.c:5844
+#: modules/printbackends/gtkprintbackendcups.c:5849
 msgctxt "printer option"
 msgid "Print at"
 msgstr "Время"
@@ -7120,7 +7111,7 @@ msgstr "Время"
 #. Translators: this is the name of the option that allows the user
 #. * to specify a time when a print job will be printed.
 #.
-#: modules/printbackends/gtkprintbackendcups.c:5855
+#: modules/printbackends/gtkprintbackendcups.c:5860
 msgctxt "printer option"
 msgid "Print at time"
 msgstr "Время начала печати"
@@ -7130,19 +7121,19 @@ msgstr "Время начала печати"
 #. * the width and height in points. E.g: "Custom
 #. * 230.4x142.9"
 #.
-#: modules/printbackends/gtkprintbackendcups.c:5902
+#: modules/printbackends/gtkprintbackendcups.c:5907
 #, c-format
 msgid "Custom %s×%s"
 msgstr "Особый %s×%s"
 
 #. TRANSLATORS: this is the ICC color profile to use for this job
-#: modules/printbackends/gtkprintbackendcups.c:6013
+#: modules/printbackends/gtkprintbackendcups.c:6018
 msgctxt "printer option"
 msgid "Printer Profile"
 msgstr "Профиль принтера"
 
 #. TRANSLATORS: this is when color profile information is unavailable
-#: modules/printbackends/gtkprintbackendcups.c:6020
+#: modules/printbackends/gtkprintbackendcups.c:6025
 msgctxt "printer option value"
 msgid "Unavailable"
 msgstr "Недоступно"
@@ -7292,7 +7283,7 @@ msgstr "Использовать стиль из файла CSS"
 #: tools/gtk-builder-tool-preview.c:187 tools/gtk-builder-tool-screenshot.c:370
 #: tools/gtk-builder-tool-validate.c:268
 #: tools/gtk-rendernode-tool-benchmark.c:106
-#: tools/gtk-rendernode-tool-render.c:203 tools/gtk-rendernode-tool-show.c:113
+#: tools/gtk-rendernode-tool-render.c:262 tools/gtk-rendernode-tool-show.c:113
 #, c-format
 msgid "Could not initialize windowing system\n"
 msgstr "Не удалось инициализировать оконную систему\n"
@@ -7337,13 +7328,13 @@ msgstr ""
 "Используйте --force для перезаписи.\n"
 
 #: tools/gtk-builder-tool-screenshot.c:332
-#: tools/gtk-rendernode-tool-render.c:171
+#: tools/gtk-rendernode-tool-render.c:230
 #, c-format
 msgid "Output written to %s.\n"
 msgstr "Выход записывается в %s.\n"
 
 #: tools/gtk-builder-tool-screenshot.c:336
-#: tools/gtk-rendernode-tool-render.c:175
+#: tools/gtk-rendernode-tool-render.c:234
 #, c-format
 msgid "Failed to save %s: %s\n"
 msgstr "Не удалось сохранить %s: %s\n"
@@ -7362,7 +7353,7 @@ msgstr "Перезаписать существующий файл"
 
 #: tools/gtk-builder-tool-screenshot.c:363
 #: tools/gtk-rendernode-tool-benchmark.c:97
-#: tools/gtk-rendernode-tool-render.c:196
+#: tools/gtk-rendernode-tool-render.c:255
 msgid "FILE…"
 msgstr "ФАЙЛ…"
 
@@ -7859,7 +7850,7 @@ msgstr "Добавить рендерер в тест"
 
 #: tools/gtk-rendernode-tool-benchmark.c:94
 #: tools/gtk-rendernode-tool-compare.c:65
-#: tools/gtk-rendernode-tool-render.c:195
+#: tools/gtk-rendernode-tool-render.c:254
 msgid "RENDERER"
 msgstr "РЕНДЕРЕР"
 
@@ -7880,7 +7871,7 @@ msgid "Benchmark rendering of a .node file."
 msgstr "Тестовый рендеринг файла .node."
 
 #: tools/gtk-rendernode-tool-benchmark.c:127
-#: tools/gtk-rendernode-tool-info.c:236 tools/gtk-rendernode-tool-render.c:224
+#: tools/gtk-rendernode-tool-info.c:236 tools/gtk-rendernode-tool-render.c:283
 #: tools/gtk-rendernode-tool-show.c:134
 #, c-format
 msgid "No .node file specified\n"
@@ -7892,7 +7883,7 @@ msgid "Can only benchmark a single .node file\n"
 msgstr "Можно выполнять тест только одного файла .node\n"
 
 #: tools/gtk-rendernode-tool-compare.c:65
-#: tools/gtk-rendernode-tool-render.c:195
+#: tools/gtk-rendernode-tool-render.c:254
 msgid "Renderer to use"
 msgstr "Используемый рендерер"
 
@@ -7914,7 +7905,7 @@ msgid "Must specify two files\n"
 msgstr "Необходимо указать два файла\n"
 
 #: tools/gtk-rendernode-tool-compare.c:102
-#: tools/gtk-rendernode-tool-render.c:150
+#: tools/gtk-rendernode-tool-render.c:209
 #, c-format
 msgid "Failed to create renderer: %s\n"
 msgstr "Не удалось создать рендерер: %s\n"
@@ -7973,7 +7964,7 @@ msgstr "Предоставить информацию об узле рендер
 msgid "Can only accept a single .node file\n"
 msgstr "Можно принимать только один файл .node\n"
 
-#: tools/gtk-rendernode-tool-render.c:123
+#: tools/gtk-rendernode-tool-render.c:170
 #, c-format
 msgid ""
 "File %s exists.\n"
@@ -7982,16 +7973,17 @@ msgstr ""
 "Файл \"%s\" существует.\n"
 "Если хотите перезаписать, укажите имя файла.\n"
 
-#: tools/gtk-rendernode-tool-render.c:137
+#: tools/gtk-rendernode-tool-render.c:184
+#: tools/gtk-rendernode-tool-render.c:196
 #, c-format
 msgid "Failed to generate SVG: %s\n"
 msgstr "Не удалось сгенерировать SVG: %s\n"
 
-#: tools/gtk-rendernode-tool-render.c:211
+#: tools/gtk-rendernode-tool-render.c:270
 msgid "Render a .node file to an image."
 msgstr "Преобразование .node файла в изображение."
 
-#: tools/gtk-rendernode-tool-render.c:230
+#: tools/gtk-rendernode-tool-render.c:289
 #, c-format
 msgid "Can only render a single .node file to a single output file\n"
 msgstr "Можно вывести только один файл .node в один выходной файл\n"
@@ -8126,6 +8118,31 @@ msgstr ""
 "Нет индексного файла темы в \"%s\".\n"
 "Если действительно хотите создать здесь кэш значков, используйте --ignore-"
 "theme-index.\n"
+
+#~ msgid "Antialiasing"
+#~ msgstr "Сглаживание"
+
+#~ msgid "Hinting"
+#~ msgstr "Хинтинг"
+
+#~ msgctxt "Font hinting style"
+#~ msgid "None"
+#~ msgstr "Нет"
+
+#~ msgctxt "Font hinting style"
+#~ msgid "Slight"
+#~ msgstr "Незначительный"
+
+#~ msgctxt "Font hinting style"
+#~ msgid "Medium"
+#~ msgstr "Средний"
+
+#~ msgctxt "Font hinting style"
+#~ msgid "Full"
+#~ msgstr "Полный"
+
+#~ msgid "Metrics Hinting"
+#~ msgstr "Метрика хинтинга"
 
 #~ msgid "Backend does not support window scaling"
 #~ msgstr "Движок не поддерживает масштабирование окон"

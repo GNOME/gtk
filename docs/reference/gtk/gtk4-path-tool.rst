@@ -8,6 +8,10 @@ gtk4-path-tool
 GskPath Utility
 -----------------------
 
+:Version: GTK
+:Manual section: 1
+:Manual group: GTK commands
+
 SYNOPSIS
 --------
 |   **gtk4-path-tool** <COMMAND> [OPTIONS...] <PATH>

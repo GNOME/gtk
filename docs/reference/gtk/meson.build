@@ -25,7 +25,8 @@ expand_content_md_files = [
   'section-tree-widget.md',
   'section-list-widget.md',
   'question_index.md',
-  'visual_index.md'
+  'visual_index.md',
+  'tools.md',
 ]
 
 gtk_images = []
@@ -60,39 +61,39 @@ if get_option('documentation')
     build_by_default: true,
     install: true,
     install_dir: docs_dir,
+    install_tag: 'doc',
   )
 endif
 
-rst2man = find_program('rst2man', 'rst2man.py', required: false)
-if get_option('man-pages') and not rst2man.found()
-  error('No rst2man found, but man pages were explicitly enabled')
+rst2man = find_program('rst2man', 'rst2man.py', required: get_option('man-pages'))
+rst2html5 = find_program('rst2html5', 'rst2html5.py', required: get_option('documentation'))
+
+rst_files = [
+  [ 'gtk4-broadwayd', '1' ],
+  [ 'gtk4-builder-tool', '1' ],
+  [ 'gtk4-encode-symbolic-svg', '1', ],
+  [ 'gtk4-launch', '1', ],
+  [ 'gtk4-query-settings', '1', ],
+  [ 'gtk4-rendernode-tool', '1' ],
+  [ 'gtk4-update-icon-cache', '1', ],
+  [ 'gtk4-path-tool', '1', ],
+]
+
+if get_option('build-demos')
+  rst_files += [
+    [ 'gtk4-demo', '1', ],
+    [ 'gtk4-demo-application', '1', ],
+    [ 'gtk4-widget-factory', '1', ],
+    [ 'gtk4-icon-browser', '1', ],
+    [ 'gtk4-node-editor', '1', ],
+  ]
 endif
 
-if get_option('man-pages') and rst2man.found()
-  rst_files = [
-    [ 'gtk4-broadwayd', '1' ],
-    [ 'gtk4-builder-tool', '1' ],
-    [ 'gtk4-encode-symbolic-svg', '1', ],
-    [ 'gtk4-launch', '1', ],
-    [ 'gtk4-query-settings', '1', ],
-    [ 'gtk4-rendernode-tool', '1' ],
-    [ 'gtk4-update-icon-cache', '1', ],
-    [ 'gtk4-path-tool', '1', ],
-  ]
+rst2x_flags = [
+  '--syntax-highlight=none',
+]
 
-  if get_option('demos')
-    rst_files += [
-      [ 'gtk4-demo', '1', ],
-      [ 'gtk4-demo-application', '1', ],
-      [ 'gtk4-widget-factory', '1', ],
-      [ 'gtk4-icon-browser', '1', ],
-      [ 'gtk4-node-editor', '1', ],
-    ]
-  endif
-
-  rst2man_flags = [
-    '--syntax-highlight=none',
-  ]
+if get_option('man-pages')
 
   foreach rst: rst_files
     man_name = rst[0]
@@ -103,12 +104,34 @@ if get_option('man-pages') and rst2man.found()
       output: '@0@.@1@'.format(man_name, man_section),
       command: [
         rst2man,
-        rst2man_flags,
+        rst2x_flags,
         '@INPUT@',
       ],
       capture: true,
       install: true,
       install_dir: get_option('mandir') / 'man@0@'.format(man_section),
+      install_tag: 'doc',
+    )
+  endforeach
+endif
+
+if get_option('documentation')
+
+  foreach rst: rst_files
+    man_name = rst[0]
+
+    custom_target(
+      input: '@0@.rst'.format(man_name),
+      output: '@0@.html'.format(man_name),
+      command: [
+        rst2html5,
+        rst2x_flags,
+        '@INPUT@',
+      ],
+      capture: true,
+      install: true,
+      install_dir: docs_dir / 'gtk4',
+      install_tag: 'doc',
     )
   endforeach
 endif

@@ -1,5 +1,5 @@
 project('gtk', 'c',
-        version: '4.15.0',
+        version: '4.15.2',
         default_options: [
           'buildtype=debugoptimized',
           'warning_level=1',
@@ -18,7 +18,7 @@ harfbuzz_req       = '>= 2.6.0'
 fribidi_req        = '>= 1.0.6'
 cairo_req          = '>= 1.18.0'
 gdk_pixbuf_req     = '>= 2.30.0'
-wayland_proto_req  = '>= 1.31'
+wayland_proto_req  = '>= 1.36'
 wayland_req        = '>= 1.21.0'
 graphene_req       = '>= 1.10.0'
 epoxy_req          = '>= 1.4'
@@ -58,6 +58,11 @@ gtk_interface_age = gtk_minor_version.is_odd() ? 0 : gtk_micro_version
 add_project_arguments('-DGTK_VERSION="@0@"'.format(meson.project_version()), language: 'c')
 
 add_project_arguments('-D_GNU_SOURCE', language: 'c')
+
+if host_machine.system() == 'windows'
+  add_project_arguments(['-DUNICODE',
+                         '-D_UNICODE'], language: 'c')
+endif
 
 # Use debug/optimization flags to determine whether to enable debug or disable
 # cast checks
@@ -201,6 +206,7 @@ check_functions = [
   'posix_fallocate',
   'sincos',
   'sincosf',
+  'memmem',
 ]
 
 foreach func : check_functions
@@ -208,6 +214,7 @@ foreach func : check_functions
                      args: '-D_GNU_SOURCE',
                      prefix:
                        '#include <stdlib.h>\n' +
+                       '#include <string.h>\n' +
                        '#include <unistd.h>\n' +
                        '#include <sys/mman.h>\n' +
                        '#include <fcntl.h>\n' +
@@ -489,8 +496,6 @@ if wayland_enabled
                               default_options: ['documentation=false'])
   wlprotocolsdep = dependency('wayland-protocols', version: wayland_proto_req)
   wlegldep       = dependency('wayland-egl')
-
-  wlproto_dir = wlprotocolsdep.get_variable('pkgdatadir')
 
   wayland_pkgs = [
     'wayland-client @0@'.format(wayland_req),

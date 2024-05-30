@@ -24,27 +24,40 @@
 
 G_BEGIN_DECLS
 
+typedef enum {
+  GTK_CSS_COLOR_SPACE_SRGB,
+  GTK_CSS_COLOR_SPACE_SRGB_LINEAR,
+} GtkCssColorSpace;
 
 GtkCssValue *   gtk_css_color_value_new_transparent     (void) G_GNUC_PURE;
 GtkCssValue *   gtk_css_color_value_new_white           (void) G_GNUC_PURE;
-GtkCssValue *   _gtk_css_color_value_new_literal        (const GdkRGBA  *color) G_GNUC_PURE;
-GtkCssValue *   _gtk_css_color_value_new_name           (const char     *name) G_GNUC_PURE;
-GtkCssValue *   _gtk_css_color_value_new_shade          (GtkCssValue    *color,
+GtkCssValue *   gtk_css_color_value_new_literal         (const GdkRGBA  *color) G_GNUC_PURE;
+GtkCssValue *   gtk_css_value_value_new_color           (GtkCssColorSpace color_space,
+                                                         float            values[4]) G_GNUC_PURE;
+GtkCssValue *   gtk_css_color_value_new_name            (const char     *name) G_GNUC_PURE;
+GtkCssValue *   gtk_css_color_value_new_shade           (GtkCssValue    *color,
                                                          double          factor) G_GNUC_PURE;
-GtkCssValue *   _gtk_css_color_value_new_alpha          (GtkCssValue    *color,
+GtkCssValue *   gtk_css_color_value_new_alpha           (GtkCssValue    *color,
                                                          double          factor) G_GNUC_PURE;
-GtkCssValue *   _gtk_css_color_value_new_mix            (GtkCssValue    *color1,
+GtkCssValue *   gtk_css_color_value_new_mix             (GtkCssValue    *color1,
                                                          GtkCssValue    *color2,
                                                          double          factor) G_GNUC_PURE;
-GtkCssValue *   _gtk_css_color_value_new_current_color  (void) G_GNUC_PURE;
+GtkCssValue *   gtk_css_color_value_new_current_color   (void) G_GNUC_PURE;
+GtkCssValue *   gtk_css_color_value_new_oklab           (float           L,
+                                                         float           a,
+                                                         float           b,
+                                                         float           alpha) G_GNUC_PURE;
+GtkCssValue *   gtk_css_color_value_new_oklch           (float           L,
+                                                         float           C,
+                                                         float           H,
+                                                         float           alpha) G_GNUC_PURE;
 
 gboolean        gtk_css_color_value_can_parse           (GtkCssParser   *parser);
-GtkCssValue *   _gtk_css_color_value_parse              (GtkCssParser   *parser);
+GtkCssValue *   gtk_css_color_value_parse               (GtkCssParser   *parser);
 
-GtkCssValue *   _gtk_css_color_value_resolve            (GtkCssValue      *color,
+GtkCssValue *   gtk_css_color_value_resolve             (GtkCssValue      *color,
                                                          GtkStyleProvider *provider,
-                                                         GtkCssValue      *current,
-                                                         GSList           *cycle_list);
+                                                         GtkCssValue      *current);
 const GdkRGBA * gtk_css_color_value_get_rgba            (const GtkCssValue *color) G_GNUC_CONST;
 
 

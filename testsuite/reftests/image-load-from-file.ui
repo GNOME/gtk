@@ -12,7 +12,7 @@
         </child>
         <child>
           <object class="GtkPicture" id="image2">
-            <property name="paintable">marble.xpm</property>
+            <property name="paintable">marble.png</property>
           </object>
         </child>
       </object>

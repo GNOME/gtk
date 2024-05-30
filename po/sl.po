@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2024-04-04 16:15+0000\n"
-"PO-Revision-Date: 2024-04-05 00:14+0200\n"
+"POT-Creation-Date: 2024-04-19 17:35+0000\n"
+"PO-Revision-Date: 2024-04-19 23:45+0200\n"
 "Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language-Team: Slovenian GNOME Translation Team <gnome-si@googlegroups.com>\n"
 "Language: sl_SI\n"
@@ -56,7 +56,7 @@ msgstr "Ni mogoče določiti vsebine kot %s."
 msgid "The current backend does not support OpenGL"
 msgstr "Trenutno zagnan ozadnji program ne podpira OpenGL"
 
-#: gdk/gdkdisplay.c:1315 gdk/gdkvulkancontext.c:1600
+#: gdk/gdkdisplay.c:1315 gdk/gdkvulkancontext.c:1603
 msgid "Vulkan support disabled via GDK_DEBUG"
 msgstr "Podpora Vulkan je onemogočena prek GDK_DEBUG"
 
@@ -2693,7 +2693,7 @@ msgstr "Različice sloga"
 msgid "Character Variations"
 msgstr "Različice znakov"
 
-#: gtk/gtkglarea.c:309
+#: gtk/gtkglarea.c:316
 msgid "OpenGL context creation failed"
 msgstr "Ustvarjanje vsebine OpenGL je spodletelo"
 
@@ -3874,37 +3874,37 @@ msgstr "Razredi slogov"
 msgid "CSS Property"
 msgstr "Lastnosti CSS"
 
-#: gtk/inspector/general.c:370
+#: gtk/inspector/general.c:371
 msgctxt "GL version"
 msgid "None"
 msgstr "Brez"
 
-#: gtk/inspector/general.c:461
+#: gtk/inspector/general.c:462
 msgctxt "GL version"
 msgid "Unknown"
 msgstr "Neznano"
 
-#: gtk/inspector/general.c:523
+#: gtk/inspector/general.c:524
 msgctxt "Vulkan device"
 msgid "Disabled"
 msgstr "Onemogočeno"
 
-#: gtk/inspector/general.c:524 gtk/inspector/general.c:525
+#: gtk/inspector/general.c:525 gtk/inspector/general.c:526
 msgctxt "Vulkan version"
 msgid "Disabled"
 msgstr "Onemogočeno"
 
-#: gtk/inspector/general.c:576
+#: gtk/inspector/general.c:577
 msgctxt "Vulkan device"
 msgid "None"
 msgstr "Neopredeljeno"
 
-#: gtk/inspector/general.c:577 gtk/inspector/general.c:578
+#: gtk/inspector/general.c:578 gtk/inspector/general.c:579
 msgctxt "Vulkan version"
 msgid "None"
 msgstr "Neopredeljeno"
 
-#: gtk/inspector/general.c:924
+#: gtk/inspector/general.c:930
 msgid "IM Context is hardcoded by GTK_IM_MODULE"
 msgstr "Vsebina IM je določena z vrednostjo GTK_IM_MODULE"
 
@@ -4214,7 +4214,7 @@ msgstr "Vir:"
 msgid "Defined At"
 msgstr "Določeno pri"
 
-#: gtk/inspector/recorder.c:1941
+#: gtk/inspector/recorder.c:1953
 #, c-format
 msgid "Saving RenderNode failed"
 msgstr "Shranjevanje izrisovanja vozlišča je spodletelo"
@@ -4353,7 +4353,7 @@ msgstr "Hierarhija"
 msgid "Implements"
 msgstr "Vgradnje"
 
-#: gtk/inspector/visual.c:765 gtk/inspector/visual.c:784
+#: gtk/inspector/visual.c:690 gtk/inspector/visual.c:708
 msgid "Theme is hardcoded by GTK_THEME"
 msgstr "Tema je vključena v privzeto temo GTK_THEME"
 
@@ -4398,93 +4398,75 @@ msgid "Slowdown"
 msgstr "Upočasni"
 
 #: gtk/inspector/visual.ui:362
-msgid "Antialiasing"
-msgstr "Glajenje robov"
+msgid "Rendering"
+msgstr "Izrisovanje"
 
-#: gtk/inspector/visual.ui:387
-msgid "Hinting"
-msgstr "Namigovanje"
+#: gtk/inspector/visual.ui:377
+msgctxt "Font rendering"
+msgid "Automatic"
+msgstr "Samodejno"
 
-#: gtk/inspector/visual.ui:402
-msgctxt "Font hinting style"
-msgid "None"
-msgstr "Brez"
-
-#: gtk/inspector/visual.ui:403
-msgctxt "Font hinting style"
-msgid "Slight"
-msgstr "Rahlo"
-
-#: gtk/inspector/visual.ui:404
-msgctxt "Font hinting style"
-msgid "Medium"
-msgstr "Srednje"
+#: gtk/inspector/visual.ui:378
+msgctxt "Font rendering"
+msgid "Manual"
+msgstr "Ročno"
 
 #: gtk/inspector/visual.ui:405
-msgctxt "Font hinting style"
-msgid "Full"
-msgstr "Polno"
-
-#: gtk/inspector/visual.ui:422
-msgid "Metrics Hinting"
-msgstr "Metrično namigovanje"
-
-#: gtk/inspector/visual.ui:457
 msgid "Show Framerate"
 msgstr "Pokaži hitrost sličic"
 
-#: gtk/inspector/visual.ui:482
+#: gtk/inspector/visual.ui:430
 msgid "Show Graphic Updates"
 msgstr "Pokaži grafične posodobitve"
 
-#: gtk/inspector/visual.ui:502
+#: gtk/inspector/visual.ui:450
 msgid ""
 "Tints all the places where the current renderer uses Cairo instead of the "
 "GPU."
 msgstr ""
 "Obarva vsa mesta, kjer trenutni izrisovalnik uporablja Kairo namesto GPU."
 
-#: gtk/inspector/visual.ui:508
+#: gtk/inspector/visual.ui:456
 msgid "Show Cairo Rendering"
 msgstr "Pokaži izrisovanje Cairo"
 
-#: gtk/inspector/visual.ui:533
+#: gtk/inspector/visual.ui:481
 msgid "Show Baselines"
 msgstr "Pokaži črte vrstic"
 
-#: gtk/inspector/visual.ui:561
+#: gtk/inspector/visual.ui:509
 msgid "Show Layout Borders"
 msgstr "Pokaži razporeditev okvirjev"
 
-#: gtk/inspector/visual.ui:618
+#: gtk/inspector/visual.ui:566
 msgid "CSS Padding"
 msgstr "Blazinjenje CSS"
 
-#: gtk/inspector/visual.ui:628
+#: gtk/inspector/visual.ui:576
 msgid "CSS Border"
 msgstr "Obroba CSS"
 
-#: gtk/inspector/visual.ui:638
+#: gtk/inspector/visual.ui:586
 msgid "CSS Margin"
 msgstr "Rob CSS"
 
-#: gtk/inspector/visual.ui:648
+#: gtk/inspector/visual.ui:596
 msgid "Widget Margin"
 msgstr "Robovi gradnika"
 
-#: gtk/inspector/visual.ui:683
+#: gtk/inspector/visual.ui:631
 msgid "Show Focus"
 msgstr "Pokaži žarišče"
 
-#: gtk/inspector/visual.ui:708
+#: gtk/inspector/visual.ui:656
 msgid "Show Accessibility warnings"
 msgstr "Pokaži opozorila o dostopnosti"
 
-#: gtk/inspector/visual.ui:733
+#: gtk/inspector/visual.ui:681
 msgid "Show Graphics Offload"
 msgstr "Pokaži grafično razbremenitev"
 
-#: gtk/inspector/visual.ui:765
+#: gtk/inspector/visual.ui:713
 msgid "Inspect Inspector"
 msgstr "Preuči inšpektorja"
 
@@ -7287,7 +7269,7 @@ msgstr "Uporabi slog iz datoteke CSS"
 #: tools/gtk-builder-tool-preview.c:187 tools/gtk-builder-tool-screenshot.c:370
 #: tools/gtk-builder-tool-validate.c:268
 #: tools/gtk-rendernode-tool-benchmark.c:106
-#: tools/gtk-rendernode-tool-render.c:203 tools/gtk-rendernode-tool-show.c:113
+#: tools/gtk-rendernode-tool-render.c:262 tools/gtk-rendernode-tool-show.c:113
 #, c-format
 msgid "Could not initialize windowing system\n"
 msgstr "Ni mogoče začeti okenskega sistema\n"
@@ -7332,13 +7314,13 @@ msgstr ""
 "Za prepisovanje je na voljo zastavica --force.\n"
 
 #: tools/gtk-builder-tool-screenshot.c:332
-#: tools/gtk-rendernode-tool-render.c:171
+#: tools/gtk-rendernode-tool-render.c:230
 #, c-format
 msgid "Output written to %s.\n"
 msgstr "Odvod je zapisan v %s.\n"
 
 #: tools/gtk-builder-tool-screenshot.c:336
-#: tools/gtk-rendernode-tool-render.c:175
+#: tools/gtk-rendernode-tool-render.c:234
 #, c-format
 msgid "Failed to save %s: %s\n"
 msgstr "Datoteke %s ni mogoče shraniti: %s\n"
@@ -7357,7 +7339,7 @@ msgstr "Prepiši obstoječo datoteko"
 
 #: tools/gtk-builder-tool-screenshot.c:363
 #: tools/gtk-rendernode-tool-benchmark.c:97
-#: tools/gtk-rendernode-tool-render.c:196
+#: tools/gtk-rendernode-tool-render.c:255
 msgid "FILE…"
 msgstr "DATOTEKA …"
 
@@ -7859,7 +7841,7 @@ msgstr "Dodaj izrisovalnik v preizkušanje"
 
 #: tools/gtk-rendernode-tool-benchmark.c:94
 #: tools/gtk-rendernode-tool-compare.c:65
-#: tools/gtk-rendernode-tool-render.c:195
+#: tools/gtk-rendernode-tool-render.c:254
 msgid "RENDERER"
 msgstr "IZRISOVALNIK"
 
@@ -7880,7 +7862,7 @@ msgid "Benchmark rendering of a .node file."
 msgstr "Preizkusno izrisovanje datoteke .node."
 
 #: tools/gtk-rendernode-tool-benchmark.c:127
-#: tools/gtk-rendernode-tool-info.c:236 tools/gtk-rendernode-tool-render.c:224
+#: tools/gtk-rendernode-tool-info.c:236 tools/gtk-rendernode-tool-render.c:283
 #: tools/gtk-rendernode-tool-show.c:134
 #, c-format
 msgid "No .node file specified\n"
@@ -7892,7 +7874,7 @@ msgid "Can only benchmark a single .node file\n"
 msgstr "Preizkušati je mogoče le eno datoteko .node\n"
 
 #: tools/gtk-rendernode-tool-compare.c:65
-#: tools/gtk-rendernode-tool-render.c:195
+#: tools/gtk-rendernode-tool-render.c:254
 msgid "Renderer to use"
 msgstr "Izrisovalnik za uporabo"
 
@@ -7914,7 +7896,7 @@ msgid "Must specify two files\n"
 msgstr "Določiti morate dve datoteki\n"
 
 #: tools/gtk-rendernode-tool-compare.c:102
-#: tools/gtk-rendernode-tool-render.c:150
+#: tools/gtk-rendernode-tool-render.c:209
 #, c-format
 msgid "Failed to create renderer: %s\n"
 msgstr ""
@@ -7975,7 +7957,7 @@ msgstr "Navesti je traba podrobnosti o vozlišču za izrisovanje."
 msgid "Can only accept a single .node file\n"
 msgstr "Sprejeti je mogoče le eno datoteko .node\n"
 
-#: tools/gtk-rendernode-tool-render.c:123
+#: tools/gtk-rendernode-tool-render.c:170
 #, c-format
 msgid ""
 "File %s exists.\n"
@@ -7984,16 +7966,17 @@ msgstr ""
 "Datoteka %s obstaja.\n"
 "Za prepis datoteke je treba navesti njeno ime.\n"
 
-#: tools/gtk-rendernode-tool-render.c:137
+#: tools/gtk-rendernode-tool-render.c:184
+#: tools/gtk-rendernode-tool-render.c:196
 #, c-format
 msgid "Failed to generate SVG: %s\n"
 msgstr "Ni mogoče ustvariti zapisa SVG: %s\n"
 
-#: tools/gtk-rendernode-tool-render.c:211
+#: tools/gtk-rendernode-tool-render.c:270
 msgid "Render a .node file to an image."
 msgstr "Izriši datoteko .node v sliko."
 
-#: tools/gtk-rendernode-tool-render.c:230
+#: tools/gtk-rendernode-tool-render.c:289
 #, c-format
 msgid "Can only render a single .node file to a single output file\n"
 msgstr "V eno izhodno datoteko je mogoče izrisati le eno datoteko .node\n"

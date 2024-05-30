@@ -1,0 +1,142 @@
+:root {
+  --color1: red;
+
+  /* A dependency cycle */
+  --test1: var(--test2);
+  --test2: var(--test1);
+}
+
+.label-1 {
+  color: var(--color1);
+
+  /* Fallback is unused when the variable resolves */
+  background-color: var(--color1, green);
+
+  /* Nested fallbacks */
+  box-shadow: inset 0 0 3px var(--color2, var(--color3, green));
+}
+
+.label-2 {
+  /* Overriding variables */
+  --color1: yellow;
+  color: var(--color1);
+
+  /* Nonexistent variable, so the fallback is used */
+  background-color: var(--color2, green);
+
+  /* Variables are case-sensitive */
+  box-shadow: inset 0 0 3px var(--Color1, green);
+}
+
+.label-3 {
+  /* Unsetting variables */
+  --color1: initial;
+  color: var(--color1, green);
+
+  /* Shorthand properties */
+  --border1: 3px;
+  --border2: solid red;
+  border: var(--border1, 4px) var(--border2);
+}
+
+.label-4 {
+  /* --test1 is a part of a dependency cycle */
+  /* See https://www.w3.org/TR/css-variables-1/#cycles */
+  color: var(--test1, green);
+
+  /* A dependency cycle with a fallback, the variable is invalid anyway */
+  --test3: var(--test3, green);
+  background-color: var(--test3, purple);
+}
+
+.label-5 {
+  /* Not a dependency cycle since we've overridden --test1. --test2 is still bad */
+  --test1: red;
+  color: var(--test1, green);
+  background-color: var(--test2, green);
+
+  --prop1: lol;
+  --prop2: var(--prop1) var(--prop1);
+  --prop3: var(--prop2) var(--prop2);
+  --prop4: var(--prop3) var(--prop3);
+  --prop5: var(--prop4) var(--prop4);
+  --prop6: var(--prop5) var(--prop5);
+  --prop7: var(--prop6) var(--prop6);
+  --prop8: var(--prop7) var(--prop7);
+  --prop9: var(--prop8) var(--prop8);
+  --prop10: var(--prop9) var(--prop9);
+  --prop11: var(--prop10) var(--prop10);
+  --prop12: var(--prop11) var(--prop11);
+  --prop13: var(--prop12) var(--prop12);
+  --prop14: var(--prop13) var(--prop13);
+  --prop15: var(--prop14) var(--prop14);
+  --prop16: var(--prop15) var(--prop15);
+  --prop17: var(--prop16) var(--prop16);
+  --prop18: var(--prop17) var(--prop17);
+  --prop19: var(--prop18) var(--prop18);
+  --prop20: var(--prop19) var(--prop19);
+
+  /* Fallback is used since --prop20 is too long */
+  /* See https://www.w3.org/TR/css-variables-1/#long-variables */
+  box-shadow: inset 0 0 3px var(--prop20, green);
+}
+
+.label-6 {
+  all: unset;
+
+  /* Should still be red, since variables are not unset by that */
+  color: var(--color1, green);
+}
+
+.label-7 {
+  /* Empty fallback */
+  color: var(--color2,) var(--color1);
+
+  background-color: red;
+}
+
+@keyframes test {
+  from {
+    --test1: red;
+    --test2: blue;
+    --duration: 2s;
+    --padding-right: 10px;
+    padding-left: var(--padding1, 10px);
+    padding-right: var(--padding-right);
+  }
+  to {
+    --test1: blue;
+    --test3: red;
+    --duration: 3s;
+    padding-left: var(--padding2, 20px);
+  }
+}
+
+.label-8 {
+  /* FIXME: this is only there because properties that are only in keyframes */
+  /* won't get printed otherwise */
+  padding-left: 0;
+  padding-right: 0;
+
+  --padding1: 1px;
+  --padding2: 2px;
+
+  /* We're testing the initial state */
+  animation: test 10s infinite linear;
+
+  /* This gets overridden by the animation */
+  --test1: pink;
+
+  color: var(--test1, yellow);
+
+  /* Only defined in the initial state, still fine */
+  background-color: var(--test2, yellow);
+
+  /* Variables only defined later in the animation -> invalid */
+  box-shadow: inset 0 0 3px var(--test3, yellow);
+
+  /* --duration is animation-tainted and so is --duration2, this should be 5s */
+  --duration2: var(--duration, 4s);
+  transition-duration: var(--duration2, 5s);
+}
+

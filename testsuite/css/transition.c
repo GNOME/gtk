@@ -43,7 +43,7 @@ value_is_near (int          prop,
                GtkCssValue *value1,
                GtkCssValue *value2)
 {
-  if (_gtk_css_value_equal (value1, value2))
+  if (gtk_css_value_equal (value1, value2))
     return TRUE;
 
   switch (prop)
@@ -63,8 +63,8 @@ value_is_near (int          prop,
       break;
 
     case GTK_CSS_PROPERTY_FONT_SIZE:
-      return fabs (_gtk_css_number_value_get (value1, 100) -
-                   _gtk_css_number_value_get (value2, 100)) < FLT_EPSILON;
+      return fabs (gtk_css_number_value_get (value1, 100) -
+                   gtk_css_number_value_get (value2, 100)) < FLT_EPSILON;
       break;
 
     default:
@@ -85,8 +85,8 @@ assert_css_value (int          prop,
   if (((result == NULL) != (expected == NULL)) ||
       !value_is_near (prop, result, expected))
     {
-      char *r = result ? _gtk_css_value_to_string (result) : g_strdup ("(nil)");
-      char *e = expected ? _gtk_css_value_to_string (expected) : g_strdup ("(nil)");
+      char *r = result ? gtk_css_value_to_string (result) : g_strdup ("(nil)");
+      char *e = expected ? gtk_css_value_to_string (expected) : g_strdup ("(nil)");
       g_print ("Expected %s\nGot %s\n", e, r);
       g_free (r);
       g_free (e);
@@ -215,31 +215,35 @@ test_transition (gconstpointer data)
   GtkCssValue *result;
   GtkStyleProvider *provider;
   GtkCssStyle *style;
+  GtkCssComputeContext context = { NULL, };
 
   provider = GTK_STYLE_PROVIDER (gtk_settings_get_default ());
   style = gtk_css_static_style_get_default ();
+
+  context.provider = provider;
+  context.style = style;
 
   prop = (GtkStyleProperty *)_gtk_css_style_property_lookup_by_id (test->prop);
 
   value1 = value_from_string (prop, test->value1);
   g_assert_nonnull (value1);
-  computed1 = _gtk_css_value_compute (value1, test->prop, provider, style, NULL);
+  computed1 = gtk_css_value_compute (value1, test->prop, &context);
 
   value2 = value_from_string (prop, test->value2);
   g_assert_nonnull (value2);
-  computed2 = _gtk_css_value_compute (value2, test->prop, provider, style, NULL);
+  computed2 = gtk_css_value_compute (value2, test->prop, &context);
 
   if (test->value3)
     {
       value3 = value_from_string (prop, test->value3);
-      computed3 = _gtk_css_value_compute (value3, test->prop, provider, style, NULL);
+      computed3 = gtk_css_value_compute (value3, test->prop, &context);
     }
   else
     {
       value3 = computed3 = NULL;
     }
 
-  result = _gtk_css_value_transition (computed1, computed2, test->prop, test->progress);
+  result = gtk_css_value_transition (computed1, computed2, test->prop, test->progress);
   assert_css_value (test->prop, result, computed3);
 
   gtk_css_value_unref (value1);

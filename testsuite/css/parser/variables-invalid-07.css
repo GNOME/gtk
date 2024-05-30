@@ -1,0 +1,15 @@
+a {
+  --accent-fg-color: var();
+}
+
+b {
+  --accent-fg-color: var(-);
+}
+
+c {
+  --accent-fg-color: var(a);
+}
+
+d {
+  --accent-fg-color: var(21);
+}

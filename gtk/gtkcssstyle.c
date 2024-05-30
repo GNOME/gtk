@@ -24,11 +24,13 @@
 
 #include "gtkcssanimationprivate.h"
 #include "gtkcssarrayvalueprivate.h"
+#include "gtkcsscustompropertypoolprivate.h"
 #include "gtkcssenumvalueprivate.h"
 #include "gtkcssinheritvalueprivate.h"
 #include "gtkcssinitialvalueprivate.h"
 #include "gtkcssnumbervalueprivate.h"
 #include "gtkcsscolorvalueprivate.h"
+#include "gtkcsspalettevalueprivate.h"
 #include "gtkcssshorthandpropertyprivate.h"
 #include "gtkcssstringvalueprivate.h"
 #include "gtkcssfontvariationsvalueprivate.h"
@@ -72,6 +74,9 @@ gtk_css_style_finalize (GObject *object)
   gtk_css_values_unref ((GtkCssValues *)style->transition);
   gtk_css_values_unref ((GtkCssValues *)style->size);
   gtk_css_values_unref ((GtkCssValues *)style->other);
+
+  if (style->variables)
+    gtk_css_variable_set_unref (style->variables);
 
   G_OBJECT_CLASS (gtk_css_style_parent_class)->finalize (object);
 }
@@ -311,6 +316,15 @@ gtk_css_style_get_static_style (GtkCssStyle *style)
   return GTK_CSS_STYLE_GET_CLASS (style)->get_static_style (style);
 }
 
+GtkCssValue *
+gtk_css_style_get_original_value (GtkCssStyle *style,
+                                  guint        id)
+{
+  gtk_internal_return_val_if_fail (GTK_IS_CSS_STYLE (style), NULL);
+
+  return GTK_CSS_STYLE_GET_CLASS (style)->get_original_value (style, id);
+}
+
 /*
  * gtk_css_style_print:
  * @style: a `GtkCssStyle`
@@ -353,7 +367,7 @@ gtk_css_style_print (GtkCssStyle *style,
       value = gtk_css_style_get_value (style, i);
 
       g_string_append_printf (string, "%*s%s: ", indent, "", name);
-      _gtk_css_value_print (value, string);
+      gtk_css_value_print (value, string);
       g_string_append_c (string, ';');
 
       if (section)
@@ -367,6 +381,43 @@ gtk_css_style_print (GtkCssStyle *style,
 
       retval = TRUE;
     }
+
+    if (style->variables)
+      {
+        GtkCssCustomPropertyPool *pool = gtk_css_custom_property_pool_get ();
+        GArray *ids = gtk_css_variable_set_list_ids (style->variables);
+
+        for (i = 0; i < ids->len; i++)
+          {
+            int id = g_array_index (ids, int, i);
+            const char *name = gtk_css_custom_property_pool_get_name (pool, id);
+            GtkCssVariableSet *source;
+            GtkCssVariableValue *value = gtk_css_variable_set_lookup (style->variables, id, &source);
+
+            if (!value)
+              continue;
+
+            if (source != style->variables && skip_initial)
+              continue;
+
+            g_string_append_printf (string, "%*s%s: ", indent, "", name);
+            gtk_css_variable_value_print (value, string);
+            g_string_append_c (string, ';');
+
+            if (value->section)
+              {
+                g_string_append (string, " /* ");
+                gtk_css_section_print (value->section, string);
+                g_string_append (string, " */");
+              }
+
+            g_string_append_c (string, '\n');
+          }
+
+        retval = TRUE;
+
+        g_array_unref (ids);
+      }
 
   return retval;
 }
@@ -632,7 +683,7 @@ gtk_css_style_get_pango_attributes (GtkCssStyle *style)
     }
 
   /* letter-spacing */
-  letter_spacing = _gtk_css_number_value_get (style->font->letter_spacing, 100);
+  letter_spacing = gtk_css_number_value_get (style->font->letter_spacing, 100);
   if (letter_spacing != 0)
     {
       attrs = add_pango_attr (attrs, pango_attr_letter_spacing_new (letter_spacing * PANGO_SCALE));
@@ -730,13 +781,13 @@ gtk_css_style_get_pango_font (GtkCssStyle *style)
     }
 
   v = style->core->font_size;
-  pango_font_description_set_absolute_size (description, round (_gtk_css_number_value_get (v, 100) * PANGO_SCALE));
+  pango_font_description_set_absolute_size (description, round (gtk_css_number_value_get (v, 100) * PANGO_SCALE));
 
   v = style->font->font_style;
   pango_font_description_set_style (description, _gtk_css_font_style_value_get (v));
 
   v = style->font->font_weight;
-  pango_font_description_set_weight (description, _gtk_css_number_value_get (v, 100));
+  pango_font_description_set_weight (description, gtk_css_number_value_get (v, 100));
 
   v = style->font->font_stretch;
   pango_font_description_set_stretch (description, _gtk_css_font_stretch_value_get (v));
@@ -748,6 +799,33 @@ gtk_css_style_get_pango_font (GtkCssStyle *style)
   g_free (str);
 
   return description;
+}
+
+void
+gtk_css_style_lookup_symbolic_colors (GtkCssStyle *style,
+                                      GdkRGBA      color_out[4])
+{
+  GtkCssValue *palette, *color;
+  const char *names[4] = {
+    [GTK_SYMBOLIC_COLOR_ERROR] = "error",
+    [GTK_SYMBOLIC_COLOR_WARNING] = "warning",
+    [GTK_SYMBOLIC_COLOR_SUCCESS] = "success"
+  };
+
+  color = style->core->color;
+  palette = style->core->icon_palette;
+  color_out[GTK_SYMBOLIC_COLOR_FOREGROUND] = *gtk_css_color_value_get_rgba (color);
+
+  for (gsize i = 1; i < 4; i++)
+    {
+      const GdkRGBA *lookup;
+
+      lookup = gtk_css_palette_value_get_color (palette, names[i]);
+      if (lookup)
+        color_out[i] = *lookup;
+      else
+        color_out[i] = color_out[GTK_SYMBOLIC_COLOR_FOREGROUND];
+    }
 }
 
 /* Refcounted value structs */
@@ -782,10 +860,9 @@ GtkCssValues *gtk_css_values_ref (GtkCssValues *values)
 static void
 gtk_css_values_free (GtkCssValues *values)
 {
-  int i;
   GtkCssValue **v = GET_VALUES (values);
 
-  for (i = 0; i < N_VALUES (values->type); i++)
+  for (int i = 0; i < N_VALUES (values->type); i++)
     {
       if (v[i])
         gtk_css_value_unref (v[i]);
@@ -810,14 +887,13 @@ gtk_css_values_copy (GtkCssValues *values)
 {
   GtkCssValues *copy;
   GtkCssValue **v, **v2;
-  int i;
 
-  copy = gtk_css_values_new (TYPE_INDEX(values->type));
+  copy = gtk_css_values_new (TYPE_INDEX (values->type));
 
   v = GET_VALUES (values);
   v2 = GET_VALUES (copy);
 
-  for (i = 0; i < N_VALUES (values->type); i++)
+  for (int i = 0; i < N_VALUES (values->type); i++)
     {
       if (v[i])
         v2[i] = gtk_css_value_ref (v[i]);
@@ -831,9 +907,28 @@ gtk_css_values_new (GtkCssValuesType type)
 {
   GtkCssValues *values;
 
-  values = (GtkCssValues *)g_malloc0 (VALUES_SIZE(type));
+  values = (GtkCssValues *) g_malloc0 (VALUES_SIZE (type));
   values->ref_count = 1;
   values->type = type;
 
   return values;
+}
+
+GtkCssVariableValue *
+gtk_css_style_get_custom_property (GtkCssStyle *style,
+                                   int          id)
+{
+  if (style->variables)
+    return gtk_css_variable_set_lookup (style->variables, id, NULL);
+
+  return NULL;
+}
+
+GArray *
+gtk_css_style_list_custom_properties (GtkCssStyle *style)
+{
+  if (style->variables)
+    return gtk_css_variable_set_list_ids (style->variables);
+
+  return NULL;
 }

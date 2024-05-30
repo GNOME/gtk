@@ -8,6 +8,9 @@ gtk4-demo-application
 Demonstrate GtkApplication
 --------------------------
 
+:Version: GTK
+:Manual section: 1
+:Manual group: GTK commands
 
 SYNOPSIS
 --------

@@ -25,6 +25,7 @@
 #include "gdkdmabufformatsbuilderprivate.h"
 #include "gdkdmabuffourccprivate.h"
 #include "gdkdmabufprivate.h"
+#include "gdkdmabuftexturebuilderprivate.h"
 #include "gdktextureprivate.h"
 #include <gdk/gdkglcontext.h>
 #include <gdk/gdkgltexturebuilder.h>
@@ -71,7 +72,10 @@ gdk_dmabuf_texture_dispose (GObject *object)
   GdkDmabufTexture *self = GDK_DMABUF_TEXTURE (object);
 
   if (self->destroy)
-    self->destroy (self->data);
+    {
+      self->destroy (self->data);
+      self->destroy = NULL;
+    }
 
   g_clear_object (&self->downloader);
   g_clear_object (&self->display);

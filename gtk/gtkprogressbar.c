@@ -28,12 +28,14 @@
 
 #include "gtkaccessiblerange.h"
 #include "gtkboxlayout.h"
+#include "gtkcssboxesprivate.h"
 #include "gtkgizmoprivate.h"
 #include <glib/gi18n-lib.h>
 #include "gtklabel.h"
 #include "gtkorientable.h"
 #include "gtkprogresstrackerprivate.h"
 #include "gtkprivate.h"
+#include "gtksnapshot.h"
 #include "gtkwidgetprivate.h"
 
 #include <string.h>
@@ -438,7 +440,24 @@ allocate_trough (GtkGizmo *gizmo,
     }
 
   gtk_widget_size_allocate (pbar->progress_widget, &alloc, -1);
+}
 
+static void
+snapshot_trough (GtkGizmo    *gizmo,
+                 GtkSnapshot *snapshot)
+
+{
+  GtkWidget *widget = gtk_widget_get_parent (GTK_WIDGET (gizmo));
+  GtkProgressBar *pbar = GTK_PROGRESS_BAR (widget);
+
+  if (pbar->progress_widget)
+    {
+      GtkCssBoxes boxes;
+      gtk_css_boxes_init (&boxes, GTK_WIDGET (gizmo));
+      gtk_snapshot_push_rounded_clip (snapshot, gtk_css_boxes_get_border_box (&boxes));
+      gtk_widget_snapshot_child (GTK_WIDGET (gizmo), pbar->progress_widget, snapshot);
+      gtk_snapshot_pop (snapshot);
+    }
 }
 
 static void
@@ -459,10 +478,9 @@ gtk_progress_bar_init (GtkProgressBar *pbar)
                                                  GTK_ACCESSIBLE_ROLE_NONE,
                                                  NULL,
                                                  allocate_trough,
-                                                 NULL,
+                                                 snapshot_trough,
                                                  NULL,
                                                  NULL, NULL);
-  gtk_widget_set_overflow (pbar->trough_widget, GTK_OVERFLOW_HIDDEN);
   gtk_widget_set_parent (pbar->trough_widget, GTK_WIDGET (pbar));
 
   pbar->progress_widget = gtk_gizmo_new_with_role ("progress",

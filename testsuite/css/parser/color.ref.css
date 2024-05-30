@@ -13,7 +13,7 @@ c {
 }
 
 d {
-  color: currentColor;
+  color: currentcolor;
 }
 
 e {
@@ -70,4 +70,56 @@ q {
 
 r {
   color: @mygreen;
+}
+
+s {
+  color: rgb(255,0,0);
+}
+
+t {
+  color: rgb(255,0,0);
+}
+
+u {
+  color: rgba(255,0,0,0.5);
+}
+
+v {
+  color: rgba(255,0,0,0.5);
+}
+
+w {
+  color: rgb(255,0,0);
+}
+
+x {
+  color: rgba(255,0,0,0.5);
+}
+
+y {
+  color: color(srgb 1 0 0);
+}
+
+z {
+  color: color(srgb 0.99 0.985 0.98 / 0.5);
+}
+
+aa {
+  color: color(srgb 1.5 -1.5 0);
+}
+
+ab {
+  color: color(srgb-linear 1 0.5 0 / 0.5);
+}
+
+ac {
+  color: oklab(0.80000001192092896 0 0.30000001192092896 / 0.5);
+}
+
+ad {
+  color: oklch(0.80000001192092896 0.30000001192092896 200 / 0.5);
+}
+
+ae {
+  color: rgba(26,26,26,0.5);
 }

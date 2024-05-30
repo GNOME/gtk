@@ -289,11 +289,11 @@ parse_progress (GtkCssParser *parser,
   double *progress = option_data;
   GtkCssValue *number;
   
-  number = _gtk_css_number_value_parse (parser, GTK_CSS_PARSE_PERCENT | GTK_CSS_POSITIVE_ONLY);
+  number = gtk_css_number_value_parse (parser, GTK_CSS_PARSE_PERCENT | GTK_CSS_POSITIVE_ONLY);
   if (number == NULL)
     return FALSE;
-  *progress = _gtk_css_number_value_get (number, 1);
-  _gtk_css_value_unref (number);
+  *progress = gtk_css_number_value_get (number, 1);
+  gtk_css_value_unref (number);
 
   if (*progress > 1.0)
     {
@@ -323,7 +323,7 @@ parse_image (GtkCssParser *parser,
     {
       GtkCssValue *color;
 
-      color = _gtk_css_color_value_parse (parser);
+      color = gtk_css_color_value_parse (parser);
       if (color == NULL)
         return FALSE;
 
@@ -399,11 +399,9 @@ gtk_css_image_cross_fade_print (GtkCssImage *image,
 }
 
 static GtkCssImage *
-gtk_css_image_cross_fade_compute (GtkCssImage      *image,
-                                  guint             property_id,
-                                  GtkStyleProvider *provider,
-                                  GtkCssStyle      *style,
-                                  GtkCssStyle      *parent_style)
+gtk_css_image_cross_fade_compute (GtkCssImage          *image,
+                                  guint                 property_id,
+                                  GtkCssComputeContext *context)
 {
   GtkCssImageCrossFade *self = GTK_CSS_IMAGE_CROSS_FADE (image);
   GtkCssImageCrossFade *result;
@@ -418,7 +416,7 @@ gtk_css_image_cross_fade_compute (GtkCssImage      *image,
       gtk_css_image_cross_fade_add (result,
                                     entry->has_progress,
                                     entry->progress,
-                                    _gtk_css_image_compute (entry->image, property_id, provider, style, parent_style));
+                                    _gtk_css_image_compute (entry->image, property_id, context));
     }
 
   return GTK_CSS_IMAGE (result);

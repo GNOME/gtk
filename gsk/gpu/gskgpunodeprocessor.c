@@ -345,8 +345,8 @@ gsk_gpu_node_processor_init_draw (GskGpuNodeProcessor   *self,
 
   area.x = 0;
   area.y = 0;
-  area.width = ceilf (graphene_vec2_get_x (scale) * viewport->size.width - EPSILON);
-  area.height = ceilf (graphene_vec2_get_y (scale) * viewport->size.height - EPSILON);
+  area.width = MAX (1, ceilf (graphene_vec2_get_x (scale) * viewport->size.width - EPSILON));
+  area.height = MAX (1, ceilf (graphene_vec2_get_y (scale) * viewport->size.height - EPSILON));
 
   image = gsk_gpu_device_create_offscreen_image (gsk_gpu_frame_get_device (frame),
                                                  FALSE,
@@ -2077,6 +2077,8 @@ gsk_gpu_node_processor_add_texture_scale_node (GskGpuNodeProcessor *self,
       /* now intersect with actual node bounds */
       if (!gsk_rect_intersection (&clip_bounds, &node->bounds, &clip_bounds))
         return;
+      clip_bounds.size.width = ceilf (clip_bounds.size.width);
+      clip_bounds.size.height = ceilf (clip_bounds.size.height);
       offscreen = gsk_gpu_node_processor_create_offscreen (self->frame,
                                                            graphene_vec2_one (),
                                                            &clip_bounds,

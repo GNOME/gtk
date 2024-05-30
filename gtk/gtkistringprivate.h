@@ -117,7 +117,7 @@ static inline void
 istring_prepend (IString *str,
                  IString *other)
 {
-  if G_LIKELY (str->n_bytes + other->n_bytes < sizeof str->u.buf - 1)
+  if G_LIKELY (str->n_bytes + other->n_bytes <= (sizeof str->u.buf - 1))
     {
       memmove (str->u.buf + other->n_bytes, str->u.buf, str->n_bytes);
       memcpy (str->u.buf, other->u.buf, other->n_bytes);

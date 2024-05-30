@@ -77,16 +77,8 @@ static void
 gdk_vulkan_context_wayland_empty_frame (GdkDrawContext *context)
 {
   GdkSurface *surface = gdk_draw_context_get_surface (GDK_DRAW_CONTEXT (context));
-  GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
 
-  if (!impl->has_pending_subsurface_commits)
-    return;
-
-  gdk_wayland_surface_sync (surface);
-  gdk_wayland_surface_request_frame (surface);
-
-  gdk_wayland_surface_commit (surface);
-  gdk_wayland_surface_notify_committed (surface);
+  gdk_wayland_surface_handle_empty_frame (surface);
 }
 
 static void

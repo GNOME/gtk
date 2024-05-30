@@ -138,15 +138,22 @@ void                    gtk_css_token_print                     (const GtkCssTok
 char *                  gtk_css_token_to_string                 (const GtkCssToken      *token);
 
 GtkCssTokenizer *       gtk_css_tokenizer_new                   (GBytes                 *bytes);
+GtkCssTokenizer *       gtk_css_tokenizer_new_for_range         (GBytes                 *bytes,
+                                                                 gsize                   offset,
+                                                                 gsize                   length);
 
 GtkCssTokenizer *       gtk_css_tokenizer_ref                   (GtkCssTokenizer        *tokenizer);
 void                    gtk_css_tokenizer_unref                 (GtkCssTokenizer        *tokenizer);
 
+GBytes *                gtk_css_tokenizer_get_bytes             (GtkCssTokenizer        *tokenizer);
 const GtkCssLocation *  gtk_css_tokenizer_get_location          (GtkCssTokenizer        *tokenizer) G_GNUC_CONST;
 
 gboolean                gtk_css_tokenizer_read_token            (GtkCssTokenizer        *tokenizer,
                                                                  GtkCssToken            *token,
                                                                  GError                **error);
+
+void                     gtk_css_tokenizer_save                 (GtkCssTokenizer        *tokenizer);
+void                     gtk_css_tokenizer_restore              (GtkCssTokenizer        *tokenizer);
 
 G_END_DECLS
 

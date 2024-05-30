@@ -64,7 +64,7 @@ gdk_win32_deps = [
 ]
 
 libgdk_win32 = static_library('gdk-win32',
-  gdk_win32_sources, gdkconfig, gdkenum_h,
+  sources: [ gdk_win32_sources, gdk_gen_headers ],
   include_directories: [ confinc, gdkinc ],
   c_args: [
     '-DGTK_COMPILATION',

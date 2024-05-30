@@ -52,13 +52,11 @@ gtk_css_value_font_variations_free (GtkCssValue *value)
 }
 
 static GtkCssValue *
-gtk_css_value_font_variations_compute (GtkCssValue      *specified,
-                                       guint             property_id,
-                                       GtkStyleProvider *provider,
-                                       GtkCssStyle      *style,
-                                       GtkCssStyle      *parent_style)
+gtk_css_value_font_variations_compute (GtkCssValue          *specified,
+                                       guint                 property_id,
+                                       GtkCssComputeContext *context)
 {
-  return _gtk_css_value_ref (specified);
+  return gtk_css_value_ref (specified);
 }
 
 static gboolean
@@ -78,7 +76,7 @@ gtk_css_value_font_variations_equal (const GtkCssValue *value1,
       if (coord2 == NULL)
         return FALSE;
 
-      if (!_gtk_css_value_equal (coord1, coord2))
+      if (!gtk_css_value_equal (coord1, coord2))
         return FALSE;
     }
 
@@ -108,9 +106,9 @@ gtk_css_value_font_variations_transition (GtkCssValue *start,
     {
       end_coord = g_hash_table_lookup (end->axes, name);
       if (end_coord == NULL)
-        transition = _gtk_css_value_ref (start_coord);
+        transition = gtk_css_value_ref (start_coord);
       else
-        transition = _gtk_css_value_transition (start_coord, end_coord, property_id, progress);
+        transition = gtk_css_value_transition (start_coord, end_coord, property_id, progress);
 
       gtk_css_font_variations_value_add_axis (result, name, transition);
     }
@@ -122,7 +120,7 @@ gtk_css_value_font_variations_transition (GtkCssValue *start,
       if (start_coord != NULL)
         continue;
 
-      gtk_css_font_variations_value_add_axis (result, name, _gtk_css_value_ref (end_coord));
+      gtk_css_font_variations_value_add_axis (result, name, gtk_css_value_ref (end_coord));
     }
 
   return result;
@@ -151,7 +149,7 @@ gtk_css_value_font_variations_print (const GtkCssValue *value,
       else
         g_string_append (string, ", ");
       g_string_append_printf (string, "\"%s\" ", name);
-      _gtk_css_value_print (coord, string);
+      gtk_css_value_print (coord, string);
     }
 }
 
@@ -171,10 +169,10 @@ gtk_css_font_variations_value_new_empty (void)
 {
   GtkCssValue *result;
 
-  result = _gtk_css_value_new (GtkCssValue, &GTK_CSS_VALUE_FONT_VARIATIONS);
+  result = gtk_css_value_new (GtkCssValue, &GTK_CSS_VALUE_FONT_VARIATIONS);
   result->axes = g_hash_table_new_full (g_str_hash, g_str_equal,
                                         g_free,
-                                        (GDestroyNotify) _gtk_css_value_unref);
+                                        (GDestroyNotify) gtk_css_value_unref);
   result->is_computed = TRUE;
 
   return result;
@@ -186,7 +184,7 @@ gtk_css_font_variations_value_new_default (void)
   if (default_font_variations == NULL)
     default_font_variations = gtk_css_font_variations_value_new_empty ();
 
-  return _gtk_css_value_ref (default_font_variations);
+  return gtk_css_value_ref (default_font_variations);
 }
 
 static gboolean
@@ -219,7 +217,7 @@ gtk_css_font_variations_value_parse (GtkCssParser *parser)
     name = gtk_css_parser_consume_string (parser);
     if (name == NULL)
       {
-        _gtk_css_value_unref (result);
+        gtk_css_value_unref (result);
         return NULL;
       }
 
@@ -227,15 +225,15 @@ gtk_css_font_variations_value_parse (GtkCssParser *parser)
       {
         gtk_css_parser_error_value (parser, "Not a valid OpenType tag.");
         g_free (name);
-        _gtk_css_value_unref (result);
+        gtk_css_value_unref (result);
         return NULL;
       }
 
-    coord = _gtk_css_number_value_parse (parser, GTK_CSS_PARSE_NUMBER);
+    coord = gtk_css_number_value_parse (parser, GTK_CSS_PARSE_NUMBER);
     if (coord == NULL)
       {
         g_free (name);
-        _gtk_css_value_unref (result);
+        gtk_css_value_unref (result);
         return NULL;
       }
 
@@ -270,7 +268,7 @@ gtk_css_font_variations_value_get_variations (GtkCssValue *value)
       else
         g_string_append (string, ",");
       g_string_append_printf (string, "%s=%g", name,
-                              _gtk_css_number_value_get (coord, 100));
+                              gtk_css_number_value_get (coord, 100));
     }
 
   return g_string_free (string, FALSE);

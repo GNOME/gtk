@@ -227,7 +227,7 @@ get_t_by_bisection (const GskCurve *curve,
   t1 = 0;
   t2 = 1;
 
-  while (t1 < t2)
+  do
     {
       t = (t1 + t2) / 2;
       if (t == t1 || t == t2)
@@ -243,6 +243,7 @@ get_t_by_bisection (const GskCurve *curve,
       else
         t2 = t;
     }
+  while (t1 < t2);
 
   return t;
 }
