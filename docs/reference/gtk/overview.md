@@ -64,6 +64,6 @@ GTK is divided into three parts:
 [cairo]: https://www.cairographics.org/manual/
 [opengl]: https://www.opengl.org/about/
 [vulkan]: https://www.vulkan.org/
-[pango]: https://docs.gtk.org/pango/
+[pango]: https://docs.gtk.org/Pango/
 [gdkpixbuf]: https://docs.gtk.org/gdk-pixbuf/
 [graphene]: https://ebassi.github.io/graphene/
