@@ -20,6 +20,14 @@
 
 #include "gtk/gtkdialogerror.h"
 
+/**
+ * gtk_dialog_error_quark:
+ *
+ * Registers an error quark for an operation that requires a dialog if
+ * necessary.
+ *
+ * Returns: the error quark
+ */
 GQuark
 gtk_dialog_error_quark (void)
 {

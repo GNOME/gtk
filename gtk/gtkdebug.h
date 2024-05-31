@@ -106,6 +106,12 @@ typedef enum {
   GTK_DEBUG_CSS             = 1 << 20,
 } GtkDebugFlags;
 
+/**
+ * GTK_DEBUG_CHECK:
+ * @type: type to check
+ *
+ * Whether the `type` debug flag is set.
+ **/
 #define GTK_DEBUG_CHECK(type) G_UNLIKELY (gtk_get_debug_flags () & GTK_DEBUG_##type)
 
 GDK_AVAILABLE_IN_ALL

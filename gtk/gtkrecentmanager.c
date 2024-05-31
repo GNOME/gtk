@@ -243,6 +243,13 @@ has_case_prefix (const char *haystack,
   return *n == '\0';
 }
 
+/**
+ * gtk_recent_manager_error_quark:
+ *
+ * Registers an error quark for [class@RecentManager] errors.
+ *
+ * Returns: the error quark
+ **/
 GQuark
 gtk_recent_manager_error_quark (void)
 {

@@ -122,6 +122,11 @@ gtk_style_context_class_init (GtkStyleContextClass *klass)
   object_class->set_property = gtk_style_context_impl_set_property;
   object_class->get_property = gtk_style_context_impl_get_property;
 
+  /**
+   * GtkStyleContext:display:
+   *
+   * The display of the style context.
+   */
   properties[PROP_DISPLAY] =
       g_param_spec_object ("display", NULL, NULL,
                            GDK_TYPE_DISPLAY,

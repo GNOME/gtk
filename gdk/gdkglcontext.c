@@ -152,6 +152,13 @@ enum {
 
 static GParamSpec *properties[LAST_PROP] = { NULL, };
 
+/**
+ * gdk_gl_error_quark:
+ *
+ * Registers an error quark for [class@Gdk.GLContext] errors.
+ *
+ * Returns: the error quark
+ **/
 G_DEFINE_QUARK (gdk-gl-error-quark, gdk_gl_error)
 
 G_DEFINE_ABSTRACT_TYPE_WITH_PRIVATE (GdkGLContext, gdk_gl_context, GDK_TYPE_DRAW_CONTEXT)

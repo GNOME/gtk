@@ -70,6 +70,10 @@ struct _GtkScaleClass
  * @value: The numeric value to format
  * @user_data: (closure): user data
  *
+ * Function that formats the value of a scale.
+ *
+ * See [method@Gtk.Scale.set_format_value_func].
+ *
  * Returns: (not nullable): A newly allocated string describing a textual representation
  *   of the given numerical value.
  */

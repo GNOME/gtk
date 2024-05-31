@@ -30,6 +30,13 @@ G_BEGIN_DECLS
  * No longer used by GTK, just left here on the off chance that some
  * 3rd party code used this define.
  */
+/**
+ * GTK_MAX_COMPOSE_LEN:
+ *
+ * Evaluates to the maximum length of a compose sequence.
+ *
+ * This macro is longer used by GTK.
+ */
 #define GTK_MAX_COMPOSE_LEN 7
 
 #define GTK_TYPE_IM_CONTEXT_SIMPLE              (gtk_im_context_simple_get_type ())

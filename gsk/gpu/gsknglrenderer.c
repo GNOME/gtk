@@ -13,6 +13,15 @@
 
 #include <glib/gi18n-lib.h>
 
+/**
+ * GskNglRenderer:
+ *
+ * A GL based renderer.
+ *
+ * See [class@Gsk.Renderer].
+ *
+ * Since: 4.2
+ */
 struct _GskNglRenderer
 {
   GskGpuRenderer parent_instance;

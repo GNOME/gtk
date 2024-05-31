@@ -32,6 +32,15 @@ typedef struct _GtkPrintSettings GtkPrintSettings;
 #define GTK_PRINT_SETTINGS(obj)    (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_PRINT_SETTINGS, GtkPrintSettings))
 #define GTK_IS_PRINT_SETTINGS(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_PRINT_SETTINGS))
 
+/**
+ * GtkPrintSettingsFunc:
+ * @key: the setting key
+ * @value: the setting value
+ * @user_data: (closure): The user data provided with the function
+ *
+ * Function called by [method@Gtk.PrintSettings.foreach] on every key/value pair
+ * inside a [class@Gtk.PrintSettings].
+ */
 typedef void  (*GtkPrintSettingsFunc)  (const char *key,
 					const char *value,
 					gpointer     user_data);
@@ -141,31 +150,198 @@ void              gtk_print_settings_set_int                 (GtkPrintSettings  
 							      const char           *key,
 							      int                   value);
 
+/**
+ * GTK_PRINT_SETTINGS_PRINTER:
+ *
+ * The key used by the “Print to file” printer to store the printer name.
+ */
 #define GTK_PRINT_SETTINGS_PRINTER          "printer"
+
+/**
+ * GTK_PRINT_SETTINGS_ORIENTATION:
+ *
+ * The key used by the “Print to file” printer to store the orientation.
+ */
 #define GTK_PRINT_SETTINGS_ORIENTATION      "orientation"
+
+/**
+ * GTK_PRINT_SETTINGS_PAPER_FORMAT:
+ *
+ * The key used by the “Print to file” printer to store the page format.
+ */
 #define GTK_PRINT_SETTINGS_PAPER_FORMAT     "paper-format"
+
+/**
+ * GTK_PRINT_SETTINGS_PAPER_WIDTH:
+ *
+ * The key used by the “Print to file” printer to store the paper width.
+ */
 #define GTK_PRINT_SETTINGS_PAPER_WIDTH      "paper-width"
+
+/**
+ * GTK_PRINT_SETTINGS_PAPER_HEIGHT:
+ *
+ * The key used by the “Print to file” printer to store the page height.
+ */
 #define GTK_PRINT_SETTINGS_PAPER_HEIGHT     "paper-height"
+
+/**
+ * GTK_PRINT_SETTINGS_N_COPIES:
+ *
+ * The key used by the “Print to file” printer to store the number of copies.
+ */
 #define GTK_PRINT_SETTINGS_N_COPIES         "n-copies"
+
+/**
+ * GTK_PRINT_SETTINGS_DEFAULT_SOURCE:
+ *
+ * The key used by the “Print to file” printer to store the default source.
+ */
 #define GTK_PRINT_SETTINGS_DEFAULT_SOURCE   "default-source"
+
+/**
+ * GTK_PRINT_SETTINGS_QUALITY:
+ *
+ * The key used by the “Print to file” printer to store the printing quality.
+ */
 #define GTK_PRINT_SETTINGS_QUALITY          "quality"
+
+/**
+ * GTK_PRINT_SETTINGS_RESOLUTION:
+ *
+ * The key used by the “Print to file” printer to store the resolution in DPI.
+ */
 #define GTK_PRINT_SETTINGS_RESOLUTION       "resolution"
+
+/**
+ * GTK_PRINT_SETTINGS_USE_COLOR:
+ *
+ * The key used by the “Print to file” printer to store whether to print with
+ * colors.
+ */
 #define GTK_PRINT_SETTINGS_USE_COLOR        "use-color"
+
+/**
+ * GTK_PRINT_SETTINGS_DUPLEX:
+ *
+ * The key used by the “Print to file” printer to store whether to print the
+ * output in duplex.
+ */
 #define GTK_PRINT_SETTINGS_DUPLEX           "duplex"
+
+/**
+ * GTK_PRINT_SETTINGS_COLLATE:
+ *
+ * The key used by the “Print to file” printer to store whether to collate the
+ * printed pages.
+ */
 #define GTK_PRINT_SETTINGS_COLLATE          "collate"
+
+/**
+ * GTK_PRINT_SETTINGS_REVERSE:
+ *
+ * The key used by the “Print to file” printer to store whether to reverse the
+ * order of the printed pages.
+ */
 #define GTK_PRINT_SETTINGS_REVERSE          "reverse"
+
+/**
+ * GTK_PRINT_SETTINGS_MEDIA_TYPE:
+ *
+ * The key used by the “Print to file” printer to store the media type.
+ *
+ * The set of media types is defined in PWG 5101.1-2002 PWG.
+ */
 #define GTK_PRINT_SETTINGS_MEDIA_TYPE       "media-type"
+
+/**
+ * GTK_PRINT_SETTINGS_DITHER:
+ *
+ * The key used by the “Print to file” printer to store the dither used.
+ */
 #define GTK_PRINT_SETTINGS_DITHER           "dither"
+
+/**
+ * GTK_PRINT_SETTINGS_SCALE:
+ *
+ * The key used by the “Print to file” printer to store the scale.
+ */
 #define GTK_PRINT_SETTINGS_SCALE            "scale"
+
+/**
+ * GTK_PRINT_SETTINGS_PRINT_PAGES:
+ *
+ * The key used by the “Print to file” printer to store which pages to print.
+ */
 #define GTK_PRINT_SETTINGS_PRINT_PAGES      "print-pages"
+
+/**
+ * GTK_PRINT_SETTINGS_PAGE_RANGES:
+ *
+ * The key used by the “Print to file” printer to store the array of page ranges
+ * to print.
+ */
 #define GTK_PRINT_SETTINGS_PAGE_RANGES      "page-ranges"
+
+/**
+ * GTK_PRINT_SETTINGS_PAGE_SET:
+ *
+ * The key used by the “Print to file” printer to store the set of pages to print.
+ */
 #define GTK_PRINT_SETTINGS_PAGE_SET         "page-set"
+
+/**
+ * GTK_PRINT_SETTINGS_FINISHINGS:
+ *
+ * The key used by the “Print to file” printer to store the finishings.
+ */
 #define GTK_PRINT_SETTINGS_FINISHINGS       "finishings"
+
+/**
+ * GTK_PRINT_SETTINGS_NUMBER_UP:
+ *
+ * The key used by the “Print to file” printer to store the number of pages per
+ * sheet.
+ */
 #define GTK_PRINT_SETTINGS_NUMBER_UP        "number-up"
+
+/**
+ * GTK_PRINT_SETTINGS_NUMBER_UP_LAYOUT:
+ *
+ * The key used by the “Print to file” printer to store the number of pages per
+ * sheet in number-up mode.
+ */
 #define GTK_PRINT_SETTINGS_NUMBER_UP_LAYOUT "number-up-layout"
+
+/**
+ * GTK_PRINT_SETTINGS_OUTPUT_BIN:
+ *
+ * The key used by the “Print to file” printer to store the output bin.
+ */
 #define GTK_PRINT_SETTINGS_OUTPUT_BIN       "output-bin"
+
+/**
+ * GTK_PRINT_SETTINGS_RESOLUTION_X:
+ *
+ * The key used by the “Print to file” printer to store the horizontal
+ * resolution in DPI.
+ */
 #define GTK_PRINT_SETTINGS_RESOLUTION_X     "resolution-x"
+
+/**
+ * GTK_PRINT_SETTINGS_RESOLUTION_Y:
+ *
+ * The key used by the “Print to file” printer to store the vertical resolution
+ * in DPI.
+ */
 #define GTK_PRINT_SETTINGS_RESOLUTION_Y     "resolution-y"
+
+/**
+ * GTK_PRINT_SETTINGS_PRINTER_LPI:
+ *
+ * The key used by the “Print to file” printer to store the resolution in lines
+ * per inch.
+ */
 #define GTK_PRINT_SETTINGS_PRINTER_LPI      "printer-lpi"
 
 /**
@@ -202,7 +378,20 @@ void              gtk_print_settings_set_int                 (GtkPrintSettings  
  */
 #define GTK_PRINT_SETTINGS_OUTPUT_URI          "output-uri"
 
+/**
+ * GTK_PRINT_SETTINGS_WIN32_DRIVER_VERSION:
+ *
+ * The key used by the “Print to file” printer to store the 32-bit Windows
+ * driver version.
+ */
 #define GTK_PRINT_SETTINGS_WIN32_DRIVER_VERSION "win32-driver-version"
+
+/**
+ * GTK_PRINT_SETTINGS_WIN32_DRIVER_EXTRA:
+ *
+ * The key used by the “Print to file” printer to store 32-bit Windows extra
+ * driver.
+ */
 #define GTK_PRINT_SETTINGS_WIN32_DRIVER_EXTRA   "win32-driver-extra"
 
 /* Helpers: */

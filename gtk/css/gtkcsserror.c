@@ -21,12 +21,26 @@
 
 #include "gtkcsserror.h"
 
+/**
+ * gtk_css_parser_error_quark:
+ *
+ * Registers an error quark for CSS parsing errors.
+ *
+ * Returns: the error quark
+ **/
 GQuark
 gtk_css_parser_error_quark (void)
 {
   return g_quark_from_static_string ("gtk-css-parser-error-quark");
 }
 
+/**
+ * gtk_css_parser_warning_quark:
+ *
+ * Registers an error quark for CSS parsing warnings.
+ *
+ * Returns: the warning quark
+ **/
 GQuark
 gtk_css_parser_warning_quark (void)
 {

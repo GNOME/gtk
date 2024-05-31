@@ -297,11 +297,21 @@ gtk_entry_completion_class_init (GtkEntryCompletionClass *klass)
                   NULL,
                   G_TYPE_NONE, 0);
 
+  /**
+   * GtkEntryCompletion:model:
+   *
+   * The model used as data source.
+   */
   entry_completion_props[PROP_MODEL] =
       g_param_spec_object ("model", NULL, NULL,
                            GTK_TYPE_TREE_MODEL,
                            GTK_PARAM_READWRITE);
 
+  /**
+   * GtkEntryCompletion:minimum-key-length:
+   *
+   * The minimum key length as set for completion.
+   */
   entry_completion_props[PROP_MINIMUM_KEY_LENGTH] =
       g_param_spec_int ("minimum-key-length", NULL, NULL,
                         0, G_MAXINT, 1,

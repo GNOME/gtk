@@ -562,6 +562,11 @@ gtk_header_bar_class_init (GtkHeaderBarClass *class)
   widget_class->unroot = gtk_header_bar_unroot;
   widget_class->get_request_mode = gtk_header_bar_get_request_mode;
 
+  /**
+   * GtkHeaderBar:title-widget:
+   *
+   * The title widget to display.
+   */
   header_bar_props[PROP_TITLE_WIDGET] =
       g_param_spec_object ("title-widget", NULL, NULL,
                            GTK_TYPE_WIDGET,

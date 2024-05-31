@@ -51,6 +51,16 @@ G_DEFINE_BOXED_TYPE (GskPathPoint, gsk_path_point,
                      gsk_path_point_copy,
                      gsk_path_point_free)
 
+/**
+ * gsk_path_point_copy:
+ * @point: a path point
+ *
+ * Copies a path point.
+ *
+ * Returns: the copied point
+ *
+ * Since: 4.14
+ */
 GskPathPoint *
 gsk_path_point_copy (GskPathPoint *point)
 {
@@ -63,6 +73,14 @@ gsk_path_point_copy (GskPathPoint *point)
   return copy;
 }
 
+/**
+ * gsk_path_point_free:
+ * @point: a path point
+ *
+ * Frees a path point copied by [method@Gsk.PathPoint.copy].
+ *
+ * Since: 4.14
+ */
 void
 gsk_path_point_free (GskPathPoint *point)
 {

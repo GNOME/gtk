@@ -350,6 +350,15 @@ gtk_shortcuts_section_class_init (GtkShortcutsSectionClass *klass)
 
   g_object_class_install_properties (object_class, LAST_PROP, properties);
 
+  /**
+   * GtkShortcutsSection::change-current-page:
+   * @shortcut_section: the shortcut section
+   * @offset: the offset
+   *
+   * Emitted when we change the current page.
+   *
+   * Returns: whether the page was changed
+   */
   signals[CHANGE_CURRENT_PAGE] =
     g_signal_new (I_("change-current-page"),
                   G_TYPE_FROM_CLASS (object_class),

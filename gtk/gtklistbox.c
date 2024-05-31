@@ -631,6 +631,13 @@ gtk_list_box_class_init (GtkListBoxClass *klass)
                   NULL,
                   G_TYPE_NONE, 1,
                   GTK_TYPE_LIST_BOX_ROW);
+
+  /**
+   * GtkListBox::activate-cursor-row:
+   * @box: the list box
+   *
+   * Emitted when the cursor row is activated.
+   */
   signals[ACTIVATE_CURSOR_ROW] =
     g_signal_new (I_("activate-cursor-row"),
                   GTK_TYPE_LIST_BOX,
@@ -639,6 +646,13 @@ gtk_list_box_class_init (GtkListBoxClass *klass)
                   NULL, NULL,
                   NULL,
                   G_TYPE_NONE, 0);
+
+  /**
+   * GtkListBox::toggle-cursor-row:
+   * @box: the list box
+   *
+   * Emitted when the cursor row is toggled.
+   */
   signals[TOGGLE_CURSOR_ROW] =
     g_signal_new (I_("toggle-cursor-row"),
                   GTK_TYPE_LIST_BOX,
@@ -647,6 +661,26 @@ gtk_list_box_class_init (GtkListBoxClass *klass)
                   NULL, NULL,
                   NULL,
                   G_TYPE_NONE, 0);
+  /**
+   * GtkListBox::move-cursor:
+   * @box: the list box on which the signal is emitted
+   * @step: the granularity of the move, as a `GtkMovementStep`
+   * @count: the number of @step units to move
+   * @extend: whether to extend the selection
+   * @modify: whether to modify the selection
+   *
+   * Emitted when the user initiates a cursor movement.
+   *
+   * The default bindings for this signal come in two variants, the variant with
+   * the Shift modifier extends the selection, the variant without the Shift
+   * modifier does not. There are too many key combinations to list them all
+   * here.
+   *
+   * - <kbd>←</kbd>, <kbd>→</kbd>, <kbd>↑</kbd>, <kbd>↓</kbd>
+   *   move by individual children
+   * - <kbd>Home</kbd>, <kbd>End</kbd> move to the ends of the box
+   * - <kbd>PgUp</kbd>, <kbd>PgDn</kbd> move vertically by pages
+   */
   signals[MOVE_CURSOR] =
     g_signal_new (I_("move-cursor"),
                   GTK_TYPE_LIST_BOX,

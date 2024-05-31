@@ -689,6 +689,11 @@ gtk_cell_renderer_progress_class_init (GtkCellRendererProgressClass *klass)
                                     PROP_ORIENTATION,
                                     "orientation");
 
+  /**
+   * GtkCellRendererProgress:inverted:
+   *
+   * Whether progess is inverted.
+   */
   g_object_class_install_property (object_class,
                                    PROP_INVERTED,
                                    g_param_spec_boolean ("inverted", NULL, NULL,

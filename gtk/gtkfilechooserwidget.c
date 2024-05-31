@@ -6704,11 +6704,21 @@ gtk_file_chooser_widget_class_init (GtkFileChooserWidgetClass *class)
                                          "quick-bookmark",
                                          "(i)", i);
 
+  /**
+   * GtkFileChooserWidget:search-mode:
+   *
+   * Whether search mode is enabled.
+   */
   g_object_class_install_property (gobject_class, PROP_SEARCH_MODE,
                                    g_param_spec_boolean ("search-mode", NULL, NULL,
                                                          FALSE,
                                                          GTK_PARAM_READWRITE));
 
+  /**
+   * GtkFileChooserWidget:subtitle:
+   *
+   * The subtitle of the file chooser widget.
+   */
   g_object_class_install_property (gobject_class, PROP_SUBTITLE,
                                    g_param_spec_string ("subtitle", NULL, NULL,
                                                         "",

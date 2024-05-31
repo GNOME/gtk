@@ -232,6 +232,14 @@ gtk_color_chooser_dialog_class_init (GtkColorChooserDialogClass *class)
 
   g_object_class_override_property (object_class, PROP_RGBA, "rgba");
   g_object_class_override_property (object_class, PROP_USE_ALPHA, "use-alpha");
+
+  /**
+   * GtkColorChooserDialog:show-editor:
+   *
+   * Whether the color chooser dialog is showing the single-color editor.
+   *
+   * It can be set to switch the color chooser into single-color editing mode.
+   */
   g_object_class_install_property (object_class, PROP_SHOW_EDITOR,
       g_param_spec_boolean ("show-editor", NULL, NULL,
                             FALSE, GTK_PARAM_READWRITE));

@@ -27,6 +27,11 @@
 
 G_BEGIN_DECLS
 
+/**
+ * GTK_MEDIA_FILE_EXTENSION_POINT_NAME:
+ *
+ * The default extension point name for media file.
+ */
 #define GTK_MEDIA_FILE_EXTENSION_POINT_NAME "gtk-media-file"
 
 #define GTK_TYPE_MEDIA_FILE             (gtk_media_file_get_type ())

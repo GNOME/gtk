@@ -94,6 +94,13 @@ enum {
   LAST_SIGNAL
 };
 
+/**
+ * gdk_vulkan_error_quark:
+ *
+ * Registers an error quark for [class@Gdk.VulkanContext] errors.
+ *
+ * Returns: the error quark
+ **/
 G_DEFINE_QUARK (gdk-vulkan-error-quark, gdk_vulkan_error)
 
 static guint signals[LAST_SIGNAL] = { 0 };

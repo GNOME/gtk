@@ -1201,6 +1201,16 @@ gtk_notebook_class_init (GtkNotebookClass *class)
   g_signal_set_va_marshaller (notebook_signals[SWITCH_PAGE],
                               G_TYPE_FROM_CLASS (gobject_class),
                               _gtk_marshal_VOID__OBJECT_UINTv);
+
+  /**
+   * GtkNotebook::focus-tab:
+   * @notebook: the notebook
+   * @tab: the notebook tab
+   *
+   * Emitted when a tab should be focused.
+   *
+   * Returns: whether the tab has been focused
+   */
   notebook_signals[FOCUS_TAB] =
     g_signal_new (I_("focus-tab"),
                   G_TYPE_FROM_CLASS (gobject_class),
@@ -1213,6 +1223,16 @@ gtk_notebook_class_init (GtkNotebookClass *class)
   g_signal_set_va_marshaller (notebook_signals[FOCUS_TAB],
                               G_TYPE_FROM_CLASS (gobject_class),
                               _gtk_marshal_BOOLEAN__ENUMv);
+
+  /**
+   * GtkNotebook::select-page:
+   * @notebook: the notebook
+   * @move_focus: whether to move focus
+   *
+   * Emitted when a page should be selected.
+   *
+   * Returns: whether the page was selected
+   */
   notebook_signals[SELECT_PAGE] =
     g_signal_new (I_("select-page"),
                   G_TYPE_FROM_CLASS (gobject_class),
@@ -1225,6 +1245,16 @@ gtk_notebook_class_init (GtkNotebookClass *class)
   g_signal_set_va_marshaller (notebook_signals[SELECT_PAGE],
                               G_TYPE_FROM_CLASS (gobject_class),
                               _gtk_marshal_BOOLEAN__BOOLEANv);
+
+  /**
+   * GtkNotebook::change-current-page:
+   * @notebook: the notebook
+   * @page: the page index
+   *
+   * Emitted when the current page should be changed.
+   *
+   * Returns: whether the page was changed
+   */
   notebook_signals[CHANGE_CURRENT_PAGE] =
     g_signal_new (I_("change-current-page"),
                   G_TYPE_FROM_CLASS (gobject_class),
@@ -1237,6 +1267,14 @@ gtk_notebook_class_init (GtkNotebookClass *class)
   g_signal_set_va_marshaller (notebook_signals[CHANGE_CURRENT_PAGE],
                               G_TYPE_FROM_CLASS (gobject_class),
                               _gtk_marshal_BOOLEAN__INTv);
+
+  /**
+   * GtkNotebook::move-focus-out:
+   * @notebook: the notebook
+   * @direction: the direction to move the focus
+   *
+   * Emitted when focus was moved out.
+   */
   notebook_signals[MOVE_FOCUS_OUT] =
     g_signal_new (I_("move-focus-out"),
                   G_TYPE_FROM_CLASS (gobject_class),
@@ -1246,6 +1284,17 @@ gtk_notebook_class_init (GtkNotebookClass *class)
                   NULL,
                   G_TYPE_NONE, 1,
                   GTK_TYPE_DIRECTION_TYPE);
+
+  /**
+   * GtkNotebook::reorder-tab:
+   * @notebook: the notebook
+   * @direction: the direction to move the tab
+   * @move_to_last: whether to move to the last position
+   *
+   * Emitted when the tab should be reordered.
+   *
+   * Returns: whether the tab was moved.
+   */
   notebook_signals[REORDER_TAB] =
     g_signal_new (I_("reorder-tab"),
                   G_TYPE_FROM_CLASS (gobject_class),

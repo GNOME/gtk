@@ -62,6 +62,13 @@ struct _GdkDmabufTextureClass
   GdkTextureClass parent_class;
 };
 
+/**
+ * gdk_dmabuf_error_quark:
+ *
+ * Registers an error quark for [class@Gdk.DmabufTexture] errors.
+ *
+ * Returns: the error quark
+ **/
 G_DEFINE_QUARK (gdk-dmabuf-error-quark, gdk_dmabuf_error)
 
 G_DEFINE_TYPE (GdkDmabufTexture, gdk_dmabuf_texture, GDK_TYPE_TEXTURE)

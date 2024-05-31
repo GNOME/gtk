@@ -479,6 +479,12 @@ gtk_tree_model_sort_class_init (GtkTreeModelSortClass *class)
   object_class->finalize = gtk_tree_model_sort_finalize;
 
   /* Properties */
+
+  /**
+   * GtkTreeModelSort:model:
+   *
+   * The model of the tree model sort.
+   */
   g_object_class_install_property (object_class,
                                    PROP_MODEL,
                                    g_param_spec_object ("model", NULL, NULL,
