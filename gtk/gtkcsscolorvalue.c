@@ -1085,7 +1085,7 @@ parse_ok_C_value (GtkCssParser  *parser,
       if (val == NULL)
         return FALSE;
 
-      *value = gtk_css_number_value_get_canonical (val, 1);
+      *value = gtk_css_number_value_get_canonical (val, 0.4);
       *value = MAX (*value, 0.0);
 
       gtk_css_value_unref (val);
