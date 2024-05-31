@@ -31,6 +31,15 @@
 #include "gtkcolorutilsprivate.h"
 
 typedef enum {
+  GTK_CSS_COLOR_SPACE_SRGB,
+  GTK_CSS_COLOR_SPACE_SRGB_LINEAR,
+} GtkCssColorSpace;
+
+static GtkCssValue * gtk_css_color_value_new_mix (GtkCssValue *color1,
+                                                  GtkCssValue *color2,
+                                                  double       factor);
+
+typedef enum {
   COLOR_TYPE_LITERAL,
   COLOR_TYPE_COLOR,
   COLOR_TYPE_NAME,
@@ -70,10 +79,12 @@ struct _GtkCssValue
       GtkCssValue *color2;
       double factor;
     } mix;
+
     struct
     {
       float L, a, b, alpha;
     } oklab;
+
     struct
     {
       float L, C, H, alpha;
@@ -209,7 +220,7 @@ gtk_css_value_color_equal (const GtkCssValue *value1,
 
     case COLOR_TYPE_COLOR:
       return value1->color.color_space == value2->color.color_space &&
-             memcmp (value1->color.values, value2->color.values, sizeof(float) * 4) == 0;
+             memcmp (value1->color.values, value2->color.values, sizeof (float) * 4) == 0;
 
     case COLOR_TYPE_NAME:
       return g_str_equal (value1->name, value2->name);
@@ -665,7 +676,7 @@ gtk_css_color_value_new_literal (const GdkRGBA *color)
   return value;
 }
 
-GtkCssValue *
+static GtkCssValue *
 gtk_css_value_value_new_color (GtkCssColorSpace color_space,
                                float            values[4])
 {
@@ -674,7 +685,7 @@ gtk_css_value_value_new_color (GtkCssColorSpace color_space,
   value = gtk_css_value_new (GtkCssValue, &GTK_CSS_VALUE_COLOR);
   value->type = COLOR_TYPE_COLOR;
   value->color.color_space = color_space;
-  memcpy (value->color.values, values, sizeof(float) * 4);
+  memcpy (value->color.values, values, sizeof (float) * 4);
 
   return value;
 }
@@ -693,7 +704,7 @@ gtk_css_color_value_new_name (const char *name)
   return value;
 }
 
-GtkCssValue *
+static GtkCssValue *
 gtk_css_color_value_new_shade (GtkCssValue *color,
                                double       factor)
 {
@@ -718,7 +729,7 @@ gtk_css_color_value_new_shade (GtkCssValue *color,
   return value;
 }
 
-GtkCssValue *
+static GtkCssValue *
 gtk_css_color_value_new_alpha (GtkCssValue *color,
                                double       factor)
 {
@@ -743,7 +754,7 @@ gtk_css_color_value_new_alpha (GtkCssValue *color,
   return value;
 }
 
-GtkCssValue *
+static GtkCssValue *
 gtk_css_color_value_new_mix (GtkCssValue *color1,
                              GtkCssValue *color2,
                              double       factor)
@@ -781,7 +792,7 @@ gtk_css_color_value_new_current_color (void)
   return gtk_css_value_ref (&current_color);
 }
 
-GtkCssValue *
+static GtkCssValue *
 gtk_css_color_value_new_oklab (float L,
                                float a,
                                float b,
@@ -799,7 +810,7 @@ gtk_css_color_value_new_oklab (float L,
   return value;
 }
 
-GtkCssValue *
+static GtkCssValue *
 gtk_css_color_value_new_oklch (float L,
                                float C,
                                float H,

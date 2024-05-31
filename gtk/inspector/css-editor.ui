@@ -9,6 +9,13 @@
     </child>
     <child type="tag">
       <object class="GtkTextTag">
+        <property name="name">deprecation</property>
+        <property name="underline">none</property>
+        <property name="underline-rgba">blue</property>
+      </object>
+    </child>
+    <child type="tag">
+      <object class="GtkTextTag">
         <property name="name">error</property>
         <property name="underline">error</property>
       </object>
@@ -37,6 +44,13 @@
             <property name="tooltip-text" translatable="yes">Save the current CSS</property>
             <property name="icon-name">document-save-symbolic</property>
             <signal name="clicked" handler="save_clicked"/>
+          </object>
+        </child>
+        <child>
+          <object class="GtkToggleButton" id="deprections_button">
+            <property name="tooltip-text" translatable="yes">Show deprecations</property>
+            <property name="icon-name">dialog-information-symbolic</property>
+            <signal name="toggled" handler="toggle_deprecations"/>
           </object>
         </child>
       </object>
