@@ -51,6 +51,7 @@ gtk_private_sources = files([
   'gtkcssbgsizevalue.c',
   'gtkcssbordervalue.c',
   'gtkcsscalcvalue.c',
+  'gtkcsscolor.c',
   'gtkcsscolorvalue.c',
   'gtkcsscornervalue.c',
   'gtkcsscustompropertypool.c',
