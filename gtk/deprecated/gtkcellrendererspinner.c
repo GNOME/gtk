@@ -175,7 +175,8 @@ gtk_cell_renderer_spinner_class_init (GtkCellRendererSpinnerClass *klass)
   cell_class->get_preferred_height = gtk_cell_renderer_spinner_get_preferred_height;
   cell_class->snapshot = gtk_cell_renderer_spinner_snapshot;
 
-  /* GtkCellRendererSpinner:active:
+  /**
+   * GtkCellRendererSpinner:active:
    *
    * Whether the spinner is active (ie. shown) in the cell
    */
