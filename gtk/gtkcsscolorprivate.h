@@ -84,4 +84,8 @@ void    gtk_css_color_init      (GtkCssColor            *color,
                                  GtkCssColorSpace        color_space,
                                  const float             values[4]);
 
+void    gtk_css_color_convert   (const GtkCssColor      *input,
+                                 GtkCssColorSpace        dest,
+                                 GtkCssColor            *output);
+
 G_END_DECLS
