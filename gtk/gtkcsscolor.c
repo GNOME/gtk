@@ -94,8 +94,8 @@ convert_to_rectangular (GtkCssColor *output)
 
     case GTK_CSS_COLOR_SPACE_OKLCH:
       gtk_oklch_to_oklab (output->values[0],
-                          output->values[1] / 100,
-                          output->values[2] / 100,
+                          output->values[1],
+                          output->values[2],
                           &v[0], &v[1], &v[2]);
       v[3] = output->values[3];
       gtk_css_color_init (output, GTK_CSS_COLOR_SPACE_OKLAB, v);
