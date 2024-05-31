@@ -29,8 +29,6 @@ GtkCssValue *   gtk_css_color_value_new_white           (void) G_GNUC_PURE;
 GtkCssValue *   gtk_css_color_value_new_current_color   (void) G_GNUC_PURE;
 GtkCssValue *   gtk_css_color_value_new_name            (const char     *name) G_GNUC_PURE;
 
-GtkCssValue *   gtk_css_color_value_new_literal         (const GdkRGBA  *color) G_GNUC_PURE;
-
 gboolean        gtk_css_color_value_can_parse           (GtkCssParser   *parser);
 GtkCssValue *   gtk_css_color_value_parse               (GtkCssParser   *parser);
 

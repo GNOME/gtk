@@ -38,6 +38,7 @@ typedef enum {
 static GtkCssValue * gtk_css_color_value_new_mix (GtkCssValue *color1,
                                                   GtkCssValue *color2,
                                                   double       factor);
+static GtkCssValue * gtk_css_color_value_new_literal (const GdkRGBA *color);
 
 typedef enum {
   COLOR_TYPE_LITERAL,
