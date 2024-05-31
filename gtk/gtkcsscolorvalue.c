@@ -50,13 +50,13 @@ typedef enum {
 struct _GtkCssValue
 {
   GTK_CSS_VALUE_BASE
-  guint serialize_as_rgb: 1;
-  ColorType type;
+  guint serialize_as_rgb : 1;
+  guint type : 16;
+  GdkRGBA rgba;
 
   union
   {
     char *name;
-    GdkRGBA rgba;
     GtkCssColor color;
 
     struct
@@ -190,6 +190,14 @@ static gboolean
 gtk_css_value_color_equal (const GtkCssValue *value1,
                            const GtkCssValue *value2)
 {
+  if (value1->type == COLOR_TYPE_COLOR && value1->color.missing == 0 &&
+      value2->type == COLOR_TYPE_LITERAL)
+    return gdk_rgba_equal (&value1->rgba, &value2->rgba);
+
+  if (value2->type == COLOR_TYPE_COLOR && value2->color.missing == 0 &&
+      value1->type == COLOR_TYPE_LITERAL)
+    return gdk_rgba_equal (&value1->rgba, &value2->rgba);
+
   if (value1->type != value2->type)
     return FALSE;
 
@@ -456,21 +464,8 @@ gtk_css_color_value_do_resolve (GtkCssValue      *color,
   switch (color->type)
     {
     case COLOR_TYPE_LITERAL:
-      value = gtk_css_value_ref (color);
-      break;
-
     case COLOR_TYPE_COLOR:
-      {
-        GtkCssColor tmp;
-        GdkRGBA rgba;
-
-        gtk_css_color_convert (&color->color, GTK_CSS_COLOR_SPACE_SRGB, &tmp);
-        rgba.red = tmp.values[0];
-        rgba.green = tmp.values[1];
-        rgba.blue = tmp.values[2];
-        rgba.alpha = tmp.values[3];
-        value = gtk_css_color_value_new_literal (&rgba);
-      }
+      value = gtk_css_value_ref (color);
       break;
 
     case COLOR_TYPE_NAME:
@@ -620,12 +615,21 @@ gtk_css_color_value_new_color (GtkCssColorSpace color_space,
                                gboolean         missing[4])
 {
   GtkCssValue *value;
+  GtkCssColor tmp;
 
   value = gtk_css_value_new (GtkCssValue, &GTK_CSS_VALUE_COLOR);
-  value->type = COLOR_TYPE_COLOR;
   value->color.color_space = color_space;
+  value->is_computed = TRUE;
   value->serialize_as_rgb = serialize_as_rgb;
+  value->type = COLOR_TYPE_COLOR;
   gtk_css_color_init_with_missing (&value->color, color_space, values, missing);
+
+  gtk_css_color_convert (&value->color, GTK_CSS_COLOR_SPACE_SRGB, &tmp);
+
+  value->rgba.red = tmp.values[0];
+  value->rgba.green = tmp.values[1];
+  value->rgba.blue = tmp.values[2];
+  value->rgba.alpha = tmp.values[3];
 
   return value;
 }
@@ -652,7 +656,7 @@ gtk_css_color_value_new_shade (GtkCssValue *color,
 
   gtk_internal_return_val_if_fail (color->class == &GTK_CSS_VALUE_COLOR, NULL);
 
-  if (color->type == COLOR_TYPE_LITERAL)
+  if (color->type == COLOR_TYPE_LITERAL || color->type == COLOR_TYPE_COLOR)
     {
       GdkRGBA c;
 
@@ -677,7 +681,7 @@ gtk_css_color_value_new_alpha (GtkCssValue *color,
 
   gtk_internal_return_val_if_fail (color->class == &GTK_CSS_VALUE_COLOR, NULL);
 
-  if (color->type == COLOR_TYPE_LITERAL)
+  if (color->type == COLOR_TYPE_LITERAL || color->type == COLOR_TYPE_COLOR)
     {
       GdkRGBA c;
 
@@ -704,8 +708,8 @@ gtk_css_color_value_new_mix (GtkCssValue *color1,
   gtk_internal_return_val_if_fail (color1->class == &GTK_CSS_VALUE_COLOR, NULL);
   gtk_internal_return_val_if_fail (color2->class == &GTK_CSS_VALUE_COLOR, NULL);
 
-  if (color1->type == COLOR_TYPE_LITERAL &&
-      color2->type == COLOR_TYPE_LITERAL)
+  if ((color1->type == COLOR_TYPE_LITERAL || color1->type == COLOR_TYPE_COLOR) &&
+      (color2->type == COLOR_TYPE_LITERAL || color2->type == COLOR_TYPE_COLOR))
     {
       GdkRGBA result;
 
@@ -1625,7 +1629,7 @@ const GdkRGBA *
 gtk_css_color_value_get_rgba (const GtkCssValue *color)
 {
   g_assert (color->class == &GTK_CSS_VALUE_COLOR);
-  g_assert (color->type == COLOR_TYPE_LITERAL);
+  g_assert (color->type == COLOR_TYPE_LITERAL || color->type == COLOR_TYPE_COLOR);
 
   return &color->rgba;
 }
