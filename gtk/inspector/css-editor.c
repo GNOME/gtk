@@ -47,6 +47,7 @@ struct _GtkInspectorCssEditorPrivate
   GtkToggleButton *disable_button;
   guint timeout;
   GList *errors;
+  gboolean show_deprecations;
 };
 
 typedef struct {
@@ -93,6 +94,12 @@ query_tooltip_cb (GtkWidget             *widget,
   for (l = ce->priv->errors; l; l = l->next)
     {
       CssError *css_error = l->data;
+
+      if (g_error_matches (css_error->error,
+                           GTK_CSS_PARSER_WARNING,
+                           GTK_CSS_PARSER_WARNING_DEPRECATED) &&
+          !ce->priv->show_deprecations)
+        continue;
 
       if (gtk_text_iter_in_range (&iter, &css_error->start, &css_error->end))
         {
@@ -168,6 +175,29 @@ disable_toggled (GtkToggleButton       *button,
     gtk_style_context_add_provider_for_display (ce->priv->display,
                                                 GTK_STYLE_PROVIDER (ce->priv->provider),
                                                 GTK_STYLE_PROVIDER_PRIORITY_USER);
+}
+
+static void
+toggle_deprecations (GtkToggleButton       *button,
+                     GtkInspectorCssEditor *ce)
+{
+  GtkTextTagTable *tags;
+  GtkTextTag *tag;
+  PangoUnderline underline;
+
+  if (!ce->priv->display)
+    return;
+
+  ce->priv->show_deprecations = gtk_toggle_button_get_active (button);
+
+  tags = gtk_text_buffer_get_tag_table (GTK_TEXT_BUFFER (ce->priv->text));
+  tag = gtk_text_tag_table_lookup (tags, "deprecation");
+  if (ce->priv->show_deprecations)
+    underline = PANGO_UNDERLINE_SINGLE;
+  else
+    underline = PANGO_UNDERLINE_NONE;
+
+  g_object_set (tag, "underline", underline, NULL);
 }
 
 static char *
@@ -316,7 +346,12 @@ show_parsing_error (GtkCssProvider        *provider,
                                           end->line_bytes);
 
   if (error->domain == GTK_CSS_PARSER_WARNING)
-    tag_name = "warning";
+    {
+      if (error->code == GTK_CSS_PARSER_WARNING_DEPRECATED)
+        tag_name = "deprecation";
+      else
+        tag_name = "warning";
+    }
   else
     tag_name = "error";
 
@@ -407,6 +442,7 @@ gtk_inspector_css_editor_class_init (GtkInspectorCssEditorClass *klass)
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorCssEditor, view);
   gtk_widget_class_bind_template_child_private (widget_class, GtkInspectorCssEditor, disable_button);
   gtk_widget_class_bind_template_callback (widget_class, disable_toggled);
+  gtk_widget_class_bind_template_callback (widget_class, toggle_deprecations);
   gtk_widget_class_bind_template_callback (widget_class, save_clicked);
   gtk_widget_class_bind_template_callback (widget_class, text_changed);
   gtk_widget_class_bind_template_callback (widget_class, query_tooltip_cb);
