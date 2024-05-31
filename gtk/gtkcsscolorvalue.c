@@ -251,85 +251,6 @@ append_color_component (GString           *string,
 }
 
 static void
-convert_to_rgba (const GtkCssValue *value,
-                 GdkRGBA           *rgba)
-{
-  g_assert (value->type == COLOR_TYPE_COLOR);
-
-  switch (value->color.color_space)
-    {
-    case GTK_CSS_COLOR_SPACE_SRGB:
-      rgba->red = CLAMP (value->color.values[0], 0, 1);
-      rgba->green = CLAMP (value->color.values[1], 0, 1);
-      rgba->blue = CLAMP (value->color.values[2], 0, 1);
-      rgba->alpha = CLAMP (value->color.values[3], 0, 1);
-      break;
-
-    case GTK_CSS_COLOR_SPACE_SRGB_LINEAR:
-      gtk_linear_srgb_to_rgb (CLAMP (value->color.values[0], 0, 1),
-                              CLAMP (value->color.values[1], 0, 1),
-                              CLAMP (value->color.values[2], 0, 1),
-                              &rgba->red,
-                              &rgba->green,
-                              &rgba->blue);
-      rgba->alpha = CLAMP (value->color.values[3], 0, 1);
-      break;
-
-    case GTK_CSS_COLOR_SPACE_HSL:
-      {
-        GdkHSLA hsla;
-
-        hsla.hue = value->color.values[0];
-        hsla.saturation = CLAMP (value->color.values[1] / 100, 0, 1);
-        hsla.lightness = CLAMP (value->color.values[2] / 100, 0, 1);
-        hsla.alpha = CLAMP (value->color.values[3], 0, 1);
-
-        _gdk_rgba_init_from_hsla (rgba, &hsla);
-      }
-      break;
-
-    case GTK_CSS_COLOR_SPACE_HWB:
-      {
-        float h, w, b;
-
-        h = value->color.values[0];
-        w = CLAMP (value->color.values[1] / 100, 0, 1);
-        b = CLAMP (value->color.values[2] / 100, 0, 1);
-
-        gtk_hwb_to_rgb (h, w, b, &rgba->red, &rgba->green, &rgba->blue);
-        rgba->alpha = value->color.values[3];
-      }
-      break;
-
-    case GTK_CSS_COLOR_SPACE_OKLAB:
-      gtk_oklab_to_rgb (CLAMP (value->color.values[0], 0, 1),
-                        value->color.values[1],
-                        value->color.values[2],
-                        &rgba->red,
-                        &rgba->green,
-                        &rgba->blue);
-      rgba->alpha = value->color.values[3];
-      break;
-
-    case GTK_CSS_COLOR_SPACE_OKLCH:
-      {
-        float L, C, H, a, b;
-
-        L = CLAMP (value->color.values[0], 0, 1);
-        C = MAX (value->color.values[1], 0);
-        H = value->color.values[2];
-        gtk_oklch_to_oklab (L, C, H, &L, &a, &b);
-        gtk_oklab_to_rgb (L, a, b, &rgba->red, &rgba->green, &rgba->blue);
-        rgba->alpha = value->color.values[3];
-      }
-      break;
-
-    default:
-      g_assert_not_reached ();
-    }
-}
-
-static void
 gtk_css_value_color_print (const GtkCssValue *value,
                            GString           *string)
 {
@@ -350,15 +271,30 @@ gtk_css_value_color_print (const GtkCssValue *value,
         {
         case GTK_CSS_COLOR_SPACE_HSL:
         case GTK_CSS_COLOR_SPACE_HWB:
-          {
 print_rgb:
-            GdkRGBA rgba;
-            char *s;
+          {
+            GtkCssColor tmp;
 
-            convert_to_rgba (value, &rgba);
-            s = gdk_rgba_to_string (&rgba);
-            g_string_append (string, s);
-            g_free (s);
+            gtk_css_color_convert (&value->color, GTK_CSS_COLOR_SPACE_SRGB, &tmp);
+            if (tmp.values[3] > 0.999)
+              {
+                g_string_append_printf (string, "rgb(%d,%d,%d)",
+                                        (int)(0.5 + CLAMP (tmp.values[0], 0., 1.) * 255.),
+                                        (int)(0.5 + CLAMP (tmp.values[1], 0., 1.) * 255.),
+                                        (int)(0.5 + CLAMP (tmp.values[2], 0., 1.) * 255.));
+              }
+            else
+              {
+                char alpha[G_ASCII_DTOSTR_BUF_SIZE];
+
+                g_ascii_formatd (alpha, G_ASCII_DTOSTR_BUF_SIZE, "%g", CLAMP (tmp.values[3], 0, 1));
+
+                g_string_append_printf (string, "rgba(%d,%d,%d,%s)",
+                                        (int)(0.5 + CLAMP (tmp.values[0], 0., 1.) * 255.),
+                                        (int)(0.5 + CLAMP (tmp.values[1], 0., 1.) * 255.),
+                                        (int)(0.5 + CLAMP (tmp.values[2], 0., 1.) * 255.),
+                                        alpha);
+              }
           }
           return;
 
@@ -525,9 +461,14 @@ gtk_css_color_value_do_resolve (GtkCssValue      *color,
 
     case COLOR_TYPE_COLOR:
       {
+        GtkCssColor tmp;
         GdkRGBA rgba;
 
-        convert_to_rgba (color, &rgba);
+        gtk_css_color_convert (&color->color, GTK_CSS_COLOR_SPACE_SRGB, &tmp);
+        rgba.red = tmp.values[0];
+        rgba.green = tmp.values[1];
+        rgba.blue = tmp.values[2];
+        rgba.alpha = tmp.values[3];
         value = gtk_css_color_value_new_literal (&rgba);
       }
       break;
