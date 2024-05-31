@@ -183,6 +183,11 @@ void             gtk_label_set_tabs (GtkLabel      *self,
 GDK_AVAILABLE_IN_4_8
 PangoTabArray * gtk_label_get_tabs  (GtkLabel      *self);
 
+GDK_AVAILABLE_IN_4_16
+void            gtk_label_set_allow_select_on_focus (GtkLabel *self,
+                                                     gboolean  allow_select_on_focus);
+GDK_AVAILABLE_IN_4_16
+gboolean        gtk_label_get_allow_select_on_focus (GtkLabel *self);
 
 
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkLabel, g_object_unref)

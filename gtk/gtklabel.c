@@ -284,6 +284,7 @@ struct _GtkLabel
   guint    single_line_mode   : 1;
   guint    in_click           : 1;
   guint    track_links        : 1;
+  guint    allow_select_on_focus : 1;
 
   guint    mnemonic_keyval;
 
@@ -402,6 +403,7 @@ enum {
   PROP_YALIGN,
   PROP_EXTRA_MENU,
   PROP_TABS,
+  PROP_ALLOW_SELECT_ON_FOCUS,
   NUM_PROPERTIES
 };
 
@@ -536,6 +538,9 @@ gtk_label_set_property (GObject      *object,
     case PROP_TABS:
       gtk_label_set_tabs (self, g_value_get_boxed (value));
       break;
+    case PROP_ALLOW_SELECT_ON_FOCUS:
+      gtk_label_set_allow_select_on_focus (self, g_value_get_boolean (value));
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -612,6 +617,9 @@ gtk_label_get_property (GObject     *object,
     case PROP_TABS:
       g_value_set_boxed (value, self->tabs);
       break;
+    case PROP_ALLOW_SELECT_ON_FOCUS:
+      g_value_set_boolean (value, gtk_label_get_allow_select_on_focus (self));
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -647,6 +655,7 @@ gtk_label_init (GtkLabel *self)
   self->mnemonic_widget = NULL;
 
   self->mnemonics_visible = FALSE;
+  self->allow_select_on_focus = TRUE;
 }
 
 static const GtkBuildableParser pango_parser =
@@ -1661,7 +1670,6 @@ static gboolean
 gtk_label_grab_focus (GtkWidget *widget)
 {
   GtkLabel *self = GTK_LABEL (widget);
-  gboolean select_on_focus;
   GtkWidget *prev_focus;
 
   if (self->select_info == NULL)
@@ -1674,11 +1682,14 @@ gtk_label_grab_focus (GtkWidget *widget)
 
   if (self->select_info->selectable)
     {
-      g_object_get (gtk_widget_get_settings (widget),
-                    "gtk-label-select-on-focus",
-                    &select_on_focus,
-                    NULL);
-
+      gboolean select_on_focus = self->allow_select_on_focus;
+      if (select_on_focus)
+        {
+          g_object_get (gtk_widget_get_settings (widget),
+                        "gtk-label-select-on-focus",
+                        &select_on_focus,
+                        NULL);
+        }
       if (select_on_focus && !self->in_click &&
           !(prev_focus && gtk_widget_is_ancestor (prev_focus, widget)))
         gtk_label_select_region (self, 0, -1);
@@ -2640,6 +2651,21 @@ gtk_label_class_init (GtkLabelClass *class)
       g_param_spec_boxed ("tabs", NULL, NULL,
                           PANGO_TYPE_TAB_ARRAY,
                           GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+
+  /**
+   * GtkLabel:allow-select-on-focus: (attributes org.gtk.Property.get=gtk_label_get_allow_select_on_focus org.gtk.Property.set=gtk_label_set_allow_select_on_focus)
+   *
+   * Whether the selectable label can select whole text when it grabs focus.
+   *
+   * The default is %TRUE. The value is used in combination with GtkSettings:gtk-label-select-on-focus
+   * and the text is selected only if both values are %TRUE.
+   *
+   * Since: 4.16
+   */
+  label_props[PROP_ALLOW_SELECT_ON_FOCUS] =
+      g_param_spec_boolean ("allow-select-on-focus", NULL, NULL,
+                            TRUE,
+                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   g_object_class_install_properties (gobject_class, NUM_PROPERTIES, label_props);
 
@@ -6093,6 +6119,53 @@ gtk_label_get_tabs (GtkLabel *self)
   g_return_val_if_fail (GTK_IS_LABEL (self), NULL);
 
   return self->tabs ? pango_tab_array_copy (self->tabs) : NULL;
+}
+
+/**
+ * gtk_label_set_allow_select_on_focus: (attributes org.gtk.Method.set_property=allow-select-on-focus)
+ * @self: a `GtkLabel`
+ * @allow_select_on_focus: value to set
+ *
+ * Sets whether the selectable label can select whole text on focus.
+ *
+ * See the [property@Gtk.Label:allow-select-on-focus] property for more information.
+ *
+ * Since: 4.16
+ */
+void
+gtk_label_set_allow_select_on_focus (GtkLabel *self,
+                                     gboolean allow_select_on_focus)
+{
+  g_return_if_fail (GTK_IS_LABEL (self));
+
+  allow_select_on_focus = allow_select_on_focus != FALSE;
+
+  if (self->allow_select_on_focus != allow_select_on_focus)
+    {
+      self->allow_select_on_focus = allow_select_on_focus;
+
+      g_object_notify_by_pspec (G_OBJECT (self), label_props[PROP_ALLOW_SELECT_ON_FOCUS]);
+    }
+}
+
+/**
+ * gtk_label_get_allow_select_on_focus: (attributes org.gtk.Method.get_property=allow-select-on-focus)
+ * @self: a `GtkLabel`
+ *
+ * Returns whether the selectable label can select whole text on focus.
+ *
+ * See the [property@Gtk.Label:allow-select-on-focus] property for more information.
+ *
+ * Returns: %TRUE when the selectable label can select whole text on focus.
+ *
+ * Since: 4.16
+ **/
+gboolean
+gtk_label_get_allow_select_on_focus (GtkLabel *self)
+{
+  g_return_val_if_fail (GTK_IS_LABEL (self), FALSE);
+
+  return self->allow_select_on_focus;
 }
 
 /* {{{ GtkAccessibleText implementation */
