@@ -276,5 +276,290 @@ gtk_css_color_convert (const GtkCssColor *input,
 }
 
 /* }}} */
+/* {{{ Color interpolation */
 
+static void
+adjust_hue (float                  *h1,
+            float                  *h2,
+            GtkCssHueInterpolation  interp)
+{
+
+  switch (interp)
+    {
+    case GTK_CSS_HUE_INTERPOLATION_SHORTER:
+      {
+        float d = *h2 - *h1;
+
+        if (d > 180)
+          *h1 += 360;
+        else if (d < -180)
+          *h2 += 360;
+      }
+      break;
+
+    case GTK_CSS_HUE_INTERPOLATION_LONGER:
+      {
+        float d = *h2 - *h1;
+
+        if (0 < d && d < 180)
+          *h1 += 360;
+        else if (-180 < d && d <= 0)
+          *h2 += 360;
+      }
+      break;
+
+    case GTK_CSS_HUE_INTERPOLATION_INCREASING:
+      if (*h2 < *h1)
+        *h2 += 360;
+      break;
+
+    case GTK_CSS_HUE_INTERPOLATION_DECREASING:
+      if (*h1 < *h2)
+        *h1 += 360;
+      break;
+
+    default:
+      g_assert_not_reached ();
+    }
+}
+
+static void
+apply_hue_interpolation (GtkCssColor            *from,
+                         GtkCssColor            *to,
+                         GtkCssColorSpace        in,
+                         GtkCssHueInterpolation  interp)
+{
+  switch (in)
+    {
+    case GTK_CSS_COLOR_SPACE_SRGB:
+    case GTK_CSS_COLOR_SPACE_SRGB_LINEAR:
+    case GTK_CSS_COLOR_SPACE_OKLAB:
+      break;
+
+    case GTK_CSS_COLOR_SPACE_HSL:
+    case GTK_CSS_COLOR_SPACE_HWB:
+      adjust_hue (&from->values[0], &to->values[0], interp);
+      break;
+
+    case GTK_CSS_COLOR_SPACE_OKLCH:
+      adjust_hue (&from->values[2], &to->values[2], interp);
+      break;
+
+    default:
+      g_assert_not_reached ();
+    }
+}
+
+static void
+normalize_hue_component (float *v)
+{
+  *v = fmod (*v, 360);
+  if (*v < 0)
+    *v += 360;
+}
+
+static void
+normalize_hue (GtkCssColor *color)
+{
+  switch (color->color_space)
+    {
+    case GTK_CSS_COLOR_SPACE_SRGB:
+    case GTK_CSS_COLOR_SPACE_SRGB_LINEAR:
+    case GTK_CSS_COLOR_SPACE_OKLAB:
+      break;
+
+    case GTK_CSS_COLOR_SPACE_HSL:
+    case GTK_CSS_COLOR_SPACE_HWB:
+      normalize_hue_component (&color->values[0]);
+      break;
+
+    case GTK_CSS_COLOR_SPACE_OKLCH:
+      normalize_hue_component  (&color->values[2]);
+      break;
+
+    default:
+      g_assert_not_reached ();
+    }
+}
+
+static inline void
+premultiply_component (GtkCssColor *color,
+                       guint        i)
+{
+  if ((color->missing & (1 << i)) != 0)
+    return;
+
+  color->values[i] *= color->values[3];
+}
+
+static void
+premultiply (GtkCssColor *color)
+{
+  if (color->missing & (1 << 3))
+    return;
+
+  switch (color->color_space)
+    {
+    case GTK_CSS_COLOR_SPACE_SRGB:
+    case GTK_CSS_COLOR_SPACE_SRGB_LINEAR:
+    case GTK_CSS_COLOR_SPACE_OKLAB:
+      premultiply_component (color, 0);
+      premultiply_component (color, 1);
+      premultiply_component (color, 2);
+      break;
+
+    case GTK_CSS_COLOR_SPACE_HSL:
+    case GTK_CSS_COLOR_SPACE_HWB:
+      premultiply_component (color, 1);
+      premultiply_component (color, 2);
+      break;
+
+    case GTK_CSS_COLOR_SPACE_OKLCH:
+      premultiply_component (color, 0);
+      premultiply_component (color, 1);
+      break;
+
+    default:
+      g_assert_not_reached ();
+    }
+}
+
+static void
+unpremultiply_component (GtkCssColor *color,
+                         guint        i)
+{
+  if ((color->missing & (1 << i)) != 0)
+    return;
+
+  color->values[i] /= color->values[3];
+}
+
+static void
+unpremultiply (GtkCssColor *color)
+{
+  if ((color->missing & (1 << 3)) != 0 || color->values[3] == 0)
+    return;
+
+  switch (color->color_space)
+    {
+    case GTK_CSS_COLOR_SPACE_SRGB:
+    case GTK_CSS_COLOR_SPACE_SRGB_LINEAR:
+    case GTK_CSS_COLOR_SPACE_OKLAB:
+      unpremultiply_component (color, 0);
+      unpremultiply_component (color, 1);
+      unpremultiply_component (color, 2);
+      break;
+
+    case GTK_CSS_COLOR_SPACE_HSL:
+    case GTK_CSS_COLOR_SPACE_HWB:
+      unpremultiply_component (color, 1);
+      unpremultiply_component (color, 2);
+      break;
+
+    case GTK_CSS_COLOR_SPACE_OKLCH:
+      unpremultiply_component (color, 0);
+      unpremultiply_component (color, 1);
+      break;
+
+    default:
+      g_assert_not_reached ();
+    }
+}
+
+static void
+collect_analogous_missing (const GtkCssColor *color,
+                           GtkCssColorSpace   color_space,
+                           gboolean           missing[4])
+{
+  /* Coords for red, green, blue, lightness, colorfulness, hue,
+   * opposite a, opposite b, for each of our colorspaces
+   */
+  static int analogous[][8] = {
+    {  0,  1,  2, -1, -1, -1, -1, -1 }, /* srgb */
+    {  0,  1,  2, -1, -1, -1, -1, -1 }, /* srgb-linear */
+    { -1, -1, -1,  2,  1,  0, -1, -1 }, /* hsl */
+    { -1, -1, -1, -1, -1,  0, -1, -1 }, /* hwb */
+    { -1, -1, -1,  0, -1, -1,  1,  2 }, /* oklab */
+    { -1, -1, -1,  0,  1,  2, -1, -1 }, /* oklch */
+
+  };
+
+  int *src = analogous[color->color_space];
+  int *dest = analogous[color_space];
+
+  for (guint i = 0; i < 4; i++)
+    missing[i] = 0;
+
+  for (guint i = 0; i < 4; i++)
+    {
+      if ((color->missing & (1 << i)) == 0)
+        continue;
+
+      for (guint j = 0; j < 8; j++)
+        {
+          if (src[j] == i)
+            {
+              int idx = dest[j];
+
+              if (idx != -1)
+                missing[idx] = TRUE;
+
+              break;
+            }
+        }
+    }
+}
+
+/* See https://www.w3.org/TR/css-color-4/#interpolation */
+void
+gtk_css_color_interpolate (const GtkCssColor      *from,
+                           const GtkCssColor      *to,
+                           float                   progress,
+                           GtkCssColorSpace        in,
+                           GtkCssHueInterpolation  interp,
+                           GtkCssColor            *output)
+{
+  GtkCssColor from1, to1;
+  gboolean from_missing[4];
+  gboolean to_missing[4];
+  gboolean missing[4];
+  float v[4];
+
+  collect_analogous_missing (from, in, from_missing);
+  collect_analogous_missing (to, in, to_missing);
+
+  gtk_css_color_convert (from, in, &from1);
+  gtk_css_color_convert (to, in, &to1);
+
+  for (guint i = 0; i < 4; i++)
+    {
+      gboolean m1 = from_missing[i];
+      gboolean m2 = to_missing[i];
+
+      if (m1 && !m2)
+        from1.values[i] = to1.values[1];
+      else if (!m1 && m2)
+        to1.values[i] = from1.values[1];
+
+      missing[i] = from_missing[i] && to_missing[i];
+    }
+
+  apply_hue_interpolation (&from1, &to1, in, interp);
+
+  premultiply (&from1);
+  premultiply (&to1);
+
+  v[0] = from1.values[0] * (1 - progress) + to1.values[0] * progress;
+  v[1] = from1.values[1] * (1 - progress) + to1.values[1] * progress;
+  v[2] = from1.values[2] * (1 - progress) + to1.values[2] * progress;
+  v[3] = from1.values[3] * (1 - progress) + to1.values[3] * progress;
+
+  gtk_css_color_init_with_missing (output, in, v, missing);
+
+  normalize_hue (output);
+
+  unpremultiply (output);
+}
+
+/* }}} */
 /* vim:set foldmethod=marker expandtab: */
