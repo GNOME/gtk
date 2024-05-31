@@ -608,7 +608,7 @@ gtk_css_color_value_new_literal (const GdkRGBA *color)
   return value;
 }
 
-static GtkCssValue *
+GtkCssValue *
 gtk_css_color_value_new_color (GtkCssColorSpace color_space,
                                gboolean         serialize_as_rgb,
                                float            values[4],
@@ -1632,4 +1632,13 @@ gtk_css_color_value_get_rgba (const GtkCssValue *color)
   g_assert (color->type == COLOR_TYPE_LITERAL || color->type == COLOR_TYPE_COLOR);
 
   return &color->rgba;
+}
+
+const GtkCssColor *
+gtk_css_color_value_get_color (const GtkCssValue *color)
+{
+  g_assert (color->class == &GTK_CSS_VALUE_COLOR);
+  g_assert (color->type == COLOR_TYPE_COLOR);
+
+  return &color->color;
 }

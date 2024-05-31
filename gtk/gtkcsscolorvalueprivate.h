@@ -21,6 +21,7 @@
 #include "gtk/css/gtkcsstokenizerprivate.h"
 #include "gtk/css/gtkcssparserprivate.h"
 #include "gtkcssvalueprivate.h"
+#include "gtkcsscolorprivate.h"
 
 G_BEGIN_DECLS
 
@@ -36,6 +37,14 @@ GtkCssValue *   gtk_css_color_value_resolve             (GtkCssValue      *color
                                                          GtkStyleProvider *provider,
                                                          GtkCssValue      *current);
 const GdkRGBA * gtk_css_color_value_get_rgba            (const GtkCssValue *color) G_GNUC_CONST;
+
+GtkCssValue *   gtk_css_color_value_new_color           (GtkCssColorSpace color_space,
+                                                         gboolean         serialize_as_rgb,
+                                                         float            values[4],
+                                                         gboolean         missing[4]) G_GNUC_PURE;
+
+const GtkCssColor *
+                gtk_css_color_value_get_color           (const GtkCssValue *color) G_GNUC_CONST;
 
 
 G_END_DECLS
