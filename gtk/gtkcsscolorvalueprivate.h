@@ -40,7 +40,7 @@ const GdkRGBA * gtk_css_color_value_get_rgba            (const GtkCssValue *colo
 
 GtkCssValue *   gtk_css_color_value_new_color           (GtkCssColorSpace color_space,
                                                          gboolean         serialize_as_rgb,
-                                                         float            values[4],
+                                                         const float      values[4],
                                                          gboolean         missing[4]) G_GNUC_PURE;
 
 const GtkCssColor *

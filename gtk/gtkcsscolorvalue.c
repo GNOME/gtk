@@ -611,7 +611,7 @@ gtk_css_color_value_new_literal (const GdkRGBA *color)
 GtkCssValue *
 gtk_css_color_value_new_color (GtkCssColorSpace color_space,
                                gboolean         serialize_as_rgb,
-                               float            values[4],
+                               const float      values[4],
                                gboolean         missing[4])
 {
   GtkCssValue *value;
