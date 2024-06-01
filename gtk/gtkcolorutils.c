@@ -307,7 +307,10 @@ gtk_oklab_to_oklch (float  L,  float  a, float  b,
 {
   *L2 = L;
   *C = sqrtf (a * a + b * b);
-  *H = atan2 (b, a);
+  *H = RAD_TO_DEG (atan2 (b, a));
+  *H = fmod (*H, 360);
+  if (*H < 0)
+    *H += 360;
 }
 
 void
