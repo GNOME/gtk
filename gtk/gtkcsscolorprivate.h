@@ -84,6 +84,12 @@ void    gtk_css_color_init      (GtkCssColor            *color,
                                  GtkCssColorSpace        color_space,
                                  const float             values[4]);
 
+GString * gtk_css_color_print   (const GtkCssColor      *color,
+                                 gboolean                serialize_as_rgb,
+                                 GString                *string);
+
+char *  gtk_css_color_to_string (const GtkCssColor      *color);
+
 void    gtk_css_color_convert   (const GtkCssColor      *input,
                                  GtkCssColorSpace        dest,
                                  GtkCssColor            *output);

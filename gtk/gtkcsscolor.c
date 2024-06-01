@@ -60,6 +60,104 @@ gtk_css_color_init (GtkCssColor      *color,
 }
 
 /* }}} */
+/* {{{ Utilities */
+
+static inline void
+append_color_component (GString           *string,
+                        const GtkCssColor *color,
+                        guint              idx)
+{
+  if (gtk_css_color_component_missing (color, idx))
+    g_string_append (string, "none");
+  else
+    g_string_append_printf (string, "%g", gtk_css_color_get_component (color, idx));
+}
+
+GString *
+gtk_css_color_print (const GtkCssColor *color,
+                     gboolean           serialize_as_rgb,
+                     GString           *string)
+{
+  switch (color->color_space)
+    {
+    case GTK_CSS_COLOR_SPACE_HSL:
+    case GTK_CSS_COLOR_SPACE_HWB:
+print_rgb:
+      {
+        GtkCssColor tmp;
+
+        gtk_css_color_convert (color, GTK_CSS_COLOR_SPACE_SRGB, &tmp);
+        if (tmp.values[3] > 0.999)
+          {
+            g_string_append_printf (string, "rgb(%d,%d,%d)",
+                                    (int)(0.5 + CLAMP (tmp.values[0], 0., 1.) * 255.),
+                                    (int)(0.5 + CLAMP (tmp.values[1], 0., 1.) * 255.),
+                                    (int)(0.5 + CLAMP (tmp.values[2], 0., 1.) * 255.));
+          }
+        else
+          {
+            char alpha[G_ASCII_DTOSTR_BUF_SIZE];
+
+            g_ascii_formatd (alpha, G_ASCII_DTOSTR_BUF_SIZE, "%g", CLAMP (tmp.values[3], 0, 1));
+
+            g_string_append_printf (string, "rgba(%d,%d,%d,%s)",
+                                    (int)(0.5 + CLAMP (tmp.values[0], 0., 1.) * 255.),
+                                    (int)(0.5 + CLAMP (tmp.values[1], 0., 1.) * 255.),
+                                    (int)(0.5 + CLAMP (tmp.values[2], 0., 1.) * 255.),
+                                    alpha);
+          }
+      }
+      return string;
+
+    case GTK_CSS_COLOR_SPACE_SRGB:
+      if (serialize_as_rgb)
+        goto print_rgb;
+
+      g_string_append (string, "color(srgb ");
+      break;
+
+    case GTK_CSS_COLOR_SPACE_SRGB_LINEAR:
+      g_string_append (string, "color(srgb-linear ");
+      break;
+
+    case GTK_CSS_COLOR_SPACE_OKLAB:
+      g_string_append (string, "oklab(");
+      break;
+
+    case GTK_CSS_COLOR_SPACE_OKLCH:
+      g_string_append (string, "oklch(");
+      break;
+
+    default:
+      g_assert_not_reached ();
+    }
+
+  for (guint i = 0; i < 3; i++)
+    {
+      if (i > 0)
+        g_string_append_c (string, ' ');
+      append_color_component (string, color, i);
+    }
+
+  if (gtk_css_color_component_missing (color, 3) ||
+      color->values[3] < 0.999)
+    {
+      g_string_append (string, " / ");
+      append_color_component (string, color, 3);
+    }
+
+  g_string_append_c (string, ')');
+
+  return string;
+}
+
+char *
+gtk_css_color_to_string (const GtkCssColor *color)
+{
+  return g_string_free (gtk_css_color_print (color, FALSE, g_string_new ("")), FALSE);
+}
+
+/* }}} */
 /* {{{ Color conversion */
 
 static void
