@@ -397,9 +397,17 @@ gboolean
 char *
 gdk_rgba_to_string (const GdkRGBA *rgba)
 {
+  return g_string_free (gdk_rgba_print (rgba, g_string_new ("")), FALSE);
+}
+
+GString *
+gdk_rgba_print (const GdkRGBA *rgba,
+                GString       *string)
+{
   if (rgba->alpha > 0.999)
     {
-      return g_strdup_printf ("rgb(%d,%d,%d)",
+      g_string_append_printf (string,
+                              "rgb(%d,%d,%d)",
                               (int)(0.5 + CLAMP (rgba->red, 0., 1.) * 255.),
                               (int)(0.5 + CLAMP (rgba->green, 0., 1.) * 255.),
                               (int)(0.5 + CLAMP (rgba->blue, 0., 1.) * 255.));
@@ -410,12 +418,15 @@ gdk_rgba_to_string (const GdkRGBA *rgba)
 
       g_ascii_formatd (alpha, G_ASCII_DTOSTR_BUF_SIZE, "%g", CLAMP (rgba->alpha, 0, 1));
 
-      return g_strdup_printf ("rgba(%d,%d,%d,%s)",
+      g_string_append_printf (string,
+                              "rgba(%d,%d,%d,%s)",
                               (int)(0.5 + CLAMP (rgba->red, 0., 1.) * 255.),
                               (int)(0.5 + CLAMP (rgba->green, 0., 1.) * 255.),
                               (int)(0.5 + CLAMP (rgba->blue, 0., 1.) * 255.),
                               alpha);
     }
+
+  return string;
 }
 
 static gboolean
