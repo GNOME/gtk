@@ -66,6 +66,7 @@ static void
 convert_to_rectangular (GtkCssColor *output)
 {
   float v[4];
+  gboolean no_missing[4] = { 0, };
 
   switch (output->color_space)
     {
@@ -80,7 +81,7 @@ convert_to_rectangular (GtkCssColor *output)
                       output->values[2] / 100,
                       &v[0], &v[1], &v[2]);
       v[3] = output->values[3];
-      gtk_css_color_init (output, GTK_CSS_COLOR_SPACE_SRGB, v);
+      gtk_css_color_init_with_missing (output, GTK_CSS_COLOR_SPACE_SRGB, v, no_missing);
       break;
 
     case GTK_CSS_COLOR_SPACE_HWB:
@@ -89,7 +90,7 @@ convert_to_rectangular (GtkCssColor *output)
                       output->values[2] / 100,
                       &v[0], &v[1], &v[2]);
       v[3] = output->values[3];
-      gtk_css_color_init (output, GTK_CSS_COLOR_SPACE_SRGB, v);
+      gtk_css_color_init_with_missing (output, GTK_CSS_COLOR_SPACE_SRGB, v, no_missing);
       break;
 
     case GTK_CSS_COLOR_SPACE_OKLCH:
@@ -98,7 +99,7 @@ convert_to_rectangular (GtkCssColor *output)
                           output->values[2],
                           &v[0], &v[1], &v[2]);
       v[3] = output->values[3];
-      gtk_css_color_init (output, GTK_CSS_COLOR_SPACE_OKLAB, v);
+      gtk_css_color_init_with_missing (output, GTK_CSS_COLOR_SPACE_OKLAB, v, no_missing);
       break;
 
     default:
@@ -238,7 +239,7 @@ convert_linear_to_linear (GtkCssColor      *output,
       gtk_css_color_init (output, dest_linear, v);
     }
   else if (dest_linear == GTK_CSS_COLOR_SPACE_OKLAB &&
-      output->color_space == GTK_CSS_COLOR_SPACE_SRGB_LINEAR)
+           output->color_space == GTK_CSS_COLOR_SPACE_SRGB_LINEAR)
     {
       gtk_linear_srgb_to_oklab (output->values[0],
                                 output->values[1],
@@ -472,15 +473,15 @@ collect_analogous_missing (const GtkCssColor *color,
                            gboolean           missing[4])
 {
   /* Coords for red, green, blue, lightness, colorfulness, hue,
-   * opposite a, opposite b, for each of our colorspaces
+   * opposite a, opposite b, alpha, for each of our colorspaces,
    */
-  static int analogous[][8] = {
-    {  0,  1,  2, -1, -1, -1, -1, -1 }, /* srgb */
-    {  0,  1,  2, -1, -1, -1, -1, -1 }, /* srgb-linear */
-    { -1, -1, -1,  2,  1,  0, -1, -1 }, /* hsl */
-    { -1, -1, -1, -1, -1,  0, -1, -1 }, /* hwb */
-    { -1, -1, -1,  0, -1, -1,  1,  2 }, /* oklab */
-    { -1, -1, -1,  0,  1,  2, -1, -1 }, /* oklch */
+  static int analogous[][9] = {
+    {  0,  1,  2, -1, -1, -1, -1, -1, 3 }, /* srgb */
+    {  0,  1,  2, -1, -1, -1, -1, -1, 3 }, /* srgb-linear */
+    { -1, -1, -1,  2,  1,  0, -1, -1, 3 }, /* hsl */
+    { -1, -1, -1, -1, -1,  0, -1, -1, 3 }, /* hwb */
+    { -1, -1, -1,  0, -1, -1,  1,  2, 3 }, /* oklab */
+    { -1, -1, -1,  0,  1,  2, -1, -1, 3 }, /* oklch */
 
   };
 
@@ -495,7 +496,7 @@ collect_analogous_missing (const GtkCssColor *color,
       if ((color->missing & (1 << i)) == 0)
         continue;
 
-      for (guint j = 0; j < 8; j++)
+      for (guint j = 0; j < 9; j++)
         {
           if (src[j] == i)
             {
@@ -537,12 +538,15 @@ gtk_css_color_interpolate (const GtkCssColor      *from,
       gboolean m2 = to_missing[i];
 
       if (m1 && !m2)
-        from1.values[i] = to1.values[1];
+        from1.values[i] = to1.values[i];
       else if (!m1 && m2)
-        to1.values[i] = from1.values[1];
+        to1.values[i] = from1.values[i];
 
       missing[i] = from_missing[i] && to_missing[i];
     }
+
+  from1.missing = 0;
+  to1.missing = 0;
 
   apply_hue_interpolation (&from1, &to1, in, interp);
 
