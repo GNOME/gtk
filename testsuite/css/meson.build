@@ -52,3 +52,15 @@ test('transition', transition,
      suite: 'css'
 )
 
+color = executable('color',
+  sources: ['color.c'],
+  c_args: common_cflags + ['-DGTK_COMPILATION'],
+  dependencies: libgtk_static_dep,
+)
+
+test('color', color,
+     args: [ '--tap', '-k'],
+     protocol: 'tap',
+     env: csstest_env,
+     suite: 'css'
+)

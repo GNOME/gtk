@@ -55,6 +55,7 @@
 #include <gdk/gdksubsurfaceprivate.h>
 #include <gdk/gdksurfaceprivate.h>
 #include <gdk/gdktextureprivate.h>
+#include <gdk/gdkrgbaprivate.h>
 #include "gtk/gtkdebug.h"
 #include "gtk/gtkbuiltiniconprivate.h"
 #include "gtk/gtkrendernodepaintableprivate.h"
@@ -1083,9 +1084,9 @@ populate_render_node_properties (GListStore    *store,
         s = g_string_new ("");
         for (i = 0; i < n_stops; i++)
           {
-            char *tmp = gdk_rgba_to_string (&stops[i].color);
-            g_string_append_printf (s, "%.2f, %s\n", stops[i].offset, tmp);
-            g_free (tmp);
+            g_string_append_printf (s, "%.2f, ", stops[i].offset);
+            gdk_rgba_print (&stops[i].color, s);
+            g_string_append_c (s, '\n');
           }
 
         texture = get_linear_gradient_texture (n_stops, stops);
@@ -1117,9 +1118,9 @@ populate_render_node_properties (GListStore    *store,
         s = g_string_new ("");
         for (i = 0; i < n_stops; i++)
           {
-            char *tmp = gdk_rgba_to_string (&stops[i].color);
-            g_string_append_printf (s, "%.2f, %s\n", stops[i].offset, tmp);
-            g_free (tmp);
+            g_string_append_printf (s, "%.2f, ", stops[i].offset);
+            gdk_rgba_print (&stops[i].color, s);
+            g_string_append_c (s, '\n');
           }
 
         texture = get_linear_gradient_texture (n_stops, stops);
@@ -1146,9 +1147,9 @@ populate_render_node_properties (GListStore    *store,
         s = g_string_new ("");
         for (i = 0; i < n_stops; i++)
           {
-            char *tmp = gdk_rgba_to_string (&stops[i].color);
-            g_string_append_printf (s, "%.2f, %s\n", stops[i].offset, tmp);
-            g_free (tmp);
+            g_string_append_printf (s, "%.2f, ", stops[i].offset);
+            gdk_rgba_print (&stops[i].color, s);
+            g_string_append_c (s, '\n');
           }
 
         texture = get_linear_gradient_texture (n_stops, stops);

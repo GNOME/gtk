@@ -301,13 +301,29 @@ gtk_hwb_to_rgb (float  hue, float  white, float  black,
 #define DEG_TO_RAD(x) ((x) * G_PI / 180)
 #define RAD_TO_DEG(x) ((x) * 180 / G_PI)
 
+static inline void
+_sincosf (float  angle,
+          float *out_s,
+          float *out_c)
+{
+#ifdef HAVE_SINCOSF
+  sincosf (angle, out_s, out_c);
+#else
+  *out_s = sinf (angle);
+  *out_c = cosf (angle);
+#endif
+}
+
 void
 gtk_oklab_to_oklch (float  L,  float  a, float  b,
                     float *L2, float *C, float *H)
 {
   *L2 = L;
-  *C = sqrtf (a * a + b * b);
-  *H = atan2 (b, a);
+  *C = hypotf (a, b);
+  *H = RAD_TO_DEG (atan2 (b, a));
+  *H = fmod (*H, 360);
+  if (*H < 0)
+    *H += 360;
 }
 
 void
@@ -315,16 +331,9 @@ gtk_oklch_to_oklab (float  L,  float  C, float  H,
                     float *L2, float *a, float *b)
 {
   *L2 = L;
-
-  if (H == 0)
-    {
-      *a = *b = 0;
-    }
-  else
-    {
-      *a = C * cosf (DEG_TO_RAD (H));
-      *b = C * sinf (DEG_TO_RAD (H));
-    }
+  _sincosf (DEG_TO_RAD (H), b, a);
+  *a *= C;
+  *b *= C;
 }
 
 static float

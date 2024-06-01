@@ -3233,17 +3233,6 @@ append_rounded_rect (GString              *str,
 }
 
 static void
-append_rgba (GString       *str,
-             const GdkRGBA *rgba)
-{
-  char *rgba_str = gdk_rgba_to_string (rgba);
-
-  g_string_append (str, rgba_str);
-
-  g_free (rgba_str);
-}
-
-static void
 append_point (GString                *str,
               const graphene_point_t *p)
 {
@@ -3288,7 +3277,7 @@ append_rgba_param (Printer       *p,
 {
   _indent (p);
   g_string_append_printf (p->str, "%s: ", param_name);
-  append_rgba (p->str, value);
+  gdk_rgba_print (value, p->str);
   g_string_append_c (p->str, ';');
   g_string_append_c (p->str, '\n');
 }
@@ -3442,7 +3431,7 @@ append_stops_param (Printer            *p,
 
       string_append_double (p->str, stops[i].offset);
       g_string_append_c (p->str, ' ');
-      append_rgba (p->str, &stops[i].color);
+      gdk_rgba_print (&stops[i].color, p->str);
     }
   g_string_append (p->str, ";\n");
 }
@@ -4068,7 +4057,7 @@ render_node_print (Printer       *p,
               {
                 if (i > 0)
                   g_string_append_c (p->str, ' ');
-                append_rgba (p->str, &colors[i]);
+                gdk_rgba_print (&colors[i], p->str);
               }
             g_string_append (p->str, ";\n");
           }
