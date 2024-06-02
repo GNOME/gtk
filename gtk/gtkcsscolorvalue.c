@@ -1820,5 +1820,37 @@ gtk_css_color_value_get_color (const GtkCssValue *color)
   return &color->color;
 }
 
+float
+gtk_css_color_value_get_coord (const GtkCssValue *color,
+                               GtkCssColorSpace   color_space,
+                               gboolean           legacy_srgb,
+                               guint              coord)
+{
+  GtkCssColor origin;
+
+  g_assert (coord < 4);
+
+  if (color->type != COLOR_TYPE_COLOR)
+    return 0;
+
+  if (color->type == COLOR_TYPE_COLOR)
+    gtk_css_color_init_from_color (&origin, &color->color);
+  else
+    gtk_css_color_init (&origin, GTK_CSS_COLOR_SPACE_SRGB, (float *) &color->rgba);
+
+  if (color_space != origin.color_space)
+    {
+      GtkCssColor tmp;
+      gtk_css_color_convert (&origin, color_space, &tmp);
+      gtk_css_color_init_from_color (&origin, &tmp);
+    }
+
+  /* Scale up r, g, b in legacy context */
+  if (color_space == GTK_CSS_COLOR_SPACE_SRGB && legacy_srgb && coord < 3)
+    return origin.values[coord] * 255.;
+  else
+    return origin.values[coord];
+}
+
 /* }}} */
 /* vim:set foldmethod=marker expandtab: */
