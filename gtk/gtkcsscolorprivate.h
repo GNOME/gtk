@@ -109,4 +109,7 @@ void    gtk_css_color_interpolate (const GtkCssColor      *from,
                                    GtkCssHueInterpolation  interp,
                                    GtkCssColor            *output);
 
+const char * gtk_css_color_space_get_coord_name (GtkCssColorSpace color_space,
+                                                 guint            coord);
+
 G_END_DECLS

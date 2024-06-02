@@ -157,6 +157,61 @@ gtk_css_color_to_string (const GtkCssColor *color)
   return g_string_free (gtk_css_color_print (color, FALSE, g_string_new ("")), FALSE);
 }
 
+const char *
+gtk_css_color_space_get_coord_name (GtkCssColorSpace color_space,
+                                    guint            coord)
+{
+  if (coord == 3)
+    return "alpha";
+
+  switch (color_space)
+    {
+    case GTK_CSS_COLOR_SPACE_SRGB:
+    case GTK_CSS_COLOR_SPACE_SRGB_LINEAR:
+      switch (coord)
+        {
+        case 0: return "r";
+        case 1: return "g";
+        case 2: return "b";
+        default: g_assert_not_reached ();
+        }
+    case GTK_CSS_COLOR_SPACE_HSL:
+      switch (coord)
+        {
+        case 0: return "h";
+        case 1: return "s";
+        case 2: return "l";
+        default: g_assert_not_reached ();
+        }
+    case GTK_CSS_COLOR_SPACE_HWB:
+      switch (coord)
+        {
+        case 0: return "h";
+        case 1: return "w";
+        case 2: return "b";
+        default: g_assert_not_reached ();
+        }
+    case GTK_CSS_COLOR_SPACE_OKLAB:
+      switch (coord)
+        {
+        case 0: return "l";
+        case 1: return "a";
+        case 2: return "b";
+        default: g_assert_not_reached ();
+        }
+    case GTK_CSS_COLOR_SPACE_OKLCH:
+      switch (coord)
+        {
+        case 0: return "l";
+        case 1: return "c";
+        case 2: return "h";
+        default: g_assert_not_reached ();
+        }
+    default:
+      g_assert_not_reached ();
+    }
+}
+
 /* }}} */
 /* {{{ Color conversion */
 
