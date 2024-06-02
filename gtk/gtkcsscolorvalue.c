@@ -179,9 +179,7 @@ gtk_css_value_color_compute (GtkCssValue          *value,
       else
         current = NULL;
 
-      resolved = gtk_css_color_value_resolve (value,
-                                              context->provider,
-                                              current);
+      resolved = gtk_css_color_value_resolve (value, property_id, context, current);
     }
   else if (value->type == COLOR_TYPE_COLOR)
     {
@@ -191,9 +189,7 @@ gtk_css_value_color_compute (GtkCssValue          *value,
     {
       GtkCssValue *current = context->style->core->color;
 
-      resolved = gtk_css_color_value_resolve (value,
-                                              context->provider,
-                                              current);
+      resolved = gtk_css_color_value_resolve (value, property_id, context, current);
     }
 
   if (resolved == NULL)
@@ -507,11 +503,13 @@ apply_color_mix (GtkCssColorSpace        in,
 }
 
 static GtkCssValue *
-gtk_css_color_value_do_resolve (GtkCssValue      *color,
-                                GtkStyleProvider *provider,
-                                GtkCssValue      *current,
-                                GSList           *cycle_list)
+gtk_css_color_value_do_resolve (GtkCssValue          *color,
+                                guint                 property_id,
+                                GtkCssComputeContext *context,
+                                GtkCssValue          *current,
+                                GSList               *cycle_list)
 {
+  GtkStyleProvider *provider = context->provider;
   GtkCssValue *value;
 
   gtk_internal_return_val_if_fail (color != NULL, NULL);
@@ -536,7 +534,7 @@ gtk_css_color_value_do_resolve (GtkCssValue      *color,
         if (named == NULL)
           return NULL;
 
-        value = gtk_css_color_value_do_resolve (named, provider, current, &cycle);
+        value = gtk_css_color_value_do_resolve (named, property_id, context, current, &cycle);
       }
       break;
 
@@ -544,8 +542,8 @@ gtk_css_color_value_do_resolve (GtkCssValue      *color,
       {
         GtkCssValue *val1, *val2;
 
-        val1 = gtk_css_color_value_do_resolve (color->color_mix.color1, provider, current, cycle_list);
-        val2 = gtk_css_color_value_do_resolve (color->color_mix.color2, provider, current, cycle_list);
+        val1 = gtk_css_color_value_do_resolve (color->color_mix.color1, property_id, context, current, cycle_list);
+        val2 = gtk_css_color_value_do_resolve (color->color_mix.color2, property_id, context, current, cycle_list);
 
         value = apply_color_mix (color->color_mix.color_space,
                                  color->color_mix.hue_interpolation,
@@ -564,7 +562,7 @@ gtk_css_color_value_do_resolve (GtkCssValue      *color,
         GtkCssValue *val;
         GdkRGBA shade;
 
-        val = gtk_css_color_value_do_resolve (color->shade.color, provider, current, cycle_list);
+        val = gtk_css_color_value_do_resolve (color->shade.color, property_id, context, current, cycle_list);
         if (val == NULL)
           return NULL;
         c = gtk_css_color_value_get_rgba (val);
@@ -582,7 +580,7 @@ gtk_css_color_value_do_resolve (GtkCssValue      *color,
         GtkCssValue *val;
         GdkRGBA alpha;
 
-        val = gtk_css_color_value_do_resolve (color->alpha.color, provider, current, cycle_list);
+        val = gtk_css_color_value_do_resolve (color->alpha.color, property_id, context, current, cycle_list);
         if (val == NULL)
           return NULL;
         c = gtk_css_color_value_get_rgba (val);
@@ -600,12 +598,12 @@ gtk_css_color_value_do_resolve (GtkCssValue      *color,
         GtkCssValue *val1, *val2;
         GdkRGBA res;
 
-        val1 = gtk_css_color_value_do_resolve (color->mix.color1, provider, current, cycle_list);
+        val1 = gtk_css_color_value_do_resolve (color->mix.color1, property_id, context, current, cycle_list);
         if (val1 == NULL)
           return NULL;
         color1 = gtk_css_color_value_get_rgba (val1);
 
-        val2 = gtk_css_color_value_do_resolve (color->mix.color2, provider, current, cycle_list);
+        val2 = gtk_css_color_value_do_resolve (color->mix.color2, property_id, context, current, cycle_list);
         if (val2 == NULL)
           return NULL;
         color2 = gtk_css_color_value_get_rgba (val2);
@@ -634,11 +632,12 @@ gtk_css_color_value_do_resolve (GtkCssValue      *color,
 }
 
 GtkCssValue *
-gtk_css_color_value_resolve (GtkCssValue      *color,
-                             GtkStyleProvider *provider,
-                             GtkCssValue      *current)
+gtk_css_color_value_resolve (GtkCssValue          *color,
+                             guint                 property_id,
+                             GtkCssComputeContext *context,
+                             GtkCssValue          *current)
 {
-  return gtk_css_color_value_do_resolve (color, provider, current, NULL);
+  return gtk_css_color_value_do_resolve (color, property_id, context, current, NULL);
 }
 
 /* }}} */
