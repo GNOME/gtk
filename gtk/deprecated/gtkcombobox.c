@@ -512,6 +512,8 @@ gtk_combo_box_class_init (GtkComboBoxClass *klass)
    * This is an [keybinding signal](class.SignalAction.html).
    *
    * The default bindings for this signal are Alt+Up and Escape.
+   *
+   * Returns: whether the combo box was popped down
    */
   combo_box_signals[POPDOWN] =
     g_signal_new_class_handler (I_("popdown"),

@@ -558,6 +558,8 @@ gtk_paned_class_init (GtkPanedClass *class)
    * This is a [keybinding signal](class.SignalAction.html).
    *
    * The default binding is <kbd>F6</kbd>.
+   *
+   * Returns: whether the behavior was cycled
    */
   signals [CYCLE_CHILD_FOCUS] =
     g_signal_new (I_("cycle-child-focus"),
@@ -582,6 +584,8 @@ gtk_paned_class_init (GtkPanedClass *class)
    * This is a [keybinding signal](class.SignalAction.html).
    *
    * The default binding is <kbd>Tab</kbd>.
+   *
+   * Return: whether handle focus was toggled
    */
   signals [TOGGLE_HANDLE_FOCUS] =
     g_signal_new (I_("toggle-handle-focus"),
@@ -603,6 +607,8 @@ gtk_paned_class_init (GtkPanedClass *class)
    * Emitted to move the handle with key bindings.
    *
    * This is a [keybinding signal](class.SignalAction.html).
+   *
+   * Returns: whether the handle was moved
    */
   signals[MOVE_HANDLE] =
     g_signal_new (I_("move-handle"),
@@ -628,6 +634,8 @@ gtk_paned_class_init (GtkPanedClass *class)
    * This is a [keybinding signal](class.SignalAction.html).
    *
    * The default binding for this signal is <kbd>F8</kbd>.
+   *
+   * Returns: whether the behavior was cycled
    */
   signals [CYCLE_HANDLE_FOCUS] =
     g_signal_new (I_("cycle-handle-focus"),
@@ -653,6 +661,8 @@ gtk_paned_class_init (GtkPanedClass *class)
    *
    * The default binding for this signal is <kbd>Return</kbd> or
    * <kbd>Space</kbd>.
+   *
+   * Returns: whether the position was accepted
    */
   signals [ACCEPT_POSITION] =
     g_signal_new (I_("accept-position"),
@@ -679,6 +689,8 @@ gtk_paned_class_init (GtkPanedClass *class)
    * This is a [keybinding signal](class.SignalAction.html).
    *
    * The default binding for this signal is <kbd>Escape</kbd>.
+   *
+   * Returns: whether the position was canceled
    */
   signals [CANCEL_POSITION] =
     g_signal_new (I_("cancel-position"),

@@ -1268,6 +1268,8 @@ gtk_file_dialog_select_multiple_folders_finish (GtkFileDialog   *self,
  * gtk_file_dialog_get_accept_label:
  * @self: a `GtkFileDialog`
  *
+ * Retrieves the text used by the dialog on its accept button.
+ *
  * Returns: (nullable): the label shown on the file chooser's accept button.
  *
  * Since: 4.10

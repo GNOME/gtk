@@ -237,6 +237,8 @@ gtk_event_controller_key_class_init (GtkEventControllerKeyClass *klass)
    *   pointer buttons.
    *
    * Emitted whenever the state of modifier keys and pointer buttons change.
+   *
+   * Returns: whether to ignore modifiers
    */
   signals[MODIFIERS] =
     g_signal_new (I_("modifiers"),

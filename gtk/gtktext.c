@@ -6876,6 +6876,8 @@ gtk_text_set_input_purpose (GtkText         *self,
  * @self: a `GtkText`
  *
  * Gets the input purpose of the `GtkText`.
+ *
+ * Returns: the input purpose
  */
 GtkInputPurpose
 gtk_text_get_input_purpose (GtkText *self)
@@ -6925,6 +6927,8 @@ gtk_text_set_input_hints (GtkText       *self,
  * @self: a `GtkText`
  *
  * Gets the input hints of the `GtkText`.
+ *
+ * Returns: the input hints
  */
 GtkInputHints
 gtk_text_get_input_hints (GtkText *self)

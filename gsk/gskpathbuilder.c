@@ -387,6 +387,7 @@ gsk_path_builder_add_reverse_path (GskPathBuilder *self,
 /**
  * gsk_path_builder_add_cairo_path:
  * @self: a `GskPathBuilder`
+ * @path: a path
  *
  * Adds a Cairo path to the builder.
  *

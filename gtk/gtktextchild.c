@@ -414,6 +414,7 @@ gtk_text_child_anchor_new (void)
 
 /**
  * gtk_text_child_anchor_new_with_replacement:
+ * @character: a replacement character
  *
  * Creates a new `GtkTextChildAnchor` with the given replacement character.
  *
