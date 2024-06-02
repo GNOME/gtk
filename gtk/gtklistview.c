@@ -1259,7 +1259,7 @@ gtk_list_view_set_single_click_activate (GtkListView *self,
 }
 
 /**
- * gtk_list_view_get_single_click_activate: (attributes org.gtk.Method.set_property=single-click-activate)
+ * gtk_list_view_get_single_click_activate: (attributes org.gtk.Method.get_property=single-click-activate)
  * @self: a `GtkListView`
  *
  * Returns whether rows will be activated on single click and

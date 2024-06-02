@@ -1212,7 +1212,7 @@ gtk_drop_down_set_enable_search (GtkDropDown *self,
 }
 
 /**
- * gtk_drop_down_get_enable_search: (attributes org.gtk.Method.set_property=enable-search)
+ * gtk_drop_down_get_enable_search: (attributes org.gtk.Method.get_property=enable-search)
  * @self: a `GtkDropDown`
  *
  * Returns whether search is enabled.
@@ -1307,7 +1307,7 @@ gtk_drop_down_set_show_arrow (GtkDropDown *self,
 }
 
 /**
- * gtk_drop_down_get_show_arrow: (attributes org.gtk.Method.set_property=show-arrow)
+ * gtk_drop_down_get_show_arrow: (attributes org.gtk.Method.get_property=show-arrow)
  * @self: a `GtkDropDown`
  *
  * Returns whether to show an arrow within the widget.

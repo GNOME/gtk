@@ -1129,7 +1129,7 @@ gtk_about_dialog_set_copyright (GtkAboutDialog *about,
 }
 
 /**
- * gtk_about_dialog_get_comments: (attributes org.gtk.Method.set_property=comments)
+ * gtk_about_dialog_get_comments: (attributes org.gtk.Method.get_property=comments)
  * @about: a `GtkAboutDialog`
  *
  * Returns the comments string.
