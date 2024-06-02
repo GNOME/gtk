@@ -400,7 +400,7 @@ gtk_drag_icon_init (GtkDragIcon *self)
 }
 
 /**
- * gtk_drag_icon_get_for_drag:
+ * gtk_drag_icon_get_for_drag: (constructor)
  * @drag: a `GdkDrag`
  *
  * Gets the `GtkDragIcon` in use with @drag.
