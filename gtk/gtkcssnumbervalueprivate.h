@@ -36,6 +36,11 @@ typedef enum /*< skip >*/ {
   GTK_CSS_PARSE_TIME = (1 << 5)
 } GtkCssNumberParseFlags;
 
+typedef struct
+{
+  /* Context needed when parsing numbers */
+} GtkCssNumberParseContext;
+
 #define GTK_CSS_PARSE_DIMENSION (GTK_CSS_PARSE_LENGTH|GTK_CSS_PARSE_ANGLE|GTK_CSS_PARSE_TIME)
 
 GtkCssValue *   gtk_css_dimension_value_new         (double                  value,
@@ -46,6 +51,10 @@ GtkCssValue *   gtk_css_number_value_new            (double                  val
 gboolean        gtk_css_number_value_can_parse      (GtkCssParser           *parser);
 GtkCssValue *   gtk_css_number_value_parse          (GtkCssParser           *parser,
                                                      GtkCssNumberParseFlags  flags);
+
+GtkCssValue *   gtk_css_number_value_parse_with_context (GtkCssParser             *parser,
+                                                         GtkCssNumberParseFlags    flags,
+                                                         GtkCssNumberParseContext *context);
 
 GtkCssDimension gtk_css_number_value_get_dimension  (const GtkCssValue      *value) G_GNUC_PURE;
 gboolean        gtk_css_number_value_has_percent    (const GtkCssValue      *value) G_GNUC_PURE;

@@ -22,21 +22,26 @@
 G_BEGIN_DECLS
 
 GtkCssValue *   gtk_css_calc_value_parse            (GtkCssParser           *parser,
-                                                     GtkCssNumberParseFlags  flags);
+                                                     GtkCssNumberParseFlags  flags,
+                                                     GtkCssNumberParseContext *ctx);
 GtkCssValue *   gtk_css_clamp_value_parse           (GtkCssParser           *parser,
                                                      GtkCssNumberParseFlags  flags,
+                                                     GtkCssNumberParseContext *ctx,
                                                      guint                   type);
 GtkCssValue *   gtk_css_round_value_parse           (GtkCssParser           *parser,
                                                      GtkCssNumberParseFlags  flags,
+                                                     GtkCssNumberParseContext *ctx,
                                                      guint                   type);
 GtkCssValue *   gtk_css_arg2_value_parse            (GtkCssParser           *parser,
                                                      GtkCssNumberParseFlags  flags,
+                                                     GtkCssNumberParseContext *ctx,
                                                      guint                   min_args,
                                                      guint                   max_args,
                                                      const char             *function,
                                                      guint                   type);
 GtkCssValue *   gtk_css_argn_value_parse            (GtkCssParser           *parser,
                                                      GtkCssNumberParseFlags  flags,
+                                                     GtkCssNumberParseContext *ctx,
                                                      const char             *function,
                                                      guint                   type);
 

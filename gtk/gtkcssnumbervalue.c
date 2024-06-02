@@ -1408,6 +1408,16 @@ GtkCssValue *
 gtk_css_number_value_parse (GtkCssParser           *parser,
                             GtkCssNumberParseFlags  flags)
 {
+  GtkCssNumberParseContext ctx;
+
+  return gtk_css_number_value_parse_with_context (parser, flags, &ctx);
+}
+
+GtkCssValue *
+gtk_css_number_value_parse_with_context (GtkCssParser             *parser,
+                                         GtkCssNumberParseFlags    flags,
+                                         GtkCssNumberParseContext *ctx)
+{
   const GtkCssToken *token = gtk_css_parser_get_token (parser);
 
   if (gtk_css_token_is (token, GTK_CSS_TOKEN_FUNCTION))
@@ -1415,47 +1425,47 @@ gtk_css_number_value_parse (GtkCssParser           *parser,
       const char *name = gtk_css_token_get_string (token);
 
       if (g_ascii_strcasecmp (name, "calc") == 0)
-        return gtk_css_calc_value_parse (parser, flags);
+        return gtk_css_calc_value_parse (parser, flags, ctx);
       else if (g_ascii_strcasecmp (name, "min") == 0)
-        return gtk_css_argn_value_parse (parser, flags, "min", TYPE_MIN);
+        return gtk_css_argn_value_parse (parser, flags, ctx, "min", TYPE_MIN);
       else if (g_ascii_strcasecmp (name, "max") == 0)
-        return gtk_css_argn_value_parse (parser, flags, "max", TYPE_MAX);
+        return gtk_css_argn_value_parse (parser, flags, ctx, "max", TYPE_MAX);
       else if (g_ascii_strcasecmp (name, "hypot") == 0)
-        return gtk_css_argn_value_parse (parser, flags, "hypot", TYPE_HYPOT);
+        return gtk_css_argn_value_parse (parser, flags, ctx, "hypot", TYPE_HYPOT);
       else if (g_ascii_strcasecmp (name, "clamp") == 0)
-        return gtk_css_clamp_value_parse (parser, flags, TYPE_CLAMP);
+        return gtk_css_clamp_value_parse (parser, flags, ctx, TYPE_CLAMP);
       else if (g_ascii_strcasecmp (name, "round") == 0)
-        return gtk_css_round_value_parse (parser, flags, TYPE_ROUND);
+        return gtk_css_round_value_parse (parser, flags, ctx, TYPE_ROUND);
       else if (g_ascii_strcasecmp (name, "mod") == 0)
-        return gtk_css_arg2_value_parse (parser, flags, 2, 2, "mod", TYPE_MOD);
+        return gtk_css_arg2_value_parse (parser, flags, ctx, 2, 2, "mod", TYPE_MOD);
       else if (g_ascii_strcasecmp (name, "rem") == 0)
-        return gtk_css_arg2_value_parse (parser, flags, 2, 2, "rem", TYPE_REM);
+        return gtk_css_arg2_value_parse (parser, flags, ctx, 2, 2, "rem", TYPE_REM);
       else if (g_ascii_strcasecmp (name, "abs") == 0)
-        return gtk_css_arg2_value_parse (parser, flags, 1, 1, "abs", TYPE_ABS);
+        return gtk_css_arg2_value_parse (parser, flags, ctx, 1, 1, "abs", TYPE_ABS);
       else if ((flags & GTK_CSS_PARSE_NUMBER) && g_ascii_strcasecmp (name, "sign") == 0)
-        return gtk_css_arg2_value_parse (parser, GTK_CSS_PARSE_NUMBER|GTK_CSS_PARSE_DIMENSION|GTK_CSS_PARSE_PERCENT, 1, 1, "sign", TYPE_SIGN);
+        return gtk_css_arg2_value_parse (parser, GTK_CSS_PARSE_NUMBER|GTK_CSS_PARSE_DIMENSION|GTK_CSS_PARSE_PERCENT, ctx, 1, 1, "sign", TYPE_SIGN);
       else if ((flags & GTK_CSS_PARSE_NUMBER) && g_ascii_strcasecmp (name, "sin") == 0)
-        return gtk_css_arg2_value_parse (parser, GTK_CSS_PARSE_NUMBER|GTK_CSS_PARSE_ANGLE, 1, 1, "sin", TYPE_SIN);
+        return gtk_css_arg2_value_parse (parser, GTK_CSS_PARSE_NUMBER|GTK_CSS_PARSE_ANGLE, ctx, 1, 1, "sin", TYPE_SIN);
       else if ((flags & GTK_CSS_PARSE_NUMBER) && g_ascii_strcasecmp (name, "cos") == 0)
-        return gtk_css_arg2_value_parse (parser, GTK_CSS_PARSE_NUMBER|GTK_CSS_PARSE_ANGLE, 1, 1, "cos", TYPE_COS);
+        return gtk_css_arg2_value_parse (parser, GTK_CSS_PARSE_NUMBER|GTK_CSS_PARSE_ANGLE, ctx, 1, 1, "cos", TYPE_COS);
       else if ((flags & GTK_CSS_PARSE_NUMBER) && g_ascii_strcasecmp (name, "tan") == 0)
-        return gtk_css_arg2_value_parse (parser, GTK_CSS_PARSE_NUMBER|GTK_CSS_PARSE_ANGLE, 1, 1, "tan", TYPE_TAN);
+        return gtk_css_arg2_value_parse (parser, GTK_CSS_PARSE_NUMBER|GTK_CSS_PARSE_ANGLE, ctx, 1, 1, "tan", TYPE_TAN);
       else if ((flags & GTK_CSS_PARSE_ANGLE) && g_ascii_strcasecmp (name, "asin") == 0)
-        return gtk_css_arg2_value_parse (parser, GTK_CSS_PARSE_NUMBER, 1, 1, "asin", TYPE_ASIN);
+        return gtk_css_arg2_value_parse (parser, GTK_CSS_PARSE_NUMBER, ctx, 1, 1, "asin", TYPE_ASIN);
       else if ((flags & GTK_CSS_PARSE_ANGLE) && g_ascii_strcasecmp (name, "acos") == 0)
-        return gtk_css_arg2_value_parse (parser, GTK_CSS_PARSE_NUMBER, 1, 1, "acos", TYPE_ACOS);
+        return gtk_css_arg2_value_parse (parser, GTK_CSS_PARSE_NUMBER, ctx, 1, 1, "acos", TYPE_ACOS);
       else if ((flags & GTK_CSS_PARSE_ANGLE) && g_ascii_strcasecmp (name, "atan") == 0)
-        return gtk_css_arg2_value_parse (parser, GTK_CSS_PARSE_NUMBER, 1, 1, "atan", TYPE_ATAN);
+        return gtk_css_arg2_value_parse (parser, GTK_CSS_PARSE_NUMBER, ctx, 1, 1, "atan", TYPE_ATAN);
       else if ((flags & GTK_CSS_PARSE_ANGLE) && g_ascii_strcasecmp (name, "atan2") == 0)
-        return gtk_css_arg2_value_parse (parser, GTK_CSS_PARSE_NUMBER|GTK_CSS_PARSE_DIMENSION|GTK_CSS_PARSE_PERCENT, 2, 2, "atan2", TYPE_ATAN2);
+        return gtk_css_arg2_value_parse (parser, GTK_CSS_PARSE_NUMBER|GTK_CSS_PARSE_DIMENSION|GTK_CSS_PARSE_PERCENT, ctx, 2, 2, "atan2", TYPE_ATAN2);
       else if ((flags & GTK_CSS_PARSE_NUMBER) && g_ascii_strcasecmp (name, "pow") == 0)
-        return gtk_css_arg2_value_parse (parser, GTK_CSS_PARSE_NUMBER, 2, 2, "pow", TYPE_POW);
+        return gtk_css_arg2_value_parse (parser, GTK_CSS_PARSE_NUMBER, ctx, 2, 2, "pow", TYPE_POW);
       else if ((flags & GTK_CSS_PARSE_NUMBER) && g_ascii_strcasecmp (name, "sqrt") == 0)
-        return gtk_css_arg2_value_parse (parser, GTK_CSS_PARSE_NUMBER, 1, 1, "sqrt", TYPE_SQRT);
+        return gtk_css_arg2_value_parse (parser, GTK_CSS_PARSE_NUMBER, ctx, 1, 1, "sqrt", TYPE_SQRT);
       else if ((flags & GTK_CSS_PARSE_NUMBER) && g_ascii_strcasecmp (name, "exp") == 0)
-        return gtk_css_arg2_value_parse (parser, GTK_CSS_PARSE_NUMBER, 1, 1, "exp", TYPE_EXP);
+        return gtk_css_arg2_value_parse (parser, GTK_CSS_PARSE_NUMBER, ctx, 1, 1, "exp", TYPE_EXP);
       else if ((flags & GTK_CSS_PARSE_NUMBER) && g_ascii_strcasecmp (name, "log") == 0)
-        return gtk_css_arg2_value_parse (parser, GTK_CSS_PARSE_NUMBER, 1, 2, "log", TYPE_LOG);
+        return gtk_css_arg2_value_parse (parser, GTK_CSS_PARSE_NUMBER, ctx, 1, 2, "log", TYPE_LOG);
     }
   else if (gtk_css_token_is (token, GTK_CSS_TOKEN_IDENT))
     {
