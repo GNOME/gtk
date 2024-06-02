@@ -439,7 +439,7 @@ gsk_gl_shader_class_init (GskGLShaderClass *klass)
   object_class->constructed = gsk_gl_shader_constructed;
 
   /**
-   * GskGLShader:sourcecode: (attributes org.gtk.Property.get=gsk_gl_shader_get_source)
+   * GskGLShader:source: (attributes org.gtk.Property.get=gsk_gl_shader_get_source)
    *
    * The source code for the shader, as a `GBytes`.
    */

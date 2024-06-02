@@ -582,7 +582,7 @@ gtk_scrolled_window_class_init (GtkScrolledWindowClass *class)
   class->move_focus_out = gtk_scrolled_window_move_focus_out;
 
   /**
-   * GtkScrolleWindow:hadjustment: (attributes org.gtk.Property.get=gtk_scrolled_window_get_hadjustment org.gtk.Property.set=gtk_scrolled_window_set_hadjustment)
+   * GtkScrolledWindow:hadjustment: (attributes org.gtk.Property.get=gtk_scrolled_window_get_hadjustment org.gtk.Property.set=gtk_scrolled_window_set_hadjustment)
    *
    * The `GtkAdjustment` for the horizontal position.
    */
@@ -592,7 +592,7 @@ gtk_scrolled_window_class_init (GtkScrolledWindowClass *class)
                            GTK_PARAM_READWRITE|G_PARAM_CONSTRUCT|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkScrolleWindow:vadjustment: (attributes org.gtk.Property.get=gtk_scrolled_window_get_vadjustment org.gtk.Property.set=gtk_scrolled_window_set_vadjustment)
+   * GtkScrolledWindow:vadjustment: (attributes org.gtk.Property.get=gtk_scrolled_window_get_vadjustment org.gtk.Property.set=gtk_scrolled_window_set_vadjustment)
    *
    * The `GtkAdjustment` for the vertical position.
    */

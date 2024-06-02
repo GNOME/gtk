@@ -876,7 +876,7 @@ gtk_entry_class_init (GtkEntryClass *class)
                           GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkEntry::tabs: (attributes org.gtk.Property.get=gtk_entry_get_tabs org.gtk.Property.set=gtk_entry_set_tabs)
+   * GtkEntry:tabs: (attributes org.gtk.Property.get=gtk_entry_get_tabs org.gtk.Property.set=gtk_entry_set_tabs)
    *
    * A list of tabstops to apply to the text of the entry.
    */
@@ -886,7 +886,7 @@ gtk_entry_class_init (GtkEntryClass *class)
                           GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkEntry::show-emoji-icon: 
+   * GtkEntry:show-emoji-icon:
    *
    * Whether the entry will show an Emoji icon in the secondary icon position
    * to open the Emoji chooser.

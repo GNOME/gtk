@@ -52,7 +52,7 @@ GdkCursor*  gdk_cursor_new_from_name     (const char      *name,
                                           GdkCursor       *fallback);
 
 /**
- * GdkCursorGetTestureCallback:
+ * GdkCursorGetTextureCallback:
  * @cursor: the `GdkCursor`
  * @cursor_size: the nominal cursor size, in application pixels
  * @scale: the device scale

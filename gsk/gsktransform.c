@@ -2023,7 +2023,7 @@ GskTransformCategory
   return self->category;
 }
 
-/*
+/**
  * gsk_transform_new: (constructor):
  *
  * Creates a new identity transform.

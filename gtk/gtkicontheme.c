@@ -1699,7 +1699,7 @@ gtk_icon_theme_set_theme_name (GtkIconTheme *self,
  *
  * Gets the current icon theme name.
  *
- * Returns (transfer full): the current icon theme name,
+ * Returns: (transfer full): the current icon theme name,
  */
 char *
 gtk_icon_theme_get_theme_name (GtkIconTheme *self)
