@@ -3221,7 +3221,7 @@ gtk_print_unix_dialog_set_settings (GtkPrintUnixDialog *dialog,
 }
 
 /**
- * gtk_print_unix_dialog_get_settings: (attributes org.gtk.Method.set_property=print-settings)
+ * gtk_print_unix_dialog_get_settings: (attributes org.gtk.Method.get_property=print-settings)
  * @dialog: a `GtkPrintUnixDialog`
  *
  * Gets a new `GtkPrintSettings` object that represents the

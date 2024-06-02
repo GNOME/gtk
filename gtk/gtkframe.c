@@ -397,7 +397,7 @@ update_accessible_relation (GtkFrame *frame)
 }
 
 /**
- * gtk_frame_set_label_widget: (attributes org.gtk.Method.get_property=label-widget)
+ * gtk_frame_set_label_widget: (attributes org.gtk.Method.set_property=label-widget)
  * @frame: a `GtkFrame`
  * @label_widget: (nullable): the new label widget
  *
