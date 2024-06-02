@@ -348,7 +348,7 @@ apply_shade (const GdkRGBA *in,
 static inline double
 transition (double start,
             double end,
-             double progress)
+            double progress)
 {
   return start + (end - start) * progress;
 }
@@ -664,6 +664,29 @@ gtk_css_color_value_new_current_color (void)
 /* }}} */
 /* {{{ Parsing */
 
+gboolean
+gtk_css_color_value_can_parse (GtkCssParser *parser)
+{
+  /* This is way too generous, but meh... */
+  return gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_IDENT)
+      || gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_AT_KEYWORD)
+      || gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_HASH_ID)
+      || gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_HASH_UNRESTRICTED)
+      || gtk_css_parser_has_function (parser, "lighter")
+      || gtk_css_parser_has_function (parser, "darker")
+      || gtk_css_parser_has_function (parser, "shade")
+      || gtk_css_parser_has_function (parser, "alpha")
+      || gtk_css_parser_has_function (parser, "mix")
+      || gtk_css_parser_has_function (parser, "hsl")
+      || gtk_css_parser_has_function (parser, "hsla")
+      || gtk_css_parser_has_function (parser, "rgb")
+      || gtk_css_parser_has_function (parser, "rgba")
+      || gtk_css_parser_has_function (parser, "hwb")
+      || gtk_css_parser_has_function (parser, "oklab")
+      || gtk_css_parser_has_function (parser, "oklch")
+      || gtk_css_parser_has_function (parser, "color");
+}
+
 typedef struct
 {
   GtkCssValue *color;
@@ -725,29 +748,6 @@ parse_color_number (GtkCssParser *parser,
     default:
       g_return_val_if_reached (0);
   }
-}
-
-gboolean
-gtk_css_color_value_can_parse (GtkCssParser *parser)
-{
-  /* This is way too generous, but meh... */
-  return gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_IDENT)
-      || gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_AT_KEYWORD)
-      || gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_HASH_ID)
-      || gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_HASH_UNRESTRICTED)
-      || gtk_css_parser_has_function (parser, "lighter")
-      || gtk_css_parser_has_function (parser, "darker")
-      || gtk_css_parser_has_function (parser, "shade")
-      || gtk_css_parser_has_function (parser, "alpha")
-      || gtk_css_parser_has_function (parser, "mix")
-      || gtk_css_parser_has_function (parser, "hsl")
-      || gtk_css_parser_has_function (parser, "hsla")
-      || gtk_css_parser_has_function (parser, "rgb")
-      || gtk_css_parser_has_function (parser, "rgba")
-      || gtk_css_parser_has_function (parser, "hwb")
-      || gtk_css_parser_has_function (parser, "oklab")
-      || gtk_css_parser_has_function (parser, "oklch")
-      || gtk_css_parser_has_function (parser, "color");
 }
 
 typedef struct
