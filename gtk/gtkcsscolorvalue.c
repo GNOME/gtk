@@ -74,6 +74,8 @@ struct _GtkCssValue
   };
 };
 
+/* {{{ GtkCssValue vfuncs */
+
 static void
 gtk_css_value_color_free (GtkCssValue *color)
 {
@@ -328,6 +330,9 @@ static const GtkCssValueClass GTK_CSS_VALUE_COLOR = {
   gtk_css_value_color_print
 };
 
+/* }}} */
+/* {{{ Resolving colors */
+
 static void
 apply_alpha (const GdkRGBA *in,
              GdkRGBA       *out,
@@ -497,6 +502,9 @@ gtk_css_color_value_resolve (GtkCssValue      *color,
   return gtk_css_color_value_do_resolve (color, provider, current, NULL);
 }
 
+/* }}} */
+/* {{{ Constructors */
+
 static GtkCssValue transparent_black_singleton = { &GTK_CSS_VALUE_COLOR, 1, TRUE, FALSE, FALSE, COLOR_TYPE_LITERAL,
                                                    .rgba = {0, 0, 0, 0} };
 static GtkCssValue white_singleton             = { &GTK_CSS_VALUE_COLOR, 1, TRUE, FALSE, FALSE, COLOR_TYPE_LITERAL,
@@ -663,6 +671,9 @@ gtk_css_color_value_new_current_color (void)
 
   return gtk_css_value_ref (&current_color);
 }
+
+/* }}} */
+/* {{{ Parsing */
 
 typedef struct
 {
@@ -1553,6 +1564,9 @@ gtk_css_color_value_parse (GtkCssParser *parser)
     return NULL;
 }
 
+/* }}} */
+/* {{{ Utilities */
+
 const GdkRGBA *
 gtk_css_color_value_get_rgba (const GtkCssValue *color)
 {
@@ -1570,3 +1584,6 @@ gtk_css_color_value_get_color (const GtkCssValue *color)
 
   return &color->color;
 }
+
+/* }}} */
+/* vim:set foldmethod=marker expandtab: */
