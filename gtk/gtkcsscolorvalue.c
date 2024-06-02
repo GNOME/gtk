@@ -74,6 +74,8 @@ struct _GtkCssValue
   };
 };
 
+/* {{{ GtkCssValue vfuncs */
+
 static void
 gtk_css_value_color_free (GtkCssValue *color)
 {
@@ -247,17 +249,6 @@ gtk_css_value_color_transition (GtkCssValue *start,
   return gtk_css_color_value_new_mix (start, end, progress);
 }
 
-static inline void
-append_color_component (GString           *string,
-                        const GtkCssColor *color,
-                        guint              idx)
-{
-  if (gtk_css_color_component_missing (color, idx))
-    g_string_append (string, "none");
-  else
-    g_string_append_printf (string, "%g", gtk_css_color_get_component (color, idx));
-}
-
 static void
 gtk_css_value_color_print (const GtkCssValue *value,
                            GString           *string)
@@ -328,6 +319,9 @@ static const GtkCssValueClass GTK_CSS_VALUE_COLOR = {
   gtk_css_value_color_print
 };
 
+/* }}} */
+/* {{{ Resolving colors */
+
 static void
 apply_alpha (const GdkRGBA *in,
              GdkRGBA       *out,
@@ -354,7 +348,7 @@ apply_shade (const GdkRGBA *in,
 static inline double
 transition (double start,
             double end,
-             double progress)
+            double progress)
 {
   return start + (end - start) * progress;
 }
@@ -496,6 +490,9 @@ gtk_css_color_value_resolve (GtkCssValue      *color,
 {
   return gtk_css_color_value_do_resolve (color, provider, current, NULL);
 }
+
+/* }}} */
+/* {{{ Constructors */
 
 static GtkCssValue transparent_black_singleton = { &GTK_CSS_VALUE_COLOR, 1, TRUE, FALSE, FALSE, COLOR_TYPE_LITERAL,
                                                    .rgba = {0, 0, 0, 0} };
@@ -664,6 +661,32 @@ gtk_css_color_value_new_current_color (void)
   return gtk_css_value_ref (&current_color);
 }
 
+/* }}} */
+/* {{{ Parsing */
+
+gboolean
+gtk_css_color_value_can_parse (GtkCssParser *parser)
+{
+  /* This is way too generous, but meh... */
+  return gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_IDENT)
+      || gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_AT_KEYWORD)
+      || gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_HASH_ID)
+      || gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_HASH_UNRESTRICTED)
+      || gtk_css_parser_has_function (parser, "lighter")
+      || gtk_css_parser_has_function (parser, "darker")
+      || gtk_css_parser_has_function (parser, "shade")
+      || gtk_css_parser_has_function (parser, "alpha")
+      || gtk_css_parser_has_function (parser, "mix")
+      || gtk_css_parser_has_function (parser, "hsl")
+      || gtk_css_parser_has_function (parser, "hsla")
+      || gtk_css_parser_has_function (parser, "rgb")
+      || gtk_css_parser_has_function (parser, "rgba")
+      || gtk_css_parser_has_function (parser, "hwb")
+      || gtk_css_parser_has_function (parser, "oklab")
+      || gtk_css_parser_has_function (parser, "oklch")
+      || gtk_css_parser_has_function (parser, "color");
+}
+
 typedef struct
 {
   GtkCssValue *color;
@@ -725,29 +748,6 @@ parse_color_number (GtkCssParser *parser,
     default:
       g_return_val_if_reached (0);
   }
-}
-
-gboolean
-gtk_css_color_value_can_parse (GtkCssParser *parser)
-{
-  /* This is way too generous, but meh... */
-  return gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_IDENT)
-      || gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_AT_KEYWORD)
-      || gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_HASH_ID)
-      || gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_HASH_UNRESTRICTED)
-      || gtk_css_parser_has_function (parser, "lighter")
-      || gtk_css_parser_has_function (parser, "darker")
-      || gtk_css_parser_has_function (parser, "shade")
-      || gtk_css_parser_has_function (parser, "alpha")
-      || gtk_css_parser_has_function (parser, "mix")
-      || gtk_css_parser_has_function (parser, "hsl")
-      || gtk_css_parser_has_function (parser, "hsla")
-      || gtk_css_parser_has_function (parser, "rgb")
-      || gtk_css_parser_has_function (parser, "rgba")
-      || gtk_css_parser_has_function (parser, "hwb")
-      || gtk_css_parser_has_function (parser, "oklab")
-      || gtk_css_parser_has_function (parser, "oklch")
-      || gtk_css_parser_has_function (parser, "color");
 }
 
 typedef struct
@@ -1553,6 +1553,9 @@ gtk_css_color_value_parse (GtkCssParser *parser)
     return NULL;
 }
 
+/* }}} */
+/* {{{ Utilities */
+
 const GdkRGBA *
 gtk_css_color_value_get_rgba (const GtkCssValue *color)
 {
@@ -1570,3 +1573,6 @@ gtk_css_color_value_get_color (const GtkCssValue *color)
 
   return &color->color;
 }
+
+/* }}} */
+/* vim:set foldmethod=marker expandtab: */

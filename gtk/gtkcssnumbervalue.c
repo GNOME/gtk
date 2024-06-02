@@ -1015,11 +1015,11 @@ gtk_css_number_value_multiply (GtkCssValue *value,
       break;
     }
 
- return gtk_css_math_value_new (TYPE_PRODUCT, 0,
-                                (GtkCssValue *[]) {
-                                   gtk_css_value_ref (value),
-                                   gtk_css_number_value_new (factor, GTK_CSS_NUMBER)
-                                }, 2);
+  return gtk_css_math_value_new (TYPE_PRODUCT, 0,
+                                 (GtkCssValue *[]) {
+                                    gtk_css_value_ref (value),
+                                    gtk_css_number_value_new (factor, GTK_CSS_NUMBER)
+                                 }, 2);
 }
 
 GtkCssValue *
@@ -1314,7 +1314,7 @@ gtk_css_arg2_value_new (guint        type,
   return gtk_css_dimension_value_new (v, unit);
 }
 
-/* This funciton is called at parsing time, so units are not
+/* This function is called at parsing time, so units are not
  * canonical, and length values can't necessarily be unified.
  */
 GtkCssValue *
