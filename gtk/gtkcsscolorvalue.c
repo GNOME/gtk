@@ -249,17 +249,6 @@ gtk_css_value_color_transition (GtkCssValue *start,
   return gtk_css_color_value_new_mix (start, end, progress);
 }
 
-static inline void
-append_color_component (GString           *string,
-                        const GtkCssColor *color,
-                        guint              idx)
-{
-  if (gtk_css_color_component_missing (color, idx))
-    g_string_append (string, "none");
-  else
-    g_string_append_printf (string, "%g", gtk_css_color_get_component (color, idx));
-}
-
 static void
 gtk_css_value_color_print (const GtkCssValue *value,
                            GString           *string)
