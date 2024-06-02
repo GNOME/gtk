@@ -26,6 +26,10 @@
 #include "gtkcsserror.h"
 #include "gtkcsslocationprivate.h"
 
+/* We cannot include gtkdebug.h, so we must keep this in sync */
+extern unsigned int gtk_get_debug_flags (void);
+#define DEBUG_CHECK_CSS ((gtk_get_debug_flags () & GTK_CSS_PARSER_DEBUG_CSS) != 0)
+
 static void clear_ref (GtkCssVariableValueReference *ref);
 
 #define GDK_ARRAY_NAME gtk_css_parser_references
@@ -626,7 +630,7 @@ void
 gtk_css_parser_skip (GtkCssParser *self)
 {
   const GtkCssToken *token;
-  
+
   token = gtk_css_parser_get_token (self);
   if (gtk_css_token_is_preserved (token, NULL))
     {
@@ -659,7 +663,7 @@ gtk_css_parser_skip_until (GtkCssParser    *self,
                            GtkCssTokenType  token_type)
 {
   const GtkCssToken *token;
-  
+
   for (token = gtk_css_parser_get_token (self);
        !gtk_css_token_is (token, token_type) &&
        !gtk_css_token_is (token, GTK_CSS_TOKEN_EOF);
@@ -817,19 +821,22 @@ gtk_css_parser_warn_deprecated (GtkCssParser *self,
                                  const char   *format,
                                  ...)
 {
-  va_list args;
-  GError *error;
+  if (DEBUG_CHECK_CSS)
+    {
+      va_list args;
+      GError *error;
 
-  va_start (args, format);
-  error = g_error_new_valist (GTK_CSS_PARSER_WARNING,
-                              GTK_CSS_PARSER_WARNING_DEPRECATED,
-                              format, args);
-  gtk_css_parser_emit_error (self,
-                             gtk_css_parser_get_start_location (self),
-                             gtk_css_parser_get_end_location (self),
-                             error);
-  g_error_free (error);
-  va_end (args);
+      va_start (args, format);
+      error = g_error_new_valist (GTK_CSS_PARSER_WARNING,
+                                  GTK_CSS_PARSER_WARNING_DEPRECATED,
+                                  format, args);
+      gtk_css_parser_emit_error (self,
+                                 gtk_css_parser_get_start_location (self),
+                                 gtk_css_parser_get_end_location (self),
+                                 error);
+      g_error_free (error);
+      va_end (args);
+    }
 }
 
 gboolean
@@ -1153,7 +1160,7 @@ gtk_css_parser_parse_url_arg (GtkCssParser *parser,
   *out_url = gtk_css_parser_consume_string (parser);
   if (*out_url == NULL)
     return 0;
-  
+
   return 1;
 }
 
@@ -1199,7 +1206,7 @@ gtk_css_parser_consume_url (GtkCssParser *self)
       gtk_css_parser_error_syntax (self, "Expected a URL");
       return NULL;
     }
-  
+
   return url;
 }
 

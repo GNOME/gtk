@@ -52,6 +52,9 @@
 #define GDK_ARRAY_PREALLOC 64
 #include "gdk/gdkarrayimpl.c"
 
+/* For lack of a better place, assert here that these two definitions match */
+G_STATIC_ASSERT (GTK_DEBUG_CSS == GTK_CSS_PARSER_DEBUG_CSS);
+
 /**
  * GtkCssProvider:
  *
