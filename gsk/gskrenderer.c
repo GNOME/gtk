@@ -679,9 +679,16 @@ vulkan_supported_platform (GdkSurface *surface,
   if (props.deviceType == VK_PHYSICAL_DEVICE_TYPE_CPU)
     {
       if (!as_fallback)
-        GSK_DEBUG (RENDERER,
-                   "Not using '%s': device is CPU",
-                   g_type_name (renderer_type));
+        GSK_DEBUG (RENDERER, "Not using '%s': device is CPU", g_type_name (renderer_type));
+      return FALSE;
+    }
+
+  gdk_display_init_dmabuf (display);
+  if (!display->vk_dmabuf_formats ||
+      gdk_dmabuf_formats_get_n_formats (display->vk_dmabuf_formats) == 0)
+    {
+      if (!as_fallback)
+        GSK_DEBUG (RENDERER, "Not using '%s': no dmabuf support", g_type_name (renderer_type));
       return FALSE;
     }
 
