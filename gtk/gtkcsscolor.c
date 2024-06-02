@@ -321,7 +321,8 @@ convert_linear_to_linear (GtkCssColor      *output,
   GtkCssColorSpace dest_linear;
   float v[4];
 
-  if (dest == GTK_CSS_COLOR_SPACE_OKLCH)
+  if (dest == GTK_CSS_COLOR_SPACE_OKLCH ||
+      dest == GTK_CSS_COLOR_SPACE_OKLAB)
     dest_linear = GTK_CSS_COLOR_SPACE_OKLAB;
   else
     dest_linear = GTK_CSS_COLOR_SPACE_SRGB_LINEAR;
