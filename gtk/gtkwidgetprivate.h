@@ -88,7 +88,12 @@ struct _GtkWidgetPrivate
   guint alloc_needed_on_child : 1; /* 0 or more children - or this widget - need a size_allocate() call */
 
   /* Queue-draw related flags */
-  guint draw_needed           : 1;
+  guint draw_needed            : 1;
+  guint background_draw_needed : 1;
+  guint border_draw_needed     : 1;
+  guint content_draw_needed    : 1;
+  guint outline_draw_needed    : 1;
+
   /* Expand-related flags */
   guint need_compute_expand   : 1; /* Need to recompute computed_[hv]_expand */
   guint computed_hexpand      : 1; /* computed results (composite of child flags) */
@@ -166,6 +171,10 @@ struct _GtkWidgetPrivate
 
   /* The render node we draw or %NULL if not yet created.*/
   GskRenderNode *render_node;
+  GskRenderNode *background_node;
+  GskRenderNode *border_node;
+  GskRenderNode *content_node;
+  GskRenderNode *outline_node;
 
   /* The layout manager, or %NULL */
   GtkLayoutManager *layout_manager;

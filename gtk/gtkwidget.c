@@ -2322,6 +2322,10 @@ gtk_widget_init (GTypeInstance *instance, gpointer g_class)
   priv->alloc_needed = TRUE;
   priv->alloc_needed_on_child = TRUE;
   priv->draw_needed = TRUE;
+  priv->background_draw_needed = TRUE;
+  priv->border_draw_needed = TRUE;
+  priv->content_draw_needed = TRUE;
+  priv->outline_draw_needed = TRUE;
   priv->focus_on_click = TRUE;
   priv->can_focus = TRUE;
   priv->focusable = FALSE;
@@ -3489,6 +3493,64 @@ gtk_widget_unrealize (GtkWidget *widget)
   g_object_unref (widget);
 }
 
+typedef enum
+{
+  GTK_WIDGET_DRAW_BACKGROUND  = 1 << 0,
+  GTK_WIDGET_DRAW_BORDER      = 1 << 1,
+  GTK_WIDGET_DRAW_CONTENT     = 1 << 2,
+  GTK_WIDGET_DRAW_OUTLINE     = 1 << 3
+} GtkWidgetDrawFlags;
+
+static void
+gtk_widget_queue_draw_node (GtkWidget          *widget,
+                            GtkWidgetDrawFlags  flags)
+{
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
+
+  /* Just return if the widget isn't mapped */
+  if (!_gtk_widget_get_mapped (widget))
+    return;
+
+  if (flags & GTK_WIDGET_DRAW_BACKGROUND)
+    {
+      g_clear_pointer (&priv->background_node, gsk_render_node_unref);
+      priv->background_draw_needed = TRUE;
+    }
+  if (flags & GTK_WIDGET_DRAW_BORDER)
+    {
+      g_clear_pointer (&priv->border_node, gsk_render_node_unref);
+      priv->border_draw_needed = TRUE;
+    }
+  if (flags & GTK_WIDGET_DRAW_CONTENT)
+    {
+      g_clear_pointer (&priv->content_node, gsk_render_node_unref);
+      priv->content_draw_needed = TRUE;
+    }
+  if (flags & GTK_WIDGET_DRAW_OUTLINE)
+    {
+      g_clear_pointer (&priv->outline_node, gsk_render_node_unref);
+      priv->outline_draw_needed = TRUE;
+    }
+
+  for (GtkWidget *w = widget; w; w = _gtk_widget_get_parent (w))
+    {
+      priv = gtk_widget_get_instance_private (w);
+
+      if (priv->draw_needed)
+        break;
+
+      priv->draw_needed = TRUE;
+      g_clear_pointer (&priv->render_node, gsk_render_node_unref);
+      if (w != widget)
+        {
+          g_clear_pointer (&priv->content_node, gsk_render_node_unref);
+          priv->content_draw_needed = TRUE;
+        }
+      if (GTK_IS_NATIVE (w) && _gtk_widget_get_realized (w))
+        gdk_surface_queue_render (gtk_native_get_surface (GTK_NATIVE (w)));
+    }
+}
+
 /**
  * gtk_widget_queue_draw:
  * @widget: a `GtkWidget`
@@ -3504,22 +3566,7 @@ gtk_widget_queue_draw (GtkWidget *widget)
 {
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
-  /* Just return if the widget isn't mapped */
-  if (!_gtk_widget_get_mapped (widget))
-    return;
-
-  for (; widget; widget = _gtk_widget_get_parent (widget))
-    {
-      GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
-
-      if (priv->draw_needed)
-        break;
-
-      priv->draw_needed = TRUE;
-      g_clear_pointer (&priv->render_node, gsk_render_node_unref);
-      if (GTK_IS_NATIVE (widget) && _gtk_widget_get_realized (widget))
-        gdk_surface_queue_render (gtk_native_get_surface (GTK_NATIVE (widget)));
-    }
+  gtk_widget_queue_draw_node (widget, GTK_WIDGET_DRAW_CONTENT);
 }
 
 static void
@@ -5001,7 +5048,19 @@ gtk_widget_real_css_changed (GtkWidget         *widget,
           if (gtk_css_style_change_affects (change, GTK_CSS_AFFECTS_REDRAW) ||
               (has_text && gtk_css_style_change_affects (change, GTK_CSS_AFFECTS_TEXT_CONTENT)))
             {
-              gtk_widget_queue_draw (widget);
+              GtkWidgetDrawFlags flags = 0;
+
+              if (gtk_css_style_change_affects (change, GTK_CSS_AFFECTS_CONTENT) ||
+                  (has_text && gtk_css_style_change_affects (change, GTK_CSS_AFFECTS_TEXT_CONTENT)))
+                flags |= GTK_WIDGET_DRAW_CONTENT;
+              if (gtk_css_style_change_affects (change, GTK_CSS_AFFECTS_BACKGROUND))
+                flags |= GTK_WIDGET_DRAW_BACKGROUND;
+              if (gtk_css_style_change_affects (change, GTK_CSS_AFFECTS_BORDER))
+                flags |= GTK_WIDGET_DRAW_BORDER;
+              if (gtk_css_style_change_affects (change, GTK_CSS_AFFECTS_OUTLINE))
+                flags |= GTK_WIDGET_DRAW_OUTLINE;
+
+              gtk_widget_queue_draw_node (widget, flags);
             }
         }
     }
@@ -11845,10 +11904,105 @@ gtk_widget_list_controllers (GtkWidget           *widget,
 }
 
 static GskRenderNode *
+gtk_widget_ensure_background_node (GtkWidget   *widget,
+                                   GtkCssBoxes *boxes)
+{
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
+
+  if (priv->background_draw_needed)
+    {
+      GtkSnapshot *snapshot;
+
+      g_clear_pointer (&priv->background_node, gsk_render_node_unref);
+      snapshot = gtk_snapshot_new ();
+      gtk_css_style_snapshot_background (boxes, snapshot);
+      priv->background_node = gtk_snapshot_free_to_node (snapshot);
+    }
+
+  return priv->background_node;
+}
+
+static GskRenderNode *
+gtk_widget_ensure_border_node (GtkWidget   *widget,
+                               GtkCssBoxes *boxes)
+{
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
+
+  if (priv->border_draw_needed)
+    {
+      GtkSnapshot *snapshot;
+
+      g_clear_pointer (&priv->border_node, gsk_render_node_unref);
+      snapshot = gtk_snapshot_new ();
+      gtk_css_style_snapshot_border (boxes, snapshot);
+      priv->border_node = gtk_snapshot_free_to_node (snapshot);
+    }
+
+  return priv->border_node;
+}
+
+static GskRenderNode *
+gtk_widget_ensure_content_node (GtkWidget   *widget,
+                                GtkCssBoxes *boxes)
+{
+  GtkWidgetClass *klass = GTK_WIDGET_GET_CLASS (widget);
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
+
+  if (priv->content_draw_needed)
+    {
+      GtkSnapshot *snapshot;
+
+      g_clear_pointer (&priv->content_node, gsk_render_node_unref);
+      snapshot = gtk_snapshot_new ();
+
+      if (priv->overflow == GTK_OVERFLOW_HIDDEN)
+        {
+          gtk_snapshot_push_rounded_clip (snapshot, gtk_css_boxes_get_padding_box (boxes));
+          klass->snapshot (widget, snapshot);
+          gtk_snapshot_pop (snapshot);
+        }
+      else
+        {
+          klass->snapshot (widget, snapshot);
+        }
+
+      priv->content_node = gtk_snapshot_free_to_node (snapshot);
+    }
+
+  return priv->content_node;
+}
+
+static GskRenderNode *
+gtk_widget_ensure_outline_node (GtkWidget   *widget,
+                                GtkCssBoxes *boxes)
+{
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
+
+  if (priv->outline_draw_needed)
+    {
+      GtkSnapshot *snapshot;
+
+      g_clear_pointer (&priv->outline_node, gsk_render_node_unref);
+      snapshot = gtk_snapshot_new ();
+      gtk_css_style_snapshot_outline (boxes, snapshot);
+      priv->outline_node = gtk_snapshot_free_to_node (snapshot);
+    }
+
+  return priv->outline_node;
+}
+
+static void
+maybe_append (GtkSnapshot   *snapshot,
+              GskRenderNode *node)
+{
+  if (node)
+    gtk_snapshot_append_node (snapshot, node);
+}
+
+static GskRenderNode *
 gtk_widget_create_render_node (GtkWidget   *widget,
                                GtkSnapshot *snapshot)
 {
-  GtkWidgetClass *klass = GTK_WIDGET_GET_CLASS (widget);
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
   GtkCssBoxes boxes;
   GtkCssValue *filter_value;
@@ -11876,21 +12030,10 @@ gtk_widget_create_render_node (GtkWidget   *widget,
   if (opacity < 1.0)
     gtk_snapshot_push_opacity (snapshot, opacity);
 
-  gtk_css_style_snapshot_background (&boxes, snapshot);
-  gtk_css_style_snapshot_border (&boxes, snapshot);
-
-  if (priv->overflow == GTK_OVERFLOW_HIDDEN)
-    {
-      gtk_snapshot_push_rounded_clip (snapshot, gtk_css_boxes_get_padding_box (&boxes));
-      klass->snapshot (widget, snapshot);
-      gtk_snapshot_pop (snapshot);
-    }
-  else
-    {
-      klass->snapshot (widget, snapshot);
-    }
-
-  gtk_css_style_snapshot_outline (&boxes, snapshot);
+  maybe_append (snapshot, gtk_widget_ensure_background_node (widget, &boxes));
+  maybe_append (snapshot, gtk_widget_ensure_border_node (widget, &boxes));
+  maybe_append (snapshot, gtk_widget_ensure_content_node (widget, &boxes));
+  maybe_append (snapshot, gtk_widget_ensure_outline_node (widget, &boxes));
 
   if (opacity < 1.0)
     gtk_snapshot_pop (snapshot);
