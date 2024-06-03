@@ -2988,7 +2988,7 @@ printer_init_collect_font_info (Printer       *printer,
       info = g_new0 (FontInfo, 1);
 
       info->face = hb_face_reference (hb_font_get_face (pango_font_get_hb_font (font)));
-      if (!g_object_get_data (G_OBJECT (font), "from-url"))
+      if (!g_object_get_data (G_OBJECT (pango_font_get_font_map (font)), "font-files"))
         {
           info->input = hb_subset_input_create_or_fail ();
           hb_subset_input_set_flags (info->input, HB_SUBSET_FLAGS_RETAIN_GIDS);
