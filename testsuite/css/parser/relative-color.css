@@ -1,0 +1,24 @@
+a {
+  color: color(from rgb(100, 200, 10) srgb g g calc(b * 2));
+}
+
+b {
+  color: oklab(from white l 0.1 0.2);
+}
+
+c {
+  color: red;
+  background-color: hsl(from currentcolor calc(h + 60) s l);
+}
+
+d {
+  color: oklab(from white r g b);
+}
+
+e {
+  color: rgb(from darkgoldenrod r g 100 / 50%);
+}
+
+e {
+  color: rgb(from rgba(30,40,50,60) r g 100 / alpha);
+}
