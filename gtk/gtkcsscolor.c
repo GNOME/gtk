@@ -225,6 +225,24 @@ gtk_css_color_space_get_coord_name (GtkCssColorSpace color_space,
     }
 }
 
+static gboolean
+color_space_is_polar (GtkCssColorSpace color_space)
+{
+  switch (color_space)
+    {
+    case GTK_CSS_COLOR_SPACE_SRGB:
+    case GTK_CSS_COLOR_SPACE_SRGB_LINEAR:
+    case GTK_CSS_COLOR_SPACE_OKLAB:
+      return FALSE;
+    case GTK_CSS_COLOR_SPACE_HSL:
+    case GTK_CSS_COLOR_SPACE_HWB:
+    case GTK_CSS_COLOR_SPACE_OKLCH:
+      return TRUE;
+    default:
+      g_assert_not_reached ();
+    }
+}
+
 /* }}} */
 /* {{{ Color conversion */
 
@@ -730,6 +748,158 @@ gtk_css_color_interpolate (const GtkCssColor      *from,
   normalize_hue (output);
 
   unpremultiply (output);
+}
+
+static gboolean
+parse_hue_interpolation (GtkCssParser           *parser,
+                         GtkCssHueInterpolation *interp)
+{
+  const GtkCssToken *token = gtk_css_parser_get_token (parser);
+
+  if (gtk_css_token_is_ident (token, "shorter"))
+    {
+      gtk_css_parser_consume_token (parser);
+      *interp = GTK_CSS_HUE_INTERPOLATION_SHORTER;
+    }
+  else if (gtk_css_token_is_ident (token, "longer"))
+    {
+      gtk_css_parser_consume_token (parser);
+      *interp = GTK_CSS_HUE_INTERPOLATION_LONGER;
+    }
+  else if (gtk_css_token_is_ident (token, "increasing"))
+    {
+      gtk_css_parser_consume_token (parser);
+      *interp = GTK_CSS_HUE_INTERPOLATION_INCREASING;
+    }
+  else if (gtk_css_token_is_ident (token, "decreasing"))
+    {
+      gtk_css_parser_consume_token (parser);
+      *interp = GTK_CSS_HUE_INTERPOLATION_DECREASING;
+    }
+  else
+    {
+      *interp = GTK_CSS_HUE_INTERPOLATION_SHORTER;
+      return TRUE;
+    }
+
+  if (!gtk_css_parser_try_ident (parser, "hue"))
+    {
+      gtk_css_parser_error_syntax (parser, "Expected 'hue'");
+      return FALSE;
+    }
+
+  return TRUE;
+}
+
+gboolean
+gtk_css_color_interpolation_method_parse (GtkCssParser           *parser,
+                                          GtkCssColorSpace       *in,
+                                          GtkCssHueInterpolation *interp)
+{
+  const GtkCssToken *token;
+
+  if (!gtk_css_parser_try_ident (parser, "in"))
+    {
+      gtk_css_parser_error_syntax (parser, "Expected 'in'");
+      return FALSE;
+    }
+
+  token = gtk_css_parser_get_token (parser);
+
+  if (gtk_css_token_is_ident (token, "srgb"))
+    {
+      gtk_css_parser_consume_token (parser);
+      *in = GTK_CSS_COLOR_SPACE_SRGB;
+    }
+  else if (gtk_css_token_is_ident (token, "srgb-linear"))
+    {
+      gtk_css_parser_consume_token (parser);
+      *in = GTK_CSS_COLOR_SPACE_SRGB_LINEAR;
+    }
+  else if (gtk_css_token_is_ident (token, "hsl"))
+    {
+      gtk_css_parser_consume_token (parser);
+      *in = GTK_CSS_COLOR_SPACE_HSL;
+    }
+  else if (gtk_css_token_is_ident (token, "hwb"))
+    {
+      gtk_css_parser_consume_token (parser);
+      *in = GTK_CSS_COLOR_SPACE_HWB;
+    }
+  else if (gtk_css_token_is_ident (token, "oklch"))
+    {
+      gtk_css_parser_consume_token (parser);
+      *in = GTK_CSS_COLOR_SPACE_OKLCH;
+    }
+  else if (gtk_css_token_is_ident (token, "oklab"))
+    {
+      gtk_css_parser_consume_token (parser);
+      *in = GTK_CSS_COLOR_SPACE_OKLAB;
+    }
+  else
+    {
+      gtk_css_parser_error_syntax (parser, "Invalid color space");
+      return FALSE;
+    }
+
+  if (color_space_is_polar (*in))
+    return parse_hue_interpolation (parser, interp);
+
+  return TRUE;
+}
+
+
+void
+gtk_css_color_interpolation_method_print (GtkCssColorSpace        in,
+                                          GtkCssHueInterpolation  interp,
+                                          GString                *string)
+{
+  g_string_append (string, "in ");
+
+  switch (in)
+  {
+    case GTK_CSS_COLOR_SPACE_SRGB:
+      g_string_append (string, "srgb");
+      break;
+    case GTK_CSS_COLOR_SPACE_SRGB_LINEAR:
+      g_string_append (string, "srgb-linear");
+      break;
+    case GTK_CSS_COLOR_SPACE_HSL:
+      g_string_append (string, "hsl");
+      break;
+    case GTK_CSS_COLOR_SPACE_HWB:
+      g_string_append (string, "hwb");
+      break;
+    case GTK_CSS_COLOR_SPACE_OKLCH:
+      g_string_append (string, "oklch");
+      break;
+    case GTK_CSS_COLOR_SPACE_OKLAB:
+      g_string_append (string, "oklab");
+      break;
+    default:
+      g_assert_not_reached ();
+  }
+
+  if (!color_space_is_polar (in))
+    return;
+
+  switch (interp)
+  {
+    case GTK_CSS_HUE_INTERPOLATION_SHORTER:
+      /* shorter is the default mode, don't print it */
+      break;
+    case GTK_CSS_HUE_INTERPOLATION_LONGER:
+      g_string_append (string, " longer hue");
+      break;
+    case GTK_CSS_HUE_INTERPOLATION_INCREASING:
+      g_string_append (string, " increasing hue");
+      break;
+    case GTK_CSS_HUE_INTERPOLATION_DECREASING:
+      g_string_append (string, " decreasing hue");
+      break;
+    default:
+      g_assert_not_reached ();
+  }
 }
 
 /* }}} */
