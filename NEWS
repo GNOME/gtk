@@ -1,6 +1,40 @@
 Overview of Changes in 4.15.2, xx-xx-xxxx
 =========================================
 
+* GtkFileChooserWidget:
+ - Plug some memory leaks
+ - Make Ctrl-Shift-N create a new folder
+
+* CSS:
+ - Support color(), oklab(), etc (https://www.w3.org/TR/css-color-4/)
+ - Support color-mix() (https://www.w3.org/TR/css-color-5/)
+ - Support relative colors (https://www.w3.org/TR/css-color-5/)
+
+* Accessibility:
+ - Avoid markup when reading labels
+
+* GSK:
+ - Subset fonts when serializing node trees
+
+* Wayland:
+ - Use xdg-dialog protocol for attached dialogs
+
+* Windows:
+ - Build with UNICODE
+
+* Debugging:
+ - Add GTK_DEBUG=css for warning about deprecated css syntax
+
+* Tools:
+ - nodeparser: Add an extract command for data urls
+
+* Deprecations:
+ - CSS Color functions shade(), lighter(), darker(), alpha(), mix()
+
+* Translation updates:
+ Hebrew
+
+
 Overview of Changes in 4.15.1, 21-05-2024
 =========================================
 
