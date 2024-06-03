@@ -66,7 +66,7 @@ log_writer_func (GLogLevelFlags   level,
         message = fields[i].value;
     }
 
-  if (message != NULL && !g_log_writer_would_drop (level, domain))
+  if (message != NULL && !g_log_writer_default_would_drop (level, domain))
     {
       const char *prefix;
       switch (level & G_LOG_LEVEL_MASK)
