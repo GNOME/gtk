@@ -6449,7 +6449,7 @@ gtk_notebook_set_scrollable (GtkNotebook *notebook,
 }
 
 /**
- * gtk_notebook_get_scrollable: (attributes or.gtk.Method.get_property=scrollable)
+ * gtk_notebook_get_scrollable:
  * @notebook: a `GtkNotebook`
  *
  * Returns whether the tab label area has arrows for scrolling.

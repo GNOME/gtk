@@ -688,7 +688,7 @@ gtk_scale_class_init (GtkScaleClass *class)
   class->get_layout_offsets = gtk_scale_real_get_layout_offsets;
 
   /**
-   * GtkScale:digits: (attributes org.gtk.Method.get=gtk_scale_get_digits org.gtk.Method.set=gtk_scale_set_digits)
+   * GtkScale:digits:
    *
    * The number of decimal places that are displayed in the value.
    */
@@ -699,7 +699,7 @@ gtk_scale_class_init (GtkScaleClass *class)
                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkScale:draw-value: (attributes org.gtk.Method.get=gtk_scale_get_draw_value org.gtk.Method.set=gtk_scale_set_draw_value)
+   * GtkScale:draw-value:
    *
    * Whether the current value is displayed as a string next to the slider.
    */
@@ -709,7 +709,7 @@ gtk_scale_class_init (GtkScaleClass *class)
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkScale:has-origin: (attributes org.gtk.Method.get=gtk_scale_get_has_origin org.gtk.Method.set=gtk_scale_set_has_origin)
+   * GtkScale:has-origin:
    *
    * Whether the scale has an origin.
    */
@@ -719,7 +719,7 @@ gtk_scale_class_init (GtkScaleClass *class)
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkScale:value-pos: (attributes org.gtk.Method.get=gtk_scale_get_value_pos org.gtk.Method.set=gtk_scale_set_value_pos)
+   * GtkScale:value-pos:
    *
    * The position in which the current value is displayed.
    */

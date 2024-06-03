@@ -1915,7 +1915,7 @@ gtk_popover_class_init (GtkPopoverClass *klass)
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkPopover:default-widget: (attributes org.gtk.Popover.set=gtk_popover_set_default_widget)
+   * GtkPopover:default-widget:
    *
    * The default widget inside the popover.
    */
