@@ -151,10 +151,11 @@ Checks whether the widget is set to be visible or not.
  - Methods are special functions whose first argument is always the instance
    of a certain class. The instance argument for newly written code should be
    called `self`.
- - If a method is a setter or a getter for an object property, you should
-   add an `(attributes org.gtk.Method.set_property=property-name)` or a
-   an `(attributes org.gtk.Method.get_property=property-name)` annotation
-   to the method's identifier
+ - If a method is a setter or a getter for an object property
+   `GtkClassName:prop-name`, and if its name does not match the naming scheme
+   `gtk_class_name_{g,s}et_prop_name`, you should add a `(set-property
+   prop-name)` or a `(get-property prop-name)` annotation to the method's
+   identifier
  - If a method changes one or more properties as side effect, link those
    properties in the method's description
  - If a method is a signal emitter, you should use the
@@ -192,9 +193,10 @@ Checks whether the widget is set to be visible or not.
    purposes.
  - Always note if setting a property has side effects, like causing another
    property to change state.
- - If the property has public accessors you should annotate it with
-   the `(attributes org.gtk.Property.set=setter_function)` and
-   `(attributes org.gtk.Property.get=getter_function)` attributes
+ - If a property `GtkClassName:prop-name` has a public getter or setter, and
+   they do not match the naming scheme `gtk_class_name_{g,s}et_prop_name` you
+   should annotate it with the `(setter setter_function)` and `(getter
+   getter_function)`.
  - The syntax for property documentation is:
 
 ```c
