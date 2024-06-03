@@ -480,7 +480,7 @@ gtk_editable_label_new (const char *str)
 }
 
 /**
- * gtk_editable_label_get_editing: (attributes org.gtk.Method.get_property=editing)
+ * gtk_editable_label_get_editing:
  * @self: a `GtkEditableLabel`
  *
  * Returns whether the label is currently in “editing mode”.

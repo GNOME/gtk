@@ -695,7 +695,7 @@ gtk_popover_menu_bar_new_from_model (GMenuModel *model)
 }
 
 /**
- * gtk_popover_menu_bar_set_menu_model: (attributes org.gtk.Method.set_property=menu-model)
+ * gtk_popover_menu_bar_set_menu_model:
  * @bar: a `GtkPopoverMenuBar`
  * @model: (nullable): a `GMenuModel`
  *
@@ -738,7 +738,7 @@ gtk_popover_menu_bar_set_menu_model (GtkPopoverMenuBar *bar,
 }
 
 /**
- * gtk_popover_menu_bar_get_menu_model: (attributes org.gtk.Method.get_property=menu-model)
+ * gtk_popover_menu_bar_get_menu_model:
  * @bar: a `GtkPopoverMenuBar`
  *
  * Returns the model from which the contents of @bar are taken.

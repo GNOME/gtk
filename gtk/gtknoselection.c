@@ -317,7 +317,7 @@ gtk_no_selection_new (GListModel *model)
 }
 
 /**
- * gtk_no_selection_get_model: (attributes org.gtk.Method.get_property=model)
+ * gtk_no_selection_get_model:
  * @self: a `GtkNoSelection`
  *
  * Gets the model that @self is wrapping.
@@ -333,7 +333,7 @@ gtk_no_selection_get_model (GtkNoSelection *self)
 }
 
 /**
- * gtk_no_selection_set_model: (attributes org.gtk.Method.set_property=model)
+ * gtk_no_selection_set_model:
  * @self: a `GtkNoSelection`
  * @model: (nullable): A `GListModel` to wrap
  *

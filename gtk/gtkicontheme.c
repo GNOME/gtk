@@ -3609,7 +3609,7 @@ new_resource_file (const char *filename)
 }
 
 /**
- * gtk_icon_paintable_get_file: (attributes org.gtk.Method.get_property=file)
+ * gtk_icon_paintable_get_file:
  * @self: a `GtkIconPaintable`
  *
  * Gets the `GFile` that was used to load the icon.
@@ -3633,7 +3633,7 @@ gtk_icon_paintable_get_file (GtkIconPaintable *icon)
 }
 
 /**
- * gtk_icon_paintable_get_icon_name: (attributes org.gtk.Method.get_property=icon-name)
+ * gtk_icon_paintable_get_icon_name:
  * @self: a `GtkIconPaintable`
  *
  * Get the icon name being used for this icon.

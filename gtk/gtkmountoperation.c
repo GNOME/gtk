@@ -1722,7 +1722,7 @@ gtk_mount_operation_new (GtkWindow *parent)
 }
 
 /**
- * gtk_mount_operation_is_showing: (attributes org.gtk.Method.get_property=is-showing)
+ * gtk_mount_operation_is_showing:
  * @op: a `GtkMountOperation`
  *
  * Returns whether the `GtkMountOperation` is currently displaying
@@ -1739,7 +1739,7 @@ gtk_mount_operation_is_showing (GtkMountOperation *op)
 }
 
 /**
- * gtk_mount_operation_set_parent: (attributes org.gtk.Method.set_property=parent)
+ * gtk_mount_operation_set_parent:
  * @op: a `GtkMountOperation`
  * @parent: (nullable): transient parent of the window
  *
@@ -1782,7 +1782,7 @@ gtk_mount_operation_set_parent (GtkMountOperation *op,
 }
 
 /**
- * gtk_mount_operation_get_parent: (attributes org.gtk.Method.get_property=parent)
+ * gtk_mount_operation_get_parent:
  * @op: a `GtkMountOperation`
  *
  * Gets the transient parent used by the `GtkMountOperation`.
@@ -1798,7 +1798,7 @@ gtk_mount_operation_get_parent (GtkMountOperation *op)
 }
 
 /**
- * gtk_mount_operation_set_display: (attributes org.gtk.Method.set_property=display)
+ * gtk_mount_operation_set_display:
  * @op: a `GtkMountOperation`
  * @display: a `GdkDisplay`
  *
@@ -1830,7 +1830,7 @@ gtk_mount_operation_set_display (GtkMountOperation *op,
 }
 
 /**
- * gtk_mount_operation_get_display: (attributes org.gtk.Method.get_property=display)
+ * gtk_mount_operation_get_display:
  * @op: a `GtkMountOperation`
  *
  * Gets the display on which windows of the `GtkMountOperation`

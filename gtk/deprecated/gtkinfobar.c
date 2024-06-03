@@ -1104,7 +1104,7 @@ gtk_info_bar_buildable_add_child (GtkBuildable *buildable,
 }
 
 /**
- * gtk_info_bar_set_message_type: (attributes org.gtk.Method.set_property=message-type)
+ * gtk_info_bar_set_message_type:
  * @info_bar: a `GtkInfoBar`
  * @message_type: a `GtkMessageType`
  *
@@ -1145,7 +1145,7 @@ gtk_info_bar_set_message_type (GtkInfoBar     *info_bar,
 }
 
 /**
- * gtk_info_bar_get_message_type: (attributes org.gtk.Method.get_property=message-type)
+ * gtk_info_bar_get_message_type:
  * @info_bar: a `GtkInfoBar`
  *
  * Returns the message type of the message area.
@@ -1164,7 +1164,7 @@ gtk_info_bar_get_message_type (GtkInfoBar *info_bar)
 
 
 /**
- * gtk_info_bar_set_show_close_button: (attributes org.gtk.Method.set_property=show-close-button)
+ * gtk_info_bar_set_show_close_button:
  * @info_bar: a `GtkInfoBar`
  * @setting: %TRUE to include a close button
  *
@@ -1188,7 +1188,7 @@ gtk_info_bar_set_show_close_button (GtkInfoBar *info_bar,
 }
 
 /**
- * gtk_info_bar_get_show_close_button: (attributes org.gtk.Method.get_property=show-close-button)
+ * gtk_info_bar_get_show_close_button:
  * @info_bar: a `GtkInfoBar`
  *
  * Returns whether the widget will display a standard close button.
@@ -1206,7 +1206,7 @@ gtk_info_bar_get_show_close_button (GtkInfoBar *info_bar)
 }
 
 /**
- * gtk_info_bar_set_revealed: (attributes org.gtk.Method.set_property=revealed)
+ * gtk_info_bar_set_revealed:
  * @info_bar: a `GtkInfoBar`
  * @revealed: The new value of the property
  *
@@ -1235,7 +1235,7 @@ gtk_info_bar_set_revealed (GtkInfoBar *info_bar,
 }
 
 /**
- * gtk_info_bar_get_revealed: (attributes org.gtk.Method.get_property=revealed)
+ * gtk_info_bar_get_revealed:
  * @info_bar: a `GtkInfoBar`
  *
  * Returns whether the info bar is currently revealed.

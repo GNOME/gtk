@@ -316,7 +316,7 @@ gtk_list_item_do_notify (GtkListItem *list_item,
 }
 
 /**
- * gtk_list_item_get_item: (attributes org.gtk.Method.get_property=item)
+ * gtk_list_item_get_item:
  * @self: a `GtkListItem`
  *
  * Gets the model item that associated with @self.
@@ -339,7 +339,7 @@ gtk_list_item_get_item (GtkListItem *self)
 }
 
 /**
- * gtk_list_item_get_child: (attributes org.gtk.Method.get_property=child)
+ * gtk_list_item_get_child:
  * @self: a `GtkListItem`
  *
  * Gets the child previously set via gtk_list_item_set_child() or
@@ -359,7 +359,7 @@ gtk_list_item_get_child (GtkListItem *self)
 }
 
 /**
- * gtk_list_item_set_child: (attributes org.gtk.Method.set_property=child)
+ * gtk_list_item_set_child:
  * @self: a `GtkListItem`
  * @child: (nullable): The list item's child or %NULL to unset
  *
@@ -406,7 +406,7 @@ gtk_list_item_set_child (GtkListItem *self,
 }
 
 /**
- * gtk_list_item_get_position: (attributes org.gtk.Method.get_property=position)
+ * gtk_list_item_get_position:
  * @self: a `GtkListItem`
  *
  * Gets the position in the model that @self currently displays.
@@ -429,7 +429,7 @@ gtk_list_item_get_position (GtkListItem *self)
 }
 
 /**
- * gtk_list_item_get_selected: (attributes org.gtk.Method.get_property=selected)
+ * gtk_list_item_get_selected:
  * @self: a `GtkListItem`
  *
  * Checks if the item is displayed as selected.
@@ -453,7 +453,7 @@ gtk_list_item_get_selected (GtkListItem *self)
 }
 
 /**
- * gtk_list_item_get_selectable: (attributes org.gtk.Method.get_property=selectable)
+ * gtk_list_item_get_selectable:
  * @self: a `GtkListItem`
  *
  * Checks if a list item has been set to be selectable via
@@ -472,7 +472,7 @@ gtk_list_item_get_selectable (GtkListItem *self)
 }
 
 /**
- * gtk_list_item_set_selectable: (attributes org.gtk.Method.set_property=selectable)
+ * gtk_list_item_set_selectable:
  * @self: a `GtkListItem`
  * @selectable: if the item should be selectable
  *
@@ -507,7 +507,7 @@ gtk_list_item_set_selectable (GtkListItem *self,
 }
 
 /**
- * gtk_list_item_get_activatable: (attributes org.gtk.Method.get_property=activatable)
+ * gtk_list_item_get_activatable:
  * @self: a `GtkListItem`
  *
  * Checks if a list item has been set to be activatable via
@@ -524,7 +524,7 @@ gtk_list_item_get_activatable (GtkListItem *self)
 }
 
 /**
- * gtk_list_item_set_activatable: (attributes org.gtk.Method.set_property=activatable)
+ * gtk_list_item_set_activatable:
  * @self: a `GtkListItem`
  * @activatable: if the item should be activatable
  *
@@ -556,7 +556,7 @@ gtk_list_item_set_activatable (GtkListItem *self,
 }
 
 /**
- * gtk_list_item_get_focusable: (attributes org.gtk.Method.get_property=focusable)
+ * gtk_list_item_get_focusable:
  * @self: a `GtkListItem`
  *
  * Checks if a list item has been set to be focusable via
@@ -575,7 +575,7 @@ gtk_list_item_get_focusable (GtkListItem *self)
 }
 
 /**
- * gtk_list_item_set_focusable: (attributes org.gtk.Method.set_property=focusable)
+ * gtk_list_item_set_focusable:
  * @self: a `GtkListItem`
  * @focusable: if the item should be focusable
  *

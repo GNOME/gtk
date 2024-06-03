@@ -324,7 +324,7 @@ gtk_print_job_new (const char       *title,
 }
 
 /**
- * gtk_print_job_get_settings: (attributes org.gtk.Method.get_property=settings)
+ * gtk_print_job_get_settings:
  * @job: a `GtkPrintJob`
  *
  * Gets the `GtkPrintSettings` of the print job.
@@ -340,7 +340,7 @@ gtk_print_job_get_settings (GtkPrintJob *job)
 }
 
 /**
- * gtk_print_job_get_printer: (attributes org.gtk.Method.get_property=printer)
+ * gtk_print_job_get_printer:
  * @job: a `GtkPrintJob`
  *
  * Gets the `GtkPrinter` of the print job.
@@ -356,7 +356,7 @@ gtk_print_job_get_printer (GtkPrintJob *job)
 }
 
 /**
- * gtk_print_job_get_title: (attributes org.gtk.Method.get_property=title)
+ * gtk_print_job_get_title:
  * @job: a `GtkPrintJob`
  *
  * Gets the job title.
@@ -553,7 +553,7 @@ gtk_print_job_get_surface (GtkPrintJob  *job,
 }
 
 /**
- * gtk_print_job_set_track_print_status: (attributes org.gtk.Method.set_property=track-print-status)
+ * gtk_print_job_set_track_print_status:
  * @job: a `GtkPrintJob`
  * @track_status: %TRUE to track status after printing
  *
@@ -583,7 +583,7 @@ gtk_print_job_set_track_print_status (GtkPrintJob *job,
 }
 
 /**
- * gtk_print_job_get_track_print_status: (attributes org.gtk.Method.get_property=track-print-status)
+ * gtk_print_job_get_track_print_status:
  * @job: a `GtkPrintJob`
  *
  * Returns whether jobs will be tracked after printing.

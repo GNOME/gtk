@@ -348,7 +348,7 @@ gtk_builder_list_item_factory_new_from_resource (GtkBuilderScope *scope,
 }
 
 /**
- * gtk_builder_list_item_factory_get_bytes: (attributes org.gtk.Method.get_property=bytes)
+ * gtk_builder_list_item_factory_get_bytes:
  * @self: a `GtkBuilderListItemFactory`
  *
  * Gets the data used as the `GtkBuilder` UI template for constructing
@@ -365,7 +365,7 @@ gtk_builder_list_item_factory_get_bytes (GtkBuilderListItemFactory *self)
 }
 
 /**
- * gtk_builder_list_item_factory_get_resource: (attributes org.gtk.Method.get_property=resource)
+ * gtk_builder_list_item_factory_get_resource:
  * @self: a `GtkBuilderListItemFactory`
  *
  * If the data references a resource, gets the path of that resource.
@@ -381,7 +381,7 @@ gtk_builder_list_item_factory_get_resource (GtkBuilderListItemFactory *self)
 }
 
 /**
- * gtk_builder_list_item_factory_get_scope: (attributes org.gtk.Method.get_property=scope)
+ * gtk_builder_list_item_factory_get_scope:
  * @self: a `GtkBuilderListItemFactory`
  *
  * Gets the scope used when constructing listitems.

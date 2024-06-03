@@ -320,7 +320,7 @@ gtk_media_controls_new (GtkMediaStream *stream)
 }
 
 /**
- * gtk_media_controls_get_media_stream: (attributes org.gtk.Method.get_property=media-stream)
+ * gtk_media_controls_get_media_stream:
  * @controls: a `GtkMediaControls`
  *
  * Gets the media stream managed by @controls or %NULL if none.
@@ -485,7 +485,7 @@ gtk_media_controls_notify_cb (GtkMediaStream   *stream,
 }
 
 /**
- * gtk_media_controls_set_media_stream: (attributes org.gtk.Method.set_property=media-stream)
+ * gtk_media_controls_set_media_stream:
  * @controls: a `GtkMediaControls` widget
  * @stream: (nullable):  a `GtkMediaStream`
  *

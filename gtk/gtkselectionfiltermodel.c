@@ -292,7 +292,7 @@ gtk_selection_filter_model_new (GtkSelectionModel *model)
 }
 
 /**
- * gtk_selection_filter_model_set_model: (attributes org.gtk.Method.set_property=model)
+ * gtk_selection_filter_model_set_model:
  * @self: a `GtkSelectionFilterModel`
  * @model: (nullable): The model to be filtered
  *
@@ -343,7 +343,7 @@ gtk_selection_filter_model_set_model (GtkSelectionFilterModel *self,
 }
 
 /**
- * gtk_selection_filter_model_get_model: (attributes org.gtk.Method.get_property=model)
+ * gtk_selection_filter_model_get_model:
  * @self: a `GtkSelectionFilterModel`
  *
  * Gets the model currently filtered or %NULL if none.

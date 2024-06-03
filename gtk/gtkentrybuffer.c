@@ -446,7 +446,7 @@ gtk_entry_buffer_new (const char *initial_chars,
 }
 
 /**
- * gtk_entry_buffer_get_length: (attributes org.gtk.Method.get_property=length)
+ * gtk_entry_buffer_get_length:
  * @buffer: a `GtkEntryBuffer`
  *
  * Retrieves the length in characters of the buffer.
@@ -492,7 +492,7 @@ gtk_entry_buffer_get_bytes (GtkEntryBuffer *buffer)
 }
 
 /**
- * gtk_entry_buffer_get_text: (attributes org.gtk.Method.get_property=text)
+ * gtk_entry_buffer_get_text:
  * @buffer: a `GtkEntryBuffer`
  *
  * Retrieves the contents of the buffer.
@@ -518,7 +518,7 @@ gtk_entry_buffer_get_text (GtkEntryBuffer *buffer)
 }
 
 /**
- * gtk_entry_buffer_set_text: (attributes org.gtk.Method.set_property=text)
+ * gtk_entry_buffer_set_text:
  * @buffer: a `GtkEntryBuffer`
  * @chars: the new text
  * @n_chars: the number of characters in @text, or -1
@@ -546,7 +546,7 @@ gtk_entry_buffer_set_text (GtkEntryBuffer *buffer,
 }
 
 /**
- * gtk_entry_buffer_set_max_length: (attributes org.gtk.Method.set_property=max-length)
+ * gtk_entry_buffer_set_max_length:
  * @buffer: a `GtkEntryBuffer`
  * @max_length: the maximum length of the entry buffer, or 0 for no maximum.
  *   (other than the maximum length of entries.) The value passed in will
@@ -578,7 +578,7 @@ gtk_entry_buffer_set_max_length (GtkEntryBuffer *buffer,
 }
 
 /**
- * gtk_entry_buffer_get_max_length: (attributes org.gtk.Method.get_property=max-length)
+ * gtk_entry_buffer_get_max_length:
  * @buffer: a `GtkEntryBuffer`
  *
  * Retrieves the maximum allowed length of the text in @buffer.

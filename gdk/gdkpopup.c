@@ -178,7 +178,7 @@ gdk_popup_get_rect_anchor (GdkPopup *popup)
 }
 
 /**
- * gdk_popup_get_parent: (attributes org.gtk.Method.get_property=parent)
+ * gdk_popup_get_parent:
  * @popup: a `GdkPopup`
  *
  * Returns the parent surface of a popup.
@@ -233,7 +233,7 @@ gdk_popup_get_position_y (GdkPopup *popup)
 }
 
 /**
- * gdk_popup_get_autohide: (attributes org.gtk.Method.get_property=autohide)
+ * gdk_popup_get_autohide:
  * @popup: a `GdkPopup`
  *
  * Returns whether this popup is set to hide on outside clicks.

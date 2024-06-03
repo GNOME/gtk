@@ -1140,7 +1140,7 @@ gtk_sort_list_model_new (GListModel *model,
 }
 
 /**
- * gtk_sort_list_model_set_model: (attributes org.gtk.Method.set_property=model)
+ * gtk_sort_list_model_set_model:
  * @self: a `GtkSortListModel`
  * @model: (nullable): The model to be sorted
  *
@@ -1188,7 +1188,7 @@ gtk_sort_list_model_set_model (GtkSortListModel *self,
 }
 
 /**
- * gtk_sort_list_model_get_model: (attributes org.gtk.Method.get_property=model)
+ * gtk_sort_list_model_get_model:
  * @self: a `GtkSortListModel`
  *
  * Gets the model currently sorted or %NULL if none.
@@ -1204,7 +1204,7 @@ gtk_sort_list_model_get_model (GtkSortListModel *self)
 }
 
 /**
- * gtk_sort_list_model_set_sorter: (attributes org.gtk.Method.set_property=sorter)
+ * gtk_sort_list_model_set_sorter:
  * @self: a `GtkSortListModel`
  * @sorter: (nullable): the `GtkSorter` to sort @model with
  *
@@ -1228,7 +1228,7 @@ gtk_sort_list_model_set_sorter (GtkSortListModel *self,
 }
 
 /**
- * gtk_sort_list_model_get_sorter: (attributes org.gtk.Method.get_property=sorter)
+ * gtk_sort_list_model_get_sorter:
  * @self: a `GtkSortListModel`
  *
  * Gets the sorter that is used to sort @self.
@@ -1244,7 +1244,7 @@ gtk_sort_list_model_get_sorter (GtkSortListModel *self)
 }
 
 /**
- * gtk_sort_list_model_set_section_sorter: (attributes org.gtk.Method.set_property=section-sorter)
+ * gtk_sort_list_model_set_section_sorter:
  * @self: a `GtkSortListModel`
  * @sorter: (nullable): the `GtkSorter` to sort @model with
  *
@@ -1270,7 +1270,7 @@ gtk_sort_list_model_set_section_sorter (GtkSortListModel *self,
 }
 
 /**
- * gtk_sort_list_model_get_section_sorter: (attributes org.gtk.Method.get_property=section-sorter)
+ * gtk_sort_list_model_get_section_sorter:
  * @self: a `GtkSortListModel`
  *
  * Gets the section sorter that is used to sort items of @self into
@@ -1289,7 +1289,7 @@ gtk_sort_list_model_get_section_sorter (GtkSortListModel *self)
 }
 
 /**
- * gtk_sort_list_model_set_incremental: (attributes org.gtk.Method.set_property=incremental)
+ * gtk_sort_list_model_set_incremental:
  * @self: a `GtkSortListModel`
  * @incremental: %TRUE to sort incrementally
  *
@@ -1334,7 +1334,7 @@ gtk_sort_list_model_set_incremental (GtkSortListModel *self,
 }
 
 /**
- * gtk_sort_list_model_get_incremental: (attributes org.gtk.Method.get_property=incremental)
+ * gtk_sort_list_model_get_incremental:
  * @self: a `GtkSortListModel`
  *
  * Returns whether incremental sorting is enabled.
@@ -1352,7 +1352,7 @@ gtk_sort_list_model_get_incremental (GtkSortListModel *self)
 }
 
 /**
- * gtk_sort_list_model_get_pending: (attributes org.gtk.Method.get_property=pending)
+ * gtk_sort_list_model_get_pending:
  * @self: a `GtkSortListModel`
  *
  * Estimates progress of an ongoing sorting operation.

@@ -642,7 +642,7 @@ gtk_drag_source_new (void)
 }
 
 /**
- * gtk_drag_source_get_content: (attributes org.gtk.Method.get_property=content)
+ * gtk_drag_source_get_content:
  * @source: a `GtkDragSource`
  *
  * Gets the current content provider of a `GtkDragSource`.
@@ -658,7 +658,7 @@ gtk_drag_source_get_content (GtkDragSource *source)
 }
 
 /**
- * gtk_drag_source_set_content: (attributes org.gtk.Method.set_property=content)
+ * gtk_drag_source_set_content:
  * @source: a `GtkDragSource`
  * @content: (nullable): a `GdkContentProvider`
  *
@@ -686,7 +686,7 @@ gtk_drag_source_set_content (GtkDragSource      *source,
 }
 
 /**
- * gtk_drag_source_get_actions: (attributes org.gtk.Method.get_property=actions)
+ * gtk_drag_source_get_actions:
  * @source: a `GtkDragSource`
  *
  * Gets the actions that are currently set on the `GtkDragSource`.
@@ -702,7 +702,7 @@ gtk_drag_source_get_actions (GtkDragSource *source)
 }
 
 /**
- * gtk_drag_source_set_actions: (attributes org.gtk.Method.set_property=actions)
+ * gtk_drag_source_set_actions:
  * @source: a `GtkDragSource`
  * @actions: the actions to offer
  *

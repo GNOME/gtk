@@ -81,7 +81,7 @@ gtk_app_chooser_default_init (GtkAppChooserIface *iface)
 
 
 /**
- * gtk_app_chooser_get_content_type: (attributes org.gtk.Method.get_property=content-type)
+ * gtk_app_chooser_get_content_type:
  * @self: a `GtkAppChooser`
  *
  * Returns the content type for which the `GtkAppChooser`

@@ -169,7 +169,7 @@ gdk_app_launch_context_get_display_name (GAppLaunchContext *context,
 }
 
 /**
- * gdk_app_launch_context_get_display: (attributes org.gtk.Method.get_property=display)
+ * gdk_app_launch_context_get_display:
  * @context: a `GdkAppLaunchContext`
  *
  * Gets the `GdkDisplay` that @context is for.

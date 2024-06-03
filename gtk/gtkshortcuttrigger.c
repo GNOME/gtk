@@ -705,7 +705,7 @@ gtk_keyval_trigger_new (guint           keyval,
 }
 
 /**
- * gtk_keyval_trigger_get_modifiers: (attributes org.gtk.Method.get_property=modifiers)
+ * gtk_keyval_trigger_get_modifiers:
  * @self: a keyval `GtkShortcutTrigger`
  *
  * Gets the modifiers that must be present to succeed
@@ -722,7 +722,7 @@ gtk_keyval_trigger_get_modifiers (GtkKeyvalTrigger *self)
 }
 
 /**
- * gtk_keyval_trigger_get_keyval: (attributes org.gtk.Method.get_property=keyval)
+ * gtk_keyval_trigger_get_keyval:
  * @self: a keyval `GtkShortcutTrigger`
  *
  * Gets the keyval that must be pressed to succeed
@@ -944,7 +944,7 @@ gtk_mnemonic_trigger_new (guint keyval)
 }
 
 /**
- * gtk_mnemonic_trigger_get_keyval: (attributes org.gtk.Method.get_property=keyval)
+ * gtk_mnemonic_trigger_get_keyval:
  * @self: a mnemonic `GtkShortcutTrigger`
  *
  * Gets the keyval that must be pressed to succeed triggering @self.
@@ -1212,7 +1212,7 @@ gtk_alternative_trigger_new (GtkShortcutTrigger *first,
 }
 
 /**
- * gtk_alternative_trigger_get_first: (attributes org.gtk.Method.get_property=first)
+ * gtk_alternative_trigger_get_first:
  * @self: an alternative `GtkShortcutTrigger`
  *
  * Gets the first of the two alternative triggers that may
@@ -1232,7 +1232,7 @@ gtk_alternative_trigger_get_first (GtkAlternativeTrigger *self)
 }
 
 /**
- * gtk_alternative_trigger_get_second: (attributes org.gtk.Method.get_property=second)
+ * gtk_alternative_trigger_get_second:
  * @self: an alternative `GtkShortcutTrigger`
  *
  * Gets the second of the two alternative triggers that may

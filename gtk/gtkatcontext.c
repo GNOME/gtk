@@ -438,7 +438,7 @@ gtk_at_context_init (GtkATContext *self)
 }
 
 /**
- * gtk_at_context_get_accessible: (attributes org.gtk.Method.get_property=accessible)
+ * gtk_at_context_get_accessible:
  * @self: a `GtkATContext`
  *
  * Retrieves the `GtkAccessible` using this context.
@@ -478,7 +478,7 @@ gtk_at_context_set_accessible_role (GtkATContext      *self,
 }
 
 /**
- * gtk_at_context_get_accessible_role: (attributes org.gtk.Method.get_property=accessible-role)
+ * gtk_at_context_get_accessible_role:
  * @self: a `GtkATContext`
  *
  * Retrieves the accessible role of this context.

@@ -1250,7 +1250,7 @@ gdk_gl_context_is_shared (GdkGLContext *self,
 }
 
 /**
- * gdk_gl_context_set_allowed_apis: (attributes org.gtk.Method.set_property=allowed-apis)
+ * gdk_gl_context_set_allowed_apis:
  * @self: a GL context
  * @apis: the allowed APIs
  *
@@ -1281,7 +1281,7 @@ gdk_gl_context_set_allowed_apis (GdkGLContext *self,
 }
 
 /**
- * gdk_gl_context_get_allowed_apis: (attributes org.gtk.Method.get_property=allowed-apis)
+ * gdk_gl_context_get_allowed_apis:
  * @self: a GL context
  *
  * Gets the allowed APIs set via gdk_gl_context_set_allowed_apis().
@@ -1301,7 +1301,7 @@ gdk_gl_context_get_allowed_apis (GdkGLContext *self)
 }
 
 /**
- * gdk_gl_context_get_api: (attributes org.gtk.Method.get_property=api)
+ * gdk_gl_context_get_api:
  * @self: a GL context
  *
  * Gets the API currently in use.
@@ -1913,7 +1913,7 @@ gdk_gl_context_get_surface (GdkGLContext *context)
 }
 
 /**
- * gdk_gl_context_get_shared_context: (attributes org.gtk.Method.get_property=shared-context)
+ * gdk_gl_context_get_shared_context:
  * @context: a `GdkGLContext`
  *
  * Used to retrieves the `GdkGLContext` that this @context share data with.

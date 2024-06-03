@@ -613,7 +613,7 @@ _gdk_macos_surface_set_native (GdkMacosSurface *self,
 }
 
 /**
- * gdk_macos_surface_get_native_window: (attributes org.gtk.Method.get_property=native)
+ * gdk_macos_surface_get_native_window:
  * @self: a #GdkMacosSurface
  *
  * Gets the underlying NSWindow used by the surface.

@@ -306,7 +306,7 @@ gtk_size_group_new (GtkSizeGroupMode mode)
 }
 
 /**
- * gtk_size_group_set_mode: (attributes org.gtk.Method.set_property=mode)
+ * gtk_size_group_set_mode:
  * @size_group: a `GtkSizeGroup`
  * @mode: the mode to set for the size group.
  *
@@ -339,7 +339,7 @@ gtk_size_group_set_mode (GtkSizeGroup     *size_group,
 }
 
 /**
- * gtk_size_group_get_mode: (attributes org.gtk.Method.get_property=mode)
+ * gtk_size_group_get_mode:
  * @size_group: a `GtkSizeGroup`
  *
  * Gets the current mode of the size group.

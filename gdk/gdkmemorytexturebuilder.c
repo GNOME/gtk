@@ -348,7 +348,7 @@ gdk_memory_texture_builder_get_bytes (GdkMemoryTextureBuilder *self)
 }
 
 /**
- * gdk_memory_texture_builder_set_bytes: (attributes org.gtk.Method.set_property=bytes)
+ * gdk_memory_texture_builder_set_bytes:
  * @self: a `GdkMemoryTextureBuilder`
  * @bytes: (nullable): The bytes the texture shows or %NULL to unset
  *
@@ -377,7 +377,7 @@ gdk_memory_texture_builder_set_bytes (GdkMemoryTextureBuilder *self,
 }
 
 /**
- * gdk_memory_texture_builder_get_color_state: (attributes org.gtk.Method.get_property=color-state)
+ * gdk_memory_texture_builder_get_color_state:
  * @self: a `GdkMemoryTextureBuilder`
  *
  * Gets the colorstate previously set via gdk_memory_texture_builder_set_color_state().
@@ -395,7 +395,7 @@ gdk_memory_texture_builder_get_color_state (GdkMemoryTextureBuilder *self)
 }
 
 /**
- * gdk_memory_texture_builder_set_color_state: (attributes org.gtk.Method.set_property=color-state)
+ * gdk_memory_texture_builder_set_color_state:
  * @self: a `GdkMemoryTextureBuilder`
  * @color_state: (nullable): The colorstate describing the data
  *
@@ -425,7 +425,7 @@ gdk_memory_texture_builder_set_color_state (GdkMemoryTextureBuilder *self,
 }
 
 /**
- * gdk_memory_texture_builder_get_height: (attributes org.gtk.Method.get_property=height)
+ * gdk_memory_texture_builder_get_height:
  * @self: a `GdkMemoryTextureBuilder`
  *
  * Gets the height previously set via gdk_memory_texture_builder_set_height()
@@ -444,7 +444,7 @@ gdk_memory_texture_builder_get_height (GdkMemoryTextureBuilder *self)
 }
 
 /**
- * gdk_memory_texture_builder_set_height: (attributes org.gtk.Method.set_property=height)
+ * gdk_memory_texture_builder_set_height:
  * @self: a `GdkMemoryTextureBuilder`
  * @height: The texture's height or 0 to unset
  *
@@ -469,7 +469,7 @@ gdk_memory_texture_builder_set_height (GdkMemoryTextureBuilder *self,
 }
 
 /**
- * gdk_memory_texture_builder_get_width: (attributes org.gtk.Method.get_property=width)
+ * gdk_memory_texture_builder_get_width:
  * @self: a `GdkMemoryTextureBuilder`
  *
  * Gets the width previously set via gdk_memory_texture_builder_set_width()
@@ -488,7 +488,7 @@ gdk_memory_texture_builder_get_width (GdkMemoryTextureBuilder *self)
 }
 
 /**
- * gdk_memory_texture_builder_set_width: (attributes org.gtk.Method.set_property=width)
+ * gdk_memory_texture_builder_set_width:
  * @self: a `GdkMemoryTextureBuilder`
  * @width: The texture's width or 0 to unset
  *
@@ -512,7 +512,6 @@ gdk_memory_texture_builder_set_width (GdkMemoryTextureBuilder *self,
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_WIDTH]);
 }
 
-/* gdk_memory_texture_builder_get_stride: (attributes org.gtk.Method.get_property=stride) */
 /**
  * gdk_memory_texture_builder_get_stride:
  * @self: a `GdkMemoryTextureBuilder`
@@ -531,7 +530,6 @@ gdk_memory_texture_builder_get_stride (GdkMemoryTextureBuilder *self)
   return self->stride;
 }
 
- /* gdk_memory_texture_builder_set_stride: (attributes org.gtk.Method.set_property=stride) */
 /**
  * gdk_memory_texture_builder_set_stride:
  * @self: a `GdkMemoryTextureBuilder`
@@ -558,7 +556,7 @@ gdk_memory_texture_builder_set_stride (GdkMemoryTextureBuilder *self,
 }
 
 /**
- * gdk_memory_texture_builder_get_format: (attributes org.gtk.Method.get_property=format)
+ * gdk_memory_texture_builder_get_format:
  * @self: a `GdkMemoryTextureBuilder`
  *
  * Gets the format previously set via gdk_memory_texture_builder_set_format().
@@ -576,7 +574,7 @@ gdk_memory_texture_builder_get_format (GdkMemoryTextureBuilder *self)
 }
 
 /**
- * gdk_memory_texture_builder_set_format: (attributes org.gtk.Method.set_property=format)
+ * gdk_memory_texture_builder_set_format:
  * @self: a `GdkMemoryTextureBuilder`
  * @format: The texture's format
  *
@@ -601,7 +599,7 @@ gdk_memory_texture_builder_set_format (GdkMemoryTextureBuilder *self,
 }
 
 /**
- * gdk_memory_texture_builder_get_update_texture: (attributes org.gtk.Method.get_property=update-texture)
+ * gdk_memory_texture_builder_get_update_texture:
  * @self: a `GdkMemoryTextureBuilder`
  *
  * Gets the texture previously set via gdk_memory_texture_builder_set_update_texture()
@@ -620,7 +618,7 @@ gdk_memory_texture_builder_get_update_texture (GdkMemoryTextureBuilder *self)
 }
 
 /**
- * gdk_memory_texture_builder_set_update_texture: (attributes org.gtk.Method.set_property=update-texture)
+ * gdk_memory_texture_builder_set_update_texture:
  * @self: a `GdkMemoryTextureBuilder`
  * @texture: (nullable): the texture to update
  *
@@ -644,7 +642,7 @@ gdk_memory_texture_builder_set_update_texture (GdkMemoryTextureBuilder *self,
 }
 
 /**
- * gdk_memory_texture_builder_get_update_region: (attributes org.gtk.Method.get_property=update-region)
+ * gdk_memory_texture_builder_get_update_region:
  * @self: a `GdkMemoryTextureBuilder`
  *
  * Gets the region previously set via gdk_memory_texture_builder_set_update_region()
@@ -663,7 +661,7 @@ gdk_memory_texture_builder_get_update_region (GdkMemoryTextureBuilder *self)
 }
 
 /**
- * gdk_memory_texture_builder_set_update_region: (attributes org.gtk.Method.set_property=update-region)
+ * gdk_memory_texture_builder_set_update_region:
  * @self: a `GdkMemoryTextureBuilder`
  * @region: (nullable): the region to update
  *

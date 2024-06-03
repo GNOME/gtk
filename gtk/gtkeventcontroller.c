@@ -400,7 +400,7 @@ gtk_event_controller_handle_crossing (GtkEventController    *controller,
 }
 
 /**
- * gtk_event_controller_get_widget: (attributes org.gtk.Method.get_property=widget)
+ * gtk_event_controller_get_widget:
  * @controller: a `GtkEventController`
  *
  * Returns the `GtkWidget` this controller relates to.
@@ -439,7 +439,7 @@ gtk_event_controller_reset (GtkEventController *controller)
 }
 
 /**
- * gtk_event_controller_get_propagation_phase: (attributes org.gtk.Method.get_property=propagation-phase)
+ * gtk_event_controller_get_propagation_phase:
  * @controller: a `GtkEventController`
  *
  * Gets the propagation phase at which @controller handles events.
@@ -459,7 +459,7 @@ gtk_event_controller_get_propagation_phase (GtkEventController *controller)
 }
 
 /**
- * gtk_event_controller_set_propagation_phase: (attributes org.gtk.Method.set_property=propagation-phase)
+ * gtk_event_controller_set_propagation_phase:
  * @controller: a `GtkEventController`
  * @phase: a propagation phase
  *
@@ -491,7 +491,7 @@ gtk_event_controller_set_propagation_phase (GtkEventController  *controller,
 }
 
 /**
- * gtk_event_controller_get_propagation_limit: (attributes org.gtk.Method.get_property=propagation-limit)
+ * gtk_event_controller_get_propagation_limit:
  * @controller: a `GtkEventController`
  *
  * Gets the propagation limit of the event controller.
@@ -511,7 +511,7 @@ gtk_event_controller_get_propagation_limit (GtkEventController *controller)
 }
 
 /**
- * gtk_event_controller_set_propagation_limit: (attributes org.gtk.Method.set_property=propagation-limit)
+ * gtk_event_controller_set_propagation_limit:
  * @controller: a `GtkEventController`
  * @limit: the propagation limit
  *
@@ -540,7 +540,7 @@ gtk_event_controller_set_propagation_limit (GtkEventController  *controller,
 }
 
 /**
- * gtk_event_controller_get_name: (attributes org.gtk.Method.get_property=name)
+ * gtk_event_controller_get_name:
  * @controller: a `GtkEventController`
  *
  * Gets the name of @controller.
@@ -558,7 +558,7 @@ gtk_event_controller_get_name (GtkEventController *controller)
 }
 
 /**
- * gtk_event_controller_set_name: (attributes org.gtk.Method.set_property=name)
+ * gtk_event_controller_set_name:
  * @controller: a `GtkEventController`
  * @name: (nullable): a name for @controller
  *

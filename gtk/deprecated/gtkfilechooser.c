@@ -178,7 +178,7 @@ gtk_file_chooser_error_quark (void)
 }
 
 /**
- * gtk_file_chooser_set_action: (attributes org.gtk.Method.set_property=action)
+ * gtk_file_chooser_set_action:
  * @chooser: a `GtkFileChooser`
  * @action: the action that the file selector is performing
  *
@@ -202,7 +202,7 @@ gtk_file_chooser_set_action (GtkFileChooser       *chooser,
 }
 
 /**
- * gtk_file_chooser_get_action: (attributes org.gtk.Method.get_property=action)
+ * gtk_file_chooser_get_action:
  * @chooser: a `GtkFileChooser`
  *
  * Gets the type of operation that the file chooser is performing.
@@ -224,7 +224,7 @@ gtk_file_chooser_get_action (GtkFileChooser *chooser)
 }
 
 /**
- * gtk_file_chooser_set_select_multiple: (attributes org.gtk.Method.set_property=select-multiple)
+ * gtk_file_chooser_set_select_multiple:
  * @chooser: a `GtkFileChooser`
  * @select_multiple: %TRUE if multiple files can be selected.
  *
@@ -246,7 +246,7 @@ gtk_file_chooser_set_select_multiple (GtkFileChooser *chooser,
 }
 
 /**
- * gtk_file_chooser_get_select_multiple: (attributes org.gtk.Method.get_property=select-multiple)
+ * gtk_file_chooser_get_select_multiple:
  * @chooser: a `GtkFileChooser`
  *
  * Gets whether multiple files can be selected in the file
@@ -269,7 +269,7 @@ gtk_file_chooser_get_select_multiple (GtkFileChooser *chooser)
 }
 
 /**
- * gtk_file_chooser_set_create_folders: (attributes org.gtk.Method.set_property=create-folders)
+ * gtk_file_chooser_set_create_folders:
  * @chooser: a `GtkFileChooser`
  * @create_folders: %TRUE if the Create Folder button should be displayed
  *
@@ -290,7 +290,7 @@ gtk_file_chooser_set_create_folders (GtkFileChooser *chooser,
 }
 
 /**
- * gtk_file_chooser_get_create_folders: (attributes org.gtk.Method.get_property=create-folders)
+ * gtk_file_chooser_get_create_folders:
  * @chooser: a `GtkFileChooser`
  *
  * Gets whether file chooser will offer to create new folders.
@@ -662,7 +662,7 @@ gtk_file_chooser_remove_filter (GtkFileChooser *chooser,
 }
 
 /**
- * gtk_file_chooser_get_filters: (attributes org.gtk.Method.get_property=filters)
+ * gtk_file_chooser_get_filters:
  * @chooser: a `GtkFileChooser`
  *
  * Gets the current set of user-selectable filters, as a list model.
@@ -687,7 +687,7 @@ gtk_file_chooser_get_filters (GtkFileChooser *chooser)
 }
 
 /**
- * gtk_file_chooser_set_filter: (attributes org.gtk.Method.set_property=filter)
+ * gtk_file_chooser_set_filter:
  * @chooser: a `GtkFileChooser`
  * @filter: a `GtkFileFilter`
  *
@@ -714,7 +714,7 @@ gtk_file_chooser_set_filter (GtkFileChooser *chooser,
 }
 
 /**
- * gtk_file_chooser_get_filter: (attributes org.gtk.Method.get_property=filter)
+ * gtk_file_chooser_get_filter:
  * @chooser: a `GtkFileChooser`
  *
  * Gets the current filter.
@@ -742,7 +742,7 @@ gtk_file_chooser_get_filter (GtkFileChooser *chooser)
 }
 
 /**
- * gtk_file_chooser_get_shortcut_folders: (attributes org.gtk.Method.get_property=shortcut-folders)
+ * gtk_file_chooser_get_shortcut_folders:
  * @chooser: a `GtkFileChooser`
  *
  * Queries the list of shortcut folders in the file chooser.

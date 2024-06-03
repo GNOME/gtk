@@ -402,7 +402,7 @@ gtk_string_sorter_new (GtkExpression *expression)
 }
 
 /**
- * gtk_string_sorter_get_expression: (attributes org.gtk.Method.get_property=expression)
+ * gtk_string_sorter_get_expression:
  * @self: a `GtkStringSorter`
  *
  * Gets the expression that is evaluated to obtain strings from items.
@@ -418,7 +418,7 @@ gtk_string_sorter_get_expression (GtkStringSorter *self)
 }
 
 /**
- * gtk_string_sorter_set_expression: (attributes org.gtk.Method.set_property=expression)
+ * gtk_string_sorter_set_expression:
  * @self: a `GtkStringSorter`
  * @expression: (nullable) (transfer none): a `GtkExpression`
  *
@@ -448,7 +448,7 @@ gtk_string_sorter_set_expression (GtkStringSorter *self,
 }
 
 /**
- * gtk_string_sorter_get_ignore_case: (attributes org.gtk.Method.get_property=ignore-case)
+ * gtk_string_sorter_get_ignore_case:
  * @self: a `GtkStringSorter`
  *
  * Gets whether the sorter ignores case differences.
@@ -464,7 +464,7 @@ gtk_string_sorter_get_ignore_case (GtkStringSorter *self)
 }
 
 /**
- * gtk_string_sorter_set_ignore_case: (attributes org.gtk.Method.set_property=ignore-case)
+ * gtk_string_sorter_set_ignore_case:
  * @self: a `GtkStringSorter`
  * @ignore_case: %TRUE to ignore case differences
  *
@@ -489,7 +489,7 @@ gtk_string_sorter_set_ignore_case (GtkStringSorter *self,
 }
 
 /**
- * gtk_string_sorter_get_collation: (attributes org.gtk.Method.get_property=collation)
+ * gtk_string_sorter_get_collation:
  * @self: a `GtkStringSorter`
  *
  * Gets which collation method the sorter uses.
@@ -507,7 +507,7 @@ gtk_string_sorter_get_collation (GtkStringSorter *self)
 }
 
 /**
- * gtk_string_sorter_set_collation: (attributes org.gtk.Method.set_property=collation)
+ * gtk_string_sorter_set_collation:
  * @self: a `GtkStringSorter`
  * @collation: the collation method
  *

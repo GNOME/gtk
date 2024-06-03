@@ -760,7 +760,7 @@ menu_deactivate_cb (GtkMenuButton *self)
 }
 
 /**
- * gtk_menu_button_set_menu_model: (attributes org.gtk.Method.set_property=menu-model)
+ * gtk_menu_button_set_menu_model:
  * @menu_button: a `GtkMenuButton`
  * @menu_model: (nullable): a `GMenuModel`, or %NULL to unset and disable the
  *   button
@@ -812,7 +812,7 @@ gtk_menu_button_set_menu_model (GtkMenuButton *menu_button,
 }
 
 /**
- * gtk_menu_button_get_menu_model: (attributes org.gtk.Method.get_property=menu-model)
+ * gtk_menu_button_get_menu_model:
  * @menu_button: a `GtkMenuButton`
  *
  * Returns the `GMenuModel` used to generate the popup.
@@ -860,7 +860,7 @@ popover_destroy_cb (GtkMenuButton *menu_button)
 }
 
 /**
- * gtk_menu_button_set_direction: (attributes org.gtk.Method.set_property=direction)
+ * gtk_menu_button_set_direction:
  * @menu_button: a `GtkMenuButton`
  * @direction: a `GtkArrowType`
  *
@@ -892,7 +892,7 @@ gtk_menu_button_set_direction (GtkMenuButton *menu_button,
 }
 
 /**
- * gtk_menu_button_get_direction: (attributes org.gtk.Method.get_property=direction)
+ * gtk_menu_button_get_direction:
  * @menu_button: a `GtkMenuButton`
  *
  * Returns the direction the popup will be pointing at when popped up.
@@ -934,7 +934,7 @@ gtk_menu_button_dispose (GObject *object)
 }
 
 /**
- * gtk_menu_button_set_popover: (attributes org.gtk.Method.set_property=popover)
+ * gtk_menu_button_set_popover:
  * @menu_button: a `GtkMenuButton`
  * @popover: (nullable): a `GtkPopover`, or %NULL to unset and disable the button
  *
@@ -990,7 +990,7 @@ gtk_menu_button_set_popover (GtkMenuButton *menu_button,
 }
 
 /**
- * gtk_menu_button_get_popover: (attributes org.gtk.Method.get_property=popover)
+ * gtk_menu_button_get_popover:
  * @menu_button: a `GtkMenuButton`
  *
  * Returns the `GtkPopover` that pops out of the button.
@@ -1009,7 +1009,7 @@ gtk_menu_button_get_popover (GtkMenuButton *menu_button)
 }
 
 /**
- * gtk_menu_button_set_icon_name: (attributes org.gtk.Method.set_property=icon-name)
+ * gtk_menu_button_set_icon_name:
  * @menu_button: a `GtkMenuButton`
  * @icon_name: the icon name
  *
@@ -1065,7 +1065,7 @@ gtk_menu_button_set_icon_name (GtkMenuButton *menu_button,
 }
 
 /**
- * gtk_menu_button_get_icon_name: (attributes org.gtk.Method.get_property=icon-name)
+ * gtk_menu_button_get_icon_name:
  * @menu_button: a `GtkMenuButton`
  *
  * Gets the name of the icon shown in the button.
@@ -1084,7 +1084,7 @@ gtk_menu_button_get_icon_name (GtkMenuButton *menu_button)
 }
 
 /**
- * gtk_menu_button_set_always_show_arrow: (attributes org.gtk.Method.set_property=always-show-arrow)
+ * gtk_menu_button_set_always_show_arrow:
  * @menu_button: a `GtkMenuButton`
  * @always_show_arrow: whether to show a dropdown arrow even when using an icon
  * or a custom child
@@ -1113,7 +1113,7 @@ gtk_menu_button_set_always_show_arrow (GtkMenuButton *menu_button,
 }
 
 /**
- * gtk_menu_button_get_always_show_arrow: (attributes org.gtk.Method.get_property=always-show-arrow)
+ * gtk_menu_button_get_always_show_arrow:
  * @menu_button: a `GtkMenuButton`
  *
  * Gets whether to show a dropdown arrow even when using an icon or a custom
@@ -1133,7 +1133,7 @@ gtk_menu_button_get_always_show_arrow (GtkMenuButton *menu_button)
 }
 
 /**
- * gtk_menu_button_set_label: (attributes org.gtk.Method.set_property=label)
+ * gtk_menu_button_set_label:
  * @menu_button: a `GtkMenuButton`
  * @label: the label
  *
@@ -1189,7 +1189,7 @@ gtk_menu_button_set_label (GtkMenuButton *menu_button,
 }
 
 /**
- * gtk_menu_button_get_label: (attributes org.gtk.Method.get_property=label)
+ * gtk_menu_button_get_label:
  * @menu_button: a `GtkMenuButton`
  *
  * Gets the label shown in the button
@@ -1208,7 +1208,7 @@ gtk_menu_button_get_label (GtkMenuButton *menu_button)
 }
 
 /**
- * gtk_menu_button_set_has_frame: (attributes org.gtk.Method.set_property=has-frame)
+ * gtk_menu_button_set_has_frame:
  * @menu_button: a `GtkMenuButton`
  * @has_frame: whether the button should have a visible frame
  *
@@ -1228,7 +1228,7 @@ gtk_menu_button_set_has_frame (GtkMenuButton *menu_button,
 }
 
 /**
- * gtk_menu_button_get_has_frame: (attributes org.gtk.Method.get_property=has-frame)
+ * gtk_menu_button_get_has_frame:
  * @menu_button: a `GtkMenuButton`
  *
  * Returns whether the button has a frame.
@@ -1312,7 +1312,7 @@ gtk_menu_button_set_create_popup_func (GtkMenuButton                *menu_button
 }
 
 /**
- * gtk_menu_button_set_use_underline: (attributes org.gtk.Method.set_property=use-underline)
+ * gtk_menu_button_set_use_underline:
  * @menu_button: a `GtkMenuButton`
  * @use_underline: %TRUE if underlines in the text indicate mnemonics
  *
@@ -1335,7 +1335,7 @@ gtk_menu_button_set_use_underline (GtkMenuButton *menu_button,
 }
 
 /**
- * gtk_menu_button_get_use_underline: (attributes org.gtk.Method.get_property=use-underline)
+ * gtk_menu_button_get_use_underline:
  * @menu_button: a `GtkMenuButton`
  *
  * Returns whether an embedded underline in the text indicates a
@@ -1410,7 +1410,7 @@ gtk_menu_button_unroot (GtkWidget *widget)
 }
 
 /**
- * gtk_menu_button_set_primary: (attributes org.gtk.Method.set_property=primary)
+ * gtk_menu_button_set_primary:
  * @menu_button: a `GtkMenuButton`
  * @primary: whether the menubutton should act as a primary menu
  *
@@ -1446,7 +1446,7 @@ gtk_menu_button_set_primary (GtkMenuButton *menu_button,
 }
 
 /**
- * gtk_menu_button_get_primary: (attributes org.gtk.Method.get_property=primary)
+ * gtk_menu_button_get_primary:
  * @menu_button: a `GtkMenuButton`
  *
  * Returns whether the menu button acts as a primary menu.
@@ -1464,7 +1464,7 @@ gtk_menu_button_get_primary (GtkMenuButton *menu_button)
 }
 
 /**
- * gtk_menu_button_set_child: (attributes org.gtk.Method.set_property=child)
+ * gtk_menu_button_set_child:
  * @menu_button: a `GtkMenuButton`
  * @child: (nullable): the child widget
  *
@@ -1535,7 +1535,7 @@ gtk_menu_button_set_child (GtkMenuButton *menu_button,
 }
 
 /**
- * gtk_menu_button_get_child: (attributes org.gtk.Method.get_property=child)
+ * gtk_menu_button_get_child:
  * @menu_button: a `GtkMenuButton`
  *
  * Gets the child widget of @menu_button.
@@ -1553,7 +1553,7 @@ gtk_menu_button_get_child (GtkMenuButton *menu_button)
 }
 
 /**
- * gtk_menu_button_set_active: (attributes org.gtk.Method.set_property=active)
+ * gtk_menu_button_set_active:
  * @menu_button: a `GtkMenuButton`
  * @active: whether the menu button is active
  *
@@ -1577,7 +1577,7 @@ gtk_menu_button_set_active (GtkMenuButton *menu_button,
 }
 
 /**
- * gtk_menu_button_get_active: (attributes org.gtk.Method.get_property=active)
+ * gtk_menu_button_get_active:
  * @menu_button: a `GtkMenuButton`
  *
  * Returns whether the menu button is active.

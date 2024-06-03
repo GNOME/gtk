@@ -208,7 +208,7 @@ gtk_grid_layout_child_init (GtkGridLayoutChild *self)
 }
 
 /**
- * gtk_grid_layout_child_set_row: (attributes org.gtk.Method.set_property=row)
+ * gtk_grid_layout_child_set_row:
  * @child: a `GtkGridLayoutChild`
  * @row: the row for @child
  *
@@ -231,7 +231,7 @@ gtk_grid_layout_child_set_row (GtkGridLayoutChild *child,
 }
 
 /**
- * gtk_grid_layout_child_get_row: (attributes org.gtk.Method.get_property=row)
+ * gtk_grid_layout_child_get_row:
  * @child: a `GtkGridLayoutChild`
  *
  * Retrieves the row number to which @child attaches its top side.
@@ -247,7 +247,7 @@ gtk_grid_layout_child_get_row (GtkGridLayoutChild *child)
 }
 
 /**
- * gtk_grid_layout_child_set_column: (attributes org.gtk.Method.set_property=column)
+ * gtk_grid_layout_child_set_column:
  * @child: a `GtkGridLayoutChild`
  * @column: the attach point for @child
  *
@@ -270,7 +270,7 @@ gtk_grid_layout_child_set_column (GtkGridLayoutChild *child,
 }
 
 /**
- * gtk_grid_layout_child_get_column: (attributes org.gtk.Method.get_property=column)
+ * gtk_grid_layout_child_get_column:
  * @child: a `GtkGridLayoutChild`
  *
  * Retrieves the column number to which @child attaches its left side.
@@ -286,7 +286,7 @@ gtk_grid_layout_child_get_column (GtkGridLayoutChild *child)
 }
 
 /**
- * gtk_grid_layout_child_set_column_span: (attributes org.gtk.Method.set_property=column-span)
+ * gtk_grid_layout_child_set_column_span:
  * @child: a `GtkGridLayoutChild`
  * @span: the span of @child
  *
@@ -309,7 +309,7 @@ gtk_grid_layout_child_set_column_span (GtkGridLayoutChild *child,
 }
 
 /**
- * gtk_grid_layout_child_get_column_span: (attributes org.gtk.Method.get_property=column-span)
+ * gtk_grid_layout_child_get_column_span:
  * @child: a `GtkGridLayoutChild`
  *
  * Retrieves the number of columns that @child spans to.
@@ -325,7 +325,7 @@ gtk_grid_layout_child_get_column_span (GtkGridLayoutChild *child)
 }
 
 /**
- * gtk_grid_layout_child_set_row_span: (attributes org.gtk.Method.set_property=row-span)
+ * gtk_grid_layout_child_set_row_span:
  * @child: a `GtkGridLayoutChild`
  * @span: the span of @child
  *
@@ -348,7 +348,7 @@ gtk_grid_layout_child_set_row_span (GtkGridLayoutChild *child,
 }
 
 /**
- * gtk_grid_layout_child_get_row_span: (attributes org.gtk.Method.get_property=row-span)
+ * gtk_grid_layout_child_get_row_span:
  * @child: a `GtkGridLayoutChild`
  *
  * Retrieves the number of rows that @child spans to.
@@ -1726,7 +1726,7 @@ gtk_grid_layout_new (void)
 }
 
 /**
- * gtk_grid_layout_set_row_homogeneous: (attributes org.gtk.Method.set_property=row-homogeneous)
+ * gtk_grid_layout_set_row_homogeneous:
  * @grid: a `GtkGridLayout`
  * @homogeneous: %TRUE to make rows homogeneous
  *
@@ -1749,7 +1749,7 @@ gtk_grid_layout_set_row_homogeneous (GtkGridLayout *grid,
 }
 
 /**
- * gtk_grid_layout_get_row_homogeneous: (attributes org.gtk.Method.get_property=row-homogeneous)
+ * gtk_grid_layout_get_row_homogeneous:
  * @grid: a `GtkGridLayout`
  *
  * Checks whether all rows of @grid should have the same height.
@@ -1765,7 +1765,7 @@ gtk_grid_layout_get_row_homogeneous (GtkGridLayout *grid)
 }
 
 /**
- * gtk_grid_layout_set_row_spacing: (attributes org.gtk.Method.set_property=row-spacing)
+ * gtk_grid_layout_set_row_spacing:
  * @grid: a `GtkGridLayout`
  * @spacing: the amount of space between rows, in pixels
  *
@@ -1788,7 +1788,7 @@ gtk_grid_layout_set_row_spacing (GtkGridLayout *grid,
 }
 
 /**
- * gtk_grid_layout_get_row_spacing: (attributes org.gtk.Method.get_property=row-spacing)
+ * gtk_grid_layout_get_row_spacing:
  * @grid: a `GtkGridLayout`
  *
  * Retrieves the spacing set with gtk_grid_layout_set_row_spacing().
@@ -1804,7 +1804,7 @@ gtk_grid_layout_get_row_spacing (GtkGridLayout *grid)
 }
 
 /**
- * gtk_grid_layout_set_column_homogeneous: (attributes org.gtk.Method.set_property=column-homogeneous)
+ * gtk_grid_layout_set_column_homogeneous:
  * @grid: a `GtkGridLayout`
  * @homogeneous: %TRUE to make columns homogeneous
  *
@@ -1827,7 +1827,7 @@ gtk_grid_layout_set_column_homogeneous (GtkGridLayout *grid,
 }
 
 /**
- * gtk_grid_layout_get_column_homogeneous: (attributes org.gtk.Method.get_property=column-homogeneous)
+ * gtk_grid_layout_get_column_homogeneous:
  * @grid: a `GtkGridLayout`
  *
  * Checks whether all columns of @grid should have the same width.
@@ -1843,7 +1843,7 @@ gtk_grid_layout_get_column_homogeneous (GtkGridLayout *grid)
 }
 
 /**
- * gtk_grid_layout_set_column_spacing: (attributes org.gtk.Method.set_property=column-spacing)
+ * gtk_grid_layout_set_column_spacing:
  * @grid: a `GtkGridLayout`
  * @spacing: the amount of space between columns, in pixels
  *
@@ -1866,7 +1866,7 @@ gtk_grid_layout_set_column_spacing (GtkGridLayout *grid,
 }
 
 /**
- * gtk_grid_layout_get_column_spacing: (attributes org.gtk.Method.get_property=column-spacing)
+ * gtk_grid_layout_get_column_spacing:
  * @grid: a `GtkGridLayout`
  *
  * Retrieves the spacing set with gtk_grid_layout_set_column_spacing().
@@ -1993,7 +1993,7 @@ gtk_grid_layout_get_row_baseline_position (GtkGridLayout *grid,
 }
 
 /**
- * gtk_grid_layout_set_baseline_row: (attributes org.gtk.Method.set_property=baseline-row)
+ * gtk_grid_layout_set_baseline_row:
  * @grid: a `GtkGridLayout`
  * @row: the row index
  *
@@ -2018,7 +2018,7 @@ gtk_grid_layout_set_baseline_row (GtkGridLayout *grid,
 }
 
 /**
- * gtk_grid_layout_get_baseline_row: (attributes org.gtk.Method.get_property=baseline-row)
+ * gtk_grid_layout_get_baseline_row:
  * @grid: a `GtkGridLayout`
  *
  * Retrieves the row set with gtk_grid_layout_set_baseline_row().

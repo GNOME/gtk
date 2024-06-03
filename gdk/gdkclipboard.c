@@ -429,7 +429,7 @@ gdk_clipboard_init (GdkClipboard *clipboard)
 }
 
 /**
- * gdk_clipboard_get_display: (attributes org.gtk.Method.get_property=display)
+ * gdk_clipboard_get_display:
  * @clipboard: a `GdkClipboard`
  *
  * Gets the `GdkDisplay` that the clipboard was created for.
@@ -447,7 +447,7 @@ gdk_clipboard_get_display (GdkClipboard *clipboard)
 }
 
 /**
- * gdk_clipboard_get_formats: (attributes org.gtk.Method.get_property=formats)
+ * gdk_clipboard_get_formats:
  * @clipboard: a `GdkClipboard`
  *
  * Gets the formats that the clipboard can provide its current contents in.
@@ -489,7 +489,7 @@ gdk_clipboard_is_local (GdkClipboard *clipboard)
 }
 
 /**
- * gdk_clipboard_get_content: (attributes org.gtk.Method.get_property=content)
+ * gdk_clipboard_get_content:
  * @clipboard: a `GdkClipboard`
  *
  * Returns the `GdkContentProvider` currently set on @clipboard.

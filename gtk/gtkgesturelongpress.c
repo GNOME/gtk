@@ -344,7 +344,7 @@ gtk_gesture_long_press_new (void)
 }
 
 /**
- * gtk_gesture_long_press_set_delay_factor: (attributes org.gtk.Method.set_property=delay-factor)
+ * gtk_gesture_long_press_set_delay_factor:
  * @gesture: A `GtkGestureLongPress`
  * @delay_factor: The delay factor to apply
  *
@@ -372,7 +372,7 @@ gtk_gesture_long_press_set_delay_factor (GtkGestureLongPress *gesture,
 }
 
 /**
- * gtk_gesture_long_press_get_delay_factor: (attributes org.gtk.Method.get_property=delay-factor)
+ * gtk_gesture_long_press_get_delay_factor:
  * @gesture: A `GtkGestureLongPress`
  *
  * Returns the delay factor.

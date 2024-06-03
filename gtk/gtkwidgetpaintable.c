@@ -292,7 +292,7 @@ gtk_widget_paintable_snapshot_widget (GtkWidgetPaintable *self)
 }
 
 /**
- * gtk_widget_paintable_get_widget: (attributes org.gtk.Method.get_property=widget)
+ * gtk_widget_paintable_get_widget:
  * @self: a `GtkWidgetPaintable`
  *
  * Returns the widget that is observed or %NULL if none.
@@ -308,7 +308,7 @@ gtk_widget_paintable_get_widget (GtkWidgetPaintable *self)
 }
 
 /**
- * gtk_widget_paintable_set_widget: (attributes org.gtk.Method.set_property=widget)
+ * gtk_widget_paintable_set_widget:
  * @self: a `GtkWidgetPaintable`
  * @widget: (nullable): the widget to observe
  *

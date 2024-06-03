@@ -478,7 +478,7 @@ gtk_search_bar_set_search_mode (GtkSearchBar *bar,
 }
 
 /**
- * gtk_search_bar_get_show_close_button: (attributes org.gtk.Method.get_property=show-close-button)
+ * gtk_search_bar_get_show_close_button:
  * @bar: a `GtkSearchBar`
  *
  * Returns whether the close button is shown.
@@ -494,7 +494,7 @@ gtk_search_bar_get_show_close_button (GtkSearchBar *bar)
 }
 
 /**
- * gtk_search_bar_set_show_close_button: (attributes org.gtk.Method.set_property=show-close-button)
+ * gtk_search_bar_set_show_close_button:
  * @bar: a `GtkSearchBar`
  * @visible: whether the close button will be shown or not
  *
@@ -599,7 +599,7 @@ capture_widget_key_handled (GtkEventControllerKey *controller,
 }
 
 /**
- * gtk_search_bar_set_key_capture_widget: (attributes org.gtk.Method.set_property=key-capture-widget)
+ * gtk_search_bar_set_key_capture_widget:
  * @bar: a `GtkSearchBar`
  * @widget: (nullable) (transfer none): a `GtkWidget`
  *
@@ -655,7 +655,7 @@ gtk_search_bar_set_key_capture_widget (GtkSearchBar *bar,
 }
 
 /**
- * gtk_search_bar_get_key_capture_widget: (attributes org.gtk.Method.get_property=key-capture-widget)
+ * gtk_search_bar_get_key_capture_widget:
  * @bar: a `GtkSearchBar`
  *
  * Gets the widget that @bar is capturing key events from.
@@ -671,7 +671,7 @@ gtk_search_bar_get_key_capture_widget (GtkSearchBar *bar)
 }
 
 /**
- * gtk_search_bar_set_child: (attributes org.gtk.Method.set_property=child)
+ * gtk_search_bar_set_child:
  * @bar: a `GtkSearchBar`
  * @child: (nullable): the child widget
  *
@@ -709,7 +709,7 @@ gtk_search_bar_set_child (GtkSearchBar *bar,
 }
 
 /**
- * gtk_search_bar_get_child: (attributes org.gtk.Method.get_property=child)
+ * gtk_search_bar_get_child:
  * @bar: a `GtkSearchBar`
  *
  * Gets the child widget of @bar.

@@ -825,7 +825,7 @@ gtk_check_button_new_with_mnemonic (const char *label)
 }
 
 /**
- * gtk_check_button_set_inconsistent: (attributes org.gtk.Method.set_property=inconsistent)
+ * gtk_check_button_set_inconsistent:
  * @check_button: a `GtkCheckButton`
  * @inconsistent: %TRUE if state is inconsistent
  *
@@ -865,7 +865,7 @@ gtk_check_button_set_inconsistent (GtkCheckButton *check_button,
 }
 
 /**
- * gtk_check_button_get_inconsistent: (attributes org.gtk.Method.get_property=inconsistent)
+ * gtk_check_button_get_inconsistent:
  * @check_button: a `GtkCheckButton`
  *
  * Returns whether the check button is in an inconsistent state.
@@ -883,7 +883,7 @@ gtk_check_button_get_inconsistent (GtkCheckButton *check_button)
 }
 
 /**
- * gtk_check_button_get_active: (attributes org.gtk.Method.get_property=active)
+ * gtk_check_button_get_active:
  * @self: a `GtkCheckButton`
  *
  * Returns whether the check button is active.
@@ -901,7 +901,7 @@ gtk_check_button_get_active (GtkCheckButton *self)
 }
 
 /**
- * gtk_check_button_set_active: (attributes org.gtk.Method.set_property=active)
+ * gtk_check_button_set_active:
  * @self: a `GtkCheckButton`
  * @setting: the new value to set
  *
@@ -953,7 +953,7 @@ gtk_check_button_set_active (GtkCheckButton *self,
 }
 
 /**
- * gtk_check_button_get_label: (attributes org.gtk.Method.get_property=label)
+ * gtk_check_button_get_label:
  * @self: a `GtkCheckButton`
  *
  * Returns the label of the check button or `NULL` if [property@CheckButton:child] is set.
@@ -975,7 +975,7 @@ gtk_check_button_get_label (GtkCheckButton *self)
 }
 
 /**
- * gtk_check_button_set_label: (attributes org.gtk.Method.set_property=label)
+ * gtk_check_button_set_label:
  * @self: a `GtkCheckButton`
  * @label: (nullable): The text shown next to the indicator, or %NULL
  *   to show no text
@@ -1029,7 +1029,7 @@ gtk_check_button_set_label (GtkCheckButton *self,
 }
 
 /**
- * gtk_check_button_set_group: (attributes org.gtk.Method.set_property=group)
+ * gtk_check_button_set_group:
  * @self: a `GtkCheckButton`
  * @group: (nullable) (transfer none): another `GtkCheckButton` to
  *   form a group with
@@ -1110,7 +1110,7 @@ gtk_check_button_set_group (GtkCheckButton *self,
 }
 
 /**
- * gtk_check_button_get_use_underline: (attributes org.gtk.Method.get_property=use-underline)
+ * gtk_check_button_get_use_underline:
  * @self: a `GtkCheckButton`
  *
  * Returns whether underlines in the label indicate mnemonics.
@@ -1130,7 +1130,7 @@ gtk_check_button_get_use_underline (GtkCheckButton *self)
 }
 
 /**
- * gtk_check_button_set_use_underline: (attributes org.gtk.Method.set_property=use-underline)
+ * gtk_check_button_set_use_underline:
  * @self: a `GtkCheckButton`
  * @setting: the new value to set
  *
@@ -1161,7 +1161,7 @@ gtk_check_button_set_use_underline (GtkCheckButton *self,
 }
 
 /**
- * gtk_check_button_set_child: (attributes org.gtk.Method.set_property=child)
+ * gtk_check_button_set_child:
  * @button: a `GtkCheckButton`
  * @child: (nullable): the child widget
  *
@@ -1199,7 +1199,7 @@ gtk_check_button_set_child (GtkCheckButton *button,
 }
 
 /**
- * gtk_check_button_get_child: (attributes org.gtk.Method.get_property=child)
+ * gtk_check_button_get_child:
  * @button: a `GtkCheckButton`
  *
  * Gets the child widget of @button or `NULL` if [property@CheckButton:label] is set.

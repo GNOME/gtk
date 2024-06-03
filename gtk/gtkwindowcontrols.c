@@ -579,7 +579,7 @@ gtk_window_controls_new (GtkPackType side)
 }
 
 /**
- * gtk_window_controls_get_side: (attributes org.gtk.Method.get_property=side)
+ * gtk_window_controls_get_side:
  * @self: a `GtkWindowControls`
  *
  * Gets the side to which this `GtkWindowControls` instance belongs.
@@ -595,7 +595,7 @@ gtk_window_controls_get_side (GtkWindowControls *self)
 }
 
 /**
- * gtk_window_controls_set_side: (attributes org.gtk.Method.set_property=side)
+ * gtk_window_controls_set_side:
  * @self: a `GtkWindowControls`
  * @side: a side
  *
@@ -637,7 +637,7 @@ gtk_window_controls_set_side (GtkWindowControls *self,
 }
 
 /**
- * gtk_window_controls_get_decoration_layout: (attributes org.gtk.Method.get_property=decoration-layout)
+ * gtk_window_controls_get_decoration_layout:
  * @self: a `GtkWindowControls`
  *
  * Gets the decoration layout of this `GtkWindowControls`.
@@ -653,7 +653,7 @@ gtk_window_controls_get_decoration_layout (GtkWindowControls *self)
 }
 
 /**
- * gtk_window_controls_set_decoration_layout: (attributes org.gtk.Method.set_property=decoration-layout)
+ * gtk_window_controls_set_decoration_layout:
  * @self: a `GtkWindowControls`
  * @layout: (nullable): a decoration layout, or %NULL to unset the layout
  *
@@ -688,7 +688,7 @@ gtk_window_controls_set_decoration_layout (GtkWindowControls *self,
 }
 
 /**
- * gtk_window_controls_get_empty: (attributes org.gtk.Method.get_property=empty)
+ * gtk_window_controls_get_empty:
  * @self: a `GtkWindowControls`
  *
  * Gets whether the widget has any window buttons.

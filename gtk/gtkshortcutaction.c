@@ -991,7 +991,7 @@ gtk_signal_action_new (const char *signal_name)
 }
 
 /**
- * gtk_signal_action_get_signal_name: (attributes org.gtk.Method.get_property=signal-name)
+ * gtk_signal_action_get_signal_name:
  * @self: a signal action
  *
  * Returns the name of the signal that will be emitted.
@@ -1234,7 +1234,7 @@ gtk_named_action_new (const char *name)
 }
 
 /**
- * gtk_named_action_get_action_name: (attributes org.gtk.Method.get_property=action-name)
+ * gtk_named_action_get_action_name:
  * @self: a named action
  *
  * Returns the name of the action that will be activated.

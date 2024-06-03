@@ -1647,7 +1647,7 @@ gtk_calendar_get_date (GtkCalendar *self)
 }
 
 /**
- * gtk_calendar_set_show_week_numbers: (attributes org.gtk.Method.set_property=show-week-numbers)
+ * gtk_calendar_set_show_week_numbers:
  * @self: a `GtkCalendar`
  * @value: whether to show week numbers on the left of the days
  *
@@ -1673,7 +1673,7 @@ gtk_calendar_set_show_week_numbers (GtkCalendar *self,
 }
 
 /**
- * gtk_calendar_get_show_week_numbers: (attributes org.gtk.Method.get_property=show-week-numbers)
+ * gtk_calendar_get_show_week_numbers:
  * @self: a `GtkCalendar`
  *
  * Returns whether @self is showing week numbers right
@@ -1693,7 +1693,7 @@ gtk_calendar_get_show_week_numbers (GtkCalendar *self)
 }
 
 /**
- * gtk_calendar_set_show_heading: (attributes org.gtk.Method.set_property=show-heading)
+ * gtk_calendar_set_show_heading:
  * @self: a `GtkCalendar`
  * @value: Whether to show the heading in the calendar
  *
@@ -1719,7 +1719,7 @@ gtk_calendar_set_show_heading (GtkCalendar *self,
 }
 
 /**
- * gtk_calendar_get_show_heading: (attributes org.gtk.Method.get_property=show-heading)
+ * gtk_calendar_get_show_heading:
  * @self: a `GtkCalendar`
  *
  * Returns whether @self is currently showing the heading.
@@ -1738,7 +1738,7 @@ gtk_calendar_get_show_heading (GtkCalendar *self)
 }
 
 /**
- * gtk_calendar_set_show_day_names: (attributes org.gtk.Method.set_property=show-day-names)
+ * gtk_calendar_set_show_day_names:
  * @self: a `GtkCalendar`
  * @value: Whether to show day names above the day numbers
  *
@@ -1764,7 +1764,7 @@ gtk_calendar_set_show_day_names (GtkCalendar *self,
 }
 
 /**
- * gtk_calendar_get_show_day_names: (attributes org.gtk.Method.get_property=show-day-names)
+ * gtk_calendar_get_show_day_names:
  * @self: a `GtkCalendar`
  *
  * Returns whether @self is currently showing the names

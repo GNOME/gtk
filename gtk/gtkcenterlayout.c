@@ -830,7 +830,7 @@ gtk_center_layout_get_end_widget (GtkCenterLayout *self)
 }
 
 /**
- * gtk_center_layout_set_shrink_center_last: (attributes org.gtk.Method.set_property=shrink-center-last)
+ * gtk_center_layout_set_shrink_center_last:
  * @self: a `GtkCenterLayout`
  * @shrink_center_last: whether to shrink the center widget after others
  *
@@ -864,7 +864,7 @@ gtk_center_layout_set_shrink_center_last (GtkCenterLayout *self,
 }
 
 /**
- * gtk_center_layout_get_shrink_center_last: (attributes org.gtk.Method.get_property=shrink-center-last)
+ * gtk_center_layout_get_shrink_center_last:
  * @self: a `GtkCenterLayout`
  *
  * Gets whether @self shrinks the center widget after other children.

@@ -202,7 +202,7 @@ gtk_bool_filter_new (GtkExpression *expression)
 }
 
 /**
- * gtk_bool_filter_get_expression: (attributes org.gtk.Method.get_property=expression)
+ * gtk_bool_filter_get_expression:
  * @self: a `GtkBoolFilter`
  *
  * Gets the expression that the filter uses to evaluate if
@@ -219,7 +219,7 @@ gtk_bool_filter_get_expression (GtkBoolFilter *self)
 }
 
 /**
- * gtk_bool_filter_set_expression: (attributes org.gtk.Method.set_property=expression)
+ * gtk_bool_filter_set_expression:
  * @self: a `GtkBoolFilter`
  * @expression: (nullable): a `GtkExpression`
  *
@@ -248,7 +248,7 @@ gtk_bool_filter_set_expression (GtkBoolFilter *self,
 }
 
 /**
- * gtk_bool_filter_get_invert: (attributes org.gtk.Method.get_property=invert)
+ * gtk_bool_filter_get_invert:
  * @self: a `GtkBoolFilter`
  *
  * Returns whether the filter inverts the expression.
@@ -264,7 +264,7 @@ gtk_bool_filter_get_invert (GtkBoolFilter *self)
 }
 
 /**
- * gtk_bool_filter_set_invert: (attributes org.gtk.Method.set_property=invert)
+ * gtk_bool_filter_set_invert:
  * @self: a `GtkBoolFilter`
  * @invert: %TRUE to invert
  *

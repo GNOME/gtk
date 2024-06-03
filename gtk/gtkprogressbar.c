@@ -757,7 +757,7 @@ gtk_progress_bar_set_activity_mode (GtkProgressBar *pbar,
 }
 
 /**
- * gtk_progress_bar_set_fraction: (attributes org.gtk.Method.set_property=fraction)
+ * gtk_progress_bar_set_fraction:
  * @pbar: a `GtkProgressBar`
  * @fraction: fraction of the task that’s been completed
  *
@@ -841,7 +841,7 @@ gtk_progress_bar_pulse (GtkProgressBar *pbar)
 }
 
 /**
- * gtk_progress_bar_set_text: (attributes org.gtk.Method.set_property=text)
+ * gtk_progress_bar_set_text:
  * @pbar: a `GtkProgressBar`
  * @text: (nullable): a UTF-8 string
  *
@@ -877,7 +877,7 @@ gtk_progress_bar_set_text (GtkProgressBar *pbar,
 }
 
 /**
- * gtk_progress_bar_set_show_text: (attributes org.gtk.Method.set_property=show-text)
+ * gtk_progress_bar_set_show_text:
  * @pbar: a `GtkProgressBar`
  * @show_text: whether to show text
  *
@@ -927,7 +927,7 @@ gtk_progress_bar_set_show_text (GtkProgressBar *pbar,
 }
 
 /**
- * gtk_progress_bar_get_show_text: (attributes org.gtk.Method.get_property=show-text)
+ * gtk_progress_bar_get_show_text:
  * @pbar: a `GtkProgressBar`
  *
  * Returns whether the `GtkProgressBar` shows text.
@@ -945,7 +945,7 @@ gtk_progress_bar_get_show_text (GtkProgressBar *pbar)
 }
 
 /**
- * gtk_progress_bar_set_pulse_step: (attributes org.gtk.Method.set_property=pulse-step)
+ * gtk_progress_bar_set_pulse_step:
  * @pbar: a `GtkProgressBar`
  * @fraction: fraction between 0.0 and 1.0
  *
@@ -1013,7 +1013,7 @@ gtk_progress_bar_set_orientation (GtkProgressBar *pbar,
 }
 
 /**
- * gtk_progress_bar_set_inverted: (attributes org.gtk.Method.set_property=inverted)
+ * gtk_progress_bar_set_inverted:
  * @pbar: a `GtkProgressBar`
  * @inverted: %TRUE to invert the progress bar
  *
@@ -1040,7 +1040,7 @@ gtk_progress_bar_set_inverted (GtkProgressBar *pbar,
 }
 
 /**
- * gtk_progress_bar_get_text: (attributes org.gtk.Method.get_property=text)
+ * gtk_progress_bar_get_text:
  * @pbar: a `GtkProgressBar`
  *
  * Retrieves the text that is displayed with the progress bar.
@@ -1059,7 +1059,7 @@ gtk_progress_bar_get_text (GtkProgressBar *pbar)
 }
 
 /**
- * gtk_progress_bar_get_fraction: (attributes org.gtk.Method.get_property=fraction)
+ * gtk_progress_bar_get_fraction:
  * @pbar: a `GtkProgressBar`
  *
  * Returns the current fraction of the task that’s been completed.
@@ -1075,7 +1075,7 @@ gtk_progress_bar_get_fraction (GtkProgressBar *pbar)
 }
 
 /**
- * gtk_progress_bar_get_pulse_step: (attributes org.gtk.Method.get_property=pulse-step)
+ * gtk_progress_bar_get_pulse_step:
  * @pbar: a `GtkProgressBar`
  *
  * Retrieves the pulse step.
@@ -1093,7 +1093,7 @@ gtk_progress_bar_get_pulse_step (GtkProgressBar *pbar)
 }
 
 /**
- * gtk_progress_bar_get_inverted: (attributes org.gtk.Method.get_property=inverted)
+ * gtk_progress_bar_get_inverted:
  * @pbar: a `GtkProgressBar`
  *
  * Returns whether the progress bar is inverted.
@@ -1109,7 +1109,7 @@ gtk_progress_bar_get_inverted (GtkProgressBar *pbar)
 }
 
 /**
- * gtk_progress_bar_set_ellipsize: (attributes org.gtk.Method.set_property=ellipsize)
+ * gtk_progress_bar_set_ellipsize:
  * @pbar: a `GtkProgressBar`
  * @mode: a `PangoEllipsizeMode`
  *
@@ -1138,7 +1138,7 @@ gtk_progress_bar_set_ellipsize (GtkProgressBar     *pbar,
 }
 
 /**
- * gtk_progress_bar_get_ellipsize: (attributes org.gtk.Method.get_property=ellipsize)
+ * gtk_progress_bar_get_ellipsize:
  * @pbar: a `GtkProgressBar`
  *
  * Returns the ellipsizing position of the progress bar.

@@ -390,7 +390,7 @@ gdk_seat_device_removed (GdkSeat   *seat,
 }
 
 /**
- * gdk_seat_get_display: (attributes org.gtk.Method.get_property=display)
+ * gdk_seat_get_display:
  * @seat: a `GdkSeat`
  *
  * Returns the `GdkDisplay` this seat belongs to.

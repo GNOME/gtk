@@ -221,7 +221,7 @@ gsk_renderer_init (GskRenderer *self)
 }
 
 /**
- * gsk_renderer_get_surface: (attributes org.gtk.Method.get_property=surface)
+ * gsk_renderer_get_surface:
  * @renderer: a `GskRenderer`
  *
  * Retrieves the `GdkSurface` set using gsk_enderer_realize().

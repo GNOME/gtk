@@ -773,7 +773,7 @@ gtk_tree_list_model_new (GListModel                      *root,
 }
 
 /**
- * gtk_tree_list_model_get_model: (attributes org.gtk.Method.get_property=model)
+ * gtk_tree_list_model_get_model:
  * @self: a `GtkTreeListModel`
  *
  * Gets the root model that @self was created with.
@@ -789,7 +789,7 @@ gtk_tree_list_model_get_model (GtkTreeListModel *self)
 }
 
 /**
- * gtk_tree_list_model_get_passthrough: (attributes org.gtk.Method.get_property=passthrough)
+ * gtk_tree_list_model_get_passthrough:
  * @self: a `GtkTreeListModel`
  *
  * Gets whether the model is passing through original row items.
@@ -814,7 +814,7 @@ gtk_tree_list_model_get_passthrough (GtkTreeListModel *self)
 }
 
 /**
- * gtk_tree_list_model_set_autoexpand: (attributes org.gtk.Method.set_property=autoexpand)
+ * gtk_tree_list_model_set_autoexpand:
  * @self: a `GtkTreeListModel`
  * @autoexpand: %TRUE to make the model autoexpand its rows
  *
@@ -839,7 +839,7 @@ gtk_tree_list_model_set_autoexpand (GtkTreeListModel *self,
 }
 
 /**
- * gtk_tree_list_model_get_autoexpand: (attributes org.gtk.Method.get_property=autoexpand)
+ * gtk_tree_list_model_get_autoexpand:
  * @self: a `GtkTreeListModel`
  *
  * Gets whether the model is set to automatically expand new rows
@@ -1126,7 +1126,7 @@ gtk_tree_list_row_get_position (GtkTreeListRow *self)
 }
 
 /**
- * gtk_tree_list_row_get_depth: (attributes org.gtk.Method.get_property=depth)
+ * gtk_tree_list_row_get_depth:
  * @self: a `GtkTreeListRow`
  *
  * Gets the depth of this row.
@@ -1161,7 +1161,7 @@ gtk_tree_list_row_get_depth (GtkTreeListRow *self)
 }
 
 /**
- * gtk_tree_list_row_set_expanded: (attributes org.gtk.Method.set_property=expanded)
+ * gtk_tree_list_row_set_expanded:
  * @self: a `GtkTreeListRow`
  * @expanded: %TRUE if the row should be expanded
  *
@@ -1219,7 +1219,7 @@ gtk_tree_list_row_set_expanded (GtkTreeListRow *self,
 }
 
 /**
- * gtk_tree_list_row_get_expanded: (attributes org.gtk.Method.get_property=expanded)
+ * gtk_tree_list_row_get_expanded:
  * @self: a `GtkTreeListRow`
  *
  * Gets if a row is currently expanded.
@@ -1283,7 +1283,7 @@ gtk_tree_list_row_is_expandable (GtkTreeListRow *self)
 }
 
 /**
- * gtk_tree_list_row_get_item: (attributes org.gtk.Method.get_property=item)
+ * gtk_tree_list_row_get_item:
  * @self: a `GtkTreeListRow`
  *
  * Gets the item corresponding to this row,
@@ -1301,7 +1301,7 @@ gtk_tree_list_row_get_item (GtkTreeListRow *self)
 }
 
 /**
- * gtk_tree_list_row_get_children: (attributes org.gtk.Method.get_property=children)
+ * gtk_tree_list_row_get_children:
  * @self: a `GtkTreeListRow`
  *
  * If the row is expanded, gets the model holding the children of @self.

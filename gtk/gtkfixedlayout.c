@@ -173,7 +173,7 @@ gtk_fixed_layout_child_init (GtkFixedLayoutChild *self)
 }
 
 /**
- * gtk_fixed_layout_child_set_transform: (attributes org.gtk.Method.set_property=transform)
+ * gtk_fixed_layout_child_set_transform:
  * @child: a `GtkFixedLayoutChild`
  * @transform: a `GskTransform`
  *

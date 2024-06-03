@@ -148,7 +148,7 @@ gtk_layout_child_init (GtkLayoutChild *self)
 }
 
 /**
- * gtk_layout_child_get_layout_manager: (attributes org.gtk.Method.get_property=layout-manager)
+ * gtk_layout_child_get_layout_manager:
  * @layout_child: a `GtkLayoutChild`
  *
  * Retrieves the `GtkLayoutManager` instance that created the
@@ -167,7 +167,7 @@ gtk_layout_child_get_layout_manager (GtkLayoutChild *layout_child)
 }
 
 /**
- * gtk_layout_child_get_child_widget: (attributes org.gtk.Method.get_property=child-widget)
+ * gtk_layout_child_get_child_widget:
  * @layout_child: a `GtkLayoutChild`
  *
  * Retrieves the `GtkWidget` associated to the given @layout_child.

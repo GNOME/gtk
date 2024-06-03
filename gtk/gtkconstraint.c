@@ -380,7 +380,7 @@ gtk_constraint_new_constant (gpointer                target,
 }
 
 /**
- * gtk_constraint_get_target: (attributes org.gtk.Method.get_property=target)
+ * gtk_constraint_get_target:
  * @constraint: a `GtkConstraint`
  *
  * Retrieves the [iface@Gtk.ConstraintTarget] used as the target for
@@ -400,7 +400,7 @@ gtk_constraint_get_target (GtkConstraint *constraint)
 }
 
 /**
- * gtk_constraint_get_target_attribute: (attributes org.gtk.Method.get_property=target-attribute)
+ * gtk_constraint_get_target_attribute:
  * @constraint: a `GtkConstraint`
  *
  * Retrieves the attribute of the target to be set by the constraint.
@@ -416,7 +416,7 @@ gtk_constraint_get_target_attribute (GtkConstraint *constraint)
 }
 
 /**
- * gtk_constraint_get_source: (attributes org.gtk.Method.get_property=source)
+ * gtk_constraint_get_source:
  * @constraint: a `GtkConstraint`
  *
  * Retrieves the [iface@Gtk.ConstraintTarget] used as the source for the
@@ -436,7 +436,7 @@ gtk_constraint_get_source (GtkConstraint *constraint)
 }
 
 /**
- * gtk_constraint_get_source_attribute: (attributes org.gtk.Method.get_property=source-attribute)
+ * gtk_constraint_get_source_attribute:
  * @constraint: a `GtkConstraint`
  *
  * Retrieves the attribute of the source to be read by the constraint.
@@ -452,7 +452,7 @@ gtk_constraint_get_source_attribute (GtkConstraint *constraint)
 }
 
 /**
- * gtk_constraint_get_relation: (attributes org.gtk.Method.get_property=relation)
+ * gtk_constraint_get_relation:
  * @constraint: a `GtkConstraint`
  *
  * The order relation between the terms of the constraint.
@@ -468,7 +468,7 @@ gtk_constraint_get_relation (GtkConstraint *constraint)
 }
 
 /**
- * gtk_constraint_get_multiplier: (attributes org.gtk.Method.get_property=multiplier)
+ * gtk_constraint_get_multiplier:
  * @constraint: a `GtkConstraint`
  *
  * Retrieves the multiplication factor applied to the source
@@ -485,7 +485,7 @@ gtk_constraint_get_multiplier (GtkConstraint *constraint)
 }
 
 /**
- * gtk_constraint_get_constant: (attributes org.gtk.Method.get_property=constant)
+ * gtk_constraint_get_constant:
  * @constraint: a `GtkConstraint`
  *
  * Retrieves the constant factor added to the source attributes' value.
@@ -501,7 +501,7 @@ gtk_constraint_get_constant (GtkConstraint *constraint)
 }
 
 /**
- * gtk_constraint_get_strength: (attributes org.gtk.Method.get_property=strength)
+ * gtk_constraint_get_strength:
  * @constraint: a `GtkConstraint`
  *
  * Retrieves the strength of the constraint.

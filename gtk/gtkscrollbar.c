@@ -319,7 +319,7 @@ gtk_scrollbar_adjustment_value_changed (GtkAdjustment *adjustment,
 }
 
 /**
- * gtk_scrollbar_set_adjustment: (attributes org.gtk.Method.set_property=adjustment)
+ * gtk_scrollbar_set_adjustment:
  * @self: a `GtkScrollbar`
  * @adjustment: (nullable): the adjustment to set
  *
@@ -365,7 +365,7 @@ gtk_scrollbar_set_adjustment (GtkScrollbar  *self,
 }
 
 /**
- * gtk_scrollbar_get_adjustment: (attributes org.gtk.Method.get_property=adjustment)
+ * gtk_scrollbar_get_adjustment:
  * @self: a `GtkScrollbar`
  *
  * Returns the scrollbar's adjustment.

@@ -160,7 +160,7 @@ gtk_spinner_css_changed (GtkWidget         *widget,
 }
 
 /**
- * gtk_spinner_get_spinning: (attributes org.gtk.Method.get_property=spinning)
+ * gtk_spinner_get_spinning:
  * @spinner: a `GtkSpinner`
  *
  * Returns whether the spinner is spinning.
@@ -176,7 +176,7 @@ gtk_spinner_get_spinning (GtkSpinner *spinner)
 }
 
 /**
- * gtk_spinner_set_spinning: (attributes org.gtk.Method.set_property=spinning)
+ * gtk_spinner_set_spinning:
  * @spinner: a `GtkSpinner`
  * @spinning: whether the spinner should be spinning
  *

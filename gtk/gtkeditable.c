@@ -570,7 +570,7 @@ gtk_editable_get_chars (GtkEditable *editable,
 }
 
 /**
- * gtk_editable_get_text: (attributes org.gtk.Method.get_property=text)
+ * gtk_editable_get_text:
  * @editable: a `GtkEditable`
  *
  * Retrieves the contents of @editable.
@@ -588,7 +588,7 @@ gtk_editable_get_text (GtkEditable *editable)
 }
 
 /**
- * gtk_editable_set_text: (attributes org.gtk.Method.set_property=text)
+ * gtk_editable_set_text:
  * @editable: a `GtkEditable`
  * @text: the text to set
  *
@@ -738,7 +738,7 @@ gtk_editable_select_region (GtkEditable *editable,
 }
 
 /**
- * gtk_editable_set_editable: (attributes org.gtk.Method.set_property=editable)
+ * gtk_editable_set_editable:
  * @editable: a `GtkEditable`
  * @is_editable: %TRUE if the user is allowed to edit the text
  *   in the widget
@@ -755,7 +755,7 @@ gtk_editable_set_editable (GtkEditable *editable,
 }
 
 /**
- * gtk_editable_get_editable: (attributes org.gtk.Method.get_property=editable)
+ * gtk_editable_get_editable:
  * @editable: a `GtkEditable`
  *
  * Retrieves whether @editable is editable.
@@ -816,7 +816,7 @@ gtk_editable_set_alignment (GtkEditable *editable,
 }
 
 /**
- * gtk_editable_get_width_chars: (attributes org.gtk.Method.get_property=width-chars)
+ * gtk_editable_get_width_chars:
  * @editable: a `GtkEditable`
  *
  * Gets the number of characters of space reserved
@@ -837,7 +837,7 @@ gtk_editable_get_width_chars (GtkEditable *editable)
 }
 
 /**
- * gtk_editable_set_width_chars: (attributes org.gtk.Method.set_property=width-chars)
+ * gtk_editable_set_width_chars:
  * @editable: a `GtkEditable`
  * @n_chars: width in chars
  *
@@ -858,7 +858,7 @@ gtk_editable_set_width_chars (GtkEditable *editable,
 }
 
 /**
- * gtk_editable_get_max_width_chars: (attributes org.gtk.Method.get_property=max-width-chars)
+ * gtk_editable_get_max_width_chars:
  * @editable: a `GtkEditable`
  *
  * Retrieves the desired maximum width of @editable, in characters.
@@ -878,7 +878,7 @@ gtk_editable_get_max_width_chars (GtkEditable *editable)
 }
 
 /**
- * gtk_editable_set_max_width_chars: (attributes org.gtk.Method.set_property=max-width-chars)
+ * gtk_editable_set_max_width_chars:
  * @editable: a `GtkEditable`
  * @n_chars: the new desired maximum width, in characters
  *
@@ -894,7 +894,7 @@ gtk_editable_set_max_width_chars (GtkEditable *editable,
 }
 
 /**
- * gtk_editable_get_enable_undo: (attributes org.gtk.Method.get_property=enable-undo)
+ * gtk_editable_get_enable_undo:
  * @editable: a `GtkEditable`
  *
  * Gets if undo/redo actions are enabled for @editable
@@ -914,7 +914,7 @@ gtk_editable_get_enable_undo (GtkEditable *editable)
 }
 
 /**
- * gtk_editable_set_enable_undo: (attributes org.gtk.Method.set_property=enable-undo)
+ * gtk_editable_set_enable_undo:
  * @editable: a `GtkEditable`
  * @enable_undo: if undo/redo should be enabled
  *

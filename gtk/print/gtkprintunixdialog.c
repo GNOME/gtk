@@ -3014,7 +3014,7 @@ gtk_print_unix_dialog_new (const char *title,
 }
 
 /**
- * gtk_print_unix_dialog_get_selected_printer: (attributes org.gtk.Method.get_property=selected-printer)
+ * gtk_print_unix_dialog_get_selected_printer:
  * @dialog: a `GtkPrintUnixDialog`
  *
  * Gets the currently selected printer.
@@ -3030,7 +3030,7 @@ gtk_print_unix_dialog_get_selected_printer (GtkPrintUnixDialog *dialog)
 }
 
 /**
- * gtk_print_unix_dialog_set_page_setup: (attributes org.gtk.Method.set_property=page-setup)
+ * gtk_print_unix_dialog_set_page_setup:
  * @dialog: a `GtkPrintUnixDialog`
  * @page_setup: a `GtkPageSetup`
  *
@@ -3055,7 +3055,7 @@ gtk_print_unix_dialog_set_page_setup (GtkPrintUnixDialog *dialog,
 }
 
 /**
- * gtk_print_unix_dialog_get_page_setup: (attributes org.gtk.Method.get_property=page-setup)
+ * gtk_print_unix_dialog_get_page_setup:
  * @dialog: a `GtkPrintUnixDialog`
  *
  * Gets the page setup that is used by the `GtkPrintUnixDialog`.
@@ -3087,7 +3087,7 @@ gtk_print_unix_dialog_get_page_setup_set (GtkPrintUnixDialog *dialog)
 }
 
 /**
- * gtk_print_unix_dialog_set_current_page: (attributes org.gtk.Method.set_property=current-page)
+ * gtk_print_unix_dialog_set_current_page:
  * @dialog: a `GtkPrintUnixDialog`
  * @current_page: the current page number.
  *
@@ -3114,7 +3114,7 @@ gtk_print_unix_dialog_set_current_page (GtkPrintUnixDialog *dialog,
 }
 
 /**
- * gtk_print_unix_dialog_get_current_page: (attributes org.gtk.Method.get_property=current-page)
+ * gtk_print_unix_dialog_get_current_page:
  * @dialog: a `GtkPrintUnixDialog`
  *
  * Gets the current page of the `GtkPrintUnixDialog`.
@@ -3310,7 +3310,7 @@ gtk_print_unix_dialog_add_custom_tab (GtkPrintUnixDialog *dialog,
 }
 
 /**
- * gtk_print_unix_dialog_set_manual_capabilities: (attributes org.gtk.Method.set_property=manual-capabilities)
+ * gtk_print_unix_dialog_set_manual_capabilities:
  * @dialog: a `GtkPrintUnixDialog`
  * @capabilities: the printing capabilities of your application
  *
@@ -3342,7 +3342,7 @@ gtk_print_unix_dialog_set_manual_capabilities (GtkPrintUnixDialog   *dialog,
 }
 
 /**
- * gtk_print_unix_dialog_get_manual_capabilities: (attributes org.gtk.Method.get_property=manual-capabilities)
+ * gtk_print_unix_dialog_get_manual_capabilities:
  * @dialog: a `GtkPrintUnixDialog`
  *
  * Gets the capabilities that have been set on this `GtkPrintUnixDialog`.
@@ -3358,7 +3358,7 @@ gtk_print_unix_dialog_get_manual_capabilities (GtkPrintUnixDialog *dialog)
 }
 
 /**
- * gtk_print_unix_dialog_set_support_selection: (attributes org.gtk.Method.set_property=support-selection)
+ * gtk_print_unix_dialog_set_support_selection:
  * @dialog: a `GtkPrintUnixDialog`
  * @support_selection: %TRUE to allow print selection
  *
@@ -3386,7 +3386,7 @@ gtk_print_unix_dialog_set_support_selection (GtkPrintUnixDialog *dialog,
 }
 
 /**
- * gtk_print_unix_dialog_get_support_selection: (attributes org.gtk.Method.get_property=support-selection)
+ * gtk_print_unix_dialog_get_support_selection:
  * @dialog: a `GtkPrintUnixDialog`
  *
  * Gets whether the print dialog allows user to print a selection.
@@ -3402,7 +3402,7 @@ gtk_print_unix_dialog_get_support_selection (GtkPrintUnixDialog *dialog)
 }
 
 /**
- * gtk_print_unix_dialog_set_has_selection: (attributes org.gtk.Method.set_property=has-selection)
+ * gtk_print_unix_dialog_set_has_selection:
  * @dialog: a `GtkPrintUnixDialog`
  * @has_selection: %TRUE indicates that a selection exists
  *
@@ -3432,7 +3432,7 @@ gtk_print_unix_dialog_set_has_selection (GtkPrintUnixDialog *dialog,
 }
 
 /**
- * gtk_print_unix_dialog_get_has_selection: (attributes org.gtk.Method.get_property=has-selection)
+ * gtk_print_unix_dialog_get_has_selection:
  * @dialog: a `GtkPrintUnixDialog`
  *
  * Gets whether there is a selection.
@@ -3448,7 +3448,7 @@ gtk_print_unix_dialog_get_has_selection (GtkPrintUnixDialog *dialog)
 }
 
 /**
- * gtk_print_unix_dialog_set_embed_page_setup: (attributes org.gtk.Method.set_property=embed-page-setup)
+ * gtk_print_unix_dialog_set_embed_page_setup:
  * @dialog: a `GtkPrintUnixDialog`
  * @embed: embed page setup selection
  *
@@ -3492,7 +3492,7 @@ gtk_print_unix_dialog_set_embed_page_setup (GtkPrintUnixDialog *dialog,
 }
 
 /**
- * gtk_print_unix_dialog_get_embed_page_setup: (attributes org.gtk.Method.get_property=embed-page-setup)
+ * gtk_print_unix_dialog_get_embed_page_setup:
  * @dialog: a `GtkPrintUnixDialog`
  *
  * Gets whether to embed the page setup.

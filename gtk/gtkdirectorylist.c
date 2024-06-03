@@ -810,7 +810,7 @@ gtk_directory_list_update_monitoring (GtkDirectoryList *self)
 }
 
 /**
- * gtk_directory_list_set_file: (attributes org.gtk.Method.set_property=file)
+ * gtk_directory_list_set_file:
  * @self: a `GtkDirectoryList`
  * @file: (nullable): the `GFile` to be enumerated
  *
@@ -842,7 +842,7 @@ gtk_directory_list_set_file (GtkDirectoryList *self,
 }
 
 /**
- * gtk_directory_list_get_file: (attributes org.gtk.Method.get_property=file)
+ * gtk_directory_list_get_file:
  * @self: a `GtkDirectoryList`
  *
  * Gets the file whose children are currently enumerated.
@@ -858,7 +858,7 @@ gtk_directory_list_get_file (GtkDirectoryList *self)
 }
 
 /**
- * gtk_directory_list_set_attributes: (attributes org.gtk.Method.set_property=attributes)
+ * gtk_directory_list_set_attributes:
  * @self: a `GtkDirectoryList`
  * @attributes: (nullable): the attributes to enumerate
  *
@@ -889,7 +889,7 @@ gtk_directory_list_set_attributes (GtkDirectoryList *self,
 }
 
 /**
- * gtk_directory_list_get_attributes: (attributes org.gtk.Method.get_property=attributes)
+ * gtk_directory_list_get_attributes:
  * @self: a `GtkDirectoryList`
  *
  * Gets the attributes queried on the children.
@@ -905,7 +905,7 @@ gtk_directory_list_get_attributes (GtkDirectoryList *self)
 }
 
 /**
- * gtk_directory_list_set_io_priority: (attributes org.gtk.Method.set_property=io-priority)
+ * gtk_directory_list_set_io_priority:
  * @self: a `GtkDirectoryList`
  * @io_priority: IO priority to use
  *
@@ -934,7 +934,7 @@ gtk_directory_list_set_io_priority (GtkDirectoryList *self,
 }
 
 /**
- * gtk_directory_list_get_io_priority: (attributes org.gtk.Method.get_property=io-priority)
+ * gtk_directory_list_get_io_priority:
  * @self: a `GtkDirectoryList`
  *
  * Gets the IO priority set via gtk_directory_list_set_io_priority().
@@ -971,7 +971,7 @@ gtk_directory_list_is_loading (GtkDirectoryList *self)
 }
 
 /**
- * gtk_directory_list_get_error: (attributes org.gtk.Method.get_property=error)
+ * gtk_directory_list_get_error:
  * @self: a `GtkDirectoryList`
  *
  * Gets the loading error, if any.
@@ -995,7 +995,7 @@ gtk_directory_list_get_error (GtkDirectoryList *self)
 }
 
 /**
- * gtk_directory_list_set_monitored: (attributes org.gtk.Method.set_property=monitored)
+ * gtk_directory_list_set_monitored:
  * @self: a `GtkDirectoryList`
  * @monitored: %TRUE to monitor the directory for changes
  *
@@ -1030,7 +1030,7 @@ gtk_directory_list_set_monitored (GtkDirectoryList *self,
 }
 
 /**
- * gtk_directory_list_get_monitored: (attributes org.gtk.Method.get_property=monitored)
+ * gtk_directory_list_get_monitored:
  * @self: a `GtkDirectoryList`
  *
  * Returns whether the directory list is monitoring

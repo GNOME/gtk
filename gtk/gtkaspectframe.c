@@ -334,7 +334,7 @@ gtk_aspect_frame_new (float    xalign,
 }
 
 /**
- * gtk_aspect_frame_set_xalign: (attributes org.gtk.Method.set_property=xalign)
+ * gtk_aspect_frame_set_xalign:
  * @self: a `GtkAspectFrame`
  * @xalign: horizontal alignment, from 0.0 (left aligned) to 1.0 (right aligned)
  *
@@ -359,7 +359,7 @@ gtk_aspect_frame_set_xalign (GtkAspectFrame *self,
 }
 
 /**
- * gtk_aspect_frame_get_xalign: (attributes org.gtk.Method.get_property=xalign)
+ * gtk_aspect_frame_get_xalign:
  * @self: a `GtkAspectFrame`
  *
  * Returns the horizontal alignment of the child within the
@@ -376,7 +376,7 @@ gtk_aspect_frame_get_xalign (GtkAspectFrame *self)
 }
 
 /**
- * gtk_aspect_frame_set_yalign: (attributes org.gtk.Method.set_property=yalign)
+ * gtk_aspect_frame_set_yalign:
  * @self: a `GtkAspectFrame`
  * @yalign: horizontal alignment, from 0.0 (top aligned) to 1.0 (bottom aligned)
  *
@@ -401,7 +401,7 @@ gtk_aspect_frame_set_yalign (GtkAspectFrame *self,
 }
 
 /**
- * gtk_aspect_frame_get_yalign: (attributes org.gtk.Method.get_property=yalign)
+ * gtk_aspect_frame_get_yalign:
  * @self: a `GtkAspectFrame`
  *
  * Returns the vertical alignment of the child within the
@@ -418,7 +418,7 @@ gtk_aspect_frame_get_yalign (GtkAspectFrame *self)
 }
 
 /**
- * gtk_aspect_frame_set_ratio: (attributes org.gtk.Method.set_property=ratio)
+ * gtk_aspect_frame_set_ratio:
  * @self: a `GtkAspectFrame`
  * @ratio: aspect ratio of the child
  *
@@ -442,7 +442,7 @@ gtk_aspect_frame_set_ratio (GtkAspectFrame *self,
 }
 
 /**
- * gtk_aspect_frame_get_ratio: (attributes org.gtk.Method.get_property=ratio)
+ * gtk_aspect_frame_get_ratio:
  * @self: a `GtkAspectFrame`
  *
  * Returns the desired aspect ratio of the child.
@@ -458,7 +458,7 @@ gtk_aspect_frame_get_ratio (GtkAspectFrame *self)
 }
 
 /**
- * gtk_aspect_frame_set_obey_child: (attributes org.gtk.Method.set_propery=obey-child)
+ * gtk_aspect_frame_set_obey_child:
  * @self: a `GtkAspectFrame`
  * @obey_child: If %TRUE, @ratio is ignored, and the aspect
  *    ratio is taken from the requisition of the child.
@@ -484,7 +484,7 @@ gtk_aspect_frame_set_obey_child (GtkAspectFrame *self,
 }
 
 /**
- * gtk_aspect_frame_get_obey_child: (attributes org.gtk.Method.get_property=obey-child)
+ * gtk_aspect_frame_get_obey_child:
  * @self: a `GtkAspectFrame`
  *
  * Returns whether the child's size request should override
@@ -636,7 +636,7 @@ gtk_aspect_frame_get_request_mode (GtkWidget *widget)
 }
 
 /**
- * gtk_aspect_frame_set_child: (attributes org.gtk.Method.set_property=child)
+ * gtk_aspect_frame_set_child:
  * @self: a `GtkAspectFrame`
  * @child: (nullable): the child widget
  *
@@ -664,7 +664,7 @@ gtk_aspect_frame_set_child (GtkAspectFrame  *self,
 }
 
 /**
- * gtk_aspect_frame_get_child: (attributes org.gtk.Method.get_property=child)
+ * gtk_aspect_frame_get_child:
  * @self: a `GtkAspectFrame`
  *
  * Gets the child widget of @self.

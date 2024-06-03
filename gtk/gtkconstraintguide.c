@@ -606,7 +606,7 @@ gtk_constraint_guide_get_max_size (GtkConstraintGuide *guide,
 }
 
 /**
- * gtk_constraint_guide_get_name: (attributes org.gtk.Method.get_property=name)
+ * gtk_constraint_guide_get_name:
  * @guide: a `GtkConstraintGuide`
  *
  * Retrieves the name set using gtk_constraint_guide_set_name().
@@ -622,7 +622,7 @@ gtk_constraint_guide_get_name (GtkConstraintGuide *guide)
 }
 
 /**
- * gtk_constraint_guide_set_name: (attributes org.gtk.Method.set_property=name)
+ * gtk_constraint_guide_set_name:
  * @guide: a `GtkConstraintGuide`
  * @name: (nullable): a name for the @guide
  *
@@ -642,7 +642,7 @@ gtk_constraint_guide_set_name (GtkConstraintGuide *guide,
 }
 
 /**
- * gtk_constraint_guide_get_strength: (attributes org.gtk.Method.get_property=strength)
+ * gtk_constraint_guide_get_strength:
  * @guide: a `GtkConstraintGuide`
  *
  * Retrieves the strength set using gtk_constraint_guide_set_strength().
@@ -659,7 +659,7 @@ gtk_constraint_guide_get_strength (GtkConstraintGuide *guide)
 }
 
 /**
- * gtk_constraint_guide_set_strength: (attributes org.gtk.Method.set_property=strength)
+ * gtk_constraint_guide_set_strength:
  * @guide: a `GtkConstraintGuide`
  * @strength: the strength of the constraint
  *

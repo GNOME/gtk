@@ -262,7 +262,7 @@ gtk_gesture_stylus_new (void)
 }
 
 /**
- * gtk_gesture_stylus_get_stylus_only: (attributes org.gtk.Method.get_property=stylus-only)
+ * gtk_gesture_stylus_get_stylus_only:
  * @gesture: the gesture
  *
  * Checks whether the gesture is for styluses only.
@@ -285,7 +285,7 @@ gtk_gesture_stylus_get_stylus_only (GtkGestureStylus *gesture)
 }
 
 /**
- * gtk_gesture_stylus_set_stylus_only: (attributes org.gtk.Method.set_property=stylus-only)
+ * gtk_gesture_stylus_set_stylus_only:
  * @gesture: the gesture
  * @stylus_only: whether the gesture is used exclusively for stylus events
  *

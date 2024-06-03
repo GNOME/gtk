@@ -857,7 +857,7 @@ gtk_shortcut_controller_remove_shortcut (GtkShortcutController  *self,
 }
 
 /**
- * gtk_shortcut_controller_set_scope: (attributes org.gtk.Method.set_property=scope)
+ * gtk_shortcut_controller_set_scope:
  * @self: a `GtkShortcutController`
  * @scope: the new scope to use
  *
@@ -896,7 +896,7 @@ gtk_shortcut_controller_set_scope (GtkShortcutController *self,
 }
 
 /**
- * gtk_shortcut_controller_get_scope: (attributes org.gtk.Method.get_property=scope)
+ * gtk_shortcut_controller_get_scope:
  * @self: a `GtkShortcutController`
  *
  * Gets the scope for when this controller activates its shortcuts.

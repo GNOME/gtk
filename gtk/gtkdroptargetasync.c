@@ -577,7 +577,7 @@ gtk_drop_target_async_new (GdkContentFormats *formats,
 }
 
 /**
- * gtk_drop_target_async_set_formats: (attributes org.gtk.Method.set_property=formats)
+ * gtk_drop_target_async_set_formats:
  * @self: a `GtkDropTargetAsync`
  * @formats: (nullable): the supported data formats or %NULL for any format
  *
@@ -604,7 +604,7 @@ gtk_drop_target_async_set_formats (GtkDropTargetAsync *self,
 }
 
 /**
- * gtk_drop_target_async_get_formats: (attributes org.gtk.Method.get_property=formats)
+ * gtk_drop_target_async_get_formats:
  * @self: a `GtkDropTargetAsync`
  *
  * Gets the data formats that this drop target accepts.
@@ -622,7 +622,7 @@ gtk_drop_target_async_get_formats (GtkDropTargetAsync *self)
 }
 
 /**
- * gtk_drop_target_async_set_actions: (attributes org.gtk.Method.set_property=actions)
+ * gtk_drop_target_async_set_actions:
  * @self: a `GtkDropTargetAsync`
  * @actions: the supported actions
  *
@@ -643,7 +643,7 @@ gtk_drop_target_async_set_actions (GtkDropTargetAsync *self,
 }
 
 /**
- * gtk_drop_target_async_get_actions: (attributes org.gtk.Method.get_property=actions)
+ * gtk_drop_target_async_get_actions:
  * @self: a `GtkDropTargetAsync`
  *
  * Gets the actions that this drop target supports.

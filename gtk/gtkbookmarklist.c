@@ -474,7 +474,7 @@ gtk_bookmark_list_set_filename (GtkBookmarkList *self,
 }
 
 /**
- * gtk_bookmark_list_get_filename: (attributes org.gtk.Method.get_property=filename)
+ * gtk_bookmark_list_get_filename:
  * @self: a `GtkBookmarkList`
  *
  * Returns the filename of the bookmark file that
@@ -510,7 +510,7 @@ gtk_bookmark_list_new (const char *filename,
 }
 
 /**
- * gtk_bookmark_list_set_attributes: (attributes org.gtk.Method.set_property=attributes)
+ * gtk_bookmark_list_set_attributes:
  * @self: a `GtkBookmarkList`
  * @attributes: (nullable): the attributes to enumerate
  *
@@ -541,7 +541,7 @@ gtk_bookmark_list_set_attributes (GtkBookmarkList *self,
 }
 
 /**
- * gtk_bookmark_list_get_attributes: (attributes org.gtk.Method.get_property=attributes)
+ * gtk_bookmark_list_get_attributes:
  * @self: a `GtkBookmarkList`
  *
  * Gets the attributes queried on the children.
@@ -557,7 +557,7 @@ gtk_bookmark_list_get_attributes (GtkBookmarkList *self)
 }
 
 /**
- * gtk_bookmark_list_set_io_priority: (attributes org.gtk.Method.set_property=io-priority)
+ * gtk_bookmark_list_set_io_priority:
  * @self: a `GtkBookmarkList`
  * @io_priority: IO priority to use
  *
@@ -580,7 +580,7 @@ gtk_bookmark_list_set_io_priority (GtkBookmarkList *self,
 }
 
 /**
- * gtk_bookmark_list_get_io_priority: (attributes org.gtk.Method.get_property=io-priority)
+ * gtk_bookmark_list_get_io_priority:
  * @self: a `GtkBookmarkList`
  *
  * Gets the IO priority to use while loading file.

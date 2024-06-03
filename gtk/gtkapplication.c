@@ -805,7 +805,7 @@ gtk_application_get_window_by_id (GtkApplication *application,
 }
 
 /**
- * gtk_application_get_active_window: (attributes org.gtk.Method.get_property=active-window)
+ * gtk_application_get_active_window:
  * @application: a `GtkApplication`
  *
  * Gets the “active” window for the application.
@@ -838,7 +838,7 @@ gtk_application_update_accels (GtkApplication *application)
 }
 
 /**
- * gtk_application_set_menubar: (attributes org.gtk.Method.set_property=menubar)
+ * gtk_application_set_menubar:
  * @application: a `GtkApplication`
  * @menubar: (nullable): a `GMenuModel`
  *
@@ -881,7 +881,7 @@ gtk_application_set_menubar (GtkApplication *application,
 }
 
 /**
- * gtk_application_get_menubar: (attributes org.gtk.Method.get_property=menubar)
+ * gtk_application_get_menubar:
  * @application: a `GtkApplication`
  *
  * Returns the menu model that has been set with

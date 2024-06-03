@@ -877,7 +877,7 @@ gtk_entry_completion_get_entry (GtkEntryCompletion *completion)
 }
 
 /**
- * gtk_entry_completion_set_model: (attributes org.gtk.Method.set_property=model)
+ * gtk_entry_completion_set_model:
  * @completion: a `GtkEntryCompletion`
  * @model: (nullable): the `GtkTreeModel`
  *
@@ -924,7 +924,7 @@ gtk_entry_completion_set_model (GtkEntryCompletion *completion,
 }
 
 /**
- * gtk_entry_completion_get_model: (attributes org.gtk.Method.get_property=model)
+ * gtk_entry_completion_get_model:
  * @completion: a `GtkEntryCompletion`
  *
  * Returns the model the `GtkEntryCompletion` is using as data source.
@@ -1064,7 +1064,7 @@ gtk_entry_completion_complete (GtkEntryCompletion *completion)
 }
 
 /**
- * gtk_entry_completion_set_text_column: (attributes org.gtk.Method.set_property=text-column)
+ * gtk_entry_completion_set_text_column:
  * @completion: a `GtkEntryCompletion`
  * @column: the column in the model of @completion to get strings from
  *
@@ -1107,7 +1107,7 @@ gtk_entry_completion_set_text_column (GtkEntryCompletion *completion,
 }
 
 /**
- * gtk_entry_completion_get_text_column: (attributes org.gtk.Method.get_property=text-column)
+ * gtk_entry_completion_get_text_column:
  * @completion: a `GtkEntryCompletion`
  *
  * Returns the column in the model of @completion to get strings from.
@@ -1470,7 +1470,7 @@ gtk_entry_completion_insert_prefix (GtkEntryCompletion *completion)
 }
 
 /**
- * gtk_entry_completion_set_inline_completion: (attributes org.gtk.Method.set_property=inline-completion)
+ * gtk_entry_completion_set_inline_completion:
  * @completion: a `GtkEntryCompletion`
  * @inline_completion: %TRUE to do inline completion
  *
@@ -1496,7 +1496,7 @@ gtk_entry_completion_set_inline_completion (GtkEntryCompletion *completion,
 }
 
 /**
- * gtk_entry_completion_get_inline_completion: (attributes org.gtk.Method.get_property=inline-completion)
+ * gtk_entry_completion_get_inline_completion:
  * @completion: a `GtkEntryCompletion`
  *
  * Returns whether the common prefix of the possible completions should
@@ -1515,7 +1515,7 @@ gtk_entry_completion_get_inline_completion (GtkEntryCompletion *completion)
 }
 
 /**
- * gtk_entry_completion_set_popup_completion: (attributes org.gtk.Method.set_property=popup-completion)
+ * gtk_entry_completion_set_popup_completion:
  * @completion: a `GtkEntryCompletion`
  * @popup_completion: %TRUE to do popup completion
  *
@@ -1541,7 +1541,7 @@ gtk_entry_completion_set_popup_completion (GtkEntryCompletion *completion,
 
 
 /**
- * gtk_entry_completion_get_popup_completion: (attributes org.gtk.Method.get_property=popup-completion)
+ * gtk_entry_completion_get_popup_completion:
  * @completion: a `GtkEntryCompletion`
  *
  * Returns whether the completions should be presented in a popup window.
@@ -1559,7 +1559,7 @@ gtk_entry_completion_get_popup_completion (GtkEntryCompletion *completion)
 }
 
 /**
- * gtk_entry_completion_set_popup_set_width: (attributes org.gtk.Method.set_property=popup-set-width)
+ * gtk_entry_completion_set_popup_set_width:
  * @completion: a `GtkEntryCompletion`
  * @popup_set_width: %TRUE to make the width of the popup the same as the entry
  *
@@ -1585,7 +1585,7 @@ gtk_entry_completion_set_popup_set_width (GtkEntryCompletion *completion,
 }
 
 /**
- * gtk_entry_completion_get_popup_set_width: (attributes org.gtk.Method.get_property=popup-set-width)
+ * gtk_entry_completion_get_popup_set_width:
  * @completion: a `GtkEntryCompletion`
  *
  * Returns whether the completion popup window will be resized to the
@@ -1606,7 +1606,7 @@ gtk_entry_completion_get_popup_set_width (GtkEntryCompletion *completion)
 
 
 /**
- * gtk_entry_completion_set_popup_single_match: (attributes org.gtk.Method.set_property=popup-single-match)
+ * gtk_entry_completion_set_popup_single_match:
  * @completion: a `GtkEntryCompletion`
  * @popup_single_match: %TRUE if the popup should appear even for a single match
  *
@@ -1635,7 +1635,7 @@ gtk_entry_completion_set_popup_single_match (GtkEntryCompletion *completion,
 }
 
 /**
- * gtk_entry_completion_get_popup_single_match: (attributes org.gtk.Method.get_property=popup-single-match)
+ * gtk_entry_completion_get_popup_single_match:
  * @completion: a `GtkEntryCompletion`
  *
  * Returns whether the completion popup window will appear even if there is
@@ -1655,7 +1655,7 @@ gtk_entry_completion_get_popup_single_match (GtkEntryCompletion *completion)
 }
 
 /**
- * gtk_entry_completion_set_inline_selection: (attributes org.gtk.Method.set_property=inline-selection)
+ * gtk_entry_completion_set_inline_selection:
  * @completion: a `GtkEntryCompletion`
  * @inline_selection: %TRUE to do inline selection
  *
@@ -1681,7 +1681,7 @@ gtk_entry_completion_set_inline_selection (GtkEntryCompletion *completion,
 }
 
 /**
- * gtk_entry_completion_get_inline_selection: (attributes org.gtk.Method.get_property=inline-selection)
+ * gtk_entry_completion_get_inline_selection:
  * @completion: a `GtkEntryCompletion`
  *
  * Returns %TRUE if inline-selection mode is turned on.

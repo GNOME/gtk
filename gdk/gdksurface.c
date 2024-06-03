@@ -1083,7 +1083,7 @@ gdk_surface_get_widget (GdkSurface *self)
 }
 
 /**
- * gdk_surface_get_display: (attributes org.gtk.Method.get_property=display)
+ * gdk_surface_get_display:
  * @surface: a `GdkSurface`
  *
  * Gets the `GdkDisplay` associated with a `GdkSurface`.
@@ -1112,7 +1112,7 @@ gdk_surface_is_destroyed (GdkSurface *surface)
 }
 
 /**
- * gdk_surface_get_mapped: (attributes org.gtk.Method.get_property=mapped)
+ * gdk_surface_get_mapped:
  * @surface: a `GdkSurface`
  *
  * Checks whether the surface has been mapped.
@@ -1845,7 +1845,7 @@ gdk_surface_set_cursor_internal (GdkSurface *surface,
 }
 
 /**
- * gdk_surface_get_cursor: (attributes org.gtk.Method.get_property=cursor)
+ * gdk_surface_get_cursor:
  * @surface: a `GdkSurface`
  *
  * Retrieves a `GdkCursor` pointer for the cursor currently set on the
@@ -1867,7 +1867,7 @@ gdk_surface_get_cursor (GdkSurface *surface)
 }
 
 /**
- * gdk_surface_set_cursor: (attributes org.gtk.Method.set_property=cursor)
+ * gdk_surface_set_cursor:
  * @surface: a `GdkSurface`
  * @cursor: (nullable): a `GdkCursor`
  *
@@ -2027,7 +2027,7 @@ gdk_surface_get_geometry (GdkSurface *surface,
 }
 
 /**
- * gdk_surface_get_width: (attributes org.gtk.Method.get_property=width)
+ * gdk_surface_get_width:
  * @surface: a `GdkSurface`
  *
  * Returns the width of the given @surface.
@@ -2046,7 +2046,7 @@ gdk_surface_get_width (GdkSurface *surface)
 }
 
 /**
- * gdk_surface_get_height: (attributes org.gtk.Method.get_property=height)
+ * gdk_surface_get_height:
  * @surface: a `GdkSurface`
  *
  * Returns the height of the given @surface.
@@ -2590,7 +2590,7 @@ gdk_surface_set_frame_clock (GdkSurface     *surface,
 }
 
 /**
- * gdk_surface_get_frame_clock: (attributes org.gtk.Method.get_property=frame-clock)
+ * gdk_surface_get_frame_clock:
  * @surface: surface to get frame clock for
  *
  * Gets the frame clock for the surface.
@@ -2609,7 +2609,7 @@ gdk_surface_get_frame_clock (GdkSurface *surface)
 }
 
 /**
- * gdk_surface_get_scale_factor: (attributes org.gtk.Method.get_property=scale-factor)
+ * gdk_surface_get_scale_factor:
  * @surface: surface to get scale factor for
  *
  * Returns the internal scale factor that maps from surface coordinates
@@ -2635,7 +2635,7 @@ gdk_surface_get_scale_factor (GdkSurface *surface)
 }
 
 /**
- * gdk_surface_get_scale: (attributes org.gtk.Method.get_property=scale)
+ * gdk_surface_get_scale:
  * @surface: surface to get scale for
  *
  * Returns the internal scale that maps from surface coordinates

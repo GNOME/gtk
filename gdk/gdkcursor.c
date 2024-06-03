@@ -407,7 +407,7 @@ gdk_cursor_new_from_callback (GdkCursorGetTextureCallback  callback,
 }
 
 /**
- * gdk_cursor_get_fallback: (attributes org.gtk.Method.get_property=fallback)
+ * gdk_cursor_get_fallback:
  * @cursor: a `GdkCursor`
  *
  * Returns the fallback for this @cursor.
@@ -430,7 +430,7 @@ gdk_cursor_get_fallback (GdkCursor *cursor)
 }
 
 /**
- * gdk_cursor_get_name: (attributes org.gtk.Method.get_property=name)
+ * gdk_cursor_get_name:
  * @cursor: a `GdkCursor`
  *
  * Returns the name of the cursor.
@@ -468,7 +468,7 @@ gdk_cursor_get_texture (GdkCursor *cursor)
 }
 
 /**
- * gdk_cursor_get_hotspot_x: (attributes org.gtk.Method.get_property=hotspot-x)
+ * gdk_cursor_get_hotspot_x:
  * @cursor: a `GdkCursor`
  *
  * Returns the horizontal offset of the hotspot.
@@ -490,7 +490,7 @@ gdk_cursor_get_hotspot_x (GdkCursor *cursor)
 }
 
 /**
- * gdk_cursor_get_hotspot_y: (attributes org.gtk.Method.get_property=hotspot-y)
+ * gdk_cursor_get_hotspot_y:
  * @cursor: a `GdkCursor`
  *
  * Returns the vertical offset of the hotspot.

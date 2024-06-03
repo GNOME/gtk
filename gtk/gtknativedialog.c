@@ -369,7 +369,7 @@ _gtk_native_dialog_emit_response (GtkNativeDialog *self,
 }
 
 /**
- * gtk_native_dialog_get_visible: (attributes org.gtk.Method.get_property=visible)
+ * gtk_native_dialog_get_visible:
  * @self: a `GtkNativeDialog`
  *
  * Determines whether the dialog is visible.
@@ -387,7 +387,7 @@ gtk_native_dialog_get_visible (GtkNativeDialog *self)
 }
 
 /**
- * gtk_native_dialog_set_modal: (attributes org.gtk.Method.set_property=modal)
+ * gtk_native_dialog_set_modal:
  * @self: a `GtkNativeDialog`
  * @modal: whether the window is modal
  *
@@ -417,7 +417,7 @@ gtk_native_dialog_set_modal (GtkNativeDialog *self,
 }
 
 /**
- * gtk_native_dialog_get_modal: (attributes org.gtk.Method.get_property=modal)
+ * gtk_native_dialog_get_modal:
  * @self: a `GtkNativeDialog`
  *
  * Returns whether the dialog is modal.
@@ -435,7 +435,7 @@ gtk_native_dialog_get_modal (GtkNativeDialog *self)
 }
 
 /**
- * gtk_native_dialog_set_title: (attributes org.gtk.Method.set_property=title)
+ * gtk_native_dialog_set_title:
  * @self: a `GtkNativeDialog`
  * @title: title of the dialog
  *
@@ -456,7 +456,7 @@ gtk_native_dialog_set_title (GtkNativeDialog *self,
 }
 
 /**
- * gtk_native_dialog_get_title: (attributes org.gtk.Method.get_property=title)
+ * gtk_native_dialog_get_title:
  * @self: a `GtkNativeDialog`
  *
  * Gets the title of the `GtkNativeDialog`.
@@ -485,7 +485,7 @@ parent_destroyed (GtkWidget       *parent,
 }
 
 /**
- * gtk_native_dialog_set_transient_for: (attributes org.gtk.Method.set_property=transient-for)
+ * gtk_native_dialog_set_transient_for:
  * @self: a `GtkNativeDialog`
  * @parent: (nullable): parent window
  *
@@ -520,7 +520,7 @@ gtk_native_dialog_set_transient_for (GtkNativeDialog *self,
 }
 
 /**
- * gtk_native_dialog_get_transient_for: (attributes org.gtk.Method.get_property=transient-for)
+ * gtk_native_dialog_get_transient_for:
  * @self: a `GtkNativeDialog`
  *
  * Fetches the transient parent for this window.

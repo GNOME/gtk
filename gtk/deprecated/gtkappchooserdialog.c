@@ -753,7 +753,7 @@ gtk_app_chooser_dialog_get_widget (GtkAppChooserDialog *self)
 }
 
 /**
- * gtk_app_chooser_dialog_set_heading: (attributes org.gtk.Method.set_property=heading)
+ * gtk_app_chooser_dialog_set_heading:
  * @self: a `GtkAppChooserDialog`
  * @heading: a string containing Pango markup
  *
@@ -789,7 +789,7 @@ gtk_app_chooser_dialog_set_heading (GtkAppChooserDialog *self,
 }
 
 /**
- * gtk_app_chooser_dialog_get_heading: (attributes org.gtk.Method.get_property=heading)
+ * gtk_app_chooser_dialog_get_heading:
  * @self: a `GtkAppChooserDialog`
  *
  * Returns the text to display at the top of the dialog.

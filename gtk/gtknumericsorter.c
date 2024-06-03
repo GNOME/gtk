@@ -597,7 +597,7 @@ gtk_numeric_sorter_new (GtkExpression *expression)
 }
 
 /**
- * gtk_numeric_sorter_get_expression: (attributes org.gtk.Method.get_property=expression)
+ * gtk_numeric_sorter_get_expression:
  * @self: a `GtkNumericSorter`
  *
  * Gets the expression that is evaluated to obtain numbers from items.
@@ -613,7 +613,7 @@ gtk_numeric_sorter_get_expression (GtkNumericSorter *self)
 }
 
 /**
- * gtk_numeric_sorter_set_expression: (attributes org.gtk.Method.set_property=expression)
+ * gtk_numeric_sorter_set_expression:
  * @self: a `GtkNumericSorter`
  * @expression: (nullable) (transfer none): a `GtkExpression`
  *
@@ -646,7 +646,7 @@ gtk_numeric_sorter_set_expression (GtkNumericSorter *self,
 }
 
 /**
- * gtk_numeric_sorter_set_sort_order: (attributes org.gtk.Method.set_property=sort-order)
+ * gtk_numeric_sorter_set_sort_order:
  * @self: a `GtkNumericSorter`
  * @sort_order: whether to sort smaller numbers first
  *
@@ -671,7 +671,7 @@ gtk_numeric_sorter_set_sort_order (GtkNumericSorter *self,
 }
 
 /**
- * gtk_numeric_sorter_get_sort_order: (attributes org.gtk.Method.get_property=sort-order)
+ * gtk_numeric_sorter_get_sort_order:
  * @self: a `GtkNumericSorter`
  *
  * Gets whether this sorter will sort smaller numbers first.

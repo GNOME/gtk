@@ -402,7 +402,7 @@ gtk_stack_sidebar_new (void)
 }
 
 /**
- * gtk_stack_sidebar_set_stack: (attributes org.gtk.Method.set_property=stack)
+ * gtk_stack_sidebar_set_stack:
  * @self: a `GtkStackSidebar`
  * @stack: a `GtkStack`
  *
@@ -431,7 +431,7 @@ gtk_stack_sidebar_set_stack (GtkStackSidebar *self,
 }
 
 /**
- * gtk_stack_sidebar_get_stack: (attributes org.gtk.Method.get_property=stack)
+ * gtk_stack_sidebar_get_stack:
  * @self: a `GtkStackSidebar`
  *
  * Retrieves the stack.

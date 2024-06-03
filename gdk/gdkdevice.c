@@ -540,7 +540,7 @@ gdk_device_get_name (GdkDevice *device)
 }
 
 /**
- * gdk_device_get_has_cursor: (attributes org.gtk.Method.get_property=has-cursor)
+ * gdk_device_get_has_cursor:
  * @device: a `GdkDevice`
  *
  * Determines whether the pointer follows device motion.
@@ -559,7 +559,7 @@ gdk_device_get_has_cursor (GdkDevice *device)
 }
 
 /**
- * gdk_device_get_source: (attributes org.gtk.Method.get_property=source)
+ * gdk_device_get_source:
  * @device: a `GdkDevice`
  *
  * Determines the type of the device.
@@ -599,7 +599,7 @@ gdk_device_get_axis_use (GdkDevice *device,
 }
 
 /**
- * gdk_device_get_display: (attributes org.gtk.Method.get_property=display)
+ * gdk_device_get_display:
  * @device: a `GdkDevice`
  *
  * Returns the `GdkDisplay` to which @device pertains.
@@ -1082,7 +1082,7 @@ _gdk_device_surface_at_position (GdkDevice       *device,
 }
 
 /**
- * gdk_device_get_vendor_id: (attributes org.gtk.Method.get_property=vendor-id)
+ * gdk_device_get_vendor_id:
  * @device: a physical `GdkDevice`
  *
  * Returns the vendor ID of this device.
@@ -1124,7 +1124,7 @@ gdk_device_get_vendor_id (GdkDevice *device)
 }
 
 /**
- * gdk_device_get_product_id: (attributes org.gtk.Method.get_property=product-id)
+ * gdk_device_get_product_id:
  * @device: a physical `GdkDevice`
  *
  * Returns the product ID of this device.
@@ -1157,7 +1157,7 @@ gdk_device_set_seat (GdkDevice *device,
 }
 
 /**
- * gdk_device_get_seat: (attributes org.gtk.Method.get_property=seat)
+ * gdk_device_get_seat:
  * @device: A `GdkDevice`
  *
  * Returns the `GdkSeat` the device belongs to.
@@ -1218,7 +1218,7 @@ gdk_device_get_device_tool (GdkDevice *device)
 }
 
 /**
- * gdk_device_get_caps_lock_state: (attributes org.gtk.Method.get_property=caps-lock-state)
+ * gdk_device_get_caps_lock_state:
  * @device: a `GdkDevice`
  *
  * Retrieves whether the Caps Lock modifier of the keyboard is locked.
@@ -1239,7 +1239,7 @@ gdk_device_get_caps_lock_state (GdkDevice *device)
 }
 
 /**
- * gdk_device_get_num_lock_state: (attributes org.gtk.Method.get_property=num-lock-state)
+ * gdk_device_get_num_lock_state:
  * @device: a ``GdkDevice`
  *
  * Retrieves whether the Num Lock modifier of the keyboard is locked.
@@ -1260,7 +1260,7 @@ gdk_device_get_num_lock_state (GdkDevice *device)
 }
 
 /**
- * gdk_device_get_scroll_lock_state: (attributes org.gtk.Method.get_property=scroll-lock-state)
+ * gdk_device_get_scroll_lock_state:
  * @device: a `GdkDevice`
  *
  * Retrieves whether the Scroll Lock modifier of the keyboard is locked.
@@ -1281,7 +1281,7 @@ gdk_device_get_scroll_lock_state (GdkDevice *device)
 }
 
 /**
- * gdk_device_get_modifier_state: (attributes org.gtk.Method.get_property=modifier-state)
+ * gdk_device_get_modifier_state:
  * @device: a `GdkDevice`
  *
  * Retrieves the current modifier state of the keyboard.
@@ -1302,7 +1302,7 @@ gdk_device_get_modifier_state (GdkDevice *device)
 }
 
 /**
- * gdk_device_get_direction: (attributes org.gtk.Method.get_property=direction)
+ * gdk_device_get_direction:
  * @device: a `GdkDevice`
  *
  * Returns the direction of effective layout of the keyboard.
@@ -1328,7 +1328,7 @@ gdk_device_get_direction (GdkDevice *device)
 }
 
 /**
- * gdk_device_has_bidi_layouts: (attributes org.gtk.Method.get_property=has-bidi-layouts)
+ * gdk_device_has_bidi_layouts:
  * @device: a `GdkDevice`
  *
  * Determines if layouts for both right-to-left and
