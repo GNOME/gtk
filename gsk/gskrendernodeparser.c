@@ -2996,7 +2996,7 @@ printer_init_collect_font_info (Printer       *printer,
 
   font = gsk_text_node_get_font (node);
 
-  info = (FontInfo *) g_hash_table_lookup (printer->fonts, font);
+  info = (FontInfo *) g_hash_table_lookup (printer->fonts, hb_font_get_face (pango_font_get_hb_font (font)));
   if (!info)
     {
       info = g_new0 (FontInfo, 1);
@@ -3008,7 +3008,7 @@ printer_init_collect_font_info (Printer       *printer,
           hb_subset_input_set_flags (info->input, HB_SUBSET_FLAGS_RETAIN_GIDS);
         }
 
-      g_hash_table_insert (printer->fonts, g_object_ref (font), info);
+      g_hash_table_insert (printer->fonts, info->face, info);
     }
 
   if (info->input)
@@ -3164,7 +3164,7 @@ printer_init (Printer       *self,
   self->named_node_counter = 0;
   self->named_textures = g_hash_table_new_full (NULL, NULL, NULL, g_free);
   self->named_texture_counter = 0;
-  self->fonts = g_hash_table_new_full (g_direct_hash, g_direct_equal, g_object_unref, font_info_free);
+  self->fonts = g_hash_table_new_full (g_direct_hash, g_direct_equal, NULL, font_info_free);
 
   printer_init_duplicates_for_node (self, node);
 }
@@ -3656,7 +3656,7 @@ gsk_text_node_serialize_font (GskRenderNode *node,
   g_free (s);
   pango_font_description_free (desc);
 
-  info = g_hash_table_lookup (p->fonts, font);
+  info = g_hash_table_lookup (p->fonts, hb_font_get_face (pango_font_get_hb_font (font)));
   if (info->serialized)
     return;
 
