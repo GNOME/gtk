@@ -1068,7 +1068,7 @@ gtk_tree_list_row_class_init (GtkTreeListRowClass *class)
                          GTK_PARAM_READABLE);
 
   /**
-   * GtkTreeListRow:expandable: (attributes org.gtk.Property.get=gtk_tree_list_row_is_expandable)
+   * GtkTreeListRow:expandable: (getter is_expandable)
    *
    * If this row can ever be expanded.
    */
@@ -1238,7 +1238,7 @@ gtk_tree_list_row_get_expanded (GtkTreeListRow *self)
 }
 
 /**
- * gtk_tree_list_row_is_expandable: (attributes org.gtk.Method.get_property=expandable)
+ * gtk_tree_list_row_is_expandable: (get-property expandable)
  * @self: a `GtkTreeListRow`
  *
  * Checks if a row can be expanded.

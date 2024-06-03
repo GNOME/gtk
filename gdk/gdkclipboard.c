@@ -378,7 +378,7 @@ gdk_clipboard_class_init (GdkClipboardClass *class)
                         G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GdkClipboard:local: (attributes org.gtk.Property.get=gdk_clipboard_is_local)
+   * GdkClipboard:local: (getter is_local)
    *
    * %TRUE if the contents of the clipboard are owned by this process.
    */
@@ -465,7 +465,7 @@ gdk_clipboard_get_formats (GdkClipboard *clipboard)
 }
 
 /**
- * gdk_clipboard_is_local: (attributes org.gtk.Method.get_property=local)
+ * gdk_clipboard_is_local: (get-property local)
  * @clipboard: a `GdkClipboard`
  *
  * Returns if the clipboard is local.

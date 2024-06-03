@@ -290,7 +290,7 @@ gtk_media_stream_class_init (GtkMediaStreamClass *class)
   gobject_class->dispose = gtk_media_stream_dispose;
 
   /**
-   * GtkMediaStream:prepared: (attributes org.gtk.Property.get=gtk_media_stream_is_prepared)
+   * GtkMediaStream:prepared: (getter is_prepared)
    *
    * Whether the stream has finished initializing and existence of
    * audio and video is known.
@@ -372,7 +372,7 @@ gtk_media_stream_class_init (GtkMediaStreamClass *class)
                         G_PARAM_READABLE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   /**
-   * GtkMediaStream:seekable: (attributes org.gtk.Property.get=gtk_media_stream_is_seekable)
+   * GtkMediaStream:seekable: (getter is_seekable)
    *
    * Set unless the stream is known to not support seeking.
    */
@@ -382,7 +382,7 @@ gtk_media_stream_class_init (GtkMediaStreamClass *class)
                           G_PARAM_READABLE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   /**
-   * GtkMediaStream:seeking: (attributes org.gtk.Property.get=gtk_media_stream_is_seeking)
+   * GtkMediaStream:seeking: (getter is_seeking)
    *
    * Set while a seek is in progress.
    */
@@ -433,7 +433,7 @@ gtk_media_stream_init (GtkMediaStream *self)
 }
 
 /**
- * gtk_media_stream_is_prepared: (attributes org.gtk.Method.get_property=prepared)
+ * gtk_media_stream_is_prepared: (get-property prepared)
  * @self: a `GtkMediaStream`
  *
  * Returns whether the stream has finished initializing.
@@ -647,7 +647,7 @@ gtk_media_stream_get_duration (GtkMediaStream *self)
 }
 
 /**
- * gtk_media_stream_is_seekable: (attributes org.gtk.Method.get_property=seekable)
+ * gtk_media_stream_is_seekable: (get-property seekable)
  * @self: a `GtkMediaStream`
  *
  * Checks if a stream may be seekable.
@@ -673,7 +673,7 @@ gtk_media_stream_is_seekable (GtkMediaStream *self)
 }
 
 /**
- * gtk_media_stream_is_seeking: (attributes org.gtk.Method.get_property=seeking)
+ * gtk_media_stream_is_seeking: (get-property seeking)
  * @self: a `GtkMediaStream`
  *
  * Checks if there is currently a seek operation going on.

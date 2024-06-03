@@ -308,7 +308,7 @@ gtk_search_bar_class_init (GtkSearchBarClass *klass)
   widget_class->focus = gtk_widget_focus_child;
 
   /**
-   * GtkSearchBar:search-mode-enabled: (attributes org.gtk.Property.get=gtk_search_bar_get_search_mode org.gtk.Property.set=gtk_search_bar_set_search_mode)
+   * GtkSearchBar:search-mode-enabled: (getter get_search_mode) (setter set_search_mode)
    *
    * Whether the search mode is on and the search bar shown.
    */
@@ -446,7 +446,7 @@ gtk_search_bar_connect_entry (GtkSearchBar *bar,
 }
 
 /**
- * gtk_search_bar_get_search_mode: (attributes org.gtk.Method.get_property=search-mode-enabled)
+ * gtk_search_bar_get_search_mode: (get-property search-mode-enabled)
  * @bar: a `GtkSearchBar`
  *
  * Returns whether the search mode is on or off.
@@ -462,7 +462,7 @@ gtk_search_bar_get_search_mode (GtkSearchBar *bar)
 }
 
 /**
- * gtk_search_bar_set_search_mode: (attributes org.gtk.Method.set_property=search-mode-enabled)
+ * gtk_search_bar_set_search_mode: (set-property search-mode-enabled)
  * @bar: a `GtkSearchBar`
  * @search_mode: the new state of the search mode
  *

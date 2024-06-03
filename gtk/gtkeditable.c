@@ -384,7 +384,7 @@ gtk_editable_default_init (GtkEditableInterface *iface)
                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   /**
-   * GtkEditable:cursor-position: (attributes org.gtk.Property.get=gtk_editable_get_position org.gtk.Property.set=gtk_editable_set_position)
+   * GtkEditable:cursor-position: (getter get_position) (setter set_position)
    *
    * The current position of the insertion cursor in chars.
    */
@@ -448,7 +448,7 @@ gtk_editable_default_init (GtkEditableInterface *iface)
                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   /**
-   * GtkEditable:xalign: (attributes org.gtk.Property.get=gtk_editable_get_alignment org.gtk.Property.set=gtk_editable_set_alignment)
+   * GtkEditable:xalign: (getter get_alignment) (setter set_alignment)
    *
    * The horizontal alignment, from 0 (left) to 1 (right).
    *
@@ -613,7 +613,7 @@ gtk_editable_set_text (GtkEditable *editable,
 }
 
 /**
- * gtk_editable_set_position: (attributes org.gtk.Method.set_property=cursor-position)
+ * gtk_editable_set_position: (set-property cursor-position)
  * @editable: a `GtkEditable`
  * @position: the position of the cursor
  *
@@ -635,7 +635,7 @@ gtk_editable_set_position (GtkEditable *editable,
 }
 
 /**
- * gtk_editable_get_position: (attributes org.gtk.Method.get_property=cursor-position)
+ * gtk_editable_get_position: (get-property cursor-position)
  * @editable: a `GtkEditable`
  *
  * Retrieves the current position of the cursor relative
@@ -776,7 +776,7 @@ gtk_editable_get_editable (GtkEditable *editable)
 
 
 /**
- * gtk_editable_get_alignment: (attributes org.gtk.Method.get_property=xalign)
+ * gtk_editable_get_alignment: (get-property xalign)
  * @editable: a `GtkEditable`
  *
  * Gets the alignment of the editable.
@@ -796,7 +796,7 @@ gtk_editable_get_alignment (GtkEditable *editable)
 }
 
 /**
- * gtk_editable_set_alignment: (attributes org.gtk.Method.set_property=xalign)
+ * gtk_editable_set_alignment: (set-property xalign)
  * @editable: a `GtkEditable`
  * @xalign: The horizontal alignment, from 0 (left) to 1 (right).
  *   Reversed for RTL layouts

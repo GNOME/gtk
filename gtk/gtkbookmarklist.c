@@ -259,7 +259,7 @@ gtk_bookmark_list_class_init (GtkBookmarkListClass *class)
                         G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
 
   /**
-   * GtkBookmarkList:loading: (attributes org.gtk.Property.get=gtk_bookmark_list_is_loading)
+   * GtkBookmarkList:loading: (getter is_loading)
    *
    * %TRUE if files are being loaded.
    */
@@ -596,7 +596,7 @@ gtk_bookmark_list_get_io_priority (GtkBookmarkList *self)
 }
 
 /**
- * gtk_bookmark_list_is_loading: (attributes org.gtk.Method.get_property=loading)
+ * gtk_bookmark_list_is_loading: (get-property loading)
  * @self: a `GtkBookmarkList`
  *
  * Returns %TRUE if the files are currently being loaded.

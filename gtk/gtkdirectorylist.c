@@ -335,7 +335,7 @@ gtk_directory_list_class_init (GtkDirectoryListClass *class)
                         G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
 
   /**
-   * GtkDirectoryList:loading: (attributes org.gtk.Property.get=gtk_directory_list_is_loading)
+   * GtkDirectoryList:loading: (getter is_loading)
    *
    * %TRUE if files are being loaded.
    */
@@ -950,7 +950,7 @@ gtk_directory_list_get_io_priority (GtkDirectoryList *self)
 }
 
 /**
- * gtk_directory_list_is_loading: (attributes org.gtk.Method.get_property=loading)
+ * gtk_directory_list_is_loading: (get-property loading)
  * @self: a `GtkDirectoryList`
  *
  * Returns %TRUE if the children enumeration is currently in

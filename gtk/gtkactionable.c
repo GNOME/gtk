@@ -123,7 +123,7 @@ gtk_actionable_set_action_name (GtkActionable *actionable,
 }
 
 /**
- * gtk_actionable_get_action_target_value: (attributes org.gtk.Method.get_property=action-target)
+ * gtk_actionable_get_action_target_value: (get-property action-target)
  * @actionable: a `GtkActionable` widget
  *
  * Gets the current target value of @actionable.
@@ -140,7 +140,7 @@ gtk_actionable_get_action_target_value (GtkActionable *actionable)
 }
 
 /**
- * gtk_actionable_set_action_target_value: (attributes org.gtk.Method.set_property=action-target)
+ * gtk_actionable_set_action_target_value: (set-property action-target)
  * @actionable: a `GtkActionable` widget
  * @target_value: (nullable): a [struct@GLib.Variant] to set as the target value
  *

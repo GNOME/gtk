@@ -211,7 +211,7 @@ gdk_device_class_init (GdkDeviceClass *klass)
                          G_PARAM_STATIC_STRINGS);
 
   /**
-   * GdkDevice:tool: (attributes org.gtk.Property.get=gdk_device_get_device_tool)
+   * GdkDevice:tool: (getter get_device_tool)
    *
    * The `GdkDeviceTool` that is currently used with this device.
    */
@@ -1202,7 +1202,7 @@ gdk_device_get_num_touches (GdkDevice *device)
 }
 
 /**
- * gdk_device_get_device_tool: (attributes org.gtk.Method.get_property=tool)
+ * gdk_device_get_device_tool: (get-property tool)
  * @device: a `GdkDevice`
  *
  * Retrieves the current tool for @device.

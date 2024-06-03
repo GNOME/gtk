@@ -957,7 +957,7 @@ gtk_window_class_init (GtkWindowClass *klass)
                            GTK_PARAM_READWRITE|G_PARAM_CONSTRUCT|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkWindow:maximized: (attributes org.gtk.Property.get=gtk_window_is_maximized)
+   * GtkWindow:maximized: (getter is_maximized)
    *
    * Whether the window is maximized.
    *
@@ -973,7 +973,7 @@ gtk_window_class_init (GtkWindowClass *klass)
                             GTK_PARAM_READWRITE|G_PARAM_CONSTRUCT|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkWindow:fullscreened: (attributes org.gtk.Property.get=gtk_window_is_fullscreen)
+   * GtkWindow:fullscreened: (getter is_fullscreen)
    *
    * Whether the window is fullscreen.
    *
@@ -989,7 +989,7 @@ gtk_window_class_init (GtkWindowClass *klass)
                             GTK_PARAM_READWRITE|G_PARAM_CONSTRUCT|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkWindow:suspended: (attributes org.gtk.Property.get=gtk_window_is_suspended)
+   * GtkWindow:suspended: (getter is_suspended)
    *
    * Whether the window is suspended.
    *
@@ -1031,7 +1031,7 @@ gtk_window_class_init (GtkWindowClass *klass)
                            GTK_PARAM_READWRITE|G_PARAM_STATIC_STRINGS|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkWindow:focus-widget: (attributes org.gtk.Property.get=gtk_window_get_focus org.gtk.Property.set=gtk_window_set_focus)
+   * GtkWindow:focus-widget: (getter get_focus) (setter set_focus)
    *
    * The focus widget.
    */
@@ -1262,7 +1262,7 @@ gtk_window_class_init (GtkWindowClass *klass)
 }
 
 /**
- * gtk_window_is_maximized: (attributes org.gtk.Method.get_property=maximized)
+ * gtk_window_is_maximized: (get-property maximized)
  * @window: a `GtkWindow`
  *
  * Retrieves the current maximized state of @window.
@@ -1289,7 +1289,7 @@ gtk_window_is_maximized (GtkWindow *window)
 }
 
 /**
- * gtk_window_is_fullscreen: (attributes org.gtk.Property.get=fullscreened)
+ * gtk_window_is_fullscreen: (get-property fullscreened)
  * @window: a `GtkWindow`
  *
  * Retrieves the current fullscreen state of @window.
@@ -1316,7 +1316,7 @@ gtk_window_is_fullscreen (GtkWindow *window)
 }
 
 /**
- * gtk_window_is_suspended: (attributes org.gtk.Property.get=suspended)
+ * gtk_window_is_suspended: (get-property suspended)
  * @window: a `GtkWindow`
  *
  * Retrieves the current suspended state of @window.
@@ -2404,7 +2404,7 @@ _gtk_window_notify_keys_changed (GtkWindow *window)
 }
 
 /**
- * gtk_window_get_focus: (attributes org.gtk.Property.get=focus-widget)
+ * gtk_window_get_focus: (get-property focus-widget)
  * @window: a `GtkWindow`
  *
  * Retrieves the current focused widget within the window.
@@ -5123,7 +5123,7 @@ synthesize_focus_change_events (GtkWindow       *window,
 }
 
 /**
- * gtk_window_set_focus: (attributes org.gtk.Method.set_property=focus-widget)
+ * gtk_window_set_focus: (set-property focus-widget)
  * @window: a `GtkWindow`
  * @focus: (nullable): widget to be the new focus widget, or %NULL to unset
  *   any focus widget for the toplevel window.

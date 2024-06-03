@@ -427,7 +427,7 @@ gtk_print_unix_dialog_class_init (GtkPrintUnixDialogClass *class)
                                                      G_PARAM_READWRITE));
 
   /**
-   * GtkPrintUnixDialog:print-settings: (attributes org.gtk.Property.get=gtk_print_unix_dialog_get_settings org.gtk.Property.set=gtk_print_unix_dialog_set_settings)
+   * GtkPrintUnixDialog:print-settings: (getter get_settings) (setter set_settings)
    *
    * The `GtkPrintSettings` object used for this dialog.
    */
@@ -3161,7 +3161,7 @@ set_active_printer (GtkPrintUnixDialog *dialog,
 }
 
 /**
- * gtk_print_unix_dialog_set_settings: (attributes org.gtk.Method.set_property=print-settings)
+ * gtk_print_unix_dialog_set_settings: (set-property print-settings)
  * @dialog: a `GtkPrintUnixDialog`
  * @settings: (nullable): a `GtkPrintSettings`
  *
@@ -3223,7 +3223,7 @@ gtk_print_unix_dialog_set_settings (GtkPrintUnixDialog *dialog,
 }
 
 /**
- * gtk_print_unix_dialog_get_settings: (attributes org.gtk.Method.get_property=print-settings)
+ * gtk_print_unix_dialog_get_settings: (get-property print-settings)
  * @dialog: a `GtkPrintUnixDialog`
  *
  * Gets a new `GtkPrintSettings` object that represents the

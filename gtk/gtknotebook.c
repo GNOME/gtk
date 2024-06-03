@@ -1122,7 +1122,7 @@ gtk_notebook_class_init (GtkNotebookClass *class)
   class->create_window = gtk_notebook_create_window;
 
   /**
-   * GtkNotebook:page: (attributes org.gtk.Property.get=gtk_notebook_get_current_page org.gtk.Property.set=gtk_notebook_set_current_page)
+   * GtkNotebook:page: (getter get_current_page) (setter set_current_page)
    *
    * The index of the current page.
    */
@@ -5976,7 +5976,7 @@ gtk_notebook_remove_page (GtkNotebook *notebook,
  */
 
 /**
- * gtk_notebook_get_current_page: (attributes org.gtk.Method.get_property=page)
+ * gtk_notebook_get_current_page: (get-property page)
  * @notebook: a `GtkNotebook`
  *
  * Returns the page number of the current page.
@@ -6083,7 +6083,7 @@ gtk_notebook_page_num (GtkNotebook      *notebook,
 }
 
 /**
- * gtk_notebook_set_current_page: (attributes org.gtk.Method.set_property=page)
+ * gtk_notebook_set_current_page: (set-property page)
  * @notebook: a `GtkNotebook`
  * @page_num: index of the page to switch to, starting from 0.
  *   If negative, the last page will be used. If greater

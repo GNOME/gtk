@@ -3584,7 +3584,7 @@ gtk_icon_paintable_class_init (GtkIconPaintableClass *klass)
                                                         G_PARAM_CONSTRUCT_ONLY | G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_BLURB | G_PARAM_STATIC_NICK));
 
   /**
-   * GtkIconPaintable:is-symbolic: (attributes org.gtk.Property.get=gtk_icon_paintable_is_symbolic)
+   * GtkIconPaintable:is-symbolic: (getter is_symbolic)
    *
    * Whether the icon is symbolic or not.
    */
@@ -3659,7 +3659,7 @@ gtk_icon_paintable_get_icon_name (GtkIconPaintable *icon)
 }
 
 /**
- * gtk_icon_paintable_is_symbolic: (attributes org.gtk.Method.get_property=is-symbolic)
+ * gtk_icon_paintable_is_symbolic: (get-property is-symbolic)
  * @self: a `GtkIconPaintable`
  *
  * Checks if the icon is symbolic or not.

@@ -636,7 +636,7 @@ gtk_scrolled_window_class_init (GtkScrolledWindowClass *class)
                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkScrolledWindow:window-placement: (attributes org.gtk.Property.get=gtk_scrolled_window_get_placement org.gtk.Property.set=gtk_scrolled_window_set_placement)
+   * GtkScrolledWindow:window-placement: (getter get_placement) (setter set_placement)
    *
    * Where the contents are located with respect to the scrollbars.
    */
@@ -2451,7 +2451,7 @@ gtk_scrolled_window_get_policy (GtkScrolledWindow *scrolled_window,
 }
 
 /**
- * gtk_scrolled_window_set_placement: (attributes org.gtk.Method.set_property=window-placement)
+ * gtk_scrolled_window_set_placement: (set-property window-placement)
  * @scrolled_window: a `GtkScrolledWindow`
  * @window_placement: position of the child window
  *
@@ -2486,7 +2486,7 @@ gtk_scrolled_window_set_placement (GtkScrolledWindow *scrolled_window,
 }
 
 /**
- * gtk_scrolled_window_get_placement: (attributes org.gtk.Method.get_property=window-placement)
+ * gtk_scrolled_window_get_placement: (get-property window-placement)
  * @scrolled_window: a `GtkScrolledWindow`
  *
  * Gets the placement of the contents with respect to the scrollbars.

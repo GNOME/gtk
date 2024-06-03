@@ -594,7 +594,7 @@ gtk_shortcut_controller_class_init (GtkShortcutControllerClass *klass)
                         G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
 
   /**
-   * GtkShortcutController:mnemonic-modifiers: (attributes org.gtk.Property.get=gtk_shortcut_controller_get_mnemonics_modifiers org.gtk.Property.set=gtk_shortcut_controller_set_mnemonics_modifiers)
+   * GtkShortcutController:mnemonic-modifiers: (getter get_mnemonics_modifiers) (setter set_mnemonics_modifiers)
    *
    * The modifiers that need to be pressed to allow mnemonics activation.
    */
@@ -914,7 +914,7 @@ gtk_shortcut_controller_get_scope (GtkShortcutController *self)
 }
 
 /**
- * gtk_shortcut_controller_set_mnemonics_modifiers: (attributes org.gtk.Method.set_property=mnemonic-modifiers)
+ * gtk_shortcut_controller_set_mnemonics_modifiers: (set-property mnemonic-modifiers)
  * @self: a `GtkShortcutController`
  * @modifiers: the new mnemonics_modifiers to use
  *
@@ -947,7 +947,7 @@ gtk_shortcut_controller_set_mnemonics_modifiers (GtkShortcutController *self,
 }
 
 /**
- * gtk_shortcut_controller_get_mnemonics_modifiers: (attributes org.gtk.Method.get_property=mnemonic-modifiers)
+ * gtk_shortcut_controller_get_mnemonics_modifiers: (get-property mnemonic-modifiers)
  * @self: a `GtkShortcutController`
  *
  * Gets the mnemonics modifiers for when this controller activates its shortcuts.

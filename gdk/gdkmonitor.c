@@ -319,7 +319,7 @@ gdk_monitor_class_init (GdkMonitorClass *class)
                        G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
 
   /**
-   * GdkMonitor:valid: (attributes org.gtk.Property.get=gdk_monitor_is_valid)
+   * GdkMonitor:valid: (getter is_valid)
    *
    * Whether the object is still valid.
    */
@@ -696,7 +696,7 @@ gdk_monitor_invalidate (GdkMonitor *monitor)
 }
 
 /**
- * gdk_monitor_is_valid: (attributes org.gtk.Method.get_property=valid)
+ * gdk_monitor_is_valid: (get-property valid)
  * @monitor: a `GdkMonitor`
  *
  * Returns %TRUE if the @monitor object corresponds to a

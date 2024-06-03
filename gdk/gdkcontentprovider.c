@@ -169,7 +169,7 @@ gdk_content_provider_class_init (GdkContentProviderClass *class)
   class->get_value = gdk_content_provider_real_get_value;
 
   /**
-   * GdkContentProvider:formats: (attributes org.gtk.Property.get=gdk_content_provider_ref_formats)
+   * GdkContentProvider:formats: (getter ref_formats)
    *
    * The possible formats that the provider can provide its data in.
    */
@@ -181,7 +181,7 @@ gdk_content_provider_class_init (GdkContentProviderClass *class)
                         G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GdkContentProvider:storable-formats: (attributes org.gtk.Property.get=gdk_content_provider_ref_storable_formats)
+   * GdkContentProvider:storable-formats: (getter ref_storable_formats)
    *
    * The subset of formats that clipboard managers should store this provider's data in.
    */
@@ -214,7 +214,7 @@ gdk_content_provider_init (GdkContentProvider *provider)
 }
 
 /**
- * gdk_content_provider_ref_formats: (attributes org.gtk.Method.get_property=formats)
+ * gdk_content_provider_ref_formats: (get-property formats)
  * @provider: a `GdkContentProvider`
  *
  * Gets the formats that the provider can provide its current contents in.
@@ -230,7 +230,7 @@ gdk_content_provider_ref_formats (GdkContentProvider *provider)
 }
 
 /**
- * gdk_content_provider_ref_storable_formats: (attributes org.gtk.Method.get_property=storable-formats)
+ * gdk_content_provider_ref_storable_formats: (get-property storable-formats)
  * @provider: a `GdkContentProvider`
  *
  * Gets the formats that the provider suggests other applications to store

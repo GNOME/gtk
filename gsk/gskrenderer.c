@@ -189,7 +189,7 @@ gsk_renderer_class_init (GskRendererClass *klass)
   gobject_class->dispose = gsk_renderer_dispose;
 
   /**
-   * GskRenderer:realized: (attributes org.gtk.Property.get=gsk_renderer_is_realized)
+   * GskRenderer:realized: (getter is_realized)
    *
    * Whether the renderer has been associated with a surface or draw context.
    */
@@ -241,7 +241,7 @@ gsk_renderer_get_surface (GskRenderer *renderer)
 }
 
 /**
- * gsk_renderer_is_realized: (attributes org.gtk.Method.get_property=realized)
+ * gsk_renderer_is_realized: (get-property realized)
  * @renderer: a `GskRenderer`
  *
  * Checks whether the @renderer is realized or not.

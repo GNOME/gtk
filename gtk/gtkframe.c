@@ -174,7 +174,7 @@ gtk_frame_class_init (GtkFrameClass *class)
                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkFrame:label-xalign: (attributes org.gtk.Property.get=gtk_frame_get_label_align org.gtk.Property.set=gtk_frame_set_label_align)
+   * GtkFrame:label-xalign: (getter get_label_align) (setter set_label_align)
    *
    * The horizontal alignment of the label.
    */
@@ -456,7 +456,7 @@ gtk_frame_get_label_widget (GtkFrame *frame)
 }
 
 /**
- * gtk_frame_set_label_align: (attributes org.gtk.Method.set_property=label-xalign)
+ * gtk_frame_set_label_align: (set-property label-xalign)
  * @frame: a `GtkFrame`
  * @xalign: The position of the label along the top edge
  *   of the widget. A value of 0.0 represents left alignment;
@@ -484,7 +484,7 @@ gtk_frame_set_label_align (GtkFrame *frame,
 }
 
 /**
- * gtk_frame_get_label_align: (attributes org.gtk.Method.get_property=label-xalign)
+ * gtk_frame_get_label_align: (get-property label-xalign)
  * @frame: a `GtkFrame`
  *
  * Retrieves the X alignment of the frame’s label.
