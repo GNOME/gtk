@@ -18,6 +18,7 @@ SYNOPSIS
 |
 |   **gtk4-rendernode-tool** benchmark [OPTIONS...] <FILE>
 |   **gtk4-rendernode-tool** compare [OPTIONS...] <FILE1> <FILE2>
+|   **gtk4-rendernode-tool** extract [OPTIONS...] <FILE>
 |   **gtk4-rendernode-tool** info [OPTIONS...] <FILE>
 |   **gtk4-rendernode-tool** render [OPTIONS...] <FILE> [<FILE>]
 |   **gtk4-rendernode-tool** show [OPTIONS...] <FILE>
@@ -99,3 +100,15 @@ exit code is 1. If the images are identical, it is 0.
 ``--quiet``
 
   Don't write results to stdout.
+
+
+Extract
+^^^^^^^
+
+The ``extract`` command saves all the data urls found in a node file to a given
+directory. The file names for the extracted files are derived from the mimetype
+of the url.
+
+``--dir=DIRECTORY``
+
+  Save extracted files in ``DIRECTORY`` (defaults to the current directory).

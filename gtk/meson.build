@@ -1002,6 +1002,7 @@ gtk_deps = [
   platform_gio_dep,
   pangocairo_dep,
   harfbuzz_dep,
+  hb_subset_dep,
   fribidi_dep,
   cairogobj_dep,
   fontconfig_dep,

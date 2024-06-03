@@ -43,6 +43,7 @@ gtk_tools = [
   ['gtk4-rendernode-tool', ['gtk-rendernode-tool.c',
                         'gtk-rendernode-tool-benchmark.c',
                         'gtk-rendernode-tool-compare.c',
+                        'gtk-rendernode-tool-extract.c',
                         'gtk-rendernode-tool-info.c',
                         'gtk-rendernode-tool-render.c',
                         'gtk-rendernode-tool-show.c',
