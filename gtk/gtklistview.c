@@ -875,7 +875,7 @@ gtk_list_view_class_init (GtkListViewClass *klass)
   gobject_class->set_property = gtk_list_view_set_property;
 
   /**
-   * GtkListView:enable-rubberband: (attributes org.gtk.Property.get=gtk_list_view_get_enable_rubberband org.gtk.Property.set=gtk_list_view_set_enable_rubberband)
+   * GtkListView:enable-rubberband:
    *
    * Allow rubberband selection.
    */
@@ -885,7 +885,7 @@ gtk_list_view_class_init (GtkListViewClass *klass)
                           G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkListView:factory: (attributes org.gtk.Property.get=gtk_list_view_get_factory org.gtk.Property.set=gtk_list_view_set_factory)
+   * GtkListView:factory:
    *
    * Factory for populating list items.
    *
@@ -897,7 +897,7 @@ gtk_list_view_class_init (GtkListViewClass *klass)
                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   /**
-   * GtkListView:header-factory: (attributes org.gtk.Property.get=gtk_list_view_get_header_factory org.gtk.Property.set=gtk_list_view_set_header_factory)
+   * GtkListView:header-factory:
    *
    * Factory for creating header widgets.
    *
@@ -911,7 +911,7 @@ gtk_list_view_class_init (GtkListViewClass *klass)
                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   /**
-   * GtkListView:model: (attributes org.gtk.Property.get=gtk_list_view_get_model org.gtk.Property.set=gtk_list_view_set_model)
+   * GtkListView:model:
    *
    * Model for the items displayed.
    */
@@ -921,7 +921,7 @@ gtk_list_view_class_init (GtkListViewClass *klass)
                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   /**
-   * GtkListView:show-separators: (attributes org.gtk.Property.get=gtk_list_view_get_show_separators org.gtk.Property.set=gtk_list_view_set_show_separators)
+   * GtkListView:show-separators:
    *
    * Show separators between rows.
    */
@@ -931,7 +931,7 @@ gtk_list_view_class_init (GtkListViewClass *klass)
                           G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkListView:single-click-activate: (attributes org.gtk.Property.get=gtk_list_view_get_single_click_activate org.gtk.Property.set=gtk_list_view_set_single_click_activate)
+   * GtkListView:single-click-activate:
    *
    * Activate rows on single click and select them on hover.
    */
@@ -941,7 +941,7 @@ gtk_list_view_class_init (GtkListViewClass *klass)
                           G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkListView:tab-behavior: (attributes org.gtk.Property.get=gtk_list_view_get_tab_behavior org.gtk.Property.set=gtk_list_view_set_tab_behavior)
+   * GtkListView:tab-behavior:
    *
    * Behavior of the <kbd>Tab</kbd> key
    *

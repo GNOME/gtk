@@ -536,7 +536,7 @@ gtk_window_handle_class_init (GtkWindowHandleClass *klass)
   widget_class->unrealize = gtk_window_handle_unrealize;
 
   /**
-   * GtkWindowHandle:child: (attributes org.gtk.Property.get=gtk_window_handle_get_child org.gtk.Property.set=gtk_window_handle_set_child)
+   * GtkWindowHandle:child:
    *
    * The child widget.
    */

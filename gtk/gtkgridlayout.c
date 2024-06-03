@@ -158,7 +158,7 @@ gtk_grid_layout_child_class_init (GtkGridLayoutChildClass *klass)
   gobject_class->get_property = gtk_grid_layout_child_get_property;
 
   /**
-   * GtkGridLayoutChild:column: (attributes org.gtk.Property.get=gtk_grid_layout_child_get_column org.gtk.Property.set=gtk_grid_layout_child_set_column)
+   * GtkGridLayoutChild:column:
    *
    * The column to place the child in.
    */
@@ -168,7 +168,7 @@ gtk_grid_layout_child_class_init (GtkGridLayoutChildClass *klass)
                       GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkGridLayoutChild:row: (attributes org.gtk.Property.get=gtk_grid_layout_child_get_row org.gtk.Property.set=gtk_grid_layout_child_set_row)
+   * GtkGridLayoutChild:row:
    *
    * The row to place the child in.
    */
@@ -178,7 +178,7 @@ gtk_grid_layout_child_class_init (GtkGridLayoutChildClass *klass)
                       GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkGridLayoutChild:column-span: (attributes org.gtk.Property.get=gtk_grid_layout_child_get_column_span org.gtk.Property.set=gtk_grid_layout_child_set_column_span)
+   * GtkGridLayoutChild:column-span:
    *
    * The number of columns the child spans to.
    */
@@ -188,7 +188,7 @@ gtk_grid_layout_child_class_init (GtkGridLayoutChildClass *klass)
                       GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkGridLayoutChild:row-span: (attributes org.gtk.Property.get=gtk_grid_layout_child_get_row_span org.gtk.Property.set=gtk_grid_layout_child_set_row_span)
+   * GtkGridLayoutChild:row-span:
    *
    * The number of rows the child spans to.
    */
@@ -1654,7 +1654,7 @@ gtk_grid_layout_class_init (GtkGridLayoutClass *klass)
   gobject_class->finalize = gtk_grid_layout_finalize;
 
   /**
-   * GtkGridLayout:row-spacing: (attributes org.gtk.Property.get=gtk_grid_layout_get_row_spacing org.gtk.Property.set=gtk_grid_layout_set_row_spacing)
+   * GtkGridLayout:row-spacing:
    *
    * The amount of space between to consecutive rows.
    */
@@ -1664,7 +1664,7 @@ gtk_grid_layout_class_init (GtkGridLayoutClass *klass)
                       GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkGridLayout:column-spacing: (attributes org.gtk.Property.get=gtk_grid_layout_get_column_spacing org.gtk.Property.set=gtk_grid_layout_set_column_spacing)
+   * GtkGridLayout:column-spacing:
    *
    * The amount of space between to consecutive columns.
    */
@@ -1674,7 +1674,7 @@ gtk_grid_layout_class_init (GtkGridLayoutClass *klass)
                       GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkGridLayout:row-homogeneous: (attributes org.gtk.Property.get=gtk_grid_layout_get_row_homogeneous org.gtk.Property.set=gtk_grid_layout_set_row_homogeneous)
+   * GtkGridLayout:row-homogeneous:
    *
    * Whether all the rows in the grid have the same height.
    */
@@ -1684,7 +1684,7 @@ gtk_grid_layout_class_init (GtkGridLayoutClass *klass)
                           GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkGridLayout:column-homogeneous: (attributes org.gtk.Property.get=gtk_grid_layout_get_column_homogeneous org.gtk.Property.set=gtk_grid_layout_set_column_homogeneous)
+   * GtkGridLayout:column-homogeneous:
    *
    * Whether all the columns in the grid have the same width.
    */
@@ -1694,7 +1694,7 @@ gtk_grid_layout_class_init (GtkGridLayoutClass *klass)
                           GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkGridLayout:baseline-row: (attributes org.gtk.Property.get=gtk_grid_layout_get_baseline_row org.gtk.Property.set=gtk_grid_layout_set_baseline_row)
+   * GtkGridLayout:baseline-row:
    *
    * The row to align to the baseline, when `GtkWidget:valign` is set
    * to %GTK_ALIGN_BASELINE.

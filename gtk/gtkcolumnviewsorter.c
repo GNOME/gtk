@@ -214,7 +214,7 @@ gtk_column_view_sorter_class_init (GtkColumnViewSorterClass *class)
   object_class->get_property = gtk_column_view_sorter_get_property;
 
   /**
-   * GtkColumnViewSorter:primary-sort-column: (attributes org.gtk.Property.get=gtk_column_view_sorter_get_primary_sort_column)
+   * GtkColumnViewSorter:primary-sort-column:
    *
    * The primary sort column.
    *
@@ -229,7 +229,7 @@ gtk_column_view_sorter_class_init (GtkColumnViewSorterClass *class)
                          G_PARAM_READABLE|G_PARAM_STATIC_STRINGS);
 
   /**
-   * GtkColumnViewSorter:primary-sort-order: (attributes org.gtk.Property.get=gtk_column_view_sorter_get_primary_sort_order)
+   * GtkColumnViewSorter:primary-sort-order:
    *
    * The primary sort order.
    *

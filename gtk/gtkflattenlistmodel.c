@@ -457,7 +457,7 @@ gtk_flatten_list_model_class_init (GtkFlattenListModelClass *class)
                         G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
 
   /**
-   * GtkFlattenListModel:model: (attributes org.gtk.Property.get=gtk_flatten_list_model_get_model org.gtk.Property.set=gtk_flatten_list_model_set_model)
+   * GtkFlattenListModel:model:
    *
    * The model being flattened.
    */

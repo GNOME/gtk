@@ -179,7 +179,7 @@ gdk_seat_class_init (GdkSeatClass *klass)
                   GDK_TYPE_DEVICE_TOOL);
 
   /**
-   * GdkSeat:display: (attributes org.gtk.Property.get=gdk_seat_get_display)
+   * GdkSeat:display:
    *
    * `GdkDisplay` of this seat.
    */

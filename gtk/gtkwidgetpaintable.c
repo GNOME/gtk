@@ -238,7 +238,7 @@ gtk_widget_paintable_class_init (GtkWidgetPaintableClass *klass)
   gobject_class->finalize = gtk_widget_paintable_finalize;
 
   /**
-   * GtkWidgetPaintable:widget: (attributes org.gtk.Property.get=gtk_widget_paintable_get_widget org.gtk.Property.set=gtk_widget_paintable_set_widget)
+   * GtkWidgetPaintable:widget:
    *
    * The observed widget or %NULL if none.
    */

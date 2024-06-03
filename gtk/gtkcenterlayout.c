@@ -607,7 +607,7 @@ gtk_center_layout_class_init (GtkCenterLayoutClass *klass)
   layout_class->allocate = gtk_center_layout_allocate;
 
   /**
-   * GtkCenterLayout:shrink-center-last: (attributes org.gtk.Property.get=gtk_center_layout_get_shrink_center_last org.gtk.Property.set=gtk_center_layout_set_shrink_center_last)
+   * GtkCenterLayout:shrink-center-last:
    *
    * Whether to shrink the center widget after other children.
    *

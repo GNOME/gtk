@@ -187,7 +187,7 @@ gtk_list_item_class_init (GtkListItemClass *klass)
   gobject_class->set_property = gtk_list_item_set_property;
 
   /**
-   * GtkListItem:accessible-description: (attributes org.gtk.Property.get=gtk_list_item_get_accessible_description org.gtk.Property.set=gtk_list_item_set_accessible_description)
+   * GtkListItem:accessible-description:
    *
    * The accessible description to set on the list item.
    *
@@ -199,7 +199,7 @@ gtk_list_item_class_init (GtkListItemClass *klass)
                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   /**
-   * GtkListItem:accessible-label: (attributes org.gtk.Property.get=gtk_list_item_get_accessible_label org.gtk.Property.set=gtk_list_item_set_accessible_label)
+   * GtkListItem:accessible-label:
    *
    * The accessible label to set on the list item.
    *
@@ -211,7 +211,7 @@ gtk_list_item_class_init (GtkListItemClass *klass)
                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   /**
-   * GtkListItem:activatable: (attributes org.gtk.Property.get=gtk_list_item_get_activatable org.gtk.Property.set=gtk_list_item_set_activatable)
+   * GtkListItem:activatable:
    *
    * If the item can be activated by the user.
    */
@@ -221,7 +221,7 @@ gtk_list_item_class_init (GtkListItemClass *klass)
                           G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   /**
-   * GtkListItem:child: (attributes org.gtk.Property.get=gtk_list_item_get_child org.gtk.Property.set=gtk_list_item_set_child)
+   * GtkListItem:child:
    *
    * Widget used for display.
    */
@@ -231,7 +231,7 @@ gtk_list_item_class_init (GtkListItemClass *klass)
                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   /**
-   * GtkListItem:focusable: (attributes org.gtk.Property.get=gtk_list_item_get_focusable org.gtk.Property.set=gtk_list_item_set_focusable)
+   * GtkListItem:focusable:
    *
    * If the item can be focused with the keyboard.
    *
@@ -243,7 +243,7 @@ gtk_list_item_class_init (GtkListItemClass *klass)
                           G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   /**
-   * GtkListItem:item: (attributes org.gtk.Property.get=gtk_list_item_get_item)
+   * GtkListItem:item:
    *
    * Displayed item.
    */
@@ -253,7 +253,7 @@ gtk_list_item_class_init (GtkListItemClass *klass)
                          G_PARAM_READABLE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   /**
-   * GtkListItem:position: (attributes org.gtk.Property.get=gtk_list_item_get_position)
+   * GtkListItem:position:
    *
    * Position of the item.
    */
@@ -263,7 +263,7 @@ gtk_list_item_class_init (GtkListItemClass *klass)
                        G_PARAM_READABLE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   /**
-   * GtkListItem:selectable: (attributes org.gtk.Property.get=gtk_list_item_get_selectable org.gtk.Property.set=gtk_list_item_set_selectable)
+   * GtkListItem:selectable:
    *
    * If the item can be selected by the user.
    */
@@ -273,7 +273,7 @@ gtk_list_item_class_init (GtkListItemClass *klass)
                           G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   /**
-   * GtkListItem:selected: (attributes org.gtk.Property.get=gtk_list_item_get_selected)
+   * GtkListItem:selected:
    *
    * If the item is currently selected.
    */

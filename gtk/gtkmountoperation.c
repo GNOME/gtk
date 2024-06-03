@@ -158,7 +158,7 @@ gtk_mount_operation_class_init (GtkMountOperationClass *klass)
   mount_op_class->aborted = gtk_mount_operation_aborted;
 
   /**
-   * GtkMountOperation:parent: (attributes org.gtk.Property.get=gtk_mount_operation_get_parent org.gtk.Property.set=gtk_mount_operation_set_parent)
+   * GtkMountOperation:parent:
    *
    * The parent window.
    */
@@ -169,7 +169,7 @@ gtk_mount_operation_class_init (GtkMountOperationClass *klass)
                                                         GTK_PARAM_READWRITE));
 
   /**
-   * GtkMountOperation:is-showing: (attributes org.gtk.Property.get=gtk_mount_operation_is_showing)
+   * GtkMountOperation:is-showing:
    *
    * Whether a dialog is currently shown.
    */
@@ -180,7 +180,7 @@ gtk_mount_operation_class_init (GtkMountOperationClass *klass)
                                                          GTK_PARAM_READABLE));
 
   /**
-   * GtkMountOperation:display: (attributes org.gtk.Property.get=gtk_mount_operation_get_display org.gtk.Property.set=gtk_mount_operation_set_display)
+   * GtkMountOperation:display:
    *
    * The display where dialogs will be shown.
    */

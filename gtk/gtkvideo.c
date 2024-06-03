@@ -410,7 +410,7 @@ gtk_video_class_init (GtkVideoClass *klass)
   gobject_class->set_property = gtk_video_set_property;
 
   /**
-   * GtkVideo:autoplay: (attributes org.gtk.Property.get=gtk_video_get_autoplay org.gtk.Property.set=gtk_video_set_autoplay)
+   * GtkVideo:autoplay:
    *
    * If the video should automatically begin playing.
    */
@@ -420,7 +420,7 @@ gtk_video_class_init (GtkVideoClass *klass)
                           G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   /**
-   * GtkVideo:file: (attributes org.gtk.Property.get=gtk_video_get_file org.gtk.Property.set=gtk_video_set_file)
+   * GtkVideo:file:
    *
    * The file played by this video if the video is playing a file.
    */
@@ -430,7 +430,7 @@ gtk_video_class_init (GtkVideoClass *klass)
                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   /**
-   * GtkVideo:loop: (attributes org.gtk.Property.get=gtk_video_get_loop org.gtk.Property.set=gtk_video_set_loop)
+   * GtkVideo:loop:
    *
    * If new media files should be set to loop.
    */
@@ -440,7 +440,7 @@ gtk_video_class_init (GtkVideoClass *klass)
                           G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   /**
-   * GtkVideo:media-stream: (attributes org.gtk.Property.get=gtk_video_get_media_stream org.gtk.Property.set=gtk_video_set_media_stream)
+   * GtkVideo:media-stream:
    *
    * The media-stream played
    */
@@ -450,7 +450,7 @@ gtk_video_class_init (GtkVideoClass *klass)
                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   /**
-   * GtkVideo:graphics-offload: (attributes org.gtk.Property.get=gtk_video_get_graphics_offload org.gtk.Property.set=gtk_video_set_graphics_offload)
+   * GtkVideo:graphics-offload:
    *
    * Whether to enable graphics offload.
    *

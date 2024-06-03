@@ -131,7 +131,7 @@ gtk_adjustment_class_init (GtkAdjustmentClass *class)
   class->value_changed = NULL;
 
   /**
-   * GtkAdjustment:value: (attributes org.gtk.Property.get=gtk_adjustment_get_value org.gtk.Property.set=gtk_adjustment_set_value)
+   * GtkAdjustment:value:
    *
    * The value of the adjustment.
    */
@@ -142,7 +142,7 @@ gtk_adjustment_class_init (GtkAdjustmentClass *class)
                            GTK_PARAM_READWRITE);
 
   /**
-   * GtkAdjustment:lower: (attributes org.gtk.Property.get=gtk_adjustment_get_lower org.gtk.Property.set=gtk_adjustment_set_lower)
+   * GtkAdjustment:lower:
    *
    * The minimum value of the adjustment.
    */
@@ -153,7 +153,7 @@ gtk_adjustment_class_init (GtkAdjustmentClass *class)
                            GTK_PARAM_READWRITE);
 
   /**
-   * GtkAdjustment:upper: (attributes org.gtk.Property.get=gtk_adjustment_get_upper org.gtk.Property.set=gtk_adjustment_set_upper)
+   * GtkAdjustment:upper:
    *
    * The maximum value of the adjustment.
    *
@@ -167,7 +167,7 @@ gtk_adjustment_class_init (GtkAdjustmentClass *class)
                            GTK_PARAM_READWRITE);
 
   /**
-   * GtkAdjustment:step-increment: (attributes org.gtk.Property.get=gtk_adjustment_get_step_increment org.gtk.Property.set=gtk_adjustment_set_step_increment)
+   * GtkAdjustment:step-increment:
    *
    * The step increment of the adjustment.
    */
@@ -178,7 +178,7 @@ gtk_adjustment_class_init (GtkAdjustmentClass *class)
                            GTK_PARAM_READWRITE);
 
   /**
-   * GtkAdjustment:page-increment: (attributes org.gtk.Property.get=gtk_adjustment_get_page_increment org.gtk.Property.set=gtk_adjustment_set_page_increment)
+   * GtkAdjustment:page-increment:
    *
    * The page increment of the adjustment.
    */
@@ -189,7 +189,7 @@ gtk_adjustment_class_init (GtkAdjustmentClass *class)
                            GTK_PARAM_READWRITE);
 
   /**
-   * GtkAdjustment:page-size: (attributes org.gtk.Property.get=gtk_adjustment_get_page_size org.gtk.Property.set=gtk_adjustment_set_page_size)
+   * GtkAdjustment:page-size:
    *
    * The page size of the adjustment.
    *

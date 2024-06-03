@@ -77,7 +77,7 @@ gtk_actionable_default_init (GtkActionableInterface *iface)
 }
 
 /**
- * gtk_actionable_get_action_name: (attributes org.gtk.Property.get=action-name)
+ * gtk_actionable_get_action_name:
  * @actionable: a `GtkActionable` widget
  *
  * Gets the action name for @actionable.
@@ -94,7 +94,7 @@ gtk_actionable_get_action_name (GtkActionable *actionable)
 }
 
 /**
- * gtk_actionable_set_action_name: (attributes org.gtk.Property.set=action-name)
+ * gtk_actionable_set_action_name:
  * @actionable: a `GtkActionable` widget
  * @action_name: (nullable): an action name
  *

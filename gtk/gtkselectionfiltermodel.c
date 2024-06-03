@@ -245,7 +245,7 @@ gtk_selection_filter_model_class_init (GtkSelectionFilterModelClass *class)
                         G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
 
   /**
-   * GtkSelectionFilterModel:model: (attributes org.gtk.Property.get=gtk_selection_filter_model_get_model org.gtk.Property.set=gtk_selection_filter_model_set_model)
+   * GtkSelectionFilterModel:model:
    *
    * The model being filtered.
    */

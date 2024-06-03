@@ -55,7 +55,7 @@ static void
 gtk_color_chooser_default_init (GtkColorChooserInterface *iface)
 {
   /**
-   * GtkColorChooser:rgba: (attributes org.gtk.Property.get=gtk_color_chooser_get_rgba org.gtk.Property.set=gtk_color_chooser_set_rgba)
+   * GtkColorChooser:rgba:
    *
    * The currently selected color, as a `GdkRGBA` struct.
    *
@@ -71,7 +71,7 @@ gtk_color_chooser_default_init (GtkColorChooserInterface *iface)
                           GTK_PARAM_READWRITE));
 
   /**
-   * GtkColorChooser:use-alpha: (attributes org.gtk.Property.get=gtk_color_chooser_get_use_alpha org.gtk.Property.set=gtk_color_chooser_set_use_alpha)
+   * GtkColorChooser:use-alpha:
    *
    * Whether colors may have alpha (translucency).
    *

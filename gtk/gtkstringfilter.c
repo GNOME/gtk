@@ -247,7 +247,7 @@ gtk_string_filter_class_init (GtkStringFilterClass *class)
   object_class->dispose = gtk_string_filter_dispose;
 
   /**
-   * GtkStringFilter:expression: (type GtkExpression) (attributes org.gtk.Property.get=gtk_string_filter_get_expression org.gtk.Property.set=gtk_string_filter_set_expression)
+   * GtkStringFilter:expression: (type GtkExpression)
    *
    * The expression to evaluate on item to get a string to compare with.
    */
@@ -256,7 +256,7 @@ gtk_string_filter_class_init (GtkStringFilterClass *class)
                                G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkStringFilter:ignore-case: (attributes org.gtk.Property.get=gtk_string_filter_get_ignore_case org.gtk.Property.set=gtk_string_filter_set_ignore_case)
+   * GtkStringFilter:ignore-case:
    *
    * If matching is case sensitive.
    */
@@ -266,7 +266,7 @@ gtk_string_filter_class_init (GtkStringFilterClass *class)
                             G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkStringFilter:match-mode: (attributes org.gtk.Property.get=gtk_string_filter_get_match_mode org.gtk.Property.set=gtk_string_filter_set_match_mode)
+   * GtkStringFilter:match-mode:
    *
    * If exact matches are necessary or if substrings are allowed.
    */
@@ -277,7 +277,7 @@ gtk_string_filter_class_init (GtkStringFilterClass *class)
                          G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkStringFilter:search: (attributes org.gtk.Property.get=gtk_string_filter_get_search org.gtk.Property.set=gtk_string_filter_set_search)
+   * GtkStringFilter:search:
    *
    * The search term.
    */

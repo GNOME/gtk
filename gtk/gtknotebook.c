@@ -601,7 +601,7 @@ gtk_notebook_page_class_init (GtkNotebookPageClass *class)
   object_class->set_property = gtk_notebook_page_set_property;
 
   /**
-   * GtkNotebookPage:child: (attributes org.gtk.Property.get=gtk_notebook_page_get_child)
+   * GtkNotebookPage:child:
    *
    * The child for this page.
    */
@@ -1133,7 +1133,7 @@ gtk_notebook_class_init (GtkNotebookClass *class)
                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkNotebook:tab-pos: (attributes org.gtk.Property.get=gtk_notebook_get_tab_pos org.gtk.Property.set=gtk_notebook_set_tab_pos)
+   * GtkNotebook:tab-pos:
    *
    * Which side of the notebook holds the tabs.
    */
@@ -1144,7 +1144,7 @@ gtk_notebook_class_init (GtkNotebookClass *class)
                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkNotebook:show-tabs: (attributes org.gtk.Property.get=gtk_notebook_get_show_tabs org.gtk.Property.set=gtk_notebook_set_show_tabs)
+   * GtkNotebook:show-tabs:
    *
    * Whether tabs should be shown.
    */
@@ -1154,7 +1154,7 @@ gtk_notebook_class_init (GtkNotebookClass *class)
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkNotebook:show-border: (attributes org.gtk.Property.get=gtk_notebook_get_show_border org.gtk.Property.set=gtk_notebook_set_show_border)
+   * GtkNotebook:show-border:
    *
    * Whether the border should be shown.
    */
@@ -1164,7 +1164,7 @@ gtk_notebook_class_init (GtkNotebookClass *class)
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkNotebook:scrollable: (attributes org.gtk.Property.get=gtk_notebook_get_scrollable org.gtk.Property.set=gtk_notebook_set_scrollable)
+   * GtkNotebook:scrollable:
    *
    * If %TRUE, scroll arrows are added if there are too many pages to fit.
    */
@@ -1184,7 +1184,7 @@ gtk_notebook_class_init (GtkNotebookClass *class)
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkNotebook:group-name: (attributes org.gtk.Property.get=gtk_notebook_get_group_name org.gtk.Property.set=gtk_notebook_set_group_name)
+   * GtkNotebook:group-name:
    *
    * Group name for tab drag and drop.
    */
@@ -1194,7 +1194,7 @@ gtk_notebook_class_init (GtkNotebookClass *class)
                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkNotebook:pages: (attributes org.gtk.Property.get=gtk_notebook_get_pages)
+   * GtkNotebook:pages:
    *
    * A selection model with the pages.
    */

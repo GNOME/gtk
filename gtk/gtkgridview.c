@@ -1103,7 +1103,7 @@ gtk_grid_view_class_init (GtkGridViewClass *klass)
   gobject_class->set_property = gtk_grid_view_set_property;
 
   /**
-   * GtkGridView:enable-rubberband: (attributes org.gtk.Property.get=gtk_grid_view_get_enable_rubberband org.gtk.Property.set=gtk_grid_view_set_enable_rubberband)
+   * GtkGridView:enable-rubberband:
    *
    * Allow rubberband selection.
    */
@@ -1113,7 +1113,7 @@ gtk_grid_view_class_init (GtkGridViewClass *klass)
                           G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkGridView:factory: (attributes org.gtk.Property.get=gtk_grid_view_get_factory org.gtk.Property.set=gtk_grid_view_set_factory)
+   * GtkGridView:factory:
    *
    * Factory for populating list items.
    *
@@ -1126,7 +1126,7 @@ gtk_grid_view_class_init (GtkGridViewClass *klass)
 
 
   /**
-   * GtkGridView:max-columns: (attributes org.gtk.Property.get=gtk_grid_view_get_max_columns org.gtk.Property.set=gtk_grid_view_set_max_columns)
+   * GtkGridView:max-columns:
    *
    * Maximum number of columns per row.
    *
@@ -1139,7 +1139,7 @@ gtk_grid_view_class_init (GtkGridViewClass *klass)
                        G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   /**
-   * GtkGridView:min-columns: (attributes org.gtk.Property.get=gtk_grid_view_get_min_columns org.gtk.Property.set=gtk_grid_view_set_min_columns)
+   * GtkGridView:min-columns:
    *
    * Minimum number of columns per row.
    */
@@ -1149,7 +1149,7 @@ gtk_grid_view_class_init (GtkGridViewClass *klass)
                        G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   /**
-   * GtkGridView:model: (attributes org.gtk.Property.get=gtk_grid_view_get_model org.gtk.Property.set=gtk_grid_view_set_model)
+   * GtkGridView:model:
    *
    * Model for the items displayed.
    */
@@ -1159,7 +1159,7 @@ gtk_grid_view_class_init (GtkGridViewClass *klass)
                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   /**
-   * GtkGridView:single-click-activate: (attributes org.gtk.Property.get=gtk_grid_view_get_single_click_activate org.gtk.Property.set=gtk_grid_view_set_single_click_activate)
+   * GtkGridView:single-click-activate:
    *
    * Activate rows on single click and select them on hover.
    */
@@ -1169,7 +1169,7 @@ gtk_grid_view_class_init (GtkGridViewClass *klass)
                           G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkGridView:tab-behavior: (attributes org.gtk.Property.get=gtk_grid_view_get_tab_behavior org.gtk.Property.set=gtk_grid_view_set_tab_behavior)
+   * GtkGridView:tab-behavior:
    *
    * Behavior of the <kbd>Tab</kbd> key
    *

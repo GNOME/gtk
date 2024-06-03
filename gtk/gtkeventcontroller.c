@@ -196,7 +196,7 @@ gtk_event_controller_class_init (GtkEventControllerClass *klass)
   object_class->get_property = gtk_event_controller_get_property;
 
   /**
-   * GtkEventController:widget: (attributes org.gtk.Property.get=gtk_event_controller_get_widget)
+   * GtkEventController:widget:
    *
    * The widget receiving the `GdkEvents` that the controller will handle.
    */
@@ -206,7 +206,7 @@ gtk_event_controller_class_init (GtkEventControllerClass *klass)
                            GTK_PARAM_READABLE);
 
   /**
-   * GtkEventController:propagation-phase: (attributes org.gtk.Property.get=gtk_event_controller_get_propagation_phase org.gtk.Property.set=gtk_event_controller_set_propagation_phase)
+   * GtkEventController:propagation-phase:
    *
    * The propagation phase at which this controller will handle events.
    */
@@ -217,7 +217,7 @@ gtk_event_controller_class_init (GtkEventControllerClass *klass)
                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkEventController:propagation-limit: (attributes org.gtk.Property.get=gtk_event_controller_get_propagation_limit org.gtk.Property.set=gtk_event_controller_set_propagation_limit)
+   * GtkEventController:propagation-limit:
    *
    * The limit for which events this controller will handle.
    */
@@ -228,7 +228,7 @@ gtk_event_controller_class_init (GtkEventControllerClass *klass)
                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkEventController:name: (attributes org.gtk.Property.get=gtk_event_controller_get_name org.gtk.Property.set=gtk_event_controller_set_name)
+   * GtkEventController:name:
    *
    * The name for this controller, typically used for debugging purposes.
    */

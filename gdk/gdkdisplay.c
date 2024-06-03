@@ -272,7 +272,7 @@ gdk_display_class_init (GdkDisplayClass *class)
                           G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
 
   /**
-   * GdkDisplay:dmabuf-formats: (attributes org.gtk.Property.get=gdk_display_get_dmabuf_formats)
+   * GdkDisplay:dmabuf-formats:
    *
    * The dma-buf formats that are supported on this display
    *

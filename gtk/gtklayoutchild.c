@@ -118,7 +118,7 @@ gtk_layout_child_class_init (GtkLayoutChildClass *klass)
   gobject_class->constructed = gtk_layout_child_constructed;
 
   /**
-   * GtkLayoutChild:layout-manager: (attributes org.gtk.Property.get=gtk_layout_child_get_layout_manager)
+   * GtkLayoutChild:layout-manager:
    *
    * The layout manager that created the `GtkLayoutChild` instance.
    */
@@ -129,7 +129,7 @@ gtk_layout_child_class_init (GtkLayoutChildClass *klass)
                          G_PARAM_CONSTRUCT_ONLY);
 
   /**
-   * GtkLayoutChild:child-widget: (attributes org.gtk.Property.get=gtk_layout_child_get_child_widget)
+   * GtkLayoutChild:child-widget:
    *
    * The widget that is associated to the `GtkLayoutChild` instance.
    */

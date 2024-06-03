@@ -406,7 +406,7 @@ gtk_map_list_model_class_init (GtkMapListModelClass *class)
   gobject_class->dispose = gtk_map_list_model_dispose;
 
   /**
-   * GtkMapListModel:has-map: (attributes org.gtk.Property.get=gtk_map_list_model_has_map)
+   * GtkMapListModel:has-map:
    *
    * If a map is set for this model
    */
@@ -428,7 +428,7 @@ gtk_map_list_model_class_init (GtkMapListModelClass *class)
                         G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
 
   /**
-   * GtkMapListModel:model: (attributes org.gtk.Property.get=gtk_map_list_model_get_model org.gtk.Property.set=gtk_map_list_model_set_model)
+   * GtkMapListModel:model:
    *
    * The model being mapped.
    */

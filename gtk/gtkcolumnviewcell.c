@@ -154,7 +154,7 @@ gtk_column_view_cell_class_init (GtkColumnViewCellClass *klass)
   gobject_class->set_property = gtk_column_view_cell_set_property;
 
   /**
-   * GtkColumnViewCell:child: (attributes org.gtk.Property.get=gtk_column_view_cell_get_child org.gtk.Property.set=gtk_column_view_cell_set_child)
+   * GtkColumnViewCell:child:
    *
    * Widget used for display.
    *
@@ -166,7 +166,7 @@ gtk_column_view_cell_class_init (GtkColumnViewCellClass *klass)
                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   /**
-   * GtkColumnViewCell:focusable: (attributes org.gtk.Property.get=gtk_column_view_cell_get_focusable org.gtk.Property.set=gtk_column_view_cell_set_focusable)
+   * GtkColumnViewCell:focusable:
    *
    * If the item can be focused with the keyboard.
    *
@@ -178,7 +178,7 @@ gtk_column_view_cell_class_init (GtkColumnViewCellClass *klass)
                           G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   /**
-   * GtkColumnViewCell:item: (attributes org.gtk.Property.get=gtk_column_view_cell_get_item)
+   * GtkColumnViewCell:item:
    *
    * Displayed item.
    *
@@ -190,7 +190,7 @@ gtk_column_view_cell_class_init (GtkColumnViewCellClass *klass)
                          G_PARAM_READABLE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   /**
-   * GtkColumnViewCell:position: (attributes org.gtk.Property.get=gtk_column_view_cell_get_position)
+   * GtkColumnViewCell:position:
    *
    * Position of the item.
    *
@@ -202,7 +202,7 @@ gtk_column_view_cell_class_init (GtkColumnViewCellClass *klass)
                        G_PARAM_READABLE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   /**
-   * GtkColumnViewCell:selected: (attributes org.gtk.Property.get=gtk_column_view_cell_get_selected)
+   * GtkColumnViewCell:selected:
    *
    * If the item is currently selected.
    *

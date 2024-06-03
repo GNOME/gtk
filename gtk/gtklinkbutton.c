@@ -183,7 +183,7 @@ gtk_link_button_class_init (GtkLinkButtonClass *klass)
   klass->activate_link = gtk_link_button_activate_link;
 
   /**
-   * GtkLinkButton:uri: (attributes org.gtk.Property.get=gtk_link_button_get_uri org.gtk.Property.set=gtk_link_button_set_uri)
+   * GtkLinkButton:uri:
    *
    * The URI bound to this button.
    */
@@ -194,7 +194,7 @@ gtk_link_button_class_init (GtkLinkButtonClass *klass)
                                                         GTK_PARAM_READWRITE));
 
   /**
-   * GtkLinkButton:visited: (attributes org.gtk.Property.get=gtk_link_button_get_visited org.gtk.Property.set=gtk_link_button_set_visited)
+   * GtkLinkButton:visited:
    *
    * The 'visited' state of this button.
    *

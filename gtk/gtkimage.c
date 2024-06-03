@@ -189,7 +189,7 @@ gtk_image_class_init (GtkImageClass *class)
                            GTK_PARAM_READWRITE);
 
   /**
-   * GtkImage:icon-size: (attributes org.gtk.Property.get=gtk_image_get_icon_size org.gtk.Property.set=gtk_image_set_icon_size org.gtk.Property.set=gtk_image_set_icon_size)
+   * GtkImage:icon-size:
    *
    * The symbolic size to display icons at.
    */
@@ -200,7 +200,7 @@ gtk_image_class_init (GtkImageClass *class)
                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkImage:pixel-size: (attributes org.gtk.Property.get=gtk_image_get_pixel_size org.gtk.Property.set=gtk_image_set_pixel_size)
+   * GtkImage:pixel-size:
    *
    * The size in pixels to display icons at.
    *
@@ -250,7 +250,7 @@ gtk_image_class_init (GtkImageClass *class)
                            GTK_PARAM_READWRITE);
 
   /**
-   * GtkImage:storage-type: (attributes org.gtk.Property.get=gtk_image_get_storage_type)
+   * GtkImage:storage-type:
    *
    * The representation being used for image data.
    */

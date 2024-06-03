@@ -627,7 +627,7 @@ gtk_shortcut_controller_class_init (GtkShortcutControllerClass *klass)
                        G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
 
   /**
-   * GtkShortcutController:scope: (attributes org.gtk.Property.get=gtk_shortcut_controller_get_scope org.gtk.Property.set=gtk_shortcut_controller_set_scope)
+   * GtkShortcutController:scope:
    *
    * What scope the shortcuts will be handled in.
    */

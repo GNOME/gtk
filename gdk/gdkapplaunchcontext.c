@@ -120,7 +120,7 @@ gdk_app_launch_context_class_init (GdkAppLaunchContextClass *klass)
   context_class->launch_failed = gdk_app_launch_context_launch_failed;
 
   /**
-   * GdkAppLaunchContext:display: (attributes org.gtk.Property.get=gdk_app_launch_context_get_display)
+   * GdkAppLaunchContext:display:
    *
    * The display that the `GdkAppLaunchContext` is on.
    */

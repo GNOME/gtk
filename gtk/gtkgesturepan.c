@@ -223,7 +223,7 @@ gtk_gesture_pan_class_init (GtkGesturePanClass *klass)
   drag_gesture_class->drag_end = gtk_gesture_pan_drag_end;
 
   /**
-   * GtkGesturePan:orientation: (attributes org.gtk.Property.get=gtk_gesture_pan_get_orientation org.gtk.Property.set=gtk_gesture_pan_set_orientation)
+   * GtkGesturePan:orientation:
    *
    * The expected orientation of pan gestures.
    */

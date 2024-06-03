@@ -521,7 +521,7 @@ gtk_event_controller_scroll_class_init (GtkEventControllerScrollClass *klass)
   controller_class->handle_event = gtk_event_controller_scroll_handle_event;
 
   /**
-   * GtkEventControllerScroll:flags: (attributes org.gtk.Property.get=gtk_event_controller_scroll_get_flags org.gtk.Property.set=gtk_event_controller_scroll_set_flags)
+   * GtkEventControllerScroll:flags:
    *
    * The flags affecting event controller behavior.
    */

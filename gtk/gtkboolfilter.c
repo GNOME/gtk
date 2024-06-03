@@ -153,7 +153,7 @@ gtk_bool_filter_class_init (GtkBoolFilterClass *class)
   object_class->dispose = gtk_bool_filter_dispose;
 
   /**
-   * GtkBoolFilter:expression: (type GtkExpression) (attributes org.gtk.Property.get=gtk_bool_filter_get_expression org.gtk.Property.set=gtk_bool_filter_set_expression)
+   * GtkBoolFilter:expression: (type GtkExpression)
    *
    * The boolean expression to evaluate on item.
    */
@@ -162,7 +162,7 @@ gtk_bool_filter_class_init (GtkBoolFilterClass *class)
                                G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkBoolFilter:invert: (attributes org.gtk.Property.get=gtk_bool_filter_get_invert org.gtk.Property.set=gtk_bool_filter_set_invert)
+   * GtkBoolFilter:invert:
    *
    * If the expression result should be inverted.
    */

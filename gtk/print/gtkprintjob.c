@@ -135,7 +135,7 @@ gtk_print_job_class_init (GtkPrintJobClass *class)
   object_class->get_property = gtk_print_job_get_property;
 
   /**
-   * GtkPrintJob:title: (attributes org.gtk.Property.get=gtk_print_job_get_title)
+   * GtkPrintJob:title:
    *
    * The title of the print job.
    */
@@ -147,7 +147,7 @@ gtk_print_job_class_init (GtkPrintJobClass *class)
 						        G_PARAM_CONSTRUCT_ONLY));
 
   /**
-   * GtkPrintJob:printer: (attributes org.gtk.Property.get=gtk_print_job_get_printer)
+   * GtkPrintJob:printer:
    *
    * The printer to send the job to.
    */
@@ -159,7 +159,7 @@ gtk_print_job_class_init (GtkPrintJobClass *class)
 						        G_PARAM_CONSTRUCT_ONLY));
 
   /**
-   * GtkPrintJob:settings: (attributes org.gtk.Property.get=gtk_print_job_get_settings)
+   * GtkPrintJob:settings:
    *
    * Printer settings.
    */
@@ -183,7 +183,7 @@ gtk_print_job_class_init (GtkPrintJobClass *class)
 						        G_PARAM_CONSTRUCT_ONLY));
 
   /**
-   * GtkPrintJob:track-print-status: (attributes org.gtk.Property.get=gtk_print_job_get_track_print_status org.gtk.Property.set=gtk_print_job_set_track_print_status)
+   * GtkPrintJob:track-print-status:
    *
    * %TRUE if the print job will continue to emit status-changed
    * signals after the print data has been setn to the printer.

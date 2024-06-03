@@ -379,7 +379,7 @@ gtk_drag_icon_class_init (GtkDragIconClass *klass)
   widget_class->hide = gtk_drag_icon_hide;
 
   /**
-   * GtkDragIcon:child: (attributes org.gtk.Property.get=gtk_drag_icon_get_child org.gtk.Property.set=gtk_drag_icon_set_child)
+   * GtkDragIcon:child:
    *
    * The widget to display as drag icon.
    */

@@ -676,7 +676,7 @@ gtk_filter_list_model_class_init (GtkFilterListModelClass *class)
   gobject_class->dispose = gtk_filter_list_model_dispose;
 
   /**
-   * GtkFilterListModel:filter: (attributes org.gtk.Property.get=gtk_filter_list_model_get_filter org.gtk.Property.set=gtk_filter_list_model_set_filter)
+   * GtkFilterListModel:filter:
    *
    * The filter for this model.
    */
@@ -686,7 +686,7 @@ gtk_filter_list_model_class_init (GtkFilterListModelClass *class)
                            GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkFilterListModel:incremental: (attributes org.gtk.Property.get=gtk_filter_list_model_get_incremental org.gtk.Property.set=gtk_filter_list_model_set_incremental)
+   * GtkFilterListModel:incremental:
    *
    * If the model should filter items incrementally.
    */
@@ -708,7 +708,7 @@ gtk_filter_list_model_class_init (GtkFilterListModelClass *class)
                         G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
 
   /**
-   * GtkFilterListModel:model: (attributes org.gtk.Property.get=gtk_filter_list_model_get_model org.gtk.Property.set=gtk_filter_list_model_set_model)
+   * GtkFilterListModel:model:
    *
    * The model being filtered.
    */
@@ -730,7 +730,7 @@ gtk_filter_list_model_class_init (GtkFilterListModelClass *class)
                        G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
 
   /**
-   * GtkFilterListModel:pending: (attributes org.gtk.Property.get=gtk_filter_list_model_get_pending)
+   * GtkFilterListModel:pending:
    *
    * Number of items not yet filtered.
    */

@@ -935,7 +935,7 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
    */
 
   /**
-   * GtkTextView:pixels-above-lines: (attributes org.gtk.Property.get=gtk_text_view_get_pixels_above_lines org.gtk.Property.set=gtk_text_view_set_pixels_above_lines)
+   * GtkTextView:pixels-above-lines:
    *
    * Pixels of blank space above paragraphs.
    */
@@ -946,7 +946,7 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
                                                      GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   /**
-   * GtkTextView:pixels-below-lines: (attributes org.gtk.Property.get=gtk_text_view_get_pixels_below_lines org.gtk.Property.set=gtk_text_view_set_pixels_below_lines)
+   * GtkTextView:pixels-below-lines:
    *
    * Pixels of blank space below paragraphs.
    */
@@ -957,7 +957,7 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
                                                      GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   /**
-   * GtkTextView:pixels-inside-wrap: (attributes org.gtk.Property.get=gtk_text_view_get_pixels_inside_wrap org.gtk.Property.set=gtk_text_view_set_pixels_inside_wrap)
+   * GtkTextView:pixels-inside-wrap:
    *
    * Pixels of blank space between wrapped lines in a paragraph.
    */
@@ -968,7 +968,7 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
                                                      GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   /**
-   * GtkTextView:editable: (attributes org.gtk.Property.get=gtk_text_view_get_editable org.gtk.Property.set=gtk_text_view_set_editable)
+   * GtkTextView:editable:
    *
    * Whether the text can be modified by the user.
    */
@@ -979,7 +979,7 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
                                                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   /**
-   * GtkTextView:wrap-mode: (attributes org.gtk.Property.get=gtk_text_view_get_wrap_mode org.gtk.Property.set=gtk_text_view_set_wrap_mode)
+   * GtkTextView:wrap-mode:
    *
    * Whether to wrap lines never, at word boundaries, or at character boundaries.
    */
@@ -991,7 +991,7 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
                                                       GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   /**
-   * GtkTextView:justification: (attributes org.gtk.Property.get=gtk_text_view_get_justification org.gtk.Property.set=gtk_text_view_set_justification)
+   * GtkTextView:justification:
    *
    * Left, right, or center justification.
    */
@@ -1003,7 +1003,7 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
                                                       GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   /**
-   * GtkTextView:left-margin: (attributes org.gtk.Property.get=gtk_text_view_get_left_margin org.gtk.Property.set=gtk_text_view_set_left_margin)
+   * GtkTextView:left-margin:
    *
    * The default left margin for text in the text view.
    *
@@ -1020,7 +1020,7 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
                                                      GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   /**
-   * GtkTextView:right-margin: (attributes org.gtk.Property.get=gtk_text_view_get_right_margin org.gtk.Property.set=gtk_text_view_set_right_margin)
+   * GtkTextView:right-margin:
    *
    * The default right margin for text in the text view.
    *
@@ -1037,7 +1037,7 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
                                                      GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   /**
-   * GtkTextView:top-margin: (attributes org.gtk.Property.get=gtk_text_view_get_top_margin org.gtk.Property.set=gtk_text_view_set_top_margin)
+   * GtkTextView:top-margin:
    *
    * The top margin for text in the text view.
    *
@@ -1054,7 +1054,7 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
                                                      GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   /**
-   * GtkTextView:bottom-margin: (attributes org.gtk.Property.get=gtk_text_view_get_bottom_margin org.gtk.Property.set=gtk_text_view_set_bottom_margin)
+   * GtkTextView:bottom-margin:
    *
    * The bottom margin for text in the text view.
    *
@@ -1071,7 +1071,7 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
                                                      GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   /**
-   * GtkTextView:indent: (attributes org.gtk.Property.get=gtk_text_view_get_indent org.gtk.Property.set=gtk_text_view_set_indent)
+   * GtkTextView:indent:
    *
    * Amount to indent the paragraph, in pixels.
    *
@@ -1087,7 +1087,7 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
                                                      GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   /**
-   * GtkTextView:tabs: (attributes org.gtk.Property.get=gtk_text_view_get_tabs org.gtk.Property.set=gtk_text_view_set_tabs)
+   * GtkTextView:tabs:
    *
    * Custom tabs for this text.
    */
@@ -1098,7 +1098,7 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
 						       GTK_PARAM_READWRITE));
 
   /**
-   * GtkTextView:cursor-visible: (attributes org.gtk.Property.get=gtk_text_view_get_cursor_visible org.gtk.Property.set=gtk_text_view_set_cursor_visible)
+   * GtkTextView:cursor-visible:
    *
    * If the insertion cursor is shown.
    */
@@ -1109,7 +1109,7 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
                                                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   /**
-   * GtkTextView:buffer: (attributes org.gtk.Property.get=gtk_text_view_get_buffer org.gtk.Property.set=gtk_text_view_set_buffer)
+   * GtkTextView:buffer:
    *
    * The buffer which is displayed.
    */
@@ -1120,7 +1120,7 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
 							GTK_PARAM_READWRITE));
 
   /**
-   * GtkTextView:overwrite: (attributes org.gtk.Property.get=gtk_text_view_get_overwrite org.gtk.Property.set=gtk_text_view_set_overwrite)
+   * GtkTextView:overwrite:
    *
    * Whether entered text overwrites existing contents.
    */
@@ -1131,7 +1131,7 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
                                                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   /**
-   * GtkTextView:accepts-tab: (attributes org.gtk.Property.get=gtk_text_view_get_accepts_tab org.gtk.Property.set=gtk_text_view_set_accepts_tab)
+   * GtkTextView:accepts-tab:
    *
    * Whether Tab will result in a tab character being entered.
    */
@@ -1158,7 +1158,7 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
                                                          GTK_PARAM_READWRITE));
 
   /**
-   * GtkTextView:input-purpose: (attributes org.gtk.Property.get=gtk_text_view_get_input_purpose org.gtk.Property.set=gtk_text_view_set_input_purpose)
+   * GtkTextView:input-purpose:
    *
    * The purpose of this text field.
    *
@@ -1174,7 +1174,7 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
 
 
   /**
-   * GtkTextView:input-hints: (attributes org.gtk.Property.get=gtk_text_view_get_input_hints org.gtk.Property.set=gtk_text_view_set_input_hints)
+   * GtkTextView:input-hints:
    *
    * Additional hints (beyond [property@Gtk.TextView:input-purpose])
    * that allow input methods to fine-tune their behaviour.
@@ -1188,7 +1188,7 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
 
 
   /**
-   * GtkTextView:monospace: (attributes org.gtk.Property.get=gtk_text_view_get_monospace org.gtk.Property.set=gtk_text_view_set_monospace)
+   * GtkTextView:monospace:
    *
    * Whether text should be displayed in a monospace font.
    *
@@ -1202,7 +1202,7 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
                                                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   /**
-   * GtkTextView:extra-menu: (attributes org.gtk.Property.get=gtk_text_view_get_extra_menu org.gtk.Property.set=gtk_text_view_set_extra_menu)
+   * GtkTextView:extra-menu:
    *
    * A menu model whose contents will be appended to the context menu.
    */

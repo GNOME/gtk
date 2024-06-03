@@ -127,7 +127,7 @@ gtk_uri_launcher_class_init (GtkUriLauncherClass *class)
   object_class->set_property = gtk_uri_launcher_set_property;
 
   /**
-   * GtkUriLauncher:uri: (attributes org.gtk.Property.get=gtk_uri_launcher_get_uri org.gtk.Property.set=gtk_uri_launcher_set_uri)
+   * GtkUriLauncher:uri:
    *
    * The uri to launch.
    *

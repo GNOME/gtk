@@ -395,7 +395,7 @@ gdk_texture_class_init (GdkTextureClass *klass)
   gobject_class->finalize = gdk_texture_finalize;
 
   /**
-   * GdkTexture:width: (attributes org.gtk.Property.get=gdk_texture_get_width)
+   * GdkTexture:width:
    *
    * The width of the texture, in pixels.
    */
@@ -410,7 +410,7 @@ gdk_texture_class_init (GdkTextureClass *klass)
                       G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GdkTexture:height: (attributes org.gtk.Property.get=gdk_texture_get_height)
+   * GdkTexture:height:
    *
    * The height of the texture, in pixels.
    */
@@ -425,7 +425,7 @@ gdk_texture_class_init (GdkTextureClass *klass)
                       G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GdkTexture:color-state: (attributes org.gtk.Property.get=gdk_texture_get_color_state)
+   * GdkTexture:color-state:
    *
    * The color state of the texture.
    *

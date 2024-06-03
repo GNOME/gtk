@@ -642,7 +642,7 @@ gtk_drop_target_class_init (GtkDropTargetClass *class)
   class->drop = gtk_drop_target_drop;
 
   /**
-   * GtkDropTarget:actions: (attributes org.gtk.Property.get=gtk_drop_target_get_actions org.gtk.Property.set=gtk_drop_target_set_actions)
+   * GtkDropTarget:actions:
    *
    * The `GdkDragActions` that this drop target supports.
    */
@@ -652,7 +652,7 @@ gtk_drop_target_class_init (GtkDropTargetClass *class)
                            G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkDropTarget:drop: (attributes org.gtk.Property.get=gtk_drop_target_get_drop) (skip)
+   * GtkDropTarget:drop:
    *
    * The `GdkDrop` that is currently being performed.
    *
@@ -664,7 +664,7 @@ gtk_drop_target_class_init (GtkDropTargetClass *class)
                             GTK_PARAM_READABLE | G_PARAM_DEPRECATED);
 
   /**
-   * GtkDropTarget:current-drop: (attributes org.gtk.Property.get=gtk_drop_target_get_current_drop)
+   * GtkDropTarget:current-drop:
    *
    * The `GdkDrop` that is currently being performed.
    *
@@ -676,7 +676,7 @@ gtk_drop_target_class_init (GtkDropTargetClass *class)
                             GTK_PARAM_READABLE);
 
   /**
-   * GtkDropTarget:formats: (attributes org.gtk.Property.get=gtk_drop_target_get_formats)
+   * GtkDropTarget:formats:
    *
    * The `GdkContentFormats` that determine the supported data formats.
    */
@@ -686,7 +686,7 @@ gtk_drop_target_class_init (GtkDropTargetClass *class)
                            GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY);
 
   /**
-   * GtkDropTarget:preload: (attributes org.gtk.Property.get=gtk_drop_target_get_preload org.gtk.Property.set=gtk_drop_target_set_preload)
+   * GtkDropTarget:preload:
    *
    * Whether the drop data should be preloaded when the pointer is only
    * hovering over the widget but has not been released.
@@ -713,7 +713,7 @@ gtk_drop_target_class_init (GtkDropTargetClass *class)
                              G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkDropTarget:value: (attributes org.gtk.Property.get=gtk_drop_target_get_value)
+   * GtkDropTarget:value:
    *
    * The value for this drop operation.
    *

@@ -142,7 +142,7 @@ gtk_gesture_stylus_class_init (GtkGestureStylusClass *klass)
   object_class->set_property = gtk_gesture_stylus_set_property;
 
   /**
-   * GtkGestureStylus:stylus-only: (attributes org.gtk.Property.get=gtk_gesture_stylus_get_stylus_only org.gtk.Property.set=gtk_gesture_stylus_set_stylus_only)
+   * GtkGestureStylus:stylus-only:
    *
    * If this gesture should exclusively react to stylus input devices.
    *

@@ -615,7 +615,7 @@ gtk_app_chooser_dialog_class_init (GtkAppChooserDialogClass *klass)
   g_object_class_install_property (gobject_class, PROP_GFILE, pspec);
 
   /**
-   * GtkAppChooserDialog:heading: (attributes org.gtk.Property.get=gtk_app_chooser_dialog_get_heading org.gtk.Property.set=gtk_app_chooser_dialog_set_heading)
+   * GtkAppChooserDialog:heading:
    *
    * The text to show at the top of the dialog.
    *

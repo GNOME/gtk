@@ -955,7 +955,7 @@ gtk_level_bar_class_init (GtkLevelBarClass *klass)
                   1, G_TYPE_STRING);
 
   /**
-   * GtkLevelBar:value: (attributes org.gtk.Property.get=gtk_level_bar_get_value org.gtk.Property.set=gtk_level_bar_set_value)
+   * GtkLevelBar:value:
    *
    * Determines the currently filled value of the level bar.
    */
@@ -965,7 +965,7 @@ gtk_level_bar_class_init (GtkLevelBarClass *klass)
                          G_PARAM_READWRITE|G_PARAM_STATIC_STRINGS|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkLevelBar:min-value: (attributes org.gtk.Property.get=gtk_level_bar_get_min_value org.gtk.Property.set=gtk_level_bar_set_min_value)
+   * GtkLevelBar:min-value:
    *
    * Determines the minimum value of the interval that can be displayed by the bar.
    */
@@ -975,7 +975,7 @@ gtk_level_bar_class_init (GtkLevelBarClass *klass)
                          G_PARAM_READWRITE|G_PARAM_STATIC_STRINGS|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkLevelBar:max-value: (attributes org.gtk.Property.get=gtk_level_bar_get_max_value org.gtk.Property.set=gtk_level_bar_set_max_value)
+   * GtkLevelBar:max-value:
    *
    * Determines the maximum value of the interval that can be displayed by the bar.
    */
@@ -985,7 +985,7 @@ gtk_level_bar_class_init (GtkLevelBarClass *klass)
                          G_PARAM_READWRITE|G_PARAM_STATIC_STRINGS|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkLevelBar:mode: (attributes org.gtk.Property.get=gtk_level_bar_get_mode org.gtk.Property.set=gtk_level_bar_set_mode)
+   * GtkLevelBar:mode:
    *
    * Determines the way `GtkLevelBar` interprets the value properties to draw the
    * level fill area.
@@ -1005,7 +1005,7 @@ gtk_level_bar_class_init (GtkLevelBarClass *klass)
                        G_PARAM_READWRITE|G_PARAM_STATIC_STRINGS|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkLevelBar:inverted: (attributes org.gtk.Property.get=gtk_level_bar_get_inverted org.gtk.Property.set=gtk_level_bar_set_inverted)
+   * GtkLevelBar:inverted:
    *
    * Whether the `GtkLeveBar` is inverted.
    *

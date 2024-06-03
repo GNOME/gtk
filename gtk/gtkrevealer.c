@@ -309,7 +309,7 @@ gtk_revealer_class_init (GtkRevealerClass *klass)
   widget_class->get_request_mode = gtk_revealer_get_request_mode;
 
   /**
-   * GtkRevealer:transition-type: (attributes org.gtk.Property.get=gtk_revealer_get_transition_type org.gtk.Property.set=gtk_revealer_set_transition_type)
+   * GtkRevealer:transition-type:
    *
    * The type of animation used to transition.
    */
@@ -320,7 +320,7 @@ gtk_revealer_class_init (GtkRevealerClass *klass)
                        GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkRevealer:transition-duration: (attributes org.gtk.Property.get=gtk_revealer_get_transition_duration org.gtk.Property.set=gtk_revealer_set_transition_duration)
+   * GtkRevealer:transition-duration:
    *
    * The animation duration, in milliseconds.
    */
@@ -330,7 +330,7 @@ gtk_revealer_class_init (GtkRevealerClass *klass)
                        GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkRevealer:reveal-child: (attributes org.gtk.Property.get=gtk_revealer_get_reveal_child org.gtk.Property.set=gtk_revealer_set_reveal_child)
+   * GtkRevealer:reveal-child:
    *
    * Whether the revealer should reveal the child.
    */
@@ -340,7 +340,7 @@ gtk_revealer_class_init (GtkRevealerClass *klass)
                           GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkRevealer:child-revealed: (attributes org.gtk.Property.get=gtk_revealer_get_child_revealed)
+   * GtkRevealer:child-revealed:
    *
    * Whether the child is revealed and the animation target reached.
    */
@@ -350,7 +350,7 @@ gtk_revealer_class_init (GtkRevealerClass *klass)
                           GTK_PARAM_READABLE);
 
   /**
-   * GtkRevealer:child: (attributes org.gtk.Property.get=gtk_revealer_get_child org.gtk.Property.set=gtk_revealer_set_child)
+   * GtkRevealer:child:
    *
    * The child widget.
    */

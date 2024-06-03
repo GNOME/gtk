@@ -538,7 +538,7 @@ gtk_numeric_sorter_class_init (GtkNumericSorterClass *class)
   object_class->dispose = gtk_numeric_sorter_dispose;
 
   /**
-   * GtkNumericSorter:expression: (type GtkExpression) (attributes org.gtk.Property.get=gtk_numeric_sorter_get_expression org.gtk.Property.set=gtk_numeric_sorter_set_expression)
+   * GtkNumericSorter:expression: (type GtkExpression)
    *
    * The expression to evaluate on items to get a number to compare with.
    */
@@ -547,7 +547,7 @@ gtk_numeric_sorter_class_init (GtkNumericSorterClass *class)
                                G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkNumericSorter:sort-order: (attributes org.gtk.Property.get=gtk_numeric_sorter_get_sort_order org.gtk.Property.set=gtk_numeric_sorter_set_sort_order)
+   * GtkNumericSorter:sort-order:
    *
    * Whether the sorter will sort smaller numbers first.
    */

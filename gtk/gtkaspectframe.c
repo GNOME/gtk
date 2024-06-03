@@ -140,7 +140,7 @@ gtk_aspect_frame_class_init (GtkAspectFrameClass *class)
   widget_class->get_request_mode = gtk_aspect_frame_get_request_mode;
 
   /**
-   * GtkAspectFrame:xalign: (attributes org.gtk.Property.get=gtk_aspect_frame_get_xalign org.gtk.Property.set=gtk_aspect_frame_set_xalign)
+   * GtkAspectFrame:xalign:
    *
    * The horizontal alignment of the child.
    */
@@ -150,7 +150,7 @@ gtk_aspect_frame_class_init (GtkAspectFrameClass *class)
                                                        0.0, 1.0, 0.5,
                                                        GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
   /**
-   * GtkAspectFrame:yalign: (attributes org.gtk.Property.get=gtk_aspect_frame_get_yalign org.gtk.Property.set=gtk_aspect_frame_set_yalign)
+   * GtkAspectFrame:yalign:
    *
    * The vertical alignment of the child.
    */
@@ -160,7 +160,7 @@ gtk_aspect_frame_class_init (GtkAspectFrameClass *class)
                                                        0.0, 1.0, 0.5,
                                                        GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
   /**
-   * GtkAspectFrame:ratio: (attributes org.gtk.Property.get=gtk_aspect_frame_get_ratio org.gtk.Property.set=gtk_aspect_frame_set_ratio)
+   * GtkAspectFrame:ratio:
    *
    * The aspect ratio to be used by the `GtkAspectFrame`.
    *
@@ -173,7 +173,7 @@ gtk_aspect_frame_class_init (GtkAspectFrameClass *class)
                                                        MIN_RATIO, MAX_RATIO, 1.0,
                                                        GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
   /**
-   * GtkAspectFrame:obey-child: (attributes org.gtk.Property.get=gtk_aspect_frame_get_obey_child org.gtk.Property.set=gtk_aspect_frame_set_obey_child)
+   * GtkAspectFrame:obey-child:
    *
    * Whether the `GtkAspectFrame` should use the aspect ratio of its child.
    */
@@ -183,7 +183,7 @@ gtk_aspect_frame_class_init (GtkAspectFrameClass *class)
                                                          TRUE,
                                                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
   /**
-   * GtkAspectFrame:child: (attributes org.gtk.Property.get=gtk_aspect_frame_get_child org.gtk.Property.set=gtk_aspect_frame_set_child)
+   * GtkAspectFrame:child:
    *
    * The child widget.
    */

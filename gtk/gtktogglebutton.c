@@ -292,7 +292,7 @@ gtk_toggle_button_class_init (GtkToggleButtonClass *class)
   class->toggled = NULL;
 
   /**
-   * GtkToggleButton:active: (attributes org.gtk.Property.get=gtk_toggle_button_get_active org.gtk.Property.set=gtk_toggle_button_set_active)
+   * GtkToggleButton:active:
    *
    * If the toggle button should be pressed in.
    */
@@ -302,7 +302,7 @@ gtk_toggle_button_class_init (GtkToggleButtonClass *class)
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkToggleButton:group: (attributes org.gtk.Property.set=gtk_toggle_button_set_group)
+   * GtkToggleButton:group:
    *
    * The toggle button whose group this widget belongs to.
    */

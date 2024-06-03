@@ -199,7 +199,7 @@ gsk_renderer_class_init (GskRendererClass *klass)
                           G_PARAM_READABLE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   /**
-   * GskRenderer:surface: (attributes org.gtk.Property.get=gsk_renderer_get_surface)
+   * GskRenderer:surface:
    *
    * The surface associated with renderer.
    */

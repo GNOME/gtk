@@ -378,7 +378,7 @@ gtk_range_class_init (GtkRangeClass *class)
   g_object_class_override_property (gobject_class, PROP_ORIENTATION, "orientation");
 
   /**
-   * GtkRange:adjustment: (attributes org.gtk.Property.get=gtk_range_get_adjustment org.gtk.Property.set=gtk_range_set_adjustment)
+   * GtkRange:adjustment:
    *
    * The adjustment that is controlled by the range.
    */
@@ -388,7 +388,7 @@ gtk_range_class_init (GtkRangeClass *class)
                            GTK_PARAM_READWRITE|G_PARAM_CONSTRUCT|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkRange:inverted: (attributes org.gtk.Property.get=gtk_range_get_inverted org.gtk.Property.set=gtk_range_set_inverted)
+   * GtkRange:inverted:
    *
    * If %TRUE, the direction in which the slider moves is inverted.
    */
@@ -398,7 +398,7 @@ gtk_range_class_init (GtkRangeClass *class)
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkRange:show-fill-level: (attributes org.gtk.Property.get=gtk_range_get_show_fill_level org.gtk.Property.set=gtk_range_set_show_fill_level)
+   * GtkRange:show-fill-level:
    *
    * Controls whether fill level indicator graphics are displayed
    * on the trough.
@@ -409,7 +409,7 @@ gtk_range_class_init (GtkRangeClass *class)
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkRange:restrict-to-fill-level: (attributes org.gtk.Property.get=gtk_range_get_restrict_to_fill_level org.gtk.Property.set=gtk_range_set_restrict_to_fill_level)
+   * GtkRange:restrict-to-fill-level:
    *
    * Controls whether slider movement is restricted to an
    * upper boundary set by the fill level.
@@ -420,7 +420,7 @@ gtk_range_class_init (GtkRangeClass *class)
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkRange:fill-level: (attributes org.gtk.Property.get=gtk_range_get_fill_level org.gtk.Property.set=gtk_range_set_fill_level)
+   * GtkRange:fill-level:
    *
    * The fill level (e.g. prebuffering of a network stream).
    */
@@ -431,7 +431,7 @@ gtk_range_class_init (GtkRangeClass *class)
                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkRange:round-digits: (attributes org.gtk.Property.get=gtk_range_get_round_digits org.gtk.Property.set=gtk_range_set_round_digits)
+   * GtkRange:round-digits:
    *
    * The number of digits to round the value to when
    * it changes.

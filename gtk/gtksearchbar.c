@@ -317,7 +317,7 @@ gtk_search_bar_class_init (GtkSearchBarClass *klass)
                                                                  GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkSearchBar:show-close-button: (attributes org.gtk.Property.get=gtk_search_bar_get_show_close_button org.gtk.Property.set=gtk_search_bar_set_show_close_button)
+   * GtkSearchBar:show-close-button:
    *
    * Whether to show the close button in the search bar.
    */
@@ -326,7 +326,7 @@ gtk_search_bar_class_init (GtkSearchBarClass *klass)
                                                                GTK_PARAM_READWRITE|G_PARAM_CONSTRUCT|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkSearchBar:child: (attributes org.gtk.Property.get=gtk_search_bar_get_child org.gtk.Property.set=gtk_search_bar_set_child)
+   * GtkSearchBar:child:
    *
    * The child widget.
    */
@@ -335,7 +335,7 @@ gtk_search_bar_class_init (GtkSearchBarClass *klass)
                                                   GTK_PARAM_READWRITE|G_PARAM_CONSTRUCT|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkSearchBar:key-capture-widget: (attributes org.gtk.Property.get=gtk_search_bar_get_key_capture_widget org.gtk.Property.set=gtk_search_bar_set_key_capture_widget)
+   * GtkSearchBar:key-capture-widget:
    *
    * The key capture widget.
    */

@@ -411,7 +411,7 @@ gtk_calendar_class_init (GtkCalendarClass *class)
                                                      G_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   /**
-   * GtkCalendar:show-heading: (attributes org.gtk.Property.get=gtk_calendar_get_show_heading org.gtk.Property.set=gtk_calendar_set_show_heading)
+   * GtkCalendar:show-heading:
    *
    * Determines whether a heading is displayed.
    */
@@ -422,7 +422,7 @@ gtk_calendar_class_init (GtkCalendarClass *class)
                                                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   /**
-   * GtkCalendar:show-day-names: (attributes org.gtk.Property.get=gtk_calendar_get_show_day_names org.gtk.Property.set=gtk_calendar_set_show_day_names)
+   * GtkCalendar:show-day-names:
    *
    * Determines whether day names are displayed.
    */
@@ -432,7 +432,7 @@ gtk_calendar_class_init (GtkCalendarClass *class)
                                                          TRUE,
                                                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
   /**
-   * GtkCalendar:show-week-numbers: (attributes org.gtk.Property.get=gtk_calendar_get_show_week_numbers org.gtk.Property.set=gtk_calendar_set_show_week_numbers)
+   * GtkCalendar:show-week-numbers:
    *
    * Determines whether week numbers are displayed.
    */

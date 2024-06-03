@@ -281,7 +281,7 @@ gtk_gesture_long_press_class_init (GtkGestureLongPressClass *klass)
   gesture_class->sequence_state_changed = gtk_gesture_long_press_sequence_state_changed;
 
   /**
-   * GtkGestureLongPress:delay-factor: (attributes org.gtk.Property.get=gtk_gesture_long_press_get_delay_factor org.gtk.Property.set=gtk_gesture_long_press_set_delay_factor)
+   * GtkGestureLongPress:delay-factor:
    *
    * Factor by which to modify the default timeout.
    */

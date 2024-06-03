@@ -411,7 +411,7 @@ gtk_constraint_guide_class_init (GtkConstraintGuideClass *class)
                         G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkConstraintGuide:strength: (attributes org.gtk.Property.get=gtk_constraint_guide_get_strength org.gtk.Property.set=gtk_constraint_guide_set_strength)
+   * GtkConstraintGuide:strength:
    *
    * The `GtkConstraintStrength` to be used for the constraint on
    * the natural size of the guide.
@@ -424,7 +424,7 @@ gtk_constraint_guide_class_init (GtkConstraintGuideClass *class)
                          G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkConstraintGuide:name: (attributes org.gtk.Property.get=gtk_constraint_guide_get_name org.gtk.Property.set=gtk_constraint_guide_set_name)
+   * GtkConstraintGuide:name:
    *
    * A name that identifies the `GtkConstraintGuide`, for debugging.
    */

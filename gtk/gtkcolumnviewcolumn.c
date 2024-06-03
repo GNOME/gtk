@@ -242,7 +242,7 @@ gtk_column_view_column_class_init (GtkColumnViewColumnClass *klass)
   gobject_class->set_property = gtk_column_view_column_set_property;
 
   /**
-   * GtkColumnViewColumn:column-view: (attributes org.gtk.Property.get=gtk_column_view_column_get_column_view)
+   * GtkColumnViewColumn:column-view:
    *
    * The `GtkColumnView` this column is a part of.
    */
@@ -252,7 +252,7 @@ gtk_column_view_column_class_init (GtkColumnViewColumnClass *klass)
                          G_PARAM_READABLE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   /**
-   * GtkColumnViewColumn:factory: (attributes org.gtk.Property.get=gtk_column_view_column_get_factory org.gtk.Property.set=gtk_column_view_column_set_factory)
+   * GtkColumnViewColumn:factory:
    *
    * Factory for populating list items.
    *
@@ -264,7 +264,7 @@ gtk_column_view_column_class_init (GtkColumnViewColumnClass *klass)
                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   /**
-   * GtkColumnViewColumn:title: (attributes org.gtk.Property.get=gtk_column_view_column_get_title org.gtk.Property.set=gtk_column_view_column_set_title)
+   * GtkColumnViewColumn:title:
    *
    * Title displayed in the header.
    */
@@ -274,7 +274,7 @@ gtk_column_view_column_class_init (GtkColumnViewColumnClass *klass)
                           G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkColumnViewColumn:sorter: (attributes org.gtk.Property.get=gtk_column_view_column_get_sorter org.gtk.Property.set=gtk_column_view_column_set_sorter)
+   * GtkColumnViewColumn:sorter:
    *
    * Sorter for sorting items according to this column.
    */
@@ -284,7 +284,7 @@ gtk_column_view_column_class_init (GtkColumnViewColumnClass *klass)
                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   /**
-   * GtkColumnViewColumn:visible: (attributes org.gtk.Property.get=gtk_column_view_column_get_visible org.gtk.Property.set=gtk_column_view_column_set_visible)
+   * GtkColumnViewColumn:visible:
    *
    * Whether this column is visible.
    */
@@ -294,7 +294,7 @@ gtk_column_view_column_class_init (GtkColumnViewColumnClass *klass)
                           G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   /**
-   * GtkColumnViewColumn:header-menu: (attributes org.gtk.Property.get=gtk_column_view_column_get_header_menu org.gtk.Property.set=gtk_column_view_column_set_header_menu)
+   * GtkColumnViewColumn:header-menu:
    *
    * Menu model used to create the context menu for the column header.
    */
@@ -304,7 +304,7 @@ gtk_column_view_column_class_init (GtkColumnViewColumnClass *klass)
                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   /**
-   * GtkColumnViewColumn:resizable: (attributes org.gtk.Property.get=gtk_column_view_column_get_resizable org.gtk.Property.set=gtk_column_view_column_set_resizable)
+   * GtkColumnViewColumn:resizable:
    *
    * Whether this column is resizable.
    */
@@ -314,7 +314,7 @@ gtk_column_view_column_class_init (GtkColumnViewColumnClass *klass)
                           G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   /**
-   * GtkColumnViewColumn:expand: (attributes org.gtk.Property.get=gtk_column_view_column_get_expand org.gtk.Property.set=gtk_column_view_column_set_expand)
+   * GtkColumnViewColumn:expand:
    *
    * Column gets share of extra width allocated to the view.
    */
@@ -324,7 +324,7 @@ gtk_column_view_column_class_init (GtkColumnViewColumnClass *klass)
                           G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   /**
-   * GtkColumnViewColumn:fixed-width: (attributes org.gtk.Property.get=gtk_column_view_column_get_fixed_width org.gtk.Property.set=gtk_column_view_column_set_fixed_width)
+   * GtkColumnViewColumn:fixed-width:
    *
    * If not -1, this is the width that the column is allocated,
    * regardless of the size of its content.
@@ -335,7 +335,7 @@ gtk_column_view_column_class_init (GtkColumnViewColumnClass *klass)
                       G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   /**
-   * GtkColumnViewColumn:id: (attributes org.gtk.Property.get=gtk_column_view_column_get_id org.gtk.Property.set=gtk_column_view_column_set_id)
+   * GtkColumnViewColumn:id:
    *
    * An ID for the column.
    *

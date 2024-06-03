@@ -80,7 +80,7 @@ gdk_popup_default_init (GdkPopupInterface *iface)
   iface->get_position_y = gdk_popup_default_get_position_y;
 
   /**
-   * GdkPopup:parent: (attributes org.gtk.Property.get=gdk_popup_get_parent)
+   * GdkPopup:parent:
    *
    * The parent surface.
    */
@@ -90,7 +90,7 @@ gdk_popup_default_init (GdkPopupInterface *iface)
                            G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
 
   /**
-   * GdkPopup:autohide: (attributes org.gtk.Property.get=gdk_popup_get_autohide)
+   * GdkPopup:autohide:
    *
    * Whether to hide on outside clicks.
    */

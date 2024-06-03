@@ -255,7 +255,7 @@ gtk_file_filter_class_init (GtkFileFilterClass *class)
   filter_class->match = gtk_file_filter_match;
 
   /**
-   * GtkFileFilter:name: (attributes org.gtk.Property.get=gtk_file_filter_get_name org.gtk.Property.set=gtk_file_filter_set_name)
+   * GtkFileFilter:name:
    *
    * The human-readable name of the filter.
    *

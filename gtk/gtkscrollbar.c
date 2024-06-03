@@ -237,7 +237,7 @@ gtk_scrollbar_class_init (GtkScrollbarClass *class)
   object_class->dispose = gtk_scrollbar_dispose;
 
   /**
-   * GtkScrollbar:adjustment: (attributes org.gtk.Property.get=gtk_scrollbar_get_adjustment org.gtk.Property.set=gtk_scrollbar_set_adjustment)
+   * GtkScrollbar:adjustment:
    *
    * The `GtkAdjustment` controlled by this scrollbar.
    */

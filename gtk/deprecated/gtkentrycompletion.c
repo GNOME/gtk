@@ -318,7 +318,7 @@ gtk_entry_completion_class_init (GtkEntryCompletionClass *klass)
                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkEntryCompletion:text-column: (attributes org.gtk.Property.get=gtk_entry_completion_get_text_column org.gtk.Property.set=gtk_entry_completion_set_text_column)
+   * GtkEntryCompletion:text-column:
    *
    * The column of the model containing the strings.
    *
@@ -330,7 +330,7 @@ gtk_entry_completion_class_init (GtkEntryCompletionClass *klass)
                       GTK_PARAM_READWRITE);
 
   /**
-   * GtkEntryCompletion:inline-completion: (attributes org.gtk.Property.get=gtk_entry_completion_get_inline_completion org.gtk.Property.set=gtk_entry_completion_set_inline_completion)
+   * GtkEntryCompletion:inline-completion:
    *
    * Determines whether the common prefix of the possible completions
    * should be inserted automatically in the entry.
@@ -344,7 +344,7 @@ gtk_entry_completion_class_init (GtkEntryCompletionClass *klass)
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkEntryCompletion:popup-completion: (attributes org.gtk.Property.get=gtk_entry_completion_get_popup_completion org.gtk.Property.set=gtk_entry_completion_set_popup_completion)
+   * GtkEntryCompletion:popup-completion:
    *
    * Determines whether the possible completions should be
    * shown in a popup window.
@@ -355,7 +355,7 @@ gtk_entry_completion_class_init (GtkEntryCompletionClass *klass)
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkEntryCompletion:popup-set-width: (attributes org.gtk.Property.get=gtk_entry_completion_get_popup_set_width org.gtk.Property.set=gtk_entry_completion_set_popup_set_width)
+   * GtkEntryCompletion:popup-set-width:
    *
    * Determines whether the completions popup window will be
    * resized to the width of the entry.
@@ -366,7 +366,7 @@ gtk_entry_completion_class_init (GtkEntryCompletionClass *klass)
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkEntryCompletion:popup-single-match: (attributes org.gtk.Property.get=gtk_entry_completion_get_popup_single_match org.gtk.Property.set=gtk_entry_completion_set_popup_single_match)
+   * GtkEntryCompletion:popup-single-match:
    *
    * Determines whether the completions popup window will shown
    * for a single possible completion.
@@ -380,7 +380,7 @@ gtk_entry_completion_class_init (GtkEntryCompletionClass *klass)
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkEntryCompletion:inline-selection: (attributes org.gtk.Property.get=gtk_entry_completion_get_inline_selection org.gtk.Property.set=gtk_entry_completion_set_inline_selection)
+   * GtkEntryCompletion:inline-selection:
    *
    * Determines whether the possible completions on the popup
    * will appear in the entry as you navigate through them.

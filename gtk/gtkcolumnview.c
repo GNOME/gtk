@@ -817,7 +817,7 @@ gtk_column_view_class_init (GtkColumnViewClass *klass)
                              g_object_interface_find_property (iface, "vscroll-policy"));
 
   /**
-   * GtkColumnView:columns: (attributes org.gtk.Property.get=gtk_column_view_get_columns)
+   * GtkColumnView:columns:
    *
    * The list of columns.
    */
@@ -827,7 +827,7 @@ gtk_column_view_class_init (GtkColumnViewClass *klass)
                          G_PARAM_READABLE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   /**
-   * GtkColumnView:enable-rubberband: (attributes org.gtk.Property.get=gtk_column_view_get_enable_rubberband org.gtk.Property.set=gtk_column_view_set_enable_rubberband)
+   * GtkColumnView:enable-rubberband:
    *
    * Allow rubberband selection.
    */
@@ -837,7 +837,7 @@ gtk_column_view_class_init (GtkColumnViewClass *klass)
                           G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkColumnView:model: (attributes org.gtk.Property.get=gtk_column_view_get_model org.gtk.Property.set=gtk_column_view_set_model)
+   * GtkColumnView:model:
    *
    * Model for the items displayed.
    */
@@ -847,7 +847,7 @@ gtk_column_view_class_init (GtkColumnViewClass *klass)
                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   /**
-   * GtkColumnView:reorderable: (attributes org.gtk.Property.get=gtk_column_view_get_reorderable org.gtk.Property.set=gtk_column_view_set_reorderable)
+   * GtkColumnView:reorderable:
    *
    * Whether columns are reorderable.
    */
@@ -857,7 +857,7 @@ gtk_column_view_class_init (GtkColumnViewClass *klass)
                           G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   /**
-   * GtkColumnView:row-factory: (attributes org.gtk.Property.get=gtk_column_view_get_row_factory org.gtk.Property.set=gtk_column_view_set_row_factory)
+   * GtkColumnView:row-factory:
    *
    * The factory used for configuring rows.
    *
@@ -871,7 +871,7 @@ gtk_column_view_class_init (GtkColumnViewClass *klass)
                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   /**
-   * GtkColumnView:show-row-separators: (attributes org.gtk.Property.get=gtk_column_view_get_show_row_separators org.gtk.Property.set=gtk_column_view_set_show_row_separators)
+   * GtkColumnView:show-row-separators:
    *
    * Show separators between rows.
    */
@@ -881,7 +881,7 @@ gtk_column_view_class_init (GtkColumnViewClass *klass)
                           G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkColumnView:show-column-separators: (attributes org.gtk.Property.get=gtk_column_view_get_show_column_separators org.gtk.Property.set=gtk_column_view_set_show_column_separators)
+   * GtkColumnView:show-column-separators:
    *
    * Show separators between columns.
    */
@@ -891,7 +891,7 @@ gtk_column_view_class_init (GtkColumnViewClass *klass)
                           G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkColumnView:sorter: (attributes org.gtk.Property.get=gtk_column_view_get_sorter)
+   * GtkColumnView:sorter:
    *
    * Sorter with the sorting choices of the user.
    */
@@ -901,7 +901,7 @@ gtk_column_view_class_init (GtkColumnViewClass *klass)
                          G_PARAM_READABLE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   /**
-   * GtkColumnView:single-click-activate: (attributes org.gtk.Property.get=gtk_column_view_get_single_click_activate org.gtk.Property.set=gtk_column_view_set_single_click_activate)
+   * GtkColumnView:single-click-activate:
    *
    * Activate rows on single click and select them on hover.
    */
@@ -911,7 +911,7 @@ gtk_column_view_class_init (GtkColumnViewClass *klass)
                           G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkColumnView:tab-behavior: (attributes org.gtk.Property.get=gtk_column_view_get_tab_behavior org.gtk.Property.set=gtk_column_view_set_tab_behavior)
+   * GtkColumnView:tab-behavior:
    *
    * Behavior of the <kbd>Tab</kbd> key
    *
@@ -924,7 +924,7 @@ gtk_column_view_class_init (GtkColumnViewClass *klass)
                        G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkColumnView:header-factory: (attributes org.gtk.Property.get=gtk_column_view_get_header_factory org.gtk.Property.set=gtk_column_view_set_header_factory)
+   * GtkColumnView:header-factory:
    *
    * Factory for creating header widgets.
    *

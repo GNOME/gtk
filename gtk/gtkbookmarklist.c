@@ -218,7 +218,7 @@ gtk_bookmark_list_class_init (GtkBookmarkListClass *class)
   gobject_class->dispose = gtk_bookmark_list_dispose;
 
   /**
-   * GtkBookmarkList:filename: (attributes org.gtk.Property.get=gtk_bookmark_list_get_filename)
+   * GtkBookmarkList:filename:
    *
    * The bookmark file to load.
    */
@@ -227,7 +227,7 @@ gtk_bookmark_list_class_init (GtkBookmarkListClass *class)
                            NULL,
                            GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_EXPLICIT_NOTIFY);
   /**
-   * GtkBookmarkList:attributes: (attributes org.gtk.Property.get=gtk_bookmark_list_get_attributes org.gtk.Property.set=gtk_bookmark_list_set_attributes)
+   * GtkBookmarkList:attributes:
    *
    * The attributes to query.
    */
@@ -237,7 +237,7 @@ gtk_bookmark_list_class_init (GtkBookmarkListClass *class)
                            GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkBookmarkList:io-priority: (attributes org.gtk.Property.get=gtk_bookmark_list_get_io_priority org.gtk.Property.set=gtk_bookmark_list_set_io_priority)
+   * GtkBookmarkList:io-priority:
    *
    * Priority used when loading.
    */

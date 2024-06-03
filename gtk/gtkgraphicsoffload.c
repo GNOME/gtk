@@ -248,7 +248,7 @@ gtk_graphics_offload_class_init (GtkGraphicsOffloadClass *class)
   widget_class->snapshot = gtk_graphics_offload_snapshot;
 
   /**
-   * GtkGraphicsOffload:child: (attributes org.gtk.Property.get=gtk_graphics_offload_get_child org.gtk.Property.set=gtk_graphics_offload_set_child)
+   * GtkGraphicsOffload:child:
    *
    * The child widget.
    *
@@ -259,7 +259,7 @@ gtk_graphics_offload_class_init (GtkGraphicsOffloadClass *class)
                                                 GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   /**
-   * GtkGraphicsOffload:enabled: (attributes org.gtk.Property.get=gtk_graphics_offload_get_enabled org.gtk.Property.set=gtk_graphics_offload_set_enabled)
+   * GtkGraphicsOffload:enabled:
    *
    * Whether graphics offload is enabled.
    *
@@ -271,7 +271,7 @@ gtk_graphics_offload_class_init (GtkGraphicsOffloadClass *class)
                                                 GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   /**
-   * GtkGraphicsOffload:black-background: (attributes org.gtk.Property.get=gtk_graphics_offload_get_black_background org.gtk.Property.set=gtk_graphics_offload_set_black_background)
+   * GtkGraphicsOffload:black-background:
    *
    * Whether to draw a black background.
    *

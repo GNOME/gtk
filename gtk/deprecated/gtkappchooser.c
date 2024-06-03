@@ -66,7 +66,7 @@ gtk_app_chooser_default_init (GtkAppChooserIface *iface)
   GParamSpec *pspec;
 
   /**
-   * GtkAppChooser:content-type: (attributes org.gtk.Property.get=gtk_app_chooser_get_content_type)
+   * GtkAppChooser:content-type:
    *
    * The content type of the `GtkAppChooser` object.
    *

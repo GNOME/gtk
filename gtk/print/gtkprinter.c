@@ -116,7 +116,7 @@ gtk_printer_class_init (GtkPrinterClass *class)
   object_class->get_property = gtk_printer_get_property;
 
   /**
-   * GtkPrinter:name: (attributes org.gtk.Property.get=gtk_printer_get_name)
+   * GtkPrinter:name:
    *
    * The name of the printer.
    */
@@ -127,7 +127,7 @@ gtk_printer_class_init (GtkPrinterClass *class)
 							G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
 
   /**
-   * GtkPrinter:backend: (attributes org.gtk.Property.get=gtk_printer_get_backend)
+   * GtkPrinter:backend:
    *
    * The backend for the printer.
    */
@@ -171,7 +171,7 @@ gtk_printer_class_init (GtkPrinterClass *class)
 							 G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY));
 
   /**
-   * GtkPrinter:state-message: (attributes org.gtk.Property.get=gtk_printer_get_state_message)
+   * GtkPrinter:state-message:
    *
    * String giving the current status of the printer.
    */
@@ -182,7 +182,7 @@ gtk_printer_class_init (GtkPrinterClass *class)
 							G_PARAM_READABLE));
 
   /**
-   * GtkPrinter:location: (attributes org.gtk.Property.get=gtk_printer_get_location)
+   * GtkPrinter:location:
    *
    * Information about the location of the printer.
    */
@@ -193,7 +193,7 @@ gtk_printer_class_init (GtkPrinterClass *class)
 							G_PARAM_READABLE));
 
   /**
-   * GtkPrinter:icon-name: (attributes org.gtk.Property.get=gtk_printer_get_icon_name)
+   * GtkPrinter:icon-name:
    *
    * Icon name to use for the printer.
    */
@@ -204,7 +204,7 @@ gtk_printer_class_init (GtkPrinterClass *class)
 							G_PARAM_READABLE));
 
   /**
-   * GtkPrinter:job-count: (attributes org.gtk.Property.get=gtk_printer_get_job_count)
+   * GtkPrinter:job-count:
    *
    * Number of jobs queued in the printer.
    */

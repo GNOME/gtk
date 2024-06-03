@@ -171,7 +171,7 @@ gtk_column_view_row_class_init (GtkColumnViewRowClass *klass)
   gobject_class->set_property = gtk_column_view_row_set_property;
 
   /**
-   * GtkColumnViewRow:accessible-description: (attributes org.gtk.Property.get=gtk_column_view_row_get_accessible_description org.gtk.Property.set=gtk_column_view_row_set_accessible_description)
+   * GtkColumnViewRow:accessible-description:
    *
    * The accessible description to set on the row.
    *
@@ -183,7 +183,7 @@ gtk_column_view_row_class_init (GtkColumnViewRowClass *klass)
                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   /**
-   * GtkColumnViewRow:accessible-label: (attributes org.gtk.Property.get=gtk_column_view_row_get_accessible_label org.gtk.Property.set=gtk_column_view_row_set_accessible_label)
+   * GtkColumnViewRow:accessible-label:
    *
    * The accessible label to set on the row.
    *
@@ -195,7 +195,7 @@ gtk_column_view_row_class_init (GtkColumnViewRowClass *klass)
                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   /**
-   * GtkColumnViewRow:activatable: (attributes org.gtk.Property.get=gtk_column_view_row_get_activatable org.gtk.Property.set=gtk_column_view_row_set_activatable)
+   * GtkColumnViewRow:activatable:
    *
    * If the row can be activated by the user.
    * 
@@ -207,7 +207,7 @@ gtk_column_view_row_class_init (GtkColumnViewRowClass *klass)
                           G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   /**
-   * GtkColumnViewRow:focusable: (attributes org.gtk.Property.get=gtk_column_view_row_get_focusable org.gtk.Property.set=gtk_column_view_row_set_focusable)
+   * GtkColumnViewRow:focusable:
    *
    * If the row can be focused with the keyboard.
    *
@@ -219,7 +219,7 @@ gtk_column_view_row_class_init (GtkColumnViewRowClass *klass)
                           G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   /**
-   * GtkColumnViewRow:item: (attributes org.gtk.Property.get=gtk_column_view_row_get_item)
+   * GtkColumnViewRow:item:
    *
    * The item for this row.
    *
@@ -231,7 +231,7 @@ gtk_column_view_row_class_init (GtkColumnViewRowClass *klass)
                          G_PARAM_READABLE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   /**
-   * GtkColumnViewRow:position: (attributes org.gtk.Property.get=gtk_column_view_row_get_position)
+   * GtkColumnViewRow:position:
    *
    * Position of the row.
    *
@@ -243,7 +243,7 @@ gtk_column_view_row_class_init (GtkColumnViewRowClass *klass)
                        G_PARAM_READABLE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   /**
-   * GtkColumnViewRow:selectable: (attributes org.gtk.Property.get=gtk_column_view_row_get_selectable org.gtk.Property.set=gtk_column_view_row_set_selectable)
+   * GtkColumnViewRow:selectable:
    *
    * If the row can be selected by the user.
    *
@@ -255,7 +255,7 @@ gtk_column_view_row_class_init (GtkColumnViewRowClass *klass)
                           G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   /**
-   * GtkColumnViewRow:selected: (attributes org.gtk.Property.get=gtk_column_view_row_get_selected)
+   * GtkColumnViewRow:selected:
    *
    * If the item in the row is currently selected.
    *

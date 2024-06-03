@@ -256,7 +256,7 @@ gtk_gesture_single_class_init (GtkGestureSingleClass *klass)
   gesture_class->cancel = gtk_gesture_single_cancel;
 
   /**
-   * GtkGestureSingle:touch-only: (attributes org.gtk.Property.get=gtk_gesture_single_get_touch_only org.gtk.Property.set=gtk_gesture_single_set_touch_only)
+   * GtkGestureSingle:touch-only:
    *
    * Whether the gesture handles only touch events.
    */
@@ -266,7 +266,7 @@ gtk_gesture_single_class_init (GtkGestureSingleClass *klass)
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkGestureSingle:exclusive: (attributes org.gtk.Property.get=gtk_gesture_single_get_exclusive org.gtk.Property.set=gtk_gesture_single_set_exclusive)
+   * GtkGestureSingle:exclusive:
    *
    * Whether the gesture is exclusive.
    *
@@ -278,7 +278,7 @@ gtk_gesture_single_class_init (GtkGestureSingleClass *klass)
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkGestureSingle:button: (attributes org.gtk.Property.get=gtk_gesture_single_get_button org.gtk.Property.set=gtk_gesture_single_set_button)
+   * GtkGestureSingle:button:
    *
    * Mouse button number to listen to, or 0 to listen for any button.
    */

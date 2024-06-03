@@ -663,7 +663,7 @@ gtk_tree_list_model_class_init (GtkTreeListModelClass *class)
   gobject_class->finalize = gtk_tree_list_model_finalize;
 
   /**
-   * GtkTreeListModel:autoexpand: (attributes org.gtk.Property.get=gtk_tree_list_model_get_autoexpand org.gtk.Property.set=gtk_tree_list_model_set_autoexpand)
+   * GtkTreeListModel:autoexpand:
    *
    * If all rows should be expanded by default.
    */
@@ -685,7 +685,7 @@ gtk_tree_list_model_class_init (GtkTreeListModelClass *class)
                         G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
 
   /**
-   * GtkTreeListModel:model: (attributes org.gtk.Property.get=gtk_tree_list_model_get_model)
+   * GtkTreeListModel:model:
    *
    * The root model displayed.
    */
@@ -707,7 +707,7 @@ gtk_tree_list_model_class_init (GtkTreeListModelClass *class)
                        G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
 
   /**
-   * GtkTreeListModel:passthrough: (attributes org.gtk.Property.get=gtk_tree_list_model_get_passthrough)
+   * GtkTreeListModel:passthrough:
    *
    * Gets whether the model is in passthrough mode.
    *
@@ -1048,7 +1048,7 @@ gtk_tree_list_row_class_init (GtkTreeListRowClass *class)
   gobject_class->dispose = gtk_tree_list_row_dispose;
 
   /**
-   * GtkTreeListRow:children: (attributes org.gtk.Property.get=gtk_tree_list_row_get_children)
+   * GtkTreeListRow:children:
    *
    * The model holding the row's children.
    */
@@ -1058,7 +1058,7 @@ gtk_tree_list_row_class_init (GtkTreeListRowClass *class)
                            GTK_PARAM_READABLE);
 
   /**
-   * GtkTreeListRow:depth: (attributes org.gtk.Property.get=gtk_tree_list_row_get_depth)
+   * GtkTreeListRow:depth:
    *
    * The depth in the tree of this row.
    */
@@ -1078,7 +1078,7 @@ gtk_tree_list_row_class_init (GtkTreeListRowClass *class)
                             GTK_PARAM_READABLE);
 
   /**
-   * GtkTreeListRow:expanded: (attributes org.gtk.Property.get=gtk_tree_list_row_get_expanded org.gtk.Property.set=gtk_tree_list_row_set_expanded)
+   * GtkTreeListRow:expanded:
    *
    * If this row is currently expanded.
    */
@@ -1088,7 +1088,7 @@ gtk_tree_list_row_class_init (GtkTreeListRowClass *class)
                             GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkTreeListRow:item: (attributes org.gtk.Property.get=gtk_tree_list_row_get_item)
+   * GtkTreeListRow:item:
    *
    * The item held in this row.
    */

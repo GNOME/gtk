@@ -53,7 +53,7 @@ static void
 gtk_orientable_default_init (GtkOrientableInterface *iface)
 {
   /**
-   * GtkOrientable:orientation: (attributes org.gtk.Property.get=gtk_orientable_get_orientation org.gtk.Property.set=gtk_orientable_set_orientation)
+   * GtkOrientable:orientation:
    *
    * The orientation of the orientable.
    **/

@@ -146,7 +146,7 @@ gtk_shortcut_class_init (GtkShortcutClass *klass)
   gobject_class->set_property = gtk_shortcut_set_property;
 
   /**
-   * GtkShortcut:action: (attributes org.gtk.Property.get=gtk_shortcut_get_action org.gtk.Property.set=gtk_shortcut_set_action)
+   * GtkShortcut:action:
    *
    * The action that gets activated by this shortcut.
    */
@@ -158,7 +158,7 @@ gtk_shortcut_class_init (GtkShortcutClass *klass)
                          G_PARAM_STATIC_STRINGS);
 
   /**
-   * GtkShortcut:arguments: (attributes org.gtk.Property.get=gtk_shortcut_get_arguments org.gtk.Property.set=gtk_shortcut_set_arguments)
+   * GtkShortcut:arguments:
    *
    * Arguments passed to activation.
    */
@@ -169,7 +169,7 @@ gtk_shortcut_class_init (GtkShortcutClass *klass)
                           G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   /**
-   * GtkShortcut:trigger: (attributes org.gtk.Property.get=gtk_shortcut_get_trigger org.gtk.Property.set=gtk_shortcut_set_trigger)
+   * GtkShortcut:trigger:
    *
    * The trigger that triggers this shortcut.
    */

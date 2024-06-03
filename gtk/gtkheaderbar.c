@@ -573,7 +573,7 @@ gtk_header_bar_class_init (GtkHeaderBarClass *class)
                            G_PARAM_READWRITE|G_PARAM_STATIC_STRINGS|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkHeaderBar:show-title-buttons: (attributes org.gtk.Property.get=gtk_header_bar_get_show_title_buttons org.gtk.Property.set=gtk_header_bar_set_show_title_buttons)
+   * GtkHeaderBar:show-title-buttons:
    *
    * Whether to show title buttons like close, minimize, maximize.
    *
@@ -588,7 +588,7 @@ gtk_header_bar_class_init (GtkHeaderBarClass *class)
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkHeaderBar:decoration-layout: (attributes org.gtk.Property.get=gtk_header_bar_get_decoration_layout org.gtk.Property.set=gtk_header_bar_set_decoration_layout)
+   * GtkHeaderBar:decoration-layout:
    *
    * The decoration layout for buttons.
    *

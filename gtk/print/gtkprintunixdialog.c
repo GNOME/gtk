@@ -403,7 +403,7 @@ gtk_print_unix_dialog_class_init (GtkPrintUnixDialogClass *class)
   object_class->get_property = gtk_print_unix_dialog_get_property;
 
   /**
-   * GtkPrintUnixDialog:page-setup: (attributes org.gtk.Property.get=gtk_print_unix_dialog_get_page_setup org.gtk.Property.set=gtk_print_unix_dialog_set_page_setup)
+   * GtkPrintUnixDialog:page-setup:
    *
    * The `GtkPageSetup` object to use.
    */
@@ -414,7 +414,7 @@ gtk_print_unix_dialog_class_init (GtkPrintUnixDialogClass *class)
                                                         G_PARAM_READWRITE));
 
   /**
-   * GtkPrintUnixDialog:current-page: (attributes org.gtk.Property.get=gtk_print_unix_dialog_get_current_page org.gtk.Property.set=gtk_print_unix_dialog_set_current_page)
+   * GtkPrintUnixDialog:current-page:
    *
    * The current page in the document.
    */
@@ -438,7 +438,7 @@ gtk_print_unix_dialog_class_init (GtkPrintUnixDialogClass *class)
                                                         G_PARAM_READWRITE));
 
   /**
-   * GtkPrintUnixDialog:selected-printer: (attributes org.gtk.Property.get=gtk_print_unix_dialog_get_selected_printer)
+   * GtkPrintUnixDialog:selected-printer:
    *
    * The `GtkPrinter` which is selected.
    */
@@ -449,7 +449,7 @@ gtk_print_unix_dialog_class_init (GtkPrintUnixDialogClass *class)
                                                         G_PARAM_READABLE));
 
   /**
-   * GtkPrintUnixDialog:manual-capabilities: (attributes org.gtk.Property.get=gtk_print_unix_dialog_get_manual_capabilities org.gtk.Property.set=gtk_print_unix_dialog_set_manual_capabilities)
+   * GtkPrintUnixDialog:manual-capabilities:
    *
    * Capabilities the application can handle.
    */
@@ -461,7 +461,7 @@ gtk_print_unix_dialog_class_init (GtkPrintUnixDialogClass *class)
                                                        G_PARAM_READWRITE));
 
   /**
-   * GtkPrintUnixDialog:support-selection: (attributes org.gtk.Property.get=gtk_print_unix_dialog_get_support_selection org.gtk.Property.set=gtk_print_unix_dialog_set_support_selection)
+   * GtkPrintUnixDialog:support-selection:
    *
    * Whether the dialog supports selection.
    */
@@ -472,7 +472,7 @@ gtk_print_unix_dialog_class_init (GtkPrintUnixDialogClass *class)
                                                          G_PARAM_READWRITE));
 
   /**
-   * GtkPrintUnixDialog:has-selection: (attributes org.gtk.Property.get=gtk_print_unix_dialog_get_has_selection org.gtk.Property.set=gtk_print_unix_dialog_set_has_selection)
+   * GtkPrintUnixDialog:has-selection:
    *
    * Whether the application has a selection.
    */
@@ -483,7 +483,7 @@ gtk_print_unix_dialog_class_init (GtkPrintUnixDialogClass *class)
                                                          G_PARAM_READWRITE));
 
    /**
-    * GtkPrintUnixDialog:embed-page-setup: (attributes org.gtk.Property.get=gtk_print_unix_dialog_get_embed_page_setup org.gtk.Property.set=gtk_print_unix_dialog_set_embed_page_setup)
+    * GtkPrintUnixDialog:embed-page-setup:
     *
     * %TRUE if the page setup controls are embedded.
     */

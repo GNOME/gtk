@@ -373,7 +373,7 @@ gtk_stack_sidebar_class_init (GtkStackSidebarClass *klass)
   object_class->get_property = gtk_stack_sidebar_get_property;
 
    /**
-   * GtkStackSidebar:stack: (attributes org.gtk.Property.get=gtk_stack_sidebar_get_stack org.gtk.Property.set=gtk_stack_sidebar_set_stack)
+   * GtkStackSidebar:stack:
    *
    * The stack.
    */

@@ -104,7 +104,7 @@ gdk_device_class_init (GdkDeviceClass *klass)
   object_class->get_property = gdk_device_get_property;
 
   /**
-   * GdkDevice:display: (attributes org.gtk.Property.get=gdk_device_get_display)
+   * GdkDevice:display:
    *
    * The `GdkDisplay` the `GdkDevice` pertains to.
    */
@@ -114,7 +114,7 @@ gdk_device_class_init (GdkDeviceClass *klass)
                            G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
 
   /**
-   * GdkDevice:name: (attributes org.gtk.Property.get=gdk_device_get_name)
+   * GdkDevice:name:
    *
    * The device name.
    */
@@ -125,7 +125,7 @@ gdk_device_class_init (GdkDeviceClass *klass)
                            G_PARAM_STATIC_STRINGS);
 
   /**
-   * GdkDevice:source: (attributes org.gtk.Property.get=gdk_device_get_source)
+   * GdkDevice:source:
    *
    * Source type for the device.
    */
@@ -137,7 +137,7 @@ gdk_device_class_init (GdkDeviceClass *klass)
                          G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GdkDevice:has-cursor: (attributes org.gtk.Property.get=gdk_device_get_has_cursor)
+   * GdkDevice:has-cursor:
    *
    * Whether the device is represented by a cursor on the screen.
    */
@@ -159,7 +159,7 @@ gdk_device_class_init (GdkDeviceClass *klass)
                          G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
 
   /**
-   * GdkDevice:vendor-id: (attributes org.gtk.Property.get=gdk_device_get_vendor_id)
+   * GdkDevice:vendor-id:
    *
    * Vendor ID of this device.
    *
@@ -172,7 +172,7 @@ gdk_device_class_init (GdkDeviceClass *klass)
                            G_PARAM_STATIC_STRINGS);
 
   /**
-   * GdkDevice:product-id: (attributes org.gtk.Property.get=gdk_device_get_product_id)
+   * GdkDevice:product-id:
    *
    * Product ID of this device.
    *
@@ -185,7 +185,7 @@ gdk_device_class_init (GdkDeviceClass *klass)
                            G_PARAM_STATIC_STRINGS);
 
   /**
-   * GdkDevice:seat: (attributes org.gtk.Property.get=gdk_device_get_seat)
+   * GdkDevice:seat:
    *
    * `GdkSeat` of this device.
    */
@@ -196,7 +196,7 @@ gdk_device_class_init (GdkDeviceClass *klass)
                            G_PARAM_STATIC_STRINGS);
 
   /**
-   * GdkDevice:num-touches: (attributes org.gtk.Property.get=gdk_device_get_num_touches)
+   * GdkDevice:num-touches:
    *
    * The maximal number of concurrent touches on a touch device.
    *
@@ -221,7 +221,7 @@ gdk_device_class_init (GdkDeviceClass *klass)
                          G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
 
   /**
-   * GdkDevice:direction: (attributes org.gtk.Property.get=gdk_device_get_direction)
+   * GdkDevice:direction:
    *
    * The direction of the current layout.
    *
@@ -233,7 +233,7 @@ gdk_device_class_init (GdkDeviceClass *klass)
                          G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
 
   /**
-   * GdkDevice:has-bidi-layouts: (attributes org.gtk.Property.get=gdk_device_has_bidi_layouts)
+   * GdkDevice:has-bidi-layouts:
    *
    * Whether the device has both right-to-left and left-to-right layouts.
    *
@@ -245,7 +245,7 @@ gdk_device_class_init (GdkDeviceClass *klass)
                             G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
 
   /**
-   * GdkDevice:caps-lock-state: (attributes org.gtk.Property.get=gdk_device_get_caps_lock_state)
+   * GdkDevice:caps-lock-state:
    *
    * Whether Caps Lock is on.
    *
@@ -257,7 +257,7 @@ gdk_device_class_init (GdkDeviceClass *klass)
                             G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
 
   /**
-   * GdkDevice:num-lock-state: (attributes org.gtk.Property.get=gdk_device_get_num_lock_state)
+   * GdkDevice:num-lock-state:
    *
    * Whether Num Lock is on.
    *
@@ -269,7 +269,7 @@ gdk_device_class_init (GdkDeviceClass *klass)
                             G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
 
   /**
-   * GdkDevice:scroll-lock-state: (attributes org.gtk.Property.get=gdk_device_get_scroll_lock_state)
+   * GdkDevice:scroll-lock-state:
    *
    * Whether Scroll Lock is on.
    *
@@ -281,7 +281,7 @@ gdk_device_class_init (GdkDeviceClass *klass)
                             G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
 
   /**
-   * GdkDevice:modifier-state: (attributes org.gtk.Property.get=gdk_device_get_modifier_state)
+   * GdkDevice:modifier-state:
    *
    * The current modifier state of the device.
    *

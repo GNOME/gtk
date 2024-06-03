@@ -172,7 +172,7 @@ gdk_draw_context_class_init (GdkDrawContextClass *klass)
   klass->empty_frame = gdk_draw_context_default_empty_frame;
 
   /**
-   * GdkDrawContext:display: (attributes org.gtk.Property.get=gdk_draw_context_get_display)
+   * GdkDrawContext:display:
    *
    * The `GdkDisplay` used to create the `GdkDrawContext`.
    */
@@ -184,7 +184,7 @@ gdk_draw_context_class_init (GdkDrawContextClass *klass)
                          G_PARAM_STATIC_STRINGS);
 
   /**
-   * GdkDrawContext:surface: (attributes org.gtk.Property.get=gdk_draw_context_get_surface)
+   * GdkDrawContext:surface:
    *
    * The `GdkSurface` the context is bound to.
    */

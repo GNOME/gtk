@@ -432,7 +432,7 @@ gtk_paned_class_init (GtkPanedClass *class)
   class->cancel_position = gtk_paned_cancel_position;
 
   /**
-   * GtkPaned:position: (attributes org.gtk.Property.get=gtk_paned_get_position org.gtk.Property.set=gtk_paned_set_position)
+   * GtkPaned:position:
    *
    * Position of the separator in pixels, from the left/top.
    */
@@ -480,7 +480,7 @@ gtk_paned_class_init (GtkPanedClass *class)
                       GTK_PARAM_READABLE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkPaned:wide-handle: (attributes org.gtk.Property.get=gtk_paned_get_wide_handle org.gtk.Property.set=gtk_paned_set_wide_handle)
+   * GtkPaned:wide-handle:
    *
    * Whether the `GtkPaned` should provide a stronger visual separation.
    *
@@ -493,7 +493,7 @@ gtk_paned_class_init (GtkPanedClass *class)
                           GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkPaned:resize-start-child: (attributes org.gtk.Property.get=gtk_paned_get_resize_start_child org.gtk.Property.set=gtk_paned_set_resize_start_child)
+   * GtkPaned:resize-start-child:
    *
    * Determines whether the first child expands and shrinks
    * along with the paned widget.
@@ -504,7 +504,7 @@ gtk_paned_class_init (GtkPanedClass *class)
                           GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkPaned:resize-end-child: (attributes org.gtk.Property.get=gtk_paned_get_resize_end_child org.gtk.Property.set=gtk_paned_set_resize_end_child)
+   * GtkPaned:resize-end-child:
    *
    * Determines whether the second child expands and shrinks
    * along with the paned widget.
@@ -515,7 +515,7 @@ gtk_paned_class_init (GtkPanedClass *class)
                           GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkPaned:shrink-start-child: (attributes org.gtk.Property.get=gtk_paned_get_shrink_start_child org.gtk.Property.set=gtk_paned_set_shrink_start_child)
+   * GtkPaned:shrink-start-child:
    *
    * Determines whether the first child can be made smaller
    * than its requisition.
@@ -526,7 +526,7 @@ gtk_paned_class_init (GtkPanedClass *class)
                           GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkPaned:shrink-end-child: (attributes org.gtk.Property.get=gtk_paned_get_shrink_end_child org.gtk.Property.set=gtk_paned_set_shrink_end_child)
+   * GtkPaned:shrink-end-child:
    *
    * Determines whether the second child can be made smaller
    * than its requisition.
@@ -537,7 +537,7 @@ gtk_paned_class_init (GtkPanedClass *class)
                           GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkPaned:start-child: (attributes org.gtk.Property.get=gtk_paned_get_start_child org.gtk.Property.set=gtk_paned_set_start_child)
+   * GtkPaned:start-child:
    *
    * The first child.
    */
@@ -547,7 +547,7 @@ gtk_paned_class_init (GtkPanedClass *class)
                           GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkPaned:end-child: (attributes org.gtk.Property.get=gtk_paned_get_end_child org.gtk.Property.set=gtk_paned_set_end_child)
+   * GtkPaned:end-child:
    *
    * The second child.
    */

@@ -217,7 +217,7 @@ gtk_size_group_class_init (GtkSizeGroupClass *klass)
   gobject_class->get_property = gtk_size_group_get_property;
 
   /**
-   * GtkSizeGroup:mode: (attributes org.gtk.Property.get=gtk_size_group_get_mode org.gtk.Property.set=gtk_size_group_set_mode)
+   * GtkSizeGroup:mode:
    *
    * The direction in which the size group affects requested sizes.
    */

@@ -279,7 +279,7 @@ gtk_drawing_area_class_init (GtkDrawingAreaClass *class)
   widget_class->snapshot = gtk_drawing_area_snapshot;
 
   /**
-   * GtkDrawingArea:content-width: (attributes org.gtk.Property.get=gtk_drawing_area_get_content_width org.gtk.Property.set=gtk_drawing_area_set_content_width)
+   * GtkDrawingArea:content-width:
    *
    * The content width.
    */
@@ -289,7 +289,7 @@ gtk_drawing_area_class_init (GtkDrawingAreaClass *class)
                       GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkDrawingArea:content-height: (attributes org.gtk.Property.get=gtk_drawing_area_get_content_height org.gtk.Property.set=gtk_drawing_area_set_content_height)
+   * GtkDrawingArea:content-height:
    *
    * The content height.
    */

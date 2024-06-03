@@ -355,7 +355,7 @@ gtk_info_bar_class_init (GtkInfoBarClass *klass)
   klass->close = gtk_info_bar_close;
 
   /**
-   * GtkInfoBar:message-type: (attributes org.gtk.Property.get=gtk_info_bar_get_message_type org.gtk.Property.set=gtk_info_bar_set_message_type)
+   * GtkInfoBar:message-type:
    *
    * The type of the message.
    *
@@ -368,7 +368,7 @@ gtk_info_bar_class_init (GtkInfoBarClass *klass)
                        GTK_PARAM_READWRITE|G_PARAM_CONSTRUCT|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkInfoBar:show-close-button: (attributes org.gtk.Property.get=gtk_info_bar_get_show_close_button org.gtk.Property.set=gtk_info_bar_set_show_close_button)
+   * GtkInfoBar:show-close-button:
    *
    * Whether to include a standard close button.
    */
@@ -378,7 +378,7 @@ gtk_info_bar_class_init (GtkInfoBarClass *klass)
                           GTK_PARAM_READWRITE|G_PARAM_CONSTRUCT|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkInfoBar:revealed: (attributes org.gtk.Property.get=gtk_info_bar_get_revealed org.gtk.Property.set=gtk_info_bar_set_revealed)
+   * GtkInfoBar:revealed:
    *
    * Whether the info bar shows its contents.
    */

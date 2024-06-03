@@ -250,7 +250,7 @@ gtk_spinner_class_init (GtkSpinnerClass *klass)
   widget_class->css_changed = gtk_spinner_css_changed;
 
   /**
-   * GtkSpinner:spinning: (attributes org.gtk.Property.get=gtk_spinner_get_spinning org.gtk.Property.set=gtk_spinner_set_spinning)
+   * GtkSpinner:spinning:
    *
    * Whether the spinner is spinning
    */

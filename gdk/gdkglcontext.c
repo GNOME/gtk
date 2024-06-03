@@ -764,7 +764,7 @@ gdk_gl_context_class_init (GdkGLContextClass *klass)
   draw_context_class->surface_resized = gdk_gl_context_surface_resized;
 
   /**
-   * GdkGLContext:shared-context: (attributes org.gtk.Property.get=gdk_gl_context_get_shared_context)
+   * GdkGLContext:shared-context:
    *
    * Always %NULL
    *
@@ -783,7 +783,7 @@ gdk_gl_context_class_init (GdkGLContextClass *klass)
                          G_PARAM_DEPRECATED);
 
   /**
-   * GdkGLContext:allowed-apis: (attributes org.gtk.Property.get=gdk_gl_context_get_allowed_apis org.gtk.Property.gdk_gl_context_set_allowed_apis)
+   * GdkGLContext:allowed-apis:
    *
    * The allowed APIs.
    *
@@ -798,7 +798,7 @@ gdk_gl_context_class_init (GdkGLContextClass *klass)
                         G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GdkGLContext:api: (attributes org.gtk.Property.get=gdk_gl_context_get_api)
+   * GdkGLContext:api:
    *
    * The API currently in use.
    *

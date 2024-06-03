@@ -507,7 +507,7 @@ gtk_window_controls_class_init (GtkWindowControlsClass *klass)
   widget_class->unroot = gtk_window_controls_unroot;
 
   /**
-   * GtkWindowControls:side: (attributes org.gtk.Property.get=gtk_window_controls_get_side org.gtk.Property.set=gtk_window_controls_set_side)
+   * GtkWindowControls:side:
    *
    * Whether the widget shows start or end side of the decoration layout.
    *
@@ -520,7 +520,7 @@ gtk_window_controls_class_init (GtkWindowControlsClass *klass)
                          GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkWindowControls:decoration-layout: (attributes org.gtk.Property.get=gtk_window_controls_get_decoration_layout org.gtk.Property.set=gtk_window_controls_set_decoration_layout)
+   * GtkWindowControls:decoration-layout:
    *
    * The decoration layout for window buttons.
    *
@@ -533,7 +533,7 @@ gtk_window_controls_class_init (GtkWindowControlsClass *klass)
                            GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkWindowControls:empty: (attributes org.gtk.Property.get=gtk_window_controls_get_empty)
+   * GtkWindowControls:empty:
    *
    * Whether the widget has any window buttons.
    */

@@ -353,7 +353,7 @@ gdk_clipboard_class_init (GdkClipboardClass *class)
   class->read_finish = gdk_clipboard_read_local_finish;
 
   /**
-   * GdkClipboard:display: (attributes org.gtk.Property.get=gdk_clipboard_get_display)
+   * GdkClipboard:display:
    *
    * The `GdkDisplay` that the clipboard belongs to.
    */
@@ -366,7 +366,7 @@ gdk_clipboard_class_init (GdkClipboardClass *class)
                          G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GdkClipboard:formats: (attributes org.gtk.Property.get=gdk_clipboard_get_formats)
+   * GdkClipboard:formats:
    *
    * The possible formats that the clipboard can provide its data in.
    */
@@ -390,7 +390,7 @@ gdk_clipboard_class_init (GdkClipboardClass *class)
                           G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GdkClipboard:content: (attributes org.gtk.Property.get=gdk_clipboard_get_content)
+   * GdkClipboard:content:
    *
    * The `GdkContentProvider` or %NULL if the clipboard is empty or contents are
    * provided otherwise.

@@ -651,7 +651,7 @@ gtk_keyval_trigger_class_init (GtkKeyvalTriggerClass *klass)
   trigger_class->print_label = gtk_keyval_trigger_print_label;
 
   /**
-   * GtkKeyvalTrigger:keyval: (attributes org.gtk.Property.get=gtk_keyval_trigger_get_keyval)
+   * GtkKeyvalTrigger:keyval:
    *
    * The key value for the trigger.
    */
@@ -664,7 +664,7 @@ gtk_keyval_trigger_class_init (GtkKeyvalTriggerClass *klass)
                        G_PARAM_READWRITE);
 
   /**
-   * GtkKeyvalTrigger:modifiers: (attributes org.gtk.Property.get=gtk_keyval_trigger_get_modifiers)
+   * GtkKeyvalTrigger:modifiers:
    *
    * The key modifiers for the trigger.
    */
@@ -903,7 +903,7 @@ gtk_mnemonic_trigger_class_init (GtkMnemonicTriggerClass *klass)
   trigger_class->print_label = gtk_mnemonic_trigger_print_label;
 
   /**
-   * GtkMnemonicTrigger:keyval: (attributes org.gtk.Property.get=gtk_mnemonic_trigger_get_keyval)
+   * GtkMnemonicTrigger:keyval:
    *
    * The key value for the trigger.
    */
@@ -1147,7 +1147,7 @@ gtk_alternative_trigger_class_init (GtkAlternativeTriggerClass *klass)
   trigger_class->print_label = gtk_alternative_trigger_print_label;
 
   /**
-   * GtkAlternativeTrigger:first: (attributes org.gtk.Property.get=gtk_alternative_trigger_get_first)
+   * GtkAlternativeTrigger:first:
    *
    * The first `GtkShortcutTrigger` to check.
    */
@@ -1159,7 +1159,7 @@ gtk_alternative_trigger_class_init (GtkAlternativeTriggerClass *klass)
                          G_PARAM_READWRITE);
 
   /**
-   * GtkAlternativeTrigger:second: (attributes org.gtk.Property.get=gtk_alternative_trigger_get_second)
+   * GtkAlternativeTrigger:second:
    *
    * The second `GtkShortcutTrigger` to check.
    */

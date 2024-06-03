@@ -374,7 +374,7 @@ gtk_editable_default_init (GtkEditableInterface *iface)
                   G_TYPE_NONE, 0);
 
   /**
-   * GtkEditable:text: (attributes org.gtk.Property.get=gtk_editable_get_text org.gtk.Property.set=gtk_editable_set_text)
+   * GtkEditable:text:
    *
    * The contents of the entry.
    */
@@ -395,7 +395,7 @@ gtk_editable_default_init (GtkEditableInterface *iface)
                         GTK_PARAM_READABLE));
 
   /**
-   * GtkEditable:enable-undo: (attributes org.gtk.Property.get=gtk_editable_get_enable_undo org.gtk.Property.setg=gtk_editable_set_enable_undo)
+   * GtkEditable:enable-undo:
    *
    * If undo/redo should be enabled for the editable.
    */
@@ -416,7 +416,7 @@ gtk_editable_default_init (GtkEditableInterface *iface)
                         GTK_PARAM_READABLE));
 
   /**
-   * GtkEditable:editable: (attributes org.gtk.Property.get=gtk_editable_get_editable org.gtk.Property.set=gtk_editable_set_editable)
+   * GtkEditable:editable:
    *
    * Whether the entry contents can be edited.
    */
@@ -426,7 +426,7 @@ gtk_editable_default_init (GtkEditableInterface *iface)
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   /**
-   * GtkEditable:width-chars: (attributes org.gtk.Property.get=gtk_editable_get_width_chars org.gtk.Property.set=gtk_editable_set_width_chars)
+   * GtkEditable:width-chars:
    *
    * Number of characters to leave space for in the entry.
    */
@@ -437,7 +437,7 @@ gtk_editable_default_init (GtkEditableInterface *iface)
                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   /**
-   * GtkEditable:max-width-chars: (attributes org.gtk.Property.get=gtk_editable_get_max_width_chars org.gtk.Property.set=gtk_editable_set_max_width_chars)
+   * GtkEditable:max-width-chars:
    *
    * The desired maximum width of the entry, in characters.
    */

@@ -221,7 +221,7 @@ gtk_scale_button_class_init (GtkScaleButtonClass *klass)
   g_object_class_override_property (gobject_class, PROP_ORIENTATION, "orientation");
 
   /**
-   * GtkScaleButton:value: (attributes org.gtk.Property.get=gtk_scale_button_get_value org.gtk.Property.set=gtk_scale_button_set_value)
+   * GtkScaleButton:value:
    *
    * The value of the scale.
    */
@@ -234,7 +234,7 @@ gtk_scale_button_class_init (GtkScaleButtonClass *klass)
 							GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   /**
-   * GtkScaleButton:adjustment: (attributes org.gtk.Property.get=gtk_scale_button_get_adjustment org.gtk.Property.set=gtk_scale_button_set_adjustment)
+   * GtkScaleButton:adjustment:
    *
    * The `GtkAdjustment` that is used as the model.
    */
@@ -245,7 +245,7 @@ gtk_scale_button_class_init (GtkScaleButtonClass *klass)
                                                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   /**
-   * GtkScaleButton:icons: (attributes org.gtk.Property.set=gtk_scale_button_set_icons)
+   * GtkScaleButton:icons:
    *
    * The names of the icons to be used by the scale button.
    *
@@ -271,7 +271,7 @@ gtk_scale_button_class_init (GtkScaleButtonClass *klass)
                                                        GTK_PARAM_READWRITE));
 
   /**
-   * GtkScaleButton:active: (attributes org.gtk.Property.get=gtk_scale_button_get_active)
+   * GtkScaleButton:active:
    *
    * If the scale button should be pressed in.
    *
@@ -284,7 +284,7 @@ gtk_scale_button_class_init (GtkScaleButtonClass *klass)
                                                          GTK_PARAM_READABLE));
 
   /**
-   * GtkScaleButton:has-frame: (attributes org.gtk.Property.get=gtk_scale_button_get_has_frame org.gtk.Property.set=gtk_scale_button_set_has_frame)
+   * GtkScaleButton:has-frame:
    *
    * If the scale button has a frame.
    *

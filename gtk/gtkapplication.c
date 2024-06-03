@@ -616,7 +616,7 @@ gtk_application_class_init (GtkApplicationClass *class)
                           G_PARAM_READABLE|G_PARAM_STATIC_STRINGS);
 
   /**
-   * GtkApplication:menubar: (attributes org.gtk.Property.get=gtk_application_get_menubar org.gtk.Property.set=gtk_application_set_menubar)
+   * GtkApplication:menubar:
    *
    * The `GMenuModel` to be used for the application's menu bar.
    */
@@ -626,7 +626,7 @@ gtk_application_class_init (GtkApplicationClass *class)
                          G_PARAM_READWRITE|G_PARAM_STATIC_STRINGS);
 
   /**
-   * GtkApplication:active-window: (attributes org.gtk.Property.get=gtk_application_get_active_window)
+   * GtkApplication:active-window:
    *
    * The currently focused window of the application.
    */

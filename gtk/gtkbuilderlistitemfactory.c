@@ -265,7 +265,7 @@ gtk_builder_list_item_factory_class_init (GtkBuilderListItemFactoryClass *klass)
   factory_class->setup = gtk_builder_list_item_factory_setup;
 
   /**
-   * GtkBuilderListItemFactory:bytes: (attributes org.gtk.Property.get=gtk_builder_list_item_factory_get_bytes)
+   * GtkBuilderListItemFactory:bytes:
    *
    * `GBytes` containing the UI definition.
    */
@@ -275,7 +275,7 @@ gtk_builder_list_item_factory_class_init (GtkBuilderListItemFactoryClass *klass)
                         G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
 
   /**
-   * GtkBuilderListItemFactory:resource: (attributes org.gtk.Property.get=gtk_builder_list_item_factory_get_resource)
+   * GtkBuilderListItemFactory:resource:
    *
    * Path of the resource containing the UI definition.
    */
@@ -285,7 +285,7 @@ gtk_builder_list_item_factory_class_init (GtkBuilderListItemFactoryClass *klass)
                          G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
 
   /**
-   * GtkBuilderListItemFactory:scope: (attributes org.gtk.Property.get=gtk_builder_list_item_factory_get_scope)
+   * GtkBuilderListItemFactory:scope:
    *
    * `GtkBuilderScope` to use when instantiating listitems
    */

@@ -187,7 +187,7 @@ gdk_monitor_class_init (GdkMonitorClass *class)
   object_class->set_property = gdk_monitor_set_property;
 
   /**
-   * GdkMonitor:description: (attributes org.gtk.Property.get=gdk_monitor_get_description)
+   * GdkMonitor:description:
    *
    * A short description of the monitor, meant for display to the user.
    *
@@ -199,7 +199,7 @@ gdk_monitor_class_init (GdkMonitorClass *class)
                          G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
 
   /**
-   * GdkMonitor:display: (attributes org.gtk.Property.get=gdk_monitor_get_display)
+   * GdkMonitor:display:
    *
    * The `GdkDisplay` of the monitor.
    */
@@ -209,7 +209,7 @@ gdk_monitor_class_init (GdkMonitorClass *class)
                          G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
 
   /**
-   * GdkMonitor:manufacturer: (attributes org.gtk.Property.get=gdk_monitor_get_manufacturer)
+   * GdkMonitor:manufacturer:
    *
    * The manufacturer name.
    */
@@ -219,7 +219,7 @@ gdk_monitor_class_init (GdkMonitorClass *class)
                          G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
 
   /**
-   * GdkMonitor:model: (attributes org.gtk.Property.get=gdk_monitor_get_model)
+   * GdkMonitor:model:
    *
    * The model name.
    */
@@ -229,7 +229,7 @@ gdk_monitor_class_init (GdkMonitorClass *class)
                          G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
 
   /**
-   * GdkMonitor:connector: (attributes org.gtk.Property.get=gdk_monitor_get_connector)
+   * GdkMonitor:connector:
    *
    * The connector name.
    */
@@ -239,7 +239,7 @@ gdk_monitor_class_init (GdkMonitorClass *class)
                          G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
 
   /**
-   * GdkMonitor:scale-factor: (attributes org.gtk.Property.get=gdk_monitor_get_scale_factor)
+   * GdkMonitor:scale-factor:
    *
    * The scale factor.
    *
@@ -253,7 +253,7 @@ gdk_monitor_class_init (GdkMonitorClass *class)
                       G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
 
   /**
-   * GdkMonitor:scale: (attributes org.gtk.Property.get=gdk_monitor_get_scale)
+   * GdkMonitor:scale:
    *
    * The scale of the monitor.
    *
@@ -265,7 +265,7 @@ gdk_monitor_class_init (GdkMonitorClass *class)
                         G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
 
   /**
-   * GdkMonitor:geometry: (attributes org.gtk.Property.get=gdk_monitor_get_geometry)
+   * GdkMonitor:geometry:
    *
    * The geometry of the monitor.
    */
@@ -275,7 +275,7 @@ gdk_monitor_class_init (GdkMonitorClass *class)
                         G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
 
   /**
-   * GdkMonitor:width-mm: (attributes org.gtk.Property.get=gdk_monitor_get_width_mm)
+   * GdkMonitor:width-mm:
    *
    * The width of the monitor, in millimeters.
    */
@@ -286,7 +286,7 @@ gdk_monitor_class_init (GdkMonitorClass *class)
                       G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
 
   /**
-   * GdkMonitor:height-mm: (attributes org.gtk.Property.get=gdk_monitor_get_height_mm)
+   * GdkMonitor:height-mm:
    *
    * The height of the monitor, in millimeters.
    */
@@ -297,7 +297,7 @@ gdk_monitor_class_init (GdkMonitorClass *class)
                       G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
 
   /**
-   * GdkMonitor:refresh-rate: (attributes org.gtk.Property.get=gdk_monitor_get_refresh_rate)
+   * GdkMonitor:refresh-rate:
    *
    * The refresh rate, in milli-Hertz.
    */
@@ -308,7 +308,7 @@ gdk_monitor_class_init (GdkMonitorClass *class)
                       G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
 
   /**
-   * GdkMonitor:subpixel-layout: (attributes org.gtk.Property.get=gdk_monitor_get_subpixel_layout)
+   * GdkMonitor:subpixel-layout:
    *
    * The subpixel layout.
    */

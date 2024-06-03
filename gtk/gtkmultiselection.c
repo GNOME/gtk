@@ -401,7 +401,7 @@ gtk_multi_selection_class_init (GtkMultiSelectionClass *klass)
                         G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
 
   /**
-   * GtkMultiSelection:model: (attributes org.gtk.Property.get=gtk_multi_selection_get_model org.gtk.Property.set=gtk_multi_selection_set_model)
+   * GtkMultiSelection:model:
    *
    * The list managed by this selection.
    */

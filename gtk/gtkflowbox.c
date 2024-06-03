@@ -531,7 +531,7 @@ gtk_flow_box_child_class_init (GtkFlowBoxChildClass *class)
   class->activate = gtk_flow_box_child_activate;
 
   /**
-   * GtkFlowBoxChild:child: (attributes org.gtk.Property.get=gtk_flow_box_child_get_child org.gtk.Property.set=gtk_flow_box_child_set_child)
+   * GtkFlowBoxChild:child:
    *
    * The child widget.
    */
@@ -3662,7 +3662,7 @@ gtk_flow_box_class_init (GtkFlowBoxClass *class)
   g_object_class_override_property (object_class, PROP_ORIENTATION, "orientation");
 
   /**
-   * GtkFlowBox:selection-mode: (attributes org.gtk.Property.get=gtk_flow_box_get_selection_mode org.gtk.Property.set=gtk_flow_box_set_selection_mode)
+   * GtkFlowBox:selection-mode:
    *
    * The selection mode used by the flow box.
    */
@@ -3673,7 +3673,7 @@ gtk_flow_box_class_init (GtkFlowBoxClass *class)
                        GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkFlowBox:activate-on-single-click: (attributes org.gtk.Property.get=gtk_flow_box_get_activate_on_single_click org.gtk.Property.set=gtk_flow_box_set_activate_on_single_click)
+   * GtkFlowBox:activate-on-single-click:
    *
    * Determines whether children can be activated with a single
    * click, or require a double-click.
@@ -3694,7 +3694,7 @@ gtk_flow_box_class_init (GtkFlowBoxClass *class)
                           GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkFlowBox:homogeneous: (attributes org.gtk.Property.get=gtk_flow_box_get_homogeneous org.gtk.Property.set=gtk_flow_box_set_homogeneous)
+   * GtkFlowBox:homogeneous:
    *
    * Determines whether all children should be allocated the
    * same size.
@@ -3705,7 +3705,7 @@ gtk_flow_box_class_init (GtkFlowBoxClass *class)
                           GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkFlowBox:min-children-per-line: (attributes org.gtk.Property.get=gtk_flow_box_get_min_children_per_line org.gtk.Property.set=gtk_flow_box_set_min_children_per_line)
+   * GtkFlowBox:min-children-per-line:
    *
    * The minimum number of children to allocate consecutively
    * in the given orientation.
@@ -3720,7 +3720,7 @@ gtk_flow_box_class_init (GtkFlowBoxClass *class)
                        GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkFlowBox:max-children-per-line: (attributes org.gtk.Property.get=gtk_flow_box_get_max_children_per_line org.gtk.Property.set=gtk_flow_box_set_max_children_per_line)
+   * GtkFlowBox:max-children-per-line:
    *
    * The maximum amount of children to request space for consecutively
    * in the given orientation.
@@ -3731,7 +3731,7 @@ gtk_flow_box_class_init (GtkFlowBoxClass *class)
                        GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkFlowBox:row-spacing: (attributes org.gtk.Property.get=gtk_flow_box_get_row_spacing org.gtk.Property.set=gtk_flow_box_set_row_spacing)
+   * GtkFlowBox:row-spacing:
    *
    * The amount of vertical space between two children.
    */
@@ -3741,7 +3741,7 @@ gtk_flow_box_class_init (GtkFlowBoxClass *class)
                        GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkFlowBox:column-spacing: (attributes org.gtk.Property.get=gtk_flow_box_get_column_spacing org.gtk.Property.set=gtk_flow_box_set_column_spacing)
+   * GtkFlowBox:column-spacing:
    *
    * The amount of horizontal space between two children.
    */

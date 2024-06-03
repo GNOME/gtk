@@ -294,7 +294,7 @@ gtk_font_dialog_button_class_init (GtkFontDialogButtonClass *class)
   widget_class->unroot = gtk_font_dialog_button_unroot;
 
   /**
-   * GtkFontDialogButton:dialog: (attributes org.gtk.Property.get=gtk_font_dialog_button_get_dialog org.gtk.Property.set=gtk_font_dialog_button_set_dialog)
+   * GtkFontDialogButton:dialog:
    *
    * The `GtkFontDialog` that contains parameters for
    * the font chooser dialog.
@@ -307,7 +307,7 @@ gtk_font_dialog_button_class_init (GtkFontDialogButtonClass *class)
                            G_PARAM_READWRITE|G_PARAM_STATIC_STRINGS|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkFontDialogButton:level: (attributes org.gtk.Property.get=gtk_font_dialog_button_get_level org.gtk.Property.set=gtk_font_dialog_button_set_level)
+   * GtkFontDialogButton:level:
    *
    * The level of detail for the font chooser dialog.
    */
@@ -318,7 +318,7 @@ gtk_font_dialog_button_class_init (GtkFontDialogButtonClass *class)
                          GTK_PARAM_READWRITE|G_PARAM_STATIC_STRINGS|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkFontDialogButton:font-desc: (attributes org.gtk.Property.get=gtk_font_dialog_button_get_font_desc org.gtk.Property.set=gtk_font_dialog_button_set_font_desc)
+   * GtkFontDialogButton:font-desc:
    *
    * The selected font.
    *
@@ -337,7 +337,7 @@ gtk_font_dialog_button_class_init (GtkFontDialogButtonClass *class)
                           G_PARAM_READWRITE|G_PARAM_STATIC_STRINGS|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkFontDialogButton:font-features: (attributes org.gtk.Property.get=gtk_font_dialog_button_get_font_features org.gtk.Property.set=gtk_font_dialog_button_set_font_features)
+   * GtkFontDialogButton:font-features:
    *
    * The selected font features.
    *
@@ -355,7 +355,7 @@ gtk_font_dialog_button_class_init (GtkFontDialogButtonClass *class)
                            G_PARAM_READWRITE|G_PARAM_STATIC_STRINGS|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkFontDialogButton:language: (attributes org.gtk.Property.get=gtk_font_dialog_button_get_language org.gtk.Property.set=gtk_font_dialog_button_set_language)
+   * GtkFontDialogButton:language:
    *
    * The selected language for font features.
    *
@@ -373,7 +373,7 @@ gtk_font_dialog_button_class_init (GtkFontDialogButtonClass *class)
                           G_PARAM_READWRITE|G_PARAM_STATIC_STRINGS|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkFontDialogButton:use-font: (attributes org.gtk.Property.get=gtk_font_dialog_button_get_use_font org.gtk.Property.set=gtk_font_dialog_button_set_use_font)
+   * GtkFontDialogButton:use-font:
    *
    * Whether the buttons label will be drawn in the selected font.
    */
@@ -383,7 +383,7 @@ gtk_font_dialog_button_class_init (GtkFontDialogButtonClass *class)
                             GTK_PARAM_READWRITE|G_PARAM_STATIC_STRINGS|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkFontDialogButton:use-size: (attributes org.gtk.Property.get=gtk_font_dialog_button_get_use_size org.gtk.Property.set=gtk_font_dialog_button_set_use_size)
+   * GtkFontDialogButton:use-size:
    *
    * Whether the buttons label will use the selected font size.
    */

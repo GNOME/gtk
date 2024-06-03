@@ -505,7 +505,7 @@ gtk_list_box_class_init (GtkListBoxClass *klass)
   klass->selected_rows_changed = gtk_list_box_selected_rows_changed;
 
   /**
-   * GtkListBox:selection-mode: (attributes org.gtk.Property.get=gtk_list_box_get_selection_mode org.gtk.Property.set=gtk_list_box_set_selection_mode)
+   * GtkListBox:selection-mode:
    *
    * The selection mode used by the list box.
    */
@@ -516,7 +516,7 @@ gtk_list_box_class_init (GtkListBoxClass *klass)
                        G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
     /**
-   * GtkListBox:activate-on-single-click: (attributes org.gtk.Property.get=gtk_list_box_get_activate_on_single_click org.gtk.Property.set=gtk_list_box_set_activate_on_single_click)
+   * GtkListBox:activate-on-single-click:
    *
    * Determines whether children can be activated with a single
    * click, or require a double-click.
@@ -538,7 +538,7 @@ gtk_list_box_class_init (GtkListBoxClass *klass)
 
 
   /**
-   * GtkListBox:show-separators: (attributes org.gtk.Property.get=gtk_list_box_get_show_separators org.gtk.Property.set=gtk_list_box_set_show_separators)
+   * GtkListBox:show-separators:
    *
    * Whether to show separators between rows.
    */
@@ -3633,7 +3633,7 @@ gtk_list_box_row_class_init (GtkListBoxRowClass *klass)
   gtk_widget_class_set_activate_signal (widget_class, row_signals[ROW__ACTIVATE]);
 
   /**
-   * GtkListBoxRow:activatable: (attributes org.gtk.Property.get=gtk_list_box_row_get_activatable org.gtk.Property.set=gtk_list_box_row_set_activatable)
+   * GtkListBoxRow:activatable:
    *
    * Determines whether the ::row-activated
    * signal will be emitted for this row.
@@ -3644,7 +3644,7 @@ gtk_list_box_row_class_init (GtkListBoxRowClass *klass)
                           G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkListBoxRow:selectable: (attributes org.gtk.Property.get=gtk_list_box_row_get_selectable org.gtk.Property.set=gtk_list_box_row_set_selectable)
+   * GtkListBoxRow:selectable:
    *
    * Determines whether this row can be selected.
    */
@@ -3654,7 +3654,7 @@ gtk_list_box_row_class_init (GtkListBoxRowClass *klass)
                           G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkListBoxRow:child: (attributes org.gtk.Property.get=gtk_list_box_row_get_child org.gtk.Property.set=gtk_list_box_row_set_child)
+   * GtkListBoxRow:child:
    *
    * The child widget.
    */

@@ -588,7 +588,7 @@ gtk_scrolled_window_class_init (GtkScrolledWindowClass *class)
   class->move_focus_out = gtk_scrolled_window_move_focus_out;
 
   /**
-   * GtkScrolledWindow:hadjustment: (attributes org.gtk.Property.get=gtk_scrolled_window_get_hadjustment org.gtk.Property.set=gtk_scrolled_window_set_hadjustment)
+   * GtkScrolledWindow:hadjustment:
    *
    * The `GtkAdjustment` for the horizontal position.
    */
@@ -598,7 +598,7 @@ gtk_scrolled_window_class_init (GtkScrolledWindowClass *class)
                            GTK_PARAM_READWRITE|G_PARAM_CONSTRUCT|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkScrolledWindow:vadjustment: (attributes org.gtk.Property.get=gtk_scrolled_window_get_vadjustment org.gtk.Property.set=gtk_scrolled_window_set_vadjustment)
+   * GtkScrolledWindow:vadjustment:
    *
    * The `GtkAdjustment` for the vertical position.
    */
@@ -647,7 +647,7 @@ gtk_scrolled_window_class_init (GtkScrolledWindowClass *class)
                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkScrolledWindow:has-frame: (attributes org.gtk.Property.get=gtk_scrolled_window_get_has_frame org.gtk.Property.set=gtk_scrolled_window_set_has_frame)
+   * GtkScrolledWindow:has-frame:
    *
    * Whether to draw a frame around the contents.
    */
@@ -657,7 +657,7 @@ gtk_scrolled_window_class_init (GtkScrolledWindowClass *class)
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkScrolledWindow:min-content-width: (attributes org.gtk.Property.get=gtk_scrolled_window_get_min_content_width org.gtk.Property.set=gtk_scrolled_window_set_min_content_width)
+   * GtkScrolledWindow:min-content-width:
    *
    * The minimum content width of @scrolled_window.
    */
@@ -667,7 +667,7 @@ gtk_scrolled_window_class_init (GtkScrolledWindowClass *class)
                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkScrolledWindow:min-content-height: (attributes org.gtk.Property.get=gtk_scrolled_window_get_min_content_height org.gtk.Property.set=gtk_scrolled_window_set_min_content_height)
+   * GtkScrolledWindow:min-content-height:
    *
    * The minimum content height of @scrolled_window.
    */
@@ -677,7 +677,7 @@ gtk_scrolled_window_class_init (GtkScrolledWindowClass *class)
                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkScrolledWindow:kinetic-scrolling: (attributes org.gtk.Property.get=gtk_scrolled_window_get_kinetic_scrolling org.gtk.Property.set=gtk_scrolled_window_set_kinetic_scrolling)
+   * GtkScrolledWindow:kinetic-scrolling:
    *
    * Whether kinetic scrolling is enabled or not.
    *
@@ -689,7 +689,7 @@ gtk_scrolled_window_class_init (GtkScrolledWindowClass *class)
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkScrolledWindow:overlay-scrolling: (attributes org.gtk.Property.get=gtk_scrolled_window_get_overlay_scrolling org.gtk.Property.set=gtk_scrolled_window_set_overlay_scrolling)
+   * GtkScrolledWindow:overlay-scrolling:
    *
    * Whether overlay scrolling is enabled or not.
    *
@@ -706,7 +706,7 @@ gtk_scrolled_window_class_init (GtkScrolledWindowClass *class)
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkScrolledWindow:max-content-width: (attributes org.gtk.Property.get=gtk_scrolled_window_get_max_content_width org.gtk.Property.set=gtk_scrolled_window_set_max_content_width)
+   * GtkScrolledWindow:max-content-width:
    *
    * The maximum content width of @scrolled_window.
    */
@@ -716,7 +716,7 @@ gtk_scrolled_window_class_init (GtkScrolledWindowClass *class)
                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkScrolledWindow:max-content-height: (attributes org.gtk.Property.get=gtk_scrolled_window_get_max_content_height org.gtk.Property.set=gtk_scrolled_window_set_max_content_height)
+   * GtkScrolledWindow:max-content-height:
    *
    * The maximum content height of @scrolled_window.
    */
@@ -726,7 +726,7 @@ gtk_scrolled_window_class_init (GtkScrolledWindowClass *class)
                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkScrolledWindow:propagate-natural-width: (attributes org.gtk.Property.get=gtk_scrolled_window_get_propagate_natural_width org.gtk.Property.set=gtk_scrolled_window_set_propagate_natural_width)
+   * GtkScrolledWindow:propagate-natural-width:
    *
    * Whether the natural width of the child should be calculated and propagated
    * through the scrolled window’s requested natural width.
@@ -740,7 +740,7 @@ gtk_scrolled_window_class_init (GtkScrolledWindowClass *class)
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkScrolledWindow:propagate-natural-height: (attributes org.gtk.Property.get=gtk_scrolled_window_get_propagate_natural_height org.gtk.Property.set=gtk_scrolled_window_set_propagate_natural_height)
+   * GtkScrolledWindow:propagate-natural-height:
    *
    * Whether the natural height of the child should be calculated and propagated
    * through the scrolled window’s requested natural height.
@@ -754,7 +754,7 @@ gtk_scrolled_window_class_init (GtkScrolledWindowClass *class)
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkScrolledWindow:child: (attributes org.gtk.Property.get=gtk_scrolled_window_get_child org.gtk.Property.set=gtk_scrolled_window_set_child)
+   * GtkScrolledWindow:child:
    *
    * The child widget.
    *

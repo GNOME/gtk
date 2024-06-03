@@ -653,7 +653,7 @@ gtk_combo_box_class_init (GtkComboBoxClass *klass)
                                     "editing-canceled");
 
   /**
-   * GtkComboBox:model: (attributes org.gtk.Property.get=gtk_combo_box_get_model org.gtk.Property.set=gtk_combo_box_set_model)
+   * GtkComboBox:model:
    *
    * The model from which the combo box takes its values.
    */
@@ -665,7 +665,7 @@ gtk_combo_box_class_init (GtkComboBoxClass *klass)
 
 
   /**
-   * GtkComboBox:active: (attributes org.gtk.Property.get=gtk_combo_box_get_active org.gtk.Property.set=gtk_combo_box_set_active)
+   * GtkComboBox:active:
    *
    * The item which is currently active.
    *
@@ -709,7 +709,7 @@ gtk_combo_box_class_init (GtkComboBoxClass *klass)
 
 
    /**
-    * GtkComboBox:button-sensitivity: (attributes org.gtk.Property.get=gtk_combo_box_get_button_sensitivity org.gtk.Property.set=gtk_combo_box_set_button_sensitivity)
+    * GtkComboBox:button-sensitivity:
     *
     * Whether the dropdown button is sensitive when
     * the model is empty.
@@ -722,7 +722,7 @@ gtk_combo_box_class_init (GtkComboBoxClass *klass)
                                                        GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
    /**
-    * GtkComboBox:has-entry: (attributes org.gtk.Property.get=gtk_combo_box_get_has_entry)
+    * GtkComboBox:has-entry:
     *
     * Whether the combo box has an entry.
     */
@@ -733,7 +733,7 @@ gtk_combo_box_class_init (GtkComboBoxClass *klass)
                                                           GTK_PARAM_READWRITE|G_PARAM_CONSTRUCT_ONLY));
 
    /**
-    * GtkComboBox:entry-text-column: (attributes org.gtk.Property.get=gtk_combo_box_get_entry_text_column org.gtk.Property.set=gtk_combo_box_set_entry_text_column)
+    * GtkComboBox:entry-text-column:
     *
     * The model column to associate with strings from the entry.
     *
@@ -747,7 +747,7 @@ gtk_combo_box_class_init (GtkComboBoxClass *klass)
                                                       GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
    /**
-    * GtkComboBox:id-column: (attributes org.gtk.Property.get=gtk_combo_box_get_id_column org.gtk.Property.set=gtk_combo_box_set_id_column)
+    * GtkComboBox:id-column:
     *
     * The model column that provides string IDs for the values
     * in the model, if != -1.
@@ -759,7 +759,7 @@ gtk_combo_box_class_init (GtkComboBoxClass *klass)
                                                       GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
    /**
-    * GtkComboBox:active-id: (attributes org.gtk.Property.get=gtk_combo_box_get_active_id org.gtk.Property.set=gtk_combo_box_set_active_id)
+    * GtkComboBox:active-id:
     *
     * The value of the ID column of the active row.
     */
@@ -770,7 +770,7 @@ gtk_combo_box_class_init (GtkComboBoxClass *klass)
                                                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
    /**
-    * GtkComboBox:popup-fixed-width: (attributes org.gtk.Property.get=gtk_combo_box_get_popup_fixed_width org.gtk.Property.set=gtk_combo_box_set_popup_fixed_width)
+    * GtkComboBox:popup-fixed-width:
     *
     * Whether the popup's width should be a fixed width matching the
     * allocated width of the combo box.
@@ -782,7 +782,7 @@ gtk_combo_box_class_init (GtkComboBoxClass *klass)
                                                           GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
    /**
-    * GtkComboBox:child: (attributes org.gtk.Property.get=gtk_combo_box_get_child org.gtk.Property.set=gtk_combo_box_set_child)
+    * GtkComboBox:child:
     *
     * The child widget.
     */

@@ -817,7 +817,7 @@ gtk_text_class_init (GtkTextClass *class)
   quark_password_hint = g_quark_from_static_string ("gtk-entry-password-hint");
 
   /**
-   * GtkText:buffer: (attributes org.gtk.Property.get=gtk_text_get_buffer org.gtk.Property.set=gtk_text_set_buffer)
+   * GtkText:buffer:
    *
    * The `GtkEntryBuffer` object which stores the text.
    */
@@ -827,7 +827,7 @@ gtk_text_class_init (GtkTextClass *class)
                            GTK_PARAM_READWRITE|G_PARAM_CONSTRUCT|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkText:max-length: (attributes org.gtk.Property.get=gtk_text_get_max_length org.gtk.Property.set=gtk_text_set_max_length)
+   * GtkText:max-length:
    *
    * Maximum number of characters that are allowed.
    *
@@ -840,7 +840,7 @@ gtk_text_class_init (GtkTextClass *class)
                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkText:invisible-char: (attributes org.gtk.Property.get=gtk_text_set_invisible_char org.gtk.Property.set=gtk_text_set_invisible_char)
+   * GtkText:invisible-char:
    *
    * The character to used when masking contents (in “password mode”).
    */
@@ -850,7 +850,7 @@ gtk_text_class_init (GtkTextClass *class)
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkText:activates-default: (attributes org.gtk.Property.get=gtk_text_get_activates_default org.gtk.Property.set=gtk_text_set_activates_default)
+   * GtkText:activates-default:
    *
    * Whether to activate the default widget when Enter is pressed.
    */
@@ -871,7 +871,7 @@ gtk_text_class_init (GtkTextClass *class)
                         GTK_PARAM_READABLE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkText:truncate-multiline: (attributes org.gtk.Property.get=gtk_text_get_truncate_multiline org.gtk.Property.set=gtk_text_set_truncate_multiline)
+   * GtkText:truncate-multiline:
    *
    * When %TRUE, pasted multi-line text is truncated to the first line.
    */
@@ -881,7 +881,7 @@ gtk_text_class_init (GtkTextClass *class)
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkText:overwrite-mode: (attributes org.gtk.Property.get=gtk_text_get_overwrite_mode org.gtk.Property.set=gtk_text_set_overwrite_mode)
+   * GtkText:overwrite-mode:
    *
    * If text is overwritten when typing in the `GtkText`.
    */
@@ -901,7 +901,7 @@ gtk_text_class_init (GtkTextClass *class)
                             GTK_PARAM_READWRITE);
 
   /**
-  * GtkText:placeholder-text: (attributes org.gtk.Property.get=gtk_text_get_placeholder_text org.gtk.Property.set=gtk_text_set_placeholder_text)
+  * GtkText:placeholder-text:
   *
   * The text that will be displayed in the `GtkText` when it is empty
   * and unfocused.
@@ -928,7 +928,7 @@ gtk_text_class_init (GtkTextClass *class)
                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkText:input-purpose: (attributes org.gtk.Property.get=gtk_text_get_input_purpose org.gtk.Property.set=gtk_text_set_input_purpose)
+   * GtkText:input-purpose:
    *
    * The purpose of this text field.
    *
@@ -946,7 +946,7 @@ gtk_text_class_init (GtkTextClass *class)
                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkText:input-hints: (attributes org.gtk.Property.get=gtk_text_get_input_hints org.gtk.Property.set=gtk_text_set_input_hints)
+   * GtkText:input-hints:
    *
    * Additional hints that allow input methods to fine-tune
    * their behaviour.
@@ -958,7 +958,7 @@ gtk_text_class_init (GtkTextClass *class)
                           GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkText:attributes: (attributes org.gtk.Property.get=gtk_text_get_attributes org.gtk.Property.set=gtk_text_set_attributes)
+   * GtkText:attributes:
    *
    * A list of Pango attributes to apply to the text of the `GtkText`.
    *
@@ -973,7 +973,7 @@ gtk_text_class_init (GtkTextClass *class)
                           GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkText:tabs: (attributes org.gtk.Property.get=gtk_text_get_tabs org.gtk.Property.set=gtk_text_set_tabs)
+   * GtkText:tabs:
    *
    * A list of tabstops to apply to the text of the `GtkText`.
    */
@@ -983,7 +983,7 @@ gtk_text_class_init (GtkTextClass *class)
                           GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkText:enable-emoji-completion: (attributes org.gtk.Property.get=gtk_text_get_enable_emoji_completion org.gtk.Property.set=gtk_text_set_enable_emoji_completion)
+   * GtkText:enable-emoji-completion:
    *
    * Whether to suggest Emoji replacements.
    */
@@ -993,7 +993,7 @@ gtk_text_class_init (GtkTextClass *class)
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkText:visibility: (attributes org.gtk.Property.get=gtk_text_get_visibility org.gtk.Property.set=gtk_text_set_visibility)
+   * GtkText:visibility:
    *
    * If %FALSE, the text is masked with the “invisible char”.
    */
@@ -1003,7 +1003,7 @@ gtk_text_class_init (GtkTextClass *class)
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkText:propagate-text-width: (attributes org.gtk.Property.get=gtk_text_get_propagate_text_width org.gtk.Property.set=gtk_text_set_propagate_text_width)
+   * GtkText:propagate-text-width:
    *
    * Whether the widget should grow and shrink with the content.
    */
@@ -1013,7 +1013,7 @@ gtk_text_class_init (GtkTextClass *class)
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkText:extra-menu: (attributes org.gtk.Property.get=gtk_text_get_extra_menu org.gtk.Property.set=gtk_text_set_extra_menu)
+   * GtkText:extra-menu:
    *
    * A menu model whose contents will be appended to
    * the context menu.

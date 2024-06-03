@@ -323,7 +323,7 @@ gtk_string_sorter_class_init (GtkStringSorterClass *class)
   object_class->dispose = gtk_string_sorter_dispose;
 
   /**
-   * GtkStringSorter:expression: (type GtkExpression) (attributes org.gtk.Property.get=gtk_string_sorter_get_expression org.gtk.Property.set=gtk_string_sorter_set_expression)
+   * GtkStringSorter:expression: (type GtkExpression)
    *
    * The expression to evaluate on item to get a string to compare with.
    */
@@ -332,7 +332,7 @@ gtk_string_sorter_class_init (GtkStringSorterClass *class)
                                G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkStringSorter:ignore-case: (attributes org.gtk.Property.get=gtk_string_sorter_get_ignore_case org.gtk.Property.set=gtk_string_sorter_set_ignore_case)
+   * GtkStringSorter:ignore-case:
    *
    * If sorting is case sensitive.
    */
@@ -342,7 +342,7 @@ gtk_string_sorter_class_init (GtkStringSorterClass *class)
                             G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkStringSorter:collation: (attributes org.gtk.Property.get=gtk_string_sorter_get_collation org.gtk.Property.set=gtk_string_sorter_set_collation)
+   * GtkStringSorter:collation:
    *
    * The collation method to use for sorting.
    *

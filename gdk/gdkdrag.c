@@ -362,7 +362,7 @@ gdk_drag_class_init (GdkDragClass *klass)
   object_class->finalize = gdk_drag_finalize;
 
   /**
-   * GdkDrag:content: (attributes org.gtk.Property.get=gdk_drag_get_content)
+   * GdkDrag:content:
    *
    * The `GdkContentProvider`.
    */
@@ -375,7 +375,7 @@ gdk_drag_class_init (GdkDragClass *klass)
                          G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GdkDrag:device: (attributes org.gtk.Property.get=gdk_drag_get_device)
+   * GdkDrag:device:
    *
    * The `GdkDevice` that is performing the drag.
    */
@@ -388,7 +388,7 @@ gdk_drag_class_init (GdkDragClass *klass)
                          G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GdkDrag:display: (attributes org.gtk.Property.get=gdk_drag_get_display)
+   * GdkDrag:display:
    *
    * The `GdkDisplay` that the drag belongs to.
    */
@@ -400,7 +400,7 @@ gdk_drag_class_init (GdkDragClass *klass)
                          G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GdkDrag:formats: (attributes org.gtk.Property.get=gdk_drag_get_formats)
+   * GdkDrag:formats:
    *
    * The possible formats that the drag can provide its data in.
    */
@@ -413,7 +413,7 @@ gdk_drag_class_init (GdkDragClass *klass)
                         G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GdkDrag:selected-action: (attributes org.gtk.Property.get=gdk_drag_get_selected_action)
+   * GdkDrag:selected-action:
    *
    * The currently selected action of the drag.
    */
@@ -426,7 +426,7 @@ gdk_drag_class_init (GdkDragClass *klass)
                         G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GdkDrag:actions: (attributes org.gtk.Property.get=gdk_drag_get_actions)
+   * GdkDrag:actions:
    *
    * The possible actions of this drag.
    */
@@ -439,7 +439,7 @@ gdk_drag_class_init (GdkDragClass *klass)
                         G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GdkDrag:surface: (attributes org.gtk.Property.get=gdk_drag_get_surface)
+   * GdkDrag:surface:
    *
    * The surface where the drag originates.
    */

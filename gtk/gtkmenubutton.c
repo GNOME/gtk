@@ -420,7 +420,7 @@ gtk_menu_button_class_init (GtkMenuButtonClass *klass)
   klass->activate = gtk_menu_button_activate;
 
   /**
-   * GtkMenuButton:menu-model: (attributes org.gtk.Property.get=gtk_menu_button_get_menu_model org.gtk.Property.set=gtk_menu_button_set_menu_model)
+   * GtkMenuButton:menu-model:
    *
    * The `GMenuModel` from which the popup will be created.
    *
@@ -433,7 +433,7 @@ gtk_menu_button_class_init (GtkMenuButtonClass *klass)
                            GTK_PARAM_READWRITE);
 
   /**
-   * GtkMenuButton:direction: (attributes org.gtk.Property.get=gtk_menu_button_get_direction org.gtk.Property.set=gtk_menu_button_set_direction)
+   * GtkMenuButton:direction:
    *
    * The `GtkArrowType` representing the direction in which the
    * menu or popover will be popped out.
@@ -445,7 +445,7 @@ gtk_menu_button_class_init (GtkMenuButtonClass *klass)
                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkMenuButton:popover: (attributes org.gtk.Property.get=gtk_menu_button_get_popover org.gtk.Property.set=gtk_menu_button_set_popover)
+   * GtkMenuButton:popover:
    *
    * The `GtkPopover` that will be popped up when the button is clicked.
    */
@@ -455,7 +455,7 @@ gtk_menu_button_class_init (GtkMenuButtonClass *klass)
                            G_PARAM_READWRITE);
 
   /**
-   * GtkMenuButton:icon-name: (attributes org.gtk.Property.get=gtk_menu_button_get_icon_name org.gtk.Property.set=gtk_menu_button_set_icon_name)
+   * GtkMenuButton:icon-name:
    *
    * The name of the icon used to automatically populate the button.
    */
@@ -465,7 +465,7 @@ gtk_menu_button_class_init (GtkMenuButtonClass *klass)
                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkMenuButton:always-show-arrow: (attributes org.gtk.Property.get=gtk_menu_button_get_always_show_arrow org.gtk.Property.set=gtk_menu_button_set_always_show_arrow)
+   * GtkMenuButton:always-show-arrow:
    *
    * Whether to show a dropdown arrow even when using an icon or a custom child.
    *
@@ -477,7 +477,7 @@ gtk_menu_button_class_init (GtkMenuButtonClass *klass)
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkMenuButton:label: (attributes org.gtk.Property.get=gtk_menu_button_get_label org.gtk.Property.set=gtk_menu_button_set_label)
+   * GtkMenuButton:label:
    *
    * The label for the button.
    */
@@ -487,7 +487,7 @@ gtk_menu_button_class_init (GtkMenuButtonClass *klass)
                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkMenuButton:use-underline: (attributes org.gtk.Property.get=gtk_menu_button_get_use_underline org.gtk.Property.set=gtk_menu_button_set_use_underline)
+   * GtkMenuButton:use-underline:
    *
    * If set an underscore in the text indicates a mnemonic.
    */
@@ -497,7 +497,7 @@ gtk_menu_button_class_init (GtkMenuButtonClass *klass)
                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkMenuButton:has-frame: (attributes org.gtk.Property.get=gtk_menu_button_get_has_frame org.gtk.Property.set=gtk_menu_button_set_has_frame)
+   * GtkMenuButton:has-frame:
    *
    * Whether the button has a frame.
    */
@@ -507,7 +507,7 @@ gtk_menu_button_class_init (GtkMenuButtonClass *klass)
                           GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkMenuButton:primary: (attributes org.gtk.Property.get=gtk_menu_button_get_primary org.gtk.Property.set=gtk_menu_button_set_primary)
+   * GtkMenuButton:primary:
    *
    * Whether the menu button acts as a primary menu.
    *
@@ -521,7 +521,7 @@ gtk_menu_button_class_init (GtkMenuButtonClass *klass)
                           GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkMenuButton:child: (attributes org.gtk.Property.get=gtk_menu_button_get_child org.gtk.Property.set=gtk_menu_button_set_child)
+   * GtkMenuButton:child:
    *
    * The child widget.
    *
@@ -533,7 +533,7 @@ gtk_menu_button_class_init (GtkMenuButtonClass *klass)
                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkMenuButton:active: (attributes org.gtk.Property.get=gtk_menu_button_get_active org.gtk.Property.set=gtk_menu_button_set_active)
+   * GtkMenuButton:active:
    *
    * Whether the menu button is active.
    *
@@ -545,7 +545,7 @@ gtk_menu_button_class_init (GtkMenuButtonClass *klass)
                           GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkMenuButton:can-shrink: (attributes org.gtk.Property.get=gtk_menu_button_get_can_shrink org.gtk.Property.set=gtk_menu_button_set_can_shrink)
+   * GtkMenuButton:can-shrink:
    *
    * Whether the size of the button can be made smaller than the natural
    * size of its contents.

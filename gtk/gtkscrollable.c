@@ -64,7 +64,7 @@ gtk_scrollable_default_init (GtkScrollableInterface *iface)
   GParamSpec *pspec;
 
   /**
-   * GtkScrollable:hadjustment: (attributes org.gtk.Property.get=gtk_scrollable_get_hadjustment org.gtk.Property.set=gtk_scrollable_set_hadjustment)
+   * GtkScrollable:hadjustment:
    *
    * Horizontal `GtkAdjustment` of the scrollable widget.
    *
@@ -76,7 +76,7 @@ gtk_scrollable_default_init (GtkScrollableInterface *iface)
   g_object_interface_install_property (iface, pspec);
 
   /**
-   * GtkScrollable:vadjustment: (attributes org.gtk.Property.get=gtk_scrollable_get_vadjustment org.gtk.Property.set=gtk_scrollable_set_vadjustment)
+   * GtkScrollable:vadjustment:
    *
    * Vertical `GtkAdjustment` of the scrollable widget.
    *
@@ -88,7 +88,7 @@ gtk_scrollable_default_init (GtkScrollableInterface *iface)
   g_object_interface_install_property (iface, pspec);
 
   /**
-   * GtkScrollable:hscroll-policy: (attributes org.gtk.Property.get=gtk_scrollable_get_hscroll_policy org.gtk.Property.set=gtk_scrollable_set_hscroll_policy)
+   * GtkScrollable:hscroll-policy:
    *
    * Determines when horizontal scrolling should start.
    */
@@ -99,7 +99,7 @@ gtk_scrollable_default_init (GtkScrollableInterface *iface)
   g_object_interface_install_property (iface, pspec);
 
   /**
-   * GtkScrollable:vscroll-policy: (attributes org.gtk.Property.get=gtk_scrollable_get_vscroll_policy org.gtk.Property.set=gtk_scrollable_set_vscroll_policy)
+   * GtkScrollable:vscroll-policy:
    *
    * Determines when vertical scrolling should start.
    */

@@ -624,7 +624,7 @@ gtk_popover_menu_bar_class_init (GtkPopoverMenuBarClass *klass)
   widget_class->focus = gtk_popover_menu_bar_focus;
 
   /**
-   * GtkPopoverMenuBar:menu-model: (attributes org.gtk.Property.get=gtk_popover_menu_bar_get_menu_model org.gtk.Property.set=gtk_popover_menu_bar_set_menu_model)
+   * GtkPopoverMenuBar:menu-model:
    *
    * The `GMenuModel` from which the menu bar is created.
    *

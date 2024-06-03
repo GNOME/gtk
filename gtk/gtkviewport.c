@@ -312,7 +312,7 @@ gtk_viewport_class_init (GtkViewportClass *class)
   g_object_class_override_property (gobject_class, PROP_VSCROLL_POLICY, "vscroll-policy");
 
   /**
-   * GtkViewport:scroll-to-focus: (attributes org.gtk.Property.get=gtk_viewport_get_scroll_to_focus org.gtk.Property.set=gtk_viewport_set_scroll_to_focus)
+   * GtkViewport:scroll-to-focus:
    *
    * Whether to scroll when the focus changes.
    *
@@ -327,7 +327,7 @@ gtk_viewport_class_init (GtkViewportClass *class)
                                                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   /**
-   * GtkViewport:child: (attributes org.gtk.Property.get=gtk_viewport_get_child org.gtk.Property.set=gtk_viewport_set_child)
+   * GtkViewport:child:
    *
    * The child widget.
    */

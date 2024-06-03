@@ -1006,7 +1006,7 @@ gtk_box_layout_class_init (GtkBoxLayoutClass *klass)
   layout_manager_class->allocate = gtk_box_layout_allocate;
 
   /**
-   * GtkBoxLayout:homogeneous: (attributes org.gtk.Property.get=gtk_box_layout_get_homogeneous org.gtk.Property.set=gtk_box_layout_set_homogeneous)
+   * GtkBoxLayout:homogeneous:
    *
    * Whether the box layout should distribute the available space
    * equally among the children.
@@ -1018,7 +1018,7 @@ gtk_box_layout_class_init (GtkBoxLayoutClass *klass)
                           G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkBoxLayout:spacing: (attributes org.gtk.Property.get=gtk_box_layout_get_spacing org.gtk.Property.set=gtk_box_layout_set_spacing)
+   * GtkBoxLayout:spacing:
    *
    * The space to put between the children.
    */
@@ -1029,7 +1029,7 @@ gtk_box_layout_class_init (GtkBoxLayoutClass *klass)
                       G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkBoxLayout:baseline-child: (attributes org.gtk.Property.get=gtk_box_layout_get_baseline_child org.gtk.Property.set=gtk_box_layout_set_baseline_child)
+   * GtkBoxLayout:baseline-child:
    *
    * The child that determines the baseline of the box
    * in vertical layout.
@@ -1047,7 +1047,7 @@ gtk_box_layout_class_init (GtkBoxLayoutClass *klass)
                       G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkBoxLayout:baseline-position: (attributes org.gtk.Property.get=gtk_box_layout_get_baseline_position org.gtk.Property.set=gtk_box_layout_set_baseline_position)
+   * GtkBoxLayout:baseline-position:
    *
    * The position of the allocated baseline within the extra space
    * allocated to each child.

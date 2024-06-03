@@ -262,7 +262,7 @@ gtk_no_selection_class_init (GtkNoSelectionClass *klass)
                         G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
 
   /**
-   * GtkNoSelection:model: (attributes org.gtk.property.get=gtk_no_selection_get_model org.gtk.Property.set=gtk_no_selection_set_model)
+   * GtkNoSelection:model:
    *
    * The model being managed.
    */

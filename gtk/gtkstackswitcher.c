@@ -542,7 +542,7 @@ gtk_stack_switcher_class_init (GtkStackSwitcherClass *class)
   object_class->finalize = gtk_stack_switcher_finalize;
 
   /**
-   * GtkStackSwitcher:stack: (attributes org.gtk.Property.get=gtk_stack_switcher_get_stack org.gtk.Property.set=gtk_stack_switcher_set_stack)
+   * GtkStackSwitcher:stack:
    *
    * The stack.
    */

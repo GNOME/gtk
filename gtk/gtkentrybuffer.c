@@ -341,7 +341,7 @@ gtk_entry_buffer_class_init (GtkEntryBufferClass *klass)
   klass->deleted_text = gtk_entry_buffer_real_deleted_text;
 
   /**
-   * GtkEntryBuffer:text: (attributes org.gtk.Property.get=gtk_entry_buffer_get_text org.gtk.Property.set=gtk_entry_buffer_set_text)
+   * GtkEntryBuffer:text:
    *
    * The contents of the buffer.
    */
@@ -351,7 +351,7 @@ gtk_entry_buffer_class_init (GtkEntryBufferClass *klass)
                            GTK_PARAM_READWRITE);
 
   /**
-   * GtkEntryBuffer:length: (attributes org.gtk.Property.get=gtk_entry_buffer_get_length)
+   * GtkEntryBuffer:length:
    *
    * The length (in characters) of the text in buffer.
    */
@@ -361,7 +361,7 @@ gtk_entry_buffer_class_init (GtkEntryBufferClass *klass)
                           GTK_PARAM_READABLE);
 
   /**
-   * GtkEntryBuffer:max-length: (attributes org.gtk.Property.get=gtk_entry_buffer_get_max_length org.gtk.Property.set=gtk_entry_buffer_set_max_length)
+   * GtkEntryBuffer:max-length:
    *
    * The maximum length (in characters) of the text in the buffer.
    */

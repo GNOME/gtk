@@ -498,7 +498,7 @@ gtk_shortcut_label_class_init (GtkShortcutLabelClass *klass)
   object_class->set_property = gtk_shortcut_label_set_property;
 
   /**
-   * GtkShortcutLabel:accelerator: (attributes org.gtk.Property.get=gtk_shortcut_label_get_accelerator org.gtk.Property.set=gtk_shortcut_label_set_accelerator)
+   * GtkShortcutLabel:accelerator:
    *
    * The accelerator that @self displays.
    *
@@ -511,7 +511,7 @@ gtk_shortcut_label_class_init (GtkShortcutLabelClass *klass)
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   /**
-   * GtkShortcutLabel:disabled-text: (attributes org.gtk.Property.get=gtk_shortcut_label_get_disabled_text org.gtk.Property.set=gtk_shortcut_label_set_disabled_text)
+   * GtkShortcutLabel:disabled-text:
    *
    * The text that is displayed when no accelerator is set.
    */

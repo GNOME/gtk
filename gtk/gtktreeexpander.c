@@ -553,7 +553,7 @@ gtk_tree_expander_class_init (GtkTreeExpanderClass *klass)
   gobject_class->set_property = gtk_tree_expander_set_property;
 
   /**
-   * GtkTreeExpander:child: (attributes org.gtk.Property.get=gtk_tree_expander_get_child org.gtk.Property.set=gtk_tree_expander_set_child)
+   * GtkTreeExpander:child:
    *
    * The child widget with the actual contents.
    */
@@ -563,7 +563,7 @@ gtk_tree_expander_class_init (GtkTreeExpanderClass *klass)
                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   /**
-   * GtkTreeExpander:hide-expander: (attributes org.gtk.Property.get=gtk_tree_expander_get_hide_expander org.gtk.Property.set=gtk_tree_expander_set_hide_expander)
+   * GtkTreeExpander:hide-expander:
    *
    * Whether the expander icon should be hidden in a GtkTreeListRow.
    * Note that this property simply hides the icon.  The actions and keybinding
@@ -580,7 +580,7 @@ gtk_tree_expander_class_init (GtkTreeExpanderClass *klass)
                             G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkTreeExpander:indent-for-depth: (attributes org.gtk.Property.get=gtk_tree_expander_get_indent_for_depth org.gtk.Property.set=gtk_tree_expander_set_indent_for_depth)
+   * GtkTreeExpander:indent-for-depth:
    *
    * TreeExpander indents the child according to its depth.
    *
@@ -592,7 +592,7 @@ gtk_tree_expander_class_init (GtkTreeExpanderClass *klass)
                             G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkTreeExpander:indent-for-icon: (attributes org.gtk.Property.get=gtk_tree_expander_get_indent_for_icon org.gtk.Property.set=gtk_tree_expander_set_indent_for_icon)
+   * GtkTreeExpander:indent-for-icon:
    *
    * TreeExpander indents the child by the width of an expander-icon if it is not expandable.
    *
@@ -604,7 +604,7 @@ gtk_tree_expander_class_init (GtkTreeExpanderClass *klass)
                             G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkTreeExpander:item: (attributes org.gtk.Property.get=gtk_tree_expander_get_item)
+   * GtkTreeExpander:item:
    *
    * The item held by this expander's row.
    */
@@ -614,7 +614,7 @@ gtk_tree_expander_class_init (GtkTreeExpanderClass *klass)
                            G_PARAM_READABLE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   /**
-   * GtkTreeExpander:list-row: (attributes org.gtk.Property.get=gtk_tree_expander_get_list_row org.gtk.Property.set=gtk_tree_expander_set_list_row)
+   * GtkTreeExpander:list-row:
    *
    * The list row to track for expander state.
    */

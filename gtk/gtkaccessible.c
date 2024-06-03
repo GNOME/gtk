@@ -71,7 +71,7 @@ static void
 gtk_accessible_default_init (GtkAccessibleInterface *iface)
 {
   /**
-   * GtkAccessible:accessible-role: (attributes org.gtk.Property.get=gtk_accessible_get_accessible_role)
+   * GtkAccessible:accessible-role:
    *
    * The accessible role of the given `GtkAccessible` implementation.
    *

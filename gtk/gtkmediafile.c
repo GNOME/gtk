@@ -151,7 +151,7 @@ gtk_media_file_class_init (GtkMediaFileClass *class)
   gobject_class->dispose = gtk_media_file_dispose;
 
   /**
-   * GtkMediaFile:file: (attributes org.gtk.Property.get=gtk_media_file_get_file org.gtk.Property.set=gtk_media_file_set_file)
+   * GtkMediaFile:file:
    *
    * The file being played back or %NULL if not playing a file.
    */
@@ -161,7 +161,7 @@ gtk_media_file_class_init (GtkMediaFileClass *class)
                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   /**
-   * GtkMediaFile:input-stream: (attributes org.gtk.Property.get=gtk_media_file_get_input_stream org.gtk.Property.set=gtk_media_file_set_input_stream)
+   * GtkMediaFile:input-stream:
    *
    * The stream being played back or %NULL if not playing a stream.
    *

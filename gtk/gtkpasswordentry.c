@@ -493,7 +493,7 @@ gtk_password_entry_class_init (GtkPasswordEntryClass *klass)
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkPasswordEntry:show-peek-icon: (attributes org.gtk.Property.get=gtk_password_entry_get_show_peek_icon org.gtk.Property.set=gtk_password_entry_set_show_peek_icon)
+   * GtkPasswordEntry:show-peek-icon:
    *
    * Whether to show an icon for revealing the content.
    */
@@ -503,7 +503,7 @@ gtk_password_entry_class_init (GtkPasswordEntryClass *klass)
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkPasswordEntry:extra-menu: (attributes org.gtk.Property.get=gtk_password_entry_get_extra_menu org.gtk.Property.set=gtk_password_entry_set_extra_menu)
+   * GtkPasswordEntry:extra-menu:
    *
    * A menu model whose contents will be appended to
    * the context menu.

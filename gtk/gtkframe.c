@@ -164,7 +164,7 @@ gtk_frame_class_init (GtkFrameClass *class)
   class->compute_child_allocation = gtk_frame_real_compute_child_allocation;
 
   /**
-   * GtkFrame:label: (attributes org.gtk.Property.get=gtk_frame_get_label org.gtk.Property.set=gtk_frame_set_label)
+   * GtkFrame:label:
    *
    * Text of the frame's label.
    */
@@ -185,7 +185,7 @@ gtk_frame_class_init (GtkFrameClass *class)
                           GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkFrame:label-widget: (attributes org.gtk.Property.get=gtk_frame_get_label_widget org.gtk.Property.set=gtk_frame_set_label_widget)
+   * GtkFrame:label-widget:
    *
    * Widget to display in place of the usual frame label.
    */
@@ -195,7 +195,7 @@ gtk_frame_class_init (GtkFrameClass *class)
                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkFrame:child: (attributes org.gtk.Property.get=gtk_frame_get_child org.gtk.Property.set=gtk_frame_set_child)
+   * GtkFrame:child:
    *
    * The child widget.
    */

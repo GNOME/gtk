@@ -107,7 +107,7 @@ gdk_device_tool_class_init (GdkDeviceToolClass *klass)
   object_class->get_property = gdk_device_tool_get_property;
 
   /**
-   * GdkDeviceTool:serial: (attributes org.gtk.Property.get=gdk_device_tool_get_serial)
+   * GdkDeviceTool:serial:
    *
    * The serial number of the tool.
    */
@@ -118,7 +118,7 @@ gdk_device_tool_class_init (GdkDeviceToolClass *klass)
                                                       G_PARAM_STATIC_STRINGS);
 
   /**
-   * GdkDeviceTool:tool-type: (attributes org.gtk.Property.get=gdk_device_tool_get_tool_type)
+   * GdkDeviceTool:tool-type:
    *
    * The type of the tool.
    */
@@ -130,7 +130,7 @@ gdk_device_tool_class_init (GdkDeviceToolClass *klass)
                                                        G_PARAM_STATIC_STRINGS);
 
   /**
-   * GdkDeviceTool:axes: (attributes org.gtk.Property.get=gdk_device_tool_get_axes)
+   * GdkDeviceTool:axes:
    *
    * The axes of the tool.
    */
@@ -140,7 +140,7 @@ gdk_device_tool_class_init (GdkDeviceToolClass *klass)
                                                    G_PARAM_CONSTRUCT_ONLY);
 
   /**
-   * GdkDeviceTool:hardware-id: (attributes org.gtk.Property.get=gdk_device_tool_get_hardware_id)
+   * GdkDeviceTool:hardware-id:
    *
    * The hardware ID of the tool.
    */

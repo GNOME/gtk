@@ -268,7 +268,7 @@ gtk_media_controls_class_init (GtkMediaControlsClass *klass)
   gobject_class->set_property = gtk_media_controls_set_property;
 
   /**
-   * GtkMediaControls:media-stream: (attributes org.gtk.Property.get=gtk_media_controls_get_media_stream org.gtk.Property.set=gtk_media_controls_set_media_stream)
+   * GtkMediaControls:media-stream:
    *
    * The media-stream managed by this object or %NULL if none.
    */

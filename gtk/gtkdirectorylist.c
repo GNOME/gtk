@@ -283,7 +283,7 @@ gtk_directory_list_class_init (GtkDirectoryListClass *class)
   gobject_class->dispose = gtk_directory_list_dispose;
 
   /**
-   * GtkDirectoryList:attributes: (attributes org.gtk.Property.get=gtk_directory_list_get_attributes org.gtk.Property.set=gtk_directory_list_set_attributes)
+   * GtkDirectoryList:attributes:
    *
    * The attributes to query.
    */
@@ -293,7 +293,7 @@ gtk_directory_list_class_init (GtkDirectoryListClass *class)
                            GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkDirectoryList:error: (attributes org.gtk.Property.get=gtk_directory_list_get_error)
+   * GtkDirectoryList:error:
    *
    * Error encountered while loading files.
    */
@@ -303,7 +303,7 @@ gtk_directory_list_class_init (GtkDirectoryListClass *class)
                           GTK_PARAM_READABLE | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkDirectoryList:file: (attributes org.gtk.Property.get=gtk_directory_list_get_file org.gtk.Property.set=gtk_directory_list_set_file)
+   * GtkDirectoryList:file:
    *
    * File to query.
    */
@@ -313,7 +313,7 @@ gtk_directory_list_class_init (GtkDirectoryListClass *class)
                            GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkDirectoryList:io-priority: (attributes org.gtk.Property.get=gtk_directory_list_get_io_priority org.gtk.Property.set=gtk_directory_list_set_io_priority)
+   * GtkDirectoryList:io-priority:
    *
    * Priority used when loading.
    */
@@ -345,7 +345,7 @@ gtk_directory_list_class_init (GtkDirectoryListClass *class)
                             GTK_PARAM_READABLE | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkDirectoryList:monitored: (attributes org.gtk.Property.get=gtk_directory_list_get_monitored org.gtk.Property.set=gtk_directory_list_set_monitored)
+   * GtkDirectoryList:monitored:
    *
    * %TRUE if the directory is monitored for changed.
    */

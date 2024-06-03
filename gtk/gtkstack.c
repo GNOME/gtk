@@ -492,7 +492,7 @@ gtk_stack_page_class_init (GtkStackPageClass *class)
   object_class->constructed = gtk_stack_page_constructed;
 
   /**
-   * GtkStackPage:child: (attributes org.gtk.Property.get=gtk_stack_page_get_child)
+   * GtkStackPage:child:
    *
    * The child that this page is for.
    */
@@ -502,7 +502,7 @@ gtk_stack_page_class_init (GtkStackPageClass *class)
                          GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY);
 
   /**
-   * GtkStackPage:name: (attributes org.gtk.Property.get=gtk_stack_page_get_name org.gtk.Property.set=gtk_stack_page_set_name)
+   * GtkStackPage:name:
    *
    * The name of the child page.
    */
@@ -512,7 +512,7 @@ gtk_stack_page_class_init (GtkStackPageClass *class)
                          GTK_PARAM_READWRITE);
 
   /**
-   * GtkStackPage:title: (attributes org.gtk.Property.get=gtk_stack_page_get_title org.gtk.Property.set=gtk_stack_page_set_title)
+   * GtkStackPage:title:
    *
    * The title of the child page.
    */
@@ -522,7 +522,7 @@ gtk_stack_page_class_init (GtkStackPageClass *class)
                          GTK_PARAM_READWRITE);
 
   /**
-   * GtkStackPage:icon-name: (attributes org.gtk.Property.get=gtk_stack_page_get_icon_name org.gtk.Property.set=gtk_stack_page_set_icon_name)
+   * GtkStackPage:icon-name:
    *
    * The icon name of the child page.
    */
@@ -532,7 +532,7 @@ gtk_stack_page_class_init (GtkStackPageClass *class)
                          GTK_PARAM_READWRITE);
 
   /**
-   * GtkStackPage:needs-attention: (attributes org.gtk.Property.get=gtk_stack_page_get_needs_attention org.gtk.Property.set=gtk_stack_page_set_needs_attention)
+   * GtkStackPage:needs-attention:
    *
    * Whether the page requires the user attention.
    *
@@ -546,7 +546,7 @@ gtk_stack_page_class_init (GtkStackPageClass *class)
                          GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkStackPage:visible: (attributes org.gtk.Property.get=gtk_stack_page_get_visible org.gtk.Property.set=gtk_stack_page_set_visible)
+   * GtkStackPage:visible:
    *
    * Whether this page is visible.
    */
@@ -556,7 +556,7 @@ gtk_stack_page_class_init (GtkStackPageClass *class)
                          GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkStackPage:use-underline: (attributes org.gtk.Property.get=gtk_stack_page_get_use_underline org.gtk.Property.set=gtk_stack_page_set_use_underline)
+   * GtkStackPage:use-underline:
    *
    * If set, an underline in the title indicates a mnemonic.
    */
@@ -963,7 +963,7 @@ gtk_stack_class_init (GtkStackClass *klass)
   widget_class->get_request_mode = gtk_stack_get_request_mode;
 
   /**
-   * GtkStack:hhomogeneous: (attributes org.gtk.Property.get=gtk_stack_get_hhomogeneous org.gtk.Property.set=gtk_stack_set_hhomogeneous)
+   * GtkStack:hhomogeneous:
    *
    * %TRUE if the stack allocates the same width for all children.
    */
@@ -973,7 +973,7 @@ gtk_stack_class_init (GtkStackClass *klass)
                             GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkStack:vhomogeneous: (attributes org.gtk.Property.get=gtk_stack_get_vhomogeneous org.gtk.Property.set=gtk_stack_set_vhomogeneous)
+   * GtkStack:vhomogeneous:
    *
    * %TRUE if the stack allocates the same height for all children.
    */
@@ -983,7 +983,7 @@ gtk_stack_class_init (GtkStackClass *klass)
                             GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkStack:visible-child: (attributes org.gtk.Property.get=gtk_stack_get_visible_child org.gtk.Property.set=gtk_stack_set_visible_child)
+   * GtkStack:visible-child:
    *
    * The widget currently visible in the stack.
    */
@@ -993,7 +993,7 @@ gtk_stack_class_init (GtkStackClass *klass)
                            GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkStack:visible-child-name: (attributes org.gtk.Property.get=gtk_stack_get_visible_child_name org.gtk.Property.set=gtk_stack_set_visible_child_name)
+   * GtkStack:visible-child-name:
    *
    * The name of the widget currently visible in the stack.
    */
@@ -1003,7 +1003,7 @@ gtk_stack_class_init (GtkStackClass *klass)
                            GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkStack:transition-duration: (attributes org.gtk.Property.get=gtk_stack_get_transition_duration org.gtk.Property.set=gtk_stack_set_transition_duration)
+   * GtkStack:transition-duration:
    *
    * The animation duration, in milliseconds.
    */
@@ -1013,7 +1013,7 @@ gtk_stack_class_init (GtkStackClass *klass)
                          GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkStack:transition-type: (attributes org.gtk.Property.get=gtk_stack_get_transition_type org.gtk.Property.set=gtk_stack_set_transition_type)
+   * GtkStack:transition-type:
    *
    * The type of animation used to transition.
    */
@@ -1023,7 +1023,7 @@ gtk_stack_class_init (GtkStackClass *klass)
                          GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkStack:transition-running: (attributes org.gtk.Property.get=gtk_stack_get_transition_running)
+   * GtkStack:transition-running:
    *
    * Whether or not the transition is currently running.
    */
@@ -1033,7 +1033,7 @@ gtk_stack_class_init (GtkStackClass *klass)
                             GTK_PARAM_READABLE);
 
   /**
-   * GtkStack:interpolate-size: (attributes org.gtk.Property.get=gtk_stack_get_interpolate_size org.gtk.Property.set=gtk_stack_set_interpolate_size)
+   * GtkStack:interpolate-size:
    *
    * Whether or not the size should smoothly change during the transition.
    */
@@ -1043,7 +1043,7 @@ gtk_stack_class_init (GtkStackClass *klass)
                             GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkStack:pages: (attributes org.gtk.Property.get=gtk_stack_get_pages)
+   * GtkStack:pages:
    *
    * A selection model with the stack pages.
    */

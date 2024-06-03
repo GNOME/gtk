@@ -337,7 +337,7 @@ gtk_slice_list_model_class_init (GtkSliceListModelClass *class)
                         G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
 
   /**
-   * GtkSliceListModel:model: (attributes org.gtk.Property.get=gtk_slice_list_model_get_model org.gtk.Property.set=gtk_slice_list_model_set_model)
+   * GtkSliceListModel:model:
    *
    * Child model to take slice from.
    */
@@ -359,7 +359,7 @@ gtk_slice_list_model_class_init (GtkSliceListModelClass *class)
                        G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
 
   /**
-   * GtkSliceListModel:offset: (attributes org.gtk.Property.get=gtk_slice_list_model_get_offset org.gtk.Property.set=gtk_slice_list_model_set_offset)
+   * GtkSliceListModel:offset:
    *
    * Offset of slice.
    */
@@ -369,7 +369,7 @@ gtk_slice_list_model_class_init (GtkSliceListModelClass *class)
                          GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkSliceListModel:size: (attributes org.gtk.Property.get=gtk_slice_list_model_get_size org.gtk.Property.set=gtk_slice_list_model_set_size)
+   * GtkSliceListModel:size:
    *
    * Maximum size of slice.
    */

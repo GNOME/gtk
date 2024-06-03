@@ -260,7 +260,7 @@ gtk_box_class_init (GtkBoxClass *class)
                                     "orientation");
 
   /**
-   * GtkBox:spacing: (attributes org.gtk.Property.get=gtk_box_get_spacing org.gtk.Property.set=gtk_box_set_spacing)
+   * GtkBox:spacing:
    *
    * The amount of space between children.
    */
@@ -270,7 +270,7 @@ gtk_box_class_init (GtkBoxClass *class)
                       GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkBox:homogeneous: (attributes org.gtk.Property.get=gtk_box_get_homogeneous org.gtk.Property.set=gtk_box_set_homogeneous)
+   * GtkBox:homogeneous:
    *
    * Whether the children should all be the same size.
    */
@@ -280,7 +280,7 @@ gtk_box_class_init (GtkBoxClass *class)
                           GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkBox:baseline-child: (attributes org.gtk.Property.get=gtk_box_get_baseline_child org.gtk.Property.set=gtk_box_set_baseline_child)
+   * GtkBox:baseline-child:
    *
    * The child that determines the baseline, in vertical orientation.
    *
@@ -292,7 +292,7 @@ gtk_box_class_init (GtkBoxClass *class)
                       GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkBox:baseline-position: (attributes org.gtk.Property.get=gtk_box_get_baseline_position org.gtk.Property.set=gtk_box_set_baseline_position)
+   * GtkBox:baseline-position:
    *
    * The position of the baseline aligned widgets if extra space is available.
    */

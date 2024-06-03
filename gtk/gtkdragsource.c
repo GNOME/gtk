@@ -333,7 +333,7 @@ gtk_drag_source_class_init (GtkDragSourceClass *class)
   class->prepare = gtk_drag_source_prepare;
 
   /**
-   * GtkDragSource:content: (attributes org.gtk.Property.get=gtk_drag_source_get_content org.gtk.Property.set=gtk_drag_source_set_content)
+   * GtkDragSource:content:
    *
    * The data that is offered by drag operations from this source.
    */
@@ -343,7 +343,7 @@ gtk_drag_source_class_init (GtkDragSourceClass *class)
                            G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkDragSource:actions: (attributes org.gtk.Property.get=gtk_drag_source_get_actions org.gtk.Property.set=gtk_drag_source_set_actions)
+   * GtkDragSource:actions:
    *
    * The actions that are supported by drag operations from the source.
    *

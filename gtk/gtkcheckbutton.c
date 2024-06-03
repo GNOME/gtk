@@ -621,7 +621,7 @@ gtk_check_button_class_init (GtkCheckButtonClass *class)
   class->activate = gtk_check_button_real_activate;
 
   /**
-   * GtkCheckButton:active: (attributes org.gtk.Property.get=gtk_check_button_get_active org.gtk.Property.set=gtk_check_button_set_active)
+   * GtkCheckButton:active:
    *
    * If the check button is active.
    *
@@ -634,7 +634,7 @@ gtk_check_button_class_init (GtkCheckButtonClass *class)
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkCheckButton:group: (attributes org.gtk.Property.set=gtk_check_button_set_group)
+   * GtkCheckButton:group:
    *
    * The check button whose group this widget belongs to.
    */
@@ -644,7 +644,7 @@ gtk_check_button_class_init (GtkCheckButtonClass *class)
                            GTK_PARAM_WRITABLE);
 
   /**
-   * GtkCheckButton:label: (attributes org.gtk.Property.get=gtk_check_button_get_label org.gtk.Property.set=gtk_check_button_set_label)
+   * GtkCheckButton:label:
    *
    * Text of the label inside the check button, if it contains a label widget.
    */
@@ -654,7 +654,7 @@ gtk_check_button_class_init (GtkCheckButtonClass *class)
                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkCheckButton:inconsistent: (attributes org.gtk.Property.get=gtk_check_button_get_inconsistent org.gtk.Property.set=gtk_check_button_set_inconsistent)
+   * GtkCheckButton:inconsistent:
    *
    * If the check button is in an “in between” state.
    *
@@ -667,7 +667,7 @@ gtk_check_button_class_init (GtkCheckButtonClass *class)
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkCheckButton:use-underline: (attributes org.gtk.Property.get=gtk_check_button_get_use_underline org.gtk.Property.set=gtk_check_button_set_use_underline)
+   * GtkCheckButton:use-underline:
    *
    * If set, an underline in the text indicates that the following
    * character is to be used as mnemonic.
@@ -678,7 +678,7 @@ gtk_check_button_class_init (GtkCheckButtonClass *class)
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkCheckButton:child: (attributes org.gtk.Property.get=gtk_check_button_get_child org.gtk.Property.set=gtk_check_button_set_child)
+   * GtkCheckButton:child:
    *
    * The child widget.
    *

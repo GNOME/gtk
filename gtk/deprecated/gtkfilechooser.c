@@ -81,7 +81,7 @@ static void
 gtk_file_chooser_default_init (GtkFileChooserInterface *iface)
 {
   /**
-   * GtkFileChooser:action: (attributes org.gtk.Property.get=gtk_file_chooser_get_action org.gtk.Property.set=gtk_file_chooser_set_action)
+   * GtkFileChooser:action:
    *
    * The type of operation that the file chooser is performing.
    *
@@ -95,7 +95,7 @@ gtk_file_chooser_default_init (GtkFileChooserInterface *iface)
 
 
   /**
-   * GtkFileChooser:filter: (attributes org.gtk.Property.get=gtk_file_chooser_get_filter org.gtk.Property.set=gtk_file_chooser_set_filter)
+   * GtkFileChooser:filter:
    *
    * The current filter for selecting files that are displayed.
    *
@@ -107,7 +107,7 @@ gtk_file_chooser_default_init (GtkFileChooserInterface *iface)
                                                             GTK_PARAM_READWRITE));
 
   /**
-   * GtkFileChooser:select-multiple: (attributes org.gtk.Property.get=gtk_file_chooser_get_select_multiple org.gtk.Property.set=gtk_file_chooser_set_select_multiple)
+   * GtkFileChooser:select-multiple:
    *
    * Whether to allow multiple files to be selected.
    *
@@ -119,7 +119,7 @@ gtk_file_chooser_default_init (GtkFileChooserInterface *iface)
                                                              GTK_PARAM_READWRITE));
 
   /**
-   * GtkFileChooser:filters: (attributes org.gtk.Property.get=gtk_file_chooser_get_filters)
+   * GtkFileChooser:filters:
    *
    * A `GListModel` containing the filters that have been
    * added with gtk_file_chooser_add_filter().
@@ -135,7 +135,7 @@ gtk_file_chooser_default_init (GtkFileChooserInterface *iface)
                                                           GTK_PARAM_READABLE));
 
   /**
-   * GtkFileChooser:shortcut-folders: (attributes org.gtk.Property.get=gtk_file_chooser_get_shortcut_folders)
+   * GtkFileChooser:shortcut-folders:
    *
    * A `GListModel` containing the shortcut folders that have been
    * added with gtk_file_chooser_add_shortcut_folder().
@@ -151,7 +151,7 @@ gtk_file_chooser_default_init (GtkFileChooserInterface *iface)
                                                           GTK_PARAM_READABLE));
 
   /**
-   * GtkFileChooser:create-folders: (attributes org.gtk.Property.get=gtk_file_chooser_get_create_folders org.gtk.Property.set=gtk_file_chooser_set_create_folders)
+   * GtkFileChooser:create-folders:
    *
    * Whether a file chooser not in %GTK_FILE_CHOOSER_ACTION_OPEN mode
    * will offer the user to create new folders.

@@ -995,7 +995,7 @@ gtk_search_entry_get_key_capture_widget (GtkSearchEntry *entry)
 }
 
 /**
- * gtk_search_entry_set_search_delay: (attributes org.gtk.Property.set_property=search-delay)
+ * gtk_search_entry_set_search_delay:
  * @entry: a `GtkSearchEntry`
  * @delay: a delay in milliseconds
  *
@@ -1022,7 +1022,7 @@ gtk_search_entry_set_search_delay (GtkSearchEntry *entry,
 }
 
 /**
- * gtk_search_entry_get_search_delay: (attributes org.gtk.Property.get_property=search-delay)
+ * gtk_search_entry_get_search_delay:
  * @entry: a `GtkSearchEntry`
  *
  * Get the delay to be used between the last keypress and the

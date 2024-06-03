@@ -153,7 +153,7 @@ gtk_fixed_layout_child_class_init (GtkFixedLayoutChildClass *klass)
   gobject_class->finalize = gtk_fixed_layout_child_finalize;
 
   /**
-   * GtkFixedLayoutChild:transform: (attributes org.gtk.Property.get=gtk_fixed_layout_child_get_transform org.gtk.Property.set=gtk_fixed_layout_child_set_transform)
+   * GtkFixedLayoutChild:transform:
    *
    * The transform of the child.
    */

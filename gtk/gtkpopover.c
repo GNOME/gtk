@@ -1885,7 +1885,7 @@ gtk_popover_class_init (GtkPopoverClass *klass)
   klass->activate_default = gtk_popover_activate_default;
 
   /**
-   * GtkPopover:pointing-to: (attributes org.gtk.Property.get=gtk_popover_get_pointing_to org.gtk.Property.set=gtk_popover_set_pointing_to)
+   * GtkPopover:pointing-to:
    *
    * Rectangle in the parent widget that the popover points to.
    */
@@ -1895,7 +1895,7 @@ gtk_popover_class_init (GtkPopoverClass *klass)
                           GTK_PARAM_READWRITE);
 
   /**
-   * GtkPopover:position: (attributes org.gtk.Property.get=gtk_popover_get_position org.gtk.Property.set=gtk_popover_set_position)
+   * GtkPopover:position:
    *
    * How to place the popover, relative to its parent.
    */
@@ -1905,7 +1905,7 @@ gtk_popover_class_init (GtkPopoverClass *klass)
                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkPopover:autohide: (attributes org.gtk.Property.get=gtk_popover_get_autohide org.gtk.Property.set=gtk_popover_set_autohide)
+   * GtkPopover:autohide:
    *
    * Whether to dismiss the popover on outside clicks.
    */
@@ -1925,7 +1925,7 @@ gtk_popover_class_init (GtkPopoverClass *klass)
                            GTK_PARAM_READWRITE|G_PARAM_STATIC_STRINGS|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkPopover:has-arrow: (attributes org.gtk.Popover.get=gtk_popover_get_has_arrow org.gtk.Property.set=gtk_popover_set_has_arrow)
+   * GtkPopover:has-arrow:
    *
    * Whether to draw an arrow.
    */
@@ -1935,7 +1935,7 @@ gtk_popover_class_init (GtkPopoverClass *klass)
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkPopover:mnemonics-visible: (attributes org.gtk.Property.get=gtk_popover_get_mnemonics_visible org.gtk.Property.set=gtk_popover_set_mnemonics_visible)
+   * GtkPopover:mnemonics-visible:
    *
    * Whether mnemonics are currently visible in this popover.
    */
@@ -1945,7 +1945,7 @@ gtk_popover_class_init (GtkPopoverClass *klass)
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkPopover:child: (attributes org.gtk.Property.get=gtk_popover_get_child org.gtk.Property.set=gtk_popover_set_child)
+   * GtkPopover:child:
    *
    * The child widget.
    */
@@ -1955,7 +1955,7 @@ gtk_popover_class_init (GtkPopoverClass *klass)
                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkPopover:cascade-popdown: (attributes org.gtk.Property.get=gtk_popover_get_cascade_popdown org.gtk.Property.set=gtk_popover_set_cascade_popdown)
+   * GtkPopover:cascade-popdown:
    *
    * Whether the popover pops down after a child popover.
    *

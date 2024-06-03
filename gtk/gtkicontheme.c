@@ -3564,7 +3564,7 @@ gtk_icon_paintable_class_init (GtkIconPaintableClass *klass)
   gobject_class->finalize = gtk_icon_paintable_finalize;
 
   /**
-   * GtkIconPaintable:file: (attributes org.gtk.Property.get=gtk_icon_paintable_get_file)
+   * GtkIconPaintable:file:
    *
    * The file representing the icon, if any.
    */
@@ -3574,7 +3574,7 @@ gtk_icon_paintable_class_init (GtkIconPaintableClass *klass)
                                                         G_PARAM_CONSTRUCT_ONLY | G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_BLURB | G_PARAM_STATIC_NICK));
 
   /**
-   * GtkIconPaintable:icon-name: (attributes org.gtk.Property.get=gtk_icon_paintable_get_icon_name)
+   * GtkIconPaintable:icon-name:
    *
    * The icon name that was chosen during lookup.
    */

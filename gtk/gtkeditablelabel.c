@@ -401,7 +401,7 @@ gtk_editable_label_class_init (GtkEditableLabelClass *class)
   widget_class->grab_focus = gtk_editable_label_grab_focus;
 
   /**
-   * GtkEditableLabel:editing: (attributes org.gtk.Property.get=gtk_editable_label_get_editing)
+   * GtkEditableLabel:editing:
    *
    * This property is %TRUE while the widget is in edit mode.
    */

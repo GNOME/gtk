@@ -172,7 +172,7 @@ gdk_cursor_class_init (GdkCursorClass *cursor_class)
   object_class->finalize = gdk_cursor_finalize;
 
   /**
-   * GdkCursor:fallback: (attributes org.gtk.Property.get=gdk_cursor_get_fallback)
+   * GdkCursor:fallback:
    *
    * Cursor to fall back to if this cursor cannot be displayed.
    */
@@ -184,7 +184,7 @@ gdk_cursor_class_init (GdkCursorClass *cursor_class)
                                                         G_PARAM_STATIC_STRINGS));
 
   /**
-   * GdkCursor:hotspot-x: (attributes org.gtk.Property.get=gdk_cursor_get_hotspot_x)
+   * GdkCursor:hotspot-x:
    *
    * X position of the cursor hotspot in the cursor image.
    */
@@ -196,7 +196,7 @@ gdk_cursor_class_init (GdkCursorClass *cursor_class)
                                                      G_PARAM_STATIC_STRINGS));
 
   /**
-   * GdkCursor:hotspot-y: (attributes org.gtk.Property.get=gdk_cursor_get_hotspot_y)
+   * GdkCursor:hotspot-y:
    *
    * Y position of the cursor hotspot in the cursor image.
    */
@@ -208,7 +208,7 @@ gdk_cursor_class_init (GdkCursorClass *cursor_class)
                                                      G_PARAM_STATIC_STRINGS));
 
   /**
-   * GdkCursor:name: (attributes org.gtk.Property.get=gdk_cursor_get_name)
+   * GdkCursor:name:
    *
    * Name of this this cursor.
    *

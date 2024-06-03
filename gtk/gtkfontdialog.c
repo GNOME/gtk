@@ -176,7 +176,7 @@ gtk_font_dialog_class_init (GtkFontDialogClass *class)
   object_class->finalize = gtk_font_dialog_finalize;
 
   /**
-   * GtkFontDialog:title: (attributes org.gtk.Property.get=gtk_font_dialog_get_title org.gtk.Property.set=gtk_font_dialog_set_title)
+   * GtkFontDialog:title:
    *
    * A title that may be shown on the font chooser
    * dialog that is presented by [method@Gtk.FontDialog.choose_font].
@@ -189,7 +189,7 @@ gtk_font_dialog_class_init (GtkFontDialogClass *class)
                            G_PARAM_READWRITE|G_PARAM_STATIC_STRINGS|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkFontDialog:modal: (attributes org.gtk.Property.get=gtk_font_dialog_get_modal org.gtk.Property.set=gtk_font_dialog_set_modal)
+   * GtkFontDialog:modal:
    *
    * Whether the font chooser dialog is modal.
    *
@@ -201,7 +201,7 @@ gtk_font_dialog_class_init (GtkFontDialogClass *class)
                             G_PARAM_READWRITE|G_PARAM_STATIC_STRINGS|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkFontDialog:language: (attributes org.gtk.Property.get=gtk_font_dialog_get_language org.gtk.Property.set=gtk_font_dialog_set_language)
+   * GtkFontDialog:language:
    *
    * The language for which the font features are selected.
    *
@@ -213,7 +213,7 @@ gtk_font_dialog_class_init (GtkFontDialogClass *class)
                           G_PARAM_READWRITE|G_PARAM_STATIC_STRINGS|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkFontDialog:font-map: (attributes org.gtk.Property.get=gtk_font_dialog_get_font_map org.gtk.Property.set=gtk_font_dialog_set_font_map)
+   * GtkFontDialog:font-map:
    *
    * Sets a custom font map to select fonts from.
    *
@@ -228,7 +228,7 @@ gtk_font_dialog_class_init (GtkFontDialogClass *class)
                            G_PARAM_READWRITE|G_PARAM_STATIC_STRINGS|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkFontDialog:filter: (attributes org.gtk.Property.get=gtk_font_dialog_get_filter org.gtk.Property.set=gtk_font_dialog_set_filter)
+   * GtkFontDialog:filter:
    *
    * Sets a filter to restrict what fonts are shown
    * in the font chooser dialog.

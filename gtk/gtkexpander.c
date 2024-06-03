@@ -310,7 +310,7 @@ gtk_expander_class_init (GtkExpanderClass *klass)
   klass->activate = gtk_expander_activate;
 
   /**
-   * GtkExpander:expanded: (attributes org.gtk.Property.get=gtk_expander_get_expanded org.gtk.Property.set=gtk_expander_set_expanded)
+   * GtkExpander:expanded:
    *
    * Whether the expander has been opened to reveal the child.
    */
@@ -321,7 +321,7 @@ gtk_expander_class_init (GtkExpanderClass *klass)
                                                          GTK_PARAM_READWRITE|G_PARAM_CONSTRUCT|G_PARAM_EXPLICIT_NOTIFY));
 
   /**
-   * GtkExpander:label: (attributes org.gtk.Property.get=gtk_expander_get_label org.gtk.Property.set=gtk_expander_set_label)
+   * GtkExpander:label:
    *
    * The text of the expanders label.
    */
@@ -332,7 +332,7 @@ gtk_expander_class_init (GtkExpanderClass *klass)
                                                         GTK_PARAM_READWRITE|G_PARAM_CONSTRUCT));
 
   /**
-   * GtkExpander:use-underline: (attributes org.gtk.Property.get=gtk_expander_get_use_underline org.gtk.Property.set=gtk_expander_set_use_underline)
+   * GtkExpander:use-underline:
    *
    * Whether an underline in the text indicates a mnemonic.
    */
@@ -343,7 +343,7 @@ gtk_expander_class_init (GtkExpanderClass *klass)
                                                          GTK_PARAM_READWRITE|G_PARAM_CONSTRUCT|G_PARAM_EXPLICIT_NOTIFY));
 
   /**
-   * GtkExpander:use-markup: (attributes org.gtk.Property.get=gtk_expander_get_use_markup org.gtk.Property.set=gtk_expander_set_use_markup)
+   * GtkExpander:use-markup:
    *
    * Whether the text in the label is Pango markup.
    */
@@ -354,7 +354,7 @@ gtk_expander_class_init (GtkExpanderClass *klass)
                                                          GTK_PARAM_READWRITE|G_PARAM_CONSTRUCT|G_PARAM_EXPLICIT_NOTIFY));
 
   /**
-   * GtkExpander:label-widget: (attributes org.gtk.Property.get=gtk_expander_get_label_widget org.gtk.Property.set=gtk_expander_set_label_widget)
+   * GtkExpander:label-widget:
    *
    * A widget to display instead of the usual expander label.
    */
@@ -365,7 +365,7 @@ gtk_expander_class_init (GtkExpanderClass *klass)
                                                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   /**
-   * GtkExpander:resize-toplevel: (attributes org.gtk.Property.get=gtk_expander_get_resize_toplevel org.gtk.Property.set=gtk_expander_set_resize_toplevel)
+   * GtkExpander:resize-toplevel:
    *
    * When this property is %TRUE, the expander will resize the toplevel
    * widget containing the expander upon expanding and collapsing.
@@ -377,7 +377,7 @@ gtk_expander_class_init (GtkExpanderClass *klass)
                                                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   /**
-   * GtkExpander:child: (attributes org.gtk.Property.get=gtk_expander_get_child org.gtk.Property.set=gtk_expander_set_child)
+   * GtkExpander:child:
    *
    * The child widget.
    */

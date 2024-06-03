@@ -547,7 +547,7 @@ gdk_surface_class_init (GdkSurfaceClass *klass)
   klass->set_opaque_region = gdk_surface_default_set_opaque_region;
 
   /**
-   * GdkSurface:cursor: (attributes org.gtk.Property.get=gdk_surface_get_cursor org.gtk.Property.set=gdk_surface_set_cursor)
+   * GdkSurface:cursor:
    *
    * The mouse pointer for the `GdkSurface`.
    */
@@ -557,7 +557,7 @@ gdk_surface_class_init (GdkSurfaceClass *klass)
                            G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
 
   /**
-   * GdkSurface:display: (attributes org.gtk.Property.get=gdk_surface_get_display)
+   * GdkSurface:display:
    *
    * The `GdkDisplay` connection of the surface.
    */
@@ -567,7 +567,7 @@ gdk_surface_class_init (GdkSurfaceClass *klass)
                            G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
 
   /**
-   * GdkSurface:frame-clock: (attributes org.gtk.Property.get=gdk_surface_get_frame_clock)
+   * GdkSurface:frame-clock:
    *
    * The `GdkFrameClock` of the surface.
    */
@@ -577,7 +577,7 @@ gdk_surface_class_init (GdkSurfaceClass *klass)
                            G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
 
   /**
-   * GdkSurface:mapped: (attributes org.gtk.Property.get=gdk_surface_get_mapped)
+   * GdkSurface:mapped:
    *
    * Whether the surface is mapped.
    */
@@ -587,7 +587,7 @@ gdk_surface_class_init (GdkSurfaceClass *klass)
                             G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
 
   /**
-   * GdkSurface:width: (attributes org.gtk.Property.get=gdk_surface_get_width)
+   * GdkSurface:width:
    *
    * The width of the surface in pixels.
    */
@@ -597,7 +597,7 @@ gdk_surface_class_init (GdkSurfaceClass *klass)
                         G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
 
   /**
-   * GdkSurface:height: (attributes org.gtk.Property.get=gdk_surface_get_height)
+   * GdkSurface:height:
    *
    * The height of the surface, in pixels.
    */
@@ -607,7 +607,7 @@ gdk_surface_class_init (GdkSurfaceClass *klass)
                         G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
 
   /**
-   * GdkSurface:scale-factor: (attributes org.gtk.Property.get=gdk_surface_get_scale_factor)
+   * GdkSurface:scale-factor:
    *
    * The scale factor of the surface.
    *
@@ -620,7 +620,7 @@ gdk_surface_class_init (GdkSurfaceClass *klass)
                         G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
 
   /**
-   * GdkSurface:scale: (attributes org.gtk.Property.get=gdk_surface_get_scale)
+   * GdkSurface:scale:
    *
    * The scale of the surface.
    *

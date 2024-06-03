@@ -205,7 +205,7 @@ gtk_file_dialog_class_init (GtkFileDialogClass *class)
   object_class->set_property = gtk_file_dialog_set_property;
 
   /**
-   * GtkFileDialog:title: (attributes org.gtk.Property.get=gtk_file_dialog_get_title org.gtk.Property.set=gtk_file_dialog_set_title)
+   * GtkFileDialog:title:
    *
    * A title that may be shown on the file chooser dialog.
    *
@@ -217,7 +217,7 @@ gtk_file_dialog_class_init (GtkFileDialogClass *class)
                            G_PARAM_READWRITE|G_PARAM_STATIC_STRINGS|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkFileDialog:modal: (attributes org.gtk.Property.get=gtk_file_dialog_get_modal org.gtk.Property.set=gtk_file_dialog_set_modal)
+   * GtkFileDialog:modal:
    *
    * Whether the file chooser dialog is modal.
    *
@@ -229,7 +229,7 @@ gtk_file_dialog_class_init (GtkFileDialogClass *class)
                             G_PARAM_READWRITE|G_PARAM_STATIC_STRINGS|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkFileDialog:filters: (attributes org.gtk.Property.get=gtk_file_dialog_get_filters org.gtk.Property.set=gtk_file_dialog_set_filters)
+   * GtkFileDialog:filters:
    *
    * The list of filters.
    *
@@ -243,7 +243,7 @@ gtk_file_dialog_class_init (GtkFileDialogClass *class)
                            G_PARAM_READWRITE|G_PARAM_STATIC_STRINGS|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkFileDialog:default-filter: (attributes org.gtk.Property.get=gtk_file_dialog_get_default_filter org.gtk.Property.set=gtk_file_dialog_set_default_filter)
+   * GtkFileDialog:default-filter:
    *
    * The default filter, that is, the filter that is initially
    * active in the file chooser dialog.
@@ -263,7 +263,7 @@ gtk_file_dialog_class_init (GtkFileDialogClass *class)
                            G_PARAM_READWRITE|G_PARAM_STATIC_STRINGS|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkFileDialog:initial-file: (attributes org.gtk.Property.get=gtk_file_dialog_get_initial_file org.gtk.Property.set=gtk_file_dialog_set_initial_file)
+   * GtkFileDialog:initial-file:
    *
    * The initial file, that is, the file that is initially selected
    * in the file chooser dialog
@@ -279,7 +279,7 @@ gtk_file_dialog_class_init (GtkFileDialogClass *class)
                            G_PARAM_READWRITE|G_PARAM_STATIC_STRINGS|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkFileDialog:initial-folder: (attributes org.gtk.Property.get=gtk_file_dialog_get_initial_folder org.gtk.Property.set=gtk_file_dialog_set_initial_folder)
+   * GtkFileDialog:initial-folder:
    *
    * The initial folder, that is, the directory that is initially
    * opened in the file chooser dialog
@@ -292,7 +292,7 @@ gtk_file_dialog_class_init (GtkFileDialogClass *class)
                            G_PARAM_READWRITE|G_PARAM_STATIC_STRINGS|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkFileDialog:initial-name: (attributes org.gtk.Property.get=gtk_file_dialog_get_initial_name org.gtk.Property.set=gtk_file_dialog_set_initial_name)
+   * GtkFileDialog:initial-name:
    *
    * The initial name, that is, the filename that is initially
    * selected in the file chooser dialog.
@@ -305,7 +305,7 @@ gtk_file_dialog_class_init (GtkFileDialogClass *class)
                            G_PARAM_READWRITE|G_PARAM_STATIC_STRINGS|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkFileDialog:accept-label: (attributes org.gtk.Property.get=gtk_file_dialog_get_accept_label org.gtk.Property.set=gtk_file_dialog_set_accept_label)
+   * GtkFileDialog:accept-label:
    *
    * Label for the file chooser's accept button.
    *

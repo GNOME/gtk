@@ -382,7 +382,7 @@ gtk_spin_button_class_init (GtkSpinButtonClass *class)
   class->activate = gtk_spin_button_real_activate;
 
   /**
-   * GtkSpinButton:activates-default: (attributes org.gtk.Property.get=gtk_spin_button_get_activates_default org.gtk.Property.set=gtk_spin_button_set_activates_default)
+   * GtkSpinButton:activates-default:
    *
    * Whether to activate the default widget when the spin button is activated.
    *
@@ -396,7 +396,7 @@ gtk_spin_button_class_init (GtkSpinButtonClass *class)
                           GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkSpinButton:adjustment: (attributes org.gtk.Property.get=gtk_spin_button_get_adjustment org.gtk.Property.set=gtk_spin_button_set_adjustment)
+   * GtkSpinButton:adjustment:
    *
    * The adjustment that holds the value of the spin button.
    */
@@ -406,7 +406,7 @@ gtk_spin_button_class_init (GtkSpinButtonClass *class)
                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkSpinButton:climb-rate: (attributes org.gtk.Property.get=gtk_spin_button_get_climb_rate org.gtk.Property.set=gtk_spin_button_set_climb_rate)
+   * GtkSpinButton:climb-rate:
    *
    * The acceleration rate when you hold down a button or key.
    */
@@ -416,7 +416,7 @@ gtk_spin_button_class_init (GtkSpinButtonClass *class)
                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkSpinButton:digits: (attributes org.gtk.Property.get=gtk_spin_button_get_digits org.gtk.Property.set=gtk_spin_button_set_digits)
+   * GtkSpinButton:digits:
    *
    * The number of decimal places to display.
    */
@@ -426,7 +426,7 @@ gtk_spin_button_class_init (GtkSpinButtonClass *class)
                        GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkSpinButton:snap-to-ticks: (attributes org.gtk.Property.get=gtk_spin_button_get_snap_to_ticks org.gtk.Property.set=gtk_spin_button_set_snap_to_ticks)
+   * GtkSpinButton:snap-to-ticks:
    *
    * Whether erroneous values are automatically changed to the spin buttons
    * nearest step increment.
@@ -437,7 +437,7 @@ gtk_spin_button_class_init (GtkSpinButtonClass *class)
                           GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkSpinButton:numeric: (attributes org.gtk.Property.get=gtk_spin_button_get_numeric org.gtk.Property.set=gtk_spin_button_set_numeric)
+   * GtkSpinButton:numeric:
    *
    * Whether non-numeric characters should be ignored.
    */
@@ -447,7 +447,7 @@ gtk_spin_button_class_init (GtkSpinButtonClass *class)
                           GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkSpinButton:wrap: (attributes org.gtk.Property.get=gtk_spin_button_get_wrap org.gtk.Property.set=gtk_spin_button_set_wrap)
+   * GtkSpinButton:wrap:
    *
    * Whether a spin button should wrap upon reaching its limits.
    */
@@ -457,7 +457,7 @@ gtk_spin_button_class_init (GtkSpinButtonClass *class)
                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkSpinButton:update-policy: (attributes org.gtk.Property.get=gtk_spin_button_get_update_policy org.gtk.Property.set=gtk_spin_button_set_update_policy)
+   * GtkSpinButton:update-policy:
    *
    * Whether the spin button should update always, or only when the value
    * is acceptable.
@@ -469,7 +469,7 @@ gtk_spin_button_class_init (GtkSpinButtonClass *class)
                        GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkSpinButton:value: (attributes org.gtk.Property.get=gtk_spin_button_get_value org.gtk.Property.set=gtk_spin_button_set_value)
+   * GtkSpinButton:value:
    *
    * The current value.
    */

@@ -454,7 +454,7 @@ gtk_entry_class_init (GtkEntryClass *class)
   quark_entry_completion = g_quark_from_static_string ("gtk-entry-completion-key");
 
   /**
-   * GtkEntry:buffer: (attributes org.gtk.Property.get=gtk_entry_get_buffer org.gtk.Property.set=gtk_entry_set_buffer)
+   * GtkEntry:buffer:
    *
    * The buffer object which actually stores the text.
    */
@@ -464,7 +464,7 @@ gtk_entry_class_init (GtkEntryClass *class)
                            GTK_PARAM_READWRITE|G_PARAM_CONSTRUCT|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkEntry:max-length: (attributes org.gtk.Property.get=gtk_entry_get_max_length org.gtk.Property.set=gtk_entry_set_max_length)
+   * GtkEntry:max-length:
    *
    * Maximum number of characters for this entry.
    */
@@ -475,7 +475,7 @@ gtk_entry_class_init (GtkEntryClass *class)
                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkEntry:visibility: (attributes org.gtk.Property.get=gtk_entry_get_visibility org.gtk.Property.set=gtk_entry_set_visibility)
+   * GtkEntry:visibility:
    *
    * Whether the entry should show the “invisible char” instead of the
    * actual text (“password mode”).
@@ -486,7 +486,7 @@ gtk_entry_class_init (GtkEntryClass *class)
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkEntry:has-frame: (attributes org.gtk.Property.get=gtk_entry_get_has_frame org.gtk.Property.set=gtk_entry_set_has_frame)
+   * GtkEntry:has-frame:
    *
    * Whether the entry should draw a frame.
    */
@@ -496,7 +496,7 @@ gtk_entry_class_init (GtkEntryClass *class)
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkEntry:invisible-char: (attributes org.gtk.Property.get=gtk_entry_get_invisible_char org.gtk.Property.set=gtk_entry_set_invisible_char)
+   * GtkEntry:invisible-char:
    *
    * The character to use when masking entry contents (“password mode”).
    */
@@ -506,7 +506,7 @@ gtk_entry_class_init (GtkEntryClass *class)
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkEntry:activates-default: (attributes org.gtk.Property.get=gtk_entry_get_activates_default org.gtk.Property.set=gtk_entry_set_activates_default)
+   * GtkEntry:activates-default:
    *
    * Whether to activate the default widget when Enter is pressed.
    */
@@ -537,7 +537,7 @@ gtk_entry_class_init (GtkEntryClass *class)
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkEntry:overwrite-mode: (attributes org.gtk.Property.get=gtk_entry_get_overwrite_mode org.gtk.Property.set=gtk_entry_set_overwrite_mode)
+   * GtkEntry:overwrite-mode:
    *
    * If text is overwritten when typing in the `GtkEntry`.
    */
@@ -547,7 +547,7 @@ gtk_entry_class_init (GtkEntryClass *class)
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkEntry:text-length: (attributes org.gtk.Property.get=gtk_entry_get_text_length)
+   * GtkEntry:text-length:
    *
    * The length of the text in the `GtkEntry`.
    */
@@ -568,7 +568,7 @@ gtk_entry_class_init (GtkEntryClass *class)
                             GTK_PARAM_READWRITE);
 
   /**
-   * GtkEntry:progress-fraction: (attributes org.gtk.Property.get=gtk_entry_get_progress_fraction org.gtk.Property.set=gtk_entry_set_progress_fraction)
+   * GtkEntry:progress-fraction:
    *
    * The current fraction of the task that's been completed.
    */
@@ -579,7 +579,7 @@ gtk_entry_class_init (GtkEntryClass *class)
                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkEntry:progress-pulse-step: (attributes org.gtk.Property.get=gtk_entry_get_progress_pulse_step org.gtk.Property.set=gtk_entry_set_progress_pulse_step)
+   * GtkEntry:progress-pulse-step:
    *
    * The fraction of total entry width to move the progress
    * bouncing block for each pulse.
@@ -593,7 +593,7 @@ gtk_entry_class_init (GtkEntryClass *class)
                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-  * GtkEntry:placeholder-text: (attributes org.gtk.Property.get=gtk_entry_get_placeholder_text org.gtk.Property.set=gtk_entry_set_placeholder_text)
+  * GtkEntry:placeholder-text:
   *
   * The text that will be displayed in the `GtkEntry` when it is empty
   * and unfocused.
@@ -818,7 +818,7 @@ gtk_entry_class_init (GtkEntryClass *class)
                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkEntry:completion: (attributes org.gtk.Property.get=gtk_entry_get_completion org.gtk.Property.set=gtk_entry_set_completion)
+   * GtkEntry:completion:
    *
    * The auxiliary completion object to use with the entry.
    *
@@ -830,7 +830,7 @@ gtk_entry_class_init (GtkEntryClass *class)
                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY|G_PARAM_DEPRECATED);
 
   /**
-   * GtkEntry:input-purpose: (attributes org.gtk.Property.get=gtk_entry_get_input_purpose org.gtk.Property.set=gtk_entry_set_input_purpose)
+   * GtkEntry:input-purpose:
    *
    * The purpose of this text field.
    *
@@ -848,7 +848,7 @@ gtk_entry_class_init (GtkEntryClass *class)
                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkEntry:input-hints: (attributes org.gtk.Property.get=gtk_entry_get_input_hints org.gtk.Property.set=gtk_entry_set_input_hints)
+   * GtkEntry:input-hints:
    *
    * Additional hints that allow input methods to fine-tune their behavior.
    *
@@ -861,7 +861,7 @@ gtk_entry_class_init (GtkEntryClass *class)
                           GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkEntry:attributes: (attributes org.gtk.Property.get=gtk_entry_get_attributes org.gtk.Property.set=gtk_entry_set_attributes)
+   * GtkEntry:attributes:
    *
    * A list of Pango attributes to apply to the text of the entry.
    *
@@ -876,7 +876,7 @@ gtk_entry_class_init (GtkEntryClass *class)
                           GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkEntry:tabs: (attributes org.gtk.Property.get=gtk_entry_get_tabs org.gtk.Property.set=gtk_entry_set_tabs)
+   * GtkEntry:tabs:
    *
    * A list of tabstops to apply to the text of the entry.
    */
@@ -897,7 +897,7 @@ gtk_entry_class_init (GtkEntryClass *class)
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkEntry:extra-menu: (attributes org.gtk.Property.get=gtk_entry_get_extra_menu org.gtk.Property.set=gtk_entry_set_extra_menu)
+   * GtkEntry:extra-menu:
    *
    * A menu model whose contents will be appended to the context menu.
    */

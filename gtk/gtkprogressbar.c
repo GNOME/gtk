@@ -183,7 +183,7 @@ gtk_progress_bar_class_init (GtkProgressBarClass *class)
   g_object_class_override_property (gobject_class, PROP_ORIENTATION, "orientation");
 
   /**
-   * GtkProgressBar:inverted: (attributes org.gtk.Property.get=gtk_progress_bar_get_inverted org.gtk.Property.set=gtk_progress_bar_set_inverted)
+   * GtkProgressBar:inverted:
    *
    * Invert the direction in which the progress bar grows.
    */
@@ -193,7 +193,7 @@ gtk_progress_bar_class_init (GtkProgressBarClass *class)
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkProgressBar:fraction: (attributes org.gtk.Property.get=gtk_progress_bar_get_fraction org.gtk.Property.set=gtk_progress_bar_set_fraction)
+   * GtkProgressBar:fraction:
    *
    * The fraction of total work that has been completed.
    */
@@ -204,7 +204,7 @@ gtk_progress_bar_class_init (GtkProgressBarClass *class)
                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkProgressBar:pulse-step: (attributes org.gtk.Property.get=gtk_progress_bar_get_pulse_step org.gtk.Property.set=gtk_progress_bar_set_pulse_step)
+   * GtkProgressBar:pulse-step:
    *
    * The fraction of total progress to move the bounding block when pulsed.
    */
@@ -215,7 +215,7 @@ gtk_progress_bar_class_init (GtkProgressBarClass *class)
                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkProgressBar:text: (attributes org.gtk.Property.get=gtk_progress_bar_get_text org.gtk.Property.set=gtk_progress_bar_set_text)
+   * GtkProgressBar:text:
    *
    * Text to be displayed in the progress bar.
    */
@@ -225,7 +225,7 @@ gtk_progress_bar_class_init (GtkProgressBarClass *class)
                            GTK_PARAM_READWRITE);
 
   /**
-   * GtkProgressBar:show-text: (attributes org.gtk.Property.get=gtk_progress_bar_get_show_text org.gtk.Property.set=gtk_progress_bar_set_show_text)
+   * GtkProgressBar:show-text:
    *
    * Sets whether the progress bar will show a text in addition
    * to the bar itself.
@@ -244,7 +244,7 @@ gtk_progress_bar_class_init (GtkProgressBarClass *class)
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkProgressBar:ellipsize: (attributes org.gtk.Property.get=gtk_progress_bar_get_ellipsize org.gtk.Property.set=gtk_progress_bar_set_ellipsize)
+   * GtkProgressBar:ellipsize:
    *
    * The preferred place to ellipsize the string.
    *

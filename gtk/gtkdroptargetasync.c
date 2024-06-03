@@ -381,7 +381,7 @@ gtk_drop_target_async_class_init (GtkDropTargetAsyncClass *class)
   class->drop = gtk_drop_target_async_drop;
 
   /**
-   * GtkDropTargetAsync:actions: (attributes org.gtk.Property.get=gtk_drop_target_async_get_actions org.gtk.Property.set=gtk_drop_target_async_set_actions)
+   * GtkDropTargetAsync:actions:
    *
    * The `GdkDragActions` that this drop target supports.
    */
@@ -391,7 +391,7 @@ gtk_drop_target_async_class_init (GtkDropTargetAsyncClass *class)
                            G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkDropTargetAsync:formats: (attributes org.gtk.Property.get=gtk_drop_target_async_get_formats org.gtk.Property.set=gtk_drop_target_async_set_formats)
+   * GtkDropTargetAsync:formats:
    *
    * The `GdkContentFormats` that determines the supported data formats.
    */
