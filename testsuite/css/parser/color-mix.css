@@ -1,0 +1,127 @@
+a {
+  color: color-mix(in srgb, red, blue);
+}
+
+b {
+  color: color-mix(in srgb, red 50%, blue 50%);
+}
+
+c {
+  color: color-mix(in srgb, red 25%, blue);
+}
+
+d {
+  color: color-mix(in srgb, red, blue 25%);
+}
+
+e {
+  color: color-mix(in srgb, red 20%, blue 30%);
+}
+
+f {
+  color: color-mix(in srgb, red 60%, blue 90%);
+}
+
+g {
+  color: color-mix(in srgb-linear, red, blue);
+}
+
+h {
+  color: color-mix(in hsl, red, blue);
+}
+
+i {
+  color: color-mix(in hsl shorter hue, red, blue);
+}
+
+j {
+  color: color-mix(in hsl longer hue, red, blue);
+}
+
+k {
+  color: color-mix(in hsl increasing hue, red, blue);
+}
+
+l {
+  color: color-mix(in hsl decreasing hue, red, blue);
+}
+
+m {
+  color: color-mix(in hwb shorter hue, red, blue);
+}
+
+n {
+  color: color-mix(in oklch shorter hue, red, blue);
+}
+
+o {
+  color: color-mix(in oklab, red, blue);
+}
+
+p {
+  color: color-mix(in);
+}
+
+q {
+  color: color-mix(in srgb);
+}
+
+r {
+  color: color-mix(in srgb longer hue, red, blue);
+}
+
+s {
+  color: color-mix(in hsl wider hue, red, blue);
+}
+
+t {
+  color: color-mix(in hsl, red);
+}
+
+u {
+  color: color-mix(in hsl, red, 50%);
+}
+
+v {
+  color: color-mix(in hsl, white, black calc(20% + 30%));
+}
+
+w {
+  color: color-mix(in srgb, currentColor 50%, transparent 50%);
+}
+
+x {
+  color: color-mix(in srgb-linear, currentColor 25%, transparent);
+}
+
+y {
+  color: color-mix(in hsl, currentColor, transparent 25%);
+}
+
+z {
+  color: color-mix(in srgb-linear, currentColor 50%, transparent);
+}
+
+aa {
+  color: color-mix(in hsl, currentColor, transparent 50%);
+}
+
+ab {
+  color: color-mix(in hsl longer hue, currentColor 20%, transparent 30%);
+}
+
+ac {
+  color: color-mix(in hwb, currentColor 60%, transparent 90%);
+}
+
+ad {
+  color: color-mix(in oklch, currentColor 60%, transparent 90%);
+}
+
+ae {
+  color: color-mix(in oklab, currentColor 60%, transparent 90%);
+}
+
+af {
+  color: color-mix(in srgb, 30% red, 70% blue);
+}

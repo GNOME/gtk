@@ -20,6 +20,8 @@
 #include <glib.h>
 #include <math.h>
 
+#include "gtk/css/gtkcssparserprivate.h"
+
 G_BEGIN_DECLS
 
 typedef enum {
@@ -111,5 +113,13 @@ void    gtk_css_color_interpolate (const GtkCssColor      *from,
 
 const char * gtk_css_color_space_get_coord_name (GtkCssColorSpace color_space,
                                                  guint            coord);
+
+gboolean gtk_css_color_interpolation_method_parse (GtkCssParser           *parser,
+                                                   GtkCssColorSpace       *in,
+                                                   GtkCssHueInterpolation *interp);
+
+void gtk_css_color_interpolation_method_print (GtkCssColorSpace        in,
+                                               GtkCssHueInterpolation  interp,
+                                               GString                *string);
 
 G_END_DECLS

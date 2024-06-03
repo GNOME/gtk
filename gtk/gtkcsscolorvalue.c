@@ -35,12 +35,12 @@
 static GtkCssValue * gtk_css_color_value_new_mix (GtkCssValue *color1,
                                                   GtkCssValue *color2,
                                                   double       factor);
-static GtkCssValue * gtk_css_color_value_new_literal (const GdkRGBA *color);
+static GtkCssValue * gtk_css_color_value_new_color_from_rgba (const GdkRGBA *rgba);
 
 typedef enum {
-  COLOR_TYPE_LITERAL,
   COLOR_TYPE_COLOR,
   COLOR_TYPE_NAME,
+  COLOR_TYPE_COLOR_MIX,
   COLOR_TYPE_SHADE,
   COLOR_TYPE_ALPHA,
   COLOR_TYPE_MIX,
@@ -58,6 +58,16 @@ struct _GtkCssValue
   {
     char *name;
     GtkCssColor color;
+
+    struct
+    {
+      GtkCssColorSpace color_space;
+      GtkCssHueInterpolation hue_interpolation;
+      GtkCssValue *color1;
+      GtkCssValue *color2;
+      float percentage1;
+      float percentage2;
+    } color_mix;
 
     struct
     {
@@ -85,6 +95,11 @@ gtk_css_value_color_free (GtkCssValue *color)
       g_free (color->name);
       break;
 
+    case COLOR_TYPE_COLOR_MIX:
+      gtk_css_value_unref (color->color_mix.color1);
+      gtk_css_value_unref (color->color_mix.color2);
+      break;
+
     case COLOR_TYPE_SHADE:
       gtk_css_value_unref (color->shade.color);
       break;
@@ -98,7 +113,6 @@ gtk_css_value_color_free (GtkCssValue *color)
       gtk_css_value_unref (color->mix.color2);
       break;
 
-    case COLOR_TYPE_LITERAL:
     case COLOR_TYPE_COLOR:
     case COLOR_TYPE_CURRENT_COLOR:
     default:
@@ -169,7 +183,7 @@ gtk_css_value_color_compute (GtkCssValue          *value,
                                               context->provider,
                                               current);
     }
-  else if (value->type == COLOR_TYPE_LITERAL)
+  else if (value->type == COLOR_TYPE_COLOR)
     {
       resolved = gtk_css_value_ref (value);
     }
@@ -192,27 +206,26 @@ static gboolean
 gtk_css_value_color_equal (const GtkCssValue *value1,
                            const GtkCssValue *value2)
 {
-  if (value1->type == COLOR_TYPE_COLOR && value1->color.missing == 0 &&
-      value2->type == COLOR_TYPE_LITERAL)
-    return gdk_rgba_equal (&value1->rgba, &value2->rgba);
-
-  if (value2->type == COLOR_TYPE_COLOR && value2->color.missing == 0 &&
-      value1->type == COLOR_TYPE_LITERAL)
-    return gdk_rgba_equal (&value1->rgba, &value2->rgba);
-
   if (value1->type != value2->type)
     return FALSE;
 
   switch (value1->type)
     {
-    case COLOR_TYPE_LITERAL:
-      return gdk_rgba_equal (&value1->rgba, &value2->rgba);
-
     case COLOR_TYPE_COLOR:
       return gtk_css_color_equal (&value1->color, &value2->color);
 
     case COLOR_TYPE_NAME:
       return g_str_equal (value1->name, value2->name);
+
+    case COLOR_TYPE_COLOR_MIX:
+      return value1->color_mix.color_space == value2->color_mix.color_space &&
+             value1->color_mix.hue_interpolation == value2->color_mix.hue_interpolation &&
+             value1->color_mix.percentage1 == value2->color_mix.percentage1 &&
+             value1->color_mix.percentage2 == value2->color_mix.percentage2 &&
+             gtk_css_value_equal (value1->color_mix.color1,
+                                  value2->color_mix.color1) &&
+             gtk_css_value_equal (value1->color_mix.color2,
+                                  value2->color_mix.color2);
 
     case COLOR_TYPE_SHADE:
       return value1->shade.factor == value2->shade.factor &&
@@ -240,6 +253,50 @@ gtk_css_value_color_equal (const GtkCssValue *value1,
     }
 }
 
+static void
+normalize_color_mix_percentages (float  p1,
+                                 float  p2,
+                                 float *out_p1,
+                                 float *out_p2,
+                                 float *alpha_multiplier)
+{
+  *alpha_multiplier = 1;
+
+  if (p1 < -0.5 && p2 < -0.5)
+    {
+      if (out_p1)
+        *out_p1 = 50;
+      if (out_p2)
+        *out_p2 = 50;
+      return;
+    }
+
+  if (p1 < -0.5)
+    {
+      if (out_p1)
+        *out_p1 = 100 - p2;
+      if (out_p2)
+        *out_p2 = p2;
+      return;
+    }
+
+  if (p2 < -0.5)
+    {
+      if (out_p1)
+        *out_p1 = p1;
+      if (out_p2)
+        *out_p2 = 100 - p1;
+      return;
+    }
+
+  if (out_p1)
+    *out_p1 = p1 / (p1 + p2) * 100;
+  if (out_p2)
+    *out_p2 = p2 / (p1 + p2) * 100;
+  if (alpha_multiplier)
+    *alpha_multiplier = MIN (1, (p1 + p2) * 0.01);
+}
+
 static GtkCssValue *
 gtk_css_value_color_transition (GtkCssValue *start,
                                 GtkCssValue *end,
@@ -257,10 +314,6 @@ gtk_css_value_color_print (const GtkCssValue *value,
 
   switch (value->type)
     {
-    case COLOR_TYPE_LITERAL:
-      gdk_rgba_print (&value->rgba, string);
-      break;
-
     case COLOR_TYPE_COLOR:
       gtk_css_color_print (&value->color, value->serialize_as_rgb, string);
       break;
@@ -268,6 +321,56 @@ gtk_css_value_color_print (const GtkCssValue *value,
     case COLOR_TYPE_NAME:
       g_string_append (string, "@");
       g_string_append (string, value->name);
+      break;
+
+    case COLOR_TYPE_COLOR_MIX:
+      {
+        char percent[G_ASCII_DTOSTR_BUF_SIZE];
+        float p1 = value->color_mix.percentage1;
+        float p2 = value->color_mix.percentage2;
+        gboolean p1_present = p1 > -0.5;
+        gboolean p2_present = p2 > -0.5;
+        gboolean defaults = (!p1_present || G_APPROX_VALUE (p1, 50, FLT_EPSILON)) &&
+                            (!p2_present || G_APPROX_VALUE (p2, 50, FLT_EPSILON));
+
+        if (!p1_present && p2_present && !defaults)
+          {
+            p1 = 100 - p2;
+            p1_present = TRUE;
+            p2_present = FALSE;
+          }
+
+        g_string_append (string, "color-mix(");
+        gtk_css_color_interpolation_method_print (value->color_mix.color_space,
+                                                  value->color_mix.hue_interpolation,
+                                                  string);
+
+        g_string_append (string, ", ");
+
+        gtk_css_value_print (value->color_mix.color1, string);
+
+        if (p1_present && !defaults)
+          {
+            g_ascii_dtostr (percent, sizeof (percent), p1);
+            g_string_append_c (string, ' ');
+            g_string_append (string, percent);
+            g_string_append_c (string, '%');
+          }
+
+        g_string_append (string, ", ");
+
+        gtk_css_value_print (value->color_mix.color2, string);
+
+        if (p2_present && !defaults)
+          {
+            g_ascii_dtostr (percent, sizeof (percent), p2);
+            g_string_append_c (string, ' ');
+            g_string_append (string, percent);
+            g_string_append_c (string, '%');
+          }
+
+        g_string_append (string, ")");
+      }
       break;
 
     case COLOR_TYPE_SHADE:
@@ -374,6 +477,36 @@ apply_mix (const GdkRGBA *in1,
 }
 
 static GtkCssValue *
+apply_color_mix (GtkCssColorSpace        in,
+                 GtkCssHueInterpolation  interp,
+                 const GtkCssValue      *value1,
+                 const GtkCssValue      *value2,
+                 float                   percentage1,
+                 float                   percentage2)
+{
+  float p2, alpha_multiplier;
+  GtkCssColor output;
+  gboolean missing[4];
+  int i;
+
+  normalize_color_mix_percentages (percentage1, percentage2,
+                                   NULL, &p2, &alpha_multiplier);
+
+  gtk_css_color_interpolate (&value1->color, &value2->color,
+                             p2 * 0.01, in, interp, &output);
+
+  output.values[3] *= alpha_multiplier;
+
+  for (i = 0; i < 4; i++)
+    missing[i] = gtk_css_color_component_missing (&output, i);
+
+  return gtk_css_color_value_new_color (output.color_space,
+                                        FALSE,
+                                        output.values,
+                                        missing);
+}
+
+static GtkCssValue *
 gtk_css_color_value_do_resolve (GtkCssValue      *color,
                                 GtkStyleProvider *provider,
                                 GtkCssValue      *current,
@@ -385,7 +518,6 @@ gtk_css_color_value_do_resolve (GtkCssValue      *color,
 
   switch (color->type)
     {
-    case COLOR_TYPE_LITERAL:
     case COLOR_TYPE_COLOR:
       value = gtk_css_value_ref (color);
       break;
@@ -408,6 +540,24 @@ gtk_css_color_value_do_resolve (GtkCssValue      *color,
       }
       break;
 
+    case COLOR_TYPE_COLOR_MIX:
+      {
+        GtkCssValue *val1, *val2;
+
+        val1 = gtk_css_color_value_do_resolve (color->color_mix.color1, provider, current, cycle_list);
+        val2 = gtk_css_color_value_do_resolve (color->color_mix.color2, provider, current, cycle_list);
+
+        value = apply_color_mix (color->color_mix.color_space,
+                                 color->color_mix.hue_interpolation,
+                                 val1, val2,
+                                 color->color_mix.percentage1,
+                                 color->color_mix.percentage2);
+
+        gtk_css_value_unref (val1);
+        gtk_css_value_unref (val2);
+      }
+      break;
+
     case COLOR_TYPE_SHADE:
       {
         const GdkRGBA *c;
@@ -421,7 +571,7 @@ gtk_css_color_value_do_resolve (GtkCssValue      *color,
 
         apply_shade (c, &shade, color->shade.factor);
 
-        value = gtk_css_color_value_new_literal (&shade);
+        value = gtk_css_color_value_new_color_from_rgba (&shade);
         gtk_css_value_unref (val);
       }
       break;
@@ -439,7 +589,7 @@ gtk_css_color_value_do_resolve (GtkCssValue      *color,
 
         apply_alpha (c, &alpha, color->alpha.factor);
 
-        value = gtk_css_color_value_new_literal (&alpha);
+        value = gtk_css_color_value_new_color_from_rgba (&alpha);
         gtk_css_value_unref (val);
       }
       break;
@@ -462,7 +612,7 @@ gtk_css_color_value_do_resolve (GtkCssValue      *color,
 
         apply_mix (color1, color2, &res, color->mix.factor);
 
-        value = gtk_css_color_value_new_literal (&res);
+        value = gtk_css_color_value_new_color_from_rgba (&res);
         gtk_css_value_unref (val1);
         gtk_css_value_unref (val2);
       }
@@ -494,10 +644,12 @@ gtk_css_color_value_resolve (GtkCssValue      *color,
 /* }}} */
 /* {{{ Constructors */
 
-static GtkCssValue transparent_black_singleton = { &GTK_CSS_VALUE_COLOR, 1, TRUE, FALSE, FALSE, COLOR_TYPE_LITERAL,
-                                                   .rgba = {0, 0, 0, 0} };
-static GtkCssValue white_singleton             = { &GTK_CSS_VALUE_COLOR, 1, TRUE, FALSE, FALSE, COLOR_TYPE_LITERAL,
-                                                   .rgba = {1, 1, 1, 1} };
+static GtkCssValue transparent_black_singleton = { &GTK_CSS_VALUE_COLOR, 1, TRUE, FALSE, TRUE, COLOR_TYPE_COLOR,
+                                                   .rgba = {0, 0, 0, 0},
+                                                   .color = { GTK_CSS_COLOR_SPACE_SRGB, {0, 0, 0, 0}, 0 } };
+static GtkCssValue white_singleton             = { &GTK_CSS_VALUE_COLOR, 1, TRUE, FALSE, TRUE, COLOR_TYPE_COLOR,
+                                                   .rgba = {1, 1, 1, 1},
+                                                   .color = { GTK_CSS_COLOR_SPACE_SRGB, {1, 1, 1, 1}, 0 } };
 
 
 GtkCssValue *
@@ -510,27 +662,6 @@ GtkCssValue *
 gtk_css_color_value_new_white (void)
 {
   return gtk_css_value_ref (&white_singleton);
-}
-
-static GtkCssValue *
-gtk_css_color_value_new_literal (const GdkRGBA *color)
-{
-  GtkCssValue *value;
-
-  g_return_val_if_fail (color != NULL, NULL);
-
-  if (gdk_rgba_equal (color, &white_singleton.rgba))
-    return gtk_css_value_ref (&white_singleton);
-
-  if (gdk_rgba_equal (color, &transparent_black_singleton.rgba))
-    return gtk_css_value_ref (&transparent_black_singleton);
-
-  value = gtk_css_value_new (GtkCssValue, &GTK_CSS_VALUE_COLOR);
-  value->type = COLOR_TYPE_LITERAL;
-  value->is_computed = TRUE;
-  value->rgba = *color;
-
-  return value;
 }
 
 GtkCssValue *
@@ -559,6 +690,33 @@ gtk_css_color_value_new_color (GtkCssColorSpace color_space,
   return value;
 }
 
+static GtkCssValue *
+gtk_css_color_value_new_color_from_rgba (const GdkRGBA *rgba)
+{
+  GtkCssValue *value;
+
+  g_return_val_if_fail (rgba != NULL, NULL);
+
+  if (gdk_rgba_equal (rgba, &white_singleton.rgba))
+    return gtk_css_value_ref (&white_singleton);
+
+  if (gdk_rgba_equal (rgba, &transparent_black_singleton.rgba))
+    return gtk_css_value_ref (&transparent_black_singleton);
+
+  value = gtk_css_value_new (GtkCssValue, &GTK_CSS_VALUE_COLOR);
+  value->color.color_space = GTK_CSS_COLOR_SPACE_SRGB;
+  value->is_computed = TRUE;
+  value->serialize_as_rgb = TRUE;
+  value->type = COLOR_TYPE_COLOR;
+  gtk_css_color_init (&value->color,
+                      GTK_CSS_COLOR_SPACE_SRGB,
+                      (float[4]) { rgba->red, rgba->green, rgba->blue, rgba->alpha });
+
+  value->rgba = *rgba;
+
+  return value;
+}
+
 GtkCssValue *
 gtk_css_color_value_new_name (const char *name)
 {
@@ -581,13 +739,13 @@ gtk_css_color_value_new_shade (GtkCssValue *color,
 
   gtk_internal_return_val_if_fail (color->class == &GTK_CSS_VALUE_COLOR, NULL);
 
-  if (color->type == COLOR_TYPE_LITERAL || color->type == COLOR_TYPE_COLOR)
+  if (color->is_computed)
     {
       GdkRGBA c;
 
       apply_shade (&color->rgba, &c, factor);
 
-      return gtk_css_color_value_new_literal (&c);
+      return gtk_css_color_value_new_color_from_rgba (&c);
     }
 
   value = gtk_css_value_new (GtkCssValue, &GTK_CSS_VALUE_COLOR);
@@ -606,19 +764,54 @@ gtk_css_color_value_new_alpha (GtkCssValue *color,
 
   gtk_internal_return_val_if_fail (color->class == &GTK_CSS_VALUE_COLOR, NULL);
 
-  if (color->type == COLOR_TYPE_LITERAL || color->type == COLOR_TYPE_COLOR)
+  if (color->is_computed)
     {
       GdkRGBA c;
 
       apply_alpha (&color->rgba, &c, factor);
 
-      return gtk_css_color_value_new_literal (&c);
+      return gtk_css_color_value_new_color_from_rgba (&c);
     }
 
   value = gtk_css_value_new (GtkCssValue, &GTK_CSS_VALUE_COLOR);
   value->type = COLOR_TYPE_ALPHA;
   value->alpha.color = gtk_css_value_ref (color);
   value->alpha.factor = factor;
+
+  return value;
+}
+
+static GtkCssValue *
+gtk_css_color_value_new_color_mix (GtkCssColorSpace        color_space,
+                                   GtkCssHueInterpolation  hue_interpolation,
+                                   GtkCssValue            *color1,
+                                   GtkCssValue            *color2,
+                                   float                   percentage1,
+                                   float                   percentage2)
+{
+  GtkCssValue *value;
+
+  gtk_internal_return_val_if_fail (color1->class == &GTK_CSS_VALUE_COLOR, NULL);
+  gtk_internal_return_val_if_fail (color2->class == &GTK_CSS_VALUE_COLOR, NULL);
+
+  if (percentage1 > -0.5 && percentage2 > -0.5 && fabs (percentage1 + percentage2) < 0.001)
+    return NULL;
+
+  if (color1->is_computed && color2->is_computed)
+    {
+      return apply_color_mix (color_space, hue_interpolation,
+                              color1, color2,
+                              percentage1, percentage2);
+    }
+
+  value = gtk_css_value_new (GtkCssValue, &GTK_CSS_VALUE_COLOR);
+  value->type = COLOR_TYPE_COLOR_MIX;
+  value->color_mix.color_space = color_space;
+  value->color_mix.hue_interpolation = hue_interpolation;
+  value->color_mix.color1 = gtk_css_value_ref (color1);
+  value->color_mix.color2 = gtk_css_value_ref (color2);
+  value->color_mix.percentage1 = percentage1;
+  value->color_mix.percentage2 = percentage2;
 
   return value;
 }
@@ -633,14 +826,13 @@ gtk_css_color_value_new_mix (GtkCssValue *color1,
   gtk_internal_return_val_if_fail (color1->class == &GTK_CSS_VALUE_COLOR, NULL);
   gtk_internal_return_val_if_fail (color2->class == &GTK_CSS_VALUE_COLOR, NULL);
 
-  if ((color1->type == COLOR_TYPE_LITERAL || color1->type == COLOR_TYPE_COLOR) &&
-      (color2->type == COLOR_TYPE_LITERAL || color2->type == COLOR_TYPE_COLOR))
+  if (color1->is_computed && color2->is_computed)
     {
       GdkRGBA result;
 
       apply_mix (&color1->rgba, &color2->rgba, &result, factor);
 
-      return gtk_css_color_value_new_literal (&result);
+      return gtk_css_color_value_new_color_from_rgba (&result);
 
     }
 
@@ -684,7 +876,90 @@ gtk_css_color_value_can_parse (GtkCssParser *parser)
       || gtk_css_parser_has_function (parser, "hwb")
       || gtk_css_parser_has_function (parser, "oklab")
       || gtk_css_parser_has_function (parser, "oklch")
-      || gtk_css_parser_has_function (parser, "color");
+      || gtk_css_parser_has_function (parser, "color")
+      || gtk_css_parser_has_function (parser, "color-mix");
+}
+
+typedef struct
+{
+  GtkCssColorSpace color_space;
+  GtkCssHueInterpolation hue_interpolation;
+  GtkCssValue *color1;
+  GtkCssValue *color2;
+  float percentage1;
+  float percentage2;
+} ColorMixData;
+
+static gboolean
+parse_color_mix_component (GtkCssParser  *parser,
+                           GtkCssValue  **value,
+                           float         *percentage)
+{
+  *percentage = -1;
+
+  if (gtk_css_color_value_can_parse (parser))
+    {
+      *value = gtk_css_color_value_parse (parser);
+      if (*value == NULL)
+        return FALSE;
+    }
+
+  if (gtk_css_number_value_can_parse (parser))
+    {
+      GtkCssValue *val;
+      val = gtk_css_number_value_parse (parser, GTK_CSS_PARSE_PERCENT | GTK_CSS_POSITIVE_ONLY);
+      if (val == NULL)
+        return FALSE;
+
+      *percentage = gtk_css_number_value_get_canonical (val, 100);
+
+      if (*percentage > 100)
+        {
+          gtk_css_parser_error_syntax (parser, "Values above 100%% are not allowed");
+          gtk_css_value_unref (val);
+          return FALSE;
+        }
+
+      gtk_css_value_unref (val);
+    }
+
+  if (*value == NULL)
+    {
+      *value = gtk_css_color_value_parse (parser);
+      if (*value == NULL)
+        return FALSE;
+    }
+
+  return TRUE;
+}
+
+static guint
+parse_color_mix (GtkCssParser *parser,
+                 guint         arg,
+                 gpointer      data_)
+{
+  ColorMixData *data = data_;
+
+  switch (arg)
+  {
+    case 0:
+      if (!gtk_css_color_interpolation_method_parse (parser, &data->color_space, &data->hue_interpolation))
+        return 0;
+      return 1;
+
+    case 1:
+      if (!parse_color_mix_component (parser, &data->color1, &data->percentage1))
+        return 0;
+      return 1;
+
+    case 2:
+      if (!parse_color_mix_component (parser, &data->color2, &data->percentage2))
+        return 0;
+      return 1;
+
+    default:
+      g_assert_not_reached ();
+  }
 }
 
 typedef struct
@@ -695,9 +970,9 @@ typedef struct
 } ColorFunctionData;
 
 static guint
-parse_color_mix (GtkCssParser *parser,
-                 guint         arg,
-                 gpointer      data_)
+parse_legacy_mix (GtkCssParser *parser,
+                  guint         arg,
+                  gpointer      data_)
 {
   ColorFunctionData *data = data_;
 
@@ -1447,7 +1722,7 @@ gtk_css_color_value_parse (GtkCssParser *parser)
       if (!parse_color_function (parser, COLOR_SYNTAX_DETECTING, FALSE, TRUE, FALSE, parse_hsla_color_channel, &data))
         return NULL;
 
-      return gtk_css_color_value_new_color (GTK_CSS_COLOR_SPACE_HSL, FALSE, (float *) &hsla, data.missing);
+      return gtk_css_color_value_new_color (GTK_CSS_COLOR_SPACE_HSL, TRUE, (float *) &hsla, data.missing);
     }
   else if (gtk_css_parser_has_function (parser, "hwb"))
     {
@@ -1456,7 +1731,7 @@ gtk_css_color_value_parse (GtkCssParser *parser)
       if (!parse_color_function (parser, COLOR_SYNTAX_MODERN, FALSE, TRUE, FALSE, parse_hwb_color_channel, &hwb))
         return NULL;
 
-      return gtk_css_color_value_new_color (GTK_CSS_COLOR_SPACE_HWB, FALSE, (float *) &hwb, hwb.missing);
+      return gtk_css_color_value_new_color (GTK_CSS_COLOR_SPACE_HWB, TRUE, (float *) &hwb, hwb.missing);
     }
   else if (gtk_css_parser_has_function (parser, "oklab"))
     {
@@ -1484,6 +1759,31 @@ gtk_css_color_value_parse (GtkCssParser *parser)
         return NULL;
 
       return gtk_css_color_value_new_color (data.color_space, FALSE, data.values, data.missing);
+    }
+  else if (gtk_css_parser_has_function (parser, "color-mix"))
+    {
+      ColorMixData data;
+
+      data.color1 = NULL;
+      data.color2 = NULL;
+
+      if (gtk_css_parser_consume_function (parser, 3, 3, parse_color_mix, &data))
+        {
+          value = gtk_css_color_value_new_color_mix (data.color_space,
+                                                     data.hue_interpolation,
+                                                     data.color1,
+                                                     data.color2,
+                                                     data.percentage1,
+                                                     data.percentage2);
+        }
+      else
+        {
+          value = NULL;
+        }
+
+      g_clear_pointer (&data.color1, gtk_css_value_unref);
+      g_clear_pointer (&data.color2, gtk_css_value_unref);
+      return value;
     }
   else if (gtk_css_parser_has_function (parser, "lighter"))
     {
@@ -1537,7 +1837,7 @@ gtk_css_color_value_parse (GtkCssParser *parser)
     {
       ColorFunctionData data = { NULL, };
 
-      if (gtk_css_parser_consume_function (parser, 3, 3, parse_color_mix, &data))
+      if (gtk_css_parser_consume_function (parser, 3, 3, parse_legacy_mix, &data))
         value = gtk_css_color_value_new_mix (data.color, data.color2, data.value);
       else
         value = NULL;
@@ -1548,7 +1848,7 @@ gtk_css_color_value_parse (GtkCssParser *parser)
     }
 
   if (gdk_rgba_parser_parse (parser, &rgba))
-    return gtk_css_color_value_new_literal (&rgba);
+    return gtk_css_color_value_new_color_from_rgba (&rgba);
   else
     return NULL;
 }
@@ -1560,7 +1860,7 @@ const GdkRGBA *
 gtk_css_color_value_get_rgba (const GtkCssValue *color)
 {
   g_assert (color->class == &GTK_CSS_VALUE_COLOR);
-  g_assert (color->type == COLOR_TYPE_LITERAL || color->type == COLOR_TYPE_COLOR);
+  g_assert (color->type == COLOR_TYPE_COLOR);
 
   return &color->rgba;
 }
