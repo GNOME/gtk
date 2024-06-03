@@ -11903,7 +11903,7 @@ gtk_widget_create_render_node (GtkWidget   *widget,
 }
 
 static void
-gtk_widget_do_snapshot (GtkWidget *widget,
+gtk_widget_do_snapshot (GtkWidget   *widget,
                         GtkSnapshot *snapshot)
 {
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
