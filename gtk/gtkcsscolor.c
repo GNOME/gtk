@@ -73,46 +73,54 @@ append_color_component (GString           *string,
     g_string_append_printf (string, "%g", gtk_css_color_get_component (color, idx));
 }
 
+static void
+print_as_rgb (const GtkCssColor *color,
+              GString           *string)
+{
+  GtkCssColor tmp;
+
+  gtk_css_color_convert (color, GTK_CSS_COLOR_SPACE_SRGB, &tmp);
+  if (tmp.values[3] > 0.999)
+    {
+      g_string_append_printf (string, "rgb(%d,%d,%d)",
+                              (int)(0.5 + CLAMP (tmp.values[0], 0., 1.) * 255.),
+                              (int)(0.5 + CLAMP (tmp.values[1], 0., 1.) * 255.),
+                              (int)(0.5 + CLAMP (tmp.values[2], 0., 1.) * 255.));
+    }
+  else
+    {
+      char alpha[G_ASCII_DTOSTR_BUF_SIZE];
+
+      g_ascii_formatd (alpha, G_ASCII_DTOSTR_BUF_SIZE, "%g", CLAMP (tmp.values[3], 0, 1));
+
+      g_string_append_printf (string, "rgba(%d,%d,%d,%s)",
+                              (int)(0.5 + CLAMP (tmp.values[0], 0., 1.) * 255.),
+                              (int)(0.5 + CLAMP (tmp.values[1], 0., 1.) * 255.),
+                              (int)(0.5 + CLAMP (tmp.values[2], 0., 1.) * 255.),
+                              alpha);
+    }
+}
+
 GString *
 gtk_css_color_print (const GtkCssColor *color,
                      gboolean           serialize_as_rgb,
                      GString           *string)
 {
+  GtkCssColorSpace print_color_space = color->color_space;
+  GtkCssColor tmp;
+
   switch (color->color_space)
     {
+    case GTK_CSS_COLOR_SPACE_SRGB:
     case GTK_CSS_COLOR_SPACE_HSL:
     case GTK_CSS_COLOR_SPACE_HWB:
-print_rgb:
-      {
-        GtkCssColor tmp;
-
-        gtk_css_color_convert (color, GTK_CSS_COLOR_SPACE_SRGB, &tmp);
-        if (tmp.values[3] > 0.999)
-          {
-            g_string_append_printf (string, "rgb(%d,%d,%d)",
-                                    (int)(0.5 + CLAMP (tmp.values[0], 0., 1.) * 255.),
-                                    (int)(0.5 + CLAMP (tmp.values[1], 0., 1.) * 255.),
-                                    (int)(0.5 + CLAMP (tmp.values[2], 0., 1.) * 255.));
-          }
-        else
-          {
-            char alpha[G_ASCII_DTOSTR_BUF_SIZE];
-
-            g_ascii_formatd (alpha, G_ASCII_DTOSTR_BUF_SIZE, "%g", CLAMP (tmp.values[3], 0, 1));
-
-            g_string_append_printf (string, "rgba(%d,%d,%d,%s)",
-                                    (int)(0.5 + CLAMP (tmp.values[0], 0., 1.) * 255.),
-                                    (int)(0.5 + CLAMP (tmp.values[1], 0., 1.) * 255.),
-                                    (int)(0.5 + CLAMP (tmp.values[2], 0., 1.) * 255.),
-                                    alpha);
-          }
-      }
-      return string;
-
-    case GTK_CSS_COLOR_SPACE_SRGB:
       if (serialize_as_rgb)
-        goto print_rgb;
+        {
+          print_as_rgb (color, string);
+          return string;
+        }
 
+      print_color_space = GTK_CSS_COLOR_SPACE_SRGB;
       g_string_append (string, "color(srgb ");
       break;
 
@@ -132,18 +140,23 @@ print_rgb:
       g_assert_not_reached ();
     }
 
+  if (print_color_space != color->color_space)
+    gtk_css_color_convert (color, print_color_space, &tmp);
+  else
+    tmp = *color;
+
   for (guint i = 0; i < 3; i++)
     {
       if (i > 0)
         g_string_append_c (string, ' ');
-      append_color_component (string, color, i);
+      append_color_component (string, &tmp, i);
     }
 
-  if (gtk_css_color_component_missing (color, 3) ||
-      color->values[3] < 0.999)
+  if (gtk_css_color_component_missing (&tmp, 3) ||
+      tmp.values[3] < 0.999)
     {
       g_string_append (string, " / ");
-      append_color_component (string, color, 3);
+      append_color_component (string, &tmp, 3);
     }
 
   g_string_append_c (string, ')');

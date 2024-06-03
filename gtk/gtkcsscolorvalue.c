@@ -1447,7 +1447,7 @@ gtk_css_color_value_parse (GtkCssParser *parser)
       if (!parse_color_function (parser, COLOR_SYNTAX_DETECTING, FALSE, TRUE, FALSE, parse_hsla_color_channel, &data))
         return NULL;
 
-      return gtk_css_color_value_new_color (GTK_CSS_COLOR_SPACE_HSL, FALSE, (float *) &hsla, data.missing);
+      return gtk_css_color_value_new_color (GTK_CSS_COLOR_SPACE_HSL, TRUE, (float *) &hsla, data.missing);
     }
   else if (gtk_css_parser_has_function (parser, "hwb"))
     {
@@ -1456,7 +1456,7 @@ gtk_css_color_value_parse (GtkCssParser *parser)
       if (!parse_color_function (parser, COLOR_SYNTAX_MODERN, FALSE, TRUE, FALSE, parse_hwb_color_channel, &hwb))
         return NULL;
 
-      return gtk_css_color_value_new_color (GTK_CSS_COLOR_SPACE_HWB, FALSE, (float *) &hwb, hwb.missing);
+      return gtk_css_color_value_new_color (GTK_CSS_COLOR_SPACE_HWB, TRUE, (float *) &hwb, hwb.missing);
     }
   else if (gtk_css_parser_has_function (parser, "oklab"))
     {
