@@ -1,0 +1,103 @@
+a {
+  color: color(srgb 0.5 0 0.5);
+}
+
+b {
+  color: color(srgb 0.5 0 0.5);
+}
+
+c {
+  color: color(srgb 0.25 0 0.75);
+}
+
+d {
+  color: color(srgb 0.75 0 0.25);
+}
+
+e {
+  color: color(srgb 0.4 0 0.6 / 0.5);
+}
+
+f {
+  color: color(srgb 0.4 0 0.6);
+}
+
+g {
+  color: color(srgb-linear 0.5 0 0.5);
+}
+
+h {
+  color: color(srgb 1 0 1);
+}
+
+i {
+  color: color(srgb 1 0 1);
+}
+
+j {
+  color: color(srgb 0 1 0);
+}
+
+k {
+  color: color(srgb 0 1 0);
+}
+
+l {
+  color: color(srgb 1 0 1);
+}
+
+m {
+  color: color(srgb 1 0 1);
+}
+
+n {
+  color: oklch(0.539985 0.285449 326.643);
+}
+
+o {
+  color: oklab(0.539985 0.096203 -0.0928409);
+}
+
+v {
+  color: color(srgb 0.5 0.5 0.5);
+}
+
+w {
+  color: color-mix(in srgb, currentcolor, rgba(0,0,0,0));
+}
+
+x {
+  color: color-mix(in srgb-linear, currentcolor 25%, rgba(0,0,0,0));
+}
+
+y {
+  color: color-mix(in hsl, currentcolor 75%, rgba(0,0,0,0));
+}
+
+z {
+  color: color-mix(in srgb-linear, currentcolor, rgba(0,0,0,0));
+}
+
+aa {
+  color: color-mix(in hsl, currentcolor, rgba(0,0,0,0));
+}
+
+ab {
+  color: color-mix(in hsl longer hue, currentcolor 20%, rgba(0,0,0,0) 30%);
+}
+
+ac {
+  color: color-mix(in hwb, currentcolor 60%, rgba(0,0,0,0) 90%);
+}
+
+ad {
+  color: color-mix(in oklch, currentcolor 60%, rgba(0,0,0,0) 90%);
+}
+
+ae {
+  color: color-mix(in oklab, currentcolor 60%, rgba(0,0,0,0) 90%);
+}
+
+af {
+  color: color(srgb 0.3 0 0.7);
+}

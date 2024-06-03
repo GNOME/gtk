@@ -1,0 +1,6 @@
+color-mix.css:62:22-23: error: GTK_CSS_PARSER_ERROR_SYNTAX
+color-mix.css:66:27-28: error: GTK_CSS_PARSER_ERROR_SYNTAX
+color-mix.css:70:28-34: error: GTK_CSS_PARSER_ERROR_SYNTAX
+color-mix.css:74:27-32: error: GTK_CSS_PARSER_ERROR_SYNTAX
+color-mix.css:78:31-32: error: GTK_CSS_PARSER_ERROR_SYNTAX
+color-mix.css:82:36-37: error: GTK_CSS_PARSER_ERROR_SYNTAX
