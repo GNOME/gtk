@@ -5018,6 +5018,7 @@ static void
 gtk_widget_real_system_setting_changed (GtkWidget        *widget,
                                         GtkSystemSetting  setting)
 {
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
   GtkWidget *child;
 
   if (setting == GTK_SYSTEM_SETTING_DPI ||
@@ -5027,6 +5028,11 @@ gtk_widget_real_system_setting_changed (GtkWidget        *widget,
       gtk_widget_update_default_pango_context (widget);
       if (gtk_widget_peek_pango_context (widget))
         gtk_widget_queue_resize (widget);
+    }
+
+  if (setting == GTK_SYSTEM_SETTING_COLOR_SCHEME)
+    {
+      gtk_css_node_invalidate (priv->cssnode, GTK_CSS_CHANGE_SOURCE);
     }
 
   for (child = _gtk_widget_get_first_child (widget);
