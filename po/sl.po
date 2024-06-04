@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2024-05-31 21:05+0000\n"
-"PO-Revision-Date: 2024-06-01 10:53+0200\n"
+"POT-Creation-Date: 2024-06-03 12:48+0000\n"
+"PO-Revision-Date: 2024-06-04 09:27+0200\n"
 "Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language-Team: Slovenian GNOME Translation Team <gnome-si@googlegroups.com>\n"
 "Language: sl_SI\n"
@@ -1295,7 +1295,7 @@ msgstr ""
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccelgroup.c:837 gtk/gtkshortcutlabel.c:101
+#: gtk/gtkaccelgroup.c:839 gtk/gtkshortcutlabel.c:101
 #: gtk/gtkshortcutlabel.c:137
 msgctxt "keyboard label"
 msgid "Shift"
@@ -1306,7 +1306,7 @@ msgstr "Shift"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccelgroup.c:856 gtk/gtkshortcutlabel.c:104
+#: gtk/gtkaccelgroup.c:858 gtk/gtkshortcutlabel.c:104
 #: gtk/gtkshortcutlabel.c:139
 msgctxt "keyboard label"
 msgid "Ctrl"
@@ -1317,7 +1317,7 @@ msgstr "Ctrl"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccelgroup.c:875 gtk/gtkshortcutlabel.c:107
+#: gtk/gtkaccelgroup.c:877 gtk/gtkshortcutlabel.c:107
 #: gtk/gtkshortcutlabel.c:141
 msgctxt "keyboard label"
 msgid "Alt"
@@ -1328,7 +1328,7 @@ msgstr "Alt"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccelgroup.c:893 gtk/gtkshortcutlabel.c:113
+#: gtk/gtkaccelgroup.c:895 gtk/gtkshortcutlabel.c:113
 #: gtk/gtkshortcutlabel.c:143
 msgctxt "keyboard label"
 msgid "Super"
@@ -1339,7 +1339,7 @@ msgstr "Super"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccelgroup.c:907 gtk/gtkshortcutlabel.c:116
+#: gtk/gtkaccelgroup.c:909 gtk/gtkshortcutlabel.c:116
 #: gtk/gtkshortcutlabel.c:145
 msgctxt "keyboard label"
 msgid "Hyper"
@@ -1350,7 +1350,7 @@ msgstr "Hiper"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccelgroup.c:922 gtk/gtkshortcutlabel.c:110
+#: gtk/gtkaccelgroup.c:924 gtk/gtkshortcutlabel.c:110
 #: gtk/gtkshortcutlabel.c:148
 msgctxt "keyboard label"
 msgid "Meta"
@@ -1360,17 +1360,17 @@ msgstr "Meta"
 #. * be used in accelerators such as "Ctrl+Shift+KP 1" in menus,
 #. * and therefore the translation needs to be very short.
 #.
-#: gtk/gtkaccelgroup.c:942
+#: gtk/gtkaccelgroup.c:944
 msgctxt "keyboard label"
 msgid "KP"
 msgstr "KP"
 
-#: gtk/gtkaccelgroup.c:949
+#: gtk/gtkaccelgroup.c:951
 msgctxt "keyboard label"
 msgid "Space"
 msgstr "Preslednica"
 
-#: gtk/gtkaccelgroup.c:952 gtk/gtkshortcutlabel.c:176
+#: gtk/gtkaccelgroup.c:954 gtk/gtkshortcutlabel.c:176
 msgctxt "keyboard label"
 msgid "Backslash"
 msgstr "Leva poševnica"
@@ -2482,6 +2482,7 @@ msgid "Yesterday"
 msgstr "Včeraj"
 
 #: gtk/gtkfilechooserwidget.c:3777
+#, c-format
 msgid "%-e %b"
 msgstr "%-e %b"
 
@@ -4218,7 +4219,7 @@ msgstr "Vir:"
 msgid "Defined At"
 msgstr "Določeno pri"
 
-#: gtk/inspector/recorder.c:1950
+#: gtk/inspector/recorder.c:1951
 #, c-format
 msgid "Saving RenderNode failed"
 msgstr "Shranjevanje izrisovanja vozlišča je spodletelo"
@@ -7821,6 +7822,7 @@ msgid ""
 "Commands:\n"
 "  benchmark    Benchmark rendering of a node\n"
 "  compare      Compare nodes or images\n"
+"  extract      Extract data urls\n"
 "  info         Provide information about the node\n"
 "  show         Show the node\n"
 "  render       Take a screenshot of the node\n"
@@ -7834,6 +7836,7 @@ msgstr ""
 "Ukazi:\n"
 "  benchmark    Preizkusno izrisovanje vozlišča\n"
 "  compare      Primerja vozlišča ali slike\n"
+"  extract      Izvleče url-je podatkov\n"
 "  info         Izpiše podatke o vozlišču\n"
 "  show         Pokaže vozlišče\n"
 "  render       Izdela zaslonsko sliko vozlišča\n"
