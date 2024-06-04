@@ -71,6 +71,17 @@
                                             <property name="tooltip-text" translatable="yes">Create Folder</property>
                                             <property name="popover">new_folder_popover</property>
                                             <property name="icon-name">folder-new-symbolic</property>
+                                            <child>
+                                              <object class="GtkShortcutController">
+                                                <property name="scope">managed</property>
+                                                <child>
+                                                  <object class="GtkShortcut">
+                                                    <property name="trigger">&lt;Control&gt;&lt;Shift&gt;N</property>
+                                                    <property name="action">activate</property>
+                                                  </object>
+                                                </child>
+                                              </object>
+                                            </child>
                                           </object>
                                         </child>
                                       </object>
