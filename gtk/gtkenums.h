@@ -1245,7 +1245,8 @@ typedef enum {
   GTK_SYSTEM_SETTING_FONT_NAME,
   GTK_SYSTEM_SETTING_FONT_CONFIG,
   GTK_SYSTEM_SETTING_DISPLAY,
-  GTK_SYSTEM_SETTING_ICON_THEME
+  GTK_SYSTEM_SETTING_ICON_THEME,
+  GTK_SYSTEM_SETTING_COLOR_SCHEME,
 } GtkSystemSetting;
 
 /**
@@ -1879,5 +1880,23 @@ typedef enum {
   GTK_FONT_RENDERING_AUTOMATIC,
   GTK_FONT_RENDERING_MANUAL,
 } GtkFontRendering;
+
+/**
+ * GtkColorScheme:
+ * @GTK_COLOR_SCHEME_LIGHT: A light color scheme is used
+ * @GTK_COLOR_SCHEME_DARK: A dark color scheme is used
+ *
+ * Values for the [property@Gtk.Settings:gtk-color-scheme] property
+ * that indicate what color scheme is used.
+ *
+ * This information can be used inside CSS to select appropriate colors
+ * with the light-dark() function.
+ *
+ * Since: 4.16
+ */
+typedef enum {
+  GTK_COLOR_SCHEME_LIGHT,
+  GTK_COLOR_SCHEME_DARK
+} GtkColorScheme;
 
 G_END_DECLS

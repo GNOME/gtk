@@ -203,6 +203,7 @@ enum {
   PROP_KEYNAV_USE_CARET,
   PROP_OVERLAY_SCROLLING,
   PROP_FONT_RENDERING,
+  PROP_COLOR_SCHEME,
 
   NUM_PROPERTIES
 };
@@ -977,6 +978,24 @@ gtk_settings_class_init (GtkSettingsClass *class)
                                                    GTK_FONT_RENDERING_AUTOMATIC,
                                                    GTK_PARAM_READWRITE);
 
+  /**
+   * GtkSettings:gtk-color-scheme:
+   *
+   * The used color scheme.
+   *
+   * GTK can not determine this on its own and relies on application or
+   * platform libraries to set this property appropriately.
+   *
+   * The used color scheme can affect color selection inside CSS with
+   * the light-dark() function.
+   *
+   * Since: 4.16
+   */
+  pspecs[PROP_COLOR_SCHEME] = g_param_spec_enum ("gtk-color-scheme", NULL, NULL,
+                                                 GTK_TYPE_COLOR_SCHEME,
+                                                 GTK_COLOR_SCHEME_LIGHT,
+                                                 GTK_PARAM_READWRITE);
+
   g_object_class_install_properties (gobject_class, NUM_PROPERTIES, pspecs);
 }
 
@@ -1292,6 +1311,8 @@ gtk_settings_notify (GObject    *object,
     case PROP_CURSOR_THEME_SIZE:
       settings_update_cursor_theme (settings);
       break;
+    case PROP_COLOR_SCHEME:
+      gtk_system_setting_changed (settings->display, GTK_SYSTEM_SETTING_COLOR_SCHEME);
     default:
       break;
     }
