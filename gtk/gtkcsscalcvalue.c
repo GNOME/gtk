@@ -21,12 +21,14 @@
 
 #include <string.h>
 
-GtkCssValue *   gtk_css_calc_value_parse_sum (GtkCssParser           *parser,
-                                              GtkCssNumberParseFlags  flags);
+GtkCssValue * gtk_css_calc_value_parse_sum (GtkCssParser             *parser,
+                                            GtkCssNumberParseFlags    flags,
+                                            GtkCssNumberParseContext *ctx);
 
 static GtkCssValue *
-gtk_css_calc_value_parse_value (GtkCssParser           *parser,
-                                GtkCssNumberParseFlags  flags)
+gtk_css_calc_value_parse_value (GtkCssParser             *parser,
+                                GtkCssNumberParseFlags    flags,
+                                GtkCssNumberParseContext *ctx)
 {
   if (gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_OPEN_PARENS))
     {
@@ -34,7 +36,7 @@ gtk_css_calc_value_parse_value (GtkCssParser           *parser,
 
       gtk_css_parser_start_block (parser);
 
-      result = gtk_css_calc_value_parse_sum (parser, flags);
+      result = gtk_css_calc_value_parse_sum (parser, flags, ctx);
       if (result == NULL)
         {
           gtk_css_parser_end_block (parser);
@@ -60,7 +62,7 @@ gtk_css_calc_value_parse_value (GtkCssParser           *parser,
       return result;
     }
 
-  return gtk_css_number_value_parse (parser, flags);
+  return gtk_css_number_value_parse_with_context (parser, flags, ctx);
 }
 
 static gboolean
@@ -71,8 +73,9 @@ is_number (GtkCssValue *value)
 }
 
 static GtkCssValue *
-gtk_css_calc_value_parse_product (GtkCssParser           *parser,
-                                  GtkCssNumberParseFlags  flags)
+gtk_css_calc_value_parse_product (GtkCssParser             *parser,
+                                  GtkCssNumberParseFlags    flags,
+                                  GtkCssNumberParseContext *ctx)
 {
   GtkCssValue *result, *value, *temp;
   GtkCssNumberParseFlags actual_flags;
@@ -81,7 +84,7 @@ gtk_css_calc_value_parse_product (GtkCssParser           *parser,
   actual_flags = flags | GTK_CSS_PARSE_NUMBER;
   gtk_css_parser_get_token (parser);
   start = *gtk_css_parser_get_start_location (parser);
-  result = gtk_css_calc_value_parse_value (parser, actual_flags);
+  result = gtk_css_calc_value_parse_value (parser, actual_flags, ctx);
   if (result == NULL)
     return NULL;
 
@@ -92,7 +95,7 @@ gtk_css_calc_value_parse_product (GtkCssParser           *parser,
 
       if (gtk_css_parser_try_delim (parser, '*'))
         {
-          value = gtk_css_calc_value_parse_product (parser, actual_flags);
+          value = gtk_css_calc_value_parse_product (parser, actual_flags, ctx);
           if (value == NULL)
             goto fail;
           if (is_number (value))
@@ -105,7 +108,7 @@ gtk_css_calc_value_parse_product (GtkCssParser           *parser,
         }
       else if (gtk_css_parser_try_delim (parser, '/'))
         {
-          value = gtk_css_calc_value_parse_product (parser, GTK_CSS_PARSE_NUMBER);
+          value = gtk_css_calc_value_parse_product (parser, GTK_CSS_PARSE_NUMBER, ctx);
           if (value == NULL)
             goto fail;
           temp = gtk_css_number_value_multiply (result, 1.0 / gtk_css_number_value_get (value, 100));
@@ -137,12 +140,13 @@ fail:
 }
 
 GtkCssValue *
-gtk_css_calc_value_parse_sum (GtkCssParser           *parser,
-                              GtkCssNumberParseFlags  flags)
+gtk_css_calc_value_parse_sum (GtkCssParser             *parser,
+                              GtkCssNumberParseFlags    flags,
+                              GtkCssNumberParseContext *ctx)
 {
   GtkCssValue *result;
 
-  result = gtk_css_calc_value_parse_product (parser, flags);
+  result = gtk_css_calc_value_parse_product (parser, flags, ctx);
   if (result == NULL)
     return NULL;
 
@@ -152,13 +156,13 @@ gtk_css_calc_value_parse_sum (GtkCssParser           *parser,
 
       if (gtk_css_parser_try_delim (parser, '+'))
         {
-          next = gtk_css_calc_value_parse_product (parser, flags);
+          next = gtk_css_calc_value_parse_product (parser, flags, ctx);
           if (next == NULL)
             goto fail;
         }
       else if (gtk_css_parser_try_delim (parser, '-'))
         {
-          temp = gtk_css_calc_value_parse_product (parser, flags);
+          temp = gtk_css_calc_value_parse_product (parser, flags, ctx);
           if (temp == NULL)
             goto fail;
           next = gtk_css_number_value_multiply (temp, -1);
@@ -193,6 +197,7 @@ fail:
 typedef struct
 {
   GtkCssNumberParseFlags flags;
+  GtkCssNumberParseContext *ctx;
   GtkCssValue *value;
 } ParseCalcData;
 
@@ -203,7 +208,7 @@ gtk_css_calc_value_parse_arg (GtkCssParser *parser,
 {
   ParseCalcData *data = data_;
 
-  data->value = gtk_css_calc_value_parse_sum (parser, data->flags);
+  data->value = gtk_css_calc_value_parse_sum (parser, data->flags, data->ctx);
   if (data->value == NULL)
     return 0;
 
@@ -211,14 +216,16 @@ gtk_css_calc_value_parse_arg (GtkCssParser *parser,
 }
 
 GtkCssValue *
-gtk_css_calc_value_parse (GtkCssParser           *parser,
-                          GtkCssNumberParseFlags  flags)
+gtk_css_calc_value_parse (GtkCssParser             *parser,
+                          GtkCssNumberParseFlags    flags,
+                          GtkCssNumberParseContext *ctx)
 {
   ParseCalcData data;
 
   /* This can only be handled at compute time, we allow '-' after all */
   data.flags = flags & ~GTK_CSS_POSITIVE_ONLY;
   data.value = NULL;
+  data.ctx = ctx;
 
   if (!gtk_css_parser_has_function (parser, "calc"))
     {
@@ -235,6 +242,7 @@ gtk_css_calc_value_parse (GtkCssParser           *parser,
 typedef struct
 {
   GtkCssNumberParseFlags flags;
+  GtkCssNumberParseContext *ctx;
   GPtrArray *values;
 } ParseArgnData;
 
@@ -246,7 +254,7 @@ gtk_css_argn_value_parse_arg (GtkCssParser *parser,
   ParseArgnData *data = data_;
   GtkCssValue *value;
 
-  value = gtk_css_calc_value_parse_sum (parser, data->flags);
+  value = gtk_css_calc_value_parse_sum (parser, data->flags, data->ctx);
   if (value == NULL)
     return 0;
 
@@ -258,6 +266,7 @@ gtk_css_argn_value_parse_arg (GtkCssParser *parser,
 typedef struct
 {
   GtkCssNumberParseFlags flags;
+  GtkCssNumberParseContext *ctx;
   GtkCssValue *values[3];
 } ParseClampData;
 
@@ -277,7 +286,7 @@ gtk_css_clamp_value_parse_arg (GtkCssParser *parser,
         }
     }
 
-  data->values[arg] = gtk_css_calc_value_parse_sum (parser, data->flags);
+  data->values[arg] = gtk_css_calc_value_parse_sum (parser, data->flags, data->ctx);
   if (data->values[arg] == NULL)
     return 0;
 
@@ -285,9 +294,10 @@ gtk_css_clamp_value_parse_arg (GtkCssParser *parser,
 }
 
 GtkCssValue *
-gtk_css_clamp_value_parse (GtkCssParser           *parser,
-                           GtkCssNumberParseFlags  flags,
-                           guint                   type)
+gtk_css_clamp_value_parse (GtkCssParser             *parser,
+                           GtkCssNumberParseFlags    flags,
+                           GtkCssNumberParseContext *ctx,
+                           guint                     type)
 {
   ParseClampData data;
   GtkCssValue *result = NULL;
@@ -300,6 +310,7 @@ gtk_css_clamp_value_parse (GtkCssParser           *parser,
 
   /* This can only be handled at compute time, we allow '-' after all */
   data.flags = flags & ~GTK_CSS_POSITIVE_ONLY;
+  data.ctx = ctx;
   data.values[0] = NULL;
   data.values[1] = NULL;
   data.values[2] = NULL;
@@ -326,6 +337,7 @@ gtk_css_clamp_value_parse (GtkCssParser           *parser,
 
 typedef struct {
   GtkCssNumberParseFlags flags;
+  GtkCssNumberParseContext *ctx;
   guint mode;
   gboolean has_mode;
   GtkCssValue *values[2];
@@ -352,13 +364,13 @@ gtk_css_round_value_parse_arg (GtkCssParser *parser,
             }
         }
 
-      data->values[0] = gtk_css_calc_value_parse_sum (parser, data->flags);
+      data->values[0] = gtk_css_calc_value_parse_sum (parser, data->flags, data->ctx);
       if (data->values[0] == NULL)
         return 0;
     }
   else if (arg == 1)
     {
-      GtkCssValue *value = gtk_css_calc_value_parse_sum (parser, data->flags);
+      GtkCssValue *value = gtk_css_calc_value_parse_sum (parser, data->flags, data->ctx);
 
       if (value == NULL)
         return 0;
@@ -376,7 +388,7 @@ gtk_css_round_value_parse_arg (GtkCssParser *parser,
           return 0;
         }
 
-      data->values[1] = gtk_css_calc_value_parse_sum (parser, data->flags);
+      data->values[1] = gtk_css_calc_value_parse_sum (parser, data->flags, data->ctx);
 
       if (data->values[1] == NULL)
         return 0;
@@ -386,9 +398,10 @@ gtk_css_round_value_parse_arg (GtkCssParser *parser,
 }
 
 GtkCssValue *
-gtk_css_round_value_parse (GtkCssParser           *parser,
-                           GtkCssNumberParseFlags  flags,
-                           guint                   type)
+gtk_css_round_value_parse (GtkCssParser             *parser,
+                           GtkCssNumberParseFlags    flags,
+                           GtkCssNumberParseContext *ctx,
+                           guint                     type)
 {
   ParseRoundData data;
   GtkCssValue *result = NULL;
@@ -400,6 +413,7 @@ gtk_css_round_value_parse (GtkCssParser           *parser,
     }
 
   data.flags = flags & ~GTK_CSS_POSITIVE_ONLY;
+  data.ctx = ctx;
   data.mode = ROUND_NEAREST;
   data.has_mode = FALSE;
   data.values[0] = NULL;
@@ -430,6 +444,7 @@ gtk_css_round_value_parse (GtkCssParser           *parser,
 
 typedef struct {
   GtkCssNumberParseFlags flags;
+  GtkCssNumberParseContext *ctx;
   GtkCssValue *values[2];
 } ParseArg2Data;
 
@@ -440,7 +455,7 @@ gtk_css_arg2_value_parse_arg (GtkCssParser *parser,
 {
   ParseArg2Data *data = data_;
 
-  data->values[arg] = gtk_css_calc_value_parse_sum (parser, data->flags);
+  data->values[arg] = gtk_css_calc_value_parse_sum (parser, data->flags, data->ctx);
   if (data->values[arg] == NULL)
     return 0;
 
@@ -448,12 +463,13 @@ gtk_css_arg2_value_parse_arg (GtkCssParser *parser,
 }
 
 GtkCssValue *
-gtk_css_arg2_value_parse (GtkCssParser           *parser,
-                          GtkCssNumberParseFlags  flags,
-                          guint                   min_args,
-                          guint                   max_args,
-                          const char             *function,
-                          guint                   type)
+gtk_css_arg2_value_parse (GtkCssParser             *parser,
+                          GtkCssNumberParseFlags    flags,
+                          GtkCssNumberParseContext *ctx,
+                          guint                     min_args,
+                          guint                     max_args,
+                          const char               *function,
+                          guint                     type)
 {
   ParseArg2Data data;
   GtkCssValue *result = NULL;
@@ -467,6 +483,7 @@ gtk_css_arg2_value_parse (GtkCssParser           *parser,
     }
 
   data.flags = flags & ~GTK_CSS_POSITIVE_ONLY;
+  data.ctx = ctx;
   data.values[0] = NULL;
   data.values[1] = NULL;
 
@@ -490,10 +507,11 @@ gtk_css_arg2_value_parse (GtkCssParser           *parser,
 }
 
 GtkCssValue *
-gtk_css_argn_value_parse (GtkCssParser           *parser,
-                          GtkCssNumberParseFlags  flags,
-                          const char             *function,
-                          guint                   type)
+gtk_css_argn_value_parse (GtkCssParser             *parser,
+                          GtkCssNumberParseFlags    flags,
+                          GtkCssNumberParseContext *ctx,
+                          const char               *function,
+                          guint                     type)
 {
   ParseArgnData data;
   GtkCssValue *result = NULL;
@@ -507,6 +525,7 @@ gtk_css_argn_value_parse (GtkCssParser           *parser,
   /* This can only be handled at compute time, we allow '-' after all */
   data.flags = flags & ~GTK_CSS_POSITIVE_ONLY;
   data.values = g_ptr_array_new ();
+  data.ctx = ctx;
 
   if (gtk_css_parser_consume_function (parser, 1, G_MAXUINT, gtk_css_argn_value_parse_arg, &data))
     {
@@ -535,4 +554,3 @@ gtk_css_argn_value_parse (GtkCssParser           *parser,
 
   return result;
 }
-

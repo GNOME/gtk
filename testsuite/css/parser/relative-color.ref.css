@@ -1,0 +1,20 @@
+a {
+  color: color(srgb 0.784314 0.784314 0.0784314);
+}
+
+b {
+  color: oklab(1 0.1 0.2);
+}
+
+c {
+  background-color: hsl(from currentcolor calc(h + 60) s l / alpha);
+  color: rgb(255,0,0);
+}
+
+e {
+  color: color(from rgb(184,134,11) srgb 184 134 100 / 50%);
+}
+
+e {
+  color: rgb(30,40,100);
+}

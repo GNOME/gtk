@@ -22,6 +22,7 @@
 #include "gtkcsscalcvalueprivate.h"
 #include "gtkcssenumvalueprivate.h"
 #include "gtkcssdimensionvalueprivate.h"
+#include "gtkcsscolorvalueprivate.h"
 #include "gtkcssstyleprivate.h"
 #include "gtkprivate.h"
 
@@ -69,6 +70,7 @@ typedef enum {
   TYPE_EXP,
   TYPE_LOG,
   TYPE_HYPOT,
+  TYPE_COLOR_COORD,
 } NumberValueType;
 
 static const char *function_name[] = {
@@ -110,6 +112,12 @@ struct _GtkCssValue {
       guint n_terms;
       GtkCssValue *terms[1];
     } calc;
+    struct {
+      GtkCssValue *color;
+      GtkCssColorSpace color_space;
+      guint coord            : 16;
+      guint legacy_rgb_scale :  1;
+    } color_coord;
   };
 };
 
@@ -140,7 +148,11 @@ gtk_css_calc_value_new (guint         type,
 static void
 gtk_css_value_number_free (GtkCssValue *number)
 {
-  if (number->type != TYPE_DIMENSION)
+  if (number->type == TYPE_COLOR_COORD)
+    {
+      gtk_css_value_unref (number->color_coord.color);
+    }
+  else if (number->type != TYPE_DIMENSION)
     {
       for (guint i = 0; i < number->calc.n_terms; i++)
         {
@@ -310,7 +322,21 @@ gtk_css_value_number_compute (GtkCssValue          *number,
   GtkCssStyle *style = context->style;
   GtkCssStyle *parent_style = context->parent_style;
 
-  if (number->type != TYPE_DIMENSION)
+  if (number->type == TYPE_COLOR_COORD)
+    {
+      GtkCssValue *color;
+      float v;
+
+      color = gtk_css_value_compute (number->color_coord.color, property_id, context);
+      v = gtk_css_color_value_get_coord (color,
+                                         number->color_coord.color_space,
+                                         number->color_coord.legacy_rgb_scale,
+                                         number->color_coord.coord);
+      gtk_css_value_unref (color);
+
+      return gtk_css_number_value_new (v, GTK_CSS_NUMBER);
+    }
+  else if (number->type != TYPE_DIMENSION)
     {
       const guint n_terms = number->calc.n_terms;
       GtkCssValue *result;
@@ -518,6 +544,10 @@ gtk_css_value_number_print (const GtkCssValue *value,
           gtk_css_value_print (value->calc.terms[1], string);
         }
       g_string_append_c (string, ')');
+      break;
+
+    case TYPE_COLOR_COORD:
+      g_string_append (string, gtk_css_color_space_get_coord_name (value->color_coord.color_space, value->color_coord.coord));
       break;
 
     default:
@@ -871,6 +901,7 @@ gtk_css_number_value_get_dimension (const GtkCssValue *value)
     case TYPE_SQRT:
     case TYPE_POW:
     case TYPE_LOG:
+    case TYPE_COLOR_COORD:
       return GTK_CSS_DIMENSION_NUMBER;
 
     case TYPE_ASIN:
@@ -887,7 +918,11 @@ gtk_css_number_value_get_dimension (const GtkCssValue *value)
 gboolean
 gtk_css_number_value_has_percent (const GtkCssValue *value)
 {
-  if (value->type == TYPE_DIMENSION)
+  if (value->type == TYPE_COLOR_COORD)
+    {
+      return FALSE;
+    }
+  else if (value->type == TYPE_DIMENSION)
     {
       return gtk_css_unit_get_dimension (value->dimension.unit) == GTK_CSS_DIMENSION_PERCENTAGE;
     }
@@ -1326,6 +1361,7 @@ gtk_css_math_value_new (guint         type,
   switch ((NumberValueType) type)
     {
     case TYPE_DIMENSION:
+    case TYPE_COLOR_COORD:
       g_assert_not_reached ();
 
     case TYPE_ROUND:
@@ -1408,6 +1444,16 @@ GtkCssValue *
 gtk_css_number_value_parse (GtkCssParser           *parser,
                             GtkCssNumberParseFlags  flags)
 {
+  GtkCssNumberParseContext ctx = { NULL, 0, FALSE };
+
+  return gtk_css_number_value_parse_with_context (parser, flags, &ctx);
+}
+
+GtkCssValue *
+gtk_css_number_value_parse_with_context (GtkCssParser             *parser,
+                                         GtkCssNumberParseFlags    flags,
+                                         GtkCssNumberParseContext *ctx)
+{
   const GtkCssToken *token = gtk_css_parser_get_token (parser);
 
   if (gtk_css_token_is (token, GTK_CSS_TOKEN_FUNCTION))
@@ -1415,47 +1461,47 @@ gtk_css_number_value_parse (GtkCssParser           *parser,
       const char *name = gtk_css_token_get_string (token);
 
       if (g_ascii_strcasecmp (name, "calc") == 0)
-        return gtk_css_calc_value_parse (parser, flags);
+        return gtk_css_calc_value_parse (parser, flags, ctx);
       else if (g_ascii_strcasecmp (name, "min") == 0)
-        return gtk_css_argn_value_parse (parser, flags, "min", TYPE_MIN);
+        return gtk_css_argn_value_parse (parser, flags, ctx, "min", TYPE_MIN);
       else if (g_ascii_strcasecmp (name, "max") == 0)
-        return gtk_css_argn_value_parse (parser, flags, "max", TYPE_MAX);
+        return gtk_css_argn_value_parse (parser, flags, ctx, "max", TYPE_MAX);
       else if (g_ascii_strcasecmp (name, "hypot") == 0)
-        return gtk_css_argn_value_parse (parser, flags, "hypot", TYPE_HYPOT);
+        return gtk_css_argn_value_parse (parser, flags, ctx, "hypot", TYPE_HYPOT);
       else if (g_ascii_strcasecmp (name, "clamp") == 0)
-        return gtk_css_clamp_value_parse (parser, flags, TYPE_CLAMP);
+        return gtk_css_clamp_value_parse (parser, flags, ctx, TYPE_CLAMP);
       else if (g_ascii_strcasecmp (name, "round") == 0)
-        return gtk_css_round_value_parse (parser, flags, TYPE_ROUND);
+        return gtk_css_round_value_parse (parser, flags, ctx, TYPE_ROUND);
       else if (g_ascii_strcasecmp (name, "mod") == 0)
-        return gtk_css_arg2_value_parse (parser, flags, 2, 2, "mod", TYPE_MOD);
+        return gtk_css_arg2_value_parse (parser, flags, ctx, 2, 2, "mod", TYPE_MOD);
       else if (g_ascii_strcasecmp (name, "rem") == 0)
-        return gtk_css_arg2_value_parse (parser, flags, 2, 2, "rem", TYPE_REM);
+        return gtk_css_arg2_value_parse (parser, flags, ctx, 2, 2, "rem", TYPE_REM);
       else if (g_ascii_strcasecmp (name, "abs") == 0)
-        return gtk_css_arg2_value_parse (parser, flags, 1, 1, "abs", TYPE_ABS);
+        return gtk_css_arg2_value_parse (parser, flags, ctx, 1, 1, "abs", TYPE_ABS);
       else if ((flags & GTK_CSS_PARSE_NUMBER) && g_ascii_strcasecmp (name, "sign") == 0)
-        return gtk_css_arg2_value_parse (parser, GTK_CSS_PARSE_NUMBER|GTK_CSS_PARSE_DIMENSION|GTK_CSS_PARSE_PERCENT, 1, 1, "sign", TYPE_SIGN);
+        return gtk_css_arg2_value_parse (parser, GTK_CSS_PARSE_NUMBER|GTK_CSS_PARSE_DIMENSION|GTK_CSS_PARSE_PERCENT, ctx, 1, 1, "sign", TYPE_SIGN);
       else if ((flags & GTK_CSS_PARSE_NUMBER) && g_ascii_strcasecmp (name, "sin") == 0)
-        return gtk_css_arg2_value_parse (parser, GTK_CSS_PARSE_NUMBER|GTK_CSS_PARSE_ANGLE, 1, 1, "sin", TYPE_SIN);
+        return gtk_css_arg2_value_parse (parser, GTK_CSS_PARSE_NUMBER|GTK_CSS_PARSE_ANGLE, ctx, 1, 1, "sin", TYPE_SIN);
       else if ((flags & GTK_CSS_PARSE_NUMBER) && g_ascii_strcasecmp (name, "cos") == 0)
-        return gtk_css_arg2_value_parse (parser, GTK_CSS_PARSE_NUMBER|GTK_CSS_PARSE_ANGLE, 1, 1, "cos", TYPE_COS);
+        return gtk_css_arg2_value_parse (parser, GTK_CSS_PARSE_NUMBER|GTK_CSS_PARSE_ANGLE, ctx, 1, 1, "cos", TYPE_COS);
       else if ((flags & GTK_CSS_PARSE_NUMBER) && g_ascii_strcasecmp (name, "tan") == 0)
-        return gtk_css_arg2_value_parse (parser, GTK_CSS_PARSE_NUMBER|GTK_CSS_PARSE_ANGLE, 1, 1, "tan", TYPE_TAN);
+        return gtk_css_arg2_value_parse (parser, GTK_CSS_PARSE_NUMBER|GTK_CSS_PARSE_ANGLE, ctx, 1, 1, "tan", TYPE_TAN);
       else if ((flags & GTK_CSS_PARSE_ANGLE) && g_ascii_strcasecmp (name, "asin") == 0)
-        return gtk_css_arg2_value_parse (parser, GTK_CSS_PARSE_NUMBER, 1, 1, "asin", TYPE_ASIN);
+        return gtk_css_arg2_value_parse (parser, GTK_CSS_PARSE_NUMBER, ctx, 1, 1, "asin", TYPE_ASIN);
       else if ((flags & GTK_CSS_PARSE_ANGLE) && g_ascii_strcasecmp (name, "acos") == 0)
-        return gtk_css_arg2_value_parse (parser, GTK_CSS_PARSE_NUMBER, 1, 1, "acos", TYPE_ACOS);
+        return gtk_css_arg2_value_parse (parser, GTK_CSS_PARSE_NUMBER, ctx, 1, 1, "acos", TYPE_ACOS);
       else if ((flags & GTK_CSS_PARSE_ANGLE) && g_ascii_strcasecmp (name, "atan") == 0)
-        return gtk_css_arg2_value_parse (parser, GTK_CSS_PARSE_NUMBER, 1, 1, "atan", TYPE_ATAN);
+        return gtk_css_arg2_value_parse (parser, GTK_CSS_PARSE_NUMBER, ctx, 1, 1, "atan", TYPE_ATAN);
       else if ((flags & GTK_CSS_PARSE_ANGLE) && g_ascii_strcasecmp (name, "atan2") == 0)
-        return gtk_css_arg2_value_parse (parser, GTK_CSS_PARSE_NUMBER|GTK_CSS_PARSE_DIMENSION|GTK_CSS_PARSE_PERCENT, 2, 2, "atan2", TYPE_ATAN2);
+        return gtk_css_arg2_value_parse (parser, GTK_CSS_PARSE_NUMBER|GTK_CSS_PARSE_DIMENSION|GTK_CSS_PARSE_PERCENT, ctx, 2, 2, "atan2", TYPE_ATAN2);
       else if ((flags & GTK_CSS_PARSE_NUMBER) && g_ascii_strcasecmp (name, "pow") == 0)
-        return gtk_css_arg2_value_parse (parser, GTK_CSS_PARSE_NUMBER, 2, 2, "pow", TYPE_POW);
+        return gtk_css_arg2_value_parse (parser, GTK_CSS_PARSE_NUMBER, ctx, 2, 2, "pow", TYPE_POW);
       else if ((flags & GTK_CSS_PARSE_NUMBER) && g_ascii_strcasecmp (name, "sqrt") == 0)
-        return gtk_css_arg2_value_parse (parser, GTK_CSS_PARSE_NUMBER, 1, 1, "sqrt", TYPE_SQRT);
+        return gtk_css_arg2_value_parse (parser, GTK_CSS_PARSE_NUMBER, ctx, 1, 1, "sqrt", TYPE_SQRT);
       else if ((flags & GTK_CSS_PARSE_NUMBER) && g_ascii_strcasecmp (name, "exp") == 0)
-        return gtk_css_arg2_value_parse (parser, GTK_CSS_PARSE_NUMBER, 1, 1, "exp", TYPE_EXP);
+        return gtk_css_arg2_value_parse (parser, GTK_CSS_PARSE_NUMBER, ctx, 1, 1, "exp", TYPE_EXP);
       else if ((flags & GTK_CSS_PARSE_NUMBER) && g_ascii_strcasecmp (name, "log") == 0)
-        return gtk_css_arg2_value_parse (parser, GTK_CSS_PARSE_NUMBER, 1, 2, "log", TYPE_LOG);
+        return gtk_css_arg2_value_parse (parser, GTK_CSS_PARSE_NUMBER, ctx, 1, 2, "log", TYPE_LOG);
     }
   else if (gtk_css_token_is (token, GTK_CSS_TOKEN_IDENT))
     {
@@ -1477,6 +1523,18 @@ gtk_css_number_value_parse (GtkCssParser           *parser,
             {
               gtk_css_parser_consume_token (parser);
               return gtk_css_number_value_new (constants[i].value, GTK_CSS_NUMBER);
+            }
+        }
+
+      if (ctx->color)
+        {
+          for (guint i = 0; i < 4; i++)
+            {
+              if (g_ascii_strcasecmp (name, gtk_css_color_space_get_coord_name (ctx->color_space, i)) == 0)
+                {
+                  gtk_css_parser_consume_token (parser);
+                  return gtk_css_number_value_new_color_component (ctx->color, ctx->color_space, ctx->legacy_rgb_scale, i);
+                }
             }
         }
     }
@@ -1710,6 +1768,12 @@ gtk_css_number_value_get (const GtkCssValue *value,
         return sqrt (acc);
       }
 
+    case TYPE_COLOR_COORD:
+      return gtk_css_color_value_get_coord (value->color_coord.color,
+                                            value->color_coord.color_space,
+                                            value->color_coord.legacy_rgb_scale,
+                                            value->color_coord.coord);
+
     default:
       g_assert_not_reached ();
     }
@@ -1820,4 +1884,34 @@ _sign (double a)
     return 1;
   else
     return 0;
+}
+
+GtkCssValue *
+gtk_css_number_value_new_color_component (GtkCssValue      *color,
+                                          GtkCssColorSpace  color_space,
+                                          gboolean          legacy_rgb_scale,
+                                          guint             coord)
+{
+  if (gtk_css_value_is_computed (color))
+    {
+      float v;
+
+      v = gtk_css_color_value_get_coord (color, color_space, legacy_rgb_scale, coord);
+
+      return gtk_css_number_value_new (v, GTK_CSS_NUMBER);
+    }
+  else
+    {
+      GtkCssValue *result;
+
+      result = gtk_css_value_new (GtkCssValue, &GTK_CSS_VALUE_NUMBER);
+      result->type = TYPE_COLOR_COORD;
+      result->color_coord.color_space = color_space;
+      result->color_coord.color = gtk_css_value_ref (color);
+      result->color_coord.coord = coord;
+      result->color_coord.legacy_rgb_scale = legacy_rgb_scale;
+      result->is_computed = FALSE;
+
+      return result;
+    }
 }
