@@ -93,11 +93,12 @@ Colors can be expressed in numerous ways in CSS (see the
 many (but not all) of these.
 
 You can use rgb(), rgba(), hsl() with both the legacy or the modern CSS
-syntax, and calc() can be used as well in color expressions.
+syntax, and calc() can be used as well in color expressions. hwb(), oklab(),
+oklch(), color(), color-mix() and relative colors are supported as well.
 
 ### Non-CSS Colors
 
-GTK extends the CSS syntax with several additional ways to specify colors.
+GTK  extends the CSS syntax with several additional ways to specify colors.
 
 These extensions are deprecated and should be replaced by the equivalent
 standard CSS notions.
