@@ -130,7 +130,7 @@ a {
 }
 
 b {
-  color: alpha(black, 0.5);
+  color: alpha(green, 0.6);
 }
 
 c {
@@ -150,15 +150,15 @@ a {
 }
 
 b {
-  color: color-mix(in srgb, black, transparent 50%);
+  color: rgb(from green, r g b / calc(alpha * 0.6));
 }
 
 c {
-  color: color-mix(in hsl, red, white 30%);
+  color: hsl(from red, h calc(s * 1.3) calc(l * 1.3));
 }
 
 d {
-  color: color-mix(in hsl, red, black 30%);
+  color: hsl(from red, h calc(s * 0.7) calc(l * 0.7));
 }
 ```
 
