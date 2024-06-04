@@ -46,6 +46,7 @@ typedef enum {
   COLOR_TYPE_ALPHA,
   COLOR_TYPE_MIX,
   COLOR_TYPE_CURRENT_COLOR,
+  COLOR_TYPE_LIGHT_DARK,
 } ColorType;
 
 struct _GtkCssValue
@@ -90,6 +91,12 @@ struct _GtkCssValue
       gboolean legacy_srgb;
       GtkCssValue *values[1];
     } relative;
+
+    struct
+    {
+      GtkCssValue *color1;
+      GtkCssValue *color2;
+    } light_dark;
   };
 };
 
@@ -129,7 +136,11 @@ gtk_css_value_color_free (GtkCssValue *color)
           if (color->relative.values[i])
             gtk_css_value_unref (color->relative.values[i]);
         }
+      break;
 
+    case COLOR_TYPE_LIGHT_DARK:
+      gtk_css_value_unref (color->light_dark.color1);
+      gtk_css_value_unref (color->light_dark.color2);
       break;
 
     case COLOR_TYPE_COLOR:
@@ -269,6 +280,12 @@ gtk_css_value_color_equal (const GtkCssValue *value1,
 
     case COLOR_TYPE_CURRENT_COLOR:
       return TRUE;
+
+    case COLOR_TYPE_LIGHT_DARK:
+      return gtk_css_value_equal (value1->light_dark.color1,
+                                  value2->light_dark.color1) &&
+             gtk_css_value_equal (value1->light_dark.color2,
+                                  value2->light_dark.color2);
 
     default:
       g_assert_not_reached ();
@@ -492,6 +509,14 @@ gtk_css_value_color_print (const GtkCssValue *value,
 
     case COLOR_TYPE_CURRENT_COLOR:
       g_string_append (string, "currentcolor");
+      break;
+
+    case COLOR_TYPE_LIGHT_DARK:
+      g_string_append (string, "light-dark(");
+      gtk_css_value_print (value->light_dark.color1, string);
+      g_string_append (string, ", ");
+      gtk_css_value_print (value->light_dark.color2, string);
+      g_string_append_c (string, ')');
       break;
 
     default:
@@ -752,6 +777,30 @@ gtk_css_color_value_do_resolve (GtkCssValue          *color,
       value = gtk_css_value_ref (current);
       break;
 
+    case COLOR_TYPE_LIGHT_DARK:
+      {
+        GtkSettings *settings = gtk_style_provider_get_settings (provider);
+        int color_scheme;
+
+        g_object_get (settings, "gtk-color-scheme", &color_scheme, NULL);
+
+        switch (color_scheme)
+          {
+          case GTK_COLOR_SCHEME_LIGHT:
+            value = gtk_css_color_value_do_resolve (color->light_dark.color1, property_id, context, current, cycle_list);
+            break;
+
+          case GTK_COLOR_SCHEME_DARK:
+            value = gtk_css_color_value_do_resolve (color->light_dark.color2, property_id, context, current, cycle_list);
+            break;
+
+          default:
+            g_assert_not_reached ();
+
+          }
+      }
+      break;
+
     default:
       value = NULL;
       g_assert_not_reached ();
@@ -1007,6 +1056,20 @@ gtk_css_color_value_new_current_color (void)
   return gtk_css_value_ref (&current_color);
 }
 
+static GtkCssValue *
+gtk_css_color_value_new_light_dark (GtkCssValue *color1,
+                                    GtkCssValue *color2)
+{
+  GtkCssValue *value;
+
+  value = gtk_css_value_new (GtkCssValue, &GTK_CSS_VALUE_COLOR);
+  value->type = COLOR_TYPE_LIGHT_DARK;
+  value->light_dark.color1 = gtk_css_value_ref (color1);
+  value->light_dark.color2 = gtk_css_value_ref (color2);
+
+  return value;
+}
+
 /* }}} */
 /* {{{ Parsing */
 
@@ -1031,7 +1094,8 @@ gtk_css_color_value_can_parse (GtkCssParser *parser)
       || gtk_css_parser_has_function (parser, "oklab")
       || gtk_css_parser_has_function (parser, "oklch")
       || gtk_css_parser_has_function (parser, "color")
-      || gtk_css_parser_has_function (parser, "color-mix");
+      || gtk_css_parser_has_function (parser, "color-mix")
+      || gtk_css_parser_has_function (parser, "light-dark");
 }
 
 typedef struct
@@ -1178,6 +1242,39 @@ parse_color_number (GtkCssParser *parser,
       g_return_val_if_reached (0);
   }
 }
+
+static guint
+parse_color_color (GtkCssParser *parser,
+                   guint         arg,
+                   gpointer      data_)
+{
+  ColorFunctionData *data = data_;
+
+  switch (arg)
+  {
+    case 0:
+      data->color = gtk_css_color_value_parse (parser);
+      if (data->color == NULL)
+        return 0;
+      return 1;
+
+    case 1:
+      data->color2 = gtk_css_color_value_parse (parser);
+      if (data->color2 == NULL)
+        return 0;
+      return 1;
+
+    default:
+      g_return_val_if_reached (0);
+  }
+}
+
+typedef struct
+{
+  GdkRGBA *rgba;
+  gboolean use_percentages;
+  gboolean missing[4];
+} ParseRGBAData;
 
 typedef enum
 {
@@ -1916,6 +2013,20 @@ gtk_css_color_value_parse (GtkCssParser *parser)
 
       g_clear_pointer (&data.color1, gtk_css_value_unref);
       g_clear_pointer (&data.color2, gtk_css_value_unref);
+      return value;
+    }
+  else if (gtk_css_parser_has_function (parser, "light-dark"))
+    {
+      ColorFunctionData data = { NULL, };
+
+      if (gtk_css_parser_consume_function (parser, 2, 2, parse_color_color, &data))
+        value = gtk_css_color_value_new_light_dark (data.color, data.color2);
+      else
+        value = NULL;
+
+      g_clear_pointer (&data.color, gtk_css_value_unref);
+      g_clear_pointer (&data.color2, gtk_css_value_unref);
+
       return value;
     }
   else if (gtk_css_parser_has_function (parser, "lighter"))
