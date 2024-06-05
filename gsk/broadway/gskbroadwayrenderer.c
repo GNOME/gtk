@@ -10,6 +10,13 @@
 #include "gskrendernodeprivate.h"
 #include "gdk/gdktextureprivate.h"
 
+/**
+ * GskBroadwayRenderer:
+ *
+ * A Broadway based renderer.
+ *
+ * See [class@Gsk.Renderer].
+ */
 struct _GskBroadwayRenderer
 {
   GskRenderer parent_instance;
