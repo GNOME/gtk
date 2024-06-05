@@ -240,9 +240,10 @@ parse_css_direction (GtkCssStyleProperty *property,
 
 static GtkCssValue *
 opacity_parse (GtkCssStyleProperty *property,
-	       GtkCssParser        *parser)
+               GtkCssParser        *parser)
 {
-  return gtk_css_number_value_parse (parser, GTK_CSS_PARSE_NUMBER);
+  return gtk_css_number_value_parse (parser, GTK_CSS_PARSE_NUMBER
+                                             | GTK_CSS_PARSE_PERCENT);
 }
 
 static GtkCssValue *
