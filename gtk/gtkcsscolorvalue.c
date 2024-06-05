@@ -123,6 +123,7 @@ gtk_css_value_color_free (GtkCssValue *color)
       break;
 
     case COLOR_TYPE_RELATIVE:
+      gtk_css_value_unref (color->relative.origin);
       for (guint i = 0; i < 4; i++)
         {
           if (color->relative.values[i])
