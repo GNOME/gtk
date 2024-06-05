@@ -12,9 +12,49 @@ c {
 }
 
 e {
-  color: color(from rgb(184,134,11) srgb 184 134 100 / 50%);
+  color: color(srgb 0.721569 0.52549 0.392157 / 0.5);
 }
 
-e {
-  color: rgb(30,40,100);
+f {
+  color: color(srgb 0.117647 0.156863 0.392157);
+}
+
+g {
+  color: color(from currentcolor srgb r g 100 / 50%);
+}
+
+h {
+  color: color(srgb 1 1 1);
+}
+
+i {
+  color: color(srgb 1 1 1);
+}
+
+j {
+  color: color(srgb-linear 1 1 1);
+}
+
+k {
+  color: color(srgb 1 1 1);
+}
+
+l {
+  color: color(srgb 1 1 1);
+}
+
+m {
+  color: color(srgb 0 0 0);
+}
+
+n {
+  color: oklch(1 0.4 0);
+}
+
+o {
+  color: oklab(1 -0.4 -0.4);
+}
+
+p {
+  color: oklab(1 0.4 0.4);
 }

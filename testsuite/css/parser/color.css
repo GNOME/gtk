@@ -123,3 +123,11 @@ ad {
 ae {
   color: hwb(200 10 90 / 0.5);
 }
+
+af {
+  color: oklab(0% 0% 0% / 0%);
+}
+
+ag {
+  color: oklab(100% 100% 100% / 100%);
+}

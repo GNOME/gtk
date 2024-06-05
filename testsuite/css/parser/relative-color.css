@@ -19,6 +19,46 @@ e {
   color: rgb(from darkgoldenrod r g 100 / 50%);
 }
 
-e {
+f {
   color: rgb(from rgba(30,40,50,60) r g 100 / alpha);
+}
+
+g {
+  color: rgb(from currentColor r g 100 / 50%);
+}
+
+h {
+  color: rgb(from white 100% 100% 100% / 100%);
+}
+
+i {
+  color: color(from white srgb 100% 100% 100% / 100%);
+}
+
+j {
+  color: color(from white srgb-linear 100% 100% 100% / 100%);
+}
+
+k {
+  color: hsl(from white 0 100% 100% / 100%);
+}
+
+l {
+  color: hwb(from white 0 100% 0% / 100%);
+}
+
+m {
+  color: hwb(from white 0 0% 100% / 100%);
+}
+
+n {
+  color: oklch(from white 100% 100% 0 / 100%);
+}
+
+o {
+  color: oklab(from white 100% 0% 0% / 100%);
+}
+
+p {
+  color: oklab(from white 100% 100% 100% / 100%);
 }

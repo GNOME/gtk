@@ -1,2 +1,3 @@
+at-invalid-16.css:1:21-25: error: GTK_CSS_PARSER_WARNING_DEPRECATED
 at-invalid-16.css:1:25-30: error: GTK_CSS_PARSER_WARNING_DEPRECATED
 at-invalid-16.css:1:30-31: error: GTK_CSS_PARSER_ERROR_SYNTAX
