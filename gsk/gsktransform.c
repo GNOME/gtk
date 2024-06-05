@@ -489,6 +489,9 @@ gsk_transform_matrix_with_category (GskTransform            *next,
  *
  * Multiplies @next with the given @matrix.
  *
+ * This function consumes @next. Use [method@Gsk.Transform.ref] first
+ * if you want to keep it around.
+ *
  * Returns: The new transform
  **/
 GskTransform *
@@ -643,6 +646,9 @@ static const GskTransformClass GSK_TRANSLATE_TRANSFORM_CLASS =
  *
  * Translates @next in 2-dimensional space by @point.
  *
+ * This function consumes @next. Use [method@Gsk.Transform.ref] first
+ * if you want to keep it around.
+ *
  * Returns: (nullable): The new transform
  **/
 GskTransform *
@@ -662,6 +668,9 @@ gsk_transform_translate (GskTransform           *next,
  * @point: the point to translate the transform by
  *
  * Translates @next by @point.
+ *
+ * This function consumes @next. Use [method@Gsk.Transform.ref] first
+ * if you want to keep it around.
  *
  * Returns: (nullable): The new transform
  **/
@@ -880,6 +889,9 @@ normalize_angle (float angle)
  * Rotates @next @angle degrees in 2D - or in 3D-speak, around the Z axis.
  * The rotation happens around the origin point of (0, 0).
  *
+ * This function consumes @next. Use [method@Gsk.Transform.ref] first
+ * if you want to keep it around.
+ *
  * Returns: (nullable): The new transform
  */
 GskTransform *
@@ -1007,6 +1019,9 @@ static const GskTransformClass GSK_ROTATE3D_TRANSFORM_CLASS =
  * Rotates @next @angle degrees around @axis.
  *
  * For a rotation in 2D space, use [method@Gsk.Transform.rotate]
+ *
+ * This function consumes @next. Use [method@Gsk.Transform.ref] first
+ * if you want to keep it around.
  *
  * Returns: (nullable): The new transform
  */
@@ -1184,6 +1199,9 @@ static const GskTransformClass GSK_SKEW_TRANSFORM_CLASS =
  *
  * Applies a skew transform.
  *
+ * This function consumes @next. Use [method@Gsk.Transform.ref] first
+ * if you want to keep it around.
+ *
  * Returns: (nullable): The new transform
  *
  * Since: 4.6
@@ -1356,6 +1374,9 @@ static const GskTransformClass GSK_SCALE_TRANSFORM_CLASS =
  *
  * Use [method@Gsk.Transform.scale_3d] to scale in all 3 dimensions.
  *
+ * This function consumes @next. Use [method@Gsk.Transform.ref] first
+ * if you want to keep it around.
+ *
  * Returns: (nullable): The new transform
  **/
 GskTransform *
@@ -1374,6 +1395,9 @@ gsk_transform_scale (GskTransform *next,
  * @factor_z: scaling factor on the Z axis
  *
  * Scales @next by the given factors.
+ *
+ * This function consumes @next. Use [method@Gsk.Transform.ref] first
+ * if you want to keep it around.
  *
  * Returns: (nullable): The new transform
  **/
@@ -1509,6 +1533,9 @@ static const GskTransformClass GSK_PERSPECTIVE_TRANSFORM_CLASS =
  * scaling points with positive Z values away from the origin, and
  * those with negative Z values towards the origin. Points
  * on the z=0 plane are unchanged.
+ *
+ * This function consumes @next. Use [method@Gsk.Transform.ref] first
+ * if you want to keep it around.
  *
  * Returns: The new transform
  */
@@ -1919,6 +1946,9 @@ gsk_transform_to_translate (GskTransform *self,
  *
  * Applies all the operations from @other to @next.
  *
+ * This function consumes @next. Use [method@Gsk.Transform.ref] first
+ * if you want to keep it around.
+ *
  * Returns: (nullable): The new transform
  */
 GskTransform *
@@ -1954,6 +1984,9 @@ gsk_transform_transform (GskTransform *next,
  * the correct inverse of %NULL. If you need to differentiate
  * between those cases, you should check @self is not %NULL
  * before calling this function.
+ *
+ * This function consumes @self. Use [method@Gsk.Transform.ref] first
+ * if you want to keep it around.
  *
  * Returns: (nullable): The inverted transform
  */
