@@ -745,6 +745,10 @@ gdk_toplevel_begin_move (GdkToplevel *toplevel,
  * @toplevel: a `GdkToplevel`
  * @gesture: a `GdkTitlebarGesture`
  *
+ * Performs a title bar gesture.
+ *
+ * Returns: whether the gesture was performed
+ *
  * Since: 4.4
  */
 gboolean
