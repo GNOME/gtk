@@ -1,2 +1,6 @@
+currentcolor-everywhere.css:8:10-16: error: GTK_CSS_PARSER_WARNING_DEPRECATED
+currentcolor-everywhere.css:12:10-16: error: GTK_CSS_PARSER_WARNING_DEPRECATED
+currentcolor-everywhere.css:16:10-14: error: GTK_CSS_PARSER_WARNING_DEPRECATED
 currentcolor-everywhere.css:16:28-39: error: GTK_CSS_PARSER_WARNING_DEPRECATED
+currentcolor-everywhere.css:20:10-14: error: GTK_CSS_PARSER_WARNING_DEPRECATED
 currentcolor-everywhere.css:20:14-25: error: GTK_CSS_PARSER_WARNING_DEPRECATED

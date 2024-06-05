@@ -107,7 +107,7 @@ typedef struct {
 
 static ValueTransitionTest tests[] = {
   { GTK_CSS_PROPERTY_COLOR, "transparent", "rgb(255,0,0)", 0.25, "rgba(255,0,0,0.25)" },
-  { GTK_CSS_PROPERTY_COLOR, "alpha(red, 0.2)", "alpha(rgb(255,0,0),0.8)", 0.5, "rgba(255,0,0,0.5)" },
+  { GTK_CSS_PROPERTY_COLOR, "rgb(from red r g b / 0.2)", "rgb(from rgb(255,0,0) r g b / 0.8)", 0.5, "rgba(255,0,0,0.5)" },
   { GTK_CSS_PROPERTY_BOX_SHADOW, "none", "2px 2px 10px 4px rgb(200,200,200)", 0.5, "1px 1px 5px 2px rgba(200,200,200,0.5)" },
   { GTK_CSS_PROPERTY_BOX_SHADOW, "2px 2px 10px 4px rgb(200,200,200)", "none", 0.5, "1px 1px 5px 2px rgba(200,200,200,0.5)" },
   { GTK_CSS_PROPERTY_BOX_SHADOW, "2px 2px 10px 4px rgb(200,200,200), 0px 10px 8px 6px rgb(200,100,0)", "none", 0.5, "1px 1px 5px 2px rgba(200,200,200,0.5), 0px 5px 4px 3px rgba(200,100,0,0.5)" },
