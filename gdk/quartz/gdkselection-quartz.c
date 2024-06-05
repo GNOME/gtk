@@ -189,15 +189,18 @@ gdk_quartz_pasteboard_type_to_atom_libgtk_only (NSString *type)
   else if ([type isEqualToString:GDK_QUARTZ_URL_PBOARD_TYPE] ||
            [type isEqualToString:GDK_QUARTZ_FILE_PBOARD_TYPE])
     return gdk_atom_intern_static_string ("text/uri-list");
-  else {
+  else
+    {
 #if MAC_OS_X_VERSION_MIN_REQUIRED >= 110000
-    UTType* uti = [UTType typeWithIdentifier:type];
-    if (uti != nil)
-      return gdk_atom_intern (uti.preferredMIMEType.UTF8String, FALSE);
-    else
+      if (gdk_quartz_osx_version() >= GDK_OSX_BIGSUR)
+        {  
+          UTType* uti = [UTType typeWithIdentifier:type];
+          if (uti != nil)
+            return gdk_atom_intern (uti.preferredMIMEType.UTF8String, FALSE);
+        }
 #endif
-    return gdk_atom_intern ([type UTF8String], FALSE);
-  }
+      return gdk_atom_intern ([type UTF8String], FALSE);
+    }
 }
 
 NSString *
@@ -211,15 +214,18 @@ gdk_quartz_target_to_pasteboard_type_libgtk_only (const char *target)
     return GDK_QUARTZ_COLOR_PBOARD_TYPE;
   else if (strcmp (target, "text/uri-list") == 0)
     return GDK_QUARTZ_URL_PBOARD_TYPE;
-  else {
+  else
+    {
 #if MAC_OS_X_VERSION_MIN_REQUIRED >= 110000
-    UTType* type = [UTType typeWithMIMEType: [NSString stringWithUTF8String:target]];
-    if (type != nil)
-      return type.identifier;
-    else
+      if (gdk_quartz_osx_version() >= GDK_OSX_BIGSUR)
+        {
+          UTType* type = [UTType typeWithMIMEType: [NSString stringWithUTF8String:target]];
+          if (type != nil)
+            return type.identifier;
+        }
 #endif
       return [NSString stringWithUTF8String:target];
-  }
+    }
 }
 
 NSString *
