@@ -605,8 +605,16 @@ resolve_relative (GtkCssValue      *values[4],
     {
       if (values[i])
         {
+          float lower, upper;
+
+          gtk_css_color_space_get_coord_range (color_space, legacy_rgb_scale,
+                                               i, &lower, &upper);
+
           m[i] = FALSE;
-          v[i] = gtk_css_number_value_get_canonical (values[i], 1);
+          v[i] = gtk_css_number_value_get_canonical (values[i], upper - lower);
+
+          if (gtk_css_number_value_has_percent (values[i]))
+            v[i] += lower;
         }
       else
         {

@@ -22,3 +22,39 @@ f {
 g {
   color: color(from currentcolor srgb r g 100 / 50%);
 }
+
+h {
+  color: color(srgb 1 1 1);
+}
+
+i {
+  color: color(srgb 1 1 1);
+}
+
+j {
+  color: color(srgb-linear 1 1 1);
+}
+
+k {
+  color: color(srgb 1 1 1);
+}
+
+l {
+  color: color(srgb 1 1 1);
+}
+
+m {
+  color: color(srgb 0 0 0);
+}
+
+n {
+  color: oklch(1 0.4 0);
+}
+
+o {
+  color: oklab(1 -0.4 -0.4);
+}
+
+p {
+  color: oklab(1 0.4 0.4);
+}

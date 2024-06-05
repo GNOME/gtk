@@ -225,6 +225,60 @@ gtk_css_color_space_get_coord_name (GtkCssColorSpace color_space,
     }
 }
 
+void
+gtk_css_color_space_get_coord_range (GtkCssColorSpace  color_space,
+                                     gboolean          legacy_rgb_scale,
+                                     guint             coord,
+                                     float            *lower,
+                                     float            *upper)
+{
+  if (coord == 3)
+    {
+      *lower = 0;
+      *upper = 1;
+      return;
+    }
+
+  switch (color_space)
+    {
+    case GTK_CSS_COLOR_SPACE_SRGB:
+      *lower = 0;
+      *upper = legacy_rgb_scale ? 255 : 1;
+      return;
+    case GTK_CSS_COLOR_SPACE_SRGB_LINEAR:
+      *lower = 0;
+      *upper = 1;
+      return;
+    case GTK_CSS_COLOR_SPACE_HSL:
+    case GTK_CSS_COLOR_SPACE_HWB:
+      switch (coord)
+        {
+        case 0: *lower = *upper = NAN; return;
+        case 1:
+        case 2: *lower = 0; *upper = 100; return;
+        default: g_assert_not_reached ();
+        }
+    case GTK_CSS_COLOR_SPACE_OKLAB:
+      switch (coord)
+        {
+        case 0: *lower = 0; *upper = 1; return;
+        case 1:
+        case 2: *lower = -0.4; *upper = 0.4; return;
+        default: g_assert_not_reached ();
+        }
+    case GTK_CSS_COLOR_SPACE_OKLCH:
+      switch (coord)
+        {
+        case 0: *lower = 0; *upper = 1; return;
+        case 1: *lower = 0; *upper = 0.4; return;
+        case 2: *lower = *upper = NAN; return;
+        default: g_assert_not_reached ();
+        }
+    default:
+      g_assert_not_reached ();
+    }
+}
+
 static gboolean
 color_space_is_polar (GtkCssColorSpace color_space)
 {

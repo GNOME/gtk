@@ -114,6 +114,12 @@ void    gtk_css_color_interpolate (const GtkCssColor      *from,
 const char * gtk_css_color_space_get_coord_name (GtkCssColorSpace color_space,
                                                  guint            coord);
 
+void gtk_css_color_space_get_coord_range (GtkCssColorSpace  color_space,
+                                          gboolean          legacy_rgb_scale,
+                                          guint             coord,
+                                          float            *lower,
+                                          float            *upper);
+
 gboolean gtk_css_color_interpolation_method_parse (GtkCssParser           *parser,
                                                    GtkCssColorSpace       *in,
                                                    GtkCssHueInterpolation *interp);
