@@ -1643,6 +1643,7 @@ parse_color_function (GtkCssParser     *self,
     {
       data->ctx.color = gtk_css_color_value_parse (self);
       data->syntax = COLOR_SYNTAX_MODERN;
+      data->serialize_as_rgb = FALSE;
     }
 
   arg = 0;

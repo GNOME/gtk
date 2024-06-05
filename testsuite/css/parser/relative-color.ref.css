@@ -15,6 +15,6 @@ e {
   color: color(from rgb(184,134,11) srgb 184 134 100 / 50%);
 }
 
-e {
-  color: rgb(30,40,100);
+f {
+  color: color(srgb 0.117647 0.156863 0.392157);
 }
