@@ -105,6 +105,8 @@ struct _GdkSurface
    */
   GdkSubsurface *subsurfaces_above;
   GdkSubsurface *subsurfaces_below;
+
+  GdkColorState *color_state;
 };
 
 struct _GdkSurfaceClass
@@ -354,5 +356,8 @@ GdkSubsurface * gdk_surface_create_subsurface  (GdkSurface          *surface);
 gsize           gdk_surface_get_n_subsurfaces  (GdkSurface          *surface);
 GdkSubsurface * gdk_surface_get_subsurface     (GdkSurface          *surface,
                                                 gsize                idx);
+
+void            gdk_surface_set_color_state    (GdkSurface          *surface,
+                                                GdkColorState       *color_state);
 
 G_END_DECLS

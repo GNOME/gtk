@@ -44,6 +44,7 @@
 #include "gdktoplevelprivate.h"
 #include "gdkvulkancontext.h"
 #include "gdksubsurfaceprivate.h"
+#include "gdkcolorstate.h"
 
 #include <math.h>
 
@@ -89,6 +90,7 @@ enum {
 
 enum {
   PROP_0,
+  PROP_COLOR_STATE,
   PROP_CURSOR,
   PROP_DISPLAY,
   PROP_FRAME_CLOCK,
@@ -484,6 +486,8 @@ gdk_surface_init (GdkSurface *surface)
 
   surface->alpha = 255;
 
+  surface->color_state = gdk_color_state_get_srgb ();
+
   surface->device_cursor = g_hash_table_new_full (NULL, NULL,
                                                  NULL, g_object_unref);
 
@@ -527,6 +531,25 @@ gdk_surface_class_init (GdkSurfaceClass *klass)
   klass->beep = gdk_surface_real_beep;
   klass->get_scale = gdk_surface_real_get_scale;
   klass->create_subsurface = gdk_surface_real_create_subsurface;
+
+  /**
+   * GdkSurface:color-state: (attributes org.gtk.Property.get=gdk_surface_get_color_state)
+   *
+   * The preferred color state for rendering to the surface
+   *
+   * This color state is negotiated between GTK and the compositor.
+   *
+   * The color state may change as the surface gets moved around - for example
+   * to different monitors or when the compositor gets reconfigured. As long as
+   * the surface isn't shown, the color space may not represent the actual color
+   * state that is going to be used.
+   *
+   * Since: 4.16
+   */
+  properties[PROP_COLOR_STATE] =
+      g_param_spec_boxed ("color-state", NULL, NULL,
+                          GDK_TYPE_COLOR_STATE,
+                          G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
 
   /**
    * GdkSurface:cursor: (attributes org.gtk.Property.get=gdk_surface_get_cursor org.gtk.Property.set=gdk_surface_set_cursor)
@@ -786,6 +809,10 @@ gdk_surface_set_property (GObject      *object,
 
   switch (prop_id)
     {
+    case PROP_COLOR_STATE:
+      gdk_surface_set_color_state (surface, g_value_get_object (value));
+      break;
+
     case PROP_CURSOR:
       gdk_surface_set_cursor (surface, g_value_get_object (value));
       break;
@@ -819,6 +846,10 @@ gdk_surface_get_property (GObject    *object,
 
   switch (prop_id)
     {
+    case PROP_COLOR_STATE:
+      g_value_set_object (value, gdk_surface_get_color_state (surface));
+      break;
+
     case PROP_CURSOR:
       g_value_set_object (value, gdk_surface_get_cursor (surface));
       break;
@@ -3075,4 +3106,34 @@ gdk_surface_get_subsurface (GdkSurface *surface,
                             gsize       idx)
 {
   return g_ptr_array_index (surface->subsurfaces, idx);
+}
+
+void
+gdk_surface_set_color_state (GdkSurface    *surface,
+                             GdkColorState *color_state)
+{
+  if (gdk_color_state_equal (surface->color_state, color_state))
+    return;
+
+  g_set_object (&surface->color_state, color_state);
+
+  g_object_notify_by_pspec (G_OBJECT (surface), properties[PROP_COLOR_STATE]);
+}
+
+/**
+ * gdk_surface_get_color_state:
+ * @self: a `GdkSurface`
+ *
+ * Returns the preferred color state for rendering to the given @surface.
+ *
+ * Returns: (transfer none): The color state of @surface
+ *
+ * Since: 4.16
+ */
+GdkColorState *
+gdk_surface_get_color_state (GdkSurface *surface)
+{
+  g_return_val_if_fail (GDK_IS_SURFACE (surface), gdk_color_state_get_srgb ());
+
+  return surface->color_state;
 }
