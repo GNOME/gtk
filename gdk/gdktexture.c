@@ -44,6 +44,7 @@
 #include "gdkmemorytextureprivate.h"
 #include "gdkpaintable.h"
 #include "gdksnapshot.h"
+#include "gdkcolorstate.h"
 
 #include <graphene.h>
 #include "loaders/gdkpngprivate.h"
@@ -69,6 +70,7 @@ enum {
   PROP_0,
   PROP_WIDTH,
   PROP_HEIGHT,
+  PROP_COLOR_STATE,
 
   N_PROPS
 };
@@ -282,6 +284,10 @@ gdk_texture_set_property (GObject      *gobject,
       self->height = g_value_get_int (value);
       break;
 
+    case PROP_COLOR_STATE:
+      g_set_object (&self->color_state, g_value_get_object (value));
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (gobject, prop_id, pspec);
       break;
@@ -304,6 +310,10 @@ gdk_texture_get_property (GObject    *gobject,
 
     case PROP_HEIGHT:
       g_value_set_int (value, self->height);
+      break;
+
+    case PROP_COLOR_STATE:
+      g_value_set_object (value, self->color_state);
       break;
 
     default:
@@ -343,6 +353,8 @@ gdk_texture_dispose (GObject *object)
     }
 
   gdk_texture_clear_render_data (self);
+
+  g_clear_object (&self->color_state);
 
   G_OBJECT_CLASS (gdk_texture_parent_class)->dispose (object);
 }
@@ -388,12 +400,28 @@ gdk_texture_class_init (GdkTextureClass *klass)
                       G_PARAM_STATIC_STRINGS |
                       G_PARAM_EXPLICIT_NOTIFY);
 
+  /**
+   * GdkTexture:color-state: (attributes org.gtk.Property.get=gdk_texture_get_color_state)
+   *
+   * The color state of the texture.
+   *
+   * Since: 4.16
+   */
+  properties[PROP_COLOR_STATE] =
+    g_param_spec_object ("color-state", NULL, NULL,
+                         GDK_TYPE_COLOR_STATE,
+                         G_PARAM_READWRITE |
+                         G_PARAM_CONSTRUCT_ONLY |
+                         G_PARAM_STATIC_STRINGS |
+                         G_PARAM_EXPLICIT_NOTIFY);
+
   g_object_class_install_properties (gobject_class, N_PROPS, properties);
 }
 
 static void
 gdk_texture_init (GdkTexture *self)
 {
+  self->color_state = g_object_ref (gdk_color_state_get_srgb ());
 }
 
 /**
@@ -727,6 +755,23 @@ gdk_texture_get_height (GdkTexture *texture)
   return texture->height;
 }
 
+/**
+ * gdk_texture_get_color_state: (attributes org.gtk.Method.get_property=color-state)
+ * @texture: a `GdkTexture`
+ *
+ * Returns the color state associsated with @texture.
+ *
+ * Returns: (transfer none): the color state of the `GdkTexture`
+ *
+ * Since: 4.16
+ */
+GdkColorState *
+gdk_texture_get_color_state (GdkTexture *texture)
+{
+  g_return_val_if_fail (GDK_IS_TEXTURE (texture), NULL);
+
+  return texture->color_state;
+}
 void
 gdk_texture_do_download (GdkTexture      *texture,
                          GdkMemoryFormat  format,

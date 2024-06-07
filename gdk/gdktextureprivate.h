@@ -26,6 +26,8 @@ struct _GdkTexture
   int width;
   int height;
 
+  GdkColorState *color_state;
+
   gpointer render_key;
   gpointer render_data;
   GDestroyNotify render_notify;
