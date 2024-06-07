@@ -488,6 +488,7 @@ gdk_gl_texture_new_from_builder (GdkGLTextureBuilder *builder,
   self = g_object_new (GDK_TYPE_GL_TEXTURE,
                        "width", gdk_gl_texture_builder_get_width (builder),
                        "height", gdk_gl_texture_builder_get_height (builder),
+                       "color-state", gdk_gl_texture_builder_get_color_state (builder),
                        NULL);
 
   self->context = g_object_ref (gdk_gl_texture_builder_get_context (builder));
