@@ -24,6 +24,7 @@
 #include "gdkdebugprivate.h"
 #include "gdkdisplay.h"
 #include "gdkenumtypes.h"
+#include "gdkcolorstate.h"
 #include "gdkdmabuftextureprivate.h"
 #include "gdkdmabuftexturebuilderprivate.h"
 
@@ -40,6 +41,8 @@ struct _GdkDmabufTextureBuilder
   gboolean premultiplied;
 
   GdkDmabuf dmabuf;
+
+  GdkColorState *color_state;
 
   GdkTexture *update_texture;
   cairo_region_t *update_region;
@@ -124,6 +127,7 @@ enum
   PROP_MODIFIER,
   PROP_PREMULTIPLIED,
   PROP_N_PLANES,
+  PROP_COLOR_STATE,
   PROP_UPDATE_REGION,
   PROP_UPDATE_TEXTURE,
 
@@ -141,6 +145,7 @@ gdk_dmabuf_texture_builder_dispose (GObject *object)
 
   g_clear_object (&self->update_texture);
   g_clear_pointer (&self->update_region, cairo_region_destroy);
+  g_clear_pointer (&self->color_state, gdk_color_state_unref);
 
   G_OBJECT_CLASS (gdk_dmabuf_texture_builder_parent_class)->dispose (object);
 }
@@ -181,6 +186,10 @@ gdk_dmabuf_texture_builder_get_property (GObject    *object,
 
     case PROP_N_PLANES:
       g_value_set_uint (value, self->dmabuf.n_planes);
+      break;
+
+    case PROP_COLOR_STATE:
+      g_value_set_boxed (value, self->color_state);
       break;
 
     case PROP_UPDATE_REGION:
@@ -233,6 +242,10 @@ gdk_dmabuf_texture_builder_set_property (GObject      *object,
 
     case PROP_N_PLANES:
       gdk_dmabuf_texture_builder_set_n_planes (self, g_value_get_uint (value));
+      break;
+
+    case PROP_COLOR_STATE:
+      gdk_dmabuf_texture_builder_set_color_state (self, g_value_get_boxed (value));
       break;
 
     case PROP_UPDATE_REGION:
@@ -348,6 +361,18 @@ gdk_dmabuf_texture_builder_class_init (GdkDmabufTextureBuilderClass *klass)
                        G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   /**
+   * GdkDmabufTextureBuilder:color-state: (attributes org.gtk.Property.get=gdk_dmabuf_texture_builder_get_color_state org.gtk.Property.set=gdk_dmabuf_texture_builder_set_color_state)
+   *
+   * The color state of the texture.
+   *
+   * Since: 4.16
+   */
+  properties[PROP_COLOR_STATE] =
+    g_param_spec_boxed ("color-state", NULL, NULL,
+                        GDK_TYPE_COLOR_STATE,
+                        G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+
+  /**
    * GdkDmabufTextureBuilder:update-region: (attributes org.gtk.Property.get=gdk_dmabuf_texture_builder_get_update_region org.gtk.Property.set=gdk_dmabuf_texture_builder_set_update_region)
    *
    * The update region for [property@Gdk.GLTextureBuilder:update-texture].
@@ -383,6 +408,8 @@ gdk_dmabuf_texture_builder_init (GdkDmabufTextureBuilder *self)
 
   for (int i = 0; i < GDK_DMABUF_MAX_PLANES; i++)
     self->dmabuf.planes[i].fd = -1;
+
+  self->color_state = gdk_color_state_get_srgb ();
 }
 
 /**
@@ -841,6 +868,48 @@ gdk_dmabuf_texture_builder_set_offset (GdkDmabufTextureBuilder *self,
     return;
 
   self->dmabuf.planes[plane].offset = offset;
+}
+
+/**
+ * gdk_dmabuf_texture_builder_get_color_state: (attributes org.gtk.Method.get_property=color-state)
+ * @self: a `GdkDmabufTextureBuilder`
+ *
+ * Gets the color state previously set via gdk_dmabuf_texture_builder_set_color_state().
+ *
+ * Returns: the color state
+ *
+ * Since: 4.16
+ */
+GdkColorState *
+gdk_dmabuf_texture_builder_get_color_state (GdkDmabufTextureBuilder *self)
+{
+  g_return_val_if_fail (GDK_IS_DMABUF_TEXTURE_BUILDER (self), NULL);
+
+  return self->color_state;
+}
+
+/**
+ * gdk_dmabuf_texture_builder_set_color_state: (attributes org.gtk.Method.set_property=color-state)
+ * @self: a `GdkDmabufTextureBuilder`
+ * @color_state: a `GdkColorState`
+ *
+ * Sets the color state for the texture.
+ *
+ * Since: 4.16
+ */
+void
+gdk_dmabuf_texture_builder_set_color_state (GdkDmabufTextureBuilder *self,
+                                            GdkColorState           *color_state)
+{
+  g_return_if_fail (GDK_IS_DMABUF_TEXTURE_BUILDER (self));
+  g_return_if_fail (color_state != NULL);
+
+  if (self->color_state != color_state)
+    {
+      g_clear_pointer (&self->color_state, gdk_color_state_unref);
+      self->color_state = gdk_color_state_ref (color_state);
+      g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_COLOR_STATE]);
+    }
 }
 
 /**
