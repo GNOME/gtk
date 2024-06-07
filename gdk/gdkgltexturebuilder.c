@@ -23,6 +23,7 @@
 
 #include "gdkenumtypes.h"
 #include "gdkglcontext.h"
+#include "gdkcolorstate.h"
 #include "gdkgltextureprivate.h"
 
 #include <cairo-gobject.h>
@@ -38,6 +39,7 @@ struct _GdkGLTextureBuilder
   GdkMemoryFormat format;
   gboolean has_mipmap;
   gpointer sync;
+  GdkColorState *color_state;
 
   GdkTexture *update_texture;
   cairo_region_t *update_region;
@@ -75,6 +77,7 @@ enum
   PROP_HEIGHT,
   PROP_ID,
   PROP_SYNC,
+  PROP_COLOR_STATE,
   PROP_UPDATE_REGION,
   PROP_UPDATE_TEXTURE,
   PROP_WIDTH,
@@ -95,6 +98,7 @@ gdk_gl_texture_builder_dispose (GObject *object)
 
   g_clear_object (&self->update_texture);
   g_clear_pointer (&self->update_region, cairo_region_destroy);
+  g_clear_pointer (&self->color_state, gdk_color_state_unref);
 
   G_OBJECT_CLASS (gdk_gl_texture_builder_parent_class)->dispose (object);
 }
@@ -131,6 +135,10 @@ gdk_gl_texture_builder_get_property (GObject    *object,
 
     case PROP_SYNC:
       g_value_set_pointer (value, self->sync);
+      break;
+
+    case PROP_COLOR_STATE:
+      g_value_set_object (value, self->color_state);
       break;
 
     case PROP_UPDATE_REGION:
@@ -183,6 +191,10 @@ gdk_gl_texture_builder_set_property (GObject      *object,
 
     case PROP_SYNC:
       gdk_gl_texture_builder_set_sync (self, g_value_get_pointer (value));
+      break;
+
+    case PROP_COLOR_STATE:
+      gdk_gl_texture_builder_set_color_state (self, g_value_get_object (value));
       break;
 
     case PROP_UPDATE_REGION:
@@ -287,6 +299,18 @@ gdk_gl_texture_builder_class_init (GdkGLTextureBuilderClass *klass)
                           G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   /**
+   * GdkGLTextureBuilder:color-state: (attributes org.gtk.Property.get=gdk_gl_texture_builder_get_color_state org.gtk.Property.set=gdk_gl_texture_builder_set_color_state)
+   *
+   * The color state of the texture.
+   *
+   * Since: 4.16
+   */
+  properties[PROP_COLOR_STATE] =
+    g_param_spec_boxed ("color-state", NULL, NULL,
+                        GDK_TYPE_COLOR_STATE,
+                        G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+
+  /**
    * GdkGLTextureBuilder:update-region: (attributes org.gtk.Property.get=gdk_gl_texture_builder_get_update_region org.gtk.Property.set=gdk_gl_texture_builder_set_update_region)
    *
    * The update region for [property@Gdk.GLTextureBuilder:update-texture].
@@ -329,6 +353,7 @@ static void
 gdk_gl_texture_builder_init (GdkGLTextureBuilder *self)
 {
   self->format = GDK_MEMORY_R8G8B8A8_PREMULTIPLIED;
+  self->color_state = gdk_color_state_get_srgb ();
 }
 
 /**
@@ -614,6 +639,48 @@ gdk_gl_texture_builder_set_sync (GdkGLTextureBuilder *self,
   self->sync = sync;
 
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_SYNC]);
+}
+
+/**
+ * gdk_gl_texture_builder_get_color_state: (attributes org.gtk.Method.get_property=color-state)
+ * @self: a `GdkGLTextureBuilder`
+ *
+ * Gets the color state previously set via gdk_gl_texture_builder_set_color_state().
+ *
+ * Returns: the color state
+ *
+ * Since: 4.16
+ */
+GdkColorState *
+gdk_gl_texture_builder_get_color_state (GdkGLTextureBuilder *self)
+{
+  g_return_val_if_fail (GDK_IS_GL_TEXTURE_BUILDER (self), NULL);
+
+  return self->color_state;
+}
+
+/**
+ * gdk_gl_texture_builder_set_color_state: (attributes org.gtk.Method.set_property=color-state)
+ * @self: a `GdkGLTextureBuilder`
+ * @color_state: a `GdkColorState`
+ *
+ * Sets the color state for the texture.
+ *
+ * Since: 4.16
+ */
+void
+gdk_gl_texture_builder_set_color_state (GdkGLTextureBuilder *self,
+                                        GdkColorState       *color_state)
+{
+  g_return_if_fail (GDK_IS_GL_TEXTURE_BUILDER (self));
+  g_return_if_fail (color_state != NULL);
+
+  if (self->color_state != color_state)
+    {
+      g_clear_pointer (&self->color_state, gdk_color_state_unref);
+      self->color_state = gdk_color_state_ref (color_state);
+      g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_COLOR_STATE]);
+    }
 }
 
 /**
