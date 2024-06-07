@@ -200,6 +200,7 @@ gdk_dmabuf_texture_new_from_builder (GdkDmabufTextureBuilder *builder,
   self = g_object_new (GDK_TYPE_DMABUF_TEXTURE,
                        "width", width,
                        "height", height,
+                       "color-state", gdk_dmabuf_texture_builder_get_color_state (builder),
                        NULL);
 
   g_set_object (&self->display, display);
