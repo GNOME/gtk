@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk main\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2024-04-29 11:55+0000\n"
-"PO-Revision-Date: 2024-04-30 22:03+0200\n"
+"POT-Creation-Date: 2024-05-31 20:00+0000\n"
+"PO-Revision-Date: 2024-06-05 14:52+0200\n"
 "Last-Translator: sa\n"
 "Language-Team: Kabyle <>\n"
 "Language: kab\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n>1;\n"
-"X-Generator: Poedit 3.4.2\n"
+"X-Generator: Poedit 3.4.4\n"
 "X-DL-Team: kab\n"
 "X-DL-Module: gtk\n"
 "X-DL-Branch: gtk-4-14\n"
@@ -56,7 +56,7 @@ msgstr ""
 msgid "The current backend does not support OpenGL"
 msgstr ""
 
-#: gdk/gdkdisplay.c:1315 gdk/gdkvulkancontext.c:1600
+#: gdk/gdkdisplay.c:1315 gdk/gdkvulkancontext.c:1601
 msgid "Vulkan support disabled via GDK_DEBUG"
 msgstr ""
 
@@ -537,7 +537,7 @@ msgstr ""
 msgid "Unsupported JPEG colorspace (%d)"
 msgstr ""
 
-#: gdk/loaders/gdkjpeg.c:203 gdk/loaders/gdkpng.c:286 gdk/loaders/gdktiff.c:472
+#: gdk/loaders/gdkjpeg.c:203 gdk/loaders/gdkpng.c:289 gdk/loaders/gdktiff.c:472
 #, c-format
 msgid "Not enough memory for image size %ux%u"
 msgstr ""
@@ -547,17 +547,17 @@ msgstr ""
 msgid "Error reading png (%s)"
 msgstr "Tuccḍa deg tɣuri n png (%s)"
 
-#: gdk/loaders/gdkpng.c:212
+#: gdk/loaders/gdkpng.c:215
 #, c-format
 msgid "Unsupported depth %u in png image"
 msgstr ""
 
-#: gdk/loaders/gdkpng.c:262
+#: gdk/loaders/gdkpng.c:265
 #, c-format
 msgid "Unsupported color type %u in png image"
 msgstr ""
 
-#: gdk/loaders/gdkpng.c:272
+#: gdk/loaders/gdkpng.c:275
 #, c-format
 msgid "Image stride too large for image size %ux%u"
 msgstr ""
@@ -999,7 +999,7 @@ msgstr "Asnas amezwar"
 #: gtk/deprecated/gtkappchooserwidget.c:575
 #, c-format
 msgid "No apps found for “%s”."
-msgstr "Ulac isnasen yettwafen i “%s”"
+msgstr "Ulac isnasen yettwafen i “%s”."
 
 #: gtk/deprecated/gtkappchooserwidget.c:658
 msgid "Recommended Apps"
@@ -1011,7 +1011,7 @@ msgstr ""
 
 #: gtk/deprecated/gtkappchooserwidget.c:687
 msgid "Other Apps"
-msgstr "Isnasen-nniḍen…"
+msgstr "Isnasen-nniḍen"
 
 #. This label is displayed in a treeview cell displaying
 #. * a disabled accelerator key combination.
@@ -2233,7 +2233,7 @@ msgstr "Afaylu s yisem-agi yella yakan"
 #: gtk/gtkmessagedialog.c:179 gtk/gtkmountoperation.c:608
 #: gtk/print/gtkpagesetupunixdialog.c:282 gtk/print/gtkprintbackend.c:638
 #: gtk/print/gtkprintunixdialog.c:682 gtk/print/gtkprintunixdialog.c:839
-#: gtk/gtkwindow.c:6256 gtk/ui/gtkappchooserdialog.ui:48
+#: gtk/gtkwindow.c:6257 gtk/ui/gtkappchooserdialog.ui:48
 #: gtk/ui/gtkassistant.ui:52 gtk/ui/gtkcolorchooserdialog.ui:36
 #: gtk/ui/gtkfontchooserdialog.ui:27
 msgid "_Cancel"
@@ -2285,7 +2285,7 @@ msgstr ""
 
 #: gtk/gtkfilechooserwidget.c:757
 msgid "Try using a shorter name."
-msgstr "Ɛreḍ ad tesqedceḍ isem wezzilen ugar"
+msgstr "Ɛreḍ ad tesqedceḍ isem wezzilen ugar."
 
 #: gtk/gtkfilechooserwidget.c:767
 msgid "You may only select folders"
@@ -2321,7 +2321,7 @@ msgid "If you delete an item, it will be permanently lost."
 msgstr "Ma tekkseḍ aferdis, ad iṛuḥ i lebda."
 
 #: gtk/gtkfilechooserwidget.c:1188 gtk/gtkfilechooserwidget.c:1786
-#: gtk/gtklabel.c:5712 gtk/gtktext.c:6194 gtk/gtktextview.c:9099
+#: gtk/gtklabel.c:5734 gtk/gtktext.c:6196 gtk/gtktextview.c:9099
 msgid "_Delete"
 msgstr "Kkes (_D)"
 
@@ -2659,31 +2659,31 @@ msgstr "Mdel"
 msgid "Close the infobar"
 msgstr ""
 
-#: gtk/gtklabel.c:5709 gtk/gtktext.c:6182 gtk/gtktextview.c:9087
+#: gtk/gtklabel.c:5731 gtk/gtktext.c:6184 gtk/gtktextview.c:9087
 msgid "Cu_t"
 msgstr "Gzem (_T)"
 
-#: gtk/gtklabel.c:5710 gtk/gtktext.c:6186 gtk/gtktextview.c:9091
+#: gtk/gtklabel.c:5732 gtk/gtktext.c:6188 gtk/gtktextview.c:9091
 msgid "_Copy"
 msgstr "Nɣel (_C)"
 
-#: gtk/gtklabel.c:5711 gtk/gtktext.c:6190 gtk/gtktextview.c:9095
+#: gtk/gtklabel.c:5733 gtk/gtktext.c:6192 gtk/gtktextview.c:9095
 msgid "_Paste"
 msgstr "Senteḍ (_P)"
 
-#: gtk/gtklabel.c:5717 gtk/gtktext.c:6203 gtk/gtktextview.c:9120
+#: gtk/gtklabel.c:5739 gtk/gtktext.c:6205 gtk/gtktextview.c:9120
 msgid "Select _All"
 msgstr "Fren _Akk"
 
-#: gtk/gtklabel.c:5722
+#: gtk/gtklabel.c:5744
 msgid "_Open Link"
 msgstr "Ldi aseɣwen (_O)"
 
-#: gtk/gtklabel.c:5726
+#: gtk/gtklabel.c:5748
 msgid "Copy _Link Address"
 msgstr "Nɣel asaɣ n tansa (_L)"
 
-#: gtk/gtklabel.c:5770 gtk/gtktext.c:2723 gtk/gtktextview.c:9169
+#: gtk/gtklabel.c:5792 gtk/gtktext.c:2723 gtk/gtktextview.c:9169
 msgid "Context menu"
 msgstr ""
 
@@ -2691,7 +2691,7 @@ msgstr ""
 msgid "_Copy URL"
 msgstr "Nɣel URL (_C)"
 
-#: gtk/gtklinkbutton.c:567
+#: gtk/gtklinkbutton.c:589
 msgid "Invalid URI"
 msgstr "URI arameɣtu"
 
@@ -2754,7 +2754,7 @@ msgid "Play"
 msgstr "Ɣeṛ"
 
 #: gtk/gtkmessagedialog.c:162 gtk/gtkmessagedialog.c:180
-#: gtk/print/gtkprintbackend.c:639 gtk/gtkwindow.c:6257
+#: gtk/print/gtkprintbackend.c:639 gtk/gtkwindow.c:6258
 msgid "_OK"
 msgstr "IH (_O)"
 
@@ -3039,7 +3039,7 @@ msgstr ""
 
 #: gtk/gtkplacessidebar.c:2233
 msgid "This name is already taken"
-msgstr "isem-a yettwasekles yakan"
+msgstr "Isem-a yettwasekles yakan"
 
 #: gtk/gtkplacessidebar.c:2525
 #, c-format
@@ -3612,7 +3612,7 @@ msgctxt "accessibility"
 msgid "Sidebar"
 msgstr "Afeggag n yidis"
 
-#: gtk/gtktext.c:6208 gtk/gtktextview.c:9125
+#: gtk/gtktext.c:6210 gtk/gtktextview.c:9125
 msgid "Insert _Emoji"
 msgstr "G_er-d Imujit"
 
@@ -3624,12 +3624,12 @@ msgstr "Err-d (_U)"
 msgid "_Redo"
 msgstr "E_rr-d"
 
-#: gtk/gtkwindow.c:6245
+#: gtk/gtkwindow.c:6246
 #, c-format
 msgid "Do you want to use GTK Inspector?"
 msgstr ""
 
-#: gtk/gtkwindow.c:6247
+#: gtk/gtkwindow.c:6248
 #, c-format
 msgid ""
 "GTK Inspector is an interactive debugger that lets you explore and modify "
@@ -3637,7 +3637,7 @@ msgid ""
 "break or crash."
 msgstr ""
 
-#: gtk/gtkwindow.c:6252
+#: gtk/gtkwindow.c:6253
 msgid "Don’t show this message again"
 msgstr "Ur d-skan ara izen-a tikelt-nniḍen"
 
@@ -4291,7 +4291,7 @@ msgstr ""
 msgid "Implements"
 msgstr ""
 
-#: gtk/inspector/visual.c:765 gtk/inspector/visual.c:784
+#: gtk/inspector/visual.c:777 gtk/inspector/visual.c:795
 msgid "Theme is hardcoded by GTK_THEME"
 msgstr ""
 
@@ -4313,7 +4313,7 @@ msgstr "Tiddi n teḥnacaḍt"
 
 #: gtk/inspector/visual.ui:144
 msgid "Icon Theme"
-msgstr ""
+msgstr "Asentel n tignit"
 
 #: gtk/inspector/visual.ui:169
 msgid "Text Direction"
@@ -4427,7 +4427,7 @@ msgstr ""
 
 #: gtk/inspector/window.ui:27
 msgid "Select an Object"
-msgstr ""
+msgstr "Fren taɣawsa"
 
 #: gtk/inspector/window.ui:42 gtk/inspector/window.ui:107
 msgid "Show Details"
@@ -4435,15 +4435,15 @@ msgstr "Sken tealqayt"
 
 #: gtk/inspector/window.ui:57
 msgid "Show all Objects"
-msgstr ""
+msgstr "Sken akk tiɣawsiwin"
 
 #: gtk/inspector/window.ui:121
 msgid "Show all Resources"
-msgstr ""
+msgstr "Sken meṛṛa iɣbula"
 
 #: gtk/inspector/window.ui:147
 msgid "Collect Statistics"
-msgstr ""
+msgstr "Lqeḍ tidaddanin"
 
 #: gtk/inspector/window.ui:199
 msgid "Objects"
@@ -4491,7 +4491,7 @@ msgstr ""
 
 #: gtk/inspector/window.ui:429
 msgid "Size Groups"
-msgstr ""
+msgstr "Igrawen n teɣzi"
 
 #: gtk/inspector/window.ui:438 gtk/inspector/window.ui:447
 msgid "Data"
@@ -5152,7 +5152,7 @@ msgstr "Ilem uzrig"
 #: gtk/print/paper_names_offsets.c:4
 msgctxt "paper size"
 msgid "asme_f"
-msgstr ""
+msgstr "asme_f"
 
 #: gtk/print/paper_names_offsets.c:5
 msgctxt "paper size"
@@ -5217,7 +5217,7 @@ msgstr "A3"
 #: gtk/print/paper_names_offsets.c:17
 msgctxt "paper size"
 msgid "A3 Extra"
-msgstr ""
+msgstr "A3 Extra"
 
 #: gtk/print/paper_names_offsets.c:18
 msgctxt "paper size"
@@ -5252,12 +5252,12 @@ msgstr "A4"
 #: gtk/print/paper_names_offsets.c:24
 msgctxt "paper size"
 msgid "A4 Extra"
-msgstr ""
+msgstr "A4 Extra"
 
 #: gtk/print/paper_names_offsets.c:25
 msgctxt "paper size"
 msgid "A4 Tab"
-msgstr ""
+msgstr "A4 Tab"
 
 #: gtk/print/paper_names_offsets.c:26
 msgctxt "paper size"
@@ -5302,7 +5302,7 @@ msgstr "A5"
 #: gtk/print/paper_names_offsets.c:34
 msgctxt "paper size"
 msgid "A5 Extra"
-msgstr ""
+msgstr "A5 Extra"
 
 #: gtk/print/paper_names_offsets.c:35
 msgctxt "paper size"
@@ -5362,7 +5362,7 @@ msgstr "B5"
 #: gtk/print/paper_names_offsets.c:46
 msgctxt "paper size"
 msgid "B5 Extra"
-msgstr ""
+msgstr "B5 Extra"
 
 #: gtk/print/paper_names_offsets.c:47
 msgctxt "paper size"
@@ -5567,7 +5567,7 @@ msgstr "JB9"
 #: gtk/print/paper_names_offsets.c:87
 msgctxt "paper size"
 msgid "jis exec"
-msgstr ""
+msgstr "jis exec"
 
 #: gtk/print/paper_names_offsets.c:88
 msgctxt "paper size"
@@ -5592,7 +5592,7 @@ msgstr ""
 #: gtk/print/paper_names_offsets.c:92
 msgctxt "paper size"
 msgid "hagaki (postcard)"
-msgstr ""
+msgstr "hagaki (takarḍa n lpusṭa)"
 
 #: gtk/print/paper_names_offsets.c:93
 msgctxt "paper size"
@@ -5632,7 +5632,7 @@ msgstr ""
 #: gtk/print/paper_names_offsets.c:100
 msgctxt "paper size"
 msgid "oufuku (reply postcard)"
-msgstr ""
+msgstr "oufuku (takarḍa n lpusṭa n tririt)"
 
 #: gtk/print/paper_names_offsets.c:101
 msgctxt "paper size"
@@ -5772,7 +5772,7 @@ msgstr "edp"
 #: gtk/print/paper_names_offsets.c:128
 msgctxt "paper size"
 msgid "European edp"
-msgstr "edp n turuft"
+msgstr "Edp n turuft"
 
 #: gtk/print/paper_names_offsets.c:129
 msgctxt "paper size"
@@ -5787,12 +5787,12 @@ msgstr "f"
 #: gtk/print/paper_names_offsets.c:131
 msgctxt "paper size"
 msgid "Fan-Fold European"
-msgstr ""
+msgstr "Fan-Fold European"
 
 #: gtk/print/paper_names_offsets.c:132
 msgctxt "paper size"
 msgid "Fan-Fold US"
-msgstr ""
+msgstr "Fan-Fold US"
 
 #: gtk/print/paper_names_offsets.c:133
 msgctxt "paper size"
@@ -5822,7 +5822,7 @@ msgstr ""
 #: gtk/print/paper_names_offsets.c:138
 msgctxt "paper size"
 msgid "Index 4×6 ext"
-msgstr ""
+msgstr "Index 4×6 ext"
 
 #: gtk/print/paper_names_offsets.c:139
 msgctxt "paper size"
@@ -5837,7 +5837,7 @@ msgstr "Tafaturt"
 #: gtk/print/paper_names_offsets.c:141
 msgctxt "paper size"
 msgid "Tabloid"
-msgstr ""
+msgstr "Tabloid"
 
 #: gtk/print/paper_names_offsets.c:142
 msgctxt "paper size"
@@ -6022,32 +6022,32 @@ msgstr "prc 32k"
 #: gtk/print/paper_names_offsets.c:178
 msgctxt "paper size"
 msgid "prc4 Envelope"
-msgstr "Tanattalt prc4"
+msgstr "tanattalt prc4"
 
 #: gtk/print/paper_names_offsets.c:179
 msgctxt "paper size"
 msgid "prc5 Envelope"
-msgstr "Tanattalt prc5"
+msgstr "tanattalt prc5"
 
 #: gtk/print/paper_names_offsets.c:180
 msgctxt "paper size"
 msgid "prc6 Envelope"
-msgstr "Tanattalt prc6"
+msgstr "tanattalt prc6"
 
 #: gtk/print/paper_names_offsets.c:181
 msgctxt "paper size"
 msgid "prc7 Envelope"
-msgstr "Tanattalt prc7"
+msgstr "tanattalt prc7"
 
 #: gtk/print/paper_names_offsets.c:182
 msgctxt "paper size"
 msgid "prc8 Envelope"
-msgstr "Tanattalt prc8"
+msgstr "tanattalt prc8"
 
 #: gtk/print/paper_names_offsets.c:183
 msgctxt "paper size"
 msgid "prc9 Envelope"
-msgstr "Tanattalt prc9"
+msgstr "tanattalt prc9"
 
 #: gtk/print/paper_names_offsets.c:184
 msgctxt "paper size"
@@ -7132,22 +7132,22 @@ msgstr ""
 msgid "Generate debug output"
 msgstr ""
 
-#: tools/encodesymbolic.c:92
+#: tools/encodesymbolic.c:95
 #, c-format
 msgid "Invalid size %s\n"
 msgstr "Tiddi d tarmeɣtut %s\n"
 
-#: tools/encodesymbolic.c:104 tools/encodesymbolic.c:113
+#: tools/encodesymbolic.c:107 tools/encodesymbolic.c:116
 #, c-format
 msgid "Can’t load file: %s\n"
 msgstr "Ulamek asali n ufaylu: %s\n"
 
-#: tools/encodesymbolic.c:141 tools/encodesymbolic.c:147
+#: tools/encodesymbolic.c:144 tools/encodesymbolic.c:162
 #, c-format
 msgid "Can’t save file %s: %s\n"
 msgstr "Ulamek asekles n ufaylu %s: %s\n"
 
-#: tools/encodesymbolic.c:153
+#: tools/encodesymbolic.c:168
 #, c-format
 msgid "Can’t close stream"
 msgstr ""
@@ -7486,7 +7486,7 @@ msgstr ""
 
 #: tools/gtk-path-tool-info.c:121
 msgid "Path is empty."
-msgstr "Abrid-nni d ilem"
+msgstr "Abrid-nni d ilem."
 
 #: tools/gtk-path-tool-info.c:127
 msgid "Path is closed"
