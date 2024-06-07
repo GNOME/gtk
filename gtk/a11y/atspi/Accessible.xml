@@ -16,6 +16,8 @@
 
   <property name="AccessibleId" type="s" access="read"/>
 
+  <property name="HelpText" type="s" access="read"/>
+
   <method name="GetChildAtIndex">
     <arg direction="in" name="index" type="i"/>
     <arg direction="out" type="(so)"/>
