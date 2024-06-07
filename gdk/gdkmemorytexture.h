@@ -68,6 +68,14 @@ GdkTexture *            gdk_memory_texture_new              (int                
                                                              GBytes            *bytes,
                                                              gsize              stride);
 
+GDK_AVAILABLE_IN_4_16
+GdkTexture *            gdk_memory_texture_new_with_color_state (int              width,
+                                                                 int              height,
+                                                                 GdkMemoryFormat  format,
+                                                                 GdkColorState   *color_state,
+                                                                 GBytes          *bytes,
+                                                                 gsize            stride);
+
 
 G_END_DECLS
 
