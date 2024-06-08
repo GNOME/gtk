@@ -240,6 +240,7 @@ gsk_vulkan_device_check_format (GskVulkanDevice          *device,
 static GskVulkanImage *
 gsk_vulkan_image_new (GskVulkanDevice           *device,
                       GdkMemoryFormat            format,
+                      GdkColorState             *color_state,
                       GskGpuImageFlags           required_flags,
                       gsize                      width,
                       gsize                      height,
@@ -321,7 +322,7 @@ gsk_vulkan_image_new (GskVulkanDevice           *device,
   gsk_gpu_image_setup (GSK_GPU_IMAGE (self),
                        flags,
                        format,
-                       gdk_color_state_get_srgb (),
+                       color_state,
                        width, height);
 
   GSK_VK_CHECK (vkCreateImage, vk_device,
@@ -370,6 +371,7 @@ GskGpuImage *
 gsk_vulkan_image_new_for_upload (GskVulkanDevice *device,
                                  gboolean         with_mipmap,
                                  GdkMemoryFormat  format,
+                                 GdkColorState   *color_state,
                                  gsize            width,
                                  gsize            height)
 {
@@ -377,6 +379,7 @@ gsk_vulkan_image_new_for_upload (GskVulkanDevice *device,
 
   self = gsk_vulkan_image_new (device,
                                format,
+                               color_state,
                                with_mipmap ? (GSK_GPU_IMAGE_CAN_MIPMAP | GSK_GPU_IMAGE_RENDERABLE | GSK_GPU_IMAGE_FILTERABLE) : 0,
                                width,
                                height,
@@ -437,6 +440,7 @@ GskGpuImage *
 gsk_vulkan_image_new_for_swapchain (GskVulkanDevice  *device,
                                     VkImage           image,
                                     VkFormat          format,
+                                    GdkColorState    *color_state,
                                     gsize             width,
                                     gsize             height)
 {
@@ -457,7 +461,7 @@ gsk_vulkan_image_new_for_swapchain (GskVulkanDevice  *device,
   gsk_gpu_image_setup (GSK_GPU_IMAGE (self),
                        0,
                        GDK_MEMORY_DEFAULT,
-                       gdk_color_state_get_srgb (),
+                       color_state,
                        width, height);
 
   gsk_vulkan_image_create_view (self,
@@ -475,6 +479,7 @@ gsk_vulkan_image_new_for_swapchain (GskVulkanDevice  *device,
 
 GskGpuImage *
 gsk_vulkan_image_new_for_atlas (GskVulkanDevice *device,
+                                GdkColorState   *color_state,
                                 gsize            width,
                                 gsize            height)
 {
@@ -482,6 +487,7 @@ gsk_vulkan_image_new_for_atlas (GskVulkanDevice *device,
 
   self = gsk_vulkan_image_new (device,
                                GDK_MEMORY_DEFAULT,
+                               color_state,
                                GSK_GPU_IMAGE_FILTERABLE | GSK_GPU_IMAGE_RENDERABLE,
                                width,
                                height,
@@ -499,6 +505,7 @@ GskGpuImage *
 gsk_vulkan_image_new_for_offscreen (GskVulkanDevice *device,
                                     gboolean         with_mipmap,
                                     GdkMemoryFormat  preferred_format,
+                                    GdkColorState   *color_state,
                                     gsize            width,
                                     gsize            height)
 {
@@ -506,6 +513,7 @@ gsk_vulkan_image_new_for_offscreen (GskVulkanDevice *device,
 
   self = gsk_vulkan_image_new (device,
                                preferred_format,
+                               color_state,
                                GSK_GPU_IMAGE_RENDERABLE |
                                (with_mipmap ? GSK_GPU_IMAGE_CAN_MIPMAP | GSK_GPU_IMAGE_FILTERABLE : 0),
                                width,
@@ -620,6 +628,7 @@ gsk_vulkan_device_check_dmabuf_format (GskVulkanDevice          *device,
 GskGpuImage *
 gsk_vulkan_image_new_dmabuf (GskVulkanDevice *device,
                              GdkMemoryFormat  format,
+                             GdkColorState   *color_state,
                              gsize            width,
                              gsize            height)
 {
@@ -694,7 +703,7 @@ gsk_vulkan_image_new_dmabuf (GskVulkanDevice *device,
                        flags | GSK_GPU_IMAGE_EXTERNAL |
                        (gdk_memory_format_alpha (format) == GDK_MEMORY_ALPHA_STRAIGHT ? GSK_GPU_IMAGE_STRAIGHT_ALPHA : 0),
                        format,
-                       gdk_color_state_get_srgb (),
+                       color_state,
                        width, height);
 
   res = vkCreateImage (vk_device,
@@ -894,7 +903,7 @@ gsk_vulkan_image_new_for_dmabuf (GskVulkanDevice *device,
                        (gdk_memory_format_alpha (gdk_texture_get_format (texture)) == GDK_MEMORY_ALPHA_STRAIGHT ? GSK_GPU_IMAGE_STRAIGHT_ALPHA : 0) |
                        (is_yuv ? (GSK_GPU_IMAGE_EXTERNAL | GSK_GPU_IMAGE_NO_BLIT) : 0),
                        gdk_texture_get_format (texture),
-                       gdk_color_state_get_srgb (),
+                       gdk_texture_get_color_state (texture),
                        width, height);
   gsk_gpu_image_toggle_ref_texture (GSK_GPU_IMAGE (self), texture);
 

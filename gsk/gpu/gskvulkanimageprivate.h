@@ -14,25 +14,30 @@ G_DECLARE_FINAL_TYPE (GskVulkanImage, gsk_vulkan_image, GSK, VULKAN_IMAGE, GskGp
 GskGpuImage *           gsk_vulkan_image_new_for_swapchain              (GskVulkanDevice        *device,
                                                                          VkImage                 image,
                                                                          VkFormat                format,
+                                                                         GdkColorState          *color_state,
                                                                          gsize                   width,
                                                                          gsize                   height);
 
 GskGpuImage *           gsk_vulkan_image_new_for_atlas                  (GskVulkanDevice        *device,
+                                                                         GdkColorState          *color_state,
                                                                          gsize                   width,
                                                                          gsize                   height);
 GskGpuImage *           gsk_vulkan_image_new_for_offscreen              (GskVulkanDevice        *device,
                                                                          gboolean                with_mipmap,
                                                                          GdkMemoryFormat         preferred_format,
+                                                                         GdkColorState          *color_state,
                                                                          gsize                   width,
                                                                          gsize                   height);
 GskGpuImage *           gsk_vulkan_image_new_for_upload                 (GskVulkanDevice        *device,
                                                                          gboolean                with_mipmap,
                                                                          GdkMemoryFormat         format,
+                                                                         GdkColorState          *color_state,
                                                                          gsize                   width,
                                                                          gsize                   height);
 #ifdef HAVE_DMABUF
 GskGpuImage *           gsk_vulkan_image_new_dmabuf                     (GskVulkanDevice        *device,
                                                                          GdkMemoryFormat         format,
+                                                                         GdkColorState          *color_state,
                                                                          gsize                   width,
                                                                          gsize                   height);
 GskGpuImage *           gsk_vulkan_image_new_for_dmabuf                 (GskVulkanDevice        *device,

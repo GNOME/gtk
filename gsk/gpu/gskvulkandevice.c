@@ -371,6 +371,7 @@ gsk_vulkan_device_create_offscreen_image (GskGpuDevice   *device,
   return gsk_vulkan_image_new_for_offscreen (self,
                                              with_mipmap,
                                              gdk_memory_depth_get_format (depth),
+                                             gdk_color_state_get_srgb (),
                                              width,
                                              height);
 }
@@ -383,6 +384,7 @@ gsk_vulkan_device_create_atlas_image (GskGpuDevice *device,
   GskVulkanDevice *self = GSK_VULKAN_DEVICE (device);
 
   return gsk_vulkan_image_new_for_atlas (self,
+                                         gdk_color_state_get_srgb (),
                                          width,
                                          height);
 }
@@ -399,6 +401,7 @@ gsk_vulkan_device_create_upload_image (GskGpuDevice    *device,
   return gsk_vulkan_image_new_for_upload (self,
                                           with_mipmap,
                                           format,
+                                          gdk_color_state_get_srgb (),
                                           width,
                                           height);
 }
@@ -415,6 +418,7 @@ gsk_vulkan_device_create_download_image (GskGpuDevice   *device,
 #ifdef HAVE_DMABUF
   image = gsk_vulkan_image_new_dmabuf (self,
                                        gdk_memory_depth_get_format (depth),
+                                       gdk_color_state_get_srgb (),
                                        width,
                                        height);
   if (image != NULL)
@@ -424,6 +428,7 @@ gsk_vulkan_device_create_download_image (GskGpuDevice   *device,
   image = gsk_vulkan_image_new_for_offscreen (self,
                                               FALSE,
                                               gdk_memory_depth_get_format (depth),
+                                              gdk_color_state_get_srgb (),
                                               width,
                                               height);
 

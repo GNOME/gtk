@@ -13,10 +13,12 @@ G_DECLARE_FINAL_TYPE (GskGLImage, gsk_gl_image, GSK, GL_IMAGE, GskGpuImage)
 GskGpuImage *           gsk_gl_image_new_backbuffer                     (GskGLDevice            *device,
                                                                          GdkGLContext           *context,
                                                                          GdkMemoryFormat         format,
+                                                                         GdkColorState          *color_state,
                                                                          gsize                   width,
                                                                          gsize                   height);
 GskGpuImage *           gsk_gl_image_new                                (GskGLDevice            *device,
                                                                          GdkMemoryFormat         format,
+                                                                         GdkColorState          *color_state,
                                                                          GskGpuImageFlags        required_flags,
                                                                          gsize                   width,
                                                                          gsize                   height);
@@ -25,7 +27,6 @@ GskGpuImage *           gsk_gl_image_new_for_texture                    (GskGLDe
                                                                          GLuint                  tex_id,
                                                                          gboolean                take_ownership,
                                                                          GskGpuImageFlags        extra_flags);
-                                                                         
 
 void                    gsk_gl_image_bind_texture                       (GskGLImage             *self);
 void                    gsk_gl_image_bind_framebuffer                   (GskGLImage             *self);
