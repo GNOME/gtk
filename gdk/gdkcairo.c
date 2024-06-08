@@ -20,6 +20,7 @@
 #include "gdkcairo.h"
 
 #include "gdkrgba.h"
+#include "gdkcolor.h"
 #include "gdktexture.h"
 #include "gdkcolorstate.h"
 
