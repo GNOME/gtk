@@ -15,6 +15,13 @@
 #include "gdk/gdkglcontextprivate.h"
 #include "gsk/gskdebugprivate.h"
 
+#ifdef HAVE_PANGOFT
+#include <pango/pangofc-font.h>
+#include <ft2build.h>
+#include FT_FREETYPE_H
+#include FT_PARAMETER_TAGS_H
+#endif
+
 static GskGpuOp *
 gsk_gpu_upload_op_gl_command_with_area (GskGpuOp                    *op,
                                         GskGpuFrame                 *frame,
@@ -487,6 +494,7 @@ struct _GskGpuUploadGlyphOp
   GskGpuOp op;
 
   GskGpuImage *image;
+  gboolean linear;
   cairo_rectangle_int_t area;
   PangoFont *font;
   PangoGlyph glyph;
@@ -522,6 +530,8 @@ gsk_gpu_upload_glyph_op_print (GskGpuOp    *op,
   gsk_gpu_print_op (string, indent, "upload-glyph");
   gsk_gpu_print_int_rect (string, &self->area);
   g_string_append_printf (string, "glyph %u font %s ", self->glyph, str);
+  if (self->linear)
+    g_string_append_printf (string, "(linear) ");
   gsk_gpu_print_newline (string);
 
   g_free (str);
@@ -537,6 +547,19 @@ gsk_gpu_upload_glyph_op_draw (GskGpuOp *op,
   cairo_surface_t *surface;
   cairo_t *cr;
   PangoRectangle ink_rect = { 0, };
+#ifdef HAVE_PANGOFT
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+  if (self->linear)
+    {
+      FT_Face face;
+      FT_Bool darken = 1;
+      FT_Parameter property = { FT_PARAM_TAG_STEM_DARKENING, &darken };
+
+      face = pango_fc_font_lock_face (PANGO_FC_FONT (self->font));
+      FT_Face_Properties (face, 1, &property);
+    }
+G_GNUC_END_IGNORE_DEPRECATIONS
+#endif
 
   surface = cairo_image_surface_create_for_data (data,
                                                  CAIRO_FORMAT_ARGB32,
@@ -578,6 +601,13 @@ gsk_gpu_upload_glyph_op_draw (GskGpuOp *op,
 
   cairo_surface_finish (surface);
   cairo_surface_destroy (surface);
+
+#ifdef HAVE_PANGOFT
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+  if (self->linear)
+    pango_fc_font_unlock_face (PANGO_FC_FONT (self->font));
+G_GNUC_END_IGNORE_DEPRECATIONS
+#endif
 }
 
 #ifdef GDK_RENDERING_VULKAN
@@ -626,6 +656,7 @@ static const GskGpuOpClass GSK_GPU_UPLOAD_GLYPH_OP_CLASS = {
 void
 gsk_gpu_upload_glyph_op (GskGpuFrame                 *frame,
                          GskGpuImage                 *image,
+                         gboolean                     linear,
                          PangoFont                   *font,
                          const PangoGlyph             glyph,
                          const cairo_rectangle_int_t *area,
@@ -637,6 +668,7 @@ gsk_gpu_upload_glyph_op (GskGpuFrame                 *frame,
 
   self->image = g_object_ref (image);
   self->area = *area;
+  self->linear = linear;
   self->font = g_object_ref (font);
   self->glyph = glyph;
   self->origin = *origin;
