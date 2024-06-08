@@ -93,7 +93,8 @@ typedef enum
   GSK_GPU_GLYPH_X_OFFSET_3 = 0x3,
   GSK_GPU_GLYPH_Y_OFFSET_1 = 0x4,
   GSK_GPU_GLYPH_Y_OFFSET_2 = 0x8,
-  GSK_GPU_GLYPH_Y_OFFSET_3 = 0xC
+  GSK_GPU_GLYPH_Y_OFFSET_3 = 0xC,
+  GSK_GPU_GLYPH_LINEAR = 0x10,
 } GskGpuGlyphLookupFlags;
 
 GskGpuImage *           gsk_gpu_device_lookup_glyph_image               (GskGpuDevice           *self,

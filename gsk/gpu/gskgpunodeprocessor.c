@@ -3108,6 +3108,9 @@ gsk_gpu_node_processor_add_glyph_node (GskGpuNodeProcessor *self,
       glyph_origin.x *= inv_align_scale_x;
       glyph_origin.y *= inv_align_scale_y;
 
+      if (self->color_state == gdk_color_state_get_srgb_linear ())
+        flags |= GSK_GPU_GLYPH_LINEAR;
+
       image = gsk_gpu_device_lookup_glyph_image (device,
                                                  self->frame,
                                                  font,
