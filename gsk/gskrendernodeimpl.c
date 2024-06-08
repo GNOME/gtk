@@ -1770,7 +1770,7 @@ gsk_texture_node_draw (GskRenderNode *node,
       return;
     }
 
-  surface = gdk_texture_download_surface (self->texture);
+  surface = gdk_texture_download_surface (self->texture, gdk_color_state_get_srgb ());
   pattern = cairo_pattern_create_for_surface (surface);
   cairo_pattern_set_extend (pattern, CAIRO_EXTEND_PAD);
 
@@ -1946,7 +1946,7 @@ gsk_texture_scale_node_draw (GskRenderNode *node,
   cairo_surface_set_device_offset (surface2, -clip_rect.origin.x, -clip_rect.origin.y);
   cr2 = cairo_create (surface2);
 
-  surface = gdk_texture_download_surface (self->texture);
+  surface = gdk_texture_download_surface (self->texture, gdk_color_state_get_srgb ());
   pattern = cairo_pattern_create_for_surface (surface);
   cairo_pattern_set_extend (pattern, CAIRO_EXTEND_PAD);
 

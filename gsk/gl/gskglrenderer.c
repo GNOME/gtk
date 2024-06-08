@@ -104,6 +104,7 @@ static void
 gsk_gl_renderer_dmabuf_downloader_download (GdkDmabufDownloader *downloader_,
                                             GdkDmabufTexture    *texture,
                                             GdkMemoryFormat      format,
+                                            GdkColorState       *color_state,
                                             guchar              *data,
                                             gsize                stride)
 {
@@ -125,6 +126,7 @@ gsk_gl_renderer_dmabuf_downloader_download (GdkDmabufDownloader *downloader_,
 
   downloader = gdk_texture_downloader_new (native);
   gdk_texture_downloader_set_format (downloader, format);
+  gdk_texture_downloader_set_color_state (downloader, color_state);
   gdk_texture_downloader_download_into (downloader, data, stride);
   gdk_texture_downloader_free (downloader);
 

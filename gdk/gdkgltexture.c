@@ -137,6 +137,7 @@ typedef struct _Download Download;
 struct _Download
 {
   GdkMemoryFormat format;
+  GdkColorState *color_state;
   guchar *data;
   gsize stride;
 };
@@ -228,7 +229,7 @@ gdk_gl_texture_do_download (GdkGLTexture *self,
           gdk_memory_convert (download->data,
                               download->stride,
                               download->format,
-                              gdk_color_state_get_srgb (),
+                              download->color_state,
                               pixels,
                               stride,
                               format,
@@ -382,7 +383,7 @@ gdk_gl_texture_do_download (GdkGLTexture *self,
           gdk_memory_convert (download->data,
                               download->stride,
                               download->format,
-                              gdk_color_state_get_srgb (),
+                              download->color_state,
                               pixels,
                               stride,
                               actual_format,
@@ -400,6 +401,7 @@ gdk_gl_texture_do_download (GdkGLTexture *self,
 static void
 gdk_gl_texture_download (GdkTexture      *texture,
                          GdkMemoryFormat  format,
+                         GdkColorState   *color_state,
                          guchar          *data,
                          gsize            stride)
 {
@@ -408,11 +410,12 @@ gdk_gl_texture_download (GdkTexture      *texture,
 
   if (self->saved)
     {
-      gdk_texture_do_download (self->saved, format, data, stride);
+      gdk_texture_do_download (self->saved, format, color_state, data, stride);
       return;
     }
 
   download.format = format;
+  download.color_state = color_state;
   download.data = data;
   download.stride = stride;
 
@@ -478,8 +481,7 @@ gdk_gl_texture_release (GdkGLTexture *self)
   g_return_if_fail (self->saved == NULL);
 
   texture = GDK_TEXTURE (self);
-  self->saved = GDK_TEXTURE (gdk_memory_texture_from_texture (texture,
-                                                              gdk_texture_get_format (texture)));
+  self->saved = GDK_TEXTURE (gdk_memory_texture_from_texture (texture));
 
   drop_gl_resources (self);
 }

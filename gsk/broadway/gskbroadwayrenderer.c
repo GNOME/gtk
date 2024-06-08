@@ -477,7 +477,7 @@ get_colorized_texture (GdkTexture *texture,
         return g_object_ref (colorized->texture);
     }
 
-  surface = gdk_texture_download_surface (texture);
+  surface = gdk_texture_download_surface (texture, gdk_color_state_get_srgb ());
   image_surface = cairo_surface_map_to_image (surface, NULL);
   data = cairo_image_surface_get_data (image_surface);
   width = cairo_image_surface_get_width (image_surface);

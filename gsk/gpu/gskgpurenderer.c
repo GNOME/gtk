@@ -105,6 +105,7 @@ static void
 gsk_gpu_renderer_dmabuf_downloader_download (GdkDmabufDownloader *downloader,
                                              GdkDmabufTexture    *texture,
                                              GdkMemoryFormat      format,
+                                             GdkColorState       *color_state,
                                              guchar              *data,
                                              gsize                stride)
 {

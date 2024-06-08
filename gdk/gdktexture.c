@@ -260,6 +260,7 @@ G_DEFINE_ABSTRACT_TYPE_WITH_CODE (GdkTexture, gdk_texture, G_TYPE_OBJECT,
 static void
 gdk_texture_default_download (GdkTexture      *texture,
                               GdkMemoryFormat  format,
+                              GdkColorState   *color_state,
                               guchar          *data,
                               gsize            stride)
 {
@@ -807,10 +808,11 @@ gdk_texture_get_color_state (GdkTexture *texture)
 void
 gdk_texture_do_download (GdkTexture      *texture,
                          GdkMemoryFormat  format,
+                         GdkColorState   *color_state,
                          guchar          *data,
                          gsize            stride)
 {
-  GDK_TEXTURE_GET_CLASS (texture)->download (texture, format, data, stride);
+  GDK_TEXTURE_GET_CLASS (texture)->download (texture, format, color_state, data, stride);
 }
 
 static gboolean
@@ -906,7 +908,8 @@ gdk_texture_set_diff (GdkTexture     *self,
 }
 
 cairo_surface_t *
-gdk_texture_download_surface (GdkTexture *texture)
+gdk_texture_download_surface (GdkTexture    *texture,
+                              GdkColorState *color_state)
 {
   cairo_surface_t *surface;
   cairo_status_t surface_status;
@@ -918,10 +921,13 @@ gdk_texture_download_surface (GdkTexture *texture)
   if (surface_status != CAIRO_STATUS_SUCCESS)
     g_warning ("%s: surface error: %s", __FUNCTION__,
                cairo_status_to_string (surface_status));
+  else
+    gdk_texture_do_download (texture,
+                             GDK_MEMORY_DEFAULT,
+                             color_state,
+                             cairo_image_surface_get_data (surface),
+                             cairo_image_surface_get_stride (surface));
 
-  gdk_texture_download (texture,
-                        cairo_image_surface_get_data (surface),
-                        cairo_image_surface_get_stride (surface));
   cairo_surface_mark_dirty (surface);
 
   return surface;
@@ -968,6 +974,7 @@ gdk_texture_download (GdkTexture *texture,
 
   gdk_texture_do_download (texture,
                            GDK_MEMORY_DEFAULT,
+                           gdk_color_state_get_srgb (),
                            data,
                            stride);
 }
