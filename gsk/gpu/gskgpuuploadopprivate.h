@@ -22,6 +22,7 @@ GskGpuImage *           gsk_gpu_upload_cairo_op                         (GskGpuF
 
 void                    gsk_gpu_upload_glyph_op                         (GskGpuFrame                    *frame,
                                                                          GskGpuImage                    *image,
+                                                                         gboolean                        linear,
                                                                          PangoFont                      *font,
                                                                          PangoGlyph                      glyph,
                                                                          const cairo_rectangle_int_t    *area,
