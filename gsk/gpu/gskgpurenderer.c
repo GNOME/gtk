@@ -18,6 +18,7 @@
 #include "gdk/gdktextureprivate.h"
 #include "gdk/gdktexturedownloaderprivate.h"
 #include "gdk/gdkdrawcontextprivate.h"
+#include "gdk/gdkcolorstateprivate.h"
 
 #include <graphene.h>
 
@@ -395,6 +396,9 @@ gsk_gpu_renderer_render (GskRenderer          *renderer,
   GskGpuImage *backbuffer;
   cairo_region_t *render_region;
   double scale;
+  GdkColorState *color_state;
+  GskGpuImage *target;
+  GdkMemoryDepth depth;
 
   if (cairo_region_is_empty (region))
     {
@@ -402,9 +406,11 @@ gsk_gpu_renderer_render (GskRenderer          *renderer,
       return;
     }
 
-  gdk_draw_context_begin_frame_full (priv->context,
-                                     gsk_render_node_get_preferred_depth (root),
-                                     region);
+  color_state = gsk_gpu_renderer_get_color_state (self);
+  depth = gdk_memory_depth_merge (gsk_render_node_get_preferred_depth (root),
+                                  gdk_color_state_get_min_depth (color_state));
+
+  gdk_draw_context_begin_frame_full (priv->context, depth, region);
 
   gsk_gpu_device_maybe_gc (priv->device);
 
@@ -412,11 +418,15 @@ gsk_gpu_renderer_render (GskRenderer          *renderer,
 
   backbuffer = GSK_GPU_RENDERER_GET_CLASS (self)->get_backbuffer (self);
 
-  if (!gdk_color_state_equal (gsk_gpu_image_get_color_state (backbuffer),
-                              gsk_gpu_renderer_get_color_state (self)))
-    {
-      g_warning ("FIXME: push an offscreen for color state conversion");
-    }
+  if (gdk_color_state_equal (gsk_gpu_image_get_color_state (backbuffer), color_state))
+    target = g_object_ref (backbuffer);
+  else
+    target = gsk_gpu_device_create_offscreen_image (priv->device,
+                                                    FALSE,
+                                                    depth,
+                                                    color_state,
+                                                    gsk_gpu_image_get_width (backbuffer),
+                                                    gsk_gpu_image_get_height (backbuffer));
 
   frame = gsk_gpu_renderer_get_frame (self);
   render_region = get_render_region (self);
@@ -424,15 +434,54 @@ gsk_gpu_renderer_render (GskRenderer          *renderer,
 
   gsk_gpu_frame_render (frame,
                         g_get_monotonic_time (),
-                        backbuffer,
+                        target,
                         render_region,
                         root,
                         &GRAPHENE_RECT_INIT (
                           0, 0,
-                          gsk_gpu_image_get_width (backbuffer) / scale,
-                          gsk_gpu_image_get_height (backbuffer) / scale
+                          gsk_gpu_image_get_width (target) / scale,
+                          gsk_gpu_image_get_height (target) / scale
                         ),
                         NULL);
+
+  if (target != backbuffer)
+    {
+      GskRenderNode *node;
+      GdkTexture *texture;
+      GBytes *bytes;
+
+      /* HACK. Make a texture so we can inject the target image into our texture cache */
+
+      bytes = g_bytes_new_static ("ABCD", 4);
+      texture = gdk_memory_texture_new (1, 1, GDK_MEMORY_DEFAULT, bytes, 4);
+      g_bytes_unref (bytes);
+
+      gsk_gpu_device_cache_texture_image (priv->device, texture, g_get_monotonic_time (), target);
+
+      node = gsk_texture_node_new (texture,
+                                   &GRAPHENE_RECT_INIT (
+                                     0, 0,
+                                     gsk_gpu_image_get_width (backbuffer) / scale,
+                                     gsk_gpu_image_get_height (backbuffer) / scale
+                                   ));
+      g_object_unref (texture);
+
+      gsk_gpu_frame_render (frame,
+                            g_get_monotonic_time (),
+                            backbuffer,
+                            render_region,
+                            node,
+                            &GRAPHENE_RECT_INIT (
+                              0, 0,
+                              gsk_gpu_image_get_width (backbuffer) / scale,
+                              gsk_gpu_image_get_height (backbuffer) / scale
+                            ),
+                            NULL);
+
+      gsk_render_node_unref (node);
+    }
+
+  g_object_unref (target);
 
   gsk_gpu_device_queue_gc (priv->device);
 
