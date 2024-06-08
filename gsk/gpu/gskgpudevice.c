@@ -229,9 +229,15 @@ static GskGpuCachedAtlas *
 gsk_gpu_cached_atlas_new (GskGpuDevice *device)
 {
   GskGpuCachedAtlas *self;
+  GdkColorState *color_state;
+
+  color_state = gdk_color_state_get_srgb (); /* FIXME */
 
   self = gsk_gpu_cached_new (device, &GSK_GPU_CACHED_ATLAS_CLASS, NULL);
-  self->image = GSK_GPU_DEVICE_GET_CLASS (device)->create_atlas_image (device, ATLAS_SIZE, ATLAS_SIZE);
+  self->image = GSK_GPU_DEVICE_GET_CLASS (device)->create_atlas_image (device,
+                                                                       color_state,
+                                                                       ATLAS_SIZE,
+                                                                       ATLAS_SIZE);
 
   return self;
 }
@@ -689,20 +695,22 @@ GskGpuImage *
 gsk_gpu_device_create_offscreen_image (GskGpuDevice   *self,
                                        gboolean        with_mipmap,
                                        GdkMemoryDepth  depth,
+                                       GdkColorState  *color_state,
                                        gsize           width,
                                        gsize           height)
 {
-  return GSK_GPU_DEVICE_GET_CLASS (self)->create_offscreen_image (self, with_mipmap, depth, width, height);
+  return GSK_GPU_DEVICE_GET_CLASS (self)->create_offscreen_image (self, with_mipmap, depth, color_state, width, height);
 }
 
 GskGpuImage *
-gsk_gpu_device_create_upload_image (GskGpuDevice   *self,
-                                    gboolean        with_mipmap,
-                                    GdkMemoryFormat format,
-                                    gsize           width,
-                                    gsize           height)
+gsk_gpu_device_create_upload_image (GskGpuDevice    *self,
+                                    gboolean         with_mipmap,
+                                    GdkMemoryFormat  format,
+                                    GdkColorState   *color_state,
+                                    gsize            width,
+                                    gsize            height)
 {
-  return GSK_GPU_DEVICE_GET_CLASS (self)->create_upload_image (self, with_mipmap, format, width, height);
+  return GSK_GPU_DEVICE_GET_CLASS (self)->create_upload_image (self, with_mipmap, format, color_state, width, height);
 }
 
 void
@@ -714,10 +722,11 @@ gsk_gpu_device_make_current (GskGpuDevice *self)
 GskGpuImage *
 gsk_gpu_device_create_download_image (GskGpuDevice   *self,
                                       GdkMemoryDepth  depth,
+                                      GdkColorState  *color_state,
                                       gsize           width,
                                       gsize           height)
 {
-  return GSK_GPU_DEVICE_GET_CLASS (self)->create_download_image (self, depth, width, height);
+  return GSK_GPU_DEVICE_GET_CLASS (self)->create_download_image (self, depth, color_state, width, height);
 }
 
 /* This rounds up to the next number that has <= 2 bits set:
@@ -950,7 +959,11 @@ gsk_gpu_device_lookup_glyph_image (GskGpuDevice           *self,
     }
   else
     {
-      image = gsk_gpu_device_create_upload_image (self, FALSE, GDK_MEMORY_DEFAULT, rect.size.width, rect.size.height),
+      image = gsk_gpu_device_create_upload_image (self,
+                                                  FALSE,
+                                                  GDK_MEMORY_DEFAULT,
+                                                  gdk_color_state_get_srgb (), /* FIXME */
+                                                  rect.size.width, rect.size.height),
       rect.origin.x = 0;
       rect.origin.y = 0;
       padding = 0;

@@ -351,6 +351,7 @@ gsk_gpu_node_processor_init_draw (GskGpuNodeProcessor   *self,
   image = gsk_gpu_device_create_offscreen_image (gsk_gpu_frame_get_device (frame),
                                                  FALSE,
                                                  depth,
+                                                 gdk_color_state_get_srgb (),
                                                  area.width, area.height);
   if (image == NULL)
     return NULL;
@@ -874,6 +875,7 @@ gsk_gpu_node_processor_ensure_image (GskGpuFrame      *frame,
   copy = gsk_gpu_device_create_offscreen_image (gsk_gpu_frame_get_device (frame),
                                                 required_flags & (GSK_GPU_IMAGE_CAN_MIPMAP | GSK_GPU_IMAGE_MIPMAP) ? TRUE : FALSE,
                                                 gdk_memory_format_get_depth (gsk_gpu_image_get_format (image)),
+                                                gdk_color_state_get_srgb (),
                                                 width, height);
 
   if (gsk_gpu_frame_should_optimize (frame, GSK_GPU_OPTIMIZE_BLIT) &&

@@ -304,6 +304,7 @@ gsk_gpu_upload_texture_op_try (GskGpuFrame *frame,
   image = gsk_gpu_device_create_upload_image (gsk_gpu_frame_get_device (frame),
                                               with_mipmap,
                                               gdk_texture_get_format (texture),
+                                              gdk_texture_get_color_state (texture),
                                               gdk_texture_get_width (texture),
                                               gdk_texture_get_height (texture));
   if (image == NULL)
@@ -470,6 +471,7 @@ gsk_gpu_upload_cairo_op (GskGpuFrame           *frame,
   self->image = gsk_gpu_device_create_upload_image (gsk_gpu_frame_get_device (frame),
                                                     FALSE,
                                                     GDK_MEMORY_DEFAULT,
+                                                    gdk_color_state_get_srgb (),
                                                     ceil (graphene_vec2_get_x (scale) * viewport->size.width),
                                                     ceil (graphene_vec2_get_y (scale) * viewport->size.height));
   self->viewport = *viewport;

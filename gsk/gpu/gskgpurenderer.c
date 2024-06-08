@@ -261,13 +261,16 @@ gsk_gpu_renderer_fallback_render_texture (GskGpuRenderer        *self,
   GdkTexture *texture;
   GdkTextureDownloader downloader;
   GskGpuFrame *frame;
+  GdkColorState *color_state;
 
   max_size = gsk_gpu_device_get_max_image_size (priv->device);
   depth = gsk_render_node_get_preferred_depth (root);
+  color_state = gdk_color_state_get_srgb (); /* FIXME */
   do
     {
       image = gsk_gpu_device_create_download_image (priv->device,
                                                     gsk_render_node_get_preferred_depth (root),
+                                                    color_state,
                                                     MIN (max_size, rounded_viewport->size.width),
                                                     MIN (max_size, rounded_viewport->size.height));
       max_size /= 2;
@@ -292,6 +295,7 @@ gsk_gpu_renderer_fallback_render_texture (GskGpuRenderer        *self,
           if (image == NULL)
             image = gsk_gpu_device_create_download_image (priv->device,
                                                           depth,
+                                                          color_state,
                                                           MIN (image_width, width - x),
                                                           MIN (image_height, height - y));
 
@@ -338,17 +342,20 @@ gsk_gpu_renderer_render_texture (GskRenderer           *renderer,
   GskGpuImage *image;
   GdkTexture *texture;
   graphene_rect_t rounded_viewport;
+  GdkColorState *color_state;
 
   gsk_gpu_device_maybe_gc (priv->device);
 
   gsk_gpu_renderer_make_current (self);
 
+  color_state = gdk_color_state_get_srgb (); /* FIXME */
   rounded_viewport = GRAPHENE_RECT_INIT (viewport->origin.x,
                                          viewport->origin.y,
                                          ceil (viewport->size.width),
                                          ceil (viewport->size.height));
   image = gsk_gpu_device_create_download_image (priv->device,
                                                 gsk_render_node_get_preferred_depth (root),
+                                                color_state,
                                                 rounded_viewport.size.width,
                                                 rounded_viewport.size.height);
 

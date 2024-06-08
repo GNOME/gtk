@@ -27,18 +27,22 @@ struct _GskGpuDeviceClass
   GskGpuImage *         (* create_offscreen_image)                      (GskGpuDevice           *self,
                                                                          gboolean                with_mipmap,
                                                                          GdkMemoryDepth          depth,
+                                                                         GdkColorState          *color_state,
                                                                          gsize                   width,
                                                                          gsize                   height);
   GskGpuImage *         (* create_atlas_image)                          (GskGpuDevice           *self,
+                                                                         GdkColorState          *color_state,
                                                                          gsize                   width,
                                                                          gsize                   height);
   GskGpuImage *         (* create_upload_image)                         (GskGpuDevice           *self,
                                                                          gboolean                with_mipmap,
                                                                          GdkMemoryFormat         format,
+                                                                         GdkColorState          *color_state,
                                                                          gsize                   width,
                                                                          gsize                   height);
   GskGpuImage *         (* create_download_image)                       (GskGpuDevice           *self,
                                                                          GdkMemoryDepth          depth,
+                                                                         GdkColorState          *color_state,
                                                                          gsize                   width,
                                                                          gsize                   height);
   void                  (* make_current)                                (GskGpuDevice           *self);
@@ -59,15 +63,18 @@ GskGpuImage *           gsk_gpu_device_get_atlas_image                  (GskGpuD
 GskGpuImage *           gsk_gpu_device_create_offscreen_image           (GskGpuDevice           *self,
                                                                          gboolean                with_mipmap,
                                                                          GdkMemoryDepth          depth,
+                                                                         GdkColorState          *color_state,
                                                                          gsize                   width,
                                                                          gsize                   height);
 GskGpuImage *           gsk_gpu_device_create_upload_image              (GskGpuDevice           *self,
                                                                          gboolean                with_mipmap,
                                                                          GdkMemoryFormat         format,
+                                                                         GdkColorState          *color_state,
                                                                          gsize                   width,
                                                                          gsize                   height);
 GskGpuImage *           gsk_gpu_device_create_download_image            (GskGpuDevice           *self,
                                                                          GdkMemoryDepth          depth,
+                                                                         GdkColorState          *color_state,
                                                                          gsize                   width,
                                                                          gsize                   height);
 void                    gsk_gpu_device_make_current                     (GskGpuDevice           *self);
