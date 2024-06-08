@@ -3136,7 +3136,7 @@ gdk_surface_update_icon (GdkSurface *surface,
 
       toplevel->icon_pixmap = gdk_x11_surface_create_pixmap_surface (surface, width, height);
 
-      cairo_surface = gdk_texture_download_surface (best_icon);
+      cairo_surface = gdk_texture_download_surface (best_icon, gdk_color_state_get_srgb ());
 
       cr = cairo_create (toplevel->icon_pixmap);
       cairo_set_operator (cr, CAIRO_OPERATOR_SOURCE);

@@ -49,6 +49,12 @@ void                    gdk_texture_downloader_set_format       (GdkTextureDownl
 GDK_AVAILABLE_IN_4_10
 GdkMemoryFormat         gdk_texture_downloader_get_format       (const GdkTextureDownloader     *self);
 
+GDK_AVAILABLE_IN_4_16
+void                    gdk_texture_downloader_set_color_state  (GdkTextureDownloader           *self,
+                                                                 GdkColorState                  *color_state);
+GDK_AVAILABLE_IN_4_16
+GdkColorState *         gdk_texture_downloader_get_color_state  (const GdkTextureDownloader     *self);
+
 
 GDK_AVAILABLE_IN_4_10
 void                    gdk_texture_downloader_download_into    (const GdkTextureDownloader     *self,

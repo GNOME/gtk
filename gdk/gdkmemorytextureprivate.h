@@ -28,8 +28,7 @@ G_BEGIN_DECLS
 #define GDK_MEMORY_GDK_PIXBUF_OPAQUE GDK_MEMORY_R8G8B8
 #define GDK_MEMORY_GDK_PIXBUF_ALPHA GDK_MEMORY_R8G8B8A8
 
-GdkMemoryTexture *      gdk_memory_texture_from_texture     (GdkTexture        *texture,
-                                                             GdkMemoryFormat    format);
+GdkMemoryTexture *      gdk_memory_texture_from_texture     (GdkTexture        *texture);
 GdkTexture *            gdk_memory_texture_new_subtexture   (GdkMemoryTexture  *texture,
                                                              int                x,
                                                              int                y,

@@ -35,6 +35,7 @@ void
 gdk_dmabuf_downloader_download (GdkDmabufDownloader *self,
                                 GdkDmabufTexture    *texture,
                                 GdkMemoryFormat      format,
+                                GdkColorState       *color_state,
                                 guchar              *data,
                                 gsize                stride)
 {
@@ -43,6 +44,6 @@ gdk_dmabuf_downloader_download (GdkDmabufDownloader *self,
   g_return_if_fail (GDK_IS_DMABUF_DOWNLOADER (self));
 
   iface = GDK_DMABUF_DOWNLOADER_GET_IFACE (self);
-  iface->download (self, texture, format, data, stride);
+  iface->download (self, texture, format, color_state, data, stride);
 }
 
