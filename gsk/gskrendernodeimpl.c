@@ -33,6 +33,7 @@
 #include "gsktransformprivate.h"
 #include "gskprivate.h"
 
+#include "gdk/gdkcolorprivate.h"
 #include "gdk/gdkmemoryformatprivate.h"
 #include "gdk/gdkprivate.h"
 #include "gdk/gdkrectangleprivate.h"
@@ -45,6 +46,7 @@
 #ifdef CAIRO_HAS_SVG_SURFACE
 #include <cairo-svg.h>
 #endif
+
 #include <hb-ot.h>
 
 /* for oversized image fallback - we use a smaller size than Cairo actually
@@ -282,8 +284,11 @@ gsk_linear_gradient_node_draw (GskRenderNode *node,
                                cairo_t       *cr)
 {
   GskLinearGradientNode *self = (GskLinearGradientNode *) node;
+  GdkColorState *color_state;
   cairo_pattern_t *pattern;
   gsize i;
+  GdkColor color;
+  const float *components;
 
   pattern = cairo_pattern_create_linear (self->start.x, self->start.y,
                                          self->end.x, self->end.y);
@@ -291,29 +296,45 @@ gsk_linear_gradient_node_draw (GskRenderNode *node,
   if (gsk_render_node_get_node_type (node) == GSK_REPEATING_LINEAR_GRADIENT_NODE)
     cairo_pattern_set_extend (pattern, CAIRO_EXTEND_REPEAT);
 
+  color_state = gdk_cairo_get_color_state (cr);
   if (self->stops[0].offset > 0.0)
-    cairo_pattern_add_color_stop_rgba (pattern,
-                                       0.0,
-                                       self->stops[0].color.red,
-                                       self->stops[0].color.green,
-                                       self->stops[0].color.blue,
-                                       self->stops[0].color.alpha);
+    {
+      gdk_color_convert_rgba (&color, color_state, &self->stops[0].color);
+      components = gdk_color_get_components (&color);
+
+      cairo_pattern_add_color_stop_rgba (pattern,
+                                         0.0,
+                                         components[0],
+                                         components[1],
+                                         components[2],
+                                         components[3]);
+    }
+
   for (i = 0; i < self->n_stops; i++)
     {
+      gdk_color_convert_rgba (&color, color_state, &self->stops[i].color);
+      components = gdk_color_get_components (&color);
+
       cairo_pattern_add_color_stop_rgba (pattern,
                                          self->stops[i].offset,
-                                         self->stops[i].color.red,
-                                         self->stops[i].color.green,
-                                         self->stops[i].color.blue,
-                                         self->stops[i].color.alpha);
+                                         components[0],
+                                         components[1],
+                                         components[2],
+                                         components[3]);
     }
+
   if (self->stops[self->n_stops-1].offset < 1.0)
-    cairo_pattern_add_color_stop_rgba (pattern,
-                                       1.0,
-                                       self->stops[self->n_stops-1].color.red,
-                                       self->stops[self->n_stops-1].color.green,
-                                       self->stops[self->n_stops-1].color.blue,
-                                       self->stops[self->n_stops-1].color.alpha);
+    {
+      gdk_color_convert_rgba (&color, color_state, &self->stops[self->n_stops - 1].color);
+      components = gdk_color_get_components (&color);
+
+      cairo_pattern_add_color_stop_rgba (pattern,
+                                         1.0,
+                                         components[0],
+                                         components[1],
+                                         components[2],
+                                         components[3]);
+    }
 
   cairo_set_source (cr, pattern);
   cairo_pattern_destroy (pattern);
@@ -602,8 +623,11 @@ gsk_radial_gradient_node_draw (GskRenderNode *node,
                                cairo_t       *cr)
 {
   GskRadialGradientNode *self = (GskRadialGradientNode *) node;
+  GdkColorState *color_state;
   cairo_pattern_t *pattern;
   gsize i;
+  GdkColor color;
+  const float *components;
 
   pattern = cairo_pattern_create_radial (0, 0, self->hradius * self->start,
                                          0, 0, self->hradius * self->end);
@@ -621,29 +645,45 @@ gsk_radial_gradient_node_draw (GskRenderNode *node,
   else
     cairo_pattern_set_extend (pattern, CAIRO_EXTEND_PAD);
 
+  color_state = gdk_cairo_get_color_state (cr);
   if (self->stops[0].offset > 0.0)
-    cairo_pattern_add_color_stop_rgba (pattern,
-                                       0.0,
-                                       self->stops[0].color.red,
-                                       self->stops[0].color.green,
-                                       self->stops[0].color.blue,
-                                       self->stops[0].color.alpha);
+    {
+      gdk_color_convert_rgba (&color, color_state, &self->stops[0].color);
+      components = gdk_color_get_components (&color);
+
+      cairo_pattern_add_color_stop_rgba (pattern,
+                                         0.0,
+                                         components[0],
+                                         components[1],
+                                         components[2],
+                                         components[3]);
+    }
+
   for (i = 0; i < self->n_stops; i++)
     {
+      gdk_color_convert_rgba (&color, color_state, &self->stops[i].color);
+      components = gdk_color_get_components (&color);
+
       cairo_pattern_add_color_stop_rgba (pattern,
                                          self->stops[i].offset,
-                                         self->stops[i].color.red,
-                                         self->stops[i].color.green,
-                                         self->stops[i].color.blue,
-                                         self->stops[i].color.alpha);
+                                         components[0],
+                                         components[1],
+                                         components[2],
+                                         components[3]);
     }
+
   if (self->stops[self->n_stops-1].offset < 1.0)
-    cairo_pattern_add_color_stop_rgba (pattern,
-                                       1.0,
-                                       self->stops[self->n_stops-1].color.red,
-                                       self->stops[self->n_stops-1].color.green,
-                                       self->stops[self->n_stops-1].color.blue,
-                                       self->stops[self->n_stops-1].color.alpha);
+    {
+      gdk_color_convert_rgba (&color, color_state, &self->stops[self->n_stops-1].color);
+      components = gdk_color_get_components (&color);
+
+      cairo_pattern_add_color_stop_rgba (pattern,
+                                         1.0,
+                                         components[0],
+                                         components[1],
+                                         components[2],
+                                         components[3]);
+    }
 
   gsk_cairo_rectangle (cr, &node->bounds);
   cairo_translate (cr, self->center.x, self->center.y);
@@ -1007,11 +1047,17 @@ gsk_conic_gradient_node_finalize (GskRenderNode *node)
 #define DEG_TO_RAD(x)          ((x) * (G_PI / 180.f))
 
 static void
-_cairo_mesh_pattern_set_corner_rgba (cairo_pattern_t *pattern,
-                                     guint            corner_num,
-                                     const GdkRGBA   *rgba)
+_cairo_mesh_pattern_set_corner_color (cairo_pattern_t *pattern,
+                                      guint            corner_num,
+                                      const GdkColor  *color)
 {
-  cairo_mesh_pattern_set_corner_color_rgba (pattern, corner_num, rgba->red, rgba->green, rgba->blue, rgba->alpha);
+  const float *components = gdk_color_get_components (color);
+  cairo_mesh_pattern_set_corner_color_rgba (pattern,
+                                            corner_num,
+                                            components[0],
+                                            components[1],
+                                            components[2],
+                                            components[3]);
 }
 
 static void
@@ -1036,9 +1082,9 @@ static void
 gsk_conic_gradient_node_add_patch (cairo_pattern_t *pattern,
                                    float            radius,
                                    float            start_angle,
-                                   const GdkRGBA   *start_color,
+                                   const GdkColor  *start_color,
                                    float            end_angle,
-                                   const GdkRGBA   *end_color)
+                                   const GdkColor  *end_color)
 {
   double x, y;
 
@@ -1051,35 +1097,12 @@ gsk_conic_gradient_node_add_patch (cairo_pattern_t *pattern,
   cairo_mesh_pattern_line_to  (pattern, x, y);
   cairo_mesh_pattern_line_to  (pattern, 0, 0);
 
-  _cairo_mesh_pattern_set_corner_rgba (pattern, 0, start_color);
-  _cairo_mesh_pattern_set_corner_rgba (pattern, 1, start_color);
-  _cairo_mesh_pattern_set_corner_rgba (pattern, 2, end_color);
-  _cairo_mesh_pattern_set_corner_rgba (pattern, 3, end_color);
+  _cairo_mesh_pattern_set_corner_color (pattern, 0, start_color);
+  _cairo_mesh_pattern_set_corner_color (pattern, 1, start_color);
+  _cairo_mesh_pattern_set_corner_color (pattern, 2, end_color);
+  _cairo_mesh_pattern_set_corner_color (pattern, 3, end_color);
 
   cairo_mesh_pattern_end_patch (pattern);
-}
-
-static void
-gdk_rgba_color_interpolate (GdkRGBA       *dest,
-                            const GdkRGBA *src1,
-                            const GdkRGBA *src2,
-                            double         progress)
-{
-  double alpha = src1->alpha * (1.0 - progress) + src2->alpha * progress;
-
-  dest->alpha = alpha;
-  if (alpha == 0)
-    {
-      dest->red = src1->red * (1.0 - progress) + src2->red * progress;
-      dest->green = src1->green * (1.0 - progress) + src2->green * progress;
-      dest->blue = src1->blue * (1.0 - progress) + src2->blue * progress;
-    }
-  else
-    {
-      dest->red = (src1->red * src1->alpha * (1.0 - progress) + src2->red * src2->alpha * progress) / alpha;
-      dest->green = (src1->green * src1->alpha * (1.0 - progress) + src2->green * src2->alpha * progress) / alpha;
-      dest->blue = (src1->blue * src1->alpha * (1.0 - progress) + src2->blue * src2->alpha * progress) / alpha;
-    }
 }
 
 static void
@@ -1087,10 +1110,13 @@ gsk_conic_gradient_node_draw (GskRenderNode *node,
                               cairo_t       *cr)
 {
   GskConicGradientNode *self = (GskConicGradientNode *) node;
+  GdkColorState *color_state;
   cairo_pattern_t *pattern;
   graphene_point_t corner;
   float radius;
   gsize i;
+
+  color_state = gdk_cairo_get_color_state (cr);
 
   pattern = cairo_pattern_create_mesh ();
   graphene_rect_get_top_right (&node->bounds, &corner);
@@ -1106,26 +1132,31 @@ gsk_conic_gradient_node_draw (GskRenderNode *node,
     {
       GskColorStop *stop1 = &self->stops[MAX (i, 1) - 1];
       GskColorStop *stop2 = &self->stops[MIN (i, self->n_stops - 1)];
+      GdkColor stop1_color, stop2_color;
       double offset1 = i > 0 ? stop1->offset : 0;
       double offset2 = i < self->n_stops ? stop2->offset : 1;
       double start_angle, end_angle;
 
       offset1 = offset1 * 360 + self->rotation - 90;
       offset2 = offset2 * 360 + self->rotation - 90;
+      gdk_color_convert_rgba (&stop1_color, color_state, &stop1->color);
+      gdk_color_convert_rgba (&stop2_color, color_state, &stop1->color);
 
       for (start_angle = offset1; start_angle < offset2; start_angle = end_angle)
         {
-          GdkRGBA start_color, end_color;
+          GdkColor start_color, end_color;
           end_angle = (floor (start_angle / 45) + 1) * 45;
           end_angle = MIN (end_angle, offset2);
-          gdk_rgba_color_interpolate (&start_color,
-                                      &stop1->color,
-                                      &stop2->color,
-                                      (start_angle - offset1) / (offset2 - offset1));
-          gdk_rgba_color_interpolate (&end_color,
-                                      &stop1->color,
-                                      &stop2->color,
-                                      (end_angle - offset1) / (offset2 - offset1));
+          gdk_color_mix (&start_color,
+                         color_state,
+                         &stop1_color,
+                         &stop2_color,
+                         (start_angle - offset1) / (offset2 - offset1));
+          gdk_color_mix (&end_color,
+                         color_state,
+                         &stop1_color,
+                         &stop2_color,
+                         (end_angle - offset1) / (offset2 - offset1));
 
           gsk_conic_gradient_node_add_patch (pattern,
                                              radius,
@@ -1365,7 +1396,8 @@ struct _GskBorderNode
 
 static void
 gsk_border_node_mesh_add_patch (cairo_pattern_t *pattern,
-                                const GdkRGBA   *color,
+                                GdkColorState   *color_state,
+                                const GdkRGBA   *rgba,
                                 double           x0,
                                 double           y0,
                                 double           x1,
@@ -1375,15 +1407,21 @@ gsk_border_node_mesh_add_patch (cairo_pattern_t *pattern,
                                 double           x3,
                                 double           y3)
 {
+  GdkColor color;
+  const float *components;
+
+  gdk_color_convert_rgba (&color, color_state, rgba);
+  components = gdk_color_get_components (&color);
+
   cairo_mesh_pattern_begin_patch (pattern);
   cairo_mesh_pattern_move_to (pattern, x0, y0);
   cairo_mesh_pattern_line_to (pattern, x1, y1);
   cairo_mesh_pattern_line_to (pattern, x2, y2);
   cairo_mesh_pattern_line_to (pattern, x3, y3);
-  cairo_mesh_pattern_set_corner_color_rgba (pattern, 0, color->red, color->green, color->blue, color->alpha);
-  cairo_mesh_pattern_set_corner_color_rgba (pattern, 1, color->red, color->green, color->blue, color->alpha);
-  cairo_mesh_pattern_set_corner_color_rgba (pattern, 2, color->red, color->green, color->blue, color->alpha);
-  cairo_mesh_pattern_set_corner_color_rgba (pattern, 3, color->red, color->green, color->blue, color->alpha);
+  cairo_mesh_pattern_set_corner_color_rgba (pattern, 0, components[0], components[1], components[2], components[3]);
+  cairo_mesh_pattern_set_corner_color_rgba (pattern, 1, components[0], components[1], components[2], components[3]);
+  cairo_mesh_pattern_set_corner_color_rgba (pattern, 2, components[0], components[1], components[2], components[3]);
+  cairo_mesh_pattern_set_corner_color_rgba (pattern, 3, components[0], components[1], components[2], components[3]);
   cairo_mesh_pattern_end_patch (pattern);
 }
 
@@ -1429,11 +1467,13 @@ gsk_border_node_draw (GskRenderNode *node,
        * Note that the call to cairo_fill() will add the potential final
        * segment by closing the path, so we don't have to care.
        */
+      GdkColorState *color_state;
       cairo_pattern_t *mesh;
       cairo_matrix_t mat;
       graphene_point_t tl, br;
       float scale;
 
+      color_state = gdk_cairo_get_color_state (cr);
       mesh = cairo_pattern_create_mesh ();
       cairo_matrix_init_translate (&mat, -bounds->origin.x, -bounds->origin.y);
       cairo_pattern_set_matrix (mesh, &mat);
@@ -1451,6 +1491,7 @@ gsk_border_node_draw (GskRenderNode *node,
       if (self->border_width[0] > 0)
         {
           gsk_border_node_mesh_add_patch (mesh,
+                                          color_state,
                                           &self->border_color[0],
                                           0, 0,
                                           tl.x, tl.y,
@@ -1462,6 +1503,7 @@ gsk_border_node_draw (GskRenderNode *node,
       if (self->border_width[1] > 0)
         {
           gsk_border_node_mesh_add_patch (mesh,
+                                          color_state,
                                           &self->border_color[1],
                                           bounds->size.width, 0,
                                           br.x, tl.y,
@@ -1473,6 +1515,7 @@ gsk_border_node_draw (GskRenderNode *node,
       if (self->border_width[2] > 0)
         {
           gsk_border_node_mesh_add_patch (mesh,
+                                          color_state,
                                           &self->border_color[2],
                                           0, bounds->size.height,
                                           tl.x, br.y,
@@ -1484,6 +1527,7 @@ gsk_border_node_draw (GskRenderNode *node,
       if (self->border_width[3] > 0)
         {
           gsk_border_node_mesh_add_patch (mesh,
+                                          color_state,
                                           &self->border_color[3],
                                           0, 0,
                                           tl.x, tl.y,
