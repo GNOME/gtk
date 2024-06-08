@@ -977,6 +977,7 @@ gsk_gpu_device_lookup_glyph_image (GskGpuDevice           *self,
 
   gsk_gpu_upload_glyph_op (frame,
                            cache->image,
+                           (flags & GSK_GPU_GLYPH_LINEAR) != 0,
                            scaled_font,
                            glyph,
                            &(cairo_rectangle_int_t) {
