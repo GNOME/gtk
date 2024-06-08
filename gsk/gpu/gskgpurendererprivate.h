@@ -43,6 +43,7 @@ struct _GskGpuRendererClass
 GdkDrawContext *        gsk_gpu_renderer_get_context                    (GskGpuRenderer         *self);
 GskGpuDevice *          gsk_gpu_renderer_get_device                     (GskGpuRenderer         *self);
 double                  gsk_gpu_renderer_get_scale                      (GskGpuRenderer         *self);
+GdkColorState *         gsk_gpu_renderer_get_color_state                (GskGpuRenderer         *self);
 
 G_END_DECLS
 

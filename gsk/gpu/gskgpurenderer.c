@@ -412,6 +412,12 @@ gsk_gpu_renderer_render (GskRenderer          *renderer,
 
   backbuffer = GSK_GPU_RENDERER_GET_CLASS (self)->get_backbuffer (self);
 
+  if (!gdk_color_state_equal (gsk_gpu_image_get_color_state (backbuffer),
+                              gsk_gpu_renderer_get_color_state (self)))
+    {
+      g_warning ("FIXME: push an offscreen for color state conversion");
+    }
+
   frame = gsk_gpu_renderer_get_frame (self);
   render_region = get_render_region (self);
   scale = gsk_gpu_renderer_get_scale (self);
@@ -496,3 +502,24 @@ gsk_gpu_renderer_get_scale (GskGpuRenderer *self)
 {
   return GSK_GPU_RENDERER_GET_CLASS (self)->get_scale (self);
 }
+
+GdkColorState *
+gsk_gpu_renderer_get_color_state (GskGpuRenderer *self)
+{
+  GskGpuRendererPrivate *priv = gsk_gpu_renderer_get_instance_private (self);
+  GdkSurface *surface;
+  GdkColorState *color_state;
+
+  surface = gdk_draw_context_get_surface (priv->context);
+
+  color_state = gdk_surface_get_color_state (surface);
+
+  if (g_getenv ("LINEAR_COMPOSITING"))
+    {
+      if (atoi (g_getenv ("LINEAR_COMPOSITING")) != 0)
+        color_state = gdk_color_state_get_srgb_linear ();
+    }
+
+  return color_state;
+}
+
