@@ -18,6 +18,7 @@ harfbuzz_req       = '>= 2.6.0'
 fribidi_req        = '>= 1.0.6'
 cairo_req          = '>= 1.18.0'
 gdk_pixbuf_req     = '>= 2.30.0'
+lcms2_req          = '>= 2.8'
 wayland_proto_req  = '>= 1.36'
 wayland_req        = '>= 1.21.0'
 graphene_req       = '>= 1.10.0'
@@ -400,6 +401,8 @@ fribidi_dep    = dependency('fribidi', version: fribidi_req,
 harfbuzz_dep   = dependency('harfbuzz', version: harfbuzz_req,
                             default_options: ['coretext=enabled'])
 hb_subset_dep  = dependency('harfbuzz-subset', version: harfbuzz_req)
+lcms2_dep      = dependency('lcms2', version: lcms2_req,
+                            fallback: ['lcms2', 'liblcms2_dep'])
 
 # Require PangoFT2 if on X11 or wayland
 pangoft_dep    = dependency('pangoft2', version: pango_req,
