@@ -59,6 +59,7 @@
 #include "gtk/gtkdebug.h"
 #include "gtk/gtkbuiltiniconprivate.h"
 #include "gtk/gtkrendernodepaintableprivate.h"
+#include "gdk/gdkcolorstateprivate.h"
 
 #include "recording.h"
 #include "renderrecording.h"
@@ -373,6 +374,9 @@ create_list_model_for_render_node (GskRenderNode *node)
 
     case GSK_SUBSURFACE_NODE:
       return create_render_node_list_model ((GskRenderNode *[1]) { gsk_subsurface_node_get_child (node) }, 1);
+
+    case GSK_COLOR_STATE_NODE:
+      return create_render_node_list_model ((GskRenderNode *[1]) { gsk_color_state_node_get_child (node) }, 1);
     }
 }
 
@@ -461,6 +465,8 @@ node_type_name (GskRenderNodeType type)
       return "GL Shader";
     case GSK_SUBSURFACE_NODE:
       return "Subsurface";
+    case GSK_COLOR_STATE_NODE:
+      return "Color State";
     }
 }
 
@@ -498,6 +504,7 @@ node_name (GskRenderNode *node)
     case GSK_BLUR_NODE:
     case GSK_GL_SHADER_NODE:
     case GSK_SUBSURFACE_NODE:
+    case GSK_COLOR_STATE_NODE:
       return g_strdup (node_type_name (gsk_render_node_get_node_type (node)));
 
     case GSK_DEBUG_NODE:
@@ -1527,6 +1534,14 @@ populate_render_node_properties (GListStore    *store,
         GdkSubsurface *subsurface = gsk_subsurface_node_get_subsurface (node);
 
         add_text_row (store, "Subsurface", "%p", subsurface);
+      }
+      break;
+
+    case GSK_COLOR_STATE_NODE:
+      {
+        GdkColorState *color_state = gsk_color_state_node_get_color_state (node);
+
+        add_text_row (store, "Color State", "%s", gdk_color_state_get_name (color_state));
       }
       break;
 

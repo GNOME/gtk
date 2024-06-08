@@ -203,6 +203,12 @@ node_attach (const GskRenderNode *node,
         return res;
       }
 
+    case GSK_COLOR_STATE_NODE:
+      child = node_attach (gsk_color_state_node_get_child (node), surface, idx);
+      res = gsk_color_state_node_new (child, gsk_color_state_node_get_color_state (node));
+      gsk_render_node_unref (child);
+      return res;
+
     case GSK_NOT_A_RENDER_NODE:
     default:
       g_assert_not_reached ();

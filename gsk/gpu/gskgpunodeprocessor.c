@@ -1202,6 +1202,7 @@ gsk_gpu_node_processor_ubershader_instead_of_offscreen (GskGpuNodeProcessor *sel
         case GSK_BLEND_NODE:
         case GSK_TEXT_NODE:
         case GSK_MASK_NODE:
+        case GSK_COLOR_STATE_NODE:
           return TRUE;
 
         case GSK_CONTAINER_NODE:
@@ -3851,6 +3852,26 @@ gsk_gpu_node_processor_create_subsurface_pattern (GskGpuPatternWriter *self,
 }
 
 static void
+gsk_gpu_node_processor_add_color_state_node (GskGpuNodeProcessor *self,
+                                             GskRenderNode       *node)
+{
+  GskGpuImage *image;
+  GdkColorState *color_state;
+  GskRenderNode *child;
+
+  color_state = gsk_color_state_node_get_color_state (node);
+  child = gsk_color_state_node_get_child (node);
+
+  image = gsk_gpu_node_processor_create_offscreen (self->frame,
+                                                   &self->scale,
+                                                   &node->bounds,
+                                                   child,
+                                                   color_state);
+
+  gsk_gpu_node_processor_image_op (self, image, &node->bounds, &node->bounds);
+}
+
+static void
 gsk_gpu_node_processor_add_container_node (GskGpuNodeProcessor *self,
                                            GskRenderNode       *node)
 {
@@ -4076,6 +4097,12 @@ static const struct
     GSK_GPU_HANDLE_OPACITY,
     gsk_gpu_node_processor_add_subsurface_node,
     gsk_gpu_node_processor_create_subsurface_pattern,
+  },
+  [GSK_COLOR_STATE_NODE] = {
+    0,
+    0,
+    gsk_gpu_node_processor_add_color_state_node,
+    NULL,
   },
 };
 

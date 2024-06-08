@@ -300,6 +300,7 @@ node_supports_2d_transform (const GskRenderNode *node)
     case GSK_FILL_NODE:
     case GSK_STROKE_NODE:
     case GSK_SUBSURFACE_NODE:
+    case GSK_COLOR_STATE_NODE:
       return TRUE;
 
     case GSK_SHADOW_NODE:
@@ -357,6 +358,7 @@ node_supports_transform (const GskRenderNode *node)
     case GSK_FILL_NODE:
     case GSK_STROKE_NODE:
     case GSK_SUBSURFACE_NODE:
+    case GSK_COLOR_STATE_NODE:
       return TRUE;
 
     case GSK_SHADOW_NODE:
@@ -4226,6 +4228,10 @@ gsk_gl_render_job_visit_node (GskGLRenderJob      *job,
 
     case GSK_SUBSURFACE_NODE:
       gsk_gl_render_job_visit_subsurface_node (job, node);
+    break;
+
+    case GSK_COLOR_STATE_NODE:
+      gsk_gl_render_job_visit_node (job, gsk_color_state_node_get_child (node));
     break;
 
     case GSK_NOT_A_RENDER_NODE:

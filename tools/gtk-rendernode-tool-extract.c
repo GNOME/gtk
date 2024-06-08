@@ -34,6 +34,7 @@ static char *directory = NULL;
 
 static guint texture_count;
 static guint font_count;
+static guint icc_profile_count;
 
 static GHashTable *fonts;
 
@@ -155,7 +156,52 @@ extract_font (GskRenderNode *node)
   font_count++;
 }
 
-#define N_NODE_TYPES (GSK_SUBSURFACE_NODE + 1)
+static void
+extract_icc_profile (GskRenderNode *node)
+{
+  GdkColorState *cs;
+  GBytes *bytes;
+  const gchar *data;
+  gsize len;
+  char *filename;
+  char *path;
+
+  cs = gsk_color_state_node_get_color_state (node);
+  bytes = gdk_color_state_save_to_icc_profile (cs, NULL);
+
+  if (bytes == NULL)
+    return;
+
+  do {
+    filename = g_strdup_printf ("gtk-icc-profile-%u.ttf", icc_profile_count);
+    path = g_build_path ("/", directory, filename, NULL);
+
+    if (!g_file_test (path, G_FILE_TEST_EXISTS))
+      break;
+
+    g_free (path);
+    g_free (filename);
+    icc_profile_count++;
+  } while (TRUE);
+
+  if (verbose)
+    g_print ("Writing ICC profile to %s\n", filename);
+
+  data = g_bytes_get_data (bytes, &len);
+  if (!g_file_set_contents (path, data, len, NULL))
+    {
+      g_printerr (_("Failed to write %s\n"), filename);
+    }
+
+  g_bytes_unref (bytes);
+
+  g_free (path);
+  g_free (filename);
+
+  icc_profile_count++;
+}
+
+#define N_NODE_TYPES (GSK_COLOR_STATE_NODE + 1)
 static void
 extract_from_node (GskRenderNode *node)
 {
@@ -255,6 +301,11 @@ extract_from_node (GskRenderNode *node)
 
     case GSK_SUBSURFACE_NODE:
       extract_from_node (gsk_subsurface_node_get_child (node));
+      break;
+
+    case GSK_COLOR_STATE_NODE:
+      extract_icc_profile (node);
+      extract_from_node (gsk_color_state_node_get_child (node));
       break;
 
     case GSK_NOT_A_RENDER_NODE:
