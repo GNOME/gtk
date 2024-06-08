@@ -57,6 +57,7 @@ foreach t : tests
 endforeach
 
 internal_tests = [
+  { 'name': 'colorstate' },
   { 'name': 'dihedral' },
   { 'name': 'image' },
   { 'name': 'texture' },
