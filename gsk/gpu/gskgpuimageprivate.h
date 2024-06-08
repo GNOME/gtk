@@ -33,12 +33,14 @@ GType                   gsk_gpu_image_get_type                          (void) G
 void                    gsk_gpu_image_setup                             (GskGpuImage            *self,
                                                                          GskGpuImageFlags        flags,
                                                                          GdkMemoryFormat         format,
+                                                                         GdkColorState          *color_state,
                                                                          gsize                   width,
                                                                          gsize                   height);
 void                    gsk_gpu_image_toggle_ref_texture                (GskGpuImage            *self,
                                                                          GdkTexture             *texture);
 
 GdkMemoryFormat         gsk_gpu_image_get_format                        (GskGpuImage            *self);
+GdkColorState *         gsk_gpu_image_get_color_state                   (GskGpuImage            *self);
 gsize                   gsk_gpu_image_get_width                         (GskGpuImage            *self);
 gsize                   gsk_gpu_image_get_height                        (GskGpuImage            *self);
 GskGpuImageFlags        gsk_gpu_image_get_flags                         (GskGpuImage            *self);

@@ -10,6 +10,7 @@ struct _GskGpuImagePrivate
   GdkMemoryFormat format;
   gsize width;
   gsize height;
+  GdkColorState *color_state;
 };
 
 #define ORTHO_NEAR_PLANE        -10000
@@ -54,6 +55,8 @@ gsk_gpu_image_dispose (GObject *object)
       g_object_remove_toggle_ref (G_OBJECT (self), gsk_gpu_image_texture_toggle_ref_cb, NULL);
     }
 
+  g_clear_object (&priv->color_state);
+
   G_OBJECT_CLASS (gsk_gpu_image_parent_class)->dispose (object);
 }
 
@@ -76,6 +79,7 @@ void
 gsk_gpu_image_setup (GskGpuImage      *self,
                      GskGpuImageFlags  flags,
                      GdkMemoryFormat   format,
+                     GdkColorState    *color_state,
                      gsize             width,
                      gsize             height)
 {
@@ -85,6 +89,7 @@ gsk_gpu_image_setup (GskGpuImage      *self,
   priv->format = format;
   priv->width = width;
   priv->height = height;
+  priv->color_state = g_object_ref (color_state);
 }
 
 /*
@@ -161,4 +166,12 @@ gsk_gpu_image_get_projection_matrix (GskGpuImage       *self,
                                      graphene_matrix_t *out_projection)
 {
   GSK_GPU_IMAGE_GET_CLASS (self)->get_projection_matrix (self, out_projection);
+}
+
+GdkColorState *
+gsk_gpu_image_get_color_state (GskGpuImage *self)
+{
+  GskGpuImagePrivate *priv = gsk_gpu_image_get_instance_private (self);
+
+  return priv->color_state;
 }
