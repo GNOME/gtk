@@ -24,6 +24,7 @@
 #include "gdkglcontextprivate.h"
 #include "gdkmemoryformatprivate.h"
 #include "gdkmemorytextureprivate.h"
+#include "gdkcolorstate.h"
 
 #include <epoxy/gl.h>
 
@@ -185,13 +186,15 @@ gdk_gl_texture_do_download (GdkGLTexture *self,
 {
   GdkTexture *texture = GDK_TEXTURE (self);
   GdkMemoryFormat format;
+  GdkColorState *color_state;
   gsize expected_stride;
   Download *download = download_;
   GLint gl_internal_format;
   GLenum gl_format, gl_type;
   GLint gl_swizzle[4];
 
-  format = gdk_texture_get_format (texture),
+  format = gdk_texture_get_format (texture);
+  color_state = gdk_texture_get_color_state (texture);
   expected_stride = texture->width * gdk_memory_format_bytes_per_pixel (download->format);
 
   if (!gdk_gl_context_get_use_es (context) &&
@@ -225,9 +228,11 @@ gdk_gl_texture_do_download (GdkGLTexture *self,
           gdk_memory_convert (download->data,
                               download->stride,
                               download->format,
+                              gdk_color_state_get_srgb (),
                               pixels,
                               stride,
                               format,
+                              color_state,
                               texture->width,
                               texture->height);
 
@@ -377,9 +382,11 @@ gdk_gl_texture_do_download (GdkGLTexture *self,
           gdk_memory_convert (download->data,
                               download->stride,
                               download->format,
+                              gdk_color_state_get_srgb (),
                               pixels,
                               stride,
                               actual_format,
+                              color_state,
                               texture->width,
                               texture->height);
 

@@ -23,8 +23,9 @@
 
 #include "gdkdmabuffourccprivate.h"
 #include "gdkglcontextprivate.h"
-
+#include "gdkcolorstateprivate.h"
 #include "gsk/gl/fp16private.h"
+#include "gtk/gtkcolorutilsprivate.h"
 
 #include <epoxy/gl.h>
 
@@ -1734,14 +1735,18 @@ void
 gdk_memory_convert (guchar              *dest_data,
                     gsize                dest_stride,
                     GdkMemoryFormat      dest_format,
+                    GdkColorState       *dest_color_state,
                     const guchar        *src_data,
                     gsize                src_stride,
                     GdkMemoryFormat      src_format,
+                    GdkColorState       *src_color_state,
                     gsize                width,
                     gsize                height)
 {
   const GdkMemoryFormatDescription *dest_desc = &memory_formats[dest_format];
   const GdkMemoryFormatDescription *src_desc = &memory_formats[src_format];
+  GdkColorStateTransform transform;
+  gboolean has_transform;
   float *tmp;
   gsize y;
   void (*func) (guchar *, const guchar *, gsize) = NULL;
@@ -1749,7 +1754,8 @@ gdk_memory_convert (guchar              *dest_data,
   g_assert (dest_format < GDK_MEMORY_N_FORMATS);
   g_assert (src_format < GDK_MEMORY_N_FORMATS);
 
-  if (src_format == dest_format)
+  if (gdk_color_state_equal (src_color_state, dest_color_state) &&
+      src_format == dest_format)
     {
       gsize bytes_per_row = src_desc->bytes_per_pixel * width;
 
@@ -1769,7 +1775,9 @@ gdk_memory_convert (guchar              *dest_data,
       return;
     }
 
-  if (src_format == GDK_MEMORY_R8G8B8A8 && dest_format == GDK_MEMORY_R8G8B8A8_PREMULTIPLIED)
+  if (!gdk_color_state_equal (src_color_state, dest_color_state))
+    func = NULL;
+  else if (src_format == GDK_MEMORY_R8G8B8A8 && dest_format == GDK_MEMORY_R8G8B8A8_PREMULTIPLIED)
     func = r8g8b8a8_to_r8g8b8a8_premultiplied;
   else if (src_format == GDK_MEMORY_B8G8R8A8 && dest_format == GDK_MEMORY_R8G8B8A8_PREMULTIPLIED)
     func = r8g8b8a8_to_b8g8r8a8_premultiplied;
@@ -1817,19 +1825,43 @@ gdk_memory_convert (guchar              *dest_data,
       return;
     }
 
+  if (!gdk_color_state_equal (src_color_state, dest_color_state))
+    {
+      gdk_color_state_transform_init (&transform, src_color_state, dest_color_state, TRUE);
+      has_transform = TRUE;
+    }
+  else
+    {
+      has_transform = FALSE;
+    }
+
   tmp = g_new (float, width * 4);
 
   for (y = 0; y < height; y++)
     {
       src_desc->to_float (tmp, src_data, width);
-      if (src_desc->alpha == GDK_MEMORY_ALPHA_PREMULTIPLIED && dest_desc->alpha == GDK_MEMORY_ALPHA_STRAIGHT)
-        unpremultiply (tmp, width);
-      else if (src_desc->alpha == GDK_MEMORY_ALPHA_STRAIGHT && dest_desc->alpha != GDK_MEMORY_ALPHA_STRAIGHT)
-        premultiply (tmp, width);
+      if (has_transform)
+        {
+          if (src_desc->alpha == GDK_MEMORY_ALPHA_PREMULTIPLIED)
+            unpremultiply (tmp, width);
+          gdk_color_state_transform (&transform, tmp, tmp, width);
+          if (dest_desc->alpha != GDK_MEMORY_ALPHA_STRAIGHT)
+            premultiply (tmp, width);
+        }
+      else
+        {
+          if (src_desc->alpha == GDK_MEMORY_ALPHA_PREMULTIPLIED && dest_desc->alpha == GDK_MEMORY_ALPHA_STRAIGHT)
+            unpremultiply (tmp, width);
+          else if (src_desc->alpha == GDK_MEMORY_ALPHA_STRAIGHT && dest_desc->alpha != GDK_MEMORY_ALPHA_STRAIGHT)
+            premultiply (tmp, width);
+        }
       dest_desc->from_float (dest_data, tmp, width);
       src_data += src_stride;
       dest_data += dest_stride;
     }
+
+  if (has_transform)
+    gdk_color_state_transform_finish (&transform);
 
   g_free (tmp);
 }

@@ -24,6 +24,7 @@
 #include "gdkdmabuffourccprivate.h"
 #include "gdkdmabuftextureprivate.h"
 #include "gdkmemoryformatprivate.h"
+#include "gdkcolorstate.h"
 
 #ifdef HAVE_DMABUF
 #include <sys/mman.h>
@@ -2066,8 +2067,10 @@ gdk_dmabuf_download_mmap (GdkTexture      *texture,
                           gsize            stride)
 {
   GdkMemoryFormat src_format = gdk_texture_get_format (texture);
+  GdkColorState *src_color_state = gdk_texture_get_color_state (texture);
 
-  if (format == src_format)
+  if (format == src_format &&
+      gdk_color_state_equal (gdk_color_state_get_srgb (), src_color_state))
     gdk_dmabuf_do_download_mmap (texture, data, stride);
   else
     {
@@ -2083,8 +2086,10 @@ gdk_dmabuf_download_mmap (GdkTexture      *texture,
 
       gdk_dmabuf_do_download_mmap (texture, src_data, src_stride);
 
-      gdk_memory_convert (data, stride, format,
-                          src_data, src_stride, src_format,
+      gdk_memory_convert (data, stride,
+                          format, gdk_color_state_get_srgb (),
+                          src_data, src_stride,
+                          src_format, src_color_state,
                           width, height);
 
       g_free (src_data);

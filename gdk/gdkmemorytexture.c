@@ -66,9 +66,11 @@ gdk_memory_texture_download (GdkTexture      *texture,
 
   gdk_memory_convert (data, stride,
                       format,
+                      gdk_color_state_get_srgb (),
                       (guchar *) g_bytes_get_data (self->bytes, NULL),
                       self->stride,
                       texture->format,
+                      texture->color_state,
                       gdk_texture_get_width (texture),
                       gdk_texture_get_height (texture));
 }

@@ -80,9 +80,11 @@ const char *            gdk_memory_format_get_name          (GdkMemoryFormat    
 void                    gdk_memory_convert                  (guchar                     *dest_data,
                                                              gsize                       dest_stride,
                                                              GdkMemoryFormat             dest_format,
+                                                             GdkColorState              *dest_color_state,
                                                              const guchar               *src_data,
                                                              gsize                       src_stride,
                                                              GdkMemoryFormat             src_format,
+                                                             GdkColorState              *src_color_state,
                                                              gsize                       width,
                                                              gsize                       height);
 
