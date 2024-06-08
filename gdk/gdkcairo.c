@@ -23,6 +23,8 @@
 #include "gdkcolor.h"
 #include "gdktexture.h"
 #include "gdkcolorstate.h"
+#include "gdkcolorprivate.h"
+#include "gdkmemoryformatprivate.h"
 
 #include <math.h>
 
@@ -37,14 +39,19 @@ void
 gdk_cairo_set_source_rgba (cairo_t       *cr,
                            const GdkRGBA *rgba)
 {
+  GdkColor color;
+  const float *components;
+
   g_return_if_fail (cr != NULL);
   g_return_if_fail (rgba != NULL);
 
+  gdk_color_convert_rgba (&color, gdk_cairo_get_color_state (cr), rgba);
+  components = gdk_color_get_components (&color);
   cairo_set_source_rgba (cr,
-                         rgba->red,
-                         rgba->green,
-                         rgba->blue,
-                         rgba->alpha);
+                         components[0],
+                         components[1],
+                         components[2],
+                         components[3]);
 }
 
 /**
