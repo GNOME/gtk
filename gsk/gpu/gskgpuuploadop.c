@@ -17,6 +17,13 @@
 #include "gdk/gdkcolorstateprivate.h"
 
 
+#ifdef HAVE_PANGOFT
+#include <pango/pangofc-font.h>
+#include <ft2build.h>
+#include FT_FREETYPE_H
+#include FT_PARAMETER_TAGS_H
+#endif
+
 static GskGpuOp *
 gsk_gpu_upload_op_gl_command_with_area (GskGpuOp                    *op,
                                         GskGpuFrame                 *frame,
@@ -541,6 +548,16 @@ gsk_gpu_upload_glyph_op_draw (GskGpuOp *op,
   cairo_surface_t *surface;
   cairo_t *cr;
   PangoRectangle ink_rect = { 0, };
+#ifdef HAVE_PANGOFT
+  FT_Face face;
+  FT_Bool darken = 1;
+  FT_Parameter property = { FT_PARAM_TAG_STEM_DARKENING, &darken };
+
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+  face = pango_fc_font_lock_face (PANGO_FC_FONT (self->font));
+G_GNUC_END_IGNORE_DEPRECATIONS
+  FT_Face_Properties (face, 1, &property);
+#endif
 
   surface = cairo_image_surface_create_for_data (data,
                                                  CAIRO_FORMAT_ARGB32,
@@ -582,6 +599,12 @@ gsk_gpu_upload_glyph_op_draw (GskGpuOp *op,
 
   cairo_surface_finish (surface);
   cairo_surface_destroy (surface);
+
+#ifdef HAVE_PANGOFT
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+  pango_fc_font_unlock_face (PANGO_FC_FONT (self->font));
+G_GNUC_END_IGNORE_DEPRECATIONS
+#endif
 }
 
 #ifdef GDK_RENDERING_VULKAN
