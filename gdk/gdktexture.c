@@ -803,6 +803,7 @@ gdk_texture_get_color_state (GdkTexture *texture)
 
   return texture->color_state;
 }
+
 void
 gdk_texture_do_download (GdkTexture      *texture,
                          GdkMemoryFormat  format,
