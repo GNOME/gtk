@@ -7172,6 +7172,160 @@ gsk_subsurface_node_get_subsurface (const GskRenderNode *node)
 }
 
 /* }}} */
+/* {{{ GSK_COLOR_STATE_NODE */
+
+/**
+ * GskColorStateNode:
+ *
+ * A render node that changes the compositing color state for its children.
+ *
+ * Since: 4.16
+ */
+struct _GskColorStateNode
+{
+  GskRenderNode render_node;
+
+  GskRenderNode *child;
+  GdkColorState *color_state;
+};
+
+static void
+gsk_color_state_node_finalize (GskRenderNode *node)
+{
+  GskColorStateNode *self = (GskColorStateNode *) node;
+  GskRenderNodeClass *parent_class = g_type_class_peek (g_type_parent (GSK_TYPE_COLOR_STATE_NODE));
+
+  gsk_render_node_unref (self->child);
+  gdk_color_state_unref (self->color_state);
+
+  parent_class->finalize (node);
+}
+
+static void
+gsk_color_state_node_draw (GskRenderNode *node,
+                           cairo_t       *cr)
+{
+  GskColorStateNode *self = (GskColorStateNode *) node;
+
+  /* FIXME */
+  gsk_render_node_draw (self->child, cr);
+}
+
+static gboolean
+gsk_color_state_node_can_diff (const GskRenderNode *node1,
+                               const GskRenderNode *node2)
+{
+  GskColorStateNode *self1 = (GskColorStateNode *) node1;
+  GskColorStateNode *self2 = (GskColorStateNode *) node2;
+
+  return gdk_color_state_equal (self1->color_state, self2->color_state);
+}
+
+static void
+gsk_color_state_node_diff (GskRenderNode *node1,
+                           GskRenderNode *node2,
+                           GskDiffData   *data)
+{
+  GskColorStateNode *self1 = (GskColorStateNode *) node1;
+  GskColorStateNode *self2 = (GskColorStateNode *) node2;
+
+  if (!gdk_color_state_equal (self1->color_state, self2->color_state))
+    {
+      /* Shouldn't happen, can_diff() avoids this, but to be sure */
+      gsk_render_node_diff_impossible (node1, node2, data);
+    }
+  else
+    {
+      gsk_render_node_diff (self1->child, self2->child, data);
+    }
+}
+
+static void
+gsk_color_state_node_class_init (gpointer g_class,
+                                 gpointer class_data)
+{
+  GskRenderNodeClass *node_class = g_class;
+
+  node_class->node_type = GSK_COLOR_STATE_NODE;
+
+  node_class->finalize = gsk_color_state_node_finalize;
+  node_class->draw = gsk_color_state_node_draw;
+  node_class->can_diff = gsk_color_state_node_can_diff;
+  node_class->diff = gsk_color_state_node_diff;
+}
+
+/**
+ * gsk_color_state_node_new: (skip)
+ * @child: The child to composite in the new color state
+ * @color_state: the color state to use
+ *
+ * Creates a `GskRenderNode` that will change the compositing
+ * color state for its children.
+ *
+ * Returns: (transfer full) (type GskColorStateNode): A new `GskRenderNode`
+ *
+ * Since: 4.16
+ */
+GskRenderNode *
+gsk_color_state_node_new (GskRenderNode *child,
+                          GdkColorState *color_state)
+{
+  GskColorStateNode *self;
+  GskRenderNode *node;
+
+  g_return_val_if_fail (GSK_IS_RENDER_NODE (child), NULL);
+
+  self = gsk_render_node_alloc (GSK_COLOR_STATE_NODE);
+  node = (GskRenderNode *) self;
+  node->offscreen_for_opacity = child->offscreen_for_opacity;
+
+  self->child = gsk_render_node_ref (child);
+  self->color_state = gdk_color_state_ref (color_state);
+
+  gsk_rect_init_from_rect (&node->bounds, &child->bounds);
+
+  node->preferred_depth = gsk_render_node_get_preferred_depth (child);
+
+  return node;
+}
+
+/**
+ * gsk_color_state_node_get_child:
+ * @node: (type GskColorStateNode): a debug `GskRenderNode`
+ *
+ * Gets the child node that is getting drawn by the given @node.
+ *
+ * Returns: (transfer none): the child `GskRenderNode`
+ *
+ * Since: 4.16
+ */
+GskRenderNode *
+gsk_color_state_node_get_child (const GskRenderNode *node)
+{
+  const GskColorStateNode *self = (const GskColorStateNode *) node;
+
+  return self->child;
+}
+
+/**
+ * gsk_color_state_node_get_color_state: (skip)
+ * @node: (type GskColorStateNode): a color state `GskRenderNode`
+ *
+ * Gets the color state that was set on this node.
+ *
+ * Returns: (transfer none): the color state
+ *
+ * Since: 4.16
+ */
+GdkColorState *
+gsk_color_state_node_get_color_state (const GskRenderNode *node)
+{
+  const GskColorStateNode *self = (const GskColorStateNode *) node;
+
+  return self->color_state;
+}
+
+/* }}} */
 
 GType gsk_render_node_types[GSK_RENDER_NODE_TYPE_N_TYPES];
 
@@ -7217,6 +7371,7 @@ GSK_DEFINE_RENDER_NODE_TYPE (gsk_mask_node, GSK_MASK_NODE)
 GSK_DEFINE_RENDER_NODE_TYPE (gsk_gl_shader_node, GSK_GL_SHADER_NODE)
 GSK_DEFINE_RENDER_NODE_TYPE (gsk_debug_node, GSK_DEBUG_NODE)
 GSK_DEFINE_RENDER_NODE_TYPE (gsk_subsurface_node, GSK_SUBSURFACE_NODE)
+GSK_DEFINE_RENDER_NODE_TYPE (gsk_color_state_node, GSK_COLOR_STATE_NODE)
 
 static void
 gsk_render_node_init_types_once (void)
@@ -7372,6 +7527,11 @@ gsk_render_node_init_types_once (void)
                                                     sizeof (GskSubsurfaceNode),
                                                     gsk_subsurface_node_class_init);
   gsk_render_node_types[GSK_SUBSURFACE_NODE] = node_type;
+
+  node_type = gsk_render_node_type_register_static (I_("GskColorStateNode"),
+                                                    sizeof (GskColorStateNode),
+                                                    gsk_color_state_node_class_init);
+  gsk_render_node_types[GSK_COLOR_STATE_NODE] = node_type;
 }
 
 static void

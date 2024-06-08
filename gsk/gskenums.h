@@ -93,6 +93,14 @@
  * Since: 4.14
  */
 
+/**
+ * GSK_COLOR_STATE_NODE:
+ *
+ * A node that changes the compositing color state.
+ *
+ * Since: 4.16
+ */
+
 typedef enum {
   GSK_NOT_A_RENDER_NODE = 0,
   GSK_CONTAINER_NODE,
@@ -125,6 +133,7 @@ typedef enum {
   GSK_FILL_NODE,
   GSK_STROKE_NODE,
   GSK_SUBSURFACE_NODE,
+  GSK_COLOR_STATE_NODE,
 } GskRenderNodeType;
 
 /**

@@ -35,6 +35,7 @@
 #include "gdk/gdkrgbaprivate.h"
 #include "gdk/gdktextureprivate.h"
 #include "gdk/gdkmemoryformatprivate.h"
+#include "gdk/gdkcolorstateprivate.h"
 #include <gtk/css/gtkcss.h>
 #include "gtk/css/gtkcssdataurlprivate.h"
 #include "gtk/css/gtkcssparserprivate.h"
@@ -1477,6 +1478,101 @@ parse_color_node (GtkCssParser *parser,
   return gsk_color_node_new (&color, &bounds);
 }
 
+static gboolean
+parse_color_state (GtkCssParser *parser,
+                   Context      *context,
+                   gpointer      out_color_state)
+{
+  GdkColorState *color_state = NULL;
+
+  if (gtk_css_parser_try_ident (parser, "srgb"))
+    color_state = gdk_color_state_get_srgb ();
+  else if (gtk_css_parser_try_ident (parser, "srgb-linear"))
+    color_state = gdk_color_state_get_srgb_linear ();
+  else if (gtk_css_parser_try_ident (parser, "hsl"))
+    color_state = gdk_color_state_get_hsl ();
+  else if (gtk_css_parser_try_ident (parser, "hwb"))
+    color_state = gdk_color_state_get_hwb ();
+  else if (gtk_css_parser_try_ident (parser, "oklab"))
+    color_state = gdk_color_state_get_oklab ();
+  else if (gtk_css_parser_try_ident (parser, "oklch"))
+    color_state = gdk_color_state_get_oklch ();
+  else if (gtk_css_parser_try_ident (parser, "xyz"))
+    color_state = gdk_color_state_get_xyz ();
+  else if (gtk_css_parser_try_ident (parser, "display-p3"))
+    color_state = gdk_color_state_get_display_p3 ();
+  else if (gtk_css_parser_try_ident (parser, "rec2020"))
+    color_state = gdk_color_state_get_rec2020 ();
+  else if (gtk_css_parser_try_ident (parser, "rec2100-pq"))
+    color_state = gdk_color_state_get_rec2100_pq ();
+  else if (gtk_css_parser_try_ident (parser, "rec2100-linear"))
+    color_state = gdk_color_state_get_rec2100_linear ();
+  else
+    {
+      char *url, *scheme, *mimetype;
+      GBytes *bytes;
+      GError *error = NULL;
+
+      url = gtk_css_parser_consume_url (parser);
+      if (url == NULL)
+        return FALSE;
+
+      scheme = g_uri_parse_scheme (url);
+      if (!scheme || g_ascii_strcasecmp (scheme, "data") != 0)
+        {
+          g_free (scheme);
+          g_free (url);
+          return FALSE;
+        }
+      g_free (scheme);
+
+      bytes = gtk_css_data_url_parse (url, &mimetype, &error);
+      if (!bytes)
+        {
+          gtk_css_parser_error_value (parser, "Could not parse data url: %s", error->message);
+          g_error_free (error);
+          g_free (mimetype);
+          return FALSE;
+        }
+      g_free (url);
+
+      if (g_strcmp0 (mimetype, "application/vnd.iccprofile") != 0)
+        {
+          gtk_css_parser_error_value (parser, "Wrong mimetype for color-state: %s", mimetype);
+          g_free (mimetype);
+          g_bytes_unref (bytes);
+          return FALSE;
+        }
+      g_free (mimetype);
+
+      color_state = gdk_color_state_new_from_icc_profile (bytes, &error);
+      if (!color_state)
+        {
+          gtk_css_parser_error_value (parser, "Invalid ICC profile: %s", error->message);
+          g_error_free (error);
+          g_bytes_unref (bytes);
+          return FALSE;
+        }
+      g_bytes_unref (bytes);
+    }
+
+  if (color_state == NULL)
+    {
+      gtk_css_parser_error_value (parser, "Invalid color-state");
+      return FALSE;
+    }
+
+  *((GdkColorState **) out_color_state) = color_state;
+
+  return TRUE;
+}
+
+static void
+clear_color_state (gpointer inout_color_state)
+{
+  g_clear_pointer ((GdkColorState **) inout_color_state, gdk_color_state_unref);
+}
+
 static GskRenderNode *
 parse_linear_gradient_node_internal (GtkCssParser *parser,
                                      Context      *context,
@@ -2738,6 +2834,33 @@ parse_subsurface_node (GtkCssParser *parser,
   return result;
 }
 
+static GskRenderNode *
+parse_color_state_node (GtkCssParser *parser,
+                        Context      *context)
+{
+  GskRenderNode *child = NULL;
+  GdkColorState *color_state = NULL;
+  const Declaration declarations[] = {
+    { "child", parse_node, clear_node, &child },
+    { "color-state", parse_color_state, clear_color_state, &color_state },
+  };
+  GskRenderNode *result;
+
+  parse_declarations (parser, context, declarations, G_N_ELEMENTS (declarations));
+  if (child == NULL)
+    child = create_default_render_node ();
+
+  if (color_state == NULL)
+    color_state = gdk_color_state_get_srgb ();
+
+  result = gsk_color_state_node_new (child, color_state);
+
+  gsk_render_node_unref (child);
+  gdk_color_state_unref (color_state);
+
+  return result;
+}
+
 static gboolean
 parse_node (GtkCssParser *parser,
             Context      *context,
@@ -2777,6 +2900,7 @@ parse_node (GtkCssParser *parser,
     { "glshader", parse_glshader_node },
     { "mask", parse_mask_node },
     { "subsurface", parse_subsurface_node },
+    { "color-state", parse_color_state_node },
   };
   GskRenderNode **node_p = out_node;
   const GtkCssToken *token;
@@ -3130,6 +3254,10 @@ printer_init_duplicates_for_node (Printer       *printer,
 
     case GSK_SUBSURFACE_NODE:
       printer_init_duplicates_for_node (printer, gsk_subsurface_node_get_child (node));
+      break;
+
+    case GSK_COLOR_STATE_NODE:
+      printer_init_duplicates_for_node (printer, gsk_color_state_node_get_child (node));
       break;
 
     default:
@@ -3867,6 +3995,40 @@ append_dash_param (Printer     *p,
 }
 
 static void
+color_state_serialize (GdkColorState *cs,
+                       Printer       *p)
+{
+  if (GDK_IS_NAMED_COLOR_STATE (cs))
+    {
+      g_string_append_printf (p->str, "%s", gdk_color_state_get_name (cs));
+      return;
+    }
+  else if (GDK_IS_LCMS_COLOR_STATE (cs))
+    {
+      GBytes *bytes;
+
+      bytes = gdk_color_state_save_to_icc_profile (cs, NULL);
+      if (bytes)
+        {
+          const guchar *data;
+          gsize len;
+          char *b64;
+
+          g_string_append (p->str, "url(\"data:application/vnc.iccprofile;base64,\\\n");
+          data = g_bytes_get_data (bytes, &len);
+          b64 = base64_encode_with_linebreaks (data, len);
+          append_escaping_newlines (p->str, b64);
+          g_free (b64);
+          g_string_append (p->str, "\")");
+          g_bytes_unref (bytes);
+          return;
+        }
+    }
+
+  g_string_append (p->str, "srgb");
+}
+
+static void
 render_node_print (Printer       *p,
                    GskRenderNode *node)
 {
@@ -4552,6 +4714,21 @@ render_node_print (Printer       *p,
         start_node (p, "subsurface", node_name);
 
         append_node_param (p, "child", gsk_subsurface_node_get_child (node));
+
+        end_node (p);
+      }
+      break;
+
+    case GSK_COLOR_STATE_NODE:
+      {
+        start_node (p, "color-state", node_name);
+
+        _indent (p);
+        g_string_append (p->str, "color-state: ");
+        color_state_serialize (gsk_color_state_node_get_color_state (node), p);
+        g_string_append (p->str, ";\n");
+
+        append_node_param (p, "child", gsk_color_state_node_get_child (node));
 
         end_node (p);
       }

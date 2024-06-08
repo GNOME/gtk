@@ -117,6 +117,15 @@ should be aware that the allowed values are meant to be used on 3D transformatio
 so their naming might appear awkward. However, it is always possible to use the
 matrix3d() production to specify all 16 values individually.
 
+### color-state
+
+| property    | syntax           | default                | printed     |
+| ----------- | ---------------- | ---------------------- | ----------- |
+| bounds      | `<rect>`         | 50                     | always      |
+| color-state | `<ident>|<url>`  | srgb                   | always      |
+
+Creates a node like `gsk_color_state_node_new()` with the given properties.
+
 ### conic-gradient
 
 | property | syntax           | default                | printed     |

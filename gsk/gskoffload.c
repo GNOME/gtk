@@ -619,6 +619,10 @@ complex_clip:
       visit_node (self, gsk_debug_node_get_child (node));
       break;
 
+    case GSK_COLOR_STATE_NODE:
+      visit_node (self, gsk_color_state_node_get_child (node));
+      break;
+
     case GSK_SUBSURFACE_NODE:
       {
         GdkSubsurface *subsurface = gsk_subsurface_node_get_subsurface (node);
