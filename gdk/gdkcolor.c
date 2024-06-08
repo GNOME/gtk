@@ -20,30 +20,23 @@
 
 #include "gdkcolorprivate.h"
 #include "gdkcolorstateprivate.h"
-#include "gdklcmscolorstateprivate.h"
 
 #include <lcms2.h>
-
-static inline cmsHTRANSFORM *
-gdk_color_get_transform (GdkColorState *src,
-                         GdkColorState *dest)
-{
-  return gdk_lcms_color_state_lookup_transform (src, TYPE_RGBA_FLT, dest, TYPE_RGBA_FLT);
-}
 
 void
 gdk_color_convert (GdkColor        *self,
                    GdkColorState   *color_state,
                    const GdkColor  *other)
 {
-  gdk_color_init (self,
-                  color_state,
-                  other->alpha,
-                  NULL);
+  GdkColorStateTransform *tf;
 
-  cmsDoTransform (gdk_color_get_transform (other->color_state, color_state),
-                  gdk_color_get_components (other),
-                  (float *) gdk_color_get_components (self), 1);
+  gdk_color_init (self, color_state, other->alpha, NULL);
+
+  tf = gdk_color_state_get_transform (gdk_color_state_get_srgb (), color_state, FALSE);
+  gdk_color_state_transform (tf,
+                             (float *) gdk_color_get_components (other),
+                             (float *) gdk_color_get_components (self),
+                             1);
 }
 
 void
@@ -51,15 +44,16 @@ gdk_color_convert_rgba (GdkColor        *self,
                         GdkColorState   *color_state,
                         const GdkRGBA   *rgba)
 {
-  gdk_color_init (self,
-                  color_state,
-                  rgba->alpha,
-                  NULL);
+  GdkColorStateTransform *tf;
 
-  cmsDoTransform (gdk_color_get_transform (gdk_color_state_get_srgb (), color_state),
-                  (float[3]) { rgba->red, rgba->green, rgba->blue },
-                  (float *) gdk_color_get_components (self),
-                  1);
+  gdk_color_init (self, color_state, rgba->alpha, NULL);
+
+  tf = gdk_color_state_get_transform (gdk_color_state_get_srgb (), color_state, FALSE);
+  gdk_color_state_transform (tf,
+                            (float[3]) { rgba->red, rgba->green, rgba->blue },
+                            (float *) gdk_color_get_components (self),
+                            1);
+  gdk_color_state_transform_free (tf);
 }
 
 void
