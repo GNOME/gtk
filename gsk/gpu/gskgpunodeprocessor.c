@@ -710,16 +710,36 @@ gsk_gpu_node_processor_image_op (GskGpuNodeProcessor   *self,
                                  const graphene_rect_t *tex_rect)
 {
   guint32 descriptor;
+  gboolean straight_alpha = FALSE;
+  gboolean linearize = FALSE;
+  gboolean delinearize = FALSE;
 
   g_assert (self->pending_globals == 0);
 
   descriptor = gsk_gpu_node_processor_add_image (self, image, GSK_GPU_SAMPLER_DEFAULT);
 
-  if (gsk_gpu_image_get_flags (image) & GSK_GPU_IMAGE_STRAIGHT_ALPHA)
+  straight_alpha = (gsk_gpu_image_get_flags (image) & GSK_GPU_IMAGE_STRAIGHT_ALPHA) != 0;
+
+  if (!gdk_color_state_equal (gsk_gpu_image_get_color_state (image), self->color_state))
+    {
+      if (gsk_gpu_image_get_color_state (image) == gdk_color_state_get_srgb () &&
+          self->color_state == gdk_color_state_get_srgb_linear ())
+        linearize = TRUE;
+      else if (gsk_gpu_image_get_color_state (image) == gdk_color_state_get_srgb_linear () &&
+          self->color_state == gdk_color_state_get_srgb ())
+        delinearize = TRUE;
+      else
+        g_warning ("Unhandled color states");
+    }
+
+  if (straight_alpha || linearize || delinearize)
     {
       gsk_gpu_straight_alpha_op (self->frame,
                                  gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, rect),
                                  self->opacity,
+                                 straight_alpha,
+                                 linearize,
+                                 delinearize,
                                  self->desc,
                                  descriptor,
                                  rect,
@@ -857,7 +877,8 @@ static GskGpuImage *
 gsk_gpu_node_processor_ensure_image (GskGpuFrame      *frame,
                                      GskGpuImage      *image,
                                      GskGpuImageFlags  required_flags,
-                                     GskGpuImageFlags  disallowed_flags)
+                                     GskGpuImageFlags  disallowed_flags,
+                                     GdkColorState    *target_color_state)
 {
   GskGpuImageFlags flags, missing_flags;
   GskGpuImage *copy;
@@ -887,10 +908,11 @@ gsk_gpu_node_processor_ensure_image (GskGpuFrame      *frame,
   copy = gsk_gpu_device_create_offscreen_image (gsk_gpu_frame_get_device (frame),
                                                 required_flags & (GSK_GPU_IMAGE_CAN_MIPMAP | GSK_GPU_IMAGE_MIPMAP) ? TRUE : FALSE,
                                                 gdk_memory_format_get_depth (gsk_gpu_image_get_format (image)),
-                                                gsk_gpu_image_get_color_state (image),
+                                                target_color_state,
                                                 width, height);
 
   if (gsk_gpu_frame_should_optimize (frame, GSK_GPU_OPTIMIZE_BLIT) &&
+      gdk_color_state_equal (gsk_gpu_image_get_color_state (image), target_color_state) &&
       (flags & (GSK_GPU_IMAGE_NO_BLIT | GSK_GPU_IMAGE_STRAIGHT_ALPHA | GSK_GPU_IMAGE_FILTERABLE)) == GSK_GPU_IMAGE_FILTERABLE)
     {
       gsk_gpu_blit_op (frame,
@@ -990,7 +1012,8 @@ gsk_gpu_node_processor_get_node_as_image (GskGpuNodeProcessor   *self,
   ensure = gsk_gpu_node_processor_ensure_image (self->frame,
                                                 image,
                                                 required_flags,
-                                                disallowed_flags);
+                                                disallowed_flags,
+                                                self->color_state);
 
   /* if we fixed up a cached texture, cache the fixed up version instead */
   if (ensure != image && disallowed_flags &&
@@ -1221,7 +1244,8 @@ gsk_gpu_node_processor_try_node_as_pattern (GskGpuNodeProcessor *self,
                                self->frame,
                                &self->scale,
                                &self->offset,
-                               &clipped);
+                               &clipped,
+                               self->color_state);
  
   if (!gsk_gpu_node_processor_create_node_pattern (&writer, node))
     {
@@ -1972,7 +1996,8 @@ gsk_gpu_node_processor_add_texture_node (GskGpuNodeProcessor *self,
       image = gsk_gpu_node_processor_ensure_image (self->frame,
                                                    image,
                                                    GSK_GPU_IMAGE_MIPMAP,
-                                                   GSK_GPU_IMAGE_STRAIGHT_ALPHA);
+                                                   GSK_GPU_IMAGE_STRAIGHT_ALPHA,
+                                                   self->color_state);
       descriptor = gsk_gpu_node_processor_add_image (self, image, GSK_GPU_SAMPLER_MIPMAP_DEFAULT);
       if (self->opacity < 1.0)
         {
@@ -2037,7 +2062,8 @@ gsk_gpu_node_processor_create_texture_pattern (GskGpuPatternWriter *self,
       image = gsk_gpu_node_processor_ensure_image (self->frame,
                                                    image,
                                                    GSK_GPU_IMAGE_MIPMAP,
-                                                   GSK_GPU_IMAGE_STRAIGHT_ALPHA);
+                                                   GSK_GPU_IMAGE_STRAIGHT_ALPHA,
+                                                   self->color_state);
       sampler = GSK_GPU_SAMPLER_MIPMAP_DEFAULT;
     }
   else
@@ -2136,7 +2162,8 @@ gsk_gpu_node_processor_add_texture_scale_node (GskGpuNodeProcessor *self,
   image = gsk_gpu_node_processor_ensure_image (self->frame,
                                                image,
                                                need_mipmap ? (GSK_GPU_IMAGE_CAN_MIPMAP | GSK_GPU_IMAGE_MIPMAP) : 0,
-                                               GSK_GPU_IMAGE_STRAIGHT_ALPHA);
+                                               GSK_GPU_IMAGE_STRAIGHT_ALPHA,
+                                               self->color_state);
 
   switch (scaling_filter)
     {

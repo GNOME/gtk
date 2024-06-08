@@ -10,6 +10,8 @@
 
 #define VARIATION_OPACITY        (1 << 0)
 #define VARIATION_STRAIGHT_ALPHA (1 << 1)
+#define VARIATION_LINEARIZE      (1 << 2)
+#define VARIATION_DELINEARIZE    (1 << 3)
 
 typedef struct _GskGpuStraightAlphaOp GskGpuStraightAlphaOp;
 
@@ -54,6 +56,9 @@ void
 gsk_gpu_straight_alpha_op (GskGpuFrame            *frame,
                            GskGpuShaderClip        clip,
                            float                   opacity,
+                           gboolean                straight_alpha,
+                           gboolean                linearize,
+                           gboolean                delinearize,
                            GskGpuDescriptors      *desc,
                            guint32                 descriptor,
                            const graphene_rect_t  *rect,
@@ -62,10 +67,14 @@ gsk_gpu_straight_alpha_op (GskGpuFrame            *frame,
 {
   GskGpuStraightalphaInstance *instance;
 
+  g_assert (!(linearize && delinearize));
+
   gsk_gpu_shader_op_alloc (frame,
                            &GSK_GPU_STRAIGHT_ALPHA_OP_CLASS,
                            (opacity < 1.0 ? VARIATION_OPACITY : 0) |
-                           VARIATION_STRAIGHT_ALPHA,
+                           (straight_alpha ? VARIATION_STRAIGHT_ALPHA : 0) |
+                           (linearize ? VARIATION_LINEARIZE : 0) |
+                           (delinearize ? VARIATION_DELINEARIZE : 0),
                            clip,
                            desc,
                            &instance);

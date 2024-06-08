@@ -2,8 +2,10 @@
 
 #define VARIATION_OPACITY        (1u << 0)
 #define VARIATION_STRAIGHT_ALPHA (1u << 1)
+#define VARIATION_LINEARIZE      (1u << 2)
+#define VARIATION_DELINEARIZE    (1u << 3)
 
-#define HAS_VARIATION(var) ((GSK_VARIATION & var) == var)
+#define HAS_VARIATION(var) ((GSK_VARIATION & (var)) == (var))
 
 PASS(0) vec2 _pos;
 PASS_FLAT(1) Rect _rect;
@@ -23,7 +25,7 @@ void
 run (out vec2 pos)
 {
   Rect r = rect_from_gsk (in_rect);
-  
+
   pos = rect_get_position (r);
 
   _pos = pos;
@@ -43,15 +45,23 @@ void
 run (out vec4 color,
      out vec2 position)
 {
+  vec4 c;
+
   float alpha = rect_coverage (_rect, _pos);
   if (HAS_VARIATION (VARIATION_OPACITY))
     alpha *= _opacity;
 
   if (HAS_VARIATION (VARIATION_STRAIGHT_ALPHA))
-    color = gsk_texture_straight_alpha (_tex_id, _tex_coord) * alpha;
+    c = gsk_texture_straight_alpha (_tex_id, _tex_coord);
   else
-    color = gsk_texture (_tex_id, _tex_coord) * alpha;
+    c = gsk_texture (_tex_id, _tex_coord);
 
+  if (HAS_VARIATION (VARIATION_LINEARIZE))
+    c = srgb_to_linear (c);
+  else if (HAS_VARIATION (VARIATION_DELINEARIZE))
+    c = srgb_from_linear (c);
+
+  color = c * alpha;
   position = _pos;
 }
 
