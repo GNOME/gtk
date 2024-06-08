@@ -24,7 +24,9 @@
 #include "gdkdmabuffourccprivate.h"
 #include "gdkglcontextprivate.h"
 #include "gdklcmscolorstateprivate.h"
+#include "gdknamedcolorstateprivate.h"
 #include "gsk/gl/fp16private.h"
+#include "gtk/gtkcolorutilsprivate.h"
 
 #include <epoxy/gl.h>
 
@@ -1690,6 +1692,161 @@ unpremultiply (float *rgba,
     }
 }
 
+typedef void (* StepFunc) (float  s0, float  s1, float  s2,
+                           float *d0, float *d1, float *d2);
+
+typedef struct
+{
+  int n_funcs;
+  StepFunc funcs[5];
+} TransformList;
+
+static void
+transform_list_init (TransformList *tf)
+{
+  tf->n_funcs = 0;
+}
+
+static void
+transform_list_append (TransformList *tf,
+                       StepFunc       func)
+{
+  g_assert (tf->n_funcs < 5);
+  tf->funcs[tf->n_funcs] = func;
+  tf->n_funcs++;
+}
+
+static struct {
+  GdkColorStateId n1, n2;
+  StepFunc func;
+} functions[] = {
+  { GDK_COLOR_STATE_HWB, GDK_COLOR_STATE_SRGB, gtk_hwb_to_rgb },
+  { GDK_COLOR_STATE_SRGB, GDK_COLOR_STATE_HWB, gtk_rgb_to_hwb },
+  { GDK_COLOR_STATE_HSL, GDK_COLOR_STATE_SRGB, gtk_hsl_to_rgb },
+  { GDK_COLOR_STATE_SRGB, GDK_COLOR_STATE_HSL, gtk_rgb_to_hsl },
+  { GDK_COLOR_STATE_SRGB_LINEAR, GDK_COLOR_STATE_SRGB, gtk_rgb_to_linear_srgb },
+  { GDK_COLOR_STATE_SRGB, GDK_COLOR_STATE_SRGB_LINEAR, gtk_linear_srgb_to_rgb },
+  { GDK_COLOR_STATE_SRGB_LINEAR, GDK_COLOR_STATE_OKLAB, gtk_linear_srgb_to_oklab },
+  { GDK_COLOR_STATE_OKLAB, GDK_COLOR_STATE_SRGB_LINEAR, gtk_oklab_to_linear_srgb },
+  { GDK_COLOR_STATE_OKLAB, GDK_COLOR_STATE_OKLCH, gtk_oklab_to_oklch },
+  { GDK_COLOR_STATE_OKLCH, GDK_COLOR_STATE_OKLAB, gtk_oklch_to_oklab },
+};
+
+static gpointer
+find_function (int i, int j)
+{
+  for (int k = 0; k < G_N_ELEMENTS (functions); k++)
+    {
+      if (functions[k].n1 == i && functions[k].n2 == j)
+        return functions[k].func;
+    }
+
+  return NULL;
+}
+
+static GdkColorStateId line1[] = { GDK_COLOR_STATE_SRGB,
+                                   GDK_COLOR_STATE_SRGB_LINEAR,
+                                   GDK_COLOR_STATE_OKLAB,
+                                   GDK_COLOR_STATE_OKLCH };
+static GdkColorStateId line2[] = { GDK_COLOR_STATE_HSL,
+                                   GDK_COLOR_STATE_SRGB,
+                                   GDK_COLOR_STATE_HWB};
+
+static void
+collect_functions (TransformList   *tf,
+                   GdkColorStateId  line[],
+                   int              si,
+                   int              di)
+{
+  int inc = di < si ? -1 : 1;
+  int i0, i;
+
+  i0 = i = si;
+  do
+    {
+      i += inc;
+      transform_list_append (tf, find_function (line[i0], line[i]));
+      i0 = i;
+    }
+  while (i != di);
+}
+
+static void
+get_transform_list (TransformList *tf,
+                    GdkColorState *src,
+                    GdkColorState *dest)
+{
+  GdkColorStateId sn, dn;
+  int si, di, sii, dii;
+
+  sn = gdk_named_color_state_get_id (src);
+  dn = gdk_named_color_state_get_id (dest);
+
+  for (int i = 0; i < G_N_ELEMENTS (line1); i++)
+    {
+      if (line1[i] == sn)
+        si = i;
+      if (line1[i] == dn)
+        di = i;
+    }
+
+  if (si > -1 && di > -1)
+    {
+      collect_functions (tf, line1, si, di);
+      return;
+    }
+
+  for (int i = 0; i < G_N_ELEMENTS (line2); i++)
+    {
+      if (line2[i] == sn)
+        sii = i;
+      if (line2[i] == dn)
+        dii = i;
+    }
+
+  if (sii > -1 && dii > -1)
+    {
+      collect_functions (tf, line2, sii, dii);
+      return;
+    }
+
+  if (si > -1 && dii > -1)
+    {
+      collect_functions (tf, line1, si, 0);
+      collect_functions (tf, line2, 1, dii);
+      return;
+    }
+
+  if (sii > -1 && di > -1)
+    {
+      collect_functions (tf, line2, sii, 1);
+      collect_functions (tf, line2, 0, di);
+      return;
+    }
+}
+
+static void
+transform_by_list (TransformList *tf,
+                   float         *src,
+                   float         *dst,
+                   int            width)
+{
+  for (int i = 0; i < width * 4; i+=4)
+    {
+      float s0 = src[i];
+      float s1 = src[i + 1];
+      float s2 = src[i + 2];
+
+      for (int k = 0; k < tf->n_funcs; k++)
+        tf->funcs[k] (s0, s1, s2, &s0, &s1, &s2);
+
+      dst[i]     = s0;
+      dst[i + 1] = s1;
+      dst[i + 2] = s2;
+      dst[i + 3] = src[i + 3];
+    }
+}
+
 void
 gdk_memory_convert (guchar              *dest_data,
                     gsize                dest_stride,
@@ -1704,7 +1861,9 @@ gdk_memory_convert (guchar              *dest_data,
 {
   const GdkMemoryFormatDescription *dest_desc = &memory_formats[dest_format];
   const GdkMemoryFormatDescription *src_desc = &memory_formats[src_format];
-  cmsHTRANSFORM transform;
+  cmsHTRANSFORM transform = NULL;
+  TransformList transform_list;
+  TransformList transform_list2;
   float *tmp;
   gsize y;
   void (*func) (guchar *, const guchar *, gsize) = NULL;
@@ -1712,21 +1871,8 @@ gdk_memory_convert (guchar              *dest_data,
   g_assert (dest_format < GDK_MEMORY_N_FORMATS);
   g_assert (src_format < GDK_MEMORY_N_FORMATS);
 
-  if (gdk_color_state_equal (src_color_state, dest_color_state))
-    {
-      transform = NULL;
-    }
-  else
-    {
-      transform = cmsCreateTransform (gdk_lcms_color_state_get_lcms_profile (src_color_state),
-                                      TYPE_RGBA_FLT,
-                                      gdk_lcms_color_state_get_lcms_profile (dest_color_state),
-                                      TYPE_RGBA_FLT,
-                                      INTENT_PERCEPTUAL,
-                                      cmsFLAGS_COPY_ALPHA);
-    }
-
-  if (src_format == dest_format && transform == NULL)
+  if (gdk_color_state_equal (src_color_state, dest_color_state) &&
+      src_format == dest_format)
     {
       gsize bytes_per_row = src_desc->bytes_per_pixel * width;
 
@@ -1746,7 +1892,7 @@ gdk_memory_convert (guchar              *dest_data,
       return;
     }
 
-  if (transform)
+  if (!gdk_color_state_equal (src_color_state, dest_color_state))
     func = NULL;
   else if (src_format == GDK_MEMORY_R8G8B8A8 && dest_format == GDK_MEMORY_R8G8B8A8_PREMULTIPLIED)
     func = r8g8b8a8_to_r8g8b8a8_premultiplied;
@@ -1796,16 +1942,76 @@ gdk_memory_convert (guchar              *dest_data,
       return;
     }
 
+  transform = NULL;
+  transform_list_init (&transform_list);
+  transform_list_init (&transform_list2);
+
+  if (gdk_color_state_equal (src_color_state, dest_color_state))
+    {
+    }
+  else if (GDK_IS_LCMS_COLOR_STATE (src_color_state) &&
+           GDK_IS_LCMS_COLOR_STATE (dest_color_state))
+    {
+      transform = cmsCreateTransform (gdk_lcms_color_state_get_lcms_profile (src_color_state),
+                                      TYPE_RGBA_FLT,
+                                      gdk_lcms_color_state_get_lcms_profile (dest_color_state),
+                                      TYPE_RGBA_FLT,
+                                      INTENT_PERCEPTUAL,
+                                      cmsFLAGS_COPY_ALPHA);
+    }
+  else if (GDK_IS_NAMED_COLOR_STATE (src_color_state) &&
+           GDK_IS_NAMED_COLOR_STATE (dest_color_state))
+    {
+      get_transform_list (&transform_list, src_color_state, dest_color_state);
+    }
+  else if (GDK_IS_NAMED_COLOR_STATE (src_color_state) &&
+           GDK_IS_LCMS_COLOR_STATE (dest_color_state))
+    {
+      cmsHPROFILE profile;
+
+      get_transform_list (&transform_list, src_color_state, gdk_color_state_get_srgb ());
+
+      profile = cmsCreate_sRGBProfile ();
+      transform = cmsCreateTransform (profile,
+                                      TYPE_RGBA_FLT,
+                                      gdk_lcms_color_state_get_lcms_profile (dest_color_state),
+                                      TYPE_RGBA_FLT,
+                                      INTENT_PERCEPTUAL,
+                                      cmsFLAGS_COPY_ALPHA);
+      cmsCloseProfile (profile);
+    }
+  else if (GDK_IS_LCMS_COLOR_STATE (src_color_state) &&
+           GDK_IS_NAMED_COLOR_STATE (dest_color_state))
+    {
+      cmsHPROFILE profile;
+
+      profile = cmsCreate_sRGBProfile ();
+      transform = cmsCreateTransform (gdk_lcms_color_state_get_lcms_profile (src_color_state),
+                                      TYPE_RGBA_FLT,
+                                      profile,
+                                      TYPE_RGBA_FLT,
+                                      INTENT_PERCEPTUAL,
+                                      cmsFLAGS_COPY_ALPHA);
+      cmsCloseProfile (profile);
+
+      get_transform_list (&transform_list2, gdk_color_state_get_srgb (), dest_color_state);
+    }
+
   tmp = g_new (float, width * 4);
 
   for (y = 0; y < height; y++)
     {
       src_desc->to_float (tmp, src_data, width);
-      if (transform)
+      if (transform || transform_list.n_funcs || transform_list2.n_funcs)
         {
           if (src_desc->alpha == GDK_MEMORY_ALPHA_PREMULTIPLIED)
             unpremultiply (tmp, width);
-          cmsDoTransform (transform, tmp, tmp, width);
+          if (transform_list.n_funcs)
+            transform_by_list (&transform_list, tmp, tmp, width);
+          if (transform)
+            cmsDoTransform (transform, tmp, tmp, width);
+          if (transform_list2.n_funcs)
+            transform_by_list (&transform_list2, tmp, tmp, width);
           if (dest_desc->alpha != GDK_MEMORY_ALPHA_STRAIGHT)
             premultiply (tmp, width);
         }
