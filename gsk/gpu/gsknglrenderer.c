@@ -116,7 +116,7 @@ gsk_ngl_renderer_get_backbuffer (GskGpuRenderer *renderer)
       self->backbuffer = gsk_gl_image_new_backbuffer (GSK_GL_DEVICE (gsk_gpu_renderer_get_device (renderer)),
                                                       GDK_GL_CONTEXT (context),
                                                       GDK_MEMORY_DEFAULT /* FIXME */,
-                                                      gdk_color_state_get_srgb (),
+                                                      gdk_surface_get_color_state (surface),
                                                       ceil (gdk_surface_get_width (surface) * scale),
                                                       ceil (gdk_surface_get_height (surface) * scale));
     }
