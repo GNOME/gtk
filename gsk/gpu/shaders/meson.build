@@ -18,6 +18,7 @@ gsk_private_gpu_shaders = files([
   'gskgpuborder.glsl',
   'gskgpuboxshadow.glsl',
   'gskgpucolor.glsl',
+  'gskgpucolorconvert.glsl',
   'gskgpucolorize.glsl',
   'gskgpucolormatrix.glsl',
   'gskgpuconicgradient.glsl',
