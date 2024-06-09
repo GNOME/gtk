@@ -327,6 +327,7 @@ ADD_ALPHA_FUNC(r8g8b8_to_a8b8g8r8, 0, 1, 2, 3, 2, 1, 0)
 
 struct _GdkMemoryFormatDescription
 {
+  const char *name;
   GdkMemoryAlpha alpha;
   GdkMemoryFormat premultiplied;
   GdkMemoryFormat straight;
@@ -366,6 +367,7 @@ struct _GdkMemoryFormatDescription
 
 static const GdkMemoryFormatDescription memory_formats[] = {
   [GDK_MEMORY_B8G8R8A8_PREMULTIPLIED] = {
+    .name = "*BGRA8",
     .alpha = GDK_MEMORY_ALPHA_PREMULTIPLIED,
     .premultiplied = GDK_MEMORY_B8G8R8A8_PREMULTIPLIED,
     .straight = GDK_MEMORY_B8G8R8A8,
@@ -394,6 +396,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .from_float = b8g8r8a8_premultiplied_from_float,
   },
   [GDK_MEMORY_A8R8G8B8_PREMULTIPLIED] = {
+    .name = "*ARGB8",
     .alpha = GDK_MEMORY_ALPHA_PREMULTIPLIED,
     .premultiplied = GDK_MEMORY_A8R8G8B8_PREMULTIPLIED,
     .straight = GDK_MEMORY_A8R8G8B8,
@@ -422,6 +425,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .from_float = a8r8g8b8_premultiplied_from_float,
   },
   [GDK_MEMORY_R8G8B8A8_PREMULTIPLIED] = {
+    .name = "*RGBA8",
     .alpha = GDK_MEMORY_ALPHA_PREMULTIPLIED,
     .premultiplied = GDK_MEMORY_R8G8B8A8_PREMULTIPLIED,
     .straight = GDK_MEMORY_R8G8B8A8,
@@ -449,6 +453,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .from_float = r8g8b8a8_premultiplied_from_float,
   },
   [GDK_MEMORY_A8B8G8R8_PREMULTIPLIED] = {
+    .name = "*ABGR8",
     .alpha = GDK_MEMORY_ALPHA_PREMULTIPLIED,
     .premultiplied = GDK_MEMORY_A8B8G8R8_PREMULTIPLIED,
     .straight = GDK_MEMORY_A8B8G8R8,
@@ -477,6 +482,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .from_float = a8b8g8r8_premultiplied_from_float,
   },
   [GDK_MEMORY_B8G8R8A8] = {
+    .name = "BGRA8",
     .alpha = GDK_MEMORY_ALPHA_STRAIGHT,
     .premultiplied = GDK_MEMORY_B8G8R8A8_PREMULTIPLIED,
     .straight = GDK_MEMORY_B8G8R8A8,
@@ -505,6 +511,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .from_float = b8g8r8a8_from_float,
   },
   [GDK_MEMORY_A8R8G8B8] = {
+    .name = "ARGB8",
     .alpha = GDK_MEMORY_ALPHA_STRAIGHT,
     .premultiplied = GDK_MEMORY_A8R8G8B8_PREMULTIPLIED,
     .straight = GDK_MEMORY_A8R8G8B8,
@@ -533,6 +540,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .from_float = a8r8g8b8_from_float,
   },
   [GDK_MEMORY_R8G8B8A8] = {
+    .name = "RGBA8",
     .alpha = GDK_MEMORY_ALPHA_STRAIGHT,
     .premultiplied = GDK_MEMORY_R8G8B8A8_PREMULTIPLIED,
     .straight = GDK_MEMORY_R8G8B8A8,
@@ -560,6 +568,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .from_float = r8g8b8a8_from_float,
   },
   [GDK_MEMORY_A8B8G8R8] = {
+    .name = "ABGR8",
     .alpha = GDK_MEMORY_ALPHA_STRAIGHT,
     .premultiplied = GDK_MEMORY_A8B8G8R8_PREMULTIPLIED,
     .straight = GDK_MEMORY_A8B8G8R8,
@@ -588,6 +597,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .from_float = a8b8g8r8_from_float,
   },
   [GDK_MEMORY_B8G8R8X8] = {
+    .name = "BGRX8",
     .alpha = GDK_MEMORY_ALPHA_OPAQUE,
     .premultiplied = GDK_MEMORY_B8G8R8X8,
     .straight = GDK_MEMORY_B8G8R8X8,
@@ -617,6 +627,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .from_float = b8g8r8x8_from_float,
   },
   [GDK_MEMORY_X8R8G8B8] = {
+    .name = "XRGB8",
     .alpha = GDK_MEMORY_ALPHA_OPAQUE,
     .premultiplied = GDK_MEMORY_X8R8G8B8,
     .straight = GDK_MEMORY_X8R8G8B8,
@@ -646,6 +657,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .from_float = x8r8g8b8_from_float,
   },
   [GDK_MEMORY_R8G8B8X8] = {
+    .name = "RGBX8",
     .alpha = GDK_MEMORY_ALPHA_OPAQUE,
     .premultiplied = GDK_MEMORY_R8G8B8X8,
     .straight = GDK_MEMORY_R8G8B8X8,
@@ -674,6 +686,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .from_float = r8g8b8x8_from_float,
   },
   [GDK_MEMORY_X8B8G8R8] = {
+    .name = "XBGR8",
     .alpha = GDK_MEMORY_ALPHA_OPAQUE,
     .premultiplied = GDK_MEMORY_X8B8G8R8,
     .straight = GDK_MEMORY_X8B8G8R8,
@@ -703,6 +716,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .from_float = x8b8g8r8_from_float,
   },
   [GDK_MEMORY_R8G8B8] = {
+    .name = "RGB8",
     .alpha = GDK_MEMORY_ALPHA_OPAQUE,
     .premultiplied = GDK_MEMORY_R8G8B8,
     .straight = GDK_MEMORY_R8G8B8,
@@ -731,6 +745,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .from_float = r8g8b8_from_float,
   },
   [GDK_MEMORY_B8G8R8] = {
+    .name = "BGR8",
     .alpha = GDK_MEMORY_ALPHA_OPAQUE,
     .premultiplied = GDK_MEMORY_B8G8R8,
     .straight = GDK_MEMORY_B8G8R8,
@@ -760,6 +775,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .from_float = b8g8r8_from_float,
   },
   [GDK_MEMORY_R16G16B16] = {
+    .name = "RGB16",
     .alpha = GDK_MEMORY_ALPHA_OPAQUE,
     .premultiplied = GDK_MEMORY_R16G16B16,
     .straight = GDK_MEMORY_R16G16B16,
@@ -791,6 +807,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .from_float = r16g16b16_from_float,
   },
   [GDK_MEMORY_R16G16B16A16_PREMULTIPLIED] = {
+    .name = "*RGBA16",
     .alpha = GDK_MEMORY_ALPHA_PREMULTIPLIED,
     .premultiplied = GDK_MEMORY_R16G16B16A16_PREMULTIPLIED,
     .straight = GDK_MEMORY_R16G16B16A16,
@@ -821,6 +838,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .from_float = r16g16b16a16_from_float,
   },
   [GDK_MEMORY_R16G16B16A16] = {
+    .name = "RGBA16",
     .alpha = GDK_MEMORY_ALPHA_STRAIGHT,
     .premultiplied = GDK_MEMORY_R16G16B16A16_PREMULTIPLIED,
     .straight = GDK_MEMORY_R16G16B16A16,
@@ -851,6 +869,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .from_float = r16g16b16a16_from_float,
   },
   [GDK_MEMORY_R16G16B16_FLOAT] = {
+    .name = "RGBA16f",
     .alpha = GDK_MEMORY_ALPHA_OPAQUE,
     .premultiplied = GDK_MEMORY_R16G16B16_FLOAT,
     .straight = GDK_MEMORY_R16G16B16_FLOAT,
@@ -881,6 +900,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .from_float = r16g16b16_float_from_float,
   },
   [GDK_MEMORY_R16G16B16A16_FLOAT_PREMULTIPLIED] = {
+    .name = "*RGBA16f",
     .alpha = GDK_MEMORY_ALPHA_PREMULTIPLIED,
     .premultiplied = GDK_MEMORY_R16G16B16A16_FLOAT_PREMULTIPLIED,
     .straight = GDK_MEMORY_R16G16B16A16_FLOAT,
@@ -910,6 +930,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .from_float = r16g16b16a16_float_from_float,
   },
   [GDK_MEMORY_R16G16B16A16_FLOAT] = {
+    .name = "RGBA16f",
     .alpha = GDK_MEMORY_ALPHA_STRAIGHT,
     .premultiplied = GDK_MEMORY_R16G16B16A16_FLOAT_PREMULTIPLIED,
     .straight = GDK_MEMORY_R16G16B16A16_FLOAT,
@@ -939,6 +960,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .from_float = r16g16b16a16_float_from_float,
   },
   [GDK_MEMORY_R32G32B32_FLOAT] = {
+    .name = "RGB32f",
     .alpha = GDK_MEMORY_ALPHA_OPAQUE,
     .premultiplied = GDK_MEMORY_R32G32B32_FLOAT,
     .straight = GDK_MEMORY_R32G32B32_FLOAT,
@@ -969,6 +991,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .from_float = r32g32b32_float_from_float,
   },
   [GDK_MEMORY_R32G32B32A32_FLOAT_PREMULTIPLIED] = {
+    .name = "*RGBA32f",
     .alpha = GDK_MEMORY_ALPHA_PREMULTIPLIED,
     .premultiplied = GDK_MEMORY_R32G32B32A32_FLOAT_PREMULTIPLIED,
     .straight = GDK_MEMORY_R32G32B32A32_FLOAT,
@@ -998,6 +1021,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .from_float = r32g32b32a32_float_from_float,
   },
   [GDK_MEMORY_R32G32B32A32_FLOAT] = {
+    .name = "RGBA32f",
     .alpha = GDK_MEMORY_ALPHA_STRAIGHT,
     .premultiplied = GDK_MEMORY_R32G32B32A32_FLOAT_PREMULTIPLIED,
     .straight = GDK_MEMORY_R32G32B32A32_FLOAT,
@@ -1027,6 +1051,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .from_float = r32g32b32a32_float_from_float,
   },
   [GDK_MEMORY_G8A8_PREMULTIPLIED] = {
+    .name = "*GA8",
     .alpha = GDK_MEMORY_ALPHA_PREMULTIPLIED,
     .premultiplied = GDK_MEMORY_G8A8_PREMULTIPLIED,
     .straight = GDK_MEMORY_G8A8,
@@ -1055,6 +1080,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .from_float = g8a8_premultiplied_from_float,
   },
   [GDK_MEMORY_G8A8] = {
+    .name = "GA8",
     .alpha = GDK_MEMORY_ALPHA_STRAIGHT,
     .premultiplied = GDK_MEMORY_G8A8_PREMULTIPLIED,
     .straight = GDK_MEMORY_G8A8,
@@ -1083,6 +1109,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .from_float = g8a8_from_float,
   },
   [GDK_MEMORY_G8] = {
+    .name = "G8",
     .alpha = GDK_MEMORY_ALPHA_OPAQUE,
     .premultiplied = GDK_MEMORY_G8,
     .straight = GDK_MEMORY_G8,
@@ -1111,6 +1138,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .from_float = g8_from_float,
   },
   [GDK_MEMORY_G16A16_PREMULTIPLIED] = {
+    .name = "*GA16",
     .alpha = GDK_MEMORY_ALPHA_PREMULTIPLIED,
     .premultiplied = GDK_MEMORY_G16A16_PREMULTIPLIED,
     .straight = GDK_MEMORY_G16A16,
@@ -1142,6 +1170,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .from_float = g16a16_premultiplied_from_float,
   },
   [GDK_MEMORY_G16A16] = {
+    .name = "GA16",
     .alpha = GDK_MEMORY_ALPHA_STRAIGHT,
     .premultiplied = GDK_MEMORY_G16A16_PREMULTIPLIED,
     .straight = GDK_MEMORY_G16A16,
@@ -1173,6 +1202,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .from_float = g16a16_from_float,
   },
   [GDK_MEMORY_G16] = {
+    .name = "G16",
     .alpha = GDK_MEMORY_ALPHA_OPAQUE,
     .premultiplied = GDK_MEMORY_G16,
     .straight = GDK_MEMORY_G16,
@@ -1204,6 +1234,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .from_float = g16_from_float,
   },
   [GDK_MEMORY_A8] = {
+    .name = "A8",
     .alpha = GDK_MEMORY_ALPHA_PREMULTIPLIED,
     .premultiplied = GDK_MEMORY_A8,
     .straight = GDK_MEMORY_A8,
@@ -1232,6 +1263,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .from_float = a8_from_float,
   },
   [GDK_MEMORY_A16] = {
+    .name = "A16",
     .alpha = GDK_MEMORY_ALPHA_PREMULTIPLIED,
     .premultiplied = GDK_MEMORY_A16,
     .straight = GDK_MEMORY_A16,
@@ -1263,6 +1295,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .from_float = a16_from_float,
   },
   [GDK_MEMORY_A16_FLOAT] = {
+    .name = "A16f",
     .alpha = GDK_MEMORY_ALPHA_PREMULTIPLIED,
     .premultiplied = GDK_MEMORY_A16_FLOAT,
     .straight = GDK_MEMORY_A16_FLOAT,
@@ -1293,6 +1326,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .from_float = a16_float_from_float,
   },
   [GDK_MEMORY_A32_FLOAT] = {
+    .name = "A32f",
     .alpha = GDK_MEMORY_ALPHA_PREMULTIPLIED,
     .premultiplied = GDK_MEMORY_A32_FLOAT,
     .straight = GDK_MEMORY_A32_FLOAT,
@@ -1659,6 +1693,12 @@ gdk_memory_format_get_dmabuf_fourcc (GdkMemoryFormat format)
 #else
   return 0;
 #endif
+}
+
+const char *
+gdk_memory_format_get_name (GdkMemoryFormat format)
+{
+  return memory_formats[format].name;
 }
 
 static void
