@@ -14,6 +14,7 @@ G_DECLARE_FINAL_TYPE (GskVulkanImage, gsk_vulkan_image, GSK, VULKAN_IMAGE, GskGp
 GskGpuImage *           gsk_vulkan_image_new_for_swapchain              (GskVulkanDevice        *device,
                                                                          VkImage                 image,
                                                                          VkFormat                format,
+                                                                         GdkMemoryFormat         memory_format,
                                                                          gsize                   width,
                                                                          gsize                   height);
 

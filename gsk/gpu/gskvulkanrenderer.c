@@ -75,6 +75,7 @@ gsk_vulkan_renderer_update_images_cb (GdkVulkanContext  *context,
       self->targets[i] = gsk_vulkan_image_new_for_swapchain (device,
                                                              gdk_vulkan_context_get_image (context, i),
                                                              gdk_vulkan_context_get_image_format (context),
+                                                             gdk_vulkan_context_get_memory_format (context),
                                                              width, height);
     }
 }
