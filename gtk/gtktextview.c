@@ -2302,6 +2302,10 @@ gtk_text_view_set_buffer (GtkTextView   *text_view,
 
   if (old_buffer != NULL)
     {
+      gtk_accessible_text_update_contents (GTK_ACCESSIBLE_TEXT (text_view),
+                                           GTK_ACCESSIBLE_TEXT_CONTENT_CHANGE_REMOVE,
+                                           0, gtk_text_buffer_get_char_count (old_buffer));
+
       while (priv->anchored_children.length)
         {
           AnchoredChild *ac = g_queue_peek_head (&priv->anchored_children);
@@ -2406,6 +2410,10 @@ gtk_text_view_set_buffer (GtkTextView   *text_view,
 
       gtk_widget_action_set_enabled (GTK_WIDGET (text_view), "text.undo", can_undo);
       gtk_widget_action_set_enabled (GTK_WIDGET (text_view), "text.redo", can_redo);
+
+      gtk_accessible_text_update_contents (GTK_ACCESSIBLE_TEXT (text_view),
+                                           GTK_ACCESSIBLE_TEXT_CONTENT_CHANGE_INSERT,
+                                           0, gtk_text_buffer_get_char_count (buffer));
     }
 
   if (old_buffer)
