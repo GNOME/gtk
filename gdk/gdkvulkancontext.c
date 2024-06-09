@@ -30,6 +30,7 @@
 #include "gdkdmabuftextureprivate.h"
 #include "gdkdisplayprivate.h"
 #include "gdkprofilerprivate.h"
+#include "gdkmemorytexture.h"
 #include <glib/gi18n-lib.h>
 #include <math.h>
 
@@ -1294,6 +1295,15 @@ gdk_vulkan_context_get_image_format (GdkVulkanContext *context)
   return priv->formats[priv->current_format].vk_format.format;
 }
 
+GdkMemoryFormat
+gdk_vulkan_context_get_memory_format (GdkVulkanContext *context)
+{
+  GdkVulkanContextPrivate *priv = gdk_vulkan_context_get_instance_private (context);
+
+  g_return_val_if_fail (GDK_IS_VULKAN_CONTEXT (context), GDK_MEMORY_DEFAULT);
+
+  return priv->formats[priv->current_format].gdk_format;
+}
 /**
  * gdk_vulkan_context_get_n_images:
  * @context: a `GdkVulkanContext`
