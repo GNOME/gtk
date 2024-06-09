@@ -75,7 +75,7 @@ VkFormat                gdk_memory_format_vk_rgba_format    (GdkMemoryFormat    
                                                              VkComponentMapping         *out_swizzle);
 #endif
 guint32                 gdk_memory_format_get_dmabuf_fourcc (GdkMemoryFormat             format);
-
+const char *            gdk_memory_format_get_name          (GdkMemoryFormat             format);
 
 void                    gdk_memory_convert                  (guchar                     *dest_data,
                                                              gsize                       dest_stride,

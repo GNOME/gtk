@@ -140,9 +140,10 @@ void
 gsk_gpu_print_image (GString     *string,
                      GskGpuImage *image)
 {
-  g_string_append_printf (string, "%zux%zu ",
+  g_string_append_printf (string, "%zux%zu %s ",
                           gsk_gpu_image_get_width (image),
-                          gsk_gpu_image_get_height (image));
+                          gsk_gpu_image_get_height (image),
+                          gdk_memory_format_get_name (gsk_gpu_image_get_format (image)));
 }
 
 void

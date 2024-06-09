@@ -30,6 +30,7 @@
 #include "gdkdmabuftextureprivate.h"
 #include "gdkdisplayprivate.h"
 #include "gdkprofilerprivate.h"
+#include "gdkmemorytexture.h"
 #include <glib/gi18n-lib.h>
 #include <math.h>
 
@@ -647,15 +648,18 @@ gdk_vulkan_context_begin_frame (GdkDrawContext *draw_context,
     {
       if (priv->formats[depth].gdk_format != priv->formats[priv->current_format].gdk_format)
         {
+          GdkMemoryFormat old_format = priv->current_format;
           GError *error = NULL;
+
+          priv->current_format = depth;
           if (!gdk_vulkan_context_check_swapchain (context, &error))
             {
               g_warning ("%s", error->message);
               g_error_free (error);
+              priv->current_format = old_format;
               return;
             }
         }
-      priv->current_format = depth;
     }
   for (i = 0; i < priv->n_images; i++)
     {
@@ -1294,6 +1298,15 @@ gdk_vulkan_context_get_image_format (GdkVulkanContext *context)
   return priv->formats[priv->current_format].vk_format.format;
 }
 
+GdkMemoryFormat
+gdk_vulkan_context_get_memory_format (GdkVulkanContext *context)
+{
+  GdkVulkanContextPrivate *priv = gdk_vulkan_context_get_instance_private (context);
+
+  g_return_val_if_fail (GDK_IS_VULKAN_CONTEXT (context), GDK_MEMORY_DEFAULT);
+
+  return priv->formats[priv->current_format].gdk_format;
+}
 /**
  * gdk_vulkan_context_get_n_images:
  * @context: a `GdkVulkanContext`
