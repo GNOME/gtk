@@ -19,4 +19,4 @@ luminance (vec3 color)
   return dot (vec3 (0.2126, 0.7152, 0.0722), color);
 }
 
-#endif /* _COLOR_ */
+#endif
