@@ -265,20 +265,42 @@ request_initial_tree_other_thread (void *data)
   return NULL;
 }
 
-static void
-do_action (const accesskit_action_request *request, void *data)
-{
-  GtkAccessKitRoot *self = data;
+typedef struct _DoActionData {
+  accesskit_action_request *request;
+  GtkAccessKitRoot *root;
+} DoActionData;
 
-  if (request->target == (request->target & 0xffffffff))
+static gboolean
+do_action_main_thread (gpointer data_generic)
+{
+  DoActionData *data = data_generic;
+
+  if (data->request->target == (data->request->target & 0xffffffff))
     {
-      guint id = request->target & 0xffffffff;
+      guint id = data->request->target & 0xffffffff;
       GtkAccessKitContext *accesskit_ctx =
-        g_hash_table_lookup (self->contexts, GUINT_TO_POINTER (id));
+        g_hash_table_lookup (data->root->contexts, GUINT_TO_POINTER (id));
 
       if (accesskit_ctx)
-        gtk_accesskit_context_do_action (accesskit_ctx, request);
+        gtk_accesskit_context_do_action (accesskit_ctx, data->request);
     }
+
+  g_object_unref (data->root);
+  accesskit_action_request_free (data->request);
+  g_free (data);
+
+  return G_SOURCE_REMOVE;
+}
+
+static void
+do_action (accesskit_action_request *request, void *data)
+{
+  GtkAccessKitRoot *root = data;
+  DoActionData *main_thread_data = g_new0 (DoActionData, 1);
+
+  main_thread_data->request = request;
+  main_thread_data->root = g_object_ref (root);
+  g_idle_add (do_action_main_thread, main_thread_data);
 }
 
 static void
