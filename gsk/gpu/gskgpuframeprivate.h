@@ -75,6 +75,7 @@ void                    gsk_gpu_frame_wait                              (GskGpuF
 void                    gsk_gpu_frame_render                            (GskGpuFrame            *self,
                                                                          gint64                  timestamp,
                                                                          GskGpuImage            *target,
+                                                                         GdkColorState          *target_color_state,
                                                                          const cairo_region_t   *region,
                                                                          GskRenderNode          *node,
                                                                          const graphene_rect_t  *viewport,

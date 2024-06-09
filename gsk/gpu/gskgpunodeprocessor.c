@@ -109,6 +109,7 @@ typedef enum {
 struct _GskGpuNodeProcessor
 {
   GskGpuFrame                   *frame;
+  GdkColorState                 *ccs;
   GskGpuDescriptors             *desc;
   cairo_rectangle_int_t          scissor;
   GskGpuBlend                    blend;
@@ -130,6 +131,7 @@ static gboolean         gsk_gpu_node_processor_add_first_node           (GskGpuN
                                                                          GskRenderPassType               pass_type,
                                                                          GskRenderNode                  *node);
 static GskGpuImage *    gsk_gpu_get_node_as_image                       (GskGpuFrame                    *frame,
+                                                                         GdkColorState                  *ccs,
                                                                          const graphene_rect_t          *clip_bounds,
                                                                          const graphene_vec2_t          *scale,
                                                                          GskRenderNode                  *node,
@@ -145,8 +147,9 @@ gsk_gpu_node_processor_finish (GskGpuNodeProcessor *self)
 static void
 gsk_gpu_node_processor_init (GskGpuNodeProcessor         *self,
                              GskGpuFrame                 *frame,
-                             GskGpuDescriptors           *desc,
                              GskGpuImage                 *target,
+                             GdkColorState               *ccs,
+                             GskGpuDescriptors           *desc,
                              const cairo_rectangle_int_t *clip,
                              const graphene_rect_t       *viewport)
 {
@@ -156,6 +159,7 @@ gsk_gpu_node_processor_init (GskGpuNodeProcessor         *self,
   height = gsk_gpu_image_get_height (target);
 
   self->frame = frame;
+  self->ccs = ccs;
   if (desc)
     self->desc = g_object_ref (desc);
   else
@@ -323,6 +327,7 @@ rect_round_to_pixels (const graphene_rect_t  *src,
 static GskGpuImage *
 gsk_gpu_node_processor_init_draw (GskGpuNodeProcessor   *self,
                                   GskGpuFrame           *frame,
+                                  GdkColorState         *ccs,
                                   GdkMemoryDepth         depth,
                                   const graphene_vec2_t *scale,
                                   const graphene_rect_t *viewport)
@@ -344,8 +349,9 @@ gsk_gpu_node_processor_init_draw (GskGpuNodeProcessor   *self,
 
   gsk_gpu_node_processor_init (self,
                                frame,
-                               NULL,
                                image,
+                               ccs,
+                               NULL,
                                &area,
                                viewport);
 
@@ -372,6 +378,7 @@ gsk_gpu_node_processor_finish_draw (GskGpuNodeProcessor *self,
 void
 gsk_gpu_node_processor_process (GskGpuFrame                 *frame,
                                 GskGpuImage                 *target,
+                                GdkColorState               *target_color_state,
                                 const cairo_rectangle_int_t *clip,
                                 GskRenderNode               *node,
                                 const graphene_rect_t       *viewport,
@@ -381,8 +388,9 @@ gsk_gpu_node_processor_process (GskGpuFrame                 *frame,
 
   gsk_gpu_node_processor_init (&self,
                                frame,
-                               NULL,
                                target,
+                               target_color_state,
+                               NULL,
                                clip,
                                viewport);
 
@@ -596,6 +604,7 @@ gsk_gpu_node_processor_image_op (GskGpuNodeProcessor   *self,
 
 static GskGpuImage *
 gsk_gpu_node_processor_create_offscreen (GskGpuFrame           *frame,
+                                         GdkColorState         *ccs,
                                          const graphene_vec2_t *scale,
                                          const graphene_rect_t *viewport,
                                          GskRenderNode         *node)
@@ -617,6 +626,7 @@ gsk_gpu_node_processor_create_offscreen (GskGpuFrame           *frame,
 
   gsk_gpu_node_processor_process (frame,
                                   image,
+                                  ccs,
                                   &area,
                                   node,
                                   viewport,
@@ -627,6 +637,7 @@ gsk_gpu_node_processor_create_offscreen (GskGpuFrame           *frame,
 
 static GskGpuImage *
 gsk_gpu_get_node_as_image_via_offscreen (GskGpuFrame            *frame,
+                                         GdkColorState          *ccs,
                                          const graphene_rect_t  *clip_bounds,
                                          const graphene_vec2_t  *scale,
                                          GskRenderNode          *node,
@@ -636,6 +647,7 @@ gsk_gpu_get_node_as_image_via_offscreen (GskGpuFrame            *frame,
 
   GSK_DEBUG (FALLBACK, "Offscreening node '%s'", g_type_name_from_instance ((GTypeInstance *) node));
   result = gsk_gpu_node_processor_create_offscreen (frame,
+                                                    ccs,
                                                     scale,
                                                     clip_bounds,
                                                     node);
@@ -647,6 +659,7 @@ gsk_gpu_get_node_as_image_via_offscreen (GskGpuFrame            *frame,
 /*
  * gsk_gpu_node_copy_image:
  * @frame: The frame the image will be copied in
+ * @ccs: color state the copy will be in
  * @image: (transfer full): The image to copy
  * @prepare_mipmap: If the copied image should reserve space for
  *   mipmaps
@@ -657,9 +670,10 @@ gsk_gpu_get_node_as_image_via_offscreen (GskGpuFrame            *frame,
  * Returns: (transfer full): The copy of the image.
  **/
 static GskGpuImage *
-gsk_gpu_copy_image (GskGpuFrame *frame,
-                    GskGpuImage *image,
-                    gboolean     prepare_mipmap)
+gsk_gpu_copy_image (GskGpuFrame   *frame,
+                    GdkColorState *ccs,
+                    GskGpuImage   *image,
+                    gboolean       prepare_mipmap)
 {
   GskGpuImage *copy;
   gsize width, height;
@@ -692,8 +706,9 @@ gsk_gpu_copy_image (GskGpuFrame *frame,
 
       gsk_gpu_node_processor_init (&other,
                                    frame,
-                                   NULL,
                                    copy,
+                                   ccs,
+                                   NULL,
                                    &(cairo_rectangle_int_t) { 0, 0, width, height },
                                    &rect);
 
@@ -760,6 +775,7 @@ gsk_gpu_node_processor_get_node_as_image (GskGpuNodeProcessor   *self,
   rect_round_to_pixels (&clip, &self->scale, &self->offset, &clip);
 
   return gsk_gpu_get_node_as_image (self->frame,
+                                    self->ccs,
                                     &clip,
                                     &self->scale,
                                     node,
@@ -799,6 +815,7 @@ gsk_gpu_node_processor_blur_op (GskGpuNodeProcessor       *self,
 
   intermediate = gsk_gpu_node_processor_init_draw (&other,
                                                    self->frame,
+                                                   self->ccs,
                                                    source_depth,
                                                    &self->scale,
                                                    &intermediate_rect);
@@ -1061,6 +1078,7 @@ gsk_gpu_node_processor_add_rounded_clip_node_with_mask (GskGpuNodeProcessor *sel
 
   mask_image = gsk_gpu_node_processor_init_draw (&other,
                                                  self->frame,
+                                                 self->ccs,
                                                  gsk_render_node_get_preferred_depth (node),
                                                  &self->scale,
                                                  &clip_bounds);
@@ -1697,7 +1715,7 @@ gsk_gpu_node_processor_add_texture_node (GskGpuNodeProcessor *self,
       guint32 descriptor;
 
       if ((gsk_gpu_image_get_flags (image) & (GSK_GPU_IMAGE_STRAIGHT_ALPHA | GSK_GPU_IMAGE_CAN_MIPMAP)) != GSK_GPU_IMAGE_CAN_MIPMAP)
-          image = gsk_gpu_copy_image (self->frame, image, TRUE);
+          image = gsk_gpu_copy_image (self->frame, self->ccs, image, TRUE);
 
       if (!(gsk_gpu_image_get_flags (image) & GSK_GPU_IMAGE_MIPMAP))
         gsk_gpu_mipmap_op (self->frame, image);
@@ -1738,6 +1756,7 @@ gsk_gpu_node_processor_add_texture_node (GskGpuNodeProcessor *self,
 
 static GskGpuImage *
 gsk_gpu_get_texture_node_as_image (GskGpuFrame            *frame,
+                                   GdkColorState          *ccs,
                                    const graphene_rect_t  *clip_bounds,
                                    const graphene_vec2_t  *scale,
                                    GskRenderNode          *node,
@@ -1749,7 +1768,7 @@ gsk_gpu_get_texture_node_as_image (GskGpuFrame            *frame,
   GskGpuImage *image;
 
   if (texture_node_should_mipmap (node, frame, scale))
-    return gsk_gpu_get_node_as_image_via_offscreen (frame, clip_bounds, scale, node, out_bounds);
+    return gsk_gpu_get_node_as_image_via_offscreen (frame, ccs, clip_bounds, scale, node, out_bounds);
 
   image = gsk_gpu_cache_lookup_texture_image (gsk_gpu_device_get_cache (device), texture, timestamp);
   if (image == NULL)
@@ -1763,7 +1782,7 @@ gsk_gpu_get_texture_node_as_image (GskGpuFrame            *frame,
 
   if (gsk_gpu_image_get_flags (image) & GSK_GPU_IMAGE_STRAIGHT_ALPHA)
     {
-      image = gsk_gpu_copy_image (frame, image, FALSE);
+      image = gsk_gpu_copy_image (frame, ccs, image, FALSE);
       /* We fixed up a cached texture, cache the fixed up version instead */
       gsk_gpu_cache_cache_texture_image (gsk_gpu_device_get_cache (gsk_gpu_frame_get_device (frame)),
                                          texture,
@@ -1772,7 +1791,7 @@ gsk_gpu_get_texture_node_as_image (GskGpuFrame            *frame,
     }
 
   /* Happens for oversized textures */
-  return gsk_gpu_get_node_as_image_via_offscreen (frame, clip_bounds, scale, node, out_bounds);
+  return gsk_gpu_get_node_as_image_via_offscreen (frame, ccs, clip_bounds, scale, node, out_bounds);
 }
 
 static void
@@ -1808,6 +1827,7 @@ gsk_gpu_node_processor_add_texture_scale_node (GskGpuNodeProcessor *self,
       clip_bounds.size.width = ceilf (clip_bounds.size.width);
       clip_bounds.size.height = ceilf (clip_bounds.size.height);
       offscreen = gsk_gpu_node_processor_create_offscreen (self->frame,
+                                                           self->ccs,
                                                            graphene_vec2_one (),
                                                            &clip_bounds,
                                                            node);
@@ -1846,7 +1866,7 @@ gsk_gpu_node_processor_add_texture_scale_node (GskGpuNodeProcessor *self,
 
   if ((gsk_gpu_image_get_flags (image) & GSK_GPU_IMAGE_STRAIGHT_ALPHA) ||
       (need_mipmap && !(gsk_gpu_image_get_flags (image) & GSK_GPU_IMAGE_CAN_MIPMAP)))
-    image = gsk_gpu_copy_image (self->frame, image, need_mipmap);
+    image = gsk_gpu_copy_image (self->frame, self->ccs, image, need_mipmap);
 
   if (need_mipmap && !(gsk_gpu_image_get_flags (image) & GSK_GPU_IMAGE_MIPMAP))
     gsk_gpu_mipmap_op (self->frame, image);
@@ -1883,12 +1903,16 @@ gsk_gpu_node_processor_add_texture_scale_node (GskGpuNodeProcessor *self,
 
 static GskGpuImage *
 gsk_gpu_get_cairo_node_as_image (GskGpuFrame            *frame,
+                                 GdkColorState          *ccs,
                                  const graphene_rect_t  *clip_bounds,
                                  const graphene_vec2_t  *scale,
                                  GskRenderNode          *node,
                                  graphene_rect_t        *out_bounds)
 {
   GskGpuImage *result;
+
+  if (!gdk_color_state_equal (ccs, GDK_COLOR_STATE_SRGB))
+    return gsk_gpu_get_node_as_image_via_offscreen (frame, ccs, clip_bounds, scale, node, out_bounds);
 
   result = gsk_gpu_upload_cairo_op (frame,
                                     scale,
@@ -2029,6 +2053,7 @@ gsk_gpu_node_processor_add_gradient_node (GskGpuNodeProcessor *self,
 
   image = gsk_gpu_node_processor_init_draw (&other,
                                             self->frame,
+                                            self->ccs,
                                             gsk_render_node_get_preferred_depth (node),
                                             &self->scale,
                                             &bounds);
@@ -2714,6 +2739,7 @@ gsk_gpu_node_processor_repeat_tile (GskGpuNodeProcessor    *self,
 
   GSK_DEBUG (FALLBACK, "Offscreening node '%s' for tiling", g_type_name_from_instance ((GTypeInstance *) child));
   image = gsk_gpu_node_processor_create_offscreen (self->frame,
+                                                   self->ccs,
                                                    &self->scale,
                                                    &clipped_child_bounds,
                                                    child);
@@ -3115,6 +3141,7 @@ gsk_gpu_node_processor_add_subsurface_node (GskGpuNodeProcessor *self,
 
 static GskGpuImage *
 gsk_gpu_get_subsurface_node_as_image (GskGpuFrame            *frame,
+                                      GdkColorState          *ccs,
                                       const graphene_rect_t  *clip_bounds,
                                       const graphene_vec2_t  *scale,
                                       GskRenderNode          *node,
@@ -3130,6 +3157,7 @@ gsk_gpu_get_subsurface_node_as_image (GskGpuFrame            *frame,
 #endif
 
   return gsk_gpu_get_node_as_image (frame,
+                                    ccs,
                                     clip_bounds,
                                     scale,
                                     gsk_subsurface_node_get_child (node),
@@ -3208,12 +3236,14 @@ gsk_gpu_node_processor_add_debug_node (GskGpuNodeProcessor *self,
 
 static GskGpuImage *
 gsk_gpu_get_debug_node_as_image (GskGpuFrame            *frame,
+                                 GdkColorState          *ccs,
                                  const graphene_rect_t  *clip_bounds,
                                  const graphene_vec2_t  *scale,
                                  GskRenderNode          *node,
                                  graphene_rect_t        *out_bounds)
 {
   return gsk_gpu_get_node_as_image (frame,
+                                    ccs,
                                     clip_bounds,
                                     scale,
                                     gsk_debug_node_get_child (node),
@@ -3236,6 +3266,7 @@ static const struct
                                                                  GskRenderPassType       pass_type,
                                                                  GskRenderNode          *node);
   GskGpuImage *         (* get_node_as_image)                   (GskGpuFrame            *self,
+                                                                 GdkColorState          *ccs,
                                                                  const graphene_rect_t  *clip_bounds,
                                                                  const graphene_vec2_t  *scale,
                                                                  GskRenderNode          *node,
@@ -3566,6 +3597,7 @@ gsk_gpu_node_processor_add_first_node (GskGpuNodeProcessor         *self,
 /*
  * gsk_gpu_get_node_as_image:
  * @frame: frame to render in
+ * @ccs: the color state to composite the image in
  * @clip_bounds: region of node that must be included in image
  * @scale: scale factor to use for the image
  * @node: the node to render
@@ -3573,7 +3605,7 @@ gsk_gpu_node_processor_add_first_node (GskGpuNodeProcessor         *self,
  *
  * Get the part of the node indicated by the clip bounds as an image.
  *
- * The resulting image will be premultiplied.
+ * The resulting image will be in the given colorstate and premultiplied.
  *
  * It is perfectly valid for this function to return an image covering
  * a larger or smaller rectangle than the given clip bounds.
@@ -3589,6 +3621,7 @@ gsk_gpu_node_processor_add_first_node (GskGpuNodeProcessor         *self,
  **/
 static GskGpuImage *
 gsk_gpu_get_node_as_image (GskGpuFrame            *frame,
+                           GdkColorState          *ccs,
                            const graphene_rect_t  *clip_bounds,
                            const graphene_vec2_t  *scale,
                            GskRenderNode          *node,
@@ -3606,13 +3639,13 @@ gsk_gpu_get_node_as_image (GskGpuFrame            *frame,
   if (gsk_gpu_frame_should_optimize (frame, GSK_GPU_OPTIMIZE_TO_IMAGE) &&
       nodes_vtable[node_type].get_node_as_image)
     {
-      return nodes_vtable[node_type].get_node_as_image (frame, clip_bounds, scale, node, out_bounds);
+      return nodes_vtable[node_type].get_node_as_image (frame, ccs, clip_bounds, scale, node, out_bounds);
     }
   else
     {
       GSK_DEBUG (FALLBACK, "Unsupported node '%s'",
                  g_type_name_from_instance ((GTypeInstance *) node));
-      return gsk_gpu_get_node_as_image_via_offscreen (frame, clip_bounds, scale, node, out_bounds);
+      return gsk_gpu_get_node_as_image_via_offscreen (frame, ccs, clip_bounds, scale, node, out_bounds);
     }
 }
 
