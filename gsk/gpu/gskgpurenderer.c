@@ -18,6 +18,7 @@
 #include "gdk/gdktextureprivate.h"
 #include "gdk/gdktexturedownloaderprivate.h"
 #include "gdk/gdkdrawcontextprivate.h"
+#include "gdk/gdkcolorstateprivate.h"
 
 #include <graphene.h>
 
@@ -298,6 +299,7 @@ gsk_gpu_renderer_fallback_render_texture (GskGpuRenderer        *self,
           gsk_gpu_frame_render (frame,
                                 g_get_monotonic_time (),
                                 image,
+                                GDK_COLOR_STATE_SRGB,
                                 NULL,
                                 root,
                                 &GRAPHENE_RECT_INIT (rounded_viewport->origin.x + x,
@@ -360,6 +362,7 @@ gsk_gpu_renderer_render_texture (GskRenderer           *renderer,
   gsk_gpu_frame_render (frame,
                         g_get_monotonic_time (),
                         image,
+                        GDK_COLOR_STATE_SRGB,
                         NULL,
                         root,
                         &rounded_viewport,
@@ -387,6 +390,7 @@ gsk_gpu_renderer_render (GskRenderer          *renderer,
   GskGpuImage *backbuffer;
   cairo_region_t *render_region;
   double scale;
+  GdkMemoryDepth depth;
 
   if (cairo_region_is_empty (region))
     {
@@ -394,9 +398,9 @@ gsk_gpu_renderer_render (GskRenderer          *renderer,
       return;
     }
 
-  gdk_draw_context_begin_frame_full (priv->context,
-                                     gsk_render_node_get_preferred_depth (root),
-                                     region);
+  depth = gsk_render_node_get_preferred_depth (root);
+
+  gdk_draw_context_begin_frame_full (priv->context, depth, region);
 
   gsk_gpu_device_maybe_gc (priv->device);
 
@@ -411,6 +415,7 @@ gsk_gpu_renderer_render (GskRenderer          *renderer,
   gsk_gpu_frame_render (frame,
                         g_get_monotonic_time (),
                         backbuffer,
+                        GDK_COLOR_STATE_SRGB,
                         render_region,
                         root,
                         &GRAPHENE_RECT_INIT (
