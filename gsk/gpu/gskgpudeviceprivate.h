@@ -73,11 +73,13 @@ GskGpuImage *           gsk_gpu_device_create_download_image            (GskGpuD
 void                    gsk_gpu_device_make_current                     (GskGpuDevice           *self);
 GskGpuImage *           gsk_gpu_device_lookup_texture_image             (GskGpuDevice           *self,
                                                                          GdkTexture             *texture,
-                                                                         gint64                  timestamp);
+                                                                         gint64                  timestamp,
+                                                                         GdkColorState         **out_color_state);
 void                    gsk_gpu_device_cache_texture_image              (GskGpuDevice           *self,
                                                                          GdkTexture             *texture,
                                                                          gint64                  timestamp,
-                                                                         GskGpuImage            *image);
+                                                                         GskGpuImage            *image,
+                                                                         GdkColorState          *color_state);
 
 typedef enum
 {

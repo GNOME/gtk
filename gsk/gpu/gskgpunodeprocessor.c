@@ -856,6 +856,7 @@ gsk_gpu_node_processor_create_offscreen (GskGpuFrame           *frame,
  * @frame: frame to render in
  * @clip_bounds: region of node that must be included in image
  * @scale: scale factor to use for the image
+ * @color_state: the color state to composite in
  * @node: the node to render
  * @out_bounds: the actual bounds of the result
  *
@@ -882,6 +883,7 @@ gsk_gpu_get_node_as_image (GskGpuFrame            *frame,
                            graphene_rect_t        *out_bounds)
 {
   GskGpuImage *result;
+  GdkColorState *orig_color_state = NULL;
 
   switch ((guint) gsk_render_node_get_node_type (node))
     {
@@ -890,18 +892,16 @@ gsk_gpu_get_node_as_image (GskGpuFrame            *frame,
         GdkTexture *texture = gsk_texture_node_get_texture (node);
         GskGpuDevice *device = gsk_gpu_frame_get_device (frame);
         gint64 timestamp = gsk_gpu_frame_get_timestamp (frame);
-        result = gsk_gpu_device_lookup_texture_image (device, texture, timestamp);
+        result = gsk_gpu_device_lookup_texture_image (device, texture, timestamp, &orig_color_state);
         if (result == NULL)
           {
             result = gsk_gpu_frame_upload_texture (frame, FALSE, texture);
-            result = gsk_gpu_color_convert (frame,
-                                            result,
-                                            gdk_texture_get_color_state (texture),
-                                            color_state);
+            orig_color_state = gdk_texture_get_color_state (texture);
           }
 
         if (result)
           {
+            result = gsk_gpu_color_convert (frame, result, orig_color_state, color_state);
             *out_bounds = node->bounds;
             return result;
           }
@@ -915,10 +915,8 @@ gsk_gpu_get_node_as_image (GskGpuFrame            *frame,
                                         (GskGpuCairoFunc) gsk_render_node_draw_fallback,
                                         gsk_render_node_ref (node),
                                         (GDestroyNotify) gsk_render_node_unref);
-      result = gsk_gpu_color_convert (frame,
-                                      result,
-                                      gdk_color_state_get_srgb (),
-                                      color_state);
+
+      result = gsk_gpu_color_convert (frame, result, GDK_COLOR_STATE_SRGB, color_state);
 
       g_object_ref (result);
 
@@ -1089,7 +1087,8 @@ gsk_gpu_node_processor_get_node_as_image (GskGpuNodeProcessor   *self,
       gsk_gpu_device_cache_texture_image (gsk_gpu_frame_get_device (self->frame),
                                           gsk_texture_node_get_texture (node),
                                           gsk_gpu_frame_get_timestamp (self->frame),
-                                          ensure);
+                                          ensure,
+                                          self->color_state);
     }
 
   return ensure;
@@ -2035,12 +2034,13 @@ gsk_gpu_node_processor_add_texture_node (GskGpuNodeProcessor *self,
   GskGpuImage *image;
   GdkTexture *texture;
   gint64 timestamp;
+  GdkColorState *color_state = NULL;
 
   device = gsk_gpu_frame_get_device (self->frame);
   texture = gsk_texture_node_get_texture (node);
   timestamp = gsk_gpu_frame_get_timestamp (self->frame);
 
-  image = gsk_gpu_device_lookup_texture_image (device, texture, timestamp);
+  image = gsk_gpu_device_lookup_texture_image (device, texture, timestamp, &color_state);
   if (image == NULL)
     {
       image = gsk_gpu_frame_upload_texture (self->frame, FALSE, texture);
@@ -2053,11 +2053,9 @@ gsk_gpu_node_processor_add_texture_node (GskGpuNodeProcessor *self,
           gsk_gpu_node_processor_add_fallback_node (self, node);
           return;
         }
-      image = gsk_gpu_color_convert (self->frame,
-                                     image,
-                                     gdk_texture_get_color_state (texture),
-                                     self->color_state);
+      color_state = gdk_texture_get_color_state (texture);
     }
+  image = gsk_gpu_color_convert (self->frame, image, color_state, self->color_state);
 
   if (gsk_gpu_frame_should_optimize (self->frame, GSK_GPU_OPTIMIZE_MIPMAP) &&
       (gdk_texture_get_width (texture) > 2 * node->bounds.size.width * graphene_vec2_get_x (&self->scale) ||
@@ -2114,22 +2112,21 @@ gsk_gpu_node_processor_create_texture_pattern (GskGpuPatternWriter *self,
   guint32 descriptor;
   GskGpuImage *image;
   GskGpuSampler sampler;
+  GdkColorState *color_state = NULL;
 
   device = gsk_gpu_frame_get_device (self->frame);
   texture = gsk_texture_node_get_texture (node);
   timestamp = gsk_gpu_frame_get_timestamp (self->frame);
 
-  image = gsk_gpu_device_lookup_texture_image (device, texture, timestamp);
+  image = gsk_gpu_device_lookup_texture_image (device, texture, timestamp, &color_state);
   if (image == NULL)
     {
       image = gsk_gpu_frame_upload_texture (self->frame, FALSE, texture);
-      image = gsk_gpu_color_convert (self->frame,
-                                     image,
-                                     gdk_texture_get_color_state (texture),
-                                     self->color_state);
       if (image == NULL)
         return FALSE;
+      color_state = gdk_texture_get_color_state (texture);
     }
+  image = gsk_gpu_color_convert (self->frame, image, color_state, self->color_state);
 
   if (gsk_gpu_frame_should_optimize (self->frame, GSK_GPU_OPTIMIZE_MIPMAP) &&
       (gdk_texture_get_width (texture) > 2 * node->bounds.size.width * graphene_vec2_get_x (&self->scale) ||
@@ -2176,6 +2173,7 @@ gsk_gpu_node_processor_add_texture_scale_node (GskGpuNodeProcessor *self,
   gint64 timestamp;
   guint32 descriptor;
   gboolean need_mipmap, need_offscreen;
+  GdkColorState *color_state = NULL;
 
   need_offscreen = self->modelview != NULL ||
             !graphene_vec2_equal (&self->scale, graphene_vec2_one ());
@@ -2220,7 +2218,7 @@ gsk_gpu_node_processor_add_texture_scale_node (GskGpuNodeProcessor *self,
   timestamp = gsk_gpu_frame_get_timestamp (self->frame);
   need_mipmap = scaling_filter == GSK_SCALING_FILTER_TRILINEAR;
 
-  image = gsk_gpu_device_lookup_texture_image (device, texture, timestamp);
+  image = gsk_gpu_device_lookup_texture_image (device, texture, timestamp, &color_state);
   if (image == NULL)
     {
       image = gsk_gpu_frame_upload_texture (self->frame, need_mipmap, texture);
@@ -2233,11 +2231,10 @@ gsk_gpu_node_processor_add_texture_scale_node (GskGpuNodeProcessor *self,
           gsk_gpu_node_processor_add_fallback_node (self, node);
           return;
         }
-      image = gsk_gpu_color_convert (self->frame,
-                                     image,
-                                     gdk_texture_get_color_state (texture),
-                                     self->color_state);
+      color_state = gdk_texture_get_color_state (texture);
     }
+
+  image = gsk_gpu_color_convert (self->frame, image, color_state, self->color_state);
 
   image = gsk_gpu_node_processor_ensure_image (self->frame,
                                                image,
