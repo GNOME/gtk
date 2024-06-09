@@ -18,6 +18,7 @@
 #include "gdk/gdktextureprivate.h"
 #include "gdk/gdktexturedownloaderprivate.h"
 #include "gdk/gdkdrawcontextprivate.h"
+#include "gdk/gdkcolorstateprivate.h"
 
 #include <graphene.h>
 
@@ -261,6 +262,7 @@ gsk_gpu_renderer_fallback_render_texture (GskGpuRenderer        *self,
   GdkTexture *texture;
   GdkTextureDownloader downloader;
   GskGpuFrame *frame;
+  GdkColorState *color_state;
 
   max_size = gsk_gpu_device_get_max_image_size (priv->device);
   depth = gsk_render_node_get_preferred_depth (root);
@@ -283,6 +285,7 @@ gsk_gpu_renderer_fallback_render_texture (GskGpuRenderer        *self,
   stride = width * bpp;
   size = stride * height;
   data = g_malloc_n (stride, height);
+  color_state = gdk_color_state_get_srgb ();
 
   for (y = 0; y < height; y += image_height)
     {
@@ -299,6 +302,7 @@ gsk_gpu_renderer_fallback_render_texture (GskGpuRenderer        *self,
           gsk_gpu_frame_render (frame,
                                 g_get_monotonic_time (),
                                 image,
+                                color_state,
                                 NULL,
                                 root,
                                 &GRAPHENE_RECT_INIT (rounded_viewport->origin.x + x,
@@ -338,6 +342,7 @@ gsk_gpu_renderer_render_texture (GskRenderer           *renderer,
   GskGpuImage *image;
   GdkTexture *texture;
   graphene_rect_t rounded_viewport;
+  GdkColorState *color_state;
 
   gsk_gpu_device_maybe_gc (priv->device);
 
@@ -351,6 +356,7 @@ gsk_gpu_renderer_render_texture (GskRenderer           *renderer,
                                                 gsk_render_node_get_preferred_depth (root),
                                                 rounded_viewport.size.width,
                                                 rounded_viewport.size.height);
+  color_state = gdk_color_state_get_srgb ();
 
   if (image == NULL)
     return gsk_gpu_renderer_fallback_render_texture (self, root, &rounded_viewport);
@@ -361,6 +367,7 @@ gsk_gpu_renderer_render_texture (GskRenderer           *renderer,
   gsk_gpu_frame_render (frame,
                         g_get_monotonic_time (),
                         image,
+                        color_state,
                         NULL,
                         root,
                         &rounded_viewport,
@@ -388,6 +395,10 @@ gsk_gpu_renderer_render (GskRenderer          *renderer,
   GskGpuImage *backbuffer;
   cairo_region_t *render_region;
   double scale;
+  GdkSurface *surface;
+  GdkColorState *color_state;
+  GskRenderNode *node;
+  GdkMemoryDepth depth;
 
   if (cairo_region_is_empty (region))
     {
@@ -395,9 +406,13 @@ gsk_gpu_renderer_render (GskRenderer          *renderer,
       return;
     }
 
-  gdk_draw_context_begin_frame_full (priv->context,
-                                     gsk_render_node_get_preferred_depth (root),
-                                     region);
+  surface = gdk_draw_context_get_surface (priv->context);
+  depth = gsk_render_node_get_preferred_depth (root);
+
+  color_state = gdk_surface_get_color_state (surface);
+  depth = gdk_memory_depth_merge (depth, gdk_color_state_get_min_depth (color_state));
+
+  gdk_draw_context_begin_frame_full (priv->context, depth, region);
 
   gsk_gpu_device_maybe_gc (priv->device);
 
@@ -409,17 +424,25 @@ gsk_gpu_renderer_render (GskRenderer          *renderer,
   render_region = get_render_region (self);
   scale = gsk_gpu_renderer_get_scale (self);
 
+  if (!gdk_color_state_is_linear (color_state))
+    node = gsk_color_state_node_new (root, gdk_color_state_get_srgb_linear ());
+  else
+    node = gsk_render_node_ref (root);
+
   gsk_gpu_frame_render (frame,
                         g_get_monotonic_time (),
                         backbuffer,
+                        color_state,
                         render_region,
-                        root,
+                        node,
                         &GRAPHENE_RECT_INIT (
                           0, 0,
                           gsk_gpu_image_get_width (backbuffer) / scale,
                           gsk_gpu_image_get_height (backbuffer) / scale
                         ),
                         NULL);
+
+  gsk_render_node_unref (node);
 
   gsk_gpu_device_queue_gc (priv->device);
 
