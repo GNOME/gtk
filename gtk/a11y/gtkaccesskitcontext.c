@@ -2029,6 +2029,7 @@ gtk_accesskit_context_do_action (GtkAccessKitContext            *self,
           return;
 
         gtk_text_buffer_select_range (buffer, &focus, &anchor);
+        gtk_text_view_scroll_to_iter (text_view, &focus, 0, FALSE, 0, 0);
       }
     else if (GTK_IS_EDITABLE (accessible))
       {
