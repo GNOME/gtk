@@ -77,6 +77,7 @@ struct _GtkAccessKitContext
 
   GtkAccessKitTextLayout single_text_layout;
   GHashTable *text_view_lines;
+  GHashTable *text_view_lines_by_id;
 };
 
 G_DEFINE_TYPE (GtkAccessKitContext, gtk_accesskit_context, GTK_TYPE_AT_CONTEXT)
@@ -89,6 +90,7 @@ gtk_accesskit_context_finalize (GObject *gobject)
   g_clear_object (&self->root);
   g_clear_pointer (&self->single_text_layout.children, g_array_unref);
   g_clear_pointer (&self->text_view_lines, g_hash_table_destroy);
+  g_clear_pointer (&self->text_view_lines_by_id, g_hash_table_destroy);
 
   G_OBJECT_CLASS (gtk_accesskit_context_parent_class)->finalize (gobject);
 }
@@ -131,6 +133,7 @@ gtk_accesskit_context_unrealize (GtkATContext *context)
   self->single_text_layout.id = 0;
   g_clear_pointer (&self->single_text_layout.children, g_array_unref);
   g_clear_pointer (&self->text_view_lines, g_hash_table_destroy);
+  g_clear_pointer (&self->text_view_lines_by_id, g_hash_table_destroy);
 }
 
 static void
@@ -295,7 +298,11 @@ gtk_accesskit_context_update_text_contents (GtkATContext *ctx,
                   gtk_text_iter_get_line_offset (&current) == 0 &&
                   (gtk_text_iter_get_offset (&current) +
                    gtk_text_iter_get_chars_in_line (&current)) <= end_offset)
-                g_hash_table_remove (self->text_view_lines, line);
+                {
+                  g_hash_table_remove (self->text_view_lines_by_id,
+                                       GUINT_TO_POINTER (layout->id));
+                  g_hash_table_remove (self->text_view_lines, line);
+                }
               else
                 g_clear_pointer (&layout->children, g_array_unref);
             }
@@ -1763,8 +1770,11 @@ gtk_accesskit_context_add_to_update (GtkAccessKitContext   *self,
       GtkTextIter current;
 
       if (!self->text_view_lines)
-        self->text_view_lines =
-          g_hash_table_new_full (NULL, NULL, NULL, destroy_text_view_lines_value);
+        {
+          self->text_view_lines =
+            g_hash_table_new_full (NULL, NULL, NULL, destroy_text_view_lines_value);
+          self->text_view_lines_by_id = g_hash_table_new (NULL, NULL);
+        }
 
       gtk_text_buffer_get_start_iter (buffer, &current);
 
@@ -1786,6 +1796,8 @@ gtk_accesskit_context_add_to_update (GtkAccessKitContext   *self,
               line_layout = g_new0 (GtkAccessKitTextLayout, 1);
               line_layout->id = gtk_accesskit_root_new_id (self->root);
               g_hash_table_insert (self->text_view_lines, line, line_layout);
+              g_hash_table_insert (self->text_view_lines_by_id,
+                                   GUINT_TO_POINTER (line_layout->id), line);
             }
 
           if (!gtk_text_iter_ends_line (&line_end))
@@ -1927,6 +1939,43 @@ text_position_to_usv_offset (GtkAccessKitTextLayout        *layout,
   return offset;
 }
 
+static gboolean
+text_position_to_text_view_iter (GtkAccessKitContext           *self,
+                                 GtkTextView                   *text_view,
+                                 const accesskit_text_position *pos,
+                                 GtkTextIter                   *iter)
+{
+  GtkTextBuffer *buffer = gtk_text_view_get_buffer (text_view);
+  GtkTextBTree *btree = _gtk_text_buffer_get_btree (buffer);
+  GtkTextLayout *layout = gtk_text_view_get_layout (text_view);
+  guint line_id;
+  GtkTextLine *line;
+  GtkAccessKitTextLayout *line_layout;
+  GtkTextLineDisplay *display;
+  gint usv_offset;
+
+  if (pos->node == (pos->node & 0xffffffff))
+    return FALSE;
+  line_id = pos->node >> 32;
+
+  line = g_hash_table_lookup (self->text_view_lines_by_id,
+                              GUINT_TO_POINTER (line_id));
+  if (!line)
+    return FALSE;
+  line_layout = g_hash_table_lookup (self->text_view_lines, line);
+  g_assert (line_layout);
+  if (!line_layout->children)
+    return FALSE;
+  display = gtk_text_layout_get_line_display (layout, line, FALSE);
+
+  usv_offset = text_position_to_usv_offset (line_layout, display->layout, pos);
+  if (usv_offset == -1)
+    return FALSE;
+
+  _gtk_text_btree_get_iter_at_line_ptr_char (btree, iter, line, usv_offset);
+  return TRUE;
+}
+
 void
 gtk_accesskit_context_do_action (GtkAccessKitContext            *self,
                                  const accesskit_action_request *request)
@@ -1968,7 +2017,18 @@ gtk_accesskit_context_do_action (GtkAccessKitContext            *self,
 
     if (GTK_IS_TEXT_VIEW (accessible))
       {
-        /* TODO */
+        GtkTextView *text_view = GTK_TEXT_VIEW (accessible);
+        GtkTextBuffer *buffer = gtk_text_view_get_buffer (text_view);
+        GtkTextIter anchor, focus;
+
+        if (!text_position_to_text_view_iter (self, text_view,
+                                              &selection->anchor, &anchor))
+          return;
+        if (!text_position_to_text_view_iter (self, text_view,
+                                              &selection->focus, &focus))
+          return;
+
+        gtk_text_buffer_select_range (buffer, &focus, &anchor);
       }
     else if (GTK_IS_EDITABLE (accessible))
       {
