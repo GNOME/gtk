@@ -174,45 +174,6 @@ invalidate_text_view_line_layout (gpointer key,
   g_clear_pointer (&layout->children, g_array_unref);
 }
 
-static void
-gtk_accesskit_context_bounds_change (GtkATContext *ctx)
-{
-  GtkAccessKitContext *self = GTK_ACCESSKIT_CONTEXT (ctx);
-
-  g_clear_pointer (&self->single_text_layout.children, g_array_unref);
-  if (self->text_view_lines)
-    g_hash_table_foreach (self->text_view_lines,
-                          invalidate_text_view_line_layout, NULL);
-
-  queue_update (self, FALSE);
-}
-
-static void
-gtk_accesskit_context_child_change (GtkATContext             *ctx,
-                                    GtkAccessibleChildChange  change,
-                                    GtkAccessible            *child)
-{
-  GtkAccessKitContext *self = GTK_ACCESSKIT_CONTEXT (ctx);
-
-  queue_update (self, FALSE);
-}
-
-static void
-gtk_accesskit_context_announce (GtkATContext                      *context,
-                                const char                        *message,
-                                GtkAccessibleAnnouncementPriority  priority)
-{
-  /* TODO */
-}
-
-static void
-gtk_accesskit_context_update_caret_position (GtkATContext *ctx)
-{
-  GtkAccessKitContext *self = GTK_ACCESSKIT_CONTEXT (ctx);
-
-  queue_update (self, FALSE);
-}
-
 static GtkAccessible *
 editable_ancestor (GtkAccessible *accessible)
 {
@@ -251,6 +212,46 @@ queue_update_on_editable_ancestor (GtkAccessKitContext *self)
   queue_update (GTK_ACCESSKIT_CONTEXT (ancestor_ctx), TRUE /* force_to_end */);
   g_object_unref (ancestor_ctx);
   g_object_unref (ancestor);
+}
+
+static void
+gtk_accesskit_context_bounds_change (GtkATContext *ctx)
+{
+  GtkAccessKitContext *self = GTK_ACCESSKIT_CONTEXT (ctx);
+
+  g_clear_pointer (&self->single_text_layout.children, g_array_unref);
+  if (self->text_view_lines)
+    g_hash_table_foreach (self->text_view_lines,
+                          invalidate_text_view_line_layout, NULL);
+
+  queue_update (self, FALSE);
+  queue_update_on_editable_ancestor (self);
+}
+
+static void
+gtk_accesskit_context_child_change (GtkATContext             *ctx,
+                                    GtkAccessibleChildChange  change,
+                                    GtkAccessible            *child)
+{
+  GtkAccessKitContext *self = GTK_ACCESSKIT_CONTEXT (ctx);
+
+  queue_update (self, FALSE);
+}
+
+static void
+gtk_accesskit_context_announce (GtkATContext                      *context,
+                                const char                        *message,
+                                GtkAccessibleAnnouncementPriority  priority)
+{
+  /* TODO */
+}
+
+static void
+gtk_accesskit_context_update_caret_position (GtkATContext *ctx)
+{
+  GtkAccessKitContext *self = GTK_ACCESSKIT_CONTEXT (ctx);
+
+  queue_update (self, FALSE);
 }
 
 static void
