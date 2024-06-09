@@ -31,6 +31,7 @@
 #include "gtkentryprivate.h"
 #include "gtkinscriptionprivate.h"
 #include "gtklabelprivate.h"
+#include "gtkmodelbuttonprivate.h"
 #include "gtkpasswordentry.h"
 #include "gtkroot.h"
 #include "gtkscrolledwindow.h"
@@ -1471,7 +1472,17 @@ gtk_accesskit_context_add_to_update (GtkAccessKitContext   *self,
                                          GTK_ACCESSIBLE_PLATFORM_STATE_FOCUSABLE))
     accesskit_node_builder_add_action (builder, ACCESSKIT_ACTION_FOCUS);
 
-  /* TODO: actions */
+  if (GTK_IS_EDITABLE (accessible) ||
+      GTK_IS_TEXT_VIEW (accessible))
+    accesskit_node_builder_set_default_action_verb (builder,
+                                                    ACCESSKIT_DEFAULT_ACTION_VERB_FOCUS);
+  else if (GTK_IS_BUTTON (accessible) ||
+           GTK_IS_MODEL_BUTTON (accessible) ||
+           GTK_IS_SWITCH (accessible) ||
+           GTK_IS_EXPANDER (accessible))
+    accesskit_node_builder_set_default_action_verb (builder,
+                                                    ACCESSKIT_DEFAULT_ACTION_VERB_CLICK);
+  /* TODO: other actions */
 
   set_bounds (accessible, builder);
 
@@ -1880,4 +1891,43 @@ gtk_accesskit_context_update_tree (GtkAccessKitContext *self)
     return;
 
   gtk_accesskit_root_update_tree (self->root);
+}
+
+void
+gtk_accesskit_context_do_action (GtkAccessKitContext            *self,
+                                 const accesskit_action_request *request)
+{
+  GtkATContext *ctx = GTK_AT_CONTEXT (self);
+  GtkAccessible *accessible = gtk_at_context_get_accessible (ctx);
+  GtkWidget *widget;
+
+  switch (request->action)
+  {
+  case ACCESSKIT_ACTION_DEFAULT:
+    if (!GTK_IS_WIDGET (accessible))
+      return;
+    widget = GTK_WIDGET (accessible);
+
+    if (!gtk_widget_is_sensitive (widget) || !gtk_widget_is_visible (widget))
+      return;
+
+    gtk_widget_activate (widget);
+    break;
+
+  case ACCESSKIT_ACTION_FOCUS:
+    if (!GTK_IS_WIDGET (accessible))
+      return;
+    widget = GTK_WIDGET (accessible);
+
+    if (!gtk_widget_is_sensitive (widget) || !gtk_widget_is_visible (widget))
+      return;
+
+    gtk_widget_grab_focus (widget);
+    break;
+
+  /* TODO: other actions */
+
+  default:
+    break;
+  }
 }

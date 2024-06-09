@@ -268,7 +268,17 @@ request_initial_tree_other_thread (void *data)
 static void
 do_action (const accesskit_action_request *request, void *data)
 {
-  /* TODO */
+  GtkAccessKitRoot *self = data;
+
+  if (request->target == (request->target & 0xffffffff))
+    {
+      guint id = request->target & 0xffffffff;
+      GtkAccessKitContext *accesskit_ctx =
+        g_hash_table_lookup (self->contexts, GUINT_TO_POINTER (id));
+
+      if (accesskit_ctx)
+        gtk_accesskit_context_do_action (accesskit_ctx, request);
+    }
 }
 
 static void

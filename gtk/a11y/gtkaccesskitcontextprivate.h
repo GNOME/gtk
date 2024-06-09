@@ -45,4 +45,8 @@ gtk_accesskit_context_add_to_update (GtkAccessKitContext   *self,
 void
 gtk_accesskit_context_update_tree (GtkAccessKitContext *self);
 
+void
+gtk_accesskit_context_do_action (GtkAccessKitContext            *self,
+                                 const accesskit_action_request *request);
+
 G_END_DECLS
