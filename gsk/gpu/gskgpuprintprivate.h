@@ -35,3 +35,5 @@ void                    gsk_gpu_print_image                             (GString
 void                    gsk_gpu_print_image_descriptor                  (GString                        *string,
                                                                          GskGpuDescriptors              *desc,
                                                                          guint32                         descriptor);
+void                    gsk_gpu_print_color_conversion                  (GString                        *string,
+                                                                         guint                           conversion);

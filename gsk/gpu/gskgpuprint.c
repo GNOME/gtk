@@ -2,6 +2,8 @@
 
 #include "gskgpuprintprivate.h"
 
+#include "gdk/gdkrgbaprivate.h"
+#include "gdk/gdkcolorstateprivate.h"
 #include "gskgpudescriptorsprivate.h"
 #include "gskgpuimageprivate.h"
 
@@ -155,3 +157,11 @@ gsk_gpu_print_image_descriptor (GString           *string,
   gsk_gpu_print_image (string, gsk_gpu_descriptors_get_image (desc, id));
 }
 
+void
+gsk_gpu_print_color_conversion (GString *string,
+                                guint    conversion)
+{
+  g_string_append_printf (string, "%s->%s ",
+                          gdk_color_state_get_name_from_id (conversion & 0xffff),
+                          gdk_color_state_get_name_from_id (conversion >> 16));
+}
