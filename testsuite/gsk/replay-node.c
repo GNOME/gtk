@@ -366,6 +366,17 @@ replay_stroke_node (GskRenderNode *node, GtkSnapshot *snapshot)
   gtk_snapshot_pop (snapshot);
 }
 
+static void
+replay_color_state_node (GskRenderNode *node, GtkSnapshot *snapshot)
+{
+  GdkColorState *color_state = gsk_color_state_node_get_color_state (node);
+  GskRenderNode *child = gsk_color_state_node_get_child (node);
+
+  gtk_snapshot_push_color_state (snapshot, color_state);
+  replay_node (child, snapshot);
+  gtk_snapshot_pop (snapshot);
+}
+
 void
 replay_node (GskRenderNode *node, GtkSnapshot *snapshot)
 {
@@ -479,6 +490,10 @@ replay_node (GskRenderNode *node, GtkSnapshot *snapshot)
 
     case GSK_STROKE_NODE:
       replay_stroke_node (node, snapshot);
+      break;
+
+    case GSK_COLOR_STATE_NODE:
+      replay_color_state_node (node, snapshot);
       break;
 
     case GSK_SUBSURFACE_NODE:
