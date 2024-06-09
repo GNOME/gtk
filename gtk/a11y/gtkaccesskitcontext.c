@@ -1396,7 +1396,7 @@ usv_offset_to_text_position (GtkAccessKitTextLayout  *layout,
   gint i;
   accesskit_node_id id = 0;
   guint run_start_usv_offset = 0;
-  const PangoLogAttr *log_attrs =
+  const PangoLogAttr *attrs =
     pango_layout_get_log_attrs_readonly (pango_layout, NULL);
 
   for (i = layout->children->len - 1; i >= 0; i--)
@@ -1415,7 +1415,7 @@ usv_offset_to_text_position (GtkAccessKitTextLayout  *layout,
 
   for (i = run_start_usv_offset; i < usv_offset; i++)
     {
-      if (log_attrs[i].is_cursor_position)
+      if (attrs[i].is_cursor_position)
         pos->character_index++;
     }
 }
@@ -1850,6 +1850,8 @@ gtk_accesskit_context_add_to_update (GtkAccessKitContext   *self,
       text_view_mark_to_text_position (self, text_view, focus_mark,
                                        &selection.focus);
       accesskit_node_builder_set_text_selection (builder, selection);
+      accesskit_node_builder_add_action (builder,
+                                         ACCESSKIT_ACTION_SET_TEXT_SELECTION);
     }
   else if (GTK_IS_EDITABLE (accessible) &&
            role != ACCESSKIT_ROLE_GENERIC_CONTAINER)
@@ -1873,6 +1875,8 @@ gtk_accesskit_context_add_to_update (GtkAccessKitContext   *self,
           usv_offset_to_text_position (&text_accesskit_ctx->single_text_layout,
                                        layout, end, &selection.focus);
           accesskit_node_builder_set_text_selection (builder, selection);
+          accesskit_node_builder_add_action (builder,
+                                             ACCESSKIT_ACTION_SET_TEXT_SELECTION);
 
           g_object_unref (text_ctx);
         }
@@ -1893,6 +1897,35 @@ gtk_accesskit_context_update_tree (GtkAccessKitContext *self)
   gtk_accesskit_root_update_tree (self->root);
 }
 
+static gint
+text_position_to_usv_offset (GtkAccessKitTextLayout        *layout,
+                             PangoLayout                   *pango_layout,
+                             const accesskit_text_position *pos)
+{
+  gint n_attrs;
+  const PangoLogAttr *attrs =
+    pango_layout_get_log_attrs_readonly (pango_layout, &n_attrs);
+  guint offset;
+  size_t char_index = 0;
+
+  if ((pos->node >> 32) != layout->id)
+    return -1;
+  offset = pos->node & 0xffffffff;
+  if (offset > n_attrs)
+    return -1;
+
+  while (char_index < pos->character_index)
+    {
+      if (offset == n_attrs)
+        return -1;
+      ++offset;
+      if (offset == n_attrs || attrs[offset].is_cursor_position)
+        ++char_index;
+    }
+
+  return offset;
+}
+
 void
 gtk_accesskit_context_do_action (GtkAccessKitContext            *self,
                                  const accesskit_action_request *request)
@@ -1900,6 +1933,7 @@ gtk_accesskit_context_do_action (GtkAccessKitContext            *self,
   GtkATContext *ctx = GTK_AT_CONTEXT (self);
   GtkAccessible *accessible = gtk_at_context_get_accessible (ctx);
   GtkWidget *widget;
+  const accesskit_text_selection *selection;
 
   switch (request->action)
   {
@@ -1923,6 +1957,61 @@ gtk_accesskit_context_do_action (GtkAccessKitContext            *self,
       return;
 
     gtk_widget_grab_focus (widget);
+    break;
+
+  case ACCESSKIT_ACTION_SET_TEXT_SELECTION:
+    if (!request->data.has_value ||
+        request->data.value.tag != ACCESSKIT_ACTION_DATA_SET_TEXT_SELECTION)
+      return;
+    selection = &request->data.value.set_text_selection;
+
+    if (GTK_IS_TEXT_VIEW (accessible))
+      {
+        /* TODO */
+      }
+    else if (GTK_IS_EDITABLE (accessible))
+      {
+        GtkEditable *editable = GTK_EDITABLE (accessible);
+        GtkText *text = gtk_editable_get_text_widget (editable);
+        GtkATContext *text_ctx;
+        GtkAccessKitContext *text_accesskit_ctx;
+        PangoLayout *layout;
+        gint anchor, focus;
+
+        if (!text)
+          return;
+        text_ctx = gtk_accessible_get_at_context (GTK_ACCESSIBLE (text));
+        text_accesskit_ctx = GTK_ACCESSKIT_CONTEXT (text_ctx);
+        if (!gtk_at_context_is_realized (text_ctx) ||
+            !text_accesskit_ctx->single_text_layout.children)
+          {
+            g_object_unref (text_ctx);
+            return;
+          }
+        layout = gtk_text_get_layout (text);
+
+        anchor =
+          text_position_to_usv_offset (&text_accesskit_ctx->single_text_layout,
+                                       layout, &selection->anchor);
+        if (anchor == -1)
+          return;
+        focus =
+          text_position_to_usv_offset (&text_accesskit_ctx->single_text_layout,
+                                       layout, &selection->focus);
+        if (focus == -1)
+          return;
+
+        if (anchor == focus)
+          gtk_editable_set_position (editable, focus);
+        else if (anchor > focus)
+          gtk_editable_select_region (editable, focus, anchor);
+        else
+          gtk_editable_select_region (editable, anchor, focus);
+
+        g_object_unref (text_ctx);
+      }
+    /* TODO: other text widgets */
+
     break;
 
   /* TODO: other actions */
