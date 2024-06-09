@@ -519,8 +519,11 @@ gtk_accesskit_root_queue_update (GtkAccessKitRoot *self,
 void
 gtk_accesskit_root_update_tree (GtkAccessKitRoot *self)
 {
-  if (self->did_initial_update && self->update_queue)
-    update_if_active (self, build_incremental_update);
+  if (self->did_initial_update)
+    {
+      if (self->update_queue)
+        update_if_active (self, build_incremental_update);
+    }
   else if (self->requested_initial_tree)
     {
       update_if_active (self, build_full_update);
