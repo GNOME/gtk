@@ -106,6 +106,10 @@ GDK_AVAILABLE_IN_4_10
 void            gtk_snapshot_push_mask                  (GtkSnapshot            *snapshot,
                                                          GskMaskMode             mask_mode);
 
+GDK_AVAILABLE_IN_4_16
+void            gtk_snapshot_push_color_state           (GtkSnapshot            *snapshot,
+                                                         GdkColorState          *color_state);
+
 GDK_AVAILABLE_IN_ALL
 void            gtk_snapshot_push_cross_fade            (GtkSnapshot            *snapshot,
                                                          double                  progress);
