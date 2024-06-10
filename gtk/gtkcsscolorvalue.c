@@ -369,6 +369,12 @@ gtk_css_value_color_print (const GtkCssValue *value,
             g_string_append (string, " xyz");
             break;
 
+          case GTK_CSS_COLOR_SPACE_REC2020:
+            g_string_append (string, "color(from ");
+            gtk_css_value_print (value->relative.origin, string);
+            g_string_append (string, " rec2020");
+            break;
+
           case GTK_CSS_COLOR_SPACE_HSL:
             g_string_append (string, "hsl(from ");
             gtk_css_value_print (value->relative.origin, string);
@@ -1663,6 +1669,12 @@ parse_color_color_channel (GtkCssParser *parser,
       if (gtk_css_parser_try_ident (parser, "xyz"))
         {
           data->ctx.color_space = GTK_CSS_COLOR_SPACE_XYZ;
+          return 1;
+        }
+
+      if (gtk_css_parser_try_ident (parser, "rec2020"))
+        {
+          data->ctx.color_space = GTK_CSS_COLOR_SPACE_REC2020;
           return 1;
         }
 

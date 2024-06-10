@@ -62,4 +62,10 @@ void gtk_xyz_to_linear_srgb (float x, float y, float z,
 void gtk_linear_srgb_to_xyz (float r, float g, float b,
                              float *x, float *y, float *z);
 
+void gtk_rec2020_to_xyz (float r, float g, float b,
+                         float *x, float *y, float *z);
+
+void gtk_xyz_to_rec2020 (float x, float y, float z,
+                         float *r, float *g, float *b);
+
 G_END_DECLS

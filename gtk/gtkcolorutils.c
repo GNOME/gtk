@@ -484,3 +484,60 @@ gtk_p3_to_rgb (float  pr,  float  pg,    float pb,
   gtk_xyz_to_linear_srgb (x, y, z, &r, &g, &b);
   gtk_linear_srgb_to_rgb (r, g, b, red, green, blue);
 }
+
+static float
+linearize_one (float val)
+{
+  float alpha = 1.09929682680944 ;
+  float beta = 0.018053968510807;
+
+  int sign = val < 0 ? -1 : 1;
+  float abs = fabs (val);
+
+  if (abs < beta * 4.5 )
+    return val / 4.5;
+  else
+    return sign * powf ((abs + alpha - 1) / alpha, 1.0 / 0.45);
+}
+
+void
+gtk_rec2020_to_xyz (float r, float g, float b,
+                    float *x, float *y, float *z)
+{
+  r = linearize_one (r);
+  g = linearize_one (g);
+  b = linearize_one (b);
+
+  *x = (63426534.0 / 99577255.0) * r + (20160776.0 / 139408157.0)  * g + (47086771.0 / 278816314.0) * b;
+  *y = (26158966.0 / 99577255.0) * r + (472592308.0 / 697040785.0) * g + (8267143.0 / 139408157.0) * b;
+  *z = (     0 /        1)       * r + (19567812.0 / 697040785.0)  * g + (295819943.0 / 278816314.0) * b;
+}
+
+static float
+delinearize_one (float val)
+{
+  float alpha = 1.09929682680944;
+  float beta = 0.018053968510807;
+  int sign = val < 0 ? -1 : 1;
+  float abs = fabsf (val);
+
+  if (abs > beta)
+    return sign * (alpha * powf (abs, 0.45) - (alpha - 1));
+  else
+    return 4.5 * val;
+}
+
+void
+gtk_xyz_to_rec2020 (float x, float y, float z,
+                    float *r, float *g, float *b)
+{
+  float rr, gg, bb;
+
+  rr =   (30757411.0 / 17917100.0) * x - (6372589.0 / 17917100.0) * y - (4539589.0 / 17917100.0) * z;
+  gg = - (19765991.0 / 29648200.0) * x + (47925759.0 / 29648200.0) * y + (467509.0 / 29648200.0) *z;
+  bb =   (792561.0 / 44930125.0)   * x - (1921689.0 / 44930125.0) * y + (42328811.0 / 44930125.0) * z;
+
+  *r = delinearize_one (rr);
+  *g = delinearize_one (gg);
+  *b = delinearize_one (bb);
+}
