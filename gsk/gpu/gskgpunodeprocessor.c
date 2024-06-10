@@ -458,6 +458,28 @@ gsk_gpu_color_convert (GskGpuFrame   *frame,
   return copy;
 }
 
+static void
+gsk_gpu_node_processor_color_convert_op (GskGpuNodeProcessor   *self,
+                                         GskGpuImage           *image,
+                                         GdkColorState         *from,
+                                         const graphene_rect_t *rect,
+                                         const graphene_rect_t *tex_rect)
+{
+  guint32 descriptor;
+
+  descriptor = gsk_gpu_node_processor_add_image (self, image, GSK_GPU_SAMPLER_DEFAULT);
+
+  gsk_gpu_color_convert_op (self->frame,
+                            GSK_GPU_SHADER_CLIP_NONE,
+                            from,
+                            self->color_state,
+                            self->desc,
+                            descriptor,
+                            rect,
+                            &self->offset,
+                            tex_rect);
+}
+
 void
 gsk_gpu_node_processor_process (GskGpuFrame                 *frame,
                                 GskGpuImage                 *target,
@@ -3988,22 +4010,22 @@ gsk_gpu_node_processor_add_color_state_node (GskGpuNodeProcessor *self,
     }
   else
     {
-      GskGpuImage *offscreen;
+      GskGpuImage *image;
 
-      offscreen = gsk_gpu_node_processor_create_offscreen (self->frame,
-                                                           &self->scale,
-                                                           color_state,
-                                                           &node->bounds,
-                                                           child);
-
-      offscreen = gsk_gpu_color_convert (self->frame,
-                                         offscreen,
+      image = gsk_gpu_get_node_as_image (self->frame,
+                                         &node->bounds,
+                                         &self->scale,
                                          color_state,
-                                         self->color_state);
+                                         child,
+                                         &node->bounds);
 
-      gsk_gpu_node_processor_image_op (self, offscreen, &node->bounds, &node->bounds);
+      gsk_gpu_node_processor_color_convert_op (self,
+                                               image,
+                                               color_state,
+                                               &node->bounds,
+                                               &node->bounds);
 
-      g_object_unref (offscreen);
+      g_object_unref (image);
     }
 }
 
