@@ -76,4 +76,14 @@ void gtk_rec2020_linear_to_xyz (float r, float g, float b,
 void gtk_xyz_to_rec2020_linear (float x, float y, float z,
                                 float *r, float *g, float *b);
 
+void gtk_rec2100_pq_to_rec2100_linear (float r, float g, float b,
+                                       float *rr, float *gg, float *bb);
+void gtk_rec2100_linear_to_rec2100_pq (float r, float g, float b,
+                                       float *rr, float *gg, float *bb);
+
+void gtk_rec2100_linear_to_rec2020_linear (float r, float g, float b,
+                                           float *rr, float *gg, float *bb);
+void gtk_rec2020_linear_to_rec2100_linear (float r, float g, float b,
+                                           float *rr, float *gg, float *bb);
+
 G_END_DECLS

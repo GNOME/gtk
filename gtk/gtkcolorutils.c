@@ -565,3 +565,67 @@ gtk_xyz_to_rec2020 (float x, float y, float z,
   gtk_xyz_to_rec2020_linear (x, y, z, r, g, b);
   gtk_rec2020_linear_to_rec2020 (*r, *g, *b, r, g, b);
 }
+
+/* maps [0, 1]  to [0, 70] */
+static inline float
+pq_to_linear (float v)
+{
+  float ninv = (1 << 14) / 2610.0;
+  float minv = (1 << 5) / 2523.0;
+  float c1 = 3424.0 / (1 << 12);
+  float c2 = 2413.0 / (1 << 7);
+  float c3 = 2392.0 / (1 << 7);
+
+  float x = powf (MAX ((powf (v, minv) - c1), 0) / (c2 - (c3 * (powf (v, minv)))), ninv);
+  return x * 10000 / 203.0;
+}
+
+/* maps [0, 70] to [0, 1] */
+void
+gtk_rec2100_pq_to_rec2100_linear (float r, float g, float b,
+                                  float *rr, float *gg, float *bb)
+{
+  *rr = pq_to_linear (r);
+  *gg = pq_to_linear (g);
+  *bb = pq_to_linear (b);
+}
+
+static inline float
+linear_to_pq (float v)
+{
+  float x = v * 203.0 / 10000.0;
+  float n = 2610.0 / (1 << 14);
+  float m = 2523.0 / (1 << 5);
+  float c1 = 3424.0 / (1 << 12);
+  float c2 = 2413.0 / (1 << 7);
+  float c3 = 2392.0 / (1 << 7);
+
+  return powf (((c1 + (c2 * powf (x, n))) / (1 + (c3 * powf (x, n)))), m);
+}
+
+void
+gtk_rec2100_linear_to_rec2100_pq (float r, float g, float b,
+                                  float *rr, float *gg, float *bb)
+{
+  *rr = linear_to_pq (r);
+  *gg = linear_to_pq (g);
+  *bb = linear_to_pq (b);
+}
+
+void
+gtk_rec2100_linear_to_rec2020_linear (float r, float g, float b,
+                                      float *rr, float *gg, float *bb)
+{
+  *rr = r;
+  *gg = g;
+  *bb = b;
+}
+
+void
+gtk_rec2020_linear_to_rec2100_linear (float r, float g, float b,
+                                      float *rr, float *gg, float *bb)
+{
+  *rr = r;
+  *gg = g;
+  *bb = b;
+}
