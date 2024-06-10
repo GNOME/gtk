@@ -357,6 +357,12 @@ gtk_css_value_color_print (const GtkCssValue *value,
             g_string_append (string, " srgb-linear");
             break;
 
+          case GTK_CSS_COLOR_SPACE_DISPLAY_P3:
+            g_string_append (string, "color(from ");
+            gtk_css_value_print (value->relative.origin, string);
+            g_string_append (string, " display-p3");
+            break;
+
           case GTK_CSS_COLOR_SPACE_HSL:
             g_string_append (string, "hsl(from ");
             gtk_css_value_print (value->relative.origin, string);
@@ -1639,6 +1645,12 @@ parse_color_color_channel (GtkCssParser *parser,
       if (gtk_css_parser_try_ident (parser, "srgb-linear"))
         {
           data->ctx.color_space = GTK_CSS_COLOR_SPACE_SRGB_LINEAR;
+          return 1;
+        }
+
+      if (gtk_css_parser_try_ident (parser, "display-p3"))
+        {
+          data->ctx.color_space = GTK_CSS_COLOR_SPACE_DISPLAY_P3;
           return 1;
         }
 

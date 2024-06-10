@@ -423,3 +423,64 @@ gtk_linear_srgb_to_rgb (float  linear_red, float  linear_green, float  linear_bl
   *green = apply_gamma (linear_green);
   *blue = apply_gamma (linear_blue);
 }
+
+static void
+gtk_linrgb_to_xyz (float r, float g, float b,
+                   float *x, float *y, float *z)
+{
+  *x =  (506752.0 / 1228815.0) * r + (87881.0 / 245763.0)  * g + (12673.0 /   70218.0)   * b;
+  *y =  (87098.0 /  409605.0)  * r + (175762.0 / 245763.0) * g + (12673.0 /  175545.0)   * b;
+  *z =  ( 7918.0 /  409605.0)  * r + (87881.0 / 737289.0)  * g + (1001167.0 / 1053270.0) * b;
+}
+
+static void
+gtk_xyz_to_linrgb (float x, float y, float z,
+                   float *r, float *g, float *b)
+{
+  *r =   (12831.0 /   3959.0)  * x - (329.0 /    214.0)     * y - (1974.0 /   3959.0)  * z;
+  *g = - (851781.0 / 878810.0) * x + (1648619.0 / 878810.0) * y + (36519.0 / 878810.0) * z;
+  *b =   (705.0 /  12673.0)    * x - (2585.0 /  12673.0)    * y + (705.0 /    667.0)   * z;
+}
+
+static void
+gtk_lin_p3_to_xyz (float r, float g, float b,
+                   float *x, float *y, float *z)
+{
+  *x = (608311.0 / 1250200.0) * r + (189793.0 / 714400.0) * g + (198249.0 / 1000160.0) * b;
+  *y = (35783.0 /  156275.0)  * r + (247089.0 / 357200.0) * g + (198249.0 / 2500400.0) * b;
+  *z = (      0 /       1)    * r + (32229.0 / 714400.0)  * g + (5220557.0 / 5000800.0) * b;
+}
+
+static void
+gtk_xyz_to_lin_p3 (float x, float y, float z,
+                   float *r, float *g, float *b)
+{
+  *r =   (446124.0 / 178915.0) * x - (333277.0 / 357830.0) * y - (72051.0 / 178915.0)  * z;
+  *g = - (14852.0 /  17905.0)  * x + (63121.0 /  35810.0)  * y + (423.0 /  17905.0)    * z;
+  *b =   (11844.0 / 330415.0)  * x - (50337.0 / 660830.0)  * y + (316169.0 / 330415.0) * z;
+}
+
+void gtk_rgb_to_p3 (float  red, float  green, float  blue,
+                    float *pr,  float *pg,    float *pb)
+{
+  float r, g, b;
+  float x, y, z;
+
+  gtk_rgb_to_linear_srgb (red, green, blue, &r, &g, &b);
+  gtk_linrgb_to_xyz (r, g, b, &x, &y, &z);
+  gtk_xyz_to_lin_p3 (x, y, z, &r, &g, &b);
+  gtk_linear_srgb_to_rgb (r, g, b, pr, pg, pb);
+}
+
+void
+gtk_p3_to_rgb (float  pr,  float  pg,    float pb,
+               float *red, float *green, float *blue)
+{
+  float r, g, b;
+  float x, y, z;
+
+  gtk_rgb_to_linear_srgb (pr, pg, pb, &r, &g, &b);
+  gtk_lin_p3_to_xyz (r, g, b, &x, &y, &z);
+  gtk_xyz_to_linrgb (x, y, z, &r, &g, &b);
+  gtk_linear_srgb_to_rgb (r, g, b, red, green, blue);
+}

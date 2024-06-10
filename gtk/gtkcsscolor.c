@@ -35,6 +35,7 @@ gtk_css_color_init (GtkCssColor      *color,
     case GTK_CSS_COLOR_SPACE_SRGB:
     case GTK_CSS_COLOR_SPACE_SRGB_LINEAR:
     case GTK_CSS_COLOR_SPACE_OKLAB:
+    case GTK_CSS_COLOR_SPACE_DISPLAY_P3:
       break;
 
     case GTK_CSS_COLOR_SPACE_HSL:
@@ -136,6 +137,10 @@ gtk_css_color_print (const GtkCssColor *color,
       g_string_append (string, "oklch(");
       break;
 
+    case GTK_CSS_COLOR_SPACE_DISPLAY_P3:
+      g_string_append (string, "color(display-p3 ");
+      break;
+
     default:
       g_assert_not_reached ();
     }
@@ -181,6 +186,7 @@ gtk_css_color_space_get_coord_name (GtkCssColorSpace color_space,
     {
     case GTK_CSS_COLOR_SPACE_SRGB:
     case GTK_CSS_COLOR_SPACE_SRGB_LINEAR:
+    case GTK_CSS_COLOR_SPACE_DISPLAY_P3:
       switch (coord)
         {
         case 0: return "r";
@@ -246,6 +252,7 @@ gtk_css_color_space_get_coord_range (GtkCssColorSpace  color_space,
       *upper = legacy_rgb_scale ? 255 : 1;
       return;
     case GTK_CSS_COLOR_SPACE_SRGB_LINEAR:
+    case GTK_CSS_COLOR_SPACE_DISPLAY_P3:
       *lower = 0;
       *upper = 1;
       return;
@@ -287,6 +294,7 @@ color_space_is_polar (GtkCssColorSpace color_space)
     case GTK_CSS_COLOR_SPACE_SRGB:
     case GTK_CSS_COLOR_SPACE_SRGB_LINEAR:
     case GTK_CSS_COLOR_SPACE_OKLAB:
+    case GTK_CSS_COLOR_SPACE_DISPLAY_P3:
       return FALSE;
     case GTK_CSS_COLOR_SPACE_HSL:
     case GTK_CSS_COLOR_SPACE_HWB:
@@ -311,6 +319,7 @@ convert_to_rectangular (GtkCssColor *output)
     case GTK_CSS_COLOR_SPACE_SRGB:
     case GTK_CSS_COLOR_SPACE_SRGB_LINEAR:
     case GTK_CSS_COLOR_SPACE_OKLAB:
+    case GTK_CSS_COLOR_SPACE_DISPLAY_P3:
       break;
 
     case GTK_CSS_COLOR_SPACE_HSL:
@@ -352,13 +361,25 @@ convert_to_linear (GtkCssColor *output)
 
   g_assert (output->color_space == GTK_CSS_COLOR_SPACE_SRGB ||
             output->color_space == GTK_CSS_COLOR_SPACE_SRGB_LINEAR ||
-            output->color_space == GTK_CSS_COLOR_SPACE_OKLAB);
+            output->color_space == GTK_CSS_COLOR_SPACE_OKLAB ||
+            output->color_space == GTK_CSS_COLOR_SPACE_DISPLAY_P3);
 
   if (output->color_space == GTK_CSS_COLOR_SPACE_SRGB)
     {
       gtk_rgb_to_linear_srgb (output->values[0],
                               output->values[1],
                               output->values[2],
+                              &v[0], &v[1], &v[2]);
+      v[3] = output->values[3];
+      gtk_css_color_init (output, GTK_CSS_COLOR_SPACE_SRGB_LINEAR, v);
+    }
+  else if (output->color_space == GTK_CSS_COLOR_SPACE_DISPLAY_P3)
+    {
+      gtk_p3_to_rgb (output->values[0],
+                     output->values[1],
+                     output->values[2],
+                     &v[0], &v[1], &v[2]);
+      gtk_rgb_to_linear_srgb (v[0], v[1], v[2],
                               &v[0], &v[1], &v[2]);
       v[3] = output->values[3];
       gtk_css_color_init (output, GTK_CSS_COLOR_SPACE_SRGB_LINEAR, v);
@@ -379,6 +400,7 @@ convert_from_linear (GtkCssColor      *output,
     case GTK_CSS_COLOR_SPACE_SRGB:
     case GTK_CSS_COLOR_SPACE_HSL:
     case GTK_CSS_COLOR_SPACE_HWB:
+    case GTK_CSS_COLOR_SPACE_DISPLAY_P3:
       gtk_linear_srgb_to_rgb (output->values[0],
                               output->values[1],
                               output->values[2],
@@ -408,6 +430,7 @@ convert_from_rectangular (GtkCssColor      *output,
     case GTK_CSS_COLOR_SPACE_SRGB:
     case GTK_CSS_COLOR_SPACE_SRGB_LINEAR:
     case GTK_CSS_COLOR_SPACE_OKLAB:
+    case GTK_CSS_COLOR_SPACE_DISPLAY_P3:
       g_assert (output->color_space == dest);
       break;
 
@@ -574,6 +597,7 @@ apply_hue_interpolation (GtkCssColor            *from,
     case GTK_CSS_COLOR_SPACE_SRGB:
     case GTK_CSS_COLOR_SPACE_SRGB_LINEAR:
     case GTK_CSS_COLOR_SPACE_OKLAB:
+    case GTK_CSS_COLOR_SPACE_DISPLAY_P3:
       break;
 
     case GTK_CSS_COLOR_SPACE_HSL:
@@ -606,6 +630,7 @@ normalize_hue (GtkCssColor *color)
     case GTK_CSS_COLOR_SPACE_SRGB:
     case GTK_CSS_COLOR_SPACE_SRGB_LINEAR:
     case GTK_CSS_COLOR_SPACE_OKLAB:
+    case GTK_CSS_COLOR_SPACE_DISPLAY_P3:
       break;
 
     case GTK_CSS_COLOR_SPACE_HSL:
@@ -643,6 +668,7 @@ premultiply (GtkCssColor *color)
     case GTK_CSS_COLOR_SPACE_SRGB:
     case GTK_CSS_COLOR_SPACE_SRGB_LINEAR:
     case GTK_CSS_COLOR_SPACE_OKLAB:
+    case GTK_CSS_COLOR_SPACE_DISPLAY_P3:
       premultiply_component (color, 0);
       premultiply_component (color, 1);
       premultiply_component (color, 2);
@@ -685,6 +711,7 @@ unpremultiply (GtkCssColor *color)
     case GTK_CSS_COLOR_SPACE_SRGB:
     case GTK_CSS_COLOR_SPACE_SRGB_LINEAR:
     case GTK_CSS_COLOR_SPACE_OKLAB:
+    case GTK_CSS_COLOR_SPACE_DISPLAY_P3:
       unpremultiply_component (color, 0);
       unpremultiply_component (color, 1);
       unpremultiply_component (color, 2);
@@ -721,7 +748,7 @@ collect_analogous_missing (const GtkCssColor *color,
     { -1, -1, -1, -1, -1,  0, -1, -1, 3 }, /* hwb */
     { -1, -1, -1,  0, -1, -1,  1,  2, 3 }, /* oklab */
     { -1, -1, -1,  0,  1,  2, -1, -1, 3 }, /* oklch */
-
+    {  0,  1,  2, -1, -1, -1, -1, -1, 3 }, /* display-p3 */
   };
 
   int *src = analogous[color->color_space];
@@ -929,6 +956,9 @@ gtk_css_color_interpolation_method_print (GtkCssColorSpace        in,
       break;
     case GTK_CSS_COLOR_SPACE_OKLAB:
       g_string_append (string, "oklab");
+      break;
+    case GTK_CSS_COLOR_SPACE_DISPLAY_P3:
+      g_string_append (string, "display-p3");
       break;
     default:
       g_assert_not_reached ();
