@@ -4011,19 +4011,23 @@ gsk_gpu_node_processor_add_color_state_node (GskGpuNodeProcessor *self,
   else
     {
       GskGpuImage *image;
+      graphene_rect_t clip_bounds;
+      graphene_rect_t bounds;
+
+      gsk_gpu_node_processor_get_clip_bounds (self, &clip_bounds);
 
       image = gsk_gpu_get_node_as_image (self->frame,
-                                         &node->bounds,
+                                         &clip_bounds,
                                          &self->scale,
                                          color_state,
                                          child,
-                                         &node->bounds);
+                                         &bounds);
 
       gsk_gpu_node_processor_color_convert_op (self,
                                                image,
                                                color_state,
-                                               &node->bounds,
-                                               &node->bounds);
+                                               &bounds,
+                                               &bounds);
 
       g_object_unref (image);
     }
