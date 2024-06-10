@@ -485,7 +485,7 @@ gtk_p3_to_rgb (float  pr,  float  pg,    float pb,
   gtk_linear_srgb_to_rgb (r, g, b, red, green, blue);
 }
 
-static float
+static inline float
 linearize_one (float val)
 {
   float alpha = 1.09929682680944 ;
@@ -501,19 +501,32 @@ linearize_one (float val)
 }
 
 void
-gtk_rec2020_to_xyz (float r, float g, float b,
-                    float *x, float *y, float *z)
+gtk_rec2020_to_rec2020_linear (float r, float g , float b,
+                               float *rr, float *gg, float *bb)
 {
-  r = linearize_one (r);
-  g = linearize_one (g);
-  b = linearize_one (b);
+  *rr = linearize_one (r);
+  *gg = linearize_one (g);
+  *bb = linearize_one (b);
+}
 
+void
+gtk_rec2020_linear_to_xyz (float r, float g, float b,
+                            float *x, float *y, float *z)
+{
   *x = (63426534.0 / 99577255.0) * r + (20160776.0 / 139408157.0)  * g + (47086771.0 / 278816314.0) * b;
   *y = (26158966.0 / 99577255.0) * r + (472592308.0 / 697040785.0) * g + (8267143.0 / 139408157.0) * b;
   *z = (     0 /        1)       * r + (19567812.0 / 697040785.0)  * g + (295819943.0 / 278816314.0) * b;
 }
 
-static float
+void
+gtk_rec2020_to_xyz (float r, float g, float b,
+                    float *x, float *y, float *z)
+{
+  gtk_rec2020_to_rec2020_linear (r, g, b, &r, &g, &b);
+  gtk_rec2020_linear_to_xyz (r, g, b, x, y, z);
+}
+
+static inline float
 delinearize_one (float val)
 {
   float alpha = 1.09929682680944;
@@ -528,16 +541,27 @@ delinearize_one (float val)
 }
 
 void
+gtk_rec2020_linear_to_rec2020 (float r, float g, float b,
+                               float *rr, float *gg, float *bb)
+{
+  *rr = delinearize_one (r);
+  *gg = delinearize_one (g);
+  *bb = delinearize_one (b);
+}
+
+void
+gtk_xyz_to_rec2020_linear (float x, float y, float z,
+                           float *r, float *g, float *b)
+{
+  *r =   (30757411.0 / 17917100.0) * x - (6372589.0 / 17917100.0) * y - (4539589.0 / 17917100.0) * z;
+  *g = - (19765991.0 / 29648200.0) * x + (47925759.0 / 29648200.0) * y + (467509.0 / 29648200.0) *z;
+  *b =   (792561.0 / 44930125.0)   * x - (1921689.0 / 44930125.0) * y + (42328811.0 / 44930125.0) * z;
+}
+
+void
 gtk_xyz_to_rec2020 (float x, float y, float z,
                     float *r, float *g, float *b)
 {
-  float rr, gg, bb;
-
-  rr =   (30757411.0 / 17917100.0) * x - (6372589.0 / 17917100.0) * y - (4539589.0 / 17917100.0) * z;
-  gg = - (19765991.0 / 29648200.0) * x + (47925759.0 / 29648200.0) * y + (467509.0 / 29648200.0) *z;
-  bb =   (792561.0 / 44930125.0)   * x - (1921689.0 / 44930125.0) * y + (42328811.0 / 44930125.0) * z;
-
-  *r = delinearize_one (rr);
-  *g = delinearize_one (gg);
-  *b = delinearize_one (bb);
+  gtk_xyz_to_rec2020_linear (x, y, z, r, g, b);
+  gtk_rec2020_linear_to_rec2020 (*r, *g, *b, r, g, b);
 }
