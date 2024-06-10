@@ -56,4 +56,10 @@ void gtk_rgb_to_p3 (float  red, float  green, float  blue,
 void gtk_p3_to_rgb (float  pr,  float  pg,    float pb,
                     float *red, float *green, float *blue);
 
+void gtk_xyz_to_linear_srgb (float x, float y, float z,
+                             float *r, float *g, float *b);
+
+void gtk_linear_srgb_to_xyz (float r, float g, float b,
+                             float *x, float *y, float *z);
+
 G_END_DECLS

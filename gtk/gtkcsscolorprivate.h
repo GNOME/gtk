@@ -32,6 +32,7 @@ typedef enum {
   GTK_CSS_COLOR_SPACE_OKLAB,
   GTK_CSS_COLOR_SPACE_OKLCH,
   GTK_CSS_COLOR_SPACE_DISPLAY_P3,
+  GTK_CSS_COLOR_SPACE_XYZ,
 } GtkCssColorSpace;
 
 typedef struct
