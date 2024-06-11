@@ -1481,19 +1481,10 @@ parse_color_node (GtkCssParser *parser,
     { "bounds", parse_rect, NULL, &bounds },
     { "color", parse_color, NULL, &color },
   };
-  GdkColor col2;
-  GdkRGBA rgba;
 
   parse_declarations (parser, context, declarations, G_N_ELEMENTS (declarations));
 
-  gdk_color_convert (&col2, gdk_color_state_get_srgb (), &color);
-
-  rgba.red = col2.values[0];
-  rgba.green = col2.values[1];
-  rgba.blue = col2.values[2];
-  rgba.alpha = col2.values[3];
-
-  return gsk_color_node_new (&rgba, &bounds);
+  return gsk_color_node_new2 (&color, &bounds);
 }
 
 static gboolean
@@ -3552,6 +3543,18 @@ append_rgba_param (Printer       *p,
 }
 
 static void
+append_color_param (Printer       *p,
+                   const char     *param_name,
+                   const GdkColor *value)
+{
+  _indent (p);
+  g_string_append_printf (p->str, "%s: ", param_name);
+  gdk_color_print (value, p->str);
+  g_string_append_c (p->str, ';');
+  g_string_append_c (p->str, '\n');
+}
+
+static void
 append_rect_param (Printer               *p,
                    const char            *param_name,
                    const graphene_rect_t *value)
@@ -4207,7 +4210,7 @@ render_node_print (Printer       *p,
       {
         start_node (p, "color", node_name);
         append_rect_param (p, "bounds", &node->bounds);
-        append_rgba_param (p, "color", gsk_color_node_get_color (node));
+        append_color_param (p, "color", gsk_color_node_get_color2 (node));
         end_node (p);
       }
       break;

@@ -128,7 +128,7 @@ find_texture_to_attach (GskOffload           *self,
               gsk_transform_transform_bounds (transform, &child->bounds, &bounds);
               if (GSK_RENDER_NODE_TYPE (child) == GSK_COLOR_NODE &&
                   gsk_rect_equal (&bounds, &subsurface_node->bounds) &&
-                  gdk_rgba_equal (gsk_color_node_get_color (child), &GDK_RGBA_BLACK))
+                  gdk_color_is_black (gsk_color_node_get_color2 (child)))
                 {
                   *has_background = TRUE;
                   node = gsk_container_node_get_child (node, 1);

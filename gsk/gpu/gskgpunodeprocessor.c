@@ -1616,23 +1616,34 @@ gsk_gpu_node_processor_add_rounded_clip_node_with_mask (GskGpuNodeProcessor *sel
   g_object_unref (mask_image);
 }
 
-static const GdkRGBA *
-get_color (GdkRGBA       *to,
-           const GdkRGBA *from,
-           GdkColorState *in)
+static void
+get_color (GdkRGBA        *to,
+           const GdkColor *from,
+           GdkColorState  *in)
 {
-  GdkColor src;
   GdkColor dst;
 
-  gdk_color_init_from_rgba (&src, from);
-  gdk_color_convert (&dst, in, &src);
+  gdk_color_convert (&dst, in, from);
 
   to->red   = dst.values[0];
   to->green = dst.values[1];
   to->blue  = dst.values[2];
   to->alpha = dst.values[3];
+}
 
-  return to;
+static void
+get_color2 (GdkRGBA        *to,
+            const GdkRGBA  *from,
+            GdkColorState  *in)
+{
+  GdkColor dst = { NULL, };
+
+  gdk_color_convert_rgba (&dst, in, from);
+
+  to->red   = dst.values[0];
+  to->green = dst.values[1];
+  to->blue  = dst.values[2];
+  to->alpha = dst.values[3];
 }
 
 static void
@@ -1654,7 +1665,7 @@ gsk_gpu_node_processor_add_rounded_clip_node (GskGpuNodeProcessor *self,
     {
       GdkRGBA rgba;
 
-      get_color (&rgba, gsk_color_node_get_color (child), self->color_state);
+      get_color (&rgba, gsk_color_node_get_color2 (child), self->color_state);
       gsk_gpu_node_processor_sync_globals (self, 0);
       gsk_gpu_rounded_color_op (self->frame,
                                 gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, &original_clip->bounds),
@@ -1936,9 +1947,9 @@ gsk_gpu_node_processor_add_color_node (GskGpuNodeProcessor *self,
   cairo_rectangle_int_t int_clipped;
   graphene_rect_t rect, clipped;
   GdkRGBA rgba;
-  const GdkRGBA *color;
+  const GdkRGBA *color = &rgba;
 
-  color = get_color (&rgba, gsk_color_node_get_color (node), self->color_state);
+  get_color (&rgba, gsk_color_node_get_color2 (node), self->color_state);
 
   graphene_rect_offset_r (&node->bounds,
                           self->offset.x, self->offset.y,
@@ -2047,9 +2058,9 @@ gsk_gpu_node_processor_create_color_pattern (GskGpuPatternWriter *self,
                                              GskRenderNode       *node)
 {
   GdkRGBA rgba;
-  const GdkRGBA *color;
+  const GdkRGBA *color = &rgba;
 
-  color = get_color (&rgba, gsk_color_node_get_color (node), self->color_state);
+  get_color (&rgba, gsk_color_node_get_color2 (node), self->color_state);
 
   gsk_gpu_pattern_writer_append_uint (self, GSK_GPU_PATTERN_COLOR);
   gsk_gpu_pattern_writer_append_rgba (self, color);
@@ -2064,10 +2075,10 @@ gsk_gpu_node_processor_add_border_node (GskGpuNodeProcessor *self,
   GdkRGBA colors[4];
   gsize i;
 
-  get_color (&colors[0], &gsk_border_node_get_colors (node)[0], self->color_state);
-  get_color (&colors[1], &gsk_border_node_get_colors (node)[1], self->color_state);
-  get_color (&colors[2], &gsk_border_node_get_colors (node)[2], self->color_state);
-  get_color (&colors[3], &gsk_border_node_get_colors (node)[3], self->color_state);
+  get_color2 (&colors[0], &gsk_border_node_get_colors (node)[0], self->color_state);
+  get_color2 (&colors[1], &gsk_border_node_get_colors (node)[1], self->color_state);
+  get_color2 (&colors[2], &gsk_border_node_get_colors (node)[2], self->color_state);
+  get_color2 (&colors[3], &gsk_border_node_get_colors (node)[3], self->color_state);
 
   for (i = 0; i < G_N_ELEMENTS (colors); i++)
     colors[i].alpha *= self->opacity;
@@ -2335,7 +2346,7 @@ gsk_gpu_node_processor_add_inset_shadow_node (GskGpuNodeProcessor *self,
   float spread, blur_radius;
 
   spread = gsk_inset_shadow_node_get_spread (node);
-  get_color (&color, gsk_inset_shadow_node_get_color (node), self->color_state);
+  get_color2 (&color, gsk_inset_shadow_node_get_color (node), self->color_state);
   color.alpha *= self->opacity;
   blur_radius = gsk_inset_shadow_node_get_blur_radius (node);
 
@@ -2374,7 +2385,7 @@ gsk_gpu_node_processor_add_outset_shadow_node (GskGpuNodeProcessor *self,
   float spread, blur_radius, dx, dy;
 
   spread = gsk_outset_shadow_node_get_spread (node);
-  get_color (&color, gsk_outset_shadow_node_get_color (node), self->color_state);
+  get_color2 (&color, gsk_outset_shadow_node_get_color (node), self->color_state);
   color.alpha *= self->opacity;
   blur_radius = gsk_outset_shadow_node_get_blur_radius (node);
   dx = gsk_outset_shadow_node_get_dx (node);
@@ -3082,7 +3093,7 @@ gsk_gpu_node_processor_add_mask_node (GskGpuNodeProcessor *self,
     {
       GdkRGBA rgba;
 
-      get_color (&rgba, gsk_color_node_get_color (source_child), self->color_state);
+      get_color (&rgba, gsk_color_node_get_color2 (source_child), self->color_state);
       guint32 descriptor = gsk_gpu_node_processor_add_image (self, mask_image, GSK_GPU_SAMPLER_DEFAULT);
       gsk_gpu_colorize_op (self->frame,
                            gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, &node->bounds),
@@ -3222,7 +3233,7 @@ gsk_gpu_node_processor_add_glyph_node (GskGpuNodeProcessor *self,
 
   device = gsk_gpu_frame_get_device (self->frame);
 
-  get_color (&color, gsk_text_node_get_color (node), self->color_state);
+  get_color2 (&color, gsk_text_node_get_color (node), self->color_state);
   color.alpha *= self->opacity;
   num_glyphs = gsk_text_node_get_num_glyphs (node);
   glyphs = gsk_text_node_get_glyphs (node, NULL);
@@ -3351,7 +3362,7 @@ gsk_gpu_node_processor_create_glyph_pattern (GskGpuPatternWriter *self,
   scale = MAX (graphene_vec2_get_x (&self->scale), graphene_vec2_get_y (&self->scale));
   inv_scale = 1.f / scale;
 
-  get_color (&color, gsk_text_node_get_color (node), self->color_state);
+  get_color2 (&color, gsk_text_node_get_color (node), self->color_state);
   gsk_gpu_pattern_writer_append_uint (self, GSK_GPU_PATTERN_GLYPHS);
   gsk_gpu_pattern_writer_append_rgba (self, &color);
   gsk_gpu_pattern_writer_append_uint (self, num_glyphs);
@@ -3796,7 +3807,7 @@ gsk_gpu_node_processor_add_fill_node (GskGpuNodeProcessor *self,
 
   child = gsk_fill_node_get_child (node);
 
-  get_color (&color, gsk_color_node_get_color (child), self->color_state);
+  get_color (&color, gsk_color_node_get_color2 (child), self->color_state);
   mask_image = gsk_gpu_upload_cairo_op (self->frame,
                                         &self->scale,
                                         &clip_bounds,
@@ -3895,7 +3906,7 @@ gsk_gpu_node_processor_add_stroke_node (GskGpuNodeProcessor *self,
 
   child = gsk_stroke_node_get_child (node);
 
-  get_color (&color, gsk_color_node_get_color (child), self->color_state);
+  get_color (&color, gsk_color_node_get_color2 (child), self->color_state);
   mask_image = gsk_gpu_upload_cairo_op (self->frame,
                                         &self->scale,
                                         &clip_bounds,

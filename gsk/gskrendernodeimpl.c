@@ -159,8 +159,19 @@ struct _GskColorNode
 {
   GskRenderNode render_node;
 
-  GdkRGBA color;
+  GdkColor color;
 };
+
+static void
+gsk_color_node_finalize (GskRenderNode *node)
+{
+  GskColorNode *self = (GskColorNode *) node;
+  GskRenderNodeClass *parent_class = g_type_class_peek (g_type_parent (GSK_TYPE_COLOR_NODE));
+
+  gdk_color_state_unref (self->color.color_state);
+
+  parent_class->finalize (node);
+}
 
 static void
 gsk_color_node_draw (GskRenderNode *node,
@@ -168,8 +179,7 @@ gsk_color_node_draw (GskRenderNode *node,
 {
   GskColorNode *self = (GskColorNode *) node;
 
-  gdk_cairo_set_source_rgba (cr, &self->color);
-
+  gdk_cairo_set_source_color (cr, &self->color);
   gsk_cairo_rectangle (cr, &node->bounds);
   cairo_fill (cr);
 }
@@ -183,7 +193,7 @@ gsk_color_node_diff (GskRenderNode *node1,
   GskColorNode *self2 = (GskColorNode *) node2;
 
   if (gsk_rect_equal (&node1->bounds, &node2->bounds) &&
-      gdk_rgba_equal (&self1->color, &self2->color))
+      gdk_color_equal (&self1->color, &self2->color))
     return;
 
   gsk_render_node_diff_impossible (node1, node2, data);
@@ -197,6 +207,7 @@ gsk_color_node_class_init (gpointer g_class,
 
   node_class->node_type = GSK_COLOR_NODE;
 
+  node_class->finalize = gsk_color_node_finalize;
   node_class->draw = gsk_color_node_draw;
   node_class->diff = gsk_color_node_diff;
 }
@@ -208,9 +219,32 @@ gsk_color_node_class_init (gpointer g_class,
  * Retrieves the color of the given @node.
  *
  * Returns: (transfer none): the color of the node
+ *
+ * Deprecated: 4.16: This function only returns correct
+ *   values if the node is in the srgb color state
  */
 const GdkRGBA *
 gsk_color_node_get_color (const GskRenderNode *node)
+{
+  GskColorNode *self = (GskColorNode *) node;
+
+  g_return_val_if_fail (GSK_IS_RENDER_NODE_TYPE (node, GSK_COLOR_NODE), NULL);
+
+  return (const GdkRGBA *) &self->color.values;
+}
+
+/**
+ * gsk_color_node_get_color2:
+ * @node: (type GskColorNode): a `GskRenderNode`
+ *
+ * Retrieves the color of the given @node.
+ *
+ * Returns: (transfer none): the color of the node
+ *
+ * Since: 4.16
+ */
+const GdkColor *
+gsk_color_node_get_color2 (const GskRenderNode *node)
 {
   GskColorNode *self = (GskColorNode *) node;
 
@@ -233,17 +267,40 @@ GskRenderNode *
 gsk_color_node_new (const GdkRGBA         *rgba,
                     const graphene_rect_t *bounds)
 {
+  GdkColor color;
+
+  gdk_color_init_from_rgba (&color, rgba);
+  return gsk_color_node_new2 (&color, bounds);
+}
+
+/**
+ * gsk_color_node_new2:
+ * @color: a `GdkColor` specifying a color
+ * @bounds: the rectangle to render the color into
+ *
+ * Creates a `GskRenderNode` that will render the color specified by
+ * the @values in the given color state into the area given by @bounds.
+ *
+ * Returns: (transfer full) (type GskColorNode): A new `GskRenderNode`
+ *
+ * Since: 4.16
+ */
+GskRenderNode *
+gsk_color_node_new2 (const GdkColor        *color,
+                     const graphene_rect_t *bounds)
+{
   GskColorNode *self;
   GskRenderNode *node;
 
-  g_return_val_if_fail (rgba != NULL, NULL);
   g_return_val_if_fail (bounds != NULL, NULL);
 
   self = gsk_render_node_alloc (GSK_COLOR_NODE);
   node = (GskRenderNode *) self;
   node->offscreen_for_opacity = FALSE;
 
-  self->color = *rgba;
+  gdk_color_init (&self->color, color->color_state, color->values);
+  gdk_color_state_ref (self->color.color_state);
+
   gsk_rect_init_from_rect (&node->bounds, bounds);
   gsk_rect_normalize (&node->bounds);
 
@@ -5121,7 +5178,7 @@ gsk_fill_node_draw (GskRenderNode *node,
   if (gsk_render_node_get_node_type (self->child) == GSK_COLOR_NODE &&
       gsk_rect_contains_rect (&self->child->bounds, &node->bounds))
     {
-      gdk_cairo_set_source_rgba (cr, gsk_color_node_get_color (self->child));
+      gdk_cairo_set_source_color (cr, gsk_color_node_get_color2 (self->child));
       cairo_fill (cr);
     }
   else
@@ -5314,7 +5371,7 @@ gsk_stroke_node_draw (GskRenderNode *node,
   if (gsk_render_node_get_node_type (self->child) == GSK_COLOR_NODE &&
       gsk_rect_contains_rect (&self->child->bounds, &node->bounds))
     {
-      gdk_cairo_set_source_rgba (cr, gsk_color_node_get_color (self->child));
+      gdk_cairo_set_source_color (cr, gsk_color_node_get_color2 (self->child));
     }
   else
     {

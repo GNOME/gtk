@@ -216,8 +216,15 @@ GType                   gsk_color_node_get_type                 (void) G_GNUC_CO
 GDK_AVAILABLE_IN_ALL
 GskRenderNode *         gsk_color_node_new                      (const GdkRGBA            *rgba,
                                                                  const graphene_rect_t    *bounds);
+
+GDK_AVAILABLE_IN_4_16
+GskRenderNode *         gsk_color_node_new2                     (const GdkColor           *color,
+                                                                 const graphene_rect_t    *bounds);
 GDK_AVAILABLE_IN_ALL
 const GdkRGBA *         gsk_color_node_get_color                (const GskRenderNode      *node) G_GNUC_PURE;
+
+GDK_AVAILABLE_IN_4_16
+const GdkColor *        gsk_color_node_get_color2               (const GskRenderNode      *node) G_GNUC_PURE;
 
 GDK_AVAILABLE_IN_ALL
 GType                   gsk_texture_node_get_type               (void) G_GNUC_CONST;

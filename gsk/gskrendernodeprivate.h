@@ -3,6 +3,7 @@
 #include "gskrendernode.h"
 #include <cairo.h>
 
+#include "gdk/gdkcolorprivate.h"
 #include "gdk/gdkmemoryformatprivate.h"
 
 G_BEGIN_DECLS
