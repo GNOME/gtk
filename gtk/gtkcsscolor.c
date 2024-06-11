@@ -35,6 +35,10 @@ gtk_css_color_init (GtkCssColor      *color,
     case GTK_CSS_COLOR_SPACE_SRGB:
     case GTK_CSS_COLOR_SPACE_SRGB_LINEAR:
     case GTK_CSS_COLOR_SPACE_OKLAB:
+    case GTK_CSS_COLOR_SPACE_DISPLAY_P3:
+    case GTK_CSS_COLOR_SPACE_XYZ:
+    case GTK_CSS_COLOR_SPACE_REC2020:
+    case GTK_CSS_COLOR_SPACE_REC2100_PQ:
       break;
 
     case GTK_CSS_COLOR_SPACE_HSL:
@@ -136,6 +140,22 @@ gtk_css_color_print (const GtkCssColor *color,
       g_string_append (string, "oklch(");
       break;
 
+    case GTK_CSS_COLOR_SPACE_DISPLAY_P3:
+      g_string_append (string, "color(display-p3 ");
+      break;
+
+    case GTK_CSS_COLOR_SPACE_XYZ:
+      g_string_append (string, "color(xyz ");
+      break;
+
+    case GTK_CSS_COLOR_SPACE_REC2020:
+      g_string_append (string, "color(rec2020 ");
+      break;
+
+    case GTK_CSS_COLOR_SPACE_REC2100_PQ:
+      g_string_append (string, "color(rec2100-pq ");
+      break;
+
     default:
       g_assert_not_reached ();
     }
@@ -181,11 +201,22 @@ gtk_css_color_space_get_coord_name (GtkCssColorSpace color_space,
     {
     case GTK_CSS_COLOR_SPACE_SRGB:
     case GTK_CSS_COLOR_SPACE_SRGB_LINEAR:
+    case GTK_CSS_COLOR_SPACE_DISPLAY_P3:
+    case GTK_CSS_COLOR_SPACE_REC2020:
+    case GTK_CSS_COLOR_SPACE_REC2100_PQ:
       switch (coord)
         {
         case 0: return "r";
         case 1: return "g";
         case 2: return "b";
+        default: g_assert_not_reached ();
+        }
+    case GTK_CSS_COLOR_SPACE_XYZ:
+      switch (coord)
+        {
+        case 0: return "x";
+        case 1: return "y";
+        case 2: return "z";
         default: g_assert_not_reached ();
         }
     case GTK_CSS_COLOR_SPACE_HSL:
@@ -246,6 +277,10 @@ gtk_css_color_space_get_coord_range (GtkCssColorSpace  color_space,
       *upper = legacy_rgb_scale ? 255 : 1;
       return;
     case GTK_CSS_COLOR_SPACE_SRGB_LINEAR:
+    case GTK_CSS_COLOR_SPACE_DISPLAY_P3:
+    case GTK_CSS_COLOR_SPACE_XYZ:
+    case GTK_CSS_COLOR_SPACE_REC2020:
+    case GTK_CSS_COLOR_SPACE_REC2100_PQ:
       *lower = 0;
       *upper = 1;
       return;
@@ -287,11 +322,17 @@ color_space_is_polar (GtkCssColorSpace color_space)
     case GTK_CSS_COLOR_SPACE_SRGB:
     case GTK_CSS_COLOR_SPACE_SRGB_LINEAR:
     case GTK_CSS_COLOR_SPACE_OKLAB:
+    case GTK_CSS_COLOR_SPACE_DISPLAY_P3:
+    case GTK_CSS_COLOR_SPACE_XYZ:
+    case GTK_CSS_COLOR_SPACE_REC2020:
+    case GTK_CSS_COLOR_SPACE_REC2100_PQ:
       return FALSE;
+
     case GTK_CSS_COLOR_SPACE_HSL:
     case GTK_CSS_COLOR_SPACE_HWB:
     case GTK_CSS_COLOR_SPACE_OKLCH:
       return TRUE;
+
     default:
       g_assert_not_reached ();
     }
@@ -311,6 +352,10 @@ convert_to_rectangular (GtkCssColor *output)
     case GTK_CSS_COLOR_SPACE_SRGB:
     case GTK_CSS_COLOR_SPACE_SRGB_LINEAR:
     case GTK_CSS_COLOR_SPACE_OKLAB:
+    case GTK_CSS_COLOR_SPACE_DISPLAY_P3:
+    case GTK_CSS_COLOR_SPACE_XYZ:
+    case GTK_CSS_COLOR_SPACE_REC2020:
+    case GTK_CSS_COLOR_SPACE_REC2100_PQ:
       break;
 
     case GTK_CSS_COLOR_SPACE_HSL:
@@ -352,13 +397,63 @@ convert_to_linear (GtkCssColor *output)
 
   g_assert (output->color_space == GTK_CSS_COLOR_SPACE_SRGB ||
             output->color_space == GTK_CSS_COLOR_SPACE_SRGB_LINEAR ||
-            output->color_space == GTK_CSS_COLOR_SPACE_OKLAB);
+            output->color_space == GTK_CSS_COLOR_SPACE_OKLAB ||
+            output->color_space == GTK_CSS_COLOR_SPACE_DISPLAY_P3 ||
+            output->color_space == GTK_CSS_COLOR_SPACE_XYZ ||
+            output->color_space == GTK_CSS_COLOR_SPACE_REC2020 ||
+            output->color_space == GTK_CSS_COLOR_SPACE_REC2100_PQ);
 
   if (output->color_space == GTK_CSS_COLOR_SPACE_SRGB)
     {
       gtk_rgb_to_linear_srgb (output->values[0],
                               output->values[1],
                               output->values[2],
+                              &v[0], &v[1], &v[2]);
+      v[3] = output->values[3];
+      gtk_css_color_init (output, GTK_CSS_COLOR_SPACE_SRGB_LINEAR, v);
+    }
+  else if (output->color_space == GTK_CSS_COLOR_SPACE_DISPLAY_P3)
+    {
+      gtk_p3_to_rgb (output->values[0],
+                     output->values[1],
+                     output->values[2],
+                     &v[0], &v[1], &v[2]);
+      gtk_rgb_to_linear_srgb (v[0], v[1], v[2],
+                              &v[0], &v[1], &v[2]);
+      v[3] = output->values[3];
+      gtk_css_color_init (output, GTK_CSS_COLOR_SPACE_SRGB_LINEAR, v);
+    }
+  else if (output->color_space == GTK_CSS_COLOR_SPACE_XYZ)
+    {
+      gtk_xyz_to_linear_srgb (output->values[0],
+                              output->values[1],
+                              output->values[2],
+                              &v[0], &v[1], &v[2]);
+      v[3] = output->values[3];
+      gtk_css_color_init (output, GTK_CSS_COLOR_SPACE_SRGB_LINEAR, v);
+    }
+  else if (output->color_space == GTK_CSS_COLOR_SPACE_REC2020)
+    {
+      gtk_rec2020_to_xyz (output->values[0],
+                          output->values[1],
+                          output->values[2],
+                          &v[0], &v[1], &v[2]);
+      gtk_xyz_to_linear_srgb (v[0], v[1], v[2],
+                              &v[0], &v[1], &v[2]);
+      v[3] = output->values[3];
+      gtk_css_color_init (output, GTK_CSS_COLOR_SPACE_SRGB_LINEAR, v);
+    }
+  else if (output->color_space == GTK_CSS_COLOR_SPACE_REC2100_PQ)
+    {
+      gtk_rec2100_pq_to_rec2100_linear (output->values[0],
+                                        output->values[1],
+                                        output->values[2],
+                                        &v[0], &v[1], &v[2]);
+      gtk_rec2100_linear_to_rec2020_linear (v[0], v[1], v[2],
+                                            &v[0], &v[1], &v[2]);
+      gtk_rec2020_linear_to_xyz (v[0], v[1], v[2],
+                                 &v[0], &v[1], &v[2]);
+      gtk_xyz_to_linear_srgb (v[0], v[1], v[2],
                               &v[0], &v[1], &v[2]);
       v[3] = output->values[3];
       gtk_css_color_init (output, GTK_CSS_COLOR_SPACE_SRGB_LINEAR, v);
@@ -387,6 +482,52 @@ convert_from_linear (GtkCssColor      *output,
       gtk_css_color_init (output, GTK_CSS_COLOR_SPACE_SRGB, v);
       break;
 
+    case GTK_CSS_COLOR_SPACE_DISPLAY_P3:
+      gtk_linear_srgb_to_rgb (output->values[0],
+                              output->values[1],
+                              output->values[2],
+                              &v[0], &v[1], &v[2]);
+      gtk_rgb_to_p3 (v[0], v[1], v[2],
+                     &v[0], &v[1], &v[2]);
+      v[3] = output->values[3];
+      gtk_css_color_init (output, GTK_CSS_COLOR_SPACE_DISPLAY_P3, v);
+      break;
+
+    case GTK_CSS_COLOR_SPACE_XYZ:
+      gtk_linear_srgb_to_xyz (output->values[0],
+                              output->values[1],
+                              output->values[2],
+                              &v[0], &v[1], &v[2]);
+      v[3] = output->values[3];
+      gtk_css_color_init (output, GTK_CSS_COLOR_SPACE_XYZ, v);
+      break;
+
+    case GTK_CSS_COLOR_SPACE_REC2020:
+      gtk_linear_srgb_to_xyz (output->values[0],
+                              output->values[1],
+                              output->values[2],
+                              &v[0], &v[1], &v[2]);
+      gtk_xyz_to_rec2020 (v[0], v[1], v[2],
+                          &v[0], &v[1], &v[2]);
+      v[3] = output->values[3];
+      gtk_css_color_init (output, GTK_CSS_COLOR_SPACE_REC2020, v);
+      break;
+
+    case GTK_CSS_COLOR_SPACE_REC2100_PQ:
+      gtk_linear_srgb_to_xyz (output->values[0],
+                              output->values[1],
+                              output->values[2],
+                              &v[0], &v[1], &v[2]);
+      gtk_xyz_to_rec2020_linear (v[0], v[1], v[2],
+                                 &v[0], &v[1], &v[2]);
+      gtk_rec2020_linear_to_rec2100_linear (v[0], v[1], v[2],
+                                            &v[0], &v[1], &v[2]);
+      gtk_rec2100_linear_to_rec2100_pq (v[0], v[1], v[2],
+                                        &v[0], &v[1], &v[2]);
+      v[3] = output->values[3];
+      gtk_css_color_init (output, GTK_CSS_COLOR_SPACE_REC2100_PQ, v);
+      break;
+
     case GTK_CSS_COLOR_SPACE_SRGB_LINEAR:
     case GTK_CSS_COLOR_SPACE_OKLAB:
     case GTK_CSS_COLOR_SPACE_OKLCH:
@@ -408,6 +549,10 @@ convert_from_rectangular (GtkCssColor      *output,
     case GTK_CSS_COLOR_SPACE_SRGB:
     case GTK_CSS_COLOR_SPACE_SRGB_LINEAR:
     case GTK_CSS_COLOR_SPACE_OKLAB:
+    case GTK_CSS_COLOR_SPACE_DISPLAY_P3:
+    case GTK_CSS_COLOR_SPACE_XYZ:
+    case GTK_CSS_COLOR_SPACE_REC2020:
+    case GTK_CSS_COLOR_SPACE_REC2100_PQ:
       g_assert (output->color_space == dest);
       break;
 
@@ -574,6 +719,10 @@ apply_hue_interpolation (GtkCssColor            *from,
     case GTK_CSS_COLOR_SPACE_SRGB:
     case GTK_CSS_COLOR_SPACE_SRGB_LINEAR:
     case GTK_CSS_COLOR_SPACE_OKLAB:
+    case GTK_CSS_COLOR_SPACE_DISPLAY_P3:
+    case GTK_CSS_COLOR_SPACE_XYZ:
+    case GTK_CSS_COLOR_SPACE_REC2020:
+    case GTK_CSS_COLOR_SPACE_REC2100_PQ:
       break;
 
     case GTK_CSS_COLOR_SPACE_HSL:
@@ -606,6 +755,10 @@ normalize_hue (GtkCssColor *color)
     case GTK_CSS_COLOR_SPACE_SRGB:
     case GTK_CSS_COLOR_SPACE_SRGB_LINEAR:
     case GTK_CSS_COLOR_SPACE_OKLAB:
+    case GTK_CSS_COLOR_SPACE_DISPLAY_P3:
+    case GTK_CSS_COLOR_SPACE_XYZ:
+    case GTK_CSS_COLOR_SPACE_REC2020:
+    case GTK_CSS_COLOR_SPACE_REC2100_PQ:
       break;
 
     case GTK_CSS_COLOR_SPACE_HSL:
@@ -643,6 +796,10 @@ premultiply (GtkCssColor *color)
     case GTK_CSS_COLOR_SPACE_SRGB:
     case GTK_CSS_COLOR_SPACE_SRGB_LINEAR:
     case GTK_CSS_COLOR_SPACE_OKLAB:
+    case GTK_CSS_COLOR_SPACE_DISPLAY_P3:
+    case GTK_CSS_COLOR_SPACE_XYZ:
+    case GTK_CSS_COLOR_SPACE_REC2020:
+    case GTK_CSS_COLOR_SPACE_REC2100_PQ:
       premultiply_component (color, 0);
       premultiply_component (color, 1);
       premultiply_component (color, 2);
@@ -685,6 +842,10 @@ unpremultiply (GtkCssColor *color)
     case GTK_CSS_COLOR_SPACE_SRGB:
     case GTK_CSS_COLOR_SPACE_SRGB_LINEAR:
     case GTK_CSS_COLOR_SPACE_OKLAB:
+    case GTK_CSS_COLOR_SPACE_DISPLAY_P3:
+    case GTK_CSS_COLOR_SPACE_XYZ:
+    case GTK_CSS_COLOR_SPACE_REC2020:
+    case GTK_CSS_COLOR_SPACE_REC2100_PQ:
       unpremultiply_component (color, 0);
       unpremultiply_component (color, 1);
       unpremultiply_component (color, 2);
@@ -721,7 +882,10 @@ collect_analogous_missing (const GtkCssColor *color,
     { -1, -1, -1, -1, -1,  0, -1, -1, 3 }, /* hwb */
     { -1, -1, -1,  0, -1, -1,  1,  2, 3 }, /* oklab */
     { -1, -1, -1,  0,  1,  2, -1, -1, 3 }, /* oklch */
-
+    {  0,  1,  2, -1, -1, -1, -1, -1, 3 }, /* display-p3 */
+    {  0,  1,  2, -1, -1, -1, -1, -1, 3 }, /* xyz */
+    {  0,  1,  2, -1, -1, -1, -1, -1, 3 }, /* rec2020 */
+    {  0,  1,  2, -1, -1, -1, -1, -1, 3 }, /* rec2100-pq */
   };
 
   int *src = analogous[color->color_space];
@@ -929,6 +1093,18 @@ gtk_css_color_interpolation_method_print (GtkCssColorSpace        in,
       break;
     case GTK_CSS_COLOR_SPACE_OKLAB:
       g_string_append (string, "oklab");
+      break;
+    case GTK_CSS_COLOR_SPACE_DISPLAY_P3:
+      g_string_append (string, "display-p3");
+      break;
+    case GTK_CSS_COLOR_SPACE_XYZ:
+      g_string_append (string, "xyz");
+      break;
+    case GTK_CSS_COLOR_SPACE_REC2020:
+      g_string_append (string, "rec2020");
+      break;
+    case GTK_CSS_COLOR_SPACE_REC2100_PQ:
+      g_string_append (string, "rec2100-pq");
       break;
     default:
       g_assert_not_reached ();

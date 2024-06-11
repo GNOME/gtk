@@ -51,5 +51,39 @@ void gtk_rgb_to_linear_srgb (float  red,        float  green,        float  blue
 void gtk_linear_srgb_to_rgb (float  linear_red, float  linear_green, float  linear_blue,
                              float *red,        float *green,        float *blue);
 
+void gtk_rgb_to_p3 (float  red, float  green, float  blue,
+                    float *pr,  float *pg,    float *pb);
+void gtk_p3_to_rgb (float  pr,  float  pg,    float pb,
+                    float *red, float *green, float *blue);
+
+void gtk_xyz_to_linear_srgb (float x, float y, float z,
+                             float *r, float *g, float *b);
+void gtk_linear_srgb_to_xyz (float r, float g, float b,
+                             float *x, float *y, float *z);
+
+void gtk_rec2020_to_xyz (float r, float g, float b,
+                         float *x, float *y, float *z);
+void gtk_xyz_to_rec2020 (float x, float y, float z,
+                         float *r, float *g, float *b);
+
+void gtk_rec2020_to_rec2020_linear (float r, float g , float b,
+                                    float *rr, float *gg, float *bb);
+void gtk_rec2020_linear_to_rec2020 (float r, float g, float b,
+                                    float *rr, float *gg, float *bb);
+
+void gtk_rec2020_linear_to_xyz (float r, float g, float b,
+                                float *x, float *y, float *z);
+void gtk_xyz_to_rec2020_linear (float x, float y, float z,
+                                float *r, float *g, float *b);
+
+void gtk_rec2100_pq_to_rec2100_linear (float r, float g, float b,
+                                       float *rr, float *gg, float *bb);
+void gtk_rec2100_linear_to_rec2100_pq (float r, float g, float b,
+                                       float *rr, float *gg, float *bb);
+
+void gtk_rec2100_linear_to_rec2020_linear (float r, float g, float b,
+                                           float *rr, float *gg, float *bb);
+void gtk_rec2020_linear_to_rec2100_linear (float r, float g, float b,
+                                           float *rr, float *gg, float *bb);
 
 G_END_DECLS
