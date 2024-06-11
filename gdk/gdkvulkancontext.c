@@ -648,7 +648,7 @@ gdk_vulkan_context_begin_frame (GdkDrawContext *draw_context,
     {
       if (priv->formats[depth].gdk_format != priv->formats[priv->current_format].gdk_format)
         {
-          GdkMemoryFormat old_format = priv->current_format;
+          GdkMemoryDepth old_format = priv->current_format;
           GError *error = NULL;
 
           priv->current_format = depth;
