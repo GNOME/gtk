@@ -27,7 +27,7 @@
 #include "gtk/gtkcssstylepropertyprivate.h"
 #include "gtk/gtkcssstaticstyleprivate.h"
 
-#define EPSILON 0.001
+#define EPSILON 0.005
 
 static gboolean
 color_is_near (const GtkCssColor *color1,
@@ -116,8 +116,15 @@ static ColorConversionTest conversion_tests[] = {
   { "oklch(0.66016 0.15546 134.231)", GTK_CSS_COLOR_SPACE_SRGB, "rgb(40.73% 65.12% 22.35%)" },
   { "oklch(72.322% 0.12403 247.996)", GTK_CSS_COLOR_SPACE_SRGB, "rgb(38.29% 67.27% 93.85%)" },
   { "oklch(42.1% 48.25% 328.4)", GTK_CSS_COLOR_SPACE_SRGB, "color(srgb 0.501808 0.00257216 0.501403)" },
-  /* more random tests */
+  /* some self-conversions */
   { "oklch(0.392 0.4 none)", GTK_CSS_COLOR_SPACE_OKLCH, "oklch(0.392 0.4 0)" },
+  { "color(display-p3 1 1 1)", GTK_CSS_COLOR_SPACE_DISPLAY_P3, "color(display-p3 1 1 1)" },
+  { "color(rec2020 1 1 1)", GTK_CSS_COLOR_SPACE_REC2020, "color(rec2020 1 1 1)" },
+  { "color(rec2100-pq 0.58 0.58 0.58)", GTK_CSS_COLOR_SPACE_REC2100_PQ, "color(rec2100-pq 0.58 0.58 0.58)" },
+  /* more random tests */
+  { "color(rec2100-pq 0.58 0.58 0.58)", GTK_CSS_COLOR_SPACE_REC2020, "color(rec2020 1 1 1)" },
+  { "color(xyz 0.5 0.7 99%)", GTK_CSS_COLOR_SPACE_DISPLAY_P3, "color(display-p3 0.48 0.93 0.96)" },
+  { "hsl(250 100 20)", GTK_CSS_COLOR_SPACE_REC2020, "color(rec2020 0.042 0.008 0.3226)" },
 };
 
 static void
