@@ -134,7 +134,6 @@ proto_sources = [
   {
     'name': 'presentation-time',
     'stability': 'stable',
-    'version': 1,
   },
   {
     'name': 'single-pixel-buffer',
