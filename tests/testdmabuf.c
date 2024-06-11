@@ -189,7 +189,8 @@ allocate_memfd (gsize size)
   if (fd == -1)
     g_error ("memfd allocation failed");
 
-  ftruncate (fd, size);
+  if (ftruncate (fd, size) != 0)
+    g_error ("ftruncate failed");
 
   return fd;
 }
