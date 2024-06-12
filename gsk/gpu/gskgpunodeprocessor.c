@@ -3233,7 +3233,7 @@ gsk_gpu_node_processor_add_glyph_node (GskGpuNodeProcessor *self,
 
   device = gsk_gpu_frame_get_device (self->frame);
 
-  get_color2 (&color, gsk_text_node_get_color (node), self->color_state);
+  get_color (&color, gsk_text_node_get_color2 (node), self->color_state);
   color.alpha *= self->opacity;
   num_glyphs = gsk_text_node_get_num_glyphs (node);
   glyphs = gsk_text_node_get_glyphs (node, NULL);
@@ -3362,7 +3362,7 @@ gsk_gpu_node_processor_create_glyph_pattern (GskGpuPatternWriter *self,
   scale = MAX (graphene_vec2_get_x (&self->scale), graphene_vec2_get_y (&self->scale));
   inv_scale = 1.f / scale;
 
-  get_color2 (&color, gsk_text_node_get_color (node), self->color_state);
+  get_color (&color, gsk_text_node_get_color2 (node), self->color_state);
   gsk_gpu_pattern_writer_append_uint (self, GSK_GPU_PATTERN_GLYPHS);
   gsk_gpu_pattern_writer_append_rgba (self, &color);
   gsk_gpu_pattern_writer_append_uint (self, num_glyphs);

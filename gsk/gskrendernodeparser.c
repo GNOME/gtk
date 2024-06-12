@@ -2509,7 +2509,7 @@ parse_text_node (GtkCssParser *parser,
 {
   PangoFont *font = NULL;
   graphene_point_t offset = GRAPHENE_POINT_INIT (0, 0);
-  GdkRGBA color = GDK_RGBA("000000");
+  GdkColor color = { NULL, { 0, 0, 0, 0 } };
   PangoGlyphString *glyphs = NULL;
   cairo_hint_style_t hint_style = CAIRO_HINT_STYLE_SLIGHT;
   cairo_antialias_t antialias = CAIRO_ANTIALIAS_GRAY;
@@ -2518,7 +2518,7 @@ parse_text_node (GtkCssParser *parser,
   const Declaration declarations[] = {
     { "font", parse_font, clear_font, &font },
     { "offset", parse_point, NULL, &offset },
-    { "color", parse_rgba, NULL, &color },
+    { "color", parse_color, NULL, &color },
     { "glyphs", parse_glyphs, clear_glyphs, &glyphs },
     { "hint-style", parse_hint_style, NULL, &hint_style },
     { "antialias", parse_antialias, NULL, &antialias },
@@ -2527,6 +2527,9 @@ parse_text_node (GtkCssParser *parser,
   GskRenderNode *result;
 
   parse_declarations (parser, context, declarations, G_N_ELEMENTS (declarations));
+
+  if (color.color_state == NULL)
+    gdk_color_init (&color, gdk_color_state_get_srgb (), (float[4]) { 0, 0, 0, 1 });
 
   if (font == NULL)
     {
@@ -2561,7 +2564,7 @@ parse_text_node (GtkCssParser *parser,
     }
   else
     {
-      result = gsk_text_node_new (font, glyphs, &color, &offset);
+      result = gsk_text_node_new2 (font, glyphs, &color, &offset);
       if (result == NULL)
         {
           gtk_css_parser_error_value (parser, "Glyphs result in empty text");
@@ -3906,7 +3909,6 @@ gsk_text_node_serialize_font (GskRenderNode *node,
   g_free (s);
   pango_font_description_free (desc);
 
-  g_print ("serializing ");
   print_font (font);
   info = g_hash_table_lookup (p->fonts, hb_font_get_face (pango_font_get_hb_font (font)));
   if (info->serialized)
@@ -4563,12 +4565,12 @@ render_node_print (Printer       *p,
     case GSK_TEXT_NODE:
       {
         const graphene_point_t *offset = gsk_text_node_get_offset (node);
-        const GdkRGBA *color = gsk_text_node_get_color (node);
+        const GdkColor *color = gsk_text_node_get_color2 (node);
 
         start_node (p, "text", node_name);
 
-        if (!gdk_rgba_equal (color, &GDK_RGBA ("000000")))
-          append_rgba_param (p, "color", color);
+        if (!gdk_color_is_black (color))
+          append_color_param (p, "color", color);
 
         _indent (p);
         g_string_append (p->str, "font: ");
