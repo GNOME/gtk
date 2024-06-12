@@ -95,6 +95,63 @@ test_icc_roundtrip_rec709 (void)
   g_object_unref (cs);
 }
 
+static gboolean
+gdk_color_near (const GdkColor *color1,
+                const GdkColor *color2,
+                float           epsilon)
+{
+  return gdk_color_state_equal (color1->color_state, color2->color_state) &&
+         G_APPROX_VALUE (color1->values[0], color2->values[0], epsilon) &&
+         G_APPROX_VALUE (color1->values[1], color2->values[1], epsilon) &&
+         G_APPROX_VALUE (color1->values[2], color2->values[2], epsilon) &&
+         G_APPROX_VALUE (color1->values[3], color2->values[3], epsilon);
+}
+
+static void
+test_conversions (void)
+{
+  GdkColorState *cs[] = {
+    GDK_COLOR_STATE_SRGB,
+    GDK_COLOR_STATE_SRGB_LINEAR,
+    GDK_COLOR_STATE_HSL,
+    GDK_COLOR_STATE_HWB,
+    GDK_COLOR_STATE_OKLAB,
+    GDK_COLOR_STATE_OKLCH,
+    GDK_COLOR_STATE_XYZ,
+    GDK_COLOR_STATE_DISPLAY_P3,
+    GDK_COLOR_STATE_REC2020,
+    GDK_COLOR_STATE_REC2100_PQ,
+    GDK_COLOR_STATE_REC2100_LINEAR,
+  };
+
+  for (int k = 0; k < 100; k++)
+    {
+      int c;
+      float values[4];
+      GdkColor color;
+
+      values[0] = g_test_rand_double_range (0, 1);
+      values[1] = g_test_rand_double_range (0, 1);
+      values[2] = g_test_rand_double_range (0, 1);
+      values[3] = g_test_rand_double_range (0, 1);
+
+      gdk_color_init (&color, cs[0], values);
+
+      for (int i = 0; i < 100; i++)
+       {
+         GdkColor color2;
+         GdkColor color3;
+
+         c = g_test_rand_int_range (0, G_N_ELEMENTS (cs));
+
+         gdk_color_convert (&color2, cs[c], &color);
+         gdk_color_convert (&color3, cs[0], &color2);
+
+         g_assert_true (gdk_color_near (&color, &color3, 0.001));
+       }
+    }
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -103,6 +160,7 @@ main (int argc, char *argv[])
   g_test_add_func ("/colorstate/srgb", test_srgb);
   g_test_add_func ("/colorstate/srgb-linear", test_srgb_linear);
   g_test_add_func ("/colorstate/icc-roundtrip-rec709", test_icc_roundtrip_rec709);
+  g_test_add_func ("/colorstate/conversions", test_conversions);
 
   return g_test_run ();
 }
