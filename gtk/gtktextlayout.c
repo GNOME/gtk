@@ -1407,6 +1407,16 @@ gtk_text_attr_appearance_compare (const PangoAttribute *attr1,
          overline_equal (appearance1, appearance2);
 }
 
+static inline GdkRGBA *
+clamp_rgba (GdkRGBA *rgba)
+{
+  rgba->red = CLAMP (rgba->red, 0, 1);
+  rgba->green = CLAMP (rgba->green, 0, 1);
+  rgba->blue = CLAMP (rgba->blue, 0, 1);
+  rgba->alpha = CLAMP (rgba->alpha, 0, 1);
+  return rgba;
+}
+
 /*
  * gtk_text_attr_appearance_new:
  * @desc:
@@ -1439,19 +1449,19 @@ gtk_text_attr_appearance_new (const GtkTextAppearance *appearance)
   result->appearance = *appearance;
 
   if (appearance->fg_rgba)
-    result->appearance.fg_rgba = gdk_rgba_copy (appearance->fg_rgba);
+    result->appearance.fg_rgba = clamp_rgba (gdk_rgba_copy (appearance->fg_rgba));
 
   if (appearance->bg_rgba)
-    result->appearance.bg_rgba = gdk_rgba_copy (appearance->bg_rgba);
+    result->appearance.bg_rgba = clamp_rgba (gdk_rgba_copy (appearance->bg_rgba));
 
   if (appearance->underline_rgba)
-    result->appearance.underline_rgba = gdk_rgba_copy (appearance->underline_rgba);
+    result->appearance.underline_rgba = clamp_rgba (gdk_rgba_copy (appearance->underline_rgba));
 
   if (appearance->overline_rgba)
-    result->appearance.overline_rgba = gdk_rgba_copy (appearance->overline_rgba);
+    result->appearance.overline_rgba = clamp_rgba (gdk_rgba_copy (appearance->overline_rgba));
 
   if (appearance->strikethrough_rgba)
-    result->appearance.strikethrough_rgba = gdk_rgba_copy (appearance->strikethrough_rgba);
+    result->appearance.strikethrough_rgba = clamp_rgba (gdk_rgba_copy (appearance->strikethrough_rgba));
 
   return (PangoAttribute *)result;
 }
