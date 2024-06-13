@@ -3440,7 +3440,7 @@ link_style_changed_cb (GtkCssNode        *node,
                                     GTK_CSS_AFFECTS_CONTENT |
                                     GTK_CSS_AFFECTS_TEXT_ATTRS))
     {
-      gtk_label_clear_layout (self);
+      gtk_label_ensure_layout (self);
       gtk_widget_queue_draw (GTK_WIDGET (self));
     }
 }
@@ -6300,3 +6300,4 @@ gtk_label_accessible_text_init (GtkAccessibleTextInterface *iface)
 /* }}} */
 
 /* vim:set foldmethod=marker expandtab: */
+
