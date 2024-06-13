@@ -57,6 +57,8 @@
 #define MAX_GRADIENT_STOPS  6
 #define SHADOW_EXTRA_SIZE   4
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+
 /* Make sure gradient stops fits in packed array_count */
 G_STATIC_ASSERT ((MAX_GRADIENT_STOPS * 5) < (1 << GSK_GL_UNIFORM_ARRAY_BITS));
 
