@@ -492,14 +492,6 @@ parse_rounded_rect (GtkCssParser *parser,
 }
 
 static gboolean
-parse_rgba (GtkCssParser *parser,
-            Context      *context,
-            gpointer      out_rgba)
-{
-  return gdk_rgba_parser_parse (parser, out_rgba);
-}
-
-static gboolean
 parse_color (GtkCssParser *parser,
              Context      *context,
              gpointer      out_color)
@@ -1442,13 +1434,23 @@ create_default_texture (void)
 static GskRenderNode *
 create_default_render_node_with_bounds (const graphene_rect_t *rect)
 {
-  return gsk_color_node_new (&GDK_RGBA("FF00CC"), rect);
+  GdkColor color = GDK_COLOR_INIT_SRGB (1, 0, 0.864, 1);
+
+  return gsk_color_node_new2 (&color, rect);
 }
 
 static GskRenderNode *
 create_default_render_node (void)
 {
   return create_default_render_node_with_bounds (&GRAPHENE_RECT_INIT (0, 0, 50, 50));
+}
+
+static GskRenderNode *
+create_alternate_default_render_node (void)
+{
+  GdkColor color = GDK_COLOR_INIT_SRGB (0.667, 1, 0, 1);
+
+  return gsk_color_node_new2 (&color, &GRAPHENE_RECT_INIT (0, 0, 50, 50));
 }
 
 static GskPath *
@@ -1791,11 +1793,11 @@ parse_inset_shadow_node (GtkCssParser *parser,
                          Context      *context)
 {
   GskRoundedRect outline = GSK_ROUNDED_RECT_INIT (0, 0, 50, 50);
-  GdkRGBA color = GDK_RGBA("000000");
+  GdkColor color = GDK_COLOR_INIT_SRGB (0, 0, 0, 1);
   double dx = 1, dy = 1, blur = 0, spread = 0;
   const Declaration declarations[] = {
     { "outline", parse_rounded_rect, NULL, &outline },
-    { "color", parse_rgba, NULL, &color },
+    { "color", parse_color, NULL, &color },
     { "dx", parse_double, NULL, &dx },
     { "dy", parse_double, NULL, &dy },
     { "spread", parse_double, NULL, &spread },
@@ -1804,7 +1806,7 @@ parse_inset_shadow_node (GtkCssParser *parser,
 
   parse_declarations (parser, context, declarations, G_N_ELEMENTS (declarations));
 
-  return gsk_inset_shadow_node_new (&outline, &color, dx, dy, spread, blur);
+  return gsk_inset_shadow_node_new2 (&outline, &color, dx, dy, spread, blur);
 }
 
 typedef union {
@@ -2068,7 +2070,7 @@ parse_mask_node (GtkCssParser *parser,
   if (source == NULL)
     source = create_default_render_node ();
   if (mask == NULL)
-    mask = gsk_color_node_new (&GDK_RGBA("AAFF00"), &GRAPHENE_RECT_INIT (0, 0, 50, 50));
+    mask = create_alternate_default_render_node ();
 
   result = gsk_mask_node_new (source, mask, mode);
 
@@ -2099,7 +2101,7 @@ parse_border_node (GtkCssParser *parser,
   for (int i = 0; i < 4; i++)
     {
       if (colors[i].color_state == NULL)
-        gdk_color_init_from_rgba (&colors[i], &GDK_RGBA("000"));
+        gdk_color_init_from_rgba (&colors[i], &GDK_RGBA_BLACK);
     }
 
   return gsk_border_node_new2 (&outline, widths, colors);
@@ -2202,11 +2204,11 @@ parse_outset_shadow_node (GtkCssParser *parser,
                           Context      *context)
 {
   GskRoundedRect outline = GSK_ROUNDED_RECT_INIT (0, 0, 50, 50);
-  GdkRGBA color = GDK_RGBA("000000");
+  GdkColor color = GDK_COLOR_INIT_SRGB (0, 0, 0, 1);
   double dx = 1, dy = 1, blur = 0, spread = 0;
   const Declaration declarations[] = {
     { "outline", parse_rounded_rect, NULL, &outline },
-    { "color", parse_rgba, NULL, &color },
+    { "color", parse_color, NULL, &color },
     { "dx", parse_double, NULL, &dx },
     { "dy", parse_double, NULL, &dy },
     { "spread", parse_double, NULL, &spread },
@@ -2215,7 +2217,7 @@ parse_outset_shadow_node (GtkCssParser *parser,
 
   parse_declarations (parser, context, declarations, G_N_ELEMENTS (declarations));
 
-  return gsk_outset_shadow_node_new (&outline, &color, dx, dy, spread, blur);
+  return gsk_outset_shadow_node_new2 (&outline, &color, dx, dy, spread, blur);
 }
 
 static GskRenderNode *
@@ -2316,7 +2318,7 @@ parse_cross_fade_node (GtkCssParser *parser,
 
   parse_declarations (parser, context, declarations, G_N_ELEMENTS (declarations));
   if (start == NULL)
-    start = gsk_color_node_new (&GDK_RGBA("AAFF00"), &GRAPHENE_RECT_INIT (0, 0, 50, 50));
+    start = create_alternate_default_render_node ();
   if (end == NULL)
     end = create_default_render_node ();
 
@@ -2344,7 +2346,7 @@ parse_blend_node (GtkCssParser *parser,
 
   parse_declarations (parser, context, declarations, G_N_ELEMENTS (declarations));
   if (bottom == NULL)
-    bottom = gsk_color_node_new (&GDK_RGBA("AAFF00"), &GRAPHENE_RECT_INIT (0, 0, 50, 50));
+    bottom = create_alternate_default_render_node ();
   if (top == NULL)
     top = create_default_render_node ();
 
@@ -2503,7 +2505,7 @@ parse_text_node (GtkCssParser *parser,
 {
   PangoFont *font = NULL;
   graphene_point_t offset = GRAPHENE_POINT_INIT (0, 0);
-  GdkColor color = { NULL, { 0, 0, 0, 0 } };
+  GdkColor color = GDK_COLOR_INIT_SRGB (0, 0, 0, 1);
   PangoGlyphString *glyphs = NULL;
   cairo_hint_style_t hint_style = CAIRO_HINT_STYLE_SLIGHT;
   cairo_antialias_t antialias = CAIRO_ANTIALIAS_GRAY;
@@ -2521,9 +2523,6 @@ parse_text_node (GtkCssParser *parser,
   GskRenderNode *result;
 
   parse_declarations (parser, context, declarations, G_N_ELEMENTS (declarations));
-
-  if (color.color_state == NULL)
-    gdk_color_init (&color, gdk_color_state_get_srgb (), (float[4]) { 0, 0, 0, 1 });
 
   if (font == NULL)
     {
@@ -3529,18 +3528,6 @@ append_float_param (Printer    *p,
 }
 
 static void
-append_rgba_param (Printer       *p,
-                   const char    *param_name,
-                   const GdkRGBA *value)
-{
-  _indent (p);
-  g_string_append_printf (p->str, "%s: ", param_name);
-  gdk_rgba_print (value, p->str);
-  g_string_append_c (p->str, ';');
-  g_string_append_c (p->str, '\n');
-}
-
-static void
 append_color_param (Printer       *p,
                    const char     *param_name,
                    const GdkColor *value)
@@ -4282,13 +4269,13 @@ render_node_print (Printer       *p,
 
     case GSK_OUTSET_SHADOW_NODE:
       {
-        const GdkRGBA *color = gsk_outset_shadow_node_get_color (node);
+        const GdkColor *color = gsk_outset_shadow_node_get_color2 (node);
 
         start_node (p, "outset-shadow", node_name);
 
         append_float_param (p, "blur", gsk_outset_shadow_node_get_blur_radius (node), 0.0f);
-        if (!gdk_rgba_equal (color, &GDK_RGBA("000")))
-          append_rgba_param (p, "color", color);
+        if (!gdk_color_is_black (color))
+          append_color_param (p, "color", color);
         append_float_param (p, "dx", gsk_outset_shadow_node_get_dx (node), 1.0f);
         append_float_param (p, "dy", gsk_outset_shadow_node_get_dy (node), 1.0f);
         append_rounded_rect_param (p, "outline", gsk_outset_shadow_node_get_outline (node));
@@ -4392,7 +4379,7 @@ render_node_print (Printer       *p,
         start_node (p, "border", node_name);
         GdkColor transparent;
 
-        gdk_color_init (&transparent, gdk_color_state_get_srgb (), (float[4]) { 0, 0, 0, 0 });
+        gdk_color_init (&transparent, gdk_color_state_get_srgb (), ((float[4]) { 0, 0, 0, 0 }));
 
         if (!gdk_color_equal (&colors[3], &colors[1]))
           n = 4;
@@ -4459,14 +4446,12 @@ render_node_print (Printer       *p,
         g_string_append (p->str, "shadows: ");
         for (i = 0; i < n_shadows; i ++)
           {
-            const GskShadow *s = gsk_shadow_node_get_shadow (node, i);
-            char *color;
+            const GskShadow2 *s = gsk_shadow_node_get_shadow2 (node, i);
 
             if (i > 0)
               g_string_append (p->str, ", ");
 
-            color = gdk_rgba_to_string (&s->color);
-            g_string_append (p->str, color);
+            gdk_color_print (&s->color, p->str);
             g_string_append_c (p->str, ' ');
             string_append_double (p->str, s->dx);
             g_string_append_c (p->str, ' ');
@@ -4476,8 +4461,6 @@ render_node_print (Printer       *p,
                 g_string_append_c (p->str, ' ');
                 string_append_double (p->str, s->radius);
               }
-
-            g_free (color);
           }
 
         g_string_append_c (p->str, ';');
@@ -4490,12 +4473,12 @@ render_node_print (Printer       *p,
 
     case GSK_INSET_SHADOW_NODE:
       {
-        const GdkRGBA *color = gsk_inset_shadow_node_get_color (node);
+        const GdkColor *color = gsk_inset_shadow_node_get_color2 (node);
         start_node (p, "inset-shadow", node_name);
 
         append_float_param (p, "blur", gsk_inset_shadow_node_get_blur_radius (node), 0.0f);
-        if (!gdk_rgba_equal (color, &GDK_RGBA("000")))
-          append_rgba_param (p, "color", color);
+        if (!gdk_color_is_black (color))
+          append_color_param (p, "color", color);
         append_float_param (p, "dx", gsk_inset_shadow_node_get_dx (node), 1.0f);
         append_float_param (p, "dy", gsk_inset_shadow_node_get_dy (node), 1.0f);
         append_rounded_rect_param (p, "outline", gsk_inset_shadow_node_get_outline (node));
