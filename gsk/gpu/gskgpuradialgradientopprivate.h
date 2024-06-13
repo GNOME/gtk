@@ -20,7 +20,7 @@ void                    gsk_gpu_radial_gradient_op                      (GskGpuF
                                                                          GdkColorState                  *in,
                                                                          GdkColorState                  *target,
                                                                          GskHueInterpolation             hue_interp,
-                                                                         const GskColorStop             *stops,
+                                                                         const GskColorStop2            *stops,
                                                                          gsize                           n_stops);
 
 

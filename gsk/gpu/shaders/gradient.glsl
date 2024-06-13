@@ -9,6 +9,7 @@ struct Gradient
 {
   int n_stops;
   uint offset;
+  uint conversion;
 };
 
 float
@@ -109,7 +110,7 @@ gradient_get_color_repeating (Gradient self,
     }
   c /= end - start;
 
-  return color_premultiply (c);
+  return color_premultiply (color_convert (c, self.conversion));
 }
 
 vec4
@@ -125,20 +126,21 @@ gradient_get_color (Gradient self,
   if (end > start)
     c /= end - start;
 
-  return color_premultiply (c);
+  return color_premultiply (color_convert (c, self.conversion));
 }
 
 uint
 gradient_get_size (Gradient self)
 {
-  return uint (self.n_stops) * 5u + 1u;
+  return uint (self.n_stops) * 5u + 2u;
 }
 
 Gradient
 gradient_new (uint offset)
 {
   Gradient self = Gradient (gsk_get_int (offset),
-                            offset + 1u);
+                            offset + 1u,
+                            offset + 2u);
 
   return self;
 }

@@ -18,8 +18,8 @@ void                    gsk_gpu_linear_gradient_op                      (GskGpuF
                                                                          GdkColorState                 *in,
                                                                          GdkColorState                 *target,
                                                                          GskHueInterpolation            hue_interp,
-                                                                         const GskColorStop             *stops,
-                                                                         gsize                           n_stops);
+                                                                         const GskColorStop2           *stops,
+                                                                         gsize                          n_stops);
 
 
 int  gsk_get_hue_coord (GdkColorState       *in);
