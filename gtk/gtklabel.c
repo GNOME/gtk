@@ -3446,6 +3446,15 @@ link_style_changed_cb (GtkCssNode        *node,
 }
 
 static void
+selection_style_changed_cb (GtkCssNode        *node,
+                            GtkCssStyleChange *change,
+                            GtkLabel          *self)
+{
+  if (gtk_css_style_change_affects (change, GTK_CSS_AFFECTS_REDRAW))
+    gtk_widget_queue_draw (GTK_WIDGET (self));
+}
+
+static void
 start_element_handler (GMarkupParseContext  *context,
                        const char           *element_name,
                        const char          **attribute_names,
@@ -5152,6 +5161,8 @@ gtk_label_select_region_index (GtkLabel *self,
               gtk_css_node_set_name (self->select_info->selection_node, g_quark_from_static_string ("selection"));
               gtk_css_node_set_parent (self->select_info->selection_node, widget_node);
               gtk_css_node_set_state (self->select_info->selection_node, gtk_css_node_get_state (widget_node));
+              g_signal_connect (self->select_info->selection_node, "style-changed",
+                                G_CALLBACK (selection_style_changed_cb), self);
               g_object_unref (self->select_info->selection_node);
             }
         }
