@@ -704,12 +704,12 @@ parse_colors4 (GtkCssParser *parser,
                Context      *context,
                gpointer      out_colors)
 {
-  GdkRGBA colors[4];
+  GdkColor colors[4];
   int i;
 
   for (i = 0; i < 4 && !gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_EOF); i ++)
     {
-      if (!gdk_rgba_parser_parse (parser, &colors[i]))
+      if (!gdk_color_parser_parse (parser, &colors[i]))
         return FALSE;
     }
   if (i == 0)
@@ -722,7 +722,7 @@ parse_colors4 (GtkCssParser *parser,
       colors[i] = colors[(i - 1) >> 1];
     }
 
-  memcpy (out_colors, colors, sizeof (GdkRGBA) * 4);
+  memcpy (out_colors, colors, sizeof (GdkColor) * 4);
 
   return TRUE;
 }
@@ -2084,7 +2084,10 @@ parse_border_node (GtkCssParser *parser,
 {
   GskRoundedRect outline = GSK_ROUNDED_RECT_INIT (0, 0, 50, 50);
   float widths[4] = { 1, 1, 1, 1 };
-  GdkRGBA colors[4] = { GDK_RGBA("000"), GDK_RGBA("000"), GDK_RGBA("000"), GDK_RGBA("000") };
+  GdkColor colors[4] = { { NULL, { 0, } },
+                         { NULL, { 0, } },
+                         { NULL, { 0, } },
+                         { NULL, { 0, } } };
   const Declaration declarations[] = {
     { "outline", parse_rounded_rect, NULL, &outline },
     { "widths", parse_float4, NULL, &widths },
@@ -2093,7 +2096,13 @@ parse_border_node (GtkCssParser *parser,
 
   parse_declarations (parser, context, declarations, G_N_ELEMENTS (declarations));
 
-  return gsk_border_node_new (&outline, widths, colors);
+  for (int i = 0; i < 4; i++)
+    {
+      if (colors[i].color_state == NULL)
+        gdk_color_init_from_rgba (&colors[i], &GDK_RGBA("000"));
+    }
+
+  return gsk_border_node_new2 (&outline, widths, colors);
 }
 
 static GskRenderNode *
@@ -4377,18 +4386,21 @@ render_node_print (Printer       *p,
 
     case GSK_BORDER_NODE:
       {
-        const GdkRGBA *colors = gsk_border_node_get_colors (node);
+        const GdkColor *colors = gsk_border_node_get_colors2 (node);
         const float *widths = gsk_border_node_get_widths (node);
         guint i, n;
         start_node (p, "border", node_name);
+        GdkColor transparent;
 
-        if (!gdk_rgba_equal (&colors[3], &colors[1]))
+        gdk_color_init (&transparent, gdk_color_state_get_srgb (), (float[4]) { 0, 0, 0, 0 });
+
+        if (!gdk_color_equal (&colors[3], &colors[1]))
           n = 4;
-        else if (!gdk_rgba_equal (&colors[2], &colors[0]))
+        else if (!gdk_color_equal (&colors[2], &colors[0]))
           n = 3;
-        else if (!gdk_rgba_equal (&colors[1], &colors[0]))
+        else if (!gdk_color_equal (&colors[1], &colors[0]))
           n = 2;
-        else if (!gdk_rgba_equal (&colors[0], &GDK_RGBA("000000")))
+        else if (!gdk_color_equal (&colors[0], &transparent))
           n = 1;
         else
           n = 0;
@@ -4401,7 +4413,7 @@ render_node_print (Printer       *p,
               {
                 if (i > 0)
                   g_string_append_c (p->str, ' ');
-                gdk_rgba_print (&colors[i], p->str);
+                gdk_color_print (&colors[i], p->str);
               }
             g_string_append (p->str, ";\n");
           }

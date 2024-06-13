@@ -453,12 +453,19 @@ GDK_AVAILABLE_IN_ALL
 GskRenderNode *         gsk_border_node_new                     (const GskRoundedRect     *outline,
                                                                  const float               border_width[4],
                                                                  const GdkRGBA             border_color[4]);
+GDK_AVAILABLE_IN_4_16
+GskRenderNode *         gsk_border_node_new2                    (const GskRoundedRect     *outline,
+                                                                 const float               border_width[4],
+                                                                 const GdkColor            border_color[4]);
 GDK_AVAILABLE_IN_ALL
 const GskRoundedRect *  gsk_border_node_get_outline             (const GskRenderNode      *node) G_GNUC_PURE;
 GDK_AVAILABLE_IN_ALL
 const float *           gsk_border_node_get_widths              (const GskRenderNode      *node) G_GNUC_PURE;
 GDK_AVAILABLE_IN_ALL
 const GdkRGBA *         gsk_border_node_get_colors              (const GskRenderNode      *node) G_GNUC_PURE;
+
+GDK_AVAILABLE_IN_4_16
+const GdkColor *        gsk_border_node_get_colors2             (const GskRenderNode      *node) G_GNUC_PURE;
 
 GDK_AVAILABLE_IN_ALL
 GType                   gsk_inset_shadow_node_get_type          (void) G_GNUC_CONST;
