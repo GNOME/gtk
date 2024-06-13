@@ -3859,6 +3859,15 @@ get_better_cursor_x (GtkText *self,
 }
 
 static void
+selection_style_changed_cb (GtkCssNode        *node,
+                            GtkCssStyleChange *change,
+                            GtkText           *self)
+{
+  if (gtk_css_style_change_affects (change, GTK_CSS_AFFECTS_REDRAW))
+    gtk_widget_queue_draw (GTK_WIDGET (self));
+}
+
+static void
 gtk_text_move_cursor (GtkText         *self,
                       GtkMovementStep  step,
                       int              count,
@@ -4510,6 +4519,8 @@ gtk_text_set_positions (GtkText *self,
           gtk_css_node_set_name (priv->selection_node, g_quark_from_static_string ("selection"));
           gtk_css_node_set_parent (priv->selection_node, widget_node);
           gtk_css_node_set_state (priv->selection_node, gtk_css_node_get_state (widget_node));
+          g_signal_connect (priv->selection_node, "style-changed",
+                            G_CALLBACK (selection_style_changed_cb), self);
           g_object_unref (priv->selection_node);
         }
     }
