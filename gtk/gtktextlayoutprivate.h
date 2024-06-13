@@ -376,6 +376,7 @@ void gtk_text_layout_snapshot (GtkTextLayout        *layout,
                                GtkWidget            *widget,
                                GtkSnapshot          *snapshot,
                                const GdkRectangle   *clip,
+                               gboolean              selection_style_changed,
                                float                 cursor_alpha);
 
 void gtk_text_layout_set_mru_size (GtkTextLayout *layout,

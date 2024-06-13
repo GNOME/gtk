@@ -4100,6 +4100,7 @@ gtk_text_layout_snapshot (GtkTextLayout      *layout,
                           GtkWidget          *widget,
                           GtkSnapshot        *snapshot,
                           const GdkRectangle *clip,
+                          gboolean            selection_style_changed,
                           float               cursor_alpha)
 {
   GtkTextLayoutPrivate *priv;
@@ -4237,6 +4238,12 @@ gtk_text_layout_snapshot (GtkTextLayout      *layout,
             {
               if (line_display->has_block_cursor && gtk_widget_has_focus (widget))
                 g_clear_pointer (&line_display->node, gsk_render_node_unref);
+
+              if (selection_style_changed &&
+                  (selection_start_index != -1 || selection_end_index != -1))
+                {
+                  g_clear_pointer (&line_display->node, gsk_render_node_unref);
+                }
             }
 
           if (line_display->node == NULL &&
