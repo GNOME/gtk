@@ -840,9 +840,17 @@ gtk_label_update_layout_attributes (GtkLabel      *self,
             }
 
           link_color = gtk_css_color_value_get_rgba (style->core->color);
-          attr = pango_attr_foreground_new (link_color->red * 65535,
-                                            link_color->green * 65535,
-                                            link_color->blue * 65535);
+
+          attr = pango_attr_foreground_new (CLAMP (link_color->red * 65535. + 0.5, 0, 65535),
+                                            CLAMP (link_color->green * 65535. + 0.5, 0, 65535),
+                                            CLAMP (link_color->blue * 65535. + 0.5, 0, 65535));
+
+          attr->start_index = link->start;
+          attr->end_index = link->end;
+          pango_attr_list_insert (attrs, attr);
+
+          attr = pango_attr_foreground_alpha_new (CLAMP (link_color->alpha * 65535. + 0.5, 0, 65535));
+
           attr->start_index = link->start;
           attr->end_index = link->end;
           pango_attr_list_insert (attrs, attr);
