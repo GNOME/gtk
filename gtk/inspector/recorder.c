@@ -511,7 +511,7 @@ node_name (GskRenderNode *node)
       return g_strdup (gsk_debug_node_get_message (node));
 
     case GSK_COLOR_NODE:
-      return gdk_rgba_to_string (gsk_color_node_get_color (node));
+      return gdk_color_to_string (gsk_color_node_get_color2 (node));
 
     case GSK_TEXTURE_NODE:
       {
@@ -695,12 +695,13 @@ static GskRenderNode *
 make_dot (double x, double y)
 {
   GskRenderNode *fill, *dot;
-  GdkRGBA red = (GdkRGBA){ 1, 0, 0, 1 };
+  GdkColor red;
   graphene_rect_t rect = GRAPHENE_RECT_INIT (x - 3, y - 3, 6, 6);
   graphene_size_t corner = GRAPHENE_SIZE_INIT (3, 3);
   GskRoundedRect clip;
 
-  fill = gsk_color_node_new (&red, &rect);
+  gdk_color_init_from_rgba (&red, &(GdkRGBA) { 1, 0, 0, 1 });
+  fill = gsk_color_node_new2 (&red, &rect);
   dot = gsk_rounded_clip_node_new (fill, gsk_rounded_rect_init (&clip, &rect,
                                                                &corner, &corner, &corner, &corner));
   gsk_render_node_unref (fill);
@@ -798,7 +799,7 @@ recording_selected (GtkSingleSelection   *selection,
 }
 
 static GdkTexture *
-get_color_texture (const GdkRGBA *color)
+get_color_texture (const GdkColor *color)
 {
   GdkTexture *texture;
   guchar pixel[4];
@@ -807,17 +808,17 @@ get_color_texture (const GdkRGBA *color)
   int width = 30;
   int height = 30;
   int i;
+  GdkColor c;
 
-  pixel[0] = round (color->red * 255);
-  pixel[1] = round (color->green * 255);
-  pixel[2] = round (color->blue * 255);
-  pixel[3] = round (color->alpha * 255);
+  gdk_color_convert (&c, gdk_color_state_get_srgb (), color);
+  pixel[0] = round (c.values[0] * 255);
+  pixel[1] = round (c.values[1] * 255);
+  pixel[2] = round (c.values[2] * 255);
+  pixel[3] = round (c.values[3] * 255);
 
   data = g_malloc (4 * width * height);
   for (i = 0; i < width * height; i++)
-    {
-      memcpy (data + 4 * i, pixel, 4);
-    }
+    memcpy (data + 4 * i, pixel, 4);
 
   bytes = g_bytes_new_take (data, 4 * width * height);
   texture = gdk_memory_texture_new (width,
@@ -831,7 +832,7 @@ get_color_texture (const GdkRGBA *color)
 }
 
 static GdkTexture *
-get_linear_gradient_texture (gsize n_stops, const GskColorStop *stops)
+get_linear_gradient_texture (gsize n_stops, const GskColorStop2 *stops)
 {
   cairo_surface_t *surface;
   cairo_t *cr;
@@ -845,12 +846,14 @@ get_linear_gradient_texture (gsize n_stops, const GskColorStop *stops)
   pattern = cairo_pattern_create_linear (0, 0, 90, 0);
   for (i = 0; i < n_stops; i++)
     {
+      GdkColor c;
+      gdk_color_convert (&c, gdk_color_state_get_srgb (), &stops[i].color);
       cairo_pattern_add_color_stop_rgba (pattern,
                                          stops[i].offset,
-                                         stops[i].color.red,
-                                         stops[i].color.green,
-                                         stops[i].color.blue,
-                                         stops[i].color.alpha);
+                                         c.values[0],
+                                         c.values[1],
+                                         c.values[2],
+                                         c.values[3]);
     }
 
   cairo_set_source (cr, pattern);
@@ -898,14 +901,14 @@ add_text_row (GListStore *store,
 }
 
 static void
-add_color_row (GListStore    *store,
-               const char    *name,
-               const GdkRGBA *color)
+add_color_row (GListStore     *store,
+               const char     *name,
+               const GdkColor *color)
 {
   char *text;
   GdkTexture *texture;
 
-  text = gdk_rgba_to_string (color);
+  text = gdk_color_to_string (color);
   texture = get_color_texture (color);
   list_store_add_object_property (store, name, text, texture);
   g_free (text);
@@ -1072,7 +1075,7 @@ populate_render_node_properties (GListStore    *store,
       break;
 
     case GSK_COLOR_NODE:
-      add_color_row (store, "Color", gsk_color_node_get_color (node));
+      add_color_row (store, "Color", gsk_color_node_get_color2 (node));
       break;
 
     case GSK_LINEAR_GRADIENT_NODE:
@@ -1081,7 +1084,7 @@ populate_render_node_properties (GListStore    *store,
         const graphene_point_t *start = gsk_linear_gradient_node_get_start (node);
         const graphene_point_t *end = gsk_linear_gradient_node_get_end (node);
         const gsize n_stops = gsk_linear_gradient_node_get_n_color_stops (node);
-        const GskColorStop *stops = gsk_linear_gradient_node_get_color_stops (node, NULL);
+        const GskColorStop2 *stops = gsk_linear_gradient_node_get_color_stops2 (node, NULL);
         GdkColorState *in = gsk_linear_gradient_node_get_color_state (node);
         GskHueInterpolation hue = gsk_linear_gradient_node_get_hue_interpolation (node);
         int i;
@@ -1094,7 +1097,7 @@ populate_render_node_properties (GListStore    *store,
         for (i = 0; i < n_stops; i++)
           {
             g_string_append_printf (s, "%.2f, ", stops[i].offset);
-            gdk_rgba_print (&stops[i].color, s);
+            gdk_color_print (&stops[i].color, s);
             g_string_append_c (s, '\n');
           }
 
@@ -1118,7 +1121,7 @@ populate_render_node_properties (GListStore    *store,
         const float hradius = gsk_radial_gradient_node_get_hradius (node);
         const float vradius = gsk_radial_gradient_node_get_vradius (node);
         const gsize n_stops = gsk_radial_gradient_node_get_n_color_stops (node);
-        const GskColorStop *stops = gsk_radial_gradient_node_get_color_stops (node, NULL);
+        const GskColorStop2 *stops = gsk_radial_gradient_node_get_color_stops2 (node, NULL);
         GdkColorState *in = gsk_radial_gradient_node_get_color_state (node);
         GskHueInterpolation hue = gsk_radial_gradient_node_get_hue_interpolation (node);
         int i;
@@ -1133,7 +1136,7 @@ populate_render_node_properties (GListStore    *store,
         for (i = 0; i < n_stops; i++)
           {
             g_string_append_printf (s, "%.2f, ", stops[i].offset);
-            gdk_rgba_print (&stops[i].color, s);
+            gdk_color_print (&stops[i].color, s);
             g_string_append_c (s, '\n');
           }
 
@@ -1153,7 +1156,7 @@ populate_render_node_properties (GListStore    *store,
         const graphene_point_t *center = gsk_conic_gradient_node_get_center (node);
         const float rotation = gsk_conic_gradient_node_get_rotation (node);
         const gsize n_stops = gsk_conic_gradient_node_get_n_color_stops (node);
-        const GskColorStop *stops = gsk_conic_gradient_node_get_color_stops (node, NULL);
+        const GskColorStop2 *stops = gsk_conic_gradient_node_get_color_stops2 (node, NULL);
         GdkColorState *in = gsk_conic_gradient_node_get_color_state (node);
         GskHueInterpolation hue = gsk_conic_gradient_node_get_hue_interpolation (node);
         gsize i;
@@ -1167,7 +1170,7 @@ populate_render_node_properties (GListStore    *store,
         for (i = 0; i < n_stops; i++)
           {
             g_string_append_printf (s, "%.2f, ", stops[i].offset);
-            gdk_rgba_print (&stops[i].color, s);
+            gdk_color_print (&stops[i].color, s);
             g_string_append_c (s, '\n');
           }
 
@@ -1185,7 +1188,7 @@ populate_render_node_properties (GListStore    *store,
     case GSK_TEXT_NODE:
       {
         const PangoFont *font = gsk_text_node_get_font (node);
-        const GdkRGBA *color = gsk_text_node_get_color (node);
+        const GdkColor *color = gsk_text_node_get_color2 (node);
         const graphene_point_t *offset = gsk_text_node_get_offset (node);
         PangoFontDescription *desc;
         GString *s;
@@ -1212,7 +1215,7 @@ populate_render_node_properties (GListStore    *store,
       {
         const char *name[4] = { "Top", "Right", "Bottom", "Left" };
         const float *widths = gsk_border_node_get_widths (node);
-        const GdkRGBA *colors = gsk_border_node_get_colors (node);
+        const GdkColor *colors = gsk_border_node_get_colors2 (node);
         int i;
 
         for (i = 0; i < 4; i++)
@@ -1220,7 +1223,7 @@ populate_render_node_properties (GListStore    *store,
             GdkTexture *texture;
             char *text, *tmp;
 
-            text = gdk_rgba_to_string (&colors[i]);
+            text = gdk_color_to_string (&colors[i]);
             tmp = g_strdup_printf ("%.2f, %s", widths[i], text);
             texture = get_color_texture (&colors[i]);
             list_store_add_object_property (store, name[i], tmp, texture);
@@ -1342,7 +1345,7 @@ populate_render_node_properties (GListStore    *store,
 
     case GSK_INSET_SHADOW_NODE:
       {
-        const GdkRGBA *color = gsk_inset_shadow_node_get_color (node);
+        const GdkColor *color = gsk_inset_shadow_node_get_color2 (node);
         float dx = gsk_inset_shadow_node_get_dx (node);
         float dy = gsk_inset_shadow_node_get_dy (node);
         float spread = gsk_inset_shadow_node_get_spread (node);
@@ -1360,7 +1363,7 @@ populate_render_node_properties (GListStore    *store,
     case GSK_OUTSET_SHADOW_NODE:
       {
         const GskRoundedRect *outline = gsk_outset_shadow_node_get_outline (node);
-        const GdkRGBA *color = gsk_outset_shadow_node_get_color (node);
+        const GdkColor *color = gsk_outset_shadow_node_get_color2 (node);
         float dx = gsk_outset_shadow_node_get_dx (node);
         float dy = gsk_outset_shadow_node_get_dy (node);
         float spread = gsk_outset_shadow_node_get_spread (node);
@@ -1505,7 +1508,7 @@ populate_render_node_properties (GListStore    *store,
         for (i = 0; i < gsk_shadow_node_get_n_shadows (node); i++)
           {
             char *label;
-            const GskShadow *shadow = gsk_shadow_node_get_shadow (node, i);
+            const GskShadow2 *shadow = gsk_shadow_node_get_shadow2 (node, i);
 
             label = g_strdup_printf ("Color %d", i);
             add_color_row (store, label, &shadow->color);

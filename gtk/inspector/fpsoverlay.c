@@ -25,6 +25,7 @@
 #include "gtkwindow.h"
 #include "gtknative.h"
 #include "gtkmain.h"
+#include "gdk/gdkrgbaprivate.h"
 
 /* duration before we start fading in us */
 #define GDK_FPS_OVERLAY_LINGER_DURATION (1000 * 1000)
@@ -210,6 +211,7 @@ gtk_fps_overlay_snapshot (GtkInspectorOverlay *overlay,
       char fps_string[40];
       gboolean bg_drawn = FALSE;
       float bg_x = 0;
+      GdkColor white;
 
       g_snprintf (fps_string, sizeof (fps_string), "%9.2f fps", fps);
       for (int i = 0; i < 9; i++)
@@ -235,10 +237,11 @@ gtk_fps_overlay_snapshot (GtkInspectorOverlay *overlay,
             }
         }
 
-      fps_node = gsk_text_node_new (info->font,
-                                    info->glyphs,
-                                    &(GdkRGBA) { 1, 1, 1, 1 },
-                                    &GRAPHENE_POINT_INIT (0, info->baseline));
+      gdk_color_init_from_rgba (&white, &GDK_RGBA_WHITE);
+      fps_node = gsk_text_node_new2 (info->font,
+                                     info->glyphs,
+                                     &white,
+                                     &GRAPHENE_POINT_INIT (0, info->baseline));
       gtk_snapshot_append_node (snapshot, fps_node);
       gsk_render_node_unref (fps_node);
     }
