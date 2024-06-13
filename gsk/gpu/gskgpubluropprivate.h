@@ -23,7 +23,7 @@ void                    gsk_gpu_blur_shadow_op                          (GskGpuF
                                                                          const graphene_point_t         *offset,
                                                                          const graphene_rect_t          *tex_rect,
                                                                          const graphene_vec2_t          *blur_direction,
-                                                                         const GdkRGBA                  *shadow_color);
+                                                                         const GdkColor                 *shadow_color);
 
 
 G_END_DECLS

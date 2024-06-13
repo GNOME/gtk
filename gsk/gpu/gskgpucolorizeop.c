@@ -56,7 +56,7 @@ gsk_gpu_colorize_op (GskGpuFrame            *frame,
                      const graphene_rect_t  *rect,
                      const graphene_point_t *offset,
                      const graphene_rect_t  *tex_rect,
-                     const GdkRGBA          *color)
+                     const GdkColor         *color)
 {
   GskGpuColorizeInstance *instance;
 
@@ -70,5 +70,5 @@ gsk_gpu_colorize_op (GskGpuFrame            *frame,
   gsk_gpu_rect_to_float (rect, offset, instance->rect);
   gsk_gpu_rect_to_float (tex_rect, offset, instance->tex_rect);
   instance->tex_id = descriptor;
-  gsk_gpu_rgba_to_float (color, instance->color);
+  gsk_gpu_color_to_float (color, instance->color);
 }

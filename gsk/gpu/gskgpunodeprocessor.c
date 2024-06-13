@@ -1152,7 +1152,7 @@ gsk_gpu_node_processor_blur_op (GskGpuNodeProcessor       *self,
                                 const graphene_rect_t     *rect,
                                 const graphene_point_t    *shadow_offset,
                                 float                      blur_radius,
-                                const GdkRGBA             *shadow_color,
+                                const GdkColor            *shadow_color,
                                 GskGpuDescriptors         *source_desc,
                                 guint32                    source_descriptor,
                                 GdkMemoryDepth             source_depth,
@@ -2824,7 +2824,7 @@ gsk_gpu_node_processor_add_shadow_node (GskGpuNodeProcessor *self,
   image = gsk_gpu_node_processor_get_node_as_image (self,
                                                     0,
                                                     GSK_GPU_IMAGE_STRAIGHT_ALPHA,
-                                                    &clip_bounds, 
+                                                    &clip_bounds,
                                                     child,
                                                     &tex_rect);
   if (image == NULL)
@@ -2835,7 +2835,11 @@ gsk_gpu_node_processor_add_shadow_node (GskGpuNodeProcessor *self,
 
   for (i = 0; i < n_shadows; i++)
     {
-      const GskShadow *shadow = gsk_shadow_node_get_shadow (node, i);
+      const GskShadow2 *shadow = gsk_shadow_node_get_shadow2 (node, i);
+      GdkColor color;
+
+      gdk_color_convert (&color, self->color_state, &shadow->color);
+
       if (shadow->radius == 0)
         {
           graphene_point_t shadow_offset = GRAPHENE_POINT_INIT (self->offset.x + shadow->dx,
@@ -2847,7 +2851,7 @@ gsk_gpu_node_processor_add_shadow_node (GskGpuNodeProcessor *self,
                                &child->bounds,
                                &shadow_offset,
                                &tex_rect,
-                               &shadow->color);
+                               &color);
         }
       else
         {
@@ -2858,7 +2862,7 @@ gsk_gpu_node_processor_add_shadow_node (GskGpuNodeProcessor *self,
                                           &bounds,
                                           &GRAPHENE_POINT_INIT (shadow->dx, shadow->dy),
                                           shadow->radius,
-                                          &shadow->color,
+                                          &color,
                                           desc,
                                           descriptor,
                                           gdk_memory_format_get_depth (gsk_gpu_image_get_format (image)),
@@ -3145,9 +3149,10 @@ gsk_gpu_node_processor_add_mask_node (GskGpuNodeProcessor *self,
   if (gsk_render_node_get_node_type (source_child) == GSK_COLOR_NODE &&
       mask_mode == GSK_MASK_MODE_ALPHA)
     {
-      GdkRGBA rgba;
+      GdkColor color;
 
-      get_color (&rgba, gsk_color_node_get_color2 (source_child), self->color_state);
+      gdk_color_convert (&color, self->color_state, gsk_color_node_get_color2 (source_child));
+      color.values[3] *= self->opacity;
       guint32 descriptor = gsk_gpu_node_processor_add_image (self, mask_image, GSK_GPU_SAMPLER_DEFAULT);
       gsk_gpu_colorize_op (self->frame,
                            gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, &node->bounds),
@@ -3156,7 +3161,7 @@ gsk_gpu_node_processor_add_mask_node (GskGpuNodeProcessor *self,
                            &node->bounds,
                            &self->offset,
                            &mask_rect,
-                           &GDK_RGBA_INIT_ALPHA (&rgba, self->opacity));
+                           &color);
     }
   else
     {
@@ -3270,7 +3275,7 @@ gsk_gpu_node_processor_add_glyph_node (GskGpuNodeProcessor *self,
   graphene_point_t offset;
   guint i, num_glyphs;
   float scale, inv_scale;
-  GdkRGBA color;
+  GdkColor color;
   float align_scale_x, align_scale_y;
   float inv_align_scale_x, inv_align_scale_y;
   unsigned int flags_mask;
@@ -3287,8 +3292,9 @@ gsk_gpu_node_processor_add_glyph_node (GskGpuNodeProcessor *self,
 
   device = gsk_gpu_frame_get_device (self->frame);
 
-  get_color (&color, gsk_text_node_get_color2 (node), self->color_state);
-  color.alpha *= self->opacity;
+  gdk_color_convert (&color, self->color_state, gsk_text_node_get_color2 (node));
+  color.values[3] *= self->opacity;
+
   num_glyphs = gsk_text_node_get_num_glyphs (node);
   glyphs = gsk_text_node_get_glyphs (node, NULL);
   font = gsk_text_node_get_font (node);

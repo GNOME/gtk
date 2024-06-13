@@ -736,10 +736,10 @@ parse_shadows (GtkCssParser *parser,
 
   do
     {
-      GskShadow shadow = { GDK_RGBA("000000"), 0, 0, 0 };
+      GskShadow2 shadow = { { NULL, { 0, } } , 0, 0, 0 };
       double dx = 0, dy = 0, radius = 0;
 
-      if (!gdk_rgba_parser_parse (parser, &shadow.color))
+      if (!gdk_color_parser_parse (parser, &shadow.color))
         gtk_css_parser_error_value (parser, "Expected shadow color");
 
       if (!gtk_css_parser_consume_number (parser, &dx))
@@ -2834,7 +2834,7 @@ parse_shadow_node (GtkCssParser *parser,
                    Context      *context)
 {
   GskRenderNode *child = NULL;
-  GArray *shadows = g_array_new (FALSE, TRUE, sizeof (GskShadow));
+  GArray *shadows = g_array_new (FALSE, TRUE, sizeof (GskShadow2));
   const Declaration declarations[] = {
     { "child", parse_node, clear_node, &child },
     { "shadows", parse_shadows, clear_shadows, shadows }
@@ -2847,11 +2847,12 @@ parse_shadow_node (GtkCssParser *parser,
 
   if (shadows->len == 0)
     {
-      GskShadow default_shadow = { GDK_RGBA("000000"), 1, 1, 0 };
+      GskShadow2 default_shadow = { { NULL, { 0, } }, 1, 1, 0 };
+      default_shadow.color.color_state = gdk_color_state_get_srgb ();
       g_array_append_val (shadows, default_shadow);
     }
 
-  result = gsk_shadow_node_new (child, (GskShadow *)shadows->data, shadows->len);
+  result = gsk_shadow_node_new2 (child, (GskShadow2 *)shadows->data, shadows->len);
 
   g_array_free (shadows, TRUE);
   gsk_render_node_unref (child);

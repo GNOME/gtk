@@ -13,7 +13,7 @@ void                    gsk_gpu_colorize_op                             (GskGpuF
                                                                          const graphene_rect_t          *rect,
                                                                          const graphene_point_t         *offset,
                                                                          const graphene_rect_t          *tex_rect,
-                                                                         const GdkRGBA                  *color);
+                                                                         const GdkColor                 *color);
 
 
 G_END_DECLS

@@ -62,7 +62,7 @@ gsk_gpu_blur_op_full (GskGpuFrame            *frame,
                       const graphene_point_t *offset,
                       const graphene_rect_t  *tex_rect,
                       const graphene_vec2_t  *blur_direction,
-                      const GdkRGBA          *blur_color)
+                      const GdkColor         *blur_color)
 {
   GskGpuBlurInstance *instance;
 
@@ -76,7 +76,7 @@ gsk_gpu_blur_op_full (GskGpuFrame            *frame,
   gsk_gpu_rect_to_float (rect, offset, instance->rect);
   gsk_gpu_rect_to_float (tex_rect, offset, instance->tex_rect);
   graphene_vec2_to_float (blur_direction, instance->blur_direction);
-  gsk_gpu_rgba_to_float (blur_color, instance->blur_color);
+  gsk_gpu_color_to_float (blur_color, instance->blur_color);
   instance->tex_id = descriptor;
 }
 
@@ -90,6 +90,10 @@ gsk_gpu_blur_op (GskGpuFrame            *frame,
                  const graphene_rect_t  *tex_rect,
                  const graphene_vec2_t  *blur_direction)
 {
+  GdkColor color;
+
+  gdk_color_init_from_rgba (&color, &GDK_RGBA_TRANSPARENT);
+
   gsk_gpu_blur_op_full (frame,
                         0,
                         clip,
@@ -99,7 +103,7 @@ gsk_gpu_blur_op (GskGpuFrame            *frame,
                         offset,
                         tex_rect,
                         blur_direction,
-                        &GDK_RGBA_TRANSPARENT);
+                        &color);
 }
 
 void
@@ -111,7 +115,7 @@ gsk_gpu_blur_shadow_op (GskGpuFrame            *frame,
                         const graphene_point_t *offset,
                         const graphene_rect_t  *tex_rect,
                         const graphene_vec2_t  *blur_direction,
-                        const GdkRGBA          *shadow_color)
+                        const GdkColor         *shadow_color)
 {
   gsk_gpu_blur_op_full (frame,
                         VARIATION_COLORIZE,
