@@ -3432,6 +3432,20 @@ finish_text (UriParserData *pdata)
 }
 
 static void
+link_style_changed_cb (GtkCssNode        *node,
+                       GtkCssStyleChange *change,
+                       GtkLabel          *self)
+{
+  if (gtk_css_style_change_affects (change,
+                                    GTK_CSS_AFFECTS_CONTENT |
+                                    GTK_CSS_AFFECTS_TEXT_ATTRS))
+    {
+      gtk_label_clear_layout (self);
+      gtk_widget_queue_draw (GTK_WIDGET (self));
+    }
+}
+
+static void
 start_element_handler (GMarkupParseContext  *context,
                        const char           *element_name,
                        const char          **attribute_names,
@@ -3519,6 +3533,7 @@ start_element_handler (GMarkupParseContext  *context,
       gtk_css_node_set_parent (link.cssnode, widget_node);
       if (class)
         gtk_css_node_add_class (link.cssnode, g_quark_from_string (class));
+      g_signal_connect (link.cssnode, "style-changed", G_CALLBACK (link_style_changed_cb), self);
 
       state = gtk_css_node_get_state (widget_node);
       if (visited)
