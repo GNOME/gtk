@@ -372,7 +372,7 @@ mask_surface_repeat (cairo_t         *cr,
 cairo_t *
 gsk_cairo_blur_finish_drawing (cairo_t         *cr,
                                float            radius,
-                               const GdkRGBA   *color,
+                               const GdkColor  *color,
                                GskBlurFlags     blur_flags)
 {
   cairo_t *original_cr;
@@ -392,7 +392,7 @@ gsk_cairo_blur_finish_drawing (cairo_t         *cr,
 
   gsk_cairo_blur_surface (surface, x_scale * radius, blur_flags);
 
-  gdk_cairo_set_source_rgba (original_cr, color);
+  gdk_cairo_set_source_color (original_cr, color);
   if (blur_flags & GSK_BLUR_REPEAT)
     mask_surface_repeat (original_cr, surface);
   else

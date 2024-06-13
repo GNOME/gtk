@@ -53,7 +53,7 @@ gsk_gpu_color_op (GskGpuFrame            *frame,
                   GskGpuShaderClip        clip,
                   const graphene_rect_t  *rect,
                   const graphene_point_t *offset,
-                  const GdkRGBA          *color)
+                  const GdkColor         *color)
 {
   GskGpuColorInstance *instance;
 
@@ -65,5 +65,5 @@ gsk_gpu_color_op (GskGpuFrame            *frame,
                            &instance);
 
   gsk_gpu_rect_to_float (rect, offset, instance->rect);
-  gsk_gpu_rgba_to_float (color, instance->color);
+  gsk_gpu_color_to_float (color, instance->color);
 }

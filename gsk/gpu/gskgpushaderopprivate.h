@@ -64,16 +64,6 @@ GskGpuOp *              gsk_gpu_shader_op_gl_command                    (GskGpuO
                                                                          GskGLCommandState      *state);
 
 static inline void
-gsk_gpu_rgba_to_float (const GdkRGBA *rgba,
-                       float          values[4])
-{
-  values[0] = rgba->red;
-  values[1] = rgba->green;
-  values[2] = rgba->blue;
-  values[3] = rgba->alpha;
-}
-
-static inline void
 gsk_gpu_color_to_float (const GdkColor *color,
                         float           values[4])
 {

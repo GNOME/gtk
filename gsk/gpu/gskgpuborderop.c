@@ -20,8 +20,10 @@ static gboolean
 color_equal (const float *color1,
              const float *color2)
 {
-  return gdk_rgba_equal (&(GdkRGBA) { color1[0], color1[1], color1[2], color1[3] },
-                         &(GdkRGBA) { color2[0], color2[1], color2[2], color2[3] });
+  return color1[0] == color2[0] &&
+         color1[1] == color2[1] &&
+         color1[2] == color2[2] &&
+         color1[3] == color2[3];
 }
 
 static void
@@ -100,7 +102,7 @@ gsk_gpu_border_op (GskGpuFrame            *frame,
                    const graphene_point_t *offset,
                    const graphene_point_t *inside_offset,
                    const float             widths[4],
-                   const GdkRGBA           colors[4])
+                   const GdkColor          colors[4])
 {
   GskGpuBorderInstance *instance;
   guint i;
@@ -117,7 +119,7 @@ gsk_gpu_border_op (GskGpuFrame            *frame,
   for (i = 0; i < 4; i++)
     {
       instance->border_widths[i] = widths[i];
-      gsk_gpu_rgba_to_float (&colors[i], &instance->border_colors[4 * i]);
+      gsk_gpu_color_to_float (&colors[i], &instance->border_colors[4 * i]);
     }
   instance->offset[0] = inside_offset->x;
   instance->offset[1] = inside_offset->y;

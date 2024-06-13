@@ -123,10 +123,8 @@ gsk_gpu_print_rgba (GString     *string,
                     const float  rgba[4])
 {
   GdkRGBA color = { rgba[0], rgba[1], rgba[2], rgba[3] };
-  char *s = gdk_rgba_to_string (&color);
-  g_string_append (string, s);
+  gdk_rgba_print (&color, string);
   g_string_append_c (string, ' ');
-  g_free (s);
 }
 
 void

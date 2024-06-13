@@ -11,7 +11,7 @@ void                    gsk_gpu_rounded_color_op                               (
                                                                                 GskGpuShaderClip                clip,
                                                                                 const GskRoundedRect           *outline,
                                                                                 const graphene_point_t         *offset,
-                                                                                const GdkRGBA                  *color);
+                                                                                const GdkColor                 *color);
 
 
 G_END_DECLS

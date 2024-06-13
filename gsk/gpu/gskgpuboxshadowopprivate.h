@@ -16,7 +16,7 @@ void                    gsk_gpu_box_shadow_op                                  (
                                                                                 float                           spread,
                                                                                 float                           blur_radius,
                                                                                 const graphene_point_t         *offset,
-                                                                                const GdkRGBA                  *color);
+                                                                                const GdkColor                 *color);
 
 
 G_END_DECLS

@@ -82,7 +82,7 @@ gsk_gpu_box_shadow_op (GskGpuFrame            *frame,
                        float                   spread,
                        float                   blur_radius,
                        const graphene_point_t *offset,
-                       const GdkRGBA          *color)
+                       const GdkColor         *color)
 {
   GskGpuBoxshadowInstance *instance;
 
@@ -98,7 +98,7 @@ gsk_gpu_box_shadow_op (GskGpuFrame            *frame,
 
   gsk_gpu_rect_to_float (bounds, offset, instance->bounds);
   gsk_rounded_rect_to_float (outline, offset, instance->outline);
-  gsk_gpu_rgba_to_float (color, instance->color);
+  gsk_gpu_color_to_float (color, instance->color);
   instance->shadow_offset[0] = shadow_offset->x;
   instance->shadow_offset[1] = shadow_offset->y;
   instance->shadow_spread = spread;

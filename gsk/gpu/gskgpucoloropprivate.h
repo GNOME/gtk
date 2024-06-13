@@ -10,7 +10,7 @@ void                    gsk_gpu_color_op                                (GskGpuF
                                                                          GskGpuShaderClip                clip,
                                                                          const graphene_rect_t          *rect,
                                                                          const graphene_point_t         *offset,
-                                                                         const GdkRGBA                  *color);
+                                                                         const GdkColor                 *color);
 
 
 G_END_DECLS

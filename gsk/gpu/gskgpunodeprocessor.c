@@ -610,15 +610,6 @@ gsk_gpu_pattern_writer_append_rect (GskGpuPatternWriter    *self,
 }
 
 static void
-gsk_gpu_pattern_writer_append_rgba (GskGpuPatternWriter *self,
-                                    const GdkRGBA       *rgba)
-{
-  float f[4] = { rgba->red, rgba->green, rgba->blue, rgba->alpha };
-
-  gsk_gpu_pattern_writer_append (self, G_ALIGNOF (float), (guchar *) f, sizeof (f));
-}
-
-static void
 gsk_gpu_pattern_writer_append_color (GskGpuPatternWriter *self,
                                      const GdkColor      *color)
 {
@@ -1595,6 +1586,7 @@ gsk_gpu_node_processor_add_rounded_clip_node_with_mask (GskGpuNodeProcessor *sel
   graphene_rect_t clip_bounds, child_rect;
   GskGpuImage *child_image, *mask_image;
   guint32 descriptors[2];
+  GdkColor white = GDK_COLOR_INIT_SRGB (1, 1, 1, 1);
 
   if (!gsk_gpu_node_processor_clip_node_bounds (self, node, &clip_bounds))
     return;
@@ -1620,7 +1612,7 @@ gsk_gpu_node_processor_add_rounded_clip_node_with_mask (GskGpuNodeProcessor *sel
                             gsk_gpu_clip_get_shader_clip (&other.clip, &other.offset, &node->bounds),
                             gsk_rounded_clip_node_get_clip (node),
                             &other.offset,
-                            &GDK_RGBA_WHITE);
+                            &white);
   gsk_gpu_node_processor_finish_draw (&other, mask_image);
 
   gsk_gpu_node_processor_add_images (self,
@@ -1647,36 +1639,6 @@ gsk_gpu_node_processor_add_rounded_clip_node_with_mask (GskGpuNodeProcessor *sel
 }
 
 static void
-get_color (GdkRGBA        *to,
-           const GdkColor *from,
-           GdkColorState  *in)
-{
-  GdkColor dst;
-
-  gdk_color_convert (&dst, in, from);
-
-  to->red   = dst.values[0];
-  to->green = dst.values[1];
-  to->blue  = dst.values[2];
-  to->alpha = dst.values[3];
-}
-
-static void
-get_color2 (GdkRGBA        *to,
-            const GdkRGBA  *from,
-            GdkColorState  *in)
-{
-  GdkColor dst = { NULL, };
-
-  gdk_color_convert_rgba (&dst, in, from);
-
-  to->red   = dst.values[0];
-  to->green = dst.values[1];
-  to->blue  = dst.values[2];
-  to->alpha = dst.values[3];
-}
-
-static void
 gsk_gpu_node_processor_add_rounded_clip_node (GskGpuNodeProcessor *self,
                                               GskRenderNode       *node)
 {
@@ -1693,15 +1655,17 @@ gsk_gpu_node_processor_add_rounded_clip_node (GskGpuNodeProcessor *self,
   if (gsk_render_node_get_node_type (child) == GSK_COLOR_NODE &&
       gsk_rect_contains_rect (&child->bounds, &original_clip->bounds))
     {
-      GdkRGBA rgba;
+      GdkColor color;
 
-      get_color (&rgba, gsk_color_node_get_color2 (child), self->color_state);
+      gdk_color_convert (&color, self->color_state, gsk_color_node_get_color2 (child));
+      color.values[3] *= self->opacity;
+
       gsk_gpu_node_processor_sync_globals (self, 0);
       gsk_gpu_rounded_color_op (self->frame,
                                 gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, &original_clip->bounds),
                                 original_clip,
                                 &self->offset,
-                                &GDK_RGBA_INIT_ALPHA (&rgba, self->opacity));
+                                &color);
       return;
     }
 
@@ -1976,10 +1940,9 @@ gsk_gpu_node_processor_add_color_node (GskGpuNodeProcessor *self,
 {
   cairo_rectangle_int_t int_clipped;
   graphene_rect_t rect, clipped;
-  GdkRGBA rgba;
-  const GdkRGBA *color = &rgba;
+  GdkColor color;
 
-  get_color (&rgba, gsk_color_node_get_color2 (node), self->color_state);
+  gdk_color_convert (&color, self->color_state, gsk_color_node_get_color2 (node));
 
   graphene_rect_offset_r (&node->bounds,
                           self->offset.x, self->offset.y,
@@ -1987,7 +1950,7 @@ gsk_gpu_node_processor_add_color_node (GskGpuNodeProcessor *self,
   gsk_rect_intersection (&self->clip.rect.bounds, &rect, &clipped);
 
   if (gsk_gpu_frame_should_optimize (self->frame, GSK_GPU_OPTIMIZE_CLEAR) &&
-      gdk_rgba_is_opaque (color) &&
+      gdk_color_is_opaque (&color) &&
       self->opacity >= 1.0 &&
       node->bounds.size.width * node->bounds.size.height > 100 * 100 && /* not worth the effort for small images */
       gsk_gpu_node_processor_rect_is_integer (self, &clipped, &int_clipped))
@@ -2010,7 +1973,7 @@ gsk_gpu_node_processor_add_color_node (GskGpuNodeProcessor *self,
                                 gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, &node->bounds),
                                 &node->bounds,
                                 &self->offset,
-                                color);
+                                &color);
               return;
             }
 
@@ -2032,7 +1995,7 @@ gsk_gpu_node_processor_add_color_node (GskGpuNodeProcessor *self,
                                     shader_clip,
                                     &clipped,
                                     graphene_point_zero (),
-                                    color);
+                                    &color);
                   return;
                 }
               cover = GRAPHENE_RECT_INIT (int_clipped.x / scale_x, int_clipped.y / scale_y,
@@ -2042,13 +2005,13 @@ gsk_gpu_node_processor_add_color_node (GskGpuNodeProcessor *self,
                                   shader_clip,
                                   &GRAPHENE_RECT_INIT (clipped.origin.x, clipped.origin.y, cover.origin.x - clipped.origin.x, clipped.size.height),
                                   graphene_point_zero (),
-                                  color);
+                                  &color);
               if (clipped.origin.y != cover.origin.y)
                 gsk_gpu_color_op (self->frame,
                                   shader_clip,
                                   &GRAPHENE_RECT_INIT (clipped.origin.x, clipped.origin.y, clipped.size.width, cover.origin.y - clipped.origin.y),
                                   graphene_point_zero (),
-                                  color);
+                                  &color);
               if (clipped.origin.x + clipped.size.width != cover.origin.x + cover.size.width)
                 gsk_gpu_color_op (self->frame,
                                   shader_clip,
@@ -2057,7 +2020,7 @@ gsk_gpu_node_processor_add_color_node (GskGpuNodeProcessor *self,
                                                        clipped.origin.x + clipped.size.width - cover.origin.x - cover.size.width,
                                                        clipped.size.height),
                                   graphene_point_zero (),
-                                  color);
+                                  &color);
               if (clipped.origin.y + clipped.size.height != cover.origin.y + cover.size.height)
                 gsk_gpu_color_op (self->frame,
                                   shader_clip,
@@ -2066,21 +2029,20 @@ gsk_gpu_node_processor_add_color_node (GskGpuNodeProcessor *self,
                                                        clipped.size.width,
                                                        clipped.origin.y + clipped.size.height - cover.origin.y - cover.size.height),
                                   graphene_point_zero (),
-                                  color);
+                                  &color);
             }
         }
 
-      gsk_gpu_clear_op (self->frame,
-                        &int_clipped,
-                        color);
+      gsk_gpu_clear_op (self->frame, &int_clipped, &color);
       return;
     }
 
+  color.values[3] *= self->opacity;
   gsk_gpu_color_op (self->frame,
                     gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, &node->bounds),
                     &node->bounds,
                     &self->offset,
-                    &GDK_RGBA_INIT_ALPHA (color, self->opacity));
+                    &color);
 }
 
 static gboolean
@@ -2097,16 +2059,16 @@ static void
 gsk_gpu_node_processor_add_border_node (GskGpuNodeProcessor *self,
                                         GskRenderNode       *node)
 {
-  GdkRGBA colors[4];
+  GdkColor colors[4];
   gsize i;
 
-  get_color2 (&colors[0], &gsk_border_node_get_colors (node)[0], self->color_state);
-  get_color2 (&colors[1], &gsk_border_node_get_colors (node)[1], self->color_state);
-  get_color2 (&colors[2], &gsk_border_node_get_colors (node)[2], self->color_state);
-  get_color2 (&colors[3], &gsk_border_node_get_colors (node)[3], self->color_state);
+  gdk_color_convert (&colors[0], self->color_state, &gsk_border_node_get_colors2 (node)[0]);
+  gdk_color_convert (&colors[1], self->color_state, &gsk_border_node_get_colors2 (node)[1]);
+  gdk_color_convert (&colors[2], self->color_state, &gsk_border_node_get_colors2 (node)[2]);
+  gdk_color_convert (&colors[3], self->color_state, &gsk_border_node_get_colors2 (node)[3]);
 
   for (i = 0; i < G_N_ELEMENTS (colors); i++)
-    colors[i].alpha *= self->opacity;
+    colors[i].values[3] *= self->opacity;
 
   gsk_gpu_border_op (self->frame,
                      gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, &node->bounds),
@@ -2367,12 +2329,12 @@ static void
 gsk_gpu_node_processor_add_inset_shadow_node (GskGpuNodeProcessor *self,
                                               GskRenderNode       *node)
 {
-  GdkRGBA color;
+  GdkColor color;
   float spread, blur_radius;
 
   spread = gsk_inset_shadow_node_get_spread (node);
-  get_color2 (&color, gsk_inset_shadow_node_get_color (node), self->color_state);
-  color.alpha *= self->opacity;
+  gdk_color_convert (&color, self->color_state, gsk_inset_shadow_node_get_color2 (node));
+  color.values[3] *= self->opacity;
   blur_radius = gsk_inset_shadow_node_get_blur_radius (node);
 
   if (blur_radius == 0)
@@ -2384,7 +2346,7 @@ gsk_gpu_node_processor_add_inset_shadow_node (GskGpuNodeProcessor *self,
                          &GRAPHENE_POINT_INIT (gsk_inset_shadow_node_get_dx (node),
                                                gsk_inset_shadow_node_get_dy (node)),
                          (float[4]) { spread, spread, spread, spread },
-                         (GdkRGBA[4]) { color, color, color, color });
+                         (GdkColor[4]) { color, color, color, color });
     }
   else
     {
@@ -2406,12 +2368,12 @@ static void
 gsk_gpu_node_processor_add_outset_shadow_node (GskGpuNodeProcessor *self,
                                                GskRenderNode       *node)
 {
-  GdkRGBA color;
+  GdkColor color;
   float spread, blur_radius, dx, dy;
 
   spread = gsk_outset_shadow_node_get_spread (node);
-  get_color2 (&color, gsk_outset_shadow_node_get_color (node), self->color_state);
-  color.alpha *= self->opacity;
+  gdk_color_convert (&color, self->color_state, gsk_outset_shadow_node_get_color2 (node));
+  color.values[3] *= self->opacity;
   blur_radius = gsk_outset_shadow_node_get_blur_radius (node);
   dx = gsk_outset_shadow_node_get_dx (node);
   dy = gsk_outset_shadow_node_get_dy (node);
@@ -2430,7 +2392,7 @@ gsk_gpu_node_processor_add_outset_shadow_node (GskGpuNodeProcessor *self,
                          &self->offset,
                          &GRAPHENE_POINT_INIT (-dx, -dy),
                          (float[4]) { spread, spread, spread, spread },
-                         (GdkRGBA[4]) { color, color, color, color });
+                         (GdkColor[4]) { color, color, color, color });
     }
   else
     {
@@ -3770,8 +3732,10 @@ gsk_gpu_node_processor_create_repeat_pattern (GskGpuPatternWriter *self,
 
   if (gsk_rect_is_empty (child_bounds))
     {
+      GdkColor transparent = GDK_COLOR_INIT_SRGB (0, 0, 0, 0);
+
       gsk_gpu_pattern_writer_append_uint (self, GSK_GPU_PATTERN_COLOR);
-      gsk_gpu_pattern_writer_append_rgba (self, &GDK_RGBA_TRANSPARENT);
+      gsk_gpu_pattern_writer_append_color (self, &transparent);
       return TRUE;
     }
 
@@ -3813,7 +3777,7 @@ typedef struct _FillData FillData;
 struct _FillData
 {
   GskPath *path;
-  GdkRGBA color;
+  GdkColor color;
   GskFillRule fill_rule;
 };
 
@@ -3845,7 +3809,7 @@ gsk_gpu_node_processor_fill_path (gpointer  data,
       break;
   }
   gsk_path_to_cairo (fill->path, cr);
-  gdk_cairo_set_source_rgba (cr, &fill->color);
+  gdk_cairo_set_source_color (cr, &fill->color);
   cairo_fill (cr);
 }
 
@@ -3857,7 +3821,8 @@ gsk_gpu_node_processor_add_fill_node (GskGpuNodeProcessor *self,
   GskGpuImage *mask_image, *source_image;
   guint32 descriptors[2];
   GskRenderNode *child;
-  GdkRGBA color;
+  GdkColor color;
+  GdkColor white = GDK_COLOR_INIT_SRGB (1, 1, 1, 1);
 
   if (!gsk_gpu_node_processor_clip_node_bounds (self, node, &clip_bounds))
     return;
@@ -3865,7 +3830,7 @@ gsk_gpu_node_processor_add_fill_node (GskGpuNodeProcessor *self,
 
   child = gsk_fill_node_get_child (node);
 
-  get_color (&color, gsk_color_node_get_color2 (child), self->color_state);
+  gdk_color_convert (&color, self->color_state, gsk_color_node_get_color2 (child));
   mask_image = gsk_gpu_upload_cairo_op (self->frame,
                                         &self->scale,
                                         &clip_bounds,
@@ -3874,7 +3839,7 @@ gsk_gpu_node_processor_add_fill_node (GskGpuNodeProcessor *self,
                                             .path = gsk_path_ref (gsk_fill_node_get_path (node)),
                                             .color = GSK_RENDER_NODE_TYPE (child) == GSK_COLOR_NODE
                                                    ? color
-                                                   : GDK_RGBA_WHITE,
+                                                   : white,
                                             .fill_rule = gsk_fill_node_get_fill_rule (node)
                                         }, sizeof (FillData)),
                                         (GDestroyNotify) gsk_fill_data_free);
@@ -3922,7 +3887,7 @@ typedef struct _StrokeData StrokeData;
 struct _StrokeData
 {
   GskPath *path;
-  GdkRGBA color;
+  GdkColor color;
   GskStroke stroke;
 };
 
@@ -3944,7 +3909,7 @@ gsk_gpu_node_processor_stroke_path (gpointer  data,
 
   gsk_stroke_to_cairo (&stroke->stroke, cr);
   gsk_path_to_cairo (stroke->path, cr);
-  gdk_cairo_set_source_rgba (cr, &stroke->color);
+  gdk_cairo_set_source_color (cr, &stroke->color);
   cairo_stroke (cr);
 }
 
@@ -3956,7 +3921,8 @@ gsk_gpu_node_processor_add_stroke_node (GskGpuNodeProcessor *self,
   GskGpuImage *mask_image, *source_image;
   guint32 descriptors[2];
   GskRenderNode *child;
-  GdkRGBA color;
+  GdkColor color;
+  GdkColor white = GDK_COLOR_INIT_SRGB (1, 1, 1, 1);
 
   if (!gsk_gpu_node_processor_clip_node_bounds (self, node, &clip_bounds))
     return;
@@ -3964,7 +3930,8 @@ gsk_gpu_node_processor_add_stroke_node (GskGpuNodeProcessor *self,
 
   child = gsk_stroke_node_get_child (node);
 
-  get_color (&color, gsk_color_node_get_color2 (child), self->color_state);
+  gdk_color_convert (&color, self->color_state, gsk_color_node_get_color2 (child));
+
   mask_image = gsk_gpu_upload_cairo_op (self->frame,
                                         &self->scale,
                                         &clip_bounds,
@@ -3973,7 +3940,7 @@ gsk_gpu_node_processor_add_stroke_node (GskGpuNodeProcessor *self,
                                             .path = gsk_path_ref (gsk_stroke_node_get_path (node)),
                                             .color = GSK_RENDER_NODE_TYPE (child) == GSK_COLOR_NODE
                                                    ? color
-                                                   : GDK_RGBA_WHITE,
+                                                   : white,
                                             .stroke = GSK_STROKE_INIT_COPY (gsk_stroke_node_get_stroke (node))
                                         }, sizeof (StrokeData)),
                                         (GDestroyNotify) gsk_stroke_data_free);
@@ -4050,13 +4017,14 @@ gsk_gpu_node_processor_add_subsurface_node (GskGpuNodeProcessor *self,
         {
           if (gdk_rectangle_intersect (&int_clipped, &self->scissor, &int_clipped))
             {
-              gsk_gpu_clear_op (self->frame,
-                                &int_clipped,
-                                &GDK_RGBA_TRANSPARENT);
+              GdkColor transparent = GDK_COLOR_INIT_SRGB (0, 0, 0, 0);
+              gsk_gpu_clear_op (self->frame, &int_clipped, &transparent);
             }
         }
       else
         {
+           GdkColor white = GDK_COLOR_INIT_SRGB (1, 1, 1, 1);
+
           self->blend = GSK_GPU_BLEND_CLEAR;
           self->pending_globals |= GSK_GPU_GLOBAL_BLEND;
           gsk_gpu_node_processor_sync_globals (self, 0);
@@ -4065,7 +4033,7 @@ gsk_gpu_node_processor_add_subsurface_node (GskGpuNodeProcessor *self,
                             gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, &node->bounds),
                             &node->bounds,
                             &self->offset,
-                            &GDK_RGBA_WHITE);
+                            &white);
 
           self->blend = GSK_GPU_BLEND_OVER;
           self->pending_globals |= GSK_GPU_GLOBAL_BLEND;
@@ -4457,8 +4425,9 @@ gsk_gpu_node_processor_create_node_pattern (GskGpuPatternWriter *self,
                                      &bounds);
   if (image == NULL)
     {
+      GdkColor transparent = GDK_COLOR_INIT_SRGB (0, 0, 0, 0);
       gsk_gpu_pattern_writer_append_uint (self, GSK_GPU_PATTERN_COLOR);
-      gsk_gpu_pattern_writer_append_rgba (self, &GDK_RGBA_TRANSPARENT);
+      gsk_gpu_pattern_writer_append_color (self, &transparent);
       return TRUE;
     }
 
