@@ -619,6 +619,15 @@ gsk_gpu_pattern_writer_append_rgba (GskGpuPatternWriter *self,
 }
 
 static void
+gsk_gpu_pattern_writer_append_color (GskGpuPatternWriter *self,
+                                     const GdkColor      *color)
+{
+  GdkColor c;
+
+  gdk_color_convert (&c, self->color_state, color);
+  gsk_gpu_pattern_writer_append (self, G_ALIGNOF (float), (guchar *) c.values, sizeof (float) * 4);
+}
+static void
 gsk_gpu_pattern_writer_append_color_stops (GskGpuPatternWriter *self,
                                            GdkColorState       *color_state,
                                            GskHueInterpolation  hue_interp,
@@ -2078,13 +2087,8 @@ static gboolean
 gsk_gpu_node_processor_create_color_pattern (GskGpuPatternWriter *self,
                                              GskRenderNode       *node)
 {
-  GdkRGBA rgba;
-  const GdkRGBA *color = &rgba;
-
-  get_color (&rgba, gsk_color_node_get_color2 (node), self->color_state);
-
   gsk_gpu_pattern_writer_append_uint (self, GSK_GPU_PATTERN_COLOR);
-  gsk_gpu_pattern_writer_append_rgba (self, color);
+  gsk_gpu_pattern_writer_append_color (self, gsk_color_node_get_color2 (node));
 
   return TRUE;
 }
@@ -3396,7 +3400,6 @@ gsk_gpu_node_processor_create_glyph_pattern (GskGpuPatternWriter *self,
   float inv_align_scale_x, inv_align_scale_y;
   unsigned int flags_mask;
   const float inv_pango_scale = 1.f / PANGO_SCALE;
-  GdkRGBA color;
 
   if (gsk_text_node_has_color_glyphs (node))
     return FALSE;
@@ -3412,9 +3415,8 @@ gsk_gpu_node_processor_create_glyph_pattern (GskGpuPatternWriter *self,
   scale = MAX (graphene_vec2_get_x (&self->scale), graphene_vec2_get_y (&self->scale));
   inv_scale = 1.f / scale;
 
-  get_color (&color, gsk_text_node_get_color2 (node), self->color_state);
   gsk_gpu_pattern_writer_append_uint (self, GSK_GPU_PATTERN_GLYPHS);
-  gsk_gpu_pattern_writer_append_rgba (self, &color);
+  gsk_gpu_pattern_writer_append_color (self, gsk_text_node_get_color2 (node));
   gsk_gpu_pattern_writer_append_uint (self, num_glyphs);
 
   if (gsk_font_get_hint_style (font) != CAIRO_HINT_STYLE_NONE)
