@@ -47,6 +47,34 @@ gdk_cairo_set_source_rgba (cairo_t       *cr,
 }
 
 /**
+ * gdk_cairo_set_source_color:
+ * @cr: a cairo contet
+ * @rgba: a `GdkColor`
+ *
+ * Sets the specified `GdkColor` as the source color of @cr.
+ *
+ * Since: 4.16
+ */
+void
+gdk_cairo_set_source_color (cairo_t        *cr,
+                            const GdkColor *color)
+{
+  GdkColor c;
+  const float *components;
+
+  g_return_if_fail (cr != NULL);
+  g_return_if_fail (color != NULL);
+
+  gdk_color_convert (&c, gdk_cairo_get_color_state (cr), color);
+  components = gdk_color_get_components (&c);
+  cairo_set_source_rgba (cr,
+                         components[0],
+                         components[1],
+                         components[2],
+                         components[3]);
+}
+
+/**
  * gdk_cairo_rectangle:
  * @cr: a cairo context
  * @rectangle: a `GdkRectangle`

@@ -30,6 +30,11 @@ G_BEGIN_DECLS
 GDK_AVAILABLE_IN_ALL
 void       gdk_cairo_set_source_rgba    (cairo_t              *cr,
                                          const GdkRGBA        *rgba);
+
+GDK_AVAILABLE_IN_4_16
+void       gdk_cairo_set_source_color   (cairo_t              *cr,
+                                         const GdkColor       *color);
+
 GDK_AVAILABLE_IN_ALL
 void       gdk_cairo_set_source_pixbuf  (cairo_t              *cr,
                                          const GdkPixbuf      *pixbuf,
