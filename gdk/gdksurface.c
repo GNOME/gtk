@@ -488,7 +488,17 @@ gdk_surface_init (GdkSurface *surface)
 
   surface->alpha = 255;
 
-  surface->color_state = gdk_color_state_get_srgb ();
+  if (g_getenv ("GDK_DISPLAY_COLORSTATE"))
+    {
+      const char *env = g_getenv ("GDK_DISPLAY_COLORSTATE");
+      if (strcmp (env, "srgb") == 0)
+        surface->color_state = gdk_color_state_get_srgb ();
+      else if (strcmp (env, "srgb-linear") == 0)
+        surface->color_state = gdk_color_state_get_srgb_linear ();
+    }
+
+  if (surface->color_state == NULL)
+    surface->color_state = gdk_color_state_get_srgb ();
 
   surface->device_cursor = g_hash_table_new_full (NULL, NULL,
                                                  NULL, g_object_unref);
