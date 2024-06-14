@@ -201,6 +201,10 @@ struct _GtkAboutDialog
   guint hovering_over_link : 1;
   guint wrap_license : 1;
   guint in_child_changed : 1;
+
+  GSList *link_tags;
+
+  guint update_links_cb_id;
 };
 
 struct _GtkAboutDialogClass
@@ -707,6 +711,51 @@ update_credits_button_visibility (GtkAboutDialog *about)
 }
 
 static void
+update_links_cb (GtkAboutDialog *about)
+{
+  GtkCssStyle *style;
+  GdkRGBA link_color, visited_link_color;
+  GSList *l;
+
+  style = gtk_css_node_get_style (about->link_node);
+  link_color = *gtk_css_color_value_get_rgba (style->core->color);
+
+  style = gtk_css_node_get_style (about->visited_link_node);
+  visited_link_color = *gtk_css_color_value_get_rgba (style->core->color);
+
+  for (l = about->link_tags; l != NULL; l = l->next)
+    {
+      GtkTextTag *tag = l->data;
+      GdkRGBA color;
+
+      if (g_ptr_array_find_with_equal_func (about->visited_links, link, (GCompareFunc)strcmp, NULL))
+        color = visited_link_color;
+      else
+        color = link_color;
+
+      g_object_set (G_OBJECT (tag), "foreground-rgba", &color, NULL);
+    }
+
+  about->update_links_cb_id = 0;
+}
+
+static void
+link_style_changed_cb (GtkCssNode        *node,
+                       GtkCssStyleChange *change,
+                       GtkAboutDialog    *about)
+{
+  if (gtk_css_style_change_affects (change, GTK_CSS_AFFECTS_REDRAW))
+    {
+      /* If we access the node right here, we'll end up with infinite recursion */
+      if (about->link_tags && !about->update_links_cb_id)
+        {
+          about->update_links_cb_id =
+            g_idle_add_once ((GSourceOnceFunc) update_links_cb, about);
+        }
+    }
+}
+
+static void
 gtk_about_dialog_init (GtkAboutDialog *about)
 {
   GtkCssNode *node;
@@ -748,12 +797,16 @@ gtk_about_dialog_init (GtkAboutDialog *about)
   gtk_css_node_set_name (about->link_node, g_quark_from_static_string ("link"));
   gtk_css_node_set_parent (about->link_node, node);
   gtk_css_node_set_state (about->link_node, state | GTK_STATE_FLAG_LINK);
+  g_signal_connect (about->link_node, "style-changed",
+                    G_CALLBACK (link_style_changed_cb), about);
   g_object_unref (about->link_node);
 
   about->visited_link_node = gtk_css_node_new ();
   gtk_css_node_set_name (about->visited_link_node, g_quark_from_static_string ("link"));
   gtk_css_node_set_parent (about->visited_link_node, node);
-  gtk_css_node_set_state (about->visited_link_node, state | GTK_STATE_FLAG_VISITED);
+  gtk_css_node_set_state (about->visited_link_node, state | GTK_STATE_FLAG_LINK);
+  g_signal_connect (about->visited_link_node, "style-changed",
+                    G_CALLBACK (link_style_changed_cb), about);
   g_object_unref (about->visited_link_node);
 }
 
@@ -787,6 +840,10 @@ gtk_about_dialog_finalize (GObject *object)
 
   g_slist_free_full (about->credit_sections, destroy_credit_section);
   g_ptr_array_unref (about->visited_links);
+
+  g_slist_free (about->link_tags);
+
+  g_clear_handle_id (&about->update_links_cb_id, g_source_remove);
 
   G_OBJECT_CLASS (gtk_about_dialog_parent_class)->finalize (object);
 }
@@ -1910,6 +1967,9 @@ text_buffer_new (GtkAboutDialog  *about,
                                                 "foreground-rgba", &color,
                                                 "underline", PANGO_UNDERLINE_SINGLE,
                                                 NULL);
+
+              about->link_tags = g_slist_prepend (about->link_tags, tag);
+
               if (strcmp (link_type, "email") == 0)
                 {
                   char *escaped;

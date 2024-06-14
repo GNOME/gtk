@@ -303,6 +303,8 @@ struct _GtkTextViewPrivate
   guint vscroll_policy : 1;
   guint cursor_handle_dragged : 1;
   guint selection_handle_dragged : 1;
+
+  guint selection_style_changed : 1;
 };
 
 struct _GtkTextPendingScroll
@@ -838,6 +840,19 @@ gtk_text_view_notify (GObject    *object,
 
   if (G_OBJECT_CLASS (gtk_text_view_parent_class)->notify)
     G_OBJECT_CLASS (gtk_text_view_parent_class)->notify (object, pspec);
+}
+
+static void
+selection_style_changed_cb (GtkCssNode        *node,
+                            GtkCssStyleChange *change,
+                            GtkTextView       *self)
+{
+  if (gtk_css_style_change_affects (change, GTK_CSS_AFFECTS_REDRAW))
+    {
+      GtkTextViewPrivate *priv = self->priv;
+      priv->selection_style_changed = TRUE;
+      gtk_widget_queue_draw (GTK_WIDGET (self));
+    }
 }
 
 static void
@@ -2041,6 +2056,8 @@ gtk_text_view_init (GtkTextView *text_view)
   gtk_css_node_set_state (priv->selection_node,
                           gtk_css_node_get_state (priv->text_window->css_node) & ~GTK_STATE_FLAG_DROP_ACTIVE);
   gtk_css_node_set_visible (priv->selection_node, FALSE);
+  g_signal_connect (priv->selection_node, "style-changed",
+                    G_CALLBACK (selection_style_changed_cb), text_view);
   g_object_unref (priv->selection_node);
 
   gtk_widget_action_set_enabled (GTK_WIDGET (text_view), "text.can-redo", FALSE);
@@ -5922,9 +5939,12 @@ gtk_text_view_paint (GtkWidget   *widget,
                               gtk_widget_get_width (widget),
                               gtk_widget_get_height (widget)
                             },
+                            priv->selection_style_changed,
                             priv->cursor_alpha);
 
   gtk_snapshot_restore (snapshot);
+
+  priv->selection_style_changed = FALSE;
 }
 
 static void

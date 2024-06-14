@@ -4197,20 +4197,20 @@ gtk_tree_view_snapshot_grid_line (GtkTreeView            *tree_view,
       surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, 2, 1);
       data = cairo_image_surface_get_data (surface);
       /* just color the first pixel... */
-      data[0] = round (grid_line_color->blue  * 255);
-      data[1] = round (grid_line_color->green * 255);
-      data[2] = round (grid_line_color->red   * 255);
-      data[3] = round (grid_line_color->alpha * 255);
+      data[0] = round (CLAMP (grid_line_color->blue,  0, 1)  * 255);
+      data[1] = round (CLAMP (grid_line_color->green, 0, 1) * 255);
+      data[2] = round (CLAMP (grid_line_color->red,   0, 1)   * 255);
+      data[3] = round (CLAMP (grid_line_color->alpha, 0, 1) * 255);
 
       priv->horizontal_grid_line_texture = gdk_texture_new_for_surface (surface);
       cairo_surface_destroy (surface);
 
       surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, 1, 2);
       data = cairo_image_surface_get_data (surface);
-      data[0] = round (grid_line_color->blue  * 255);
-      data[1] = round (grid_line_color->green * 255);
-      data[2] = round (grid_line_color->red   * 255);
-      data[3] = round (grid_line_color->alpha * 255);
+      data[0] = round (CLAMP (grid_line_color->blue,  0, 1)  * 255);
+      data[1] = round (CLAMP (grid_line_color->green, 0, 1) * 255);
+      data[2] = round (CLAMP (grid_line_color->red,   0, 1)   * 255);
+      data[3] = round (CLAMP (grid_line_color->alpha, 0, 1) * 255);
 
       priv->vertical_grid_line_texture = gdk_texture_new_for_surface (surface);
       cairo_surface_destroy (surface);
@@ -4272,20 +4272,20 @@ gtk_tree_view_snapshot_tree_line (GtkTreeView            *tree_view,
       surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, 2, 1);
       data = cairo_image_surface_get_data (surface);
       /* just color the first pixel... */
-      data[0] = round (tree_line_color->blue  * 255);
-      data[1] = round (tree_line_color->green * 255);
-      data[2] = round (tree_line_color->red   * 255);
-      data[3] = round (tree_line_color->alpha * 255);
+      data[0] = round (CLAMP (tree_line_color->blue,  0, 1) * 255);
+      data[1] = round (CLAMP (tree_line_color->green, 0, 1) * 255);
+      data[2] = round (CLAMP (tree_line_color->red,   0, 1) * 255);
+      data[3] = round (CLAMP (tree_line_color->alpha, 0, 1) * 255);
 
       priv->horizontal_tree_line_texture = gdk_texture_new_for_surface (surface);
       cairo_surface_destroy (surface);
 
       surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, 1, 2);
       data = cairo_image_surface_get_data (surface);
-      data[0] = round (tree_line_color->blue  * 255);
-      data[1] = round (tree_line_color->green * 255);
-      data[2] = round (tree_line_color->red   * 255);
-      data[3] = round (tree_line_color->alpha * 255);
+      data[0] = round (CLAMP (tree_line_color->blue,  0, 1) * 255);
+      data[1] = round (CLAMP (tree_line_color->green, 0, 1) * 255);
+      data[2] = round (CLAMP (tree_line_color->red,   0, 1) * 255);
+      data[3] = round (CLAMP (tree_line_color->alpha, 0, 1) * 255);
 
       priv->vertical_tree_line_texture = gdk_texture_new_for_surface (surface);
       cairo_surface_destroy (surface);
