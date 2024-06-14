@@ -849,11 +849,14 @@ gtk_label_update_layout_attributes (GtkLabel      *self,
           attr->end_index = link->end;
           pango_attr_list_insert (attrs, attr);
 
-          attr = pango_attr_foreground_alpha_new (CLAMP (link_color->alpha * 65535. + 0.5, 0, 65535));
+          if (link_color->alpha < 0.999)
+            {
+              attr = pango_attr_foreground_alpha_new (CLAMP (link_color->alpha * 65535. + 0.5, 0, 65535));
 
-          attr->start_index = link->start;
-          attr->end_index = link->end;
-          pango_attr_list_insert (attrs, attr);
+              attr->start_index = link->start;
+              attr->end_index = link->end;
+              pango_attr_list_insert (attrs, attr);
+            }
 
           pango_attr_list_unref (link_attrs);
         }
