@@ -35,8 +35,8 @@
 #include "gdk/gdkrgbaprivate.h"
 #include "gdk/gdktextureprivate.h"
 #include "gdk/gdkmemoryformatprivate.h"
-#include "gdk/gdkcolorstateprivate.h"
 #include "gdk/gdkcolorprivate.h"
+#include "gdk/gdkcolorstateprivate.h"
 #include <gtk/css/gtkcss.h>
 #include "gtk/css/gtkcssdataurlprivate.h"
 #include "gtk/css/gtkcssparserprivate.h"
@@ -492,11 +492,19 @@ parse_rounded_rect (GtkCssParser *parser,
 }
 
 static gboolean
+parse_rgba (GtkCssParser *parser,
+            Context      *context,
+            gpointer      out_rgba)
+{
+  return gdk_rgba_parser_parse (parser, out_rgba);
+}
+
+static gboolean
 parse_color (GtkCssParser *parser,
              Context      *context,
              gpointer      out_color)
 {
-  return gdk_rgba_parser_parse (parser, out_color);
+  return gdk_color_parser_parse (parser, out_color);
 }
 
 static gboolean
@@ -1468,15 +1476,24 @@ parse_color_node (GtkCssParser *parser,
                   Context      *context)
 {
   graphene_rect_t bounds = GRAPHENE_RECT_INIT (0, 0, 50, 50);
-  GdkRGBA color = GDK_RGBA("FF00CC");
+  GdkColor color = GDK_COLOR_INIT_SRGB (1, 0, 0.864, 1);
   const Declaration declarations[] = {
     { "bounds", parse_rect, NULL, &bounds },
     { "color", parse_color, NULL, &color },
   };
+  GdkColor col2;
+  GdkRGBA rgba;
 
   parse_declarations (parser, context, declarations, G_N_ELEMENTS (declarations));
 
-  return gsk_color_node_new (&color, &bounds);
+  gdk_color_convert (&col2, gdk_color_state_get_srgb (), &color);
+
+  rgba.red = col2.values[0];
+  rgba.green = col2.values[1];
+  rgba.blue = col2.values[2];
+  rgba.alpha = col2.values[3];
+
+  return gsk_color_node_new (&rgba, &bounds);
 }
 
 static gboolean
@@ -1651,7 +1668,7 @@ parse_linear_gradient_node_internal (GtkCssParser *parser,
                                             color_state, hue_interp,
                                             (GskColorStop *) stops->data, stops->len);
 
-  g_object_unref (color_state);
+  gdk_color_state_unref (color_state);
   g_array_free (stops, TRUE);
 
   return result;
@@ -1727,7 +1744,7 @@ parse_radial_gradient_node_internal (GtkCssParser *parser,
                                             color_state, hue_interp,
                                             (GskColorStop *) stops->data, stops->len);
 
-  g_object_unref (color_state);
+  gdk_color_state_unref (color_state);
   g_array_free (stops, TRUE);
 
   return result;
@@ -1787,7 +1804,7 @@ parse_conic_gradient_node (GtkCssParser *parser,
                                          color_state, hue_interp,
                                          (GskColorStop *) stops->data, stops->len);
 
-  g_object_unref (color_state);
+  gdk_color_state_unref (color_state);
   g_array_free (stops, TRUE);
 
   return result;
@@ -1802,7 +1819,7 @@ parse_inset_shadow_node (GtkCssParser *parser,
   double dx = 1, dy = 1, blur = 0, spread = 0;
   const Declaration declarations[] = {
     { "outline", parse_rounded_rect, NULL, &outline },
-    { "color", parse_color, NULL, &color },
+    { "color", parse_rgba, NULL, &color },
     { "dx", parse_double, NULL, &dx },
     { "dy", parse_double, NULL, &dy },
     { "spread", parse_double, NULL, &spread },
@@ -2204,7 +2221,7 @@ parse_outset_shadow_node (GtkCssParser *parser,
   double dx = 1, dy = 1, blur = 0, spread = 0;
   const Declaration declarations[] = {
     { "outline", parse_rounded_rect, NULL, &outline },
-    { "color", parse_color, NULL, &color },
+    { "color", parse_rgba, NULL, &color },
     { "dx", parse_double, NULL, &dx },
     { "dy", parse_double, NULL, &dy },
     { "spread", parse_double, NULL, &spread },
@@ -2510,7 +2527,7 @@ parse_text_node (GtkCssParser *parser,
   const Declaration declarations[] = {
     { "font", parse_font, clear_font, &font },
     { "offset", parse_point, NULL, &offset },
-    { "color", parse_color, NULL, &color },
+    { "color", parse_rgba, NULL, &color },
     { "glyphs", parse_glyphs, clear_glyphs, &glyphs },
     { "hint-style", parse_hint_style, NULL, &hint_style },
     { "antialias", parse_antialias, NULL, &antialias },
@@ -2929,7 +2946,7 @@ parse_color_state_node (GtkCssParser *parser,
   result = gsk_color_state_node_new (child, color_state);
 
   gsk_render_node_unref (child);
-  g_object_unref (color_state);
+  gdk_color_state_unref (color_state);
 
   return result;
 }
@@ -4092,7 +4109,7 @@ color_state_serialize (GdkColorState *cs,
       g_string_append_printf (p->str, "%s", gdk_color_state_get_name (cs));
       return;
     }
-  else if (GDK_IS_LCMS_COLOR_STATE (cs))
+  else
     {
       GBytes *bytes;
 
