@@ -112,19 +112,17 @@ swatch_snapshot (GtkWidget   *widget,
         {
           _gtk_color_chooser_snapshot_checkered_pattern (snapshot, width, height);
 
-          gtk_snapshot_append_color (snapshot,
-                                     color,
-                                     &GRAPHENE_RECT_INIT (0, 0, width, height));
+          gtk_snapshot_append_color2 (snapshot,
+                                      &GDK_COLOR_INIT_RGBA (color),
+                                      &GRAPHENE_RECT_INIT (0, 0, width, height));
         }
       else
         {
-          GdkRGBA opaque = *color;
+          GdkColor opaque = GDK_COLOR_INIT_SRGB (color->red, color->green, color->blue, 1);
 
-          opaque.alpha = 1.0;
-
-          gtk_snapshot_append_color (snapshot,
-                                     &opaque,
-                                     &GRAPHENE_RECT_INIT (0, 0, width, height));
+          gtk_snapshot_append_color2 (snapshot,
+                                      &opaque,
+                                      &GRAPHENE_RECT_INIT (0, 0, width, height));
         }
     }
 
