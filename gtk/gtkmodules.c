@@ -214,13 +214,8 @@ find_module (const gchar *name)
   gchar *module_name;
 
   module_name = _gtk_find_module (name, "modules");
-  if (!module_name)
-    {
-      /* As last resort, try loading without an absolute path (using system
-       * library path)
-       */
-      module_name = g_module_build_path (NULL, name);
-    }
+  if (module_name == NULL)
+    return NULL;
 
   module = g_module_open (module_name, G_MODULE_BIND_LOCAL | G_MODULE_BIND_LAZY);
 
