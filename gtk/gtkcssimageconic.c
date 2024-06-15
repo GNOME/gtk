@@ -37,11 +37,11 @@ gtk_css_image_conic_snapshot (GtkCssImage        *image,
                               double              height)
 {
   GtkCssImageConic *self = GTK_CSS_IMAGE_CONIC (image);
-  GskColorStop *stops;
+  GskColorStop2 *stops;
   int i, last;
   double offset;
 
-  stops = g_newa (GskColorStop, self->n_stops);
+  stops = g_newa (GskColorStop2, self->n_stops);
 
   last = -1;
   offset = 0;
@@ -74,22 +74,21 @@ gtk_css_image_conic_snapshot (GtkCssImage        *image,
           offset += step;
 
           stops[last].offset = offset;
-          stops[last].color = *gtk_css_color_value_get_rgba (stop->color);
+          gdk_color_init_from_css (&stops[last].color, gtk_css_color_value_get_color (stop->color));
         }
 
       offset = pos;
       last = i;
     }
 
-  if (self->color_space != GTK_CSS_COLOR_SPACE_SRGB)
-    g_warning_once ("Gradient interpolation color spaces are not supported yet");
-
-  gtk_snapshot_append_conic_gradient (
+    gtk_snapshot_append_conic_gradient2 (
           snapshot,
           &GRAPHENE_RECT_INIT (0, 0, width, height),
           &GRAPHENE_POINT_INIT (_gtk_css_position_value_get_x (self->center, width),
                                 _gtk_css_position_value_get_y (self->center, height)),
           gtk_css_number_value_get (self->rotation, 360),
+          gdk_color_state_from_css (self->color_space),
+          gsk_hue_interpolation_from_css (self->hue_interp),
           stops,
           self->n_stops);
 }

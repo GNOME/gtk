@@ -140,7 +140,7 @@ gtk_css_image_linear_snapshot (GtkCssImage        *image,
                                double              height)
 {
   GtkCssImageLinear *linear = GTK_CSS_IMAGE_LINEAR (image);
-  GskColorStop *stops;
+  GskColorStop2 *stops;
   double angle; /* actual angle of the gradient line in degrees */
   double x, y; /* coordinates of start point */
   double length; /* distance in pixels for 100% */
@@ -206,7 +206,7 @@ gtk_css_image_linear_snapshot (GtkCssImage        *image,
 
   offset = start;
   last = -1;
-  stops = g_newa (GskColorStop, linear->n_stops);
+  stops = g_newa (GskColorStop2, linear->n_stops);
 
   for (i = 0; i < linear->n_stops; i++)
     {
@@ -237,33 +237,34 @@ gtk_css_image_linear_snapshot (GtkCssImage        *image,
           offset += step;
 
           stops[last].offset = (offset - start) / (end - start);
-          stops[last].color = *gtk_css_color_value_get_rgba (stop->color);
+          gdk_color_init_from_css (&stops[last].color, gtk_css_color_value_get_color (stop->color));
         }
 
       offset = pos;
       last = i;
     }
 
-  if (linear->color_space != GTK_CSS_COLOR_SPACE_SRGB)
-    g_warning_once ("Gradient interpolation color spaces are not supported yet");
-
   if (linear->repeating)
     {
-      gtk_snapshot_append_repeating_linear_gradient (
+      gtk_snapshot_append_repeating_linear_gradient2 (
           snapshot,
           &GRAPHENE_RECT_INIT (0, 0, width, height),
           &GRAPHENE_POINT_INIT (width / 2 + x * (start - 0.5), height / 2 + y * (start - 0.5)),
           &GRAPHENE_POINT_INIT (width / 2 + x * (end - 0.5),   height / 2 + y * (end - 0.5)),
+          gdk_color_state_from_css (linear->color_space),
+          gsk_hue_interpolation_from_css (linear->hue_interp),
           stops,
           linear->n_stops);
     }
   else
     {
-      gtk_snapshot_append_linear_gradient (
+      gtk_snapshot_append_linear_gradient2 (
           snapshot,
           &GRAPHENE_RECT_INIT (0, 0, width, height),
           &GRAPHENE_POINT_INIT (width / 2 + x * (start - 0.5), height / 2 + y * (start - 0.5)),
           &GRAPHENE_POINT_INIT (width / 2 + x * (end - 0.5),   height / 2 + y * (end - 0.5)),
+          gdk_color_state_from_css (linear->color_space),
+          gsk_hue_interpolation_from_css (linear->hue_interp),
           stops,
           linear->n_stops);
     }
