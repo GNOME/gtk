@@ -1,0 +1,16 @@
+linear-gradient-invalid.css:2:44-50: error: GTK_CSS_PARSER_ERROR_SYNTAX
+linear-gradient-invalid.css:3:57-63: error: GTK_CSS_PARSER_ERROR_SYNTAX
+linear-gradient-invalid.css:7:49-55: error: GTK_CSS_PARSER_ERROR_SYNTAX
+linear-gradient-invalid.css:8:62-68: error: GTK_CSS_PARSER_ERROR_SYNTAX
+linear-gradient-invalid.css:12:44-47: error: GTK_CSS_PARSER_ERROR_SYNTAX
+linear-gradient-invalid.css:13:57-60: error: GTK_CSS_PARSER_ERROR_SYNTAX
+linear-gradient-invalid.css:17:44-46: error: GTK_CSS_PARSER_ERROR_SYNTAX
+linear-gradient-invalid.css:18:57-59: error: GTK_CSS_PARSER_ERROR_SYNTAX
+linear-gradient-invalid.css:22:49-54: error: GTK_CSS_PARSER_ERROR_SYNTAX
+linear-gradient-invalid.css:23:62-67: error: GTK_CSS_PARSER_ERROR_SYNTAX
+linear-gradient-invalid.css:27:40-46: error: GTK_CSS_PARSER_ERROR_SYNTAX
+linear-gradient-invalid.css:28:53-59: error: GTK_CSS_PARSER_ERROR_SYNTAX
+linear-gradient-invalid.css:32:45-51: error: GTK_CSS_PARSER_ERROR_SYNTAX
+linear-gradient-invalid.css:33:58-64: error: GTK_CSS_PARSER_ERROR_SYNTAX
+linear-gradient-invalid.css:37:45-47: error: GTK_CSS_PARSER_ERROR_SYNTAX
+linear-gradient-invalid.css:38:58-60: error: GTK_CSS_PARSER_ERROR_SYNTAX
