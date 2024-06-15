@@ -91,31 +91,31 @@ plane_snapshot (GtkWidget   *widget,
                                &GRAPHENE_RECT_INIT (0, 0, width, height));
   if (gtk_widget_has_visible_focus (widget))
     {
-      const GdkRGBA c1 = { 1.0, 1.0, 1.0, 0.6 };
-      const GdkRGBA c2 = { 0.0, 0.0, 0.0, 0.8 };
+      const GdkColor c1 = GDK_COLOR_INIT_SRGB (1, 1, 1, 0.6);
+      const GdkColor c2 = GDK_COLOR_INIT_SRGB (0, 0, 0, 0.8);
 
       /* Crosshair border */
-      gtk_snapshot_append_color (snapshot, &c1,
-                                 &GRAPHENE_RECT_INIT (0, y - 1.5, width, 3));
-      gtk_snapshot_append_color (snapshot, &c1,
-                                 &GRAPHENE_RECT_INIT (x - 1.5, 0, 3, height));
+      gtk_snapshot_append_color2 (snapshot, &c1,
+                                  &GRAPHENE_RECT_INIT (0, y - 1.5, width, 3));
+      gtk_snapshot_append_color2 (snapshot, &c1,
+                                  &GRAPHENE_RECT_INIT (x - 1.5, 0, 3, height));
 
       /* Actual crosshair */
-      gtk_snapshot_append_color (snapshot, &c2,
-                                 &GRAPHENE_RECT_INIT (0, y - 0.5, width, 1));
-      gtk_snapshot_append_color (snapshot, &c2,
-                                 &GRAPHENE_RECT_INIT (x - 0.5, 0, 1, height));
+      gtk_snapshot_append_color2 (snapshot, &c2,
+                                  &GRAPHENE_RECT_INIT (0, y - 0.5, width, 1));
+      gtk_snapshot_append_color2 (snapshot, &c2,
+                                  &GRAPHENE_RECT_INIT (x - 0.5, 0, 1, height));
     }
   else
     {
-      const GdkRGBA c = { 0.8, 0.8, 0.8, 0.8 };
+      const GdkColor c = GDK_COLOR_INIT_SRGB (0.8, 0.8, 0.8, 0.8);
 
       /* Horizontal */
-      gtk_snapshot_append_color (snapshot, &c,
-                                 &GRAPHENE_RECT_INIT (0, y - 0.5, width, 1));
+      gtk_snapshot_append_color2 (snapshot, &c,
+                                  &GRAPHENE_RECT_INIT (0, y - 0.5, width, 1));
       /* Vertical */
-      gtk_snapshot_append_color (snapshot, &c,
-                                 &GRAPHENE_RECT_INIT (x - 0.5, 0, 1, height));
+      gtk_snapshot_append_color2 (snapshot, &c,
+                                  &GRAPHENE_RECT_INIT (x - 0.5, 0, 1, height));
     }
 }
 
