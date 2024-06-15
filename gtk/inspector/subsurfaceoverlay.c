@@ -41,7 +41,7 @@ gtk_subsurface_overlay_snapshot (GtkInspectorOverlay *overlay,
     {
       GdkSubsurface *subsurface = gdk_surface_get_subsurface (surface, i);
       graphene_rect_t rect;
-      GdkRGBA color;
+      GdkColor color;
 
       if (gdk_subsurface_get_texture (subsurface) == NULL)
         continue;
@@ -49,17 +49,17 @@ gtk_subsurface_overlay_snapshot (GtkInspectorOverlay *overlay,
       gdk_subsurface_get_texture_rect (subsurface, &rect);
 
       if (gdk_subsurface_is_above_parent (subsurface))
-        color = GDK_RGBA ("DAA520"); /* goldenrod */
+        gdk_color_init_from_rgba (&color, &GDK_RGBA ("DAA520")); /* goldenrod */
       else
-        color = GDK_RGBA ("FF00FF"); /* magenta */
+        gdk_color_init_from_rgba (&color, &GDK_RGBA ("FF00FF")); /* magenta */
 
       /* Use 4 color nodes since a border node overlaps and prevents
        * the subsurface from being raised.
        */
-      gtk_snapshot_append_color (snapshot, &color, &GRAPHENE_RECT_INIT (rect.origin.x - 2, rect.origin.y - 2, 2, rect.size.height + 4));
-      gtk_snapshot_append_color (snapshot, &color, &GRAPHENE_RECT_INIT (rect.origin.x - 2, rect.origin.y - 2, rect.size.width + 4, 2));
-      gtk_snapshot_append_color (snapshot, &color, &GRAPHENE_RECT_INIT (rect.origin.x - 2, rect.origin.y + rect.size.height, rect.size.width + 4, 2));
-      gtk_snapshot_append_color (snapshot, &color, &GRAPHENE_RECT_INIT (rect.origin.x + rect.size.width, rect.origin.y - 2, 2, rect.size.height + 4));
+      gtk_snapshot_append_color2 (snapshot, &color, &GRAPHENE_RECT_INIT (rect.origin.x - 2, rect.origin.y - 2, 2, rect.size.height + 4));
+      gtk_snapshot_append_color2 (snapshot, &color, &GRAPHENE_RECT_INIT (rect.origin.x - 2, rect.origin.y - 2, rect.size.width + 4, 2));
+      gtk_snapshot_append_color2 (snapshot, &color, &GRAPHENE_RECT_INIT (rect.origin.x - 2, rect.origin.y + rect.size.height, rect.size.width + 4, 2));
+      gtk_snapshot_append_color2 (snapshot, &color, &GRAPHENE_RECT_INIT (rect.origin.x + rect.size.width, rect.origin.y - 2, 2, rect.size.height + 4));
     }
 
   gtk_snapshot_restore (snapshot);
