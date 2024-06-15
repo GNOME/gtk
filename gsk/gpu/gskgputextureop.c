@@ -5,6 +5,7 @@
 #include "gskgpuframeprivate.h"
 #include "gskgpuprintprivate.h"
 #include "gskrectprivate.h"
+#include "gskgpucolorconvertopprivate.h"
 
 #include "gpu/shaders/gskgputextureinstance.h"
 
@@ -24,6 +25,8 @@ gsk_gpu_texture_op_print_instance (GskGpuShaderOp *shader,
 
   gsk_gpu_print_rect (string, instance->rect);
   gsk_gpu_print_image_descriptor (string, shader->desc, instance->tex_id);
+  if (shader->variation != 0)
+    gsk_gpu_print_color_conversion (string, shader->variation);
 }
 
 static const GskGpuShaderOpClass GSK_GPU_TEXTURE_OP_CLASS = {
@@ -50,6 +53,8 @@ static const GskGpuShaderOpClass GSK_GPU_TEXTURE_OP_CLASS = {
 void
 gsk_gpu_texture_op (GskGpuFrame            *frame,
                     GskGpuShaderClip        clip,
+                    GdkColorState          *from,
+                    GdkColorState          *to,
                     GskGpuDescriptors      *desc,
                     guint32                 descriptor,
                     const graphene_rect_t  *rect,
@@ -60,7 +65,7 @@ gsk_gpu_texture_op (GskGpuFrame            *frame,
 
   gsk_gpu_shader_op_alloc (frame,
                            &GSK_GPU_TEXTURE_OP_CLASS,
-                           0,
+                           gsk_gpu_color_conversion (from, to),
                            clip,
                            desc,
                            &instance);

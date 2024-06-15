@@ -5,6 +5,7 @@
 #include "gskgpuframeprivate.h"
 #include "gskgpuprintprivate.h"
 #include "gskrectprivate.h"
+#include "gskgpucolorconvertopprivate.h"
 
 #include "gpu/shaders/gskgpucolormatrixinstance.h"
 
@@ -24,6 +25,8 @@ gsk_gpu_color_matrix_op_print_instance (GskGpuShaderOp *shader,
 
   gsk_gpu_print_rect (string, instance->rect);
   gsk_gpu_print_image_descriptor (string, shader->desc, instance->tex_id);
+  if (shader->variation != 0)
+    gsk_gpu_print_color_conversion (string, shader->variation);
 }
 
 static const GskGpuShaderOpClass GSK_GPU_COLOR_MATRIX_OP_CLASS = {
@@ -55,6 +58,8 @@ gsk_gpu_color_matrix_op (GskGpuFrame             *frame,
                          const graphene_rect_t   *rect,
                          const graphene_point_t  *offset,
                          const graphene_rect_t   *tex_rect,
+                         GdkColorState           *from,
+                         GdkColorState           *to,
                          const graphene_matrix_t *color_matrix,
                          const graphene_vec4_t   *color_offset)
 {
@@ -62,7 +67,7 @@ gsk_gpu_color_matrix_op (GskGpuFrame             *frame,
 
   gsk_gpu_shader_op_alloc (frame,
                            &GSK_GPU_COLOR_MATRIX_OP_CLASS,
-                           0,
+                           gsk_gpu_color_conversion (from, to),
                            clip,
                            desc,
                            &instance);
@@ -82,6 +87,8 @@ gsk_gpu_color_matrix_op_opacity (GskGpuFrame             *frame,
                                  const graphene_rect_t   *rect,
                                  const graphene_point_t  *offset,
                                  const graphene_rect_t   *tex_rect,
+                                 GdkColorState           *from,
+                                 GdkColorState           *to,
                                  float                    opacity)
 {
   graphene_matrix_t matrix;
@@ -101,6 +108,8 @@ gsk_gpu_color_matrix_op_opacity (GskGpuFrame             *frame,
                            rect,
                            offset,
                            tex_rect,
+                           from,
+                           to,
                            &matrix,
                            graphene_vec4_zero ());
 }

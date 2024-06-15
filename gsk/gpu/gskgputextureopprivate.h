@@ -8,6 +8,8 @@ G_BEGIN_DECLS
 
 void                    gsk_gpu_texture_op                              (GskGpuFrame                    *frame,
                                                                          GskGpuShaderClip                clip,
+                                                                         GdkColorState                  *from,
+                                                                         GdkColorState                  *to,
                                                                          GskGpuDescriptors              *desc,
                                                                          guint32                         descriptor,
                                                                          const graphene_rect_t          *rect,

@@ -413,7 +413,7 @@ gsk_gpu_frame_upload_texture (GskGpuFrame  *self,
   image = GSK_GPU_FRAME_GET_CLASS (self)->upload_texture (self, with_mipmap, texture);
 
   if (image)
-    gsk_gpu_device_cache_texture_image (priv->device, texture, priv->timestamp, image, gdk_texture_get_color_state (texture));
+    gsk_gpu_device_cache_texture_image (priv->device, texture, priv->timestamp, image);
 
   return image;
 }
@@ -709,7 +709,7 @@ gsk_gpu_frame_download_texture (GskGpuFrame     *self,
   GskGpuFramePrivate *priv = gsk_gpu_frame_get_instance_private (self);
   GskGpuImage *image;
 
-  image = gsk_gpu_device_lookup_texture_image (priv->device, texture, gdk_color_state_get_srgb (), timestamp);
+  image = gsk_gpu_device_lookup_texture_image (priv->device, texture, timestamp);
   if (image == NULL)
     image = gsk_gpu_frame_upload_texture (self, FALSE, texture);
   if (image == NULL)

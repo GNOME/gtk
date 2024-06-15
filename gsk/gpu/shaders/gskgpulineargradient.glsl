@@ -122,7 +122,6 @@ run (out vec4 color,
      out vec2 position)
 {
   float alpha = rect_coverage (_rect, _pos);
-  uint tf = GSK_VARIATION >> 2;
 
   if (VARIATION_SUPERSAMPLING)
     {
