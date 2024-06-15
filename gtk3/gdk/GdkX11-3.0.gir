@@ -23,13 +23,13 @@ and/or use gtk-doc annotations.  -->
                     c:identifier="GDK_CURSOR_XCURSOR"
                     introspectable="0">
       <doc xml:space="preserve"
-           filename="../gdk/x11/gdkx11cursor.h"
+           filename="gdk/x11/gdkx11cursor.h"
            line="71">Returns the X cursor belonging to a #GdkCursor.</doc>
-      <source-position filename="../gdk/x11/gdkx11cursor.h" line="79"/>
+      <source-position filename="gdk/x11/gdkx11cursor.h" line="79"/>
       <parameters>
         <parameter name="cursor">
           <doc xml:space="preserve"
-               filename="../gdk/x11/gdkx11cursor.h"
+               filename="gdk/x11/gdkx11cursor.h"
                line="73">a #GdkCursor.</doc>
         </parameter>
       </parameters>
@@ -38,13 +38,13 @@ and/or use gtk-doc annotations.  -->
                     c:identifier="GDK_CURSOR_XDISPLAY"
                     introspectable="0">
       <doc xml:space="preserve"
-           filename="../gdk/x11/gdkx11cursor.h"
+           filename="gdk/x11/gdkx11cursor.h"
            line="61">Returns the display of a #GdkCursor.</doc>
-      <source-position filename="../gdk/x11/gdkx11cursor.h" line="69"/>
+      <source-position filename="gdk/x11/gdkx11cursor.h" line="69"/>
       <parameters>
         <parameter name="cursor">
           <doc xml:space="preserve"
-               filename="../gdk/x11/gdkx11cursor.h"
+               filename="gdk/x11/gdkx11cursor.h"
                line="63">a #GdkCursor.</doc>
         </parameter>
       </parameters>
@@ -52,7 +52,7 @@ and/or use gtk-doc annotations.  -->
     <function-macro name="DISPLAY_XDISPLAY"
                     c:identifier="GDK_DISPLAY_XDISPLAY"
                     introspectable="0">
-      <source-position filename="../gdk/x11/gdkx11display.h" line="59"/>
+      <source-position filename="gdk/x11/gdkx11display.h" line="59"/>
       <parameters>
         <parameter name="display">
         </parameter>
@@ -61,8 +61,7 @@ and/or use gtk-doc annotations.  -->
     <function-macro name="IS_X11_APP_LAUNCH_CONTEXT"
                     c:identifier="GDK_IS_X11_APP_LAUNCH_CONTEXT"
                     introspectable="0">
-      <source-position filename="../gdk/x11/gdkx11applaunchcontext.h"
-                       line="32"/>
+      <source-position filename="gdk/x11/gdkx11applaunchcontext.h" line="32"/>
       <parameters>
         <parameter name="object">
         </parameter>
@@ -71,8 +70,7 @@ and/or use gtk-doc annotations.  -->
     <function-macro name="IS_X11_APP_LAUNCH_CONTEXT_CLASS"
                     c:identifier="GDK_IS_X11_APP_LAUNCH_CONTEXT_CLASS"
                     introspectable="0">
-      <source-position filename="../gdk/x11/gdkx11applaunchcontext.h"
-                       line="33"/>
+      <source-position filename="gdk/x11/gdkx11applaunchcontext.h" line="33"/>
       <parameters>
         <parameter name="klass">
         </parameter>
@@ -81,7 +79,7 @@ and/or use gtk-doc annotations.  -->
     <function-macro name="IS_X11_CURSOR"
                     c:identifier="GDK_IS_X11_CURSOR"
                     introspectable="0">
-      <source-position filename="../gdk/x11/gdkx11cursor.h" line="42"/>
+      <source-position filename="gdk/x11/gdkx11cursor.h" line="42"/>
       <parameters>
         <parameter name="object">
         </parameter>
@@ -90,7 +88,7 @@ and/or use gtk-doc annotations.  -->
     <function-macro name="IS_X11_CURSOR_CLASS"
                     c:identifier="GDK_IS_X11_CURSOR_CLASS"
                     introspectable="0">
-      <source-position filename="../gdk/x11/gdkx11cursor.h" line="43"/>
+      <source-position filename="gdk/x11/gdkx11cursor.h" line="43"/>
       <parameters>
         <parameter name="klass">
         </parameter>
@@ -99,7 +97,7 @@ and/or use gtk-doc annotations.  -->
     <function-macro name="IS_X11_DEVICE_CORE"
                     c:identifier="GDK_IS_X11_DEVICE_CORE"
                     introspectable="0">
-      <source-position filename="../gdk/x11/gdkx11device-core.h" line="28"/>
+      <source-position filename="gdk/x11/gdkx11device-core.h" line="28"/>
       <parameters>
         <parameter name="o">
         </parameter>
@@ -108,7 +106,7 @@ and/or use gtk-doc annotations.  -->
     <function-macro name="IS_X11_DEVICE_CORE_CLASS"
                     c:identifier="GDK_IS_X11_DEVICE_CORE_CLASS"
                     introspectable="0">
-      <source-position filename="../gdk/x11/gdkx11device-core.h" line="29"/>
+      <source-position filename="gdk/x11/gdkx11device-core.h" line="29"/>
       <parameters>
         <parameter name="c">
         </parameter>
@@ -117,7 +115,7 @@ and/or use gtk-doc annotations.  -->
     <function-macro name="IS_X11_DEVICE_MANAGER_CORE"
                     c:identifier="GDK_IS_X11_DEVICE_MANAGER_CORE"
                     introspectable="0">
-      <source-position filename="../gdk/x11/gdkx11devicemanager-core.h"
+      <source-position filename="gdk/x11/gdkx11devicemanager-core.h"
                        line="28"/>
       <parameters>
         <parameter name="o">
@@ -127,7 +125,7 @@ and/or use gtk-doc annotations.  -->
     <function-macro name="IS_X11_DEVICE_MANAGER_CORE_CLASS"
                     c:identifier="GDK_IS_X11_DEVICE_MANAGER_CORE_CLASS"
                     introspectable="0">
-      <source-position filename="../gdk/x11/gdkx11devicemanager-core.h"
+      <source-position filename="gdk/x11/gdkx11devicemanager-core.h"
                        line="29"/>
       <parameters>
         <parameter name="c">
@@ -137,8 +135,7 @@ and/or use gtk-doc annotations.  -->
     <function-macro name="IS_X11_DEVICE_MANAGER_XI2"
                     c:identifier="GDK_IS_X11_DEVICE_MANAGER_XI2"
                     introspectable="0">
-      <source-position filename="../gdk/x11/gdkx11devicemanager-xi2.h"
-                       line="28"/>
+      <source-position filename="gdk/x11/gdkx11devicemanager-xi2.h" line="28"/>
       <parameters>
         <parameter name="o">
         </parameter>
@@ -147,8 +144,7 @@ and/or use gtk-doc annotations.  -->
     <function-macro name="IS_X11_DEVICE_MANAGER_XI2_CLASS"
                     c:identifier="GDK_IS_X11_DEVICE_MANAGER_XI2_CLASS"
                     introspectable="0">
-      <source-position filename="../gdk/x11/gdkx11devicemanager-xi2.h"
-                       line="29"/>
+      <source-position filename="gdk/x11/gdkx11devicemanager-xi2.h" line="29"/>
       <parameters>
         <parameter name="c">
         </parameter>
@@ -157,7 +153,7 @@ and/or use gtk-doc annotations.  -->
     <function-macro name="IS_X11_DEVICE_XI2"
                     c:identifier="GDK_IS_X11_DEVICE_XI2"
                     introspectable="0">
-      <source-position filename="../gdk/x11/gdkx11device-xi2.h" line="28"/>
+      <source-position filename="gdk/x11/gdkx11device-xi2.h" line="28"/>
       <parameters>
         <parameter name="o">
         </parameter>
@@ -166,7 +162,7 @@ and/or use gtk-doc annotations.  -->
     <function-macro name="IS_X11_DEVICE_XI2_CLASS"
                     c:identifier="GDK_IS_X11_DEVICE_XI2_CLASS"
                     introspectable="0">
-      <source-position filename="../gdk/x11/gdkx11device-xi2.h" line="29"/>
+      <source-position filename="gdk/x11/gdkx11device-xi2.h" line="29"/>
       <parameters>
         <parameter name="c">
         </parameter>
@@ -175,7 +171,7 @@ and/or use gtk-doc annotations.  -->
     <function-macro name="IS_X11_DISPLAY"
                     c:identifier="GDK_IS_X11_DISPLAY"
                     introspectable="0">
-      <source-position filename="../gdk/x11/gdkx11display.h" line="49"/>
+      <source-position filename="gdk/x11/gdkx11display.h" line="49"/>
       <parameters>
         <parameter name="object">
         </parameter>
@@ -184,7 +180,7 @@ and/or use gtk-doc annotations.  -->
     <function-macro name="IS_X11_DISPLAY_CLASS"
                     c:identifier="GDK_IS_X11_DISPLAY_CLASS"
                     introspectable="0">
-      <source-position filename="../gdk/x11/gdkx11display.h" line="50"/>
+      <source-position filename="gdk/x11/gdkx11display.h" line="50"/>
       <parameters>
         <parameter name="klass">
         </parameter>
@@ -193,7 +189,7 @@ and/or use gtk-doc annotations.  -->
     <function-macro name="IS_X11_DISPLAY_MANAGER"
                     c:identifier="GDK_IS_X11_DISPLAY_MANAGER"
                     introspectable="0">
-      <source-position filename="../gdk/x11/gdkx11displaymanager.h" line="39"/>
+      <source-position filename="gdk/x11/gdkx11displaymanager.h" line="39"/>
       <parameters>
         <parameter name="object">
         </parameter>
@@ -202,7 +198,7 @@ and/or use gtk-doc annotations.  -->
     <function-macro name="IS_X11_DISPLAY_MANAGER_CLASS"
                     c:identifier="GDK_IS_X11_DISPLAY_MANAGER_CLASS"
                     introspectable="0">
-      <source-position filename="../gdk/x11/gdkx11displaymanager.h" line="40"/>
+      <source-position filename="gdk/x11/gdkx11displaymanager.h" line="40"/>
       <parameters>
         <parameter name="klass">
         </parameter>
@@ -211,7 +207,7 @@ and/or use gtk-doc annotations.  -->
     <function-macro name="IS_X11_DRAG_CONTEXT"
                     c:identifier="GDK_IS_X11_DRAG_CONTEXT"
                     introspectable="0">
-      <source-position filename="../gdk/x11/gdkx11dnd.h" line="32"/>
+      <source-position filename="gdk/x11/gdkx11dnd.h" line="32"/>
       <parameters>
         <parameter name="object">
         </parameter>
@@ -220,7 +216,7 @@ and/or use gtk-doc annotations.  -->
     <function-macro name="IS_X11_DRAG_CONTEXT_CLASS"
                     c:identifier="GDK_IS_X11_DRAG_CONTEXT_CLASS"
                     introspectable="0">
-      <source-position filename="../gdk/x11/gdkx11dnd.h" line="33"/>
+      <source-position filename="gdk/x11/gdkx11dnd.h" line="33"/>
       <parameters>
         <parameter name="klass">
         </parameter>
@@ -229,7 +225,7 @@ and/or use gtk-doc annotations.  -->
     <function-macro name="IS_X11_KEYMAP"
                     c:identifier="GDK_IS_X11_KEYMAP"
                     introspectable="0">
-      <source-position filename="../gdk/x11/gdkx11keys.h" line="39"/>
+      <source-position filename="gdk/x11/gdkx11keys.h" line="39"/>
       <parameters>
         <parameter name="object">
         </parameter>
@@ -238,7 +234,7 @@ and/or use gtk-doc annotations.  -->
     <function-macro name="IS_X11_KEYMAP_CLASS"
                     c:identifier="GDK_IS_X11_KEYMAP_CLASS"
                     introspectable="0">
-      <source-position filename="../gdk/x11/gdkx11keys.h" line="40"/>
+      <source-position filename="gdk/x11/gdkx11keys.h" line="40"/>
       <parameters>
         <parameter name="klass">
         </parameter>
@@ -247,7 +243,7 @@ and/or use gtk-doc annotations.  -->
     <function-macro name="IS_X11_MONITOR"
                     c:identifier="GDK_IS_X11_MONITOR"
                     introspectable="0">
-      <source-position filename="../gdk/x11/gdkx11monitor.h" line="35"/>
+      <source-position filename="gdk/x11/gdkx11monitor.h" line="35"/>
       <parameters>
         <parameter name="object">
         </parameter>
@@ -256,7 +252,7 @@ and/or use gtk-doc annotations.  -->
     <function-macro name="IS_X11_SCREEN"
                     c:identifier="GDK_IS_X11_SCREEN"
                     introspectable="0">
-      <source-position filename="../gdk/x11/gdkx11screen.h" line="42"/>
+      <source-position filename="gdk/x11/gdkx11screen.h" line="42"/>
       <parameters>
         <parameter name="object">
         </parameter>
@@ -265,7 +261,7 @@ and/or use gtk-doc annotations.  -->
     <function-macro name="IS_X11_SCREEN_CLASS"
                     c:identifier="GDK_IS_X11_SCREEN_CLASS"
                     introspectable="0">
-      <source-position filename="../gdk/x11/gdkx11screen.h" line="43"/>
+      <source-position filename="gdk/x11/gdkx11screen.h" line="43"/>
       <parameters>
         <parameter name="klass">
         </parameter>
@@ -274,7 +270,7 @@ and/or use gtk-doc annotations.  -->
     <function-macro name="IS_X11_VISUAL"
                     c:identifier="GDK_IS_X11_VISUAL"
                     introspectable="0">
-      <source-position filename="../gdk/x11/gdkx11visual.h" line="42"/>
+      <source-position filename="gdk/x11/gdkx11visual.h" line="42"/>
       <parameters>
         <parameter name="object">
         </parameter>
@@ -283,7 +279,7 @@ and/or use gtk-doc annotations.  -->
     <function-macro name="IS_X11_VISUAL_CLASS"
                     c:identifier="GDK_IS_X11_VISUAL_CLASS"
                     introspectable="0">
-      <source-position filename="../gdk/x11/gdkx11visual.h" line="43"/>
+      <source-position filename="gdk/x11/gdkx11visual.h" line="43"/>
       <parameters>
         <parameter name="klass">
         </parameter>
@@ -292,7 +288,7 @@ and/or use gtk-doc annotations.  -->
     <function-macro name="IS_X11_WINDOW"
                     c:identifier="GDK_IS_X11_WINDOW"
                     introspectable="0">
-      <source-position filename="../gdk/x11/gdkx11window.h" line="42"/>
+      <source-position filename="gdk/x11/gdkx11window.h" line="42"/>
       <parameters>
         <parameter name="object">
         </parameter>
@@ -301,7 +297,7 @@ and/or use gtk-doc annotations.  -->
     <function-macro name="IS_X11_WINDOW_CLASS"
                     c:identifier="GDK_IS_X11_WINDOW_CLASS"
                     introspectable="0">
-      <source-position filename="../gdk/x11/gdkx11window.h" line="43"/>
+      <source-position filename="gdk/x11/gdkx11window.h" line="43"/>
       <parameters>
         <parameter name="klass">
         </parameter>
@@ -311,29 +307,37 @@ and/or use gtk-doc annotations.  -->
                     c:identifier="GDK_POINTER_TO_XID"
                     introspectable="0">
       <doc xml:space="preserve"
-           filename="../gdk/x11/gdkx11utils.h"
+           filename="gdk/x11/gdkx11utils.h"
            line="61">Converts a @gpointer back to an XID that was previously converted
 using GDK_XID_TO_POINTER().</doc>
-      <source-position filename="../gdk/x11/gdkx11utils.h" line="68"/>
+      <source-position filename="gdk/x11/gdkx11utils.h" line="68"/>
       <parameters>
         <parameter name="pointer">
           <doc xml:space="preserve"
-               filename="../gdk/x11/gdkx11utils.h"
+               filename="gdk/x11/gdkx11utils.h"
                line="63">pointer to extract an XID from</doc>
         </parameter>
       </parameters>
+    </function-macro>
+    <function-macro name="ROOT_WINDOW"
+                    c:identifier="GDK_ROOT_WINDOW"
+                    introspectable="0">
+      <doc xml:space="preserve"
+           filename="gdk/x11/gdkx11utils.h"
+           line="44">Obtains the Xlib window id of the root window of the current screen.</doc>
+      <source-position filename="gdk/x11/gdkx11utils.h" line="49"/>
     </function-macro>
     <function-macro name="SCREEN_XDISPLAY"
                     c:identifier="GDK_SCREEN_XDISPLAY"
                     introspectable="0">
       <doc xml:space="preserve"
-           filename="../gdk/x11/gdkx11screen.h"
+           filename="gdk/x11/gdkx11screen.h"
            line="67">Returns the display of a X11 #GdkScreen.</doc>
-      <source-position filename="../gdk/x11/gdkx11screen.h" line="75"/>
+      <source-position filename="gdk/x11/gdkx11screen.h" line="75"/>
       <parameters>
         <parameter name="screen">
           <doc xml:space="preserve"
-               filename="../gdk/x11/gdkx11screen.h"
+               filename="gdk/x11/gdkx11screen.h"
                line="69">a #GdkScreen</doc>
         </parameter>
       </parameters>
@@ -342,13 +346,13 @@ using GDK_XID_TO_POINTER().</doc>
                     c:identifier="GDK_SCREEN_XNUMBER"
                     introspectable="0">
       <doc xml:space="preserve"
-           filename="../gdk/x11/gdkx11screen.h"
+           filename="gdk/x11/gdkx11screen.h"
            line="87">Returns the index of a X11 #GdkScreen.</doc>
-      <source-position filename="../gdk/x11/gdkx11screen.h" line="95"/>
+      <source-position filename="gdk/x11/gdkx11screen.h" line="95"/>
       <parameters>
         <parameter name="screen">
           <doc xml:space="preserve"
-               filename="../gdk/x11/gdkx11screen.h"
+               filename="gdk/x11/gdkx11screen.h"
                line="89">a #GdkScreen</doc>
         </parameter>
       </parameters>
@@ -357,13 +361,13 @@ using GDK_XID_TO_POINTER().</doc>
                     c:identifier="GDK_SCREEN_XSCREEN"
                     introspectable="0">
       <doc xml:space="preserve"
-           filename="../gdk/x11/gdkx11screen.h"
+           filename="gdk/x11/gdkx11screen.h"
            line="77">Returns the screen of a X11 #GdkScreen.</doc>
-      <source-position filename="../gdk/x11/gdkx11screen.h" line="85"/>
+      <source-position filename="gdk/x11/gdkx11screen.h" line="85"/>
       <parameters>
         <parameter name="screen">
           <doc xml:space="preserve"
-               filename="../gdk/x11/gdkx11screen.h"
+               filename="gdk/x11/gdkx11screen.h"
                line="79">a #GdkScreen</doc>
         </parameter>
       </parameters>
@@ -371,7 +375,7 @@ using GDK_XID_TO_POINTER().</doc>
     <function-macro name="VISUAL_XVISUAL"
                     c:identifier="GDK_VISUAL_XVISUAL"
                     introspectable="0">
-      <source-position filename="../gdk/x11/gdkx11visual.h" line="59"/>
+      <source-position filename="gdk/x11/gdkx11visual.h" line="59"/>
       <parameters>
         <parameter name="visual">
         </parameter>
@@ -381,13 +385,13 @@ using GDK_XID_TO_POINTER().</doc>
                     c:identifier="GDK_WINDOW_XDISPLAY"
                     introspectable="0">
       <doc xml:space="preserve"
-           filename="../gdk/x11/gdkx11window.h"
+           filename="gdk/x11/gdkx11window.h"
            line="90">Returns the display of a #GdkWindow.</doc>
-      <source-position filename="../gdk/x11/gdkx11window.h" line="98"/>
+      <source-position filename="gdk/x11/gdkx11window.h" line="98"/>
       <parameters>
         <parameter name="win">
           <doc xml:space="preserve"
-               filename="../gdk/x11/gdkx11window.h"
+               filename="gdk/x11/gdkx11window.h"
                line="92">a #GdkWindow.</doc>
         </parameter>
       </parameters>
@@ -396,13 +400,13 @@ using GDK_XID_TO_POINTER().</doc>
                     c:identifier="GDK_WINDOW_XID"
                     introspectable="0">
       <doc xml:space="preserve"
-           filename="../gdk/x11/gdkx11window.h"
+           filename="gdk/x11/gdkx11window.h"
            line="100">Returns the X window belonging to a #GdkWindow.</doc>
-      <source-position filename="../gdk/x11/gdkx11window.h" line="108"/>
+      <source-position filename="gdk/x11/gdkx11window.h" line="108"/>
       <parameters>
         <parameter name="win">
           <doc xml:space="preserve"
-               filename="../gdk/x11/gdkx11window.h"
+               filename="gdk/x11/gdkx11window.h"
                line="102">a #GdkWindow.</doc>
         </parameter>
       </parameters>
@@ -414,15 +418,14 @@ using GDK_XID_TO_POINTER().</doc>
            glib:type-name="GdkX11AppLaunchContext"
            glib:get-type="gdk_x11_app_launch_context_get_type"
            glib:type-struct="X11AppLaunchContextClass">
-      <source-position filename="../gdk/x11/gdkx11applaunchcontext.h"
-                       line="41"/>
+      <source-position filename="gdk/x11/gdkx11applaunchcontext.h" line="41"/>
     </class>
     <record name="X11AppLaunchContextClass"
             c:type="GdkX11AppLaunchContextClass"
             disguised="1"
+            opaque="1"
             glib:is-gtype-struct-for="X11AppLaunchContext">
-      <source-position filename="../gdk/x11/gdkx11applaunchcontext.h"
-                       line="41"/>
+      <source-position filename="gdk/x11/gdkx11applaunchcontext.h" line="41"/>
     </record>
     <class name="X11Cursor"
            c:symbol-prefix="x11_cursor"
@@ -431,22 +434,22 @@ using GDK_XID_TO_POINTER().</doc>
            glib:type-name="GdkX11Cursor"
            glib:get-type="gdk_x11_cursor_get_type"
            glib:type-struct="X11CursorClass">
-      <source-position filename="../gdk/x11/gdkx11cursor.h" line="51"/>
+      <source-position filename="gdk/x11/gdkx11cursor.h" line="51"/>
       <method name="get_xcursor" c:identifier="gdk_x11_cursor_get_xcursor">
         <doc xml:space="preserve"
-             filename="../gdk/x11/gdkcursor-x11.c"
+             filename="gdk/x11/gdkcursor-x11.c"
              line="304">Returns the X cursor belonging to a #GdkCursor.</doc>
-        <source-position filename="../gdk/x11/gdkx11cursor.h" line="59"/>
+        <source-position filename="gdk/x11/gdkx11cursor.h" line="59"/>
         <return-value transfer-ownership="none">
           <doc xml:space="preserve"
-               filename="../gdk/x11/gdkcursor-x11.c"
+               filename="gdk/x11/gdkcursor-x11.c"
                line="310">an Xlib Cursor.</doc>
           <type name="xlib.Cursor" c:type="Cursor"/>
         </return-value>
         <parameters>
           <instance-parameter name="cursor" transfer-ownership="none">
             <doc xml:space="preserve"
-                 filename="../gdk/x11/gdkcursor-x11.c"
+                 filename="gdk/x11/gdkcursor-x11.c"
                  line="306">a #GdkCursor.</doc>
             <type name="X11Cursor" c:type="GdkCursor*"/>
           </instance-parameter>
@@ -454,19 +457,19 @@ using GDK_XID_TO_POINTER().</doc>
       </method>
       <method name="get_xdisplay" c:identifier="gdk_x11_cursor_get_xdisplay">
         <doc xml:space="preserve"
-             filename="../gdk/x11/gdkcursor-x11.c"
+             filename="gdk/x11/gdkcursor-x11.c"
              line="288">Returns the display of a #GdkCursor.</doc>
-        <source-position filename="../gdk/x11/gdkx11cursor.h" line="57"/>
+        <source-position filename="gdk/x11/gdkx11cursor.h" line="57"/>
         <return-value transfer-ownership="none">
           <doc xml:space="preserve"
-               filename="../gdk/x11/gdkcursor-x11.c"
+               filename="gdk/x11/gdkcursor-x11.c"
                line="294">an Xlib Display*.</doc>
           <type name="xlib.Display" c:type="Display*"/>
         </return-value>
         <parameters>
           <instance-parameter name="cursor" transfer-ownership="none">
             <doc xml:space="preserve"
-                 filename="../gdk/x11/gdkcursor-x11.c"
+                 filename="gdk/x11/gdkcursor-x11.c"
                  line="290">a #GdkCursor.</doc>
             <type name="X11Cursor" c:type="GdkCursor*"/>
           </instance-parameter>
@@ -476,8 +479,9 @@ using GDK_XID_TO_POINTER().</doc>
     <record name="X11CursorClass"
             c:type="GdkX11CursorClass"
             disguised="1"
+            opaque="1"
             glib:is-gtype-struct-for="X11Cursor">
-      <source-position filename="../gdk/x11/gdkx11cursor.h" line="51"/>
+      <source-position filename="gdk/x11/gdkx11cursor.h" line="51"/>
     </record>
     <class name="X11DeviceCore"
            c:symbol-prefix="x11_device_core"
@@ -486,13 +490,14 @@ using GDK_XID_TO_POINTER().</doc>
            glib:type-name="GdkX11DeviceCore"
            glib:get-type="gdk_x11_device_core_get_type"
            glib:type-struct="X11DeviceCoreClass">
-      <source-position filename="../gdk/x11/gdkx11device-core.h" line="33"/>
+      <source-position filename="gdk/x11/gdkx11device-core.h" line="33"/>
     </class>
     <record name="X11DeviceCoreClass"
             c:type="GdkX11DeviceCoreClass"
             disguised="1"
+            opaque="1"
             glib:is-gtype-struct-for="X11DeviceCore">
-      <source-position filename="../gdk/x11/gdkx11device-core.h" line="33"/>
+      <source-position filename="gdk/x11/gdkx11device-core.h" line="33"/>
     </record>
     <class name="X11DeviceManagerCore"
            c:symbol-prefix="x11_device_manager_core"
@@ -501,14 +506,15 @@ using GDK_XID_TO_POINTER().</doc>
            glib:type-name="GdkX11DeviceManagerCore"
            glib:get-type="gdk_x11_device_manager_core_get_type"
            glib:type-struct="X11DeviceManagerCoreClass">
-      <source-position filename="../gdk/x11/gdkx11devicemanager-core.h"
+      <source-position filename="gdk/x11/gdkx11devicemanager-core.h"
                        line="33"/>
     </class>
     <record name="X11DeviceManagerCoreClass"
             c:type="GdkX11DeviceManagerCoreClass"
             disguised="1"
+            opaque="1"
             glib:is-gtype-struct-for="X11DeviceManagerCore">
-      <source-position filename="../gdk/x11/gdkx11devicemanager-core.h"
+      <source-position filename="gdk/x11/gdkx11devicemanager-core.h"
                        line="33"/>
     </record>
     <class name="X11DeviceManagerXI2"
@@ -518,33 +524,35 @@ using GDK_XID_TO_POINTER().</doc>
            glib:type-name="GdkX11DeviceManagerXI2"
            glib:get-type="gdk_x11_device_manager_xi2_get_type"
            glib:type-struct="X11DeviceManagerXI2Class">
-      <source-position filename="../gdk/x11/gdkx11devicemanager-xi2.h"
-                       line="33"/>
+      <source-position filename="gdk/x11/gdkx11devicemanager-xi2.h" line="33"/>
       <property name="major"
                 writable="1"
                 construct-only="1"
-                transfer-ownership="none">
+                transfer-ownership="none"
+                default-value="0">
         <type name="gint" c:type="gint"/>
       </property>
       <property name="minor"
                 writable="1"
                 construct-only="1"
-                transfer-ownership="none">
+                transfer-ownership="none"
+                default-value="0">
         <type name="gint" c:type="gint"/>
       </property>
       <property name="opcode"
                 writable="1"
                 construct-only="1"
-                transfer-ownership="none">
+                transfer-ownership="none"
+                default-value="0">
         <type name="gint" c:type="gint"/>
       </property>
     </class>
     <record name="X11DeviceManagerXI2Class"
             c:type="GdkX11DeviceManagerXI2Class"
             disguised="1"
+            opaque="1"
             glib:is-gtype-struct-for="X11DeviceManagerXI2">
-      <source-position filename="../gdk/x11/gdkx11devicemanager-xi2.h"
-                       line="33"/>
+      <source-position filename="gdk/x11/gdkx11devicemanager-xi2.h" line="33"/>
     </record>
     <class name="X11DeviceXI2"
            c:symbol-prefix="x11_device_xi2"
@@ -553,19 +561,21 @@ using GDK_XID_TO_POINTER().</doc>
            glib:type-name="GdkX11DeviceXI2"
            glib:get-type="gdk_x11_device_xi2_get_type"
            glib:type-struct="X11DeviceXI2Class">
-      <source-position filename="../gdk/x11/gdkx11device-xi2.h" line="33"/>
+      <source-position filename="gdk/x11/gdkx11device-xi2.h" line="33"/>
       <property name="device-id"
                 writable="1"
                 construct-only="1"
-                transfer-ownership="none">
+                transfer-ownership="none"
+                default-value="0">
         <type name="gint" c:type="gint"/>
       </property>
     </class>
     <record name="X11DeviceXI2Class"
             c:type="GdkX11DeviceXI2Class"
             disguised="1"
+            opaque="1"
             glib:is-gtype-struct-for="X11DeviceXI2">
-      <source-position filename="../gdk/x11/gdkx11device-xi2.h" line="33"/>
+      <source-position filename="gdk/x11/gdkx11device-xi2.h" line="33"/>
     </record>
     <class name="X11Display"
            c:symbol-prefix="x11_display"
@@ -574,24 +584,24 @@ using GDK_XID_TO_POINTER().</doc>
            glib:type-name="GdkX11Display"
            glib:get-type="gdk_x11_display_get_type"
            glib:type-struct="X11DisplayClass">
-      <source-position filename="../gdk/x11/gdkx11display.h" line="44"/>
+      <source-position filename="gdk/x11/gdkx11display.h" line="44"/>
       <function name="get_glx_version"
                 c:identifier="gdk_x11_display_get_glx_version"
                 version="3.16">
         <doc xml:space="preserve"
-             filename="../gdk/x11/gdkglcontext-x11.c"
+             filename="gdk/x11/gdkglcontext-x11.c"
              line="1362">Retrieves the version of the GLX implementation.</doc>
-        <source-position filename="../gdk/x11/gdkx11glcontext.h" line="43"/>
+        <source-position filename="gdk/x11/gdkx11glcontext.h" line="43"/>
         <return-value transfer-ownership="none">
           <doc xml:space="preserve"
-               filename="../gdk/x11/gdkglcontext-x11.c"
+               filename="gdk/x11/gdkglcontext-x11.c"
                line="1370">%TRUE if GLX is available</doc>
           <type name="gboolean" c:type="gboolean"/>
         </return-value>
         <parameters>
           <parameter name="display" transfer-ownership="none">
             <doc xml:space="preserve"
-                 filename="../gdk/x11/gdkglcontext-x11.c"
+                 filename="gdk/x11/gdkglcontext-x11.c"
                  line="1364">a #GdkDisplay</doc>
             <type name="Gdk.Display" c:type="GdkDisplay*"/>
           </parameter>
@@ -600,7 +610,7 @@ using GDK_XID_TO_POINTER().</doc>
                      caller-allocates="0"
                      transfer-ownership="full">
             <doc xml:space="preserve"
-                 filename="../gdk/x11/gdkglcontext-x11.c"
+                 filename="gdk/x11/gdkglcontext-x11.c"
                  line="1365">return location for the GLX major version</doc>
             <type name="gint" c:type="gint*"/>
           </parameter>
@@ -609,7 +619,7 @@ using GDK_XID_TO_POINTER().</doc>
                      caller-allocates="0"
                      transfer-ownership="full">
             <doc xml:space="preserve"
-                 filename="../gdk/x11/gdkglcontext-x11.c"
+                 filename="gdk/x11/gdkglcontext-x11.c"
                  line="1366">return location for the GLX minor version</doc>
             <type name="gint" c:type="gint*"/>
           </parameter>
@@ -620,7 +630,7 @@ using GDK_XID_TO_POINTER().</doc>
               version="2.12"
               introspectable="0">
         <doc xml:space="preserve"
-             filename="../gdk/x11/gdkdisplay-x11.c"
+             filename="gdk/x11/gdkdisplay-x11.c"
              line="2335">Sends a startup notification message of type @message_type to
 @display.
 
@@ -629,27 +639,27 @@ freedesktop startup notification specification. Applications should
 not normally need to call it directly. See the
 [Startup Notification Protocol specification](http://standards.freedesktop.org/startup-notification-spec/startup-notification-latest.txt)
 for definitions of the message types and keys that can be used.</doc>
-        <source-position filename="../gdk/x11/gdkx11display.h" line="76"/>
+        <source-position filename="gdk/x11/gdkx11display.h" line="76"/>
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
         <parameters>
           <instance-parameter name="display" transfer-ownership="none">
             <doc xml:space="preserve"
-                 filename="../gdk/x11/gdkdisplay-x11.c"
+                 filename="gdk/x11/gdkdisplay-x11.c"
                  line="2337">a #GdkDisplay</doc>
             <type name="X11Display" c:type="GdkDisplay*"/>
           </instance-parameter>
           <parameter name="message_type" transfer-ownership="none">
             <doc xml:space="preserve"
-                 filename="../gdk/x11/gdkdisplay-x11.c"
+                 filename="gdk/x11/gdkdisplay-x11.c"
                  line="2338">startup notification message type ("new", "change",
 or "remove")</doc>
             <type name="utf8" c:type="const char*"/>
           </parameter>
           <parameter name="..." transfer-ownership="none">
             <doc xml:space="preserve"
-                 filename="../gdk/x11/gdkdisplay-x11.c"
+                 filename="gdk/x11/gdkdisplay-x11.c"
                  line="2340">a list of key/value pairs (as strings), terminated by a
 %NULL key. (A %NULL value for a key will cause that key to be
 skipped in the output.)</doc>
@@ -661,7 +671,7 @@ skipped in the output.)</doc>
               c:identifier="gdk_x11_display_error_trap_pop"
               version="3.0">
         <doc xml:space="preserve"
-             filename="../gdk/x11/gdkdisplay-x11.c"
+             filename="gdk/x11/gdkdisplay-x11.c"
              line="2955">Pops the error trap pushed by gdk_x11_display_error_trap_push().
 Will XSync() if necessary and will always block until
 the error is known to have occurred or not occurred,
@@ -672,17 +682,17 @@ gdk_x11_display_error_trap_pop_ignored() would be more efficient.
 
 See gdk_error_trap_pop() for the all-displays-at-once
 equivalent.</doc>
-        <source-position filename="../gdk/x11/gdkx11display.h" line="96"/>
+        <source-position filename="gdk/x11/gdkx11display.h" line="96"/>
         <return-value transfer-ownership="none">
           <doc xml:space="preserve"
-               filename="../gdk/x11/gdkdisplay-x11.c"
+               filename="gdk/x11/gdkdisplay-x11.c"
                line="2972">X error code or 0 on success</doc>
           <type name="gint" c:type="gint"/>
         </return-value>
         <parameters>
           <instance-parameter name="display" transfer-ownership="none">
             <doc xml:space="preserve"
-                 filename="../gdk/x11/gdkdisplay-x11.c"
+                 filename="gdk/x11/gdkdisplay-x11.c"
                  line="2957">the display</doc>
             <type name="X11Display" c:type="GdkDisplay*"/>
           </instance-parameter>
@@ -692,7 +702,7 @@ equivalent.</doc>
               c:identifier="gdk_x11_display_error_trap_pop_ignored"
               version="3.0">
         <doc xml:space="preserve"
-             filename="../gdk/x11/gdkdisplay-x11.c"
+             filename="gdk/x11/gdkdisplay-x11.c"
              line="2982">Pops the error trap pushed by gdk_x11_display_error_trap_push().
 Does not block to see if an error occurred; merely records the
 range of requests to ignore errors for, and ignores those errors
@@ -700,14 +710,14 @@ if they arrive asynchronously.
 
 See gdk_error_trap_pop_ignored() for the all-displays-at-once
 equivalent.</doc>
-        <source-position filename="../gdk/x11/gdkx11display.h" line="98"/>
+        <source-position filename="gdk/x11/gdkx11display.h" line="98"/>
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
         <parameters>
           <instance-parameter name="display" transfer-ownership="none">
             <doc xml:space="preserve"
-                 filename="../gdk/x11/gdkdisplay-x11.c"
+                 filename="gdk/x11/gdkdisplay-x11.c"
                  line="2984">the display</doc>
             <type name="X11Display" c:type="GdkDisplay*"/>
           </instance-parameter>
@@ -717,7 +727,7 @@ equivalent.</doc>
               c:identifier="gdk_x11_display_error_trap_push"
               version="3.0">
         <doc xml:space="preserve"
-             filename="../gdk/x11/gdkdisplay-x11.c"
+             filename="gdk/x11/gdkdisplay-x11.c"
              line="2805">Begins a range of X requests on @display for which X error events
 will be ignored. Unignored errors (when no trap is pushed) will abort
 the application. Use gdk_x11_display_error_trap_pop() or
@@ -725,14 +735,14 @@ gdk_x11_display_error_trap_pop_ignored()to lift a trap pushed
 with this function.
 
 See also gdk_error_trap_push() to push a trap on all displays.</doc>
-        <source-position filename="../gdk/x11/gdkx11display.h" line="93"/>
+        <source-position filename="gdk/x11/gdkx11display.h" line="93"/>
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
         <parameters>
           <instance-parameter name="display" transfer-ownership="none">
             <doc xml:space="preserve"
-                 filename="../gdk/x11/gdkdisplay-x11.c"
+                 filename="gdk/x11/gdkdisplay-x11.c"
                  line="2807">a #GdkDisplay</doc>
             <type name="X11Display" c:type="GdkDisplay*"/>
           </instance-parameter>
@@ -742,19 +752,19 @@ See also gdk_error_trap_push() to push a trap on all displays.</doc>
               c:identifier="gdk_x11_display_get_startup_notification_id"
               version="2.12">
         <doc xml:space="preserve"
-             filename="../gdk/x11/gdkdisplay-x11.c"
+             filename="gdk/x11/gdkdisplay-x11.c"
              line="2547">Gets the startup notification ID for a display.</doc>
-        <source-position filename="../gdk/x11/gdkx11display.h" line="65"/>
+        <source-position filename="gdk/x11/gdkx11display.h" line="65"/>
         <return-value transfer-ownership="none">
           <doc xml:space="preserve"
-               filename="../gdk/x11/gdkdisplay-x11.c"
+               filename="gdk/x11/gdkdisplay-x11.c"
                line="2553">the startup notification ID for @display</doc>
           <type name="utf8" c:type="const gchar*"/>
         </return-value>
         <parameters>
           <instance-parameter name="display" transfer-ownership="none">
             <doc xml:space="preserve"
-                 filename="../gdk/x11/gdkdisplay-x11.c"
+                 filename="gdk/x11/gdkdisplay-x11.c"
                  line="2549">a #GdkDisplay</doc>
             <type name="X11Display" c:type="GdkDisplay*"/>
           </instance-parameter>
@@ -764,22 +774,22 @@ See also gdk_error_trap_push() to push a trap on all displays.</doc>
               c:identifier="gdk_x11_display_get_user_time"
               version="2.8">
         <doc xml:space="preserve"
-             filename="../gdk/x11/gdkdisplay-x11.c"
+             filename="gdk/x11/gdkdisplay-x11.c"
              line="2515">Returns the timestamp of the last user interaction on
 @display. The timestamp is taken from events caused
 by user interaction such as key presses or pointer
 movements. See gdk_x11_window_set_user_time().</doc>
-        <source-position filename="../gdk/x11/gdkx11display.h" line="62"/>
+        <source-position filename="gdk/x11/gdkx11display.h" line="62"/>
         <return-value transfer-ownership="none">
           <doc xml:space="preserve"
-               filename="../gdk/x11/gdkdisplay-x11.c"
+               filename="gdk/x11/gdkdisplay-x11.c"
                line="2524">the timestamp of the last user interaction</doc>
           <type name="guint32" c:type="guint32"/>
         </return-value>
         <parameters>
           <instance-parameter name="display" transfer-ownership="none">
             <doc xml:space="preserve"
-                 filename="../gdk/x11/gdkdisplay-x11.c"
+                 filename="gdk/x11/gdkdisplay-x11.c"
                  line="2517">a #GdkDisplay</doc>
             <type name="X11Display" c:type="GdkDisplay*"/>
           </instance-parameter>
@@ -789,19 +799,19 @@ movements. See gdk_x11_window_set_user_time().</doc>
               c:identifier="gdk_x11_display_get_xdisplay"
               version="2.2">
         <doc xml:space="preserve"
-             filename="../gdk/x11/gdkdisplay-x11.c"
+             filename="gdk/x11/gdkdisplay-x11.c"
              line="2213">Returns the X display of a #GdkDisplay.</doc>
-        <source-position filename="../gdk/x11/gdkx11display.h" line="57"/>
+        <source-position filename="gdk/x11/gdkx11display.h" line="57"/>
         <return-value transfer-ownership="none">
           <doc xml:space="preserve"
-               filename="../gdk/x11/gdkdisplay-x11.c"
+               filename="gdk/x11/gdkdisplay-x11.c"
                line="2219">an X display</doc>
           <type name="xlib.Display" c:type="Display*"/>
         </return-value>
         <parameters>
           <instance-parameter name="display" transfer-ownership="none">
             <doc xml:space="preserve"
-                 filename="../gdk/x11/gdkdisplay-x11.c"
+                 filename="gdk/x11/gdkdisplay-x11.c"
                  line="2215">a #GdkDisplay</doc>
             <type name="X11Display" c:type="GdkDisplay*"/>
           </instance-parameter>
@@ -809,19 +819,19 @@ movements. See gdk_x11_window_set_user_time().</doc>
       </method>
       <method name="grab" c:identifier="gdk_x11_display_grab" version="2.2">
         <doc xml:space="preserve"
-             filename="../gdk/x11/gdkdisplay-x11.c"
+             filename="gdk/x11/gdkdisplay-x11.c"
              line="2004">Call XGrabServer() on @display.
 To ungrab the display again, use gdk_x11_display_ungrab().
 
 gdk_x11_display_grab()/gdk_x11_display_ungrab() calls can be nested.</doc>
-        <source-position filename="../gdk/x11/gdkx11display.h" line="84"/>
+        <source-position filename="gdk/x11/gdkx11display.h" line="84"/>
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
         <parameters>
           <instance-parameter name="display" transfer-ownership="none">
             <doc xml:space="preserve"
-                 filename="../gdk/x11/gdkdisplay-x11.c"
+                 filename="gdk/x11/gdkdisplay-x11.c"
                  line="2006">a #GdkDisplay</doc>
             <type name="X11Display" c:type="GdkDisplay*"/>
           </instance-parameter>
@@ -831,7 +841,7 @@ gdk_x11_display_grab()/gdk_x11_display_ungrab() calls can be nested.</doc>
               c:identifier="gdk_x11_display_set_cursor_theme"
               version="2.8">
         <doc xml:space="preserve"
-             filename="../gdk/x11/gdkcursor-x11.c"
+             filename="gdk/x11/gdkcursor-x11.c"
              line="441">Sets the cursor theme from which the images for cursor
 should be taken.
 
@@ -843,14 +853,14 @@ gdk_cursor_new_from_pixbuf() will have to be handled
 by the application (GTK+ applications can learn about
 cursor theme changes by listening for change notification
 for the corresponding #GtkSetting).</doc>
-        <source-position filename="../gdk/x11/gdkx11display.h" line="71"/>
+        <source-position filename="gdk/x11/gdkx11display.h" line="71"/>
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
         <parameters>
           <instance-parameter name="display" transfer-ownership="none">
             <doc xml:space="preserve"
-                 filename="../gdk/x11/gdkcursor-x11.c"
+                 filename="gdk/x11/gdkcursor-x11.c"
                  line="443">a #GdkDisplay</doc>
             <type name="X11Display" c:type="GdkDisplay*"/>
           </instance-parameter>
@@ -859,14 +869,14 @@ for the corresponding #GtkSetting).</doc>
                      nullable="1"
                      allow-none="1">
             <doc xml:space="preserve"
-                 filename="../gdk/x11/gdkcursor-x11.c"
+                 filename="gdk/x11/gdkcursor-x11.c"
                  line="444">the name of the cursor theme to use, or %NULL to unset
         a previously set value</doc>
             <type name="utf8" c:type="const gchar*"/>
           </parameter>
           <parameter name="size" transfer-ownership="none">
             <doc xml:space="preserve"
-                 filename="../gdk/x11/gdkcursor-x11.c"
+                 filename="gdk/x11/gdkcursor-x11.c"
                  line="446">the cursor size to use, or 0 to keep the previous size</doc>
             <type name="gint" c:type="const gint"/>
           </parameter>
@@ -876,7 +886,7 @@ for the corresponding #GtkSetting).</doc>
               c:identifier="gdk_x11_display_set_startup_notification_id"
               version="3.0">
         <doc xml:space="preserve"
-             filename="../gdk/x11/gdkdisplay-x11.c"
+             filename="gdk/x11/gdkdisplay-x11.c"
              line="2563">Sets the startup notification ID for a display.
 
 This is usually taken from the value of the DESKTOP_STARTUP_ID
@@ -891,20 +901,20 @@ accordingly.
 The startup ID is also what is used to signal that the startup is
 complete (for example, when opening a window or when calling
 gdk_notify_startup_complete()).</doc>
-        <source-position filename="../gdk/x11/gdkx11display.h" line="67"/>
+        <source-position filename="gdk/x11/gdkx11display.h" line="67"/>
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
         <parameters>
           <instance-parameter name="display" transfer-ownership="none">
             <doc xml:space="preserve"
-                 filename="../gdk/x11/gdkdisplay-x11.c"
+                 filename="gdk/x11/gdkdisplay-x11.c"
                  line="2565">a #GdkDisplay</doc>
             <type name="X11Display" c:type="GdkDisplay*"/>
           </instance-parameter>
           <parameter name="startup_id" transfer-ownership="none">
             <doc xml:space="preserve"
-                 filename="../gdk/x11/gdkdisplay-x11.c"
+                 filename="gdk/x11/gdkdisplay-x11.c"
                  line="2566">the startup notification ID (must be valid utf8)</doc>
             <type name="utf8" c:type="const gchar*"/>
           </parameter>
@@ -914,7 +924,7 @@ gdk_notify_startup_complete()).</doc>
               c:identifier="gdk_x11_display_set_window_scale"
               version="3.10">
         <doc xml:space="preserve"
-             filename="../gdk/x11/gdkdisplay-x11.c"
+             filename="gdk/x11/gdkdisplay-x11.c"
              line="2910">Forces a specific window scale for all windows on this display,
 instead of using the default or user configured scale. This
 is can be used to disable scaling support by setting @scale to
@@ -922,20 +932,20 @@ is can be used to disable scaling support by setting @scale to
 
 Once the scale is set by this call it will not change in response
 to later user configuration changes.</doc>
-        <source-position filename="../gdk/x11/gdkx11display.h" line="89"/>
+        <source-position filename="gdk/x11/gdkx11display.h" line="89"/>
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
         <parameters>
           <instance-parameter name="display" transfer-ownership="none">
             <doc xml:space="preserve"
-                 filename="../gdk/x11/gdkdisplay-x11.c"
+                 filename="gdk/x11/gdkdisplay-x11.c"
                  line="2912">the display</doc>
             <type name="X11Display" c:type="GdkDisplay*"/>
           </instance-parameter>
           <parameter name="scale" transfer-ownership="none">
             <doc xml:space="preserve"
-                 filename="../gdk/x11/gdkdisplay-x11.c"
+                 filename="gdk/x11/gdkdisplay-x11.c"
                  line="2913">The new scale value</doc>
             <type name="gint" c:type="gint"/>
           </parameter>
@@ -945,26 +955,26 @@ to later user configuration changes.</doc>
               c:identifier="gdk_x11_display_string_to_compound_text"
               version="2.24">
         <doc xml:space="preserve"
-             filename="../gdk/x11/gdkselection-x11.c"
+             filename="gdk/x11/gdkselection-x11.c"
              line="573">Convert a string from the encoding of the current
 locale into a form suitable for storing in a window property.</doc>
-        <source-position filename="../gdk/x11/gdkx11selection.h" line="49"/>
+        <source-position filename="gdk/x11/gdkx11selection.h" line="49"/>
         <return-value transfer-ownership="none">
           <doc xml:space="preserve"
-               filename="../gdk/x11/gdkselection-x11.c"
+               filename="gdk/x11/gdkselection-x11.c"
                line="587">0 upon success, non-zero upon failure</doc>
           <type name="gint" c:type="gint"/>
         </return-value>
         <parameters>
           <instance-parameter name="display" transfer-ownership="none">
             <doc xml:space="preserve"
-                 filename="../gdk/x11/gdkselection-x11.c"
+                 filename="gdk/x11/gdkselection-x11.c"
                  line="575">the #GdkDisplay where the encoding is defined</doc>
             <type name="X11Display" c:type="GdkDisplay*"/>
           </instance-parameter>
           <parameter name="str" transfer-ownership="none">
             <doc xml:space="preserve"
-                 filename="../gdk/x11/gdkselection-x11.c"
+                 filename="gdk/x11/gdkselection-x11.c"
                  line="576">a nul-terminated string</doc>
             <type name="utf8" c:type="const gchar*"/>
           </parameter>
@@ -973,7 +983,7 @@ locale into a form suitable for storing in a window property.</doc>
                      caller-allocates="1"
                      transfer-ownership="none">
             <doc xml:space="preserve"
-                 filename="../gdk/x11/gdkselection-x11.c"
+                 filename="gdk/x11/gdkselection-x11.c"
                  line="577">location to store the encoding atom
     (to be used as the type for the property)</doc>
             <type name="Gdk.Atom" c:type="GdkAtom*"/>
@@ -983,7 +993,7 @@ locale into a form suitable for storing in a window property.</doc>
                      caller-allocates="0"
                      transfer-ownership="full">
             <doc xml:space="preserve"
-                 filename="../gdk/x11/gdkselection-x11.c"
+                 filename="gdk/x11/gdkselection-x11.c"
                  line="579">location to store the format of the property</doc>
             <type name="gint" c:type="gint*"/>
           </parameter>
@@ -992,7 +1002,7 @@ locale into a form suitable for storing in a window property.</doc>
                      caller-allocates="0"
                      transfer-ownership="full">
             <doc xml:space="preserve"
-                 filename="../gdk/x11/gdkselection-x11.c"
+                 filename="gdk/x11/gdkselection-x11.c"
                  line="580">location to store newly
     allocated data for the property</doc>
             <array length="4" zero-terminated="0" c:type="guchar**">
@@ -1004,7 +1014,7 @@ locale into a form suitable for storing in a window property.</doc>
                      caller-allocates="0"
                      transfer-ownership="full">
             <doc xml:space="preserve"
-                 filename="../gdk/x11/gdkselection-x11.c"
+                 filename="gdk/x11/gdkselection-x11.c"
                  line="582">the length of @ctext, in bytes</doc>
             <type name="gint" c:type="gint*"/>
           </parameter>
@@ -1014,15 +1024,15 @@ locale into a form suitable for storing in a window property.</doc>
               c:identifier="gdk_x11_display_text_property_to_text_list"
               version="2.24">
         <doc xml:space="preserve"
-             filename="../gdk/x11/gdkselection-x11.c"
+             filename="gdk/x11/gdkselection-x11.c"
              line="332">Convert a text string from the encoding as it is stored
 in a property into an array of strings in the encoding of
 the current locale. (The elements of the array represent the
 nul-separated elements of the original text string.)</doc>
-        <source-position filename="../gdk/x11/gdkx11selection.h" line="40"/>
+        <source-position filename="gdk/x11/gdkx11selection.h" line="40"/>
         <return-value transfer-ownership="none">
           <doc xml:space="preserve"
-               filename="../gdk/x11/gdkselection-x11.c"
+               filename="gdk/x11/gdkselection-x11.c"
                line="350">the number of strings stored in list, or 0,
     if the conversion failed</doc>
           <type name="gint" c:type="gint"/>
@@ -1030,13 +1040,13 @@ nul-separated elements of the original text string.)</doc>
         <parameters>
           <instance-parameter name="display" transfer-ownership="none">
             <doc xml:space="preserve"
-                 filename="../gdk/x11/gdkselection-x11.c"
+                 filename="gdk/x11/gdkselection-x11.c"
                  line="334">The #GdkDisplay where the encoding is defined</doc>
             <type name="X11Display" c:type="GdkDisplay*"/>
           </instance-parameter>
           <parameter name="encoding" transfer-ownership="none">
             <doc xml:space="preserve"
-                 filename="../gdk/x11/gdkselection-x11.c"
+                 filename="gdk/x11/gdkselection-x11.c"
                  line="335">an atom representing the encoding. The most
    common values for this are STRING, or COMPOUND_TEXT.
    This is value used as the type for the property</doc>
@@ -1044,25 +1054,25 @@ nul-separated elements of the original text string.)</doc>
           </parameter>
           <parameter name="format" transfer-ownership="none">
             <doc xml:space="preserve"
-                 filename="../gdk/x11/gdkselection-x11.c"
+                 filename="gdk/x11/gdkselection-x11.c"
                  line="338">the format of the property</doc>
             <type name="gint" c:type="gint"/>
           </parameter>
           <parameter name="text" transfer-ownership="none">
             <doc xml:space="preserve"
-                 filename="../gdk/x11/gdkselection-x11.c"
+                 filename="gdk/x11/gdkselection-x11.c"
                  line="339">The text data</doc>
             <type name="guint8" c:type="const guchar*"/>
           </parameter>
           <parameter name="length" transfer-ownership="none">
             <doc xml:space="preserve"
-                 filename="../gdk/x11/gdkselection-x11.c"
+                 filename="gdk/x11/gdkselection-x11.c"
                  line="340">The number of items to transform</doc>
             <type name="gint" c:type="gint"/>
           </parameter>
           <parameter name="list" transfer-ownership="none">
             <doc xml:space="preserve"
-                 filename="../gdk/x11/gdkselection-x11.c"
+                 filename="gdk/x11/gdkselection-x11.c"
                  line="341">location to store an  array of strings in
    the encoding of the current locale. This array should be
    freed using gdk_free_text_list().</doc>
@@ -1074,17 +1084,17 @@ nul-separated elements of the original text string.)</doc>
               c:identifier="gdk_x11_display_ungrab"
               version="2.2">
         <doc xml:space="preserve"
-             filename="../gdk/x11/gdkdisplay-x11.c"
+             filename="gdk/x11/gdkdisplay-x11.c"
              line="2029">Ungrab @display after it has been grabbed with
 gdk_x11_display_grab().</doc>
-        <source-position filename="../gdk/x11/gdkx11display.h" line="86"/>
+        <source-position filename="gdk/x11/gdkx11display.h" line="86"/>
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
         <parameters>
           <instance-parameter name="display" transfer-ownership="none">
             <doc xml:space="preserve"
-                 filename="../gdk/x11/gdkdisplay-x11.c"
+                 filename="gdk/x11/gdkdisplay-x11.c"
                  line="2031">a #GdkDisplay</doc>
             <type name="X11Display" c:type="GdkDisplay*"/>
           </instance-parameter>
@@ -1094,12 +1104,12 @@ gdk_x11_display_grab().</doc>
               c:identifier="gdk_x11_display_utf8_to_compound_text"
               version="2.24">
         <doc xml:space="preserve"
-             filename="../gdk/x11/gdkselection-x11.c"
+             filename="gdk/x11/gdkselection-x11.c"
              line="694">Converts from UTF-8 to compound text.</doc>
-        <source-position filename="../gdk/x11/gdkx11selection.h" line="56"/>
+        <source-position filename="gdk/x11/gdkx11selection.h" line="56"/>
         <return-value transfer-ownership="none">
           <doc xml:space="preserve"
-               filename="../gdk/x11/gdkselection-x11.c"
+               filename="gdk/x11/gdkselection-x11.c"
                line="706">%TRUE if the conversion succeeded,
     otherwise %FALSE</doc>
           <type name="gboolean" c:type="gboolean"/>
@@ -1107,13 +1117,13 @@ gdk_x11_display_grab().</doc>
         <parameters>
           <instance-parameter name="display" transfer-ownership="none">
             <doc xml:space="preserve"
-                 filename="../gdk/x11/gdkselection-x11.c"
+                 filename="gdk/x11/gdkselection-x11.c"
                  line="696">a #GdkDisplay</doc>
             <type name="X11Display" c:type="GdkDisplay*"/>
           </instance-parameter>
           <parameter name="str" transfer-ownership="none">
             <doc xml:space="preserve"
-                 filename="../gdk/x11/gdkselection-x11.c"
+                 filename="gdk/x11/gdkselection-x11.c"
                  line="697">a UTF-8 string</doc>
             <type name="utf8" c:type="const gchar*"/>
           </parameter>
@@ -1122,7 +1132,7 @@ gdk_x11_display_grab().</doc>
                      caller-allocates="1"
                      transfer-ownership="none">
             <doc xml:space="preserve"
-                 filename="../gdk/x11/gdkselection-x11.c"
+                 filename="gdk/x11/gdkselection-x11.c"
                  line="698">location to store resulting encoding</doc>
             <type name="Gdk.Atom" c:type="GdkAtom*"/>
           </parameter>
@@ -1131,7 +1141,7 @@ gdk_x11_display_grab().</doc>
                      caller-allocates="0"
                      transfer-ownership="full">
             <doc xml:space="preserve"
-                 filename="../gdk/x11/gdkselection-x11.c"
+                 filename="gdk/x11/gdkselection-x11.c"
                  line="699">location to store format of the result</doc>
             <type name="gint" c:type="gint*"/>
           </parameter>
@@ -1140,7 +1150,7 @@ gdk_x11_display_grab().</doc>
                      caller-allocates="0"
                      transfer-ownership="full">
             <doc xml:space="preserve"
-                 filename="../gdk/x11/gdkselection-x11.c"
+                 filename="gdk/x11/gdkselection-x11.c"
                  line="700">location to store the data of the result</doc>
             <array length="4" zero-terminated="0" c:type="guchar**">
               <type name="guint8" c:type="guchar*"/>
@@ -1151,7 +1161,7 @@ gdk_x11_display_grab().</doc>
                      caller-allocates="0"
                      transfer-ownership="full">
             <doc xml:space="preserve"
-                 filename="../gdk/x11/gdkselection-x11.c"
+                 filename="gdk/x11/gdkselection-x11.c"
                  line="701">location to store the length of the data
     stored in @ctext</doc>
             <type name="gint" c:type="gint*"/>
@@ -1162,8 +1172,9 @@ gdk_x11_display_grab().</doc>
     <record name="X11DisplayClass"
             c:type="GdkX11DisplayClass"
             disguised="1"
+            opaque="1"
             glib:is-gtype-struct-for="X11Display">
-      <source-position filename="../gdk/x11/gdkx11display.h" line="44"/>
+      <source-position filename="gdk/x11/gdkx11display.h" line="44"/>
     </record>
     <class name="X11DisplayManager"
            c:symbol-prefix="x11_display_manager"
@@ -1172,13 +1183,14 @@ gdk_x11_display_grab().</doc>
            glib:type-name="GdkX11DisplayManager"
            glib:get-type="gdk_x11_display_manager_get_type"
            glib:type-struct="X11DisplayManagerClass">
-      <source-position filename="../gdk/x11/gdkx11displaymanager.h" line="34"/>
+      <source-position filename="gdk/x11/gdkx11displaymanager.h" line="34"/>
     </class>
     <record name="X11DisplayManagerClass"
             c:type="GdkX11DisplayManagerClass"
             disguised="1"
+            opaque="1"
             glib:is-gtype-struct-for="X11DisplayManager">
-      <source-position filename="../gdk/x11/gdkx11displaymanager.h" line="34"/>
+      <source-position filename="gdk/x11/gdkx11displaymanager.h" line="34"/>
     </record>
     <class name="X11DragContext"
            c:symbol-prefix="x11_drag_context"
@@ -1187,13 +1199,14 @@ gdk_x11_display_grab().</doc>
            glib:type-name="GdkX11DragContext"
            glib:get-type="gdk_x11_drag_context_get_type"
            glib:type-struct="X11DragContextClass">
-      <source-position filename="../gdk/x11/gdkx11dnd.h" line="41"/>
+      <source-position filename="gdk/x11/gdkx11dnd.h" line="41"/>
     </class>
     <record name="X11DragContextClass"
             c:type="GdkX11DragContextClass"
             disguised="1"
+            opaque="1"
             glib:is-gtype-struct-for="X11DragContext">
-      <source-position filename="../gdk/x11/gdkx11dnd.h" line="41"/>
+      <source-position filename="gdk/x11/gdkx11dnd.h" line="41"/>
     </record>
     <class name="X11GLContext"
            c:symbol-prefix="x11_gl_context"
@@ -1202,13 +1215,14 @@ gdk_x11_display_grab().</doc>
            glib:type-name="GdkX11GLContext"
            glib:get-type="gdk_x11_gl_context_get_type"
            glib:type-struct="X11GLContextClass">
-      <source-position filename="../gdk/x11/gdkx11glcontext.h" line="37"/>
+      <source-position filename="gdk/x11/gdkx11glcontext.h" line="37"/>
     </class>
     <record name="X11GLContextClass"
             c:type="GdkX11GLContextClass"
             disguised="1"
+            opaque="1"
             glib:is-gtype-struct-for="X11GLContext">
-      <source-position filename="../gdk/x11/gdkx11glcontext.h" line="37"/>
+      <source-position filename="gdk/x11/gdkx11glcontext.h" line="37"/>
     </record>
     <class name="X11Keymap"
            c:symbol-prefix="x11_keymap"
@@ -1217,32 +1231,32 @@ gdk_x11_display_grab().</doc>
            glib:type-name="GdkX11Keymap"
            glib:get-type="gdk_x11_keymap_get_type"
            glib:type-struct="X11KeymapClass">
-      <source-position filename="../gdk/x11/gdkx11keys.h" line="34"/>
+      <source-position filename="gdk/x11/gdkx11keys.h" line="34"/>
       <method name="get_group_for_state"
               c:identifier="gdk_x11_keymap_get_group_for_state"
               version="3.6">
         <doc xml:space="preserve"
-             filename="../gdk/x11/gdkkeys-x11.c"
+             filename="gdk/x11/gdkkeys-x11.c"
              line="1381">Extracts the group from the state field sent in an X Key event.
 This is only needed for code processing raw X events, since #GdkEventKey
 directly includes an is_modifier field.</doc>
-        <source-position filename="../gdk/x11/gdkx11keys.h" line="47"/>
+        <source-position filename="gdk/x11/gdkx11keys.h" line="47"/>
         <return-value transfer-ownership="none">
           <doc xml:space="preserve"
-               filename="../gdk/x11/gdkkeys-x11.c"
+               filename="gdk/x11/gdkkeys-x11.c"
                line="1390">the index of the active keyboard group for the event</doc>
           <type name="gint" c:type="gint"/>
         </return-value>
         <parameters>
           <instance-parameter name="keymap" transfer-ownership="none">
             <doc xml:space="preserve"
-                 filename="../gdk/x11/gdkkeys-x11.c"
+                 filename="gdk/x11/gdkkeys-x11.c"
                  line="1383">a #GdkX11Keymap</doc>
             <type name="X11Keymap" c:type="GdkKeymap*"/>
           </instance-parameter>
           <parameter name="state" transfer-ownership="none">
             <doc xml:space="preserve"
-                 filename="../gdk/x11/gdkkeys-x11.c"
+                 filename="gdk/x11/gdkkeys-x11.c"
                  line="1384">raw state returned from X</doc>
             <type name="guint" c:type="guint"/>
           </parameter>
@@ -1252,30 +1266,30 @@ directly includes an is_modifier field.</doc>
               c:identifier="gdk_x11_keymap_key_is_modifier"
               version="3.6">
         <doc xml:space="preserve"
-             filename="../gdk/x11/gdkkeys-x11.c"
+             filename="gdk/x11/gdkkeys-x11.c"
              line="1469">Determines whether a particular key code represents a key that
 is a modifier. That is, it’s a key that normally just affects
 the keyboard state and the behavior of other keys rather than
 producing a direct effect itself. This is only needed for code
 processing raw X events, since #GdkEventKey directly includes
 an is_modifier field.</doc>
-        <source-position filename="../gdk/x11/gdkx11keys.h" line="51"/>
+        <source-position filename="gdk/x11/gdkx11keys.h" line="51"/>
         <return-value transfer-ownership="none">
           <doc xml:space="preserve"
-               filename="../gdk/x11/gdkkeys-x11.c"
+               filename="gdk/x11/gdkkeys-x11.c"
                line="1481">%TRUE if the hardware keycode is a modifier key</doc>
           <type name="gboolean" c:type="gboolean"/>
         </return-value>
         <parameters>
           <instance-parameter name="keymap" transfer-ownership="none">
             <doc xml:space="preserve"
-                 filename="../gdk/x11/gdkkeys-x11.c"
+                 filename="gdk/x11/gdkkeys-x11.c"
                  line="1471">a #GdkX11Keymap</doc>
             <type name="X11Keymap" c:type="GdkKeymap*"/>
           </instance-parameter>
           <parameter name="keycode" transfer-ownership="none">
             <doc xml:space="preserve"
-                 filename="../gdk/x11/gdkkeys-x11.c"
+                 filename="gdk/x11/gdkkeys-x11.c"
                  line="1472">the hardware keycode from a key event</doc>
             <type name="guint" c:type="guint"/>
           </parameter>
@@ -1285,8 +1299,9 @@ an is_modifier field.</doc>
     <record name="X11KeymapClass"
             c:type="GdkX11KeymapClass"
             disguised="1"
+            opaque="1"
             glib:is-gtype-struct-for="X11Keymap">
-      <source-position filename="../gdk/x11/gdkx11keys.h" line="34"/>
+      <source-position filename="gdk/x11/gdkx11keys.h" line="34"/>
     </record>
     <class name="X11Monitor"
            c:symbol-prefix="x11_monitor"
@@ -1295,9 +1310,9 @@ an is_modifier field.</doc>
            glib:type-name="GdkX11Monitor"
            glib:get-type="gdk_x11_monitor_get_type"
            glib:type-struct="X11MonitorClass">
-      <source-position filename="../gdk/x11/gdkx11monitor.h" line="38"/>
+      <source-position filename="gdk/x11/gdkx11monitor.h" line="38"/>
       <function name="get_output" c:identifier="gdk_x11_monitor_get_output">
-        <source-position filename="../gdk/x11/gdkx11monitor.h" line="44"/>
+        <source-position filename="gdk/x11/gdkx11monitor.h" line="44"/>
         <return-value transfer-ownership="none">
           <type name="xlib.XID" c:type="XID"/>
         </return-value>
@@ -1311,8 +1326,9 @@ an is_modifier field.</doc>
     <record name="X11MonitorClass"
             c:type="GdkX11MonitorClass"
             disguised="1"
+            opaque="1"
             glib:is-gtype-struct-for="X11Monitor">
-      <source-position filename="../gdk/x11/gdkx11monitor.h" line="38"/>
+      <source-position filename="gdk/x11/gdkx11monitor.h" line="38"/>
     </record>
     <class name="X11Screen"
            c:symbol-prefix="x11_screen"
@@ -1321,28 +1337,28 @@ an is_modifier field.</doc>
            glib:type-name="GdkX11Screen"
            glib:get-type="gdk_x11_screen_get_type"
            glib:type-struct="X11ScreenClass">
-      <source-position filename="../gdk/x11/gdkx11screen.h" line="51"/>
+      <source-position filename="gdk/x11/gdkx11screen.h" line="51"/>
       <method name="get_current_desktop"
               c:identifier="gdk_x11_screen_get_current_desktop"
               version="3.10">
         <doc xml:space="preserve"
-             filename="../gdk/x11/gdkscreen-x11.c"
-             line="1812">Returns the current workspace for @screen when running under a
+             filename="gdk/x11/gdkscreen-x11.c"
+             line="1848">Returns the current workspace for @screen when running under a
 window manager that supports multiple workspaces, as described
 in the
 [Extended Window Manager Hints](http://www.freedesktop.org/Standards/wm-spec) specification.</doc>
-        <source-position filename="../gdk/x11/gdkx11screen.h" line="108"/>
+        <source-position filename="gdk/x11/gdkx11screen.h" line="108"/>
         <return-value transfer-ownership="none">
           <doc xml:space="preserve"
-               filename="../gdk/x11/gdkscreen-x11.c"
-               line="1821">the current workspace, or 0 if workspaces are not supported</doc>
+               filename="gdk/x11/gdkscreen-x11.c"
+               line="1857">the current workspace, or 0 if workspaces are not supported</doc>
           <type name="guint32" c:type="guint32"/>
         </return-value>
         <parameters>
           <instance-parameter name="screen" transfer-ownership="none">
             <doc xml:space="preserve"
-                 filename="../gdk/x11/gdkscreen-x11.c"
-                 line="1814">a #GdkScreen</doc>
+                 filename="gdk/x11/gdkscreen-x11.c"
+                 line="1850">a #GdkScreen</doc>
             <type name="X11Screen" c:type="GdkScreen*"/>
           </instance-parameter>
         </parameters>
@@ -1351,27 +1367,27 @@ in the
               c:identifier="gdk_x11_screen_get_monitor_output"
               version="2.14">
         <doc xml:space="preserve"
-             filename="../gdk/x11/gdkscreen-x11.c"
+             filename="gdk/x11/gdkscreen-x11.c"
              line="171">Gets the XID of the specified output/monitor.
 If the X server does not support version 1.2 of the RANDR
 extension, 0 is returned.</doc>
-        <source-position filename="../gdk/x11/gdkx11screen.h" line="102"/>
+        <source-position filename="gdk/x11/gdkx11screen.h" line="102"/>
         <return-value transfer-ownership="none">
           <doc xml:space="preserve"
-               filename="../gdk/x11/gdkscreen-x11.c"
+               filename="gdk/x11/gdkscreen-x11.c"
                line="180">the XID of the monitor</doc>
           <type name="xlib.XID" c:type="XID"/>
         </return-value>
         <parameters>
           <instance-parameter name="screen" transfer-ownership="none">
             <doc xml:space="preserve"
-                 filename="../gdk/x11/gdkscreen-x11.c"
+                 filename="gdk/x11/gdkscreen-x11.c"
                  line="173">a #GdkScreen</doc>
             <type name="X11Screen" c:type="GdkScreen*"/>
           </instance-parameter>
           <parameter name="monitor_num" transfer-ownership="none">
             <doc xml:space="preserve"
-                 filename="../gdk/x11/gdkscreen-x11.c"
+                 filename="gdk/x11/gdkscreen-x11.c"
                  line="174">number of the monitor, between 0 and gdk_screen_get_n_monitors (screen)</doc>
             <type name="gint" c:type="gint"/>
           </parameter>
@@ -1381,23 +1397,23 @@ extension, 0 is returned.</doc>
               c:identifier="gdk_x11_screen_get_number_of_desktops"
               version="3.10">
         <doc xml:space="preserve"
-             filename="../gdk/x11/gdkscreen-x11.c"
-             line="1793">Returns the number of workspaces for @screen when running under a
+             filename="gdk/x11/gdkscreen-x11.c"
+             line="1829">Returns the number of workspaces for @screen when running under a
 window manager that supports multiple workspaces, as described
 in the
 [Extended Window Manager Hints](http://www.freedesktop.org/Standards/wm-spec) specification.</doc>
-        <source-position filename="../gdk/x11/gdkx11screen.h" line="106"/>
+        <source-position filename="gdk/x11/gdkx11screen.h" line="106"/>
         <return-value transfer-ownership="none">
           <doc xml:space="preserve"
-               filename="../gdk/x11/gdkscreen-x11.c"
-               line="1802">the number of workspaces, or 0 if workspaces are not supported</doc>
+               filename="gdk/x11/gdkscreen-x11.c"
+               line="1838">the number of workspaces, or 0 if workspaces are not supported</doc>
           <type name="guint32" c:type="guint32"/>
         </return-value>
         <parameters>
           <instance-parameter name="screen" transfer-ownership="none">
             <doc xml:space="preserve"
-                 filename="../gdk/x11/gdkscreen-x11.c"
-                 line="1795">a #GdkScreen</doc>
+                 filename="gdk/x11/gdkscreen-x11.c"
+                 line="1831">a #GdkScreen</doc>
             <type name="X11Screen" c:type="GdkScreen*"/>
           </instance-parameter>
         </parameters>
@@ -1406,12 +1422,12 @@ in the
               c:identifier="gdk_x11_screen_get_screen_number"
               version="2.2">
         <doc xml:space="preserve"
-             filename="../gdk/x11/gdkscreen-x11.c"
+             filename="gdk/x11/gdkscreen-x11.c"
              line="437">Returns the index of a #GdkScreen.</doc>
-        <source-position filename="../gdk/x11/gdkx11screen.h" line="59"/>
+        <source-position filename="gdk/x11/gdkx11screen.h" line="59"/>
         <return-value transfer-ownership="none">
           <doc xml:space="preserve"
-               filename="../gdk/x11/gdkscreen-x11.c"
+               filename="gdk/x11/gdkscreen-x11.c"
                line="443">the position of @screen among the screens
     of its display</doc>
           <type name="gint" c:type="int"/>
@@ -1419,7 +1435,7 @@ in the
         <parameters>
           <instance-parameter name="screen" transfer-ownership="none">
             <doc xml:space="preserve"
-                 filename="../gdk/x11/gdkscreen-x11.c"
+                 filename="gdk/x11/gdkscreen-x11.c"
                  line="439">a #GdkScreen</doc>
             <type name="X11Screen" c:type="GdkScreen*"/>
           </instance-parameter>
@@ -1429,13 +1445,13 @@ in the
               c:identifier="gdk_x11_screen_get_window_manager_name"
               version="2.2">
         <doc xml:space="preserve"
-             filename="../gdk/x11/gdkscreen-x11.c"
-             line="1645">Returns the name of the window manager for @screen.</doc>
-        <source-position filename="../gdk/x11/gdkx11screen.h" line="62"/>
+             filename="gdk/x11/gdkscreen-x11.c"
+             line="1681">Returns the name of the window manager for @screen.</doc>
+        <source-position filename="gdk/x11/gdkx11screen.h" line="62"/>
         <return-value transfer-ownership="none">
           <doc xml:space="preserve"
-               filename="../gdk/x11/gdkscreen-x11.c"
-               line="1651">the name of the window manager screen @screen, or
+               filename="gdk/x11/gdkscreen-x11.c"
+               line="1687">the name of the window manager screen @screen, or
 "unknown" if the window manager is unknown. The string is owned by GDK
 and should not be freed.</doc>
           <type name="utf8" c:type="const char*"/>
@@ -1443,8 +1459,8 @@ and should not be freed.</doc>
         <parameters>
           <instance-parameter name="screen" transfer-ownership="none">
             <doc xml:space="preserve"
-                 filename="../gdk/x11/gdkscreen-x11.c"
-                 line="1647">a #GdkScreen</doc>
+                 filename="gdk/x11/gdkscreen-x11.c"
+                 line="1683">a #GdkScreen</doc>
             <type name="X11Screen" c:type="GdkScreen*"/>
           </instance-parameter>
         </parameters>
@@ -1453,19 +1469,19 @@ and should not be freed.</doc>
               c:identifier="gdk_x11_screen_get_xscreen"
               version="2.2">
         <doc xml:space="preserve"
-             filename="../gdk/x11/gdkscreen-x11.c"
+             filename="gdk/x11/gdkscreen-x11.c"
              line="421">Returns the screen of a #GdkScreen.</doc>
-        <source-position filename="../gdk/x11/gdkx11screen.h" line="57"/>
+        <source-position filename="gdk/x11/gdkx11screen.h" line="57"/>
         <return-value transfer-ownership="none">
           <doc xml:space="preserve"
-               filename="../gdk/x11/gdkscreen-x11.c"
+               filename="gdk/x11/gdkscreen-x11.c"
                line="427">an Xlib Screen*</doc>
           <type name="xlib.Screen" c:type="Screen*"/>
         </return-value>
         <parameters>
           <instance-parameter name="screen" transfer-ownership="none">
             <doc xml:space="preserve"
-                 filename="../gdk/x11/gdkscreen-x11.c"
+                 filename="gdk/x11/gdkscreen-x11.c"
                  line="423">a #GdkScreen</doc>
             <type name="X11Screen" c:type="GdkScreen*"/>
           </instance-parameter>
@@ -1475,12 +1491,12 @@ and should not be freed.</doc>
               c:identifier="gdk_x11_screen_lookup_visual"
               version="2.2">
         <doc xml:space="preserve"
-             filename="../gdk/x11/gdkvisual-x11.c"
+             filename="gdk/x11/gdkvisual-x11.c"
              line="439">Looks up the #GdkVisual for a particular screen and X Visual ID.</doc>
-        <source-position filename="../gdk/x11/gdkx11visual.h" line="62"/>
+        <source-position filename="gdk/x11/gdkx11visual.h" line="62"/>
         <return-value transfer-ownership="none">
           <doc xml:space="preserve"
-               filename="../gdk/x11/gdkvisual-x11.c"
+               filename="gdk/x11/gdkvisual-x11.c"
                line="446">the #GdkVisual (owned by the screen
   object), or %NULL if the visual ID wasn’t found.</doc>
           <type name="X11Visual" c:type="GdkVisual*"/>
@@ -1488,13 +1504,13 @@ and should not be freed.</doc>
         <parameters>
           <instance-parameter name="screen" transfer-ownership="none">
             <doc xml:space="preserve"
-                 filename="../gdk/x11/gdkvisual-x11.c"
+                 filename="gdk/x11/gdkvisual-x11.c"
                  line="441">a #GdkScreen.</doc>
             <type name="X11Screen" c:type="GdkScreen*"/>
           </instance-parameter>
           <parameter name="xvisualid" transfer-ownership="none">
             <doc xml:space="preserve"
-                 filename="../gdk/x11/gdkvisual-x11.c"
+                 filename="gdk/x11/gdkvisual-x11.c"
                  line="442">an X Visual ID.</doc>
             <type name="xlib.VisualID" c:type="VisualID"/>
           </parameter>
@@ -1504,8 +1520,8 @@ and should not be freed.</doc>
               c:identifier="gdk_x11_screen_supports_net_wm_hint"
               version="2.2">
         <doc xml:space="preserve"
-             filename="../gdk/x11/gdkscreen-x11.c"
-             line="1552">This function is specific to the X11 backend of GDK, and indicates
+             filename="gdk/x11/gdkscreen-x11.c"
+             line="1588">This function is specific to the X11 backend of GDK, and indicates
 whether the window manager supports a certain hint from the
 [Extended Window Manager Hints](http://www.freedesktop.org/Standards/wm-spec) specification.
 
@@ -1517,24 +1533,24 @@ does when the user logs in, and before the window manager starts
 gdk_x11_screen_supports_net_wm_hint() will return %FALSE for every property.
 You can monitor the window_manager_changed signal on #GdkScreen to detect
 a window manager change.</doc>
-        <source-position filename="../gdk/x11/gdkx11screen.h" line="98"/>
+        <source-position filename="gdk/x11/gdkx11screen.h" line="98"/>
         <return-value transfer-ownership="none">
           <doc xml:space="preserve"
-               filename="../gdk/x11/gdkscreen-x11.c"
-               line="1570">%TRUE if the window manager supports @property</doc>
+               filename="gdk/x11/gdkscreen-x11.c"
+               line="1606">%TRUE if the window manager supports @property</doc>
           <type name="gboolean" c:type="gboolean"/>
         </return-value>
         <parameters>
           <instance-parameter name="screen" transfer-ownership="none">
             <doc xml:space="preserve"
-                 filename="../gdk/x11/gdkscreen-x11.c"
-                 line="1554">the relevant #GdkScreen.</doc>
+                 filename="gdk/x11/gdkscreen-x11.c"
+                 line="1590">the relevant #GdkScreen.</doc>
             <type name="X11Screen" c:type="GdkScreen*"/>
           </instance-parameter>
           <parameter name="property" transfer-ownership="none">
             <doc xml:space="preserve"
-                 filename="../gdk/x11/gdkscreen-x11.c"
-                 line="1555">a property atom.</doc>
+                 filename="gdk/x11/gdkscreen-x11.c"
+                 line="1591">a property atom.</doc>
             <type name="Gdk.Atom" c:type="GdkAtom"/>
           </parameter>
         </parameters>
@@ -1548,8 +1564,9 @@ a window manager change.</doc>
     <record name="X11ScreenClass"
             c:type="GdkX11ScreenClass"
             disguised="1"
+            opaque="1"
             glib:is-gtype-struct-for="X11Screen">
-      <source-position filename="../gdk/x11/gdkx11screen.h" line="51"/>
+      <source-position filename="gdk/x11/gdkx11screen.h" line="51"/>
     </record>
     <class name="X11Visual"
            c:symbol-prefix="x11_visual"
@@ -1558,22 +1575,22 @@ a window manager change.</doc>
            glib:type-name="GdkX11Visual"
            glib:get-type="gdk_x11_visual_get_type"
            glib:type-struct="X11VisualClass">
-      <source-position filename="../gdk/x11/gdkx11visual.h" line="51"/>
+      <source-position filename="gdk/x11/gdkx11visual.h" line="51"/>
       <method name="get_xvisual" c:identifier="gdk_x11_visual_get_xvisual">
         <doc xml:space="preserve"
-             filename="../gdk/x11/gdkvisual-x11.c"
+             filename="gdk/x11/gdkvisual-x11.c"
              line="520">Returns the X visual belonging to a #GdkVisual.</doc>
-        <source-position filename="../gdk/x11/gdkx11visual.h" line="57"/>
+        <source-position filename="gdk/x11/gdkx11visual.h" line="57"/>
         <return-value transfer-ownership="none">
           <doc xml:space="preserve"
-               filename="../gdk/x11/gdkvisual-x11.c"
+               filename="gdk/x11/gdkvisual-x11.c"
                line="526">an Xlib Visual*.</doc>
           <type name="xlib.Visual" c:type="Visual*"/>
         </return-value>
         <parameters>
           <instance-parameter name="visual" transfer-ownership="none">
             <doc xml:space="preserve"
-                 filename="../gdk/x11/gdkvisual-x11.c"
+                 filename="gdk/x11/gdkvisual-x11.c"
                  line="522">a #GdkVisual.</doc>
             <type name="X11Visual" c:type="GdkVisual*"/>
           </instance-parameter>
@@ -1583,8 +1600,9 @@ a window manager change.</doc>
     <record name="X11VisualClass"
             c:type="GdkX11VisualClass"
             disguised="1"
+            opaque="1"
             glib:is-gtype-struct-for="X11Visual">
-      <source-position filename="../gdk/x11/gdkx11visual.h" line="51"/>
+      <source-position filename="gdk/x11/gdkx11visual.h" line="51"/>
     </record>
     <class name="X11Window"
            c:symbol-prefix="x11_window"
@@ -1593,12 +1611,12 @@ a window manager change.</doc>
            glib:type-name="GdkX11Window"
            glib:get-type="gdk_x11_window_get_type"
            glib:type-struct="X11WindowClass">
-      <source-position filename="../gdk/x11/gdkx11window.h" line="51"/>
+      <source-position filename="gdk/x11/gdkx11window.h" line="51"/>
       <constructor name="foreign_new_for_display"
                    c:identifier="gdk_x11_window_foreign_new_for_display"
                    version="2.24">
         <doc xml:space="preserve"
-             filename="../gdk/x11/gdkwindow-x11.c"
+             filename="gdk/x11/gdkwindow-x11.c"
              line="1207">Wraps a native window in a #GdkWindow. The function will try to
 look up the window using gdk_x11_window_lookup_for_display() first.
 If it does not find it there, it will create a new window.
@@ -1606,10 +1624,10 @@ If it does not find it there, it will create a new window.
 This may fail if the window has been destroyed. If the window
 was already known to GDK, a new reference to the existing
 #GdkWindow is returned.</doc>
-        <source-position filename="../gdk/x11/gdkx11window.h" line="114"/>
+        <source-position filename="gdk/x11/gdkx11window.h" line="114"/>
         <return-value transfer-ownership="full">
           <doc xml:space="preserve"
-               filename="../gdk/x11/gdkwindow-x11.c"
+               filename="gdk/x11/gdkwindow-x11.c"
                line="1220">a #GdkWindow wrapper for the native
   window, or %NULL if the window has been destroyed. The wrapper
   will be newly created, if one doesn’t exist already.</doc>
@@ -1618,13 +1636,13 @@ was already known to GDK, a new reference to the existing
         <parameters>
           <parameter name="display" transfer-ownership="none">
             <doc xml:space="preserve"
-                 filename="../gdk/x11/gdkwindow-x11.c"
+                 filename="gdk/x11/gdkwindow-x11.c"
                  line="1209">the #GdkDisplay where the window handle comes from.</doc>
             <type name="X11Display" c:type="GdkDisplay*"/>
           </parameter>
           <parameter name="window" transfer-ownership="none">
             <doc xml:space="preserve"
-                 filename="../gdk/x11/gdkwindow-x11.c"
+                 filename="gdk/x11/gdkwindow-x11.c"
                  line="1210">an Xlib Window</doc>
             <type name="xlib.Window" c:type="Window"/>
           </parameter>
@@ -1634,12 +1652,12 @@ was already known to GDK, a new reference to the existing
                 c:identifier="gdk_x11_window_lookup_for_display"
                 version="2.24">
         <doc xml:space="preserve"
-             filename="../gdk/x11/gdkxid.c"
+             filename="gdk/x11/gdkxid.c"
              line="80">Looks up the #GdkWindow that wraps the given native window handle.</doc>
-        <source-position filename="../gdk/x11/gdkx11window.h" line="117"/>
+        <source-position filename="gdk/x11/gdkx11window.h" line="117"/>
         <return-value transfer-ownership="none">
           <doc xml:space="preserve"
-               filename="../gdk/x11/gdkxid.c"
+               filename="gdk/x11/gdkxid.c"
                line="88">the #GdkWindow wrapper for the native
    window, or %NULL if there is none.</doc>
           <type name="X11Window" c:type="GdkWindow*"/>
@@ -1647,14 +1665,14 @@ was already known to GDK, a new reference to the existing
         <parameters>
           <parameter name="display" transfer-ownership="none">
             <doc xml:space="preserve"
-                 filename="../gdk/x11/gdkxid.c"
+                 filename="gdk/x11/gdkxid.c"
                  line="82">the #GdkDisplay corresponding to the
           window handle</doc>
             <type name="X11Display" c:type="GdkDisplay*"/>
           </parameter>
           <parameter name="window" transfer-ownership="none">
             <doc xml:space="preserve"
-                 filename="../gdk/x11/gdkxid.c"
+                 filename="gdk/x11/gdkxid.c"
                  line="84">an Xlib Window</doc>
             <type name="xlib.Window" c:type="Window"/>
           </parameter>
@@ -1664,19 +1682,19 @@ was already known to GDK, a new reference to the existing
               c:identifier="gdk_x11_window_get_desktop"
               version="3.10">
         <doc xml:space="preserve"
-             filename="../gdk/x11/gdkwindow-x11.c"
+             filename="gdk/x11/gdkwindow-x11.c"
              line="2220">Gets the number of the workspace @window is on.</doc>
-        <source-position filename="../gdk/x11/gdkx11window.h" line="81"/>
+        <source-position filename="gdk/x11/gdkx11window.h" line="81"/>
         <return-value transfer-ownership="none">
           <doc xml:space="preserve"
-               filename="../gdk/x11/gdkwindow-x11.c"
+               filename="gdk/x11/gdkwindow-x11.c"
                line="2226">the current workspace of @window</doc>
           <type name="guint32" c:type="guint32"/>
         </return-value>
         <parameters>
           <instance-parameter name="window" transfer-ownership="none">
             <doc xml:space="preserve"
-                 filename="../gdk/x11/gdkwindow-x11.c"
+                 filename="gdk/x11/gdkwindow-x11.c"
                  line="2222">a #GdkWindow</doc>
             <type name="X11Window" c:type="GdkWindow*"/>
           </instance-parameter>
@@ -1684,20 +1702,20 @@ was already known to GDK, a new reference to the existing
       </method>
       <method name="get_xid" c:identifier="gdk_x11_window_get_xid">
         <doc xml:space="preserve"
-             filename="../gdk/x11/gdkwindow-x11.c"
-             line="5628">Returns the X resource (window) belonging to a #GdkWindow.</doc>
-        <source-position filename="../gdk/x11/gdkx11window.h" line="57"/>
+             filename="gdk/x11/gdkwindow-x11.c"
+             line="5651">Returns the X resource (window) belonging to a #GdkWindow.</doc>
+        <source-position filename="gdk/x11/gdkx11window.h" line="57"/>
         <return-value transfer-ownership="none">
           <doc xml:space="preserve"
-               filename="../gdk/x11/gdkwindow-x11.c"
-               line="5634">the ID of @drawable’s X resource.</doc>
+               filename="gdk/x11/gdkwindow-x11.c"
+               line="5657">the ID of @drawable’s X resource.</doc>
           <type name="xlib.Window" c:type="Window"/>
         </return-value>
         <parameters>
           <instance-parameter name="window" transfer-ownership="none">
             <doc xml:space="preserve"
-                 filename="../gdk/x11/gdkwindow-x11.c"
-                 line="5630">a native #GdkWindow.</doc>
+                 filename="gdk/x11/gdkwindow-x11.c"
+                 line="5653">a native #GdkWindow.</doc>
             <type name="X11Window" c:type="GdkWindow*"/>
           </instance-parameter>
         </parameters>
@@ -1706,19 +1724,19 @@ was already known to GDK, a new reference to the existing
               c:identifier="gdk_x11_window_move_to_current_desktop"
               version="2.8">
         <doc xml:space="preserve"
-             filename="../gdk/x11/gdkwindow-x11.c"
+             filename="gdk/x11/gdkwindow-x11.c"
              line="2150">Moves the window to the correct workspace when running under a
 window manager that supports multiple workspaces, as described
 in the [Extended Window Manager Hints](http://www.freedesktop.org/Standards/wm-spec) specification.
 Will not do anything if the window is already on all workspaces.</doc>
-        <source-position filename="../gdk/x11/gdkx11window.h" line="78"/>
+        <source-position filename="gdk/x11/gdkx11window.h" line="78"/>
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
         <parameters>
           <instance-parameter name="window" transfer-ownership="none">
             <doc xml:space="preserve"
-                 filename="../gdk/x11/gdkwindow-x11.c"
+                 filename="gdk/x11/gdkwindow-x11.c"
                  line="2152">a #GdkWindow</doc>
             <type name="X11Window" c:type="GdkWindow*"/>
           </instance-parameter>
@@ -1728,24 +1746,24 @@ Will not do anything if the window is already on all workspaces.</doc>
               c:identifier="gdk_x11_window_move_to_desktop"
               version="3.10">
         <doc xml:space="preserve"
-             filename="../gdk/x11/gdkwindow-x11.c"
+             filename="gdk/x11/gdkwindow-x11.c"
              line="2238">Moves the window to the given workspace when running unde a
 window manager that supports multiple workspaces, as described
 in the [Extended Window Manager Hints](http://www.freedesktop.org/Standards/wm-spec) specification.</doc>
-        <source-position filename="../gdk/x11/gdkx11window.h" line="83"/>
+        <source-position filename="gdk/x11/gdkx11window.h" line="83"/>
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
         <parameters>
           <instance-parameter name="window" transfer-ownership="none">
             <doc xml:space="preserve"
-                 filename="../gdk/x11/gdkwindow-x11.c"
+                 filename="gdk/x11/gdkwindow-x11.c"
                  line="2240">a #GdkWindow</doc>
             <type name="X11Window" c:type="GdkWindow*"/>
           </instance-parameter>
           <parameter name="desktop" transfer-ownership="none">
             <doc xml:space="preserve"
-                 filename="../gdk/x11/gdkwindow-x11.c"
+                 filename="gdk/x11/gdkwindow-x11.c"
                  line="2241">the number of the workspace to move the window to</doc>
             <type name="guint32" c:type="guint32"/>
           </parameter>
@@ -1757,43 +1775,43 @@ in the [Extended Window Manager Hints](http://www.freedesktop.org/Standards/wm-s
               deprecated="1"
               deprecated-version="3.12">
         <doc xml:space="preserve"
-             filename="../gdk/x11/gdkwindow-x11.c"
-             line="3761">This is the same as gdk_window_set_shadow_width() but it only works
+             filename="gdk/x11/gdkwindow-x11.c"
+             line="3784">This is the same as gdk_window_set_shadow_width() but it only works
 on GdkX11Window.</doc>
         <doc-deprecated xml:space="preserve">Use gdk_window_set_shadow_width() instead.</doc-deprecated>
-        <source-position filename="../gdk/x11/gdkx11window.h" line="69"/>
+        <source-position filename="gdk/x11/gdkx11window.h" line="69"/>
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
         <parameters>
           <instance-parameter name="window" transfer-ownership="none">
             <doc xml:space="preserve"
-                 filename="../gdk/x11/gdkwindow-x11.c"
-                 line="3763">a #GdkWindow</doc>
+                 filename="gdk/x11/gdkwindow-x11.c"
+                 line="3786">a #GdkWindow</doc>
             <type name="X11Window" c:type="GdkWindow*"/>
           </instance-parameter>
           <parameter name="left" transfer-ownership="none">
             <doc xml:space="preserve"
-                 filename="../gdk/x11/gdkwindow-x11.c"
-                 line="3764">The left extent</doc>
+                 filename="gdk/x11/gdkwindow-x11.c"
+                 line="3787">The left extent</doc>
             <type name="gint" c:type="int"/>
           </parameter>
           <parameter name="right" transfer-ownership="none">
             <doc xml:space="preserve"
-                 filename="../gdk/x11/gdkwindow-x11.c"
-                 line="3765">The right extent</doc>
+                 filename="gdk/x11/gdkwindow-x11.c"
+                 line="3788">The right extent</doc>
             <type name="gint" c:type="int"/>
           </parameter>
           <parameter name="top" transfer-ownership="none">
             <doc xml:space="preserve"
-                 filename="../gdk/x11/gdkwindow-x11.c"
-                 line="3766">The top extent</doc>
+                 filename="gdk/x11/gdkwindow-x11.c"
+                 line="3789">The top extent</doc>
             <type name="gint" c:type="int"/>
           </parameter>
           <parameter name="bottom" transfer-ownership="none">
             <doc xml:space="preserve"
-                 filename="../gdk/x11/gdkwindow-x11.c"
-                 line="3767">The bottom extent</doc>
+                 filename="gdk/x11/gdkwindow-x11.c"
+                 line="3790">The bottom extent</doc>
             <type name="gint" c:type="int"/>
           </parameter>
         </parameters>
@@ -1802,28 +1820,28 @@ on GdkX11Window.</doc>
               c:identifier="gdk_x11_window_set_frame_sync_enabled"
               version="3.8">
         <doc xml:space="preserve"
-             filename="../gdk/x11/gdkwindow-x11.c"
-             line="5671">This function can be used to disable frame synchronization for a window.
+             filename="gdk/x11/gdkwindow-x11.c"
+             line="5696">This function can be used to disable frame synchronization for a window.
 Normally frame synchronziation will be enabled or disabled based on whether
 the system has a compositor that supports frame synchronization, but if
 the window is not directly managed by the window manager, then frame
 synchronziation may need to be disabled. This is the case for a window
 embedded via the XEMBED protocol.</doc>
-        <source-position filename="../gdk/x11/gdkx11window.h" line="87"/>
+        <source-position filename="gdk/x11/gdkx11window.h" line="87"/>
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
         <parameters>
           <instance-parameter name="window" transfer-ownership="none">
             <doc xml:space="preserve"
-                 filename="../gdk/x11/gdkwindow-x11.c"
-                 line="5673">a native #GdkWindow</doc>
+                 filename="gdk/x11/gdkwindow-x11.c"
+                 line="5698">a native #GdkWindow</doc>
             <type name="X11Window" c:type="GdkWindow*"/>
           </instance-parameter>
           <parameter name="frame_sync_enabled" transfer-ownership="none">
             <doc xml:space="preserve"
-                 filename="../gdk/x11/gdkwindow-x11.c"
-                 line="5674">whether frame-synchronization should be enabled</doc>
+                 filename="gdk/x11/gdkwindow-x11.c"
+                 line="5699">whether frame-synchronization should be enabled</doc>
             <type name="gboolean" c:type="gboolean"/>
           </parameter>
         </parameters>
@@ -1832,29 +1850,29 @@ embedded via the XEMBED protocol.</doc>
               c:identifier="gdk_x11_window_set_hide_titlebar_when_maximized"
               version="3.4">
         <doc xml:space="preserve"
-             filename="../gdk/x11/gdkwindow-x11.c"
-             line="3693">Set a hint for the window manager, requesting that the titlebar
+             filename="gdk/x11/gdkwindow-x11.c"
+             line="3716">Set a hint for the window manager, requesting that the titlebar
 should be hidden when the window is maximized.
 
 Note that this property is automatically updated by GTK+, so this
 function should only be used by applications which do not use GTK+
 to create toplevel windows.</doc>
-        <source-position filename="../gdk/x11/gdkx11window.h" line="75"/>
+        <source-position filename="gdk/x11/gdkx11window.h" line="75"/>
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
         <parameters>
           <instance-parameter name="window" transfer-ownership="none">
             <doc xml:space="preserve"
-                 filename="../gdk/x11/gdkwindow-x11.c"
-                 line="3695">a #GdkWindow</doc>
+                 filename="gdk/x11/gdkwindow-x11.c"
+                 line="3718">a #GdkWindow</doc>
             <type name="X11Window" c:type="GdkWindow*"/>
           </instance-parameter>
           <parameter name="hide_titlebar_when_maximized"
                      transfer-ownership="none">
             <doc xml:space="preserve"
-                 filename="../gdk/x11/gdkwindow-x11.c"
-                 line="3696">whether to hide the titlebar when
+                 filename="gdk/x11/gdkwindow-x11.c"
+                 line="3719">whether to hide the titlebar when
                                maximized</doc>
             <type name="gboolean" c:type="gboolean"/>
           </parameter>
@@ -1864,8 +1882,8 @@ to create toplevel windows.</doc>
               c:identifier="gdk_x11_window_set_theme_variant"
               version="3.2">
         <doc xml:space="preserve"
-             filename="../gdk/x11/gdkwindow-x11.c"
-             line="3786">GTK+ applications can request a dark theme variant. In order to
+             filename="gdk/x11/gdkwindow-x11.c"
+             line="3809">GTK+ applications can request a dark theme variant. In order to
 make other applications - namely window managers using GTK+ for
 themeing - aware of this choice, GTK+ uses this function to
 export the requested theme variant as _GTK_THEME_VARIANT property
@@ -1874,21 +1892,21 @@ on toplevel windows.
 Note that this property is automatically updated by GTK+, so this
 function should only be used by applications which do not use GTK+
 to create toplevel windows.</doc>
-        <source-position filename="../gdk/x11/gdkx11window.h" line="66"/>
+        <source-position filename="gdk/x11/gdkx11window.h" line="66"/>
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
         <parameters>
           <instance-parameter name="window" transfer-ownership="none">
             <doc xml:space="preserve"
-                 filename="../gdk/x11/gdkwindow-x11.c"
-                 line="3788">a #GdkWindow</doc>
+                 filename="gdk/x11/gdkwindow-x11.c"
+                 line="3811">a #GdkWindow</doc>
             <type name="X11Window" c:type="GdkWindow*"/>
           </instance-parameter>
           <parameter name="variant" transfer-ownership="none">
             <doc xml:space="preserve"
-                 filename="../gdk/x11/gdkwindow-x11.c"
-                 line="3789">the theme variant to export</doc>
+                 filename="gdk/x11/gdkwindow-x11.c"
+                 line="3812">the theme variant to export</doc>
             <type name="utf8" c:type="char*"/>
           </parameter>
         </parameters>
@@ -1897,8 +1915,8 @@ to create toplevel windows.</doc>
               c:identifier="gdk_x11_window_set_user_time"
               version="2.6">
         <doc xml:space="preserve"
-             filename="../gdk/x11/gdkwindow-x11.c"
-             line="3588">The application can use this call to update the _NET_WM_USER_TIME
+             filename="gdk/x11/gdkwindow-x11.c"
+             line="3611">The application can use this call to update the _NET_WM_USER_TIME
 property on a toplevel window.  This property stores an Xserver
 time which represents the time of the last user input event
 received for this window.  This property may be used by the window
@@ -1910,21 +1928,21 @@ timer or some other event.
 Note that this property is automatically updated by GDK, so this
 function should only be used by applications which handle input
 events bypassing GDK.</doc>
-        <source-position filename="../gdk/x11/gdkx11window.h" line="59"/>
+        <source-position filename="gdk/x11/gdkx11window.h" line="59"/>
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
         <parameters>
           <instance-parameter name="window" transfer-ownership="none">
             <doc xml:space="preserve"
-                 filename="../gdk/x11/gdkwindow-x11.c"
-                 line="3590">A toplevel #GdkWindow</doc>
+                 filename="gdk/x11/gdkwindow-x11.c"
+                 line="3613">A toplevel #GdkWindow</doc>
             <type name="X11Window" c:type="GdkWindow*"/>
           </instance-parameter>
           <parameter name="timestamp" transfer-ownership="none">
             <doc xml:space="preserve"
-                 filename="../gdk/x11/gdkwindow-x11.c"
-                 line="3591">An XServer timestamp to which the property should be set</doc>
+                 filename="gdk/x11/gdkwindow-x11.c"
+                 line="3614">An XServer timestamp to which the property should be set</doc>
             <type name="guint32" c:type="guint32"/>
           </parameter>
         </parameters>
@@ -1933,25 +1951,25 @@ events bypassing GDK.</doc>
               c:identifier="gdk_x11_window_set_utf8_property"
               version="3.4">
         <doc xml:space="preserve"
-             filename="../gdk/x11/gdkwindow-x11.c"
-             line="3653">This function modifies or removes an arbitrary X11 window
+             filename="gdk/x11/gdkwindow-x11.c"
+             line="3676">This function modifies or removes an arbitrary X11 window
 property of type UTF8_STRING.  If the given @window is
 not a toplevel window, it is ignored.</doc>
-        <source-position filename="../gdk/x11/gdkx11window.h" line="62"/>
+        <source-position filename="gdk/x11/gdkx11window.h" line="62"/>
         <return-value transfer-ownership="none">
           <type name="none" c:type="void"/>
         </return-value>
         <parameters>
           <instance-parameter name="window" transfer-ownership="none">
             <doc xml:space="preserve"
-                 filename="../gdk/x11/gdkwindow-x11.c"
-                 line="3655">a #GdkWindow</doc>
+                 filename="gdk/x11/gdkwindow-x11.c"
+                 line="3678">a #GdkWindow</doc>
             <type name="X11Window" c:type="GdkWindow*"/>
           </instance-parameter>
           <parameter name="name" transfer-ownership="none">
             <doc xml:space="preserve"
-                 filename="../gdk/x11/gdkwindow-x11.c"
-                 line="3656">Property name, will be interned as an X atom</doc>
+                 filename="gdk/x11/gdkwindow-x11.c"
+                 line="3679">Property name, will be interned as an X atom</doc>
             <type name="utf8" c:type="const gchar*"/>
           </parameter>
           <parameter name="value"
@@ -1959,8 +1977,8 @@ not a toplevel window, it is ignored.</doc>
                      nullable="1"
                      allow-none="1">
             <doc xml:space="preserve"
-                 filename="../gdk/x11/gdkwindow-x11.c"
-                 line="3657">Property value, or %NULL to delete</doc>
+                 filename="gdk/x11/gdkwindow-x11.c"
+                 line="3680">Property value, or %NULL to delete</doc>
             <type name="utf8" c:type="const gchar*"/>
           </parameter>
         </parameters>
@@ -1969,14 +1987,14 @@ not a toplevel window, it is ignored.</doc>
     <record name="X11WindowClass"
             c:type="GdkX11WindowClass"
             disguised="1"
+            opaque="1"
             glib:is-gtype-struct-for="X11Window">
-      <source-position filename="../gdk/x11/gdkx11window.h" line="51"/>
+      <source-position filename="gdk/x11/gdkx11window.h" line="51"/>
     </record>
     <function-macro name="X11_APP_LAUNCH_CONTEXT"
                     c:identifier="GDK_X11_APP_LAUNCH_CONTEXT"
                     introspectable="0">
-      <source-position filename="../gdk/x11/gdkx11applaunchcontext.h"
-                       line="30"/>
+      <source-position filename="gdk/x11/gdkx11applaunchcontext.h" line="30"/>
       <parameters>
         <parameter name="object">
         </parameter>
@@ -1985,8 +2003,7 @@ not a toplevel window, it is ignored.</doc>
     <function-macro name="X11_APP_LAUNCH_CONTEXT_CLASS"
                     c:identifier="GDK_X11_APP_LAUNCH_CONTEXT_CLASS"
                     introspectable="0">
-      <source-position filename="../gdk/x11/gdkx11applaunchcontext.h"
-                       line="31"/>
+      <source-position filename="gdk/x11/gdkx11applaunchcontext.h" line="31"/>
       <parameters>
         <parameter name="klass">
         </parameter>
@@ -1995,8 +2012,7 @@ not a toplevel window, it is ignored.</doc>
     <function-macro name="X11_APP_LAUNCH_CONTEXT_GET_CLASS"
                     c:identifier="GDK_X11_APP_LAUNCH_CONTEXT_GET_CLASS"
                     introspectable="0">
-      <source-position filename="../gdk/x11/gdkx11applaunchcontext.h"
-                       line="34"/>
+      <source-position filename="gdk/x11/gdkx11applaunchcontext.h" line="34"/>
       <parameters>
         <parameter name="obj">
         </parameter>
@@ -2005,7 +2021,7 @@ not a toplevel window, it is ignored.</doc>
     <function-macro name="X11_CURSOR"
                     c:identifier="GDK_X11_CURSOR"
                     introspectable="0">
-      <source-position filename="../gdk/x11/gdkx11cursor.h" line="40"/>
+      <source-position filename="gdk/x11/gdkx11cursor.h" line="40"/>
       <parameters>
         <parameter name="object">
         </parameter>
@@ -2014,7 +2030,7 @@ not a toplevel window, it is ignored.</doc>
     <function-macro name="X11_CURSOR_CLASS"
                     c:identifier="GDK_X11_CURSOR_CLASS"
                     introspectable="0">
-      <source-position filename="../gdk/x11/gdkx11cursor.h" line="41"/>
+      <source-position filename="gdk/x11/gdkx11cursor.h" line="41"/>
       <parameters>
         <parameter name="klass">
         </parameter>
@@ -2023,7 +2039,7 @@ not a toplevel window, it is ignored.</doc>
     <function-macro name="X11_CURSOR_GET_CLASS"
                     c:identifier="GDK_X11_CURSOR_GET_CLASS"
                     introspectable="0">
-      <source-position filename="../gdk/x11/gdkx11cursor.h" line="44"/>
+      <source-position filename="gdk/x11/gdkx11cursor.h" line="44"/>
       <parameters>
         <parameter name="obj">
         </parameter>
@@ -2032,7 +2048,7 @@ not a toplevel window, it is ignored.</doc>
     <function-macro name="X11_DEVICE_CORE"
                     c:identifier="GDK_X11_DEVICE_CORE"
                     introspectable="0">
-      <source-position filename="../gdk/x11/gdkx11device-core.h" line="26"/>
+      <source-position filename="gdk/x11/gdkx11device-core.h" line="26"/>
       <parameters>
         <parameter name="o">
         </parameter>
@@ -2041,7 +2057,7 @@ not a toplevel window, it is ignored.</doc>
     <function-macro name="X11_DEVICE_CORE_CLASS"
                     c:identifier="GDK_X11_DEVICE_CORE_CLASS"
                     introspectable="0">
-      <source-position filename="../gdk/x11/gdkx11device-core.h" line="27"/>
+      <source-position filename="gdk/x11/gdkx11device-core.h" line="27"/>
       <parameters>
         <parameter name="c">
         </parameter>
@@ -2050,7 +2066,7 @@ not a toplevel window, it is ignored.</doc>
     <function-macro name="X11_DEVICE_CORE_GET_CLASS"
                     c:identifier="GDK_X11_DEVICE_CORE_GET_CLASS"
                     introspectable="0">
-      <source-position filename="../gdk/x11/gdkx11device-core.h" line="30"/>
+      <source-position filename="gdk/x11/gdkx11device-core.h" line="30"/>
       <parameters>
         <parameter name="o">
         </parameter>
@@ -2059,7 +2075,7 @@ not a toplevel window, it is ignored.</doc>
     <function-macro name="X11_DEVICE_MANAGER_CORE"
                     c:identifier="GDK_X11_DEVICE_MANAGER_CORE"
                     introspectable="0">
-      <source-position filename="../gdk/x11/gdkx11devicemanager-core.h"
+      <source-position filename="gdk/x11/gdkx11devicemanager-core.h"
                        line="26"/>
       <parameters>
         <parameter name="o">
@@ -2069,7 +2085,7 @@ not a toplevel window, it is ignored.</doc>
     <function-macro name="X11_DEVICE_MANAGER_CORE_CLASS"
                     c:identifier="GDK_X11_DEVICE_MANAGER_CORE_CLASS"
                     introspectable="0">
-      <source-position filename="../gdk/x11/gdkx11devicemanager-core.h"
+      <source-position filename="gdk/x11/gdkx11devicemanager-core.h"
                        line="27"/>
       <parameters>
         <parameter name="c">
@@ -2079,7 +2095,7 @@ not a toplevel window, it is ignored.</doc>
     <function-macro name="X11_DEVICE_MANAGER_CORE_GET_CLASS"
                     c:identifier="GDK_X11_DEVICE_MANAGER_CORE_GET_CLASS"
                     introspectable="0">
-      <source-position filename="../gdk/x11/gdkx11devicemanager-core.h"
+      <source-position filename="gdk/x11/gdkx11devicemanager-core.h"
                        line="30"/>
       <parameters>
         <parameter name="o">
@@ -2089,8 +2105,7 @@ not a toplevel window, it is ignored.</doc>
     <function-macro name="X11_DEVICE_MANAGER_XI2"
                     c:identifier="GDK_X11_DEVICE_MANAGER_XI2"
                     introspectable="0">
-      <source-position filename="../gdk/x11/gdkx11devicemanager-xi2.h"
-                       line="26"/>
+      <source-position filename="gdk/x11/gdkx11devicemanager-xi2.h" line="26"/>
       <parameters>
         <parameter name="o">
         </parameter>
@@ -2099,8 +2114,7 @@ not a toplevel window, it is ignored.</doc>
     <function-macro name="X11_DEVICE_MANAGER_XI2_CLASS"
                     c:identifier="GDK_X11_DEVICE_MANAGER_XI2_CLASS"
                     introspectable="0">
-      <source-position filename="../gdk/x11/gdkx11devicemanager-xi2.h"
-                       line="27"/>
+      <source-position filename="gdk/x11/gdkx11devicemanager-xi2.h" line="27"/>
       <parameters>
         <parameter name="c">
         </parameter>
@@ -2109,8 +2123,7 @@ not a toplevel window, it is ignored.</doc>
     <function-macro name="X11_DEVICE_MANAGER_XI2_GET_CLASS"
                     c:identifier="GDK_X11_DEVICE_MANAGER_XI2_GET_CLASS"
                     introspectable="0">
-      <source-position filename="../gdk/x11/gdkx11devicemanager-xi2.h"
-                       line="30"/>
+      <source-position filename="gdk/x11/gdkx11devicemanager-xi2.h" line="30"/>
       <parameters>
         <parameter name="o">
         </parameter>
@@ -2119,7 +2132,7 @@ not a toplevel window, it is ignored.</doc>
     <function-macro name="X11_DEVICE_XI2"
                     c:identifier="GDK_X11_DEVICE_XI2"
                     introspectable="0">
-      <source-position filename="../gdk/x11/gdkx11device-xi2.h" line="26"/>
+      <source-position filename="gdk/x11/gdkx11device-xi2.h" line="26"/>
       <parameters>
         <parameter name="o">
         </parameter>
@@ -2128,7 +2141,7 @@ not a toplevel window, it is ignored.</doc>
     <function-macro name="X11_DEVICE_XI2_CLASS"
                     c:identifier="GDK_X11_DEVICE_XI2_CLASS"
                     introspectable="0">
-      <source-position filename="../gdk/x11/gdkx11device-xi2.h" line="27"/>
+      <source-position filename="gdk/x11/gdkx11device-xi2.h" line="27"/>
       <parameters>
         <parameter name="c">
         </parameter>
@@ -2137,7 +2150,7 @@ not a toplevel window, it is ignored.</doc>
     <function-macro name="X11_DEVICE_XI2_GET_CLASS"
                     c:identifier="GDK_X11_DEVICE_XI2_GET_CLASS"
                     introspectable="0">
-      <source-position filename="../gdk/x11/gdkx11device-xi2.h" line="30"/>
+      <source-position filename="gdk/x11/gdkx11device-xi2.h" line="30"/>
       <parameters>
         <parameter name="o">
         </parameter>
@@ -2146,7 +2159,7 @@ not a toplevel window, it is ignored.</doc>
     <function-macro name="X11_DISPLAY"
                     c:identifier="GDK_X11_DISPLAY"
                     introspectable="0">
-      <source-position filename="../gdk/x11/gdkx11display.h" line="47"/>
+      <source-position filename="gdk/x11/gdkx11display.h" line="47"/>
       <parameters>
         <parameter name="object">
         </parameter>
@@ -2155,7 +2168,7 @@ not a toplevel window, it is ignored.</doc>
     <function-macro name="X11_DISPLAY_CLASS"
                     c:identifier="GDK_X11_DISPLAY_CLASS"
                     introspectable="0">
-      <source-position filename="../gdk/x11/gdkx11display.h" line="48"/>
+      <source-position filename="gdk/x11/gdkx11display.h" line="48"/>
       <parameters>
         <parameter name="klass">
         </parameter>
@@ -2164,7 +2177,7 @@ not a toplevel window, it is ignored.</doc>
     <function-macro name="X11_DISPLAY_GET_CLASS"
                     c:identifier="GDK_X11_DISPLAY_GET_CLASS"
                     introspectable="0">
-      <source-position filename="../gdk/x11/gdkx11display.h" line="51"/>
+      <source-position filename="gdk/x11/gdkx11display.h" line="51"/>
       <parameters>
         <parameter name="obj">
         </parameter>
@@ -2173,7 +2186,7 @@ not a toplevel window, it is ignored.</doc>
     <function-macro name="X11_DISPLAY_MANAGER"
                     c:identifier="GDK_X11_DISPLAY_MANAGER"
                     introspectable="0">
-      <source-position filename="../gdk/x11/gdkx11displaymanager.h" line="37"/>
+      <source-position filename="gdk/x11/gdkx11displaymanager.h" line="37"/>
       <parameters>
         <parameter name="object">
         </parameter>
@@ -2182,7 +2195,7 @@ not a toplevel window, it is ignored.</doc>
     <function-macro name="X11_DISPLAY_MANAGER_CLASS"
                     c:identifier="GDK_X11_DISPLAY_MANAGER_CLASS"
                     introspectable="0">
-      <source-position filename="../gdk/x11/gdkx11displaymanager.h" line="38"/>
+      <source-position filename="gdk/x11/gdkx11displaymanager.h" line="38"/>
       <parameters>
         <parameter name="klass">
         </parameter>
@@ -2191,7 +2204,7 @@ not a toplevel window, it is ignored.</doc>
     <function-macro name="X11_DISPLAY_MANAGER_GET_CLASS"
                     c:identifier="GDK_X11_DISPLAY_MANAGER_GET_CLASS"
                     introspectable="0">
-      <source-position filename="../gdk/x11/gdkx11displaymanager.h" line="41"/>
+      <source-position filename="gdk/x11/gdkx11displaymanager.h" line="41"/>
       <parameters>
         <parameter name="obj">
         </parameter>
@@ -2200,7 +2213,7 @@ not a toplevel window, it is ignored.</doc>
     <function-macro name="X11_DRAG_CONTEXT"
                     c:identifier="GDK_X11_DRAG_CONTEXT"
                     introspectable="0">
-      <source-position filename="../gdk/x11/gdkx11dnd.h" line="30"/>
+      <source-position filename="gdk/x11/gdkx11dnd.h" line="30"/>
       <parameters>
         <parameter name="object">
         </parameter>
@@ -2209,7 +2222,7 @@ not a toplevel window, it is ignored.</doc>
     <function-macro name="X11_DRAG_CONTEXT_CLASS"
                     c:identifier="GDK_X11_DRAG_CONTEXT_CLASS"
                     introspectable="0">
-      <source-position filename="../gdk/x11/gdkx11dnd.h" line="31"/>
+      <source-position filename="gdk/x11/gdkx11dnd.h" line="31"/>
       <parameters>
         <parameter name="klass">
         </parameter>
@@ -2218,7 +2231,7 @@ not a toplevel window, it is ignored.</doc>
     <function-macro name="X11_DRAG_CONTEXT_GET_CLASS"
                     c:identifier="GDK_X11_DRAG_CONTEXT_GET_CLASS"
                     introspectable="0">
-      <source-position filename="../gdk/x11/gdkx11dnd.h" line="34"/>
+      <source-position filename="gdk/x11/gdkx11dnd.h" line="34"/>
       <parameters>
         <parameter name="obj">
         </parameter>
@@ -2227,7 +2240,7 @@ not a toplevel window, it is ignored.</doc>
     <function-macro name="X11_GL_CONTEXT"
                     c:identifier="GDK_X11_GL_CONTEXT"
                     introspectable="0">
-      <source-position filename="../gdk/x11/gdkx11glcontext.h" line="33"/>
+      <source-position filename="gdk/x11/gdkx11glcontext.h" line="33"/>
       <parameters>
         <parameter name="obj">
         </parameter>
@@ -2236,7 +2249,7 @@ not a toplevel window, it is ignored.</doc>
     <function-macro name="X11_IS_GL_CONTEXT"
                     c:identifier="GDK_X11_IS_GL_CONTEXT"
                     introspectable="0">
-      <source-position filename="../gdk/x11/gdkx11glcontext.h" line="34"/>
+      <source-position filename="gdk/x11/gdkx11glcontext.h" line="34"/>
       <parameters>
         <parameter name="obj">
         </parameter>
@@ -2245,7 +2258,7 @@ not a toplevel window, it is ignored.</doc>
     <function-macro name="X11_KEYMAP"
                     c:identifier="GDK_X11_KEYMAP"
                     introspectable="0">
-      <source-position filename="../gdk/x11/gdkx11keys.h" line="37"/>
+      <source-position filename="gdk/x11/gdkx11keys.h" line="37"/>
       <parameters>
         <parameter name="object">
         </parameter>
@@ -2254,7 +2267,7 @@ not a toplevel window, it is ignored.</doc>
     <function-macro name="X11_KEYMAP_CLASS"
                     c:identifier="GDK_X11_KEYMAP_CLASS"
                     introspectable="0">
-      <source-position filename="../gdk/x11/gdkx11keys.h" line="38"/>
+      <source-position filename="gdk/x11/gdkx11keys.h" line="38"/>
       <parameters>
         <parameter name="klass">
         </parameter>
@@ -2263,7 +2276,7 @@ not a toplevel window, it is ignored.</doc>
     <function-macro name="X11_KEYMAP_GET_CLASS"
                     c:identifier="GDK_X11_KEYMAP_GET_CLASS"
                     introspectable="0">
-      <source-position filename="../gdk/x11/gdkx11keys.h" line="41"/>
+      <source-position filename="gdk/x11/gdkx11keys.h" line="41"/>
       <parameters>
         <parameter name="obj">
         </parameter>
@@ -2272,7 +2285,7 @@ not a toplevel window, it is ignored.</doc>
     <function-macro name="X11_MONITOR"
                     c:identifier="GDK_X11_MONITOR"
                     introspectable="0">
-      <source-position filename="../gdk/x11/gdkx11monitor.h" line="34"/>
+      <source-position filename="gdk/x11/gdkx11monitor.h" line="34"/>
       <parameters>
         <parameter name="object">
         </parameter>
@@ -2281,7 +2294,7 @@ not a toplevel window, it is ignored.</doc>
     <function-macro name="X11_SCREEN"
                     c:identifier="GDK_X11_SCREEN"
                     introspectable="0">
-      <source-position filename="../gdk/x11/gdkx11screen.h" line="40"/>
+      <source-position filename="gdk/x11/gdkx11screen.h" line="40"/>
       <parameters>
         <parameter name="object">
         </parameter>
@@ -2290,7 +2303,7 @@ not a toplevel window, it is ignored.</doc>
     <function-macro name="X11_SCREEN_CLASS"
                     c:identifier="GDK_X11_SCREEN_CLASS"
                     introspectable="0">
-      <source-position filename="../gdk/x11/gdkx11screen.h" line="41"/>
+      <source-position filename="gdk/x11/gdkx11screen.h" line="41"/>
       <parameters>
         <parameter name="klass">
         </parameter>
@@ -2299,7 +2312,7 @@ not a toplevel window, it is ignored.</doc>
     <function-macro name="X11_SCREEN_GET_CLASS"
                     c:identifier="GDK_X11_SCREEN_GET_CLASS"
                     introspectable="0">
-      <source-position filename="../gdk/x11/gdkx11screen.h" line="44"/>
+      <source-position filename="gdk/x11/gdkx11screen.h" line="44"/>
       <parameters>
         <parameter name="obj">
         </parameter>
@@ -2308,7 +2321,7 @@ not a toplevel window, it is ignored.</doc>
     <function-macro name="X11_VISUAL"
                     c:identifier="GDK_X11_VISUAL"
                     introspectable="0">
-      <source-position filename="../gdk/x11/gdkx11visual.h" line="40"/>
+      <source-position filename="gdk/x11/gdkx11visual.h" line="40"/>
       <parameters>
         <parameter name="object">
         </parameter>
@@ -2317,7 +2330,7 @@ not a toplevel window, it is ignored.</doc>
     <function-macro name="X11_VISUAL_CLASS"
                     c:identifier="GDK_X11_VISUAL_CLASS"
                     introspectable="0">
-      <source-position filename="../gdk/x11/gdkx11visual.h" line="41"/>
+      <source-position filename="gdk/x11/gdkx11visual.h" line="41"/>
       <parameters>
         <parameter name="klass">
         </parameter>
@@ -2326,7 +2339,7 @@ not a toplevel window, it is ignored.</doc>
     <function-macro name="X11_VISUAL_GET_CLASS"
                     c:identifier="GDK_X11_VISUAL_GET_CLASS"
                     introspectable="0">
-      <source-position filename="../gdk/x11/gdkx11visual.h" line="44"/>
+      <source-position filename="gdk/x11/gdkx11visual.h" line="44"/>
       <parameters>
         <parameter name="obj">
         </parameter>
@@ -2335,7 +2348,7 @@ not a toplevel window, it is ignored.</doc>
     <function-macro name="X11_WINDOW"
                     c:identifier="GDK_X11_WINDOW"
                     introspectable="0">
-      <source-position filename="../gdk/x11/gdkx11window.h" line="40"/>
+      <source-position filename="gdk/x11/gdkx11window.h" line="40"/>
       <parameters>
         <parameter name="object">
         </parameter>
@@ -2344,7 +2357,7 @@ not a toplevel window, it is ignored.</doc>
     <function-macro name="X11_WINDOW_CLASS"
                     c:identifier="GDK_X11_WINDOW_CLASS"
                     introspectable="0">
-      <source-position filename="../gdk/x11/gdkx11window.h" line="41"/>
+      <source-position filename="gdk/x11/gdkx11window.h" line="41"/>
       <parameters>
         <parameter name="klass">
         </parameter>
@@ -2353,7 +2366,7 @@ not a toplevel window, it is ignored.</doc>
     <function-macro name="X11_WINDOW_GET_CLASS"
                     c:identifier="GDK_X11_WINDOW_GET_CLASS"
                     introspectable="0">
-      <source-position filename="../gdk/x11/gdkx11window.h" line="44"/>
+      <source-position filename="gdk/x11/gdkx11window.h" line="44"/>
       <parameters>
         <parameter name="obj">
         </parameter>
@@ -2363,35 +2376,35 @@ not a toplevel window, it is ignored.</doc>
                     c:identifier="GDK_XID_TO_POINTER"
                     introspectable="0">
       <doc xml:space="preserve"
-           filename="../gdk/x11/gdkx11utils.h"
+           filename="gdk/x11/gdkx11utils.h"
            line="51">Converts an XID into a @gpointer. This is useful with data structures
 that use pointer arguments such as #GHashTable. Use GDK_POINTER_TO_XID()
 to convert the argument back to an XID.</doc>
-      <source-position filename="../gdk/x11/gdkx11utils.h" line="59"/>
+      <source-position filename="gdk/x11/gdkx11utils.h" line="59"/>
       <parameters>
         <parameter name="xid">
           <doc xml:space="preserve"
-               filename="../gdk/x11/gdkx11utils.h"
+               filename="gdk/x11/gdkx11utils.h"
                line="53">XID to stuff into the pointer</doc>
         </parameter>
       </parameters>
     </function-macro>
     <function name="x11_atom_to_xatom" c:identifier="gdk_x11_atom_to_xatom">
       <doc xml:space="preserve"
-           filename="../gdk/x11/gdkproperty-x11.c"
+           filename="gdk/x11/gdkproperty-x11.c"
            line="163">Converts from a #GdkAtom to the X atom for the default GDK display
 with the same string value.</doc>
-      <source-position filename="../gdk/x11/gdkx11property.h" line="53"/>
+      <source-position filename="gdk/x11/gdkx11property.h" line="53"/>
       <return-value transfer-ownership="none">
         <doc xml:space="preserve"
-             filename="../gdk/x11/gdkproperty-x11.c"
+             filename="gdk/x11/gdkproperty-x11.c"
              line="170">the X atom corresponding to @atom.</doc>
         <type name="xlib.Atom" c:type="Atom"/>
       </return-value>
       <parameters>
         <parameter name="atom" transfer-ownership="none">
           <doc xml:space="preserve"
-               filename="../gdk/x11/gdkproperty-x11.c"
+               filename="gdk/x11/gdkproperty-x11.c"
                line="165">A #GdkAtom</doc>
           <type name="Gdk.Atom" c:type="GdkAtom"/>
         </parameter>
@@ -2401,27 +2414,27 @@ with the same string value.</doc>
               c:identifier="gdk_x11_atom_to_xatom_for_display"
               version="2.2">
       <doc xml:space="preserve"
-           filename="../gdk/x11/gdkproperty-x11.c"
+           filename="gdk/x11/gdkproperty-x11.c"
            line="82">Converts from a #GdkAtom to the X atom for a #GdkDisplay
 with the same string value. The special value %GDK_NONE
 is converted to %None.</doc>
-      <source-position filename="../gdk/x11/gdkx11property.h" line="41"/>
+      <source-position filename="gdk/x11/gdkx11property.h" line="41"/>
       <return-value transfer-ownership="none">
         <doc xml:space="preserve"
-             filename="../gdk/x11/gdkproperty-x11.c"
+             filename="gdk/x11/gdkproperty-x11.c"
              line="91">the X atom corresponding to @atom, or %None</doc>
         <type name="xlib.Atom" c:type="Atom"/>
       </return-value>
       <parameters>
         <parameter name="display" transfer-ownership="none">
           <doc xml:space="preserve"
-               filename="../gdk/x11/gdkproperty-x11.c"
+               filename="gdk/x11/gdkproperty-x11.c"
                line="84">A #GdkDisplay</doc>
           <type name="X11Display" c:type="GdkDisplay*"/>
         </parameter>
         <parameter name="atom" transfer-ownership="none">
           <doc xml:space="preserve"
-               filename="../gdk/x11/gdkproperty-x11.c"
+               filename="gdk/x11/gdkproperty-x11.c"
                line="85">A #GdkAtom, or %GDK_NONE</doc>
           <type name="Gdk.Atom" c:type="GdkAtom"/>
         </parameter>
@@ -2431,26 +2444,26 @@ is converted to %None.</doc>
               c:identifier="gdk_x11_device_get_id"
               version="3.2">
       <doc xml:space="preserve"
-           filename="../gdk/x11/gdkdevicemanager-x11.c"
-           line="121">Returns the device ID as seen by XInput2.
+           filename="gdk/x11/gdkdevicemanager-x11.c"
+           line="122">Returns the device ID as seen by XInput2.
 
 &gt; If gdk_disable_multidevice() has been called, this function
 &gt; will respectively return 2/3 for the core pointer and keyboard,
 &gt; (matching the IDs for the Virtual Core Pointer and Keyboard in
 &gt; XInput 2), but calling this function on any slave devices (i.e.
 &gt; those managed via XInput 1.x), will return 0.</doc>
-      <source-position filename="../gdk/x11/gdkx11device.h" line="30"/>
+      <source-position filename="gdk/x11/gdkx11device.h" line="30"/>
       <return-value transfer-ownership="none">
         <doc xml:space="preserve"
-             filename="../gdk/x11/gdkdevicemanager-x11.c"
-             line="133">the XInput2 device ID.</doc>
+             filename="gdk/x11/gdkdevicemanager-x11.c"
+             line="134">the XInput2 device ID.</doc>
         <type name="gint" c:type="gint"/>
       </return-value>
       <parameters>
         <parameter name="device" transfer-ownership="none">
           <doc xml:space="preserve"
-               filename="../gdk/x11/gdkdevicemanager-x11.c"
-               line="123">a #GdkDevice</doc>
+               filename="gdk/x11/gdkdevicemanager-x11.c"
+               line="124">a #GdkDevice</doc>
           <type name="X11DeviceCore" c:type="GdkDevice*"/>
         </parameter>
       </parameters>
@@ -2459,27 +2472,27 @@ is converted to %None.</doc>
               c:identifier="gdk_x11_device_manager_lookup"
               version="3.2">
       <doc xml:space="preserve"
-           filename="../gdk/x11/gdkdevicemanager-x11.c"
-           line="80">Returns the #GdkDevice that wraps the given device ID.</doc>
-      <source-position filename="../gdk/x11/gdkx11devicemanager.h" line="33"/>
+           filename="gdk/x11/gdkdevicemanager-x11.c"
+           line="81">Returns the #GdkDevice that wraps the given device ID.</doc>
+      <source-position filename="gdk/x11/gdkx11devicemanager.h" line="33"/>
       <return-value transfer-ownership="none" nullable="1">
         <doc xml:space="preserve"
-             filename="../gdk/x11/gdkdevicemanager-x11.c"
-             line="87">The #GdkDevice wrapping the device ID,
+             filename="gdk/x11/gdkdevicemanager-x11.c"
+             line="88">The #GdkDevice wrapping the device ID,
          or %NULL if the given ID doesn’t currently represent a device.</doc>
         <type name="X11DeviceCore" c:type="GdkDevice*"/>
       </return-value>
       <parameters>
         <parameter name="device_manager" transfer-ownership="none">
           <doc xml:space="preserve"
-               filename="../gdk/x11/gdkdevicemanager-x11.c"
-               line="82">a #GdkDeviceManager</doc>
+               filename="gdk/x11/gdkdevicemanager-x11.c"
+               line="83">a #GdkDeviceManager</doc>
           <type name="X11DeviceManagerCore" c:type="GdkDeviceManager*"/>
         </parameter>
         <parameter name="device_id" transfer-ownership="none">
           <doc xml:space="preserve"
-               filename="../gdk/x11/gdkdevicemanager-x11.c"
-               line="83">a device ID, as understood by the XInput2 protocol</doc>
+               filename="gdk/x11/gdkdevicemanager-x11.c"
+               line="84">a device ID, as understood by the XInput2 protocol</doc>
           <type name="gint" c:type="gint"/>
         </parameter>
       </parameters>
@@ -2488,16 +2501,16 @@ is converted to %None.</doc>
               c:identifier="gdk_x11_free_compound_text"
               version="2.24">
       <doc xml:space="preserve"
-           filename="../gdk/x11/gdkselection-x11.c"
+           filename="gdk/x11/gdkselection-x11.c"
            line="773">Frees the data returned from gdk_x11_display_string_to_compound_text().</doc>
-      <source-position filename="../gdk/x11/gdkx11selection.h" line="63"/>
+      <source-position filename="gdk/x11/gdkx11selection.h" line="63"/>
       <return-value transfer-ownership="none">
         <type name="none" c:type="void"/>
       </return-value>
       <parameters>
         <parameter name="ctext" transfer-ownership="none">
           <doc xml:space="preserve"
-               filename="../gdk/x11/gdkselection-x11.c"
+               filename="gdk/x11/gdkselection-x11.c"
                line="775">The pointer stored in @ctext from a call to
   gdk_x11_display_string_to_compound_text().</doc>
           <type name="guint8" c:type="guchar*"/>
@@ -2508,17 +2521,17 @@ is converted to %None.</doc>
               c:identifier="gdk_x11_free_text_list"
               version="2.24">
       <doc xml:space="preserve"
-           filename="../gdk/x11/gdkselection-x11.c"
+           filename="gdk/x11/gdkselection-x11.c"
            line="394">Frees the array of strings created by
 gdk_x11_display_text_property_to_text_list().</doc>
-      <source-position filename="../gdk/x11/gdkx11selection.h" line="47"/>
+      <source-position filename="gdk/x11/gdkx11selection.h" line="47"/>
       <return-value transfer-ownership="none">
         <type name="none" c:type="void"/>
       </return-value>
       <parameters>
         <parameter name="list" transfer-ownership="none">
           <doc xml:space="preserve"
-               filename="../gdk/x11/gdkselection-x11.c"
+               filename="gdk/x11/gdkselection-x11.c"
                line="396">the value stored in the @list parameter by
   a call to gdk_x11_display_text_property_to_text_list().</doc>
           <type name="utf8" c:type="gchar**"/>
@@ -2528,13 +2541,13 @@ gdk_x11_display_text_property_to_text_list().</doc>
     <function name="x11_get_default_root_xwindow"
               c:identifier="gdk_x11_get_default_root_xwindow">
       <doc xml:space="preserve"
-           filename="../gdk/x11/gdkmain-x11.c"
+           filename="gdk/x11/gdkmain-x11.c"
            line="429">Gets the root window of the default screen
 (see gdk_x11_get_default_screen()).</doc>
-      <source-position filename="../gdk/x11/gdkx11utils.h" line="40"/>
+      <source-position filename="gdk/x11/gdkx11utils.h" line="40"/>
       <return-value transfer-ownership="none">
         <doc xml:space="preserve"
-             filename="../gdk/x11/gdkmain-x11.c"
+             filename="gdk/x11/gdkmain-x11.c"
              line="435">an Xlib Window.</doc>
         <type name="xlib.Window" c:type="Window"/>
       </return-value>
@@ -2542,12 +2555,12 @@ gdk_x11_display_text_property_to_text_list().</doc>
     <function name="x11_get_default_screen"
               c:identifier="gdk_x11_get_default_screen">
       <doc xml:space="preserve"
-           filename="../gdk/x11/gdkmain-x11.c"
+           filename="gdk/x11/gdkmain-x11.c"
            line="414">Gets the default GTK+ screen number.</doc>
-      <source-position filename="../gdk/x11/gdkx11screen.h" line="65"/>
+      <source-position filename="gdk/x11/gdkx11screen.h" line="65"/>
       <return-value transfer-ownership="none">
         <doc xml:space="preserve"
-             filename="../gdk/x11/gdkmain-x11.c"
+             filename="gdk/x11/gdkmain-x11.c"
              line="419">returns the screen number specified by
   the --display command line option or the DISPLAY environment
   variable when gdk_init() calls XOpenDisplay().</doc>
@@ -2557,12 +2570,12 @@ gdk_x11_display_text_property_to_text_list().</doc>
     <function name="x11_get_default_xdisplay"
               c:identifier="gdk_x11_get_default_xdisplay">
       <doc xml:space="preserve"
-           filename="../gdk/x11/gdkmain-x11.c"
+           filename="gdk/x11/gdkmain-x11.c"
            line="443">Gets the default GTK+ display.</doc>
-      <source-position filename="../gdk/x11/gdkx11utils.h" line="42"/>
+      <source-position filename="gdk/x11/gdkx11utils.h" line="42"/>
       <return-value transfer-ownership="none">
         <doc xml:space="preserve"
-             filename="../gdk/x11/gdkmain-x11.c"
+             filename="gdk/x11/gdkmain-x11.c"
              line="448">the Xlib Display* for
 the display specified in the `--display` command
 line option or the `DISPLAY` environment variable.</doc>
@@ -2575,12 +2588,12 @@ line option or the `DISPLAY` environment variable.</doc>
               deprecated="1"
               deprecated-version="3.24">
       <doc xml:space="preserve"
-           filename="../gdk/x11/gdkmain-x11.c"
+           filename="gdk/x11/gdkmain-x11.c"
            line="458">Used with gdk_window_set_background_pattern() to inherit background from
 parent window. Useful for imitating transparency when compositing is not
 available. Otherwise behaves like a transparent pattern.</doc>
       <doc-deprecated xml:space="preserve">Don't use this function</doc-deprecated>
-      <source-position filename="../gdk/x11/gdkx11utils.h" line="76"/>
+      <source-position filename="gdk/x11/gdkx11utils.h" line="76"/>
       <return-value transfer-ownership="full">
         <type name="cairo.Pattern" c:type="cairo_pattern_t*"/>
       </return-value>
@@ -2588,20 +2601,20 @@ available. Otherwise behaves like a transparent pattern.</doc>
     <function name="x11_get_server_time"
               c:identifier="gdk_x11_get_server_time">
       <doc xml:space="preserve"
-           filename="../gdk/x11/gdkwindow-x11.c"
-           line="5589">Routine to get the current X server time stamp.</doc>
-      <source-position filename="../gdk/x11/gdkx11window.h" line="111"/>
+           filename="gdk/x11/gdkwindow-x11.c"
+           line="5612">Routine to get the current X server time stamp.</doc>
+      <source-position filename="gdk/x11/gdkx11window.h" line="111"/>
       <return-value transfer-ownership="none">
         <doc xml:space="preserve"
-             filename="../gdk/x11/gdkwindow-x11.c"
-             line="5598">the time stamp.</doc>
+             filename="gdk/x11/gdkwindow-x11.c"
+             line="5621">the time stamp.</doc>
         <type name="guint32" c:type="guint32"/>
       </return-value>
       <parameters>
         <parameter name="window" transfer-ownership="none">
           <doc xml:space="preserve"
-               filename="../gdk/x11/gdkwindow-x11.c"
-               line="5591">a #GdkWindow, used for communication
+               filename="gdk/x11/gdkwindow-x11.c"
+               line="5614">a #GdkWindow, used for communication
          with the server.  The window must have
          GDK_PROPERTY_CHANGE_MASK in its events mask or a hang will
          result.</doc>
@@ -2612,21 +2625,21 @@ available. Otherwise behaves like a transparent pattern.</doc>
     <function name="x11_get_xatom_by_name"
               c:identifier="gdk_x11_get_xatom_by_name">
       <doc xml:space="preserve"
-           filename="../gdk/x11/gdkproperty-x11.c"
+           filename="gdk/x11/gdkproperty-x11.c"
            line="295">Returns the X atom for GDK’s default display corresponding to @atom_name.
 This function caches the result, so if called repeatedly it is much
 faster than XInternAtom(), which is a round trip to the server each time.</doc>
-      <source-position filename="../gdk/x11/gdkx11property.h" line="57"/>
+      <source-position filename="gdk/x11/gdkx11property.h" line="57"/>
       <return-value transfer-ownership="none">
         <doc xml:space="preserve"
-             filename="../gdk/x11/gdkproperty-x11.c"
+             filename="gdk/x11/gdkproperty-x11.c"
              line="303">a X atom for GDK’s default display.</doc>
         <type name="xlib.Atom" c:type="Atom"/>
       </return-value>
       <parameters>
         <parameter name="atom_name" transfer-ownership="none">
           <doc xml:space="preserve"
-               filename="../gdk/x11/gdkproperty-x11.c"
+               filename="gdk/x11/gdkproperty-x11.c"
                line="297">a string</doc>
           <type name="utf8" c:type="const gchar*"/>
         </parameter>
@@ -2636,27 +2649,27 @@ faster than XInternAtom(), which is a round trip to the server each time.</doc>
               c:identifier="gdk_x11_get_xatom_by_name_for_display"
               version="2.2">
       <doc xml:space="preserve"
-           filename="../gdk/x11/gdkproperty-x11.c"
+           filename="gdk/x11/gdkproperty-x11.c"
            line="253">Returns the X atom for a #GdkDisplay corresponding to @atom_name.
 This function caches the result, so if called repeatedly it is much
 faster than XInternAtom(), which is a round trip to the server each time.</doc>
-      <source-position filename="../gdk/x11/gdkx11property.h" line="47"/>
+      <source-position filename="gdk/x11/gdkx11property.h" line="47"/>
       <return-value transfer-ownership="none">
         <doc xml:space="preserve"
-             filename="../gdk/x11/gdkproperty-x11.c"
+             filename="gdk/x11/gdkproperty-x11.c"
              line="262">a X atom for a #GdkDisplay</doc>
         <type name="xlib.Atom" c:type="Atom"/>
       </return-value>
       <parameters>
         <parameter name="display" transfer-ownership="none">
           <doc xml:space="preserve"
-               filename="../gdk/x11/gdkproperty-x11.c"
+               filename="gdk/x11/gdkproperty-x11.c"
                line="255">a #GdkDisplay</doc>
           <type name="X11Display" c:type="GdkDisplay*"/>
         </parameter>
         <parameter name="atom_name" transfer-ownership="none">
           <doc xml:space="preserve"
-               filename="../gdk/x11/gdkproperty-x11.c"
+               filename="gdk/x11/gdkproperty-x11.c"
                line="256">a string</doc>
           <type name="utf8" c:type="const gchar*"/>
         </parameter>
@@ -2664,16 +2677,16 @@ faster than XInternAtom(), which is a round trip to the server each time.</doc>
     </function>
     <function name="x11_get_xatom_name" c:identifier="gdk_x11_get_xatom_name">
       <doc xml:space="preserve"
-           filename="../gdk/x11/gdkproperty-x11.c"
+           filename="gdk/x11/gdkproperty-x11.c"
            line="336">Returns the name of an X atom for GDK’s default display. This
 function is meant mainly for debugging, so for convenience, unlike
 XAtomName() and gdk_atom_name(), the result
 doesn’t need to be freed. Also, this function will never return %NULL,
 even if @xatom is invalid.</doc>
-      <source-position filename="../gdk/x11/gdkx11property.h" line="59"/>
+      <source-position filename="gdk/x11/gdkx11property.h" line="59"/>
       <return-value transfer-ownership="none">
         <doc xml:space="preserve"
-             filename="../gdk/x11/gdkproperty-x11.c"
+             filename="gdk/x11/gdkproperty-x11.c"
              line="346">name of the X atom; this string is owned by GTK+,
   so it shouldn’t be modifed or freed.</doc>
         <type name="utf8" c:type="const gchar*"/>
@@ -2681,7 +2694,7 @@ even if @xatom is invalid.</doc>
       <parameters>
         <parameter name="xatom" transfer-ownership="none">
           <doc xml:space="preserve"
-               filename="../gdk/x11/gdkproperty-x11.c"
+               filename="gdk/x11/gdkproperty-x11.c"
                line="338">an X atom for GDK’s default display</doc>
           <type name="xlib.Atom" c:type="Atom"/>
         </parameter>
@@ -2691,15 +2704,15 @@ even if @xatom is invalid.</doc>
               c:identifier="gdk_x11_get_xatom_name_for_display"
               version="2.2">
       <doc xml:space="preserve"
-           filename="../gdk/x11/gdkproperty-x11.c"
+           filename="gdk/x11/gdkproperty-x11.c"
            line="312">Returns the name of an X atom for its display. This
 function is meant mainly for debugging, so for convenience, unlike
 XAtomName() and gdk_atom_name(), the result doesn’t need to
 be freed.</doc>
-      <source-position filename="../gdk/x11/gdkx11property.h" line="50"/>
+      <source-position filename="gdk/x11/gdkx11property.h" line="50"/>
       <return-value transfer-ownership="none">
         <doc xml:space="preserve"
-             filename="../gdk/x11/gdkproperty-x11.c"
+             filename="gdk/x11/gdkproperty-x11.c"
              line="322">name of the X atom; this string is owned by GDK,
   so it shouldn’t be modifed or freed.</doc>
         <type name="utf8" c:type="const gchar*"/>
@@ -2707,13 +2720,13 @@ be freed.</doc>
       <parameters>
         <parameter name="display" transfer-ownership="none">
           <doc xml:space="preserve"
-               filename="../gdk/x11/gdkproperty-x11.c"
+               filename="gdk/x11/gdkproperty-x11.c"
                line="314">the #GdkDisplay where @xatom is defined</doc>
           <type name="X11Display" c:type="GdkDisplay*"/>
         </parameter>
         <parameter name="xatom" transfer-ownership="none">
           <doc xml:space="preserve"
-               filename="../gdk/x11/gdkproperty-x11.c"
+               filename="gdk/x11/gdkproperty-x11.c"
                line="315">an X atom</doc>
           <type name="xlib.Atom" c:type="Atom"/>
         </parameter>
@@ -2721,12 +2734,12 @@ be freed.</doc>
     </function>
     <function name="x11_grab_server" c:identifier="gdk_x11_grab_server">
       <doc xml:space="preserve"
-           filename="../gdk/x11/gdkmain-x11.c"
+           filename="gdk/x11/gdkmain-x11.c"
            line="388">Call gdk_x11_display_grab() on the default display.
 To ungrab the server again, use gdk_x11_ungrab_server().
 
 gdk_x11_grab_server()/gdk_x11_ungrab_server() calls can be nested.</doc>
-      <source-position filename="../gdk/x11/gdkx11utils.h" line="71"/>
+      <source-position filename="gdk/x11/gdkx11utils.h" line="71"/>
       <return-value transfer-ownership="none">
         <type name="none" c:type="void"/>
       </return-value>
@@ -2735,19 +2748,19 @@ gdk_x11_grab_server()/gdk_x11_ungrab_server() calls can be nested.</doc>
               c:identifier="gdk_x11_lookup_xdisplay"
               version="2.2">
       <doc xml:space="preserve"
-           filename="../gdk/x11/gdkdisplay-x11.c"
+           filename="gdk/x11/gdkdisplay-x11.c"
            line="2131">Find the #GdkDisplay corresponding to @xdisplay, if any exists.</doc>
-      <source-position filename="../gdk/x11/gdkx11display.h" line="81"/>
+      <source-position filename="gdk/x11/gdkx11display.h" line="81"/>
       <return-value transfer-ownership="none">
         <doc xml:space="preserve"
-             filename="../gdk/x11/gdkdisplay-x11.c"
+             filename="gdk/x11/gdkdisplay-x11.c"
              line="2137">the #GdkDisplay, if found, otherwise %NULL.</doc>
         <type name="X11Display" c:type="GdkDisplay*"/>
       </return-value>
       <parameters>
         <parameter name="xdisplay" transfer-ownership="none">
           <doc xml:space="preserve"
-               filename="../gdk/x11/gdkdisplay-x11.c"
+               filename="gdk/x11/gdkdisplay-x11.c"
                line="2133">a pointer to an X Display</doc>
           <type name="xlib.Display" c:type="Display*"/>
         </parameter>
@@ -2757,7 +2770,7 @@ gdk_x11_grab_server()/gdk_x11_ungrab_server() calls can be nested.</doc>
               c:identifier="gdk_x11_register_standard_event_type"
               version="2.4">
       <doc xml:space="preserve"
-           filename="../gdk/x11/gdkdisplay-x11.c"
+           filename="gdk/x11/gdkdisplay-x11.c"
            line="2647">Registers interest in receiving extension events with type codes
 between @event_base and `event_base + n_events - 1`.
 The registered events must have the window field in the same place
@@ -2770,26 +2783,26 @@ GDK may register the events of some X extensions on its own.
 
 This function should only be needed in unusual circumstances, e.g.
 when filtering XInput extension events on the root window.</doc>
-      <source-position filename="../gdk/x11/gdkx11display.h" line="101"/>
+      <source-position filename="gdk/x11/gdkx11display.h" line="101"/>
       <return-value transfer-ownership="none">
         <type name="none" c:type="void"/>
       </return-value>
       <parameters>
         <parameter name="display" transfer-ownership="none">
           <doc xml:space="preserve"
-               filename="../gdk/x11/gdkdisplay-x11.c"
+               filename="gdk/x11/gdkdisplay-x11.c"
                line="2649">a #GdkDisplay</doc>
           <type name="X11Display" c:type="GdkDisplay*"/>
         </parameter>
         <parameter name="event_base" transfer-ownership="none">
           <doc xml:space="preserve"
-               filename="../gdk/x11/gdkdisplay-x11.c"
+               filename="gdk/x11/gdkdisplay-x11.c"
                line="2650">first event type code to register</doc>
           <type name="gint" c:type="gint"/>
         </parameter>
         <parameter name="n_events" transfer-ownership="none">
           <doc xml:space="preserve"
-               filename="../gdk/x11/gdkdisplay-x11.c"
+               filename="gdk/x11/gdkdisplay-x11.c"
                line="2651">number of event type codes to register</doc>
           <type name="gint" c:type="gint"/>
         </parameter>
@@ -2799,14 +2812,14 @@ when filtering XInput extension events on the root window.</doc>
               c:identifier="gdk_x11_set_sm_client_id"
               version="2.24">
       <doc xml:space="preserve"
-           filename="../gdk/x11/gdkdisplay-x11.c"
+           filename="gdk/x11/gdkdisplay-x11.c"
            line="3004">Sets the `SM_CLIENT_ID` property on the application’s leader window so that
 the window manager can save the application’s state using the X11R6 ICCCM
 session management protocol.
 
 See the X Session Management Library documentation for more information on
 session management and the Inter-Client Communication Conventions Manual</doc>
-      <source-position filename="../gdk/x11/gdkx11display.h" line="106"/>
+      <source-position filename="gdk/x11/gdkx11display.h" line="106"/>
       <return-value transfer-ownership="none">
         <type name="none" c:type="void"/>
       </return-value>
@@ -2816,7 +2829,7 @@ session management and the Inter-Client Communication Conventions Manual</doc>
                    nullable="1"
                    allow-none="1">
           <doc xml:space="preserve"
-               filename="../gdk/x11/gdkdisplay-x11.c"
+               filename="gdk/x11/gdkdisplay-x11.c"
                line="3006">the client id assigned by the session manager
    when the connection was opened, or %NULL to remove the property.</doc>
           <type name="utf8" c:type="const gchar*"/>
@@ -2825,30 +2838,30 @@ session management and the Inter-Client Communication Conventions Manual</doc>
     </function>
     <function name="x11_ungrab_server" c:identifier="gdk_x11_ungrab_server">
       <doc xml:space="preserve"
-           filename="../gdk/x11/gdkmain-x11.c"
+           filename="gdk/x11/gdkmain-x11.c"
            line="402">Ungrab the default display after it has been grabbed with
 gdk_x11_grab_server().</doc>
-      <source-position filename="../gdk/x11/gdkx11utils.h" line="73"/>
+      <source-position filename="gdk/x11/gdkx11utils.h" line="73"/>
       <return-value transfer-ownership="none">
         <type name="none" c:type="void"/>
       </return-value>
     </function>
     <function name="x11_xatom_to_atom" c:identifier="gdk_x11_xatom_to_atom">
       <doc xml:space="preserve"
-           filename="../gdk/x11/gdkproperty-x11.c"
+           filename="gdk/x11/gdkproperty-x11.c"
            line="238">Convert from an X atom for the default display to the corresponding
 #GdkAtom.</doc>
-      <source-position filename="../gdk/x11/gdkx11property.h" line="55"/>
+      <source-position filename="gdk/x11/gdkx11property.h" line="55"/>
       <return-value transfer-ownership="none">
         <doc xml:space="preserve"
-             filename="../gdk/x11/gdkproperty-x11.c"
+             filename="gdk/x11/gdkproperty-x11.c"
              line="245">the corresponding G#dkAtom.</doc>
         <type name="Gdk.Atom" c:type="GdkAtom"/>
       </return-value>
       <parameters>
         <parameter name="xatom" transfer-ownership="none">
           <doc xml:space="preserve"
-               filename="../gdk/x11/gdkproperty-x11.c"
+               filename="gdk/x11/gdkproperty-x11.c"
                line="240">an X atom for the default GDK display</doc>
           <type name="xlib.Atom" c:type="Atom"/>
         </parameter>
@@ -2858,26 +2871,26 @@ gdk_x11_grab_server().</doc>
               c:identifier="gdk_x11_xatom_to_atom_for_display"
               version="2.2">
       <doc xml:space="preserve"
-           filename="../gdk/x11/gdkproperty-x11.c"
+           filename="gdk/x11/gdkproperty-x11.c"
            line="178">Convert from an X atom for a #GdkDisplay to the corresponding
 #GdkAtom.</doc>
-      <source-position filename="../gdk/x11/gdkx11property.h" line="44"/>
+      <source-position filename="gdk/x11/gdkx11property.h" line="44"/>
       <return-value transfer-ownership="none">
         <doc xml:space="preserve"
-             filename="../gdk/x11/gdkproperty-x11.c"
+             filename="gdk/x11/gdkproperty-x11.c"
              line="186">the corresponding #GdkAtom.</doc>
         <type name="Gdk.Atom" c:type="GdkAtom"/>
       </return-value>
       <parameters>
         <parameter name="display" transfer-ownership="none">
           <doc xml:space="preserve"
-               filename="../gdk/x11/gdkproperty-x11.c"
+               filename="gdk/x11/gdkproperty-x11.c"
                line="180">A #GdkDisplay</doc>
           <type name="X11Display" c:type="GdkDisplay*"/>
         </parameter>
         <parameter name="xatom" transfer-ownership="none">
           <doc xml:space="preserve"
-               filename="../gdk/x11/gdkproperty-x11.c"
+               filename="gdk/x11/gdkproperty-x11.c"
                line="181">an X atom</doc>
           <type name="xlib.Atom" c:type="Atom"/>
         </parameter>
@@ -2885,7 +2898,7 @@ gdk_x11_grab_server().</doc>
     </function>
     <docsection name="x_interaction">
       <doc xml:space="preserve"
-           filename="../gdk/x11/gdkmain-x11.c"
+           filename="gdk/x11/gdkmain-x11.c"
            line="49">The functions in this section are specific to the GDK X11 backend.
 To use them, you need to include the `&lt;gdk/gdkx.h&gt;` header and use
 the X11-specific pkg-config files to build your application (either
