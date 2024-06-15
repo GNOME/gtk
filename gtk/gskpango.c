@@ -490,15 +490,47 @@ gtk_snapshot_append_layout (GtkSnapshot   *snapshot,
                             PangoLayout   *layout,
                             const GdkRGBA *color)
 {
+  gtk_snapshot_append_layout2 (snapshot, layout, &GDK_COLOR_INIT_RGBA (color));
+}
+
+/**
+ * gtk_snapshot_append_layout2:
+ * @snapshot: a `GtkSnapshot`
+ * @layout: the `PangoLayout` to render
+ * @color: the foreground color to render the layout in
+ *
+ * Creates render nodes for rendering @layout in the given foregound @color
+ * and appends them to the current node of @snapshot without changing the
+ * current node. The current theme's foreground color for a widget can be
+ * obtained with [method@Gtk.Widget.get_color].
+ *
+ * Note that if the layout does not produce any visible output, then nodes
+ * may not be added to the @snapshot.
+ *
+ * Since: 4.16
+ **/
+void
+gtk_snapshot_append_layout2 (GtkSnapshot    *snapshot,
+                             PangoLayout    *layout,
+                             const GdkColor *color)
+{
   GskPangoRenderer *crenderer;
+  GdkColor c;
+  GdkRGBA rgba;
 
   g_return_if_fail (snapshot != NULL);
   g_return_if_fail (PANGO_IS_LAYOUT (layout));
 
   crenderer = gsk_pango_renderer_acquire ();
 
+  gdk_color_convert (&c, GDK_COLOR_STATE_SRGB, color);
+  rgba.red = c.values[0];
+  rgba.green = c.values[1];
+  rgba.blue = c.values[2];
+  rgba.alpha = c.values[3];
+
   crenderer->snapshot = snapshot;
-  crenderer->fg_color = color;
+  crenderer->fg_color = &rgba;
 
   pango_renderer_draw_layout (PANGO_RENDERER (crenderer), layout, 0, 0);
 
