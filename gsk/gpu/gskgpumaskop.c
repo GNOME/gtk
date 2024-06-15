@@ -5,6 +5,7 @@
 #include "gskgpuframeprivate.h"
 #include "gskgpuprintprivate.h"
 #include "gskrectprivate.h"
+#include "gskenumtypes.h"
 
 #include "gpu/shaders/gskgpumaskinstance.h"
 
@@ -22,6 +23,7 @@ gsk_gpu_mask_op_print_instance (GskGpuShaderOp *shader,
 {
   GskGpuMaskInstance *instance = (GskGpuMaskInstance *) instance_;
 
+  gsk_gpu_print_enum (string, GSK_TYPE_MASK_MODE, shader->variation);
   gsk_gpu_print_rect (string, instance->rect);
   gsk_gpu_print_image_descriptor (string, shader->desc, instance->source_id);
   gsk_gpu_print_image_descriptor (string, shader->desc, instance->mask_id);

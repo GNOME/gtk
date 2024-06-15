@@ -23,6 +23,7 @@ gsk_gpu_blend_mode_op_print_instance (GskGpuShaderOp *shader,
 {
   GskGpuBlendmodeInstance *instance = (GskGpuBlendmodeInstance *) instance_;
 
+  gsk_gpu_print_enum (string, GSK_TYPE_BLEND_MODE, shader->variation);
   gsk_gpu_print_rect (string, instance->rect);
   gsk_gpu_print_image_descriptor (string, shader->desc, instance->bottom_id);
   gsk_gpu_print_enum (string, GSK_TYPE_BLEND_MODE, shader->variation);
