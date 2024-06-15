@@ -3918,7 +3918,7 @@ gtk_icon_paintable_snapshot_symbolic (GtkSymbolicPaintable *paintable,
       gtk_snapshot_push_mask (snapshot, GSK_MASK_MODE_ALPHA);
       gtk_snapshot_append_texture (snapshot, texture, &render_rect);
       gtk_snapshot_pop (snapshot);
-      gtk_snapshot_append_color (snapshot, &colors[0], &render_rect);
+      gtk_snapshot_append_color2 (snapshot, &GDK_COLOR_INIT_RGBA (&colors[0]), &render_rect);
       gtk_snapshot_pop (snapshot);
     }
   else if (icon->is_symbolic)
