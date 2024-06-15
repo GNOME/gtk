@@ -147,19 +147,19 @@ gsk_gpu_linear_gradient_op (GskGpuFrame            *frame,
   gsk_gpu_rect_to_float (rect, offset, instance->rect);
   gsk_gpu_point_to_float (start, offset, instance->startend);
   gsk_gpu_point_to_float (end, offset, &instance->startend[2]);
-  gsk_gpu_color_to_float (&stops[MIN (n_stops - 1, 6)].color, instance->color6);
+  gsk_gpu_convert_color_to_float (&stops[MIN (n_stops - 1, 6)].color, in, instance->color6);
   instance->offsets1[2] = stops[MIN (n_stops - 1, 6)].offset;
-  gsk_gpu_color_to_float (&stops[MIN (n_stops - 1, 5)].color, instance->color5);
+  gsk_gpu_convert_color_to_float (&stops[MIN (n_stops - 1, 5)].color, in, instance->color5);
   instance->offsets1[1] = stops[MIN (n_stops - 1, 5)].offset;
-  gsk_gpu_color_to_float (&stops[MIN (n_stops - 1, 4)].color, instance->color4);
+  gsk_gpu_convert_color_to_float (&stops[MIN (n_stops - 1, 4)].color, in, instance->color4);
   instance->offsets1[0] = stops[MIN (n_stops - 1, 4)].offset;
-  gsk_gpu_color_to_float (&stops[MIN (n_stops - 1, 3)].color, instance->color3);
+  gsk_gpu_convert_color_to_float (&stops[MIN (n_stops - 1, 3)].color, in, instance->color3);
   instance->offsets0[3] = stops[MIN (n_stops - 1, 3)].offset;
-  gsk_gpu_color_to_float (&stops[MIN (n_stops - 1, 2)].color, instance->color2);
+  gsk_gpu_convert_color_to_float (&stops[MIN (n_stops - 1, 2)].color, in, instance->color2);
   instance->offsets0[2] = stops[MIN (n_stops - 1, 2)].offset;
-  gsk_gpu_color_to_float (&stops[1].color, instance->color1);
+  gsk_gpu_convert_color_to_float (&stops[1].color, in, instance->color1);
   instance->offsets0[1] = stops[1].offset;
-  gsk_gpu_color_to_float (&stops[0].color, instance->color0);
+  gsk_gpu_convert_color_to_float (&stops[0].color, in, instance->color0);
   instance->offsets0[0] = stops[0].offset;
 
   int hue_coord = gdk_color_state_get_hue_coord (in);

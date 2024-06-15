@@ -73,6 +73,17 @@ gsk_gpu_color_to_float (const GdkColor *color,
   values[3] = color->values[3];
 }
 
+static inline void
+gsk_gpu_convert_color_to_float (const GdkColor *color,
+                                GdkColorState  *in,
+                                float           values[4])
+{
+  GdkColor c;
+
+  gdk_color_convert (&c, in, color);
+  gsk_gpu_color_to_float (&c, values);
+}
+
 #include <graphene.h>
 
 static inline void
