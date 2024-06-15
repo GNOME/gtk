@@ -17,6 +17,7 @@
 
 #include "gdk/gdkdmabufdownloaderprivate.h"
 #include "gdk/gdktexturedownloaderprivate.h"
+#include "gdk/gdkcolorstateprivate.h"
 
 #define DEFAULT_VERTEX_BUFFER_SIZE 128 * 1024
 
@@ -707,9 +708,8 @@ gsk_gpu_frame_download_texture (GskGpuFrame     *self,
 {
   GskGpuFramePrivate *priv = gsk_gpu_frame_get_instance_private (self);
   GskGpuImage *image;
-  GdkColorState *color_state = NULL;
 
-  image = gsk_gpu_device_lookup_texture_image (priv->device, texture, timestamp, &color_state);
+  image = gsk_gpu_device_lookup_texture_image (priv->device, texture, gdk_color_state_get_srgb (), timestamp);
   if (image == NULL)
     image = gsk_gpu_frame_upload_texture (self, FALSE, texture);
   if (image == NULL)
