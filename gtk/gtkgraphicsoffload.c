@@ -220,11 +220,11 @@ gtk_graphics_offload_snapshot (GtkWidget   *widget,
     gtk_snapshot_push_subsurface (snapshot, self->subsurface);
 
   if (self->black_background)
-    gtk_snapshot_append_color (snapshot,
-                               &GDK_RGBA_BLACK,
-                               &GRAPHENE_RECT_INIT (0, 0,
-                                                    gtk_widget_get_width (widget),
-                                                    gtk_widget_get_height (widget)));
+    gtk_snapshot_append_color2 (snapshot,
+                                &GDK_COLOR_INIT_SRGB (0, 0, 0, 1),
+                                &GRAPHENE_RECT_INIT (0, 0,
+                                                     gtk_widget_get_width (widget),
+                                                     gtk_widget_get_height (widget)));
 
   if (self->child)
     gtk_widget_snapshot_child (widget, self->child, snapshot);
