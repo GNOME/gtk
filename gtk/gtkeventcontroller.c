@@ -405,7 +405,7 @@ gtk_event_controller_handle_crossing (GtkEventController    *controller,
  *
  * Returns the `GtkWidget` this controller relates to.
  *
- * Returns: (transfer none): a `GtkWidget`
+ * Returns: (nullable) (transfer none): a `GtkWidget`
  **/
 GtkWidget *
 gtk_event_controller_get_widget (GtkEventController *controller)
@@ -544,7 +544,7 @@ gtk_event_controller_set_propagation_limit (GtkEventController  *controller,
  * @controller: a `GtkEventController`
  *
  * Gets the name of @controller.
- * 
+ *
  * Returns: (nullable): The controller name
  */
 const char *
