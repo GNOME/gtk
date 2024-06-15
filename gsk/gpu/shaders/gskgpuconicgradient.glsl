@@ -1,6 +1,7 @@
 #include "common.glsl"
 
 #define VARIATION_SUPERSAMPLING ((GSK_VARIATION & (1u << 0)) == (1u << 0))
+#define VARIATION_CONVERSION (GSK_VARIATION >> 1)
 
 PASS(0) vec2 _pos;
 PASS_FLAT(1) Rect _rect;
@@ -110,7 +111,7 @@ get_gradient_color_at (vec2 pos)
   float offset = atan (pos.y, pos.x);
   offset = degrees (offset + _angle) / 360.0;
   offset = fract (offset);
-  return color_premultiply (get_gradient_color (offset));
+  return color_premultiply (color_convert (get_gradient_color (offset), VARIATION_CONVERSION));
 }
 
 void

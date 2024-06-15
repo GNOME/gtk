@@ -1082,6 +1082,8 @@ populate_render_node_properties (GListStore    *store,
         const graphene_point_t *end = gsk_linear_gradient_node_get_end (node);
         const gsize n_stops = gsk_linear_gradient_node_get_n_color_stops (node);
         const GskColorStop *stops = gsk_linear_gradient_node_get_color_stops (node, NULL);
+        GdkColorState *in = gsk_linear_gradient_node_get_color_state (node);
+        GskHueInterpolation hue = gsk_linear_gradient_node_get_hue_interpolation (node);
         int i;
         GString *s;
         GdkTexture *texture;
@@ -1101,6 +1103,9 @@ populate_render_node_properties (GListStore    *store,
         g_object_unref (texture);
 
         g_string_free (s, TRUE);
+
+        add_text_row (store, "In", "%s", gdk_color_state_get_name (in));
+        add_text_row (store, "Hue", "%s", enum_to_nick (GSK_TYPE_HUE_INTERPOLATION, hue));
       }
       break;
 
@@ -1114,6 +1119,8 @@ populate_render_node_properties (GListStore    *store,
         const float vradius = gsk_radial_gradient_node_get_vradius (node);
         const gsize n_stops = gsk_radial_gradient_node_get_n_color_stops (node);
         const GskColorStop *stops = gsk_radial_gradient_node_get_color_stops (node, NULL);
+        GdkColorState *in = gsk_radial_gradient_node_get_color_state (node);
+        GskHueInterpolation hue = gsk_radial_gradient_node_get_hue_interpolation (node);
         int i;
         GString *s;
         GdkTexture *texture;
@@ -1135,6 +1142,9 @@ populate_render_node_properties (GListStore    *store,
         g_object_unref (texture);
 
         g_string_free (s, TRUE);
+
+        add_text_row (store, "In", "%s", gdk_color_state_get_name (in));
+        add_text_row (store, "Hue", "%s", enum_to_nick (GSK_TYPE_HUE_INTERPOLATION, hue));
       }
       break;
 
@@ -1144,6 +1154,8 @@ populate_render_node_properties (GListStore    *store,
         const float rotation = gsk_conic_gradient_node_get_rotation (node);
         const gsize n_stops = gsk_conic_gradient_node_get_n_color_stops (node);
         const GskColorStop *stops = gsk_conic_gradient_node_get_color_stops (node, NULL);
+        GdkColorState *in = gsk_conic_gradient_node_get_color_state (node);
+        GskHueInterpolation hue = gsk_conic_gradient_node_get_hue_interpolation (node);
         gsize i;
         GString *s;
         GdkTexture *texture;
@@ -1164,6 +1176,9 @@ populate_render_node_properties (GListStore    *store,
         g_object_unref (texture);
 
         g_string_free (s, TRUE);
+
+        add_text_row (store, "In", "%s", gdk_color_state_get_name (in));
+        add_text_row (store, "Hue", "%s", enum_to_nick (GSK_TYPE_HUE_INTERPOLATION, hue));
       }
       break;
 

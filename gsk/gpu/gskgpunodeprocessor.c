@@ -1630,10 +1630,7 @@ get_color (GdkRGBA       *to,
   to->red   = dst.values[0];
   to->green = dst.values[1];
   to->blue  = dst.values[2];
-  to->alpha = dst.alpha;
-
-  gdk_color_finish (&src);
-  gdk_color_finish (&dst);
+  to->alpha = dst.values[3];
 
   return to;
 }
@@ -2416,12 +2413,16 @@ gsk_gpu_node_processor_add_outset_shadow_node (GskGpuNodeProcessor *self,
 
 typedef void (* GradientOpFunc) (GskGpuNodeProcessor  *self,
                                  GskRenderNode        *node,
+                                 GdkColorState        *in,
+                                 GskHueInterpolation   hue_interp,
                                  const GskColorStop   *stops,
                                  gsize                 n_stops);
 
 static void
 gsk_gpu_node_processor_add_gradient_node (GskGpuNodeProcessor *self,
                                           GskRenderNode       *node,
+                                          GdkColorState       *in,
+                                          GskHueInterpolation  hue_interp,
                                           const GskColorStop  *stops,
                                           gsize                n_stops,
                                           GradientOpFunc       func)
@@ -2444,8 +2445,8 @@ gsk_gpu_node_processor_add_gradient_node (GskGpuNodeProcessor *self,
             }
           stops = real_stops;
         }
-      
-      func (self, node, stops, n_stops);
+
+      func (self, node, in, hue_interp, stops, n_stops);
 
       return;
     }
@@ -2467,7 +2468,7 @@ gsk_gpu_node_processor_add_gradient_node (GskGpuNodeProcessor *self,
   other.blend = GSK_GPU_BLEND_ADD;
   other.pending_globals |= GSK_GPU_GLOBAL_BLEND;
   gsk_gpu_node_processor_sync_globals (&other, 0);
-  
+
   for (i = 0; i < n_stops; /* happens inside the loop */)
     {
       if (i == 0)
@@ -2502,7 +2503,7 @@ gsk_gpu_node_processor_add_gradient_node (GskGpuNodeProcessor *self,
           j++;
         }
 
-      func (&other, node, real_stops, j);
+      func (&other, node, in, hue_interp, real_stops, j);
     }
 
   gsk_gpu_node_processor_finish_draw (&other, image);
@@ -2523,6 +2524,8 @@ gsk_gpu_node_processor_add_gradient_node (GskGpuNodeProcessor *self,
 static void
 gsk_gpu_node_processor_linear_gradient_op (GskGpuNodeProcessor  *self,
                                            GskRenderNode        *node,
+                                           GdkColorState        *in,
+                                           GskHueInterpolation   hue_interp,
                                            const GskColorStop   *stops,
                                            gsize                 n_stops)
 {
@@ -2533,6 +2536,9 @@ gsk_gpu_node_processor_linear_gradient_op (GskGpuNodeProcessor  *self,
                               gsk_linear_gradient_node_get_start (node),
                               gsk_linear_gradient_node_get_end (node),
                               &self->offset,
+                              in,
+                              self->color_state,
+                              hue_interp,
                               stops,
                               n_stops);
 }
@@ -2543,6 +2549,8 @@ gsk_gpu_node_processor_add_linear_gradient_node (GskGpuNodeProcessor *self,
 {
   gsk_gpu_node_processor_add_gradient_node (self,
                                             node,
+                                            gsk_linear_gradient_node_get_color_state (node),
+                                            gsk_linear_gradient_node_get_hue_interpolation (node),
                                             gsk_linear_gradient_node_get_color_stops (node, NULL),
                                             gsk_linear_gradient_node_get_n_color_stops (node),
                                             gsk_gpu_node_processor_linear_gradient_op);
@@ -2563,7 +2571,7 @@ gsk_gpu_node_processor_create_linear_gradient_pattern (GskGpuPatternWriter *self
   gsk_gpu_pattern_writer_append_point (self,
                                       gsk_linear_gradient_node_get_end (node),
                                       &self->offset);
-  gsk_gpu_pattern_writer_append_color_stops (self, 
+  gsk_gpu_pattern_writer_append_color_stops (self,
                                             gsk_linear_gradient_node_get_color_stops (node, NULL),
                                             gsk_linear_gradient_node_get_n_color_stops (node));
 
@@ -2573,6 +2581,8 @@ gsk_gpu_node_processor_create_linear_gradient_pattern (GskGpuPatternWriter *self
 static void
 gsk_gpu_node_processor_radial_gradient_op (GskGpuNodeProcessor  *self,
                                            GskRenderNode        *node,
+                                           GdkColorState        *in,
+                                           GskHueInterpolation   hue_interp,
                                            const GskColorStop   *stops,
                                            gsize                 n_stops)
 {
@@ -2588,6 +2598,9 @@ gsk_gpu_node_processor_radial_gradient_op (GskGpuNodeProcessor  *self,
                               gsk_radial_gradient_node_get_start (node),
                               gsk_radial_gradient_node_get_end (node),
                               &self->offset,
+                              in,
+                              self->color_state,
+                              hue_interp,
                               stops,
                               n_stops);
 }
@@ -2598,6 +2611,8 @@ gsk_gpu_node_processor_add_radial_gradient_node (GskGpuNodeProcessor *self,
 {
   gsk_gpu_node_processor_add_gradient_node (self,
                                             node,
+                                            gsk_radial_gradient_node_get_color_state (node),
+                                            gsk_radial_gradient_node_get_hue_interpolation (node),
                                             gsk_radial_gradient_node_get_color_stops (node, NULL),
                                             gsk_radial_gradient_node_get_n_color_stops (node),
                                             gsk_gpu_node_processor_radial_gradient_op);
@@ -2619,7 +2634,7 @@ gsk_gpu_node_processor_create_radial_gradient_pattern (GskGpuPatternWriter *self
   gsk_gpu_pattern_writer_append_float (self, gsk_radial_gradient_node_get_vradius (node));
   gsk_gpu_pattern_writer_append_float (self, gsk_radial_gradient_node_get_start (node));
   gsk_gpu_pattern_writer_append_float (self, gsk_radial_gradient_node_get_end (node));
-  gsk_gpu_pattern_writer_append_color_stops (self, 
+  gsk_gpu_pattern_writer_append_color_stops (self,
                                             gsk_radial_gradient_node_get_color_stops (node, NULL),
                                             gsk_radial_gradient_node_get_n_color_stops (node));
 
@@ -2629,6 +2644,8 @@ gsk_gpu_node_processor_create_radial_gradient_pattern (GskGpuPatternWriter *self
 static void
 gsk_gpu_node_processor_conic_gradient_op (GskGpuNodeProcessor  *self,
                                           GskRenderNode        *node,
+                                          GdkColorState        *in,
+                                          GskHueInterpolation   hue_interp,
                                           const GskColorStop   *stops,
                                           gsize                 n_stops)
 {
@@ -2638,6 +2655,9 @@ gsk_gpu_node_processor_conic_gradient_op (GskGpuNodeProcessor  *self,
                              gsk_conic_gradient_node_get_center (node),
                              gsk_conic_gradient_node_get_angle (node),
                              &self->offset,
+                             in,
+                             self->color_state,
+                             hue_interp,
                              stops,
                              n_stops);
 }
@@ -2648,6 +2668,8 @@ gsk_gpu_node_processor_add_conic_gradient_node (GskGpuNodeProcessor *self,
 {
   gsk_gpu_node_processor_add_gradient_node (self,
                                             node,
+                                            gsk_conic_gradient_node_get_color_state (node),
+                                            gsk_conic_gradient_node_get_hue_interpolation (node),
                                             gsk_conic_gradient_node_get_color_stops (node, NULL),
                                             gsk_conic_gradient_node_get_n_color_stops (node),
                                             gsk_gpu_node_processor_conic_gradient_op);
@@ -2662,7 +2684,7 @@ gsk_gpu_node_processor_create_conic_gradient_pattern (GskGpuPatternWriter *self,
                                       gsk_conic_gradient_node_get_center (node),
                                       &self->offset);
   gsk_gpu_pattern_writer_append_float (self, gsk_conic_gradient_node_get_angle (node));
-  gsk_gpu_pattern_writer_append_color_stops (self, 
+  gsk_gpu_pattern_writer_append_color_stops (self,
                                             gsk_conic_gradient_node_get_color_stops (node, NULL),
                                             gsk_conic_gradient_node_get_n_color_stops (node));
 

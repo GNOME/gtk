@@ -271,6 +271,9 @@ struct _GskLinearGradientNode
   graphene_point_t start;
   graphene_point_t end;
 
+  GdkColorState *color_state;
+  GskHueInterpolation hue_interp;
+
   gsize n_stops;
   GskColorStop *stops;
 };
@@ -281,6 +284,7 @@ gsk_linear_gradient_node_finalize (GskRenderNode *node)
   GskLinearGradientNode *self = (GskLinearGradientNode *) node;
   GskRenderNodeClass *parent_class = g_type_class_peek (g_type_parent (GSK_TYPE_LINEAR_GRADIENT_NODE));
 
+  gdk_color_state_unref (self->color_state);
   g_free (self->stops);
 
   parent_class->finalize (node);
@@ -360,7 +364,9 @@ gsk_linear_gradient_node_diff (GskRenderNode *node1,
 
   if (graphene_point_equal (&self1->start, &self2->start) &&
       graphene_point_equal (&self1->end, &self2->end) &&
-      self1->n_stops == self2->n_stops)
+      self1->n_stops == self2->n_stops &&
+      self1->hue_interp == self2->hue_interp &&
+      gdk_color_state_equal (self1->color_state, self2->color_state))
     {
       gsize i;
 
@@ -432,6 +438,47 @@ gsk_linear_gradient_node_new (const graphene_rect_t  *bounds,
                               const GskColorStop     *color_stops,
                               gsize                   n_color_stops)
 {
+  return gsk_linear_gradient_node_new2 (bounds,
+                                        start, end,
+                                        GDK_COLOR_STATE_SRGB,
+                                        GSK_HUE_INTERPOLATION_SHORTER,
+                                        color_stops, n_color_stops);
+}
+
+/**
+ * gsk_linear_gradient_node_new2:
+ * @bounds: the rectangle to render the linear gradient into
+ * @start: the point at which the linear gradient will begin
+ * @end: the point at which the linear gradient will finish
+ * @color_state: the color state to interpolate in
+ * @hue_interp: How to interpolate hue, in case @in is a polar color state
+ * @color_stops: (array length=n_color_stops): a pointer to an array of
+ *   `GskColorStop` defining the gradient. The offsets of all color stops
+ *   must be increasing. The first stop's offset must be >= 0 and the last
+ *   stop's offset must be <= 1.
+ * @n_color_stops: the number of elements in @color_stops
+ *
+ * Creates a `GskRenderNode` that will create a linear gradient from the given
+ * points and color stops, and render that into the area given by @bounds.
+ *
+ * This function is like [constructor@Gsk.LinearGradientNode.new], but
+ * additionally lets one specify the interpolation color state. The colors
+ * in the color stops are expected to be in that color state (despite being
+ * specified as GdkRGBA).
+ *
+ * Since: 4.16
+ *
+ * Returns: (transfer full) (type GskLinearGradientNode): A new `GskRenderNode`
+ */
+GskRenderNode *
+gsk_linear_gradient_node_new2 (const graphene_rect_t  *bounds,
+                               const graphene_point_t *start,
+                               const graphene_point_t *end,
+                               GdkColorState          *color_state,
+                               GskHueInterpolation     hue_interp,
+                               const GskColorStop     *color_stops,
+                               gsize                   n_color_stops)
+{
   GskLinearGradientNode *self;
   GskRenderNode *node;
   gsize i;
@@ -439,9 +486,11 @@ gsk_linear_gradient_node_new (const graphene_rect_t  *bounds,
   g_return_val_if_fail (bounds != NULL, NULL);
   g_return_val_if_fail (start != NULL, NULL);
   g_return_val_if_fail (end != NULL, NULL);
+  g_return_val_if_fail (color_state != NULL, NULL);
   g_return_val_if_fail (color_stops != NULL, NULL);
   g_return_val_if_fail (n_color_stops >= 2, NULL);
   g_return_val_if_fail (color_stops[0].offset >= 0, NULL);
+
   for (i = 1; i < n_color_stops; i++)
     g_return_val_if_fail (color_stops[i].offset >= color_stops[i - 1].offset, NULL);
   g_return_val_if_fail (color_stops[n_color_stops - 1].offset <= 1, NULL);
@@ -458,6 +507,9 @@ gsk_linear_gradient_node_new (const graphene_rect_t  *bounds,
   self->n_stops = n_color_stops;
   self->stops = g_malloc_n (n_color_stops, sizeof (GskColorStop));
   memcpy (self->stops, color_stops, n_color_stops * sizeof (GskColorStop));
+
+  self->color_state = gdk_color_state_ref (color_state);
+  self->hue_interp = hue_interp;
 
   return node;
 }
@@ -486,6 +538,48 @@ gsk_repeating_linear_gradient_node_new (const graphene_rect_t  *bounds,
                                         const GskColorStop     *color_stops,
                                         gsize                   n_color_stops)
 {
+  return gsk_repeating_linear_gradient_node_new2 (bounds,
+                                                  start, end,
+                                                  GDK_COLOR_STATE_SRGB,
+                                                  GSK_HUE_INTERPOLATION_SHORTER,
+                                                  color_stops, n_color_stops);
+}
+
+/**
+ * gsk_repeating_linear_gradient_node_new2:
+ * @bounds: the rectangle to render the linear gradient into
+ * @start: the point at which the linear gradient will begin
+ * @end: the point at which the linear gradient will finish
+ * @color_state: the color state to interpolate in
+ * @hue_interp: How to interpolate hue, in case @in is a polar color state
+ * @color_stops: (array length=n_color_stops): a pointer to an array of
+ * `GskColorStop` defining the gradient. The offsets of all color stops
+ *   must be increasing. The first stop's offset must be >= 0 and the last
+ *   stop's offset must be <= 1.
+ * @n_color_stops: the number of elements in @color_stops
+ *
+ * Creates a `GskRenderNode` that will create a repeating linear gradient
+ * from the given points and color stops, and render that into the area
+ * given by @bounds.
+ *
+ * This function is like [constructor@Gsk.RepeatingLinearGradientNode.new],
+ * but additionally lets one specify the interpolation color state. The colors
+ * in the color stops are expected to be in that color state (despite being
+ * specified as GdkRGBA).
+ *
+ * Since: 4.16
+ *
+ * Returns: (transfer full) (type GskRepeatingLinearGradientNode): A new `GskRenderNode`
+ */
+GskRenderNode *
+gsk_repeating_linear_gradient_node_new2 (const graphene_rect_t  *bounds,
+                                         const graphene_point_t *start,
+                                         const graphene_point_t *end,
+                                         GdkColorState          *color_state,
+                                         GskHueInterpolation     hue_interp,
+                                         const GskColorStop     *color_stops,
+                                         gsize                   n_color_stops)
+{
   GskLinearGradientNode *self;
   GskRenderNode *node;
   gsize i;
@@ -493,6 +587,7 @@ gsk_repeating_linear_gradient_node_new (const graphene_rect_t  *bounds,
   g_return_val_if_fail (bounds != NULL, NULL);
   g_return_val_if_fail (start != NULL, NULL);
   g_return_val_if_fail (end != NULL, NULL);
+  g_return_val_if_fail (color_state != NULL, NULL);
   g_return_val_if_fail (color_stops != NULL, NULL);
   g_return_val_if_fail (n_color_stops >= 2, NULL);
   g_return_val_if_fail (color_stops[0].offset >= 0, NULL);
@@ -512,6 +607,9 @@ gsk_repeating_linear_gradient_node_new (const graphene_rect_t  *bounds,
   self->stops = g_malloc_n (n_color_stops, sizeof (GskColorStop));
   memcpy (self->stops, color_stops, n_color_stops * sizeof (GskColorStop));
   self->n_stops = n_color_stops;
+
+  self->color_state = gdk_color_state_ref (color_state);
+  self->hue_interp = hue_interp;
 
   return node;
 }
@@ -585,6 +683,42 @@ gsk_linear_gradient_node_get_color_stops (const GskRenderNode *node,
   return self->stops;
 }
 
+/**
+ * gsk_linear_gradient_node_get_color_state:
+ * @node: (type GskLinearGradientNode): a `GskRenderNode` for a linear gradient
+ *
+ * Retrieves the interpolation color state for the gradient.
+ *
+ * Returns: the interpolation color state
+ *
+ * Since: 4.16
+ */
+GdkColorState *
+gsk_linear_gradient_node_get_color_state (const GskRenderNode *node)
+{
+  const GskLinearGradientNode *self = (const GskLinearGradientNode *) node;
+
+  return self->color_state;
+}
+
+/**
+ * gsk_linear_gradient_node_get_hue_interpolation:
+ * @node: (type GskLinearGradientNode): a `GskRenderNode` for a linear gradient
+ *
+ * Retrieves the hue interpolation for the gradient.
+ *
+ * Returns: the hue interpolation
+ *
+ * Since: 4.16
+ */
+GskHueInterpolation
+gsk_linear_gradient_node_get_hue_interpolation (const GskRenderNode *node)
+{
+  const GskLinearGradientNode *self = (const GskLinearGradientNode *) node;
+
+  return self->hue_interp;
+}
+
 /* }}} */
 /* {{{ GSK_RADIAL_GRADIENT_NODE */
 
@@ -610,6 +744,9 @@ struct _GskRadialGradientNode
   float start;
   float end;
 
+  GdkColorState *color_state;
+  GskHueInterpolation hue_interp;
+
   gsize n_stops;
   GskColorStop *stops;
 };
@@ -620,6 +757,7 @@ gsk_radial_gradient_node_finalize (GskRenderNode *node)
   GskRadialGradientNode *self = (GskRadialGradientNode *) node;
   GskRenderNodeClass *parent_class = g_type_class_peek (g_type_parent (GSK_TYPE_RADIAL_GRADIENT_NODE));
 
+  gdk_color_state_unref (self->color_state);
   g_free (self->stops);
 
   parent_class->finalize (node);
@@ -713,7 +851,9 @@ gsk_radial_gradient_node_diff (GskRenderNode *node1,
       self1->vradius == self2->vradius &&
       self1->start == self2->start &&
       self1->end == self2->end &&
-      self1->n_stops == self2->n_stops)
+      self1->n_stops == self2->n_stops &&
+      self1->hue_interp == self2->hue_interp &&
+      gdk_color_state_equal (self1->color_state, self2->color_state))
     {
       gsize i;
 
@@ -794,6 +934,58 @@ gsk_radial_gradient_node_new (const graphene_rect_t  *bounds,
                               const GskColorStop     *color_stops,
                               gsize                   n_color_stops)
 {
+  return gsk_radial_gradient_node_new2 (bounds, center,
+                                        hradius, vradius,
+                                        start, end,
+                                        GDK_COLOR_STATE_SRGB,
+                                        GSK_HUE_INTERPOLATION_SHORTER,
+                                        color_stops, n_color_stops);
+}
+
+/**
+ * gsk_radial_gradient_node_new2:
+ * @bounds: the bounds of the node
+ * @center: the center of the gradient
+ * @hradius: the horizontal radius
+ * @vradius: the vertical radius
+ * @start: a percentage >= 0 that defines the start of the gradient around @center
+ * @end: a percentage >= 0 that defines the end of the gradient around @center
+ * @color_state: the color state to interpolate in
+ * @hue_interp: How to interpolate hue, in case @in is a polar color state
+ * @color_stops: (array length=n_color_stops): a pointer to an array of
+ *   `GskColorStop` defining the gradient. The offsets of all color stops
+ *   must be increasing. The first stop's offset must be >= 0 and the last
+ *   stop's offset must be <= 1.
+ * @n_color_stops: the number of elements in @color_stops
+ *
+ * Creates a `GskRenderNode` that draws a radial gradient.
+ *
+ * The radial gradient
+ * starts around @center. The size of the gradient is dictated by @hradius
+ * in horizontal orientation and by @vradius in vertical orientation.
+ *
+ * This function is like [constructor@Gsk.RadialGradientNode.new], but
+ * additionally lets one specify the interpolation color state. The colors
+ * in the color stops are expected to be in that color state (despite being
+ * specified as GdkRGBA).
+ *
+ * Since: 4.16
+ *
+ * Returns: (transfer full) (type GskRadialGradientNode): A new `GskRenderNode`
+ */
+GskRenderNode *
+gsk_radial_gradient_node_new2 (const graphene_rect_t  *bounds,
+                               const graphene_point_t *center,
+                               float                   hradius,
+                               float                   vradius,
+                               float                   start,
+                               float                   end,
+                               GdkColorState          *color_state,
+                               GskHueInterpolation     hue_interp,
+                               const GskColorStop     *color_stops,
+                               gsize                   n_color_stops)
+
+{
   GskRadialGradientNode *self;
   GskRenderNode *node;
   gsize i;
@@ -805,6 +997,7 @@ gsk_radial_gradient_node_new (const graphene_rect_t  *bounds,
   g_return_val_if_fail (start >= 0., NULL);
   g_return_val_if_fail (end >= 0., NULL);
   g_return_val_if_fail (end > start, NULL);
+  g_return_val_if_fail (color_state != NULL, NULL);
   g_return_val_if_fail (color_stops != NULL, NULL);
   g_return_val_if_fail (n_color_stops >= 2, NULL);
   g_return_val_if_fail (color_stops[0].offset >= 0, NULL);
@@ -828,6 +1021,9 @@ gsk_radial_gradient_node_new (const graphene_rect_t  *bounds,
   self->n_stops = n_color_stops;
   self->stops = g_malloc_n (n_color_stops, sizeof (GskColorStop));
   memcpy (self->stops, color_stops, n_color_stops * sizeof (GskColorStop));
+
+  self->color_state = gdk_color_state_ref (color_state);
+  self->hue_interp = hue_interp;
 
   return node;
 }
@@ -864,6 +1060,57 @@ gsk_repeating_radial_gradient_node_new (const graphene_rect_t  *bounds,
                                         const GskColorStop     *color_stops,
                                         gsize                   n_color_stops)
 {
+  return gsk_repeating_radial_gradient_node_new2 (bounds, center,
+                                                  hradius, vradius,
+                                                  start, end,
+                                                  GDK_COLOR_STATE_SRGB,
+                                                  GSK_HUE_INTERPOLATION_SHORTER,
+                                                  color_stops, n_color_stops);
+}
+
+/**
+ * gsk_repeating_radial_gradient_node_new2:
+ * @bounds: the bounds of the node
+ * @center: the center of the gradient
+ * @hradius: the horizontal radius
+ * @vradius: the vertical radius
+ * @start: a percentage >= 0 that defines the start of the gradient around @center
+ * @end: a percentage >= 0 that defines the end of the gradient around @center
+ * @color_state: the color state to interpolate in
+ * @hue_interp: How to interpolate hue, in case @in is a polar color state
+ * @color_stops: (array length=n_color_stops): a pointer to an array of
+ *   `GskColorStop` defining the gradient. The offsets of all color stops
+ *   must be increasing. The first stop's offset must be >= 0 and the last
+ *   stop's offset must be <= 1.
+ * @n_color_stops: the number of elements in @color_stops
+ *
+ * Creates a `GskRenderNode` that draws a repeating radial gradient.
+ *
+ * The radial gradient starts around @center. The size of the gradient
+ * is dictated by @hradius in horizontal orientation and by @vradius
+ * in vertical orientation.
+ *
+ * This function is like [constructor@Gsk.RepeatingRadialGradientNode.new],
+ * but additionally lets one specify the interpolation color state. The colors
+ * in the color stops are expected to be in that color state (despite being
+ * specified as GdkRGBA).
+ *
+ * Since: 4.16
+ *
+ * Returns: (transfer full) (type GskRepeatingRadialGradientNode): A new `GskRenderNode`
+ */
+GskRenderNode *
+gsk_repeating_radial_gradient_node_new2 (const graphene_rect_t  *bounds,
+                                         const graphene_point_t *center,
+                                         float                   hradius,
+                                         float                   vradius,
+                                         float                   start,
+                                         float                   end,
+                                         GdkColorState          *color_state,
+                                         GskHueInterpolation     hue_interp,
+                                         const GskColorStop     *color_stops,
+                                         gsize                   n_color_stops)
+{
   GskRadialGradientNode *self;
   GskRenderNode *node;
   gsize i;
@@ -875,6 +1122,7 @@ gsk_repeating_radial_gradient_node_new (const graphene_rect_t  *bounds,
   g_return_val_if_fail (start >= 0., NULL);
   g_return_val_if_fail (end >= 0., NULL);
   g_return_val_if_fail (end > start, NULL);
+  g_return_val_if_fail (color_state != NULL, NULL);
   g_return_val_if_fail (color_stops != NULL, NULL);
   g_return_val_if_fail (n_color_stops >= 2, NULL);
   g_return_val_if_fail (color_stops[0].offset >= 0, NULL);
@@ -898,6 +1146,9 @@ gsk_repeating_radial_gradient_node_new (const graphene_rect_t  *bounds,
   self->n_stops = n_color_stops;
   self->stops = g_malloc_n (n_color_stops, sizeof (GskColorStop));
   memcpy (self->stops, color_stops, n_color_stops * sizeof (GskColorStop));
+
+  self->color_state = gdk_color_state_ref (color_state);
+  self->hue_interp = hue_interp;
 
   return node;
 }
@@ -1019,6 +1270,42 @@ gsk_radial_gradient_node_get_end (const GskRenderNode *node)
   return self->end;
 }
 
+/**
+ * gsk_radial_gradient_node_get_color_state:
+ * @node: (type GskRadialGradientNode): a `GskRenderNode` for a radial gradient
+ *
+ * Retrieves the interpolation color state for the gradient.
+ *
+ * Returns: the interpolation color state
+ *
+ * Since: 4.16
+ */
+GdkColorState *
+gsk_radial_gradient_node_get_color_state (const GskRenderNode *node)
+{
+  const GskRadialGradientNode *self = (const GskRadialGradientNode *) node;
+
+  return self->color_state;
+}
+
+/**
+ * gsk_radial_gradient_node_get_hue_interpolation:
+ * @node: (type GskRadialGradientNode): a `GskRenderNode` for a radial gradient
+ *
+ * Retrieves the hue interpolation for the gradient.
+ *
+ * Returns: the hue interpolation
+ *
+ * Since: 4.16
+ */
+GskHueInterpolation
+gsk_radial_gradient_node_get_hue_interpolation (const GskRenderNode *node)
+{
+  const GskRadialGradientNode *self = (const GskRadialGradientNode *) node;
+
+  return self->hue_interp;
+}
+
 /* }}} */
 /* {{{ GSK_CONIC_GRADIENT_NODE */
 
@@ -1036,6 +1323,9 @@ struct _GskConicGradientNode
   float rotation;
   float angle;
 
+  GdkColorState *color_state;
+  GskHueInterpolation hue_interp;
+
   gsize n_stops;
   GskColorStop *stops;
 };
@@ -1046,6 +1336,7 @@ gsk_conic_gradient_node_finalize (GskRenderNode *node)
   GskConicGradientNode *self = (GskConicGradientNode *) node;
   GskRenderNodeClass *parent_class = g_type_class_peek (g_type_parent (GSK_TYPE_CONIC_GRADIENT_NODE));
 
+  gdk_color_state_unref (self->color_state);
   g_free (self->stops);
 
   parent_class->finalize (node);
@@ -1195,7 +1486,9 @@ gsk_conic_gradient_node_diff (GskRenderNode *node1,
 
   if (!graphene_point_equal (&self1->center, &self2->center) ||
       self1->rotation != self2->rotation ||
-      self1->n_stops != self2->n_stops)
+      self1->n_stops != self2->n_stops ||
+      self1->hue_interp != self2->hue_interp ||
+      !gdk_color_state_equal (self1->color_state, self2->color_state))
     {
       gsk_render_node_diff_impossible (node1, node2, data);
       return;
@@ -1254,12 +1547,57 @@ gsk_conic_gradient_node_new (const graphene_rect_t  *bounds,
                              const GskColorStop     *color_stops,
                              gsize                   n_color_stops)
 {
+  return gsk_conic_gradient_node_new2 (bounds,
+                                       center, rotation,
+                                       GDK_COLOR_STATE_SRGB,
+                                       GSK_HUE_INTERPOLATION_SHORTER,
+                                       color_stops, n_color_stops);
+}
+
+/**
+ * gsk_conic_gradient_node_new2:
+ * @bounds: the bounds of the node
+ * @center: the center of the gradient
+ * @rotation: the rotation of the gradient in degrees
+ * @color_state: the color state to interpolate in
+ * @hue_interp: How to interpolate hue, in case @in is a polar color state
+ * @color_stops: (array length=n_color_stops): a pointer to an array of
+ *   `GskColorStop` defining the gradient. The offsets of all color stops
+ *   must be increasing. The first stop's offset must be >= 0 and the last
+ *   stop's offset must be <= 1.
+ * @n_color_stops: the number of elements in @color_stops
+ *
+ * Creates a `GskRenderNode` that draws a conic gradient.
+ *
+ * The conic gradient
+ * starts around @center in the direction of @rotation. A rotation of 0 means
+ * that the gradient points up. Color stops are then added clockwise.
+ *
+ * This function is like [constructor@Gsk.ConicGradientNode.new],
+ * but additionally lets one specify the interpolation color state. The colors
+ * in the color stops are expected to be in that color state (despite being
+ * specified as GdkRGBA).
+ *
+ * Since: 4.16
+ *
+ * Returns: (transfer full) (type GskConicGradientNode): A new `GskRenderNode`
+ */
+GskRenderNode *
+gsk_conic_gradient_node_new2 (const graphene_rect_t  *bounds,
+                              const graphene_point_t *center,
+                              float                   rotation,
+                              GdkColorState          *color_state,
+                              GskHueInterpolation     hue_interp,
+                              const GskColorStop     *color_stops,
+                              gsize                   n_color_stops)
+{
   GskConicGradientNode *self;
   GskRenderNode *node;
   gsize i;
 
   g_return_val_if_fail (bounds != NULL, NULL);
   g_return_val_if_fail (center != NULL, NULL);
+  g_return_val_if_fail (color_state != NULL, NULL);
   g_return_val_if_fail (color_stops != NULL, NULL);
   g_return_val_if_fail (n_color_stops >= 2, NULL);
   g_return_val_if_fail (color_stops[0].offset >= 0, NULL);
@@ -1286,6 +1624,9 @@ gsk_conic_gradient_node_new (const graphene_rect_t  *bounds,
   self->angle = fmodf (self->angle, 2.f * G_PI);
   if (self->angle < 0.f)
     self->angle += 2.f * G_PI;
+
+  self->color_state = gdk_color_state_ref (color_state);
+  self->hue_interp = hue_interp;
 
   return node;
 }
@@ -1380,6 +1721,42 @@ gsk_conic_gradient_node_get_angle (const GskRenderNode *node)
   const GskConicGradientNode *self = (const GskConicGradientNode *) node;
 
   return self->angle;
+}
+
+/**
+ * gsk_conic_gradient_node_get_color_state:
+ * @node: (type GskConicGradientNode): a `GskRenderNode` for a conic gradient
+ *
+ * Retrieves the interpolation color state for the gradient.
+ *
+ * Returns: the interpolation color state
+ *
+ * Since: 4.16
+ */
+GdkColorState *
+gsk_conic_gradient_node_get_color_state (const GskRenderNode *node)
+{
+  const GskConicGradientNode *self = (const GskConicGradientNode *) node;
+
+  return self->color_state;
+}
+
+/**
+ * gsk_conic_gradient_node_get_hue_interpolation:
+ * @node: (type GskConicGradientNode): a `GskRenderNode` for a conic gradient
+ *
+ * Retrieves the hue interpolation for the gradient.
+ *
+ * Returns: the hue interpolation
+ *
+ * Since: 4.16
+ */
+GskHueInterpolation
+gsk_conic_gradient_node_get_hue_interpolation (const GskRenderNode *node)
+{
+  const GskConicGradientNode *self = (const GskConicGradientNode *) node;
+
+  return self->hue_interp;
 }
 
 /* }}} */

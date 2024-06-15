@@ -14,6 +14,9 @@ void                    gsk_gpu_conic_gradient_op                       (GskGpuF
                                                                          const graphene_point_t         *center,
                                                                          float                           angle,
                                                                          const graphene_point_t         *offset,
+                                                                         GdkColorState                  *in,
+                                                                         GdkColorState                  *target,
+                                                                         GskHueInterpolation             hue_interp,
                                                                          const GskColorStop             *stops,
                                                                          gsize                           n_stops);
 

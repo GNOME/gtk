@@ -17,6 +17,9 @@ void                    gsk_gpu_radial_gradient_op                      (GskGpuF
                                                                          float                           start,
                                                                          float                           end,
                                                                          const graphene_point_t         *offset,
+                                                                         GdkColorState                  *in,
+                                                                         GdkColorState                  *target,
+                                                                         GskHueInterpolation             hue_interp,
                                                                          const GskColorStop             *stops,
                                                                          gsize                           n_stops);
 
