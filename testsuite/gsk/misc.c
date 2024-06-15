@@ -3,6 +3,8 @@
 
 #include <gobject/gvaluecollector.h>
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+
 static void
 test_rendernode_gvalue (void)
 {
