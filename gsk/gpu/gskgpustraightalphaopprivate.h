@@ -13,7 +13,9 @@ void                    gsk_gpu_straight_alpha_op                       (GskGpuF
                                                                          guint32                         descriptor,
                                                                          const graphene_rect_t          *rect,
                                                                          const graphene_point_t         *offset,
-                                                                         const graphene_rect_t          *tex_rect);
+                                                                         const graphene_rect_t          *tex_rect,
+                                                                         GdkColorState                  *from,
+                                                                         GdkColorState                  *to);
 
 
 G_END_DECLS

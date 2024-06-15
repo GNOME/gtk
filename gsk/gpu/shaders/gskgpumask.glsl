@@ -1,6 +1,8 @@
 #include "common.glsl"
 
-#define VARIATION_MASK_MODE GSK_VARIATION
+#define VARIATION_MASK_MODE (GSK_VARIATION & 3u)
+
+#define VARIATION_CONVERSIONS (GSK_VARIATION >> 2)
 
 PASS(0) vec2 _pos;
 PASS_FLAT(1) Rect _source_rect;
@@ -25,7 +27,7 @@ void
 run (out vec2 pos)
 {
   Rect r = rect_from_gsk (in_rect);
-  
+
   pos = rect_get_position (r);
 
   _pos = pos;
@@ -50,10 +52,38 @@ void
 run (out vec4 color,
      out vec2 position)
 {
-  vec4 source = gsk_texture (_source_id, _source_coord) *
-                rect_coverage (_source_rect, _pos);
-  vec4 mask = gsk_texture (_mask_id, _mask_coord) *
-              rect_coverage (_mask_rect, _pos);
+  vec4 source = gsk_texture (_source_id, _source_coord);
+  vec4 mask = gsk_texture (_mask_id, _mask_coord);
+
+  if (VARIATION_CONVERSIONS != 0u)
+    {
+      uint source_color_state = VARIATION_CONVERSIONS & 31u;
+      uint mask_color_state = (VARIATION_CONVERSIONS >> 5) & 31u;
+      uint target_color_state = (VARIATION_CONVERSIONS >> 10) & 31u;
+
+      if (source_color_state != 0u && target_color_state != 0u &&
+          source_color_state != target_color_state)
+        {
+          uint conversion = source_color_state | (target_color_state << 16);
+
+          source = color_unpremultiply (source);
+          source = color_convert (source, conversion);
+          source = color_premultiply (source);
+        }
+
+      if (mask_color_state != 0u && target_color_state != 0u &&
+          mask_color_state != target_color_state)
+        {
+          uint conversion = mask_color_state | (target_color_state << 16);
+
+          mask = color_unpremultiply (mask);
+          mask = color_convert (mask, conversion);
+          mask = color_premultiply (source);
+        }
+    }
+
+  source = source * rect_coverage (_source_rect, _pos);
+  mask =  mask * rect_coverage (_mask_rect, _pos);
 
   float alpha = _opacity;
   switch (VARIATION_MASK_MODE)

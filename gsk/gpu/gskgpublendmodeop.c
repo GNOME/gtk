@@ -6,6 +6,7 @@
 #include "gskgpuframeprivate.h"
 #include "gskgpuprintprivate.h"
 #include "gskrectprivate.h"
+#include "gskgpucolorconvertopprivate.h"
 
 #include "gpu/shaders/gskgpublendmodeinstance.h"
 
@@ -23,11 +24,13 @@ gsk_gpu_blend_mode_op_print_instance (GskGpuShaderOp *shader,
 {
   GskGpuBlendmodeInstance *instance = (GskGpuBlendmodeInstance *) instance_;
 
-  gsk_gpu_print_enum (string, GSK_TYPE_BLEND_MODE, shader->variation);
+  gsk_gpu_print_enum (string, GSK_TYPE_BLEND_MODE, shader->variation & 0xff);
   gsk_gpu_print_rect (string, instance->rect);
   gsk_gpu_print_image_descriptor (string, shader->desc, instance->bottom_id);
   gsk_gpu_print_enum (string, GSK_TYPE_BLEND_MODE, shader->variation);
   gsk_gpu_print_image_descriptor (string, shader->desc, instance->top_id);
+  if ((shader->variation >> 8) != 0)
+    gsk_gpu_print_color_conversion_triple (string, shader->variation >> 8);
 }
 
 static const GskGpuShaderOpClass GSK_GPU_BLEND_MODE_OP_CLASS = {
@@ -54,6 +57,7 @@ static const GskGpuShaderOpClass GSK_GPU_BLEND_MODE_OP_CLASS = {
 void
 gsk_gpu_blend_mode_op (GskGpuFrame            *frame,
                        GskGpuShaderClip        clip,
+                       GdkColorState          *target_color_state,
                        GskGpuDescriptors      *desc,
                        const graphene_rect_t  *rect,
                        const graphene_point_t *offset,
@@ -61,14 +65,19 @@ gsk_gpu_blend_mode_op (GskGpuFrame            *frame,
                        GskBlendMode            blend_mode,
                        guint32                 bottom_descriptor,
                        const graphene_rect_t  *bottom_rect,
+                       GdkColorState          *bottom_color_state,
                        guint32                 top_descriptor,
-                       const graphene_rect_t  *top_rect)
+                       const graphene_rect_t  *top_rect,
+                       GdkColorState          *top_color_state)
 {
   GskGpuBlendmodeInstance *instance;
 
   gsk_gpu_shader_op_alloc (frame,
                            &GSK_GPU_BLEND_MODE_OP_CLASS,
-                           blend_mode,
+                           blend_mode |
+                           (gsk_gpu_color_conversion_triple (bottom_color_state,
+                                                             top_color_state,
+                                                             target_color_state) << 8),
                            clip,
                            desc,
                            &instance);

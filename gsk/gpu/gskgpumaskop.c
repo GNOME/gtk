@@ -6,6 +6,7 @@
 #include "gskgpuprintprivate.h"
 #include "gskrectprivate.h"
 #include "gskenumtypes.h"
+#include "gskgpucolorconvertopprivate.h"
 
 #include "gpu/shaders/gskgpumaskinstance.h"
 
@@ -23,10 +24,12 @@ gsk_gpu_mask_op_print_instance (GskGpuShaderOp *shader,
 {
   GskGpuMaskInstance *instance = (GskGpuMaskInstance *) instance_;
 
-  gsk_gpu_print_enum (string, GSK_TYPE_MASK_MODE, shader->variation);
+  gsk_gpu_print_enum (string, GSK_TYPE_MASK_MODE, (shader->variation & 3));
   gsk_gpu_print_rect (string, instance->rect);
   gsk_gpu_print_image_descriptor (string, shader->desc, instance->source_id);
   gsk_gpu_print_image_descriptor (string, shader->desc, instance->mask_id);
+  if (shader->variation != 0)
+    gsk_gpu_print_color_conversion_triple (string, shader->variation >> 2);
 }
 
 static const GskGpuShaderOpClass GSK_GPU_MASK_OP_CLASS = {
@@ -53,6 +56,7 @@ static const GskGpuShaderOpClass GSK_GPU_MASK_OP_CLASS = {
 void
 gsk_gpu_mask_op (GskGpuFrame            *frame,
                  GskGpuShaderClip        clip,
+                 GdkColorState          *target_color_state,
                  GskGpuDescriptors      *desc,
                  const graphene_rect_t  *rect,
                  const graphene_point_t *offset,
@@ -60,14 +64,19 @@ gsk_gpu_mask_op (GskGpuFrame            *frame,
                  GskMaskMode             mask_mode,
                  guint32                 source_descriptor,
                  const graphene_rect_t  *source_rect,
+                 GdkColorState          *source_color_state,
                  guint32                 mask_descriptor,
-                 const graphene_rect_t  *mask_rect)
+                 const graphene_rect_t  *mask_rect,
+                 GdkColorState          *mask_color_state)
 {
   GskGpuMaskInstance *instance;
 
   gsk_gpu_shader_op_alloc (frame,
                            &GSK_GPU_MASK_OP_CLASS,
-                           mask_mode,
+                           mask_mode |
+                           (gsk_gpu_color_conversion_triple (source_color_state,
+                                                             mask_color_state,
+                                                             target_color_state) << 2),
                            clip,
                            desc,
                            &instance);

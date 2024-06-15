@@ -5,6 +5,7 @@
 #include "gskgpuframeprivate.h"
 #include "gskgpuprintprivate.h"
 #include "gskrectprivate.h"
+#include "gskgpucolorconvertopprivate.h"
 
 #include "gpu/shaders/gskgpustraightalphainstance.h"
 
@@ -27,6 +28,8 @@ gsk_gpu_straight_alpha_op_print_instance (GskGpuShaderOp *shader,
 
   gsk_gpu_print_rect (string, instance->rect);
   gsk_gpu_print_image_descriptor (string, shader->desc, instance->tex_id);
+  if ((shader->variation >> 2) != 0)
+    gsk_gpu_print_color_conversion (string, shader->variation >> 2);
 }
 
 static const GskGpuShaderOpClass GSK_GPU_STRAIGHT_ALPHA_OP_CLASS = {
@@ -58,14 +61,17 @@ gsk_gpu_straight_alpha_op (GskGpuFrame            *frame,
                            guint32                 descriptor,
                            const graphene_rect_t  *rect,
                            const graphene_point_t *offset,
-                           const graphene_rect_t  *tex_rect)
+                           const graphene_rect_t  *tex_rect,
+                           GdkColorState          *from,
+                           GdkColorState          *to)
 {
   GskGpuStraightalphaInstance *instance;
 
   gsk_gpu_shader_op_alloc (frame,
                            &GSK_GPU_STRAIGHT_ALPHA_OP_CLASS,
                            (opacity < 1.0 ? VARIATION_OPACITY : 0) |
-                           VARIATION_STRAIGHT_ALPHA,
+                           VARIATION_STRAIGHT_ALPHA |
+                           gsk_gpu_color_conversion (from, to) << 2,
                            clip,
                            desc,
                            &instance);

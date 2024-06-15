@@ -1,5 +1,8 @@
 #include "common.glsl"
 
+#define VARIATION_CONVERSION    (GSK_VARIATION)
+
+
 PASS_FLAT(0) mat4 _color_matrix;
 PASS_FLAT(4) vec4 _color_offset;
 PASS(5) vec2 _pos;
@@ -47,6 +50,10 @@ run (out vec4 color,
   vec4 pixel = gsk_texture (_tex_id, _tex_coord);
   pixel = color_unpremultiply (pixel);
 #endif
+
+  if (VARIATION_CONVERSION != 0u)
+    pixel = color_convert (pixel, VARIATION_CONVERSION);
+
   pixel = _color_matrix * pixel + _color_offset;
   pixel = clamp (pixel, 0.0, 1.0);
 

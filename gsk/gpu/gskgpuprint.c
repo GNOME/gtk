@@ -159,7 +159,24 @@ void
 gsk_gpu_print_color_conversion (GString *string,
                                 guint    conversion)
 {
+  GdkColorStateId from = conversion & 0xffff;
+  GdkColorStateId to = conversion >> 16;
+
   g_string_append_printf (string, "%s->%s ",
-                          gdk_color_state_get_name_from_id (conversion & 0xffff),
-                          gdk_color_state_get_name_from_id (conversion >> 16));
+                          gdk_color_state_get_name_from_id (from),
+                          gdk_color_state_get_name_from_id (to));
+}
+
+void
+gsk_gpu_print_color_conversion_triple (GString *string,
+                                       guint    conversion)
+{
+  GdkColorStateId from1 = conversion & 31;
+  GdkColorStateId from2 = (conversion >>  5) & 31;
+  GdkColorStateId to    = (conversion >> 10) & 31;
+
+  g_string_append_printf (string, "%s,%s->%s ",
+                          gdk_color_state_get_name_from_id (from1),
+                          gdk_color_state_get_name_from_id (from2),
+                          gdk_color_state_get_name_from_id (to));
 }

@@ -1,5 +1,7 @@
 #include "common.glsl"
 
+#define VARIATION_CONVERSION    GSK_VARIATION
+
 PASS(0) vec2 _pos;
 PASS_FLAT(1) Rect _rect;
 PASS(2) vec2 _tex_coord;
@@ -36,8 +38,16 @@ void
 run (out vec4 color,
      out vec2 position)
 {
-  color = gsk_texture (_tex_id, _tex_coord) *
-          rect_coverage (_rect, _pos);
+  color = gsk_texture (_tex_id, _tex_coord);
+
+  if (VARIATION_CONVERSION != 0u)
+    {
+      color = color_unpremultiply (color);
+      color = color_convert (color, VARIATION_CONVERSION);
+      color = color_premultiply (color);
+    }
+
+  color = color * rect_coverage (_rect, _pos);
   position = _pos;
 }
 

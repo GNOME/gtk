@@ -13,6 +13,8 @@ void                    gsk_gpu_color_matrix_op                         (GskGpuF
                                                                          const graphene_rect_t          *rect,
                                                                          const graphene_point_t         *offset,
                                                                          const graphene_rect_t          *tex_rect,
+                                                                         GdkColorState                  *from,
+                                                                         GdkColorState                  *to,
                                                                          const graphene_matrix_t        *color_matrix,
                                                                          const graphene_vec4_t          *color_offset);
 
@@ -23,6 +25,8 @@ void                    gsk_gpu_color_matrix_op_opacity                 (GskGpuF
                                                                          const graphene_rect_t          *rect,
                                                                          const graphene_point_t         *offset,
                                                                          const graphene_rect_t          *tex_rect,
+                                                                         GdkColorState                  *from,
+                                                                         GdkColorState                  *to,
                                                                          float                           opacity);
 
 G_END_DECLS

@@ -89,3 +89,24 @@ gsk_gpu_color_conversion (GdkColorState *from,
   return GDK_NAMED_COLOR_STATE_ID (from) |
         (GDK_NAMED_COLOR_STATE_ID (to) << 16);
 }
+
+guint
+gsk_gpu_color_conversion_triple (GdkColorState *from1,
+                                 GdkColorState *from2,
+                                 GdkColorState *to)
+{
+  if (from1 == to && from2 == to)
+    return 0;
+
+  if (!GDK_IS_NAMED_COLOR_STATE (from1) ||
+      !GDK_IS_NAMED_COLOR_STATE (from2) ||
+      !GDK_IS_NAMED_COLOR_STATE (to))
+    {
+      g_warning ("FIXME: Implement support for ICC color transforms");
+      return 0;
+    }
+
+  return GDK_NAMED_COLOR_STATE_ID (from1) |
+         (GDK_NAMED_COLOR_STATE_ID (from2) << 5) |
+         (GDK_NAMED_COLOR_STATE_ID (to) << 10);
+}

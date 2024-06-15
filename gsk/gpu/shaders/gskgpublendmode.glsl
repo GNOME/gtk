@@ -1,6 +1,9 @@
 #include "common.glsl"
 #include "blendmode.glsl"
 
+#define VARIATION_BLENDMODE (GSK_VARIATION & 0xff)
+#define VARIATION_CONVERSIONS (GSK_VARIATION >> 8)
+
 PASS(0) vec2 _pos;
 PASS_FLAT(1) Rect _bottom_rect;
 PASS_FLAT(2) Rect _top_rect;
@@ -51,11 +54,41 @@ void
 run (out vec4 color,
      out vec2 position)
 {
-  color = _opacity * blend_mode (gsk_texture (_bottom_id, _bottom_coord)
-                                 * rect_coverage (_bottom_rect, _pos),
-                                 gsk_texture (_top_id, _top_coord)
-                                 * rect_coverage (_top_rect, _pos),
-                                 GSK_VARIATION);
+  vec4 bottom = gsk_texture (_bottom_id, _bottom_coord);
+  vec4 top = gsk_texture (_top_id, _top_coord);
+
+  if (VARIATION_CONVERSIONS != 0u)
+    {
+      uint bottom_color_state = VARIATION_CONVERSIONS & 31u;
+      uint top_color_state = (VARIATION_CONVERSIONS >> 5) & 31u;
+      uint target_color_state = (VARIATION_CONVERSIONS >> 10) & 31u;
+
+      if (bottom_color_state != 0u && target_color_state != 0u &&
+          bottom_color_state != target_color_state)
+        {
+          uint conversion = bottom_color_state | (target_color_state << 16);
+
+          bottom = color_unpremultiply (bottom);
+          bottom = color_convert (bottom, conversion);
+          bottom = color_premultiply (bottom);
+        }
+
+      if (top_color_state != 0u && target_color_state != 0u &&
+          top_color_state != target_color_state)
+        {
+          uint conversion = top_color_state | (target_color_state << 16);
+
+          top = color_unpremultiply (top);
+          top = color_convert (top, conversion);
+          top = color_premultiply (top);
+        }
+    }
+
+  bottom = bottom * rect_coverage (_bottom_rect, _pos);
+  top = top * rect_coverage (_top_rect, _pos);
+
+  color = blend_mode (bottom, top, VARIATION_BLENDMODE) * _opacity;
+
   position = _pos;
 }
 

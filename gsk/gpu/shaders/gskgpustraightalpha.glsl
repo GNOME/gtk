@@ -2,6 +2,7 @@
 
 #define VARIATION_OPACITY        (1u << 0)
 #define VARIATION_STRAIGHT_ALPHA (1u << 1)
+#define VARIATION_CONVERSION    (GSK_VARIATION >> 2)
 
 #define HAS_VARIATION(var) ((GSK_VARIATION & var) == var)
 
@@ -48,9 +49,18 @@ run (out vec4 color,
     alpha *= _opacity;
 
   if (HAS_VARIATION (VARIATION_STRAIGHT_ALPHA))
-    color = gsk_texture_straight_alpha (_tex_id, _tex_coord) * alpha;
+    color = gsk_texture_straight_alpha (_tex_id, _tex_coord);
   else
-    color = gsk_texture (_tex_id, _tex_coord) * alpha;
+    color = gsk_texture (_tex_id, _tex_coord);
+
+  if (VARIATION_CONVERSION != 0u)
+    {
+      color = color_unpremultiply (color);
+      color = color_convert (color, VARIATION_CONVERSION);
+      color = color_premultiply (color);
+    }
+
+  color = color * alpha;
 
   position = _pos;
 }
