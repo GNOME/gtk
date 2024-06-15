@@ -20,8 +20,10 @@
 #include <glib.h>
 #include <math.h>
 
+#include "gdk/gdkcolor.h"
 #include "gtk/css/gtkcssparserprivate.h"
 #include "gtkcsstypesprivate.h"
+#include "gsk/gskenums.h"
 
 G_BEGIN_DECLS
 
@@ -114,5 +116,12 @@ gboolean gtk_css_color_interpolation_method_parse (GtkCssParser           *parse
 void gtk_css_color_interpolation_method_print (GtkCssColorSpace        in,
                                                GtkCssHueInterpolation  interp,
                                                GString                *string);
+
+
+void gdk_color_init_from_css (GdkColor          *color,
+                              const GtkCssColor *css_color);
+
+GdkColorState * gdk_color_state_from_css (GtkCssColorSpace space);
+GskHueInterpolation gsk_hue_interpolation_from_css (GtkCssHueInterpolation hue);
 
 G_END_DECLS

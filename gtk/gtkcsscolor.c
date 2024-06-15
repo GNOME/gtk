@@ -1164,4 +1164,78 @@ gtk_css_color_interpolation_method_print (GtkCssColorSpace        in,
 }
 
 /* }}} */
+
+void
+gdk_color_init_from_css (GdkColor          *color,
+                         const GtkCssColor *css_color)
+{
+  switch (css_color->color_space)
+    {
+    case GTK_CSS_COLOR_SPACE_SRGB:
+      color->color_state = GDK_COLOR_STATE_SRGB;
+      break;
+    case GTK_CSS_COLOR_SPACE_SRGB_LINEAR:
+      color->color_state = GDK_COLOR_STATE_SRGB_LINEAR;
+      break;
+    case GTK_CSS_COLOR_SPACE_HSL:
+      color->color_state = GDK_COLOR_STATE_HSL;
+      break;
+    case GTK_CSS_COLOR_SPACE_HWB:
+      color->color_state = GDK_COLOR_STATE_HWB;
+      break;
+    case GTK_CSS_COLOR_SPACE_OKLAB:
+      color->color_state = GDK_COLOR_STATE_OKLAB;
+      break;
+    case GTK_CSS_COLOR_SPACE_OKLCH:
+      color->color_state = GDK_COLOR_STATE_OKLCH;
+      break;
+    case GTK_CSS_COLOR_SPACE_DISPLAY_P3:
+      color->color_state = GDK_COLOR_STATE_DISPLAY_P3;
+      break;
+    case GTK_CSS_COLOR_SPACE_XYZ:
+      color->color_state = GDK_COLOR_STATE_XYZ;
+      break;
+    case GTK_CSS_COLOR_SPACE_REC2020:
+      color->color_state = GDK_COLOR_STATE_REC2020;
+      break;
+    case GTK_CSS_COLOR_SPACE_REC2100_PQ:
+      color->color_state = GDK_COLOR_STATE_REC2100_PQ;
+      break;
+    default:
+      g_assert_not_reached ();
+    }
+
+  /* FIXME: handle missing values */
+  color->values[0] = css_color->values[0];
+  color->values[1] = css_color->values[1];
+  color->values[2] = css_color->values[2];
+  color->values[3] = css_color->values[3];
+}
+
+GdkColorState *
+gdk_color_state_from_css (GtkCssColorSpace space)
+{
+  switch (space)
+    {
+    case GTK_CSS_COLOR_SPACE_SRGB: return GDK_COLOR_STATE_SRGB;
+    case GTK_CSS_COLOR_SPACE_SRGB_LINEAR: return GDK_COLOR_STATE_SRGB_LINEAR;
+    case GTK_CSS_COLOR_SPACE_HSL: return GDK_COLOR_STATE_HSL;
+    case GTK_CSS_COLOR_SPACE_HWB: return GDK_COLOR_STATE_HWB;
+    case GTK_CSS_COLOR_SPACE_OKLAB: return GDK_COLOR_STATE_OKLAB;
+    case GTK_CSS_COLOR_SPACE_OKLCH: return GDK_COLOR_STATE_OKLCH;
+    case GTK_CSS_COLOR_SPACE_DISPLAY_P3: return GDK_COLOR_STATE_DISPLAY_P3;
+    case GTK_CSS_COLOR_SPACE_XYZ: return GDK_COLOR_STATE_XYZ;
+    case GTK_CSS_COLOR_SPACE_REC2020: return GDK_COLOR_STATE_REC2020;
+    case GTK_CSS_COLOR_SPACE_REC2100_PQ: return GDK_COLOR_STATE_REC2100_PQ;
+    default: g_assert_not_reached ();
+    }
+}
+
+GskHueInterpolation
+gsk_hue_interpolation_from_css (GtkCssHueInterpolation hue)
+{
+  return (GskHueInterpolation) hue;
+}
+
+
 /* vim:set foldmethod=marker expandtab: */
