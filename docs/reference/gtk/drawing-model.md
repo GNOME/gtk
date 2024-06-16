@@ -105,10 +105,9 @@ happen at higher levels:
 - If some state changes that causes the size of your widget to
   change you call gtk_widget_queue_resize() which will request
   a Layout phase and mark your widget as needing relayout.
-- If some state changes so you need to redraw some area of
-  your widget you use the normal gtk_widget_queue_draw()
-  set of functions. These will request a Paint phase and
-  mark the region as needing redraw.
+- If some state changes so you need to redraw your widget you
+  use gtk_widget_queue_draw() to request a Paint phase for
+  your widget.
 
 There are also a lot of implicit triggers of these from the
 CSS layer (which does animations, resizes and repaints as needed).
