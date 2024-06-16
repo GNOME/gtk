@@ -1,0 +1,39 @@
+a {
+  background-image: linear-gradient(to top bottom, red 0% blue 100%);
+  border-image-source: repeating-linear-gradient(to top bottom, red 0% blue 100%);
+}
+
+b {
+  background-image: linear-gradient(to top left bottom, red 0% blue 100%);
+  border-image-source: repeating-linear-gradient(to top left bottom, red 0% blue 100%);
+}
+
+c {
+  background-image: linear-gradient(to top top, red 0% blue 100%);
+  border-image-source: repeating-linear-gradient(to top top, red 0% blue 100%);
+}
+
+d {
+  background-image: linear-gradient(to top to left, red 0% blue 100%);
+  border-image-source: repeating-linear-gradient(to top to left, red 0% blue 100%);
+}
+
+e {
+  background-image: linear-gradient(to top left 0turn, red 0% blue 100%);
+  border-image-source: repeating-linear-gradient(to top left 0turn, red 0% blue 100%);
+}
+
+f {
+  background-image: linear-gradient(in swishy, red 0% blue 100%);
+  border-image-source: repeating-linear-gradient(in swishy, red 0% blue 100%);
+}
+
+g {
+  background-image: linear-gradient(in srgb longer hue, red 0% blue 100%);
+  border-image-source: repeating-linear-gradient(in srgb longer hue, red 0% blue 100%);
+}
+
+h {
+  background-image: linear-gradient(in srgb in srgb, red 0% blue 100%);
+  border-image-source: repeating-linear-gradient(in srgb in srgb, red 0% blue 100%);
+}

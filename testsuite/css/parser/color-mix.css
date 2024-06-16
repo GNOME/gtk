@@ -125,3 +125,19 @@ ae {
 af {
   color: color-mix(in srgb, 30% red, 70% blue);
 }
+
+ag {
+  color: color-mix(in display-p3, 30% red, 70% blue);
+}
+
+ah {
+  color: color-mix(in xyz, 30% red, 70% blue);
+}
+
+ai {
+  color: color-mix(in rec2020, 30% red, 70% blue);
+}
+
+aj {
+  color: color-mix(in rec2100-pq, 30% red, 70% blue);
+}

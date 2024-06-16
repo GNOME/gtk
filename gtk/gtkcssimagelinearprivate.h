@@ -48,6 +48,9 @@ struct _GtkCssImageLinear
   guint repeating :1;
   GtkCssValue *angle;
 
+  GtkCssColorSpace color_space;
+  GtkCssHueInterpolation hue_interp;
+
   guint n_stops;
   GtkCssImageLinearColorStop *color_stops;
 };

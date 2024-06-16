@@ -244,6 +244,9 @@ gtk_css_image_linear_snapshot (GtkCssImage        *image,
       last = i;
     }
 
+  if (linear->color_space != GTK_CSS_COLOR_SPACE_SRGB)
+    g_warning_once ("Gradient interpolation color spaces are not supported yet");
+
   if (linear->repeating)
     {
       gtk_snapshot_append_repeating_linear_gradient (
@@ -304,75 +307,102 @@ gtk_css_image_linear_parse_first_arg (GtkCssImageLinear *linear,
                                       GArray            *stop_array)
 {
   guint i;
+  gboolean has_colorspace = FALSE;
+  gboolean has_side_or_angle = FALSE;
+  guint retval = 1;
 
-  if (gtk_css_parser_try_ident (parser, "to"))
+  do
     {
-      for (i = 0; i < 2; i++)
+      if (!has_colorspace &&gtk_css_color_interpolation_method_can_parse (parser))
         {
-          if (gtk_css_parser_try_ident (parser, "left"))
-            {
-              if (linear->side & ((1 << GTK_CSS_LEFT) | (1 << GTK_CSS_RIGHT)))
-                {
-                  gtk_css_parser_error_syntax (parser, "Expected 'top', 'bottom' or comma");
-                  return 0;
-                }
-              linear->side |= (1 << GTK_CSS_LEFT);
-            }
-          else if (gtk_css_parser_try_ident (parser, "right"))
-            {
-              if (linear->side & ((1 << GTK_CSS_LEFT) | (1 << GTK_CSS_RIGHT)))
-                {
-                  gtk_css_parser_error_syntax (parser, "Expected 'top', 'bottom' or comma");
-                  return 0;
-                }
-              linear->side |= (1 << GTK_CSS_RIGHT);
-            }
-          else if (gtk_css_parser_try_ident (parser, "top"))
-            {
-              if (linear->side & ((1 << GTK_CSS_TOP) | (1 << GTK_CSS_BOTTOM)))
-                {
-                  gtk_css_parser_error_syntax (parser, "Expected 'left', 'right' or comma");
-                  return 0;
-                }
-              linear->side |= (1 << GTK_CSS_TOP);
-            }
-          else if (gtk_css_parser_try_ident (parser, "bottom"))
-            {
-              if (linear->side & ((1 << GTK_CSS_TOP) | (1 << GTK_CSS_BOTTOM)))
-                {
-                  gtk_css_parser_error_syntax (parser, "Expected 'left', 'right' or comma");
-                  return 0;
-                }
-              linear->side |= (1 << GTK_CSS_BOTTOM);
-            }
-          else
-            break;
+          if (!gtk_css_color_interpolation_method_parse (parser, &linear->color_space, &linear->hue_interp))
+            return 0;
+          has_colorspace = TRUE;
         }
-
-      if (linear->side == 0)
+      else if (!has_side_or_angle && gtk_css_parser_try_ident (parser, "to"))
         {
-          gtk_css_parser_error_syntax (parser, "Expected side that gradient should go to");
+          gtk_css_parser_consume_token (parser);
+
+          for (i = 0; i < 2; i++)
+            {
+              if (gtk_css_parser_try_ident (parser, "left"))
+                {
+                  if (linear->side & ((1 << GTK_CSS_LEFT) | (1 << GTK_CSS_RIGHT)))
+                    {
+                      gtk_css_parser_error_syntax (parser, "Expected 'top', 'bottom' or comma");
+                      return 0;
+                    }
+                  linear->side |= (1 << GTK_CSS_LEFT);
+                }
+              else if (gtk_css_parser_try_ident (parser, "right"))
+                {
+                  if (linear->side & ((1 << GTK_CSS_LEFT) | (1 << GTK_CSS_RIGHT)))
+                    {
+                      gtk_css_parser_error_syntax (parser, "Expected 'top', 'bottom' or comma");
+                      return 0;
+                    }
+                  linear->side |= (1 << GTK_CSS_RIGHT);
+                }
+              else if (gtk_css_parser_try_ident (parser, "top"))
+                {
+                  if (linear->side & ((1 << GTK_CSS_TOP) | (1 << GTK_CSS_BOTTOM)))
+                    {
+                      gtk_css_parser_error_syntax (parser, "Expected 'left', 'right' or comma");
+                      return 0;
+                    }
+                  linear->side |= (1 << GTK_CSS_TOP);
+                }
+              else if (gtk_css_parser_try_ident (parser, "bottom"))
+                {
+                  if (linear->side & ((1 << GTK_CSS_TOP) | (1 << GTK_CSS_BOTTOM)))
+                    {
+                      gtk_css_parser_error_syntax (parser, "Expected 'left', 'right' or comma");
+                      return 0;
+                    }
+                  linear->side |= (1 << GTK_CSS_BOTTOM);
+                }
+              else
+                break;
+            }
+
+          if (linear->side == 0)
+            {
+              gtk_css_parser_error_syntax (parser, "Expected side that gradient should go to");
+              return 0;
+            }
+
+          has_side_or_angle = TRUE;
+        }
+      else if (!has_side_or_angle && gtk_css_number_value_can_parse (parser))
+        {
+          linear->angle = gtk_css_number_value_parse (parser, GTK_CSS_PARSE_ANGLE);
+          if (linear->angle == NULL)
+            return 0;
+
+          has_side_or_angle = TRUE;
+        }
+      else if (gtk_css_token_is (gtk_css_parser_get_token (parser), GTK_CSS_TOKEN_COMMA))
+        {
+          retval = 1;
+          break;
+        }
+      else
+        {
+          if (gtk_css_image_linear_parse_color_stop (linear, parser, stop_array))
+            {
+              retval = 2;
+              break;
+            }
+
           return 0;
         }
-
-      return 1;
     }
-  else if (gtk_css_number_value_can_parse (parser))
-    {
-      linear->angle = gtk_css_number_value_parse (parser, GTK_CSS_PARSE_ANGLE);
-      if (linear->angle == NULL)
-        return 0;
+  while (!(has_colorspace && has_side_or_angle));
 
-      return 1;
-    }
-  else
-    {
-      linear->side = 1 << GTK_CSS_BOTTOM;
-      if (!gtk_css_image_linear_parse_color_stop (linear, parser, stop_array))
-        return 0;
+  if (linear->angle == NULL && linear->side == 0)
+    linear->side = (1 << GTK_CSS_BOTTOM);
 
-      return 2;
-    }
+  return retval;
 }
 
 typedef struct
@@ -437,6 +467,7 @@ gtk_css_image_linear_print (GtkCssImage *image,
 {
   GtkCssImageLinear *linear = GTK_CSS_IMAGE_LINEAR (image);
   guint i;
+  gboolean has_printed = FALSE;
 
   if (linear->repeating)
     g_string_append (string, "repeating-linear-gradient(");
@@ -459,14 +490,28 @@ gtk_css_image_linear_print (GtkCssImage *image,
           else if (linear->side & (1 << GTK_CSS_RIGHT))
             g_string_append (string, " right");
 
-          g_string_append (string, ", ");
+          has_printed = TRUE;
         }
     }
   else
     {
       gtk_css_value_print (linear->angle, string);
-      g_string_append (string, ", ");
+      has_printed = TRUE;
     }
+
+  if (linear->color_space != GTK_CSS_COLOR_SPACE_SRGB)
+    {
+      if (has_printed)
+        g_string_append_c (string, ' ');
+
+      gtk_css_color_interpolation_method_print (linear->color_space,
+                                                linear->hue_interp,
+                                                string);
+      has_printed = TRUE;
+    }
+
+  if (has_printed)
+    g_string_append (string, ", ");
 
   for (i = 0; i < linear->n_stops; i++)
     {
@@ -499,6 +544,8 @@ gtk_css_image_linear_compute (GtkCssImage          *image,
   copy = g_object_new (GTK_TYPE_CSS_IMAGE_LINEAR, NULL);
   copy->repeating = linear->repeating;
   copy->side = linear->side;
+  copy->color_space = linear->color_space;
+  copy->hue_interp = linear->hue_interp;
 
   if (linear->angle)
     copy->angle = gtk_css_value_compute (linear->angle, property_id, context);
@@ -545,11 +592,15 @@ gtk_css_image_linear_transition (GtkCssImage *start_image,
   end = GTK_CSS_IMAGE_LINEAR (end_image);
 
   if ((start->repeating != end->repeating)
-      || (start->n_stops != end->n_stops))
+      || (start->n_stops != end->n_stops)
+      || (start->color_space != end->color_space)
+      || (start->hue_interp != end->hue_interp))
     return GTK_CSS_IMAGE_CLASS (_gtk_css_image_linear_parent_class)->transition (start_image, end_image, property_id, progress);
 
   result = g_object_new (GTK_TYPE_CSS_IMAGE_LINEAR, NULL);
   result->repeating = start->repeating;
+  result->color_space = start->color_space;
+  result->hue_interp = start->hue_interp;
 
   if (start->side != end->side)
     goto fail;
@@ -618,7 +669,9 @@ gtk_css_image_linear_equal (GtkCssImage *image1,
   if (linear1->repeating != linear2->repeating ||
       linear1->side != linear2->side ||
       (linear1->side == 0 && !gtk_css_value_equal (linear1->angle, linear2->angle)) ||
-      linear1->n_stops != linear2->n_stops)
+      linear1->n_stops != linear2->n_stops ||
+      linear1->color_space != linear2->color_space ||
+      linear1->hue_interp != linear2->hue_interp)
     return FALSE;
 
   for (i = 0; i < linear1->n_stops; i++)

@@ -37,3 +37,18 @@ i {
 j {
   background-image: radial-gradient(20px 20px at 20px 30px, red, yellow, green);
 }
+
+k {
+  background-image: radial-gradient(in srgb 20px 20px, red, yellow);
+  border-image-source: repeating-radial-gradient(in srgb 20px 20px, red, yellow);
+}
+
+l {
+  background-image: radial-gradient(in oklch 20px 20px, red, yellow);
+  border-image-source: repeating-radial-gradient(in oklch 20px 20px, red, yellow);
+}
+
+m {
+  background-image: radial-gradient(circle in hsl longer hue, red, yellow);
+  border-image-source: repeating-radial-gradient(circle in hsl longer hue, red, yellow);
+}

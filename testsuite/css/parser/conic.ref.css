@@ -1,0 +1,43 @@
+a {
+  background-image: conic-gradient(rgb(255,255,0), rgb(0,128,0));
+}
+
+b {
+  background-image: conic-gradient(rgb(255,255,0) 0, rgb(0,128,0) 100%);
+}
+
+c {
+  background-image: conic-gradient(rgb(255,255,0), rgb(0,128,0));
+}
+
+d {
+  background-image: conic-gradient(at left top, rgb(255,255,0), rgb(0,128,0));
+}
+
+e {
+  background-image: conic-gradient(at 25% bottom, rgb(255,0,0), rgb(255,255,0), rgb(0,128,0));
+}
+
+f {
+  background-image: conic-gradient(from 20deg, rgb(255,0,0), rgb(255,255,0) 50%, rgb(0,128,0));
+}
+
+g {
+  background-image: conic-gradient(at 20px 20px from 0.25turn, rgb(255,0,0), rgb(255,255,0), rgb(0,128,0));
+}
+
+h {
+  background-image: conic-gradient(from 20deg in oklab, rgb(255,0,0), rgb(255,255,0), rgb(0,128,0));
+}
+
+i {
+  background-image: conic-gradient(in rec2020, rgb(255,0,0), rgb(255,255,0), rgb(0,128,0));
+}
+
+j {
+  background-image: conic-gradient(from 10deg in hsl longer hue, rgb(255,0,0), rgb(255,255,0), rgb(0,128,0));
+}
+
+k {
+  background-image: conic-gradient(at 20px 20px from -10deg, rgb(255,0,0), rgb(255,255,0));
+}

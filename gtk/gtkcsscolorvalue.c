@@ -1651,6 +1651,8 @@ parse_color_color_channel (GtkCssParser *parser,
                            ParseData    *data,
                            guint         arg)
 {
+  const GtkCssToken *token;
+
   switch (arg)
     {
     case 0:
@@ -1690,7 +1692,11 @@ parse_color_color_channel (GtkCssParser *parser,
           return 1;
         }
 
-      gtk_css_parser_error_syntax (parser, "Invalid color space in color()");
+      token = gtk_css_parser_get_token (parser);
+      gtk_css_parser_error_syntax (parser,
+                                   "Invalid color space in color(): %s",
+                                   gtk_css_token_to_string (token));
+
       return 0;
 
     case 1:

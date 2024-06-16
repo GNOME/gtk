@@ -194,6 +194,9 @@ gtk_css_image_radial_snapshot (GtkCssImage *image,
       last = i;
     }
 
+  if (radial->color_space != GTK_CSS_COLOR_SPACE_SRGB)
+    g_warning_once ("Gradient interpolation color spaces are not supported yet");
+
  if (radial->repeating)
    gtk_snapshot_append_repeating_radial_gradient (snapshot,
                                                   &GRAPHENE_RECT_INIT (0, 0, width, height),
@@ -255,6 +258,7 @@ gtk_css_image_radial_parse_first_arg (GtkCssImageRadial *radial,
 {
   gboolean has_shape = FALSE;
   gboolean has_size = FALSE;
+  gboolean has_colorspace = FALSE;
   gboolean found_one = FALSE;
   guint i;
   static struct {
@@ -270,7 +274,13 @@ gtk_css_image_radial_parse_first_arg (GtkCssImageRadial *radial,
   found_one = FALSE;
 
   do {
-    if (!has_shape && gtk_css_parser_try_ident (parser, "circle"))
+    if (!has_colorspace && gtk_css_color_interpolation_method_can_parse (parser))
+      {
+        if (!gtk_css_color_interpolation_method_parse (parser, &radial->color_space, &radial->hue_interp))
+          return 0;
+        has_colorspace = TRUE;
+      }
+    else if (!has_shape && gtk_css_parser_try_ident (parser, "circle"))
       {
         radial->circle = TRUE;
         found_one = has_shape = TRUE;
@@ -467,6 +477,14 @@ gtk_css_image_radial_print (GtkCssImage *image,
   g_string_append (string, " at ");
   gtk_css_value_print (radial->position, string);
 
+  if (radial->color_space != GTK_CSS_COLOR_SPACE_SRGB)
+    {
+      g_string_append_c (string, ' ');
+      gtk_css_color_interpolation_method_print (radial->color_space,
+                                                radial->hue_interp,
+                                                string);
+    }
+
   g_string_append (string, ", ");
 
   for (i = 0; i < radial->n_stops; i++)
@@ -501,6 +519,8 @@ gtk_css_image_radial_compute (GtkCssImage          *image,
   copy->repeating = radial->repeating;
   copy->circle = radial->circle;
   copy->size = radial->size;
+  copy->color_space = radial->color_space;
+  copy->hue_interp = radial->hue_interp;
 
   copy->position = gtk_css_value_compute (radial->position, property_id, context);
 
@@ -554,7 +574,9 @@ gtk_css_image_radial_transition (GtkCssImage *start_image,
   if (start->repeating != end->repeating ||
       start->n_stops != end->n_stops ||
       start->size != end->size ||
-      start->circle != end->circle)
+      start->circle != end->circle ||
+      start->color_space != end->color_space ||
+      start->hue_interp != end->hue_interp)
     return GTK_CSS_IMAGE_CLASS (_gtk_css_image_radial_parent_class)->transition (start_image, end_image, property_id, progress);
 
   result = g_object_new (GTK_TYPE_CSS_IMAGE_RADIAL, NULL);
@@ -645,7 +667,9 @@ gtk_css_image_radial_equal (GtkCssImage *image1,
       (radial1->sizes[0] && radial2->sizes[0] && !gtk_css_value_equal (radial1->sizes[0], radial2->sizes[0])) ||
       ((radial1->sizes[1] == NULL) != (radial2->sizes[1] == NULL)) ||
       (radial1->sizes[1] && radial2->sizes[1] && !gtk_css_value_equal (radial1->sizes[1], radial2->sizes[1])) ||
-      radial1->n_stops != radial2->n_stops)
+      radial1->n_stops != radial2->n_stops ||
+      radial1->color_space != radial2->color_space ||
+      radial1->hue_interp != radial2->hue_interp)
     return FALSE;
 
   for (i = 0; i < radial1->n_stops; i++)

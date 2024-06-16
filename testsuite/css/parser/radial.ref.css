@@ -37,3 +37,18 @@ i {
 j {
   background-image: radial-gradient(ellipse 20px 20px at 20px 30px, rgb(255,0,0), rgb(255,255,0), rgb(0,128,0));
 }
+
+k {
+  background-image: radial-gradient(ellipse 20px 20px at center, rgb(255,0,0), rgb(255,255,0));
+  border-image-source: repeating-radial-gradient(ellipse 20px 20px at center, rgb(255,0,0), rgb(255,255,0));
+}
+
+l {
+  background-image: radial-gradient(ellipse 20px 20px at center in oklch, rgb(255,0,0), rgb(255,255,0));
+  border-image-source: repeating-radial-gradient(ellipse 20px 20px at center in oklch, rgb(255,0,0), rgb(255,255,0));
+}
+
+m {
+  background-image: radial-gradient(circle farthest-corner at center in hsl longer hue, rgb(255,0,0), rgb(255,255,0));
+  border-image-source: repeating-radial-gradient(circle farthest-corner at center in hsl longer hue, rgb(255,0,0), rgb(255,255,0));
+}

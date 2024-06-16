@@ -102,3 +102,23 @@ u {
   background-image: linear-gradient(rgb(255,0,0) -5px, rgb(0,128,0) 20em, rgb(0,0,255), rgb(128,0,128) -42%, rgb(255,192,203) 3pt);
   border-image-source: repeating-linear-gradient(rgb(255,0,0) -5px, rgb(0,128,0) 20em, rgb(0,0,255), rgb(128,0,128) -42%, rgb(255,192,203) 3pt);
 }
+
+v {
+  background-image: linear-gradient(to top left, rgb(255,0,0) 0, rgb(0,128,0) 100%);
+  border-image-source: repeating-linear-gradient(to top left, rgb(255,0,0) 0, rgb(0,128,0) 100%);
+}
+
+w {
+  background-image: linear-gradient(to top left in hsl longer hue, rgb(255,0,0) 0, rgb(0,128,0) 100%);
+  border-image-source: repeating-linear-gradient(to top left in hsl longer hue, rgb(255,0,0) 0, rgb(0,128,0) 100%);
+}
+
+x {
+  background-image: linear-gradient(25deg in rec2020, rgb(255,0,0) 0, rgb(0,128,0) 100%);
+  border-image-source: repeating-linear-gradient(25deg in rec2020, rgb(255,0,0) 0, rgb(0,128,0) 100%);
+}
+
+y {
+  background-image: linear-gradient(in hwb, rgb(255,0,0) 0, rgb(0,128,0) 100%);
+  border-image-source: repeating-linear-gradient(in hwb, rgb(255,0,0) 0, rgb(0,128,0) 100%);
+}
