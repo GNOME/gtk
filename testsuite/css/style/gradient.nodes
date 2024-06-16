@@ -7,4 +7,4 @@ window.background:dir(ltr)
     label:dir(ltr)
       background-image: radial-gradient(ellipse farthest-corner at center 30px, rgb(255,255,0), rgb(255,0,0) 30%, rgb(0,0,255)); /* gradient.css:10:3-89 */
     image:dir(ltr)
-      background-image: self-gradient(from center 30px at 25deg, rgb(255,255,0), rgb(255,0,0) 30%, rgb(0,0,255)); /* gradient.css:14:3-83 */
+      background-image: conic-gradient(at center 30px from 25deg, rgb(255,255,0), rgb(255,0,0) 30%, rgb(0,0,255)); /* gradient.css:14:3-83 */

@@ -81,7 +81,10 @@ gtk_css_image_conic_snapshot (GtkCssImage        *image,
       last = i;
     }
 
-    gtk_snapshot_append_conic_gradient (
+  if (self->color_space != GTK_CSS_COLOR_SPACE_SRGB)
+    g_warning_once ("Gradient interpolation color spaces are not supported yet");
+
+  gtk_snapshot_append_conic_gradient (
           snapshot,
           &GRAPHENE_RECT_INIT (0, 0, width, height),
           &GRAPHENE_POINT_INIT (_gtk_css_position_value_get_x (self->center, width),
@@ -172,37 +175,57 @@ gtk_css_image_conic_parse_first_arg (GtkCssImageConic *self,
                                      GtkCssParser      *parser,
                                      GArray            *stop_array)
 {
-  gboolean nothing_parsed = TRUE;
+  gboolean has_rotation = FALSE;
+  gboolean has_center = FALSE;
+  gboolean has_colorspace = FALSE;
+  int retval = 1;
 
-  if (gtk_css_parser_try_ident (parser, "from"))
+  do
     {
-      self->rotation = gtk_css_number_value_parse (parser, GTK_CSS_PARSE_ANGLE);
-      if (self->rotation == NULL)
-        return 0;
-      nothing_parsed = FALSE;
+      if (!has_colorspace && gtk_css_color_interpolation_method_can_parse (parser))
+        {
+          if (!gtk_css_color_interpolation_method_parse (parser, &self->color_space, &self->hue_interp))
+            return 0;
+          has_colorspace = TRUE;
+        }
+      else if (!has_rotation && gtk_css_parser_try_ident (parser, "from"))
+        {
+          self->rotation = gtk_css_number_value_parse (parser, GTK_CSS_PARSE_ANGLE);
+          if (self->rotation == NULL)
+            return 0;
+          has_rotation = TRUE;
+        }
+      else if (!has_center && gtk_css_parser_try_ident (parser, "at"))
+        {
+          self->center = _gtk_css_position_value_parse (parser);
+          if (self->center == NULL)
+            return 0;
+          has_center = TRUE;
+        }
+      else if (gtk_css_token_is (gtk_css_parser_get_token (parser), GTK_CSS_TOKEN_COMMA))
+        {
+          retval = 1;
+          break;
+        }
+      else
+        {
+          if (gtk_css_image_conic_parse_color_stop (self, parser, stop_array))
+            {
+              retval = 2;
+              break;
+            }
+        }
     }
-  else
-    {
-      self->rotation = gtk_css_number_value_new (0, GTK_CSS_DEG);
-    }
+  while (!(has_colorspace && has_rotation && has_center));
 
-  if (gtk_css_parser_try_ident (parser, "at"))
-    {
-      self->center = _gtk_css_position_value_parse (parser);
-      if (self->center == NULL)
-        return 0;
-      nothing_parsed = FALSE;
-    }
-  else
-    {
-      self->center = _gtk_css_position_value_new (gtk_css_number_value_new (50, GTK_CSS_PERCENT),
-                                                  gtk_css_number_value_new (50, GTK_CSS_PERCENT));
-    }
+  if (!has_rotation)
+    self->rotation = gtk_css_number_value_new (0, GTK_CSS_DEG);
 
-  if (!nothing_parsed)
-    return 1;
+  if (!has_center)
+    self->center = _gtk_css_position_value_new (gtk_css_number_value_new (50, GTK_CSS_PERCENT),
+                                                gtk_css_number_value_new (50, GTK_CSS_PERCENT));
 
-  return 1 + gtk_css_image_conic_parse_color_stop (self, parser, stop_array);
+  return retval;
 }
 
 typedef struct
@@ -265,7 +288,7 @@ gtk_css_image_conic_print (GtkCssImage *image,
   gboolean written = FALSE;
   guint i;
 
-  g_string_append (string, "self-gradient(");
+  g_string_append (string, "conic-gradient(");
 
   if (self->center)
     {
@@ -274,7 +297,7 @@ gtk_css_image_conic_print (GtkCssImage *image,
 
       if (!gtk_css_value_equal (self->center, compare))
         {
-          g_string_append (string, "from ");
+          g_string_append (string, "at ");
           gtk_css_value_print (self->center, string);
           written = TRUE;
         }
@@ -286,8 +309,19 @@ gtk_css_image_conic_print (GtkCssImage *image,
     {
       if (written)
         g_string_append_c (string, ' ');
-      g_string_append (string, "at ");
+      g_string_append (string, "from ");
       gtk_css_value_print (self->rotation, string);
+      written = TRUE;
+    }
+
+  if (self->color_space != GTK_CSS_COLOR_SPACE_SRGB)
+    {
+      if (written)
+        g_string_append_c (string, ' ');
+      gtk_css_color_interpolation_method_print (self->color_space,
+                                                self->hue_interp,
+                                                string);
+      written = TRUE;
     }
 
   if (written)
@@ -325,6 +359,8 @@ gtk_css_image_conic_compute (GtkCssImage          *image,
 
   copy->center = gtk_css_value_compute (self->center, property_id, context);
   copy->rotation = gtk_css_value_compute (self->rotation, property_id, context);
+  copy->color_space = self->color_space;
+  copy->hue_interp = self->hue_interp;
 
   copy->n_stops = self->n_stops;
   copy->color_stops = g_malloc (sizeof (GtkCssImageConicColorStop) * copy->n_stops);
@@ -379,6 +415,9 @@ gtk_css_image_conic_transition (GtkCssImage *start_image,
   result->rotation = gtk_css_value_transition (start->rotation, end->rotation, property_id, progress);
   if (result->rotation == NULL)
     goto fail;
+
+  result->color_space = start->color_space;
+  result->hue_interp = start->hue_interp;
 
   result->color_stops = g_malloc (sizeof (GtkCssImageConicColorStop) * start->n_stops);
   result->n_stops = 0;
@@ -435,7 +474,9 @@ gtk_css_image_conic_equal (GtkCssImage *image1,
   guint i;
 
   if (!gtk_css_value_equal (conic1->center, conic2->center) ||
-      !gtk_css_value_equal (conic1->rotation, conic2->rotation))
+      !gtk_css_value_equal (conic1->rotation, conic2->rotation) ||
+      conic1->color_space != conic2->color_space ||
+      conic1->hue_interp != conic2->hue_interp)
     return FALSE;
 
   for (i = 0; i < conic1->n_stops; i++)

@@ -1,0 +1,43 @@
+a {
+  background-image: conic-gradient(yellow, green);
+}
+
+b {
+  background-image: conic-gradient(at center, yellow 0%, green 100%);
+}
+
+c {
+  background-image: conic-gradient(at 50% 50%, yellow, green);
+}
+
+d {
+  background-image: conic-gradient(at left top, yellow, green);
+}
+
+e {
+  background-image: conic-gradient(at 25% bottom, red, yellow, green);
+}
+
+f {
+  background-image: conic-gradient(from 20deg, red, yellow 50%, green);
+}
+
+g {
+  background-image: conic-gradient(from 0.25turn at 20px 20px, red, yellow, green);
+}
+
+h {
+  background-image: conic-gradient(from 20deg in oklab, red, yellow, green);
+}
+
+i {
+  background-image: conic-gradient(in rec2020 at center, red, yellow, green);
+}
+
+j {
+  background-image: conic-gradient(in hsl longer hue from 10deg, red, yellow, green);
+}
+
+k {
+  background-image: conic-gradient(in srgb from -10deg at 20px 20px, red, yellow);
+}
