@@ -101,3 +101,19 @@ ae {
 af {
   color: color(srgb 0.3 0 0.7);
 }
+
+ag {
+  color: color(display-p3 0.275246 0.0600861 0.71328);
+}
+
+ah {
+  color: color(xyz 0.250054 0.114326 0.671172);
+}
+
+ai {
+  color: color(rec2020 0.355452 0.105084 0.684877);
+}
+
+aj {
+  color: color(rec2100-pq 0.362517 0.235874 0.464457);
+}

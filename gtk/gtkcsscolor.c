@@ -1050,19 +1050,39 @@ gtk_css_color_interpolation_method_parse (GtkCssParser           *parser,
       gtk_css_parser_consume_token (parser);
       *in = GTK_CSS_COLOR_SPACE_HWB;
     }
-  else if (gtk_css_token_is_ident (token, "oklch"))
-    {
-      gtk_css_parser_consume_token (parser);
-      *in = GTK_CSS_COLOR_SPACE_OKLCH;
-    }
   else if (gtk_css_token_is_ident (token, "oklab"))
     {
       gtk_css_parser_consume_token (parser);
       *in = GTK_CSS_COLOR_SPACE_OKLAB;
     }
+  else if (gtk_css_token_is_ident (token, "oklch"))
+    {
+      gtk_css_parser_consume_token (parser);
+      *in = GTK_CSS_COLOR_SPACE_OKLCH;
+    }
+  else if (gtk_css_token_is_ident (token, "display-p3"))
+    {
+      gtk_css_parser_consume_token (parser);
+      *in = GTK_CSS_COLOR_SPACE_DISPLAY_P3;
+    }
+  else if (gtk_css_token_is_ident (token, "xyz"))
+    {
+      gtk_css_parser_consume_token (parser);
+      *in = GTK_CSS_COLOR_SPACE_XYZ;
+    }
+  else if (gtk_css_token_is_ident (token, "rec2020"))
+    {
+      gtk_css_parser_consume_token (parser);
+      *in = GTK_CSS_COLOR_SPACE_REC2020;
+    }
+  else if (gtk_css_token_is_ident (token, "rec2100-pq"))
+    {
+      gtk_css_parser_consume_token (parser);
+      *in = GTK_CSS_COLOR_SPACE_REC2100_PQ;
+    }
   else
     {
-      gtk_css_parser_error_syntax (parser, "Invalid color space");
+      gtk_css_parser_error_syntax (parser, "Invalid color space: %s", gtk_css_token_to_string (token));
       return FALSE;
     }
 

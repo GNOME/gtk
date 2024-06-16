@@ -131,3 +131,19 @@ af {
 ag {
   color: oklab(1 0.4 0.4);
 }
+
+ah {
+  color: color(display-p3 0.5 0.5 0.5);
+}
+
+ai {
+  color: color(xyz 0.5 0.5 0.5);
+}
+
+aj {
+  color: color(rec2020 0.5 0.5 0.5);
+}
+
+ak {
+  color: color(rec2100-pq 0.5 0.5 0.5);
+}
