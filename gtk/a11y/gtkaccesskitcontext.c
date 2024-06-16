@@ -1866,6 +1866,26 @@ gtk_accesskit_context_add_to_update (GtkAccessKitContext   *self,
       accesskit_node_builder_add_action (builder,
                                          ACCESSKIT_ACTION_SET_TEXT_SELECTION);
     }
+  else if (GTK_IS_LABEL (accessible))
+    {
+      GtkLabel *label = GTK_LABEL (accessible);
+
+      if (gtk_label_get_selectable (label))
+        {
+          PangoLayout *layout = gtk_label_get_layout (label);
+          int anchor = _gtk_label_get_selection_bound (label);
+          int focus = _gtk_label_get_cursor_position (label);
+          accesskit_text_selection selection;
+
+          usv_offset_to_text_position (&self->single_text_layout, layout,
+                                       anchor, &selection.anchor);
+          usv_offset_to_text_position (&self->single_text_layout, layout,
+                                       focus, &selection.focus);
+          accesskit_node_builder_set_text_selection (builder, selection);
+          accesskit_node_builder_add_action (builder,
+                                             ACCESSKIT_ACTION_SET_TEXT_SELECTION);
+        }
+    }
   else if (GTK_IS_EDITABLE (accessible) &&
            role != ACCESSKIT_ROLE_GENERIC_CONTAINER)
     {
@@ -2030,6 +2050,30 @@ gtk_accesskit_context_do_action (GtkAccessKitContext            *self,
 
         gtk_text_buffer_select_range (buffer, &focus, &anchor);
         gtk_text_view_scroll_to_iter (text_view, &focus, 0, FALSE, 0, 0);
+      }
+    else if (GTK_IS_LABEL (accessible))
+      {
+        GtkLabel *label = GTK_LABEL (accessible);
+        PangoLayout *layout;
+        gint anchor, focus;
+
+        if (!gtk_label_get_selectable (label))
+          return;
+
+        layout = gtk_label_get_layout (label);
+
+        anchor =
+          text_position_to_usv_offset (&self->single_text_layout, layout,
+                                       &selection->anchor);
+        if (anchor == -1)
+          return;
+        focus =
+          text_position_to_usv_offset (&self->single_text_layout, layout,
+                                       &selection->focus);
+        if (focus == -1)
+          return;
+
+        gtk_label_select_region (label, anchor, focus);
       }
     else if (GTK_IS_EDITABLE (accessible))
       {
