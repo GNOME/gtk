@@ -105,6 +105,8 @@ void gtk_css_color_space_get_coord_range (GtkCssColorSpace  color_space,
                                           float            *lower,
                                           float            *upper);
 
+gboolean gtk_css_color_interpolation_method_can_parse (GtkCssParser *parser);
+
 gboolean gtk_css_color_interpolation_method_parse (GtkCssParser           *parser,
                                                    GtkCssColorSpace       *in,
                                                    GtkCssHueInterpolation *interp);

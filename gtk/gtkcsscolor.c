@@ -1010,6 +1010,12 @@ parse_hue_interpolation (GtkCssParser           *parser,
 }
 
 gboolean
+gtk_css_color_interpolation_method_can_parse (GtkCssParser *parser)
+{
+  return gtk_css_token_is_ident (gtk_css_parser_get_token (parser), "in");
+}
+
+gboolean
 gtk_css_color_interpolation_method_parse (GtkCssParser           *parser,
                                           GtkCssColorSpace       *in,
                                           GtkCssHueInterpolation *interp)
