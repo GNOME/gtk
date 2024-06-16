@@ -994,6 +994,11 @@ parse_hue_interpolation (GtkCssParser           *parser,
       gtk_css_parser_consume_token (parser);
       *interp = GTK_CSS_HUE_INTERPOLATION_DECREASING;
     }
+  else if (gtk_css_token_is_ident (token, "hue"))
+    {
+      gtk_css_parser_error_syntax (parser, "'hue' goes after the interpolation method");
+      return FALSE;
+    }
   else
     {
       *interp = GTK_CSS_HUE_INTERPOLATION_SHORTER;
