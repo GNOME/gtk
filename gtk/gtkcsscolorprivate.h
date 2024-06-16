@@ -21,21 +21,10 @@
 #include <math.h>
 
 #include "gtk/css/gtkcssparserprivate.h"
+#include "gtkcsstypesprivate.h"
 
 G_BEGIN_DECLS
 
-typedef enum {
-  GTK_CSS_COLOR_SPACE_SRGB,
-  GTK_CSS_COLOR_SPACE_SRGB_LINEAR,
-  GTK_CSS_COLOR_SPACE_HSL,
-  GTK_CSS_COLOR_SPACE_HWB,
-  GTK_CSS_COLOR_SPACE_OKLAB,
-  GTK_CSS_COLOR_SPACE_OKLCH,
-  GTK_CSS_COLOR_SPACE_DISPLAY_P3,
-  GTK_CSS_COLOR_SPACE_XYZ,
-  GTK_CSS_COLOR_SPACE_REC2020,
-  GTK_CSS_COLOR_SPACE_REC2100_PQ,
-} GtkCssColorSpace;
 
 typedef struct
 {
@@ -99,14 +88,6 @@ char *  gtk_css_color_to_string (const GtkCssColor      *color);
 void    gtk_css_color_convert   (const GtkCssColor      *input,
                                  GtkCssColorSpace        dest,
                                  GtkCssColor            *output);
-
-typedef enum
-{
-  GTK_CSS_HUE_INTERPOLATION_SHORTER,
-  GTK_CSS_HUE_INTERPOLATION_LONGER,
-  GTK_CSS_HUE_INTERPOLATION_INCREASING,
-  GTK_CSS_HUE_INTERPOLATION_DECREASING,
-} GtkCssHueInterpolation;
 
 void    gtk_css_color_interpolate (const GtkCssColor      *from,
                                    const GtkCssColor      *to,
