@@ -99,16 +99,15 @@ reaches the requested phase. However, in practice most things
 happen at higher levels:
 
 - If you are doing an animation, you can use
-  gtk_widget_add_tick_callback() which will cause a regular
+  [method@Gtk.Widget.add_tick_callback] which will cause a regular
   beating of the clock with a callback in the Update phase
   until you stop the tick.
 - If some state changes that causes the size of your widget to
-  change you call gtk_widget_queue_resize() which will request
+  change you call [method@Gtk.Widget.queue_resize] which will request
   a Layout phase and mark your widget as needing relayout.
-- If some state changes so you need to redraw some area of
-  your widget you use the normal gtk_widget_queue_draw()
-  set of functions. These will request a Paint phase and
-  mark the region as needing redraw.
+- If some state changes so you need to redraw your widget you
+  use [method@Gtk.Widget.queue_draw] to request a Paint phase for
+  your widget.
 
 There are also a lot of implicit triggers of these from the
 CSS layer (which does animations, resizes and repaints as needed).
