@@ -1,6 +1,7 @@
-FROM fedora:39
+FROM fedora:40
 
 RUN dnf -y install \
+    abattis-cantarell-fonts \
     adwaita-icon-theme \
     avahi-gobject-devel \
     cairo-devel \
