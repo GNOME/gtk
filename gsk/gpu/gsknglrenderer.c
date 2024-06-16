@@ -96,6 +96,8 @@ gsk_ngl_renderer_free_backbuffer (GskNglRenderer *self)
   g_clear_object (&self->backbuffer);
 }
 
+extern GdkColorState * find_compositing_color_state (GdkSurface *surface);
+
 static GskGpuImage *
 gsk_ngl_renderer_get_backbuffer (GskGpuRenderer *renderer)
 {
@@ -110,14 +112,16 @@ gsk_ngl_renderer_get_backbuffer (GskGpuRenderer *renderer)
 
   if (self->backbuffer == NULL ||
       gsk_gpu_image_get_width (self->backbuffer) != ceil (gdk_surface_get_width (surface) * scale) ||
-      gsk_gpu_image_get_height (self->backbuffer) != ceil (gdk_surface_get_height (surface) * scale))
+      gsk_gpu_image_get_height (self->backbuffer) != ceil (gdk_surface_get_height (surface) * scale) ||
+      gsk_gpu_image_converts_srgb_linear_to_srgb (self->backbuffer) != gdk_surface_get_egl_surface_converts_srgb (surface))
     {
       gsk_ngl_renderer_free_backbuffer (self);
       self->backbuffer = gsk_gl_image_new_backbuffer (GSK_GL_DEVICE (gsk_gpu_renderer_get_device (renderer)),
                                                       GDK_GL_CONTEXT (context),
                                                       GDK_MEMORY_DEFAULT /* FIXME */,
                                                       ceil (gdk_surface_get_width (surface) * scale),
-                                                      ceil (gdk_surface_get_height (surface) * scale));
+                                                      ceil (gdk_surface_get_height (surface) * scale),
+                                                      gdk_surface_get_egl_surface_converts_srgb (surface));
     }
 
   return self->backbuffer;

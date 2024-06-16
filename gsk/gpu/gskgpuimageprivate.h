@@ -34,7 +34,8 @@ void                    gsk_gpu_image_setup                             (GskGpuI
                                                                          GskGpuImageFlags        flags,
                                                                          GdkMemoryFormat         format,
                                                                          gsize                   width,
-                                                                         gsize                   height);
+                                                                         gsize                   height,
+                                                                         gboolean                converts_srgb_linear_to_srgb);
 void                    gsk_gpu_image_toggle_ref_texture                (GskGpuImage            *self,
                                                                          GdkTexture             *texture);
 
@@ -44,10 +45,10 @@ gsize                   gsk_gpu_image_get_height                        (GskGpuI
 GskGpuImageFlags        gsk_gpu_image_get_flags                         (GskGpuImage            *self);
 void                    gsk_gpu_image_set_flags                         (GskGpuImage            *self,
                                                                          GskGpuImageFlags        flags);
-
 void                    gsk_gpu_image_get_projection_matrix             (GskGpuImage            *self,
                                                                          graphene_matrix_t      *out_projection);
 
+gboolean                gsk_gpu_image_converts_srgb_linear_to_srgb      (GskGpuImage            *self);
 
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GskGpuImage, g_object_unref)
 

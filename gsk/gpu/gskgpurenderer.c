@@ -246,7 +246,9 @@ gsk_gpu_renderer_unrealize (GskRenderer *renderer)
   g_clear_object (&priv->device);
 }
 
-static GdkColorState *
+GdkColorState * find_compositing_color_state (GdkSurface *surface);
+
+GdkColorState *
 find_compositing_color_state (GdkSurface *surface)
 {
   GdkColorState *ccs = NULL;
@@ -473,7 +475,7 @@ gsk_gpu_renderer_render (GskRenderer          *renderer,
   double scale;
   GdkSurface *surface;
   GdkColorState *color_state;
-  GdkColorState *ccs = NULL;
+  GdkColorState *ccs;
   GskRenderNode *node;
   GdkMemoryDepth depth;
 
@@ -488,24 +490,37 @@ gsk_gpu_renderer_render (GskRenderer          *renderer,
 
   color_state = gdk_surface_get_color_state (surface);
   ccs = find_compositing_color_state (surface);
+
   depth = gdk_memory_depth_merge (depth, gdk_color_state_get_min_depth (color_state));
-  depth = gdk_memory_depth_merge (depth, gdk_color_state_get_min_depth (ccs));
 
   g_debug ("Compositing color state: %s", gdk_color_state_get_name (ccs));
   g_debug ("Display color state: %s", gdk_color_state_get_name (color_state));
 
-  if (!gdk_color_state_equal (ccs, color_state))
-    node = gsk_color_state_node_new (root, ccs);
-  else
-    node = gsk_render_node_ref (root);
+  if (ccs == GDK_COLOR_STATE_SRGB_LINEAR && color_state == GDK_COLOR_STATE_SRGB &&
+      depth != GDK_MEMORY_U8)
+    {
+      g_debug ("Can't use fast path because of depth");
+    }
 
   gdk_draw_context_begin_frame_full (priv->context, depth, region);
+
+  backbuffer = GSK_GPU_RENDERER_GET_CLASS (self)->get_backbuffer (self);
+
+  if (gsk_gpu_image_converts_srgb_linear_to_srgb (backbuffer))
+    {
+      g_debug ("Relying on Vulkan/GL to do framebuffer conversion");
+      color_state = ccs;
+      node = gsk_render_node_ref (root);
+    }
+  else
+    {
+      g_debug ("Using a color state node for framebuffer conversion");
+      node = gsk_color_state_node_new (root, ccs);
+    }
 
   gsk_gpu_device_maybe_gc (priv->device);
 
   gsk_gpu_renderer_make_current (self);
-
-  backbuffer = GSK_GPU_RENDERER_GET_CLASS (self)->get_backbuffer (self);
 
   frame = gsk_gpu_renderer_get_frame (self);
   render_region = get_render_region (self);

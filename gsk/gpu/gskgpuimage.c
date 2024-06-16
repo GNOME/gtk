@@ -10,6 +10,7 @@ struct _GskGpuImagePrivate
   GdkMemoryFormat format;
   gsize width;
   gsize height;
+  gboolean converts_srgb_linear_to_srgb;
 };
 
 #define ORTHO_NEAR_PLANE        -10000
@@ -77,7 +78,8 @@ gsk_gpu_image_setup (GskGpuImage      *self,
                      GskGpuImageFlags  flags,
                      GdkMemoryFormat   format,
                      gsize             width,
-                     gsize             height)
+                     gsize             height,
+                     gboolean          converts_srgb_linear_to_srgb)
 {
   GskGpuImagePrivate *priv = gsk_gpu_image_get_instance_private (self);
 
@@ -85,6 +87,7 @@ gsk_gpu_image_setup (GskGpuImage      *self,
   priv->format = format;
   priv->width = width;
   priv->height = height;
+  priv->converts_srgb_linear_to_srgb = converts_srgb_linear_to_srgb;
 }
 
 /*
@@ -114,7 +117,7 @@ gsk_gpu_image_toggle_ref_texture (GskGpuImage *self,
   g_object_add_toggle_ref (G_OBJECT (self), gsk_gpu_image_texture_toggle_ref_cb, texture);
   g_object_unref (self);
 }
-                     
+
 GdkMemoryFormat
 gsk_gpu_image_get_format (GskGpuImage *self)
 {
@@ -161,4 +164,12 @@ gsk_gpu_image_get_projection_matrix (GskGpuImage       *self,
                                      graphene_matrix_t *out_projection)
 {
   GSK_GPU_IMAGE_GET_CLASS (self)->get_projection_matrix (self, out_projection);
+}
+
+gboolean
+gsk_gpu_image_converts_srgb_linear_to_srgb (GskGpuImage *self)
+{
+  GskGpuImagePrivate *priv = gsk_gpu_image_get_instance_private (self);
+
+  return priv->converts_srgb_linear_to_srgb;
 }

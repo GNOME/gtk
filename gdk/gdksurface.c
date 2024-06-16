@@ -76,6 +76,7 @@ struct _GdkSurfacePrivate
 #ifdef HAVE_EGL
   EGLSurface egl_surface;
   gboolean egl_surface_high_depth;
+  gboolean egl_surface_converts_srgb;
 #endif
 
   gpointer widget;
@@ -1182,14 +1183,29 @@ gdk_surface_get_egl_surface (GdkSurface *self)
   return priv->egl_surface;
 }
 
+extern GdkColorState *find_compositing_color_state (GdkSurface *surface);
+
 void
 gdk_surface_ensure_egl_surface (GdkSurface *self,
                                 gboolean    high_depth)
 {
   GdkSurfacePrivate *priv = gdk_surface_get_instance_private (self);
   GdkDisplay *display = gdk_surface_get_display (self);
+  GdkColorState *color_state;
+  GdkColorState *ccs;
+  gboolean want_srgb_conversion = FALSE;
 
   g_return_if_fail (priv->egl_native_window != NULL);
+
+  color_state = gdk_surface_get_color_state (self);
+  ccs = find_compositing_color_state (self);
+
+  if (color_state == GDK_COLOR_STATE_SRGB && ccs == GDK_COLOR_STATE_SRGB_LINEAR &&
+      !high_depth)
+    {
+      /* fast path this */
+      want_srgb_conversion = TRUE;
+    }
 
   if (priv->egl_surface_high_depth != high_depth &&
       priv->egl_surface != NULL &&
@@ -1200,14 +1216,34 @@ gdk_surface_ensure_egl_surface (GdkSurface *self,
       priv->egl_surface = NULL;
     }
 
+  if (want_srgb_conversion != priv->egl_surface_converts_srgb &&
+      priv->egl_surface != NULL)
+    {
+      gdk_gl_context_clear_current_if_surface (self);
+      eglDestroySurface (gdk_display_get_egl_display (display), priv->egl_surface);
+      priv->egl_surface = NULL;
+    }
+
   if (priv->egl_surface == NULL)
     {
+      EGLint attribs[4];
+      int i;
+
+      i = 0;
+      if (want_srgb_conversion)
+        {
+          attribs[i++] = EGL_GL_COLORSPACE_KHR;
+          attribs[i++] = EGL_GL_COLORSPACE_SRGB_KHR;
+        }
+      attribs[i++] = EGL_NONE;
+
       priv->egl_surface = eglCreateWindowSurface (gdk_display_get_egl_display (display),
                                                   high_depth ? gdk_display_get_egl_config_high_depth (display)
                                                              : gdk_display_get_egl_config (display),
                                                   (EGLNativeWindowType) priv->egl_native_window,
-                                                  NULL);
+                                                  attribs);
       priv->egl_surface_high_depth = high_depth;
+      priv->egl_surface_converts_srgb = want_srgb_conversion;
     }
 #endif
 }
@@ -3153,4 +3189,12 @@ gdk_surface_get_color_state (GdkSurface *surface)
   g_return_val_if_fail (GDK_IS_SURFACE (surface), gdk_color_state_get_srgb ());
 
   return surface->color_state;
+}
+
+gboolean
+gdk_surface_get_egl_surface_converts_srgb (GdkSurface *surface)
+{
+  GdkSurfacePrivate *priv = gdk_surface_get_instance_private (surface);
+
+  return priv->egl_surface_converts_srgb;
 }

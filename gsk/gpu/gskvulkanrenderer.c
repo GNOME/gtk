@@ -45,6 +45,8 @@ gsk_vulkan_renderer_free_targets (GskVulkanRenderer *self)
   self->n_targets = 0;
 }
 
+extern GdkColorState * find_compositing_color_state (GdkSurface *surface);
+
 static void
 gsk_vulkan_renderer_update_images_cb (GdkVulkanContext  *context,
                                       GskVulkanRenderer *self)
@@ -54,6 +56,9 @@ gsk_vulkan_renderer_update_images_cb (GdkVulkanContext  *context,
   double scale;
   gsize width, height;
   guint i;
+  VkFormat format;
+  GdkColorState *color_state;
+  GdkColorState *ccs;
 
   surface = gsk_renderer_get_surface (GSK_RENDERER (self));
   if (surface == NULL)
@@ -70,11 +75,22 @@ gsk_vulkan_renderer_update_images_cb (GdkVulkanContext  *context,
   width = (gsize) ceil (gdk_surface_get_width (surface) * scale);
   height = (gsize) ceil (gdk_surface_get_height (surface) * scale);
 
+  format = gdk_vulkan_context_get_image_format (context);
+  color_state = gdk_surface_get_color_state (surface);
+  ccs = find_compositing_color_state (surface);
+
+  if (format == VK_FORMAT_B8G8R8A8_UNORM &&
+      color_state == GDK_COLOR_STATE_SRGB && ccs == GDK_COLOR_STATE_SRGB_LINEAR)
+    {
+      g_debug ("Using VK_FORMAT_B8G8R8A8_SRGB");
+      format = VK_FORMAT_B8G8R8A8_SRGB;
+    }
+
   for (i = 0; i < self->n_targets; i++)
     {
       self->targets[i] = gsk_vulkan_image_new_for_swapchain (device,
                                                              gdk_vulkan_context_get_image (context, i),
-                                                             gdk_vulkan_context_get_image_format (context),
+                                                             format,
                                                              gdk_vulkan_context_get_memory_format (context),
                                                              width, height);
     }
