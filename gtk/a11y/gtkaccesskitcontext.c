@@ -444,7 +444,7 @@ gtk_accessible_role_to_accesskit_role (GtkAccessibleRole role)
       return ACCESSKIT_ROLE_TEXT_INPUT;
 
     case GTK_ACCESSIBLE_ROLE_LABEL:
-      return ACCESSKIT_ROLE_STATIC_TEXT;
+      return ACCESSKIT_ROLE_LABEL;
 
     case GTK_ACCESSIBLE_ROLE_LANDMARK:
       return ACCESSKIT_ROLE_GENERIC_CONTAINER;
