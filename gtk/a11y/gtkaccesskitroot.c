@@ -304,14 +304,44 @@ do_action (accesskit_action_request *request, void *data)
 }
 
 static void
-deactivate_accessibility (void *data)
+add_context_to_unrealize_queue (gpointer key,
+                                gpointer value,
+                                gpointer user_data)
+{
+  GtkATContext *ctx = GTK_AT_CONTEXT (value);
+  GPtrArray *contexts_to_unrealize = user_data;
+
+  if (!GTK_IS_ROOT (gtk_at_context_get_accessible (ctx)))
+    g_ptr_array_add (contexts_to_unrealize, ctx);
+}
+
+static gboolean
+deactivate_accessibility_main_thread (gpointer data)
 {
   GtkAccessKitRoot *self = data;
+  GPtrArray *contexts_to_unrealize = g_ptr_array_new ();
+  guint i;
 
   /* TODO: Unrealize AT contexts. Which ones? */
   g_clear_pointer (&self->update_queue, g_array_unref);
   self->did_initial_update = FALSE;
   self->requested_initial_tree = FALSE;
+
+  g_hash_table_foreach (self->contexts, add_context_to_unrealize_queue,
+                        contexts_to_unrealize);
+  for (i = 0; i < contexts_to_unrealize->len; i++)
+    gtk_at_context_unrealize (contexts_to_unrealize->pdata[i]);
+
+  g_ptr_array_unref (contexts_to_unrealize);
+  g_object_unref (self);
+  return G_SOURCE_REMOVE;
+}
+
+static void
+deactivate_accessibility (void *data)
+{
+  GtkAccessKitRoot *self = data;
+  g_idle_add (deactivate_accessibility_main_thread, g_object_ref (self));
 }
 
 static void
