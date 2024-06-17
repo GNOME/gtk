@@ -73,6 +73,7 @@ struct _GdkSurfacePrivate
 #ifdef HAVE_EGL
   EGLSurface egl_surface;
   gboolean egl_surface_high_depth;
+  gboolean egl_surface_is_srgb;
 #endif
 
   gpointer widget;
@@ -1148,9 +1149,11 @@ gdk_surface_ensure_egl_surface (GdkSurface *self,
 
   g_return_if_fail (priv->egl_native_window != NULL);
 
+  if (gdk_display_get_egl_config_high_depth (display) == gdk_display_get_egl_config (display))
+    high_depth = FALSE;
+
   if (priv->egl_surface_high_depth != high_depth &&
-      priv->egl_surface != NULL &&
-      gdk_display_get_egl_config_high_depth (display) != gdk_display_get_egl_config (display))
+      priv->egl_surface != NULL)
     {
       gdk_gl_context_clear_current_if_surface (self);
       eglDestroySurface (gdk_display_get_egl_display (display), priv->egl_surface);
@@ -1159,12 +1162,25 @@ gdk_surface_ensure_egl_surface (GdkSurface *self,
 
   if (priv->egl_surface == NULL)
     {
+      EGLint attribs[4];
+      int i;
+
+      i = 0;
+      if (!high_depth && display->have_egl_gl_colorspace)
+        {
+          attribs[i++] = EGL_GL_COLORSPACE_KHR;
+          attribs[i++] = EGL_GL_COLORSPACE_SRGB_KHR;
+        }
+      g_assert (i < G_N_ELEMENTS (attribs));
+      attribs[i++] = EGL_NONE;
+
       priv->egl_surface = eglCreateWindowSurface (gdk_display_get_egl_display (display),
                                                   high_depth ? gdk_display_get_egl_config_high_depth (display)
                                                              : gdk_display_get_egl_config (display),
                                                   (EGLNativeWindowType) priv->egl_native_window,
-                                                  NULL);
+                                                  attribs);
       priv->egl_surface_high_depth = high_depth;
+      priv->egl_surface_is_srgb = !high_depth && display->have_egl_gl_colorspace;
     }
 #endif
 }
@@ -1172,6 +1188,11 @@ gdk_surface_ensure_egl_surface (GdkSurface *self,
 gboolean
 gdk_surface_get_gl_is_srgb (GdkSurface *self)
 {
+  GdkSurfacePrivate *priv = gdk_surface_get_instance_private (self);
+
+  if (priv->egl_surface)
+    return priv->egl_surface_is_srgb;
+
   return FALSE;
 }
 
