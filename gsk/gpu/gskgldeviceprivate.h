@@ -26,6 +26,7 @@ void                    gsk_gl_device_find_gl_format                    (GskGLDe
                                                                          GdkMemoryFormat        *out_format,
                                                                          GskGpuImageFlags       *out_flags,
                                                                          GLint                  *out_gl_internal_format,
+                                                                         GLint                  *out_gl_internal_srgb_format,
                                                                          GLenum                 *out_gl_format,
                                                                          GLenum                 *out_gl_type,
                                                                          GLint                   out_swizzle[4]);

@@ -151,7 +151,7 @@ gdk_gl_texture_find_format (GdkGLContext    *context,
 
   for (format = 0; format < GDK_MEMORY_N_FORMATS; format++)
     {
-      GLint q_internal_format;
+      GLint q_internal_format, q_internal_srgb_format;
       GLenum q_format, q_type;
       GLint q_swizzle[4];
 
@@ -164,6 +164,7 @@ gdk_gl_texture_find_format (GdkGLContext    *context,
       gdk_memory_format_gl_format (format,
                                    gdk_gl_context_get_use_es (context),
                                    &q_internal_format,
+                                   &q_internal_srgb_format,
                                    &q_format,
                                    &q_type,
                                    q_swizzle);
@@ -187,7 +188,7 @@ gdk_gl_texture_do_download (GdkGLTexture *self,
   GdkMemoryFormat format;
   gsize expected_stride;
   Download *download = download_;
-  GLint gl_internal_format;
+  GLint gl_internal_format, gl_internal_srgb_format;
   GLenum gl_format, gl_type;
   GLint gl_swizzle[4];
 
@@ -199,7 +200,7 @@ gdk_gl_texture_do_download (GdkGLTexture *self,
     {
       gdk_memory_format_gl_format (format,
                                    gdk_gl_context_get_use_es (context),
-                                   &gl_internal_format,
+                                   &gl_internal_format, &gl_internal_srgb_format,
                                    &gl_format, &gl_type, gl_swizzle);
       if (download->stride == expected_stride &&
           download->format == format)
@@ -262,7 +263,7 @@ gdk_gl_texture_do_download (GdkGLTexture *self,
 
               gdk_memory_format_gl_format (actual_format,
                                            gdk_gl_context_get_use_es (context),
-                                           &gl_internal_format,
+                                           &gl_internal_format, &gl_internal_srgb_format,
                                            &gl_read_format, &gl_read_type, gl_swizzle);
             }
         }
@@ -274,7 +275,7 @@ gdk_gl_texture_do_download (GdkGLTexture *self,
 
           gdk_memory_format_gl_format (actual_format,
                                        gdk_gl_context_get_use_es (context),
-                                       &gl_internal_format,
+                                       &gl_internal_format, &gl_internal_srgb_format,
                                        &gl_read_format, &gl_read_type, gl_swizzle);
         }
 
