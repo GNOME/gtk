@@ -44,6 +44,7 @@
 #include "gdkmemorytextureprivate.h"
 #include "gdkpaintable.h"
 #include "gdksnapshot.h"
+#include "gdkcolorstateprivate.h"
 
 #include <graphene.h>
 #include "loaders/gdkpngprivate.h"
@@ -1085,4 +1086,20 @@ gdk_texture_save_to_tiff_bytes (GdkTexture *texture)
   g_return_val_if_fail (GDK_IS_TEXTURE (texture), NULL);
 
   return gdk_save_tiff (texture);
+}
+
+/**
+ * gdk_texture_get_color_state:
+ * @texture: a `GdkTexture`
+ *
+ * Returns the color state associated with @texture.
+ *
+ * Returns: (transfer none): the color state of the `GdkTexture`
+ *
+ * Since: 4.16
+ */
+GdkColorState *
+gdk_texture_get_color_state (GdkTexture *texture)
+{
+  return GDK_COLOR_STATE_SRGB;
 }

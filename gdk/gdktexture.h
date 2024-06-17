@@ -98,6 +98,9 @@ gboolean                gdk_texture_save_to_tiff               (GdkTexture      
 GDK_AVAILABLE_IN_4_6
 GBytes *                gdk_texture_save_to_tiff_bytes         (GdkTexture      *texture);
 
+GDK_AVAILABLE_IN_4_16
+GdkColorState *         gdk_texture_get_color_state            (GdkTexture      *texture);
+
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GdkTexture, g_object_unref)
 
 G_END_DECLS
