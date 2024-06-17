@@ -73,6 +73,7 @@ compare_textures (GdkTexture *texture1,
 
   g_assert_true (gdk_texture_get_width (texture1) == gdk_texture_get_width (texture2));
   g_assert_true (gdk_texture_get_height (texture1) == gdk_texture_get_height (texture2));
+  g_assert_true (gdk_texture_get_color_state (texture1) == gdk_texture_get_color_state (texture2));
 
   width = gdk_texture_get_width (texture1);
   height = gdk_texture_get_height (texture1);
@@ -144,6 +145,7 @@ static void
 test_texture_from_resource (void)
 {
   GdkTexture *texture;
+  GdkColorState *color_state;
   int width, height;
 
   texture = gdk_texture_new_from_resource ("/org/gtk/libgtk/icons/16x16/places/user-trash.png");
@@ -152,10 +154,13 @@ test_texture_from_resource (void)
   g_object_get (texture,
                 "width", &width,
                 "height", &height,
+                "color-state", &color_state,
                 NULL);
   g_assert_cmpint (width, ==, 16);
   g_assert_cmpint (height, ==, 16);
+  g_assert_true (gdk_color_state_equal (color_state, gdk_color_state_get_srgb ()));
 
+  gdk_color_state_unref (color_state);
   g_object_unref (texture);
 }
 
@@ -237,6 +242,8 @@ test_texture_subtexture (void)
 
   g_assert_cmpint (gdk_texture_get_width (subtexture), ==, 32);
   g_assert_cmpint (gdk_texture_get_height (subtexture), ==, 32);
+  g_assert_true (gdk_color_state_equal (gdk_texture_get_color_state (subtexture),
+                                        gdk_texture_get_color_state (texture)));
 
   data = g_new0 (guchar, 64 * 64 * 4);
   stride = 64 * 4;

@@ -20,6 +20,7 @@
 
 #include "gdkgltextureprivate.h"
 
+#include "gdkcolorstateprivate.h"
 #include "gdkdisplayprivate.h"
 #include "gdkglcontextprivate.h"
 #include "gdkmemoryformatprivate.h"
@@ -488,6 +489,7 @@ gdk_gl_texture_new_from_builder (GdkGLTextureBuilder *builder,
   self = g_object_new (GDK_TYPE_GL_TEXTURE,
                        "width", gdk_gl_texture_builder_get_width (builder),
                        "height", gdk_gl_texture_builder_get_height (builder),
+                       "color-state", GDK_COLOR_STATE_SRGB,
                        NULL);
 
   self->context = g_object_ref (gdk_gl_texture_builder_get_context (builder));
@@ -682,6 +684,7 @@ gdk_gl_texture_new (GdkGLContext   *context,
   self = g_object_new (GDK_TYPE_GL_TEXTURE,
                        "width", width,
                        "height", height,
+                       "color-state", GDK_COLOR_STATE_SRGB,
                        NULL);
 
   self->context = g_object_ref (context);
