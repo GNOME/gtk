@@ -623,6 +623,9 @@ gdk_named_color_state_get_min_depth (GdkColorState *self)
     case GDK_COLOR_STATE_ID_SRGB_LINEAR:
       return GDK_MEMORY_FLOAT16;
 
+    /* We want to use fast paths for the common srgb-linear / srgb case,
+     * which needs u8 framebuffers
+     */
     case GDK_COLOR_STATE_ID_SRGB:
       return GDK_MEMORY_U8;
 
