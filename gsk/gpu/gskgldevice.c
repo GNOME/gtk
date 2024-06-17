@@ -77,6 +77,7 @@ gsk_gl_device_create_offscreen_image (GskGpuDevice   *device,
 
   return gsk_gl_image_new (self,
                            gdk_memory_depth_get_format (depth),
+                           GDK_COLOR_STATE_SRGB_LINEAR,
                            GSK_GPU_IMAGE_RENDERABLE | GSK_GPU_IMAGE_FILTERABLE,
                            width,
                            height);
@@ -94,6 +95,7 @@ gsk_gl_device_create_upload_image (GskGpuDevice    *device,
 
   return gsk_gl_image_new (self,
                            format,
+                           color_state,
                            0,
                            width,
                            height);
@@ -109,6 +111,7 @@ gsk_gl_device_create_download_image (GskGpuDevice   *device,
 
   return gsk_gl_image_new (self,
                            gdk_memory_depth_get_format (depth),
+                           GDK_COLOR_STATE_SRGB_LINEAR,
                            GSK_GPU_IMAGE_RENDERABLE,
                            width,
                            height);
@@ -123,6 +126,7 @@ gsk_gl_device_create_atlas_image (GskGpuDevice *device,
 
   return gsk_gl_image_new (self,
                            GDK_MEMORY_DEFAULT,
+                           GDK_COLOR_STATE_SRGB_LINEAR,
                            GSK_GPU_IMAGE_RENDERABLE,
                            width,
                            height);
