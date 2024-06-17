@@ -403,17 +403,26 @@ gsk_gpu_frame_get_last_op (GskGpuFrame *self)
 }
 
 GskGpuImage *
-gsk_gpu_frame_upload_texture (GskGpuFrame  *self,
-                              gboolean      with_mipmap,
-                              GdkTexture   *texture)
+gsk_gpu_frame_upload_texture (GskGpuFrame    *self,
+                              gboolean        with_mipmap,
+                              GdkTexture     *texture,
+                              GdkColorState **out_color_state)
 {
   GskGpuFramePrivate *priv = gsk_gpu_frame_get_instance_private (self);
   GskGpuImage *image;
+  GdkColorState *color_state;
 
   image = GSK_GPU_FRAME_GET_CLASS (self)->upload_texture (self, with_mipmap, texture);
 
+  if (gsk_gpu_image_get_flags (image) & GSK_GPU_IMAGE_SRGB)
+    color_state = GDK_COLOR_STATE_SRGB_LINEAR;
+  else
+    color_state = gdk_texture_get_color_state (texture);
+
   if (image)
-    gsk_gpu_device_cache_texture_image (priv->device, texture, priv->timestamp, image, gdk_texture_get_color_state (texture));
+    gsk_gpu_device_cache_texture_image (priv->device, texture, priv->timestamp, image, color_state);
+
+  *out_color_state = color_state;
 
   return image;
 }
@@ -708,10 +717,11 @@ gsk_gpu_frame_download_texture (GskGpuFrame     *self,
 {
   GskGpuFramePrivate *priv = gsk_gpu_frame_get_instance_private (self);
   GskGpuImage *image;
+  GdkColorState *color_state;
 
   image = gsk_gpu_device_lookup_texture_image (priv->device, texture, GDK_COLOR_STATE_SRGB, timestamp);
   if (image == NULL)
-    image = gsk_gpu_frame_upload_texture (self, FALSE, texture);
+    image = gsk_gpu_frame_upload_texture (self, FALSE, texture, &color_state);
   if (image == NULL)
     {
       g_critical ("Could not upload texture");
