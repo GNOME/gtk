@@ -114,7 +114,7 @@ gsk_gpu_image_toggle_ref_texture (GskGpuImage *self,
   g_object_add_toggle_ref (G_OBJECT (self), gsk_gpu_image_texture_toggle_ref_cb, texture);
   g_object_unref (self);
 }
-                     
+
 GdkMemoryFormat
 gsk_gpu_image_get_format (GskGpuImage *self)
 {
