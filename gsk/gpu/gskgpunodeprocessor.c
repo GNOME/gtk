@@ -819,7 +819,7 @@ gsk_gpu_get_node_as_image (GskGpuFrame            *frame,
         GdkTexture *texture = gsk_texture_node_get_texture (node);
         GskGpuDevice *device = gsk_gpu_frame_get_device (frame);
         gint64 timestamp = gsk_gpu_frame_get_timestamp (frame);
-        result = gsk_gpu_device_lookup_texture_image (device, texture, timestamp);
+        result = gsk_gpu_device_lookup_texture_image (device, texture, gdk_texture_get_color_state (texture), timestamp);
         if (result == NULL)
           result = gsk_gpu_frame_upload_texture (frame, FALSE, texture);
 
@@ -1008,7 +1008,8 @@ gsk_gpu_node_processor_get_node_as_image (GskGpuNodeProcessor   *self,
       gsk_gpu_device_cache_texture_image (gsk_gpu_frame_get_device (self->frame),
                                           gsk_texture_node_get_texture (node),
                                           gsk_gpu_frame_get_timestamp (self->frame),
-                                          ensure);
+                                          ensure,
+                                          gdk_texture_get_color_state (gsk_texture_node_get_texture (node)));
     }
 
   return ensure;
@@ -1958,7 +1959,7 @@ gsk_gpu_node_processor_add_texture_node (GskGpuNodeProcessor *self,
   texture = gsk_texture_node_get_texture (node);
   timestamp = gsk_gpu_frame_get_timestamp (self->frame);
 
-  image = gsk_gpu_device_lookup_texture_image (device, texture, timestamp);
+  image = gsk_gpu_device_lookup_texture_image (device, texture, gdk_texture_get_color_state (texture), timestamp);
   if (image == NULL)
     {
       image = gsk_gpu_frame_upload_texture (self->frame, FALSE, texture);
@@ -2033,7 +2034,7 @@ gsk_gpu_node_processor_create_texture_pattern (GskGpuPatternWriter *self,
   texture = gsk_texture_node_get_texture (node);
   timestamp = gsk_gpu_frame_get_timestamp (self->frame);
 
-  image = gsk_gpu_device_lookup_texture_image (device, texture, timestamp);
+  image = gsk_gpu_device_lookup_texture_image (device, texture, gdk_texture_get_color_state (texture), timestamp);
   if (image == NULL)
     {
       image = gsk_gpu_frame_upload_texture (self->frame, FALSE, texture);
@@ -2130,7 +2131,7 @@ gsk_gpu_node_processor_add_texture_scale_node (GskGpuNodeProcessor *self,
   timestamp = gsk_gpu_frame_get_timestamp (self->frame);
   need_mipmap = scaling_filter == GSK_SCALING_FILTER_TRILINEAR;
 
-  image = gsk_gpu_device_lookup_texture_image (device, texture, timestamp);
+  image = gsk_gpu_device_lookup_texture_image (device, texture, gdk_texture_get_color_state (texture), timestamp);
   if (image == NULL)
     {
       image = gsk_gpu_frame_upload_texture (self->frame, need_mipmap, texture);
