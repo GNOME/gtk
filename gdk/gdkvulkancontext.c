@@ -884,7 +884,9 @@ gdk_vulkan_context_real_init (GInitable     *initable,
           switch ((int) formats[i].format)
             {
               case VK_FORMAT_B8G8R8A8_UNORM:
-                if (priv->formats[GDK_MEMORY_U8].vk_format.format == VK_FORMAT_UNDEFINED)
+              case VK_FORMAT_B8G8R8A8_SRGB:
+                if (priv->formats[GDK_MEMORY_U8].vk_format.format == VK_FORMAT_UNDEFINED ||
+                    priv->formats[GDK_MEMORY_U8].vk_format.format == VK_FORMAT_B8G8R8A8_UNORM)
                   {
                     priv->formats[GDK_MEMORY_U8].vk_format = formats[i];
                     priv->formats[GDK_MEMORY_U8].gdk_format = GDK_MEMORY_B8G8R8A8_PREMULTIPLIED;
@@ -893,7 +895,9 @@ gdk_vulkan_context_real_init (GInitable     *initable,
                 break;
 
               case VK_FORMAT_R8G8B8A8_UNORM:
-                if (priv->formats[GDK_MEMORY_U8].vk_format.format == VK_FORMAT_UNDEFINED)
+              case VK_FORMAT_R8G8B8A8_SRGB:
+                if (priv->formats[GDK_MEMORY_U8].vk_format.format == VK_FORMAT_UNDEFINED ||
+                    priv->formats[GDK_MEMORY_U8].vk_format.format == VK_FORMAT_R8G8B8A8_UNORM)
                   {
                     priv->formats[GDK_MEMORY_U8].vk_format = formats[i];
                     priv->formats[GDK_MEMORY_U8].gdk_format = GDK_MEMORY_R8G8B8A8_PREMULTIPLIED;
