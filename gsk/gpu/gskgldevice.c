@@ -10,6 +10,7 @@
 #include "gdk/gdkdisplayprivate.h"
 #include "gdk/gdkglcontextprivate.h"
 #include "gdk/gdkprofilerprivate.h"
+#include "gdk/gdkcolorstateprivate.h"
 
 #include <glib/gi18n-lib.h>
 
@@ -85,6 +86,7 @@ static GskGpuImage *
 gsk_gl_device_create_upload_image (GskGpuDevice    *device,
                                    gboolean         with_mipmap,
                                    GdkMemoryFormat  format,
+                                   GdkColorState   *color_state,
                                    gsize            width,
                                    gsize            height)
 {
