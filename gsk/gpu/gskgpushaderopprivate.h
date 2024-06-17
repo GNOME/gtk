@@ -4,6 +4,8 @@
 
 #include "gskgputypesprivate.h"
 
+#include <math.h>
+
 G_BEGIN_DECLS
 
 struct _GskGpuShaderOp
@@ -63,13 +65,23 @@ GskGpuOp *              gsk_gpu_shader_op_gl_command                    (GskGpuO
                                                                          GskGpuFrame            *frame,
                                                                          GskGLCommandState      *state);
 
+
+static inline float
+srgb_inverse_transfer_function (float v)
+{
+  if (v >= 0.04045)
+    return powf (((v + 0.055)/(1 + 0.055)), 2.4);
+  else
+    return v / 12.92;
+}
+
 static inline void
 gsk_gpu_rgba_to_float (const GdkRGBA *rgba,
                        float          values[4])
 {
-  values[0] = rgba->red;
-  values[1] = rgba->green;
-  values[2] = rgba->blue;
+  values[0] = srgb_inverse_transfer_function (rgba->red);
+  values[1] = srgb_inverse_transfer_function (rgba->green);
+  values[2] = srgb_inverse_transfer_function (rgba->blue);
   values[3] = rgba->alpha;
 }
 
