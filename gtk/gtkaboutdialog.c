@@ -727,8 +727,9 @@ update_links_cb (GtkAboutDialog *about)
     {
       GtkTextTag *tag = l->data;
       GdkRGBA color;
+      const char *uri = g_object_get_data (G_OBJECT (tag), "uri");
 
-      if (g_ptr_array_find_with_equal_func (about->visited_links, link, (GCompareFunc)strcmp, NULL))
+      if (uri && g_ptr_array_find_with_equal_func (about->visited_links, uri, (GCompareFunc)strcmp, NULL))
         color = visited_link_color;
       else
         color = link_color;
