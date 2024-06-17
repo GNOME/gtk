@@ -348,6 +348,7 @@ struct _GdkMemoryFormatDescription
   } gl;
 #ifdef GDK_RENDERING_VULKAN
   VkFormat vk_format;
+  VkFormat vk_srgb_format;
 #endif
 #ifdef HAVE_DMABUF
   guint32 dmabuf_fourcc;
@@ -388,6 +389,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     },
 #ifdef GDK_RENDERING_VULKAN
     .vk_format = VK_FORMAT_B8G8R8A8_UNORM,
+    .vk_srgb_format = VK_FORMAT_B8G8R8A8_SRGB,
 #endif
 #ifdef HAVE_DMABUF
     .dmabuf_fourcc = DRM_FORMAT_ARGB8888,
@@ -417,6 +419,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     },
 #ifdef GDK_RENDERING_VULKAN
     .vk_format = VK_FORMAT_UNDEFINED,
+    .vk_srgb_format = VK_FORMAT_UNDEFINED,
 #endif
 #ifdef HAVE_DMABUF
     .dmabuf_fourcc = DRM_FORMAT_BGRA8888,
@@ -445,6 +448,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     },
 #ifdef GDK_RENDERING_VULKAN
     .vk_format = VK_FORMAT_R8G8B8A8_UNORM,
+    .vk_srgb_format = VK_FORMAT_R8G8B8A8_SRGB,
 #endif
 #ifdef HAVE_DMABUF
     .dmabuf_fourcc = DRM_FORMAT_ABGR8888,
@@ -474,6 +478,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     },
 #ifdef GDK_RENDERING_VULKAN
     .vk_format = VK_FORMAT_UNDEFINED,
+    .vk_srgb_format = VK_FORMAT_UNDEFINED,
 #endif
 #ifdef HAVE_DMABUF
     .dmabuf_fourcc = DRM_FORMAT_RGBA8888,
@@ -503,6 +508,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     },
 #ifdef GDK_RENDERING_VULKAN
     .vk_format = VK_FORMAT_B8G8R8A8_UNORM,
+    .vk_srgb_format = VK_FORMAT_B8G8R8A8_SRGB,
 #endif
 #ifdef HAVE_DMABUF
     .dmabuf_fourcc = DRM_FORMAT_ARGB8888,
@@ -532,6 +538,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     },
 #ifdef GDK_RENDERING_VULKAN
     .vk_format = VK_FORMAT_UNDEFINED,
+    .vk_srgb_format = VK_FORMAT_UNDEFINED,
 #endif
 #ifdef HAVE_DMABUF
     .dmabuf_fourcc = DRM_FORMAT_BGRA8888,
@@ -560,6 +567,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     },
 #ifdef GDK_RENDERING_VULKAN
     .vk_format = VK_FORMAT_R8G8B8A8_UNORM,
+    .vk_srgb_format = VK_FORMAT_R8G8B8A8_SRGB,
 #endif
 #ifdef HAVE_DMABUF
     .dmabuf_fourcc = DRM_FORMAT_ABGR8888,
@@ -589,6 +597,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     },
 #ifdef GDK_RENDERING_VULKAN
     .vk_format = VK_FORMAT_UNDEFINED,
+    .vk_srgb_format = VK_FORMAT_UNDEFINED,
 #endif
 #ifdef HAVE_DMABUF
     .dmabuf_fourcc = DRM_FORMAT_RGBA8888,
@@ -619,6 +628,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     },
 #ifdef GDK_RENDERING_VULKAN
     .vk_format = VK_FORMAT_B8G8R8A8_UNORM,
+    .vk_srgb_format = VK_FORMAT_B8G8R8A8_SRGB,
 #endif
 #ifdef HAVE_DMABUF
     .dmabuf_fourcc = DRM_FORMAT_XRGB8888,
@@ -649,6 +659,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     },
 #ifdef GDK_RENDERING_VULKAN
     .vk_format = VK_FORMAT_UNDEFINED,
+    .vk_srgb_format = VK_FORMAT_UNDEFINED,
 #endif
 #ifdef HAVE_DMABUF
     .dmabuf_fourcc = DRM_FORMAT_BGRX8888,
@@ -678,6 +689,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     },
 #ifdef GDK_RENDERING_VULKAN
     .vk_format = VK_FORMAT_R8G8B8A8_UNORM,
+    .vk_srgb_format = VK_FORMAT_R8G8B8A8_SRGB,
 #endif
 #ifdef HAVE_DMABUF
     .dmabuf_fourcc = DRM_FORMAT_XBGR8888,
@@ -708,6 +720,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     },
 #ifdef GDK_RENDERING_VULKAN
     .vk_format = VK_FORMAT_UNDEFINED,
+    .vk_srgb_format = VK_FORMAT_UNDEFINED,
 #endif
 #ifdef HAVE_DMABUF
     .dmabuf_fourcc = DRM_FORMAT_RGBX8888,
@@ -737,6 +750,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     },
 #ifdef GDK_RENDERING_VULKAN
     .vk_format = VK_FORMAT_R8G8B8_UNORM,
+    .vk_srgb_format = VK_FORMAT_R8G8B8_SRGB,
 #endif
 #ifdef HAVE_DMABUF
     .dmabuf_fourcc = DRM_FORMAT_BGR888,
@@ -767,6 +781,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     },
 #ifdef GDK_RENDERING_VULKAN
     .vk_format = VK_FORMAT_B8G8R8_UNORM,
+    .vk_srgb_format = VK_FORMAT_B8G8R8_SRGB,
 #endif
 #ifdef HAVE_DMABUF
     .dmabuf_fourcc = DRM_FORMAT_RGB888,
@@ -799,6 +814,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     },
 #ifdef GDK_RENDERING_VULKAN
     .vk_format = VK_FORMAT_R16G16B16_UNORM,
+    .vk_srgb_format = VK_FORMAT_UNDEFINED,
 #endif
 #ifdef HAVE_DMABUF
     .dmabuf_fourcc = 0,
@@ -830,6 +846,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     },
 #ifdef GDK_RENDERING_VULKAN
     .vk_format = VK_FORMAT_R16G16B16A16_UNORM,
+    .vk_srgb_format = VK_FORMAT_UNDEFINED,
 #endif
 #ifdef HAVE_DMABUF
     .dmabuf_fourcc = DRM_FORMAT_ABGR16161616,
@@ -861,6 +878,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     },
 #ifdef GDK_RENDERING_VULKAN
     .vk_format = VK_FORMAT_R16G16B16A16_UNORM,
+    .vk_srgb_format = VK_FORMAT_UNDEFINED,
 #endif
 #ifdef HAVE_DMABUF
     .dmabuf_fourcc = DRM_FORMAT_ABGR16161616,
@@ -892,6 +910,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     },
 #ifdef GDK_RENDERING_VULKAN
     .vk_format = VK_FORMAT_R16G16B16_SFLOAT,
+    .vk_srgb_format = VK_FORMAT_UNDEFINED,
 #endif
 #ifdef HAVE_DMABUF
     .dmabuf_fourcc = 0,
@@ -922,6 +941,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     },
 #ifdef GDK_RENDERING_VULKAN
     .vk_format = VK_FORMAT_R16G16B16A16_SFLOAT,
+    .vk_srgb_format = VK_FORMAT_UNDEFINED,
 #endif
 #ifdef HAVE_DMABUF
     .dmabuf_fourcc = DRM_FORMAT_ABGR16161616F,
@@ -952,6 +972,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     },
 #ifdef GDK_RENDERING_VULKAN
     .vk_format = VK_FORMAT_R16G16B16A16_SFLOAT,
+    .vk_srgb_format = VK_FORMAT_UNDEFINED,
 #endif
 #ifdef HAVE_DMABUF
     .dmabuf_fourcc = DRM_FORMAT_ABGR16161616F,
@@ -983,6 +1004,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     },
 #ifdef GDK_RENDERING_VULKAN
     .vk_format = VK_FORMAT_R32G32B32_SFLOAT,
+    .vk_srgb_format = VK_FORMAT_UNDEFINED,
 #endif
 #ifdef HAVE_DMABUF
     .dmabuf_fourcc = 0,
@@ -1013,6 +1035,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     },
 #ifdef GDK_RENDERING_VULKAN
     .vk_format = VK_FORMAT_R32G32B32A32_SFLOAT,
+    .vk_srgb_format = VK_FORMAT_UNDEFINED,
 #endif
 #ifdef HAVE_DMABUF
     .dmabuf_fourcc = 0,
@@ -1043,6 +1066,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     },
 #ifdef GDK_RENDERING_VULKAN
     .vk_format = VK_FORMAT_R32G32B32A32_SFLOAT,
+    .vk_srgb_format = VK_FORMAT_UNDEFINED,
 #endif
 #ifdef HAVE_DMABUF
     .dmabuf_fourcc = 0,
@@ -1072,6 +1096,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     },
 #ifdef GDK_RENDERING_VULKAN
     .vk_format = VK_FORMAT_R8G8_UNORM,
+    .vk_srgb_format = VK_FORMAT_UNDEFINED,
 #endif
 #ifdef HAVE_DMABUF
     .dmabuf_fourcc = 0,
@@ -1101,6 +1126,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     },
 #ifdef GDK_RENDERING_VULKAN
     .vk_format = VK_FORMAT_R8G8_UNORM,
+    .vk_srgb_format = VK_FORMAT_UNDEFINED,
 #endif
 #ifdef HAVE_DMABUF
     .dmabuf_fourcc = 0,
@@ -1130,6 +1156,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     },
 #ifdef GDK_RENDERING_VULKAN
     .vk_format = VK_FORMAT_R8_UNORM,
+    .vk_srgb_format = VK_FORMAT_R8_SRGB,
 #endif
 #ifdef HAVE_DMABUF
     .dmabuf_fourcc = DRM_FORMAT_R8,
@@ -1162,6 +1189,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     },
 #ifdef GDK_RENDERING_VULKAN
     .vk_format = VK_FORMAT_R16G16_UNORM,
+    .vk_srgb_format = VK_FORMAT_UNDEFINED,
 #endif
 #ifdef HAVE_DMABUF
     .dmabuf_fourcc = 0,
@@ -1194,6 +1222,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     },
 #ifdef GDK_RENDERING_VULKAN
     .vk_format = VK_FORMAT_R16G16_UNORM,
+    .vk_srgb_format = VK_FORMAT_UNDEFINED,
 #endif
 #ifdef HAVE_DMABUF
     .dmabuf_fourcc = 0,
@@ -1226,6 +1255,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     },
 #ifdef GDK_RENDERING_VULKAN
     .vk_format = VK_FORMAT_R16_UNORM,
+    .vk_srgb_format = VK_FORMAT_UNDEFINED,
 #endif
 #ifdef HAVE_DMABUF
     .dmabuf_fourcc = DRM_FORMAT_R16,
@@ -1255,6 +1285,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     },
 #ifdef GDK_RENDERING_VULKAN
     .vk_format = VK_FORMAT_R8_UNORM,
+    .vk_srgb_format = VK_FORMAT_UNDEFINED,
 #endif
 #ifdef HAVE_DMABUF
     .dmabuf_fourcc = 0,
@@ -1287,6 +1318,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     },
 #ifdef GDK_RENDERING_VULKAN
     .vk_format = VK_FORMAT_R16_UNORM,
+    .vk_srgb_format = VK_FORMAT_UNDEFINED,
 #endif
 #ifdef HAVE_DMABUF
     .dmabuf_fourcc = 0,
@@ -1318,6 +1350,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     },
 #ifdef GDK_RENDERING_VULKAN
     .vk_format = VK_FORMAT_R16_SFLOAT,
+    .vk_srgb_format = VK_FORMAT_UNDEFINED,
 #endif
 #ifdef HAVE_DMABUF
     .dmabuf_fourcc = 0,
@@ -1349,6 +1382,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     },
 #ifdef GDK_RENDERING_VULKAN
     .vk_format = VK_FORMAT_R32_SFLOAT,
+    .vk_srgb_format = VK_FORMAT_UNDEFINED,
 #endif
 #ifdef HAVE_DMABUF
     .dmabuf_fourcc = 0,
@@ -1645,6 +1679,14 @@ gdk_memory_format_vk_format (GdkMemoryFormat     format,
   if (out_swizzle)
     vk_swizzle_from_gl_swizzle (out_swizzle, memory_formats[format].gl.swizzle);
   return memory_formats[format].vk_format;
+}
+
+/* Gets the matching SRGB version of a VkFormat
+ * Returns VK_FORMAT_UNDEFINED if none exists */
+VkFormat
+gdk_memory_format_vk_srgb_format (GdkMemoryFormat format)
+{
+  return memory_formats[format].vk_srgb_format;
 }
 
 /* Vulkan version of gdk_memory_format_gl_rgba_format()
