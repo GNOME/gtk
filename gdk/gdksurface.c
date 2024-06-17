@@ -1217,7 +1217,8 @@ gdk_surface_ensure_egl_surface (GdkSurface *self,
     }
 
   if (want_srgb_conversion != priv->egl_surface_converts_srgb &&
-      priv->egl_surface != NULL)
+      priv->egl_surface != NULL &&
+      display->have_egl_gl_colorspace)
     {
       gdk_gl_context_clear_current_if_surface (self);
       eglDestroySurface (gdk_display_get_egl_display (display), priv->egl_surface);
