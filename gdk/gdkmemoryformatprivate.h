@@ -65,6 +65,7 @@ GdkMemoryFormat         gdk_memory_depth_get_alpha_format   (GdkMemoryDepth     
 void                    gdk_memory_format_gl_format         (GdkMemoryFormat             format,
                                                              gboolean                    gles,
                                                              GLint                      *out_internal_format,
+                                                             GLint                      *out_internal_srgb_format,
                                                              GLenum                     *out_format,
                                                              GLenum                     *out_type,
                                                              GLint                       out_swizzle[4]);

@@ -1,4 +1,4 @@
-#include "config.h"
+        #include "config.h"
 
 #include "gskglimageprivate.h"
 
@@ -78,6 +78,7 @@ gsk_gl_image_new_backbuffer (GskGLDevice    *device,
   GskGLImage *self;
   GskGpuImageFlags flags;
   GLint swizzle[4];
+  GLint gl_internal_format, gl_internal_srgb_format;
 
   self = g_object_new (GSK_TYPE_GL_IMAGE, NULL);
 
@@ -87,11 +88,14 @@ gsk_gl_image_new_backbuffer (GskGLDevice    *device,
                                 0,
                                 &format,
                                 &flags,
-                                &self->gl_internal_format,
+                                &gl_internal_format,
+                                &gl_internal_srgb_format,
                                 &self->gl_format,
                                 &self->gl_type,
                                 swizzle);
-  
+
+  self->gl_internal_format = gl_internal_format;
+
   gsk_gpu_image_setup (GSK_GPU_IMAGE (self), flags, format, width, height);
 
   /* texture_id == 0 means backbuffer */
@@ -116,6 +120,7 @@ gsk_gl_image_new (GskGLDevice      *device,
   GskGLImage *self;
   GLint swizzle[4];
   GskGpuImageFlags flags;
+  GLint gl_internal_format, gl_internal_srgb_format;
   gsize max_size;
 
   max_size = gsk_gpu_device_get_max_image_size (GSK_GPU_DEVICE (device));
@@ -129,11 +134,14 @@ gsk_gl_image_new (GskGLDevice      *device,
                                 required_flags,
                                 &format,
                                 &flags,
-                                &self->gl_internal_format,
+                                &gl_internal_format,
+                                &gl_internal_srgb_format,
                                 &self->gl_format,
                                 &self->gl_type,
                                 swizzle);
-  
+
+  self->gl_internal_format = gl_internal_format;
+
   gsk_gpu_image_setup (GSK_GPU_IMAGE (self),
                        flags,
                        format,
@@ -177,6 +185,7 @@ gsk_gl_image_new_for_texture (GskGLDevice      *device,
   GdkMemoryFormat format, real_format;
   GskGpuImageFlags flags;
   GskGLImage *self;
+  GLint gl_internal_format, gl_internal_srgb_format;
   GLint swizzle[4];
 
   format = gdk_texture_get_format (owner);
@@ -188,10 +197,14 @@ gsk_gl_image_new_for_texture (GskGLDevice      *device,
                                 0,
                                 &real_format,
                                 &flags,
-                                &self->gl_internal_format,
+                                &gl_internal_format,
+                                &gl_internal_srgb_format,
                                 &self->gl_format,
                                 &self->gl_type,
                                 swizzle);
+  
+  self->gl_internal_format = gl_internal_format;
+
   if (format != real_format)
     flags = GSK_GPU_IMAGE_NO_BLIT | 
             (gdk_memory_format_alpha (format) == GDK_MEMORY_ALPHA_STRAIGHT ? GSK_GPU_IMAGE_STRAIGHT_ALPHA : 0);
