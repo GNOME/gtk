@@ -811,6 +811,7 @@ gsk_gpu_get_node_as_image (GskGpuFrame            *frame,
                            graphene_rect_t        *out_bounds)
 {
   GskGpuImage *result;
+  GdkColorState *image_color_state;
 
   switch ((guint) gsk_render_node_get_node_type (node))
     {
@@ -821,7 +822,7 @@ gsk_gpu_get_node_as_image (GskGpuFrame            *frame,
         gint64 timestamp = gsk_gpu_frame_get_timestamp (frame);
         result = gsk_gpu_device_lookup_texture_image (device, texture, gdk_texture_get_color_state (texture), timestamp);
         if (result == NULL)
-          result = gsk_gpu_frame_upload_texture (frame, FALSE, texture);
+          result = gsk_gpu_frame_upload_texture (frame, FALSE, texture, &image_color_state);
 
         if (result)
           {
@@ -1954,6 +1955,7 @@ gsk_gpu_node_processor_add_texture_node (GskGpuNodeProcessor *self,
   GskGpuImage *image;
   GdkTexture *texture;
   gint64 timestamp;
+  GdkColorState *image_color_state;
 
   device = gsk_gpu_frame_get_device (self->frame);
   texture = gsk_texture_node_get_texture (node);
@@ -1962,7 +1964,7 @@ gsk_gpu_node_processor_add_texture_node (GskGpuNodeProcessor *self,
   image = gsk_gpu_device_lookup_texture_image (device, texture, gdk_texture_get_color_state (texture), timestamp);
   if (image == NULL)
     {
-      image = gsk_gpu_frame_upload_texture (self->frame, FALSE, texture);
+      image = gsk_gpu_frame_upload_texture (self->frame, FALSE, texture, &image_color_state);
       if (image == NULL)
         {
           GSK_DEBUG (FALLBACK, "Unsupported texture format %u for size %dx%d",
@@ -2029,6 +2031,7 @@ gsk_gpu_node_processor_create_texture_pattern (GskGpuPatternWriter *self,
   guint32 descriptor;
   GskGpuImage *image;
   GskGpuSampler sampler;
+  GdkColorState *image_color_state;
 
   device = gsk_gpu_frame_get_device (self->frame);
   texture = gsk_texture_node_get_texture (node);
@@ -2037,7 +2040,7 @@ gsk_gpu_node_processor_create_texture_pattern (GskGpuPatternWriter *self,
   image = gsk_gpu_device_lookup_texture_image (device, texture, gdk_texture_get_color_state (texture), timestamp);
   if (image == NULL)
     {
-      image = gsk_gpu_frame_upload_texture (self->frame, FALSE, texture);
+      image = gsk_gpu_frame_upload_texture (self->frame, FALSE, texture, &image_color_state);
       if (image == NULL)
         return FALSE;
     }
@@ -2087,6 +2090,7 @@ gsk_gpu_node_processor_add_texture_scale_node (GskGpuNodeProcessor *self,
   gint64 timestamp;
   guint32 descriptor;
   gboolean need_mipmap, need_offscreen;
+  GdkColorState *image_color_state;
 
   need_offscreen = self->modelview != NULL ||
             !graphene_vec2_equal (&self->scale, graphene_vec2_one ());
@@ -2134,7 +2138,7 @@ gsk_gpu_node_processor_add_texture_scale_node (GskGpuNodeProcessor *self,
   image = gsk_gpu_device_lookup_texture_image (device, texture, gdk_texture_get_color_state (texture), timestamp);
   if (image == NULL)
     {
-      image = gsk_gpu_frame_upload_texture (self->frame, need_mipmap, texture);
+      image = gsk_gpu_frame_upload_texture (self->frame, need_mipmap, texture, &image_color_state);
       if (image == NULL)
         {
           GSK_DEBUG (FALLBACK, "Unsupported texture format %u for size %dx%d",
