@@ -73,7 +73,8 @@ gsk_gl_image_new_backbuffer (GskGLDevice    *device,
                              GdkGLContext   *context,
                              GdkMemoryFormat format,
                              gsize           width,
-                             gsize           height)
+                             gsize           height,
+                             gboolean        is_srgb)
 {
   GskGLImage *self;
   GskGpuImageFlags flags;
@@ -94,7 +95,18 @@ gsk_gl_image_new_backbuffer (GskGLDevice    *device,
                                 &self->gl_type,
                                 swizzle);
 
-  self->gl_internal_format = gl_internal_format;
+  if (is_srgb)
+    {
+      if (gl_internal_srgb_format != -1)
+        self->gl_internal_format = gl_internal_srgb_format;
+      else /* FIXME: not really correct */
+        self->gl_internal_format = gl_internal_format;
+      flags |= GSK_GPU_IMAGE_SRGB;
+    }
+  else
+    {
+      self->gl_internal_format = gl_internal_format;
+    }
 
   gsk_gpu_image_setup (GSK_GPU_IMAGE (self), flags, format, width, height);
 

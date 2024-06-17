@@ -117,7 +117,8 @@ gsk_ngl_renderer_get_backbuffer (GskGpuRenderer *renderer)
                                                       GDK_GL_CONTEXT (context),
                                                       GDK_MEMORY_DEFAULT /* FIXME */,
                                                       ceil (gdk_surface_get_width (surface) * scale),
-                                                      ceil (gdk_surface_get_height (surface) * scale));
+                                                      ceil (gdk_surface_get_height (surface) * scale),
+                                                      gdk_surface_get_gl_is_srgb (surface));
     }
 
   return self->backbuffer;
