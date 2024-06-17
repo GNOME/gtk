@@ -4,6 +4,7 @@
 
 #include "gdk/gdkdisplayprivate.h"
 #include "gdk/gdkglcontextprivate.h"
+#include "gdk/gdkcolorstateprivate.h"
 
 struct _GskGLImage
 {
@@ -125,6 +126,7 @@ gsk_gl_image_new_backbuffer (GskGLDevice    *device,
 GskGpuImage *
 gsk_gl_image_new (GskGLDevice      *device,
                   GdkMemoryFormat   format,
+                  GdkColorState    *color_state,
                   GskGpuImageFlags  required_flags,
                   gsize             width,
                   gsize             height)
@@ -152,7 +154,16 @@ gsk_gl_image_new (GskGLDevice      *device,
                                 &self->gl_type,
                                 swizzle);
 
-  self->gl_internal_format = gl_internal_format;
+  if (gl_internal_srgb_format != -1 &&
+      gdk_color_state_equal (color_state, GDK_COLOR_STATE_SRGB))
+    {
+      self->gl_internal_format = gl_internal_srgb_format;
+      flags |= GSK_GPU_IMAGE_SRGB;
+    }
+  else
+    {
+      self->gl_internal_format = gl_internal_format;
+    }
 
   gsk_gpu_image_setup (GSK_GPU_IMAGE (self),
                        flags,

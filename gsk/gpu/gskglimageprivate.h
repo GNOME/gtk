@@ -18,6 +18,7 @@ GskGpuImage *           gsk_gl_image_new_backbuffer                     (GskGLDe
                                                                          gboolean                converts_srgb);
 GskGpuImage *           gsk_gl_image_new                                (GskGLDevice            *device,
                                                                          GdkMemoryFormat         format,
+                                                                         GdkColorState          *color_state,
                                                                          GskGpuImageFlags        required_flags,
                                                                          gsize                   width,
                                                                          gsize                   height);

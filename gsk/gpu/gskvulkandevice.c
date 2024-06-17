@@ -391,6 +391,7 @@ static GskGpuImage *
 gsk_vulkan_device_create_upload_image (GskGpuDevice    *device,
                                        gboolean         with_mipmap,
                                        GdkMemoryFormat  format,
+                                       GdkColorState   *color_state,
                                        gsize            width,
                                        gsize            height)
 {
@@ -399,6 +400,7 @@ gsk_vulkan_device_create_upload_image (GskGpuDevice    *device,
   return gsk_vulkan_image_new_for_upload (self,
                                           with_mipmap,
                                           format,
+                                          color_state,
                                           width,
                                           height);
 }
