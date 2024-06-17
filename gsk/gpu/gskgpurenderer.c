@@ -391,6 +391,7 @@ gsk_gpu_renderer_render (GskRenderer          *renderer,
   cairo_region_t *render_region;
   double scale;
   GdkMemoryDepth depth;
+  GdkColorState *target_color_state;
 
   if (cairo_region_is_empty (region))
     {
@@ -412,10 +413,15 @@ gsk_gpu_renderer_render (GskRenderer          *renderer,
   render_region = get_render_region (self);
   scale = gsk_gpu_renderer_get_scale (self);
 
+  if (gsk_gpu_image_get_flags (backbuffer) & GSK_GPU_IMAGE_SRGB)
+    target_color_state = GDK_COLOR_STATE_SRGB_LINEAR;
+  else
+    target_color_state = GDK_COLOR_STATE_SRGB;
+
   gsk_gpu_frame_render (frame,
                         g_get_monotonic_time (),
                         backbuffer,
-                        GDK_COLOR_STATE_SRGB,
+                        target_color_state,
                         render_region,
                         root,
                         &GRAPHENE_RECT_INIT (
