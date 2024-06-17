@@ -20,6 +20,7 @@
 
 #include "gdkdmabuftextureprivate.h"
 
+#include "gdkcolorstateprivate.h"
 #include "gdkdisplayprivate.h"
 #include "gdkdmabufdownloaderprivate.h"
 #include "gdkdmabufformatsbuilderprivate.h"
@@ -200,6 +201,7 @@ gdk_dmabuf_texture_new_from_builder (GdkDmabufTextureBuilder *builder,
   self = g_object_new (GDK_TYPE_DMABUF_TEXTURE,
                        "width", width,
                        "height", height,
+                       "color-state", GDK_COLOR_STATE_SRGB,
                        NULL);
 
   g_set_object (&self->display, display);
