@@ -12,6 +12,7 @@
 
 #include "gsk/gskdebugprivate.h"
 #include "gsk/gskprivate.h"
+#include "gdk/gdkcolorstateprivate.h"
 
 #define MAX_SLICES_PER_ATLAS 64
 
@@ -252,6 +253,9 @@ struct _GskGpuCachedTexture
 
   GdkTexture *texture;
   GskGpuImage *image;
+  GdkColorState *color_state;
+  GskGpuImage *image2;
+  GdkColorState *color_state2;
 };
 
 static void
@@ -263,6 +267,9 @@ gsk_gpu_cached_texture_free (GskGpuDevice *device,
   gpointer key, value;
 
   g_clear_object (&self->image);
+  g_clear_pointer (&self->color_state, gdk_color_state_unref);
+  g_clear_object (&self->image2);
+  g_clear_pointer (&self->color_state2, gdk_color_state_unref);
 
   if (g_hash_table_steal_extended (priv->texture_cache, self->texture, &key, &value))
     {
@@ -325,9 +332,10 @@ gsk_gpu_cached_texture_destroy_cb (gpointer data)
 }
 
 static GskGpuCachedTexture *
-gsk_gpu_cached_texture_new (GskGpuDevice *device,
-                            GdkTexture   *texture,
-                            GskGpuImage  *image)
+gsk_gpu_cached_texture_new (GskGpuDevice  *device,
+                            GdkTexture    *texture,
+                            GskGpuImage   *image,
+                            GdkColorState *color_state)
 {
   GskGpuDevicePrivate *priv = gsk_gpu_device_get_instance_private (device);
   GskGpuCachedTexture *self;
@@ -340,6 +348,9 @@ gsk_gpu_cached_texture_new (GskGpuDevice *device,
   self = gsk_gpu_cached_new (device, &GSK_GPU_CACHED_TEXTURE_CLASS, NULL);
   self->texture = texture;
   self->image = g_object_ref (image);
+  self->color_state = gdk_color_state_ref (color_state);
+  self->image2 = NULL;
+  self->color_state2 = NULL;
   ((GskGpuCached *)self)->pixels = gsk_gpu_image_get_width (image) * gsk_gpu_image_get_height (image);
   self->dead_pixels_counter = &priv->dead_texture_pixels;
   self->use_count = 2;
@@ -850,34 +861,65 @@ gsk_gpu_device_add_atlas_image (GskGpuDevice      *self,
 }
 
 GskGpuImage *
-gsk_gpu_device_lookup_texture_image (GskGpuDevice *self,
-                                     GdkTexture   *texture,
-                                     gint64        timestamp)
+gsk_gpu_device_lookup_texture_image (GskGpuDevice   *self,
+                                     GdkTexture     *texture,
+                                     GdkColorState  *color_state,
+                                     gint64          timestamp)
 {
   GskGpuDevicePrivate *priv = gsk_gpu_device_get_instance_private (self);
   GskGpuCachedTexture *cache;
+  GskGpuImage *image;
 
   cache = gdk_texture_get_render_data (texture, self);
   if (cache == NULL)
     cache = g_hash_table_lookup (priv->texture_cache, texture);
 
-  if (!cache || !cache->image || gsk_gpu_cached_texture_is_invalid (cache))
+  if (!cache || gsk_gpu_cached_texture_is_invalid (cache))
+    return NULL;
+
+  if (gdk_color_state_equal (color_state, cache->color_state))
+    image = cache->image;
+  else if (cache->color_state2 && gdk_color_state_equal (color_state, cache->color_state2))
+    image = cache->image2;
+  else
     return NULL;
 
   gsk_gpu_cached_use (self, (GskGpuCached *) cache, timestamp);
 
-  return g_object_ref (cache->image);
+  return g_object_ref (image);
 }
 
 void
-gsk_gpu_device_cache_texture_image (GskGpuDevice *self,
-                                    GdkTexture   *texture,
-                                    gint64        timestamp,
-                                    GskGpuImage  *image)
+gsk_gpu_device_cache_texture_image (GskGpuDevice  *self,
+                                    GdkTexture    *texture,
+                                    gint64         timestamp,
+                                    GskGpuImage   *image,
+                                    GdkColorState *color_state)
 {
   GskGpuCachedTexture *cache;
 
-  cache = gsk_gpu_cached_texture_new (self, texture, image);
+  cache = gdk_texture_get_render_data (texture, self);
+  if (cache)
+    {
+      if (gdk_color_state_equal (color_state, gdk_texture_get_color_state (texture)))
+        {
+          g_clear_pointer (&cache->color_state, gdk_color_state_unref);
+          g_clear_object (&cache->image);
+          cache->color_state = gdk_color_state_ref (color_state);
+          cache->image = g_object_ref (image);
+        }
+      else
+        {
+          g_clear_pointer (&cache->color_state2, gdk_color_state_unref);
+          g_clear_object (&cache->image2);
+          cache->color_state2 = gdk_color_state_ref (color_state);
+          cache->image2 = g_object_ref (image);
+        }
+    }
+  else
+    {
+      cache = gsk_gpu_cached_texture_new (self, texture, image, color_state);
+    }
 
   gsk_gpu_cached_use (self, (GskGpuCached *) cache, timestamp);
 }

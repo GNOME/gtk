@@ -146,7 +146,7 @@ gsk_gpu_download_op_vk_command (GskGpuOp              *op,
       GskVulkanDevice *device = GSK_VULKAN_DEVICE (gsk_gpu_frame_get_device (frame));
       VkDevice vk_device = gsk_vulkan_device_get_vk_device (device);
 
-      gsk_gpu_device_cache_texture_image (GSK_GPU_DEVICE (device), self->texture, gsk_gpu_frame_get_timestamp (frame), self->image);
+      gsk_gpu_device_cache_texture_image (GSK_GPU_DEVICE (device), self->texture, gsk_gpu_frame_get_timestamp (frame), self->image, gdk_texture_get_color_state (self->texture));
 
       if (gsk_vulkan_device_has_feature (device, GDK_VULKAN_FEATURE_SEMAPHORE_EXPORT))
         {
