@@ -72,6 +72,7 @@ GskGpuImage *
 gsk_gl_image_new_backbuffer (GskGLDevice    *device,
                              GdkGLContext   *context,
                              GdkMemoryFormat format,
+                             gboolean        is_srgb,
                              gsize           width,
                              gsize           height)
 {
@@ -94,7 +95,18 @@ gsk_gl_image_new_backbuffer (GskGLDevice    *device,
                                 &self->gl_type,
                                 swizzle);
 
-  self->gl_internal_format = gl_internal_format;
+  if (is_srgb)
+    {
+      if (gl_internal_srgb_format != -1)
+        self->gl_internal_format = gl_internal_srgb_format;
+      else /* FIXME: Happens when the driver uses formats that it does not expose */
+        self->gl_internal_format = gl_internal_format;
+      flags |= GSK_GPU_IMAGE_SRGB;
+    }
+  else
+    {
+      self->gl_internal_format = gl_internal_format;
+    }
 
   gsk_gpu_image_setup (GSK_GPU_IMAGE (self), flags, format, width, height);
 
