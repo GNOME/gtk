@@ -457,6 +457,27 @@ gsk_gpu_color_convert (GskGpuFrame   *frame,
   return copy;
 }
 
+static void
+gsk_gpu_node_processor_get_clip_bounds (GskGpuNodeProcessor *self,
+                                        graphene_rect_t     *out_bounds)
+{
+  graphene_rect_offset_r (&self->clip.rect.bounds,
+                          - self->offset.x,
+                          - self->offset.y,
+                          out_bounds);
+
+  /* FIXME: We could try the scissor rect here.
+   * But how often is that smaller than the clip bounds?
+   */
+}
+
+static GskGpuImage * gsk_gpu_get_node_as_image (GskGpuFrame            *frame,
+                                                const graphene_rect_t  *clip_bounds,
+                                                const graphene_vec2_t  *scale,
+                                                GdkColorState          *color_state,
+                                                GskRenderNode          *node,
+                                                graphene_rect_t        *out_bounds);
+
 void
 gsk_gpu_node_processor_process (GskGpuFrame                 *frame,
                                 GskGpuImage                 *target,
@@ -471,11 +492,46 @@ gsk_gpu_node_processor_process (GskGpuFrame                 *frame,
                                frame,
                                NULL,
                                target,
-                               target_color_state,
+                               GDK_COLOR_STATE_SRGB_LINEAR,
                                clip,
                                viewport);
 
-  gsk_gpu_node_processor_add_node (&self, node);
+  if (gdk_color_state_equal (target_color_state, GDK_COLOR_STATE_SRGB_LINEAR))
+    {
+      gsk_gpu_node_processor_add_node (&self, node);
+    }
+  else
+    {
+      GskGpuImage *image;
+      graphene_rect_t clip_bounds;
+      graphene_rect_t bounds;
+      guint32 descriptor;
+
+      gsk_gpu_node_processor_sync_globals (&self, 0);
+
+      gsk_gpu_node_processor_get_clip_bounds (&self, &clip_bounds);
+
+      image = gsk_gpu_get_node_as_image (frame,
+                                         &clip_bounds,
+                                         &self.scale,
+                                         GDK_COLOR_STATE_SRGB_LINEAR,
+                                         node,
+                                         &bounds);
+
+      descriptor = gsk_gpu_node_processor_add_image (&self, image, GSK_GPU_SAMPLER_DEFAULT);
+
+      gsk_gpu_color_convert_op (frame,
+                                GSK_GPU_SHADER_CLIP_NONE,
+                                GDK_COLOR_STATE_SRGB_LINEAR,
+                                target_color_state,
+                                self.desc,
+                                descriptor,
+                                &bounds,
+                                &self.offset,
+                                &bounds);
+
+      g_object_unref (image);
+    }
 
   gsk_gpu_node_processor_finish (&self);
 }
@@ -746,20 +802,6 @@ gsk_gpu_node_processor_rect_is_integer (GskGpuNodeProcessor   *self,
       && int_rect->height == rect->size.height * scale_y;
 }
 
-static void
-gsk_gpu_node_processor_get_clip_bounds (GskGpuNodeProcessor *self,
-                                        graphene_rect_t     *out_bounds)
-{
-  graphene_rect_offset_r (&self->clip.rect.bounds,
-                          - self->offset.x,
-                          - self->offset.y,
-                          out_bounds);
- 
-  /* FIXME: We could try the scissor rect here.
-   * But how often is that smaller than the clip bounds?
-   */
-}
- 
 static gboolean G_GNUC_WARN_UNUSED_RESULT
 gsk_gpu_node_processor_clip_node_bounds (GskGpuNodeProcessor *self,
                                          GskRenderNode       *node,
