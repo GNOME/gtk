@@ -1483,6 +1483,7 @@ memory_format_gl_format (GskGLCommandQueue *self,
                          gboolean           ensure_mipmap,
                          gboolean          *out_can_mipmap,
                          GLint             *gl_internalformat,
+                         GLint             *gl_internalsrgbformat,
                          GLenum            *gl_format,
                          GLenum            *gl_type,
                          GLint              gl_swizzle[4])
@@ -1507,6 +1508,7 @@ memory_format_gl_format (GskGLCommandQueue *self,
       gdk_memory_format_gl_format (data_format,
                                    gdk_gl_context_get_use_es (self->context),
                                    gl_internalformat,
+                                   gl_internalsrgbformat,
                                    gl_format,
                                    gl_type,
                                    gl_swizzle);
@@ -1519,6 +1521,7 @@ memory_format_gl_format (GskGLCommandQueue *self,
                                         gdk_gl_context_get_use_es (self->context),
                                         &alt_format,
                                         gl_internalformat,
+                                        gl_internalsrgbformat,
                                         gl_format,
                                         gl_type,
                                         gl_swizzle))
@@ -1534,6 +1537,7 @@ memory_format_gl_format (GskGLCommandQueue *self,
           gdk_memory_format_gl_format (alt_format,
                                        gdk_gl_context_get_use_es (self->context),
                                        gl_internalformat,
+                                       gl_internalsrgbformat,
                                        gl_format,
                                        gl_type,
                                        gl_swizzle);
@@ -1552,6 +1556,7 @@ memory_format_gl_format (GskGLCommandQueue *self,
           gdk_memory_format_gl_format (fallbacks[i],
                                        gdk_gl_context_get_use_es (self->context),
                                        gl_internalformat,
+                                       gl_internalsrgbformat,
                                        gl_format,
                                        gl_type,
                                        gl_swizzle);
@@ -1670,7 +1675,7 @@ gsk_gl_command_queue_upload_texture_chunks (GskGLCommandQueue    *self,
   G_GNUC_UNUSED gint64 start_time = GDK_PROFILER_CURRENT_TIME;
   int width, height;
   GdkMemoryFormat data_format;
-  GLint gl_internalformat;
+  GLint gl_internalformat, gl_internalsrgbformat;
   GLenum gl_format;
   GLenum gl_type;
   GLint gl_swizzle[4];
@@ -1713,6 +1718,7 @@ gsk_gl_command_queue_upload_texture_chunks (GskGLCommandQueue    *self,
                                          ensure_mipmap,
                                          out_can_mipmap,
                                          &gl_internalformat,
+                                         &gl_internalsrgbformat,
                                          &gl_format,
                                          &gl_type,
                                          gl_swizzle);
