@@ -3623,33 +3623,6 @@ append_texture_param (Printer    *p,
 }
 
 static void
-print_font (PangoFont *font)
-{
-  PangoFontDescription *desc;
-  char *s;
-  hb_face_t *face;
-  hb_blob_t *blob;
-  const char *data;
-  unsigned int length;
-  char *csum;
-
-  desc = pango_font_describe_with_absolute_size (font);
-  s = pango_font_description_to_string (desc);
-
-  face = hb_font_get_face (pango_font_get_hb_font (font));
-  blob = hb_face_reference_blob (face);
-
-  data = hb_blob_get_data (blob, &length);
-  csum = g_compute_checksum_for_data (G_CHECKSUM_SHA256, (const guchar *)data, length);
-
-  g_print ("%s, face %p, sha %s\n", s, face, csum);
-
-  g_free (csum);
-  hb_blob_destroy (blob);
-  g_free (s);
-}
-
-static void
 gsk_text_node_serialize_font (GskRenderNode *node,
                               Printer       *p)
 {
@@ -3669,8 +3642,6 @@ gsk_text_node_serialize_font (GskRenderNode *node,
   g_free (s);
   pango_font_description_free (desc);
 
-  g_print ("serializing ");
-  print_font (font);
   info = g_hash_table_lookup (p->fonts, hb_font_get_face (pango_font_get_hb_font (font)));
   if (info->serialized)
     return;
