@@ -452,7 +452,8 @@ foreach test : node_parser_tests
         'GSK_RENDERER=opengl',
         'GTK_A11Y=test',
         'G_TEST_SRCDIR=@0@'.format(meson.current_source_dir()),
-        'G_TEST_BUILDDIR=@0@'.format(meson.current_build_dir())
+        'G_TEST_BUILDDIR=@0@'.format(meson.current_build_dir()),
+        'FONTCONFIG_FILE=@0@/fonts/fonts.conf'.format(meson.current_source_dir()),
       ],
       protocol: 'exitcode',
       suite: [ 'gsk', 'gsk-nodeparser' ]
