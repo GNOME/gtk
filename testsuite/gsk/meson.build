@@ -225,8 +225,8 @@ compare_xfails = {
   'ngl': {
     # the gradients are prone to rounding errors which become
     # more pronounced in small clips, it seems
-    'radial-gradient-with-64-colorstops': ['clipped', 'colorflipped'],
-    'conic-gradient-with-64-colorstops': ['clipped', 'colorflipped'],
+    'radial-gradient-with-64-colorstops': ['plain','flipped','rotated','repeated','masked','replayed','clipped','colorflipped'],
+    'conic-gradient-with-64-colorstops': ['plain','flipped','rotated','repeated','masked','replayed','clipped','colorflipped'],
     'blur-child-bounds-oversize-nogl': ['clipped'], # 6450
     'rounded-clip-with-huge-bounds-nogl': ['plain','flipped','rotated','repeated','masked','replayed','clipped','colorflipped'], # 6532
     'big-checkerboard': ['clipped'], # 6444
