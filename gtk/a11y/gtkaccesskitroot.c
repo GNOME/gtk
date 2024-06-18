@@ -322,7 +322,6 @@ deactivate_accessibility_main_thread (gpointer data)
   GPtrArray *contexts_to_unrealize = g_ptr_array_new ();
   guint i;
 
-  /* TODO: Unrealize AT contexts. Which ones? */
   g_clear_pointer (&self->update_queue, g_array_unref);
   self->did_initial_update = FALSE;
   self->requested_initial_tree = FALSE;
