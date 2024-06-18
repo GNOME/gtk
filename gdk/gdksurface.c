@@ -1168,6 +1168,12 @@ gdk_surface_ensure_egl_surface (GdkSurface     *self,
 #endif
 }
 
+gboolean
+gdk_surface_get_gl_is_srgb (GdkSurface *self)
+{
+  return self->is_srgb;
+}
+
 GdkGLContext *
 gdk_surface_get_paint_gl_context (GdkSurface  *surface,
                                   GError     **error)
