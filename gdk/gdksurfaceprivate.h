@@ -302,6 +302,8 @@ void                    gdk_surface_ensure_egl_surface          (GdkSurface     
                                                                  gboolean                hdr);
 gpointer /*EGLSurface*/ gdk_surface_get_egl_surface             (GdkSurface             *self);
 
+gboolean                gdk_surface_get_gl_is_srgb              (GdkSurface             *self);
+
 void                    gdk_surface_set_widget                  (GdkSurface             *self,
                                                                  gpointer                widget);
 gpointer                gdk_surface_get_widget                  (GdkSurface             *self);
