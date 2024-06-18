@@ -3022,11 +3022,11 @@ printer_init_duplicates_for_node (Printer       *printer,
 
   switch (gsk_render_node_get_node_type (node))
     {
-    case GSK_CAIRO_NODE:
     case GSK_TEXT_NODE:
       printer_init_collect_font_info (printer, node);
       break;
 
+    case GSK_CAIRO_NODE:
     case GSK_COLOR_NODE:
     case GSK_LINEAR_GRADIENT_NODE:
     case GSK_REPEATING_LINEAR_GRADIENT_NODE:
