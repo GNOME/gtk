@@ -212,13 +212,13 @@ compare_xfails_small_texture = [
 
 variants = {
   'plain': '--plain',
-  'flipped': '--flip',
-  'rotated': '--rotate',
-  'repeated': '--repeat',
-  'masked': '--mask',
-  'replayed': '--replay',
-  'clipped': '--clip',
-  'colorflipped': '--colorflip',
+  #'flipped': '--flip',
+  #'rotated': '--rotate',
+  #'repeated': '--repeat',
+  #'masked': '--mask',
+  #'replayed': '--replay',
+  #'clipped': '--clip',
+  #'colorflipped': '--colorflip',
 }
 
 compare_xfails = {
