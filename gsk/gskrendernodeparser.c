@@ -1005,7 +1005,7 @@ ensure_fontmap (Context *context)
 
   context->fontmap = pango_cairo_font_map_new ();
 
-  config = FcInitLoadConfig ();
+  config = FcConfigCreate ();
   pango_fc_font_map_set_config (PANGO_FC_FONT_MAP (context->fontmap), config);
   FcConfigDestroy (config);
 
