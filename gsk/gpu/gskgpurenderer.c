@@ -414,9 +414,15 @@ gsk_gpu_renderer_render (GskRenderer          *renderer,
   scale = gsk_gpu_renderer_get_scale (self);
 
   if (gsk_gpu_image_get_flags (backbuffer) & GSK_GPU_IMAGE_SRGB)
-    target_color_state = GDK_COLOR_STATE_SRGB_LINEAR;
+    {
+      g_debug ("Relying on GL/Vulkan to do srgb-linear->srgb conversion");
+      target_color_state = GDK_COLOR_STATE_SRGB_LINEAR;
+    }
   else
-    target_color_state = GDK_COLOR_STATE_SRGB;
+    {
+      g_debug ("Using an offscreen for srgb-linear->srgb conversion");
+      target_color_state = GDK_COLOR_STATE_SRGB;
+    }
 
   gsk_gpu_frame_render (frame,
                         g_get_monotonic_time (),
