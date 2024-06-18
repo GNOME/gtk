@@ -24,6 +24,7 @@
 
 #include "gdkprofilerprivate.h"
 #include <glib/gi18n-lib.h>
+#include "gdksurfaceprivate.h"
 
 #include <cairo-xlib.h>
 
@@ -53,6 +54,9 @@ gdk_x11_surface_get_glx_drawable (GdkSurface *surface)
   GdkX11Surface *self = GDK_X11_SURFACE (surface);
   GdkDisplay *display = gdk_surface_get_display (GDK_SURFACE (self));
   GdkX11Display *display_x11 = GDK_X11_DISPLAY (display);
+  Display *dpy = gdk_x11_display_get_xdisplay (display);
+  XVisualInfo *visinfo;
+  int value;
 
   if (self->glx_drawable)
     return self->glx_drawable;
@@ -61,6 +65,11 @@ gdk_x11_surface_get_glx_drawable (GdkSurface *surface)
                                         display_x11->glx_config,
                                         gdk_x11_surface_get_xid (surface),
                                         NULL);
+
+  visinfo = glXGetVisualFromFBConfig (dpy, display_x11->glx_config);
+  glXGetConfig (dpy, visinfo, GLX_FRAMEBUFFER_SRGB_CAPABLE_ARB, &value);
+  surface->is_srgb = value != 0;
+  XFree (visinfo);
 
   return self->glx_drawable;
 }
@@ -758,6 +767,17 @@ visual_is_rgba (XVisualInfo *visinfo)
     visinfo->visual->blue_mask  == 0x0000ff;
 }
 
+static gboolean
+visual_is_srgb (Display     *display,
+                XVisualInfo *visinfo)
+{
+  int value;
+
+  glXGetConfig (display, visinfo, GLX_FRAMEBUFFER_SRGB_CAPABLE_ARB, &value);
+
+  return value != 0;
+}
+
 #define MAX_GLX_ATTRS   30
 
 static gboolean
@@ -777,6 +797,7 @@ gdk_x11_display_create_glx_config (GdkX11Display  *self,
     WITH_STENCIL_AND_DEPTH_BUFFER,
     NO_ALPHA,
     NO_ALPHA_VISUAL,
+    NO_SRGB,
     PERFECT
   } best_features;
   int i = 0;
@@ -857,6 +878,20 @@ gdk_x11_display_create_glx_config (GdkX11Display  *self,
             {
               GDK_DISPLAY_DEBUG (display, OPENGL, "Best GLX config is %u for visual 0x%lX with no RGBA Visual", i, visinfo->visualid);
               best_features = NO_ALPHA_VISUAL;
+              *out_visual = visinfo->visual;
+              *out_depth = visinfo->depth;
+              self->glx_config = configs[i];
+            }
+          XFree (visinfo);
+          continue;
+        }
+
+      if (!visual_is_srgb (dpy, visinfo))
+        {
+          if (best_features < NO_SRGB)
+            {
+              GDK_DISPLAY_DEBUG (display, OPENGL, "Best GLX config is %u for visual 0x%lX with no SRGB", i, visinfo->visualid);
+              best_features = NO_SRGB;
               *out_visual = visinfo->visual;
               *out_depth = visinfo->depth;
               self->glx_config = configs[i];
