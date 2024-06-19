@@ -163,22 +163,13 @@ gsk_cairo_set_source_rgba (cairo_t       *cr,
 static void
 surface_srgb_to_linear_srgb (cairo_surface_t *s)
 {
-  guchar *data = cairo_image_surface_get_data (s);
-  gsize width = cairo_image_surface_get_width (s);
-  gsize height = cairo_image_surface_get_height (s);
-  gsize stride = cairo_image_surface_get_stride (s);
-
-  gdk_memory_convert (data,
-                      stride,
-                      GDK_MEMORY_DEFAULT,
-                      GDK_COLOR_STATE_SRGB_LINEAR,
-                      data,
-                      stride,
-                      GDK_MEMORY_DEFAULT,
-                      GDK_COLOR_STATE_SRGB,
-                      width,
-                      height);
-
+  gdk_memory_convert_color_state (cairo_image_surface_get_data (s),
+                                  cairo_image_surface_get_stride (s),
+                                  GDK_MEMORY_DEFAULT,
+                                  GDK_COLOR_STATE_SRGB,
+                                  GDK_COLOR_STATE_SRGB_LINEAR,
+                                  cairo_image_surface_get_width (s),
+                                  cairo_image_surface_get_height (s));
   cairo_surface_mark_dirty (s);
 }
 
