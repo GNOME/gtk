@@ -65,5 +65,12 @@ gboolean                gdk_wayland_display_query_registry      (GdkDisplay  *di
 GDK_AVAILABLE_IN_4_4
 gpointer                gdk_wayland_display_get_egl_display     (GdkDisplay  *display);
 
+void                    gdk_wayland_display_register_session    (GdkDisplay *display,
+                                                                 const char *name);
+
+void                    gdk_wayland_display_unregister_session  (GdkDisplay *display);
+
+const char *            gdk_wayland_display_get_current_session_id (GdkDisplay *display);
+
 G_END_DECLS
 
