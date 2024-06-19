@@ -20,6 +20,8 @@
 
 #include "gdkcolorstateprivate.h"
 
+#include <math.h>
+
 /**
  * GdkColorState:
  *
@@ -156,12 +158,73 @@ gdk_default_color_state_has_srgb_tf (GdkColorState  *color_state,
   return TRUE;
 }
 
+static inline float
+srgb_oetf (float v)
+{
+  if (v > 0.0031308)
+    return 1.055 * pow (v, 1 / 2.4) - 0.055;
+  else
+    return 12.92 * v;
+}
+
+static inline float
+srgb_eotf (float v)
+{
+  if (v >= 0.04045)
+    return powf (((v + 0.055) / (1 + 0.055)), 2.4);
+  else
+    return v / 12.92;
+}
+
+static void
+gdk_default_srgb_to_linear_srgb (GdkColorState  *self,
+                                 float         (*values)[4],
+                                 gsize           n_values)
+{
+  gsize i;
+
+  for (i = 0; i < n_values; i++)
+    {
+      values[i][0] = srgb_eotf (values[i][0]);
+      values[i][1] = srgb_eotf (values[i][1]);
+      values[i][2] = srgb_eotf (values[i][2]);
+    }
+}
+
+static void
+gdk_default_srgb_linear_to_srgb (GdkColorState  *self,
+                                 float         (*values)[4],
+                                 gsize           n_values)
+{
+  gsize i;
+
+  for (i = 0; i < n_values; i++)
+    {
+      values[i][0] = srgb_oetf (values[i][0]);
+      values[i][1] = srgb_oetf (values[i][1]);
+      values[i][2] = srgb_oetf (values[i][2]);
+    }
+}
+
+static GdkFloatColorConvert
+gdk_default_color_state_get_convert_to (GdkColorState  *color_state,
+                                        GdkColorState  *target)
+{
+  GdkDefaultColorState *self = (GdkDefaultColorState *) color_state;
+
+  if (!GDK_IS_DEFAULT_COLOR_STATE (target))
+    return NULL;
+
+  return self->convert_to[GDK_DEFAULT_COLOR_STATE_ID (target)];
+}
+
 static const
 GdkColorStateClass GDK_DEFAULT_COLOR_STATE_CLASS = {
   .free = NULL, /* crash here if this ever happens */
   .equal = gdk_default_color_state_equal,
   .get_name = gdk_default_color_state_get_name,
   .has_srgb_tf = gdk_default_color_state_has_srgb_tf,
+  .get_convert_to = gdk_default_color_state_get_convert_to,
 };
 
 GdkDefaultColorState gdk_default_color_states[] = {
@@ -174,6 +237,9 @@ GdkDefaultColorState gdk_default_color_states[] = {
     },
     .name = "srgb",
     .no_srgb = GDK_COLOR_STATE_SRGB_LINEAR,
+    .convert_to = {
+      [GDK_COLOR_STATE_ID_SRGB_LINEAR] = gdk_default_srgb_to_linear_srgb,
+    },
   },
   [GDK_COLOR_STATE_ID_SRGB_LINEAR] = {
     .parent = {
@@ -184,6 +250,9 @@ GdkDefaultColorState gdk_default_color_states[] = {
     },
     .name = "srgb-linear",
     .no_srgb = NULL,
+    .convert_to = {
+      [GDK_COLOR_STATE_ID_SRGB] = gdk_default_srgb_linear_to_srgb,
+    },
   },
 };
 

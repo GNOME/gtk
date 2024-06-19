@@ -23,6 +23,8 @@
 
 #include "gdkdmabuffourccprivate.h"
 #include "gdkglcontextprivate.h"
+#include "gdkcolorstateprivate.h"
+#include "gtk/gtkcolorutilsprivate.h"
 
 #include "gsk/gl/fp16private.h"
 
@@ -1840,6 +1842,10 @@ gdk_memory_convert (guchar              *dest_data,
 
   g_assert (dest_format < GDK_MEMORY_N_FORMATS);
   g_assert (src_format < GDK_MEMORY_N_FORMATS);
+  /* We don't allow overlap here. If you want to do in-place color state conversions,
+   * use gdk_memory_convert_color_state.
+   */
+  g_assert (dest_data + height * dest_stride < src_data || src_data + height * src_stride < dest_data);
 
   if (src_format == dest_format)
     {
@@ -1921,6 +1927,47 @@ gdk_memory_convert (guchar              *dest_data,
       dest_desc->from_float (dest_data, tmp, width);
       src_data += src_stride;
       dest_data += dest_stride;
+    }
+
+  g_free (tmp);
+}
+
+void
+gdk_memory_convert_color_state (guchar          *data,
+                                gsize            stride,
+                                GdkMemoryFormat  format,
+                                GdkColorState   *src_cs,
+                                GdkColorState   *dest_cs,
+                                gsize            width,
+                                gsize            height)
+{
+  const GdkMemoryFormatDescription *desc = &memory_formats[format];
+  GdkFloatColorConvert convert_func;
+  float (*tmp)[4];
+
+  if (gdk_color_state_equal (src_cs, dest_cs))
+    return;
+
+  convert_func = gdk_color_state_get_convert_to (src_cs, dest_cs);
+  /* FIXME: add fallback that goes via generic colorstate */
+  g_assert (convert_func);
+
+  tmp = g_malloc (sizeof (*tmp) * width);
+
+  for (gsize y = 0; y < height; y++)
+    {
+      desc->to_float (tmp, data, width);
+
+      if (desc->alpha == GDK_MEMORY_ALPHA_PREMULTIPLIED)
+        unpremultiply (tmp, width);
+
+      convert_func (src_cs, tmp, width);
+
+      if (desc->alpha == GDK_MEMORY_ALPHA_PREMULTIPLIED)
+        premultiply (tmp, width);
+
+      desc->from_float (data, tmp, width);
+      data += stride;
     }
 
   g_free (tmp);
