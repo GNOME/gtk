@@ -47,6 +47,8 @@
 
 #include <netinet/in.h>
 #include <unistd.h>
+#include <fcntl.h>
+#include <sys/stat.h>
 
 #include "gdksurface-wayland-private.h"
 #include "gdktoplevel-wayland-private.h"
@@ -55,6 +57,8 @@
 #include "presentation-time-client-protocol.h"
 
 #include "gsk/gskrectprivate.h"
+
+#include <lcms2.h>
 
 /**
  * GdkWaylandSurface:
@@ -980,16 +984,42 @@ gdk_wayland_surface_create_wl_surface (GdkSurface *surface)
           desc = xx_image_description_creator_params_v2_create (params);
           xx_image_description_v2_add_listener (desc, &image_desc_listener, surface);
         }
-#if 0
       else if (display_wayland->color_manager_supported.features & (1 << XX_COLOR_MANAGER_V2_FEATURE_ICC_V2_V4))
         {
-          GDK_DEBUG (MISC, "Using ICC image description");
+          int fd;
+          char *filename;
+          cmsHPROFILE profile;
 
-          struct xx_image_description_creator_icc_v2 *icc;
+          fd = g_file_open_tmp ("gtk-XXXXXX.icc", &filename, NULL);
+          close (fd);
 
-          icc = xx_color_manager_v2_new_icc_creator (display_wayland->color_manager);
+          profile = cmsCreate_sRGBProfile ();
+
+          if (cmsSaveProfileToFile (profile, filename))
+            {
+              struct xx_image_description_creator_icc_v2 *icc;
+              struct xx_image_description_v2 *desc;
+              int fd;
+              struct stat statbuf;
+
+              fd = open (filename, O_RDONLY);
+              fstat (fd, &statbuf);
+
+              GDK_DEBUG (MISC, "Using ICC image description");
+
+              icc = xx_color_manager_v2_new_icc_creator (display_wayland->color_manager);
+              xx_image_description_creator_icc_v2_set_icc_file (icc, fd, 0, statbuf.st_size);
+              desc = xx_image_description_creator_icc_v2_create (icc);
+              xx_image_description_v2_add_listener (desc, &image_desc_listener, surface);
+
+              close (fd);
+            }
+
+          cmsCloseProfile (profile);
+
+          g_unlink (filename);
+          g_free (filename);
         }
-#endif
       else
         {
           GDK_DEBUG (MISC, "Not using Wayland color management");
@@ -1447,7 +1477,7 @@ gdk_wayland_surface_class_init (GdkWaylandSurfaceClass *klass)
   klass->hide_surface = gdk_wayland_surface_default_hide_surface;
 }
 
-/* }}} */
+ /* }}} */
 /* {{{ Private Surface API */
 
 struct wl_output *
