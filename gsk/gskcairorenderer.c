@@ -26,6 +26,7 @@
 #include "gskrendererprivate.h"
 #include "gskrendernodeprivate.h"
 #include "gdk/gdktextureprivate.h"
+#include "gdk/gdkcolorstateprivate.h"
 
 typedef struct {
   GQuark cpu_time;
@@ -90,6 +91,19 @@ gsk_cairo_renderer_do_render (GskRenderer   *renderer,
   gsk_profiler_push_samples (profiler);
 }
 
+static void
+surface_linear_srgb_to_srgb (cairo_surface_t *s)
+{
+  gdk_memory_convert_color_state (cairo_image_surface_get_data (s),
+                                  cairo_image_surface_get_stride (s),
+                                  GDK_MEMORY_DEFAULT,
+                                  GDK_COLOR_STATE_SRGB_LINEAR,
+                                  GDK_COLOR_STATE_SRGB,
+                                  cairo_image_surface_get_width (s),
+                                  cairo_image_surface_get_height (s));
+  cairo_surface_mark_dirty (s);
+}
+
 static GdkTexture *
 gsk_cairo_renderer_render_texture (GskRenderer           *renderer,
                                    GskRenderNode         *root,
@@ -144,6 +158,7 @@ gsk_cairo_renderer_render_texture (GskRenderer           *renderer,
 
   cairo_destroy (cr);
 
+  surface_linear_srgb_to_srgb (surface);
   texture = gdk_texture_new_for_surface (surface);
   cairo_surface_destroy (surface);
 
@@ -156,18 +171,17 @@ gsk_cairo_renderer_render (GskRenderer          *renderer,
                            const cairo_region_t *region)
 {
   GskCairoRenderer *self = GSK_CAIRO_RENDERER (renderer);
-  cairo_t *cr;
+  cairo_t *cr, *cr2;
+  GdkSurface *surface = gsk_renderer_get_surface (renderer);
+  cairo_surface_t *s;
 
-  gdk_draw_context_begin_frame (GDK_DRAW_CONTEXT (self->cairo_context),
-                                region);
+  gdk_draw_context_begin_frame (GDK_DRAW_CONTEXT (self->cairo_context), region);
   cr = gdk_cairo_context_cairo_create (self->cairo_context);
 
   g_return_if_fail (cr != NULL);
 
   if (GSK_RENDERER_DEBUG_CHECK (renderer, GEOMETRY))
     {
-      GdkSurface *surface = gsk_renderer_get_surface (renderer);
-
       cairo_save (cr);
       cairo_set_operator (cr, CAIRO_OPERATOR_OVER);
       cairo_rectangle (cr,
@@ -178,8 +192,21 @@ gsk_cairo_renderer_render (GskRenderer          *renderer,
       cairo_restore (cr);
     }
 
-  gsk_cairo_renderer_do_render (renderer, cr, root);
+  s = cairo_image_surface_create (CAIRO_FORMAT_ARGB32,
+                                  gdk_surface_get_width (surface),
+                                  gdk_surface_get_height (surface));
 
+  cr2 = cairo_create (s);
+  gdk_cairo_region (cr2, gdk_draw_context_get_frame_region (GDK_DRAW_CONTEXT (self->cairo_context)));
+  cairo_clip (cr2);
+
+  gsk_cairo_renderer_do_render (renderer, cr2, root);
+  surface_linear_srgb_to_srgb (s);
+  cairo_set_source_surface (cr, s, 0, 0);
+  cairo_paint (cr);
+
+  cairo_destroy (cr2);
+  cairo_surface_destroy (s);
   cairo_destroy (cr);
 
   gdk_draw_context_end_frame (GDK_DRAW_CONTEXT (self->cairo_context));
