@@ -40,6 +40,7 @@
 #include "gdk/gdktextureprivate.h"
 #include "gdk/gdktexturedownloaderprivate.h"
 #include "gdk/gdkrgbaprivate.h"
+#include "gdk/gdkcolorstateprivate.h"
 
 #include <cairo.h>
 #ifdef CAIRO_HAS_SVG_SURFACE
@@ -157,6 +158,19 @@ gsk_cairo_set_source_rgba (cairo_t       *cr,
                          srgb_inverse_transfer_function (rgba->green),
                          srgb_inverse_transfer_function (rgba->blue),
                          rgba->alpha);
+}
+
+static void
+surface_srgb_to_linear_srgb (cairo_surface_t *s)
+{
+  gdk_memory_convert_color_state (cairo_image_surface_get_data (s),
+                                  cairo_image_surface_get_stride (s),
+                                  GDK_MEMORY_DEFAULT,
+                                  GDK_COLOR_STATE_SRGB,
+                                  GDK_COLOR_STATE_SRGB_LINEAR,
+                                  cairo_image_surface_get_width (s),
+                                  cairo_image_surface_get_height (s));
+  cairo_surface_mark_dirty (s);
 }
 
 /* {{{ GSK_COLOR_NODE */
@@ -1796,6 +1810,7 @@ gsk_texture_node_draw (GskRenderNode *node,
     }
 
   surface = gdk_texture_download_surface (self->texture);
+  surface_srgb_to_linear_srgb (surface);
   pattern = cairo_pattern_create_for_surface (surface);
   cairo_pattern_set_extend (pattern, CAIRO_EXTEND_PAD);
 
@@ -1972,6 +1987,7 @@ gsk_texture_scale_node_draw (GskRenderNode *node,
   cr2 = cairo_create (surface2);
 
   surface = gdk_texture_download_surface (self->texture);
+  surface_srgb_to_linear_srgb (surface);
   pattern = cairo_pattern_create_for_surface (surface);
   cairo_pattern_set_extend (pattern, CAIRO_EXTEND_PAD);
 
