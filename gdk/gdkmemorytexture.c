@@ -22,6 +22,7 @@
 #include "gdkmemorytextureprivate.h"
 
 #include "gdkmemoryformatprivate.h"
+#include "gdkcolorstateprivate.h"
 #include "gsk/gl/fp16private.h"
 
 /**
@@ -58,6 +59,7 @@ gdk_memory_texture_dispose (GObject *object)
 static void
 gdk_memory_texture_download (GdkTexture      *texture,
                              GdkMemoryFormat  format,
+                             GdkColorState   *color_state,
                              guchar          *data,
                              gsize            stride)
 {
@@ -65,9 +67,11 @@ gdk_memory_texture_download (GdkTexture      *texture,
 
   gdk_memory_convert (data, stride,
                       format,
+                      color_state,
                       (guchar *) g_bytes_get_data (self->bytes, NULL),
                       self->stride,
                       texture->format,
+                      gdk_texture_get_color_state (texture),
                       gdk_texture_get_width (texture),
                       gdk_texture_get_height (texture));
 }
@@ -217,7 +221,7 @@ gdk_memory_texture_from_texture (GdkTexture *texture)
   stride = texture->width * gdk_memory_format_bytes_per_pixel (texture->format);
   data = g_malloc_n (stride, texture->height);
 
-  gdk_texture_do_download (texture, texture->format, data, stride);
+  gdk_texture_do_download (texture, texture->format, gdk_texture_get_color_state (texture), data, stride);
   bytes = g_bytes_new_take (data, stride * texture->height);
   result = gdk_memory_texture_new (texture->width,
                                    texture->height,

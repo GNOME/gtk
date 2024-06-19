@@ -688,6 +688,7 @@ typedef struct _Download Download;
 struct _Download
 {
   GdkMemoryFormat format;
+  GdkColorState *color_state;
   guchar *data;
   gsize stride;
 };
@@ -701,6 +702,7 @@ do_download (gpointer    user_data,
 
   gdk_texture_downloader_init (&downloader, texture);
   gdk_texture_downloader_set_format (&downloader, download->format);
+  gdk_texture_downloader_set_color_state (&downloader, download->color_state);
   gdk_texture_downloader_download_into (&downloader, download->data, download->stride);
   gdk_texture_downloader_finish (&downloader);
 
@@ -712,12 +714,12 @@ gsk_gpu_frame_download_texture (GskGpuFrame     *self,
                                 gint64           timestamp,
                                 GdkTexture      *texture,
                                 GdkMemoryFormat  format,
+                                GdkColorState   *color_state,
                                 guchar          *data,
                                 gsize            stride)
 {
   GskGpuFramePrivate *priv = gsk_gpu_frame_get_instance_private (self);
   GskGpuImage *image;
-  GdkColorState *color_state;
 
   image = gsk_gpu_device_lookup_texture_image (priv->device, texture, GDK_COLOR_STATE_SRGB, timestamp);
   if (image == NULL)
@@ -738,6 +740,7 @@ gsk_gpu_frame_download_texture (GskGpuFrame     *self,
                        do_download,
                        g_memdup (&(Download) {
                            .format = format,
+                           .color_state = color_state,
                            .data = data,
                            .stride = stride
                        }, sizeof (Download)));

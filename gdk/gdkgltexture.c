@@ -24,6 +24,7 @@
 #include "gdkglcontextprivate.h"
 #include "gdkmemoryformatprivate.h"
 #include "gdkmemorytextureprivate.h"
+#include "gdkcolorstateprivate.h"
 
 #include <epoxy/gl.h>
 
@@ -136,6 +137,7 @@ typedef struct _Download Download;
 struct _Download
 {
   GdkMemoryFormat format;
+  GdkColorState *color_state;
   guchar *data;
   gsize stride;
 };
@@ -203,7 +205,8 @@ gdk_gl_texture_do_download (GdkGLTexture *self,
                                    &gl_internal_format, &gl_internal_srgb_format,
                                    &gl_format, &gl_type, gl_swizzle);
       if (download->stride == expected_stride &&
-          download->format == format)
+          download->format == format &&
+          gdk_color_state_equal (download->color_state, gdk_texture_get_color_state (texture)))
         {
           glGetTexImage (GL_TEXTURE_2D,
                          0,
@@ -226,9 +229,11 @@ gdk_gl_texture_do_download (GdkGLTexture *self,
           gdk_memory_convert (download->data,
                               download->stride,
                               download->format,
+                              download->color_state,
                               pixels,
                               stride,
                               format,
+                              gdk_texture_get_color_state (texture),
                               texture->width,
                               texture->height);
 
@@ -378,9 +383,11 @@ gdk_gl_texture_do_download (GdkGLTexture *self,
           gdk_memory_convert (download->data,
                               download->stride,
                               download->format,
+                              download->color_state,
                               pixels,
                               stride,
                               actual_format,
+                              gdk_texture_get_color_state (texture),
                               texture->width,
                               texture->height);
 
@@ -394,6 +401,7 @@ gdk_gl_texture_do_download (GdkGLTexture *self,
 static void
 gdk_gl_texture_download (GdkTexture      *texture,
                          GdkMemoryFormat  format,
+                         GdkColorState   *color_state,
                          guchar          *data,
                          gsize            stride)
 {
@@ -402,11 +410,12 @@ gdk_gl_texture_download (GdkTexture      *texture,
 
   if (self->saved)
     {
-      gdk_texture_do_download (self->saved, format, data, stride);
+      gdk_texture_do_download (self->saved, format, color_state, data, stride);
       return;
     }
 
   download.format = format;
+  download.color_state = color_state;
   download.data = data;
   download.stride = stride;
 

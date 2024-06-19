@@ -28,6 +28,7 @@ struct _GdkTextureDownloader
   /*< private >*/
   GdkTexture *texture;
   GdkMemoryFormat format;
+  GdkColorState *color_state;
 };
 
 void                    gdk_texture_downloader_init              (GdkTextureDownloader           *self,

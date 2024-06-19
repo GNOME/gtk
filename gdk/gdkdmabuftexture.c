@@ -96,6 +96,7 @@ struct _Download
 {
   GdkDmabufTexture *texture;
   GdkMemoryFormat format;
+  GdkColorState *color_state;
   guchar *data;
   gsize stride;
   volatile int spinlock;
@@ -109,6 +110,7 @@ gdk_dmabuf_texture_invoke_callback (gpointer data)
   gdk_dmabuf_downloader_download (download->texture->downloader,
                                   download->texture,
                                   download->format,
+                                  download->color_state,
                                   download->data,
                                   download->stride);
 
@@ -120,16 +122,17 @@ gdk_dmabuf_texture_invoke_callback (gpointer data)
 static void
 gdk_dmabuf_texture_download (GdkTexture      *texture,
                              GdkMemoryFormat  format,
+                             GdkColorState   *color_state,
                              guchar          *data,
                              gsize            stride)
 {
   GdkDmabufTexture *self = GDK_DMABUF_TEXTURE (texture);
-  Download download = { self, format, data, stride, 0 };
+  Download download = { self, format, color_state, data, stride, 0 };
 
   if (self->downloader == NULL)
     {
 #ifdef HAVE_DMABUF
-      gdk_dmabuf_download_mmap (texture, format, data, stride);
+      gdk_dmabuf_download_mmap (texture, format, color_state, data, stride);
 #endif
       return;
     }

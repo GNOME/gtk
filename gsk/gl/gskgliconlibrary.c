@@ -24,6 +24,7 @@
 #include <gdk/gdkmemoryformatprivate.h>
 #include <gdk/gdkprofilerprivate.h>
 #include <gdk/gdktextureprivate.h>
+#include <gdk/gdkcolorstateprivate.h>
 
 #include "gskglcommandqueueprivate.h"
 #include "gskgldriverprivate.h"
@@ -116,8 +117,11 @@ gsk_gl_icon_library_add (GskGLIconLibrary     *self,
       pixel_data = free_data = g_malloc (width * height * 4);
       gdk_memory_convert (pixel_data, width * 4,
                           GDK_MEMORY_R8G8B8A8_PREMULTIPLIED,
+                          GDK_COLOR_STATE_SRGB,
                           surface_data, cairo_image_surface_get_stride (surface),
-                          GDK_MEMORY_DEFAULT, width, height);
+                          GDK_MEMORY_DEFAULT,
+                          GDK_COLOR_STATE_SRGB,
+                          width, height);
       gl_format = GL_RGBA;
       gl_type = GL_UNSIGNED_BYTE;
     }
