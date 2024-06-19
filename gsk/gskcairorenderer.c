@@ -26,6 +26,7 @@
 #include "gskrendererprivate.h"
 #include "gskrendernodeprivate.h"
 #include "gdk/gdktextureprivate.h"
+#include "gdk/gdkcolorstateprivate.h"
 
 typedef struct {
   GQuark cpu_time;
@@ -150,39 +151,24 @@ gsk_cairo_renderer_render_texture (GskRenderer           *renderer,
   return texture;
 }
 
-static float
-srgb_transfer_function (float v)
-{
-  if (v > 0.0031308)
-    return 1.055 * pow (v, 1/2.4) - 0.055;
-  else
-    return 12.92 * v;
-}
-
 static void
 surface_linear_srgb_to_srgb (cairo_surface_t *s)
 {
   guchar *data = cairo_image_surface_get_data (s);
+  gsize width = cairo_image_surface_get_width (s);
+  gsize height = cairo_image_surface_get_height (s);
+  gsize stride = cairo_image_surface_get_stride (s);
 
-  for (int i = 0; i < cairo_image_surface_get_height (s); i++)
-    {
-      guchar *p = data + i * cairo_image_surface_get_stride (s);
-      for (int j = 0; j < cairo_image_surface_get_width (s); j++)
-        {
-          float a = p[4 * j + 3] / 255.0;
-          float b = p[4 * j] / (a * 255.0);
-          float g = p[4 * j + 1] / (a * 255.0);
-          float r = p[4 * j + 2] / (a * 255.0);
-
-          b = srgb_transfer_function (b);
-          g = srgb_transfer_function (g);
-          r = srgb_transfer_function (r);
-
-          p[4 * j] = CLAMP (255 * b * a, 0, 255);
-          p[4 * j + 1] = CLAMP (255 * g * a, 0, 255);
-          p[4 * j + 2] = CLAMP (255 * r * a, 0, 255);
-        }
-    }
+  gdk_memory_convert (data,
+                      stride,
+                      GDK_MEMORY_DEFAULT,
+                      GDK_COLOR_STATE_SRGB,
+                      data,
+                      stride,
+                      GDK_MEMORY_DEFAULT,
+                      GDK_COLOR_STATE_SRGB_LINEAR,
+                      width,
+                      height);
 
   cairo_surface_mark_dirty (s);
 }
