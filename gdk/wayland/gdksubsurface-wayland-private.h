@@ -2,6 +2,7 @@
 
 #include "gdksubsurfaceprivate.h"
 
+#include "gdkwaylandcolor-private.h"
 #include "wayland-client-protocol.h"
 
 typedef struct _GdkWaylandSubsurface GdkWaylandSubsurface;
@@ -20,6 +21,7 @@ struct _GdkWaylandSubsurface
   struct wl_surface *surface;
   struct wl_subsurface *subsurface;
   struct wp_viewport *viewport;
+  GdkWaylandColorSurface *color;
 
   GdkTexture *texture;
   cairo_rectangle_int_t dest;
