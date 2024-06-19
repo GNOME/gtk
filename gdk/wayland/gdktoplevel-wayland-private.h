@@ -38,3 +38,14 @@ gboolean gdk_wayland_toplevel_inhibit_idle        (GdkToplevel *toplevel);
 void     gdk_wayland_toplevel_uninhibit_idle      (GdkToplevel *toplevel);
 
 void     gdk_wayland_toplevel_destroy             (GdkToplevel *toplevel);
+
+void     gdk_wayland_toplevel_set_session_id      (GdkToplevel *toplevel,
+                                                   const char  *session_id);
+
+const char *
+         gdk_wayland_toplevel_get_session_id      (GdkToplevel *toplevel);
+
+void     gdk_wayland_toplevel_restore_from_session
+                                                  (GdkToplevel *toplevel);
+
+void     gdk_wayland_toplevel_remove_from_session (GdkToplevel *toplevel);
