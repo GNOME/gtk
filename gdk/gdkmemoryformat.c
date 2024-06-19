@@ -1835,6 +1835,10 @@ gdk_memory_convert (guchar              *dest_data,
 
   g_assert (dest_format < GDK_MEMORY_N_FORMATS);
   g_assert (src_format < GDK_MEMORY_N_FORMATS);
+  /* We don't allow overlap here. If you want to do in-place color state conversions,
+   * use gdk_memory_convert_color_state.
+   */
+  g_assert (dest_data + height * dest_stride < src_data || src_data + height * src_stride < dest_data);
 
   if (src_format == dest_format &&
       gdk_color_state_equal (src_color_state, dest_color_state))
@@ -1935,5 +1939,53 @@ gdk_memory_convert (guchar              *dest_data,
       dest_data += dest_stride;
     }
 
+  gdk_color_state_transform_finish (&transform);
   g_free (tmp);
+}
+
+void
+gdk_memory_convert_color_state (guchar          *data,
+                                gsize            stride,
+                                GdkMemoryFormat  format,
+                                GdkColorState   *src_color_state,
+                                GdkColorState   *dest_color_state,
+                                gsize            width,
+                                gsize            height)
+{
+#if 0
+  if (format == GDK_MEMORY_B8G8R8A8_PREMULTIPLIED)
+    {
+    }
+  else
+#endif
+    {
+      /* General case, treat it just like gdk_memory_convert */
+
+      const GdkMemoryFormatDescription *desc = &memory_formats[format];
+      GdkColorStateTransform transform = { NULL, FALSE };
+      float *tmp;
+
+      gdk_color_state_transform_init (&transform, src_color_state, dest_color_state, TRUE);
+
+      tmp = g_new (float, width * 4);
+
+      for (gsize y= 0; y < height; y++)
+        {
+          desc->to_float (tmp, data, width);
+
+          if (desc->alpha == GDK_MEMORY_ALPHA_PREMULTIPLIED)
+            unpremultiply (tmp, width);
+
+          gdk_color_state_transform (&transform, tmp, tmp, width);
+
+          if (desc->alpha != GDK_MEMORY_ALPHA_STRAIGHT)
+            premultiply (tmp, width);
+
+          desc->from_float (data, tmp, width);
+          data += stride;
+        }
+
+      g_free (tmp);
+      gdk_color_state_transform_finish (&transform);
+    }
 }
