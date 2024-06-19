@@ -19,6 +19,7 @@
   <object class="GtkApplicationWindow" id="window">
     <property name="default-width">800</property>
     <property name="default-height">600</property>
+    <property name="session-id">main-window</property>
     <property name="titlebar">
       <object class="GtkHeaderBar" id="headerbar">
         <child type="start">
