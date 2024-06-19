@@ -36,6 +36,8 @@ static char *current_file = NULL;
 static GtkWidget *notebook;
 static GtkSingleSelection *selection;
 static GtkWidget *toplevel;
+static GtkWidget *search_bar;
+static GtkWidget *search_entry;
 static char **search_needle;
 
 typedef struct _GtkDemo GtkDemo;
@@ -947,28 +949,109 @@ search_results_update (GObject    *filter_model,
     }
 }
 
+static gboolean
+close_request_cb (GtkWindow *window)
+{
+  GtkApplication *application;
+
+  application = gtk_window_get_application (window);
+  g_application_quit (G_APPLICATION (application));
+
+  return TRUE;
+}
+
+static gboolean
+save_state_cb (GtkApplicationWindow *window,
+               GVariantDict         *state)
+{
+  guint selected;
+  int current;
+
+  g_variant_dict_insert_value (state, "search-bar-visible", g_variant_new_boolean (gtk_search_bar_get_search_mode (GTK_SEARCH_BAR (search_bar))));
+
+  g_variant_dict_insert_value (state, "search-string", g_variant_new_string (gtk_editable_get_text (GTK_EDITABLE (search_entry))));
+
+  selected = gtk_single_selection_get_selected (selection);
+  g_variant_dict_insert_value (state, "selected-item", g_variant_new_uint32 (selected));
+
+  current = gtk_notebook_get_current_page (GTK_NOTEBOOK (notebook));
+  g_variant_dict_insert_value (state, "current-page", g_variant_new_int32 (current));
+
+  return TRUE;
+}
+
+static gboolean
+select_item (gpointer data)
+{
+  gtk_single_selection_set_selected (selection, GPOINTER_TO_UINT (data));
+  return G_SOURCE_REMOVE;
+}
+
+static gboolean
+select_page (gpointer data)
+{
+  gtk_notebook_set_current_page (GTK_NOTEBOOK (notebook), GPOINTER_TO_INT (data));
+  return G_SOURCE_REMOVE;
+}
+
 static void
-activate (GApplication *app)
+restore_state (GtkApplicationWindow *window,
+               GtkRestoreReason      reason,
+               GVariant             *state)
+{
+  gboolean visible;
+  guint selected;
+  const char *string;
+  int current;
+
+  if (!state)
+    return;
+
+  if (reason != GTK_RESTORE_REASON_RESTORE)
+    return;
+
+  g_variant_lookup (state, "search-bar-visible", "b", &visible);
+  gtk_search_bar_set_search_mode (GTK_SEARCH_BAR (search_bar), visible);
+
+  g_variant_lookup (state, "search-string", "&s", &string);
+  if (string)
+    {
+      gtk_editable_set_text (GTK_EDITABLE (search_entry), string);
+      gtk_editable_set_position (GTK_EDITABLE (search_entry), -1);
+    }
+
+  /* Wait for the search string filtering to take effect before
+   * applying the selected-item
+   */
+  g_variant_lookup (state, "selected-item", "u", &selected);
+  g_timeout_add (160, select_item, GUINT_TO_POINTER (selected));
+
+  /* Wait for the selected-item to update the notebook before
+   * applying the current-page
+   */
+  g_variant_lookup (state, "current-page", "i", &current);
+  g_timeout_add (320, select_page , GINT_TO_POINTER (current));
+}
+
+static GtkWindow *
+create_window (GtkApplication *app)
 {
   GtkBuilder *builder;
   GListModel *listmodel;
   GtkTreeListModel *treemodel;
-  GtkWidget *window, *listview, *search_entry, *search_bar;
+  GtkWidget *window, *listview;
   GtkFilterListModel *filter_model;
   GtkFilter *filter;
   GSimpleAction *action;
-  GList *list;
-
-  if ((list = gtk_application_get_windows (GTK_APPLICATION (app))) != NULL)
-    {
-      gtk_window_present (GTK_WINDOW (list->data));
-      return;
-    }
 
   builder = gtk_builder_new_from_resource ("/ui/main.ui");
 
-  window = (GtkWidget *)gtk_builder_get_object (builder, "window");
-  gtk_application_add_window (GTK_APPLICATION (app), GTK_WINDOW (window));
+  window = (GtkWidget *) gtk_builder_get_object (builder, "window");
+
+  g_signal_connect (window, "close-request", G_CALLBACK (close_request_cb), NULL);
+  g_signal_connect (window, "save-state", G_CALLBACK (save_state_cb), NULL);
+
+  gtk_application_add_window (app, GTK_WINDOW (window));
 
   if (g_strcmp0 (PROFILE, "devel") == 0)
     gtk_widget_add_css_class (window, "devel");
@@ -1010,9 +1093,36 @@ activate (GApplication *app)
   selection_cb (selection, NULL, NULL);
   g_object_unref (selection);
 
-  gtk_window_present (GTK_WINDOW (window));
-
   g_object_unref (builder);
+
+  return GTK_WINDOW (window);
+}
+
+static void
+restore_window (GtkApplication   *app,
+                GtkRestoreReason  reason,
+                GVariant         *state)
+{
+  GtkWindow *window;
+
+  window = create_window (app);
+  restore_state (GTK_APPLICATION_WINDOW (window), reason, state);
+}
+
+static void
+activate (GApplication *gapp)
+{
+  GtkApplication *app = GTK_APPLICATION (gapp);
+  GList *list;
+  GtkWindow *window;
+
+  list = gtk_application_get_windows (app);
+  if (list)
+    window = list->data;
+  else
+    window = create_window (app);
+
+  gtk_window_present (window);
 }
 
 static gboolean
@@ -1056,12 +1166,18 @@ command_line (GApplication            *app,
   GDoDemoFunc func = 0;
   GtkWidget *window, *demo;
 
-  activate (app);
-
   options = g_application_command_line_get_options_dict (cmdline);
   g_variant_dict_lookup (options, "run", "&s", &name);
   g_variant_dict_lookup (options, "autoquit", "b", &autoquit);
   g_variant_dict_lookup (options, "list", "b", &list);
+
+  if (!name && !list)
+    {
+      g_application_activate (app);
+      return 0;
+    }
+
+  create_window (GTK_APPLICATION (app));
 
   if (list)
     {
@@ -1137,6 +1253,7 @@ main (int argc, char **argv)
   gtk_init ();
 
   app = gtk_application_new ("org.gtk.Demo4", G_APPLICATION_NON_UNIQUE|G_APPLICATION_HANDLES_COMMAND_LINE);
+  g_object_set (app, "support-save", TRUE, NULL);
 
   g_snprintf (version, sizeof (version), "%s%s%s\n",
               PACKAGE_VERSION,
@@ -1156,8 +1273,9 @@ main (int argc, char **argv)
   g_application_add_main_option (G_APPLICATION (app), "list", 0, 0, G_OPTION_ARG_NONE, "List examples", NULL);
   g_application_add_main_option (G_APPLICATION (app), "autoquit", 0, 0, G_OPTION_ARG_NONE, "Quit after a delay", NULL);
 
-  g_signal_connect (app, "activate", G_CALLBACK (activate), NULL);
   g_signal_connect (app, "command-line", G_CALLBACK (command_line), NULL);
+  g_signal_connect (app, "activate", G_CALLBACK (activate), NULL);
+  g_signal_connect (app, "restore-window", G_CALLBACK (restore_window), NULL);
 
   g_application_run (G_APPLICATION (app), argc, argv);
 

@@ -21,6 +21,10 @@
     <key name='fullscreen' type='b'>
       <default>false</default>
     </key>
+
+    <key name='session-id' type='s'>
+      <default>''</default>
+    </key>
   </schema>
 
 </schemalist>

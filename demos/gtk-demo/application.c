@@ -395,7 +395,6 @@ demo_application_class_init (DemoApplicationClass *class)
 {
   GApplicationClass *app_class = G_APPLICATION_CLASS (class);
 
-  app_class->startup = startup;
   app_class->activate = activate;
 }
 
@@ -552,6 +551,7 @@ main (int argc, char *argv[])
   app = GTK_APPLICATION (g_object_new (demo_application_get_type (),
                                        "application-id", "org.gtk.Demo4.App",
                                        "flags", G_APPLICATION_HANDLES_OPEN,
+                                       "register-session", TRUE,
                                        NULL));
 
   return g_application_run (G_APPLICATION (app), 0, NULL);
