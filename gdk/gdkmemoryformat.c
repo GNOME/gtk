@@ -1987,10 +1987,25 @@ convert_srgb_to_srgb_linear (guchar *data,
 {
   for (gsize i = 0; i < n; i++)
     {
-      *data = srgb_inverse_lookup[*data]; data++;
-      *data = srgb_inverse_lookup[*data]; data++;
-      *data = srgb_inverse_lookup[*data]; data++;
-      data++;
+      guint8 r = data[0];
+      guint8 g = data[1];
+      guint8 b = data[2];
+      guchar a = data[3];
+      float f = a / 255.0;
+      if (a < 255)
+        {
+          r = r / f;
+          g = g / f;
+          b = b / f;
+        }
+      r = srgb_inverse_lookup[r];
+      g = srgb_inverse_lookup[g];
+      b = srgb_inverse_lookup[b];
+
+      data[0] = r * f;
+      data[1] = g * f;
+      data[2] = b * f;
+      data += 4;
     }
 }
 
@@ -2000,10 +2015,25 @@ convert_srgb_linear_to_srgb (guchar *data,
 {
   for (gsize i = 0; i < n; i++)
     {
-      *data = srgb_lookup[*data]; data++;
-      *data = srgb_lookup[*data]; data++;
-      *data = srgb_lookup[*data]; data++;
-      data++;
+      guint8 r = data[0];
+      guint8 g = data[1];
+      guint8 b = data[2];
+      guchar a = data[3];
+      float f = a / 255.0;
+      if (a < 255)
+        {
+          r = r / f;
+          g = g / f;
+          b = b / f;
+        }
+      r = srgb_lookup[r];
+      g = srgb_lookup[g];
+      b = srgb_lookup[b];
+
+      data[0] = r * f;
+      data[1] = g * f;
+      data[2] = b * f;
+      data += 4;
     }
 }
 
