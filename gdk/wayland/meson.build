@@ -145,6 +145,11 @@ proto_sources = [
     'stability': 'staging',
     'version': 1,
   },
+  {
+    'name': 'xx-color-management',
+    'stability': 'private',
+    'version': 2,
+  },
 ]
 
 gdk_wayland_gen_headers = []

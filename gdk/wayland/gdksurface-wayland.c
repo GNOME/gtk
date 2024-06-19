@@ -56,7 +56,6 @@
 
 #include "gsk/gskrectprivate.h"
 
-
 /**
  * GdkWaylandSurface:
  *
@@ -910,6 +909,34 @@ static const struct wl_surface_listener surface_listener = {
 };
 
 static void
+image_desc_failed (void                           *data,
+                   struct xx_image_description_v2 *image_desc,
+                   uint32_t                        cause,
+                   const char                     *msg)
+{
+  GDK_DEBUG (MISC, "Drats! Image description failed: %s", msg);
+  xx_image_description_v2_destroy (image_desc);
+}
+
+static void
+image_desc_ready (void                           *data,
+                  struct xx_image_description_v2 *image_desc,
+                  uint32_t                        identity)
+{
+  GdkWaylandSurface *self = data;
+
+  GDK_DEBUG (MISC, "Seting image description on surface");
+  xx_color_management_surface_v2_set_image_description (self->display_server.color,
+                                                        image_desc,
+                                                        XX_COLOR_MANAGER_V2_RENDER_INTENT_PERCEPTUAL);
+}
+
+static const struct xx_image_description_v2_listener image_desc_listener = {
+  image_desc_failed,
+  image_desc_ready
+};
+
+static void
 gdk_wayland_surface_create_wl_surface (GdkSurface *surface)
 {
   GdkWaylandSurface *self = GDK_WAYLAND_SURFACE (surface);
@@ -931,6 +958,42 @@ gdk_wayland_surface_create_wl_surface (GdkSurface *surface)
     {
       self->display_server.viewport =
           wp_viewporter_get_viewport (display_wayland->viewporter, wl_surface);
+    }
+
+  if (display_wayland->color_manager)
+    {
+      self->display_server.color = xx_color_manager_v2_get_surface (display_wayland->color_manager, wl_surface);
+
+      if (display_wayland->color_manager_supported.features & (1 << XX_COLOR_MANAGER_V2_FEATURE_PARAMETRIC) &&
+          display_wayland->color_manager_supported.transfers & (1 << XX_COLOR_MANAGER_V2_TRANSFER_FUNCTION_SRGB) &&
+          display_wayland->color_manager_supported.primaries & (1 << XX_COLOR_MANAGER_V2_PRIMARIES_SRGB) &&
+          display_wayland->color_manager_supported.intents & (1 << XX_COLOR_MANAGER_V2_RENDER_INTENT_PERCEPTUAL))
+        {
+          GDK_DEBUG (MISC, "Using parametric image description");
+
+          struct xx_image_description_creator_params_v2 *params;
+          struct xx_image_description_v2 *desc;
+
+          params = xx_color_manager_v2_new_parametric_creator (display_wayland->color_manager);
+          xx_image_description_creator_params_v2_set_tf_named (params, XX_COLOR_MANAGER_V2_TRANSFER_FUNCTION_SRGB);
+          xx_image_description_creator_params_v2_set_primaries_named (params, XX_COLOR_MANAGER_V2_PRIMARIES_SRGB);
+          desc = xx_image_description_creator_params_v2_create (params);
+          xx_image_description_v2_add_listener (desc, &image_desc_listener, surface);
+        }
+#if 0
+      else if (display_wayland->color_manager_supported.features & (1 << XX_COLOR_MANAGER_V2_FEATURE_ICC_V2_V4))
+        {
+          GDK_DEBUG (MISC, "Using ICC image description");
+
+          struct xx_image_description_creator_icc_v2 *icc;
+
+          icc = xx_color_manager_v2_new_icc_creator (display_wayland->color_manager);
+        }
+#endif
+      else
+        {
+          GDK_DEBUG (MISC, "Not using Wayland color management");
+        }
     }
 
   self->display_server.wl_surface = wl_surface;
@@ -986,6 +1049,7 @@ gdk_wayland_surface_destroy_wl_surface (GdkWaylandSurface *self)
 
   g_clear_pointer (&self->display_server.viewport, wp_viewport_destroy);
   g_clear_pointer (&self->display_server.fractional_scale, wp_fractional_scale_v1_destroy);
+  g_clear_pointer (&self->display_server.color, xx_color_management_surface_v2_destroy);
 
   g_clear_pointer (&self->display_server.wl_surface, wl_surface_destroy);
 

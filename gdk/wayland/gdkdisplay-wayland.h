@@ -42,6 +42,7 @@
 #include <gdk/wayland/presentation-time-client-protocol.h>
 #include <gdk/wayland/single-pixel-buffer-v1-client-protocol.h>
 #include <gdk/wayland/xdg-dialog-v1-client-protocol.h>
+#include <gdk/wayland/xx-color-management-v2-client-protocol.h>
 
 #include <glib.h>
 #include <gdk/gdkkeys.h>
@@ -123,6 +124,13 @@ struct _GdkWaylandDisplay
   struct wp_viewporter *viewporter;
   struct wp_presentation *presentation;
   struct wp_single_pixel_buffer_manager_v1 *single_pixel_buffer;
+  struct xx_color_manager_v2 *color_manager;
+  struct {
+    unsigned int intents;
+    unsigned int features;
+    unsigned int transfers;
+    unsigned int primaries;
+  } color_manager_supported;
 
   GList *async_roundtrips;
 

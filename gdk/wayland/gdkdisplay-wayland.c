@@ -339,6 +339,53 @@ static void gdk_wayland_display_init_xdg_output   (GdkWaylandDisplay *display_wa
 static void gdk_wayland_display_get_xdg_output    (GdkWaylandMonitor *monitor);
 
 static void
+xx_color_manager_v2_supported_intent (void                       *data,
+                                      struct xx_color_manager_v2 *xx_color_manager_v2,
+                                      uint32_t                    render_intent)
+{
+  GdkWaylandDisplay *display = data;
+
+  display->color_manager_supported.intents |= (1 << render_intent);
+}
+
+static void
+xx_color_manager_v2_supported_feature (void                       *data,
+                                       struct xx_color_manager_v2 *xx_color_manager_v2,
+                                       uint32_t                    feature)
+{
+  GdkWaylandDisplay *display = data;
+
+  display->color_manager_supported.features |= (1 << feature);
+}
+
+static void
+xx_color_manager_v2_supported_tf_named (void                       *data,
+                                        struct xx_color_manager_v2 *xx_color_manager_v2,
+                                        uint32_t                    tf)
+{
+  GdkWaylandDisplay *display = data;
+
+  display->color_manager_supported.transfers |= (1 << tf);
+}
+
+static void
+xx_color_manager_v2_supported_primaries_named (void                       *data,
+                                               struct xx_color_manager_v2 *xx_color_manager_v2,
+                                               uint32_t                    primaries)
+{
+  GdkWaylandDisplay *display = data;
+
+  display->color_manager_supported.primaries |= (1 << primaries);
+}
+
+static struct xx_color_manager_v2_listener color_manager_listener = {
+  xx_color_manager_v2_supported_intent,
+  xx_color_manager_v2_supported_feature,
+  xx_color_manager_v2_supported_tf_named,
+  xx_color_manager_v2_supported_primaries_named,
+};
+
+static void
 gdk_registry_handle_global (void               *data,
                             struct wl_registry *registry,
                             uint32_t            id,
@@ -532,6 +579,19 @@ gdk_registry_handle_global (void               *data,
                           &wp_presentation_interface,
                           MIN (version, 1));
     }
+  else if (strcmp (interface, "xx_color_manager_v2") == 0)
+    {
+      display_wayland->color_manager =
+        wl_registry_bind (display_wayland->wl_registry, id,
+                          &xx_color_manager_v2_interface,
+                          MIN (version, 2));
+
+      xx_color_manager_v2_add_listener (display_wayland->color_manager,
+                                        &color_manager_listener,
+                                        display_wayland);
+
+      _gdk_wayland_display_async_roundtrip (display_wayland);
+    }
   else if (strcmp (interface, wp_single_pixel_buffer_manager_v1_interface.name) == 0)
     {
       display_wayland->single_pixel_buffer =
@@ -690,6 +750,49 @@ _gdk_wayland_display_open (const char *display_name)
       g_object_unref (display);
 
       return NULL;
+    }
+
+  if (display_wayland->color_manager)
+    {
+      const char *intents[] = {
+        "perceptual", "relative", "saturation", "absolute", "relative-bpc"
+      };
+      const char *features[] = {
+        "icc-v2-v4", "parametric", "set-primaries", "set-tf-power",
+        "set-mastering-display-primaries", "extended-target-volume"
+      };
+      const char *tf[] = {
+        "bt709", "gamma22", "gamma28", "st240", "linear", "log100",
+        "log316", "xvycc", "bt1361", "srgb", "pq", "st428", "hlg"
+      };
+      const char *primaries[] = {
+        "srgb", "pal-m", "pal", "ntsc", "generic-film", "bt2020", "xyz",
+        "dci-p3", "display-p3", "adobe-rgb",
+      };
+
+      for (int i = 0; i < G_N_ELEMENTS (intents); i++)
+        {
+          GDK_DEBUG (MISC, "Rendering intent %d (%s): %s",
+                   i, intents[i], display_wayland->color_manager_supported.intents & (1 << i) ? "✓" : "✗");
+        }
+
+      for (int i = 0; i < G_N_ELEMENTS (features); i++)
+        {
+          GDK_DEBUG (MISC, "Feature %d (%s): %s",
+                   i, features[i], display_wayland->color_manager_supported.features & (1 << i) ? "✓" : "✗");
+        }
+
+      for (int i = 0; i < G_N_ELEMENTS (tf); i++)
+        {
+          GDK_DEBUG (MISC, "Transfer function %d (%s): %s",
+                   i, tf[i], display_wayland->color_manager_supported.transfers & (1 << i) ? "✓" : "✗");
+        }
+
+      for (int i = 0; i < G_N_ELEMENTS (primaries); i++)
+        {
+          GDK_DEBUG (MISC, "Primaries %d (%s): %s",
+                   i, primaries[i], display_wayland->color_manager_supported.primaries& (1 << i) ? "✓" : "✗");
+        }
     }
 
   gdk_display_emit_opened (display);

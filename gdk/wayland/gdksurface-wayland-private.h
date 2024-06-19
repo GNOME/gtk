@@ -39,6 +39,7 @@ struct _GdkWaylandSurface
     struct wl_egl_window *egl_window;
     struct wp_fractional_scale_v1 *fractional_scale;
     struct wp_viewport *viewport;
+    struct xx_color_management_surface_v2 *color;
   } display_server;
 
   struct wl_event_queue *event_queue;
