@@ -19,6 +19,7 @@
 #include "config.h"
 
 #include "gdkcolorstateprivate.h"
+#include "gtk/gtkcolorutilsprivate.h"
 
 #include <glib/gi18n-lib.h>
 
@@ -176,6 +177,55 @@ gdk_color_state_get_min_depth (GdkColorState *self)
     return GDK_MEMORY_U8;
 
   return GDK_MEMORY_FLOAT16;
+}
+
+/* }}} */
+/* {{{ Conversion */
+
+void
+gdk_color_state_transform_init (GdkColorStateTransform *tf,
+                                GdkColorState           *from,
+                                GdkColorState           *to,
+                                gboolean                 copy_alpha)
+{
+  memset (tf, 0, sizeof (GdkColorStateTransform));
+
+  tf->copy_alpha = copy_alpha;
+
+  if (from == to)
+    return;
+
+  if (from == GDK_COLOR_STATE_SRGB && to == GDK_COLOR_STATE_SRGB_LINEAR)
+    tf->step = gtk_rgb_to_linear_srgb;
+  else if (from == GDK_COLOR_STATE_SRGB_LINEAR && to == GDK_COLOR_STATE_SRGB)
+    tf->step = gtk_linear_srgb_to_rgb;
+  else
+    g_assert_not_reached ();
+}
+
+void
+gdk_color_state_transform_finish (GdkColorStateTransform *tf)
+{
+  /* Nothing to do for now */
+}
+
+void
+gdk_color_state_transform (GdkColorStateTransform *tf,
+                           const float            *src,
+                           float                  *dst,
+                           int                     width)
+{
+  if (tf->step)
+    {
+      for (int i = 0; i < width * 4; i += 4)
+        {
+          tf->step (src[i], src[i+1], src[i+2],
+                    &dst[i], &dst[i+1], &dst[i+2]);
+
+          if (tf->copy_alpha)
+            dst[i+3] = src[i+3];
+        }
+    }
 }
 
 /* }}} */

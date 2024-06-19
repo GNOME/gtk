@@ -82,3 +82,26 @@ _gdk_color_state_equal (GdkColorState *self,
   return self->klass->equal (self, other);
 }
 
+typedef void (* StepFunc) (float  s0, float  s1, float  s2,
+                           float *d0, float *d1, float *d2);
+
+typedef struct _GdkColorStateTransform GdkColorStateTransform;
+
+struct _GdkColorStateTransform
+{
+  StepFunc step;
+  gboolean copy_alpha;
+};
+
+void gdk_color_state_transform_init (GdkColorStateTransform *tf,
+                                     GdkColorState           *from,
+                                     GdkColorState           *to,
+                                     gboolean                 copy_alpha);
+
+void gdk_color_state_transform_finish (GdkColorStateTransform *tf);
+
+void gdk_color_state_transform (GdkColorStateTransform *tf,
+                                const float            *src,
+                                float                  *dst,
+                                int                     width);
+
