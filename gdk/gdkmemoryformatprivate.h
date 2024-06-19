@@ -88,6 +88,13 @@ void                    gdk_memory_convert                  (guchar             
                                                              GdkMemoryFormat             src_format,
                                                              gsize                       width,
                                                              gsize                       height);
+void                    gdk_memory_convert_color_state      (guchar                     *data,
+                                                             gsize                       stride,
+                                                             GdkMemoryFormat             format,
+                                                             GdkColorState              *src_color_state,
+                                                             GdkColorState              *dest_color_state,
+                                                             gsize                       width,
+                                                             gsize                       height);
 
 
 G_END_DECLS

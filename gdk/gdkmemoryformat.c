@@ -23,6 +23,8 @@
 
 #include "gdkdmabuffourccprivate.h"
 #include "gdkglcontextprivate.h"
+#include "gdkcolorstateprivate.h"
+#include "gtk/gtkcolorutilsprivate.h"
 
 #include "gsk/gl/fp16private.h"
 
@@ -1831,6 +1833,10 @@ gdk_memory_convert (guchar              *dest_data,
 
   g_assert (dest_format < GDK_MEMORY_N_FORMATS);
   g_assert (src_format < GDK_MEMORY_N_FORMATS);
+  /* We don't allow overlap here. If you want to do in-place color state conversions,
+   * use gdk_memory_convert_color_state.
+   */
+  g_assert (dest_data + height * dest_stride < src_data || src_data + height * src_stride < dest_data);
 
   if (src_format == dest_format)
     {
@@ -1912,6 +1918,53 @@ gdk_memory_convert (guchar              *dest_data,
       dest_desc->from_float (dest_data, tmp, width);
       src_data += src_stride;
       dest_data += dest_stride;
+    }
+
+  g_free (tmp);
+}
+
+typedef void (* StepFunc) (float  s0, float  s1, float  s2,
+                           float *d0, float *d1, float *d2);
+
+void
+gdk_memory_convert_color_state (guchar          *data,
+                                gsize            stride,
+                                GdkMemoryFormat  format,
+                                GdkColorState   *src_color_state,
+                                GdkColorState   *dest_color_state,
+                                gsize            width,
+                                gsize            height)
+{
+  const GdkMemoryFormatDescription *desc = &memory_formats[format];
+  StepFunc func;
+  float *tmp;
+
+  if (src_color_state == GDK_COLOR_STATE_SRGB &&
+      dest_color_state == GDK_COLOR_STATE_SRGB_LINEAR)
+    func = gtk_rgb_to_linear_srgb;
+  else if (src_color_state == GDK_COLOR_STATE_SRGB_LINEAR &&
+           dest_color_state == GDK_COLOR_STATE_SRGB)
+    func = gtk_linear_srgb_to_rgb;
+  else
+    return;
+
+  tmp = g_new (float, width * 4);
+
+  for (gsize y = 0; y < height; y++)
+    {
+      desc->to_float (tmp, data, width);
+
+      if (desc->alpha == GDK_MEMORY_ALPHA_PREMULTIPLIED)
+        unpremultiply (tmp, width);
+
+      for (gsize x = 0; x < 4 * width; x += 4)
+        func (tmp[x], tmp[x+1], tmp[x+2], &tmp[x], &tmp[x+1], &tmp[x+2]);
+
+      if (desc->alpha != GDK_MEMORY_ALPHA_STRAIGHT)
+        premultiply (tmp, width);
+
+      desc->from_float (data, tmp, width);
+      data += stride;
     }
 
   g_free (tmp);
