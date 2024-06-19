@@ -471,8 +471,7 @@ gdk_gl_texture_release (GdkGLTexture *self)
   g_return_if_fail (self->saved == NULL);
 
   texture = GDK_TEXTURE (self);
-  self->saved = GDK_TEXTURE (gdk_memory_texture_from_texture (texture,
-                                                              gdk_texture_get_format (texture)));
+  self->saved = GDK_TEXTURE (gdk_memory_texture_from_texture (texture));
 
   drop_gl_resources (self);
 }
