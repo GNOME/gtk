@@ -153,6 +153,15 @@ gtk_application_impl_prefers_app_menu (GtkApplicationImpl *impl)
   return GTK_APPLICATION_IMPL_GET_CLASS (impl)->prefers_app_menu (impl);
 }
 
+const char *
+gtk_application_impl_get_current_session_id (GtkApplicationImpl *impl)
+{
+  if (!GTK_APPLICATION_IMPL_GET_CLASS (impl)->get_current_session_id)
+    return NULL;
+
+  return GTK_APPLICATION_IMPL_GET_CLASS (impl)->get_current_session_id (impl);
+}
+
 GtkApplicationImpl *
 gtk_application_impl_new (GtkApplication *application,
                           GdkDisplay     *display)

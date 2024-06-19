@@ -130,6 +130,7 @@ enum {
   PROP_SCREENSAVER_ACTIVE,
   PROP_MENUBAR,
   PROP_ACTIVE_WINDOW,
+  PROP_SESSION_ID,
   NUM_PROPERTIES
 };
 
@@ -150,6 +151,7 @@ typedef struct
   GtkActionMuxer  *muxer;
   GtkBuilder      *menus_builder;
   char            *help_overlay_path;
+  char            *session_id;
 } GtkApplicationPrivate;
 
 G_DEFINE_TYPE_WITH_PRIVATE (GtkApplication, gtk_application, G_TYPE_APPLICATION)
@@ -464,6 +466,10 @@ gtk_application_get_property (GObject    *object,
       g_value_set_object (value, gtk_application_get_active_window (application));
       break;
 
+    case PROP_SESSION_ID:
+      g_value_set_string (value, gtk_application_get_session_id (application));
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -487,6 +493,10 @@ gtk_application_set_property (GObject      *object,
 
     case PROP_MENUBAR:
       gtk_application_set_menubar (application, g_value_get_object (value));
+      break;
+
+    case PROP_SESSION_ID:
+      gtk_application_set_session_id (application, g_value_get_string (value));
       break;
 
     default:
@@ -649,6 +659,18 @@ gtk_application_class_init (GtkApplicationClass *class)
     g_param_spec_object ("active-window", NULL, NULL,
                          GTK_TYPE_WINDOW,
                          G_PARAM_READABLE|G_PARAM_STATIC_STRINGS);
+
+  /**
+   * GtkApplication:session-id: (attributes org.gtk.Property.get=gtk_application_get_session_id org.gtk.Property.set=gtk_application_set_session_id)
+   *
+   * The identifier of the session used to restore window state.
+   *
+   * Since: 4.16
+   */
+  gtk_application_props[PROP_SESSION_ID] =
+    g_param_spec_string ("session-id", NULL, NULL,
+                         NULL,
+                         G_PARAM_READWRITE|G_PARAM_STATIC_STRINGS);
 
   g_object_class_install_properties (object_class, NUM_PROPERTIES, gtk_application_props);
 }
@@ -1237,4 +1259,96 @@ gtk_application_set_screensaver_active (GtkApplication *application,
       priv->screensaver_active = active;
       g_object_notify (G_OBJECT (application), "screensaver-active");
     }
+}
+
+/**
+ * gtk_application_set_session_id:
+ * @application: a `GtkApplication`
+ * @session_id: (nullable): The identifier used for session management purposes
+ *
+ * Sets the identifier used for session management purposes.
+ *
+ * This identifier would have been typically retrieved in prior runs
+ * through [method@Gtk.Application.get_current_session_id].
+ *
+ * This session identifier must be set before `GApplication::startup` happens,
+ * as it will be applied there. In the case %NULL was passed, or the request
+ * resulted in a new session being created from scratch,
+ * [method@Gtk.Application.get_current_session_id] may return a different
+ * identifier than the one passed here.
+ **/
+void
+gtk_application_set_session_id (GtkApplication *application,
+                                const char     *session_id)
+{
+  GtkApplicationPrivate *priv =
+    gtk_application_get_instance_private (application);
+
+  g_return_if_fail (GTK_IS_APPLICATION (application));
+
+  if (g_set_str (&priv->session_id, session_id))
+    g_object_notify (G_OBJECT (application), "session-id");
+}
+
+/**
+ * gtk_application_get_session_id:
+ * @application: a `GtkApplication`
+ *
+ * Gets the session identifier that this `GtkApplication` will use
+ * for session management registration.
+ *
+ * See [method@Gtk.Application.set_session_id] for more information about
+ * session management.
+ *
+ * Returns: (nullable): The session management ID
+ **/
+const char *
+gtk_application_get_session_id (GtkApplication *application)
+{
+  GtkApplicationPrivate *priv =
+    gtk_application_get_instance_private (application);
+
+  return priv->session_id;
+}
+
+/**
+ * gtk_application_get_current_session_id:
+ * @application: a `GtkApplication`
+ *
+ * Retrieves the session management identifier that the application
+ * is using during execution.
+ *
+ * This identifier may be saved for future executions of the application
+ * to have their window state recovered.
+ *
+ * This function may be used during or after [signal@Gio.Application.startup]
+ * to retrieve a session identifier string in environments where session
+ * management is supported.
+ *
+ * In order to restore window state in future runs of the same application,
+ * this string should be stored, so it can be passed through
+ * [method@Gtk.Application.set_session_id] in these future executions.
+ *
+ * Note that this identifier may end up being different from the one
+ * initially specified through [method@Gtk.Application.set_session_id],
+ * e.g. in the case the specified session ID could not be recovered and a
+ * new session was created.
+ *
+ * If called on an environment/backend that does not support session
+ * management, or prior to application startup, this method will return `NULL`.
+ *
+ * Currently, session management is only supported in the Wayland backend.
+ *
+ * Returns: (nullable): The session identifier to preserve for future runs
+ **/
+const char *
+gtk_application_get_current_session_id (GtkApplication *application)
+{
+  GtkApplicationPrivate *priv =
+    gtk_application_get_instance_private (application);
+
+  if (!priv->impl)
+    return NULL;
+
+  return gtk_application_impl_get_current_session_id (priv->impl);
 }

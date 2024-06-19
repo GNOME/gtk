@@ -134,6 +134,16 @@ GDK_AVAILABLE_IN_ALL
 GMenu *          gtk_application_get_menu_by_id                  (GtkApplication       *application,
                                                                   const char           *id);
 
+GDK_AVAILABLE_IN_4_16
+void             gtk_application_set_session_id         (GtkApplication *application,
+                                                         const char     *session_id);
+
+GDK_AVAILABLE_IN_4_16
+const char *     gtk_application_get_session_id         (GtkApplication *application);
+
+GDK_AVAILABLE_IN_4_16
+const char *     gtk_application_get_current_session_id (GtkApplication *application);
+
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkApplication, g_object_unref)
 
 G_END_DECLS
