@@ -265,6 +265,13 @@ void     gtk_window_set_handle_menubar_accel (GtkWindow *window,
 GDK_AVAILABLE_IN_4_2
 gboolean gtk_window_get_handle_menubar_accel (GtkWindow *window);
 
+GDK_AVAILABLE_IN_4_16
+void         gtk_window_set_session_id       (GtkWindow  *window,
+                                              const char *session_id);
+
+GDK_AVAILABLE_IN_4_16
+const char * gtk_window_get_session_id       (GtkWindow  *window);
+
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkWindow, g_object_unref)
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkWindowGroup, g_object_unref)
 
