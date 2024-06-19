@@ -38,6 +38,7 @@
 #include <wayland/xdg-shell-unstable-v6-client-protocol.h>
 #include <wayland/xdg-foreign-unstable-v2-client-protocol.h>
 #include <wayland/xdg-dialog-v1-client-protocol.h>
+#include <wayland/xx-session-management-v1-client-protocol.h>
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -127,6 +128,7 @@ struct _GdkWaylandToplevel
   struct wl_output *initial_fullscreen_output;
 
   struct wp_presentation_feedback *feedback;
+  struct xx_toplevel_session_v1 *toplevel_session;
 
   struct {
     GdkToplevelState unset_flags;
@@ -143,6 +145,7 @@ struct _GdkWaylandToplevel
 
   char *title;
   gboolean decorated;
+  char *session_id;
 
   GdkGeometry geometry_hints;
   GdkSurfaceHints geometry_mask;
@@ -821,6 +824,23 @@ create_zxdg_toplevel_v6_resources (GdkWaylandToplevel *toplevel)
 }
 
 static void
+attempt_restore_toplevel (GdkWaylandToplevel *wayland_toplevel)
+{
+  GdkDisplay *display = gdk_surface_get_display (GDK_SURFACE (wayland_toplevel));
+  GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (display);
+
+  if (display_wayland->xdg_session &&
+      wayland_toplevel->session_id &&
+      wayland_toplevel->display_server.xdg_toplevel)
+    {
+      wayland_toplevel->toplevel_session =
+        xx_session_v1_restore_toplevel (display_wayland->xdg_session,
+                                        wayland_toplevel->display_server.xdg_toplevel,
+                                        wayland_toplevel->session_id);
+    }
+}
+
+static void
 gdk_wayland_surface_create_xdg_toplevel (GdkWaylandToplevel *wayland_toplevel)
 {
   GdkSurface *surface = GDK_SURFACE (wayland_toplevel);
@@ -885,6 +905,8 @@ gdk_wayland_surface_create_xdg_toplevel (GdkWaylandToplevel *wayland_toplevel)
   maybe_set_gtk_surface_dbus_properties (wayland_toplevel);
   if (!maybe_set_xdg_dialog_modal (wayland_toplevel))
     maybe_set_gtk_surface_modal (wayland_toplevel);
+
+  attempt_restore_toplevel (wayland_toplevel);
 
   gdk_profiler_add_mark (GDK_PROFILER_CURRENT_TIME, 0, "Wayland surface commit", NULL);
   wl_surface_commit (wayland_surface->display_server.wl_surface);
@@ -1411,6 +1433,9 @@ gdk_wayland_toplevel_finalize (GObject *object)
   g_free (self->application.window_object_path);
   g_free (self->application.application_object_path);
   g_free (self->application.unique_bus_name);
+
+  g_free (self->session_id);
+  g_clear_pointer (&self->toplevel_session, xx_toplevel_session_v1_destroy);
 
   g_free (self->title);
   g_clear_pointer (&self->shortcuts_inhibitors, g_hash_table_unref);
@@ -2780,6 +2805,46 @@ gdk_wayland_toplevel_set_transient_for_exported (GdkToplevel *toplevel,
   gdk_wayland_toplevel_sync_parent_of_imported (wayland_toplevel);
 
   return TRUE;
+}
+
+void
+gdk_wayland_toplevel_set_session_id (GdkToplevel *toplevel,
+                                     const char  *session_id)
+{
+  GdkWaylandToplevel *wayland_toplevel = GDK_WAYLAND_TOPLEVEL (toplevel);
+
+  g_clear_pointer (&wayland_toplevel->session_id, g_free);
+  wayland_toplevel->session_id = g_strdup (session_id);
+}
+
+void
+gdk_wayland_toplevel_restore_from_session (GdkToplevel *toplevel)
+{
+  GdkWaylandToplevel *wayland_toplevel = GDK_WAYLAND_TOPLEVEL (toplevel);
+  GdkDisplay *display = gdk_surface_get_display (GDK_SURFACE (toplevel));
+  GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (display);
+
+  if (display_wayland->xdg_session && wayland_toplevel->display_server.xdg_toplevel)
+    {
+      wayland_toplevel->toplevel_session =
+        xx_session_v1_restore_toplevel (display_wayland->xdg_session,
+                                        wayland_toplevel->display_server.xdg_toplevel,
+                                        wayland_toplevel->session_id);
+    }
+}
+
+void
+gdk_wayland_toplevel_remove_from_session (GdkToplevel *toplevel)
+{
+  GdkWaylandToplevel *wayland_toplevel = GDK_WAYLAND_TOPLEVEL (toplevel);
+  GdkDisplay *display = gdk_surface_get_display (GDK_SURFACE (toplevel));
+  GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (display);
+
+  if (display_wayland->xdg_session && wayland_toplevel->toplevel_session)
+    {
+      xx_toplevel_session_v1_remove (wayland_toplevel->toplevel_session);
+      wayland_toplevel->toplevel_session = NULL;
+    }
 }
 
 /* }}} */

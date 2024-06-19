@@ -43,7 +43,7 @@
 #include <gdk/wayland/single-pixel-buffer-v1-client-protocol.h>
 #include <gdk/wayland/xdg-dialog-v1-client-protocol.h>
 #include <gdk/wayland/xdg-system-bell-v1-client-protocol.h>
-#include <gdk/wayland/xdg-session-management-v1-client-protocol.h>
+#include <gdk/wayland/xx-session-management-v1-client-protocol.h>
 
 #include <glib.h>
 #include <gdk/gdkkeys.h>
@@ -127,8 +127,8 @@ struct _GdkWaylandDisplay
   struct wp_viewporter *viewporter;
   struct wp_presentation *presentation;
   struct wp_single_pixel_buffer_manager_v1 *single_pixel_buffer;
-  struct xdg_session_manager_v1 *xdg_session_manager;
-  struct xdg_session_v1 *xdg_session;
+  struct xx_session_manager_v1 *xdg_session_manager;
+  struct xx_session_v1 *xdg_session;
   GdkWaylandColor *color;
 
   GList *async_roundtrips;
