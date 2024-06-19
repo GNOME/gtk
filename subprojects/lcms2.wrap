@@ -1,0 +1,6 @@
+[wrap-git]
+directory=lcms2
+url=https://github.com/mm2/Little-CMS.git
+revision=master
+patch_directory=lcms2
+depth=1
