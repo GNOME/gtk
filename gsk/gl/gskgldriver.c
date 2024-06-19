@@ -972,7 +972,7 @@ gsk_gl_driver_load_texture (GskGLDriver *self,
 
   if (texture_id == 0)
     {
-      downloaded_texture = gdk_memory_texture_from_texture (texture, gdk_texture_get_format (texture));
+      downloaded_texture = gdk_memory_texture_from_texture (texture);
 
       /* The download_texture() call may have switched the GL context. Make sure
        * the right context is at work again.
@@ -1471,8 +1471,7 @@ gsk_gl_driver_add_texture_slices (GskGLDriver        *self,
     }
 
   slices = g_new0 (GskGLTextureSlice, n_slices);
-  memtex = gdk_memory_texture_from_texture (texture,
-                                            gdk_texture_get_format (texture));
+  memtex = gdk_memory_texture_from_texture (texture);
 
   if (ensure_mipmap)
     {
