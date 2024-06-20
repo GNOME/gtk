@@ -102,3 +102,8 @@ GSK_GL_DEFINE_PROGRAM_NO_CLIP (external,
 GSK_GL_DEFINE_PROGRAM_NO_CLIP (premultiply,
                                GSK_GL_SHADER_SINGLE (GSK_GL_SHADER_RESOURCE ("premultiply.glsl")),
                                GSK_GL_NO_UNIFORMS)
+
+GSK_GL_DEFINE_PROGRAM (colorconvert,
+                       GSK_GL_SHADER_SINGLE (GSK_GL_SHADER_RESOURCE ("colorconvert.glsl")),
+                       GSK_GL_ADD_UNIFORM (1, TO_LINEAR, u_to_linear))
+

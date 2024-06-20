@@ -30,7 +30,9 @@ GskGLRenderJob *gsk_gl_render_job_new                (GskGLDriver           *dri
                                                       gboolean               clear_framebuffer);
 void            gsk_gl_render_job_free               (GskGLRenderJob        *job);
 void            gsk_gl_render_job_render             (GskGLRenderJob        *job,
-                                                      GskRenderNode         *root);
+                                                      GskRenderNode         *root,
+                                                      GdkColorState         *color_state);
 void            gsk_gl_render_job_render_flipped     (GskGLRenderJob        *job,
-                                                      GskRenderNode         *root);
+                                                      GskRenderNode         *root,
+                                                      GdkColorState         *color_state);
 

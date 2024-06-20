@@ -4,6 +4,7 @@ gsk_private_gl_shaders = [
   'gl/resources/preamble.vs.glsl',
   'gl/resources/border.glsl',
   'gl/resources/blit.glsl',
+  'gl/resources/colorconvert.glsl',
   'gl/resources/coloring.glsl',
   'gl/resources/color.glsl',
   'gl/resources/linear_gradient.glsl',

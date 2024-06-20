@@ -34,6 +34,7 @@
 #include <gdk/gdkglcontextprivate.h>
 #include <gdk/gdksurfaceprivate.h>
 #include <gdk/gdksubsurfaceprivate.h>
+#include <gdk/gdkcolorstateprivate.h>
 #include <glib/gi18n-lib.h>
 #include <gsk/gskdebugprivate.h>
 #include <gsk/gskrendererprivate.h>
@@ -362,6 +363,7 @@ gsk_gl_renderer_render (GskRenderer          *renderer,
   GdkSurface *surface;
   gboolean clear_framebuffer;
   float scale;
+  GdkColorState *target_color_state;
 
   g_assert (GSK_IS_GL_RENDERER (renderer));
   g_assert (root != NULL);
@@ -384,6 +386,17 @@ gsk_gl_renderer_render (GskRenderer          *renderer,
                                      gsk_render_node_get_preferred_depth (root),
                                      update_area);
 
+  if (gdk_surface_get_gl_is_srgb (surface))
+    {
+      g_debug ("Relying on GL to do srgb-linear->srgb conversion");
+      target_color_state = GDK_COLOR_STATE_SRGB_LINEAR;
+    }
+  else
+    {
+      g_debug ("Using an offscreen for srgb-linear->srgb conversion");
+      target_color_state = GDK_COLOR_STATE_SRGB;
+    }
+
   gdk_gl_context_make_current (self->context);
 
   /* Must be called *AFTER* gdk_draw_context_begin_frame() */
@@ -392,7 +405,7 @@ gsk_gl_renderer_render (GskRenderer          *renderer,
 
   gsk_gl_driver_begin_frame (self->driver, self->command_queue);
   job = gsk_gl_render_job_new (self->driver, &viewport, scale, render_region, 0, clear_framebuffer);
-  gsk_gl_render_job_render (job, root);
+  gsk_gl_render_job_render (job, root, target_color_state);
   gsk_gl_driver_end_frame (self->driver);
   gsk_gl_render_job_free (job);
 
@@ -476,7 +489,7 @@ gsk_gl_renderer_render_texture (GskRenderer           *renderer,
     {
       gsk_gl_driver_begin_frame (self->driver, self->command_queue);
       job = gsk_gl_render_job_new (self->driver, viewport, 1, NULL, render_target->framebuffer_id, TRUE);
-      gsk_gl_render_job_render_flipped (job, root);
+      gsk_gl_render_job_render_flipped (job, root, GDK_COLOR_STATE_SRGB);
       texture_id = gsk_gl_driver_release_render_target (self->driver, render_target, FALSE);
       texture = gsk_gl_driver_create_gdk_texture (self->driver, texture_id, gdk_format);
       gsk_gl_driver_end_frame (self->driver);
