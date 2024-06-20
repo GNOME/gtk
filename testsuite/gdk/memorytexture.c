@@ -835,7 +835,22 @@ compare_textures (GdkTexture *texture1,
     {
       for (x = 0; x < width; x++)
         {
-          g_assert_true (gdk_memory_format_pixel_equal (format, accurate_compare, data1 + bpp * x, data2 + bpp * x));
+          if (!gdk_memory_format_pixel_equal (format, accurate_compare, data1 + bpp * x, data2 + bpp * x))
+            {
+              gsize i;
+              GString *msg = g_string_new (NULL);
+
+              g_string_append_printf (msg, "(%u %u): ", x, y);
+              for (i = 0; i < bpp; i++)
+                g_string_append_printf (msg, "%02X", data1[bpp * x + i]);
+              g_string_append (msg, " != ");
+              for (i = 0; i < bpp; i++)
+                g_string_append_printf (msg, "%02X", data2[bpp * x + i]);
+
+              g_test_message ("%s", msg->str);
+              g_string_free (msg, TRUE);
+              g_test_fail ();
+            }
         }
       data1 += stride1;
       data2 += stride2;
