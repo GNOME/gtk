@@ -1758,6 +1758,8 @@ gdk_gl_context_check_extensions (GdkGLContext *context)
 
   priv->features = supported_features & ~disabled_features;
 
+  glEnable (GL_FRAMEBUFFER_SRGB);
+
   gdk_gl_context_init_memory_flags (context);
 
   if ((priv->features & GDK_GL_FEATURE_DEBUG) && gl_debug)
