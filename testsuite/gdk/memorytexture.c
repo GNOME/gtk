@@ -359,7 +359,8 @@ gdk_memory_format_is_deep (GdkMemoryFormat format)
 
 static void
 gdk_memory_format_pixel_print (GdkMemoryFormat  format,
-                               const guchar    *data)
+                               const guchar    *data,
+                               GString         *string)
 {
   switch (format)
     {
@@ -371,29 +372,29 @@ gdk_memory_format_pixel_print (GdkMemoryFormat  format,
     case GDK_MEMORY_A8R8G8B8:
     case GDK_MEMORY_R8G8B8A8:
     case GDK_MEMORY_A8B8G8R8:
-      g_print ("%d %d %d %d", data[0], data[1], data[2], data[3]);
+      g_string_append_printf (string, "%d %d %d %d", data[0], data[1], data[2], data[3]);
       break;
 
     case GDK_MEMORY_B8G8R8X8:
     case GDK_MEMORY_R8G8B8X8:
     case GDK_MEMORY_R8G8B8:
     case GDK_MEMORY_B8G8R8:
-      g_print ("%d %d %d", data[0], data[1], data[2]);
+      g_string_append_printf (string, "%d %d %d", data[0], data[1], data[2]);
       break;
 
     case GDK_MEMORY_G8A8:
     case GDK_MEMORY_G8A8_PREMULTIPLIED:
-      g_print ("%d %d", data[0], data[1]);
+      g_string_append_printf (string, "%d %d", data[0], data[1]);
       break;
 
     case GDK_MEMORY_A8:
     case GDK_MEMORY_G8:
-      g_print ("%d", data[0]);
+      g_string_append_printf (string, "%d", data[0]);
       break;
 
     case GDK_MEMORY_X8R8G8B8:
     case GDK_MEMORY_X8B8G8R8:
-      g_print ("%d %d %d", data[1], data[2], data[3]);
+      g_string_append_printf (string, "%d %d %d", data[1], data[2], data[3]);
       break;
 
 
@@ -401,14 +402,14 @@ gdk_memory_format_pixel_print (GdkMemoryFormat  format,
     case GDK_MEMORY_R16G16B16A16_PREMULTIPLIED:
       {
         guint16 *data16 = (guint16 *) data;
-        g_print ("%d %d %d %d", data16[0], data16[1], data16[2], data16[3]);
+        g_string_append_printf (string, "%d %d %d %d", data16[0], data16[1], data16[2], data16[3]);
       }
       break;
 
     case GDK_MEMORY_R16G16B16:
       {
         guint16 *data16 = (guint16 *) data;
-        g_print ("%d %d %d", data16[0], data16[1], data16[2]);
+        g_string_append_printf (string, "%d %d %d", data16[0], data16[1], data16[2]);
       }
       break;
 
@@ -416,7 +417,7 @@ gdk_memory_format_pixel_print (GdkMemoryFormat  format,
     case GDK_MEMORY_G16A16_PREMULTIPLIED:
       {
         guint16 *data16 = (guint16 *) data;
-        g_print ("%d %d", data16[0], data16[1]);
+        g_string_append_printf (string, "%d %d", data16[0], data16[1]);
       }
       break;
 
@@ -424,7 +425,7 @@ gdk_memory_format_pixel_print (GdkMemoryFormat  format,
     case GDK_MEMORY_A16:
       {
         guint16 *data16 = (guint16 *) data;
-        g_print ("%d", data16[0]);
+        g_string_append_printf (string, "%d", data16[0]);
       }
       break;
 
@@ -432,28 +433,28 @@ gdk_memory_format_pixel_print (GdkMemoryFormat  format,
     case GDK_MEMORY_R16G16B16A16_FLOAT:
     case GDK_MEMORY_R16G16B16A16_FLOAT_PREMULTIPLIED:
     case GDK_MEMORY_A16_FLOAT:
-      g_print ("FIXME print f16\n");
+      g_string_append (string, "FIXME print f16\n");
       break;
 
     case GDK_MEMORY_R32G32B32A32_FLOAT:
     case GDK_MEMORY_R32G32B32A32_FLOAT_PREMULTIPLIED:
       {
         float *dataf = (float *)data;
-        g_print ("%f %f %f %f", dataf[0], dataf[1], dataf[2], dataf[3]);
+        g_string_append_printf (string, "%f %f %f %f", dataf[0], dataf[1], dataf[2], dataf[3]);
       }
       break;
 
     case GDK_MEMORY_R32G32B32_FLOAT:
       {
         float *dataf = (float *)data;
-        g_print ("%f %f %f", dataf[0], dataf[1], dataf[2]);
+        g_string_append_printf (string, "%f %f %f", dataf[0], dataf[1], dataf[2]);
       }
       break;
 
     case GDK_MEMORY_A32_FLOAT:
       {
         float *dataf = (float *)data;
-        g_print ("%f", dataf[0]);
+        g_string_append_printf (string, "%f", dataf[0]);
       }
       break;
 
@@ -946,9 +947,9 @@ compare_textures (GdkTexture *texture1,
               GString *msg = g_string_new (NULL);
 
               g_string_append_printf (msg, "(%u %u): ", x, y);
-              gdk_memory_format_pixel_print (format, data1 + bpp + x);
+              gdk_memory_format_pixel_print (format, data1 + bpp + x, msg);
               g_string_append (msg, " != ");
-              gdk_memory_format_pixel_print (format, data2 + bpp + x); g_print ("\n");
+              gdk_memory_format_pixel_print (format, data2 + bpp + x, msg);
               g_test_message ("%s", msg->str);
               g_string_free (msg, TRUE);
               g_test_fail ();
