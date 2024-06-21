@@ -438,6 +438,7 @@ gsk_vulkan_image_new_for_swapchain (GskVulkanDevice  *device,
                                     gsize             height)
 {
   GskVulkanImage *self;
+  GskGpuImageFlags flags = 0;
 
   self = g_object_new (GSK_TYPE_VULKAN_IMAGE, NULL);
 
@@ -450,8 +451,11 @@ gsk_vulkan_image_new_for_swapchain (GskVulkanDevice  *device,
   self->vk_image_layout = VK_IMAGE_LAYOUT_UNDEFINED;
   self->vk_access = 0;
 
+  if (format == gdk_memory_format_vk_srgb_format (memory_format))
+    flags |= GSK_GPU_IMAGE_SRGB;
+
   /* FIXME: The flags here are very suboptimal */
-  gsk_gpu_image_setup (GSK_GPU_IMAGE (self), 0, memory_format, width, height);
+  gsk_gpu_image_setup (GSK_GPU_IMAGE (self), flags, memory_format, width, height);
 
   gsk_vulkan_image_create_view (self,
                                 format,
