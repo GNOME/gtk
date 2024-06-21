@@ -299,7 +299,7 @@ node_editor_application_new (void)
 
   app = g_object_new (NODE_EDITOR_APPLICATION_TYPE,
                       "application-id", "org.gtk.gtk4.NodeEditor",
-                      "flags", G_APPLICATION_HANDLES_OPEN,
+                      "flags", G_APPLICATION_HANDLES_OPEN | G_APPLICATION_NON_UNIQUE,
                       NULL);
 
   g_application_add_main_option (G_APPLICATION (app), "version", 0, 0,G_OPTION_ARG_NONE, "Show program version", NULL);

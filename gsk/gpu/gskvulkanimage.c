@@ -202,6 +202,9 @@ gsk_vulkan_device_check_format (GskVulkanDevice          *device,
 #define CHECK_FLAGS (GSK_GPU_IMAGE_NO_BLIT | GSK_GPU_IMAGE_FILTERABLE | GSK_GPU_IMAGE_RENDERABLE)
   GskGpuImageFlags flags;
 
+  if (vk_format == VK_FORMAT_UNDEFINED)
+    return FALSE;
+
   if (vk_usage & VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT &&
       !gsk_component_mapping_is_framebuffer_compatible (vk_components))
     return FALSE;
@@ -261,15 +264,13 @@ gsk_vulkan_image_new (GskVulkanDevice           *device,
 
   /* First, try the actual format */
   vk_format = gdk_memory_format_vk_format (format, &vk_components);
-  if (vk_format == VK_FORMAT_UNDEFINED ||
-      !gsk_vulkan_device_check_format (device, vk_format, &vk_components, required_flags,
+  if (!gsk_vulkan_device_check_format (device, vk_format, &vk_components, required_flags,
                                        tiling, usage, width, height,
                                        &tiling, &flags))
     {
       /* Second, try the potential RGBA format */
       vk_format = gdk_memory_format_vk_rgba_format (format, NULL, &vk_components);
-      if (vk_format == VK_FORMAT_UNDEFINED ||
-          !gsk_vulkan_device_check_format (device, vk_format, &vk_components, required_flags,
+      if (!gsk_vulkan_device_check_format (device, vk_format, &vk_components, required_flags,
                                            tiling, usage, width, height,
                                            &tiling, &flags))
         {
@@ -281,8 +282,7 @@ gsk_vulkan_image_new (GskVulkanDevice           *device,
           for (i = 0; fallbacks[i] != -1; i++)
             {
               vk_format = gdk_memory_format_vk_format (fallbacks[i], &vk_components);
-              if (vk_format != VK_FORMAT_UNDEFINED &&
-                  gsk_vulkan_device_check_format (device, vk_format, &vk_components, required_flags,
+              if (gsk_vulkan_device_check_format (device, vk_format, &vk_components, required_flags,
                                                   tiling, usage, width, height,
                                                   &tiling, &flags))
                 {
