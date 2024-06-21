@@ -1005,7 +1005,7 @@ ensure_fontmap (Context *context)
 
   context->fontmap = pango_cairo_font_map_new ();
 
-  config = FcInitLoadConfig ();
+  config = FcConfigCreate ();
   pango_fc_font_map_set_config (PANGO_FC_FONT_MAP (context->fontmap), config);
   FcConfigDestroy (config);
 
@@ -2990,8 +2990,13 @@ printer_init_collect_font_info (Printer       *printer,
       info->face = hb_face_reference (hb_font_get_face (pango_font_get_hb_font (font)));
       if (!g_object_get_data (G_OBJECT (pango_font_get_font_map (font)), "font-files"))
         {
-          info->input = hb_subset_input_create_or_fail ();
-          hb_subset_input_set_flags (info->input, HB_SUBSET_FLAGS_RETAIN_GIDS);
+          if (g_strcmp0 (g_getenv ("GSK_SUBSET_FONTS"), "1") == 0)
+            {
+              info->input = hb_subset_input_create_or_fail ();
+              hb_subset_input_set_flags (info->input, HB_SUBSET_FLAGS_RETAIN_GIDS);
+            }
+          else
+            info->serialized = TRUE; /* Don't subset (or serialize) system fonts */
         }
 
       g_hash_table_insert (printer->fonts, info->face, info);
