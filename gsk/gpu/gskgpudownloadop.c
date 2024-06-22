@@ -12,6 +12,7 @@
 #include "gskvulkanimageprivate.h"
 #endif
 
+#include "gdk/gdkdmabuftexturebuilderprivate.h"
 #include "gdk/gdkdmabuftextureprivate.h"
 #include "gdk/gdkglcontextprivate.h"
 
@@ -262,6 +263,23 @@ gsk_gl_texture_data_free (gpointer user_data)
   g_free (data);
 }
 
+#ifdef HAVE_DMABUF
+typedef struct
+{
+  GdkDmabuf dmabuf;
+} Texture;
+
+static void
+release_dmabuf_texture (gpointer data)
+{
+  Texture *texture = data;
+
+  for (unsigned int i = 0; i < texture->dmabuf.n_planes; i++)
+    g_close (texture->dmabuf.planes[i].fd, NULL);
+  g_free (texture);
+}
+#endif
+
 static GskGpuOp *
 gsk_gpu_download_op_gl_command (GskGpuOp          *op,
                                 GskGpuFrame       *frame,
@@ -271,12 +289,44 @@ gsk_gpu_download_op_gl_command (GskGpuOp          *op,
   GdkGLTextureBuilder *builder;
   GskGLTextureData *data;
   GdkGLContext *context;
+  guint texture_id;
 
   context = GDK_GL_CONTEXT (gsk_gpu_frame_get_context (frame));
+  texture_id = gsk_gl_image_steal_texture (GSK_GL_IMAGE (self->image));
+
+#ifdef HAVE_DMABUF
+  if (self->allow_dmabuf)
+    {
+      Texture *texture;
+
+      texture = g_new0 (Texture, 1);
+
+      if (gdk_gl_context_export_dmabuf (context, texture_id, &texture->dmabuf))
+        {
+          GdkDmabufTextureBuilder *db;
+
+          db = gdk_dmabuf_texture_builder_new ();
+          gdk_dmabuf_texture_builder_set_display (db, gdk_gl_context_get_display (context));
+          gdk_dmabuf_texture_builder_set_dmabuf (db, &texture->dmabuf);
+          gdk_dmabuf_texture_builder_set_premultiplied (db, gdk_memory_format_get_premultiplied (gsk_gpu_image_get_format (self->image)));
+          gdk_dmabuf_texture_builder_set_width (db, gsk_gpu_image_get_width (self->image));
+          gdk_dmabuf_texture_builder_set_height (db, gsk_gpu_image_get_height (self->image));
+
+          self->texture = gdk_dmabuf_texture_builder_build (db, release_dmabuf_texture, texture, NULL);
+
+          g_object_unref (db);
+
+          if (self->texture)
+            return op->next;
+        }
+
+      g_free (texture);
+    }
+#endif
 
   data = g_new (GskGLTextureData, 1);
   data->context = g_object_ref (context);
-  data->texture_id = gsk_gl_image_steal_texture (GSK_GL_IMAGE (self->image));
+  data->texture_id = texture_id;
 
   if (gdk_gl_context_has_feature (context, GDK_GL_FEATURE_SYNC))
     data->sync = glFenceSync (GL_SYNC_GPU_COMMANDS_COMPLETE, 0);
