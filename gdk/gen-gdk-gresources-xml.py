@@ -26,6 +26,8 @@ xml = '''<?xml version='1.0' encoding='UTF-8'?>
 <gresources>
   <gresource prefix='/org/gtk/libgdk'>
     <file alias='cursor/default'>default_cursor.png</file>
+    <file alias='icc/srgb.icc'>srgb.icc</file>
+    <file alias='icc/srgb-linear.icc'>srgb-linear.icc</file>
 '''
 
 def get_files(subdir,extension):

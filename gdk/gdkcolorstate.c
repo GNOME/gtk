@@ -125,6 +125,178 @@ gboolean
   return _gdk_color_state_equal (self, other);
 }
 
+/*< private >
+ * gdk_color_state_new_from_icc_profile:
+ * @icc_profile: The ICC profiles given as a `GBytes`
+ * @error: Return location for an error
+ *
+ * Creates a new color state for the given ICC profile data.
+ *
+ * If the given ICC profile can not be represented as a
+ * [struct@Gdk.ColorState], `NULL` is returned and an error
+ * is raised.
+ *
+ * Returns: a new `GdkColorState` or %NULL on error
+ *
+ * Since: 4.16
+ */
+GdkColorState *
+gdk_color_state_new_from_icc_profile (GBytes  *icc_profile,
+                                      GError **error)
+{
+  GBytes *bytes;
+
+  g_return_val_if_fail (icc_profile != NULL, NULL);
+  g_return_val_if_fail (error == NULL || *error == NULL, NULL);
+
+  bytes = g_resources_lookup_data ("/org/gtk/libgdk/icc/srgb.icc", 0, NULL);
+  if (g_bytes_equal (icc_profile, bytes))
+    {
+      g_bytes_unref (bytes);
+      return GDK_COLOR_STATE_SRGB;
+    }
+
+  bytes = g_resources_lookup_data ("/org/gtk/libgdk/icc/srgb-linear.icc", 0, NULL);
+  if (g_bytes_equal (icc_profile, bytes))
+    {
+      g_bytes_unref (bytes);
+      return GDK_COLOR_STATE_SRGB_LINEAR;
+    }
+
+  g_set_error_literal (error, G_IO_ERROR, G_IO_ERROR_FAILED,
+                       _("Failed to load ICC profile"));
+  return NULL;
+}
+
+/*< private >
+ * gdk_color_state_new_from_cicp_data:
+ * @color_primaries: the color primaries
+ * @transfer_characteristics: the transfer function
+ * @matrix_coefficients: the color matrix
+ * @full_range: whether the data is 'full-range'
+ * @error: Return location for an error
+ *
+ * Creates a new color state for the given CICP data.
+ *
+ * If the given CICP data can not be represented as a
+ * [struct@Gdk.ColorState], `NULL` is returned and an error
+ * is raised.
+ *
+ * See [CICP](https://en.wikipedia.org/wiki/Coding-independent_code_points)
+ * for more information about CICP.
+ *
+ * Returns: a new `GdkColorState` or %NULL on error
+ *
+ * Since: 4.16
+ */
+GdkColorState *
+gdk_color_state_new_from_cicp_data (int      color_primaries,
+                                    int      transfer_characteristics,
+                                    int      matrix_coefficients,
+                                    gboolean full_range)
+{
+  if (color_primaries == 0 && transfer_characteristics == 13 &&
+      matrix_coefficients == 0 && full_range)
+    return GDK_COLOR_STATE_SRGB;
+  else if (color_primaries == 0 && transfer_characteristics == 8 &&
+           matrix_coefficients == 0 && full_range)
+    return GDK_COLOR_STATE_SRGB_LINEAR;
+
+  return NULL;
+}
+
+/*< private >
+ * gdk_color_state_save_to_icc_profile:
+ * @self: a `GdkColorState`
+ * @error: Return location for an error
+ *
+ * Saves the color state to an
+ * [ICC profile](https://en.wikipedia.org/wiki/ICC_profile).
+ *
+ * It may not be possible to represent a color state as ICC profile.
+ * In that case, @error will be set and %NULL will be returned.
+ *
+ * Returns: (nullable): A new `GBytes` containing the ICC profile
+ *
+ * Since: 4.16
+ */
+GBytes *
+gdk_color_state_save_to_icc_profile (GdkColorState  *self,
+                                     GError        **error)
+{
+  GBytes *bytes;
+
+  if (self == GDK_COLOR_STATE_SRGB)
+    {
+      bytes = g_resources_lookup_data ("/org/gtk/libgdk/icc/srgb.icc", 0, NULL);
+      g_assert (bytes != NULL);
+    }
+  else if (self == GDK_COLOR_STATE_SRGB_LINEAR)
+    {
+      bytes = g_resources_lookup_data ("/org/gtk/libgdk/icc/srgb-linear.icc", 0, NULL);
+      g_assert (bytes != NULL);
+    }
+  else
+    {
+      bytes = NULL;
+      g_set_error_literal (error, G_IO_ERROR, G_IO_ERROR_FAILED,
+                           _("ICC profile not supported for this color state"));
+    }
+
+  return bytes;
+}
+
+/*< private >
+ * gdk_color_state_save_to_cicp_data:
+ * @self: a `GdkColorState`
+ * @color_primaries: return location for color primaries
+ * @transfer_characteristics: return location for transfer characteristics
+ * @matrix_coefficients: return location for matrix_coefficients
+ * @full_range: return location for the full range flag
+ * @error: Return location for an error
+ *
+ * Saves the color state as CICP data.
+ *
+ * It may not be possible to represent a color state as CICP data.
+ * In that case, @error will be set and `FALSE` will be returned.
+ *
+ * See [CICP](https://en.wikipedia.org/wiki/Coding-independent_code_points)
+ * for more information about CICP.
+ *
+ * Returns: (nullable): `TRUE` if the out arguments were set
+ *
+ * Since: 4.16
+ */
+gboolean
+gdk_color_state_save_to_cicp_data (GdkColorState  *self,
+                                   int            *color_primaries,
+                                   int            *transfer_characteristics,
+                                   int            *matrix_coefficients,
+                                   gboolean       *full_range,
+                                   GError        **error)
+{
+  if (self == GDK_COLOR_STATE_SRGB)
+    {
+      *color_primaries = 0;
+      *transfer_characteristics = 13;
+      *matrix_coefficients = 0;
+      *full_range = TRUE;
+      return TRUE;
+    }
+  else if (self == GDK_COLOR_STATE_SRGB_LINEAR)
+    {
+      *color_primaries = 0;
+      *transfer_characteristics = 8;
+      *matrix_coefficients = 0;
+      *full_range = TRUE;
+      return TRUE;
+    }
+
+  g_set_error_literal (error, G_IO_ERROR, G_IO_ERROR_NOT_SUPPORTED,
+                       _("This color state does not support CICP data"));
+  return FALSE;
+}
+
 /* }}} */
 /* {{{ Default implementation */
 

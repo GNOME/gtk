@@ -82,3 +82,21 @@ _gdk_color_state_equal (GdkColorState *self,
   return self->klass->equal (self, other);
 }
 
+GdkColorState * gdk_color_state_new_from_icc_profile    (GBytes         *icc_profile,
+                                                         GError        **error);
+
+GdkColorState * gdk_color_state_new_from_cicp_data      (int             color_primaries,
+                                                         int             transfer_characteristics,
+                                                         int             matrix_coefficients,
+                                                         gboolean        full_range);
+
+GBytes *        gdk_color_state_save_to_icc_profile     (GdkColorState  *self,
+                                                         GError        **error);
+
+gboolean        gdk_color_state_save_to_cicp_data       (GdkColorState  *self,
+                                                         int            *color_primaries,
+                                                         int            *transfer_characteristic,
+                                                         int            *matrix_coefficients,
+                                                         gboolean       *full_range,
+                                                         GError        **error);
+
