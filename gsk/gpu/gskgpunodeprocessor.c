@@ -14,6 +14,7 @@
 #include "gskgpucolormatrixopprivate.h"
 #include "gskgpucoloropprivate.h"
 #include "gskgpuconicgradientopprivate.h"
+#include "gskgpuconvertopprivate.h"
 #include "gskgpucrossfadeopprivate.h"
 #include "gskgpudescriptorsprivate.h"
 #include "gskgpudeviceprivate.h"
@@ -27,7 +28,6 @@
 #include "gskgpurenderpassopprivate.h"
 #include "gskgpuroundedcoloropprivate.h"
 #include "gskgpuscissoropprivate.h"
-#include "gskgpustraightalphaopprivate.h"
 #include "gskgputextureopprivate.h"
 #include "gskgpuuberopprivate.h"
 #include "gskgpuuploadopprivate.h"
@@ -42,6 +42,7 @@
 #include "gsktransformprivate.h"
 #include "gskprivate.h"
 
+#include "gdk/gdkcolorstateprivate.h"
 #include "gdk/gdkrgbaprivate.h"
 #include "gdk/gdksubsurfaceprivate.h"
 
@@ -707,14 +708,18 @@ gsk_gpu_node_processor_image_op (GskGpuNodeProcessor   *self,
 
   if (gsk_gpu_image_get_flags (image) & GSK_GPU_IMAGE_STRAIGHT_ALPHA)
     {
-      gsk_gpu_straight_alpha_op (self->frame,
-                                 gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, rect),
-                                 self->opacity,
-                                 self->desc,
-                                 descriptor,
-                                 rect,
-                                 &self->offset,
-                                 tex_rect);
+      gsk_gpu_convert_op (self->frame,
+                          gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, rect),
+                          GDK_COLOR_STATE_SRGB,
+                          FALSE,
+                          GDK_COLOR_STATE_SRGB,
+                          TRUE,
+                          self->opacity,
+                          self->desc,
+                          descriptor,
+                          rect,
+                          &self->offset,
+                          tex_rect);
     }
   else if (self->opacity < 1.0)
     {
