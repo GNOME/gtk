@@ -1,0 +1,170 @@
+/*  Copyright 2024 Red Hat, Inc.
+ *
+ * GTK is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License as
+ * published by the Free Software Foundation; either version 2 of the
+ * License, or (at your option) any later version.
+ *
+ * GTK is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with GTK; see the file COPYING.  If not,
+ * see <http://www.gnu.org/licenses/>.
+ *
+ * Author: Matthias Clasen
+ */
+
+#include "config.h"
+
+#include <stdlib.h>
+#include <string.h>
+#include <errno.h>
+
+#include <glib/gi18n-lib.h>
+#include <glib/gprintf.h>
+#include <glib/gstdio.h>
+#include <gtk/gtk.h>
+#include "gtk-image-tool.h"
+
+static GdkMemoryFormat
+format_from_name (const char *name)
+{
+  const char *names[] = {
+    "*BGRA8", "*ARGB8", "*RGBA8", "BGRA8", "ARGB8", "RGBA8", "ABGR8", "RGB8", "BGR8", "RGB16",
+    "*RGBA16", "RGBA16", "RGB16f", "*RGBA16f", "RGBA16f", "RGB32f", "*RGBA32f", "RGBA32f", "*GA8",
+    "GA8", "G8", "*GA16", "GA16", "G16", "A8", "A16", "A16f", "A32f", "*ABGR8", "BGRX8", "XRGB8",
+    "RGBX8", "XBGR8",
+  };
+
+  for (int i = 0; i < G_N_ELEMENTS (names); i++)
+    {
+      if (g_strcmp0 (name, names[i]) == 0)
+        return (GdkMemoryFormat) i;
+    }
+
+  g_printerr ("Unknown memory format\n");
+  exit (1);
+
+  return 0;
+}
+
+static GdkColorState *
+color_state_from_name (const char *name)
+{
+  if (g_strcmp0 (name, "srgb-linear") == 0)
+    return gdk_color_state_get_srgb_linear ();
+  else if (g_strcmp0 (name, "srgb") == 0)
+    return gdk_color_state_get_srgb ();
+
+  g_printerr ("Unknown color state\n");
+  exit (1);
+
+  return gdk_color_state_get_srgb ();
+}
+
+static void
+save_image (const char      *filename,
+            const char      *output,
+            GdkMemoryFormat  format,
+            GdkColorState   *color_state)
+{
+  GdkTexture *orig;
+  GdkTextureDownloader *downloader;
+  GBytes *bytes;
+  gsize stride;
+  GdkTexture *texture;
+
+  orig = load_image_file (filename);
+  downloader = gdk_texture_downloader_new (orig);
+
+  gdk_texture_downloader_set_format (downloader, format);
+#if 0
+  gdk_texture_downloader_set_color_state (downloader, color_state);
+#endif
+
+  bytes = gdk_texture_downloader_download_bytes (downloader, &stride);
+
+#if 0
+  texture = gdk_memory_texture_new_with_color_state (gdk_texture_get_width (orig),
+                                                     gdk_texture_get_height (orig),
+                                                     format,
+                                                     color_state,
+                                                     bytes,
+                                                     stride);
+#else
+  texture = gdk_memory_texture_new (gdk_texture_get_width (orig),
+                                    gdk_texture_get_height (orig),
+                                    format,
+                                    bytes,
+                                    stride);
+#endif
+
+  if (g_str_has_suffix (output, ".tiff"))
+    gdk_texture_save_to_tiff (texture, output);
+  else
+    gdk_texture_save_to_png (texture, output);
+
+  g_object_unref (texture);
+  g_bytes_unref (bytes);
+  gdk_texture_downloader_free (downloader);
+  g_object_unref (orig);
+}
+
+void
+do_save (int          *argc,
+         const char ***argv)
+{
+  GOptionContext *context;
+  char **filenames = NULL;
+  char *format_name = NULL;
+  char *colorstate_name = NULL;
+  const GOptionEntry entries[] = {
+    { "format", 0, 0, G_OPTION_ARG_STRING, &format_name, N_("Format to use"), N_("FORMAT") },
+    { "colorstate", 0, 0, G_OPTION_ARG_STRING, &colorstate_name, N_("Colorstate to use"), N_("COLORSTATE") },
+    { G_OPTION_REMAINING, 0, 0, G_OPTION_ARG_FILENAME_ARRAY, &filenames, NULL, N_("FILE") },
+    { NULL, }
+  };
+  GError *error = NULL;
+  GdkMemoryFormat format = GDK_MEMORY_DEFAULT;
+  GdkColorState *color_state = gdk_color_state_get_srgb ();
+
+  g_set_prgname ("gtk4-image-tool save");
+  context = g_option_context_new (NULL);
+  g_option_context_set_translation_domain (context, GETTEXT_PACKAGE);
+  g_option_context_add_main_entries (context, entries, NULL);
+  g_option_context_set_summary (context, _("Save theimage as a new file."));
+
+  if (!g_option_context_parse (context, argc, (char ***)argv, &error))
+    {
+      g_printerr ("%s\n", error->message);
+      g_error_free (error);
+      exit (1);
+    }
+
+  g_option_context_free (context);
+
+  if (filenames == NULL)
+    {
+      g_printerr (_("No image file specified\n"));
+      exit (1);
+    }
+
+  if (g_strv_length (filenames) != 2)
+    {
+      g_printerr (_("Can only accept a single image file and output file\n"));
+      exit (1);
+    }
+
+  if (format_name)
+    format = format_from_name (format_name);
+
+  if (colorstate_name)
+    color_state = color_state_from_name (colorstate_name);
+
+  save_image (filenames[0], filenames[1], format, color_state);
+
+  g_strfreev (filenames);
+}
