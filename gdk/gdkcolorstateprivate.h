@@ -75,6 +75,12 @@ gdk_color_state_get_depth (GdkColorState *self)
   return self->depth;
 }
 
+static inline GdkColorState *
+gdk_color_state_get_by_id (GdkColorStateId id)
+{
+  return (GdkColorState *) &gdk_default_color_states[id];
+}
+
 #define gdk_color_state_ref(self) _gdk_color_state_ref (self)
 static inline GdkColorState *
 _gdk_color_state_ref (GdkColorState *self)
