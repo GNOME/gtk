@@ -591,6 +591,8 @@ gdk_save_png (GdkTexture *texture)
 
   png_set_keep_unknown_chunks (png, PNG_HANDLE_CHUNK_ALWAYS, NULL, 0);
 
+  png_set_option (png, PNG_SKIP_sRGB_CHECK_PROFILE, PNG_OPTION_ON);
+
   info = png_create_info_struct (png);
   if (!info)
     {
