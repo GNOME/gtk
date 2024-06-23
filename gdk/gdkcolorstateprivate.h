@@ -4,7 +4,6 @@
 #include "gdkmemoryformatprivate.h"
 #include <lcms2.h>
 
-const char *   gdk_color_state_get_name      (GdkColorState *color_state);
 GdkMemoryDepth gdk_color_state_get_min_depth (GdkColorState *color_state);
 int            gdk_color_state_get_hue_coord (GdkColorState *color_state);
 

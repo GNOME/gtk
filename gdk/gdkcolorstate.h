@@ -99,6 +99,9 @@ gboolean        gdk_color_state_save_to_cicp_data       (GdkColorState  *self,
                                                          gboolean       *full_range,
                                                          GError        **error);
 
+GDK_AVAILABLE_IN_4_16
+const char    * gdk_color_state_get_name                (GdkColorState *self);
+
 #include "gdkcolorstateimpl.h"
 
 G_END_DECLS

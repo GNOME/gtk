@@ -353,6 +353,7 @@ gdk_lcms_color_state_save_to_cicp_data (GdkColorState  *self,
   return FALSE;
 }
 
+
 static const char *
 gdk_lcms_color_state_get_name (GdkColorState *self)
 {
@@ -720,6 +721,19 @@ gdk_color_state_get_min_depth (GdkColorState *self)
   return (GdkMemoryDepth) get_class (self)->get_min_depth (self);
 }
 
+/**
+ * gdk_color_state_get_name:
+ * @self: a `GdkColorState`
+ *
+ * Returns the name of @self.
+ *
+ * Note that the returned value may be a static buffer that
+ * is only valid until the next call to this function.
+ *
+ * Returns: (transfer none): the name of @self
+ *
+ * Since: 4.16
+ */
 const char *
 gdk_color_state_get_name (GdkColorState *self)
 {
