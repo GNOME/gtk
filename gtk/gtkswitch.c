@@ -43,6 +43,10 @@
  *
  * See [signal@Gtk.Switch::state-set] for details.
  *
+ * # Shortcuts and Gestures
+ *
+ * `GtkSwitch` supports pan and drag gestures to move the slider.
+ *
  * # CSS nodes
  *
  * ```

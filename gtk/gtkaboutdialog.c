@@ -101,6 +101,12 @@
  *                        NULL);
  * ```
  *
+ * ## Shortcuts and Gestures
+ *
+ * `GtkAboutDialog` supports the following keyboard shortcuts:
+ *
+ * - <kbd>Escape</kbd> closes the window.
+ *
  * ## CSS nodes
  *
  * `GtkAboutDialog` has a single CSS node with the name `window` and style

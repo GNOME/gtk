@@ -58,6 +58,13 @@
  * To learn more about the list widget framework, see the
  * [overview](section-list-widget.html).
  *
+ * # Actions
+ *
+ * `GtkGridView` defines a set of built-in actions:
+ *
+ * - `list.activate-item` activates the item at given position by emitting the
+ *   the [signal@Gtk.GridView::activate] signal.
+ *
  * # CSS nodes
  *
  * ```

@@ -62,6 +62,14 @@
  *
  * If you need to add a group programmatically, use
  * [method@Gtk.ShortcutsSection.add_group].
+ *
+ * # Shortcuts and Gestures
+ *
+ * Pan gestures allow to navigate between sections.
+ *
+ * The following signals have default keybindings:
+ *
+ * - [signal@Gtk.ShortcutsSection::change-current-page]
  */
 
 struct _GtkShortcutsSection
@@ -356,6 +364,10 @@ gtk_shortcuts_section_class_init (GtkShortcutsSectionClass *klass)
    * @offset: the offset
    *
    * Emitted when we change the current page.
+   *
+   * The default bindings for this signal are
+   * <kbd>Ctrl</kbd>+<kbd>PgUp</kbd>, <kbd>PgUp</kbd>,
+   * <kbd>Ctrl</kbd>+<kbd>PgDn</kbd>, <kbd>PgDn</kbd>.
    *
    * Returns: whether the page was changed
    */

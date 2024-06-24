@@ -152,6 +152,12 @@
  * }
  * ```
  *
+ * # Shortcuts and Gestures
+ *
+ * The following signals have default keybindings:
+ *
+ * - [signal@Gtk.SpinButton::change-value]
+ *
  * # CSS nodes
  *
  * ```

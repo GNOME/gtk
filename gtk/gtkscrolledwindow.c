@@ -105,6 +105,12 @@
  * can be turned off with the [property@Gtk.ScrolledWindow:overlay-scrolling]
  * property.
  *
+ * # Shortcuts and Gestures
+ *
+ * The following signals have default keybindings:
+ *
+ * - [signal@Gtk.ScrolledWindow::scroll-child]
+ *
  * # CSS nodes
  *
  * `GtkScrolledWindow` has a main CSS node with name scrolledwindow.
@@ -805,8 +811,8 @@ gtk_scrolled_window_class_init (GtkScrolledWindowClass *class)
    * This is a [keybinding signal](class.SignalAction.html).
    *
    * The default bindings for this signal are
-   * `Ctrl + Tab` to move forward and `Ctrl + Shift + Tab` to
-   * move backward.
+   * <kbd>Ctrl</kbd>+<kbd>Tab</kbd> to move forward and
+   * <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>Tab</kbd>` to move backward.
    */
   signals[MOVE_FOCUS_OUT] =
     g_signal_new (I_("move-focus-out"),

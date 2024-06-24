@@ -74,6 +74,43 @@
  * which gives an overview of all the objects and data types related to the
  * text widget and how they work together.
  *
+ * ## Shortcuts and Gestures
+ *
+ * `GtkTextView` supports the following keyboard shortcuts:
+ *
+ * - <kbd>Shift</kbd>+<kbd>F10</kbd> or <kbd>Menu</kbd> opens the context menu.
+ * - <kbd>Ctrl</kbd>+<kbd>Z</kbd> undoes the last modification.
+ * - <kbd>Ctrl</kbd>+<kbd>Y</kbd> or <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>Z</kbd>
+ *   redoes the last undone modification.
+ *
+ * Additionally, the following signals have default keybindings:
+ *
+ * - [signal@Gtk.TextView::backspace]
+ * - [signal@Gtk.TextView::copy-clipboard]
+ * - [signal@Gtk.TextView::cut-clipboard]
+ * - [signal@Gtk.TextView::delete-from-cursor]
+ * - [signal@Gtk.TextView::insert-emoji]
+ * - [signal@Gtk.TextView::move-cursor]
+ * - [signal@Gtk.TextView::paste-clipboard]
+ * - [signal@Gtk.TextView::select-all]
+ * - [signal@Gtk.TextView::toggle-cursor-visible]
+ * - [signal@Gtk.TextView::toggle-overwrite]
+ *
+ * ## Actions
+ *
+ * `GtkTextView` defines a set of built-in actions:
+ *
+ * - `clipboard.copy` copies the contents to the clipboard.
+ * - `clipboard.cut` copies the contents to the clipboard and deletes it from
+ *   the widget.
+ * - `clipboard.paste` inserts the contents of the clipboard into the widget.
+ * - `menu.popup` opens the context menu.
+ * - `misc.insert-emoji` opens the Emoji chooser.
+ * - `selection.delete` deletes the current selection.
+ * - `selection.select-all` selects all of the widgets content.
+ * - `text.redo` redoes the last change to the contents.
+ * - `text.undo` undoes the last change to the contents.
+ *
  * ## CSS nodes
  *
  * ```

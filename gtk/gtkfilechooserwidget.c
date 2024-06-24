@@ -118,6 +118,27 @@ G_GNUC_BEGIN_IGNORE_DEPRECATIONS
  * use the methods of this interface to interact with the
  * widget.
  *
+ * # Shortcuts and Gestures
+ *
+ * `GtkFileChooserWidget` supports the following keyboard shortcuts:
+ *
+ * - <kbd>Shift</kbd>+<kbd>F10</kbd> or <kbd>Menu</kbd> opens the context menu.
+ *
+ * The following signals have default keybindings:
+ *
+ * - [signal@Gtk.FileChooserWidget::desktop-folder]
+ * - [signal@Gtk.FileChooserWidget::down-folder]
+ * - [signal@Gtk.FileChooserWidget::home-folder]
+ * - [signal@Gtk.FileChooserWidget::location-popup]
+ * - [signal@Gtk.FileChooserWidget::location-popup-on-paste]
+ * - [signal@Gtk.FileChooserWidget::location-toggle-popup]
+ * - [signal@Gtk.FileChooserWidget::places-shortcut]
+ * - [signal@Gtk.FileChooserWidget::quick-bookmark]
+ * - [signal@Gtk.FileChooserWidget::recent-shortcut]
+ * - [signal@Gtk.FileChooserWidget::search-shortcut]
+ * - [signal@Gtk.FileChooserWidget::show-hidden]
+ * - [signal@Gtk.FileChooserWidget::up-folder]
+ *
  * # CSS nodes
  *
  * `GtkFileChooserWidget` has a single CSS node with name filechooser.

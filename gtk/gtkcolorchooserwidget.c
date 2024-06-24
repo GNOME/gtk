@@ -61,6 +61,14 @@ G_GNUC_BEGIN_IGNORE_DEPRECATIONS
  * The `GtkColorChooserWidget` is used in the [class@Gtk.ColorChooserDialog]
  * to provide a dialog for selecting colors.
  *
+ * # Actions
+ *
+ * `GtkColorChooserWidget` defines a set of built-in actions:
+ *
+ * - `color.customize` activates the color editor for the given color.
+ * - `color.select` emits the [signal@Gtk.ColorChooser::color-activated] signal
+ *   for the given color.
+ *
  * # CSS names
  *
  * `GtkColorChooserWidget` has a single CSS node with name colorchooser.

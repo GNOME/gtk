@@ -112,6 +112,13 @@
  *   gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (sw), list);
  * ```
  *
+ * # Actions
+ *
+ * `GtkListView` defines a set of built-in actions:
+ *
+ * - `list.activate-item` activates the item at given position by emitting
+ *   the [signal@Gtk.ListView::activate] signal.
+ *
  * # CSS nodes
  *
  * ```

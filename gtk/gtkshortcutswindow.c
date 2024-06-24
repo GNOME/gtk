@@ -93,7 +93,14 @@
  *
  * The .ui file for this example can be found [here](https://gitlab.gnome.org/GNOME/gtk/tree/main/demos/gtk-demo/shortcuts-builder.ui).
  *
- * ## CSS nodes
+ * # Shortcuts and Gestures
+ *
+ * The following signals have default keybindings:
+ *
+ * - [signal@Gtk.ShortcutsWindow::close]
+ * - [signal@Gtk.ShortcutsWindow::search]
+ *
+ * # CSS nodes
  *
  * `GtkShortcutsWindow` has a single CSS node with the name `window` and style
  * class `.shortcuts`.
@@ -807,7 +814,7 @@ gtk_shortcuts_window_class_init (GtkShortcutsWindowClass *klass)
    *
    * This is a [keybinding signal](class.SignalAction.html).
    *
-   * The default binding for this signal is the Escape key.
+   * The default binding for this signal is the <kbd>Escape</kbd> key.
    */
   signals[CLOSE] = g_signal_new (I_("close"),
                                  G_TYPE_FROM_CLASS (klass),
@@ -824,7 +831,7 @@ gtk_shortcuts_window_class_init (GtkShortcutsWindowClass *klass)
    *
    * This is a [keybinding signal](class.SignalAction.html).
    *
-   * The default binding for this signal is Control-F.
+   * The default binding for this signal is <kbd>Control</kbd>+<kbd>F</kbd>.
    */
   signals[SEARCH] = g_signal_new (I_("search"),
                                  G_TYPE_FROM_CLASS (klass),
