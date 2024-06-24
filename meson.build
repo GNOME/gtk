@@ -23,7 +23,7 @@ wayland_req        = '>= 1.21.0'
 graphene_req       = '>= 1.10.0'
 epoxy_req          = '>= 1.4'
 cloudproviders_req = '>= 0.3.1'
-xkbcommon_req      = '>= 0.2.0'
+xkbcommon_req      = '>= 0.7.0'
 sysprof_req        = '>= 3.38.0'
 vulkan_req         = '>= 1.3'
 

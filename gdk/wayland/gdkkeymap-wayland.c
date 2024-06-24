@@ -336,7 +336,7 @@ gdk_wayland_keymap_translate_keyboard_state (GdkKeymap       *keymap,
   layout = xkb_state_key_get_layout (xkb_state, hardware_keycode);
   level = xkb_state_key_get_level (xkb_state, hardware_keycode, layout);
   sym = xkb_state_key_get_one_sym (xkb_state, hardware_keycode);
-  consumed = modifiers & ~xkb_state_mod_mask_remove_consumed (xkb_state, hardware_keycode, modifiers);
+  consumed = modifiers & xkb_state_key_get_consumed_mods2 (xkb_state, hardware_keycode, XKB_CONSUMED_MODE_XKB);
 
   xkb_state_unref (xkb_state);
 
