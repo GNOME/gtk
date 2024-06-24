@@ -287,7 +287,10 @@ gdk_texture_set_property (GObject      *gobject,
     case PROP_COLOR_STATE:
       if (self->color_state)
         gdk_color_state_unref (self->color_state);
-      self->color_state = gdk_color_state_ref (g_value_get_boxed (value));
+      if (g_value_get_boxed (value))
+        self->color_state = gdk_color_state_ref (g_value_get_boxed (value));
+      else
+        self->color_state = GDK_COLOR_STATE_SRGB;
       break;
 
     default:
