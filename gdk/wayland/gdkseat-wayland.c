@@ -1283,7 +1283,7 @@ deliver_key_event (GdkWaylandSeat *seat,
 
   translated.keyval = xkb_state_key_get_one_sym (xkb_state, key);
   modifiers = xkb_state_serialize_mods (xkb_state, XKB_STATE_MODS_EFFECTIVE);
-  consumed = modifiers & xkb_state_key_get_consumed_mods2 (xkb_state, key, XKB_CONSUMED_MODE_XKB);
+  consumed = modifiers & xkb_state_key_get_consumed_mods2 (xkb_state, key, XKB_CONSUMED_MODE_GTK);
   translated.consumed = gdk_wayland_keymap_get_gdk_modifiers (keymap, consumed);
   translated.layout = xkb_state_key_get_layout (xkb_state, key);
   translated.level = xkb_state_key_get_level (xkb_state, key, translated.layout);
@@ -1307,7 +1307,7 @@ deliver_key_event (GdkWaylandSeat *seat,
       xkb_state_update_mask (tmp_state, modifiers, 0, 0, layout, 0, 0);
 
       no_lock.keyval = xkb_state_key_get_one_sym (tmp_state, key);
-      consumed = modifiers & xkb_state_key_get_consumed_mods2 (tmp_state, key, XKB_CONSUMED_MODE_XKB);
+      consumed = modifiers & xkb_state_key_get_consumed_mods2 (tmp_state, key, XKB_CONSUMED_MODE_GTK);
       no_lock.consumed = gdk_wayland_keymap_get_gdk_modifiers (keymap, consumed);
       no_lock.layout = xkb_state_key_get_layout (tmp_state, key);
       no_lock.level = xkb_state_key_get_level (tmp_state, key, no_lock.layout);
