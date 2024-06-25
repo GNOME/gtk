@@ -52,4 +52,8 @@ gtk_accesskit_root_queue_update (GtkAccessKitRoot *self,
 void
 gtk_accesskit_root_update_tree (GtkAccessKitRoot *self);
 
+void
+gtk_accesskit_root_update_window_focus_state (GtkAccessKitRoot *self,
+                                              gboolean          focused);
+
 G_END_DECLS

@@ -161,11 +161,21 @@ gtk_accesskit_context_state_change (GtkATContext                *ctx,
 
 static void
 gtk_accesskit_context_platform_change (GtkATContext                *ctx,
-                                       GtkAccessiblePlatformChange  changed_platform)
+                                       GtkAccessiblePlatformChange  change)
 {
   GtkAccessKitContext *self = GTK_ACCESSKIT_CONTEXT (ctx);
+  GtkAccessible *accessible = gtk_at_context_get_accessible (ctx);
 
   queue_update (self, FALSE);
+
+  if (GTK_IS_ROOT (accessible) &&
+      change == GTK_ACCESSIBLE_PLATFORM_CHANGE_ACTIVE)
+    {
+      gboolean active =
+        gtk_accessible_get_platform_state (accessible,
+                                           GTK_ACCESSIBLE_PLATFORM_STATE_ACTIVE);
+      gtk_accesskit_root_update_window_focus_state (self->root, active);
+    }
 }
 
 static void

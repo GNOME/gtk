@@ -671,10 +671,10 @@ static const struct {
                                      GtkAccessible    *accessible,
                                      GdkDisplay       *display);
 } a11y_backends[] = {
-  { "AccessKit", "accesskit", gtk_accesskit_create_context },
 #if defined(GDK_WINDOWING_WAYLAND) || defined(GDK_WINDOWING_X11)
   { "AT-SPI", "atspi", gtk_at_spi_create_context },
 #endif
+  { "AccessKit", "accesskit", gtk_accesskit_create_context },
   { "Test", "test", gtk_test_at_context_new },
 };
 

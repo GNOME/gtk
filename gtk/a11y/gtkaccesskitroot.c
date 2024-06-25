@@ -48,8 +48,8 @@ struct _GtkAccessKitRoot
 
 #if defined(GDK_WINDOWING_WIN32)
   accesskit_windows_subclassing_adapter *adapter;
-#elif defined(GDK_WINDOWING_WAYLAND)
-  accesskit_newton_adapter *adapter;
+#elif defined(GDK_WINDOWING_WAYLAND) || defined(GDK_WINDOWING_X11)
+  accesskit_unix_adapter *adapter;
 /* TODO: other platforms */
 #endif
 };
@@ -75,8 +75,8 @@ gtk_accesskit_root_finalize (GObject *gobject)
 
 #if defined(GDK_WINDOWING_WIN32)
   g_clear_pointer (&self->adapter, accesskit_windows_subclassing_adapter_free);
-#elif defined(GDK_WINDOWING_WAYLAND)
-  g_clear_pointer (&self->adapter, accesskit_newton_adapter_free);
+#elif defined(GDK_WINDOWING_WAYLAND) || defined(GDK_WINDOWING_X11)
+  g_clear_pointer (&self->adapter, accesskit_unix_adapter_free);
 /* TODO: other platforms */
 #endif
 
@@ -236,10 +236,8 @@ update_if_active (GtkAccessKitRoot *self, accesskit_tree_update_factory factory)
                                                             factory, self);
   if (events)
     accesskit_windows_queued_events_raise (events);
-#elif defined(GDK_WINDOWING_WAYLAND)
-  GdkSurface *surface = gtk_native_get_surface (GTK_NATIVE (self->root_widget));
-  gdk_wayland_surface_force_next_commit (surface);
-  accesskit_newton_adapter_update_if_active (self->adapter, factory, self);
+#elif defined(GDK_WINDOWING_WAYLAND) || defined(GDK_WINDOWING_X11)
+  accesskit_unix_adapter_update_if_active (self->adapter, factory, self);
 /* TODO: other platforms */
 #endif
 }
@@ -356,15 +354,11 @@ gtk_accesskit_root_constructed (GObject *gobject)
     accesskit_windows_subclassing_adapter_new (GDK_SURFACE_HWND (surface),
                                                request_initial_tree_main_thread,
                                                self, do_action, self);
-#elif defined(GDK_WINDOWING_WAYLAND)
-  GdkDisplay *display = gtk_root_get_display (self->root_widget);
-  struct wl_display *wl_display = gdk_wayland_display_get_wl_display (display);
-  struct wl_surface *wl_surface = gdk_wayland_surface_get_wl_surface (surface);
+#elif defined(GDK_WINDOWING_WAYLAND) || defined(GDK_WINDOWING_X11)
   self->adapter =
-    accesskit_newton_adapter_new (wl_display, wl_surface,
-                                  request_initial_tree_other_thread, self,
-                                  do_action, self,
-                                  deactivate_accessibility, self);
+    accesskit_unix_adapter_new (request_initial_tree_other_thread, self,
+                                do_action, self,
+                                deactivate_accessibility, self);
 /* TODO: other platforms */
 #endif
 
@@ -558,4 +552,14 @@ gtk_accesskit_root_update_tree (GtkAccessKitRoot *self)
       update_if_active (self, build_full_update);
       self->did_initial_update = TRUE;
     }
+}
+
+void
+gtk_accesskit_root_update_window_focus_state (GtkAccessKitRoot *self,
+                                              gboolean          focused)
+{
+#if defined(GDK_WINDOWING_WAYLAND) || defined(GDK_WINDOWING_X11)
+  accesskit_unix_adapter_update_window_focus_state (self->adapter, focused);
+/* TODO: macOS */
+#endif
 }
