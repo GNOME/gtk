@@ -3614,6 +3614,7 @@ append_texture_param (Printer    *p,
       g_string_append (p->str, "url(\"data:image/tiff;base64,\\\n");
       break;
 
+    case GDK_N_DEPTHS:
     default:
       g_assert_not_reached ();
     }
