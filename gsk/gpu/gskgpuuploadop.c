@@ -12,6 +12,7 @@
 #include "gskvulkanimageprivate.h"
 #endif
 
+#include "gdk/gdkcolorstateprivate.h"
 #include "gdk/gdkglcontextprivate.h"
 #include "gsk/gskdebugprivate.h"
 
@@ -304,6 +305,7 @@ gsk_gpu_upload_texture_op_try (GskGpuFrame *frame,
   image = gsk_gpu_device_create_upload_image (gsk_gpu_frame_get_device (frame),
                                               with_mipmap,
                                               gdk_texture_get_format (texture),
+                                              gdk_color_state_has_srgb_tf (gdk_texture_get_color_state (texture), NULL),
                                               gdk_texture_get_width (texture),
                                               gdk_texture_get_height (texture));
   if (image == NULL)
@@ -470,6 +472,7 @@ gsk_gpu_upload_cairo_op (GskGpuFrame           *frame,
   self->image = gsk_gpu_device_create_upload_image (gsk_gpu_frame_get_device (frame),
                                                     FALSE,
                                                     GDK_MEMORY_DEFAULT,
+                                                    gdk_color_state_has_srgb_tf (GDK_COLOR_STATE_SRGB, NULL),
                                                     ceil (graphene_vec2_get_x (scale) * viewport->size.width),
                                                     ceil (graphene_vec2_get_y (scale) * viewport->size.height));
   self->viewport = *viewport;

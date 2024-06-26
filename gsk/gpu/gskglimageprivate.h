@@ -18,6 +18,7 @@ GskGpuImage *           gsk_gl_image_new_backbuffer                     (GskGLDe
                                                                          gsize                   height);
 GskGpuImage *           gsk_gl_image_new                                (GskGLDevice            *device,
                                                                          GdkMemoryFormat         format,
+                                                                         gboolean                try_srgb,
                                                                          GskGpuImageFlags        required_flags,
                                                                          gsize                   width,
                                                                          gsize                   height);
