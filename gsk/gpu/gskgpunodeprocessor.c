@@ -873,7 +873,8 @@ gsk_gpu_node_processor_ensure_image (GskGpuFrame      *frame,
 
   copy = gsk_gpu_device_create_offscreen_image (gsk_gpu_frame_get_device (frame),
                                                 required_flags & (GSK_GPU_IMAGE_CAN_MIPMAP | GSK_GPU_IMAGE_MIPMAP) ? TRUE : FALSE,
-                                                gdk_memory_format_get_depth (gsk_gpu_image_get_format (image)),
+                                                gdk_memory_format_get_depth (gsk_gpu_image_get_format (image),
+                                                                             flags & GSK_GPU_IMAGE_SRGB),
                                                 width, height);
 
   if (gsk_gpu_frame_should_optimize (frame, GSK_GPU_OPTIMIZE_BLIT) &&
@@ -2528,7 +2529,8 @@ gsk_gpu_node_processor_add_blur_node (GskGpuNodeProcessor *self,
                                   NULL,
                                   self->desc,
                                   descriptor,
-                                  gdk_memory_format_get_depth (gsk_gpu_image_get_format (image)),
+                                  gdk_memory_format_get_depth (gsk_gpu_image_get_format (image),
+                                                               gsk_gpu_image_get_flags (image) & GSK_GPU_IMAGE_SRGB),
                                   &tex_rect);
 
   g_object_unref (image);
@@ -2594,7 +2596,8 @@ gsk_gpu_node_processor_add_shadow_node (GskGpuNodeProcessor *self,
                                           &shadow->color,
                                           desc,
                                           descriptor,
-                                          gdk_memory_format_get_depth (gsk_gpu_image_get_format (image)),
+                                          gdk_memory_format_get_depth (gsk_gpu_image_get_format (image),
+                                                                       gsk_gpu_image_get_flags (image) & GSK_GPU_IMAGE_SRGB),
                                           &tex_rect);
         }
     }
