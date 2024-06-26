@@ -38,6 +38,7 @@ typedef enum {
 
 typedef enum {
   GDK_MEMORY_U8,
+  GDK_MEMORY_U8_SRGB,
   GDK_MEMORY_U16,
   GDK_MEMORY_FLOAT16,
   GDK_MEMORY_FLOAT32,
@@ -53,11 +54,13 @@ gsize                   gdk_memory_format_bytes_per_pixel   (GdkMemoryFormat    
 GdkMemoryFormat         gdk_memory_format_get_premultiplied (GdkMemoryFormat             format) G_GNUC_CONST;
 GdkMemoryFormat         gdk_memory_format_get_straight      (GdkMemoryFormat             format) G_GNUC_CONST;
 const GdkMemoryFormat * gdk_memory_format_get_fallbacks     (GdkMemoryFormat             format) G_GNUC_CONST;
-GdkMemoryDepth          gdk_memory_format_get_depth         (GdkMemoryFormat             format) G_GNUC_CONST;
+GdkMemoryDepth          gdk_memory_format_get_depth         (GdkMemoryFormat             format,
+                                                             gboolean                    srgb) G_GNUC_CONST;
 gsize                   gdk_memory_format_min_buffer_size   (GdkMemoryFormat             format,
                                                              gsize                       stride,
                                                              gsize                       width,
                                                              gsize                       height) G_GNUC_CONST;
+gboolean                gdk_memory_depth_is_srgb            (GdkMemoryDepth              depth) G_GNUC_CONST;
 GdkMemoryDepth          gdk_memory_depth_merge              (GdkMemoryDepth              depth1,
                                                              GdkMemoryDepth              depth2) G_GNUC_CONST;
 GdkMemoryFormat         gdk_memory_depth_get_format         (GdkMemoryDepth              depth) G_GNUC_CONST;

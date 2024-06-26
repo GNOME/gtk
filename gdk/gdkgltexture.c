@@ -258,7 +258,7 @@ gdk_gl_texture_do_download (GdkGLTexture *self,
             }
           else
             {
-              actual_format = gdk_memory_depth_get_format (gdk_memory_format_get_depth (format));
+              actual_format = gdk_memory_depth_get_format (gdk_memory_format_get_depth (format, FALSE));
               if (gdk_memory_format_alpha (format) == GDK_MEMORY_ALPHA_STRAIGHT)
                 actual_format = gdk_memory_format_get_straight (actual_format);
 
@@ -270,7 +270,7 @@ gdk_gl_texture_do_download (GdkGLTexture *self,
         }
       else
         {
-          actual_format = gdk_memory_depth_get_format (gdk_memory_format_get_depth (format));
+          actual_format = gdk_memory_depth_get_format (gdk_memory_format_get_depth (format, FALSE));
           if (gdk_memory_format_alpha (format) == GDK_MEMORY_ALPHA_STRAIGHT)
             actual_format = gdk_memory_format_get_straight (actual_format);
 
