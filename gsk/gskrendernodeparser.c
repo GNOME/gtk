@@ -3600,9 +3600,10 @@ append_texture_param (Printer    *p,
       g_hash_table_insert (p->named_textures, texture, new_name);
     }
 
-  switch (gdk_memory_format_get_depth (gdk_texture_get_format (texture)))
+  switch (gdk_memory_format_get_depth (gdk_texture_get_format (texture), FALSE))
     {
     case GDK_MEMORY_U8:
+    case GDK_MEMORY_U8_SRGB:
     case GDK_MEMORY_U16:
       bytes = gdk_texture_save_to_png_bytes (texture);
       g_string_append (p->str, "url(\"data:image/png;base64,\\\n");
