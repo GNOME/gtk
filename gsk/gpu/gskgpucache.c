@@ -829,7 +829,7 @@ gsk_gpu_cache_lookup_glyph_image (GskGpuCache            *self,
     }
   else
     {
-      image = gsk_gpu_device_create_upload_image (self->device, GDK_MEMORY_DEFAULT, FALSE, rect.size.width, rect.size.height),
+      image = gsk_gpu_device_create_upload_image (self->device, FALSE, GDK_MEMORY_DEFAULT, FALSE, rect.size.width, rect.size.height),
       rect.origin.x = 0;
       rect.origin.y = 0;
       padding = 0;

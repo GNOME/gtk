@@ -125,6 +125,7 @@ gsk_gl_image_new_backbuffer (GskGLDevice    *device,
 GskGpuImage *
 gsk_gl_image_new (GskGLDevice      *device,
                   GdkMemoryFormat   format,
+                  gboolean          try_srgb,
                   GskGpuImageFlags  required_flags,
                   gsize             width,
                   gsize             height)
@@ -152,7 +153,15 @@ gsk_gl_image_new (GskGLDevice      *device,
                                 &self->gl_type,
                                 swizzle);
 
-  self->gl_internal_format = gl_internal_format;
+  if (try_srgb && gl_internal_srgb_format != -1)
+    {
+      self->gl_internal_format = gl_internal_srgb_format;
+      flags |= GSK_GPU_IMAGE_SRGB;
+    }
+  else
+    {
+      self->gl_internal_format = gl_internal_format;
+    }
 
   gsk_gpu_image_setup (GSK_GPU_IMAGE (self),
                        flags,

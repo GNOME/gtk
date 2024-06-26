@@ -371,6 +371,7 @@ gsk_vulkan_device_create_offscreen_image (GskGpuDevice   *device,
   return gsk_vulkan_image_new_for_offscreen (self,
                                              with_mipmap,
                                              gdk_memory_depth_get_format (depth),
+                                             gdk_memory_depth_is_srgb (depth),
                                              width,
                                              height);
 }
@@ -391,6 +392,7 @@ static GskGpuImage *
 gsk_vulkan_device_create_upload_image (GskGpuDevice    *device,
                                        gboolean         with_mipmap,
                                        GdkMemoryFormat  format,
+                                       gboolean         try_srgb,
                                        gsize            width,
                                        gsize            height)
 {
@@ -399,6 +401,7 @@ gsk_vulkan_device_create_upload_image (GskGpuDevice    *device,
   return gsk_vulkan_image_new_for_upload (self,
                                           with_mipmap,
                                           format,
+                                          try_srgb,
                                           width,
                                           height);
 }
@@ -415,6 +418,7 @@ gsk_vulkan_device_create_download_image (GskGpuDevice   *device,
 #ifdef HAVE_DMABUF
   image = gsk_vulkan_image_new_dmabuf (self,
                                        gdk_memory_depth_get_format (depth),
+                                       gdk_memory_depth_is_srgb (depth),
                                        width,
                                        height);
   if (image != NULL)
@@ -424,6 +428,7 @@ gsk_vulkan_device_create_download_image (GskGpuDevice   *device,
   image = gsk_vulkan_image_new_for_offscreen (self,
                                               FALSE,
                                               gdk_memory_depth_get_format (depth),
+                                              gdk_memory_depth_is_srgb (depth),
                                               width,
                                               height);
 
