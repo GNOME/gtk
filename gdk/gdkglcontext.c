@@ -329,7 +329,7 @@ gdk_gl_context_create_egl_context (GdkGLContext *context,
   if (display->have_egl_no_config_context)
     egl_config = NULL;
   else
-    egl_config = gdk_display_get_egl_config (display);
+    egl_config = gdk_display_get_egl_config (display, GDK_MEMORY_U8);
 
   if (debug_bit)
     flags |= EGL_CONTEXT_OPENGL_DEBUG_BIT_KHR;
@@ -626,7 +626,7 @@ gdk_gl_context_real_begin_frame (GdkDrawContext *draw_context,
 
 #ifdef HAVE_EGL
   if (priv->egl_context)
-    gdk_surface_ensure_egl_surface (surface, depth != GDK_MEMORY_U8);
+    gdk_surface_ensure_egl_surface (surface, depth);
 #endif
 
   damage = GDK_GL_CONTEXT_GET_CLASS (context)->get_damage (context);

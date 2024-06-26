@@ -2993,7 +2993,7 @@ gdk_x11_display_init_gl_backend (GdkX11Display  *self,
     }
 
   if (!eglGetConfigAttrib (gdk_display_get_egl_display (display),
-                           gdk_display_get_egl_config (display),
+                           gdk_display_get_egl_config (display, GDK_MEMORY_U8),
                            EGL_NATIVE_VISUAL_ID,
                            &visualid))
     {

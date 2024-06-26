@@ -72,7 +72,7 @@ struct _GdkSurfacePrivate
   gpointer egl_native_window;
 #ifdef HAVE_EGL
   EGLSurface egl_surface;
-  gboolean egl_surface_high_depth;
+  GdkMemoryDepth egl_surface_depth;
 #endif
 
   gpointer widget;
@@ -1140,17 +1140,17 @@ gdk_surface_get_egl_surface (GdkSurface *self)
 }
 
 void
-gdk_surface_ensure_egl_surface (GdkSurface *self,
-                                gboolean    high_depth)
+gdk_surface_ensure_egl_surface (GdkSurface     *self,
+                                GdkMemoryDepth  depth)
 {
   GdkSurfacePrivate *priv = gdk_surface_get_instance_private (self);
   GdkDisplay *display = gdk_surface_get_display (self);
 
   g_return_if_fail (priv->egl_native_window != NULL);
 
-  if (priv->egl_surface_high_depth != high_depth &&
+  if (priv->egl_surface_depth != depth &&
       priv->egl_surface != NULL &&
-      gdk_display_get_egl_config_high_depth (display) != gdk_display_get_egl_config (display))
+      gdk_display_get_egl_config (display, priv->egl_surface_depth) != gdk_display_get_egl_config (display, depth))
     {
       gdk_gl_context_clear_current_if_surface (self);
       eglDestroySurface (gdk_display_get_egl_display (display), priv->egl_surface);
@@ -1160,11 +1160,10 @@ gdk_surface_ensure_egl_surface (GdkSurface *self,
   if (priv->egl_surface == NULL)
     {
       priv->egl_surface = eglCreateWindowSurface (gdk_display_get_egl_display (display),
-                                                  high_depth ? gdk_display_get_egl_config_high_depth (display)
-                                                             : gdk_display_get_egl_config (display),
+                                                  gdk_display_get_egl_config (display, depth),
                                                   (EGLNativeWindowType) priv->egl_native_window,
                                                   NULL);
-      priv->egl_surface_high_depth = high_depth;
+      priv->egl_surface_depth = depth;
     }
 #endif
 }
