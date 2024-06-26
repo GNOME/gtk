@@ -82,6 +82,7 @@ has_surface_at_origin (const GList *surfaces,
 static void
 _gdk_macos_display_position_toplevel (GdkMacosDisplay *self,
                                       GdkMacosSurface *surface,
+                                      GdkMonitor      *selected_monitor,
                                       int             *x,
                                       int             *y)
 {
@@ -95,7 +96,11 @@ _gdk_macos_display_position_toplevel (GdkMacosDisplay *self,
   g_assert (GDK_IS_MACOS_TOPLEVEL_SURFACE (surface));
 
   mouse = [NSEvent mouseLocation];
-  monitor = _gdk_macos_display_get_monitor_at_display_coords (self, mouse.x, mouse.y);
+  if (!selected_monitor)
+    monitor = _gdk_macos_display_get_monitor_at_display_coords (self, mouse.x, mouse.y);
+  else
+    monitor = selected_monitor;
+
   gdk_macos_monitor_get_workarea (monitor, &workarea);
 
   /* First place at top-left of current monitor */
@@ -104,7 +109,7 @@ _gdk_macos_display_position_toplevel (GdkMacosDisplay *self,
   surface_rect.x = workarea.x + ((workarea.width - surface_rect.width) / 2);
   surface_rect.y = workarea.y + ((workarea.height - surface_rect.height) / 2);
 
-  _gdk_macos_monitor_clamp (GDK_MACOS_MONITOR (surface->best_monitor), &surface_rect);
+  _gdk_macos_monitor_clamp (GDK_MACOS_MONITOR (selected_monitor ? selected_monitor : surface->best_monitor), &surface_rect);
 
   *x = surface_rect.x;
   *y = surface_rect.y;
@@ -138,6 +143,7 @@ _gdk_macos_display_position_toplevel (GdkMacosDisplay *self,
 void
 _gdk_macos_display_position_surface (GdkMacosDisplay *self,
                                      GdkMacosSurface *surface,
+                                     GdkMonitor      *monitor,
                                      int             *x,
                                      int             *y)
 {
@@ -151,5 +157,5 @@ _gdk_macos_display_position_surface (GdkMacosDisplay *self,
   if (transient_for != NULL)
     _gdk_macos_display_position_toplevel_with_parent (self, surface, GDK_MACOS_SURFACE (transient_for), x, y);
   else
-    _gdk_macos_display_position_toplevel (self, surface, x, y);
+    _gdk_macos_display_position_toplevel (self, surface, monitor, x, y);
 }
