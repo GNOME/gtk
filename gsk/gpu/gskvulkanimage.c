@@ -548,6 +548,9 @@ gsk_vulkan_device_check_dmabuf_format (GskVulkanDevice          *device,
     .pNext = &drm_properties
   };
 
+  if (vk_format == VK_FORMAT_UNDEFINED)
+    return FALSE;
+
   if (!gsk_component_mapping_is_framebuffer_compatible (vk_components))
     return FALSE;
 
@@ -633,8 +636,7 @@ gsk_vulkan_image_new_dmabuf (GskVulkanDevice *device,
 
   /* First, try the actual format */
   vk_format = gdk_memory_format_vk_format (format, &vk_components);
-  if (vk_format == VK_FORMAT_UNDEFINED ||
-      !gsk_vulkan_device_check_dmabuf_format (device, vk_format, &vk_components, width, height,
+  if (!gsk_vulkan_device_check_dmabuf_format (device, vk_format, &vk_components, width, height,
                                               modifiers, &flags, &n_modifiers))
     {
       /* Second, try the potential RGBA format, but as a fallback */
@@ -642,8 +644,7 @@ gsk_vulkan_image_new_dmabuf (GskVulkanDevice *device,
       vk_format = gdk_memory_format_vk_rgba_format (format, &rgba_format, NULL);
       if (vk_format != VK_FORMAT_UNDEFINED)
         vk_format = gdk_memory_format_vk_format (rgba_format, &vk_components);
-      if (vk_format != VK_FORMAT_UNDEFINED &&
-          gsk_vulkan_device_check_dmabuf_format (device, vk_format, &vk_components, width, height,
+      if (gsk_vulkan_device_check_dmabuf_format (device, vk_format, &vk_components, width, height,
                                                  modifiers, &flags, &n_modifiers))
         {
           format = rgba_format;
@@ -658,8 +659,7 @@ gsk_vulkan_image_new_dmabuf (GskVulkanDevice *device,
           for (i = 0; fallbacks[i] != -1; i++)
             {
               vk_format = gdk_memory_format_vk_format (fallbacks[i], &vk_components);
-              if (vk_format != VK_FORMAT_UNDEFINED &&
-                  gsk_vulkan_device_check_dmabuf_format (device, vk_format, &vk_components, width, height,
+              if (gsk_vulkan_device_check_dmabuf_format (device, vk_format, &vk_components, width, height,
                                                          modifiers, &flags, &n_modifiers))
                 {
                   format = fallbacks[i];
