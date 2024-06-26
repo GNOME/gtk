@@ -698,6 +698,14 @@ gtk_popover_native_layout (GtkNative *native,
   GtkPopover *popover = GTK_POPOVER (native);
   GtkPopoverPrivate *priv = gtk_popover_get_instance_private (popover);
   GtkWidget *widget = GTK_WIDGET (popover);
+  GtkRequisition min, nat;
+
+  gtk_widget_get_preferred_size (widget, &min, &nat);
+  if (width < min.width || height < min.height)
+    {
+      gtk_popover_popdown (popover);
+      return;
+    }
 
   update_popover_layout (popover, gdk_popup_layout_ref (priv->layout), width, height);
 
