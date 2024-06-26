@@ -1479,6 +1479,7 @@ gdk_memory_depth_merge (GdkMemoryDepth depth1,
         else
           return GDK_MEMORY_FLOAT32;
 
+      case GDK_N_DEPTHS:
       default:
         g_assert_not_reached ();
         return GDK_MEMORY_U8;
@@ -1507,6 +1508,7 @@ gdk_memory_depth_get_format (GdkMemoryDepth depth)
         return GDK_MEMORY_R16G16B16A16_FLOAT_PREMULTIPLIED;
       case GDK_MEMORY_FLOAT32:
         return GDK_MEMORY_R32G32B32A32_FLOAT_PREMULTIPLIED;
+      case GDK_N_DEPTHS:
       default:
         g_return_val_if_reached (GDK_MEMORY_R8G8B8A8_PREMULTIPLIED);
     }
@@ -1534,6 +1536,7 @@ gdk_memory_depth_get_alpha_format (GdkMemoryDepth depth)
         return GDK_MEMORY_A16_FLOAT;
       case GDK_MEMORY_FLOAT32:
         return GDK_MEMORY_A32_FLOAT;
+      case GDK_N_DEPTHS:
       default:
         g_return_val_if_reached (GDK_MEMORY_A8);
     }
