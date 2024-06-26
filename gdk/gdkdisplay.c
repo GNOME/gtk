@@ -1570,19 +1570,15 @@ describe_egl_config (EGLDisplay egl_display,
 }
 
 gpointer
-gdk_display_get_egl_config (GdkDisplay *self)
+gdk_display_get_egl_config (GdkDisplay     *self,
+                            GdkMemoryDepth  depth)
 {
   GdkDisplayPrivate *priv = gdk_display_get_instance_private (self);
 
-  return priv->egl_config;
-}
-
-gpointer
-gdk_display_get_egl_config_high_depth (GdkDisplay *self)
-{
-  GdkDisplayPrivate *priv = gdk_display_get_instance_private (self);
-
-  return priv->egl_config_high_depth;
+  if (depth == GDK_MEMORY_U8 || depth == GDK_MEMORY_U8_SRGB)
+    return priv->egl_config;
+  else
+    return priv->egl_config_high_depth;
 }
 
 static EGLDisplay

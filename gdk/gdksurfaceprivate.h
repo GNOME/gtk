@@ -19,8 +19,8 @@
 
 #pragma once
 
-#include <gdk-pixbuf/gdk-pixbuf.h>
 #include "gdkenumtypes.h"
+#include "gdkmemoryformatprivate.h"
 #include "gdksurface.h"
 #include "gdktoplevel.h"
 #include <graphene.h>
@@ -299,7 +299,7 @@ void                    gdk_surface_set_frame_clock             (GdkSurface     
 void                    gdk_surface_set_egl_native_window       (GdkSurface             *self,
                                                                  gpointer                native_window);
 void                    gdk_surface_ensure_egl_surface          (GdkSurface             *self,
-                                                                 gboolean                hdr);
+                                                                 GdkMemoryDepth          depth);
 gpointer /*EGLSurface*/ gdk_surface_get_egl_surface             (GdkSurface             *self);
 
 void                    gdk_surface_set_widget                  (GdkSurface             *self,
