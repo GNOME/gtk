@@ -101,9 +101,6 @@ VkImage                 gdk_vulkan_context_get_image                    (GdkVulk
 uint32_t                gdk_vulkan_context_get_draw_index               (GdkVulkanContext      *context);
 VkSemaphore             gdk_vulkan_context_get_draw_semaphore           (GdkVulkanContext      *context);
 
-GdkMemoryFormat         gdk_vulkan_context_get_offscreen_format         (GdkVulkanContext      *context,
-                                                                         GdkMemoryDepth         depth);
-
 #else /* !GDK_RENDERING_VULKAN */
 
 
