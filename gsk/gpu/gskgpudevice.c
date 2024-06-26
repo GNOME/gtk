@@ -699,10 +699,11 @@ GskGpuImage *
 gsk_gpu_device_create_upload_image (GskGpuDevice   *self,
                                     gboolean        with_mipmap,
                                     GdkMemoryFormat format,
+                                    gboolean        try_srgb,
                                     gsize           width,
                                     gsize           height)
 {
-  return GSK_GPU_DEVICE_GET_CLASS (self)->create_upload_image (self, with_mipmap, format, width, height);
+  return GSK_GPU_DEVICE_GET_CLASS (self)->create_upload_image (self, with_mipmap, format, try_srgb, width, height);
 }
 
 void
@@ -950,7 +951,7 @@ gsk_gpu_device_lookup_glyph_image (GskGpuDevice           *self,
     }
   else
     {
-      image = gsk_gpu_device_create_upload_image (self, FALSE, GDK_MEMORY_DEFAULT, rect.size.width, rect.size.height),
+      image = gsk_gpu_device_create_upload_image (self, FALSE, GDK_MEMORY_DEFAULT, FALSE, rect.size.width, rect.size.height),
       rect.origin.x = 0;
       rect.origin.y = 0;
       padding = 0;
