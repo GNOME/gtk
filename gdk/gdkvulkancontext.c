@@ -893,6 +893,22 @@ gdk_vulkan_context_real_init (GInitable     *initable,
                   }
                 break;
 
+              case VK_FORMAT_B8G8R8A8_SRGB:
+                if (priv->formats[GDK_MEMORY_U8_SRGB].vk_format.format == VK_FORMAT_UNDEFINED)
+                  {
+                    priv->formats[GDK_MEMORY_U8_SRGB].vk_format = formats[i];
+                    priv->formats[GDK_MEMORY_U8_SRGB].gdk_format = GDK_MEMORY_B8G8R8A8_PREMULTIPLIED;
+                  }
+                break;
+
+              case VK_FORMAT_R8G8B8A8_SRGB:
+                if (priv->formats[GDK_MEMORY_U8_SRGB].vk_format.format == VK_FORMAT_UNDEFINED)
+                  {
+                    priv->formats[GDK_MEMORY_U8_SRGB].vk_format = formats[i];
+                    priv->formats[GDK_MEMORY_U8_SRGB].gdk_format = GDK_MEMORY_R8G8B8A8_PREMULTIPLIED;
+                  }
+                break;
+
               case VK_FORMAT_R16G16B16A16_UNORM:
                 priv->formats[GDK_MEMORY_U16].vk_format = formats[i];
                 priv->formats[GDK_MEMORY_U16].gdk_format = GDK_MEMORY_R16G16B16A16_PREMULTIPLIED;
