@@ -47,7 +47,6 @@ property_has_color (guint id)
 {
   switch (id)
     {
-    case GTK_CSS_PROPERTY_COLOR:
     case GTK_CSS_PROPERTY_ICON_PALETTE:
     case GTK_CSS_PROPERTY_TEXT_DECORATION_COLOR:
     case GTK_CSS_PROPERTY_TEXT_SHADOW:
@@ -57,7 +56,7 @@ property_has_color (guint id)
     case GTK_CSS_PROPERTY_BORDER_BOTTOM_COLOR:
     case GTK_CSS_PROPERTY_BORDER_LEFT_COLOR:
     case GTK_CSS_PROPERTY_OUTLINE_COLOR:
-    case GTK_CSS_PROPERTY_BACKGROUND_IMAGE:
+    case GTK_CSS_PROPERTY_BACKGROUND_COLOR:
     case GTK_CSS_PROPERTY_ICON_SOURCE:
     case GTK_CSS_PROPERTY_ICON_SHADOW:
     case GTK_CSS_PROPERTY_CARET_COLOR:
@@ -75,7 +74,6 @@ gtk_css_ ## NAME ## _values_recompute (GtkCssAnimatedStyle   *animated, \
                                        GtkCssAnimationChange  change) \
 { \
   GtkCssStyle *style = (GtkCssStyle *)animated; \
-  GtkCssValue **values = (GtkCssValue **)((guint8*)(animated->style->NAME) + sizeof (GtkCssValues)); \
   int i; \
 \
   for (i = 0; i < G_N_ELEMENTS (NAME ## _props); i++) \
@@ -84,27 +82,30 @@ gtk_css_ ## NAME ## _values_recompute (GtkCssAnimatedStyle   *animated, \
       GtkCssValue *original, *computed; \
       gboolean needs_recompute = FALSE; \
 \
-      if (values[i] == NULL) \
-        continue; \
-\
       original = gtk_css_style_get_original_value (style, id); \
-      if (original == NULL) \
-        continue; \
 \
       if ((change & GTK_CSS_ANIMATION_CHANGE_VARIABLES) && \
+           original && \
            gtk_css_value_contains_variables (original)) \
-        needs_recompute = TRUE; \
+        { \
+          needs_recompute = TRUE; \
+        } \
 \
       if ((change & GTK_CSS_ANIMATION_CHANGE_COLOR) && \
           property_has_color (id)) \
-        needs_recompute = TRUE; \
+        { \
+          needs_recompute = TRUE; \
+          if (original == NULL) \
+            original = gtk_css_animated_style_get_intrinsic_value (animated, id); \
+        } \
 \
       if (!needs_recompute) \
         continue; \
 \
-      computed = gtk_css_value_compute (original, \
-                                        id, \
-                                        context); \
+      if (original == NULL) \
+        continue; \
+\
+      computed = gtk_css_value_compute (original, id, context); \
       if (computed == NULL) \
         continue; \
 \
