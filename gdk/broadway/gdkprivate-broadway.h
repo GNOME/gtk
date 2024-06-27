@@ -36,8 +36,9 @@
 #include "gdkbroadwaycursor.h"
 #include "gdkbroadwaysurface.h"
 
-guint32 gdk_broadway_display_ensure_texture (GdkDisplay *display,
-                                             GdkTexture *texture);
+guint32 gdk_broadway_display_ensure_texture (GdkDisplay  *display,
+                                             GdkTexture  *texture,
+                                             GError     **error);
 
 void gdk_broadway_display_flush_in_idle (GdkDisplay *display);
 

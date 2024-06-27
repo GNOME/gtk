@@ -15,6 +15,8 @@
 #ifdef G_OS_UNIX
 #include <gio/gunixsocketaddress.h>
 #include <gio/gunixfdmessage.h>
+#elif defined G_OS_WIN32
+#include <io.h>
 #endif
 
 #include "broadway-server.h"

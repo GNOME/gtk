@@ -64,7 +64,8 @@ gboolean           _gdk_broadway_server_surface_translate         (GdkBroadwaySe
 								  int                 dx,
 								  int                 dy);
 guint32             gdk_broadway_server_upload_texture           (GdkBroadwayServer  *server,
-                                                                  GdkTexture         *texture);
+                                                                  GdkTexture         *texture,
+                                                                  GError            **error);
 void                gdk_broadway_server_release_texture          (GdkBroadwayServer  *server,
                                                                   guint32             id);
 void               gdk_broadway_server_surface_set_nodes          (GdkBroadwayServer *server,

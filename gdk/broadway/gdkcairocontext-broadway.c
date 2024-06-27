@@ -86,24 +86,34 @@ gdk_broadway_cairo_context_end_frame (GdkDrawContext *draw_context,
   GPtrArray *node_textures;
   GArray *nodes;
   guint32 texture_id;
+  GError *error = NULL;
 
   nodes = g_array_new (FALSE, FALSE, sizeof(guint32));
   node_textures = g_ptr_array_new_with_free_func (g_object_unref);
 
   texture = gdk_texture_new_for_surface ((cairo_surface_t *)self->paint_surface);
   g_ptr_array_add (node_textures, g_object_ref (texture)); /* Transfers ownership to node_textures */
-  texture_id = gdk_broadway_display_ensure_texture (display, texture);
+  texture_id = gdk_broadway_display_ensure_texture (display, texture, &error);
 
-  add_uint32 (nodes, BROADWAY_NODE_TEXTURE);
-  add_float (nodes, 0);
-  add_float (nodes, 0);
-  add_float (nodes, cairo_image_surface_get_width (self->paint_surface));
-  add_float (nodes, cairo_image_surface_get_height (self->paint_surface));
-  add_uint32 (nodes, texture_id);
+  if (error == NULL)
+    {
+      add_uint32 (nodes, BROADWAY_NODE_TEXTURE);
+      add_float (nodes, 0);
+      add_float (nodes, 0);
+      add_float (nodes, cairo_image_surface_get_width (self->paint_surface));
+      add_float (nodes, cairo_image_surface_get_height (self->paint_surface));
+      add_uint32 (nodes, texture_id);
 
-  gdk_broadway_surface_set_nodes (surface, nodes, node_textures);
-  g_array_unref (nodes);
-  g_ptr_array_unref (node_textures);
+      gdk_broadway_surface_set_nodes (surface, nodes, node_textures);
+      g_array_unref (nodes);
+      g_ptr_array_unref (node_textures);
+    }
+  else
+    {
+      /* this is for Windows only, BTW */
+      g_critical ("gdk_broadway_display_ensure_texture() failed, error: %s", error->message);
+      g_error_free (error);
+    }
 
   cairo_surface_destroy (self->paint_surface);
   self->paint_surface = NULL;

@@ -1503,9 +1503,7 @@ broadway_server_on_unix_socket_new (char *address, GError **error)
     }
   else
     {
-#ifdef HAVE_GIO_UNIX
       socket_address = g_unix_socket_address_new (address);
-#endif
       if (socket_address == NULL)
         {
           g_set_error (error, G_IO_ERROR, G_IO_ERROR_INVALID_DATA, "Invalid unix domain socket address %s: ", address);

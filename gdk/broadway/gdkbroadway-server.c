@@ -20,7 +20,11 @@
 #include <glib.h>
 #include <glib/gprintf.h>
 #include <gio/gunixsocketaddress.h>
+
+#ifdef G_OS_UNIX
 #include <gio/gunixfdmessage.h>
+#endif
+
 #include <stdlib.h>
 #include <string.h>
 #include <errno.h>
@@ -573,8 +577,56 @@ _gdk_broadway_server_surface_set_modal_hint (GdkBroadwayServer *server,
 				    BROADWAY_REQUEST_SET_MODAL_HINT);
 }
 
+#ifdef G_OS_WIN32
+
+typedef struct
+{
+  HANDLE shm_handle;
+  void *buffer;
+  wchar_t *name;
+} BroadwayWin32ShmFd;
+
+/* Create shared memory in the Windows way */
+static BroadwayWin32ShmFd *
+open_shared_memory_win32 (gsize size, GError **error)
+{
+  BroadwayWin32ShmFd *shm_fd = NULL;
+  void *buf = NULL;
+  HANDLE mf = NULL;
+  wchar_t name[MAX_PATH - 1] = L"";
+  char *name_utf8 = NULL;
+  char *shm_path;
+  char *err_msg = NULL;
+
+  _swprintf (name, L"Global\\gdk-broadway-%x", g_random_int ());
+
+  mf = CreateFileMapping (INVALID_HANDLE_VALUE,    /* Use the system page file for our shared memory */
+                          NULL,                    /* default security */
+                          PAGE_READWRITE,
+                          0,
+                          size,
+                          name);                   /* name of mapping object */
+
+  if (mf != NULL)
+    buf = MapViewOfFile (mf, FILE_MAP_WRITE, 0, 0, size);
+
+  if (buf == NULL)
+    {
+      int win32_error = GetLastError ();
+      g_set_error (error, G_IO_ERROR, g_io_error_from_win32_error (win32_error), g_win32_error_message (win32_error));
+	  return NULL;
+    }
+
+  shm_fd = g_new0 (BroadwayWin32ShmFd, 1);
+  shm_fd->shm_handle = mf;
+  shm_fd->buffer = buf;
+
+  return shm_fd;
+}
+
+#else
 static int
-open_shared_memory (void)
+open_shared_memory_unix (void)
 {
   static gboolean force_shm_open = FALSE;
   int ret = -1;
@@ -620,10 +672,12 @@ open_shared_memory (void)
 
   return ret;
 }
+#endif
 
 guint32
 gdk_broadway_server_upload_texture (GdkBroadwayServer *server,
-                                    GdkTexture        *texture)
+                                    GdkTexture        *texture,
+                                    GError           **error)
 {
   guint32 id;
   BroadwayRequestUploadTexture msg;
@@ -633,8 +687,17 @@ gdk_broadway_server_upload_texture (GdkBroadwayServer *server,
   int fd;
 
   bytes = gdk_texture_save_to_png_bytes (texture);
-  fd = open_shared_memory ();
   data = g_bytes_get_data (bytes, &size);
+
+#ifdef G_OS_WIN32
+  BroadwayWin32ShmFd *win32_shm_fd = open_shared_memory_win32 (size, error);
+
+  if (win32_shm_fd == NULL)
+    return 0;
+
+#else
+  fd = open_shared_memory_unix ();
+#endif
 
   id = server->next_texture_id++;
 
@@ -642,6 +705,9 @@ gdk_broadway_server_upload_texture (GdkBroadwayServer *server,
   msg.offset = 0;
   msg.size = 0;
 
+#ifdef G_OS_WIN32
+  memcpy (win32_shm_fd->buffer, data, size);
+#else
   while (msg.size < size)
     {
       gssize ret = write (fd, data + msg.size, size - msg.size);
@@ -655,10 +721,12 @@ gdk_broadway_server_upload_texture (GdkBroadwayServer *server,
 
       msg.size += ret;
     }
+#endif
 
   g_bytes_unref (bytes);
 
   /* This passes ownership of fd */
+  /*** TODO: Add Win32 version of following */
   gdk_broadway_server_send_fd_message (server, msg,
                                        BROADWAY_REQUEST_UPLOAD_TEXTURE, fd);
 

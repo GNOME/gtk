@@ -423,8 +423,9 @@ broadway_texture_data_free (BroadwayTextureData *data)
 }
 
 guint32
-gdk_broadway_display_ensure_texture (GdkDisplay *display,
-                                     GdkTexture *texture)
+gdk_broadway_display_ensure_texture (GdkDisplay  *display,
+                                     GdkTexture  *texture,
+                                     GError     **error)
 {
   GdkBroadwayDisplay *broadway_display = GDK_BROADWAY_DISPLAY (display);
   BroadwayTextureData *data;
@@ -432,7 +433,7 @@ gdk_broadway_display_ensure_texture (GdkDisplay *display,
   data = g_object_get_data (G_OBJECT (texture), "broadway-data");
   if (data == NULL)
     {
-      guint32 id = gdk_broadway_server_upload_texture (broadway_display->server, texture);
+      guint32 id = gdk_broadway_server_upload_texture (broadway_display->server, texture, error);
 
       data = g_new0 (BroadwayTextureData, 1);
       data->id = id;
