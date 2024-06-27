@@ -704,12 +704,23 @@ pointer_handle_leave (void              *data,
   GdkWaylandSeat *seat = data;
   GdkEvent *event;
   GdkDeviceGrabInfo *grab;
+  GdkSurface *gdk_surface;
 
   if (!seat->pointer_info.focus)
     return;
 
+  if (surface == NULL)
+    return;
+
+  gdk_surface = GDK_SURFACE (wl_surface_get_user_data (surface));
+
   grab = _gdk_display_get_last_device_grab (seat->display,
                                             seat->logical_pointer);
+
+  if (grab &&
+      !grab->implicit &&
+      gdk_surface != grab->surface)
+    return;
 
   if (seat->pointer_info.button_modifiers != 0 &&
       grab && grab->implicit)
