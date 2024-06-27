@@ -195,32 +195,7 @@ gtk_css_value_color_compute (GtkCssValue          *value,
 {
   GtkCssValue *resolved;
 
-  /* The computed value of the ‘currentColor’ keyword is the computed
-   * value of the ‘color’ property. If the ‘currentColor’ keyword is
-   * set on the ‘color’ property itself, it is treated as ‘color: inherit’.
-   */
-  if (property_id == GTK_CSS_PROPERTY_COLOR)
-    {
-      GtkCssValue *current;
-
-      if (context->parent_style)
-        current = context->parent_style->core->color;
-      else
-        current = NULL;
-
-      resolved = gtk_css_color_value_resolve (value, context, current);
-    }
-  else if (value->type == COLOR_TYPE_COLOR)
-    {
-      resolved = gtk_css_value_ref (value);
-    }
-  else
-    {
-      GtkCssValue *current = context->style->core->color;
-
-      resolved = gtk_css_color_value_resolve (value, context, current);
-    }
-
+  resolved = gtk_css_color_value_resolve (value, context, NULL);
   if (resolved == NULL)
     return gtk_css_value_color_get_fallback (property_id, context);
 
@@ -714,6 +689,8 @@ gtk_css_color_value_do_resolve (GtkCssValue          *color,
         GtkCssValue *named;
         GSList cycle = { color, cycle_list };
 
+        g_assert (provider != NULL);
+
         /* If color exists in cycle_list, we're currently resolving it.
          * So we've detected a cycle.
          */
@@ -781,9 +758,7 @@ gtk_css_color_value_do_resolve (GtkCssValue          *color,
 
     case COLOR_TYPE_MIX:
       {
-        const GdkRGBA *color1, *color2;
         GtkCssValue *val1, *val2;
-        GdkRGBA res;
 
         val1 = gtk_css_color_value_do_resolve (color->mix.color1, context, current, cycle_list);
         if (val1 == NULL)
@@ -803,20 +778,26 @@ gtk_css_color_value_do_resolve (GtkCssValue          *color,
       break;
 
     case COLOR_TYPE_CURRENT_COLOR:
-      if (current == NULL)
-        current = _gtk_css_style_property_get_initial_value (_gtk_css_style_property_lookup_by_id (GTK_CSS_PROPERTY_COLOR));
-
-      value = gtk_css_value_ref (current);
+      if (current)
+        value = gtk_css_value_ref (current);
+      else
+        value = gtk_css_value_ref (color);
       break;
 
     default:
-      value = NULL;
       g_assert_not_reached ();
     }
 
   return value;
 }
 
+/* gtk_css_color_value_resolve() can be called in two ways:
+ * - at compute time, passing current == NULL, to make
+ *   currentcolor compute to itself
+ * - at use time, passing the appropriate value for current,
+ *   to fully resolve color values that contain currentcolor
+ *   references
+ */
 GtkCssValue *
 gtk_css_color_value_resolve (GtkCssValue          *color,
                              GtkCssComputeContext *context,
