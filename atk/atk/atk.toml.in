@@ -1,7 +1,7 @@
 [library]
-version = "2.37"
-browse_url = "https://gitlab.gnome.org/GNOME/atk/"
-repository_url = "https://gitlab.gnome.org/GNOME/atk.git"
+version = "2.52"
+browse_url = "https://gitlab.gnome.org/GNOME/at-spi2-core/"
+repository_url = "https://gitlab.gnome.org/GNOME/at-spi2-core.git"
 website_url = "https://www.gtk.org"
 docs_url = "https://docs.gtk.org/atk/"
 authors = "GTK Development Team"
@@ -30,7 +30,7 @@ show_index_summary = true
 show_class_hierarchy = true
 
 [source-location]
-base_url = "https://gitlab.gnome.org/GNOME/atk/-/blob/HEAD/"
+base_url = "https://gitlab.gnome.org/GNOME/at-spi2-core/-/blob/HEAD/"
 
 [extra]
 content_files = [
