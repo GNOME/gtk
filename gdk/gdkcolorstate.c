@@ -20,7 +20,7 @@
 
 #include "gdkcolorstateprivate.h"
 
-#include <glib/gi18n-lib.h>
+#include "gdkdebugprivate.h"
 
 /**
  * GdkColorState:
@@ -143,11 +143,27 @@ gdk_default_color_state_get_name (GdkColorState *color_state)
   return self->name;
 }
 
+static gboolean
+gdk_default_color_state_has_srgb_tf (GdkColorState  *color_state,
+                                     GdkColorState **out_no_srgb)
+{
+  GdkDefaultColorState *self = (GdkDefaultColorState *) color_state;
+
+  if (self->no_srgb == NULL)
+    return FALSE;
+
+  if (out_no_srgb)
+    *out_no_srgb = gdk_color_state_ref (self->no_srgb);
+  
+  return TRUE;
+}
+
 static const
 GdkColorStateClass GDK_DEFAULT_COLOR_STATE_CLASS = {
   .free = NULL, /* crash here if this ever happens */
   .equal = gdk_default_color_state_equal,
   .get_name = gdk_default_color_state_get_name,
+  .has_srgb_tf = gdk_default_color_state_has_srgb_tf,
 };
 
 GdkDefaultColorState gdk_default_color_states[] = {
@@ -158,6 +174,7 @@ GdkDefaultColorState gdk_default_color_states[] = {
       .depth = GDK_MEMORY_U8,
     },
     .name = "srgb",
+    .no_srgb = GDK_COLOR_STATE_SRGB_LINEAR,
   },
   [GDK_COLOR_STATE_ID_SRGB_LINEAR] = {
     .parent = {
@@ -166,6 +183,7 @@ GdkDefaultColorState gdk_default_color_states[] = {
       .depth = GDK_MEMORY_U8,
     },
     .name = "srgb-linear",
+    .no_srgb = NULL,
   },
 };
 
@@ -176,6 +194,28 @@ const char *
 gdk_color_state_get_name (GdkColorState *self)
 {
   return self->klass->get_name (self);
+}
+
+/*<private>
+ * gdk_color_state_has_srgb_tf:
+ * @self: a colorstate
+ * @out_no_srgb: (out) (optional) (transfer full): return location for 
+ *   non-srgb version of colorstate
+ *
+ * This function checks if the colorstate uses an SRGB transfer function
+ * as final operation. In that case, it is suitable for use with GL_SRGB
+ * (and the Vulkan equivalents).
+ *
+ * Returns: TRUE if a non-srgb version of this colorspace exists.
+ **/
+gboolean
+gdk_color_state_has_srgb_tf (GdkColorState  *self,
+                             GdkColorState **out_no_srgb)
+{
+  if (!GDK_DEBUG_CHECK (LINEAR))
+    return FALSE;
+
+  return self->klass->has_srgb_tf (self, out_no_srgb);
 }
 
 /* }}} */
