@@ -69,6 +69,15 @@
  * attribute of a `<child>` element. See [method@Gtk.ListBox.set_placeholder]
  * for info.
  *
+ * # Shortcuts and Gestures
+ *
+ * The following signals have default keybindings:
+ *
+ * - [signal@Gtk.ListBox::move-cursor]
+ * - [signal@Gtk.ListBox::select-all]
+ * - [signal@Gtk.ListBox::toggle-cursor-row]
+ * - [signal@Gtk.ListBox::unselect-all]
+ *
  * # CSS nodes
  *
  * |[<!-- language="plain" -->
@@ -652,6 +661,8 @@ gtk_list_box_class_init (GtkListBoxClass *klass)
    * @box: the list box
    *
    * Emitted when the cursor row is toggled.
+   *
+   * The default bindings for this signal is <kbd>Ctrl</kbd>+<kbd>␣</kbd>.
    */
   signals[TOGGLE_CURSOR_ROW] =
     g_signal_new (I_("toggle-cursor-row"),

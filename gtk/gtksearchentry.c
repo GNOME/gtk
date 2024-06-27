@@ -78,6 +78,15 @@
  * `GtkSearchEntry` provides only minimal API and should be used with
  * the [iface@Gtk.Editable] API.
  *
+ * ## Shortcuts and Gestures
+ *
+ * The following signals have default keybindings:
+ *
+ * - [signal@Gtk.SearchEntry::activate]
+ * - [signal@Gtk.SearchEntry::next-match]
+ * - [signal@Gtk.SearchEntry::previous-match]
+ * - [signal@Gtk.SearchEntry::stop-search]
+ *
  * ## CSS Nodes
  *
  * ```
@@ -528,7 +537,7 @@ gtk_search_entry_class_init (GtkSearchEntryClass *klass)
    *
    * Emitted when the entry is activated.
    *
-   * The keybindings for this signal are all forms of the Enter key.
+   * The keybindings for this signal are all forms of the <kbd>Enter</kbd> key.
    */
   signals[ACTIVATE] =
     g_signal_new (I_("activate"),
@@ -568,7 +577,7 @@ gtk_search_entry_class_init (GtkSearchEntryClass *klass)
    * Applications should connect to it, to implement moving
    * between matches.
    *
-   * The default bindings for this signal is Ctrl-g.
+   * The default bindings for this signal is <kbd>Ctrl</kbd>+<kbd>g</kbd>.
    */
   signals[NEXT_MATCH] =
     g_signal_new (I_("next-match"),
@@ -591,7 +600,8 @@ gtk_search_entry_class_init (GtkSearchEntryClass *klass)
    * Applications should connect to it, to implement moving
    * between matches.
    *
-   * The default bindings for this signal is Ctrl-Shift-g.
+   * The default bindings for this signal is
+   * <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>g</kbd>.
    */
   signals[PREVIOUS_MATCH] =
     g_signal_new (I_("previous-match"),
@@ -613,7 +623,7 @@ gtk_search_entry_class_init (GtkSearchEntryClass *klass)
    * Applications should connect to it, to implement hiding
    * the search entry in this case.
    *
-   * The default bindings for this signal is Escape.
+   * The default bindings for this signal is <kbd>Escape</kbd>.
    */
   signals[STOP_SEARCH] =
     g_signal_new (I_("stop-search"),

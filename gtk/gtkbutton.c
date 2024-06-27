@@ -34,6 +34,12 @@
  * almost any other standard `GtkWidget`. The most commonly used child is the
  * `GtkLabel`.
  *
+ * # Shortcuts and Gestures
+ *
+ * The following signals have default keybindings:
+ *
+ * - [signal@Gtk.Button::activate]
+ *
  * # CSS nodes
  *
  * `GtkButton` has a single CSS node with name button. The node will get the

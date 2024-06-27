@@ -48,6 +48,19 @@
  * `GtkEmojiChooser` emits the [signal@Gtk.EmojiChooser::emoji-picked]
  * signal when an Emoji is selected.
  *
+ * # Shortcuts and Gestures
+ *
+ * `GtkEmojiChooser` supports the following keyboard shortcuts:
+ *
+ * - <kbd>Ctrl</kbd>+<kbd>N</kbd> scrolls th the next section.
+ * - <kbd>Ctrl</kbd>+<kbd>P</kbd> scrolls th the previous section.
+ *
+ * # Actions
+ *
+ * `GtkEmojiChooser` defines a set of built-in actions:
+ *
+ * - `scroll.section` scrolls to the next or previous section.
+ *
  * # CSS nodes
  *
  * ```

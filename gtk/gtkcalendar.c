@@ -51,6 +51,13 @@
  * between 1582 and 1929. Display before these dates is likely to be
  * historically incorrect.
  *
+ * # Shortcuts and Gestures
+ *
+ * `GtkCalendar` supports the following gestures:
+ *
+ * - Scrolling up or down will switch to the previous or next month.
+ * - Date strings can be dropped for setting the current day.
+ *
  * # CSS nodes
  *
  * ```

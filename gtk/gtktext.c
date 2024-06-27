@@ -102,6 +102,47 @@
  *
  * If you need multi-line editable text, look at [class@Gtk.TextView].
  *
+ * # Shortcuts and Gestures
+ *
+ * `GtkText` supports the following keyboard shortcuts:
+ *
+ * - <kbd>Shift</kbd>+<kbd>F10</kbd> or <kbd>Menu</kbd> opens the context menu.
+ * - <kbd>Ctrl</kbd>+<kbd>A</kbd> or <kbd>Ctrl</kbd>+<kbd>&sol;</kbd>
+ *   selects all the text.
+ * - <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>A</kbd> or
+ *   <kbd>Ctrl</kbd>+<kbd>&bsol;</kbd> unselects all.
+ * - <kbd>Ctrl</kbd>+<kbd>Z</kbd> undoes the last modification.
+ * - <kbd>Ctrl</kbd>+<kbd>Y</kbd> or <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>Z</kbd>
+ *   redoes the last undone modification.
+ *
+ * Additionally, the following signals have default keybindings:
+ *
+ * - [signal@Gtk.Text::activate]
+ * - [signal@Gtk.Text::backspace]
+ * - [signal@Gtk.Text::copy-clipboard]
+ * - [signal@Gtk.Text::cut-clipboard]
+ * - [signal@Gtk.Text::delete-from-cursor]
+ * - [signal@Gtk.Text::insert-emoji]
+ * - [signal@Gtk.Text::move-cursor]
+ * - [signal@Gtk.Text::paste-clipboard]
+ * - [signal@Gtk.Text::toggle-overwrite]
+ *
+ * # Actions
+ *
+ * `GtkText` defines a set of built-in actions:
+ *
+ * - `clipboard.copy` copies the contents to the clipboard.
+ * - `clipboard.cut` copies the contents to the clipboard and deletes it from
+ *   the widget.
+ * - `clipboard.paste` inserts the contents of the clipboard into the widget.
+ * - `menu.popup` opens the context menu.
+ * - `misc.insert-emoji` opens the Emoji chooser.
+ * - `misc.toggle-visibility` toggles the `GtkText`:visibility property.
+ * - `selection.delete` deletes the current selection.
+ * - `selection.select-all` selects all of the widgets content.
+ * - `text.redo` redoes the last change to the contents.
+ * - `text.undo` undoes the last change to the contents.
+ *
  * # CSS nodes
  *
  * ```

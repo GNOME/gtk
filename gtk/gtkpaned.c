@@ -74,6 +74,17 @@
  * The application can set the position of the slider as if it were set
  * by the user, by calling [method@Gtk.Paned.set_position].
  *
+ * # Shortcuts and Gestures
+ *
+ * The following signals have default keybindings:
+ *
+ * - [signal@Gtk.Paned::accept-position]
+ * - [signal@Gtk.Paned::cancel-position]
+ * - [signal@Gtk.Paned::cycle-child-focus]
+ * - [signal@Gtk.Paned::cycle-handle-focus]
+ * - [signal@Gtk.Paned::move-handle]
+ * - [signal@Gtk.Paned::toggle-handle-focus]
+ *
  * # CSS nodes
  *
  * ```
@@ -607,6 +618,13 @@ gtk_paned_class_init (GtkPanedClass *class)
    * Emitted to move the handle with key bindings.
    *
    * This is a [keybinding signal](class.SignalAction.html).
+   *
+   * The default bindings for this signal are
+   * <kbd>Ctrl</kbd>+<kbd>←</kbd>, <kbd>←</kbd>,
+   * <kbd>Ctrl</kbd>+<kbd>→</kbd>, <kbd>→</kbd>,
+   * <kbd>Ctrl</kbd>+<kbd>↑</kbd>, <kbd>↑</kbd>,
+   * <kbd>Ctrl</kbd>+<kbd>↓</kbd>, <kbd>↓</kbd>,
+   * <kbd>PgUp</kbd>, <kbd>PgDn</kbd>, <kbd>Home</kbd>, <kbd>End</kbd>.
    *
    * Returns: whether the handle was moved
    */

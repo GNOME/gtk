@@ -69,6 +69,12 @@
  * applications, and GTK provides a [class@Gtk.VolumeButton] subclass that
  * is tailored for this use case.
  *
+ * # Shortcuts and Gestures
+ *
+ * The following signals have default keybindings:
+ *
+ * - [signal@Gtk.ScaleButton::popup]
+ *
  * # CSS nodes
  *
  * ```

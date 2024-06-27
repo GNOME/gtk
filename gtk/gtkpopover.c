@@ -67,6 +67,17 @@
  * </section>
  * ```
  *
+ * # Shortcuts and Gestures
+ *
+ * `GtkPopover` supports the following keyboard shortcuts:
+ *
+ * - <kbd>Escape</kbd> closes the popover.
+ * - <kbd>Alt</kbd> makes the mnemonics visible.
+ *
+ * The following signals have default keybindings:
+ *
+ * - [signal@Gtk.Popover::activate-default]
+ *
  * # CSS nodes
  *
  * ```
@@ -1973,6 +1984,8 @@ gtk_popover_class_init (GtkPopoverClass *klass)
    * Emitted whend the user activates the default widget.
    *
    * This is a [keybinding signal](class.SignalAction.html).
+   *
+   * The default binding for this signal is <kbd>Enter</kbd>.
    */
   signals[ACTIVATE_DEFAULT] =
     g_signal_new (I_("activate-default"),

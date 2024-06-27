@@ -70,6 +70,12 @@
  *
  * [A simple example](https://gitlab.gnome.org/GNOME/gtk/tree/main/examples/search-bar.c)
  *
+ * # Shortcuts and Gestures
+ *
+ * `GtkSearchBar` supports the following keyboard shortcuts:
+ *
+ * - <kbd>Escape</kbd> hides the search bar.
+ *
  * # CSS nodes
  *
  * ```

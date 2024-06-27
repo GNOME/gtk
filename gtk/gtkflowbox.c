@@ -52,6 +52,15 @@
  *
  * Also see [class@Gtk.ListBox].
  *
+ * # Shortcuts and Gestures
+ *
+ * The following signals have default keybindings:
+ *
+ * - [signal@Gtk.FlowBox::move-cursor]
+ * - [signal@Gtk.FlowBox::select-all]
+ * - [signal@Gtk.FlowBox::toggle-cursor-child]
+ * - [signal@Gtk.FlowBox::unselect-all]
+ *
  * # CSS nodes
  *
  * ```

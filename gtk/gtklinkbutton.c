@@ -42,6 +42,19 @@
  * [signal@Gtk.LinkButton::activate-link] signal and returning %TRUE from
  * the signal handler.
  *
+ * # Shortcuts and Gestures
+ *
+ * `GtkLinkButton` supports the following keyboard shortcuts:
+ *
+ * - <kbd>Shift</kbd>+<kbd>F10</kbd> or <kbd>Menu</kbd> opens the context menu.
+ *
+ * # Actions
+ *
+ * `GtkLinkButton` defines a set of built-in actions:
+ *
+ * - `clipboard.copy` copies the url to the clipboard.
+ * - `menu.popup` opens the context menu.
+ *
  * # CSS nodes
  *
  * `GtkLinkButton` has a single CSS node with name button. To differentiate

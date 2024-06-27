@@ -123,6 +123,28 @@
  * setting a child as the titlebar by specifying “titlebar” as the “type”
  * attribute of a `<child>` element.
  *
+ * # Shortcuts and Gestures
+ *
+ * `GtkWindow` supports the following keyboard shortcuts:
+ *
+ * - <kbd>F10</kbd> activates the menubar, if present.
+ * - <kbd>Alt</kbd> makes the mnemonics visible while pressed.
+ *
+ * The following signals have default keybindings:
+ *
+ * - [signal@Gtk.Window::activate-default]
+ * - [signal@Gtk.Window::activate-focus]
+ * - [signal@Gtk.Window::enable-debugging]
+ *
+ * # Actions
+ *
+ * `GtkWindow` defines a set of built-in actions:
+ *
+ * - `default.activate` activates the default widget.
+ * - `window.minimize` minimizes the window.
+ * - `window.toggle-maximized` maximizes or restores the window.
+ * - `window.close` closes the window.
+ *
  * # CSS nodes
  *
  * ```
@@ -158,14 +180,6 @@
  * Until GTK 4.10, `GtkWindow` used the `GTK_ACCESSIBLE_ROLE_WINDOW` role.
  *
  * Since GTK 4.12, `GtkWindow` uses the `GTK_ACCESSIBLE_ROLE_APPLICATION` role.
- *
- * # Actions
- *
- * `GtkWindow` defines a set of built-in actions:
- * - `default.activate`: Activate the default widget.
- * - `window.minimize`: Minimize the window.
- * - `window.toggle-maximized`: Maximize or restore the window.
- * - `window.close`: Close the window.
  */
 
 #define MENU_BAR_ACCEL GDK_KEY_F10
@@ -1075,6 +1089,8 @@ gtk_window_class_init (GtkWindowClass *klass)
    * widget of @window.
    *
    * This is a [keybinding signal](class.SignalAction.html).
+   *
+   * The default binding for this signal is <kbd>␣</kbd>.
    */
   window_signals[ACTIVATE_FOCUS] =
     g_signal_new (I_("activate-focus"),
@@ -1094,6 +1110,8 @@ gtk_window_class_init (GtkWindowClass *klass)
    * of @window.
    *
    * This is a [keybinding signal](class.SignalAction.html).
+   *
+   * The keybindings for this signal are all forms of the <kbd>Enter</kbd> key.
    */
   window_signals[ACTIVATE_DEFAULT] =
     g_signal_new (I_("activate-default"),
@@ -1138,8 +1156,9 @@ gtk_window_class_init (GtkWindowClass *klass)
    *
    * This is a [keybinding signal](class.SignalAction.html).
    *
-   * The default bindings for this signal are Ctrl-Shift-I
-   * and Ctrl-Shift-D.
+   * The default bindings for this signal are
+   * <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>I</kbd> and
+   * <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>D</kbd>.
    *
    * Return: %TRUE if the key binding was handled
    */
