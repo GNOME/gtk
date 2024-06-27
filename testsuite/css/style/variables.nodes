@@ -162,12 +162,12 @@ window.background:dir(ltr)
       background-color: rgb(255,0,0); /* variables.css:95:3-25 */
       --color1: red; /* variables.css:2:13-16 */
     label.label-8:dir(ltr)
-      color: rgb(255,192,203); /* variables.css:130:3-31 */
-      background-color: rgb(255,255,0); /* variables.css:133:3-42 */
+      color: rgb(255,0,0); /* variables.css:130:3-31 */
+      background-color: rgb(0,0,255); /* variables.css:133:3-42 */
       box-shadow: 0 0 3px rgb(255,255,0) inset; /* variables.css:136:3-50 */
       padding-left: 1px; /* variables.css:118:3-19 */
       padding-right: 10px; /* variables.css:119:3-20 */
-      transition-duration: 4s; /* variables.css:140:3-45 */
+      transition-duration: 5s; /* variables.css:140:3-45 */
       animation-name: test; /* variables.css:125:3-39 */
       animation-duration: 10s; /* variables.css:125:3-39 */
       animation-timing-function: linear; /* variables.css:125:3-39 */
