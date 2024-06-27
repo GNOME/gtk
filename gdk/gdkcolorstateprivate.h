@@ -27,6 +27,7 @@ struct _GdkColorStateClass
   gboolean              (* equal)               (GdkColorState  *self,
                                                  GdkColorState  *other);
   const char *          (* get_name)            (GdkColorState  *self);
+  GdkColorState *       (* get_no_srgb_tf)      (GdkColorState  *self);
 };
 
 typedef struct _GdkDefaultColorState GdkDefaultColorState;
@@ -36,6 +37,7 @@ struct _GdkDefaultColorState
   GdkColorState parent;
 
   const char *name;
+  GdkColorState *no_srgb;
 };
 
 extern GdkDefaultColorState gdk_default_color_states[GDK_COLOR_STATE_N_IDS];
@@ -48,6 +50,7 @@ extern GdkDefaultColorState gdk_default_color_states[GDK_COLOR_STATE_N_IDS];
 #define GDK_DEFAULT_COLOR_STATE_ID(c) ((GdkColorStateId) (((GdkDefaultColorState *) c) - gdk_default_color_states))
 
 const char *    gdk_color_state_get_name                (GdkColorState          *color_state);
+GdkColorState * gdk_color_state_get_no_srgb_tf          (GdkColorState          *self);
 
 static inline GdkMemoryDepth
 gdk_color_state_get_depth (GdkColorState *self)
