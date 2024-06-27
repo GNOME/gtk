@@ -790,7 +790,6 @@ gtk_style_context_resolve_color (GtkStyleContext    *context,
     ctx.parent_style = gtk_css_node_get_style (gtk_css_node_get_parent (priv->cssnode));
 
   val = gtk_css_color_value_resolve (color,
-                                     GTK_CSS_PROPERTY_COLOR,
                                      &ctx,
                                      _gtk_style_context_peek_property (context, GTK_CSS_PROPERTY_COLOR));
 
