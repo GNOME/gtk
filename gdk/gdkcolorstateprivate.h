@@ -1,6 +1,8 @@
 #pragma once
 
 #include "gdkcolorstate.h"
+
+#include "gdkdebugprivate.h"
 #include "gdkmemoryformatprivate.h"
 
 typedef enum
@@ -19,6 +21,7 @@ struct _GdkColorState
   gatomicrefcount ref_count;
 
   GdkMemoryDepth depth;
+  GdkColorState *rendering_color_state;
 };
 
 struct _GdkColorStateClass
@@ -53,6 +56,15 @@ extern GdkDefaultColorState gdk_default_color_states[GDK_COLOR_STATE_N_IDS];
 const char *    gdk_color_state_get_name                (GdkColorState          *color_state);
 gboolean        gdk_color_state_has_srgb_tf             (GdkColorState          *self,
                                                          GdkColorState         **out_no_srgb);
+
+static inline GdkColorState *
+gdk_color_state_get_rendering_color_state (GdkColorState *self)
+{
+  if (!GDK_DEBUG_CHECK (LINEAR))
+    return self;
+
+  return self->rendering_color_state;
+}
 
 static inline GdkMemoryDepth
 gdk_color_state_get_depth (GdkColorState *self)
