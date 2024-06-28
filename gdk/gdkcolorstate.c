@@ -169,7 +169,7 @@ GdkDefaultColorState gdk_default_color_states[] = {
     .parent = {
       .klass = &GDK_DEFAULT_COLOR_STATE_CLASS,
       .ref_count = 0,
-      .depth = GDK_MEMORY_U8,
+      .depth = GDK_MEMORY_U8_SRGB,
       .rendering_color_state = GDK_COLOR_STATE_SRGB_LINEAR,
     },
     .name = "srgb",
