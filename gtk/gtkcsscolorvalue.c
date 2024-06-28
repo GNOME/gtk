@@ -803,6 +803,8 @@ gtk_css_color_value_resolve (GtkCssValue          *color,
                              GtkCssComputeContext *context,
                              GtkCssValue          *current)
 {
+  gtk_internal_return_val_if_fail (context != NULL, NULL);
+
   return gtk_css_color_value_do_resolve (color, context, current, NULL);
 }
 
