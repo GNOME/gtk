@@ -675,9 +675,11 @@ gtk_drop_target_async_reject_drop (GtkDropTargetAsync *self,
 {
   g_return_if_fail (GTK_IS_DROP_TARGET_ASYNC (self));
   g_return_if_fail (GDK_IS_DROP (drop));
-  g_return_if_fail (self->drop == drop);
 
   if (self->rejected)
+    return;
+
+  if (self->drop != drop)
     return;
 
   self->rejected = TRUE;
