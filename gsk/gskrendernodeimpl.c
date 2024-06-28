@@ -4769,6 +4769,8 @@ gsk_fill_node_new (GskRenderNode *child,
 
   self = gsk_render_node_alloc (GSK_FILL_NODE);
   node = (GskRenderNode *) self;
+  node->offscreen_for_opacity = child->offscreen_for_opacity;
+  node->preferred_depth = gsk_render_node_get_preferred_depth (child);
 
   self->child = gsk_render_node_ref (child);
   self->path = gsk_path_ref (path);
@@ -4976,6 +4978,8 @@ gsk_stroke_node_new (GskRenderNode   *child,
 
   self = gsk_render_node_alloc (GSK_STROKE_NODE);
   node = (GskRenderNode *) self;
+  node->offscreen_for_opacity = child->offscreen_for_opacity;
+  node->preferred_depth = gsk_render_node_get_preferred_depth (child);
 
   self->child = gsk_render_node_ref (child);
   self->path = gsk_path_ref (path);
