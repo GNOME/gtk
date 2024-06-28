@@ -1,7 +1,7 @@
 @import "reset-to-defaults.css";
 
 window {
-  color: alpha(currentColor, 0.0);
+  color: color(from currentColor srgb r g b / 0);
   /* So we draw something */
   border: 1px solid rebeccapurple;
 }
