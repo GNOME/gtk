@@ -69,6 +69,9 @@ gdk_color_state_get_rendering_color_state (GdkColorState *self)
 static inline GdkMemoryDepth
 gdk_color_state_get_depth (GdkColorState *self)
 {
+  if (!GDK_DEBUG_CHECK (LINEAR) && self->depth == GDK_MEMORY_U8_SRGB)
+    return GDK_MEMORY_U8;
+
   return self->depth;
 }
 
