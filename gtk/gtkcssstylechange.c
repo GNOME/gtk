@@ -26,7 +26,8 @@ compute_change (GtkCssStyleChange *change)
 {
   gboolean color_changed = FALSE;
 
-  if (change->old_style->core != change->new_style->core)
+  if (change->old_style->core != change->new_style->core ||
+      gtk_css_value_contains_current_color (change->old_style->core->color))
     {
       gtk_css_core_values_compute_changes_and_affects (change->old_style,
                                                        change->new_style,
@@ -35,45 +36,51 @@ compute_change (GtkCssStyleChange *change)
       color_changed = _gtk_bitmask_get (change->changes, GTK_CSS_PROPERTY_COLOR);
     }
 
-  if (change->old_style->background != change->new_style->background)
+  if (change->old_style->background != change->new_style->background ||
+      (color_changed && (gtk_css_value_contains_current_color (change->old_style->background->background_color) ||
+                         gtk_css_value_contains_current_color (change->old_style->background->box_shadow) ||
+                         gtk_css_value_contains_current_color (change->old_style->background->background_image))))
     gtk_css_background_values_compute_changes_and_affects (change->old_style,
                                                            change->new_style,
                                                            &change->changes,
                                                            &change->affects);
 
   if (change->old_style->border != change->new_style->border ||
-      (color_changed && (change->old_style->border->border_top_color == NULL ||
-                         change->old_style->border->border_right_color == NULL ||
-                         change->old_style->border->border_bottom_color == NULL ||
-                         change->old_style->border->border_left_color == NULL)))
+      (color_changed && (gtk_css_value_contains_current_color (change->old_style->border->border_top_color) ||
+                         gtk_css_value_contains_current_color (change->old_style->border->border_right_color) ||
+                         gtk_css_value_contains_current_color (change->old_style->border->border_bottom_color) ||
+                         gtk_css_value_contains_current_color (change->old_style->border->border_left_color) ||
+                         gtk_css_value_contains_current_color (change->old_style->border->border_image_source))))
     gtk_css_border_values_compute_changes_and_affects (change->old_style,
                                                        change->new_style,
                                                        &change->changes,
                                                        &change->affects);
 
-  if (change->old_style->icon != change->new_style->icon)
+  if (change->old_style->icon != change->new_style->icon ||
+      (color_changed && (gtk_css_value_contains_current_color (change->old_style->icon->icon_shadow))))
     gtk_css_icon_values_compute_changes_and_affects (change->old_style,
                                                      change->new_style,
                                                      &change->changes,
                                                      &change->affects);
 
   if (change->old_style->outline != change->new_style->outline ||
-      (color_changed && change->old_style->outline->outline_color == NULL))
+      (color_changed && gtk_css_value_contains_current_color (change->old_style->outline->outline_color)))
     gtk_css_outline_values_compute_changes_and_affects (change->old_style,
                                                         change->new_style,
                                                         &change->changes,
                                                         &change->affects);
 
   if (change->old_style->font != change->new_style->font ||
-      (color_changed && (change->old_style->font->caret_color == NULL ||
-                         change->old_style->font->secondary_caret_color == NULL)))
+      (color_changed && (gtk_css_value_contains_current_color (change->old_style->font->caret_color) ||
+                         gtk_css_value_contains_current_color (change->old_style->font->secondary_caret_color) ||
+                         gtk_css_value_contains_current_color (change->old_style->font->text_shadow))))
     gtk_css_font_values_compute_changes_and_affects (change->old_style,
                                                      change->new_style,
                                                      &change->changes,
                                                      &change->affects);
 
   if (change->old_style->font_variant != change->new_style->font_variant ||
-      (color_changed && change->old_style->font_variant->text_decoration_color == NULL))
+      (color_changed && gtk_css_value_contains_current_color (change->old_style->font_variant->text_decoration_color)))
     gtk_css_font_variant_values_compute_changes_and_affects (change->old_style,
                                                              change->new_style,
                                                              &change->changes,
@@ -97,7 +104,8 @@ compute_change (GtkCssStyleChange *change)
                                                      &change->changes,
                                                      &change->affects);
 
-  if (change->old_style->other != change->new_style->other)
+  if (change->old_style->other != change->new_style->other ||
+      (color_changed && gtk_css_value_contains_current_color (change->old_style->other->icon_source)))
     gtk_css_other_values_compute_changes_and_affects (change->old_style,
                                                       change->new_style,
                                                       &change->changes,

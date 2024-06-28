@@ -7893,7 +7893,6 @@ gtk_text_view_set_attributes_from_style (GtkTextView        *text_view,
 {
   GtkCssStyle *style;
   const GdkRGBA black = { 0, };
-  const GdkRGBA *color;
   const GdkRGBA *decoration_color;
   GtkTextDecorationLine decoration_line;
   GtkTextDecorationStyle decoration_style;
@@ -7903,12 +7902,10 @@ gtk_text_view_set_attributes_from_style (GtkTextView        *text_view,
   if (!values->appearance.fg_rgba)
     values->appearance.fg_rgba = gdk_rgba_copy (&black);
 
-  style = gtk_css_node_get_style (gtk_widget_get_css_node (GTK_WIDGET (text_view)));
+  style = gtk_css_node_get_style (gtk_widget_get_css_node (GTK_WIDGET (text_view)));;
 
-  color = gtk_css_color_value_get_rgba (style->background->background_color);
-  *values->appearance.bg_rgba = *color;
-  color = gtk_css_color_value_get_rgba (style->core->color);
-  *values->appearance.fg_rgba = *color;
+  *values->appearance.bg_rgba = *gtk_css_color_value_get_rgba (style->used->background_color);
+  *values->appearance.fg_rgba = *gtk_css_color_value_get_rgba (style->used->color);
 
   if (values->font)
     pango_font_description_free (values->font);
@@ -7919,9 +7916,7 @@ gtk_text_view_set_attributes_from_style (GtkTextView        *text_view,
 
   decoration_line = _gtk_css_text_decoration_line_value_get (style->font_variant->text_decoration_line);
   decoration_style = _gtk_css_text_decoration_style_value_get (style->font_variant->text_decoration_style);
-  decoration_color = gtk_css_color_value_get_rgba (style->font_variant->text_decoration_color
-                                                   ? style->font_variant->text_decoration_color
-                                                   : style->core->color);
+  decoration_color = gtk_css_color_value_get_rgba (style->used->text_decoration_color);
 
   if (decoration_line & GTK_CSS_TEXT_DECORATION_LINE_UNDERLINE)
     {
@@ -7982,7 +7977,6 @@ gtk_text_view_set_attributes_from_style (GtkTextView        *text_view,
   values->letter_spacing = gtk_css_number_value_get (style->font->letter_spacing, 100) * PANGO_SCALE;
 
   /* line-height */
-
   values->line_height = gtk_css_line_height_value_get (style->font->line_height);
   values->line_height_is_absolute = FALSE;
   if (values->line_height != 0.0)

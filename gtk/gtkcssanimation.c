@@ -95,7 +95,7 @@ gtk_css_animation_apply_values (GtkStyleAnimation    *style_animation,
   GtkCssKeyframes *resolved_keyframes;
   double progress;
   guint i;
-  GtkCssAnimationChange change = 0;
+  gboolean needs_recompute = FALSE;
 
   if (!gtk_css_animation_is_executing (animation))
     return;
@@ -127,33 +127,13 @@ gtk_css_animation_apply_values (GtkStyleAnimation    *style_animation,
         continue;
 
       if (gtk_css_animated_style_set_animated_custom_value (style, variable_id, value))
-        change |= GTK_CSS_ANIMATION_CHANGE_VARIABLES;
+        needs_recompute = TRUE;
 
       gtk_css_variable_value_unref (value);
     }
 
-  /* Now deal with color */
-  for (i = 0; i < _gtk_css_keyframes_get_n_properties (resolved_keyframes); i++)
-    {
-      GtkCssValue *value;
-      guint property_id;
-
-      property_id = _gtk_css_keyframes_get_property_id (resolved_keyframes, i);
-      if (property_id != GTK_CSS_PROPERTY_COLOR)
-        continue;
-
-      value = _gtk_css_keyframes_get_value (resolved_keyframes,
-                                            i,
-                                            progress,
-                                            gtk_css_animated_style_get_intrinsic_value (style, property_id));
-      gtk_css_animated_style_set_animated_value (style, property_id, value);
-
-      change |= GTK_CSS_ANIMATION_CHANGE_COLOR;
-      break;
-    }
-
-  if (change != 0)
-    gtk_css_animated_style_recompute (style, change);
+  if (needs_recompute)
+    gtk_css_animated_style_recompute (style);
 
   for (i = 0; i < _gtk_css_keyframes_get_n_properties (resolved_keyframes); i++)
     {

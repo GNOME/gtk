@@ -1,0 +1,13 @@
+window.background:dir(ltr)
+  entry:dir(ltr)
+    color: rgb(0,0,255); /* currentcolor3.css:3:3-15 */
+    caret-color: color(srgb 0.4 0.4 0.6); /* currentcolor3.css:2:3-61 */
+
+    text:dir(ltr)
+      color: rgb(255,0,0); /* currentcolor3.css:7:3-14 */
+      caret-color: color(srgb 1 0.4 0);
+
+      undershoot.left:dir(ltr)
+        caret-color: color(srgb 1 0.4 0);
+      undershoot.right:dir(ltr)
+        caret-color: color(srgb 1 0.4 0);

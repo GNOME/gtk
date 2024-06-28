@@ -1,0 +1,8 @@
+entry {
+  caret-color: color-mix(in srgb, currentcolor, yellow 40%);
+  color: blue;
+}
+
+text {
+  color: red;
+}

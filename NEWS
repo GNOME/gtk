@@ -5,16 +5,22 @@ Overview of Changes in 4.15.2, xx-xx-xxxx
  - Plug some memory leaks
  - Make Ctrl-Shift-N create a new folder
 
+* GtkPopover:
+ - Handle resizing and position changes better
+
 * CSS:
  - Support color(), oklab(), etc (https://www.w3.org/TR/css-color-4/)
  - Support color-mix() (https://www.w3.org/TR/css-color-5/)
  - Support relative colors (https://www.w3.org/TR/css-color-5/)
+ - Support more colorspaces in color()
+ - Allow percentages for opacity
 
 * Accessibility:
  - Avoid markup when reading labels
 
 * GSK:
  - Subset fonts when serializing node trees
+ - Make ngl export render_texture results as dmabufs
 
 * Wayland:
  - Use xdg-dialog protocol for attached dialogs
@@ -22,17 +28,22 @@ Overview of Changes in 4.15.2, xx-xx-xxxx
 * Windows:
  - Build with UNICODE
 
+* macOS:
+ - Implement fullscreen-on-monitor
+
 * Debugging:
  - Add GTK_DEBUG=css for warning about deprecated css syntax
 
 * Tools:
- - nodeparser: Add an extract command for data urls
+ - rendernode-tool: Add an extract command for data urls
 
 * Deprecations:
  - CSS Color functions shade(), lighter(), darker(), alpha(), mix()
 
 * Translation updates:
+ Czech
  Hebrew
+ Serbian
 
 
 Overview of Changes in 4.15.1, 21-05-2024

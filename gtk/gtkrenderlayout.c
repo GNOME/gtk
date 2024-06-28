@@ -47,8 +47,9 @@ gtk_css_style_snapshot_layout (GtkCssBoxes *boxes,
     }
 
   style = boxes->style;
-  color = gtk_css_color_value_get_rgba (style->core->color);
-  has_shadow = gtk_css_shadow_value_push_snapshot (style->font->text_shadow, snapshot);
+  color = gtk_css_color_value_get_rgba (style->used->color);
+
+  has_shadow = gtk_css_shadow_value_push_snapshot (style->used->text_shadow, snapshot);
 
   gtk_snapshot_append_layout (snapshot, layout, color);
 
@@ -187,12 +188,12 @@ snapshot_insertion_cursor (GtkSnapshot     *snapshot,
                            PangoDirection   direction,
                            gboolean         draw_arrow)
 {
-  GdkRGBA color;
+  const GdkRGBA *color;
 
   if (is_primary)
-    color = *gtk_css_color_value_get_rgba (style->font->caret_color ? style->font->caret_color : style->core->color);
+    color = gtk_css_color_value_get_rgba (style->used->caret_color);
   else
-    color = *gtk_css_color_value_get_rgba (style->font->secondary_caret_color ? style->font->secondary_caret_color : style->core->color);
+    color = gtk_css_color_value_get_rgba (style->used->secondary_caret_color);
 
   if (width != 0 || draw_arrow)
     {
@@ -202,7 +203,7 @@ snapshot_insertion_cursor (GtkSnapshot     *snapshot,
       get_insertion_cursor_bounds (width, height, aspect_ratio, direction, draw_arrow, &bounds);
       cr = gtk_snapshot_append_cairo (snapshot, &bounds);
 
-      draw_insertion_cursor (cr, 0, 0, width, height, aspect_ratio, &color, direction, draw_arrow);
+      draw_insertion_cursor (cr, 0, 0, width, height, aspect_ratio, color, direction, draw_arrow);
 
       cairo_destroy (cr);
     }
@@ -220,7 +221,7 @@ snapshot_insertion_cursor (GtkSnapshot     *snapshot,
         offset = stem_width - stem_width / 2;
 
       gtk_snapshot_append_color (snapshot,
-                                 &color,
+                                 color,
                                  &GRAPHENE_RECT_INIT (- offset, 0, stem_width, height));
     }
 }

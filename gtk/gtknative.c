@@ -341,13 +341,9 @@ subtract_decoration_corners_from_region (cairo_region_t        *region,
 }
 
 static int
-get_translucent_border_edge (const GtkCssValue *color,
-                             const GtkCssValue *border_color,
-                             const GtkCssValue *border_width)
+get_translucent_border_edge (GtkCssValue *border_color,
+                             GtkCssValue *border_width)
 {
-  if (border_color == NULL)
-    border_color = color;
-
   if (!gdk_rgba_is_opaque (gtk_css_color_value_get_rgba (border_color)))
     return round (gtk_css_number_value_get (border_width, 100));
 
@@ -361,29 +357,36 @@ get_translucent_border_width (GtkWidget *widget,
   GtkCssNode *css_node = gtk_widget_get_css_node (widget);
   GtkCssStyle *style = gtk_css_node_get_style (css_node);
 
-  border->top = get_translucent_border_edge (style->core->color,
-                                             style->border->border_top_color,
+  border->top = get_translucent_border_edge (style->used->border_top_color,
                                              style->border->border_top_width);
-  border->bottom = get_translucent_border_edge (style->core->color,
-                                                style->border->border_bottom_color,
+  border->bottom = get_translucent_border_edge (style->used->border_bottom_color,
                                                 style->border->border_bottom_width);
-  border->left = get_translucent_border_edge (style->core->color,
-                                              style->border->border_left_color,
+  border->left = get_translucent_border_edge (style->used->border_left_color,
                                               style->border->border_left_width);
-  border->right = get_translucent_border_edge (style->core->color,
-                                               style->border->border_right_color,
+  border->right = get_translucent_border_edge (style->used->border_right_color,
                                                style->border->border_right_width);
 }
 
 static gboolean
 get_opaque_rect (GtkWidget             *widget,
-                 const GtkCssStyle     *style,
                  cairo_rectangle_int_t *rect)
 {
-  gboolean is_opaque = gdk_rgba_is_opaque (gtk_css_color_value_get_rgba (style->background->background_color));
+  gboolean is_opaque;
 
-  if (is_opaque && gtk_widget_get_opacity (widget) < 1.0)
+  if (gtk_widget_get_opacity (widget) < 1)
     is_opaque = FALSE;
+  else
+    {
+      GtkCssNode *node;
+      GtkCssStyle *style;
+      const GdkRGBA *color;
+
+      node = gtk_widget_get_css_node (widget);
+      style = gtk_css_node_get_style (node);
+
+      color = gtk_css_color_value_get_rgba (style->used->background_color);
+      is_opaque = gdk_rgba_is_opaque (color);
+    }
 
   if (is_opaque)
     {
@@ -429,8 +432,6 @@ gtk_native_update_opaque_region (GtkNative  *native,
 {
   cairo_rectangle_int_t rect;
   cairo_region_t *opaque_region = NULL;
-  const GtkCssStyle *style;
-  GtkCssNode *css_node;
   GdkSurface *surface;
   GtkBorder shadow;
 
@@ -444,17 +445,14 @@ gtk_native_update_opaque_region (GtkNative  *native,
       !_gtk_widget_get_realized (contents))
     return;
 
-  css_node = gtk_widget_get_css_node (contents);
-
   if (subtract_shadow)
     get_shadow_width (contents, &shadow, resize_handle_size);
   else
     shadow = (GtkBorder) {0, 0, 0, 0};
 
   surface = gtk_native_get_surface (native);
-  style = gtk_css_node_get_style (css_node);
 
-  if (get_opaque_rect (contents, style, &rect))
+  if (get_opaque_rect (contents, &rect))
     {
       double native_x, native_y;
 
@@ -476,7 +474,12 @@ gtk_native_update_opaque_region (GtkNative  *native,
       opaque_region = cairo_region_create_rectangle (&rect);
 
       if (subtract_decoration_corners)
-        subtract_decoration_corners_from_region (opaque_region, &rect, style);
+        {
+          GtkCssStyle *style;
+
+          style = gtk_css_node_get_style (gtk_widget_get_css_node (contents));
+          subtract_decoration_corners_from_region (opaque_region, &rect, style);
+        }
     }
 
   gdk_surface_set_opaque_region (surface, opaque_region);

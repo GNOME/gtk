@@ -34,7 +34,6 @@ gboolean        gtk_css_color_value_can_parse           (GtkCssParser   *parser)
 GtkCssValue *   gtk_css_color_value_parse               (GtkCssParser   *parser);
 
 GtkCssValue *   gtk_css_color_value_resolve             (GtkCssValue          *color,
-                                                         guint                 property_id,
                                                          GtkCssComputeContext *context,
                                                          GtkCssValue          *current);
 

@@ -13172,7 +13172,7 @@ gtk_widget_get_color (GtkWidget *widget,
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
   style = gtk_css_node_get_style (priv->cssnode);
-  *color = *gtk_css_color_value_get_rgba (style->core->color);
+  *color = *gtk_css_color_value_get_rgba (style->used->color);
 }
 
 /*< private >

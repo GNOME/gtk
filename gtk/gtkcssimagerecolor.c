@@ -55,41 +55,11 @@ gtk_css_image_recolor_dispose (GObject *object)
   GtkCssImageRecolor *recolor = GTK_CSS_IMAGE_RECOLOR (object);
 
   g_clear_pointer (&recolor->palette, gtk_css_value_unref);
+  g_clear_pointer (&recolor->color, gtk_css_value_unref);
   g_clear_object (&recolor->file);
   g_clear_object (&recolor->texture);
 
   G_OBJECT_CLASS (_gtk_css_image_recolor_parent_class)->dispose (object);
-}
-
-static void
-lookup_symbolic_colors (GtkCssStyle *style,
-                        GtkCssValue *palette,
-                        GdkRGBA     *color_out,
-                        GdkRGBA     *success_out,
-                        GdkRGBA     *warning_out,
-                        GdkRGBA     *error_out)
-{
-  const GdkRGBA *lookup;
-
-  *color_out = *gtk_css_color_value_get_rgba (style->core->color);
-
-  lookup = gtk_css_palette_value_get_color (palette, "success");
-  if (lookup)
-    *success_out = *lookup;
-  else
-    *success_out = *color_out;
-
-  lookup = gtk_css_palette_value_get_color (palette, "warning");
-  if (lookup)
-    *warning_out = *lookup;
-  else
-    *warning_out = *color_out;
-
-  lookup = gtk_css_palette_value_get_color (palette, "error");
-  if (lookup)
-    *error_out = *lookup;
-  else
-    *error_out = *color_out;
 }
 
 static void
@@ -127,21 +97,22 @@ gtk_css_image_recolor_load_texture (GtkCssImageRecolor  *recolor,
 }
 
 static GtkCssImage *
-gtk_css_image_recolor_load (GtkCssImageRecolor  *recolor,
-                            GtkCssStyle         *style,
-                            GtkCssValue         *palette,
-                            int                  scale,
-                            GError             **gerror)
+gtk_css_image_recolor_load (GtkCssImageRecolor    *recolor,
+                            GtkCssComputeContext  *context,
+                            GtkCssValue           *palette,
+                            int                    scale,
+                            GError               **gerror)
 {
   GError *local_error = NULL;
   GtkCssImageRecolor *image;
 
   image = g_object_new (GTK_TYPE_CSS_IMAGE_RECOLOR, NULL);
 
-  lookup_symbolic_colors (style, palette, &image->color, &image->success, &image->warning, &image->error);
-  gtk_css_image_recolor_load_texture (recolor, &local_error);
-
   image->file = g_object_ref (recolor->file);
+  image->palette = gtk_css_value_ref (palette);
+  image->color = gtk_css_value_ref (context->style->core->color);
+
+  gtk_css_image_recolor_load_texture (recolor, &local_error);
 
   if (recolor->texture)
     image->texture = g_object_ref (recolor->texture);
@@ -172,15 +143,33 @@ gtk_css_image_recolor_snapshot (GtkCssImage *image,
                                 double       height)
 {
   GtkCssImageRecolor *recolor = GTK_CSS_IMAGE_RECOLOR (image);
-  const GdkRGBA *fg = &recolor->color;
-  const GdkRGBA *sc = &recolor->success;
-  const GdkRGBA *wc = &recolor->warning;
-  const GdkRGBA *ec = &recolor->error;
+  const GdkRGBA *fg, *sc, *wc, *ec;
+  const GtkCssValue *color;
   graphene_matrix_t matrix;
   graphene_vec4_t offset;
 
   if (recolor->texture == NULL)
     return;
+
+  fg = gtk_css_color_value_get_rgba (recolor->color);
+
+  color = gtk_css_palette_value_get_color (recolor->palette, "success");
+  if (color)
+    sc = gtk_css_color_value_get_rgba (color);
+  else
+    sc = fg;
+
+  color = gtk_css_palette_value_get_color (recolor->palette, "warning");
+  if (color)
+    wc = gtk_css_color_value_get_rgba (color);
+  else
+    wc = fg;
+
+  color = gtk_css_palette_value_get_color (recolor->palette, "error");
+  if (color)
+    ec = gtk_css_color_value_get_rgba (color);
+  else
+    ec = fg;
 
   graphene_matrix_init_from_float (&matrix,
           (float[16]) {
@@ -218,7 +207,7 @@ gtk_css_image_recolor_compute (GtkCssImage          *image,
   else
     palette = gtk_css_value_ref (context->style->core->icon_palette);
 
-  img = gtk_css_image_recolor_load (recolor, context->style, palette, scale, &error);
+  img = gtk_css_image_recolor_load (recolor, context, palette, scale, &error);
 
   if (error)
     {
@@ -267,7 +256,7 @@ gtk_css_image_recolor_parse_arg (GtkCssParser *parser,
 
 static gboolean
 gtk_css_image_recolor_parse (GtkCssImage  *image,
-                                GtkCssParser *parser)
+                             GtkCssParser *parser)
 {
   if (!gtk_css_parser_has_function (parser, "-gtk-recolor"))
     {
@@ -309,8 +298,38 @@ gtk_css_image_recolor_is_computed (GtkCssImage *image)
 {
   GtkCssImageRecolor *recolor = GTK_CSS_IMAGE_RECOLOR (image);
 
-  return recolor->texture &&
-         (!recolor->palette || gtk_css_value_is_computed (recolor->palette));
+  return recolor->texture && gtk_css_value_is_computed (recolor->palette);
+}
+
+static gboolean
+gtk_css_image_recolor_contains_current_color (GtkCssImage *image)
+{
+  GtkCssImageRecolor *recolor = GTK_CSS_IMAGE_RECOLOR (image);
+
+  if (!recolor->palette || !recolor->color)
+    return TRUE;
+
+  return gtk_css_value_contains_current_color (recolor->palette) ||
+         gtk_css_value_contains_current_color (recolor->color);
+}
+
+static GtkCssImage *
+gtk_css_image_recolor_resolve (GtkCssImage          *image,
+                               GtkCssComputeContext *context,
+                               GtkCssValue          *current_color)
+{
+  GtkCssImageRecolor *recolor = GTK_CSS_IMAGE_RECOLOR (image);
+  GtkCssImageRecolor *img;
+
+  img = g_object_new (GTK_TYPE_CSS_IMAGE_RECOLOR, NULL);
+
+  img->palette = gtk_css_palette_value_resolve (recolor->palette, context, current_color);
+  img->color = gtk_css_color_value_resolve (recolor->color, context, current_color);
+  img->file = g_object_ref (recolor->file);
+  if (recolor->texture)
+    img->texture = g_object_ref (recolor->texture);
+
+  return GTK_CSS_IMAGE (img);
 }
 
 static void
@@ -326,6 +345,8 @@ _gtk_css_image_recolor_class_init (GtkCssImageRecolorClass *klass)
   image_class->parse = gtk_css_image_recolor_parse;
   image_class->print = gtk_css_image_recolor_print;
   image_class->is_computed = gtk_css_image_recolor_is_computed;
+  image_class->contains_current_color = gtk_css_image_recolor_contains_current_color;
+  image_class->resolve = gtk_css_image_recolor_resolve;
 
   object_class->dispose = gtk_css_image_recolor_dispose;
 }

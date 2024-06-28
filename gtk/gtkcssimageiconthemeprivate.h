@@ -39,7 +39,7 @@ struct _GtkCssImageIconTheme
   GtkCssImage parent;
 
   GtkIconTheme *icon_theme;
-  GdkRGBA colors[4];
+  GtkCssValue *colors[4];
   int serial;
   int scale;
   char *name;

@@ -148,4 +148,65 @@ static const int other_props[] = {
   GTK_CSS_PROPERTY_FILTER,
 };
 
+static const int used_props[] = {
+  GTK_CSS_PROPERTY_COLOR,
+  GTK_CSS_PROPERTY_ICON_PALETTE,
+  GTK_CSS_PROPERTY_BACKGROUND_COLOR,
+  GTK_CSS_PROPERTY_BOX_SHADOW,
+  GTK_CSS_PROPERTY_BACKGROUND_IMAGE,
+  GTK_CSS_PROPERTY_BORDER_TOP_COLOR,
+  GTK_CSS_PROPERTY_BORDER_RIGHT_COLOR,
+  GTK_CSS_PROPERTY_BORDER_BOTTOM_COLOR,
+  GTK_CSS_PROPERTY_BORDER_LEFT_COLOR,
+  GTK_CSS_PROPERTY_BORDER_IMAGE_SOURCE,
+  GTK_CSS_PROPERTY_ICON_SHADOW,
+  GTK_CSS_PROPERTY_OUTLINE_COLOR,
+  GTK_CSS_PROPERTY_CARET_COLOR,
+  GTK_CSS_PROPERTY_SECONDARY_CARET_COLOR,
+  GTK_CSS_PROPERTY_TEXT_SHADOW,
+  GTK_CSS_PROPERTY_TEXT_DECORATION_COLOR,
+  GTK_CSS_PROPERTY_ICON_SOURCE,
+};
+
+/* Maps back from css property ids to position in used_props.
+ * -1 means 'not present'.
+ */
+static const int used_props_map[] = {
+  0, /* color */
+  -1, -1,
+  1, /* icon-palette */
+  2, /* background-color */
+  -1, -1, -1, -1, -1, -1,
+  15, /* text-decoration-color */
+  -1, -1, -1, -1, -1, -1, -1, -1,
+  -1,
+  14, /* text-shadow */
+  3, /* box-shadow */
+  -1, -1, -1, -1, -1, -1, -1, -1,
+  -1, -1, -1, -1, -1, -1, -1, -1,
+  -1, -1, -1, -1, -1, -1, -1, -1,
+  -1, -1, -1,
+  5, /* border-top-color */
+  6, /* border-right-color */
+  7, /* border-bottom-color */
+  8, /* border-left-color */
+  11, /* outline-color */
+  -1,
+  4, /* background-image */
+  -1,
+  9, /* border-image-source */
+  -1, -1, -1,
+  16, /* icon-source */
+  -1,
+  10, /* icon-shadow */
+  -1, -1, -1, -1, -1, -1, -1, -1,
+  -1, -1, -1, -1, -1, -1, -1, -1,
+  -1, -1, -1, -1, -1, -1,
+  12, /* caret-color */
+  13, /* secondary-caret-color */
+  -1, -1, -1,
+};
+
+G_STATIC_ASSERT (G_N_ELEMENTS (used_props_map) == GTK_CSS_PROPERTY_N_PROPERTIES);
+
 G_END_DECLS

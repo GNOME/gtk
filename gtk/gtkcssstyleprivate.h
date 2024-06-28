@@ -59,6 +59,7 @@ typedef enum {
   GTK_CSS_SIZE_INITIAL_VALUES,
   GTK_CSS_OTHER_VALUES,
   GTK_CSS_OTHER_INITIAL_VALUES,
+  GTK_CSS_USED_VALUES,
 } GtkCssValuesType;
 
 typedef struct _GtkCssValues GtkCssValues;
@@ -73,6 +74,7 @@ typedef struct _GtkCssAnimationValues GtkCssAnimationValues;
 typedef struct _GtkCssTransitionValues GtkCssTransitionValues;
 typedef struct _GtkCssSizeValues GtkCssSizeValues;
 typedef struct _GtkCssOtherValues GtkCssOtherValues;
+typedef struct _GtkCssUsedValues GtkCssUsedValues;
 
 struct _GtkCssValues {
   int ref_count;
@@ -117,10 +119,10 @@ struct _GtkCssBorderValues {
   GtkCssValue *border_top_right_radius;
   GtkCssValue *border_bottom_right_radius;
   GtkCssValue *border_bottom_left_radius;
-  GtkCssValue *border_top_color; // NULL if currentColor
-  GtkCssValue *border_right_color; // NULL if currentColor
-  GtkCssValue *border_bottom_color; // NULL if currentColor
-  GtkCssValue *border_left_color; // NULL if currentColor
+  GtkCssValue *border_top_color;
+  GtkCssValue *border_right_color;
+  GtkCssValue *border_bottom_color;
+  GtkCssValue *border_left_color;
   GtkCssValue *border_image_source;
   GtkCssValue *border_image_repeat;
   GtkCssValue *border_image_slice;
@@ -142,7 +144,7 @@ struct _GtkCssOutlineValues {
   GtkCssValue *outline_style;
   GtkCssValue *outline_width;
   GtkCssValue *outline_offset;
-  GtkCssValue *outline_color; // NULL if currentColor
+  GtkCssValue *outline_color;
 };
 
 struct _GtkCssFontValues {
@@ -154,8 +156,8 @@ struct _GtkCssFontValues {
   GtkCssValue *font_stretch;
   GtkCssValue *letter_spacing;
   GtkCssValue *text_shadow;
-  GtkCssValue *caret_color; // NULL if currentColor
-  GtkCssValue *secondary_caret_color; // NULL if currentColor
+  GtkCssValue *caret_color;
+  GtkCssValue *secondary_caret_color;
   GtkCssValue *font_feature_settings;
   GtkCssValue *font_variation_settings;
   GtkCssValue *line_height;
@@ -165,7 +167,7 @@ struct _GtkCssFontVariantValues {
   GtkCssValues base;
 
   GtkCssValue *text_decoration_line;
-  GtkCssValue *text_decoration_color; // NULL if currentColor
+  GtkCssValue *text_decoration_color;
   GtkCssValue *text_decoration_style;
   GtkCssValue *text_transform;
   GtkCssValue *font_kerning;
@@ -227,6 +229,28 @@ struct _GtkCssOtherValues {
   GtkCssValue *filter;
 };
 
+struct _GtkCssUsedValues {
+  GtkCssValues base;
+
+  GtkCssValue *color;
+  GtkCssValue *icon_palette;
+  GtkCssValue *background_color;
+  GtkCssValue *box_shadow;
+  GtkCssValue *background_image;
+  GtkCssValue *border_top_color;
+  GtkCssValue *border_right_color;
+  GtkCssValue *border_bottom_color;
+  GtkCssValue *border_left_color;
+  GtkCssValue *border_image_source;
+  GtkCssValue *icon_shadow;
+  GtkCssValue *outline_color;
+  GtkCssValue *caret_color;
+  GtkCssValue *secondary_caret_color;
+  GtkCssValue *text_shadow;
+  GtkCssValue *text_decoration_color;
+  GtkCssValue *icon_source;
+};
+
 /* typedef struct _GtkCssStyle           GtkCssStyle; */
 typedef struct _GtkCssStyleClass      GtkCssStyleClass;
 
@@ -245,6 +269,8 @@ struct _GtkCssStyle
   GtkCssTransitionValues  *transition;
   GtkCssSizeValues        *size;
   GtkCssOtherValues       *other;
+  GtkCssUsedValues        *used;
+
   GtkCssVariableSet       *variables;
 
   GtkCssValue             *variable_values;
@@ -272,6 +298,10 @@ GType                   gtk_css_style_get_type                  (void) G_GNUC_CO
 
 GtkCssValue *           gtk_css_style_get_value                 (GtkCssStyle            *style,
                                                                  guint                   id) G_GNUC_PURE;
+GtkCssValue *           gtk_css_style_get_computed_value        (GtkCssStyle            *style,
+                                                                 guint                   id) G_GNUC_PURE;
+GtkCssValue *           gtk_css_style_get_used_value            (GtkCssStyle            *style,
+                                                                 guint                   id) G_GNUC_PURE;
 GtkCssSection *         gtk_css_style_get_section               (GtkCssStyle            *style,
                                                                  guint                   id) G_GNUC_PURE;
 gboolean                gtk_css_style_is_static                 (GtkCssStyle            *style) G_GNUC_PURE;
@@ -297,6 +327,13 @@ void                    gtk_css_style_lookup_symbolic_colors    (GtkCssStyle    
 GtkCssVariableValue *   gtk_css_style_get_custom_property       (GtkCssStyle            *style,
                                                                  int                     id);
 GArray *                gtk_css_style_list_custom_properties    (GtkCssStyle            *style);
+
+GtkCssValue *           gtk_css_style_resolve_used_value        (GtkCssStyle            *style,
+                                                                 GtkCssValue            *value,
+                                                                 guint                   property_id,
+                                                                 GtkCssComputeContext   *context);
+void                    gtk_css_style_resolve_used_values       (GtkCssStyle            *style,
+                                                                 GtkCssComputeContext   *context);
 
 GtkCssValues *gtk_css_values_new   (GtkCssValuesType  type);
 GtkCssValues *gtk_css_values_ref   (GtkCssValues     *values);
