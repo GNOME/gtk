@@ -3600,7 +3600,7 @@ append_texture_param (Printer    *p,
       g_hash_table_insert (p->named_textures, texture, new_name);
     }
 
-  switch (gdk_memory_format_get_depth (gdk_texture_get_format (texture), FALSE))
+  switch (gdk_texture_get_depth (texture))
     {
     case GDK_MEMORY_U8:
     case GDK_MEMORY_U8_SRGB:

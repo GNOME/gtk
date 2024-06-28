@@ -977,6 +977,13 @@ gdk_texture_get_format (GdkTexture *self)
   return self->format;
 }
 
+GdkMemoryDepth
+gdk_texture_get_depth (GdkTexture *self)
+{
+  return gdk_memory_format_get_depth (self->format,
+                                      gdk_color_state_has_srgb_tf (self->color_state, NULL));
+}
+
 gboolean
 gdk_texture_set_render_data (GdkTexture     *self,
                              gpointer        key,

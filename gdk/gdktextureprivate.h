@@ -3,6 +3,7 @@
 #include "gdktexture.h"
 
 #include "gdkenums.h"
+#include "gdkmemoryformatprivate.h"
 
 G_BEGIN_DECLS
 
@@ -55,6 +56,8 @@ gboolean                gdk_texture_can_load            (GBytes                 
 
 GdkTexture *            gdk_texture_new_for_surface     (cairo_surface_t        *surface);
 cairo_surface_t *       gdk_texture_download_surface    (GdkTexture             *texture);
+
+GdkMemoryDepth          gdk_texture_get_depth           (GdkTexture             *self);
 
 void                    gdk_texture_do_download         (GdkTexture             *texture,
                                                          GdkMemoryFormat         format,
