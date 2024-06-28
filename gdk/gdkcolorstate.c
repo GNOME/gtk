@@ -20,8 +20,6 @@
 
 #include "gdkcolorstateprivate.h"
 
-#include "gdkdebugprivate.h"
-
 /**
  * GdkColorState:
  *
@@ -172,6 +170,7 @@ GdkDefaultColorState gdk_default_color_states[] = {
       .klass = &GDK_DEFAULT_COLOR_STATE_CLASS,
       .ref_count = 0,
       .depth = GDK_MEMORY_U8,
+      .rendering_color_state = GDK_COLOR_STATE_SRGB_LINEAR,
     },
     .name = "srgb",
     .no_srgb = GDK_COLOR_STATE_SRGB_LINEAR,
@@ -181,6 +180,7 @@ GdkDefaultColorState gdk_default_color_states[] = {
       .klass = &GDK_DEFAULT_COLOR_STATE_CLASS,
       .ref_count = 0,
       .depth = GDK_MEMORY_U8,
+      .rendering_color_state = GDK_COLOR_STATE_SRGB_LINEAR,
     },
     .name = "srgb-linear",
     .no_srgb = NULL,
