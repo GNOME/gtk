@@ -1541,6 +1541,15 @@ GdkMemoryDepth
 gdk_memory_depth_merge (GdkMemoryDepth depth1,
                         GdkMemoryDepth depth2)
 {
+  GdkMemoryDepth d;
+
+  if (depth1 == depth2)
+    return depth1;
+
+  d = MAX (depth1, depth2);
+  depth1 = MIN (depth1, depth2);
+  depth2 = d;
+
   switch (depth1)
     {
       case GDK_MEMORY_U8:
