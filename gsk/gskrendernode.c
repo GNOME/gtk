@@ -181,6 +181,7 @@ static void
 gsk_render_node_init (GskRenderNode *self)
 {
   g_atomic_ref_count_init (&self->ref_count);
+  self->preferred_depth = GDK_N_DEPTHS; /* illegal value */
 }
 
 GType
