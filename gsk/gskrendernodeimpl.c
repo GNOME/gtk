@@ -1931,7 +1931,7 @@ gsk_texture_node_new (GdkTexture            *texture,
   gsk_rect_init_from_rect (&node->bounds, bounds);
   gsk_rect_normalize (&node->bounds);
 
-  node->preferred_depth = gdk_memory_format_get_depth (gdk_texture_get_format (texture), FALSE);
+  node->preferred_depth = gdk_texture_get_depth (texture);
 
   return node;
 }
@@ -2153,7 +2153,7 @@ gsk_texture_scale_node_new (GdkTexture            *texture,
   gsk_rect_normalize (&node->bounds);
   self->filter = filter;
 
-  node->preferred_depth = gdk_memory_format_get_depth (gdk_texture_get_format (texture), FALSE);
+  node->preferred_depth = gdk_texture_get_depth (texture);
 
   return node;
 }
