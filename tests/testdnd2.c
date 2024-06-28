@@ -215,6 +215,8 @@ image_drag_accept (GtkDropTargetAsync *dest,
   GtkWidget *image = data;
   g_object_set_data_full (G_OBJECT (image), "drop", g_object_ref (drop), g_object_unref);
 
+  g_print ("accept\n");
+
   g_timeout_add (1000, delayed_deny, dest);
 
   return TRUE;
@@ -229,10 +231,22 @@ image_drag_drop (GtkDropTarget    *dest,
 {
   GtkWidget *image = data;
   GdkDragAction action = gdk_drop_get_actions (drop);
+  const char *name[] = { "copy", "move", "link", "ask" };
 
   g_object_set_data_full (G_OBJECT (image), "drop", g_object_ref (drop), g_object_unref);
 
-  g_print ("drop, actions %d\n", action);
+  g_print ("drop, actions: ");
+  for (guint i = 0; i < 4; i++)
+    {
+      if (action & (1 << i))
+        {
+          if (i > 0)
+            g_print (", ");
+          g_print ("%s", name[i]);
+        }
+    }
+  g_print ("\n");
+
   if (!gdk_drag_action_is_unique (action))
     ask_actions (drop, image);
   else
@@ -321,7 +335,8 @@ drag_cancel (GtkDragSource       *source,
              GdkDrag             *drag,
              GdkDragCancelReason  reason)
 {
-  g_print ("drag failed: %d\n", reason);
+  const char *msg[] = { "no target", "user cancelled", "error" };
+  g_print ("drag failed: %s\n", msg[reason]);
   return FALSE;
 }
 
