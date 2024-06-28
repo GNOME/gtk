@@ -63,6 +63,7 @@ internal_tests = [
   { 'name': 'texture' },
   { 'name': 'gltexture' },
   { 'name': 'subsurface' },
+  { 'name': 'memoryformat' },
 ]
 
 if os_linux
