@@ -120,6 +120,7 @@ static const GdkDebugKey gdk_debug_keys[] = {
   { "dmabuf",          GDK_DEBUG_DMABUF, "Information about dmabuf buffers" },
   { "offload",         GDK_DEBUG_OFFLOAD, "Information about subsurfaces and graphics offload" },
 
+  { "linear",          GDK_DEBUG_LINEAR, "Enable linear rendering" },
   { "portals",         GDK_DEBUG_PORTALS, "Force use of portals" },
   { "no-portals",      GDK_DEBUG_NO_PORTALS, "Disable use of portals" },
   { "force-offload",   GDK_DEBUG_FORCE_OFFLOAD, "Force graphics offload for all textures" },
