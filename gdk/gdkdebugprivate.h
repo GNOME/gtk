@@ -40,6 +40,7 @@ typedef enum {
   GDK_DEBUG_OFFLOAD         = 1 << 12,
 
   /* flags below are influencing behavior */
+  GDK_DEBUG_LINEAR          = 1 << 13,
   GDK_DEBUG_PORTALS         = 1 << 14,
   GDK_DEBUG_NO_PORTALS      = 1 << 15,
   GDK_DEBUG_GL_DISABLE      = 1 << 16,
