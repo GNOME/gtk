@@ -230,6 +230,9 @@ gtk_css_image_scaled_resolve (GtkCssImage          *image,
   GtkCssImageScaled *self = GTK_CSS_IMAGE_SCALED (image);
   GtkCssImageScaled *res;
 
+  if (!gtk_css_image_scaled_contains_current_color (image))
+    return g_object_ref (image);
+
   res = g_object_new (GTK_TYPE_CSS_IMAGE_SCALED, NULL);
 
   res->n_images = self->n_images;

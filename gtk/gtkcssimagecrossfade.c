@@ -448,6 +448,49 @@ gtk_css_image_cross_fade_is_computed (GtkCssImage *image)
   return TRUE;
 }
 
+static gboolean
+gtk_css_image_cross_fade_contains_current_color (GtkCssImage *image)
+{
+  GtkCssImageCrossFade *cross_fade = GTK_CSS_IMAGE_CROSS_FADE (image);
+  guint i;
+
+  for (i = 0; i < cross_fade->images->len; i++)
+    {
+      const CrossFadeEntry *entry = &g_array_index (cross_fade->images, CrossFadeEntry, i);
+      if (gtk_css_image_contains_current_color (entry->image))
+        return TRUE;
+    }
+
+  return FALSE;
+}
+
+static GtkCssImage *
+gtk_css_image_cross_fade_resolve (GtkCssImage          *image,
+                                  GtkCssComputeContext *context,
+                                  GtkCssValue          *current)
+{
+  GtkCssImageCrossFade *self = GTK_CSS_IMAGE_CROSS_FADE (image);
+  GtkCssImageCrossFade *result;
+  guint i;
+
+  if (!gtk_css_image_cross_fade_contains_current_color (image))
+    return g_object_ref (image);
+
+  result = gtk_css_image_cross_fade_new_empty ();
+
+  for (i = 0; i < self->images->len; i++)
+    {
+      CrossFadeEntry *entry = &g_array_index (self->images, CrossFadeEntry, i);
+
+      gtk_css_image_cross_fade_add (result,
+                                    entry->has_progress,
+                                    entry->progress,
+                                    gtk_css_image_resolve (entry->image, context, current));
+    }
+
+  return GTK_CSS_IMAGE (result);
+}
+
 static void
 gtk_css_image_cross_fade_class_init (GtkCssImageCrossFadeClass *klass)
 {
@@ -464,6 +507,8 @@ gtk_css_image_cross_fade_class_init (GtkCssImageCrossFadeClass *klass)
   image_class->parse = gtk_css_image_cross_fade_parse;
   image_class->print = gtk_css_image_cross_fade_print;
   image_class->is_computed = gtk_css_image_cross_fade_is_computed;
+  image_class->contains_current_color = gtk_css_image_cross_fade_contains_current_color;
+  image_class->resolve = gtk_css_image_cross_fade_resolve;
 
   object_class->dispose = gtk_css_image_cross_fade_dispose;
 }
