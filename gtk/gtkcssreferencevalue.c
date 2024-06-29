@@ -362,6 +362,7 @@ static const GtkCssValueClass GTK_CSS_VALUE_REFERENCE = {
   "GtkCssReferenceValue",
   gtk_css_value_reference_free,
   gtk_css_value_reference_compute,
+  NULL,
   gtk_css_value_reference_equal,
   gtk_css_value_reference_transition,
   NULL,

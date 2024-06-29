@@ -138,6 +138,34 @@ gtk_css_value_shadow_compute (GtkCssValue          *value,
   return gtk_css_shadow_value_new (shadows, value->n_shadows, value->is_filter);
 }
 
+static GtkCssValue *
+gtk_css_value_shadow_resolve (GtkCssValue          *value,
+                              GtkCssComputeContext *context,
+                              GtkCssValue          *current_color)
+{
+  guint i;
+  ShadowValue *shadows;
+
+  if (!gtk_css_value_contains_current_color (value))
+    return gtk_css_value_ref (value);
+
+  shadows = g_alloca (sizeof (ShadowValue) * value->n_shadows);
+
+  for (i = 0; i < value->n_shadows; i++)
+    {
+      const ShadowValue *shadow = &value->shadows[i];
+
+      shadows[i].hoffset = gtk_css_value_ref (shadow->hoffset);
+      shadows[i].voffset = gtk_css_value_ref (shadow->voffset);
+      shadows[i].radius = gtk_css_value_ref (shadow->radius);
+      shadows[i].spread = gtk_css_value_ref (shadow->spread);
+      shadows[i].color = gtk_css_value_resolve (shadow->color, context, current_color);
+      shadows[i].inset = shadow->inset;
+    }
+
+  return gtk_css_shadow_value_new (shadows, value->n_shadows, value->is_filter);
+}
+
 static gboolean
 gtk_css_value_shadow_equal (const GtkCssValue *value1,
                             const GtkCssValue *value2)
@@ -279,11 +307,12 @@ static const GtkCssValueClass GTK_CSS_VALUE_SHADOW = {
   "GtkCssShadowValue",
   gtk_css_value_shadow_free,
   gtk_css_value_shadow_compute,
+  gtk_css_value_shadow_resolve,
   gtk_css_value_shadow_equal,
   gtk_css_value_shadow_transition,
   NULL,
   NULL,
-  gtk_css_value_shadow_print
+  gtk_css_value_shadow_print,
 };
 
 static GtkCssValue shadow_none_singleton = { &GTK_CSS_VALUE_SHADOW, 1, 1, 0, 0, 0, 0 };
@@ -747,32 +776,4 @@ gtk_css_shadow_value_pop_snapshot (const GtkCssValue *value,
 {
   if (!gtk_css_shadow_value_is_clear (value))
     gtk_snapshot_pop (snapshot);
-}
-
-GtkCssValue *
-gtk_css_shadow_value_resolve (GtkCssValue          *value,
-                              GtkCssComputeContext *context,
-                              GtkCssValue          *current_color)
-{
-  guint i;
-  ShadowValue *shadows;
-
-  if (!gtk_css_value_contains_current_color (value))
-    return gtk_css_value_ref (value);
-
-  shadows = g_alloca (sizeof (ShadowValue) * value->n_shadows);
-
-  for (i = 0; i < value->n_shadows; i++)
-    {
-      const ShadowValue *shadow = &value->shadows[i];
-
-      shadows[i].hoffset = gtk_css_value_ref (shadow->hoffset);
-      shadows[i].voffset = gtk_css_value_ref (shadow->voffset);
-      shadows[i].radius = gtk_css_value_ref (shadow->radius);
-      shadows[i].spread = gtk_css_value_ref (shadow->spread);
-      shadows[i].color = gtk_css_color_value_resolve (shadow->color, context, current_color);
-      shadows[i].inset = shadow->inset;
-    }
-
-  return gtk_css_shadow_value_new (shadows, value->n_shadows, value->is_filter);
 }

@@ -46,6 +46,9 @@ static GtkCssValue * gtk_css_color_value_new_color_mix (GtkCssColorSpace        
                                                         GtkCssValue            *color2,
                                                         float                   percentage1,
                                                         float                   percentage2);
+static GtkCssValue * gtk_css_color_value_resolve  (GtkCssValue          *color,
+                                                   GtkCssComputeContext *context,
+                                                   GtkCssValue          *current);
 
 typedef enum {
   COLOR_TYPE_COLOR,
@@ -193,13 +196,21 @@ gtk_css_value_color_compute (GtkCssValue          *value,
                              guint                 property_id,
                              GtkCssComputeContext *context)
 {
-  GtkCssValue *resolved;
+  GtkCssValue *computed;
 
-  resolved = gtk_css_color_value_resolve (value, context, NULL);
-  if (resolved == NULL)
+  computed = gtk_css_color_value_resolve (value, context, NULL);
+  if (computed == NULL)
     return gtk_css_value_color_get_fallback (property_id, context);
 
-  return resolved;
+  return computed;
+}
+
+static GtkCssValue *
+gtk_css_value_color_resolve (GtkCssValue          *value,
+                             GtkCssComputeContext *context,
+                             GtkCssValue          *current)
+{
+  return gtk_css_color_value_resolve (value, context, current);
 }
 
 static gboolean
@@ -512,6 +523,7 @@ static const GtkCssValueClass GTK_CSS_VALUE_COLOR = {
   "GtkCssColorValue",
   gtk_css_value_color_free,
   gtk_css_value_color_compute,
+  gtk_css_value_color_resolve,
   gtk_css_value_color_equal,
   gtk_css_value_color_transition,
   NULL,
@@ -798,7 +810,7 @@ gtk_css_color_value_do_resolve (GtkCssValue          *color,
  *   to fully resolve color values that contain currentcolor
  *   references
  */
-GtkCssValue *
+static GtkCssValue *
 gtk_css_color_value_resolve (GtkCssValue          *color,
                              GtkCssComputeContext *context,
                              GtkCssValue          *current)

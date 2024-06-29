@@ -56,6 +56,17 @@ gtk_css_value_image_compute (GtkCssValue          *value,
   return _gtk_css_image_value_new (computed);
 }
 
+static GtkCssValue *
+gtk_css_value_image_resolve (GtkCssValue          *value,
+                             GtkCssComputeContext *context,
+                             GtkCssValue          *current_color)
+{
+  if (!gtk_css_value_contains_current_color (value))
+    return gtk_css_value_ref (value);
+
+  return _gtk_css_image_value_new (gtk_css_image_resolve (_gtk_css_image_value_get_image (value), context, current_color));
+}
+
 static gboolean
 gtk_css_value_image_equal (const GtkCssValue *value1,
                            const GtkCssValue *value2)
@@ -124,6 +135,7 @@ static const GtkCssValueClass GTK_CSS_VALUE_IMAGE = {
   "GtkCssImageValue",
   gtk_css_value_image_free,
   gtk_css_value_image_compute,
+  gtk_css_value_image_resolve,
   gtk_css_value_image_equal,
   gtk_css_value_image_transition,
   gtk_css_value_image_is_dynamic,
@@ -154,15 +166,4 @@ _gtk_css_image_value_get_image (const GtkCssValue *value)
   g_return_val_if_fail (value->class == &GTK_CSS_VALUE_IMAGE, NULL);
 
   return value->image;
-}
-
-GtkCssValue *
-gtk_css_image_value_resolve (GtkCssValue          *value,
-                             GtkCssComputeContext *context,
-                             GtkCssValue          *current_color)
-{
-  if (!gtk_css_value_contains_current_color (value))
-    return gtk_css_value_ref (value);
-
-  return _gtk_css_image_value_new (gtk_css_image_resolve (_gtk_css_image_value_get_image (value), context, current_color));
 }

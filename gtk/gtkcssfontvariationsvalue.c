@@ -157,6 +157,7 @@ static const GtkCssValueClass GTK_CSS_VALUE_FONT_VARIATIONS = {
   "GtkCssFontVariationsValue",
   gtk_css_value_font_variations_free,
   gtk_css_value_font_variations_compute,
+  NULL,
   gtk_css_value_font_variations_equal,
   gtk_css_value_font_variations_transition,
   NULL,

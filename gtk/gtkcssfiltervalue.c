@@ -710,6 +710,7 @@ static const GtkCssValueClass GTK_CSS_VALUE_FILTER = {
   "GtkCssFilterValue",
   gtk_css_value_filter_free,
   gtk_css_value_filter_compute,
+  NULL,
   gtk_css_value_filter_equal,
   gtk_css_value_filter_transition,
   NULL,

@@ -77,6 +77,7 @@ static const GtkCssValueClass GTK_CSS_VALUE_INHERIT = {
   "GtkCssInheritValue",
   gtk_css_value_inherit_free,
   gtk_css_value_inherit_compute,
+  NULL,
   gtk_css_value_inherit_equal,
   gtk_css_value_inherit_transition,
   NULL,

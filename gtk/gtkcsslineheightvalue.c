@@ -107,6 +107,7 @@ static const GtkCssValueClass GTK_CSS_VALUE_LINE_HEIGHT = {
   "GtkCssLineHeightValue",
   gtk_css_value_line_height_free,
   gtk_css_value_line_height_compute,
+  NULL,
   gtk_css_value_line_height_equal,
   gtk_css_value_line_height_transition,
   NULL,

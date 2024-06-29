@@ -196,11 +196,8 @@ void
  * gtk_css_value_compute:
  * @value: the value to compute from
  * @property_id: the ID of the property to compute
- * @provider: Style provider for looking up extra information
- * @style: Style to compute for
- * @parent_style: parent style to use for inherited values
- * @variables: an additional set of variables to use along with @style
- * @shorthands: (nullable): Already computed values for shorthands
+ * @context: the context containing the style provider, style
+ *   parent style and variables that might be used during computation
  *
  * Converts the specified @value into the computed value for the CSS
  * property given by @property_id using the information in @context.
@@ -222,6 +219,29 @@ gtk_css_value_compute (GtkCssValue          *value,
 #endif
 
   return value->class->compute (value, property_id, context);
+}
+
+/**
+ * gtk_css_value_resolve:
+ * @value: the value to resolve
+ * @context: the context containing the style provider, style
+ *   parent style and variables that might be used during computation
+ * @current: the value to use for currentcolor
+ *
+ * Converts the computed @value into the used value, by replacing
+ * currentcolor with @current.
+ *
+ * Returns: the used value
+ */
+GtkCssValue *
+gtk_css_value_resolve (GtkCssValue          *value,
+                       GtkCssComputeContext *context,
+                       GtkCssValue          *current)
+{
+  if (!value->class->resolve)
+    return gtk_css_value_ref (value);
+
+  return value->class->resolve (value, context, current);
 }
 
 gboolean

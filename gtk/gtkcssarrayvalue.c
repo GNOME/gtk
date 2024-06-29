@@ -74,6 +74,40 @@ gtk_css_value_array_compute (GtkCssValue          *value,
   return result;
 }
 
+static GtkCssValue *
+gtk_css_value_array_resolve (GtkCssValue          *value,
+                             GtkCssComputeContext *context,
+                             GtkCssValue          *current)
+{
+  GtkCssValue *result;
+  GtkCssValue *i_value;
+  guint i, j;
+
+  result = NULL;
+  for (i = 0; i < value->n_values; i++)
+    {
+      i_value =  gtk_css_value_resolve (value->values[i], context, current);
+
+      if (result == NULL &&
+          i_value != value->values[i])
+        {
+          result = _gtk_css_array_value_new_from_array (value->values, value->n_values);
+          for (j = 0; j < i; j++)
+            gtk_css_value_ref (result->values[j]);
+        }
+
+      if (result != NULL)
+        result->values[i] = i_value;
+      else
+        gtk_css_value_unref (i_value);
+    }
+
+  if (result == NULL)
+    return gtk_css_value_ref (value);
+
+  return result;
+}
+
 static gboolean
 gtk_css_value_array_equal (const GtkCssValue *value1,
                            const GtkCssValue *value2)
@@ -364,6 +398,7 @@ static const GtkCssValueClass GTK_CSS_VALUE_ARRAY = {
   "GtkCssArrayValue",
   gtk_css_value_array_free,
   gtk_css_value_array_compute,
+  gtk_css_value_array_resolve,
   gtk_css_value_array_equal,
   gtk_css_value_array_transition,
   gtk_css_value_array_is_dynamic,
@@ -398,6 +433,7 @@ _gtk_css_array_value_new_from_array (GtkCssValue **values,
 
   result->is_computed = TRUE;
   result->contains_variables = FALSE;
+  result->contains_current_color = FALSE;
   for (i = 0; i < n_values; i ++)
     {
       if (!gtk_css_value_is_computed (values[i]))
@@ -406,7 +442,10 @@ _gtk_css_array_value_new_from_array (GtkCssValue **values,
       if (gtk_css_value_contains_variables (values[i]))
         result->contains_variables = TRUE;
 
-      if (!result->is_computed && result->contains_variables)
+      if (gtk_css_value_contains_current_color (values[i]))
+        result->contains_current_color = TRUE;
+
+      if (!result->is_computed && result->contains_variables && result->contains_current_color)
         break;
     }
 
@@ -468,5 +507,3 @@ _gtk_css_array_value_get_n_values (const GtkCssValue *value)
 
   return value->n_values;
 }
-
-

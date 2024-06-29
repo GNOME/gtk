@@ -340,7 +340,7 @@ gtk_css_image_fallback_resolve (GtkCssImage          *image,
       GtkCssValue *resolved_color = NULL;
 
       if (fallback->color)
-        resolved_color = gtk_css_color_value_resolve (fallback->color, context, current_color);
+        resolved_color = gtk_css_value_resolve (fallback->color, context, current_color);
 
       /* image($color) that didn't change */
       if (resolved_color && !fallback->images && resolved_color == fallback->color)

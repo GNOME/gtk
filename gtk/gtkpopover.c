@@ -507,7 +507,7 @@ create_popup_layout (GtkPopover *popover)
   compute_surface_pointing_to (popover, &rect);
 
   style = gtk_css_node_get_style (gtk_widget_get_css_node (GTK_WIDGET (priv->contents_widget)));
-  gtk_css_shadow_value_get_extents (style->background->box_shadow, &shadow_width);
+  gtk_css_shadow_value_get_extents (style->used->box_shadow, &shadow_width);
 
   switch (priv->position)
     {
@@ -1274,7 +1274,7 @@ gtk_popover_get_gap_coords (GtkPopover *popover,
   border_right = gtk_css_number_value_get (style->border->border_right_width, 100);
   border_bottom = gtk_css_number_value_get (style->border->border_bottom_width, 100);
 
-  gtk_css_shadow_value_get_extents (style->background->box_shadow, &shadow_width);
+  gtk_css_shadow_value_get_extents (style->used->box_shadow, &shadow_width);
 
   if (pos == GTK_POS_BOTTOM)
     {
@@ -1448,7 +1448,7 @@ gtk_popover_update_shape (GtkPopover *popover)
       content_css_node =
         gtk_widget_get_css_node (GTK_WIDGET (priv->contents_widget));
       style = gtk_css_node_get_style (content_css_node);
-      gtk_css_shadow_value_get_extents (style->background->box_shadow, &shadow_width);
+      gtk_css_shadow_value_get_extents (style->used->box_shadow, &shadow_width);
 
       input_rect.x = shadow_width.left;
       input_rect.y = shadow_width.top;
@@ -1515,7 +1515,7 @@ gtk_popover_measure (GtkWidget      *widget,
     for_size -= tail_height;
 
   style = gtk_css_node_get_style (gtk_widget_get_css_node (GTK_WIDGET (priv->contents_widget)));
-  gtk_css_shadow_value_get_extents (style->background->box_shadow, &shadow_width);
+  gtk_css_shadow_value_get_extents (style->used->box_shadow, &shadow_width);
 
   gtk_widget_measure (priv->contents_widget,
                       orientation, for_size,
@@ -1558,7 +1558,7 @@ gtk_popover_size_allocate (GtkWidget *widget,
   GtkBorder shadow_width;
 
   style = gtk_css_node_get_style (gtk_widget_get_css_node (GTK_WIDGET (priv->contents_widget)));
-  gtk_css_shadow_value_get_extents (style->background->box_shadow, &shadow_width);
+  gtk_css_shadow_value_get_extents (style->used->box_shadow, &shadow_width);
 
   switch (priv->final_position)
     {

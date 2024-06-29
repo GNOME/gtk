@@ -156,6 +156,7 @@ static const GtkCssValueClass GTK_CSS_VALUE_FONT_FEATURES = {
   "GtkCssFontFeaturesValue",
   gtk_css_value_font_features_free,
   gtk_css_value_font_features_compute,
+  NULL,
   gtk_css_value_font_features_equal,
   gtk_css_value_font_features_transition,
   NULL,

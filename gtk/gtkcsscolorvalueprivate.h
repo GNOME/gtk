@@ -33,10 +33,6 @@ GtkCssValue *   gtk_css_color_value_new_name            (const char     *name) G
 gboolean        gtk_css_color_value_can_parse           (GtkCssParser   *parser);
 GtkCssValue *   gtk_css_color_value_parse               (GtkCssParser   *parser);
 
-GtkCssValue *   gtk_css_color_value_resolve             (GtkCssValue          *color,
-                                                         GtkCssComputeContext *context,
-                                                         GtkCssValue          *current);
-
 const GdkRGBA * gtk_css_color_value_get_rgba            (const GtkCssValue *color) G_GNUC_CONST;
 
 GtkCssValue *   gtk_css_color_value_new_color           (GtkCssColorSpace color_space,

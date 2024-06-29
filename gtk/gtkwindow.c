@@ -4046,7 +4046,7 @@ get_shadow_width (GtkWindow *window,
   style = gtk_css_node_get_style (gtk_widget_get_css_node (GTK_WIDGET (window)));
 
   /* Calculate the size of the drop shadows ... */
-  gtk_css_shadow_value_get_extents (style->background->box_shadow, shadow_width);
+  gtk_css_shadow_value_get_extents (style->used->box_shadow, shadow_width);
 
   shadow_width->left = MAX (shadow_width->left, RESIZE_HANDLE_SIZE);
   shadow_width->top = MAX (shadow_width->top, RESIZE_HANDLE_SIZE);

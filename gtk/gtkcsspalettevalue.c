@@ -134,6 +134,26 @@ gtk_css_value_palette_compute (GtkCssValue          *specified,
   return result;
 }
 
+static GtkCssValue *
+gtk_css_value_palette_resolve (GtkCssValue          *value,
+                               GtkCssComputeContext *context,
+                               GtkCssValue          *current_color)
+{
+  GtkCssValue *result;
+
+  if (!gtk_css_value_contains_current_color (value))
+    return gtk_css_value_ref (value);
+
+  result = gtk_css_palette_value_new_sized (value->n_colors);
+  for (guint i = 0; i < value->n_colors; i++)
+    {
+      result->color_names[i] = g_strdup (value->color_names[i]);
+      result->color_values[i] = gtk_css_value_resolve (value->color_values[i], context, current_color);
+    }
+
+  return result;
+}
+
 static gboolean
 gtk_css_value_palette_equal (const GtkCssValue *value1,
                              const GtkCssValue *value2)
@@ -243,6 +263,7 @@ static const GtkCssValueClass GTK_CSS_VALUE_PALETTE = {
   "GtkCssPaletteValue",
   gtk_css_value_palette_free,
   gtk_css_value_palette_compute,
+  gtk_css_value_palette_resolve,
   gtk_css_value_palette_equal,
   gtk_css_value_palette_transition,
   NULL,
@@ -352,24 +373,4 @@ gtk_css_palette_value_get_color (GtkCssValue *value,
     }
 
   return NULL;
-}
-
-GtkCssValue *
-gtk_css_palette_value_resolve (GtkCssValue          *value,
-                               GtkCssComputeContext *context,
-                               GtkCssValue          *current_color)
-{
-  GtkCssValue *result;
-
-  if (!gtk_css_value_contains_current_color (value))
-    return gtk_css_value_ref (value);
-
-  result = gtk_css_palette_value_new_sized (value->n_colors);
-  for (guint i = 0; i < value->n_colors; i++)
-    {
-      result->color_names[i] = g_strdup (value->color_names[i]);
-      result->color_values[i] = gtk_css_color_value_resolve (value->color_values[i], context, current_color);
-    }
-
-  return result;
 }
