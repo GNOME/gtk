@@ -3565,11 +3565,6 @@ gtk_text_set_selection_bounds (GtkText *self,
   gtk_text_reset_im_context (self);
 
   gtk_text_set_positions (self, MIN (end, length), MIN (start, length));
-
-  gtk_text_update_primary_selection (self);
-
-  gtk_accessible_text_update_caret_position (GTK_ACCESSIBLE_TEXT (self));
-  gtk_accessible_text_update_selection_bound (GTK_ACCESSIBLE_TEXT (self));
 }
 
 static gboolean
@@ -4578,6 +4573,10 @@ gtk_text_set_positions (GtkText *self,
     {
       gtk_text_update_clipboard_actions (self);
       gtk_text_recompute (self);
+
+      gtk_text_update_primary_selection (self);
+      gtk_accessible_text_update_caret_position (GTK_ACCESSIBLE_TEXT (self));
+      gtk_accessible_text_update_selection_bound (GTK_ACCESSIBLE_TEXT (self));
     }
 }
 
