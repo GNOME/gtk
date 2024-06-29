@@ -1536,35 +1536,19 @@ GdkMemoryDepth
 gdk_memory_depth_merge (GdkMemoryDepth depth1,
                         GdkMemoryDepth depth2)
 {
-  switch (depth1)
-    {
-      case GDK_MEMORY_U8:
-        if (depth2 == GDK_MEMORY_U8_SRGB)
-          return GDK_MEMORY_FLOAT16;
-        else
-          return depth2;
+  static const GdkMemoryDepth merged_depths[GDK_N_DEPTHS][GDK_N_DEPTHS] = {
+                         /*  U8                  U8_SRGB             U16                 FLOAT16             FLOAT32 */
+    [GDK_MEMORY_U8]      = { GDK_MEMORY_U8,      GDK_MEMORY_FLOAT16, GDK_MEMORY_U16,     GDK_MEMORY_FLOAT16, GDK_MEMORY_FLOAT32 },
+    [GDK_MEMORY_U8_SRGB] = { GDK_MEMORY_FLOAT16, GDK_MEMORY_U8_SRGB, GDK_MEMORY_FLOAT32, GDK_MEMORY_FLOAT16, GDK_MEMORY_FLOAT32 },
+    [GDK_MEMORY_U16]     = { GDK_MEMORY_U16,     GDK_MEMORY_FLOAT32, GDK_MEMORY_U16,     GDK_MEMORY_FLOAT32, GDK_MEMORY_FLOAT32 },
+    [GDK_MEMORY_FLOAT16] = { GDK_MEMORY_FLOAT16, GDK_MEMORY_FLOAT16, GDK_MEMORY_FLOAT32, GDK_MEMORY_FLOAT16, GDK_MEMORY_FLOAT32 },
+    [GDK_MEMORY_FLOAT32] = { GDK_MEMORY_FLOAT32, GDK_MEMORY_FLOAT32, GDK_MEMORY_FLOAT32, GDK_MEMORY_FLOAT32, GDK_MEMORY_FLOAT32 },
+  };
 
-      case GDK_MEMORY_U8_SRGB:
-        if (depth2 == GDK_MEMORY_U8)
-          return GDK_MEMORY_FLOAT16;
-        else
-          return depth2;
+  g_assert (depth1 < GDK_N_DEPTHS);
+  g_assert (depth2 < GDK_N_DEPTHS);
 
-      case GDK_MEMORY_FLOAT32:
-        return GDK_MEMORY_FLOAT32;
-
-      case GDK_MEMORY_U16:
-      case GDK_MEMORY_FLOAT16:
-        if (depth2 == depth1 || depth2 == GDK_MEMORY_U8)
-          return depth1;
-        else
-          return GDK_MEMORY_FLOAT32;
-
-      case GDK_N_DEPTHS:
-      default:
-        g_assert_not_reached ();
-        return GDK_MEMORY_U8;
-    }
+  return merged_depths[depth1][depth2];
 }
 
 /*
