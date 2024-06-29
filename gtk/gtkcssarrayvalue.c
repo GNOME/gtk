@@ -48,28 +48,33 @@ gtk_css_value_array_compute (GtkCssValue          *value,
   GtkCssValue *result;
   GtkCssValue *i_value;
   guint i, j;
+  gboolean contains_current_color = FALSE;;
 
   result = NULL;
   for (i = 0; i < value->n_values; i++)
     {
       i_value =  gtk_css_value_compute (value->values[i], property_id, context);
+      contains_current_color |= gtk_css_value_contains_current_color (i_value);
 
       if (result == NULL &&
-	  i_value != value->values[i])
-	{
-	  result = _gtk_css_array_value_new_from_array (value->values, value->n_values);
-	  for (j = 0; j < i; j++)
-	    gtk_css_value_ref (result->values[j]);
-	}
+          i_value != value->values[i])
+        {
+          result = _gtk_css_array_value_new_from_array (value->values, value->n_values);
+          for (j = 0; j < i; j++)
+            gtk_css_value_ref (result->values[j]);
+        }
 
       if (result != NULL)
-	result->values[i] = i_value;
+        result->values[i] = i_value;
       else
-	gtk_css_value_unref (i_value);
+        gtk_css_value_unref (i_value);
     }
 
   if (result == NULL)
     return gtk_css_value_ref (value);
+
+  result->is_computed = TRUE;
+  result->contains_current_color = contains_current_color;
 
   return result;
 }
@@ -104,6 +109,9 @@ gtk_css_value_array_resolve (GtkCssValue          *value,
 
   if (result == NULL)
     return gtk_css_value_ref (value);
+
+  result->is_computed = TRUE;
+  result->contains_current_color = FALSE;
 
   return result;
 }

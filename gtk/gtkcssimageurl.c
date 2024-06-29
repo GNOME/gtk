@@ -159,6 +159,21 @@ gtk_css_image_url_is_computed (GtkCssImage *image)
   return TRUE;
 }
 
+static GtkCssImage *
+gtk_css_image_url_resolve (GtkCssImage          *image,
+                           GtkCssComputeContext *context,
+                           GtkCssValue          *current)
+{
+  return g_object_ref (image);
+}
+
+static gboolean
+gtk_css_image_url_contains_current_color (GtkCssImage *image)
+{
+  return FALSE;
+}
+
+
 static gboolean
 gtk_css_image_url_parse (GtkCssImage  *image,
                          GtkCssParser *parser)
@@ -253,6 +268,8 @@ _gtk_css_image_url_class_init (GtkCssImageUrlClass *klass)
   image_class->equal = gtk_css_image_url_equal;
   image_class->is_invalid = gtk_css_image_url_is_invalid;
   image_class->is_computed = gtk_css_image_url_is_computed;
+  image_class->contains_current_color = gtk_css_image_url_contains_current_color;
+  image_class->resolve = gtk_css_image_url_resolve;
 
   object_class->dispose = gtk_css_image_url_dispose;
 }

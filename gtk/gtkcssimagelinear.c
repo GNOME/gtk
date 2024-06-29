@@ -772,6 +772,9 @@ gtk_css_image_linear_resolve (GtkCssImage          *image,
   GtkCssImageLinear *copy;
   guint i;
 
+  if (!gtk_css_image_linear_contains_current_color (image))
+    return g_object_ref (image);
+
   copy = g_object_new (GTK_TYPE_CSS_IMAGE_LINEAR, NULL);
   copy->repeating = linear->repeating;
   copy->side = linear->side;

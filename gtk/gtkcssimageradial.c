@@ -773,6 +773,9 @@ gtk_css_image_radial_resolve (GtkCssImage          *image,
   GtkCssImageRadial *radial = GTK_CSS_IMAGE_RADIAL (image);
   GtkCssImageRadial *copy;
 
+  if (!gtk_css_image_radial_contains_current_color (image))
+    return g_object_ref (image);
+
   copy = g_object_new (GTK_TYPE_CSS_IMAGE_RADIAL, NULL);
   copy->repeating = radial->repeating;
   copy->circle = radial->circle;

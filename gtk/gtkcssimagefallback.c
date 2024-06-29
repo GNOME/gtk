@@ -323,7 +323,7 @@ gtk_css_image_fallback_contains_current_color (GtkCssImage *image)
         }
     }
 
-  return FALSE;
+  return gtk_css_image_contains_current_color (fallback->images[fallback->used]);
 }
 
 static GtkCssImage *
@@ -334,6 +334,9 @@ gtk_css_image_fallback_resolve (GtkCssImage          *image,
   GtkCssImageFallback *fallback = GTK_CSS_IMAGE_FALLBACK (image);
   GtkCssImageFallback *resolved;
   int i;
+
+  if (!gtk_css_image_fallback_contains_current_color (image))
+    return g_object_ref (image);
 
   if (fallback->used < 0)
     {
@@ -351,7 +354,7 @@ gtk_css_image_fallback_resolve (GtkCssImage          *image,
       resolved->images = g_new (GtkCssImage *, fallback->n_images);
       for (i = 0; i < fallback->n_images; i++)
         {
-          resolved->images[i] = g_object_ref (fallback->images[i]);
+          resolved->images[i] = gtk_css_image_resolve (fallback->images[i], context, current_color);
 
           if (gtk_css_image_is_invalid (resolved->images[i]))
             continue;
@@ -365,7 +368,7 @@ gtk_css_image_fallback_resolve (GtkCssImage          *image,
       return GTK_CSS_IMAGE (resolved);
     }
   else
-    return GTK_CSS_IMAGE (g_object_ref (image));
+    return gtk_css_image_resolve (fallback->images[fallback->used], context, current_color);
 }
 
 static void

@@ -157,6 +157,20 @@ gtk_css_image_paintable_is_computed (GtkCssImage *image)
   return (gdk_paintable_get_flags (self->paintable) & GDK_PAINTABLE_IMMUTABLE) == GDK_PAINTABLE_IMMUTABLE;
 }
 
+static gboolean
+gtk_css_image_paintable_contains_current_color (GtkCssImage *image)
+{
+  return FALSE;
+}
+
+static GtkCssImage *
+gtk_css_image_paintable_resolve (GtkCssImage          *image,
+                                 GtkCssComputeContext *context,
+                                 GtkCssValue          *value)
+{
+  return g_object_ref (image);
+}
+
 static void
 gtk_css_image_paintable_class_init (GtkCssImagePaintableClass *klass)
 {
@@ -173,6 +187,8 @@ gtk_css_image_paintable_class_init (GtkCssImagePaintableClass *klass)
   image_class->is_dynamic = gtk_css_image_paintable_is_dynamic;
   image_class->is_computed = gtk_css_image_paintable_is_computed;
   image_class->get_dynamic_image = gtk_css_image_paintable_get_dynamic_image;
+  image_class->contains_current_color = gtk_css_image_paintable_contains_current_color;
+  image_class->resolve = gtk_css_image_paintable_resolve;
 
   object_class->dispose = gtk_css_image_paintable_dispose;
 }
