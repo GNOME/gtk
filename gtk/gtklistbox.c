@@ -741,6 +741,16 @@ gtk_list_box_class_init (GtkListBoxClass *klass)
                                        "toggle-cursor-row",
                                        NULL);
 
+#ifdef __APPLE__
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       GDK_KEY_a, GDK_META_MASK,
+                                       "select-all",
+                                       NULL);
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       GDK_KEY_a, GDK_META_MASK | GDK_SHIFT_MASK,
+                                       "unselect-all",
+                                       NULL);
+#else
   gtk_widget_class_add_binding_signal (widget_class,
                                        GDK_KEY_a, GDK_CONTROL_MASK,
                                        "select-all",
@@ -749,6 +759,7 @@ gtk_list_box_class_init (GtkListBoxClass *klass)
                                        GDK_KEY_a, GDK_CONTROL_MASK | GDK_SHIFT_MASK,
                                        "unselect-all",
                                        NULL);
+#endif
 
   gtk_widget_class_set_css_name (widget_class, I_("list"));
   gtk_widget_class_set_accessible_role (widget_class, GTK_ACCESSIBLE_ROLE_LIST);
@@ -1950,6 +1961,9 @@ gtk_list_box_click_gesture_released (GtkGestureClick *gesture,
           state = gdk_event_get_modifier_state (event);
           extend = (state & GDK_SHIFT_MASK) != 0;
           modify = (state & GDK_CONTROL_MASK) != 0;
+#ifdef __APPLE__
+          modify = modify | ((state & GDK_META_MASK) != 0);
+#endif
           source = gdk_device_get_source (gdk_event_get_device (event));
 
           if (source == GDK_SOURCE_TOUCHSCREEN)

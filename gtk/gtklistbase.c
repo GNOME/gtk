@@ -1327,10 +1327,15 @@ gtk_list_base_class_init (GtkListBaseClass *klass)
   gtk_list_base_add_custom_move_binding (widget_class, GDK_KEY_Page_Down, gtk_list_base_move_cursor_page_down);
   gtk_list_base_add_custom_move_binding (widget_class, GDK_KEY_KP_Page_Down, gtk_list_base_move_cursor_page_down);
 
+#ifdef __APPLE__
+  gtk_widget_class_add_binding_action (widget_class, GDK_KEY_a, GDK_META_MASK, "list.select-all", NULL);
+  gtk_widget_class_add_binding_action (widget_class, GDK_KEY_A, GDK_META_MASK | GDK_SHIFT_MASK, "list.unselect-all", NULL);
+#else
   gtk_widget_class_add_binding_action (widget_class, GDK_KEY_a, GDK_CONTROL_MASK, "list.select-all", NULL);
   gtk_widget_class_add_binding_action (widget_class, GDK_KEY_slash, GDK_CONTROL_MASK, "list.select-all", NULL);
   gtk_widget_class_add_binding_action (widget_class, GDK_KEY_A, GDK_CONTROL_MASK | GDK_SHIFT_MASK, "list.unselect-all", NULL);
   gtk_widget_class_add_binding_action (widget_class, GDK_KEY_backslash, GDK_CONTROL_MASK, "list.unselect-all", NULL);
+#endif
 }
 
 static gboolean
@@ -1858,6 +1863,11 @@ get_selection_modifiers (GtkGesture *gesture,
     *modify = TRUE;
   if ((state & GDK_SHIFT_MASK) == GDK_SHIFT_MASK)
     *extend = TRUE;
+
+#ifdef __APPLE__
+  if ((state & GDK_META_MASK) == GDK_META_MASK)
+    *modify = TRUE;
+#endif
 }
 
 static void

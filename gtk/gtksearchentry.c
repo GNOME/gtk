@@ -648,6 +648,16 @@ gtk_search_entry_class_init (GtkSearchEntryClass *klass)
                   NULL,
                   G_TYPE_NONE, 0);
 
+#ifdef __APPLE__
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       GDK_KEY_g, GDK_META_MASK,
+                                       "next-match",
+                                       NULL);
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       GDK_KEY_g, GDK_SHIFT_MASK | GDK_META_MASK,
+                                       "previous-match",
+                                       NULL);
+#else
   gtk_widget_class_add_binding_signal (widget_class,
                                        GDK_KEY_g, GDK_CONTROL_MASK,
                                        "next-match",
@@ -656,6 +666,8 @@ gtk_search_entry_class_init (GtkSearchEntryClass *klass)
                                        GDK_KEY_g, GDK_SHIFT_MASK | GDK_CONTROL_MASK,
                                        "previous-match",
                                        NULL);
+#endif
+
   gtk_widget_class_add_binding_signal (widget_class,
                                        GDK_KEY_Escape, 0,
                                        "stop-search",

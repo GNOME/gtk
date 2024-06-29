@@ -140,6 +140,11 @@ capture phase, and key bindings locally, during the target phase.
 Under the hood, all shortcuts are represented as instances of `GtkShortcut`,
 and they are managed by `GtkShortcutController`.
 
+Note that GTK does not do anything to map the primary shortcut modifier
+to <kbd>Command</kbd> on macOS. If you want to let your application to follow
+macOS user experience conventions, you must create macOS-specific keyboard shortcuts.
+The <kbd>Command</kbd> is named `Meta` (`GDK_META_MASK`) in GTK.
+
 ## Text input
 
 When actual text input is needed (i.e. not just keyboard shortcuts),

@@ -98,9 +98,9 @@ typedef enum
  * @GDK_BUTTON3_MASK: the third mouse button.
  * @GDK_BUTTON4_MASK: the fourth mouse button.
  * @GDK_BUTTON5_MASK: the fifth mouse button.
- * @GDK_SUPER_MASK: the Super modifier
- * @GDK_HYPER_MASK: the Hyper modifier
- * @GDK_META_MASK: the Meta modifier
+ * @GDK_SUPER_MASK: the Super modifier.
+ * @GDK_HYPER_MASK: the Hyper modifier.
+ * @GDK_META_MASK: the Meta modifier. Maps to Command on macOS.
  *
  * Flags to indicate the state of modifier keys and mouse buttons
  * in events.
