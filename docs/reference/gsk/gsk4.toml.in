@@ -66,3 +66,7 @@ content_images = [
 ]
 content_base_url = "https://gitlab.gnome.org/GNOME/gtk/-/blob/main/docs/reference/gsk/"
 urlmap_file = "urlmap.js"
+
+[[object]]
+name = "INCLUDE_WARNING"
+hidden = true

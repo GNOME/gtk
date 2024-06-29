@@ -26,6 +26,12 @@
 #include "gtkprintjob.h"
 
 /**
+ * GtkPrintBackend:
+ *
+ * A print backend.
+ */
+
+/**
  * GtkPrinter:
  *
  * A `GtkPrinter` object represents a printer.

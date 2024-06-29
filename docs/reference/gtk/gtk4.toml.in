@@ -251,3 +251,12 @@ content_images = [
 ]
 content_base_url = "https://gitlab.gnome.org/GNOME/gtk/-/blob/main/docs/reference/gtk/"
 urlmap_file = "urlmap.js"
+
+[[object]]
+name = "StyleProvider"
+  [[object.signal]]
+  name = "gtk-private-changed"
+  hidden = true
+
+[check]
+skip_deprecated = true

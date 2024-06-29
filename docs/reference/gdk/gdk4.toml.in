@@ -111,3 +111,11 @@ content_images = [
 ]
 content_base_url = "https://gitlab.gnome.org/GNOME/gtk/-/blob/main/docs/reference/gdk/"
 urlmap_file = "urlmap.js"
+
+[[object]]
+name = "DECLARE_INTERNAL_TYPE"
+hidden = true
+
+[[object]]
+pattern = "KEY_*"
+check_ignore = true

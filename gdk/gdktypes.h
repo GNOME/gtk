@@ -99,7 +99,7 @@ typedef struct _GdkVulkanContext      GdkVulkanContext;
 typedef struct _GdkDmabufFormats      GdkDmabufFormats;
 typedef struct _GdkDmabufTexture      GdkDmabufTexture;
 
-/*
+/*<private>
  * GDK_DECLARE_INTERNAL_TYPE:
  * @ModuleObjName: The name of the new type, in camel case (like GtkWidget)
  * @module_obj_name: The name of the new type in lowercase, with words

@@ -64,6 +64,18 @@ if get_option('documentation')
     install_dir: docs_dir,
     install_tag: 'doc',
   )
+
+  test('doc-check-gtk',
+    gidocgen,
+    args: [
+      'check',
+      '--config', gtk4_toml,
+      '--add-include-path=@0@'.format(meson.current_build_dir() / '../../../gtk'),
+      gtk_gir[0],
+    ],
+    depends: gtk_gir[0],
+    suite: ['docs'],
+  )
 endif
 
 rst2man = find_program('rst2man', 'rst2man.py', required: get_option('man-pages'))

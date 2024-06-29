@@ -481,7 +481,7 @@ out:
   return res;
 }
 
-/*< private >
+/**
  * gtk_test_accessible_assertion_message_role:
  * @domain: a domain
  * @file: a file name
