@@ -415,7 +415,7 @@ get_shadow_width (GtkWidget *widget,
   GtkCssNode *css_node = gtk_widget_get_css_node (widget);
   const GtkCssStyle *style = gtk_css_node_get_style (css_node);
 
-  gtk_css_shadow_value_get_extents (style->background->box_shadow, shadow_width);
+  gtk_css_shadow_value_get_extents (style->used->box_shadow, shadow_width);
 
   shadow_width->left = MAX (shadow_width->left, resize_handle_size);
   shadow_width->top = MAX (shadow_width->top, resize_handle_size);

@@ -323,8 +323,8 @@ gtk_css_image_recolor_resolve (GtkCssImage          *image,
 
   img = g_object_new (GTK_TYPE_CSS_IMAGE_RECOLOR, NULL);
 
-  img->palette = gtk_css_palette_value_resolve (recolor->palette, context, current_color);
-  img->color = gtk_css_color_value_resolve (recolor->color, context, current_color);
+  img->palette = gtk_css_value_resolve (recolor->palette, context, current_color);
+  img->color = gtk_css_value_resolve (recolor->color, context, current_color);
   img->file = g_object_ref (recolor->file);
   if (recolor->texture)
     img->texture = g_object_ref (recolor->texture);

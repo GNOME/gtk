@@ -724,10 +724,10 @@ update_links_cb (GtkAboutDialog *about)
   GSList *l;
 
   style = gtk_css_node_get_style (about->link_node);
-  link_color = *gtk_css_color_value_get_rgba (style->core->color);
+  link_color = *gtk_css_color_value_get_rgba (style->used->color);
 
   style = gtk_css_node_get_style (about->visited_link_node);
-  visited_link_color = *gtk_css_color_value_get_rgba (style->core->color);
+  visited_link_color = *gtk_css_color_value_get_rgba (style->used->color);
 
   for (l = about->link_tags; l != NULL; l = l->next)
     {

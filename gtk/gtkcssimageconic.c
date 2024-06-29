@@ -586,7 +586,7 @@ gtk_css_image_conic_resolve (GtkCssImage          *image,
       else
         resolved->color_stops[i].offset = NULL;
 
-      resolved->color_stops[i].color = gtk_css_color_value_resolve (self->color_stops[i].color, context, current_color);
+      resolved->color_stops[i].color = gtk_css_value_resolve (self->color_stops[i].color, context, current_color);
     }
 
   return GTK_CSS_IMAGE (resolved);

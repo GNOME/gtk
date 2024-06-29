@@ -794,7 +794,7 @@ gtk_css_image_radial_resolve (GtkCssImage          *image,
       const GtkCssImageRadialColorStop *stop = &radial->color_stops[i];
       GtkCssImageRadialColorStop *scopy = &copy->color_stops[i];
 
-      scopy->color = gtk_css_color_value_resolve (stop->color, context, current_color);
+      scopy->color = gtk_css_value_resolve (stop->color, context, current_color);
 
       if (stop->offset)
         scopy->offset = gtk_css_value_ref (stop->offset);

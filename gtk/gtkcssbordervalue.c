@@ -141,6 +141,7 @@ static const GtkCssValueClass GTK_CSS_VALUE_BORDER = {
   "GtkCssBorderValue",
   gtk_css_value_border_free,
   gtk_css_value_border_compute,
+  NULL,
   gtk_css_value_border_equal,
   gtk_css_value_border_transition,
   NULL,

@@ -605,6 +605,7 @@ static const GtkCssValueClass GTK_CSS_VALUE_NUMBER = {
   "GtkCssNumberValue",
   gtk_css_value_number_free,
   gtk_css_value_number_compute,
+  NULL,
   gtk_css_value_number_equal,
   gtk_css_value_number_transition,
   NULL,

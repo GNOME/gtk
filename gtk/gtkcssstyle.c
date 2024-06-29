@@ -1017,7 +1017,7 @@ gtk_css_style_resolve_used_value (GtkCssStyle          *style,
         else
           current = _gtk_css_style_property_get_initial_value (_gtk_css_style_property_lookup_by_id (GTK_CSS_PROPERTY_COLOR));
 
-        used = gtk_css_color_value_resolve (value, context, current);
+        used = gtk_css_value_resolve (value, context, current);
       }
       break;
 
@@ -1030,23 +1030,14 @@ gtk_css_style_resolve_used_value (GtkCssStyle          *style,
     case GTK_CSS_PROPERTY_OUTLINE_COLOR:
     case GTK_CSS_PROPERTY_CARET_COLOR:
     case GTK_CSS_PROPERTY_SECONDARY_CARET_COLOR:
-      used = gtk_css_color_value_resolve (value, context, style->used->color);
-      break;
-
     case GTK_CSS_PROPERTY_BOX_SHADOW:
     case GTK_CSS_PROPERTY_TEXT_SHADOW:
     case GTK_CSS_PROPERTY_ICON_SHADOW:
-      used = gtk_css_shadow_value_resolve (value, context, style->used->color);
-      break;
-
     case GTK_CSS_PROPERTY_ICON_PALETTE:
-      used = gtk_css_palette_value_resolve (value, context, style->used->color);
-      break;
-
     case GTK_CSS_PROPERTY_BACKGROUND_IMAGE:
     case GTK_CSS_PROPERTY_ICON_SOURCE:
     case GTK_CSS_PROPERTY_BORDER_IMAGE_SOURCE:
-      used = gtk_css_image_value_resolve (value, context, style->used->color);
+      used = gtk_css_value_resolve (value, context, style->used->color);
       break;
 
     default:

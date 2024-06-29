@@ -240,7 +240,7 @@ gtk_css_image_icon_theme_resolve (GtkCssImage          *image,
   copy->scale = icon_theme->scale;
 
   for (guint i = 0; i < 4; i++)
-    copy->colors[i] = gtk_css_color_value_resolve (icon_theme->colors[i], context, current);
+    copy->colors[i] = gtk_css_value_resolve (icon_theme->colors[i], context, current);
 
   return GTK_CSS_IMAGE (copy);
 }

@@ -154,6 +154,7 @@ static const GtkCssValueClass GTK_CSS_VALUE_BG_SIZE = {
   "GtkCssBgSizeValue",
   gtk_css_value_bg_size_free,
   gtk_css_value_bg_size_compute,
+  NULL,
   gtk_css_value_bg_size_equal,
   gtk_css_value_bg_size_transition,
   NULL,

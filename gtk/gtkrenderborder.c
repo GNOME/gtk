@@ -54,7 +54,7 @@ static gboolean
 gtk_border_image_init (GtkBorderImage *image,
                        GtkCssStyle    *style)
 {
-  image->source = _gtk_css_image_value_get_image (style->border->border_image_source);
+  image->source = _gtk_css_image_value_get_image (style->used->border_image_source);
   if (image->source == NULL)
     return FALSE;
 
