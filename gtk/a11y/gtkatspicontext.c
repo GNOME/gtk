@@ -729,7 +729,7 @@ handle_accessible_get_property (GDBusConnection       *connection,
     res = get_parent_context_ref (accessible);
   else if (g_strcmp0 (property_name, "ChildCount") == 0)
     res = g_variant_new_int32 (gtk_at_spi_context_get_child_count (self));
-  else if (g_strcmp0 (property_name, "HelpText"))
+  else if (g_strcmp0 (property_name, "HelpText") == 0)
     {
       if (gtk_at_context_has_accessible_property (GTK_AT_CONTEXT (self), GTK_ACCESSIBLE_PROPERTY_HELP_TEXT))
         {
