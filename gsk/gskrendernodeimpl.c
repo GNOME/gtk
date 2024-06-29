@@ -3335,17 +3335,15 @@ gsk_container_node_new (GskRenderNode **children,
 
       self->children[0] = gsk_render_node_ref (children[0]);
       node->offscreen_for_opacity = children[0]->offscreen_for_opacity;
+      node->preferred_depth = children[0]->preferred_depth;
       gsk_rect_init_from_rect (&bounds, &(children[0]->bounds));
-      node->preferred_depth = gdk_memory_depth_merge (node->preferred_depth,
-                                                      gsk_render_node_get_preferred_depth (children[0]));
 
       for (guint i = 1; i < n_children; i++)
         {
           self->children[i] = gsk_render_node_ref (children[i]);
           self->disjoint = self->disjoint && !gsk_rect_intersects (&bounds, &(children[i]->bounds));
           graphene_rect_union (&bounds, &(children[i]->bounds), &bounds);
-          node->preferred_depth = gdk_memory_depth_merge (node->preferred_depth,
-                                                          gsk_render_node_get_preferred_depth (children[i]));
+          node->preferred_depth = gdk_memory_depth_merge (node->preferred_depth, children[i]->preferred_depth);
           node->offscreen_for_opacity = node->offscreen_for_opacity || children[i]->offscreen_for_opacity;
         }
 
@@ -4769,6 +4767,8 @@ gsk_fill_node_new (GskRenderNode *child,
 
   self = gsk_render_node_alloc (GSK_FILL_NODE);
   node = (GskRenderNode *) self;
+  node->offscreen_for_opacity = child->offscreen_for_opacity;
+  node->preferred_depth = gsk_render_node_get_preferred_depth (child);
 
   self->child = gsk_render_node_ref (child);
   self->path = gsk_path_ref (path);
@@ -4976,6 +4976,8 @@ gsk_stroke_node_new (GskRenderNode   *child,
 
   self = gsk_render_node_alloc (GSK_STROKE_NODE);
   node = (GskRenderNode *) self;
+  node->offscreen_for_opacity = child->offscreen_for_opacity;
+  node->preferred_depth = gsk_render_node_get_preferred_depth (child);
 
   self->child = gsk_render_node_ref (child);
   self->path = gsk_path_ref (path);

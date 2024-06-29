@@ -73,8 +73,7 @@ struct _GdkVulkanContextPrivate {
     VkSurfaceFormatKHR vk_format;
     GdkMemoryFormat gdk_format;
   } formats[4];
-  GdkMemoryDepth current_format;
-  GdkMemoryFormat offscreen_formats[4];
+  GdkMemoryDepth current_depth;
 
   VkSwapchainKHR swapchain;
   VkSemaphore draw_semaphore;
@@ -474,8 +473,8 @@ gdk_vulkan_context_check_swapchain (GdkVulkanContext  *context,
                                                 .minImageCount = CLAMP (4,
                                                                         capabilities.minImageCount,
                                                                         capabilities.maxImageCount ? capabilities.maxImageCount : G_MAXUINT32),
-                                                .imageFormat = priv->formats[priv->current_format].vk_format.format,
-                                                .imageColorSpace = priv->formats[priv->current_format].vk_format.colorSpace,
+                                                .imageFormat = priv->formats[priv->current_depth].vk_format.format,
+                                                .imageColorSpace = priv->formats[priv->current_depth].vk_format.colorSpace,
                                                 .imageExtent = capabilities.currentExtent,
                                                 .imageArrayLayers = 1,
                                                 .imageUsage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT,
@@ -644,19 +643,19 @@ gdk_vulkan_context_begin_frame (GdkDrawContext *draw_context,
   VkResult acquire_result;
   guint i;
 
-  if (depth != priv->current_format)
+  if (depth != priv->current_depth)
     {
-      if (priv->formats[depth].gdk_format != priv->formats[priv->current_format].gdk_format)
+      if (priv->formats[depth].gdk_format != priv->formats[priv->current_depth].gdk_format)
         {
-          GdkMemoryDepth old_format = priv->current_format;
+          GdkMemoryDepth old_depth = priv->current_depth;
           GError *error = NULL;
 
-          priv->current_format = depth;
+          priv->current_depth = depth;
           if (!gdk_vulkan_context_check_swapchain (context, &error))
             {
               g_warning ("%s", error->message);
               g_error_free (error);
-              priv->current_format = old_format;
+              priv->current_depth = old_depth;
               return;
             }
         }
@@ -828,11 +827,6 @@ gdk_vulkan_context_real_init (GInitable     *initable,
   if (!priv->vulkan_ref)
     return FALSE;
 
-  priv->offscreen_formats[GDK_MEMORY_U8] = GDK_MEMORY_B8G8R8A8_PREMULTIPLIED;
-  priv->offscreen_formats[GDK_MEMORY_U16] = GDK_MEMORY_R16G16B16A16_PREMULTIPLIED;
-  priv->offscreen_formats[GDK_MEMORY_FLOAT16] = GDK_MEMORY_R16G16B16A16_FLOAT_PREMULTIPLIED;
-  priv->offscreen_formats[GDK_MEMORY_FLOAT32] = GDK_MEMORY_R32G32B32A32_FLOAT_PREMULTIPLIED;
-
   if (surface == NULL)
     {
       for (i = 0; i < G_N_ELEMENTS (priv->formats); i++)
@@ -888,7 +882,6 @@ gdk_vulkan_context_real_init (GInitable     *initable,
                   {
                     priv->formats[GDK_MEMORY_U8].vk_format = formats[i];
                     priv->formats[GDK_MEMORY_U8].gdk_format = GDK_MEMORY_B8G8R8A8_PREMULTIPLIED;
-                    priv->offscreen_formats[GDK_MEMORY_U8] = GDK_MEMORY_B8G8R8A8_PREMULTIPLIED;
                   };
                 break;
 
@@ -963,15 +956,6 @@ out_surface:
                        NULL);
   priv->surface = VK_NULL_HANDLE;
   return FALSE;
-}
-
-GdkMemoryFormat
-gdk_vulkan_context_get_offscreen_format (GdkVulkanContext *context,
-                                         GdkMemoryDepth    depth)
-{
-  GdkVulkanContextPrivate *priv = gdk_vulkan_context_get_instance_private (context);
-
-  return priv->offscreen_formats[depth];
 }
 
 static void
@@ -1295,7 +1279,7 @@ gdk_vulkan_context_get_image_format (GdkVulkanContext *context)
 
   g_return_val_if_fail (GDK_IS_VULKAN_CONTEXT (context), VK_FORMAT_UNDEFINED);
 
-  return priv->formats[priv->current_format].vk_format.format;
+  return priv->formats[priv->current_depth].vk_format.format;
 }
 
 GdkMemoryFormat
@@ -1305,7 +1289,7 @@ gdk_vulkan_context_get_memory_format (GdkVulkanContext *context)
 
   g_return_val_if_fail (GDK_IS_VULKAN_CONTEXT (context), GDK_MEMORY_DEFAULT);
 
-  return priv->formats[priv->current_format].gdk_format;
+  return priv->formats[priv->current_depth].gdk_format;
 }
 /**
  * gdk_vulkan_context_get_n_images:
