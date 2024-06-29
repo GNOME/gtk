@@ -1528,9 +1528,10 @@ gtk_snapshot_collect_mask_source (GtkSnapshot      *snapshot,
                                   GskRenderNode   **nodes,
                                   guint             n_nodes)
 {
-  GskRenderNode *source_child, *mask_child, *mask_node;
+  GskRenderNode *source_child, *mask_child = NULL, *mask_node;
 
-  mask_child = gsk_render_node_ref (state->data.mask.mask_node);
+  if (state->data.mask.mask_node)
+    mask_child = gsk_render_node_ref (state->data.mask.mask_node);
   source_child = gtk_snapshot_collect_default (snapshot, state, nodes, n_nodes);
 
   if (source_child == NULL || mask_child == NULL)
