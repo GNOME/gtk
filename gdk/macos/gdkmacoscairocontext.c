@@ -197,9 +197,11 @@ clamp_region_to_surface (cairo_region_t *region,
 }
 
 static void
-_gdk_macos_cairo_context_begin_frame (GdkDrawContext *draw_context,
-                                      GdkMemoryDepth  depth,
-                                      cairo_region_t *region)
+_gdk_macos_cairo_context_begin_frame (GdkDrawContext  *draw_context,
+                                      GdkMemoryDepth   depth,
+                                      cairo_region_t  *region,
+                                      GdkColorState  **out_color_state,
+                                      GdkMemoryDepth  *out_depth)
 {
   GdkMacosCairoContext *self = (GdkMacosCairoContext *)draw_context;
   GdkMacosBuffer *buffer;
@@ -249,6 +251,9 @@ _gdk_macos_cairo_context_begin_frame (GdkDrawContext *draw_context,
           cairo_region_destroy (copy);
         }
     }
+
+  *out_color_state = GDK_COLOR_STATE_SRGB;
+  *out_depth = gdk_color_state_get_depth (GDK_COLOR_STATE_SRGB);
 }
 
 static void

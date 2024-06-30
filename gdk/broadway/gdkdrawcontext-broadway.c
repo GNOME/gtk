@@ -33,9 +33,11 @@ gdk_broadway_draw_context_dispose (GObject *object)
 }
 
 static void
-gdk_broadway_draw_context_begin_frame (GdkDrawContext *draw_context,
-                                       GdkMemoryDepth  depth,
-                                       cairo_region_t *region)
+gdk_broadway_draw_context_begin_frame (GdkDrawContext  *draw_context,
+                                       GdkMemoryDepth   depth,
+                                       cairo_region_t  *region,
+                                       GdkColorState  **out_color_state,
+                                       GdkMemoryDepth  *out_depth)
 {
   GdkBroadwayDrawContext *self = GDK_BROADWAY_DRAW_CONTEXT (draw_context);
   GdkSurface *surface = gdk_draw_context_get_surface (GDK_DRAW_CONTEXT (self));
@@ -52,6 +54,9 @@ gdk_broadway_draw_context_begin_frame (GdkDrawContext *draw_context,
 
   self->nodes = g_array_new (FALSE, FALSE, sizeof(guint32));
   self->node_textures = g_ptr_array_new_with_free_func (g_object_unref);
+
+  *out_color_state = GDK_COLOR_STATE_SRGB;
+  *out_depth = gdk_color_state_get_depth (GDK_COLOR_STATE_SRGB);
 }
 
 static void

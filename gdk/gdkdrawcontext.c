@@ -48,6 +48,8 @@ struct _GdkDrawContextPrivate {
   GdkSurface *surface;
 
   cairo_region_t *frame_region;
+  GdkColorState *color_state;
+  GdkMemoryDepth depth;
 };
 
 enum {
@@ -201,8 +203,12 @@ static guint pixels_counter;
 static void
 gdk_draw_context_init (GdkDrawContext *self)
 {
+  GdkDrawContextPrivate *priv = gdk_draw_context_get_instance_private (self);
+
   if (pixels_counter == 0)
     pixels_counter = gdk_profiler_define_int_counter ("frame pixels", "Pixels drawn per frame");
+
+  priv->depth = GDK_N_DEPTHS;
 }
 
 /**
@@ -378,7 +384,15 @@ gdk_draw_context_begin_frame_full (GdkDrawContext       *context,
   priv->frame_region = cairo_region_copy (region);
   priv->surface->paint_context = g_object_ref (context);
 
-  GDK_DRAW_CONTEXT_GET_CLASS (context)->begin_frame (context, depth, priv->frame_region);
+  GDK_DRAW_CONTEXT_GET_CLASS (context)->begin_frame (context,
+                                                     depth,
+                                                     priv->frame_region,
+                                                     &priv->color_state,
+                                                     &priv->depth);
+
+  /* the callback is meant to set them */
+  g_assert (priv->color_state != NULL);
+  g_assert (priv->depth < GDK_N_DEPTHS);
 
   cairo_region_intersect_rectangle (priv->frame_region,
                                     &(cairo_rectangle_int_t) {
@@ -449,8 +463,10 @@ gdk_draw_context_end_frame (GdkDrawContext *context)
 
   gdk_profiler_set_int_counter (pixels_counter, region_get_pixels (priv->frame_region));
 
+  g_clear_pointer (&priv->color_state, gdk_color_state_unref);
   g_clear_pointer (&priv->frame_region, cairo_region_destroy);
   g_clear_object (&priv->surface->paint_context);
+  priv->depth = GDK_N_DEPTHS;
 }
 
 /**
@@ -476,6 +492,38 @@ gdk_draw_context_get_frame_region (GdkDrawContext *context)
   g_return_val_if_fail (GDK_IS_DRAW_CONTEXT (context), NULL);
 
   return priv->frame_region;
+}
+
+/*<private>
+ * gdk_draw_context_get_color_state:
+ * @self: a `GdkDrawContext`
+ *
+ * Gets the target color state while rendering. If no rendering is going on, %NULL is returned.
+ *
+ * Returns: (transfer none) (nullable): the target color state
+ **/
+GdkColorState *
+gdk_draw_context_get_color_state (GdkDrawContext *self)
+{
+  GdkDrawContextPrivate *priv = gdk_draw_context_get_instance_private (self);
+
+  return priv->color_state;
+}
+
+/*<private>
+ * gdk_draw_context_get_depth:
+ * @self: a `GdkDrawContext`
+ *
+ * Gets the target depth while rendering. If no rendering is going on, the return value is undefined.
+ *
+ * Returns: the target depth
+ **/
+GdkMemoryDepth
+gdk_draw_context_get_depth (GdkDrawContext *self)
+{
+  GdkDrawContextPrivate *priv = gdk_draw_context_get_instance_private (self);
+
+  return priv->depth;
 }
 
 void
