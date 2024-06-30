@@ -1,5 +1,25 @@
-Overview of Changes in 4.15.3, xx-xx-xxxx
+Overview of Changes in 4.15.4, xx-xx-xxxx
 =========================================
+
+Overview of Changes in 4.15.3, 29-06-2024
+=========================================
+
+* Accessibility:
+ - Only emit notifications when cursor positions change in GtkText
+ - Fix handling of help text properties
+
+* CSS:
+ - Fix some crashes introduced in recent currentcolor changes
+
+* DND:
+ - Avoid a critical
+
+* Documentation:
+ - Fix many oversights and missing docs
+
+* maxOS:
+ - Add native keyboard shortcuts
+
 
 Overview of Changes in 4.15.2, 28-06-2024
 =========================================
