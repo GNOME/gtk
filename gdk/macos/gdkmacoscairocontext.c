@@ -249,6 +249,9 @@ _gdk_macos_cairo_context_begin_frame (GdkDrawContext *draw_context,
           cairo_region_destroy (copy);
         }
     }
+
+  *out_color_state = GDK_COLOR_STATE_SRGB;
+  *out_depth = gdk_color_state_get_depth (GDK_COLOR_STATE_SRGB);
 }
 
 static void

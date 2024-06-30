@@ -299,7 +299,7 @@ void                    gdk_surface_set_frame_clock             (GdkSurface     
                                                                  GdkFrameClock          *clock);
 void                    gdk_surface_set_egl_native_window       (GdkSurface             *self,
                                                                  gpointer                native_window);
-void                    gdk_surface_ensure_egl_surface          (GdkSurface             *self,
+GdkMemoryDepth          gdk_surface_ensure_egl_surface          (GdkSurface             *self,
                                                                  GdkMemoryDepth          depth);
 gpointer /*EGLSurface*/ gdk_surface_get_egl_surface             (GdkSurface             *self);
 

@@ -52,9 +52,11 @@ create_cairo_surface_for_surface (GdkSurface *surface,
 }
 
 static void
-gdk_win32_cairo_context_begin_frame (GdkDrawContext *draw_context,
-                                     GdkMemoryDepth  depth,
-                                     cairo_region_t *region)
+gdk_win32_cairo_context_begin_frame (GdkDrawContext  *draw_context,
+                                     GdkMemoryDepth   depth,
+                                     cairo_region_t  *region,
+                                     GdkColorState  **out_color_state,
+                                     GdkMemoryDepth  *out_depth)
 {
   GdkWin32CairoContext *self = GDK_WIN32_CAIRO_CONTEXT (draw_context);
   GdkSurface *surface;
@@ -115,6 +117,9 @@ G_GNUC_END_IGNORE_DEPRECATIONS
   cairo_clip (cr);
   cairo_paint (cr);
   cairo_destroy (cr);
+
+  *out_color_state = GDK_COLOR_STATE_SRGB;
+  *out_depth = gdk_color_state_get_depth (GDK_COLOR_STATE_SRGB);
 }
 
 static void
