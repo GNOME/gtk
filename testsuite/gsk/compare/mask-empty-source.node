@@ -1,0 +1,41 @@
+/* guarantee bounds */
+color {
+  color: transparent;
+  bounds: 0 0 90 90;
+}
+
+mask {
+  source: container {
+  }
+  mask: color {
+    bounds: 0 0 40 40;
+    color: rgb(255,0,204);
+  }
+}
+mask {
+  mode: inverted-alpha;
+  source: container {
+  }
+  mask: color {
+    bounds: 0 50 40 40;
+    color: rgb(255,0,204);
+  }
+}
+mask {
+  mode: luminance;
+  source: container {
+  }
+  mask: color {
+    bounds: 50 0 40 40;
+    color: rgb(255,0,204);
+  }
+}
+mask {
+  mode: inverted-luminance;
+  source: container {
+  }
+  mask: color {
+    bounds: 50 50 40 40;
+    color: rgb(255,0,204);
+  }
+}
