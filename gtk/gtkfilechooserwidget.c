@@ -4909,6 +4909,7 @@ my_g_format_date_for_display (GtkFileChooserWidget *impl,
     }
   else if (g_date_time_get_year (now) == g_date_time_get_year (time))
     {
+      /* xgettext:no-c-format */
       format = _("%-e %b");
     }
   else
