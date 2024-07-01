@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: gtk+ 2.6\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-06-28 18:39+0000\n"
-"PO-Revision-Date: 2024-07-01 22:22+0330\n"
+"PO-Revision-Date: 2024-07-01 22:36+0330\n"
 "Last-Translator: Danial Behzadi <dani.behzi@ubuntu.com>\n"
 "Language-Team: Persian <>\n"
 "Language: fa\n"
@@ -2566,12 +2566,13 @@ msgstr "دیروز"
 
 #: gtk/gtkfilechooserwidget.c:4912
 #, no-c-format
+#| msgid "%-e %b"
 msgid "%-e %b"
 msgstr "%-Oe %Ob"
 
 #: gtk/gtkfilechooserwidget.c:4916
 msgid "%-e %b %Y"
-msgstr "%-Oe %b %OY"
+msgstr "%O-e %b %OY"
 
 #: gtk/gtkfilechooserwidget.c:5015 gtk/gtkfilechooserwidget.c:5023
 msgid "Program"
