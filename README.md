@@ -1,21 +1,3 @@
-# Experimental AccessKit integration
-
-This branch is where I'm developing an experimental integration of the [AccessKit](https://github.com/AccessKit/accesskit) cross-platform accessibility libraries into GTK. So far, this integration supports Windows and Newton, the experimental Wayland-native accessibility stack.
-
-To build this branch, you first need to build the AccessKit C bindings. To do that, check out [the AccessKit main branch](https://github.com/AccessKit/accesskit) and follow the instructions in `bindings/c/README.md`. Note that running `cmake --install` on that project doesn't install the library system-wide, but only copies files into the `include` and `lib` directories under `bindings/c`.
-
-Then, when building GTK in this branch, include the following option in the `meson setup` command:
-
-```
---cmake-prefix-path $ACCESSKIT_PATH/bindings/c
-```
-
-where `$ACCESSKIT_PATH` is the path to the root of your AccessKit working copy.
-
-This setup isn't ideal; it relies on a manual build of AccessKit, and it statically links AccessKit into GTK. We will revisit these issues later.
-
-Original README follows:
-
 GTK — The GTK toolkit
 =====================
 
