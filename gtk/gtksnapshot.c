@@ -1537,6 +1537,8 @@ gtk_snapshot_collect_mask_source (GtkSnapshot      *snapshot,
 
   if (mask_child)
     mask_node = gsk_mask_node_new (source_child, mask_child, state->data.mask.mask_mode);
+  else if (state->data.mask.mask_mode == GSK_MASK_MODE_INVERTED_ALPHA)
+    mask_node = gsk_render_node_ref (source_child);
   else
     mask_node = NULL;
 
