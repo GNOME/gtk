@@ -6364,7 +6364,7 @@ gtk_label_accessible_text_get_extents (GtkAccessibleText *self,
 
   layout = label->layout;
   text = label->text;
-  get_layout_location (label, &lx, &ly);
+  gtk_label_get_layout_location (label, &lx, &ly);
 
   range[0] = g_utf8_pointer_to_offset (text, text + start);
   range[1] = g_utf8_pointer_to_offset (text, text + end);
