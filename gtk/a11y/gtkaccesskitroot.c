@@ -28,8 +28,8 @@
 
 #if defined(GDK_WINDOWING_WIN32)
 #include "win32/gdkwin32.h"
-#elif defined(GDK_WINDOWING_WAYLAND)
-#include "wayland/gdkwayland.h"
+#elif defined(GDK_WINDOWING_MACOS)
+#include "macos/gdkmacos.h"
 #endif
 
 #include <accesskit.h>
@@ -48,9 +48,10 @@ struct _GtkAccessKitRoot
 
 #if defined(GDK_WINDOWING_WIN32)
   accesskit_windows_subclassing_adapter *adapter;
+#elif defined(GDK_WINDOWING_MACOS)
+  accesskit_macos_subclassing_adapter *adapter;
 #elif defined(GDK_WINDOWING_WAYLAND) || defined(GDK_WINDOWING_X11)
   accesskit_unix_adapter *adapter;
-/* TODO: other platforms */
 #endif
 };
 
@@ -75,9 +76,10 @@ gtk_accesskit_root_finalize (GObject *gobject)
 
 #if defined(GDK_WINDOWING_WIN32)
   g_clear_pointer (&self->adapter, accesskit_windows_subclassing_adapter_free);
+#elif defined(GDK_WINDOWING_MACOS)
+  g_clear_pointer (&self->adapter, accesskit_macos_subclassing_adapter_free);
 #elif defined(GDK_WINDOWING_WAYLAND) || defined(GDK_WINDOWING_X11)
   g_clear_pointer (&self->adapter, accesskit_unix_adapter_free);
-/* TODO: other platforms */
 #endif
 
   G_OBJECT_CLASS (gtk_accesskit_root_parent_class)->finalize (gobject);
@@ -217,6 +219,7 @@ build_full_update (void *data)
   return update;
 }
 
+#if defined(GDK_WINDOWING_WIN32) || defined(GDK_WINDOWING_MACOS)
 static accesskit_tree_update *
 request_initial_tree_main_thread (void *data)
 {
@@ -226,6 +229,7 @@ request_initial_tree_main_thread (void *data)
   self->did_initial_update = TRUE;
   return update;
 }
+#endif
 
 static void
 update_if_active (GtkAccessKitRoot *self, accesskit_tree_update_factory factory)
@@ -236,9 +240,14 @@ update_if_active (GtkAccessKitRoot *self, accesskit_tree_update_factory factory)
                                                             factory, self);
   if (events)
     accesskit_windows_queued_events_raise (events);
+#elif defined(GDK_WINDOWING_MACOS)
+  accesskit_macos_queued_events *events =
+    accesskit_macos_subclassing_adapter_update_if_active (self->adapter,
+                                                          factory, self);
+  if (events)
+    accesskit_macos_queued_events_raise (events);
 #elif defined(GDK_WINDOWING_WAYLAND) || defined(GDK_WINDOWING_X11)
   accesskit_unix_adapter_update_if_active (self->adapter, factory, self);
-/* TODO: other platforms */
 #endif
 }
 
@@ -252,6 +261,7 @@ queue_tree_update (GtkAccessKitRoot *self)
   gdk_surface_queue_render (surface);
 }
 
+#if defined(GDK_WINDOWING_WAYLAND) || defined(GDK_WINDOWING_X11)
 static accesskit_tree_update *
 request_initial_tree_other_thread (void *data)
 {
@@ -262,6 +272,7 @@ request_initial_tree_other_thread (void *data)
 
   return NULL;
 }
+#endif
 
 typedef struct _DoActionData {
   accesskit_action_request *request;
@@ -301,6 +312,7 @@ do_action (accesskit_action_request *request, void *data)
   g_idle_add (do_action_main_thread, main_thread_data);
 }
 
+#if defined(GDK_WINDOWING_WAYLAND) || defined(GDK_WINDOWING_X11)
 static void
 add_context_to_unrealize_queue (gpointer key,
                                 gpointer value,
@@ -340,12 +352,18 @@ deactivate_accessibility (void *data)
   GtkAccessKitRoot *self = data;
   g_idle_add (deactivate_accessibility_main_thread, g_object_ref (self));
 }
+#endif
 
 static void
 gtk_accesskit_root_constructed (GObject *gobject)
 {
   GtkAccessKitRoot *self = GTK_ACCESSKIT_ROOT (gobject);
+#if defined(GDK_WINDOWING_WIN32) || defined(GDK_WINDOWING_MACOS)
   GdkSurface *surface = gtk_native_get_surface (GTK_NATIVE (self->root_widget));
+#endif
+#if defined(GDK_WINDOWING_MACOS)
+  gpointer window = gdk_macos_surface_get_native_window (GDK_MACOS_SURFACE (surface));
+#endif
 
   self->contexts = g_hash_table_new (NULL, NULL);
 
@@ -354,12 +372,16 @@ gtk_accesskit_root_constructed (GObject *gobject)
     accesskit_windows_subclassing_adapter_new (GDK_SURFACE_HWND (surface),
                                                request_initial_tree_main_thread,
                                                self, do_action, self);
+#elif defined(GDK_WINDOWING_MACOS)
+  self->adapter =
+    accesskit_macos_subclassing_adapter_for_window (window,
+                                                    request_initial_tree_main_thread,
+                                                    self, do_action, self);
 #elif defined(GDK_WINDOWING_WAYLAND) || defined(GDK_WINDOWING_X11)
   self->adapter =
     accesskit_unix_adapter_new (request_initial_tree_other_thread, self,
                                 do_action, self,
                                 deactivate_accessibility, self);
-/* TODO: other platforms */
 #endif
 
   G_OBJECT_CLASS (gtk_accesskit_root_parent_class)->constructed (gobject);
@@ -558,8 +580,13 @@ void
 gtk_accesskit_root_update_window_focus_state (GtkAccessKitRoot *self,
                                               gboolean          focused)
 {
-#if defined(GDK_WINDOWING_WAYLAND) || defined(GDK_WINDOWING_X11)
+#if defined(GDK_WINDOWING_MACOS)
+  accesskit_macos_queued_events *events =
+    accesskit_macos_subclassing_adapter_update_view_focus_state (self->adapter,
+                                                                 focused);
+  if (events)
+    accesskit_macos_queued_events_raise (events);
+#elif defined(GDK_WINDOWING_WAYLAND) || defined(GDK_WINDOWING_X11)
   accesskit_unix_adapter_update_window_focus_state (self->adapter, focused);
-/* TODO: macOS */
 #endif
 }
