@@ -6,14 +6,14 @@
 # Mahyar Moghimi <mahyar.moqimi@gmail.com>, 2010.
 # Ali Yousefi Sabzevar <aysabzevar@gmail.com>, 2010.
 # Arash Mousavi <mousavi.arash@gmail.com>, 2011, 2012, 2013, 2015, 2016, 2017.
-# Danial Behzadi <dani.behzi@ubuntu.com>, 2020-2023.
+# Danial Behzadi <dani.behzi@ubuntu.com>, 2020-2024.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.6\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-04-02 19:44+0000\n"
-"PO-Revision-Date: 2023-04-03 16:23+0330\n"
+"POT-Creation-Date: 2024-06-28 18:39+0000\n"
+"PO-Revision-Date: 2024-07-01 22:22+0330\n"
 "Last-Translator: Danial Behzadi <dani.behzi@ubuntu.com>\n"
 "Language-Team: Persian <>\n"
 "Language: fa\n"
@@ -23,7 +23,7 @@ msgstr ""
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Poedit-Bookmarks: 133,-1,-1,-1,-1,-1,-1,-1,-1,-1\n"
 "X-Poedit-SourceCharset: utf-8\n"
-"X-Generator: Poedit 3.2.2\n"
+"X-Generator: Poedit 3.4.4\n"
 
 #: gdk/broadway/gdkbroadway-server.c:144
 #, c-format
@@ -1211,7 +1211,7 @@ msgstr ""
 #: gtk/gtkfilechoosernative.c:545 gtk/gtkfilechoosernative.c:637
 #: gtk/gtkfilechooserwidget.c:1502 gtk/gtkfilechooserwidget.c:6578
 #: gtk/gtkmessagedialog.c:952 gtk/gtkmessagedialog.c:965
-#: gtk/gtkmountoperation.c:594 gtk/gtkpagesetupunixdialog.c:197
+#: gtk/gtkmountoperation.c:599 gtk/gtkpagesetupunixdialog.c:197
 #: gtk/gtkprintbackend.c:779 gtk/gtkprinteroptionwidget.c:545
 #: gtk/gtkprintunixdialog.c:674 gtk/gtkprintunixdialog.c:747 gtk/gtkwindow.c:12829
 #: gtk/inspector/css-editor.c:201 gtk/ui/gtkappchooserdialog.ui:61
@@ -2320,7 +2320,7 @@ msgstr "_گشودن"
 msgid "_Save"
 msgstr "_ذخیره"
 
-#: gtk/gtkfilechoosernativequartz.c:331 gtk/ui/gtkfilechooserwidget.ui:435
+#: gtk/gtkfilechoosernativequartz.c:332 gtk/ui/gtkfilechooserwidget.ui:435
 msgid "Select which types of files are shown"
 msgstr "انتخاب این که کدام نوع پرونده‌ها نمایش داده شوند"
 
@@ -2565,12 +2565,13 @@ msgid "Yesterday"
 msgstr "دیروز"
 
 #: gtk/gtkfilechooserwidget.c:4912
+#, no-c-format
 msgid "%-e %b"
-msgstr "%O-e %b"
+msgstr "%-Oe %Ob"
 
 #: gtk/gtkfilechooserwidget.c:4916
 msgid "%-e %b %Y"
-msgstr "%O-e %b %OY"
+msgstr "%-Oe %b %OY"
 
 #: gtk/gtkfilechooserwidget.c:5015 gtk/gtkfilechooserwidget.c:5023
 msgid "Program"
@@ -2958,73 +2959,73 @@ msgstr "_خیر"
 msgid "_Yes"
 msgstr "_بله"
 
-#: gtk/gtkmountoperation.c:595
+#: gtk/gtkmountoperation.c:600
 msgid "Co_nnect"
 msgstr "اتّ_صال"
 
-#: gtk/gtkmountoperation.c:668
+#: gtk/gtkmountoperation.c:673
 msgid "Connect As"
 msgstr "اتّصال به عنوان"
 
-#: gtk/gtkmountoperation.c:677
+#: gtk/gtkmountoperation.c:682
 msgid "_Anonymous"
 msgstr "_ناشناس"
 
-#: gtk/gtkmountoperation.c:686
+#: gtk/gtkmountoperation.c:691
 msgid "Registered U_ser"
 msgstr "_کاربرِ ثبت شده"
 
-#: gtk/gtkmountoperation.c:697
+#: gtk/gtkmountoperation.c:702
 msgid "_Username"
 msgstr "نام _کاربری"
 
-#: gtk/gtkmountoperation.c:702
+#: gtk/gtkmountoperation.c:707
 msgid "_Domain"
 msgstr "_دامنه"
 
-#: gtk/gtkmountoperation.c:711
+#: gtk/gtkmountoperation.c:716
 msgid "Volume type"
 msgstr "گونهٔ حجم"
 
-#: gtk/gtkmountoperation.c:721
+#: gtk/gtkmountoperation.c:726
 msgid "_Hidden"
 msgstr "_پنهان"
 
-#: gtk/gtkmountoperation.c:724
+#: gtk/gtkmountoperation.c:729
 msgid "_Windows system"
 msgstr "_سامانهٔ ویندوزی"
 
-#: gtk/gtkmountoperation.c:727
+#: gtk/gtkmountoperation.c:732
 msgid "_PIM"
 msgstr "_PIM"
 
-#: gtk/gtkmountoperation.c:733
+#: gtk/gtkmountoperation.c:738
 msgid "_Password"
 msgstr "_گذر‌واژه"
 
-#: gtk/gtkmountoperation.c:755
+#: gtk/gtkmountoperation.c:760
 msgid "Forget password _immediately"
 msgstr "گذرواژه _بی‌درنگ فراموش شود"
 
-#: gtk/gtkmountoperation.c:765
+#: gtk/gtkmountoperation.c:770
 msgid "Remember password until you _logout"
 msgstr "گذرواژه تا هنگام _خروج  به‌خاطر سپرده شود"
 
-#: gtk/gtkmountoperation.c:775
+#: gtk/gtkmountoperation.c:780
 msgid "Remember _forever"
 msgstr "برای _همیشه به‌خاطر سپرده شود"
 
-#: gtk/gtkmountoperation.c:1170
+#: gtk/gtkmountoperation.c:1175
 #, c-format
 msgid "Unknown Application (PID %d)"
 msgstr "برنامهٔ ناشناخته (شناسهٔ فرایند %Id)"
 
-#: gtk/gtkmountoperation.c:1355
+#: gtk/gtkmountoperation.c:1360
 #, c-format
 msgid "Unable to end process"
 msgstr "ناتوان در پایان دادن به فرایند"
 
-#: gtk/gtkmountoperation.c:1389
+#: gtk/gtkmountoperation.c:1394
 msgid "_End Process"
 msgstr "_پایان دادن به فرایند"
 
@@ -3100,7 +3101,7 @@ msgstr "مدیریت اندازه‌های سفارشی…"
 msgid "Page Setup"
 msgstr "برپایی صفحه"
 
-#: gtk/gtkpathbar.c:1571
+#: gtk/gtkpathbar.c:1572
 msgid "File System Root"
 msgstr "ریشهٔ سامانهٔ پرونده"
 
@@ -3603,42 +3604,42 @@ msgstr "در حال گرفتن اطلاعاتِ چاپگر…"
 #. * multiple pages on a sheet when printing
 #.
 #: gtk/gtkprintunixdialog.c:3120
-#: modules/printbackends/cups/gtkprintbackendcups.c:5709
+#: modules/printbackends/cups/gtkprintbackendcups.c:5736
 msgid "Left to right, top to bottom"
 msgstr "از چپ به راست، از بالا به پایین"
 
 #: gtk/gtkprintunixdialog.c:3120
-#: modules/printbackends/cups/gtkprintbackendcups.c:5709
+#: modules/printbackends/cups/gtkprintbackendcups.c:5736
 msgid "Left to right, bottom to top"
 msgstr "از چپ به راست، از پایین به ابتدا"
 
 #: gtk/gtkprintunixdialog.c:3121
-#: modules/printbackends/cups/gtkprintbackendcups.c:5710
+#: modules/printbackends/cups/gtkprintbackendcups.c:5737
 msgid "Right to left, top to bottom"
 msgstr "از راست به چپ، از بالا به پایین"
 
 #: gtk/gtkprintunixdialog.c:3121
-#: modules/printbackends/cups/gtkprintbackendcups.c:5710
+#: modules/printbackends/cups/gtkprintbackendcups.c:5737
 msgid "Right to left, bottom to top"
 msgstr "از راست به چپ، از پایین به بالا"
 
 #: gtk/gtkprintunixdialog.c:3122
-#: modules/printbackends/cups/gtkprintbackendcups.c:5711
+#: modules/printbackends/cups/gtkprintbackendcups.c:5738
 msgid "Top to bottom, left to right"
 msgstr "از بالا به پایین، از چپ به راست"
 
 #: gtk/gtkprintunixdialog.c:3122
-#: modules/printbackends/cups/gtkprintbackendcups.c:5711
+#: modules/printbackends/cups/gtkprintbackendcups.c:5738
 msgid "Top to bottom, right to left"
 msgstr "از بالا به پایین، از راست به چپ"
 
 #: gtk/gtkprintunixdialog.c:3123
-#: modules/printbackends/cups/gtkprintbackendcups.c:5712
+#: modules/printbackends/cups/gtkprintbackendcups.c:5739
 msgid "Bottom to top, left to right"
 msgstr "از انتها به ابتدا، از چپ به راست"
 
 #: gtk/gtkprintunixdialog.c:3123
-#: modules/printbackends/cups/gtkprintbackendcups.c:5712
+#: modules/printbackends/cups/gtkprintbackendcups.c:5739
 msgid "Bottom to top, right to left"
 msgstr "از پایین به بالا، از راست به چپ"
 
@@ -7093,7 +7094,6 @@ msgstr "سرویس‌ها"
 
 #. used for the application menu on MacOS.  %s is replaced with the application name.
 #: gtk/ui/gtkapplication-quartz.ui:29
-#, c-format
 msgid "Hide %s"
 msgstr "مخفی‌کردن %s"
 
@@ -7109,7 +7109,6 @@ msgstr "نمایش همه"
 
 #. used for the application menu on MacOS.  %s is replaced with the application name.
 #: gtk/ui/gtkapplication-quartz.ui:49
-#, c-format
 msgid "Quit %s"
 msgstr "خروج از %s"
 
@@ -7924,283 +7923,283 @@ msgstr "در حال رد کردن کار‌ها"
 msgid "; "
 msgstr "؛ "
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:4655
-#: modules/printbackends/cups/gtkprintbackendcups.c:4722
+#: modules/printbackends/cups/gtkprintbackendcups.c:4682
+#: modules/printbackends/cups/gtkprintbackendcups.c:4749
 msgctxt "printing option"
 msgid "Two Sided"
 msgstr "دو رو"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:4656
+#: modules/printbackends/cups/gtkprintbackendcups.c:4683
 msgctxt "printing option"
 msgid "Paper Type"
 msgstr "نوع کاغذ"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:4657
+#: modules/printbackends/cups/gtkprintbackendcups.c:4684
 msgctxt "printing option"
 msgid "Paper Source"
 msgstr "منبع کاغذ"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:4658
-#: modules/printbackends/cups/gtkprintbackendcups.c:4723
+#: modules/printbackends/cups/gtkprintbackendcups.c:4685
+#: modules/printbackends/cups/gtkprintbackendcups.c:4750
 msgctxt "printing option"
 msgid "Output Tray"
 msgstr "خروجی کاغذ"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:4659
+#: modules/printbackends/cups/gtkprintbackendcups.c:4686
 msgctxt "printing option"
 msgid "Resolution"
 msgstr "تفکیک‌پذیری"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:4660
+#: modules/printbackends/cups/gtkprintbackendcups.c:4687
 msgctxt "printing option"
 msgid "GhostScript pre-filtering"
 msgstr "پیش‌پالایش GhostScript"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:4669
+#: modules/printbackends/cups/gtkprintbackendcups.c:4696
 msgctxt "printing option value"
 msgid "One Sided"
 msgstr "یک رو"
 
 #. Translators: this is an option of "Two Sided"
-#: modules/printbackends/cups/gtkprintbackendcups.c:4671
+#: modules/printbackends/cups/gtkprintbackendcups.c:4698
 msgctxt "printing option value"
 msgid "Long Edge (Standard)"
 msgstr "لبه بلند (استاندارد)"
 
 #. Translators: this is an option of "Two Sided"
-#: modules/printbackends/cups/gtkprintbackendcups.c:4673
+#: modules/printbackends/cups/gtkprintbackendcups.c:4700
 msgctxt "printing option value"
 msgid "Short Edge (Flip)"
 msgstr "لبه کوتاه (برگشته)"
 
 #. Translators: this is an option of "Paper Source"
-#: modules/printbackends/cups/gtkprintbackendcups.c:4675
-#: modules/printbackends/cups/gtkprintbackendcups.c:4677
-#: modules/printbackends/cups/gtkprintbackendcups.c:4685
+#: modules/printbackends/cups/gtkprintbackendcups.c:4702
+#: modules/printbackends/cups/gtkprintbackendcups.c:4704
+#: modules/printbackends/cups/gtkprintbackendcups.c:4712
 msgctxt "printing option value"
 msgid "Auto Select"
 msgstr "گزینش خودکار"
 
 #. Translators: this is an option of "Paper Source"
 #. Translators: this is an option of "Resolution"
-#: modules/printbackends/cups/gtkprintbackendcups.c:4679
-#: modules/printbackends/cups/gtkprintbackendcups.c:4681
-#: modules/printbackends/cups/gtkprintbackendcups.c:4683
-#: modules/printbackends/cups/gtkprintbackendcups.c:4687
+#: modules/printbackends/cups/gtkprintbackendcups.c:4706
+#: modules/printbackends/cups/gtkprintbackendcups.c:4708
+#: modules/printbackends/cups/gtkprintbackendcups.c:4710
+#: modules/printbackends/cups/gtkprintbackendcups.c:4714
 msgctxt "printing option value"
 msgid "Printer Default"
 msgstr "پیش‌گزیده چاپگر"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:4689
+#: modules/printbackends/cups/gtkprintbackendcups.c:4716
 msgctxt "printing option value"
 msgid "Embed GhostScript fonts only"
 msgstr "تنها قلم‌های GhostScript نهفته شوند"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:4691
+#: modules/printbackends/cups/gtkprintbackendcups.c:4718
 msgctxt "printing option value"
 msgid "Convert to PS level 1"
 msgstr "تبدیل به سطح ۱ از PS"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:4693
+#: modules/printbackends/cups/gtkprintbackendcups.c:4720
 msgctxt "printing option value"
 msgid "Convert to PS level 2"
 msgstr "تبدیل به سطح ۲ از PS"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:4695
+#: modules/printbackends/cups/gtkprintbackendcups.c:4722
 msgctxt "printing option value"
 msgid "No pre-filtering"
 msgstr "بدون پیش‌پالایش"
 
 #. Translators: "Miscellaneous" is the label for a button, that opens
 #. up an extra panel of settings in a print dialog.
-#: modules/printbackends/cups/gtkprintbackendcups.c:4704
+#: modules/printbackends/cups/gtkprintbackendcups.c:4731
 msgctxt "printing option group"
 msgid "Miscellaneous"
 msgstr "گوناگون"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:4731
+#: modules/printbackends/cups/gtkprintbackendcups.c:4758
 msgctxt "sides"
 msgid "One Sided"
 msgstr "یک رو"
 
 #. Translators: this is an option of "Two Sided"
-#: modules/printbackends/cups/gtkprintbackendcups.c:4733
+#: modules/printbackends/cups/gtkprintbackendcups.c:4760
 msgctxt "sides"
 msgid "Long Edge (Standard)"
 msgstr "لبه بلند (استاندارد)"
 
 #. Translators: this is an option of "Two Sided"
-#: modules/printbackends/cups/gtkprintbackendcups.c:4735
+#: modules/printbackends/cups/gtkprintbackendcups.c:4762
 msgctxt "sides"
 msgid "Short Edge (Flip)"
 msgstr "لبه کوتاه (برگشته)"
 
 #. Translators: Top output bin
-#: modules/printbackends/cups/gtkprintbackendcups.c:4738
+#: modules/printbackends/cups/gtkprintbackendcups.c:4765
 msgctxt "output-bin"
 msgid "Top Bin"
 msgstr "محفظه بالایی"
 
 #. Translators: Middle output bin
-#: modules/printbackends/cups/gtkprintbackendcups.c:4740
+#: modules/printbackends/cups/gtkprintbackendcups.c:4767
 msgctxt "output-bin"
 msgid "Middle Bin"
 msgstr "محفظه وسط"
 
 #. Translators: Bottom output bin
-#: modules/printbackends/cups/gtkprintbackendcups.c:4742
+#: modules/printbackends/cups/gtkprintbackendcups.c:4769
 msgctxt "output-bin"
 msgid "Bottom Bin"
 msgstr "محفظه پایین"
 
 #. Translators: Side output bin
-#: modules/printbackends/cups/gtkprintbackendcups.c:4744
+#: modules/printbackends/cups/gtkprintbackendcups.c:4771
 msgctxt "output-bin"
 msgid "Side Bin"
 msgstr "محفظه کنار"
 
 #. Translators: Left output bin
-#: modules/printbackends/cups/gtkprintbackendcups.c:4746
+#: modules/printbackends/cups/gtkprintbackendcups.c:4773
 msgctxt "output-bin"
 msgid "Left Bin"
 msgstr "محفظه چپ"
 
 #. Translators: Right output bin
-#: modules/printbackends/cups/gtkprintbackendcups.c:4748
+#: modules/printbackends/cups/gtkprintbackendcups.c:4775
 msgctxt "output-bin"
 msgid "Right Bin"
 msgstr "محفظه راست"
 
 #. Translators: Center output bin
-#: modules/printbackends/cups/gtkprintbackendcups.c:4750
+#: modules/printbackends/cups/gtkprintbackendcups.c:4777
 msgctxt "output-bin"
 msgid "Center Bin"
 msgstr "محفظه مرکزی"
 
 #. Translators: Rear output bin
-#: modules/printbackends/cups/gtkprintbackendcups.c:4752
+#: modules/printbackends/cups/gtkprintbackendcups.c:4779
 msgctxt "output-bin"
 msgid "Rear Bin"
 msgstr "محفظه عقب"
 
 #. Translators: Output bin where one sided output is oriented in the face-up position
-#: modules/printbackends/cups/gtkprintbackendcups.c:4754
+#: modules/printbackends/cups/gtkprintbackendcups.c:4781
 msgctxt "output-bin"
 msgid "Face Up Bin"
 msgstr "محفظه رو به بالا"
 
 #. Translators: Output bin where one sided output is oriented in the face-down position
-#: modules/printbackends/cups/gtkprintbackendcups.c:4756
+#: modules/printbackends/cups/gtkprintbackendcups.c:4783
 msgctxt "output-bin"
 msgid "Face Down Bin"
 msgstr "محفطه رو به پایین"
 
 #. Translators: Large capacity output bin
-#: modules/printbackends/cups/gtkprintbackendcups.c:4758
+#: modules/printbackends/cups/gtkprintbackendcups.c:4785
 msgctxt "output-bin"
 msgid "Large Capacity Bin"
 msgstr "محفظه با گنجایش بالا"
 
 #. Translators: Output stacker number %d
-#: modules/printbackends/cups/gtkprintbackendcups.c:4780
+#: modules/printbackends/cups/gtkprintbackendcups.c:4807
 #, c-format
 msgctxt "output-bin"
 msgid "Stacker %d"
 msgstr "پشته‌ساز %Id"
 
 #. Translators: Output mailbox number %d
-#: modules/printbackends/cups/gtkprintbackendcups.c:4784
+#: modules/printbackends/cups/gtkprintbackendcups.c:4811
 #, c-format
 msgctxt "output-bin"
 msgid "Mailbox %d"
 msgstr "صندوق پستی %Id"
 
 #. Translators: Private mailbox
-#: modules/printbackends/cups/gtkprintbackendcups.c:4788
+#: modules/printbackends/cups/gtkprintbackendcups.c:4815
 msgctxt "output-bin"
 msgid "My Mailbox"
 msgstr "صندوق پستی من"
 
 #. Translators: Output tray number %d
-#: modules/printbackends/cups/gtkprintbackendcups.c:4792
+#: modules/printbackends/cups/gtkprintbackendcups.c:4819
 #, c-format
 msgctxt "output-bin"
 msgid "Tray %d"
 msgstr "سینی %Id"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:5263
+#: modules/printbackends/cups/gtkprintbackendcups.c:5290
 msgid "Printer Default"
 msgstr "پیش‌گزیده چاپگر"
 
 #. Translators: These strings name the possible values of the
 #. * job priority option in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:5704
+#: modules/printbackends/cups/gtkprintbackendcups.c:5731
 msgid "Urgent"
 msgstr "فوری"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:5704
+#: modules/printbackends/cups/gtkprintbackendcups.c:5731
 msgid "High"
 msgstr "بالا"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:5704
+#: modules/printbackends/cups/gtkprintbackendcups.c:5731
 msgid "Medium"
 msgstr "متوسط"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:5704
+#: modules/printbackends/cups/gtkprintbackendcups.c:5731
 msgid "Low"
 msgstr "پایین"
 
 #. Translators, this string is used to label the job priority option
 #. * in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:5734
+#: modules/printbackends/cups/gtkprintbackendcups.c:5761
 msgid "Job Priority"
 msgstr "اولویت کار"
 
 #. Translators, this string is used to label the billing info entry
 #. * in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:5745
+#: modules/printbackends/cups/gtkprintbackendcups.c:5772
 msgid "Billing Info"
 msgstr "اطلاعات صورتحساب"
 
 # farmaan
-#: modules/printbackends/cups/gtkprintbackendcups.c:5769
+#: modules/printbackends/cups/gtkprintbackendcups.c:5796
 msgctxt "cover page"
 msgid "None"
 msgstr "هیچ‌کدام"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:5770
+#: modules/printbackends/cups/gtkprintbackendcups.c:5797
 msgctxt "cover page"
 msgid "Classified"
 msgstr "طبقه‌بندی شده"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:5771
+#: modules/printbackends/cups/gtkprintbackendcups.c:5798
 msgctxt "cover page"
 msgid "Confidential"
 msgstr "محرمانه"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:5772
+#: modules/printbackends/cups/gtkprintbackendcups.c:5799
 msgctxt "cover page"
 msgid "Secret"
 msgstr "سری"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:5773
+#: modules/printbackends/cups/gtkprintbackendcups.c:5800
 msgctxt "cover page"
 msgid "Standard"
 msgstr "استاندارد"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:5774
+#: modules/printbackends/cups/gtkprintbackendcups.c:5801
 msgctxt "cover page"
 msgid "Top Secret"
 msgstr "فوق سری"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:5775
+#: modules/printbackends/cups/gtkprintbackendcups.c:5802
 msgctxt "cover page"
 msgid "Unclassified"
 msgstr "طبقه‌بندی نشده"
@@ -8208,7 +8207,7 @@ msgstr "طبقه‌بندی نشده"
 #. Translators, this string is used to label the pages-per-sheet option
 #. * in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:5787
+#: modules/printbackends/cups/gtkprintbackendcups.c:5814
 msgctxt "printer option"
 msgid "Pages per Sheet"
 msgstr "تعداد صفحه‌ها در برگه"
@@ -8216,7 +8215,7 @@ msgstr "تعداد صفحه‌ها در برگه"
 #. Translators, this string is used to label the option in the print
 #. * dialog that controls in what order multiple pages are arranged
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:5804
+#: modules/printbackends/cups/gtkprintbackendcups.c:5831
 msgctxt "printer option"
 msgid "Page Ordering"
 msgstr "ترتیب صفحه‌ها"
@@ -8224,7 +8223,7 @@ msgstr "ترتیب صفحه‌ها"
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the front cover page.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:5846
+#: modules/printbackends/cups/gtkprintbackendcups.c:5873
 msgctxt "printer option"
 msgid "Before"
 msgstr "پیش از"
@@ -8232,7 +8231,7 @@ msgstr "پیش از"
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the back cover page.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:5861
+#: modules/printbackends/cups/gtkprintbackendcups.c:5888
 msgctxt "printer option"
 msgid "After"
 msgstr "پس از"
@@ -8241,7 +8240,7 @@ msgstr "پس از"
 #. * a print job is printed. Possible values are 'now', a specified time,
 #. * or 'on hold'
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:5881
+#: modules/printbackends/cups/gtkprintbackendcups.c:5908
 msgctxt "printer option"
 msgid "Print at"
 msgstr "زمان چاپ"
@@ -8249,7 +8248,7 @@ msgstr "زمان چاپ"
 #. Translators: this is the name of the option that allows the user
 #. * to specify a time when a print job will be printed.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:5892
+#: modules/printbackends/cups/gtkprintbackendcups.c:5919
 msgctxt "printer option"
 msgid "Print at time"
 msgstr "چاپ در زمان مشخص"
@@ -8259,18 +8258,18 @@ msgstr "چاپ در زمان مشخص"
 #. * the width and height in points. E.g: "Custom
 #. * 230.4x142.9"
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:5937
+#: modules/printbackends/cups/gtkprintbackendcups.c:5964
 #, c-format
 msgid "Custom %s×%s"
 msgstr "سفارشی %s×%s"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:6047
+#: modules/printbackends/cups/gtkprintbackendcups.c:6074
 msgctxt "printer option"
 msgid "Printer Profile"
 msgstr "مجموعه تنظیمات چاپگر"
 
 #. TRANSLATORS: this is when color profile information is unavailable
-#: modules/printbackends/cups/gtkprintbackendcups.c:6054
+#: modules/printbackends/cups/gtkprintbackendcups.c:6081
 msgctxt "printer option value"
 msgid "Unavailable"
 msgstr "خارج از دسترس"
