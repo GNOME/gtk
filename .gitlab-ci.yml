@@ -117,10 +117,11 @@ release-build:
     EXTRA_MESON_FLAGS: "--buildtype=release"
   script:
     - .gitlab-ci/show-info-linux.sh
-    - export PATH="$HOME/.local/bin:$PATH"
+    - mkdir _install
+    - export PATH="$HOME/.local/bin:${CI_PROJECT_DIR}/_install/bin:$PATH"
+    - .gitlab-ci/install-meson-project.sh --prefix ${CI_PROJECT_DIR}/_install https://gitlab.gnome.org/jadahl/catch.git main
     - meson subprojects download
     - meson subprojects update --reset
-    - mkdir _install
     - meson setup
             --prefix=${CI_PROJECT_DIR}/_install
             ${COMMON_MESON_FLAGS}
