@@ -1,0 +1,8 @@
+[wrap-git]
+directory = catch
+url = https://gitlab.gnome.org/jadahl/catch.git
+revision = main
+depth = 1
+
+[provide]
+program_names = catch

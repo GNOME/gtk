@@ -3,10 +3,8 @@ installed_test_bindir = join_paths(gtk_libexecdir, 'installed-tests', 'gtk-4.0')
 installed_test_datadir = join_paths(gtk_datadir, 'installed-tests', 'gtk-4.0')
 
 test_wrappers = []
-catch = find_program('catch', required: false)
-if catch.found()
-  test_wrappers += [ catch ]
-endif
+catch = find_program('catch')
+test_wrappers += [ catch ]
 
 common_env = [
   'GIO_USE_VOLUME_MONITOR=unix',
