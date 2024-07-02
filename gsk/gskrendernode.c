@@ -42,6 +42,8 @@
 #include "gskrendererprivate.h"
 #include "gskrendernodeparserprivate.h"
 
+#include "gdk/gdkcolorstateprivate.h"
+
 #include <graphene-gobject.h>
 
 #include <math.h>
@@ -362,6 +364,93 @@ gsk_render_node_get_bounds (GskRenderNode   *node,
   graphene_rect_init_from_rect (bounds, &node->bounds);
 }
 
+void
+gsk_render_node_draw_ccs (GskRenderNode *node,
+                          cairo_t       *cr,
+                          GdkColorState *ccs)
+{
+  /* Check that the calling function did pass a correct color state */
+  g_assert (ccs == gdk_color_state_get_rendering_color_state (ccs));
+
+  cairo_save (cr);
+
+  GSK_RENDER_NODE_GET_CLASS (node)->draw (node, cr, ccs);
+
+  if (GSK_DEBUG_CHECK (GEOMETRY))
+    {
+      cairo_set_operator (cr, CAIRO_OPERATOR_OVER);
+      cairo_rectangle (cr, node->bounds.origin.x - 1, node->bounds.origin.y - 1,
+                       node->bounds.size.width + 2, node->bounds.size.height + 2);
+      cairo_set_line_width (cr, 2);
+      cairo_set_source_rgba (cr, 0, 0, 0, 0.5);
+      cairo_stroke (cr);
+    }
+
+  cairo_restore (cr);
+
+  if (cairo_status (cr))
+    {
+      g_warning ("drawing failure for render node %s: %s",
+                 g_type_name_from_instance ((GTypeInstance *) node),
+                 cairo_status_to_string (cairo_status (cr)));
+    }
+}
+
+static void
+my_cairo_surface_convert_color_state (cairo_surface_t *surface,
+                                      GdkColorState   *source,
+                                      GdkColorState   *target)
+{
+  cairo_surface_t *image_surface;
+
+  image_surface = cairo_surface_map_to_image (surface, NULL);
+
+  gdk_memory_convert_color_state (cairo_image_surface_get_data (image_surface),
+                                  cairo_image_surface_get_stride (image_surface),
+                                  GDK_MEMORY_DEFAULT,
+                                  source,
+                                  target,
+                                  cairo_image_surface_get_width (image_surface),
+                                  cairo_image_surface_get_height (image_surface));
+
+  cairo_surface_mark_dirty (image_surface);
+  cairo_surface_unmap_image (surface, image_surface);
+  /* https://gitlab.freedesktop.org/cairo/cairo/-/merge_requests/487 */
+  cairo_surface_mark_dirty (surface);
+}
+
+void
+gsk_render_node_draw_with_color_state (GskRenderNode *node,
+                                       cairo_t       *cr,
+                                       GdkColorState *color_state)
+{
+  GdkColorState *ccs;
+
+  ccs = gdk_color_state_get_rendering_color_state (color_state);
+
+  if (gdk_color_state_equal (color_state, ccs))
+    {
+      gsk_render_node_draw_ccs (node, cr, ccs);
+    }
+  else
+    {
+      cairo_save (cr);
+      cairo_rectangle (cr,
+                       node->bounds.origin.x, node->bounds.origin.y,
+                       node->bounds.size.width, node->bounds.size.height);
+      cairo_clip (cr);
+      cairo_push_group (cr);
+
+      gsk_render_node_draw_ccs (node, cr, ccs);
+      my_cairo_surface_convert_color_state (cairo_get_group_target (cr),
+                                            ccs,
+                                            color_state);
+      cairo_pop_group_to_source (cr);
+      cairo_paint (cr);
+      cairo_restore (cr);
+    }
+}
+
 /**
  * gsk_render_node_draw:
  * @node: a `GskRenderNode`
@@ -384,28 +473,7 @@ gsk_render_node_draw (GskRenderNode *node,
   g_return_if_fail (cr != NULL);
   g_return_if_fail (cairo_status (cr) == CAIRO_STATUS_SUCCESS);
 
-  cairo_save (cr);
-
-  GSK_RENDER_NODE_GET_CLASS (node)->draw (node, cr);
-
-  if (GSK_DEBUG_CHECK (GEOMETRY))
-    {
-      cairo_set_operator (cr, CAIRO_OPERATOR_OVER);
-      cairo_rectangle (cr, node->bounds.origin.x - 1, node->bounds.origin.y - 1,
-                       node->bounds.size.width + 2, node->bounds.size.height + 2);
-      cairo_set_line_width (cr, 2);
-      cairo_set_source_rgba (cr, 0, 0, 0, 0.5);
-      cairo_stroke (cr);
-    }
-
-  cairo_restore (cr);
-
-  if (cairo_status (cr))
-    {
-      g_warning ("drawing failure for render node %s: %s",
-                 g_type_name_from_instance ((GTypeInstance *) node),
-                 cairo_status_to_string (cairo_status (cr)));
-    }
+  gsk_render_node_draw_with_color_state (node, cr, GDK_COLOR_STATE_SRGB);
 }
 
 /*

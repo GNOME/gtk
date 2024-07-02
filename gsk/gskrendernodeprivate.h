@@ -50,7 +50,8 @@ struct _GskRenderNodeClass
 
   void            (* finalize)    (GskRenderNode  *node);
   void            (* draw)        (GskRenderNode  *node,
-                                   cairo_t        *cr);
+                                   cairo_t        *cr,
+                                   GdkColorState  *ccs);
   gboolean        (* can_diff)    (const GskRenderNode  *node1,
                                    const GskRenderNode  *node2);
   void            (* diff)        (GskRenderNode  *node1,
@@ -79,6 +80,12 @@ void            gsk_render_node_diff_impossible         (GskRenderNode          
 void            gsk_container_node_diff_with            (GskRenderNode               *container,
                                                          GskRenderNode               *other,
                                                          GskDiffData                 *data);
+void            gsk_render_node_draw_ccs                (GskRenderNode               *node,
+                                                         cairo_t                     *cr,
+                                                         GdkColorState               *ccs);
+void            gsk_render_node_draw_with_color_state   (GskRenderNode               *node,
+                                                         cairo_t                     *cr,
+                                                         GdkColorState               *color_state);
 void            gsk_render_node_draw_fallback           (GskRenderNode               *node,
                                                          cairo_t                     *cr);
 
