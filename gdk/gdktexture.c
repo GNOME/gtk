@@ -885,22 +885,35 @@ gdk_texture_set_diff (GdkTexture     *self,
 }
 
 cairo_surface_t *
-gdk_texture_download_surface (GdkTexture *texture)
+gdk_texture_download_surface (GdkTexture    *texture,
+                              GdkColorState *color_state)
 {
   cairo_surface_t *surface;
   cairo_status_t surface_status;
+  guchar *data;
+  gsize stride;
 
   surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32,
                                         texture->width, texture->height);
 
   surface_status = cairo_surface_status (surface);
   if (surface_status != CAIRO_STATUS_SUCCESS)
-    g_warning ("%s: surface error: %s", __FUNCTION__,
-               cairo_status_to_string (surface_status));
+    {
+      g_warning ("%s: surface error: %s", __FUNCTION__,
+                 cairo_status_to_string (surface_status));
+      return surface;
+    }
 
-  gdk_texture_download (texture,
-                        cairo_image_surface_get_data (surface),
-                        cairo_image_surface_get_stride (surface));
+  data = cairo_image_surface_get_data (surface);
+  stride = cairo_image_surface_get_stride (surface);
+  gdk_texture_download (texture, data, stride);
+  gdk_memory_convert_color_state (data,
+                                  stride,
+                                  GDK_MEMORY_DEFAULT,
+                                  GDK_COLOR_STATE_SRGB,
+                                  color_state,
+                                  texture->width,
+                                  texture->height);
   cairo_surface_mark_dirty (surface);
 
   return surface;
