@@ -32,64 +32,60 @@ typedef struct _GdkMemoryFormatDescription GdkMemoryFormatDescription;
 
 #define TYPED_FUNCS(name, T, R, G, B, A, bpp, scale) \
 static void \
-name ## _to_float (float        *dest, \
-                   const guchar *src_data, \
-                   gsize         n) \
+name ## _to_float (float        (*dest)[4], \
+                   const guchar  *src_data, \
+                   gsize          n) \
 { \
   for (gsize i = 0; i < n; i++) \
     { \
       T *src = (T *) (src_data + i * bpp); \
-      dest[0] = (float) src[R] / scale; \
-      dest[1] = (float) src[G] / scale; \
-      dest[2] = (float) src[B] / scale; \
-      if (A >= 0) dest[3] = (float) src[A] / scale; else dest[3] = 1.0; \
-      dest += 4; \
+      dest[i][0] = (float) src[R] / scale; \
+      dest[i][1] = (float) src[G] / scale; \
+      dest[i][2] = (float) src[B] / scale; \
+      if (A >= 0) dest[i][3] = (float) src[A] / scale; else dest[i][3] = 1.0; \
     } \
 } \
 \
 static void \
-name ## _from_float (guchar      *dest_data, \
-                     const float *src, \
-                     gsize        n) \
+name ## _from_float (guchar       *dest_data, \
+                     const float (*src)[4], \
+                     gsize         n) \
 { \
   for (gsize i = 0; i < n; i++) \
     { \
       T *dest = (T *) (dest_data + i * bpp); \
-      dest[R] = CLAMP (src[0] * scale + 0.5, 0, scale); \
-      dest[G] = CLAMP (src[1] * scale + 0.5, 0, scale); \
-      dest[B] = CLAMP (src[2] * scale + 0.5, 0, scale); \
-      if (A >= 0) dest[A] = CLAMP (src[3] * scale + 0.5, 0, scale); \
-      src += 4; \
+      dest[R] = CLAMP (src[i][0] * scale + 0.5, 0, scale); \
+      dest[G] = CLAMP (src[i][1] * scale + 0.5, 0, scale); \
+      dest[B] = CLAMP (src[i][2] * scale + 0.5, 0, scale); \
+      if (A >= 0) dest[A] = CLAMP (src[i][3] * scale + 0.5, 0, scale); \
     } \
 }
 
 #define TYPED_GRAY_FUNCS(name, T, G, A, bpp, scale) \
 static void \
-name ## _to_float (float        *dest, \
-                   const guchar *src_data, \
-                   gsize         n) \
+name ## _to_float (float        (*dest)[4], \
+                   const guchar  *src_data, \
+                   gsize          n) \
 { \
   for (gsize i = 0; i < n; i++) \
     { \
       T *src = (T *) (src_data + i * bpp); \
-      if (A >= 0) dest[3] = (float) src[A] / scale; else dest[3] = 1.0; \
-      if (G >= 0) dest[0] = (float) src[G] / scale; else dest[0] = dest[3]; \
-      dest[1] = dest[2] = dest[0]; \
-      dest += 4; \
+      if (A >= 0) dest[i][3] = (float) src[A] / scale; else dest[i][3] = 1.0; \
+      if (G >= 0) dest[i][0] = (float) src[G] / scale; else dest[i][0] = dest[i][3]; \
+      dest[i][1] = dest[i][2] = dest[i][0]; \
     } \
 } \
 \
 static void \
-name ## _from_float (guchar      *dest_data, \
-                     const float *src, \
-                     gsize        n) \
+name ## _from_float (guchar       *dest_data, \
+                     const float (*src)[4], \
+                     gsize         n) \
 { \
   for (gsize i = 0; i < n; i++) \
     { \
       T *dest = (T *) (dest_data + i * bpp); \
-      if (G >= 0) dest[G] = CLAMP ((src[0] + src[1] + src[2]) * scale / 3.f + 0.5, 0, scale); \
-      if (A >= 0) dest[A] = CLAMP (src[3] * scale + 0.5, 0, scale); \
-      src += 4; \
+      if (G >= 0) dest[G] = CLAMP ((src[i][0] + src[i][1] + src[i][2]) * scale / 3.f + 0.5, 0, scale); \
+      if (A >= 0) dest[A] = CLAMP (src[i][3] * scale + 0.5, 0, scale); \
     } \
 }
 
@@ -122,158 +118,146 @@ TYPED_GRAY_FUNCS (g16, guint16, 0, -1, 2, 65535)
 TYPED_GRAY_FUNCS (a16, guint16, -1, 0, 2, 65535)
 
 static void
-r16g16b16_float_to_float (float        *dest,
-                          const guchar *src_data,
-                          gsize         n)
+r16g16b16_float_to_float (float        (*dest)[4],
+                          const guchar  *src_data,
+                          gsize          n)
 {
   guint16 *src = (guint16 *) src_data;
   for (gsize i = 0; i < n; i++)
     {
-      half_to_float (src, dest, 3);
-      dest[3] = 1.0;
-      dest += 4;
+      half_to_float (src, dest[i], 3);
+      dest[i][3] = 1.0;
       src += 3;
     }
 }
 
 static void
-r16g16b16_float_from_float (guchar      *dest_data,
-                            const float *src,
-                            gsize        n)
+r16g16b16_float_from_float (guchar       *dest_data,
+                            const float (*src)[4],
+                            gsize         n)
 {
   guint16 *dest = (guint16 *) dest_data;
   for (gsize i = 0; i < n; i++)
     {
-      float_to_half (src, dest, 3);
+      float_to_half (src[i], dest, 3);
       dest += 3;
-      src += 4;
     }
 }
 
 static void
-r16g16b16a16_float_to_float (float        *dest,
-                             const guchar *src,
-                             gsize         n)
+r16g16b16a16_float_to_float (float        (*dest)[4],
+                             const guchar  *src,
+                             gsize          n)
 {
-  half_to_float ((const guint16 *) src, dest, 4 * n);
+  half_to_float ((const guint16 *) src, (float *) dest, 4 * n);
 }
 
 static void
-r16g16b16a16_float_from_float (guchar      *dest,
-                               const float *src,
-                               gsize        n)
+r16g16b16a16_float_from_float (guchar       *dest,
+                               const float (*src)[4],
+                               gsize         n)
 {
-  float_to_half (src, (guint16 *) dest, 4 * n);
+  float_to_half ((const float *) src, (guint16 *) dest, 4 * n);
 }
 
 static void
-a16_float_to_float (float        *dest,
-                    const guchar *src_data,
-                    gsize         n)
+a16_float_to_float (float        (*dest)[4],
+                    const guchar  *src_data,
+                    gsize          n)
 {
   const guint16 *src = (const guint16 *) src_data;
   for (gsize i = 0; i < n; i++)
     {
-      half_to_float (src, dest, 1);
-      dest[1] = dest[0];
-      dest[2] = dest[0];
-      dest[3] = dest[0];
+      half_to_float (src, &dest[i][0], 1);
+      dest[i][1] = dest[i][0];
+      dest[i][2] = dest[i][0];
+      dest[i][3] = dest[i][0];
       src++;
-      dest += 4;
     }
 }
 
 static void
-a16_float_from_float (guchar      *dest_data,
-                      const float *src,
-                      gsize        n)
+a16_float_from_float (guchar       *dest_data,
+                      const float (*src)[4],
+                      gsize         n)
 {
   guint16 *dest = (guint16 *) dest_data;
   for (gsize i = 0; i < n; i++)
     {
-      float_to_half (&src[3], dest, 1);
+      float_to_half (&src[i][3], dest, 1);
       dest ++;
-      src += 4;
     }
 }
 
 static void
-r32g32b32_float_to_float (float        *dest,
-                          const guchar *src_data,
-                          gsize         n)
+r32g32b32_float_to_float (float        (*dest)[4],
+                          const guchar  *src_data,
+                          gsize          n)
 {
-  float *src = (float *) src_data;
+  const float (*src)[3] = (const float (*)[3]) src_data;
   for (gsize i = 0; i < n; i++)
     {
-      dest[0] = src[0];
-      dest[1] = src[1];
-      dest[2] = src[2];
-      dest[3] = 1.0;
-      dest += 4;
-      src += 3;
+      dest[i][0] = src[i][0];
+      dest[i][1] = src[i][1];
+      dest[i][2] = src[i][2];
+      dest[i][3] = 1.0;
     }
 }
 
 static void
-r32g32b32_float_from_float (guchar      *dest_data,
-                            const float *src,
-                            gsize        n)
+r32g32b32_float_from_float (guchar       *dest_data,
+                            const float (*src)[4],
+                            gsize         n)
 {
-  float *dest = (float *) dest_data;
+  float (*dest)[3] = (float (*)[3]) dest_data;
   for (gsize i = 0; i < n; i++)
     {
-      dest[0] = src[0];
-      dest[1] = src[1];
-      dest[2] = src[2];
-      dest += 3;
-      src += 4;
+      dest[i][0] = src[i][0];
+      dest[i][1] = src[i][1];
+      dest[i][2] = src[i][2];
     }
 }
 
 static void
-r32g32b32a32_float_to_float (float        *dest,
-                             const guchar *src,
-                             gsize         n)
+r32g32b32a32_float_to_float (float        (*dest)[4],
+                             const guchar  *src,
+                             gsize          n)
 {
   memcpy (dest, src, sizeof (float) * n * 4);
 }
 
 static void
-r32g32b32a32_float_from_float (guchar      *dest,
-                               const float *src,
-                               gsize        n)
+r32g32b32a32_float_from_float (guchar       *dest,
+                               const float (*src)[4],
+                               gsize         n)
 {
   memcpy (dest, src, sizeof (float) * n * 4);
 }
 
 static void
-a32_float_to_float (float        *dest,
-                    const guchar *src_data,
-                    gsize         n)
+a32_float_to_float (float        (*dest)[4],
+                    const guchar  *src_data,
+                    gsize          n)
 {
   const float *src = (const float *) src_data;
   for (gsize i = 0; i < n; i++)
     {
-      dest[0] = src[0];
-      dest[1] = src[0];
-      dest[2] = src[0];
-      dest[3] = src[0];
-      src++;
-      dest += 4;
+      dest[i][0] = src[i];
+      dest[i][1] = src[i];
+      dest[i][2] = src[i];
+      dest[i][3] = src[i];
     }
 }
 
 static void
-a32_float_from_float (guchar      *dest_data,
-                      const float *src,
-                      gsize        n)
+a32_float_from_float (guchar       *dest_data,
+                      const float (*src)[4],
+                      gsize         n)
 {
   float *dest = (float *) dest_data;
   for (gsize i = 0; i < n; i++)
     {
-      dest[0] = src[3];
-      dest ++;
-      src += 4;
+      dest[i] = src[i][3];
     }
 }
 
@@ -353,8 +337,8 @@ struct _GdkMemoryFormatDescription
   guint32 dmabuf_fourcc;
 #endif
   /* no premultiplication going on here */
-  void (* to_float) (float *, const guchar*, gsize);
-  void (* from_float) (guchar *, const float *, gsize);
+  void (* to_float) (float (*)[4], const guchar*, gsize);
+  void (* from_float) (guchar *, const float (*)[4], gsize);
 };
 
 #if  G_BYTE_ORDER == G_LITTLE_ENDIAN
@@ -1479,6 +1463,7 @@ gdk_memory_depth_merge (GdkMemoryDepth depth1,
         else
           return GDK_MEMORY_FLOAT32;
 
+      case GDK_N_DEPTHS:
       default:
         g_assert_not_reached ();
         return GDK_MEMORY_U8;
@@ -1507,6 +1492,7 @@ gdk_memory_depth_get_format (GdkMemoryDepth depth)
         return GDK_MEMORY_R16G16B16A16_FLOAT_PREMULTIPLIED;
       case GDK_MEMORY_FLOAT32:
         return GDK_MEMORY_R32G32B32A32_FLOAT_PREMULTIPLIED;
+      case GDK_N_DEPTHS:
       default:
         g_return_val_if_reached (GDK_MEMORY_R8G8B8A8_PREMULTIPLIED);
     }
@@ -1534,6 +1520,7 @@ gdk_memory_depth_get_alpha_format (GdkMemoryDepth depth)
         return GDK_MEMORY_A16_FLOAT;
       case GDK_MEMORY_FLOAT32:
         return GDK_MEMORY_A32_FLOAT;
+      case GDK_N_DEPTHS:
       default:
         g_return_val_if_reached (GDK_MEMORY_A8);
     }
@@ -1702,31 +1689,29 @@ gdk_memory_format_get_name (GdkMemoryFormat format)
 }
 
 static void
-premultiply (float *rgba,
+premultiply (float (*rgba)[4],
              gsize  n)
 {
   for (gsize i = 0; i < n; i++)
     {
-      rgba[0] *= rgba[3];
-      rgba[1] *= rgba[3];
-      rgba[2] *= rgba[3];
-      rgba += 4;
+      rgba[i][0] *= rgba[i][3];
+      rgba[i][1] *= rgba[i][3];
+      rgba[i][2] *= rgba[i][3];
     }
 }
 
 static void
-unpremultiply (float *rgba,
-               gsize  n)
+unpremultiply (float (*rgba)[4],
+               gsize   n)
 {
   for (gsize i = 0; i < n; i++)
     {
-      if (rgba[3] > 1/255.0)
+      if (rgba[i][3] > 1/255.0)
         {
-          rgba[0] /= rgba[3];
-          rgba[1] /= rgba[3];
-          rgba[2] /= rgba[3];
+          rgba[i][0] /= rgba[i][3];
+          rgba[i][1] /= rgba[i][3];
+          rgba[i][2] /= rgba[i][3];
         }
-      rgba += 4;
     }
 }
 
@@ -1742,7 +1727,7 @@ gdk_memory_convert (guchar              *dest_data,
 {
   const GdkMemoryFormatDescription *dest_desc = &memory_formats[dest_format];
   const GdkMemoryFormatDescription *src_desc = &memory_formats[src_format];
-  float *tmp;
+  float (*tmp)[4];
   gsize y;
   void (*func) (guchar *, const guchar *, gsize) = NULL;
 
@@ -1817,7 +1802,7 @@ gdk_memory_convert (guchar              *dest_data,
       return;
     }
 
-  tmp = g_new (float, width * 4);
+  tmp = g_malloc (sizeof (*tmp) * width);
 
   for (y = 0; y < height; y++)
     {

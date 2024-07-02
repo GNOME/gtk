@@ -3413,6 +3413,8 @@ gsk_gl_render_job_visit_mask_node (GskGLRenderJob      *job,
   if (!gsk_gl_render_job_visit_node_with_offscreen (job, mask, &mask_offscreen))
     {
       gsk_gl_render_job_pop_modelview (job);
+      if (gsk_mask_node_get_mask_mode (node) == GSK_MASK_MODE_INVERTED_ALPHA)
+        gsk_gl_render_job_visit_node (job, source);
       return;
     }
 

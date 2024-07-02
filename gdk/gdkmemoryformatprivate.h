@@ -40,7 +40,9 @@ typedef enum {
   GDK_MEMORY_U8,
   GDK_MEMORY_U16,
   GDK_MEMORY_FLOAT16,
-  GDK_MEMORY_FLOAT32
+  GDK_MEMORY_FLOAT32,
+
+  GDK_N_DEPTHS
 } GdkMemoryDepth;
 
 gsize                   gdk_memory_format_alignment         (GdkMemoryFormat             format) G_GNUC_CONST;

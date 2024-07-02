@@ -99,6 +99,8 @@ compare_render_tests = [
   'linear-gradient-with-64-colorstops',
   'mask',
   'mask-clipped-inverted-alpha',
+  'mask-empty-mask',
+  'mask-empty-source',
   'mask-modes',
   'mask-modes-in-opacity',
   'mask-modes-with-alpha',

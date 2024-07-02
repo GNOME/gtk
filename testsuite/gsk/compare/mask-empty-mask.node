@@ -1,0 +1,35 @@
+mask {
+  source: color {
+    bounds: 0 0 40 40;
+    color: rgb(255,0,204);
+  }
+  mask: container {
+  }
+}
+mask {
+  mode: inverted-alpha;
+  source: color {
+    bounds: 0 50 40 40;
+    color: rgb(255,0,204);
+  }
+  mask: container {
+  }
+}
+mask {
+  mode: luminance;
+  source: color {
+    bounds: 50 0 40 40;
+    color: rgb(255,0,204);
+  }
+  mask: container {
+  }
+}
+mask {
+  mode: inverted-luminance;
+  source: color {
+    bounds: 50 50 40 40;
+    color: rgb(255,0,204);
+  }
+  mask: container {
+  }
+}

@@ -72,7 +72,7 @@ struct _GdkVulkanContextPrivate {
   struct {
     VkSurfaceFormatKHR vk_format;
     GdkMemoryFormat gdk_format;
-  } formats[4];
+  } formats[GDK_N_DEPTHS];
   GdkMemoryDepth current_depth;
 
   VkSwapchainKHR swapchain;
