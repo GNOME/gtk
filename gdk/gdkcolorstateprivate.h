@@ -4,6 +4,7 @@
 
 #include "gdkdebugprivate.h"
 #include "gdkmemoryformatprivate.h"
+#include "gdkrgba.h"
 
 typedef enum
 {
@@ -132,3 +133,21 @@ gdk_color_state_get_convert_to (GdkColorState *self,
   return self->klass->get_convert_to (self, target);
 }
 
+static inline void
+gdk_color_state_from_rgba (GdkColorState *self,
+                           const GdkRGBA *rgba,
+                           float          out_color[4])
+{
+  GdkFloatColorConvert convert_to;
+
+  out_color[0] = rgba->red;
+  out_color[1] = rgba->green;
+  out_color[2] = rgba->blue;
+  out_color[3] = rgba->alpha;
+
+  if (gdk_color_state_equal (GDK_COLOR_STATE_SRGB, self))
+    return;
+
+  convert_to = gdk_color_state_get_convert_to (GDK_COLOR_STATE_SRGB, self);
+  convert_to (GDK_COLOR_STATE_SRGB, (float(*)[4]) out_color, 1);
+}
