@@ -6998,7 +6998,7 @@ gsk_subsurface_node_diff (GskRenderNode *node1,
       /* Shouldn't happen, can_diff() avoids this, but to be sure */
       gsk_render_node_diff_impossible (node1, node2, data);
     }
-  else if (self1->subsurface->parent != data->surface)
+  else if (self1->subsurface && self1->subsurface->parent != data->surface)
     {
       /* The inspector case */
       gsk_render_node_diff (self1->child, self2->child, data);
