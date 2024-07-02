@@ -1,0 +1,249 @@
+color {
+  bounds: 0 0 1920 1040;
+  color: rgb(36,36,36);
+}
+container {
+  container {
+    color {
+      bounds: 0 0 1920 1040;
+      color: rgb(0,0,0);
+    }
+    transform {
+      transform: matrix3d(-1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 1920, 0, 0, 1);
+      child: subsurface {
+        child: color {
+          bounds: 35 0 1849 1040;
+          color: blue;
+        }
+      }
+    }
+  }
+  transform {
+    transform: translate(1844, 12);
+    child: container {
+      color {
+        bounds: -12 -12 88 1040;
+        color: rgba(0,0,0,0.45);
+      }
+      transform {
+        transform: translate(15, 0);
+        child: container {
+          transform {
+            transform: translate(5, 5);
+            child: transform {
+              transform: translate(2, 2);
+              child: container {
+                rounded-clip {
+                  clip: -2 -2 24 24 / 12;
+                  child: color {
+                    bounds: -2 -2 24 24;
+                    color: rgba(255,255,255,0.1);
+                  }
+                }
+                mask {
+                  source: color {
+                    bounds: 2 2 16 16;
+                    color: rgb(255,255,255);
+                  }
+                  mask: texture {
+                    bounds: 2 2 16 16;
+                    texture: url("data:image/png;base64,\
+iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAeUlEQVQ4je2RMQqAMBAEB7+gQgoL\
+8f9/sLBXFMXCQnyFYqPNCYso3gMcCFwumwlH4OeJA6iAVHoxUNrZJ70FO5MkQGO90SPIgEkkrdUz\
+kHvHUMkBLEDxFIxeBDuwyn6z5SIAg8w8Sh08gvp2IYik8QiuoL4W5Cd+bpyTYiVbpApYxwAAAABJ\
+RU5ErkJggg==\
+");
+                  }
+                }
+              }
+            }
+          }
+          transform {
+            transform: translate(0, 40);
+            child: transform {
+              transform: translate(9, 0);
+              child: mask {
+                source: color {
+                  bounds: 0 9 16 16;
+                  color: rgb(255,255,255);
+                }
+                mask: texture {
+                  bounds: 0 9 16 16;
+                  texture: url("data:image/png;base64,\
+iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAIUlEQVQ4jWNgGGjACKX/k6ufiYqO\
+GapgNBCpAEYDkYEBANnNAwrBavXPAAAAAElFTkSuQmCC\
+");
+                }
+              }
+            }
+          }
+          transform {
+            transform: translate(0, 80);
+            child: container {
+              transform {
+                transform: translate(5, 5);
+                child: container {
+                  rounded-clip {
+                    clip: -5 -5 34 34 / 6 6 0 0;
+                    child: color {
+                      bounds: -5 -5 34 34;
+                      color: rgba(255,255,255,0.1);
+                    }
+                  }
+                  transform {
+                    transform: translate(0, 4);
+                    child: mask {
+                      source: color {
+                        bounds: 4 0 16 16;
+                        color: rgb(255,255,255);
+                      }
+                      mask: texture {
+                        bounds: 4 0 16 16;
+                        texture: url("data:image/png;base64,\
+iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAA10lEQVQ4jZWSOw7CQAxEHxRcItAB\
+dyCch4JIHIPfUaKIinCjQEUkoEpFaCbIWBtpsTSFvZ7ZsWUIxxpogFZoVIuKFfA25A5vYBMijIAj\
+cHPNmenJnOgV2IvLwf3UZ9eP1QI7pNYCC9M8BgrgJZyAmXlPjZOvmiXXgR3UQGL6vjwvUCg/i5AA\
+pWp5jMBLuf1totrDCwwDy+rEBoG3YHgHJ+Wl9jEGLqoVMSPMgXvPEqcxAmj+HHgKhSP/8Lo7SGNn\
+BpbiVOgkvd1YbNE9742TGFQij/5wHY4PHBZ9Wh7qrJ4AAAAASUVORK5CYII=\
+");
+                      }
+                    }
+                  }
+                }
+              }
+              transform {
+                transform: translate(5, 38);
+                child: container {
+                  rounded-clip {
+                    clip: -5 -5 34 34 / 0 0 6 6;
+                    child: color {
+                      bounds: -5 -5 34 34;
+                      color: rgba(255,255,255,0.3);
+                    }
+                  }
+                  transform {
+                    transform: translate(0, 4);
+                    child: mask {
+                      source: color {
+                        bounds: 4 0 16 16;
+                        color: rgb(255,255,255);
+                      }
+                      mask: texture {
+                        bounds: 4 0 16 16;
+                        texture: url("data:image/png;base64,\
+iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAl0lEQVQ4jd3SQQrCMBAF0FcXPYuu\
+BN1oPZ9WrymtqAsLXkA3sYRSYyu4cWAgM/P/z2cS/jJyHHDC403WKAPWHatIYJ8gdnMnHBosg0Ad\
+euuEyyJy0qo1WET1p2hxsaXLWIEsAc4GCJh0mscBN/dbwRnTb3dwxSwMXq9QJMibgKnghnk0LEf8\
+g22feh5E6gSxCuR8zK5+E08KF0+f3BMc2wAAAABJRU5ErkJggg==\
+");
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+      transform {
+        transform: translate(0, 408);
+        child: container {
+          transform {
+            transform: translate(0, 68);
+            child: container {
+              texture {
+                bounds: -1.6 -1.6 67.2 67.2;
+                texture: url("data:image/png;base64,\
+iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAADWElEQVR4nO2bL09jQRTFz4xaMGUD\
+AgEkJAjWgCNg6leRbPgMSCQJDoPE7HcAFGIVCoPa1IFgEU1INpAgFhbVonrW3JbJ5b0+St/ctjv9\
+yXZm7rnvzbz5c+84RIbkAoB1AKsAlgEsApgFMAXgkxR7AfAM4AHALYAbAJcAfjrnfsfU52I0SrIK\
+YBPAVwBf+mzuF4AzAD+ccxclSSwfkhWSuySvGY9rsVEZtL8dxPEDko2IjmsaYrPvB9HXECC5A2Af\
+wOeCohcAagCuANQB3AF4BNCU/ycATAOYA7AEYAXAGoBqQbt/Aew7577340fPkFwheV7wlo5JbpGc\
+7MPOpLRxXGDrnORKuV7mi9om2coRck9yj+RMBLsz0vZ9ju0Wye2y7WoRhznGmyIuyqyiNDix1czR\
+chjL8FGXrj4fxWh3PfNdhsZR2cZOcwzF7XLv07ado+20LANZb75OcqMUAyVAckM0ldsTcsZ8bRBd\
+vggZErUMvR/7JuR0rVqML3xZyEyR9RB6G6oyz+uprj6Mb14jPUEPh1ZP64ScRc7QjPki5JugOX9v\
+5Z2+u9AQkDOEd4oqVUg+qUrHZqpLJmOd8NR1AyU7rJDmKIz7POR7oFeMB3mFKxlb2j1z1SUjy+aQ\
+RmYvkIOGkHuLtX1sZO+gN1C7WQX1Sc7Iv/02Gb3gWheo8i1Du+DpFVkgaaoA4KXMpqpz4pz7Yy81\
+DuLLifr51eeM7r9lrjIycrL0dhiQXMjoHh8+xhpW5HhNs+AlaBFy4ZxrDEhnNMQnHVdY9xKxCakZ\
+6rJG+7bqJVwVcmUoyBrt27KXWF1I3VCQNdq3RS+BypA7Q0HWaN9mvURpQx4NBVmjfZtyJFsqROad\
+czQWZoLsbVrhT75L+STwkpwQMjEgLRZo3168ZGaETBsKskb79uwlLSVkzlCQNdq3By85OSFLhoKs\
+0b7deklICrGJsw8G7duNl2yskDVDQdZo3y6T3w63/0z2QKS9EDpT5b/ZS4yO9unV55QPRcNC6R6L\
+YxwYGYfG2oXTDY5iHB7vVEo3QSKonG6KDMZJUp2G0k2TCxpMN1EyaDjdVNnAQLrJ0oGhdNPlA6Pp\
+XpgIBKR7ZSYQ899cmhpfm+uXUb84WRqjenU2+cvTFtPWUF+f/wf/If14MnEtTwAAAABJRU5ErkJg\
+gg==\
+");
+              }
+              transform {
+                transform: translate(-1.6, -1.6) scale(1.05) translate(32, 32) rotate(279.464);
+                child: rounded-clip {
+                  clip: -15.1042 -15.1042 30.2085 30.2085 / 5.64306;
+                  child: color {
+                    bounds: -32 -32 64 64;
+                    color: rgb(224,36,27);
+                  }
+                }
+              }
+            }
+          }
+          transform {
+            transform: translate(0, 156);
+            child: transform {
+              transform: translate(10, 0);
+              child: container {
+                rounded-clip {
+                  clip: 0 0 44 44 / 22;
+                  child: color {
+                    bounds: 0 0 44 44;
+                    color: rgba(255,255,255,0.1);
+                  }
+                }
+                transform {
+                  transform: translate(0, 14);
+                  child: mask {
+                    source: color {
+                      bounds: 14 0 16 16;
+                      color: rgb(255,255,255);
+                    }
+                    mask: texture {
+                      bounds: 14 0 16 16;
+                      texture: url("data:image/png;base64,\
+iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAArElEQVQ4jcXQMYoCQRSE4U8RcUXU\
+QHED2cRkU29gIhh5Ka9lpiaC2eIFRAwWDEU2GZMeGIYeRQfWB48qHl0/TfHuqQRt4Br8FL3I218s\
+88dq0BmawcfC0I8dU8AHJqg/9f8MADr4fhZQy/gz9hjhD22csMXlEWgeihT0E+PQywZJZNdZQCMH\
+POIr+Fg43cJJ8INuGUCCRRnADq1XAQcMy3QwyPh1QXh1D/B/cwOBV0KUoIHnYwAAAABJRU5ErkJg\
+gg==\
+");
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+      transform {
+        transform: translate(15, 982);
+        child: transform {
+          transform: translate(9, 0);
+          child: mask {
+            source: color {
+              bounds: 0 9 16 16;
+              color: rgb(255,255,255);
+            }
+            mask: texture {
+              bounds: 0 9 16 16;
+              texture: url("data:image/png;base64,\
+iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABFklEQVQ4jZXSPy9DYRQG8B+R1IKy\
+2MxC+QI+h0R0MFl9DQklpH++gsQitYp0Y7DpwITBwmBAYyqW0+Tm1dvqk7zJvc/7PM8995zDYDTQ\
+wR1qWBmi/4MWXnCL7zgNFEYJaMXzAk7xg8s0ZA3TfQK242SxEyG1HlGK0rbi/QobQyqrohtedXyg\
+GJfl+MIJpnICitHcY9Hhs0TQjJD7AZ0/Rxu+sJtczuEpQp5zAvbQGQ9Rijes4xXXOQFjMIFHLPYR\
+3GA+xyw8D2Icn5gZIE4xG008gtUYyf4IAYfhWe4R9SA2/2Euh7aaJQuxnl1UMjuRll0JzQUmU0Eh\
++tGN/2vGqA5i5p3Y2Fo/cxal2LA23sPYDm4pVf8C/WpHM7/zJ4wAAAAASUVORK5CYII=\
+");
+            }
+          }
+        }
+      }
+    }
+  }
+}

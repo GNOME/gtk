@@ -196,6 +196,16 @@ find_texture_to_attach (GskOffload           *self,
           {
             GdkTexture *texture = gsk_texture_node_get_texture (node);
 
+            if (gsk_transform_get_category (transform) < GSK_TRANSFORM_CATEGORY_2D_AFFINE)
+              {
+                char *s = gsk_transform_to_string (transform);
+                GDK_DISPLAY_DEBUG (gdk_surface_get_display (self->surface), OFFLOAD,
+                                   "[%p] 🗙 Transform %s is not just scale/translate",
+                                   subsurface, s);
+                g_free (s);
+                goto out;
+              }
+
             *out_texture_transform = find_texture_transform (transform);
 
             if (has_clip)
@@ -277,7 +287,7 @@ transform_bounds (GskOffload            *self,
   gsk_transform_transform_bounds (t, bounds, rect);
 }
 
-static inline void
+static inline gboolean
 transform_rounded_rect (GskOffload       *self,
                         const GskRoundedRect *rect,
                         GskRoundedRect       *out_rect)
@@ -285,10 +295,13 @@ transform_rounded_rect (GskOffload       *self,
   GskTransform *t = self->transforms ? self->transforms->data : NULL;
   float sx, sy, dx, dy;
 
-  g_assert (gsk_transform_get_category (t) >= GSK_TRANSFORM_CATEGORY_2D_AFFINE);
+  if (gsk_transform_get_category (t) < GSK_TRANSFORM_CATEGORY_2D_AFFINE)
+    return FALSE;
 
   gsk_transform_to_affine (t, &sx, &sy, &dx, &dy);
   gsk_rounded_rect_scale_affine (out_rect, rect, sx, sy, dx, dy);
+
+  return TRUE;
 }
 
 static void
@@ -571,9 +584,12 @@ visit_node (GskOffload    *self,
         const GskRoundedRect *clip = gsk_rounded_clip_node_get_clip (node);
         GskRoundedRect transformed_clip;
 
-        transform_rounded_rect (self, clip, &transformed_clip);
-
-        if (self->current_clip->is_rectilinear)
+        if (!transform_rounded_rect (self, clip, &transformed_clip))
+          {
+            GDK_DISPLAY_DEBUG (gdk_surface_get_display (self->surface), OFFLOAD,
+                               "🗙 Non-affine transform, giving up");
+          }
+        else if (self->current_clip->is_rectilinear)
           {
             GskRoundedRect intersection;
             GskRoundedRectIntersection result;
