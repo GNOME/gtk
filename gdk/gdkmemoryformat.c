@@ -1415,6 +1415,15 @@ gdk_memory_format_get_fallbacks (GdkMemoryFormat format)
   return memory_formats[format].fallbacks;
 }
 
+gsize
+gdk_memory_format_min_buffer_size (GdkMemoryFormat format,
+                                   gsize           stride,
+                                   gsize           width,
+                                   gsize           height)
+{
+  return stride * (height - 1) + width * gdk_memory_format_bytes_per_pixel (format);
+}
+
 /*<private>
  * gdk_memory_format_get_depth:
  * @format: a memory format
