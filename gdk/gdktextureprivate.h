@@ -55,7 +55,8 @@ struct _GdkTextureClass {
 gboolean                gdk_texture_can_load            (GBytes                 *bytes);
 
 GdkTexture *            gdk_texture_new_for_surface     (cairo_surface_t        *surface);
-cairo_surface_t *       gdk_texture_download_surface    (GdkTexture             *texture);
+cairo_surface_t *       gdk_texture_download_surface    (GdkTexture             *texture,
+                                                         GdkColorState          *color_state);
 
 GdkMemoryDepth          gdk_texture_get_depth           (GdkTexture             *self);
 

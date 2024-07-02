@@ -32,6 +32,7 @@
 #include "gskenumtypes.h"
 #include "gskprivate.h"
 
+#include "gdk/gdkcolorstateprivate.h"
 #include "gdk/gdkrgbaprivate.h"
 #include "gdk/gdktextureprivate.h"
 #include "gdk/gdkmemoryformatprivate.h"
@@ -2010,7 +2011,7 @@ parse_cairo_node (GtkCssParser *parser,
   else if (pixels != NULL)
     {
       cairo_t *cr = gsk_cairo_node_get_draw_context (node);
-      surface = gdk_texture_download_surface (pixels);
+      surface = gdk_texture_download_surface (pixels, GDK_COLOR_STATE_SRGB);
       cairo_set_source_surface (cr, surface, 0, 0);
       cairo_paint (cr);
       cairo_destroy (cr);
