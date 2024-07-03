@@ -2,6 +2,7 @@
 
 #include "gskvulkanrealdescriptorsprivate.h"
 
+#include "gskgpucacheprivate.h"
 #include "gskvulkanbufferprivate.h"
 #include "gskvulkanframeprivate.h"
 #include "gskvulkanimageprivate.h"
@@ -245,7 +246,7 @@ gsk_vulkan_real_descriptors_fill_sets (GskVulkanRealDescriptors *self)
       guint32 ignored;
 
       if (!gsk_gpu_descriptors_add_image (GSK_GPU_DESCRIPTORS (self),
-                                          gsk_gpu_device_get_atlas_image (GSK_GPU_DEVICE (device)),
+                                          gsk_gpu_cache_get_atlas_image (gsk_gpu_device_get_cache (GSK_GPU_DEVICE (device))),
                                           GSK_GPU_SAMPLER_DEFAULT,
                                           &ignored))
         {

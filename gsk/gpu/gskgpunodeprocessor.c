@@ -8,6 +8,7 @@
 #include "gskgpublendopprivate.h"
 #include "gskgpublitopprivate.h"
 #include "gskgpubluropprivate.h"
+#include "gskgpucacheprivate.h"
 #include "gskgpuclearopprivate.h"
 #include "gskgpuclipprivate.h"
 #include "gskgpucolorizeopprivate.h"
@@ -801,7 +802,7 @@ gsk_gpu_get_node_as_image (GskGpuFrame            *frame,
         GdkTexture *texture = gsk_texture_node_get_texture (node);
         GskGpuDevice *device = gsk_gpu_frame_get_device (frame);
         gint64 timestamp = gsk_gpu_frame_get_timestamp (frame);
-        result = gsk_gpu_device_lookup_texture_image (device, texture, timestamp);
+        result = gsk_gpu_cache_lookup_texture_image (gsk_gpu_device_get_cache (device), texture, timestamp);
         if (result == NULL)
           result = gsk_gpu_frame_upload_texture (frame, FALSE, texture);
 
@@ -982,10 +983,10 @@ gsk_gpu_node_processor_get_node_as_image (GskGpuNodeProcessor   *self,
   if (ensure != image && disallowed_flags &&
       gsk_render_node_get_node_type (node) == GSK_TEXTURE_NODE)
     {
-      gsk_gpu_device_cache_texture_image (gsk_gpu_frame_get_device (self->frame),
-                                          gsk_texture_node_get_texture (node),
-                                          gsk_gpu_frame_get_timestamp (self->frame),
-                                          ensure);
+      gsk_gpu_cache_cache_texture_image (gsk_gpu_device_get_cache (gsk_gpu_frame_get_device (self->frame)),
+                                         gsk_texture_node_get_texture (node),
+                                         gsk_gpu_frame_get_timestamp (self->frame),
+                                         ensure);
     }
 
   return ensure;
@@ -1923,16 +1924,16 @@ static void
 gsk_gpu_node_processor_add_texture_node (GskGpuNodeProcessor *self,
                                          GskRenderNode       *node)
 {
-  GskGpuDevice *device;
+  GskGpuCache *cache;
   GskGpuImage *image;
   GdkTexture *texture;
   gint64 timestamp;
 
-  device = gsk_gpu_frame_get_device (self->frame);
+  cache = gsk_gpu_device_get_cache (gsk_gpu_frame_get_device (self->frame));
   texture = gsk_texture_node_get_texture (node);
   timestamp = gsk_gpu_frame_get_timestamp (self->frame);
 
-  image = gsk_gpu_device_lookup_texture_image (device, texture, timestamp);
+  image = gsk_gpu_cache_lookup_texture_image (cache, texture, timestamp);
   if (image == NULL)
     {
       image = gsk_gpu_frame_upload_texture (self->frame, FALSE, texture);
@@ -1995,18 +1996,18 @@ static gboolean
 gsk_gpu_node_processor_create_texture_pattern (GskGpuPatternWriter *self,
                                                GskRenderNode       *node)
 {
-  GskGpuDevice *device;
+  GskGpuCache *cache;
   GdkTexture *texture;
   gint64 timestamp;
   guint32 descriptor;
   GskGpuImage *image;
   GskGpuSampler sampler;
 
-  device = gsk_gpu_frame_get_device (self->frame);
+  cache = gsk_gpu_device_get_cache (gsk_gpu_frame_get_device (self->frame));
   texture = gsk_texture_node_get_texture (node);
   timestamp = gsk_gpu_frame_get_timestamp (self->frame);
 
-  image = gsk_gpu_device_lookup_texture_image (device, texture, timestamp);
+  image = gsk_gpu_cache_lookup_texture_image (cache, texture, timestamp);
   if (image == NULL)
     {
       image = gsk_gpu_frame_upload_texture (self->frame, FALSE, texture);
@@ -2051,7 +2052,7 @@ static void
 gsk_gpu_node_processor_add_texture_scale_node (GskGpuNodeProcessor *self,
                                                GskRenderNode       *node)
 {
-  GskGpuDevice *device;
+  GskGpuCache *cache;
   GskGpuImage *image;
   GdkTexture *texture;
   GskScalingFilter scaling_filter;
@@ -2095,13 +2096,13 @@ gsk_gpu_node_processor_add_texture_scale_node (GskGpuNodeProcessor *self,
       return;
     }
 
-  device = gsk_gpu_frame_get_device (self->frame);
+  cache = gsk_gpu_device_get_cache (gsk_gpu_frame_get_device (self->frame));
   texture = gsk_texture_scale_node_get_texture (node);
   scaling_filter = gsk_texture_scale_node_get_filter (node);
   timestamp = gsk_gpu_frame_get_timestamp (self->frame);
   need_mipmap = scaling_filter == GSK_SCALING_FILTER_TRILINEAR;
 
-  image = gsk_gpu_device_lookup_texture_image (device, texture, timestamp);
+  image = gsk_gpu_cache_lookup_texture_image (cache, texture, timestamp);
   if (image == NULL)
     {
       image = gsk_gpu_frame_upload_texture (self->frame, need_mipmap, texture);
@@ -2995,7 +2996,7 @@ static void
 gsk_gpu_node_processor_add_glyph_node (GskGpuNodeProcessor *self,
                                        GskRenderNode       *node)
 {
-  GskGpuDevice *device;
+  GskGpuCache *cache;
   const PangoGlyphInfo *glyphs;
   PangoFont *font;
   graphene_point_t offset;
@@ -3016,7 +3017,7 @@ gsk_gpu_node_processor_add_glyph_node (GskGpuNodeProcessor *self,
       return;
     }
 
-  device = gsk_gpu_frame_get_device (self->frame);
+  cache = gsk_gpu_device_get_cache (gsk_gpu_frame_get_device (self->frame));
 
   color = *gsk_text_node_get_color (node);
   color.alpha *= self->opacity;
@@ -3063,7 +3064,7 @@ gsk_gpu_node_processor_add_glyph_node (GskGpuNodeProcessor *self,
       glyph_origin.x *= inv_align_scale_x;
       glyph_origin.y *= inv_align_scale_y;
 
-      image = gsk_gpu_device_lookup_glyph_image (device,
+      image = gsk_gpu_cache_lookup_glyph_image (cache,
                                                  self->frame,
                                                  font,
                                                  glyphs[i].glyph,
@@ -3115,7 +3116,7 @@ static gboolean
 gsk_gpu_node_processor_create_glyph_pattern (GskGpuPatternWriter *self,
                                              GskRenderNode       *node)
 {
-  GskGpuDevice *device;
+  GskGpuCache *cache;
   const PangoGlyphInfo *glyphs;
   PangoFont *font;
   guint num_glyphs;
@@ -3132,7 +3133,7 @@ gsk_gpu_node_processor_create_glyph_pattern (GskGpuPatternWriter *self,
   if (gsk_text_node_has_color_glyphs (node))
     return FALSE;
 
-  device = gsk_gpu_frame_get_device (self->frame);
+  cache = gsk_gpu_device_get_cache (gsk_gpu_frame_get_device (self->frame));
   num_glyphs = gsk_text_node_get_num_glyphs (node);
   glyphs = gsk_text_node_get_glyphs (node, NULL);
   font = gsk_text_node_get_font (node);
@@ -3179,14 +3180,14 @@ gsk_gpu_node_processor_create_glyph_pattern (GskGpuPatternWriter *self,
       glyph_origin.x *= inv_align_scale_x;
       glyph_origin.y *= inv_align_scale_y;
 
-      image = gsk_gpu_device_lookup_glyph_image (device,
-                                                 self->frame,
-                                                 font,
-                                                 glyphs[i].glyph,
-                                                 flags,
-                                                 scale,
-                                                 &glyph_bounds,
-                                                 &glyph_offset);
+      image = gsk_gpu_cache_lookup_glyph_image (cache,
+                                                self->frame,
+                                                font,
+                                                glyphs[i].glyph,
+                                                flags,
+                                                scale,
+                                                &glyph_bounds,
+                                                &glyph_offset);
 
       if (image != last_image)
         {

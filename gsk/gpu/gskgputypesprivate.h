@@ -9,6 +9,7 @@
 
 typedef struct _GskGLDescriptors        GskGLDescriptors;
 typedef struct _GskGpuBuffer            GskGpuBuffer;
+typedef struct _GskGpuCache             GskGpuCache;
 typedef struct _GskGpuDescriptors       GskGpuDescriptors;
 typedef struct _GskGpuDevice            GskGpuDevice;
 typedef struct _GskGpuFrame             GskGpuFrame;

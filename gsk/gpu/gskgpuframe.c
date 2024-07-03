@@ -3,6 +3,7 @@
 #include "gskgpuframeprivate.h"
 
 #include "gskgpubufferprivate.h"
+#include "gskgpucacheprivate.h"
 #include "gskgpudeviceprivate.h"
 #include "gskgpudownloadopprivate.h"
 #include "gskgpuimageprivate.h"
@@ -412,7 +413,7 @@ gsk_gpu_frame_upload_texture (GskGpuFrame  *self,
   image = GSK_GPU_FRAME_GET_CLASS (self)->upload_texture (self, with_mipmap, texture);
 
   if (image)
-    gsk_gpu_device_cache_texture_image (priv->device, texture, priv->timestamp, image);
+    gsk_gpu_cache_cache_texture_image (gsk_gpu_device_get_cache (priv->device), texture, priv->timestamp, image);
 
   return image;
 }
@@ -703,7 +704,7 @@ gsk_gpu_frame_download_texture (GskGpuFrame     *self,
   GskGpuFramePrivate *priv = gsk_gpu_frame_get_instance_private (self);
   GskGpuImage *image;
 
-  image = gsk_gpu_device_lookup_texture_image (priv->device, texture, timestamp);
+  image = gsk_gpu_cache_lookup_texture_image (gsk_gpu_device_get_cache (priv->device), texture, timestamp);
   if (image == NULL)
     image = gsk_gpu_frame_upload_texture (self, FALSE, texture);
   if (image == NULL)
