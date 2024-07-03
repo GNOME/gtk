@@ -1648,15 +1648,20 @@ static void
 gsk_gpu_node_processor_add_border_node (GskGpuNodeProcessor *self,
                                         GskRenderNode       *node)
 {
-  GdkRGBA colors[4];
+  const GdkRGBA *rgbas;
+  float colors[4][4];
   gsize i;
 
-  memcpy (colors, gsk_border_node_get_colors (node), sizeof (colors));
+  rgbas = gsk_border_node_get_colors (node);
   for (i = 0; i < G_N_ELEMENTS (colors); i++)
-    colors[i].alpha *= self->opacity;
+    {
+      gdk_color_state_from_rgba (GDK_COLOR_STATE_SRGB, &rgbas[i], colors[i]);
+      colors[i][3] *= self->opacity;
+    }
 
   gsk_gpu_border_op (self->frame,
                      gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, &node->bounds),
+                     gsk_gpu_node_processor_color_states_for_rgba (self),
                      gsk_border_node_get_outline (node),
                      &self->offset,
                      graphene_point_zero (),
@@ -1929,27 +1934,40 @@ static void
 gsk_gpu_node_processor_add_inset_shadow_node (GskGpuNodeProcessor *self,
                                               GskRenderNode       *node)
 {
-  GdkRGBA color;
   float spread, blur_radius;
 
   spread = gsk_inset_shadow_node_get_spread (node);
-  color = *gsk_inset_shadow_node_get_color (node);
-  color.alpha *= self->opacity;
   blur_radius = gsk_inset_shadow_node_get_blur_radius (node);
 
   if (blur_radius == 0)
     {
+      const GdkRGBA *rgba = gsk_inset_shadow_node_get_color (node);
+      float color[4]; 
+
+      gdk_color_state_from_rgba (GDK_COLOR_STATE_SRGB, rgba, color);
+      color[3] *= self->opacity;
+
       gsk_gpu_border_op (self->frame,
                          gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, &node->bounds),
+                         gsk_gpu_node_processor_color_states_for_rgba (self),
                          gsk_inset_shadow_node_get_outline (node),
                          &self->offset,
                          &GRAPHENE_POINT_INIT (gsk_inset_shadow_node_get_dx (node),
                                                gsk_inset_shadow_node_get_dy (node)),
                          (float[4]) { spread, spread, spread, spread },
-                         (GdkRGBA[4]) { color, color, color, color });
+                         (float[4][4]) {
+                             { color[0], color[1], color[2], color[3] },
+                             { color[0], color[1], color[2], color[3] },
+                             { color[0], color[1], color[2], color[3] },
+                             { color[0], color[1], color[2], color[3] }
+                         });
     }
   else
     {
+      GdkRGBA color;
+
+      color = *gsk_inset_shadow_node_get_color (node);
+      color.alpha *= self->opacity;
       gsk_gpu_box_shadow_op (self->frame,
                              gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, &node->bounds),
                              TRUE,
@@ -1968,12 +1986,9 @@ static void
 gsk_gpu_node_processor_add_outset_shadow_node (GskGpuNodeProcessor *self,
                                                GskRenderNode       *node)
 {
-  GdkRGBA color;
   float spread, blur_radius, dx, dy;
 
   spread = gsk_outset_shadow_node_get_spread (node);
-  color = *gsk_outset_shadow_node_get_color (node);
-  color.alpha *= self->opacity;
   blur_radius = gsk_outset_shadow_node_get_blur_radius (node);
   dx = gsk_outset_shadow_node_get_dx (node);
   dy = gsk_outset_shadow_node_get_dy (node);
@@ -1981,21 +1996,37 @@ gsk_gpu_node_processor_add_outset_shadow_node (GskGpuNodeProcessor *self,
   if (blur_radius == 0)
     {
       GskRoundedRect outline;
+      const GdkRGBA *rgba = gsk_inset_shadow_node_get_color (node);
+      float color[4]; 
 
       gsk_rounded_rect_init_copy (&outline, gsk_outset_shadow_node_get_outline (node));
       gsk_rounded_rect_shrink (&outline, -spread, -spread, -spread, -spread);
       graphene_rect_offset (&outline.bounds, dx, dy);
 
+      gdk_color_state_from_rgba (GDK_COLOR_STATE_SRGB, rgba, color);
+      color[3] *= self->opacity;
+
       gsk_gpu_border_op (self->frame,
                          gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, &node->bounds),
+                         gsk_gpu_node_processor_color_states_for_rgba (self),
                          &outline,
                          &self->offset,
                          &GRAPHENE_POINT_INIT (-dx, -dy),
                          (float[4]) { spread, spread, spread, spread },
-                         (GdkRGBA[4]) { color, color, color, color });
+                         (float[4][4]) {
+                             { color[0], color[1], color[2], color[3] },
+                             { color[0], color[1], color[2], color[3] },
+                             { color[0], color[1], color[2], color[3] },
+                             { color[0], color[1], color[2], color[3] }
+                         });
     }
   else
     {
+      GdkRGBA color;
+
+      color = *gsk_outset_shadow_node_get_color (node);
+      color.alpha *= self->opacity;
+
       gsk_gpu_box_shadow_op (self->frame,
                              gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, &node->bounds),
                              FALSE,

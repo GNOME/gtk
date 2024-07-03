@@ -77,9 +77,9 @@ compute_color (void)
   }
   
   if (in_border_widths[index] > 0.0)
-    return color_premultiply (in_border_colors[index]);
+    return output_color_from_alt (in_border_colors[index]);
   else
-    return color_premultiply (in_border_colors[fallback]);
+    return output_color_from_alt (in_border_colors[fallback]);
 }
 
 void
@@ -111,7 +111,7 @@ run (out vec4 color,
                        0.0, 1.0);
 
   position = _pos;
-  color = _color * alpha;
+  color = output_color_alpha (_color, alpha);
 }
 
 #endif
