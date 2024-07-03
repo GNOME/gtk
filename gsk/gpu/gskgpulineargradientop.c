@@ -69,6 +69,7 @@ gsk_gpu_linear_gradient_op (GskGpuFrame            *frame,
 
   gsk_gpu_shader_op_alloc (frame,
                            &GSK_GPU_LINEAR_GRADIENT_OP_CLASS,
+                           DEFAULT_COLOR_STATES,
                            (repeating ? VARIATION_REPEATING : 0) |
                            (gsk_gpu_frame_should_optimize (frame, GSK_GPU_OPTIMIZE_GRADIENTS) ? VARIATION_SUPERSAMPLING : 0),
                            clip,

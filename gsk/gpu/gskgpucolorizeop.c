@@ -62,6 +62,7 @@ gsk_gpu_colorize_op (GskGpuFrame            *frame,
 
   gsk_gpu_shader_op_alloc (frame,
                            &GSK_GPU_COLORIZE_OP_CLASS,
+                           DEFAULT_COLOR_STATES,
                            0,
                            clip,
                            descriptors,

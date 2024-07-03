@@ -66,6 +66,7 @@ gsk_gpu_cross_fade_op (GskGpuFrame            *frame,
 
   gsk_gpu_shader_op_alloc (frame,
                            &GSK_GPU_CROSS_FADE_OP_CLASS,
+                           DEFAULT_COLOR_STATES,
                            0,
                            clip,
                            desc,

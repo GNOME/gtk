@@ -77,6 +77,7 @@ struct _ConversionCacheEntry
 struct _PipelineCacheKey
 {
   const GskGpuShaderOpClass *op_class;
+  GskGpuColorStates color_states;
   guint32 variation;
   GskGpuShaderClip clip;
   GskGpuBlend blend;
@@ -905,6 +906,7 @@ struct _GskVulkanShaderSpecialization
   guint32 n_immutable_samplers;
   guint32 n_samplers;
   guint32 n_buffers;
+  guint32 color_states;
   guint32 variation;
 };
 
@@ -954,6 +956,7 @@ VkPipeline
 gsk_vulkan_device_get_vk_pipeline (GskVulkanDevice           *self,
                                    GskVulkanPipelineLayout   *layout,
                                    const GskGpuShaderOpClass *op_class,
+                                   GskGpuColorStates          color_states,
                                    guint32                    variation,
                                    GskGpuShaderClip           clip,
                                    GskGpuBlend                blend,
@@ -972,6 +975,7 @@ gsk_vulkan_device_get_vk_pipeline (GskVulkanDevice           *self,
 
   cache_key = (PipelineCacheKey) {
     .op_class = op_class,
+    .color_states = color_states,
     .variation = variation,
     .clip = clip,
     .blend = blend,
@@ -1011,8 +1015,8 @@ gsk_vulkan_device_get_vk_pipeline (GskVulkanDevice           *self,
                                                        .module = gdk_display_get_vk_shader_module (display, vertex_shader_name),
                                                        .pName = "main",
                                                        .pSpecializationInfo = &(VkSpecializationInfo) {
-                                                           .mapEntryCount = 5,
-                                                           .pMapEntries = (VkSpecializationMapEntry[5]) {
+                                                           .mapEntryCount = 6,
+                                                           .pMapEntries = (VkSpecializationMapEntry[6]) {
                                                                {
                                                                    .constantID = 0,
                                                                    .offset = G_STRUCT_OFFSET (GskVulkanShaderSpecialization, clip),
@@ -1035,6 +1039,11 @@ gsk_vulkan_device_get_vk_pipeline (GskVulkanDevice           *self,
                                                                },
                                                                {
                                                                    .constantID = 4,
+                                                                   .offset = G_STRUCT_OFFSET (GskVulkanShaderSpecialization, color_states),
+                                                                   .size = sizeof (guint32),
+                                                               },
+                                                               {
+                                                                   .constantID = 5,
                                                                    .offset = G_STRUCT_OFFSET (GskVulkanShaderSpecialization, variation),
                                                                    .size = sizeof (guint32),
                                                                },
@@ -1045,6 +1054,7 @@ gsk_vulkan_device_get_vk_pipeline (GskVulkanDevice           *self,
                                                                .n_immutable_samplers = MAX (1, layout->setup.n_immutable_samplers),
                                                                .n_samplers = layout->setup.n_samplers - MAX (3 * layout->setup.n_immutable_samplers, 1),
                                                                .n_buffers = layout->setup.n_buffers,
+                                                               .color_states = color_states,
                                                                .variation = variation,
                                                            },
                                                        },
@@ -1055,8 +1065,8 @@ gsk_vulkan_device_get_vk_pipeline (GskVulkanDevice           *self,
                                                        .module = gdk_display_get_vk_shader_module (display, fragment_shader_name),
                                                        .pName = "main",
                                                        .pSpecializationInfo = &(VkSpecializationInfo) {
-                                                           .mapEntryCount = 5,
-                                                           .pMapEntries = (VkSpecializationMapEntry[5]) {
+                                                           .mapEntryCount = 6,
+                                                           .pMapEntries = (VkSpecializationMapEntry[6]) {
                                                                {
                                                                    .constantID = 0,
                                                                    .offset = G_STRUCT_OFFSET (GskVulkanShaderSpecialization, clip),
@@ -1079,6 +1089,11 @@ gsk_vulkan_device_get_vk_pipeline (GskVulkanDevice           *self,
                                                                },
                                                                {
                                                                    .constantID = 4,
+                                                                   .offset = G_STRUCT_OFFSET (GskVulkanShaderSpecialization, color_states),
+                                                                   .size = sizeof (guint32),
+                                                               },
+                                                               {
+                                                                   .constantID = 5,
                                                                    .offset = G_STRUCT_OFFSET (GskVulkanShaderSpecialization, variation),
                                                                    .size = sizeof (guint32),
                                                                },
@@ -1089,6 +1104,7 @@ gsk_vulkan_device_get_vk_pipeline (GskVulkanDevice           *self,
                                                                .n_immutable_samplers = MAX (1, layout->setup.n_immutable_samplers),
                                                                .n_samplers = layout->setup.n_samplers - MAX (3 * layout->setup.n_immutable_samplers, 1),
                                                                .n_buffers = layout->setup.n_buffers,
+                                                               .color_states = color_states,
                                                                .variation = variation,
                                                            },
                                                        },
@@ -1146,18 +1162,20 @@ gsk_vulkan_device_get_vk_pipeline (GskVulkanDevice           *self,
                                            &pipeline);
 
   gdk_profiler_end_markf (begin_time,
-                          "Create Vulkan pipeline", "%s version=%s variation=%u clip=%s blend=%s format=%u",
+                          "Create Vulkan pipeline", "%s version=%s color states=%u variation=%u clip=%s blend=%s format=%u",
                           op_class->shader_name,
                           version_string + 1,
+                          color_states, 
                           variation,
                           clip_name[clip],
                           blend_name[blend],
                           format);
 
   GSK_DEBUG (SHADERS,
-             "Create Vulkan pipeline (%s %s, %u/%s/%s/%u) for layout (%" G_GSIZE_FORMAT "/%" G_GSIZE_FORMAT "/%" G_GSIZE_FORMAT ")",
+             "Create Vulkan pipeline (%s %s, %u/%u/%s/%s/%u) for layout (%" G_GSIZE_FORMAT "/%" G_GSIZE_FORMAT "/%" G_GSIZE_FORMAT ")",
              op_class->shader_name,
              version_string + 1,
+             color_states, 
              variation,
              clip_name[clip],
              blend_name[blend],

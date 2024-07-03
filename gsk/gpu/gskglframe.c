@@ -245,6 +245,7 @@ gsk_gl_frame_init (GskGLFrame *self)
 void
 gsk_gl_frame_use_program (GskGLFrame                *self,
                           const GskGpuShaderOpClass *op_class,
+                          GskGpuColorStates          color_states,
                           guint32                    variation,
                           GskGpuShaderClip           clip,
                           guint                      n_external_textures)
@@ -253,6 +254,7 @@ gsk_gl_frame_use_program (GskGLFrame                *self,
 
   gsk_gl_device_use_program (GSK_GL_DEVICE (gsk_gpu_frame_get_device (GSK_GPU_FRAME (self))),
                              op_class,
+                             color_states,
                              variation,
                              clip,
                              n_external_textures);

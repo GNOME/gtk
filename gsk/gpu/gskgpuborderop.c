@@ -107,6 +107,7 @@ gsk_gpu_border_op (GskGpuFrame            *frame,
 
   gsk_gpu_shader_op_alloc (frame,
                            &GSK_GPU_BORDER_OP_CLASS,
+                           DEFAULT_COLOR_STATES,
                            0,
                            clip,
                            NULL,

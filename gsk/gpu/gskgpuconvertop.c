@@ -133,6 +133,7 @@ gsk_gpu_convert_op (GskGpuFrame            *frame,
 
   gsk_gpu_shader_op_alloc (frame,
                            &GSK_GPU_CONVERT_OP_CLASS,
+                           DEFAULT_COLOR_STATES,
                            variation,
                            clip,
                            desc,

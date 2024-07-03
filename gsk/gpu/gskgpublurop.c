@@ -68,6 +68,7 @@ gsk_gpu_blur_op_full (GskGpuFrame            *frame,
 
   gsk_gpu_shader_op_alloc (frame,
                            &GSK_GPU_BLUR_OP_CLASS,
+                           DEFAULT_COLOR_STATES,
                            variation,
                            clip,
                            desc,

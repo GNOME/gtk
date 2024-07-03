@@ -3,6 +3,7 @@
 #include "gskgpuopprivate.h"
 
 #include "gskgputypesprivate.h"
+#include "gskgpucolorstatesprivate.h"
 
 G_BEGIN_DECLS
 
@@ -11,6 +12,7 @@ struct _GskGpuShaderOp
   GskGpuOp parent_op;
 
   GskGpuDescriptors *desc;
+  GskGpuColorStates color_states;
   guint32 variation;
   GskGpuShaderClip clip;
   gsize vertex_offset;
@@ -35,6 +37,7 @@ struct _GskGpuShaderOpClass
 
 void                    gsk_gpu_shader_op_alloc                         (GskGpuFrame            *frame,
                                                                          const GskGpuShaderOpClass *op_class,
+                                                                         GskGpuColorStates       color_states,
                                                                          guint32                 variation,
                                                                          GskGpuShaderClip        clip,
                                                                          GskGpuDescriptors      *desc,

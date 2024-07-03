@@ -13,6 +13,7 @@ GskGpuDevice *          gsk_gl_device_get_for_display                   (GdkDisp
 
 void                    gsk_gl_device_use_program                       (GskGLDevice            *self,
                                                                          const GskGpuShaderOpClass *op_class,
+                                                                         GskGpuColorStates       color_states,
                                                                          guint32                 variation,
                                                                          GskGpuShaderClip        clip,
                                                                          guint                   n_external_textures);
