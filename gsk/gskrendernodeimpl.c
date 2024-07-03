@@ -3396,6 +3396,7 @@ gsk_container_node_new (GskRenderNode **children,
   if (n_children == 0)
     {
       gsk_rect_init_from_rect (&node->bounds, graphene_rect_zero ());
+      node->preferred_depth = GDK_MEMORY_NONE;
     }
   else
     {

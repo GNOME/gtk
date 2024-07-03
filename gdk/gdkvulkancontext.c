@@ -643,7 +643,7 @@ gdk_vulkan_context_begin_frame (GdkDrawContext *draw_context,
   VkResult acquire_result;
   guint i;
 
-  if (depth != priv->current_depth)
+  if (depth != priv->current_depth && depth != GDK_MEMORY_NONE)
     {
       if (priv->formats[depth].gdk_format != priv->formats[priv->current_depth].gdk_format)
         {
@@ -936,6 +936,7 @@ gdk_vulkan_context_real_init (GInitable     *initable,
         priv->formats[GDK_MEMORY_FLOAT16] = priv->formats[GDK_MEMORY_FLOAT32];
       if (priv->formats[GDK_MEMORY_U16].vk_format.format == VK_FORMAT_UNDEFINED)
         priv->formats[GDK_MEMORY_U16] = priv->formats[GDK_MEMORY_FLOAT32];
+      priv->formats[GDK_MEMORY_NONE] = priv->formats[GDK_MEMORY_U8];
 
       if (!gdk_vulkan_context_check_swapchain (context, error))
         goto out_surface;

@@ -37,6 +37,7 @@ typedef enum {
 } GdkMemoryAlpha;
 
 typedef enum {
+  GDK_MEMORY_NONE,
   GDK_MEMORY_U8,
   GDK_MEMORY_U8_SRGB,
   GDK_MEMORY_U16,

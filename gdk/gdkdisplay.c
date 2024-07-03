@@ -1575,10 +1575,22 @@ gdk_display_get_egl_config (GdkDisplay     *self,
 {
   GdkDisplayPrivate *priv = gdk_display_get_instance_private (self);
 
-  if (depth == GDK_MEMORY_U8 || depth == GDK_MEMORY_U8_SRGB)
-    return priv->egl_config;
-  else
-    return priv->egl_config_high_depth;
+  switch (depth)
+    {
+      case GDK_MEMORY_NONE:
+      case GDK_MEMORY_U8:
+      case GDK_MEMORY_U8_SRGB:
+        return priv->egl_config;
+
+      case GDK_MEMORY_U16:
+      case GDK_MEMORY_FLOAT16:
+      case GDK_MEMORY_FLOAT32:
+        return priv->egl_config_high_depth;
+
+      case GDK_N_DEPTHS:
+      default:
+        g_return_val_if_reached (priv->egl_config);
+    }
 }
 
 static EGLDisplay
