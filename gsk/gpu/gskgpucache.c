@@ -490,6 +490,7 @@ gsk_gpu_cache_gc (GskGpuCache *self,
 {
   GskGpuCached *cached, *prev;
   gint64 before G_GNUC_UNUSED = GDK_PROFILER_CURRENT_TIME;
+  gboolean is_empty = TRUE;
 
   /* We walk the cache from the end so we don't end up with prev
    * being a leftover glyph on the atlas we are freeing
@@ -499,6 +500,8 @@ gsk_gpu_cache_gc (GskGpuCache *self,
       prev = cached->prev;
       if (gsk_gpu_cached_should_collect (self, cached, cache_timeout, timestamp))
         gsk_gpu_cached_free (self, cached);
+      else
+        is_empty &= cached->stale;
     }
 
   g_atomic_pointer_set (&self->dead_texture_pixels, 0);
@@ -508,7 +511,7 @@ gsk_gpu_cache_gc (GskGpuCache *self,
 
   gdk_profiler_end_mark (before, "Glyph cache GC", NULL);
 
-  return self->last_cached == NULL;
+  return is_empty;
 }
 
 gsize
