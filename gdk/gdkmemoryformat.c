@@ -28,6 +28,8 @@
 
 #include <epoxy/gl.h>
 
+G_STATIC_ASSERT ((1 << GDK_MEMORY_DEPTH_BITS) > GDK_N_DEPTHS);
+
 typedef struct _GdkMemoryFormatDescription GdkMemoryFormatDescription;
 
 #define TYPED_FUNCS(name, T, R, G, B, A, bpp, scale) \
@@ -1413,6 +1415,15 @@ const GdkMemoryFormat *
 gdk_memory_format_get_fallbacks (GdkMemoryFormat format)
 {
   return memory_formats[format].fallbacks;
+}
+
+gsize
+gdk_memory_format_min_buffer_size (GdkMemoryFormat format,
+                                   gsize           stride,
+                                   gsize           width,
+                                   gsize           height)
+{
+  return stride * (height - 1) + width * gdk_memory_format_bytes_per_pixel (format);
 }
 
 /*<private>

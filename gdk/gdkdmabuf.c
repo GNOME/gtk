@@ -71,7 +71,7 @@ download_memcpy (guchar          *dst_data,
   bpp = gdk_memory_format_bytes_per_pixel (dst_format);
   src_stride = dmabuf->planes[0].stride;
   src_data = src_datas[0] + dmabuf->planes[0].offset;
-  g_return_if_fail (sizes[0] >= dmabuf->planes[0].offset + (height - 1) * dst_stride + width * bpp);
+  g_return_if_fail (sizes[0] >= dmabuf->planes[0].offset + gdk_memory_format_min_buffer_size (dst_format, dst_stride, width, height));
 
   if (dst_stride == src_stride)
     memcpy (dst_data, src_data, (height - 1) * dst_stride + width * bpp);

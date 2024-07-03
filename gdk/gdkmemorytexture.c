@@ -152,7 +152,7 @@ gdk_memory_texture_new (int              width,
   g_return_val_if_fail (bytes != NULL, NULL);
   g_return_val_if_fail (stride >= width * gdk_memory_format_bytes_per_pixel (format), NULL);
   /* needs to be this complex to support subtexture of the bottom right part */
-  g_return_val_if_fail (g_bytes_get_size (bytes) >= stride * (height - 1) + width * gdk_memory_format_bytes_per_pixel (format), NULL);
+  g_return_val_if_fail (g_bytes_get_size (bytes) >= gdk_memory_format_min_buffer_size (format, stride, width, height), NULL);
 
   bytes = gdk_memory_sanitize (bytes, width, height, format, stride, &stride);
 
@@ -176,7 +176,7 @@ gdk_memory_texture_new_subtexture (GdkMemoryTexture  *source,
                                    int                height)
 {
   GdkTexture *texture, *result;
-  gsize bpp, offset, size;
+  gsize offset, size;
   GBytes *bytes;
 
   g_return_val_if_fail (GDK_IS_MEMORY_TEXTURE (source), NULL);
@@ -186,9 +186,8 @@ gdk_memory_texture_new_subtexture (GdkMemoryTexture  *source,
   g_return_val_if_fail (height > 0 && y + height <= GDK_TEXTURE (source)->height, NULL);
 
   texture = GDK_TEXTURE (source);
-  bpp = gdk_memory_format_bytes_per_pixel (texture->format);
-  offset = y * source->stride + x * bpp;
-  size = source->stride * (height - 1) + width * bpp;
+  offset = y * source->stride + x * gdk_memory_format_bytes_per_pixel (texture->format);
+  size = gdk_memory_format_min_buffer_size (texture->format, source->stride, width, height);
   bytes = g_bytes_new_from_bytes (source->bytes, offset, size);
 
   result = gdk_memory_texture_new (width,

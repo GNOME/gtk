@@ -7,6 +7,7 @@
 #include "gskgpuimageprivate.h"
 #include "gskgpuprintprivate.h"
 #ifdef GDK_RENDERING_VULKAN
+#include "gskgpucacheprivate.h"
 #include "gskvulkanbufferprivate.h"
 #include "gskvulkanframeprivate.h"
 #include "gskvulkanimageprivate.h"
@@ -143,12 +144,13 @@ gsk_gpu_download_op_vk_command (GskGpuOp              *op,
     self->texture = gsk_vulkan_image_to_dmabuf_texture (GSK_VULKAN_IMAGE (self->image));
   if (self->texture)
     {
-      GskVulkanDevice *device = GSK_VULKAN_DEVICE (gsk_gpu_frame_get_device (frame));
-      VkDevice vk_device = gsk_vulkan_device_get_vk_device (device);
+      GskGpuDevice *device = gsk_gpu_frame_get_device (frame);
+      GskGpuCache *cache = gsk_gpu_device_get_cache (device);
+      VkDevice vk_device = gsk_vulkan_device_get_vk_device (GSK_VULKAN_DEVICE (device));
 
-      gsk_gpu_device_cache_texture_image (GSK_GPU_DEVICE (device), self->texture, gsk_gpu_frame_get_timestamp (frame), self->image);
+      gsk_gpu_cache_cache_texture_image (cache, self->texture, gsk_gpu_frame_get_timestamp (frame), self->image);
 
-      if (gsk_vulkan_device_has_feature (device, GDK_VULKAN_FEATURE_SEMAPHORE_EXPORT))
+      if (gsk_vulkan_device_has_feature (GSK_VULKAN_DEVICE (device), GDK_VULKAN_FEATURE_SEMAPHORE_EXPORT))
         {
           GSK_VK_CHECK (vkCreateSemaphore, vk_device,
                                            &(VkSemaphoreCreateInfo) {
