@@ -647,7 +647,8 @@ gdk_vulkan_context_begin_frame (GdkDrawContext  *draw_context,
 
   if (depth != priv->current_depth && depth != GDK_MEMORY_NONE)
     {
-      if (priv->formats[depth].gdk_format != priv->formats[priv->current_depth].gdk_format)
+      if (priv->formats[depth].vk_format.format != priv->formats[priv->current_depth].vk_format.format ||
+          priv->formats[depth].vk_format.colorSpace != priv->formats[priv->current_depth].vk_format.colorSpace)
         {
           GdkMemoryDepth old_depth = priv->current_depth;
           GError *error = NULL;
