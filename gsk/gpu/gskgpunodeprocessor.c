@@ -266,6 +266,16 @@ gsk_gpu_node_processor_color_states_self (GskGpuNodeProcessor *self)
                                       self->ccs,
                                       TRUE);
 }
+
+static inline GskGpuColorStates
+gsk_gpu_node_processor_color_states_for_rgba (GskGpuNodeProcessor *self)
+{
+  return gsk_gpu_color_states_create (self->ccs,
+                                      TRUE,
+                                      GDK_COLOR_STATE_SRGB,
+                                      FALSE);
+}
+
 static guint32
 gsk_gpu_node_processor_add_image (GskGpuNodeProcessor *self,
                                   GskGpuImage         *image,
@@ -1523,9 +1533,10 @@ gsk_gpu_node_processor_add_color_node (GskGpuNodeProcessor *self,
               /* Yuck, rounded clip and modelview. I give up. */
               gsk_gpu_color_op (self->frame,
                                 gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, &node->bounds),
+                                gsk_gpu_node_processor_color_states_for_rgba (self),
                                 &node->bounds,
                                 &self->offset,
-                                gsk_color_node_get_color (node));
+                                GSK_RGBA_TO_VEC4 (color));
               return;
             }
 
@@ -1545,9 +1556,10 @@ gsk_gpu_node_processor_add_color_node (GskGpuNodeProcessor *self,
                 {
                   gsk_gpu_color_op (self->frame,
                                     shader_clip,
+                                    gsk_gpu_node_processor_color_states_for_rgba (self),
                                     &clipped,
                                     graphene_point_zero (),
-                                    color);
+                                    GSK_RGBA_TO_VEC4 (color));
                   return;
                 }
               cover = GRAPHENE_RECT_INIT (int_clipped.x / scale_x, int_clipped.y / scale_y,
@@ -1555,33 +1567,37 @@ gsk_gpu_node_processor_add_color_node (GskGpuNodeProcessor *self,
               if (clipped.origin.x != cover.origin.x)
                 gsk_gpu_color_op (self->frame,
                                   shader_clip,
+                                  gsk_gpu_node_processor_color_states_for_rgba (self),
                                   &GRAPHENE_RECT_INIT (clipped.origin.x, clipped.origin.y, cover.origin.x - clipped.origin.x, clipped.size.height),
                                   graphene_point_zero (),
-                                  color);
+                                  GSK_RGBA_TO_VEC4 (color));
               if (clipped.origin.y != cover.origin.y)
                 gsk_gpu_color_op (self->frame,
                                   shader_clip,
+                                  gsk_gpu_node_processor_color_states_for_rgba (self),
                                   &GRAPHENE_RECT_INIT (clipped.origin.x, clipped.origin.y, clipped.size.width, cover.origin.y - clipped.origin.y),
                                   graphene_point_zero (),
-                                  color);
+                                  GSK_RGBA_TO_VEC4 (color));
               if (clipped.origin.x + clipped.size.width != cover.origin.x + cover.size.width)
                 gsk_gpu_color_op (self->frame,
                                   shader_clip,
+                                  gsk_gpu_node_processor_color_states_for_rgba (self),
                                   &GRAPHENE_RECT_INIT (cover.origin.x + cover.size.width,
                                                        clipped.origin.y,
                                                        clipped.origin.x + clipped.size.width - cover.origin.x - cover.size.width,
                                                        clipped.size.height),
                                   graphene_point_zero (),
-                                  color);
+                                  GSK_RGBA_TO_VEC4 (color));
               if (clipped.origin.y + clipped.size.height != cover.origin.y + cover.size.height)
                 gsk_gpu_color_op (self->frame,
                                   shader_clip,
+                                  gsk_gpu_node_processor_color_states_for_rgba (self),
                                   &GRAPHENE_RECT_INIT (clipped.origin.x,
                                                        cover.origin.y + cover.size.height,
                                                        clipped.size.width,
                                                        clipped.origin.y + clipped.size.height - cover.origin.y - cover.size.height),
                                   graphene_point_zero (),
-                                  color);
+                                  GSK_RGBA_TO_VEC4 (color));
             }
         }
 
@@ -1594,9 +1610,10 @@ gsk_gpu_node_processor_add_color_node (GskGpuNodeProcessor *self,
 
   gsk_gpu_color_op (self->frame,
                     gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, &node->bounds),
+                    gsk_gpu_node_processor_color_states_for_rgba (self),
                     &node->bounds,
                     &self->offset,
-                    &GDK_RGBA_INIT_ALPHA (color, self->opacity));
+                    GSK_RGBA_TO_VEC4_ALPHA (color, self->opacity));
 }
 
 static gboolean
@@ -2308,9 +2325,10 @@ gsk_gpu_node_processor_add_gl_shader_node (GskGpuNodeProcessor *self,
 
   gsk_gpu_color_op (self->frame,
                     gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, &node->bounds),
+                    gsk_gpu_node_processor_color_states_for_rgba (self),
                     &node->bounds,
                     &self->offset,
-                    &GDK_RGBA_INIT_ALPHA (&pink, self->opacity));
+                    GSK_RGBA_TO_VEC4_ALPHA (&pink, self->opacity));
 }
 
 static void
@@ -3108,9 +3126,10 @@ gsk_gpu_node_processor_add_subsurface_node (GskGpuNodeProcessor *self,
 
           gsk_gpu_color_op (self->frame,
                             gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, &node->bounds),
+                            gsk_gpu_node_processor_color_states_self (self),
                             &node->bounds,
                             &self->offset,
-                            &GDK_RGBA_WHITE);
+                            (float[4]) { 1, 1, 1, 1 });
 
           self->blend = GSK_GPU_BLEND_OVER;
           self->pending_globals |= GSK_GPU_GLOBAL_BLEND;
