@@ -46,13 +46,13 @@ run (out vec2 pos)
 
   _pos = pos;
   _rect = r;
-  _color0 = in_color0;
-  _color1 = in_color1;
-  _color2 = in_color2;
-  _color3 = in_color3;
-  _color4 = in_color4;
-  _color5 = in_color5;
-  _color6 = in_color6;
+  _color0 = color_premultiply (in_color0);
+  _color1 = color_premultiply (in_color1);
+  _color2 = color_premultiply (in_color2);
+  _color3 = color_premultiply (in_color3);
+  _color4 = color_premultiply (in_color4);
+  _color5 = color_premultiply (in_color5);
+  _color6 = color_premultiply (in_color6);
   _offsets0 = in_offsets0;
   _offsets1 = in_offsets1;
 }
@@ -113,7 +113,7 @@ get_gradient_color_at (float offset)
   else
     offset = clamp (offset, 0.0, 1.0);
 
-  return color_premultiply (get_gradient_color (offset));
+  return output_color_from_alt (get_gradient_color (offset));
 }
 
 void
@@ -126,14 +126,15 @@ run (out vec4 color,
     {
       float dx = 0.25 * dFdx (_offset);
       float dy = 0.25 * dFdy (_offset);
-      color = alpha * 0.25 * (get_gradient_color_at (_offset - dx - dy) +
-                              get_gradient_color_at (_offset - dx + dy) +
-                              get_gradient_color_at (_offset + dx - dy) +
-                              get_gradient_color_at (_offset + dx + dy));
+      color = output_color_alpha (get_gradient_color_at (_offset - dx - dy) +
+                                  get_gradient_color_at (_offset - dx + dy) +
+                                  get_gradient_color_at (_offset + dx - dy) +
+                                  get_gradient_color_at (_offset + dx + dy),
+                                  alpha * 0.25);
     }
   else
     {
-      color = alpha * get_gradient_color_at (_offset);
+      color = output_color_alpha (get_gradient_color_at (_offset), alpha);
     }
 
   position = _pos;

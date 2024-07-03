@@ -2151,6 +2151,7 @@ gsk_gpu_node_processor_linear_gradient_op (GskGpuNodeProcessor  *self,
 {
   gsk_gpu_linear_gradient_op (self->frame,
                               gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, &node->bounds),
+                              gsk_gpu_node_processor_color_states_explicit (self, GDK_COLOR_STATE_SRGB, TRUE),
                               GSK_RENDER_NODE_TYPE (node) == GSK_REPEATING_LINEAR_GRADIENT_NODE,
                               &node->bounds,
                               gsk_linear_gradient_node_get_start (node),
