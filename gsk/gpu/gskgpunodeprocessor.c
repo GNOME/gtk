@@ -1586,6 +1586,7 @@ gsk_gpu_node_processor_add_color_node (GskGpuNodeProcessor *self,
         }
 
       gsk_gpu_clear_op (self->frame,
+                        self->ccs,
                         &int_clipped,
                         color);
       return;
@@ -3094,6 +3095,7 @@ gsk_gpu_node_processor_add_subsurface_node (GskGpuNodeProcessor *self,
           if (gdk_rectangle_intersect (&int_clipped, &self->scissor, &int_clipped))
             {
               gsk_gpu_clear_op (self->frame,
+                                GDK_COLOR_STATE_SRGB,
                                 &int_clipped,
                                 &GDK_RGBA_TRANSPARENT);
             }
