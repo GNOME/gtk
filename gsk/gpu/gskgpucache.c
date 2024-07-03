@@ -21,6 +21,8 @@
 
 #define MAX_DEAD_PIXELS (ATLAS_SIZE * ATLAS_SIZE / 2)
 
+#define ATLAS_TIMEOUT_SCALE 4
+
 G_STATIC_ASSERT (MAX_ATLAS_ITEM_SIZE < ATLAS_SIZE);
 G_STATIC_ASSERT (MAX_DEAD_PIXELS < ATLAS_SIZE * ATLAS_SIZE);
 
@@ -209,6 +211,12 @@ gsk_gpu_cached_atlas_should_collect (GskGpuCache  *cache,
                                      gint64        cache_timeout,
                                      gint64        timestamp)
 {
+  GskGpuCachedAtlas *self = (GskGpuCachedAtlas *) cached;
+
+  if (cache->current_atlas == self &&
+      gsk_gpu_cached_is_old (cache, cached, cache_timeout * ATLAS_TIMEOUT_SCALE, timestamp))
+    return TRUE;
+
   return cached->pixels > MAX_DEAD_PIXELS;
 }
 
@@ -684,6 +692,7 @@ gsk_gpu_cache_get_atlas_image (GskGpuCache *self)
 
 static GskGpuImage *
 gsk_gpu_cache_add_atlas_image (GskGpuCache      *self,
+                               gint64            timestamp,
                                gsize             width,
                                gsize             height,
                                gsize            *out_x,
@@ -695,12 +704,18 @@ gsk_gpu_cache_add_atlas_image (GskGpuCache      *self,
   gsk_gpu_cache_ensure_atlas (self, FALSE);
 
   if (gsk_gpu_cached_atlas_allocate (self->current_atlas, width, height, out_x, out_y))
-    return self->current_atlas->image;
+    {
+      gsk_gpu_cached_use (self, (GskGpuCached *) self->current_atlas, timestamp);
+      return self->current_atlas->image;
+    }
 
   gsk_gpu_cache_ensure_atlas (self, TRUE);
 
   if (gsk_gpu_cached_atlas_allocate (self->current_atlas, width, height, out_x, out_y))
-    return self->current_atlas->image;
+    {
+      gsk_gpu_cached_use (self, (GskGpuCached *) self->current_atlas, timestamp);
+      return self->current_atlas->image;
+    }
 
   return NULL;
 }
@@ -793,6 +808,7 @@ gsk_gpu_cache_lookup_glyph_image (GskGpuCache            *self,
   padding = 1;
 
   image = gsk_gpu_cache_add_atlas_image (self,
+                                         gsk_gpu_frame_get_timestamp (frame),
                                          rect.size.width + 2 * padding, rect.size.height + 2 * padding,
                                          &atlas_x, &atlas_y);
   if (image)
