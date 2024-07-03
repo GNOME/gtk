@@ -651,9 +651,9 @@ gdk_drop_read_internal (GdkDrop             *self,
  *   pointer to an array of mime types
  * @io_priority: the I/O priority for the read operation
  * @cancellable: (nullable): optional `GCancellable` object
- * @callback: (scope async): a `GAsyncReadyCallback` to call when
+ * @callback: (scope async) (closure user_data): a `GAsyncReadyCallback` to call when
  *   the request is satisfied
- * @user_data: (closure): the data to pass to @callback
+ * @user_data: the data to pass to @callback
  *
  * Asynchronously read the dropped data from a `GdkDrop`
  * in a format that complies with one of the mime types.
@@ -843,8 +843,8 @@ gdk_drop_read_value_internal (GdkDrop             *self,
  * @type: a `GType` to read
  * @io_priority: the I/O priority of the request.
  * @cancellable: (nullable): optional `GCancellable` object, %NULL to ignore.
- * @callback: (scope async): callback to call when the request is satisfied
- * @user_data: (closure): the data to pass to callback function
+ * @callback: (scope async) (closure user_data): callback to call when the request is satisfied
+ * @user_data: the data to pass to callback function
  *
  * Asynchronously request the drag operation's contents converted
  * to the given @type.

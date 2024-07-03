@@ -533,8 +533,8 @@ deserialize_not_found (GdkContentDeserializer *deserializer)
  * @type: the GType to deserialize from
  * @io_priority: the I/O priority of the operation
  * @cancellable: (nullable): optional `GCancellable` object
- * @callback: (scope async): callback to call when the operation is done
- * @user_data: (closure): data to pass to the callback function
+ * @callback: (scope async) (closure user_data): callback to call when the operation is done
+ * @user_data: data to pass to the callback function
  *
  * Read content from the given input stream and deserialize it, asynchronously.
  *
