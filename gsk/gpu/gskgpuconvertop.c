@@ -17,74 +17,19 @@ struct _GskGpuConvertOp
 };
 
 #define VARIATION_OPACITY              (1u << 0)
-#define VARIATION_ALPHA_ALL_CHANNELS   (1u << 1)
-#define VARIATION_SOURCE_UNPREMULTIPLY (1u << 2)
-#define VARIATION_TARGET_PREMULTIPLY   (1u << 3)
-#define VARIATION_SOURCE_SHIFT 8u
-#define VARIATION_TARGET_SHIFT 16u
-#define VARIATION_COLOR_STATE_MASK 0xFFu
-
-static guint
-gsk_gpu_convert_encode_variation (GdkColorState *source,
-                                  gboolean       source_premultiplied,
-                                  GdkColorState *target,
-                                  gboolean       target_premultiplied,
-                                  gboolean       opacity)
-{
-  guint conversion;
-
-  if (source == target)
-    {
-      if (source_premultiplied == target_premultiplied)
-        {
-          /* no changes should be caught before running a shader */
-          g_assert (opacity);
-          if (source_premultiplied)
-            conversion = VARIATION_ALPHA_ALL_CHANNELS;
-          else
-            conversion = 0;
-        }
-      else
-        {
-          if (source_premultiplied)
-            conversion = VARIATION_SOURCE_UNPREMULTIPLY;
-          else
-            conversion = VARIATION_TARGET_PREMULTIPLY;
-        }
-    }
-  else
-    {
-      conversion = GDK_DEFAULT_COLOR_STATE_ID (source) << VARIATION_SOURCE_SHIFT;
-      conversion |= GDK_DEFAULT_COLOR_STATE_ID (target) << VARIATION_TARGET_SHIFT;
-      if (source_premultiplied)
-        conversion |= VARIATION_SOURCE_UNPREMULTIPLY;
-      if (target_premultiplied)
-        conversion |= VARIATION_TARGET_PREMULTIPLY;
-    }
-
-  if (opacity)
-    conversion |= VARIATION_OPACITY;
-
-  return conversion;
-}
+#define VARIATION_STRAIGHT_ALPHA       (1u << 1)
 
 static void
 gsk_gpu_convert_op_print_instance (GskGpuShaderOp *shader,
-                                         gpointer        instance_,
-                                         GString        *string)
+                                   gpointer        instance_,
+                                   GString        *string)
 {
   GskGpuConvertInstance *instance = (GskGpuConvertInstance *) instance_;
-  GdkColorState *source, *target;
 
-  source = gdk_color_state_get_by_id ((shader->variation >> VARIATION_SOURCE_SHIFT) & VARIATION_COLOR_STATE_MASK);
-  target = gdk_color_state_get_by_id ((shader->variation >> VARIATION_TARGET_SHIFT) & VARIATION_COLOR_STATE_MASK);
   gsk_gpu_print_rect (string, instance->rect);
   gsk_gpu_print_image_descriptor (string, shader->desc, instance->tex_id);
-  g_string_append_printf (string, "%s%s -> %s%s ",
-                          gdk_color_state_get_name (source),
-                          (shader->variation & VARIATION_SOURCE_UNPREMULTIPLY) ? "(p)" : "",
-                          gdk_color_state_get_name (target),
-                          (shader->variation & VARIATION_TARGET_PREMULTIPLY) ? "(p)" : "");
+  if (shader->variation & VARIATION_STRAIGHT_ALPHA)
+    gsk_gpu_print_string (string, "straight");
 }
 
 static const GskGpuShaderOpClass GSK_GPU_CONVERT_OP_CLASS = {
@@ -111,30 +56,22 @@ static const GskGpuShaderOpClass GSK_GPU_CONVERT_OP_CLASS = {
 void
 gsk_gpu_convert_op (GskGpuFrame            *frame,
                     GskGpuShaderClip        clip,
-                    GdkColorState          *source,
-                    gboolean                source_premultiplied,
-                    GdkColorState          *target,
-                    gboolean                target_premultiplied,
+                    GskGpuColorStates       color_states,
                     float                   opacity,
                     GskGpuDescriptors      *desc,
                     guint32                 descriptor,
+                    gboolean                straight_alpha,
                     const graphene_rect_t  *rect,
                     const graphene_point_t *offset,
                     const graphene_rect_t  *tex_rect)
 {
   GskGpuConvertInstance *instance;
-  guint variation;
-
-  variation = gsk_gpu_convert_encode_variation (source,
-                                                source_premultiplied,
-                                                target,
-                                                target_premultiplied,
-                                                opacity < 1.0);
 
   gsk_gpu_shader_op_alloc (frame,
                            &GSK_GPU_CONVERT_OP_CLASS,
-                           DEFAULT_COLOR_STATES,
-                           variation,
+                           color_states,
+                           (opacity < 1.0 ? VARIATION_OPACITY : 0) |
+                           (straight_alpha ? VARIATION_STRAIGHT_ALPHA : 0),
                            clip,
                            desc,
                            &instance);

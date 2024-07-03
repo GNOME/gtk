@@ -247,6 +247,14 @@ gsk_gpu_node_processor_sync_globals (GskGpuNodeProcessor *self,
     gsk_gpu_node_processor_emit_blend_op (self);
 }
 
+static inline GskGpuColorStates
+gsk_gpu_node_processor_color_states_self (GskGpuNodeProcessor *self)
+{
+  return gsk_gpu_color_states_create (self->ccs,
+                                      TRUE,
+                                      self->ccs,
+                                      TRUE);
+}
 static guint32
 gsk_gpu_node_processor_add_image (GskGpuNodeProcessor *self,
                                   GskGpuImage         *image,
@@ -559,22 +567,22 @@ gsk_gpu_node_processor_image_op (GskGpuNodeProcessor   *self,
                                  const graphene_rect_t *tex_rect)
 {
   guint32 descriptor;
+  gboolean straight_alpha;
 
   g_assert (self->pending_globals == 0);
 
   descriptor = gsk_gpu_node_processor_add_image (self, image, GSK_GPU_SAMPLER_DEFAULT);
+  straight_alpha = gsk_gpu_image_get_flags (image) & GSK_GPU_IMAGE_STRAIGHT_ALPHA;
 
-  if (gsk_gpu_image_get_flags (image) & GSK_GPU_IMAGE_STRAIGHT_ALPHA)
+  if (straight_alpha)
     {
       gsk_gpu_convert_op (self->frame,
                           gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, rect),
-                          GDK_COLOR_STATE_SRGB,
-                          FALSE,
-                          GDK_COLOR_STATE_SRGB,
-                          TRUE,
+                          gsk_gpu_node_processor_color_states_self (self),
                           self->opacity,
                           self->desc,
                           descriptor,
+                          straight_alpha,
                           rect,
                           &self->offset,
                           tex_rect);
