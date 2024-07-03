@@ -28,6 +28,8 @@
 
 #include <epoxy/gl.h>
 
+G_STATIC_ASSERT ((1 << GDK_MEMORY_DEPTH_BITS) > GDK_N_DEPTHS);
+
 typedef struct _GdkMemoryFormatDescription GdkMemoryFormatDescription;
 
 #define TYPED_FUNCS(name, T, R, G, B, A, bpp, scale) \

@@ -45,6 +45,8 @@ typedef enum {
   GDK_N_DEPTHS
 } GdkMemoryDepth;
 
+#define GDK_MEMORY_DEPTH_BITS 3
+
 gsize                   gdk_memory_format_alignment         (GdkMemoryFormat             format) G_GNUC_CONST;
 GdkMemoryAlpha          gdk_memory_format_alpha             (GdkMemoryFormat             format) G_GNUC_CONST;
 gsize                   gdk_memory_format_bytes_per_pixel   (GdkMemoryFormat             format) G_GNUC_CONST;

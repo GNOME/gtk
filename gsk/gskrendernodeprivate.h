@@ -32,7 +32,7 @@ struct _GskRenderNode
 
   graphene_rect_t bounds;
 
-  guint preferred_depth : 2;
+  guint preferred_depth : GDK_MEMORY_DEPTH_BITS;
   guint offscreen_for_opacity : 1;
 };
 
