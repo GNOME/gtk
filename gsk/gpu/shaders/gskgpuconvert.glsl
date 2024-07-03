@@ -13,24 +13,6 @@
 #define SOURCE_COLOR_STATE ((GSK_VARIATION >> VARIATION_SOURCE_SHIFT) & VARIATION_COLOR_STATE_MASK)
 #define TARGET_COLOR_STATE ((GSK_VARIATION >> VARIATION_TARGET_SHIFT) & VARIATION_COLOR_STATE_MASK)
 
-float
-srgb_eotf (float v)
-{
-  if (v >= 0.04045)
-    return pow (((v + 0.055) / (1.0 + 0.055)), 2.4);
-  else
-    return v / 12.92;
-}
-
-float
-srgb_oetf (float v)
-{
-  if (v > 0.0031308)
-    return 1.055 * pow (v, 1.0 / 2.4) - 0.055;
-  else
-    return 12.92 * v;
-}
-
 vec4
 srgb_to_linear_srgb (vec4 color)
 {
