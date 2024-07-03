@@ -36,6 +36,8 @@ expander_relations (void)
 
   gtk_expander_set_child (GTK_EXPANDER (widget), child);
 
+  gtk_expander_set_expanded (GTK_EXPANDER (widget), TRUE);
+
   gtk_test_accessible_assert_relation (widget, GTK_ACCESSIBLE_RELATION_CONTROLS, child, NULL);
 
   g_object_unref (widget);
