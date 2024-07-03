@@ -19,12 +19,12 @@
 
 #define MAX_ATLAS_ITEM_SIZE 256
 
-#define MAX_DEAD_PIXELS (ATLAS_SIZE * ATLAS_SIZE / 2)
+#define MIN_ALIVE_PIXELS (ATLAS_SIZE * ATLAS_SIZE / 2)
 
 #define ATLAS_TIMEOUT_SCALE 4
 
 G_STATIC_ASSERT (MAX_ATLAS_ITEM_SIZE < ATLAS_SIZE);
-G_STATIC_ASSERT (MAX_DEAD_PIXELS < ATLAS_SIZE * ATLAS_SIZE);
+G_STATIC_ASSERT (MIN_ALIVE_PIXELS < ATLAS_SIZE * ATLAS_SIZE);
 
 typedef struct _GskGpuCached GskGpuCached;
 typedef struct _GskGpuCachedClass GskGpuCachedClass;
@@ -75,7 +75,7 @@ struct _GskGpuCached
 
   gint64 timestamp;
   gboolean stale;
-  guint pixels;   /* For glyphs and textures, pixels. For atlases, dead pixels */
+  guint pixels;   /* For glyphs and textures, pixels. For atlases, alive pixels */
 };
 
 static inline void
@@ -89,9 +89,9 @@ mark_as_stale (GskGpuCached *cached,
       if (cached->atlas)
         {
           if (stale)
-            ((GskGpuCached *) cached->atlas)->pixels += cached->pixels;
-          else
             ((GskGpuCached *) cached->atlas)->pixels -= cached->pixels;
+          else
+            ((GskGpuCached *) cached->atlas)->pixels += cached->pixels;
         }
     }
 }
@@ -175,6 +175,7 @@ struct _GskGpuCachedAtlas
 
   GskGpuImage *image;
 
+  gsize remaining_pixels;
   gsize n_slices;
   struct {
     gsize width;
@@ -214,10 +215,11 @@ gsk_gpu_cached_atlas_should_collect (GskGpuCache  *cache,
   GskGpuCachedAtlas *self = (GskGpuCachedAtlas *) cached;
 
   if (cache->current_atlas == self &&
-      gsk_gpu_cached_is_old (cache, cached, cache_timeout * ATLAS_TIMEOUT_SCALE, timestamp))
+      gsk_gpu_cached_is_old (cache, cached, cache_timeout * ATLAS_TIMEOUT_SCALE, timestamp) &&
+      cached->pixels == 0)
     return TRUE;
 
-  return cached->pixels > MAX_DEAD_PIXELS;
+  return cached->pixels + self->remaining_pixels < MIN_ALIVE_PIXELS;
 }
 
 static const GskGpuCachedClass GSK_GPU_CACHED_ATLAS_CLASS =
@@ -234,6 +236,7 @@ gsk_gpu_cached_atlas_new (GskGpuCache *cache)
 
   self = gsk_gpu_cached_new (cache, &GSK_GPU_CACHED_ATLAS_CLASS, NULL);
   self->image = gsk_gpu_device_create_atlas_image (cache->device, ATLAS_SIZE, ATLAS_SIZE);
+  self->remaining_pixels = gsk_gpu_image_get_width (self->image) * gsk_gpu_image_get_height (self->image);
 
   return self;
 }
@@ -669,6 +672,9 @@ gsk_gpu_cached_atlas_allocate (GskGpuCachedAtlas *atlas,
   atlas->slices[best_slice].width += width;
   g_assert (atlas->slices[best_slice].width <= ATLAS_SIZE);
 
+  atlas->remaining_pixels -= width * height;
+  ((GskGpuCached *) atlas)->pixels += width * height;
+
   return TRUE;
 }
 
@@ -678,6 +684,9 @@ gsk_gpu_cache_ensure_atlas (GskGpuCache *self,
 {
   if (self->current_atlas && !recreate)
     return;
+
+  if (self->current_atlas)
+    self->current_atlas->remaining_pixels = 0;
 
   self->current_atlas = gsk_gpu_cached_atlas_new (self);
 }
