@@ -2,6 +2,7 @@
 
 #include "gskgpuprintprivate.h"
 
+#include "gskgpucolorstatesprivate.h"
 #include "gskgpudescriptorsprivate.h"
 #include "gskgpuimageprivate.h"
 
@@ -13,7 +14,7 @@ gsk_gpu_print_indent (GString *string,
 }
 
 void
-gsk_gpu_print_shader_info (GString          *string,
+gsk_gpu_print_shader_clip (GString          *string,
                            GskGpuShaderClip  clip)
 {
   switch (clip)
@@ -31,6 +32,17 @@ gsk_gpu_print_shader_info (GString          *string,
         g_assert_not_reached ();
         break;
     }
+}
+
+void
+gsk_gpu_print_color_states (GString           *string,
+                            GskGpuColorStates  color_states)
+{
+  g_string_append_printf (string, "%s%s -> %s%s ",
+                          gdk_color_state_get_name (gsk_gpu_color_states_get_alt (color_states)),
+                          gsk_gpu_color_states_is_alt_premultiplied (color_states) ? "(p)" : "",
+                          gdk_color_state_get_name (gsk_gpu_color_states_get_output (color_states)),
+                          gsk_gpu_color_states_is_output_premultiplied (color_states) ? "(p)" : "");
 }
 
 void

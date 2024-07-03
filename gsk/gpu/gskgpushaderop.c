@@ -51,7 +51,8 @@ gsk_gpu_shader_op_print (GskGpuOp    *op,
   for (i = 0; i < self->n_ops; i++)
     {
       gsk_gpu_print_op (string, indent, shader_name);
-      gsk_gpu_print_shader_info (string, self->clip);
+      gsk_gpu_print_shader_clip (string, self->clip);
+      gsk_gpu_print_color_states (string, self->color_states);
       shader_class->print_instance (self,
                                     instance + i * shader_class->vertex_size,
                                     string);
