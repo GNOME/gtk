@@ -1072,9 +1072,10 @@ gsk_gpu_node_processor_add_rounded_clip_node_with_mask (GskGpuNodeProcessor *sel
   gsk_gpu_node_processor_sync_globals (&other, 0);
   gsk_gpu_rounded_color_op (other.frame,
                             gsk_gpu_clip_get_shader_clip (&other.clip, &other.offset, &node->bounds),
+                            gsk_gpu_node_processor_color_states_self (&other),
                             gsk_rounded_clip_node_get_clip (node),
                             &other.offset,
-                            &GDK_RGBA_WHITE);
+                            (float[4]) { 1, 1, 1, 1 });
   gsk_gpu_node_processor_finish_draw (&other, mask_image);
 
   gsk_gpu_node_processor_add_images (self,
@@ -1119,11 +1120,13 @@ gsk_gpu_node_processor_add_rounded_clip_node (GskGpuNodeProcessor *self,
     {
       const GdkRGBA *rgba = gsk_color_node_get_color (child);
       gsk_gpu_node_processor_sync_globals (self, 0);
+
       gsk_gpu_rounded_color_op (self->frame,
                                 gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, &original_clip->bounds),
+                                gsk_gpu_node_processor_color_states_for_rgba (self),
                                 original_clip,
                                 &self->offset,
-                                &GDK_RGBA_INIT_ALPHA (rgba, self->opacity));
+                                GSK_RGBA_TO_VEC4_ALPHA (rgba, self->opacity));
       return;
     }
 
