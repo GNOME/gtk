@@ -175,7 +175,7 @@ tree_node_get_position (TreeNode *node)
   TreeNode *left, *parent;
   TreeAugment *left_aug;
   guint n;
-  
+
   for (n = 0;
        !node->is_root;
        node = node->parent, n++)
@@ -495,7 +495,7 @@ gtk_tree_list_model_expand_node (GtkTreeListModel *self,
 
   if (node->empty)
     return 0;
-  
+
   if (node->model != NULL)
     return 0;
 
@@ -503,18 +503,18 @@ gtk_tree_list_model_expand_node (GtkTreeListModel *self,
 
   if (model == NULL)
     return 0;
-  
+
   gtk_tree_list_model_init_node (self, node, model);
 
   tree_node_mark_dirty (node);
-  
+
   return tree_node_get_n_children (node);
 }
 
 static guint
 gtk_tree_list_model_collapse_node (GtkTreeListModel *self,
                                    TreeNode         *node)
-{      
+{
   guint n_items;
 
   if (node->model == NULL)
@@ -605,7 +605,7 @@ gtk_tree_list_model_set_property (GObject      *object,
     }
 }
 
-static void 
+static void
 gtk_tree_list_model_get_property (GObject     *object,
                                   guint        prop_id,
                                   GValue      *value,
@@ -735,9 +735,9 @@ gtk_tree_list_model_init (GtkTreeListModel *self)
  * @root: (transfer full): The `GListModel` to use as root
  * @passthrough: %TRUE to pass through items from the models
  * @autoexpand: %TRUE to set the autoexpand property and expand the @root model
- * @create_func: Function to call to create the `GListModel` for the children
- *   of an item
- * @user_data: (closure): Data to pass to @create_func
+ * @create_func: (scope notified) (closure user_data) (destroy user_destroy): function to
+ *   call to create the `GListModel` for the children of an item
+ * @user_data: Data to pass to @create_func
  * @user_destroy: Function to call to free @user_data
  *
  * Creates a new empty `GtkTreeListModel` displaying @root
@@ -989,7 +989,7 @@ gtk_tree_list_row_set_property (GObject      *object,
     }
 }
 
-static void 
+static void
 gtk_tree_list_row_get_property (GObject     *object,
                                 guint        prop_id,
                                 GValue      *value,

@@ -261,8 +261,9 @@ G_GNUC_END_IGNORE_DEPRECATIONS
  * @self: a `GtkUriLauncher`
  * @parent: (nullable): the parent `GtkWindow`
  * @cancellable: (nullable): a `GCancellable` to cancel the operation
- * @callback: (scope async): a callback to call when the operation is complete
- * @user_data: (closure callback): data to pass to @callback
+ * @callback: (scope async) (closure user_data): a callback to call when the
+ *   operation is complete
+ * @user_data: data to pass to @callback
  *
  * Launch an application to open the uri.
  *

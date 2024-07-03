@@ -256,7 +256,7 @@ path_from_vertical_line_rects (cairo_t      *cr,
     }
   while (end_line < n_lines);
 }
- 
+
 /* GtkFlowBoxChild {{{1 */
 
 /* GObject boilerplate {{{2 */
@@ -575,7 +575,7 @@ gtk_flow_box_child_init (GtkFlowBoxChild *child)
 {
   gtk_widget_set_focusable (GTK_WIDGET (child), TRUE);
 }
- 
+
 /* Public API {{{2 */
 
 /**
@@ -716,7 +716,7 @@ gtk_flow_box_child_changed (GtkFlowBoxChild *child)
   gtk_flow_box_apply_sort (box, child);
   gtk_flow_box_apply_filter (box, child);
 }
- 
+
 /* G tkFlowBox  {{{1 */
 
  /* Constants {{{2 */
@@ -848,8 +848,8 @@ G_DEFINE_TYPE_WITH_CODE (GtkFlowBox, gtk_flow_box, GTK_TYPE_WIDGET,
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_ORIENTABLE, NULL)
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_BUILDABLE,
                                                 gtk_flow_box_buildable_iface_init))
- 
-/*  Internal API, utilities {{{2 */ 
+
+/*  Internal API, utilities {{{2 */
 
 #define ORIENTATION_ALIGN(box)                              \
   (BOX_PRIV(box)->orientation == GTK_ORIENTATION_HORIZONTAL \
@@ -2815,7 +2815,7 @@ gtk_flow_box_drag_gesture_update (GtkGestureDrag *gesture,
     {
       priv->rubberband_select = TRUE;
       priv->rubberband_first = gtk_flow_box_get_child_at_pos (box, start_x, start_y);
-  
+
       widget_node = gtk_widget_get_css_node (GTK_WIDGET (box));
       priv->rubberband_node = gtk_css_node_new ();
       gtk_css_node_set_name (priv->rubberband_node, g_quark_from_static_string ("rubberband"));
@@ -3254,7 +3254,7 @@ void
 gtk_flow_box_disable_move_cursor (GtkFlowBox *box)
 {
   GtkFlowBoxPrivate *priv = BOX_PRIV (box);
-  
+
   priv->disable_move_cursor = TRUE;
 }
 
@@ -4079,7 +4079,7 @@ gtk_flow_box_buildable_iface_init (GtkBuildableIface *iface)
   parent_buildable_iface = g_type_interface_peek_parent (iface);
 
   iface->add_child = gtk_flow_box_buildable_add_child;
-} 
+}
    /* Public API {{{2 */
 
 /**
@@ -4353,8 +4353,9 @@ gtk_flow_box_check_model_compat (GtkFlowBox *box)
  * gtk_flow_box_bind_model:
  * @box: a `GtkFlowBox`
  * @model: (nullable): the `GListModel` to be bound to @box
- * @create_widget_func: a function that creates widgets for items
- * @user_data: (closure): user data passed to @create_widget_func
+ * @create_widget_func: (scope notified) (closure user_data) (destroy user_data_free_func): a function
+ *   that creates widgets for items
+ * @user_data: user data passed to @create_widget_func
  * @user_data_free_func: function for freeing @user_data
  *
  * Binds @model to @box.
@@ -4875,7 +4876,7 @@ gtk_flow_box_get_selection_mode (GtkFlowBox *box)
 
   return BOX_PRIV (box)->selection_mode;
 }
- 
+
 /* Filtering {{{2 */
 
 /**
@@ -4894,9 +4895,9 @@ gtk_flow_box_get_selection_mode (GtkFlowBox *box)
 /**
  * gtk_flow_box_set_filter_func:
  * @box: a `GtkFlowBox`
- * @filter_func: (nullable): callback that
- *   lets you filter which children to show
- * @user_data: (closure): user data passed to @filter_func
+ * @filter_func: (nullable) (scope notified) (closure user_data) (destroy destroy): callback
+ *   that lets you filter which children to show
+ * @user_data: user data passed to @filter_func
  * @destroy: destroy notifier for @user_data
  *
  * By setting a filter function on the @box one can decide dynamically
@@ -4957,7 +4958,7 @@ gtk_flow_box_invalidate_filter (GtkFlowBox *box)
   if (BOX_PRIV (box)->filter_func != NULL)
     gtk_flow_box_apply_filter_all (box);
 }
- 
+
 /* Sorting {{{2 */
 
 /**
@@ -4976,8 +4977,8 @@ gtk_flow_box_invalidate_filter (GtkFlowBox *box)
 /**
  * gtk_flow_box_set_sort_func:
  * @box: a `GtkFlowBox`
- * @sort_func: (nullable): the sort function
- * @user_data: (closure): user data passed to @sort_func
+ * @sort_func: (nullable) (scope notified) (closure user_data) (destroy destroy): the sort function
+ * @user_data: user data passed to @sort_func
  * @destroy: destroy notifier for @user_data
  *
  * By setting a sort function on the @box, one can dynamically

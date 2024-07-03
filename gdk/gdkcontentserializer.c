@@ -539,8 +539,8 @@ serialize_not_found (GdkContentSerializer *serializer)
  * @value: the content to serialize
  * @io_priority: the I/O priority of the operation
  * @cancellable: (nullable): optional `GCancellable` object
- * @callback: (scope async): callback to call when the operation is done
- * @user_data: (closure): data to pass to the callback function
+ * @callback: (scope async) (closure): callback to call when the operation is done
+ * @user_data: data to pass to the callback function
  *
  * Serialize content and write it to the given output stream, asynchronously.
  *

@@ -1238,8 +1238,9 @@ gtk_list_box_get_selection_mode (GtkListBox *box)
 /**
  * gtk_list_box_set_filter_func:
  * @box: a `GtkListBox`
- * @filter_func: (nullable): callback that lets you filter which rows to show
- * @user_data: (closure): user data passed to @filter_func
+ * @filter_func: (nullable) (scope notified) (closure user_data) (destroy destroy): callback
+ *   that lets you filter which rows to show
+ * @user_data: user data passed to @filter_func
  * @destroy: destroy notifier for @user_data
  *
  * By setting a filter function on the @box one can decide dynamically which
@@ -1279,8 +1280,9 @@ gtk_list_box_set_filter_func (GtkListBox           *box,
 /**
  * gtk_list_box_set_header_func:
  * @box: a `GtkListBox`
- * @update_header: (nullable): callback that lets you add row headers
- * @user_data: (closure): user data passed to @update_header
+ * @update_header: (nullable) (scope notified) (closure user_data) (destroy destroy): callback
+ *   that lets you add row headers
+ * @user_data: user data passed to @update_header
  * @destroy: destroy notifier for @user_data
  *
  * Sets a header function.
@@ -1434,8 +1436,8 @@ gtk_list_box_invalidate_headers (GtkListBox *box)
 /**
  * gtk_list_box_set_sort_func:
  * @box: a `GtkListBox`
- * @sort_func: (nullable): the sort function
- * @user_data: (closure): user data passed to @sort_func
+ * @sort_func: (nullable) (scope notified) (closure user_data) (destroy destroy): the sort function
+ * @user_data: user data passed to @sort_func
  * @destroy: destroy notifier for @user_data
  *
  * Sets a sort function.
@@ -3759,9 +3761,9 @@ gtk_list_box_check_model_compat (GtkListBox *box)
  * gtk_list_box_bind_model:
  * @box: a `GtkListBox`
  * @model: (nullable): the `GListModel` to be bound to @box
- * @create_widget_func: (nullable): a function that creates widgets for items
- *   or %NULL in case you also passed %NULL as @model
- * @user_data: (closure): user data passed to @create_widget_func
+ * @create_widget_func: (nullable) (scope notified) (closure user_data) (destroy user_data_free_func): a function
+ *   that creates widgets for items or %NULL in case you also passed %NULL as @model
+ * @user_data: user data passed to @create_widget_func
  * @user_data_free_func: function for freeing @user_data
  *
  * Binds @model to @box.

@@ -2575,8 +2575,8 @@ export_handle_done (GObject      *source,
 /**
  * gdk_wayland_toplevel_export_handle:
  * @toplevel: (type GdkWaylandToplevel): the `GdkToplevel` to obtain a handle for
- * @callback: callback to call with the handle
- * @user_data: (closure): user data for @callback
+ * @callback: (scope notified) (closure user_data) (destroy destroy_func): callback to call with the handle
+ * @user_data: user data for @callback
  * @destroy_func: destroy notify for @user_data
  *
  * Asynchronously obtains a handle for a surface that can be passed

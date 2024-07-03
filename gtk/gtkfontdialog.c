@@ -619,8 +619,9 @@ G_GNUC_END_IGNORE_DEPRECATIONS
  * @parent: (nullable): the parent `GtkWindow`
  * @initial_value: (nullable): the initial value
  * @cancellable: (nullable): a `GCancellable` to cancel the operation
- * @callback: (scope async): a callback to call when the operation is complete
- * @user_data: (closure callback): data to pass to @callback
+ * @callback: (scope async) (closure user_data): a callback to call when the
+ *   operation is complete
+ * @user_data: data to pass to @callback
  *
  * This function initiates a font selection operation by
  * presenting a dialog to the user for selecting a font family.
@@ -703,8 +704,9 @@ gtk_font_dialog_choose_family_finish (GtkFontDialog  *self,
  * @parent: (nullable): the parent `GtkWindow`
  * @initial_value: (nullable): the initial value
  * @cancellable: (nullable): a `GCancellable` to cancel the operation
- * @callback: (scope async): a callback to call when the operation is complete
- * @user_data: (closure callback): data to pass to @callback
+ * @callback: (scope async) (closure user_data): a callback to call when the
+ *   operation is complete
+ * @user_data: data to pass to @callback
  *
  * This function initiates a font selection operation by
  * presenting a dialog to the user for selecting a font face
@@ -782,8 +784,9 @@ gtk_font_dialog_choose_face_finish (GtkFontDialog  *self,
  * @parent: (nullable): the parent `GtkWindow`
  * @initial_value: (nullable): the font to select initially
  * @cancellable: (nullable): a `GCancellable` to cancel the operation
- * @callback: (scope async): a callback to call when the operation is complete
- * @user_data: (closure callback): data to pass to @callback
+ * @callback: (scope async) (closure user_data): a callback to call when the
+ *   operation is complete
+ * @user_data: data to pass to @callback
  *
  * This function initiates a font selection operation by
  * presenting a dialog to the user for selecting a font.
@@ -859,8 +862,9 @@ gtk_font_dialog_choose_font_finish (GtkFontDialog  *self,
  * @parent: (nullable): the parent `GtkWindow`
  * @initial_value: (nullable): the font to select initially
  * @cancellable: (nullable): a `GCancellable` to cancel the operation
- * @callback: (scope async): a callback to call when the operation is complete
- * @user_data: (closure callback): data to pass to @callback
+ * @callback: (scope async) (closure user_data): a callback to call when the
+ *   operation is complete
+ * @user_data: data to pass to @callback
  *
  * This function initiates a font selection operation by
  * presenting a dialog to the user for selecting a font and

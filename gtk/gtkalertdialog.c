@@ -681,8 +681,9 @@ G_GNUC_END_IGNORE_DEPRECATIONS
  * @self: a `GtkAlertDialog`
  * @parent: (nullable): the parent `GtkWindow`
  * @cancellable: (nullable): a `GCancellable` to cancel the operation
- * @callback: (nullable) (scope async): a callback to call when the operation is complete
- * @user_data: (closure callback): data to pass to @callback
+ * @callback: (nullable) (scope async) (closure user_data): a callback to call
+ *   when the operation is complete
+ * @user_data: data to pass to @callback
  *
  * This function shows the alert to the user.
  *

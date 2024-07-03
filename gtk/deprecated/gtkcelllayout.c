@@ -510,8 +510,8 @@ gtk_cell_layout_add_attribute (GtkCellLayout   *cell_layout,
  * gtk_cell_layout_set_cell_data_func:
  * @cell_layout: a `GtkCellLayout`
  * @cell: a `GtkCellRenderer`
- * @func: (nullable): the `GtkCellLayout`DataFunc to use
- * @func_data: (closure): user data for @func
+ * @func: (nullable) (scope notified) (closure func_data) (destroy destroy): the `GtkCellLayout`DataFunc to use
+ * @func_data: user data for @func
  * @destroy: destroy notify for @func_data
  *
  * Sets the `GtkCellLayout`DataFunc to use for @cell_layout.

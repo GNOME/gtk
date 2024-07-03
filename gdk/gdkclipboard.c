@@ -515,8 +515,8 @@ gdk_clipboard_get_content (GdkClipboard *clipboard)
  * @clipboard: a `GdkClipboard`
  * @io_priority: the I/O priority of the request
  * @cancellable: (nullable): optional `GCancellable` object
- * @callback: (scope async): callback to call when the request is satisfied
- * @user_data: (closure): the data to pass to callback function
+ * @callback: (scope async) (closure user_data): callback to call when the request is satisfied
+ * @user_data:: the data to pass to callback function
  *
  * Asynchronously instructs the @clipboard to store its contents remotely.
  *
@@ -630,8 +630,8 @@ gdk_clipboard_read_internal (GdkClipboard        *clipboard,
  * @mime_types: (array zero-terminated=1): a %NULL-terminated array of mime types to choose from
  * @io_priority: the I/O priority of the request
  * @cancellable: (nullable): optional `GCancellable` object
- * @callback: (scope async): callback to call when the request is satisfied
- * @user_data: (closure): the data to pass to callback function
+ * @callback: (scope async) (closure user_data): callback to call when the request is satisfied
+ * @user_data: the data to pass to callback function
  *
  * Asynchronously requests an input stream to read the @clipboard's
  * contents from.
@@ -823,8 +823,8 @@ gdk_clipboard_read_value_internal (GdkClipboard        *clipboard,
  * @type: a `GType` to read
  * @io_priority: the I/O priority of the request
  * @cancellable: (nullable): optional `GCancellable` object
- * @callback: (scope async): callback to call when the request is satisfied
- * @user_data: (closure): the data to pass to callback function
+ * @callback: (scope async) (closure user_data): callback to call when the request is satisfied
+ * @user_data: the data to pass to callback function
  *
  * Asynchronously request the @clipboard contents converted to the given
  * @type.
@@ -882,8 +882,8 @@ gdk_clipboard_read_value_finish (GdkClipboard  *clipboard,
  * gdk_clipboard_read_texture_async:
  * @clipboard: a `GdkClipboard`
  * @cancellable: (nullable): optional `GCancellable` object, %NULL to ignore.
- * @callback: (scope async): callback to call when the request is satisfied
- * @user_data: (closure): the data to pass to callback function
+ * @callback: (scope async) (closure user_data): callback to call when the request is satisfied
+ * @user_data: the data to pass to callback function
  *
  * Asynchronously request the @clipboard contents converted to a `GdkPixbuf`.
  *
@@ -944,8 +944,8 @@ gdk_clipboard_read_texture_finish (GdkClipboard  *clipboard,
  * gdk_clipboard_read_text_async:
  * @clipboard: a `GdkClipboard`
  * @cancellable: (nullable): optional `GCancellable` object
- * @callback: (scope async): callback to call when the request is satisfied
- * @user_data: (closure): the data to pass to callback function
+ * @callback: (scope async) (closure user_data): callback to call when the request is satisfied
+ * @user_data: the data to pass to callback function
  *
  * Asynchronously request the @clipboard contents converted to a string.
  *

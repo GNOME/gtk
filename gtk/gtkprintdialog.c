@@ -1423,8 +1423,9 @@ print_response_cb (GtkPrintUnixDialog *window,
  * @self: a `GtkPrintDialog`
  * @parent: (nullable): the parent `GtkWindow`
  * @cancellable: (nullable): a `GCancellable` to cancel the operation
- * @callback: (scope async): a callback to call when the operation is complete
- * @user_data: (closure callback): data to pass to @callback
+ * @callback: (scope async) (closure user_data): a callback to call when the
+ *   operation is complete
+ * @user_data: data to pass to @callback
  *
  * This function presents a print dialog to let the user select a printer,
  * and set up print settings and page setup.
@@ -1523,8 +1524,9 @@ gtk_print_dialog_setup_finish (GtkPrintDialog    *self,
  * @parent: (nullable): the parent `GtkWindow`
  * @setup: (nullable): the `GtkPrintSetup` to use
  * @cancellable: (nullable): a `GCancellable` to cancel the operation
- * @callback: (scope async): a callback to call when the operation is complete
- * @user_data: (closure callback): data to pass to @callback
+ * @callback: (scope async) (closure user_data): a callback to call when the
+ *   operation is complete
+ * @user_data: data to pass to @callback
  *
  * This function prints content from a stream.
  *
@@ -1648,8 +1650,9 @@ gtk_print_dialog_print_finish (GtkPrintDialog  *self,
  * @setup: (nullable):  the `GtkPrintSetup` to use
  * @file: the `GFile` to print
  * @cancellable: (nullable): a `GCancellable` to cancel the operation
- * @callback: (scope async): a callback to call when the operation is complete
- * @user_data: (closure callback): data to pass to @callback
+ * @callback: (scope async) (closure user_data): a callback to call when the
+ *   operation is complete
+ * @user_data: data to pass to @callback
  *
  * This function prints a file.
  *
