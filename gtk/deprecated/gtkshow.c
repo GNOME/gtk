@@ -92,8 +92,8 @@ window_handle_exported (GtkWindow  *window,
  * @uri: the uri to show
  * @timestamp: timestamp from the event that triggered this call, or %GDK_CURRENT_TIME
  * @cancellable: (nullable): a `GCancellable` to cancel the launch
- * @callback: (scope async): a callback to call when the action is complete
- * @user_data: (closure callback): data to pass to @callback
+ * @callback: (scope async) (closure user_data): a callback to call when the action is complete
+ * @user_data: data to pass to @callback
  *
  * This function launches the default application for showing
  * a given uri.

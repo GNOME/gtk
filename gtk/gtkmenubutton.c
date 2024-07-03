@@ -1274,10 +1274,10 @@ gtk_menu_button_popdown (GtkMenuButton *menu_button)
 /**
  * gtk_menu_button_set_create_popup_func:
  * @menu_button: a `GtkMenuButton`
- * @func: (nullable): function to call when a popup is about to
- *   be shown, but none has been provided via other means, or %NULL
- *   to reset to default behavior.
- * @user_data: (closure): user data to pass to @func.
+ * @func: (nullable) (scope notified) (closure user_data) (destroy destroy_notify): function
+ *   to call when a popup is about to be shown, but none has been provided via other means,
+ *   or %NULL to reset to default behavior
+ * @user_data: user data to pass to @func
  * @destroy_notify: (nullable): destroy notify for @user_data
  *
  * Sets @func to be called when a popup is about to be shown.

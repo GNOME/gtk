@@ -406,10 +406,10 @@ gtk_callback_action_init (GtkCallbackAction *self)
 
 /**
  * gtk_callback_action_new:
- * @callback: (scope notified): the callback to call
- * @data: (closure callback): the data to be passed to @callback
- * @destroy: (destroy data): the function to be called when the
- *   callback action is finalized
+ * @callback: (scope notified) (closure data) (destroy destroy): the callback
+ *   to call when the action is activated
+ * @data: the data to be passed to @callback
+ * @destroy: the function to be called when the callback action is finalized
  *
  * Create a custom action that calls the given @callback when
  * activated.

@@ -253,7 +253,7 @@ gtk_print_job_constructed (GObject *object)
   g_assert (job->printer_set &&
 	    job->settings_set &&
 	    job->page_setup_set);
-  
+
   _gtk_printer_prepare_for_print (job->printer,
 				  job,
 				  job->settings,
@@ -335,7 +335,7 @@ GtkPrintSettings *
 gtk_print_job_get_settings (GtkPrintJob *job)
 {
   g_return_val_if_fail (GTK_IS_PRINT_JOB (job), NULL);
-  
+
   return job->settings;
 }
 
@@ -351,7 +351,7 @@ GtkPrinter *
 gtk_print_job_get_printer (GtkPrintJob *job)
 {
   g_return_val_if_fail (GTK_IS_PRINT_JOB (job), NULL);
-  
+
   return job->printer;
 }
 
@@ -367,7 +367,7 @@ const char *
 gtk_print_job_get_title (GtkPrintJob *job)
 {
   g_return_val_if_fail (GTK_IS_PRINT_JOB (job), NULL);
-  
+
   return job->title;
 }
 
@@ -383,7 +383,7 @@ GtkPrintStatus
 gtk_print_job_get_status (GtkPrintJob *job)
 {
   g_return_val_if_fail (GTK_IS_PRINT_JOB (job), GTK_PRINT_STATUS_FINISHED);
-  
+
   return job->status;
 }
 
@@ -508,11 +508,11 @@ gtk_print_job_get_surface (GtkPrintJob  *job,
 
   if (job->surface)
     return job->surface;
- 
+
   g_return_val_if_fail (job->spool_io == NULL, NULL);
- 
-  fd = g_file_open_tmp ("gtkprint_XXXXXX", 
-			 &filename, 
+
+  fd = g_file_open_tmp ("gtkprint_XXXXXX",
+			 &filename,
 			 &tmp_error);
   if (fd == -1)
     {
@@ -522,7 +522,7 @@ gtk_print_job_get_surface (GtkPrintJob  *job,
     }
 
   fchmod (fd, S_IRUSR | S_IWUSR);
-  
+
   /* If we are debugging printing don't delete the tmp files */
   if (!GTK_DEBUG_CHECK (PRINTING))
     g_unlink (filename);
@@ -531,11 +531,11 @@ gtk_print_job_get_surface (GtkPrintJob  *job,
   paper_size = gtk_page_setup_get_paper_size (job->page_setup);
   width = gtk_paper_size_get_width (paper_size, GTK_UNIT_POINTS);
   height = gtk_paper_size_get_height (paper_size, GTK_UNIT_POINTS);
- 
+
   job->spool_io = g_io_channel_unix_new (fd);
   g_io_channel_set_close_on_unref (job->spool_io, TRUE);
   g_io_channel_set_encoding (job->spool_io, NULL, &tmp_error);
-  
+
   if (tmp_error != NULL)
     {
       g_io_channel_unref (job->spool_io);
@@ -548,7 +548,7 @@ gtk_print_job_get_surface (GtkPrintJob  *job,
 						     job->settings,
 						     width, height,
 						     job->spool_io);
-  
+
   return job->surface;
 }
 
@@ -577,7 +577,7 @@ gtk_print_job_set_track_print_status (GtkPrintJob *job,
   if (job->track_print_status != track_status)
     {
       job->track_print_status = track_status;
-      
+
       g_object_notify (G_OBJECT (job), "track-print-status");
     }
 }
@@ -596,7 +596,7 @@ gboolean
 gtk_print_job_get_track_print_status (GtkPrintJob *job)
 {
   g_return_val_if_fail (GTK_IS_PRINT_JOB (job), FALSE);
-  
+
   return job->track_print_status;
 }
 
@@ -616,7 +616,7 @@ gtk_print_job_set_property (GObject      *object,
       g_free (job->title);
       job->title = g_value_dup_string (value);
       break;
-    
+
     case PROP_PRINTER:
       job->printer = GTK_PRINTER (g_value_dup_object (value));
       job->printer_set = TRUE;
@@ -627,7 +627,7 @@ gtk_print_job_set_property (GObject      *object,
       job->page_setup = GTK_PAGE_SETUP (g_value_dup_object (value));
       job->page_setup_set = TRUE;
       break;
-      
+
     case PROP_SETTINGS:
       /* We save a copy of the settings since we modify
        * if when preparing the printer job. */
@@ -680,8 +680,9 @@ gtk_print_job_get_property (GObject    *object,
 /**
  * gtk_print_job_send:
  * @job: a `GtkPrintJob`
- * @callback: function to call when the job completes or an error occurs
- * @user_data: (closure): user data that gets passed to @callback
+ * @callback: (scope notified) (closure user_data) (destroy dnotify): function
+ *   to call when the job completes or an error occurs
+ * @user_data: user data that gets passed to @callback
  * @dnotify: destroy notify for @user_data
  *
  * Sends the print job off to the printer.
@@ -694,12 +695,12 @@ gtk_print_job_send (GtkPrintJob             *job,
 {
   g_return_if_fail (GTK_IS_PRINT_JOB (job));
   g_return_if_fail (job->spool_io != NULL);
-  
+
   gtk_print_job_set_status (job, GTK_PRINT_STATUS_SENDING_DATA);
 
   if (g_io_channel_get_flags (job->spool_io) & G_IO_FLAG_IS_SEEKABLE)
     g_io_channel_seek_position (job->spool_io, 0, G_SEEK_SET, NULL);
-  
+
   gtk_print_backend_print_stream (job->backend, job,
 				  job->spool_io,
                                   callback, user_data, dnotify);

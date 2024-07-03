@@ -184,8 +184,8 @@ gtk_tree_sortable_set_sort_column_id (GtkTreeSortable  *sortable,
  * gtk_tree_sortable_set_sort_func:
  * @sortable: A `GtkTreeSortable`
  * @sort_column_id: the sort column id to set the function for
- * @sort_func: The comparison function
- * @user_data: (closure): User data to pass to @sort_func
+ * @sort_func: (scope notified) (closure user_data) (destroy destroy): The comparison function
+ * @user_data: User data to pass to @sort_func
  * @destroy: (nullable): Destroy notifier of @user_data
  *
  * Sets the comparison function used when sorting to be @sort_func. If the
@@ -218,8 +218,8 @@ gtk_tree_sortable_set_sort_func (GtkTreeSortable        *sortable,
 /**
  * gtk_tree_sortable_set_default_sort_func:
  * @sortable: A `GtkTreeSortable`
- * @sort_func: The comparison function
- * @user_data: (closure): User data to pass to @sort_func
+ * @sort_func: (scope notified) (closure user_data) (destroy destroy): The comparison function
+ * @user_data: User data to pass to @sort_func
  * @destroy: (nullable): Destroy notifier of @user_data
  *
  * Sets the default comparison function used when sorting to be @sort_func.

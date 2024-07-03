@@ -917,8 +917,9 @@ finish_multiple_files_op (GtkFileDialog  *self,
  * @self: a `GtkFileDialog`
  * @parent: (nullable): the parent `GtkWindow`
  * @cancellable: (nullable): a `GCancellable` to cancel the operation
- * @callback: (scope async): a callback to call when the operation is complete
- * @user_data: (closure callback): data to pass to @callback
+ * @callback: (scope async) (closure user_data): a callback to call when the
+ *   operation is complete
+ * @user_data: data to pass to @callback
  *
  * This function initiates a file selection operation by
  * presenting a file chooser dialog to the user.
@@ -985,8 +986,9 @@ gtk_file_dialog_open_finish (GtkFileDialog   *self,
  * @self: a `GtkFileDialog`
  * @parent: (nullable): the parent `GtkWindow`
  * @cancellable: (nullable): a `GCancellable` to cancel the operation
- * @callback: (scope async): a callback to call when the operation is complete
- * @user_data: (closure callback): data to pass to @callback
+ * @callback: (scope async) (closure user_data): a callback to call when the
+ *   operation is complete
+ * @user_data: data to pass to @callback
  *
  * This function initiates a directory selection operation by
  * presenting a file chooser dialog to the user.
@@ -1057,8 +1059,9 @@ gtk_file_dialog_select_folder_finish (GtkFileDialog  *self,
  * @self: a `GtkFileDialog`
  * @parent: (nullable): the parent `GtkWindow`
  * @cancellable: (nullable): a `GCancellable` to cancel the operation
- * @callback: (scope async): a callback to call when the operation is complete
- * @user_data: (closure callback): data to pass to @callback
+ * @callback: (scope async) (closure user_data): a callback to call when the
+ *   operation is complete
+ * @user_data: data to pass to @callback
  *
  * This function initiates a file save operation by
  * presenting a file chooser dialog to the user.
@@ -1125,8 +1128,9 @@ gtk_file_dialog_save_finish (GtkFileDialog   *self,
  * @self: a `GtkFileDialog`
  * @parent: (nullable): the parent `GtkWindow`
  * @cancellable: (nullable): a `GCancellable` to cancel the operation
- * @callback: (scope async): a callback to call when the operation is complete
- * @user_data: (closure callback): data to pass to @callback
+ * @callback: (scope async) (closure user_data): a callback to call when the
+ *   operation is complete
+ * @user_data: data to pass to @callback
  *
  * This function initiates a multi-file selection operation by
  * presenting a file chooser dialog to the user.
@@ -1197,8 +1201,9 @@ gtk_file_dialog_open_multiple_finish (GtkFileDialog   *self,
  * @self: a `GtkFileDialog`
  * @parent: (nullable): the parent `GtkWindow`
  * @cancellable: (nullable): a `GCancellable` to cancel the operation
- * @callback: (scope async): a callback to call when the operation is complete
- * @user_data: (closure callback): data to pass to @callback
+ * @callback: (scope async) (closure user_data): a callback to call when the
+ *   operation is complete
+ * @user_data: data to pass to @callback
  *
  * This function initiates a multi-directory selection operation by
  * presenting a file chooser dialog to the user.

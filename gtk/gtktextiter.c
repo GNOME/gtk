@@ -4433,8 +4433,8 @@ matches_pred (GtkTextIter *iter,
 /**
  * gtk_text_iter_forward_find_char:
  * @iter: a `GtkTextIter`
- * @pred: (scope call): a function to be called on each character
- * @user_data: (closure): user data for @pred
+ * @pred: (scope call) (closure user_data): a function to be called on each character
+ * @user_data: user data for @pred
  * @limit: (nullable): search limit
  *
  * Advances @iter, calling @pred on each character.
@@ -4472,8 +4472,8 @@ gtk_text_iter_forward_find_char (GtkTextIter         *iter,
 /**
  * gtk_text_iter_backward_find_char:
  * @iter: a `GtkTextIter`
- * @pred: (scope call): function to be called on each character
- * @user_data: (closure): user data for @pred
+ * @pred: (scope call) (closure user_data): function to be called on each character
+ * @user_data: user data for @pred
  * @limit: (nullable): search limit
  *
  * Same as [method@Gtk.TextIter.forward_find_char],

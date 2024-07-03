@@ -3010,8 +3010,9 @@ static guint tick_callback_id;
 /**
  * gtk_widget_add_tick_callback:
  * @widget: a `GtkWidget`
- * @callback: function to call for updating animations
- * @user_data: (closure): data to pass to @callback
+ * @callback: (scope notified) (closure user_data) (destroy notify): function
+ *   to call for updating animations
+ * @user_data: data to pass to @callback
  * @notify: function to call to free @user_data when the callback is removed.
  *
  * Queues an animation frame update and adds a callback to be called
