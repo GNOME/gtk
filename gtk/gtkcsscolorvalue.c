@@ -46,6 +46,10 @@ static GtkCssValue * gtk_css_color_value_new_color_mix (GtkCssColorSpace        
                                                         GtkCssValue            *color2,
                                                         float                   percentage1,
                                                         float                   percentage2);
+static GtkCssValue * gtk_css_color_value_new_relative  (GtkCssValue            *origin,
+                                                        GtkCssColorSpace        color_space,
+                                                        gboolean                legacy_srgb,
+                                                        GtkCssValue             *values[4]);
 static GtkCssValue * gtk_css_color_value_resolve  (GtkCssValue          *color,
                                                    GtkCssComputeContext *context,
                                                    GtkCssValue          *current);
@@ -413,6 +417,7 @@ gtk_css_value_color_print (const GtkCssValue *value,
 
         if (value->relative.values[3] == NULL ||
             !gtk_css_value_is_computed (value->relative.values[3]) ||
+            gtk_css_value_contains_current_color (value->relative.values[3]) ||
             gtk_css_number_value_get_canonical (value->relative.values[3], 1) < 0.999)
           {
             g_string_append (string, " / ");
@@ -676,23 +681,31 @@ gtk_css_color_value_do_resolve (GtkCssValue          *color,
 
     case COLOR_TYPE_RELATIVE:
       {
+        GtkCssValue *origin;
         GtkCssValue *vals[4];
+
+        origin = gtk_css_color_value_do_resolve (color->relative.origin, context, current, cycle_list);
 
         for (guint i = 0; i < 4; i++)
           {
             if (color->relative.values[i])
-              vals[i] = gtk_css_value_compute (color->relative.values[i], GTK_CSS_PROPERTY_COLOR, context);
+              vals[i] = gtk_css_value_resolve (color->relative.values[i], context, current);
             else
               vals[i] = NULL;
           }
 
-        value = resolve_relative (vals, color->relative.color_space, color->relative.legacy_srgb);
+        value = gtk_css_color_value_new_relative (origin,
+                                                  color->relative.color_space,
+                                                  color->relative.legacy_srgb,
+                                                  vals);
 
         for (guint i = 0; i < 4; i++)
           {
             if (vals[i])
               gtk_css_value_unref (vals[i]);
           }
+
+        gtk_css_value_unref (origin);
       }
       break;
 
@@ -935,7 +948,7 @@ gtk_css_color_value_new_relative (GtkCssValue      *origin,
   if (!gtk_css_value_is_computed (origin))
     computed = FALSE;
 
-  if (!computed)
+  if (computed)
     {
       for (guint i = 0; i < 4; i++)
         {
