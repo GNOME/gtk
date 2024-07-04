@@ -7,6 +7,14 @@ container {
       }
     }
   }
+  subsurface {
+    child: transform {
+      transform: rotate(45);
+      child: texture {
+          texture: url('data:image/svg+xml;utf-8,<svg width="13" height="17"></svg>');
+      }
+    }
+  }
   transform {
     transform: translate3d(0, 1, 2);
     child: subsurface {
