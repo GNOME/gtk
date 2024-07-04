@@ -601,11 +601,68 @@ gtk_css_value_number_transition (GtkCssValue *start,
   return result;
 }
 
+static GtkCssValue *
+gtk_css_value_number_resolve (GtkCssValue          *number,
+                              GtkCssComputeContext *context,
+                              GtkCssValue          *current)
+{
+  if (number->type == TYPE_COLOR_COORD)
+    {
+      GtkCssValue *color;
+      float v;
+
+      color = gtk_css_value_resolve (number->color_coord.color, context, current);
+      v = gtk_css_color_value_get_coord (color,
+                                         number->color_coord.color_space,
+                                         number->color_coord.legacy_rgb_scale,
+                                         number->color_coord.coord);
+      gtk_css_value_unref (color);
+
+      return gtk_css_number_value_new (v, GTK_CSS_NUMBER);
+    }
+  else if (number->type != TYPE_DIMENSION)
+    {
+      const guint n_terms = number->calc.n_terms;
+      GtkCssValue *result;
+      gboolean changed = FALSE;
+      GtkCssValue **new_values;
+
+      new_values = g_alloca (sizeof (GtkCssValue *) * n_terms);
+
+      for (gsize i = 0; i < n_terms; i++)
+        {
+          GtkCssValue *resolved;
+
+          resolved = gtk_css_value_resolve (number->calc.terms[i], context, current);
+          changed |= resolved != number->calc.terms[i];
+          new_values[i] = resolved ;
+        }
+
+      if (changed)
+        {
+          result = gtk_css_math_value_new (number->type, number->calc.mode, new_values, n_terms);
+        }
+      else
+        {
+          for (gsize i = 0; i < n_terms; i++)
+            gtk_css_value_unref (new_values[i]);
+
+          result = gtk_css_value_ref (number);
+        }
+
+      return result;
+    }
+  else
+    {
+      return gtk_css_value_ref (number);
+    }
+}
+
 static const GtkCssValueClass GTK_CSS_VALUE_NUMBER = {
   "GtkCssNumberValue",
   gtk_css_value_number_free,
   gtk_css_value_number_compute,
-  NULL,
+  gtk_css_value_number_resolve,
   gtk_css_value_number_equal,
   gtk_css_value_number_transition,
   NULL,
@@ -1893,7 +1950,8 @@ gtk_css_number_value_new_color_component (GtkCssValue      *color,
                                           gboolean          legacy_rgb_scale,
                                           guint             coord)
 {
-  if (gtk_css_value_is_computed (color))
+  if (gtk_css_value_is_computed (color) &&
+      !gtk_css_value_contains_current_color (color))
     {
       float v;
 
@@ -1912,6 +1970,7 @@ gtk_css_number_value_new_color_component (GtkCssValue      *color,
       result->color_coord.coord = coord;
       result->color_coord.legacy_rgb_scale = legacy_rgb_scale;
       result->is_computed = FALSE;
+      result->contains_current_color = gtk_css_value_contains_current_color (color);
 
       return result;
     }
