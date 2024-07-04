@@ -857,7 +857,7 @@ static GtkCssValue white_singleton             = { .class = &GTK_CSS_VALUE_COLOR
 
 static GtkCssValue current_color_singleton     = { .class = &GTK_CSS_VALUE_COLOR,
                                                    .ref_count = 1,
-                                                   .is_computed = FALSE,
+                                                   .is_computed = TRUE,
                                                    .contains_variables = FALSE,
                                                    .contains_current_color = TRUE,
                                                    .serialize_as_rgb = FALSE,
@@ -945,7 +945,8 @@ gtk_css_color_value_new_relative (GtkCssValue      *origin,
   GtkCssValue *value;
   gboolean computed = TRUE;
 
-  if (!gtk_css_value_is_computed (origin))
+  if (!gtk_css_value_is_computed (origin) ||
+      gtk_css_value_contains_current_color (origin))
     computed = FALSE;
 
   if (computed)
@@ -967,6 +968,7 @@ gtk_css_color_value_new_relative (GtkCssValue      *origin,
                                sizeof (GtkCssValue) + sizeof (GtkCssValue *) * 3);
   value->relative.color_space = color_space;
   value->is_computed = FALSE;
+  value->contains_current_color = gtk_css_value_contains_current_color (origin);
   value->type = COLOR_TYPE_RELATIVE;
 
   value->relative.origin = gtk_css_value_ref (origin);
@@ -1003,7 +1005,7 @@ gtk_css_color_value_new_shade (GtkCssValue *color,
 
   gtk_internal_return_val_if_fail (color->class == &GTK_CSS_VALUE_COLOR, NULL);
 
-  if (color->is_computed)
+  if (color->is_computed && !color->contains_current_color)
     {
       GdkRGBA c;
 
@@ -1014,6 +1016,7 @@ gtk_css_color_value_new_shade (GtkCssValue *color,
 
   value = gtk_css_value_new (GtkCssValue, &GTK_CSS_VALUE_COLOR);
   value->type = COLOR_TYPE_SHADE;
+  value->is_computed = color->is_computed;
   value->contains_current_color = color->contains_current_color;
   value->shade.color = gtk_css_value_ref (color);
   value->shade.factor = factor;
@@ -1029,7 +1032,7 @@ gtk_css_color_value_new_alpha (GtkCssValue *color,
 
   gtk_internal_return_val_if_fail (color->class == &GTK_CSS_VALUE_COLOR, NULL);
 
-  if (color->is_computed)
+  if (color->is_computed && !color->contains_current_color)
     {
       GdkRGBA c;
 
@@ -1040,6 +1043,7 @@ gtk_css_color_value_new_alpha (GtkCssValue *color,
 
   value = gtk_css_value_new (GtkCssValue, &GTK_CSS_VALUE_COLOR);
   value->type = COLOR_TYPE_ALPHA;
+  value->is_computed = color->is_computed;
   value->contains_current_color = color->contains_current_color;
   value->alpha.color = gtk_css_value_ref (color);
   value->alpha.factor = factor;
@@ -1063,7 +1067,8 @@ gtk_css_color_value_new_color_mix (GtkCssColorSpace        color_space,
   if (percentage1 > -0.5 && percentage2 > -0.5 && fabs (percentage1 + percentage2) < 0.001)
     return NULL;
 
-  if (color1->is_computed && color2->is_computed)
+  if (color1->is_computed && color2->is_computed &&
+      !color1->contains_current_color && !color2->contains_current_color)
     {
       return apply_color_mix (color_space, hue_interpolation,
                               color1, color2,
@@ -1071,6 +1076,8 @@ gtk_css_color_value_new_color_mix (GtkCssColorSpace        color_space,
     }
 
   value = gtk_css_value_new (GtkCssValue, &GTK_CSS_VALUE_COLOR);
+  value->is_computed = color1->is_computed &&
+                       color2->is_computed;
   value->contains_current_color = color1->contains_current_color ||
                                   color2->contains_current_color;
   value->type = COLOR_TYPE_COLOR_MIX;
@@ -1094,7 +1101,8 @@ gtk_css_color_value_new_mix (GtkCssValue *color1,
   gtk_internal_return_val_if_fail (color1->class == &GTK_CSS_VALUE_COLOR, NULL);
   gtk_internal_return_val_if_fail (color2->class == &GTK_CSS_VALUE_COLOR, NULL);
 
-  if (color1->is_computed && color2->is_computed)
+  if (color1->is_computed && color2->is_computed &&
+      !color1->contains_current_color && !color2->contains_current_color)
     {
       GdkRGBA result;
 
@@ -1106,6 +1114,8 @@ gtk_css_color_value_new_mix (GtkCssValue *color1,
 
   value = gtk_css_value_new (GtkCssValue, &GTK_CSS_VALUE_COLOR);
   value->type = COLOR_TYPE_MIX;
+  value->is_computed = color1->is_computed &&
+                       color2->is_computed;
   value->contains_current_color = color1->contains_current_color ||
                                   color2->contains_current_color;
   value->mix.color1 = gtk_css_value_ref (color1);
