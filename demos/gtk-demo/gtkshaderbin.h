@@ -2,6 +2,8 @@
 
 #include <gtk/gtk.h>
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+
 G_BEGIN_DECLS
 
 #define GTK_TYPE_SHADER_BIN      (gtk_shader_bin_get_type ())
@@ -18,3 +20,5 @@ void       gtk_shader_bin_set_child   (GtkShaderBin *self,
 GtkWidget *gtk_shader_bin_get_child   (GtkShaderBin *self);
 
 G_END_DECLS
+
+G_GNUC_END_IGNORE_DEPRECATIONS

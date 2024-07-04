@@ -525,6 +525,8 @@ gsk_gl_renderer_init (GskGLRenderer *self)
 {
 }
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+
 gboolean
 gsk_gl_renderer_try_compile_gl_shader (GskGLRenderer  *renderer,
                                        GskGLShader    *shader,
@@ -540,3 +542,4 @@ gsk_gl_renderer_try_compile_gl_shader (GskGLRenderer  *renderer,
   return program != NULL;
 }
 
+G_GNUC_END_IGNORE_DEPRECATIONS

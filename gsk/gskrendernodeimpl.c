@@ -6717,6 +6717,7 @@ gsk_debug_node_get_message (const GskRenderNode *node)
 /* }}} */
 /* {{{ GSK_GL_SHADER_NODE */
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 /**
  * GskGLShaderNode:
  *
@@ -6826,6 +6827,10 @@ gsk_gl_shader_node_class_init (gpointer g_class,
  * renderer before using it.
  *
  * Returns: (transfer full) (type GskGLShaderNode): A new `GskRenderNode`
+ *
+ * Deprecated: 4.16: GTK's new Vulkan-focused rendering
+ *   does not support this feature. Use [GtkGLArea](../gtk4/class.GLArea.html)
+ *   for OpenGL rendering.
  */
 GskRenderNode *
 gsk_gl_shader_node_new (GskGLShader           *shader,
@@ -6877,6 +6882,10 @@ gsk_gl_shader_node_new (GskGLShader           *shader,
  * Returns the number of children
  *
  * Returns: The number of children
+ *
+ * Deprecated: 4.16: GTK's new Vulkan-focused rendering
+ *   does not support this feature. Use [GtkGLArea](../gtk4/class.GLArea.html)
+ *   for OpenGL rendering.
  */
 guint
 gsk_gl_shader_node_get_n_children (const GskRenderNode *node)
@@ -6894,6 +6903,10 @@ gsk_gl_shader_node_get_n_children (const GskRenderNode *node)
  * Gets one of the children.
  *
  * Returns: (transfer none): the @idx'th child of @node
+ *
+ * Deprecated: 4.16: GTK's new Vulkan-focused rendering
+ *   does not support this feature. Use [GtkGLArea](../gtk4/class.GLArea.html)
+ *   for OpenGL rendering.
  */
 GskRenderNode *
 gsk_gl_shader_node_get_child (const GskRenderNode *node,
@@ -6927,6 +6940,10 @@ gsk_gl_shader_node_get_shader (const GskRenderNode *node)
  * Gets args for the node.
  *
  * Returns: (transfer none): A `GBytes` with the uniform arguments
+ *
+ * Deprecated: 4.16: GTK's new Vulkan-focused rendering
+ *   does not support this feature. Use [GtkGLArea](../gtk4/class.GLArea.html)
+ *   for OpenGL rendering.
  */
 GBytes *
 gsk_gl_shader_node_get_args (const GskRenderNode *node)
@@ -6935,6 +6952,7 @@ gsk_gl_shader_node_get_args (const GskRenderNode *node)
 
   return self->args;
 }
+G_GNUC_END_IGNORE_DEPRECATIONS
 
 /* }}} */
 /* {{{ GSK_SUBSURFACE_NODE */
@@ -7283,10 +7301,12 @@ gsk_render_node_init_types_once (void)
                                                     gsk_mask_node_class_init);
   gsk_render_node_types[GSK_MASK_NODE] = node_type;
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   node_type = gsk_render_node_type_register_static (I_("GskGLShaderNode"),
                                                     sizeof (GskGLShaderNode),
                                                     gsk_gl_shader_node_class_init);
   gsk_render_node_types[GSK_GL_SHADER_NODE] = node_type;
+G_GNUC_END_IGNORE_DEPRECATIONS
 
   node_type = gsk_render_node_type_register_static (I_("GskDebugNode"),
                                                     sizeof (GskDebugNode),

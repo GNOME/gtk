@@ -26,9 +26,13 @@
 
 G_BEGIN_DECLS
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+
 gboolean gsk_gl_renderer_try_compile_gl_shader (GskGLRenderer  *renderer,
                                                 GskGLShader    *shader,
                                                 GError        **error);
+
+G_GNUC_END_IGNORE_DEPRECATIONS
 
 G_END_DECLS
 

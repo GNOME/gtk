@@ -177,9 +177,11 @@ void                gsk_gl_driver_add_texture_slices     (GskGLDriver         *s
                                                           gboolean             ensure_mipmap,
                                                           GskGLTextureSlice  **out_slices,
                                                           guint               *out_n_slices);
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 GskGLProgram      * gsk_gl_driver_lookup_shader          (GskGLDriver         *self,
                                                           GskGLShader         *shader,
                                                           GError             **error);
+G_GNUC_END_IGNORE_DEPRECATIONS
 
 #if 0
 void                gsk_gl_driver_save_texture_to_png    (GskGLDriver         *self,

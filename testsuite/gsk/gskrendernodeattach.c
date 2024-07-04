@@ -142,6 +142,7 @@ node_attach (const GskRenderNode *node,
 
     case GSK_GL_SHADER_NODE:
       {
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
         GskRenderNode **children;
 
         children = g_newa (GskRenderNode *, gsk_gl_shader_node_get_n_children (node));
@@ -155,6 +156,7 @@ node_attach (const GskRenderNode *node,
         for (int i = 0; i < gsk_gl_shader_node_get_n_children (node); i++)
           gsk_render_node_unref (children[i]);
         return res;
+G_GNUC_END_IGNORE_DEPRECATIONS
       }
 
     case GSK_MASK_NODE:

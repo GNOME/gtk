@@ -3501,6 +3501,7 @@ static inline void
 gsk_gl_render_job_visit_gl_shader_node (GskGLRenderJob      *job,
                                         const GskRenderNode *node)
 {
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   GError *error = NULL;
   GskGLShader *shader;
   GskGLProgram *program;
@@ -3612,6 +3613,7 @@ gsk_gl_render_job_visit_gl_shader_node (GskGLRenderJob      *job,
           gsk_gl_render_job_end_draw (job);
         }
     }
+G_GNUC_END_IGNORE_DEPRECATIONS
 }
 
 static void

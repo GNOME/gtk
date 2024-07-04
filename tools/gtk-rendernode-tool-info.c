@@ -116,11 +116,13 @@ count_nodes (GskRenderNode *node,
       break;
 
     case GSK_GL_SHADER_NODE:
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
       for (unsigned int i = 0; i < gsk_gl_shader_node_get_n_children (node); i++)
         {
           count_nodes (gsk_gl_shader_node_get_child (node, i), counts, &dd);
           d = MAX (d, dd);
         }
+G_GNUC_END_IGNORE_DEPRECATIONS
       break;
 
     case GSK_TEXTURE_SCALE_NODE:

@@ -91,6 +91,7 @@ struct _GtkSnapshotState {
     struct {
       graphene_rect_t bounds;
     } clip;
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
     struct {
       GskGLShader *shader;
       GBytes *args;
@@ -98,6 +99,7 @@ struct _GtkSnapshotState {
       GskRenderNode **nodes;
       GskRenderNode *internal_nodes[4];
     } glshader;
+G_GNUC_END_IGNORE_DEPRECATIONS
     struct {
       graphene_rect_t bounds;
       int node_idx;
@@ -917,6 +919,8 @@ gtk_snapshot_push_clip (GtkSnapshot           *snapshot,
   gtk_graphene_rect_scale_affine (bounds, scale_x, scale_y, dx, dy, &state->data.clip.bounds);
 }
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+
 static GskRenderNode *
 gtk_snapshot_collect_gl_shader (GtkSnapshot      *snapshot,
                                 GtkSnapshotState *state,
@@ -1045,6 +1049,10 @@ gtk_snapshot_collect_gl_shader_texture (GtkSnapshot      *snapshot,
  * re-rendered.
  *
  * For details on how to write shaders, see [class@Gsk.GLShader].
+ *
+ * Deprecated: 4.16: GTK's new Vulkan-focused rendering
+ *   does not support this feature. Use [class@Gtk.GLArea] for
+ *   OpenGL rendering.
  */
 void
 gtk_snapshot_push_gl_shader (GtkSnapshot           *snapshot,
@@ -1125,6 +1133,8 @@ gtk_snapshot_collect_rounded_clip (GtkSnapshot      *snapshot,
 
   return clip_node;
 }
+
+G_GNUC_END_IGNORE_DEPRECATIONS
 
 /**
  * gtk_snapshot_push_rounded_clip:
@@ -1956,6 +1966,10 @@ gtk_snapshot_pop (GtkSnapshot *snapshot)
  * This must be called the same number of times as the number
  * of textures is needed for the shader in
  * [method@Gtk.Snapshot.push_gl_shader].
+ *
+ * Deprecated: 4.16: GTK's new Vulkan-focused rendering
+ *   does not support this feature. Use [class@Gtk.GLArea] for
+ *   OpenGL rendering.
  */
 void
 gtk_snapshot_gl_shader_pop_texture (GtkSnapshot *snapshot)
