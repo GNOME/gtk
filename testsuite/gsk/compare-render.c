@@ -313,7 +313,7 @@ main (int argc, char **argv)
   GdkSurface *window;
   GskRenderNode *node;
   const char *node_file;
-  const char *png_file;
+  char *png_file;
   gboolean success = TRUE;
   GError *error = NULL;
   GOptionContext *context;
@@ -321,7 +321,7 @@ main (int argc, char **argv)
 
   (g_test_init) (&argc, &argv, NULL);
 
-  context = g_option_context_new ("NODE REF - run GSK node tests");
+  context = g_option_context_new ("NODE [REF] - run GSK node tests");
   g_option_context_add_main_entries (context, options, NULL);
   g_option_context_set_ignore_unknown_options (context, TRUE);
 
@@ -330,7 +330,7 @@ main (int argc, char **argv)
       g_error ("Option parsing failed: %s\n", error->message);
       return 1;
     }
-  else if (argc != 3)
+  else if (argc != 3 && argc != 2)
     {
       char *help = g_option_context_get_help (context, TRUE, NULL);
       g_print ("%s", help);
@@ -345,7 +345,10 @@ main (int argc, char **argv)
   gtk_init ();
 
   node_file = argv[1];
-  png_file = argv[2];
+  if (argc <= 2)
+    png_file = file_replace_extension (node_file, ".node", ".png");
+  else
+    png_file = g_strdup (argv[2]);
 
   g_print ("Node file: '%s'\n", node_file);
   g_print ("PNG file: '%s'\n", png_file);
@@ -729,6 +732,7 @@ skip_clip:
   gsk_renderer_unrealize (renderer);
   g_object_unref (renderer);
   gdk_surface_destroy (window);
+  g_free (png_file);
 
   return success ? 0 : 1;
 }
