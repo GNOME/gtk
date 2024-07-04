@@ -2209,6 +2209,7 @@ gsk_gpu_node_processor_conic_gradient_op (GskGpuNodeProcessor  *self,
 {
   gsk_gpu_conic_gradient_op (self->frame,
                              gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, &node->bounds),
+                             gsk_gpu_node_processor_color_states_explicit (self, GDK_COLOR_STATE_SRGB, TRUE),
                              &node->bounds,
                              gsk_conic_gradient_node_get_center (node),
                              gsk_conic_gradient_node_get_angle (node),
