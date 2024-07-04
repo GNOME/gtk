@@ -385,13 +385,13 @@ parse_node_file (GFile *file, const char *generate)
 
   if (!GDK_DISPLAY_DEBUG_CHECK (gdk_display_get_default (), FORCE_OFFLOAD))
     {
-      g_print ("Offload tests require GDK_DEBUG=force-offload");
+      g_print ("Offload tests require GDK_DEBUG=force-offload\n");
       exit (77);
     }
 
   if (gdk_surface_get_scale (surface) != 1.0)
     {
-      g_print ("Offload tests don't work with fractional scales");
+      g_print ("Offload tests don't work with fractional scales\n");
       exit (77);
     }
 
