@@ -100,14 +100,16 @@ development tools appropriate for your operating system, including:
  - Meson
  - Ninja
  - Gettext (19.7 or newer)
- - a [C99 compatible compiler](https://wiki.gnome.org/Projects/GLib/CompilerRequirements)
+ - a [C99 compatible compiler][glib-toolchain-reqs]
 
 Up-to-date instructions about developing GNOME applications and libraries
 can be found on [the GNOME Developer Center](https://developer.gnome.org).
 
 The GTK project uses GitLab for code hosting and for tracking issues. More
-information about using GitLab can be found [on the GNOME
-wiki](https://wiki.gnome.org/GitLab).
+information about using GitLab can be found on [the GNOME handbook][handbook].
+
+[glib-toolchain-reqs]: https://gitlab.gnome.org/GNOME/glib/-/blob/main/docs/toolchain-requirements.md
+[handbook]: https://handbook.gnome.org/infrastructure/gitlab.html
 
 ### Dependencies
 
@@ -131,7 +133,7 @@ GTK will attempt to download and build some of these dependencies if it
 cannot find them on your system.
 
 Additionally, you may want to look at projects that create a development
-environment for you, like [jhbuild](https://wiki.gnome.org/HowDoI/Jhbuild)
+environment for you, like [jhbuild](https://gitlab.gnome.org/GNOME/jhbuild)
 and [gvsbuild](https://github.com/wingtk/gvsbuild).
 
 ### Getting started

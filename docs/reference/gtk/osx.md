@@ -7,5 +7,5 @@ on top of the Quartz API.
 Currently, the macOS port does not use any additional commandline options
 or environment variables.
 
-For up-to-date information about the current status of this port, see the
-[project page](https://wiki.gnome.org/Projects/GTK/OSX).
+For up-to-date information on building, installation, and bundling, see the
+[GTK website](https://www.gtk.org/docs/installations/macos).
