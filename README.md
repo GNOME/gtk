@@ -39,18 +39,21 @@ Nightly documentation can be found at
   - Gsk: https://gnome.pages.gitlab.gnome.org/gtk/gsk4/
 
 Nightly flatpaks of our demos can be installed from the
-[GNOME Nightly](https://wiki.gnome.org/Apps/Nightly) repository:
-  - `flatpak remote-add --if-not-exists gnome-nightly https://nightly.gnome.org/gnome-nightly.flatpakrepo`
-  - `flatpak install gnome-nightly org.gtk.Demo4`
-  - `flatpak install gnome-nightly org.gtk.WidgetFactory4`
-  - `flatpak install gnome-nightly org.gtk.IconBrowser4`
+[GNOME Nightly](https://nightly.gnome.org/) repository:
+
+```sh
+flatpak remote-add --if-not-exists gnome-nightly https://nightly.gnome.org/gnome-nightly.flatpakrepo
+flatpak install gnome-nightly org.gtk.Demo4
+flatpak install gnome-nightly org.gtk.WidgetFactory4
+flatpak install gnome-nightly org.gtk.IconBrowser4
+```
 
 Building and installing
 -----------------------
 
 In order to build GTK you will need:
 
-  - [a C99 compatible compiler](https://wiki.gnome.org/Projects/GLib/CompilerRequirements)
+  - [a C99 compatible compiler](https://gitlab.gnome.org/GNOME/glib/-/blob/main/docs/toolchain-requirements.md)
   - [Python 3](https://www.python.org/)
   - [Meson](http://mesonbuild.com)
   - [Ninja](https://ninja-build.org)

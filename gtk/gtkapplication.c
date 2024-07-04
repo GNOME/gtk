@@ -108,8 +108,8 @@
  *
  * ## See Also
  *
- * [HowDoI: Using GtkApplication](https://wiki.gnome.org/HowDoI/GtkApplication),
- * [Getting Started with GTK: Basics](getting_started.html#basics)
+ * - [Using GtkApplication](https://developer.gnome.org/documentation/tutorials/application.html)
+ * - [Getting Started with GTK: Basics](getting_started.html#basics)
  */
 
 enum {

@@ -245,9 +245,6 @@ to connect the "clicked" signal with [method@Gtk.Window.destroy], then the funct
 would be called on `button` (which would not go well, since the function expects
 a `GtkWindow` as argument).
 
-More information about creating buttons can be found
-[here](https://wiki.gnome.org/HowDoI/Buttons).
-
 The rest of the code in `example-1.c` is identical to `example-0.c`. The next
 section will elaborate further on how to add several [class@Gtk.Widget]s to your
 GTK application.

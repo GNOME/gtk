@@ -140,7 +140,7 @@ Other libraries are maintained separately.
   file formats. It is available [here](ttps://download.gnome.org/sources/gdk-pixbuf/).
 - [Pango](http://www.pango.org) is a library for internationalized
   text handling. It is available [here](https://download.gnome.org/sources/pango/).
-- [GObject Introspection](https://wiki.gnome.org/Projects/GObjectIntrospection)
+- [GObject Introspection](https://gitlab.gnome.org/GNOME/gobject-introspection)
   is a framework for making introspection data available to language
   bindings. It is available [here](https://download.gnome.org/sources/gobject-introspection/).
 - The [GNU libiconv](https://www.gnu.org/software/libiconv/) library
