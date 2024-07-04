@@ -349,8 +349,10 @@ wl_cursor_theme_create(const char *path, int size, struct wl_shm *shm)
 	struct wl_cursor_theme *theme;
 
 	theme = malloc(sizeof *theme);
-	if (!theme)
+	if (!theme) {
+                g_warning ("malloc() failed");
 		return NULL;
+        }
 
 	theme->path = strdup (path);
 	theme->size = size;
@@ -359,6 +361,7 @@ wl_cursor_theme_create(const char *path, int size, struct wl_shm *shm)
 
 	theme->pool = shm_pool_create(shm, size * size * 4);
 	if (!theme->pool) {
+                g_warning ("shm_pool_create() failed");
                 free (theme->path);
                 free (theme);
 		return NULL;
