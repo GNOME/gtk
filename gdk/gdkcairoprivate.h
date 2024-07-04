@@ -1,8 +1,59 @@
 #pragma once
 
-#include "gdk/gdkcolorstateprivate.h"
+#include "gdkcolorstateprivate.h"
+
+#include "gdkmemoryformatprivate.h"
+#include "gdkmemorytexture.h"
 
 #include <cairo.h>
+#include <graphene.h>
+
+static inline cairo_format_t
+gdk_cairo_format_for_depth (GdkMemoryDepth depth)
+{
+  switch (depth)
+    {
+      case GDK_MEMORY_NONE:
+      case GDK_MEMORY_U8:
+        return CAIRO_FORMAT_ARGB32;
+
+      case GDK_MEMORY_U8_SRGB:
+      case GDK_MEMORY_U16:
+      case GDK_MEMORY_FLOAT16:
+      case GDK_MEMORY_FLOAT32:
+        return CAIRO_FORMAT_RGBA128F;
+
+      case GDK_N_DEPTHS:
+      default:
+        g_return_val_if_reached (CAIRO_FORMAT_ARGB32);
+    }
+}
+
+static inline GdkMemoryDepth
+gdk_cairo_depth_for_format (cairo_format_t format)
+{
+  switch (format)
+  {
+    case CAIRO_FORMAT_ARGB32:
+    case CAIRO_FORMAT_RGB24:
+    case CAIRO_FORMAT_RGB16_565:
+    case CAIRO_FORMAT_A1:
+    case CAIRO_FORMAT_A8:
+      return GDK_MEMORY_U8;
+
+    case CAIRO_FORMAT_RGB30:
+      return GDK_MEMORY_U16;
+
+    case CAIRO_FORMAT_RGB96F:
+    case CAIRO_FORMAT_RGBA128F:
+      return GDK_MEMORY_FLOAT32;
+
+    case CAIRO_FORMAT_INVALID:
+    default:
+      g_assert_not_reached ();
+      return GDK_MEMORY_NONE;
+  }
+}
 
 static GdkMemoryFormat
 gdk_cairo_format_to_memory_format (cairo_format_t format)
@@ -75,6 +126,9 @@ gdk_cairo_surface_convert_color_state (cairo_surface_t *surface,
                                        GdkColorState   *target)
 {
   cairo_surface_t *image_surface;
+
+  if (gdk_color_state_equal (source, target))
+    return;
 
   image_surface = cairo_surface_map_to_image (surface, NULL);
 

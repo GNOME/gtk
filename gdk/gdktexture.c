@@ -40,10 +40,12 @@
 
 #include "gdktextureprivate.h"
 
+#include "gdkcairoprivate.h"
 #include "gdkcolorstateprivate.h"
 #include "gdkmemorytextureprivate.h"
 #include "gdkpaintable.h"
 #include "gdksnapshot.h"
+#include "gdktexturedownloaderprivate.h"
 
 #include <glib/gi18n-lib.h>
 #include <graphene.h>
@@ -921,12 +923,24 @@ cairo_surface_t *
 gdk_texture_download_surface (GdkTexture    *texture,
                               GdkColorState *color_state)
 {
+  GdkMemoryDepth depth;
   cairo_surface_t *surface;
   cairo_status_t surface_status;
-  guchar *data;
-  gsize stride;
+  cairo_format_t surface_format;
+  GdkTextureDownloader downloader;
 
-  surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32,
+  depth = gdk_texture_get_depth (texture);
+#if 0
+  /* disabled for performance reasons. Enjoy living with some banding. */
+  if (!gdk_color_state_equal (texture->color_state, color_state))
+    depth = gdk_memory_depth_merge (depth, gdk_color_state_get_depth (color_state));
+#else
+  if (depth == GDK_MEMORY_U8_SRGB)
+    depth = GDK_MEMORY_U8;
+#endif
+
+  surface_format = gdk_cairo_format_for_depth (depth);
+  surface = cairo_image_surface_create (surface_format,
                                         texture->width, texture->height);
 
   surface_status = cairo_surface_status (surface);
@@ -937,16 +951,15 @@ gdk_texture_download_surface (GdkTexture    *texture,
       return surface;
     }
 
-  data = cairo_image_surface_get_data (surface);
-  stride = cairo_image_surface_get_stride (surface);
-  gdk_texture_download (texture, data, stride);
-  gdk_memory_convert_color_state (data,
-                                  stride,
-                                  GDK_MEMORY_DEFAULT,
-                                  GDK_COLOR_STATE_SRGB,
-                                  color_state,
-                                  texture->width,
-                                  texture->height);
+  gdk_texture_downloader_init (&downloader, texture);
+  gdk_texture_downloader_set_format (&downloader,
+                                     gdk_cairo_format_to_memory_format  (surface_format));
+  gdk_texture_downloader_download_into (&downloader,
+                                        cairo_image_surface_get_data (surface),
+                                        cairo_image_surface_get_stride (surface));
+  gdk_texture_downloader_finish (&downloader);
+
+  gdk_cairo_surface_convert_color_state (surface, texture->color_state, color_state);
   cairo_surface_mark_dirty (surface);
 
   return surface;
