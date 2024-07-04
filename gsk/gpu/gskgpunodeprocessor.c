@@ -30,7 +30,6 @@
 #include "gskgpuscissoropprivate.h"
 #include "gskgpustraightalphaopprivate.h"
 #include "gskgputextureopprivate.h"
-#include "gskgpuuberopprivate.h"
 #include "gskgpuuploadopprivate.h"
 
 #include "gskcairoblurprivate.h"
@@ -97,7 +96,6 @@
  */
 
 typedef struct _GskGpuNodeProcessor GskGpuNodeProcessor;
-typedef struct _GskGpuPatternWriter GskGpuPatternWriter;
 
 typedef enum {
   GSK_GPU_GLOBAL_MATRIX  = (1 << 0),
@@ -123,30 +121,7 @@ struct _GskGpuNodeProcessor
   GskGpuGlobals                  pending_globals;
 };
 
-#define GDK_ARRAY_NAME pattern_buffer
-#define GDK_ARRAY_TYPE_NAME PatternBuffer
-#define GDK_ARRAY_ELEMENT_TYPE guchar
-#define GDK_ARRAY_BY_VALUE 1
-#define GDK_ARRAY_PREALLOC 2048
-#define GDK_ARRAY_NO_MEMSET 1
-#include "gdk/gdkarrayimpl.c"
-
-struct _GskGpuPatternWriter
-{
-  GskGpuFrame                   *frame;
-  GskGpuDescriptors             *desc;
-
-  graphene_rect_t                bounds;
-  graphene_point_t               offset;
-  graphene_vec2_t                scale;
-  guint                          stack;
-
-  PatternBuffer                  buffer;
-};
-
 static void             gsk_gpu_node_processor_add_node                 (GskGpuNodeProcessor            *self,
-                                                                         GskRenderNode                  *node);
-static gboolean         gsk_gpu_node_processor_create_node_pattern      (GskGpuPatternWriter            *self,
                                                                          GskRenderNode                  *node);
 
 static void
@@ -401,164 +376,6 @@ gsk_gpu_node_processor_process (GskGpuFrame                 *frame,
   gsk_gpu_node_processor_add_node (&self, node);
 
   gsk_gpu_node_processor_finish (&self);
-}
-
-static void
-gsk_gpu_pattern_writer_init (GskGpuPatternWriter    *self,
-                             GskGpuFrame            *frame,
-                             const graphene_vec2_t  *scale,
-                             const graphene_point_t *offset,
-                             const graphene_rect_t  *bounds)
-{
-  self->frame = frame;
-  self->desc = NULL;
-  self->bounds = GRAPHENE_RECT_INIT (bounds->origin.x + offset->x,
-                                     bounds->origin.y + offset->y,
-                                     bounds->size.width,
-                                     bounds->size.height);
-  self->offset = *offset;
-  self->scale = *scale;
-  self->stack = 0;
-
-  pattern_buffer_init (&self->buffer);
-}
-
-static inline gsize
-round_up (gsize number, gsize divisor)
-{
-  return (number + divisor - 1) / divisor * divisor;
-}
-
-static void
-gsk_gpu_pattern_writer_append (GskGpuPatternWriter *self,
-                               gsize                align,
-                               const guchar        *data,
-                               gsize                size)
-{
-  pattern_buffer_set_size (&self->buffer, round_up (pattern_buffer_get_size (&self->buffer), align));
-  
-  pattern_buffer_splice (&self->buffer, 
-                         pattern_buffer_get_size (&self->buffer),
-                         0,
-                         FALSE,
-                         data,
-                         size);
-}
-
-static void
-gsk_gpu_pattern_writer_append_float (GskGpuPatternWriter *self,
-                                     float                f)
-{
-  gsk_gpu_pattern_writer_append (self, G_ALIGNOF (float), (guchar *) &f, sizeof (float));
-}
-
-static void
-gsk_gpu_pattern_writer_append_uint (GskGpuPatternWriter *self,
-                                    guint32              u)
-{
-  gsk_gpu_pattern_writer_append (self, G_ALIGNOF (guint32), (guchar *) &u, sizeof (guint32));
-}
-
-static void
-gsk_gpu_pattern_writer_append_matrix (GskGpuPatternWriter     *self,
-                                      const graphene_matrix_t *matrix)
-{
-  float f[16];
-
-  graphene_matrix_to_float (matrix, f);
-
-  gsk_gpu_pattern_writer_append (self, G_ALIGNOF (float), (guchar *) f, sizeof (f));
-}
-
-static void
-gsk_gpu_pattern_writer_append_vec4 (GskGpuPatternWriter   *self,
-                                    const graphene_vec4_t *vec4)
-{
-  float f[4];
-
-  graphene_vec4_to_float (vec4, f);
-
-  gsk_gpu_pattern_writer_append (self, G_ALIGNOF (float), (guchar *) f, sizeof (f));
-}
-
-static void
-gsk_gpu_pattern_writer_append_point (GskGpuPatternWriter    *self,
-                                     const graphene_point_t *point,
-                                     const graphene_point_t *offset)
-{
-  float f[2];
-
-  f[0] = point->x + offset->x;
-  f[1] = point->y + offset->y;
-
-  gsk_gpu_pattern_writer_append (self, G_ALIGNOF (float), (guchar *) f, sizeof (f));
-}
-
-static void
-gsk_gpu_pattern_writer_append_rect (GskGpuPatternWriter    *self,
-                                    const graphene_rect_t  *rect,
-                                    const graphene_point_t *offset)
-{
-  float f[4];
-
-  gsk_gpu_rect_to_float (rect, offset, f);
-
-  gsk_gpu_pattern_writer_append (self, G_ALIGNOF (float), (guchar *) f, sizeof (f));
-}
-
-static void
-gsk_gpu_pattern_writer_append_rgba (GskGpuPatternWriter *self,
-                                    const GdkRGBA       *rgba)
-{
-  float f[4] = { rgba->red, rgba->green, rgba->blue, rgba->alpha };
-
-  gsk_gpu_pattern_writer_append (self, G_ALIGNOF (float), (guchar *) f, sizeof (f));
-}
-
-static void
-gsk_gpu_pattern_writer_append_color_stops (GskGpuPatternWriter *self,
-                                           const GskColorStop  *stops,
-                                           gsize                n_stops)
-{
-  gsk_gpu_pattern_writer_append_uint (self, n_stops);
-  gsk_gpu_pattern_writer_append (self, G_ALIGNOF (float), (guchar *) stops, sizeof (GskColorStop) * n_stops);
-}
-
-static gboolean
-gsk_gpu_pattern_writer_push_stack (GskGpuPatternWriter *self)
-{
-  if (self->stack >= GSK_GPU_PATTERN_STACK_SIZE)
-    return FALSE;
-
-  self->stack++;
-  return TRUE;
-}
-
-static void
-gsk_gpu_pattern_writer_pop_stack (GskGpuPatternWriter *self)
-{
-  g_assert (self->stack > 0);
-  self->stack--;
-}
-
-static void
-gsk_gpu_pattern_writer_finish (GskGpuPatternWriter *self)
-{
-  pattern_buffer_clear (&self->buffer);
-  g_assert (self->stack == 0);
-  g_clear_object (&self->desc);
-}
-
-static gboolean
-gsk_gpu_pattern_writer_add_image (GskGpuPatternWriter *self,
-                                  GskGpuImage         *image,
-                                  GskGpuSampler        sampler,
-                                  guint32             *out_descriptor)
-{
-  if (self->desc == NULL)
-    self->desc = gsk_gpu_frame_create_descriptors (self->frame);
-
-  return gsk_gpu_descriptors_add_image (self->desc, image, sampler, out_descriptor);
 }
 
 static void
@@ -1101,159 +918,6 @@ gsk_gpu_node_processor_add_fallback_node (GskGpuNodeProcessor *self,
                                    &clipped_bounds);
 }
 
-static gboolean
-gsk_gpu_node_processor_repeat_node_can_ubershader (GskRenderNode *node)
-{
-  const graphene_rect_t *child_bounds;
-
-  child_bounds = gsk_repeat_node_get_child_bounds (node);
-
-  if (child_bounds->size.width > node->bounds.size.width ||
-      child_bounds->size.height > node->bounds.size.height)
-    return FALSE;
-
-  return TRUE;
-}
-
-/* To be called when code wants to run a shader which
- * would require rendering @node into an offscreen, but it
- * could also run an ubershader.
- */
-static gboolean
-gsk_gpu_node_processor_ubershader_instead_of_offscreen (GskGpuNodeProcessor *self,
-                                                        GskRenderNode       *node)
-{
-  if (!gsk_gpu_frame_should_optimize (self->frame, GSK_GPU_OPTIMIZE_UBER))
-    return FALSE;
-
-  for (;;)
-    {
-      switch (gsk_render_node_get_node_type (node))
-        {
-        case GSK_TRANSFORM_NODE:
-          node = gsk_transform_node_get_child (node);
-          break;
-
-        case GSK_CLIP_NODE:
-          node = gsk_clip_node_get_child (node);
-          break;
-
-        case GSK_OPACITY_NODE:
-          node = gsk_opacity_node_get_child (node);
-          break;
-
-        case GSK_DEBUG_NODE:
-          node = gsk_debug_node_get_child (node);
-          break;
-
-        case GSK_SUBSURFACE_NODE:
-          node = gsk_subsurface_node_get_child (node);
-          break;
-
-        case GSK_REPEAT_NODE:
-          return gsk_gpu_node_processor_repeat_node_can_ubershader (node);
-
-        case GSK_COLOR_NODE:
-        case GSK_LINEAR_GRADIENT_NODE:
-        case GSK_REPEATING_LINEAR_GRADIENT_NODE:
-        case GSK_RADIAL_GRADIENT_NODE:
-        case GSK_REPEATING_RADIAL_GRADIENT_NODE:
-        case GSK_CONIC_GRADIENT_NODE:
-        case GSK_ROUNDED_CLIP_NODE:
-        case GSK_COLOR_MATRIX_NODE:
-        case GSK_CROSS_FADE_NODE:
-        case GSK_BLEND_NODE:
-        case GSK_TEXT_NODE:
-        case GSK_MASK_NODE:
-          return TRUE;
-
-        case GSK_CONTAINER_NODE:
-        case GSK_CAIRO_NODE:
-        case GSK_BORDER_NODE:
-        case GSK_TEXTURE_NODE:
-        case GSK_INSET_SHADOW_NODE:
-        case GSK_OUTSET_SHADOW_NODE:
-        case GSK_SHADOW_NODE:
-        case GSK_BLUR_NODE:
-        case GSK_GL_SHADER_NODE:
-        case GSK_TEXTURE_SCALE_NODE:
-        case GSK_FILL_NODE:
-        case GSK_STROKE_NODE:
-          return FALSE;
-
-        case GSK_NOT_A_RENDER_NODE:
-        default:
-          g_return_val_if_reached (FALSE);
-        }
-    }
-}
-
-static gboolean
-gsk_gpu_node_processor_try_node_as_pattern (GskGpuNodeProcessor *self,
-                                            GskRenderNode       *node)
-{
-  GskGpuPatternWriter writer;
-  graphene_rect_t clipped;
-  GskGpuBuffer *buffer;
-  gsize offset;
-  guint32 pattern_id;
- 
-  g_assert (self->pending_globals == 0);
-
-  if (!gsk_gpu_node_processor_clip_node_bounds (self, node, &clipped))
-    return TRUE;
-
-  gsk_gpu_pattern_writer_init (&writer,
-                               self->frame,
-                               &self->scale,
-                               &self->offset,
-                               &clipped);
- 
-  if (!gsk_gpu_node_processor_create_node_pattern (&writer, node))
-    {
-      gsk_gpu_pattern_writer_finish (&writer);
-      return FALSE;
-    }
-
-  if (self->opacity < 1.0)
-    {
-      gsk_gpu_pattern_writer_append_uint (&writer, GSK_GPU_PATTERN_OPACITY);
-      gsk_gpu_pattern_writer_append_float (&writer, self->opacity);
-    }
-
-  gsk_gpu_pattern_writer_append_uint (&writer, GSK_GPU_PATTERN_DONE);
-
-  buffer = gsk_gpu_frame_write_storage_buffer (self->frame,
-                                               pattern_buffer_get_data (&writer.buffer),
-                                               pattern_buffer_get_size (&writer.buffer),
-                                               &offset);
-  if (writer.desc == NULL)
-    {
-      if (self->desc == NULL)
-        self->desc = gsk_gpu_frame_create_descriptors (self->frame);
-      if (!gsk_gpu_descriptors_add_buffer (self->desc, buffer, &pattern_id))
-        writer.desc = gsk_gpu_frame_create_descriptors (self->frame);
-    }
-  if (writer.desc &&
-      !gsk_gpu_descriptors_add_buffer (writer.desc, buffer, &pattern_id))
-    {
-      g_assert_not_reached ();
-    }
-
-  pattern_id = (pattern_id << 22) | (offset / sizeof (float));
-
-  gsk_gpu_uber_op (self->frame,
-                   gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, &node->bounds),
-                   &node->bounds,
-                   &self->offset,
-                   writer.desc ? writer.desc : self->desc,
-                   pattern_id);
-
-  gsk_gpu_pattern_writer_finish (&writer);
-
-  return TRUE;
-}
- 
 static void
 gsk_gpu_node_processor_add_without_opacity (GskGpuNodeProcessor *self,
                                             GskRenderNode       *node)
@@ -1263,10 +927,6 @@ gsk_gpu_node_processor_add_without_opacity (GskGpuNodeProcessor *self,
   graphene_rect_t tex_rect;
 
   gsk_gpu_node_processor_sync_globals (self, 0);
-
-  if (gsk_gpu_node_processor_ubershader_instead_of_offscreen (self, node) &&
-      gsk_gpu_node_processor_try_node_as_pattern (self, node))
-    return;
 
   image = gsk_gpu_node_processor_get_node_as_image (self,
                                                     0,
@@ -1361,31 +1021,29 @@ gsk_gpu_node_processor_add_node_clipped (GskGpuNodeProcessor   *self,
     {
       if (!gsk_gpu_clip_intersect_rect (&self->clip, &old_clip, &clip))
         {
+          GskGpuImage *image;
+          graphene_rect_t bounds, tex_rect;
+
           gsk_gpu_clip_init_copy (&self->clip, &old_clip);
           gsk_gpu_node_processor_sync_globals (self, 0);
-          if (!gsk_gpu_node_processor_ubershader_instead_of_offscreen (self, node) ||
-              !gsk_gpu_node_processor_try_node_as_pattern (self, node))
+
+          if (gsk_gpu_node_processor_clip_node_bounds (self, node, &bounds) &&
+              gsk_rect_intersection (&bounds, clip_bounds, &bounds))
+            image = gsk_gpu_node_processor_get_node_as_image (self,
+                                                              0,
+                                                              0,
+                                                              &bounds,
+                                                              node,
+                                                              &tex_rect);
+          else
+            image = NULL;
+          if (image)
             {
-              GskGpuImage *image;
-              graphene_rect_t bounds, tex_rect;
-              if (gsk_gpu_node_processor_clip_node_bounds (self, node, &bounds) &&
-                  gsk_rect_intersection (&bounds, clip_bounds, &bounds))
-                image = gsk_gpu_node_processor_get_node_as_image (self,
-                                                                  0,
-                                                                  0,
-                                                                  &bounds,
-                                                                  node,
-                                                                  &tex_rect);
-              else
-                image = NULL;
-              if (image)
-                {
-                  gsk_gpu_node_processor_image_op (self,
-                                                   image,
-                                                   &bounds,
-                                                   &tex_rect);
-                  g_object_unref (image);
-                }
+              gsk_gpu_node_processor_image_op (self,
+                                               image,
+                                               &bounds,
+                                               &tex_rect);
+              g_object_unref (image);
             }
           return;
         }
@@ -1412,21 +1070,6 @@ gsk_gpu_node_processor_add_clip_node (GskGpuNodeProcessor *self,
   gsk_gpu_node_processor_add_node_clipped (self,
                                            gsk_clip_node_get_child (node),
                                            gsk_clip_node_get_clip (node));
-}
-
-static gboolean
-gsk_gpu_node_processor_create_clip_pattern (GskGpuPatternWriter *self,
-                                            GskRenderNode       *node)
-{
-  if (!gsk_gpu_node_processor_create_node_pattern (self, gsk_opacity_node_get_child (node)))
-    return FALSE;
-
-  gsk_gpu_pattern_writer_append_uint (self, GSK_GPU_PATTERN_CLIP);
-  gsk_gpu_pattern_writer_append_rect (self,
-                                     gsk_clip_node_get_clip (node),
-                                     &self->offset);
-
-  return TRUE;
 }
 
 static void
@@ -1686,86 +1329,6 @@ gsk_gpu_node_processor_add_transform_node (GskGpuNodeProcessor *self,
   self->pending_globals |= GSK_GPU_GLOBAL_MATRIX | GSK_GPU_GLOBAL_SCALE | GSK_GPU_GLOBAL_CLIP;
 }
 
-static gboolean
-gsk_gpu_node_processor_create_transform_pattern (GskGpuPatternWriter *self,
-                                                 GskRenderNode       *node)
-{
-  GskRenderNode *child;
-  GskTransform *transform;
-  graphene_point_t old_offset;
-  graphene_vec2_t old_scale;
-  graphene_rect_t old_bounds;
-  gboolean result;
-
-  child = gsk_transform_node_get_child (node);
-  transform = gsk_transform_node_get_transform (node);
-  old_offset = self->offset;
-  old_scale = self->scale;
-  old_bounds = self->bounds;
-
-  switch (gsk_transform_get_category (transform))
-    {
-    case GSK_TRANSFORM_CATEGORY_IDENTITY:
-      return gsk_gpu_node_processor_create_node_pattern (self, child);
-
-    case GSK_TRANSFORM_CATEGORY_2D_TRANSLATE:
-      {
-        float dx, dy;
-        gsk_transform_to_translate (transform, &dx, &dy);
-        self->offset.x += dx;
-        self->offset.y += dy;
-        result = gsk_gpu_node_processor_create_node_pattern (self, child);
-        self->offset = old_offset;
-        return result;
-      }
-
-    case GSK_TRANSFORM_CATEGORY_2D_AFFINE:
-      {
-        float sx, sy, dx, dy, inv_sx, inv_sy;
-        graphene_vec4_t vec4;
-        if (!gsk_gpu_pattern_writer_push_stack (self))
-          return FALSE;
-        gsk_transform_to_affine (transform, &sx, &sy, &dx, &dy);
-        inv_sx = 1.f / sx;
-        inv_sy = 1.f / sy;
-        gsk_gpu_pattern_writer_append_uint (self, GSK_GPU_PATTERN_AFFINE);
-        graphene_vec4_init (&vec4, self->offset.x + dx, self->offset.y + dy, inv_sx, inv_sy);
-        gsk_gpu_pattern_writer_append_vec4 (self, &vec4);
-        self->bounds.origin.x = (self->bounds.origin.x - self->offset.x - dx) * inv_sx;
-        self->bounds.origin.y = (self->bounds.origin.y - self->offset.y - dy) * inv_sy;
-        self->bounds.size.width *= inv_sx;
-        self->bounds.size.height *= inv_sy;
-        self->offset = GRAPHENE_POINT_INIT (0, 0);
-        graphene_vec2_init (&self->scale, fabs (sx), fabs (sy));
-        graphene_vec2_multiply (&self->scale, &old_scale, &self->scale);
-      }
-      break;
-
-    case GSK_TRANSFORM_CATEGORY_2D:
-    case GSK_TRANSFORM_CATEGORY_UNKNOWN:
-    case GSK_TRANSFORM_CATEGORY_ANY:
-    case GSK_TRANSFORM_CATEGORY_3D:
-      /* could add a mat4 operation here? */
-      return FALSE;
-
-    default:
-      g_assert_not_reached ();
-      return FALSE;
-    }
-
-  result = gsk_gpu_node_processor_create_node_pattern (self, child);
-
-  if (result)
-    gsk_gpu_pattern_writer_append_uint (self, GSK_GPU_PATTERN_POSITION_POP);
-
-  gsk_gpu_pattern_writer_pop_stack (self);
-  self->scale = old_scale; 
-  self->bounds = old_bounds; 
-  self->offset = old_offset; 
-
-  return result;
-}
-
 static void
 gsk_gpu_node_processor_add_opacity_node (GskGpuNodeProcessor *self,
                                          GskRenderNode       *node)
@@ -1890,16 +1453,6 @@ gsk_gpu_node_processor_add_color_node (GskGpuNodeProcessor *self,
                     &GDK_RGBA_INIT_ALPHA (color, self->opacity));
 }
 
-static gboolean
-gsk_gpu_node_processor_create_color_pattern (GskGpuPatternWriter *self,
-                                             GskRenderNode       *node)
-{
-  gsk_gpu_pattern_writer_append_uint (self, GSK_GPU_PATTERN_COLOR);
-  gsk_gpu_pattern_writer_append_rgba (self, gsk_color_node_get_color (node));
-
-  return TRUE;
-}
-
 static void
 gsk_gpu_node_processor_add_border_node (GskGpuNodeProcessor *self,
                                         GskRenderNode       *node)
@@ -1990,62 +1543,6 @@ gsk_gpu_node_processor_add_texture_node (GskGpuNodeProcessor *self,
     }
 
   g_object_unref (image);
-}
-
-static gboolean
-gsk_gpu_node_processor_create_texture_pattern (GskGpuPatternWriter *self,
-                                               GskRenderNode       *node)
-{
-  GskGpuCache *cache;
-  GdkTexture *texture;
-  gint64 timestamp;
-  guint32 descriptor;
-  GskGpuImage *image;
-  GskGpuSampler sampler;
-
-  cache = gsk_gpu_device_get_cache (gsk_gpu_frame_get_device (self->frame));
-  texture = gsk_texture_node_get_texture (node);
-  timestamp = gsk_gpu_frame_get_timestamp (self->frame);
-
-  image = gsk_gpu_cache_lookup_texture_image (cache, texture, timestamp);
-  if (image == NULL)
-    {
-      image = gsk_gpu_frame_upload_texture (self->frame, FALSE, texture);
-      if (image == NULL)
-        return FALSE;
-    }
-
-  if (gsk_gpu_frame_should_optimize (self->frame, GSK_GPU_OPTIMIZE_MIPMAP) &&
-      (gdk_texture_get_width (texture) > 2 * node->bounds.size.width * graphene_vec2_get_x (&self->scale) ||
-       gdk_texture_get_height (texture) > 2 * node->bounds.size.height * graphene_vec2_get_y (&self->scale)))
-    {
-      image = gsk_gpu_node_processor_ensure_image (self->frame,
-                                                   image,
-                                                   GSK_GPU_IMAGE_MIPMAP,
-                                                   GSK_GPU_IMAGE_STRAIGHT_ALPHA);
-      sampler = GSK_GPU_SAMPLER_MIPMAP_DEFAULT;
-    }
-  else
-    {
-      sampler = GSK_GPU_SAMPLER_DEFAULT;
-    }
-
-  if (!gsk_gpu_pattern_writer_add_image (self, image, sampler, &descriptor))
-    {
-      g_object_unref (image);
-      return FALSE;
-    }
-
-  if (gsk_gpu_image_get_flags (image) & GSK_GPU_IMAGE_STRAIGHT_ALPHA)
-    gsk_gpu_pattern_writer_append_uint (self, GSK_GPU_PATTERN_STRAIGHT_ALPHA);
-  else
-    gsk_gpu_pattern_writer_append_uint (self, GSK_GPU_PATTERN_TEXTURE);
-  gsk_gpu_pattern_writer_append_uint (self, descriptor);
-  gsk_gpu_pattern_writer_append_rect (self, &node->bounds, &self->offset);
-
-  g_object_unref (image);
-
-  return TRUE;
 }
 
 static void
@@ -2272,9 +1769,6 @@ gsk_gpu_node_processor_add_gradient_node (GskGpuNodeProcessor *self,
       return;
     }
 
-  if (gsk_gpu_node_processor_try_node_as_pattern (self, node))
-    return;
-
   if (!gsk_gpu_node_processor_clip_node_bounds (self, node, &bounds))
     return;
   rect_round_to_pixels (&bounds, &self->scale, &self->offset, &bounds);
@@ -2369,28 +1863,6 @@ gsk_gpu_node_processor_add_linear_gradient_node (GskGpuNodeProcessor *self,
                                             gsk_gpu_node_processor_linear_gradient_op);
 }
 
-static gboolean
-gsk_gpu_node_processor_create_linear_gradient_pattern (GskGpuPatternWriter *self,
-                                                       GskRenderNode       *node)
-{
-  if (gsk_render_node_get_node_type (node) == GSK_REPEATING_LINEAR_GRADIENT_NODE)
-    gsk_gpu_pattern_writer_append_uint (self, GSK_GPU_PATTERN_REPEATING_LINEAR_GRADIENT);
-  else
-    gsk_gpu_pattern_writer_append_uint (self, GSK_GPU_PATTERN_LINEAR_GRADIENT);
-
-  gsk_gpu_pattern_writer_append_point (self,
-                                      gsk_linear_gradient_node_get_start (node),
-                                      &self->offset);
-  gsk_gpu_pattern_writer_append_point (self,
-                                      gsk_linear_gradient_node_get_end (node),
-                                      &self->offset);
-  gsk_gpu_pattern_writer_append_color_stops (self, 
-                                            gsk_linear_gradient_node_get_color_stops (node, NULL),
-                                            gsk_linear_gradient_node_get_n_color_stops (node));
-
-  return TRUE;
-}
-
 static void
 gsk_gpu_node_processor_radial_gradient_op (GskGpuNodeProcessor  *self,
                                            GskRenderNode        *node,
@@ -2424,29 +1896,6 @@ gsk_gpu_node_processor_add_radial_gradient_node (GskGpuNodeProcessor *self,
                                             gsk_gpu_node_processor_radial_gradient_op);
 }
 
-static gboolean
-gsk_gpu_node_processor_create_radial_gradient_pattern (GskGpuPatternWriter *self,
-                                                       GskRenderNode       *node)
-{
-  if (gsk_render_node_get_node_type (node) == GSK_REPEATING_RADIAL_GRADIENT_NODE)
-    gsk_gpu_pattern_writer_append_uint (self, GSK_GPU_PATTERN_REPEATING_RADIAL_GRADIENT);
-  else
-    gsk_gpu_pattern_writer_append_uint (self, GSK_GPU_PATTERN_RADIAL_GRADIENT);
-
-  gsk_gpu_pattern_writer_append_point (self,
-                                      gsk_radial_gradient_node_get_center (node),
-                                      &self->offset);
-  gsk_gpu_pattern_writer_append_float (self, gsk_radial_gradient_node_get_hradius (node));
-  gsk_gpu_pattern_writer_append_float (self, gsk_radial_gradient_node_get_vradius (node));
-  gsk_gpu_pattern_writer_append_float (self, gsk_radial_gradient_node_get_start (node));
-  gsk_gpu_pattern_writer_append_float (self, gsk_radial_gradient_node_get_end (node));
-  gsk_gpu_pattern_writer_append_color_stops (self, 
-                                            gsk_radial_gradient_node_get_color_stops (node, NULL),
-                                            gsk_radial_gradient_node_get_n_color_stops (node));
-
-  return TRUE;
-}
-
 static void
 gsk_gpu_node_processor_conic_gradient_op (GskGpuNodeProcessor  *self,
                                           GskRenderNode        *node,
@@ -2472,22 +1921,6 @@ gsk_gpu_node_processor_add_conic_gradient_node (GskGpuNodeProcessor *self,
                                             gsk_conic_gradient_node_get_color_stops (node, NULL),
                                             gsk_conic_gradient_node_get_n_color_stops (node),
                                             gsk_gpu_node_processor_conic_gradient_op);
-}
-
-static gboolean
-gsk_gpu_node_processor_create_conic_gradient_pattern (GskGpuPatternWriter *self,
-                                                      GskRenderNode       *node)
-{
-  gsk_gpu_pattern_writer_append_uint (self, GSK_GPU_PATTERN_CONIC_GRADIENT);
-  gsk_gpu_pattern_writer_append_point (self,
-                                      gsk_conic_gradient_node_get_center (node),
-                                      &self->offset);
-  gsk_gpu_pattern_writer_append_float (self, gsk_conic_gradient_node_get_angle (node));
-  gsk_gpu_pattern_writer_append_color_stops (self, 
-                                            gsk_conic_gradient_node_get_color_stops (node, NULL),
-                                            gsk_conic_gradient_node_get_n_color_stops (node));
-
-  return TRUE;
 }
 
 static void
@@ -2624,11 +2057,6 @@ gsk_gpu_node_processor_add_blend_node (GskGpuNodeProcessor *self,
   bottom_child = gsk_blend_node_get_bottom_child (node);
   top_child = gsk_blend_node_get_top_child (node);
 
-  if ((gsk_gpu_node_processor_ubershader_instead_of_offscreen (self, bottom_child) ||
-       gsk_gpu_node_processor_ubershader_instead_of_offscreen (self, top_child)) &&
-      gsk_gpu_node_processor_try_node_as_pattern (self, node))
-    return;
-
   bottom_image = gsk_gpu_node_processor_get_node_as_image (self,
                                                            0,
                                                            GSK_GPU_IMAGE_STRAIGHT_ALPHA,
@@ -2678,46 +2106,6 @@ gsk_gpu_node_processor_add_blend_node (GskGpuNodeProcessor *self,
   g_object_unref (bottom_image);
 }
 
-static gboolean
-gsk_gpu_node_processor_create_blend_pattern (GskGpuPatternWriter *self,
-                                             GskRenderNode       *node)
-{
-  GskRenderNode *bottom_child, *top_child;
-
-  bottom_child = gsk_blend_node_get_bottom_child (node);
-  top_child = gsk_blend_node_get_top_child (node);
-
-  if (!gsk_gpu_node_processor_create_node_pattern (self, bottom_child))
-    return FALSE;
-  if (!gsk_rect_contains_rect (&bottom_child->bounds, &node->bounds))
-    {
-      gsk_gpu_pattern_writer_append_uint (self, GSK_GPU_PATTERN_CLIP);
-      gsk_gpu_pattern_writer_append_rect (self, &bottom_child->bounds, &self->offset);
-    }
-
-  gsk_gpu_pattern_writer_append_uint (self, GSK_GPU_PATTERN_PUSH_COLOR);
-
-  if (!gsk_gpu_pattern_writer_push_stack (self))
-    return FALSE;
-
-  if (!gsk_gpu_node_processor_create_node_pattern (self, top_child))
-    {
-      gsk_gpu_pattern_writer_pop_stack (self);
-      return FALSE;
-    }
-  if (!gsk_rect_contains_rect (&top_child->bounds, &node->bounds))
-    {
-      gsk_gpu_pattern_writer_append_uint (self, GSK_GPU_PATTERN_CLIP);
-      gsk_gpu_pattern_writer_append_rect (self, &top_child->bounds, &self->offset);
-    }
-
-  gsk_gpu_pattern_writer_append_uint (self, GSK_GPU_PATTERN_BLEND_DEFAULT + gsk_blend_node_get_blend_mode (node));
-
-  gsk_gpu_pattern_writer_pop_stack (self);
-
-  return TRUE;
-}
-
 static void
 gsk_gpu_node_processor_add_cross_fade_node (GskGpuNodeProcessor *self,
                                             GskRenderNode       *node)
@@ -2731,11 +2119,6 @@ gsk_gpu_node_processor_add_cross_fade_node (GskGpuNodeProcessor *self,
   start_child = gsk_cross_fade_node_get_start_child (node);
   end_child = gsk_cross_fade_node_get_end_child (node);
   progress = gsk_cross_fade_node_get_progress (node);
-
-  if ((gsk_gpu_node_processor_ubershader_instead_of_offscreen (self, start_child) ||
-       gsk_gpu_node_processor_ubershader_instead_of_offscreen (self, end_child)) &&
-      gsk_gpu_node_processor_try_node_as_pattern (self, node))
-    return;
 
   start_image = gsk_gpu_node_processor_get_node_as_image (self,
                                                           0,
@@ -2800,47 +2183,6 @@ gsk_gpu_node_processor_add_cross_fade_node (GskGpuNodeProcessor *self,
   g_object_unref (start_image);
 }
 
-static gboolean
-gsk_gpu_node_processor_create_cross_fade_pattern (GskGpuPatternWriter *self,
-                                                  GskRenderNode       *node)
-{
-  GskRenderNode *start_child, *end_child;
-
-  start_child = gsk_cross_fade_node_get_start_child (node);
-  end_child = gsk_cross_fade_node_get_end_child (node);
-
-  if (!gsk_gpu_node_processor_create_node_pattern (self, start_child))
-    return FALSE;
-  if (!gsk_rect_contains_rect (&start_child->bounds, &node->bounds))
-    {
-      gsk_gpu_pattern_writer_append_uint (self, GSK_GPU_PATTERN_CLIP);
-      gsk_gpu_pattern_writer_append_rect (self, &start_child->bounds, &self->offset);
-    }
-
-  gsk_gpu_pattern_writer_append_uint (self, GSK_GPU_PATTERN_PUSH_COLOR);
-
-  if (!gsk_gpu_pattern_writer_push_stack (self))
-    return FALSE;
-
-  if (!gsk_gpu_node_processor_create_node_pattern (self, end_child))
-    {
-      gsk_gpu_pattern_writer_pop_stack (self);
-      return FALSE;
-    }
-  if (!gsk_rect_contains_rect (&end_child->bounds, &node->bounds))
-    {
-      gsk_gpu_pattern_writer_append_uint (self, GSK_GPU_PATTERN_CLIP);
-      gsk_gpu_pattern_writer_append_rect (self, &end_child->bounds, &self->offset);
-    }
-
-  gsk_gpu_pattern_writer_append_uint (self, GSK_GPU_PATTERN_POP_CROSS_FADE);
-  gsk_gpu_pattern_writer_append_float (self, gsk_cross_fade_node_get_progress (node));
-
-  gsk_gpu_pattern_writer_pop_stack (self);
-
-  return TRUE;
-}
-
 static void
 gsk_gpu_node_processor_add_mask_node (GskGpuNodeProcessor *self,
                                       GskRenderNode       *node)
@@ -2853,12 +2195,6 @@ gsk_gpu_node_processor_add_mask_node (GskGpuNodeProcessor *self,
   source_child = gsk_mask_node_get_source (node);
   mask_child = gsk_mask_node_get_mask (node);
   mask_mode = gsk_mask_node_get_mask_mode (node);
-
-  if ((gsk_gpu_node_processor_ubershader_instead_of_offscreen (self, mask_child) ||
-       (gsk_gpu_node_processor_ubershader_instead_of_offscreen (self, source_child) &&
-        gsk_render_node_get_node_type (source_child) != GSK_COLOR_NODE)) &&
-      gsk_gpu_node_processor_try_node_as_pattern (self, node))
-    return;
 
   if (!gsk_gpu_node_processor_clip_node_bounds (self, node, &bounds))
     return;
@@ -2929,67 +2265,6 @@ gsk_gpu_node_processor_add_mask_node (GskGpuNodeProcessor *self,
     }
 
   g_object_unref (mask_image);
-}
-
-static gboolean
-gsk_gpu_node_processor_create_mask_pattern (GskGpuPatternWriter *self,
-                                            GskRenderNode       *node)
-{
-  GskRenderNode *source_child, *mask_child;
-
-  source_child = gsk_mask_node_get_source (node);
-  mask_child = gsk_mask_node_get_mask (node);
-
-  if (!gsk_gpu_node_processor_create_node_pattern (self, source_child))
-    return FALSE;
-  if (!gsk_rect_contains_rect (&source_child->bounds, &node->bounds))
-    {
-      gsk_gpu_pattern_writer_append_uint (self, GSK_GPU_PATTERN_CLIP);
-      gsk_gpu_pattern_writer_append_rect (self, &source_child->bounds, &self->offset);
-    }
-
-  gsk_gpu_pattern_writer_append_uint (self, GSK_GPU_PATTERN_PUSH_COLOR);
-
-  if (!gsk_gpu_pattern_writer_push_stack (self))
-    return FALSE;
-
-  if (!gsk_gpu_node_processor_create_node_pattern (self, mask_child))
-    {
-      gsk_gpu_pattern_writer_pop_stack (self);
-      return FALSE;
-    }
-  if (!gsk_rect_contains_rect (&mask_child->bounds, &node->bounds))
-    {
-      gsk_gpu_pattern_writer_append_uint (self, GSK_GPU_PATTERN_CLIP);
-      gsk_gpu_pattern_writer_append_rect (self, &mask_child->bounds, &self->offset);
-    }
-
-  switch (gsk_mask_node_get_mask_mode (node))
-  {
-    case GSK_MASK_MODE_ALPHA:
-      gsk_gpu_pattern_writer_append_uint (self, GSK_GPU_PATTERN_POP_MASK_ALPHA);
-      break;
-
-    case GSK_MASK_MODE_INVERTED_ALPHA:
-      gsk_gpu_pattern_writer_append_uint (self, GSK_GPU_PATTERN_POP_MASK_INVERTED_ALPHA);
-      break;
-
-    case GSK_MASK_MODE_LUMINANCE:
-      gsk_gpu_pattern_writer_append_uint (self, GSK_GPU_PATTERN_POP_MASK_LUMINANCE);
-      break;
-
-    case GSK_MASK_MODE_INVERTED_LUMINANCE:
-      gsk_gpu_pattern_writer_append_uint (self, GSK_GPU_PATTERN_POP_MASK_INVERTED_LUMINANCE);
-      break;
-
-    default:
-      g_return_val_if_reached (FALSE);
-  }
-
-
-  gsk_gpu_pattern_writer_pop_stack (self);
-
-  return TRUE;
 }
 
 static void
@@ -3112,131 +2387,6 @@ gsk_gpu_node_processor_add_glyph_node (GskGpuNodeProcessor *self,
     }
 }
 
-static gboolean
-gsk_gpu_node_processor_create_glyph_pattern (GskGpuPatternWriter *self,
-                                             GskRenderNode       *node)
-{
-  GskGpuCache *cache;
-  const PangoGlyphInfo *glyphs;
-  PangoFont *font;
-  guint num_glyphs;
-  gsize i;
-  float scale, inv_scale;
-  guint32 tex_id;
-  GskGpuImage *last_image;
-  graphene_point_t offset;
-  float align_scale_x, align_scale_y;
-  float inv_align_scale_x, inv_align_scale_y;
-  unsigned int flags_mask;
-  const float inv_pango_scale = 1.f / PANGO_SCALE;
-
-  if (gsk_text_node_has_color_glyphs (node))
-    return FALSE;
-
-  cache = gsk_gpu_device_get_cache (gsk_gpu_frame_get_device (self->frame));
-  num_glyphs = gsk_text_node_get_num_glyphs (node);
-  glyphs = gsk_text_node_get_glyphs (node, NULL);
-  font = gsk_text_node_get_font (node);
-  offset = *gsk_text_node_get_offset (node);
-  offset.x += self->offset.x;
-  offset.y += self->offset.y;
-
-  scale = MAX (graphene_vec2_get_x (&self->scale), graphene_vec2_get_y (&self->scale));
-  inv_scale = 1.f / scale;
-
-  gsk_gpu_pattern_writer_append_uint (self, GSK_GPU_PATTERN_GLYPHS);
-  gsk_gpu_pattern_writer_append_rgba (self, gsk_text_node_get_color (node));
-  gsk_gpu_pattern_writer_append_uint (self, num_glyphs);
-
-  if (gsk_font_get_hint_style (font) != CAIRO_HINT_STYLE_NONE)
-    {
-      align_scale_x = scale * 4;
-      align_scale_y = scale;
-      flags_mask = 3;
-    }
-  else
-    {
-      align_scale_x = align_scale_y = scale * 4;
-      flags_mask = 15;
-    }
-
-  inv_align_scale_x = 1 / align_scale_x;
-  inv_align_scale_y = 1 / align_scale_y;
-
-  last_image = NULL;
-  for (i = 0; i < num_glyphs; i++)
-    {
-      GskGpuImage *image;
-      graphene_rect_t glyph_bounds;
-      graphene_point_t glyph_offset, glyph_origin;
-      GskGpuGlyphLookupFlags flags;
-
-      glyph_origin = GRAPHENE_POINT_INIT (offset.x + glyphs[i].geometry.x_offset * inv_pango_scale,
-                                          offset.y + glyphs[i].geometry.y_offset * inv_pango_scale);
-
-      glyph_origin.x = floorf (glyph_origin.x * align_scale_x + 0.5f);
-      glyph_origin.y = floorf (glyph_origin.y * align_scale_y + 0.5f);
-      flags = (((int) glyph_origin.x & 3) | (((int) glyph_origin.y & 3) << 2)) & flags_mask;
-      glyph_origin.x *= inv_align_scale_x;
-      glyph_origin.y *= inv_align_scale_y;
-
-      image = gsk_gpu_cache_lookup_glyph_image (cache,
-                                                self->frame,
-                                                font,
-                                                glyphs[i].glyph,
-                                                flags,
-                                                scale,
-                                                &glyph_bounds,
-                                                &glyph_offset);
-
-      if (image != last_image)
-        {
-          if (!gsk_gpu_pattern_writer_add_image (self, image, GSK_GPU_SAMPLER_DEFAULT, &tex_id))
-            return FALSE;
-
-          last_image = image;
-        }
-
-      glyph_origin = GRAPHENE_POINT_INIT (glyph_origin.x - glyph_offset.x * inv_scale,
-                                          glyph_origin.y - glyph_offset.y * inv_scale);
-
-      gsk_gpu_pattern_writer_append_uint (self, tex_id);
-      gsk_gpu_pattern_writer_append_rect (self,
-                                          &GRAPHENE_RECT_INIT (
-                                              0,
-                                              0,
-                                              glyph_bounds.size.width * inv_scale,
-                                              glyph_bounds.size.height * inv_scale
-                                          ),
-                                          &glyph_origin);
-      gsk_gpu_pattern_writer_append_rect (self,
-                                          &GRAPHENE_RECT_INIT (
-                                              - glyph_bounds.origin.x * inv_scale,
-                                              - glyph_bounds.origin.y * inv_scale,
-                                              gsk_gpu_image_get_width (image) * inv_scale,
-                                              gsk_gpu_image_get_height (image) * inv_scale
-                                          ),
-                                          &glyph_origin);
-
-      offset.x += glyphs[i].geometry.width * inv_pango_scale;
-    }
-
-  return TRUE;
-}
-
-static gboolean
-gsk_gpu_node_processor_create_opacity_pattern (GskGpuPatternWriter *self,
-                                               GskRenderNode       *node)
-{
-  if (!gsk_gpu_node_processor_create_node_pattern (self, gsk_opacity_node_get_child (node)))
-    return FALSE;
-
-  gsk_gpu_pattern_writer_append_uint (self, GSK_GPU_PATTERN_OPACITY);
-  gsk_gpu_pattern_writer_append_float (self, gsk_opacity_node_get_opacity (node));
-
-  return TRUE;
-}
-
 static void
 gsk_gpu_node_processor_add_color_matrix_node (GskGpuNodeProcessor *self,
                                               GskRenderNode       *node)
@@ -3249,10 +2399,6 @@ gsk_gpu_node_processor_add_color_matrix_node (GskGpuNodeProcessor *self,
   graphene_rect_t tex_rect;
 
   child = gsk_color_matrix_node_get_child (node);
-
-  if (gsk_gpu_node_processor_ubershader_instead_of_offscreen (self, child) &&
-      gsk_gpu_node_processor_try_node_as_pattern (self, node))
-    return;
 
   color_matrix = gsk_color_matrix_node_get_color_matrix (node);
   if (self->opacity < 1.0f)
@@ -3290,20 +2436,6 @@ gsk_gpu_node_processor_add_color_matrix_node (GskGpuNodeProcessor *self,
                            gsk_color_matrix_node_get_color_offset (node));
 
   g_object_unref (image);
-}
-
-static gboolean
-gsk_gpu_node_processor_create_color_matrix_pattern (GskGpuPatternWriter *self,
-                                                    GskRenderNode       *node)
-{
-  if (!gsk_gpu_node_processor_create_node_pattern (self, gsk_color_matrix_node_get_child (node)))
-    return FALSE;
-
-  gsk_gpu_pattern_writer_append_uint (self, GSK_GPU_PATTERN_COLOR_MATRIX);
-  gsk_gpu_pattern_writer_append_matrix (self, gsk_color_matrix_node_get_color_matrix (node));
-  gsk_gpu_pattern_writer_append_vec4 (self, gsk_color_matrix_node_get_color_offset (node));
-
-  return TRUE;
 }
 
 static void
@@ -3367,11 +2499,6 @@ gsk_gpu_node_processor_add_repeat_node (GskGpuNodeProcessor *self,
   child = gsk_repeat_node_get_child (node);
   child_bounds = gsk_repeat_node_get_child_bounds (node);
   if (gsk_rect_is_empty (child_bounds))
-    return;
-
-  if (gsk_gpu_node_processor_ubershader_instead_of_offscreen (self, child) &&
-      gsk_gpu_node_processor_repeat_node_can_ubershader (node) &&
-      gsk_gpu_node_processor_try_node_as_pattern (self, node))
     return;
 
   gsk_gpu_node_processor_get_clip_bounds (self, &bounds);
@@ -3477,58 +2604,6 @@ gsk_gpu_node_processor_add_repeat_node (GskGpuNodeProcessor *self,
 
       self->offset = old_offset;
     }
-}
-
-static gboolean
-gsk_gpu_node_processor_create_repeat_pattern (GskGpuPatternWriter *self,
-                                              GskRenderNode       *node)
-{
-  GskRenderNode *child;
-  const graphene_rect_t *child_bounds;
-  graphene_rect_t old_bounds;
-
-  child = gsk_repeat_node_get_child (node);
-  child_bounds = gsk_repeat_node_get_child_bounds (node);
-
-  if (gsk_rect_is_empty (child_bounds))
-    {
-      gsk_gpu_pattern_writer_append_uint (self, GSK_GPU_PATTERN_COLOR);
-      gsk_gpu_pattern_writer_append_rgba (self, &GDK_RGBA_TRANSPARENT);
-      return TRUE;
-    }
-
-  if (!gsk_gpu_node_processor_repeat_node_can_ubershader (node))
-    return FALSE;
-
-  if (!gsk_gpu_pattern_writer_push_stack (self))
-    return FALSE;
-
-  gsk_gpu_pattern_writer_append_uint (self, GSK_GPU_PATTERN_REPEAT_PUSH);
-  gsk_gpu_pattern_writer_append_rect (self, child_bounds, &self->offset);
-
-  old_bounds = self->bounds;
-  self->bounds = GRAPHENE_RECT_INIT (child_bounds->origin.x + self->offset.x,
-                                     child_bounds->origin.y + self->offset.y,
-                                     child_bounds->size.width,
-                                     child_bounds->size.height);
-
-  if (!gsk_gpu_node_processor_create_node_pattern (self, child))
-    {
-      gsk_gpu_pattern_writer_pop_stack (self);
-      return FALSE;
-    }
-  self->bounds = old_bounds;
-
-  if (!gsk_rect_contains_rect (&child->bounds, child_bounds))
-    {
-      gsk_gpu_pattern_writer_append_uint (self, GSK_GPU_PATTERN_CLIP);
-      gsk_gpu_pattern_writer_append_rect (self, &child->bounds, &self->offset);
-    }
-
-  gsk_gpu_pattern_writer_append_uint (self, GSK_GPU_PATTERN_POSITION_POP);
-  gsk_gpu_pattern_writer_pop_stack (self);
-
-  return TRUE;
 }
 
 typedef struct _FillData FillData;
@@ -3791,17 +2866,6 @@ gsk_gpu_node_processor_add_subsurface_node (GskGpuNodeProcessor *self,
     }
 }
 
-static gboolean
-gsk_gpu_node_processor_create_subsurface_pattern (GskGpuPatternWriter *self,
-                                                  GskRenderNode       *node)
-{
-  /* This can only ever happen if no offloading is happening */
-  g_assert (gsk_subsurface_node_get_subsurface (node) == NULL ||
-            gdk_subsurface_get_texture (gsk_subsurface_node_get_subsurface (node)) == NULL);
-
-  return gsk_gpu_node_processor_create_node_pattern (self, gsk_subsurface_node_get_child (node));
-}
-
 static void
 gsk_gpu_node_processor_add_container_node (GskGpuNodeProcessor *self,
                                            GskRenderNode       *node)
@@ -3814,13 +2878,6 @@ gsk_gpu_node_processor_add_container_node (GskGpuNodeProcessor *self,
 
   for (guint i = 0; i < gsk_container_node_get_n_children (node); i++)
     gsk_gpu_node_processor_add_node (self, gsk_container_node_get_child (node, i));
-}
-
-static gboolean
-gsk_gpu_node_processor_create_debug_pattern (GskGpuPatternWriter *self,
-                                             GskRenderNode       *node)
-{
-  return gsk_gpu_node_processor_create_node_pattern (self, gsk_debug_node_get_child (node));
 }
 
 static void
@@ -3840,194 +2897,161 @@ static const struct
   GskGpuNodeFeatures features;
   void                  (* process_node)                        (GskGpuNodeProcessor    *self,
                                                                  GskRenderNode          *node);
-  gboolean              (* create_pattern)                      (GskGpuPatternWriter    *self,
-                                                                 GskRenderNode          *node);
 } nodes_vtable[] = {
   [GSK_NOT_A_RENDER_NODE] = {
     0,
     0,
-    NULL,
     NULL,
   },
   [GSK_CONTAINER_NODE] = {
     GSK_GPU_GLOBAL_MATRIX | GSK_GPU_GLOBAL_SCALE | GSK_GPU_GLOBAL_CLIP | GSK_GPU_GLOBAL_SCISSOR,
     GSK_GPU_HANDLE_OPACITY,
     gsk_gpu_node_processor_add_container_node,
-    NULL,
   },
   [GSK_CAIRO_NODE] = {
     0,
     GSK_GPU_HANDLE_OPACITY,
-    NULL,
     NULL,
   },
   [GSK_COLOR_NODE] = {
     0,
     GSK_GPU_HANDLE_OPACITY,
     gsk_gpu_node_processor_add_color_node,
-    gsk_gpu_node_processor_create_color_pattern,
   },
   [GSK_LINEAR_GRADIENT_NODE] = {
     0,
     GSK_GPU_HANDLE_OPACITY,
     gsk_gpu_node_processor_add_linear_gradient_node,
-    gsk_gpu_node_processor_create_linear_gradient_pattern,
   },
   [GSK_REPEATING_LINEAR_GRADIENT_NODE] = {
     0,
     GSK_GPU_HANDLE_OPACITY,
     gsk_gpu_node_processor_add_linear_gradient_node,
-    gsk_gpu_node_processor_create_linear_gradient_pattern,
   },
   [GSK_RADIAL_GRADIENT_NODE] = {
     0,
     GSK_GPU_HANDLE_OPACITY,
     gsk_gpu_node_processor_add_radial_gradient_node,
-    gsk_gpu_node_processor_create_radial_gradient_pattern,
   },
   [GSK_REPEATING_RADIAL_GRADIENT_NODE] = {
     0,
     GSK_GPU_HANDLE_OPACITY,
     gsk_gpu_node_processor_add_radial_gradient_node,
-    gsk_gpu_node_processor_create_radial_gradient_pattern,
   },
   [GSK_CONIC_GRADIENT_NODE] = {
     0,
     GSK_GPU_HANDLE_OPACITY,
     gsk_gpu_node_processor_add_conic_gradient_node,
-    gsk_gpu_node_processor_create_conic_gradient_pattern,
   },
   [GSK_BORDER_NODE] = {
     0,
     GSK_GPU_HANDLE_OPACITY,
     gsk_gpu_node_processor_add_border_node,
-    NULL,
   },
   [GSK_TEXTURE_NODE] = {
     0,
     GSK_GPU_HANDLE_OPACITY,
     gsk_gpu_node_processor_add_texture_node,
-    gsk_gpu_node_processor_create_texture_pattern,
   },
   [GSK_INSET_SHADOW_NODE] = {
     0,
     GSK_GPU_HANDLE_OPACITY,
     gsk_gpu_node_processor_add_inset_shadow_node,
-    NULL,
   },
   [GSK_OUTSET_SHADOW_NODE] = {
     0,
     GSK_GPU_HANDLE_OPACITY,
     gsk_gpu_node_processor_add_outset_shadow_node,
-    NULL,
   },
   [GSK_TRANSFORM_NODE] = {
     GSK_GPU_GLOBAL_MATRIX | GSK_GPU_GLOBAL_SCALE | GSK_GPU_GLOBAL_CLIP | GSK_GPU_GLOBAL_SCISSOR | GSK_GPU_GLOBAL_BLEND,
     GSK_GPU_HANDLE_OPACITY,
     gsk_gpu_node_processor_add_transform_node,
-    gsk_gpu_node_processor_create_transform_pattern,
   },
   [GSK_OPACITY_NODE] = {
     GSK_GPU_GLOBAL_MATRIX | GSK_GPU_GLOBAL_SCALE | GSK_GPU_GLOBAL_CLIP | GSK_GPU_GLOBAL_SCISSOR,
     GSK_GPU_HANDLE_OPACITY,
     gsk_gpu_node_processor_add_opacity_node,
-    gsk_gpu_node_processor_create_opacity_pattern,
   },
   [GSK_COLOR_MATRIX_NODE] = {
     0,
     GSK_GPU_HANDLE_OPACITY,
     gsk_gpu_node_processor_add_color_matrix_node,
-    gsk_gpu_node_processor_create_color_matrix_pattern
   },
   [GSK_REPEAT_NODE] = {
     0,
     GSK_GPU_HANDLE_OPACITY,
     gsk_gpu_node_processor_add_repeat_node,
-    gsk_gpu_node_processor_create_repeat_pattern
   },
   [GSK_CLIP_NODE] = {
     GSK_GPU_GLOBAL_MATRIX | GSK_GPU_GLOBAL_SCALE | GSK_GPU_GLOBAL_CLIP | GSK_GPU_GLOBAL_SCISSOR | GSK_GPU_GLOBAL_BLEND,
     GSK_GPU_HANDLE_OPACITY,
     gsk_gpu_node_processor_add_clip_node,
-    gsk_gpu_node_processor_create_clip_pattern,
   },
   [GSK_ROUNDED_CLIP_NODE] = {
     GSK_GPU_GLOBAL_MATRIX | GSK_GPU_GLOBAL_SCALE | GSK_GPU_GLOBAL_CLIP | GSK_GPU_GLOBAL_SCISSOR | GSK_GPU_GLOBAL_BLEND,
     GSK_GPU_HANDLE_OPACITY,
     gsk_gpu_node_processor_add_rounded_clip_node,
-    NULL,
   },
   [GSK_SHADOW_NODE] = {
     0,
     0,
     gsk_gpu_node_processor_add_shadow_node,
-    NULL,
   },
   [GSK_BLEND_NODE] = {
     0,
     GSK_GPU_HANDLE_OPACITY,
     gsk_gpu_node_processor_add_blend_node,
-    gsk_gpu_node_processor_create_blend_pattern,
   },
   [GSK_CROSS_FADE_NODE] = {
     0,
     GSK_GPU_HANDLE_OPACITY,
     gsk_gpu_node_processor_add_cross_fade_node,
-    gsk_gpu_node_processor_create_cross_fade_pattern,
   },
   [GSK_TEXT_NODE] = {
     0,
     GSK_GPU_HANDLE_OPACITY,
     gsk_gpu_node_processor_add_glyph_node,
-    gsk_gpu_node_processor_create_glyph_pattern,
   },
   [GSK_BLUR_NODE] = {
     0,
     0,
     gsk_gpu_node_processor_add_blur_node,
-    NULL,
   },
   [GSK_DEBUG_NODE] = {
     GSK_GPU_GLOBAL_MATRIX | GSK_GPU_GLOBAL_SCALE | GSK_GPU_GLOBAL_CLIP | GSK_GPU_GLOBAL_SCISSOR | GSK_GPU_GLOBAL_BLEND,
     GSK_GPU_HANDLE_OPACITY,
     gsk_gpu_node_processor_add_debug_node,
-    gsk_gpu_node_processor_create_debug_pattern,
   },
   [GSK_GL_SHADER_NODE] = {
     0,
     0,
-    NULL,
     NULL,
   },
   [GSK_TEXTURE_SCALE_NODE] = {
     0,
     0,
     gsk_gpu_node_processor_add_texture_scale_node,
-    NULL,
   },
   [GSK_MASK_NODE] = {
     0,
     GSK_GPU_HANDLE_OPACITY,
     gsk_gpu_node_processor_add_mask_node,
-    gsk_gpu_node_processor_create_mask_pattern,
   },
   [GSK_FILL_NODE] = {
     0,
     GSK_GPU_HANDLE_OPACITY,
     gsk_gpu_node_processor_add_fill_node,
-    NULL,
   },
   [GSK_STROKE_NODE] = {
     0,
     GSK_GPU_HANDLE_OPACITY,
     gsk_gpu_node_processor_add_stroke_node,
-    NULL,
   },
   [GSK_SUBSURFACE_NODE] = {
     GSK_GPU_GLOBAL_MATRIX | GSK_GPU_GLOBAL_SCALE | GSK_GPU_GLOBAL_CLIP | GSK_GPU_GLOBAL_SCISSOR | GSK_GPU_GLOBAL_BLEND,
     GSK_GPU_HANDLE_OPACITY,
     gsk_gpu_node_processor_add_subsurface_node,
-    gsk_gpu_node_processor_create_subsurface_pattern,
   },
 };
 
@@ -4073,81 +3097,5 @@ gsk_gpu_node_processor_add_node (GskGpuNodeProcessor *self,
                  g_type_name_from_instance ((GTypeInstance *) node));
       gsk_gpu_node_processor_add_fallback_node (self, node);
     }
-}
-
-static gboolean
-gsk_gpu_node_processor_create_node_pattern (GskGpuPatternWriter *self,
-                                            GskRenderNode       *node)
-{
-  GskRenderNodeType node_type;
-  graphene_rect_t bounds;
-  GskGpuImage *image;
-  guint32 tex_id;
-
-  if (!gsk_gpu_frame_should_optimize (self->frame, GSK_GPU_OPTIMIZE_UBER))
-    return FALSE;
-
-  /* This catches the corner cases of empty nodes, so after this check
-   * there's quaranteed to be at least 1 pixel that needs to be drawn
-   */
-  if (node->bounds.size.width == 0 || node->bounds.size.height == 0)
-    return TRUE;
-
-  node_type = gsk_render_node_get_node_type (node);
-  if (node_type >= G_N_ELEMENTS (nodes_vtable))
-    {
-      g_critical ("unknown node type %u for %s", node_type, g_type_name_from_instance ((GTypeInstance *) node));
-      return FALSE;
-    }
-
-  if (nodes_vtable[node_type].create_pattern != NULL)
-    {
-      gsize size_before = pattern_buffer_get_size (&self->buffer);
-      gsize images_before = self->desc ? gsk_gpu_descriptors_get_n_images (self->desc) : 0;
-      gsize buffers_before = self->desc ? gsk_gpu_descriptors_get_n_buffers (self->desc) : 0;
-      if (nodes_vtable[node_type].create_pattern (self, node))
-        return TRUE;
-      pattern_buffer_set_size (&self->buffer, size_before);
-      if (self->desc)
-        gsk_gpu_descriptors_set_size (self->desc, images_before, buffers_before);
-    }
-
-  rect_round_to_pixels (&GRAPHENE_RECT_INIT (
-                            self->bounds.origin.x - self->offset.x,
-                            self->bounds.origin.y - self->offset.y,
-                            self->bounds.size.width,
-                            self->bounds.size.height
-                        ),
-                        &self->scale,
-                        &self->offset,
-                        &bounds);
-  image = gsk_gpu_get_node_as_image (self->frame,
-                                     &bounds,
-                                     &self->scale,
-                                     node,
-                                     &bounds);
-  if (image == NULL)
-    {
-      gsk_gpu_pattern_writer_append_uint (self, GSK_GPU_PATTERN_COLOR);
-      gsk_gpu_pattern_writer_append_rgba (self, &GDK_RGBA_TRANSPARENT);
-      return TRUE;
-    }
-
-  if (!gsk_gpu_pattern_writer_add_image (self, image, GSK_GPU_SAMPLER_DEFAULT, &tex_id))
-    {
-      g_object_unref (image);
-      return FALSE;
-    }
-
-  if (gsk_gpu_image_get_flags (image) & GSK_GPU_IMAGE_STRAIGHT_ALPHA)
-    gsk_gpu_pattern_writer_append_uint (self, GSK_GPU_PATTERN_STRAIGHT_ALPHA);
-  else
-    gsk_gpu_pattern_writer_append_uint (self, GSK_GPU_PATTERN_TEXTURE);
-  gsk_gpu_pattern_writer_append_uint (self, tex_id);
-  gsk_gpu_pattern_writer_append_rect (self, &bounds, &self->offset);
-
-  g_object_unref (image);
-
-  return TRUE;
 }
 

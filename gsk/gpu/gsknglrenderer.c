@@ -75,12 +75,6 @@ gsk_ngl_renderer_create_context (GskGpuRenderer       *renderer,
 
   *supported = -1;
 
-  /* Shader compilation takes too long when texture() and get_float() calls
-   * use if/else ladders to avoid non-uniform indexing.
-   * And that is always true with GL.
-   */
-  *supported &= ~GSK_GPU_OPTIMIZE_UBER;
-
   return GDK_DRAW_CONTEXT (context);
 }
 
