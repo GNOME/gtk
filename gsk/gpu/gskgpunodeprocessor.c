@@ -2315,12 +2315,13 @@ gsk_gpu_node_processor_add_shadow_node (GskGpuNodeProcessor *self,
                                                                 self->offset.y + shadow->dy);
           gsk_gpu_colorize_op (self->frame,
                                gsk_gpu_clip_get_shader_clip (&self->clip, &shadow_offset, &child->bounds),
+                               gsk_gpu_node_processor_color_states_for_rgba (self),
                                desc,
                                descriptor,
                                &child->bounds,
                                &shadow_offset,
                                &tex_rect,
-                               &shadow->color);
+                               GSK_RGBA_TO_VEC4 (&shadow->color));
         }
       else
         {
@@ -2530,12 +2531,13 @@ gsk_gpu_node_processor_add_mask_node (GskGpuNodeProcessor *self,
       guint32 descriptor = gsk_gpu_node_processor_add_image (self, mask_image, GSK_GPU_SAMPLER_DEFAULT);
       gsk_gpu_colorize_op (self->frame,
                            gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, &node->bounds),
+                           gsk_gpu_node_processor_color_states_for_rgba (self),
                            self->desc,
                            descriptor,
                            &node->bounds,
                            &self->offset,
                            &mask_rect,
-                           &GDK_RGBA_INIT_ALPHA (rgba, self->opacity));
+                           GSK_RGBA_TO_VEC4_ALPHA (rgba, self->opacity));
     }
   else
     {
@@ -2685,12 +2687,13 @@ gsk_gpu_node_processor_add_glyph_node (GskGpuNodeProcessor *self,
       else
         gsk_gpu_colorize_op (self->frame,
                              gsk_gpu_clip_get_shader_clip (&self->clip, &glyph_offset, &glyph_bounds),
+                             gsk_gpu_node_processor_color_states_for_rgba (self),
                              self->desc,
                              descriptor,
                              &glyph_bounds,
                              &glyph_origin,
                              &glyph_tex_rect,
-                             &color);
+                             GSK_RGBA_TO_VEC4 (&color));
 
       offset.x += glyphs[i].geometry.width * inv_pango_scale;
     }

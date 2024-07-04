@@ -24,7 +24,7 @@ run (out vec2 pos)
 
   _pos = pos;
   _rect = r;
-  _color = color_premultiply (in_color);
+  _color = output_color_from_alt (in_color);
   _tex_coord = rect_get_coord (rect_from_gsk (in_tex_rect), pos);
   _tex_id = in_tex_id;
 }
@@ -40,7 +40,7 @@ run (out vec4 color,
      out vec2 position)
 {
   float alpha = gsk_texture (_tex_id, _tex_coord).a * rect_coverage (_rect, _pos);
-  color = _color * alpha;
+  color = output_color_alpha (_color, alpha);
   position = _pos;
 }
 
