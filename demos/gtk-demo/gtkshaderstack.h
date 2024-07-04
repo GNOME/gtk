@@ -2,6 +2,8 @@
 
 #include <gtk/gtk.h>
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+
 G_BEGIN_DECLS
 
 #define GTK_TYPE_SHADER_STACK     (gtk_shader_stack_get_type ())
@@ -18,3 +20,5 @@ void        gtk_shader_stack_set_active   (GtkShaderStack *self,
                                            int             index);
 
 G_END_DECLS
+
+G_GNUC_END_IGNORE_DEPRECATIONS

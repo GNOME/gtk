@@ -170,6 +170,7 @@ update_paintable (GtkWidget     *widget,
 static GtkWidget *
 create_cogs (void)
 {
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   GtkWidget *picture;
   static GskGLShader *cog_shader = NULL;
   GdkPaintable *paintable;
@@ -182,6 +183,7 @@ create_cogs (void)
   gtk_widget_add_tick_callback (picture, update_paintable, NULL, NULL);
 
   return picture;
+G_GNUC_END_IGNORE_DEPRECATIONS
 }
 
 static gboolean

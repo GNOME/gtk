@@ -22,6 +22,8 @@
 #include <gtk/gtk.h>
 #include "gskshaderpaintable.h"
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+
 /**
  * GskShaderPaintable:
  *
@@ -332,3 +334,5 @@ gsk_shader_paintable_update_time (GskShaderPaintable *self,
 
   g_bytes_unref (args);
 }
+
+G_GNUC_END_IGNORE_DEPRECATIONS

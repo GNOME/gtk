@@ -245,6 +245,7 @@ gsk_gl_driver_dispose (GObject *object)
 #undef GSK_GL_DEFINE_PROGRAM
 #undef GSK_GL_DEFINE_PROGRAM_NO_CLIP
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   if (self->shader_cache != NULL)
     {
       GHashTableIter iter;
@@ -262,6 +263,7 @@ gsk_gl_driver_dispose (GObject *object)
 
       g_clear_pointer (&self->shader_cache, g_hash_table_unref);
     }
+G_GNUC_END_IGNORE_DEPRECATIONS
 
   if (self->command_queue != NULL)
     {
@@ -1230,6 +1232,8 @@ gsk_gl_driver_release_render_target (GskGLDriver       *self,
   return release_render_target (self, render_target, release_texture, TRUE);
 }
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+
 /**
  * gsk_gl_driver_lookup_shader:
  * @self: a `GskGLDriver`
@@ -1346,6 +1350,8 @@ gsk_gl_driver_lookup_shader (GskGLDriver  *self,
 
   return program;
 }
+
+G_GNUC_END_IGNORE_DEPRECATIONS
 
 #if 0
 void

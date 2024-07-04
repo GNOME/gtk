@@ -20,6 +20,8 @@
 #include "gtkshadertoy.h"
 #include "gskshaderpaintable.h"
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+
 static GtkWidget *demo_window = NULL;
 
 static void
@@ -360,3 +362,5 @@ do_gltransition (GtkWidget *do_widget)
 
   return demo_window;
 }
+
+G_GNUC_END_IGNORE_DEPRECATIONS

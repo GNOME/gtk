@@ -22,6 +22,8 @@
 #include <gdk/gdk.h>
 #include <gsk/gsk.h>
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+
 G_BEGIN_DECLS
 
 #define GSK_TYPE_SHADER_PAINTABLE (gsk_shader_paintable_get_type ())
@@ -41,3 +43,5 @@ void             gsk_shader_paintable_update_time      (GskShaderPaintable *self
                                                         int                 time_idx,
                                                         gint64              frame_time);
 G_END_DECLS
+
+G_GNUC_END_IGNORE_DEPRECATIONS

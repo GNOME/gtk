@@ -132,6 +132,15 @@
  *   fragColor = position * source1 + (1.0 - position) * source2;
  * }
  * ```
+ *
+ * # Deprecation
+ *
+ * This feature was deprecated in GTK 4.16 after the new rendering infrastructure
+ * introduced in 4.14 did not support it.
+ * The lack of Vulkan inegration would have made it a very hard feature to support.
+ *
+ * If you want to use OpenGL directly, you should look at [GtkGLArea](../gtk4/class.GLArea.html)
+ * which uses a different approach and is still well supported.
  */
 
 #include "config.h"
@@ -140,6 +149,8 @@
 #include "gskdebugprivate.h"
 
 #include "gl/gskglrendererprivate.h"
+
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 
 static GskGLUniformType
 uniform_type_from_glsl (const char *str)
@@ -481,6 +492,10 @@ gsk_gl_shader_init (GskGLShader *shader)
  * Creates a `GskGLShader` that will render pixels using the specified code.
  *
  * Returns: (transfer full): A new `GskGLShader`
+ *
+ * Deprecated: 4.16: GTK's new Vulkan-focused rendering
+ *   does not support this feature. Use [GtkGLArea](../gtk4/class.GLArea.html)
+ *   for OpenGL rendering.
  */
 GskGLShader *
 gsk_gl_shader_new_from_bytes (GBytes *sourcecode)
@@ -500,6 +515,10 @@ gsk_gl_shader_new_from_bytes (GBytes *sourcecode)
  * Creates a `GskGLShader` that will render pixels using the specified code.
  *
  * Returns: (transfer full): A new `GskGLShader`
+ *
+ * Deprecated: 4.16: GTK's new Vulkan-focused rendering
+ *   does not support this feature. Use [GtkGLArea](../gtk4/class.GLArea.html)
+ *   for OpenGL rendering.
  */
 GskGLShader *
 gsk_gl_shader_new_from_resource (const char *resource_path)
@@ -531,6 +550,10 @@ gsk_gl_shader_new_from_resource (const char *resource_path)
  * widget snapshot.
  *
  * Returns: %TRUE on success, %FALSE if an error occurred
+ *
+ * Deprecated: 4.16: GTK's new Vulkan-focused rendering
+ *   does not support this feature. Use [GtkGLArea](../gtk4/class.GLArea.html)
+ *   for OpenGL rendering.
  */
 gboolean
 gsk_gl_shader_compile (GskGLShader  *shader,
@@ -555,6 +578,10 @@ gsk_gl_shader_compile (GskGLShader  *shader,
  * Gets the GLSL sourcecode being used to render this shader.
  *
  * Returns: (transfer none): The source code for the shader
+ *
+ * Deprecated: 4.16: GTK's new Vulkan-focused rendering
+ *   does not support this feature. Use [GtkGLArea](../gtk4/class.GLArea.html)
+ *   for OpenGL rendering.
  */
 GBytes *
 gsk_gl_shader_get_source (GskGLShader *shader)
@@ -572,6 +599,10 @@ gsk_gl_shader_get_source (GskGLShader *shader)
  * to render this shader.
  *
  * Returns: (transfer none) (nullable): The resource path for the shader
+ *
+ * Deprecated: 4.16: GTK's new Vulkan-focused rendering
+ *   does not support this feature. Use [GtkGLArea](../gtk4/class.GLArea.html)
+ *   for OpenGL rendering.
  */
 const char *
 gsk_gl_shader_get_resource (GskGLShader *shader)
@@ -592,6 +623,10 @@ gsk_gl_shader_get_resource (GskGLShader *shader)
  * u_textureN value that the shader defines.
  *
  * Returns: The number of texture inputs required by @shader
+ *
+ * Deprecated: 4.16: GTK's new Vulkan-focused rendering
+ *   does not support this feature. Use [GtkGLArea](../gtk4/class.GLArea.html)
+ *   for OpenGL rendering.
  */
 int
 gsk_gl_shader_get_n_textures (GskGLShader *shader)
@@ -608,6 +643,10 @@ gsk_gl_shader_get_n_textures (GskGLShader *shader)
  * Get the number of declared uniforms for this shader.
  *
  * Returns: The number of declared uniforms
+ *
+ * Deprecated: 4.16: GTK's new Vulkan-focused rendering
+ *   does not support this feature. Use [GtkGLArea](../gtk4/class.GLArea.html)
+ *   for OpenGL rendering.
  */
 int
 gsk_gl_shader_get_n_uniforms (GskGLShader *shader)
@@ -625,6 +664,10 @@ gsk_gl_shader_get_n_uniforms (GskGLShader *shader)
  * Get the name of the declared uniform for this shader at index @idx.
  *
  * Returns: (transfer none): The name of the declared uniform
+ *
+ * Deprecated: 4.16: GTK's new Vulkan-focused rendering
+ *   does not support this feature. Use [GtkGLArea](../gtk4/class.GLArea.html)
+ *   for OpenGL rendering.
  */
 const char *
 gsk_gl_shader_get_uniform_name (GskGLShader *shader,
@@ -645,6 +688,10 @@ gsk_gl_shader_get_uniform_name (GskGLShader *shader,
  * of the uniform, or -1 if it was not found.
  *
  * Returns: The index of the uniform, or -1
+ *
+ * Deprecated: 4.16: GTK's new Vulkan-focused rendering
+ *   does not support this feature. Use [GtkGLArea](../gtk4/class.GLArea.html)
+ *   for OpenGL rendering.
  */
 int
 gsk_gl_shader_find_uniform_by_name (GskGLShader *shader,
@@ -670,6 +717,10 @@ gsk_gl_shader_find_uniform_by_name (GskGLShader *shader,
  * Get the type of the declared uniform for this shader at index @idx.
  *
  * Returns: The type of the declared uniform
+ *
+ * Deprecated: 4.16: GTK's new Vulkan-focused rendering
+ *   does not support this feature. Use [GtkGLArea](../gtk4/class.GLArea.html)
+ *   for OpenGL rendering.
  */
 GskGLUniformType
 gsk_gl_shader_get_uniform_type (GskGLShader *shader,
@@ -689,6 +740,10 @@ gsk_gl_shader_get_uniform_type (GskGLShader *shader,
  * Get the offset into the data block where data for this uniforms is stored.
  *
  * Returns: The data offset
+ *
+ * Deprecated: 4.16: GTK's new Vulkan-focused rendering
+ *   does not support this feature. Use [GtkGLArea](../gtk4/class.GLArea.html)
+ *   for OpenGL rendering.
  */
 int
 gsk_gl_shader_get_uniform_offset (GskGLShader *shader,
@@ -715,6 +770,10 @@ gsk_gl_shader_get_uniforms (GskGLShader *shader,
  * Get the size of the data block used to specify arguments for this shader.
  *
  * Returns: The size of the data block
+ *
+ * Deprecated: 4.16: GTK's new Vulkan-focused rendering
+ *   does not support this feature. Use [GtkGLArea](../gtk4/class.GLArea.html)
+ *   for OpenGL rendering.
  */
 gsize
 gsk_gl_shader_get_args_size (GskGLShader *shader)
@@ -749,6 +808,10 @@ gsk_gl_shader_find_uniform (GskGLShader *shader,
  * The uniform must be of float type.
  *
  * Returns: The value
+ *
+ * Deprecated: 4.16: GTK's new Vulkan-focused rendering
+ *   does not support this feature. Use [GtkGLArea](../gtk4/class.GLArea.html)
+ *   for OpenGL rendering.
  */
 float
 gsk_gl_shader_get_arg_float (GskGLShader *shader,
@@ -782,6 +845,10 @@ gsk_gl_shader_get_arg_float (GskGLShader *shader,
  * The uniform must be of int type.
  *
  * Returns: The value
+ *
+ * Deprecated: 4.16: GTK's new Vulkan-focused rendering
+ *   does not support this feature. Use [GtkGLArea](../gtk4/class.GLArea.html)
+ *   for OpenGL rendering.
  */
 gint32
 gsk_gl_shader_get_arg_int (GskGLShader *shader,
@@ -815,6 +882,10 @@ gsk_gl_shader_get_arg_int (GskGLShader *shader,
  * The uniform must be of uint type.
  *
  * Returns: The value
+ *
+ * Deprecated: 4.16: GTK's new Vulkan-focused rendering
+ *   does not support this feature. Use [GtkGLArea](../gtk4/class.GLArea.html)
+ *   for OpenGL rendering.
  */
 guint32
 gsk_gl_shader_get_arg_uint (GskGLShader *shader,
@@ -848,6 +919,10 @@ gsk_gl_shader_get_arg_uint (GskGLShader *shader,
  * The uniform must be of bool type.
  *
  * Returns: The value
+ *
+ * Deprecated: 4.16: GTK's new Vulkan-focused rendering
+ *   does not support this feature. Use [GtkGLArea](../gtk4/class.GLArea.html)
+ *   for OpenGL rendering.
  */
 gboolean
 gsk_gl_shader_get_arg_bool (GskGLShader *shader,
@@ -880,6 +955,10 @@ gsk_gl_shader_get_arg_bool (GskGLShader *shader,
  * Gets the value of the uniform @idx in the @args block.
  *
  * The uniform must be of vec2 type.
+ *
+ * Deprecated: 4.16: GTK's new Vulkan-focused rendering
+ *   does not support this feature. Use [GtkGLArea](../gtk4/class.GLArea.html)
+ *   for OpenGL rendering.
  */
 void
 gsk_gl_shader_get_arg_vec2 (GskGLShader     *shader,
@@ -913,6 +992,10 @@ gsk_gl_shader_get_arg_vec2 (GskGLShader     *shader,
  * Gets the value of the uniform @idx in the @args block.
  *
  * The uniform must be of vec3 type.
+ *
+ * Deprecated: 4.16: GTK's new Vulkan-focused rendering
+ *   does not support this feature. Use [GtkGLArea](../gtk4/class.GLArea.html)
+ *   for OpenGL rendering.
  */
 void
 gsk_gl_shader_get_arg_vec3 (GskGLShader     *shader,
@@ -946,6 +1029,10 @@ gsk_gl_shader_get_arg_vec3 (GskGLShader     *shader,
  * Gets the value of the uniform @idx in the @args block.
  *
  * The uniform must be of vec4 type.
+ *
+ * Deprecated: 4.16: GTK's new Vulkan-focused rendering
+ *   does not support this feature. Use [GtkGLArea](../gtk4/class.GLArea.html)
+ *   for OpenGL rendering.
  */
 void
 gsk_gl_shader_get_arg_vec4 (GskGLShader     *shader,
@@ -989,6 +1076,10 @@ gsk_gl_shader_get_arg_vec4 (GskGLShader     *shader,
  *
  * Returns: (transfer full): A newly allocated block of data which can be
  *     passed to [ctor@Gsk.GLShaderNode.new].
+ *
+ * Deprecated: 4.16: GTK's new Vulkan-focused rendering
+ *   does not support this feature. Use [GtkGLArea](../gtk4/class.GLArea.html)
+ *   for OpenGL rendering.
  */
 GBytes *
 gsk_gl_shader_format_args_va (GskGLShader *shader,
@@ -1073,6 +1164,10 @@ gsk_gl_shader_format_args_va (GskGLShader *shader,
  *
  * Returns: (transfer full): A newly allocated block of data which can be
  *     passed to [ctor@Gsk.GLShaderNode.new].
+ *
+ * Deprecated: 4.16: GTK's new Vulkan-focused rendering
+ *   does not support this feature. Use [GtkGLArea](../gtk4/class.GLArea.html)
+ *   for OpenGL rendering.
  */
 GBytes *
 gsk_gl_shader_format_args (GskGLShader *shader,
@@ -1109,6 +1204,10 @@ G_DEFINE_BOXED_TYPE (GskShaderArgsBuilder, gsk_shader_args_builder,
  *
  * Returns: (transfer full): The newly allocated builder, free with
  *     [method@Gsk.ShaderArgsBuilder.unref]
+ *
+ * Deprecated: 4.16: GTK's new Vulkan-focused rendering
+ *   does not support this feature. Use [GtkGLArea](../gtk4/class.GLArea.html)
+ *   for OpenGL rendering.
  */
 GskShaderArgsBuilder *
 gsk_shader_args_builder_new (GskGLShader *shader,
@@ -1147,9 +1246,12 @@ gsk_shader_args_builder_new (GskGLShader *shader,
  * This function is intended primarily for bindings. C code should use
  * [method@Gsk.ShaderArgsBuilder.free_to_args].
  *
- *
  * Returns: (transfer full): the newly allocated buffer with
  *   all the args added to @builder
+ *
+ * Deprecated: 4.16: GTK's new Vulkan-focused rendering
+ *   does not support this feature. Use [GtkGLArea](../gtk4/class.GLArea.html)
+ *   for OpenGL rendering.
  */
 GBytes *
 gsk_shader_args_builder_to_args (GskShaderArgsBuilder *builder)
@@ -1170,6 +1272,10 @@ gsk_shader_args_builder_to_args (GskShaderArgsBuilder *builder)
  *
  * Returns: (transfer full): the newly allocated buffer with
  *   all the args added to @builder
+ *
+ * Deprecated: 4.16: GTK's new Vulkan-focused rendering
+ *   does not support this feature. Use [GtkGLArea](../gtk4/class.GLArea.html)
+ *   for OpenGL rendering.
  */
 GBytes *
 gsk_shader_args_builder_free_to_args (GskShaderArgsBuilder *builder)
@@ -1193,6 +1299,10 @@ gsk_shader_args_builder_free_to_args (GskShaderArgsBuilder *builder)
  * Decreases the reference count of a `GskShaderArgBuilder` by one.
  *
  * If the resulting reference count is zero, frees the builder.
+ *
+ * Deprecated: 4.16: GTK's new Vulkan-focused rendering
+ *   does not support this feature. Use [GtkGLArea](../gtk4/class.GLArea.html)
+ *   for OpenGL rendering.
  */
 void
 gsk_shader_args_builder_unref (GskShaderArgsBuilder *builder)
@@ -1217,6 +1327,10 @@ gsk_shader_args_builder_unref (GskShaderArgsBuilder *builder)
  * Increases the reference count of a `GskShaderArgsBuilder` by one.
  *
  * Returns: the passed in `GskShaderArgsBuilder`
+ *
+ * Deprecated: 4.16: GTK's new Vulkan-focused rendering
+ *   does not support this feature. Use [GtkGLArea](../gtk4/class.GLArea.html)
+ *   for OpenGL rendering.
  */
 GskShaderArgsBuilder *
 gsk_shader_args_builder_ref (GskShaderArgsBuilder *builder)
@@ -1264,6 +1378,10 @@ gsk_shader_args_builder_set_float (GskShaderArgsBuilder *builder,
  * Sets the value of the uniform @idx.
  *
  * The uniform must be of int type.
+ *
+ * Deprecated: 4.16: GTK's new Vulkan-focused rendering
+ *   does not support this feature. Use [GtkGLArea](../gtk4/class.GLArea.html)
+ *   for OpenGL rendering.
  */
 void
 gsk_shader_args_builder_set_int (GskShaderArgsBuilder *builder,
@@ -1292,6 +1410,10 @@ gsk_shader_args_builder_set_int (GskShaderArgsBuilder *builder,
  * Sets the value of the uniform @idx.
  *
  * The uniform must be of uint type.
+ *
+ * Deprecated: 4.16: GTK's new Vulkan-focused rendering
+ *   does not support this feature. Use [GtkGLArea](../gtk4/class.GLArea.html)
+ *   for OpenGL rendering.
  */
 void
 gsk_shader_args_builder_set_uint (GskShaderArgsBuilder *builder,
@@ -1320,6 +1442,10 @@ gsk_shader_args_builder_set_uint (GskShaderArgsBuilder *builder,
  * Sets the value of the uniform @idx.
  *
  * The uniform must be of bool type.
+ *
+ * Deprecated: 4.16: GTK's new Vulkan-focused rendering
+ *   does not support this feature. Use [GtkGLArea](../gtk4/class.GLArea.html)
+ *   for OpenGL rendering.
  */
 void
 gsk_shader_args_builder_set_bool (GskShaderArgsBuilder *builder,
@@ -1348,6 +1474,10 @@ gsk_shader_args_builder_set_bool (GskShaderArgsBuilder *builder,
  * Sets the value of the uniform @idx.
  *
  * The uniform must be of vec2 type.
+ *
+ * Deprecated: 4.16: GTK's new Vulkan-focused rendering
+ *   does not support this feature. Use [GtkGLArea](../gtk4/class.GLArea.html)
+ *   for OpenGL rendering.
  */
 void
 gsk_shader_args_builder_set_vec2 (GskShaderArgsBuilder  *builder,
@@ -1376,6 +1506,10 @@ gsk_shader_args_builder_set_vec2 (GskShaderArgsBuilder  *builder,
  * Sets the value of the uniform @idx.
  *
  * The uniform must be of vec3 type.
+ *
+ * Deprecated: 4.16: GTK's new Vulkan-focused rendering
+ *   does not support this feature. Use [GtkGLArea](../gtk4/class.GLArea.html)
+ *   for OpenGL rendering.
  */
 void
 gsk_shader_args_builder_set_vec3 (GskShaderArgsBuilder  *builder,
@@ -1404,6 +1538,10 @@ gsk_shader_args_builder_set_vec3 (GskShaderArgsBuilder  *builder,
  * Sets the value of the uniform @idx.
  *
  * The uniform must be of vec4 type.
+ *
+ * Deprecated: 4.16: GTK's new Vulkan-focused rendering
+ *   does not support this feature. Use [GtkGLArea](../gtk4/class.GLArea.html)
+ *   for OpenGL rendering.
  */
 void
 gsk_shader_args_builder_set_vec4 (GskShaderArgsBuilder  *builder,
@@ -1422,3 +1560,5 @@ gsk_shader_args_builder_set_vec4 (GskShaderArgsBuilder  *builder,
   args_dest = builder->data + u->offset;
   graphene_vec4_to_float (value, (float *)args_dest);
 }
+
+G_GNUC_END_IGNORE_DEPRECATIONS

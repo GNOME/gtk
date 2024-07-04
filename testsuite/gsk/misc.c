@@ -191,7 +191,9 @@ test_renderer (GskRenderer *renderer)
   GdkSurface *surface;
   gboolean res;
   GError *error = NULL;
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   GskGLShader *shader;
+G_GNUC_END_IGNORE_DEPRECATIONS
   GBytes *bytes;
 
   g_assert (GSK_IS_RENDERER (renderer));
@@ -217,6 +219,7 @@ test_renderer (GskRenderer *renderer)
   g_assert_true (gsk_renderer_is_realized (renderer));
   g_assert_true (gsk_renderer_get_surface (renderer) == surface);
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   bytes = g_bytes_new_static (shader1, sizeof (shader1));
   shader = gsk_gl_shader_new_from_bytes (bytes);
   g_bytes_unref (bytes);
@@ -232,6 +235,7 @@ test_renderer (GskRenderer *renderer)
       g_assert_error (error, G_IO_ERROR, G_IO_ERROR_NOT_SUPPORTED);
       g_clear_error (&error);
     }
+G_GNUC_END_IGNORE_DEPRECATIONS
 
   gsk_renderer_unrealize (renderer);
 

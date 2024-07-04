@@ -1,5 +1,7 @@
 #include "gtkshaderbin.h"
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+
 typedef struct {
   GskGLShader *shader;
   GtkStateFlags state;
@@ -262,3 +264,5 @@ gtk_shader_bin_new (void)
 
   return GTK_WIDGET (self);
 }
+
+G_GNUC_END_IGNORE_DEPRECATIONS

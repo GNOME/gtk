@@ -129,12 +129,14 @@ test_type (gconstpointer data)
       GBytes *bytes = g_bytes_new_static (pixels, sizeof (pixels));
       instance = (GObject *) gdk_memory_texture_new (1, 1, GDK_MEMORY_DEFAULT, bytes, 4);
       g_bytes_unref (bytes);
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
     }
   else if (g_type_is_a (type, GSK_TYPE_GL_SHADER))
     {
       GBytes *bytes = g_bytes_new_static ("", 0);
       instance = g_object_new (type, "source", bytes, NULL);
       g_bytes_unref (bytes);
+G_GNUC_END_IGNORE_DEPRECATIONS
     }
   else if (g_type_is_a (type, GDK_TYPE_CLIPBOARD) ||
            g_str_equal (g_type_name (type), "GdkX11Cursor"))
@@ -193,10 +195,12 @@ test_type (gconstpointer data)
 	  strcmp (pspec->name, "display") == 0)
 	check = FALSE;
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
       /* set in the constructor */
       if (g_type_is_a (type, GSK_TYPE_GL_SHADER) &&
 	  strcmp (pspec->name, "source") == 0)
 	check = FALSE;
+G_GNUC_END_IGNORE_DEPRECATIONS
 
       /* This one has a special-purpose default value */
       if (g_type_is_a (type, GTK_TYPE_DIALOG) &&

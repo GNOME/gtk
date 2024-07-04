@@ -302,6 +302,7 @@ replay_debug_node (GskRenderNode *node, GtkSnapshot *snapshot)
 static void
 replay_gl_shader_node (GskRenderNode *node, GtkSnapshot *snapshot)
 {
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   graphene_rect_t bounds;
   gsk_render_node_get_bounds (node, &bounds);
   GskGLShader *shader = gsk_gl_shader_node_get_shader (node);
@@ -315,6 +316,7 @@ replay_gl_shader_node (GskRenderNode *node, GtkSnapshot *snapshot)
       gtk_snapshot_gl_shader_pop_texture (snapshot);
     }
   gtk_snapshot_pop (snapshot);
+G_GNUC_END_IGNORE_DEPRECATIONS
 }
 
 static void

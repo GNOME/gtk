@@ -19,6 +19,8 @@
 
 #include <gtk/gtk.h>
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+
 /* shader fragment as found in nature */
 const char shader0[] =
 "// author: bobylito\n"
@@ -303,3 +305,5 @@ main (int   argc,
 
   return g_test_run ();
 }
+
+G_GNUC_END_IGNORE_DEPRECATIONS

@@ -328,6 +328,7 @@ create_list_model_for_render_node (GskRenderNode *node)
 
     case GSK_GL_SHADER_NODE:
       {
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
         GListStore *store = g_list_store_new (GDK_TYPE_PAINTABLE);
 
         for (guint i = 0; i < gsk_gl_shader_node_get_n_children (node); i++)
@@ -343,6 +344,7 @@ create_list_model_for_render_node (GskRenderNode *node)
           }
 
         return G_LIST_MODEL (store);
+G_GNUC_END_IGNORE_DEPRECATIONS
       }
 
     case GSK_CONTAINER_NODE:
@@ -1240,6 +1242,7 @@ populate_render_node_properties (GListStore    *store,
 
     case GSK_GL_SHADER_NODE:
       {
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
         GskGLShader *shader = gsk_gl_shader_node_get_shader (node);
         GBytes *args = gsk_gl_shader_node_get_args (node);
         int i;
@@ -1315,6 +1318,7 @@ populate_render_node_properties (GListStore    *store,
               }
             g_free (title);
           }
+G_GNUC_END_IGNORE_DEPRECATIONS
       }
       break;
 

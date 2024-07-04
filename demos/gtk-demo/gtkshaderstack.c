@@ -1,5 +1,7 @@
 #include "gtkshaderstack.h"
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+
 struct _GtkShaderStack
 {
   GtkWidget parent_instance;
@@ -359,3 +361,5 @@ gtk_shader_stack_set_active (GtkShaderStack *self,
   self->current = MIN (index, self->children->len);
   update_child_visible (self);
 }
+
+G_GNUC_END_IGNORE_DEPRECATIONS

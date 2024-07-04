@@ -109,13 +109,15 @@ void            gtk_snapshot_push_mask                  (GtkSnapshot            
 GDK_AVAILABLE_IN_ALL
 void            gtk_snapshot_push_cross_fade            (GtkSnapshot            *snapshot,
                                                          double                  progress);
-GDK_AVAILABLE_IN_ALL
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+GDK_DEPRECATED_IN_4_16_FOR(GtkGLArea)
 void            gtk_snapshot_push_gl_shader             (GtkSnapshot            *snapshot,
                                                          GskGLShader            *shader,
                                                          const graphene_rect_t  *bounds,
                                                          GBytes                 *take_args);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_16_FOR(GtkGLArea)
 void           gtk_snapshot_gl_shader_pop_texture       (GtkSnapshot            *snapshot);
+G_GNUC_END_IGNORE_DEPRECATIONS
 GDK_AVAILABLE_IN_ALL
 void            gtk_snapshot_pop                        (GtkSnapshot            *snapshot);
 GDK_AVAILABLE_IN_ALL
