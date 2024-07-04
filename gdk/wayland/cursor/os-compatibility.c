@@ -31,6 +31,7 @@
 #include <errno.h>
 #include <string.h>
 #include <stdlib.h>
+#include <glib.h>
 
 #ifdef HAVE_MEMFD_CREATE
 #include <sys/mman.h>
@@ -134,6 +135,7 @@ os_create_anonymous_file(off_t size)
 	{
 		path = getenv("XDG_RUNTIME_DIR");
 		if (!path) {
+                        g_warning ("os_create_anonymous_file(): XDG_RUNTIME_DIR is not set");
 			errno = ENOENT;
 			return -1;
 		}
@@ -147,15 +149,19 @@ os_create_anonymous_file(off_t size)
 
 		fd = create_tmpfile_cloexec(name);
 
-		free(name);
-
-		if (fd < 0)
+		if (fd < 0) {
+                        g_warning ("os_create_anonymous_file(): create_tmpfile_cloexec(\"%s\") failed", name);
+		        free(name);
 			return -1;
+                }
+
+		free(name);
 	}
 
 #ifdef HAVE_POSIX_FALLOCATE
 	ret = posix_fallocate(fd, 0, size);
 	if (ret != 0) {
+                g_warning ("os_create_anonymous_file(): posix_fallocate(%d, 0, %ld) failed: %s", fd, size, strerror (errno));
 		close(fd);
 		errno = ret;
 		return -1;
@@ -163,6 +169,7 @@ os_create_anonymous_file(off_t size)
 #else
 	ret = ftruncate(fd, size);
 	if (ret < 0) {
+                g_warning ("os_create_anonymous_file(): ftruncate() failed");
 		close(fd);
 		return -1;
 	}
