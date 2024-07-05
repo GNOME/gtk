@@ -2742,6 +2742,7 @@ gsk_gpu_node_processor_add_color_matrix_node (GskGpuNodeProcessor *self,
   
   gsk_gpu_color_matrix_op (self->frame,
                            gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, &node->bounds),
+                           gsk_gpu_node_processor_color_states_explicit (self, self->ccs, FALSE),
                            self->desc,
                            descriptor,
                            &node->bounds,

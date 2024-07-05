@@ -8,6 +8,7 @@ G_BEGIN_DECLS
 
 void                    gsk_gpu_color_matrix_op                         (GskGpuFrame                    *frame,
                                                                          GskGpuShaderClip                clip,
+                                                                         GskGpuColorStates               color_states,
                                                                          GskGpuDescriptors              *desc,
                                                                          guint32                         descriptor,
                                                                          const graphene_rect_t          *rect,

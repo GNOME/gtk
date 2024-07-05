@@ -50,6 +50,7 @@ static const GskGpuShaderOpClass GSK_GPU_COLOR_MATRIX_OP_CLASS = {
 void
 gsk_gpu_color_matrix_op (GskGpuFrame             *frame,
                          GskGpuShaderClip         clip,
+                         GskGpuColorStates        color_states,
                          GskGpuDescriptors       *desc,
                          guint32                  descriptor,
                          const graphene_rect_t   *rect,
@@ -62,7 +63,7 @@ gsk_gpu_color_matrix_op (GskGpuFrame             *frame,
 
   gsk_gpu_shader_op_alloc (frame,
                            &GSK_GPU_COLOR_MATRIX_OP_CLASS,
-                           DEFAULT_COLOR_STATES,
+                           color_states,
                            0,
                            clip,
                            desc,
