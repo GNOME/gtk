@@ -811,6 +811,7 @@ gsk_gpu_node_processor_blur_op (GskGpuNodeProcessor       *self,
   graphene_vec2_init (&direction, blur_radius, 0.0f);
   gsk_gpu_blur_op (other.frame,
                    gsk_gpu_clip_get_shader_clip (&other.clip, &other.offset, &intermediate_rect),
+                   gsk_gpu_node_processor_color_states_self (&other),
                    source_desc,
                    source_descriptor,
                    &intermediate_rect,
@@ -828,18 +829,20 @@ gsk_gpu_node_processor_blur_op (GskGpuNodeProcessor       *self,
     {
       gsk_gpu_blur_shadow_op (self->frame,
                               gsk_gpu_clip_get_shader_clip (&self->clip, &real_offset, rect),
+                              gsk_gpu_node_processor_color_states_for_rgba (self),
                               self->desc,
                               intermediate_descriptor,
                               rect,
                               &real_offset,
                               &intermediate_rect,
                               &direction,
-                              shadow_color);
+                              GSK_RGBA_TO_VEC4 (shadow_color));
     }
   else
     {
       gsk_gpu_blur_op (self->frame,
                        gsk_gpu_clip_get_shader_clip (&self->clip, &real_offset, rect),
+                       gsk_gpu_node_processor_color_states_self (self),
                        self->desc,
                        intermediate_descriptor,
                        rect,

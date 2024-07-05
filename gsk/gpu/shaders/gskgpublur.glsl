@@ -31,7 +31,7 @@ run (out vec2 pos)
 
   _pos = pos;
   _rect = r;
-  _blur_color = in_blur_color;
+  _blur_color = output_color_from_alt (in_blur_color);
   Rect tex_rect = rect_from_gsk (in_tex_rect);
   _tex_coord = rect_get_coord (tex_rect, pos);
   _tex_id = in_tex_id;
