@@ -261,10 +261,7 @@ gsk_gpu_node_processor_color_states_explicit (GskGpuNodeProcessor *self,
 static inline GskGpuColorStates
 gsk_gpu_node_processor_color_states_self (GskGpuNodeProcessor *self)
 {
-  return gsk_gpu_color_states_create (self->ccs,
-                                      TRUE,
-                                      self->ccs,
-                                      TRUE);
+  return gsk_gpu_color_states_create_equal (TRUE, TRUE);
 }
 
 static inline GskGpuColorStates
