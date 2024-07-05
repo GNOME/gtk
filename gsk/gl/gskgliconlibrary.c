@@ -24,6 +24,7 @@
 #include <gdk/gdkmemoryformatprivate.h>
 #include <gdk/gdkprofilerprivate.h>
 #include <gdk/gdktextureprivate.h>
+#include <gdk/gdktexturedownloaderprivate.h>
 
 #include "gskglcommandqueueprivate.h"
 #include "gskgldriverprivate.h"
@@ -78,11 +79,9 @@ gsk_gl_icon_library_add (GskGLIconLibrary     *self,
 {
   GskGLTextureLibrary *tl = (GskGLTextureLibrary *)self;
   G_GNUC_UNUSED gint64 start_time = GDK_PROFILER_CURRENT_TIME;
-  cairo_surface_t *surface;
   GskGLIconData *icon_data;
+  GdkTextureDownloader downloader;
   guint8 *pixel_data;
-  guint8 *surface_data;
-  guint8 *free_data = NULL;
   guint gl_format;
   guint gl_type;
   guint packed_x;
@@ -106,27 +105,25 @@ gsk_gl_icon_library_add (GskGLIconLibrary     *self,
   icon_data->source_texture = g_object_ref (key);
 
   /* actually upload the texture */
-  surface = gdk_texture_download_surface (key);
-  surface_data = cairo_image_surface_get_data (surface);
+  gdk_texture_downloader_init (&downloader, key);
   gdk_gl_context_push_debug_group_printf (gdk_gl_context_get_current (),
                                           "Uploading texture");
 
   if (gdk_gl_context_get_use_es (gdk_gl_context_get_current ()))
     {
-      pixel_data = free_data = g_malloc (width * height * 4);
-      gdk_memory_convert (pixel_data, width * 4,
-                          GDK_MEMORY_R8G8B8A8_PREMULTIPLIED,
-                          surface_data, cairo_image_surface_get_stride (surface),
-                          GDK_MEMORY_DEFAULT, width, height);
+      gdk_texture_downloader_set_format (&downloader, GDK_MEMORY_R8G8B8A8_PREMULTIPLIED);
       gl_format = GL_RGBA;
       gl_type = GL_UNSIGNED_BYTE;
     }
   else
     {
-      pixel_data = surface_data;
+      gdk_texture_downloader_set_format (&downloader, GDK_MEMORY_DEFAULT);
       gl_format = GL_BGRA;
       gl_type = GL_UNSIGNED_INT_8_8_8_8_REV;
     }
+  pixel_data = g_malloc (width * height * 4);
+  gdk_texture_downloader_download_into (&downloader, pixel_data, width * 4);
+  gdk_texture_downloader_finish (&downloader);
 
   texture_id = GSK_GL_TEXTURE_ATLAS_ENTRY_TEXTURE (icon_data);
 
@@ -202,8 +199,7 @@ gsk_gl_icon_library_add (GskGLIconLibrary     *self,
 
   *out_value = icon_data;
 
-  cairo_surface_destroy (surface);
-  g_free (free_data);
+  g_free (pixel_data);
 
   tl->driver->command_queue->n_uploads++;
 
