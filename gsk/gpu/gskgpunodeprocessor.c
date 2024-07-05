@@ -2511,6 +2511,7 @@ gsk_gpu_node_processor_add_cross_fade_node (GskGpuNodeProcessor *self,
 
   gsk_gpu_cross_fade_op (self->frame,
                          gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, &node->bounds),
+                         gsk_gpu_node_processor_color_states_for_rgba (self),
                          self->desc,
                          &node->bounds,
                          &self->offset,
