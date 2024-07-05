@@ -947,9 +947,9 @@ compare_textures (GdkTexture *texture1,
               GString *msg = g_string_new (NULL);
 
               g_string_append_printf (msg, "(%u %u): ", x, y);
-              gdk_memory_format_pixel_print (format, data1 + bpp + x, msg);
+              gdk_memory_format_pixel_print (format, data1 + bpp * x, msg);
               g_string_append (msg, " != ");
-              gdk_memory_format_pixel_print (format, data2 + bpp + x, msg);
+              gdk_memory_format_pixel_print (format, data2 + bpp * x, msg);
               g_test_message ("%s", msg->str);
               g_string_free (msg, TRUE);
               g_test_fail ();
