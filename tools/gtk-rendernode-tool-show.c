@@ -57,6 +57,7 @@ show_file (const char *filename,
            gboolean    decorated)
 {
   GskRenderNode *node;
+  graphene_rect_t node_bounds;
   GdkPaintable *paintable;
   GtkWidget *sw;
   GtkWidget *window;
@@ -65,8 +66,10 @@ show_file (const char *filename,
   GtkWidget *picture;
 
   node = load_node_file (filename);
+  gsk_render_node_get_bounds (node, &node_bounds);
 
   snapshot = gtk_snapshot_new ();
+  gtk_snapshot_translate (snapshot, &GRAPHENE_POINT_INIT (- node_bounds.origin.x, - node_bounds.origin.y));
   gtk_snapshot_append_node (snapshot, node);
   paintable = gtk_snapshot_free_to_paintable (snapshot, NULL);
 
