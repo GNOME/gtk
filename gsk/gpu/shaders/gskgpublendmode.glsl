@@ -51,11 +51,15 @@ void
 run (out vec4 color,
      out vec2 position)
 {
-  color = _opacity * blend_mode (gsk_texture (_bottom_id, _bottom_coord)
-                                 * rect_coverage (_bottom_rect, _pos),
-                                 gsk_texture (_top_id, _top_coord)
-                                 * rect_coverage (_top_rect, _pos),
-                                 GSK_VARIATION);
+  vec4 bottom_color = gsk_texture (_bottom_id, _bottom_coord);
+  bottom_color = output_color_alpha (bottom_color, rect_coverage (_bottom_rect, _pos));
+
+  vec4 top_color = gsk_texture (_top_id, _top_coord);
+  top_color = output_color_alpha (top_color, rect_coverage (_top_rect, _pos));
+
+  color = blend_mode (bottom_color, top_color, GSK_VARIATION);
+  color = output_color_alpha (color, _opacity);
+
   position = _pos;
 }
 
