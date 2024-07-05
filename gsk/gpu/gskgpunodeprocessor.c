@@ -892,7 +892,6 @@ gsk_gpu_node_processor_add_without_opacity (GskGpuNodeProcessor *self,
                                             GskRenderNode       *node)
 {
   GskGpuImage *image;
-  guint32 descriptor;
   graphene_rect_t tex_rect;
 
   gsk_gpu_node_processor_sync_globals (self, 0);
@@ -904,16 +903,11 @@ gsk_gpu_node_processor_add_without_opacity (GskGpuNodeProcessor *self,
   if (image == NULL)
     return;
 
-  descriptor = gsk_gpu_node_processor_add_image (self, image, GSK_GPU_SAMPLER_DEFAULT);
-  
-  gsk_gpu_color_matrix_op_opacity (self->frame,
-                                   gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, &node->bounds),
-                                   self->desc,
-                                   descriptor,
+  gsk_gpu_node_processor_image_op (self,
+                                   image,
+                                   self->ccs,
                                    &node->bounds,
-                                   &self->offset,
-                                   &tex_rect,
-                                   self->opacity);
+                                   &tex_rect);
 
   g_object_unref (image);
 }
