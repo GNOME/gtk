@@ -555,6 +555,7 @@ gsk_gpu_node_processor_image_op (GskGpuNodeProcessor   *self,
   straight_alpha = gsk_gpu_image_get_flags (image) & GSK_GPU_IMAGE_STRAIGHT_ALPHA;
 
   if (straight_alpha ||
+      self->opacity < 1.0 ||
       !gdk_color_state_equal (image_color_state, self->ccs))
     {
       gsk_gpu_convert_op (self->frame,
@@ -569,17 +570,6 @@ gsk_gpu_node_processor_image_op (GskGpuNodeProcessor   *self,
                           rect,
                           &self->offset,
                           tex_rect);
-    }
-  else if (self->opacity < 1.0)
-    {
-      gsk_gpu_color_matrix_op_opacity (self->frame,
-                                       gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, rect),
-                                       self->desc,
-                                       descriptor,
-                                       rect,
-                                       &self->offset,
-                                       tex_rect,
-                                       self->opacity);
     }
   else
     {
