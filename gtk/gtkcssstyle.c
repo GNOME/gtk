@@ -1012,12 +1012,17 @@ gtk_css_style_resolve_used_value (GtkCssStyle          *style,
       {
         GtkCssValue *current;
 
-        if (context->parent_style)
-          current = context->parent_style->used->color;
+        if (context->parent_style && context->parent_style->core->color == value)
+          used = gtk_css_value_ref (context->parent_style->used->color);
         else
-          current = _gtk_css_style_property_get_initial_value (_gtk_css_style_property_lookup_by_id (GTK_CSS_PROPERTY_COLOR));
+          {
+            if (context->parent_style)
+              current = context->parent_style->used->color;
+            else
+              current = _gtk_css_style_property_get_initial_value (_gtk_css_style_property_lookup_by_id (GTK_CSS_PROPERTY_COLOR));
 
-        used = gtk_css_value_resolve (value, context, current);
+            used = gtk_css_value_resolve (value, context, current);
+          }
       }
       break;
 
