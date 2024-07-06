@@ -62,4 +62,3 @@ gsk_gpu_color_states_is_alt_premultiplied (GskGpuColorStates self)
   return !!(self & COLOR_SPACE_ALT_PREMULTIPLIED);
 }
 
-#define DEFAULT_COLOR_STATES (gsk_gpu_color_states_create (GDK_COLOR_STATE_SRGB, TRUE, GDK_COLOR_STATE_SRGB, TRUE))
