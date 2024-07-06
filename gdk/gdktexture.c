@@ -1062,6 +1062,14 @@ gdk_texture_set_render_data (GdkTexture     *self,
 }
 
 void
+gdk_texture_steal_render_data (GdkTexture *self)
+{
+  self->render_key = NULL;
+  self->render_data = NULL;
+  self->render_notify = NULL;
+}
+
+void
 gdk_texture_clear_render_data (GdkTexture *self)
 {
   if (self->render_notify)

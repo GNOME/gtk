@@ -76,6 +76,7 @@ gboolean                gdk_texture_set_render_data     (GdkTexture             
                                                          gpointer                key,
                                                          gpointer                data,
                                                          GDestroyNotify          notify);
+void                    gdk_texture_steal_render_data   (GdkTexture             *self);
 void                    gdk_texture_clear_render_data   (GdkTexture             *self);
 gpointer                gdk_texture_get_render_data     (GdkTexture             *self,
                                                          gpointer                key);

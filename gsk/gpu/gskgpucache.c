@@ -336,10 +336,14 @@ gsk_gpu_cached_texture_new (GskGpuCache *cache,
 {
   GskGpuCachedTexture *self;
 
-  if (gdk_texture_get_render_data (texture, cache))
-    gdk_texture_clear_render_data (texture);
-  else if ((self = g_hash_table_lookup (cache->texture_cache, texture)))
-    g_hash_table_remove (cache->texture_cache, texture);
+  /* First, move any existing renderdata */
+  self = gdk_texture_get_render_data (texture, cache);
+  if (self)
+    {
+      gdk_texture_steal_render_data (texture);
+      g_object_weak_ref (G_OBJECT (texture), (GWeakNotify) gsk_gpu_cached_texture_destroy_cb, self);
+      g_hash_table_insert (cache->texture_cache, texture, self);
+    }
 
   self = gsk_gpu_cached_new (cache, &GSK_GPU_CACHED_TEXTURE_CLASS, NULL);
   self->texture = texture;
