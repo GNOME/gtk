@@ -301,10 +301,14 @@ gsk_gpu_upload_texture_op_try (GskGpuFrame *frame,
 {
   GskGpuUploadTextureOp *self;
   GskGpuImage *image;
+  GdkMemoryFormat format;
+
+  format = gdk_texture_get_format (texture);
 
   image = gsk_gpu_device_create_upload_image (gsk_gpu_frame_get_device (frame),
                                               with_mipmap,
-                                              gdk_texture_get_format (texture),
+                                              format,
+                                              gdk_memory_format_alpha (format) != GDK_MEMORY_ALPHA_PREMULTIPLIED &&
                                               gdk_color_state_get_no_srgb_tf (gdk_texture_get_color_state (texture)) != NULL,
                                               gdk_texture_get_width (texture),
                                               gdk_texture_get_height (texture));
