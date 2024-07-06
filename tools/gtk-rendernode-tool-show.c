@@ -89,6 +89,8 @@ show_file (const char *filename,
   window = gtk_window_new ();
   gtk_window_set_decorated (GTK_WINDOW (window), decorated);
   gtk_window_set_resizable (GTK_WINDOW (window), decorated);
+  if (!decorated)
+    gtk_widget_remove_css_class (window, "background");
   set_window_title (GTK_WINDOW (window), filename);
   gtk_window_set_child (GTK_WINDOW (window), handle);
 
