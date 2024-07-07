@@ -3309,6 +3309,51 @@ gsk_container_node_diff (GskRenderNode *node1,
   gsk_render_node_diff_impossible (node1, node2, data);
 }
 
+static gboolean
+gsk_container_node_get_opaque_rect (GskRenderNode   *node,
+                                    graphene_rect_t *opaque)
+{
+  GskContainerNode *self = (GskContainerNode *) node;
+  graphene_rect_t child_opaque;
+  double size, child_size, desired_size;
+  guint i;
+
+  for (i = 0; i < self->n_children; i++)
+    {
+      if (gsk_render_node_get_opaque_rect (self->children[i], opaque))
+        break;
+    }
+
+  if (i == self->n_children)
+    return FALSE;
+
+  size = opaque->size.width * opaque->size.height;
+  /* the 80% is random. I just want it to be low enough to catch
+   * rounded corners, but not so small it catches on to .view
+   * backgrounds for the smaller child of a paned.
+   */
+  desired_size = node->bounds.size.width * node->bounds.size.height * 0.8; 
+
+  for (i++; i < self->n_children; i++)
+    {
+      if (size >= desired_size)
+        break;
+
+      if (!gsk_render_node_get_opaque_rect (self->children[i], &child_opaque))
+        continue;
+
+      child_size = child_opaque.size.width * child_opaque.size.height;
+      /* We allow == here because we want to find the topmost opaque child */
+      if (child_size < size)
+        continue;
+
+      *opaque = child_opaque;
+      size = child_size;
+    }
+
+  return TRUE;
+}
+
 static void
 gsk_container_node_class_init (gpointer g_class,
                                gpointer class_data)
@@ -3320,6 +3365,7 @@ gsk_container_node_class_init (gpointer g_class,
   node_class->finalize = gsk_container_node_finalize;
   node_class->draw = gsk_container_node_draw;
   node_class->diff = gsk_container_node_diff;
+  node_class->get_opaque_rect = gsk_container_node_get_opaque_rect;
 }
 
 /**
