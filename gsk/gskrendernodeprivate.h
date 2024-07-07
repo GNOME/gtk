@@ -34,6 +34,7 @@ struct _GskRenderNode
 
   guint preferred_depth : GDK_MEMORY_DEPTH_BITS;
   guint offscreen_for_opacity : 1;
+  guint fully_opaque : 1;
 };
 
 typedef struct

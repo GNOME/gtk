@@ -593,6 +593,12 @@ gsk_render_node_get_opaque_rect (GskRenderNode   *self,
   g_return_val_if_fail (GSK_IS_RENDER_NODE (self), FALSE);
   g_return_val_if_fail (out_opaque != NULL, FALSE);
 
+  if (self->fully_opaque)
+    {
+      *out_opaque = self->bounds;
+      return TRUE;
+    }
+
   return GSK_RENDER_NODE_GET_CLASS (self)->get_opaque_rect (self, out_opaque);
 }
 
