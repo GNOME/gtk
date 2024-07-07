@@ -324,17 +324,15 @@ gtk_css_value_number_compute (GtkCssValue          *number,
 
   if (number->type == TYPE_COLOR_COORD)
     {
-      GtkCssValue *color;
-      float v;
+      GtkCssValue *color, *result;;
 
       color = gtk_css_value_compute (number->color_coord.color, property_id, context);
-      v = gtk_css_color_value_get_coord (color,
-                                         number->color_coord.color_space,
-                                         number->color_coord.legacy_rgb_scale,
-                                         number->color_coord.coord);
+      result = gtk_css_number_value_new_color_component (color,
+                                                         number->color_coord.color_space,
+                                                         number->color_coord.legacy_rgb_scale,
+                                                         number->color_coord.coord);
       gtk_css_value_unref (color);
-
-      return gtk_css_number_value_new (v, GTK_CSS_NUMBER);
+      return result;
     }
   else if (number->type != TYPE_DIMENSION)
     {
@@ -608,17 +606,15 @@ gtk_css_value_number_resolve (GtkCssValue          *number,
 {
   if (number->type == TYPE_COLOR_COORD)
     {
-      GtkCssValue *color;
-      float v;
+      GtkCssValue *color, *result;
 
       color = gtk_css_value_resolve (number->color_coord.color, context, current);
-      v = gtk_css_color_value_get_coord (color,
-                                         number->color_coord.color_space,
-                                         number->color_coord.legacy_rgb_scale,
-                                         number->color_coord.coord);
+      result = gtk_css_number_value_new_color_component (color,
+                                                         number->color_coord.color_space,
+                                                         number->color_coord.legacy_rgb_scale,
+                                                         number->color_coord.coord);
       gtk_css_value_unref (color);
-
-      return gtk_css_number_value_new (v, GTK_CSS_NUMBER);
+      return result;
     }
   else if (number->type != TYPE_DIMENSION)
     {
