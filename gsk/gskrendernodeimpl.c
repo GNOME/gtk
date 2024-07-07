@@ -4621,6 +4621,39 @@ gsk_rounded_clip_node_diff (GskRenderNode *node1,
     }
 }
 
+static gboolean
+gsk_rounded_clip_node_get_opaque_rect (GskRenderNode   *node,
+                                       graphene_rect_t *opaque)
+{
+  GskRoundedClipNode *self = (GskRoundedClipNode *) node;
+  graphene_rect_t child_opaque, wide_opaque, high_opaque;
+  double start, end;
+
+  if (!gsk_render_node_get_opaque_rect (self->child, &child_opaque))
+    return FALSE;
+
+  wide_opaque = self->clip.bounds;
+  start = MAX(self->clip.corner[GSK_CORNER_TOP_LEFT].height, self->clip.corner[GSK_CORNER_TOP_RIGHT].height);
+  end = MAX(self->clip.corner[GSK_CORNER_BOTTOM_LEFT].height, self->clip.corner[GSK_CORNER_BOTTOM_RIGHT].height);
+  wide_opaque.size.height -= MIN (wide_opaque.size.height, start + end);
+  wide_opaque.origin.y += start;
+  graphene_rect_intersection (&wide_opaque, &child_opaque, &wide_opaque);
+
+  high_opaque = self->clip.bounds;
+  start = MAX(self->clip.corner[GSK_CORNER_TOP_LEFT].width, self->clip.corner[GSK_CORNER_BOTTOM_LEFT].width);
+  end = MAX(self->clip.corner[GSK_CORNER_TOP_RIGHT].width, self->clip.corner[GSK_CORNER_BOTTOM_RIGHT].width);
+  high_opaque.size.width -= MIN (high_opaque.size.width, start + end);
+  high_opaque.origin.x += start;
+  graphene_rect_intersection (&high_opaque, &child_opaque, &high_opaque);
+
+  if (wide_opaque.size.width * wide_opaque.size.height > high_opaque.size.width * high_opaque.size.height)
+    *opaque = wide_opaque;
+  else
+    *opaque = high_opaque;
+
+  return TRUE;
+}
+
 static void
 gsk_rounded_clip_node_class_init (gpointer g_class,
                                   gpointer class_data)
@@ -4632,6 +4665,7 @@ gsk_rounded_clip_node_class_init (gpointer g_class,
   node_class->finalize = gsk_rounded_clip_node_finalize;
   node_class->draw = gsk_rounded_clip_node_draw;
   node_class->diff = gsk_rounded_clip_node_diff;
+  node_class->get_opaque_rect = gsk_rounded_clip_node_get_opaque_rect;
 }
 
 /**
