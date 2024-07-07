@@ -290,8 +290,8 @@ are only available when GTK has been configured with `-Ddebug=true`.
 `fallback`
 : Information about fallback usage in renderers
 
-`glyphcache`
-: Information about glyph caching
+`cache`
+: Information about caching
 
 `verbose`
 : Print verbose output while rendering

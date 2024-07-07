@@ -141,8 +141,8 @@
               </object>
             </child>
             <child>
-              <object class="GtkCheckButton" id="glyphcache">
-                <property name="label">Glyph Cache</property>
+              <object class="GtkCheckButton" id="cache">
+                <property name="label">Cache</property>
                 <signal name="toggled" handler="flag_toggled"/>
               </object>
             </child>
