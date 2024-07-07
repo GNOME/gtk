@@ -2899,6 +2899,20 @@ gsk_gpu_node_processor_add_debug_node (GskGpuNodeProcessor *self,
   gsk_gpu_node_processor_add_node (self, gsk_debug_node_get_child (node));
 }
 
+static GskGpuImage *
+gsk_gpu_get_debug_node_as_image (GskGpuFrame            *frame,
+                                 const graphene_rect_t  *clip_bounds,
+                                 const graphene_vec2_t  *scale,
+                                 GskRenderNode          *node,
+                                 graphene_rect_t        *out_bounds)
+{
+  return gsk_gpu_get_node_as_image (frame,
+                                    clip_bounds,
+                                    scale,
+                                    gsk_debug_node_get_child (node),
+                                    out_bounds);
+}
+
 typedef enum {
   GSK_GPU_HANDLE_OPACITY = (1 << 0)
 } GskGpuNodeFeatures;
@@ -3063,7 +3077,7 @@ static const struct
     GSK_GPU_GLOBAL_MATRIX | GSK_GPU_GLOBAL_SCALE | GSK_GPU_GLOBAL_CLIP | GSK_GPU_GLOBAL_SCISSOR | GSK_GPU_GLOBAL_BLEND,
     GSK_GPU_HANDLE_OPACITY,
     gsk_gpu_node_processor_add_debug_node,
-    NULL,
+    gsk_gpu_get_debug_node_as_image,
   },
   [GSK_GL_SHADER_NODE] = {
     0,
