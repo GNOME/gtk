@@ -1384,6 +1384,31 @@ gsk_gpu_node_processor_add_color_node (GskGpuNodeProcessor *self,
                     &GDK_RGBA_INIT_ALPHA (color, self->opacity));
 }
 
+static gboolean
+gsk_gpu_node_processor_add_first_color_node (GskGpuNodeProcessor         *self,
+                                             GskGpuImage                 *target,
+                                             const cairo_rectangle_int_t *clip,
+                                             GskRenderPassType            pass_type,
+                                             GskRenderNode               *node)
+{
+  graphene_rect_t clip_bounds;
+
+  if (!node->fully_opaque)
+    return FALSE;
+
+  gsk_gpu_node_processor_get_clip_bounds (self, &clip_bounds);
+  if (!gsk_rect_contains_rect (&node->bounds, &clip_bounds))
+    return FALSE;
+
+  gsk_gpu_render_pass_begin_op (self->frame,
+                                target,
+                                clip,
+                                gsk_color_node_get_color (node),
+                                pass_type);
+
+  return TRUE;
+}
+
 static void
 gsk_gpu_node_processor_add_border_node (GskGpuNodeProcessor *self,
                                         GskRenderNode       *node)
@@ -2992,7 +3017,7 @@ static const struct
     0,
     GSK_GPU_HANDLE_OPACITY,
     gsk_gpu_node_processor_add_color_node,
-    NULL,
+    gsk_gpu_node_processor_add_first_color_node,
     NULL,
   },
   [GSK_LINEAR_GRADIENT_NODE] = {
