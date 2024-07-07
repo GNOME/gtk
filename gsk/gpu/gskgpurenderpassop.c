@@ -22,6 +22,7 @@ struct _GskGpuRenderPassOp
 
   GskGpuImage *target;
   cairo_rectangle_int_t area;
+  float background[4];
   GskRenderPassType pass_type;
 };
 
@@ -43,6 +44,9 @@ gsk_gpu_render_pass_op_print (GskGpuOp    *op,
 
   gsk_gpu_print_op (string, indent, "begin-render-pass");
   gsk_gpu_print_image (string, self->target);
+  gsk_gpu_print_int_rect (string, &self->area);
+  if (self->background[3] > 0)
+    gsk_gpu_print_rgba (string, self->background);
   gsk_gpu_print_newline (string);
 }
 
@@ -137,7 +141,16 @@ gsk_gpu_render_pass_op_vk_command (GskGpuOp              *op,
                             },
                             .clearValueCount = 1,
                             .pClearValues = (VkClearValue [1]) {
-                                { .color = { .float32 = { 0.f, 0.f, 0.f, 0.f } } }
+                                {
+                                    .color = {
+                                        .float32 = {
+                                            self->background[0],
+                                            self->background[1],
+                                            self->background[2],
+                                            self->background[3]
+                                        }
+                                    }
+                                }
                             }
                         },
                         VK_SUBPASS_CONTENTS_INLINE);
@@ -179,7 +192,7 @@ gsk_gpu_render_pass_op_gl_command (GskGpuOp          *op,
     glScissor (self->area.x, state->flip_y - self->area.y - self->area.height, self->area.width, self->area.height);
   else
     glScissor (self->area.x, self->area.y, self->area.width, self->area.height);
-  glClearColor (0, 0, 0, 0);
+  glClearColor (self->background[0], self->background[1], self->background[2], self->background[3]);
   glClear (GL_COLOR_BUFFER_BIT);
 
   op = op->next;
@@ -311,6 +324,7 @@ void
 gsk_gpu_render_pass_begin_op (GskGpuFrame                 *frame,
                               GskGpuImage                 *image,
                               const cairo_rectangle_int_t *area,
+                              const GdkRGBA               *background,
                               GskRenderPassType            pass_type)
 {
   GskGpuRenderPassOp *self;
@@ -319,6 +333,7 @@ gsk_gpu_render_pass_begin_op (GskGpuFrame                 *frame,
 
   self->target = g_object_ref (image);
   self->area = *area;
+  gsk_gpu_rgba_to_float (background, self->background);
   self->pass_type = pass_type;
 }
 

@@ -346,6 +346,7 @@ gsk_gpu_node_processor_init_draw (GskGpuNodeProcessor   *self,
   gsk_gpu_render_pass_begin_op (frame,
                                 image,
                                 &area,
+                                &GDK_RGBA_TRANSPARENT,
                                 GSK_RENDER_PASS_OFFSCREEN);
 
   return image;
@@ -381,6 +382,7 @@ gsk_gpu_node_processor_process (GskGpuFrame                 *frame,
   gsk_gpu_render_pass_begin_op (frame,
                                 target,
                                 clip,
+                                &GDK_RGBA_TRANSPARENT,
                                 GSK_RENDER_PASS_PRESENT);
 
   gsk_gpu_node_processor_add_node (&self, node);
@@ -669,6 +671,7 @@ gsk_gpu_copy_image (GskGpuFrame *frame,
       gsk_gpu_render_pass_begin_op (other.frame,
                                     copy,
                                     &(cairo_rectangle_int_t) { 0, 0, width, height },
+                                    &GDK_RGBA_TRANSPARENT,
                                     GSK_RENDER_PASS_OFFSCREEN);
 
       gsk_gpu_node_processor_sync_globals (&other, 0);
