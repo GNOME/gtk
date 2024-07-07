@@ -2881,14 +2881,48 @@ static void
 gsk_gpu_node_processor_add_container_node (GskGpuNodeProcessor *self,
                                            GskRenderNode       *node)
 {
+  gsize i;
+
   if (self->opacity < 1.0 && !gsk_container_node_is_disjoint (node))
     {
       gsk_gpu_node_processor_add_without_opacity (self, node);
       return;
     }
 
-  for (guint i = 0; i < gsk_container_node_get_n_children (node); i++)
+  for (i = 0; i < gsk_container_node_get_n_children (node); i++)
     gsk_gpu_node_processor_add_node (self, gsk_container_node_get_child (node, i));
+}
+
+static gboolean
+gsk_gpu_node_processor_add_first_container_node (GskGpuNodeProcessor         *self,
+                                                 GskGpuImage                 *target,
+                                                 const cairo_rectangle_int_t *clip,
+                                                 GskRenderPassType            pass_type,
+                                                 GskRenderNode               *node)
+{
+  gsize i, n;
+
+  n = gsk_container_node_get_n_children (node);
+  if (n == 0)
+    return FALSE;
+
+  for (i = n - 1; ; i--)
+    {
+      if (gsk_gpu_node_processor_add_first_node (self,
+                                                 target,
+                                                 clip,
+                                                 pass_type,
+                                                 gsk_container_node_get_child (node, i)))
+        break;
+
+      if (i == 0)
+        return FALSE;
+    }
+
+  for (i = i + 1; i < n; i++)
+    gsk_gpu_node_processor_add_node (self, gsk_container_node_get_child (node, i));
+
+  return TRUE;
 }
 
 static void
@@ -2944,7 +2978,7 @@ static const struct
     GSK_GPU_GLOBAL_MATRIX | GSK_GPU_GLOBAL_SCALE | GSK_GPU_GLOBAL_CLIP | GSK_GPU_GLOBAL_SCISSOR,
     GSK_GPU_HANDLE_OPACITY,
     gsk_gpu_node_processor_add_container_node,
-    NULL
+    gsk_gpu_node_processor_add_first_container_node,
     NULL,
   },
   [GSK_CAIRO_NODE] = {
