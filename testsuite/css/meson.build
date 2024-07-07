@@ -64,3 +64,16 @@ test('color', color,
      env: csstest_env,
      suite: 'css'
 )
+
+compute = executable('compute',
+  sources: ['compute.c'],
+  c_args: common_cflags + ['-DGTK_COMPILATION'],
+  dependencies: libgtk_static_dep
+)
+
+test('compute', compute,
+  args: [ '--tap', '-k'],
+  protocol: 'tap',
+  env: csstest_env,
+  suite: 'css'
+)
