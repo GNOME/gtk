@@ -703,7 +703,6 @@ gsk_gpu_node_processor_get_node_as_image (GskGpuNodeProcessor   *self,
                                           GskRenderNode         *node,
                                           graphene_rect_t       *out_bounds)
 {
-  GskGpuImage *image;
   graphene_rect_t clip;
 
   if (clip_bounds == NULL)
@@ -718,29 +717,11 @@ gsk_gpu_node_processor_get_node_as_image (GskGpuNodeProcessor   *self,
     }
   rect_round_to_pixels (&clip, &self->scale, &self->offset, &clip);
 
-  image = gsk_gpu_get_node_as_image (self->frame,
-                                     &clip,
-                                     &self->scale,
-                                     node,
-                                     out_bounds);
-  if (image == NULL)
-    return NULL;
-
-  if (gsk_gpu_image_get_flags (image) & GSK_GPU_IMAGE_STRAIGHT_ALPHA)
-    {
-      image = gsk_gpu_copy_image (self->frame, image, FALSE);
-
-      /* if we fixed up a cached texture, cache the fixed up version instead */
-      if (gsk_render_node_get_node_type (node) == GSK_TEXTURE_NODE)
-        {
-          gsk_gpu_cache_cache_texture_image (gsk_gpu_device_get_cache (gsk_gpu_frame_get_device (self->frame)),
-                                             gsk_texture_node_get_texture (node),
-                                             gsk_gpu_frame_get_timestamp (self->frame),
-                                             image);
-        }
-    }
-
-  return image;
+  return gsk_gpu_get_node_as_image (self->frame,
+                                    &clip,
+                                    &self->scale,
+                                    node,
+                                    out_bounds);
 }
 
 static void
@@ -1510,6 +1491,16 @@ gsk_gpu_get_texture_node_as_image (GskGpuFrame            *frame,
     {
       *out_bounds = node->bounds;
       return image;
+    }
+
+  if (gsk_gpu_image_get_flags (image) & GSK_GPU_IMAGE_STRAIGHT_ALPHA)
+    {
+      image = gsk_gpu_copy_image (frame, image, FALSE);
+      /* We fixed up a cached texture, cache the fixed up version instead */
+      gsk_gpu_cache_cache_texture_image (gsk_gpu_device_get_cache (gsk_gpu_frame_get_device (frame)),
+                                         texture,
+                                         gsk_gpu_frame_get_timestamp (frame),
+                                         image);
     }
 
   /* Happens for oversized textures */
@@ -3154,6 +3145,8 @@ gsk_gpu_node_processor_add_node (GskGpuNodeProcessor *self,
  * @out_bounds: the actual bounds of the result
  *
  * Get the part of the node indicated by the clip bounds as an image.
+ *
+ * The resulting image will be premultiplied.
  *
  * It is perfectly valid for this function to return an image covering
  * a larger or smaller rectangle than the given clip bounds.
