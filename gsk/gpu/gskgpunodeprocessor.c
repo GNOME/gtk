@@ -1685,48 +1685,73 @@ texture_node_should_mipmap (GskRenderNode         *node,
          gdk_texture_get_height (texture) > 2 * node->bounds.size.height * graphene_vec2_get_y (scale);
 }
 
+static GskGpuImage *
+gsk_gpu_lookup_texture (GskGpuFrame    *frame,
+                        GdkColorState  *ccs,
+                        GdkTexture     *texture,
+                        gboolean        try_mipmap,
+                        GdkColorState **out_image_cs)
+{
+  GskGpuCache *cache;
+  GdkColorState *image_cs;
+  gint64 timestamp;
+  GskGpuImage *image;
+
+  cache = gsk_gpu_device_get_cache (gsk_gpu_frame_get_device (frame));
+  timestamp = gsk_gpu_frame_get_timestamp (frame);
+
+  image = gsk_gpu_cache_lookup_texture_image (cache, texture, timestamp, ccs);
+  if (image)
+    {
+      *out_image_cs = ccs;
+      return image;
+    }
+
+  image = gsk_gpu_cache_lookup_texture_image (cache, texture, timestamp, NULL);
+  if (image == NULL)
+    image = gsk_gpu_frame_upload_texture (frame, try_mipmap, texture);
+
+  /* Happens ie for oversized textures */
+  if (image == NULL)
+    return NULL;
+
+  image_cs = gdk_texture_get_color_state (texture);
+
+  if (gsk_gpu_image_get_flags (image) & GSK_GPU_IMAGE_SRGB)
+    {
+      image_cs = gdk_color_state_get_no_srgb_tf (image_cs);
+      g_assert (image_cs);
+    }
+
+  *out_image_cs = image_cs;
+  return image;
+}
+
 static void
 gsk_gpu_node_processor_add_texture_node (GskGpuNodeProcessor *self,
                                          GskRenderNode       *node)
 {
-  GskGpuCache *cache;
   GdkColorState *image_cs;
   GskGpuImage *image;
   GdkTexture *texture;
-  gint64 timestamp;
+  gboolean should_mipmap;
 
-  cache = gsk_gpu_device_get_cache (gsk_gpu_frame_get_device (self->frame));
   texture = gsk_texture_node_get_texture (node);
-  timestamp = gsk_gpu_frame_get_timestamp (self->frame);
+  should_mipmap = texture_node_should_mipmap (node, self->frame, &self->scale);
 
-  image = gsk_gpu_cache_lookup_texture_image (cache, texture, timestamp, self->ccs);
-  if (image)
+  image = gsk_gpu_lookup_texture (self->frame, self->ccs, texture, should_mipmap, &image_cs);
+
+  if (image == NULL)
     {
-      image_cs = self->ccs;
-    }
-  else
-    {
-      image = gsk_gpu_cache_lookup_texture_image (cache, texture, timestamp, NULL);
-      if (image == NULL)
-        image = gsk_gpu_frame_upload_texture (self->frame, FALSE, texture);
-      if (image == NULL)
-        {
-          GSK_DEBUG (FALLBACK, "Unsupported texture format %u for size %dx%d",
-                     gdk_texture_get_format (texture),
-                     gdk_texture_get_width (texture),
-                     gdk_texture_get_height (texture));
-          gsk_gpu_node_processor_add_cairo_node (self, node);
-          return;
-        }
-      image_cs = gdk_texture_get_color_state (texture);
-      if (gsk_gpu_image_get_flags (image) & GSK_GPU_IMAGE_SRGB)
-        {
-          image_cs = gdk_color_state_get_no_srgb_tf (image_cs);
-          g_assert (image_cs);
-        }
+      GSK_DEBUG (FALLBACK, "Unsupported texture format %u for size %dx%d",
+                 gdk_texture_get_format (texture),
+                 gdk_texture_get_width (texture),
+                 gdk_texture_get_height (texture));
+      gsk_gpu_node_processor_add_cairo_node (self, node);
+      return;
     }
 
-  if (texture_node_should_mipmap (node, self->frame, &self->scale))
+  if (should_mipmap)
     {
       if ((gsk_gpu_image_get_flags (image) & (GSK_GPU_IMAGE_STRAIGHT_ALPHA | GSK_GPU_IMAGE_CAN_MIPMAP)) != GSK_GPU_IMAGE_CAN_MIPMAP ||
           !gdk_color_state_equal (image_cs, self->ccs))
@@ -1767,31 +1792,13 @@ gsk_gpu_get_texture_node_as_image (GskGpuFrame            *frame,
                                    graphene_rect_t        *out_bounds)
 {
   GdkTexture *texture = gsk_texture_node_get_texture (node);
-  GskGpuDevice *device = gsk_gpu_frame_get_device (frame);
-  gint64 timestamp = gsk_gpu_frame_get_timestamp (frame);
   GdkColorState *image_cs;
   GskGpuImage *image;
 
   if (texture_node_should_mipmap (node, frame, scale))
     return gsk_gpu_get_node_as_image_via_offscreen (frame, ccs, clip_bounds, scale, node, out_bounds);
 
-  image = gsk_gpu_cache_lookup_texture_image (gsk_gpu_device_get_cache (device), texture, timestamp, ccs);
-  if (image)
-    {
-      *out_bounds = node->bounds;
-      return image;
-    }
-
-  image = gsk_gpu_cache_lookup_texture_image (gsk_gpu_device_get_cache (device), texture, timestamp, NULL);
-  if (image == NULL)
-    image = gsk_gpu_frame_upload_texture (frame, FALSE, texture);
-
-  image_cs = gdk_texture_get_color_state (texture);
-  if (gsk_gpu_image_get_flags (image) & GSK_GPU_IMAGE_SRGB)
-    {
-      image_cs = gdk_color_state_get_no_srgb_tf (image_cs);
-      g_assert (image_cs);
-    }
+  image = gsk_gpu_lookup_texture (frame, ccs, texture, FALSE, &image_cs);
 
   /* Happens ie for oversized textures */
   if (image == NULL)
@@ -1801,7 +1808,6 @@ gsk_gpu_get_texture_node_as_image (GskGpuFrame            *frame,
       gsk_gpu_image_get_flags (image) & GSK_GPU_IMAGE_STRAIGHT_ALPHA)
     {
       image = gsk_gpu_copy_image (frame, ccs, image, image_cs, FALSE);
-      image_cs = ccs;
       gsk_gpu_cache_cache_texture_image (gsk_gpu_device_get_cache (gsk_gpu_frame_get_device (frame)),
                                          texture,
                                          gsk_gpu_frame_get_timestamp (frame),
@@ -1817,12 +1823,10 @@ static void
 gsk_gpu_node_processor_add_texture_scale_node (GskGpuNodeProcessor *self,
                                                GskRenderNode       *node)
 {
-  GskGpuCache *cache;
   GskGpuImage *image;
   GdkTexture *texture;
   GdkColorState *image_cs;
   GskScalingFilter scaling_filter;
-  gint64 timestamp;
   guint32 descriptor;
   gboolean need_mipmap, need_offscreen;
 
@@ -1863,37 +1867,20 @@ gsk_gpu_node_processor_add_texture_scale_node (GskGpuNodeProcessor *self,
       return;
     }
 
-  cache = gsk_gpu_device_get_cache (gsk_gpu_frame_get_device (self->frame));
   texture = gsk_texture_scale_node_get_texture (node);
   scaling_filter = gsk_texture_scale_node_get_filter (node);
-  timestamp = gsk_gpu_frame_get_timestamp (self->frame);
   need_mipmap = scaling_filter == GSK_SCALING_FILTER_TRILINEAR;
 
-  image = gsk_gpu_cache_lookup_texture_image (cache, texture, timestamp, self->ccs);
-  if (image)
+  image = gsk_gpu_lookup_texture (self->frame, self->ccs, texture, need_mipmap, &image_cs);
+
+  if (image == NULL)
     {
-      image_cs = self->ccs;
-    }
-  else
-    {
-      image = gsk_gpu_cache_lookup_texture_image (cache, texture, timestamp, NULL);
-      if (image == NULL)
-        image = gsk_gpu_frame_upload_texture (self->frame, need_mipmap, texture);
-      if (image == NULL)
-        {
-          GSK_DEBUG (FALLBACK, "Unsupported texture format %u for size %dx%d",
-                     gdk_texture_get_format (texture),
-                     gdk_texture_get_width (texture),
-                     gdk_texture_get_height (texture));
-          gsk_gpu_node_processor_add_cairo_node (self, node);
-          return;
-        }
-      image_cs = gdk_texture_get_color_state (texture);
-      if (gsk_gpu_image_get_flags (image) & GSK_GPU_IMAGE_SRGB)
-        {
-          image_cs = gdk_color_state_get_no_srgb_tf (image_cs);
-          g_assert (image_cs);
-        }
+      GSK_DEBUG (FALLBACK, "Unsupported texture format %u for size %dx%d",
+                 gdk_texture_get_format (texture),
+                 gdk_texture_get_width (texture),
+                 gdk_texture_get_height (texture));
+      gsk_gpu_node_processor_add_cairo_node (self, node);
+      return;
     }
 
   if ((gsk_gpu_image_get_flags (image) & GSK_GPU_IMAGE_STRAIGHT_ALPHA) ||
