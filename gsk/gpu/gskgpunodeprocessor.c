@@ -2878,6 +2878,29 @@ gsk_gpu_node_processor_add_subsurface_node (GskGpuNodeProcessor *self,
     }
 }
 
+static GskGpuImage *
+gsk_gpu_get_subsurface_node_as_image (GskGpuFrame            *frame,
+                                      const graphene_rect_t  *clip_bounds,
+                                      const graphene_vec2_t  *scale,
+                                      GskRenderNode          *node,
+                                      graphene_rect_t        *out_bounds)
+{
+#ifndef G_DISABLE_ASSERT
+  GdkSubsurface *subsurface;
+
+  subsurface = gsk_subsurface_node_get_subsurface (node);
+  g_assert (subsurface == NULL ||
+            gdk_subsurface_get_texture (subsurface) == NULL ||
+            gdk_subsurface_get_parent (subsurface) != gdk_draw_context_get_surface (gsk_gpu_frame_get_context (frame)));
+#endif
+
+  return gsk_gpu_get_node_as_image (frame,
+                                    clip_bounds,
+                                    scale,
+                                    gsk_subsurface_node_get_child (node),
+                                    out_bounds);
+}
+
 static void
 gsk_gpu_node_processor_add_container_node (GskGpuNodeProcessor *self,
                                            GskRenderNode       *node)
@@ -3113,7 +3136,7 @@ static const struct
     GSK_GPU_GLOBAL_MATRIX | GSK_GPU_GLOBAL_SCALE | GSK_GPU_GLOBAL_CLIP | GSK_GPU_GLOBAL_SCISSOR | GSK_GPU_GLOBAL_BLEND,
     GSK_GPU_HANDLE_OPACITY,
     gsk_gpu_node_processor_add_subsurface_node,
-    NULL,
+    gsk_gpu_get_subsurface_node_as_image,
   },
 };
 
