@@ -113,11 +113,10 @@ G_STATIC_ASSERT (GSK_GPU_PATTERN_BLEND_SATURATION == GSK_GPU_PATTERN_BLEND_DEFAU
 G_STATIC_ASSERT (GSK_GPU_PATTERN_BLEND_LUMINOSITY == GSK_GPU_PATTERN_BLEND_DEFAULT + GSK_BLEND_MODE_LUMINOSITY);
 
 typedef enum {
-  GSK_GPU_OPTIMIZE_UBER                 = 1 <<  0,
-  GSK_GPU_OPTIMIZE_CLEAR                = 1 <<  1,
-  GSK_GPU_OPTIMIZE_MERGE                = 1 <<  2,
-  GSK_GPU_OPTIMIZE_BLIT                 = 1 <<  3,
-  GSK_GPU_OPTIMIZE_GRADIENTS            = 1 <<  4,
-  GSK_GPU_OPTIMIZE_MIPMAP               = 1 <<  5,
+  GSK_GPU_OPTIMIZE_CLEAR                = 1 <<  0,
+  GSK_GPU_OPTIMIZE_MERGE                = 1 <<  1,
+  GSK_GPU_OPTIMIZE_BLIT                 = 1 <<  2,
+  GSK_GPU_OPTIMIZE_GRADIENTS            = 1 <<  3,
+  GSK_GPU_OPTIMIZE_MIPMAP               = 1 <<  4,
 } GskGpuOptimizations;
 

@@ -63,7 +63,7 @@ cache_gc_cb (gpointer data)
   gint64 timestamp;
 
   timestamp = g_get_monotonic_time ();
-  GSK_DEBUG (GLYPH_CACHE, "Periodic GC (timestamp %lld)", (long long) timestamp);
+  GSK_DEBUG (CACHE, "Periodic GC (timestamp %lld)", (long long) timestamp);
 
   if (gsk_gpu_device_gc (self, timestamp))
     {
@@ -90,7 +90,7 @@ gsk_gpu_device_maybe_gc (GskGpuDevice *self)
 
   if (priv->cache_timeout == 0 || dead_texture_pixels > 1000000)
     {
-      GSK_DEBUG (GLYPH_CACHE, "Pre-frame GC (%" G_GSIZE_FORMAT " dead pixels)", dead_texture_pixels);
+      GSK_DEBUG (CACHE, "Pre-frame GC (%" G_GSIZE_FORMAT " dead pixels)", dead_texture_pixels);
       gsk_gpu_device_gc (self, g_get_monotonic_time ());
     }
 }
@@ -168,7 +168,7 @@ gsk_gpu_device_setup (GskGpuDevice *self,
         }
     }
 
-  if (GSK_DEBUG_CHECK (GLYPH_CACHE))
+  if (GSK_DEBUG_CHECK (CACHE))
     {
       if (priv->cache_timeout < 0)
         gdk_debug_message ("Cache GC disabled");

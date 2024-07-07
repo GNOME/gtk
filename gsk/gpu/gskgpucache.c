@@ -517,7 +517,7 @@ gsk_gpu_cache_gc (GskGpuCache *self,
 
   g_atomic_pointer_set (&self->dead_texture_pixels, 0);
 
-  if (GSK_DEBUG_CHECK (GLYPH_CACHE))
+  if (GSK_DEBUG_CHECK (CACHE))
     print_cache_stats (self);
 
   gdk_profiler_end_mark (before, "Glyph cache GC", NULL);

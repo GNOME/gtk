@@ -74,7 +74,7 @@ gsk_gl_texture_library_real_compact (GskGLTextureLibrary *self,
 
       if (gsk_gl_texture_atlas_get_unused_ratio (atlas) > MAX_OLD_RATIO)
         {
-          GSK_DEBUG (GLYPH_CACHE,
+          GSK_DEBUG (CACHE,
                      "Dropping atlas %d (%g.2%% old)", i,
                      100.0 * gsk_gl_texture_atlas_get_unused_ratio (atlas));
           if (removed == NULL)
@@ -122,10 +122,10 @@ gsk_gl_texture_library_real_compact (GskGLTextureLibrary *self,
             }
         }
 
-      GSK_DEBUG (GLYPH_CACHE, "%s: Dropped %d individual items",
+      GSK_DEBUG (CACHE, "%s: Dropped %d individual items",
                               G_OBJECT_TYPE_NAME (self),
                               dropped);
-      GSK_DEBUG (GLYPH_CACHE, "%s: %d items cached (%d atlased, %d individually)",
+      GSK_DEBUG (CACHE, "%s: %d items cached (%d atlased, %d individually)",
                               G_OBJECT_TYPE_NAME (self),
                               g_hash_table_size (self->hash_table),
                               atlased,
@@ -139,7 +139,7 @@ gsk_gl_texture_library_real_compact (GskGLTextureLibrary *self,
       g_clear_pointer (&removed, g_ptr_array_unref);
     }
 
-  if (GSK_DEBUG_CHECK (GLYPH_CACHE))
+  if (GSK_DEBUG_CHECK (CACHE))
     {
       static gint64 last_message;
       gint64 now = g_get_monotonic_time ();
