@@ -1420,6 +1420,22 @@ gsk_gpu_node_processor_add_border_node (GskGpuNodeProcessor *self,
                      colors);
 }
 
+static gboolean
+texture_node_should_mipmap (GskRenderNode         *node,
+                            GskGpuFrame           *frame,
+                            const graphene_vec2_t *scale)
+{
+  GdkTexture *texture;
+
+  texture = gsk_texture_node_get_texture (node);
+
+  if (!gsk_gpu_frame_should_optimize (frame, GSK_GPU_OPTIMIZE_MIPMAP))
+    return FALSE;
+
+  return gdk_texture_get_width (texture) > 2 * node->bounds.size.width * graphene_vec2_get_x (scale) ||
+         gdk_texture_get_height (texture) > 2 * node->bounds.size.height * graphene_vec2_get_y (scale);
+}
+
 static void
 gsk_gpu_node_processor_add_texture_node (GskGpuNodeProcessor *self,
                                          GskRenderNode       *node)
@@ -1448,9 +1464,7 @@ gsk_gpu_node_processor_add_texture_node (GskGpuNodeProcessor *self,
         }
     }
 
-  if (gsk_gpu_frame_should_optimize (self->frame, GSK_GPU_OPTIMIZE_MIPMAP) &&
-      (gdk_texture_get_width (texture) > 2 * node->bounds.size.width * graphene_vec2_get_x (&self->scale) ||
-       gdk_texture_get_height (texture) > 2 * node->bounds.size.height * graphene_vec2_get_y (&self->scale)))
+  if (texture_node_should_mipmap (node, self->frame, &self->scale))
     {
       guint32 descriptor;
 
@@ -1503,6 +1517,9 @@ gsk_gpu_get_texture_node_as_image (GskGpuFrame            *frame,
   GskGpuDevice *device = gsk_gpu_frame_get_device (frame);
   gint64 timestamp = gsk_gpu_frame_get_timestamp (frame);
   GskGpuImage *image;
+
+  if (texture_node_should_mipmap (node, frame, scale))
+    return gsk_gpu_get_node_as_image_via_offscreen (frame, clip_bounds, scale, node, out_bounds);
 
   image = gsk_gpu_cache_lookup_texture_image (gsk_gpu_device_get_cache (device), texture, timestamp);
   if (image == NULL)
