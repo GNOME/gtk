@@ -20,7 +20,7 @@ f {
 }
 
 g {
-  color: color(from currentcolor srgb r g 100 / 50%);
+  color: color(from currentcolor srgb r g 0.39215686274509803 / 50%);
 }
 
 h {

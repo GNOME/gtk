@@ -410,7 +410,22 @@ gtk_css_value_color_print (const GtkCssValue *value,
             g_string_append_c (string, ' ');
 
             if (value->relative.values[i])
-              gtk_css_value_print (value->relative.values[i], string);
+              {
+                if (value->relative.legacy_srgb &&
+                    gtk_css_number_value_get_dimension (value->relative.values[i]) == GTK_CSS_DIMENSION_NUMBER &&
+                    !gtk_css_value_contains_current_color (value->relative.values[i]))
+                  {
+                    GtkCssValue *v;
+
+                    v = gtk_css_number_value_multiply (value->relative.values[i], 1.0 / 255.0);
+                    gtk_css_value_print (v, string);
+                    gtk_css_value_unref (v);
+                  }
+                else
+                  {
+                    gtk_css_value_print (value->relative.values[i], string);
+                  }
+              }
             else
               g_string_append (string, "none");
           }
@@ -689,7 +704,12 @@ gtk_css_color_value_do_resolve (GtkCssValue          *color,
         for (guint i = 0; i < 4; i++)
           {
             if (color->relative.values[i])
-              vals[i] = gtk_css_value_resolve (color->relative.values[i], context, current);
+              {
+                if (current)
+                  vals[i] = gtk_css_value_resolve (color->relative.values[i], context, current);
+                else
+                  vals[i] = gtk_css_value_compute (color->relative.values[i], GTK_CSS_PROPERTY_COLOR, context);
+              }
             else
               vals[i] = NULL;
           }
@@ -944,31 +964,36 @@ gtk_css_color_value_new_relative (GtkCssValue      *origin,
 {
   GtkCssValue *value;
   gboolean computed = TRUE;
+  gboolean resolved = TRUE;
 
-  if (!gtk_css_value_is_computed (origin) ||
-      gtk_css_value_contains_current_color (origin))
+  if (!gtk_css_value_is_computed (origin))
     computed = FALSE;
 
-  if (computed)
+  if (gtk_css_value_contains_current_color (origin))
+    resolved = FALSE;
+
+  if (computed || resolved)
     {
       for (guint i = 0; i < 4; i++)
         {
-          if (values[i] && !gtk_css_value_is_computed (values[i]))
+          if (values[i])
             {
-              computed = FALSE;
-              break;
+              if (!gtk_css_value_is_computed (values[i]))
+                computed = FALSE;
+              if (gtk_css_value_contains_current_color (values[i]))
+                resolved = FALSE;
             }
         }
     }
 
-  if (computed)
+  if (computed && resolved)
     return resolve_relative (values, color_space, legacy_srgb);
 
   value = gtk_css_value_alloc (&GTK_CSS_VALUE_COLOR,
                                sizeof (GtkCssValue) + sizeof (GtkCssValue *) * 3);
   value->relative.color_space = color_space;
-  value->is_computed = FALSE;
-  value->contains_current_color = gtk_css_value_contains_current_color (origin);
+  value->is_computed = computed;
+  value->contains_current_color = !resolved;
   value->type = COLOR_TYPE_RELATIVE;
 
   value->relative.origin = gtk_css_value_ref (origin);
@@ -1905,12 +1930,19 @@ gtk_css_color_value_new_from_parse_data (ParseData *data)
                                                                           data->ctx.color_space,
                                                                           data->ctx.legacy_rgb_scale,
                                                                           3);
+              if (gtk_css_value_is_computed (data->values[3]) &&
+                  !gtk_css_value_contains_current_color (data->values[3]))
+                data->v[3] = gtk_css_number_value_get_canonical (data->values[3], 1);
+              else
+                data->v[3] = 0;
             }
         }
 
       for (guint i = 0; i < 4; i++)
         {
-          if (data->values[i] && !gtk_css_value_is_computed (data->values[i]))
+          if (data->values[i] &&
+              (!gtk_css_value_is_computed (data->values[i]) ||
+                gtk_css_value_contains_current_color (data->values[i])))
             {
               return gtk_css_color_value_new_relative (data->ctx.color,
                                                        data->ctx.color_space,
