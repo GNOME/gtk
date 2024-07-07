@@ -378,7 +378,16 @@ gsk_gpu_node_processor_process (GskGpuFrame                 *frame,
                                clip,
                                viewport);
 
+  gsk_gpu_render_pass_begin_op (frame,
+                                target,
+                                clip,
+                                GSK_RENDER_PASS_PRESENT);
+
   gsk_gpu_node_processor_add_node (&self, node);
+
+  gsk_gpu_render_pass_end_op (frame,
+                              target,
+                              GSK_RENDER_PASS_PRESENT);
 
   gsk_gpu_node_processor_finish (&self);
 }

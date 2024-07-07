@@ -10,7 +10,6 @@
 #include "gskgpunodeprocessorprivate.h"
 #include "gskgpuopprivate.h"
 #include "gskgpurendererprivate.h"
-#include "gskgpurenderpassopprivate.h"
 #include "gskgpuuploadopprivate.h"
 
 #include "gskdebugprivate.h"
@@ -560,29 +559,6 @@ copy_texture (gpointer    user_data,
 }
 
 static void
-gsk_gpu_frame_record_rect (GskGpuFrame                 *self,
-                           GskGpuImage                 *target,
-                           const cairo_rectangle_int_t *clip,
-                           GskRenderNode               *node,
-                           const graphene_rect_t       *viewport)
-{
-  gsk_gpu_render_pass_begin_op (self,
-                                target,
-                                clip,
-                                GSK_RENDER_PASS_PRESENT);
-
-  gsk_gpu_node_processor_process (self,
-                                  target,
-                                  clip,
-                                  node,
-                                  viewport);
-
-  gsk_gpu_render_pass_end_op (self,
-                              target,
-                              GSK_RENDER_PASS_PRESENT);
-}
-
-static void
 gsk_gpu_frame_record (GskGpuFrame            *self,
                       gint64                  timestamp,
                       GskGpuImage            *target,
@@ -604,20 +580,20 @@ gsk_gpu_frame_record (GskGpuFrame            *self,
           cairo_rectangle_int_t rect;
 
           cairo_region_get_rectangle (clip, i, &rect);
-          gsk_gpu_frame_record_rect (self, target, &rect, node, viewport);
+          gsk_gpu_node_processor_process  (self, target, &rect, node, viewport);
         }
     }
   else
     {
-      gsk_gpu_frame_record_rect (self,
-                                 target,
-                                 &(cairo_rectangle_int_t) {
-                                     0, 0,
-                                     gsk_gpu_image_get_width (target),
-                                     gsk_gpu_image_get_height (target)
-                                 },
-                                 node,
-                                 viewport);
+      gsk_gpu_node_processor_process (self,
+                                      target,
+                                      &(cairo_rectangle_int_t) {
+                                          0, 0,
+                                          gsk_gpu_image_get_width (target),
+                                          gsk_gpu_image_get_height (target)
+                                      },
+                                      node,
+                                      viewport);
     }
 
   if (texture)
