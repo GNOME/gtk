@@ -3183,7 +3183,8 @@ gsk_gpu_get_node_as_image (GskGpuFrame            *frame,
       return NULL;
     }
 
-  if (nodes_vtable[node_type].get_node_as_image)
+  if (gsk_gpu_frame_should_optimize (frame, GSK_GPU_OPTIMIZE_TO_IMAGE) &&
+      nodes_vtable[node_type].get_node_as_image)
     {
       return nodes_vtable[node_type].get_node_as_image (frame, clip_bounds, scale, node, out_bounds);
     }

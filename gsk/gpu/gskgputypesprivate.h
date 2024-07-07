@@ -118,5 +118,6 @@ typedef enum {
   GSK_GPU_OPTIMIZE_BLIT                 = 1 <<  2,
   GSK_GPU_OPTIMIZE_GRADIENTS            = 1 <<  3,
   GSK_GPU_OPTIMIZE_MIPMAP               = 1 <<  4,
+  GSK_GPU_OPTIMIZE_TO_IMAGE             = 1 <<  5,
 } GskGpuOptimizations;
 
