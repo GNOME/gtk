@@ -1758,6 +1758,11 @@ gsk_gpu_node_processor_add_texture_node (GskGpuNodeProcessor *self,
         {
           image = gsk_gpu_copy_image (self->frame, self->ccs, image, image_cs, TRUE);
           image_cs = self->ccs;
+          gsk_gpu_cache_cache_texture_image (gsk_gpu_device_get_cache (gsk_gpu_frame_get_device (self->frame)),
+                                             texture,
+                                             gsk_gpu_frame_get_timestamp (self->frame),
+                                             image,
+                                             image_cs);
         }
 
       if (!(gsk_gpu_image_get_flags (image) & GSK_GPU_IMAGE_MIPMAP))
@@ -1889,6 +1894,11 @@ gsk_gpu_node_processor_add_texture_scale_node (GskGpuNodeProcessor *self,
     {
       image = gsk_gpu_copy_image (self->frame, self->ccs, image, image_cs, need_mipmap);
       image_cs = self->ccs;
+      gsk_gpu_cache_cache_texture_image (gsk_gpu_device_get_cache (gsk_gpu_frame_get_device (self->frame)),
+                                         texture,
+                                         gsk_gpu_frame_get_timestamp (self->frame),
+                                         image,
+                                         image_cs);
     }
 
   if (need_mipmap && !(gsk_gpu_image_get_flags (image) & GSK_GPU_IMAGE_MIPMAP))
