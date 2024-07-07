@@ -123,6 +123,11 @@ struct _GskGpuNodeProcessor
 
 static void             gsk_gpu_node_processor_add_node                 (GskGpuNodeProcessor            *self,
                                                                          GskRenderNode                  *node);
+static GskGpuImage *    gsk_gpu_get_node_as_image                       (GskGpuFrame                    *frame,
+                                                                         const graphene_rect_t          *clip_bounds,
+                                                                         const graphene_vec2_t          *scale,
+                                                                         GskRenderNode                  *node,
+                                                                         graphene_rect_t                *out_bounds);
 
 static void
 gsk_gpu_node_processor_finish (GskGpuNodeProcessor *self)
@@ -581,72 +586,14 @@ gsk_gpu_node_processor_create_offscreen (GskGpuFrame           *frame,
   return image;
 }
 
-/*
- * gsk_gpu_get_node_as_image:
- * @frame: frame to render in
- * @clip_bounds: region of node that must be included in image
- * @scale: scale factor to use for the image
- * @node: the node to render
- * @out_bounds: the actual bounds of the result
- *
- * Get the part of the node indicated by the clip bounds as an image.
- *
- * It is perfectly valid for this function to return an image covering
- * a larger or smaller rectangle than the given clip bounds.
- * It can be smaller if the node is actually smaller than the clip
- * bounds and it's not necessary to create such a large offscreen, and
- * it can be larger if only part of a node is drawn but a cached image
- * for the full node (usually a texture node) already exists.
- *
- * The rectangle that is actually covered by the image is returned in
- * out_bounds.
- *
- * Returns: the image or %NULL if there was nothing to render
- **/
 static GskGpuImage *
-gsk_gpu_get_node_as_image (GskGpuFrame            *frame,
-                           const graphene_rect_t  *clip_bounds,
-                           const graphene_vec2_t  *scale,
-                           GskRenderNode          *node,
-                           graphene_rect_t        *out_bounds)
+gsk_gpu_get_node_as_image_via_offscreen (GskGpuFrame            *frame,
+                                         const graphene_rect_t  *clip_bounds,
+                                         const graphene_vec2_t  *scale,
+                                         GskRenderNode          *node,
+                                         graphene_rect_t        *out_bounds)
 {
   GskGpuImage *result;
-
-  switch ((guint) gsk_render_node_get_node_type (node))
-    {
-    case GSK_TEXTURE_NODE:
-      {
-        GdkTexture *texture = gsk_texture_node_get_texture (node);
-        GskGpuDevice *device = gsk_gpu_frame_get_device (frame);
-        gint64 timestamp = gsk_gpu_frame_get_timestamp (frame);
-        result = gsk_gpu_cache_lookup_texture_image (gsk_gpu_device_get_cache (device), texture, timestamp);
-        if (result == NULL)
-          result = gsk_gpu_frame_upload_texture (frame, FALSE, texture);
-
-        if (result)
-          {
-            *out_bounds = node->bounds;
-            return result;
-          }
-        break;
-      }
-
-    case GSK_CAIRO_NODE:
-      result = gsk_gpu_upload_cairo_op (frame,
-                                        scale,
-                                        clip_bounds,
-                                        (GskGpuCairoFunc) gsk_render_node_draw_fallback,
-                                        gsk_render_node_ref (node),
-                                        (GDestroyNotify) gsk_render_node_unref);
-
-      g_object_ref (result);
-
-      *out_bounds = *clip_bounds;
-      return result;
-
-    default:
-      break;
-    }
 
   GSK_DEBUG (FALLBACK, "Offscreening node '%s'", g_type_name_from_instance ((GTypeInstance *) node));
   result = gsk_gpu_node_processor_create_offscreen (frame,
@@ -1545,6 +1492,32 @@ gsk_gpu_node_processor_add_texture_node (GskGpuNodeProcessor *self,
   g_object_unref (image);
 }
 
+static GskGpuImage *
+gsk_gpu_get_texture_node_as_image (GskGpuFrame            *frame,
+                                   const graphene_rect_t  *clip_bounds,
+                                   const graphene_vec2_t  *scale,
+                                   GskRenderNode          *node,
+                                   graphene_rect_t        *out_bounds)
+{
+  GdkTexture *texture = gsk_texture_node_get_texture (node);
+  GskGpuDevice *device = gsk_gpu_frame_get_device (frame);
+  gint64 timestamp = gsk_gpu_frame_get_timestamp (frame);
+  GskGpuImage *image;
+
+  image = gsk_gpu_cache_lookup_texture_image (gsk_gpu_device_get_cache (device), texture, timestamp);
+  if (image == NULL)
+    image = gsk_gpu_frame_upload_texture (frame, FALSE, texture);
+
+  if (image)
+    {
+      *out_bounds = node->bounds;
+      return image;
+    }
+
+  /* Happens for oversized textures */
+  return gsk_gpu_get_node_as_image_via_offscreen (frame, clip_bounds, scale, node, out_bounds);
+}
+
 static void
 gsk_gpu_node_processor_add_texture_scale_node (GskGpuNodeProcessor *self,
                                                GskRenderNode       *node)
@@ -1647,6 +1620,28 @@ gsk_gpu_node_processor_add_texture_scale_node (GskGpuNodeProcessor *self,
                       &node->bounds);
 
   g_object_unref (image);
+}
+
+static GskGpuImage *
+gsk_gpu_get_cairo_node_as_image (GskGpuFrame            *frame,
+                                 const graphene_rect_t  *clip_bounds,
+                                 const graphene_vec2_t  *scale,
+                                 GskRenderNode          *node,
+                                 graphene_rect_t        *out_bounds)
+{
+  GskGpuImage *result;
+
+  result = gsk_gpu_upload_cairo_op (frame,
+                                    scale,
+                                    clip_bounds,
+                                    (GskGpuCairoFunc) gsk_render_node_draw_fallback,
+                                    gsk_render_node_ref (node),
+                                    (GDestroyNotify) gsk_render_node_unref);
+
+  g_object_ref (result);
+
+  *out_bounds = *clip_bounds;
+  return result;
 }
 
 static void
@@ -2897,161 +2892,197 @@ static const struct
   GskGpuNodeFeatures features;
   void                  (* process_node)                        (GskGpuNodeProcessor    *self,
                                                                  GskRenderNode          *node);
+  GskGpuImage *         (* get_node_as_image)                   (GskGpuFrame            *self,
+                                                                 const graphene_rect_t  *clip_bounds,
+                                                                 const graphene_vec2_t  *scale,
+                                                                 GskRenderNode          *node,
+                                                                 graphene_rect_t        *out_bounds);
 } nodes_vtable[] = {
   [GSK_NOT_A_RENDER_NODE] = {
     0,
     0,
+    NULL,
     NULL,
   },
   [GSK_CONTAINER_NODE] = {
     GSK_GPU_GLOBAL_MATRIX | GSK_GPU_GLOBAL_SCALE | GSK_GPU_GLOBAL_CLIP | GSK_GPU_GLOBAL_SCISSOR,
     GSK_GPU_HANDLE_OPACITY,
     gsk_gpu_node_processor_add_container_node,
+    NULL,
   },
   [GSK_CAIRO_NODE] = {
     0,
     GSK_GPU_HANDLE_OPACITY,
     NULL,
+    gsk_gpu_get_cairo_node_as_image,
   },
   [GSK_COLOR_NODE] = {
     0,
     GSK_GPU_HANDLE_OPACITY,
     gsk_gpu_node_processor_add_color_node,
+    NULL,
   },
   [GSK_LINEAR_GRADIENT_NODE] = {
     0,
     GSK_GPU_HANDLE_OPACITY,
     gsk_gpu_node_processor_add_linear_gradient_node,
+    NULL,
   },
   [GSK_REPEATING_LINEAR_GRADIENT_NODE] = {
     0,
     GSK_GPU_HANDLE_OPACITY,
     gsk_gpu_node_processor_add_linear_gradient_node,
+    NULL,
   },
   [GSK_RADIAL_GRADIENT_NODE] = {
     0,
     GSK_GPU_HANDLE_OPACITY,
     gsk_gpu_node_processor_add_radial_gradient_node,
+    NULL,
   },
   [GSK_REPEATING_RADIAL_GRADIENT_NODE] = {
     0,
     GSK_GPU_HANDLE_OPACITY,
     gsk_gpu_node_processor_add_radial_gradient_node,
+    NULL,
   },
   [GSK_CONIC_GRADIENT_NODE] = {
     0,
     GSK_GPU_HANDLE_OPACITY,
     gsk_gpu_node_processor_add_conic_gradient_node,
+    NULL,
   },
   [GSK_BORDER_NODE] = {
     0,
     GSK_GPU_HANDLE_OPACITY,
     gsk_gpu_node_processor_add_border_node,
+    NULL,
   },
   [GSK_TEXTURE_NODE] = {
     0,
     GSK_GPU_HANDLE_OPACITY,
     gsk_gpu_node_processor_add_texture_node,
+    gsk_gpu_get_texture_node_as_image,
   },
   [GSK_INSET_SHADOW_NODE] = {
     0,
     GSK_GPU_HANDLE_OPACITY,
     gsk_gpu_node_processor_add_inset_shadow_node,
+    NULL,
   },
   [GSK_OUTSET_SHADOW_NODE] = {
     0,
     GSK_GPU_HANDLE_OPACITY,
     gsk_gpu_node_processor_add_outset_shadow_node,
+    NULL,
   },
   [GSK_TRANSFORM_NODE] = {
     GSK_GPU_GLOBAL_MATRIX | GSK_GPU_GLOBAL_SCALE | GSK_GPU_GLOBAL_CLIP | GSK_GPU_GLOBAL_SCISSOR | GSK_GPU_GLOBAL_BLEND,
     GSK_GPU_HANDLE_OPACITY,
     gsk_gpu_node_processor_add_transform_node,
+    NULL,
   },
   [GSK_OPACITY_NODE] = {
     GSK_GPU_GLOBAL_MATRIX | GSK_GPU_GLOBAL_SCALE | GSK_GPU_GLOBAL_CLIP | GSK_GPU_GLOBAL_SCISSOR,
     GSK_GPU_HANDLE_OPACITY,
     gsk_gpu_node_processor_add_opacity_node,
+    NULL,
   },
   [GSK_COLOR_MATRIX_NODE] = {
     0,
     GSK_GPU_HANDLE_OPACITY,
     gsk_gpu_node_processor_add_color_matrix_node,
+    NULL,
   },
   [GSK_REPEAT_NODE] = {
     0,
     GSK_GPU_HANDLE_OPACITY,
     gsk_gpu_node_processor_add_repeat_node,
+    NULL,
   },
   [GSK_CLIP_NODE] = {
     GSK_GPU_GLOBAL_MATRIX | GSK_GPU_GLOBAL_SCALE | GSK_GPU_GLOBAL_CLIP | GSK_GPU_GLOBAL_SCISSOR | GSK_GPU_GLOBAL_BLEND,
     GSK_GPU_HANDLE_OPACITY,
     gsk_gpu_node_processor_add_clip_node,
+    NULL,
   },
   [GSK_ROUNDED_CLIP_NODE] = {
     GSK_GPU_GLOBAL_MATRIX | GSK_GPU_GLOBAL_SCALE | GSK_GPU_GLOBAL_CLIP | GSK_GPU_GLOBAL_SCISSOR | GSK_GPU_GLOBAL_BLEND,
     GSK_GPU_HANDLE_OPACITY,
     gsk_gpu_node_processor_add_rounded_clip_node,
+    NULL,
   },
   [GSK_SHADOW_NODE] = {
     0,
     0,
     gsk_gpu_node_processor_add_shadow_node,
+    NULL,
   },
   [GSK_BLEND_NODE] = {
     0,
     GSK_GPU_HANDLE_OPACITY,
     gsk_gpu_node_processor_add_blend_node,
+    NULL,
   },
   [GSK_CROSS_FADE_NODE] = {
     0,
     GSK_GPU_HANDLE_OPACITY,
     gsk_gpu_node_processor_add_cross_fade_node,
+    NULL,
   },
   [GSK_TEXT_NODE] = {
     0,
     GSK_GPU_HANDLE_OPACITY,
     gsk_gpu_node_processor_add_glyph_node,
+    NULL,
   },
   [GSK_BLUR_NODE] = {
     0,
     0,
     gsk_gpu_node_processor_add_blur_node,
+    NULL,
   },
   [GSK_DEBUG_NODE] = {
     GSK_GPU_GLOBAL_MATRIX | GSK_GPU_GLOBAL_SCALE | GSK_GPU_GLOBAL_CLIP | GSK_GPU_GLOBAL_SCISSOR | GSK_GPU_GLOBAL_BLEND,
     GSK_GPU_HANDLE_OPACITY,
     gsk_gpu_node_processor_add_debug_node,
+    NULL,
   },
   [GSK_GL_SHADER_NODE] = {
     0,
     0,
+    NULL,
     NULL,
   },
   [GSK_TEXTURE_SCALE_NODE] = {
     0,
     0,
     gsk_gpu_node_processor_add_texture_scale_node,
+    NULL,
   },
   [GSK_MASK_NODE] = {
     0,
     GSK_GPU_HANDLE_OPACITY,
     gsk_gpu_node_processor_add_mask_node,
+    NULL,
   },
   [GSK_FILL_NODE] = {
     0,
     GSK_GPU_HANDLE_OPACITY,
     gsk_gpu_node_processor_add_fill_node,
+    NULL,
   },
   [GSK_STROKE_NODE] = {
     0,
     GSK_GPU_HANDLE_OPACITY,
     gsk_gpu_node_processor_add_stroke_node,
+    NULL,
   },
   [GSK_SUBSURFACE_NODE] = {
     GSK_GPU_GLOBAL_MATRIX | GSK_GPU_GLOBAL_SCALE | GSK_GPU_GLOBAL_CLIP | GSK_GPU_GLOBAL_SCISSOR | GSK_GPU_GLOBAL_BLEND,
     GSK_GPU_HANDLE_OPACITY,
     gsk_gpu_node_processor_add_subsurface_node,
+    NULL,
   },
 };
 
@@ -3096,6 +3127,56 @@ gsk_gpu_node_processor_add_node (GskGpuNodeProcessor *self,
       GSK_DEBUG (FALLBACK, "Unsupported node '%s'",
                  g_type_name_from_instance ((GTypeInstance *) node));
       gsk_gpu_node_processor_add_fallback_node (self, node);
+    }
+}
+
+/*
+ * gsk_gpu_get_node_as_image:
+ * @frame: frame to render in
+ * @clip_bounds: region of node that must be included in image
+ * @scale: scale factor to use for the image
+ * @node: the node to render
+ * @out_bounds: the actual bounds of the result
+ *
+ * Get the part of the node indicated by the clip bounds as an image.
+ *
+ * It is perfectly valid for this function to return an image covering
+ * a larger or smaller rectangle than the given clip bounds.
+ * It can be smaller if the node is actually smaller than the clip
+ * bounds and it's not necessary to create such a large offscreen, and
+ * it can be larger if only part of a node is drawn but a cached image
+ * for the full node (usually a texture node) already exists.
+ *
+ * The rectangle that is actually covered by the image is returned in
+ * out_bounds.
+ *
+ * Returns: the image or %NULL if there was nothing to render
+ **/
+static GskGpuImage *
+gsk_gpu_get_node_as_image (GskGpuFrame            *frame,
+                           const graphene_rect_t  *clip_bounds,
+                           const graphene_vec2_t  *scale,
+                           GskRenderNode          *node,
+                           graphene_rect_t        *out_bounds)
+{
+  GskRenderNodeType node_type;
+
+  node_type = gsk_render_node_get_node_type (node);
+  if (node_type >= G_N_ELEMENTS (nodes_vtable))
+    {
+      g_critical ("unknown node type %u for %s", node_type, g_type_name_from_instance ((GTypeInstance *) node));
+      return NULL;
+    }
+
+  if (nodes_vtable[node_type].get_node_as_image)
+    {
+      return nodes_vtable[node_type].get_node_as_image (frame, clip_bounds, scale, node, out_bounds);
+    }
+  else
+    {
+      GSK_DEBUG (FALLBACK, "Unsupported node '%s'",
+                 g_type_name_from_instance ((GTypeInstance *) node));
+      return gsk_gpu_get_node_as_image_via_offscreen (frame, clip_bounds, scale, node, out_bounds);
     }
 }
 
