@@ -210,7 +210,7 @@ apply_mask_to_pixbuf (GdkPixbuf *pixbuf)
   copy = gdk_pixbuf_add_alpha (pixbuf, FALSE, 0, 0, 0);
   width = MIN (1000, gdk_pixbuf_get_width (pixbuf));
   height = MIN (1000, gdk_pixbuf_get_height (pixbuf));
-  if (width < 25 || height < 25)
+  if (width <= 25 || height <= 25)
     {
       width = MIN (width, 25);
       height = MIN (height, 25);

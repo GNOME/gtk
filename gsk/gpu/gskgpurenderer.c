@@ -29,6 +29,7 @@ static const GdkDebugKey gsk_gpu_optimization_keys[] = {
   { "blit", GSK_GPU_OPTIMIZE_BLIT, "Use shaders instead of vkCmdBlit()/glBlitFramebuffer()" },
   { "gradients", GSK_GPU_OPTIMIZE_GRADIENTS, "Don't supersample gradients" },
   { "mipmap", GSK_GPU_OPTIMIZE_MIPMAP, "Avoid creating mipmaps" },
+  { "to-image", GSK_GPU_OPTIMIZE_TO_IMAGE, "Don't fast-path creation of images for nodes" },
 };
 
 typedef struct _GskGpuRendererPrivate GskGpuRendererPrivate;

@@ -171,6 +171,7 @@ compare_render_tests = [
   'text-mixed-color-nocairo',
   'text-mixed-color-colrv1',
   'texture-coords',
+  'texture-offscreen-mipmap-nogl',
   'texture-scale-filters-nocairo',
   'texture-scale-magnify-10000x',
   'texture-scale-magnify-rotate',
