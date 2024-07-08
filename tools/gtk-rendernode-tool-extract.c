@@ -155,12 +155,9 @@ extract_font (GskRenderNode *node)
   font_count++;
 }
 
-#define N_NODE_TYPES (GSK_SUBSURFACE_NODE + 1)
 static void
 extract_from_node (GskRenderNode *node)
 {
-  g_assert (gsk_render_node_get_node_type (node) < N_NODE_TYPES);
-
   switch (gsk_render_node_get_node_type (node))
     {
     case GSK_CONTAINER_NODE:
