@@ -47,10 +47,10 @@ G_DEFINE_TYPE (GskVulkanImage, gsk_vulkan_image, GSK_TYPE_GPU_IMAGE)
 static gboolean
 gsk_component_mapping_is_framebuffer_compatible (const VkComponentMapping *components)
 {
-  if (components->r != VK_COMPONENT_SWIZZLE_R ||
-      components->g != VK_COMPONENT_SWIZZLE_G ||
-      components->b != VK_COMPONENT_SWIZZLE_B ||
-      components->a != VK_COMPONENT_SWIZZLE_A)
+  if ((components->r != VK_COMPONENT_SWIZZLE_R && components->r != VK_COMPONENT_SWIZZLE_IDENTITY) ||
+      (components->g != VK_COMPONENT_SWIZZLE_G && components->g != VK_COMPONENT_SWIZZLE_IDENTITY) ||
+      (components->b != VK_COMPONENT_SWIZZLE_B && components->b != VK_COMPONENT_SWIZZLE_IDENTITY) ||
+      (components->a != VK_COMPONENT_SWIZZLE_A && components->a != VK_COMPONENT_SWIZZLE_IDENTITY))
     return FALSE;
 
   return TRUE;
