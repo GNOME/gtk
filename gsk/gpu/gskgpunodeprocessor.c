@@ -3036,26 +3036,41 @@ gsk_gpu_node_processor_add_first_container_node (GskGpuNodeProcessor         *se
                                                  GskRenderPassType            pass_type,
                                                  GskRenderNode               *node)
 {
-  gsize i, n;
+  int i, n;
 
   n = gsk_container_node_get_n_children (node);
   if (n == 0)
     return FALSE;
 
-  for (i = n - 1; ; i--)
+  for (i = n; i-->0; )
     {
       if (gsk_gpu_node_processor_add_first_node (self,
                                                  target,
                                                  clip,
                                                  pass_type,
                                                  gsk_container_node_get_child (node, i)))
-        break;
-
-      if (i == 0)
-        return FALSE;
+          break;
     }
 
-  for (i = i + 1; i < n; i++)
+  if (i < 0)
+    {
+      graphene_rect_t opaque, clip_bounds;
+
+      if (!gsk_render_node_get_opaque_rect (node, &opaque))
+        return FALSE;
+
+      gsk_gpu_node_processor_get_clip_bounds (self, &clip_bounds);
+      if (!gsk_rect_contains_rect (&opaque, &clip_bounds))
+        return FALSE;
+
+      gsk_gpu_render_pass_begin_op (self->frame,
+                                    target,
+                                    clip,
+                                    &GDK_RGBA_TRANSPARENT,
+                                    pass_type);
+    }
+
+  for (i++; i < n; i++)
     gsk_gpu_node_processor_add_node (self, gsk_container_node_get_child (node, i));
 
   return TRUE;
