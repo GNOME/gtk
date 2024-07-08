@@ -3181,6 +3181,7 @@ struct _GskContainerNode
   GskRenderNode render_node;
 
   gboolean disjoint;
+  graphene_rect_t opaque; /* Can be 0 0 0 0 to mean no opacity */
   guint n_children;
   GskRenderNode **children;
 };
@@ -3314,26 +3315,11 @@ gsk_container_node_get_opaque_rect (GskRenderNode   *node,
                                     graphene_rect_t *opaque)
 {
   GskContainerNode *self = (GskContainerNode *) node;
-  graphene_rect_t child_opaque;
-  guint i;
 
-  for (i = 0; i < self->n_children; i++)
-    {
-      if (gsk_render_node_get_opaque_rect (self->children[i], opaque))
-        break;
-    }
-
-  if (i == self->n_children)
+  if (self->opaque.size.width <= 0 && self->opaque.size.height <= 0)
     return FALSE;
 
-  for (i++; i < self->n_children; i++)
-    {
-      if (!gsk_render_node_get_opaque_rect (self->children[i], &child_opaque))
-        continue;
-
-      gsk_rect_coverage (opaque, &child_opaque, opaque);
-    }
-
+  *opaque = self->opaque;
   return TRUE;
 }
 
@@ -3381,25 +3367,36 @@ gsk_container_node_new (GskRenderNode **children,
     }
   else
     {
-      graphene_rect_t bounds;
+      graphene_rect_t child_opaque;
+      gboolean have_opaque;
 
       self->children = g_malloc_n (n_children, sizeof (GskRenderNode *));
 
       self->children[0] = gsk_render_node_ref (children[0]);
       node->offscreen_for_opacity = children[0]->offscreen_for_opacity;
       node->preferred_depth = children[0]->preferred_depth;
-      gsk_rect_init_from_rect (&bounds, &(children[0]->bounds));
+      gsk_rect_init_from_rect (&node->bounds, &(children[0]->bounds));
+      have_opaque = gsk_render_node_get_opaque_rect (self->children[0], &self->opaque);
 
       for (guint i = 1; i < n_children; i++)
         {
           self->children[i] = gsk_render_node_ref (children[i]);
-          self->disjoint = self->disjoint && !gsk_rect_intersects (&bounds, &(children[i]->bounds));
-          graphene_rect_union (&bounds, &(children[i]->bounds), &bounds);
+          self->disjoint = self->disjoint && !gsk_rect_intersects (&node->bounds, &(children[i]->bounds));
+          graphene_rect_union (&node->bounds, &(children[i]->bounds), &node->bounds);
           node->preferred_depth = gdk_memory_depth_merge (node->preferred_depth, children[i]->preferred_depth);
           node->offscreen_for_opacity = node->offscreen_for_opacity || children[i]->offscreen_for_opacity;
+          if (gsk_render_node_get_opaque_rect (self->children[i], &child_opaque))
+            {
+              if (have_opaque)
+                gsk_rect_coverage (&self->opaque, &child_opaque, &self->opaque);
+              else
+                {
+                  self->opaque = child_opaque;
+                  have_opaque = TRUE;
+                }
+            }
         }
 
-      gsk_rect_init_from_rect (&node->bounds, &bounds);
       node->offscreen_for_opacity = node->offscreen_for_opacity || !self->disjoint;
     }
 
