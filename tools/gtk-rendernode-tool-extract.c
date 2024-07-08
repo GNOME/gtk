@@ -50,7 +50,7 @@ extract_texture (GskRenderNode *node)
     texture = gsk_texture_scale_node_get_texture (node);
 
   do {
-    filename = g_strdup_printf ("gtk-texture-%u.ttf", texture_count);
+    filename = g_strdup_printf ("gtk-texture-%u.png", texture_count);
     path = g_build_path ("/", directory, filename, NULL);
 
     if (!g_file_test (path, G_FILE_TEST_EXISTS))
