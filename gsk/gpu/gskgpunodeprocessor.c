@@ -3426,7 +3426,7 @@ gsk_gpu_node_processor_add_first_node (GskGpuNodeProcessor         *self,
     return FALSE;
 
   gsk_gpu_node_processor_get_clip_bounds (self, &clip_bounds);
-  if (!gsk_rect_contains_rect (&clip_bounds, &opaque))
+  if (!gsk_rect_contains_rect (&opaque, &clip_bounds))
     return FALSE;
 
   gsk_gpu_render_pass_begin_op (self->frame,

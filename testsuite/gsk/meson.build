@@ -396,6 +396,7 @@ node_parser_tests = [
   'node-names-everywhere.errors',
   'node-names-everywhere.node',
   'node-names-everywhere.ref.node',
+  'occlusion-wrong-rect-contains',
   'radial-gradient.node',
   'radial-gradient.ref.node',
   'repeating-linear-gradient.node',
