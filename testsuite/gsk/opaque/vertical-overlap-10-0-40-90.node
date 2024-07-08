@@ -1,0 +1,8 @@
+color {
+  bounds: 0 0 50 50;
+  color: lime;
+}
+color {
+  bounds: 10 40 50 50;
+  color: red;
+}

@@ -1,0 +1,12 @@
+color {
+  bounds: 0 0 25 50;
+}
+color {
+  bounds: 25 0 25 50;
+}
+color {
+  bounds: 50 0 25 50;
+}
+color {
+  bounds: 75 0 25 50;
+}

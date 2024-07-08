@@ -85,6 +85,81 @@ gsk_rect_intersection (const graphene_rect_t *r1,
     }
 }
 
+/**
+ * gsk_rect_coverage:
+ * @r1: a valid rectangle
+ * @r2: another valid rectangle
+ * @res: The result, may be one of r1/r2
+ *
+ * Computes the largest rectangle that is fully covered by
+ * r1 and r2.
+ *
+ * Note that this is different from a union, which is the smallest
+ * rectangle that covers the rectangles.
+ *
+ * The use case for this function is joining opaque rectangles.
+ **/
+static inline void
+gsk_rect_coverage (const graphene_rect_t *r1,
+                   const graphene_rect_t *r2,
+                   graphene_rect_t       *res)
+{
+  float x1min, y1min, x2min, y2min;
+  float x1max, y1max, x2max, y2max;
+  float size, size2;
+  graphene_rect_t r;
+
+  /* Assumes both rects are already normalized, as they usually are */
+  size = r1->size.width * r1->size.height;
+  size2 = r2->size.width * r2->size.height;
+  if (size >= size2)
+    {
+      r = *r1;
+    }
+  else
+    {
+      r = *r2;
+      size = size2;
+    }
+
+  x1min = MIN (r1->origin.x, r2->origin.x);
+  y1min = MIN (r1->origin.y, r2->origin.y);
+  x1max = MAX (r1->origin.x, r2->origin.x);
+  y1max = MAX (r1->origin.y, r2->origin.y);
+  x2min = MIN (r1->origin.x + r1->size.width, r2->origin.x + r2->size.width);
+  y2min = MIN (r1->origin.y + r1->size.height, r2->origin.y + r2->size.height);
+  x2max = MAX (r1->origin.x + r1->size.width, r2->origin.x + r2->size.width);
+  y2max = MAX (r1->origin.y + r1->size.height, r2->origin.y + r2->size.height);
+
+  if (x2min >= x1max)
+    {
+      float w, h;
+      w = x2min - x1max;
+      h = y2max - y1min;
+      size2 = w * h;
+      if (size2 > size)
+        {
+          r = GRAPHENE_RECT_INIT (x1max, y1min, w, h);
+          size = size2;
+        }
+    }
+
+  if (y2min >= y1max)
+    {
+      float w, h;
+      w = x2max - x1min;
+      h = y2min - y1max;
+      size2 = w * h;
+      if (size2 > size)
+        {
+          r = GRAPHENE_RECT_INIT (x1min, y1max, w, h);
+          size = size2;
+        }
+    }
+
+  *res = r;
+}
+
 static inline gboolean G_GNUC_PURE
 gsk_rect_is_empty (const graphene_rect_t *rect)
 {
