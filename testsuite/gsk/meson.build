@@ -485,6 +485,7 @@ if os_linux
     'complex-clip.node',
     'background.node',
     'background2.node',
+    'bad-transform.node',
   ]
 
   foreach test : offload_tests
