@@ -5,6 +5,83 @@
 
 #define HAS_VARIATION(var) ((GSK_VARIATION & var) == var)
 
+#define SOURCE_COLOR_STATE ((GSK_VARIATION >> VARIATION_SOURCE_SHIFT) & VARIATION_COLOR_STATE_MASK)
+#define TARGET_COLOR_STATE ((GSK_VARIATION >> VARIATION_TARGET_SHIFT) & VARIATION_COLOR_STATE_MASK)
+
+float
+srgb_eotf (float v)
+{
+  if (v >= 0.04045)
+    return pow (((v + 0.055) / (1.0 + 0.055)), 2.4);
+  else
+    return v / 12.92;
+}
+
+float
+srgb_oetf (float v)
+{
+  if (v > 0.0031308)
+    return 1.055 * pow (v, 1.0 / 2.4) - 0.055;
+  else
+    return 12.92 * v;
+}
+
+vec4
+srgb_to_srgb_linear (vec4 color)
+{
+  return vec4 (srgb_eotf (color.r),
+               srgb_eotf (color.g),
+               srgb_eotf (color.b),
+               color.a);
+}
+
+vec4
+srgb_linear_to_srgb (vec4 color)
+{
+  return vec4 (srgb_oetf (color.r),
+               srgb_oetf (color.g),
+               srgb_oetf (color.b),
+               color.a);
+}
+
+#define PAIR(_from_cs, _to_cs) ((_from_cs) << 16 | (_to_cs))
+
+bool
+do_conversion (vec4     color,
+               uint     from_cs,
+               uint     to_cs,
+               out vec4 result)
+{
+  switch (PAIR (from_cs, to_cs))
+    {
+    case PAIR (GDK_COLOR_STATE_ID_SRGB, GDK_COLOR_STATE_ID_SRGB_LINEAR):
+      result = srgb_to_srgb_linear (color);
+      break;
+    case PAIR (GDK_COLOR_STATE_ID_SRGB_LINEAR, GDK_COLOR_STATE_ID_SRGB):
+      result = srgb_linear_to_srgb (color);
+      break;
+
+    default:
+      return false;
+    }
+
+  return true;
+}
+
+vec4
+color_convert (vec4 color)
+{
+  vec4 result;
+
+  if (SOURCE_COLOR_STATE == TARGET_COLOR_STATE)
+    return color;
+
+  if (!do_conversion (color, SOURCE_COLOR_STATE, TARGET_COLOR_STATE, result))
+    result = vec4 (1.0, 0.0, 0.8, 1.0);
+
+  return result;
+}
+
 PASS(0) vec2 _pos;
 PASS_FLAT(1) Rect _rect;
 PASS(2) vec2 _tex_coord;
