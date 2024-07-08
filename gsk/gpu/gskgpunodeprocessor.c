@@ -384,7 +384,8 @@ gsk_gpu_node_processor_process (GskGpuFrame                 *frame,
                                clip,
                                viewport);
 
-  if (!gsk_gpu_node_processor_add_first_node (&self,
+  if (!gsk_gpu_frame_should_optimize (frame, GSK_GPU_OPTIMIZE_OCCLUSION_CULLING) ||
+      !gsk_gpu_node_processor_add_first_node (&self,
                                               target,
                                               clip,
                                               GSK_RENDER_PASS_PRESENT,
