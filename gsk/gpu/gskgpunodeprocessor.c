@@ -1260,6 +1260,81 @@ gsk_gpu_node_processor_add_transform_node (GskGpuNodeProcessor *self,
   self->pending_globals |= GSK_GPU_GLOBAL_MATRIX | GSK_GPU_GLOBAL_SCALE | GSK_GPU_GLOBAL_CLIP;
 }
 
+static gboolean
+gsk_gpu_node_processor_add_first_transform_node (GskGpuNodeProcessor         *self,
+                                                 GskGpuImage                 *target,
+                                                 const cairo_rectangle_int_t *clip,
+                                                 GskRenderPassType            pass_type,
+                                                 GskRenderNode               *node)
+{
+  GskTransform *transform;
+  float dx, dy, scale_x, scale_y;
+  GskGpuClip old_clip;
+  graphene_point_t old_offset;
+  graphene_vec2_t old_scale;
+  gboolean result;
+
+  transform = gsk_transform_node_get_transform (node);
+
+  switch (gsk_transform_get_category (transform))
+    {
+    case GSK_TRANSFORM_CATEGORY_IDENTITY:
+    case GSK_TRANSFORM_CATEGORY_2D_TRANSLATE:
+      gsk_transform_to_translate (transform, &dx, &dy);
+      old_offset = self->offset;
+      self->offset.x += dx;
+      self->offset.y += dy;
+      result = gsk_gpu_node_processor_add_first_node (self,
+                                                      target,
+                                                      clip,
+                                                      pass_type,
+                                                      gsk_transform_node_get_child (node));
+      self->offset = old_offset;
+      return result;
+
+    case GSK_TRANSFORM_CATEGORY_2D_AFFINE:
+      gsk_transform_to_affine (transform, &scale_x, &scale_y, &dx, &dy);
+      if (scale_x <= 0 || scale_y <= 0)
+        return FALSE;
+
+      gsk_gpu_clip_init_copy (&old_clip, &self->clip);
+      old_offset = self->offset;
+      old_scale = self->scale;
+
+      gsk_gpu_clip_scale (&self->clip, &old_clip, scale_x, scale_y);
+      self->offset.x = (self->offset.x + dx) / scale_x;
+      self->offset.y = (self->offset.y + dy) / scale_y;
+      graphene_vec2_init (&self->scale, fabs (scale_x), fabs (scale_y));
+      graphene_vec2_multiply (&self->scale, &old_scale, &self->scale);
+
+      self->pending_globals |= GSK_GPU_GLOBAL_SCALE | GSK_GPU_GLOBAL_CLIP;
+
+      result = gsk_gpu_node_processor_add_first_node (self,
+                                                      target,
+                                                      clip,
+                                                      pass_type,
+                                                      gsk_transform_node_get_child (node));
+
+      self->offset = old_offset;
+      self->scale = old_scale;
+      gsk_gpu_clip_init_copy (&self->clip, &old_clip);
+
+      self->pending_globals |= GSK_GPU_GLOBAL_SCALE | GSK_GPU_GLOBAL_CLIP;
+
+      return result;
+
+    case GSK_TRANSFORM_CATEGORY_2D:
+    case GSK_TRANSFORM_CATEGORY_UNKNOWN:
+    case GSK_TRANSFORM_CATEGORY_ANY:
+    case GSK_TRANSFORM_CATEGORY_3D:
+      return FALSE;
+
+    default:
+      g_assert_not_reached ();
+      return FALSE;
+    }
+}
+
 static void
 gsk_gpu_node_processor_add_opacity_node (GskGpuNodeProcessor *self,
                                          GskRenderNode       *node)
@@ -3087,7 +3162,7 @@ static const struct
     GSK_GPU_GLOBAL_MATRIX | GSK_GPU_GLOBAL_SCALE | GSK_GPU_GLOBAL_CLIP | GSK_GPU_GLOBAL_SCISSOR | GSK_GPU_GLOBAL_BLEND,
     GSK_GPU_HANDLE_OPACITY,
     gsk_gpu_node_processor_add_transform_node,
-    NULL,
+    gsk_gpu_node_processor_add_first_transform_node,
     NULL,
   },
   [GSK_OPACITY_NODE] = {
