@@ -226,22 +226,25 @@ gtk_css_value_compute (GtkCssValue          *value,
  * @value: the value to resolve
  * @context: the context containing the style provider, style
  *   parent style and variables that might be used during computation
- * @current: the value to use for currentcolor
+ * @current_color: the value to use for currentcolor
  *
  * Converts the computed @value into the used value, by replacing
- * currentcolor with @current.
+ * currentcolor with @current_color.
  *
  * Returns: the used value
  */
 GtkCssValue *
 gtk_css_value_resolve (GtkCssValue          *value,
                        GtkCssComputeContext *context,
-                       GtkCssValue          *current)
+                       GtkCssValue          *current_color)
 {
+  if (!gtk_css_value_contains_current_color (value))
+    return gtk_css_value_ref (value);
+
   if (!value->class->resolve)
     return gtk_css_value_ref (value);
 
-  return value->class->resolve (value, context, current);
+  return value->class->resolve (value, context, current_color);
 }
 
 gboolean
