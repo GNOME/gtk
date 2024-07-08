@@ -22,7 +22,8 @@ struct _GskGpuRenderPassOp
 
   GskGpuImage *target;
   cairo_rectangle_int_t area;
-  float background[4];
+  gboolean clear;
+  float clear_color[4];
   GskRenderPassType pass_type;
 };
 
@@ -45,8 +46,8 @@ gsk_gpu_render_pass_op_print (GskGpuOp    *op,
   gsk_gpu_print_op (string, indent, "begin-render-pass");
   gsk_gpu_print_image (string, self->target);
   gsk_gpu_print_int_rect (string, &self->area);
-  if (self->background[3] > 0)
-    gsk_gpu_print_rgba (string, self->background);
+  if (self->clear)
+    gsk_gpu_print_rgba (string, self->clear_color);
   gsk_gpu_print_newline (string);
 }
 
@@ -62,6 +63,8 @@ gsk_gpu_render_pass_type_to_vk_image_layout (GskRenderPassType type)
       return VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;
     case GSK_RENDER_PASS_OFFSCREEN:
       return VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+    case GSK_RENDER_PASS_EXPORT:
+      return VK_IMAGE_LAYOUT_GENERAL;
   }
 }
 
@@ -144,10 +147,10 @@ gsk_gpu_render_pass_op_vk_command (GskGpuOp              *op,
                                 {
                                     .color = {
                                         .float32 = {
-                                            self->background[0],
-                                            self->background[1],
-                                            self->background[2],
-                                            self->background[3]
+                                            self->clear ? self->clear_color[0] : 0,
+                                            self->clear ? self->clear_color[1] : 0,
+                                            self->clear ? self->clear_color[2] : 0,
+                                            self->clear ? self->clear_color[3] : 0
                                         }
                                     }
                                 }
@@ -192,8 +195,11 @@ gsk_gpu_render_pass_op_gl_command (GskGpuOp          *op,
     glScissor (self->area.x, state->flip_y - self->area.y - self->area.height, self->area.width, self->area.height);
   else
     glScissor (self->area.x, self->area.y, self->area.width, self->area.height);
-  glClearColor (self->background[0], self->background[1], self->background[2], self->background[3]);
-  glClear (GL_COLOR_BUFFER_BIT);
+  if (self->clear)
+    {
+      glClearColor (self->clear_color[0], self->clear_color[1], self->clear_color[2], self->clear_color[3]);
+      glClear (GL_COLOR_BUFFER_BIT);
+    }
 
   op = op->next;
   while (op->op_class->stage != GSK_GPU_STAGE_END_PASS)
@@ -324,7 +330,7 @@ void
 gsk_gpu_render_pass_begin_op (GskGpuFrame                 *frame,
                               GskGpuImage                 *image,
                               const cairo_rectangle_int_t *area,
-                              const GdkRGBA               *background,
+                              const GdkRGBA               *clear_color_or_null,
                               GskRenderPassType            pass_type)
 {
   GskGpuRenderPassOp *self;
@@ -333,7 +339,9 @@ gsk_gpu_render_pass_begin_op (GskGpuFrame                 *frame,
 
   self->target = g_object_ref (image);
   self->area = *area;
-  gsk_gpu_rgba_to_float (background, self->background);
+  self->clear = clear_color_or_null != NULL;
+  if (clear_color_or_null)
+    gsk_gpu_rgba_to_float (clear_color_or_null, self->clear_color);
   self->pass_type = pass_type;
 }
 

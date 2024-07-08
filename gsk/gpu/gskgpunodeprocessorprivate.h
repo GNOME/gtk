@@ -9,6 +9,7 @@ void                    gsk_gpu_node_processor_process                  (GskGpuF
                                                                          GskGpuImage                    *target,
                                                                          const cairo_rectangle_int_t    *clip,
                                                                          GskRenderNode                  *node,
-                                                                         const graphene_rect_t          *viewport);
+                                                                         const graphene_rect_t          *viewport,
+                                                                         GskRenderPassType               pass_type);
 
 G_END_DECLS

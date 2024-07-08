@@ -373,7 +373,8 @@ gsk_gpu_node_processor_process (GskGpuFrame                 *frame,
                                 GskGpuImage                 *target,
                                 const cairo_rectangle_int_t *clip,
                                 GskRenderNode               *node,
-                                const graphene_rect_t       *viewport)
+                                const graphene_rect_t       *viewport,
+                                GskRenderPassType            pass_type)
 {
   GskGpuNodeProcessor self;
 
@@ -388,21 +389,21 @@ gsk_gpu_node_processor_process (GskGpuFrame                 *frame,
       !gsk_gpu_node_processor_add_first_node (&self,
                                               target,
                                               clip,
-                                              GSK_RENDER_PASS_PRESENT,
+                                              pass_type,
                                               node))
     {
       gsk_gpu_render_pass_begin_op (frame,
                                     target,
                                     clip,
                                     &GDK_RGBA_TRANSPARENT,
-                                    GSK_RENDER_PASS_PRESENT);
+                                    pass_type);
 
       gsk_gpu_node_processor_add_node (&self, node);
     }
 
   gsk_gpu_render_pass_end_op (frame,
                               target,
-                              GSK_RENDER_PASS_PRESENT);
+                              pass_type);
 
   gsk_gpu_node_processor_finish (&self);
 }
@@ -592,20 +593,27 @@ gsk_gpu_node_processor_create_offscreen (GskGpuFrame           *frame,
                                          const graphene_rect_t *viewport,
                                          GskRenderNode         *node)
 {
-  GskGpuNodeProcessor self;
   GskGpuImage *image;
+  cairo_rectangle_int_t area;
 
-  image = gsk_gpu_node_processor_init_draw (&self,
-                                            frame,
-                                            gsk_render_node_get_preferred_depth (node),
-                                            scale,
-                                            viewport);
+  area.x = 0;
+  area.y = 0;
+  area.width = MAX (1, ceilf (graphene_vec2_get_x (scale) * viewport->size.width - EPSILON));
+  area.height = MAX (1, ceilf (graphene_vec2_get_y (scale) * viewport->size.height - EPSILON));
+
+  image = gsk_gpu_device_create_offscreen_image (gsk_gpu_frame_get_device (frame),
+                                                 FALSE,
+                                                 gsk_render_node_get_preferred_depth (node),
+                                                 area.width, area.height);
   if (image == NULL)
     return NULL;
 
-  gsk_gpu_node_processor_add_node (&self, node);
-
-  gsk_gpu_node_processor_finish_draw (&self, image);
+  gsk_gpu_node_processor_process (frame,
+                                  image,
+                                  &area,
+                                  node,
+                                  viewport,
+                                  GSK_RENDER_PASS_OFFSCREEN);
 
   return image;
 }
@@ -681,6 +689,7 @@ gsk_gpu_copy_image (GskGpuFrame *frame,
                                    &(cairo_rectangle_int_t) { 0, 0, width, height },
                                    &rect);
 
+      /* FIXME: With blend mode SOURCE/OFF we wouldn't need the clear here */
       gsk_gpu_render_pass_begin_op (other.frame,
                                     copy,
                                     &(cairo_rectangle_int_t) { 0, 0, width, height },
@@ -3036,26 +3045,41 @@ gsk_gpu_node_processor_add_first_container_node (GskGpuNodeProcessor         *se
                                                  GskRenderPassType            pass_type,
                                                  GskRenderNode               *node)
 {
-  gsize i, n;
+  int i, n;
 
   n = gsk_container_node_get_n_children (node);
   if (n == 0)
     return FALSE;
 
-  for (i = n - 1; ; i--)
+  for (i = n; i-->0; )
     {
       if (gsk_gpu_node_processor_add_first_node (self,
                                                  target,
                                                  clip,
                                                  pass_type,
                                                  gsk_container_node_get_child (node, i)))
-        break;
-
-      if (i == 0)
-        return FALSE;
+          break;
     }
 
-  for (i = i + 1; i < n; i++)
+  if (i < 0)
+    {
+      graphene_rect_t opaque, clip_bounds;
+
+      if (!gsk_render_node_get_opaque_rect (node, &opaque))
+        return FALSE;
+
+      gsk_gpu_node_processor_get_clip_bounds (self, &clip_bounds);
+      if (!gsk_rect_contains_rect (&opaque, &clip_bounds))
+        return FALSE;
+
+      gsk_gpu_render_pass_begin_op (self->frame,
+                                    target,
+                                    clip,
+                                    NULL,
+                                    pass_type);
+    }
+
+  for (i++; i < n; i++)
     gsk_gpu_node_processor_add_node (self, gsk_container_node_get_child (node, i));
 
   return TRUE;
@@ -3411,13 +3435,13 @@ gsk_gpu_node_processor_add_first_node (GskGpuNodeProcessor         *self,
     return FALSE;
 
   gsk_gpu_node_processor_get_clip_bounds (self, &clip_bounds);
-  if (!gsk_rect_contains_rect (&clip_bounds, &opaque))
+  if (!gsk_rect_contains_rect (&opaque, &clip_bounds))
     return FALSE;
 
   gsk_gpu_render_pass_begin_op (self->frame,
                                 target,
                                 clip,
-                                &GDK_RGBA_TRANSPARENT,
+                                NULL,
                                 pass_type);
 
   gsk_gpu_node_processor_add_node (self, node);
