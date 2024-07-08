@@ -321,6 +321,8 @@ gtk_css_image_fallback_contains_current_color (GtkCssImage *image)
           if (gtk_css_image_contains_current_color (fallback->images[i]))
             return TRUE;
         }
+
+      return FALSE;
     }
 
   return gtk_css_image_contains_current_color (fallback->images[fallback->used]);
