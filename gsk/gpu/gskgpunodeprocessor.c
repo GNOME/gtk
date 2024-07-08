@@ -1130,6 +1130,27 @@ gsk_gpu_node_processor_add_rounded_clip_node (GskGpuNodeProcessor *self,
   self->pending_globals |= GSK_GPU_GLOBAL_CLIP;
 }
 
+static gboolean
+gsk_gpu_node_processor_add_first_rounded_clip_node (GskGpuNodeProcessor         *self,
+                                                    GskGpuImage                 *target,
+                                                    const cairo_rectangle_int_t *clip,
+                                                    GskRenderPassType            pass_type,
+                                                    GskRenderNode               *node)
+{
+  GskRoundedRect node_clip;
+
+  node_clip = *gsk_rounded_clip_node_get_clip (node);
+  gsk_rounded_rect_offset (&node_clip, self->offset.x, self->offset.y);
+  if (!gsk_rounded_rect_contains_rect (&node_clip, &self->clip.rect.bounds))
+    return FALSE;
+
+  return gsk_gpu_node_processor_add_first_node (self,
+                                                target,
+                                                clip,
+                                                pass_type,
+                                                gsk_rounded_clip_node_get_child (node));
+}
+
 static void
 gsk_gpu_node_processor_add_transform_node (GskGpuNodeProcessor *self,
                                            GskRenderNode       *node)
@@ -3211,7 +3232,7 @@ static const struct
     GSK_GPU_GLOBAL_MATRIX | GSK_GPU_GLOBAL_SCALE | GSK_GPU_GLOBAL_CLIP | GSK_GPU_GLOBAL_SCISSOR | GSK_GPU_GLOBAL_BLEND,
     GSK_GPU_HANDLE_OPACITY,
     gsk_gpu_node_processor_add_rounded_clip_node,
-    NULL,
+    gsk_gpu_node_processor_add_first_rounded_clip_node,
     NULL,
   },
   [GSK_SHADOW_NODE] = {
