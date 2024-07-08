@@ -128,6 +128,8 @@ gtk_css_calc_value_new (guint         type,
                         guint         n_values)
 {
   GtkCssValue *result;
+  gboolean computed;
+  gboolean contains_current_color;
 
   if (n_values == 1 &&
       (type == TYPE_CALC || type == TYPE_PRODUCT ||
@@ -141,6 +143,17 @@ gtk_css_calc_value_new (guint         type,
   result->calc.mode = mode;
 
   memcpy (result->calc.terms, values, n_values * sizeof (GtkCssValue *));
+
+  computed = TRUE;
+  contains_current_color = FALSE;
+  for (int i = 0; i < n_values; i++)
+    {
+      computed &= gtk_css_value_is_computed (values[i]);
+      contains_current_color |= gtk_css_value_contains_current_color (values[i]);
+    }
+
+  result->is_computed = computed;
+  result->contains_current_color = contains_current_color;
 
   return result;
 }
@@ -338,94 +351,91 @@ gtk_css_value_number_compute (GtkCssValue          *number,
     {
       const guint n_terms = number->calc.n_terms;
       GtkCssValue *result;
-      gboolean changed = FALSE;
       GtkCssValue **new_values;
 
       new_values = g_alloca (sizeof (GtkCssValue *) * n_terms);
 
       for (gsize i = 0; i < n_terms; i++)
-        {
-          GtkCssValue *computed;
+        new_values[i] = gtk_css_value_compute (number->calc.terms[i], property_id, context);
 
-          computed = gtk_css_value_compute (number->calc.terms[i], property_id, context);
-          changed |= computed != number->calc.terms[i];
-          new_values[i] = computed;
-        }
-
-      if (changed)
-        {
-          result = gtk_css_math_value_new (number->type, number->calc.mode, new_values, n_terms);
-        }
-      else
-        {
-          for (gsize i = 0; i < n_terms; i++)
-            gtk_css_value_unref (new_values[i]);
-
-          result = gtk_css_value_ref (number);
-        }
+      result = gtk_css_math_value_new (number->type, number->calc.mode, new_values, n_terms);
+      result->is_computed = TRUE;
 
       return result;
     }
   else
     {
+      GtkCssValue *result;
       double value = number->dimension.value;
+
       switch (number->dimension.unit)
         {
         case GTK_CSS_PERCENT:
           /* percentages for font sizes are computed, other percentages aren't */
           if (property_id == GTK_CSS_PROPERTY_FONT_SIZE)
-            return gtk_css_dimension_value_new (value / 100.0 *
-                                                get_base_font_size_px (property_id, provider, style, parent_style),
-                                                GTK_CSS_PX);
+            {
+              result = gtk_css_dimension_value_new (value / 100.0 *
+                                                    get_base_font_size_px (property_id, provider, style, parent_style),
+                                                    GTK_CSS_PX);
+              break;
+            }
           G_GNUC_FALLTHROUGH;
         case GTK_CSS_NUMBER:
         case GTK_CSS_PX:
         case GTK_CSS_DEG:
         case GTK_CSS_S:
-          return gtk_css_value_ref (number);
+          result = gtk_css_dimension_value_new (value, number->dimension.unit);
+          break;
         case GTK_CSS_PT:
-          return gtk_css_dimension_value_new (value * get_dpi (style) / 72.0,
-                                              GTK_CSS_PX);
+          result = gtk_css_dimension_value_new (value * get_dpi (style) / 72.0, GTK_CSS_PX);
+          break;
         case GTK_CSS_PC:
-          return gtk_css_dimension_value_new (value * get_dpi (style) / 72.0 * 12.0,
-                                              GTK_CSS_PX);
+          result = gtk_css_dimension_value_new (value * get_dpi (style) / 72.0 * 12.0, GTK_CSS_PX);
+          break;
         case GTK_CSS_IN:
-          return gtk_css_dimension_value_new (value * get_dpi (style),
-                                              GTK_CSS_PX);
+          result = gtk_css_dimension_value_new (value * get_dpi (style), GTK_CSS_PX);
+          break;
         case GTK_CSS_CM:
-          return gtk_css_dimension_value_new (value * get_dpi (style) * 0.39370078740157477,
-                                              GTK_CSS_PX);
+          result = gtk_css_dimension_value_new (value * get_dpi (style) * 0.39370078740157477, GTK_CSS_PX);
+          break;
         case GTK_CSS_MM:
-          return gtk_css_dimension_value_new (value * get_dpi (style) * 0.039370078740157477,
-                                              GTK_CSS_PX);
+          result = gtk_css_dimension_value_new (value * get_dpi (style) * 0.039370078740157477, GTK_CSS_PX);
+          break;
         case GTK_CSS_EM:
-         return gtk_css_dimension_value_new (value *
-                                              get_base_font_size_px (property_id, provider, style, parent_style),
-                                              GTK_CSS_PX);
+          result = gtk_css_dimension_value_new (value *
+                                                get_base_font_size_px (property_id, provider, style, parent_style),
+                                                GTK_CSS_PX);
+          break;
         case GTK_CSS_EX:
           /* for now we pretend ex is half of em */
-          return gtk_css_dimension_value_new (value * 0.5 *
-                                              get_base_font_size_px (property_id, provider, style, parent_style),
-                                              GTK_CSS_PX);
+          result = gtk_css_dimension_value_new (value * 0.5 *
+                                                get_base_font_size_px (property_id, provider, style, parent_style),
+                                                GTK_CSS_PX);
+          break;
         case GTK_CSS_REM:
-          return gtk_css_dimension_value_new (value *
-                                              gtk_css_font_size_get_default_px (provider, style),
-                                              GTK_CSS_PX);
+          result = gtk_css_dimension_value_new (value *
+                                                gtk_css_font_size_get_default_px (provider, style),
+                                                GTK_CSS_PX);
+          break;
         case GTK_CSS_RAD:
-          return gtk_css_dimension_value_new (value * 360.0 / (2 * G_PI),
-                                              GTK_CSS_DEG);
+          result = gtk_css_dimension_value_new (value * 360.0 / (2 * G_PI), GTK_CSS_DEG);
+          break;
         case GTK_CSS_GRAD:
-          return gtk_css_dimension_value_new (value * 360.0 / 400.0,
-                                              GTK_CSS_DEG);
+          result = gtk_css_dimension_value_new (value * 360.0 / 400.0, GTK_CSS_DEG);
+          break;
         case GTK_CSS_TURN:
-          return gtk_css_dimension_value_new (value * 360.0,
-                                              GTK_CSS_DEG);
+          result = gtk_css_dimension_value_new (value * 360.0, GTK_CSS_DEG);
+          break;
         case GTK_CSS_MS:
-          return gtk_css_dimension_value_new (value / 1000.0,
-                                              GTK_CSS_S);
+          result = gtk_css_dimension_value_new (value / 1000.0, GTK_CSS_S);
+          break;
         default:
           g_assert_not_reached();
         }
+
+      result->is_computed = TRUE;
+
+      return result;
     }
 }
 
@@ -711,8 +721,8 @@ gtk_css_dimension_value_new (double     value,
   };
   static GtkCssValue percent_singletons[] = {
     { &GTK_CSS_VALUE_NUMBER, 1, 1, 0, 0, TYPE_DIMENSION, {{ GTK_CSS_PERCENT, 0 }} },
-    { &GTK_CSS_VALUE_NUMBER, 1, 0, 0, 0, TYPE_DIMENSION, {{ GTK_CSS_PERCENT, 50 }} },
-    { &GTK_CSS_VALUE_NUMBER, 1, 0, 0, 0, TYPE_DIMENSION, {{ GTK_CSS_PERCENT, 100 }} },
+    { &GTK_CSS_VALUE_NUMBER, 1, 1, 0, 0, TYPE_DIMENSION, {{ GTK_CSS_PERCENT, 50 }} },
+    { &GTK_CSS_VALUE_NUMBER, 1, 1, 0, 0, TYPE_DIMENSION, {{ GTK_CSS_PERCENT, 100 }} },
   };
   static GtkCssValue second_singletons[] = {
     { &GTK_CSS_VALUE_NUMBER, 1, 1, 0, 0, TYPE_DIMENSION, {{ GTK_CSS_S, 0 }} },
@@ -1965,7 +1975,7 @@ gtk_css_number_value_new_color_component (GtkCssValue      *color,
       result->color_coord.color = gtk_css_value_ref (color);
       result->color_coord.coord = coord;
       result->color_coord.legacy_rgb_scale = legacy_rgb_scale;
-      result->is_computed = FALSE;
+      result->is_computed = gtk_css_value_is_computed (color);
       result->contains_current_color = gtk_css_value_contains_current_color (color);
 
       return result;
