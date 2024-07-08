@@ -17,6 +17,7 @@ static const char *icon_names[] = {
   "dialog-password-symbolic",
   "dialog-warning-symbolic",
   "document-open-symbolic",
+  "document-save",
   "document-save-as-symbolic",
   "document-save-symbolic",
   "edit-clear-symbolic",
