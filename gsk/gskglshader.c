@@ -137,7 +137,7 @@
  *
  * This feature was deprecated in GTK 4.16 after the new rendering infrastructure
  * introduced in 4.14 did not support it.
- * The lack of Vulkan inegration would have made it a very hard feature to support.
+ * The lack of Vulkan integration would have made it a very hard feature to support.
  *
  * If you want to use OpenGL directly, you should look at [GtkGLArea](../gtk4/class.GLArea.html)
  * which uses a different approach and is still well supported.
