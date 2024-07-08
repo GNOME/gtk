@@ -1,5 +1,9 @@
 # GDK backends
 
+# Windowing system backends
+# Note: The options change the abi (what backend api is available) without
+# changing the soname, so think twice before deviating from the default values.
+
 option('x11-backend',
        type: 'boolean',
        value: true,
