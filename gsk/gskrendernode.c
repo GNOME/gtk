@@ -160,6 +160,13 @@ gsk_render_node_real_diff (GskRenderNode  *node1,
   gsk_render_node_diff_impossible (node1, node2, data);
 }
 
+static gboolean
+gsk_render_node_real_get_opaque_rect (GskRenderNode   *node,
+                                      graphene_rect_t *out_opaque)
+{
+  return FALSE;
+}
+
 static void
 gsk_render_node_class_init (GskRenderNodeClass *klass)
 {
@@ -167,6 +174,7 @@ gsk_render_node_class_init (GskRenderNodeClass *klass)
   klass->finalize = gsk_render_node_finalize;
   klass->can_diff = gsk_render_node_real_can_diff;
   klass->diff = gsk_render_node_real_diff;
+  klass->get_opaque_rect = gsk_render_node_real_get_opaque_rect;
 }
 
 static void
@@ -557,6 +565,41 @@ gsk_render_node_diff (GskRenderNode  *node1,
     {
       gsk_render_node_diff_impossible (node1, node2, data);
     }
+}
+
+/**
+ * gsk_render_node_get_opaque_rect:
+ * @self: a `GskRenderNode`
+ * @out_opaque: (out): 
+ *
+ * Gets an opaque rectangle inside the node that GTK can determine to
+ * be fully opaque.
+ *
+ * There is no guarantee that this is indeed the largest opaque rectangle or
+ * that regions outside the rectangle are not opaque. This function is a best
+ * effort with that goal.
+ *
+ * The rectangle will be fully contained in the bounds of the node.
+ *
+ * Returns: %TRUE if part or all of the rendernode is opaque, %FALSE if no
+ *   opaque region could be found.
+ *
+ * Since: 4.16
+ **/
+gboolean
+gsk_render_node_get_opaque_rect (GskRenderNode   *self,
+                                 graphene_rect_t *out_opaque)
+{
+  g_return_val_if_fail (GSK_IS_RENDER_NODE (self), FALSE);
+  g_return_val_if_fail (out_opaque != NULL, FALSE);
+
+  if (self->fully_opaque)
+    {
+      *out_opaque = self->bounds;
+      return TRUE;
+    }
+
+  return GSK_RENDER_NODE_GET_CLASS (self)->get_opaque_rect (self, out_opaque);
 }
 
 /**

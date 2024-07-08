@@ -122,6 +122,10 @@ GDK_AVAILABLE_IN_ALL
 void                    gsk_render_node_get_bounds              (GskRenderNode   *node,
                                                                  graphene_rect_t *bounds);
 
+GDK_AVAILABLE_IN_4_16
+gboolean                gsk_render_node_get_opaque_rect         (GskRenderNode   *self,
+                                                                 graphene_rect_t *out_opaque);
+
 GDK_AVAILABLE_IN_ALL
 void                    gsk_render_node_draw                    (GskRenderNode *node,
                                                                  cairo_t       *cr);

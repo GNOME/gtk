@@ -24,12 +24,13 @@
 #define GSK_GPU_MAX_FRAMES 4
 
 static const GdkDebugKey gsk_gpu_optimization_keys[] = {
-  { "clear", GSK_GPU_OPTIMIZE_CLEAR, "Use shaders instead of vkCmdClearAttachment()/glClear()" },
-  { "merge", GSK_GPU_OPTIMIZE_MERGE, "Use one vkCmdDraw()/glDrawArrays() per operation" },
-  { "blit", GSK_GPU_OPTIMIZE_BLIT, "Use shaders instead of vkCmdBlit()/glBlitFramebuffer()" },
-  { "gradients", GSK_GPU_OPTIMIZE_GRADIENTS, "Don't supersample gradients" },
-  { "mipmap", GSK_GPU_OPTIMIZE_MIPMAP, "Avoid creating mipmaps" },
-  { "to-image", GSK_GPU_OPTIMIZE_TO_IMAGE, "Don't fast-path creation of images for nodes" },
+  { "clear",     GSK_GPU_OPTIMIZE_CLEAR,             "Use shaders instead of vkCmdClearAttachment()/glClear()" },
+  { "merge",     GSK_GPU_OPTIMIZE_MERGE,             "Use one vkCmdDraw()/glDrawArrays() per operation" },
+  { "blit",      GSK_GPU_OPTIMIZE_BLIT,              "Use shaders instead of vkCmdBlit()/glBlitFramebuffer()" },
+  { "gradients", GSK_GPU_OPTIMIZE_GRADIENTS,         "Don't supersample gradients" },
+  { "mipmap",    GSK_GPU_OPTIMIZE_MIPMAP,            "Avoid creating mipmaps" },
+  { "to-image",  GSK_GPU_OPTIMIZE_TO_IMAGE,          "Don't fast-path creation of images for nodes" },
+  { "occlusion", GSK_GPU_OPTIMIZE_OCCLUSION_CULLING, "Disable occlusion culling via opaque node tracking" },
 };
 
 typedef struct _GskGpuRendererPrivate GskGpuRendererPrivate;

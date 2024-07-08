@@ -1,0 +1,26 @@
+/* the covered node */
+color {
+  bounds: 30 30 40 40;
+  color: black;
+}
+
+container {
+  color {
+    bounds: 0 0 50 50;
+    color: lime;
+  }
+  color {
+    bounds: 50 0 50 50;
+    color: red;
+  }
+}
+container {
+  color {
+    bounds: 0 50 50 50;
+    color: blue;
+  }
+  color {
+    bounds: 50 50 50 50;
+    color: yellow;
+  }
+}

@@ -18,6 +18,7 @@ typedef enum
 void                    gsk_gpu_render_pass_begin_op                    (GskGpuFrame                    *frame,
                                                                          GskGpuImage                    *image,
                                                                          const cairo_rectangle_int_t    *area,
+                                                                         const GdkRGBA                  *background,
                                                                          GskRenderPassType               pass_type);
 void                    gsk_gpu_render_pass_end_op                      (GskGpuFrame                    *frame,
                                                                          GskGpuImage                    *image,

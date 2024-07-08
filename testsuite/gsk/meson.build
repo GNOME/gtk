@@ -511,6 +511,7 @@ tests = [
   [ 'normalize', [ 'normalize.c', '../reftests/reftest-compare.c' ] ],
   [ 'transform' ],
   [ 'shader' ],
+  [ 'opaque' ],
   [ 'path', [ 'path-utils.c' ], [ 'flaky'] ],
   [ 'path-special-cases' ],
   [ 'scaling' ],
