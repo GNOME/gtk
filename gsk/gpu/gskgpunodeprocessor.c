@@ -681,6 +681,7 @@ gsk_gpu_copy_image (GskGpuFrame *frame,
                                    &(cairo_rectangle_int_t) { 0, 0, width, height },
                                    &rect);
 
+      /* FIXME: With blend mode SOURCE/OFF we wouldn't need the clear here */
       gsk_gpu_render_pass_begin_op (other.frame,
                                     copy,
                                     &(cairo_rectangle_int_t) { 0, 0, width, height },
@@ -3066,7 +3067,7 @@ gsk_gpu_node_processor_add_first_container_node (GskGpuNodeProcessor         *se
       gsk_gpu_render_pass_begin_op (self->frame,
                                     target,
                                     clip,
-                                    &GDK_RGBA_TRANSPARENT,
+                                    NULL,
                                     pass_type);
     }
 
@@ -3432,7 +3433,7 @@ gsk_gpu_node_processor_add_first_node (GskGpuNodeProcessor         *self,
   gsk_gpu_render_pass_begin_op (self->frame,
                                 target,
                                 clip,
-                                &GDK_RGBA_TRANSPARENT,
+                                NULL,
                                 pass_type);
 
   gsk_gpu_node_processor_add_node (self, node);
