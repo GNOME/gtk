@@ -305,6 +305,9 @@ gsk_vulkan_image_new (GskVulkanDevice           *device,
       (required_flags & GSK_GPU_IMAGE_CAN_MIPMAP))
     flags |= GSK_GPU_IMAGE_CAN_MIPMAP;
 
+  if (!gsk_component_mapping_is_framebuffer_compatible (&vk_components))
+    flags |= GSK_GPU_IMAGE_NO_BLIT;
+
   vk_device = gsk_vulkan_device_get_vk_device (device);
 
   self = g_object_new (GSK_TYPE_VULKAN_IMAGE, NULL);
@@ -685,7 +688,8 @@ gsk_vulkan_image_new_dmabuf (GskVulkanDevice *device,
 
   gsk_gpu_image_setup (GSK_GPU_IMAGE (self),
                        flags | GSK_GPU_IMAGE_EXTERNAL |
-                       (gdk_memory_format_alpha (format) == GDK_MEMORY_ALPHA_STRAIGHT ? GSK_GPU_IMAGE_STRAIGHT_ALPHA : 0),
+                       (gdk_memory_format_alpha (format) == GDK_MEMORY_ALPHA_STRAIGHT ? GSK_GPU_IMAGE_STRAIGHT_ALPHA : 0) |
+                       (gsk_component_mapping_is_framebuffer_compatible (&vk_components) ? 0 : GSK_GPU_IMAGE_NO_BLIT),
                        format,
                        width, height);
 
@@ -884,7 +888,8 @@ gsk_vulkan_image_new_for_dmabuf (GskVulkanDevice *device,
   gsk_gpu_image_setup (GSK_GPU_IMAGE (self),
                        flags |
                        (gdk_memory_format_alpha (gdk_texture_get_format (texture)) == GDK_MEMORY_ALPHA_STRAIGHT ? GSK_GPU_IMAGE_STRAIGHT_ALPHA : 0) |
-                       (is_yuv ? (GSK_GPU_IMAGE_EXTERNAL | GSK_GPU_IMAGE_NO_BLIT) : 0),
+                       (is_yuv ? (GSK_GPU_IMAGE_EXTERNAL | GSK_GPU_IMAGE_NO_BLIT) : 0) |
+                       (gsk_component_mapping_is_framebuffer_compatible (&vk_components) ? 0 : GSK_GPU_IMAGE_NO_BLIT),
                        gdk_texture_get_format (texture),
                        width, height);
   gsk_gpu_image_toggle_ref_texture (GSK_GPU_IMAGE (self), texture);
