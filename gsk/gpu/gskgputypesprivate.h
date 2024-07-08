@@ -54,6 +54,14 @@ typedef enum {
   GSK_GPU_BLEND_CLEAR
 } GskGpuBlend;
 
+/* We only need this for the final VkImageLayout, but don't tell anyone */
+typedef enum
+{
+  GSK_RENDER_PASS_OFFSCREEN,
+  GSK_RENDER_PASS_PRESENT,
+  GSK_RENDER_PASS_EXPORT
+} GskRenderPassType;
+
 typedef enum {
   GSK_GPU_PATTERN_DONE,
   GSK_GPU_PATTERN_COLOR,

@@ -568,6 +568,7 @@ gsk_gpu_frame_record (GskGpuFrame            *self,
                       GdkTexture            **texture)
 {
   GskGpuFramePrivate *priv = gsk_gpu_frame_get_instance_private (self);
+  GskRenderPassType pass_type = texture ? GSK_RENDER_PASS_EXPORT : GSK_RENDER_PASS_PRESENT;
 
   priv->timestamp = timestamp;
 
@@ -580,7 +581,7 @@ gsk_gpu_frame_record (GskGpuFrame            *self,
           cairo_rectangle_int_t rect;
 
           cairo_region_get_rectangle (clip, i, &rect);
-          gsk_gpu_node_processor_process  (self, target, &rect, node, viewport);
+          gsk_gpu_node_processor_process  (self, target, &rect, node, viewport, pass_type);
         }
     }
   else
@@ -593,7 +594,8 @@ gsk_gpu_frame_record (GskGpuFrame            *self,
                                           gsk_gpu_image_get_height (target)
                                       },
                                       node,
-                                      viewport);
+                                      viewport,
+                                      pass_type);
     }
 
   if (texture)

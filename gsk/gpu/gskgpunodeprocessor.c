@@ -373,7 +373,8 @@ gsk_gpu_node_processor_process (GskGpuFrame                 *frame,
                                 GskGpuImage                 *target,
                                 const cairo_rectangle_int_t *clip,
                                 GskRenderNode               *node,
-                                const graphene_rect_t       *viewport)
+                                const graphene_rect_t       *viewport,
+                                GskRenderPassType            pass_type)
 {
   GskGpuNodeProcessor self;
 
@@ -388,21 +389,21 @@ gsk_gpu_node_processor_process (GskGpuFrame                 *frame,
       !gsk_gpu_node_processor_add_first_node (&self,
                                               target,
                                               clip,
-                                              GSK_RENDER_PASS_PRESENT,
+                                              pass_type,
                                               node))
     {
       gsk_gpu_render_pass_begin_op (frame,
                                     target,
                                     clip,
                                     &GDK_RGBA_TRANSPARENT,
-                                    GSK_RENDER_PASS_PRESENT);
+                                    pass_type);
 
       gsk_gpu_node_processor_add_node (&self, node);
     }
 
   gsk_gpu_render_pass_end_op (frame,
                               target,
-                              GSK_RENDER_PASS_PRESENT);
+                              pass_type);
 
   gsk_gpu_node_processor_finish (&self);
 }

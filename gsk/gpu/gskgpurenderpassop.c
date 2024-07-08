@@ -63,6 +63,8 @@ gsk_gpu_render_pass_type_to_vk_image_layout (GskRenderPassType type)
       return VK_IMAGE_LAYOUT_PRESENT_SRC_KHR;
     case GSK_RENDER_PASS_OFFSCREEN:
       return VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL;
+    case GSK_RENDER_PASS_EXPORT:
+      return VK_IMAGE_LAYOUT_GENERAL;
   }
 }
 
