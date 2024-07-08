@@ -2117,7 +2117,9 @@ gsk_texture_scale_node_new (GdkTexture            *texture,
   self = gsk_render_node_alloc (GSK_TEXTURE_SCALE_NODE);
   node = (GskRenderNode *) self;
   node->offscreen_for_opacity = FALSE;
-  node->fully_opaque = gdk_memory_format_alpha (gdk_texture_get_format (texture)) == GDK_MEMORY_ALPHA_OPAQUE;
+  node->fully_opaque = gdk_memory_format_alpha (gdk_texture_get_format (texture)) == GDK_MEMORY_ALPHA_OPAQUE &&
+    bounds->size.width == floor (bounds->size.width) &&
+    bounds->size.height == floor (bounds->size.height);
 
   self->texture = g_object_ref (texture);
   gsk_rect_init_from_rect (&node->bounds, bounds);

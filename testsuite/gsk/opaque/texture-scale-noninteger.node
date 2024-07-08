@@ -1,0 +1,7 @@
+texture-scale {
+  bounds: 3 0 1.5 1;
+}
+
+texture-scale {
+  bounds: 0 3 1 1.5;
+}
