@@ -593,20 +593,27 @@ gsk_gpu_node_processor_create_offscreen (GskGpuFrame           *frame,
                                          const graphene_rect_t *viewport,
                                          GskRenderNode         *node)
 {
-  GskGpuNodeProcessor self;
   GskGpuImage *image;
+  cairo_rectangle_int_t area;
 
-  image = gsk_gpu_node_processor_init_draw (&self,
-                                            frame,
-                                            gsk_render_node_get_preferred_depth (node),
-                                            scale,
-                                            viewport);
+  area.x = 0;
+  area.y = 0;
+  area.width = MAX (1, ceilf (graphene_vec2_get_x (scale) * viewport->size.width - EPSILON));
+  area.height = MAX (1, ceilf (graphene_vec2_get_y (scale) * viewport->size.height - EPSILON));
+
+  image = gsk_gpu_device_create_offscreen_image (gsk_gpu_frame_get_device (frame),
+                                                 FALSE,
+                                                 gsk_render_node_get_preferred_depth (node),
+                                                 area.width, area.height);
   if (image == NULL)
     return NULL;
 
-  gsk_gpu_node_processor_add_node (&self, node);
-
-  gsk_gpu_node_processor_finish_draw (&self, image);
+  gsk_gpu_node_processor_process (frame,
+                                  image,
+                                  &area,
+                                  node,
+                                  viewport,
+                                  GSK_RENDER_PASS_OFFSCREEN);
 
   return image;
 }
