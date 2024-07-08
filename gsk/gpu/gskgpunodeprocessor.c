@@ -3256,6 +3256,18 @@ gsk_gpu_node_processor_add_node (GskGpuNodeProcessor *self,
 }
 
 static gboolean
+clip_covered_by_rect (const GskGpuClip       *self,
+                      const graphene_point_t *offset,
+                      const graphene_rect_t  *rect)
+{
+  graphene_rect_t r = *rect;
+  r.origin.x += offset->x;
+  r.origin.y += offset->y;
+
+  return gsk_rect_contains_rect (&r, &self->rect.bounds);
+}
+
+static gboolean
 gsk_gpu_node_processor_add_first_node (GskGpuNodeProcessor         *self,
                                        GskGpuImage                 *target,
                                        const cairo_rectangle_int_t *clip,
@@ -3268,7 +3280,8 @@ gsk_gpu_node_processor_add_first_node (GskGpuNodeProcessor         *self,
   /* This catches the corner cases of empty nodes, so after this check
    * there's quaranteed to be at least 1 pixel that needs to be drawn
    */
-  if (node->bounds.size.width == 0 || node->bounds.size.height == 0)
+  if (node->bounds.size.width == 0 || node->bounds.size.height == 0 ||
+      !clip_covered_by_rect (&self->clip, &self->offset, &node->bounds))
     return FALSE;
 
   node_type = gsk_render_node_get_node_type (node);
