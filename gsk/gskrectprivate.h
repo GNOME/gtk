@@ -131,9 +131,10 @@ gsk_rect_coverage (const graphene_rect_t *r1,
   x2max = MAX (r1->origin.x + r1->size.width, r2->origin.x + r2->size.width);
   y2max = MAX (r1->origin.y + r1->size.height, r2->origin.y + r2->size.height);
 
-  if (x2min >= x1max)
+  if (x2min >= x1max && y2min >= y1max)
     {
       float w, h;
+
       w = x2min - x1max;
       h = y2max - y1min;
       size2 = w * h;
@@ -142,11 +143,7 @@ gsk_rect_coverage (const graphene_rect_t *r1,
           r = GRAPHENE_RECT_INIT (x1max, y1min, w, h);
           size = size2;
         }
-    }
 
-  if (y2min >= y1max)
-    {
-      float w, h;
       w = x2max - x1min;
       h = y2min - y1max;
       size2 = w * h;
