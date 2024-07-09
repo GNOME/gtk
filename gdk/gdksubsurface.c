@@ -144,7 +144,7 @@ gdk_subsurface_attach (GdkSubsurface         *subsurface,
                        GdkTexture            *texture,
                        const graphene_rect_t *source,
                        const graphene_rect_t *dest,
-                       GdkTextureTransform    transform,
+                       GdkDihedral             transform,
                        const graphene_rect_t *background,
                        gboolean               above,
                        GdkSubsurface         *sibling)
@@ -320,10 +320,10 @@ gdk_subsurface_get_sibling (GdkSubsurface *subsurface,
  *
  * Returns: the transform
  */
-GdkTextureTransform
+GdkDihedral
 gdk_subsurface_get_transform (GdkSubsurface *subsurface)
 {
-  g_return_val_if_fail (GDK_IS_SUBSURFACE (subsurface), GDK_TEXTURE_TRANSFORM_NORMAL);
+  g_return_val_if_fail (GDK_IS_SUBSURFACE (subsurface), GDK_DIHEDRAL_NORMAL);
 
   return GDK_SUBSURFACE_GET_CLASS (subsurface)->get_transform (subsurface);
 }
