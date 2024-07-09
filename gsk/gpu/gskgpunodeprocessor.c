@@ -427,8 +427,8 @@ extract_scale_from_transform (GskTransform *transform,
       {
         float scale_x, scale_y, dx, dy;
         gsk_transform_to_affine (transform, &scale_x, &scale_y, &dx, &dy);
-        *out_scale_x = fabs (scale_x);
-        *out_scale_y = fabs (scale_y);
+        *out_scale_x = scale_x;
+        *out_scale_y = scale_y;
       }
       return;
 
@@ -1344,10 +1344,7 @@ gsk_gpu_node_processor_add_first_transform_node (GskGpuNodeProcessor         *se
       return result;
 
     case GSK_FINE_TRANSFORM_CATEGORY_2D_AFFINE:
-    case GSK_FINE_TRANSFORM_CATEGORY_2D_NEGATIVE_AFFINE:
       gsk_transform_to_affine (transform, &scale_x, &scale_y, &dx, &dy);
-      if (scale_x <= 0 || scale_y <= 0)
-        return FALSE;
 
       gsk_gpu_clip_init_copy (&old_clip, &self->clip);
       old_offset = self->offset;
@@ -1375,6 +1372,7 @@ gsk_gpu_node_processor_add_first_transform_node (GskGpuNodeProcessor         *se
 
       return result;
 
+    case GSK_FINE_TRANSFORM_CATEGORY_2D_NEGATIVE_AFFINE:
     case GSK_FINE_TRANSFORM_CATEGORY_2D_DIHEDRAL:
     case GSK_FINE_TRANSFORM_CATEGORY_2D:
     case GSK_FINE_TRANSFORM_CATEGORY_UNKNOWN:
