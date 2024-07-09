@@ -110,7 +110,7 @@ void gsk_matrix_transform_rect    (const graphene_matrix_t  *m,
                                    const graphene_rect_t    *r,
                                    graphene_quad_t          *res);
 
-#define gsk_transform_get_fine_category(t) ((t) ? (t)->category : GSK_TRANSFORM_CATEGORY_IDENTITY)
+#define gsk_transform_get_fine_category(t) ((t) ? (t)->category : GSK_FINE_TRANSFORM_CATEGORY_IDENTITY)
 
 G_END_DECLS
 

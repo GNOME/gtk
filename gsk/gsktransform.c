@@ -2289,7 +2289,7 @@ gsk_transform_get_category (GskTransform *self)
         return GSK_TRANSFORM_CATEGORY_IDENTITY;
 
       default:
-        g_return_val_if_reached (GSK_FINE_TRANSFORM_CATEGORY_UNKNOWN);
+        g_return_val_if_reached (GSK_TRANSFORM_CATEGORY_UNKNOWN);
     }
 }
 
