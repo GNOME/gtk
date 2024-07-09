@@ -59,3 +59,9 @@ gdk_dihedral_combine (GdkDihedral first,
          (((first & 3) * (((second & 4) >> 1) + 1)) ^ (second & 3));
 }
 
+GdkDihedral
+gdk_dihedral_invert (GdkDihedral self)
+{
+  return ((4 - self) & 3) | (self & 4);
+}
+
