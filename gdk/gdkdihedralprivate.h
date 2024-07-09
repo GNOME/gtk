@@ -40,6 +40,7 @@ void            gdk_dihedral_get_mat2                           (GdkDihedral    
 
 GdkDihedral     gdk_dihedral_combine                            (GdkDihedral            first,
                                                                  GdkDihedral            second);
+GdkDihedral     gdk_dihedral_invert                             (GdkDihedral            self);
 
 G_END_DECLS
 

@@ -2,6 +2,8 @@
 
 #include "gskroundedrect.h"
 
+#include "gdk/gdkdihedralprivate.h"
+
 #include <cairo.h>
 
 G_BEGIN_DECLS
@@ -34,12 +36,15 @@ G_STATIC_ASSERT (OPPOSITE_CORNER_Y (GSK_CORNER_BOTTOM_RIGHT) == GSK_CORNER_TOP_R
                      }}
 
 
-void                     gsk_rounded_rect_scale_affine          (GskRoundedRect       *dest,
-                                                                 const GskRoundedRect *src,
-                                                                 float                 scale_x,
-                                                                 float                 scale_y,
-                                                                 float                 dx,
-                                                                 float                 dy);
+void                     gsk_rounded_rect_scale_affine          (GskRoundedRect           *dest,
+                                                                 const GskRoundedRect     *src,
+                                                                 float                     scale_x,
+                                                                 float                     scale_y,
+                                                                 float                     dx,
+                                                                 float                     dy);
+void                     gsk_rounded_rect_dihedral              (GskRoundedRect           *dest,
+                                                                 const GskRoundedRect     *src,
+                                                                 GdkDihedral               dihedral);
 
 gboolean                 gsk_rounded_rect_is_circular           (const GskRoundedRect     *self) G_GNUC_PURE;
 
