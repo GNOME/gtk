@@ -1211,27 +1211,24 @@ gsk_gpu_node_processor_add_transform_node (GskGpuNodeProcessor *self,
       return;
 
     case GSK_FINE_TRANSFORM_CATEGORY_2D_AFFINE:
-    case GSK_FINE_TRANSFORM_CATEGORY_2D_NEGATIVE_AFFINE:
       {
         float dx, dy, scale_x, scale_y;
 
         gsk_gpu_clip_init_copy (&old_clip, &self->clip);
         old_offset = self->offset;
         old_scale = self->scale;
-        old_modelview = gsk_transform_ref (self->modelview);
+        old_modelview = self->modelview;
 
         gsk_transform_to_affine (transform, &scale_x, &scale_y, &dx, &dy);
         gsk_gpu_clip_scale (&self->clip, &old_clip, GDK_DIHEDRAL_NORMAL, scale_x, scale_y);
         self->offset.x = (self->offset.x + dx) / scale_x;
         self->offset.y = (self->offset.y + dy) / scale_y;
-        graphene_vec2_init (&self->scale, fabs (scale_x), fabs (scale_y));
+        graphene_vec2_init (&self->scale, scale_x, scale_y);
         graphene_vec2_multiply (&self->scale, &old_scale, &self->scale);
-        self->modelview = gsk_transform_scale (self->modelview,
-                                               scale_x / fabs (scale_x),
-                                               scale_y / fabs (scale_y));
       }
       break;
 
+    case GSK_FINE_TRANSFORM_CATEGORY_2D_NEGATIVE_AFFINE:
     case GSK_FINE_TRANSFORM_CATEGORY_2D_DIHEDRAL:
       {
         GdkDihedral dihedral, inverted;
@@ -1341,16 +1338,22 @@ gsk_gpu_node_processor_add_transform_node (GskGpuNodeProcessor *self,
       break;
     }
 
-  self->pending_globals |= GSK_GPU_GLOBAL_MATRIX | GSK_GPU_GLOBAL_SCALE | GSK_GPU_GLOBAL_CLIP;
+  self->pending_globals |= GSK_GPU_GLOBAL_SCALE | GSK_GPU_GLOBAL_CLIP;
+  if (self->modelview != old_modelview)
+    self->pending_globals |= GSK_GPU_GLOBAL_MATRIX;
 
   gsk_gpu_node_processor_add_node (self, child);
 
   self->offset = old_offset;
   self->scale = old_scale;
-  gsk_transform_unref (self->modelview);
-  self->modelview = old_modelview;
   gsk_gpu_clip_init_copy (&self->clip, &old_clip);
-  self->pending_globals |= GSK_GPU_GLOBAL_MATRIX | GSK_GPU_GLOBAL_SCALE | GSK_GPU_GLOBAL_CLIP;
+  self->pending_globals |= GSK_GPU_GLOBAL_SCALE | GSK_GPU_GLOBAL_CLIP;
+  if (self->modelview != old_modelview)
+    {
+      self->pending_globals |= GSK_GPU_GLOBAL_MATRIX;
+      gsk_transform_unref (self->modelview);
+      self->modelview = old_modelview;
+    }
 }
 
 static gboolean
