@@ -1,0 +1,55 @@
+transform {
+  child: color {
+    bounds: 0 0 50 50;
+    color: rgb(0,255,0);
+  }
+}
+transform {
+  transform: rotate(90);
+  child: color {
+    bounds: 0 0 50 50;
+    color: rgb(255,0,0);
+  }
+}
+transform {
+  transform: rotate(180);
+  child: color {
+    bounds: 0 0 50 50;
+    color: rgb(255,255,0);
+  }
+}
+transform {
+  transform: rotate(270);
+  child: color {
+    bounds: 0 0 50 50;
+    color: rgb(0,0,255);
+  }
+}
+transform {
+  transform: scale(2, -2);
+  child: color {
+    bounds: 25 -50 25 25;
+    color: rgb(0,255,0);
+  }
+}
+transform {
+  transform: rotate(90) scale(-2);
+  child: color {
+    bounds: -50 -50 25 25;
+    color: rgb(255,0,0);
+  }
+}
+transform {
+  transform: rotate(180) scale(-2, 2);
+  child: color {
+    bounds: -50 25 25 25;
+    color: rgb(255,255,0);
+  }
+}
+transform {
+  transform: rotate(270) scale(2);
+  child: color {
+    bounds: 25 25 25 25;
+    color: rgb(0,0,255);
+  }
+}

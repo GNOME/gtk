@@ -269,3 +269,4 @@ gsk_rect_normalize (graphene_rect_t *r)
       r->size.height = size;
     }
 }
+
