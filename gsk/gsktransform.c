@@ -80,9 +80,9 @@ G_DEFINE_BOXED_TYPE (GskTransform, gsk_transform,
 static gboolean
 gsk_transform_is_identity (GskTransform *self);
 static GskTransform *
-gsk_transform_matrix_with_category (GskTransform           *next,
-                                    const graphene_matrix_t*matrix,
-                                    GskTransformCategory    category);
+gsk_transform_matrix_with_category (GskTransform             *next,
+                                    const graphene_matrix_t  *matrix,
+                                    GskFineTransformCategory  category);
 
 static inline gboolean
 gsk_transform_has_class (GskTransform            *self,
@@ -101,9 +101,9 @@ gsk_transform_has_class (GskTransform            *self,
  * Returns: (transfer full): the newly created `GskTransform`
  */
 static gpointer
-gsk_transform_alloc (const GskTransformClass *transform_class,
-                     GskTransformCategory     category,
-                     GskTransform            *next)
+gsk_transform_alloc (const GskTransformClass   *transform_class,
+                     GskFineTransformCategory   category,
+                     GskTransform              *next)
 {
   GskTransform *self;
 
@@ -311,27 +311,29 @@ gsk_matrix_transform_apply_affine (GskTransform *transform,
 
   switch (transform->category)
   {
-    case GSK_TRANSFORM_CATEGORY_UNKNOWN:
-    case GSK_TRANSFORM_CATEGORY_ANY:
-    case GSK_TRANSFORM_CATEGORY_3D:
-    case GSK_TRANSFORM_CATEGORY_2D:
+    case GSK_FINE_TRANSFORM_CATEGORY_UNKNOWN:
+    case GSK_FINE_TRANSFORM_CATEGORY_ANY:
+    case GSK_FINE_TRANSFORM_CATEGORY_3D:
+    case GSK_FINE_TRANSFORM_CATEGORY_2D:
+    case GSK_FINE_TRANSFORM_CATEGORY_2D_DIHEDRAL:
     default:
       g_assert_not_reached ();
       break;
 
-    case GSK_TRANSFORM_CATEGORY_2D_AFFINE:
+    case GSK_FINE_TRANSFORM_CATEGORY_2D_NEGATIVE_AFFINE:
+    case GSK_FINE_TRANSFORM_CATEGORY_2D_AFFINE:
       *out_dx += *out_scale_x * graphene_matrix_get_x_translation (&self->matrix);
       *out_dy += *out_scale_y * graphene_matrix_get_y_translation (&self->matrix);
       *out_scale_x *= graphene_matrix_get_x_scale (&self->matrix);
       *out_scale_y *= graphene_matrix_get_y_scale (&self->matrix);
       break;
 
-    case GSK_TRANSFORM_CATEGORY_2D_TRANSLATE:
+    case GSK_FINE_TRANSFORM_CATEGORY_2D_TRANSLATE:
       *out_dx += *out_scale_x * graphene_matrix_get_x_translation (&self->matrix);
       *out_dy += *out_scale_y * graphene_matrix_get_y_translation (&self->matrix);
       break;
 
-    case GSK_TRANSFORM_CATEGORY_IDENTITY:
+    case GSK_FINE_TRANSFORM_CATEGORY_IDENTITY:
       break;
   }
 }
@@ -345,21 +347,23 @@ gsk_matrix_transform_apply_translate (GskTransform *transform,
 
   switch (transform->category)
   {
-    case GSK_TRANSFORM_CATEGORY_UNKNOWN:
-    case GSK_TRANSFORM_CATEGORY_ANY:
-    case GSK_TRANSFORM_CATEGORY_3D:
-    case GSK_TRANSFORM_CATEGORY_2D:
-    case GSK_TRANSFORM_CATEGORY_2D_AFFINE:
+    case GSK_FINE_TRANSFORM_CATEGORY_UNKNOWN:
+    case GSK_FINE_TRANSFORM_CATEGORY_ANY:
+    case GSK_FINE_TRANSFORM_CATEGORY_3D:
+    case GSK_FINE_TRANSFORM_CATEGORY_2D:
+    case GSK_FINE_TRANSFORM_CATEGORY_2D_DIHEDRAL:
+    case GSK_FINE_TRANSFORM_CATEGORY_2D_NEGATIVE_AFFINE:
+    case GSK_FINE_TRANSFORM_CATEGORY_2D_AFFINE:
     default:
       g_assert_not_reached ();
       break;
 
-    case GSK_TRANSFORM_CATEGORY_2D_TRANSLATE:
+    case GSK_FINE_TRANSFORM_CATEGORY_2D_TRANSLATE:
       *out_dx += graphene_matrix_get_x_translation (&self->matrix);
       *out_dy += graphene_matrix_get_y_translation (&self->matrix);
       break;
 
-    case GSK_TRANSFORM_CATEGORY_IDENTITY:
+    case GSK_FINE_TRANSFORM_CATEGORY_IDENTITY:
       break;
   }
 }
@@ -382,7 +386,7 @@ gsk_matrix_transform_print (GskTransform *transform,
   guint i;
   float f[16];
 
-  if (transform->category >= GSK_TRANSFORM_CATEGORY_2D)
+  if (transform->category >= GSK_FINE_TRANSFORM_CATEGORY_2D)
     {
       g_string_append (string, "matrix(");
       graphene_matrix_to_float (&self->matrix, f);
@@ -471,9 +475,9 @@ static const GskTransformClass GSK_TRANSFORM_TRANSFORM_CLASS =
 };
 
 static GskTransform *
-gsk_transform_matrix_with_category (GskTransform            *next,
-                                    const graphene_matrix_t *matrix,
-                                    GskTransformCategory     category)
+gsk_transform_matrix_with_category (GskTransform             *next,
+                                    const graphene_matrix_t  *matrix,
+                                    GskFineTransformCategory  category)
 {
   GskMatrixTransform *result = gsk_transform_alloc (&GSK_TRANSFORM_TRANSFORM_CLASS, category, next);
 
@@ -498,7 +502,7 @@ GskTransform *
 gsk_transform_matrix (GskTransform            *next,
                       const graphene_matrix_t *matrix)
 {
-  return gsk_transform_matrix_with_category (next, matrix, GSK_TRANSFORM_CATEGORY_UNKNOWN);
+  return gsk_transform_matrix_with_category (next, matrix, GSK_FINE_TRANSFORM_CATEGORY_UNKNOWN);
 }
 
 /* }}} */
@@ -695,8 +699,8 @@ gsk_transform_translate_3d (GskTransform             *next,
     }
 
   result = gsk_transform_alloc (&GSK_TRANSLATE_TRANSFORM_CLASS,
-                                point->z == 0.0 ? GSK_TRANSFORM_CATEGORY_2D_TRANSLATE
-                                                : GSK_TRANSFORM_CATEGORY_3D,
+                                point->z == 0.0 ? GSK_FINE_TRANSFORM_CATEGORY_2D_TRANSLATE
+                                                : GSK_FINE_TRANSFORM_CATEGORY_3D,
                                 next);
 
   graphene_point3d_init_from_point (&result->point, point);
@@ -912,7 +916,8 @@ gsk_transform_rotate (GskTransform *next,
     }
 
   result = gsk_transform_alloc (&GSK_ROTATE_TRANSFORM_CLASS,
-                                GSK_TRANSFORM_CATEGORY_2D,
+                                fmodf (angle, 90.0) ? GSK_FINE_TRANSFORM_CATEGORY_2D
+                                                    : GSK_FINE_TRANSFORM_CATEGORY_2D_DIHEDRAL,
                                 next);
 
   result->angle = normalize_angle (angle);
@@ -1039,7 +1044,7 @@ gsk_transform_rotate_3d (GskTransform          *next,
     return next;
 
   result = gsk_transform_alloc (&GSK_ROTATE3D_TRANSFORM_CLASS,
-                                GSK_TRANSFORM_CATEGORY_3D,
+                                GSK_FINE_TRANSFORM_CATEGORY_3D,
                                 next);
 
   result->angle = normalize_angle (angle);
@@ -1162,7 +1167,7 @@ gsk_skew_transform_invert (GskTransform *transform,
                                 0, 0);
   return gsk_transform_matrix_with_category (next,
                                              &matrix,
-                                             GSK_TRANSFORM_CATEGORY_2D);
+                                             GSK_FINE_TRANSFORM_CATEGORY_2D);
 }
 
 static gboolean
@@ -1217,7 +1222,7 @@ gsk_transform_skew (GskTransform *next,
     return next;
 
   result = gsk_transform_alloc (&GSK_SKEW_TRANSFORM_CLASS,
-                                GSK_TRANSFORM_CATEGORY_2D,
+                                GSK_FINE_TRANSFORM_CATEGORY_2D,
                                 next);
 
   result->skew_x = skew_x;
@@ -1408,6 +1413,7 @@ gsk_transform_scale_3d (GskTransform *next,
                         float         factor_z)
 {
   GskScaleTransform *result;
+  GskFineTransformCategory category;
 
   if (factor_x == 1 && factor_y == 1 && factor_z == 1)
     return next;
@@ -1423,9 +1429,15 @@ gsk_transform_scale_3d (GskTransform *next,
       return r;
     }
 
+  if (factor_z != 1.0f)
+    category = GSK_FINE_TRANSFORM_CATEGORY_3D;
+  else if (factor_x < 0.0f || factor_y < 0.0f)
+    category = GSK_FINE_TRANSFORM_CATEGORY_2D_NEGATIVE_AFFINE;
+  else
+    category = GSK_FINE_TRANSFORM_CATEGORY_2D_AFFINE;
+
   result = gsk_transform_alloc (&GSK_SCALE_TRANSFORM_CLASS,
-                                factor_z != 1.0 ? GSK_TRANSFORM_CATEGORY_3D
-                                                : GSK_TRANSFORM_CATEGORY_2D_AFFINE,
+                                category,
                                 next);
 
   result->factor_x = factor_x;
@@ -1554,7 +1566,7 @@ gsk_transform_perspective (GskTransform *next,
     }
 
   result = gsk_transform_alloc (&GSK_PERSPECTIVE_TRANSFORM_CLASS,
-                                GSK_TRANSFORM_CATEGORY_ANY,
+                                GSK_FINE_TRANSFORM_CATEGORY_ANY,
                                 next);
 
   result->depth = depth;
@@ -1729,7 +1741,7 @@ gsk_transform_to_2d (GskTransform *self,
   if (self == NULL)
     return;
 
-  if (G_UNLIKELY (self->category < GSK_TRANSFORM_CATEGORY_2D))
+  if (G_UNLIKELY (self->category < GSK_FINE_TRANSFORM_CATEGORY_2D))
     {
       char *s = gsk_transform_to_string (self);
       g_warning ("Given transform \"%s\" is not a 2D transform.", s);
@@ -1880,7 +1892,7 @@ gsk_transform_to_affine (GskTransform *self,
   if (self == NULL)
     return;
 
-  if (G_UNLIKELY (self->category < GSK_TRANSFORM_CATEGORY_2D_AFFINE))
+  if (G_UNLIKELY (self->category < GSK_FINE_TRANSFORM_CATEGORY_2D_NEGATIVE_AFFINE))
     {
       char *s = gsk_transform_to_string (self);
       g_warning ("Given transform \"%s\" is not an affine 2D transform.", s);
@@ -1925,7 +1937,7 @@ gsk_transform_to_translate (GskTransform *self,
   if (self == NULL)
     return;
 
-  if (G_UNLIKELY (self->category < GSK_TRANSFORM_CATEGORY_2D_TRANSLATE))
+  if (G_UNLIKELY (self->category < GSK_FINE_TRANSFORM_CATEGORY_2D_TRANSLATE))
     {
       char *s = gsk_transform_to_string (self);
       g_warning ("Given transform \"%s\" is not an affine 2D translation.", s);
@@ -2048,12 +2060,39 @@ gsk_transform_equal (GskTransform *first,
  * Returns: The category of the transform
  **/
 GskTransformCategory
-(gsk_transform_get_category) (GskTransform *self)
+gsk_transform_get_category (GskTransform *self)
 {
   if (self == NULL)
     return GSK_TRANSFORM_CATEGORY_IDENTITY;
 
-  return self->category;
+  switch (self->category)
+    {
+      case GSK_FINE_TRANSFORM_CATEGORY_UNKNOWN:
+        return GSK_TRANSFORM_CATEGORY_UNKNOWN;
+
+      case GSK_FINE_TRANSFORM_CATEGORY_ANY:
+        return GSK_TRANSFORM_CATEGORY_ANY;
+
+      case GSK_FINE_TRANSFORM_CATEGORY_3D:
+        return GSK_TRANSFORM_CATEGORY_3D;
+
+      case GSK_FINE_TRANSFORM_CATEGORY_2D:
+      case GSK_FINE_TRANSFORM_CATEGORY_2D_DIHEDRAL:
+        return GSK_TRANSFORM_CATEGORY_2D;
+
+      case GSK_FINE_TRANSFORM_CATEGORY_2D_NEGATIVE_AFFINE:
+      case GSK_FINE_TRANSFORM_CATEGORY_2D_AFFINE:
+        return GSK_TRANSFORM_CATEGORY_2D_AFFINE;
+
+      case GSK_FINE_TRANSFORM_CATEGORY_2D_TRANSLATE:
+        return GSK_TRANSFORM_CATEGORY_2D_TRANSLATE;
+
+      case GSK_FINE_TRANSFORM_CATEGORY_IDENTITY:
+        return GSK_TRANSFORM_CATEGORY_IDENTITY;
+
+      default:
+        g_return_val_if_reached (GSK_FINE_TRANSFORM_CATEGORY_UNKNOWN);
+    }
 }
 
 /**
@@ -2069,7 +2108,7 @@ GskTransformCategory
 GskTransform *
 gsk_transform_new (void)
 {
-  return gsk_transform_alloc (&GSK_IDENTITY_TRANSFORM_CLASS, GSK_TRANSFORM_CATEGORY_IDENTITY, NULL);
+  return gsk_transform_alloc (&GSK_IDENTITY_TRANSFORM_CLASS, GSK_FINE_TRANSFORM_CATEGORY_IDENTITY, NULL);
 }
 
 /**
@@ -2088,13 +2127,13 @@ gsk_transform_transform_bounds (GskTransform          *self,
                                 const graphene_rect_t *rect,
                                 graphene_rect_t       *out_rect)
 {
-  switch (gsk_transform_get_category (self))
+  switch (gsk_transform_get_fine_category (self))
     {
-    case GSK_TRANSFORM_CATEGORY_IDENTITY:
+    case GSK_FINE_TRANSFORM_CATEGORY_IDENTITY:
       graphene_rect_init_from_rect (out_rect, rect);
       break;
 
-    case GSK_TRANSFORM_CATEGORY_2D_TRANSLATE:
+    case GSK_FINE_TRANSFORM_CATEGORY_2D_TRANSLATE:
       {
         float dx, dy;
 
@@ -2107,7 +2146,8 @@ gsk_transform_transform_bounds (GskTransform          *self,
       }
     break;
 
-    case GSK_TRANSFORM_CATEGORY_2D_AFFINE:
+    case GSK_FINE_TRANSFORM_CATEGORY_2D_AFFINE:
+    case GSK_FINE_TRANSFORM_CATEGORY_2D_NEGATIVE_AFFINE:
       {
         float dx, dy, scale_x, scale_y;
 
@@ -2121,10 +2161,11 @@ gsk_transform_transform_bounds (GskTransform          *self,
       }
     break;
 
-    case GSK_TRANSFORM_CATEGORY_UNKNOWN:
-    case GSK_TRANSFORM_CATEGORY_ANY:
-    case GSK_TRANSFORM_CATEGORY_3D:
-    case GSK_TRANSFORM_CATEGORY_2D:
+    case GSK_FINE_TRANSFORM_CATEGORY_UNKNOWN:
+    case GSK_FINE_TRANSFORM_CATEGORY_ANY:
+    case GSK_FINE_TRANSFORM_CATEGORY_3D:
+    case GSK_FINE_TRANSFORM_CATEGORY_2D:
+    case GSK_FINE_TRANSFORM_CATEGORY_2D_DIHEDRAL:
     default:
       {
         graphene_matrix_t mat;
@@ -2150,13 +2191,13 @@ gsk_transform_transform_point (GskTransform           *self,
                                const graphene_point_t *point,
                                graphene_point_t       *out_point)
 {
-  switch (gsk_transform_get_category (self))
+  switch (gsk_transform_get_fine_category (self))
     {
-    case GSK_TRANSFORM_CATEGORY_IDENTITY:
+    case GSK_FINE_TRANSFORM_CATEGORY_IDENTITY:
       *out_point = *point;
       break;
 
-    case GSK_TRANSFORM_CATEGORY_2D_TRANSLATE:
+    case GSK_FINE_TRANSFORM_CATEGORY_2D_TRANSLATE:
       {
         float dx, dy;
 
@@ -2166,7 +2207,8 @@ gsk_transform_transform_point (GskTransform           *self,
       }
     break;
 
-    case GSK_TRANSFORM_CATEGORY_2D_AFFINE:
+    case GSK_FINE_TRANSFORM_CATEGORY_2D_AFFINE:
+    case GSK_FINE_TRANSFORM_CATEGORY_2D_NEGATIVE_AFFINE:
       {
         float dx, dy, scale_x, scale_y;
 
@@ -2177,10 +2219,11 @@ gsk_transform_transform_point (GskTransform           *self,
       }
     break;
 
-    case GSK_TRANSFORM_CATEGORY_UNKNOWN:
-    case GSK_TRANSFORM_CATEGORY_ANY:
-    case GSK_TRANSFORM_CATEGORY_3D:
-    case GSK_TRANSFORM_CATEGORY_2D:
+    case GSK_FINE_TRANSFORM_CATEGORY_UNKNOWN:
+    case GSK_FINE_TRANSFORM_CATEGORY_ANY:
+    case GSK_FINE_TRANSFORM_CATEGORY_3D:
+    case GSK_FINE_TRANSFORM_CATEGORY_2D:
+    case GSK_FINE_TRANSFORM_CATEGORY_2D_DIHEDRAL:
     default:
       {
         graphene_matrix_t mat;
@@ -2251,7 +2294,7 @@ gsk_transform_parser_parse (GtkCssParser  *parser,
           graphene_matrix_init_from_2d (&matrix, f[0], f[1], f[2], f[3], f[4], f[5]);
           transform = gsk_transform_matrix_with_category (transform,
                                                           &matrix,
-                                                          GSK_TRANSFORM_CATEGORY_2D);
+                                                          GSK_FINE_TRANSFORM_CATEGORY_2D);
         }
       else if (gtk_css_token_is_function (token, "matrix3d"))
         {
