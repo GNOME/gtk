@@ -6,6 +6,8 @@
 #include <graphene.h>
 #include <gsk/gskroundedrect.h>
 
+#include "gdk/gdkdihedralprivate.h"
+
 G_BEGIN_DECLS
 
 typedef enum {
@@ -51,12 +53,13 @@ gboolean                gsk_gpu_clip_intersect_rect                     (GskGpuC
 gboolean                gsk_gpu_clip_intersect_rounded_rect             (GskGpuClip          *dest,
                                                                          const GskGpuClip    *src,
                                                                          const GskRoundedRect   *rounded) G_GNUC_WARN_UNUSED_RESULT;
-void                    gsk_gpu_clip_scale                              (GskGpuClip          *dest,
-                                                                         const GskGpuClip    *src,
+void                    gsk_gpu_clip_scale                              (GskGpuClip             *dest,
+                                                                         const GskGpuClip       *src,
+                                                                         GdkDihedral             dihedral,
                                                                          float                   scale_x,
                                                                          float                   scale_y);
-gboolean                gsk_gpu_clip_transform                          (GskGpuClip          *dest,
-                                                                         const GskGpuClip    *src,
+gboolean                gsk_gpu_clip_transform                          (GskGpuClip             *dest,
+                                                                         const GskGpuClip       *src,
                                                                          GskTransform           *transform,
                                                                          const graphene_rect_t  *viewport) G_GNUC_WARN_UNUSED_RESULT;
 
