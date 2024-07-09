@@ -1,0 +1,28 @@
+transform {
+  transform: rotate(0);
+  child: color {
+    bounds: 0 0 50 50;
+    color: lime;
+  }
+}
+transform {
+  transform: rotate(90);
+  child: color {
+    bounds: 0 -100 50 50;
+    color: red;
+  }
+}
+transform {
+  transform: rotate(180);
+  child: color {
+    bounds: -150 -50 50 50;
+    color: yellow;
+  }
+}
+transform {
+  transform: rotate(270);
+  child: color {
+    bounds: -50 150 50 50;
+    color: blue;
+  }
+}
