@@ -25,6 +25,9 @@
 #include <gtk/css/gtkcss.h>
 #include "gtk/css/gtkcssparserprivate.h"
 
+/* declares GdkDihedralTransform */
+#include "gdk/gdksubsurfaceprivate.h"
+
 G_BEGIN_DECLS
 
 typedef struct _GskTransformClass GskTransformClass;
@@ -86,6 +89,13 @@ struct _GskTransform
 
 gboolean                gsk_transform_parser_parse              (GtkCssParser           *parser,
                                                                  GskTransform          **out_transform);
+
+void                    gsk_transform_to_dihedral               (GskTransform           *self,
+                                                                 GdkDihedral            *out_dihedral,
+                                                                 float                  *out_scale_x,
+                                                                 float                  *out_scale_y,
+                                                                 float                  *out_dx,
+                                                                 float                  *out_dy);
 
 void gsk_matrix_transform_point   (const graphene_matrix_t  *m,
                                    const graphene_point_t   *p,
