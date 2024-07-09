@@ -1,0 +1,11 @@
+window {
+  color: color(srgb 1 0 0);
+}
+
+entry {
+  color: color-mix(in srgb, currentcolor, color(srgb 0 0 1));
+}
+
+text {
+   color: inherit;
+}

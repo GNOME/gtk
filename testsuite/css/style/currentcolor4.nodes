@@ -1,0 +1,11 @@
+window.background:dir(ltr)
+  color: color(srgb 1 0 0); /* currentcolor4.css:2:3-28 */
+
+  entry:dir(ltr)
+    color: color(srgb 0.5 0 0.5); /* currentcolor4.css:6:3-62 */
+
+    text:dir(ltr)
+      color: color(srgb 0.5 0 0.5); /* currentcolor4.css:10:4-19 */
+
+      undershoot.left:dir(ltr)
+      undershoot.right:dir(ltr)

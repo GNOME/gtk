@@ -19,3 +19,11 @@ d {
 e {
   color: mix(@some-color, currentColor, 0.5);
 }
+
+f {
+  color: color-mix(in srgb, red 40%, currentColor 60%);
+}
+
+g {
+  color: color(from currentcolor srgb r g b / calc(alpha / 2));
+}
