@@ -32,5 +32,14 @@ typedef enum {
   GDK_DIHEDRAL_FLIPPED_270,
 } GdkDihedral;
 
+void            gdk_dihedral_get_mat2                           (GdkDihedral            transform,
+                                                                 float                 *xx,
+                                                                 float                 *xy,
+                                                                 float                 *yx,
+                                                                 float                 *yy);
+
+GdkDihedral     gdk_dihedral_combine                            (GdkDihedral            first,
+                                                                 GdkDihedral            second);
+
 G_END_DECLS
 
