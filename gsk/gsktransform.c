@@ -36,6 +36,8 @@
 
 #include "gsktransformprivate.h"
 
+#include "gskrectprivate.h"
+
 /* {{{ Boilerplate */
 
 struct _GskTransformClass
@@ -2357,11 +2359,26 @@ gsk_transform_transform_bounds (GskTransform          *self,
       }
     break;
 
+    case GSK_FINE_TRANSFORM_CATEGORY_2D_DIHEDRAL:
+      {
+        GdkDihedral dihedral;
+        float dx, dy, scale_x, scale_y;
+
+        gsk_transform_to_dihedral (self, &dihedral, &scale_x, &scale_y, &dx, &dy);
+
+        gsk_rect_dihedral (rect, dihedral, out_rect);
+        graphene_rect_init (out_rect,
+                            (out_rect->origin.x * scale_x) + dx,
+                            (out_rect->origin.y * scale_y) + dy,
+                            out_rect->size.width * scale_x,
+                            out_rect->size.height * scale_y);
+      }
+      break;
+
     case GSK_FINE_TRANSFORM_CATEGORY_UNKNOWN:
     case GSK_FINE_TRANSFORM_CATEGORY_ANY:
     case GSK_FINE_TRANSFORM_CATEGORY_3D:
     case GSK_FINE_TRANSFORM_CATEGORY_2D:
-    case GSK_FINE_TRANSFORM_CATEGORY_2D_DIHEDRAL:
     default:
       {
         graphene_matrix_t mat;

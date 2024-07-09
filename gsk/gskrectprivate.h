@@ -1,5 +1,7 @@
 #pragma once
 
+#include "gdk/gdkdihedralprivate.h"
+
 #include <graphene.h>
 #include <math.h>
 
@@ -155,6 +157,22 @@ gsk_rect_coverage (const graphene_rect_t *r1,
     }
 
   *res = r;
+}
+
+static inline void
+gsk_rect_dihedral (const graphene_rect_t *src,
+                   GdkDihedral            dihedral,
+                   graphene_rect_t       *res)
+{
+  float xx, xy, yx, yy;
+
+  gdk_dihedral_get_mat2 (dihedral, &xx, &xy, &yx, &yy);
+
+  graphene_rect_init (res,
+                      (xx * src->origin.x + xy * src->origin.y),
+                      (yx * src->origin.x + yy * src->origin.y),
+                      (xx * src->size.width + xy * src->size.height),
+                      (yx * src->size.width + yy * src->size.height));
 }
 
 static inline gboolean G_GNUC_PURE
