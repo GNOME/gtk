@@ -53,6 +53,7 @@ compare_render_tests = [
   'cross-fade-in-opacity',
   'cross-fade-in-rotate',
   'css-background',
+  'dihedral',
   'empty-blend',
   'empty-blur',
   'empty-border',
