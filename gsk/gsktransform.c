@@ -2432,11 +2432,23 @@ gsk_transform_transform_point (GskTransform           *self,
       }
     break;
 
+    case GSK_FINE_TRANSFORM_CATEGORY_2D_DIHEDRAL:
+      {
+        GdkDihedral dihedral;
+        float xx, xy, yx, yy, dx, dy, scale_x, scale_y;
+
+        gsk_transform_to_dihedral (self, &dihedral, &scale_x, &scale_y, &dx, &dy);
+        gdk_dihedral_get_mat2 (dihedral, &xx, &xy, &yx, &yy);
+
+        *out_point = GRAPHENE_POINT_INIT ((xx * point->x + xy * point->y) * scale_x + dx,
+                                          (yx * point->x + yy * point->y) * scale_y + dy);
+      }
+      break;
+
     case GSK_FINE_TRANSFORM_CATEGORY_UNKNOWN:
     case GSK_FINE_TRANSFORM_CATEGORY_ANY:
     case GSK_FINE_TRANSFORM_CATEGORY_3D:
     case GSK_FINE_TRANSFORM_CATEGORY_2D:
-    case GSK_FINE_TRANSFORM_CATEGORY_2D_DIHEDRAL:
     default:
       {
         graphene_matrix_t mat;
