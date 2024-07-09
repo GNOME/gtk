@@ -1165,6 +1165,22 @@ gsk_gpu_node_processor_add_first_rounded_clip_node (GskGpuNodeProcessor         
                                                 gsk_rounded_clip_node_get_child (node));
 }
 
+static GskTransform *
+gsk_transform_dihedral (GskTransform *transform,
+                        GdkDihedral   dihedral)
+{
+  int rotate = dihedral & 3;
+  int flip = dihedral & 4;
+
+  if (flip)
+      transform = gsk_transform_scale (transform, -1.0, 1.0);
+
+  if (rotate)
+      transform = gsk_transform_rotate (transform, rotate * 90.0f);
+
+  return transform;
+}
+
 static void
 gsk_gpu_node_processor_add_transform_node (GskGpuNodeProcessor *self,
                                            GskRenderNode       *node)
@@ -1205,7 +1221,7 @@ gsk_gpu_node_processor_add_transform_node (GskGpuNodeProcessor *self,
         old_modelview = gsk_transform_ref (self->modelview);
 
         gsk_transform_to_affine (transform, &scale_x, &scale_y, &dx, &dy);
-        gsk_gpu_clip_scale (&self->clip, &old_clip, scale_x, scale_y);
+        gsk_gpu_clip_scale (&self->clip, &old_clip, GDK_DIHEDRAL_NORMAL, scale_x, scale_y);
         self->offset.x = (self->offset.x + dx) / scale_x;
         self->offset.y = (self->offset.y + dy) / scale_y;
         graphene_vec2_init (&self->scale, fabs (scale_x), fabs (scale_y));
@@ -1217,6 +1233,32 @@ gsk_gpu_node_processor_add_transform_node (GskGpuNodeProcessor *self,
       break;
 
     case GSK_FINE_TRANSFORM_CATEGORY_2D_DIHEDRAL:
+      {
+        GdkDihedral dihedral, inverted;
+        float xx, xy, yx, yy, dx, dy, scale_x, scale_y, old_scale_x, old_scale_y;
+
+        gsk_gpu_clip_init_copy (&old_clip, &self->clip);
+        old_offset = self->offset;
+        old_scale = self->scale;
+        old_modelview = gsk_transform_ref (self->modelview);
+
+        gsk_transform_to_dihedral (transform, &dihedral, &scale_x, &scale_y, &dx, &dy);
+        inverted = gdk_dihedral_invert (dihedral);
+        gdk_dihedral_get_mat2 (inverted, &xx, &xy, &yx, &yy);
+        gsk_gpu_clip_scale (&self->clip, &old_clip, inverted, scale_x, scale_y);
+        self->offset.x = (self->offset.x + dx) / scale_x;
+        self->offset.y = (self->offset.y + dy) / scale_y;
+        self->offset = GRAPHENE_POINT_INIT (xx * self->offset.x + xy * self->offset.y,
+                                            yx * self->offset.x + yy * self->offset.y);
+        old_scale_x = graphene_vec2_get_x (&old_scale);
+        old_scale_y = graphene_vec2_get_y (&old_scale);
+        graphene_vec2_init (&self->scale,
+                            fabs (scale_x * (old_scale_x * xx + old_scale_y * yx)),
+                            fabs (scale_y * (old_scale_x * xy + old_scale_y * yy)));
+        self->modelview = gsk_transform_dihedral (self->modelview, dihedral);
+      }
+      break;
+
     case GSK_FINE_TRANSFORM_CATEGORY_2D:
     case GSK_FINE_TRANSFORM_CATEGORY_UNKNOWN:
     case GSK_FINE_TRANSFORM_CATEGORY_ANY:
@@ -1350,7 +1392,7 @@ gsk_gpu_node_processor_add_first_transform_node (GskGpuNodeProcessor         *se
       old_offset = self->offset;
       old_scale = self->scale;
 
-      gsk_gpu_clip_scale (&self->clip, &old_clip, scale_x, scale_y);
+      gsk_gpu_clip_scale (&self->clip, &old_clip, GDK_DIHEDRAL_NORMAL, scale_x, scale_y);
       self->offset.x = (self->offset.x + dx) / scale_x;
       self->offset.y = (self->offset.y + dy) / scale_y;
       graphene_vec2_init (&self->scale, fabs (scale_x), fabs (scale_y));
