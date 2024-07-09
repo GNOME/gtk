@@ -20,6 +20,7 @@
 #pragma once
 
 #include "gdkenumtypes.h"
+#include "gdkdihedralprivate.h"
 #include "gdksurface.h"
 #include <graphene.h>
 
@@ -47,17 +48,6 @@ struct _GdkSubsurface
   GdkSubsurface *sibling_below;
 };
 
-typedef enum {
-  GDK_TEXTURE_TRANSFORM_NORMAL,
-  GDK_TEXTURE_TRANSFORM_90,
-  GDK_TEXTURE_TRANSFORM_180,
-  GDK_TEXTURE_TRANSFORM_270,
-  GDK_TEXTURE_TRANSFORM_FLIPPED,
-  GDK_TEXTURE_TRANSFORM_FLIPPED_90,
-  GDK_TEXTURE_TRANSFORM_FLIPPED_180,
-  GDK_TEXTURE_TRANSFORM_FLIPPED_270,
-} GdkTextureTransform;
-
 struct _GdkSubsurfaceClass
 {
   GObjectClass parent_class;
@@ -66,7 +56,7 @@ struct _GdkSubsurfaceClass
                                         GdkTexture            *texture,
                                         const graphene_rect_t *source,
                                         const graphene_rect_t *dest,
-                                        GdkTextureTransform    transform,
+                                        GdkDihedral            transform,
                                         const graphene_rect_t *bg,
                                         gboolean               above,
                                         GdkSubsurface         *sibling);
@@ -76,7 +66,7 @@ struct _GdkSubsurfaceClass
                                         graphene_rect_t       *rect);
   void         (* get_texture_rect)    (GdkSubsurface         *subsurface,
                                         graphene_rect_t       *rect);
-  GdkTextureTransform
+  GdkDihedral
                (* get_transform)       (GdkSubsurface         *subsurface);
   gboolean     (* get_background_rect) (GdkSubsurface         *subsurface,
                                         graphene_rect_t       *rect);
@@ -90,7 +80,7 @@ gboolean        gdk_subsurface_attach              (GdkSubsurface         *subsu
                                                     GdkTexture            *texture,
                                                     const graphene_rect_t *source,
                                                     const graphene_rect_t *dest,
-                                                    GdkTextureTransform    transform,
+                                                    GdkDihedral             transform,
                                                     const graphene_rect_t *background,
                                                     gboolean               above,
                                                     GdkSubsurface         *sibling);
@@ -103,7 +93,7 @@ void            gdk_subsurface_get_texture_rect    (GdkSubsurface         *subsu
 gboolean        gdk_subsurface_is_above_parent     (GdkSubsurface         *subsurface);
 GdkSubsurface * gdk_subsurface_get_sibling         (GdkSubsurface         *subsurface,
                                                     gboolean               above);
-GdkTextureTransform
+GdkDihedral
                 gdk_subsurface_get_transform       (GdkSubsurface         *subsurface);
 gboolean        gdk_subsurface_get_background_rect (GdkSubsurface         *subsurface,
                                                     graphene_rect_t       *rect);

@@ -56,7 +56,7 @@ struct _GskOffload
   GskOffloadInfo *last_info;
 };
 
-static GdkTextureTransform
+static GdkDihedral
 find_texture_transform (GskTransform *transform)
 {
   float sx, sy, dx, dy;
@@ -68,26 +68,26 @@ find_texture_transform (GskTransform *transform)
   if (sx > 0)
     {
       if (sy > 0)
-        return GDK_TEXTURE_TRANSFORM_NORMAL;
+        return GDK_DIHEDRAL_NORMAL;
       else
-        return GDK_TEXTURE_TRANSFORM_FLIPPED_180;
+        return GDK_DIHEDRAL_FLIPPED_180;
     }
   else
     {
       if (sy > 0)
-        return GDK_TEXTURE_TRANSFORM_FLIPPED;
+        return GDK_DIHEDRAL_FLIPPED;
       else
-        return GDK_TEXTURE_TRANSFORM_180;
+        return GDK_DIHEDRAL_180;
     }
 }
 
 static GdkTexture *
-find_texture_to_attach (GskOffload           *self,
-                        const GskRenderNode  *subsurface_node,
-                        graphene_rect_t      *out_texture_rect,
-                        graphene_rect_t      *out_source_rect,
-                        gboolean             *has_background,
-                        GdkTextureTransform  *out_texture_transform)
+find_texture_to_attach (GskOffload          *self,
+                        const GskRenderNode *subsurface_node,
+                        graphene_rect_t     *out_texture_rect,
+                        graphene_rect_t     *out_source_rect,
+                        gboolean            *has_background,
+                        GdkDihedral         *out_texture_transform)
 {
   GdkSubsurface *subsurface;
   const GskRenderNode *node;
@@ -97,7 +97,7 @@ find_texture_to_attach (GskOffload           *self,
   GdkTexture *ret = NULL;
 
   *has_background = FALSE;
-  *out_texture_transform = GDK_TEXTURE_TRANSFORM_NORMAL;
+  *out_texture_transform = GDK_DIHEDRAL_NORMAL;
 
   subsurface = gsk_subsurface_node_get_subsurface (subsurface_node);
   node = subsurface_node;

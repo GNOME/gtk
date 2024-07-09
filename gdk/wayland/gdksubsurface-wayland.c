@@ -242,15 +242,15 @@ get_sp_buffer (GdkWaylandSubsurface *self)
 }
 
 static inline enum wl_output_transform
-gdk_texture_transform_to_wl (GdkTextureTransform transform)
+gdk_texture_transform_to_wl (GdkDihedral transform)
 {
   return (enum wl_output_transform) transform;
 }
 
-static inline GdkTextureTransform
+static inline GdkDihedral
 wl_output_transform_to_gdk (enum wl_output_transform transform)
 {
-  return (GdkTextureTransform) transform;
+  return (GdkDihedral) transform;
 }
 
 static void
@@ -304,7 +304,7 @@ gdk_wayland_subsurface_attach (GdkSubsurface         *sub,
                                GdkTexture            *texture,
                                const graphene_rect_t *source,
                                const graphene_rect_t *dest,
-                               GdkTextureTransform    transform,
+                               GdkDihedral            transform,
                                const graphene_rect_t *background,
                                gboolean               above,
                                GdkSubsurface         *sibling)
@@ -715,7 +715,7 @@ gdk_wayland_subsurface_get_source_rect (GdkSubsurface   *sub,
   rect->size.height = self->source.size.height;
 }
 
-static GdkTextureTransform
+static GdkDihedral
 gdk_wayland_subsurface_get_transform (GdkSubsurface *sub)
 {
   GdkWaylandSubsurface *self = GDK_WAYLAND_SUBSURFACE (sub);
