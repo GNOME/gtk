@@ -13,6 +13,8 @@
 #include "gskvulkanimageprivate.h"
 #endif
 
+#include <glib/gstdio.h>
+
 #include "gdk/gdkdmabuftexturebuilderprivate.h"
 #include "gdk/gdkdmabuftextureprivate.h"
 #include "gdk/gdkglcontextprivate.h"
