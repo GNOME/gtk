@@ -667,10 +667,16 @@ complex_clip:
         else
           {
             gboolean has_background;
+            float sx, sy, dx, dy;
+            GdkDihedral context_transform;
+            GdkDihedral inner_transform;
 
-            info->texture = find_texture_to_attach (self, node, &info->texture_rect, &info->source_rect, &has_background, &info->transform);
+            gsk_transform_to_dihedral (transform, &context_transform, &sx, &sy, &dx, &dy);
+
+            info->texture = find_texture_to_attach (self, node, &info->texture_rect, &info->source_rect, &has_background, &inner_transform);
             if (info->texture)
               {
+                info->transform = gdk_dihedral_combine (context_transform, inner_transform);
                 info->can_offload = TRUE;
                 info->can_raise = TRUE;
                 transform_bounds (self, &info->texture_rect, &info->texture_rect);
