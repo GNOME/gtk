@@ -247,14 +247,6 @@ gdk_texture_transform_to_wl (GdkDihedral transform)
   return (enum wl_output_transform) transform;
 }
 
-static inline const char *
-transform_name (GdkDihedral transform)
-{
-  const char *name[] = { "normal", "90", "180", "270", "flipped", "flipped 90", "flipped 180", "flipped 270" };
-
-  return name[transform];
-}
-
 static inline GdkDihedral
 wl_output_transform_to_gdk (enum wl_output_transform transform)
 {
@@ -521,7 +513,7 @@ gdk_wayland_subsurface_attach (GdkSubsurface         *sub,
                                  self->dest.x, self->dest.y,
                                  self->dest.width, self->dest.height,
                                  transform != GDK_DIHEDRAL_NORMAL ? " (" : "",
-                                 transform != GDK_DIHEDRAL_NORMAL ? transform_name (transform): "",
+                                 transform != GDK_DIHEDRAL_NORMAL ? gdk_dihedral_get_name (transform) : "",
                                  transform != GDK_DIHEDRAL_NORMAL ? " )" : ""
                                  );
               result = TRUE;

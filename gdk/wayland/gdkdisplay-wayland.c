@@ -50,6 +50,7 @@
 #include "gdkvulkancontext-wayland.h"
 #include "gdkwaylandmonitor.h"
 #include "gdkprofilerprivate.h"
+#include "gdkdihedralprivate.h"
 #include "gdktoplevel-wayland-private.h"
 #include <wayland/pointer-gestures-unstable-v1-client-protocol.h>
 #include "tablet-unstable-v2-client-protocol.h"
@@ -2307,30 +2308,6 @@ subpixel_to_string (int layout)
   return NULL;
 }
 
-static const char *
-transform_to_string (int transform)
-{
-  int i;
-  struct { int transform; const char *name; } transforms[] = {
-    { WL_OUTPUT_TRANSFORM_NORMAL, "normal" },
-    { WL_OUTPUT_TRANSFORM_90, "90" },
-    { WL_OUTPUT_TRANSFORM_180, "180" },
-    { WL_OUTPUT_TRANSFORM_270, "270" },
-    { WL_OUTPUT_TRANSFORM_FLIPPED, "flipped" },
-    { WL_OUTPUT_TRANSFORM_FLIPPED_90, "flipped 90" },
-    { WL_OUTPUT_TRANSFORM_FLIPPED_180, "flipped 180" },
-    { WL_OUTPUT_TRANSFORM_FLIPPED_270, "flipped 270" },
-    { 0xffffffff, NULL }
-  };
-
-  for (i = 0; transforms[i].name; i++)
-    {
-      if (transforms[i].transform == transform)
-        return transforms[i].name;
-    }
-  return NULL;
-}
-
 static void
 update_scale (GdkDisplay *display)
 {
@@ -2561,7 +2538,7 @@ output_handle_geometry (void             *data,
                    physical_width, physical_height,
                    subpixel_to_string (subpixel),
                    make, model,
-                   transform_to_string (transform));
+                   gdk_dihedral_get_name ((GdkDihedral) transform));
 
   monitor->output_geometry.x = x;
   monitor->output_geometry.y = y;
