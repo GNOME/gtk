@@ -75,6 +75,7 @@ struct _GdkSurfacePrivate
   gboolean egl_surface_high_depth;
 #endif
 
+  GdkDihedral preferred_transform;
   gpointer widget;
 };
 
@@ -857,16 +858,44 @@ gdk_surface_get_property (GObject    *object,
     }
 }
 
-void
-_gdk_surface_update_size (GdkSurface *surface)
+static void
+gdk_surface_resize_draw_contexts (GdkSurface *surface)
 {
   GSList *l;
 
   for (l = surface->draw_contexts; l; l = l->next)
     gdk_draw_context_surface_resized (l->data);
+}
+
+void
+_gdk_surface_update_size (GdkSurface *surface)
+{
+  gdk_surface_resize_draw_contexts (surface);
 
   g_object_notify (G_OBJECT (surface), "width");
   g_object_notify (G_OBJECT (surface), "height");
+}
+
+GdkDihedral
+gdk_surface_get_preferred_transform (GdkSurface  *surface)
+{
+  GdkSurfacePrivate *priv = gdk_surface_get_instance_private (surface);
+
+  return priv->preferred_transform;
+}
+
+void
+gdk_surface_set_preferred_transform (GdkSurface  *surface,
+                                     GdkDihedral  transform)
+{
+  GdkSurfacePrivate *priv = gdk_surface_get_instance_private (surface);
+
+  if (priv->preferred_transform == transform)
+    return;
+
+  priv->preferred_transform = transform;
+
+  gdk_surface_resize_draw_contexts (surface);
 }
 
 /**
