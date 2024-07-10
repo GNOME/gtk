@@ -54,6 +54,7 @@
 
 #define GDK_COLOR_STATE_ID_SRGB 0u
 #define GDK_COLOR_STATE_ID_SRGB_LINEAR 1u
+#define GDK_COLOR_STATE_ID_XYZ 2u
 
 #define TOP 0u
 #define RIGHT 1u

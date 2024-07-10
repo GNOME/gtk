@@ -104,6 +104,19 @@ gdk_color_state_get_srgb_linear (void)
 }
 
 /**
+ * gdk_color_state_get_xyz:
+ *
+ * Returns the color state object representing the XYZ color space.
+ *
+ * Since: 4.16
+ */
+GdkColorState *
+gdk_color_state_get_xyz (void)
+{
+  return GDK_COLOR_STATE_XYZ;
+}
+
+/**
  * gdk_color_state_equal:
  * @self: a `GdkColorState`
  * @other: another `GdkColorStatee`
@@ -202,6 +215,62 @@ srgb_eotf (float v)
 COORDINATE_TRANSFORM(gdk_default_srgb_to_srgb_linear, srgb_eotf)
 COORDINATE_TRANSFORM(gdk_default_srgb_linear_to_srgb, srgb_oetf)
 
+static inline void
+vec3_multiply (const float matrix[3][3],
+               const float vec[3],
+               float       res[3])
+{
+  res[0] = matrix[0][0] * vec[0] + matrix[0][1] * vec[1] + matrix[0][2] * vec[2];
+  res[1] = matrix[1][0] * vec[0] + matrix[1][1] * vec[1] + matrix[1][2] * vec[2];
+  res[2] = matrix[2][0] * vec[0] + matrix[2][1] * vec[1] + matrix[2][2] * vec[2];
+}
+
+#define LINEAR_TRANSFORM(name, matrix) \
+static void \
+name (GdkColorState  *self, \
+      float         (*values)[4], \
+      gsize           n_values) \
+{ \
+  for (gsize i = 0; i < n_values; i++) \
+    { \
+      float res[3]; \
+\
+      vec3_multiply (matrix, values[i], res); \
+\
+      values[i][0] = res[0]; \
+      values[i][1] = res[1]; \
+      values[i][2] = res[2]; \
+    } \
+}
+
+static const float srgb_linear_to_xyz[3][3] = {
+  { (506752.0 / 1228815.0),  (87881.0 / 245763.0),   (12673.0 /   70218.0) },
+  {  (87098.0 /  409605.0), (175762.0 / 245763.0),   (12673.0 /  175545.0) },
+  {  ( 7918.0 /  409605.0),  (87881.0 / 737289.0), (1001167.0 / 1053270.0) },
+};
+
+static const float xyz_to_srgb_linear[3][3] = {
+  {    (12831.0 /   3959.0),     - (329.0 /    214.0),  - (1974.0 /   3959.0) },
+  { - (851781.0 / 878810.0),   (1648619.0 / 878810.0),   (36519.0 / 878810.0) },
+  {      (705.0 /  12673.0),    - (2585.0 /  12673.0),     (705.0 /    667.0) },
+};
+
+LINEAR_TRANSFORM(gdk_default_xyz_to_srgb_linear, xyz_to_srgb_linear)
+LINEAR_TRANSFORM(gdk_default_srgb_linear_to_xyz, srgb_linear_to_xyz)
+
+#define CONCAT(name, f1, f2) \
+static void \
+name (GdkColorState  *self, \
+      float         (*values)[4], \
+      gsize           n_values) \
+{ \
+  f1 (self, values, n_values); \
+  f2 (self, values, n_values); \
+}
+
+CONCAT(gdk_default_xyz_to_srgb, gdk_default_xyz_to_srgb_linear, gdk_default_srgb_linear_to_srgb);
+CONCAT(gdk_default_srgb_to_xyz, gdk_default_srgb_to_srgb_linear, gdk_default_srgb_linear_to_xyz);
+
 /* }}} */
 
 static const
@@ -225,6 +294,7 @@ GdkDefaultColorState gdk_default_color_states[] = {
     .no_srgb = GDK_COLOR_STATE_SRGB_LINEAR,
     .convert_to = {
       [GDK_COLOR_STATE_ID_SRGB_LINEAR] = gdk_default_srgb_to_srgb_linear,
+      [GDK_COLOR_STATE_ID_XYZ]  = gdk_default_srgb_to_xyz,
     },
   },
   [GDK_COLOR_STATE_ID_SRGB_LINEAR] = {
@@ -238,6 +308,21 @@ GdkDefaultColorState gdk_default_color_states[] = {
     .no_srgb = NULL,
     .convert_to = {
       [GDK_COLOR_STATE_ID_SRGB] = gdk_default_srgb_linear_to_srgb,
+      [GDK_COLOR_STATE_ID_XYZ]  = gdk_default_srgb_linear_to_xyz,
+    },
+  },
+  [GDK_COLOR_STATE_ID_XYZ] = {
+    .parent = {
+      .klass = &GDK_DEFAULT_COLOR_STATE_CLASS,
+      .ref_count = 0,
+      .depth = GDK_MEMORY_FLOAT16,
+      .rendering_color_state = GDK_COLOR_STATE_XYZ,
+    },
+    .name = "xyz",
+    .no_srgb = NULL,
+    .convert_to = {
+      [GDK_COLOR_STATE_ID_SRGB] = gdk_default_xyz_to_srgb,
+      [GDK_COLOR_STATE_ID_SRGB_LINEAR] = gdk_default_xyz_to_srgb_linear,
     },
   },
 };

@@ -44,6 +44,9 @@ GDK_AVAILABLE_IN_4_16
 GdkColorState * gdk_color_state_get_srgb_linear         (void);
 
 GDK_AVAILABLE_IN_4_16
+GdkColorState * gdk_color_state_get_xyz                 (void);
+
+GDK_AVAILABLE_IN_4_16
 gboolean        gdk_color_state_equal                   (GdkColorState  *self,
                                                          GdkColorState  *other);
 

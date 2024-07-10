@@ -44,6 +44,32 @@ srgb_linear_to_srgb (vec4 color)
                color.a);
 }
 
+vec4
+srgb_linear_to_xyz (vec4 color)
+{
+  mat3 m = mat3 (506752.0 / 1228815.0,  87881.0 / 245763.0,   12673.0 /   70218.0,
+                  87098.0 /  409605.0, 175762.0 / 245763.0,   12673.0 /  175545.0,
+                   7918.0 /  409605.0,  87881.0 / 737289.0, 1001167.0 / 1053270.0);
+
+  return vec4 (color.rgb * m, color.a);
+}
+
+vec4
+xyz_to_srgb_linear (vec4 color)
+{
+  mat3 m = mat3 (  12831.0 /   3959.0,    -329.0 /    214.0, -1974.0 /   3959.0,
+                 -851781.0 / 878810.0, 1648619.0 / 878810.0, 36519.0 / 878810.0,
+                     705.0 /  12673.0,   -2585.0 /  12673.0,   705.0 /    667.0);
+
+  return vec4 (color.xyz * m, color.a);
+}
+
+#define CONCAT(f, f1, f2) vec4 f(vec4 color) { return f2(f1(color)); }
+
+CONCAT(srgb_to_xyz, srgb_to_srgb_linear, srgb_linear_to_xyz)
+CONCAT(xyz_to_srgb, xyz_to_srgb_linear, srgb_linear_to_srgb)
+
+
 #define PAIR(_from_cs, _to_cs) ((_from_cs) << 16 | (_to_cs))
 
 bool
@@ -59,6 +85,18 @@ do_conversion (vec4     color,
       break;
     case PAIR (GDK_COLOR_STATE_ID_SRGB_LINEAR, GDK_COLOR_STATE_ID_SRGB):
       result = srgb_linear_to_srgb (color);
+      break;
+    case PAIR (GDK_COLOR_STATE_ID_SRGB_LINEAR, GDK_COLOR_STATE_ID_XYZ):
+      result = srgb_linear_to_xyz (color);
+      break;
+    case PAIR (GDK_COLOR_STATE_ID_SRGB, GDK_COLOR_STATE_ID_XYZ):
+      result = srgb_to_xyz (color);
+      break;
+    case PAIR (GDK_COLOR_STATE_ID_XYZ, GDK_COLOR_STATE_ID_SRGB_LINEAR):
+      result = xyz_to_srgb_linear (color);
+      break;
+    case PAIR (GDK_COLOR_STATE_ID_XYZ, GDK_COLOR_STATE_ID_SRGB):
+      result = xyz_to_srgb (color);
       break;
 
     default:

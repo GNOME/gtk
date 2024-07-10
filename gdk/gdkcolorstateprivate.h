@@ -10,6 +10,7 @@ typedef enum
 {
   GDK_COLOR_STATE_ID_SRGB,
   GDK_COLOR_STATE_ID_SRGB_LINEAR,
+  GDK_COLOR_STATE_ID_XYZ,
 
   GDK_COLOR_STATE_N_IDS
 } GdkColorStateId;
@@ -55,6 +56,7 @@ extern GdkDefaultColorState gdk_default_color_states[GDK_COLOR_STATE_N_IDS];
 
 #define GDK_COLOR_STATE_SRGB        ((GdkColorState *) &gdk_default_color_states[GDK_COLOR_STATE_ID_SRGB])
 #define GDK_COLOR_STATE_SRGB_LINEAR ((GdkColorState *) &gdk_default_color_states[GDK_COLOR_STATE_ID_SRGB_LINEAR])
+#define GDK_COLOR_STATE_XYZ         ((GdkColorState *) &gdk_default_color_states[GDK_COLOR_STATE_ID_XYZ])
 
 #define GDK_IS_DEFAULT_COLOR_STATE(c) ((GdkDefaultColorState *) (c) >= &gdk_default_color_states[0] && \
                                        (GdkDefaultColorState *) (c) < &gdk_default_color_states[GDK_COLOR_STATE_N_IDS])
