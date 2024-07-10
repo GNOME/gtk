@@ -33,7 +33,7 @@ typedef struct
   GdkSubsurface *place_above;
   graphene_rect_t texture_rect;
   graphene_rect_t source_rect;
-  GdkTextureTransform transform;
+  GdkDihedral transform;
   graphene_rect_t background_rect;
 
   guint was_offloaded : 1;

@@ -242,16 +242,25 @@ get_sp_buffer (GdkWaylandSubsurface *self)
 }
 
 static inline enum wl_output_transform
-gdk_texture_transform_to_wl (GdkTextureTransform transform)
+gdk_texture_transform_to_wl (GdkDihedral transform)
 {
   return (enum wl_output_transform) transform;
 }
 
-static inline GdkTextureTransform
+static inline GdkDihedral
 wl_output_transform_to_gdk (enum wl_output_transform transform)
 {
-  return (GdkTextureTransform) transform;
+  return (GdkDihedral) transform;
 }
+
+G_STATIC_ASSERT ((int) WL_OUTPUT_TRANSFORM_NORMAL == (int) GDK_DIHEDRAL_NORMAL);
+G_STATIC_ASSERT ((int) WL_OUTPUT_TRANSFORM_90 == (int) GDK_DIHEDRAL_90);
+G_STATIC_ASSERT ((int) WL_OUTPUT_TRANSFORM_180 == (int) GDK_DIHEDRAL_180);
+G_STATIC_ASSERT ((int) WL_OUTPUT_TRANSFORM_270 == (int) GDK_DIHEDRAL_270);
+G_STATIC_ASSERT ((int) WL_OUTPUT_TRANSFORM_FLIPPED == (int) GDK_DIHEDRAL_FLIPPED);
+G_STATIC_ASSERT ((int) WL_OUTPUT_TRANSFORM_FLIPPED_90 == (int) GDK_DIHEDRAL_FLIPPED_90);
+G_STATIC_ASSERT ((int) WL_OUTPUT_TRANSFORM_FLIPPED_180 == (int) GDK_DIHEDRAL_FLIPPED_180);
+G_STATIC_ASSERT ((int) WL_OUTPUT_TRANSFORM_FLIPPED_270 == (int) GDK_DIHEDRAL_FLIPPED_270);
 
 static void
 ensure_bg_surface (GdkWaylandSubsurface *self)
@@ -304,7 +313,7 @@ gdk_wayland_subsurface_attach (GdkSubsurface         *sub,
                                GdkTexture            *texture,
                                const graphene_rect_t *source,
                                const graphene_rect_t *dest,
-                               GdkTextureTransform    transform,
+                               GdkDihedral            transform,
                                const graphene_rect_t *background,
                                gboolean               above,
                                GdkSubsurface         *sibling)
@@ -494,7 +503,7 @@ gdk_wayland_subsurface_attach (GdkSubsurface         *sub,
                 }
 
               GDK_DISPLAY_DEBUG (gdk_surface_get_display (sub->parent), OFFLOAD,
-                                 "[%p] %s Attaching texture (%dx%d) at %d %d %d %d",
+                                 "[%p] %s Attaching texture (%dx%d) at %d %d %d %d%s%s%s",
                                  self,
                                  will_be_above
                                    ? (has_background ? "▲" : "△")
@@ -502,7 +511,11 @@ gdk_wayland_subsurface_attach (GdkSubsurface         *sub,
                                  gdk_texture_get_width (texture),
                                  gdk_texture_get_height (texture),
                                  self->dest.x, self->dest.y,
-                                 self->dest.width, self->dest.height);
+                                 self->dest.width, self->dest.height,
+                                 transform != GDK_DIHEDRAL_NORMAL ? " (" : "",
+                                 transform != GDK_DIHEDRAL_NORMAL ? gdk_dihedral_get_name (transform) : "",
+                                 transform != GDK_DIHEDRAL_NORMAL ? " )" : ""
+                                 );
               result = TRUE;
             }
           else
@@ -715,7 +728,7 @@ gdk_wayland_subsurface_get_source_rect (GdkSubsurface   *sub,
   rect->size.height = self->source.size.height;
 }
 
-static GdkTextureTransform
+static GdkDihedral
 gdk_wayland_subsurface_get_transform (GdkSubsurface *sub)
 {
   GdkWaylandSubsurface *self = GDK_WAYLAND_SUBSURFACE (sub);

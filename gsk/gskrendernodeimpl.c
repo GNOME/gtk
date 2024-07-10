@@ -3625,7 +3625,7 @@ gsk_transform_node_get_opaque_rect (GskRenderNode   *node,
   GskTransformNode *self = (GskTransformNode *) node;
   graphene_rect_t child_opaque;
 
-  if (gsk_transform_get_category (self->transform) < GSK_TRANSFORM_CATEGORY_2D_AFFINE)
+  if (gsk_transform_get_fine_category (self->transform) < GSK_FINE_TRANSFORM_CATEGORY_2D_DIHEDRAL)
     return FALSE;
 
   if (!gsk_render_node_get_opaque_rect (self->child, &child_opaque))

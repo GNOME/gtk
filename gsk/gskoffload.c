@@ -25,7 +25,7 @@
 #include "gskrendernode.h"
 #include "gskrectprivate.h"
 #include "gskroundedrectprivate.h"
-#include "gsktransform.h"
+#include "gsktransformprivate.h"
 #include "gskdebugprivate.h"
 #include "gskrendernodeprivate.h"
 #include "gdksurfaceprivate.h"
@@ -56,38 +56,26 @@ struct _GskOffload
   GskOffloadInfo *last_info;
 };
 
-static GdkTextureTransform
+static GdkDihedral
 find_texture_transform (GskTransform *transform)
 {
+  GdkDihedral dihedral;
   float sx, sy, dx, dy;
 
-  g_assert (gsk_transform_get_category (transform) >= GSK_TRANSFORM_CATEGORY_2D_AFFINE);
+  g_assert (gsk_transform_get_fine_category (transform) >= GSK_FINE_TRANSFORM_CATEGORY_2D_DIHEDRAL);
 
-  gsk_transform_to_affine (transform, &sx, &sy, &dx, &dy);
+  gsk_transform_to_dihedral (transform, &dihedral, &sx, &sy, &dx, &dy);
 
-  if (sx > 0)
-    {
-      if (sy > 0)
-        return GDK_TEXTURE_TRANSFORM_NORMAL;
-      else
-        return GDK_TEXTURE_TRANSFORM_FLIPPED_180;
-    }
-  else
-    {
-      if (sy > 0)
-        return GDK_TEXTURE_TRANSFORM_FLIPPED;
-      else
-        return GDK_TEXTURE_TRANSFORM_180;
-    }
+  return dihedral;
 }
 
 static GdkTexture *
-find_texture_to_attach (GskOffload           *self,
-                        const GskRenderNode  *subsurface_node,
-                        graphene_rect_t      *out_texture_rect,
-                        graphene_rect_t      *out_source_rect,
-                        gboolean             *has_background,
-                        GdkTextureTransform  *out_texture_transform)
+find_texture_to_attach (GskOffload          *self,
+                        const GskRenderNode *subsurface_node,
+                        graphene_rect_t     *out_texture_rect,
+                        graphene_rect_t     *out_source_rect,
+                        gboolean            *has_background,
+                        GdkDihedral         *out_texture_transform)
 {
   GdkSubsurface *subsurface;
   const GskRenderNode *node;
@@ -97,7 +85,7 @@ find_texture_to_attach (GskOffload           *self,
   GdkTexture *ret = NULL;
 
   *has_background = FALSE;
-  *out_texture_transform = GDK_TEXTURE_TRANSFORM_NORMAL;
+  *out_texture_transform = GDK_DIHEDRAL_NORMAL;
 
   subsurface = gsk_subsurface_node_get_subsurface (subsurface_node);
   node = subsurface_node;
@@ -145,11 +133,11 @@ find_texture_to_attach (GskOffload           *self,
           {
             GskTransform *t = gsk_transform_node_get_transform (node);
 
-            if (gsk_transform_get_category (t) < GSK_TRANSFORM_CATEGORY_2D_AFFINE)
+            if (gsk_transform_get_fine_category (t) < GSK_FINE_TRANSFORM_CATEGORY_2D_DIHEDRAL)
               {
                 char *s = gsk_transform_to_string (t);
                 GDK_DISPLAY_DEBUG (gdk_surface_get_display (self->surface), OFFLOAD,
-                                   "[%p] 🗙 Transform %s is not just scale/translate",
+                                   "[%p] 🗙 Transform %s is not dihedral",
                                    subsurface, s);
                 g_free (s);
                 goto out;
@@ -195,25 +183,36 @@ find_texture_to_attach (GskOffload           *self,
         case GSK_TEXTURE_NODE:
           {
             GdkTexture *texture = gsk_texture_node_get_texture (node);
+            int width, height;
 
-            if (gsk_transform_get_category (transform) < GSK_TRANSFORM_CATEGORY_2D_AFFINE)
+            if (gsk_transform_get_fine_category (transform) < GSK_FINE_TRANSFORM_CATEGORY_2D_DIHEDRAL)
               {
                 char *s = gsk_transform_to_string (transform);
                 GDK_DISPLAY_DEBUG (gdk_surface_get_display (self->surface), OFFLOAD,
-                                   "[%p] 🗙 Transform %s is not just scale/translate",
+                                   "[%p] 🗙 Transform %s is not dihedral",
                                    subsurface, s);
                 g_free (s);
                 goto out;
               }
 
+            width = gdk_texture_get_width (texture);
+            height = gdk_texture_get_height (texture);
+
             *out_texture_transform = find_texture_transform (transform);
+
+            if (gdk_dihedral_swaps_xy (*out_texture_transform))
+              {
+                int tmp = width;
+                width = height;
+                height = tmp;
+              }
 
             if (has_clip)
               {
                 float dx = node->bounds.origin.x;
                 float dy = node->bounds.origin.y;
-                float sx = gdk_texture_get_width (texture) / node->bounds.size.width;
-                float sy = gdk_texture_get_height (texture) / node->bounds.size.height;
+                float sx = width / node->bounds.size.width;
+                float sy = height / node->bounds.size.height;
 
                 gsk_rect_intersection (&node->bounds, &clip, &clip);
 
@@ -227,8 +226,8 @@ find_texture_to_attach (GskOffload           *self,
                 gsk_transform_transform_bounds (transform, &node->bounds, out_texture_rect);
                 out_source_rect->origin.x = 0;
                 out_source_rect->origin.y = 0;
-                out_source_rect->size.width = gdk_texture_get_width (texture);
-                out_source_rect->size.height = gdk_texture_get_height (texture);
+                out_source_rect->size.width = width;
+                out_source_rect->size.height = height;
               }
 
             ret = texture;
@@ -293,13 +292,16 @@ transform_rounded_rect (GskOffload       *self,
                         GskRoundedRect       *out_rect)
 {
   GskTransform *t = self->transforms ? self->transforms->data : NULL;
+  GdkDihedral dihedral;
   float sx, sy, dx, dy;
+  GskRoundedRect tmp;
 
-  if (gsk_transform_get_category (t) < GSK_TRANSFORM_CATEGORY_2D_AFFINE)
+  if (gsk_transform_get_fine_category (t) < GSK_FINE_TRANSFORM_CATEGORY_2D_DIHEDRAL)
     return FALSE;
 
-  gsk_transform_to_affine (t, &sx, &sy, &dx, &dy);
-  gsk_rounded_rect_scale_affine (out_rect, rect, sx, sy, dx, dy);
+  gsk_transform_to_dihedral (t, &dihedral, &sx, &sy, &dx, &dy);
+  gsk_rounded_rect_dihedral (&tmp, rect, dihedral);
+  gsk_rounded_rect_scale_affine (out_rect, &tmp, sx, sy, dx, dy);
 
   return TRUE;
 }
@@ -587,7 +589,7 @@ visit_node (GskOffload    *self,
         if (!transform_rounded_rect (self, clip, &transformed_clip))
           {
             GDK_DISPLAY_DEBUG (gdk_surface_get_display (self->surface), OFFLOAD,
-                               "🗙 Non-affine transform, giving up");
+                               "🗙 Non-dihedral transform, giving up");
           }
         else if (self->current_clip->is_rectilinear)
           {
@@ -656,19 +658,25 @@ complex_clip:
                                "[%p] 🗙 Clipped",
                                subsurface);
           }
-        else if (gsk_transform_get_category (transform) < GSK_TRANSFORM_CATEGORY_2D_AFFINE)
+        else if (gsk_transform_get_fine_category (transform) < GSK_FINE_TRANSFORM_CATEGORY_2D_DIHEDRAL)
           {
             GDK_DISPLAY_DEBUG (gdk_surface_get_display (self->surface), OFFLOAD,
-                               "[%p] 🗙 Non-affine transform",
+                               "[%p] 🗙 Non-dihedral transform",
                                subsurface);
           }
         else
           {
             gboolean has_background;
+            float sx, sy, dx, dy;
+            GdkDihedral context_transform;
+            GdkDihedral inner_transform;
 
-            info->texture = find_texture_to_attach (self, node, &info->texture_rect, &info->source_rect, &has_background, &info->transform);
+            gsk_transform_to_dihedral (transform, &context_transform, &sx, &sy, &dx, &dy);
+
+            info->texture = find_texture_to_attach (self, node, &info->texture_rect, &info->source_rect, &has_background, &inner_transform);
             if (info->texture)
               {
+                info->transform = gdk_dihedral_combine (context_transform, inner_transform);
                 info->can_offload = TRUE;
                 info->can_raise = TRUE;
                 transform_bounds (self, &info->texture_rect, &info->texture_rect);

@@ -168,12 +168,15 @@ gsk_gpu_clip_intersect_rounded_rect (GskGpuClip           *dest,
 void
 gsk_gpu_clip_scale (GskGpuClip       *dest,
                     const GskGpuClip *src,
+                    GdkDihedral       dihedral,
                     float             scale_x,
                     float             scale_y)
 {
+  GskRoundedRect tmp;
   dest->type = src->type;
+  gsk_rounded_rect_dihedral (&tmp, &src->rect, dihedral);
   gsk_rounded_rect_scale_affine (&dest->rect, 
-                                 &src->rect,
+                                 &tmp,
                                  1.0f / scale_x, 1.0f / scale_y,
                                  0, 0);
 }

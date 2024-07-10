@@ -893,13 +893,10 @@ surface_preferred_buffer_transform (void              *data,
                                     uint32_t           transform)
 {
   GdkSurface *surface = GDK_SURFACE (data);
-  const char *transform_name[] = {
-    "normal", "90", "180", "270", "flipped", "flipped-90", "flipped-180", "flipped-270"
-  };
 
   GDK_DISPLAY_DEBUG (gdk_surface_get_display (surface), EVENTS,
                      "preferred buffer transform, surface %p transform %s",
-                     surface, transform_name[transform]);
+                     surface, gdk_dihedral_get_name ((GdkDihedral) transform));
 }
 
 static const struct wl_surface_listener surface_listener = {
