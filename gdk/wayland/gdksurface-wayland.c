@@ -756,6 +756,20 @@ gdk_wayland_surface_sync_buffer_scale (GdkSurface *surface)
 }
 
 static void
+gdk_wayland_surface_sync_buffer_transform (GdkSurface *surface)
+{
+  GdkWaylandSurface *self = GDK_WAYLAND_SURFACE (surface);
+
+  if (!self->buffer_transform_dirty)
+    return;
+
+  wl_surface_set_buffer_transform (self->display_server.wl_surface,
+                                   (int) gdk_surface_get_preferred_transform (surface));
+
+  self->buffer_transform_dirty = FALSE;
+}
+
+static void
 gdk_wayland_surface_sync_viewport (GdkSurface *surface)
 {
   GdkWaylandSurface *self = GDK_WAYLAND_SURFACE (surface);
@@ -780,6 +794,7 @@ gdk_wayland_surface_sync (GdkSurface *surface)
   gdk_wayland_surface_sync_opaque_region (surface);
   gdk_wayland_surface_sync_input_region (surface);
   gdk_wayland_surface_sync_buffer_scale (surface);
+  gdk_wayland_surface_sync_buffer_transform (surface);
   gdk_wayland_surface_sync_viewport (surface);
 }
 
@@ -792,6 +807,7 @@ gdk_wayland_surface_needs_commit (GdkSurface *surface)
          self->opaque_region_dirty ||
          self->input_region_dirty ||
          self->buffer_scale_dirty ||
+         self->buffer_transform_dirty ||
          self->viewport_dirty;
 }
 
@@ -892,6 +908,7 @@ surface_preferred_buffer_transform (void              *data,
                                     struct wl_surface *wl_surface,
                                     uint32_t           transform)
 {
+  GdkWaylandSurface *self = GDK_WAYLAND_SURFACE (data);
   GdkSurface *surface = GDK_SURFACE (data);
   const char *transform_name[] = {
     "normal", "90", "180", "270", "flipped", "flipped-90", "flipped-180", "flipped-270"
@@ -900,6 +917,9 @@ surface_preferred_buffer_transform (void              *data,
   GDK_DISPLAY_DEBUG (gdk_surface_get_display (surface), EVENTS,
                      "preferred buffer transform, surface %p transform %s",
                      surface, transform_name[transform]);
+
+  self->buffer_transform_dirty = TRUE;
+  gdk_surface_set_preferred_transform (surface, (GdkDihedral) transform);
 }
 
 static const struct wl_surface_listener surface_listener = {
