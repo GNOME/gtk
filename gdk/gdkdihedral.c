@@ -85,3 +85,24 @@ gdk_dihedral_invert (GdkDihedral self)
 
   return inverse[self];
 }
+
+gboolean
+gdk_dihedral_flips_xy (GdkDihedral dihedral)
+{
+  switch (dihedral)
+    {
+    case GDK_DIHEDRAL_90:
+    case GDK_DIHEDRAL_270:
+    case GDK_DIHEDRAL_FLIPPED_90:
+    case GDK_DIHEDRAL_FLIPPED_270:
+      return TRUE;
+    case GDK_DIHEDRAL_NORMAL:
+    case GDK_DIHEDRAL_180:
+    case GDK_DIHEDRAL_FLIPPED:
+    case GDK_DIHEDRAL_FLIPPED_180:
+      return FALSE;
+    default:
+      g_assert_not_reached ();
+    }
+}
+
