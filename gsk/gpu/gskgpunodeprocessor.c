@@ -488,11 +488,9 @@ gsk_gpu_node_processor_rect_is_integer (GskGpuNodeProcessor   *self,
     case GSK_FINE_TRANSFORM_CATEGORY_ANY:
     case GSK_FINE_TRANSFORM_CATEGORY_3D:
     case GSK_FINE_TRANSFORM_CATEGORY_2D:
-    case GSK_FINE_TRANSFORM_CATEGORY_2D_DIHEDRAL:
-      /* FIXME: We could try to handle 90° rotation here,
-       * but I don't think there's a use case */
       return FALSE;
 
+    case GSK_FINE_TRANSFORM_CATEGORY_2D_DIHEDRAL:
     case GSK_FINE_TRANSFORM_CATEGORY_2D_NEGATIVE_AFFINE:
     case GSK_FINE_TRANSFORM_CATEGORY_2D_AFFINE:
     case GSK_FINE_TRANSFORM_CATEGORY_2D_TRANSLATE:
