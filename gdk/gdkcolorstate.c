@@ -143,6 +143,32 @@ gdk_color_state_get_oklch (void)
 }
 
 /**
+ * gdk_color_state_get_rec2020:
+ *
+ * Returns the color state object representing the rec2020 color space.
+ *
+ * Since: 4.16
+ */
+GdkColorState *
+gdk_color_state_get_rec2020 (void)
+{
+  return GDK_COLOR_STATE_REC2020;
+}
+
+/**
+ * gdk_color_state_get_rec2020_linear:
+ *
+ * Returns the color state object representing the linear rec2020 color space.
+ *
+ * Since: 4.16
+ */
+GdkColorState *
+gdk_color_state_get_rec2020_linear (void)
+{
+  return GDK_COLOR_STATE_REC2020_LINEAR;
+}
+
+/**
  * gdk_color_state_equal:
  * @self: a `GdkColorState`
  * @other: another `GdkColorStatee`
@@ -415,6 +441,53 @@ gdk_default_xyz_to_oklab (GdkColorState  *self,
     }
 }
 
+static inline float
+rec2020_eotf (float v)
+{
+  float alpha = 1.09929682680944;
+  float beta = 0.018053968510807;
+
+  int sign = v < 0 ? -1 : 1;
+  float abs = fabsf (v);
+
+  if (abs < beta * 4.5 )
+    return v/ 4.5;
+  else
+    return sign * powf ((abs + alpha - 1) / alpha, 1.0 / 0.45);
+}
+
+static inline float
+rec2020_oetf (float v)
+{
+  float alpha = 1.09929682680944;
+  float beta = 0.018053968510807;
+  int sign = v < 0 ? -1 : 1;
+  float abs = fabsf (v);
+
+  if (abs > beta)
+    return sign * (alpha * powf (abs, 0.45) - (alpha - 1));
+  else
+    return 4.5 * v;
+}
+
+COORDINATE_TRANSFORM(gdk_default_rec2020_to_rec2020_linear, rec2020_eotf)
+COORDINATE_TRANSFORM(gdk_default_rec2020_linear_to_rec2020, rec2020_oetf)
+
+static const float rec2020_linear_to_xyz[3][3] = {
+  { (63426534.0 / 99577255.0),  (20160776.0 / 139408157.0),  (47086771.0 / 278816314.0) },
+  { (26158966.0 / 99577255.0), (472592308.0 / 697040785.0),   (8267143.0 / 139408157.0) },
+  {  (      0   /        1),    (19567812.0 / 697040785.0), (295819943.0 / 278816314.0) },
+};
+
+static const float xyz_to_rec2020_linear[3][3] = {
+  {   (30757411.0 / 17917100.0), - (6372589.0 / 17917100.0), - (4539589.0 / 17917100.0) },
+  { - (19765991.0 / 29648200.0),  (47925759.0 / 29648200.0),    (467509.0 / 29648200.0) },
+  {     (792561.0 / 44930125.0), - (1921689.0 / 44930125.0),  (42328811.0 / 44930125.0) },
+};
+
+LINEAR_TRANSFORM(gdk_default_rec2020_linear_to_xyz, rec2020_linear_to_xyz)
+LINEAR_TRANSFORM(gdk_default_xyz_to_rec2020_linear, xyz_to_rec2020_linear)
+
 #define CONCAT(name, f1, f2) \
 static void \
 name (GdkColorState  *self, \
@@ -429,6 +502,8 @@ CONCAT(gdk_default_xyz_to_srgb, gdk_default_xyz_to_srgb_linear, gdk_default_srgb
 CONCAT(gdk_default_srgb_to_xyz, gdk_default_srgb_to_srgb_linear, gdk_default_srgb_linear_to_xyz);
 CONCAT(gdk_default_oklch_to_xyz, gdk_default_oklch_to_oklab, gdk_default_oklab_to_xyz);
 CONCAT(gdk_default_xyz_to_oklch, gdk_default_xyz_to_oklab, gdk_default_oklab_to_oklch);
+CONCAT(gdk_default_rec2020_to_xyz, gdk_default_rec2020_to_rec2020_linear, gdk_default_rec2020_linear_to_xyz);
+CONCAT(gdk_default_xyz_to_rec2020, gdk_default_xyz_to_rec2020_linear, gdk_default_rec2020_linear_to_rec2020);
 
 /* }}} */
 
@@ -484,6 +559,8 @@ GdkDefaultColorState gdk_default_color_states[] = {
       [GDK_COLOR_STATE_ID_SRGB_LINEAR] = gdk_default_xyz_to_srgb_linear,
       [GDK_COLOR_STATE_ID_OKLAB] = gdk_default_xyz_to_oklab,
       [GDK_COLOR_STATE_ID_OKLCH] = gdk_default_xyz_to_oklch,
+      [GDK_COLOR_STATE_ID_REC2020] = gdk_default_xyz_to_rec2020,
+      [GDK_COLOR_STATE_ID_REC2020_LINEAR] = gdk_default_xyz_to_rec2020_linear,
     },
   },
   [GDK_COLOR_STATE_ID_OKLAB] = {
@@ -510,6 +587,32 @@ GdkDefaultColorState gdk_default_color_states[] = {
     .no_srgb = NULL,
     .convert_to = {
       [GDK_COLOR_STATE_ID_XYZ] = gdk_default_oklch_to_xyz,
+    },
+  },
+  [GDK_COLOR_STATE_ID_REC2020] = {
+    .parent = {
+      .klass = &GDK_DEFAULT_COLOR_STATE_CLASS,
+      .ref_count = 0,
+      .depth = GDK_MEMORY_FLOAT16,
+      .rendering_color_state = GDK_COLOR_STATE_REC2020_LINEAR,
+    },
+    .name = "rec2020",
+    .no_srgb = NULL,
+    .convert_to = {
+      [GDK_COLOR_STATE_ID_XYZ] = gdk_default_rec2020_to_xyz,
+    },
+  },
+  [GDK_COLOR_STATE_ID_REC2020_LINEAR] = {
+    .parent = {
+      .klass = &GDK_DEFAULT_COLOR_STATE_CLASS,
+      .ref_count = 0,
+      .depth = GDK_MEMORY_FLOAT16,
+      .rendering_color_state = GDK_COLOR_STATE_REC2020_LINEAR,
+    },
+    .name = "rec2020-linear",
+    .no_srgb = NULL,
+    .convert_to = {
+      [GDK_COLOR_STATE_ID_XYZ] = gdk_default_rec2020_linear_to_xyz,
     },
   },
 };

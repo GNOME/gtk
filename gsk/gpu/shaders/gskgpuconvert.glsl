@@ -153,12 +153,81 @@ xyz_to_oklab (vec4 color)
   return vec4 (lab, color.a);
 }
 
+float
+rec2020_eotf (float v)
+{
+  float alpha = 1.09929682680944;
+  float beta = 0.018053968510807;
+
+  float sign = v < 0.0 ? -1.0 : 1.0;
+  float vabs = abs (v);
+
+  if (vabs < beta * 4.5)
+    return v / 4.5;
+  else
+    return sign * pow ((vabs + alpha - 1.0) / alpha, 1.0 / 0.45);
+}
+
+float
+rec2020_oetf (float v)
+{
+  float alpha = 1.09929682680944;
+  float beta = 0.018053968510807;
+  float sign = v < 0.0 ? -1.0 : 1.0;
+  float vabs = abs (v);
+
+  if (vabs > beta)
+    return sign * (alpha * pow (vabs, 0.45) - (alpha - 1.0));
+  else
+    return 4.5 * v;
+}
+
+vec4
+rec2020_to_rec2020_linear (vec4 color)
+{
+  return vec4 (rec2020_eotf (color.r),
+               rec2020_eotf (color.g),
+               rec2020_eotf (color.b),
+               color.a);
+}
+
+vec4
+rec2020_linear_to_rec2020 (vec4 color)
+{
+  return vec4 (rec2020_oetf (color.r),
+               rec2020_oetf (color.g),
+               rec2020_oetf (color.b),
+               color.a);
+}
+
+vec4
+rec2020_linear_to_xyz (vec4 color)
+{
+  mat3 m = mat3 (63426534.0 / 99577255.0,  20160776.0 / 139408157.0,  47086771.0 / 278816314.0,
+                 26158966.0 / 99577255.0, 472592308.0 / 697040785.0,   8267143.0 / 139408157.0,
+                        0.0,               19567812.0 / 697040785.0, 295819943.0 / 278816314.0);
+
+  return vec4 (color.rgb * m, color.a);
+}
+
+vec4
+xyz_to_rec2020_linear (vec4 color)
+{
+  mat3 m = mat3 ( 30757411.0 / 17917100.0, -6372589.0 / 17917100.0,  -4539589.0 / 17917100.0,
+                 -19765991.0 / 29648200.0, 47925759.0 / 29648200.0,    467509.0 / 29648200.0,
+                    792561.0 / 44930125.0, -1921689.0 / 44930125.0,  42328811.0 / 44930125.0);
+
+  return vec4 (color.xyz * m, color.z);
+}
+
 #define CONCAT(f, f1, f2) vec4 f(vec4 color) { return f2(f1(color)); }
 
 CONCAT(srgb_to_xyz, srgb_to_srgb_linear, srgb_linear_to_xyz)
 CONCAT(xyz_to_srgb, xyz_to_srgb_linear, srgb_linear_to_srgb)
 CONCAT(oklch_to_xyz, oklch_to_oklab, oklab_to_xyz)
 CONCAT(xyz_to_oklch, xyz_to_oklab, oklab_to_oklch)
+CONCAT(rec2020_to_xyz, rec2020_to_rec2020_linear, rec2020_linear_to_xyz)
+CONCAT(xyz_to_rec2020, xyz_to_rec2020_linear, rec2020_linear_to_rec2020)
 
 #define PAIR(_from_cs, _to_cs) ((_from_cs) << 16 | (_to_cs))
 
@@ -188,6 +257,12 @@ do_conversion (vec4     color,
     case PAIR (GDK_COLOR_STATE_ID_OKLCH, GDK_COLOR_STATE_ID_XYZ):
       result = oklch_to_xyz (color);
       break;
+    case PAIR (GDK_COLOR_STATE_ID_REC2020, GDK_COLOR_STATE_ID_XYZ):
+      result = rec2020_to_xyz (color);
+      break;
+    case PAIR (GDK_COLOR_STATE_ID_REC2020_LINEAR, GDK_COLOR_STATE_ID_XYZ):
+      result = rec2020_linear_to_xyz (color);
+      break;
     case PAIR (GDK_COLOR_STATE_ID_XYZ, GDK_COLOR_STATE_ID_SRGB_LINEAR):
       result = xyz_to_srgb_linear (color);
       break;
@@ -199,6 +274,12 @@ do_conversion (vec4     color,
       break;
     case PAIR (GDK_COLOR_STATE_ID_XYZ, GDK_COLOR_STATE_ID_OKLCH):
       result = xyz_to_oklch (color);
+      break;
+    case PAIR (GDK_COLOR_STATE_ID_XYZ, GDK_COLOR_STATE_ID_REC2020):
+      result = xyz_to_rec2020 (color);
+      break;
+    case PAIR (GDK_COLOR_STATE_ID_XYZ, GDK_COLOR_STATE_ID_REC2020_LINEAR):
+      result = xyz_to_rec2020_linear (color);
       break;
 
     default:

@@ -50,7 +50,7 @@ image_distance (const guchar *data,
 static void
 test_convert (gconstpointer testdata)
 {
-  GdkColorState *cs;
+  GdkColorState *cs = (GdkColorState *) testdata;
   char *path;
   GdkTexture *texture;
   GdkTextureDownloader *downloader;
@@ -61,8 +61,6 @@ test_convert (gconstpointer testdata)
   gsize width, height;
   gsize size;
   gsize stride;
-
-  cs = gdk_color_state_get_by_id ((GdkColorStateId) GPOINTER_TO_UINT (testdata));
 
   path = g_test_build_filename (G_TEST_DIST, "image-data", "image.png", NULL);
 
@@ -110,10 +108,12 @@ main (int argc, char *argv[])
   (g_test_init) (&argc, &argv, NULL);
 
   g_test_add_func ("/colorstate/srgb", test_srgb);
-  g_test_add_data_func ("/colorstate/convert/srgb<->srgb-linear", GUINT_TO_POINTER (GDK_COLOR_STATE_ID_SRGB_LINEAR), test_convert);
-  g_test_add_data_func ("/colorstate/convert/srgb<->xyz", GUINT_TO_POINTER (GDK_COLOR_STATE_ID_XYZ), test_convert);
-  g_test_add_data_func ("/colorstate/convert/srgb<->oklab", GUINT_TO_POINTER (GDK_COLOR_STATE_ID_OKLAB), test_convert);
-  g_test_add_data_func ("/colorstate/convert/srgb<->oklch", GUINT_TO_POINTER (GDK_COLOR_STATE_ID_OKLCH), test_convert);
+  g_test_add_data_func ("/colorstate/convert/srgb<->srgb-linear", GDK_COLOR_STATE_SRGB_LINEAR, test_convert);
+  g_test_add_data_func ("/colorstate/convert/srgb<->xyz", GDK_COLOR_STATE_XYZ, test_convert);
+  g_test_add_data_func ("/colorstate/convert/srgb<->oklab", GDK_COLOR_STATE_OKLAB, test_convert);
+  g_test_add_data_func ("/colorstate/convert/srgb<->oklch", GDK_COLOR_STATE_OKLCH, test_convert);
+  g_test_add_data_func ("/colorstate/convert/srgb<->rec2020", GDK_COLOR_STATE_REC2020, test_convert);
+  g_test_add_data_func ("/colorstate/convert/srgb<->rec2020-linear", GDK_COLOR_STATE_REC2020_LINEAR, test_convert);
 
   return g_test_run ();
 }
