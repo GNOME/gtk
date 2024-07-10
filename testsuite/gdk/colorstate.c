@@ -112,6 +112,8 @@ main (int argc, char *argv[])
   g_test_add_func ("/colorstate/srgb", test_srgb);
   g_test_add_data_func ("/colorstate/convert/srgb<->srgb-linear", GUINT_TO_POINTER (GDK_COLOR_STATE_ID_SRGB_LINEAR), test_convert);
   g_test_add_data_func ("/colorstate/convert/srgb<->xyz", GUINT_TO_POINTER (GDK_COLOR_STATE_ID_XYZ), test_convert);
+  g_test_add_data_func ("/colorstate/convert/srgb<->oklab", GUINT_TO_POINTER (GDK_COLOR_STATE_ID_OKLAB), test_convert);
+  g_test_add_data_func ("/colorstate/convert/srgb<->oklch", GUINT_TO_POINTER (GDK_COLOR_STATE_ID_OKLCH), test_convert);
 
   return g_test_run ();
 }

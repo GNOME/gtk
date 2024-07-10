@@ -117,6 +117,32 @@ gdk_color_state_get_xyz (void)
 }
 
 /**
+ * gdk_color_state_get_oklab:
+ *
+ * Returns the color state object representing the OKLAB color space.
+ *
+ * Since: 4.16
+ */
+GdkColorState *
+gdk_color_state_get_oklab (void)
+{
+  return GDK_COLOR_STATE_OKLAB;
+}
+
+/**
+ * gdk_color_state_get_oklch:
+ *
+ * Returns the color state object representing the OKLCH color space.
+ *
+ * Since: 4.16
+ */
+GdkColorState *
+gdk_color_state_get_oklch (void)
+{
+  return GDK_COLOR_STATE_OKLCH;
+}
+
+/**
  * gdk_color_state_equal:
  * @self: a `GdkColorState`
  * @other: another `GdkColorStatee`
@@ -141,7 +167,6 @@ gboolean
 /* }}} */
 /* {{{ Default implementation */
 /* {{{ Vfuncs */
-
 static gboolean
 gdk_default_color_state_equal (GdkColorState *self,
                                GdkColorState *other)
@@ -258,6 +283,138 @@ static const float xyz_to_srgb_linear[3][3] = {
 LINEAR_TRANSFORM(gdk_default_xyz_to_srgb_linear, xyz_to_srgb_linear)
 LINEAR_TRANSFORM(gdk_default_srgb_linear_to_xyz, srgb_linear_to_xyz)
 
+#define DEG_TO_RAD(x) ((x) * G_PI / 180)
+#define RAD_TO_DEG(x) ((x) * 180 / G_PI)
+
+static inline void
+_sincosf (float  angle,
+          float *out_s,
+          float *out_c)
+{
+#ifdef HAVE_SINCOSF
+  sincosf (angle, out_s, out_c);
+#else
+  *out_s = sinf (angle);
+  *out_c = cosf (angle);
+#endif
+}
+
+static void
+gdk_default_oklab_to_oklch (GdkColorState  *self,
+                            float         (*values)[4],
+                            gsize           n_values)
+{
+  for (gsize i = 0; i < n_values; i++)
+    {
+      float a = values[i][1];
+      float b = values[i][2];
+      float C, H;
+
+      C = hypotf (a, b);
+      H = RAD_TO_DEG (atan2 (b, a));
+      H = fmod (H, 360);
+      if (H < 0)
+        H += 360;
+
+      values[i][1] = C;
+      values[i][2] = H;
+    }
+}
+
+static void
+gdk_default_oklch_to_oklab (GdkColorState  *self,
+                            float         (*values)[4],
+                            gsize           n_values)
+{
+  for (gsize i = 0; i < n_values; i++)
+    {
+      float C = values[i][1];
+      float H = values[i][2];
+      float a, b;
+
+      _sincosf (DEG_TO_RAD (H), &b, &a);
+      a *= C;
+      b *= C;
+
+      values[i][1] = a;
+      values[i][2] = b;
+    }
+}
+
+static const float oklab_to_lms[3][3] = {
+  { 1,   0.3963377774,   0.2158037573 },
+  { 1, - 0.1055613458, - 0.0638541728 },
+  { 1, - 0.0894841775, - 1.2914855480 },
+};
+
+static const float lms_to_srgb_linear[3][3] = {
+  {   4.0767416621, - 3.3077115913,   0.2309699292 },
+  { - 1.2684380046,   2.6097574011, - 0.3413193965 },
+  { - 0.0041960863, - 0.7034186147,   1.7076147010 },
+};
+
+#define SUM(a, b, i, j) ((a)[i][0] * (b)[0][j] + (a)[i][1] * (b)[1][j] + (a)[i][2] * (b)[2][j])
+#define MATMUL(name, a, b) \
+static const float name[3][3] = { \
+  { SUM((a),(b),0,0), SUM((a),(b),0,1), SUM((a),(b),0,2) }, \
+  { SUM((a),(b),1,0), SUM((a),(b),1,1), SUM((a),(b),1,2) }, \
+  { SUM((a),(b),2,0), SUM((a),(b),2,1), SUM((a),(b),2,2) }, \
+};
+
+MATMUL(lms_to_xyz, lms_to_srgb_linear, srgb_linear_to_xyz)
+
+static void
+gdk_default_oklab_to_xyz (GdkColorState  *self,
+                          float         (*values)[4],
+                          gsize           n_values)
+{
+  for (gsize i = 0; i < n_values; i++)
+    {
+      float lms[3];
+
+      vec3_multiply (oklab_to_lms, values[i], lms);
+
+      lms[0] = powf (lms[0], 3);
+      lms[1] = powf (lms[1], 3);
+      lms[2] = powf (lms[2], 3);
+
+      vec3_multiply (lms_to_xyz, lms, values[i]);
+    }
+}
+
+static const float srgb_linear_to_lms[3][3] = {
+  { 0.4122214708, 0.5363325363, 0.0514459929 },
+  { 0.2119034982, 0.6806995451, 0.1073969566 },
+  { 0.0883024619, 0.2817188376, 0.6299787005 },
+};
+
+static const float lms_to_oklab[3][3] = {
+  { 0.2104542553,   0.7936177850, - 0.0040720468 },
+  { 1.9779984951, - 2.4285922050,   0.4505937099 },
+  { 0.0259040371,   0.7827717662, - 0.8086757660 },
+};
+
+MATMUL(xyz_to_lms, xyz_to_srgb_linear, srgb_linear_to_lms)
+
+static void
+gdk_default_xyz_to_oklab (GdkColorState  *self,
+                          float         (*values)[4],
+                          gsize           n_values)
+{
+  for (gsize i = 0; i < n_values; i++)
+    {
+      float lms[3];
+
+      vec3_multiply (xyz_to_lms, values[i], lms);
+
+      lms[0] = cbrtf (lms[0]);
+      lms[1] = cbrtf (lms[1]);
+      lms[2] = cbrtf (lms[2]);
+
+      vec3_multiply (lms_to_oklab, lms, values[i]);
+    }
+}
+
 #define CONCAT(name, f1, f2) \
 static void \
 name (GdkColorState  *self, \
@@ -270,6 +427,8 @@ name (GdkColorState  *self, \
 
 CONCAT(gdk_default_xyz_to_srgb, gdk_default_xyz_to_srgb_linear, gdk_default_srgb_linear_to_srgb);
 CONCAT(gdk_default_srgb_to_xyz, gdk_default_srgb_to_srgb_linear, gdk_default_srgb_linear_to_xyz);
+CONCAT(gdk_default_oklch_to_xyz, gdk_default_oklch_to_oklab, gdk_default_oklab_to_xyz);
+CONCAT(gdk_default_xyz_to_oklch, gdk_default_xyz_to_oklab, gdk_default_oklab_to_oklch);
 
 /* }}} */
 
@@ -323,6 +482,34 @@ GdkDefaultColorState gdk_default_color_states[] = {
     .convert_to = {
       [GDK_COLOR_STATE_ID_SRGB] = gdk_default_xyz_to_srgb,
       [GDK_COLOR_STATE_ID_SRGB_LINEAR] = gdk_default_xyz_to_srgb_linear,
+      [GDK_COLOR_STATE_ID_OKLAB] = gdk_default_xyz_to_oklab,
+      [GDK_COLOR_STATE_ID_OKLCH] = gdk_default_xyz_to_oklch,
+    },
+  },
+  [GDK_COLOR_STATE_ID_OKLAB] = {
+    .parent = {
+      .klass = &GDK_DEFAULT_COLOR_STATE_CLASS,
+      .ref_count = 0,
+      .depth = GDK_MEMORY_FLOAT16,
+      .rendering_color_state = GDK_COLOR_STATE_SRGB_LINEAR,
+    },
+    .name = "oklab",
+    .no_srgb = NULL,
+    .convert_to = {
+      [GDK_COLOR_STATE_ID_XYZ] = gdk_default_oklab_to_xyz,
+    },
+  },
+  [GDK_COLOR_STATE_ID_OKLCH] = {
+    .parent = {
+      .klass = &GDK_DEFAULT_COLOR_STATE_CLASS,
+      .ref_count = 0,
+      .depth = GDK_MEMORY_FLOAT16,
+      .rendering_color_state = GDK_COLOR_STATE_SRGB_LINEAR,
+    },
+    .name = "oklch",
+    .no_srgb = NULL,
+    .convert_to = {
+      [GDK_COLOR_STATE_ID_XYZ] = gdk_default_oklch_to_xyz,
     },
   },
 };
