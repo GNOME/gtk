@@ -247,6 +247,14 @@ gdk_texture_transform_to_wl (GdkDihedral transform)
   return (enum wl_output_transform) transform;
 }
 
+static inline const char *
+transform_name (GdkDihedral transform)
+{
+  const char *name[] = { "normal", "90", "180", "270", "flipped", "flipped 90", "flipped 180", "flipped 270" };
+
+  return name[transform];
+}
+
 static inline GdkDihedral
 wl_output_transform_to_gdk (enum wl_output_transform transform)
 {
@@ -503,7 +511,7 @@ gdk_wayland_subsurface_attach (GdkSubsurface         *sub,
                 }
 
               GDK_DISPLAY_DEBUG (gdk_surface_get_display (sub->parent), OFFLOAD,
-                                 "[%p] %s Attaching texture (%dx%d) at %d %d %d %d",
+                                 "[%p] %s Attaching texture (%dx%d) at %d %d %d %d%s%s%s",
                                  self,
                                  will_be_above
                                    ? (has_background ? "▲" : "△")
@@ -511,7 +519,11 @@ gdk_wayland_subsurface_attach (GdkSubsurface         *sub,
                                  gdk_texture_get_width (texture),
                                  gdk_texture_get_height (texture),
                                  self->dest.x, self->dest.y,
-                                 self->dest.width, self->dest.height);
+                                 self->dest.width, self->dest.height,
+                                 transform != GDK_DIHEDRAL_NORMAL ? " (" : "",
+                                 transform != GDK_DIHEDRAL_NORMAL ? transform_name (transform): "",
+                                 transform != GDK_DIHEDRAL_NORMAL ? " )" : ""
+                                 );
               result = TRUE;
             }
           else
