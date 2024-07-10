@@ -43,5 +43,7 @@ GdkDihedral     gdk_dihedral_combine                            (GdkDihedral    
 GdkDihedral     gdk_dihedral_invert                             (GdkDihedral            self);
 gboolean        gdk_dihedral_swaps_xy                           (GdkDihedral            self);
 
+const char *    gdk_dihedral_get_name                           (GdkDihedral            self);
+
 G_END_DECLS
 

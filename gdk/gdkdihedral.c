@@ -70,3 +70,13 @@ gdk_dihedral_swaps_xy (GdkDihedral self)
 {
   return (self & 1) ? TRUE : FALSE;
 }
+
+const char *
+gdk_dihedral_get_name (GdkDihedral self)
+{
+  const char *name[] = {
+    "normal", "90", "180", "270", "flipped", "flipped-90", "flipped-180", "flipped-270"
+  };
+
+  return name[self];
+}
