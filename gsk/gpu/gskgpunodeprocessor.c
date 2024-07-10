@@ -1419,6 +1419,50 @@ gsk_gpu_node_processor_add_first_transform_node (GskGpuNodeProcessor         *se
 
     case GSK_FINE_TRANSFORM_CATEGORY_2D_NEGATIVE_AFFINE:
     case GSK_FINE_TRANSFORM_CATEGORY_2D_DIHEDRAL:
+      {
+        GdkDihedral dihedral, inverted;
+        float xx, xy, yx, yy, old_scale_x, old_scale_y;
+        GskTransform *old_modelview;
+
+        gsk_gpu_clip_init_copy (&old_clip, &self->clip);
+        old_offset = self->offset;
+        old_scale = self->scale;
+        old_modelview = gsk_transform_ref (self->modelview);
+
+        gsk_transform_to_dihedral (transform, &dihedral, &scale_x, &scale_y, &dx, &dy);
+        inverted = gdk_dihedral_invert (dihedral);
+        gdk_dihedral_get_mat2 (inverted, &xx, &xy, &yx, &yy);
+        gsk_gpu_clip_scale (&self->clip, &old_clip, inverted, scale_x, scale_y);
+        self->offset.x = (self->offset.x + dx) / scale_x;
+        self->offset.y = (self->offset.y + dy) / scale_y;
+        self->offset = GRAPHENE_POINT_INIT (xx * self->offset.x + xy * self->offset.y,
+                                            yx * self->offset.x + yy * self->offset.y);
+        old_scale_x = graphene_vec2_get_x (&old_scale);
+        old_scale_y = graphene_vec2_get_y (&old_scale);
+        graphene_vec2_init (&self->scale,
+                            fabs (scale_x * (old_scale_x * xx + old_scale_y * yx)),
+                            fabs (scale_y * (old_scale_x * xy + old_scale_y * yy)));
+        self->modelview = gsk_transform_dihedral (self->modelview, dihedral);
+
+        self->pending_globals |= GSK_GPU_GLOBAL_MATRIX | GSK_GPU_GLOBAL_SCALE | GSK_GPU_GLOBAL_CLIP;
+
+        result = gsk_gpu_node_processor_add_first_node (self,
+                                                        target,
+                                                        clip,
+                                                        pass_type,
+                                                        gsk_transform_node_get_child (node));
+
+        self->offset = old_offset;
+        self->scale = old_scale;
+        gsk_gpu_clip_init_copy (&self->clip, &old_clip);
+        gsk_transform_unref (self->modelview);
+        self->modelview = old_modelview;
+
+        self->pending_globals |= GSK_GPU_GLOBAL_MATRIX | GSK_GPU_GLOBAL_SCALE | GSK_GPU_GLOBAL_CLIP;
+
+        return result;
+      }
+
     case GSK_FINE_TRANSFORM_CATEGORY_2D:
     case GSK_FINE_TRANSFORM_CATEGORY_UNKNOWN:
     case GSK_FINE_TRANSFORM_CATEGORY_ANY:
