@@ -65,3 +65,8 @@ gdk_dihedral_invert (GdkDihedral self)
   return ((4 - self) * (((self & 4) >> 1) + 1) & 3) | (self & 4);
 }
 
+gboolean
+gdk_dihedral_swaps_xy (GdkDihedral self)
+{
+  return (self & 1) ? TRUE : FALSE;
+}

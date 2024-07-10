@@ -64,12 +64,26 @@ test_inversions (void)
   g_assert_cmpint (gdk_dihedral_invert (GDK_DIHEDRAL_FLIPPED_270), ==, GDK_DIHEDRAL_FLIPPED_270);
 }
 
+static void
+test_swaps (void)
+{
+  g_assert_false (gdk_dihedral_swaps_xy (GDK_DIHEDRAL_NORMAL));
+  g_assert_true (gdk_dihedral_swaps_xy (GDK_DIHEDRAL_90));
+  g_assert_false (gdk_dihedral_swaps_xy (GDK_DIHEDRAL_180));
+  g_assert_true (gdk_dihedral_swaps_xy (GDK_DIHEDRAL_270));
+  g_assert_false (gdk_dihedral_swaps_xy (GDK_DIHEDRAL_FLIPPED));
+  g_assert_true (gdk_dihedral_swaps_xy (GDK_DIHEDRAL_FLIPPED_90));
+  g_assert_false (gdk_dihedral_swaps_xy (GDK_DIHEDRAL_FLIPPED_180));
+  g_assert_true (gdk_dihedral_swaps_xy (GDK_DIHEDRAL_FLIPPED_270));
+}
+
 int
 main (int argc, char *argv[])
 {
   gtk_test_init (&argc, &argv, NULL);
 
   g_test_add_func ("/dihedral/inversions", test_inversions);
+  g_test_add_func ("/dihedral/swaps", test_swaps);
   g_test_add_func ("/dihedral/combinations", test_combinations);
   g_test_add_func ("/dihedral/invariants", test_invariants);
 
