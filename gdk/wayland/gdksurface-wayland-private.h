@@ -59,6 +59,7 @@ struct _GdkWaylandSurface
   GdkFractionalScale scale;
   gboolean buffer_is_fractional;
   gboolean buffer_scale_dirty;
+  gboolean buffer_transform_dirty;
   gboolean viewport_dirty;
 
   int shadow_left;
