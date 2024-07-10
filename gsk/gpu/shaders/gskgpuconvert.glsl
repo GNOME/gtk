@@ -220,6 +220,51 @@ xyz_to_rec2020_linear (vec4 color)
   return vec4 (color.xyz * m, color.z);
 }
 
+float
+rec2100_pq_eotf (float v)
+{
+  float ninv = 16384.0 / 2610.0;
+  float minv = 32.0 / 2523.0;
+  float c1 = 3424.0 / 4096.0;
+  float c2 = 2413.0 / 128.0;
+  float c3 = 2392.0 / 128.0;
+
+  float x = pow (max ((pow (v, minv) - c1), 0.0) / (c2 - (c3 * (pow (v, minv)))), ninv);
+
+  return x * 10000.0 / 203.0;
+}
+
+float
+rec2100_pq_oetf (float v)
+{
+  float x = v * 203.0 / 10000.0;
+  float n = 2610.0 / 16384.0;
+  float m = 2523.0 / 32.0;
+  float c1 = 3424.0 / 4096.0;
+  float c2 = 2413.0 / 128.0;
+  float c3 = 2392.0 / 128.0;
+
+  return pow (((c1 + (c2 * pow (x, n))) / (1.0 + (c3 * pow (x, n)))), m);
+}
+
+vec4
+rec2100_pq_to_rec2100_linear (vec4 color)
+{
+  return vec4 (rec2100_pq_eotf (color.r),
+               rec2100_pq_eotf (color.g),
+               rec2100_pq_eotf (color.b),
+               color.a);
+}
+
+vec4
+rec2100_linear_to_rec2100_pq (vec4 color)
+{
+  return vec4 (rec2100_pq_oetf (color.r),
+               rec2100_pq_oetf (color.g),
+               rec2100_pq_oetf (color.b),
+               color.a);
+}
+
 #define CONCAT(f, f1, f2) vec4 f(vec4 color) { return f2(f1(color)); }
 
 CONCAT(srgb_to_xyz, srgb_to_srgb_linear, srgb_linear_to_xyz)
@@ -228,6 +273,8 @@ CONCAT(oklch_to_xyz, oklch_to_oklab, oklab_to_xyz)
 CONCAT(xyz_to_oklch, xyz_to_oklab, oklab_to_oklch)
 CONCAT(rec2020_to_xyz, rec2020_to_rec2020_linear, rec2020_linear_to_xyz)
 CONCAT(xyz_to_rec2020, xyz_to_rec2020_linear, rec2020_linear_to_rec2020)
+CONCAT(rec2100_pq_to_xyz, rec2100_pq_to_rec2100_linear, rec2020_linear_to_xyz)
+CONCAT(xyz_to_rec2100_pq, xyz_to_rec2020_linear, rec2100_linear_to_rec2100_pq)
 
 #define PAIR(_from_cs, _to_cs) ((_from_cs) << 16 | (_to_cs))
 
@@ -245,6 +292,7 @@ do_conversion (vec4     color,
     case PAIR (GDK_COLOR_STATE_ID_SRGB_LINEAR, GDK_COLOR_STATE_ID_SRGB):
       result = srgb_linear_to_srgb (color);
       break;
+
     case PAIR (GDK_COLOR_STATE_ID_SRGB_LINEAR, GDK_COLOR_STATE_ID_XYZ):
       result = srgb_linear_to_xyz (color);
       break;
@@ -263,6 +311,13 @@ do_conversion (vec4     color,
     case PAIR (GDK_COLOR_STATE_ID_REC2020_LINEAR, GDK_COLOR_STATE_ID_XYZ):
       result = rec2020_linear_to_xyz (color);
       break;
+    case PAIR (GDK_COLOR_STATE_ID_REC2100_PQ, GDK_COLOR_STATE_ID_XYZ):
+      result = rec2100_pq_to_xyz (color);
+      break;
+    case PAIR (GDK_COLOR_STATE_ID_REC2100_LINEAR, GDK_COLOR_STATE_ID_XYZ):
+      result = rec2020_linear_to_xyz (color);
+      break;
+
     case PAIR (GDK_COLOR_STATE_ID_XYZ, GDK_COLOR_STATE_ID_SRGB_LINEAR):
       result = xyz_to_srgb_linear (color);
       break;
@@ -279,6 +334,12 @@ do_conversion (vec4     color,
       result = xyz_to_rec2020 (color);
       break;
     case PAIR (GDK_COLOR_STATE_ID_XYZ, GDK_COLOR_STATE_ID_REC2020_LINEAR):
+      result = xyz_to_rec2020_linear (color);
+      break;
+    case PAIR (GDK_COLOR_STATE_ID_XYZ, GDK_COLOR_STATE_ID_REC2100_PQ):
+      result = xyz_to_rec2100_pq (color);
+      break;
+    case PAIR (GDK_COLOR_STATE_ID_XYZ, GDK_COLOR_STATE_ID_REC2100_LINEAR):
       result = xyz_to_rec2020_linear (color);
       break;
 

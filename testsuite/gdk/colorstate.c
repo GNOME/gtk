@@ -114,6 +114,8 @@ main (int argc, char *argv[])
   g_test_add_data_func ("/colorstate/convert/srgb<->oklch", GDK_COLOR_STATE_OKLCH, test_convert);
   g_test_add_data_func ("/colorstate/convert/srgb<->rec2020", GDK_COLOR_STATE_REC2020, test_convert);
   g_test_add_data_func ("/colorstate/convert/srgb<->rec2020-linear", GDK_COLOR_STATE_REC2020_LINEAR, test_convert);
+  g_test_add_data_func ("/colorstate/convert/srgb<->rec2100-pq", GDK_COLOR_STATE_REC2100_PQ, test_convert);
+  g_test_add_data_func ("/colorstate/convert/srgb<->rec2100-linear", GDK_COLOR_STATE_REC2100_LINEAR, test_convert);
 
   return g_test_run ();
 }
