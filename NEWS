@@ -1,3 +1,14 @@
+Overview of Changes in GTK+ 3.24.43, 10-07-2024
+===============================================
+
+* Stop looking for modules in cwd (CVE-2024-6655)
+
+* Translation updates:
+ Czech
+ Hungarian
+ Persian
+ 
+
 Overview of Changes in GTK+ 3.24.42, 15-05-2024
 ===============================================
 
