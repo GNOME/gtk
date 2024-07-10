@@ -893,6 +893,7 @@ surface_preferred_buffer_transform (void              *data,
                                     uint32_t           transform)
 {
   GdkSurface *surface = GDK_SURFACE (data);
+  GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
   const char *transform_name[] = {
     "normal", "90", "180", "270", "flipped", "flipped-90", "flipped-180", "flipped-270"
   };
@@ -900,6 +901,8 @@ surface_preferred_buffer_transform (void              *data,
   GDK_DISPLAY_DEBUG (gdk_surface_get_display (surface), EVENTS,
                      "preferred buffer transform, surface %p transform %s",
                      surface, transform_name[transform]);
+
+  impl->preferred_transform = transform;
 }
 
 static const struct wl_surface_listener surface_listener = {
@@ -1430,6 +1433,14 @@ gdk_wayland_surface_ensure_wl_egl_window (GdkSurface *surface)
         wl_egl_window_create (impl->display_server.wl_surface, width, height);
       gdk_surface_set_egl_native_window (surface, impl->display_server.egl_window);
     }
+}
+
+GdkDihedral
+gdk_wayland_surface_get_preferred_transform (GdkSurface *surface)
+{
+  GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
+
+  return (GdkDihedral) impl->preferred_transform;
 }
 
 /* }}} */

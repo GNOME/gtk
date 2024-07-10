@@ -18,6 +18,7 @@
 #pragma once
 
 #include "gdkprivate-wayland.h"
+#include "gdkdihedralprivate.h"
 
 typedef enum _PopupState
 {
@@ -89,6 +90,8 @@ struct _GdkWaylandSurface
   uint32_t last_configure_serial;
 
   int state_freeze_count;
+
+  uint32_t preferred_transform;
 };
 
 typedef struct _GdkWaylandSurfaceClass GdkWaylandSurfaceClass;
@@ -128,6 +131,7 @@ void gdk_wayland_surface_thaw_state   (GdkSurface *surface);
 void gdk_wayland_surface_frame_callback (GdkSurface *surface,
                                          uint32_t    time);
 
+GdkDihedral gdk_wayland_surface_get_preferred_transform (GdkSurface *surface);
 
 #define GDK_TYPE_WAYLAND_DRAG_SURFACE (gdk_wayland_drag_surface_get_type ())
 GType gdk_wayland_drag_surface_get_type (void) G_GNUC_CONST;
