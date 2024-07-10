@@ -331,7 +331,7 @@ gsk_rounded_rect_dihedral (GskRoundedRect       *dest,
 
   gsk_rect_dihedral (&src->bounds, dihedral, &dest->bounds);
 
-  if (dihedral & 1)
+  if (gdk_dihedral_swaps_xy (dihedral))
     {
       for (i = 0; i < 4; i++)
         {
