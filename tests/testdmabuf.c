@@ -752,6 +752,7 @@ main (int argc, char *argv[])
   gboolean premultiplied = TRUE;
   gboolean decorated = TRUE;
   gboolean fullscreen = FALSE;
+  float angle = 0;
   unsigned int i;
   const char *save_filename = NULL;
   GtkEventController *controller;
@@ -773,6 +774,8 @@ main (int argc, char *argv[])
         fullscreen = TRUE;
       else if (g_str_equal (argv[i], "--unpremultiplied"))
         premultiplied = FALSE;
+      else if (g_str_equal (argv[i], "--rotate"))
+        angle = 90;
       else if (g_str_equal (argv[i], "--download-to"))
         {
           i++;
@@ -841,7 +844,14 @@ main (int argc, char *argv[])
                                    &GRAPHENE_RECT_INIT (padding[0],
                                                         padding[2],
                                                         gdk_texture_get_width (texture) - padding[0] - padding[1],
-                                                        gdk_texture_get_height (texture) - padding[2] - padding[3]));
+                                                        gdk_texture_get_height (texture) - padding[2] - padding[3]),
+                                   0);
+    }
+  else if (angle != 0.f)
+    {
+      paintable = gtk_clipper_new (GDK_PAINTABLE (texture),
+                                   &GRAPHENE_RECT_INIT (0, 0, gdk_texture_get_width (texture), gdk_texture_get_height (texture)),
+                                   angle);
     }
   else
     paintable = GDK_PAINTABLE (texture);

@@ -7,6 +7,7 @@ struct _GtkClipper
 
   GdkPaintable *paintable;
   graphene_rect_t clip;
+  float angle;
 };
 
 struct _GtkClipperClass
@@ -32,7 +33,18 @@ gtk_clipper_paintable_snapshot (GdkPaintable *paintable,
 
   gtk_snapshot_translate (snapshot, &GRAPHENE_POINT_INIT (- self->clip.origin.x * width / self->clip.size.width,
                                                           - self->clip.origin.y * height / self->clip.size.height));
-  gdk_paintable_snapshot (self->paintable, snapshot, width * sx, height * sy);
+
+  if (self->angle != 0.f)
+    {
+      gtk_snapshot_translate (snapshot, &GRAPHENE_POINT_INIT (width / 2, height / 2));
+      gtk_snapshot_rotate (snapshot, self->angle);
+      gtk_snapshot_translate (snapshot, &GRAPHENE_POINT_INIT (-height / 2, - width / 2));
+    }
+
+  if (self->angle == 90 || self->angle == 180)
+    gdk_paintable_snapshot (self->paintable, snapshot, height * sy, width * sx);
+  else
+    gdk_paintable_snapshot (self->paintable, snapshot, width * sx, height * sy);
   gtk_snapshot_pop (snapshot);
   gtk_snapshot_restore (snapshot);
 }
@@ -44,7 +56,7 @@ gtk_clipper_paintable_get_current_image (GdkPaintable *paintable)
   GdkPaintable *current_paintable, *current_self;
 
   current_paintable = gdk_paintable_get_current_image (self->paintable);
-  current_self = gtk_clipper_new (current_paintable, &self->clip);
+  current_self = gtk_clipper_new (current_paintable, &self->clip, self->angle);
   g_object_unref (current_paintable);
 
   return current_self;
@@ -63,7 +75,10 @@ gtk_clipper_paintable_get_intrinsic_width (GdkPaintable *paintable)
 {
   GtkClipper *self = GTK_CLIPPER (paintable);
 
-  return self->clip.size.width;
+  if (self->angle == 90 || self->angle == 270)
+    return self->clip.size.height;
+  else
+    return self->clip.size.width;
 }
 
 static int
@@ -71,14 +86,20 @@ gtk_clipper_paintable_get_intrinsic_height (GdkPaintable *paintable)
 {
   GtkClipper *self = GTK_CLIPPER (paintable);
 
-  return self->clip.size.height;
+  if (self->angle == 90 || self->angle == 270)
+    return self->clip.size.width;
+  else
+    return self->clip.size.height;
 }
 
 static double gtk_clipper_paintable_get_intrinsic_aspect_ratio (GdkPaintable *paintable)
 {
   GtkClipper *self = GTK_CLIPPER (paintable);
 
-  return self->clip.size.width / (double) self->clip.size.height;
+  if (self->angle == 90 || self->angle == 270)
+    return self->clip.size.height / (double) self->clip.size.width;
+  else
+    return self->clip.size.width / (double) self->clip.size.height;
 };
 
 static void
@@ -132,7 +153,8 @@ gtk_clipper_init (GtkClipper *self)
 
 GdkPaintable *
 gtk_clipper_new (GdkPaintable          *paintable,
-                 const graphene_rect_t *clip)
+                 const graphene_rect_t *clip,
+                 float                  angle)
 {
   GtkClipper *self;
   guint flags;
@@ -152,6 +174,7 @@ gtk_clipper_new (GdkPaintable          *paintable,
     g_signal_connect_swapped (paintable, "invalidate-size", G_CALLBACK (gdk_paintable_invalidate_size), self);
 
   self->clip = *clip;
+  self->angle = angle;
 
   return GDK_PAINTABLE (self);
 }

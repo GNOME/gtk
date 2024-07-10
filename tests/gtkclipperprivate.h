@@ -10,7 +10,8 @@ G_BEGIN_DECLS
 G_DECLARE_FINAL_TYPE (GtkClipper, gtk_clipper, GTK, CLIPPER, GObject)
 
 GdkPaintable * gtk_clipper_new (GdkPaintable          *paintable,
-                                const graphene_rect_t *clip);
+                                const graphene_rect_t *clip,
+                                float                  angle);
 
 G_END_DECLS
 
