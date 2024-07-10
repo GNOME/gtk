@@ -626,7 +626,7 @@ vulkan_dep = dependency('vulkan',
                         version: vulkan_req,
                         required: vulkan_enabled)
 glslc = find_program('glslc', required: vulkan_enabled)
-if vulkan_dep.found()
+if vulkan_dep.found() and glslc.found()
   have_vulkan = true
   vulkan_pkg_found = vulkan_dep.type_name() == 'pkgconfig'
 else
