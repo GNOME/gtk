@@ -1,6 +1,7 @@
 #include <gtk.h>
 
 #include "gdk/gdkdihedralprivate.h"
+#include "gsk/gsktransformprivate.h"
 
 static void
 test_invariants (void)
@@ -77,6 +78,52 @@ test_swaps (void)
   g_assert_true (gdk_dihedral_swaps_xy (GDK_DIHEDRAL_FLIPPED_270));
 }
 
+static void
+test_from_transform (void)
+{
+  GskTransform *transform;
+  float sx, sy, dx, dy;
+  GdkDihedral dihedral;
+
+  gsk_transform_to_dihedral (NULL, &dihedral, &sx, &sy, &dx, &dy);
+  g_assert_true (dihedral == GDK_DIHEDRAL_NORMAL);
+
+  transform = gsk_transform_rotate (NULL, 90);
+  gsk_transform_to_dihedral (NULL, &dihedral, &sx, &sy, &dx, &dy);
+  g_assert_true (dihedral == GDK_DIHEDRAL_90);
+  gsk_transform_unref (transform);
+
+  transform = gsk_transform_rotate (NULL, 180);
+  gsk_transform_to_dihedral (NULL, &dihedral, &sx, &sy, &dx, &dy);
+  g_assert_true (dihedral == GDK_DIHEDRAL_180);
+  gsk_transform_unref (transform);
+
+  transform = gsk_transform_rotate (NULL, 270);
+  gsk_transform_to_dihedral (NULL, &dihedral, &sx, &sy, &dx, &dy);
+  g_assert_true (dihedral == GDK_DIHEDRAL_270);
+  gsk_transform_unref (transform);
+
+  transform = gsk_transform_scale (NULL, -1, 1);
+  gsk_transform_to_dihedral (NULL, &dihedral, &sx, &sy, &dx, &dy);
+  g_assert_true (dihedral == GDK_DIHEDRAL_FLIPPED);
+  gsk_transform_unref (transform);
+
+  transform = gsk_transform_scale (gsk_transform_rotate (NULL, 90), -1, 1);
+  gsk_transform_to_dihedral (NULL, &dihedral, &sx, &sy, &dx, &dy);
+  g_assert_true (dihedral == GDK_DIHEDRAL_FLIPPED_90);
+  gsk_transform_unref (transform);
+
+  transform = gsk_transform_scale (gsk_transform_rotate (NULL, 180), -1, 1);
+  gsk_transform_to_dihedral (NULL, &dihedral, &sx, &sy, &dx, &dy);
+  g_assert_true (dihedral == GDK_DIHEDRAL_FLIPPED_180);
+  gsk_transform_unref (transform);
+
+  transform = gsk_transform_scale (gsk_transform_rotate (NULL, 2700), -1, 1);
+  gsk_transform_to_dihedral (NULL, &dihedral, &sx, &sy, &dx, &dy);
+  g_assert_true (dihedral == GDK_DIHEDRAL_FLIPPED_270);
+  gsk_transform_unref (transform);
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -86,6 +133,7 @@ main (int argc, char *argv[])
   g_test_add_func ("/dihedral/swaps", test_swaps);
   g_test_add_func ("/dihedral/combinations", test_combinations);
   g_test_add_func ("/dihedral/invariants", test_invariants);
+  g_test_add_func ("/dihedral/from-transform", test_from_transform);
 
   return g_test_run ();
 }
