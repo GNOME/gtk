@@ -61,6 +61,7 @@ internal_tests = [
   { 'name': 'texture' },
   { 'name': 'gltexture' },
   { 'name': 'subsurface' },
+  { 'name': 'dihedral' },
 ]
 
 if os_linux
