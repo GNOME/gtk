@@ -19,10 +19,11 @@
 
 #pragma once
 
-#include <gdk-pixbuf/gdk-pixbuf.h>
+#include "gdkdihedralprivate.h"
 #include "gdkenumtypes.h"
 #include "gdksurface.h"
 #include "gdktoplevel.h"
+
 #include <graphene.h>
 
 G_BEGIN_DECLS
@@ -293,6 +294,10 @@ void gdk_surface_get_geometry (GdkSurface *surface,
                                int        *y,
                                int        *width,
                                int        *height);
+
+void                    gdk_surface_set_preferred_transform     (GdkSurface             *surface,
+                                                                 GdkDihedral             transform);
+GdkDihedral             gdk_surface_get_preferred_transform     (GdkSurface             *surface);
 
 void                    gdk_surface_set_frame_clock             (GdkSurface             *surface,
                                                                  GdkFrameClock          *clock);
