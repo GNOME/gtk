@@ -10,8 +10,9 @@
 #include "gskvulkanrealdescriptorsprivate.h"
 #include "gskvulkansubdescriptorsprivate.h"
 
-#include "gdk/gdkdisplayprivate.h"
 #include "gdk/gdkdmabuftextureprivate.h"
+#include "gdk/gdkglcontextprivate.h"
+#include "gdk/gdkgltextureprivate.h"
 
 #define GDK_ARRAY_NAME gsk_descriptors
 #define GDK_ARRAY_TYPE_NAME GskDescriptors
@@ -160,12 +161,56 @@ gsk_vulkan_frame_upload_texture (GskGpuFrame  *frame,
                                  GdkTexture   *texture)
 {
 #ifdef HAVE_DMABUF
+  if (GDK_IS_GL_TEXTURE (texture))
+    {
+      GdkGLTexture *gltexture = GDK_GL_TEXTURE (texture);
+      GdkDisplay *display;
+      GdkGLContext *glcontext;
+      GdkDmabuf dmabuf;
+
+      display = gsk_gpu_device_get_display (gsk_gpu_frame_get_device (frame));
+      glcontext = gdk_display_get_gl_context (display);
+      if (gdk_gl_context_is_shared (glcontext, gdk_gl_texture_get_context (gltexture)))
+        {
+          gdk_gl_context_make_current (glcontext);
+
+          if (gdk_gl_context_export_dmabuf (gdk_gl_texture_get_context (gltexture),
+                                            gdk_gl_texture_get_id (gltexture),
+                                            &dmabuf))
+            {
+              GskGpuImage *image;
+
+              image = gsk_vulkan_image_new_for_dmabuf (GSK_VULKAN_DEVICE (gsk_gpu_frame_get_device (frame)),
+                                                       gdk_texture_get_width (texture),
+                                                       gdk_texture_get_height (texture),
+                                                       &dmabuf,
+                                                       gdk_memory_format_alpha (gdk_texture_get_format (texture)) == GDK_MEMORY_ALPHA_PREMULTIPLIED);
+              if (image)
+                {
+                  gsk_gpu_image_toggle_ref_texture (image, texture);
+                  return image;
+                }
+
+              /* Vulkan import dups the fds, so we can close these */
+              gdk_dmabuf_close_fds (&dmabuf);
+            }
+        }
+    }
+
   if (GDK_IS_DMABUF_TEXTURE (texture))
     {
-      GskGpuImage *image = gsk_vulkan_image_new_for_dmabuf (GSK_VULKAN_DEVICE (gsk_gpu_frame_get_device (frame)),
-                                                            texture);
+      GskGpuImage *image;
+
+      image = gsk_vulkan_image_new_for_dmabuf (GSK_VULKAN_DEVICE (gsk_gpu_frame_get_device (frame)),
+                                               gdk_texture_get_width (texture),
+                                               gdk_texture_get_height (texture),
+                                               gdk_dmabuf_texture_get_dmabuf (GDK_DMABUF_TEXTURE (texture)),
+                                               gdk_memory_format_alpha (gdk_texture_get_format (texture)) == GDK_MEMORY_ALPHA_PREMULTIPLIED);
       if (image)
-        return image;
+        {
+          gsk_gpu_image_toggle_ref_texture (image, texture);
+          return image;
+        }
     }
 #endif
 
