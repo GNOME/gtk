@@ -2372,3 +2372,20 @@ gdk_dmabuf_is_disjoint (const GdkDmabuf *dmabuf)
 }
 
 #endif  /* HAVE_DMABUF */
+
+void
+gdk_dmabuf_close_fds (GdkDmabuf *dmabuf)
+{
+  guint i, j;
+
+  for (i = 0; i < dmabuf->n_planes; i++)
+    {
+      for (j = 0; j < i; j++)
+        {
+          if (dmabuf->planes[i].fd == dmabuf->planes[j].fd)
+            break;
+        }
+      if (i == j)
+        g_close (dmabuf->planes[i].fd, NULL);
+    }
+}

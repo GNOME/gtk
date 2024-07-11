@@ -843,8 +843,8 @@ gsk_gpu_node_processor_blur_op (GskGpuNodeProcessor       *self,
 }
 
 static void
-gsk_gpu_node_processor_add_fallback_node (GskGpuNodeProcessor *self,
-                                          GskRenderNode       *node)
+gsk_gpu_node_processor_add_cairo_node (GskGpuNodeProcessor *self,
+                                       GskRenderNode       *node)
 {
   GskGpuImage *image;
   graphene_rect_t clipped_bounds;
@@ -1681,7 +1681,7 @@ gsk_gpu_node_processor_add_texture_node (GskGpuNodeProcessor *self,
                      gdk_texture_get_format (texture),
                      gdk_texture_get_width (texture),
                      gdk_texture_get_height (texture));
-          gsk_gpu_node_processor_add_fallback_node (self, node);
+          gsk_gpu_node_processor_add_cairo_node (self, node);
           return;
         }
     }
@@ -1833,7 +1833,7 @@ gsk_gpu_node_processor_add_texture_scale_node (GskGpuNodeProcessor *self,
                      gdk_texture_get_format (texture),
                      gdk_texture_get_width (texture),
                      gdk_texture_get_height (texture));
-          gsk_gpu_node_processor_add_fallback_node (self, node);
+          gsk_gpu_node_processor_add_cairo_node (self, node);
           return;
         }
     }
@@ -2287,6 +2287,19 @@ gsk_gpu_node_processor_add_shadow_node (GskGpuNodeProcessor *self,
                       &tex_rect);
 
   g_object_unref (image);
+}
+
+static void
+gsk_gpu_node_processor_add_gl_shader_node (GskGpuNodeProcessor *self,
+                                           GskRenderNode       *node)
+{
+  GdkRGBA pink = { 255 / 255., 105 / 255., 180 / 255., 1.0 };
+
+  gsk_gpu_color_op (self->frame,
+                    gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, &node->bounds),
+                    &node->bounds,
+                    &self->offset,
+                    &GDK_RGBA_INIT_ALPHA (&pink, self->opacity));
 }
 
 static void
@@ -3237,7 +3250,7 @@ static const struct
   [GSK_CAIRO_NODE] = {
     0,
     GSK_GPU_HANDLE_OPACITY,
-    NULL,
+    gsk_gpu_node_processor_add_cairo_node,
     NULL,
     gsk_gpu_get_cairo_node_as_image,
   },
@@ -3397,8 +3410,8 @@ static const struct
   },
   [GSK_GL_SHADER_NODE] = {
     0,
-    0,
-    NULL,
+    GSK_GPU_HANDLE_OPACITY,
+    gsk_gpu_node_processor_add_gl_shader_node,
     NULL,
     NULL,
   },
@@ -3458,7 +3471,6 @@ gsk_gpu_node_processor_add_node (GskGpuNodeProcessor *self,
   if (node_type >= G_N_ELEMENTS (nodes_vtable))
     {
       g_critical ("unknown node type %u for %s", node_type, g_type_name_from_instance ((GTypeInstance *) node));
-      gsk_gpu_node_processor_add_fallback_node (self, node);
       return;
     }
 
@@ -3477,9 +3489,10 @@ gsk_gpu_node_processor_add_node (GskGpuNodeProcessor *self,
     }
   else
     {
-      GSK_DEBUG (FALLBACK, "Unsupported node '%s'",
-                 g_type_name_from_instance ((GTypeInstance *) node));
-      gsk_gpu_node_processor_add_fallback_node (self, node);
+      g_warning_once ("Unimplemented node '%s'",
+                      g_type_name_from_instance ((GTypeInstance *) node));
+      /* Maybe it's implemented in the Cairo renderer? */
+      gsk_gpu_node_processor_add_cairo_node (self, node);
     }
 }
 
