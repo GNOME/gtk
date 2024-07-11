@@ -64,6 +64,7 @@ compare_render_tests = [
   'empty-container',
   'empty-cross-fade',
   'empty-debug',
+  'empty-glshader',
   'empty-inset-shadow',
   'empty-linear-gradient',
   'empty-mask',
