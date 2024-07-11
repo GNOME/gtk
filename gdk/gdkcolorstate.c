@@ -51,7 +51,7 @@ G_DEFINE_BOXED_TYPE (GdkColorState, gdk_color_state,
  * Increase the reference count of @self.
  *
  * Returns: the object that was passed in
- * 
+ *
  * Since: 4.16
  */
 GdkColorState *
@@ -82,6 +82,8 @@ void
  *
  * Returns the color state object representing the sRGB color space.
  *
+ * Returns: the color state object for sRGB
+ *
  * Since: 4.16
  */
 GdkColorState *
@@ -94,6 +96,8 @@ gdk_color_state_get_srgb (void)
  * gdk_color_state_get_srgb_linear:
  *
  * Returns the color state object representing the linearized sRGB color space.
+ *
+ * Returns: the color state object for linearized sRGB
  *
  * Since: 4.16
  */
