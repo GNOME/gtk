@@ -162,10 +162,18 @@ gsk_vulkan_frame_upload_texture (GskGpuFrame  *frame,
 #ifdef HAVE_DMABUF
   if (GDK_IS_DMABUF_TEXTURE (texture))
     {
-      GskGpuImage *image = gsk_vulkan_image_new_for_dmabuf (GSK_VULKAN_DEVICE (gsk_gpu_frame_get_device (frame)),
-                                                            texture);
+      GskGpuImage *image;
+
+      image = gsk_vulkan_image_new_for_dmabuf (GSK_VULKAN_DEVICE (gsk_gpu_frame_get_device (frame)),
+                                               gdk_texture_get_width (texture),
+                                               gdk_texture_get_height (texture),
+                                               gdk_dmabuf_texture_get_dmabuf (GDK_DMABUF_TEXTURE (texture)),
+                                               gdk_memory_format_alpha (gdk_texture_get_format (texture)) == GDK_MEMORY_ALPHA_PREMULTIPLIED);
       if (image)
-        return image;
+        {
+          gsk_gpu_image_toggle_ref_texture (image, texture);
+          return image;
+        }
     }
 #endif
 

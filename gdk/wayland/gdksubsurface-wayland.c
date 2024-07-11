@@ -568,8 +568,9 @@ gdk_wayland_subsurface_attach (GdkSubsurface         *sub,
                 }
 
               GDK_DISPLAY_DEBUG (gdk_surface_get_display (sub->parent), OFFLOAD,
-                                 "[%p] %s Attaching texture (%dx%d) at %d %d %d %d%s%s%s",
+                                 "[%p] %s Attaching %s (%dx%d) at %d %d %d %d%s%s%s",
                                  self,
+                                 G_OBJECT_TYPE_NAME (texture),
                                  will_be_above
                                    ? (has_background ? "▲" : "△")
                                    : (has_background ? "▼" : "▽"),

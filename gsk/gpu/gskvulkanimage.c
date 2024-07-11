@@ -763,7 +763,10 @@ gsk_vulkan_image_new_dmabuf (GskVulkanDevice *device,
 
 GskGpuImage *
 gsk_vulkan_image_new_for_dmabuf (GskVulkanDevice *device,
-                                 GdkTexture      *texture)
+                                 gsize            width,
+                                 gsize            height,
+                                 const GdkDmabuf *dmabuf,
+                                 gboolean         premultiplied)
 {
   GskVulkanImage *self;
   VkDevice vk_device;
@@ -773,9 +776,8 @@ gsk_vulkan_image_new_for_dmabuf (GskVulkanDevice *device,
   PFN_vkGetMemoryFdPropertiesKHR func_vkGetMemoryFdPropertiesKHR;
   gsize i;
   int fd;
-  gsize width, height;
-  const GdkDmabuf *dmabuf;
   VkResult res;
+  GdkMemoryFormat format;
   GskGpuImageFlags flags;
   gboolean is_yuv;
 
@@ -785,9 +787,12 @@ gsk_vulkan_image_new_for_dmabuf (GskVulkanDevice *device,
       return NULL;
     }
 
-  width = gdk_texture_get_width (texture);
-  height = gdk_texture_get_height (texture);
-  dmabuf = gdk_dmabuf_texture_get_dmabuf (GDK_DMABUF_TEXTURE (texture));
+  if (!gdk_dmabuf_get_memory_format (dmabuf->fourcc, premultiplied, &format))
+    {
+      /* We should never get dmabufs with fourccs we've never checked we support */
+      g_return_val_if_reached (NULL);
+    }
+
   vk_device = gsk_vulkan_device_get_vk_device (device);
   func_vkGetMemoryFdPropertiesKHR = (PFN_vkGetMemoryFdPropertiesKHR) vkGetDeviceProcAddr (vk_device, "vkGetMemoryFdPropertiesKHR");
 
@@ -887,12 +892,11 @@ gsk_vulkan_image_new_for_dmabuf (GskVulkanDevice *device,
 
   gsk_gpu_image_setup (GSK_GPU_IMAGE (self),
                        flags |
-                       (gdk_memory_format_alpha (gdk_texture_get_format (texture)) == GDK_MEMORY_ALPHA_STRAIGHT ? GSK_GPU_IMAGE_STRAIGHT_ALPHA : 0) |
+                       (gdk_memory_format_alpha (format) == GDK_MEMORY_ALPHA_STRAIGHT ? GSK_GPU_IMAGE_STRAIGHT_ALPHA : 0) |
                        (is_yuv ? (GSK_GPU_IMAGE_EXTERNAL | GSK_GPU_IMAGE_NO_BLIT) : 0) |
                        (gsk_component_mapping_is_framebuffer_compatible (&vk_components) ? 0 : GSK_GPU_IMAGE_NO_BLIT),
-                       gdk_texture_get_format (texture),
+                       format,
                        width, height);
-  gsk_gpu_image_toggle_ref_texture (GSK_GPU_IMAGE (self), texture);
 
   self->allocator = gsk_vulkan_device_get_external_allocator (device);
   gsk_vulkan_allocator_ref (self->allocator);
