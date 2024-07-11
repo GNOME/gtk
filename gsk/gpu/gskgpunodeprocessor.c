@@ -2290,6 +2290,19 @@ gsk_gpu_node_processor_add_shadow_node (GskGpuNodeProcessor *self,
 }
 
 static void
+gsk_gpu_node_processor_add_gl_shader_node (GskGpuNodeProcessor *self,
+                                           GskRenderNode       *node)
+{
+  GdkRGBA pink = { 255 / 255., 105 / 255., 180 / 255., 1.0 };
+
+  gsk_gpu_color_op (self->frame,
+                    gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, &node->bounds),
+                    &node->bounds,
+                    &self->offset,
+                    &GDK_RGBA_INIT_ALPHA (&pink, self->opacity));
+}
+
+static void
 gsk_gpu_node_processor_add_blend_node (GskGpuNodeProcessor *self,
                                        GskRenderNode       *node)
 {
@@ -3397,8 +3410,8 @@ static const struct
   },
   [GSK_GL_SHADER_NODE] = {
     0,
-    0,
-    NULL,
+    GSK_GPU_HANDLE_OPACITY,
+    gsk_gpu_node_processor_add_gl_shader_node,
     NULL,
     NULL,
   },
