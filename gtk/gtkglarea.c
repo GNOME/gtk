@@ -728,15 +728,6 @@ release_gl_texture (gpointer data)
 }
 
 static void
-release_dmabuf (const GdkDmabuf *dmabuf)
-{
-#ifndef G_OS_WIN32
-  for (unsigned int i = 0; i < dmabuf->n_planes; i++)
-    close (dmabuf->planes[i].fd);
-#endif
-}
-
-static void
 release_dmabuf_texture (gpointer data)
 {
   Texture *texture = data;
@@ -746,7 +737,7 @@ release_dmabuf_texture (gpointer data)
   if (texture->dmabuf_texture == NULL)
     return;
 
-  release_dmabuf (gdk_dmabuf_texture_get_dmabuf (GDK_DMABUF_TEXTURE (texture->dmabuf_texture )));
+  gdk_dmabuf_close_fds ((GdkDmabuf *) gdk_dmabuf_texture_get_dmabuf (GDK_DMABUF_TEXTURE (texture->dmabuf_texture)));
 
   texture->dmabuf_texture = NULL;
 }
@@ -843,7 +834,7 @@ gtk_gl_area_snapshot (GtkWidget   *widget,
           if (texture->dmabuf_texture != NULL)
             holder = texture->dmabuf_texture;
           else
-            release_dmabuf (&dmabuf);
+            gdk_dmabuf_close_fds (&dmabuf);
         }
 
       /* Our texture is rendered by OpenGL, so it is upside down,
