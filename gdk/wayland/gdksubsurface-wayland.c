@@ -451,16 +451,6 @@ gdk_wayland_subsurface_attach (GdkSubsurface         *sub,
                          device_rect.size.width, device_rect.size.height,
                          scale);
     }
-  else if (!GDK_IS_DMABUF_TEXTURE (texture) &&
-           !GDK_DISPLAY_DEBUG_CHECK (gdk_surface_get_display (sub->parent), FORCE_OFFLOAD))
-    {
-      GDK_DISPLAY_DEBUG (gdk_surface_get_display (sub->parent), OFFLOAD,
-                         "[%p] 🗙 %s (%dx%d) is not a GdkDmabufTexture",
-                         self,
-                         G_OBJECT_TYPE_NAME (texture),
-                         gdk_texture_get_width (texture),
-                         gdk_texture_get_height (texture));
-    }
   else if (!will_be_above &&
            gdk_memory_format_alpha (gdk_texture_get_format (texture)) != GDK_MEMORY_ALPHA_OPAQUE &&
            !has_background)
@@ -521,8 +511,9 @@ gdk_wayland_subsurface_attach (GdkSubsurface         *sub,
           else
             {
               GDK_DISPLAY_DEBUG (gdk_surface_get_display (sub->parent), OFFLOAD,
-                                 "[%p] 🗙 Failed to create wl_buffer",
-                                 self);
+                                 "[%p] 🗙 Failed to create wl_buffer for %s",
+                                 self,
+                                 G_OBJECT_TYPE_NAME (texture));
             }
         }
       else
