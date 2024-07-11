@@ -1513,6 +1513,18 @@ get_order (const char *s)
   return 0;
 }
 
+static int
+get_font_rendering (const char *s)
+{
+  const char *names[] = { "automatic", "manual" };
+
+  for (int i = 0; i < G_N_ELEMENTS (names); i++)
+    if (strcmp (s, names[i]) == 0)
+      return i;
+
+  return 0;
+}
+
 static double
 get_dpi_from_gsettings (GdkWaylandDisplay *display_wayland)
 {
@@ -1839,8 +1851,11 @@ apply_portal_setting (TranslationEntry *entry,
       entry->fallback.s = g_intern_string (g_variant_get_string (value, NULL));
       break;
     case G_TYPE_INT:
-    case G_TYPE_ENUM:
       entry->fallback.i = g_variant_get_int32 (value);
+      break;
+    case G_TYPE_ENUM:
+      if (strcmp (entry->key, "font-rendering") == 0)
+        entry->fallback.i = get_font_rendering (g_variant_get_string (value, NULL));
       break;
     case G_TYPE_BOOLEAN:
       entry->fallback.b = g_variant_get_boolean (value);
