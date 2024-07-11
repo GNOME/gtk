@@ -3471,7 +3471,6 @@ gsk_gpu_node_processor_add_node (GskGpuNodeProcessor *self,
   if (node_type >= G_N_ELEMENTS (nodes_vtable))
     {
       g_critical ("unknown node type %u for %s", node_type, g_type_name_from_instance ((GTypeInstance *) node));
-      gsk_gpu_node_processor_add_fallback_node (self, node);
       return;
     }
 
