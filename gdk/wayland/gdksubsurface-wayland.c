@@ -143,17 +143,18 @@ static const struct zwp_linux_buffer_params_v1_listener params_listener = {
 };
 
 static struct wl_buffer *
-get_dmabuf_wl_buffer (GdkWaylandSubsurface *self,
-                      GdkTexture           *texture)
+get_dmabuf_wl_buffer (GdkWaylandSubsurface            *self,
+                      const GdkDmabuf                 *dmabuf,
+                      int                              width,
+                      int                              height,
+                      const struct wl_buffer_listener *listener,
+                      void *                           data)
 {
   GdkWaylandDisplay *display = GDK_WAYLAND_DISPLAY (gdk_surface_get_display (GDK_SUBSURFACE (self)->parent));
-  const GdkDmabuf *dmabuf;
   struct zwp_linux_buffer_params_v1 *params;
   struct wl_buffer *buffer;
   CreateBufferData cd = { NULL, FALSE };
   struct wl_event_queue *event_queue;
-
-  dmabuf = gdk_dmabuf_texture_get_dmabuf (GDK_DMABUF_TEXTURE (texture));
 
   params = zwp_linux_dmabuf_v1_create_params (display->linux_dmabuf);
 
@@ -173,8 +174,8 @@ get_dmabuf_wl_buffer (GdkWaylandSubsurface *self,
   zwp_linux_buffer_params_v1_add_listener (params, &params_listener, &cd);
 
   zwp_linux_buffer_params_v1_create (params,
-                                     gdk_texture_get_width (texture),
-                                     gdk_texture_get_height (texture),
+                                     width,
+                                     height,
                                      dmabuf->fourcc,
                                      0);
 
@@ -189,10 +190,26 @@ get_dmabuf_wl_buffer (GdkWaylandSubsurface *self,
   if (buffer)
     {
       wl_proxy_set_queue ((struct wl_proxy *) buffer, NULL);
-      wl_buffer_add_listener (buffer, &dmabuf_buffer_listener, g_object_ref (texture));
+      wl_buffer_add_listener (buffer, listener, data);
+    }
+  else
+    {
+      listener->release (data, NULL);
     }
 
   return buffer;
+}
+
+static struct wl_buffer *
+get_dmabuf_texture_wl_buffer (GdkWaylandSubsurface *self,
+                              GdkTexture           *texture)
+{
+  return get_dmabuf_wl_buffer (self,
+                               gdk_dmabuf_texture_get_dmabuf (GDK_DMABUF_TEXTURE (texture)),
+                               gdk_texture_get_width (texture),
+                               gdk_texture_get_height (texture),
+                               &dmabuf_buffer_listener,
+                               g_object_ref (texture));
 }
 
 static struct wl_buffer *
@@ -203,7 +220,7 @@ get_wl_buffer (GdkWaylandSubsurface *self,
   struct wl_buffer *buffer = NULL;
 
   if (GDK_IS_DMABUF_TEXTURE (texture))
-    buffer = get_dmabuf_wl_buffer (self, texture);
+    buffer = get_dmabuf_texture_wl_buffer (self, texture);
 
   if (GDK_DISPLAY_DEBUG_CHECK (display, FORCE_OFFLOAD))
     {
