@@ -33,9 +33,11 @@ gdk_broadway_cairo_context_dispose (GObject *object)
 }
 
 static void
-gdk_broadway_cairo_context_begin_frame (GdkDrawContext *draw_context,
-                                        GdkMemoryDepth  depth,
-                                        cairo_region_t *region)
+gdk_broadway_cairo_context_begin_frame (GdkDrawContext  *draw_context,
+                                        GdkMemoryDepth   depth,
+                                        cairo_region_t  *region,
+                                        GdkColorState  **out_color_state,
+                                        GdkMemoryDepth  *out_depth)
 {
   GdkBroadwayCairoContext *self = GDK_BROADWAY_CAIRO_CONTEXT (draw_context);
   GdkSurface *surface = gdk_draw_context_get_surface (GDK_DRAW_CONTEXT (self));
@@ -59,6 +61,9 @@ gdk_broadway_cairo_context_begin_frame (GdkDrawContext *draw_context,
   cairo_set_operator (cr, CAIRO_OPERATOR_CLEAR);
   cairo_fill (cr);
   cairo_destroy (cr);
+
+  *out_color_state = GDK_COLOR_STATE_SRGB;
+  *out_depth = gdk_color_state_get_depth (GDK_COLOR_STATE_SRGB);
 }
 
 static void

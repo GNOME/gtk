@@ -18,15 +18,16 @@
 #pragma once
 
 #include "gdkdisplay.h"
-#include "gdksurface.h"
+
 #include "gdkcursor.h"
-#include "gdkmonitor.h"
 #include "gdkdebugprivate.h"
-#include "gdksurfaceprivate.h"
-#include "gdkkeysprivate.h"
 #include "gdkdeviceprivate.h"
-#include "gdkdmabufprivate.h"
 #include "gdkdmabufdownloaderprivate.h"
+#include "gdkdmabufprivate.h"
+#include "gdkkeysprivate.h"
+#include "gdkmemoryformatprivate.h"
+#include "gdkmonitor.h"
+#include "gdksurfaceprivate.h"
 
 #ifdef GDK_RENDERING_VULKAN
 #include <vulkan/vulkan.h>
@@ -130,6 +131,7 @@ struct _GdkDisplay
   guint have_egl_pixel_format_float : 1;
   guint have_egl_dma_buf_import : 1;
   guint have_egl_dma_buf_export : 1;
+  guint have_egl_gl_colorspace : 1;
 
   GdkDmabufFormats *dmabuf_formats;
   GdkDmabufDownloader *dmabuf_downloaders[4];
@@ -247,9 +249,8 @@ gboolean            gdk_display_init_egl              (GdkDisplay       *display
                                                        gboolean          allow_any,
                                                        GError          **error);
 gpointer            gdk_display_get_egl_display       (GdkDisplay       *display);
-gpointer            gdk_display_get_egl_config        (GdkDisplay       *display);
-gpointer            gdk_display_get_egl_config_high_depth
-                                                      (GdkDisplay       *display);
+gpointer            gdk_display_get_egl_config        (GdkDisplay       *display,
+                                                       GdkMemoryDepth    depth);
 
 void                gdk_display_set_rgba              (GdkDisplay       *display,
                                                        gboolean          rgba);

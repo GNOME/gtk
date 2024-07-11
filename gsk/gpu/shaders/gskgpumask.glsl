@@ -50,10 +50,10 @@ void
 run (out vec4 color,
      out vec2 position)
 {
-  vec4 source = gsk_texture (_source_id, _source_coord) *
-                rect_coverage (_source_rect, _pos);
-  vec4 mask = gsk_texture (_mask_id, _mask_coord) *
-              rect_coverage (_mask_rect, _pos);
+  vec4 source = gsk_texture (_source_id, _source_coord);
+  source = output_color_alpha (source, rect_coverage (_source_rect, _pos));
+  vec4 mask = gsk_texture (_mask_id, _mask_coord);
+  mask = output_color_alpha (mask, rect_coverage (_mask_rect, _pos));
 
   float alpha = _opacity;
   switch (VARIATION_MASK_MODE)
@@ -78,7 +78,7 @@ run (out vec4 color,
       break;
   }
 
-  color = source * alpha;
+  color = output_color_alpha (source, alpha);
   position = _pos;
 }
 

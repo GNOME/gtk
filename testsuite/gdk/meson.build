@@ -57,11 +57,13 @@ foreach t : tests
 endforeach
 
 internal_tests = [
+  { 'name': 'colorstate' },
   { 'name': 'dihedral' },
   { 'name': 'image' },
   { 'name': 'texture' },
   { 'name': 'gltexture' },
   { 'name': 'subsurface' },
+  { 'name': 'memoryformat' },
 ]
 
 if os_linux

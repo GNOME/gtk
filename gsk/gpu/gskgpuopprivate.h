@@ -25,6 +25,7 @@ struct _GskGLCommandState
   gsize flip_y;
   struct {
     const GskGpuOpClass *op_class;
+    GskGpuColorStates color_states;
     guint32 variation;
     GskGpuShaderClip clip;
     gsize n_external;

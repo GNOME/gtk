@@ -23,6 +23,8 @@
 
 #include "gdkdmabuffourccprivate.h"
 #include "gdkglcontextprivate.h"
+#include "gdkcolorstateprivate.h"
+#include "gtk/gtkcolorutilsprivate.h"
 
 #include "gsk/gl/fp16private.h"
 
@@ -324,7 +326,9 @@ struct _GdkMemoryFormatDescription
   struct {
     GLint internal_gl_format;
     GLint internal_gles_format;
+    GLint internal_srgb_format;
     GLenum format;
+    GLenum srgb_format;
     GLenum type;
     GLint swizzle[4];
     /* -1 if none exists, ie the format is already RGBA
@@ -334,6 +338,7 @@ struct _GdkMemoryFormatDescription
   } gl;
 #ifdef GDK_RENDERING_VULKAN
   VkFormat vk_format;
+  VkFormat vk_srgb_format;
 #endif
 #ifdef HAVE_DMABUF
   guint32 dmabuf_fourcc;
@@ -366,6 +371,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .gl = {
         .internal_gl_format = GL_RGBA8,
         .internal_gles_format = GL_BGRA,
+        .internal_srgb_format = -1,
         .format = GL_BGRA,
         .type = GL_UNSIGNED_BYTE,
         .swizzle = { GL_RED, GL_GREEN, GL_BLUE, GL_ALPHA },
@@ -374,6 +380,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     },
 #ifdef GDK_RENDERING_VULKAN
     .vk_format = VK_FORMAT_B8G8R8A8_UNORM,
+    .vk_srgb_format = VK_FORMAT_B8G8R8A8_SRGB,
 #endif
 #ifdef HAVE_DMABUF
     .dmabuf_fourcc = DRM_FORMAT_ARGB8888,
@@ -395,6 +402,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .gl = {
         .internal_gl_format = GL_RGBA8,
         .internal_gles_format = GL_RGBA8,
+        .internal_srgb_format = GL_SRGB8_ALPHA8,
         .format = GL_BGRA,
         .type = GDK_GL_UNSIGNED_BYTE_FLIPPED,
         .swizzle = { GL_RED, GL_GREEN, GL_BLUE, GL_ALPHA },
@@ -403,6 +411,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     },
 #ifdef GDK_RENDERING_VULKAN
     .vk_format = VK_FORMAT_UNDEFINED,
+    .vk_srgb_format = VK_FORMAT_UNDEFINED,
 #endif
 #ifdef HAVE_DMABUF
     .dmabuf_fourcc = DRM_FORMAT_BGRA8888,
@@ -424,6 +433,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .gl = {
         .internal_gl_format = GL_RGBA8,
         .internal_gles_format = GL_RGBA8,
+        .internal_srgb_format = GL_SRGB8_ALPHA8,
         .format = GL_RGBA,
         .type = GL_UNSIGNED_BYTE,
         .swizzle = { GL_RED, GL_GREEN, GL_BLUE, GL_ALPHA },
@@ -431,6 +441,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     },
 #ifdef GDK_RENDERING_VULKAN
     .vk_format = VK_FORMAT_R8G8B8A8_UNORM,
+    .vk_srgb_format = VK_FORMAT_R8G8B8A8_SRGB,
 #endif
 #ifdef HAVE_DMABUF
     .dmabuf_fourcc = DRM_FORMAT_ABGR8888,
@@ -452,6 +463,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .gl = {
         .internal_gl_format = GL_RGBA8,
         .internal_gles_format = GL_RGBA8,
+        .internal_srgb_format = GL_SRGB8_ALPHA8,
         .format = GL_RGBA,
         .type = GDK_GL_UNSIGNED_BYTE_FLIPPED,
         .swizzle = { GL_RED, GL_GREEN, GL_BLUE, GL_ALPHA },
@@ -460,6 +472,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     },
 #ifdef GDK_RENDERING_VULKAN
     .vk_format = VK_FORMAT_UNDEFINED,
+    .vk_srgb_format = VK_FORMAT_UNDEFINED,
 #endif
 #ifdef HAVE_DMABUF
     .dmabuf_fourcc = DRM_FORMAT_RGBA8888,
@@ -481,6 +494,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .gl = {
         .internal_gl_format = GL_RGBA8,
         .internal_gles_format = GL_BGRA,
+        .internal_srgb_format = -1,
         .format = GL_BGRA,
         .type = GL_UNSIGNED_BYTE,
         .swizzle = { GL_RED, GL_GREEN, GL_BLUE, GL_ALPHA },
@@ -489,6 +503,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     },
 #ifdef GDK_RENDERING_VULKAN
     .vk_format = VK_FORMAT_B8G8R8A8_UNORM,
+    .vk_srgb_format = VK_FORMAT_B8G8R8A8_SRGB,
 #endif
 #ifdef HAVE_DMABUF
     .dmabuf_fourcc = DRM_FORMAT_ARGB8888,
@@ -510,6 +525,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .gl = {
         .internal_gl_format = GL_RGBA8,
         .internal_gles_format = GL_RGBA8,
+        .internal_srgb_format = GL_SRGB8_ALPHA8,
         .format = GL_BGRA,
         .type = GDK_GL_UNSIGNED_BYTE_FLIPPED,
         .swizzle = { GL_RED, GL_GREEN, GL_BLUE, GL_ALPHA },
@@ -518,6 +534,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     },
 #ifdef GDK_RENDERING_VULKAN
     .vk_format = VK_FORMAT_UNDEFINED,
+    .vk_srgb_format = VK_FORMAT_UNDEFINED,
 #endif
 #ifdef HAVE_DMABUF
     .dmabuf_fourcc = DRM_FORMAT_BGRA8888,
@@ -539,6 +556,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .gl = {
         .internal_gl_format = GL_RGBA8,
         .internal_gles_format = GL_RGBA8,
+        .internal_srgb_format = GL_SRGB8_ALPHA8,
         .format = GL_RGBA,
         .type = GL_UNSIGNED_BYTE,
         .swizzle = { GL_RED, GL_GREEN, GL_BLUE, GL_ALPHA },
@@ -546,6 +564,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     },
 #ifdef GDK_RENDERING_VULKAN
     .vk_format = VK_FORMAT_R8G8B8A8_UNORM,
+    .vk_srgb_format = VK_FORMAT_R8G8B8A8_SRGB,
 #endif
 #ifdef HAVE_DMABUF
     .dmabuf_fourcc = DRM_FORMAT_ABGR8888,
@@ -567,6 +586,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .gl = {
         .internal_gl_format = GL_RGBA8,
         .internal_gles_format = GL_RGBA8,
+        .internal_srgb_format = GL_SRGB8_ALPHA8,
         .format = GL_RGBA,
         .type = GDK_GL_UNSIGNED_BYTE_FLIPPED,
         .swizzle = { GL_RED, GL_GREEN, GL_BLUE, GL_ALPHA },
@@ -575,6 +595,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     },
 #ifdef GDK_RENDERING_VULKAN
     .vk_format = VK_FORMAT_UNDEFINED,
+    .vk_srgb_format = VK_FORMAT_UNDEFINED,
 #endif
 #ifdef HAVE_DMABUF
     .dmabuf_fourcc = DRM_FORMAT_RGBA8888,
@@ -597,6 +618,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .gl = {
         .internal_gl_format = GL_RGBA8,
         .internal_gles_format = GL_BGRA,
+        .internal_srgb_format = -1,
         .format = GL_BGRA,
         .type = GL_UNSIGNED_BYTE,
         .swizzle = { GL_RED, GL_GREEN, GL_BLUE, GL_ONE },
@@ -605,6 +627,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     },
 #ifdef GDK_RENDERING_VULKAN
     .vk_format = VK_FORMAT_B8G8R8A8_UNORM,
+    .vk_srgb_format = VK_FORMAT_B8G8R8A8_SRGB,
 #endif
 #ifdef HAVE_DMABUF
     .dmabuf_fourcc = DRM_FORMAT_XRGB8888,
@@ -627,6 +650,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .gl = {
         .internal_gl_format = GL_RGBA8,
         .internal_gles_format = GL_RGBA8,
+        .internal_srgb_format = GL_SRGB8_ALPHA8,
         .format = GL_BGRA,
         .type = GDK_GL_UNSIGNED_BYTE_FLIPPED,
         .swizzle = { GL_RED, GL_GREEN, GL_BLUE, GL_ONE },
@@ -635,6 +659,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     },
 #ifdef GDK_RENDERING_VULKAN
     .vk_format = VK_FORMAT_UNDEFINED,
+    .vk_srgb_format = VK_FORMAT_UNDEFINED,
 #endif
 #ifdef HAVE_DMABUF
     .dmabuf_fourcc = DRM_FORMAT_BGRX8888,
@@ -657,6 +682,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .gl = {
         .internal_gl_format = GL_RGBA8,
         .internal_gles_format = GL_RGBA8,
+        .internal_srgb_format = GL_SRGB8_ALPHA8,
         .format = GL_RGBA,
         .type = GL_UNSIGNED_BYTE,
         .swizzle = { GL_RED, GL_GREEN, GL_BLUE, GL_ONE },
@@ -664,6 +690,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     },
 #ifdef GDK_RENDERING_VULKAN
     .vk_format = VK_FORMAT_R8G8B8A8_UNORM,
+    .vk_srgb_format = VK_FORMAT_R8G8B8A8_SRGB,
 #endif
 #ifdef HAVE_DMABUF
     .dmabuf_fourcc = DRM_FORMAT_XBGR8888,
@@ -686,6 +713,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .gl = {
         .internal_gl_format = GL_RGBA8,
         .internal_gles_format = GL_RGBA8,
+        .internal_srgb_format = GL_SRGB8_ALPHA8,
         .format = GL_RGBA,
         .type = GDK_GL_UNSIGNED_BYTE_FLIPPED,
         .swizzle = { GL_RED, GL_GREEN, GL_BLUE, GL_ONE },
@@ -694,6 +722,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     },
 #ifdef GDK_RENDERING_VULKAN
     .vk_format = VK_FORMAT_UNDEFINED,
+    .vk_srgb_format = VK_FORMAT_UNDEFINED,
 #endif
 #ifdef HAVE_DMABUF
     .dmabuf_fourcc = DRM_FORMAT_RGBX8888,
@@ -716,6 +745,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .gl = {
         .internal_gl_format = GL_RGB8,
         .internal_gles_format = GL_RGB8,
+        .internal_srgb_format = GL_SRGB8,
         .format = GL_RGB,
         .type = GL_UNSIGNED_BYTE,
         .swizzle = { GL_RED, GL_GREEN, GL_BLUE, GL_ALPHA },
@@ -723,6 +753,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     },
 #ifdef GDK_RENDERING_VULKAN
     .vk_format = VK_FORMAT_R8G8B8_UNORM,
+    .vk_srgb_format = VK_FORMAT_R8G8B8_SRGB,
 #endif
 #ifdef HAVE_DMABUF
     .dmabuf_fourcc = DRM_FORMAT_BGR888,
@@ -745,6 +776,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .gl = {
         .internal_gl_format = GL_RGB8,
         .internal_gles_format = GL_RGB8,
+        .internal_srgb_format = GL_SRGB8,
         .format = GL_BGR,
         .type = GL_UNSIGNED_BYTE,
         .swizzle = { GL_RED, GL_GREEN, GL_BLUE, GL_ALPHA },
@@ -753,6 +785,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     },
 #ifdef GDK_RENDERING_VULKAN
     .vk_format = VK_FORMAT_B8G8R8_UNORM,
+    .vk_srgb_format = VK_FORMAT_B8G8R8_SRGB,
 #endif
 #ifdef HAVE_DMABUF
     .dmabuf_fourcc = DRM_FORMAT_RGB888,
@@ -778,6 +811,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .gl = {
         .internal_gl_format = GL_RGB16,
         .internal_gles_format = GL_RGB16,
+        .internal_srgb_format = -1,
         .format = GL_RGB,
         .type = GL_UNSIGNED_SHORT,
         .swizzle = { GL_RED, GL_GREEN, GL_BLUE, GL_ALPHA },
@@ -785,6 +819,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     },
 #ifdef GDK_RENDERING_VULKAN
     .vk_format = VK_FORMAT_R16G16B16_UNORM,
+    .vk_srgb_format = VK_FORMAT_UNDEFINED,
 #endif
 #ifdef HAVE_DMABUF
     .dmabuf_fourcc = 0,
@@ -809,6 +844,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .gl = {
         .internal_gl_format = GL_RGBA16,
         .internal_gles_format = GL_RGBA16,
+        .internal_srgb_format = -1,
         .format = GL_RGBA,
         .type = GL_UNSIGNED_SHORT,
         .swizzle = { GL_RED, GL_GREEN, GL_BLUE, GL_ALPHA },
@@ -816,6 +852,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     },
 #ifdef GDK_RENDERING_VULKAN
     .vk_format = VK_FORMAT_R16G16B16A16_UNORM,
+    .vk_srgb_format = VK_FORMAT_UNDEFINED,
 #endif
 #ifdef HAVE_DMABUF
     .dmabuf_fourcc = DRM_FORMAT_ABGR16161616,
@@ -840,6 +877,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .gl = {
         .internal_gl_format = GL_RGBA16,
         .internal_gles_format = GL_RGBA16,
+        .internal_srgb_format = -1,
         .format = GL_RGBA,
         .type = GL_UNSIGNED_SHORT,
         .swizzle = { GL_RED, GL_GREEN, GL_BLUE, GL_ALPHA },
@@ -847,6 +885,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     },
 #ifdef GDK_RENDERING_VULKAN
     .vk_format = VK_FORMAT_R16G16B16A16_UNORM,
+    .vk_srgb_format = VK_FORMAT_UNDEFINED,
 #endif
 #ifdef HAVE_DMABUF
     .dmabuf_fourcc = DRM_FORMAT_ABGR16161616,
@@ -871,6 +910,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .gl = {
         .internal_gl_format = GL_RGB16F,
         .internal_gles_format = GL_RGB16F,
+        .internal_srgb_format = -1,
         .format = GL_RGB,
         .type = GL_HALF_FLOAT,
         .swizzle = { GL_RED, GL_GREEN, GL_BLUE, GL_ALPHA },
@@ -878,6 +918,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     },
 #ifdef GDK_RENDERING_VULKAN
     .vk_format = VK_FORMAT_R16G16B16_SFLOAT,
+    .vk_srgb_format = VK_FORMAT_UNDEFINED,
 #endif
 #ifdef HAVE_DMABUF
     .dmabuf_fourcc = 0,
@@ -901,6 +942,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .gl = {
         .internal_gl_format = GL_RGBA16F,
         .internal_gles_format = GL_RGBA16F,
+        .internal_srgb_format = -1,
         .format = GL_RGBA,
         .type = GL_HALF_FLOAT,
         .swizzle = { GL_RED, GL_GREEN, GL_BLUE, GL_ALPHA },
@@ -908,6 +950,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     },
 #ifdef GDK_RENDERING_VULKAN
     .vk_format = VK_FORMAT_R16G16B16A16_SFLOAT,
+    .vk_srgb_format = VK_FORMAT_UNDEFINED,
 #endif
 #ifdef HAVE_DMABUF
     .dmabuf_fourcc = DRM_FORMAT_ABGR16161616F,
@@ -931,6 +974,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .gl = {
         .internal_gl_format = GL_RGBA16F,
         .internal_gles_format = GL_RGBA16F,
+        .internal_srgb_format = -1,
         .format = GL_RGBA,
         .type = GL_HALF_FLOAT,
         .swizzle = { GL_RED, GL_GREEN, GL_BLUE, GL_ALPHA },
@@ -938,6 +982,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     },
 #ifdef GDK_RENDERING_VULKAN
     .vk_format = VK_FORMAT_R16G16B16A16_SFLOAT,
+    .vk_srgb_format = VK_FORMAT_UNDEFINED,
 #endif
 #ifdef HAVE_DMABUF
     .dmabuf_fourcc = DRM_FORMAT_ABGR16161616F,
@@ -962,6 +1007,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .gl = {
         .internal_gl_format = GL_RGB32F,
         .internal_gles_format = GL_RGB32F,
+        .internal_srgb_format = -1,
         .format = GL_RGB,
         .type = GL_FLOAT,
         .swizzle = { GL_RED, GL_GREEN, GL_BLUE, GL_ALPHA },
@@ -969,6 +1015,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     },
 #ifdef GDK_RENDERING_VULKAN
     .vk_format = VK_FORMAT_R32G32B32_SFLOAT,
+    .vk_srgb_format = VK_FORMAT_UNDEFINED,
 #endif
 #ifdef HAVE_DMABUF
     .dmabuf_fourcc = 0,
@@ -992,6 +1039,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .gl = {
         .internal_gl_format = GL_RGBA32F,
         .internal_gles_format = GL_RGBA32F,
+        .internal_srgb_format = -1,
         .format = GL_RGBA,
         .type = GL_FLOAT,
         .swizzle = { GL_RED, GL_GREEN, GL_BLUE, GL_ALPHA },
@@ -999,6 +1047,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     },
 #ifdef GDK_RENDERING_VULKAN
     .vk_format = VK_FORMAT_R32G32B32A32_SFLOAT,
+    .vk_srgb_format = VK_FORMAT_UNDEFINED,
 #endif
 #ifdef HAVE_DMABUF
     .dmabuf_fourcc = 0,
@@ -1022,6 +1071,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .gl = {
         .internal_gl_format = GL_RGBA32F,
         .internal_gles_format = GL_RGBA32F,
+        .internal_srgb_format = -1,
         .format = GL_RGBA,
         .type = GL_FLOAT,
         .swizzle = { GL_RED, GL_GREEN, GL_BLUE, GL_ALPHA },
@@ -1029,6 +1079,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     },
 #ifdef GDK_RENDERING_VULKAN
     .vk_format = VK_FORMAT_R32G32B32A32_SFLOAT,
+    .vk_srgb_format = VK_FORMAT_UNDEFINED,
 #endif
 #ifdef HAVE_DMABUF
     .dmabuf_fourcc = 0,
@@ -1051,6 +1102,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .gl = {
         .internal_gl_format = GL_RG8,
         .internal_gles_format = GL_RG8,
+        .internal_srgb_format = -1,
         .format = GL_RG,
         .type = GL_UNSIGNED_BYTE,
         .swizzle = { GL_RED, GL_RED, GL_RED, GL_GREEN },
@@ -1058,6 +1110,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     },
 #ifdef GDK_RENDERING_VULKAN
     .vk_format = VK_FORMAT_R8G8_UNORM,
+    .vk_srgb_format = VK_FORMAT_UNDEFINED,
 #endif
 #ifdef HAVE_DMABUF
     .dmabuf_fourcc = 0,
@@ -1080,6 +1133,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .gl = {
         .internal_gl_format = GL_RG8,
         .internal_gles_format = GL_RG8,
+        .internal_srgb_format = -1,
         .format = GL_RG,
         .type = GL_UNSIGNED_BYTE,
         .swizzle = { GL_RED, GL_RED, GL_RED, GL_GREEN },
@@ -1087,6 +1141,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     },
 #ifdef GDK_RENDERING_VULKAN
     .vk_format = VK_FORMAT_R8G8_UNORM,
+    .vk_srgb_format = VK_FORMAT_UNDEFINED,
 #endif
 #ifdef HAVE_DMABUF
     .dmabuf_fourcc = 0,
@@ -1109,6 +1164,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .gl = {
         .internal_gl_format = GL_R8,
         .internal_gles_format = GL_R8,
+        .internal_srgb_format = -1,
         .format = GL_RED,
         .type = GL_UNSIGNED_BYTE,
         .swizzle = { GL_RED, GL_RED, GL_RED, GL_ONE },
@@ -1116,6 +1172,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     },
 #ifdef GDK_RENDERING_VULKAN
     .vk_format = VK_FORMAT_R8_UNORM,
+    .vk_srgb_format = VK_FORMAT_R8_SRGB,
 #endif
 #ifdef HAVE_DMABUF
     .dmabuf_fourcc = DRM_FORMAT_R8,
@@ -1141,6 +1198,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .gl = {
         .internal_gl_format = GL_RG16,
         .internal_gles_format = GL_RG16,
+        .internal_srgb_format = -1,
         .format = GL_RG,
         .type = GL_UNSIGNED_SHORT,
         .swizzle = { GL_RED, GL_RED, GL_RED, GL_GREEN },
@@ -1148,6 +1206,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     },
 #ifdef GDK_RENDERING_VULKAN
     .vk_format = VK_FORMAT_R16G16_UNORM,
+    .vk_srgb_format = VK_FORMAT_UNDEFINED,
 #endif
 #ifdef HAVE_DMABUF
     .dmabuf_fourcc = 0,
@@ -1173,6 +1232,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .gl = {
         .internal_gl_format = GL_RG16,
         .internal_gles_format = GL_RG16,
+        .internal_srgb_format = -1,
         .format = GL_RG,
         .type = GL_UNSIGNED_SHORT,
         .swizzle = { GL_RED, GL_RED, GL_RED, GL_GREEN },
@@ -1180,6 +1240,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     },
 #ifdef GDK_RENDERING_VULKAN
     .vk_format = VK_FORMAT_R16G16_UNORM,
+    .vk_srgb_format = VK_FORMAT_UNDEFINED,
 #endif
 #ifdef HAVE_DMABUF
     .dmabuf_fourcc = 0,
@@ -1205,6 +1266,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .gl = {
         .internal_gl_format = GL_R16,
         .internal_gles_format = GL_R16,
+        .internal_srgb_format = -1,
         .format = GL_RED,
         .type = GL_UNSIGNED_SHORT,
         .swizzle = { GL_RED, GL_RED, GL_RED, GL_ONE },
@@ -1212,6 +1274,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     },
 #ifdef GDK_RENDERING_VULKAN
     .vk_format = VK_FORMAT_R16_UNORM,
+    .vk_srgb_format = VK_FORMAT_UNDEFINED,
 #endif
 #ifdef HAVE_DMABUF
     .dmabuf_fourcc = DRM_FORMAT_R16,
@@ -1234,6 +1297,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .gl = {
         .internal_gl_format = GL_R8,
         .internal_gles_format = GL_R8,
+        .internal_srgb_format = -1,
         .format = GL_RED,
         .type = GL_UNSIGNED_BYTE,
         .swizzle = { GL_RED, GL_RED, GL_RED, GL_RED },
@@ -1241,6 +1305,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     },
 #ifdef GDK_RENDERING_VULKAN
     .vk_format = VK_FORMAT_R8_UNORM,
+    .vk_srgb_format = VK_FORMAT_UNDEFINED,
 #endif
 #ifdef HAVE_DMABUF
     .dmabuf_fourcc = 0,
@@ -1266,6 +1331,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .gl = {
         .internal_gl_format = GL_R16,
         .internal_gles_format = GL_R16,
+        .internal_srgb_format = -1,
         .format = GL_RED,
         .type = GL_UNSIGNED_SHORT,
         .swizzle = { GL_RED, GL_RED, GL_RED, GL_RED },
@@ -1273,6 +1339,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     },
 #ifdef GDK_RENDERING_VULKAN
     .vk_format = VK_FORMAT_R16_UNORM,
+    .vk_srgb_format = VK_FORMAT_UNDEFINED,
 #endif
 #ifdef HAVE_DMABUF
     .dmabuf_fourcc = 0,
@@ -1297,6 +1364,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .gl = {
         .internal_gl_format = GL_R16F,
         .internal_gles_format = GL_R16F,
+        .internal_srgb_format = -1,
         .format = GL_RED,
         .type = GL_HALF_FLOAT,
         .swizzle = { GL_RED, GL_RED, GL_RED, GL_RED },
@@ -1304,6 +1372,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     },
 #ifdef GDK_RENDERING_VULKAN
     .vk_format = VK_FORMAT_R16_SFLOAT,
+    .vk_srgb_format = VK_FORMAT_UNDEFINED,
 #endif
 #ifdef HAVE_DMABUF
     .dmabuf_fourcc = 0,
@@ -1328,6 +1397,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .gl = {
         .internal_gl_format = GL_R32F,
         .internal_gles_format = GL_R32F,
+        .internal_srgb_format = -1,
         .format = GL_RED,
         .type = GL_FLOAT,
         .swizzle = { GL_RED, GL_RED, GL_RED, GL_RED },
@@ -1335,6 +1405,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     },
 #ifdef GDK_RENDERING_VULKAN
     .vk_format = VK_FORMAT_R32_SFLOAT,
+    .vk_srgb_format = VK_FORMAT_UNDEFINED,
 #endif
 #ifdef HAVE_DMABUF
     .dmabuf_fourcc = 0,
@@ -1429,6 +1500,7 @@ gdk_memory_format_min_buffer_size (GdkMemoryFormat format,
 /*<private>
  * gdk_memory_format_get_depth:
  * @format: a memory format
+ * @srgb: whether an SRGB depth should be returned.
  *
  * Gets the depth of the individual channels of the format.
  * See gsk_render_node_prefers_high_depth() for more
@@ -1440,9 +1512,16 @@ gdk_memory_format_min_buffer_size (GdkMemoryFormat format,
  * Returns: The depth of this format
  **/
 GdkMemoryDepth
-gdk_memory_format_get_depth (GdkMemoryFormat format)
+gdk_memory_format_get_depth (GdkMemoryFormat format,
+                             gboolean        srgb)
 {
-  return memory_formats[format].depth;
+  GdkMemoryDepth depth;
+
+  depth = memory_formats[format].depth;
+  if (depth == GDK_MEMORY_U8 && srgb)
+    depth = GDK_MEMORY_U8_SRGB;
+
+  return depth;
 }
 
 /*<private>
@@ -1459,26 +1538,20 @@ GdkMemoryDepth
 gdk_memory_depth_merge (GdkMemoryDepth depth1,
                         GdkMemoryDepth depth2)
 {
-  switch (depth1)
-    {
-      case GDK_MEMORY_U8:
-        return depth2;
+  static const GdkMemoryDepth merged_depths[GDK_N_DEPTHS][GDK_N_DEPTHS] = {
+                         /*  NONE                U8                  U8_SRGB             U16                 FLOAT16             FLOAT32 */
+    [GDK_MEMORY_NONE]    = { GDK_MEMORY_NONE,    GDK_MEMORY_U8,      GDK_MEMORY_U8_SRGB, GDK_MEMORY_U16,     GDK_MEMORY_FLOAT16, GDK_MEMORY_FLOAT32 },
+    [GDK_MEMORY_U8]      = { GDK_MEMORY_U8,      GDK_MEMORY_U8,      GDK_MEMORY_FLOAT16, GDK_MEMORY_U16,     GDK_MEMORY_FLOAT16, GDK_MEMORY_FLOAT32 },
+    [GDK_MEMORY_U8_SRGB] = { GDK_MEMORY_U8_SRGB, GDK_MEMORY_FLOAT16, GDK_MEMORY_U8_SRGB, GDK_MEMORY_FLOAT32, GDK_MEMORY_FLOAT16, GDK_MEMORY_FLOAT32 },
+    [GDK_MEMORY_U16]     = { GDK_MEMORY_U16,     GDK_MEMORY_U16,     GDK_MEMORY_FLOAT32, GDK_MEMORY_U16,     GDK_MEMORY_FLOAT32, GDK_MEMORY_FLOAT32 },
+    [GDK_MEMORY_FLOAT16] = { GDK_MEMORY_FLOAT16, GDK_MEMORY_FLOAT16, GDK_MEMORY_FLOAT16, GDK_MEMORY_FLOAT32, GDK_MEMORY_FLOAT16, GDK_MEMORY_FLOAT32 },
+    [GDK_MEMORY_FLOAT32] = { GDK_MEMORY_FLOAT32, GDK_MEMORY_FLOAT32, GDK_MEMORY_FLOAT32, GDK_MEMORY_FLOAT32, GDK_MEMORY_FLOAT32, GDK_MEMORY_FLOAT32 },
+  };
 
-      case GDK_MEMORY_FLOAT32:
-        return GDK_MEMORY_FLOAT32;
+  g_assert (depth1 < GDK_N_DEPTHS);
+  g_assert (depth2 < GDK_N_DEPTHS);
 
-      case GDK_MEMORY_U16:
-      case GDK_MEMORY_FLOAT16:
-        if (depth2 == depth1 || depth2 == GDK_MEMORY_U8)
-          return depth1;
-        else
-          return GDK_MEMORY_FLOAT32;
-
-      case GDK_N_DEPTHS:
-      default:
-        g_assert_not_reached ();
-        return GDK_MEMORY_U8;
-    }
+  return merged_depths[depth1][depth2];
 }
 
 /*
@@ -1495,7 +1568,9 @@ gdk_memory_depth_get_format (GdkMemoryDepth depth)
 {
   switch (depth)
     {
+      case GDK_MEMORY_NONE:
       case GDK_MEMORY_U8:
+      case GDK_MEMORY_U8_SRGB:
         return GDK_MEMORY_R8G8B8A8_PREMULTIPLIED;
       case GDK_MEMORY_U16:
         return GDK_MEMORY_R16G16B16A16_PREMULTIPLIED;
@@ -1523,7 +1598,9 @@ gdk_memory_depth_get_alpha_format (GdkMemoryDepth depth)
 {
   switch (depth)
     {
+      case GDK_MEMORY_NONE:
       case GDK_MEMORY_U8:
+      case GDK_MEMORY_U8_SRGB:
         return GDK_MEMORY_A8;
       case GDK_MEMORY_U16:
         return GDK_MEMORY_A16;
@@ -1537,10 +1614,36 @@ gdk_memory_depth_get_alpha_format (GdkMemoryDepth depth)
     }
 }
 
+gboolean
+gdk_memory_depth_is_srgb (GdkMemoryDepth depth)
+{
+  /* Putting a switch here instead of a simple check
+   * so the compiler makes us look here
+   * when adding new formats */
+
+  switch (depth)
+    {
+      case GDK_MEMORY_U8_SRGB:
+        return TRUE;
+
+      case GDK_MEMORY_NONE:
+      case GDK_MEMORY_U8:
+      case GDK_MEMORY_U16:
+      case GDK_MEMORY_FLOAT16:
+      case GDK_MEMORY_FLOAT32:
+        return FALSE;
+
+      case GDK_N_DEPTHS:
+      default:
+        g_return_val_if_reached (GDK_MEMORY_A8);
+    }
+}
+
 void
 gdk_memory_format_gl_format (GdkMemoryFormat  format,
                              gboolean         gles,
                              GLint           *out_internal_format,
+                             GLint           *out_internal_srgb_format,
                              GLenum          *out_format,
                              GLenum          *out_type,
                              GLint            out_swizzle[4])
@@ -1549,6 +1652,7 @@ gdk_memory_format_gl_format (GdkMemoryFormat  format,
     *out_internal_format = memory_formats[format].gl.internal_gles_format;
   else
     *out_internal_format = memory_formats[format].gl.internal_gl_format;
+  *out_internal_srgb_format = memory_formats[format].gl.internal_srgb_format;
   *out_format = memory_formats[format].gl.format;
   *out_type = memory_formats[format].gl.type;
   memcpy (out_swizzle, memory_formats[format].gl.swizzle, sizeof(GLint) * 4);
@@ -1560,6 +1664,8 @@ gdk_memory_format_gl_format (GdkMemoryFormat  format,
  * @gles: TRUE for GLES, FALSE for GL
  * @out_actual_format: The actual RGBA format
  * @out_internal_format: the GL internal format
+ * @out_internal_srgb_format: the GL internal format to use for automatic
+ *   sRGB<=>linear conversion
  * @out_format: the GL format
  * @out_type: the GL type
  * @out_swizzle: The swizzle to use 
@@ -1578,6 +1684,7 @@ gdk_memory_format_gl_rgba_format (GdkMemoryFormat  format,
                                   gboolean         gles,
                                   GdkMemoryFormat *out_actual_format,
                                   GLint           *out_internal_format,
+                                  GLint           *out_internal_srgb_format,
                                   GLenum          *out_format,
                                   GLenum          *out_type,
                                   GLint            out_swizzle[4])
@@ -1592,6 +1699,7 @@ gdk_memory_format_gl_rgba_format (GdkMemoryFormat  format,
     *out_internal_format = memory_formats[actual].gl.internal_gles_format;
   else
     *out_internal_format = memory_formats[actual].gl.internal_gl_format;
+  *out_internal_srgb_format = memory_formats[actual].gl.internal_srgb_format;
   *out_format = memory_formats[actual].gl.format;
   *out_type = memory_formats[actual].gl.type;
   memcpy (out_swizzle, memory_formats[format].gl.rgba_swizzle, sizeof(GLint) * 4);
@@ -1643,6 +1751,14 @@ gdk_memory_format_vk_format (GdkMemoryFormat     format,
   if (out_swizzle)
     vk_swizzle_from_gl_swizzle (out_swizzle, memory_formats[format].gl.swizzle);
   return memory_formats[format].vk_format;
+}
+
+/* Gets the matching SRGB version of a VkFormat
+ * Returns VK_FORMAT_UNDEFINED if none exists */
+VkFormat
+gdk_memory_format_vk_srgb_format (GdkMemoryFormat format)
+{
+  return memory_formats[format].vk_srgb_format;
 }
 
 /* Vulkan version of gdk_memory_format_gl_rgba_format()
@@ -1744,6 +1860,11 @@ gdk_memory_convert (guchar              *dest_data,
 
   g_assert (dest_format < GDK_MEMORY_N_FORMATS);
   g_assert (src_format < GDK_MEMORY_N_FORMATS);
+  /* We don't allow overlap here. If you want to do in-place color state conversions,
+   * use gdk_memory_convert_color_state.
+   */
+  g_assert (dest_data + gdk_memory_format_min_buffer_size (dest_format, dest_stride, width, height) <= src_data ||
+            src_data + gdk_memory_format_min_buffer_size (src_format, src_stride, width, height) <= dest_data);
 
   if (src_format == dest_format)
     {
@@ -1825,6 +1946,205 @@ gdk_memory_convert (guchar              *dest_data,
       dest_desc->from_float (dest_data, tmp, width);
       src_data += src_stride;
       dest_data += dest_stride;
+    }
+
+  g_free (tmp);
+}
+
+static const guchar srgb_lookup[] = {
+  0, 12, 21, 28, 33, 38, 42, 46, 49, 52, 55, 58, 61, 63, 66, 68,
+  70, 73, 75, 77, 79, 81, 82, 84, 86, 88, 89, 91, 93, 94, 96, 97,
+  99, 100, 102, 103, 104, 106, 107, 109, 110, 111, 112, 114, 115, 116, 117, 118,
+  120, 121, 122, 123, 124, 125, 126, 127, 129, 130, 131, 132, 133, 134, 135, 136,
+  137, 138, 139, 140, 141, 142, 142, 143, 144, 145, 146, 147, 148, 149, 150, 151,
+  151, 152, 153, 154, 155, 156, 157, 157, 158, 159, 160, 161, 161, 162, 163, 164,
+  165, 165, 166, 167, 168, 168, 169, 170, 171, 171, 172, 173, 174, 174, 175, 176,
+  176, 177, 178, 179, 179, 180, 181, 181, 182, 183, 183, 184, 185, 185, 186, 187,
+  187, 188, 189, 189, 190, 191, 191, 192, 193, 193, 194, 194, 195, 196, 196, 197,
+  197, 198, 199, 199, 200, 201, 201, 202, 202, 203, 204, 204, 205, 205, 206, 206,
+  207, 208, 208, 209, 209, 210, 210, 211, 212, 212, 213, 213, 214, 214, 215, 215,
+  216, 217, 217, 218, 218, 219, 219, 220, 220, 221, 221, 222, 222, 223, 223, 224,
+  224, 225, 226, 226, 227, 227, 228, 228, 229, 229, 230, 230, 231, 231, 232, 232,
+  233, 233, 234, 234, 235, 235, 236, 236, 237, 237, 237, 238, 238, 239, 239, 240,
+  240, 241, 241, 242, 242, 243, 243, 244, 244, 245, 245, 245, 246, 246, 247, 247,
+  248, 248, 249, 249, 250, 250, 251, 251, 251, 252, 252, 253, 253, 254, 254, 255
+};
+
+static const guchar srgb_inverse_lookup[] = {
+  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1,
+  1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 3, 3, 3,
+  3, 3, 4, 4, 4, 4, 4, 5, 5, 5, 5, 6, 6, 6, 6, 7,
+  7, 7, 8, 8, 8, 9, 9, 9, 10, 10, 10, 11, 11, 11, 12, 12,
+  13, 13, 13, 14, 14, 15, 15, 16, 16, 16, 17, 17, 18, 18, 19, 19,
+  20, 20, 21, 22, 22, 23, 23, 24, 24, 25, 26, 26, 27, 27, 28, 29,
+  29, 30, 31, 31, 32, 33, 33, 34, 35, 36, 36, 37, 38, 38, 39, 40,
+  41, 42, 42, 43, 44, 45, 46, 47, 47, 48, 49, 50, 51, 52, 53, 54,
+  55, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 70,
+  71, 72, 73, 74, 75, 76, 77, 78, 80, 81, 82, 83, 84, 85, 87, 88,
+  89, 90, 92, 93, 94, 95, 97, 98, 99, 101, 102, 103, 105, 106, 107, 109,
+  110, 112, 113, 114, 116, 117, 119, 120, 122, 123, 125, 126, 128, 129, 131, 132,
+  134, 135, 137, 139, 140, 142, 144, 145, 147, 148, 150, 152, 153, 155, 157, 159,
+  160, 162, 164, 166, 167, 169, 171, 173, 175, 176, 178, 180, 182, 184, 186, 188,
+  190, 192, 193, 195, 197, 199, 201, 203, 205, 207, 209, 211, 213, 215, 218, 220,
+  222, 224, 226, 228, 230, 232, 235, 237, 239, 241, 243, 245, 248, 250, 252, 255
+};
+
+static void
+convert_srgb_to_srgb_linear (guchar *data,
+                             gsize   n)
+{
+  for (gsize i = 0; i < n; i++)
+    {
+      guint16 r = data[0];
+      guint16 g = data[1];
+      guint16 b = data[2];
+      guchar a = data[3];
+
+      if (a != 0)
+        {
+          r = (r * 255 + a / 2) / a;
+          g = (g * 255 + a / 2) / a;
+          b = (b * 255 + a / 2) / a;
+
+          r = srgb_inverse_lookup[r];
+          g = srgb_inverse_lookup[g];
+          b = srgb_inverse_lookup[b];
+
+          r = r * a + 127;
+          g = g * a + 127;
+          b = b * a + 127;
+          data[0] = (r + (r >> 8) + 1) >> 8;
+          data[1] = (g + (g >> 8) + 1) >> 8;
+          data[2] = (b + (b >> 8) + 1) >> 8;
+        }
+      data += 4;
+    }
+}
+
+static void
+convert_srgb_linear_to_srgb (guchar *data,
+                             gsize   n)
+{
+  for (gsize i = 0; i < n; i++)
+    {
+      guint16 r = data[0];
+      guint16 g = data[1];
+      guint16 b = data[2];
+      guchar a = data[3];
+
+      if (a != 0)
+        {
+          r = (r * 255 + a / 2) / a;
+          g = (g * 255 + a / 2) / a;
+          b = (b * 255 + a / 2) / a;
+
+          r = srgb_lookup[r];
+          g = srgb_lookup[g];
+          b = srgb_lookup[b];
+
+          r = r * a + 127;
+          g = g * a + 127;
+          b = b * a + 127;
+          data[0] = (r + (r >> 8) + 1) >> 8;
+          data[1] = (g + (g >> 8) + 1) >> 8;
+          data[2] = (b + (b >> 8) + 1) >> 8;
+        }
+
+      data += 4;
+    }
+}
+
+static void
+convert_srgb_to_srgb_linear_in_place (guchar *data,
+                                      gsize   stride,
+                                      gsize   width,
+                                      gsize   height)
+{
+  if (stride == width * 4)
+    {
+      convert_srgb_to_srgb_linear (data, height * width);
+    }
+  else
+    {
+      for (gsize y = 0; y < height; y++)
+        {
+          convert_srgb_to_srgb_linear (data, width);
+          data += stride;
+        }
+    }
+}
+
+static void
+convert_srgb_linear_to_srgb_in_place (guchar *data,
+                                      gsize   stride,
+                                      gsize   width,
+                                      gsize   height)
+{
+  if (stride == width * 4)
+    {
+      convert_srgb_linear_to_srgb (data, height * width);
+    }
+  else
+    {
+      for (gsize y = 0; y < height; y++)
+        {
+          convert_srgb_linear_to_srgb (data, width);
+          data += stride;
+        }
+    }
+}
+
+void
+gdk_memory_convert_color_state (guchar          *data,
+                                gsize            stride,
+                                GdkMemoryFormat  format,
+                                GdkColorState   *src_cs,
+                                GdkColorState   *dest_cs,
+                                gsize            width,
+                                gsize            height)
+{
+  const GdkMemoryFormatDescription *desc = &memory_formats[format];
+  GdkFloatColorConvert convert_func;
+  float (*tmp)[4];
+
+  if (gdk_color_state_equal (src_cs, dest_cs))
+    return;
+
+  if (format == GDK_MEMORY_B8G8R8A8_PREMULTIPLIED &&
+      src_cs == GDK_COLOR_STATE_SRGB &&
+      dest_cs == GDK_COLOR_STATE_SRGB_LINEAR)
+    {
+      convert_srgb_to_srgb_linear_in_place (data, stride, width, height);
+      return;
+    }
+  else if (format == GDK_MEMORY_B8G8R8A8_PREMULTIPLIED &&
+           src_cs == GDK_COLOR_STATE_SRGB_LINEAR &&
+           dest_cs == GDK_COLOR_STATE_SRGB)
+    {
+      convert_srgb_linear_to_srgb_in_place (data, stride, width, height);
+      return;
+    }
+
+  convert_func = gdk_color_state_get_convert_to (src_cs, dest_cs);
+  /* FIXME: add fallback that goes via generic colorstate */
+  g_assert (convert_func);
+
+  tmp = g_malloc (sizeof (*tmp) * width);
+
+  for (gsize y = 0; y < height; y++)
+    {
+      desc->to_float (tmp, data, width);
+
+      if (desc->alpha == GDK_MEMORY_ALPHA_PREMULTIPLIED)
+        unpremultiply (tmp, width);
+
+      convert_func (src_cs, tmp, width);
+
+      if (desc->alpha == GDK_MEMORY_ALPHA_PREMULTIPLIED)
+        premultiply (tmp, width);
+
+      desc->from_float (data, tmp, width);
+      data += stride;
     }
 
   g_free (tmp);

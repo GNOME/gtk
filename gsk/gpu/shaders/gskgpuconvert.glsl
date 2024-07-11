@@ -1,7 +1,7 @@
 #include "common.glsl"
 
-#define VARIATION_OPACITY        (1u << 0)
-#define VARIATION_STRAIGHT_ALPHA (1u << 1)
+#define VARIATION_OPACITY              (1u << 0)
+#define VARIATION_STRAIGHT_ALPHA       (1u << 1)
 
 #define HAS_VARIATION(var) ((GSK_VARIATION & var) == var)
 
@@ -10,7 +10,6 @@ PASS_FLAT(1) Rect _rect;
 PASS(2) vec2 _tex_coord;
 PASS_FLAT(3) uint _tex_id;
 PASS_FLAT(4) float _opacity;
-
 
 #ifdef GSK_VERTEX_SHADER
 
@@ -23,7 +22,7 @@ void
 run (out vec2 pos)
 {
   Rect r = rect_from_gsk (in_rect);
-  
+
   pos = rect_get_position (r);
 
   _pos = pos;
@@ -43,14 +42,19 @@ void
 run (out vec4 color,
      out vec2 position)
 {
+  vec4 pixel;
+  if (HAS_VARIATION (VARIATION_STRAIGHT_ALPHA))
+    pixel = gsk_texture_straight_alpha (_tex_id, _tex_coord);
+  else
+    pixel = gsk_texture (_tex_id, _tex_coord);
+
+  pixel = output_color_from_alt (pixel);
+
   float alpha = rect_coverage (_rect, _pos);
   if (HAS_VARIATION (VARIATION_OPACITY))
     alpha *= _opacity;
 
-  if (HAS_VARIATION (VARIATION_STRAIGHT_ALPHA))
-    color = gsk_texture_straight_alpha (_tex_id, _tex_coord) * alpha;
-  else
-    color = gsk_texture (_tex_id, _tex_coord) * alpha;
+  color = output_color_alpha (pixel, alpha);
 
   position = _pos;
 }

@@ -67,6 +67,7 @@ gsk_gpu_mask_op (GskGpuFrame            *frame,
 
   gsk_gpu_shader_op_alloc (frame,
                            &GSK_GPU_MASK_OP_CLASS,
+                           gsk_gpu_color_states_create_equal (TRUE, TRUE),
                            mask_mode,
                            clip,
                            desc,

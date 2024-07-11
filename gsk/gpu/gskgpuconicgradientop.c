@@ -51,6 +51,7 @@ static const GskGpuShaderOpClass GSK_GPU_CONIC_GRADIENT_OP_CLASS = {
 void
 gsk_gpu_conic_gradient_op (GskGpuFrame            *frame,
                            GskGpuShaderClip        clip,
+                           GskGpuColorStates       color_states,
                            const graphene_rect_t  *rect,
                            const graphene_point_t *center,
                            float                   angle,
@@ -59,12 +60,15 @@ gsk_gpu_conic_gradient_op (GskGpuFrame            *frame,
                            gsize                   n_stops)
 {
   GskGpuConicgradientInstance *instance;
+  GdkColorState *color_state = gsk_gpu_color_states_get_alt (color_states);
 
   g_assert (n_stops > 1);
   g_assert (n_stops <= 7);
+  g_assert (gsk_gpu_color_states_is_alt_premultiplied (color_states));
 
   gsk_gpu_shader_op_alloc (frame,
                            &GSK_GPU_CONIC_GRADIENT_OP_CLASS,
+                           color_states,
                            (gsk_gpu_frame_should_optimize (frame, GSK_GPU_OPTIMIZE_GRADIENTS) ? VARIATION_SUPERSAMPLING : 0),
                            clip,
                            NULL,
@@ -73,18 +77,18 @@ gsk_gpu_conic_gradient_op (GskGpuFrame            *frame,
   gsk_gpu_rect_to_float (rect, offset, instance->rect);
   gsk_gpu_point_to_float (center, offset, instance->center);
   instance->angle = angle;
-  gsk_gpu_rgba_to_float (&stops[MIN (n_stops - 1, 6)].color, instance->color6);
+  gdk_color_state_from_rgba (color_state, &stops[MIN (n_stops - 1, 6)].color, instance->color6);
   instance->offsets1[2] = stops[MIN (n_stops - 1, 6)].offset;
-  gsk_gpu_rgba_to_float (&stops[MIN (n_stops - 1, 5)].color, instance->color5);
+  gdk_color_state_from_rgba (color_state, &stops[MIN (n_stops - 1, 5)].color, instance->color5);
   instance->offsets1[1] = stops[MIN (n_stops - 1, 5)].offset;
-  gsk_gpu_rgba_to_float (&stops[MIN (n_stops - 1, 4)].color, instance->color4);
+  gdk_color_state_from_rgba (color_state, &stops[MIN (n_stops - 1, 4)].color, instance->color4);
   instance->offsets1[0] = stops[MIN (n_stops - 1, 4)].offset;
-  gsk_gpu_rgba_to_float (&stops[MIN (n_stops - 1, 3)].color, instance->color3);
+  gdk_color_state_from_rgba (color_state, &stops[MIN (n_stops - 1, 3)].color, instance->color3);
   instance->offsets0[3] = stops[MIN (n_stops - 1, 3)].offset;
-  gsk_gpu_rgba_to_float (&stops[MIN (n_stops - 1, 2)].color, instance->color2);
+  gdk_color_state_from_rgba (color_state, &stops[MIN (n_stops - 1, 2)].color, instance->color2);
   instance->offsets0[2] = stops[MIN (n_stops - 1, 2)].offset;
-  gsk_gpu_rgba_to_float (&stops[1].color, instance->color1);
+  gdk_color_state_from_rgba (color_state, &stops[1].color, instance->color1);
   instance->offsets0[1] = stops[1].offset;
-  gsk_gpu_rgba_to_float (&stops[0].color, instance->color0);
+  gdk_color_state_from_rgba (color_state, &stops[0].color, instance->color0);
   instance->offsets0[0] = stops[0].offset;
 }

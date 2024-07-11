@@ -3,6 +3,7 @@
 #include "gskgpuopprivate.h"
 
 #include "gskgputypesprivate.h"
+#include "gskgpucolorstatesprivate.h"
 
 G_BEGIN_DECLS
 
@@ -11,6 +12,7 @@ struct _GskGpuShaderOp
   GskGpuOp parent_op;
 
   GskGpuDescriptors *desc;
+  GskGpuColorStates color_states;
   guint32 variation;
   GskGpuShaderClip clip;
   gsize vertex_offset;
@@ -35,6 +37,7 @@ struct _GskGpuShaderOpClass
 
 void                    gsk_gpu_shader_op_alloc                         (GskGpuFrame            *frame,
                                                                          const GskGpuShaderOpClass *op_class,
+                                                                         GskGpuColorStates       color_states,
                                                                          guint32                 variation,
                                                                          GskGpuShaderClip        clip,
                                                                          GskGpuDescriptors      *desc,
@@ -73,6 +76,18 @@ gsk_gpu_rgba_to_float (const GdkRGBA *rgba,
   values[3] = rgba->alpha;
 }
 
+#define GSK_RGBA_TO_VEC4(_color) (float[4]) { (_color)->red, (_color)->green, (_color)->blue, (_color)->alpha }
+#define GSK_RGBA_TO_VEC4_ALPHA(_color, _alpha) (float[4]) { (_color)->red, (_color)->green, (_color)->blue, (_color)->alpha * (_alpha) }
+
+static inline void
+gsk_gpu_color_to_float (const float color[4],
+                        float       values[4])
+{
+  values[0] = color[0];
+  values[1] = color[1];
+  values[2] = color[2];
+  values[3] = color[3];
+}
 #include <graphene.h>
 
 static inline void

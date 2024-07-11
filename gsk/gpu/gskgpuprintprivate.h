@@ -17,8 +17,10 @@ void                    gsk_gpu_print_newline                           (GString
 
 void                    gsk_gpu_print_string                            (GString                        *string,
                                                                          const char                     *s);
-void                    gsk_gpu_print_shader_info                       (GString                        *string,
+void                    gsk_gpu_print_shader_clip                       (GString                        *string,
                                                                          GskGpuShaderClip                clip);
+void                    gsk_gpu_print_color_states                      (GString                        *string,
+                                                                         GskGpuColorStates               color_states);
 void                    gsk_gpu_print_enum                              (GString                        *string,
                                                                          GType                           type,
                                                                          int                             value);

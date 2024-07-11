@@ -52,12 +52,14 @@ void
 run (out vec4 color,
      out vec2 position)
 {
-  color = gsk_texture (_start_id, _start_coord) *
-          rect_coverage (_start_rect, _pos) *
-          _start_opacity +
-          gsk_texture (_end_id, _end_coord) *
-          rect_coverage (_end_rect, _pos) *
-          _end_opacity;
+  vec4 start = output_color_alpha (gsk_texture (_start_id, _start_coord),
+                                   rect_coverage (_start_rect, _pos) *
+                                   _start_opacity);
+  vec4 end = output_color_alpha (gsk_texture (_end_id, _end_coord),
+                                 rect_coverage (_end_rect, _pos) *
+                                 _end_opacity);
+
+  color = start + end;
   position = _pos;
 }
 

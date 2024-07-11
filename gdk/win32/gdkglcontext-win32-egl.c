@@ -108,13 +108,15 @@ gdk_win32_gl_context_egl_end_frame (GdkDrawContext *draw_context,
 }
 
 static void
-gdk_win32_gl_context_egl_begin_frame (GdkDrawContext *draw_context,
-                                      GdkMemoryDepth  depth,
-                                      cairo_region_t *update_area)
+gdk_win32_gl_context_egl_begin_frame (GdkDrawContext  *draw_context,
+                                      GdkMemoryDepth   depth,
+                                      cairo_region_t  *update_area,
+                                      GdkColorState  **out_color_state,
+                                      GdkMemoryDepth  *out_depth)
 {
   gdk_win32_surface_handle_queued_move_resize (draw_context);
 
-  GDK_DRAW_CONTEXT_CLASS (gdk_win32_gl_context_egl_parent_class)->begin_frame (draw_context, depth, update_area);
+  GDK_DRAW_CONTEXT_CLASS (gdk_win32_gl_context_egl_parent_class)->begin_frame (draw_context, depth, update_area, out_color_state, out_depth);
 }
 
 static void

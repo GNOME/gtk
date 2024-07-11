@@ -68,6 +68,7 @@ gsk_gpu_blend_mode_op (GskGpuFrame            *frame,
 
   gsk_gpu_shader_op_alloc (frame,
                            &GSK_GPU_BLEND_MODE_OP_CLASS,
+                           gsk_gpu_color_states_create_equal (TRUE, TRUE),
                            blend_mode,
                            clip,
                            desc,

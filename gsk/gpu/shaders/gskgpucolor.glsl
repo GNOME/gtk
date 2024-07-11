@@ -20,7 +20,7 @@ run (out vec2 pos)
 
   _pos = pos;
   _rect = r;
-  _color = color_premultiply (in_color);
+  _color = output_color_from_alt (in_color);
 }
 
 #endif
@@ -33,7 +33,7 @@ void
 run (out vec4 color,
      out vec2 position)
 {
-  color = _color * rect_coverage (_rect, _pos);
+  color = output_color_alpha (_color, rect_coverage (_rect, _pos));
   position = _pos;
 }
 

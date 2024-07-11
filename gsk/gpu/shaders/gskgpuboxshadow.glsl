@@ -51,7 +51,7 @@ run (out vec2 pos)
 
   _pos = pos;
   _shadow_outline = outline;
-  _color = in_color;
+  _color = output_color_from_alt (in_color);
   _sigma = GSK_GLOBAL_SCALE * 0.5 * in_blur_radius;
 }
 
@@ -154,7 +154,7 @@ run (out vec4 color,
   if (VARIATION_INSET)
     blur_alpha = 1.0 - blur_alpha;
 
-  color = clip_alpha * _color * blur_alpha;
+  color = output_color_alpha (_color, clip_alpha * blur_alpha);
   position = _pos;
 }
 

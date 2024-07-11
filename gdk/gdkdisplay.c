@@ -1570,19 +1570,27 @@ describe_egl_config (EGLDisplay egl_display,
 }
 
 gpointer
-gdk_display_get_egl_config (GdkDisplay *self)
+gdk_display_get_egl_config (GdkDisplay     *self,
+                            GdkMemoryDepth  depth)
 {
   GdkDisplayPrivate *priv = gdk_display_get_instance_private (self);
 
-  return priv->egl_config;
-}
+  switch (depth)
+    {
+      case GDK_MEMORY_NONE:
+      case GDK_MEMORY_U8:
+      case GDK_MEMORY_U8_SRGB:
+        return priv->egl_config;
 
-gpointer
-gdk_display_get_egl_config_high_depth (GdkDisplay *self)
-{
-  GdkDisplayPrivate *priv = gdk_display_get_instance_private (self);
+      case GDK_MEMORY_U16:
+      case GDK_MEMORY_FLOAT16:
+      case GDK_MEMORY_FLOAT32:
+        return priv->egl_config_high_depth;
 
-  return priv->egl_config_high_depth;
+      case GDK_N_DEPTHS:
+      default:
+        g_return_val_if_reached (priv->egl_config);
+    }
 }
 
 static EGLDisplay
@@ -1874,6 +1882,8 @@ gdk_display_init_egl (GdkDisplay  *self,
     epoxy_has_egl_extension (priv->egl_display, "EGL_EXT_image_dma_buf_import_modifiers");
   self->have_egl_dma_buf_export =
     epoxy_has_egl_extension (priv->egl_display, "EGL_MESA_image_dma_buf_export");
+  self->have_egl_gl_colorspace =
+    epoxy_has_egl_extension (priv->egl_display, "EGL_KHR_gl_colorspace");
 
   if (self->have_egl_no_config_context)
     priv->egl_config_high_depth = gdk_display_create_egl_config (self,

@@ -22,6 +22,7 @@
 #include "gdkwin32.h"
 #include "gdktextureprivate.h"
 #include "gdkcursorprivate.h"
+#include "gdkcolorstateprivate.h"
 
 #include "gdkdisplay-win32.h"
 
@@ -905,7 +906,7 @@ _gdk_win32_create_hicon_for_texture (GdkTexture *texture,
   int width, height;
   HICON icon;
 
-  surface = gdk_texture_download_surface (texture);
+  surface = gdk_texture_download_surface (texture, GDK_COLOR_STATE_SRGB);
   width = cairo_image_surface_get_width (surface);
   height = cairo_image_surface_get_height (surface);
 

@@ -13,10 +13,12 @@ G_DECLARE_FINAL_TYPE (GskGLImage, gsk_gl_image, GSK, GL_IMAGE, GskGpuImage)
 GskGpuImage *           gsk_gl_image_new_backbuffer                     (GskGLDevice            *device,
                                                                          GdkGLContext           *context,
                                                                          GdkMemoryFormat         format,
+                                                                         gboolean                is_srgb,
                                                                          gsize                   width,
                                                                          gsize                   height);
 GskGpuImage *           gsk_gl_image_new                                (GskGLDevice            *device,
                                                                          GdkMemoryFormat         format,
+                                                                         gboolean                try_srgb,
                                                                          GskGpuImageFlags        required_flags,
                                                                          gsize                   width,
                                                                          gsize                   height);

@@ -72,7 +72,7 @@ struct _GdkSurfacePrivate
   gpointer egl_native_window;
 #ifdef HAVE_EGL
   EGLSurface egl_surface;
-  gboolean egl_surface_high_depth;
+  GdkMemoryDepth egl_surface_depth;
 #endif
 
   gpointer widget;
@@ -1139,18 +1139,18 @@ gdk_surface_get_egl_surface (GdkSurface *self)
   return priv->egl_surface;
 }
 
-void
-gdk_surface_ensure_egl_surface (GdkSurface *self,
-                                gboolean    high_depth)
+GdkMemoryDepth
+gdk_surface_ensure_egl_surface (GdkSurface     *self,
+                                GdkMemoryDepth  depth)
 {
   GdkSurfacePrivate *priv = gdk_surface_get_instance_private (self);
   GdkDisplay *display = gdk_surface_get_display (self);
 
-  g_return_if_fail (priv->egl_native_window != NULL);
+  g_return_val_if_fail (priv->egl_native_window != NULL, depth);
 
-  if (priv->egl_surface_high_depth != high_depth &&
+  if (priv->egl_surface_depth != depth &&
       priv->egl_surface != NULL &&
-      gdk_display_get_egl_config_high_depth (display) != gdk_display_get_egl_config (display))
+      gdk_display_get_egl_config (display, priv->egl_surface_depth) != gdk_display_get_egl_config (display, depth))
     {
       gdk_gl_context_clear_current_if_surface (self);
       eglDestroySurface (gdk_display_get_egl_display (display), priv->egl_surface);
@@ -1159,14 +1159,43 @@ gdk_surface_ensure_egl_surface (GdkSurface *self,
 
   if (priv->egl_surface == NULL)
     {
+      EGLint attribs[4];
+      int i;
+
+      i = 0;
+      if (depth == GDK_MEMORY_U8_SRGB && display->have_egl_gl_colorspace)
+        {
+          attribs[i++] = EGL_GL_COLORSPACE_KHR;
+          attribs[i++] = EGL_GL_COLORSPACE_SRGB_KHR;
+          self->is_srgb = TRUE;
+        }
+      g_assert (i < G_N_ELEMENTS (attribs));
+      attribs[i++] = EGL_NONE;
+
       priv->egl_surface = eglCreateWindowSurface (gdk_display_get_egl_display (display),
-                                                  high_depth ? gdk_display_get_egl_config_high_depth (display)
-                                                             : gdk_display_get_egl_config (display),
+                                                  gdk_display_get_egl_config (display, depth),
                                                   (EGLNativeWindowType) priv->egl_native_window,
-                                                  NULL);
-      priv->egl_surface_high_depth = high_depth;
+                                                  attribs);
+      if (priv->egl_surface == EGL_NO_SURFACE)
+        {
+          /* just assume the error is no srgb support and try again without */
+          self->is_srgb = FALSE;
+          priv->egl_surface = eglCreateWindowSurface (gdk_display_get_egl_display (display),
+                                                      gdk_display_get_egl_config (display, depth),
+                                                      (EGLNativeWindowType) priv->egl_native_window,
+                                                      NULL);
+        }
+      priv->egl_surface_depth = depth;
     }
+
+  return priv->egl_surface_depth;
 #endif
+}
+
+gboolean
+gdk_surface_get_gl_is_srgb (GdkSurface *self)
+{
+  return self->is_srgb;
 }
 
 GdkGLContext *

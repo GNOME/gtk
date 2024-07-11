@@ -21,8 +21,8 @@
 
 #include "gdkmemorytextureprivate.h"
 
+#include "gdkcolorstateprivate.h"
 #include "gdkmemoryformatprivate.h"
-#include "gsk/gl/fp16private.h"
 
 /**
  * GdkMemoryTexture:
@@ -159,6 +159,7 @@ gdk_memory_texture_new (int              width,
   self = g_object_new (GDK_TYPE_MEMORY_TEXTURE,
                        "width", width,
                        "height", height,
+                       "color-state", GDK_COLOR_STATE_SRGB,
                        NULL);
 
   GDK_TEXTURE (self)->format = format;

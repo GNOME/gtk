@@ -10,6 +10,7 @@ G_BEGIN_DECLS
 
 void                    gsk_gpu_linear_gradient_op                      (GskGpuFrame                    *frame,
                                                                          GskGpuShaderClip                clip,
+                                                                         GskGpuColorStates               color_states,
                                                                          gboolean                        repeating,
                                                                          const graphene_rect_t          *rect,
                                                                          const graphene_point_t         *start,

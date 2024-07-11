@@ -32,6 +32,7 @@
 #include "gskenumtypes.h"
 #include "gskprivate.h"
 
+#include "gdk/gdkcolorstateprivate.h"
 #include "gdk/gdkrgbaprivate.h"
 #include "gdk/gdktextureprivate.h"
 #include "gdk/gdkmemoryformatprivate.h"
@@ -2012,7 +2013,7 @@ parse_cairo_node (GtkCssParser *parser,
   else if (pixels != NULL)
     {
       cairo_t *cr = gsk_cairo_node_get_draw_context (node);
-      surface = gdk_texture_download_surface (pixels);
+      surface = gdk_texture_download_surface (pixels, GDK_COLOR_STATE_SRGB);
       cairo_set_source_surface (cr, surface, 0, 0);
       cairo_paint (cr);
       cairo_destroy (cr);
@@ -3604,9 +3605,10 @@ append_texture_param (Printer    *p,
       g_hash_table_insert (p->named_textures, texture, new_name);
     }
 
-  switch (gdk_memory_format_get_depth (gdk_texture_get_format (texture)))
+  switch (gdk_texture_get_depth (texture))
     {
     case GDK_MEMORY_U8:
+    case GDK_MEMORY_U8_SRGB:
     case GDK_MEMORY_U16:
       bytes = gdk_texture_save_to_png_bytes (texture);
       g_string_append (p->str, "url(\"data:image/png;base64,\\\n");
@@ -3618,6 +3620,7 @@ append_texture_param (Printer    *p,
       g_string_append (p->str, "url(\"data:image/tiff;base64,\\\n");
       break;
 
+    case GDK_MEMORY_NONE:
     case GDK_N_DEPTHS:
     default:
       g_assert_not_reached ();

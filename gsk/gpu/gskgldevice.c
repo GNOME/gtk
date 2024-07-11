@@ -34,6 +34,7 @@ typedef struct _GLProgramKey GLProgramKey;
 struct _GLProgramKey
 {
   const GskGpuShaderOpClass *op_class;
+  GskGpuColorStates color_states;
   guint32 variation;
   GskGpuShaderClip clip;
   guint n_external_textures;
@@ -49,7 +50,8 @@ gl_program_key_hash (gconstpointer data)
   return GPOINTER_TO_UINT (key->op_class) ^
          key->clip ^
          (key->variation << 2) ^
-         (key->n_external_textures << 24);
+         (key->n_external_textures << 24) ^
+         key->color_states;
 }
 
 static gboolean
@@ -60,6 +62,7 @@ gl_program_key_equal (gconstpointer a,
   const GLProgramKey *keyb = b;
 
   return keya->op_class == keyb->op_class &&
+         keya->color_states == keyb->color_states && 
          keya->variation == keyb->variation && 
          keya->clip == keyb->clip && 
          keya->n_external_textures == keyb->n_external_textures;
@@ -76,6 +79,7 @@ gsk_gl_device_create_offscreen_image (GskGpuDevice   *device,
 
   return gsk_gl_image_new (self,
                            gdk_memory_depth_get_format (depth),
+                           gdk_memory_depth_is_srgb (depth),
                            GSK_GPU_IMAGE_RENDERABLE | GSK_GPU_IMAGE_FILTERABLE,
                            width,
                            height);
@@ -85,6 +89,7 @@ static GskGpuImage *
 gsk_gl_device_create_upload_image (GskGpuDevice    *device,
                                    gboolean         with_mipmap,
                                    GdkMemoryFormat  format,
+                                   gboolean         try_srgb,
                                    gsize            width,
                                    gsize            height)
 {
@@ -92,6 +97,7 @@ gsk_gl_device_create_upload_image (GskGpuDevice    *device,
 
   return gsk_gl_image_new (self,
                            format,
+                           try_srgb,
                            0,
                            width,
                            height);
@@ -107,6 +113,7 @@ gsk_gl_device_create_download_image (GskGpuDevice   *device,
 
   return gsk_gl_image_new (self,
                            gdk_memory_depth_get_format (depth),
+                           gdk_memory_depth_is_srgb (depth),
                            GSK_GPU_IMAGE_RENDERABLE,
                            width,
                            height);
@@ -121,6 +128,7 @@ gsk_gl_device_create_atlas_image (GskGpuDevice *device,
 
   return gsk_gl_image_new (self,
                            GDK_MEMORY_DEFAULT,
+                           FALSE,
                            GSK_GPU_IMAGE_RENDERABLE,
                            width,
                            height);
@@ -366,13 +374,14 @@ print_shader_info (const char *prefix,
 }
 
 static GLuint
-gsk_gl_device_load_shader (GskGLDevice      *self,
-                           const char       *program_name,
-                           GLenum            shader_type,
-                           guint32           variation,
-                           GskGpuShaderClip  clip,
-                           guint             n_external_textures,
-                           GError          **error)
+gsk_gl_device_load_shader (GskGLDevice       *self,
+                           const char        *program_name,
+                           GLenum             shader_type,
+                           GskGpuColorStates  color_states,
+                           guint32            variation,
+                           GskGpuShaderClip   clip,
+                           guint              n_external_textures,
+                           GError           **error)
 {
   GString *preamble;
   char *resource_name;
@@ -416,6 +425,7 @@ gsk_gl_device_load_shader (GskGLDevice      *self,
         return 0;
     }
 
+  g_string_append_printf (preamble, "#define GSK_COLOR_STATES %uu\n", color_states);
   g_string_append_printf (preamble, "#define GSK_VARIATION %uu\n", variation);
 
   switch (clip)
@@ -469,6 +479,7 @@ gsk_gl_device_load_shader (GskGLDevice      *self,
 static GLuint
 gsk_gl_device_load_program (GskGLDevice               *self,
                             const GskGpuShaderOpClass *op_class,
+                            GskGpuColorStates          color_states,
                             guint32                    variation,
                             GskGpuShaderClip           clip,
                             guint                      n_external_textures,
@@ -478,11 +489,11 @@ gsk_gl_device_load_program (GskGLDevice               *self,
   GLuint vertex_shader_id, fragment_shader_id, program_id;
   GLint link_status;
 
-  vertex_shader_id = gsk_gl_device_load_shader (self, op_class->shader_name, GL_VERTEX_SHADER, variation, clip, n_external_textures, error);
+  vertex_shader_id = gsk_gl_device_load_shader (self, op_class->shader_name, GL_VERTEX_SHADER, color_states, variation, clip, n_external_textures, error);
   if (vertex_shader_id == 0)
     return 0;
 
-  fragment_shader_id = gsk_gl_device_load_shader (self, op_class->shader_name, GL_FRAGMENT_SHADER, variation, clip, n_external_textures, error);
+  fragment_shader_id = gsk_gl_device_load_shader (self, op_class->shader_name, GL_FRAGMENT_SHADER, color_states, variation, clip, n_external_textures, error);
   if (fragment_shader_id == 0)
     return 0;
 
@@ -540,6 +551,7 @@ gsk_gl_device_load_program (GskGLDevice               *self,
 void
 gsk_gl_device_use_program (GskGLDevice               *self,
                            const GskGpuShaderOpClass *op_class,
+                           GskGpuColorStates          color_states,
                            guint32                    variation,
                            GskGpuShaderClip           clip,
                            guint                      n_external_textures)
@@ -548,6 +560,7 @@ gsk_gl_device_use_program (GskGLDevice               *self,
   GLuint program_id;
   GLProgramKey key = {
     .op_class = op_class,
+    .color_states = color_states,
     .variation = variation,
     .clip = clip,
     .n_external_textures = n_external_textures
@@ -561,7 +574,7 @@ gsk_gl_device_use_program (GskGLDevice               *self,
       return;
     }
 
-  program_id = gsk_gl_device_load_program (self, op_class, variation, clip, n_external_textures, &error);
+  program_id = gsk_gl_device_load_program (self, op_class, color_states, variation, clip, n_external_textures, &error);
   if (program_id == 0)
     {
       g_critical ("Failed to load shader program: %s", error->message);
@@ -635,6 +648,7 @@ gsk_gl_device_find_gl_format (GskGLDevice      *self,
                               GdkMemoryFormat  *out_format,
                               GskGpuImageFlags *out_flags,
                               GLint            *out_gl_internal_format,
+                              GLint            *out_gl_internal_srgb_format,
                               GLenum           *out_gl_format,
                               GLenum           *out_gl_type,
                               GLint             out_swizzle[4])
@@ -654,6 +668,7 @@ gsk_gl_device_find_gl_format (GskGLDevice      *self,
       gdk_memory_format_gl_format (format,
                                    gdk_gl_context_get_use_es (context),
                                    out_gl_internal_format,
+                                   out_gl_internal_srgb_format,
                                    out_gl_format,
                                    out_gl_type,
                                    out_swizzle);
@@ -665,6 +680,7 @@ gsk_gl_device_find_gl_format (GskGLDevice      *self,
                                         gdk_gl_context_get_use_es (context),
                                         &alt_format,
                                         out_gl_internal_format,
+                                        out_gl_internal_srgb_format,
                                         out_gl_format,
                                         out_gl_type,
                                         out_swizzle) &&
@@ -688,6 +704,7 @@ gsk_gl_device_find_gl_format (GskGLDevice      *self,
           gdk_memory_format_gl_format (fallbacks[i],
                                        gdk_gl_context_get_use_es (context),
                                        out_gl_internal_format,
+                                       out_gl_internal_srgb_format,
                                        out_gl_format,
                                        out_gl_type,
                                        out_swizzle);

@@ -22,6 +22,7 @@
 
 #include "gdkdrawcontext.h"
 
+#include "gdkcolorstateprivate.h"
 #include "gdkmemoryformatprivate.h"
 
 G_BEGIN_DECLS
@@ -43,7 +44,9 @@ struct _GdkDrawContextClass
 
   void                  (* begin_frame)                         (GdkDrawContext         *context,
                                                                  GdkMemoryDepth          depth,
-                                                                 cairo_region_t         *update_area);
+                                                                 cairo_region_t         *update_area,
+                                                                 GdkColorState         **out_color_state,
+                                                                 GdkMemoryDepth         *out_depth);
   void                  (* end_frame)                           (GdkDrawContext         *context,
                                                                  cairo_region_t         *painted);
   void                  (* empty_frame)                         (GdkDrawContext         *context);
@@ -57,6 +60,9 @@ void                    gdk_draw_context_begin_frame_full       (GdkDrawContext 
                                                                  const cairo_region_t   *region);
 
 void                    gdk_draw_context_empty_frame            (GdkDrawContext         *context);
+
+GdkColorState *         gdk_draw_context_get_color_state        (GdkDrawContext         *self);
+GdkMemoryDepth          gdk_draw_context_get_depth              (GdkDrawContext         *self);
 
 
 G_END_DECLS

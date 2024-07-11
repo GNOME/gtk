@@ -634,18 +634,21 @@ physical_device_check_features (VkPhysicalDevice device)
 }
 
 static void
-gdk_vulkan_context_begin_frame (GdkDrawContext *draw_context,
-                                GdkMemoryDepth  depth,
-                                cairo_region_t *region)
+gdk_vulkan_context_begin_frame (GdkDrawContext  *draw_context,
+                                GdkMemoryDepth   depth,
+                                cairo_region_t  *region,
+                                GdkColorState  **out_color_state,
+                                GdkMemoryDepth  *out_depth)
 {
   GdkVulkanContext *context = GDK_VULKAN_CONTEXT (draw_context);
   GdkVulkanContextPrivate *priv = gdk_vulkan_context_get_instance_private (context);
   VkResult acquire_result;
   guint i;
 
-  if (depth != priv->current_depth)
+  if (depth != priv->current_depth && depth != GDK_MEMORY_NONE)
     {
-      if (priv->formats[depth].gdk_format != priv->formats[priv->current_depth].gdk_format)
+      if (priv->formats[depth].vk_format.format != priv->formats[priv->current_depth].vk_format.format ||
+          priv->formats[depth].vk_format.colorSpace != priv->formats[priv->current_depth].vk_format.colorSpace)
         {
           GdkMemoryDepth old_depth = priv->current_depth;
           GError *error = NULL;
@@ -656,7 +659,6 @@ gdk_vulkan_context_begin_frame (GdkDrawContext *draw_context,
               g_warning ("%s", error->message);
               g_error_free (error);
               priv->current_depth = old_depth;
-              return;
             }
         }
     }
@@ -665,31 +667,38 @@ gdk_vulkan_context_begin_frame (GdkDrawContext *draw_context,
       cairo_region_union (priv->regions[i], region);
     }
 
-acquire_next_image:
-  acquire_result = GDK_VK_CHECK (vkAcquireNextImageKHR, gdk_vulkan_context_get_device (context),
-                                                        priv->swapchain,
-                                                        UINT64_MAX,
-                                                        priv->draw_semaphore,
-                                                        VK_NULL_HANDLE,
-                                                        &priv->draw_index);
-  if ((acquire_result == VK_ERROR_OUT_OF_DATE_KHR) ||
-      (acquire_result == VK_SUBOPTIMAL_KHR))
+  while (TRUE)
     {
-      GError *error = NULL;
-
-      GDK_DEBUG (VULKAN, "Recreating the swapchain");
-
-      if (!gdk_vulkan_context_check_swapchain (context, &error))
+      acquire_result = GDK_VK_CHECK (vkAcquireNextImageKHR, gdk_vulkan_context_get_device (context),
+                                                            priv->swapchain,
+                                                            UINT64_MAX,
+                                                            priv->draw_semaphore,
+                                                            VK_NULL_HANDLE,
+                                                            &priv->draw_index);
+      if ((acquire_result == VK_ERROR_OUT_OF_DATE_KHR) ||
+          (acquire_result == VK_SUBOPTIMAL_KHR))
         {
+          GError *error = NULL;
+
+          GDK_DEBUG (VULKAN, "Recreating the swapchain");
+
+          if (gdk_vulkan_context_check_swapchain (context, &error))
+            continue;
+
           g_warning ("%s", error->message);
           g_error_free (error);
-          return;
         }
 
-       goto acquire_next_image;
-     }
+      break;
+    }
 
   cairo_region_union (region, priv->regions[priv->draw_index]);
+
+  if (priv->current_depth == GDK_MEMORY_U8_SRGB)
+    *out_color_state = GDK_COLOR_STATE_SRGB_LINEAR;
+  else
+    *out_color_state = GDK_COLOR_STATE_SRGB;
+  *out_depth = priv->current_depth;
 }
 
 static void
@@ -893,6 +902,22 @@ gdk_vulkan_context_real_init (GInitable     *initable,
                   }
                 break;
 
+              case VK_FORMAT_B8G8R8A8_SRGB:
+                if (priv->formats[GDK_MEMORY_U8_SRGB].vk_format.format == VK_FORMAT_UNDEFINED)
+                  {
+                    priv->formats[GDK_MEMORY_U8_SRGB].vk_format = formats[i];
+                    priv->formats[GDK_MEMORY_U8_SRGB].gdk_format = GDK_MEMORY_B8G8R8A8_PREMULTIPLIED;
+                  }
+                break;
+
+              case VK_FORMAT_R8G8B8A8_SRGB:
+                if (priv->formats[GDK_MEMORY_U8_SRGB].vk_format.format == VK_FORMAT_UNDEFINED)
+                  {
+                    priv->formats[GDK_MEMORY_U8_SRGB].vk_format = formats[i];
+                    priv->formats[GDK_MEMORY_U8_SRGB].gdk_format = GDK_MEMORY_R8G8B8A8_PREMULTIPLIED;
+                  }
+                break;
+
               case VK_FORMAT_R16G16B16A16_UNORM:
                 priv->formats[GDK_MEMORY_U16].vk_format = formats[i];
                 priv->formats[GDK_MEMORY_U16].gdk_format = GDK_MEMORY_R16G16B16A16_PREMULTIPLIED;
@@ -936,6 +961,7 @@ gdk_vulkan_context_real_init (GInitable     *initable,
         priv->formats[GDK_MEMORY_FLOAT16] = priv->formats[GDK_MEMORY_FLOAT32];
       if (priv->formats[GDK_MEMORY_U16].vk_format.format == VK_FORMAT_UNDEFINED)
         priv->formats[GDK_MEMORY_U16] = priv->formats[GDK_MEMORY_FLOAT32];
+      priv->formats[GDK_MEMORY_NONE] = priv->formats[GDK_MEMORY_U8];
 
       if (!gdk_vulkan_context_check_swapchain (context, error))
         goto out_surface;

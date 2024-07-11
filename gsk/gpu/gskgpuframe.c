@@ -412,7 +412,7 @@ gsk_gpu_frame_upload_texture (GskGpuFrame  *self,
   image = GSK_GPU_FRAME_GET_CLASS (self)->upload_texture (self, with_mipmap, texture);
 
   if (image)
-    gsk_gpu_cache_cache_texture_image (gsk_gpu_device_get_cache (priv->device), texture, priv->timestamp, image);
+    gsk_gpu_cache_cache_texture_image (gsk_gpu_device_get_cache (priv->device), texture, priv->timestamp, image, NULL);
 
   return image;
 }
@@ -562,6 +562,7 @@ static void
 gsk_gpu_frame_record (GskGpuFrame            *self,
                       gint64                  timestamp,
                       GskGpuImage            *target,
+                      GdkColorState          *target_color_state,
                       const cairo_region_t   *clip,
                       GskRenderNode          *node,
                       const graphene_rect_t  *viewport,
@@ -581,13 +582,14 @@ gsk_gpu_frame_record (GskGpuFrame            *self,
           cairo_rectangle_int_t rect;
 
           cairo_region_get_rectangle (clip, i, &rect);
-          gsk_gpu_node_processor_process  (self, target, &rect, node, viewport, pass_type);
+          gsk_gpu_node_processor_process  (self, target, target_color_state, &rect, node, viewport, pass_type);
         }
     }
   else
     {
       gsk_gpu_node_processor_process (self,
                                       target,
+                                      target_color_state,
                                       &(cairo_rectangle_int_t) {
                                           0, 0,
                                           gsk_gpu_image_get_width (target),
@@ -635,6 +637,7 @@ void
 gsk_gpu_frame_render (GskGpuFrame            *self,
                       gint64                  timestamp,
                       GskGpuImage            *target,
+                      GdkColorState          *target_color_state,
                       const cairo_region_t   *region,
                       GskRenderNode          *node,
                       const graphene_rect_t  *viewport,
@@ -642,7 +645,7 @@ gsk_gpu_frame_render (GskGpuFrame            *self,
 {
   gsk_gpu_frame_cleanup (self);
 
-  gsk_gpu_frame_record (self, timestamp, target, region, node, viewport, texture);
+  gsk_gpu_frame_record (self, timestamp, target, target_color_state, region, node, viewport, texture);
 
   gsk_gpu_frame_submit (self);
 }
@@ -682,7 +685,7 @@ gsk_gpu_frame_download_texture (GskGpuFrame     *self,
   GskGpuFramePrivate *priv = gsk_gpu_frame_get_instance_private (self);
   GskGpuImage *image;
 
-  image = gsk_gpu_cache_lookup_texture_image (gsk_gpu_device_get_cache (priv->device), texture, timestamp);
+  image = gsk_gpu_cache_lookup_texture_image (gsk_gpu_device_get_cache (priv->device), texture, timestamp, NULL);
   if (image == NULL)
     image = gsk_gpu_frame_upload_texture (self, FALSE, texture);
   if (image == NULL)

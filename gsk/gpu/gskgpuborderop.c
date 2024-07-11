@@ -96,17 +96,19 @@ static const GskGpuShaderOpClass GSK_GPU_BORDER_OP_CLASS = {
 void
 gsk_gpu_border_op (GskGpuFrame            *frame,
                    GskGpuShaderClip        clip,
+                   GskGpuColorStates       color_states,
                    const GskRoundedRect   *outline,
                    const graphene_point_t *offset,
                    const graphene_point_t *inside_offset,
                    const float             widths[4],
-                   const GdkRGBA           colors[4])
+                   const float             colors[4][4])
 {
   GskGpuBorderInstance *instance;
   guint i;
 
   gsk_gpu_shader_op_alloc (frame,
                            &GSK_GPU_BORDER_OP_CLASS,
+                           color_states,
                            0,
                            clip,
                            NULL,
@@ -117,7 +119,7 @@ gsk_gpu_border_op (GskGpuFrame            *frame,
   for (i = 0; i < 4; i++)
     {
       instance->border_widths[i] = widths[i];
-      gsk_gpu_rgba_to_float (&colors[i], &instance->border_colors[4 * i]);
+      gsk_gpu_color_to_float (colors[i], &instance->border_colors[4 * i]);
     }
   instance->offset[0] = inside_offset->x;
   instance->offset[1] = inside_offset->y;

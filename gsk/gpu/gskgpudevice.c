@@ -230,10 +230,11 @@ GskGpuImage *
 gsk_gpu_device_create_upload_image (GskGpuDevice   *self,
                                     gboolean        with_mipmap,
                                     GdkMemoryFormat format,
+                                    gboolean        try_srgb,
                                     gsize           width,
                                     gsize           height)
 {
-  return GSK_GPU_DEVICE_GET_CLASS (self)->create_upload_image (self, with_mipmap, format, width, height);
+  return GSK_GPU_DEVICE_GET_CLASS (self)->create_upload_image (self, with_mipmap, format, try_srgb, width, height);
 }
 
 GskGpuImage *

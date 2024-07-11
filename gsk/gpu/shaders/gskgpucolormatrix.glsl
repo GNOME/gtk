@@ -41,16 +41,15 @@ void
 run (out vec4 color,
      out vec2 position)
 {
-#if 0
-  vec4 pixel = gsk_texture_straight_alpha (_tex_id, _tex_coord);
-#else
   vec4 pixel = gsk_texture (_tex_id, _tex_coord);
-  pixel = color_unpremultiply (pixel);
-#endif
+  pixel = alt_color_from_output (pixel);
+
   pixel = _color_matrix * pixel + _color_offset;
   pixel = clamp (pixel, 0.0, 1.0);
 
-  color = color_premultiply (pixel) * rect_coverage (_rect, _pos);
+  pixel = output_color_from_alt (pixel);
+
+  color = output_color_alpha (pixel, rect_coverage (_rect, _pos));
   position = _pos;
 }
 
