@@ -26,6 +26,8 @@
 #include "gdksurface-wayland-private.h"
 #include "gdksubsurfaceprivate.h"
 #include "gdkdebugprivate.h"
+#include "gdkglcontextprivate.h"
+#include "gdkgltextureprivate.h"
 #include "gsk/gskrectprivate.h"
 
 #include "linux-dmabuf-unstable-v1-client-protocol.h"
@@ -212,6 +214,60 @@ get_dmabuf_texture_wl_buffer (GdkWaylandSubsurface *self,
                                g_object_ref (texture));
 }
 
+typedef struct {
+  GdkTexture *texture;
+  GdkDmabuf dmabuf;
+} GLBufferData;
+
+static void
+gl_buffer_release (void             *data,
+                   struct wl_buffer *buffer)
+{
+  GLBufferData *gldata = data;
+
+  g_object_unref (gldata->texture);
+  gdk_dmabuf_close_fds (&gldata->dmabuf);
+  g_free (gldata);
+
+  if (buffer)
+    wl_buffer_destroy (buffer);
+}
+
+static const struct wl_buffer_listener gl_buffer_listener = {
+  gl_buffer_release,
+};
+
+static struct wl_buffer *
+get_gl_texture_wl_buffer (GdkWaylandSubsurface *self,
+                          GdkTexture           *texture)
+{
+  GdkDisplay *display = gdk_surface_get_display (GDK_SUBSURFACE (self)->parent);
+  GdkGLTexture *gltexture = GDK_GL_TEXTURE (texture);
+  GdkGLContext *glcontext;
+  GLBufferData gldata;
+
+  glcontext = gdk_display_get_gl_context (display);
+  if (!gdk_gl_context_is_shared (glcontext, gdk_gl_texture_get_context (gltexture)))
+    return NULL;
+
+  /* Can we avoid this when a right context is current already? */
+  gdk_gl_context_make_current (glcontext);
+
+  if (!gdk_gl_context_export_dmabuf (glcontext,
+                                     gdk_gl_texture_get_id (gltexture),
+                                     &gldata.dmabuf))
+    return NULL;
+
+  gldata.texture = g_object_ref (texture);
+
+  return get_dmabuf_wl_buffer (self,
+                               &gldata.dmabuf,
+                               gdk_texture_get_width (texture),
+                               gdk_texture_get_height (texture),
+                               &gl_buffer_listener,
+                               g_memdup (&gldata, sizeof (gldata)));
+}
+
 static struct wl_buffer *
 get_wl_buffer (GdkWaylandSubsurface *self,
                GdkTexture           *texture)
@@ -221,6 +277,8 @@ get_wl_buffer (GdkWaylandSubsurface *self,
 
   if (GDK_IS_DMABUF_TEXTURE (texture))
     buffer = get_dmabuf_texture_wl_buffer (self, texture);
+  else if (GDK_IS_GL_TEXTURE (texture))
+    buffer = get_gl_texture_wl_buffer (self, texture);
 
   if (GDK_DISPLAY_DEBUG_CHECK (display, FORCE_OFFLOAD))
     {
