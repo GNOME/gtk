@@ -843,8 +843,8 @@ gsk_gpu_node_processor_blur_op (GskGpuNodeProcessor       *self,
 }
 
 static void
-gsk_gpu_node_processor_add_fallback_node (GskGpuNodeProcessor *self,
-                                          GskRenderNode       *node)
+gsk_gpu_node_processor_add_cairo_node (GskGpuNodeProcessor *self,
+                                       GskRenderNode       *node)
 {
   GskGpuImage *image;
   graphene_rect_t clipped_bounds;
@@ -1681,7 +1681,7 @@ gsk_gpu_node_processor_add_texture_node (GskGpuNodeProcessor *self,
                      gdk_texture_get_format (texture),
                      gdk_texture_get_width (texture),
                      gdk_texture_get_height (texture));
-          gsk_gpu_node_processor_add_fallback_node (self, node);
+          gsk_gpu_node_processor_add_cairo_node (self, node);
           return;
         }
     }
@@ -1833,7 +1833,7 @@ gsk_gpu_node_processor_add_texture_scale_node (GskGpuNodeProcessor *self,
                      gdk_texture_get_format (texture),
                      gdk_texture_get_width (texture),
                      gdk_texture_get_height (texture));
-          gsk_gpu_node_processor_add_fallback_node (self, node);
+          gsk_gpu_node_processor_add_cairo_node (self, node);
           return;
         }
     }
@@ -3250,7 +3250,7 @@ static const struct
   [GSK_CAIRO_NODE] = {
     0,
     GSK_GPU_HANDLE_OPACITY,
-    NULL,
+    gsk_gpu_node_processor_add_cairo_node,
     NULL,
     gsk_gpu_get_cairo_node_as_image,
   },
@@ -3489,9 +3489,10 @@ gsk_gpu_node_processor_add_node (GskGpuNodeProcessor *self,
     }
   else
     {
-      GSK_DEBUG (FALLBACK, "Unsupported node '%s'",
-                 g_type_name_from_instance ((GTypeInstance *) node));
-      gsk_gpu_node_processor_add_fallback_node (self, node);
+      g_warning_once ("Unimplemented node '%s'",
+                      g_type_name_from_instance ((GTypeInstance *) node));
+      /* Maybe it's implemented in the Cairo renderer? */
+      gsk_gpu_node_processor_add_cairo_node (self, node);
     }
 }
 
