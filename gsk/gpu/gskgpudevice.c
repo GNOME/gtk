@@ -22,6 +22,7 @@ struct _GskGpuDevicePrivate
 {
   GdkDisplay *display;
   gsize max_image_size;
+  gsize tile_size;
 
   GskGpuCache *cache; /* we don't own a ref, but manage the cache */
   guint cache_gc_source;
@@ -142,13 +143,15 @@ gsk_gpu_device_init (GskGpuDevice *self)
 void
 gsk_gpu_device_setup (GskGpuDevice *self,
                       GdkDisplay   *display,
-                      gsize         max_image_size)
+                      gsize         max_image_size,
+                      gsize         tile_size)
 {
   GskGpuDevicePrivate *priv = gsk_gpu_device_get_instance_private (self);
   const char *str;
 
   priv->display = g_object_ref (display);
   priv->max_image_size = max_image_size;
+  priv->tile_size = tile_size;
   priv->cache_timeout = CACHE_TIMEOUT;
 
   str = g_getenv ("GSK_CACHE_TIMEOUT");
@@ -200,12 +203,44 @@ gsk_gpu_device_get_cache (GskGpuDevice *self)
   return priv->cache;
 }
 
+/*<private>
+ * gsk_gpu_device_get_max_image_size:
+ * @self: a device
+ *
+ * Returns the max image size supported by this device.
+ *
+ * This maps to GL_MAX_TEXTURE_SIZE on GL, but Vulkan is more flexible with
+ * per-format size limits, so this is an estimate and code should still handle
+ * failures of image creation at smaller sizes. (Besides handling them anyway
+ * in case of OOM.)
+ *
+ * Returns: The maximum size in pixels for creating a GskGpuImage
+ **/
 gsize
 gsk_gpu_device_get_max_image_size (GskGpuDevice *self)
 {
   GskGpuDevicePrivate *priv = gsk_gpu_device_get_instance_private (self);
 
   return priv->max_image_size;
+}
+
+/*<private>
+ * gsk_gpu_device_get_tile_size:
+ * @self: a device
+ *
+ * The suggested size for tiling images. This value will be small enough so that
+ * image creation never fails due to size constraints. It should also not be too
+ * large to allow efficient caching of tiles and evictions of unused tiles
+ * (think of an image editor showing only a section of a large image).
+ *
+ * Returns: The suggested size of tiles when tiling images.
+ **/
+gsize
+gsk_gpu_device_get_tile_size (GskGpuDevice *self)
+{
+  GskGpuDevicePrivate *priv = gsk_gpu_device_get_instance_private (self);
+
+  return priv->tile_size;
 }
 
 GskGpuImage *

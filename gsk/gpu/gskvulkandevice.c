@@ -575,7 +575,8 @@ gsk_vulkan_device_setup (GskVulkanDevice *self,
   self->max_immutable_samplers = MIN (self->max_samplers / 3, 32);
   gsk_gpu_device_setup (GSK_GPU_DEVICE (self),
                         display,
-                        vk_props.properties.limits.maxImageDimension2D);
+                        vk_props.properties.limits.maxImageDimension2D,
+                        GSK_GPU_DEVICE_DEFAULT_TILE_SIZE);
 }
 
 GskGpuDevice *

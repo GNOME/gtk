@@ -260,7 +260,10 @@ gsk_gl_device_get_for_display (GdkDisplay  *display,
   gdk_gl_context_make_current (context);
 
   glGetIntegerv (GL_MAX_TEXTURE_SIZE, &max_texture_size);
-  gsk_gpu_device_setup (GSK_GPU_DEVICE (self), display, max_texture_size);
+  gsk_gpu_device_setup (GSK_GPU_DEVICE (self),
+                        display,
+                        max_texture_size,
+                        GSK_GPU_DEVICE_DEFAULT_TILE_SIZE);
 
   self->version_string = gdk_gl_context_get_glsl_version_string (context);
   self->api = gdk_gl_context_get_api (context);
