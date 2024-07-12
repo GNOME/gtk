@@ -283,8 +283,10 @@ gsk_vulkan_image_new (GskVulkanDevice           *device,
 
       /* Second, try the potential RGBA format */
       vk_format = gdk_memory_format_vk_rgba_format (format, &rgba_format, &vk_components);
-      if (try_srgb)
+      if (try_srgb && vk_format != VK_FORMAT_UNDEFINED)
         vk_srgb_format = gdk_memory_format_vk_srgb_format (rgba_format);
+      else
+        vk_srgb_format = VK_FORMAT_UNDEFINED;
       if (gsk_vulkan_device_check_format (device, vk_srgb_format, &vk_components, required_flags,
                                           tiling, usage, width, height,
                                           &tiling, &flags))
